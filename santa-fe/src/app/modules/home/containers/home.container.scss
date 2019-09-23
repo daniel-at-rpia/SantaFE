@@ -1,0 +1,12 @@
+@import "global.scss";
+
+.sat-home {
+  $homeBlockName: &;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: $spacing_large;
+  &__test {
+    margin-top: $spacing_large;
+  }
+}
