@@ -1,0 +1,222 @@
+/************* 
+	Color Palette
+**************/
+
+$color_red_9: #b71c1c;
+$color_red_8: #c62828;
+$color_red_7: #d32f2f;
+$color_red_6: #e53935;
+$color_red_5: #f44336;
+$color_red_4: #ef5350;
+$color_red_3: #e57373;
+$color_red_2: #ef9a9a;
+$color_red_1: #ffcdd2;
+$color_red_1_A: #ff8a80;
+$color_red_2_A: #ff5252;
+$color_red_4_A: #ff1744;
+$color_red_7_A: #d50000;
+
+$color_pink_9: #880e4f;
+$color_pink_8: #ad1457;
+$color_pink_7: #c2185b;
+$color_pink_6: #d81b60;
+$color_pink_5: #e91e63;
+$color_pink_4: #ec407a;
+$color_pink_3: #f06292;
+$color_pink_2: #f48fb1;
+$color_pink_1: #f8bbd0;
+$color_pink_1_A: #ff80ab;
+$color_pink_2_A: #ff4081;
+$color_pink_4_A: #f50057;
+$color_pink_7_A: #c51162;
+
+$color_purple_9: #4a148c;
+$color_purple_8: #6a1b9a;
+$color_purple_7: #7b1fa2;
+$color_purple_6: #8e24aa;
+$color_purple_5: #9c27b0;
+$color_purple_4: #ab47bc;
+$color_purple_3: #ba68c8;
+$color_purple_2: #ce93d8;
+$color_purple_1: #e1bee7;
+$color_purple_1_A: #ea80fc;
+$color_purple_2_A: #e040fb;
+$color_purple_4_A: #d500f9;
+$color_purple_7_A: #a0f;
+
+$color_deeppurple_9: #311b92;
+$color_deeppurple_8: #4527a0;
+$color_deeppurple_7: #512da8;
+$color_deeppurple_6: #5e35b1;
+$color_deeppurple_5: #673ab7;
+$color_deeppurple_4: #7e57c2;
+$color_deeppurple_3: #9575cd;
+$color_deeppurple_2: #b39ddb;
+$color_deeppurple_1: #d1c4e9;
+$color_deeppurple_1_A: #b388ff;
+$color_deeppurple_2_A: #7c4dff;
+$color_deeppurple_4_A: #651fff;
+$color_deeppurple_7_A: #6200ea;
+
+$color_indigo_9: #1a237e;
+$color_indigo_8: #283593;
+$color_indigo_7: #303f9f;
+$color_indigo_6: #3949ab;
+$color_indigo_5: #3f51b5;
+$color_indigo_4: #5c6bc0;
+$color_indigo_3: #7986cb;
+$color_indigo_2: #9fa8da;
+$color_indigo_1: #e8eaf6;
+
+$color_blue_9: #0d47a1;
+$color_blue_8: #1565c0;
+$color_blue_7: #1976d2;
+$color_blue_6: #1e88e5;
+$color_blue_5: #2196f3;
+$color_blue_4: #42a5f5;
+$color_blue_3: #64b5f6;
+$color_blue_2: #90caf9;
+$color_blue_1: #bbdefb;
+
+$color_cyan_9: #006064;
+$color_cyan_8: #00838f;
+$color_cyan_7: #0097a7;
+$color_cyan_6: #00acc1;
+$color_cyan_5: #00bcd4;
+$color_cyan_4: #26c6da;
+$color_cyan_3: #4dd0e1;
+$color_cyan_2: #80deea;
+$color_cyan_1: #b2ebf2;
+$color_cyan_1_A: #84ffff;
+$color_cyan_2_A: #18ffff;
+$color_cyan_4_A: #00e5ff;
+$color_cyan_7_A: #00b8d4;
+
+$color_green_9: #1b5e20;
+$color_green_8: #2e7d32;
+$color_green_7: #388e3c;
+$color_green_6: #43a047;
+$color_green_5: #4caf50;
+$color_green_4: #66bb6a;
+$color_green_3: #81c784;
+$color_green_2: #a5d6a7;
+$color_green_1: #c8e6c9;
+$color_green_1_A: #b9f6ca;
+$color_green_2_A: #69f0ae;
+$color_green_4_A: #00e676;
+$color_green_7_A: #00c853;
+
+$color_light_green_9: #33691e;
+$color_light_green_8: #558b2f;
+$color_light_green_7: #689f38;
+$color_light_green_6: #7cb342;
+$color_light_green_5: #8bc34a;
+$color_light_green_4: #9ccc65;
+$color_light_green_3: #aed581;
+$color_light_green_2: #c5e1a5;
+$color_light_green_1: #dcedc8;
+$color_light_green_1_A: #ccff90;
+$color_light_green_2_A: #b2ff59;
+$color_light_green_4_A: #76ff03;
+$color_light_green_7_A: #64dd17;
+
+$color_teal_9: #004d40;
+$color_teal_8: #00695c;
+$color_teal_7: #00796b;
+$color_teal_6: #00897b;
+$color_teal_5: #009688;
+$color_teal_4: #26a69a;
+$color_teal_3: #4db6ac;
+$color_teal_2: #80cbc4;
+$color_teal_1: #b2dfdb;
+$color_teal_1_A: #a7ffeb;
+$color_teal_2_A: #64ffda;
+$color_teal_4_A: #1de9b6;
+$color_teal_7_A: #00bfa5;
+
+$color_lime_9: #827717;
+$color_lime_8: #9e9d24;
+$color_lime_7: #afb42b;
+$color_lime_6: #c0ca33;
+$color_lime_5: #cddc39;
+$color_lime_4: #d4e157;
+$color_lime_3: #dce775;
+$color_lime_2: #e6ee9c;
+$color_lime_1: #f0f4c3;
+
+$color_yellow_9: #f57f17;
+$color_yellow_8: #f9a825;
+$color_yellow_7: #fbc02d;
+$color_yellow_6: #fdd835;
+$color_yellow_5: #ffeb3b;
+$color_yellow_4: #ffee58;
+$color_yellow_3: #fff176;
+$color_yellow_2: #fff59d;
+$color_yellow_1: #fff9c4;
+$color_yellow_1_A: #ffff8d;
+$color_yellow_2_A: #ff0;
+$color_yellow_4_A: #ffea00;
+$color_yellow_7_A: #ffd600;
+
+$color_orange_9: #e65100;
+$color_orange_8: #ef6c00;
+$color_orange_7: #f57c00;
+$color_orange_6: #fb8c00;
+$color_orange_5: #ff9800;
+$color_orange_4: #ffa726;
+$color_orange_3: #ffb74d;
+$color_orange_2: #ffcc80;
+$color_orange_1: #ffe0b2;
+$color_orange_1_A: #ffd180;
+$color_orange_2_A: #ffab40;
+$color_orange_4_A: #ff9100;
+$color_orange_7_A: #ff6d00;
+
+$color_deeporange_9: #bf360c;
+$color_deeporange_8: #d84315;
+$color_deeporange_7: #e64a19;
+$color_deeporange_6: #f4511e;
+$color_deeporange_5: #ff5722;
+$color_deeporange_4: #ff7043;
+$color_deeporange_3: #ff8a65;
+$color_deeporange_2: #ffab91;
+$color_deeporange_1: #ffccbc;
+$color_deeporange_1_A: #ff9e80;
+$color_deeporange_2_A: #ff6e40;
+$color_deeporange_4_A: #ff3d00;
+$color_deeporange_7_A: #dd2c00;
+
+$color_blue_gray_1: #cfd8dc;
+$color_blue_gray_2: #b0bec5;
+$color_blue_gray_3: #90a4ae;
+$color_blue_gray_4: #78909c;
+$color_blue_gray_5: #607d8b;
+$color_blue_gray_6: #546e7a;
+$color_blue_gray_7: #455a64;
+$color_blue_gray_8: #37474f;
+$color_blue_gray_9: #263238;
+
+$color_gray_1: #f5f5f5;
+$color_gray_2: #eee;
+$color_gray_3: #e0e0e0;
+$color_gray_4: #bdbdbd;
+$color_gray_5: #9e9e9e;
+$color_gray_6: #757575;
+$color_gray_7: #616161;
+$color_gray_8: #424242;
+$color_gray_85: #333333;
+$color_gray_9: #212121;
+$color_gray_95: #101010;
+
+$color_brown_9: #3e2723;
+$color_brown_8: #4e342e;
+$color_brown_7: #5d4037;
+$color_brown_6: #6d4c41;
+$color_brown_5: #795548;
+$color_brown_4: #8d6e63;
+$color_brown_3: #a1887f;
+$color_brown_2: #bcaaa4;
+$color_brown_1: #d7ccc8;
+
+$color_black: #000000; 
+$color_white: #ffffff;

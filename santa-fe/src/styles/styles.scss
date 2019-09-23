@@ -1,0 +1,25 @@
+/* You can add global styles to this file, and also import other style files */
+// global rem setting for responsiveness
+
+@import 'design-tokens/color_palette';
+@import 'design-tokens/variables';
+@import 'design-tokens/mixin';
+@import 'animation';
+
+html {
+  font-size: 14px;
+  @include mq-x-large-min {
+    font-size: 16px;
+  }
+}
+
+#santa-body{
+  background-color: $color_gray_2;
+  font-family:"SantaOpenSans"; 
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: SantaOpenSans;
+  src: url(fonts/OpenSans-Light.ttf);
+}

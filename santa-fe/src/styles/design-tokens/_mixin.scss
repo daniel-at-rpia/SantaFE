@@ -1,0 +1,224 @@
+
+/***********
+  Mixins
+***********/
+
+  @mixin mix_border_radius($radius, $partial:'none'){
+    @if $partial == 'none'{
+      @if $radius == 3px or $radius == 5px or $radius == 10px or $radius == 15px or $radius == 25px or $radius == 50%{
+        border-radius: $radius;
+      }@else{
+        border-radius: 0px;
+      }
+    }@else if $partial == 'top'{
+      @if $radius == 3px or $radius == 5px or $radius == 10px or $radius == 15px or $radius == 25px or $radius == 50%{
+        border-radius: $radius $radius 0 0;
+      }@else{
+        border-radius: 0px;
+      }
+    }@else if $partial == 'bottom'{
+      @if $radius == 3px or $radius == 5px or $radius == 10px or $radius == 15px or $radius == 25px or $radius == 50%{
+        border-radius: 0 0 $radius $radius;
+      }@else{
+        border-radius: 0px;
+      }
+    }@else if $partial == 'top-left'{
+      @if $radius == 3px or $radius == 5px or $radius == 10px or $radius == 15px or $radius == 25px or $radius == 50%{
+        border-radius: $radius 0 0 0;
+      }@else{
+        border-radius: 0px;
+      }
+    }@else if $partial == 'top-right'{
+      @if $radius == 3px or $radius == 5px or $radius == 10px or $radius == 15px or $radius == 25px or $radius == 50%{
+        border-radius: 0 $radius 0 0;
+      }@else{
+        border-radius: 0px;
+      }
+    }@else if $partial == 'left'{
+      @if $radius == 3px or $radius == 5px or $radius == 10px or $radius == 15px or $radius == 25px or $radius == 50%{
+        border-radius: $radius 0 0 $radius;
+      }@else{
+        border-radius: 0px;
+      }
+    }@else if $partial == 'right'{
+      @if $radius == 3px or $radius == 5px or $radius == 10px or $radius == 15px or $radius == 25px or $radius == 50%{
+        border-radius: 0 $radius $radius 0;
+      }@else{
+        border-radius: 0px;
+      }
+    }@else if $partial == 'all-but-bottom-right'{
+      @if $radius == 3px or $radius == 5px or $radius == 10px or $radius == 15px or $radius == 25px or $radius == 50%{
+        border-radius: $radius $radius 0 $radius;
+      }@else{
+        border-radius: 0px;
+      }
+    }@else{
+      border-radius: 0px;
+    }
+  }
+
+  @mixin mix_shadow($south_markup, $degree, $intensity){
+    -webkit-box-shadow: 0px $south_markup $degree $degree/2 rgba(0,0,0,$intensity);
+    -moz-box-shadow: 0px $south_markup $degree $degree/2 rgba(0,0,0,$intensity);
+    box-shadow: 0px $south_markup $degree $degree/2 rgba(0,0,0,$intensity); 
+  }
+
+  @mixin mix_transition($time, $custom...){
+    @if $time == 'custom' {
+      transition: $custom;
+    }@else {
+      transition: all $time;
+    }
+  }
+
+  @mixin mix_calculate($attr, $var_1, $var_2, $operation:'-'){
+    @if $operation == '+'{
+      #{$attr}: -webkit-calc(#{$var_1} + #{$var_2});
+      #{$attr}:    -moz-calc(#{$var_1} + #{$var_2});
+      #{$attr}:         calc(#{$var_1} + #{$var_2});
+    }@else if $operation == '-'{
+      #{$attr}: -webkit-calc(#{$var_1} - #{$var_2});
+      #{$attr}:    -moz-calc(#{$var_1} - #{$var_2});
+      #{$attr}:         calc(#{$var_1} - #{$var_2});
+    }
+  }
+
+  @function convert_rem_to_px($rem){
+    @return ($rem/1rem)*$base-size + 0px;
+  }
+
+  @function convert_px_to_rem($px){
+    @return $px/1px/$base-size + 0rem;
+  }
+
+  @mixin mix_fixed_div($type, $z_index){
+    position: $type;
+    z-index: $z_index;
+  }
+
+  @mixin mix_border_generator($border_width:$typical_border_width, $static_color:$color_border_gray){
+    border-width: $border_width;
+    border-style: solid;
+    border-color: $static_color;
+  }
+
+  @mixin mix_text_overflow(){
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  @mixin mix_text_overflow_multi_line($num_of_lines: 2){
+    display: -webkit-box;
+    -webkit-line-clamp: $num_of_lines;
+    -webkit-box-orient: vertical;
+  }
+
+  @mixin mix_enable_scrollbar($direction: 'vertical'){
+    overflow: scroll;
+    @if $direction == 'vertical'{
+      overflow-x: overlay;
+    }@else if $direction == 'horizontal'{
+      overflow-y: overlay;
+    }@else if $direction == 'both'{
+      overflow-x: overlay;
+      overflow-y: overlay;
+    }@else if $direction == 'none'{
+      overflow: unset;
+      overflow-x: unset;
+      overflow-y: unset;
+    }
+  }
+
+  @mixin mix_hide_scrollbar(){
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  @mixin mix_break_word(){
+    word-break: break-word;
+    @supports (-moz-appearance:none) {
+      word-break: break-all;
+    }
+  }
+
+  //Media Queries
+  @mixin mq-small-min {
+    @media (min-width: $mediaQuery_size_small) {
+      @content;
+    }
+  }
+
+  @mixin mq-medium-min {
+    @media (min-width: $mediaQuery_size_medium) {
+      @content;
+    }
+  }
+
+  @mixin mq-large-min {
+    @media (min-width: $mediaQuery_size_large) {
+      @content;
+    }
+  }
+
+  @mixin mq-x-large-min {
+    @media (min-width: $mediaQuery_size_xLarge) {
+      @content;
+    }
+  }
+
+  @mixin mq-xx-large-min {
+    @media (min-width: $mediaQuery_size_xxLarge) {
+      @content;
+    }
+  }
+
+  @mixin mix_stencil_animation(){
+    animation: stencilPulse $animation_duration_loading infinite ease-in-out;
+  }
+
+  //Material
+  @mixin mix_alive($weight: 'normal', $custom...){
+    @if $weight == 'light'{
+      @include mix_transition($animation_duration_light);
+    }@else if $weight == 'normal'{
+      @include mix_transition($animation_duration_normal);
+    }@else if $weight == 'heavy'{
+      @include mix_transition($animation_duration_heavy);
+    }@else if $weight == 'extra-heavy'{
+      @include mix_transition($animation_duration_extra_heavy);
+    }@else if $weight == 'debug'{
+      @include mix_transition(20s);
+    }@else if $weight == 'custom'{
+      @include mix_transition('custom', $custom);
+    }@else{
+      transition: none;
+    }
+  }
+
+  @mixin material($style: 'normal', $height: 'normal'){
+    @if $style == 'normal'{
+      cursor: pointer;
+      @if $height == 'low'{
+        @include mix_shadow(0.5px, 2px, 0.6);
+        &:hover{
+          @include mix_shadow(1px, 5px, 0.6);
+        }
+      }@else{
+        @include mix_shadow(1px, 4px, 0.4);
+        &:hover{
+          @include mix_shadow(5px, 12px, 0.6);
+        }
+      }
+    }@else if $style == 'static'{
+      cursor: pointer;
+      @include mix_shadow(1px, 4px, 0.4);
+    }@else{
+      cursor: default;
+      @include mix_shadow(0px, 0px, 0);
+      &:hover{
+        @include mix_shadow(0px, 0px, 0);
+      }
+    }
+  }

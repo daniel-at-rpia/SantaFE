@@ -1,0 +1,85 @@
+$color_border_gray: $color_gray_4;
+
+$color_primary_key: #CC7EB4;
+$color_foreign_key: #8A84A5;
+
+$color_provenance: $color_blue_5;
+$color_warning: $color_orange_5;
+$color_active: $color_gray_85;
+$color_disabled: $color_gray_5;
+$color_kill: $color_red_5;
+$color_create: $color_green_4;
+$color_edit: $color_blue_gray_5;
+$color_stencil: $color_gray_4;
+
+$color_modal_background_hide: rgba(black, 0);
+$color_modal_background_show: rgba(black, 0.5); 
+
+// Store variables that are used globally, in order to avoid hierarchy problem
+$iconButton_size_regular: 2.25rem;
+$typical_border_width: 0.0625rem;
+$scroll_bar_width: 0.5rem;
+$compose_card_badge_width: 0.3125rem;
+$textarea_minimum_height: 2.125rem;   // Smallest height that doesn't trigger scroll bar with normal font size
+
+$spacing_xx_large: 6.25rem;   // 100px
+$spacing_x_large: 3.125rem;   // 50px
+$spacing_large: 1.5625rem;    // 25px
+$spacing_medium: 0.9375rem;   // 15px
+$spacing_small: 0.625rem;     // 10px
+$spacing_x_small: 0.3125rem;  // 5px
+$spacing_xx_small: 0.1873rem; // 3px
+$spacing_minimum: 0.0625rem;  // 1px
+
+$font_size_xx_small: 0.625rem;
+$font_size_x_small: 0.75rem;
+$font_size_small: 0.875rem;
+$font_size_normal: 1rem;
+$font_size_large: 1.25rem;
+$font_size_x_large: 1.5rem;
+$font_size_xx_large: 2rem;
+$font_size_xxx_large: 2.5rem;
+$font_size_xxxx_large: 3rem;
+
+$line_height_stencil_slim: 0.75;
+$line_height_minimum: 1;
+$line_height_x_small: 1.1;
+$line_height_default: 1.125;
+$line_height_small: 1.25;
+$line_height_normal: 1.5;
+$line_height_large: 2;
+$line_height_x_large: 2.5;
+
+$font_color_major: $color_gray_9;
+$font_color_minor: $color_gray_6;
+$font_color_inverse: $color_white;
+
+$base-size: 16;
+
+
+$z_index_feedback_toast: 39999;
+$z_index_loadingSpinner: 35000;
+$z_index_modal: 29999;
+$z_index_navTrigger: 20100;
+$z_index_feedbackTrigger: 20050;
+$z_index_mainNavMenu: 20000;
+$z_index_topNavMenu: 19999;
+$z_index_standard_dropdown: 3000;
+$z_index_standard_tooltip: 1000;
+$z_index_standard_hovering_item: 100;
+$z_index_standard_base_item_lift: 50;
+$z_index_standard_base_item_solid: 1;
+$z_index_standard_base_item: unset;
+
+$animation_duration_light: 0.2s;
+$animation_duration_normal: 0.4s;
+$animation_duration_heavy: 1s;
+$animation_duration_loading: 1.5s;
+$animation_duration_extra_heavy: 2.5s;
+$animation_duration_debug: 20s;
+
+$mediaQuery_size_small: 30rem;
+$mediaQuery_size_medium: 48rem;
+$mediaQuery_size_large: 64rem;
+$mediaQuery_size_xLarge: 90rem;
+$mediaQuery_size_xxLarge: 120rem;
