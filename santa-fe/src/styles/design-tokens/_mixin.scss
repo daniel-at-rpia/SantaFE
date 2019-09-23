@@ -199,7 +199,6 @@
 
   @mixin material($style: 'normal', $height: 'normal'){
     @if $style == 'normal'{
-      @include mix_alive('light');
       cursor: pointer;
       @if $height == 'low'{
         @include mix_shadow(0.5px, 2px, 0.6);
@@ -222,4 +221,16 @@
         @include mix_shadow(0px, 0px, 0);
       }
     }
+  }
+
+  //Card Gradient
+  @mixin mix_gradient($primary_color, $secondary_color, $percentage, $degree){
+    background: $primary_color; /* Legacy browsers */
+    background: -moz-linear-gradient($degree,  $primary_color $percentage, $secondary_color 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient($degree,  $primary_color $percentage, $secondary_color 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient($degree,  $primary_color $percentage, $secondary_color 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  }
+
+  @mixin mix_santaCard($primary, $secondary){
+    @include mix_gradient($primary, $secondary, $santaCard_primary_percentage, $santaCard_gradient_degree);
   }
