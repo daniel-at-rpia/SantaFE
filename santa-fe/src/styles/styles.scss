@@ -66,3 +66,9 @@ html {
   label{
     margin-bottom: 0;
   }
+  button{
+    @extend .santa-btn;
+    font-weight: 400;
+    font-family: "SantaOpenSans";
+    line-height: $line_height_default;
+  }

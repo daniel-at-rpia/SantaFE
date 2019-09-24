@@ -8,6 +8,14 @@
   margin: $spacing_large;
   &__test {
     margin: $spacing_large;
+    width: $securityCard_width + $spacing_large;
+    &-ctas {
+      display: flex;
+      margin-bottom: $spacing_small;
+      &-btn {
+        margin-right: $spacing_small;
+      }
+    }
     &-item {
       display: flex;
       .sat-securityCard {

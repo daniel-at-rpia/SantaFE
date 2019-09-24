@@ -28,21 +28,44 @@ export class MarketContainer {
     private dtoService: DTOService
   ) {
     this.initiateComponentState();
-    this.populateData();
   }
 
   private populateData(){
+  }
+
+  removeData(targetList){
+    if (this.state.securityList === targetList) {
+      this.state.securityList = [];
+    } else if (this.state.securityList2 === targetList) {
+      this.state.securityList2 = [];
+    } else if (this.state.securityList3 === targetList) {
+      this.state.securityList3 = [];
+    } else if (this.state.securityList4 === targetList) {
+      this.state.securityList4 = [];
+    }
+  }
+
+  populateDataForOne(){
     this.state.securityList = SecurityList.map((eachSecurity) => {
       return this.dtoService.formSecurityCardObject(eachSecurity);
     });
+  }
+
+  populateDataForTwo(){
     this.state.securityList2 = cloneDeep(this.state.securityList);
     this.state.securityList2.forEach((eachSecurity) => {
       eachSecurity.state.isStencil = true;
     });
+  }
+
+  populateDataForThree(){
     this.state.securityList3 = cloneDeep(this.state.securityList);
     this.state.securityList3.forEach((eachSecurity) => {
       eachSecurity.state.isTable = true;
     });
+  }
+
+  populateDataForFour(){
     this.state.securityList4 = cloneDeep(this.state.securityList);
     this.state.securityList4.forEach((eachSecurity) => {
       eachSecurity.state.isStencil = true;

@@ -1,0 +1,78 @@
+  .santa-btn {
+    $btnBlockName: &;
+    @include mix_border_radius(3px);
+    @include material();
+    @include mix_alive('light');
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    padding: $spacing_small;
+    margin: 0;
+    background: none;
+    overflow: visible;
+    border: none;
+    user-select: none;
+    color: $font_color_major;
+    background-color: $color_white;
+    &:focus{
+      outline: none;
+    }
+    &--small {
+      font-size: $font_size_small;
+    }
+    &--labelled {
+      flex-direction: row;
+      &>i {
+        color: $font_color_major;
+        margin-right: $spacing_medium;
+        font-size: $font_size_large;
+      }
+      &>span {
+        color: $font_color_major;
+      }
+      &>#{$btnBlockName}__loadingIcon {
+        display: none;
+        margin: 0 $spacing_large;
+        color: $theme_color_1;
+      }
+    }
+    &--iconOnly {
+      padding: 0;
+      width: $iconButton_size_regular;
+      height: $iconButton_size_regular;
+    }
+    &--labelled#{$btnBlockName}--loading {
+      @include material('none');
+      background-color: $theme_color_1;
+      &>i {
+        display: none;
+      }
+      &>span {
+        display: none;
+      }
+      &>#{$btnBlockName}__loadingIcon {
+        display: inline-block;
+      }
+    }
+    &--labelled#{$btnBlockName}--small {
+      &>i {
+        font-size: $font_size_normal;
+        margin-right: $spacing_small;
+      }
+      &>span {
+        font-size: $font_size_small;
+      }
+      &>#{$btnBlockName}__loadingIcon {
+        margin: 0 $spacing_large;
+      }
+    }
+    &--inverseLabelled {
+      &>i {
+        color: $font_color_inverse;
+      }
+      &>span {
+        color: $font_color_inverse;
+      }
+    }
+  }
