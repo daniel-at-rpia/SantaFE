@@ -5,7 +5,7 @@ import {
   Input
 } from '@angular/core';
 
-import { securityDTO } from 'app/models/frontend/frontend-models.interface';
+import { securityDTO } from 'App/models/frontend/frontend-models.interface';
 
 @Component({
   selector: 'security-card',
@@ -14,12 +14,15 @@ import { securityDTO } from 'app/models/frontend/frontend-models.interface';
   encapsulation: ViewEncapsulation.None
 })
 export class SecurityCard implements OnInit {
-  @Input() cardData: any;
-  @Input() isStencil: boolean;
-  @Input() isTable: boolean;
+  @Input() cardData: securityDTO;
   constructor() { }
 
   ngOnInit() {
+    // this is for demo only
+    if (!!this.cardData.state.isStencil) {
+      this.cardData.data.name = 'LONG PLACEHOLDER';
+      this.cardData.data.ratingValue = 'AA';
+    }
   }
 
 }

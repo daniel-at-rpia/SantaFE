@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 
+declare const require: any;
+export const cloneDeep = require('lodash.cloneDeep');
+
 @Injectable()
 export class UtilityService {
   constructor(){}

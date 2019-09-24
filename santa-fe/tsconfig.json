@@ -11,15 +11,19 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
+    "types": [
+      "node"
+    ],
     "typeRoots": [
       "node_modules/@types"
     ],
     "paths": {
-      "app/*": ["src/app/*"],
-      "styles/*": ["src/app/styles/*"],
+      "App/*": ["src/app/*"],
+      "Styles/*": ["src/app/styles/*"],
       "BEModels/*": ["src/app/models/backend/*"],
+      "FEModels/*": ["src/app/models/frontend/*"],
       "RootServices/*": ["src/app/services/*"],
-      "Market/*": ["src/app/models/market/*"]
+      "Market/*": ["src/app/modules/market/*"]
     },
     "lib": [
       "es2018",

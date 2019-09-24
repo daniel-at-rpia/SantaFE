@@ -32,6 +32,7 @@ $securityCard_rating_opacity: 0.15;
       margin-left: $spacing_small;
       font-size: $font_size_small;
       user-select: none;
+      line-height: $line_height_minimum;
     }
   }
   &__rating {
@@ -45,7 +46,7 @@ $securityCard_rating_opacity: 0.15;
       margin-right: $spacing_x_small;
       color: $font_color_major;
       opacity: $securityCard_rating_opacity;
-      font-size: 24px;
+      font-size: $font_size_x_large;
       font-family: 'SantaBlackOps';
       line-height: $line_height_minimum;
       user-select: none;
@@ -60,7 +61,13 @@ $securityCard_rating_opacity: 0.15;
         background-color: $color_stencil;
       }
       &__rating {
-        display: none;
+        align-items: center;
+        &-text {
+          @include mix_stencil_animation;
+          color: $color_stencil;
+          background-color: $color_stencil;
+          font-size: $font_size_large;
+        }
       }
     }
   }

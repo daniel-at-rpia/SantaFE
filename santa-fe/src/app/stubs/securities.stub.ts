@@ -1,4 +1,4 @@
-import { BESecurityDTO } from 'app/models/backend/backend-models.interface';
+import { BESecurityDTO } from 'App/models/backend/backend-models.interface';
 
 export const SecurityList: Array<BESecurityDTO> = [
   {

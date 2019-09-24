@@ -1,14 +1,14 @@
 <article
-  class="sat-securityCard--type-{{cardData.ratingLevel}}{{cardData.seniorityLevel}}"
+  class="sat-securityCard--type-{{cardData.data.ratingLevel}}{{cardData.data.seniorityLevel}}"
   [ngClass]="{
     'sat-securityCard': true,
-    'sat-securityCard--tableState': !!isTable,
-    'sat-securityCard--stencilState': !!isStencil
+    'sat-securityCard--tableState': cardData.state.isTable,
+    'sat-securityCard--stencilState': cardData.state.isStencil
   }">
   <section class="sat-securityCard__name">
-    <span class="sat-securityCard__name-text">{{cardData.name}}</span>
+    <span class="sat-securityCard__name-text">{{cardData.data.name}}</span>
   </section>
   <section class="sat-securityCard__rating">
-    <span class="sat-securityCard__rating-text">{{cardData.ratingValue}}</span>
+    <span class="sat-securityCard__rating-text">{{cardData.data.ratingValue}}</span>
   </section>
 </article>
