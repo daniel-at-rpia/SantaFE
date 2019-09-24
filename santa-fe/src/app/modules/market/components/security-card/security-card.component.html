@@ -1,0 +1,9 @@
+<article
+  [ngClass]="'sat-securityCard sat-securityCard--type-'+ cardData.ratingLevel + cardData.seniorityLevel">
+  <section class="sat-securityCard__name">
+    <span class="sat-securityCard__name-text">{{cardData.name}}</span>
+  </section>
+  <section class="sat-securityCard__rating">
+    <span class="sat-securityCard__rating-text">{{cardData.ratingValue}}</span>
+  </section>
+</article>

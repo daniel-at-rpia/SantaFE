@@ -1,0 +1,8 @@
+<article class="sat-market">
+  market page
+  <section class="sat-market__test">
+    <div *ngFor="let eachCard of state.securityList; let i = index">
+        <security-card [cardData]="eachCard"></security-card>
+    </div>
+  </section>
+</article>

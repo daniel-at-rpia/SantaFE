@@ -19,7 +19,11 @@
       "dom"
     ],
     "paths": {
-      "@styles/*": ["/src/app/styles/*"]
+      "@app/*": ["/src/app/*"],
+      "@styles/*": ["/src/app/styles/*"],
+      "@BEModels/*": ["/src/app/models/backend/*"],
+      "@RootServices/*": ["/src/app/services/*"],
+      "@Market/*": ["/src/app/models/market/*"]
     }
   },
   "angularCompilerOptions": {

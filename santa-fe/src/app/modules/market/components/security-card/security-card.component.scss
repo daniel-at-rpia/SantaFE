@@ -1,0 +1,52 @@
+@import "global.scss";
+@import "./security-card-mixin.scss";
+
+$securityCard_height: 2rem;
+$securityCard_width: 14rem;
+$securityCard_name_rightGap: 3rem;
+$securityCard_rating_opacity: 0.15;
+
+.sat-securityCard {
+  $securityCardBlockName: &;
+  @include mix_fixed_div(relative, $z_index_standard_base_item);
+  @include mix_securityCard();
+  @include mix_border_radius(5px);
+  display: flex;
+  background-color: $color_white;
+  height: $securityCard_height;
+  width: $securityCard_width;
+  overflow: hidden;
+  flex-wrap: nowrap;
+  &__name {
+    @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
+    @include mix_calculate(flex-basis, 100%, $securityCard_name_rightGap, '-');
+    flex-grow: 0;
+    flex-shrink: 1;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    &-text {
+      @include mix_text_overflow;
+      @include mix_break_word;
+      color: $font_color_inverse;
+      padding-left: $spacing_small;
+      font-size: $font_size_small;
+    }
+  }
+  &__rating {
+    @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
+    right: 0;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    &-text {
+      margin-right: $spacing_x_small;
+      color: $font_color_major;
+      opacity: $securityCard_rating_opacity;
+      font-size: 24px;
+      font-family: 'SantaBlackOps';
+      line-height: $line_height_minimum;
+    }
+  }
+}

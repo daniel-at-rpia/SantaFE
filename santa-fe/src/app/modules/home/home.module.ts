@@ -4,13 +4,11 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { HomePage } from './home.page';
 import { HomeContainer } from './containers/home.container';
-import { SecurityCard } from './components/security-card/security-card.component';
 
 @NgModule({
   declarations: [
     HomePage,
-    HomeContainer,
-    SecurityCard
+    HomeContainer
   ],
   imports: [
     CommonModule,

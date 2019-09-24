@@ -6,10 +6,4 @@
   flex-direction: column;
   align-items: center;
   margin: $spacing_large;
-  &__test {
-    margin-top: $spacing_large;
-    &>.sat-securityCard {
-      margin: $spacing_small 0;
-    }
-  }
 }
