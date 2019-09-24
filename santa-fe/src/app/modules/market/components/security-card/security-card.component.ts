@@ -27,7 +27,7 @@ export class SecurityCard implements OnInit {
   }
 
   onClickCard(){
-    if (!this.cardData.state.isTable) {
+    if (!this.cardData.state.isTable && !this.cardData.state.isStencil) {
       this.cardData.state.isSelected = !this.cardData.state.isSelected;
     }
   }
