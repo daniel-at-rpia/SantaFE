@@ -2,7 +2,8 @@ import {
   Component,
   OnInit,
   ViewEncapsulation,
-  Input
+  Input,
+  Output
 } from '@angular/core';
 
 import { securityDTO } from 'App/models/frontend/frontend-models.interface';
@@ -22,6 +23,12 @@ export class SecurityCard implements OnInit {
     if (!!this.cardData.state.isStencil) {
       this.cardData.data.name = 'LONG PLACEHOLDER';
       this.cardData.data.ratingValue = 'AA';
+    }
+  }
+
+  onClickCard(){
+    if (!this.cardData.state.isTable) {
+      this.cardData.state.isSelected = !this.cardData.state.isSelected;
     }
   }
 

@@ -8,8 +8,14 @@
   margin: $spacing_large;
   &__test {
     margin: $spacing_large;
-    .sat-securityCard {
-      margin: $spacing_small 0;
+    &-item {
+      display: flex;
+      .sat-securityCard {
+        margin: $spacing_small 0;
+      }
+      &--expanded {
+        height: $securityCard_previewVariant_height + $spacing_small*2;
+      }
     }
   }
 }

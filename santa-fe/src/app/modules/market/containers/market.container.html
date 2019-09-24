@@ -1,22 +1,27 @@
 <article class="sat-market">
   market page
   <section class="sat-market__test">
-    <div *ngFor="let eachCard of state.securityList; let i = index">
+    <div
+      *ngFor="let eachCard of state.securityList; let i = index"
+      [ngClass]="{
+        'sat-market__test-item': true,
+        'sat-market__test-item--expanded': eachCard.state.isSelected
+      }">
+      <security-card [cardData]="eachCard"></security-card>
+    </div>
+  </section>
+  <section class="sat-market__test">
+    <div class="sat-market__test-item" *ngFor="let eachCard of state.securityList2; let i = index">
         <security-card [cardData]="eachCard"></security-card>
     </div>
   </section>
   <section class="sat-market__test">
-    <div *ngFor="let eachCard of state.securityList2; let i = index">
+    <div class="sat-market__test-item" *ngFor="let eachCard of state.securityList4; let i = index">
         <security-card [cardData]="eachCard"></security-card>
     </div>
   </section>
   <section class="sat-market__test">
-    <div *ngFor="let eachCard of state.securityList4; let i = index">
-        <security-card [cardData]="eachCard"></security-card>
-    </div>
-  </section>
-  <section class="sat-market__test">
-    <div *ngFor="let eachCard of state.securityList3; let i = index">
+    <div class="sat-market__test-item" *ngFor="let eachCard of state.securityList3; let i = index">
         <security-card [cardData]="eachCard"></security-card>
     </div>
   </section>
