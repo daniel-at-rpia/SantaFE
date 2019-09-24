@@ -6,7 +6,7 @@ import { MarketPage } from './market.page';
 import { MarketContainer } from './containers/market.container';
 import { SecurityCard } from './components/security-card/security-card.component';
 
-import { DTOService } from '../../services/DTOService';
+import { DTOService } from 'app/services/DTOService';
 
 @NgModule({
   declarations: [

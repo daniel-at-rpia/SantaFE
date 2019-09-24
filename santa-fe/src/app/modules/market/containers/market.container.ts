@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { SecurityList } from '../../../stubs/securities.stub';
-import { DTOService } from '../../../services/DTOService';
+import { SecurityList } from 'app/stubs/securities.stub';
+import { DTOService } from 'app/services/DTOService';
 
 @Component({
   selector: 'market-container',

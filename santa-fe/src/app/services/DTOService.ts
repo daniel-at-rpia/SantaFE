@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BESecurityDTO } from '../models/backend/backend-models.interface';
-import { securityDTO } from '../models/frontend/frontend-models.interface';
+import { BESecurityDTO } from 'app/models/backend/backend-models.interface';
+import { securityDTO } from 'app/models/frontend/frontend-models.interface';
 import { UtilityService } from './UtilityService';
 
 @Injectable()
