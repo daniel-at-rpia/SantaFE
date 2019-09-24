@@ -1,0 +1,47 @@
+
+
+@mixin mix_securityCard(){
+  @include material();
+  @include mix_alive('light');
+  &--type-11 { @include mix_santaCard($color_rating_aaa, $color_seniority_1); }
+  &--type-12 { @include mix_santaCard($color_rating_aaa, $color_seniority_2); }
+  &--type-13 { @include mix_santaCard($color_rating_aaa, $color_seniority_3); }
+  &--type-14 { @include mix_santaCard($color_rating_aaa, $color_seniority_4); }
+  &--type-15 { @include mix_santaCard($color_rating_aaa, $color_seniority_5); }
+
+  &--type-21 { @include mix_santaCard($color_rating_aa, $color_seniority_1); }
+  &--type-22 { @include mix_santaCard($color_rating_aa, $color_seniority_2); }
+  &--type-23 { @include mix_santaCard($color_rating_aa, $color_seniority_3); }
+  &--type-24 { @include mix_santaCard($color_rating_aa, $color_seniority_4); }
+  &--type-25 { @include mix_santaCard($color_rating_aa, $color_seniority_5); }
+
+  &--type-31 { @include mix_santaCard($color_rating_a, $color_seniority_1); }
+  &--type-32 { @include mix_santaCard($color_rating_a, $color_seniority_2); }
+  &--type-33 { @include mix_santaCard($color_rating_a, $color_seniority_3); }
+  &--type-34 { @include mix_santaCard($color_rating_a, $color_seniority_4); }
+  &--type-35 { @include mix_santaCard($color_rating_a, $color_seniority_5); }
+
+  &--type-41 { @include mix_santaCard($color_rating_bbb, $color_seniority_1); }
+  &--type-42 { @include mix_santaCard($color_rating_bbb, $color_seniority_2); }
+  &--type-43 { @include mix_santaCard($color_rating_bbb, $color_seniority_3); }
+  &--type-44 { @include mix_santaCard($color_rating_bbb, $color_seniority_4); }
+  &--type-45 { @include mix_santaCard($color_rating_bbb, $color_seniority_5); }
+
+  &--type-51 { @include mix_santaCard($color_rating_bb, $color_seniority_1); }
+  &--type-52 { @include mix_santaCard($color_rating_bb, $color_seniority_2); }
+  &--type-53 { @include mix_santaCard($color_rating_bb, $color_seniority_3); }
+  &--type-54 { @include mix_santaCard($color_rating_bb, $color_seniority_4); }
+  &--type-55 { @include mix_santaCard($color_rating_bb, $color_seniority_5); }
+
+  &--type-61 { @include mix_santaCard($color_rating_b, $color_seniority_1); }
+  &--type-62 { @include mix_santaCard($color_rating_b, $color_seniority_2); }
+  &--type-63 { @include mix_santaCard($color_rating_b, $color_seniority_3); }
+  &--type-64 { @include mix_santaCard($color_rating_b, $color_seniority_4); }
+  &--type-65 { @include mix_santaCard($color_rating_b, $color_seniority_5); }
+
+  &--type-71 { @include mix_santaCard($color_rating_ccctod, $color_seniority_1); }
+  &--type-72 { @include mix_santaCard($color_rating_ccctod, $color_seniority_2); }
+  &--type-73 { @include mix_santaCard($color_rating_ccctod, $color_seniority_3); }
+  &--type-74 { @include mix_santaCard($color_rating_ccctod, $color_seniority_4); }
+  &--type-75 { @include mix_santaCard($color_rating_ccctod, $color_seniority_5); }
+}

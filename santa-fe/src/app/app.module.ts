@@ -5,6 +5,9 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { WelcomeModule } from './modules/welcome/welcome.module';
 import { HomeModule } from './modules/home/home.module';
+import { MarketModule } from './modules/market/market.module';
+import { DTOService } from './services/DTOService';
+import { UtilityService } from './services/UtilityService';
 
 import { AppComponent } from './app.component';
 
@@ -16,9 +19,13 @@ import { AppComponent } from './app.component';
     BrowserModule,
     AppRoutingModule,
     WelcomeModule,
-    HomeModule
+    HomeModule,
+    MarketModule
   ],
-  providers: [],
+  providers: [
+    DTOService,
+    UtilityService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

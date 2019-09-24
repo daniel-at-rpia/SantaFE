@@ -1,0 +1,147 @@
+@import "global.scss";
+@import "./security-card-mixin.scss";
+
+$securityCard_name_rightGap: 3rem;
+$securityCard_rating_opacity: 0.10;
+
+.sat-securityCard {
+  $securityCardBlockName: &;
+  @include mix_fixed_div(relative, $z_index_standard_base_item);
+  @include mix_securityCard();
+  @include mix_border_radius(5px);
+  @include mix_alive('custom', height $animation_duration_light, box-shadow $animation_duration_light);
+  display: flex;
+  flex-wrap: nowrap;
+  background-color: $color_white;
+  height: $securityCard_labelVariant_height;
+  width: $securityCard_width;
+  &__name {
+    @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
+    @include mix_calculate(flex-basis, 100%, $securityCard_name_rightGap, '-');
+    flex-grow: 0;
+    flex-shrink: 1;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    &-text {
+      @include mix_text_overflow;
+      @include mix_break_word;
+      color: $font_color_inverse;
+      margin-left: $spacing_small;
+      font-size: $font_size_small;
+      user-select: none;
+      line-height: $line_height_minimum;
+    }
+  }
+  &__rating {
+    @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
+    right: 0;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    &-text {
+      margin-right: $spacing_x_small;
+      color: $color_black;
+      opacity: $securityCard_rating_opacity;
+      font-size: $font_size_x_large;
+      font-family: 'SantaBlackOps';
+      line-height: $line_height_minimum;
+      user-select: none;
+    }
+  }
+  &__keyValue {
+    display: none;
+    flex: 1 1 50%;
+    justify-content: center;
+    align-items: flex-end;
+    &-text {
+      @include mix_border_radius(5px);
+      background-color: $color_white;
+      user-select: none;
+      margin-bottom: $spacing_small;
+      padding: $spacing_x_small $spacing_medium;
+    }
+  }
+  &__seniority {
+    @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+    @include mix_alive('custom', $animation_duration_light transform);
+    transform: scale(0.01);
+    display: flex;
+    top: -0.75rem;
+    right: -0.75rem;
+    width: 2rem;
+    height: 2rem;
+    overflow: hidden;
+    &-text {
+      @include mix_border_radius(50%);
+      flex: 1 1 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: $color_active;
+      color: $font_color_inverse;
+    }
+  }
+  &--stencilState {
+    background: $color_white;
+    #{$securityCardBlockName} {
+      &__name-text {
+        @include mix_stencil_animation;
+        color: $color_stencil;
+        background-color: $color_stencil;
+      }
+      &__rating {
+        align-items: center;
+        &-text {
+          @include mix_stencil_animation;
+          color: $color_stencil;
+          background-color: $color_stencil;
+          font-size: $font_size_large;
+        }
+      }
+    }
+  }
+  &--tableState {
+    @include material('none');
+    @include mix_border_generator($typical_border_width, $color_gray_85);
+  }
+  &--detailState {
+    @include material('none');
+    background: $color_active;
+    height: $securityCard_previewVariant_height;
+    flex-direction: column;
+    #{$securityCardBlockName} {
+      &__name {
+        flex: 1 1 50%;
+        justify-content: center;
+        align-items: flex-start;
+        &-text {
+          white-space: normal;
+          margin: $spacing_small $spacing_small 0 $spacing_small;
+          text-align: center;
+          font-size: $font_size_large;
+          line-height: $line_height_normal;
+        }
+      }
+      &__rating {
+        //@include mix_calculate(top, 50%, $font_size_xx_large*$line_height_minimum/2 , '-');
+        top: 50%;
+        left: 0;
+        width: 100%;
+        height: $font_size_xx_large * $line_height_minimum;
+        justify-content: center;
+        &-text {
+          color: $font_color_inverse;
+          font-size: $font_size_xx_large;
+        }
+      }
+      &__keyValue {
+        display: flex;
+      }
+      &__seniority {
+        transform: scale(1);
+      }
+    }
+  }
+}

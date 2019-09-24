@@ -1,0 +1,22 @@
+<article
+  (click)="onClickCard()"
+  class="sat-securityCard--type-{{cardData.data.ratingLevel}}{{cardData.data.seniorityLevel}}"
+  [ngClass]="{
+    'sat-securityCard': true,
+    'sat-securityCard--tableState': cardData.state.isTable,
+    'sat-securityCard--stencilState': cardData.state.isStencil,
+    'sat-securityCard--detailState': cardData.state.isSelected
+  }">
+  <section class="sat-securityCard__name">
+    <span class="sat-securityCard__name-text">{{cardData.data.name}}</span>
+  </section>
+  <section class="sat-securityCard__rating">
+    <span class="sat-securityCard__rating-text">{{cardData.data.ratingValue}}</span>
+  </section>
+  <section class="sat-securityCard__keyValue">
+    <span class="sat-securityCard__keyValue-text">300</span>
+  </section>
+  <section class="sat-securityCard__seniority">
+    <span class="sat-securityCard__seniority-text">SS</span>
+  </section>
+</article>

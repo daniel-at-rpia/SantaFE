@@ -1,7 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": ".",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
@@ -11,9 +11,20 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
+    "types": [
+      "node"
+    ],
     "typeRoots": [
       "node_modules/@types"
     ],
+    "paths": {
+      "App/*": ["src/app/*"],
+      "Styles/*": ["src/app/styles/*"],
+      "BEModels/*": ["src/app/models/backend/*"],
+      "FEModels/*": ["src/app/models/frontend/*"],
+      "RootServices/*": ["src/app/services/*"],
+      "Market/*": ["src/app/modules/market/*"]
+    },
     "lib": [
       "es2018",
       "dom"
