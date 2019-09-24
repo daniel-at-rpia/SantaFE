@@ -1,7 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": ".",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
@@ -14,17 +14,17 @@
     "typeRoots": [
       "node_modules/@types"
     ],
+    "paths": {
+      "app/*": ["src/app/*"],
+      "styles/*": ["src/app/styles/*"],
+      "BEModels/*": ["src/app/models/backend/*"],
+      "RootServices/*": ["src/app/services/*"],
+      "Market/*": ["src/app/models/market/*"]
+    },
     "lib": [
       "es2018",
       "dom"
-    ],
-    "paths": {
-      "@app/*": ["/src/app/*"],
-      "@styles/*": ["/src/app/styles/*"],
-      "@BEModels/*": ["/src/app/models/backend/*"],
-      "@RootServices/*": ["/src/app/services/*"],
-      "@Market/*": ["/src/app/models/market/*"]
-    }
+    ]
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
