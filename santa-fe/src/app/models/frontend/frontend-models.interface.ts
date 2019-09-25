@@ -11,3 +11,16 @@ export interface securityDTO {
     isSelected: boolean;
   }
 }
+
+export interface securityGroupDTO {
+  data: {
+    name: string;
+    ratingLevel: number;
+    ratingValue: string;
+    seniorityLevel: number;
+  }
+  state: {
+    isStencil: boolean;
+    isSelected: boolean;
+  }
+}

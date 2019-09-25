@@ -197,28 +197,47 @@
     }
   }
 
+  $material_low_southMarkup: 0.03125rem;
+  $material_low_degree: 0.125rem;
+  $material_low_intensity: 0.6;
+
+  $material_lowHover_southMarkup: 0.0625rem;
+  $material_lowHover_degree: 0.3125rem;
+  $material_lowHover_intensity: 0.6;
+
+  $material_regular_southMarkup: 0.0625rem;
+  $material_regular_degree: 0.25rem;
+  $material_regular_intensity: 0.4;
+
+  $material_regularHover_southMarkup: 0.3125rem;
+  $material_regularHover_degree: 0.75rem;
+  $material_regularHover_intensity: 0.6;
+
+  $material_static_southMarkup: 0.03125rem;
+  $material_static_degree: 0.25rem;
+  $material_static_intensity: 0.4;
   @mixin material($style: 'normal', $height: 'normal'){
     @if $style == 'normal'{
       cursor: pointer;
       @if $height == 'low'{
-        @include mix_shadow(0.5px, 2px, 0.6);
+        @include mix_shadow($material_low_southMarkup, $material_low_degree, $material_low_intensity);
         &:hover{
-          @include mix_shadow(1px, 5px, 0.6);
+          @include mix_shadow($material_lowHover_southMarkup, $material_lowHover_degree, $material_lowHover_intensity);
         }
       }@else{
-        @include mix_shadow(1px, 4px, 0.4);
+        @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
         &:hover{
-          @include mix_shadow(5px, 12px, 0.6);
+          @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
         }
       }
     }@else if $style == 'static'{
       cursor: pointer;
-      @include mix_shadow(1px, 4px, 0.4);
+      @include mix_shadow($material_static_southMarkup, $material_static_degree, $material_static_intensity);
     }@else{
       cursor: default;
-      @include mix_shadow(0px, 0px, 0);
+      @include mix_shadow(0, 0, 0);
       &:hover{
-        @include mix_shadow(0px, 0px, 0);
+        @include mix_shadow(0, 0, 0);
       }
     }
   }

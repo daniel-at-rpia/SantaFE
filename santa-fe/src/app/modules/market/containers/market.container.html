@@ -1,44 +1,55 @@
 <article class="sat-market">
   market page
   <section class="sat-market__test">
-    <div class="sat-market__test-ctas">
-      <button class="sat-market__test-ctas-btn" (click)="populateDataForOne()">Show</button>
-      <button class="sat-market__test-ctas-btn" (click)="removeData(state.securityList)">Hide</button>
+    <div class="sat-market__test-test1">
+      <div class="sat-market__test-test1-ctas">
+        <button class="sat-market__test-test1-ctas-btn" (click)="populateDataForOne()">Show</button>
+        <button class="sat-market__test-test1-ctas-btn" (click)="removeData(state.securityList)">Hide</button>
+      </div>
+      <div
+        *ngFor="let eachCard of state.securityList; let i = index"
+        [ngClass]="{
+          'sat-market__test-test1-item': true,
+          'sat-market__test-test1-item--expanded': eachCard.state.isSelected
+        }">
+        <security-card [cardData]="eachCard"></security-card>
+      </div>
     </div>
-    <div
-      *ngFor="let eachCard of state.securityList; let i = index"
-      [ngClass]="{
-        'sat-market__test-item': true,
-        'sat-market__test-item--expanded': eachCard.state.isSelected
-      }">
-      <security-card [cardData]="eachCard"></security-card>
+    <div class="sat-market__test-test1">
+      <div class="sat-market__test-test1-ctas">
+        <button class="sat-market__test-test1-ctas-btn" (click)="populateDataForTwo()">Show</button>
+        <button class="sat-market__test-test1-ctas-btn" (click)="removeData(state.securityList2)">Hide</button>
+      </div>
+      <div class="sat-market__test-test1-item" *ngFor="let eachCard of state.securityList2; let i = index">
+          <security-card [cardData]="eachCard"></security-card>
+      </div>
+    </div>
+    <div class="sat-market__test-test1">
+      <div class="sat-market__test-test1-ctas">
+        <button class="sat-market__test-test1-ctas-btn" (click)="populateDataForFour()">Show</button>
+        <button class="sat-market__test-test1-ctas-btn" (click)="removeData(state.securityList4)">Hide</button>
+      </div>
+      <div class="sat-market__test-test1-item" *ngFor="let eachCard of state.securityList4; let i = index">
+          <security-card [cardData]="eachCard"></security-card>
+      </div>
+    </div>
+    <div class="sat-market__test-test1">
+      <div class="sat-market__test-test1-ctas">
+        <button class="sat-market__test-test1-ctas-btn" (click)="populateDataForThree()">Show</button>
+        <button class="sat-market__test-test1-ctas-btn" (click)="removeData(state.securityList3)">Hide</button>
+      </div>
+      <div class="sat-market__test-test1-item" *ngFor="let eachCard of state.securityList3; let i = index">
+          <security-card [cardData]="eachCard"></security-card>
+      </div>
     </div>
   </section>
-  <section class="sat-market__test">
-    <div class="sat-market__test-ctas">
-      <button class="sat-market__test-ctas-btn" (click)="populateDataForTwo()">Show</button>
-      <button class="sat-market__test-ctas-btn" (click)="removeData(state.securityList2)">Hide</button>
+  <section class="sat-market__test2">
+    <div class="sat-market__test2-ctas">
+      <button class="sat-market__test2-ctas-btn">Show</button>
+      <button class="sat-market__test2-ctas-btn">Hide</button>
     </div>
-    <div class="sat-market__test-item" *ngFor="let eachCard of state.securityList2; let i = index">
-        <security-card [cardData]="eachCard"></security-card>
-    </div>
-  </section>
-  <section class="sat-market__test">
-    <div class="sat-market__test-ctas">
-      <button class="sat-market__test-ctas-btn" (click)="populateDataForFour()">Show</button>
-      <button class="sat-market__test-ctas-btn" (click)="removeData(state.securityList4)">Hide</button>
-    </div>
-    <div class="sat-market__test-item" *ngFor="let eachCard of state.securityList4; let i = index">
-        <security-card [cardData]="eachCard"></security-card>
-    </div>
-  </section>
-  <section class="sat-market__test">
-    <div class="sat-market__test-ctas">
-      <button class="sat-market__test-ctas-btn" (click)="populateDataForThree()">Show</button>
-      <button class="sat-market__test-ctas-btn" (click)="removeData(state.securityList3)">Hide</button>
-    </div>
-    <div class="sat-market__test-item" *ngFor="let eachCard of state.securityList3; let i = index">
-        <security-card [cardData]="eachCard"></security-card>
-    </div>
+    <ul class="sat-market__test2-list">
+      <security-group></security-group>
+    </ul>
   </section>
 </article>

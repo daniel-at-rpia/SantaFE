@@ -1,0 +1,30 @@
+<article
+  class="sat-securityGroup--type-{{groupData.data.ratingLevel}}"
+  [ngClass]="{
+    'sat-securityGroup': true,
+    'sat-securityGroup--stencilState': groupData.state.isStencil,
+    'sat-securityGroup--detailState': groupData.state.isSelected
+  }">
+  <section class="sat-securityGroup__base">
+    <div class="sat-securityGroup__base-wheel sat-securityGroup__base-wheel--left">
+      <div class="sat-securityGroup__base-wheel-innerMask"></div>
+    </div>
+    <div class="sat-securityGroup__base-center"></div>
+    <div class="sat-securityGroup__base-wheel sat-securityGroup__base-wheel--right">
+      <div class="sat-securityGroup__base-wheel-innerMask"></div>
+    </div>
+  </section>
+  <section class="sat-securityGroup__content">
+    <div class="sat-securityGroup__content-wheel"></div>
+    <div class="sat-securityGroup__content-leftCanvas">
+      <span class="sat-securityGroup__content-leftCanvas-text">Something</span>
+      <span class="sat-securityGroup__content-leftCanvas-text">Something else</span>
+      <span class="sat-securityGroup__content-leftCanvas-text">else</span>
+    </div>
+    <div class="sat-securityGroup__content-rightCanvas">
+      <span class="sat-securityGroup__content-rightCanvas-text">Something else else</span>
+    </div>
+    <div class="sat-securityGroup__content-wheel"></div>
+  </section>
+  <section class="sat-securityGroup__numberTag"></section>
+</article>

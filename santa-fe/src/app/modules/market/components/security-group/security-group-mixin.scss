@@ -1,0 +1,38 @@
+
+
+@mixin mix_securityGroup(){
+  $securityGroupBlockName: &;
+  &--type-1 {
+    #{$securityGroupBlockName} {
+      &__base {
+        &-wheel {
+          background-color: $color_rating_aaa;
+          &-innerMask {
+            background-color: $color_rating_aaa;
+          }
+        }
+        &-center {
+          background-color: $color_rating_aaa;
+        }
+      }
+    }
+  }
+  &--type-2 {
+    background-color: $color_rating_aa;
+  }
+  &--type-3 {
+    background-color: $color_rating_a;
+  }
+  &--type-4 {
+    background-color: $color_rating_bbb;
+  }
+  &--type-5 {
+    background-color: $color_rating_bb;
+  }
+  &--type-6 {
+    background-color: $color_rating_b;
+  }
+  &--type-7 {
+    background-color: $color_rating_ccctod;
+  }
+}
