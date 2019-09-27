@@ -15,24 +15,123 @@
           background-color: $color_rating_aaa;
         }
       }
+      &__content-numberTag {
+        background-color: $color_rating_aaa;
+      }
     }
   }
   &--type-2 {
     background-color: $color_rating_aa;
+    #{$securityGroupBlockName} {
+      &__base {
+        &-wheel {
+          background-color: $color_rating_aa;
+          &-innerMask {
+            background-color: $color_rating_aa;
+          }
+        }
+        &-center {
+          background-color: $color_rating_aa;
+        }
+      }
+      &__content-numberTag {
+        background-color: $color_rating_aa;
+      }
+    }
   }
   &--type-3 {
     background-color: $color_rating_a;
+    #{$securityGroupBlockName} {
+      &__base {
+        &-wheel {
+          background-color: $color_rating_a;
+          &-innerMask {
+            background-color: $color_rating_a;
+          }
+        }
+        &-center {
+          background-color: $color_rating_a;
+        }
+      }
+      &__content-numberTag {
+        background-color: $color_rating_a;
+      }
+    }
   }
   &--type-4 {
     background-color: $color_rating_bbb;
+    #{$securityGroupBlockName} {
+      &__base {
+        &-wheel {
+          background-color: $color_rating_bbb;
+          &-innerMask {
+            background-color: $color_rating_bbb;
+          }
+        }
+        &-center {
+          background-color: $color_rating_bbb;
+        }
+      }
+      &__content-numberTag {
+        background-color: $color_rating_bbb;
+      }
+    }
   }
   &--type-5 {
     background-color: $color_rating_bb;
+    #{$securityGroupBlockName} {
+      &__base {
+        &-wheel {
+          background-color: $color_rating_bb;
+          &-innerMask {
+            background-color: $color_rating_bb;
+          }
+        }
+        &-center {
+          background-color: $color_rating_bb;
+        }
+      }
+      &__content-numberTag {
+        background-color: $color_rating_bb;
+      }
+    }
   }
   &--type-6 {
     background-color: $color_rating_b;
+    #{$securityGroupBlockName} {
+      &__base {
+        &-wheel {
+          background-color: $color_rating_b;
+          &-innerMask {
+            background-color: $color_rating_b;
+          }
+        }
+        &-center {
+          background-color: $color_rating_b;
+        }
+      }
+      &__content-numberTag {
+        background-color: $color_rating_b;
+      }
+    }
   }
   &--type-7 {
     background-color: $color_rating_ccctod;
+    #{$securityGroupBlockName} {
+      &__base {
+        &-wheel {
+          background-color: $color_rating_ccctod;
+          &-innerMask {
+            background-color: $color_rating_ccctod;
+          }
+        }
+        &-center {
+          background-color: $color_rating_ccctod;
+        }
+      }
+      &__content-numberTag {
+        background-color: $color_rating_ccctod;
+      }
+    }
   }
 }
