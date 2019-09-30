@@ -81,12 +81,15 @@ $securityGroup_content_numberTag_top: -($securityGroup_content_numberTag_halfSiz
       }
     }
     &-numberTag {
+      @include mix_alive('light');
+      @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
       @include mix_border_radius(50%);
-      @include mix_fixed_div(absolute, $z_index_standard_base_item_lift);
+      @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
       @include mix_calculate(left, 50%, $securityGroup_content_numberTag_size/2, '-');
       top: $securityGroup_content_numberTag_top;
       padding: $securityGroup_content_numberTag_padding;
       &-text {
+        @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
         @include mix_border_radius(50%);
         display: flex;
         justify-content: center;
@@ -95,8 +98,16 @@ $securityGroup_content_numberTag_top: -($securityGroup_content_numberTag_halfSiz
         width: $securityGroup_content_numberTag_size;
         background-color: $color_white;
       }
+      &-mask {
+        @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
+        left: -($securityGroup_content_numberTag_size - $securityGroup_content_numberTag_padding)/2;
+        top: $securityGroup_content_numberTag_halfSize;
+        height: $securityGroup_content_numberTag_size;
+        width: $securityGroup_content_numberTag_size*2;
+      }
     }
     &-canvases {
+      @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
       flex: 1 1 auto;
       display: flex;
       flex-wrap: wrap;
@@ -133,11 +144,16 @@ $securityGroup_content_numberTag_top: -($securityGroup_content_numberTag_halfSiz
     }
   }
   &:hover {
-    #{$securityGroupBlockName}__base {
-      &-wheel {
-        @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
+    #{$securityGroupBlockName} {
+      &__base {
+        &-wheel {
+          @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
+        }
+        &-center {
+          @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
+        }
       }
-      &-center {
+      &__content-numberTag {
         @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
       }
     }

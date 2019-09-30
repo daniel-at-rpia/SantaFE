@@ -15,8 +15,13 @@
           background-color: $color_rating_aaa;
         }
       }
-      &__content-numberTag {
-        background-color: $color_rating_aaa;
+      &__content {
+        &-numberTag {
+          background-color: $color_rating_aaa;
+          &-mask {
+            background-color: $color_rating_aaa;
+          }
+        }
       }
     }
   }
@@ -34,8 +39,13 @@
           background-color: $color_rating_aa;
         }
       }
-      &__content-numberTag {
-        background-color: $color_rating_aa;
+      &__content {
+        &-numberTag {
+          background-color: $color_rating_aa;
+        }
+        &-numberTagMask {
+          background-color: $color_rating_aa;
+        }
       }
     }
   }
@@ -53,8 +63,13 @@
           background-color: $color_rating_a;
         }
       }
-      &__content-numberTag {
-        background-color: $color_rating_a;
+      &__content {
+        &-numberTag {
+          background-color: $color_rating_a;
+        }
+        &-numberTagMask {
+          background-color: $color_rating_a;
+        }
       }
     }
   }
@@ -72,8 +87,13 @@
           background-color: $color_rating_bbb;
         }
       }
-      &__content-numberTag {
-        background-color: $color_rating_bbb;
+      &__content {
+        &-numberTag {
+          background-color: $color_rating_bbb;
+        }
+        &-numberTagMask {
+          background-color: $color_rating_bbb;
+        }
       }
     }
   }
@@ -91,8 +111,13 @@
           background-color: $color_rating_bb;
         }
       }
-      &__content-numberTag {
-        background-color: $color_rating_bb;
+      &__content {
+        &-numberTag {
+          background-color: $color_rating_bb;
+        }
+        &-numberTagMask {
+          background-color: $color_rating_bb;
+        }
       }
     }
   }
@@ -110,8 +135,13 @@
           background-color: $color_rating_b;
         }
       }
-      &__content-numberTag {
-        background-color: $color_rating_b;
+      &__content {
+        &-numberTag {
+          background-color: $color_rating_b;
+        }
+        &-numberTagMask {
+          background-color: $color_rating_b;
+        }
       }
     }
   }
@@ -129,8 +159,13 @@
           background-color: $color_rating_ccctod;
         }
       }
-      &__content-numberTag {
-        background-color: $color_rating_ccctod;
+      &__content {
+        &-numberTag {
+          background-color: $color_rating_ccctod;
+        }
+        &-numberTagMask {
+          background-color: $color_rating_ccctod;
+        }
       }
     }
   }
