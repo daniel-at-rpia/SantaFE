@@ -112,6 +112,8 @@
     display: -webkit-box;
     -webkit-line-clamp: $num_of_lines;
     -webkit-box-orient: vertical;
+    word-break: break-word;
+    overflow: hidden;
   }
 
   @mixin mix_enable_scrollbar($direction: 'vertical'){
@@ -252,4 +254,11 @@
 
   @mixin mix_santaCard($primary, $secondary){
     @include mix_gradient($primary, $secondary, $santaCard_primary_percentage, $santaCard_gradient_degree);
+  }
+
+  @mixin mix_rating_style(){
+    opacity: 0.10;
+    font-family: 'SantaBlackOps';
+    user-select: none;
+    line-height: $line_height_minimum;
   }
