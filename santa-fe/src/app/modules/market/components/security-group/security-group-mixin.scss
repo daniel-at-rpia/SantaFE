@@ -16,8 +16,16 @@
         }
       }
       &__content {
-        &-canvases-left-content-value-text {
-          color: $color_rating_aaa;
+        &-canvases {
+          &-left-content-value-text {
+            color: $color_rating_aaa;
+          }
+          &-right-metricLines-mask {
+            background-color: $color_rating_aaa;
+          }
+        }
+        &-wheel-chartContainer {
+          background-color: $color_rating_aaa;
         }
         &-numberTag {
           background-color: $color_rating_aaa;
@@ -43,14 +51,22 @@
         }
       }
       &__content {
-        &-canvases-left-content-value-text {
-          color: $color_rating_aa;
+        &-canvases {
+          &-left-content-value-text {
+            color: $color_rating_aa;
+          }
+          &-right-metricLines-mask {
+            background-color: $color_rating_aa;
+          }
+        }
+        &-wheel-chartContainer {
+          background-color: $color_rating_aa;
         }
         &-numberTag {
           background-color: $color_rating_aa;
-        }
-        &-numberTagMask {
-          background-color: $color_rating_aa;
+          &-mask {
+            background-color: $color_rating_aa;
+          }
         }
       }
     }
@@ -70,14 +86,22 @@
         }
       }
       &__content {
-        &-canvases-left-content-value-text {
-          color: $color_rating_a;
+        &-canvases {
+          &-left-content-value-text {
+            color: $color_rating_a;
+          }
+          &-right-metricLines-mask {
+            background-color: $color_rating_a;
+          }
+        }
+        &-wheel-chartContainer {
+          background-color: $color_rating_a;
         }
         &-numberTag {
           background-color: $color_rating_a;
-        }
-        &-numberTagMask {
-          background-color: $color_rating_a;
+          &-mask {
+            background-color: $color_rating_a;
+          }
         }
       }
     }
@@ -97,14 +121,22 @@
         }
       }
       &__content {
-        &-canvases-left-content-value-text {
-          color: $color_rating_bbb;
+        &-canvases {
+          &-left-content-value-text {
+            color: $color_rating_bbb;
+          }
+          &-right-metricLines-mask {
+            background-color: $color_rating_bbb;
+          }
+        }
+        &-wheel-chartContainer {
+          background-color: $color_rating_bbb;
         }
         &-numberTag {
           background-color: $color_rating_bbb;
-        }
-        &-numberTagMask {
-          background-color: $color_rating_bbb;
+          &-mask {
+            background-color: $color_rating_bbb;
+          }
         }
       }
     }
@@ -124,14 +156,22 @@
         }
       }
       &__content {
-        &-canvases-left-content-value-text {
-          color: $color_rating_bb;
+        &-canvases {
+          &-left-content-value-text {
+            color: $color_rating_bb;
+          }
+          &-right-metricLines-mask {
+            background-color: $color_rating_bb;
+          }
+        }
+        &-wheel-chartContainer {
+          background-color: $color_rating_bb;
         }
         &-numberTag {
           background-color: $color_rating_bb;
-        }
-        &-numberTagMask {
-          background-color: $color_rating_bb;
+          &-mask {
+            background-color: $color_rating_bb;
+          }
         }
       }
     }
@@ -151,14 +191,22 @@
         }
       }
       &__content {
-        &-canvases-left-content-value-text {
-          color: $color_rating_b;
+        &-canvases {
+          &-left-content-value-text {
+            color: $color_rating_b;
+          }
+          &-right-metricLines-mask {
+            background-color: $color_rating_b;
+          }
+        }
+        &-wheel-chartContainer {
+          background-color: $color_rating_b;
         }
         &-numberTag {
           background-color: $color_rating_b;
-        }
-        &-numberTagMask {
-          background-color: $color_rating_b;
+          &-mask {
+            background-color: $color_rating_b;
+          }
         }
       }
     }
@@ -178,14 +226,22 @@
         }
       }
       &__content {
-        &-canvases-left-content-value-text {
-          color: $color_rating_ccctod;
+        &-canvases {
+          &-left-content-value-text {
+            color: $color_rating_ccctod;
+          }
+          &-right-metricLines-mask {
+            background-color: $color_rating_ccctod;
+          }
+        }
+        &-wheel-chartContainer {
+          background-color: $color_rating_ccctod;
         }
         &-numberTag {
           background-color: $color_rating_ccctod;
-        }
-        &-numberTagMask {
-          background-color: $color_rating_ccctod;
+          &-mask {
+            background-color: $color_rating_ccctod;
+          }
         }
       }
     }

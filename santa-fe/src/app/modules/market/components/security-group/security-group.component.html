@@ -1,9 +1,10 @@
 <article
+  (click)="onClickGroup()"
   class="sat-securityGroup--type-{{groupData.data.ratingLevel}}"
   [ngClass]="{
     'sat-securityGroup': true,
     'sat-securityGroup--stencilState': groupData.state.isStencil,
-    'sat-securityGroup--detailState': groupData.state.isSelected
+    'sat-securityGroup--selectedState': groupData.state.isSelected
   }">
   <section class="sat-securityGroup__base">
     <div class="sat-securityGroup__base-wheel sat-securityGroup__base-wheel--left">
@@ -58,6 +59,8 @@
           <div class="sat-securityGroup__content-canvases-right-metricLines-lineContainer">
             <div class="sat-securityGroup__content-canvases-right-metricLines-lineContainer-line"></div>
           </div>
+          <div class="sat-securityGroup__content-canvases-right-metricLines-mask"
+          ></div>
         </div>
       </div>
       <div class="sat-securityGroup__content-canvases-behind">

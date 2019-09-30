@@ -29,7 +29,7 @@ export class SecurityGroup implements OnInit {
       },
       state: {
         isSelected: false,
-        isStencil: false
+        isStencil: true
       }
     }
   }
@@ -64,10 +64,13 @@ export class SecurityGroup implements OnInit {
     }];
     this.graphService.generateSecurityGroupPieChart('pieChart-1', data);
     this.graphService.generateSecurityGroupPieChart('pieChart-2', data2);
-
+    const groupData = this.groupData;
+    setTimeout(function(){
+      groupData.state.isStencil = false;
+    }, 2000);
   }
 
-  onClickCard(){
+  onClickGroup(){
     if (!this.groupData.state.isStencil) {
       this.groupData.state.isSelected = !this.groupData.state.isSelected;
     }
