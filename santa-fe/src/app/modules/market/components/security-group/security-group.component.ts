@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 
 import { securityGroupDTO } from 'App/models/frontend/frontend-models.interface';
+import { GraphService } from 'App/services/GraphService';
 
 @Component({
   selector: 'security-group',
@@ -16,7 +17,9 @@ import { securityGroupDTO } from 'App/models/frontend/frontend-models.interface'
 })
 export class SecurityGroup implements OnInit {
   @Input() groupData: securityGroupDTO;
-  constructor() {
+  constructor(
+    private graphService: GraphService
+  ) {
     this.groupData = {
       data: {
         name: 'lol',
@@ -37,6 +40,31 @@ export class SecurityGroup implements OnInit {
       this.groupData.data.name = 'LONG PLACEHOLDER';
       this.groupData.data.ratingValue = 'AA';
     }
+    const data = [{
+      "country": "Lithuania",
+      "litres": 501.9
+    }, {
+      "country": "Czechia",
+      "litres": 301.9
+    }, {
+      "country": "Ireland",
+      "litres": 201.1
+    }];
+    const data2 = [{
+      "country": "Lithuania",
+      "litres": 5
+    }, {
+      "country": "Czechia",
+      "litres": 3
+    }, {
+      "country": "Ireland",
+      "litres": 2
+    }, {
+      "litres": 9
+    }];
+    this.graphService.generateSecurityGroupPieChart('pieChart-1', data);
+    this.graphService.generateSecurityGroupPieChart('pieChart-2', data2);
+
   }
 
   onClickCard(){
