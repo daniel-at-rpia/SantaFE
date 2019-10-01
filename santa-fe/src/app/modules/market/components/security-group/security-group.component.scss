@@ -23,6 +23,7 @@ $securityGroup_animationDelay: $animation_duration_light;
   @include mix_securityGroup;
   flex: 1 1 auto;
   display: flex;
+  height: $securityGroup_base_wheel_size;
   &__base {
     @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
     width: 100%;
@@ -92,7 +93,7 @@ $securityGroup_animationDelay: $animation_duration_light;
           @include mix_fixed_div(absolute, $z_index_standard_base_item);
           @include mix_alive('custom', $animation_duration_normal transform);
           transition-delay: $securityGroup_animationDelay;
-          transform: rotate(0deg) scale(1);
+          transform: rotate(180deg) scale(1);
           left: -12.5%; // this magnification is necessary for countering the layout effect of the watermark
           height: 125%;
           width: 125%;
@@ -328,7 +329,7 @@ $securityGroup_animationDelay: $animation_duration_light;
           background-color: $color_stencil;
           &-chart {
             transition-delay: unset;
-            transform: rotate(180deg) scale(0.01);
+            transform: rotate(0deg) scale(0.01);
             opacity: 0;
           }
           &-innerRadius {
@@ -377,6 +378,10 @@ $securityGroup_animationDelay: $animation_duration_light;
         }
         &-wheel-chartContainer {
           background-color: $color_active;
+          &-chart {
+            transition-delay: unset;
+            transform: rotate(0deg) scale(1);
+          }
           &-innerRadius {
             background-color: $color_active;
             transition-delay: unset;

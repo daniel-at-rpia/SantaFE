@@ -1,5 +1,8 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { SecurityList } from 'App/stubs/securities.stub';
+import {
+  SecurityList,
+  SecurityGroupList
+} from 'App/stubs/securities.stub';
 import { DTOService } from 'App/services/DTOService';
 import { cloneDeep } from 'App/services/UtilityService';
 import { MarketState } from 'FEModels/frontend-page-states.interface';
@@ -20,7 +23,9 @@ export class MarketContainer {
       securityList: [],
       securityList2: [],
       securityList3: [],
-      securityList4: []
+      securityList4: [],
+      securityGroupList1: [],
+      securityGroupList2: []
     };
   }
 
@@ -79,5 +84,11 @@ export class MarketContainer {
         eachSecurity.data.ratingValue = orginList[index].data.ratingValue;
       });
     }, 2000);
+  }
+
+  populateGroupDataForOne(){
+    this.state.securityGroupList1 = SecurityGroupList.map((eachGroup) => {
+      return this.dtoService.formSecurityGroupObject(eachGroup);
+    });
   }
 }

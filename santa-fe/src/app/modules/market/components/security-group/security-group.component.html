@@ -18,19 +18,19 @@
   <section class="sat-securityGroup__content">
     <div class="sat-securityGroup__content-wheel">
       <div class="sat-securityGroup__content-wheel-chartContainer">
-        <div id="pieChart-1" class="sat-securityGroup__content-wheel-chartContainer-chart"></div>
+        <div id="{{groupData.graph.chartNameLeft}}" class="sat-securityGroup__content-wheel-chartContainer-chart"></div>
         <div class="sat-securityGroup__content-wheel-chartContainer-innerRadius"></div>
       </div>
     </div>
     <div class="sat-securityGroup__content-numberTag">
-      <span class="sat-securityGroup__content-numberTag-text">213</span>
+      <span class="sat-securityGroup__content-numberTag-text">{{groupData.data.numOfSecurities}}</span>
       <div class="sat-securityGroup__content-numberTag-mask"></div>
     </div>
     <div class="sat-securityGroup__content-canvases">
       <div class="sat-securityGroup__content-canvases-left">
         <div class="sat-securityGroup__content-canvases-left-content">
           <div class="sat-securityGroup__content-canvases-left-content-name">
-            <span class="sat-securityGroup__content-canvases-left-content-name-text">CAN 0.75 03/01/2021 CAD</span>
+            <span class="sat-securityGroup__content-canvases-left-content-name-text">{{groupData.data.name}}</span>
           </div>
           <div class="sat-securityGroup__content-canvases-left-content-value">
             <span class="sat-securityGroup__content-canvases-left-content-value-text">302</span>
@@ -39,26 +39,14 @@
       </div>
       <div class="sat-securityGroup__content-canvases-right">
         <div class="sat-securityGroup__content-canvases-right-metricValues">
-          <div class="sat-securityGroup__content-canvases-right-metricValues-valueContainer">
-            <span class="sat-securityGroup__content-canvases-right-metricValues-valueContainer-value">10</span>
-          </div>
-          <div class="sat-securityGroup__content-canvases-right-metricValues-valueContainer">
-            <span class="sat-securityGroup__content-canvases-right-metricValues-valueContainer-value">140</span>
-          </div>
-          <div class="sat-securityGroup__content-canvases-right-metricValues-valueContainer">
-            <span class="sat-securityGroup__content-canvases-right-metricValues-valueContainer-value">42M</span>
+          <div class="sat-securityGroup__content-canvases-right-metricValues-valueContainer" *ngFor="let eachStat of groupData.data.stats">
+            <span class="sat-securityGroup__content-canvases-right-metricValues-valueContainer-value">{{eachStat.value}}</span>
           </div>
         </div>
         <div class="sat-securityGroup__content-canvases-right-alignmentLine"></div>
         <div class="sat-securityGroup__content-canvases-right-metricLines">
-          <div class="sat-securityGroup__content-canvases-right-metricLines-lineContainer">
-            <div class="sat-securityGroup__content-canvases-right-metricLines-lineContainer-line"></div>
-          </div>
-          <div class="sat-securityGroup__content-canvases-right-metricLines-lineContainer">
-            <div class="sat-securityGroup__content-canvases-right-metricLines-lineContainer-line"></div>
-          </div>
-          <div class="sat-securityGroup__content-canvases-right-metricLines-lineContainer">
-            <div class="sat-securityGroup__content-canvases-right-metricLines-lineContainer-line"></div>
+          <div class="sat-securityGroup__content-canvases-right-metricLines-lineContainer" *ngFor="let eachStat of groupData.data.stats">
+            <div [ngStyle]="{'width': eachStat.percentage + '%'}" class="sat-securityGroup__content-canvases-right-metricLines-lineContainer-line"></div>
           </div>
           <div class="sat-securityGroup__content-canvases-right-metricLines-mask"
           ></div>
@@ -66,13 +54,13 @@
       </div>
       <div class="sat-securityGroup__content-canvases-behind">
         <div class="sat-securityGroup__content-canvases-behind-rating">
-          AAA
+          {{groupData.data.ratingValue}}
         </div>
       </div>
     </div>
     <div class="sat-securityGroup__content-wheel">
       <div class="sat-securityGroup__content-wheel-chartContainer">
-        <div id="pieChart-2" class="sat-securityGroup__content-wheel-chartContainer-chart"></div>
+        <div id="{{groupData.graph.chartNameRight}}" class="sat-securityGroup__content-wheel-chartContainer-chart"></div>
         <div class="sat-securityGroup__content-wheel-chartContainer-innerRadius"></div>
       </div>
     </div>

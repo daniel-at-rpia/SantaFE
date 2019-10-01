@@ -43,13 +43,17 @@
       </div>
     </div>
   </section>
-  <section class="sat-market__test2">
-    <div class="sat-market__test2-ctas">
-      <button class="sat-market__test2-ctas-btn">Show</button>
-      <button class="sat-market__test2-ctas-btn">Hide</button>
+  <section class="sat-market__testGroup">
+    <div class="sat-market__testGroup-test2">
+      <div class="sat-market__testGroup-test2-ctas">
+        <button class="sat-market__testGroup-test2-ctas-btn" (click)="populateGroupDataForOne()">Show</button>
+        <button class="sat-market__testGroup-test2-ctas-btn">Hide</button>
+      </div>
+      <ul class="sat-market__testGroup-test2-list">
+        <li class="sat-market__testGroup-test2-list-item" *ngFor="let eachGroup of state.securityGroupList1; let i = index">
+          <security-group [groupData]="eachGroup" ></security-group>
+        </li>
+      </ul>
     </div>
-    <ul class="sat-market__test2-list">
-      <security-group [groupData]="" ></security-group>
-    </ul>
   </section>
 </article>

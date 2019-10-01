@@ -1,6 +1,6 @@
 import * as am4charts from "@amcharts/amcharts4/charts";
 
-export interface securityDTO {
+export interface SecurityDTO {
   data: {
     name: string;
     ratingLevel: number;
@@ -14,19 +14,29 @@ export interface securityDTO {
   }
 }
 
-export interface securityGroupDTO {
+export interface SecurityGroupDTO {
   data: {
     name: string;
     ratingLevel: number;
     ratingValue: string;
-    seniorityLevel: number;
+    numOfSecurities: number;
+    stats: Array<SecurityGroupStatDTO>
   }
   state: {
     isStencil: boolean;
     isSelected: boolean;
   }
   graph: {
-    pieChartLeft: am4charts.PieChart,
-    pieChartRight: am4charts.PieChart
+    chartNameLeft: string;
+    chartNameRight: string;
+    pieChartLeft: am4charts.PieChart;
+    pieChartRight: am4charts.PieChart;
   }
+}
+
+interface SecurityGroupStatDTO {
+  label: string;
+  value: number;
+  max: number;
+  percentage: number;
 }

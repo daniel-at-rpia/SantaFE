@@ -6,7 +6,7 @@ import {
   Output
 } from '@angular/core';
 
-import { securityDTO } from 'App/models/frontend/frontend-models.interface';
+import { SecurityDTO } from 'App/models/frontend/frontend-models.interface';
 
 @Component({
   selector: 'security-card',
@@ -15,7 +15,7 @@ import { securityDTO } from 'App/models/frontend/frontend-models.interface';
   encapsulation: ViewEncapsulation.None
 })
 export class SecurityCard implements OnInit {
-  @Input() cardData: securityDTO;
+  @Input() cardData: SecurityDTO;
   constructor() { }
 
   ngOnInit() {
