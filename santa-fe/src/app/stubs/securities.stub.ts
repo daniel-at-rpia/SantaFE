@@ -1,4 +1,4 @@
-import { BESecurityDTO } from 'App/models/backend/backend-models.interface';
+import { BESecurityDTO, BESecurityGroupDTO } from 'App/models/backend/backend-models.interface';
 
 export const SecurityList: Array<BESecurityDTO> = [
   {
@@ -2448,6 +2448,231 @@ export const SecurityList: Array<BESecurityDTO> = [
           "yieldMaturity": -1.1670310000000007,
           "yieldWorst": -1.1670310000000007
         }
+      }
+    }
+  }
+];
+
+export const SecurityGroupList: Array<BESecurityGroupDTO> = [
+  {
+    "date": "2019-09-27T00:00:00",
+    "source": "Citi",
+    "metricsType": "SantaServer.MetricsObjects.IndividualSecurityMetrics, SantaServer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+    "groupIdentifier": {
+      "securityType": "SantaBond",
+      "ccy": "USD",
+      "tenor": "2Y"
+    },
+    "mostRecentTimeSeriesDate": "2019-09-27T00:00:00",
+    "numOfSecurities": 94,
+    "metrics": {
+      "numOfSecurities": 94,
+      "workoutTerm": 0.0,
+      "amtOutstanding": 7574854856.381949,
+      "ratingDouble": -1.0,
+      "oasSpread": 0.0,
+      "price": 0.0,
+      "yieldMaturity": 0.0,
+      "yieldWorst": 0.0
+    },
+    "mostRecentDeltaMetrics": {
+      "DoD": {
+        "numOfSecurities": 94,
+        "workoutTerm": 0.0,
+        "amtOutstanding": 0.0,
+        "ratingDouble": 0.0,
+        "oasSpread": 0.0,
+        "price": 0.0,
+        "yieldMaturity": 0.0,
+        "yieldWorst": 0.0
+      },
+      "WoW": {
+        "numOfSecurities": 94,
+        "workoutTerm": 0.0,
+        "amtOutstanding": 333892.55225276949,
+        "ratingDouble": 0.0,
+        "oasSpread": 0.0,
+        "price": 0.0,
+        "yieldMaturity": 0.0,
+        "yieldWorst": 0.0
+      },
+      "Mtd": {
+        "numOfSecurities": 94,
+        "workoutTerm": 0.0,
+        "amtOutstanding": 7356847.965307236,
+        "ratingDouble": 0.0,
+        "oasSpread": 0.0,
+        "price": 0.0,
+        "yieldMaturity": 0.0,
+        "yieldWorst": 0.0
+      },
+      "MoM": {
+        "numOfSecurities": 94,
+        "workoutTerm": 0.0,
+        "amtOutstanding": 10836658.077157975,
+        "ratingDouble": 0.0,
+        "oasSpread": 0.0,
+        "price": 0.0,
+        "yieldMaturity": 0.0,
+        "yieldWorst": 0.0
+      },
+      "Ytd": {
+        "numOfSecurities": 94,
+        "workoutTerm": 0.0,
+        "amtOutstanding": -58020265.716119769,
+        "ratingDouble": 0.0,
+        "oasSpread": 0.0,
+        "price": 0.0,
+        "yieldMaturity": 0.0,
+        "yieldWorst": 0.0
+      }
+    }
+  },
+  {
+    "date": "2019-09-27T00:00:00",
+    "source": "Citi",
+    "metricsType": "SantaServer.MetricsObjects.IndividualSecurityMetrics, SantaServer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+    "groupIdentifier": {
+      "securityType": "SantaBond",
+      "ccy": "EUR",
+      "tenor": "2Y"
+    },
+    "mostRecentTimeSeriesDate": "2019-09-27T00:00:00",
+    "numOfSecurities": 123,
+    "metrics": {
+      "numOfSecurities": 123,
+      "workoutTerm": 0.0,
+      "amtOutstanding": 1129464401.4145516,
+      "ratingDouble": -1.0,
+      "oasSpread": 0.0,
+      "price": 0.0,
+      "yieldMaturity": 0.0,
+      "yieldWorst": 0.0
+    },
+    "mostRecentDeltaMetrics": {
+      "DoD": {
+        "numOfSecurities": 123,
+        "workoutTerm": 0.0,
+        "amtOutstanding": 0.0,
+        "ratingDouble": 0.0,
+        "oasSpread": 0.0,
+        "price": 0.0,
+        "yieldMaturity": 0.0,
+        "yieldWorst": 0.0
+      },
+      "WoW": {
+        "numOfSecurities": 123,
+        "workoutTerm": 0.0,
+        "amtOutstanding": 1227428.497005701,
+        "ratingDouble": 0.0,
+        "oasSpread": 0.0,
+        "price": 0.0,
+        "yieldMaturity": 0.0,
+        "yieldWorst": 0.0
+      },
+      "Mtd": {
+        "numOfSecurities": 123,
+        "workoutTerm": 0.0,
+        "amtOutstanding": 3985118.915653944,
+        "ratingDouble": 0.0,
+        "oasSpread": 0.0,
+        "price": 0.0,
+        "yieldMaturity": 0.0,
+        "yieldWorst": 0.0
+      },
+      "MoM": {
+        "numOfSecurities": 123,
+        "workoutTerm": 0.0,
+        "amtOutstanding": 4057327.5879735948,
+        "ratingDouble": 0.0,
+        "oasSpread": 0.0,
+        "price": 0.0,
+        "yieldMaturity": 0.0,
+        "yieldWorst": 0.0
+      },
+      "Ytd": {
+        "numOfSecurities": 123,
+        "workoutTerm": 0.0,
+        "amtOutstanding": 5717744.104166746,
+        "ratingDouble": 0.0,
+        "oasSpread": 0.0,
+        "price": 0.0,
+        "yieldMaturity": 0.0,
+        "yieldWorst": 0.0
+      }
+    }
+  },
+  {
+    "date": "2019-09-27T00:00:00",
+    "source": "Citi",
+    "metricsType": "SantaServer.MetricsObjects.IndividualSecurityMetrics, SantaServer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+    "groupIdentifier": {
+      "securityType": "SantaBond",
+      "ccy": "GBP",
+      "tenor": "2Y"
+    },
+    "mostRecentTimeSeriesDate": "2019-09-27T00:00:00",
+    "numOfSecurities": 3948,
+    "metrics": {
+      "numOfSecurities": 3948,
+      "workoutTerm": 0.0,
+      "amtOutstanding": 695366254.5750156,
+      "ratingDouble": -1.0,
+      "oasSpread": 0.0,
+      "price": 0.0,
+      "yieldMaturity": 0.0,
+      "yieldWorst": 0.0
+    },
+    "mostRecentDeltaMetrics": {
+      "DoD": {
+        "numOfSecurities": 3948,
+        "workoutTerm": 0.0,
+        "amtOutstanding": 0.0,
+        "ratingDouble": 0.0,
+        "oasSpread": 0.0,
+        "price": 0.0,
+        "yieldMaturity": 0.0,
+        "yieldWorst": 0.0
+      },
+      "WoW": {
+        "numOfSecurities": 3948,
+        "workoutTerm": 0.0,
+        "amtOutstanding": 1668797.4994132519,
+        "ratingDouble": 0.0,
+        "oasSpread": 0.0,
+        "price": 0.0,
+        "yieldMaturity": 0.0,
+        "yieldWorst": 0.0
+      },
+      "Mtd": {
+        "numOfSecurities": 3948,
+        "workoutTerm": 0.0,
+        "amtOutstanding": 3205923.4777265789,
+        "ratingDouble": 0.0,
+        "oasSpread": 0.0,
+        "price": 0.0,
+        "yieldMaturity": 0.0,
+        "yieldWorst": 0.0
+      },
+      "MoM": {
+        "numOfSecurities": 3948,
+        "workoutTerm": 0.0,
+        "amtOutstanding": 3252997.2187865974,
+        "ratingDouble": 0.0,
+        "oasSpread": 0.0,
+        "price": 0.0,
+        "yieldMaturity": 0.0,
+        "yieldWorst": 0.0
+      },
+      "Ytd": {
+        "numOfSecurities": 3948,
+        "workoutTerm": 0.0,
+        "amtOutstanding": 2767477.461622119,
+        "ratingDouble": 0.0,
+        "oasSpread": 0.0,
+        "price": 0.0,
+        "yieldMaturity": 0.0,
+        "yieldWorst": 0.0
       }
     }
   }

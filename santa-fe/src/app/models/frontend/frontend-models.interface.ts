@@ -1,3 +1,5 @@
+import * as am4charts from "@amcharts/amcharts4/charts";
+
 export interface securityDTO {
   data: {
     name: string;
@@ -22,5 +24,9 @@ export interface securityGroupDTO {
   state: {
     isStencil: boolean;
     isSelected: boolean;
+  }
+  graph: {
+    pieChartLeft: am4charts.PieChart,
+    pieChartRight: am4charts.PieChart
   }
 }

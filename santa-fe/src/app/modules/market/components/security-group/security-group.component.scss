@@ -14,7 +14,8 @@ $securityGroup_content_canvases_left_width: 60%;
 $securityGroup_content_canvases_left_width_xLarge: 10rem;
 $securityGroup_content_canvases_right_metricName_width: 2.25rem;
 $securityGroup_content_canvases_right_metricLines_thickness: 0.3125rem;
-$securityGroup_animationDelay: $animation_duration_normal;
+$securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
+$securityGroup_animationDelay: $animation_duration_light;
 
 .sat-securityGroup {
   $securityGroupBlockName: &;
@@ -95,6 +96,17 @@ $securityGroup_animationDelay: $animation_duration_normal;
           left: -12.5%; // this magnification is necessary for countering the layout effect of the watermark
           height: 125%;
           width: 125%;
+        }
+        &-innerRadius {
+          @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+          @include mix_border_radius(50%);
+          @include mix_alive('custom', $animation_duration_normal transform);
+          left: (100% - $securityGroup_content_wheel_chartContainer_innerRadius_size)/2;
+          top: (100% - $securityGroup_content_wheel_chartContainer_innerRadius_size)/2;
+          width: $securityGroup_content_wheel_chartContainer_innerRadius_size;
+          height: $securityGroup_content_wheel_chartContainer_innerRadius_size;
+          transition-delay: $securityGroup_animationDelay;
+          transform: scale(1);
         }
       }
     }
@@ -319,6 +331,11 @@ $securityGroup_animationDelay: $animation_duration_normal;
             transform: rotate(180deg) scale(0.01);
             opacity: 0;
           }
+          &-innerRadius {
+            transition-delay: unset;
+            transform: scale(0.01);
+            opacity: 0;
+          }
         }
         &-numberTag {
           background-color: $color_white;
@@ -333,8 +350,6 @@ $securityGroup_animationDelay: $animation_duration_normal;
         }
       }
     }
-  }
-  &--tableState {
   }
   &--selectedState {
     #{$securityGroupBlockName} {
@@ -362,6 +377,11 @@ $securityGroup_animationDelay: $animation_duration_normal;
         }
         &-wheel-chartContainer {
           background-color: $color_active;
+          &-innerRadius {
+            background-color: $color_active;
+            transition-delay: unset;
+            transform: scale(0.01);
+          }
         }
         &-numberTag {
           @include material('none');
