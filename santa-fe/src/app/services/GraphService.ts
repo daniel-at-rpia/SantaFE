@@ -37,10 +37,11 @@ export class GraphService {
     pieSeries.slices.template.strokeOpacity = 1;
     pieSeries.slices.template.strokeWidth = 1;
     pieSeries.alignLabels = false;
-    pieSeries.labels.template.text = "{value.percent.formatNumber('#.0')}%";
+    pieSeries.labels.template.text = "{value.percent.formatNumber('#.')}%";
     pieSeries.labels.template.fontFamily = "SantaOpenSans";
     pieSeries.labels.template.fontWeight = "600";
-    pieSeries.labels.template.fontSize = '6px';
+    pieSeries.labels.template.fontSize = 1;
+    chart.fontSize = 1;
     pieSeries.labels.template.radius = am4core.percent(-40);
     if (pieChartDTO.colorScheme.type === 'Seniority') {
       pieSeries.labels.template.fill = am4core.color("#333");
