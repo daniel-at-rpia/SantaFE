@@ -47,10 +47,21 @@
     <div class="sat-market__testGroup-test2">
       <div class="sat-market__testGroup-test2-ctas">
         <button class="sat-market__testGroup-test2-ctas-btn" (click)="populateGroupDataForOne()">Show</button>
-        <button class="sat-market__testGroup-test2-ctas-btn">Hide</button>
+        <button class="sat-market__testGroup-test2-ctas-btn" (click)="removeData(state.securityGroupList1)">Hide</button>
       </div>
       <ul class="sat-market__testGroup-test2-list">
         <li class="sat-market__testGroup-test2-list-item" *ngFor="let eachGroup of state.securityGroupList1; let i = index">
+          <security-group [groupData]="eachGroup" ></security-group>
+        </li>
+      </ul>
+    </div>
+    <div class="sat-market__testGroup-test2">
+      <div class="sat-market__testGroup-test2-ctas">
+        <button class="sat-market__testGroup-test2-ctas-btn" (click)="populateGroupDataForTwo()">Show</button>
+        <button class="sat-market__testGroup-test2-ctas-btn" (click)="removeData(state.securityGroupList2)">Hide</button>
+      </div>
+      <ul class="sat-market__testGroup-test2-list">
+        <li class="sat-market__testGroup-test2-list-item" *ngFor="let eachGroup of state.securityGroupList2; let i = index">
           <security-group [groupData]="eachGroup" ></security-group>
         </li>
       </ul>

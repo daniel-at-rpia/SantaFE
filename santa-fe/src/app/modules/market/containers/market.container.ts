@@ -47,6 +47,10 @@ export class MarketContainer {
       this.state.securityList3 = [];
     } else if (this.state.securityList4 === targetList) {
       this.state.securityList4 = [];
+    } else if (this.state.securityGroupList1 === targetList) {
+      this.state.securityGroupList1 = [];
+    } else if (this.state.securityGroupList2 === targetList) {
+      this.state.securityGroupList2 = [];
     }
   }
 
@@ -90,5 +94,17 @@ export class MarketContainer {
     this.state.securityGroupList1 = SecurityGroupList.map((eachGroup) => {
       return this.dtoService.formSecurityGroupObject(eachGroup);
     });
+  }
+
+  populateGroupDataForTwo(){
+    this.state.securityGroupList2 = SecurityGroupList.map((eachGroup) => {
+      return this.dtoService.formSecurityGroupObject(eachGroup);
+    });
+    const list2 = this.state.securityGroupList2;
+    setTimeout(function(){
+      list2.forEach((eachGroup) => {
+        eachGroup.state.isStencil = false;
+      });
+    }, 2000);
   }
 }

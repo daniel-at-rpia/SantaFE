@@ -38,9 +38,6 @@ export class SecurityGroup implements OnInit {
       setTimeout(function(){
         populateGraphs();
       }, 1);
-      setTimeout(function(){
-        groupData.state.isStencil = false;
-      }, 2000);
     }
   }
 
