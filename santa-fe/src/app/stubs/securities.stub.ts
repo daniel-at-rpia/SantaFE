@@ -2463,6 +2463,7 @@ export const SecurityGroupList: Array<BESecurityGroupDTO> = [
       "ccy": "USD",
       "tenor": "2Y"
     },
+    "groupName": 'Bond|2Yr|USD',
     "mostRecentTimeSeriesDate": "2019-09-27T00:00:00",
     "numOfSecurities": 94,
     "metrics": {
@@ -2537,6 +2538,7 @@ export const SecurityGroupList: Array<BESecurityGroupDTO> = [
       "ccy": "EUR",
       "tenor": "2Y"
     },
+    "groupName": "Bond|2Yr|EUR",
     "mostRecentTimeSeriesDate": "2019-09-27T00:00:00",
     "numOfSecurities": 123,
     "metrics": {
@@ -2611,6 +2613,7 @@ export const SecurityGroupList: Array<BESecurityGroupDTO> = [
       "ccy": "GBP",
       "tenor": "2Y"
     },
+    "groupName": "CDS|2Yr|USD",
     "mostRecentTimeSeriesDate": "2019-09-27T00:00:00",
     "numOfSecurities": 3948,
     "metrics": {

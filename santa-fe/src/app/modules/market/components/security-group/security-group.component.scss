@@ -79,7 +79,7 @@ $securityGroup_animationDelay: $animation_duration_light;
       justify-content: center;
       width: $securityGroup_base_wheel_size;
       height: $securityGroup_base_wheel_size;
-      padding: $spacing_x_small;
+      padding: $spacing_small;
       &-chartContainer {
         @include mix_border_radius(50%);
         @include mix_fixed_div(relative, $z_index_standard_base_item);
@@ -94,13 +94,14 @@ $securityGroup_animationDelay: $animation_duration_light;
           @include mix_alive('custom', $animation_duration_normal transform);
           transition-delay: $securityGroup_animationDelay;
           transform: rotate(180deg) scale(1);
-          left: -12.5%; // this magnification is necessary for countering the layout effect of the watermark
-          height: 125%;
-          width: 125%;
+          left: -12%; // this magnification is necessary for countering the layout effect of the watermark
+          height: 124%;
+          width: 124%;
         }
         &-innerRadius {
           @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
           @include mix_border_radius(50%);
+          @include mix_border_generator($typical_border_width, $color_white);
           @include mix_alive('custom', $animation_duration_normal transform);
           left: (100% - $securityGroup_content_wheel_chartContainer_innerRadius_size)/2;
           top: (100% - $securityGroup_content_wheel_chartContainer_innerRadius_size)/2;

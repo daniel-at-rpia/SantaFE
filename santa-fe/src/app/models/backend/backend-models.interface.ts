@@ -28,6 +28,7 @@ export interface BESecurityGroupDTO {
     ccy: string;
     tenor: string;
   }
+  groupName: string;
   mostRecentTimeSeriesDate: string;
   numOfSecurities: number;
   metrics: BEMetricDTO,

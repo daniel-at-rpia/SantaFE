@@ -8,6 +8,10 @@ import {
   SecurityGroupDTO
 } from 'App/models/frontend/frontend-models.interface';
 import { UtilityService } from './UtilityService';
+import {
+  SecurityGroupRatingColorScheme,
+  SecurityGroupSeniorityColorScheme
+} from 'App/stubs/colorSchemes.stub';
 
 @Injectable()
 export class DTOService {
@@ -41,7 +45,7 @@ export class DTOService {
     const ratingLevel = Math.floor(Math.random()*7 + 1);
     const object:SecurityGroupDTO = {
       data: {
-        name: 'Bond|2Yr|USD',
+        name: rawData.groupName,
         ratingLevel: ratingLevel,
         ratingValue: this.utility.mapRatings(ratingLevel),
         numOfSecurities: rawData.numOfSecurities,
@@ -69,10 +73,16 @@ export class DTOService {
         isStencil: false
       },
       graph: {
-        chartNameLeft: `Some Group Name ${rawData.numOfSecurities}-1`,
-        chartNameRight: `Some Group Name ${rawData.numOfSecurities}-2`,
-        pieChartLeft: null,
-        pieChartRight: null
+        leftPie: {
+          name: `Some Group Name ${rawData.numOfSecurities}-1`,
+          colorScheme: SecurityGroupRatingColorScheme,
+          chart: null
+        },
+        rightPie: {
+          name: `Some Group Name ${rawData.numOfSecurities}-2`,
+          colorScheme: SecurityGroupSeniorityColorScheme,
+          chart: null
+        }
       }
     }
     object.data.stats.forEach((eachStat) => {

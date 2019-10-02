@@ -27,11 +27,26 @@ export interface SecurityGroupDTO {
     isSelected: boolean;
   }
   graph: {
-    chartNameLeft: string;
-    chartNameRight: string;
-    pieChartLeft: am4charts.PieChart;
-    pieChartRight: am4charts.PieChart;
+    leftPie: SecurityGroupPieChartDTO;
+    rightPie: SecurityGroupPieChartDTO
   }
+}
+
+export interface SecurityGroupPieChartDTO {
+  name: string;
+  colorScheme: SecurityGroupPieChartColorSchemeDTO;
+  chart: am4charts.PieChart
+}
+
+export interface SecurityGroupPieChartDataDTO {
+  label: string;
+  value: number;
+  color: any;
+}
+
+export interface SecurityGroupPieChartColorSchemeDTO {
+  type: string;
+  scheme: Array<any>
 }
 
 interface SecurityGroupStatDTO {
