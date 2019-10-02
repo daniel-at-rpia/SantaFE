@@ -2,7 +2,6 @@
 @import "./security-card-mixin.scss";
 
 $securityCard_name_rightGap: 3rem;
-$securityCard_rating_opacity: 0.10;
 
 .sat-securityCard {
   $securityCardBlockName: &;
@@ -41,13 +40,10 @@ $securityCard_rating_opacity: 0.10;
     justify-content: flex-end;
     align-items: flex-end;
     &-text {
+      @include mix_rating_style;
+      font-size: $font_size_x_large;
       margin-right: $spacing_x_small;
       color: $color_black;
-      opacity: $securityCard_rating_opacity;
-      font-size: $font_size_x_large;
-      font-family: 'SantaBlackOps';
-      line-height: $line_height_minimum;
-      user-select: none;
     }
   }
   &__keyValue {

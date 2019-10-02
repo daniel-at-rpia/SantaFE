@@ -1,0 +1,68 @@
+<article
+  (click)="onClickGroup()"
+  class="sat-securityGroup--type-{{groupData.data.ratingLevel}}"
+  [ngClass]="{
+    'sat-securityGroup': true,
+    'sat-securityGroup--stencilState': groupData.state.isStencil,
+    'sat-securityGroup--selectedState': groupData.state.isSelected
+  }">
+  <section class="sat-securityGroup__base">
+    <div class="sat-securityGroup__base-wheel sat-securityGroup__base-wheel--left">
+      <div class="sat-securityGroup__base-wheel-innerMask"></div>
+    </div>
+    <div class="sat-securityGroup__base-center"></div>
+    <div class="sat-securityGroup__base-wheel sat-securityGroup__base-wheel--right">
+      <div class="sat-securityGroup__base-wheel-innerMask"></div>
+    </div>
+  </section>
+  <section class="sat-securityGroup__content">
+    <div class="sat-securityGroup__content-wheel">
+      <div class="sat-securityGroup__content-wheel-chartContainer">
+        <div id="{{groupData.graph.leftPie.name}}" class="sat-securityGroup__content-wheel-chartContainer-chart"></div>
+        <div class="sat-securityGroup__content-wheel-chartContainer-innerRadius"></div>
+      </div>
+    </div>
+    <div class="sat-securityGroup__content-numberTag">
+      <span class="sat-securityGroup__content-numberTag-text">{{groupData.data.numOfSecurities}}</span>
+      <div class="sat-securityGroup__content-numberTag-mask"></div>
+    </div>
+    <div class="sat-securityGroup__content-canvases">
+      <div class="sat-securityGroup__content-canvases-left">
+        <div class="sat-securityGroup__content-canvases-left-content">
+          <div class="sat-securityGroup__content-canvases-left-content-name">
+            <span class="sat-securityGroup__content-canvases-left-content-name-text">{{groupData.data.name}}</span>
+          </div>
+          <div class="sat-securityGroup__content-canvases-left-content-value">
+            <span class="sat-securityGroup__content-canvases-left-content-value-text">302</span>
+          </div>
+        </div>
+      </div>
+      <div class="sat-securityGroup__content-canvases-right">
+        <div class="sat-securityGroup__content-canvases-right-metricValues">
+          <div class="sat-securityGroup__content-canvases-right-metricValues-valueContainer" *ngFor="let eachStat of groupData.data.stats">
+            <span class="sat-securityGroup__content-canvases-right-metricValues-valueContainer-value">{{eachStat.value}}</span>
+          </div>
+        </div>
+        <div class="sat-securityGroup__content-canvases-right-alignmentLine"></div>
+        <div class="sat-securityGroup__content-canvases-right-metricLines">
+          <div class="sat-securityGroup__content-canvases-right-metricLines-lineContainer" *ngFor="let eachStat of groupData.data.stats">
+            <div [ngStyle]="{'width': eachStat.percentage + '%'}" class="sat-securityGroup__content-canvases-right-metricLines-lineContainer-line"></div>
+          </div>
+          <div class="sat-securityGroup__content-canvases-right-metricLines-mask"
+          ></div>
+        </div>
+      </div>
+      <div class="sat-securityGroup__content-canvases-behind">
+        <div class="sat-securityGroup__content-canvases-behind-rating">
+          {{groupData.data.ratingValue}}
+        </div>
+      </div>
+    </div>
+    <div class="sat-securityGroup__content-wheel">
+      <div class="sat-securityGroup__content-wheel-chartContainer">
+        <div id="{{groupData.graph.rightPie.name}}" class="sat-securityGroup__content-wheel-chartContainer-chart"></div>
+        <div class="sat-securityGroup__content-wheel-chartContainer-innerRadius"></div>
+      </div>
+    </div>
+  </section>
+</article>

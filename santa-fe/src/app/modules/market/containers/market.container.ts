@@ -1,5 +1,8 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { SecurityList } from 'App/stubs/securities.stub';
+import {
+  SecurityList,
+  SecurityGroupList
+} from 'App/stubs/securities.stub';
 import { DTOService } from 'App/services/DTOService';
 import { cloneDeep } from 'App/services/UtilityService';
 import { MarketState } from 'FEModels/frontend-page-states.interface';
@@ -20,7 +23,9 @@ export class MarketContainer {
       securityList: [],
       securityList2: [],
       securityList3: [],
-      securityList4: []
+      securityList4: [],
+      securityGroupList1: [],
+      securityGroupList2: []
     };
   }
 
@@ -42,6 +47,10 @@ export class MarketContainer {
       this.state.securityList3 = [];
     } else if (this.state.securityList4 === targetList) {
       this.state.securityList4 = [];
+    } else if (this.state.securityGroupList1 === targetList) {
+      this.state.securityGroupList1 = [];
+    } else if (this.state.securityGroupList2 === targetList) {
+      this.state.securityGroupList2 = [];
     }
   }
 
@@ -77,6 +86,24 @@ export class MarketContainer {
         eachSecurity.state.isStencil = false;
         eachSecurity.data.name = orginList[index].data.name;
         eachSecurity.data.ratingValue = orginList[index].data.ratingValue;
+      });
+    }, 2000);
+  }
+
+  populateGroupDataForOne(){
+    this.state.securityGroupList1 = SecurityGroupList.map((eachGroup) => {
+      return this.dtoService.formSecurityGroupObject(eachGroup);
+    });
+  }
+
+  populateGroupDataForTwo(){
+    this.state.securityGroupList2 = SecurityGroupList.map((eachGroup) => {
+      return this.dtoService.formSecurityGroupObject(eachGroup);
+    });
+    const list2 = this.state.securityGroupList2;
+    setTimeout(function(){
+      list2.forEach((eachGroup) => {
+        eachGroup.state.isStencil = false;
       });
     }, 2000);
   }

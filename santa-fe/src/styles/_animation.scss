@@ -6,3 +6,12 @@
     opacity: 0.1;
   }
 }
+
+@keyframes presentSecurityGroupPieChart {
+  0%, 50% {
+    transform: rotate(180deg) scale(0.01);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}

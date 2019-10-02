@@ -2,9 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
-import { MarketPage } from './market.page';
-import { MarketContainer } from './containers/market.container';
-import { SecurityCard } from './components/security-card/security-card.component';
+import { MarketPage } from 'Market/market.page';
+import { MarketContainer } from 'Market/containers/market.container';
+import { SecurityCard } from 'Market/components/security-card/security-card.component';
+import { SecurityGroup } from 'Market/components/security-group/security-group.component';
 
 import { DTOService } from 'App/services/DTOService';
 
@@ -12,7 +13,8 @@ import { DTOService } from 'App/services/DTOService';
   declarations: [
     MarketPage,
     MarketContainer,
-    SecurityCard
+    SecurityCard,
+    SecurityGroup
   ],
   imports: [
     CommonModule,

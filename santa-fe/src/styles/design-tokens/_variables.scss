@@ -87,9 +87,10 @@ $z_index_standard_hovering_item: 100;
 $z_index_standard_base_item_lift: 50;
 $z_index_standard_base_item_solid: 1;
 $z_index_standard_base_item: unset;
+$z_index_standard_bury_item: -1;
 
 $animation_duration_light: 0.2s;
-$animation_duration_normal: 0.4s;
+$animation_duration_normal: 0.5s;
 $animation_duration_heavy: 1s;
 $animation_duration_loading: 1.5s;
 $animation_duration_extra_heavy: 2.5s;

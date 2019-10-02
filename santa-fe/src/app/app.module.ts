@@ -8,6 +8,7 @@ import { HomeModule } from './modules/home/home.module';
 import { MarketModule } from './modules/market/market.module';
 import { DTOService } from './services/DTOService';
 import { UtilityService } from './services/UtilityService';
+import { GraphService } from './services/GraphService';
 
 import { AppComponent } from './app.component';
 
@@ -24,7 +25,8 @@ import { AppComponent } from './app.component';
   ],
   providers: [
     DTOService,
-    UtilityService
+    UtilityService,
+    GraphService
   ],
   bootstrap: [AppComponent]
 })
