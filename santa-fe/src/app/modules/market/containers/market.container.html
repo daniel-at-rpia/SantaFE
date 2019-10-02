@@ -66,5 +66,27 @@
         </li>
       </ul>
     </div>
+    <div class="sat-market__testGroup-test3">
+      <div class="sat-market__testGroup-test3-ctas">
+        <button class="sat-market__testGroup-test3-ctas-btn" (click)="populateGroupDataForThree()">Show</button>
+        <button class="sat-market__testGroup-test3-ctas-btn" (click)="removeData(state.securityGroupList3)">Hide</button>
+      </div>
+      <ul class="sat-market__testGroup-test3-list">
+        <li class="sat-market__testGroup-test3-list-item" *ngFor="let eachGroup of state.securityGroupList3; let i = index">
+          <security-group [groupData]="eachGroup" ></security-group>
+        </li>
+      </ul>
+    </div>
+    <div class="sat-market__testGroup-test3">
+      <div class="sat-market__testGroup-test3-ctas">
+        <button class="sat-market__testGroup-test3-ctas-btn" (click)="populateGroupDataForFour()">Show</button>
+        <button class="sat-market__testGroup-test3-ctas-btn" (click)="removeData(state.securityGroupList4)">Hide</button>
+      </div>
+      <ul class="sat-market__testGroup-test3-list">
+        <li class="sat-market__testGroup-test3-list-item" *ngFor="let eachGroup of state.securityGroupList4; let i = index">
+          <security-group [groupData]="eachGroup" ></security-group>
+        </li>
+      </ul>
+    </div>
   </section>
 </article>
