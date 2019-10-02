@@ -1,0 +1,13 @@
+@import "global.scss";
+
+$securityGroupDefinition_width: 6.875rem;
+$securityGroupDefinition_height: 5rem;
+.sat-securityGroupDefinition {
+  $securityGroupDefinitionBlockName: &;
+  @include material();
+  @include mix_border_radius(10px);
+  display: flex;
+  width: $securityGroupDefinition_width;
+  height: $securityGroupDefinition_height;
+  background-color: $color_white;
+}
