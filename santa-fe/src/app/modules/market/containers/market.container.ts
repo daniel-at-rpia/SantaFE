@@ -53,6 +53,10 @@ export class MarketContainer {
       this.state.securityGroupList1 = [];
     } else if (this.state.securityGroupList2 === targetList) {
       this.state.securityGroupList2 = [];
+    } else if (this.state.securityGroupList3 === targetList) {
+      this.state.securityGroupList3 = [];
+    } else if (this.state.securityGroupList4 === targetList) {
+      this.state.securityGroupList4 = [];
     }
   }
 
