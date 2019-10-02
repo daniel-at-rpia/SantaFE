@@ -1,8 +1,15 @@
+import {
+  SecurityDTO,
+  SecurityGroupDTO
+} from 'App/models/frontend/frontend-models.interface';
+
 export interface MarketState {
-  securityList: Array<any>;
-  securityList2: Array<any>;
-  securityList3: Array<any>;
-  securityList4: Array<any>;
-  securityGroupList1: Array<any>;
-  securityGroupList2: Array<any>;
+  securityList: Array<SecurityDTO>;
+  securityList2: Array<SecurityDTO>;
+  securityList3: Array<SecurityDTO>;
+  securityList4: Array<SecurityDTO>;
+  securityGroupList1: Array<SecurityGroupDTO>;
+  securityGroupList2: Array<SecurityGroupDTO>;
+  securityGroupList3: Array<SecurityGroupDTO>;
+  securityGroupList4: Array<SecurityGroupDTO>;
 }

@@ -25,7 +25,9 @@ export class MarketContainer {
       securityList3: [],
       securityList4: [],
       securityGroupList1: [],
-      securityGroupList2: []
+      securityGroupList2: [],
+      securityGroupList3: [],
+      securityGroupList4: []
     };
   }
 
@@ -107,4 +109,33 @@ export class MarketContainer {
       });
     }, 2000);
   }
+
+
+  populateGroupDataForThree(){
+    this.state.securityGroupList3 = SecurityGroupList.map((eachGroup) => {
+      return this.dtoService.formSecurityGroupObject(eachGroup);
+    });
+    const list3 = this.state.securityGroupList3;
+    setTimeout(function(){
+      list3.forEach((eachGroup) => {
+        eachGroup.state.isStencil = false;
+        eachGroup.data.stats.pop();
+      });
+    }, 2000);
+  }
+
+  populateGroupDataForFour(){
+    this.state.securityGroupList4 = SecurityGroupList.map((eachGroup) => {
+      return this.dtoService.formSecurityGroupObject(eachGroup);
+    });
+    const list4 = this.state.securityGroupList4;
+    setTimeout(function(){
+      list4.forEach((eachGroup) => {
+        eachGroup.state.isStencil = false;
+        eachGroup.data.stats.pop();
+        eachGroup.data.stats.pop();
+      });
+    }, 2000);
+  }
+
 }
