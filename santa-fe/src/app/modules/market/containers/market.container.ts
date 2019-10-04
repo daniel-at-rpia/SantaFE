@@ -24,7 +24,6 @@ export class MarketContainer {
   private initiateComponentState(){
     this.state = {
       groupDefinitionList: [],
-      groupDefinitionList2: [],
       securityList: [],
       securityList2: [],
       securityList3: [],

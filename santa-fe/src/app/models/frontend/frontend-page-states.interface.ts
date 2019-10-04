@@ -6,7 +6,6 @@ import {
 
 export interface MarketState {
   groupDefinitionList: Array<SecurityGroupDefinitionDTO>;
-  groupDefinitionList2: Array<SecurityGroupDefinitionDTO>;
   securityList: Array<SecurityDTO>;
   securityList2: Array<SecurityDTO>;
   securityList3: Array<SecurityDTO>;

@@ -1,8 +1,8 @@
 @import "global.scss";
 
 $securityGroupDefinition_width: 6.875rem;
-$securityGroupDefinition_height: 5rem;
-$securityGroupDefinition_stackedIcon_secondaryImg_marginTop: 0.5rem;
+$securityGroupDefinition_height: 4.5rem;
+$securityGroupDefinition_stackedIcon_secondaryImg_marginTop: 0.25rem;
 $securityGroupDefinition_filter_size: 2rem;
 .sat-securityGroupDefinition {
   $securityGroupDefinitionBlockName: &;
@@ -22,18 +22,17 @@ $securityGroupDefinition_filter_size: 2rem;
     align-items: center;
     &-img {
       color: $font_color_major;
-      font-size: $font_size_xxx_large;
+      font-size: $font_size_xx_large;
     }
     &-stackedIcon {
       display: none;
       &-primaryImg {
         color: $font_color_major;
-        font-size: $font_size_xxx_large;
+        font-size: $font_size_xx_large;
       }
       &-secondaryImg {
         margin-top: $securityGroupDefinition_stackedIcon_secondaryImg_marginTop;
         color: $font_color_inverse;
-        font-size: $font_size_large;
       }
     }
   }
