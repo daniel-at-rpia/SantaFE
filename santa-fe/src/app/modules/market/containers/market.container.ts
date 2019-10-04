@@ -3,9 +3,6 @@ import {
   SecurityList,
   SecurityGroupList
 } from 'App/stubs/securities.stub';
-import {
-  SecurityGroupDefinitionMap
-} from 'App/stubs/securityGroupDefinitions.stub';
 import { DTOService } from 'App/services/DTOService';
 import { cloneDeep } from 'App/services/UtilityService';
 import { MarketState } from 'FEModels/frontend-page-states.interface';
@@ -23,7 +20,7 @@ export class MarketContainer {
 
   private initiateComponentState(){
     this.state = {
-      groupDefinitionList: [],
+      configurator: this.dtoService.createSecurityGroupDefinitionConfigurator(),
       securityList: [],
       securityList2: [],
       securityList3: [],
@@ -45,9 +42,13 @@ export class MarketContainer {
   }
 
   removeData(targetList){
-    for (let key in this.state) {
-      if (this.state[key] === targetList) {
-        this.state[key] = [];
+    if (targetList === this.state.configurator) {
+      this.state.configurator = null;
+    } else {
+      for (let key in this.state) {
+        if (this.state[key] === targetList) {
+          this.state[key] = [];
+        }
       }
     }
   }
@@ -134,12 +135,8 @@ export class MarketContainer {
     }, 2000);
   }
 
-  populateGroupDefinitionForOne(){
-    this.state.groupDefinitionList = SecurityGroupDefinitionMap.map((eachDefinitionStub) => {
-      return this.dtoService.formSecurityGroupDefinitionObject(eachDefinitionStub);
-    });
-    this.state.groupDefinitionList[4].state.filterActive = true;
-    this.state.groupDefinitionList[7].state.filterActive = true;
+  populateGroupDefinitionConfigurator(){
+    this.state.configurator = this.dtoService.createSecurityGroupDefinitionConfigurator();
   }
 
 }

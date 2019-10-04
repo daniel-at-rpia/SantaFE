@@ -6,10 +6,12 @@ import {
 import {
   SecurityDTO,
   SecurityGroupDTO,
-  SecurityGroupDefinitionDTO
+  SecurityGroupDefinitionDTO,
+  SecurityGroupDefinitionConfiguratorDTO
 } from 'App/models/frontend/frontend-models.interface';
 import {
-  SecurityDefinitionStub
+  SecurityDefinitionStub,
+  SecurityGroupDefinitionMap
 } from 'App/stubs/securityGroupDefinitions.stub';
 import { UtilityService } from './UtilityService';
 import {
@@ -113,6 +115,20 @@ export class DTOService {
         filterActive: false
       }
     }
+    return object;
+  }
+
+  public createSecurityGroupDefinitionConfigurator():SecurityGroupDefinitionConfiguratorDTO {
+    const object:SecurityGroupDefinitionConfiguratorDTO = {
+      data: {
+        definitionList: SecurityGroupDefinitionMap.map((eachDefinitionStub) => {
+          return this.formSecurityGroupDefinitionObject(eachDefinitionStub);
+        })
+      },
+      state: {
+
+      }
+    };
     return object;
   }
 }

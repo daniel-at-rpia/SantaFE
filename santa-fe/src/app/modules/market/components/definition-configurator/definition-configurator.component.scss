@@ -1,0 +1,29 @@
+@import "global.scss";
+
+$securityGroupDefinition_width: 6.875rem;
+.sat-securityGroupDefinitionConfigurator {
+  $securityGroupDefinitionConfiguratorBlockName: &;
+  @include mix_fixed_div(relative, $z_index_standard_base_item);
+  display: flex;
+  flex-wrap: nowrap;
+  &__definitions {
+    @include mix_fixed_div(relative, $z_index_standard_base_item);
+    display: flex;
+    &-list {
+      display: flex;
+      flex-direction: column;
+      &-item {
+        display: flex;
+        align-items: center;
+        margin-top: $spacing_large;
+        &-selectBtn {
+          margin-right: $spacing_medium;
+        }
+      }
+    }
+
+  }
+  &__filters {
+
+  }
+}

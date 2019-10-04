@@ -75,27 +75,19 @@
       }
     }
   }
-  &__testDefinition {
+  &__testConfigurator {
     display: flex;
     flex-direction: column;
-    &-test {
+    margin-left: $spacing_large;
+    &-ctas {
       display: flex;
-      flex-direction: column;
-      padding: $spacing_large;
-      &-ctas {
-        display: flex;
-        margin-bottom: $spacing_small;
-        &-btn {
-          margin-right: $spacing_small;
-        }
+      margin-bottom: $spacing_small;
+      &-btn {
+        margin-right: $spacing_small;
       }
-      &-list {
-        display: flex;
-        flex-direction: column;
-        &-item {
-          margin: $spacing_small;
-        }
-      }
+    }
+    &-test {
+      margin-top: $spacing_small;
     }
   }
 }

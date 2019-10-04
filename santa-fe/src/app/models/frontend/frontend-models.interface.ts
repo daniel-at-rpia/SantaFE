@@ -65,6 +65,15 @@ export interface SecurityGroupDefinitionDTO {
   }
 }
 
+export interface SecurityGroupDefinitionConfiguratorDTO {
+  data: {
+    definitionList: Array<SecurityGroupDefinitionDTO>
+  }
+  state: {
+    
+  }
+}
+
 interface SecurityGroupStatDTO {
   label: string;
   value: number;

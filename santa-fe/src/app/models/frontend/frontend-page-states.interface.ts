@@ -1,11 +1,12 @@
 import {
   SecurityDTO,
   SecurityGroupDTO,
-  SecurityGroupDefinitionDTO
+  SecurityGroupDefinitionDTO,
+  SecurityGroupDefinitionConfiguratorDTO
 } from 'App/models/frontend/frontend-models.interface';
 
 export interface MarketState {
-  groupDefinitionList: Array<SecurityGroupDefinitionDTO>;
+  configurator: SecurityGroupDefinitionConfiguratorDTO;
   securityList: Array<SecurityDTO>;
   securityList2: Array<SecurityDTO>;
   securityList3: Array<SecurityDTO>;
