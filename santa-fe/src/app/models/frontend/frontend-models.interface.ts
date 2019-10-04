@@ -49,6 +49,21 @@ export interface SecurityGroupPieChartColorSchemeDTO {
   scheme: Array<any>
 }
 
+export interface SecurityGroupDefinitionDTO {
+  data: {
+    name: string;
+  }
+  style: {
+    icon: string;
+    isStacked: boolean;
+    stackedIcon: string;
+  }
+  state: {
+    isSelected: boolean,
+    isStatic: boolean
+  }
+}
+
 interface SecurityGroupStatDTO {
   label: string;
   value: number;

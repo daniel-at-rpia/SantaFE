@@ -2,12 +2,80 @@
 
 $securityGroupDefinition_width: 6.875rem;
 $securityGroupDefinition_height: 5rem;
+$securityGroupDefinition_stackedIcon_secondaryImg_marginTop: 0.5rem;
 .sat-securityGroupDefinition {
   $securityGroupDefinitionBlockName: &;
+  @include mix_alive('light');
   @include material();
   @include mix_border_radius(10px);
   display: flex;
+  flex-direction: column;
   width: $securityGroupDefinition_width;
   height: $securityGroupDefinition_height;
   background-color: $color_white;
+  &__icon {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &-img {
+      color: $font_color_major;
+      font-size: $font_size_xxx_large;
+    }
+    &-stackedIcon {
+      display: none;
+      &-primaryImg {
+        color: $font_color_major;
+        font-size: $font_size_xxx_large;
+      }
+      &-secondaryImg {
+        margin-top: $securityGroupDefinition_stackedIcon_secondaryImg_marginTop;
+        color: $font_color_inverse;
+        font-size: $font_size_large;
+      }
+    }
+  }
+  &__label {
+    display: flex;
+    justify-content: center;
+    margin-bottom: $spacing_x_small;
+    &-text {
+      color: $font_color_major;
+      user-select: none;
+    }
+  }
+  &--stackedIcon {
+    #{$securityGroupDefinitionBlockName} {
+      &__icon {
+        &-img {
+          display: none;
+        }
+        &-stackedIcon {
+          display: inline-block;
+        }
+      }
+    }
+  }
+  &--selectedState {
+    @include material('none');
+    background-color: $color_active;
+    #{$securityGroupDefinitionBlockName} {
+      &__icon {
+        &-img {
+          color: $font_color_inverse;
+        }
+        &-stackedIcon {
+          &-primaryImg {
+            color: $font_color_inverse;
+          }
+          &-secondaryImg {
+            color: $font_color_major;
+          }
+        }
+      }
+      &__label-text {
+        color: $font_color_inverse;
+      }
+    }
+  }
 }

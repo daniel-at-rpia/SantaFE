@@ -6,7 +6,7 @@ import {
   Output
 } from '@angular/core';
 
-import { SecurityGroupDTO } from 'App/models/frontend/frontend-models.interface';
+import { SecurityGroupDefinitionDTO } from 'App/models/frontend/frontend-models.interface';
 
 @Component({
   selector: 'security-group-definition',
@@ -16,18 +16,19 @@ import { SecurityGroupDTO } from 'App/models/frontend/frontend-models.interface'
 })
 
 export class SecurityGroupDefinition implements OnInit {
-  @Input() definitionData;
+  @Input() definitionData: SecurityGroupDefinitionDTO;
   constructor(
   ) {
-    this.definitionData = {
-      state: {
-        
-      }
-    }
   }
 
   ngOnInit() {
 
+  }
+
+  onClickDefinition() {
+    if(!this.definitionData.state.isStatic) {
+      this.definitionData.state.isSelected = !this.definitionData.state.isSelected;
+    }
   }
 
 }

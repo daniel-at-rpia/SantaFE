@@ -5,8 +5,12 @@ import {
 } from 'App/models/backend/backend-models.interface';
 import {
   SecurityDTO,
-  SecurityGroupDTO
+  SecurityGroupDTO,
+  SecurityGroupDefinitionDTO
 } from 'App/models/frontend/frontend-models.interface';
+import {
+  SecurityDefinitionStub
+} from 'App/stubs/securityGroupDefinitions.stub';
 import { UtilityService } from './UtilityService';
 import {
   SecurityGroupRatingColorScheme,
@@ -88,6 +92,26 @@ export class DTOService {
     object.data.stats.forEach((eachStat) => {
       eachStat.percentage = Math.round(eachStat.value/eachStat.max * 10000)/100;
     })
+    return object;
+  }
+
+  public formSecurityGroupDefinitionObject(
+    rawData: SecurityDefinitionStub
+  ): SecurityGroupDefinitionDTO {
+    const object:SecurityGroupDefinitionDTO = {
+      data: {
+        name: rawData.name
+      },
+      style: {
+        icon: rawData.icon,
+        isStacked: rawData.isStacked || false,
+        stackedIcon: rawData.stackedIcon || ''
+      },
+      state: {
+        isSelected: false,
+        isStatic: false
+      }
+    }
     return object;
   }
 }
