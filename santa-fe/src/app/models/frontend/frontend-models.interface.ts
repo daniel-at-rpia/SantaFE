@@ -59,7 +59,6 @@ export interface SecurityGroupDefinitionDTO {
     stackedIcon: string;
   }
   state: {
-    isSelected: boolean,
     isStatic: boolean,
     filterActive: boolean;
   }
@@ -67,7 +66,9 @@ export interface SecurityGroupDefinitionDTO {
 
 export interface SecurityGroupDefinitionConfiguratorDTO {
   data: {
-    definitionList: Array<SecurityGroupDefinitionDTO>
+    definitionList: Array<SecurityGroupDefinitionDTO>,
+    selectedDefinitionList: Array<SecurityGroupDefinitionDTO>,
+    showFiltersFromDefinition: SecurityGroupDefinitionDTO
   }
   state: {
     

@@ -18,6 +18,12 @@ $securityGroupDefinition_width: 6.875rem;
         margin-top: $spacing_large;
         &-selectBtn {
           margin-right: $spacing_medium;
+          font-size: $font_size_x_large;
+          &--selected {
+            @include material('none');
+            background-color: $color_active;
+            color: $font_color_inverse;
+          }
         }
       }
     }

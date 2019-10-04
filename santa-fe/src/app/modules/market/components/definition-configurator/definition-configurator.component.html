@@ -5,8 +5,18 @@
   <section class="sat-securityGroupDefinitionConfigurator__definitions">
     <ul class="sat-securityGroupDefinitionConfigurator__definitions-list">
       <li *ngFor="let eachDefinition of this.configuratorData?.data.definitionList" class="sat-securityGroupDefinitionConfigurator__definitions-list-item">
-        <button class="sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn fal fa-square"></button>
-        <security-group-definition [definitionData]="eachDefinition"></security-group-definition>
+        <button
+          (click)="selectDefinitionForGrouping(eachDefinition)"
+          [ngClass]="{
+            'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn': true,
+            'fal': true,
+            'fa-square': configuratorData.data.selectedDefinitionList.indexOf(eachDefinition) < 0,
+            'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn--selected fa-check-square': this.configuratorData.data.selectedDefinitionList.indexOf(eachDefinition) >= 0
+          }"></button>
+        <security-group-definition
+          [definitionData]="eachDefinition"
+          (onClick)="onClickDefinition($event)"
+          [selected]="configuratorData.data.showFiltersFromDefinition === eachDefinition"></security-group-definition>
       </li>
     </ul>
   </section>

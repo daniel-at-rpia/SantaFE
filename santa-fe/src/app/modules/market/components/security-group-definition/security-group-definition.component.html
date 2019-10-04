@@ -3,7 +3,7 @@
   [ngClass]="{
     'sat-securityGroupDefinition': true,
     'sat-securityGroupDefinition--stackedIcon': definitionData.style.isStacked,
-    'sat-securityGroupDefinition--selectedState': definitionData.state.isSelected,
+    'sat-securityGroupDefinition--selectedState': !!selected,
     'sat-securityGroupDefinition--filterActiveState': definitionData.state.filterActive
   }">
   <section class="sat-securityGroupDefinition__icon">

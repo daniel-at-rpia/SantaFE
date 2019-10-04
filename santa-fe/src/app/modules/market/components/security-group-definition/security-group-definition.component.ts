@@ -3,7 +3,8 @@ import {
   OnInit,
   ViewEncapsulation,
   Input,
-  Output
+  Output,
+  EventEmitter
 } from '@angular/core';
 
 import { SecurityGroupDefinitionDTO } from 'App/models/frontend/frontend-models.interface';
@@ -17,6 +18,8 @@ import { SecurityGroupDefinitionDTO } from 'App/models/frontend/frontend-models.
 
 export class SecurityGroupDefinition implements OnInit {
   @Input() definitionData: SecurityGroupDefinitionDTO;
+  @Input() selected: boolean;
+  @Output() onClick = new EventEmitter<SecurityGroupDefinitionDTO>();
   constructor(
   ) {
   }
@@ -26,9 +29,7 @@ export class SecurityGroupDefinition implements OnInit {
   }
 
   onClickDefinition() {
-    if(!this.definitionData.state.isStatic) {
-      this.definitionData.state.isSelected = !this.definitionData.state.isSelected;
-    }
+    this.onClick.emit(this.definitionData);
   }
 
 }

@@ -110,7 +110,6 @@ export class DTOService {
         stackedIcon: rawData.stackedIcon || ''
       },
       state: {
-        isSelected: false,
         isStatic: false,
         filterActive: false
       }
@@ -123,7 +122,9 @@ export class DTOService {
       data: {
         definitionList: SecurityGroupDefinitionMap.map((eachDefinitionStub) => {
           return this.formSecurityGroupDefinitionObject(eachDefinitionStub);
-        })
+        }),
+        selectedDefinitionList: [],
+        showFiltersFromDefinition: null
       },
       state: {
 
