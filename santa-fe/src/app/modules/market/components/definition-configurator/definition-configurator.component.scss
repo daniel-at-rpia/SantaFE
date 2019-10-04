@@ -1,6 +1,8 @@
 @import "global.scss";
+@import "modules/market/market.scss";
 
-$securityGroupDefinition_width: 6.875rem;
+$securityGroupDefinitionConfigurator_definitions_width: 10.375rem;
+$securityGroupDefinitionConfigurator_filters_width: 12.5rem;
 .sat-securityGroupDefinitionConfigurator {
   $securityGroupDefinitionConfiguratorBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
@@ -8,10 +10,16 @@ $securityGroupDefinition_width: 6.875rem;
   flex-wrap: nowrap;
   &__definitions {
     @include mix_fixed_div(relative, $z_index_standard_base_item);
+    @include mix_enable_scrollbar('vertical');
     display: flex;
+    direction: rtl;
+    width: $securityGroupDefinitionConfigurator_definitions_width + $securityGroupDefinitionConfigurator_filters_width + $scroll_bar_width + $securityGroupDefinitionConfigurator_gapBetweenDefAndFilter;
+    padding-left: $spacing_medium;
     &-list {
+      flex: 1 1 auto;
       display: flex;
       flex-direction: column;
+      direction: ltr;
       &-item {
         display: flex;
         align-items: center;
@@ -25,11 +33,50 @@ $securityGroupDefinition_width: 6.875rem;
             color: $font_color_inverse;
           }
         }
+        &:last-of-type {
+          margin-bottom: $spacing_large;
+        }
       }
     }
-
   }
   &__filters {
-
+    @include mix_fixed_div(absolute, $z_index_standard_base_item);
+    display: flex;
+    height: 100%;
+    top: 0;
+    right: 0;
+    width: $securityGroupDefinitionConfigurator_filters_width;
+    padding-left: $securityGroupDefinitionConfigurator_gapBetweenDefAndFilter;
+    overflow: hidden;
+    &-content {
+      @include mix_alive('custom', $animation_duration_light transform);
+      @include mix_border_radius(5px);
+      display: flex;
+      align-items: center;
+      background-color: $color_active;
+      transform: translate(-125%, 0) scale(0.01, 1);
+      &-optionList {
+        display: flex;
+        flex-wrap: wrap;
+        &-item {
+          @include mix_alive('custom', $animation_duration_light box-shadow);
+          @include material();
+          @include mix_border_radius(5px);
+          flex: 1 1 auto;
+          padding: $spacing_small $spacing_medium;
+          color: $font_color_major;
+          background-color: $color_white;
+          margin: $spacing_small $spacing_small;
+          text-align: center;
+        }
+      }
+    }
+  }
+  &--filterActiveState {
+    #{$securityGroupDefinitionConfiguratorBlockName} {
+      &__filters-content {
+        transform: translate(0, 0) scale(1, 1);
+      }
+    }
   }
 }

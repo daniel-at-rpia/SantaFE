@@ -1,6 +1,7 @@
 <article
   [ngClass]="{
-    'sat-securityGroupDefinitionConfigurator': true
+    'sat-securityGroupDefinitionConfigurator': true,
+    'sat-securityGroupDefinitionConfigurator--filterActiveState': configuratorData.data.showFiltersFromDefinition
   }">
   <section class="sat-securityGroupDefinitionConfigurator__definitions">
     <ul class="sat-securityGroupDefinitionConfigurator__definitions-list">
@@ -20,5 +21,14 @@
       </li>
     </ul>
   </section>
-  <section class="sat-securityGroupDefinitionConfigurator__filters"></section>
+  <section class="sat-securityGroupDefinitionConfigurator__filters">
+    <div class="sat-securityGroupDefinitionConfigurator__filters-content">
+      <ul class="sat-securityGroupDefinitionConfigurator__filters-content-optionList">
+        <li class="sat-securityGroupDefinitionConfigurator__filters-content-optionList-item">Float</li>
+        <li class="sat-securityGroupDefinitionConfigurator__filters-content-optionList-item">None</li>
+        <li class="sat-securityGroupDefinitionConfigurator__filters-content-optionList-item">Fixed for Life</li>
+        <li class="sat-securityGroupDefinitionConfigurator__filters-content-optionList-item">Fixed-to-Float</li>
+      </ul>
+    </div>
+  </section>
 </article>
