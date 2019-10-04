@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import uuid from 'uuidv4';
 
 declare const require: any;
 export const cloneDeep = require('lodash.cloneDeep');
@@ -36,4 +37,13 @@ export class UtilityService {
         return 'na';
     }
   }
+
+  public generateUUID = function() {
+    if (typeof uuid === 'undefined') {
+      return 'n/a';
+    } else {
+      return uuid();
+    }
+  }
+
 }

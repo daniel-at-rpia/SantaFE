@@ -1,0 +1,141 @@
+@import "global.scss";
+
+$securityGroupDefinition_width: 6.875rem;
+$securityGroupDefinition_height: 4.5rem;
+$securityGroupDefinition_stackedIcon_secondaryImg_marginTop: 0.25rem;
+$securityGroupDefinition_filter_size: 2rem;
+.sat-securityGroupDefinition {
+  $securityGroupDefinitionBlockName: &;
+  @include mix_fixed_div(relative, $z_index_standard_base_item);
+  @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
+  @include mix_alive('custom', $animation_duration_light box-shadow);
+  @include mix_border_radius(10px);
+  display: flex;
+  flex-direction: column;
+  width: $securityGroupDefinition_width;
+  height: $securityGroupDefinition_height;
+  background-color: $color_white;
+  &__icon {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &-img {
+      color: $font_color_major;
+      font-size: $font_size_xx_large;
+    }
+    &-stackedIcon {
+      display: none;
+      &-primaryImg {
+        color: $font_color_major;
+        font-size: $font_size_xx_large;
+      }
+      &-secondaryImg {
+        margin-top: $securityGroupDefinition_stackedIcon_secondaryImg_marginTop;
+        color: $font_color_inverse;
+      }
+    }
+  }
+  &__label {
+    display: flex;
+    justify-content: center;
+    margin-bottom: $spacing_x_small;
+    &-text {
+      color: $font_color_major;
+      user-select: none;
+    }
+  }
+  &__filter {
+    @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+    display: none;
+    top: -$spacing_small;
+    right: -$spacing_small;
+    width: $securityGroupDefinition_filter_size;
+    height: $securityGroupDefinition_filter_size;
+    &-icon {
+      @include mix_fixed_div(relative, $z_index_standard_base_item);
+      @include mix_border_radius(50%);
+      flex: 1 1 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: $color_filter;
+      &-img {
+        color: $font_color_inverse;
+      }
+    }
+  }
+  &__filterMask {
+    @include mix_fixed_div(absolute, $z_index_standard_bury_item);
+    @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
+    @include mix_alive('custom', $animation_duration_light box-shadow);
+    @include mix_border_radius(50%);
+    display: none;
+    top: -$spacing_small;
+    right: -$spacing_small;
+    width: $securityGroupDefinition_filter_size;
+    height: $securityGroupDefinition_filter_size;
+  }
+  &:hover {
+    @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
+    #{$securityGroupDefinitionBlockName} {
+      &__filterMask {
+        @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
+      }
+    }
+  }
+  &--stackedIcon {
+    #{$securityGroupDefinitionBlockName} {
+      &__icon {
+        &-img {
+          display: none;
+        }
+        &-stackedIcon {
+          display: inline-block;
+        }
+      }
+    }
+  }
+  &--filterActiveState {
+    #{$securityGroupDefinitionBlockName} {
+      &__filter {
+        display: flex;
+      }
+      &__filterMask {
+        display: flex;
+      }
+    }
+  }
+  &--selectedState {
+    @include material('none');
+    background-color: $color_active;
+    #{$securityGroupDefinitionBlockName} {
+      &__icon {
+        &-img {
+          color: $font_color_inverse;
+        }
+        &-stackedIcon {
+          &-primaryImg {
+            color: $font_color_inverse;
+          }
+          &-secondaryImg {
+            color: $font_color_major;
+          }
+        }
+      }
+      &__label-text {
+        color: $font_color_inverse;
+      }
+      &__filterMask {
+        @include material('none');
+      }
+    }
+  }
+  &--selectedState:hover {
+    #{$securityGroupDefinitionBlockName} {
+      &__filterMask {
+        @include material('none');
+      }
+    }
+  }
+}

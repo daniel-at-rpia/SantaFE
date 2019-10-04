@@ -3,6 +3,9 @@ import {
   SecurityList,
   SecurityGroupList
 } from 'App/stubs/securities.stub';
+import {
+  SecurityGroupDefinitionMap
+} from 'App/stubs/securityGroupDefinitions.stub';
 import { DTOService } from 'App/services/DTOService';
 import { cloneDeep } from 'App/services/UtilityService';
 import { MarketState } from 'FEModels/frontend-page-states.interface';
@@ -20,6 +23,7 @@ export class MarketContainer {
 
   private initiateComponentState(){
     this.state = {
+      groupDefinitionList: [],
       securityList: [],
       securityList2: [],
       securityList3: [],
@@ -41,22 +45,10 @@ export class MarketContainer {
   }
 
   removeData(targetList){
-    if (this.state.securityList === targetList) {
-      this.state.securityList = [];
-    } else if (this.state.securityList2 === targetList) {
-      this.state.securityList2 = [];
-    } else if (this.state.securityList3 === targetList) {
-      this.state.securityList3 = [];
-    } else if (this.state.securityList4 === targetList) {
-      this.state.securityList4 = [];
-    } else if (this.state.securityGroupList1 === targetList) {
-      this.state.securityGroupList1 = [];
-    } else if (this.state.securityGroupList2 === targetList) {
-      this.state.securityGroupList2 = [];
-    } else if (this.state.securityGroupList3 === targetList) {
-      this.state.securityGroupList3 = [];
-    } else if (this.state.securityGroupList4 === targetList) {
-      this.state.securityGroupList4 = [];
+    for (let key in this.state) {
+      if (this.state[key] === targetList) {
+        this.state[key] = [];
+      }
     }
   }
 
@@ -140,6 +132,14 @@ export class MarketContainer {
         eachGroup.data.stats.pop();
       });
     }, 2000);
+  }
+
+  populateGroupDefinitionForOne(){
+    this.state.groupDefinitionList = SecurityGroupDefinitionMap.map((eachDefinitionStub) => {
+      return this.dtoService.formSecurityGroupDefinitionObject(eachDefinitionStub);
+    });
+    this.state.groupDefinitionList[4].state.filterActive = true;
+    this.state.groupDefinitionList[7].state.filterActive = true;
   }
 
 }

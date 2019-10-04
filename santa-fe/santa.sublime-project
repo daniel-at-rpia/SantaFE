@@ -11,6 +11,7 @@
     "dependencies",
     "dist",
     ".sass-cache",
-    "santa.css"
+    "santa.css",
+    "assets"
   ]
 }
