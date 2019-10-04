@@ -60,7 +60,8 @@ export interface SecurityGroupDefinitionDTO {
   }
   state: {
     isSelected: boolean,
-    isStatic: boolean
+    isStatic: boolean,
+    filterActive: boolean;
   }
 }
 

@@ -109,7 +109,8 @@ export class DTOService {
       },
       state: {
         isSelected: false,
-        isStatic: false
+        isStatic: false,
+        filterActive: false
       }
     }
     return object;

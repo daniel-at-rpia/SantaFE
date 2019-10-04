@@ -139,6 +139,8 @@ export class MarketContainer {
     this.state.groupDefinitionList = SecurityGroupDefinitionMap.map((eachDefinitionStub) => {
       return this.dtoService.formSecurityGroupDefinitionObject(eachDefinitionStub);
     });
+    this.state.groupDefinitionList[4].state.filterActive = true;
+    this.state.groupDefinitionList[7].state.filterActive = true;
   }
 
 }
