@@ -7,10 +7,13 @@ import {
   SecurityDTO,
   SecurityGroupDTO,
   SecurityGroupDefinitionDTO,
-  SecurityGroupDefinitionConfiguratorDTO
+  SecurityGroupDefinitionConfiguratorDTO,
+  SecurityGroupDefinitionFilterDTO
 } from 'App/models/frontend/frontend-models.interface';
 import {
-  SecurityDefinitionStub,
+  SecurityDefinitionStub
+} from 'App/models/frontend/frontend-stub-models.interface';
+import {
   SecurityGroupDefinitionMap
 } from 'App/stubs/securityGroupDefinitions.stub';
 import { UtilityService } from './UtilityService';
@@ -102,7 +105,8 @@ export class DTOService {
   ): SecurityGroupDefinitionDTO {
     const object:SecurityGroupDefinitionDTO = {
       data: {
-        name: rawData.name
+        name: rawData.displayName,
+        filterOptionList: this.generateSecurityGroupDefinitionFilterOptionList(rawData.key, rawData.optionList)
       },
       style: {
         icon: rawData.icon,
@@ -132,4 +136,17 @@ export class DTOService {
     };
     return object;
   }
+
+  public generateSecurityGroupDefinitionFilterOptionList(name, options): Array<SecurityGroupDefinitionFilterDTO> {
+    return options.map((eachOption) => {
+      const normalizedOption = this.utility.normalizeDefinitionFilterOption(eachOption);
+      const newFilterDTO:SecurityGroupDefinitionFilterDTO = {
+        displayLabel: eachOption,
+        shortKey: normalizedOption,
+        key: this.utility.formDefinitionFilterOptionKey(name, normalizedOption),
+        isSelected: false
+      }
+      return newFilterDTO;
+    })
+  };
 }

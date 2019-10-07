@@ -23,11 +23,19 @@
   </section>
   <section class="sat-securityGroupDefinitionConfigurator__filters">
     <div class="sat-securityGroupDefinitionConfigurator__filters-content">
+      <div class="sat-securityGroupDefinitionConfigurator__filters-content-title">
+        <i [ngClass]="'sat-securityGroupDefinitionConfigurator__filters-content-title-img ' + this.configuratorData.data.showFiltersFromDefinition?.style.icon"></i>
+      </div>
       <ul class="sat-securityGroupDefinitionConfigurator__filters-content-optionList">
-        <li class="sat-securityGroupDefinitionConfigurator__filters-content-optionList-item">Float</li>
-        <li class="sat-securityGroupDefinitionConfigurator__filters-content-optionList-item">None</li>
-        <li class="sat-securityGroupDefinitionConfigurator__filters-content-optionList-item">Fixed for Life</li>
-        <li class="sat-securityGroupDefinitionConfigurator__filters-content-optionList-item">Fixed-to-Float</li>
+        <button
+          *ngFor="let eachOption of this.configuratorData.data.showFiltersFromDefinition?.data.filterOptionList"
+          (click)="onClickFilterOption(eachOption)"
+          [ngClass]="{
+            'sat-securityGroupDefinitionConfigurator__filters-content-optionList-item': true,
+            'sat-securityGroupDefinitionConfigurator__filters-content-optionList-item--selected': eachOption.isSelected
+          }">
+          {{eachOption.displayLabel}}
+        </button>
       </ul>
     </div>
   </section>

@@ -3,6 +3,7 @@
 
 $securityGroupDefinitionConfigurator_definitions_width: 10.375rem;
 $securityGroupDefinitionConfigurator_filters_width: 12.5rem;
+$securityGroupDefinitionConfigurator_filters_title_img_size: 7rem;
 .sat-securityGroupDefinitionConfigurator {
   $securityGroupDefinitionConfiguratorBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
@@ -46,28 +47,39 @@ $securityGroupDefinitionConfigurator_filters_width: 12.5rem;
     top: 0;
     right: 0;
     width: $securityGroupDefinitionConfigurator_filters_width;
-    padding-left: $securityGroupDefinitionConfigurator_gapBetweenDefAndFilter;
+    padding-left: $securityGroupDefinitionConfigurator_gapBetweenDefAndFilter - $spacing_xx_small;  // cover the undesirable border radius look on the left when not aligned perfectly with the definition
     overflow: hidden;
     &-content {
       @include mix_alive('custom', $animation_duration_light transform);
       @include mix_border_radius(5px);
       display: flex;
-      align-items: center;
-      background-color: $color_active;
+      flex-direction: column;
+      justify-content: center;
       transform: translate(-125%, 0) scale(0.01, 1);
+      &-title {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: $spacing_large 0;
+        &-img {
+          color: $color_gray_2;
+          font-size: $securityGroupDefinitionConfigurator_filters_title_img_size;
+        }
+      }
       &-optionList {
+        @include mix_enable_scrollbar('vertical');
         display: flex;
         flex-wrap: wrap;
+        padding: $spacing_medium 0;
         &-item {
-          @include mix_alive('custom', $animation_duration_light box-shadow);
-          @include material();
-          @include mix_border_radius(5px);
-          flex: 1 1 auto;
+          flex: 0 1 100%;
           padding: $spacing_small $spacing_medium;
-          color: $font_color_major;
-          background-color: $color_white;
-          margin: $spacing_small $spacing_small;
-          text-align: center;
+          margin: $spacing_small $spacing_medium;
+          &--selected {
+            @include material('none');
+            background-color: $color_filter;
+            color: $font_color_inverse;
+          }
         }
       }
     }
@@ -75,7 +87,9 @@ $securityGroupDefinitionConfigurator_filters_width: 12.5rem;
   &--filterActiveState {
     #{$securityGroupDefinitionConfiguratorBlockName} {
       &__filters-content {
+        @include mix_border_generator(3px, $color_active);
         transform: translate(0, 0) scale(1, 1);
+        background-color: $color_white;
       }
     }
   }

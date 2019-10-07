@@ -52,6 +52,7 @@ export interface SecurityGroupPieChartColorSchemeDTO {
 export interface SecurityGroupDefinitionDTO {
   data: {
     name: string;
+    filterOptionList: Array<SecurityGroupDefinitionFilterDTO>
   }
   style: {
     icon: string;
@@ -73,6 +74,13 @@ export interface SecurityGroupDefinitionConfiguratorDTO {
   state: {
     
   }
+}
+
+export interface SecurityGroupDefinitionFilterDTO {
+  displayLabel: string;
+  shortKey: string;
+  key: string;
+  isSelected: boolean;
 }
 
 interface SecurityGroupStatDTO {
