@@ -18,14 +18,18 @@
         <security-group-definition
           [definitionData]="eachDefinition"
           (onClick)="onClickDefinition($event)"
-          [selected]="configuratorData.data.showFiltersFromDefinition === eachDefinition"></security-group-definition>
+          [selected]="configuratorData.data.showFiltersFromDefinition === eachDefinition">
+        </security-group-definition>
       </li>
     </ul>
   </section>
   <section class="sat-securityGroupDefinitionConfigurator__filters">
     <div class="sat-securityGroupDefinitionConfigurator__filters-content">
       <div class="sat-securityGroupDefinitionConfigurator__filters-content-title">
-        <i [ngClass]="'sat-securityGroupDefinitionConfigurator__filters-content-title-img ' + this.configuratorData.data.showFiltersFromDefinition?.style.icon"></i>
+        <security-group-definition
+          [definitionData]="this.configuratorData.data.showFiltersFromDefinition"
+          [backgroundVariant]="true">
+        </security-group-definition>
       </div>
       <ul class="sat-securityGroupDefinitionConfigurator__filters-content-optionList">
         <button

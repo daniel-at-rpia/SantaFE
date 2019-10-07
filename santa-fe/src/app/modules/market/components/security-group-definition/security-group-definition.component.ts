@@ -19,6 +19,7 @@ import { SecurityGroupDefinitionDTO } from 'App/models/frontend/frontend-models.
 export class SecurityGroupDefinition implements OnInit {
   @Input() definitionData: SecurityGroupDefinitionDTO;
   @Input() selected: boolean;
+  @Input() backgroundVariant: boolean;
   @Output() onClick = new EventEmitter<SecurityGroupDefinitionDTO>();
   constructor(
   ) {

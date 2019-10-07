@@ -3,7 +3,6 @@
 
 $securityGroupDefinitionConfigurator_filters_width: 12.5rem;
 $securityGroupDefinitionConfigurator_width: $iconButton_size_regular + $spacing_small + $securityGroupDefinition_width + $securityGroupDefinitionConfigurator_gapBetweenDefAndFilter + $securityGroupDefinitionConfigurator_filters_width;
-$securityGroupDefinitionConfigurator_filters_title_img_size: 7rem;
 .sat-securityGroupDefinitionConfigurator {
   $securityGroupDefinitionConfiguratorBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
@@ -59,11 +58,9 @@ $securityGroupDefinitionConfigurator_filters_title_img_size: 7rem;
       &-title {
         display: flex;
         flex-direction: column;
-        align-items: center;
         padding: $spacing_large 0;
-        &-img {
-          color: $color_gray_2;
-          font-size: $securityGroupDefinitionConfigurator_filters_title_img_size;
+        &>security-group-definition {
+          display: flex;
         }
       }
       &-optionList {
