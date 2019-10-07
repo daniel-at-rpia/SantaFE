@@ -2,8 +2,8 @@ import { SecurityDefinitionStub } from 'App/models/frontend/frontend-stub-models
 
 
 const FilterOptionsBoolean = [
-  'True',
-  'False'
+  'Yes',
+  'No'
 ];
 
 const FilterOptionsBailInStatus = [
@@ -95,14 +95,14 @@ const FilterOptionsTempPlaceholder = [
 
 export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
   {
-    key: 'Security_TYPE',
+    key: 'SECURITY_TYPE',
     displayName: 'Security Type',
-    icon: 'fal fa-shapes',
+    icon: 'fal fa-slash',
     optionList: FilterOptionsSecurityType
   },{
     key: 'RATING',
     displayName: 'Rating',
-    icon: 'fal fa-star',
+    icon: 'fas fa-award',
     optionList: FilterOptionsRating
   },{
     key: 'CURRENCY',
@@ -113,6 +113,12 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     key: 'TENOR',
     displayName: 'Tenor',
     icon: 'fal fa-history',
+    optionList: FilterOptionsTenor
+  },{
+    key: 'BACKEND_TENOR',
+    displayName: 'Backend Tenor',
+    icon: 'fal fa-desktop',
+    secondaryIcon: 'fas fa-history',
     optionList: FilterOptionsTenor
   },{
     key: 'BAIL_IN_STATUS',
@@ -140,7 +146,7 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     icon: 'fas fa-trash',
     optionList: FilterOptionsRatingBucket,
     isStacked: true,
-    stackedIcon: 'fal fa-star'
+    secondaryIcon: 'fas fa-award'
   },{
     key: 'SECTOR',
     displayName: 'Sector',
@@ -156,5 +162,20 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     displayName: 'Sub-Industry',
     icon: 'fal fa-building',
     optionList: FilterOptionsTempPlaceholder
+  },{
+    key: 'IS_BULLET',
+    displayName: 'Bullet Bond',
+    icon: 'fas fa-bolt',
+    optionList: FilterOptionsBoolean
+  },{
+    key: 'IS_NEWISSUE',
+    displayName: 'New-Issued',
+    icon: 'far fa-sparkles',
+    optionList: FilterOptionsBoolean
+  },{
+    key: 'IS_ONTHERUN',
+    displayName: 'On-the-Run',
+    icon: 'far fa-running',
+    optionList: FilterOptionsBoolean
   }
 ];

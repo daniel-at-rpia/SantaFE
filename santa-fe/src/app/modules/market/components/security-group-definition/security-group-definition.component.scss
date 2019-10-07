@@ -2,9 +2,7 @@
 @import "modules/market/market.scss";
 //@import "modules/market/components/definition-configurator/definition-configurator.component.scss";
 
-$securityGroupDefinition_width: 6.875rem;
 $securityGroupDefinition_height: 4.5rem;
-$securityGroupDefinition_stackedIcon_secondaryImg_marginTop: 0.25rem;
 $securityGroupDefinition_filter_size: 2rem;
 .sat-securityGroupDefinition {
   $securityGroupDefinitionBlockName: &;
@@ -22,19 +20,51 @@ $securityGroupDefinition_filter_size: 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    &-img {
+    &-regularImg {
       color: $font_color_major;
       font-size: $font_size_xx_large;
     }
-    &-stackedIcon {
+    &-ratingBucket {
       display: none;
       &-primaryImg {
         color: $font_color_major;
         font-size: $font_size_xx_large;
       }
       &-secondaryImg {
-        margin-top: $securityGroupDefinition_stackedIcon_secondaryImg_marginTop;
+        margin-top: $spacing_xx_small;
         color: $font_color_inverse;
+      }
+    }
+    &-backendTenor {
+      display: none;
+      &-primaryImg {
+        color: $font_color_major;
+        font-size: $font_size_xx_large;
+      }
+      &-secondaryImg {
+        margin-top: -$spacing_xx_small;
+        color: $font_color_major;
+      }
+    }
+    &-securityType {
+      @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
+      display: none;
+      &-img {
+        font-size: $font_size_large;
+        color: $font_color_major;
+        transform: rotate(75deg);
+      }
+      &-bond {
+        @include mix_fixed_div(relative, $z_index_standard_base_item);
+        top: -$spacing_x_small;
+        left: $spacing_x_small;
+        color: $font_color_major;
+      }
+      &-cds {
+        @include mix_fixed_div(relative, $z_index_standard_base_item);
+        bottom: -$spacing_x_small;
+        right: $spacing_x_small;
+        color: $font_color_major;
       }
     }
   }
@@ -94,13 +124,37 @@ $securityGroupDefinition_filter_size: 2rem;
       }
     }
   }
-  &--stackedIcon {
+  &--isRatingBucket {
     #{$securityGroupDefinitionBlockName} {
       &__icon {
-        &-img {
+        &-regularImg {
           display: none;
         }
-        &-stackedIcon {
+        &-ratingBucket {
+          display: inline-block;
+        }
+      }
+    }
+  }
+  &--isSecurityType {
+    #{$securityGroupDefinitionBlockName} {
+      &__icon {
+        &-regularImg {
+          display: none;
+        }
+        &-securityType {
+          display: inline-block;
+        }
+      }
+    }
+  }
+  &--isBackendTenor {
+    #{$securityGroupDefinitionBlockName} {
+      &__icon {
+        &-regularImg {
+          display: none;
+        }
+        &-backendTenor {
           display: inline-block;
         }
       }
@@ -122,13 +176,10 @@ $securityGroupDefinition_filter_size: 2rem;
     background-color: $color_active;
     #{$securityGroupDefinitionBlockName} {
       &__icon {
-        &-img {
+        &-regularImg, &-ratingBucket-primaryImg, &-backendTenor-primaryImg, &-backendTenor-secondaryImg, &-securityType-bond, &-securityType-img, &-securityType-cds {
           color: $font_color_inverse;
         }
-        &-stackedIcon {
-          &-primaryImg {
-            color: $font_color_inverse;
-          }
+        &-ratingBucket {
           &-secondaryImg {
             color: $font_color_major;
           }

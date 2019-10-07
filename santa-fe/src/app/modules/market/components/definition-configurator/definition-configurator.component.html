@@ -10,6 +10,7 @@
           (click)="selectDefinitionForGrouping(eachDefinition)"
           [ngClass]="{
             'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn': true,
+            'santa-btn--iconOnly': true,
             'fal': true,
             'fa-square': configuratorData.data.selectedDefinitionList.indexOf(eachDefinition) < 0,
             'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn--selected fa-check-square': this.configuratorData.data.selectedDefinitionList.indexOf(eachDefinition) >= 0

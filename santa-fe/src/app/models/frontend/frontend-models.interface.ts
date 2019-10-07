@@ -52,12 +52,13 @@ export interface SecurityGroupPieChartColorSchemeDTO {
 export interface SecurityGroupDefinitionDTO {
   data: {
     name: string;
+    key: string;
     filterOptionList: Array<SecurityGroupDefinitionFilterDTO>
   }
   style: {
     icon: string;
     isStacked: boolean;
-    stackedIcon: string;
+    secondaryIcon: string;
   }
   state: {
     isStatic: boolean,

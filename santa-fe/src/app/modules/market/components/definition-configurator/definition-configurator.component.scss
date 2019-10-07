@@ -1,8 +1,8 @@
 @import "global.scss";
 @import "modules/market/market.scss";
 
-$securityGroupDefinitionConfigurator_definitions_width: 10.375rem;
 $securityGroupDefinitionConfigurator_filters_width: 12.5rem;
+$securityGroupDefinitionConfigurator_width: $iconButton_size_regular + $spacing_small + $securityGroupDefinition_width + $securityGroupDefinitionConfigurator_gapBetweenDefAndFilter + $securityGroupDefinitionConfigurator_filters_width;
 $securityGroupDefinitionConfigurator_filters_title_img_size: 7rem;
 .sat-securityGroupDefinitionConfigurator {
   $securityGroupDefinitionConfiguratorBlockName: &;
@@ -14,7 +14,7 @@ $securityGroupDefinitionConfigurator_filters_title_img_size: 7rem;
     @include mix_enable_scrollbar('vertical');
     display: flex;
     direction: rtl;
-    width: $securityGroupDefinitionConfigurator_definitions_width + $securityGroupDefinitionConfigurator_filters_width + $scroll_bar_width + $securityGroupDefinitionConfigurator_gapBetweenDefAndFilter;
+    width: $securityGroupDefinitionConfigurator_width;
     padding-left: $spacing_medium;
     &-list {
       flex: 1 1 auto;

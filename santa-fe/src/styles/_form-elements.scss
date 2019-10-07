@@ -38,6 +38,7 @@
       }
     }
     &--iconOnly {
+      display: flex;
       padding: 0;
       width: $iconButton_size_regular;
       height: $iconButton_size_regular;

@@ -2,16 +2,27 @@
   (click)="onClickDefinition()"
   [ngClass]="{
     'sat-securityGroupDefinition': true,
-    'sat-securityGroupDefinition--stackedIcon': definitionData.style.isStacked,
+    'sat-securityGroupDefinition--isBackendTenor': definitionData.data.key === 'BACKEND_TENOR',
+    'sat-securityGroupDefinition--isRatingBucket': definitionData.data.key === 'RATING_BUCKET',
+    'sat-securityGroupDefinition--isSecurityType': definitionData.data.key === 'SECURITY_TYPE',
     'sat-securityGroupDefinition--selectedState': !!selected,
     'sat-securityGroupDefinition--filterActiveState': definitionData.state.filterActive
   }">
   <section class="sat-securityGroupDefinition__icon">
     <i [ngClass]="
-      'sat-securityGroupDefinition__icon-img ' + definitionData.style.icon"></i>
-    <span class="sat-securityGroupDefinition__icon-stackedIcon fa-stack">
-      <i [ngClass]="'sat-securityGroupDefinition__icon-stackedIcon-primaryImg fa-stack-2x ' + definitionData.style.icon"></i>
-      <i [ngClass]="'sat-securityGroupDefinition__icon-stackedIcon-secondaryImg fa-stack-1x ' + definitionData.style.stackedIcon"></i>
+      'sat-securityGroupDefinition__icon-regularImg ' + definitionData.style.icon"></i>
+    <span class="sat-securityGroupDefinition__icon-ratingBucket fa-stack">
+      <i [ngClass]="'sat-securityGroupDefinition__icon-ratingBucket-primaryImg fa-stack-2x ' + definitionData.style.icon"></i>
+      <i [ngClass]="'sat-securityGroupDefinition__icon-ratingBucket-secondaryImg fa-stack-1x ' + definitionData.style.secondaryIcon"></i>
+    </span>
+    <span class="sat-securityGroupDefinition__icon-securityType fa-layers">
+      <span class="sat-securityGroupDefinition__icon-securityType-bond fa-layers-text">Bond</span>
+      <i [ngClass]="'sat-securityGroupDefinition__icon-securityType-img fa-flip-horizontal ' + definitionData.style.icon"></i>
+      <span class="sat-securityGroupDefinition__icon-securityType-cds fa-layers-text">CDS</span>
+    </span>
+    <span class="sat-securityGroupDefinition__icon-backendTenor fa-stack">
+      <i [ngClass]="'sat-securityGroupDefinition__icon-backendTenor-primaryImg fa-stack-2x ' + definitionData.style.icon"></i>
+      <i [ngClass]="'sat-securityGroupDefinition__icon-backendTenor-secondaryImg fa-stack-1x ' + definitionData.style.secondaryIcon"></i>
     </span>
   </section>
   <section class="sat-securityGroupDefinition__label">

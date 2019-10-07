@@ -4,6 +4,6 @@ export interface SecurityDefinitionStub {
   icon: string;
   optionList: Array<string>,
   isStacked?: boolean;
-  stackedIcon?: string;
+  secondaryIcon?: string;
   locked?: boolean;
 }

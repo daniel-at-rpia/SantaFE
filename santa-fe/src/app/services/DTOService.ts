@@ -106,12 +106,13 @@ export class DTOService {
     const object:SecurityGroupDefinitionDTO = {
       data: {
         name: rawData.displayName,
+        key: rawData.key,
         filterOptionList: this.generateSecurityGroupDefinitionFilterOptionList(rawData.key, rawData.optionList)
       },
       style: {
         icon: rawData.icon,
         isStacked: rawData.isStacked || false,
-        stackedIcon: rawData.stackedIcon || ''
+        secondaryIcon: rawData.secondaryIcon || ''
       },
       state: {
         isStatic: false,
