@@ -2,20 +2,34 @@
   (click)="onClickDefinition()"
   [ngClass]="{
     'sat-securityGroupDefinition': true,
-    'sat-securityGroupDefinition--stackedIcon': definitionData.style.isStacked,
-    'sat-securityGroupDefinition--selectedState': definitionData.state.isSelected,
-    'sat-securityGroupDefinition--filterActiveState': definitionData.state.filterActive
+    'sat-securityGroupDefinition--isBackendTenor': definitionData?.data.key === 'BACKEND_TENOR',
+    'sat-securityGroupDefinition--isRatingBucket': definitionData?.data.key === 'RATING_BUCKET',
+    'sat-securityGroupDefinition--isSecurityType': definitionData?.data.key === 'SECURITY_TYPE',
+    'sat-securityGroupDefinition--selectedState': !!selected,
+    'sat-securityGroupDefinition--filterActiveState': definitionData?.state.filterActive,
+    'sat-securityGroupDefinition--unactivated': definitionData?.state.isUnactivated,
+    'sat-securityGroupDefinition--backgroundVariant': !!backgroundVariant
   }">
   <section class="sat-securityGroupDefinition__icon">
     <i [ngClass]="
-      'sat-securityGroupDefinition__icon-img ' + definitionData.style.icon"></i>
-    <span class="sat-securityGroupDefinition__icon-stackedIcon fa-stack">
-      <i [ngClass]="'sat-securityGroupDefinition__icon-stackedIcon-primaryImg fa-stack-2x ' + definitionData.style.icon"></i>
-      <i [ngClass]="'sat-securityGroupDefinition__icon-stackedIcon-secondaryImg fa-stack-1x ' + definitionData.style.stackedIcon"></i>
+      'sat-securityGroupDefinition__icon-regularImg ' + definitionData?.style.icon"></i>
+    <span class="sat-securityGroupDefinition__icon-ratingBucket fa-stack">
+      <i [ngClass]="'sat-securityGroupDefinition__icon-ratingBucket-primaryImg fa-stack-2x ' + definitionData?.style.icon"></i>
+      <i [ngClass]="'sat-securityGroupDefinition__icon-ratingBucket-secondaryImg fa-stack-1x ' + definitionData?.style.secondaryIcon"></i>
+    </span>
+    <span class="sat-securityGroupDefinition__icon-securityType">
+      <div class="sat-securityGroupDefinition__icon-securityType-box">
+        <span class="sat-securityGroupDefinition__icon-securityType-box-text">CDS</span>
+        <span class="sat-securityGroupDefinition__icon-securityType-box-text">Bond</span>
+      </div>
+    </span>
+    <span class="sat-securityGroupDefinition__icon-backendTenor fa-stack">
+      <i [ngClass]="'sat-securityGroupDefinition__icon-backendTenor-primaryImg fa-stack-2x ' + definitionData?.style.icon"></i>
+      <i [ngClass]="'sat-securityGroupDefinition__icon-backendTenor-secondaryImg fa-stack-1x ' + definitionData?.style.secondaryIcon"></i>
     </span>
   </section>
   <section class="sat-securityGroupDefinition__label">
-    <span class="sat-securityGroupDefinition__label-text">{{definitionData.data.name}}</span>
+    <span class="sat-securityGroupDefinition__label-text">{{definitionData?.data.name}}</span>
   </section>
   <section class="sat-securityGroupDefinition__filter">
     <div class="sat-securityGroupDefinition__filter-icon">
@@ -23,4 +37,5 @@
     </div>
   </section>
   <section class="sat-securityGroupDefinition__filterMask"></section>
+  <section class="sat-securityGroupDefinition__selectedGap"></section>
 </article>

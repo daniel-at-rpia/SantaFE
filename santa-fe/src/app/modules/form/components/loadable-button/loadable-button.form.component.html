@@ -1,0 +1,13 @@
+<article
+  [ngClass]="{
+    'sat-loadableButton': true,
+    'sat-loadableButton--loading': isLoading
+  }">
+  <button (click)="onClick()" class="sat-loadableButton__btn santaBtn--labelled">
+    <i [ngClass]="'sat-loadableButton__btn-icon ' + icon"></i>
+    <span class="sat-loadableButton__btn-text">{{text}}</span>
+  </button>
+  <button class="sat-loadableButton__btn">
+    <i class="sat-loadableButton__btn-loadingIcon fal fa-circle-notch fa-spin"></i>
+  </button>
+</article>

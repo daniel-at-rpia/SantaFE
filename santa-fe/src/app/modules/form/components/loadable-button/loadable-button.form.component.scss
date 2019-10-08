@@ -1,0 +1,41 @@
+@import "global.scss";
+
+.sat-loadableButton {
+  $loadableButtonBlockName: &;
+  @include mix_fixed_div(relative, $z_index_standard_base_item);
+  flex: 1 1 auto;
+  display: flex;
+  &__btn {
+    @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
+    &-loadingIcon {
+      @include mix_fixed_div(relative, $z_index_standard_hovering_item);
+      display: none;
+      color: $font_color_inverse!important;
+      margin: 0!important;
+    }
+    &:nth-of-type(2) {
+      @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+      display: none;
+      align-self: center;
+      width: 100%;
+    }
+  }
+  &--loading {
+    #{$loadableButtonBlockName}__btn {
+      @include material('none');
+      background-color: $color_active;
+      &>i {
+        color: $color_active;
+      }
+      &>span {
+        color: $color_active;
+      }
+      &-loadingIcon {
+        display: flex!important;
+      }
+      &:nth-of-type(2) {
+        display: flex;
+      }
+    }
+  }
+}

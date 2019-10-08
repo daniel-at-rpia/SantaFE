@@ -1,0 +1,143 @@
+@import "global.scss";
+@import "modules/market/market.scss";
+
+$securityGroupDefinitionConfigurator_filters_width: 12.5rem;
+$securityGroupDefinitionConfigurator_width: $iconButton_size_regular + $spacing_small + $securityGroupDefinition_width + $securityGroupDefinitionConfigurator_gapBetweenDefAndFilter + $securityGroupDefinitionConfigurator_filters_width;
+$securityGroupDefinitionConfigurator_ctas_height: 6.5rem;
+.sat-securityGroupDefinitionConfigurator {
+  $securityGroupDefinitionConfiguratorBlockName: &;
+  @include mix_fixed_div(relative, $z_index_standard_base_item);
+  display: flex;
+  flex-direction: column;
+  width: $securityGroupDefinitionConfigurator_width;
+  &__definitions {
+    @include mix_fixed_div(relative, $z_index_standard_base_item);
+    @include mix_enable_scrollbar('vertical');
+    flex: 1 1 auto;
+    display: flex;
+    direction: rtl;
+    padding-left: $spacing_medium;
+    &-list {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      direction: ltr;
+      &-item {
+        display: flex;
+        align-items: center;
+        margin-top: $spacing_medium;
+        &-selectBtn {
+          margin-right: $spacing_medium;
+          font-size: $font_size_x_large;
+          &--selected {
+            @include material('none');
+            background-color: $color_active;
+            color: $font_color_inverse;
+          }
+          &--locked {
+            @include material('none');
+            color: $font_color_major;
+            background-color: inherit;
+          }
+        }
+        &:last-of-type {
+          margin-bottom: $spacing_large;
+        }
+      }
+    }
+  }
+  &__filters {
+    @include mix_fixed_div(absolute, $z_index_standard_base_item);
+    @include mix_calculate(height, 100%, $securityGroupDefinitionConfigurator_ctas_height, '-');
+    display: flex;
+    top: 0;
+    right: 0;
+    width: $securityGroupDefinitionConfigurator_filters_width;
+    padding-left: $securityGroupDefinitionConfigurator_gapBetweenDefAndFilter - $spacing_xx_small;  // $spacing_xx_small for covering the undesirable border radius look on the left upper corner when not aligned perfectly with the definition
+    overflow: hidden;
+    &-content {
+      @include mix_alive('custom', $animation_duration_light transform);
+      @include mix_border_radius(5px);
+      display: flex;
+      flex-direction: column;
+      transform: translate(-125%, 0) scale(0.01, 1);
+      &-title {
+        display: flex;
+        flex-direction: column;
+        padding: $spacing_large 0;
+        margin-top: 100%;
+        &>security-group-definition {
+          display: flex;
+        }
+      }
+      &-search {
+        display: flex;
+        margin: $spacing_medium;
+        input {
+          width: 100%;
+        }
+      }
+      &-optionList {
+        @include mix_enable_scrollbar('vertical');
+        display: flex;
+        flex-wrap: wrap;
+        padding: $spacing_medium 0;
+        margin: 0 $spacing_small;
+        &-item {
+          flex: 0 1 100%;
+          padding: $spacing_small $spacing_medium;
+          margin: $spacing_small $spacing_medium;
+          &--selected {
+            @include material('none');
+            background-color: $color_filter;
+            color: $font_color_inverse;
+          }
+          &--filteredOut {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+  &__ctas {
+    @include mix_fixed_div(relative, $z_index_standard_hovering_item);
+    flex: 0 0 $securityGroupDefinitionConfigurator_ctas_height;
+    display: flex;
+    &-content {
+      @include mix_border_generator($typical_border_width 0 0 0);
+      flex: 1 1 auto;
+      display: flex;
+      justify-content: center;
+      margin: $spacing_medium $spacing_x_large;
+      padding-top: $spacing_medium;
+      santa-loadable-button {
+        display: flex;
+        .sat-loadableButton__btn {
+          padding: 0 $spacing_large;
+          &>i {
+            font-size: $font_size_xx_large;
+          }
+          &>span {
+            font-size: $font_size_x_large;
+          }
+        }
+      }
+    }
+  }
+  &--longFilterOptionsState {
+    #{$securityGroupDefinitionConfiguratorBlockName} {
+      &__filters-content-title {
+        margin-top: 0;
+      }
+    }
+  }
+  &--filterActiveState {
+    #{$securityGroupDefinitionConfiguratorBlockName} {
+      &__filters-content {
+        @include mix_border_generator(3px, $color_active);
+        transform: translate(0, 0) scale(1, 1);
+        background-color: $color_white;
+      }
+    }
+  }
+}

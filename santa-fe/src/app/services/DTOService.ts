@@ -6,10 +6,15 @@ import {
 import {
   SecurityDTO,
   SecurityGroupDTO,
-  SecurityGroupDefinitionDTO
+  SecurityGroupDefinitionDTO,
+  SecurityGroupDefinitionConfiguratorDTO,
+  SecurityGroupDefinitionFilterDTO
 } from 'App/models/frontend/frontend-models.interface';
 import {
   SecurityDefinitionStub
+} from 'App/models/frontend/frontend-stub-models.interface';
+import {
+  SecurityGroupDefinitionMap
 } from 'App/stubs/securityGroupDefinitions.stub';
 import { UtilityService } from './UtilityService';
 import {
@@ -95,24 +100,61 @@ export class DTOService {
     return object;
   }
 
+  public generateSecurityGroupDefinitionFilterOptionList(name, options): Array<SecurityGroupDefinitionFilterDTO> {
+    return options.map((eachOption) => {
+      const normalizedOption = this.utility.normalizeDefinitionFilterOption(eachOption);
+      const newFilterDTO:SecurityGroupDefinitionFilterDTO = {
+        data: {
+          displayLabel: eachOption,
+          shortKey: normalizedOption,
+          key: this.utility.formDefinitionFilterOptionKey(name, normalizedOption)
+        },
+        state: {
+          isSelected: false,
+          isFilteredOut: false
+        }
+      }
+      return newFilterDTO;
+    })
+  };
+
   public formSecurityGroupDefinitionObject(
     rawData: SecurityDefinitionStub
   ): SecurityGroupDefinitionDTO {
     const object:SecurityGroupDefinitionDTO = {
       data: {
-        name: rawData.name
+        name: rawData.displayName,
+        key: rawData.key,
+        filterOptionList: this.generateSecurityGroupDefinitionFilterOptionList(rawData.key, rawData.optionList)
       },
       style: {
         icon: rawData.icon,
-        isStacked: rawData.isStacked || false,
-        stackedIcon: rawData.stackedIcon || ''
+        secondaryIcon: rawData.secondaryIcon || ''
       },
       state: {
-        isSelected: false,
-        isStatic: false,
+        isLocked: rawData.locked,
+        isUnactivated: true,
         filterActive: false
       }
     }
+    return object;
+  }
+
+  public createSecurityGroupDefinitionConfigurator():SecurityGroupDefinitionConfiguratorDTO {
+    const object:SecurityGroupDefinitionConfiguratorDTO = {
+      data: {
+        definitionList: SecurityGroupDefinitionMap.map((eachDefinitionStub) => {
+          return this.formSecurityGroupDefinitionObject(eachDefinitionStub);
+        }),
+        selectedDefinitionList: []
+      },
+      state: {
+        showLongFilterOptions: false,
+        isLoading: false
+      },
+      showFiltersFromDefinition: null,
+      filterSearchInputValue: ''
+    };
     return object;
   }
 }

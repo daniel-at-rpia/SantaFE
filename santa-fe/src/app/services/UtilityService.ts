@@ -6,6 +6,8 @@ export const cloneDeep = require('lodash.cloneDeep');
 
 @Injectable()
 export class UtilityService {
+  // Any code about naming stuff goes into this service
+
   constructor(){}
 
   public mapSeniorities(input): number {
@@ -38,12 +40,20 @@ export class UtilityService {
     }
   }
 
-  public generateUUID = function() {
+  public generateUUID() {
     if (typeof uuid === 'undefined') {
       return 'n/a';
     } else {
       return uuid();
     }
+  }
+
+  public normalizeDefinitionFilterOption(rawString): string {
+    return rawString.replace(' ', '');
+  }
+
+  public formDefinitionFilterOptionKey(name, normalizedOption): string {
+    return `${name}/${normalizedOption}`;
   }
 
 }

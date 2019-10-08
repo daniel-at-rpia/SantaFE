@@ -1,48 +1,181 @@
-export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
-  {
-    name: 'Rating',
-    icon: 'fal fa-star'
-  },{
-    name: 'Currency',
-    icon: 'fal fa-dollar-sign'
-  },{
-    name: 'Tenor',
-    icon: 'fal fa-history'
-  },{
-    name: 'Bail-in Status',
-    icon: 'fas fa-shield-alt'
-  },{
-    name: 'Coupon Type',
-    icon: 'fas fa-ticket-alt'
-  },{
-    name: 'Industry',
-    icon: 'fal fa-city'
-  },{
-    name: 'Issuer',
-    icon: 'fas fa-user-tie'
-  },{
-    name: 'Rating Bucket',
-    icon: 'fas fa-trash',
-    isStacked: true,
-    stackedIcon: 'fal fa-star'
-  },{
-    name: 'Sector',
-    icon: 'fal fa-chart-pie'
-  },{
-    name: 'Senority',
-    icon: 'fal fa-gavel'
-  },{
-    name: 'Sub-Industry',
-    icon: 'fal fa-building'
-  },{
-    name: 'Bond Type',
-    icon: 'fal fa-shapes'
-  }
+import { SecurityDefinitionStub } from 'App/models/frontend/frontend-stub-models.interface';
+
+
+const FilterOptionsBoolean = [
+  'Yes',
+  'No'
 ];
 
-export interface SecurityDefinitionStub {
-  name: string;
-  icon: string;
-  isStacked?: boolean;
-  stackedIcon?: string;
-}
+const FilterOptionsBailInStatus = [
+  'Bail In',
+  'Not Bail In'
+];
+
+const FilterOptionsCurrency = [
+  'CAD',
+  'USD',
+  'EUR',
+  'GBP'
+];
+
+const FilterOptionsCouponType = [
+  'Float',
+  'None',
+  'Fixed for Life',
+  'Fixed-to-Float'
+];
+
+const FilterOptionsRating = [
+  'AAA',
+  'AA+',
+  'AA',
+  'AA-',
+  'A+',
+  'A',
+  'A-',
+  'BBB+',
+  'BBB',
+  'BBB-',
+  'BB+',
+  'BB',
+  'BB-',
+  'B+',
+  'B',
+  'B-',
+  'CCC+',
+  'CCC',
+  'CCC-',
+  'CC+',
+  'CC',
+  'CC-',
+  'C',
+  'D',
+  'NR'
+];
+
+const FilterOptionsRatingBucket = [
+  'Xover',
+  'IG',
+  'HY',
+  'NR'
+];
+
+const FilterOptionsTenor = [
+  '0.25Y',
+  '0.5Y',
+  '0.75Y',
+  '1Y',
+  '2Y',
+  '3Y',
+  '4Y',
+  '5Y',
+  '6Y',
+  '7Y',
+  '8Y',
+  '9Y',
+  '10Y',
+  '15Y',
+  '20Y',
+  '25Y',
+  '30Y',
+  '40Y',
+  '50Y'
+];
+
+const FilterOptionsSecurityType = [
+  'Bond',
+  'CDS'
+];
+
+const FilterOptionsTempPlaceholder = [
+  'Option 1',
+  'Option 2',
+  'Option 3'
+]
+
+export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
+  {
+    key: 'SECURITY_TYPE',
+    displayName: 'Security Type',
+    icon: 'fal fa-slash',
+    optionList: FilterOptionsSecurityType,
+    locked: true
+  },{
+    key: 'RATING',
+    displayName: 'Rating',
+    icon: 'fas fa-award',
+    optionList: FilterOptionsRating
+  },{
+    key: 'CURRENCY',
+    displayName: 'Currency',
+    icon: 'fal fa-dollar-sign',
+    optionList: FilterOptionsCurrency
+  },{
+    key: 'TENOR',
+    displayName: 'Tenor',
+    icon: 'fal fa-history',
+    optionList: FilterOptionsTenor
+  },{
+    key: 'BACKEND_TENOR',
+    displayName: 'Backend Tenor',
+    icon: 'fal fa-desktop',
+    secondaryIcon: 'fas fa-history',
+    optionList: FilterOptionsTenor
+  },{
+    key: 'BAIL_IN_STATUS',
+    displayName: 'Bail-in Status',
+    icon: 'fas fa-shield-alt',
+    optionList: FilterOptionsBailInStatus
+  },{
+    key: 'COUPON_TYPE',
+    displayName: 'Coupon Type',
+    icon: 'fas fa-ticket-alt',
+    optionList: FilterOptionsCouponType
+  },{
+    key: 'INDUSTRY',
+    displayName: 'Industry',
+    icon: 'fal fa-city',
+    optionList: FilterOptionsTempPlaceholder
+  },{
+    key: 'ISSUER',
+    displayName: 'Issuer',
+    icon: 'fas fa-user-tie',
+    optionList: FilterOptionsTempPlaceholder
+  },{
+    key: 'RATING_BUCKET',
+    displayName: 'Rating Bucket',
+    icon: 'fas fa-trash',
+    optionList: FilterOptionsRatingBucket,
+    secondaryIcon: 'fas fa-award'
+  },{
+    key: 'SECTOR',
+    displayName: 'Sector',
+    icon: 'fal fa-chart-pie',
+    optionList: FilterOptionsTempPlaceholder
+  },{
+    key: 'SENORITY',
+    displayName: 'Senority',
+    icon: 'fal fa-gavel',
+    optionList: FilterOptionsTempPlaceholder
+  },{
+    key: 'SUB_INDUSTRY',
+    displayName: 'Sub-Industry',
+    icon: 'fal fa-building',
+    optionList: FilterOptionsTempPlaceholder
+  },{
+    key: 'IS_BULLET',
+    displayName: 'Bullet',
+    icon: 'fas fa-bolt',
+    optionList: FilterOptionsBoolean
+  },{
+    key: 'IS_NEWISSUE',
+    displayName: 'New-Issued',
+    icon: 'far fa-sparkles',
+    optionList: FilterOptionsBoolean
+  },{
+    key: 'IS_ONTHERUN',
+    displayName: 'On-the-Run',
+    icon: 'far fa-running',
+    optionList: FilterOptionsBoolean
+  }
+];
