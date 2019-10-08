@@ -19,6 +19,8 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+
+    // Native modules
     WelcomeModule,
     HomeModule,
     MarketModule

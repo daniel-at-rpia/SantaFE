@@ -50,10 +50,15 @@ export interface SecurityGroupPieChartColorSchemeDTO {
 }
 
 export interface SecurityGroupDefinitionFilterDTO {
-  displayLabel: string;
-  shortKey: string;
-  key: string;
-  isSelected: boolean;
+  data: {
+    displayLabel: string;
+    shortKey: string;
+    key: string;
+  }
+  state: {
+    isSelected: boolean;
+    isFilteredOut: boolean;
+  }
 }
 
 export interface SecurityGroupDefinitionDTO {
@@ -81,6 +86,7 @@ export interface SecurityGroupDefinitionConfiguratorDTO {
   state: {
     
   }
+  filterSearchInputValue: string;
 }
 
 interface SecurityGroupStatDTO {

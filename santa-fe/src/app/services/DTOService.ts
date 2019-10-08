@@ -104,10 +104,15 @@ export class DTOService {
     return options.map((eachOption) => {
       const normalizedOption = this.utility.normalizeDefinitionFilterOption(eachOption);
       const newFilterDTO:SecurityGroupDefinitionFilterDTO = {
-        displayLabel: eachOption,
-        shortKey: normalizedOption,
-        key: this.utility.formDefinitionFilterOptionKey(name, normalizedOption),
-        isSelected: false
+        data: {
+          displayLabel: eachOption,
+          shortKey: normalizedOption,
+          key: this.utility.formDefinitionFilterOptionKey(name, normalizedOption)
+        },
+        state: {
+          isSelected: false,
+          isFilteredOut: false
+        }
       }
       return newFilterDTO;
     })
@@ -145,7 +150,8 @@ export class DTOService {
       },
       state: {
 
-      }
+      },
+      filterSearchInputValue: ''
     };
     object.data.showFiltersFromDefinition = object.data.definitionList[0];
     return object;

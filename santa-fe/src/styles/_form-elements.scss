@@ -1,4 +1,4 @@
-  .santa-btn {
+  .santaBtn {
     $btnBlockName: &;
     @include mix_border_radius(3px);
     @include material();
@@ -76,4 +76,18 @@
         color: $font_color_inverse;
       }
     }
+  }
+
+  $form_basic_minWidth: 6rem;
+  $form_basic_height: 2rem;
+  $form_basic_fontSize: $font_size_normal;
+  .santaInputElement {
+    @include mix_border_radius(3px);
+    @include mix_border_generator;
+    // @include mix_border_generator(0 0 $typical_border_width 0);
+    @include mix_calculate(line-height, $form_basic_height, $typical_border_width * 2, '-');
+    width: $form_basic_minWidth;
+    background-color: $color_white;
+    font-size: $form_basic_fontSize;
+    padding: 0 $spacing_small;
   }

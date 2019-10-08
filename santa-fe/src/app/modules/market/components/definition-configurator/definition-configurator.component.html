@@ -10,7 +10,7 @@
           (click)="selectDefinitionForGrouping(eachDefinition)"
           [ngClass]="{
             'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn': true,
-            'santa-btn--iconOnly': true,
+            'santaBtn--iconOnly': true,
             'fal': true,
             'fa-square': configuratorData.data.selectedDefinitionList.indexOf(eachDefinition) < 0 && !eachDefinition.state.isLocked,
             'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn--selected fa-check-square': this.configuratorData.data.selectedDefinitionList.indexOf(eachDefinition) >= 0,
@@ -32,22 +32,30 @@
           [backgroundVariant]="true">
         </security-group-definition>
       </div>
+      <div class="sat-securityGroupDefinitionConfigurator__filters-content-search">
+        <santa-input
+          [inputValue]="this.configuratorData.filterSearchInputValue"
+          [placeholder]="'filter by keyword'"
+          (onInputChange)="onSearchKeywordChange($event)">
+        </santa-input>
+      </div>
       <ul class="sat-securityGroupDefinitionConfigurator__filters-content-optionList">
         <button
           *ngFor="let eachOption of this.configuratorData.data.showFiltersFromDefinition?.data.filterOptionList"
           (click)="onClickFilterOption(eachOption)"
           [ngClass]="{
             'sat-securityGroupDefinitionConfigurator__filters-content-optionList-item': true,
-            'sat-securityGroupDefinitionConfigurator__filters-content-optionList-item--selected': eachOption.isSelected
+            'sat-securityGroupDefinitionConfigurator__filters-content-optionList-item--selected': eachOption.state.isSelected,
+            'sat-securityGroupDefinitionConfigurator__filters-content-optionList-item--filteredOut': eachOption.state.isFilteredOut
           }">
-          {{eachOption.displayLabel}}
+          {{eachOption.data.displayLabel}}
         </button>
       </ul>
     </div>
   </section>
   <section class="sat-securityGroupDefinitionConfigurator__ctas">
     <div class="sat-securityGroupDefinitionConfigurator__ctas-content">
-      <button class="sat-securityGroupDefinitionConfigurator__ctas-content-searchBtn santa-btn--labelled">
+      <button class="sat-securityGroupDefinitionConfigurator__ctas-content-searchBtn santaBtn--labelled">
         <i class="sat-securityGroupDefinitionConfigurator__ctas-content-searchBtn-icon fal fa-paw-claws"></i>
         <span class="sat-securityGroupDefinitionConfigurator__ctas-content-searchBtn-text">Go Hunt</span>
       </button>
