@@ -10,7 +10,7 @@ $securityGroupDefinition_backgroundVariant_img_size: 7rem;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
   @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
   @include mix_alive('custom', $animation_duration_light box-shadow);
-  @include mix_border_radius(10px);
+  @include mix_border_radius(5px);
   display: flex;
   flex-direction: column;
   width: $securityGroupDefinition_width;
@@ -43,7 +43,7 @@ $securityGroupDefinition_backgroundVariant_img_size: 7rem;
         font-size: $font_size_xx_large;
       }
       &-secondaryImg {
-        margin-top: -$spacing_xx_small;
+        margin-top: -$spacing_xx_small - $spacing_minimum;
         color: $font_color_major;
       }
     }
@@ -174,7 +174,7 @@ $securityGroupDefinition_backgroundVariant_img_size: 7rem;
   }
   &--selectedState {
     @include material('none');
-    @include mix_border_radius(10px, 'left');
+    @include mix_border_radius(5px, 'left');
     background-color: $color_active;
     #{$securityGroupDefinitionBlockName} {
       &__icon {

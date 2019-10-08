@@ -100,6 +100,19 @@ export class DTOService {
     return object;
   }
 
+  public generateSecurityGroupDefinitionFilterOptionList(name, options): Array<SecurityGroupDefinitionFilterDTO> {
+    return options.map((eachOption) => {
+      const normalizedOption = this.utility.normalizeDefinitionFilterOption(eachOption);
+      const newFilterDTO:SecurityGroupDefinitionFilterDTO = {
+        displayLabel: eachOption,
+        shortKey: normalizedOption,
+        key: this.utility.formDefinitionFilterOptionKey(name, normalizedOption),
+        isSelected: false
+      }
+      return newFilterDTO;
+    })
+  };
+
   public formSecurityGroupDefinitionObject(
     rawData: SecurityDefinitionStub
   ): SecurityGroupDefinitionDTO {
@@ -111,11 +124,10 @@ export class DTOService {
       },
       style: {
         icon: rawData.icon,
-        isStacked: rawData.isStacked || false,
         secondaryIcon: rawData.secondaryIcon || ''
       },
       state: {
-        isStatic: false,
+        isLocked: rawData.locked,
         filterActive: false
       }
     }
@@ -138,17 +150,4 @@ export class DTOService {
     object.data.showFiltersFromDefinition = object.data.definitionList[0];
     return object;
   }
-
-  public generateSecurityGroupDefinitionFilterOptionList(name, options): Array<SecurityGroupDefinitionFilterDTO> {
-    return options.map((eachOption) => {
-      const normalizedOption = this.utility.normalizeDefinitionFilterOption(eachOption);
-      const newFilterDTO:SecurityGroupDefinitionFilterDTO = {
-        displayLabel: eachOption,
-        shortKey: normalizedOption,
-        key: this.utility.formDefinitionFilterOptionKey(name, normalizedOption),
-        isSelected: false
-      }
-      return newFilterDTO;
-    })
-  };
 }

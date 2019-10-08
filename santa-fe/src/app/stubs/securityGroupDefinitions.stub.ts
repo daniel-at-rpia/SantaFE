@@ -98,7 +98,8 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     key: 'SECURITY_TYPE',
     displayName: 'Security Type',
     icon: 'fal fa-slash',
-    optionList: FilterOptionsSecurityType
+    optionList: FilterOptionsSecurityType,
+    locked: true
   },{
     key: 'RATING',
     displayName: 'Rating',
@@ -145,7 +146,6 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     displayName: 'Rating Bucket',
     icon: 'fas fa-trash',
     optionList: FilterOptionsRatingBucket,
-    isStacked: true,
     secondaryIcon: 'fas fa-award'
   },{
     key: 'SECTOR',

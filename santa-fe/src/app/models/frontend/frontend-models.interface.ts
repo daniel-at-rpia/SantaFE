@@ -49,6 +49,13 @@ export interface SecurityGroupPieChartColorSchemeDTO {
   scheme: Array<any>
 }
 
+export interface SecurityGroupDefinitionFilterDTO {
+  displayLabel: string;
+  shortKey: string;
+  key: string;
+  isSelected: boolean;
+}
+
 export interface SecurityGroupDefinitionDTO {
   data: {
     name: string;
@@ -57,11 +64,10 @@ export interface SecurityGroupDefinitionDTO {
   }
   style: {
     icon: string;
-    isStacked: boolean;
     secondaryIcon: string;
   }
   state: {
-    isStatic: boolean,
+    isLocked: boolean,
     filterActive: boolean;
   }
 }
@@ -75,13 +81,6 @@ export interface SecurityGroupDefinitionConfiguratorDTO {
   state: {
     
   }
-}
-
-export interface SecurityGroupDefinitionFilterDTO {
-  displayLabel: string;
-  shortKey: string;
-  key: string;
-  isSelected: boolean;
 }
 
 interface SecurityGroupStatDTO {

@@ -3,7 +3,6 @@ export interface SecurityDefinitionStub {
   displayName: string;
   icon: string;
   optionList: Array<string>,
-  isStacked?: boolean;
   secondaryIcon?: string;
   locked?: boolean;
 }

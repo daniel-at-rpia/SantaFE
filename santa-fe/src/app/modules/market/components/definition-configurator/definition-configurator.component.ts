@@ -8,7 +8,8 @@ import {
 
 import {
   SecurityGroupDefinitionConfiguratorDTO,
-  SecurityGroupDefinitionFilterDTO
+  SecurityGroupDefinitionFilterDTO,
+  SecurityGroupDefinitionDTO
 } from 'App/models/frontend/frontend-models.interface';
 
 @Component({
@@ -28,12 +29,14 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
 
   }
 
-  selectDefinitionForGrouping(targetDefinition) {
-    const existIndex = this.configuratorData.data.selectedDefinitionList.indexOf(targetDefinition);
-    if ( existIndex >= 0) {
-      this.configuratorData.data.selectedDefinitionList.splice(existIndex, 1);
-    } else {
-      this.configuratorData.data.selectedDefinitionList.push(targetDefinition);
+  selectDefinitionForGrouping(targetDefinition: SecurityGroupDefinitionDTO) {
+    if (!targetDefinition.state.isLocked) {
+      const existIndex = this.configuratorData.data.selectedDefinitionList.indexOf(targetDefinition);
+      if ( existIndex >= 0) {
+        this.configuratorData.data.selectedDefinitionList.splice(existIndex, 1);
+      } else {
+        this.configuratorData.data.selectedDefinitionList.push(targetDefinition);
+      }
     }
   }
 
