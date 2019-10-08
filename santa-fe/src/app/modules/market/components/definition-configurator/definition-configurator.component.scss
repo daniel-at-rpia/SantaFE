@@ -60,12 +60,12 @@ $securityGroupDefinitionConfigurator_ctas_height: 6.5rem;
       @include mix_border_radius(5px);
       display: flex;
       flex-direction: column;
-      justify-content: center;
       transform: translate(-125%, 0) scale(0.01, 1);
       &-title {
         display: flex;
         flex-direction: column;
         padding: $spacing_large 0;
+        margin-top: 100%;
         &>security-group-definition {
           display: flex;
         }
@@ -118,6 +118,13 @@ $securityGroupDefinitionConfigurator_ctas_height: 6.5rem;
         &>&-text {
           font-size: $font_size_x_large;
         }
+      }
+    }
+  }
+  &--longFilterOptionsState {
+    #{$securityGroupDefinitionConfiguratorBlockName} {
+      &__filters-content-title {
+        margin-top: 0;
       }
     }
   }

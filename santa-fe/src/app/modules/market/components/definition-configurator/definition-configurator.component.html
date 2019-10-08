@@ -1,11 +1,12 @@
 <article
   [ngClass]="{
     'sat-securityGroupDefinitionConfigurator': true,
+    'sat-securityGroupDefinitionConfigurator--longFilterOptionsState': configuratorData.state.showLongFilterOptions,
     'sat-securityGroupDefinitionConfigurator--filterActiveState': configuratorData.showFiltersFromDefinition
   }">
   <section class="sat-securityGroupDefinitionConfigurator__definitions">
     <ul class="sat-securityGroupDefinitionConfigurator__definitions-list">
-      <li *ngFor="let eachDefinition of this.configuratorData?.data.definitionList" class="sat-securityGroupDefinitionConfigurator__definitions-list-item">
+      <li *ngFor="let eachDefinition of configuratorData?.data.definitionList" class="sat-securityGroupDefinitionConfigurator__definitions-list-item">
         <button
           (click)="selectDefinitionForGrouping(eachDefinition)"
           [ngClass]="{
@@ -13,8 +14,8 @@
             'santaBtn--iconOnly': true,
             'fal': true,
             'fa-square': configuratorData.data.selectedDefinitionList.indexOf(eachDefinition) < 0 && !eachDefinition.state.isLocked,
-            'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn--selected': this.configuratorData.data.selectedDefinitionList.indexOf(eachDefinition) >= 0,
-            'fa-check-square': eachDefinition.state.isLocked || this.configuratorData.data.selectedDefinitionList.indexOf(eachDefinition) >= 0,
+            'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn--selected': configuratorData.data.selectedDefinitionList.indexOf(eachDefinition) >= 0,
+            'fa-check-square': eachDefinition.state.isLocked || configuratorData.data.selectedDefinitionList.indexOf(eachDefinition) >= 0,
             'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn--locked': eachDefinition.state.isLocked
           }"></button>
         <security-group-definition
@@ -29,20 +30,20 @@
     <div class="sat-securityGroupDefinitionConfigurator__filters-content">
       <div class="sat-securityGroupDefinitionConfigurator__filters-content-title">
         <security-group-definition
-          [definitionData]="this.configuratorData.showFiltersFromDefinition"
+          [definitionData]="configuratorData.showFiltersFromDefinition"
           [backgroundVariant]="true">
         </security-group-definition>
       </div>
       <div class="sat-securityGroupDefinitionConfigurator__filters-content-search">
         <santa-input
-          [inputValue]="this.configuratorData.filterSearchInputValue"
+          [inputValue]="configuratorData.filterSearchInputValue"
           [placeholder]="'filter by keyword'"
           (onInputChange)="onSearchKeywordChange($event)">
         </santa-input>
       </div>
       <ul class="sat-securityGroupDefinitionConfigurator__filters-content-optionList">
         <button
-          *ngFor="let eachOption of this.configuratorData.showFiltersFromDefinition?.data.filterOptionList"
+          *ngFor="let eachOption of configuratorData.showFiltersFromDefinition?.data.filterOptionList"
           (click)="onClickFilterOption(eachOption)"
           [ngClass]="{
             'sat-securityGroupDefinitionConfigurator__filters-content-optionList-item': true,

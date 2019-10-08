@@ -55,6 +55,9 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
     if (!targetDefinition.state.isUnactivated) {
       this.clearSearchFilter();
       this.configuratorData.showFiltersFromDefinition = this.configuratorData.showFiltersFromDefinition === targetDefinition ? null : targetDefinition;
+      if (this.configuratorData.showFiltersFromDefinition) {
+        this.configuratorData.state.showLongFilterOptions = this.configuratorData.showFiltersFromDefinition.data.filterOptionList.length > 5;  // any list with more than five options is considered a long list, will need extra room on the UI
+      }
     }
   }
 
