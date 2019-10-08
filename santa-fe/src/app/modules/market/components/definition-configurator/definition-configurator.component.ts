@@ -40,9 +40,9 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
         targetDefinition.state.isUnactivated = true;
         if (targetDefinition === this.configuratorData.showFiltersFromDefinition) {
           this.clearSearchFilter();
-          this.clearDefinitionFilterOptions(targetDefinition);
           this.configuratorData.showFiltersFromDefinition = null;
         }
+        this.clearDefinitionFilterOptions(targetDefinition);
         this.configuratorData.data.selectedDefinitionList.splice(existIndex, 1);
       } else {
         targetDefinition.state.isUnactivated = false;
