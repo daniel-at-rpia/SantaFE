@@ -50,7 +50,7 @@ $securityGroupDefinition_backgroundVariant_img_size: 7rem;
     &-securityType {
       @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
       display: none;
-      &-box2 {
+      &-box {
         @include mix_border_radius(5px);
         background-color: $color_active;
         display: flex;
@@ -68,52 +68,6 @@ $securityGroupDefinition_backgroundVariant_img_size: 7rem;
           }
         }
       }
-      &-box {
-        @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
-        @include mix_border_radius(5px);
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        top: -3px;
-        left: 8px;
-        background-color: $font_color_major;
-        padding: $spacing_xx_small 0;
-        width: 43px;
-        height: 26px;
-        padding-left: 5px;
-        &-text {
-          color: $font_color_inverse;
-          font-size: $font_size_x_small;
-        }
-        &:nth-of-type(2){
-          @include mix_border_generator(2px, $color_white);
-          justify-content: center;
-          top: 5px;
-          padding-left: 0;
-          left: inherit;
-          right: 8px;
-          height: 30px;
-        }
-      }
-      /*
-      &-img {
-        font-size: $font_size_large;
-        color: $font_color_major;
-        transform: rotate(75deg);
-      }
-      &-bond {
-        @include mix_fixed_div(relative, $z_index_standard_base_item);
-        top: -$spacing_x_small;
-        left: $spacing_x_small;
-        color: $font_color_major;
-      }
-      &-cds {
-        @include mix_fixed_div(relative, $z_index_standard_base_item);
-        bottom: -$spacing_x_small;
-        right: $spacing_x_small;
-        color: $font_color_major;
-      }
-      */
     }
   }
   &__label {
@@ -224,12 +178,22 @@ $securityGroupDefinition_backgroundVariant_img_size: 7rem;
     background-color: $color_active;
     #{$securityGroupDefinitionBlockName} {
       &__icon {
-        &-regularImg, &-ratingBucket-primaryImg, &-backendTenor-primaryImg, &-backendTenor-secondaryImg, &-securityType-bond, &-securityType-img, &-securityType-cds {
+        &-regularImg, &-ratingBucket-primaryImg, &-backendTenor-primaryImg, &-backendTenor-secondaryImg {
           color: $font_color_inverse;
         }
         &-ratingBucket {
           &-secondaryImg {
             color: $font_color_major;
+          }
+        }
+        &-securityType-box {
+          background-color: $font_color_inverse;
+          &-text {
+            color: $font_color_major;
+            &:first-of-type {
+              color: $font_color_inverse;
+              background-color: $color_active;
+            }
           }
         }
       }
@@ -258,7 +222,7 @@ $securityGroupDefinition_backgroundVariant_img_size: 7rem;
     height: $securityGroupDefinition_backgroundVariant_img_size;
     #{$securityGroupDefinitionBlockName} {
       &__icon {
-        &-regularImg, &-ratingBucket-primaryImg, &-backendTenor-primaryImg, &-backendTenor-secondaryImg, &-securityType-bond, &-securityType-img, &-securityType-cds {
+        &-regularImg, &-ratingBucket-primaryImg, &-backendTenor-primaryImg, &-backendTenor-secondaryImg, &-securityType-box-text:first-of-type {
           color: $color_gray_2;
         }
         &-regularImg, &-ratingBucket, &-ratingBucket-primaryImg, &-backendTenor, &-backendTenor-primaryImg {
@@ -272,22 +236,14 @@ $securityGroupDefinition_backgroundVariant_img_size: 7rem;
           margin-top: -$spacing_x_large + $spacing_x_small;
           font-size: 4rem;
         }
-        &-securityType {
-          display: flex;
+        &-securityType-box {
+          background-color: $color_gray_2;
           flex-direction: column;
-          &-img {
-            font-size: 4rem;
-            transform: rotate(125deg);
-          }
-          &-bond {
-            top: 0;
-            left: 0;
-            font-size: 3rem;
-          }
-          &-cds {
-            bottom: 0;
-            right: 0;
-            font-size: 3rem;
+          &-text {
+            margin: 0;
+            padding: $spacing_x_small $spacing_medium;
+            text-align: center;
+            font-size: $font_size_x_large;
           }
         }
       }

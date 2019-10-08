@@ -164,7 +164,7 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     optionList: FilterOptionsTempPlaceholder
   },{
     key: 'IS_BULLET',
-    displayName: 'Bullet Bond',
+    displayName: 'Bullet',
     icon: 'fas fa-bolt',
     optionList: FilterOptionsBoolean
   },{

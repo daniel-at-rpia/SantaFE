@@ -135,7 +135,7 @@ export class DTOService {
 
       }
     };
-    //object.data.showFiltersFromDefinition = object.data.definitionList[0];
+    object.data.showFiltersFromDefinition = object.data.definitionList[0];
     return object;
   }
 
