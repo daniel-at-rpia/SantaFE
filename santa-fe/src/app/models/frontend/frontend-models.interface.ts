@@ -72,7 +72,8 @@ export interface SecurityGroupDefinitionDTO {
     secondaryIcon: string;
   }
   state: {
-    isLocked: boolean,
+    isLocked: boolean;
+    isUnactivated: boolean;
     filterActive: boolean;
   }
 }
@@ -80,12 +81,12 @@ export interface SecurityGroupDefinitionDTO {
 export interface SecurityGroupDefinitionConfiguratorDTO {
   data: {
     definitionList: Array<SecurityGroupDefinitionDTO>,
-    selectedDefinitionList: Array<SecurityGroupDefinitionDTO>,
-    showFiltersFromDefinition: SecurityGroupDefinitionDTO
+    selectedDefinitionList: Array<SecurityGroupDefinitionDTO>
   }
   state: {
     
-  }
+  },
+  showFiltersFromDefinition: SecurityGroupDefinitionDTO,
   filterSearchInputValue: string;
 }
 

@@ -1,7 +1,7 @@
 <article
   [ngClass]="{
     'sat-securityGroupDefinitionConfigurator': true,
-    'sat-securityGroupDefinitionConfigurator--filterActiveState': configuratorData.data.showFiltersFromDefinition
+    'sat-securityGroupDefinitionConfigurator--filterActiveState': configuratorData.showFiltersFromDefinition
   }">
   <section class="sat-securityGroupDefinitionConfigurator__definitions">
     <ul class="sat-securityGroupDefinitionConfigurator__definitions-list">
@@ -13,13 +13,14 @@
             'santaBtn--iconOnly': true,
             'fal': true,
             'fa-square': configuratorData.data.selectedDefinitionList.indexOf(eachDefinition) < 0 && !eachDefinition.state.isLocked,
-            'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn--selected fa-check-square': this.configuratorData.data.selectedDefinitionList.indexOf(eachDefinition) >= 0,
-            'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn--locked fa-check-square': eachDefinition.state.isLocked
+            'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn--selected': this.configuratorData.data.selectedDefinitionList.indexOf(eachDefinition) >= 0,
+            'fa-check-square': eachDefinition.state.isLocked || this.configuratorData.data.selectedDefinitionList.indexOf(eachDefinition) >= 0,
+            'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn--locked': eachDefinition.state.isLocked
           }"></button>
         <security-group-definition
           [definitionData]="eachDefinition"
           (onClick)="onClickDefinition($event)"
-          [selected]="configuratorData.data.showFiltersFromDefinition === eachDefinition">
+          [selected]="configuratorData.showFiltersFromDefinition === eachDefinition">
         </security-group-definition>
       </li>
     </ul>
@@ -28,7 +29,7 @@
     <div class="sat-securityGroupDefinitionConfigurator__filters-content">
       <div class="sat-securityGroupDefinitionConfigurator__filters-content-title">
         <security-group-definition
-          [definitionData]="this.configuratorData.data.showFiltersFromDefinition"
+          [definitionData]="this.configuratorData.showFiltersFromDefinition"
           [backgroundVariant]="true">
         </security-group-definition>
       </div>
@@ -41,7 +42,7 @@
       </div>
       <ul class="sat-securityGroupDefinitionConfigurator__filters-content-optionList">
         <button
-          *ngFor="let eachOption of this.configuratorData.data.showFiltersFromDefinition?.data.filterOptionList"
+          *ngFor="let eachOption of this.configuratorData.showFiltersFromDefinition?.data.filterOptionList"
           (click)="onClickFilterOption(eachOption)"
           [ngClass]="{
             'sat-securityGroupDefinitionConfigurator__filters-content-optionList-item': true,

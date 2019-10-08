@@ -26,29 +26,40 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
   }
 
   ngOnInit() {
-
+    this.configuratorData.data.definitionList.forEach((eachDefinition) => {
+      if (eachDefinition.state.isLocked) {
+        eachDefinition.state.isUnactivated = false;
+      }
+    });
   }
 
   selectDefinitionForGrouping(targetDefinition: SecurityGroupDefinitionDTO) {
     if (!targetDefinition.state.isLocked) {
       const existIndex = this.configuratorData.data.selectedDefinitionList.indexOf(targetDefinition);
       if ( existIndex >= 0) {
+        targetDefinition.state.isUnactivated = true;
+        if (targetDefinition === this.configuratorData.showFiltersFromDefinition) {
+          this.clearSearchFilter();
+          this.clearDefinitionFilterOptions(targetDefinition);
+          this.configuratorData.showFiltersFromDefinition = null;
+        }
         this.configuratorData.data.selectedDefinitionList.splice(existIndex, 1);
       } else {
+        targetDefinition.state.isUnactivated = false;
         this.configuratorData.data.selectedDefinitionList.push(targetDefinition);
       }
     }
   }
 
-  onClickDefinition(targetDefinition){
-    // reset filter before changing selected Definition
-    this.configuratorData.filterSearchInputValue = '';
-    this.onSearchKeywordChange('');
-    this.configuratorData.data.showFiltersFromDefinition = this.configuratorData.data.showFiltersFromDefinition === targetDefinition ? null : targetDefinition;
+  onClickDefinition(targetDefinition: SecurityGroupDefinitionDTO){
+    if (!targetDefinition.state.isUnactivated) {
+      this.clearSearchFilter();
+      this.configuratorData.showFiltersFromDefinition = this.configuratorData.showFiltersFromDefinition === targetDefinition ? null : targetDefinition;
+    }
   }
 
   onClickFilterOption(targetOption:SecurityGroupDefinitionFilterDTO){
-    const targetDefinition = this.configuratorData.data.showFiltersFromDefinition;
+    const targetDefinition = this.configuratorData.showFiltersFromDefinition;
     targetOption.state.isSelected = !targetOption.state.isSelected;
     let filterActive = false;
     targetDefinition.data.filterOptionList.forEach((eachOption) => {
@@ -60,10 +71,10 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
   }
 
   onSearchKeywordChange(newKeyword){
-    if (this.configuratorData.data.showFiltersFromDefinition) {
+    if (this.configuratorData.showFiltersFromDefinition) {
       this.configuratorData.filterSearchInputValue = newKeyword;
       if (!!newKeyword && newKeyword.length >= 1) {
-        this.configuratorData.data.showFiltersFromDefinition.data.filterOptionList.forEach((eachOption) => {
+        this.configuratorData.showFiltersFromDefinition.data.filterOptionList.forEach((eachOption) => {
           if (this.applySearchFilter(eachOption, newKeyword)) {
             eachOption.state.isFilteredOut = false;
           } else {
@@ -71,7 +82,7 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
           }
         })
       } else {
-        this.configuratorData.data.showFiltersFromDefinition.data.filterOptionList.forEach((eachOption) => {
+        this.configuratorData.showFiltersFromDefinition.data.filterOptionList.forEach((eachOption) => {
           eachOption.state.isFilteredOut = false;
         })
       }
@@ -82,6 +93,18 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
     const normalizedTarget = targetOption.data.displayLabel.toLowerCase();
     const normalizedKeyword = keyword.toLowerCase();
     return normalizedTarget.includes(normalizedKeyword);
+  }
+
+  clearSearchFilter(){
+    this.configuratorData.filterSearchInputValue = '';
+    this.onSearchKeywordChange('');
+  }
+
+  clearDefinitionFilterOptions(targetDefinition: SecurityGroupDefinitionDTO){
+    targetDefinition.data.filterOptionList.forEach((eachOption) => {
+      eachOption.state.isSelected = false;
+    });
+    targetDefinition.state.filterActive = false;
   }
 
 }

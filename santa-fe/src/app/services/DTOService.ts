@@ -133,6 +133,7 @@ export class DTOService {
       },
       state: {
         isLocked: rawData.locked,
+        isUnactivated: true,
         filterActive: false
       }
     }
@@ -145,15 +146,14 @@ export class DTOService {
         definitionList: SecurityGroupDefinitionMap.map((eachDefinitionStub) => {
           return this.formSecurityGroupDefinitionObject(eachDefinitionStub);
         }),
-        selectedDefinitionList: [],
-        showFiltersFromDefinition: null
+        selectedDefinitionList: []
       },
       state: {
 
       },
+      showFiltersFromDefinition: null,
       filterSearchInputValue: ''
     };
-    object.data.showFiltersFromDefinition = object.data.definitionList[0];
     return object;
   }
 }
