@@ -149,7 +149,8 @@ export class DTOService {
         selectedDefinitionList: []
       },
       state: {
-        showLongFilterOptions: false
+        showLongFilterOptions: false,
+        isLoading: false
       },
       showFiltersFromDefinition: null,
       filterSearchInputValue: ''

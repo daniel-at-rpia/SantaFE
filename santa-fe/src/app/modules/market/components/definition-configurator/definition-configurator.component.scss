@@ -110,13 +110,16 @@ $securityGroupDefinitionConfigurator_ctas_height: 6.5rem;
       justify-content: center;
       margin: $spacing_medium $spacing_x_large;
       padding-top: $spacing_medium;
-      &-searchBtn {
-        padding: 0 $spacing_large;
-        &>&-icon {
-          font-size: $font_size_xx_large;
-        }
-        &>&-text {
-          font-size: $font_size_x_large;
+      santa-loadable-button {
+        display: flex;
+        .sat-loadableButton__btn {
+          padding: 0 $spacing_large;
+          &>i {
+            font-size: $font_size_xx_large;
+          }
+          &>span {
+            font-size: $font_size_x_large;
+          }
         }
       }
     }

@@ -84,7 +84,8 @@ export interface SecurityGroupDefinitionConfiguratorDTO {
     selectedDefinitionList: Array<SecurityGroupDefinitionDTO>
   }
   state: {
-    showLongFilterOptions: boolean;    
+    showLongFilterOptions: boolean;
+    isLoading: boolean;
   },
   showFiltersFromDefinition: SecurityGroupDefinitionDTO,
   filterSearchInputValue: string;

@@ -110,4 +110,8 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
     targetDefinition.state.filterActive = false;
   }
 
+  triggerSearch(){
+    this.configuratorData.state.isLoading = true;
+  }
+
 }
