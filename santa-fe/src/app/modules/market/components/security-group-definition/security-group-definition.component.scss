@@ -219,6 +219,18 @@ $securityGroupDefinition_backgroundVariant_img_size: 7rem;
     @include mix_border_generator;
     @include material('none');
     background-color: inherit;
+    #{$securityGroupDefinitionBlockName} {
+      &__icon {
+        &-regularImg, &-ratingBucket-primaryImg, &-backendTenor-primaryImg, &-backendTenor-secondaryImg {
+          color: $font_color_minor;
+        }
+      }
+      &__label {
+        &-text {
+          color: $font_color_minor;
+        }
+      }
+    }
   }
   &--backgroundVariant {
     @include material('none');
