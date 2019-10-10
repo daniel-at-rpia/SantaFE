@@ -153,8 +153,8 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     icon: 'fal fa-chart-pie',
     optionList: FilterOptionsTempPlaceholder
   },{
-    key: 'SENORITY',
-    displayName: 'Senority',
+    key: 'SENIORITY',
+    displayName: 'Seniority',
     icon: 'fal fa-gavel',
     optionList: FilterOptionsTempPlaceholder
   },{
@@ -169,7 +169,7 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     optionList: FilterOptionsBoolean
   },{
     key: 'IS_NEWISSUE',
-    displayName: 'New-Issued',
+    displayName: 'New Issue',
     icon: 'far fa-sparkles',
     optionList: FilterOptionsBoolean
   },{
