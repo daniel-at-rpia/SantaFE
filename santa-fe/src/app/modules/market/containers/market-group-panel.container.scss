@@ -1,5 +1,9 @@
 @import "global.scss";
+@import "modules/market/market.scss";
 
+$marketGroupPanel_groups_list_padding: $spacing_medium;
+$marketGroupPanel_groups_groupAverge_metric_name_width: $securityGroup_content_canvases_left_width + $securityGroup_content_canvases_right_metricName_width + $securityGroup_content_canvases_right_alignmentLine_marginLeft;
+$marketGroupPanel_groups_groupAverge_metric_name_width_expanded: $securityGroup_content_canvases_left_width_expanded + $securityGroup_content_canvases_right_metricName_width + $securityGroup_content_canvases_right_alignmentLine_marginLeft;
 .sat-marketGroupPanel {
   $marketGroupPanelBlockName: &;
   @include mix_border_generator;
@@ -37,18 +41,71 @@
   &__groups {
     flex: 1 1 auto;
     display: flex;
+    flex-direction: column;
+    &-utility {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      &-prompt {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-bottom: $spacing_medium;
+        &-text {
+          color: $font_color_minor;
+        }
+        &-highlightText {
+          @include mix_border_radius(5px);
+          color: $font_color_inverse;
+          background: $color_active;
+          padding: 0 $spacing_small;
+          margin: 0 $spacing_small;
+        }
+      }
+      &-groupAverage {
+        display: flex;
+        flex-direction: column;
+        padding: 0 $marketGroupPanel_groups_list_padding;
+        &-metric {
+          display: flex;
+          height: 5rem;
+          &-name {
+            @include mix_border_generator(0 $typical_border_width 0 0);
+            flex: 0 0 $marketGroupPanel_groups_groupAverge_metric_name_width;
+            margin-left: $securityGroup_base_wheel_size;
+          }
+          &-value {
+            flex: 1 1 auto;
+            margin-right: $securityGroup_base_wheel_size;
+            background-color: $color_active;
+          }
+        }
+      }
+    }
     &-list {
+      @include mix_enable_scrollbar('vertical');
       flex: 1 1 auto;
       display: flex;
       flex-direction: column;
+      padding: 0 $marketGroupPanel_groups_list_padding $spacing_large $marketGroupPanel_groups_list_padding;
       &-item {
         margin-top: $spacing_large;
       }
     }
   }
   &--configuratorCollapsed {
-    #{$marketGroupPanelBlockName}__configurator {
-      display: none;
+    #{$marketGroupPanelBlockName} {
+      &__configurator {
+        display: none;
+      }
+      &__groups-utility-groupAverage-metric-name {
+        flex: 0 0 $marketGroupPanel_groups_groupAverge_metric_name_width_expanded;
+      }
+    }
+  }
+  @include mq-xx-large-min {
+    &__groups-utility-groupAverage-metric-name {
+      flex: 0 0 $marketGroupPanel_groups_groupAverge_metric_name_width_expanded;
     }
   }
 }

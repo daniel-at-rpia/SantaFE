@@ -20,9 +20,24 @@
     <div class="sat-marketGroupPanel__configuratorCollapseCTA-line"></div>
   </section>
   <section class="sat-marketGroupPanel__groups">
+    <div class="sat-marketGroupPanel__groups-utility">
+      <div class="sat-marketGroupPanel__groups-utility-prompt">
+        <span class="sat-marketGroupPanel__groups-utility-prompt-text">There are</span>
+        <span class="sat-marketGroupPanel__groups-utility-prompt-highlightText">{{state.securityGroupList.length}}</span>
+        <span class="sat-marketGroupPanel__groups-utility-prompt-text">groups that match your search</span>
+      </div>
+    </div>
+    <div class="sat-marketGroupPanel__groups-utility-groupAverage">
+      <div class="sat-marketGroupPanel__groups-utility-groupAverage-metric">
+        <div class="sat-marketGroupPanel__groups-utility-groupAverage-metric-name"></div>
+        <div class="sat-marketGroupPanel__groups-utility-groupAverage-metric-value"></div>
+      </div>
+    </div>
     <ul class="sat-marketGroupPanel__groups-list">
       <li *ngFor="let eachGroup of state.securityGroupList; let i = index" class="sat-marketGroupPanel__groups-list-item">
-        <security-group [groupData]="eachGroup"></security-group>
+        <security-group
+          [groupData]="eachGroup"
+          [isExpanded]="state.isConfiguratorCollapsed"></security-group>
       </li>
     </ul>
   </section>

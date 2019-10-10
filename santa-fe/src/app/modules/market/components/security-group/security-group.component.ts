@@ -21,6 +21,7 @@ import { GraphService } from 'App/services/GraphService';
 })
 export class SecurityGroup implements OnInit {
   @Input() groupData: SecurityGroupDTO;
+  @Input() isExpanded: boolean;
   constructor(
     private graphService: GraphService
   ) {}

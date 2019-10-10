@@ -19,7 +19,8 @@ export class MarketGroupPanel {
     this.state = {
       configurator: this.dtoService.createSecurityGroupDefinitionConfigurator(),
       securityGroupList: [],
-      isConfiguratorCollapsed: false
+      isConfiguratorCollapsed: false,
+      isGroupDataLoaded: false
     };
     this.onClickSearchInConfigurator();
   }

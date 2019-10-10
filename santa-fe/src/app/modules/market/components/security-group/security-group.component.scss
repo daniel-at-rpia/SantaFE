@@ -1,7 +1,7 @@
 @import "global.scss";
+@import "modules/market/market.scss";
 @import "./security-group-mixin.scss";
 
-$securityGroup_base_wheel_size: 7rem;
 $securityGroup_base_center_height: 5.75rem;
 $securityGroup_base_wheelToCenter_overlap: -$securityGroup_base_wheel_size/2;
 $securityGroup_wheel_innerMask_positionMarkup: 1.5rem;
@@ -10,9 +10,6 @@ $securityGroup_content_numberTag_size: 2.25rem;
 $securityGroup_content_numberTag_padding: $spacing_x_small;
 $securityGroup_content_numberTag_halfSize: $securityGroup_content_numberTag_size/2 + $securityGroup_content_numberTag_padding;
 $securityGroup_content_numberTag_top: -($securityGroup_content_numberTag_halfSize) + ($securityGroup_base_wheel_size - $securityGroup_base_center_height)/2;
-$securityGroup_content_canvases_left_width: 60%;
-$securityGroup_content_canvases_left_width_xLarge: 6rem;
-$securityGroup_content_canvases_right_metricName_width: 2.25rem;
 $securityGroup_content_canvases_right_metricLines_thickness: 0.3125rem;
 $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
 
@@ -159,8 +156,8 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
           &-name {
             flex: 1 1 auto;
             &-text {
-              @include mix_text_overflow_multi_line(3);
-              line-height: $line_height_x_small;
+              @include mix_text_overflow_multi_line(2);
+              line-height: $line_height_normal;
               color: $font_color_inverse;
               font-size: $font_size_small;
               text-align: center;
@@ -182,9 +179,8 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
       }
       &-right {
         @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
-        flex: 1 1 100%-$securityGroup_content_canvases_left_width;
+        flex: 1 1 auto;
         display: flex;
-        padding: 0 $spacing_small;
         overflow: hidden;
         &-metricValues {
           flex: 0 0 $securityGroup_content_canvases_right_metricName_width;
@@ -207,7 +203,7 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
         &-alignmentLine {
           @include mix_border_generator(0 0 0 $typical_border_width, $color_white);
           flex: 0 0 auto;
-          margin-left: $spacing_small;
+          margin-left: $securityGroup_content_canvases_right_alignmentLine_marginLeft;
           width: $spacing_small;
         }
         &-metricLines {
@@ -238,7 +234,7 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
           }
           &-mask {
             @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
-            @include mix_alive('custom', $animation_duration_normal transform);
+            @include mix_alive('custom', $animation_duration_heavy transform);
             width: 100%;
             height: 100%;
             transform: translate(100%, 0);
@@ -247,7 +243,7 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
       }
       &-behind {
         @include mix_fixed_div(absolute, $z_index_standard_bury_item);
-        @include mix_calculate(right, 100% - $securityGroup_content_canvases_left_width, $spacing_small*2, '-');
+        @include mix_calculate(right, 100%, $securityGroup_content_canvases_left_width, '-');
         height: 100%;
         display: flex;
         align-items: center;
@@ -271,6 +267,22 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
       }
       &__content-numberTag {
         @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
+      }
+    }
+  }
+  &--expandedState {
+    #{$securityGroupBlockName} {
+      &__content-canvases {
+        &-left {
+          flex: 0 0 $securityGroup_content_canvases_left_width_expanded;
+          &-content-name-text {
+            @include mix_text_overflow_multi_line(3);
+            line-height: $line_height_x_small;
+          }
+        }
+        &-behind {
+          @include mix_calculate(right, 100%, $securityGroup_content_canvases_left_width_expanded, '-');
+        }
       }
     }
   }
@@ -416,16 +428,13 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
       }
     }
   }
-  @include mq-x-large-min {
+  @include mq-xx-large-min {
     &__content-canvases {
       &-left {
-        flex: 0 0 $securityGroup_content_canvases_left_width_xLarge;
-      }
-      &-right {
-        flex: 1 1 auto;
+        flex: 0 0 $securityGroup_content_canvases_left_width_expanded;
       }
       &-behind {
-        @include mix_calculate(right, 100%, $securityGroup_content_canvases_left_width_xLarge + $spacing_small*2, '-');
+        @include mix_calculate(right, 100%, $securityGroup_content_canvases_left_width_expanded, '-');
       }
     }
   }
