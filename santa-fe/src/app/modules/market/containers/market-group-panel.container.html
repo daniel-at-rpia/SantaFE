@@ -1,0 +1,15 @@
+<article class="sat-marketGroupPanel">
+  <section class="sat-marketGroupPanel__configurator">
+    <security-group-definition-configurator
+      (onClickSearch)="onClickSearchInConfigurator($event)"
+      [configuratorData]="state.configurator"
+    ></security-group-definition-configurator>
+  </section>
+  <section class="sat-marketGroupPanel__groups">
+    <ul class="sat-marketGroupPanel__groups-list">
+      <li *ngFor="let eachGroup of state.securityGroupList; let i = index" class="sat-marketGroupPanel__groups-list-item">
+        <security-group [groupData]="eachGroup"></security-group>
+      </li>
+    </ul>
+  </section>
+</article>

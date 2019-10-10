@@ -1,17 +1,17 @@
 @import "global.scss";
 @import "./security-group-mixin.scss";
 
-$securityGroup_base_wheel_size: 9rem;
-$securityGroup_base_center_height: 7rem;
+$securityGroup_base_wheel_size: 7rem;
+$securityGroup_base_center_height: 6rem;
 $securityGroup_base_wheelToCenter_overlap: -$securityGroup_base_wheel_size/2;
 $securityGroup_wheel_innerMask_positionMarkup: 1.5rem;
 $securityGroup_wheel_innerMask_width: 3rem;
-$securityGroup_content_numberTag_size: 3rem;
+$securityGroup_content_numberTag_size: 2.25rem;
 $securityGroup_content_numberTag_padding: $spacing_x_small;
 $securityGroup_content_numberTag_halfSize: $securityGroup_content_numberTag_size/2 + $securityGroup_content_numberTag_padding;
 $securityGroup_content_numberTag_top: -($securityGroup_content_numberTag_halfSize) + ($securityGroup_base_wheel_size - $securityGroup_base_center_height)/2;
 $securityGroup_content_canvases_left_width: 60%;
-$securityGroup_content_canvases_left_width_xLarge: 10rem;
+$securityGroup_content_canvases_left_width_xLarge: 6rem;
 $securityGroup_content_canvases_right_metricName_width: 2.25rem;
 $securityGroup_content_canvases_right_metricLines_thickness: 0.3125rem;
 $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
@@ -132,6 +132,8 @@ $securityGroup_animationDelay: 0;
         height: $securityGroup_content_numberTag_size;
         width: $securityGroup_content_numberTag_size;
         background-color: $color_white;
+        font-size: $font_size_small;
+        user-select: none;
       }
       &-mask {
         @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
@@ -143,11 +145,10 @@ $securityGroup_animationDelay: 0;
     }
     &-canvases {
       @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
-      @include mix_calculate(height, $securityGroup_base_center_height, $securityGroup_content_numberTag_halfSize + $spacing_small, '-');
+      @include mix_calculate(height, $securityGroup_base_center_height, $securityGroup_content_numberTag_halfSize + $spacing_x_small, '-');
       flex: 1 1 auto;
       display: flex;
-      flex-wrap: wrap;
-      margin: $securityGroup_content_numberTag_halfSize 0 $spacing_small 0;
+      margin: $securityGroup_content_numberTag_halfSize 0 $spacing_x_small 0;
       &-left {
         flex: 0 1 $securityGroup_content_canvases_left_width;
         display: flex;
@@ -165,6 +166,7 @@ $securityGroup_animationDelay: 0;
               color: $font_color_inverse;
               font-size: $font_size_small;
               text-align: center;
+              user-select: none;
             }
           }
           &-value {
@@ -174,6 +176,8 @@ $securityGroup_animationDelay: 0;
               @include mix_border_radius(5px);
               padding: 0 $spacing_medium;
               background-color: $color_white;
+              user-select: none;
+              font-size: $font_size_small
             }
           }
         }
@@ -198,6 +202,7 @@ $securityGroup_animationDelay: 0;
               font-size: $font_size_x_small;
               color: $font_color_inverse;
               text-align: right;
+              user-select: none;
             }
           }
         }

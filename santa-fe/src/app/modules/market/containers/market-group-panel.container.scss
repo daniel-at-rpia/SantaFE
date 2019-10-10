@@ -1,0 +1,28 @@
+@import "global.scss";
+
+.sat-marketGroupPanel {
+  $marketGroupPanelBlockName: &;
+  @include mix_border_generator;
+  @include mix_border_radius(10px);
+  flex: 1 1 auto;
+  display: flex;
+  padding: $spacing_medium;
+  &__configurator {
+    display: flex;
+    security-group-definition-configurator {
+      display: flex;
+    }
+  }
+  &__groups {
+    flex: 1 1 auto;
+    display: flex;
+    &-list {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      &-item {
+        margin-top: $spacing_large;
+      }
+    }
+  }
+}

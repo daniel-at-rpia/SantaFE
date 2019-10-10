@@ -3,7 +3,8 @@ import {
   OnInit,
   ViewEncapsulation,
   Input,
-  Output
+  Output,
+  EventEmitter
 } from '@angular/core';
 
 import {
@@ -21,6 +22,7 @@ import {
 
 export class SecurityGroupDefinitionConfigurator implements OnInit {
   @Input() configuratorData: SecurityGroupDefinitionConfiguratorDTO;
+  @Output() onClickSearch = new EventEmitter();
   constructor(
   ) {
   }
@@ -112,6 +114,7 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
 
   triggerSearch(){
     this.configuratorData.state.isLoading = true;
+    this.onClickSearch.emit();
   }
 
 }

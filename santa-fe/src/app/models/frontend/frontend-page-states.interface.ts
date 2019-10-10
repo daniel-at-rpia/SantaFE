@@ -16,3 +16,8 @@ export interface MarketState {
   securityGroupList3: Array<SecurityGroupDTO>;
   securityGroupList4: Array<SecurityGroupDTO>;
 }
+
+export interface MarketGroupPanelState {
+  configurator: SecurityGroupDefinitionConfiguratorDTO;
+  securityGroupList: Array<SecurityGroupDTO>;
+}
