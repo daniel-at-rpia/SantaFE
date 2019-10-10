@@ -18,7 +18,8 @@ export class MarketGroupPanel {
   private initiateComponentState(){
     this.state = {
       configurator: this.dtoService.createSecurityGroupDefinitionConfigurator(),
-      securityGroupList: []
+      securityGroupList: [],
+      isConfiguratorCollapsed: false
     };
     this.onClickSearchInConfigurator();
   }
@@ -41,5 +42,9 @@ export class MarketGroupPanel {
         configurator.state.isLoading = false;
       });
     }, 1);
+  }
+
+  public onToggleCollapseConfigurator(){
+    this.state.isConfiguratorCollapsed = !this.state.isConfiguratorCollapsed;
   }
 }

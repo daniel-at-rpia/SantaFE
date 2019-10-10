@@ -1,9 +1,23 @@
-<article class="sat-marketGroupPanel">
+<article [ngClass]="{
+  'sat-marketGroupPanel': true,
+  'sat-marketGroupPanel--configuratorCollapsed': state.isConfiguratorCollapsed
+}">
   <section class="sat-marketGroupPanel__configurator">
     <security-group-definition-configurator
       (onClickSearch)="onClickSearchInConfigurator($event)"
       [configuratorData]="state.configurator"
     ></security-group-definition-configurator>
+  </section>
+  <section class="sat-marketGroupPanel__configuratorCollapseCTA">
+    <button
+      (click)="onToggleCollapseConfigurator()"
+      [ngClass]="{
+        'sat-marketGroupPanel__configuratorCollapseCTA-btn': true,
+        'fal': true,
+        'fa-chevron-left': !state.isConfiguratorCollapsed,
+        'fa-chevron-right': state.isConfiguratorCollapsed
+      }"></button>
+    <div class="sat-marketGroupPanel__configuratorCollapseCTA-line"></div>
   </section>
   <section class="sat-marketGroupPanel__groups">
     <ul class="sat-marketGroupPanel__groups-list">

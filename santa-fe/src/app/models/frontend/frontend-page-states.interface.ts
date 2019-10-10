@@ -20,4 +20,5 @@ export interface MarketState {
 export interface MarketGroupPanelState {
   configurator: SecurityGroupDefinitionConfiguratorDTO;
   securityGroupList: Array<SecurityGroupDTO>;
+  isConfiguratorCollapsed: boolean;
 }

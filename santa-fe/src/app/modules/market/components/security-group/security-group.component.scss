@@ -2,7 +2,7 @@
 @import "./security-group-mixin.scss";
 
 $securityGroup_base_wheel_size: 7rem;
-$securityGroup_base_center_height: 6rem;
+$securityGroup_base_center_height: 5.75rem;
 $securityGroup_base_wheelToCenter_overlap: -$securityGroup_base_wheel_size/2;
 $securityGroup_wheel_innerMask_positionMarkup: 1.5rem;
 $securityGroup_wheel_innerMask_width: 3rem;
@@ -15,7 +15,6 @@ $securityGroup_content_canvases_left_width_xLarge: 6rem;
 $securityGroup_content_canvases_right_metricName_width: 2.25rem;
 $securityGroup_content_canvases_right_metricLines_thickness: 0.3125rem;
 $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
-$securityGroup_animationDelay: 0;
 
 .sat-securityGroup {
   $securityGroupBlockName: &;
@@ -82,7 +81,7 @@ $securityGroup_animationDelay: 0;
       padding: $spacing_small;
       &-chartContainer {
         @include mix_border_radius(50%);
-        @include mix_fixed_div(relative, $z_index_standard_base_item);
+        @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
         flex: 1 1 auto;
         display: flex;
         align-items: center;
@@ -92,7 +91,6 @@ $securityGroup_animationDelay: 0;
         &-chart {
           @include mix_fixed_div(absolute, $z_index_standard_base_item);
           @include mix_alive('custom', $animation_duration_normal transform);
-          transition-delay: $securityGroup_animationDelay;
           transform: rotate(0deg) scale(1);
           left: -12%; // this magnification is necessary for countering the layout effect of the watermark
           height: 124%;
@@ -110,7 +108,6 @@ $securityGroup_animationDelay: 0;
           top: (100% - $securityGroup_content_wheel_chartContainer_innerRadius_size)/2;
           width: $securityGroup_content_wheel_chartContainer_innerRadius_size;
           height: $securityGroup_content_wheel_chartContainer_innerRadius_size;
-          transition-delay: $securityGroup_animationDelay;
           transform: scale(1);
         }
       }
@@ -137,10 +134,10 @@ $securityGroup_animationDelay: 0;
       }
       &-mask {
         @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
-        left: -($securityGroup_content_numberTag_size - $securityGroup_content_numberTag_padding)/2;
+        left: -50%;
         top: $securityGroup_content_numberTag_halfSize;
-        height: $securityGroup_content_numberTag_size;
-        width: $securityGroup_content_numberTag_size*2;
+        width: 200%;
+        height: 100%;
       }
     }
     &-canvases {
@@ -149,6 +146,7 @@ $securityGroup_animationDelay: 0;
       flex: 1 1 auto;
       display: flex;
       margin: $securityGroup_content_numberTag_halfSize 0 $spacing_x_small 0;
+      overflow: hidden;
       &-left {
         flex: 0 1 $securityGroup_content_canvases_left_width;
         display: flex;
@@ -243,7 +241,6 @@ $securityGroup_animationDelay: 0;
             @include mix_alive('custom', $animation_duration_normal transform);
             width: 100%;
             height: 100%;
-            transition-delay: $securityGroup_animationDelay;
             transform: translate(100%, 0);
           }
         }
@@ -326,7 +323,6 @@ $securityGroup_animationDelay: 0;
               }
               &-mask {
                 opacity: 0;
-                transition-delay: unset;
                 transform: translate(0, 0);
               }
             }
@@ -337,12 +333,10 @@ $securityGroup_animationDelay: 0;
           color: $color_stencil;
           background-color: $color_stencil;
           &-chart {
-            transition-delay: unset;
             transform: rotate(-360deg) scale(0.01);
             opacity: 0;
           }
           &-innerRadius {
-            transition-delay: unset;
             transform: scale(0.01);
             opacity: 0;
           }
@@ -388,12 +382,10 @@ $securityGroup_animationDelay: 0;
         &-wheel-chartContainer {
           background-color: $color_active;
           &-chart {
-            transition-delay: unset;
             transform: rotate(360deg) scale(1);
           }
           &-innerRadius {
             background-color: $color_active;
-            transition-delay: unset;
             transform: scale(0.01);
           }
         }

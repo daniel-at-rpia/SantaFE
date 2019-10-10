@@ -8,9 +8,30 @@
   display: flex;
   padding: $spacing_medium;
   &__configurator {
+    flex: 0 0 auto;
     display: flex;
     security-group-definition-configurator {
       display: flex;
+    }
+  }
+  &__configuratorCollapseCTA {
+    flex: 0 0 auto;
+    @include mix_fixed_div(relative, $z_index_standard_base_item);
+    display: flex;
+    align-items: center;
+    &-btn {
+      @include mix_fixed_div(relative, $z_index_standard_hovering_item);
+      @include mix_border_radius(50%);
+      width: $iconButton_size_regular;
+      height: $iconButton_size_regular;
+    }
+    &-line {
+      @include mix_fixed_div(absolute, $z_index_standard_base_item);
+      @include mix_border_generator(0 0 0 $typical_border_width);
+      @include mix_calculate(margin-left, 50%, $typical_border_width, '-');
+      height: 100%;
+      width: 50%;
+      margin-left: 50%;
     }
   }
   &__groups {
@@ -23,6 +44,11 @@
       &-item {
         margin-top: $spacing_large;
       }
+    }
+  }
+  &--configuratorCollapsed {
+    #{$marketGroupPanelBlockName}__configurator {
+      display: none;
     }
   }
 }
