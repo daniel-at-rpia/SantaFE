@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { UtilityService } from './UtilityService';
-import { 
-  SecurityGroupPieChartDTO,
-  SecurityGroupPieChartDataDTO
-} from 'App/models/frontend/frontend-models.interface';
+import {
+  SecurityGroupPieChartBlock,
+  SecurityGroupPieChartDataBlock
+} from 'FEModels/frontend-blocks.interface';
 
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
@@ -21,7 +21,7 @@ export class GraphService {
   ){}
 
   public generateSecurityGroupPieChart(
-    pieChartDTO: SecurityGroupPieChartDTO,
+    pieChartDTO: SecurityGroupPieChartBlock,
   ) : am4charts.PieChart {
     const chart = am4core.create(pieChartDTO.name, am4charts.PieChart);
     const pieSeries = chart.series.push(new am4charts.PieSeries());
@@ -69,7 +69,7 @@ export class GraphService {
   }
 
   public changeSecurityGroupPieChartOnSelect(
-    pieChartDTO: SecurityGroupPieChartDTO,
+    pieChartDTO: SecurityGroupPieChartBlock,
     isSelected: boolean
   ){
     const chart = pieChartDTO.chart;
@@ -90,48 +90,48 @@ export class GraphService {
   }
 
   public generateGroupPieChartTestData(
-    pieChartDTO: SecurityGroupPieChartDTO
-  ): Array<SecurityGroupPieChartDataDTO> {
+    pieChartDTO: SecurityGroupPieChartBlock
+  ): Array<SecurityGroupPieChartDataBlock> {
     const colorScheme = pieChartDTO.colorScheme.scheme;
     if (pieChartDTO.colorScheme.type === 'Rating') {
-      const newEntry1:SecurityGroupPieChartDataDTO = {
+      const newEntry1:SecurityGroupPieChartDataBlock = {
         label: 'AAA',
         value: Math.floor(Math.random()*100),
         color: am4core.color(colorScheme[1].value)
       };
-      const newEntry2:SecurityGroupPieChartDataDTO = {
+      const newEntry2:SecurityGroupPieChartDataBlock = {
         label: 'AA',
         value: Math.floor(Math.random()*100),
         color: am4core.color(colorScheme[2].value)
       };
-      const newEntry3:SecurityGroupPieChartDataDTO = {
+      const newEntry3:SecurityGroupPieChartDataBlock = {
         label: 'A',
         value: Math.floor(Math.random()*100),
         color: am4core.color(colorScheme[4].value)
       };
       return [newEntry1, newEntry2, newEntry3];
     } else if (pieChartDTO.colorScheme.type === 'Seniority') {
-      const newEntry1:SecurityGroupPieChartDataDTO = {
+      const newEntry1:SecurityGroupPieChartDataBlock = {
         label: colorScheme[1].label,
         value: Math.floor(Math.random()*100),
         color: am4core.color(colorScheme[1].value)
       };
-      const newEntry2:SecurityGroupPieChartDataDTO = {
+      const newEntry2:SecurityGroupPieChartDataBlock = {
         label: colorScheme[2].label,
         value: Math.floor(Math.random()*100),
         color: am4core.color(colorScheme[2].value)
       };
-      const newEntry3:SecurityGroupPieChartDataDTO = {
+      const newEntry3:SecurityGroupPieChartDataBlock = {
         label: colorScheme[3].label,
         value: Math.floor(Math.random()*100),
         color: am4core.color(colorScheme[3].value)
       };
-      const newEntry4:SecurityGroupPieChartDataDTO = {
+      const newEntry4:SecurityGroupPieChartDataBlock = {
         label: colorScheme[4].label,
         value: Math.floor(Math.random()*100),
         color: am4core.color(colorScheme[4].value)
       };
-      const newEntry5:SecurityGroupPieChartDataDTO = {
+      const newEntry5:SecurityGroupPieChartDataBlock = {
         label: colorScheme[5].label,
         value: Math.floor(Math.random()*100),
         color: am4core.color(colorScheme[5].value)

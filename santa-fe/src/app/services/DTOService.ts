@@ -2,17 +2,19 @@ import { Injectable } from '@angular/core';
 import {
   BESecurityDTO,
   BESecurityGroupDTO
-} from 'App/models/backend/backend-models.interface';
+} from 'BEModels/backend-models.interface';
 import {
   SecurityDTO,
   SecurityGroupDTO,
   SecurityGroupDefinitionDTO,
-  SecurityGroupDefinitionConfiguratorDTO,
-  SecurityGroupDefinitionFilterDTO
-} from 'App/models/frontend/frontend-models.interface';
+  SecurityGroupDefinitionConfiguratorDTO
+} from 'FEModels/frontend-models.interface';
+import {
+  SecurityGroupDefinitionFilterBlock
+} from 'FEModels/frontend-blocks.interface';
 import {
   SecurityDefinitionStub
-} from 'App/models/frontend/frontend-stub-models.interface';
+} from 'FEModels/frontend-stub-models.interface';
 import {
   SecurityGroupDefinitionMap
 } from 'App/stubs/securityGroupDefinitions.stub';
@@ -100,19 +102,15 @@ export class DTOService {
     return object;
   }
 
-  public generateSecurityGroupDefinitionFilterOptionList(name, options): Array<SecurityGroupDefinitionFilterDTO> {
+  public generateSecurityGroupDefinitionFilterOptionList(name, options): Array<SecurityGroupDefinitionFilterBlock> {
     return options.map((eachOption) => {
       const normalizedOption = this.utility.normalizeDefinitionFilterOption(eachOption);
-      const newFilterDTO:SecurityGroupDefinitionFilterDTO = {
-        data: {
-          displayLabel: eachOption,
-          shortKey: normalizedOption,
-          key: this.utility.formDefinitionFilterOptionKey(name, normalizedOption)
-        },
-        state: {
-          isSelected: false,
-          isFilteredOut: false
-        }
+      const newFilterDTO:SecurityGroupDefinitionFilterBlock = {
+        isSelected: false,
+        isFilteredOut: false,
+        displayLabel: eachOption,
+        shortKey: normalizedOption,
+        key: this.utility.formDefinitionFilterOptionKey(name, normalizedOption)
       }
       return newFilterDTO;
     })
@@ -143,17 +141,17 @@ export class DTOService {
   public createSecurityGroupDefinitionConfigurator():SecurityGroupDefinitionConfiguratorDTO {
     const object:SecurityGroupDefinitionConfiguratorDTO = {
       data: {
+        filterSearchInputValue: '',
         definitionList: SecurityGroupDefinitionMap.map((eachDefinitionStub) => {
           return this.formSecurityGroupDefinitionObject(eachDefinitionStub);
         }),
         selectedDefinitionList: []
       },
       state: {
+        showFiltersFromDefinition: null,
         showLongFilterOptions: false,
         isLoading: false
-      },
-      showFiltersFromDefinition: null,
-      filterSearchInputValue: ''
+      }
     };
     return object;
   }

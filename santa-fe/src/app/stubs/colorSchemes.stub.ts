@@ -1,6 +1,6 @@
-import { SecurityGroupPieChartColorSchemeDTO } from 'App/models/frontend/frontend-models.interface';
+import { SecurityGroupPieChartColorSchemeBlock } from 'FEModels/frontend-blocks.interface';
 
-export const SecurityGroupRatingColorScheme: SecurityGroupPieChartColorSchemeDTO = {
+export const SecurityGroupRatingColorScheme: SecurityGroupPieChartColorSchemeBlock = {
   type: 'Rating',
   scheme: [{
     label: 'active',
@@ -29,7 +29,7 @@ export const SecurityGroupRatingColorScheme: SecurityGroupPieChartColorSchemeDTO
   }]
 };
 
-export const SecurityGroupSeniorityColorScheme: SecurityGroupPieChartColorSchemeDTO = {
+export const SecurityGroupSeniorityColorScheme: SecurityGroupPieChartColorSchemeBlock = {
   type: 'Seniority',
   scheme: [{
     label: 'active',

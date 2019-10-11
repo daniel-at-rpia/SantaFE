@@ -1,6 +1,17 @@
-import * as am4charts from "@amcharts/amcharts4/charts";
+import {
+  SecurityGroupStatBlock,
+  SecurityGroupPieChartBlock,
+  SecurityGroupDefinitionFilterBlock
+} from 'FEModels/frontend-blocks.interface';
 
-export interface SecurityDTO {
+interface BasicDTOStructure {
+  [property: string]: object; 
+  data: object;
+  state: object;
+  style?: object;
+}
+
+export interface SecurityDTO extends BasicDTOStructure {
   data: {
     name: string;
     ratingLevel: number;
@@ -14,58 +25,29 @@ export interface SecurityDTO {
   }
 }
 
-export interface SecurityGroupDTO {
+export interface SecurityGroupDTO extends BasicDTOStructure {
   data: {
     name: string;
     ratingLevel: number;
     ratingValue: string;
     numOfSecurities: number;
-    stats: Array<SecurityGroupStatDTO>
+    stats: Array<SecurityGroupStatBlock>
   }
   state: {
     isStencil: boolean;
     isSelected: boolean;
   }
   graph: {
-    leftPie: SecurityGroupPieChartDTO;
-    rightPie: SecurityGroupPieChartDTO
+    leftPie: SecurityGroupPieChartBlock;
+    rightPie: SecurityGroupPieChartBlock
   }
 }
 
-export interface SecurityGroupPieChartDTO {
-  name: string;
-  colorScheme: SecurityGroupPieChartColorSchemeDTO;
-  chart: am4charts.PieChart
-}
-
-export interface SecurityGroupPieChartDataDTO {
-  label: string;
-  value: number;
-  color: any;
-}
-
-export interface SecurityGroupPieChartColorSchemeDTO {
-  type: string;
-  scheme: Array<any>
-}
-
-export interface SecurityGroupDefinitionFilterDTO {
-  data: {
-    displayLabel: string;
-    shortKey: string;
-    key: string;
-  }
-  state: {
-    isSelected: boolean;
-    isFilteredOut: boolean;
-  }
-}
-
-export interface SecurityGroupDefinitionDTO {
+export interface SecurityGroupDefinitionDTO extends BasicDTOStructure {
   data: {
     name: string;
     key: string;
-    filterOptionList: Array<SecurityGroupDefinitionFilterDTO>
+    filterOptionList: Array<SecurityGroupDefinitionFilterBlock>
   }
   style: {
     icon: string;
@@ -78,22 +60,24 @@ export interface SecurityGroupDefinitionDTO {
   }
 }
 
-export interface SecurityGroupDefinitionConfiguratorDTO {
+export interface SecurityGroupDefinitionConfiguratorDTO extends BasicDTOStructure {
   data: {
-    definitionList: Array<SecurityGroupDefinitionDTO>,
-    selectedDefinitionList: Array<SecurityGroupDefinitionDTO>
+    definitionList: Array<SecurityGroupDefinitionDTO>;
+    selectedDefinitionList: Array<SecurityGroupDefinitionDTO>;
+    filterSearchInputValue: string;
   }
   state: {
     showLongFilterOptions: boolean;
     isLoading: boolean;
-  },
-  showFiltersFromDefinition: SecurityGroupDefinitionDTO,
-  filterSearchInputValue: string;
+    showFiltersFromDefinition: SecurityGroupDefinitionDTO;
+  }
 }
 
-interface SecurityGroupStatDTO {
-  label: string;
-  value: number;
-  max: number;
-  percentage: number;
+export interface SecurityGroupAverageVisualizer extends BasicDTOStructure {
+  data: {
+
+  },
+  state: {
+    isLoading: boolean;
+  }
 }
