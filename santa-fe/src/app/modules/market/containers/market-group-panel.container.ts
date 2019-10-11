@@ -1,8 +1,15 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { DTOService } from 'App/services/DTOService';
+import { Observable, Subscription } from 'rxjs';
 import {
-  SecurityGroupList
-} from 'App/stubs/securities.stub';
+  interval
+} from 'rxjs';
+import {
+  tap,
+  first
+} from 'rxjs/operators';
+
+import { DTOService } from 'App/services/DTOService';
+import { SecurityGroupList } from 'App/stubs/securities.stub';
 import { MarketGroupPanelState } from 'FEModels/frontend-page-states.interface';
 
 @Component({
@@ -14,15 +21,17 @@ import { MarketGroupPanelState } from 'FEModels/frontend-page-states.interface';
 
 export class MarketGroupPanel {
   state: MarketGroupPanelState;
+  task$: Observable<any>;
+  getGroupsSubscription: Subscription;
 
   private initiateComponentState(){
     this.state = {
       configurator: this.dtoService.createSecurityGroupDefinitionConfigurator(),
       securityGroupList: [],
+      visualizer: this.dtoService.formAverageVisualizerObject(),
       isConfiguratorCollapsed: false,
       isGroupDataLoaded: false
     };
-    this.onClickSearchInConfigurator();
   }
 
   constructor(
@@ -32,20 +41,25 @@ export class MarketGroupPanel {
   }
 
   public onClickSearchInConfigurator(){
-    this.state.securityGroupList = SecurityGroupList.map((eachGroup) => {
-      return this.dtoService.formSecurityGroupObject(eachGroup);
-    });
-    const list = this.state.securityGroupList;
-    const configurator = this.state.configurator;
-    setTimeout(function(){
-      list.forEach((eachGroup) => {
-        eachGroup.state.isStencil = false;
-        configurator.state.isLoading = false;
-      });
-    }, 1);
+    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
+    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
+    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
+
+    this.task$ = interval(2000);
+    this.getGroupsSubscription = this.task$.pipe(
+      tap(() => {
+        this.state.securityGroupList.forEach((eachGroup, index) => {
+          eachGroup.state.isStencil = false;
+          eachGroup.data = this.dtoService.formSecurityGroupObject(SecurityGroupList[index]).data;
+        });
+        this.state.configurator.state.isLoading = false;
+      }),
+      first()
+    ).subscribe();
   }
 
   public onToggleCollapseConfigurator(){
     this.state.isConfiguratorCollapsed = !this.state.isConfiguratorCollapsed;
+    this.state.visualizer.state.isExpanded = this.state.isConfiguratorCollapsed;
   }
 }

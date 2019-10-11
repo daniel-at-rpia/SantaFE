@@ -22,22 +22,18 @@
   <section class="sat-marketGroupPanel__groups">
     <div class="sat-marketGroupPanel__groups-utility">
       <div class="sat-marketGroupPanel__groups-utility-prompt">
-        <span class="sat-marketGroupPanel__groups-utility-prompt-text">There are</span>
         <span class="sat-marketGroupPanel__groups-utility-prompt-highlightText">{{state.securityGroupList.length}}</span>
-        <span class="sat-marketGroupPanel__groups-utility-prompt-text">groups that match your search</span>
+        <span class="sat-marketGroupPanel__groups-utility-prompt-text">groups matched your search</span>
       </div>
     </div>
     <div class="sat-marketGroupPanel__groups-utility-groupAverage">
-      <div class="sat-marketGroupPanel__groups-utility-groupAverage-metric">
-        <div class="sat-marketGroupPanel__groups-utility-groupAverage-metric-name"></div>
-        <div class="sat-marketGroupPanel__groups-utility-groupAverage-metric-value"></div>
-      </div>
+      <security-group-average-visualizer [visualizerData]="state.visualizer"></security-group-average-visualizer>
     </div>
     <ul class="sat-marketGroupPanel__groups-list">
       <li *ngFor="let eachGroup of state.securityGroupList; let i = index" class="sat-marketGroupPanel__groups-list-item">
         <security-group
           [groupData]="eachGroup"
-          [isExpanded]="state.isConfiguratorCollapsed"></security-group>
+          [isDataReady]="!eachGroup.state.isStencil"></security-group>
       </li>
     </ul>
   </section>

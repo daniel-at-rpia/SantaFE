@@ -7,7 +7,8 @@ import {
   SecurityDTO,
   SecurityGroupDTO,
   SecurityGroupDefinitionDTO,
-  SecurityGroupDefinitionConfiguratorDTO
+  SecurityGroupDefinitionConfiguratorDTO,
+  SecurityGroupAverageVisualizerDTO
 } from 'FEModels/frontend-models.interface';
 import {
   SecurityGroupDefinitionFilterBlock
@@ -51,15 +52,16 @@ export class DTOService {
   }
 
   public formSecurityGroupObject(
-    rawData: BESecurityGroupDTO
+    rawData: BESecurityGroupDTO,
+    isStencil?: boolean
   ): SecurityGroupDTO {
     const ratingLevel = Math.floor(Math.random()*7 + 1);
     const object:SecurityGroupDTO = {
       data: {
-        name: rawData.groupName,
+        name: isStencil ? 'PLACEHOLDER' : rawData.groupName,
         ratingLevel: ratingLevel,
         ratingValue: this.utility.mapRatings(ratingLevel),
-        numOfSecurities: rawData.numOfSecurities,
+        numOfSecurities: isStencil ? 32 : rawData.numOfSecurities,
         stats: [
           {
             label: 'Attr1',
@@ -81,16 +83,18 @@ export class DTOService {
       },
       state: {
         isSelected: false,
-        isStencil: false
+        isExpanded: false,
+        isStencil: !!isStencil,
+        stencilAnimationComplete: false
       },
       graph: {
         leftPie: {
-          name: `Some Group Name ${rawData.numOfSecurities}-1`,
+          name: this.utility.generateUUID(),
           colorScheme: SecurityGroupRatingColorScheme,
           chart: null
         },
         rightPie: {
-          name: `Some Group Name ${rawData.numOfSecurities}-2`,
+          name: this.utility.generateUUID(),
           colorScheme: SecurityGroupSeniorityColorScheme,
           chart: null
         }
@@ -153,6 +157,19 @@ export class DTOService {
         isLoading: false
       }
     };
+    return object;
+  }
+
+  public formAverageVisualizerObject():SecurityGroupAverageVisualizerDTO{
+    const object:SecurityGroupAverageVisualizerDTO = {
+      data: {
+        stats: []
+      },
+      state: {
+        isLoading: false,
+        isExpanded: false
+      }
+    }
     return object;
   }
 }

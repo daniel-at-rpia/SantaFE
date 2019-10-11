@@ -39,7 +39,3 @@ export interface SecurityGroupDefinitionFilterBlock {
   shortKey: string;
   key: string;
 }
-
-export interface SecurityGroupAverageVisualizerMetric {
-  data
-}

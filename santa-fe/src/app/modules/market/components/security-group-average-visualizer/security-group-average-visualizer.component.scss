@@ -1,0 +1,36 @@
+@import "global.scss";
+@import "modules/market/market.scss";
+
+$averageVisualizer_metricNames_width: $securityGroup_content_canvases_left_width + $securityGroup_content_canvases_right_metricName_width + $securityGroup_content_canvases_right_alignmentLine_marginLeft;
+$averageVisualizer_metricNames_width_expanded: $securityGroup_content_canvases_left_width_expanded + $securityGroup_content_canvases_right_metricName_width + $securityGroup_content_canvases_right_alignmentLine_marginLeft;
+.sat-securityGroupAverageVisualizer {
+  $averageVisualizerBlockName: &;
+  display: flex;
+  height: 5rem;
+  &__metricNames {
+    flex: 0 0 $averageVisualizer_metricNames_width;
+    margin-left: $securityGroup_base_wheel_size;
+  }
+  &__alignmentLine {
+    @include mix_border_generator(0 0 0 $typical_border_width);
+    flex: 0 0 auto;
+    width: $securityGroup_content_canvases_right_alignmentLine_marginLeft;
+  }
+  &__metricValues {
+    flex: 1 1 auto;
+    margin-right: $securityGroup_base_wheel_size;
+    background-color: $color_active;
+  }
+  &--isExpanded {
+    #{$averageVisualizerBlockName} {
+      &__metricNames {
+        flex: 0 0 $averageVisualizer_metricNames_width_expanded;
+      }
+    }
+  }
+  @include mq-xx-large-min {
+    &__metricNames {
+      flex: 0 0 $averageVisualizer_metricNames_width_expanded;
+    }
+  }
+}

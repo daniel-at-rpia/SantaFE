@@ -11,6 +11,7 @@ import { SecurityCard } from 'Market/components/security-card/security-card.comp
 import { SecurityGroup } from 'Market/components/security-group/security-group.component';
 import { SecurityGroupDefinition } from 'Market/components/security-group-definition/security-group-definition.component';
 import { SecurityGroupDefinitionConfigurator } from 'Market/components/definition-configurator/definition-configurator.component';
+import { SecurityGroupAverageVisualizer } from 'Market/components/security-group-average-visualizer/security-group-average-visualizer.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { SecurityGroupDefinitionConfigurator } from 'Market/components/definitio
     SecurityCard,
     SecurityGroup,
     SecurityGroupDefinition,
-    SecurityGroupDefinitionConfigurator
+    SecurityGroupDefinitionConfigurator,
+    SecurityGroupAverageVisualizer
   ],
   imports: [
     CommonModule,

@@ -34,8 +34,10 @@ export interface SecurityGroupDTO extends BasicDTOStructure {
     stats: Array<SecurityGroupStatBlock>
   }
   state: {
+    isExpanded: boolean;
     isStencil: boolean;
     isSelected: boolean;
+    stencilAnimationComplete: boolean;
   }
   graph: {
     leftPie: SecurityGroupPieChartBlock;
@@ -73,11 +75,12 @@ export interface SecurityGroupDefinitionConfiguratorDTO extends BasicDTOStructur
   }
 }
 
-export interface SecurityGroupAverageVisualizer extends BasicDTOStructure {
+export interface SecurityGroupAverageVisualizerDTO extends BasicDTOStructure {
   data: {
-
+    stats: Array<SecurityGroupStatBlock>    
   },
   state: {
     isLoading: boolean;
+    isExpanded: boolean;
   }
 }

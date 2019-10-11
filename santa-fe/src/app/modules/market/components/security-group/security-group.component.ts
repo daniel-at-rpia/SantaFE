@@ -1,6 +1,7 @@
 import {
   Component,
   OnInit,
+  OnChanges,
   ViewEncapsulation,
   Input,
   Output
@@ -19,26 +20,20 @@ import { GraphService } from 'App/services/GraphService';
   styleUrls: ['./security-group.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class SecurityGroup implements OnInit {
+export class SecurityGroup implements OnInit, OnChanges {
   @Input() groupData: SecurityGroupDTO;
-  @Input() isExpanded: boolean;
+  @Input() isDataReady: boolean;
   constructor(
     private graphService: GraphService
   ) {}
 
   ngOnInit() {
-    // this is for demo only
-    if (!!this.groupData) {
-      this.groupData.state.isStencil = true;
-      // if (!!this.groupData.state.isStencil) {
-      //   this.groupData.data.name = 'LONG PLACEHOLDER';
-      //   this.groupData.data.ratingValue = 'AA';
-      // }
-      const groupData = this.groupData;
-      const populateGraphs = this.populateGraphs.bind(this);
-      setTimeout(function(){
-        populateGraphs();
-      }, 1);
+  }
+
+  ngOnChanges() {
+    if (!this.groupData.state.isStencil && !this.groupData.state.stencilAnimationComplete) {
+      this.groupData.state.stencilAnimationComplete = true;
+      this.populateGraphs();
     }
   }
 

@@ -2,7 +2,8 @@ import {
   SecurityDTO,
   SecurityGroupDTO,
   SecurityGroupDefinitionDTO,
-  SecurityGroupDefinitionConfiguratorDTO
+  SecurityGroupDefinitionConfiguratorDTO,
+  SecurityGroupAverageVisualizerDTO
 } from 'App/models/frontend/frontend-models.interface';
 
 export interface MarketState {
@@ -19,6 +20,7 @@ export interface MarketState {
 
 export interface MarketGroupPanelState {
   configurator: SecurityGroupDefinitionConfiguratorDTO;
+  visualizer: SecurityGroupAverageVisualizerDTO;
   securityGroupList: Array<SecurityGroupDTO>;
   isConfiguratorCollapsed: boolean;
   isGroupDataLoaded: boolean;

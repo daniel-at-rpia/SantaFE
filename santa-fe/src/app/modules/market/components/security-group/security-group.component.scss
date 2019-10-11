@@ -204,7 +204,7 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
           @include mix_border_generator(0 0 0 $typical_border_width, $color_white);
           flex: 0 0 auto;
           margin-left: $securityGroup_content_canvases_right_alignmentLine_marginLeft;
-          width: $spacing_small;
+          width: $securityGroup_content_canvases_right_alignmentLine_marginLeft;
         }
         &-metricLines {
           @include mix_fixed_div(relative, $z_index_standard_base_item);
