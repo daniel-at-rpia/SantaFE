@@ -3,19 +3,36 @@
   'sat-securityGroupAverageVisualizer--expandedState': visualizerData.state.isExpanded,
   'sat-securityGroupAverageVisualizer--stencilState': visualizerData.state.isStencil
 }">
-  <section class="sat-securityGroupAverageVisualizer__leftMargin"></section>
   <section class="sat-securityGroupAverageVisualizer__metricNames">
-    <div class="sat-securityGroupAverageVisualizer__metricNames-nameContainer" *ngFor="let eachStat of visualizerData.data.stats">
-      <button class="sat-securityGroupAverageVisualizer__metricNames-nameContainer-nameCTA">{{eachStat.label}}</button>
-      <span class="sat-securityGroupAverageVisualizer__metricNames-nameContainer-value">{{eachStat.value}}</span>
-  </div>
+    <article
+      *ngFor="let eachStat of visualizerData.data.stats; let statIndex = index"
+      [ngClass]="{
+        'sat-securityGroupAverageVisualizerName': true,
+        'sat-securityGroupAverageVisualizerName--emptyState': eachStat.isEmpty,
+        'sat-securityGroupAverageVisualizerName--last': statIndex === visualizerData.data.stats.length-1,
+        'sat-securityGroupAverageVisualizerName--stencilState': visualizerData.state.isStencil
+      }">
+      <section class="sat-securityGroupAverageVisualizerName__leftMargin"></section>
+      <button class="sat-securityGroupAverageVisualizerName__nameCTA">{{eachStat.label}}</button>
+      <span class="sat-securityGroupAverageVisualizerName__value">{{eachStat.value}}</span>
+      <button class="sat-securityGroupAverageVisualizerName__addMetric santaBtn--labelled santaBtn--inverseLabelled">
+        <i class="sat-securityGroupAverageVisualizerName__addMetric-icon fal fa-plus"></i>
+        <span>Add Metric</span>
+      </button>
+    </article>
   </section>
   <section class="sat-securityGroupAverageVisualizer__alignmentLine"></section>
   <section class="sat-securityGroupAverageVisualizer__metricValues">
-    <div class="sat-securityGroupAverageVisualizer__metricValues-lineContainer" *ngFor="let eachStat of visualizerData.data.stats">
-      <div [ngStyle]="{'width': eachStat.percentage + '%'}" class="sat-securityGroupAverageVisualizer__metricValues-lineContainer-line">
+    <article
+      *ngFor="let eachStat of visualizerData.data.stats"
+      [ngClass]="{
+        'sat-securityGroupAverageVisualizerValue': true,
+        'sat-securityGroupAverageVisualizerValue--emptyState': eachStat.isEmpty,
+        'sat-securityGroupAverageVisualizerValue--stencilState': visualizerData.state.isStencil
+      }">
+      <div [ngStyle]="{'width': eachStat.percentage + '%'}" class="sat-securityGroupAverageVisualizerValue__line">
       </div>
-    </div>
+    </article>
     <div class="sat-securityGroupAverageVisualizer__metricValues-mask"></div>
   </section>
 </article>

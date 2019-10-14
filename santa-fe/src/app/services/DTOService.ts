@@ -53,6 +53,7 @@ export class DTOService {
 
   public formSecurityGroupObject(
     rawData: BESecurityGroupDTO,
+    averageVisualizer: SecurityGroupAverageVisualizerDTO,
     isStencil?: boolean
   ): SecurityGroupDTO {
     const ratingLevel = Math.floor(Math.random()*7 + 1);
@@ -62,24 +63,7 @@ export class DTOService {
         ratingLevel: ratingLevel,
         ratingValue: this.utility.mapRatings(ratingLevel),
         numOfSecurities: isStencil ? 32 : rawData.numOfSecurities,
-        stats: [
-          {
-            label: 'Attr1',
-            value: Math.floor(Math.random()*1000),
-            max: null,
-            percentage: null
-          },{
-            label: 'Attr2',
-            value: Math.floor(Math.random()*1000),
-            max: null,
-            percentage: null
-          },{
-            label: 'Attr3',
-            value: Math.floor(Math.random()*1000)/100,
-            max: null,
-            percentage: null
-          }
-        ]
+        stats: []
       },
       state: {
         isSelected: false,
@@ -99,7 +83,21 @@ export class DTOService {
           chart: null
         }
       }
-    }
+    };
+    averageVisualizer.data.stats.forEach((eachStat, index) => {
+      if (!eachStat.isEmpty) {
+        const newStat = {
+          label: eachStat.label,
+          value: Math.floor(Math.random()*1000),
+          max: null,
+          percentage: null
+        };
+        if (index === 2) {
+          newStat.value = Math.floor(Math.random()*1000)/100;
+        };
+        object.data.stats.push(newStat);
+      }
+    });
     return object;
   }
 
@@ -163,19 +161,21 @@ export class DTOService {
         stats: [
           {
             label: 'Tenor',
-            value: 50,
+            value: 100,
             max: 100,
-            percentage: 50
+            percentage: 100
           },{
+            isEmpty: true,
             label: 'Size',
-            value: 50,
+            value: 100,
             max: 100,
-            percentage: 50
+            percentage: 100
           },{
+            isEmpty: true,
             label: 'T-Spread WoW',
-            value: 50,
+            value: 100,
             max: 100,
-            percentage: 50
+            percentage: 100
           }
         ]
       },

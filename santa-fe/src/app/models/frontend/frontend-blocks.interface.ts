@@ -9,6 +9,7 @@ Because of this, while component models need to follow "BasicDTOStructure", bloc
 import * as am4charts from "@amcharts/amcharts4/charts";
 
 export interface SecurityGroupStatBlock {
+  isEmpty?: boolean;
   label: string;
   value: number;
   max: number;

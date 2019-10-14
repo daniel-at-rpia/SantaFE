@@ -42,10 +42,9 @@ export class MarketGroupPanel {
 
   public onClickSearchInConfigurator(){
     this.state.securityGroupList = [];
-    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
-    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
-    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
-    this.state.visualizer = this.dtoService.formAverageVisualizerObject();
+    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, this.state.visualizer, true));
+    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, this.state.visualizer, true));
+    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, this.state.visualizer, true));
     this.state.visualizer.state.isEmpty = false;
     this.state.visualizer.state.isStencil = true;
 
@@ -53,7 +52,7 @@ export class MarketGroupPanel {
     this.getGroupsSubscription = this.task$.pipe(
       tap(() => {
         this.state.securityGroupList.forEach((eachGroup, index) => {
-          eachGroup.data = this.dtoService.formSecurityGroupObject(SecurityGroupList[index]).data;
+          eachGroup.data = this.dtoService.formSecurityGroupObject(SecurityGroupList[index], this.state.visualizer).data;
           eachGroup.state.isStencil = false;
         });
         this.state.configurator.state.isLoading = false;

@@ -1,39 +1,15 @@
 @import "global.scss";
 @import "modules/market/market.scss";
 
-$averageVisualizer_metricNames_width: $securityGroup_content_canvases_left_width + $securityGroup_content_canvases_right_metricName_width;
-$averageVisualizer_metricNames_width_expanded: $securityGroup_content_canvases_left_width_expanded + $securityGroup_content_canvases_right_metricName_width;
-$averageVisualizer_metricNames_nameCTA_width: 7rem;
-$averageVisaulizer_metricNames_value_width: 2.875rem;
+$averageVisualizer_metricNames_width: $securityGroup_content_canvases_left_width + $securityGroup_content_canvases_right_metricName_width + $securityGroup_base_wheel_size;
+$averageVisualizer_metricNames_width_expanded: $securityGroup_content_canvases_left_width_expanded + $securityGroup_content_canvases_right_metricName_width + $securityGroup_base_wheel_size;
 .sat-securityGroupAverageVisualizer {
   $averageVisualizerBlockName: &;
   display: flex;
-  &__leftMargin {
-    flex: 0 1 $securityGroup_base_wheel_size;
-  }
   &__metricNames {
     flex: 0 0 $averageVisualizer_metricNames_width;
     display: flex;
     flex-direction: column;
-    &-nameContainer {
-      display: flex;
-      flex-wrap: nowrap;
-      justify-content: flex-end;
-      align-items: center;
-      margin: $spacing_small 0;
-      &-nameCTA {
-        flex: 0 0 $averageVisualizer_metricNames_nameCTA_width;
-        padding: $spacing_x_small $spacing_medium;
-        font-size: $font_size_x_small;
-      }
-      &-value {
-        flex: 0 0 $averageVisaulizer_metricNames_value_width;
-        text-align: right;
-        color: $font_color_major;
-        font-size: $font_size_small;
-        margin-left: $spacing_small;
-      }
-    }
   }
   &__alignmentLine {
     @include mix_border_generator(0 0 0 $typical_border_width);
@@ -47,18 +23,6 @@ $averageVisaulizer_metricNames_value_width: 2.875rem;
     display: flex;
     flex-direction: column;
     margin-right: $securityGroup_base_wheel_size;
-    &-lineContainer {
-      flex: 1 1 auto;
-      display: flex;
-      align-items: center;
-      &-line {
-        @include mix_border_radius(3px);
-        display: flex;
-        align-items: center;
-        background-color: $color_active;
-        height: $securityGroup_content_canvases_right_metricLines_thickness*1.5;
-      }
-    }
     &-mask {
       @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
       @include mix_alive('custom', $animation_duration_heavy transform);
@@ -82,19 +46,103 @@ $averageVisaulizer_metricNames_value_width: 2.875rem;
   }
   &--stencilState {
     #{$averageVisualizerBlockName} {
-      &__metricNames {
-        &-nameContainer-value {
-          @include mix_stencil_animation;
-        }
+      &__metricValues-mask {
+        opacity: 0;
+        transform: translate(0, 0);
       }
-      &__metricValues {
-        &-lineContainer-line {
-          @include mix_stencil_animation;
-        }
-        &-mask {
-          opacity: 0;
-          transform: translate(0, 0);
-        }
+    }
+  }
+}
+
+$averageVisualizerName_nameCTA_width: 7.5rem;
+$averageVisaulizerName_value_width: 2.875rem;
+.sat-securityGroupAverageVisualizerName {
+  $averageVisualizerNameBlockName: &;
+  flex: 1 0 auto;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: center;
+  margin: $spacing_small 0;
+  &__leftMargin {
+    flex: 0 1 $securityGroup_base_wheel_size;
+  }
+  &__nameCTA {
+    flex: 0 0 $averageVisualizerName_nameCTA_width;
+    padding: $spacing_x_small $spacing_medium;
+    font-size: $font_size_x_small;
+  }
+  &__value {
+    flex: 0 0 $averageVisaulizerName_value_width;
+    text-align: right;
+    color: $font_color_major;
+    font-size: $font_size_small;
+    margin-left: $spacing_small;
+  }
+  &__addMetric {
+    flex: 0 0 $averageVisualizerName_nameCTA_width;
+    display: none;
+    padding: $spacing_x_small $spacing_medium;
+    background-color: $color_create;
+    margin-right: $averageVisaulizerName_value_width + $spacing_small;
+    &>&-icon {
+      font-size: $font_size_normal;
+    }
+    &>span {
+      font-size: $font_size_x_small;
+    }
+  }
+  &--stencilState {
+    #{$averageVisualizerNameBlockName} {
+      &__value {
+        @include mix_stencil_animation;
+      }
+    }
+  }
+  &--emptyState {
+    margin: 0;
+    #{$averageVisualizerNameBlockName} {
+      &__nameCTA {
+        display: none;
+      }
+      &__value {
+        display: none;
+      }
+    }
+  }
+  &--emptyState#{$averageVisualizerNameBlockName}--last {
+    margin: $spacing_small 0;
+    #{$averageVisualizerNameBlockName} {
+      &__addMetric {
+        display: flex;
+      }
+    }
+  }
+}
+
+.sat-securityGroupAverageVisualizerValue {
+  $averageVisualizerValueBlockName: &;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  &__line {
+    @include mix_border_radius(3px);
+    display: flex;
+    align-items: center;
+    background-color: $color_active;
+    height: $securityGroup_content_canvases_right_metricLines_thickness*1.5;
+  }
+  &--stencilState {
+    #{$averageVisualizerValueBlockName} {
+      &__line {
+        @include mix_stencil_animation;
+      }
+    }
+  }
+  &--emptyState {
+    #{$averageVisualizerValueBlockName} {
+      &__line {
+        display: none;
       }
     }
   }
