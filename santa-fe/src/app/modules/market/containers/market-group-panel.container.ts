@@ -59,6 +59,7 @@ export class MarketGroupPanel {
         this.state.configurator.state.isLoading = false;
         this.state.visualizer.state.isStencil = false;
         this.state.isGroupDataLoaded = true;
+        this.state.securityGroupList.length > 0 && this.calculateGroupAverage();
       }),
       first()
     ).subscribe();
@@ -70,5 +71,34 @@ export class MarketGroupPanel {
     this.state.securityGroupList.forEach((eachGroup) => {
       eachGroup.state.isExpanded = this.state.isConfiguratorCollapsed;
     })
+  }
+
+  private calculateGroupAverage(){
+    this.state.visualizer.data.stats.forEach((eachStat, statIndex) => {
+      let sum = 0;
+      let max = 0;
+      this.state.securityGroupList.forEach((eachGroup) => {
+        // this IF is only a safe check, should always pass
+        if (eachGroup.data.stats.length >= statIndex+1) {
+          const targetStat = eachGroup.data.stats[statIndex];
+          sum = sum + targetStat.value;
+          if (max < targetStat.value) {
+            max = targetStat.value;
+          }
+        }
+      });
+      let average = Math.round(sum / this.state.securityGroupList.length * 100)/100;
+      eachStat.max = max;
+      eachStat.value = average;
+      eachStat.percentage = Math.round(average/max * 10000)/100;
+      this.state.securityGroupList.forEach((eachGroup) => {
+        // this IF is only a safe check, should always pass
+        if (eachGroup.data.stats.length >= statIndex+1) {
+          const targetStat = eachGroup.data.stats[statIndex];
+          targetStat.max = max;
+          targetStat.percentage = Math.round(targetStat.value/targetStat.max * 10000)/100;
+        }
+      });
+    });
   }
 }

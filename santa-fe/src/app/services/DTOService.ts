@@ -66,17 +66,17 @@ export class DTOService {
           {
             label: 'Attr1',
             value: Math.floor(Math.random()*1000),
-            max: 1000,
+            max: null,
             percentage: null
           },{
             label: 'Attr2',
             value: Math.floor(Math.random()*1000),
-            max: 1000,
+            max: null,
             percentage: null
           },{
             label: 'Attr3',
             value: Math.floor(Math.random()*1000)/100,
-            max: 10,
+            max: null,
             percentage: null
           }
         ]
@@ -100,9 +100,6 @@ export class DTOService {
         }
       }
     }
-    object.data.stats.forEach((eachStat) => {
-      eachStat.percentage = Math.round(eachStat.value/eachStat.max * 10000)/100;
-    })
     return object;
   }
 
@@ -166,19 +163,19 @@ export class DTOService {
         stats: [
           {
             label: 'Tenor',
-            value: 142,
-            max: 492,
-            percentage: 32
+            value: 50,
+            max: 100,
+            percentage: 50
           },{
             label: 'Size',
-            value: 23,
-            max: 392,
-            percentage: 42
+            value: 50,
+            max: 100,
+            percentage: 50
           },{
             label: 'T-Spread WoW',
-            value: 34,
-            max: 942,
-            percentage: 95
+            value: 50,
+            max: 100,
+            percentage: 50
           }
         ]
       },
