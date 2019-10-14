@@ -9,6 +9,7 @@
   flex: 1 1 auto;
   display: flex;
   padding: $spacing_medium;
+  overflow: hidden;
   &__configurator {
     flex: 0 0 auto;
     display: flex;

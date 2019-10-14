@@ -49,8 +49,8 @@ export class MarketGroupPanel {
     this.getGroupsSubscription = this.task$.pipe(
       tap(() => {
         this.state.securityGroupList.forEach((eachGroup, index) => {
-          eachGroup.state.isStencil = false;
           eachGroup.data = this.dtoService.formSecurityGroupObject(SecurityGroupList[index]).data;
+          eachGroup.state.isStencil = false;
         });
         this.state.configurator.state.isLoading = false;
       }),
@@ -61,5 +61,8 @@ export class MarketGroupPanel {
   public onToggleCollapseConfigurator(){
     this.state.isConfiguratorCollapsed = !this.state.isConfiguratorCollapsed;
     this.state.visualizer.state.isExpanded = this.state.isConfiguratorCollapsed;
+    this.state.securityGroupList.forEach((eachGroup) => {
+      eachGroup.state.isExpanded = this.state.isConfiguratorCollapsed;
+    })
   }
 }

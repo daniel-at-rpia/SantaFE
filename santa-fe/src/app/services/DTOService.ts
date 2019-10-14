@@ -163,7 +163,24 @@ export class DTOService {
   public formAverageVisualizerObject():SecurityGroupAverageVisualizerDTO{
     const object:SecurityGroupAverageVisualizerDTO = {
       data: {
-        stats: []
+        stats: [
+          {
+            label: 'Tenor',
+            value: 142,
+            max: 492,
+            percentage: 32
+          },{
+            label: 'Size',
+            value: 23,
+            max: 392,
+            percentage: 42
+          },{
+            label: 'T-Spread WoW',
+            value: 34,
+            max: 942,
+            percentage: 95
+          }
+        ]
       },
       state: {
         isLoading: false,
