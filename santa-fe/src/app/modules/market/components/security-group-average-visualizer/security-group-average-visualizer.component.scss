@@ -56,9 +56,10 @@ $averageVisualizer_metricNames_width_expanded: $securityGroup_content_canvases_l
       width: 100%;
       height: 100%;
       transform: translate(100%, 0);
+      background-color: $color_gray_2;
     }
   }
-  &--isExpanded {
+  &--expandedState {
     #{$averageVisualizerBlockName} {
       &__metricNames {
         flex: 0 0 $averageVisualizer_metricNames_width_expanded;
@@ -68,6 +69,19 @@ $averageVisualizer_metricNames_width_expanded: $securityGroup_content_canvases_l
   @include mq-xx-large-min {
     &__metricNames {
       flex: 0 0 $averageVisualizer_metricNames_width_expanded;
+    }
+  }
+  &--stencilState {
+    #{$averageVisualizerBlockName} {
+      &__metricValues {
+        &-lineContainer-line {
+          @include mix_stencil_animation;
+        }
+        &-mask {
+          opacity: 0;
+          transform: translate(0, 0);
+        }
+      }
     }
   }
 }

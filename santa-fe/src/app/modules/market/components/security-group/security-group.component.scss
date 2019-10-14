@@ -293,17 +293,11 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
           &-left-content {
             &-name-text {
               @include mix_stencil_animation;
-              color: $color_stencil;
-              background-color: $color_stencil;
             }
             &-value {
               @include mix_stencil_animation;
-              color: $color_stencil;
-              background-color: $color_stencil;
               &-text {
                 @include mix_stencil_animation;
-                color: $color_stencil;
-                background-color: $color_stencil;
               }
             }
           }
@@ -319,8 +313,6 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
             &-metricLines {
               &-lineContainer-line {
                 @include mix_stencil_animation;
-                color: $color_stencil;
-                background-color: $color_stencil;
               }
               &-mask {
                 opacity: 0;
@@ -331,8 +323,6 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
         }
         &-wheel-chartContainer {
           @include mix_stencil_animation;
-          color: $color_stencil;
-          background-color: $color_stencil;
           &-chart {
             transform: rotate(-360deg) scale(0.01);
             opacity: 0;
@@ -346,8 +336,6 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
           background-color: $color_white;
           &-text {
             @include mix_stencil_animation;
-            color: $color_stencil;
-            background-color: $color_stencil;
           }
           &-mask {
             background-color: $color_white;

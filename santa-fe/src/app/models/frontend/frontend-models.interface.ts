@@ -80,7 +80,8 @@ export interface SecurityGroupAverageVisualizerDTO extends BasicDTOStructure {
     stats: Array<SecurityGroupStatBlock>    
   },
   state: {
-    isLoading: boolean;
+    isEmpty: boolean;
+    isStencil: boolean;
     isExpanded: boolean;
   }
 }

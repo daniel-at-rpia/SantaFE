@@ -183,7 +183,8 @@ export class DTOService {
         ]
       },
       state: {
-        isLoading: false,
+        isEmpty: true,
+        isStencil: false,
         isExpanded: false
       }
     }

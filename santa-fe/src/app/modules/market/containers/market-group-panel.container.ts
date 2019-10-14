@@ -41,9 +41,13 @@ export class MarketGroupPanel {
   }
 
   public onClickSearchInConfigurator(){
+    this.state.securityGroupList = [];
     this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
     this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
     this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
+    this.state.visualizer = this.dtoService.formAverageVisualizerObject();
+    this.state.visualizer.state.isEmpty = false;
+    this.state.visualizer.state.isStencil = true;
 
     this.task$ = interval(2000);
     this.getGroupsSubscription = this.task$.pipe(
@@ -53,6 +57,8 @@ export class MarketGroupPanel {
           eachGroup.state.isStencil = false;
         });
         this.state.configurator.state.isLoading = false;
+        this.state.visualizer.state.isStencil = false;
+        this.state.isGroupDataLoaded = true;
       }),
       first()
     ).subscribe();

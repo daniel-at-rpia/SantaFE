@@ -1,6 +1,8 @@
 <article [ngClass]="{
-  'sat-marketGroupPanel': true,
-  'sat-marketGroupPanel--configuratorCollapsed': state.isConfiguratorCollapsed
+  'sat-marketGroupPanel': true, 
+  'sat-marketGroupPanel--configuratorCollapsedState': state.isConfiguratorCollapsed,
+  'sat-marketGroupPanel--searchInProgressState': this.state.configurator.state.isLoading,
+  'sat-marketGroupPanel--searchCompletedState': this.state.isGroupDataLoaded
 }">
   <section class="sat-marketGroupPanel__configurator">
     <security-group-definition-configurator
