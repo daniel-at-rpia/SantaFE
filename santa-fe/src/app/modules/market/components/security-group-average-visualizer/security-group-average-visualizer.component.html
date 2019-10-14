@@ -3,17 +3,18 @@
   'sat-securityGroupAverageVisualizer--expandedState': visualizerData.state.isExpanded,
   'sat-securityGroupAverageVisualizer--stencilState': visualizerData.state.isStencil
 }">
+  <section class="sat-securityGroupAverageVisualizer__leftMargin"></section>
   <section class="sat-securityGroupAverageVisualizer__metricNames">
-    <div class="sat-securityGroupAverageVisualizer__metricNames-content">
-    <div class="sat-securityGroupAverageVisualizer__metricNames-content-nameContainer" *ngFor="let eachStat of visualizerData.data.stats">
-      <button class="sat-securityGroupAverageVisualizer__metricNames-content-nameContainer-name">{{eachStat.label}}</button>
-    </div>
+    <div class="sat-securityGroupAverageVisualizer__metricNames-nameContainer" *ngFor="let eachStat of visualizerData.data.stats">
+      <button class="sat-securityGroupAverageVisualizer__metricNames-nameContainer-nameCTA">{{eachStat.label}}</button>
+      <span class="sat-securityGroupAverageVisualizer__metricNames-nameContainer-value">{{eachStat.value}}</span>
   </div>
   </section>
   <section class="sat-securityGroupAverageVisualizer__alignmentLine"></section>
   <section class="sat-securityGroupAverageVisualizer__metricValues">
     <div class="sat-securityGroupAverageVisualizer__metricValues-lineContainer" *ngFor="let eachStat of visualizerData.data.stats">
-      <div [ngStyle]="{'width': eachStat.percentage + '%'}" class="sat-securityGroupAverageVisualizer__metricValues-lineContainer-line">{{eachStat.value}}</div>
+      <div [ngStyle]="{'width': eachStat.percentage + '%'}" class="sat-securityGroupAverageVisualizer__metricValues-lineContainer-line">
+      </div>
     </div>
     <div class="sat-securityGroupAverageVisualizer__metricValues-mask"></div>
   </section>

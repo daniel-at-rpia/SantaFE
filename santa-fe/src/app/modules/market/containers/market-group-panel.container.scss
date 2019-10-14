@@ -66,14 +66,6 @@
         display: none;
         flex-direction: column;
         padding: 0 $marketGroupPanel_groups_list_padding;
-        &-metric {
-          display: flex;
-          height: 5rem;
-          &-name {
-          }
-          &-value {
-          }
-        }
       }
     }
     &-list {

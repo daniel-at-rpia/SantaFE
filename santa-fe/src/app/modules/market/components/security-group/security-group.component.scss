@@ -10,7 +10,6 @@ $securityGroup_content_numberTag_size: 2.25rem;
 $securityGroup_content_numberTag_padding: $spacing_x_small;
 $securityGroup_content_numberTag_halfSize: $securityGroup_content_numberTag_size/2 + $securityGroup_content_numberTag_padding;
 $securityGroup_content_numberTag_top: -($securityGroup_content_numberTag_halfSize) + ($securityGroup_base_wheel_size - $securityGroup_base_center_height)/2;
-$securityGroup_content_canvases_right_metricLines_thickness: 0.3125rem;
 $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
 
 .sat-securityGroup {
