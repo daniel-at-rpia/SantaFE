@@ -9,7 +9,7 @@ import {
 
 import { SecurityGroupAverageVisualizerDTO } from 'FEModels/frontend-models.interface';
 import { SecurityGroupMetricBlock } from 'FEModels/frontend-blocks.interface';
-import { MetricOptions } from 'App/stubs/averageVisualizerMetrics.stub';
+import { MetricOptions } from 'App/stubs/marketModuleSpecifics.stub';
 
 @Component({
   selector: 'security-group-average-visualizer',

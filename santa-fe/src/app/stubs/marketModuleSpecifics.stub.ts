@@ -1,6 +1,5 @@
 import { SecurityDefinitionStub } from 'App/models/frontend/frontend-stub-models.interface';
 
-
 const FilterOptionsBoolean = [
   'Yes',
   'No'
@@ -163,7 +162,7 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     icon: 'fal fa-building',
     optionList: FilterOptionsTempPlaceholder
   },{
-    key: 'IS_BULLET',
+    key: 'MATURITY',
     displayName: 'Bullet',
     icon: 'fas fa-bolt',
     optionList: FilterOptionsBoolean
@@ -179,3 +178,85 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     optionList: FilterOptionsBoolean
   }
 ];
+
+export const MetricOptions = [
+  {
+    label: 'Tenor',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'Mtd',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'Size',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'Mtd',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'oasSpread',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'Mtd',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'Price',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'Mtd',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'YieldMaturity',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'Mtd',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'YieldWorst',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'Mtd',
+      'MoM',
+      'Ytd'
+    ]
+  }
+]
+
+export const PieChartConfiguratorOptions = {
+  left: [
+    'BAIL_IN_STATUS',
+    'CURRENCY',
+    'COUPON_TYPE',
+    'INDUSTRY',
+    'ISSUER',
+    'RATING'
+  ],
+  right: [
+    'RATING_BUCKET',
+    'SECTOR',
+    'SENIORITY',
+    'SUB_INDUSTRY',
+    'TENOR',
+    'MATURITY'
+  ]
+}

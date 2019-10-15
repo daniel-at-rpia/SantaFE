@@ -11,6 +11,11 @@ import {
 import { DTOService } from 'App/services/DTOService';
 import { SecurityGroupList } from 'App/stubs/securities.stub';
 import { MarketGroupPanelState } from 'FEModels/frontend-page-states.interface';
+import { SecurityDefinitionStub } from 'App/models/frontend/frontend-stub-models.interface';
+import {
+  PieChartConfiguratorOptions,
+  SecurityGroupDefinitionMap
+} from 'App/stubs/marketModuleSpecifics.stub';
 
 @Component({
   selector: 'market-group-panel',
@@ -23,6 +28,8 @@ export class MarketGroupPanel {
   state: MarketGroupPanelState;
   task$: Observable<any>;
   getGroupsSubscription: Subscription;
+  PieChartConfigurationOptions = PieChartConfiguratorOptions;
+  SecurityGroupDefinitionMap = SecurityGroupDefinitionMap;
 
   private initiateComponentState(){
     this.state = {
@@ -32,9 +39,37 @@ export class MarketGroupPanel {
       isConfiguratorCollapsed: false,
       isGroupDataLoaded: false,
       utility: {
-        selectedWidget: 'AVERAGE_VISUALIZER'
+        selectedWidget: 'AVERAGE_VISUALIZER',
+        pieConfigurator: {
+          left: {
+            selected: false,
+            options: [],
+            displayText: '',
+            activeMetric: null
+          },
+          right: {
+            selected: false,
+            options: [],
+            displayText: '',
+            activeMetric: null
+          }
+        }
       }
     };
+    this.state.utility.pieConfigurator.left.options = this.PieChartConfigurationOptions.left.map((eachOption) => {
+      const targetDefinition = SecurityGroupDefinitionMap.find((eachDefinition) => {
+        return eachDefinition.key === eachOption;
+      })
+      return targetDefinition;
+    });
+    this.state.utility.pieConfigurator.right.options = this.PieChartConfigurationOptions.right.map((eachOption) => {
+      const targetDefinition = SecurityGroupDefinitionMap.find((eachDefinition) => {
+        return eachDefinition.key === eachOption;
+      })
+      return targetDefinition;
+    });
+    this.onSelectPieConfiguratorMetric(this.state.utility.pieConfigurator.left, this.state.utility.pieConfigurator.left.options[5]);
+    this.onSelectPieConfiguratorMetric(this.state.utility.pieConfigurator.right, this.state.utility.pieConfigurator.right.options[2]);
   }
 
   constructor(
@@ -84,6 +119,15 @@ export class MarketGroupPanel {
 
   public onSwitchWidget(targetWidgetName){
     this.state.utility.selectedWidget = targetWidgetName;
+  }
+
+  public onClickPieConfigurator(targetPieConfigurator){
+    targetPieConfigurator.selected = !targetPieConfigurator.selected;
+  }
+
+  public onSelectPieConfiguratorMetric(targetPieConfigurator, targetMetric: SecurityDefinitionStub){
+    targetPieConfigurator.activeMetric = targetMetric;
+    targetPieConfigurator.displayText = targetMetric.displayName;
   }
 
   public updateGroupStats(){

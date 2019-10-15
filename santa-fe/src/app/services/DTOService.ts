@@ -14,13 +14,15 @@ import {
   SecurityGroupDefinitionFilterBlock
 } from 'FEModels/frontend-blocks.interface';
 import { SecurityDefinitionStub } from 'FEModels/frontend-stub-models.interface';
-import { SecurityGroupDefinitionMap } from 'App/stubs/securityGroupDefinitions.stub';
 import { UtilityService } from './UtilityService';
 import {
   SecurityGroupRatingColorScheme,
   SecurityGroupSeniorityColorScheme
 } from 'App/stubs/colorSchemes.stub';
-import { MetricOptions } from 'App/stubs/averageVisualizerMetrics.stub';
+import {
+  MetricOptions,
+  SecurityGroupDefinitionMap
+} from 'App/stubs/marketModuleSpecifics.stub';
 
 @Injectable()
 export class DTOService {

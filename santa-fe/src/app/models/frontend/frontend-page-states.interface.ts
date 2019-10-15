@@ -5,6 +5,7 @@ import {
   SecurityGroupDefinitionConfiguratorDTO,
   SecurityGroupAverageVisualizerDTO
 } from 'App/models/frontend/frontend-models.interface';
+import { SecurityDefinitionStub } from 'App/models/frontend/frontend-stub-models.interface';
 
 export interface MarketState {
   configurator: SecurityGroupDefinitionConfiguratorDTO;
@@ -25,6 +26,20 @@ export interface MarketGroupPanelState {
   isConfiguratorCollapsed: boolean;
   isGroupDataLoaded: boolean;
   utility: {
-    selectedWidget: string; 
+    selectedWidget: string;
+    pieConfigurator: {
+      left: {
+        selected: boolean;
+        options: Array<SecurityDefinitionStub>;
+        displayText: string;
+        activeMetric: SecurityDefinitionStub;
+      }
+      right: {
+        selected: boolean;
+        options: Array<SecurityDefinitionStub>;
+        displayText: string;
+        activeMetric: SecurityDefinitionStub;
+      }
+    }
   }
 }

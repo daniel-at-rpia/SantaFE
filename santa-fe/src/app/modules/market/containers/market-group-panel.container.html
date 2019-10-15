@@ -56,8 +56,42 @@
         </div>
       </div>
       <div class="sat-marketGroupPanel__groups-utility-pieConfigurator">
-        <div class="sat-marketGroupPanel__groups-utility-pieConfigurator-leftPie"></div>
-        <div class="sat-marketGroupPanel__groups-utility-pieConfigurator-rightPie"></div>
+        <div
+          (click)="onClickPieConfigurator(state.utility.pieConfigurator.left)"
+          [ngClass]="{
+            'sat-marketGroupPanel__groups-utility-pieConfigurator-leftPie': true,
+            'sat-marketGroupPanel__groups-utility-pieConfigurator-leftPie--selectedState': state.utility.pieConfigurator.left.selected
+          }">
+          <button
+            *ngFor="let eachOption of state.utility.pieConfigurator.left.options; let optionIndex = index"
+            (click)="onSelectPieConfiguratorMetric(state.utility.pieConfigurator.left, eachOption)"
+            class="sat-marketGroupPanel__groups-utility-pieConfigurator-leftPie-btn--{{optionIndex+1}} {{eachOption.icon}}"
+            [ngClass]="{
+              'sat-marketGroupPanel__groups-utility-pieConfigurator-leftPie-btn': true,
+              'santaBtn--iconOnly santaBtn--small': true,
+              'sat-marketGroupPanel__groups-utility-pieConfigurator-leftPie-btn--active': state.utility.pieConfigurator.left.activeMetric === eachOption
+            }">
+          </button>
+          <span class="sat-marketGroupPanel__groups-utility-pieConfigurator-leftPie-text">{{state.utility.pieConfigurator.left.displayText}}</span>
+        </div>
+        <div
+          (click)="onClickPieConfigurator(state.utility.pieConfigurator.right)"
+          [ngClass]="{
+            'sat-marketGroupPanel__groups-utility-pieConfigurator-rightPie': true,
+            'sat-marketGroupPanel__groups-utility-pieConfigurator-rightPie--selectedState': state.utility.pieConfigurator.right.selected
+          }">
+          <button
+            *ngFor="let eachOption of state.utility.pieConfigurator.right.options; let optionIndex = index"
+            (click)="onSelectPieConfiguratorMetric(state.utility.pieConfigurator.right, eachOption)"
+            class="sat-marketGroupPanel__groups-utility-pieConfigurator-rightPie-btn--{{optionIndex+1}} {{eachOption.icon}}"
+            [ngClass]="{
+              'sat-marketGroupPanel__groups-utility-pieConfigurator-rightPie-btn': true,
+              'santaBtn--iconOnly santaBtn--small': true,
+              'sat-marketGroupPanel__groups-utility-pieConfigurator-rightPie-btn--active': state.utility.pieConfigurator.right.activeMetric === eachOption
+            }">
+          </button>
+          <span class="sat-marketGroupPanel__groups-utility-pieConfigurator-rightPie-text">{{state.utility.pieConfigurator.right.displayText}}</span>
+        </div>
       </div>
       <div class="sat-marketGroupPanel__groups-utility-groupAverage">
         <security-group-average-visualizer
