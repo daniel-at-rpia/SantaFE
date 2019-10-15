@@ -56,7 +56,7 @@ $averageVisualizer_metricNames_width_expanded: $securityGroup_content_canvases_l
 
 $averageVisualizerName_nameCTA_width: 7.5rem;
 $averageVisualizerName_nameCTA_height: 1.5rem;
-$averageVisualizerName_value_width: 2.875rem;
+$averageVisualizerName_value_width: 3.25rem;
 $averageVisualizerName_metricSelectionDropdown_height: 20.25rem;
 $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
 .sat-securityGroupAverageVisualizerName {
@@ -75,7 +75,7 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
     flex: 0 0 $averageVisualizerName_nameCTA_width;
     height: $averageVisualizerName_nameCTA_height;
     padding: 0;
-    font-size: $font_size_x_small;
+    font-size: $font_size_small;
   }
   &__value {
     flex: 0 0 $averageVisualizerName_value_width;
@@ -192,7 +192,7 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
       }
     }
   }
-  &--emptyState#{$averageVisualizerNameBlockName}--prevEmpty {
+  &--emptyState#{$averageVisualizerNameBlockName}--nextEmpty {
     margin: 0;
     #{$averageVisualizerNameBlockName} {
       &__addMetric, &__metricSelectionDropdown {
@@ -228,7 +228,7 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
       }
     }
   }
-  &--emptyState#{$averageVisualizerValueBlockName}--prevEmpty {
+  &--emptyState#{$averageVisualizerValueBlockName}--nextEmpty {
     display: none;
   }
 }

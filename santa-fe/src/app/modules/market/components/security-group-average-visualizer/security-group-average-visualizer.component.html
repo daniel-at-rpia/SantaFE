@@ -11,7 +11,7 @@
         'sat-securityGroupAverageVisualizerName--selectedState': visualizerData.state.selectingStat === eachStat,
         'sat-securityGroupAverageVisualizerName--editingState': visualizerData.state.editingStat === eachStat,
         'sat-securityGroupAverageVisualizerName--emptyState': eachStat.isEmpty,
-        'sat-securityGroupAverageVisualizerName--prevEmpty': statIndex > 0 && visualizerData.data.stats[statIndex-1].isEmpty,
+        'sat-securityGroupAverageVisualizerName--nextEmpty': statIndex < visualizerData.data.stats.length-1 && visualizerData.data.stats[statIndex+1].isEmpty,
         'sat-securityGroupAverageVisualizerName--stencilState': visualizerData.state.isStencil
       }">
       <section class="sat-securityGroupAverageVisualizerName__leftMargin"></section>
@@ -95,7 +95,7 @@
       [ngClass]="{
         'sat-securityGroupAverageVisualizerValue': true,
         'sat-securityGroupAverageVisualizerValue--emptyState': eachStat.isEmpty,
-        'sat-securityGroupAverageVisualizerValue--prevEmpty': statIndex > 0 && visualizerData.data.stats[statIndex-1].isEmpty,
+        'sat-securityGroupAverageVisualizerValue--nextEmpty': statIndex < visualizerData.data.stats.length-1 && visualizerData.data.stats[statIndex+1].isEmpty,
         'sat-securityGroupAverageVisualizerValue--stencilState': visualizerData.state.isStencil
       }">
       <div [ngStyle]="{'width': eachStat.percentage + '%'}" class="sat-securityGroupAverageVisualizerValue__line">

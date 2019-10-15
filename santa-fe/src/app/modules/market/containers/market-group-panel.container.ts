@@ -30,7 +30,10 @@ export class MarketGroupPanel {
       securityGroupList: [],
       visualizer: this.dtoService.formAverageVisualizerObject(),
       isConfiguratorCollapsed: false,
-      isGroupDataLoaded: false
+      isGroupDataLoaded: false,
+      utility: {
+        selectedWidget: 'AVERAGE_VISUALIZER'
+      }
     };
   }
 
@@ -79,6 +82,10 @@ export class MarketGroupPanel {
     })
   }
 
+  public onSwitchWidget(targetWidgetName){
+    this.state.utility.selectedWidget = targetWidgetName;
+  }
+
   public updateGroupStats(){
     this.initializeGroupStats();
     this.calculateGroupAverage();
@@ -106,30 +113,34 @@ export class MarketGroupPanel {
 
   private calculateGroupAverage(){
     this.state.visualizer.data.stats.forEach((eachStat, statIndex) => {
-      let sum = 0;
-      let max = 0;
-      this.state.securityGroupList.forEach((eachGroup) => {
-        // this IF is only a safe check, should always pass
-        if (eachGroup.data.stats.length >= statIndex+1) {
-          const targetStat = eachGroup.data.stats[statIndex];
-          sum = sum + targetStat.value;
-          if (max < targetStat.value) {
-            max = targetStat.value;
+      if (!eachStat.isEmpty) {
+        let sum = 0;
+        let max = 0;
+        this.state.securityGroupList.forEach((eachGroup) => {
+          const targetStat = eachGroup.data.stats.find((eachGroupStat) => {
+            return eachGroupStat.label === eachStat.label;
+          });
+          if (!!targetStat) {
+            sum = sum + targetStat.value;
+            if (max < targetStat.value) {
+              max = targetStat.value;
+            }
           }
-        }
-      });
-      let average = Math.round(sum / this.state.securityGroupList.length * 100)/100;
-      eachStat.max = max;
-      eachStat.value = average;
-      eachStat.percentage = Math.round(average/max * 10000)/100;
-      this.state.securityGroupList.forEach((eachGroup) => {
-        // this IF is only a safe check, should always pass
-        if (eachGroup.data.stats.length >= statIndex+1) {
-          const targetStat = eachGroup.data.stats[statIndex];
-          targetStat.max = max;
-          targetStat.percentage = Math.round(targetStat.value/targetStat.max * 10000)/100;
-        }
-      });
+        });
+        let average = Math.round(sum / this.state.securityGroupList.length * 100)/100;
+        eachStat.max = max;
+        eachStat.value = average;
+        eachStat.percentage = Math.round(average/max * 10000)/100;
+        this.state.securityGroupList.forEach((eachGroup) => {
+          const targetStat = eachGroup.data.stats.find((eachGroupStat) => {
+            return eachGroupStat.label === eachStat.label;
+          });
+          if (!!targetStat) {
+            targetStat.max = max;
+            targetStat.percentage = Math.round(targetStat.value/targetStat.max * 10000)/100;
+          }
+        });
+      }
     });
   }
 }

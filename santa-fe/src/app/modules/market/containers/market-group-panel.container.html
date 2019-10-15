@@ -1,6 +1,8 @@
 <article [ngClass]="{
   'sat-marketGroupPanel': true, 
   'sat-marketGroupPanel--configuratorCollapsedState': state.isConfiguratorCollapsed,
+  'sat-marketGroupPanel--averageVisualizerEnabledState': state.utility.selectedWidget === 'AVERAGE_VISUALIZER',
+  'sat-marketGroupPanel--pieConfiguratorEnabledState': state.utility.selectedWidget === 'PIE_CONFIGURATOR',
   'sat-marketGroupPanel--searchInProgressState': this.state.configurator.state.isLoading,
   'sat-marketGroupPanel--searchCompletedState': this.state.isGroupDataLoaded
 }">
@@ -26,6 +28,32 @@
       <div class="sat-marketGroupPanel__groups-utility-prompt">
         <span class="sat-marketGroupPanel__groups-utility-prompt-highlightText">{{state.securityGroupList.length}}</span>
         <span class="sat-marketGroupPanel__groups-utility-prompt-text">groups matched your search</span>
+      </div>
+      <div class="sat-marketGroupPanel__groups-utility-widgetSelector">
+        <div class="sat-marketGroupPanel__groups-utility-widgetSelector-btnGroup santaBtnGroup">
+          <button
+            (click)="onSwitchWidget('AVERAGE_VISUALIZER')"
+            [ngClass]="{
+              'sat-marketGroupPanel__groups-utility-widgetSelector-btnGroup-btn': true,
+              'santaBtn--labelled': true,
+              'sat-marketGroupPanel__groups-utility-widgetSelector-btnGroup-btn--selected': state.utility.selectedWidget === 'AVERAGE_VISUALIZER',
+              'santaBtn--inverseLabelled': state.utility.selectedWidget === 'AVERAGE_VISUALIZER'
+            }">
+            <i class="fas fa-calculator"></i>
+            <span>Average Calculator</span>
+          </button>
+          <button
+            (click)="onSwitchWidget('PIE_CONFIGURATOR')"
+            [ngClass]="{
+              'sat-marketGroupPanel__groups-utility-widgetSelector-btnGroup-btn': true,
+              'santaBtn--labelled': true,
+              'sat-marketGroupPanel__groups-utility-widgetSelector-btnGroup-btn--selected': state.utility.selectedWidget === 'PIE_CONFIGURATOR',
+              'santaBtn--inverseLabelled': state.utility.selectedWidget === 'PIE_CONFIGURATOR'
+            }">
+            <i class="fas fa-chart-pie"></i>
+            <span>Pie Configurator</span>
+          </button>
+        </div>
       </div>
       <div class="sat-marketGroupPanel__groups-utility-pieConfigurator">
         <div class="sat-marketGroupPanel__groups-utility-pieConfigurator-leftPie"></div>

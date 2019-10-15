@@ -24,4 +24,7 @@ export interface MarketGroupPanelState {
   securityGroupList: Array<SecurityGroupDTO>;
   isConfiguratorCollapsed: boolean;
   isGroupDataLoaded: boolean;
+  utility: {
+    selectedWidget: string; 
+  }
 }

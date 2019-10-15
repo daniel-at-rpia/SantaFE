@@ -142,19 +142,19 @@ export class DTOService {
       data: {
         stats: [
           {
+            isEmpty: true,
+            label: '',
+            value: 100,
+            max: 100,
+            percentage: 100
+          },{
+            isEmpty: true,
+            label: '',
+            value: 100,
+            max: 100,
+            percentage: 100
+          },{
             label: MetricOptions[1].label,
-            value: 100,
-            max: 100,
-            percentage: 100
-          },{
-            isEmpty: true,
-            label: '',
-            value: 100,
-            max: 100,
-            percentage: 100
-          },{
-            isEmpty: true,
-            label: '',
             value: 100,
             max: 100,
             percentage: 100
