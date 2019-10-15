@@ -42,15 +42,16 @@ export class MarketGroupPanel {
 
   public onClickSearchInConfigurator(){
     this.state.securityGroupList = [];
-    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, this.state.visualizer, true));
-    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, this.state.visualizer, true));
-    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, this.state.visualizer, true));
-    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, this.state.visualizer, true));
-    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, this.state.visualizer, true));
-    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, this.state.visualizer, true));
-    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, this.state.visualizer, true));
-    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, this.state.visualizer, true));
-    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, this.state.visualizer, true));
+    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
+    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
+    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
+    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
+    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
+    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
+    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
+    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
+    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
+    this.initializeGroupStats();
     this.state.visualizer.state.isEmpty = false;
     this.state.visualizer.state.isStencil = true;
 
@@ -58,13 +59,13 @@ export class MarketGroupPanel {
     this.getGroupsSubscription = this.task$.pipe(
       tap(() => {
         this.state.securityGroupList.forEach((eachGroup, index) => {
-          eachGroup.data = this.dtoService.formSecurityGroupObject(SecurityGroupList[index%3], this.state.visualizer).data;
+          eachGroup.data = this.dtoService.formSecurityGroupObject(SecurityGroupList[index%3]).data;
           eachGroup.state.isStencil = false;
         });
         this.state.configurator.state.isLoading = false;
         this.state.visualizer.state.isStencil = false;
         this.state.isGroupDataLoaded = true;
-        this.state.securityGroupList.length > 0 && this.calculateGroupAverage();
+        this.state.securityGroupList.length > 0 && this.updateGroupStats();
       }),
       first()
     ).subscribe();
@@ -76,6 +77,31 @@ export class MarketGroupPanel {
     this.state.securityGroupList.forEach((eachGroup) => {
       eachGroup.state.isExpanded = this.state.isConfiguratorCollapsed;
     })
+  }
+
+  public updateGroupStats(){
+    this.initializeGroupStats();
+    this.calculateGroupAverage();
+  }
+
+  private initializeGroupStats(){
+    this.state.securityGroupList.forEach((eachGroup) => {
+      eachGroup.data.stats = [];
+      this.state.visualizer.data.stats.forEach((eachStat, index) => {
+        if (!eachStat.isEmpty) {
+          const newStat = {
+            label: eachStat.label,
+            value: Math.floor(Math.random()*1000),
+            max: null,
+            percentage: null
+          };
+          if (index === 2) {
+            newStat.value = Math.floor(Math.random()*1000)/100;
+          };
+          eachGroup.data.stats.push(newStat);
+        }
+      });
+    });
   }
 
   private calculateGroupAverage(){

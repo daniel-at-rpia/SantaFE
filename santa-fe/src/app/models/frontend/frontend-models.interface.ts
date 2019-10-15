@@ -1,5 +1,5 @@
 import {
-  SecurityGroupStatBlock,
+  SecurityGroupMetricBlock,
   SecurityGroupPieChartBlock,
   SecurityGroupDefinitionFilterBlock
 } from 'FEModels/frontend-blocks.interface';
@@ -31,7 +31,7 @@ export interface SecurityGroupDTO extends BasicDTOStructure {
     ratingLevel: number;
     ratingValue: string;
     numOfSecurities: number;
-    stats: Array<SecurityGroupStatBlock>
+    stats: Array<SecurityGroupMetricBlock>;
   }
   state: {
     isExpanded: boolean;
@@ -41,7 +41,7 @@ export interface SecurityGroupDTO extends BasicDTOStructure {
   }
   graph: {
     leftPie: SecurityGroupPieChartBlock;
-    rightPie: SecurityGroupPieChartBlock
+    rightPie: SecurityGroupPieChartBlock;
   }
 }
 
@@ -49,7 +49,7 @@ export interface SecurityGroupDefinitionDTO extends BasicDTOStructure {
   data: {
     name: string;
     key: string;
-    filterOptionList: Array<SecurityGroupDefinitionFilterBlock>
+    filterOptionList: Array<SecurityGroupDefinitionFilterBlock>;
   }
   style: {
     icon: string;
@@ -77,11 +77,13 @@ export interface SecurityGroupDefinitionConfiguratorDTO extends BasicDTOStructur
 
 export interface SecurityGroupAverageVisualizerDTO extends BasicDTOStructure {
   data: {
-    stats: Array<SecurityGroupStatBlock>    
+    stats: Array<SecurityGroupMetricBlock>;
   },
   state: {
     isEmpty: boolean;
     isStencil: boolean;
     isExpanded: boolean;
+    selectingStat: SecurityGroupMetricBlock;
+    editingStat: SecurityGroupMetricBlock;
   }
 }

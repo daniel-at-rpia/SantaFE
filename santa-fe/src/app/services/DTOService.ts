@@ -53,7 +53,6 @@ export class DTOService {
 
   public formSecurityGroupObject(
     rawData: BESecurityGroupDTO,
-    averageVisualizer: SecurityGroupAverageVisualizerDTO,
     isStencil?: boolean
   ): SecurityGroupDTO {
     const ratingLevel = Math.floor(Math.random()*7 + 1);
@@ -84,20 +83,6 @@ export class DTOService {
         }
       }
     };
-    averageVisualizer.data.stats.forEach((eachStat, index) => {
-      if (!eachStat.isEmpty) {
-        const newStat = {
-          label: eachStat.label,
-          value: Math.floor(Math.random()*1000),
-          max: null,
-          percentage: null
-        };
-        if (index === 2) {
-          newStat.value = Math.floor(Math.random()*1000)/100;
-        };
-        object.data.stats.push(newStat);
-      }
-    });
     return object;
   }
 
@@ -182,7 +167,9 @@ export class DTOService {
       state: {
         isEmpty: true,
         isStencil: false,
-        isExpanded: false
+        isExpanded: false,
+        selectingStat: null,
+        editingStat: null
       }
     }
     return object;
