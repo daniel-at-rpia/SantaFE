@@ -55,7 +55,7 @@ export class MarketGroupPanel {
     this.state.visualizer.state.isEmpty = false;
     this.state.visualizer.state.isStencil = true;
 
-    this.task$ = interval(2000);
+    this.task$ = interval(200);
     this.getGroupsSubscription = this.task$.pipe(
       tap(() => {
         this.state.securityGroupList.forEach((eachGroup, index) => {

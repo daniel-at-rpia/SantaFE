@@ -13,17 +13,14 @@ import {
 import {
   SecurityGroupDefinitionFilterBlock
 } from 'FEModels/frontend-blocks.interface';
-import {
-  SecurityDefinitionStub
-} from 'FEModels/frontend-stub-models.interface';
-import {
-  SecurityGroupDefinitionMap
-} from 'App/stubs/securityGroupDefinitions.stub';
+import { SecurityDefinitionStub } from 'FEModels/frontend-stub-models.interface';
+import { SecurityGroupDefinitionMap } from 'App/stubs/securityGroupDefinitions.stub';
 import { UtilityService } from './UtilityService';
 import {
   SecurityGroupRatingColorScheme,
   SecurityGroupSeniorityColorScheme
 } from 'App/stubs/colorSchemes.stub';
+import { MetricOptions } from 'App/stubs/averageVisualizerMetrics.stub';
 
 @Injectable()
 export class DTOService {
@@ -145,19 +142,19 @@ export class DTOService {
       data: {
         stats: [
           {
-            label: 'Tenor',
+            label: MetricOptions[1].label,
             value: 100,
             max: 100,
             percentage: 100
           },{
             isEmpty: true,
-            label: 'Size',
+            label: '',
             value: 100,
             max: 100,
             percentage: 100
           },{
             isEmpty: true,
-            label: 'T-Spread WoW',
+            label: '',
             value: 100,
             max: 100,
             percentage: 100
@@ -169,7 +166,10 @@ export class DTOService {
         isStencil: false,
         isExpanded: false,
         selectingStat: null,
-        editingStat: null
+        editingStat: null,
+        editingStatSelectedMetric: null,
+        editingStatSelectedMetricValueType: null,
+        editingStatSelectedMetricDeltaType: null
       }
     }
     return object;
