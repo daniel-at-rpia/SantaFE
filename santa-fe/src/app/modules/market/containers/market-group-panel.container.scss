@@ -44,10 +44,10 @@
     flex-direction: column;
     &-utility {
       flex: 0 0 auto;
-      display: flex;
+      display: none;
       flex-direction: column;
       &-prompt {
-        display: none;
+        display: flex;
         align-items: center;
         flex-wrap: wrap;
         margin-bottom: $spacing_medium;
@@ -63,9 +63,27 @@
         }
       }
       &-groupAverage {
-        display: none;
+        display: flex;
         flex-direction: column;
         padding: 0 $marketGroupPanel_groups_list_padding;
+      }
+      &-pieConfigurator {
+        display: flex;
+        justify-content: space-between;
+        margin: $spacing_medium 0;
+        padding: 0 $marketGroupPanel_groups_list_padding;
+        &-leftPie {
+          @include mix_border_generator;
+          @include mix_border_radius(50%);
+          width: $securityGroup_base_wheel_size;
+          height: $securityGroup_base_wheel_size;
+        }
+        &-rightPie {
+          @include mix_border_generator;
+          @include mix_border_radius(50%);
+          width: $securityGroup_base_wheel_size;
+          height: $securityGroup_base_wheel_size;
+        }
       }
     }
     &-list {
@@ -92,14 +110,9 @@
         transform: scale(1);
       }
       &__groups-utility {
-        &-prompt {
-          display: flex;
-          &-highlightText {
-            @include mix_stencil_animation;
-          }
-        }
-        &-groupAverage {
-          display: flex;
+        display: flex;
+        &-prompt-highlightText {
+          @include mix_stencil_animation;
         }
       }
     }
@@ -110,12 +123,7 @@
         transform: scale(1);
       }
       &__groups-utility {
-        &-prompt {
-          display: flex;
-        }
-        &-groupAverage {
-          display: flex;
-        }
+        display: flex;
       }
     }
   }

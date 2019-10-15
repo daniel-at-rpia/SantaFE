@@ -27,9 +27,13 @@
         <span class="sat-marketGroupPanel__groups-utility-prompt-highlightText">{{state.securityGroupList.length}}</span>
         <span class="sat-marketGroupPanel__groups-utility-prompt-text">groups matched your search</span>
       </div>
-    </div>
-    <div class="sat-marketGroupPanel__groups-utility-groupAverage">
-      <security-group-average-visualizer [visualizerData]="state.visualizer"></security-group-average-visualizer>
+      <div class="sat-marketGroupPanel__groups-utility-groupAverage">
+        <security-group-average-visualizer [visualizerData]="state.visualizer"></security-group-average-visualizer>
+      </div>
+      <div class="sat-marketGroupPanel__groups-utility-pieConfigurator">
+        <div class="sat-marketGroupPanel__groups-utility-pieConfigurator-leftPie"></div>
+        <div class="sat-marketGroupPanel__groups-utility-pieConfigurator-rightPie"></div>
+      </div>
     </div>
     <ul class="sat-marketGroupPanel__groups-list">
       <li *ngFor="let eachGroup of state.securityGroupList; let i = index" class="sat-marketGroupPanel__groups-list-item">
