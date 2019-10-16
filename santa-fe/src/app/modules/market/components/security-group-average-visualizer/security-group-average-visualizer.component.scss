@@ -57,7 +57,7 @@ $averageVisualizer_metricNames_width_expanded: $securityGroup_content_canvases_l
 $averageVisualizerName_nameCTA_width: 7.5rem;
 $averageVisualizerName_nameCTA_height: 1.5rem;
 $averageVisualizerName_value_width: 3.25rem;
-$averageVisualizerName_metricSelectionDropdown_height: 20.25rem;
+$averageVisualizerName_metricSelectionDropdown_size: 24rem;
 $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
 .sat-securityGroupAverageVisualizerName {
   $averageVisualizerNameBlockName: &;
@@ -120,7 +120,7 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
   &__metricSelectionDropdown {
     @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
     top: $spacing_large;
-    right: $averageVisualizerName_value_width + $spacing_small;
+    right: -50%;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -156,7 +156,8 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
       }
       &__metricSelectionDropdown-content {
         @include mix_border_generator;
-        height: $averageVisualizerName_metricSelectionDropdown_height;
+        height: $averageVisualizerName_metricSelectionDropdown_size;
+        width: $averageVisualizerName_metricSelectionDropdown_size;
         background-color: $color_white;
         transform: translate(0, 0);
       }
@@ -265,8 +266,11 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
     &-list {
       display: flex;
       justify-content: flex-start;
-      margin: $spacing_medium 0 0 $spacing_large;
+      flex-wrap: wrap;
+      margin: 0 0 0 $spacing_large;
       &-item {
+        flex: 1 1 auto;
+        margin-top: $spacing_medium;
         margin-right: $spacing_medium;
         font-size: $font_size_small;
         &--selected {
@@ -291,8 +295,11 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
     &-list {
       display: flex;
       justify-content: flex-start;
-      margin: $spacing_medium 0 0 $spacing_large;
+      flex-wrap: wrap;
+      margin: 0 0 0 $spacing_large;
       &-item {
+        flex: 1 1 auto;
+        margin-top: $spacing_medium;
         margin-right: $spacing_medium;
         font-size: $font_size_small;
         &--selected {
@@ -317,8 +324,11 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
     &-list {
       display: flex;
       justify-content: flex-start;
-      margin: $spacing_medium 0 0 $spacing_large;
+      flex-wrap: wrap;
+      margin: 0 0 0 $spacing_large;
       &-item {
+        flex: 1 1 auto;
+        margin-top: $spacing_medium;
         margin-right: $spacing_medium;
         font-size: $font_size_small;
         &--selected {
