@@ -83,22 +83,17 @@ export class MarketGroupPanel {
     this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
     this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
     this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
-    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
-    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
-    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
-    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
-    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
-    this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(null, true));
     this.initializeGroupStats();
     this.state.visualizer.state.isEmpty = false;
     this.state.visualizer.state.isStencil = true;
 
-    this.task$ = interval(200);
+    this.task$ = interval(2000);
     this.getGroupsSubscription = this.task$.pipe(
       tap(() => {
-        this.state.securityGroupList.forEach((eachGroup, index) => {
-          eachGroup.data = this.dtoService.formSecurityGroupObject(SecurityGroupList[index%3]).data;
-          eachGroup.state.isStencil = false;
+        //this.state.securityGroupList = [];
+        //this.state.securityGroupList.push(this.dtoService.formSecurityGroupObject(SecurityGroupList[0]));
+        this.state.securityGroupList = SecurityGroupList.map((eachStub) => {
+          return this.dtoService.formSecurityGroupObject(eachStub);
         });
         this.state.configurator.state.isLoading = false;
         this.state.visualizer.state.isStencil = false;

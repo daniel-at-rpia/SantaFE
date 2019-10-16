@@ -20,38 +20,60 @@ export interface BESecurityDTO {
 }
 
 export interface BESecurityGroupDTO {
-  date: string;
   source: string;
+  date: string;
   metricsType: string;
   groupIdentifier: {
-    securityType: string;
-    ccy: string;
-    tenor: string;
+    groupOptionValues: {
+      SecurityType: string;
+      Ccy: string;
+      Tenor: string;
+    };
+    tenorOptions: Array<string>
   }
+  numSecurities: number;
   groupName: string;
-  mostRecentTimeSeriesDate: string;
-  numOfSecurities: number;
   metrics: BEMetricDTO,
-  mostRecentDeltaMetrics: {
-    DoD: BEMetricDTO;
-    WoW: BEMetricDTO;
-    Mtd: BEMetricDTO;
-    MoM: BEMetricDTO;
-    Ytd: BEMetricDTO;
+  deltaMetrics: {
+    DoD: BEMetricDTO,
+    WoW?: BEMetricDTO,
+    Mtd?: BEMetricDTO,
+    MoM?: BEMetricDTO,
+    Ytd?: BEMetricDTO
+  },
+  descriptiveMetrics: {
+    SecurityType: any;
+    BailInStatus: any;
+    Ccy: any;
+    CouponType: any;
+    Industry: any;
+    Issuer: any;
+    RatingNoNotch: any;
+    RatingBucket: any;
+    Sector: any;
+    Seniority: any;
+    SubIndustry: any;
+    Tenor: any;
   }
 }
 
 interface BEMetricDTO {
-  //fieldToSecurityIdentifiers: {
-    //amtOutstanding: Array<number>;
-    //ratingDouble: Array<number>;
-  //}
-  numOfSecurities: number;
+  tenor: string;
+  propertyToNumSecurities: {
+    WorkoutTerm: number;
+    AmtOutstanding: number;
+    RatingDouble: number;
+    OasSpread?: number;
+    Price: number;
+    YieldMaturity?: number;
+    YieldWorst?: number;
+  }
   workoutTerm: number;
   amtOutstanding: number;
-  ratingDouble: number;
   oasSpread: number;
   price: number;
   yieldMaturity: number;
   yieldWorst: number;
+  rating: string;
+  ratingNoNotch: string;
 }

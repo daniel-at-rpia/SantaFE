@@ -60,7 +60,7 @@ export class DTOService {
         name: isStencil ? 'PLACEHOLDER' : rawData.groupName,
         ratingLevel: ratingLevel,
         ratingValue: this.utility.mapRatings(ratingLevel),
-        numOfSecurities: isStencil ? 32 : rawData.numOfSecurities,
+        numOfSecurities: isStencil ? 32 : rawData.numSecurities,
         stats: []
       },
       state: {

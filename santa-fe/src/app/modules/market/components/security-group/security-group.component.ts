@@ -6,6 +6,14 @@ import {
   Input,
   Output
 } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
+import {
+  interval
+} from 'rxjs';
+import {
+  tap,
+  first
+} from 'rxjs/operators';
 
 import {
   SecurityGroupRatingColorScheme,
@@ -23,6 +31,9 @@ import { GraphService } from 'App/services/GraphService';
 export class SecurityGroup implements OnInit, OnChanges {
   @Input() groupData: SecurityGroupDTO;
   @Input() isDataReady: boolean;
+  task$: Observable<any>;
+  getGroupsSubscription: Subscription;
+
   constructor(
     private graphService: GraphService
   ) {}
@@ -32,8 +43,14 @@ export class SecurityGroup implements OnInit, OnChanges {
 
   ngOnChanges() {
     if (!this.groupData.state.isStencil && !this.groupData.state.stencilAnimationComplete) {
-      this.groupData.state.stencilAnimationComplete = true;
-      this.populateGraphs();
+          this.groupData.state.stencilAnimationComplete = true;
+      this.task$ = interval(400);
+      this.getGroupsSubscription = this.task$.pipe(
+        tap(() => {
+          this.populateGraphs();
+        }),
+        first()
+      ).subscribe();
     }
   }
 
