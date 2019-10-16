@@ -61,7 +61,8 @@ export class DTOService {
         ratingLevel: ratingLevel,
         ratingValue: this.utility.mapRatings(ratingLevel),
         numOfSecurities: isStencil ? 32 : rawData.numSecurities,
-        stats: []
+        stats: [],
+        metrics: this.utility.packMetricData(rawData)
       },
       state: {
         isSelected: false,

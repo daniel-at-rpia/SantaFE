@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { BESecurityGroupDTO } from 'BEModels/backend-models.interface';
+import { SecurityGroupDTO } from 'FEModels/frontend-models.interface';
+import { MetricOptions } from 'App/stubs/marketModuleSpecifics.stub';
 import uuid from 'uuidv4';
 
 declare const require: any;
@@ -7,6 +10,7 @@ export const cloneDeep = require('lodash.cloneDeep');
 @Injectable()
 export class UtilityService {
   // Any code about naming stuff goes into this service
+  metricOptions = MetricOptions;
 
   constructor(){}
 
@@ -54,6 +58,41 @@ export class UtilityService {
 
   public formDefinitionFilterOptionKey(name, normalizedOption): string {
     return `${name}/${normalizedOption}`;
+  }
+
+  public packMetricData(rawData: BESecurityGroupDTO): object{
+    const object = {};
+    if (!!rawData) {
+      this.metricOptions.forEach((eachMetric) => {
+        const rawValue = rawData.metrics[eachMetric.backendDtoAttrName];
+        if (!!rawValue) {
+          if (eachMetric.label === 'Size') {
+            object[eachMetric.label] = Math.round(rawValue/100)/10000;
+          } else {
+            object[eachMetric.label] = Math.round(rawValue*10000)/10000;
+          }
+        } else {
+          object[eachMetric.label] = 0;
+        }
+      });
+    }
+    return object;
+  }
+
+  public retrieveGroupMetricValue(metricLabel: string, groupDTO: SecurityGroupDTO): number{
+    if (!!groupDTO) {
+      const value = groupDTO.data.metrics[metricLabel];
+      if (!!value) {
+        if (metricLabel === 'Size') {
+          return Math.round(value);
+        } else {
+          return Math.round(value*100)/100;
+        }
+      } else {
+        return 0;
+      }
+    }
+    return 0;
   }
 
 }

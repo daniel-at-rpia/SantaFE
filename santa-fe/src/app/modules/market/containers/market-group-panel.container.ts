@@ -21,7 +21,11 @@ import {
 } from 'rxjs/operators';
 
 import { DTOService } from 'App/services/DTOService';
+import { UtilityService } from 'App/services/UtilityService';
+
 import { MarketGroupPanelState } from 'FEModels/frontend-page-states.interface';
+import { SecurityGroupMetricBlock } from 'FEModels/frontend-blocks.interface';
+import { SecurityGroupDTO } from 'FEModels/frontend-models.interface';
 import { BESecurityGroupDTO } from 'BEModels/backend-models.interface';
 
 import { SecurityGroupList } from 'App/stubs/securities.stub';
@@ -91,7 +95,8 @@ export class MarketGroupPanel implements OnDestroy {
   }
 
   constructor(
-    private dtoService: DTOService
+    private dtoService: DTOService,
+    private utilityService: UtilityService
   ){
     this.initiateComponentState();
   }
@@ -188,17 +193,14 @@ export class MarketGroupPanel implements OnDestroy {
     });
   }
 
-  private initializeStatForGroup(targetGroup){
+  private initializeStatForGroup(targetGroup: SecurityGroupDTO){
     this.state.utility.visualizer.data.stats.forEach((eachStat, index) => {
       if (!eachStat.isEmpty) {
-        const newStat = {
+        const newStat:SecurityGroupMetricBlock = {
           label: eachStat.label,
-          value: Math.floor(Math.random()*1000),
+          value: this.utilityService.retrieveGroupMetricValue(eachStat.label, targetGroup),
           max: null,
           percentage: null
-        };
-        if (index === 2) {
-          newStat.value = Math.floor(Math.random()*1000)/100;
         };
         targetGroup.data.stats.push(newStat);
       }

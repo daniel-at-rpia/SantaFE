@@ -1,4 +1,7 @@
-import { SecurityDefinitionStub } from 'App/models/frontend/frontend-stub-models.interface';
+import {
+  SecurityDefinitionStub,
+  SecurityMetricOptionStub
+} from 'App/models/frontend/frontend-stub-models.interface';
 
 const FilterOptionsBoolean = [
   'Yes',
@@ -179,9 +182,10 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
   }
 ];
 
-export const MetricOptions = [
+export const MetricOptions:Array<SecurityMetricOptionStub> = [
   {
     label: 'Tenor',
+    backendDtoAttrName: 'workoutTerm',
     deltaOptions: [
       'DoD',
       'WoW',
@@ -192,6 +196,7 @@ export const MetricOptions = [
   },
   {
     label: 'Size',
+    backendDtoAttrName: 'amtOutstanding',
     deltaOptions: [
       'DoD',
       'WoW',
@@ -201,7 +206,8 @@ export const MetricOptions = [
     ]
   },
   {
-    label: 'oasSpread',
+    label: 'OAS-Spread',
+    backendDtoAttrName: 'oasSpread',
     deltaOptions: [
       'DoD',
       'WoW',
@@ -212,6 +218,7 @@ export const MetricOptions = [
   },
   {
     label: 'Price',
+    backendDtoAttrName: 'price',
     deltaOptions: [
       'DoD',
       'WoW',
@@ -222,6 +229,7 @@ export const MetricOptions = [
   },
   {
     label: 'YieldMaturity',
+    backendDtoAttrName: 'yieldMaturity',
     deltaOptions: [
       'DoD',
       'WoW',
@@ -232,6 +240,7 @@ export const MetricOptions = [
   },
   {
     label: 'YieldWorst',
+    backendDtoAttrName: 'yieldWorst',
     deltaOptions: [
       'DoD',
       'WoW',
