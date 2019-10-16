@@ -38,7 +38,7 @@ export class DTOService {
       data: {
         name: rawData.name,
         ratingLevel: ratingLevel,
-        ratingValue: this.utility.mapRatings(ratingLevel),
+        ratingValue: this.utility.mapRatingsReverse(ratingLevel),
         seniorityLevel: Math.floor(Math.random()*5 + 1)
       },
       state: {
@@ -54,15 +54,15 @@ export class DTOService {
     rawData: BESecurityGroupDTO,
     isStencil?: boolean
   ): SecurityGroupDTO {
-    const ratingLevel = Math.floor(Math.random()*7 + 1);
     const object:SecurityGroupDTO = {
       data: {
         name: isStencil ? 'PLACEHOLDER' : rawData.groupName,
-        ratingLevel: ratingLevel,
-        ratingValue: this.utility.mapRatings(ratingLevel),
+        ratingLevel: isStencil ? 1 : this.utility.mapRatings(rawData.metrics['ratingNoNotch']),
+        ratingValue: isStencil ? 'AA' : rawData.metrics['ratingNoNotch'],
         numOfSecurities: isStencil ? 32 : rawData.numSecurities,
         stats: [],
-        metrics: this.utility.packMetricData(rawData)
+        metrics: this.utility.packMetricData(rawData),
+        primaryMetric: this.utility.retrievePrimaryMetricValue(rawData)
       },
       state: {
         isSelected: false,

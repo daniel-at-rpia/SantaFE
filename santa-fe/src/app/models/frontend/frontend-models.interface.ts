@@ -33,6 +33,7 @@ export interface SecurityGroupDTO extends BasicDTOStructure {
     numOfSecurities: number;
     stats: Array<SecurityGroupMetricBlock>;
     metrics: object;
+    primaryMetric: string;
   }
   state: {
     isExpanded: boolean;

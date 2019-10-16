@@ -166,8 +166,11 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
           &-value {
             flex: 0 0 auto;
             display: flex;
+            justify-content: center;
+            max-width: $securityGroup_content_canvases_left_width;
             &-text {
               @include mix_border_radius(5px);
+              @include mix_text_overflow();
               padding: 0 $spacing_medium;
               background-color: $color_white;
               user-select: none;
@@ -263,9 +266,14 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
       &__content-canvases {
         &-left {
           flex: 0 0 $securityGroup_content_canvases_left_width_expanded;
-          &-content-name-text {
-            @include mix_text_overflow_multi_line(3);
-            line-height: $line_height_x_small;
+          &-content {
+            &-name-text {
+              @include mix_text_overflow_multi_line(3);
+              line-height: $line_height_x_small;
+            }
+            &-value {
+              max-width: $securityGroup_content_canvases_left_width_expanded;
+            }
           }
         }
         &-behind {
@@ -415,6 +423,9 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
     &__content-canvases {
       &-left {
         flex: 0 0 $securityGroup_content_canvases_left_width_expanded;
+        &-content-value {
+          max-width: $securityGroup_content_canvases_left_width_expanded;
+        }
       }
       &-behind {
         @include mix_calculate(right, 100%, $securityGroup_content_canvases_left_width_expanded, '-');

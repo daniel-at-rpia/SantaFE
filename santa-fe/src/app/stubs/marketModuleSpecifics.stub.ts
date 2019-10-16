@@ -182,6 +182,13 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
   }
 ];
 
+export const BackendKeyDictionary = {
+  'RATING': 'ratingNoNotch',
+  'SPREAD': 'oasSpread',
+  'PRICE': 'price',
+  'YIELD': 'yieldWorst'
+};
+
 export const MetricOptions:Array<SecurityMetricOptionStub> = [
   {
     label: 'Tenor',

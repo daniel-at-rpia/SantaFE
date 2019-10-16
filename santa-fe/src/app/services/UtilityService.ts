@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BESecurityGroupDTO } from 'BEModels/backend-models.interface';
 import { SecurityGroupDTO } from 'FEModels/frontend-models.interface';
-import { MetricOptions } from 'App/stubs/marketModuleSpecifics.stub';
+import {
+  MetricOptions,
+  BackendKeyDictionary
+} from 'App/stubs/marketModuleSpecifics.stub';
 import uuid from 'uuidv4';
 
 declare const require: any;
@@ -11,6 +14,7 @@ export const cloneDeep = require('lodash.cloneDeep');
 export class UtilityService {
   // Any code about naming stuff goes into this service
   metricOptions = MetricOptions;
+  keyDictionary = BackendKeyDictionary;
 
   constructor(){}
 
@@ -23,7 +27,42 @@ export class UtilityService {
     }
   }
 
-  public mapRatings(input): string {
+  public mapRatings(input): number {
+    switch (input) {
+      case 'AAA':
+        return 1;
+      case 'AA':
+        return 2;
+      case 'A':
+        return 3;
+      case 'BBB':
+        return 4;
+      case 'BB':
+        return 5;
+      case 'B':
+        return 6;
+      case 'CCC':
+        return 7;
+      case 'CC':
+        return 7;
+      case 'C':
+        return 7;
+      case 'D':
+        return 7;
+      default:
+        return 0;
+    }
+  }
+
+  public isIG(input:string): boolean {
+    if (input === 'AAA' || input === 'AA' || input === 'A' || input === 'BBB') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public mapRatingsReverse(input): string {
     switch (input) {
       case 1:
         return 'AAA';
@@ -60,7 +99,7 @@ export class UtilityService {
     return `${name}/${normalizedOption}`;
   }
 
-  public packMetricData(rawData: BESecurityGroupDTO): object{
+  public packMetricData(rawData: BESecurityGroupDTO): object {
     const object = {};
     if (!!rawData) {
       this.metricOptions.forEach((eachMetric) => {
@@ -79,7 +118,7 @@ export class UtilityService {
     return object;
   }
 
-  public retrieveGroupMetricValue(metricLabel: string, groupDTO: SecurityGroupDTO): number{
+  public retrieveGroupMetricValue(metricLabel: string, groupDTO: SecurityGroupDTO): number {
     if (!!groupDTO) {
       const value = groupDTO.data.metrics[metricLabel];
       if (!!value) {
@@ -93,6 +132,22 @@ export class UtilityService {
       }
     }
     return 0;
+  }
+
+  public retrievePrimaryMetricValue(rawData: BESecurityGroupDTO): string {
+    let value = `n/a`;
+    if (!!rawData) {
+      const rating = rawData.metrics[this.keyDictionary.RATING];
+      if (this.isIG(rating)) {
+        const spread = rawData.metrics[this.keyDictionary.SPREAD];
+        value = `${Math.round(spread)}`;
+      } else {
+        const price = rawData.metrics[this.keyDictionary.PRICE];
+        const yieldVal = rawData.metrics[this.keyDictionary.YIELD];
+        value = `${Math.round(price*100)/100} / ${Math.round(yieldVal*100)/100}`;
+      }
+    }
+    return value;
   }
 
 }
