@@ -3,8 +3,8 @@
   'sat-marketGroupPanel--configuratorCollapsedState': state.isConfiguratorCollapsed,
   'sat-marketGroupPanel--averageVisualizerEnabledState': state.utility.selectedWidget === 'AVERAGE_VISUALIZER',
   'sat-marketGroupPanel--pieConfiguratorEnabledState': state.utility.selectedWidget === 'PIE_CONFIGURATOR',
-  'sat-marketGroupPanel--searchInProgressState': this.state.configurator.state.isLoading,
-  'sat-marketGroupPanel--searchCompletedState': this.state.isGroupDataLoaded
+  'sat-marketGroupPanel--searchInProgressState': state.configurator.state.isLoading,
+  'sat-marketGroupPanel--searchCompletedState': state.isGroupDataLoaded
 }">
   <section class="sat-marketGroupPanel__configurator">
     <security-group-definition-configurator
@@ -26,8 +26,11 @@
   <section class="sat-marketGroupPanel__groups">
     <div class="sat-marketGroupPanel__groups-utility">
       <div class="sat-marketGroupPanel__groups-utility-prompt">
-        <span class="sat-marketGroupPanel__groups-utility-prompt-highlightText">{{state.securityGroupList.length}}</span>
+        <span class="sat-marketGroupPanel__groups-utility-prompt-emptyText">Perform Search to See Security Groups</span>
+        <span class="sat-marketGroupPanel__groups-utility-prompt-highlightText">{{state.searchResult.securityGroupList.length}}</span>
         <span class="sat-marketGroupPanel__groups-utility-prompt-text">groups matched your search</span>
+        <span class="sat-marketGroupPanel__groups-utility-prompt-inProgressText">Loading...</span>
+        <span class="sat-marketGroupPanel__groups-utility-prompt-inProgressHighlightText">{{state.searchResult.renderProgress}}%</span>
       </div>
       <div class="sat-marketGroupPanel__groups-utility-widgetSelector">
         <div class="sat-marketGroupPanel__groups-utility-widgetSelector-btnGroup santaBtnGroup">
@@ -95,13 +98,14 @@
       </div>
       <div class="sat-marketGroupPanel__groups-utility-groupAverage">
         <security-group-average-visualizer
-          [visualizerData]="state.visualizer"
+          [visualizerData]="state.utility.visualizer"
+          [panelAtEmptyState]="!state.configurator.state.isLoading && !this.state.isGroupDataLoaded"
           (onMetricChange)="updateGroupStats()">
         </security-group-average-visualizer>
       </div>
     </div>
     <ul class="sat-marketGroupPanel__groups-list">
-      <li *ngFor="let eachGroup of state.securityGroupList; let i = index" class="sat-marketGroupPanel__groups-list-item">
+      <li *ngFor="let eachGroup of state.searchResult.securityGroupList; let i = index" class="sat-marketGroupPanel__groups-list-item">
         <security-group
           [groupData]="eachGroup"
           [isDataReady]="!eachGroup.state.isStencil"></security-group>

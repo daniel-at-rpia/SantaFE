@@ -67,7 +67,8 @@ export class DTOService {
         isSelected: false,
         isExpanded: false,
         isStencil: !!isStencil,
-        stencilAnimationComplete: false
+        averageCalculationComplete: !isStencil,
+        pieChartComplete: false  // pie chart always needs to be drawn, while average may or may not be calculated instanteneously if it is not stencil
       },
       graph: {
         leftPie: {

@@ -309,15 +309,6 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
             &-alignmentLine {
               border-color: $color_stencil;
             }
-            &-metricLines {
-              &-lineContainer-line {
-                @include mix_stencil_animation;
-              }
-              &-mask {
-                opacity: 0;
-                transform: translate(0, 0);
-              }
-            }
           }
         }
         &-wheel-chartContainer {
@@ -338,6 +329,22 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
           }
           &-mask {
             background-color: $color_white;
+          }
+        }
+      }
+    }
+  }
+  &--calculatingAverageState {
+    #{$securityGroupBlockName} {
+      &__content-canvases-right {
+        &-metricLines {
+          &-lineContainer-line {
+            @include mix_stencil_animation;
+            width: 100%;
+          }
+          &-mask {
+            opacity: 0;
+            transform: translate(0, 0);
           }
         }
       }

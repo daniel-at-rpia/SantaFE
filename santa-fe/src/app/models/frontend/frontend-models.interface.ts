@@ -37,7 +37,8 @@ export interface SecurityGroupDTO extends BasicDTOStructure {
     isExpanded: boolean;
     isStencil: boolean;
     isSelected: boolean;
-    stencilAnimationComplete: boolean;
+    averageCalculationComplete: boolean;
+    pieChartComplete: boolean;
   }
   graph: {
     leftPie: SecurityGroupPieChartBlock;

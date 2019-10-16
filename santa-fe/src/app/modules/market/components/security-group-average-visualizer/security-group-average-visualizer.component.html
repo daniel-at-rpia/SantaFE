@@ -12,7 +12,8 @@
         'sat-securityGroupAverageVisualizerName--editingState': visualizerData.state.editingStat === eachStat,
         'sat-securityGroupAverageVisualizerName--emptyState': eachStat.isEmpty,
         'sat-securityGroupAverageVisualizerName--nextEmpty': statIndex < visualizerData.data.stats.length-1 && visualizerData.data.stats[statIndex+1].isEmpty,
-        'sat-securityGroupAverageVisualizerName--stencilState': visualizerData.state.isStencil
+        'sat-securityGroupAverageVisualizerName--stencilState': visualizerData.state.isStencil,
+        'sat-securityGroupAverageVisualizerName--panelEmptyState': panelAtEmptyState
       }">
       <section class="sat-securityGroupAverageVisualizerName__leftMargin"></section>
       <button (click)="onClickMetric(eachStat)" class="sat-securityGroupAverageVisualizerName__nameCTA">{{eachStat.label}}</button>
@@ -96,7 +97,8 @@
         'sat-securityGroupAverageVisualizerValue': true,
         'sat-securityGroupAverageVisualizerValue--emptyState': eachStat.isEmpty,
         'sat-securityGroupAverageVisualizerValue--nextEmpty': statIndex < visualizerData.data.stats.length-1 && visualizerData.data.stats[statIndex+1].isEmpty,
-        'sat-securityGroupAverageVisualizerValue--stencilState': visualizerData.state.isStencil
+        'sat-securityGroupAverageVisualizerValue--stencilState': visualizerData.state.isStencil,
+        'sat-securityGroupAverageVisualizerValue--panelEmptyState': panelAtEmptyState
       }">
       <div [ngStyle]="{'width': eachStat.percentage + '%'}" class="sat-securityGroupAverageVisualizerValue__line">
       </div>

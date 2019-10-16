@@ -3,7 +3,8 @@
   class="sat-securityGroup--type-{{groupData.data.ratingLevel}}"
   [ngClass]="{
     'sat-securityGroup': true,
-    'sat-securityGroup--stencilState': groupData.state.isStencil||!groupData.state.stencilAnimationComplete,
+    'sat-securityGroup--stencilState': groupData.state.isStencil||!groupData.state.pieChartComplete,
+    'sat-securityGroup--calculatingAverageState': !groupData.state.averageCalculationComplete,
     'sat-securityGroup--selectedState': groupData.state.isSelected,
     'sat-securityGroup--expandedState': groupData.state.isExpanded
   }">
@@ -41,7 +42,7 @@
       <div class="sat-securityGroup__content-canvases-right">
         <div class="sat-securityGroup__content-canvases-right-metricValues">
           <div class="sat-securityGroup__content-canvases-right-metricValues-valueContainer" *ngFor="let eachStat of groupData.data.stats">
-            <span class="sat-securityGroup__content-canvases-right-metricValues-valueContainer-value">{{eachStat.label}}</span>
+            <span class="sat-securityGroup__content-canvases-right-metricValues-valueContainer-value">{{eachStat.value}}</span>
           </div>
         </div>
         <div class="sat-securityGroup__content-canvases-right-alignmentLine"></div>

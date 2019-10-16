@@ -200,6 +200,14 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
       }
     }
   }
+  &--panelEmptyState {
+    #{$averageVisualizerNameBlockName} {
+      &__value {
+        opacity: 0;
+        user-select: none;
+      }
+    }
+  }
 }
 
 .sat-securityGroupAverageVisualizerValue {
@@ -230,6 +238,13 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
   }
   &--emptyState#{$averageVisualizerValueBlockName}--nextEmpty {
     display: none;
+  }
+  &--panelEmptyState {
+    #{$averageVisualizerValueBlockName} {
+      &__line {
+        display: none;
+      }
+    }
   }
 }
 

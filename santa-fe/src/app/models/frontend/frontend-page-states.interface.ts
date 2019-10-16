@@ -21,12 +21,15 @@ export interface MarketState {
 
 export interface MarketGroupPanelState {
   configurator: SecurityGroupDefinitionConfiguratorDTO;
-  visualizer: SecurityGroupAverageVisualizerDTO;
-  securityGroupList: Array<SecurityGroupDTO>;
+  searchResult: {
+    securityGroupList: Array<SecurityGroupDTO>;
+    renderProgress: number;
+  }
   isConfiguratorCollapsed: boolean;
   isGroupDataLoaded: boolean;
   utility: {
     selectedWidget: string;
+    visualizer: SecurityGroupAverageVisualizerDTO;
     pieConfigurator: {
       left: {
         selected: boolean;
