@@ -56,13 +56,13 @@ export class UtilityService {
       case 'AA':
         return 2;
       case 'A':
-        return 2;
-      case 'BBB':
         return 3;
+      case 'BBB':
+        return 4;
       case 'BB':
-        return 4;
+        return 5;
       case 'B':
-        return 4;
+        return 6;
       case 'CCC':
         return 5;
       case 'CC':

@@ -9,13 +9,19 @@ export const SecurityGroupRatingColorScheme: SecurityGroupPieChartColorSchemeBlo
     label: 'AAA',
     value: '#712f79'
   },{
-    label: 'AA | A',
+    label: 'AA',
+    value: '#293881'
+  },{
+    label: 'A',
     value: '#293881'
   },{
     label: 'BBB',
     value: '#0f8276'
   },{
-    label: 'BB | B',
+    label: 'BB',
+    value: '#968e7f'
+  },{
+    label: 'B',
     value: '#968e7f'
   },{
     label: 'CCCtoD',

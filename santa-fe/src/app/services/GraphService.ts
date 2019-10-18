@@ -103,7 +103,7 @@ export class GraphService {
           color: am4core.color(colorScheme[colorMappingIndex].value)
         };
         const existEntry = dataList.find((eachEntry) => {
-          return eachEntry.label === newEntry.label;
+          return colorScheme[eachEntry.label].value === colorScheme[newEntry.label].value;
         });
         if (!!existEntry) {
           existEntry.value = existEntry.value + newEntry.value;
