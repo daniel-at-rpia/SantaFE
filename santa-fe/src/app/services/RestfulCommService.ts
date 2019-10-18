@@ -8,9 +8,12 @@ export class RestfulCommService {
   constructor(private http: HttpClient){}
 
   callAPI(url: string, opts: any ={}, body: any = null): Observable<any>{
-    let params = new HttpParams();
-    params = params.append('apiCall', 'true');
-    const queryOpts = { ...opts, params };
+    //let params = new HttpParams();
+    //params = params.append('apiCall', 'true');
+    //const queryOpts = { ...opts, params };
+    const queryOpts = {
+      ...opts
+    };
     switch (opts.req) {
       case 'POST':
         return this.http.post<any>(url, body, queryOpts);

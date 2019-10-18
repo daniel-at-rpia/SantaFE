@@ -24,6 +24,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { DTOService } from 'App/services/DTOService';
 import { UtilityService } from 'App/services/UtilityService';
+import { RestfulCommService } from 'App/services/RestfulCommService';
 
 import { MarketGroupPanelState } from 'FEModels/frontend-page-states.interface';
 import { SecurityGroupMetricBlock } from 'FEModels/frontend-blocks.interface';
@@ -99,7 +100,7 @@ export class MarketGroupPanel implements OnDestroy {
   constructor(
     private dtoService: DTOService,
     private utilityService: UtilityService,
-    private http: HttpClient
+    private restfulCommonService: RestfulCommService
   ){
     this.initiateComponentState();
   }
@@ -116,23 +117,32 @@ export class MarketGroupPanel implements OnDestroy {
       "source": "FO",
       "tenorOptions": ["2Y", "3Y", "5Y", "7Y", "10Y", "30Y"]
     };
-    this.http.post<any>('https://rpiadev01:1225/santaGroup/get-santa-groups', payload, {}).pipe(
-      tap((serverReturn) => 
-        console.log('return is ', serverReturn)),
+    this.restfulCommonService.callAPI('https://rpiadev01:1225/santaGroup/get-santa-groups', {req: 'POST'}, payload).pipe(
+      tap((serverReturn) => {
+        console.log('return is ', serverReturn)
+      }),
       catchError(err => {
         console.log('error', err);
         return of('error');
       })
     ).subscribe();
+    // this.http.post<any>('https://rpiadev01:1225/santaGroup/get-santa-groups', payload, {}).pipe(
+    //   tap((serverReturn) => 
+    //     console.log('return is ', serverReturn)),
+    //   catchError(err => {
+    //     console.log('error', err);
+    //     return of('error');
+    //   })
+    // ).subscribe();
 
-    this.http.put<any>('https://rpiadev01:1225/santaSecurity/get-santa-securities', {}, {}).pipe(
-      tap((serverReturn) => 
-        console.log('return is ', serverReturn)),
-      catchError(err => {
-        console.log('error', err);
-        return of('error');
-      })
-    ).subscribe();
+    // this.http.options<any>('https://rpiadev01:1225/santaSecurity/get-santa-securities', {}).pipe(
+    //   tap((serverReturn) => 
+    //     console.log('return is ', serverReturn)),
+    //   catchError(err => {
+    //     console.log('error', err);
+    //     return of('error');
+    //   })
+    // ).subscribe();
   }
 
   public onToggleCollapseConfigurator(){
