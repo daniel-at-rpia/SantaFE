@@ -4,7 +4,8 @@
 
 $securityGroupDefinition_height: 4.5rem;
 $securityGroupDefinition_filter_size: 2rem;
-$securityGroupDefinition_backgroundVariant_img_size: 7rem;
+$securityGroupDefinition_backgroundVariant_img_size: 5rem;
+$securityGroupDefinition_backgroundVariant_img_size_secondary: 3rem;
 .sat-securityGroupDefinition {
   $securityGroupDefinitionBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
@@ -77,6 +78,7 @@ $securityGroupDefinition_backgroundVariant_img_size: 7rem;
     &-text {
       color: $font_color_major;
       user-select: none;
+      font-size: $font_size_x_small;
     }
   }
   &__filter {
@@ -246,12 +248,12 @@ $securityGroupDefinition_backgroundVariant_img_size: 7rem;
           font-size: $securityGroupDefinition_backgroundVariant_img_size;
         }
         &-backendTenor-secondaryImg {
-          margin-top: -$spacing_x_large - $spacing_medium - $spacing_x_small;
-          font-size: 4rem;
+          margin-top: -$spacing_x_large;
+          font-size: $securityGroupDefinition_backgroundVariant_img_size_secondary;
         }
         &-ratingBucket-secondaryImg {
-          margin-top: -$spacing_x_large + $spacing_x_small;
-          font-size: 4rem;
+          margin-top: -$spacing_large - $spacing_x_small;
+          font-size: $securityGroupDefinition_backgroundVariant_img_size_secondary;
         }
         &-securityType-box {
           background-color: $color_gray_2;

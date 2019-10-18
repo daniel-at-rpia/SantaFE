@@ -1,0 +1,259 @@
+@import "global.scss";
+@import "modules/market/market.scss";
+@import "./market-group-panel-mixin.container.scss";
+
+$marketGroupPanel_utility_widgetHeight: 8.25rem;
+.sat-marketGroupPanel {
+  $marketGroupPanelBlockName: &;
+  @include mix_border_generator;
+  @include mix_border_radius(10px);
+  flex: 1 1 auto;
+  display: flex;
+  padding: $spacing_medium;
+  overflow: hidden;
+  &__configurator {
+    flex: 0 0 auto;
+    display: flex;
+    security-group-definition-configurator {
+      display: flex;
+    }
+  }
+  &__configuratorCollapseCTA {
+    @include mix_fixed_div(relative, $z_index_standard_base_item);
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    &-btn {
+      @include mix_fixed_div(relative, $z_index_standard_hovering_item);
+      @include mix_border_radius(50%);
+      width: $iconButton_size_regular;
+      height: $iconButton_size_regular;
+      transform: scale(0.01);
+    }
+    &-line {
+      @include mix_fixed_div(absolute, $z_index_standard_base_item);
+      @include mix_border_generator(0 0 0 $typical_border_width);
+      @include mix_calculate(margin-left, 50%, $typical_border_width, '-');
+      height: 100%;
+      width: 50%;
+      margin-left: 50%;
+    }
+  }
+  &__groups {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    &-utility {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      &-prompt {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-bottom: $spacing_medium;
+        &-emptyText {
+          color: $font_color_minor;  
+        }
+        &-text {
+          display: none;
+          color: $font_color_minor;
+        }
+        &-highlightText {
+          @include mix_border_radius(5px);
+          display: none;
+          color: $font_color_inverse;
+          background: $color_active;
+          padding: 0 $spacing_small;
+          margin: 0 $spacing_small;
+        }
+        &-inProgressText {
+          display: none;
+          color: $font_color_minor;
+          margin-left: $spacing_small;
+        }
+        &-inProgressHighlightText {
+          @include mix_border_radius(5px);
+          display: none;
+          color: $font_color_inverse;
+          background: $color_active;
+          padding: 0 $spacing_small;
+          margin: 0 $spacing_small;
+        }
+      }
+      &-widgetSelector {
+        display: flex;
+        justify-content: center;
+        margin-bottom: $spacing_medium;
+        &-btnGroup {
+          &-btn {
+            &>span {
+              font-size: $font_size_small;
+            }
+            &--selected {
+              @include material('none');
+              background: $color_active;
+            }
+          }
+        }
+      }
+      &-pieConfigurator {
+        display: none;
+        justify-content: space-between;
+        height: $marketGroupPanel_utility_widgetHeight;
+        align-items: center;
+        padding: 0 $marketGroupPanel_groups_list_padding;
+        &-leftPie {
+          @include mix_border_radius(50%);
+          @include mix_fixed_div(relative, $z_index_standard_base_item);
+          @include mix_alive('light');
+          @include material;
+          width: $securityGroup_base_wheel_size;
+          height: $securityGroup_base_wheel_size;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: $color_white;
+          &-btn {
+            @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+            @include mix_border_radius(50%);
+            @include mix_pie_configurator_positioning;
+            transform: scale(0.01);
+            &--active {
+              @include material('none');
+              border-width: 0;
+              background: $color_active;
+              color: $font_color_inverse;
+              transform: scale(1);
+            }
+          }
+          &-text {
+            user-select: none;
+          }
+          &--selectedState {
+            @include material('none');
+            background-color: $color_active;
+            #{$marketGroupPanelBlockName}__groups-utility-pieConfigurator-leftPie {
+              &-btn {
+                transform: scale(1);
+              }
+              &-text {
+                color: $font_color_inverse;
+              }
+            }
+          }
+        }
+        &-rightPie {
+          @include mix_border_radius(50%);
+          @include mix_fixed_div(relative, $z_index_standard_base_item);
+          @include mix_alive('light');
+          @include material;
+          width: $securityGroup_base_wheel_size;
+          height: $securityGroup_base_wheel_size;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: $color_white;
+          &-btn {
+            @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+            @include mix_border_radius(50%);
+            @include mix_pie_configurator_positioning;
+            transform: scale(0.01);
+            &--active {
+              @include material('none');
+              border-width: 0;
+              background: $color_active;
+              color: $font_color_inverse;
+              transform: scale(1);
+            }
+          }
+          &-text {
+            user-select: none;
+          }
+          &--selectedState {
+            @include material('none');
+            background-color: $color_active;
+            #{$marketGroupPanelBlockName}__groups-utility-pieConfigurator-rightPie {
+              &-btn {
+                transform: scale(1);
+              }
+              &-text {
+                color: $font_color_inverse;
+              }
+            }
+          }
+        }
+      }
+      &-groupAverage {
+        display: none;
+        flex-direction: column;
+        justify-content: flex-end;
+        height: $marketGroupPanel_utility_widgetHeight;
+        padding: 0 $marketGroupPanel_groups_list_padding;
+      }
+    }
+    &-list {
+      @include mix_enable_scrollbar('vertical');
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      padding: 0 $marketGroupPanel_groups_list_padding $spacing_large $marketGroupPanel_groups_list_padding;
+      &-item {
+        margin-top: $spacing_large;
+      }
+    }
+  }
+  &--configuratorCollapsedState {
+    #{$marketGroupPanelBlockName} {
+      &__configurator {
+        display: none;
+      }
+    }
+  }
+  &--averageVisualizerEnabledState {
+    #{$marketGroupPanelBlockName} {
+      &__groups-utility-groupAverage {
+        display: flex;
+      }
+    }
+  }
+  &--pieConfiguratorEnabledState {
+    #{$marketGroupPanelBlockName} {
+      &__groups-utility-pieConfigurator {
+        display: flex;
+      }
+    }
+  }
+  &--searchInProgressState {
+    #{$marketGroupPanelBlockName} {
+      &__configuratorCollapseCTA-btn {
+        transform: scale(1);
+      }
+      &__groups-utility {
+        &-prompt {
+          &-emptyText, &-text, &-highlightText {
+            display: none;
+          }
+          &-inProgressText, &-inProgressHighlightText {
+            display: inline-block;
+          }
+        }
+      }
+    }
+  }
+  &--searchCompletedState {
+    #{$marketGroupPanelBlockName} {
+      &__configuratorCollapseCTA-btn {
+        transform: scale(1);
+      }
+      &__groups-utility-prompt {
+        &-emptyText, &-inProgressText, &-inProgressHighlightText {
+          display: none;
+        }
+        &-text, &-highlightText {
+          display: inline-block;
+        }
+      }
+    }
+  }
+}

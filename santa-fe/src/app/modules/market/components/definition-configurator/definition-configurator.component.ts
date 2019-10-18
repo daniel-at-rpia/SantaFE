@@ -3,14 +3,17 @@ import {
   OnInit,
   ViewEncapsulation,
   Input,
-  Output
+  Output,
+  EventEmitter
 } from '@angular/core';
 
 import {
   SecurityGroupDefinitionConfiguratorDTO,
-  SecurityGroupDefinitionFilterDTO,
   SecurityGroupDefinitionDTO
-} from 'App/models/frontend/frontend-models.interface';
+} from 'FEModels/frontend-models.interface';
+import {
+  SecurityGroupDefinitionFilterBlock
+} from 'FEModels/frontend-blocks.interface';
 
 @Component({
   selector: 'security-group-definition-configurator',
@@ -21,6 +24,7 @@ import {
 
 export class SecurityGroupDefinitionConfigurator implements OnInit {
   @Input() configuratorData: SecurityGroupDefinitionConfiguratorDTO;
+  @Output() onClickSearch = new EventEmitter();
   constructor(
   ) {
   }
@@ -38,9 +42,9 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
       const existIndex = this.configuratorData.data.selectedDefinitionList.indexOf(targetDefinition);
       if ( existIndex >= 0) {
         targetDefinition.state.isUnactivated = true;
-        if (targetDefinition === this.configuratorData.showFiltersFromDefinition) {
+        if (targetDefinition === this.configuratorData.state.showFiltersFromDefinition) {
           this.clearSearchFilter();
-          this.configuratorData.showFiltersFromDefinition = null;
+          this.configuratorData.state.showFiltersFromDefinition = null;
         }
         this.clearDefinitionFilterOptions(targetDefinition);
         this.configuratorData.data.selectedDefinitionList.splice(existIndex, 1);
@@ -54,19 +58,19 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
   onClickDefinition(targetDefinition: SecurityGroupDefinitionDTO){
     if (!targetDefinition.state.isUnactivated) {
       this.clearSearchFilter();
-      this.configuratorData.showFiltersFromDefinition = this.configuratorData.showFiltersFromDefinition === targetDefinition ? null : targetDefinition;
-      if (this.configuratorData.showFiltersFromDefinition) {
-        this.configuratorData.state.showLongFilterOptions = this.configuratorData.showFiltersFromDefinition.data.filterOptionList.length > 5;  // any list with more than five options is considered a long list, will need extra room on the UI
+      this.configuratorData.state.showFiltersFromDefinition = this.configuratorData.state.showFiltersFromDefinition === targetDefinition ? null : targetDefinition;
+      if (this.configuratorData.state.showFiltersFromDefinition) {
+        this.configuratorData.state.showLongFilterOptions = this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.length > 5;  // any list with more than five options is considered a long list, will need extra room on the UI
       }
     }
   }
 
-  onClickFilterOption(targetOption:SecurityGroupDefinitionFilterDTO){
-    const targetDefinition = this.configuratorData.showFiltersFromDefinition;
-    targetOption.state.isSelected = !targetOption.state.isSelected;
+  onClickFilterOption(targetOption:SecurityGroupDefinitionFilterBlock){
+    const targetDefinition = this.configuratorData.state.showFiltersFromDefinition;
+    targetOption.isSelected = !targetOption.isSelected;
     let filterActive = false;
     targetDefinition.data.filterOptionList.forEach((eachOption) => {
-      if (eachOption.state.isSelected) {
+      if (eachOption.isSelected) {
         filterActive = true;
       }
     });
@@ -74,44 +78,45 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
   }
 
   onSearchKeywordChange(newKeyword){
-    if (this.configuratorData.showFiltersFromDefinition) {
-      this.configuratorData.filterSearchInputValue = newKeyword;
+    if (this.configuratorData.state.showFiltersFromDefinition) {
+      this.configuratorData.data.filterSearchInputValue = newKeyword;
       if (!!newKeyword && newKeyword.length >= 1) {
-        this.configuratorData.showFiltersFromDefinition.data.filterOptionList.forEach((eachOption) => {
+        this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.forEach((eachOption) => {
           if (this.applySearchFilter(eachOption, newKeyword)) {
-            eachOption.state.isFilteredOut = false;
+            eachOption.isFilteredOut = false;
           } else {
-            eachOption.state.isFilteredOut = true;
+            eachOption.isFilteredOut = true;
           }
         })
       } else {
-        this.configuratorData.showFiltersFromDefinition.data.filterOptionList.forEach((eachOption) => {
-          eachOption.state.isFilteredOut = false;
+        this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.forEach((eachOption) => {
+          eachOption.isFilteredOut = false;
         })
       }
     }
   }
 
-  applySearchFilter(targetOption: SecurityGroupDefinitionFilterDTO, keyword: string):boolean {
-    const normalizedTarget = targetOption.data.displayLabel.toLowerCase();
+  applySearchFilter(targetOption: SecurityGroupDefinitionFilterBlock, keyword: string):boolean {
+    const normalizedTarget = targetOption.displayLabel.toLowerCase();
     const normalizedKeyword = keyword.toLowerCase();
     return normalizedTarget.includes(normalizedKeyword);
   }
 
   clearSearchFilter(){
-    this.configuratorData.filterSearchInputValue = '';
+    this.configuratorData.data.filterSearchInputValue = '';
     this.onSearchKeywordChange('');
   }
 
   clearDefinitionFilterOptions(targetDefinition: SecurityGroupDefinitionDTO){
     targetDefinition.data.filterOptionList.forEach((eachOption) => {
-      eachOption.state.isSelected = false;
+      eachOption.isSelected = false;
     });
     targetDefinition.state.filterActive = false;
   }
 
   triggerSearch(){
     this.configuratorData.state.isLoading = true;
+    this.onClickSearch.emit();
   }
 
 }

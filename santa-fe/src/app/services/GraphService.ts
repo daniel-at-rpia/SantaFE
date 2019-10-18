@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { UtilityService } from './UtilityService';
-import { 
-  SecurityGroupPieChartDTO,
-  SecurityGroupPieChartDataDTO
-} from 'App/models/frontend/frontend-models.interface';
+import {
+  SecurityGroupPieChartBlock,
+  SecurityGroupPieChartDataBlock
+} from 'FEModels/frontend-blocks.interface';
 
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
@@ -21,7 +21,7 @@ export class GraphService {
   ){}
 
   public generateSecurityGroupPieChart(
-    pieChartDTO: SecurityGroupPieChartDTO,
+    pieChartDTO: SecurityGroupPieChartBlock,
   ) : am4charts.PieChart {
     const chart = am4core.create(pieChartDTO.name, am4charts.PieChart);
     const pieSeries = chart.series.push(new am4charts.PieSeries());
@@ -37,11 +37,11 @@ export class GraphService {
     pieSeries.slices.template.strokeOpacity = 1;
     pieSeries.slices.template.strokeWidth = 1;
     pieSeries.alignLabels = false;
-    pieSeries.labels.template.text = "{value.percent.formatNumber('#.')}%";
+    pieSeries.labels.template.text = "{category}/{value}";
     pieSeries.labels.template.fontFamily = "SantaOpenSans";
-    pieSeries.labels.template.fontWeight = "600";
-    pieSeries.labels.template.fontSize = 1;
-    chart.fontSize = 1;
+    pieSeries.labels.template.fontWeight = "300";
+    pieSeries.labels.template.fontSize = 1;  // this is not working
+    chart.fontSize = 1;  // this is not working
     pieSeries.labels.template.radius = am4core.percent(-40);
     if (pieChartDTO.colorScheme.type === 'Seniority') {
       pieSeries.labels.template.fill = am4core.color("#333");
@@ -52,7 +52,7 @@ export class GraphService {
     pieSeries.slices.template.states.getKey("hover").properties.scale = 1;
     pieSeries.slices.template.states.getKey("active").properties.shiftRadius = 0;
     //pieSeries.innerRadius = am4core.percent(60);
-    const data = this.generateGroupPieChartTestData(pieChartDTO);
+    const data = this.generateGroupPieChartData(pieChartDTO);
     chart.data = data;
     //chart.innerRadius = 1;
     //chart.defaultState.properties.innerRadius = am4core.percent(2);
@@ -69,7 +69,7 @@ export class GraphService {
   }
 
   public changeSecurityGroupPieChartOnSelect(
-    pieChartDTO: SecurityGroupPieChartDTO,
+    pieChartDTO: SecurityGroupPieChartBlock,
     isSelected: boolean
   ){
     const chart = pieChartDTO.chart;
@@ -89,54 +89,41 @@ export class GraphService {
     }
   }
 
-  public generateGroupPieChartTestData(
-    pieChartDTO: SecurityGroupPieChartDTO
-  ): Array<SecurityGroupPieChartDataDTO> {
+  private generateGroupPieChartData(
+    pieChartDTO: SecurityGroupPieChartBlock
+  ): Array<SecurityGroupPieChartDataBlock> {
     const colorScheme = pieChartDTO.colorScheme.scheme;
-    if (pieChartDTO.colorScheme.type === 'Rating') {
-      const newEntry1:SecurityGroupPieChartDataDTO = {
-        label: 'AAA',
-        value: Math.floor(Math.random()*100),
-        color: am4core.color(colorScheme[1].value)
+    const dataList:Array<SecurityGroupPieChartDataBlock> = [];
+    //if (pieChartDTO.colorScheme.type === 'Rating') {
+      for (const attrName in pieChartDTO.rawSupportingData) {
+        const colorMappingIndex = this.findColorMapping(pieChartDTO.colorScheme.type, attrName);
+        const newEntry:SecurityGroupPieChartDataBlock = {
+          label: `${colorMappingIndex}`,
+          value: this.utility.retrieveValueForGroupPieChartFromSupportingData(pieChartDTO.rawSupportingData[attrName]),
+          color: am4core.color(colorScheme[colorMappingIndex].value)
+        };
+        const existEntry = dataList.find((eachEntry) => {
+          return eachEntry.label === newEntry.label;
+        });
+        if (!!existEntry) {
+          existEntry.value = existEntry.value + newEntry.value;
+        } else {
+          dataList.push(newEntry);
+        }
       };
-      const newEntry2:SecurityGroupPieChartDataDTO = {
-        label: 'AA',
-        value: Math.floor(Math.random()*100),
-        color: am4core.color(colorScheme[2].value)
-      };
-      const newEntry3:SecurityGroupPieChartDataDTO = {
-        label: 'A',
-        value: Math.floor(Math.random()*100),
-        color: am4core.color(colorScheme[4].value)
-      };
-      return [newEntry1, newEntry2, newEntry3];
-    } else if (pieChartDTO.colorScheme.type === 'Seniority') {
-      const newEntry1:SecurityGroupPieChartDataDTO = {
-        label: colorScheme[1].label,
-        value: Math.floor(Math.random()*100),
-        color: am4core.color(colorScheme[1].value)
-      };
-      const newEntry2:SecurityGroupPieChartDataDTO = {
-        label: colorScheme[2].label,
-        value: Math.floor(Math.random()*100),
-        color: am4core.color(colorScheme[2].value)
-      };
-      const newEntry3:SecurityGroupPieChartDataDTO = {
-        label: colorScheme[3].label,
-        value: Math.floor(Math.random()*100),
-        color: am4core.color(colorScheme[3].value)
-      };
-      const newEntry4:SecurityGroupPieChartDataDTO = {
-        label: colorScheme[4].label,
-        value: Math.floor(Math.random()*100),
-        color: am4core.color(colorScheme[4].value)
-      };
-      const newEntry5:SecurityGroupPieChartDataDTO = {
-        label: colorScheme[5].label,
-        value: Math.floor(Math.random()*100),
-        color: am4core.color(colorScheme[5].value)
-      };
-      return [newEntry1, newEntry2, newEntry3, newEntry4, newEntry5];
+    // } else if (pieChartDTO.colorScheme.type === 'Seniority') {
+    //   for (const attrName in pieChartDTO.rawSupportingData) {
+
+    //   }
+    // }
+    return dataList
+  }
+
+  private findColorMapping(colorScheme: string, attrName: string): number {
+    if (colorScheme === 'Rating') {
+      return this.utility.mapRatings(attrName);
+    } else if (colorScheme === 'Seniority') {
+      return this.utility.mapSeniorities(attrName);
     }
   }
 }

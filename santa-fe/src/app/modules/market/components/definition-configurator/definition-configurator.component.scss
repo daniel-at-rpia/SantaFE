@@ -1,9 +1,10 @@
 @import "global.scss";
 @import "modules/market/market.scss";
 
-$securityGroupDefinitionConfigurator_filters_width: 12.5rem;
+$securityGroupDefinitionConfigurator_filters_width: 10rem;
+//$securityGroupDefinitionConfigurator_filters_width: 12.5rem;
 $securityGroupDefinitionConfigurator_width: $iconButton_size_regular + $spacing_small + $securityGroupDefinition_width + $securityGroupDefinitionConfigurator_gapBetweenDefAndFilter + $securityGroupDefinitionConfigurator_filters_width;
-$securityGroupDefinitionConfigurator_ctas_height: 6.5rem;
+$securityGroupDefinitionConfigurator_ctas_height: 5.5rem;
 .sat-securityGroupDefinitionConfigurator {
   $securityGroupDefinitionConfiguratorBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
@@ -87,6 +88,8 @@ $securityGroupDefinitionConfigurator_ctas_height: 6.5rem;
           flex: 0 1 100%;
           padding: $spacing_small $spacing_medium;
           margin: $spacing_small $spacing_medium;
+          font-size: $font_size_small;
+          word-break: break-word;
           &--selected {
             @include material('none');
             background-color: $color_filter;
@@ -108,7 +111,7 @@ $securityGroupDefinitionConfigurator_ctas_height: 6.5rem;
       flex: 1 1 auto;
       display: flex;
       justify-content: center;
-      margin: $spacing_medium $spacing_x_large;
+      margin-top: $spacing_medium;
       padding-top: $spacing_medium;
       santa-loadable-button {
         display: flex;

@@ -1,21 +1,16 @@
 @import "global.scss";
+@import "modules/market/market.scss";
 @import "./security-group-mixin.scss";
 
-$securityGroup_base_wheel_size: 9rem;
-$securityGroup_base_center_height: 7rem;
+$securityGroup_base_center_height: 5.75rem;
 $securityGroup_base_wheelToCenter_overlap: -$securityGroup_base_wheel_size/2;
 $securityGroup_wheel_innerMask_positionMarkup: 1.5rem;
 $securityGroup_wheel_innerMask_width: 3rem;
-$securityGroup_content_numberTag_size: 3rem;
+$securityGroup_content_numberTag_size: 2.25rem;
 $securityGroup_content_numberTag_padding: $spacing_x_small;
 $securityGroup_content_numberTag_halfSize: $securityGroup_content_numberTag_size/2 + $securityGroup_content_numberTag_padding;
 $securityGroup_content_numberTag_top: -($securityGroup_content_numberTag_halfSize) + ($securityGroup_base_wheel_size - $securityGroup_base_center_height)/2;
-$securityGroup_content_canvases_left_width: 60%;
-$securityGroup_content_canvases_left_width_xLarge: 10rem;
-$securityGroup_content_canvases_right_metricName_width: 2.25rem;
-$securityGroup_content_canvases_right_metricLines_thickness: 0.3125rem;
 $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
-$securityGroup_animationDelay: 0;
 
 .sat-securityGroup {
   $securityGroupBlockName: &;
@@ -82,7 +77,7 @@ $securityGroup_animationDelay: 0;
       padding: $spacing_small;
       &-chartContainer {
         @include mix_border_radius(50%);
-        @include mix_fixed_div(relative, $z_index_standard_base_item);
+        @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
         flex: 1 1 auto;
         display: flex;
         align-items: center;
@@ -92,7 +87,6 @@ $securityGroup_animationDelay: 0;
         &-chart {
           @include mix_fixed_div(absolute, $z_index_standard_base_item);
           @include mix_alive('custom', $animation_duration_normal transform);
-          transition-delay: $securityGroup_animationDelay;
           transform: rotate(0deg) scale(1);
           left: -12%; // this magnification is necessary for countering the layout effect of the watermark
           height: 124%;
@@ -110,7 +104,6 @@ $securityGroup_animationDelay: 0;
           top: (100% - $securityGroup_content_wheel_chartContainer_innerRadius_size)/2;
           width: $securityGroup_content_wheel_chartContainer_innerRadius_size;
           height: $securityGroup_content_wheel_chartContainer_innerRadius_size;
-          transition-delay: $securityGroup_animationDelay;
           transform: scale(1);
         }
       }
@@ -132,22 +125,24 @@ $securityGroup_animationDelay: 0;
         height: $securityGroup_content_numberTag_size;
         width: $securityGroup_content_numberTag_size;
         background-color: $color_white;
+        font-size: $font_size_small;
+        user-select: none;
       }
       &-mask {
         @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
-        left: -($securityGroup_content_numberTag_size - $securityGroup_content_numberTag_padding)/2;
+        left: -50%;
         top: $securityGroup_content_numberTag_halfSize;
-        height: $securityGroup_content_numberTag_size;
-        width: $securityGroup_content_numberTag_size*2;
+        width: 200%;
+        height: 100%;
       }
     }
     &-canvases {
       @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
-      @include mix_calculate(height, $securityGroup_base_center_height, $securityGroup_content_numberTag_halfSize + $spacing_small, '-');
+      @include mix_calculate(height, $securityGroup_base_center_height, $securityGroup_content_numberTag_halfSize + $spacing_x_small, '-');
       flex: 1 1 auto;
       display: flex;
-      flex-wrap: wrap;
-      margin: $securityGroup_content_numberTag_halfSize 0 $spacing_small 0;
+      margin: $securityGroup_content_numberTag_halfSize 0 $spacing_x_small 0;
+      overflow: hidden;
       &-left {
         flex: 0 1 $securityGroup_content_canvases_left_width;
         display: flex;
@@ -160,29 +155,34 @@ $securityGroup_animationDelay: 0;
           &-name {
             flex: 1 1 auto;
             &-text {
-              @include mix_text_overflow_multi_line(3);
-              line-height: $line_height_x_small;
+              @include mix_text_overflow_multi_line(2);
+              line-height: $line_height_normal;
               color: $font_color_inverse;
               font-size: $font_size_small;
               text-align: center;
+              user-select: none;
             }
           }
           &-value {
             flex: 0 0 auto;
             display: flex;
+            justify-content: center;
+            max-width: $securityGroup_content_canvases_left_width;
             &-text {
               @include mix_border_radius(5px);
+              @include mix_text_overflow();
               padding: 0 $spacing_medium;
               background-color: $color_white;
+              user-select: none;
+              font-size: $font_size_small
             }
           }
         }
       }
       &-right {
         @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
-        flex: 1 1 100%-$securityGroup_content_canvases_left_width;
+        flex: 1 1 auto;
         display: flex;
-        padding: 0 $spacing_small;
         overflow: hidden;
         &-metricValues {
           flex: 0 0 $securityGroup_content_canvases_right_metricName_width;
@@ -198,14 +198,15 @@ $securityGroup_animationDelay: 0;
               font-size: $font_size_x_small;
               color: $font_color_inverse;
               text-align: right;
+              user-select: none;
             }
           }
         }
         &-alignmentLine {
           @include mix_border_generator(0 0 0 $typical_border_width, $color_white);
           flex: 0 0 auto;
-          margin-left: $spacing_small;
-          width: $spacing_small;
+          margin-left: $securityGroup_content_canvases_right_alignmentLine_marginLeft;
+          width: $securityGroup_content_canvases_right_alignmentLine_marginLeft;
         }
         &-metricLines {
           @include mix_fixed_div(relative, $z_index_standard_base_item);
@@ -220,32 +221,20 @@ $securityGroup_animationDelay: 0;
               @include mix_border_radius(3px);
               height: $securityGroup_content_canvases_right_metricLines_thickness;
               background-color: $color_white;
-              width: 100%;
-            }
-            &:nth-of-type(2) {
-              * {
-                width: 50%;
-              }
-            }
-            &:nth-of-type(3) {
-              * {
-                width: 25%;
-              }
             }
           }
           &-mask {
             @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
-            @include mix_alive('custom', $animation_duration_normal transform);
+            @include mix_alive('custom', $animation_duration_heavy transform);
             width: 100%;
             height: 100%;
-            transition-delay: $securityGroup_animationDelay;
             transform: translate(100%, 0);
           }
         }
       }
       &-behind {
         @include mix_fixed_div(absolute, $z_index_standard_bury_item);
-        @include mix_calculate(right, 100% - $securityGroup_content_canvases_left_width, $spacing_small*2, '-');
+        @include mix_calculate(right, 100%, $securityGroup_content_canvases_left_width, '-');
         height: 100%;
         display: flex;
         align-items: center;
@@ -272,6 +261,27 @@ $securityGroup_animationDelay: 0;
       }
     }
   }
+  &--expandedState {
+    #{$securityGroupBlockName} {
+      &__content-canvases {
+        &-left {
+          flex: 0 0 $securityGroup_content_canvases_left_width_expanded;
+          &-content {
+            &-name-text {
+              @include mix_text_overflow_multi_line(3);
+              line-height: $line_height_x_small;
+            }
+            &-value {
+              max-width: $securityGroup_content_canvases_left_width_expanded;
+            }
+          }
+        }
+        &-behind {
+          @include mix_calculate(right, 100%, $securityGroup_content_canvases_left_width_expanded, '-');
+        }
+      }
+    }
+  }
   &--stencilState {
     #{$securityGroupBlockName} {
       &__base {
@@ -290,17 +300,11 @@ $securityGroup_animationDelay: 0;
           &-left-content {
             &-name-text {
               @include mix_stencil_animation;
-              color: $color_stencil;
-              background-color: $color_stencil;
             }
             &-value {
               @include mix_stencil_animation;
-              color: $color_stencil;
-              background-color: $color_stencil;
               &-text {
                 @include mix_stencil_animation;
-                color: $color_stencil;
-                background-color: $color_stencil;
               }
             }
           }
@@ -313,31 +317,15 @@ $securityGroup_animationDelay: 0;
             &-alignmentLine {
               border-color: $color_stencil;
             }
-            &-metricLines {
-              &-lineContainer-line {
-                @include mix_stencil_animation;
-                color: $color_stencil;
-                background-color: $color_stencil;
-              }
-              &-mask {
-                opacity: 0;
-                transition-delay: unset;
-                transform: translate(0, 0);
-              }
-            }
           }
         }
         &-wheel-chartContainer {
           @include mix_stencil_animation;
-          color: $color_stencil;
-          background-color: $color_stencil;
           &-chart {
-            transition-delay: unset;
             transform: rotate(-360deg) scale(0.01);
             opacity: 0;
           }
           &-innerRadius {
-            transition-delay: unset;
             transform: scale(0.01);
             opacity: 0;
           }
@@ -346,11 +334,25 @@ $securityGroup_animationDelay: 0;
           background-color: $color_white;
           &-text {
             @include mix_stencil_animation;
-            color: $color_stencil;
-            background-color: $color_stencil;
           }
           &-mask {
             background-color: $color_white;
+          }
+        }
+      }
+    }
+  }
+  &--calculatingAverageState {
+    #{$securityGroupBlockName} {
+      &__content-canvases-right {
+        &-metricLines {
+          &-lineContainer-line {
+            @include mix_stencil_animation;
+            width: 100%;
+          }
+          &-mask {
+            opacity: 0;
+            transform: translate(0, 0);
           }
         }
       }
@@ -383,12 +385,10 @@ $securityGroup_animationDelay: 0;
         &-wheel-chartContainer {
           background-color: $color_active;
           &-chart {
-            transition-delay: unset;
             transform: rotate(360deg) scale(1);
           }
           &-innerRadius {
             background-color: $color_active;
-            transition-delay: unset;
             transform: scale(0.01);
           }
         }
@@ -419,16 +419,16 @@ $securityGroup_animationDelay: 0;
       }
     }
   }
-  @include mq-x-large-min {
+  @include mq-xx-large-min {
     &__content-canvases {
       &-left {
-        flex: 0 0 $securityGroup_content_canvases_left_width_xLarge;
-      }
-      &-right {
-        flex: 1 1 auto;
+        flex: 0 0 $securityGroup_content_canvases_left_width_expanded;
+        &-content-value {
+          max-width: $securityGroup_content_canvases_left_width_expanded;
+        }
       }
       &-behind {
-        @include mix_calculate(right, 100%, $securityGroup_content_canvases_left_width_xLarge + $spacing_small*2, '-');
+        @include mix_calculate(right, 100%, $securityGroup_content_canvases_left_width_expanded, '-');
       }
     }
   }

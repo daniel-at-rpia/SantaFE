@@ -2,25 +2,27 @@ import { Injectable } from '@angular/core';
 import {
   BESecurityDTO,
   BESecurityGroupDTO
-} from 'App/models/backend/backend-models.interface';
+} from 'BEModels/backend-models.interface';
 import {
   SecurityDTO,
   SecurityGroupDTO,
   SecurityGroupDefinitionDTO,
   SecurityGroupDefinitionConfiguratorDTO,
-  SecurityGroupDefinitionFilterDTO
-} from 'App/models/frontend/frontend-models.interface';
+  SecurityGroupAverageVisualizerDTO
+} from 'FEModels/frontend-models.interface';
 import {
-  SecurityDefinitionStub
-} from 'App/models/frontend/frontend-stub-models.interface';
-import {
-  SecurityGroupDefinitionMap
-} from 'App/stubs/securityGroupDefinitions.stub';
+  SecurityGroupDefinitionFilterBlock
+} from 'FEModels/frontend-blocks.interface';
+import { SecurityDefinitionStub } from 'FEModels/frontend-stub-models.interface';
 import { UtilityService } from './UtilityService';
 import {
   SecurityGroupRatingColorScheme,
   SecurityGroupSeniorityColorScheme
 } from 'App/stubs/colorSchemes.stub';
+import {
+  MetricOptions,
+  SecurityGroupDefinitionMap
+} from 'App/stubs/marketModuleSpecifics.stub';
 
 @Injectable()
 export class DTOService {
@@ -36,7 +38,7 @@ export class DTOService {
       data: {
         name: rawData.name,
         ratingLevel: ratingLevel,
-        ratingValue: this.utility.mapRatings(ratingLevel),
+        ratingValue: this.utility.mapRatingsReverse(ratingLevel),
         seniorityLevel: Math.floor(Math.random()*5 + 1)
       },
       state: {
@@ -49,70 +51,64 @@ export class DTOService {
   }
 
   public formSecurityGroupObject(
-    rawData: BESecurityGroupDTO
+    rawData: BESecurityGroupDTO,
+    isStencil?: boolean
   ): SecurityGroupDTO {
-    const ratingLevel = Math.floor(Math.random()*7 + 1);
     const object:SecurityGroupDTO = {
       data: {
-        name: rawData.groupName,
-        ratingLevel: ratingLevel,
-        ratingValue: this.utility.mapRatings(ratingLevel),
-        numOfSecurities: rawData.numOfSecurities,
-        stats: [
-          {
-            label: 'Attr1',
-            value: Math.floor(Math.random()*1000),
-            max: 1000,
-            percentage: null
-          },{
-            label: 'Attr2',
-            value: Math.floor(Math.random()*1000),
-            max: 1000,
-            percentage: null
-          },{
-            label: 'Attr3',
-            value: Math.floor(Math.random()*1000)/100,
-            max: 10,
-            percentage: null
-          }
-        ]
+        name: isStencil ? 'PLACEHOLDER' : rawData.groupName,
+        ratingLevel: isStencil ? 1 : this.utility.mapRatings(rawData.metrics['ratingNoNotch']),
+        ratingValue: isStencil ? 'AA' : rawData.metrics['ratingNoNotch'],
+        numOfSecurities: isStencil ? 32 : rawData.numSecurities,
+        stats: [],
+        metrics: this.utility.packMetricData(rawData),
+        primaryMetric: this.utility.retrievePrimaryMetricValue(rawData)
       },
       state: {
         isSelected: false,
-        isStencil: false
+        isExpanded: false,
+        isStencil: !!isStencil,
+        averageCalculationComplete: !isStencil,
+        pieChartComplete: false  // pie chart always needs to be drawn, while average may or may not be calculated instanteneously if it is not stencil
       },
       graph: {
         leftPie: {
-          name: `Some Group Name ${rawData.numOfSecurities}-1`,
+          name: this.utility.generateUUID(),
           colorScheme: SecurityGroupRatingColorScheme,
-          chart: null
+          chart: null,
+          rawSupportingData: isStencil ? {} : this.utility.retrieveRawSupportingDataForLeftPie(rawData)
         },
         rightPie: {
-          name: `Some Group Name ${rawData.numOfSecurities}-2`,
+          name: this.utility.generateUUID(),
           colorScheme: SecurityGroupSeniorityColorScheme,
-          chart: null
+          chart: null,
+          rawSupportingData: this.utility.retrieveRawSupportingDataForRightPie(rawData)
         }
       }
-    }
-    object.data.stats.forEach((eachStat) => {
-      eachStat.percentage = Math.round(eachStat.value/eachStat.max * 10000)/100;
-    })
+    };
     return object;
   }
 
-  public generateSecurityGroupDefinitionFilterOptionList(name, options): Array<SecurityGroupDefinitionFilterDTO> {
+  public updateSecurityGroupObject(
+    rawData: BESecurityGroupDTO,
+    oldStencilDTO: SecurityGroupDTO
+  ) {
+    const newObject = this.formSecurityGroupObject(rawData, false);
+    oldStencilDTO.data = newObject.data;
+    oldStencilDTO.graph.leftPie.rawSupportingData = newObject.graph.leftPie.rawSupportingData;
+    oldStencilDTO.graph.rightPie.rawSupportingData = newObject.graph.rightPie.rawSupportingData;
+    oldStencilDTO.state.isStencil = false;
+  }
+
+  public generateSecurityGroupDefinitionFilterOptionList(name, options): Array<SecurityGroupDefinitionFilterBlock> {
     return options.map((eachOption) => {
       const normalizedOption = this.utility.normalizeDefinitionFilterOption(eachOption);
-      const newFilterDTO:SecurityGroupDefinitionFilterDTO = {
-        data: {
-          displayLabel: eachOption,
-          shortKey: normalizedOption,
-          key: this.utility.formDefinitionFilterOptionKey(name, normalizedOption)
-        },
-        state: {
-          isSelected: false,
-          isFilteredOut: false
-        }
+      const newFilterDTO:SecurityGroupDefinitionFilterBlock = {
+        isSelected: false,
+        isFilteredOut: false,
+        displayLabel: eachOption,
+        shortKey: normalizedOption,
+        key: this.utility.formDefinitionFilterOptionKey(name, normalizedOption)
       }
       return newFilterDTO;
     })
@@ -143,18 +139,56 @@ export class DTOService {
   public createSecurityGroupDefinitionConfigurator():SecurityGroupDefinitionConfiguratorDTO {
     const object:SecurityGroupDefinitionConfiguratorDTO = {
       data: {
+        filterSearchInputValue: '',
         definitionList: SecurityGroupDefinitionMap.map((eachDefinitionStub) => {
           return this.formSecurityGroupDefinitionObject(eachDefinitionStub);
         }),
         selectedDefinitionList: []
       },
       state: {
+        showFiltersFromDefinition: null,
         showLongFilterOptions: false,
         isLoading: false
-      },
-      showFiltersFromDefinition: null,
-      filterSearchInputValue: ''
+      }
     };
+    return object;
+  }
+
+  public formAverageVisualizerObject():SecurityGroupAverageVisualizerDTO{
+    const object:SecurityGroupAverageVisualizerDTO = {
+      data: {
+        stats: [
+          {
+            isEmpty: true,
+            label: '',
+            value: 100,
+            max: 100,
+            percentage: 100
+          },{
+            isEmpty: true,
+            label: '',
+            value: 100,
+            max: 100,
+            percentage: 100
+          },{
+            label: MetricOptions[1].label,
+            value: 100,
+            max: 100,
+            percentage: 100
+          }
+        ]
+      },
+      state: {
+        isEmpty: true,
+        isStencil: false,
+        isExpanded: false,
+        selectingStat: null,
+        editingStat: null,
+        editingStatSelectedMetric: null,
+        editingStatSelectedMetricValueType: null,
+        editingStatSelectedMetricDeltaType: null
+      }
+    }
     return object;
   }
 }

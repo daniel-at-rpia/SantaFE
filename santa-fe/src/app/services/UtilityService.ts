@@ -1,4 +1,10 @@
 import { Injectable } from '@angular/core';
+import { BESecurityGroupDTO } from 'BEModels/backend-models.interface';
+import { SecurityGroupDTO } from 'FEModels/frontend-models.interface';
+import {
+  MetricOptions,
+  BackendKeyDictionary
+} from 'App/stubs/marketModuleSpecifics.stub';
 import uuid from 'uuidv4';
 
 declare const require: any;
@@ -7,19 +13,78 @@ export const cloneDeep = require('lodash.cloneDeep');
 @Injectable()
 export class UtilityService {
   // Any code about naming stuff goes into this service
+  metricOptions = MetricOptions;
+  keyDictionary = BackendKeyDictionary;
 
   constructor(){}
 
   public mapSeniorities(input): number {
     switch (input) {
+      case "1st Lien Secured":
+        return 1;
+      case "1st lien":
+        return 1;
+      case "2nd lien":
+        return 1;
+      case "Secured":
+        return 2;
       case "Sr Unsecured":
-        return 1;
+        return 2;
+      case "Sr Subordinated":
+        return 3;
+      case "Subordinated":
+        return 3;
+      case "Jr Subordinated":
+        return 3;
+      case "Sr Preferred":
+        return 3;
+      case "Preferred":
+        return 3;
+      case "Sr Non Preferred":
+        return 3;
+      case "Unsecured":
+        return 4;
       default:
-        return 1;
+        return 5;
     }
   }
 
-  public mapRatings(input): string {
+  public mapRatings(input): number {
+    switch (input) {
+      case 'AAA':
+        return 1;
+      case 'AA':
+        return 2;
+      case 'A':
+        return 2;
+      case 'BBB':
+        return 3;
+      case 'BB':
+        return 4;
+      case 'B':
+        return 4;
+      case 'CCC':
+        return 5;
+      case 'CC':
+        return 5;
+      case 'C':
+        return 5;
+      case 'D':
+        return 5;
+      default:
+        return 0;
+    }
+  }
+
+  public isIG(input:string): boolean {
+    if (input === 'AAA' || input === 'AA' || input === 'A' || input === 'BBB') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public mapRatingsReverse(input): string {
     switch (input) {
       case 1:
         return 'AAA';
@@ -56,4 +121,96 @@ export class UtilityService {
     return `${name}/${normalizedOption}`;
   }
 
+  public packMetricData(rawData: BESecurityGroupDTO): object {
+    const object = {};
+    if (!!rawData) {
+      this.metricOptions.forEach((eachMetric) => {
+        const rawValue = rawData.metrics[eachMetric.backendDtoAttrName];
+        if (!!rawValue) {
+          if (eachMetric.label === 'Size') {
+            object[eachMetric.label] = Math.round(rawValue/100)/10000;
+          } else {
+            object[eachMetric.label] = Math.round(rawValue*10000)/10000;
+          }
+        } else {
+          object[eachMetric.label] = 0;
+        }
+      });
+    }
+    return object;
+  }
+
+  public retrieveGroupMetricValue(metricLabel: string, groupDTO: SecurityGroupDTO): number {
+    if (!!groupDTO) {
+      const value = groupDTO.data.metrics[metricLabel];
+      if (!!value) {
+        if (metricLabel === 'Size') {
+          return Math.round(value);
+        } else {
+          return Math.round(value*100)/100;
+        }
+      } else {
+        return 0;
+      }
+    }
+    return 0;
+  }
+
+  public retrievePrimaryMetricValue(rawData: BESecurityGroupDTO): string {
+    let value = `n/a`;
+    if (!!rawData) {
+      const rating = rawData.metrics[this.keyDictionary.RATING];
+      if (this.isIG(rating)) {
+        const spread = rawData.metrics[this.keyDictionary.SPREAD];
+        value = `${Math.round(spread)}`;
+      } else {
+        const price = rawData.metrics[this.keyDictionary.PRICE];
+        const yieldVal = rawData.metrics[this.keyDictionary.YIELD];
+        value = `${Math.round(price*100)/100} / ${Math.round(yieldVal*100)/100}`;
+      }
+    }
+    return value;
+  }
+
+  public retrieveRawSupportingDataForLeftPie(rawData: BESecurityGroupDTO): object {
+    if (!!rawData) {
+      const object = rawData.descriptiveMetrics[this.keyDictionary.RATING_DES];
+      if (!!object) {
+        return object;
+      } else {
+        return {};
+      }
+    } else {
+      return {}
+    }
+  }
+
+  public retrieveRawSupportingDataForRightPie(rawData: BESecurityGroupDTO): object {
+    if (!!rawData) {
+      const object = rawData.descriptiveMetrics[this.keyDictionary.SENIORITY];
+      if (!!object) {
+        return object;
+      } else {
+        return {};
+      }
+    } else {
+      return {}
+    }
+  }
+
+  public retrieveValueForGroupPieChartFromSupportingData(supportingDataChunk): number {
+    //if (!!supportingDataChunk && !!supportingDataChunk["propertyToNumSecurities"]) {
+      //const count = supportingDataChunk["propertyToNumSecurities"]["WorkoutTerm"];
+    if (!!supportingDataChunk) {  
+      const weight = supportingDataChunk[this.keyDictionary.SIZE];
+      const value = Math.round(weight/1000000);
+      if (!!value) {
+        return value;
+      } else {
+        return 0
+      }
+    } else {
+      return 0;
+    }
+  }
 }

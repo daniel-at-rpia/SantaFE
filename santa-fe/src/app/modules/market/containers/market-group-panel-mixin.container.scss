@@ -1,0 +1,24 @@
+@mixin mix_pie_configurator_positioning(){
+  &--1 {
+    top: -$iconButton_size_small/2;
+  }
+  &--2 {
+    top: 0.75rem;
+    left: -0.3125rem;
+  }
+  &--3 {
+    bottom: 0.75rem;
+    left: -0.3125rem;
+  }
+  &--4 {
+    bottom: -$iconButton_size_small/2;
+  }
+  &--5 {
+    bottom: 0.75rem;
+    right: -0.3125rem;
+  }
+  &--6 {
+    top: 0.75rem;
+    right: -0.3125rem;
+  }
+}

@@ -4,100 +4,16 @@
   $marketBlockName: &;
   @include mix_fixed_div(absolute, $z_index_standard_base_item);
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   height: 100%;
   width: 100%;
-  &__test {
+  &__groupPanel {
+    flex: 0 1 50%;
     display: flex;
-    justify-content: center;
-    margin: $spacing_large;
-    &-test1 {
-      flex: 0 1 25%;
-      margin: $spacing_large;
-      width: $securityCard_width + $spacing_large;
-      &-ctas {
-        display: flex;
-        margin-bottom: $spacing_small;
-        &-btn {
-          margin-right: $spacing_small;
-        }
-      }
-      &-item {
-        display: flex;
-        .sat-securityCard {
-          margin: $spacing_small 0;
-        }
-        &--expanded {
-          height: $securityCard_previewVariant_height + $spacing_small*2;
-        }
-      }
-    }
-  }
-  &__testGroup {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    &-test2 {
-      flex: 0 0 75%;
+    padding: $spacing_medium;
+    market-group-panel {
+      flex: 1 1 auto;
       display: flex;
-      flex-direction: column;
-      margin-top: $spacing_large;
-      padding: $spacing_large;
-      &-ctas {
-        display: flex;
-        margin-bottom: $spacing_small;
-        &-btn {
-          margin-right: $spacing_small;
-        }
-      }
-      &-list {
-        flex: 1 1 auto;
-        &-item {
-          margin: $spacing_large;
-        }
-      }
-    }
-    &-test3 {
-      flex: 0 1 50%;
-      display: flex;
-      flex-direction: column;
-      margin-top: $spacing_large;
-      padding: $spacing_large;
-      &-ctas {
-        display: flex;
-        margin-bottom: $spacing_small;
-        &-btn {
-          margin-right: $spacing_small;
-        }
-      }
-      &-list {
-        flex: 1 1 auto;
-        &-item {
-          margin: $spacing_large;
-        }
-      }
-    }
-  }
-  &__testConfigurator {
-    display: flex;
-    flex-direction: column;
-    margin-left: $spacing_large;
-    height: 100%;
-    &-ctas {
-      display: flex;
-      margin-bottom: $spacing_small;
-      &-btn {
-        margin-right: $spacing_small;
-      }
-    }
-    &-test {
-      display: flex;
-      padding: $spacing_large;
-      margin-top: $spacing_small;
-      overflow: hidden;
-      .sat-securityGroupDefinitionConfigurator {
-        height: 100%;
-      }
     }
   }
 }

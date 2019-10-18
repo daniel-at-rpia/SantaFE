@@ -119,12 +119,12 @@
   @mixin mix_enable_scrollbar($direction: 'vertical'){
     overflow: scroll;
     @if $direction == 'vertical'{
-      overflow-x: overlay;
+      overflow-x: hidden;
     }@else if $direction == 'horizontal'{
-      overflow-y: overlay;
+      overflow-y: hidden;
     }@else if $direction == 'both'{
-      overflow-x: overlay;
-      overflow-y: overlay;
+      overflow-x: scroll;
+      overflow-y: scroll;
     }@else if $direction == 'none'{
       overflow: unset;
       overflow-x: unset;
@@ -178,6 +178,8 @@
 
   @mixin mix_stencil_animation(){
     animation: stencilPulse $animation_duration_loading infinite ease-in-out;
+    color: $color_stencil;
+    background: $color_stencil;
   }
 
   //Material

@@ -1,53 +1,47 @@
-import { SecurityGroupPieChartColorSchemeDTO } from 'App/models/frontend/frontend-models.interface';
+import { SecurityGroupPieChartColorSchemeBlock } from 'FEModels/frontend-blocks.interface';
 
-export const SecurityGroupRatingColorScheme: SecurityGroupPieChartColorSchemeDTO = {
+export const SecurityGroupRatingColorScheme: SecurityGroupPieChartColorSchemeBlock = {
   type: 'Rating',
   scheme: [{
     label: 'active',
     value: '#333'
   },{
-    label: 'aaa',
+    label: 'AAA',
     value: '#712f79'
   },{
-    label: 'aa',
+    label: 'AA | A',
     value: '#293881'
   },{
-    label: 'a',
-    value: '#293881'
-  },{
-    label: 'bbb',
+    label: 'BBB',
     value: '#0f8276'
   },{
-    label: 'bb',
+    label: 'BB | B',
     value: '#968e7f'
   },{
-    label: 'b',
-    value: '#968e7f'
-  },{
-    label: 'ccctod',
+    label: 'CCCtoD',
     value: '#5e6c7c'
   }]
 };
 
-export const SecurityGroupSeniorityColorScheme: SecurityGroupPieChartColorSchemeDTO = {
+export const SecurityGroupSeniorityColorScheme: SecurityGroupPieChartColorSchemeBlock = {
   type: 'Seniority',
   scheme: [{
     label: 'active',
     value: '#333'
   },{
-    label: '1',
+    label: '1st Lien Secured | 1st lien | 2nd lien',
     value: '#16c1ff'
   },{
-    label: '2',
+    label: 'Secured | Sr Unsecured',
     value: '#adf7b6'
   },{
-    label: '3',
+    label: 'Sr Subordinated | Subordinated | Jr Subordinated | Sr Preferred | Preferred | Sr Non Preferred',
     value: '#f7ff16'
   },{
-    label: '4',
+    label: 'Unsecured',
     value: '#ff167b'
   },{
-    label: '5',
+    label: 'Unmapped',
     value: '#ffffff'
   }]
 };

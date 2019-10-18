@@ -1,5 +1,7 @@
-import { SecurityDefinitionStub } from 'App/models/frontend/frontend-stub-models.interface';
-
+import {
+  SecurityDefinitionStub,
+  SecurityMetricOptionStub
+} from 'App/models/frontend/frontend-stub-models.interface';
 
 const FilterOptionsBoolean = [
   'Yes',
@@ -153,8 +155,8 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     icon: 'fal fa-chart-pie',
     optionList: FilterOptionsTempPlaceholder
   },{
-    key: 'SENORITY',
-    displayName: 'Senority',
+    key: 'SENIORITY',
+    displayName: 'Seniority',
     icon: 'fal fa-gavel',
     optionList: FilterOptionsTempPlaceholder
   },{
@@ -163,13 +165,13 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     icon: 'fal fa-building',
     optionList: FilterOptionsTempPlaceholder
   },{
-    key: 'IS_BULLET',
+    key: 'MATURITY',
     displayName: 'Bullet',
     icon: 'fas fa-bolt',
     optionList: FilterOptionsBoolean
   },{
     key: 'IS_NEWISSUE',
-    displayName: 'New-Issued',
+    displayName: 'New Issue',
     icon: 'far fa-sparkles',
     optionList: FilterOptionsBoolean
   },{
@@ -179,3 +181,101 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     optionList: FilterOptionsBoolean
   }
 ];
+
+export const BackendKeyDictionary = {
+  'RATING': 'ratingNoNotch',
+  'RATING_DES': 'RatingNoNotch',
+  'SPREAD': 'oasSpread',
+  'PRICE': 'price',
+  'YIELD': 'yieldWorst',
+  'SENIORITY': 'Seniority',
+  'SIZE': 'amtOutstanding'
+};
+
+export const MetricOptions:Array<SecurityMetricOptionStub> = [
+  {
+    label: 'Tenor',
+    backendDtoAttrName: 'workoutTerm',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'Mtd',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'Size',
+    backendDtoAttrName: 'amtOutstanding',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'Mtd',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'OAS-Spread',
+    backendDtoAttrName: 'oasSpread',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'Mtd',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'Price',
+    backendDtoAttrName: 'price',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'Mtd',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'YieldMaturity',
+    backendDtoAttrName: 'yieldMaturity',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'Mtd',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'YieldWorst',
+    backendDtoAttrName: 'yieldWorst',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'Mtd',
+      'MoM',
+      'Ytd'
+    ]
+  }
+]
+
+export const PieChartConfiguratorOptions = {
+  left: [
+    'BAIL_IN_STATUS',
+    'CURRENCY',
+    'COUPON_TYPE',
+    'INDUSTRY',
+    'ISSUER',
+    'RATING'
+  ],
+  right: [
+    'RATING_BUCKET',
+    'SECTOR',
+    'SENIORITY',
+    'SUB_INDUSTRY',
+    'TENOR',
+    'MATURITY'
+  ]
+}

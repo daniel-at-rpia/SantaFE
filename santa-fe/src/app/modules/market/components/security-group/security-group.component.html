@@ -3,8 +3,10 @@
   class="sat-securityGroup--type-{{groupData.data.ratingLevel}}"
   [ngClass]="{
     'sat-securityGroup': true,
-    'sat-securityGroup--stencilState': groupData.state.isStencil,
-    'sat-securityGroup--selectedState': groupData.state.isSelected
+    'sat-securityGroup--stencilState': groupData.state.isStencil||!groupData.state.pieChartComplete,
+    'sat-securityGroup--calculatingAverageState': !groupData.state.averageCalculationComplete,
+    'sat-securityGroup--selectedState': groupData.state.isSelected,
+    'sat-securityGroup--expandedState': groupData.state.isExpanded
   }">
   <section class="sat-securityGroup__base">
     <div class="sat-securityGroup__base-wheel sat-securityGroup__base-wheel--left">
@@ -33,7 +35,7 @@
             <span class="sat-securityGroup__content-canvases-left-content-name-text">{{groupData.data.name}}</span>
           </div>
           <div class="sat-securityGroup__content-canvases-left-content-value">
-            <span class="sat-securityGroup__content-canvases-left-content-value-text">302</span>
+            <span class="sat-securityGroup__content-canvases-left-content-value-text" title="IG: Spread, HY: Price/Yield">{{groupData.data.primaryMetric}}</span>
           </div>
         </div>
       </div>

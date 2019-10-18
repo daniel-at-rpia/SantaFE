@@ -1,0 +1,115 @@
+<article [ngClass]="{
+  'sat-marketGroupPanel': true, 
+  'sat-marketGroupPanel--configuratorCollapsedState': state.isConfiguratorCollapsed,
+  'sat-marketGroupPanel--averageVisualizerEnabledState': state.utility.selectedWidget === 'AVERAGE_VISUALIZER',
+  'sat-marketGroupPanel--pieConfiguratorEnabledState': state.utility.selectedWidget === 'PIE_CONFIGURATOR',
+  'sat-marketGroupPanel--searchInProgressState': state.configurator.state.isLoading,
+  'sat-marketGroupPanel--searchCompletedState': state.isGroupDataLoaded
+}">
+  <section class="sat-marketGroupPanel__configurator">
+    <security-group-definition-configurator
+      (onClickSearch)="onClickSearchInConfigurator($event)"
+      [configuratorData]="state.configurator"
+    ></security-group-definition-configurator>
+  </section>
+  <section class="sat-marketGroupPanel__configuratorCollapseCTA">
+    <button
+      (click)="onToggleCollapseConfigurator()"
+      [ngClass]="{
+        'sat-marketGroupPanel__configuratorCollapseCTA-btn': true,
+        'fal': true,
+        'fa-chevron-left': !state.isConfiguratorCollapsed,
+        'fa-chevron-right': state.isConfiguratorCollapsed
+      }"></button>
+    <div class="sat-marketGroupPanel__configuratorCollapseCTA-line"></div>
+  </section>
+  <section class="sat-marketGroupPanel__groups">
+    <div class="sat-marketGroupPanel__groups-utility">
+      <div class="sat-marketGroupPanel__groups-utility-prompt">
+        <span class="sat-marketGroupPanel__groups-utility-prompt-emptyText">Use "Go Hunt" to Search for Security Groups</span>
+        <span class="sat-marketGroupPanel__groups-utility-prompt-highlightText">{{state.searchResult.securityGroupList.length}}</span>
+        <span class="sat-marketGroupPanel__groups-utility-prompt-text">groups matched your search</span>
+        <span class="sat-marketGroupPanel__groups-utility-prompt-inProgressText">Loading...</span>
+        <span class="sat-marketGroupPanel__groups-utility-prompt-inProgressHighlightText">{{state.searchResult.renderProgress}}%</span>
+      </div>
+      <div class="sat-marketGroupPanel__groups-utility-widgetSelector">
+        <div class="sat-marketGroupPanel__groups-utility-widgetSelector-btnGroup santaBtnGroup">
+          <button
+            (click)="onSwitchWidget('AVERAGE_VISUALIZER')"
+            [ngClass]="{
+              'sat-marketGroupPanel__groups-utility-widgetSelector-btnGroup-btn': true,
+              'santaBtn--labelled': true,
+              'sat-marketGroupPanel__groups-utility-widgetSelector-btnGroup-btn--selected': state.utility.selectedWidget === 'AVERAGE_VISUALIZER',
+              'santaBtn--inverseLabelled': state.utility.selectedWidget === 'AVERAGE_VISUALIZER'
+            }">
+            <i class="fas fa-calculator"></i>
+            <span>Average Calculator</span>
+          </button>
+          <button
+            (click)="onSwitchWidget('PIE_CONFIGURATOR')"
+            [ngClass]="{
+              'sat-marketGroupPanel__groups-utility-widgetSelector-btnGroup-btn': true,
+              'santaBtn--labelled': true,
+              'sat-marketGroupPanel__groups-utility-widgetSelector-btnGroup-btn--selected': state.utility.selectedWidget === 'PIE_CONFIGURATOR',
+              'santaBtn--inverseLabelled': state.utility.selectedWidget === 'PIE_CONFIGURATOR'
+            }">
+            <i class="fas fa-chart-pie"></i>
+            <span>Pie Configurator</span>
+          </button>
+        </div>
+      </div>
+      <div class="sat-marketGroupPanel__groups-utility-pieConfigurator">
+        <div
+          (click)="onClickPieConfigurator(state.utility.pieConfigurator.left)"
+          [ngClass]="{
+            'sat-marketGroupPanel__groups-utility-pieConfigurator-leftPie': true,
+            'sat-marketGroupPanel__groups-utility-pieConfigurator-leftPie--selectedState': state.utility.pieConfigurator.left.selected
+          }">
+          <button
+            *ngFor="let eachOption of state.utility.pieConfigurator.left.options; let optionIndex = index"
+            (click)="onSelectPieConfiguratorMetric(state.utility.pieConfigurator.left, eachOption)"
+            class="sat-marketGroupPanel__groups-utility-pieConfigurator-leftPie-btn--{{optionIndex+1}} {{eachOption.icon}}"
+            [ngClass]="{
+              'sat-marketGroupPanel__groups-utility-pieConfigurator-leftPie-btn': true,
+              'santaBtn--iconOnly santaBtn--small': true,
+              'sat-marketGroupPanel__groups-utility-pieConfigurator-leftPie-btn--active': state.utility.pieConfigurator.left.activeMetric === eachOption
+            }">
+          </button>
+          <span class="sat-marketGroupPanel__groups-utility-pieConfigurator-leftPie-text">{{state.utility.pieConfigurator.left.displayText}}</span>
+        </div>
+        <div
+          (click)="onClickPieConfigurator(state.utility.pieConfigurator.right)"
+          [ngClass]="{
+            'sat-marketGroupPanel__groups-utility-pieConfigurator-rightPie': true,
+            'sat-marketGroupPanel__groups-utility-pieConfigurator-rightPie--selectedState': state.utility.pieConfigurator.right.selected
+          }">
+          <button
+            *ngFor="let eachOption of state.utility.pieConfigurator.right.options; let optionIndex = index"
+            (click)="onSelectPieConfiguratorMetric(state.utility.pieConfigurator.right, eachOption)"
+            class="sat-marketGroupPanel__groups-utility-pieConfigurator-rightPie-btn--{{optionIndex+1}} {{eachOption.icon}}"
+            [ngClass]="{
+              'sat-marketGroupPanel__groups-utility-pieConfigurator-rightPie-btn': true,
+              'santaBtn--iconOnly santaBtn--small': true,
+              'sat-marketGroupPanel__groups-utility-pieConfigurator-rightPie-btn--active': state.utility.pieConfigurator.right.activeMetric === eachOption
+            }">
+          </button>
+          <span class="sat-marketGroupPanel__groups-utility-pieConfigurator-rightPie-text">{{state.utility.pieConfigurator.right.displayText}}</span>
+        </div>
+      </div>
+      <div class="sat-marketGroupPanel__groups-utility-groupAverage">
+        <security-group-average-visualizer
+          [visualizerData]="state.utility.visualizer"
+          [panelAtEmptyState]="!state.configurator.state.isLoading && !this.state.isGroupDataLoaded"
+          (onMetricChange)="updateGroupStats()">
+        </security-group-average-visualizer>
+      </div>
+    </div>
+    <ul class="sat-marketGroupPanel__groups-list">
+      <li *ngFor="let eachGroup of state.searchResult.securityGroupList; let i = index" class="sat-marketGroupPanel__groups-list-item">
+        <security-group
+          [groupData]="eachGroup"
+          [isDataReady]="!eachGroup.state.isStencil"></security-group>
+      </li>
+    </ul>
+  </section>
+</article>

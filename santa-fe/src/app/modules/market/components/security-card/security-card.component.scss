@@ -84,15 +84,11 @@ $securityCard_name_rightGap: 3rem;
     #{$securityCardBlockName} {
       &__name-text {
         @include mix_stencil_animation;
-        color: $color_stencil;
-        background-color: $color_stencil;
       }
       &__rating {
         align-items: center;
         &-text {
           @include mix_stencil_animation;
-          color: $color_stencil;
-          background-color: $color_stencil;
           font-size: $font_size_large;
         }
       }

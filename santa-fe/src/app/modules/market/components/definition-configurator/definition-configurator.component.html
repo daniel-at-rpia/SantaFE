@@ -2,7 +2,7 @@
   [ngClass]="{
     'sat-securityGroupDefinitionConfigurator': true,
     'sat-securityGroupDefinitionConfigurator--longFilterOptionsState': configuratorData.state.showLongFilterOptions,
-    'sat-securityGroupDefinitionConfigurator--filterActiveState': configuratorData.showFiltersFromDefinition
+    'sat-securityGroupDefinitionConfigurator--filterActiveState': configuratorData.state.showFiltersFromDefinition
   }">
   <section class="sat-securityGroupDefinitionConfigurator__definitions">
     <ul class="sat-securityGroupDefinitionConfigurator__definitions-list">
@@ -21,7 +21,7 @@
         <security-group-definition
           [definitionData]="eachDefinition"
           (onClick)="onClickDefinition($event)"
-          [selected]="configuratorData.showFiltersFromDefinition === eachDefinition">
+          [selected]="configuratorData.state.showFiltersFromDefinition === eachDefinition">
         </security-group-definition>
       </li>
     </ul>
@@ -30,27 +30,27 @@
     <div class="sat-securityGroupDefinitionConfigurator__filters-content">
       <div class="sat-securityGroupDefinitionConfigurator__filters-content-title">
         <security-group-definition
-          [definitionData]="configuratorData.showFiltersFromDefinition"
+          [definitionData]="configuratorData.state.showFiltersFromDefinition"
           [backgroundVariant]="true">
         </security-group-definition>
       </div>
       <div class="sat-securityGroupDefinitionConfigurator__filters-content-search">
         <santa-input
-          [inputValue]="configuratorData.filterSearchInputValue"
-          [placeholder]="'filter by keyword'"
+          [inputValue]="configuratorData.data.filterSearchInputValue"
+          [placeholder]="'search'"
           (onInputChange)="onSearchKeywordChange($event)">
         </santa-input>
       </div>
       <ul class="sat-securityGroupDefinitionConfigurator__filters-content-optionList">
         <button
-          *ngFor="let eachOption of configuratorData.showFiltersFromDefinition?.data.filterOptionList"
+          *ngFor="let eachOption of configuratorData.state.showFiltersFromDefinition?.data.filterOptionList"
           (click)="onClickFilterOption(eachOption)"
           [ngClass]="{
             'sat-securityGroupDefinitionConfigurator__filters-content-optionList-item': true,
-            'sat-securityGroupDefinitionConfigurator__filters-content-optionList-item--selected': eachOption.state.isSelected,
-            'sat-securityGroupDefinitionConfigurator__filters-content-optionList-item--filteredOut': eachOption.state.isFilteredOut
+            'sat-securityGroupDefinitionConfigurator__filters-content-optionList-item--selected': eachOption.isSelected,
+            'sat-securityGroupDefinitionConfigurator__filters-content-optionList-item--filteredOut': eachOption.isFilteredOut
           }">
-          {{eachOption.data.displayLabel}}
+          {{eachOption.displayLabel}}
         </button>
       </ul>
     </div>
