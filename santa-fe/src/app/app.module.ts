@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -9,6 +10,7 @@ import { MarketModule } from './modules/market/market.module';
 import { DTOService } from './services/DTOService';
 import { UtilityService } from './services/UtilityService';
 import { GraphService } from './services/GraphService';
+import { RestfulCommService } from './services/RestfulCommService';
 
 import { AppComponent } from './app.component';
 
@@ -19,6 +21,7 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
 
     // Native modules
     WelcomeModule,
@@ -28,7 +31,8 @@ import { AppComponent } from './app.component';
   providers: [
     DTOService,
     UtilityService,
-    GraphService
+    GraphService,
+    RestfulCommService
   ],
   bootstrap: [AppComponent]
 })

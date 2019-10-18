@@ -17,8 +17,10 @@ import {
   bufferTime,
   throttleTime,
   delay,
-  concatMap
+  concatMap,
+  catchError
 } from 'rxjs/operators';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { DTOService } from 'App/services/DTOService';
 import { UtilityService } from 'App/services/UtilityService';
@@ -96,7 +98,8 @@ export class MarketGroupPanel implements OnDestroy {
 
   constructor(
     private dtoService: DTOService,
-    private utilityService: UtilityService
+    private utilityService: UtilityService,
+    private http: HttpClient
   ){
     this.initiateComponentState();
   }
@@ -107,6 +110,29 @@ export class MarketGroupPanel implements OnDestroy {
 
   public onClickSearchInConfigurator(){
     this.startSearch();
+    const payload = {
+      "groupOptions": ["Ccy", "Tenor"],
+      "yyyyMMdd": 20190920,
+      "source": "FO",
+      "tenorOptions": ["2Y", "3Y", "5Y", "7Y", "10Y", "30Y"]
+    };
+    this.http.post<any>('https://rpiadev01:1225/santaGroup/get-santa-groups', payload, {}).pipe(
+      tap((serverReturn) => 
+        console.log('return is ', serverReturn)),
+      catchError(err => {
+        console.log('error', err);
+        return of('error');
+      })
+    ).subscribe();
+
+    this.http.put<any>('https://rpiadev01:1225/santaSecurity/get-santa-securities', {}, {}).pipe(
+      tap((serverReturn) => 
+        console.log('return is ', serverReturn)),
+      catchError(err => {
+        console.log('error', err);
+        return of('error');
+      })
+    ).subscribe();
   }
 
   public onToggleCollapseConfigurator(){
