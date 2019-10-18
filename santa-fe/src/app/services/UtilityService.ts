@@ -20,10 +20,32 @@ export class UtilityService {
 
   public mapSeniorities(input): number {
     switch (input) {
+      case "1st Lien Secured":
+        return 1;
+      case "1st lien":
+        return 1;
+      case "2nd lien":
+        return 1;
+      case "Secured":
+        return 2;
       case "Sr Unsecured":
-        return 1;
+        return 2;
+      case "Sr Subordinated":
+        return 3;
+      case "Subordinated":
+        return 3;
+      case "Jr Subordinated":
+        return 3;
+      case "Sr Preferred":
+        return 3;
+      case "Preferred":
+        return 3;
+      case "Sr Non Preferred":
+        return 3;
+      case "Unsecured":
+        return 4;
       default:
-        return 1;
+        return 5;
     }
   }
 
@@ -34,21 +56,21 @@ export class UtilityService {
       case 'AA':
         return 2;
       case 'A':
-        return 3;
+        return 2;
       case 'BBB':
-        return 4;
+        return 3;
       case 'BB':
-        return 5;
+        return 4;
       case 'B':
-        return 6;
+        return 4;
       case 'CCC':
-        return 7;
+        return 5;
       case 'CC':
-        return 7;
+        return 5;
       case 'C':
-        return 7;
+        return 5;
       case 'D':
-        return 7;
+        return 5;
       default:
         return 0;
     }
@@ -150,4 +172,45 @@ export class UtilityService {
     return value;
   }
 
+  public retrieveRawSupportingDataForLeftPie(rawData: BESecurityGroupDTO): object {
+    if (!!rawData) {
+      const object = rawData.descriptiveMetrics[this.keyDictionary.RATING_DES];
+      if (!!object) {
+        return object;
+      } else {
+        return {};
+      }
+    } else {
+      return {}
+    }
+  }
+
+  public retrieveRawSupportingDataForRightPie(rawData: BESecurityGroupDTO): object {
+    if (!!rawData) {
+      const object = rawData.descriptiveMetrics[this.keyDictionary.SENIORITY];
+      if (!!object) {
+        return object;
+      } else {
+        return {};
+      }
+    } else {
+      return {}
+    }
+  }
+
+  public retrieveValueForGroupPieChartFromSupportingData(supportingDataChunk): number {
+    //if (!!supportingDataChunk && !!supportingDataChunk["propertyToNumSecurities"]) {
+      //const count = supportingDataChunk["propertyToNumSecurities"]["WorkoutTerm"];
+    if (!!supportingDataChunk) {  
+      const weight = supportingDataChunk[this.keyDictionary.SIZE];
+      const value = Math.round(weight/1000000);
+      if (!!value) {
+        return value;
+      } else {
+        return 0
+      }
+    } else {
+      return 0;
+    }
+  }
 }

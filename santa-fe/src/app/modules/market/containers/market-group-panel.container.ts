@@ -162,8 +162,7 @@ export class MarketGroupPanel implements OnDestroy {
         console.log('received', arrayOfGroups);
         arrayOfGroups.forEach((eachGroup) => {
           const targetGroupCard = this.state.searchResult.securityGroupList[index];
-          targetGroupCard.data = this.dtoService.formSecurityGroupObject(eachGroup).data;
-          targetGroupCard.state.isStencil = false;
+          this.dtoService.updateSecurityGroupObject(eachGroup, targetGroupCard);
           this.initializeStatForGroup(targetGroupCard);
           index++;
         });

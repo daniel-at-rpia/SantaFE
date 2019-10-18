@@ -75,16 +75,29 @@ export class DTOService {
         leftPie: {
           name: this.utility.generateUUID(),
           colorScheme: SecurityGroupRatingColorScheme,
-          chart: null
+          chart: null,
+          rawSupportingData: isStencil ? {} : this.utility.retrieveRawSupportingDataForLeftPie(rawData)
         },
         rightPie: {
           name: this.utility.generateUUID(),
           colorScheme: SecurityGroupSeniorityColorScheme,
-          chart: null
+          chart: null,
+          rawSupportingData: this.utility.retrieveRawSupportingDataForRightPie(rawData)
         }
       }
     };
     return object;
+  }
+
+  public updateSecurityGroupObject(
+    rawData: BESecurityGroupDTO,
+    oldStencilDTO: SecurityGroupDTO
+  ) {
+    const newObject = this.formSecurityGroupObject(rawData, false);
+    oldStencilDTO.data = newObject.data;
+    oldStencilDTO.graph.leftPie.rawSupportingData = newObject.graph.leftPie.rawSupportingData;
+    oldStencilDTO.graph.rightPie.rawSupportingData = newObject.graph.rightPie.rawSupportingData;
+    oldStencilDTO.state.isStencil = false;
   }
 
   public generateSecurityGroupDefinitionFilterOptionList(name, options): Array<SecurityGroupDefinitionFilterBlock> {

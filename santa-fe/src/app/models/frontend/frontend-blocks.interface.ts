@@ -19,7 +19,8 @@ export interface SecurityGroupMetricBlock {
 export interface SecurityGroupPieChartBlock {
   name: string;
   colorScheme: SecurityGroupPieChartColorSchemeBlock;
-  chart: am4charts.PieChart
+  chart: am4charts.PieChart;
+  rawSupportingData: object;
 }
 
 export interface SecurityGroupPieChartDataBlock {

@@ -184,9 +184,12 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
 
 export const BackendKeyDictionary = {
   'RATING': 'ratingNoNotch',
+  'RATING_DES': 'RatingNoNotch',
   'SPREAD': 'oasSpread',
   'PRICE': 'price',
-  'YIELD': 'yieldWorst'
+  'YIELD': 'yieldWorst',
+  'SENIORITY': 'Seniority',
+  'SIZE': 'amtOutstanding'
 };
 
 export const MetricOptions:Array<SecurityMetricOptionStub> = [

@@ -24,7 +24,7 @@ $averageVisualizer_metricNames_width_expanded: $securityGroup_content_canvases_l
     flex-direction: column;
     margin-right: $securityGroup_base_wheel_size;
     &-mask {
-      @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+      @include mix_fixed_div(absolute, $z_index_standard_base_item_lift);
       @include mix_alive('custom', $animation_duration_heavy transform);
       width: 100%;
       height: 100%;

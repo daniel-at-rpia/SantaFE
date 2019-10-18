@@ -37,7 +37,7 @@ export class GraphService {
     pieSeries.slices.template.strokeOpacity = 1;
     pieSeries.slices.template.strokeWidth = 1;
     pieSeries.alignLabels = false;
-    pieSeries.labels.template.text = "{value.percent.formatNumber('#.')}%";
+    pieSeries.labels.template.text = "{category}/{value}";
     pieSeries.labels.template.fontFamily = "SantaOpenSans";
     pieSeries.labels.template.fontWeight = "300";
     pieSeries.labels.template.fontSize = 1;  // this is not working
@@ -52,7 +52,7 @@ export class GraphService {
     pieSeries.slices.template.states.getKey("hover").properties.scale = 1;
     pieSeries.slices.template.states.getKey("active").properties.shiftRadius = 0;
     //pieSeries.innerRadius = am4core.percent(60);
-    const data = this.generateGroupPieChartTestData(pieChartDTO);
+    const data = this.generateGroupPieChartData(pieChartDTO);
     chart.data = data;
     //chart.innerRadius = 1;
     //chart.defaultState.properties.innerRadius = am4core.percent(2);
@@ -89,54 +89,41 @@ export class GraphService {
     }
   }
 
-  public generateGroupPieChartTestData(
+  private generateGroupPieChartData(
     pieChartDTO: SecurityGroupPieChartBlock
   ): Array<SecurityGroupPieChartDataBlock> {
     const colorScheme = pieChartDTO.colorScheme.scheme;
-    if (pieChartDTO.colorScheme.type === 'Rating') {
-      const newEntry1:SecurityGroupPieChartDataBlock = {
-        label: 'AAA',
-        value: Math.floor(Math.random()*100),
-        color: am4core.color(colorScheme[1].value)
+    const dataList:Array<SecurityGroupPieChartDataBlock> = [];
+    //if (pieChartDTO.colorScheme.type === 'Rating') {
+      for (const attrName in pieChartDTO.rawSupportingData) {
+        const colorMappingIndex = this.findColorMapping(pieChartDTO.colorScheme.type, attrName);
+        const newEntry:SecurityGroupPieChartDataBlock = {
+          label: `${colorMappingIndex}`,
+          value: this.utility.retrieveValueForGroupPieChartFromSupportingData(pieChartDTO.rawSupportingData[attrName]),
+          color: am4core.color(colorScheme[colorMappingIndex].value)
+        };
+        const existEntry = dataList.find((eachEntry) => {
+          return eachEntry.label === newEntry.label;
+        });
+        if (!!existEntry) {
+          existEntry.value = existEntry.value + newEntry.value;
+        } else {
+          dataList.push(newEntry);
+        }
       };
-      const newEntry2:SecurityGroupPieChartDataBlock = {
-        label: 'AA',
-        value: Math.floor(Math.random()*100),
-        color: am4core.color(colorScheme[2].value)
-      };
-      const newEntry3:SecurityGroupPieChartDataBlock = {
-        label: 'A',
-        value: Math.floor(Math.random()*100),
-        color: am4core.color(colorScheme[4].value)
-      };
-      return [newEntry1, newEntry2, newEntry3];
-    } else if (pieChartDTO.colorScheme.type === 'Seniority') {
-      const newEntry1:SecurityGroupPieChartDataBlock = {
-        label: colorScheme[1].label,
-        value: Math.floor(Math.random()*100),
-        color: am4core.color(colorScheme[1].value)
-      };
-      const newEntry2:SecurityGroupPieChartDataBlock = {
-        label: colorScheme[2].label,
-        value: Math.floor(Math.random()*100),
-        color: am4core.color(colorScheme[2].value)
-      };
-      const newEntry3:SecurityGroupPieChartDataBlock = {
-        label: colorScheme[3].label,
-        value: Math.floor(Math.random()*100),
-        color: am4core.color(colorScheme[3].value)
-      };
-      const newEntry4:SecurityGroupPieChartDataBlock = {
-        label: colorScheme[4].label,
-        value: Math.floor(Math.random()*100),
-        color: am4core.color(colorScheme[4].value)
-      };
-      const newEntry5:SecurityGroupPieChartDataBlock = {
-        label: colorScheme[5].label,
-        value: Math.floor(Math.random()*100),
-        color: am4core.color(colorScheme[5].value)
-      };
-      return [newEntry1, newEntry2, newEntry3, newEntry4, newEntry5];
+    // } else if (pieChartDTO.colorScheme.type === 'Seniority') {
+    //   for (const attrName in pieChartDTO.rawSupportingData) {
+
+    //   }
+    // }
+    return dataList
+  }
+
+  private findColorMapping(colorScheme: string, attrName: string): number {
+    if (colorScheme === 'Rating') {
+      return this.utility.mapRatings(attrName);
+    } else if (colorScheme === 'Seniority') {
+      return this.utility.mapSeniorities(attrName);
     }
   }
 }
