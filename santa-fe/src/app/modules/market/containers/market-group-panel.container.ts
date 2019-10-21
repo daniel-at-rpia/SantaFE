@@ -110,6 +110,15 @@ export class MarketGroupPanel implements OnDestroy {
         return of('error');
       })
     ).subscribe();
+    this.restfulCommonService.callAPI('https://rpiadev01:1225/santaGroup/get-santa-groups', {req: 'POST'}, payload).pipe(
+      tap((serverReturn) => {
+        console.log('return is ', serverReturn)
+      }),
+      catchError(err => {
+        console.log('error', err);
+        return of('error');
+      })
+    ).subscribe();
   }
 
   constructor(
