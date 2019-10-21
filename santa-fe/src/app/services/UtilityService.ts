@@ -18,6 +18,14 @@ export class UtilityService {
 
   constructor(){}
 
+  public deepCopy(input): any {
+    if (!!input) {
+      return cloneDeep(input);
+    } else {
+      return null;
+    }
+  }
+
   public mapSeniorities(input): number {
     switch (input) {
       case "1st Lien Secured":

@@ -8,15 +8,22 @@
       *ngFor="let eachStat of visualizerData.data.stats; let statIndex = index"
       [ngClass]="{
         'sat-securityGroupAverageVisualizerName': true,
+        'sat-securityGroupAverageVisualizerName--showingDeltaState': eachStat.deltaScope,
         'sat-securityGroupAverageVisualizerName--selectedState': visualizerData.state.selectingStat === eachStat,
         'sat-securityGroupAverageVisualizerName--editingState': visualizerData.state.editingStat === eachStat,
+        'sat-securityGroupAverageVisualizerName--sortActiveState': eachStat.sortHierarchy > 0,
         'sat-securityGroupAverageVisualizerName--emptyState': eachStat.isEmpty,
         'sat-securityGroupAverageVisualizerName--nextEmpty': statIndex < visualizerData.data.stats.length-1 && visualizerData.data.stats[statIndex+1].isEmpty,
         'sat-securityGroupAverageVisualizerName--stencilState': visualizerData.state.isStencil,
         'sat-securityGroupAverageVisualizerName--panelEmptyState': panelAtEmptyState
       }">
       <section class="sat-securityGroupAverageVisualizerName__leftMargin"></section>
+      <section class="sat-securityGroupAverageVisualizerName__sortHierarchy">
+        <i class="sat-securityGroupAverageVisualizerName__sortHierarchy-icon fal fa-filter"></i>
+        <span class="sat-securityGroupAverageVisualizerName__sortHierarchy-text">{{eachStat.sortHierarchy}}</span>
+      </section>
       <button (click)="onClickMetric(eachStat)" class="sat-securityGroupAverageVisualizerName__nameCTA">{{eachStat.label}}</button>
+      <button (click)="onClickMetric(eachStat)" class="sat-securityGroupAverageVisualizerName__nameCTA sat-securityGroupAverageVisualizerName__nameCTA--delta">Δ {{eachStat.label}} - {{eachStat.deltaScope}}</button>
       <span class="sat-securityGroupAverageVisualizerName__value">{{eachStat.value}}</span>
       <button (click)="addMetric(eachStat)" class="sat-securityGroupAverageVisualizerName__addMetric santaBtn--labelled santaBtn--inverseLabelled">
         <i class="sat-securityGroupAverageVisualizerName__addMetric-icon fal fa-plus"></i>
@@ -25,7 +32,7 @@
       <section class="sat-securityGroupAverageVisualizerName__actionMenu">
         <button (click)="onClickActionDelete(eachStat)" class="sat-securityGroupAverageVisualizerName__actionMenu-deleteBtn santaBtn--iconOnly santaBtn--small fal fa-times"></button>
         <button (click)="onClickActionEdit(eachStat)" class="sat-securityGroupAverageVisualizerName__actionMenu-editBtn santaBtn--iconOnly santaBtn--small fal fa-pencil"></button>
-        <button class="sat-securityGroupAverageVisualizerName__actionMenu-sortBtn santaBtn--iconOnly santaBtn--small fal fa-sort-amount-down-alt"></button>
+        <button (click)="onClickMetricSort(eachStat)" class="sat-securityGroupAverageVisualizerName__actionMenu-sortBtn santaBtn--iconOnly santaBtn--small fal fa-sort-amount-down-alt"></button>
       </section>
       <section class="sat-securityGroupAverageVisualizerName__metricSelectionDropdown">
         <div class="sat-securityGroupAverageVisualizerName__metricSelectionDropdown-content">

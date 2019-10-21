@@ -171,6 +171,10 @@ export class MarketGroupPanel implements OnDestroy {
     this.calculateGroupAverage(this.state.searchResult.securityGroupList.length);
   }
 
+  public updateSort(){
+    //console.log('dantest sorting by ', targetMetric);
+  }
+
   private startSearch(){
     this.state.isGroupDataLoaded = false;
     this.state.utility.visualizer.state.isEmpty = false;
@@ -211,6 +215,7 @@ export class MarketGroupPanel implements OnDestroy {
   }
 
   private searchComplete(){
+
     this.state.searchResult.securityGroupList.forEach((eachGroup) => {
       eachGroup.state.averageCalculationComplete = true;
     });
@@ -232,6 +237,8 @@ export class MarketGroupPanel implements OnDestroy {
     this.state.utility.visualizer.data.stats.forEach((eachStat, index) => {
       if (!eachStat.isEmpty) {
         const newStat:SecurityGroupMetricBlock = {
+          isEmpty: eachStat.isEmpty,
+          deltaScope: eachStat.deltaScope,
           label: eachStat.label,
           value: this.utilityService.retrieveGroupMetricValue(eachStat.label, targetGroup),
           max: null,

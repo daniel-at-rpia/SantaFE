@@ -90,6 +90,6 @@ export interface SecurityGroupAverageVisualizerDTO extends BasicDTOStructure {
     editingStat: SecurityGroupMetricBlock;
     editingStatSelectedMetric: any;
     editingStatSelectedMetricValueType: string;
-    editingStatSelectedMetricDeltaType: string; 
+    editingStatSelectedMetricDeltaType: string;
   }
 }

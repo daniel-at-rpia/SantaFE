@@ -54,7 +54,7 @@ $averageVisualizer_metricNames_width_expanded: $securityGroup_content_canvases_l
   }
 }
 
-$averageVisualizerName_nameCTA_width: 7.5rem;
+$averageVisualizerName_nameCTA_width: 10rem;
 $averageVisualizerName_nameCTA_height: 1.5rem;
 $averageVisualizerName_value_width: 3.25rem;
 $averageVisualizerName_metricSelectionDropdown_size: 24rem;
@@ -71,11 +71,30 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
   &__leftMargin {
     flex: 0 1 $securityGroup_base_wheel_size;
   }
+  &__sortHierarchy {
+    @include mix_border_radius(5px);
+    display: none;
+    align-items: center;
+    background-color: $color_filter;
+    padding: $spacing_xx_small $spacing_small;
+    &-icon {
+      color: $font_color_inverse;
+      font-size: $font_size_x_small;
+    }
+    &-text {
+      margin-left: $spacing_x_small;
+      color: $font_color_inverse;
+      font-size: $font_size_x_small;
+    }
+  }
   &__nameCTA {
     flex: 0 0 $averageVisualizerName_nameCTA_width;
     height: $averageVisualizerName_nameCTA_height;
     padding: 0;
     font-size: $font_size_small;
+    &--delta {
+      display: none;
+    }
   }
   &__value {
     flex: 0 0 $averageVisualizerName_value_width;
@@ -116,6 +135,9 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
       background-color: $color_edit;
       color: $font_color_inverse;
     }
+    &-sortBtn {
+
+    }
   }
   &__metricSelectionDropdown {
     @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
@@ -131,6 +153,16 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
       transform: translate(0, -100%) ;
       height: $spacing_minimum;
       overflow: hidden;
+    }
+  }
+  &--showingDeltaState {
+    #{$averageVisualizerNameBlockName} {
+      &__nameCTA {
+        display: none;
+        &--delta {
+          display: flex;
+        }
+      }
     }
   }
   &--selectedState {
@@ -160,6 +192,20 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
         width: $averageVisualizerName_metricSelectionDropdown_size;
         background-color: $color_white;
         transform: translate(0, 0);
+      }
+    }
+  }
+  &--sortActiveState {
+    #{$averageVisualizerNameBlockName} {
+      &__sortHierarchy {
+        display: flex;
+        margin-right: $spacing_small;
+      }
+      &__actionMenu {
+        &-sortBtn {
+          background-color: $color_filter;
+          color: $font_color_inverse;
+        }
       }
     }
   }

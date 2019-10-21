@@ -160,18 +160,22 @@ export class DTOService {
         stats: [
           {
             isEmpty: true,
+            deltaScope: null,
             label: '',
             value: 100,
             max: 100,
             percentage: 100
           },{
             isEmpty: true,
+            deltaScope: null,
             label: '',
             value: 100,
             max: 100,
             percentage: 100
           },{
+            isEmpty: false,
             label: MetricOptions[1].label,
+            deltaScope: null,
             value: 100,
             max: 100,
             percentage: 100
