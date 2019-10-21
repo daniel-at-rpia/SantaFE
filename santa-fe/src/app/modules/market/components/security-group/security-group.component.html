@@ -3,7 +3,8 @@
   class="sat-securityGroup--type-{{groupData.data.ratingLevel}}"
   [ngClass]="{
     'sat-securityGroup': true,
-    'sat-securityGroup--stencilState': groupData.state.isStencil||!groupData.state.pieChartComplete,
+    'sat-securityGroup--stencilState': groupData.state.isStencil,
+    'sat-securityGroup--drawingGraphState': !groupData.state.areChartsReady,
     'sat-securityGroup--calculatingAverageState': !groupData.state.averageCalculationComplete,
     'sat-securityGroup--selectedState': groupData.state.isSelected,
     'sat-securityGroup--expandedState': groupData.state.isExpanded

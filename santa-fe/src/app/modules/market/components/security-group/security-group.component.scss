@@ -342,17 +342,36 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
       }
     }
   }
+  &--drawingGraphState {
+    #{$securityGroupBlockName} {
+      &__content {
+        &-wheel-chartContainer {
+          @include mix_stencil_animation;
+          &-chart {
+            transform: rotate(-360deg) scale(0.01);
+            opacity: 0;
+          }
+          &-innerRadius {
+            transform: scale(0.01);
+            opacity: 0;
+          }
+        }
+      }
+    }
+  }
   &--calculatingAverageState {
     #{$securityGroupBlockName} {
-      &__content-canvases-right {
-        &-metricLines {
-          &-lineContainer-line {
-            @include mix_stencil_animation;
-            width: 100%;
-          }
-          &-mask {
-            opacity: 0;
-            transform: translate(0, 0);
+      &__content {
+        &-canvases-right {
+          &-metricLines {
+            &-lineContainer-line {
+              @include mix_stencil_animation;
+              width: 100%;
+            }
+            &-mask {
+              opacity: 0;
+              transform: translate(0, 0);
+            }
           }
         }
       }

@@ -109,7 +109,7 @@
       <li *ngFor="let eachGroup of state.searchResult.securityGroupList; let i = index" class="sat-marketGroupPanel__groups-list-item">
         <security-group
           [groupData]="eachGroup"
-          [isDataReady]="!eachGroup.state.isStencil"></security-group>
+          [areChartsReady]="!eachGroup.state.areChartsReady"></security-group>
       </li>
     </ul>
   </section>

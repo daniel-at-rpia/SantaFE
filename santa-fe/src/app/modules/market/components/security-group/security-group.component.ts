@@ -22,7 +22,7 @@ import { GraphService } from 'App/services/GraphService';
 })
 export class SecurityGroup implements OnInit, OnChanges {
   @Input() groupData: SecurityGroupDTO;
-  @Input() isDataReady: boolean;
+  @Input() areChartsReady: boolean;
 
   constructor(
     private graphService: GraphService
@@ -32,7 +32,7 @@ export class SecurityGroup implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (!this.groupData.state.isStencil && !this.groupData.state.pieChartComplete) {
+    if (this.groupData.state.areChartsReady && !this.groupData.state.pieChartComplete) {
       this.groupData.state.pieChartComplete = true;
       this.populateGraphs();
     }

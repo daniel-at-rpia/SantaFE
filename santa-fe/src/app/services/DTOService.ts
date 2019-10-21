@@ -52,14 +52,14 @@ export class DTOService {
 
   public formSecurityGroupObject(
     rawData: BESecurityGroupDTO,
-    isStencil?: boolean
+    areChartsReady: boolean
   ): SecurityGroupDTO {
     const object:SecurityGroupDTO = {
       data: {
-        name: isStencil ? 'PLACEHOLDER' : rawData.groupName,
-        ratingLevel: isStencil ? 1 : this.utility.mapRatings(rawData.metrics['ratingNoNotch']),
-        ratingValue: isStencil ? 'AA' : rawData.metrics['ratingNoNotch'],
-        numOfSecurities: isStencil ? 32 : rawData.numSecurities,
+        name: !!rawData ?  rawData.groupName : 'PLACEHOLDER',
+        ratingLevel: !!rawData ? this.utility.mapRatings(rawData.metrics['ratingNoNotch']) : 1,
+        ratingValue: !!rawData ? rawData.metrics['ratingNoNotch'] : 'AA',
+        numOfSecurities: !!rawData ? rawData.numSecurities : 32,
         stats: [],
         metrics: this.utility.packMetricData(rawData),
         primaryMetric: this.utility.retrievePrimaryMetricValue(rawData),
@@ -72,37 +72,37 @@ export class DTOService {
       state: {
         isSelected: false,
         isExpanded: false,
-        isStencil: !!isStencil,
-        averageCalculationComplete: !isStencil,
-        pieChartComplete: false  // pie chart always needs to be drawn, while average may or may not be calculated instanteneously if it is not stencil
+        isStencil: !rawData,
+        areChartsReady: !!areChartsReady,
+        averageCalculationComplete: false,
+        pieChartComplete: false
       },
       graph: {
         leftPie: {
           name: this.utility.generateUUID(),
           colorScheme: SecurityGroupRatingColorScheme,
           chart: null,
-          rawSupportingData: isStencil ? {} : this.utility.retrieveRawSupportingDataForLeftPie(rawData)
+          rawSupportingData: !areChartsReady ? {} : this.utility.retrieveRawSupportingDataForLeftPie(rawData)
         },
         rightPie: {
           name: this.utility.generateUUID(),
           colorScheme: SecurityGroupSeniorityColorScheme,
           chart: null,
-          rawSupportingData: this.utility.retrieveRawSupportingDataForRightPie(rawData)
+          rawSupportingData: !areChartsReady ? {} : this.utility.retrieveRawSupportingDataForRightPie(rawData)
         }
       }
     };
     return object;
   }
 
-  public updateSecurityGroupObject(
+  public updateSecurityGroupWithPieCharts(
     rawData: BESecurityGroupDTO,
-    oldStencilDTO: SecurityGroupDTO
+    groupDTO: SecurityGroupDTO
   ) {
-    const newObject = this.formSecurityGroupObject(rawData, false);
-    oldStencilDTO.data = newObject.data;
-    oldStencilDTO.graph.leftPie.rawSupportingData = newObject.graph.leftPie.rawSupportingData;
-    oldStencilDTO.graph.rightPie.rawSupportingData = newObject.graph.rightPie.rawSupportingData;
-    oldStencilDTO.state.isStencil = false;
+    const newObject = this.formSecurityGroupObject(rawData, true);
+    groupDTO.graph.leftPie.rawSupportingData = newObject.graph.leftPie.rawSupportingData;
+    groupDTO.graph.rightPie.rawSupportingData = newObject.graph.rightPie.rawSupportingData;
+    groupDTO.state.areChartsReady = true;
   }
 
   public generateSecurityGroupDefinitionFilterOptionList(name, options): Array<SecurityGroupDefinitionFilterBlock> {

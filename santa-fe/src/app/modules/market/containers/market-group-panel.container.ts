@@ -47,8 +47,8 @@ import {
 
 export class MarketGroupPanel implements OnDestroy {
   state: MarketGroupPanelState;
-  searchServerReturn$: Observable<BESecurityGroupDTO>;
-  searchServerReturnPackedInChunk$: Observable<Array<BESecurityGroupDTO>>;
+  searchServerReturn$: Observable<SecurityGroupDTO>;
+  searchServerReturnPackedInChunk$: Observable<Array<SecurityGroupDTO>>;
   getGroupsFromSearchSub: Subscription;
   PieChartConfigurationOptions = PieChartConfiguratorOptions;
   SecurityGroupDefinitionMap = SecurityGroupDefinitionMap;
@@ -169,6 +169,7 @@ export class MarketGroupPanel implements OnDestroy {
   public updateGroupStats(){
     this.initializeGroupStats();
     this.calculateGroupAverage(this.state.searchResult.securityGroupList.length);
+    this.updateSort();
   }
 
   public updateSort(){
@@ -206,30 +207,44 @@ export class MarketGroupPanel implements OnDestroy {
   }
 
   private performSearch(){
-    this.state.searchResult.securityGroupList = SecurityGroupList.map((eachStub) => {
-      return this.dtoService.formSecurityGroupObject(null, true);
+    // using stubs
+    const serverReturn = SecurityGroupList;
+
+    this.state.searchResult.securityGroupList = serverReturn.map((eachStub) => {
+      return this.dtoService.formSecurityGroupObject(eachStub, false);
     });
     this.initializeGroupStats();
+    this.updateSort();
 
-    this.searchServerReturn$ = from(SecurityGroupList).pipe(
+    this.searchServerReturn$ = from(this.state.searchResult.securityGroupList).pipe(
       concatMap(item => of(item).pipe(delay(150)))
     );
     this.searchServerReturnPackedInChunk$ = this.searchServerReturn$.pipe(
       bufferTime(1000)
     );
-    let index = 0;
+    let fullyLoadedCount = 0;
+    
     this.getGroupsFromSearchSub = this.searchServerReturnPackedInChunk$.pipe(
       delay(2000),  // this delay is to simulate the delay from server
-      tap((arrayOfGroups:Array<BESecurityGroupDTO>) => {
+      tap((arrayOfGroups:Array<SecurityGroupDTO>) => {
         console.log('received', arrayOfGroups);
         arrayOfGroups.forEach((eachGroup) => {
-          const targetGroupCard = this.state.searchResult.securityGroupList[index];
-          this.dtoService.updateSecurityGroupObject(eachGroup, targetGroupCard);
-          this.initializeStatForGroup(targetGroupCard);
-          index++;
+          // when sort is already active before the search, the index of the rawData is likely not gonna be the same as the index of the DTOs, therefore need to do "find"
+          let rawData;
+          if (this.state.utility.visualizer.data.stats[0].sortHierarchy > 0 || this.state.utility.visualizer.data.stats[1].sortHierarchy > 0 || this.state.utility.visualizer.data.stats[2].sortHierarchy > 0) {
+            rawData = serverReturn.find((eachRawGroup) => {
+              return eachRawGroup.groupName === eachGroup.data.name;
+            });
+          } else {
+            rawData = serverReturn[fullyLoadedCount];
+          }
+          //this.state.searchResult.securityGroupList[index];
+          this.dtoService.updateSecurityGroupWithPieCharts(rawData, eachGroup);
+          //this.initializeStatForGroup(targetGroupCard);
+          fullyLoadedCount++;
         });
-        this.state.searchResult.renderProgress = Math.round(index/SecurityGroupList.length*100);
-        if (index === SecurityGroupList.length) {
+        this.state.searchResult.renderProgress = Math.round(fullyLoadedCount/SecurityGroupList.length*100);
+        if (fullyLoadedCount === SecurityGroupList.length) {
           this.searchComplete();
         }
       })
@@ -237,7 +252,6 @@ export class MarketGroupPanel implements OnDestroy {
   }
 
   private searchComplete(){
-
     this.state.searchResult.securityGroupList.forEach((eachGroup) => {
       eachGroup.state.averageCalculationComplete = true;
     });
