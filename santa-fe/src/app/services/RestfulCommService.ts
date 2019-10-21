@@ -12,11 +12,17 @@ export class RestfulCommService {
     //params = params.append('apiCall', 'true');
     //const queryOpts = { ...opts, params };
     const queryOpts = {
-      ...opts
+      ...opts,
+
     };
     switch (opts.req) {
       case 'POST':
-        return this.http.post<any>(url, body, queryOpts);
+        return this.http.post<any>(url, body, 
+          {
+            ...queryOpts,
+            withCredentials: true
+          }
+        );
       case 'GET':
         return this.http.get<any>(url, queryOpts);
     }

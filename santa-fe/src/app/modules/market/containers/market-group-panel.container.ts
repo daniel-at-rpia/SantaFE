@@ -95,6 +95,21 @@ export class MarketGroupPanel implements OnDestroy {
     });
     this.onSelectPieConfiguratorMetric(this.state.utility.pieConfigurator.left, this.state.utility.pieConfigurator.left.options[5]);
     this.onSelectPieConfiguratorMetric(this.state.utility.pieConfigurator.right, this.state.utility.pieConfigurator.right.options[2]);
+    const payload = {
+      "groupOptions": ["Ccy", "Tenor"],
+      "yyyyMMdd": 20190920,
+      "source": "FO",
+      "tenorOptions": ["2Y", "3Y", "5Y", "7Y", "10Y", "30Y"]
+    };
+    this.restfulCommonService.callAPI('https://rpiadev01:1225/santaSecurity/get-santa-securities', {req: 'GET'}, payload).pipe(
+      tap((serverReturn) => {
+        console.log('return is ', serverReturn)
+      }),
+      catchError(err => {
+        console.log('error', err);
+        return of('error');
+      })
+    ).subscribe();
   }
 
   constructor(
@@ -111,21 +126,6 @@ export class MarketGroupPanel implements OnDestroy {
 
   public onClickSearchInConfigurator(){
     this.startSearch();
-    const payload = {
-      "groupOptions": ["Ccy", "Tenor"],
-      "yyyyMMdd": 20190920,
-      "source": "FO",
-      "tenorOptions": ["2Y", "3Y", "5Y", "7Y", "10Y", "30Y"]
-    };
-    this.restfulCommonService.callAPI('https://rpiadev01:1225/santaGroup/get-santa-groups', {req: 'POST'}, payload).pipe(
-      tap((serverReturn) => {
-        console.log('return is ', serverReturn)
-      }),
-      catchError(err => {
-        console.log('error', err);
-        return of('error');
-      })
-    ).subscribe();
     // this.http.post<any>('https://rpiadev01:1225/santaGroup/get-santa-groups', payload, {}).pipe(
     //   tap((serverReturn) => 
     //     console.log('return is ', serverReturn)),
