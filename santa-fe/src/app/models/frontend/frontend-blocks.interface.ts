@@ -26,6 +26,7 @@ export interface SecurityGroupPieChartBlock {
 export interface SecurityGroupPieChartDataBlock {
   label: string;
   value: number;
+  index: number;
   color: any;
 }
 

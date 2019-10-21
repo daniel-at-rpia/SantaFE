@@ -49,6 +49,37 @@ export class UtilityService {
     }
   }
 
+  public convertSenioritiesToAcronyms(input): string {
+    switch (input) {
+      case "1st Lien Secured":
+        return '1-LS';
+      case "1st lien":
+        return '1-L';
+      case "2nd lien":
+        return '2-L';
+      case "Secured":
+        return 'S';
+      case "Sr Unsecured":
+        return 'S-U';
+      case "Sr Subordinated":
+        return 'S-S';
+      case "Subordinated":
+        return 'So';
+      case "Jr Subordinated":
+        return 'J-So';
+      case "Sr Preferred":
+        return 'S-P';
+      case "Preferred":
+        return 'P';
+      case "Sr Non Preferred":
+        return 'S-NP';
+      case "Unsecured":
+        return 'U';
+      default:
+        return 'n/a';
+    }
+  }
+
   public mapRatings(input): number {
     switch (input) {
       case 'AAA':
