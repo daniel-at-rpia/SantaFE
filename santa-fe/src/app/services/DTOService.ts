@@ -62,7 +62,12 @@ export class DTOService {
         numOfSecurities: isStencil ? 32 : rawData.numSecurities,
         stats: [],
         metrics: this.utility.packMetricData(rawData),
-        primaryMetric: this.utility.retrievePrimaryMetricValue(rawData)
+        primaryMetric: this.utility.retrievePrimaryMetricValue(rawData),
+        sort: {
+          primarySortMetricValue: null,
+          secondarySortMetricValue: null,
+          tertiarySortMetricValue: null
+        }
       },
       state: {
         isSelected: false,
@@ -160,6 +165,7 @@ export class DTOService {
         stats: [
           {
             isEmpty: true,
+            sortHierarchy: null,
             deltaScope: null,
             label: '',
             value: 100,
@@ -167,6 +173,7 @@ export class DTOService {
             percentage: 100
           },{
             isEmpty: true,
+            sortHierarchy: null,
             deltaScope: null,
             label: '',
             value: 100,
@@ -174,8 +181,9 @@ export class DTOService {
             percentage: 100
           },{
             isEmpty: false,
-            label: MetricOptions[1].label,
+            sortHierarchy: null,
             deltaScope: null,
+            label: MetricOptions[1].label,
             value: 100,
             max: 100,
             percentage: 100

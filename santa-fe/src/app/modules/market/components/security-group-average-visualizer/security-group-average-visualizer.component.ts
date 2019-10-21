@@ -88,6 +88,7 @@ export class SecurityGroupAverageVisualizer implements OnInit {
     }
     this.visualizerData.state.selectingStat = null;
     this.visualizerData.state.editingStat = null;
+    this.onSortHierarchyChange.emit();
   }
 
   public dropdownSelectMetricValueType(targetValueType){

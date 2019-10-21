@@ -34,6 +34,11 @@ export interface SecurityGroupDTO extends BasicDTOStructure {
     stats: Array<SecurityGroupMetricBlock>;
     metrics: object;
     primaryMetric: string;
+    sort: {
+      primarySortMetricValue: number;
+      secondarySortMetricValue: number;
+      tertiarySortMetricValue: number;
+    }
   }
   state: {
     isExpanded: boolean;

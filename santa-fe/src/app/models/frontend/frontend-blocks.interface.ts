@@ -10,7 +10,7 @@ import * as am4charts from "@amcharts/amcharts4/charts";
 
 export interface SecurityGroupMetricBlock {
   isEmpty: boolean;
-  sortHierarchy?: number;
+  sortHierarchy: number;
   deltaScope: string;
   label: string;
   value: number;

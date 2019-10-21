@@ -172,7 +172,29 @@ export class MarketGroupPanel implements OnDestroy {
   }
 
   public updateSort(){
-    //console.log('dantest sorting by ', targetMetric);
+    if (this.state.searchResult.securityGroupList.length > 0) {
+      let primarySortIndex, secondarySortIndex, tertiarySortIndex;
+      const indexRetrieveTarget = this.state.searchResult.securityGroupList[0];
+      indexRetrieveTarget.data.stats.forEach((eachStat, index) => {
+        const matchedMetricFromVisualizer = this.state.utility.visualizer.data.stats.find((eachVisualizerStat) => {
+          return eachVisualizerStat.label === eachStat.label;
+        });
+        if (matchedMetricFromVisualizer.sortHierarchy === 1) {
+          primarySortIndex = index;
+        } else if (matchedMetricFromVisualizer.sortHierarchy === 2) {
+          secondarySortIndex = index;
+        } else if (matchedMetricFromVisualizer.sortHierarchy === 3) {
+          tertiarySortIndex = index;
+        }
+      });
+      if (primarySortIndex >= 0) {
+        // if there is at least a primarySortIndex, then it's worth to sort
+        this.populateDataToPrepareForSort(primarySortIndex, secondarySortIndex, tertiarySortIndex);
+        this.performSort();
+      } else{
+        // default sorting algorithm
+      }
+    }
   }
 
   private startSearch(){
@@ -238,6 +260,7 @@ export class MarketGroupPanel implements OnDestroy {
       if (!eachStat.isEmpty) {
         const newStat:SecurityGroupMetricBlock = {
           isEmpty: eachStat.isEmpty,
+          sortHierarchy: eachStat.sortHierarchy > 0 ? eachStat.sortHierarchy : null,
           deltaScope: eachStat.deltaScope,
           label: eachStat.label,
           value: this.utilityService.retrieveGroupMetricValue(eachStat.label, targetGroup),
@@ -278,6 +301,40 @@ export class MarketGroupPanel implements OnDestroy {
             targetStat.percentage = Math.round(targetStat.value/targetStat.max * 10000)/100;
           }
         });
+      }
+    });
+  }
+
+  private populateDataToPrepareForSort(primarySortIndex: number, secondarySortIndex: number, tertiarySortIndex: number){
+    this.state.searchResult.securityGroupList.forEach((eachGroup) => {
+      if (primarySortIndex >= 0 && primarySortIndex <= 2) {
+        eachGroup.data.sort.primarySortMetricValue = eachGroup.data.stats[primarySortIndex].value;
+      }
+      if (secondarySortIndex >= 0 && secondarySortIndex <= 2) {
+        eachGroup.data.sort.secondarySortMetricValue = eachGroup.data.stats[secondarySortIndex].value;
+      }
+      if (tertiarySortIndex >= 0 && tertiarySortIndex <= 2) {
+        eachGroup.data.sort.tertiarySortMetricValue = eachGroup.data.stats[tertiarySortIndex].value;
+      }
+    });
+  }
+
+  private performSort(){
+    this.state.searchResult.securityGroupList.sort((groupA, groupB) => {
+      if (groupA.data.sort.primarySortMetricValue < groupB.data.sort.primarySortMetricValue) {
+        return 9;
+      } else if(groupA.data.sort.primarySortMetricValue > groupB.data.sort.primarySortMetricValue){
+        return -9;
+      } else if (groupA.data.sort.secondarySortMetricValue < groupB.data.sort.secondarySortMetricValue) {
+        return 4;
+      } else if (groupA.data.sort.secondarySortMetricValue > groupB.data.sort.secondarySortMetricValue) {
+        return -4;
+      } else if (groupA.data.sort.tertiarySortMetricValue < groupB.data.sort.tertiarySortMetricValue) {
+        return 1;
+      } else if (groupA.data.sort.tertiarySortMetricValue > groupB.data.sort.tertiarySortMetricValue) {
+        return -1;
+      } else {
+        return 0;
       }
     });
   }
