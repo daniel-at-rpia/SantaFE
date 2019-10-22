@@ -124,7 +124,7 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
         align-items: center;
         height: $securityGroup_content_numberTag_size;
         width: $securityGroup_content_numberTag_size;
-        background-color: $color_white;
+        color: $font_color_inverse;
         font-size: $font_size_small;
         user-select: none;
       }
@@ -221,8 +221,11 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
               @include mix_border_radius(3px);
               height: $securityGroup_content_canvases_right_metricLines_thickness;
               background-color: $color_white;
+              opacity: $securityGroup_content_canvases_right_metricLines_opacity;
+              &--highlight {
+                opacity: $securityGroup_content_canvases_right_metricLines_highlight_opacity;
+              }
               &--negative {
-                //@include mix_border_generator($typical_border_width, $color_kill);
                 background-color: $color_negative;
               }
             }

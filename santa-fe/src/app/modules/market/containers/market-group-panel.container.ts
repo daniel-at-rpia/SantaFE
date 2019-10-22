@@ -188,9 +188,9 @@ export class MarketGroupPanel implements OnDestroy {
           tertiarySortIndex = index;
         }
       });
+      this.updateSortData(primarySortIndex, secondarySortIndex, tertiarySortIndex);
       if (primarySortIndex >= 0) {
         // if there is at least a primarySortIndex, then it's worth to sort
-        this.populateDataToPrepareForSort(primarySortIndex, secondarySortIndex, tertiarySortIndex);
         this.performSort();
       } else{
         // default sorting algorithm
@@ -319,16 +319,22 @@ export class MarketGroupPanel implements OnDestroy {
     });
   }
 
-  private populateDataToPrepareForSort(primarySortIndex: number, secondarySortIndex: number, tertiarySortIndex: number){
+  private updateSortData(primarySortIndex: number, secondarySortIndex: number, tertiarySortIndex: number){
     this.state.searchResult.securityGroupList.forEach((eachGroup) => {
+      eachGroup.data.stats.forEach((eachStat) => {
+        eachStat.sortHierarchy = null;
+      });
       if (primarySortIndex >= 0 && primarySortIndex <= 2) {
         eachGroup.data.sort.primarySortMetricValue = eachGroup.data.stats[primarySortIndex].value;
+        eachGroup.data.stats[primarySortIndex].sortHierarchy = 1;
       }
       if (secondarySortIndex >= 0 && secondarySortIndex <= 2) {
         eachGroup.data.sort.secondarySortMetricValue = eachGroup.data.stats[secondarySortIndex].value;
+        eachGroup.data.stats[secondarySortIndex].sortHierarchy = 2;
       }
       if (tertiarySortIndex >= 0 && tertiarySortIndex <= 2) {
         eachGroup.data.sort.tertiarySortMetricValue = eachGroup.data.stats[tertiarySortIndex].value;
+        eachGroup.data.stats[tertiarySortIndex].sortHierarchy = 3;
       }
     });
   }

@@ -76,7 +76,7 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
     display: none;
     align-items: center;
     background-color: $color_filter;
-    padding: $spacing_xx_small $spacing_small;
+    padding: $spacing_xx_small $spacing_x_small;
     &-icon {
       color: $font_color_inverse;
       font-size: $font_size_x_small;
@@ -268,6 +268,14 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
     align-items: center;
     background-color: $color_active;
     height: $securityGroup_content_canvases_right_metricLines_thickness*1.5;
+    opacity: $securityGroup_content_canvases_right_metricLines_opacity;
+  }
+  &--highlightState {
+    #{$averageVisualizerValueBlockName} {
+      &__line {
+        opacity: $securityGroup_content_canvases_right_metricLines_highlight_opacity;
+      }
+    }
   }
   &--negativeState {
     #{$averageVisualizerValueBlockName} {

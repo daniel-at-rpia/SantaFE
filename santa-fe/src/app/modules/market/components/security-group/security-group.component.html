@@ -53,6 +53,7 @@
               [ngStyle]="{'width': eachStat.percentage + '%'}"
               [ngClass]="{
                 'sat-securityGroup__content-canvases-right-metricLines-lineContainer-line': true,
+                'sat-securityGroup__content-canvases-right-metricLines-lineContainer-line--highlight': eachStat.sortHierarchy > 0,
                 'sat-securityGroup__content-canvases-right-metricLines-lineContainer-line--negative': eachStat.value < 0
               }"></div>
           </div>
