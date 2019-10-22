@@ -11,6 +11,7 @@ import {
   SecurityGroupAverageVisualizerDTO
 } from 'FEModels/frontend-models.interface';
 import {
+  SecurityGroupMetricBlock,
   SecurityGroupDefinitionFilterBlock
 } from 'FEModels/frontend-blocks.interface';
 import { SecurityDefinitionStub } from 'FEModels/frontend-stub-models.interface';
@@ -163,31 +164,9 @@ export class DTOService {
     const object:SecurityGroupAverageVisualizerDTO = {
       data: {
         stats: [
-          {
-            isEmpty: true,
-            sortHierarchy: null,
-            deltaScope: null,
-            label: '',
-            value: 100,
-            max: 100,
-            percentage: 100
-          },{
-            isEmpty: false,
-            sortHierarchy: null,
-            deltaScope: null,
-            label: MetricOptions[3].label,
-            value: 100,
-            max: 100,
-            percentage: 100
-          },{
-            isEmpty: false,
-            sortHierarchy: null,
-            deltaScope: null,
-            label: MetricOptions[1].label,
-            value: 100,
-            max: 100,
-            percentage: 100
-          }
+          this.formSecurityGroupMetricObject(),
+          this.formSecurityGroupMetricObject(),
+          this.formSecurityGroupMetricObject()
         ]
       },
       state: {
@@ -200,6 +179,24 @@ export class DTOService {
         editingStatSelectedMetricValueType: null,
         editingStatSelectedMetricDeltaType: null
       }
+    }
+    object.data.stats[1].isEmpty = false;
+    object.data.stats[1].label = MetricOptions[3].label;
+    object.data.stats[2].isEmpty = false;
+    object.data.stats[2].label = MetricOptions[1].label;
+    object.data.stats[2].sortHierarchy = 1;
+    return object;
+  }
+
+  public formSecurityGroupMetricObject(): SecurityGroupMetricBlock{
+    const object = {
+      isEmpty: true,
+      sortHierarchy: null,
+      deltaScope: null,
+      label: '',
+      value: 100,
+      max: 100,
+      percentage: 100
     }
     return object;
   }

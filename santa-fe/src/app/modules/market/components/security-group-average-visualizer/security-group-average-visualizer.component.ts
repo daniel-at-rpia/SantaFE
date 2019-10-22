@@ -44,6 +44,9 @@ export class SecurityGroupAverageVisualizer implements OnInit {
   public onClickActionDelete(targetMetricDTO: SecurityGroupMetricBlock){
     this.visualizerData.state.selectingStat = null;
     targetMetricDTO.isEmpty = true;
+    targetMetricDTO.sortHierarchy = null;
+    targetMetricDTO.percentage = 100;
+    targetMetricDTO.deltaScope = null;
     this.onMetricChange.emit();
   }
 

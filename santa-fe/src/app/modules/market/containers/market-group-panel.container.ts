@@ -178,7 +178,7 @@ export class MarketGroupPanel implements OnDestroy {
       const indexRetrieveTarget = this.state.searchResult.securityGroupList[0];
       indexRetrieveTarget.data.stats.forEach((eachStat, index) => {
         const matchedMetricFromVisualizer = this.state.utility.visualizer.data.stats.find((eachVisualizerStat) => {
-          return eachVisualizerStat.label === eachStat.label;
+          return eachVisualizerStat.label === eachStat.label && eachVisualizerStat.deltaScope === eachStat.deltaScope;
         });
         if (matchedMetricFromVisualizer.sortHierarchy === 1) {
           primarySortIndex = index;
@@ -293,7 +293,7 @@ export class MarketGroupPanel implements OnDestroy {
         let max = 0;
         this.state.searchResult.securityGroupList.forEach((eachGroup) => {
           const targetStat = eachGroup.data.stats.find((eachGroupStat) => {
-            return eachGroupStat.label === eachStat.label;
+            return eachGroupStat.label === eachStat.label && eachGroupStat.deltaScope === eachStat.deltaScope;
           });
           if (!!targetStat) {
             sum = sum + targetStat.value;
@@ -308,7 +308,7 @@ export class MarketGroupPanel implements OnDestroy {
         eachStat.percentage = Math.round(Math.abs(average)/max * 10000)/100;
         this.state.searchResult.securityGroupList.forEach((eachGroup) => {
           const targetStat = eachGroup.data.stats.find((eachGroupStat) => {
-            return eachGroupStat.label === eachStat.label;
+            return eachGroupStat.label === eachStat.label && eachGroupStat.deltaScope === eachStat.deltaScope;
           });
           if (!!targetStat) {
             targetStat.max = max;
