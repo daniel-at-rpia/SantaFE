@@ -75,7 +75,7 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
     @include mix_border_radius(5px);
     display: none;
     align-items: center;
-    background-color: $color_filter;
+    background-color: $color_active;
     padding: $spacing_xx_small $spacing_x_small;
     &-icon {
       color: $font_color_inverse;
@@ -203,7 +203,7 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
       }
       &__actionMenu {
         &-sortBtn {
-          background-color: $color_filter;
+          background-color: $color_active;
           color: $font_color_inverse;
         }
       }

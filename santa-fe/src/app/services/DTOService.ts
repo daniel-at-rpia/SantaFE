@@ -164,9 +164,9 @@ export class DTOService {
     const object:SecurityGroupAverageVisualizerDTO = {
       data: {
         stats: [
-          this.formSecurityGroupMetricObject(),
-          this.formSecurityGroupMetricObject(),
-          this.formSecurityGroupMetricObject()
+          this.formSecurityGroupMetricObject(MetricOptions[2].label, 'DoD'),
+          this.formSecurityGroupMetricObject(MetricOptions[2].label, 'WoW'),
+          this.formSecurityGroupMetricObject(MetricOptions[2].label, 'MoM')
         ]
       },
       state: {
@@ -180,20 +180,16 @@ export class DTOService {
         editingStatSelectedMetricDeltaType: null
       }
     }
-    object.data.stats[1].isEmpty = false;
-    object.data.stats[1].label = MetricOptions[3].label;
-    object.data.stats[2].isEmpty = false;
-    object.data.stats[2].label = MetricOptions[1].label;
-    object.data.stats[2].sortHierarchy = 1;
+    object.data.stats[1].sortHierarchy = 1;
     return object;
   }
 
-  public formSecurityGroupMetricObject(): SecurityGroupMetricBlock{
+  public formSecurityGroupMetricObject(label?: string, deltaScope?: string): SecurityGroupMetricBlock{
     const object = {
-      isEmpty: true,
+      isEmpty: !label,
       sortHierarchy: null,
-      deltaScope: null,
-      label: '',
+      deltaScope: deltaScope || null,
+      label: label || '',
       value: 100,
       absMax: 100,
       percentage: 100
