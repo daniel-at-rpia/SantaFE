@@ -38,7 +38,11 @@ export class UtilityService {
         return 1;
       case "2nd lien":
         return 1;
+      case "2nd lien Secured":
+        return 1;
       case "Secured":
+        return 2;
+      case "Asset Backed":
         return 2;
       case "Sr Unsecured":
         return 2;
@@ -49,11 +53,11 @@ export class UtilityService {
       case "Jr Subordinated":
         return 3;
       case "Sr Preferred":
-        return 3;
+        return 4;
       case "Preferred":
-        return 3;
+        return 4;
       case "Sr Non Preferred":
-        return 3;
+        return 4;
       case "Unsecured":
         return 4;
       default:
@@ -69,8 +73,12 @@ export class UtilityService {
         return '1-L';
       case "2nd lien":
         return '2-L';
+      case "2nd lien Secured":
+        return '2-LS';
       case "Secured":
         return 'S';
+      case "Asset Backed":
+        return 'A-B';
       case "Sr Unsecured":
         return 'S-U';
       case "Sr Subordinated":

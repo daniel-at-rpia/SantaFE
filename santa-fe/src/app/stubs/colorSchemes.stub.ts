@@ -35,16 +35,16 @@ export const SecurityGroupSeniorityColorScheme: SecurityGroupPieChartColorScheme
     label: 'active',
     value: '#333'
   },{
-    label: '1st Lien Secured | 1st lien | 2nd lien',
+    label: '1st Lien Secured | 1st lien | 2nd lien Secured | 2nd lien',
     value: '#16c1ff'
   },{
-    label: 'Secured | Sr Unsecured',
+    label: 'Secured | Asset Backed | Sr Unsecured',
     value: '#adf7b6'
   },{
-    label: 'Sr Subordinated | Subordinated | Jr Subordinated | Sr Preferred | Preferred | Sr Non Preferred',
+    label: 'Sr Subordinated | Subordinated | Jr Subordinated',
     value: '#f7ff16'
   },{
-    label: 'Unsecured',
+    label: 'Sr Preferred | Preferred | Sr Non Preferred | Unsecured',
     value: '#ff167b'
   },{
     label: 'Unmapped',
