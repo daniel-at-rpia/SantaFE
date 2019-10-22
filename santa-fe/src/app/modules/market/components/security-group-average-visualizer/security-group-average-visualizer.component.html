@@ -102,6 +102,7 @@
       *ngFor="let eachStat of visualizerData.data.stats; let statIndex = index"
       [ngClass]="{
         'sat-securityGroupAverageVisualizerValue': true,
+        'sat-securityGroupAverageVisualizerValue--negativeState': eachStat.value < 0,
         'sat-securityGroupAverageVisualizerValue--emptyState': eachStat.isEmpty,
         'sat-securityGroupAverageVisualizerValue--nextEmpty': statIndex < visualizerData.data.stats.length-1 && visualizerData.data.stats[statIndex+1].isEmpty,
         'sat-securityGroupAverageVisualizerValue--stencilState': visualizerData.state.isStencil,

@@ -269,6 +269,13 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
     background-color: $color_active;
     height: $securityGroup_content_canvases_right_metricLines_thickness*1.5;
   }
+  &--negativeState {
+    #{$averageVisualizerValueBlockName} {
+      &__line {
+        background-color: $color_negative;
+      }
+    }
+  }
   &--stencilState {
     #{$averageVisualizerValueBlockName} {
       &__line {
