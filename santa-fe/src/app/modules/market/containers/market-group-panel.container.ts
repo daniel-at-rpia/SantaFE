@@ -278,7 +278,7 @@ export class MarketGroupPanel implements OnDestroy {
           deltaScope: eachStat.deltaScope,
           label: eachStat.label,
           value: this.utilityService.retrieveGroupMetricValue(eachStat, targetGroup),
-          max: null,
+          absMax: null,
           percentage: null
         };
         targetGroup.data.stats.push(newStat);
@@ -290,29 +290,29 @@ export class MarketGroupPanel implements OnDestroy {
     this.state.utility.visualizer.data.stats.forEach((eachStat, statIndex) => {
       if (!eachStat.isEmpty) {
         let sum = 0;
-        let max = 0;
+        let absMax = 0;
         this.state.searchResult.securityGroupList.forEach((eachGroup) => {
           const targetStat = eachGroup.data.stats.find((eachGroupStat) => {
             return eachGroupStat.label === eachStat.label && eachGroupStat.deltaScope === eachStat.deltaScope;
           });
           if (!!targetStat) {
             sum = sum + targetStat.value;
-            if (max < targetStat.value) {
-              max = targetStat.value;
+            if (absMax < Math.abs(targetStat.value)) {
+              absMax = Math.abs(targetStat.value);
             }
           }
         });
         let average = !!eachStat.deltaScope ? Math.round(sum / respectiveLength * 10000)/10000 : Math.round(sum / respectiveLength * 100)/100;
-        eachStat.max = max;
+        eachStat.absMax = absMax;
         eachStat.value = average;
-        eachStat.percentage = Math.round(Math.abs(average)/max * 10000)/100;
+        eachStat.percentage = Math.round(Math.abs(average)/absMax * 10000)/100;
         this.state.searchResult.securityGroupList.forEach((eachGroup) => {
           const targetStat = eachGroup.data.stats.find((eachGroupStat) => {
             return eachGroupStat.label === eachStat.label && eachGroupStat.deltaScope === eachStat.deltaScope;
           });
           if (!!targetStat) {
-            targetStat.max = max;
-            targetStat.percentage = Math.round(Math.abs(targetStat.value)/targetStat.max * 10000)/100;
+            targetStat.absMax = absMax;
+            targetStat.percentage = Math.round(Math.abs(targetStat.value)/targetStat.absMax * 10000)/100;
           }
         });
       }

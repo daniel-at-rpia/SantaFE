@@ -195,7 +195,7 @@ export class DTOService {
       deltaScope: null,
       label: '',
       value: 100,
-      max: 100,
+      absMax: 100,
       percentage: 100
     }
     return object;

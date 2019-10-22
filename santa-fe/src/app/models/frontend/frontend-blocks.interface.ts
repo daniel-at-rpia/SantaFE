@@ -14,7 +14,7 @@ export interface SecurityGroupMetricBlock {
   deltaScope: string;
   label: string;
   value: number;
-  max: number;
+  absMax: number;
   percentage: number;
 }
 
