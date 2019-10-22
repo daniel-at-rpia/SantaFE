@@ -24,7 +24,11 @@ export class RestfulCommService {
           }
         );
       case 'GET':
-        return this.http.get<any>(url, queryOpts);
+        return this.http.get<any>(url, 
+          {
+            ...queryOpts,
+            withCredentials: true
+          });
     }
   }
 }
