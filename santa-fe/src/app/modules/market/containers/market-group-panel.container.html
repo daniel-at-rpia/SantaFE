@@ -100,7 +100,8 @@
         <security-group-average-visualizer
           [visualizerData]="state.utility.visualizer"
           [panelAtEmptyState]="!state.configurator.state.isLoading && !this.state.isGroupDataLoaded"
-          (onMetricChange)="updateGroupStats()">
+          (onMetricChange)="updateGroupStats()"
+          (onSortHierarchyChange)="updateSort()">
         </security-group-average-visualizer>
       </div>
     </div>
@@ -108,7 +109,7 @@
       <li *ngFor="let eachGroup of state.searchResult.securityGroupList; let i = index" class="sat-marketGroupPanel__groups-list-item">
         <security-group
           [groupData]="eachGroup"
-          [isDataReady]="!eachGroup.state.isStencil"></security-group>
+          [areChartsReady]="!eachGroup.state.areChartsReady"></security-group>
       </li>
     </ul>
   </section>

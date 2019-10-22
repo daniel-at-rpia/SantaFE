@@ -11,6 +11,7 @@ import {
   SecurityGroupAverageVisualizerDTO
 } from 'FEModels/frontend-models.interface';
 import {
+  SecurityGroupMetricBlock,
   SecurityGroupDefinitionFilterBlock
 } from 'FEModels/frontend-blocks.interface';
 import { SecurityDefinitionStub } from 'FEModels/frontend-stub-models.interface';
@@ -52,52 +53,57 @@ export class DTOService {
 
   public formSecurityGroupObject(
     rawData: BESecurityGroupDTO,
-    isStencil?: boolean
+    areChartsReady: boolean
   ): SecurityGroupDTO {
     const object:SecurityGroupDTO = {
       data: {
-        name: isStencil ? 'PLACEHOLDER' : rawData.groupName,
-        ratingLevel: isStencil ? 1 : this.utility.mapRatings(rawData.metrics['ratingNoNotch']),
-        ratingValue: isStencil ? 'AA' : rawData.metrics['ratingNoNotch'],
-        numOfSecurities: isStencil ? 32 : rawData.numSecurities,
+        name: !!rawData ?  rawData.groupName : 'PLACEHOLDER',
+        ratingLevel: !!rawData ? this.utility.mapRatings(rawData.metrics['ratingNoNotch']) : 1,
+        ratingValue: !!rawData ? rawData.metrics['ratingNoNotch'] : 'AA',
+        numOfSecurities: !!rawData ? rawData.numSecurities : 32,
         stats: [],
-        metrics: this.utility.packMetricData(rawData),
-        primaryMetric: this.utility.retrievePrimaryMetricValue(rawData)
+        metricPack: this.utility.packMetricData(rawData),
+        primaryMetric: this.utility.retrievePrimaryMetricValue(rawData),
+        sort: {
+          primarySortMetricValue: null,
+          secondarySortMetricValue: null,
+          tertiarySortMetricValue: null
+        }
       },
       state: {
         isSelected: false,
         isExpanded: false,
-        isStencil: !!isStencil,
-        averageCalculationComplete: !isStencil,
-        pieChartComplete: false  // pie chart always needs to be drawn, while average may or may not be calculated instanteneously if it is not stencil
+        isStencil: !rawData,
+        areChartsReady: !!areChartsReady,
+        averageCalculationComplete: false,
+        pieChartComplete: false
       },
       graph: {
         leftPie: {
           name: this.utility.generateUUID(),
           colorScheme: SecurityGroupRatingColorScheme,
           chart: null,
-          rawSupportingData: isStencil ? {} : this.utility.retrieveRawSupportingDataForLeftPie(rawData)
+          rawSupportingData: !areChartsReady ? {} : this.utility.retrieveRawSupportingDataForLeftPie(rawData)
         },
         rightPie: {
           name: this.utility.generateUUID(),
           colorScheme: SecurityGroupSeniorityColorScheme,
           chart: null,
-          rawSupportingData: this.utility.retrieveRawSupportingDataForRightPie(rawData)
+          rawSupportingData: !areChartsReady ? {} : this.utility.retrieveRawSupportingDataForRightPie(rawData)
         }
       }
     };
     return object;
   }
 
-  public updateSecurityGroupObject(
+  public updateSecurityGroupWithPieCharts(
     rawData: BESecurityGroupDTO,
-    oldStencilDTO: SecurityGroupDTO
+    groupDTO: SecurityGroupDTO
   ) {
-    const newObject = this.formSecurityGroupObject(rawData, false);
-    oldStencilDTO.data = newObject.data;
-    oldStencilDTO.graph.leftPie.rawSupportingData = newObject.graph.leftPie.rawSupportingData;
-    oldStencilDTO.graph.rightPie.rawSupportingData = newObject.graph.rightPie.rawSupportingData;
-    oldStencilDTO.state.isStencil = false;
+    const newObject = this.formSecurityGroupObject(rawData, true);
+    groupDTO.graph.leftPie.rawSupportingData = newObject.graph.leftPie.rawSupportingData;
+    groupDTO.graph.rightPie.rawSupportingData = newObject.graph.rightPie.rawSupportingData;
+    groupDTO.state.areChartsReady = true;
   }
 
   public generateSecurityGroupDefinitionFilterOptionList(name, options): Array<SecurityGroupDefinitionFilterBlock> {
@@ -158,24 +164,9 @@ export class DTOService {
     const object:SecurityGroupAverageVisualizerDTO = {
       data: {
         stats: [
-          {
-            isEmpty: true,
-            label: '',
-            value: 100,
-            max: 100,
-            percentage: 100
-          },{
-            isEmpty: true,
-            label: '',
-            value: 100,
-            max: 100,
-            percentage: 100
-          },{
-            label: MetricOptions[1].label,
-            value: 100,
-            max: 100,
-            percentage: 100
-          }
+          this.formSecurityGroupMetricObject(),
+          this.formSecurityGroupMetricObject(),
+          this.formSecurityGroupMetricObject()
         ]
       },
       state: {
@@ -188,6 +179,24 @@ export class DTOService {
         editingStatSelectedMetricValueType: null,
         editingStatSelectedMetricDeltaType: null
       }
+    }
+    object.data.stats[1].isEmpty = false;
+    object.data.stats[1].label = MetricOptions[3].label;
+    object.data.stats[2].isEmpty = false;
+    object.data.stats[2].label = MetricOptions[1].label;
+    object.data.stats[2].sortHierarchy = 1;
+    return object;
+  }
+
+  public formSecurityGroupMetricObject(): SecurityGroupMetricBlock{
+    const object = {
+      isEmpty: true,
+      sortHierarchy: null,
+      deltaScope: null,
+      label: '',
+      value: 100,
+      max: 100,
+      percentage: 100
     }
     return object;
   }

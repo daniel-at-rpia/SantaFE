@@ -47,8 +47,8 @@ import {
 
 export class MarketGroupPanel implements OnDestroy {
   state: MarketGroupPanelState;
-  searchServerReturn$: Observable<BESecurityGroupDTO>;
-  searchServerReturnPackedInChunk$: Observable<Array<BESecurityGroupDTO>>;
+  searchServerReturn$: Observable<SecurityGroupDTO>;
+  searchServerReturnPackedInChunk$: Observable<Array<SecurityGroupDTO>>;
   getGroupsFromSearchSub: Subscription;
   PieChartConfigurationOptions = PieChartConfiguratorOptions;
   SecurityGroupDefinitionMap = SecurityGroupDefinitionMap;
@@ -178,6 +178,33 @@ export class MarketGroupPanel implements OnDestroy {
   public updateGroupStats(){
     this.initializeGroupStats();
     this.calculateGroupAverage(this.state.searchResult.securityGroupList.length);
+    this.updateSort();
+  }
+
+  public updateSort(){
+    if (this.state.searchResult.securityGroupList.length > 0) {
+      let primarySortIndex, secondarySortIndex, tertiarySortIndex;
+      const indexRetrieveTarget = this.state.searchResult.securityGroupList[0];
+      indexRetrieveTarget.data.stats.forEach((eachStat, index) => {
+        const matchedMetricFromVisualizer = this.state.utility.visualizer.data.stats.find((eachVisualizerStat) => {
+          return eachVisualizerStat.label === eachStat.label && eachVisualizerStat.deltaScope === eachStat.deltaScope;
+        });
+        if (matchedMetricFromVisualizer.sortHierarchy === 1) {
+          primarySortIndex = index;
+        } else if (matchedMetricFromVisualizer.sortHierarchy === 2) {
+          secondarySortIndex = index;
+        } else if (matchedMetricFromVisualizer.sortHierarchy === 3) {
+          tertiarySortIndex = index;
+        }
+      });
+      if (primarySortIndex >= 0) {
+        // if there is at least a primarySortIndex, then it's worth to sort
+        this.populateDataToPrepareForSort(primarySortIndex, secondarySortIndex, tertiarySortIndex);
+        this.performSort();
+      } else{
+        // default sorting algorithm
+      }
+    }
   }
 
   private startSearch(){
@@ -189,30 +216,44 @@ export class MarketGroupPanel implements OnDestroy {
   }
 
   private performSearch(){
-    this.state.searchResult.securityGroupList = SecurityGroupList.map((eachStub) => {
-      return this.dtoService.formSecurityGroupObject(null, true);
+    // using stubs
+    const serverReturn = SecurityGroupList;
+
+    this.state.searchResult.securityGroupList = serverReturn.map((eachStub) => {
+      return this.dtoService.formSecurityGroupObject(eachStub, false);
     });
     this.initializeGroupStats();
+    this.updateSort();
 
-    this.searchServerReturn$ = from(SecurityGroupList).pipe(
+    this.searchServerReturn$ = from(this.state.searchResult.securityGroupList).pipe(
       concatMap(item => of(item).pipe(delay(150)))
     );
     this.searchServerReturnPackedInChunk$ = this.searchServerReturn$.pipe(
       bufferTime(1000)
     );
-    let index = 0;
+    let fullyLoadedCount = 0;
+    
     this.getGroupsFromSearchSub = this.searchServerReturnPackedInChunk$.pipe(
       delay(2000),  // this delay is to simulate the delay from server
-      tap((arrayOfGroups:Array<BESecurityGroupDTO>) => {
+      tap((arrayOfGroups:Array<SecurityGroupDTO>) => {
         console.log('received', arrayOfGroups);
         arrayOfGroups.forEach((eachGroup) => {
-          const targetGroupCard = this.state.searchResult.securityGroupList[index];
-          this.dtoService.updateSecurityGroupObject(eachGroup, targetGroupCard);
-          this.initializeStatForGroup(targetGroupCard);
-          index++;
+          // when sort is already active before the search, the index of the rawData is likely not gonna be the same as the index of the DTOs, therefore need to do "find"
+          let rawData;
+          if (this.state.utility.visualizer.data.stats[0].sortHierarchy > 0 || this.state.utility.visualizer.data.stats[1].sortHierarchy > 0 || this.state.utility.visualizer.data.stats[2].sortHierarchy > 0) {
+            rawData = serverReturn.find((eachRawGroup) => {
+              return eachRawGroup.groupName === eachGroup.data.name;
+            });
+          } else {
+            rawData = serverReturn[fullyLoadedCount];
+          }
+          //this.state.searchResult.securityGroupList[index];
+          this.dtoService.updateSecurityGroupWithPieCharts(rawData, eachGroup);
+          //this.initializeStatForGroup(targetGroupCard);
+          fullyLoadedCount++;
         });
-        this.state.searchResult.renderProgress = Math.round(index/SecurityGroupList.length*100);
-        if (index === SecurityGroupList.length) {
+        this.state.searchResult.renderProgress = Math.round(fullyLoadedCount/SecurityGroupList.length*100);
+        if (fullyLoadedCount === SecurityGroupList.length) {
           this.searchComplete();
         }
       })
@@ -241,8 +282,11 @@ export class MarketGroupPanel implements OnDestroy {
     this.state.utility.visualizer.data.stats.forEach((eachStat, index) => {
       if (!eachStat.isEmpty) {
         const newStat:SecurityGroupMetricBlock = {
+          isEmpty: eachStat.isEmpty,
+          sortHierarchy: eachStat.sortHierarchy > 0 ? eachStat.sortHierarchy : null,
+          deltaScope: eachStat.deltaScope,
           label: eachStat.label,
-          value: this.utilityService.retrieveGroupMetricValue(eachStat.label, targetGroup),
+          value: this.utilityService.retrieveGroupMetricValue(eachStat, targetGroup),
           max: null,
           percentage: null
         };
@@ -258,7 +302,7 @@ export class MarketGroupPanel implements OnDestroy {
         let max = 0;
         this.state.searchResult.securityGroupList.forEach((eachGroup) => {
           const targetStat = eachGroup.data.stats.find((eachGroupStat) => {
-            return eachGroupStat.label === eachStat.label;
+            return eachGroupStat.label === eachStat.label && eachGroupStat.deltaScope === eachStat.deltaScope;
           });
           if (!!targetStat) {
             sum = sum + targetStat.value;
@@ -267,19 +311,53 @@ export class MarketGroupPanel implements OnDestroy {
             }
           }
         });
-        let average = Math.round(sum / respectiveLength * 100)/100;
+        let average = !!eachStat.deltaScope ? Math.round(sum / respectiveLength * 10000)/10000 : Math.round(sum / respectiveLength * 100)/100;
         eachStat.max = max;
         eachStat.value = average;
-        eachStat.percentage = Math.round(average/max * 10000)/100;
+        eachStat.percentage = Math.round(Math.abs(average)/max * 10000)/100;
         this.state.searchResult.securityGroupList.forEach((eachGroup) => {
           const targetStat = eachGroup.data.stats.find((eachGroupStat) => {
-            return eachGroupStat.label === eachStat.label;
+            return eachGroupStat.label === eachStat.label && eachGroupStat.deltaScope === eachStat.deltaScope;
           });
           if (!!targetStat) {
             targetStat.max = max;
-            targetStat.percentage = Math.round(targetStat.value/targetStat.max * 10000)/100;
+            targetStat.percentage = Math.round(Math.abs(targetStat.value)/targetStat.max * 10000)/100;
           }
         });
+      }
+    });
+  }
+
+  private populateDataToPrepareForSort(primarySortIndex: number, secondarySortIndex: number, tertiarySortIndex: number){
+    this.state.searchResult.securityGroupList.forEach((eachGroup) => {
+      if (primarySortIndex >= 0 && primarySortIndex <= 2) {
+        eachGroup.data.sort.primarySortMetricValue = eachGroup.data.stats[primarySortIndex].value;
+      }
+      if (secondarySortIndex >= 0 && secondarySortIndex <= 2) {
+        eachGroup.data.sort.secondarySortMetricValue = eachGroup.data.stats[secondarySortIndex].value;
+      }
+      if (tertiarySortIndex >= 0 && tertiarySortIndex <= 2) {
+        eachGroup.data.sort.tertiarySortMetricValue = eachGroup.data.stats[tertiarySortIndex].value;
+      }
+    });
+  }
+
+  private performSort(){
+    this.state.searchResult.securityGroupList.sort((groupA, groupB) => {
+      if (groupA.data.sort.primarySortMetricValue < groupB.data.sort.primarySortMetricValue) {
+        return 9;
+      } else if(groupA.data.sort.primarySortMetricValue > groupB.data.sort.primarySortMetricValue){
+        return -9;
+      } else if (groupA.data.sort.secondarySortMetricValue < groupB.data.sort.secondarySortMetricValue) {
+        return 4;
+      } else if (groupA.data.sort.secondarySortMetricValue > groupB.data.sort.secondarySortMetricValue) {
+        return -4;
+      } else if (groupA.data.sort.tertiarySortMetricValue < groupB.data.sort.tertiarySortMetricValue) {
+        return 1;
+      } else if (groupA.data.sort.tertiarySortMetricValue > groupB.data.sort.tertiarySortMetricValue) {
+        return -1;
+      } else {
+        return 0;
       }
     });
   }

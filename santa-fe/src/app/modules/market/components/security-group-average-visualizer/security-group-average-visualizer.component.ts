@@ -24,6 +24,7 @@ export class SecurityGroupAverageVisualizer implements OnInit {
   @Input() visualizerData: SecurityGroupAverageVisualizerDTO;
   @Input() panelAtEmptyState: boolean;
   @Output() onMetricChange = new EventEmitter();
+  @Output() onSortHierarchyChange = new EventEmitter();
 
   constructor() {}
 
@@ -36,12 +37,16 @@ export class SecurityGroupAverageVisualizer implements OnInit {
       return eachOption.label == targetMetricDTO.label;
     })
     this.visualizerData.state.editingStatSelectedMetric = matchedMetric;
-    this.visualizerData.state.editingStatSelectedMetricValueType = 'RAW';
+    this.visualizerData.state.editingStatSelectedMetricValueType = targetMetricDTO.deltaScope ? 'DELTA' : 'RAW';
+    this.visualizerData.state.editingStatSelectedMetricDeltaType = targetMetricDTO.deltaScope;
   }
 
   public onClickActionDelete(targetMetricDTO: SecurityGroupMetricBlock){
     this.visualizerData.state.selectingStat = null;
     targetMetricDTO.isEmpty = true;
+    targetMetricDTO.sortHierarchy = null;
+    targetMetricDTO.percentage = 100;
+    targetMetricDTO.deltaScope = null;
     this.onMetricChange.emit();
   }
 
@@ -67,6 +72,28 @@ export class SecurityGroupAverageVisualizer implements OnInit {
     this.visualizerData.state.editingStatSelectedMetricDeltaType = null;
   }
 
+  public onClickMetricSort(targetMetric: SecurityGroupMetricBlock){
+    if (targetMetric.sortHierarchy > 0){
+      this.visualizerData.data.stats.forEach((eachStat) => {
+        if (eachStat.sortHierarchy > targetMetric.sortHierarchy) {
+          eachStat.sortHierarchy = eachStat.sortHierarchy - 1;
+        }
+      });
+      targetMetric.sortHierarchy = null;
+    } else {
+      let currentHierechyLevel = 0;
+      this.visualizerData.data.stats.forEach((eachStat) => {
+        if (eachStat.sortHierarchy > 0) {
+          currentHierechyLevel++;
+        }
+      });
+      targetMetric.sortHierarchy = currentHierechyLevel + 1;
+    }
+    this.visualizerData.state.selectingStat = null;
+    this.visualizerData.state.editingStat = null;
+    this.onSortHierarchyChange.emit();
+  }
+
   public dropdownSelectMetricValueType(targetValueType){
     this.visualizerData.state.editingStatSelectedMetricValueType = targetValueType;
     this.visualizerData.state.editingStatSelectedMetricDeltaType = null;
@@ -75,6 +102,7 @@ export class SecurityGroupAverageVisualizer implements OnInit {
         return eachStat === this.visualizerData.state.editingStat;
       });
       targetStat.isEmpty = false;
+      targetStat.deltaScope = null;
       targetStat.label = this.visualizerData.state.editingStatSelectedMetric.label;
       this.clearEditingStatesBeforeExitDropdown();
       this.onMetricChange.emit();
@@ -87,6 +115,7 @@ export class SecurityGroupAverageVisualizer implements OnInit {
       return eachStat === this.visualizerData.state.editingStat;
     });
     targetStat.isEmpty = false;
+    targetStat.deltaScope = targetDeltaType;
     targetStat.label = this.visualizerData.state.editingStatSelectedMetric.label;
     this.clearEditingStatesBeforeExitDropdown();
     this.onMetricChange.emit();

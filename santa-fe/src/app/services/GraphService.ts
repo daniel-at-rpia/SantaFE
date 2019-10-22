@@ -37,7 +37,7 @@ export class GraphService {
     pieSeries.slices.template.strokeOpacity = 1;
     pieSeries.slices.template.strokeWidth = 1;
     pieSeries.alignLabels = false;
-    pieSeries.labels.template.text = "{category}/{value}";
+    pieSeries.labels.template.text = "{category}";
     pieSeries.labels.template.fontFamily = "SantaOpenSans";
     pieSeries.labels.template.fontWeight = "300";
     pieSeries.labels.template.fontSize = 1;  // this is not working
@@ -98,12 +98,13 @@ export class GraphService {
       for (const attrName in pieChartDTO.rawSupportingData) {
         const colorMappingIndex = this.findColorMapping(pieChartDTO.colorScheme.type, attrName);
         const newEntry:SecurityGroupPieChartDataBlock = {
-          label: `${colorMappingIndex}`,
+          label: pieChartDTO.colorScheme.type === 'Seniority' ? this.utility.convertSenioritiesToAcronyms(attrName) :attrName,
           value: this.utility.retrieveValueForGroupPieChartFromSupportingData(pieChartDTO.rawSupportingData[attrName]),
+          index: colorMappingIndex,
           color: am4core.color(colorScheme[colorMappingIndex].value)
         };
         const existEntry = dataList.find((eachEntry) => {
-          return colorScheme[eachEntry.label].value === colorScheme[newEntry.label].value;
+          return colorScheme[eachEntry.index].value === colorScheme[newEntry.index].value;
         });
         if (!!existEntry) {
           existEntry.value = existEntry.value + newEntry.value;

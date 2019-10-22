@@ -1,5 +1,6 @@
 import {
   SecurityGroupMetricBlock,
+  SecurityGroupMetricPackBlock,
   SecurityGroupPieChartBlock,
   SecurityGroupDefinitionFilterBlock
 } from 'FEModels/frontend-blocks.interface';
@@ -32,13 +33,19 @@ export interface SecurityGroupDTO extends BasicDTOStructure {
     ratingValue: string;
     numOfSecurities: number;
     stats: Array<SecurityGroupMetricBlock>;
-    metrics: object;
+    metricPack: SecurityGroupMetricPackBlock;
     primaryMetric: string;
+    sort: {
+      primarySortMetricValue: number;
+      secondarySortMetricValue: number;
+      tertiarySortMetricValue: number;
+    }
   }
   state: {
     isExpanded: boolean;
     isStencil: boolean;
     isSelected: boolean;
+    areChartsReady: boolean;
     averageCalculationComplete: boolean;
     pieChartComplete: boolean;
   }
@@ -90,6 +97,6 @@ export interface SecurityGroupAverageVisualizerDTO extends BasicDTOStructure {
     editingStat: SecurityGroupMetricBlock;
     editingStatSelectedMetric: any;
     editingStatSelectedMetricValueType: string;
-    editingStatSelectedMetricDeltaType: string; 
+    editingStatSelectedMetricDeltaType: string;
   }
 }
