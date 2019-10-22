@@ -61,7 +61,7 @@ export class DTOService {
         ratingValue: !!rawData ? rawData.metrics['ratingNoNotch'] : 'AA',
         numOfSecurities: !!rawData ? rawData.numSecurities : 32,
         stats: [],
-        metrics: this.utility.packMetricData(rawData),
+        metricPack: this.utility.packMetricData(rawData),
         primaryMetric: this.utility.retrievePrimaryMetricValue(rawData),
         sort: {
           primarySortMetricValue: null,
@@ -172,10 +172,10 @@ export class DTOService {
             max: 100,
             percentage: 100
           },{
-            isEmpty: true,
+            isEmpty: false,
             sortHierarchy: null,
             deltaScope: null,
-            label: '',
+            label: MetricOptions[3].label,
             value: 100,
             max: 100,
             percentage: 100

@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { BESecurityGroupDTO } from 'BEModels/backend-models.interface';
 import { SecurityGroupDTO } from 'FEModels/frontend-models.interface';
 import {
+  SecurityGroupMetricBlock,
+  SecurityGroupMetricPackBlock
+} from 'FEModels/frontend-blocks.interface';
+import {
   MetricOptions,
   BackendKeyDictionary
 } from 'App/stubs/marketModuleSpecifics.stub';
@@ -160,39 +164,71 @@ export class UtilityService {
     return `${name}/${normalizedOption}`;
   }
 
-  public packMetricData(rawData: BESecurityGroupDTO): object {
-    const object = {};
+  public packMetricData(rawData: BESecurityGroupDTO): SecurityGroupMetricPackBlock {
+    const object: SecurityGroupMetricPackBlock = {
+      raw: {},
+      delta: {
+        DoD: {},
+        WoW: {},
+        Mtd: {},
+        MoM: {},
+        Ytd: {}
+      }
+    };
     if (!!rawData) {
       this.metricOptions.forEach((eachMetric) => {
         const rawValue = rawData.metrics[eachMetric.backendDtoAttrName];
-        if (!!rawValue) {
-          if (eachMetric.label === 'Size') {
-            object[eachMetric.label] = Math.round(rawValue/100)/10000;
-          } else {
-            object[eachMetric.label] = Math.round(rawValue*10000)/10000;
-          }
+        if (rawValue === null || rawValue === undefined) {
+          object.raw[eachMetric.label] = null;
         } else {
-          object[eachMetric.label] = 0;
+          if (eachMetric.label === 'Size') {
+            object.raw[eachMetric.label] = Math.round(rawValue/100)/10000;
+          } else {
+            object.raw[eachMetric.label] = Math.round(rawValue*100)/100;
+          }
         }
+        eachMetric.deltaOptions.forEach((eachDeltaScope) => {
+          const deltaSubPack = rawData.deltaMetrics[eachDeltaScope];
+          const deltaValue = !!deltaSubPack ? deltaSubPack[eachMetric.backendDtoAttrName] : null;
+          if (deltaValue === null || deltaValue === undefined) {
+            object.delta[eachDeltaScope][eachMetric.label] = null;
+          } else {
+            if (eachMetric.label === 'Size') {
+              object.delta[eachDeltaScope][eachMetric.label] = Math.round(deltaValue/100)/10000;
+            } else {
+              object.delta[eachDeltaScope][eachMetric.label] = Math.round(deltaValue*10000)/10000;
+            }
+          }
+        })
       });
     }
     return object;
   }
 
-  public retrieveGroupMetricValue(metricLabel: string, groupDTO: SecurityGroupDTO): number {
-    if (!!groupDTO) {
-      const value = groupDTO.data.metrics[metricLabel];
-      if (!!value) {
+  public retrieveGroupMetricValue(metricDTO: SecurityGroupMetricBlock, groupDTO: SecurityGroupDTO): number {
+    if (!!groupDTO && !!metricDTO) {
+      const metricLabel = metricDTO.label;
+      let value, deltaSubPack;
+      if (!!metricDTO.deltaScope) {
+        deltaSubPack = groupDTO.data.metricPack.delta[metricDTO.deltaScope];
+        value = !!deltaSubPack ? deltaSubPack[metricLabel] : null;
+        value = Math.round(value*10000)/10000;
+      } else {
+        value = groupDTO.data.metricPack.raw[metricLabel];
+        value = Math.round(value*100)/100;
+      }
+      if (value === null || value === undefined) {
+        return -3.1415926;
+      } else {
+        // further round the metric if it is Size
         if (metricLabel === 'Size') {
           return Math.round(value);
         } else {
-          return Math.round(value*100)/100;
+          return value;
         }
-      } else {
-        return 0;
       }
     }
-    return 0;
+    return -3.1415926;
   }
 
   public retrievePrimaryMetricValue(rawData: BESecurityGroupDTO): string {

@@ -1,5 +1,6 @@
 import {
   SecurityGroupMetricBlock,
+  SecurityGroupMetricPackBlock,
   SecurityGroupPieChartBlock,
   SecurityGroupDefinitionFilterBlock
 } from 'FEModels/frontend-blocks.interface';
@@ -32,7 +33,7 @@ export interface SecurityGroupDTO extends BasicDTOStructure {
     ratingValue: string;
     numOfSecurities: number;
     stats: Array<SecurityGroupMetricBlock>;
-    metrics: object;
+    metricPack: SecurityGroupMetricPackBlock;
     primaryMetric: string;
     sort: {
       primarySortMetricValue: number;

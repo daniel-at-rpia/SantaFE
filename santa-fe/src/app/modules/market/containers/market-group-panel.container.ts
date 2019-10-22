@@ -277,7 +277,7 @@ export class MarketGroupPanel implements OnDestroy {
           sortHierarchy: eachStat.sortHierarchy > 0 ? eachStat.sortHierarchy : null,
           deltaScope: eachStat.deltaScope,
           label: eachStat.label,
-          value: this.utilityService.retrieveGroupMetricValue(eachStat.label, targetGroup),
+          value: this.utilityService.retrieveGroupMetricValue(eachStat, targetGroup),
           max: null,
           percentage: null
         };
@@ -302,17 +302,17 @@ export class MarketGroupPanel implements OnDestroy {
             }
           }
         });
-        let average = Math.round(sum / respectiveLength * 100)/100;
+        let average = !!eachStat.deltaScope ? Math.round(sum / respectiveLength * 10000)/10000 : Math.round(sum / respectiveLength * 100)/100;
         eachStat.max = max;
         eachStat.value = average;
-        eachStat.percentage = Math.round(average/max * 10000)/100;
+        eachStat.percentage = Math.round(Math.abs(average)/max * 10000)/100;
         this.state.searchResult.securityGroupList.forEach((eachGroup) => {
           const targetStat = eachGroup.data.stats.find((eachGroupStat) => {
             return eachGroupStat.label === eachStat.label;
           });
           if (!!targetStat) {
             targetStat.max = max;
-            targetStat.percentage = Math.round(targetStat.value/targetStat.max * 10000)/100;
+            targetStat.percentage = Math.round(Math.abs(targetStat.value)/targetStat.max * 10000)/100;
           }
         });
       }

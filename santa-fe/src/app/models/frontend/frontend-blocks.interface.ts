@@ -18,6 +18,17 @@ export interface SecurityGroupMetricBlock {
   percentage: number;
 }
 
+export interface SecurityGroupMetricPackBlock {
+  raw: object;
+  delta: {
+    DoD: object;
+    WoW: object;
+    Mtd: object;
+    MoM: object;
+    Ytd: object;
+  }
+}
+
 export interface SecurityGroupPieChartBlock {
   name: string;
   colorScheme: SecurityGroupPieChartColorSchemeBlock;
