@@ -189,7 +189,9 @@ export const BackendKeyDictionary = {
   'PRICE': 'price',
   'YIELD': 'yieldWorst',
   'SENIORITY': 'Seniority',
-  'SIZE': 'amtOutstanding'
+  'SIZE': 'amtOutstanding',
+  'CURRENCY': 'Ccy',
+  'TENOR': 'Tenor'
 };
 
 export const MetricOptions:Array<SecurityMetricOptionStub> = [

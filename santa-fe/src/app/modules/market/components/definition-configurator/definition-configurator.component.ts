@@ -24,6 +24,7 @@ import {
 
 export class SecurityGroupDefinitionConfigurator implements OnInit {
   @Input() configuratorData: SecurityGroupDefinitionConfiguratorDTO;
+  @Input() highlightedVariant: boolean;
   @Output() onClickSearch = new EventEmitter();
   constructor(
   ) {
@@ -40,8 +41,8 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
   selectDefinitionForGrouping(targetDefinition: SecurityGroupDefinitionDTO) {
     if (!targetDefinition.state.isLocked) {
       targetDefinition.state.groupByActive = !targetDefinition.state.groupByActive;
-      // const existIndex = this.configuratorData.data.selectedDefinitionList.indexOf(targetDefinition);
       // disable the two-step config workflow through commenting, so we can bring it back up easily if necessary
+      // const existIndex = this.configuratorData.data.selectedDefinitionList.indexOf(targetDefinition);
       // if ( existIndex >= 0) {
       //   targetDefinition.state.isUnactivated = true;
       //   if (targetDefinition === this.configuratorData.state.showFiltersFromDefinition) {

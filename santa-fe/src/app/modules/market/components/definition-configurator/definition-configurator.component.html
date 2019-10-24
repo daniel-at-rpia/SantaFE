@@ -2,7 +2,8 @@
   [ngClass]="{
     'sat-securityGroupDefinitionConfigurator': true,
     'sat-securityGroupDefinitionConfigurator--longFilterOptionsState': configuratorData.state.showLongFilterOptions,
-    'sat-securityGroupDefinitionConfigurator--filterActiveState': configuratorData.state.showFiltersFromDefinition
+    'sat-securityGroupDefinitionConfigurator--filterActiveState': configuratorData.state.showFiltersFromDefinition,
+    'sat-securityGroupDefinitionConfigurator--highlightedVariant': highlightedVariant
   }">
   <section class="sat-securityGroupDefinitionConfigurator__definitions">
     <ul class="sat-securityGroupDefinitionConfigurator__definitions-list">
@@ -58,10 +59,18 @@
   <section class="sat-securityGroupDefinitionConfigurator__ctas">
     <div class="sat-securityGroupDefinitionConfigurator__ctas-content">
       <santa-loadable-button
+        class="sat-securityGroupDefinitionConfigurator__ctas-content-regularSearch"
         (onClickButton)="triggerSearch()"
         [isLoading]="configuratorData.state.isLoading"
         [icon]="'fal fa-paw-claws'"
         [text]="'Go Hunt'">
+      </santa-loadable-button>
+      <santa-loadable-button
+        class="sat-securityGroupDefinitionConfigurator__ctas-content-selectedGroupSearch"
+        (onClickButton)="triggerSearch()"
+        [isLoading]="configuratorData.state.isLoading"
+        [icon]="'fal fa-flashlight'"
+        [text]="'Focus on Selected Groups'">
       </santa-loadable-button>
     </div>
   </section>

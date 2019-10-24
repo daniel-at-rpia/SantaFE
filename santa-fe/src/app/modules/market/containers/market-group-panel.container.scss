@@ -9,13 +9,39 @@ $marketGroupPanel_utility_widgetHeight: 8.25rem;
   @include mix_border_radius(10px);
   flex: 1 1 auto;
   display: flex;
-  padding: $spacing_medium;
   overflow: hidden;
   &__configurator {
     flex: 0 0 auto;
     display: flex;
+    flex-direction: column;
+    padding: $spacing_medium 0 0 $spacing_medium;
+    &-selectedGroupConfigNotice {
+      flex: 0 0 auto;
+      height: 0;
+      overflow: hidden;
+      &-content {
+        @include mix_alive('custom', $animation_duration_light transform);
+        @include mix_border_radius(10px);
+        background-color: $color_highlight;
+        display: flex;
+        flex-direction: column;
+        transform: translate(0, -100%);
+        padding: $spacing_medium;
+        &-title {
+          display: flex;
+          &-text {
+            color: $font_color_inverse;
+          }
+        }
+        &-btn {
+          margin-top: $spacing_small;
+        }
+      }
+    }
     security-group-definition-configurator {
+      flex: 1 1 auto;
       display: flex;
+      overflow: hidden;
     }
   }
   &__configuratorCollapseCTA {
@@ -23,6 +49,7 @@ $marketGroupPanel_utility_widgetHeight: 8.25rem;
     flex: 0 0 auto;
     display: flex;
     align-items: center;
+    margin: $spacing_medium 0;
     &-btn {
       @include mix_fixed_div(relative, $z_index_standard_hovering_item);
       @include mix_border_radius(50%);
@@ -43,6 +70,7 @@ $marketGroupPanel_utility_widgetHeight: 8.25rem;
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
+    padding: $spacing_medium $spacing_medium $spacing_medium 0;
     &-utility {
       flex: 0 0 auto;
       display: flex;
@@ -200,6 +228,19 @@ $marketGroupPanel_utility_widgetHeight: 8.25rem;
       padding: 0 $marketGroupPanel_groups_list_padding $spacing_large $marketGroupPanel_groups_list_padding;
       &-item {
         margin-top: $spacing_large + $spacing_x_small;
+      }
+    }
+  }
+  &--selectedGroupConfigActiveState {
+    #{$marketGroupPanelBlockName} {
+      &__configurator {
+        &-selectedGroupConfigNotice {
+          height: auto;
+          margin-bottom: $spacing_medium;
+          &-content {
+            transform: translate(0, 0);
+          }
+        }
       }
     }
   }

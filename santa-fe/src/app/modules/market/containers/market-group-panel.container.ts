@@ -28,14 +28,18 @@ import { RestfulCommService } from 'App/services/RestfulCommService';
 
 import { MarketGroupPanelState } from 'FEModels/frontend-page-states.interface';
 import { SecurityGroupMetricBlock } from 'FEModels/frontend-blocks.interface';
-import { SecurityGroupDTO } from 'FEModels/frontend-models.interface';
+import {
+  SecurityGroupDTO,
+  SecurityGroupDefinitionConfiguratorDTO
+} from 'FEModels/frontend-models.interface';
 import { BESecurityGroupDTO } from 'BEModels/backend-models.interface';
 
 import { SecurityGroupList, SecurityGroupList2 } from 'App/stubs/securities.stub';
 import { SecurityDefinitionStub } from 'App/models/frontend/frontend-stub-models.interface';
 import {
   PieChartConfiguratorOptions,
-  SecurityGroupDefinitionMap
+  SecurityGroupDefinitionMap,
+  BackendKeyDictionary
 } from 'App/stubs/marketModuleSpecifics.stub';
 
 @Component({
@@ -55,7 +59,11 @@ export class MarketGroupPanel implements OnDestroy {
 
   private initiateComponentState(){
     this.state = {
-      configurator: this.dtoService.createSecurityGroupDefinitionConfigurator(),
+      configurator: {
+        dto: this.dtoService.createSecurityGroupDefinitionConfigurator(),
+        showSelectedGroupConfig: false,
+        cachedOriginalConfig: null
+      },
       isConfiguratorCollapsed: false,
       isGroupDataLoaded: false,
       utility: {
@@ -198,7 +206,26 @@ export class MarketGroupPanel implements OnDestroy {
     }
   }
 
+  public onSecurityGroupSelected(targetGroup: SecurityGroupDTO){
+    const selectedGroupList = [];
+    this.state.searchResult.securityGroupList.forEach((eachGroup) => {
+      eachGroup.state.isSelected && selectedGroupList.push(eachGroup);
+    });
+    if (selectedGroupList.length > 0) {
+      this.updateConfigurator(selectedGroupList);
+    } else {
+      this.onRestoreConfig();
+    }
+  }
+
+  public onRestoreConfig(){
+    this.state.configurator.dto = this.state.configurator.cachedOriginalConfig;
+    this.state.configurator.showSelectedGroupConfig = false;
+  }
+
   private startSearch(){
+    this.state.configurator.cachedOriginalConfig = null;
+    this.state.configurator.showSelectedGroupConfig = false;
     this.state.isGroupDataLoaded = false;
     this.state.utility.visualizer.state.isEmpty = false;
     this.state.utility.visualizer.state.isStencil = true;
@@ -257,7 +284,7 @@ export class MarketGroupPanel implements OnDestroy {
     });
     this.calculateGroupAverage(this.state.searchResult.securityGroupList.length);
     this.state.utility.visualizer.state.isStencil = false;
-    this.state.configurator.state.isLoading = false;
+    this.state.configurator.dto.state.isLoading = false;
     this.state.isGroupDataLoaded = true;
     this.getGroupsFromSearchSub.unsubscribe();
   }
@@ -357,5 +384,54 @@ export class MarketGroupPanel implements OnDestroy {
         return 0;
       }
     });
+  }
+
+  private updateConfigurator(selectedGroupList: Array<SecurityGroupDTO>){
+    if (!this.state.configurator.cachedOriginalConfig) {
+      this.state.configurator.cachedOriginalConfig = this.utilityService.deepCopy(this.state.configurator.dto);
+    }
+    const newConfig = this.dtoService.createSecurityGroupDefinitionConfigurator();
+    selectedGroupList.forEach((eachGroup) => {
+      this.updateConfiguratorPerGroup(eachGroup, newConfig);
+    });
+    this.state.configurator.dto = newConfig;
+    this.state.configurator.showSelectedGroupConfig = true;
+  }
+
+  private updateConfiguratorPerGroup(targetGroup: SecurityGroupDTO, config: SecurityGroupDefinitionConfiguratorDTO){
+    for (const eachBEDefinition in targetGroup.data.definitionConfig) {
+      const targetDefinition = this.utilityService.convertBEKey(eachBEDefinition);
+      const targetDefinitionValue = targetGroup.data.definitionConfig[eachBEDefinition];
+      if (!!targetDefinition) {
+        config.data.definitionList.forEach((eachDefinition) => {
+          if (eachDefinition.data.key === targetDefinition) {
+            eachDefinition.state.groupByActive = true;
+            let allFiltersAreSelected = true;
+            eachDefinition.data.filterOptionList.forEach((eachFilter) => {
+              if (eachDefinition.data.key === 'TENOR') {
+                if (eachFilter.shortKey === this.utilityService.convertBETenorToFE(targetDefinitionValue)) {
+                  eachFilter.isSelected = true;
+                  eachDefinition.state.filterActive = true;
+                }
+              } else {
+                if (eachFilter.shortKey === targetDefinitionValue) {
+                  eachFilter.isSelected = true;
+                  eachDefinition.state.filterActive = true;
+                };
+              }
+              if (!eachFilter.isSelected) {
+                allFiltersAreSelected = false;
+              }
+            });
+            if (allFiltersAreSelected) {
+              eachDefinition.data.filterOptionList.forEach((eachFilter) => {
+                eachFilter.isSelected = false;
+              });
+              eachDefinition.state.filterActive = false;
+            }
+          }
+        })
+      }
+    }
   }
 }

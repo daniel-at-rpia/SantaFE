@@ -296,4 +296,29 @@ export class UtilityService {
       return 0;
     }
   }
+
+  public convertBEKey(backendKey: string): string {
+    for (const eachKey in this.keyDictionary){
+      if (this.keyDictionary[eachKey] === backendKey) {
+        return eachKey;
+      }
+    }
+    return null;
+  }
+
+  public convertBETenorToFE(backendTenor: string): string {
+    switch (backendTenor) {
+      case "3M":
+        // code...
+        return '0.25Y';
+      case "6M":
+        // code...
+        return '0.5Y';
+      case "9M":
+        // code...
+        return '0.75Y';
+      default:
+        return backendTenor;
+    }
+  }
 }

@@ -68,7 +68,8 @@ export class DTOService {
           primarySortMetricValue: null,
           secondarySortMetricValue: null,
           tertiarySortMetricValue: null
-        }
+        },
+        definitionConfig: !!rawData ? rawData.groupIdentifier.groupOptionValues : {}
       },
       state: {
         isSelected: false,
@@ -150,8 +151,7 @@ export class DTOService {
         filterSearchInputValue: '',
         definitionList: SecurityGroupDefinitionMap.map((eachDefinitionStub) => {
           return this.formSecurityGroupDefinitionObject(eachDefinitionStub);
-        }),
-        selectedDefinitionList: []
+        })
       },
       state: {
         showFiltersFromDefinition: null,

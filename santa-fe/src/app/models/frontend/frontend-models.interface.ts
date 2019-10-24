@@ -39,7 +39,8 @@ export interface SecurityGroupDTO extends BasicDTOStructure {
       primarySortMetricValue: number;
       secondarySortMetricValue: number;
       tertiarySortMetricValue: number;
-    }
+    },
+    definitionConfig: object
   }
   state: {
     isExpanded: boolean;
@@ -76,7 +77,6 @@ export interface SecurityGroupDefinitionDTO extends BasicDTOStructure {
 export interface SecurityGroupDefinitionConfiguratorDTO extends BasicDTOStructure {
   data: {
     definitionList: Array<SecurityGroupDefinitionDTO>;
-    selectedDefinitionList: Array<SecurityGroupDefinitionDTO>;
     filterSearchInputValue: string;
   }
   state: {
