@@ -208,7 +208,7 @@ export class MarketGroupPanel implements OnDestroy {
 
   private performSearch(){
     // using stubs
-    const serverReturn = SecurityGroupList2;
+    const serverReturn = SecurityGroupList;
 
     this.state.searchResult.securityGroupList = serverReturn.map((eachStub) => {
       return this.dtoService.formSecurityGroupObject(eachStub, false);

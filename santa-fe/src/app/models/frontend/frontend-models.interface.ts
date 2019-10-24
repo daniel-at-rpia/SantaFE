@@ -68,6 +68,7 @@ export interface SecurityGroupDefinitionDTO extends BasicDTOStructure {
   state: {
     isLocked: boolean;
     isUnactivated: boolean;
+    groupByActive: boolean;
     filterActive: boolean;
   }
 }

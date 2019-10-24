@@ -13,9 +13,9 @@
             'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn': true,
             'santaBtn--iconOnly': true,
             'fal': true,
-            'fa-square': configuratorData.data.selectedDefinitionList.indexOf(eachDefinition) < 0 && !eachDefinition.state.isLocked,
-            'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn--selected': configuratorData.data.selectedDefinitionList.indexOf(eachDefinition) >= 0,
-            'fa-check-square': eachDefinition.state.isLocked || configuratorData.data.selectedDefinitionList.indexOf(eachDefinition) >= 0,
+            'fa-square': !eachDefinition.state.groupByActive && !eachDefinition.state.isLocked,
+            'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn--selected': eachDefinition.state.groupByActive,
+            'fa-check-square': eachDefinition.state.groupByActive,
             'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn--locked': eachDefinition.state.isLocked
           }"></button>
         <security-group-definition

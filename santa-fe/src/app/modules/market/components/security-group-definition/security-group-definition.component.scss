@@ -16,20 +16,20 @@ $securityGroupDefinition_backgroundVariant_img_size_secondary: 3rem;
   flex-direction: column;
   width: $securityGroupDefinition_width;
   height: $securityGroupDefinition_height;
-  background-color: $color_white;
+  background-color: $color_gray_2;
   &__icon {
     flex: 1 1 auto;
     display: flex;
     justify-content: center;
     align-items: center;
     &-regularImg {
-      color: $font_color_major;
+      color: $font_color_minor;
       font-size: $font_size_xx_large;
     }
     &-ratingBucket {
       display: none;
       &-primaryImg {
-        color: $font_color_major;
+        color: $font_color_minor;
         font-size: $font_size_xx_large;
       }
       &-secondaryImg {
@@ -40,12 +40,12 @@ $securityGroupDefinition_backgroundVariant_img_size_secondary: 3rem;
     &-backendTenor {
       display: none;
       &-primaryImg {
-        color: $font_color_major;
+        color: $font_color_minor;
         font-size: $font_size_xx_large;
       }
       &-secondaryImg {
         margin-top: -$spacing_xx_small - $spacing_minimum;
-        color: $font_color_major;
+        color: $font_color_minor;
       }
     }
     &-securityType {
@@ -160,6 +160,21 @@ $securityGroupDefinition_backgroundVariant_img_size_secondary: 3rem;
         }
         &-backendTenor {
           display: inline-block;
+        }
+      }
+    }
+  }
+  &--groupByActiveState {
+    background-color: $color_white;
+    #{$securityGroupDefinitionBlockName} {
+      &__icon {
+        &-regularImg, &-ratingBucket-primaryImg, &-backendTenor-primaryImg, &-backendTenor-secondaryImg {
+          color: $font_color_major;
+        }
+      }
+      &__label {
+        &-text {
+          color: $font_color_major;
         }
       }
     }

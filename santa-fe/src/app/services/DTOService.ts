@@ -135,7 +135,9 @@ export class DTOService {
       },
       state: {
         isLocked: rawData.locked,
-        isUnactivated: true,
+        isUnactivated: false,
+        // isUnactivated: true,
+        groupByActive: false,
         filterActive: false
       }
     }
