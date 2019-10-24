@@ -19,7 +19,7 @@
     </div>
   </section>
   <section class="sat-securityGroup__content">
-    <div class="sat-securityGroup__content-wheel">
+    <div class="sat-securityGroup__content-wheel sat-securityGroup__content-wheel--left">
       <div class="sat-securityGroup__content-wheel-chartContainer">
         <div id="{{groupData.graph.leftPie.name}}" class="sat-securityGroup__content-wheel-chartContainer-chart"></div>
         <div class="sat-securityGroup__content-wheel-chartContainer-innerRadius"></div>
@@ -53,6 +53,7 @@
               [ngStyle]="{'width': eachStat.percentage + '%'}"
               [ngClass]="{
                 'sat-securityGroup__content-canvases-right-metricLines-lineContainer-line': true,
+                'sat-securityGroup__content-canvases-right-metricLines-lineContainer-line--highlight': eachStat.sortHierarchy > 0,
                 'sat-securityGroup__content-canvases-right-metricLines-lineContainer-line--negative': eachStat.value < 0
               }"></div>
           </div>
@@ -61,12 +62,13 @@
         </div>
       </div>
       <div class="sat-securityGroup__content-canvases-behind">
+        <div class="sat-securityGroup__content-canvases-behind-numOfSecurities">{{groupData.data.numOfSecurities}}</div>
         <div class="sat-securityGroup__content-canvases-behind-rating">
           {{groupData.data.ratingValue}}
         </div>
       </div>
     </div>
-    <div class="sat-securityGroup__content-wheel">
+    <div class="sat-securityGroup__content-wheel sat-securityGroup__content-wheel--right">
       <div class="sat-securityGroup__content-wheel-chartContainer">
         <div id="{{groupData.graph.rightPie.name}}" class="sat-securityGroup__content-wheel-chartContainer-chart"></div>
         <div class="sat-securityGroup__content-wheel-chartContainer-innerRadius"></div>

@@ -38,7 +38,11 @@ export class UtilityService {
         return 1;
       case "2nd lien":
         return 1;
+      case "2nd lien Secured":
+        return 1;
       case "Secured":
+        return 2;
+      case "Asset Backed":
         return 2;
       case "Sr Unsecured":
         return 2;
@@ -49,11 +53,11 @@ export class UtilityService {
       case "Jr Subordinated":
         return 3;
       case "Sr Preferred":
-        return 3;
+        return 4;
       case "Preferred":
-        return 3;
+        return 4;
       case "Sr Non Preferred":
-        return 3;
+        return 4;
       case "Unsecured":
         return 4;
       default:
@@ -69,8 +73,12 @@ export class UtilityService {
         return '1-L';
       case "2nd lien":
         return '2-L';
+      case "2nd lien Secured":
+        return '2-LS';
       case "Secured":
         return 'S';
+      case "Asset Backed":
+        return 'A-B';
       case "Sr Unsecured":
         return 'S-U';
       case "Sr Subordinated":
@@ -196,7 +204,7 @@ export class UtilityService {
             if (eachMetric.label === 'Size') {
               object.delta[eachDeltaScope][eachMetric.label] = Math.round(deltaValue/100)/10000;
             } else {
-              object.delta[eachDeltaScope][eachMetric.label] = Math.round(deltaValue*10000)/10000;
+              object.delta[eachDeltaScope][eachMetric.label] = Math.round(deltaValue*1000)/1000;
             }
           }
         })
@@ -212,7 +220,7 @@ export class UtilityService {
       if (!!metricDTO.deltaScope) {
         deltaSubPack = groupDTO.data.metricPack.delta[metricDTO.deltaScope];
         value = !!deltaSubPack ? deltaSubPack[metricLabel] : null;
-        value = Math.round(value*10000)/10000;
+        value = Math.round(value*1000)/1000;
       } else {
         value = groupDTO.data.metricPack.raw[metricLabel];
         value = Math.round(value*100)/100;
@@ -286,6 +294,31 @@ export class UtilityService {
       }
     } else {
       return 0;
+    }
+  }
+
+  public convertBEKey(backendKey: string): string {
+    for (const eachKey in this.keyDictionary){
+      if (this.keyDictionary[eachKey] === backendKey) {
+        return eachKey;
+      }
+    }
+    return null;
+  }
+
+  public convertBETenorToFE(backendTenor: string): string {
+    switch (backendTenor) {
+      case "3M":
+        // code...
+        return '0.25Y';
+      case "6M":
+        // code...
+        return '0.5Y';
+      case "9M":
+        // code...
+        return '0.75Y';
+      default:
+        return backendTenor;
     }
   }
 }

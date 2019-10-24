@@ -122,6 +122,7 @@ export class SecurityGroupAverageVisualizer implements OnInit {
   }
 
   private clearEditingStatesBeforeExitDropdown(){
+    this.visualizerData.state.selectingStat = null;
     this.visualizerData.state.editingStat = null;
     this.visualizerData.state.editingStatSelectedMetric = null;
     this.visualizerData.state.editingStatSelectedMetricDeltaType = null;

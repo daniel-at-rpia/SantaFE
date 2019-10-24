@@ -185,11 +185,13 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
 export const BackendKeyDictionary = {
   'RATING': 'ratingNoNotch',
   'RATING_DES': 'RatingNoNotch',
-  'SPREAD': 'oasSpread',
+  'SPREAD': 'spread',
   'PRICE': 'price',
   'YIELD': 'yieldWorst',
   'SENIORITY': 'Seniority',
-  'SIZE': 'amtOutstanding'
+  'SIZE': 'amtOutstanding',
+  'CURRENCY': 'Ccy',
+  'TENOR': 'Tenor'
 };
 
 export const MetricOptions:Array<SecurityMetricOptionStub> = [
@@ -206,7 +208,7 @@ export const MetricOptions:Array<SecurityMetricOptionStub> = [
   },
   {
     label: 'Size',
-    backendDtoAttrName: 'amtOutstanding',
+    backendDtoAttrName: 'marketValue',
     deltaOptions: [
       'DoD',
       'WoW',
@@ -216,7 +218,40 @@ export const MetricOptions:Array<SecurityMetricOptionStub> = [
     ]
   },
   {
-    label: 'OAS-Spread',
+    label: 'Spread',
+    backendDtoAttrName: 'spread',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'Mtd',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'Citi Spread',
+    backendDtoAttrName: 'citiSpread',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'Mtd',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'Model Spread',
+    backendDtoAttrName: 'modelSpread',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'Mtd',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'OAS Spread',
     backendDtoAttrName: 'oasSpread',
     deltaOptions: [
       'DoD',

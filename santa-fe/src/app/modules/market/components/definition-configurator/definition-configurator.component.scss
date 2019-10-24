@@ -4,7 +4,7 @@
 $securityGroupDefinitionConfigurator_filters_width: 10rem;
 //$securityGroupDefinitionConfigurator_filters_width: 12.5rem;
 $securityGroupDefinitionConfigurator_width: $iconButton_size_regular + $spacing_small + $securityGroupDefinition_width + $securityGroupDefinitionConfigurator_gapBetweenDefAndFilter + $securityGroupDefinitionConfigurator_filters_width;
-$securityGroupDefinitionConfigurator_ctas_height: 5.5rem;
+$securityGroupDefinitionConfigurator_ctas_height: 6rem;
 .sat-securityGroupDefinitionConfigurator {
   $securityGroupDefinitionConfiguratorBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
@@ -106,6 +106,7 @@ $securityGroupDefinitionConfigurator_ctas_height: 5.5rem;
     @include mix_fixed_div(relative, $z_index_standard_hovering_item);
     flex: 0 0 $securityGroupDefinitionConfigurator_ctas_height;
     display: flex;
+    overflow: hidden;
     &-content {
       @include mix_border_generator($typical_border_width 0 0 0);
       flex: 1 1 auto;
@@ -113,10 +114,12 @@ $securityGroupDefinitionConfigurator_ctas_height: 5.5rem;
       justify-content: center;
       margin-top: $spacing_medium;
       padding-top: $spacing_medium;
-      santa-loadable-button {
-        display: flex;
+      &-regularSearch {
+        @include mix_alive('custom', $animation_duration_light transform);
+        @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+        transform: translate(0, 0);
         .sat-loadableButton__btn {
-          padding: 0 $spacing_large;
+          padding: $spacing_small $spacing_large;
           &>i {
             font-size: $font_size_xx_large;
           }
@@ -125,6 +128,20 @@ $securityGroupDefinitionConfigurator_ctas_height: 5.5rem;
           }
         }
       }
+      &-selectedGroupSearch {
+        @include mix_alive('custom', $animation_duration_light transform);
+        transform: translate(0, 200%);
+        .sat-loadableButton__btn {
+          background-color: $color_highlight;
+          &>i {
+            font-size: $font_size_xx_large;
+            color: $font_color_inverse;
+          }
+          &>span {
+            color: $font_color_inverse;
+          }
+        }
+      };
     }
   }
   &--longFilterOptionsState {
@@ -140,6 +157,25 @@ $securityGroupDefinitionConfigurator_ctas_height: 5.5rem;
         @include mix_border_generator(3px, $color_active);
         transform: translate(0, 0) scale(1, 1);
         background-color: $color_white;
+      }
+    }
+  }
+  &--highlightedVariant {
+    #{$securityGroupDefinitionConfiguratorBlockName} {
+      &__definitions {
+        &-list-item-selectBtn--selected {
+          background-color: $color_highlight;
+        }
+      }
+      &__ctas {
+        &-content {
+          &-regularSearch {
+            transform: translate(0, -200%);
+          }
+          &-selectedGroupSearch {
+            transform: translate(0, 0);
+          }
+        }
       }
     }
   }

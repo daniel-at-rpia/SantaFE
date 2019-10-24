@@ -20,7 +20,11 @@ export interface MarketState {
 }
 
 export interface MarketGroupPanelState {
-  configurator: SecurityGroupDefinitionConfiguratorDTO;
+  configurator: {
+    dto: SecurityGroupDefinitionConfiguratorDTO;
+    showSelectedGroupConfig: boolean;
+    cachedOriginalConfig: SecurityGroupDefinitionConfiguratorDTO;
+  }
   searchResult: {
     securityGroupList: Array<SecurityGroupDTO>;
     renderProgress: number;

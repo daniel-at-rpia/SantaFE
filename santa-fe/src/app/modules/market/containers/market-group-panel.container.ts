@@ -28,14 +28,18 @@ import { RestfulCommService } from 'App/services/RestfulCommService';
 
 import { MarketGroupPanelState } from 'FEModels/frontend-page-states.interface';
 import { SecurityGroupMetricBlock } from 'FEModels/frontend-blocks.interface';
-import { SecurityGroupDTO } from 'FEModels/frontend-models.interface';
+import {
+  SecurityGroupDTO,
+  SecurityGroupDefinitionConfiguratorDTO
+} from 'FEModels/frontend-models.interface';
 import { BESecurityGroupDTO } from 'BEModels/backend-models.interface';
 
-import { SecurityGroupList } from 'App/stubs/securities.stub';
+import { SecurityGroupList, SecurityGroupList2 } from 'App/stubs/securities.stub';
 import { SecurityDefinitionStub } from 'App/models/frontend/frontend-stub-models.interface';
 import {
   PieChartConfiguratorOptions,
-  SecurityGroupDefinitionMap
+  SecurityGroupDefinitionMap,
+  BackendKeyDictionary
 } from 'App/stubs/marketModuleSpecifics.stub';
 
 @Component({
@@ -55,7 +59,11 @@ export class MarketGroupPanel implements OnDestroy {
 
   private initiateComponentState(){
     this.state = {
-      configurator: this.dtoService.createSecurityGroupDefinitionConfigurator(),
+      configurator: {
+        dto: this.dtoService.createSecurityGroupDefinitionConfigurator(),
+        showSelectedGroupConfig: false,
+        cachedOriginalConfig: null
+      },
       isConfiguratorCollapsed: false,
       isGroupDataLoaded: false,
       utility: {
@@ -197,9 +205,9 @@ export class MarketGroupPanel implements OnDestroy {
           tertiarySortIndex = index;
         }
       });
+      this.updateSortData(primarySortIndex, secondarySortIndex, tertiarySortIndex);
       if (primarySortIndex >= 0) {
         // if there is at least a primarySortIndex, then it's worth to sort
-        this.populateDataToPrepareForSort(primarySortIndex, secondarySortIndex, tertiarySortIndex);
         this.performSort();
       } else{
         // default sorting algorithm
@@ -207,7 +215,26 @@ export class MarketGroupPanel implements OnDestroy {
     }
   }
 
+  public onSecurityGroupSelected(targetGroup: SecurityGroupDTO){
+    const selectedGroupList = [];
+    this.state.searchResult.securityGroupList.forEach((eachGroup) => {
+      eachGroup.state.isSelected && selectedGroupList.push(eachGroup);
+    });
+    if (selectedGroupList.length > 0) {
+      this.updateConfigurator(selectedGroupList);
+    } else {
+      this.onRestoreConfig();
+    }
+  }
+
+  public onRestoreConfig(){
+    this.state.configurator.dto = this.state.configurator.cachedOriginalConfig;
+    this.state.configurator.showSelectedGroupConfig = false;
+  }
+
   private startSearch(){
+    this.state.configurator.cachedOriginalConfig = null;
+    this.state.configurator.showSelectedGroupConfig = false;
     this.state.isGroupDataLoaded = false;
     this.state.utility.visualizer.state.isEmpty = false;
     this.state.utility.visualizer.state.isStencil = true;
@@ -252,8 +279,8 @@ export class MarketGroupPanel implements OnDestroy {
           //this.initializeStatForGroup(targetGroupCard);
           fullyLoadedCount++;
         });
-        this.state.searchResult.renderProgress = Math.round(fullyLoadedCount/SecurityGroupList.length*100);
-        if (fullyLoadedCount === SecurityGroupList.length) {
+        this.state.searchResult.renderProgress = Math.round(fullyLoadedCount/serverReturn.length*100);
+        if (fullyLoadedCount === serverReturn.length) {
           this.searchComplete();
         }
       })
@@ -266,7 +293,7 @@ export class MarketGroupPanel implements OnDestroy {
     });
     this.calculateGroupAverage(this.state.searchResult.securityGroupList.length);
     this.state.utility.visualizer.state.isStencil = false;
-    this.state.configurator.state.isLoading = false;
+    this.state.configurator.dto.state.isLoading = false;
     this.state.isGroupDataLoaded = true;
     this.getGroupsFromSearchSub.unsubscribe();
   }
@@ -287,7 +314,7 @@ export class MarketGroupPanel implements OnDestroy {
           deltaScope: eachStat.deltaScope,
           label: eachStat.label,
           value: this.utilityService.retrieveGroupMetricValue(eachStat, targetGroup),
-          max: null,
+          absMax: null,
           percentage: null
         };
         targetGroup.data.stats.push(newStat);
@@ -299,45 +326,51 @@ export class MarketGroupPanel implements OnDestroy {
     this.state.utility.visualizer.data.stats.forEach((eachStat, statIndex) => {
       if (!eachStat.isEmpty) {
         let sum = 0;
-        let max = 0;
+        let absMax = 0;
         this.state.searchResult.securityGroupList.forEach((eachGroup) => {
           const targetStat = eachGroup.data.stats.find((eachGroupStat) => {
             return eachGroupStat.label === eachStat.label && eachGroupStat.deltaScope === eachStat.deltaScope;
           });
           if (!!targetStat) {
             sum = sum + targetStat.value;
-            if (max < targetStat.value) {
-              max = targetStat.value;
+            if (absMax < Math.abs(targetStat.value)) {
+              absMax = Math.abs(targetStat.value);
             }
           }
         });
         let average = !!eachStat.deltaScope ? Math.round(sum / respectiveLength * 10000)/10000 : Math.round(sum / respectiveLength * 100)/100;
-        eachStat.max = max;
+        eachStat.absMax = absMax;
         eachStat.value = average;
-        eachStat.percentage = Math.round(Math.abs(average)/max * 10000)/100;
+        eachStat.percentage = Math.round(Math.abs(average)/absMax * 10000)/100;
         this.state.searchResult.securityGroupList.forEach((eachGroup) => {
           const targetStat = eachGroup.data.stats.find((eachGroupStat) => {
             return eachGroupStat.label === eachStat.label && eachGroupStat.deltaScope === eachStat.deltaScope;
           });
           if (!!targetStat) {
-            targetStat.max = max;
-            targetStat.percentage = Math.round(Math.abs(targetStat.value)/targetStat.max * 10000)/100;
+            targetStat.absMax = absMax;
+            targetStat.percentage = Math.round(Math.abs(targetStat.value)/targetStat.absMax * 10000)/100;
           }
         });
       }
     });
   }
 
-  private populateDataToPrepareForSort(primarySortIndex: number, secondarySortIndex: number, tertiarySortIndex: number){
+  private updateSortData(primarySortIndex: number, secondarySortIndex: number, tertiarySortIndex: number){
     this.state.searchResult.securityGroupList.forEach((eachGroup) => {
+      eachGroup.data.stats.forEach((eachStat) => {
+        eachStat.sortHierarchy = null;
+      });
       if (primarySortIndex >= 0 && primarySortIndex <= 2) {
         eachGroup.data.sort.primarySortMetricValue = eachGroup.data.stats[primarySortIndex].value;
+        eachGroup.data.stats[primarySortIndex].sortHierarchy = 1;
       }
       if (secondarySortIndex >= 0 && secondarySortIndex <= 2) {
         eachGroup.data.sort.secondarySortMetricValue = eachGroup.data.stats[secondarySortIndex].value;
+        eachGroup.data.stats[secondarySortIndex].sortHierarchy = 2;
       }
       if (tertiarySortIndex >= 0 && tertiarySortIndex <= 2) {
         eachGroup.data.sort.tertiarySortMetricValue = eachGroup.data.stats[tertiarySortIndex].value;
+        eachGroup.data.stats[tertiarySortIndex].sortHierarchy = 3;
       }
     });
   }
@@ -360,5 +393,54 @@ export class MarketGroupPanel implements OnDestroy {
         return 0;
       }
     });
+  }
+
+  private updateConfigurator(selectedGroupList: Array<SecurityGroupDTO>){
+    if (!this.state.configurator.cachedOriginalConfig) {
+      this.state.configurator.cachedOriginalConfig = this.utilityService.deepCopy(this.state.configurator.dto);
+    }
+    const newConfig = this.dtoService.createSecurityGroupDefinitionConfigurator();
+    selectedGroupList.forEach((eachGroup) => {
+      this.updateConfiguratorPerGroup(eachGroup, newConfig);
+    });
+    this.state.configurator.dto = newConfig;
+    this.state.configurator.showSelectedGroupConfig = true;
+  }
+
+  private updateConfiguratorPerGroup(targetGroup: SecurityGroupDTO, config: SecurityGroupDefinitionConfiguratorDTO){
+    for (const eachBEDefinition in targetGroup.data.definitionConfig) {
+      const targetDefinition = this.utilityService.convertBEKey(eachBEDefinition);
+      const targetDefinitionValue = targetGroup.data.definitionConfig[eachBEDefinition];
+      if (!!targetDefinition) {
+        config.data.definitionList.forEach((eachDefinition) => {
+          if (eachDefinition.data.key === targetDefinition) {
+            eachDefinition.state.groupByActive = true;
+            let allFiltersAreSelected = true;
+            eachDefinition.data.filterOptionList.forEach((eachFilter) => {
+              if (eachDefinition.data.key === 'TENOR') {
+                if (eachFilter.shortKey === this.utilityService.convertBETenorToFE(targetDefinitionValue)) {
+                  eachFilter.isSelected = true;
+                  eachDefinition.state.filterActive = true;
+                }
+              } else {
+                if (eachFilter.shortKey === targetDefinitionValue) {
+                  eachFilter.isSelected = true;
+                  eachDefinition.state.filterActive = true;
+                };
+              }
+              if (!eachFilter.isSelected) {
+                allFiltersAreSelected = false;
+              }
+            });
+            if (allFiltersAreSelected) {
+              eachDefinition.data.filterOptionList.forEach((eachFilter) => {
+                eachFilter.isSelected = false;
+              });
+              eachDefinition.state.filterActive = false;
+            }
+          }
+        })
+      }
+    }
   }
 }

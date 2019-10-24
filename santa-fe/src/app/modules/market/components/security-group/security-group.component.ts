@@ -4,7 +4,8 @@ import {
   OnChanges,
   ViewEncapsulation,
   Input,
-  Output
+  Output,
+  EventEmitter
 } from '@angular/core';
 
 import {
@@ -23,6 +24,7 @@ import { GraphService } from 'App/services/GraphService';
 export class SecurityGroup implements OnInit, OnChanges {
   @Input() groupData: SecurityGroupDTO;
   @Input() areChartsReady: boolean;
+  @Output() onGroupSelect = new EventEmitter<SecurityGroupDTO>();
 
   constructor(
     private graphService: GraphService
@@ -48,10 +50,11 @@ export class SecurityGroup implements OnInit, OnChanges {
   }
 
   onClickGroup(){
-    if (!this.groupData.state.isStencil) {
+    if (!!this.groupData.state.pieChartComplete) {
       this.groupData.state.isSelected = !this.groupData.state.isSelected;
       this.graphService.changeSecurityGroupPieChartOnSelect(this.groupData.graph.leftPie, this.groupData.state.isSelected);
       this.graphService.changeSecurityGroupPieChartOnSelect(this.groupData.graph.rightPie, this.groupData.state.isSelected);
+      this.onGroupSelect.emit(this.groupData);
     }
   }
 

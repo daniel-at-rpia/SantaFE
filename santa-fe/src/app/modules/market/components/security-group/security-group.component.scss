@@ -2,10 +2,10 @@
 @import "modules/market/market.scss";
 @import "./security-group-mixin.scss";
 
-$securityGroup_base_center_height: 5.75rem;
+$securityGroup_base_center_height: 6rem;
+$securityGroup_base_wheel_size_selected: 8rem;
 $securityGroup_base_wheelToCenter_overlap: -$securityGroup_base_wheel_size/2;
-$securityGroup_wheel_innerMask_positionMarkup: 1.5rem;
-$securityGroup_wheel_innerMask_width: 3rem;
+$securityGroup_wheel_innerMask_positionMarkup: $securityGroup_base_wheel_size/2 + ($securityGroup_base_wheel_size - $securityGroup_base_center_height);
 $securityGroup_content_numberTag_size: 2.25rem;
 $securityGroup_content_numberTag_padding: $spacing_x_small;
 $securityGroup_content_numberTag_halfSize: $securityGroup_content_numberTag_size/2 + $securityGroup_content_numberTag_padding;
@@ -25,8 +25,8 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
     display: flex;
     align-items: center;
     &-wheel {
-      @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
-      @include mix_alive('custom', $animation_duration_light box-shadow);
+      @include mix_alive('custom', $animation_duration_light box-shadow, $animation_duration_light width, $animation_duration_light height, $animation_duration_light margin-left, $animation_duration_light margin-right);
+      @include mix_fixed_div(absolute, $z_index_standard_base_item_lift);
       @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
       @include mix_border_radius(50%);
       flex-grow: 0;
@@ -37,17 +37,21 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
       height: $securityGroup_base_wheel_size;
       &-innerMask {
         @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
-        width: $securityGroup_wheel_innerMask_width;
+        width: 100%;
         height: $securityGroup_base_center_height;
       }
       &--left {
+        margin-left: 0;
         #{$securityGroupBlockName}__base-wheel-innerMask {
-          margin-left: $securityGroup_base_wheel_size - $securityGroup_wheel_innerMask_positionMarkup;
+          margin-left: $securityGroup_wheel_innerMask_positionMarkup;
         }
       }
       &--right {
+        right: 0;
+        direction: rtl;
+        margin-right: 0;
         #{$securityGroupBlockName}__base-wheel-innerMask {
-          margin-left: -$securityGroup_wheel_innerMask_positionMarkup;
+          margin-right: $securityGroup_wheel_innerMask_positionMarkup;
         }
       }
     }
@@ -56,7 +60,7 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
       @include mix_alive('custom', $animation_duration_light box-shadow);
       @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
       flex: 1 1 auto;
-      margin: 0 $securityGroup_base_wheelToCenter_overlap;
+      margin: 0 $securityGroup_base_wheelToCenter_overlap+$securityGroup_base_wheel_size;
       height: $securityGroup_base_center_height;
     }
   }
@@ -67,6 +71,8 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
     align-items: center;
     cursor: pointer;
     &-wheel {
+      @include mix_fixed_div(absolute, $z_index_standard_base_item_lift);
+      @include mix_alive('light');
       flex-grow: 0;
       flex-shrink: 0;
       display: flex;
@@ -99,13 +105,19 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
           @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
           @include mix_border_radius(50%);
           @include mix_border_generator($typical_border_width, $color_white);
-          @include mix_alive('custom', $animation_duration_normal transform);
+          @include mix_alive('custom', $animation_duration_light transform);
           left: (100% - $securityGroup_content_wheel_chartContainer_innerRadius_size)/2;
           top: (100% - $securityGroup_content_wheel_chartContainer_innerRadius_size)/2;
           width: $securityGroup_content_wheel_chartContainer_innerRadius_size;
           height: $securityGroup_content_wheel_chartContainer_innerRadius_size;
           transform: scale(1);
         }
+      }
+      &--left {
+        left: 0;
+      }
+      &--right {
+        right: 0;
       }
     }
     &-numberTag {
@@ -116,6 +128,7 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
       @include mix_calculate(left, 50%, $securityGroup_content_numberTag_size/2, '-');
       top: $securityGroup_content_numberTag_top;
       padding: $securityGroup_content_numberTag_padding;
+      display: none;
       &-text {
         @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
         @include mix_border_radius(50%);
@@ -124,7 +137,7 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
         align-items: center;
         height: $securityGroup_content_numberTag_size;
         width: $securityGroup_content_numberTag_size;
-        background-color: $color_white;
+        color: $font_color_inverse;
         font-size: $font_size_small;
         user-select: none;
       }
@@ -138,10 +151,10 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
     }
     &-canvases {
       @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
-      @include mix_calculate(height, $securityGroup_base_center_height, $securityGroup_content_numberTag_halfSize + $spacing_x_small, '-');
+      @include mix_calculate(height, $securityGroup_base_center_height, $spacing_x_small*2, '-');
       flex: 1 1 auto;
       display: flex;
-      margin: $securityGroup_content_numberTag_halfSize 0 $spacing_x_small 0;
+      margin: $spacing_x_small $securityGroup_base_wheel_size;
       overflow: hidden;
       &-left {
         flex: 0 1 $securityGroup_content_canvases_left_width;
@@ -221,8 +234,11 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
               @include mix_border_radius(3px);
               height: $securityGroup_content_canvases_right_metricLines_thickness;
               background-color: $color_white;
+              opacity: $securityGroup_content_canvases_right_metricLines_opacity;
+              &--highlight {
+                opacity: $securityGroup_content_canvases_right_metricLines_highlight_opacity;
+              }
               &--negative {
-                //@include mix_border_generator($typical_border_width, $color_kill);
                 background-color: $color_negative;
               }
             }
@@ -240,8 +256,15 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
         @include mix_fixed_div(absolute, $z_index_standard_bury_item);
         @include mix_calculate(right, 100%, $securityGroup_content_canvases_left_width, '-');
         height: 100%;
+        width: $securityGroup_content_canvases_left_width;
         display: flex;
+        justify-content: space-between;
         align-items: center;
+        &-numOfSecurities {
+          @include mix_rating_style;
+          font-size: $font_size_xx_large;
+          color: $font_color_inverse;
+        }
         &-rating {
           @include mix_rating_style;
           font-size: $font_size_xx_large;
@@ -387,8 +410,16 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
         &-wheel {
           @include material('none');
           background-color: $color_active;
+          height: $securityGroup_base_wheel_size_selected;
+          width: $securityGroup_base_wheel_size_selected;
           &-innerMask {
             background-color: $color_active;
+          }
+          &--left {
+            margin-left: -($securityGroup_base_wheel_size_selected - $securityGroup_base_wheel_size)/2;
+          }
+          &--right {
+            margin-right: -($securityGroup_base_wheel_size_selected - $securityGroup_base_wheel_size)/2;
           }
         }
         &-center {
@@ -405,14 +436,17 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
             background-color: $color_active;
           }
         }
-        &-wheel-chartContainer {
-          background-color: $color_active;
-          &-chart {
-            transform: rotate(360deg) scale(1);
-          }
-          &-innerRadius {
+        &-wheel {
+          transform: scale(1.33);
+          &-chartContainer {
             background-color: $color_active;
-            transform: scale(0.01);
+            &-chart {
+              transform: scale(1);
+            }
+            &-innerRadius {
+              background-color: $color_active;
+              transform: scale(0.01);
+            }
           }
         }
         &-numberTag {

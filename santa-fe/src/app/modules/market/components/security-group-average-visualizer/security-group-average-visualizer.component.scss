@@ -57,7 +57,8 @@ $averageVisualizer_metricNames_width_expanded: $securityGroup_content_canvases_l
 $averageVisualizerName_nameCTA_width: 9rem;
 $averageVisualizerName_nameCTA_height: 1.5rem;
 $averageVisualizerName_value_width: 3.25rem;
-$averageVisualizerName_metricSelectionDropdown_size: 24rem;
+$averageVisualizerName_metricSelectionDropdown_width: 24rem;
+$averageVisualizerName_metricSelectionDropdown_height: 27rem;
 $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
 .sat-securityGroupAverageVisualizerName {
   $averageVisualizerNameBlockName: &;
@@ -75,8 +76,8 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
     @include mix_border_radius(5px);
     display: none;
     align-items: center;
-    background-color: $color_filter;
-    padding: $spacing_xx_small $spacing_small;
+    background-color: $color_active;
+    padding: $spacing_xx_small $spacing_x_small;
     &-icon {
       color: $font_color_inverse;
       font-size: $font_size_x_small;
@@ -188,8 +189,8 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
       }
       &__metricSelectionDropdown-content {
         @include mix_border_generator;
-        height: $averageVisualizerName_metricSelectionDropdown_size;
-        width: $averageVisualizerName_metricSelectionDropdown_size;
+        height: $averageVisualizerName_metricSelectionDropdown_height;
+        width: $averageVisualizerName_metricSelectionDropdown_width;
         background-color: $color_white;
         transform: translate(0, 0);
       }
@@ -203,7 +204,7 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
       }
       &__actionMenu {
         &-sortBtn {
-          background-color: $color_filter;
+          background-color: $color_active;
           color: $font_color_inverse;
         }
       }
@@ -268,6 +269,14 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
     align-items: center;
     background-color: $color_active;
     height: $securityGroup_content_canvases_right_metricLines_thickness*1.5;
+    opacity: $securityGroup_content_canvases_right_metricLines_opacity;
+  }
+  &--highlightState {
+    #{$averageVisualizerValueBlockName} {
+      &__line {
+        opacity: $securityGroup_content_canvases_right_metricLines_highlight_opacity;
+      }
+    }
   }
   &--negativeState {
     #{$averageVisualizerValueBlockName} {

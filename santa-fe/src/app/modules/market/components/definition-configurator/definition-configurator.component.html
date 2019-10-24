@@ -2,7 +2,8 @@
   [ngClass]="{
     'sat-securityGroupDefinitionConfigurator': true,
     'sat-securityGroupDefinitionConfigurator--longFilterOptionsState': configuratorData.state.showLongFilterOptions,
-    'sat-securityGroupDefinitionConfigurator--filterActiveState': configuratorData.state.showFiltersFromDefinition
+    'sat-securityGroupDefinitionConfigurator--filterActiveState': configuratorData.state.showFiltersFromDefinition,
+    'sat-securityGroupDefinitionConfigurator--highlightedVariant': highlightedVariant
   }">
   <section class="sat-securityGroupDefinitionConfigurator__definitions">
     <ul class="sat-securityGroupDefinitionConfigurator__definitions-list">
@@ -13,9 +14,9 @@
             'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn': true,
             'santaBtn--iconOnly': true,
             'fal': true,
-            'fa-square': configuratorData.data.selectedDefinitionList.indexOf(eachDefinition) < 0 && !eachDefinition.state.isLocked,
-            'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn--selected': configuratorData.data.selectedDefinitionList.indexOf(eachDefinition) >= 0,
-            'fa-check-square': eachDefinition.state.isLocked || configuratorData.data.selectedDefinitionList.indexOf(eachDefinition) >= 0,
+            'fa-square': !eachDefinition.state.groupByActive && !eachDefinition.state.isLocked,
+            'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn--selected': eachDefinition.state.groupByActive,
+            'fa-check-square': eachDefinition.state.groupByActive,
             'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn--locked': eachDefinition.state.isLocked
           }"></button>
         <security-group-definition
@@ -58,10 +59,18 @@
   <section class="sat-securityGroupDefinitionConfigurator__ctas">
     <div class="sat-securityGroupDefinitionConfigurator__ctas-content">
       <santa-loadable-button
+        class="sat-securityGroupDefinitionConfigurator__ctas-content-regularSearch"
         (onClickButton)="triggerSearch()"
         [isLoading]="configuratorData.state.isLoading"
         [icon]="'fal fa-paw-claws'"
         [text]="'Go Hunt'">
+      </santa-loadable-button>
+      <santa-loadable-button
+        class="sat-securityGroupDefinitionConfigurator__ctas-content-selectedGroupSearch"
+        (onClickButton)="triggerSearch()"
+        [isLoading]="configuratorData.state.isLoading"
+        [icon]="'fal fa-flashlight'"
+        [text]="'Focus on Selected Groups'">
       </santa-loadable-button>
     </div>
   </section>

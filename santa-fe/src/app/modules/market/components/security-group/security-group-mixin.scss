@@ -2,6 +2,129 @@
 
 @mixin mix_securityGroup(){
   $securityGroupBlockName: &;
+  &--type-0 {
+    #{$securityGroupBlockName} {
+      &__base {
+        &-wheel {
+          background-color: $color_white;
+          &-innerMask {
+            background-color: $color_white;
+          }
+        }
+        &-center {
+          background-color: $color_white;
+        }
+      }
+      &__content {
+        &-canvases {
+          &-left-content {
+            &-name-text {
+              color: $font_color_major;
+            }
+            &-value-text {
+              background-color: $font_color_major;
+              color: $color_white;
+            }
+          }
+          &-right {
+            &-metricValues-valueContainer-value {
+              color: $font_color_major;
+            }
+            &-alignmentLine {
+              border-color: $font_color_major;
+            }
+            &-metricLines {
+              &-lineContainer-line {
+                background-color: $font_color_major;
+                &--negative {
+                  background-color: $color_negative;
+                }
+              }
+              &-mask {
+                background-color: $color_white;
+              }
+            }
+          }
+          &-behind {
+            &-numOfSecurities {
+              color: $font_color_major;
+            }
+            &-rating {
+              color: $font_color_major;
+            }
+          }
+        }
+        &-wheel-chartContainer {
+          background-color: $color_white;
+          &-innerRadius {
+            background-color: $color_white;
+          }
+        }
+        &-numberTag {
+          background-color: $color_white;
+          &-text {
+            color: $font_color_major;
+          }
+          &-mask {
+            background-color: $color_white;
+          }
+        }
+      }
+    }
+  }
+  &--selectedState#{$securityGroupBlockName}--type-0 {
+    #{$securityGroupBlockName} {
+      &__content {
+        &-canvases {
+          &-left-content {
+            &-name-text {
+              color: $font_color_inverse;
+            }
+            &-value-text {
+              background-color: $font_color_inverse;
+              color: $color_active;
+            }
+          }
+          &-right {
+            &-metricValues-valueContainer-value {
+              color: $font_color_inverse;
+            }
+            &-alignmentLine {
+              border-color: $font_color_inverse;
+            }
+            &-metricLines {
+              &-lineContainer-line {
+                background-color: $font_color_inverse;
+                &--negative {
+                  background-color: $color_negative;
+                }
+              }
+              &-mask {
+                background-color: $color_active;
+              }
+            }
+          }
+          &-behind {
+            &-numOfSecurities {
+              color: $font_color_inverse;
+            }
+            &-rating {
+              color: $font_color_inverse;
+            }
+          }
+        }
+        &-numberTag {
+          background-color: $color_active;
+          &-text {
+            color: $font_color_inverse;
+          }
+          &-mask {
+            background-color: $color_active;
+          }
+        }
+      }
+    }
+  }
   &--type-1 {
     #{$securityGroupBlockName} {
       &__base {
