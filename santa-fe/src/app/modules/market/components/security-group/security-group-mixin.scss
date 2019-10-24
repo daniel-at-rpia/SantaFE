@@ -36,14 +36,22 @@
             &-metricLines {
               &-lineContainer-line {
                 background-color: $font_color_major;
+                &--negative {
+                  background-color: $color_negative;
+                }
               }
               &-mask {
                 background-color: $color_white;
               }
             }
           }
-          &-behind-rating {
-            color: $font_color_major;
+          &-behind {
+            &-numOfSecurities {
+              color: $font_color_major;
+            }
+            &-rating {
+              color: $font_color_major;
+            }
           }
         }
         &-wheel-chartContainer {
@@ -87,14 +95,22 @@
             &-metricLines {
               &-lineContainer-line {
                 background-color: $font_color_inverse;
+                &--negative {
+                  background-color: $color_negative;
+                }
               }
               &-mask {
                 background-color: $color_active;
               }
             }
           }
-          &-behind-rating {
-            color: $font_color_inverse;
+          &-behind {
+            &-numOfSecurities {
+              color: $font_color_inverse;
+            }
+            &-rating {
+              color: $font_color_inverse;
+            }
           }
         }
         &-numberTag {
