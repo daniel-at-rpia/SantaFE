@@ -31,7 +31,7 @@ import { SecurityGroupMetricBlock } from 'FEModels/frontend-blocks.interface';
 import { SecurityGroupDTO } from 'FEModels/frontend-models.interface';
 import { BESecurityGroupDTO } from 'BEModels/backend-models.interface';
 
-import { SecurityGroupList } from 'App/stubs/securities.stub';
+import { SecurityGroupList, SecurityGroupList2 } from 'App/stubs/securities.stub';
 import { SecurityDefinitionStub } from 'App/models/frontend/frontend-stub-models.interface';
 import {
   PieChartConfiguratorOptions,
@@ -208,7 +208,7 @@ export class MarketGroupPanel implements OnDestroy {
 
   private performSearch(){
     // using stubs
-    const serverReturn = SecurityGroupList;
+    const serverReturn = SecurityGroupList2;
 
     this.state.searchResult.securityGroupList = serverReturn.map((eachStub) => {
       return this.dtoService.formSecurityGroupObject(eachStub, false);
@@ -243,8 +243,8 @@ export class MarketGroupPanel implements OnDestroy {
           //this.initializeStatForGroup(targetGroupCard);
           fullyLoadedCount++;
         });
-        this.state.searchResult.renderProgress = Math.round(fullyLoadedCount/SecurityGroupList.length*100);
-        if (fullyLoadedCount === SecurityGroupList.length) {
+        this.state.searchResult.renderProgress = Math.round(fullyLoadedCount/serverReturn.length*100);
+        if (fullyLoadedCount === serverReturn.length) {
           this.searchComplete();
         }
       })

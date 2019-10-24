@@ -204,7 +204,7 @@ export class UtilityService {
             if (eachMetric.label === 'Size') {
               object.delta[eachDeltaScope][eachMetric.label] = Math.round(deltaValue/100)/10000;
             } else {
-              object.delta[eachDeltaScope][eachMetric.label] = Math.round(deltaValue*10000)/10000;
+              object.delta[eachDeltaScope][eachMetric.label] = Math.round(deltaValue*1000)/1000;
             }
           }
         })
@@ -220,7 +220,7 @@ export class UtilityService {
       if (!!metricDTO.deltaScope) {
         deltaSubPack = groupDTO.data.metricPack.delta[metricDTO.deltaScope];
         value = !!deltaSubPack ? deltaSubPack[metricLabel] : null;
-        value = Math.round(value*10000)/10000;
+        value = Math.round(value*1000)/1000;
       } else {
         value = groupDTO.data.metricPack.raw[metricLabel];
         value = Math.round(value*100)/100;

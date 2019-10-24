@@ -29,7 +29,8 @@ export interface BESecurityGroupDTO {
       Ccy: string;
       Tenor: string;
     };
-    tenorOptions: Array<string>
+    tenorOptions: Array<string>;
+    weightField: string;
   }
   numSecurities: number;
   groupName: string;
@@ -61,19 +62,31 @@ interface BEMetricDTO {
   tenor: string;
   propertyToNumSecurities: {
     WorkoutTerm: number;
-    AmtOutstanding: number;
-    RatingDouble: number;
+    AmtOutstanding?: number;
+    RatingDouble?: number;
+    Spread?: number;
+    CitiSpread?: number;
+    ModelSpread?: number;
     OasSpread?: number;
-    Price: number;
+    Price?: number;
     YieldMaturity?: number;
     YieldWorst?: number;
+    ModelPrice?: number;
+    MarketValue?: number;
   }
+  isDelta?: boolean;
   workoutTerm: number;
-  amtOutstanding: number;
-  oasSpread: number;
-  price: number;
-  yieldMaturity: number;
-  yieldWorst: number;
-  rating: string;
-  ratingNoNotch: string;
+  marketValue?: number;
+  amtOutstanding?: number;
+  spread?: number;
+  citiSpread?: number;
+  modelSpread?: number;
+  oasSpread?: number;
+  price?: number;
+  modelPrice?: number;
+  yieldMaturity?: number;
+  yieldWorst?: number;
+  rating?: string;
+  ratingNoNotch?: string;
+  ratingDouble?: number;
 }
