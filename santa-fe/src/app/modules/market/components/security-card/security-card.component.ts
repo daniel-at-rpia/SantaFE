@@ -6,7 +6,7 @@ import {
   Output
 } from '@angular/core';
 
-import { SecurityDTO } from 'App/models/frontend/frontend-models.interface';
+import { SecurityDTO } from 'FEModels/frontend-models.interface';
 
 @Component({
   selector: 'security-card',

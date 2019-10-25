@@ -8,10 +8,6 @@ import { CoreModule } from 'Core/core.module';
 import { HomeModule } from './modules/home/home.module';
 import { MarketModule } from 'Market/market.module';
 import { TradeModule } from 'Trade/trade.module';
-import { DTOService } from './services/DTOService';
-import { UtilityService } from './services/UtilityService';
-import { GraphService } from './services/GraphService';
-import { RestfulCommService } from './services/RestfulCommService';
 
 import { AppRoot } from './app.root';
 
@@ -31,10 +27,6 @@ import { AppRoot } from './app.root';
     TradeModule
   ],
   providers: [
-    DTOService,
-    UtilityService,
-    GraphService,
-    RestfulCommService
   ],
   bootstrap: [AppRoot]
 })

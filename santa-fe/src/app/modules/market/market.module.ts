@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
+import { CoreModule } from 'Core/core.module';
 import { FormModule } from 'App/modules/form/form.module';
 
 import { MarketPage } from 'Market/market.page';
@@ -29,6 +30,7 @@ import { SecurityGroupAverageVisualizer } from 'Market/components/security-group
         path: 'market', component: MarketPage
       }
     ]),
+    CoreModule,
     FormModule
   ],
   providers: [

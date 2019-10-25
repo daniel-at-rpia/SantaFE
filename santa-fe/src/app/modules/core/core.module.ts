@@ -4,6 +4,10 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { FormModule } from 'App/modules/form/form.module';
 
+import { DTOService } from 'Core/services/DTOService';
+import { UtilityService } from 'Core/services/UtilityService';
+import { GraphService } from 'Core/services/GraphService';
+import { RestfulCommService } from 'Core/services/RestfulCommService';
 
 @NgModule({
   declarations: [
@@ -13,6 +17,10 @@ import { FormModule } from 'App/modules/form/form.module';
     FormModule
   ],
   providers: [
+    DTOService,
+    UtilityService,
+    GraphService,
+    RestfulCommService
   ]
 })
 export class CoreModule { }

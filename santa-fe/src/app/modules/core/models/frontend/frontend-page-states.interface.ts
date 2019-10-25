@@ -4,8 +4,8 @@ import {
   SecurityGroupDefinitionDTO,
   SecurityGroupDefinitionConfiguratorDTO,
   SecurityGroupAverageVisualizerDTO
-} from 'App/models/frontend/frontend-models.interface';
-import { SecurityDefinitionStub } from 'App/models/frontend/frontend-stub-models.interface';
+} from 'FEModels/frontend-models.interface';
+import { SecurityDefinitionStub } from 'FEModels/frontend-stub-models.interface';
 
 export interface MarketState {
 }

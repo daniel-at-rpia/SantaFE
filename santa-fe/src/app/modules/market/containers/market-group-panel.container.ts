@@ -22,9 +22,9 @@ import {
 } from 'rxjs/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
-import { DTOService } from 'App/services/DTOService';
-import { UtilityService } from 'App/services/UtilityService';
-import { RestfulCommService } from 'App/services/RestfulCommService';
+import { DTOService } from 'Core/services/DTOService';
+import { UtilityService } from 'Core/services/UtilityService';
+import { RestfulCommService } from 'Core/services/RestfulCommService';
 
 import { MarketGroupPanelState } from 'FEModels/frontend-page-states.interface';
 import { SecurityGroupMetricBlock } from 'FEModels/frontend-blocks.interface';
@@ -34,13 +34,13 @@ import {
 } from 'FEModels/frontend-models.interface';
 import { BESecurityGroupDTO } from 'BEModels/backend-models.interface';
 
-import { SecurityGroupList, SecurityGroupList2 } from 'App/stubs/securities.stub';
-import { SecurityDefinitionStub } from 'App/models/frontend/frontend-stub-models.interface';
+import { SecurityGroupList, SecurityGroupList2 } from 'Core/stubs/securityGroups.stub';
+import { SecurityDefinitionStub } from 'FEModels/frontend-stub-models.interface';
 import {
   PieChartConfiguratorOptions,
   SecurityGroupDefinitionMap,
   BackendKeyDictionary
-} from 'App/stubs/marketModuleSpecifics.stub';
+} from 'Core/constants/marketConstants.constant';
 
 @Component({
   selector: 'market-group-panel',
