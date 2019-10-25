@@ -5,7 +5,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormModule } from 'App/modules/form/form.module';
 
 import { MarketPage } from 'Market/market.page';
-import { MarketContainer } from 'Market/containers/market.container';
 import { MarketGroupPanel } from 'Market/containers/market-group-panel.container';
 import { SecurityCard } from 'Market/components/security-card/security-card.component';
 import { SecurityGroup } from 'Market/components/security-group/security-group.component';
@@ -16,7 +15,6 @@ import { SecurityGroupAverageVisualizer } from 'Market/components/security-group
 @NgModule({
   declarations: [
     MarketPage,
-    MarketContainer,
     MarketGroupPanel,
     SecurityCard,
     SecurityGroup,
