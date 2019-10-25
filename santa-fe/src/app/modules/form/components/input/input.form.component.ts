@@ -10,7 +10,7 @@ import {
   selector: 'santa-input',
   templateUrl: './input.form.component.html',
   styleUrls: ['./input.form.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.Emulated
 })
 
 export class SantaInput {

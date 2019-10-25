@@ -12,7 +12,7 @@ import { SecurityDTO } from 'FEModels/frontend-models.interface';
   selector: 'security-card',
   templateUrl: './security-card.component.html',
   styleUrls: ['./security-card.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.Emulated
 })
 export class SecurityCard implements OnInit {
   @Input() cardData: SecurityDTO;

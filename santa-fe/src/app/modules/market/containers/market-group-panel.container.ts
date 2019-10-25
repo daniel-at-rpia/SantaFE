@@ -46,7 +46,7 @@ import {
   selector: 'market-group-panel',
   templateUrl: './market-group-panel.container.html',
   styleUrls: ['./market-group-panel.container.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.Emulated
 })
 
 export class MarketGroupPanel implements OnDestroy {

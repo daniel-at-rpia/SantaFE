@@ -19,7 +19,7 @@ import { GraphService } from 'Core/services/GraphService';
   selector: 'security-group',
   templateUrl: './security-group.component.html',
   styleUrls: ['./security-group.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.Emulated
 })
 export class SecurityGroup implements OnInit, OnChanges {
   @Input() groupData: SecurityGroupDTO;
