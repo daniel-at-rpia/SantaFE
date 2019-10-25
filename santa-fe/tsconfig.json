@@ -22,8 +22,9 @@
       "Styles/*": ["src/app/styles/*"],
       "BEModels/*": ["src/app/models/backend/*"],
       "FEModels/*": ["src/app/models/frontend/*"],
-      "RootServices/*": ["src/app/services/*"],
-      "Market/*": ["src/app/modules/market/*"]
+      "GlobalServices/*": ["src/app/services/*"],
+      "Market/*": ["src/app/modules/market/*"],
+      "Trade/*": ["src/app/modules/trade/*"]
     },
     "lib": [
       "es2018",

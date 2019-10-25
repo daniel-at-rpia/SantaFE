@@ -6,7 +6,8 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { WelcomeModule } from './modules/welcome/welcome.module';
 import { HomeModule } from './modules/home/home.module';
-import { MarketModule } from './modules/market/market.module';
+import { MarketModule } from 'Market/market.module';
+import { TradeModule } from 'Trade/trade.module';
 import { DTOService } from './services/DTOService';
 import { UtilityService } from './services/UtilityService';
 import { GraphService } from './services/GraphService';
@@ -26,7 +27,8 @@ import { AppComponent } from './app.component';
     // Native modules
     WelcomeModule,
     HomeModule,
-    MarketModule
+    MarketModule,
+    TradeModule
   ],
   providers: [
     DTOService,
