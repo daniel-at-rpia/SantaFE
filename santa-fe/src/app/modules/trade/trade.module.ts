@@ -5,10 +5,20 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormModule } from 'App/modules/form/form.module';
 
 import { TradePage } from 'Trade/trade.page';
+import { TradeCenterPanel } from 'Trade/containers/trade-center-panel.container';
+import { TradeAlertPanel } from 'Trade/containers/trade-alert-panel.container';
+import { TradeUtilityPanel } from 'Trade/containers/trade-utility-panel.container';
+import { TradeLiveGraphPanel } from 'Trade/containers/trade-live-graph-panel.container';
+import { TradeOverviewGraphPanel } from 'Trade/containers/trade-overview-graph-panel.container';
 
 @NgModule({
   declarations: [
-    TradePage
+    TradePage,
+    TradeCenterPanel,
+    TradeAlertPanel,
+    TradeUtilityPanel,
+    TradeLiveGraphPanel,
+    TradeOverviewGraphPanel
   ],
   imports: [
     CommonModule,
