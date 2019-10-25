@@ -228,7 +228,11 @@ export class MarketGroupPanel implements OnDestroy {
   }
 
   public onRestoreConfig(){
-    this.state.configurator.dto = this.state.configurator.cachedOriginalConfig;
+    const cacheState = this.utilityService.deepCopy(this.state.configurator.dto.state);
+    this.state.configurator.dto = this.utilityService.deepCopy(this.state.configurator.cachedOriginalConfig);
+    this.state.configurator.dto.state = cacheState;
+    this.state.configurator.dto.state.showFiltersFromDefinition
+    this.state.configurator.cachedOriginalConfig = null;
     this.state.configurator.showSelectedGroupConfig = false;
   }
 

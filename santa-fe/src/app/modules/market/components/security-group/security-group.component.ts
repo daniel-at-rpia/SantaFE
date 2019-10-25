@@ -50,7 +50,7 @@ export class SecurityGroup implements OnInit, OnChanges {
   }
 
   onClickGroup(){
-    if (!!this.groupData.state.pieChartComplete) {
+    if (!!this.groupData.state.pieChartComplete && !!this.groupData.state.averageCalculationComplete) {
       this.groupData.state.isSelected = !this.groupData.state.isSelected;
       this.graphService.changeSecurityGroupPieChartOnSelect(this.groupData.graph.leftPie, this.groupData.state.isSelected);
       this.graphService.changeSecurityGroupPieChartOnSelect(this.groupData.graph.rightPie, this.groupData.state.isSelected);
