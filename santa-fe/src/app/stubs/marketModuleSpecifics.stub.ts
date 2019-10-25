@@ -63,25 +63,25 @@ const FilterOptionsRatingBucket = [
 ];
 
 const FilterOptionsTenor = [
-  '0.25Y',
-  '0.5Y',
-  '0.75Y',
-  '1Y',
+//  '0.25Y',
+//  '0.5Y',
+//  '0.75Y',
+//  '1Y',
   '2Y',
   '3Y',
-  '4Y',
+//  '4Y',
   '5Y',
-  '6Y',
+//  '6Y',
   '7Y',
-  '8Y',
-  '9Y',
+//  '8Y',
+//  '9Y',
   '10Y',
-  '15Y',
-  '20Y',
-  '25Y',
+//  '15Y',
+//  '20Y',
+//  '25Y',
   '30Y',
-  '40Y',
-  '50Y'
+//  '40Y',
+//  '50Y'
 ];
 
 const FilterOptionsSecurityType = [
