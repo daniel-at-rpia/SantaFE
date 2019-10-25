@@ -23,6 +23,7 @@
       "BEModels/*": ["src/app/models/backend/*"],
       "FEModels/*": ["src/app/models/frontend/*"],
       "GlobalServices/*": ["src/app/services/*"],
+      "Core/*": ["src/app/modules/core/*"],
       "Market/*": ["src/app/modules/market/*"],
       "Trade/*": ["src/app/modules/trade/*"]
     },
