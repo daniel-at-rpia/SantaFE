@@ -9,8 +9,11 @@ import { UtilityService } from 'Core/services/UtilityService';
 import { GraphService } from 'Core/services/GraphService';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 
+import { SecurityCard } from 'Core/components/security-card/security-card.component';
+
 @NgModule({
   declarations: [
+    SecurityCard
   ],
   imports: [
     CommonModule,
@@ -21,6 +24,9 @@ import { RestfulCommService } from 'Core/services/RestfulCommService';
     UtilityService,
     GraphService,
     RestfulCommService
+  ], 
+  exports: [
+    SecurityCard
   ]
 })
 export class CoreModule { }
