@@ -20,10 +20,12 @@
     "paths": {
       "App/*": ["src/app/*"],
       "Styles/*": ["src/app/styles/*"],
-      "BEModels/*": ["src/app/models/backend/*"],
-      "FEModels/*": ["src/app/models/frontend/*"],
-      "RootServices/*": ["src/app/services/*"],
-      "Market/*": ["src/app/modules/market/*"]
+      "GlobalServices/*": ["src/app/services/*"],
+      "Core/*": ["src/app/modules/core/*"],
+      "BEModels/*": ["src/app/modules/core/models/backend/*"],
+      "FEModels/*": ["src/app/modules/core/models/frontend/*"],
+      "Market/*": ["src/app/modules/market/*"],
+      "Trade/*": ["src/app/modules/trade/*"]
     },
     "lib": [
       "es2018",

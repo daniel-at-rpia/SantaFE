@@ -4,19 +4,10 @@ import {
   SecurityGroupDefinitionDTO,
   SecurityGroupDefinitionConfiguratorDTO,
   SecurityGroupAverageVisualizerDTO
-} from 'App/models/frontend/frontend-models.interface';
-import { SecurityDefinitionStub } from 'App/models/frontend/frontend-stub-models.interface';
+} from 'FEModels/frontend-models.interface';
+import { SecurityDefinitionStub } from 'FEModels/frontend-stub-models.interface';
 
 export interface MarketState {
-  configurator: SecurityGroupDefinitionConfiguratorDTO;
-  securityList: Array<SecurityDTO>;
-  securityList2: Array<SecurityDTO>;
-  securityList3: Array<SecurityDTO>;
-  securityList4: Array<SecurityDTO>;
-  securityGroupList1: Array<SecurityGroupDTO>;
-  securityGroupList2: Array<SecurityGroupDTO>;
-  securityGroupList3: Array<SecurityGroupDTO>;
-  securityGroupList4: Array<SecurityGroupDTO>;
 }
 
 export interface MarketGroupPanelState {

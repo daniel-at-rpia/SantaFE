@@ -4,19 +4,16 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 
-import { WelcomeModule } from './modules/welcome/welcome.module';
+import { CoreModule } from 'Core/core.module';
 import { HomeModule } from './modules/home/home.module';
-import { MarketModule } from './modules/market/market.module';
-import { DTOService } from './services/DTOService';
-import { UtilityService } from './services/UtilityService';
-import { GraphService } from './services/GraphService';
-import { RestfulCommService } from './services/RestfulCommService';
+import { MarketModule } from 'Market/market.module';
+import { TradeModule } from 'Trade/trade.module';
 
-import { AppComponent } from './app.component';
+import { AppRoot } from './app.root';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppRoot
   ],
   imports: [
     BrowserModule,
@@ -24,16 +21,13 @@ import { AppComponent } from './app.component';
     HttpClientModule,
 
     // Native modules
-    WelcomeModule,
+    CoreModule,
     HomeModule,
-    MarketModule
+    MarketModule,
+    TradeModule
   ],
   providers: [
-    DTOService,
-    UtilityService,
-    GraphService,
-    RestfulCommService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppRoot]
 })
 export class AppModule { }

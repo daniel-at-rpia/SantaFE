@@ -1,0 +1,10 @@
+@import "global.scss";
+
+.sat-tradeLiveGraphPanel {
+  $tradeLiveGraphPanelBlockName: &;
+  @include mix_border_generator;
+  @include mix_border_radius(10px);
+  flex: 1 1 auto;
+  display: flex;
+  overflow: hidden;
+}

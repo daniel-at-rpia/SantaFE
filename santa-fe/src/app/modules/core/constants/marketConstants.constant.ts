@@ -1,7 +1,7 @@
 import {
   SecurityDefinitionStub,
   SecurityMetricOptionStub
-} from 'App/models/frontend/frontend-stub-models.interface';
+} from 'FEModels/frontend-stub-models.interface';
 
 const FilterOptionsBoolean = [
   'Yes',

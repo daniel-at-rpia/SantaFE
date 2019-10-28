@@ -19,11 +19,11 @@ import { UtilityService } from './UtilityService';
 import {
   SecurityGroupRatingColorScheme,
   SecurityGroupSeniorityColorScheme
-} from 'App/stubs/colorSchemes.stub';
+} from 'Core/constants/colorSchemes.constant';
 import {
   MetricOptions,
   SecurityGroupDefinitionMap
-} from 'App/stubs/marketModuleSpecifics.stub';
+} from 'Core/constants/marketConstants.constant';
 
 @Injectable()
 export class DTOService {

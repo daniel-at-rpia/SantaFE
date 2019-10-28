@@ -6,13 +6,13 @@ import {
   Output
 } from '@angular/core';
 
-import { SecurityDTO } from 'App/models/frontend/frontend-models.interface';
+import { SecurityDTO } from 'FEModels/frontend-models.interface';
 
 @Component({
   selector: 'security-card',
   templateUrl: './security-card.component.html',
   styleUrls: ['./security-card.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.Emulated
 })
 export class SecurityCard implements OnInit {
   @Input() cardData: SecurityDTO;

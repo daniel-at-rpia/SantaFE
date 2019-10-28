@@ -9,13 +9,13 @@ import {
 
 import { SecurityGroupAverageVisualizerDTO } from 'FEModels/frontend-models.interface';
 import { SecurityGroupMetricBlock } from 'FEModels/frontend-blocks.interface';
-import { MetricOptions } from 'App/stubs/marketModuleSpecifics.stub';
+import { MetricOptions } from 'Core/constants/marketConstants.constant';
 
 @Component({
   selector: 'security-group-average-visualizer',
   templateUrl: './security-group-average-visualizer.component.html',
   styleUrls: ['./security-group-average-visualizer.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.Emulated
 })
 
 export class SecurityGroupAverageVisualizer implements OnInit {

@@ -7,13 +7,13 @@ import {
   EventEmitter
 } from '@angular/core';
 
-import { SecurityGroupDefinitionDTO } from 'App/models/frontend/frontend-models.interface';
+import { SecurityGroupDefinitionDTO } from 'FEModels/frontend-models.interface';
 
 @Component({
   selector: 'security-group-definition',
   templateUrl: './security-group-definition.component.html',
   styleUrls: ['./security-group-definition.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.Emulated
 })
 
 export class SecurityGroupDefinition implements OnInit {

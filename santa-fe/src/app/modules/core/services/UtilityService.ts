@@ -8,7 +8,7 @@ import {
 import {
   MetricOptions,
   BackendKeyDictionary
-} from 'App/stubs/marketModuleSpecifics.stub';
+} from 'Core/constants/marketConstants.constant';
 import uuid from 'uuidv4';
 
 declare const require: any;

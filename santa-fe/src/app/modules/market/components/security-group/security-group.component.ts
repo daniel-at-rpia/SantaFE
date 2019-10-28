@@ -11,15 +11,15 @@ import {
 import {
   SecurityGroupRatingColorScheme,
   SecurityGroupSeniorityColorScheme
-} from 'App/stubs/colorSchemes.stub';
-import { SecurityGroupDTO } from 'App/models/frontend/frontend-models.interface';
-import { GraphService } from 'App/services/GraphService';
+} from 'Core/constants/colorSchemes.constant';
+import { SecurityGroupDTO } from 'FEModels/frontend-models.interface';
+import { GraphService } from 'Core/services/GraphService';
 
 @Component({
   selector: 'security-group',
   templateUrl: './security-group.component.html',
   styleUrls: ['./security-group.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.Emulated
 })
 export class SecurityGroup implements OnInit, OnChanges {
   @Input() groupData: SecurityGroupDTO;

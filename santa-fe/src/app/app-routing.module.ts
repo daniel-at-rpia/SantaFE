@@ -1,9 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { HomePage } from './modules/home/home.page';
-import { WelcomePage } from './modules/welcome/welcome.page';
-import { MarketPage } from './modules/market/market.page';
-
 
 const routes: Routes = [
       {
@@ -14,6 +10,10 @@ const routes: Routes = [
       {
         path: 'market',
         redirectTo: 'market',
+        pathMatch: 'full'
+      },{
+        path: 'trade',
+        redirectTo: 'trade',
         pathMatch: 'full'
       },
       {
