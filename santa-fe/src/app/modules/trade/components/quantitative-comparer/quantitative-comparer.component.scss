@@ -1,0 +1,113 @@
+@import "global.scss";
+@import "modules/trade/trade.scss";
+
+$quanComparer_edge_width: 3rem;
+
+.sat-quantComparer {
+  $quantComparerBlockName: &;
+  @include mix_fixed_div(relative, $z_index_standard_base_item);
+  flex: 1 1 auto;
+  &__base {
+    @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    &-line {
+      @include mix_fixed_div(absolute, $z_index_standard_base_item_lift);
+      @include mix_border_generator(0 0 $typical_border_width 0);
+      @include mix_calculate(width, 100%, $quanComparer_edge_width * 2, '-');
+      height: 50%;
+      margin-left: $quanComparer_edge_width;
+      margin-right: $quanComparer_edge_width;
+    }
+    &-background {
+      @include mix_fixed_div(absolute, $z_index_standard_base_item);
+      @include mix_border_radius(5px);
+      display: none;
+      height: 100%;
+      width: 100%;
+      background-color: $color_quant_background;
+    }
+  }
+  &__content {
+    @include mix_fixed_div(absolute, $z_index_standard_base_item_lift);
+    display: flex;
+    height: 100%;
+    width: 100%;
+    padding: $spacing_x_small;
+    &-left {
+      flex: 1 1 auto;
+      display: flex;
+      align-items: center;
+      &-edge {
+        @include mix_border_radius(5px);
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+        width: $quanComparer_edge_width;
+        padding: $spacing_x_small;
+        background-color: $color_quant_left_background;
+        &-number {
+          text-align: left;
+          color: $font_color_major;
+        }
+        &-broker {
+          text-align: left;
+          color: $color_quant_left;
+        }
+      }
+      &-line {
+        flex: 1 1 auto;
+        display: flex;
+        align-items: center;
+        height: 100%;
+        &-content {
+          @include mix_border_radius(3px, 'right');
+          width: 50%;
+          height: 85%;
+          background-color: $color_quant_left;
+        }
+      }
+    }
+    &-right {
+      flex: 1 1 auto;
+      display: flex;
+      align-items: center;
+      direction: rtl;
+      &-edge {
+        @include mix_border_radius(5px);
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+        width: $quanComparer_edge_width;
+        padding: $spacing_x_small;
+        background-color: $color_quant_right_background;
+        &-number {
+          text-align: right;
+          color: $font_color_major;
+        }
+        &-broker {
+          text-align: right;
+          color: $color_quant_right;
+        }
+      }
+      &-line {
+        flex: 1 1 auto;
+        display: flex;
+        align-items: center;
+        height: 100%;
+        &-content {
+          @include mix_border_radius(3px, 'left');
+          width: 50%;
+          height: 20%;
+          background-color: $color_quant_right;
+        }
+      }
+    }
+  }
+}
