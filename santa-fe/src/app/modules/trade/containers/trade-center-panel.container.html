@@ -4,7 +4,7 @@
       <li *ngFor="let eachObject of state.demoList;" class="sat-tradeCenterPanel__demo-list-item">
         <security-card [cardData]="eachObject.security"></security-card>
         <div class="sat-tradeCenterPanel__demo-list-item-comparer">
-          <quant-comparer></quant-comparer>
+          <quant-comparer [quantData]="eachObject.comparer"></quant-comparer>
         </div>
       </li>
     </ul>

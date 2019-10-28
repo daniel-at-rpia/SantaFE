@@ -1,8 +1,8 @@
 @import "global.scss";
 @import "modules/trade/trade.scss";
 
-$quanComparer_edge_width: 2.5rem;
-
+$quantComparer_edge_width: 2.5rem;
+$quantComparer_min_height: 2.5rem;
 .sat-quantComparer {
   $quantComparerBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
@@ -17,10 +17,10 @@ $quanComparer_edge_width: 2.5rem;
     &-line {
       @include mix_fixed_div(absolute, $z_index_standard_base_item_lift);
       @include mix_border_generator(0 0 $typical_border_width 0);
-      @include mix_calculate(width, 100%, $quanComparer_edge_width * 2, '-');
+      @include mix_calculate(width, 100%, $quantComparer_edge_width * 2, '-');
       height: 50%;
-      margin-left: $quanComparer_edge_width;
-      margin-right: $quanComparer_edge_width;
+      margin-left: $quantComparer_edge_width;
+      margin-right: $quantComparer_edge_width;
     }
     &-background {
       @include mix_fixed_div(absolute, $z_index_standard_base_item);
@@ -48,7 +48,7 @@ $quanComparer_edge_width: 2.5rem;
         flex-direction: column;
         justify-content: space-between;
         height: 100%;
-        width: $quanComparer_edge_width;
+        width: $quantComparer_edge_width;
         padding: $spacing_xx_small;
         background-color: $color_quant_left_background;
         &-number {

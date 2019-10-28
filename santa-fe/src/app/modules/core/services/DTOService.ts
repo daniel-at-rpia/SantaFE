@@ -200,7 +200,7 @@ export class DTOService {
     return object;
   }
 
-  public formQuantComparerObject(){
+  public formQuantComparerObject(): QuantComparerDTO{
     const object: QuantComparerDTO = {
       data: {
         left: {
@@ -220,5 +220,6 @@ export class DTOService {
 
       }
     }
+    return object;
   }
 }
