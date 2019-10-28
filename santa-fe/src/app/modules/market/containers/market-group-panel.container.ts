@@ -109,7 +109,7 @@ export class MarketGroupPanel implements OnDestroy {
       "source": "FO",
       "tenorOptions": ["2Y", "3Y", "5Y", "7Y", "10Y", "30Y"]
     };
-    this.restfulCommonService.callAPI('https://rpia-trader17:51225/santaSecurity/get-santa-securities', {req: 'GET'}, payload).pipe(
+    this.restfulCommonService.callAPI('https://rpia-msmith-dt:51225/santaSecurity/get-santa-securities', {req: 'GET'}, payload).pipe(
       tap((serverReturn) => {
         console.log('return is ', serverReturn)
       }),
@@ -118,7 +118,7 @@ export class MarketGroupPanel implements OnDestroy {
         return of('error');
       })
     ).subscribe();
-    this.restfulCommonService.callAPI('https://rpia-trader17:51225/santaGroup/get-santa-groups', {req: 'POST'}, payload).pipe(
+    this.restfulCommonService.callAPI('https://rpia-msmith-dt:51225/santaGroup/get-santa-groups', {req: 'POST'}, payload).pipe(
       tap((serverReturn) => {
         console.log('return is ', serverReturn)
       }),
