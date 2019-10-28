@@ -1,1 +1,9 @@
-<article class="sat-tradeCenterPanel"></article>
+<article class="sat-tradeCenterPanel">
+  <section class="sat-tradeCenterPanel__demo">
+    <ul class="sat-tradeCenterPanel__demo-list">
+      <li *ngFor="let eachCard of state.tableList;" class="sat-tradeCenterPanel__demo-list-item">
+        <security-card [cardData]="eachCard"></security-card>
+      </li>
+    </ul>
+  </section>
+</article>

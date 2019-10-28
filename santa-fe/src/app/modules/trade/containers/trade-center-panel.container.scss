@@ -6,5 +6,19 @@
   @include mix_border_radius(10px);
   flex: 1 1 auto;
   display: flex;
+  flex-direction: column;
   overflow: hidden;
+  &__demo {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    &-list {
+      @include mix_enable_scrollbar('vertical');
+      margin: $spacing_small $spacing_small $spacing_small 0;
+      padding-bottom: $spacing_large;
+      &-item {
+        margin: $spacing_medium 0 0 $spacing_medium;
+      }
+    }
+  }
 }

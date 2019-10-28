@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
-import { FormModule } from 'App/modules/form/form.module';
+import { CoreModule } from 'Core/core.module';
 
 import { TradePage } from 'Trade/trade.page';
 import { TradeCenterPanel } from 'Trade/containers/trade-center-panel.container';
@@ -27,7 +27,7 @@ import { TradeOverviewGraphPanel } from 'Trade/containers/trade-overview-graph-p
         path: 'trade', component: TradePage
       }
     ]),
-    FormModule
+    CoreModule
   ],
   providers: [
   ]

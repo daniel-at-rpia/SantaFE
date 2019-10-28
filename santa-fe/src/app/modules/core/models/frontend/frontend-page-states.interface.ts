@@ -41,3 +41,7 @@ export interface MarketGroupPanelState {
     }
   }
 }
+
+export interface TradeCenterPanelState {
+  tableList: Array<any>;
+}
