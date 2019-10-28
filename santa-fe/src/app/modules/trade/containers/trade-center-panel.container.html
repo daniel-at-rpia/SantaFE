@@ -1,11 +1,11 @@
 <article class="sat-tradeCenterPanel">
   <section class="sat-tradeCenterPanel__demo">
-    <div class="sat-tradeCenterPanel__demo-quant">
-      <quant-comparer></quant-comparer>
-    </div>
     <ul class="sat-tradeCenterPanel__demo-list">
-      <li *ngFor="let eachCard of state.tableList;" class="sat-tradeCenterPanel__demo-list-item">
-        <security-card [cardData]="eachCard"></security-card>
+      <li *ngFor="let eachObject of state.demoList;" class="sat-tradeCenterPanel__demo-list-item">
+        <security-card [cardData]="eachObject.security"></security-card>
+        <div class="sat-tradeCenterPanel__demo-list-item-comparer">
+          <quant-comparer></quant-comparer>
+        </div>
       </li>
     </ul>
   </section>

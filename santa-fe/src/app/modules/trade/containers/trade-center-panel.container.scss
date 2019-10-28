@@ -12,20 +12,22 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    &-quant {
-      display: flex;
-      quant-comparer {
-        width: 16rem;
-        height: 4rem;
-        display: flex;
-      }
-    }
     &-list {
       @include mix_enable_scrollbar('vertical');
       margin: $spacing_small $spacing_small $spacing_small 0;
       padding-bottom: $spacing_large;
       &-item {
-        margin: $spacing_medium 0 0 $spacing_medium;
+        display: flex;
+        align-items: center;
+        margin: $spacing_small 0 0 $spacing_medium;
+        &-comparer {
+          margin-left: $spacing_medium;
+          display: flex;
+          quant-comparer {
+            display: flex;
+            width: 16rem;
+          }
+        }
       }
     }
   }

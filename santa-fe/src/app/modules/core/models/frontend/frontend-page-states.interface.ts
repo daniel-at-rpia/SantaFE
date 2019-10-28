@@ -3,7 +3,8 @@ import {
   SecurityGroupDTO,
   SecurityGroupDefinitionDTO,
   SecurityGroupDefinitionConfiguratorDTO,
-  SecurityGroupAverageVisualizerDTO
+  SecurityGroupAverageVisualizerDTO,
+  QuantComparerDTO
 } from 'FEModels/frontend-models.interface';
 import { SecurityDefinitionStub } from 'FEModels/frontend-stub-models.interface';
 
@@ -43,5 +44,5 @@ export interface MarketGroupPanelState {
 }
 
 export interface TradeCenterPanelState {
-  tableList: Array<any>;
+  demoList: Array<any>;
 }

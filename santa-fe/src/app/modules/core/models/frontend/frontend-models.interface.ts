@@ -102,11 +102,22 @@ export interface SecurityGroupAverageVisualizerDTO extends BasicDTOStructure {
   }
 }
 
-export interface QuantitativeComparerDTO extends BasicDTOStructure {
+export interface QuantComparerDTO extends BasicDTOStructure {
   data: {
-
+    left: {
+      number: number;
+      broker: string;
+      lineWidth: number;
+      lineHeight: number;
+    },
+    right: {
+      number: number;
+      broker: string;
+      lineWidth: number;
+      lineHeight: number;
+    }
   },
   state: {
-    
+
   }
 }

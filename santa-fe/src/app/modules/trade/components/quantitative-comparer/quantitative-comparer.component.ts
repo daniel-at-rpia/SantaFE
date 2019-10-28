@@ -7,7 +7,7 @@ import {
   EventEmitter
 } from '@angular/core';
 
-import { QuantitativeComparerDTO } from 'FEModels/frontend-models.interface';
+import { QuantComparerDTO } from 'FEModels/frontend-models.interface';
 
 @Component({
   selector: 'quant-comparer',
@@ -17,7 +17,7 @@ import { QuantitativeComparerDTO } from 'FEModels/frontend-models.interface';
 })
 
 export class QuantitativeComparer implements OnInit {
-  @Input() quantData: QuantitativeComparerDTO;
+  @Input() quantData: QuantComparerDTO;
   constructor(
   ) {
   }

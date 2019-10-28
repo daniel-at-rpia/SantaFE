@@ -29,11 +29,16 @@ export class TradeCenterPanel {
 
   private initiatePageState(){
     this.state = {
-      tableList: []
+      demoList: []
     };
 
-    this.state.tableList = SecurityList.map((eachSecurity) => {
-      return this.dtoService.formSecurityCardObject(eachSecurity);
+    SecurityList.forEach((eachSecurity) => {
+      const newSecurity = this.dtoService.formSecurityCardObject(eachSecurity);
+      const newObject = {
+        security: newSecurity,
+        comparer: this.dtoService.formQuantComparerObject()
+      };
+      this.state.demoList.push(newObject);
     });
   }
 }

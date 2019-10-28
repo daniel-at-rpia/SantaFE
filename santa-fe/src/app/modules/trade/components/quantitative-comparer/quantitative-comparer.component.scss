@@ -1,12 +1,13 @@
 @import "global.scss";
 @import "modules/trade/trade.scss";
 
-$quanComparer_edge_width: 3rem;
+$quanComparer_edge_width: 2.5rem;
 
 .sat-quantComparer {
   $quantComparerBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
   flex: 1 1 auto;
+  min-height: 2.5rem;
   &__base {
     @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
     display: flex;
@@ -36,7 +37,7 @@ $quanComparer_edge_width: 3rem;
     height: 100%;
     width: 100%;
     padding: $spacing_x_small;
-    &-left {
+    &-driver {
       flex: 1 1 auto;
       display: flex;
       align-items: center;
@@ -48,15 +49,19 @@ $quanComparer_edge_width: 3rem;
         justify-content: space-between;
         height: 100%;
         width: $quanComparer_edge_width;
-        padding: $spacing_x_small;
+        padding: $spacing_xx_small;
         background-color: $color_quant_left_background;
         &-number {
           text-align: left;
           color: $font_color_major;
+          font-size: $font_size_x_small;
+          line-height: $line_height_minimum;
         }
         &-broker {
           text-align: left;
           color: $color_quant_left;
+          font-size: $font_size_x_small;
+          line-height: $line_height_minimum;
         }
       }
       &-line {
@@ -71,41 +76,25 @@ $quanComparer_edge_width: 3rem;
           background-color: $color_quant_left;
         }
       }
-    }
-    &-right {
-      flex: 1 1 auto;
-      display: flex;
-      align-items: center;
-      direction: rtl;
-      &-edge {
-        @include mix_border_radius(5px);
-        flex: 0 0 auto;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 100%;
-        width: $quanComparer_edge_width;
-        padding: $spacing_x_small;
-        background-color: $color_quant_right_background;
-        &-number {
-          text-align: right;
-          color: $font_color_major;
-        }
-        &-broker {
-          text-align: right;
-          color: $color_quant_right;
-        }
-      }
-      &-line {
-        flex: 1 1 auto;
-        display: flex;
-        align-items: center;
-        height: 100%;
-        &-content {
-          @include mix_border_radius(3px, 'left');
-          width: 50%;
-          height: 20%;
-          background-color: $color_quant_right;
+      &--right {
+        direction: rtl;
+        #{$quantComparerBlockName}__content-driver {
+          &-edge {
+            background-color: $color_quant_right_background;
+            &-number {
+              text-align: right;
+            }
+            &-broker {
+              text-align: right;
+              color: $color_quant_right;
+            }
+          }
+          &-line {
+            &-content {
+              @include mix_border_radius(3px, 'left');
+              background-color: $color_quant_right;
+            }
+          }
         }
       }
     }
