@@ -10,7 +10,13 @@
         <span class="sat-quantComparer__content-driver-edge-broker">{{quantData.data.left.broker}}</span>
       </div>
       <div class="sat-quantComparer__content-driver-line">
-        <div class="sat-quantComparer__content-driver-line-content"></div>
+        <div
+          class="sat-quantComparer__content-driver-line-content"
+          [ngStyle]="{
+            'width': quantData.style.left.lineWidth + '%',
+            'height': quantData.style.left.lineHeight + '%'
+          }">
+        </div>
       </div>
     </div>
     <div class="sat-quantComparer__content-driver sat-quantComparer__content-driver--right">
@@ -19,7 +25,13 @@
         <span class="sat-quantComparer__content-driver-edge-broker">{{quantData.data.right.broker}}</span>
       </div>
       <div class="sat-quantComparer__content-driver-line">
-        <div class="sat-quantComparer__content-driver-line-content"></div>
+        <div
+          class="sat-quantComparer__content-driver-line-content"
+          [ngStyle]="{
+            'width': quantData.style.right.lineWidth + '%',
+            'height': quantData.style.right.lineHeight + '%'
+          }">
+        </div>
       </div>
     </div>
   </section>

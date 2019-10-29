@@ -107,16 +107,24 @@ export interface QuantComparerDTO extends BasicDTOStructure {
     left: {
       number: number;
       broker: string;
-      lineWidth: number;
-      lineHeight: number;
+      size: number;
     },
     right: {
       number: number;
       broker: string;
+      size: number;
+    }
+  },
+  style: {
+    left: {
+      lineWidth: number;
+      lineHeight: number;
+    },
+    right: {
       lineWidth: number;
       lineHeight: number;
     }
-  },
+  }
   state: {
 
   }

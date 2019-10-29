@@ -200,20 +200,28 @@ export class DTOService {
     return object;
   }
 
-  public formQuantComparerObject(): QuantComparerDTO{
+  public formQuantComparerObject(leftNumber: number, leftSize: number, rightNumber: number, rightSize: number): QuantComparerDTO{
     const object: QuantComparerDTO = {
       data: {
         left: {
-          number: 231,
+          number: leftNumber,
           broker: 'GS',
-          lineHeight: 14,
-          lineWidth: 45
+          size: leftSize
         },
         right: {
-          number: 412,
+          number: rightNumber,
           broker: 'JPM',
-          lineHeight: 49,
-          lineWidth: 45
+          size: rightSize
+        }
+      },
+      style: {
+        left: {
+          lineWidth: 1,
+          lineHeight: 1
+        },
+        right: {
+          lineWidth: 1,
+          lineHeight: 1
         }
       },
       state: {
