@@ -71,8 +71,6 @@ $quantComparer_min_height: 2.5rem;
         height: 100%;
         &-content {
           @include mix_border_radius(3px, 'right');
-          width: 50%;
-          height: 85%;
           background-color: $color_quant_left;
         }
       }

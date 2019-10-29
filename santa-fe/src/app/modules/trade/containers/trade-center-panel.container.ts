@@ -35,6 +35,7 @@ export class TradeCenterPanel {
 
     SecurityList.forEach((eachSecurity) => {
       const newSecurity = this.dtoService.formSecurityCardObject(eachSecurity);
+      newSecurity.state.isTable = true;
       const leftNumber = Math.round(Math.random() * 300) + 200;
       const rightNumber = Math.round(Math.random() * 100) + leftNumber;
       const leftSize = Math.round(Math.random() * 100);

@@ -14,12 +14,10 @@
     overflow: hidden;
     &-list {
       @include mix_enable_scrollbar('vertical');
-      margin: $spacing_small $spacing_small $spacing_small 0;
-      padding-bottom: $spacing_large;
+      margin: $spacing_medium;
       &-item {
         display: flex;
         align-items: center;
-        margin: $spacing_small 0 0 $spacing_medium;
         &-comparer {
           margin-left: $spacing_medium;
           display: flex;
