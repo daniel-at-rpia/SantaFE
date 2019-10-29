@@ -1,4 +1,10 @@
-<article class="sat-quantComparer">
+<article
+  [ngClass]="{
+    'sat-quantComparer': true,
+    'sat-quantComparer--crossedState': quantData.state.isCrossed,
+    'sat-quantComparer--crossedStateTier2': quantData.state.isCrossedTier2,
+    'sat-quantComparer--stencilState': quantData.state.isStencil
+  }">
   <section class="sat-quantComparer__base">
     <div class="sat-quantComparer__base-line"></div>
     <div class="sat-quantComparer__base-background"></div>
@@ -6,33 +12,38 @@
   <section class="sat-quantComparer__content">
     <div class="sat-quantComparer__content-driver sat-quantComparer__content-driver--left">
       <div class="sat-quantComparer__content-driver-edge">
-        <span class="sat-quantComparer__content-driver-edge-number">{{quantData.data.left.number}}</span>
-        <span class="sat-quantComparer__content-driver-edge-broker">{{quantData.data.left.broker}}</span>
+        <span class="sat-quantComparer__content-driver-edge-number">{{quantData.data.bid.number}}</span>
+        <span class="sat-quantComparer__content-driver-edge-broker">{{quantData.data.bid.broker}}</span>
       </div>
       <div class="sat-quantComparer__content-driver-line">
         <div
           class="sat-quantComparer__content-driver-line-content"
           [ngStyle]="{
-            'width': quantData.style.left.lineWidth + '%',
-            'height': quantData.style.left.lineHeight + '%'
+            'width': quantData.style.lineWidth + '%',
+            'height': quantData.style.bidLineHeight + '%'
           }">
         </div>
       </div>
     </div>
     <div class="sat-quantComparer__content-driver sat-quantComparer__content-driver--right">
       <div class="sat-quantComparer__content-driver-edge">
-        <span class="sat-quantComparer__content-driver-edge-number">{{quantData.data.right.number}}</span>
-        <span class="sat-quantComparer__content-driver-edge-broker">{{quantData.data.right.broker}}</span>
+        <span class="sat-quantComparer__content-driver-edge-number">{{quantData.data.offer.number}}</span>
+        <span class="sat-quantComparer__content-driver-edge-broker">{{quantData.data.offer.broker}}</span>
       </div>
       <div class="sat-quantComparer__content-driver-line">
         <div
           class="sat-quantComparer__content-driver-line-content"
           [ngStyle]="{
-            'width': quantData.style.right.lineWidth + '%',
-            'height': quantData.style.right.lineHeight + '%'
+            'width': quantData.style.lineWidth + '%',
+            'height': quantData.style.offerLineHeight + '%'
           }">
         </div>
       </div>
+    </div>
+  </section>
+  <section class="sat-quantComparer__crossing">
+    <div class="sat-quantComparer__crossing-content">
+      <span class="sat-quantComparer__crossing-content-value">{{-quantData.data.delta}}</span>
     </div>
   </section>
 </article>
