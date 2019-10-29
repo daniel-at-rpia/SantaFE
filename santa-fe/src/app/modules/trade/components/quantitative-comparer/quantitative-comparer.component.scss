@@ -18,6 +18,7 @@ $quantComparer_min_height: 2.5rem;
       @include mix_fixed_div(absolute, $z_index_standard_base_item_lift);
       @include mix_border_generator(0 0 $typical_border_width 0);
       @include mix_calculate(width, 100%, $quantComparer_edge_width * 2, '-');
+      display: none;  // changed the design to not show the line for now
       height: 50%;
       margin-left: $quantComparer_edge_width;
       margin-right: $quantComparer_edge_width;

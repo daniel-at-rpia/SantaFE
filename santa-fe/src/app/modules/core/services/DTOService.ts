@@ -200,32 +200,30 @@ export class DTOService {
     return object;
   }
 
-  public formQuantComparerObject(leftNumber: number, leftSize: number, rightNumber: number, rightSize: number): QuantComparerDTO{
+  public formQuantComparerObject(isSpread: boolean, bidNumber: number, bidSize: number, offerNumber: number, offerSize: number): QuantComparerDTO{
     const object: QuantComparerDTO = {
       data: {
-        left: {
-          number: leftNumber,
+        isSpread: isSpread,
+        delta: isSpread ? bidNumber - offerNumber : offerNumber - bidNumber,
+        bid: {
+          number: bidNumber,
           broker: 'GS',
-          size: leftSize
+          size: bidSize
         },
-        right: {
-          number: rightNumber,
+        offer: {
+          number: offerNumber,
           broker: 'JPM',
-          size: rightSize
+          size: offerSize
         }
       },
       style: {
-        left: {
-          lineWidth: 1,
-          lineHeight: 1
-        },
-        right: {
-          lineWidth: 1,
-          lineHeight: 1
-        }
+        lineWidth: 1,
+        bidLineHeight: 1,
+        offerLineHeight: 1
       },
       state: {
-
+        isStencil: false,
+        isCalculated: false
       }
     }
     return object;

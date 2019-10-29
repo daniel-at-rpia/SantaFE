@@ -104,28 +104,26 @@ export interface SecurityGroupAverageVisualizerDTO extends BasicDTOStructure {
 
 export interface QuantComparerDTO extends BasicDTOStructure {
   data: {
-    left: {
+    isSpread: boolean;
+    delta: number;
+    bid: {
       number: number;
       broker: string;
       size: number;
     },
-    right: {
+    offer: {
       number: number;
       broker: string;
       size: number;
     }
   },
   style: {
-    left: {
-      lineWidth: number;
-      lineHeight: number;
-    },
-    right: {
-      lineWidth: number;
-      lineHeight: number;
-    }
+    lineWidth: number;
+    bidLineHeight: number;
+    offerLineHeight: number;
   }
   state: {
-
+    isStencil: boolean;
+    isCalculated: boolean;
   }
 }
