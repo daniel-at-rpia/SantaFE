@@ -32,7 +32,7 @@ export class TradeCenterPanel {
     this.state = {
       demoList: []
     };
-    for (let i = 0; i < 20; ++i) {
+    for (let i = 0; i < 30; ++i) {
       const stencilSecurity = this.dtoService.formSecurityCardObject(null, true);
       stencilSecurity.state.isTable = true;
       const stencilComparer = this.dtoService.formQuantComparerObject(true, false, null, null, null, null);
