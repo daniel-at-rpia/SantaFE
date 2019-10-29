@@ -1,5 +1,17 @@
 {
   "projects": {
     "default": "santa-rpia"
+  },
+  "targets": {
+    "santa-rpia": {
+      "hosting": {
+        "dev": [
+          "dev-santa-rpia"
+        ],
+        "prod": [
+          "santa-rpia"
+        ]
+      }
+    }
   }
 }
