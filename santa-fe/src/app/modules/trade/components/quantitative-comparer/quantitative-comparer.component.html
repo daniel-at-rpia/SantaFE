@@ -1,4 +1,9 @@
-<article class="sat-quantComparer">
+<article
+  [ngClass]="{
+    'sat-quantComparer': true,
+    'sat-quantComparer--crossedState': quantData.state.isCrossed,
+    'sat-quantComparer--crossedStateTier2': quantData.state.isCrossedTier2
+  }">
   <section class="sat-quantComparer__base">
     <div class="sat-quantComparer__base-line"></div>
     <div class="sat-quantComparer__base-background"></div>
@@ -33,6 +38,11 @@
           }">
         </div>
       </div>
+    </div>
+  </section>
+  <section class="sat-quantComparer__crossing">
+    <div class="sat-quantComparer__crossing-content">
+      <span class="sat-quantComparer__crossing-content-value">{{-quantData.data.delta}}</span>
     </div>
   </section>
 </article>

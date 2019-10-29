@@ -125,5 +125,7 @@ export interface QuantComparerDTO extends BasicDTOStructure {
   state: {
     isStencil: boolean;
     isCalculated: boolean;
+    isCrossed: boolean;
+    isCrossedTier2: boolean;
   }
 }

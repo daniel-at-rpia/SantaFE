@@ -200,11 +200,13 @@ export class DTOService {
     return object;
   }
 
-  public formQuantComparerObject(isSpread: boolean, bidNumber: number, bidSize: number, offerNumber: number, offerSize: number): QuantComparerDTO{
+  public formQuantComparerObject(isSpread: boolean, bidNumber: number, bidSize: number, offerNumber: number, offerSize: number): QuantComparerDTO {
+    const tier2Shreshold = isSpread ? 20 : 10;
+    const delta = isSpread ? bidNumber - offerNumber : offerNumber - bidNumber;
     const object: QuantComparerDTO = {
       data: {
         isSpread: isSpread,
-        delta: isSpread ? bidNumber - offerNumber : offerNumber - bidNumber,
+        delta: delta,
         bid: {
           number: bidNumber,
           broker: 'GS',
@@ -223,9 +225,11 @@ export class DTOService {
       },
       state: {
         isStencil: false,
-        isCalculated: false
+        isCalculated: false,
+        isCrossed: delta <= 0,
+        isCrossedTier2: delta <= -tier2Shreshold,
       }
-    }
+    };
     return object;
   }
 }
