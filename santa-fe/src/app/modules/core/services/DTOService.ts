@@ -33,19 +33,20 @@ export class DTOService {
   ){}
 
   public formSecurityCardObject(
-    rawData: BESecurityDTO
+    rawData: BESecurityDTO,
+    isStencil: boolean
   ): SecurityDTO {
     const ratingLevel = Math.floor(Math.random()*7 + 1);
     const object:SecurityDTO = {
       data: {
-        name: rawData.name,
+        name: !isStencil ? rawData.name : 'PLACEHOLDER',
         ratingLevel: ratingLevel,
-        ratingValue: this.utility.mapRatingsReverse(ratingLevel),
+        ratingValue: !isStencil ? this.utility.mapRatingsReverse(ratingLevel) : 'AA',
         seniorityLevel: Math.floor(Math.random()*5 + 1)
       },
       state: {
         isSelected: false,
-        isStencil: false,
+        isStencil: isStencil,
         isTable: false
       }
     };
@@ -108,7 +109,10 @@ export class DTOService {
     groupDTO.state.areChartsReady = true;
   }
 
-  public generateSecurityGroupDefinitionFilterOptionList(name, options): Array<SecurityGroupDefinitionFilterBlock> {
+  public generateSecurityGroupDefinitionFilterOptionList(
+    name,
+    options
+  ): Array<SecurityGroupDefinitionFilterBlock> {
     return options.map((eachOption) => {
       const normalizedOption = this.utility.normalizeDefinitionFilterOption(eachOption);
       const newFilterDTO:SecurityGroupDefinitionFilterBlock = {
@@ -187,7 +191,10 @@ export class DTOService {
     return object;
   }
 
-  public formSecurityGroupMetricObject(label?: string, deltaScope?: string): SecurityGroupMetricBlock{
+  public formSecurityGroupMetricObject(
+    label?: string,
+    deltaScope?: string
+  ): SecurityGroupMetricBlock{
     const object = {
       isEmpty: !label,
       sortHierarchy: null,
@@ -200,7 +207,14 @@ export class DTOService {
     return object;
   }
 
-  public formQuantComparerObject(isSpread: boolean, bidNumber: number, bidSize: number, offerNumber: number, offerSize: number): QuantComparerDTO {
+  public formQuantComparerObject(
+    isStencil: boolean,
+    isSpread: boolean,
+    bidNumber: number,
+    bidSize: number,
+    offerNumber: number,
+    offerSize: number
+  ): QuantComparerDTO {
     const tier2Shreshold = isSpread ? 20 : 10;
     const delta = isSpread ? bidNumber - offerNumber : offerNumber - bidNumber;
     const object: QuantComparerDTO = {
@@ -208,25 +222,25 @@ export class DTOService {
         isSpread: isSpread,
         delta: delta,
         bid: {
-          number: bidNumber,
-          broker: 'GS',
+          number: !isStencil ? bidNumber : 33,
+          broker: !isStencil ? 'GS' : 'PL',
           size: bidSize
         },
         offer: {
-          number: offerNumber,
-          broker: 'JPM',
+          number: !isStencil ? offerNumber : 33,
+          broker: !isStencil ? 'JPM' : 'PL',
           size: offerSize
         }
       },
       style: {
-        lineWidth: 1,
-        bidLineHeight: 1,
-        offerLineHeight: 1
+        lineWidth: 80,
+        bidLineHeight: 30,
+        offerLineHeight: 30
       },
       state: {
-        isStencil: false,
+        isStencil: isStencil,
         isCalculated: false,
-        isCrossed: delta <= 0,
+        isCrossed: !isStencil && delta <= 0,
         isCrossedTier2: delta <= -tier2Shreshold,
       }
     };

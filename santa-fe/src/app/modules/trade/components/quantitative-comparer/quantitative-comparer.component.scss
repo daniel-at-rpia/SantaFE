@@ -173,4 +173,23 @@ $quantComparer_min_height: 2.5rem;
       }
     }
   }
+  &--stencilState {
+    #{$quantComparerBlockName} {
+      &__content {
+        &-driver {
+          &-edge {
+            &-number {
+              @include mix_stencil_animation();
+            }
+            &-broker {
+              @include mix_stencil_animation();
+            }
+          }
+          &-line-content {
+            @include mix_stencil_animation();
+          }
+        }
+      }
+    }
+  }
 }

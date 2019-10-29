@@ -32,9 +32,26 @@ export class TradeCenterPanel {
     this.state = {
       demoList: []
     };
+    for (let i = 0; i < 20; ++i) {
+      const stencilSecurity = this.dtoService.formSecurityCardObject(null, true);
+      stencilSecurity.state.isTable = true;
+      const stencilComparer = this.dtoService.formQuantComparerObject(true, false, null, null, null, null);
+      const newObject = {
+        security: stencilSecurity,
+        comparer: stencilComparer
+      };
+      this.state.demoList.push(newObject);
+    }
+    const func = () => {
+      this.loadDemoData();
+    };
+    setTimeout(func.bind(this), 3000);
+  }
 
+  private loadDemoData() {
+    this.state.demoList = [];
     SecurityList.forEach((eachSecurity) => {
-      const newSecurity = this.dtoService.formSecurityCardObject(eachSecurity);
+      const newSecurity = this.dtoService.formSecurityCardObject(eachSecurity, false);
       newSecurity.state.isTable = true;
       const isSpread = this.utilityService.isIG(newSecurity.data.ratingValue);
       const bidNumber = isSpread ?  Math.round(Math.random() * 300) + 200 : Math.round(Math.random() * 30) + 90;
@@ -43,7 +60,7 @@ export class TradeCenterPanel {
       const offerSize = Math.round(Math.random() * 100) + 10;
       const newObject = {
         security: newSecurity,
-        comparer: this.dtoService.formQuantComparerObject(isSpread, bidNumber, bidSize, offerNumber, offerSize)
+        comparer: this.dtoService.formQuantComparerObject(false, isSpread, bidNumber, bidSize, offerNumber, offerSize)
       };
       this.state.demoList.push(newObject);
     });
@@ -70,6 +87,7 @@ export class TradeCenterPanel {
       eachComparer.style.lineWidth = eachComparer.data.isSpread ? this.calculateSingleQuantComparerWidth(eachComparer.data.delta, maxSpreadAbsDelta): this.calculateSingleQuantComparerWidth(eachComparer.data.delta, maxPriceAbsDelta);
       eachComparer.style.bidLineHeight = Math.round(eachComparer.data.bid.size/maxSize * 100);
       eachComparer.style.offerLineHeight = Math.round(eachComparer.data.offer.size/maxSize * 100);
+      eachComparer.state.isCalculated = true;
     });
   }
 
