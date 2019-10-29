@@ -38,9 +38,9 @@ export class TradeCenterPanel {
       newSecurity.state.isTable = true;
       const isSpread = this.utilityService.isIG(newSecurity.data.ratingValue);
       const bidNumber = isSpread ?  Math.round(Math.random() * 300) + 200 : Math.round(Math.random() * 30) + 90;
-      const offerNumber = isSpread ? bidNumber - Math.round(Math.random() * 10) : Math.round(Math.random() * 100) + bidNumber;
-      const bidSize = Math.round(Math.random() * 100);
-      const offerSize = Math.round(Math.random() * 100);
+      const offerNumber = isSpread ? bidNumber - Math.round(Math.random() * 100) : bidNumber + Math.round(Math.random() * 10);
+      const bidSize = Math.round(Math.random() * 100) + 10;
+      const offerSize = Math.round(Math.random() * 100) + 10;
       const newObject = {
         security: newSecurity,
         comparer: this.dtoService.formQuantComparerObject(isSpread, bidNumber, bidSize, offerNumber, offerSize)
@@ -67,7 +67,7 @@ export class TradeCenterPanel {
 
     this.state.demoList.forEach((eachDemo) => {
       const eachComparer: QuantComparerDTO = eachDemo.comparer;
-      eachComparer.style.lineWidth = eachComparer.data.isSpread ? Math.round(Math.abs(eachComparer.data.delta)/maxSpreadAbsDelta * 100) : Math.round(Math.abs(eachComparer.data.delta)/maxPriceAbsDelta * 100);
+      eachComparer.style.lineWidth = eachComparer.data.isSpread ? 100 - Math.round(Math.abs(eachComparer.data.delta)/maxSpreadAbsDelta * 100) : 100 - Math.round(Math.abs(eachComparer.data.delta)/maxPriceAbsDelta * 100);
       eachComparer.style.bidLineHeight = Math.round(eachComparer.data.bid.size/maxSize * 100);
       eachComparer.style.offerLineHeight = Math.round(eachComparer.data.offer.size/maxSize * 100);
     });
