@@ -101,3 +101,31 @@ export interface SecurityGroupAverageVisualizerDTO extends BasicDTOStructure {
     editingStatSelectedMetricDeltaType: string;
   }
 }
+
+export interface QuantComparerDTO extends BasicDTOStructure {
+  data: {
+    left: {
+      number: number;
+      broker: string;
+      size: number;
+    },
+    right: {
+      number: number;
+      broker: string;
+      size: number;
+    }
+  },
+  style: {
+    left: {
+      lineWidth: number;
+      lineHeight: number;
+    },
+    right: {
+      lineWidth: number;
+      lineHeight: number;
+    }
+  }
+  state: {
+
+  }
+}

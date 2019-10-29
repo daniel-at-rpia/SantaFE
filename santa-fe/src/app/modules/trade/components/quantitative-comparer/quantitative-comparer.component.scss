@@ -1,0 +1,102 @@
+@import "global.scss";
+@import "modules/trade/trade.scss";
+
+$quantComparer_edge_width: 2.5rem;
+$quantComparer_min_height: 2.5rem;
+.sat-quantComparer {
+  $quantComparerBlockName: &;
+  @include mix_fixed_div(relative, $z_index_standard_base_item);
+  flex: 1 1 auto;
+  min-height: 2.5rem;
+  &__base {
+    @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    &-line {
+      @include mix_fixed_div(absolute, $z_index_standard_base_item_lift);
+      @include mix_border_generator(0 0 $typical_border_width 0);
+      @include mix_calculate(width, 100%, $quantComparer_edge_width * 2, '-');
+      height: 50%;
+      margin-left: $quantComparer_edge_width;
+      margin-right: $quantComparer_edge_width;
+    }
+    &-background {
+      @include mix_fixed_div(absolute, $z_index_standard_base_item);
+      @include mix_border_radius(5px);
+      display: none;
+      height: 100%;
+      width: 100%;
+      background-color: $color_quant_background;
+    }
+  }
+  &__content {
+    @include mix_fixed_div(absolute, $z_index_standard_base_item_lift);
+    display: flex;
+    height: 100%;
+    width: 100%;
+    padding: $spacing_x_small;
+    &-driver {
+      flex: 1 1 auto;
+      display: flex;
+      align-items: center;
+      &-edge {
+        @include mix_border_radius(5px);
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+        width: $quantComparer_edge_width;
+        padding: $spacing_xx_small;
+        background-color: $color_quant_left_background;
+        &-number {
+          text-align: left;
+          color: $font_color_major;
+          font-size: $font_size_x_small;
+          line-height: $line_height_minimum;
+        }
+        &-broker {
+          text-align: left;
+          color: $color_quant_left;
+          font-size: $font_size_x_small;
+          line-height: $line_height_minimum;
+        }
+      }
+      &-line {
+        flex: 1 1 auto;
+        display: flex;
+        align-items: center;
+        height: 100%;
+        &-content {
+          @include mix_border_radius(3px, 'right');
+          width: 50%;
+          height: 85%;
+          background-color: $color_quant_left;
+        }
+      }
+      &--right {
+        direction: rtl;
+        #{$quantComparerBlockName}__content-driver {
+          &-edge {
+            background-color: $color_quant_right_background;
+            &-number {
+              text-align: right;
+            }
+            &-broker {
+              text-align: right;
+              color: $color_quant_right;
+            }
+          }
+          &-line {
+            &-content {
+              @include mix_border_radius(3px, 'left');
+              background-color: $color_quant_right;
+            }
+          }
+        }
+      }
+    }
+  }
+}

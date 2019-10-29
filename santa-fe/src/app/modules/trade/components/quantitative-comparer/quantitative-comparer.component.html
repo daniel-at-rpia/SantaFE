@@ -1,0 +1,38 @@
+<article class="sat-quantComparer">
+  <section class="sat-quantComparer__base">
+    <div class="sat-quantComparer__base-line"></div>
+    <div class="sat-quantComparer__base-background"></div>
+  </section>
+  <section class="sat-quantComparer__content">
+    <div class="sat-quantComparer__content-driver sat-quantComparer__content-driver--left">
+      <div class="sat-quantComparer__content-driver-edge">
+        <span class="sat-quantComparer__content-driver-edge-number">{{quantData.data.left.number}}</span>
+        <span class="sat-quantComparer__content-driver-edge-broker">{{quantData.data.left.broker}}</span>
+      </div>
+      <div class="sat-quantComparer__content-driver-line">
+        <div
+          class="sat-quantComparer__content-driver-line-content"
+          [ngStyle]="{
+            'width': quantData.style.left.lineWidth + '%',
+            'height': quantData.style.left.lineHeight + '%'
+          }">
+        </div>
+      </div>
+    </div>
+    <div class="sat-quantComparer__content-driver sat-quantComparer__content-driver--right">
+      <div class="sat-quantComparer__content-driver-edge">
+        <span class="sat-quantComparer__content-driver-edge-number">{{quantData.data.right.number}}</span>
+        <span class="sat-quantComparer__content-driver-edge-broker">{{quantData.data.right.broker}}</span>
+      </div>
+      <div class="sat-quantComparer__content-driver-line">
+        <div
+          class="sat-quantComparer__content-driver-line-content"
+          [ngStyle]="{
+            'width': quantData.style.right.lineWidth + '%',
+            'height': quantData.style.right.lineHeight + '%'
+          }">
+        </div>
+      </div>
+    </div>
+  </section>
+</article>

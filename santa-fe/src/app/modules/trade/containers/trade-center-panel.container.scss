@@ -6,5 +6,29 @@
   @include mix_border_radius(10px);
   flex: 1 1 auto;
   display: flex;
+  flex-direction: column;
   overflow: hidden;
+  &__demo {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    &-list {
+      @include mix_enable_scrollbar('vertical');
+      margin: $spacing_small $spacing_small $spacing_small 0;
+      padding-bottom: $spacing_large;
+      &-item {
+        display: flex;
+        align-items: center;
+        margin: $spacing_small 0 0 $spacing_medium;
+        &-comparer {
+          margin-left: $spacing_medium;
+          display: flex;
+          quant-comparer {
+            display: flex;
+            width: 16rem;
+          }
+        }
+      }
+    }
+  }
 }

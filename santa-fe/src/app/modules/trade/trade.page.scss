@@ -36,6 +36,7 @@
     &-centerPanel {
       flex: 1 1 auto;
       display: flex;
+      overflow: hidden;
       trade-center-panel {
         flex: 1 1 auto;
         display: flex;

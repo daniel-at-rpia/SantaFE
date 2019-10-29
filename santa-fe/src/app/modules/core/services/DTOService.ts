@@ -8,7 +8,8 @@ import {
   SecurityGroupDTO,
   SecurityGroupDefinitionDTO,
   SecurityGroupDefinitionConfiguratorDTO,
-  SecurityGroupAverageVisualizerDTO
+  SecurityGroupAverageVisualizerDTO,
+  QuantComparerDTO
 } from 'FEModels/frontend-models.interface';
 import {
   SecurityGroupMetricBlock,
@@ -195,6 +196,37 @@ export class DTOService {
       value: 100,
       absMax: 100,
       percentage: 100
+    }
+    return object;
+  }
+
+  public formQuantComparerObject(leftNumber: number, leftSize: number, rightNumber: number, rightSize: number): QuantComparerDTO{
+    const object: QuantComparerDTO = {
+      data: {
+        left: {
+          number: leftNumber,
+          broker: 'GS',
+          size: leftSize
+        },
+        right: {
+          number: rightNumber,
+          broker: 'JPM',
+          size: rightSize
+        }
+      },
+      style: {
+        left: {
+          lineWidth: 1,
+          lineHeight: 1
+        },
+        right: {
+          lineWidth: 1,
+          lineHeight: 1
+        }
+      },
+      state: {
+
+      }
     }
     return object;
   }
