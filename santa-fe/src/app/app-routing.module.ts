@@ -3,17 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
       {
-        path: 'home',
-        redirectTo: 'home',
-        pathMatch: 'full'
-      },
-      {
         path: 'market',
         redirectTo: 'market',
-        pathMatch: 'full'
-      },{
-        path: 'trade',
-        redirectTo: 'trade',
         pathMatch: 'full'
       },
       {
