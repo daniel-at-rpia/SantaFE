@@ -257,7 +257,7 @@ export class UtilityService {
 
   public retrieveRawSupportingDataForLeftPie(rawData: BESecurityGroupDTO): object {
     if (!!rawData) {
-      const object = rawData.descriptiveMetrics[this.keyDictionary.RATING_DES];
+      const object = rawData.descriptiveMetrics[this.keyDictionary.RATING];
       if (!!object) {
         return object;
       } else {
@@ -304,6 +304,14 @@ export class UtilityService {
       }
     }
     return null;
+  }
+
+  public convertFEKey(frontendKey: string): string {
+    if (!!this.keyDictionary[frontendKey]) {
+      return this.keyDictionary[frontendKey];
+    } else {
+      return 'n/a';
+    }
   }
 
   public convertBETenorToFE(backendTenor: string): string {

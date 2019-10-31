@@ -5,30 +5,22 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class RestfulCommService {
 
+  //private endpoint = 'https://rpiadev01:1225';
+  private endpoint = 'https://rpia-trader17:51225';
+
   constructor(private http: HttpClient){}
 
   callAPI(url: string, opts: any ={}, body: any = null): Observable<any>{
-    //let params = new HttpParams();
-    //params = params.append('apiCall', 'true');
-    //const queryOpts = { ...opts, params };
+    const fullUrl = `${this.endpoint}/${url}`;
     const queryOpts = {
       ...opts,
-
+      withCredentials: true
     };
     switch (opts.req) {
       case 'POST':
-        return this.http.post<any>(url, body, 
-          {
-            ...queryOpts,
-            withCredentials: true
-          }
-        );
+        return this.http.post<any>(fullUrl, body, queryOpts);
       case 'GET':
-        return this.http.get<any>(url, 
-          {
-            ...queryOpts,
-            withCredentials: true
-          });
+        return this.http.get<any>(fullUrl, queryOpts);
     }
   }
 }

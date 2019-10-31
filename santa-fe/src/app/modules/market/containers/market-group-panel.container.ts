@@ -33,6 +33,7 @@ import {
   SecurityGroupDefinitionConfiguratorDTO
 } from 'FEModels/frontend-models.interface';
 import { BESecurityGroupDTO } from 'BEModels/backend-models.interface';
+import { PayloadGetSantaGroups } from 'BEModels/backend-payloads.interface';
 
 import { SecurityGroupList, SecurityGroupList2 } from 'Core/stubs/securityGroups.stub';
 import { SecurityDefinitionStub } from 'FEModels/frontend-stub-models.interface';
@@ -103,30 +104,6 @@ export class MarketGroupPanel implements OnDestroy {
     });
     this.onSelectPieConfiguratorMetric(this.state.utility.pieConfigurator.left, this.state.utility.pieConfigurator.left.options[5]);
     this.onSelectPieConfiguratorMetric(this.state.utility.pieConfigurator.right, this.state.utility.pieConfigurator.right.options[2]);
-    const payload = {
-      "groupOptions": ["Ccy", "Tenor"],
-      "yyyyMMdd": 20190920,
-      "source": "FO",
-      "tenorOptions": ["2Y", "3Y", "5Y", "7Y", "10Y", "30Y"]
-    };
-    this.restfulCommonService.callAPI('https://rpia-trader17:51225/santaSecurity/get-santa-securities', {req: 'GET'}, payload).pipe(
-      tap((serverReturn) => {
-        console.log('return is ', serverReturn)
-      }),
-      catchError(err => {
-        console.log('error', err);
-        return of('error');
-      })
-    ).subscribe();
-    this.restfulCommonService.callAPI('https://rpia-trader17:51225/santaGroup/get-santa-groups', {req: 'POST'}, payload).pipe(
-      tap((serverReturn) => {
-        console.log('return is ', serverReturn)
-      }),
-      catchError(err => {
-        console.log('error', err);
-        return of('error');
-      })
-    ).subscribe();
   }
 
   constructor(
@@ -143,18 +120,10 @@ export class MarketGroupPanel implements OnDestroy {
 
   public onClickSearchInConfigurator(){
     this.startSearch();
-    // this.http.post<any>('https://rpiadev01:1225/santaGroup/get-santa-groups', payload, {}).pipe(
-    //   tap((serverReturn) => 
-    //     console.log('return is ', serverReturn)),
-    //   catchError(err => {
-    //     console.log('error', err);
-    //     return of('error');
-    //   })
-    // ).subscribe();
-
-    // this.http.options<any>('https://rpiadev01:1225/santaSecurity/get-santa-securities', {}).pipe(
-    //   tap((serverReturn) => 
-    //     console.log('return is ', serverReturn)),
+    // this.restfulCommonService.callAPI('santaSecurity/get-santa-securities', {req: 'GET'}).pipe(
+    //   tap((serverReturn) => {
+    //     console.log('return is ', serverReturn)
+    //   }),
     //   catchError(err => {
     //     console.log('error', err);
     //     return of('error');
@@ -243,10 +212,53 @@ export class MarketGroupPanel implements OnDestroy {
     this.state.utility.visualizer.state.isEmpty = false;
     this.state.utility.visualizer.state.isStencil = true;
     this.state.searchResult.renderProgress = 0;
-    this.performSearch();
+    const payload = this.formSearchPayload();
+    this.performSearch(payload);
   }
 
-  private performSearch(){
+  private formSearchPayload(): PayloadGetSantaGroups{
+    const currentTime = new Date();
+    const parsedMonth = currentTime.getMonth()+1 < 10 ? `0${currentTime.getMonth()+1}` : `${currentTime.getMonth()+1}`;
+    const payload: PayloadGetSantaGroups = {
+      yyyyMMdd: parseInt(`${currentTime.getFullYear()}${parsedMonth}${currentTime.getDate()-1}`),
+      source: "Citi",
+      santaGroupDefinition: {},
+      santaGroupFilters: {},
+      tenorOptions: ["2Y", "3Y", "5Y", "7Y", "10Y", "30Y"]
+    };
+    this.state.configurator.dto.data.definitionList.forEach((eachDefinition) => {
+      if (eachDefinition.state.groupByActive || eachDefinition.state.isLocked) {
+        const attributeName = this.utilityService.convertFEKey(eachDefinition.data.key);
+        if (attributeName !== 'n/a') {
+          payload.santaGroupDefinition[attributeName] = [];
+        }
+      }
+      if (eachDefinition.state.filterActive) {
+        const attributeName = this.utilityService.convertFEKey(eachDefinition.data.key);
+        if (attributeName !== 'n/a') {
+          payload.santaGroupFilters[attributeName] = [];
+          eachDefinition.data.filterOptionList.forEach((eachOption) => {
+            if (eachOption.isSelected) {
+              payload.santaGroupFilters[attributeName].push(eachOption.displayLabel);
+            }
+          });
+        }
+      }
+    });
+    return payload;
+  }
+
+  private performSearch(payload: PayloadGetSantaGroups){
+    this.restfulCommonService.callAPI('santaGroup/get-santa-groups', {req: 'POST'}, payload).pipe(
+      tap((serverReturn) => {
+        console.log('return is ', serverReturn)
+      }),
+      catchError(err => {
+        console.log('error', err);
+        return of('error');
+      })
+    ).subscribe();
+
     // using stubs
     const serverReturn = SecurityGroupList2;
 
@@ -278,9 +290,7 @@ export class MarketGroupPanel implements OnDestroy {
           } else {
             rawData = serverReturn[fullyLoadedCount];
           }
-          //this.state.searchResult.securityGroupList[index];
           this.dtoService.updateSecurityGroupWithPieCharts(rawData, eachGroup);
-          //this.initializeStatForGroup(targetGroupCard);
           fullyLoadedCount++;
         });
         this.state.searchResult.renderProgress = Math.round(fullyLoadedCount/serverReturn.length*100);

@@ -29,27 +29,13 @@ const FilterOptionsCouponType = [
 
 const FilterOptionsRating = [
   'AAA',
-  'AA+',
   'AA',
-  'AA-',
-  'A+',
   'A',
-  'A-',
-  'BBB+',
   'BBB',
-  'BBB-',
-  'BB+',
   'BB',
-  'BB-',
-  'B+',
   'B',
-  'B-',
-  'CCC+',
   'CCC',
-  'CCC-',
-  'CC+',
   'CC',
-  'CC-',
   'C',
   'D',
   'NR'
@@ -103,6 +89,11 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     optionList: FilterOptionsSecurityType,
     locked: true
   },{
+    key: 'IS_ONTHERUN',
+    displayName: 'On-the-Run',
+    icon: 'far fa-running',
+    optionList: FilterOptionsBoolean
+  },{
     key: 'RATING',
     displayName: 'Rating',
     icon: 'fas fa-award',
@@ -118,11 +109,11 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     icon: 'fal fa-history',
     optionList: FilterOptionsTenor
   },{
-    key: 'BACKEND_TENOR',
-    displayName: 'Backend Tenor',
-    icon: 'fal fa-desktop',
-    secondaryIcon: 'fas fa-history',
-    optionList: FilterOptionsTenor
+    key: 'RATING_BUCKET',
+    displayName: 'Rating Bucket',
+    icon: 'fas fa-trash',
+    optionList: FilterOptionsRatingBucket,
+    secondaryIcon: 'fas fa-award'
   },{
     key: 'BAIL_IN_STATUS',
     displayName: 'Bail-in Status',
@@ -143,12 +134,6 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     displayName: 'Issuer',
     icon: 'fas fa-user-tie',
     optionList: FilterOptionsTempPlaceholder
-  },{
-    key: 'RATING_BUCKET',
-    displayName: 'Rating Bucket',
-    icon: 'fas fa-trash',
-    optionList: FilterOptionsRatingBucket,
-    secondaryIcon: 'fas fa-award'
   },{
     key: 'SECTOR',
     displayName: 'Sector',
@@ -175,23 +160,39 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     icon: 'far fa-sparkles',
     optionList: FilterOptionsBoolean
   },{
-    key: 'IS_ONTHERUN',
-    displayName: 'On-the-Run',
-    icon: 'far fa-running',
-    optionList: FilterOptionsBoolean
+    key: 'BACKEND_TENOR',
+    displayName: 'Backend Tenor',
+    icon: 'fal fa-desktop',
+    secondaryIcon: 'fas fa-history',
+    optionList: FilterOptionsTenor
   }
 ];
 
 export const BackendKeyDictionary = {
-  'RATING': 'ratingNoNotch',
-  'RATING_DES': 'RatingNoNotch',
+  // definitions
+  'SECURITY_TYPE': 'SecurityType',
+  'RATING': 'RatingNoNotch',
+  'CURRENCY': 'Ccy',
+  'TENOR': 'Tenor',
+  'IS_ONTHERUN': 'IsOnTheRun',
+  'RATING_BUCKET': 'RatingBucket',
+  'BAIL_IN_STATUS': 'BailInStatus',
+  'COUPON_TYPE': 'CouponType',
+  'INDUSTRY': 'Industry',
+  'IS_NEWISSUE': 'IsNewIssue',
+  'ISSUER': 'Issuer',
+  'MATURITY': 'MaturityType',
+  'SECTOR': 'Sector',
+  'SENIORITY': 'Seniority',
+  'SUB_INDUSTRY': 'SubIndustry',
+  'BACKEND_TENOR': 'BackendTenor',
+
+
+  // metrics
   'SPREAD': 'spread',
   'PRICE': 'price',
   'YIELD': 'yieldWorst',
-  'SENIORITY': 'Seniority',
-  'SIZE': 'amtOutstanding',
-  'CURRENCY': 'Ccy',
-  'TENOR': 'Tenor'
+  'SIZE': 'amtOutstanding'
 };
 
 export const MetricOptions:Array<SecurityMetricOptionStub> = [
