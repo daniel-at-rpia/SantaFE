@@ -192,10 +192,21 @@ export const BackendKeyDictionary = {
   'SPREAD': 'spread',
   'PRICE': 'price',
   'YIELD': 'yieldWorst',
-  'SIZE': 'amtOutstanding'
+  'SIZE': 'marketValue'
 };
 
 export const MetricOptions:Array<SecurityMetricOptionStub> = [
+  {
+    label: 'OAS Spread',
+    backendDtoAttrName: 'oasSpread',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'Mtd',
+      'MoM',
+      'Ytd'
+    ]
+  },
   {
     label: 'Tenor',
     backendDtoAttrName: 'workoutTerm',
@@ -232,28 +243,6 @@ export const MetricOptions:Array<SecurityMetricOptionStub> = [
   {
     label: 'Citi Spread',
     backendDtoAttrName: 'citiSpread',
-    deltaOptions: [
-      'DoD',
-      'WoW',
-      'Mtd',
-      'MoM',
-      'Ytd'
-    ]
-  },
-  {
-    label: 'Model Spread',
-    backendDtoAttrName: 'modelSpread',
-    deltaOptions: [
-      'DoD',
-      'WoW',
-      'Mtd',
-      'MoM',
-      'Ytd'
-    ]
-  },
-  {
-    label: 'OAS Spread',
-    backendDtoAttrName: 'oasSpread',
     deltaOptions: [
       'DoD',
       'WoW',

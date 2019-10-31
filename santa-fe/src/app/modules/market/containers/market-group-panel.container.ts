@@ -120,15 +120,15 @@ export class MarketGroupPanel implements OnDestroy {
 
   public onClickSearchInConfigurator(){
     this.startSearch();
-    // this.restfulCommonService.callAPI('santaSecurity/get-santa-securities', {req: 'GET'}).pipe(
-    //   tap((serverReturn) => {
-    //     console.log('return is ', serverReturn)
-    //   }),
-    //   catchError(err => {
-    //     console.log('error', err);
-    //     return of('error');
-    //   })
-    // ).subscribe();
+    this.restfulCommonService.callAPI('santaSecurity/get-santa-securities', {req: 'GET'}).pipe(
+      tap((serverReturn) => {
+        console.log('return is ', serverReturn)
+      }),
+      catchError(err => {
+        console.log('error', err);
+        return of('error');
+      })
+    ).subscribe();
   }
 
   public onToggleCollapseConfigurator(){
@@ -249,19 +249,22 @@ export class MarketGroupPanel implements OnDestroy {
   }
 
   private performSearch(payload: PayloadGetSantaGroups){
+    this.state.searchResult.securityGroupList = [this.dtoService.formSecurityGroupObject(null, false), this.dtoService.formSecurityGroupObject(null, false), this.dtoService.formSecurityGroupObject(null, false)];
+    this.initializeGroupStats();
     this.restfulCommonService.callAPI('santaGroup/get-santa-groups', {req: 'POST'}, payload).pipe(
+      first(),
       tap((serverReturn) => {
-        console.log('return is ', serverReturn)
+        console.log('return is ', serverReturn);
+        this.loadSearchResults(serverReturn);
       }),
       catchError(err => {
         console.log('error', err);
         return of('error');
       })
     ).subscribe();
+  }
 
-    // using stubs
-    const serverReturn = SecurityGroupList2;
-
+  private loadSearchResults(serverReturn){
     this.state.searchResult.securityGroupList = serverReturn.map((eachStub) => {
       return this.dtoService.formSecurityGroupObject(eachStub, false);
     });
@@ -277,7 +280,7 @@ export class MarketGroupPanel implements OnDestroy {
     let fullyLoadedCount = 0;
     
     this.getGroupsFromSearchSub = this.searchServerReturnPackedInChunk$.pipe(
-      delay(2000),  // this delay is to simulate the delay from server
+      //delay(2000),  // this delay is to simulate the delay from server
       tap((arrayOfGroups:Array<SecurityGroupDTO>) => {
         console.log('received', arrayOfGroups);
         arrayOfGroups.forEach((eachGroup) => {
