@@ -262,7 +262,7 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
         align-items: center;
         &-numOfSecurities {
           @include mix_rating_style;
-          font-size: $font_size_xx_large;
+          font-size: $font_size_large;
           color: $font_color_inverse;
         }
         &-rating {

@@ -17,12 +17,11 @@ $marketGroupPanel_utility_widgetHeight: 8.25rem;
     padding: $spacing_medium 0 0 $spacing_medium;
     &-selectedGroupConfigNotice {
       flex: 0 0 auto;
-      height: 0;
       overflow: hidden;
+      margin-bottom: $spacing_medium;
       &-content {
         @include mix_alive('custom', $animation_duration_light transform);
         @include mix_border_radius(10px);
-        background-color: $color_highlight;
         display: flex;
         flex-direction: column;
         transform: translate(0, -100%);
@@ -235,8 +234,7 @@ $marketGroupPanel_utility_widgetHeight: 8.25rem;
     #{$marketGroupPanelBlockName} {
       &__configurator {
         &-selectedGroupConfigNotice {
-          height: auto;
-          margin-bottom: $spacing_medium;
+          background-color: $color_highlight;
           &-content {
             transform: translate(0, 0);
           }

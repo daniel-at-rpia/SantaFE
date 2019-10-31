@@ -127,7 +127,7 @@ export class UtilityService {
     }
   }
 
-  public isIG(input:string): boolean {
+  public isIG(input: string): boolean {
     if (input === 'AAA' || input === 'AA' || input === 'A' || input === 'BBB') {
       return true;
     } else {
@@ -135,8 +135,8 @@ export class UtilityService {
     }
   }
 
-  public isCDS(targetGroup: SecurityGroupDTO): boolean {
-    return targetGroup.data.name.indexOf('Cds') >= 0;
+  public isCDS(input: string): boolean {
+    return input.indexOf('Cds') >= 0;
   }
 
   public mapRatingsReverse(input): string {
@@ -169,7 +169,7 @@ export class UtilityService {
   }
 
   public normalizeDefinitionFilterOption(rawString): string {
-    return rawString.replace(' ', '');
+    return rawString;//.replace(' ', '');
   }
 
   public formDefinitionFilterOptionKey(name, normalizedOption): string {
@@ -212,6 +212,17 @@ export class UtilityService {
           }
         })
       });
+      // Hack Flag: For CDS, populate all the types of spreads with CDS spread data ("spread")
+      const spreadMerics = [this.metricOptions[0].label];
+      if (this.isCDS(rawData.groupName)) {
+        spreadMerics.forEach((eachTypeOfBondSpread) => {
+          object.raw[eachTypeOfBondSpread] = rawData.metrics['spread'];
+          object.delta.DoD[eachTypeOfBondSpread] = rawData.deltaMetrics.DoD['spread'];
+          object.delta.WoW[eachTypeOfBondSpread] = rawData.deltaMetrics.WoW['spread'];
+          object.delta.MoM[eachTypeOfBondSpread] = rawData.deltaMetrics.MoM['spread'];
+          object.delta.Ytd[eachTypeOfBondSpread] = rawData.deltaMetrics.Ytd['spread'];
+        })
+      }
     }
     return object;
   }
@@ -245,11 +256,12 @@ export class UtilityService {
   public retrievePrimaryMetricValue(rawData: BESecurityGroupDTO): string {
     let value = `n/a`;
     if (!!rawData) {
-      const rating = rawData.metrics[this.keyDictionary.RATING];
       // disable the automatic differentiation betwen IG & HY
+      // const rating = rawData.metrics[this.keyDictionary.RATING];
       // if (this.isIG(rating)) {
-        const spread = rawData.metrics[this.keyDictionary.SPREAD];
-        value = `${Math.round(spread)}`;
+      // Hack Flag:
+      const spread = this.isCDS(rawData.groupName) ? rawData.metrics['spread'] : rawData.metrics[this.keyDictionary.SPREAD];
+      value = `${Math.round(spread)}`;
       // } else {
       //   const price = rawData.metrics[this.keyDictionary.PRICE];
       //   const yieldVal = rawData.metrics[this.keyDictionary.YIELD];

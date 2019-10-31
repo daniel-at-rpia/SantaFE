@@ -427,10 +427,10 @@ export class MarketGroupPanel implements OnDestroy {
   private updateConfiguratorPerGroup(targetGroup: SecurityGroupDTO, config: SecurityGroupDefinitionConfiguratorDTO){
     for (const eachBEDefinition in targetGroup.data.definitionConfig) {
       const targetDefinition = this.utilityService.convertBEKey(eachBEDefinition);
-      const targetDefinitionValue = targetGroup.data.definitionConfig[eachBEDefinition];
+      const targetDefinitionValue = targetGroup.data.definitionConfig[eachBEDefinition][0];
       if (!!targetDefinition) {
         config.data.definitionList.forEach((eachDefinition) => {
-          if (eachDefinition.data.key === targetDefinition) {
+          if (eachDefinition.data.key === targetDefinition && !eachDefinition.state.isLocked) {
             eachDefinition.state.groupByActive = true;
             let allFiltersAreSelected = true;
             eachDefinition.data.filterOptionList.forEach((eachFilter) => {

@@ -9,8 +9,8 @@ const FilterOptionsBoolean = [
 ];
 
 const FilterOptionsBailInStatus = [
-  'Bail In',
-  'Not Bail In'
+  'Bail in',
+  'Not bail in'
 ];
 
 const FilterOptionsCurrency = [
@@ -89,31 +89,11 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     optionList: FilterOptionsSecurityType,
     locked: true
   },{
-    key: 'IS_ONTHERUN',
-    displayName: 'On-the-Run',
-    icon: 'far fa-running',
-    optionList: FilterOptionsBoolean
-  },{
-    key: 'RATING',
-    displayName: 'Rating',
-    icon: 'fas fa-award',
-    optionList: FilterOptionsRating
-  },{
-    key: 'CURRENCY',
-    displayName: 'Currency',
-    icon: 'fal fa-dollar-sign',
-    optionList: FilterOptionsCurrency
-  },{
-    key: 'TENOR',
-    displayName: 'Tenor',
-    icon: 'fal fa-history',
+    key: 'BACKEND_TENOR',
+    displayName: 'Backend Tenor',
+    icon: 'fal fa-desktop',
+    secondaryIcon: 'fas fa-history',
     optionList: FilterOptionsTenor
-  },{
-    key: 'RATING_BUCKET',
-    displayName: 'Rating Bucket',
-    icon: 'fas fa-trash',
-    optionList: FilterOptionsRatingBucket,
-    secondaryIcon: 'fas fa-award'
   },{
     key: 'BAIL_IN_STATUS',
     displayName: 'Bail-in Status',
@@ -125,6 +105,11 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     icon: 'fas fa-ticket-alt',
     optionList: FilterOptionsCouponType
   },{
+    key: 'CURRENCY',
+    displayName: 'Currency',
+    icon: 'fal fa-dollar-sign',
+    optionList: FilterOptionsCurrency
+  },{
     key: 'INDUSTRY',
     displayName: 'Industry',
     icon: 'fal fa-city',
@@ -134,6 +119,32 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     displayName: 'Issuer',
     icon: 'fas fa-user-tie',
     optionList: FilterOptionsTempPlaceholder
+  },{
+    key: 'MATURITY',
+    displayName: 'Maturity',
+    icon: 'fal fa-hourglass-end',
+    optionList: FilterOptionsBoolean
+  },{
+    key: 'IS_NEWISSUE',
+    displayName: 'New Issue',
+    icon: 'far fa-sparkles',
+    optionList: FilterOptionsBoolean
+  },{
+    key: 'IS_ONTHERUN',
+    displayName: 'On-the-Run',
+    icon: 'fal fa-handshake',
+    optionList: FilterOptionsBoolean
+  },{
+    key: 'RATING',
+    displayName: 'Rating',
+    icon: 'fas fa-award',
+    optionList: FilterOptionsRating
+  },{
+    key: 'RATING_BUCKET',
+    displayName: 'Rating Bucket',
+    icon: 'fas fa-trash',
+    optionList: FilterOptionsRatingBucket,
+    secondaryIcon: 'fas fa-award'
   },{
     key: 'SECTOR',
     displayName: 'Sector',
@@ -150,20 +161,9 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     icon: 'fal fa-building',
     optionList: FilterOptionsTempPlaceholder
   },{
-    key: 'MATURITY',
-    displayName: 'Bullet',
-    icon: 'fas fa-bolt',
-    optionList: FilterOptionsBoolean
-  },{
-    key: 'IS_NEWISSUE',
-    displayName: 'New Issue',
-    icon: 'far fa-sparkles',
-    optionList: FilterOptionsBoolean
-  },{
-    key: 'BACKEND_TENOR',
-    displayName: 'Backend Tenor',
-    icon: 'fal fa-desktop',
-    secondaryIcon: 'fas fa-history',
+    key: 'TENOR',
+    displayName: 'Tenor',
+    icon: 'fal fa-history',
     optionList: FilterOptionsTenor
   }
 ];
@@ -219,26 +219,6 @@ export const MetricOptions:Array<SecurityMetricOptionStub> = [
   {
     label: 'Size',
     backendDtoAttrName: 'marketValue',
-    deltaOptions: [
-      'DoD',
-      'WoW',
-      'MoM',
-      'Ytd'
-    ]
-  },
-  {
-    label: 'Spread',
-    backendDtoAttrName: 'spread',
-    deltaOptions: [
-      'DoD',
-      'WoW',
-      'MoM',
-      'Ytd'
-    ]
-  },
-  {
-    label: 'Citi Spread',
-    backendDtoAttrName: 'citiSpread',
     deltaOptions: [
       'DoD',
       'WoW',
