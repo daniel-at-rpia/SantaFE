@@ -189,7 +189,7 @@ export const BackendKeyDictionary = {
 
 
   // metrics
-  'SPREAD': 'spread',
+  'SPREAD': 'oasSpread',
   'PRICE': 'price',
   'YIELD': 'yieldWorst',
   'SIZE': 'marketValue'
@@ -202,7 +202,6 @@ export const MetricOptions:Array<SecurityMetricOptionStub> = [
     deltaOptions: [
       'DoD',
       'WoW',
-      'Mtd',
       'MoM',
       'Ytd'
     ]
@@ -213,7 +212,6 @@ export const MetricOptions:Array<SecurityMetricOptionStub> = [
     deltaOptions: [
       'DoD',
       'WoW',
-      'Mtd',
       'MoM',
       'Ytd'
     ]
@@ -224,7 +222,6 @@ export const MetricOptions:Array<SecurityMetricOptionStub> = [
     deltaOptions: [
       'DoD',
       'WoW',
-      'Mtd',
       'MoM',
       'Ytd'
     ]
@@ -235,7 +232,6 @@ export const MetricOptions:Array<SecurityMetricOptionStub> = [
     deltaOptions: [
       'DoD',
       'WoW',
-      'Mtd',
       'MoM',
       'Ytd'
     ]
@@ -246,7 +242,6 @@ export const MetricOptions:Array<SecurityMetricOptionStub> = [
     deltaOptions: [
       'DoD',
       'WoW',
-      'Mtd',
       'MoM',
       'Ytd'
     ]
@@ -257,7 +252,6 @@ export const MetricOptions:Array<SecurityMetricOptionStub> = [
     deltaOptions: [
       'DoD',
       'WoW',
-      'Mtd',
       'MoM',
       'Ytd'
     ]
@@ -268,7 +262,6 @@ export const MetricOptions:Array<SecurityMetricOptionStub> = [
     deltaOptions: [
       'DoD',
       'WoW',
-      'Mtd',
       'MoM',
       'Ytd'
     ]
@@ -279,7 +272,6 @@ export const MetricOptions:Array<SecurityMetricOptionStub> = [
     deltaOptions: [
       'DoD',
       'WoW',
-      'Mtd',
       'MoM',
       'Ytd'
     ]

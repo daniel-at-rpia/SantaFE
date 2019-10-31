@@ -120,15 +120,15 @@ export class MarketGroupPanel implements OnDestroy {
 
   public onClickSearchInConfigurator(){
     this.startSearch();
-    this.restfulCommonService.callAPI('santaSecurity/get-santa-securities', {req: 'GET'}).pipe(
-      tap((serverReturn) => {
-        console.log('return is ', serverReturn)
-      }),
-      catchError(err => {
-        console.log('error', err);
-        return of('error');
-      })
-    ).subscribe();
+    // this.restfulCommonService.callAPI('santaSecurity/get-santa-securities', {req: 'GET'}).pipe(
+    //   tap((serverReturn) => {
+    //     console.log('return is ', serverReturn)
+    //   }),
+    //   catchError(err => {
+    //     console.log('error', err);
+    //     return of('error');
+    //   })
+    // ).subscribe();
   }
 
   public onToggleCollapseConfigurator(){
@@ -355,7 +355,7 @@ export class MarketGroupPanel implements OnDestroy {
             }
           }
         });
-        let average = !!eachStat.deltaScope ? Math.round(sum / respectiveLength * 10000)/10000 : Math.round(sum / respectiveLength * 100)/100;
+        let average = !!eachStat.deltaScope ? Math.round(sum / respectiveLength * 1000)/1000 : Math.round(sum / respectiveLength * 100)/100;
         eachStat.absMax = absMax;
         eachStat.value = average;
         eachStat.percentage = Math.round(Math.abs(average)/absMax * 10000)/100;

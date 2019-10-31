@@ -23,7 +23,6 @@ export interface SecurityGroupMetricPackBlock {
   delta: {
     DoD: object;
     WoW: object;
-    Mtd: object;
     MoM: object;
     Ytd: object;
   }

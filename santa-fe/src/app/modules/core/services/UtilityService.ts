@@ -32,26 +32,26 @@ export class UtilityService {
 
   public mapSeniorities(input): number {
     switch (input) {
-      case "1st Lien Secured":
-        return 1;
-      case "1st lien":
-        return 1;
-      case "2nd lien":
-        return 1;
-      case "2nd lien Secured":
-        return 1;
-      case "Secured":
-        return 2;
-      case "Asset Backed":
-        return 2;
+     // case "1st Lien Secured":
+     //   return 1;
+     // case "1st lien":
+     //   return 1;
+     // case "2nd lien":
+     //   return 1;
+     // case "2nd lien Secured":
+     //   return 1;
+     // case "Secured":
+     //   return 2;
+     // case "Asset Backed":
+     //   return 2;
       case "Sr Unsecured":
-        return 2;
+        return 1;
       case "Sr Subordinated":
-        return 3;
+        return 2;
       case "Subordinated":
         return 3;
       case "Jr Subordinated":
-        return 3;
+        return 4;
       case "Sr Preferred":
         return 4;
       case "Preferred":
@@ -135,6 +135,10 @@ export class UtilityService {
     }
   }
 
+  public isCDS(targetGroup: SecurityGroupDTO): boolean {
+    return targetGroup.data.name.indexOf('Cds') >= 0;
+  }
+
   public mapRatingsReverse(input): string {
     switch (input) {
       case 1:
@@ -178,7 +182,6 @@ export class UtilityService {
       delta: {
         DoD: {},
         WoW: {},
-        Mtd: {},
         MoM: {},
         Ytd: {}
       }
@@ -243,14 +246,15 @@ export class UtilityService {
     let value = `n/a`;
     if (!!rawData) {
       const rating = rawData.metrics[this.keyDictionary.RATING];
-      if (this.isIG(rating)) {
+      // disable the automatic differentiation betwen IG & HY
+      // if (this.isIG(rating)) {
         const spread = rawData.metrics[this.keyDictionary.SPREAD];
         value = `${Math.round(spread)}`;
-      } else {
-        const price = rawData.metrics[this.keyDictionary.PRICE];
-        const yieldVal = rawData.metrics[this.keyDictionary.YIELD];
-        value = `${Math.round(price*100)/100} / ${Math.round(yieldVal*100)/100}`;
-      }
+      // } else {
+      //   const price = rawData.metrics[this.keyDictionary.PRICE];
+      //   const yieldVal = rawData.metrics[this.keyDictionary.YIELD];
+      //   value = `${Math.round(price*100)/100} / ${Math.round(yieldVal*100)/100}`;
+      // }
     }
     return value;
   }
