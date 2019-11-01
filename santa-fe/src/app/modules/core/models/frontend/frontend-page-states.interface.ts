@@ -20,6 +20,8 @@ export interface MarketGroupPanelState {
   searchResult: {
     securityGroupList: Array<SecurityGroupDTO>;
     renderProgress: number;
+    searchFailed: boolean;
+    searchFailedError: string;
   }
   isConfiguratorCollapsed: boolean;
   isGroupDataLoaded: boolean;

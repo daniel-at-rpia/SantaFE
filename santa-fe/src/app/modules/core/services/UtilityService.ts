@@ -32,33 +32,29 @@ export class UtilityService {
 
   public mapSeniorities(input): number {
     switch (input) {
-     // case "1st Lien Secured":
-     //   return 1;
-     // case "1st lien":
-     //   return 1;
-     // case "2nd lien":
-     //   return 1;
-     // case "2nd lien Secured":
-     //   return 1;
-     // case "Secured":
-     //   return 2;
-     // case "Asset Backed":
-     //   return 2;
-      case "Sr Unsecured":
-        return 1;
-      case "Sr Subordinated":
+      case "Secured":
         return 2;
-      case "Subordinated":
-        return 3;
-      case "Jr Subordinated":
-        return 4;
+      case "1st lien":
+        return 2;
+      case "2nd lien":
+        return 2;
+      case "3rd lien":
+        return 2;
+      case "Asset Backed":
+        return 2;
       case "Sr Preferred":
-        return 4;
-      case "Preferred":
-        return 4;
+        return 3;
+      case "Sr Unsecured":
+        return 3;
       case "Sr Non Preferred":
-        return 4;
+        return 3;
       case "Unsecured":
+        return 3;
+      case "Sr Subordinated":
+        return 4;
+      case "Subordinated":
+        return 4;
+      case "Jr Subordinated":
         return 4;
       default:
         return 5;

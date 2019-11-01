@@ -11,6 +11,7 @@ export class RestfulCommService {
   constructor(private http: HttpClient){}
 
   callAPI(url: string, opts: any ={}, body: any = null): Observable<any>{
+    console.log('Start REST call', url, opts, body);
     const fullUrl = `${this.endpoint}/${url}`;
     const queryOpts = {
       ...opts,
