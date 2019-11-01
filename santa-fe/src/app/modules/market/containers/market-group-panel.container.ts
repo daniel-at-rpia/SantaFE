@@ -275,7 +275,8 @@ export class MarketGroupPanel implements OnDestroy {
       first(),
       tap((serverReturn) => {
         console.log('return is ', serverReturn);
-        this.loadSearchResults(serverReturn);
+        //this.loadSearchResults(serverReturn);
+        this.loadSimpleSearchResults(serverReturn);
       }),
       catchError(err => {
         console.log('error', err);
@@ -285,6 +286,18 @@ export class MarketGroupPanel implements OnDestroy {
         return of('error');
       })
     ).subscribe();
+  }
+
+  private loadSimpleSearchResults(serverReturn){
+    this.state.searchResult.securityGroupList = serverReturn.map((eachRawGroup) => {
+      const newGroupDTO = this.dtoService.formSecurityGroupObject(eachRawGroup, false);
+      this.dtoService.updateSecurityGroupWithPieCharts(eachRawGroup, newGroupDTO);
+      return newGroupDTO;
+    });
+    this.state.searchResult.renderProgress = 100;
+    this.initializeGroupStats();
+    this.updateSort();
+    this.searchComplete();
   }
 
   private loadSearchResults(serverReturn){

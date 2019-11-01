@@ -1,0 +1,31 @@
+<article
+  (click)="onClickGroup()"
+  class="sat-securityGroupSimple--type-{{groupData.data.ratingLevel}}"
+  [ngClass]="{
+    'sat-securityGroupSimple': true,
+    'sat-securityGroupSimple--stencilState': groupData.state.isStencil,
+    'sat-securityGroupSimple--selectedState': groupData.state.isSelected,
+    'sat-securityGroupSimple--expandedState': groupData.state.isExpanded
+  }">
+  <section class="sat-securityGroupSimple__base">
+    <div class="sat-securityGroupSimple__base-center"></div>
+  </section>
+  <section class="sat-securityGroupSimple__content">
+    <div class="sat-securityGroupSimple__content-canvases">
+      <div class="sat-securityGroupSimple__content-canvases-left">
+        <div class="sat-securityGroupSimple__content-canvases-left-content">
+          <div class="sat-securityGroupSimple__content-canvases-left-content-name">
+            <span class="sat-securityGroupSimple__content-canvases-left-content-name-text">{{groupData.data.name}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="sat-securityGroupSimple__content-canvases-right">lol
+      </div>
+      <div class="sat-securityGroupSimple__content-canvases-behind">
+        <div class="sat-securityGroupSimple__content-canvases-behind-rating">
+          {{groupData.data.ratingValue}}
+        </div>
+      </div>
+    </div>
+  </section>
+</article>

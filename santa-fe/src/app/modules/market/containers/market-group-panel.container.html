@@ -119,11 +119,17 @@
     </div>
     <ul class="sat-marketGroupPanel__groups-list">
       <li *ngFor="let eachGroup of state.searchResult.securityGroupList; let i = index" class="sat-marketGroupPanel__groups-list-item">
+        <security-group-simple
+          [groupData]="eachGroup"
+          (onGroupSelect)="onSecurityGroupSelected($event)">
+        </security-group-simple>
+        <!--
         <security-group
           [groupData]="eachGroup"
           [areChartsReady]="!eachGroup.state.areChartsReady"
           (onGroupSelect)="onSecurityGroupSelected($event)">
         </security-group>
+        -->
       </li>
     </ul>
     <div class="sat-marketGroupPanel__groups-errorPrompt">

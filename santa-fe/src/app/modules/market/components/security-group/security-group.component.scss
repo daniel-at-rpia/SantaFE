@@ -59,6 +59,7 @@ $securityGroup_content_wheel_chartContainer_innerRadius_size: 70%;
       @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
       @include mix_alive('custom', $animation_duration_light box-shadow);
       @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
+      @include mix_border_radius(15px);
       flex: 1 1 auto;
       margin: 0 $securityGroup_base_wheelToCenter_overlap+$securityGroup_base_wheel_size;
       height: $securityGroup_base_center_height;

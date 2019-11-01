@@ -8,6 +8,7 @@ import { FormModule } from 'App/modules/form/form.module';
 import { MarketPage } from 'Market/market.page';
 import { MarketGroupPanel } from 'Market/containers/market-group-panel.container';
 import { SecurityGroup } from 'Market/components/security-group/security-group.component';
+import { SecurityGroupSimple } from 'Market/components/security-group-simple/security-group-simple.component';
 import { SecurityGroupDefinition } from 'Market/components/security-group-definition/security-group-definition.component';
 import { SecurityGroupDefinitionConfigurator } from 'Market/components/definition-configurator/definition-configurator.component';
 import { SecurityGroupAverageVisualizer } from 'Market/components/security-group-average-visualizer/security-group-average-visualizer.component';
@@ -17,6 +18,7 @@ import { SecurityGroupAverageVisualizer } from 'Market/components/security-group
     MarketPage,
     MarketGroupPanel,
     SecurityGroup,
+    SecurityGroupSimple,
     SecurityGroupDefinition,
     SecurityGroupDefinitionConfigurator,
     SecurityGroupAverageVisualizer

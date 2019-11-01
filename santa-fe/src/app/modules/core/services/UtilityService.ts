@@ -268,7 +268,7 @@ export class UtilityService {
   }
 
   public retrieveRawSupportingDataForLeftPie(rawData: BESecurityGroupDTO): object {
-    if (!!rawData) {
+    if (!!rawData && !!rawData.descriptiveMetrics) {
       const object = rawData.descriptiveMetrics[this.keyDictionary.RATING];
       if (!!object) {
         return object;
@@ -281,7 +281,7 @@ export class UtilityService {
   }
 
   public retrieveRawSupportingDataForRightPie(rawData: BESecurityGroupDTO): object {
-    if (!!rawData) {
+    if (!!rawData && !!rawData.descriptiveMetrics) {
       const object = rawData.descriptiveMetrics[this.keyDictionary.SENIORITY];
       if (!!object) {
         return object;

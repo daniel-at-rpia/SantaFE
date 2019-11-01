@@ -1,0 +1,162 @@
+
+
+@mixin mix_securityGroupSimple(){
+  $securityGroupSimpleBlockName: &;
+  &--type-0 {
+    #{$securityGroupSimpleBlockName} {
+      &__base {
+        &-center {
+          background-color: $color_white;
+        }
+      }
+      &__content {
+        &-canvases {
+          &-left-content {
+            &-name-text {
+              color: $font_color_major;
+            }
+          }
+          &-right {
+          }
+          &-behind {
+            &-rating {
+              color: $font_color_major;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--selectedState#{$securityGroupSimpleBlockName}--type-0 {
+    #{$securityGroupSimpleBlockName} {
+      &__content {
+        &-canvases {
+          &-left-content {
+            &-name-text {
+              color: $font_color_inverse;
+            }
+          }
+          &-right {
+          }
+          &-behind {
+            &-rating {
+              color: $font_color_inverse;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--type-1 {
+    #{$securityGroupSimpleBlockName} {
+      &__base {
+        &-center {
+          background-color: $color_rating_aaa;
+        }
+      }
+      &__content {
+        &-canvases {
+          &-left-content-value-text {
+            color: $color_rating_aaa;
+          }
+        }
+      }
+    }
+  }
+  &--type-2 {
+    #{$securityGroupSimpleBlockName} {
+      &__base {
+        &-center {
+          background-color: $color_rating_aa;
+        }
+      }
+      &__content {
+        &-canvases {
+          &-left-content-value-text {
+            color: $color_rating_aa;
+          }
+        }
+      }
+    }
+  }
+  &--type-3 {
+    #{$securityGroupSimpleBlockName} {
+      &__base {
+        &-center {
+          background-color: $color_rating_a;
+        }
+      }
+      &__content {
+        &-canvases {
+          &-left-content-value-text {
+            color: $color_rating_a;
+          }
+        }
+      }
+    }
+  }
+  &--type-4 {
+    #{$securityGroupSimpleBlockName} {
+      &__base {
+        &-center {
+          background-color: $color_rating_bbb;
+        }
+      }
+      &__content {
+        &-canvases {
+          &-left-content-value-text {
+            color: $color_rating_bbb;
+          }
+        }
+      }
+    }
+  }
+  &--type-5 {
+    #{$securityGroupSimpleBlockName} {
+      &__base {
+        &-center {
+          background-color: $color_rating_bb;
+        }
+      }
+      &__content {
+        &-canvases {
+          &-left-content-value-text {
+            color: $color_rating_bb;
+          }
+        }
+      }
+    }
+  }
+  &--type-6 {
+    #{$securityGroupSimpleBlockName} {
+      &__base {
+        &-center {
+          background-color: $color_rating_b;
+        }
+      }
+      &__content {
+        &-canvases {
+          &-left-content-value-text {
+            color: $color_rating_b;
+          }
+        }
+      }
+    }
+  }
+  &--type-7 {
+    #{$securityGroupSimpleBlockName} {
+      &__base {
+        &-center {
+          background-color: $color_rating_ccctod;
+        }
+      }
+      &__content {
+        &-canvases {
+          &-left-content-value-text {
+            color: $color_rating_ccctod;
+          }
+        }
+      }
+    }
+  }
+}
