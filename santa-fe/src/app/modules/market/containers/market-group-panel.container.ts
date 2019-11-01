@@ -30,7 +30,8 @@ import { MarketGroupPanelState } from 'FEModels/frontend-page-states.interface';
 import { SecurityGroupMetricBlock } from 'FEModels/frontend-blocks.interface';
 import {
   SecurityGroupDTO,
-  SecurityGroupDefinitionConfiguratorDTO
+  SecurityGroupDefinitionDTO,
+  SecurityGroupDefinitionConfiguratorDTO,
 } from 'FEModels/frontend-models.interface';
 import { BESecurityGroupDTO } from 'BEModels/backend-models.interface';
 import { PayloadGetSantaGroups } from 'BEModels/backend-payloads.interface';
@@ -205,6 +206,20 @@ export class MarketGroupPanel implements OnDestroy {
     this.state.configurator.dto.state.showFiltersFromDefinition
     this.state.configurator.cachedOriginalConfig = null;
     this.state.configurator.showSelectedGroupConfig = false;
+  }
+
+  public loadLongDefinitionOptionList(targetDefinition: SecurityGroupDefinitionDTO){
+    this.restfulCommonService.callAPI(targetDefinition.data.urlForGetLongOptionListFromServer, {req: 'GET'}).pipe(
+      first(),
+      tap((serverReturn: Array<string>) => {
+        targetDefinition.data.filterOptionList = this.dtoService.generateSecurityGroupDefinitionFilterOptionList(targetDefinition.data.key, serverReturn);
+        this.state.configurator.dto.state.isLoadingLongOptionListFromServer = false;
+      }),
+      catchError(err => {
+        console.log('error', err);
+        return of('error');
+      })
+    ).subscribe();
   }
 
   private startSearch(){

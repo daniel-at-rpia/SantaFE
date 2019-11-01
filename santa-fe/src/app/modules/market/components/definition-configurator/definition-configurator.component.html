@@ -3,7 +3,9 @@
     'sat-securityGroupDefinitionConfigurator': true,
     'sat-securityGroupDefinitionConfigurator--longFilterOptionsState': configuratorData.state.showLongFilterOptions,
     'sat-securityGroupDefinitionConfigurator--filterActiveState': configuratorData.state.showFiltersFromDefinition,
-    'sat-securityGroupDefinitionConfigurator--highlightedVariant': highlightedVariant
+    'sat-securityGroupDefinitionConfigurator--highlightedVariant': highlightedVariant,
+    'sat-securityGroupDefinitionConfigurator--filterShowingLongDefinitionState': configuratorData.state.showFiltersFromDefinition?.data.urlForGetLongOptionListFromServer && configuratorData.state.showFiltersFromDefinition?.data.filterOptionList.length === 0,
+    'sat-securityGroupDefinitionConfigurator--filterLoadingLongOptionListState': configuratorData.state.isLoadingLongOptionListFromServer
   }">
   <section class="sat-securityGroupDefinitionConfigurator__definitions">
     <ul class="sat-securityGroupDefinitionConfigurator__definitions-list">
@@ -16,13 +18,14 @@
             'fal': true,
             'fa-square': !eachDefinition.state.groupByActive && !eachDefinition.state.isLocked,
             'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn--selected': eachDefinition.state.groupByActive,
-            'fa-check-square': eachDefinition.state.groupByActive,
+            'fa-check-square': eachDefinition.state.groupByActive || eachDefinition.state.isLocked,
             'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn--locked': eachDefinition.state.isLocked
           }"></button>
         <security-group-definition
           [definitionData]="eachDefinition"
           (onClick)="onClickDefinition($event)"
-          [selected]="configuratorData.state.showFiltersFromDefinition === eachDefinition">
+          [selected]="configuratorData.state.showFiltersFromDefinition === eachDefinition"
+          [interactionDisabled]="configuratorData.state.isLoadingLongOptionListFromServer">
         </security-group-definition>
       </li>
     </ul>
@@ -42,6 +45,13 @@
           (onInputChange)="onSearchKeywordChange($event)">
         </santa-input>
       </div>
+      <santa-loadable-button
+        class="sat-securityGroupDefinitionConfigurator__filters-content-loadLongOptionCta"
+        (onClickButton)="onClickLoadLongOptionListForDefinition(configuratorData.state.showFiltersFromDefinition)"
+        [isLoading]="configuratorData.state.isLoadingLongOptionListFromServer"
+        [icon]="'fal fa-flashlight'"
+        [text]="'Load Options'">
+      </santa-loadable-button>
       <ul class="sat-securityGroupDefinitionConfigurator__filters-content-optionList">
         <button
           *ngFor="let eachOption of configuratorData.state.showFiltersFromDefinition?.data.filterOptionList"

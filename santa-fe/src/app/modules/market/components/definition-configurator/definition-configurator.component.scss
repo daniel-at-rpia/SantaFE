@@ -78,6 +78,10 @@ $securityGroupDefinitionConfigurator_ctas_height: 6rem;
           width: 100%;
         }
       }
+      &-loadLongOptionCta {
+        display: none;
+        margin: 0 $spacing_medium;
+      }
       &-optionList {
         @include mix_enable_scrollbar('vertical');
         display: flex;
@@ -176,6 +180,28 @@ $securityGroupDefinitionConfigurator_ctas_height: 6rem;
             transform: translate(0, 0);
           }
         }
+      }
+    }
+  }
+  &--filterShowingLongDefinitionState {
+    #{$securityGroupDefinitionConfiguratorBlockName} {
+      &__filters-content {
+        &-search {
+          display: none;
+        }
+        &-loadLongOptionCta {
+          display: flex;
+        }
+        &-optionList {
+          display: none;
+        }
+      }
+    }
+  }
+  &--filterLoadingLongOptionListState {
+    #{$securityGroupDefinitionConfiguratorBlockName} {
+      &__definitions {
+
       }
     }
   }

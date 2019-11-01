@@ -19,6 +19,7 @@
     </div>
     <security-group-definition-configurator
       (onClickSearch)="onClickSearchInConfigurator($event)"
+      (onClickLoadLongOptionList)="loadLongDefinitionOptionList($event)"
       [configuratorData]="state.configurator.dto"
       [highlightedVariant]="state.configurator.showSelectedGroupConfig"
     ></security-group-definition-configurator>

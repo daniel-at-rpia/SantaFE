@@ -133,6 +133,7 @@ export class DTOService {
       data: {
         name: rawData.displayName,
         key: rawData.key,
+        urlForGetLongOptionListFromServer: rawData.urlForGetLongOptionListFromServer || null,
         filterOptionList: this.generateSecurityGroupDefinitionFilterOptionList(rawData.key, rawData.optionList)
       },
       style: {
@@ -161,7 +162,8 @@ export class DTOService {
       state: {
         showFiltersFromDefinition: null,
         showLongFilterOptions: false,
-        isLoading: false
+        isLoading: false,
+        isLoadingLongOptionListFromServer: false
       }
     };
     return object;

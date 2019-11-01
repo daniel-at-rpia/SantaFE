@@ -6,6 +6,7 @@ export interface SecurityDefinitionStub {
   optionList: Array<string>,
   secondaryIcon?: string;
   locked?: boolean;
+  urlForGetLongOptionListFromServer?: string;
 }
 
 export interface SecurityMetricOptionStub {

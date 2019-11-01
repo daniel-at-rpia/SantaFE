@@ -25,6 +25,7 @@ import {
 export class SecurityGroupDefinitionConfigurator implements OnInit {
   @Input() configuratorData: SecurityGroupDefinitionConfiguratorDTO;
   @Input() highlightedVariant: boolean;
+  @Output() onClickLoadLongOptionList = new EventEmitter<SecurityGroupDefinitionDTO>();
   @Output() onClickSearch = new EventEmitter();
   constructor(
   ) {
@@ -36,6 +37,11 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
         eachDefinition.state.isUnactivated = false;
       }
     });
+  }
+
+  public onClickLoadLongOptionListForDefinition(targetDefinition: SecurityGroupDefinitionDTO) {
+    this.configuratorData.state.isLoadingLongOptionListFromServer = true;
+    this.onClickLoadLongOptionList.emit(targetDefinition);
   }
 
   selectDefinitionForGrouping(targetDefinition: SecurityGroupDefinitionDTO) {
@@ -64,6 +70,9 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
       this.configuratorData.state.showFiltersFromDefinition = this.configuratorData.state.showFiltersFromDefinition === targetDefinition ? null : targetDefinition;
       if (this.configuratorData.state.showFiltersFromDefinition) {
         this.configuratorData.state.showLongFilterOptions = this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.length > 5;  // any list with more than five options is considered a long list, will need extra room on the UI
+      } else if (!this.configuratorData.state.showFiltersFromDefinition && targetDefinition.data.urlForGetLongOptionListFromServer) {
+        // have to flush out the long options for performance concerns
+        targetDefinition.data.filterOptionList = [];
       }
     }
   }

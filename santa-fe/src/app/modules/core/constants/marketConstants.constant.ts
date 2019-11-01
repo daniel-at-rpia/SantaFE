@@ -4,8 +4,8 @@ import {
 } from 'FEModels/frontend-stub-models.interface';
 
 const FilterOptionsBoolean = [
-  'Yes',
-  'No'
+  'Y',
+  'N'
 ];
 
 const FilterOptionsBailInStatus = [
@@ -75,11 +75,120 @@ const FilterOptionsSecurityType = [
   'CDS'
 ];
 
+const FilterOptionsSectorType = [
+  'Auto',
+  'Basic Material',
+  'Communication',
+  'Consumers',
+  'Diversified',
+  'Energy',
+  'Financial',
+  'Health Care',
+  'Industrial',
+  'Real Estate',
+  'Technology'
+];
+
+const FilterOptionsMaturityType = [
+  'Bullet',
+  'Callable',
+  'Perpetual'
+];
+
+const FilterOptionsSeniorityType = [
+  'Secured',
+  '1st lien',
+  '2nd lien',
+  '3rd lien',
+  'Asset Backed',
+  'Sr Preferred',
+  'Sr Unsecured',
+  'Sr Non Preferred',
+  'Unsecured',
+  'Sr Subordinated',
+  'Subordinated',
+  'Jr Subordinated'
+];
+
 const FilterOptionsTempPlaceholder = [
   'Option 1',
   'Option 2',
   'Option 3'
-]
+];
+
+const FilterOptionsIndustryType = [
+  'Advertising & Marketing',
+  'Aerospace & Defense',
+  'Airlines',
+  'Apparel & Textile Products',
+  'Auto Parts Manufacturing',
+  'Automobiles Manufacturing',
+  'Banks',
+  'Biotechnology',
+  'Cable & Satellite',
+  'Casinos & Gaming',
+  'Chemicals',
+  'Coal Operations',
+  'Commercial Finance',
+  'Communications Equipment',
+  'Construction Materials Manufacturing',
+  'Consumer Finance',
+  'Consumer Products',
+  'Consumer Services',
+  'Containers & Packaging',
+  'Department Stores',
+  'Design, Manufacturing & Distribution',
+  'Distributors - Consumer Discretionary',
+  'Diversified Banks',
+  'Diversified Finan Serv',
+  'Educational Services',
+  'Electrical Equipment Manufacturing',
+  'Entertainment Content',
+  'Entertainment Resources',
+  'Exploration & Production',
+  'Financial Services',
+  'Food & Beverage',
+  'Forest & Paper Products Manufacturing',
+  'Funds & Trusts',
+  'Hardware',
+  'Health Care Facilities & Services',
+  'Home & Office Products Manufacturing',
+  'Home Improvement',
+  'Homebuilders',
+  'Industrial Other',
+  'Integrated Oils',
+  'Internet Media',
+  'Leisure Products Manufacturing',
+  'Life Insurance',
+  'Machinery Manufacturing',
+  'Managed Care',
+  'Manufactured Goods',
+  'Mass Merchants',
+  'Medical Equipment & Devices Manufacturing',
+  'Metals & Mining',
+  'Oil & Gas Services & Equipment',
+  'Pharmaceuticals',
+  'Pipeline',
+  'Power Generation',
+  'Property & Casualty Insurance',
+  'Publishing & Broadcasting',
+  'Railroad',
+  'Real Estate',
+  'Refining & Marketing',
+  'Renewable Energy',
+  'Restaurants',
+  'Retail - Consumer Discretionary',
+  'Retail - Consumer Staples',
+  'Semiconductors',
+  'Software & Services',
+  'Supermarkets & Pharmacies',
+  'Tobacco',
+  'Transportation & Logistics',
+  'Travel & Lodging',
+  'Utilities',
+  'Waste & Environment Services & Equipment',
+  'Wireless Telecommunications Services'
+];
 
 export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
   {
@@ -113,17 +222,18 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     key: 'INDUSTRY',
     displayName: 'Industry',
     icon: 'fal fa-city',
-    optionList: FilterOptionsTempPlaceholder
+    optionList: FilterOptionsIndustryType
   },{
     key: 'ISSUER',
     displayName: 'Issuer',
     icon: 'fas fa-user-tie',
-    optionList: FilterOptionsTempPlaceholder
+    optionList: [],
+    urlForGetLongOptionListFromServer: 'santaSecurity/get-santa-issuers'
   },{
     key: 'MATURITY',
     displayName: 'Maturity',
-    icon: 'fal fa-hourglass-end',
-    optionList: FilterOptionsBoolean
+    icon: 'fal fa-seedling',
+    optionList: FilterOptionsMaturityType
   },{
     key: 'IS_NEWISSUE',
     displayName: 'New Issue',
@@ -149,17 +259,18 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     key: 'SECTOR',
     displayName: 'Sector',
     icon: 'fal fa-chart-pie',
-    optionList: FilterOptionsTempPlaceholder
+    optionList: FilterOptionsSectorType
   },{
     key: 'SENIORITY',
     displayName: 'Seniority',
     icon: 'fal fa-gavel',
-    optionList: FilterOptionsTempPlaceholder
+    optionList: FilterOptionsSeniorityType
   },{
     key: 'SUB_INDUSTRY',
     displayName: 'Sub-Industry',
     icon: 'fal fa-building',
-    optionList: FilterOptionsTempPlaceholder
+    optionList: [],
+    urlForGetLongOptionListFromServer: 'santaSecurity/get-santa-subindustries'
   },{
     key: 'TENOR',
     displayName: 'Tenor',

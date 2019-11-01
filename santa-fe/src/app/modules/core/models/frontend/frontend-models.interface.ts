@@ -60,6 +60,7 @@ export interface SecurityGroupDefinitionDTO extends BasicDTOStructure {
   data: {
     name: string;
     key: string;
+    urlForGetLongOptionListFromServer: string;
     filterOptionList: Array<SecurityGroupDefinitionFilterBlock>;
   }
   style: {
@@ -82,6 +83,7 @@ export interface SecurityGroupDefinitionConfiguratorDTO extends BasicDTOStructur
   state: {
     showLongFilterOptions: boolean;
     isLoading: boolean;
+    isLoadingLongOptionListFromServer: boolean;
     showFiltersFromDefinition: SecurityGroupDefinitionDTO;
   }
 }
