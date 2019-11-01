@@ -211,6 +211,7 @@ export class MarketGroupPanel implements OnDestroy {
   public loadLongDefinitionOptionList(targetDefinition: SecurityGroupDefinitionDTO){
     this.restfulCommonService.callAPI(targetDefinition.data.urlForGetLongOptionListFromServer, {req: 'GET'}).pipe(
       first(),
+      delay(200),
       tap((serverReturn: Array<string>) => {
         targetDefinition.data.filterOptionList = this.dtoService.generateSecurityGroupDefinitionFilterOptionList(targetDefinition.data.key, serverReturn);
         this.state.configurator.dto.state.isLoadingLongOptionListFromServer = false;

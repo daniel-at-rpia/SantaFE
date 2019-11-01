@@ -49,7 +49,8 @@
         class="sat-securityGroupDefinitionConfigurator__filters-content-loadLongOptionCta"
         (onClickButton)="onClickLoadLongOptionListForDefinition(configuratorData.state.showFiltersFromDefinition)"
         [isLoading]="configuratorData.state.isLoadingLongOptionListFromServer"
-        [icon]="'fal fa-flashlight'"
+        [columnLayout]="true"
+        [icon]="'fal fa-cloud-download'"
         [text]="'Load Options'">
       </santa-loadable-button>
       <ul class="sat-securityGroupDefinitionConfigurator__filters-content-optionList">

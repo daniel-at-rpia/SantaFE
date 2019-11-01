@@ -1,7 +1,8 @@
 <article
   [ngClass]="{
     'sat-loadableButton': true,
-    'sat-loadableButton--loading': isLoading
+    'sat-loadableButton--loading': isLoading,
+    'sat-loadableButton--columnLayout': columnLayout
   }">
   <button (click)="onClick()" class="sat-loadableButton__btn santaBtn--labelled">
     <i [ngClass]="'sat-loadableButton__btn-icon ' + icon"></i>

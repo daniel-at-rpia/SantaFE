@@ -67,12 +67,13 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
   onClickDefinition(targetDefinition: SecurityGroupDefinitionDTO){
     if (!targetDefinition.state.isUnactivated) {
       this.clearSearchFilter();
+      if (this.configuratorData.state.showFiltersFromDefinition && this.configuratorData.state.showFiltersFromDefinition.data.urlForGetLongOptionListFromServer) {
+        // have to flush out the long options for performance concerns
+        this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList = [];
+      }
       this.configuratorData.state.showFiltersFromDefinition = this.configuratorData.state.showFiltersFromDefinition === targetDefinition ? null : targetDefinition;
       if (this.configuratorData.state.showFiltersFromDefinition) {
         this.configuratorData.state.showLongFilterOptions = this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.length > 5;  // any list with more than five options is considered a long list, will need extra room on the UI
-      } else if (!this.configuratorData.state.showFiltersFromDefinition && targetDefinition.data.urlForGetLongOptionListFromServer) {
-        // have to flush out the long options for performance concerns
-        targetDefinition.data.filterOptionList = [];
       }
     }
   }
