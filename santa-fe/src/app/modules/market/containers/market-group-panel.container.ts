@@ -87,7 +87,9 @@ export class MarketGroupPanel implements OnDestroy {
       },
       searchResult: {
         securityGroupList: [],
-        renderProgress: 0
+        renderProgress: 0,
+        searchFailed: false,
+        searchFailedError: ''
       }
     };
     this.state.utility.pieConfigurator.left.options = this.PieChartConfigurationOptions.left.map((eachOption) => {
@@ -211,6 +213,7 @@ export class MarketGroupPanel implements OnDestroy {
     this.state.isGroupDataLoaded = false;
     this.state.utility.visualizer.state.isEmpty = false;
     this.state.utility.visualizer.state.isStencil = true;
+    this.state.searchResult.searchFailed = false;
     this.state.searchResult.renderProgress = 0;
     const payload = this.formSearchPayload();
     this.performSearch(payload);
@@ -260,6 +263,9 @@ export class MarketGroupPanel implements OnDestroy {
       }),
       catchError(err => {
         console.log('error', err);
+        this.state.searchResult.searchFailed = true;
+        this.state.searchResult.searchFailedError = err.message;
+        this.searchComplete();
         return of('error');
       })
     ).subscribe();
@@ -306,14 +312,16 @@ export class MarketGroupPanel implements OnDestroy {
   }
 
   private searchComplete(){
-    this.state.searchResult.securityGroupList.forEach((eachGroup) => {
-      eachGroup.state.averageCalculationComplete = true;
-    });
-    this.calculateGroupAverage(this.state.searchResult.securityGroupList.length);
+    if (this.state.searchResult.securityGroupList.length > 0) {
+      this.state.searchResult.securityGroupList.forEach((eachGroup) => {
+        eachGroup.state.averageCalculationComplete = true;
+      });
+      this.calculateGroupAverage(this.state.searchResult.securityGroupList.length);
+    }
     this.state.utility.visualizer.state.isStencil = false;
     this.state.configurator.dto.state.isLoading = false;
     this.state.isGroupDataLoaded = true;
-    this.getGroupsFromSearchSub.unsubscribe();
+    !!this.getGroupsFromSearchSub && this.getGroupsFromSearchSub.unsubscribe();
   }
 
   private initializeGroupStats(){

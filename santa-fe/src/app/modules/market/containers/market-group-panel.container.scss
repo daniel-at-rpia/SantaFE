@@ -229,6 +229,31 @@ $marketGroupPanel_utility_widgetHeight: 8.25rem;
         margin-top: $spacing_large + $spacing_x_small;
       }
     }
+    &-errorPrompt {
+      @include mix_border_radius(10px);
+      flex: 0 1 auto;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      background-color: $color_red_1;
+      padding: $spacing_large;
+      margin-top: $spacing_small;
+      &-icon {
+        font-size: $font_size_xxxx_large;
+        color: $color_kill;
+      }
+      &-title {
+        text-align: center;
+        font-size: $font_size_xx_large;
+        color: $color_kill;
+        margin: $spacing_large 0;
+      }
+      &-errorText {
+        text-align: center;
+        font-size: $font_size_large;
+        color: $font_color_major;
+      }
+    }
   }
   &--selectedGroupConfigActiveState {
     #{$marketGroupPanelBlockName} {
@@ -291,6 +316,18 @@ $marketGroupPanel_utility_widgetHeight: 8.25rem;
         }
         &-text, &-highlightText {
           display: inline-block;
+        }
+      }
+    }
+  }
+  &--searchFailedState {
+    #{$marketGroupPanelBlockName} {
+      &__groups {
+        &-list {
+          display: none;
+        }
+        &-errorPrompt {
+          display: flex;
         }
       }
     }

@@ -5,7 +5,8 @@
   'sat-marketGroupPanel--averageVisualizerEnabledState': state.utility.selectedWidget === 'AVERAGE_VISUALIZER',
   'sat-marketGroupPanel--pieConfiguratorEnabledState': state.utility.selectedWidget === 'PIE_CONFIGURATOR',
   'sat-marketGroupPanel--searchInProgressState': state.configurator.dto.state.isLoading,
-  'sat-marketGroupPanel--searchCompletedState': state.isGroupDataLoaded
+  'sat-marketGroupPanel--searchCompletedState': state.isGroupDataLoaded,
+  'sat-marketGroupPanel--searchFailedState': state.searchResult.searchFailed
 }">
   <section class="sat-marketGroupPanel__configurator">
     <div class="sat-marketGroupPanel__configurator-selectedGroupConfigNotice">
@@ -124,5 +125,10 @@
         </security-group>
       </li>
     </ul>
+    <div class="sat-marketGroupPanel__groups-errorPrompt">
+      <i class="sat-marketGroupPanel__groups-errorPrompt-icon fal fa-sad-tear"></i>
+      <span class="sat-marketGroupPanel__groups-errorPrompt-title">Search failed due to </span>
+      <span class="sat-marketGroupPanel__groups-errorPrompt-errorText">{{state.searchResult.searchFailedError}}</span>
+    </div>
   </section>
 </article>
