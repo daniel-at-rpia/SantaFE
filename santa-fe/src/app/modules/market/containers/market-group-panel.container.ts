@@ -237,10 +237,17 @@ export class MarketGroupPanel implements OnDestroy {
 
   private formSearchPayload(): PayloadGetSantaGroups{
     const currentTime = new Date();
-    currentTime.setDate(currentTime.getDate() - 1);
-    const parsedMonth = currentTime.getMonth()+1 < 10 ? `0${currentTime.getMonth()+1}` : `${currentTime.getMonth()+1}`;
+    if (currentTime.getDay() === 1) {
+      currentTime.setDate(currentTime.getDate() - 3);
+    } else if (currentTime.getDay() === 7) {
+      currentTime.setDate(currentTime.getDate() - 2);
+    } else {
+      currentTime.setDate(currentTime.getDate() - 1);
+    }
+    const parsedMonth = ('0' + (currentTime.getMonth()+1)).slice(-2);
+    const parsedDate = ('0' + currentTime.getDate()).slice(-2);
     const payload: PayloadGetSantaGroups = {
-      yyyyMMdd: parseInt(`${currentTime.getFullYear()}${parsedMonth}${currentTime.getDate()}`),
+      yyyyMMdd: parseInt(`${currentTime.getFullYear()}${parsedMonth}${parsedDate}`),
       source: "Default",
       santaGroupDefinition: {},
       santaGroupFilters: {},
