@@ -1,116 +1,105 @@
 <article [ngClass]="{
   'sat-securityGroupAverageVisualizer': true,
-  'sat-securityGroupAverageVisualizer--expandedState': visualizerData.state.isExpanded,
   'sat-securityGroupAverageVisualizer--stencilState': visualizerData.state.isStencil
 }">
-  <section class="sat-securityGroupAverageVisualizer__metricNames">
-    <article
-      *ngFor="let eachStat of visualizerData.data.stats; let statIndex = index"
-      [ngClass]="{
-        'sat-securityGroupAverageVisualizerName': true,
-        'sat-securityGroupAverageVisualizerName--showingDeltaState': eachStat.deltaScope,
-        'sat-securityGroupAverageVisualizerName--selectedState': visualizerData.state.selectingStat === eachStat,
-        'sat-securityGroupAverageVisualizerName--editingState': visualizerData.state.editingStat === eachStat,
-        'sat-securityGroupAverageVisualizerName--sortActiveState': eachStat.sortHierarchy > 0,
-        'sat-securityGroupAverageVisualizerName--emptyState': eachStat.isEmpty,
-        'sat-securityGroupAverageVisualizerName--nextEmpty': statIndex < visualizerData.data.stats.length-1 && visualizerData.data.stats[statIndex+1].isEmpty,
-        'sat-securityGroupAverageVisualizerName--stencilState': visualizerData.state.isStencil,
-        'sat-securityGroupAverageVisualizerName--panelEmptyState': panelAtEmptyState
-      }">
-      <section class="sat-securityGroupAverageVisualizerName__leftMargin"></section>
-      <section class="sat-securityGroupAverageVisualizerName__sortHierarchy">
-        <i class="sat-securityGroupAverageVisualizerName__sortHierarchy-icon fal fa-sort-amount-down-alt"></i>
-        <span class="sat-securityGroupAverageVisualizerName__sortHierarchy-text">{{eachStat.sortHierarchy}}</span>
-      </section>
-      <button (click)="onClickMetric(eachStat)" class="sat-securityGroupAverageVisualizerName__nameCTA">{{eachStat.label}}</button>
-      <button (click)="onClickMetric(eachStat)" class="sat-securityGroupAverageVisualizerName__nameCTA sat-securityGroupAverageVisualizerName__nameCTA--delta">{{eachStat.label}} Δ {{eachStat.deltaScope}}</button>
-      <span class="sat-securityGroupAverageVisualizerName__value">{{eachStat.value}}</span>
-      <button (click)="addMetric(eachStat)" class="sat-securityGroupAverageVisualizerName__addMetric santaBtn--labelled santaBtn--inverseLabelled">
-        <i class="sat-securityGroupAverageVisualizerName__addMetric-icon fal fa-plus"></i>
-        <span>Add Metric</span>
-      </button>
-      <section class="sat-securityGroupAverageVisualizerName__actionMenu">
-        <button (click)="onClickActionDelete(eachStat)" class="sat-securityGroupAverageVisualizerName__actionMenu-deleteBtn santaBtn--iconOnly santaBtn--small fal fa-times"></button>
-        <button (click)="onClickActionEdit(eachStat)" class="sat-securityGroupAverageVisualizerName__actionMenu-editBtn santaBtn--iconOnly santaBtn--small fal fa-pencil"></button>
-        <button (click)="onClickMetricSort(eachStat)" class="sat-securityGroupAverageVisualizerName__actionMenu-sortBtn santaBtn--iconOnly santaBtn--small fal fa-sort-amount-down-alt"></button>
-      </section>
-      <section class="sat-securityGroupAverageVisualizerName__metricSelectionDropdown">
-        <div class="sat-securityGroupAverageVisualizerName__metricSelectionDropdown-content">
-          <article
-            [ngClass]="{
-              'sat-securityGroupAverageVisualizerNameDropdownContent': true,
-              'sat-securityGroupAverageVisualizerNameDropdownContent--selectedMetric': !!visualizerData.state.editingStatSelectedMetric,
-              'sat-securityGroupAverageVisualizerNameDropdownContent--selectedValueType': visualizerData.state.editingStatSelectedMetricValueType === 'DELTA'
-            }">
-            <section class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseMetric">
-              <span class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseMetric-label">Choose Metric :</span>
-              <ul class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseMetric-list">
-                <button
-                  *ngFor="let eachMetric of metricOptions"
-                  (click)="dropdownSelectMetric(eachMetric)"
-                  [ngClass]="{
-                    'sat-securityGroupAverageVisualizerNameDropdownContent__chooseMetric-list-item': true,
-                    'sat-securityGroupAverageVisualizerNameDropdownContent__chooseMetric-list-item--selected': visualizerData.state.editingStatSelectedMetric === eachMetric
-                  }">
-                  {{eachMetric.label}}
-                </button>
-              </ul>
-            </section>
-            <section class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseValueType">
-              <span class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseValueType-label">Choose Value Type :</span>
-              <ul class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseValueType-list">
-                <button
-                  (click)="dropdownSelectMetricValueType('RAW')"
-                  [ngClass]="{
-                    'sat-securityGroupAverageVisualizerNameDropdownContent__chooseValueType-list-item': true,
-                    'sat-securityGroupAverageVisualizerNameDropdownContent__chooseValueType-list-item--selected': visualizerData.state.editingStatSelectedMetricValueType === 'RAW'
-                  }">
-                  Raw Value
-                </button>
-                <button
-                  (click)="dropdownSelectMetricValueType('DELTA')"
-                  [ngClass]="{
-                    'sat-securityGroupAverageVisualizerNameDropdownContent__chooseValueType-list-item': true,
-                    'sat-securityGroupAverageVisualizerNameDropdownContent__chooseValueType-list-item--selected': visualizerData.state.editingStatSelectedMetricValueType === 'DELTA'
-                  }">
-                  Delta Value
-                </button>
-              </ul>
-            </section>
-            <section class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseDeltaType">
-              <span class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseDeltaType-label">Choose Delta Scope :</span>
-              <ul class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseDeltaType-list">
-                <button
-                  (click)="dropdownSelectMetricDeltaType(eachDeltaType)"
-                  *ngFor="let eachDeltaType of visualizerData.state.editingStatSelectedMetric?.deltaOptions"
-                  [ngClass]="{
-                    'sat-securityGroupAverageVisualizerNameDropdownContent__chooseDeltaType-list-item': true,
-                    'sat-securityGroupAverageVisualizerNameDropdownContent__chooseDeltaType-list-item--selected': visualizerData.state.editingStatSelectedMetricDeltaType === eachDeltaType
-                  }">
-                  {{eachDeltaType}}
-                </button>
-              </ul>
-            </section>
-          </article>
-        </div>
-      </section>
-    </article>
+  <section class="sat-securityGroupAverageVisualizer__groupName">
   </section>
-  <section class="sat-securityGroupAverageVisualizer__alignmentLine"></section>
-  <section class="sat-securityGroupAverageVisualizer__metricValues">
-    <article
-      *ngFor="let eachStat of visualizerData.data.stats; let statIndex = index"
-      [ngClass]="{
-        'sat-securityGroupAverageVisualizerValue': true,
-        'sat-securityGroupAverageVisualizerValue--negativeState': eachStat.value < 0,
-        'sat-securityGroupAverageVisualizerValue--emptyState': eachStat.isEmpty,
-        'sat-securityGroupAverageVisualizerValue--nextEmpty': statIndex < visualizerData.data.stats.length-1 && visualizerData.data.stats[statIndex+1].isEmpty,
-        'sat-securityGroupAverageVisualizerValue--stencilState': visualizerData.state.isStencil,
-        'sat-securityGroupAverageVisualizerValue--panelEmptyState': panelAtEmptyState
-      }">
-      <div [ngStyle]="{'width': eachStat.percentage + '%'}" class="sat-securityGroupAverageVisualizerValue__line">
+  <section class="sat-securityGroupAverageVisualizer__metrics">
+    <div class="sat-securityGroupAverageVisualizer__metrics-item" *ngFor="let eachMetric of visualizerData.data.stats">
+      <div class="sat-securityGroupAverageVisualizer__metrics-item-cta">
+        <article
+          [ngClass]="{
+            'sat-securityGroupAverageVisualizerName': true,
+            'sat-securityGroupAverageVisualizerName--showingDeltaState': eachMetric.deltaScope,
+            'sat-securityGroupAverageVisualizerName--selectedState': visualizerData.state.selectingStat === eachMetric,
+            'sat-securityGroupAverageVisualizerName--editingState': visualizerData.state.editingStat === eachMetric,
+            'sat-securityGroupAverageVisualizerName--sortActiveState': eachMetric.sortHierarchy > 0,
+            'sat-securityGroupAverageVisualizerName--emptyState': eachMetric.isEmpty,
+            'sat-securityGroupAverageVisualizerName--nextEmpty': statIndex < visualizerData.data.stats.length-1 && visualizerData.data.stats[statIndex+1].isEmpty,
+            'sat-securityGroupAverageVisualizerName--stencilState': visualizerData.state.isStencil
+          }">
+          <section class="sat-securityGroupAverageVisualizerName__sortHierarchy">
+            <div class="sat-securityGroupAverageVisualizerName__sortHierarchy-content">
+              <i class="sat-securityGroupAverageVisualizerName__sortHierarchy-content-icon fal fa-sort-amount-down-alt"></i>
+              <span class="sat-securityGroupAverageVisualizerName__sortHierarchy-content-text">{{eachMetric.sortHierarchy}}</span>
+            </div>
+          </section>
+          <button (click)="onClickMetric(eachMetric)" class="sat-securityGroupAverageVisualizerName__nameCTA">{{eachMetric.label}}</button>
+          <button (click)="onClickMetric(eachMetric)" class="sat-securityGroupAverageVisualizerName__nameCTA sat-securityGroupAverageVisualizerName__nameCTA--delta">{{eachMetric.label}} Δ {{eachMetric.deltaScope}}</button>
+          <button (click)="addMetric(eachMetric)" class="sat-securityGroupAverageVisualizerName__addMetric santaBtn--labelled santaBtn--inverseLabelled">
+            <i class="sat-securityGroupAverageVisualizerName__addMetric-icon fal fa-plus"></i>
+            <span>Add Metric</span>
+          </button>
+          <section class="sat-securityGroupAverageVisualizerName__actionMenu">
+            <button (click)="onClickActionDelete(eachMetric)" class="sat-securityGroupAverageVisualizerName__actionMenu-deleteBtn santaBtn--iconOnly santaBtn--small fal fa-times"></button>
+            <button (click)="onClickActionEdit(eachMetric)" class="sat-securityGroupAverageVisualizerName__actionMenu-editBtn santaBtn--iconOnly santaBtn--small fal fa-pencil"></button>
+            <button (click)="onClickMetricSort(eachMetric)" class="sat-securityGroupAverageVisualizerName__actionMenu-sortBtn santaBtn--iconOnly santaBtn--small fal fa-sort-amount-down-alt"></button>
+          </section>
+          <section class="sat-securityGroupAverageVisualizerName__metricSelectionDropdown">
+            <div class="sat-securityGroupAverageVisualizerName__metricSelectionDropdown-content">
+              <article
+                [ngClass]="{
+                  'sat-securityGroupAverageVisualizerNameDropdownContent': true,
+                  'sat-securityGroupAverageVisualizerNameDropdownContent--selectedMetric': !!visualizerData.state.editingStatSelectedMetric,
+                  'sat-securityGroupAverageVisualizerNameDropdownContent--selectedValueType': visualizerData.state.editingStatSelectedMetricValueType === 'DELTA'
+                }">
+                <section class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseMetric">
+                  <span class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseMetric-label">Choose Metric :</span>
+                  <ul class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseMetric-list">
+                    <button
+                      *ngFor="let eachMetric of metricOptions"
+                      (click)="dropdownSelectMetric(eachMetric)"
+                      [ngClass]="{
+                        'sat-securityGroupAverageVisualizerNameDropdownContent__chooseMetric-list-item': true,
+                        'sat-securityGroupAverageVisualizerNameDropdownContent__chooseMetric-list-item--selected': visualizerData.state.editingStatSelectedMetric === eachMetric
+                      }">
+                      {{eachMetric.label}}
+                    </button>
+                  </ul>
+                </section>
+                <section class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseValueType">
+                  <span class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseValueType-label">Choose Value Type :</span>
+                  <ul class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseValueType-list">
+                    <button
+                      (click)="dropdownSelectMetricValueType('RAW')"
+                      [ngClass]="{
+                        'sat-securityGroupAverageVisualizerNameDropdownContent__chooseValueType-list-item': true,
+                        'sat-securityGroupAverageVisualizerNameDropdownContent__chooseValueType-list-item--selected': visualizerData.state.editingStatSelectedMetricValueType === 'RAW'
+                      }">
+                      Raw Value
+                    </button>
+                    <button
+                      (click)="dropdownSelectMetricValueType('DELTA')"
+                      [ngClass]="{
+                        'sat-securityGroupAverageVisualizerNameDropdownContent__chooseValueType-list-item': true,
+                        'sat-securityGroupAverageVisualizerNameDropdownContent__chooseValueType-list-item--selected': visualizerData.state.editingStatSelectedMetricValueType === 'DELTA'
+                      }">
+                      Delta Value
+                    </button>
+                  </ul>
+                </section>
+                <section class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseDeltaType">
+                  <span class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseDeltaType-label">Choose Delta Scope :</span>
+                  <ul class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseDeltaType-list">
+                    <button
+                      (click)="dropdownSelectMetricDeltaType(eachDeltaType)"
+                      *ngFor="let eachDeltaType of visualizerData.state.editingStatSelectedMetric?.deltaOptions"
+                      [ngClass]="{
+                        'sat-securityGroupAverageVisualizerNameDropdownContent__chooseDeltaType-list-item': true,
+                        'sat-securityGroupAverageVisualizerNameDropdownContent__chooseDeltaType-list-item--selected': visualizerData.state.editingStatSelectedMetricDeltaType === eachDeltaType
+                      }">
+                      {{eachDeltaType}}
+                    </button>
+                  </ul>
+                </section>
+              </article>
+            </div>
+          </section>
+        </article>
       </div>
-    </article>
-    <div class="sat-securityGroupAverageVisualizer__metricValues-mask"></div>
+      <div class="sat-securityGroupAverageVisualizer__metrics-item-line">
+        
+      </div>
+    </div>
   </section>
 </article>

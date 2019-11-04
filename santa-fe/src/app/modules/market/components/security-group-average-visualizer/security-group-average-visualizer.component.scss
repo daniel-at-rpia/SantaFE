@@ -1,95 +1,62 @@
 @import "global.scss";
 @import "modules/market/market.scss";
 
-$averageVisualizer_metricNames_width: $securityGroup_content_canvases_left_width + $securityGroup_content_canvases_right_metricName_width + $securityGroup_base_wheel_size;
-$averageVisualizer_metricNames_width_expanded: $securityGroup_content_canvases_left_width_expanded + $securityGroup_content_canvases_right_metricName_width + $securityGroup_base_wheel_size;
 .sat-securityGroupAverageVisualizer {
-  $averageVisualizerBlockName: &;
   display: flex;
-  &__metricNames {
-    flex: 0 0 $averageVisualizer_metricNames_width;
-    display: flex;
-    flex-direction: column;
+  flex-direction: row;
+  &__groupName {
+    flex: 0 0 $securityGroup_content_canvases_left_width;
   }
-  &__alignmentLine {
-    @include mix_border_generator(0 0 0 $typical_border_width);
-    flex: 0 0 auto;
-    margin-left: $securityGroup_content_canvases_right_alignmentLine_marginLeft;
-    width: $securityGroup_content_canvases_right_alignmentLine_marginLeft;
-  }
-  &__metricValues {
-    @include mix_fixed_div(relative, $z_index_standard_base_item);
+  &__metrics {
     flex: 1 1 auto;
     display: flex;
-    flex-direction: column;
-    margin-right: $securityGroup_base_wheel_size;
-    &-mask {
-      @include mix_fixed_div(absolute, $z_index_standard_base_item_lift);
-      @include mix_alive('custom', $animation_duration_heavy transform);
-      width: 100%;
-      height: 100%;
-      transform: translate(100%, 0);
-      background-color: $color_gray_2;
-    }
-  }
-  &--expandedState {
-    #{$averageVisualizerBlockName} {
-      &__metricNames {
-        flex: 0 0 $averageVisualizer_metricNames_width_expanded;
-      }
-    }
-  }
-  @include mq-xx-large-min {
-    &__metricNames {
-      flex: 0 0 $averageVisualizer_metricNames_width_expanded;
-    }
-  }
-  &--stencilState {
-    #{$averageVisualizerBlockName} {
-      &__metricValues-mask {
-        opacity: 0;
-        transform: translate(0, 0);
-      }
+    margin-right: $spacing_small; // to align perfectly with each securityGroup card
+    &-item {
+      flex: 1 1 33.33%;
     }
   }
 }
 
-$averageVisualizerName_nameCTA_width: 9rem;
+//    flex: 0 0 $securityGroup_content_canvases_right_metricValue_width;
+$averageVisualizerName_rightPadding: $spacing_large;
 $averageVisualizerName_nameCTA_height: 1.5rem;
-$averageVisualizerName_value_width: 3.25rem;
 $averageVisualizerName_metricSelectionDropdown_width: 24rem;
 $averageVisualizerName_metricSelectionDropdown_height: 27rem;
 $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
 .sat-securityGroupAverageVisualizerName {
   $averageVisualizerNameBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
-  flex: 1 0 auto;
+  flex: 1 1 auto;
   display: flex;
   flex-wrap: nowrap;
   justify-content: flex-end;
   align-items: center;
-  margin: $spacing_small 0;
-  &__leftMargin {
-    flex: 0 1 $securityGroup_base_wheel_size;
-  }
+  padding-right: $averageVisualizerName_rightPadding;
   &__sortHierarchy {
-    @include mix_border_radius(5px);
-    display: none;
-    align-items: center;
-    background-color: $color_active;
-    padding: $spacing_xx_small $spacing_x_small;
-    &-icon {
-      color: $font_color_inverse;
-      font-size: $font_size_x_small;
-    }
-    &-text {
-      margin-left: $spacing_x_small;
-      color: $font_color_inverse;
-      font-size: $font_size_x_small;
+    flex: 0 0 $securityGroup_content_canvases_right_metricValue_width;
+    display: flex;
+    visibility: hidden;
+    &-content {
+      @include mix_border_radius(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: $color_active;
+      padding: $spacing_xx_small $spacing_x_small;
+      margin-right: $spacing_small;
+      &-icon {
+        color: $font_color_inverse;
+        font-size: $font_size_x_small;
+      }
+      &-text {
+        margin-left: $spacing_x_small;
+        color: $font_color_inverse;
+        font-size: $font_size_x_small;
+      }
     }
   }
   &__nameCTA {
-    flex: 0 0 $averageVisualizerName_nameCTA_width;
+    flex: 1 1 auto;
     height: $averageVisualizerName_nameCTA_height;
     padding: 0;
     font-size: $font_size_small;
@@ -97,21 +64,13 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
       display: none;
     }
   }
-  &__value {
-    flex: 0 0 $averageVisualizerName_value_width;
-    text-align: right;
-    color: $font_color_major;
-    font-size: $font_size_small;
-    margin-left: $spacing_small;
-  }
   &__addMetric {
-    flex: 0 0 $averageVisualizerName_nameCTA_width;
+    flex: 1 1 auto;
     display: none;
     justify-content: center;
     height: $averageVisualizerName_nameCTA_height;
     padding: 0;
     background-color: $color_create;
-    margin-right: $averageVisualizerName_value_width + $spacing_small;
     &>&-icon {
       font-size: $font_size_normal;
     }
@@ -122,11 +81,11 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
   &__actionMenu {
     @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
     @include mix_alive('custom', $animation_duration_light transform);
+    @include mix_calculate(width, 100%, $securityGroup_content_canvases_right_metricValue_width + $averageVisualizerName_rightPadding, '-');
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     top: -$iconButton_size_small - $spacing_small;
-    right: $averageVisualizerName_value_width + $spacing_small;
-    width: $averageVisualizerName_nameCTA_width;
+    right: $averageVisualizerName_rightPadding;
     transform: scale(0.01);
     &-deleteBtn {
       background-color: $color_kill;
@@ -143,7 +102,6 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
   &__metricSelectionDropdown {
     @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
     top: $spacing_large;
-    right: -50%;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -199,8 +157,7 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
   &--sortActiveState {
     #{$averageVisualizerNameBlockName} {
       &__sortHierarchy {
-        display: flex;
-        margin-right: $spacing_small;
+        visibility: visible;
       }
       &__actionMenu {
         &-sortBtn {
@@ -212,9 +169,6 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
   }
   &--stencilState {
     #{$averageVisualizerNameBlockName} {
-      &__value {
-        @include mix_stencil_animation;
-      }
       &__nameCTA {
         @include material('none');
         @include mix_border_generator;
@@ -232,7 +186,7 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
   }
   &--emptyState {
     #{$averageVisualizerNameBlockName} {
-      &__nameCTA, &__value, &__actionMenu{
+      &__nameCTA, &__actionMenu{
         display: none;
       }
       &__addMetric {
@@ -245,14 +199,6 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
     #{$averageVisualizerNameBlockName} {
       &__addMetric, &__metricSelectionDropdown {
         display: none;
-      }
-    }
-  }
-  &--panelEmptyState {
-    #{$averageVisualizerNameBlockName} {
-      &__value {
-        opacity: 0;
-        user-select: none;
       }
     }
   }
