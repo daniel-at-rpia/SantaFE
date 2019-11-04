@@ -269,14 +269,6 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
     align-items: center;
     background-color: $color_active;
     height: $securityGroup_content_canvases_right_metricLines_thickness*1.5;
-    opacity: $securityGroup_content_canvases_right_metricLines_opacity;
-  }
-  &--highlightState {
-    #{$averageVisualizerValueBlockName} {
-      &__line {
-        opacity: $securityGroup_content_canvases_right_metricLines_highlight_opacity;
-      }
-    }
   }
   &--negativeState {
     #{$averageVisualizerValueBlockName} {

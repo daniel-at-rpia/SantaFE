@@ -11,7 +11,7 @@ $securityGroupSimple_height: 2.25rem;
   @include mix_securityGroupSimple;
   flex: 1 1 auto;
   display: flex;
-  height: 3rem;
+  height: $securityGroupSimple_height;
   &__base {
     @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
     width: 100%;
@@ -32,12 +32,12 @@ $securityGroupSimple_height: 2.25rem;
     width: 100%;
     height: 100%;
     display: flex;
-    align-items: center;
     cursor: pointer;
     &-canvases {
       @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
       flex: 1 1 auto;
       display: flex;
+      margin: $spacing_x_small 0;
       overflow: hidden;
       &-left {
         flex: 0 1 $securityGroupSimple_left_width;
@@ -72,26 +72,72 @@ $securityGroupSimple_height: 2.25rem;
         overflow: hidden;
         margin-right: $spacing_x_small;
         &-metric {
-          flex: 0 0 33.33%;
+          flex: 1 1 33.33%;
           display: flex;
           align-items: center;
           &-value {
             @include mix_text_overflow;
-            @include mix_border_generator(0 $typical_border_width 0 0, $color_white);
             flex: 0 0 3rem;
-            padding-right: $spacing_xx_small;
             margin-right: $spacing_xx_small;
             font-size: $font_size_x_small;
             color: $font_color_inverse;
             text-align: right;
             user-select: none;
           }
-          &-line {
-            @include mix_border_radius(3px);
-            height: $securityGroup_content_canvases_right_metricLines_thickness;
-            background-color: $color_white;
-            &--negative {
+          &-negative {
+            @include mix_fixed_div(relative, $z_index_standard_base_item);
+            flex: 1 1 50%;
+            direction: rtl;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            overflow: hidden;
+            &-line {
+              @include mix_border_radius(3px, 'left');
+              visibility: hidden;
+              height: $securityGroup_content_canvases_right_metricLines_thickness;
               background-color: $color_negative;
+            }
+            &-mask {
+              @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
+              @include mix_alive('custom', transform $animation_duration_heavy);
+              height: 100%;
+              width: 100%;
+              transform: translate(0, 0);
+              opacity: 1;
+            }
+          }
+          &-positive {
+            @include mix_fixed_div(relative, $z_index_standard_base_item);
+            @include mix_border_generator(0 0 0 $typical_border_width, $color_white);
+            flex: 1 1 50%;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            overflow: hidden;
+            &-line {
+              @include mix_border_radius(3px, 'right');
+              height: $securityGroup_content_canvases_right_metricLines_thickness;
+              background-color: $color_white;
+            }
+            &-mask {
+              @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
+              @include mix_alive('custom', transform $animation_duration_heavy);
+              height: 100%;
+              width: 100%;
+              transform: translate(0, 0);
+            }
+          }
+          &--negative {
+            #{$securityGroupSimpleBlockName} {
+              &__content-canvases-right-metric {
+                &-negative-line {
+                  visibility: visible;
+                }
+                &-positive-line {
+                  visibility: hidden;
+                }
+              }
             }
           }
         }
@@ -141,7 +187,19 @@ $securityGroupSimple_height: 2.25rem;
               }
             }
           }
-          &-right {
+          &-right-metric {
+            &-negative-mask, &-positive-mask {
+              transform: translate(0, 0);
+              opacity: 0;
+            }
+            &-value {
+              @include mix_stencil_animation;
+            }
+            &-negative-line, &-positive-line {
+              @include mix_stencil_animation;
+              width: 75%;
+              visibility: visible;
+            }
           }
         }
       }
@@ -160,6 +218,11 @@ $securityGroupSimple_height: 2.25rem;
           &-left-content-value-text {
             color: $color_active;
           }
+          &-right-metric {
+            &-negative-mask, &-positive-mask {
+              display: none;
+            }
+          }
         }
       }
     }
@@ -169,6 +232,20 @@ $securityGroupSimple_height: 2.25rem;
       &__base {
         &-center {
           @include material('none');
+        }
+      }
+    }
+  }
+  &--metricCompleteState {
+    #{$securityGroupSimpleBlockName} {
+      &__content {
+        &-canvases-right-metric {
+          &-negative-mask {
+            transform: translate(-100%, 0);
+          }
+          &-positive-mask {
+            transform: translate(100%, 0);
+          }
         }
       }
     }

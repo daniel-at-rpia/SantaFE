@@ -77,6 +77,7 @@ export class DTOService {
         isSelected: false,
         isExpanded: false,
         isStencil: !rawData,
+        isMetricCompleted: false,
         areChartsReady: !!areChartsReady,
         averageCalculationComplete: false,
         pieChartComplete: false

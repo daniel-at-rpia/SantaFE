@@ -3,6 +3,8 @@ import {
   SecurityMetricOptionStub
 } from 'FEModels/frontend-stub-models.interface';
 
+export const MetricRenderDelay = 300;
+
 const FilterOptionsBoolean = [
   'Y',
   'N'

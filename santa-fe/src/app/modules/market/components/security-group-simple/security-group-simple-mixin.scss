@@ -17,6 +17,17 @@
             }
           }
           &-right {
+            &-metric {
+              &-negative-mask, &-positive-mask {
+                background-color: $color_white;
+              }
+              &-positive {
+                border-color: $font_color_major;
+                &-line {
+                  background-color: $font_color_major;
+                }
+              }
+            }
           }
           &-behind {
             &-rating {
@@ -37,6 +48,9 @@
             }
           }
           &-right {
+            &-positive-line {
+              background-color: $font_color_inverse;
+            }
           }
           &-behind {
             &-rating {
@@ -59,6 +73,13 @@
           &-left-content-value-text {
             color: $color_rating_aaa;
           }
+          &-right {
+            &-metric {
+              &-negative-mask, &-positive-mask {
+                background-color: $color_rating_aaa;
+              }
+            }
+          }
         }
       }
     }
@@ -74,6 +95,13 @@
         &-canvases {
           &-left-content-value-text {
             color: $color_rating_aa;
+          }
+          &-right {
+            &-metric {
+              &-negative-mask, &-positive-mask {
+                background-color: $color_rating_aa;
+              }
+            }
           }
         }
       }
@@ -91,6 +119,13 @@
           &-left-content-value-text {
             color: $color_rating_a;
           }
+          &-right {
+            &-metric {
+              &-negative-mask, &-positive-mask {
+                background-color: $color_rating_a;
+              }
+            }
+          }
         }
       }
     }
@@ -106,6 +141,13 @@
         &-canvases {
           &-left-content-value-text {
             color: $color_rating_bbb;
+          }
+          &-right {
+            &-metric {
+              &-negative-mask, &-positive-mask {
+                background-color: $color_rating_bbb;
+              }
+            }
           }
         }
       }
@@ -123,6 +165,13 @@
           &-left-content-value-text {
             color: $color_rating_bb;
           }
+          &-right {
+            &-metric {
+              &-negative-mask, &-positive-mask {
+                background-color: $color_rating_bb;
+              }
+            }
+          }
         }
       }
     }
@@ -139,6 +188,13 @@
           &-left-content-value-text {
             color: $color_rating_b;
           }
+          &-right {
+            &-metric {
+              &-negative-mask, &-positive-mask {
+                background-color: $color_rating_b;
+              }
+            }
+          }
         }
       }
     }
@@ -154,6 +210,13 @@
         &-canvases {
           &-left-content-value-text {
             color: $color_rating_ccctod;
+          }
+          &-right {
+            &-metric {
+              &-negative-mask, &-positive-mask {
+                background-color: $color_rating_ccctod;
+              }
+            }
           }
         }
       }

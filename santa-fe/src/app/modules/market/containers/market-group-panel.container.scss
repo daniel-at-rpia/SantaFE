@@ -226,10 +226,7 @@ $marketGroupPanel_utility_widgetHeight: 8.25rem;
       flex-direction: column;
       padding: 0 $marketGroupPanel_groups_list_padding $spacing_large $marketGroupPanel_groups_list_padding;
       &-item {
-        // margin-top: $spacing_large + $spacing_x_small;
-        &:first-of-type {
-          margin-top: $spacing_small;
-        }
+        margin-top: $spacing_small;
       }
     }
     &-errorPrompt {
@@ -326,6 +323,14 @@ $marketGroupPanel_utility_widgetHeight: 8.25rem;
   &--searchFailedState {
     #{$marketGroupPanelBlockName} {
       &__groups {
+        &-utility-prompt {
+          &-emptyText {
+            display: block;
+          }
+          &-highlightText, &-text {
+            display: none;
+          }
+        }
         &-list {
           display: none;
         }

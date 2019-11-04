@@ -41,7 +41,8 @@ import { SecurityDefinitionStub } from 'FEModels/frontend-stub-models.interface'
 import {
   PieChartConfiguratorOptions,
   SecurityGroupDefinitionMap,
-  BackendKeyDictionary
+  BackendKeyDictionary,
+  MetricRenderDelay
 } from 'Core/constants/marketConstants.constant';
 
 @Component({
@@ -304,7 +305,7 @@ export class MarketGroupPanel implements OnDestroy {
     this.state.searchResult.renderProgress = 100;
     this.initializeGroupStats();
     this.updateSort();
-    this.searchComplete();
+    setTimeout(this.searchComplete.bind(this), MetricRenderDelay);
   }
 
   private loadSearchResults(serverReturn){
@@ -354,6 +355,9 @@ export class MarketGroupPanel implements OnDestroy {
       });
       this.calculateGroupAverage(this.state.searchResult.securityGroupList.length);
     }
+    this.state.searchResult.securityGroupList.forEach((eachGroup) => {
+      eachGroup.state.isMetricCompleted = true;
+    });
     this.state.utility.visualizer.state.isStencil = false;
     this.state.configurator.dto.state.isLoading = false;
     this.state.isGroupDataLoaded = true;
