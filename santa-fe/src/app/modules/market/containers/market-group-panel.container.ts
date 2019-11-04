@@ -393,17 +393,17 @@ export class MarketGroupPanel implements OnDestroy {
             }
           }
         });
-        let average = !!eachStat.deltaScope ? Math.round(sum / respectiveLength * 1000)/1000 : Math.round(sum / respectiveLength * 100)/100;
+        let average = !!eachStat.deltaScope ? Math.round(sum / respectiveLength * 10)/10 : Math.round(sum / respectiveLength);
         eachStat.absMax = absMax;
         eachStat.value = average;
-        eachStat.percentage = Math.round(Math.abs(average)/absMax * 10000)/100;
+        eachStat.percentage = Math.round(Math.abs(average)/absMax * 100);
         this.state.searchResult.securityGroupList.forEach((eachGroup) => {
           const targetStat = eachGroup.data.stats.find((eachGroupStat) => {
             return eachGroupStat.label === eachStat.label && eachGroupStat.deltaScope === eachStat.deltaScope;
           });
           if (!!targetStat) {
             targetStat.absMax = absMax;
-            targetStat.percentage = Math.round(Math.abs(targetStat.value)/targetStat.absMax * 10000)/100;
+            targetStat.percentage = Math.round(Math.abs(targetStat.value)/targetStat.absMax * 100);
           }
         });
       }

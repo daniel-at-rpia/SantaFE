@@ -19,7 +19,17 @@
           </div>
         </div>
       </div>
-      <div class="sat-securityGroupSimple__content-canvases-right">lol
+      <div class="sat-securityGroupSimple__content-canvases-right">
+        <div class="sat-securityGroupSimple__content-canvases-right-metric" *ngFor="let eachStat of groupData.data.stats">
+          <div class="sat-securityGroupSimple__content-canvases-right-metric-value">{{eachStat.value}}</div>
+          <div
+            [ngStyle]="{'width': eachStat.percentage + '%'}"
+            [ngClass]="{
+              'sat-securityGroupSimple__content-canvases-right-metric-line': true,
+              'sat-securityGroupSimple__content-canvases-right-metric-line--negative': eachStat.value < 0
+            }">
+          </div>
+        </div>
       </div>
       <div class="sat-securityGroupSimple__content-canvases-behind">
         <div class="sat-securityGroupSimple__content-canvases-behind-rating">

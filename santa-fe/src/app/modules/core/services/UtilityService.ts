@@ -230,10 +230,10 @@ export class UtilityService {
       if (!!metricDTO.deltaScope) {
         deltaSubPack = groupDTO.data.metricPack.delta[metricDTO.deltaScope];
         value = !!deltaSubPack ? deltaSubPack[metricLabel] : null;
-        value = Math.round(value*1000)/1000;
+        value = Math.round(value*10)/10;
       } else {
         value = groupDTO.data.metricPack.raw[metricLabel];
-        value = Math.round(value*100)/100;
+        value = Math.round(value);
       }
       if (value === null || value === undefined) {
         return -3.1415926;
