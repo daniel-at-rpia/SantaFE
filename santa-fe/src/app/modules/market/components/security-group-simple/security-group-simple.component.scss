@@ -131,11 +131,17 @@ $securityGroupSimple_height: 2.25rem;
           &--negative {
             #{$securityGroupSimpleBlockName} {
               &__content-canvases-right-metric {
-                &-negative-line {
-                  visibility: visible;
+                &-negative {
+                  @include mix_border_generator(0 $typical_border_width 0 0, $color_negative);
+                  &-line {
+                    visibility: visible;
+                  }
                 }
-                &-positive-line {
-                  visibility: hidden;
+                &-positive {
+                  @include mix_border_generator(0);
+                  &-line {
+                    visibility: hidden;
+                  }
                 }
               }
             }

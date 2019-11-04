@@ -13,25 +13,28 @@
         &-canvases {
           &-left-content {
             &-name-text {
-              color: $font_color_major;
+              color: $font_color_minor;
             }
           }
           &-right {
             &-metric {
+              &-value {
+                color: $font_color_minor;
+              }
               &-negative-mask, &-positive-mask {
                 background-color: $color_white;
               }
               &-positive {
-                border-color: $font_color_major;
+                border-color: $font_color_minor;
                 &-line {
-                  background-color: $font_color_major;
+                  background-color: $font_color_minor;
                 }
               }
             }
           }
           &-behind {
             &-rating {
-              color: $font_color_major;
+              color: $font_color_minor;
             }
           }
         }
@@ -48,8 +51,13 @@
             }
           }
           &-right {
-            &-positive-line {
-              background-color: $font_color_inverse;
+            &-metric{
+              &-positive {
+                border-color: $font_color_minor;
+                &-line {
+                  background-color: $font_color_inverse;
+                }
+              }
             }
           }
           &-behind {
