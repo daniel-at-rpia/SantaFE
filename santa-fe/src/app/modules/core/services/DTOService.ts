@@ -54,8 +54,7 @@ export class DTOService {
   }
 
   public formSecurityGroupObject(
-    rawData: BESecurityGroupDTO,
-    areChartsReady: boolean
+    rawData: BESecurityGroupDTO
   ): SecurityGroupDTO {
     const object:SecurityGroupDTO = {
       data: {
@@ -77,37 +76,26 @@ export class DTOService {
         isSelected: false,
         isExpanded: false,
         isStencil: !rawData,
-        isMetricCompleted: false,
-        areChartsReady: !!areChartsReady,
-        averageCalculationComplete: false,
-        pieChartComplete: false
+        isMetricCompleted: false
       },
       graph: {
         leftPie: {
           name: this.utility.generateUUID(),
           colorScheme: SecurityGroupRatingColorScheme,
           chart: null,
-          rawSupportingData: !areChartsReady ? {} : this.utility.retrieveRawSupportingDataForLeftPie(rawData)
+          rawSupportingData: {}
+          // rawSupportingData: this.utility.retrieveRawSupportingDataForLeftPie(rawData)
         },
         rightPie: {
           name: this.utility.generateUUID(),
           colorScheme: SecurityGroupSeniorityColorScheme,
           chart: null,
-          rawSupportingData: !areChartsReady ? {} : this.utility.retrieveRawSupportingDataForRightPie(rawData)
+          rawSupportingData: {} 
+          // rawSupportingData: this.utility.retrieveRawSupportingDataForRightPie(rawData)
         }
       }
     };
     return object;
-  }
-
-  public updateSecurityGroupWithPieCharts(
-    rawData: BESecurityGroupDTO,
-    groupDTO: SecurityGroupDTO
-  ) {
-    const newObject = this.formSecurityGroupObject(rawData, true);
-    groupDTO.graph.leftPie.rawSupportingData = newObject.graph.leftPie.rawSupportingData;
-    groupDTO.graph.rightPie.rawSupportingData = newObject.graph.rightPie.rawSupportingData;
-    groupDTO.state.areChartsReady = true;
   }
 
   public generateSecurityGroupDefinitionFilterOptionList(
