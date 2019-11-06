@@ -4,6 +4,7 @@ import {
   SecurityGroupDefinitionDTO,
   SecurityGroupDefinitionConfiguratorDTO,
   SecurityGroupAverageVisualizerDTO,
+  SearchShortcutDTO,
   QuantComparerDTO
 } from 'FEModels/frontend-models.interface';
 import { SecurityDefinitionStub } from 'FEModels/frontend-stub-models.interface';
@@ -16,6 +17,7 @@ export interface MarketGroupPanelState {
     dto: SecurityGroupDefinitionConfiguratorDTO;
     showSelectedGroupConfig: boolean;
     cachedOriginalConfig: SecurityGroupDefinitionConfiguratorDTO;
+    shortcutList: Array<SearchShortcutDTO>;
   }
   searchResult: {
     securityGroupList: Array<SecurityGroupDTO>;

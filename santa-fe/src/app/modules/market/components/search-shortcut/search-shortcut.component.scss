@@ -1,0 +1,6 @@
+@import "global.scss";
+@import "modules/market/market.scss";
+
+.sat-securityDefinitionShortcut {
+  $securityDefinitionConfiguratorBlockName: &;
+}

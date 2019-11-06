@@ -11,6 +11,7 @@ import { SecurityGroupSimple } from 'Market/components/security-group-simple/sec
 import { SecurityGroupDefinition } from 'Market/components/security-group-definition/security-group-definition.component';
 import { SecurityGroupDefinitionConfigurator } from 'Market/components/definition-configurator/definition-configurator.component';
 import { SecurityGroupAverageVisualizer } from 'Market/components/security-group-average-visualizer/security-group-average-visualizer.component';
+import { SearchShortcut } from 'Market/components/search-shortcut/search-shortcut.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { SecurityGroupAverageVisualizer } from 'Market/components/security-group
     SecurityGroupSimple,
     SecurityGroupDefinition,
     SecurityGroupDefinitionConfigurator,
-    SecurityGroupAverageVisualizer
+    SecurityGroupAverageVisualizer,
+    SearchShortcut
   ],
   imports: [
     CommonModule,

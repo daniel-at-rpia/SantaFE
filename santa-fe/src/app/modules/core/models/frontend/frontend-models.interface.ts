@@ -102,6 +102,18 @@ export interface SecurityGroupAverageVisualizerDTO extends BasicDTOStructure {
   }
 }
 
+export interface SearchShortcutDTO extends BasicDTOStructure {
+  data: {
+
+  },
+  style: {
+
+  },
+  state: {
+
+  }
+}
+
 export interface QuantComparerDTO extends BasicDTOStructure {
   data: {
     isSpread: boolean;

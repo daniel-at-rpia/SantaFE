@@ -9,7 +9,8 @@ import {
   SecurityGroupDefinitionDTO,
   SecurityGroupDefinitionConfiguratorDTO,
   SecurityGroupAverageVisualizerDTO,
-  QuantComparerDTO
+  QuantComparerDTO,
+  SearchShortcutDTO
 } from 'FEModels/frontend-models.interface';
 import {
   SecurityGroupMetricBlock,
@@ -140,7 +141,7 @@ export class DTOService {
     return object;
   }
 
-  public createSecurityGroupDefinitionConfigurator():SecurityGroupDefinitionConfiguratorDTO {
+  public createSecurityGroupDefinitionConfigurator(): SecurityGroupDefinitionConfiguratorDTO {
     const object:SecurityGroupDefinitionConfiguratorDTO = {
       data: {
         filterSearchInputValue: '',
@@ -158,7 +159,7 @@ export class DTOService {
     return object;
   }
 
-  public formAverageVisualizerObject():SecurityGroupAverageVisualizerDTO{
+  public formAverageVisualizerObject(): SecurityGroupAverageVisualizerDTO {
     const object:SecurityGroupAverageVisualizerDTO = {
       data: {
         stats: [
@@ -185,7 +186,7 @@ export class DTOService {
   public formSecurityGroupMetricObject(
     label?: string,
     deltaScope?: string
-  ): SecurityGroupMetricBlock{
+  ): SecurityGroupMetricBlock {
     const object = {
       isEmpty: !label,
       sortHierarchy: null,
@@ -195,6 +196,16 @@ export class DTOService {
       absMax: 100,
       percentage: 75
     }
+    return object;
+  }
+
+  public formSearchShortcutObject(
+  ): SearchShortcutDTO {
+    const object: SearchShortcutDTO = {
+      data: {},
+      style: {},
+      state: {}
+    };
     return object;
   }
 

@@ -17,12 +17,19 @@
         <button (click)="onRestoreConfig()" class="sat-marketGroupPanel__configurator-selectedGroupConfigNotice-content-btn">Restore Config</button>
       </div>
     </div>
+    <ul class="sat-marketGroupPanel__configurator-shortcutList">
+      <li *ngFor="let eachShorcut of state.configurator.shortcutList" class="sat-marketGroupPanel__configurator-shortcutList-item">
+        <search-shortcut></search-shortcut>
+      </li>
+    </ul>
+    <!--
     <security-group-definition-configurator
       (onClickSearch)="onClickSearchInConfigurator($event)"
       (onClickLoadLongOptionList)="loadLongDefinitionOptionList($event)"
       [configuratorData]="state.configurator.dto"
       [highlightedVariant]="state.configurator.showSelectedGroupConfig"
     ></security-group-definition-configurator>
+    -->
   </section>
   <section class="sat-marketGroupPanel__configuratorCollapseCTA">
     <button

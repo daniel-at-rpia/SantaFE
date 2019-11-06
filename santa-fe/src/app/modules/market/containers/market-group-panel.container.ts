@@ -65,7 +65,8 @@ export class MarketGroupPanel implements OnDestroy {
       configurator: {
         dto: this.dtoService.createSecurityGroupDefinitionConfigurator(),
         showSelectedGroupConfig: false,
-        cachedOriginalConfig: null
+        cachedOriginalConfig: null,
+        shortcutList: []
       },
       isConfiguratorCollapsed: false,
       isGroupDataLoaded: false,
@@ -116,6 +117,11 @@ export class MarketGroupPanel implements OnDestroy {
     private restfulCommonService: RestfulCommService
   ){
     this.initiateComponentState();
+    this.state.configurator.shortcutList.push(this.dtoService.formSearchShortcutObject());
+    this.state.configurator.shortcutList.push(this.dtoService.formSearchShortcutObject());
+    this.state.configurator.shortcutList.push(this.dtoService.formSearchShortcutObject());
+    this.state.configurator.shortcutList.push(this.dtoService.formSearchShortcutObject());
+    this.state.configurator.shortcutList.push(this.dtoService.formSearchShortcutObject());
   }
 
   ngOnDestroy(){
