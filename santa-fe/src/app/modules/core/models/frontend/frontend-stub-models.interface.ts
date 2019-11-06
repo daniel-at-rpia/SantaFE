@@ -4,6 +4,7 @@ export interface SearchShortcutStub {
 
 interface SearchShortcutIncludedDefinitionStub {
   definitionKey: string;
+  groupByActive: boolean;
   selectedOptions: Array<string>;
 }
 

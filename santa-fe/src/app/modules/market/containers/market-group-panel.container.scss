@@ -38,11 +38,13 @@ $marketGroupPanel_utility_widgetHeight: 8.25rem;
       }
     }
     &-shortcutList {
+      @include mix_enable_scrollbar('vertical');
       flex: 1 1 auto;
       display: flex;
+      width: $securityGroupDefinitionConfigurator_width;
       flex-direction: column;
       &-item {
-        margin-bottom: $spacing_x_large;
+        margin: $spacing_medium;
       }
     }
     security-group-definition-configurator {

@@ -11,27 +11,117 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
     includedDefinitions: [
       {
         definitionKey: 'SECURITY_TYPE',
+        groupByActive: true,
         selectedOptions: []
-      },{
-        definitionKey: 'BAIL_IN_STATUS',
-        selectedOptions: ['Bail in']
       },{
         definitionKey: 'INDUSTRY',
+        groupByActive: true,
         selectedOptions: []
-      },
+      },{
+        definitionKey: 'RATING',
+        groupByActive: false,
+        selectedOptions: ['AAA','AA','A','BBB','BB','B']
+      },{
+        definitionKey: 'TENOR',
+        groupByActive: false,
+        selectedOptions: ['2Y','3Y','5Y']
+      }
     ]
   },{
     includedDefinitions: [
       {
         definitionKey: 'SECURITY_TYPE',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'SECTOR',
+        groupByActive: true,
         selectedOptions: []
       },{
         definitionKey: 'RATING_BUCKET',
-        selectedOptions: ['Bail in']
+        groupByActive: false,
+        selectedOptions: ['IG']
+      }
+    ]
+  },{
+    includedDefinitions: [
+      {
+        definitionKey: 'SECURITY_TYPE',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'INDUSTRY',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'RATING',
+        groupByActive: false,
+        selectedOptions: ['AAA','AA','A','BBB','BB','B']
+      },{
+        definitionKey: 'IS_NEWISSUE',
+        groupByActive: false,
+        selectedOptions: ['Y']
+      }
+    ]
+  },{
+    includedDefinitions: [
+      {
+        definitionKey: 'SECURITY_TYPE',
+        groupByActive: true,
+        selectedOptions: []
       },{
         definitionKey: 'SECTOR',
+        groupByActive: true,
+        selectedOptions: ['Energy']
+      },{
+        definitionKey: 'RATING',
+        groupByActive: true,
+        selectedOptions: ['AAA','AA','A','BBB','BB','B']
+      },{
+        definitionKey: 'TENOR',
+        groupByActive: false,
+        selectedOptions: ['2Y','3Y','5Y']
+      }
+    ]
+  },{
+    includedDefinitions: [
+      {
+        definitionKey: 'SECURITY_TYPE',
+        groupByActive: true,
         selectedOptions: []
-      },
+      },{
+        definitionKey: 'SECTOR',
+        groupByActive: true,
+        selectedOptions: ['Financial']
+      },{
+        definitionKey: 'RATING',
+        groupByActive: true,
+        selectedOptions: ['AAA','AA','A','BBB','BB','B']
+      },{
+        definitionKey: 'TENOR',
+        groupByActive: false,
+        selectedOptions: ['2Y','3Y','5Y']
+      }
+    ]
+  },{
+    includedDefinitions: [
+      {
+        definitionKey: 'SECURITY_TYPE',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'SECTOR',
+        groupByActive: true,
+        selectedOptions: ['Industrial']
+      },{
+        definitionKey: 'RATING',
+        groupByActive: true,
+        selectedOptions: ['AAA','AA','A','BBB','BB','B']
+      },{
+        definitionKey: 'TENOR',
+        groupByActive: false,
+        selectedOptions: ['2Y','3Y','5Y']
+      }
     ]
   }
 ];

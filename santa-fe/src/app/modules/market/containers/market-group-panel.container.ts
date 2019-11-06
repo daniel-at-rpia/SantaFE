@@ -131,6 +131,9 @@ export class MarketGroupPanel implements OnDestroy {
   }
 
   public onClickSearchShortcut(targetShortcut: SearchShortcutDTO){
+    if (this.state.configurator.selectedShortcut && this.state.configurator.selectedShortcut !== targetShortcut) {
+      this.state.configurator.selectedShortcut.state.isSelected = false;
+    }
     targetShortcut.state.isSelected = !targetShortcut.state.isSelected;
     this.state.configurator.selectedShortcut = this.state.configurator.selectedShortcut === targetShortcut ? null : targetShortcut;
     if (this.state.configurator.selectedShortcut) {
@@ -251,7 +254,7 @@ export class MarketGroupPanel implements OnDestroy {
     this.constants.searchShortcuts.forEach((eachShortcutStub) => {
       const definitionList = eachShortcutStub.includedDefinitions.map((eachIncludedDef) => {
         const definitionDTO = this.dtoService.formSecurityGroupDefinitionObject(this.constants.securityGroupDefinitionMap.find((eachDef) => {return eachDef.key === eachIncludedDef.definitionKey}));
-        definitionDTO.state.groupByActive = true;
+        definitionDTO.state.groupByActive = !!eachIncludedDef.groupByActive;
         if (eachIncludedDef.selectedOptions.length > 0) {
           definitionDTO.state.filterActive = true;
           definitionDTO.data.filterOptionList.forEach((eachFilterOption) => {
