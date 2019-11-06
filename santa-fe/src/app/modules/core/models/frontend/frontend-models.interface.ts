@@ -104,13 +104,14 @@ export interface SecurityGroupAverageVisualizerDTO extends BasicDTOStructure {
 
 export interface SearchShortcutDTO extends BasicDTOStructure {
   data: {
-
+    configuration: Array<SecurityGroupDefinitionDTO>
   },
   style: {
-
+    slotList: Array<SecurityGroupDefinitionDTO>
   },
   state: {
-
+    isSelected: boolean;
+    isUserInputBlocked: boolean;
   }
 }
 

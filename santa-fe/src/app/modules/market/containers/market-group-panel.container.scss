@@ -37,6 +37,14 @@ $marketGroupPanel_utility_widgetHeight: 8.25rem;
         }
       }
     }
+    &-shortcutList {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      &-item {
+        margin-bottom: $spacing_x_large;
+      }
+    }
     security-group-definition-configurator {
       flex: 1 1 auto;
       display: flex;

@@ -20,6 +20,7 @@ export class SecurityGroupDefinition implements OnInit {
   @Input() definitionData: SecurityGroupDefinitionDTO;
   @Input() selected: boolean;
   @Input() backgroundVariant: boolean;
+  @Input() heroVariant: boolean;
   @Input() interactionDisabled: boolean;
   @Output() onClick = new EventEmitter<SecurityGroupDefinitionDTO>();
   constructor(

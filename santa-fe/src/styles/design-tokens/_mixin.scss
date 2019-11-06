@@ -196,7 +196,9 @@
       @include mix_transition(20s);
     }@else if $weight == 'custom'{
       @include mix_transition('custom', $custom);
-    }@else{
+    }@else if $weight == 'material' {
+      @include mix_transition('custom', box-shadow $animation_duration_light);
+    }@else {
       transition: none;
     }
   }

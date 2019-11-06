@@ -1,6 +1,31 @@
 <article
+  (click)="onClickShortcut()"
   [ngClass]="{
-    'sat-searchShortcut': true
+    'sat-searchShortcut': true,
+    'sat-searchShortcut--selectedState': shortcutData.state.isSelected,
+    'sat-searchShortcut--userInputBlockedState': shortcutData.state.isUserInputBlocked
   }">
-  Shortcut
+  <section class="sat-searchShortcut__title">
+    <span class="sat-searchShortcut__title-text">Three Year And Five Year USD Auto Industry Group by Issuer</span>
+  </section>
+  <section class="sat-searchShortcut__configOverview">
+    <ul class="sat-searchShortcut__configOverview-slotList">
+      <li
+        *ngFor="let eachSlot of shortcutData.style.slotList"
+        [ngClass]="{
+          'sat-searchShortcut__configOverview-slotList-item': true,
+          'sat-searchShortcut__configOverview-slotList-item--filterActive': eachSlot?.state.filterActive,
+          'sat-searchShortcut__configOverview-slotList-item--empty': !eachSlot
+        }">
+        <div class="sat-searchShortcut__configOverview-slotList-item-filterActive">
+          <i class="fal fa-filter"></i>
+        </div>
+        <security-group-definition
+          *ngIf="!!eachSlot"
+          [definitionData]="eachSlot"
+          [backgroundVariant]="true">
+        </security-group-definition>
+      </li>
+    </ul>
+  </section>
 </article>

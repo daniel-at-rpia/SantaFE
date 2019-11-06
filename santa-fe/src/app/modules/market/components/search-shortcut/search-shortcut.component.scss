@@ -1,6 +1,87 @@
 @import "global.scss";
 @import "modules/market/market.scss";
 
-.sat-securityDefinitionShortcut {
-  $securityDefinitionConfiguratorBlockName: &;
+.sat-searchShortcut {
+  $searchShortcutBlockName: &;
+  @include material();
+  @include mix_alive('material');
+  @include mix_border_radius(15px);
+  width: $securityGroupDefinitionConfigurator_width;
+  display: flex;
+  flex-direction: column;
+  background-color: $color_white;
+  overflow: hidden;
+  &__title {
+    display: flex;
+    justify-content: center;
+    padding: $spacing_small;
+    margin-bottom: $spacing_small;
+    &-text {
+      text-align: center;
+    }
+  }
+  &__configOverview {
+    display: flex;
+    &-slotList {
+      flex: 1 1 auto;
+      display: flex;
+      flex-wrap: nowrap;
+      margin: 0 0 $spacing_small $spacing_small;
+      &-item {
+        @include mix_fixed_div(relative, $z_index_standard_base_item);
+        @include mix_border_radius(10px);
+        flex: 0 1 20%;
+        margin-right: $spacing_small;
+        padding: $spacing_small 0;
+        background-color: $color_active;
+        &-filterActive {
+          @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+          @include mix_border_radius(50%);
+          right: -$spacing_x_small;
+          top: -$spacing_x_small;
+          display: none;
+          justify-content: center;
+          align-items: center;
+          background-color: $color_filter;
+          padding: $spacing_x_small;
+          &>i {
+            color: $font_color_inverse;
+            font-size: $font_size_x_small;
+          }
+        }
+        &--empty {
+          background-color: $color_gray_2;
+        }
+        &--filterActive {
+          #{$searchShortcutBlockName} {
+            &__configOverview {
+              &-slotList-item-filterActive {
+                display: flex;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--selectedState {
+    @include material('none');
+    background-color: $color_active;
+    #{$searchShortcutBlockName} {
+      &__title {
+        &-text {
+          color: $font_color_inverse;
+        }
+      }
+      &__configOverview {
+        &-slotList-item--empty {
+          background-color: inherit;
+        }
+      }
+    }
+  }
+  &--userInputBlockedState {
+    @include material('none');
+    background-color: $color_gray_2;
+  }
 }

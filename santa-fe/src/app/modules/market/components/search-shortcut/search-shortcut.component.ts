@@ -20,10 +20,15 @@ import {
 
 export class SearchShortcut {
   @Input() shortcutData: SearchShortcutDTO;
-  // @Output() onClickLoadLongOptionList = new EventEmitter<SecurityGroupDefinitionDTO>();
-  // @Output() onClickSearch = new EventEmitter();
+  @Output() onClickShortcutCallback = new EventEmitter<SearchShortcutDTO>();
   constructor(
   ) {
+  }
+
+  public onClickShortcut() {
+    if (!this.shortcutData.state.isUserInputBlocked) {
+      this.onClickShortcutCallback.emit(this.shortcutData);
+    }
   }
 
 }

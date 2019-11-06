@@ -32,6 +32,7 @@ import {
   SecurityGroupDTO,
   SecurityGroupDefinitionDTO,
   SecurityGroupDefinitionConfiguratorDTO,
+  SearchShortcutDTO
 } from 'FEModels/frontend-models.interface';
 import { BESecurityGroupDTO } from 'BEModels/backend-models.interface';
 import { PayloadGetSantaGroups } from 'BEModels/backend-payloads.interface';
@@ -109,6 +110,7 @@ export class MarketGroupPanel implements OnDestroy {
     });
     this.onSelectPieConfiguratorMetric(this.state.utility.pieConfigurator.left, this.state.utility.pieConfigurator.left.options[5]);
     this.onSelectPieConfiguratorMetric(this.state.utility.pieConfigurator.right, this.state.utility.pieConfigurator.right.options[2]);
+    this.populateSearchShortcuts();
   }
 
   constructor(
@@ -117,15 +119,14 @@ export class MarketGroupPanel implements OnDestroy {
     private restfulCommonService: RestfulCommService
   ){
     this.initiateComponentState();
-    this.state.configurator.shortcutList.push(this.dtoService.formSearchShortcutObject());
-    this.state.configurator.shortcutList.push(this.dtoService.formSearchShortcutObject());
-    this.state.configurator.shortcutList.push(this.dtoService.formSearchShortcutObject());
-    this.state.configurator.shortcutList.push(this.dtoService.formSearchShortcutObject());
-    this.state.configurator.shortcutList.push(this.dtoService.formSearchShortcutObject());
   }
 
   ngOnDestroy(){
     this.getGroupsFromSearchSub.unsubscribe();
+  }
+
+  public onClickSearchShortcut(targetShortcut: SearchShortcutDTO){
+    targetShortcut.state.isSelected = !targetShortcut.state.isSelected;
   }
 
   public onClickSearchInConfigurator(){
@@ -228,6 +229,27 @@ export class MarketGroupPanel implements OnDestroy {
         return of('error');
       })
     ).subscribe();
+  }
+
+  private populateSearchShortcuts(){
+    const defListOne = [
+      this.dtoService.formSecurityGroupDefinitionObject(this.SecurityGroupDefinitionMap.find((eachDef) => {return eachDef.key === 'SECURITY_TYPE'})),
+      this.dtoService.formSecurityGroupDefinitionObject(this.SecurityGroupDefinitionMap.find((eachDef) => {return eachDef.key === 'BAIL_IN_STATUS'})),
+      this.dtoService.formSecurityGroupDefinitionObject(this.SecurityGroupDefinitionMap.find((eachDef) => {return eachDef.key === 'INDUSTRY'}))
+    ];
+    defListOne[1].state.filterActive = true;
+    defListOne[1].data.filterOptionList.forEach((eachFilterOption) => {
+      if (eachFilterOption.shortKey === 'Bail in') {
+        eachFilterOption.isSelected = true;
+      }
+    });
+    this.state.configurator.shortcutList.push(this.dtoService.formSearchShortcutObject(defListOne));
+    const defListTwo = [
+      this.dtoService.formSecurityGroupDefinitionObject(this.SecurityGroupDefinitionMap.find((eachDef) => {return eachDef.key === 'SECURITY_TYPE'})),
+      this.dtoService.formSecurityGroupDefinitionObject(this.SecurityGroupDefinitionMap.find((eachDef) => {return eachDef.key === 'RATING_BUCKET'})),
+      this.dtoService.formSecurityGroupDefinitionObject(this.SecurityGroupDefinitionMap.find((eachDef) => {return eachDef.key === 'SECTOR'}))
+    ];
+    this.state.configurator.shortcutList.push(this.dtoService.formSearchShortcutObject(defListTwo));
   }
 
   private startSearch(){

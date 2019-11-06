@@ -253,6 +253,32 @@ $securityGroupDefinition_backgroundVariant_img_size_secondary: 3rem;
     @include material('none');
     background-color: inherit;
     flex: 1 1 auto;
+    height: inherit;
+    width: inherit;
+    #{$securityGroupDefinitionBlockName} {
+      &__icon {
+        &-regularImg, &-ratingBucket-primaryImg, &-backendTenor-primaryImg, &-backendTenor-secondaryImg, &-securityType-box-text:first-of-type {
+          color: $font_color_inverse;
+        }
+        &-backendTenor-secondaryImg {
+          // margin-top: -$spacing_x_large;
+          // font-size: $securityGroupDefinition_backgroundVariant_img_size_secondary;
+        }
+        &-ratingBucket-secondaryImg {
+          color: $font_color_major;
+          // margin-top: -$spacing_large - $spacing_x_small;
+          //font-size: $securityGroupDefinition_backgroundVariant_img_size_secondary;
+        }
+      }
+      &__label, &__filter, &__filterMask, &__selectedGap {
+        display: none;
+      }
+    }
+  }
+  &--heroVariant {
+    @include material('none');
+    background-color: inherit;
+    flex: 1 1 auto;
     height: $securityGroupDefinition_backgroundVariant_img_size;
     #{$securityGroupDefinitionBlockName} {
       &__icon {

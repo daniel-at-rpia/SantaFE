@@ -18,8 +18,10 @@
       </div>
     </div>
     <ul class="sat-marketGroupPanel__configurator-shortcutList">
-      <li *ngFor="let eachShorcut of state.configurator.shortcutList" class="sat-marketGroupPanel__configurator-shortcutList-item">
-        <search-shortcut></search-shortcut>
+      <li *ngFor="let eachShortcut of state.configurator.shortcutList" class="sat-marketGroupPanel__configurator-shortcutList-item">
+        <search-shortcut
+          [shortcutData]="eachShortcut"
+          (onClickShortcutCallback)="onClickSearchShortcut($event)"></search-shortcut>
       </li>
     </ul>
     <!--
