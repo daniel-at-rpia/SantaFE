@@ -193,7 +193,7 @@ export class DTOService {
       label: label || '',
       value: 100,
       absMax: 100,
-      percentage: 100
+      percentage: 75
     }
     return object;
   }

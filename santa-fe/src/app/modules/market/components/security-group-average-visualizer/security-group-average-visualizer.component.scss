@@ -2,6 +2,7 @@
 @import "modules/market/market.scss";
 
 .sat-securityGroupAverageVisualizer {
+  $averageVisualizerBlockName: &;
   display: flex;
   flex-direction: row;
   &__groupName {
@@ -13,11 +14,24 @@
     margin-right: $spacing_small; // to align perfectly with each securityGroup card
     &-item {
       flex: 1 1 33.33%;
+      display: flex;
+      flex-direction: column;
+      &-line {
+        margin-top: $spacing_small;
+      }
+    }
+  }
+  &--panelEmptyState {
+    #{$averageVisualizerBlockName} {
+      &__metrics {
+        &-item-line {
+          visibility: hidden;
+        }
+      }
     }
   }
 }
 
-//    flex: 0 0 $securityGroup_content_canvases_right_metricValue_width;
 $averageVisualizerName_rightPadding: $spacing_large;
 $averageVisualizerName_nameCTA_height: 1.5rem;
 $averageVisualizerName_metricSelectionDropdown_width: 24rem;
@@ -194,14 +208,6 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
       }
     }
   }
-  &--emptyState#{$averageVisualizerNameBlockName}--nextEmpty {
-    margin: 0;
-    #{$averageVisualizerNameBlockName} {
-      &__addMetric, &__metricSelectionDropdown {
-        display: none;
-      }
-    }
-  }
 }
 
 .sat-securityGroupAverageVisualizerValue {
@@ -209,43 +215,94 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
   flex: 1 1 auto;
   display: flex;
   align-items: center;
-  &__line {
-    @include mix_border_radius(3px);
+  &__value {
+    @include mix_text_overflow;
+    flex: 0 0 $securityGroup_content_canvases_right_metricValue_width;
+    margin-right: $spacing_xx_small;
+    font-size: $font_size_x_small;
+    color: $font_color_major;
+    text-align: right;
+    user-select: none;
+  }
+  &__negative {
+    @include mix_fixed_div(relative, $z_index_standard_base_item);
+    flex: 1 1 50%;
+    direction: rtl;
     display: flex;
     align-items: center;
-    background-color: $color_active;
-    height: $securityGroup_content_canvases_right_metricLines_thickness*1.5;
+    height: 100%;
+    overflow: hidden;
+    &-line {
+      @include mix_border_radius(3px, 'left');
+      visibility: hidden;
+      height: $securityGroup_content_canvases_right_metricLines_thickness;
+      background-color: $color_negative;
+    }
+    &-mask {
+      @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
+      @include mix_alive('custom', transform $animation_duration_heavy);
+      height: 100%;
+      width: 100%;
+      transform: translate(-100%, 0);
+      opacity: 1;
+    }
   }
-  &--negativeState {
+  &__positive {
+    @include mix_fixed_div(relative, $z_index_standard_base_item);
+    @include mix_border_generator(0 0 0 $typical_border_width, $font_color_major);
+    flex: 1 1 50%;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    overflow: hidden;
+    &-line {
+      @include mix_border_radius(3px, 'right');
+      height: $securityGroup_content_canvases_right_metricLines_thickness;
+      background-color: $font_color_major;
+    }
+    &-mask {
+      @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
+      @include mix_alive('custom', transform $animation_duration_heavy);
+      height: 100%;
+      width: 100%;
+      transform: translate(100%, 0);
+    }
+  }
+  &--negative {
     #{$averageVisualizerValueBlockName} {
-      &__line {
-        background-color: $color_negative;
+      &__negative {
+        @include mix_border_generator(0 $typical_border_width 0 0, $color_negative);
+        &-line {
+          visibility: visible;
+        }
+      }
+      &__positive {
+        @include mix_border_generator(0);
+        &-line {
+          visibility: hidden;
+        }
       }
     }
   }
   &--stencilState {
     #{$averageVisualizerValueBlockName} {
-      &__line {
+      &__negative-mask, &__positive-mask {
+        transform: translate(0, 0);
+        opacity: 0;
+      }
+      &__value {
         @include mix_stencil_animation;
+      }
+      &__negative-line, &__positive-line {
+        @include mix_stencil_animation;
+        width: 75%;
+        visibility: visible;
       }
     }
   }
   &--emptyState {
-    #{$averageVisualizerValueBlockName} {
-      &__line {
-        width: 0!important;
-      }
-    }
-  }
-  &--emptyState#{$averageVisualizerValueBlockName}--nextEmpty {
-    display: none;
-  }
-  &--panelEmptyState {
-    #{$averageVisualizerValueBlockName} {
-      &__line {
-        display: none;
-      }
-    }
+    opacity: 0;
+    user-select: none;
   }
 }
 

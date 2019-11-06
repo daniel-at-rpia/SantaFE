@@ -1,6 +1,7 @@
 <article [ngClass]="{
   'sat-securityGroupAverageVisualizer': true,
-  'sat-securityGroupAverageVisualizer--stencilState': visualizerData.state.isStencil
+  'sat-securityGroupAverageVisualizer--stencilState': visualizerData.state.isStencil,
+  'sat-securityGroupAverageVisualizer--panelEmptyState': panelAtEmptyState
 }">
   <section class="sat-securityGroupAverageVisualizer__groupName">
   </section>
@@ -15,7 +16,6 @@
             'sat-securityGroupAverageVisualizerName--editingState': visualizerData.state.editingStat === eachMetric,
             'sat-securityGroupAverageVisualizerName--sortActiveState': eachMetric.sortHierarchy > 0,
             'sat-securityGroupAverageVisualizerName--emptyState': eachMetric.isEmpty,
-            'sat-securityGroupAverageVisualizerName--nextEmpty': statIndex < visualizerData.data.stats.length-1 && visualizerData.data.stats[statIndex+1].isEmpty,
             'sat-securityGroupAverageVisualizerName--stencilState': visualizerData.state.isStencil
           }">
           <section class="sat-securityGroupAverageVisualizerName__sortHierarchy">
@@ -31,7 +31,10 @@
             <span>Add Metric</span>
           </button>
           <section class="sat-securityGroupAverageVisualizerName__actionMenu">
+            <!--
+            TODO: temporarily disable deleting metrics until we figure out the proper UI
             <button (click)="onClickActionDelete(eachMetric)" class="sat-securityGroupAverageVisualizerName__actionMenu-deleteBtn santaBtn--iconOnly santaBtn--small fal fa-times"></button>
+            -->
             <button (click)="onClickActionEdit(eachMetric)" class="sat-securityGroupAverageVisualizerName__actionMenu-editBtn santaBtn--iconOnly santaBtn--small fal fa-pencil"></button>
             <button (click)="onClickMetricSort(eachMetric)" class="sat-securityGroupAverageVisualizerName__actionMenu-sortBtn santaBtn--iconOnly santaBtn--small fal fa-sort-amount-down-alt"></button>
           </section>
@@ -98,7 +101,25 @@
         </article>
       </div>
       <div class="sat-securityGroupAverageVisualizer__metrics-item-line">
-        
+        <article
+          [ngClass]="{
+            'sat-securityGroupAverageVisualizerValue': true,
+            'sat-securityGroupAverageVisualizerValue--negative': eachMetric.value < 0,
+            'sat-securityGroupAverageVisualizerValue--stencilState': visualizerData.state.isStencil,
+            'sat-securityGroupAverageVisualizerValue--emptyState': eachMetric.isEmpty
+          }">
+          <section class="sat-securityGroupAverageVisualizerValue__value">
+            {{eachMetric.value}}
+          </section>
+          <section class="sat-securityGroupAverageVisualizerValue__negative">
+            <div [ngStyle]="{'width': eachMetric.percentage + '%'}" class="sat-securityGroupAverageVisualizerValue__negative-line"></div>
+            <div class="sat-securityGroupAverageVisualizerValue__negative-mask"></div>
+          </section>
+          <section class="sat-securityGroupAverageVisualizerValue__positive">
+            <div [ngStyle]="{'width': eachMetric.percentage + '%'}" class="sat-securityGroupAverageVisualizerValue__positive-line"></div>
+            <div class="sat-securityGroupAverageVisualizerValue__positive-mask"></div>
+          </section>
+        </article>
       </div>
     </div>
   </section>
