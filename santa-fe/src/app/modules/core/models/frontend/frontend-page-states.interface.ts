@@ -18,6 +18,7 @@ export interface MarketGroupPanelState {
     showSelectedGroupConfig: boolean;
     cachedOriginalConfig: SecurityGroupDefinitionConfiguratorDTO;
     shortcutList: Array<SearchShortcutDTO>;
+    selectedShortcut: SearchShortcutDTO;
   }
   searchResult: {
     securityGroupList: Array<SecurityGroupDTO>;

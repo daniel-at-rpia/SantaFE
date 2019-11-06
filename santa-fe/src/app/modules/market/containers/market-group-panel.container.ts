@@ -43,7 +43,8 @@ import {
   PieChartConfiguratorOptions,
   SecurityGroupDefinitionMap,
   BackendKeyDictionary,
-  MetricRenderDelay
+  MetricRenderDelay,
+  SearchShortcuts
 } from 'Core/constants/marketConstants.constant';
 
 @Component({
@@ -59,7 +60,10 @@ export class MarketGroupPanel implements OnDestroy {
   searchServerReturnPackedInChunk$: Observable<Array<SecurityGroupDTO>>;
   getGroupsFromSearchSub: Subscription;
   PieChartConfigurationOptions = PieChartConfiguratorOptions;
-  SecurityGroupDefinitionMap = SecurityGroupDefinitionMap;
+  constants = {
+    securityGroupDefinitionMap: SecurityGroupDefinitionMap,
+    searchShortcuts: SearchShortcuts
+  }
 
   private initiateComponentState(){
     this.state = {
@@ -67,7 +71,8 @@ export class MarketGroupPanel implements OnDestroy {
         dto: this.dtoService.createSecurityGroupDefinitionConfigurator(),
         showSelectedGroupConfig: false,
         cachedOriginalConfig: null,
-        shortcutList: []
+        shortcutList: [],
+        selectedShortcut: null
       },
       isConfiguratorCollapsed: false,
       isGroupDataLoaded: false,
@@ -97,13 +102,13 @@ export class MarketGroupPanel implements OnDestroy {
       }
     };
     this.state.utility.pieConfigurator.left.options = this.PieChartConfigurationOptions.left.map((eachOption) => {
-      const targetDefinition = SecurityGroupDefinitionMap.find((eachDefinition) => {
+      const targetDefinition = this.constants.securityGroupDefinitionMap.find((eachDefinition) => {
         return eachDefinition.key === eachOption;
       })
       return targetDefinition;
     });
     this.state.utility.pieConfigurator.right.options = this.PieChartConfigurationOptions.right.map((eachOption) => {
-      const targetDefinition = SecurityGroupDefinitionMap.find((eachDefinition) => {
+      const targetDefinition = this.constants.securityGroupDefinitionMap.find((eachDefinition) => {
         return eachDefinition.key === eachOption;
       })
       return targetDefinition;
@@ -127,10 +132,21 @@ export class MarketGroupPanel implements OnDestroy {
 
   public onClickSearchShortcut(targetShortcut: SearchShortcutDTO){
     targetShortcut.state.isSelected = !targetShortcut.state.isSelected;
+    this.state.configurator.selectedShortcut = this.state.configurator.selectedShortcut === targetShortcut ? null : targetShortcut;
+    if (this.state.configurator.selectedShortcut) {
+      this.state.configurator.shortcutList.forEach((eachShortcut) => {
+        eachShortcut.state.isUserInputBlocked = true;
+      });
+      this.startSearch(this.state.configurator.selectedShortcut.data.configuration);
+    } else {
+      this.state.searchResult.securityGroupList = [];
+      this.state.isGroupDataLoaded = false;
+      this.state.utility.visualizer.state.isEmpty = true;
+    }
   }
 
   public onClickSearchInConfigurator(){
-    this.startSearch();
+    this.startSearch(this.state.configurator.dto.data.definitionList);
     // this.restfulCommonService.callAPI('santaSecurity/get-santa-securities', {req: 'GET'}).pipe(
     //   tap((serverReturn) => {
     //     console.log('return is ', serverReturn)
@@ -232,27 +248,25 @@ export class MarketGroupPanel implements OnDestroy {
   }
 
   private populateSearchShortcuts(){
-    const defListOne = [
-      this.dtoService.formSecurityGroupDefinitionObject(this.SecurityGroupDefinitionMap.find((eachDef) => {return eachDef.key === 'SECURITY_TYPE'})),
-      this.dtoService.formSecurityGroupDefinitionObject(this.SecurityGroupDefinitionMap.find((eachDef) => {return eachDef.key === 'BAIL_IN_STATUS'})),
-      this.dtoService.formSecurityGroupDefinitionObject(this.SecurityGroupDefinitionMap.find((eachDef) => {return eachDef.key === 'INDUSTRY'}))
-    ];
-    defListOne[1].state.filterActive = true;
-    defListOne[1].data.filterOptionList.forEach((eachFilterOption) => {
-      if (eachFilterOption.shortKey === 'Bail in') {
-        eachFilterOption.isSelected = true;
-      }
+    this.constants.searchShortcuts.forEach((eachShortcutStub) => {
+      const definitionList = eachShortcutStub.includedDefinitions.map((eachIncludedDef) => {
+        const definitionDTO = this.dtoService.formSecurityGroupDefinitionObject(this.constants.securityGroupDefinitionMap.find((eachDef) => {return eachDef.key === eachIncludedDef.definitionKey}));
+        definitionDTO.state.groupByActive = true;
+        if (eachIncludedDef.selectedOptions.length > 0) {
+          definitionDTO.state.filterActive = true;
+          definitionDTO.data.filterOptionList.forEach((eachFilterOption) => {
+            if (eachIncludedDef.selectedOptions.indexOf(eachFilterOption.shortKey) >= 0) {
+              eachFilterOption.isSelected = true;
+            }
+          });
+        }
+        return definitionDTO;
+      });
+      this.state.configurator.shortcutList.push(this.dtoService.formSearchShortcutObject(definitionList));
     });
-    this.state.configurator.shortcutList.push(this.dtoService.formSearchShortcutObject(defListOne));
-    const defListTwo = [
-      this.dtoService.formSecurityGroupDefinitionObject(this.SecurityGroupDefinitionMap.find((eachDef) => {return eachDef.key === 'SECURITY_TYPE'})),
-      this.dtoService.formSecurityGroupDefinitionObject(this.SecurityGroupDefinitionMap.find((eachDef) => {return eachDef.key === 'RATING_BUCKET'})),
-      this.dtoService.formSecurityGroupDefinitionObject(this.SecurityGroupDefinitionMap.find((eachDef) => {return eachDef.key === 'SECTOR'}))
-    ];
-    this.state.configurator.shortcutList.push(this.dtoService.formSearchShortcutObject(defListTwo));
   }
 
-  private startSearch(){
+  private startSearch(definitionList: Array<SecurityGroupDefinitionDTO>){
     this.state.configurator.cachedOriginalConfig = null;
     this.state.configurator.showSelectedGroupConfig = false;
     this.state.isGroupDataLoaded = false;
@@ -260,11 +274,11 @@ export class MarketGroupPanel implements OnDestroy {
     this.state.utility.visualizer.state.isStencil = true;
     this.state.searchResult.searchFailed = false;
     this.state.searchResult.renderProgress = 0;
-    const payload = this.formSearchPayload();
+    const payload = this.formSearchPayload(definitionList);
     this.performSearch(payload);
   }
 
-  private formSearchPayload(): PayloadGetSantaGroups{
+  private formSearchPayload(definitionList: Array<SecurityGroupDefinitionDTO>): PayloadGetSantaGroups{
     const currentTime = new Date();
     if (currentTime.getDay() === 1) {
       currentTime.setDate(currentTime.getDate() - 3);
@@ -283,7 +297,7 @@ export class MarketGroupPanel implements OnDestroy {
       santaGroupFilters: {},
       tenorOptions: ["2Y", "3Y", "5Y", "7Y", "10Y", "30Y"]
     };
-    this.state.configurator.dto.data.definitionList.forEach((eachDefinition) => {
+    definitionList.forEach((eachDefinition) => {
       if (eachDefinition.state.groupByActive || eachDefinition.state.isLocked) {
         const attributeName = this.utilityService.convertFEKey(eachDefinition.data.key);
         if (attributeName !== 'n/a') {
@@ -377,6 +391,11 @@ export class MarketGroupPanel implements OnDestroy {
   // }
 
   private searchComplete(){
+    if (this.state.configurator.selectedShortcut) {
+      this.state.configurator.shortcutList.forEach((eachShortcut) => {
+        eachShortcut.state.isUserInputBlocked = false;
+      });
+    }
     if (this.state.searchResult.securityGroupList.length > 0) {
       this.calculateGroupAverage(this.state.searchResult.securityGroupList.length);
     }
@@ -390,6 +409,10 @@ export class MarketGroupPanel implements OnDestroy {
   }
 
   private initializeGroupStats(){
+    this.state.utility.visualizer.data.stats.forEach((eachStat) => {
+      eachStat.value = 0;
+      eachStat.percentage = 75;
+    });
     this.state.searchResult.securityGroupList.forEach((eachGroup) => {
       eachGroup.data.stats = [];
       this.initializeStatForGroup(eachGroup);

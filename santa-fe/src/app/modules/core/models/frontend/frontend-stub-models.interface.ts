@@ -1,3 +1,12 @@
+export interface SearchShortcutStub {
+  includedDefinitions: Array<SearchShortcutIncludedDefinitionStub>
+}
+
+interface SearchShortcutIncludedDefinitionStub {
+  definitionKey: string;
+  selectedOptions: Array<string>;
+}
+
 export interface SecurityDefinitionStub {
   key: string;
   backendDtoAttrName?: string;

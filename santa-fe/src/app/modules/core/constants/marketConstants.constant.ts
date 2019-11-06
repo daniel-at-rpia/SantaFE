@@ -1,196 +1,228 @@
 import {
   SecurityDefinitionStub,
-  SecurityMetricOptionStub
+  SecurityMetricOptionStub,
+  SearchShortcutStub
 } from 'FEModels/frontend-stub-models.interface';
 
 export const MetricRenderDelay = 300;
 
-const FilterOptionsBoolean = [
-  'Y',
-  'N'
+export const SearchShortcuts: Array<SearchShortcutStub> = [
+  {
+    includedDefinitions: [
+      {
+        definitionKey: 'SECURITY_TYPE',
+        selectedOptions: []
+      },{
+        definitionKey: 'BAIL_IN_STATUS',
+        selectedOptions: ['Bail in']
+      },{
+        definitionKey: 'INDUSTRY',
+        selectedOptions: []
+      },
+    ]
+  },{
+    includedDefinitions: [
+      {
+        definitionKey: 'SECURITY_TYPE',
+        selectedOptions: []
+      },{
+        definitionKey: 'RATING_BUCKET',
+        selectedOptions: ['Bail in']
+      },{
+        definitionKey: 'SECTOR',
+        selectedOptions: []
+      },
+    ]
+  }
 ];
 
-const FilterOptionsBailInStatus = [
-  'Bail in',
-  'Not bail in'
-];
+// internal constants
+  const FilterOptionsBoolean = [
+    'Y',
+    'N'
+  ];
 
-const FilterOptionsCurrency = [
-  'CAD',
-  'USD',
-  'EUR',
-  'GBP'
-];
+  const FilterOptionsBailInStatus = [
+    'Bail in',
+    'Not bail in'
+  ];
 
-const FilterOptionsCouponType = [
-  'Float',
-  'None',
-  'Fixed for Life',
-  'Fixed-to-Float'
-];
+  const FilterOptionsCurrency = [
+    'CAD',
+    'USD',
+    'EUR',
+    'GBP'
+  ];
 
-const FilterOptionsRating = [
-  'AAA',
-  'AA',
-  'A',
-  'BBB',
-  'BB',
-  'B',
-  'CCC',
-  'CC',
-  'C',
-  'D',
-  'NR'
-];
+  const FilterOptionsCouponType = [
+    'Float',
+    'None',
+    'Fixed for Life',
+    'Fixed-to-Float'
+  ];
 
-const FilterOptionsRatingBucket = [
-  'Xover',
-  'IG',
-  'HY',
-  'NR'
-];
+  const FilterOptionsRating = [
+    'AAA',
+    'AA',
+    'A',
+    'BBB',
+    'BB',
+    'B',
+    'CCC',
+    'CC',
+    'C',
+    'D',
+    'NR'
+  ];
 
-const FilterOptionsTenor = [
-//  '0.25Y',
-//  '0.5Y',
-//  '0.75Y',
-//  '1Y',
-  '2Y',
-  '3Y',
-//  '4Y',
-  '5Y',
-//  '6Y',
-  '7Y',
-//  '8Y',
-//  '9Y',
-  '10Y',
-//  '15Y',
-//  '20Y',
-//  '25Y',
-  '30Y',
-//  '40Y',
-//  '50Y'
-];
+  const FilterOptionsRatingBucket = [
+    'Xover',
+    'IG',
+    'HY',
+    'NR'
+  ];
 
-const FilterOptionsSecurityType = [
-  'Bond',
-  'CDS'
-];
+  const FilterOptionsTenor = [
+  //  '0.25Y',
+  //  '0.5Y',
+  //  '0.75Y',
+  //  '1Y',
+    '2Y',
+    '3Y',
+  //  '4Y',
+    '5Y',
+  //  '6Y',
+    '7Y',
+  //  '8Y',
+  //  '9Y',
+    '10Y',
+  //  '15Y',
+  //  '20Y',
+  //  '25Y',
+    '30Y',
+  //  '40Y',
+  //  '50Y'
+  ];
 
-const FilterOptionsSectorType = [
-  'Auto',
-  'Basic Material',
-  'Communication',
-  'Consumers',
-  'Diversified',
-  'Energy',
-  'Financial',
-  'Health Care',
-  'Industrial',
-  'Real Estate',
-  'Technology'
-];
+  const FilterOptionsSecurityType = [
+    'Bond',
+    'CDS'
+  ];
 
-const FilterOptionsMaturityType = [
-  'Bullet',
-  'Callable',
-  'Perpetual'
-];
+  const FilterOptionsSectorType = [
+    'Auto',
+    'Basic Material',
+    'Communication',
+    'Consumers',
+    'Diversified',
+    'Energy',
+    'Financial',
+    'Health Care',
+    'Industrial',
+    'Real Estate',
+    'Technology'
+  ];
 
-const FilterOptionsSeniorityType = [
-  'Secured',
-  '1st lien',
-  '2nd lien',
-  '3rd lien',
-  'Asset Backed',
-  'Sr Preferred',
-  'Sr Unsecured',
-  'Sr Non Preferred',
-  'Unsecured',
-  'Sr Subordinated',
-  'Subordinated',
-  'Jr Subordinated'
-];
+  const FilterOptionsMaturityType = [
+    'Bullet',
+    'Callable',
+    'Perpetual'
+  ];
 
-const FilterOptionsTempPlaceholder = [
-  'Option 1',
-  'Option 2',
-  'Option 3'
-];
+  const FilterOptionsSeniorityType = [
+    'Secured',
+    '1st lien',
+    '2nd lien',
+    '3rd lien',
+    'Asset Backed',
+    'Sr Preferred',
+    'Sr Unsecured',
+    'Sr Non Preferred',
+    'Unsecured',
+    'Sr Subordinated',
+    'Subordinated',
+    'Jr Subordinated'
+  ];
 
-const FilterOptionsIndustryType = [
-  'Advertising & Marketing',
-  'Aerospace & Defense',
-  'Airlines',
-  'Apparel & Textile Products',
-  'Auto Parts Manufacturing',
-  'Automobiles Manufacturing',
-  'Banks',
-  'Biotechnology',
-  'Cable & Satellite',
-  'Casinos & Gaming',
-  'Chemicals',
-  'Coal Operations',
-  'Commercial Finance',
-  'Communications Equipment',
-  'Construction Materials Manufacturing',
-  'Consumer Finance',
-  'Consumer Products',
-  'Consumer Services',
-  'Containers & Packaging',
-  'Department Stores',
-  'Design, Manufacturing & Distribution',
-  'Distributors - Consumer Discretionary',
-  'Diversified Banks',
-  'Diversified Finan Serv',
-  'Educational Services',
-  'Electrical Equipment Manufacturing',
-  'Entertainment Content',
-  'Entertainment Resources',
-  'Exploration & Production',
-  'Financial Services',
-  'Food & Beverage',
-  'Forest & Paper Products Manufacturing',
-  'Funds & Trusts',
-  'Hardware',
-  'Health Care Facilities & Services',
-  'Home & Office Products Manufacturing',
-  'Home Improvement',
-  'Homebuilders',
-  'Industrial Other',
-  'Integrated Oils',
-  'Internet Media',
-  'Leisure Products Manufacturing',
-  'Life Insurance',
-  'Machinery Manufacturing',
-  'Managed Care',
-  'Manufactured Goods',
-  'Mass Merchants',
-  'Medical Equipment & Devices Manufacturing',
-  'Metals & Mining',
-  'Oil & Gas Services & Equipment',
-  'Pharmaceuticals',
-  'Pipeline',
-  'Power Generation',
-  'Property & Casualty Insurance',
-  'Publishing & Broadcasting',
-  'Railroad',
-  'Real Estate',
-  'Refining & Marketing',
-  'Renewable Energy',
-  'Restaurants',
-  'Retail - Consumer Discretionary',
-  'Retail - Consumer Staples',
-  'Semiconductors',
-  'Software & Services',
-  'Supermarkets & Pharmacies',
-  'Tobacco',
-  'Transportation & Logistics',
-  'Travel & Lodging',
-  'Utilities',
-  'Waste & Environment Services & Equipment',
-  'Wireless Telecommunications Services'
-];
+  const FilterOptionsTempPlaceholder = [
+    'Option 1',
+    'Option 2',
+    'Option 3'
+  ];
+
+  const FilterOptionsIndustryType = [
+    'Advertising & Marketing',
+    'Aerospace & Defense',
+    'Airlines',
+    'Apparel & Textile Products',
+    'Auto Parts Manufacturing',
+    'Automobiles Manufacturing',
+    'Banks',
+    'Biotechnology',
+    'Cable & Satellite',
+    'Casinos & Gaming',
+    'Chemicals',
+    'Coal Operations',
+    'Commercial Finance',
+    'Communications Equipment',
+    'Construction Materials Manufacturing',
+    'Consumer Finance',
+    'Consumer Products',
+    'Consumer Services',
+    'Containers & Packaging',
+    'Department Stores',
+    'Design, Manufacturing & Distribution',
+    'Distributors - Consumer Discretionary',
+    'Diversified Banks',
+    'Diversified Finan Serv',
+    'Educational Services',
+    'Electrical Equipment Manufacturing',
+    'Entertainment Content',
+    'Entertainment Resources',
+    'Exploration & Production',
+    'Financial Services',
+    'Food & Beverage',
+    'Forest & Paper Products Manufacturing',
+    'Funds & Trusts',
+    'Hardware',
+    'Health Care Facilities & Services',
+    'Home & Office Products Manufacturing',
+    'Home Improvement',
+    'Homebuilders',
+    'Industrial Other',
+    'Integrated Oils',
+    'Internet Media',
+    'Leisure Products Manufacturing',
+    'Life Insurance',
+    'Machinery Manufacturing',
+    'Managed Care',
+    'Manufactured Goods',
+    'Mass Merchants',
+    'Medical Equipment & Devices Manufacturing',
+    'Metals & Mining',
+    'Oil & Gas Services & Equipment',
+    'Pharmaceuticals',
+    'Pipeline',
+    'Power Generation',
+    'Property & Casualty Insurance',
+    'Publishing & Broadcasting',
+    'Railroad',
+    'Real Estate',
+    'Refining & Marketing',
+    'Renewable Energy',
+    'Restaurants',
+    'Retail - Consumer Discretionary',
+    'Retail - Consumer Staples',
+    'Semiconductors',
+    'Software & Services',
+    'Supermarkets & Pharmacies',
+    'Tobacco',
+    'Transportation & Logistics',
+    'Travel & Lodging',
+    'Utilities',
+    'Waste & Environment Services & Equipment',
+    'Wireless Telecommunications Services'
+  ];
 
 export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
   {

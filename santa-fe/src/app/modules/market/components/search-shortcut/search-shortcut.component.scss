@@ -18,6 +18,7 @@
     margin-bottom: $spacing_small;
     &-text {
       text-align: center;
+      user-select: none;
     }
   }
   &__configOverview {
@@ -64,6 +65,10 @@
       }
     }
   }
+  &--userInputBlockedState {
+    @include material('none');
+    background-color: $color_gray_2;
+  }
   &--selectedState {
     @include material('none');
     background-color: $color_active;
@@ -79,9 +84,5 @@
         }
       }
     }
-  }
-  &--userInputBlockedState {
-    @include material('none');
-    background-color: $color_gray_2;
   }
 }

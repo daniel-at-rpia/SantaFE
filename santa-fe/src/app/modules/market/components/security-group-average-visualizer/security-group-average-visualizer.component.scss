@@ -25,7 +25,7 @@
     #{$averageVisualizerBlockName} {
       &__metrics {
         &-item-line {
-          visibility: hidden;
+          opacity: 0;
         }
       }
     }
