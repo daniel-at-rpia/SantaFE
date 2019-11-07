@@ -15,6 +15,48 @@ $marketGroupPanel_utility_widgetHeight: 8.25rem;
     display: flex;
     flex-direction: column;
     padding: $spacing_medium 0 0 $spacing_medium;
+    &-utility {
+      @include mix_border_generator(0 0 $typical_border_width 0);
+      flex: 0 0 9rem;
+      display: flex;
+      padding-bottom: $spacing_small;
+      margin-bottom: $spacing_small;
+      &-hero {
+        @include mix_alive('custom', transform $animation_duration_light, opacity $animation_duration_light);
+        flex: 0 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: $spacing_large;
+        &-icon {
+          font-size: $font_size_hero;
+        }
+        &--left {
+          transform: translate(0, 0);
+          opacity: 1;
+        }
+        &--right {
+          transform: translate(25%, 0);
+          opacity: 0;
+        }
+      }
+      &-modeCTA {
+        @include mix_submissive_width();
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        &-title {
+          text-align: center;
+          font-size: $font_size_x_large;
+          margin-bottom: $spacing_small;
+          &--power {
+            display: none;
+          }
+        }
+      }
+    }
     &-selectedGroupConfigNotice {
       flex: 0 0 auto;
       overflow: hidden;
@@ -346,6 +388,32 @@ $marketGroupPanel_utility_widgetHeight: 8.25rem;
         }
         &-errorPrompt {
           display: flex;
+        }
+      }
+    }
+  }
+  &--powerMode {
+    #{$marketGroupPanelBlockName} {
+      &__configurator {
+        &-utility {
+          &-hero {
+            &--left {
+              opacity: 0;
+              transform: translate(-25%, 0);
+            }
+            &--right {
+              opacity: 1;
+              transform: translate(0, 0);
+            }
+          }
+          &-modeCTA {
+            &-title {
+              display: none;
+              &--power {
+                display: inline-block;
+              }
+            }
+          }
         }
       }
     }

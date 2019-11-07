@@ -13,6 +13,9 @@ export interface MarketState {
 }
 
 export interface MarketGroupPanelState {
+  powerModeActivated: boolean;
+  isConfiguratorCollapsed: boolean;
+  isGroupDataLoaded: boolean;
   configurator: {
     dto: SecurityGroupDefinitionConfiguratorDTO;
     showSelectedGroupConfig: boolean;
@@ -26,8 +29,6 @@ export interface MarketGroupPanelState {
     searchFailed: boolean;
     searchFailedError: string;
   }
-  isConfiguratorCollapsed: boolean;
-  isGroupDataLoaded: boolean;
   utility: {
     selectedWidget: string;
     visualizer: SecurityGroupAverageVisualizerDTO;

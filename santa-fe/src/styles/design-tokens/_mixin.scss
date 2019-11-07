@@ -145,6 +145,11 @@
     }
   }
 
+  @mixin mix_submissive_width(){
+    width: 0;   // legacy browser support
+    width: min-content;
+  }
+
   //Media Queries
   @mixin mq-small-min {
     @media (min-width: $mediaQuery_size_small) {

@@ -1,5 +1,6 @@
 <article [ngClass]="{
   'sat-marketGroupPanel': true, 
+  'sat-marketGroupPanel--powerMode': state.powerModeActivated,
   'sat-marketGroupPanel--selectedGroupConfigActiveState': state.configurator.showSelectedGroupConfig,
   'sat-marketGroupPanel--configuratorCollapsedState': state.isConfiguratorCollapsed,
   'sat-marketGroupPanel--averageVisualizerEnabledState': state.utility.selectedWidget === 'AVERAGE_VISUALIZER',
@@ -9,6 +10,23 @@
   'sat-marketGroupPanel--searchFailedState': state.searchResult.searchFailed
 }">
   <section class="sat-marketGroupPanel__configurator">
+    <div class="sat-marketGroupPanel__configurator-utility">
+      <div class="sat-marketGroupPanel__configurator-utility-hero sat-marketGroupPanel__configurator-utility-hero--left">
+        <i class="sat-marketGroupPanel__configurator-utility-hero-icon fal fa-satellite-dish"></i>
+      </div>
+      <div class="sat-marketGroupPanel__configurator-utility-modeCTA">
+        <span class="sat-marketGroupPanel__configurator-utility-modeCTA-title">Explore Mode</span>
+        <span class="sat-marketGroupPanel__configurator-utility-modeCTA-title sat-marketGroupPanel__configurator-utility-modeCTA-title--power">Power Mode</span>
+        <button (click)="switchMode()" class="santaBtn--labelled">
+          <i class="fal fa-repeat"></i>
+          <span>Switch</span>
+        </button>
+      </div>
+      <div class="sat-marketGroupPanel__configurator-utility-hero sat-marketGroupPanel__configurator-utility-hero--right">
+        <i class="sat-marketGroupPanel__configurator-utility-hero-icon fal fa-rocket"></i>
+      </div>
+    </div>
+    <!--
     <div class="sat-marketGroupPanel__configurator-selectedGroupConfigNotice">
       <div class="sat-marketGroupPanel__configurator-selectedGroupConfigNotice-content">
         <div class="sat-marketGroupPanel__configurator-selectedGroupConfigNotice-content-title">
@@ -17,6 +35,7 @@
         <button (click)="onRestoreConfig()" class="sat-marketGroupPanel__configurator-selectedGroupConfigNotice-content-btn">Restore Config</button>
       </div>
     </div>
+    -->
     <ul class="sat-marketGroupPanel__configurator-shortcutList">
       <li *ngFor="let eachShortcut of state.configurator.shortcutList" class="sat-marketGroupPanel__configurator-shortcutList-item">
         <search-shortcut

@@ -67,6 +67,9 @@ export class MarketGroupPanel implements OnDestroy {
 
   private initiateComponentState(){
     this.state = {
+      powerModeActivated: false,
+      isConfiguratorCollapsed: false,
+      isGroupDataLoaded: false,
       configurator: {
         dto: this.dtoService.createSecurityGroupDefinitionConfigurator(),
         showSelectedGroupConfig: false,
@@ -74,8 +77,6 @@ export class MarketGroupPanel implements OnDestroy {
         shortcutList: [],
         selectedShortcut: null
       },
-      isConfiguratorCollapsed: false,
-      isGroupDataLoaded: false,
       utility: {
         selectedWidget: 'AVERAGE_VISUALIZER',
         visualizer: this.dtoService.formAverageVisualizerObject(),
@@ -128,6 +129,10 @@ export class MarketGroupPanel implements OnDestroy {
 
   ngOnDestroy(){
     this.getGroupsFromSearchSub.unsubscribe();
+  }
+
+  public switchMode() {
+    this.state.powerModeActivated = !this.state.powerModeActivated;
   }
 
   public onClickSearchShortcut(targetShortcut: SearchShortcutDTO){
