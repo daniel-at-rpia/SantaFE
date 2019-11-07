@@ -8,39 +8,6 @@ export const MetricRenderDelay = 300;
 
 export const SearchShortcuts: Array<SearchShortcutStub> = [
   {
-    displayTitle: 'Financials grouped by rating, seniority, and tenor',
-    includedDefinitions: [
-      {
-        definitionKey: 'SECURITY_TYPE',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'SECTOR',
-        groupByActive: false,
-        selectedOptions: ['Financials']
-      },{
-        definitionKey: 'CURRENCY',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'RATING',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'TENOR',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'SENIORITY',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'COUPON_TYPE',
-        groupByActive: false,
-        selectedOptions: []
-      }
-    ]
-  },{
     displayTitle: 'Grouped by rating',
     includedDefinitions: [
       {
@@ -57,7 +24,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
         selectedOptions: []
       },{
         definitionKey: 'COUPON_TYPE',
-        groupByActive: false,
+        groupByActive: true,
         selectedOptions: []
       }
     ]
@@ -78,7 +45,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
         selectedOptions: []
       },{
         definitionKey: 'COUPON_TYPE',
-        groupByActive: false,
+        groupByActive: true,
         selectedOptions: []
       }
     ]
@@ -99,7 +66,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
         selectedOptions: []
       },{
         definitionKey: 'COUPON_TYPE',
-        groupByActive: false,
+        groupByActive: true,
         selectedOptions: []
       }
     ]
@@ -124,7 +91,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
         selectedOptions: []
       },{
         definitionKey: 'COUPON_TYPE',
-        groupByActive: false,
+        groupByActive: true,
         selectedOptions: []
       }
     ]
@@ -149,7 +116,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
         selectedOptions: []
       },{
         definitionKey: 'COUPON_TYPE',
-        groupByActive: false,
+        groupByActive: true,
         selectedOptions: []
       }
     ]
@@ -178,11 +145,44 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
         selectedOptions: []
       },{
         definitionKey: 'COUPON_TYPE',
-        groupByActive: false,
+        groupByActive: true,
         selectedOptions: []
       }
     ]
-  }
+  },{
+    displayTitle: 'Financials grouped by rating, seniority, and tenor',
+    includedDefinitions: [
+      {
+        definitionKey: 'SECURITY_TYPE',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'SECTOR',
+        groupByActive: false,
+        selectedOptions: ['Financials']
+      },{
+        definitionKey: 'CURRENCY',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'RATING',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'TENOR',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'SENIORITY',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'COUPON_TYPE',
+        groupByActive: true,
+        selectedOptions: []
+      }
+    ]
+  },
 ];
 
 // internal constants
