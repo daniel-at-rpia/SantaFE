@@ -116,6 +116,13 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
   }
   &--editingState {
     #{$averageVisualizerNameBlockName} {
+      &__ctas {
+        &-editBtn {
+          @include material('none');
+          @extend .santaBtn--inverseLabelled;
+          background-color: $color_active;
+        }
+      }
       &__addMetric {
         @include material('none');
         background-color: $color_active;

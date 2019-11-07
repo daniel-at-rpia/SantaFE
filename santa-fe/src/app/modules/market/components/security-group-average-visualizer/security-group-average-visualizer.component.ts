@@ -32,13 +32,18 @@ export class SecurityGroupAverageVisualizer implements OnInit {
   }
 
   public onClickActionEdit(targetMetricDTO: SecurityGroupMetricBlock){
-    this.visualizerData.state.editingStat = targetMetricDTO;
-    const matchedMetric = this.metricOptions.find((eachOption) => {
-      return eachOption.label == targetMetricDTO.label;
-    })
-    this.visualizerData.state.editingStatSelectedMetric = matchedMetric;
-    this.visualizerData.state.editingStatSelectedMetricValueType = targetMetricDTO.deltaScope ? 'DELTA' : 'RAW';
-    this.visualizerData.state.editingStatSelectedMetricDeltaType = targetMetricDTO.deltaScope;
+    if (this.visualizerData.state.editingStat === targetMetricDTO) {
+      this.visualizerData.state.editingStat = null;
+      this.clearEditingStatesBeforeExitDropdown();
+    } else {
+      this.visualizerData.state.editingStat = targetMetricDTO;
+      const matchedMetric = this.metricOptions.find((eachOption) => {
+        return eachOption.label == targetMetricDTO.label;
+      })
+      this.visualizerData.state.editingStatSelectedMetric = matchedMetric;
+      this.visualizerData.state.editingStatSelectedMetricValueType = targetMetricDTO.deltaScope ? 'DELTA' : 'RAW';
+      this.visualizerData.state.editingStatSelectedMetricDeltaType = targetMetricDTO.deltaScope;
+    }
   }
 
   public onClickActionDelete(targetMetricDTO: SecurityGroupMetricBlock){
