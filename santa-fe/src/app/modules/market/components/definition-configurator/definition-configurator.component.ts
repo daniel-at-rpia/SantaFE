@@ -73,7 +73,7 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
       }
       this.configuratorData.state.showFiltersFromDefinition = this.configuratorData.state.showFiltersFromDefinition === targetDefinition ? null : targetDefinition;
       if (this.configuratorData.state.showFiltersFromDefinition) {
-        this.configuratorData.state.showLongFilterOptions = this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.length > 5;  // any list with more than five options is considered a long list, will need extra room on the UI
+        this.configuratorData.state.showLongFilterOptions = this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.length > 5 || !!this.configuratorData.state.showFiltersFromDefinition.data.urlForGetLongOptionListFromServer;  // any list with more than five options or need to be loaded from server is considered a long list, will need extra room on the UI
       }
     }
   }

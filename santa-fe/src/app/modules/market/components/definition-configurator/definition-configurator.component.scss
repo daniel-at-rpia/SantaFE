@@ -1,7 +1,6 @@
 @import "global.scss";
 @import "modules/market/market.scss";
 
-//$securityGroupDefinitionConfigurator_filters_width: 12.5rem;
 $securityGroupDefinitionConfigurator_ctas_height: 6rem;
 .sat-securityGroupDefinitionConfigurator {
   $securityGroupDefinitionConfiguratorBlockName: &;
@@ -23,11 +22,14 @@ $securityGroupDefinitionConfigurator_ctas_height: 6rem;
       direction: ltr;
       &-item {
         display: flex;
-        align-items: center;
-        margin-top: $spacing_medium;
+        flex-direction: column;
+        margin-top: $spacing_large;
         &-selectBtn {
-          margin-right: $spacing_medium;
+          @include mix_border_radius(5px, 'top');
+          margin-left: $securityGroupDefinition_width/4;
+          width: $securityGroupDefinition_width/2 !important;
           font-size: $font_size_x_large;
+          align-self: flex-start;
           &--selected {
             @include material('none');
             background-color: $color_active;
@@ -38,6 +40,9 @@ $securityGroupDefinitionConfigurator_ctas_height: 6rem;
             color: $font_color_major;
             background-color: inherit;
           }
+        }
+        security-group-definition {
+          align-self: flex-start;
         }
         &:last-of-type {
           margin-bottom: $spacing_large;
@@ -57,8 +62,10 @@ $securityGroupDefinitionConfigurator_ctas_height: 6rem;
     &-content {
       @include mix_alive('custom', $animation_duration_light transform);
       @include mix_border_radius(5px);
+      flex: 1 1 auto;
       display: flex;
       flex-direction: column;
+      align-items: center;
       transform: translate(-125%, 0) scale(0.01, 1);
       &-title {
         display: flex;

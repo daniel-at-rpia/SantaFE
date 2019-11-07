@@ -1,9 +1,12 @@
 // Sharable styling in Market module
 
 $securityGroupDefinition_width: 5.5rem;
-$securityGroupDefinitionConfigurator_filters_width: 12rem;
+$securityGroupDefinitionConfigurator_filters_width: 15rem;
 $securityGroupDefinitionConfigurator_gapBetweenDefAndFilter: $spacing_large;
-$securityGroupDefinitionConfigurator_width: $iconButton_size_regular + $spacing_small + $securityGroupDefinition_width + $securityGroupDefinitionConfigurator_gapBetweenDefAndFilter + $securityGroupDefinitionConfigurator_filters_width;
+$securityGroupDefinitionConfigurator_width: 
+  $securityGroupDefinition_width + 
+  $securityGroupDefinitionConfigurator_gapBetweenDefAndFilter + 
+  $securityGroupDefinitionConfigurator_filters_width;
 
 
 $securityGroup_base_wheel_size: 6rem;  // currently only used for groupPanel's pieConfigurator since pie charts for SecurityGroupSimple is not yet enabled

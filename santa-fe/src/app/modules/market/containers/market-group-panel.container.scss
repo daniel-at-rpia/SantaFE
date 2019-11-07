@@ -29,16 +29,18 @@ $marketGroupPanel_configurator_width: $securityGroupDefinitionConfigurator_width
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: $spacing_large;
+        padding: $spacing_small;
         &-icon {
-          font-size: $font_size_hero;
+          font-size: $font_size_hero_large;
         }
         &--left {
+          color: $font_color_minor;
           transform: translate(0, 0);
           opacity: 1;
         }
         &--right {
-          transform: translate(25%, 0);
+          color: $font_color_major;
+          transform: translate(50%, 0);
           opacity: 0;
         }
       }
@@ -53,8 +55,10 @@ $marketGroupPanel_configurator_width: $securityGroupDefinitionConfigurator_width
           text-align: center;
           font-size: $font_size_x_large;
           margin-bottom: $spacing_small;
+          color: $font_color_minor;
           &--power {
             display: none;
+            color: $font_color_major;
           }
         }
       }
@@ -418,7 +422,7 @@ $marketGroupPanel_configurator_width: $securityGroupDefinitionConfigurator_width
           &-hero {
             &--left {
               opacity: 0;
-              transform: translate(-25%, 0);
+              transform: translate(-50%, 0);
             }
             &--right {
               opacity: 1;
