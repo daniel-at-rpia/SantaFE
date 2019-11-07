@@ -17,7 +17,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
       },{
         definitionKey: 'SECTOR',
         groupByActive: false,
-        selectedOptions: ['Financial']
+        selectedOptions: ['Financials']
       },{
         definitionKey: 'CURRENCY',
         groupByActive: true,
@@ -265,7 +265,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
     'Consumers',
     'Diversified',
     'Energy',
-    'Financial',
+    'Financials',
     'Health Care',
     'Industrial',
     'Real Estate',
