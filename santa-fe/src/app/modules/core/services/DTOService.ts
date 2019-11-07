@@ -59,7 +59,7 @@ export class DTOService {
   ): SecurityGroupDTO {
     const object:SecurityGroupDTO = {
       data: {
-        name: !!rawData ?  rawData.groupName : 'PLACEHOLDER',
+        name: !!rawData ?  rawData.groupName.replace(/\|/g, ' | ') : 'PLACEHOLDER',
         ratingLevel: !!rawData ? this.utility.mapRatings(rawData.metrics['ratingNoNotch']) : 1,
         ratingValue: !!rawData ? rawData.metrics['ratingNoNotch'] : 'AA',
         numOfSecurities: !!rawData ? rawData.numSecurities : 32,

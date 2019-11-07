@@ -143,6 +143,7 @@
       <div class="sat-marketGroupPanel__groups-utility-groupAverage">
         <security-group-average-visualizer
           [visualizerData]="state.utility.visualizer"
+          [expandedState]="state.isConfiguratorCollapsed"
           [panelAtEmptyState]="!state.configurator.dto.state.isLoading && !this.state.isGroupDataLoaded"
           (onMetricChange)="updateGroupStats()"
           (onSortHierarchyChange)="updateSort()">

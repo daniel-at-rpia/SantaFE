@@ -2,8 +2,7 @@
 @import "modules/market/market.scss";
 @import "./security-group-simple-mixin.scss";
 
-$securityGroupSimple_numberTag_size: 2.25rem; 
-$securityGroupSimple_height: 2.25rem;
+$securityGroupSimple_height: 2.5rem;
 .sat-securityGroupSimple {
   $securityGroupSimpleBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
@@ -20,7 +19,7 @@ $securityGroupSimple_height: 2.25rem;
     &-center {
       @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
       @include mix_alive('custom', $animation_duration_light box-shadow);
-      @include mix_border_radius(5px);
+      @include mix_border_radius(10px);
       @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
       flex: 1 1 auto;
       height: $securityGroupSimple_height;
@@ -36,7 +35,6 @@ $securityGroupSimple_height: 2.25rem;
       @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
       flex: 1 1 auto;
       display: flex;
-      margin: $spacing_x_small 0;
       overflow: hidden;
       &-left {
         flex: 0 1 $securityGroup_content_canvases_left_width;
@@ -49,13 +47,31 @@ $securityGroupSimple_height: 2.25rem;
           display: flex;
           align-items: center;
           overflow: hidden;
+          &-size {
+            @include mix_border_radius(5px);
+            flex: 0 0 3rem;
+            display: flex;
+            justify-content: center;
+            margin-right: $spacing_x_small;
+            background-color: $color_white;
+            padding: $spacing_xx_small 0;
+            overflow: hidden;
+            &-text {
+              @include mix_text_overflow();
+              line-height: $line_height_normal;
+              color: $font_color_major;
+              font-size: $font_size_small;
+              text-align: center;
+              user-select: none;
+            }
+          }
           &-name {
             flex: 1 1 auto;
             display: flex;
             overflow: hidden;
             &-text {
-              @include mix_text_overflow();
-              line-height: $line_height_normal;
+              @include mix_text_overflow_multi_line(2);
+              line-height: $line_height_small;
               color: $font_color_inverse;
               font-size: $font_size_small;
               text-align: center;
@@ -69,7 +85,7 @@ $securityGroupSimple_height: 2.25rem;
         flex: 1 1 auto;
         display: flex;
         overflow: hidden;
-        margin-right: $spacing_x_small;
+        margin: $spacing_x_small $spacing_x_small $spacing_x_small 0;
         &-metric {
           flex: 1 1 33.33%;
           display: flex;
@@ -155,6 +171,12 @@ $securityGroupSimple_height: 2.25rem;
         display: flex;
         justify-content: flex-end;
         align-items: center;
+        padding-left: $spacing_x_small;
+        &-size {
+          @include mix_rating_style;
+          font-size: $font_size_xx_large;
+          color: $font_color_inverse;
+        }
         &-rating {
           @include mix_rating_style;
           font-size: $font_size_xx_large;
@@ -172,39 +194,29 @@ $securityGroupSimple_height: 2.25rem;
       }
     }
   }
-  &--stencilState {
+  &--expandedState {
     #{$securityGroupSimpleBlockName} {
-      &__base {
-        &-center {
-          background-color: $color_white;
-        }
-      }
       &__content {
         &-canvases {
-          &-left-content {
-            &-name-text {
-              @include mix_stencil_animation;
-            }
-            &-value {
-              @include mix_stencil_animation;
-              &-text {
-                @include mix_stencil_animation;
-              }
-            }
+          &-left {
+            flex: 0 1 $securityGroup_content_canvases_left_width_expanded;
           }
-          &-right-metric {
-            &-negative-mask, &-positive-mask {
-              transform: translate(0, 0);
-              opacity: 0;
-            }
-            &-value {
-              @include mix_stencil_animation;
-            }
-            &-negative-line, &-positive-line {
-              @include mix_stencil_animation;
-              width: 75%;
-              visibility: visible;
-            }
+          &-behind {
+            width: $securityGroup_content_canvases_left_width_expanded;
+          }
+        }
+      }
+    }
+  }
+  &--metricCompleteState {
+    #{$securityGroupSimpleBlockName} {
+      &__content {
+        &-canvases-right-metric {
+          &-negative-mask {
+            transform: translate(-100%, 0);
+          }
+          &-positive-mask {
+            transform: translate(100%, 0);
           }
         }
       }
@@ -220,7 +232,7 @@ $securityGroupSimple_height: 2.25rem;
       }
       &__content {
         &-canvases {
-          &-left-content-value-text {
+          &-left-content-size-text {
             color: $color_active;
           }
           &-right-metric {
@@ -241,15 +253,39 @@ $securityGroupSimple_height: 2.25rem;
       }
     }
   }
-  &--metricCompleteState {
+  &--stencilState {
     #{$securityGroupSimpleBlockName} {
+      &__base {
+        &-center {
+          background-color: $color_white;
+        }
+      }
       &__content {
-        &-canvases-right-metric {
-          &-negative-mask {
-            transform: translate(-100%, 0);
+        &-canvases {
+          &-left-content {
+            &-size {
+              @include mix_stencil_animation;
+              &-text {
+                display: none;
+              }
+            }
+            &-name-text {
+              @include mix_stencil_animation;
+            }
           }
-          &-positive-mask {
-            transform: translate(100%, 0);
+          &-right-metric {
+            &-negative-mask, &-positive-mask {
+              transform: translate(0, 0);
+              opacity: 0;
+            }
+            &-value {
+              @include mix_stencil_animation;
+            }
+            &-negative-line, &-positive-line {
+              @include mix_stencil_animation;
+              width: 75%;
+              visibility: visible;
+            }
           }
         }
       }

@@ -21,6 +21,13 @@
       }
     }
   }
+  &--expandedState {
+    #{$averageVisualizerBlockName} {
+      &__groupName {
+        flex: 0 0 $securityGroup_content_canvases_left_width_expanded;
+      }
+    }
+  }
   &--panelEmptyState {
     #{$averageVisualizerBlockName} {
       &__metrics {

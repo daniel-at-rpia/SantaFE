@@ -12,6 +12,12 @@
       &__content {
         &-canvases {
           &-left-content {
+            &-size {
+              background-color: $font_color_minor;
+              &-text {
+                color: $font_color_inverse;
+              }
+            }
             &-name-text {
               color: $font_color_minor;
             }
@@ -33,6 +39,9 @@
             }
           }
           &-behind {
+            &-size {
+              color: $font_color_minor;
+            }
             &-rating {
               color: $font_color_minor;
             }
@@ -46,6 +55,12 @@
       &__content {
         &-canvases {
           &-left-content {
+            &-size {
+              background-color: $color_white;
+              &-text {
+                color: $color_active;
+              }
+            }
             &-name-text {
               color: $font_color_inverse;
             }
@@ -61,6 +76,9 @@
             }
           }
           &-behind {
+            &-size {
+              color: $font_color_inverse;
+            }
             &-rating {
               color: $font_color_inverse;
             }
@@ -78,8 +96,10 @@
       }
       &__content {
         &-canvases {
-          &-left-content-value-text {
-            color: $color_rating_aaa;
+          &-left-content {
+            &-size-text {
+              color: $color_rating_aaa;
+            }
           }
           &-right {
             &-metric {
@@ -101,8 +121,10 @@
       }
       &__content {
         &-canvases {
-          &-left-content-value-text {
-            color: $color_rating_aa;
+          &-left-content {
+            &-size-text {
+              color: $color_rating_aa;
+            }
           }
           &-right {
             &-metric {
@@ -124,8 +146,10 @@
       }
       &__content {
         &-canvases {
-          &-left-content-value-text {
-            color: $color_rating_a;
+          &-left-content {
+            &-size-text {
+              color: $color_rating_a;
+            }
           }
           &-right {
             &-metric {
@@ -147,8 +171,10 @@
       }
       &__content {
         &-canvases {
-          &-left-content-value-text {
-            color: $color_rating_bbb;
+          &-left-content {
+            &-size-text {
+              color: $color_rating_bbb;
+            }
           }
           &-right {
             &-metric {
@@ -170,8 +196,10 @@
       }
       &__content {
         &-canvases {
-          &-left-content-value-text {
-            color: $color_rating_bb;
+          &-left-content {
+            &-size-text {
+              color: $color_rating_bb;
+            }
           }
           &-right {
             &-metric {
@@ -193,8 +221,10 @@
       }
       &__content {
         &-canvases {
-          &-left-content-value-text {
-            color: $color_rating_b;
+          &-left-content {
+            &-size-text {
+              color: $color_rating_b;
+            }
           }
           &-right {
             &-metric {
@@ -216,8 +246,10 @@
       }
       &__content {
         &-canvases {
-          &-left-content-value-text {
-            color: $color_rating_ccctod;
+          &-left-content {
+            &-size-text {
+              color: $color_rating_ccctod;
+            }
           }
           &-right {
             &-metric {

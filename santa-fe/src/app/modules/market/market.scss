@@ -11,7 +11,7 @@ $securityGroupDefinitionConfigurator_width:
 
 $securityGroup_base_wheel_size: 6rem;  // currently only used for groupPanel's pieConfigurator since pie charts for SecurityGroupSimple is not yet enabled
 $securityGroup_content_canvases_left_width: 15rem;
-$securityGroup_content_canvases_left_width_expanded: 1rem;
+$securityGroup_content_canvases_left_width_expanded: $securityGroup_content_canvases_left_width + $securityGroupDefinitionConfigurator_width;
 $securityGroup_content_canvases_right_metricValue_width: 3rem;
 $securityGroup_content_canvases_right_alignmentLine_marginLeft: $spacing_small;
 $securityGroup_content_canvases_right_metricLines_thickness: 0.625rem;

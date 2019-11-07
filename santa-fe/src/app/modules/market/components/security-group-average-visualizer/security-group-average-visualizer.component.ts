@@ -22,6 +22,7 @@ export class SecurityGroupAverageVisualizer implements OnInit {
 
   metricOptions = MetricOptions;
   @Input() visualizerData: SecurityGroupAverageVisualizerDTO;
+  @Input() expandedState: boolean;
   @Input() panelAtEmptyState: boolean;
   @Output() onMetricChange = new EventEmitter();
   @Output() onSortHierarchyChange = new EventEmitter();

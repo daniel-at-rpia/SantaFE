@@ -15,8 +15,11 @@
     <div class="sat-securityGroupSimple__content-canvases">
       <div class="sat-securityGroupSimple__content-canvases-left">
         <div class="sat-securityGroupSimple__content-canvases-left-content">
+          <div class="sat-securityGroupSimple__content-canvases-left-content-size">
+            <span class="sat-securityGroupSimple__content-canvases-left-content-size-text">{{groupData.data.numOfSecurities}}</span>
+          </div>
           <div class="sat-securityGroupSimple__content-canvases-left-content-name">
-            <span class="sat-securityGroupSimple__content-canvases-left-content-name-text">[{{groupData.data.numOfSecurities}}] - {{groupData.data.name}}</span>
+            <span class="sat-securityGroupSimple__content-canvases-left-content-name-text">{{groupData.data.name}}</span>
           </div>
         </div>
       </div>
@@ -39,6 +42,11 @@
         </div>
       </div>
       <div class="sat-securityGroupSimple__content-canvases-behind">
+        <!--
+        <div class="sat-securityGroupSimple__content-canvases-behind-size">
+          {{groupData.data.numOfSecurities}}
+        </div>
+        -->
         <div class="sat-securityGroupSimple__content-canvases-behind-rating">
           {{groupData.data.ratingValue}}
         </div>
