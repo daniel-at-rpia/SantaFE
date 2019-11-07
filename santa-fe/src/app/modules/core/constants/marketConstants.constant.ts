@@ -37,7 +37,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
       },{
         definitionKey: 'COUPON_TYPE',
         groupByActive: false,
-        selectedOptions: ['Fixed for Life','Fixed']
+        selectedOptions: []
       }
     ]
   },{
@@ -58,7 +58,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
       },{
         definitionKey: 'COUPON_TYPE',
         groupByActive: false,
-        selectedOptions: ['Fixed for Life','Fixed']
+        selectedOptions: []
       }
     ]
   },{
@@ -79,7 +79,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
       },{
         definitionKey: 'COUPON_TYPE',
         groupByActive: false,
-        selectedOptions: ['Fixed for Life','Fixed']
+        selectedOptions: []
       }
     ]
   },{
@@ -100,7 +100,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
       },{
         definitionKey: 'COUPON_TYPE',
         groupByActive: false,
-        selectedOptions: ['Fixed for Life','Fixed']
+        selectedOptions: []
       }
     ]
   },{
@@ -125,7 +125,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
       },{
         definitionKey: 'COUPON_TYPE',
         groupByActive: false,
-        selectedOptions: ['Fixed for Life','Fixed']
+        selectedOptions: []
       }
     ]
   },{
@@ -150,7 +150,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
       },{
         definitionKey: 'COUPON_TYPE',
         groupByActive: false,
-        selectedOptions: ['Fixed for Life','Fixed']
+        selectedOptions: []
       }
     ]
   },{
@@ -179,7 +179,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
       },{
         definitionKey: 'COUPON_TYPE',
         groupByActive: false,
-        selectedOptions: ['Fixed for Life','Fixed']
+        selectedOptions: []
       }
     ]
   }

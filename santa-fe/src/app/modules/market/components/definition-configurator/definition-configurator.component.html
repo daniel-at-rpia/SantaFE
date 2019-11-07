@@ -15,10 +15,10 @@
           [ngClass]="{
             'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn': true,
             'santaBtn--iconOnly': true,
-            'fa-boxes': true,
-            'fal': !eachDefinition.state.groupByActive && !eachDefinition.state.isLocked,
+            'fal': true,
+            'fa-square': !eachDefinition.state.groupByActive && !eachDefinition.state.isLocked,
             'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn--selected': eachDefinition.state.groupByActive,
-            'fas': eachDefinition.state.groupByActive || eachDefinition.state.isLocked,
+            'fa-check-square': eachDefinition.state.groupByActive || eachDefinition.state.isLocked,
             'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn--locked': eachDefinition.state.isLocked
           }"></button>
         <security-group-definition
