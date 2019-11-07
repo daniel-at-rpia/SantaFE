@@ -42,21 +42,11 @@ export class SecurityGroupAverageVisualizer implements OnInit {
   }
 
   public onClickActionDelete(targetMetricDTO: SecurityGroupMetricBlock){
-    this.visualizerData.state.selectingStat = null;
     targetMetricDTO.isEmpty = true;
     targetMetricDTO.sortHierarchy = null;
     targetMetricDTO.percentage = 100;
     targetMetricDTO.deltaScope = null;
     this.onMetricChange.emit();
-  }
-
-  public onClickMetric(targetMetricDTO: SecurityGroupMetricBlock){
-    if (!this.visualizerData.state.isStencil) {
-      this.visualizerData.state.selectingStat = this.visualizerData.state.selectingStat === targetMetricDTO ? null : targetMetricDTO;
-      if (this.visualizerData.state.editingStat === targetMetricDTO) {
-        this.visualizerData.state.editingStat = null;
-      }
-    }
   }
 
   public addMetric(targetMetricDTO: SecurityGroupMetricBlock){
@@ -73,23 +63,31 @@ export class SecurityGroupAverageVisualizer implements OnInit {
   }
 
   public onClickMetricSort(targetMetric: SecurityGroupMetricBlock){
-    if (targetMetric.sortHierarchy > 0){
-      this.visualizerData.data.stats.forEach((eachStat) => {
-        if (eachStat.sortHierarchy > targetMetric.sortHierarchy) {
-          eachStat.sortHierarchy = eachStat.sortHierarchy - 1;
-        }
-      });
+    if (targetMetric.sortHierarchy > 0) {
       targetMetric.sortHierarchy = null;
     } else {
-      let currentHierechyLevel = 0;
       this.visualizerData.data.stats.forEach((eachStat) => {
-        if (eachStat.sortHierarchy > 0) {
-          currentHierechyLevel++;
-        }
+        eachStat.sortHierarchy = null;
       });
-      targetMetric.sortHierarchy = currentHierechyLevel + 1;
+      targetMetric.sortHierarchy = 1;
     }
-    this.visualizerData.state.selectingStat = null;
+    // This version is for soring on mutiple metrics, which we currently won't support
+    // if (targetMetric.sortHierarchy > 0){
+    //   this.visualizerData.data.stats.forEach((eachStat) => {
+    //     if (eachStat.sortHierarchy > targetMetric.sortHierarchy) {
+    //       eachStat.sortHierarchy = eachStat.sortHierarchy - 1;
+    //     }
+    //   });
+    //   targetMetric.sortHierarchy = null;
+    // } else {
+    //   let currentHierechyLevel = 0;
+    //   this.visualizerData.data.stats.forEach((eachStat) => {
+    //     if (eachStat.sortHierarchy > 0) {
+    //       currentHierechyLevel++;
+    //     }
+    //   });
+    //   targetMetric.sortHierarchy = currentHierechyLevel + 1;
+    // }
     this.visualizerData.state.editingStat = null;
     this.onSortHierarchyChange.emit();
   }
@@ -121,8 +119,11 @@ export class SecurityGroupAverageVisualizer implements OnInit {
     this.onMetricChange.emit();
   }
 
+  public dropdownClose(){
+    this.clearEditingStatesBeforeExitDropdown();
+  }
+
   private clearEditingStatesBeforeExitDropdown(){
-    this.visualizerData.state.selectingStat = null;
     this.visualizerData.state.editingStat = null;
     this.visualizerData.state.editingStatSelectedMetric = null;
     this.visualizerData.state.editingStatSelectedMetricDeltaType = null;

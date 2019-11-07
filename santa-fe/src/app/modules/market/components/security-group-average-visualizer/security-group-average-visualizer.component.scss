@@ -32,7 +32,6 @@
   }
 }
 
-$averageVisualizerName_rightPadding: $spacing_large;
 $averageVisualizerName_nameCTA_height: 1.5rem;
 $averageVisualizerName_metricSelectionDropdown_width: 24rem;
 $averageVisualizerName_metricSelectionDropdown_height: 27rem;
@@ -42,38 +41,35 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
   flex: 1 1 auto;
   display: flex;
-  flex-wrap: nowrap;
-  justify-content: flex-end;
-  align-items: center;
-  padding-right: $averageVisualizerName_rightPadding;
-  &__sortHierarchy {
-    flex: 0 0 $securityGroup_content_canvases_right_metricValue_width;
+  flex-direction: column;
+  &__ctas {
     display: flex;
-    visibility: hidden;
-    &-content {
-      @include mix_border_radius(5px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: $color_active;
-      padding: $spacing_xx_small $spacing_x_small;
-      margin-right: $spacing_small;
-      &-icon {
-        color: $font_color_inverse;
-        font-size: $font_size_x_small;
-      }
-      &-text {
-        margin-left: $spacing_x_small;
-        color: $font_color_inverse;
-        font-size: $font_size_x_small;
-      }
+    justify-content: space-around;
+    margin: 0 $spacing_medium $spacing_small $spacing_medium;
+    &-editBtn {
+      flex: 1 1 50%;
+      background-color: $color_edit;
+      padding: $spacing_x_small $spacing_small;
+      margin: 0 $spacing_small;
+    }
+    &-sortBtn {
+      flex: 1 1 50%;
+      padding: $spacing_x_small $spacing_small;
+      margin: 0 $spacing_small;
     }
   }
-  &__nameCTA {
+  &__name {
+    @include mix_border_generator;
+    @include mix_border_radius(3px);
     flex: 1 1 auto;
+    justify-content: center;
+    background-color: $color_white;
     height: $averageVisualizerName_nameCTA_height;
     padding: 0;
+    margin: 0 $spacing_medium;
+    color: $font_color_major;
     font-size: $font_size_small;
+    text-align: center;
     &--delta {
       display: none;
     }
@@ -92,30 +88,10 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
       font-size: $font_size_x_small;
     }
   }
-  &__actionMenu {
-    @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
-    @include mix_alive('custom', $animation_duration_light transform);
-    @include mix_calculate(width, 100%, $securityGroup_content_canvases_right_metricValue_width + $averageVisualizerName_rightPadding, '-');
-    display: flex;
-    justify-content: space-around;
-    top: -$iconButton_size_small - $spacing_small;
-    right: $averageVisualizerName_rightPadding;
-    transform: scale(0.01);
-    &-deleteBtn {
-      background-color: $color_kill;
-      color: $font_color_inverse;
-    }
-    &-editBtn {
-      background-color: $color_edit;
-      color: $font_color_inverse;
-    }
-    &-sortBtn {
-
-    }
-  }
   &__metricSelectionDropdown {
     @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
     top: $spacing_large;
+    right: 0;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -130,23 +106,11 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
   }
   &--showingDeltaState {
     #{$averageVisualizerNameBlockName} {
-      &__nameCTA {
+      &__name {
         display: none;
         &--delta {
           display: flex;
         }
-      }
-    }
-  }
-  &--selectedState {
-    #{$averageVisualizerNameBlockName} {
-      &__nameCTA {
-        @include material('none');
-        background-color: $color_active;
-        color: $font_color_inverse;
-      }
-      &__actionMenu {
-        transform: scale(1);
       }
     }
   }
@@ -155,9 +119,6 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
       &__addMetric {
         @include material('none');
         background-color: $color_active;
-      }
-      &__actionMenu {
-        transform: scale(0.01);
       }
       &__metricSelectionDropdown-content {
         @include mix_border_generator;
@@ -170,28 +131,19 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
   }
   &--sortActiveState {
     #{$averageVisualizerNameBlockName} {
-      &__sortHierarchy {
-        visibility: visible;
-      }
-      &__actionMenu {
+      &__ctas {
         &-sortBtn {
+          @include material('none');
+          @extend .santaBtn--inverseLabelled;
           background-color: $color_active;
-          color: $font_color_inverse;
         }
       }
     }
   }
   &--stencilState {
     #{$averageVisualizerNameBlockName} {
-      &__nameCTA {
-        @include material('none');
-        @include mix_border_generator;
-      }
       &__addMetric {
         @include material('none');
-      }
-      &__actionMenu {
-        display: none;
       }
       &__metricSelectionDropdown {
         display: none;
@@ -200,7 +152,7 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
   }
   &--emptyState {
     #{$averageVisualizerNameBlockName} {
-      &__nameCTA, &__actionMenu{
+      &__name {
         display: none;
       }
       &__addMetric {
@@ -308,10 +260,18 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
 
 .sat-securityGroupAverageVisualizerNameDropdownContent {
   $averageVisualizerNameDropdownBlockName: &;
+  @include mix_fixed_div(relative, $z_index_standard_base_item);
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   padding: $spacing_medium;
+  &__closeBtn {
+    @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+    top: $spacing_small;
+    right: $spacing_small;
+    background-color: $color_kill;
+    color: $font_color_inverse;
+  }
   &__chooseMetric {
     display: flex;
     flex-direction: column;

@@ -172,7 +172,6 @@ export class DTOService {
         isEmpty: true,
         isStencil: false,
         isExpanded: false,
-        selectingStat: null,
         editingStat: null,
         editingStatSelectedMetric: null,
         editingStatSelectedMetricValueType: null,

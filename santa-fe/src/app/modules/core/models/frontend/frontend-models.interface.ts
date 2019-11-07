@@ -94,7 +94,6 @@ export interface SecurityGroupAverageVisualizerDTO extends BasicDTOStructure {
     isEmpty: boolean;
     isStencil: boolean;
     isExpanded: boolean;
-    selectingStat: SecurityGroupMetricBlock;
     editingStat: SecurityGroupMetricBlock;
     editingStatSelectedMetric: any;
     editingStatSelectedMetricValueType: string;

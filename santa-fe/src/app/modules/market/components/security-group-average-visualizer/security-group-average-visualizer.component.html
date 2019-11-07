@@ -12,32 +12,31 @@
           [ngClass]="{
             'sat-securityGroupAverageVisualizerName': true,
             'sat-securityGroupAverageVisualizerName--showingDeltaState': eachMetric.deltaScope,
-            'sat-securityGroupAverageVisualizerName--selectedState': visualizerData.state.selectingStat === eachMetric,
             'sat-securityGroupAverageVisualizerName--editingState': visualizerData.state.editingStat === eachMetric,
             'sat-securityGroupAverageVisualizerName--sortActiveState': eachMetric.sortHierarchy > 0,
             'sat-securityGroupAverageVisualizerName--emptyState': eachMetric.isEmpty,
             'sat-securityGroupAverageVisualizerName--stencilState': visualizerData.state.isStencil
           }">
-          <section class="sat-securityGroupAverageVisualizerName__sortHierarchy">
-            <div class="sat-securityGroupAverageVisualizerName__sortHierarchy-content">
-              <i class="sat-securityGroupAverageVisualizerName__sortHierarchy-content-icon fal fa-sort-amount-down-alt"></i>
-              <span class="sat-securityGroupAverageVisualizerName__sortHierarchy-content-text">{{eachMetric.sortHierarchy}}</span>
-            </div>
-          </section>
-          <button (click)="onClickMetric(eachMetric)" class="sat-securityGroupAverageVisualizerName__nameCTA">{{eachMetric.label}}</button>
-          <button (click)="onClickMetric(eachMetric)" class="sat-securityGroupAverageVisualizerName__nameCTA sat-securityGroupAverageVisualizerName__nameCTA--delta">{{eachMetric.label}} Δ {{eachMetric.deltaScope}}</button>
-          <button (click)="addMetric(eachMetric)" class="sat-securityGroupAverageVisualizerName__addMetric santaBtn--labelled santaBtn--inverseLabelled">
-            <i class="sat-securityGroupAverageVisualizerName__addMetric-icon fal fa-plus"></i>
-            <span>Add Metric</span>
-          </button>
-          <section class="sat-securityGroupAverageVisualizerName__actionMenu">
+          <section class="sat-securityGroupAverageVisualizerName__ctas">
             <!--
             TODO: temporarily disable deleting metrics until we figure out the proper UI
             <button (click)="onClickActionDelete(eachMetric)" class="sat-securityGroupAverageVisualizerName__actionMenu-deleteBtn santaBtn--iconOnly santaBtn--small fal fa-times"></button>
             -->
-            <button (click)="onClickActionEdit(eachMetric)" class="sat-securityGroupAverageVisualizerName__actionMenu-editBtn santaBtn--iconOnly santaBtn--small fal fa-pencil"></button>
-            <button (click)="onClickMetricSort(eachMetric)" class="sat-securityGroupAverageVisualizerName__actionMenu-sortBtn santaBtn--iconOnly santaBtn--small fal fa-sort-amount-down-alt"></button>
+            <button (click)="onClickActionEdit(eachMetric)" class="sat-securityGroupAverageVisualizerName__ctas-editBtn santaBtn--labelled santaBtn--inverseLabelled santaBtn--small">
+              <i class="fal fa-pencil"></i>
+              <span>Edit</span>
+            </button>
+            <button (click)="onClickMetricSort(eachMetric)" class="sat-securityGroupAverageVisualizerName__ctas-sortBtn santaBtn--labelled santaBtn--small">
+              <i class="fal fa-sort-amount-down-alt"></i>
+              <span>Sort</span>
+            </button>
           </section>
+          <section class="sat-securityGroupAverageVisualizerName__name">{{eachMetric.label}}</section>
+          <section class="sat-securityGroupAverageVisualizerName__name sat-securityGroupAverageVisualizerName__name--delta">{{eachMetric.label}} Δ {{eachMetric.deltaScope}}</section>
+          <button (click)="addMetric(eachMetric)" class="sat-securityGroupAverageVisualizerName__addMetric santaBtn--labelled santaBtn--inverseLabelled">
+            <i class="sat-securityGroupAverageVisualizerName__addMetric-icon fal fa-plus"></i>
+            <span>Add Metric</span>
+          </button>
           <section class="sat-securityGroupAverageVisualizerName__metricSelectionDropdown">
             <div class="sat-securityGroupAverageVisualizerName__metricSelectionDropdown-content">
               <article
@@ -46,6 +45,7 @@
                   'sat-securityGroupAverageVisualizerNameDropdownContent--selectedMetric': !!visualizerData.state.editingStatSelectedMetric,
                   'sat-securityGroupAverageVisualizerNameDropdownContent--selectedValueType': visualizerData.state.editingStatSelectedMetricValueType === 'DELTA'
                 }">
+                <button (click)="dropdownClose()" class="sat-securityGroupAverageVisualizerNameDropdownContent__closeBtn santaBtn--iconOnly santaBtn--small fal fa-times"></button>
                 <section class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseMetric">
                   <span class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseMetric-label">Choose Metric :</span>
                   <ul class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseMetric-list">

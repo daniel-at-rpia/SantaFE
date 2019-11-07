@@ -2,9 +2,8 @@
 @import "modules/market/market.scss";
 @import "./market-group-panel-mixin.container.scss";
 
-// use this when you bring back the pieConfigurator
-// $marketGroupPanel_utility_widgetHeight: 8.25rem;
-$marketGroupPanel_utility_widgetHeight: 5rem;
+$marketGroupPanel_utility_widgetHeight: 8.25rem;
+// $marketGroupPanel_utility_widgetHeight: 5rem;
 $marketGroupPanel_configurator_width: $securityGroupDefinitionConfigurator_width + $spacing_medium;
 .sat-marketGroupPanel {
   $marketGroupPanelBlockName: &;
