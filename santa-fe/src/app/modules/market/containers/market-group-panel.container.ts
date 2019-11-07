@@ -265,7 +265,7 @@ export class MarketGroupPanel implements OnDestroy {
         }
         return definitionDTO;
       });
-      this.state.configurator.shortcutList.push(this.dtoService.formSearchShortcutObject(definitionList));
+      this.state.configurator.shortcutList.push(this.dtoService.formSearchShortcutObject(definitionList, eachShortcutStub.displayTitle));
     });
   }
 

@@ -200,10 +200,12 @@ export class DTOService {
   }
 
   public formSearchShortcutObject(
-    definitionList: Array<SecurityGroupDefinitionDTO>
+    definitionList: Array<SecurityGroupDefinitionDTO>,
+    title: string
   ): SearchShortcutDTO {
     const object: SearchShortcutDTO = {
       data: {
+        displayTitle: title,
         configuration: definitionList
       },
       style: {
@@ -215,7 +217,7 @@ export class DTOService {
       }
     };
     definitionList.forEach((eachDefinition, index) => {
-      if ( index !== 0 && index < 5 ) {
+      if ( index !== 0 && index <= 5 ) {
         object.style.slotList[index-1] = eachDefinition;
       }
     });

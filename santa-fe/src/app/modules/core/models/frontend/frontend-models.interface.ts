@@ -104,6 +104,7 @@ export interface SecurityGroupAverageVisualizerDTO extends BasicDTOStructure {
 
 export interface SearchShortcutDTO extends BasicDTOStructure {
   data: {
+    displayTitle: string;
     configuration: Array<SecurityGroupDefinitionDTO>
   },
   style: {

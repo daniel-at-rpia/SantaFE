@@ -1,4 +1,5 @@
 export interface SearchShortcutStub {
+  displayTitle: string;
   includedDefinitions: Array<SearchShortcutIncludedDefinitionStub>
 }
 

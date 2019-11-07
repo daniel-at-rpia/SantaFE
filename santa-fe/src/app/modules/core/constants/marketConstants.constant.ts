@@ -8,26 +8,7 @@ export const MetricRenderDelay = 300;
 
 export const SearchShortcuts: Array<SearchShortcutStub> = [
   {
-    includedDefinitions: [
-      {
-        definitionKey: 'SECURITY_TYPE',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'INDUSTRY',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'RATING',
-        groupByActive: false,
-        selectedOptions: ['AAA','AA','A','BBB','BB','B']
-      },{
-        definitionKey: 'TENOR',
-        groupByActive: false,
-        selectedOptions: ['2Y','3Y','5Y']
-      }
-    ]
-  },{
+    displayTitle: 'Financials grouped by rating, seniority, and tenor',
     includedDefinitions: [
       {
         definitionKey: 'SECURITY_TYPE',
@@ -35,75 +16,53 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
         selectedOptions: []
       },{
         definitionKey: 'SECTOR',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'RATING_BUCKET',
         groupByActive: false,
-        selectedOptions: ['IG']
-      }
-    ]
-  },{
-    includedDefinitions: [
-      {
-        definitionKey: 'SECURITY_TYPE',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'INDUSTRY',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'RATING',
-        groupByActive: false,
-        selectedOptions: ['AAA','AA','A','BBB','BB','B']
-      },{
-        definitionKey: 'IS_NEWISSUE',
-        groupByActive: false,
-        selectedOptions: ['Y']
-      }
-    ]
-  },{
-    includedDefinitions: [
-      {
-        definitionKey: 'SECURITY_TYPE',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'SECTOR',
-        groupByActive: true,
-        selectedOptions: ['Energy']
-      },{
-        definitionKey: 'RATING',
-        groupByActive: true,
-        selectedOptions: ['AAA','AA','A','BBB','BB','B']
-      },{
-        definitionKey: 'TENOR',
-        groupByActive: false,
-        selectedOptions: ['2Y','3Y','5Y']
-      }
-    ]
-  },{
-    includedDefinitions: [
-      {
-        definitionKey: 'SECURITY_TYPE',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'SECTOR',
-        groupByActive: true,
         selectedOptions: ['Financial']
       },{
+        definitionKey: 'CURRENCY',
+        groupByActive: true,
+        selectedOptions: []
+      },{
         definitionKey: 'RATING',
         groupByActive: true,
-        selectedOptions: ['AAA','AA','A','BBB','BB','B']
+        selectedOptions: []
       },{
         definitionKey: 'TENOR',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'SENIORITY',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'COUPON_TYPE',
         groupByActive: false,
-        selectedOptions: ['2Y','3Y','5Y']
+        selectedOptions: ['Fixed for Life','Fixed']
       }
     ]
   },{
+    displayTitle: 'Grouped by rating',
+    includedDefinitions: [
+      {
+        definitionKey: 'SECURITY_TYPE',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'RATING',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'CURRENCY',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'COUPON_TYPE',
+        groupByActive: false,
+        selectedOptions: ['Fixed for Life','Fixed']
+      }
+    ]
+  },{
+    displayTitle: 'Grouped by sector',
     includedDefinitions: [
       {
         definitionKey: 'SECURITY_TYPE',
@@ -112,15 +71,115 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
       },{
         definitionKey: 'SECTOR',
         groupByActive: true,
-        selectedOptions: ['Industrial']
+        selectedOptions: []
+      },{
+        definitionKey: 'CURRENCY',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'COUPON_TYPE',
+        groupByActive: false,
+        selectedOptions: ['Fixed for Life','Fixed']
+      }
+    ]
+  },{
+    displayTitle: 'Grouped by tenor',
+    includedDefinitions: [
+      {
+        definitionKey: 'SECURITY_TYPE',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'TENOR',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'CURRENCY',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'COUPON_TYPE',
+        groupByActive: false,
+        selectedOptions: ['Fixed for Life','Fixed']
+      }
+    ]
+  },{
+    displayTitle: 'Grouped by rating and sector',
+    includedDefinitions: [
+      {
+        definitionKey: 'SECURITY_TYPE',
+        groupByActive: true,
+        selectedOptions: []
       },{
         definitionKey: 'RATING',
         groupByActive: true,
-        selectedOptions: ['AAA','AA','A','BBB','BB','B']
+        selectedOptions: []
+      },{
+        definitionKey: 'SECTOR',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'CURRENCY',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'COUPON_TYPE',
+        groupByActive: false,
+        selectedOptions: ['Fixed for Life','Fixed']
+      }
+    ]
+  },{
+    displayTitle: 'Grouped by sector and tenor',
+    includedDefinitions: [
+      {
+        definitionKey: 'SECURITY_TYPE',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'SECTOR',
+        groupByActive: true,
+        selectedOptions: []
       },{
         definitionKey: 'TENOR',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'CURRENCY',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'COUPON_TYPE',
         groupByActive: false,
-        selectedOptions: ['2Y','3Y','5Y']
+        selectedOptions: ['Fixed for Life','Fixed']
+      }
+    ]
+  },{
+    displayTitle: 'Grouped by rating, sector and tenor',
+    includedDefinitions: [
+      {
+        definitionKey: 'SECURITY_TYPE',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'RATING',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'SECTOR',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'TENOR',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'CURRENCY',
+        groupByActive: true,
+        selectedOptions: []
+      },{
+        definitionKey: 'COUPON_TYPE',
+        groupByActive: false,
+        selectedOptions: ['Fixed for Life','Fixed']
       }
     ]
   }
@@ -148,7 +207,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
     'Float',
     'None',
     'Fixed for Life',
-    'Fixed-to-Float'
+    'Fixed'
   ];
 
   const FilterOptionsRating = [
