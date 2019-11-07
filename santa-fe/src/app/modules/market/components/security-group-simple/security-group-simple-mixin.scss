@@ -6,81 +6,21 @@
     #{$securityGroupSimpleBlockName} {
       &__base {
         &-center {
-          background-color: $color_white;
+          background-color: $color_rating_nr;
         }
       }
       &__content {
         &-canvases {
           &-left-content {
-            &-size {
-              background-color: $font_color_minor;
-              &-text {
-                color: $font_color_inverse;
-              }
-            }
-            &-name-text {
-              color: $font_color_minor;
+            &-size-text {
+              color: $color_rating_nr;
             }
           }
           &-right {
             &-metric {
-              &-value {
-                color: $font_color_minor;
-              }
               &-negative-mask, &-positive-mask {
-                background-color: $color_white;
+                background-color: $color_rating_nr;
               }
-              &-positive {
-                border-color: $font_color_minor;
-                &-line {
-                  background-color: $font_color_minor;
-                }
-              }
-            }
-          }
-          &-behind {
-            &-size {
-              color: $font_color_minor;
-            }
-            &-rating {
-              color: $font_color_minor;
-            }
-          }
-        }
-      }
-    }
-  }
-  &--selectedState#{$securityGroupSimpleBlockName}--type-0 {
-    #{$securityGroupSimpleBlockName} {
-      &__content {
-        &-canvases {
-          &-left-content {
-            &-size {
-              background-color: $color_white;
-              &-text {
-                color: $color_active;
-              }
-            }
-            &-name-text {
-              color: $font_color_inverse;
-            }
-          }
-          &-right {
-            &-metric{
-              &-positive {
-                border-color: $font_color_minor;
-                &-line {
-                  background-color: $font_color_inverse;
-                }
-              }
-            }
-          }
-          &-behind {
-            &-size {
-              color: $font_color_inverse;
-            }
-            &-rating {
-              color: $font_color_inverse;
             }
           }
         }
