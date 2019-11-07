@@ -298,8 +298,8 @@ export class MarketGroupPanel implements OnDestroy {
     const parsedMonth = ('0' + (currentTime.getMonth()+1)).slice(-2);
     const parsedDate = ('0' + currentTime.getDate()).slice(-2);
     const payload: PayloadGetSantaGroups = {
-      //yyyyMMdd: parseInt(`${currentTime.getFullYear()}${parsedMonth}${parsedDate}`),
-      yyyyMMdd: 20191031,
+      yyyyMMdd: parseInt(`${currentTime.getFullYear()}${parsedMonth}${parsedDate}`),
+      //yyyyMMdd: 20191031,
       source: "Default",
       santaGroupDefinition: {},
       santaGroupFilters: {},
