@@ -3,6 +3,7 @@
 @import "./market-group-panel-mixin.container.scss";
 
 $marketGroupPanel_utility_widgetHeight: 8.25rem;
+$marketGroupPanel_configurator_width: $securityGroupDefinitionConfigurator_width + $spacing_medium;
 .sat-marketGroupPanel {
   $marketGroupPanelBlockName: &;
   @include mix_border_generator;
@@ -15,6 +16,7 @@ $marketGroupPanel_utility_widgetHeight: 8.25rem;
     display: flex;
     flex-direction: column;
     padding: $spacing_medium 0 0 $spacing_medium;
+    width: $marketGroupPanel_configurator_width;
     &-utility {
       @include mix_border_generator(0 0 $typical_border_width 0);
       flex: 0 0 9rem;
@@ -57,6 +59,38 @@ $marketGroupPanel_utility_widgetHeight: 8.25rem;
         }
       }
     }
+    &-mainCanvas {
+      @include mix_fixed_div(relative, $z_index_standard_base_item);
+      flex: 1 1 auto;
+      display: flex;
+      overflow: hidden;
+      &-shortcutList {
+        @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
+        @include mix_alive('custom', transform $animation_duration_light);
+        @include mix_enable_scrollbar('vertical');
+        display: flex;
+        height: 100%;
+        width: 100%;
+        flex-direction: column;
+        transform: translate(0, 0);
+        &-item {
+          margin: $spacing_medium;
+        }
+      }
+      &-configurator {
+        @include mix_fixed_div(absolute, $z_index_standard_base_item_lift);
+        @include mix_alive('custom', transform $animation_duration_light);
+        height: 100%;
+        width: 100%;
+        display: flex;
+        transform: translate(100%, 0);
+        security-group-definition-configurator {
+          flex: 1 1 auto;
+          display: flex;
+          overflow: hidden;
+        }
+      }
+    }
     &-selectedGroupConfigNotice {
       flex: 0 0 auto;
       overflow: hidden;
@@ -78,21 +112,6 @@ $marketGroupPanel_utility_widgetHeight: 8.25rem;
           margin-top: $spacing_small;
         }
       }
-    }
-    &-shortcutList {
-      @include mix_enable_scrollbar('vertical');
-      flex: 1 1 auto;
-      display: flex;
-      width: $securityGroupDefinitionConfigurator_width;
-      flex-direction: column;
-      &-item {
-        margin: $spacing_medium;
-      }
-    }
-    security-group-definition-configurator {
-      flex: 1 1 auto;
-      display: flex;
-      overflow: hidden;
     }
   }
   &__configuratorCollapseCTA {
@@ -413,6 +432,14 @@ $marketGroupPanel_utility_widgetHeight: 8.25rem;
                 display: inline-block;
               }
             }
+          }
+        }
+        &-mainCanvas {
+          &-shortcutList {
+            transform: translate(-100%, 0);
+          }
+          &-configurator {
+            transform: translate(0, 0);
           }
         }
       }
