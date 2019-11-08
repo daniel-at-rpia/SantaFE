@@ -3,7 +3,6 @@
 @import "./market-group-panel-mixin.container.scss";
 
 $marketGroupPanel_utility_widgetHeight: 8.25rem;
-// $marketGroupPanel_utility_widgetHeight: 5rem;
 $marketGroupPanel_configurator_width: $securityGroupDefinitionConfigurator_width + $spacing_medium;
 .sat-marketGroupPanel {
   $marketGroupPanelBlockName: &;
@@ -61,6 +60,9 @@ $marketGroupPanel_configurator_width: $securityGroupDefinitionConfigurator_width
             display: none;
             color: $font_color_major;
           }
+        }
+        &-landscapeBtn {
+          margin-top: $spacing_small;
         }
       }
     }
@@ -437,6 +439,9 @@ $marketGroupPanel_configurator_width: $securityGroupDefinitionConfigurator_width
                 display: inline-block;
               }
             }
+            &-landscapeBtn {
+              visibility: hidden;
+            }
           }
         }
         &-mainCanvas {
@@ -445,6 +450,25 @@ $marketGroupPanel_configurator_width: $securityGroupDefinitionConfigurator_width
           }
           &-configurator {
             transform: translate(0, 0);
+          }
+        }
+      }
+    }
+  }
+  &--landscapeViewActiveState {
+    #{$marketGroupPanelBlockName} {
+      &__configurator {
+        &-utility-modeCTA-landscapeBtn {
+          @include material('none');
+          @extend .santaBtn--inverseLabelled;
+          background-color: $color_active;
+        }
+      }
+      &__groups {
+        &-list {
+          &-item {
+            flex: 1 1 auto;
+            margin-top: 0;
           }
         }
       }

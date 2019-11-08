@@ -1,6 +1,7 @@
 <article [ngClass]="{
   'sat-marketGroupPanel': true, 
   'sat-marketGroupPanel--powerMode': state.powerModeActivated,
+  'sat-marketGroupPanel--landscapeViewActiveState': state.landscapeViewActivated,
   'sat-marketGroupPanel--selectedGroupConfigActiveState': state.configurator.showSelectedGroupConfig,
   'sat-marketGroupPanel--configuratorCollapsedState': state.isConfiguratorCollapsed,
   'sat-marketGroupPanel--averageVisualizerEnabledState': state.utility.selectedWidget === 'AVERAGE_VISUALIZER',
@@ -20,6 +21,10 @@
         <button (click)="switchMode()" class="santaBtn--labelled">
           <i class="fal fa-repeat"></i>
           <span>Switch</span>
+        </button>
+        <button (click)="toggleLandscapeView()" class="sat-marketGroupPanel__configurator-utility-modeCTA-landscapeBtn santaBtn--labelled santaBtn--small">
+          <i class="fas fa-mountains"></i>
+          <span>Landscape</span>
         </button>
       </div>
       <div class="sat-marketGroupPanel__configurator-utility-hero sat-marketGroupPanel__configurator-utility-hero--right">

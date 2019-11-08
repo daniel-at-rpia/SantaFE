@@ -14,6 +14,7 @@ export interface MarketState {
 
 export interface MarketGroupPanelState {
   powerModeActivated: boolean;
+  landscapeViewActivated: boolean;
   isConfiguratorCollapsed: boolean;
   isGroupDataLoaded: boolean;
   configurator: {

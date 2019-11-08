@@ -77,7 +77,8 @@ export class DTOService {
         isSelected: false,
         isExpanded: false,
         isStencil: !rawData,
-        isMetricCompleted: false
+        isMetricCompleted: false,
+        isLandscapeView: false
       },
       graph: {
         leftPie: {
@@ -178,7 +179,6 @@ export class DTOService {
         editingStatSelectedMetricDeltaType: null
       }
     }
-    object.data.stats[1].sortHierarchy = 1;
     return object;
   }
 

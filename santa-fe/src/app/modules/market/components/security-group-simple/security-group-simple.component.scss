@@ -22,7 +22,7 @@ $securityGroupSimple_height: 2.5rem;
       @include mix_border_radius(10px);
       @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
       flex: 1 1 auto;
-      height: $securityGroupSimple_height;
+      height: 100%;
     }
   }
   &__content {
@@ -147,13 +147,11 @@ $securityGroupSimple_height: 2.5rem;
             #{$securityGroupSimpleBlockName} {
               &__content-canvases-right-metric {
                 &-negative {
-                  @include mix_border_generator(0 $typical_border_width 0 0, $color_negative);
                   &-line {
                     visibility: visible;
                   }
                 }
                 &-positive {
-                  @include mix_border_generator(0);
                   &-line {
                     visibility: hidden;
                   }
@@ -287,6 +285,52 @@ $securityGroupSimple_height: 2.5rem;
               visibility: visible;
             }
           }
+        }
+      }
+    }
+  }
+  &--landscapeViewState {
+    height: 100%;
+    #{$securityGroupSimpleBlockName} {
+      &__base {
+        &-center {
+          @include material('none');
+          @include mix_border_radius(0);
+        }
+      }
+      &__content {
+        &-canvases {
+          &-left-content {
+            display: none;
+          }
+          &-right {
+            margin-top: 0;
+            margin-bottom: 0;
+            background-color: $color_active;
+            &-metric {
+              &-value {
+                visibility: hidden;
+              }
+              &-negative-line, &-positive-line {
+                height: 75%;
+              }
+              &-negative-mask, &-positive-mask {
+                display: none;
+              }
+            }
+          }
+          &-behind {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+  &--landscapeViewState:hover {
+    #{$securityGroupSimpleBlockName} {
+      &__base {
+        &-center {
+          @include material('none');
         }
       }
     }

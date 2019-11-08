@@ -1,51 +1,53 @@
-import {
-  Component,
-  ViewEncapsulation,
-  OnDestroy
-} from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import {
-  interval,
-  from,
-  of
-} from 'rxjs';
-import {
-  tap,
-  first,
-  combineLatest,
-  buffer,
-  bufferTime,
-  throttleTime,
-  delay,
-  concatMap,
-  catchError
-} from 'rxjs/operators';
-import { HttpClient, HttpParams } from '@angular/common/http';
+  // dependencies
+    import {
+      Component,
+      ViewEncapsulation,
+      OnDestroy
+    } from '@angular/core';
+    import { Observable, Subscription } from 'rxjs';
+    import {
+      interval,
+      from,
+      of
+    } from 'rxjs';
+    import {
+      tap,
+      first,
+      combineLatest,
+      buffer,
+      bufferTime,
+      throttleTime,
+      delay,
+      concatMap,
+      catchError
+    } from 'rxjs/operators';
+    import { HttpClient, HttpParams } from '@angular/common/http';
 
-import { DTOService } from 'Core/services/DTOService';
-import { UtilityService } from 'Core/services/UtilityService';
-import { RestfulCommService } from 'Core/services/RestfulCommService';
+    import { DTOService } from 'Core/services/DTOService';
+    import { UtilityService } from 'Core/services/UtilityService';
+    import { RestfulCommService } from 'Core/services/RestfulCommService';
 
-import { MarketGroupPanelState } from 'FEModels/frontend-page-states.interface';
-import { SecurityGroupMetricBlock } from 'FEModels/frontend-blocks.interface';
-import {
-  SecurityGroupDTO,
-  SecurityGroupDefinitionDTO,
-  SecurityGroupDefinitionConfiguratorDTO,
-  SearchShortcutDTO
-} from 'FEModels/frontend-models.interface';
-import { BESecurityGroupDTO } from 'BEModels/backend-models.interface';
-import { PayloadGetSantaGroups } from 'BEModels/backend-payloads.interface';
+    import { MarketGroupPanelState } from 'FEModels/frontend-page-states.interface';
+    import { SecurityGroupMetricBlock } from 'FEModels/frontend-blocks.interface';
+    import {
+      SecurityGroupDTO,
+      SecurityGroupDefinitionDTO,
+      SecurityGroupDefinitionConfiguratorDTO,
+      SearchShortcutDTO
+    } from 'FEModels/frontend-models.interface';
+    import { BESecurityGroupDTO } from 'BEModels/backend-models.interface';
+    import { PayloadGetSantaGroups } from 'BEModels/backend-payloads.interface';
 
-import { SecurityGroupList, SecurityGroupList2 } from 'Core/stubs/securityGroups.stub';
-import { SecurityDefinitionStub } from 'FEModels/frontend-stub-models.interface';
-import {
-  PieChartConfiguratorOptions,
-  SecurityGroupDefinitionMap,
-  BackendKeyDictionary,
-  MetricRenderDelay,
-  SearchShortcuts
-} from 'Core/constants/marketConstants.constant';
+    import { SecurityGroupList, SecurityGroupList2 } from 'Core/stubs/securityGroups.stub';
+    import { SecurityDefinitionStub } from 'FEModels/frontend-stub-models.interface';
+    import {
+      PieChartConfiguratorOptions,
+      SecurityGroupDefinitionMap,
+      BackendKeyDictionary,
+      MetricRenderDelay,
+      SearchShortcuts
+    } from 'Core/constants/marketConstants.constant';
+  //
 
 @Component({
   selector: 'market-group-panel',
@@ -68,6 +70,7 @@ export class MarketGroupPanel implements OnDestroy {
   private initiateComponentState(){
     this.state = {
       powerModeActivated: false,
+      landscapeViewActivated: false,
       isConfiguratorCollapsed: false,
       isGroupDataLoaded: false,
       configurator: {
@@ -133,6 +136,16 @@ export class MarketGroupPanel implements OnDestroy {
 
   public switchMode() {
     this.state.powerModeActivated = !this.state.powerModeActivated;
+    this.state.powerModeActivated && this.toggleLandscapeView(true, false);
+  }
+
+  public toggleLandscapeView(overwrite?: boolean, overwriteValue?: boolean) {
+    if (overwrite || !this.state.powerModeActivated) {
+      this.state.landscapeViewActivated = overwrite ? overwriteValue : !this.state.landscapeViewActivated;
+      this.state.searchResult.securityGroupList.forEach((eachGroup) => {
+        eachGroup.state.isLandscapeView = this.state.landscapeViewActivated;
+      });
+    }
   }
 
   public onClickSearchShortcut(targetShortcut: SearchShortcutDTO){
@@ -213,7 +226,8 @@ export class MarketGroupPanel implements OnDestroy {
       if (primarySortIndex >= 0) {
         // if there is at least a primarySortIndex, then it's worth to sort
         this.performSort();
-      } else{
+      } else {
+        this.performDefaultSort();
         // default sorting algorithm
       }
     }
@@ -350,6 +364,7 @@ export class MarketGroupPanel implements OnDestroy {
   private loadSimpleSearchResults(serverReturn){
     this.state.searchResult.securityGroupList = serverReturn.map((eachRawGroup) => {
       const newGroupDTO = this.dtoService.formSecurityGroupObject(eachRawGroup);
+      newGroupDTO.state.isLandscapeView = this.state.landscapeViewActivated;
       return newGroupDTO;
     });
     this.state.searchResult.renderProgress = 100;
@@ -463,14 +478,14 @@ export class MarketGroupPanel implements OnDestroy {
         let average = !!eachStat.deltaScope ? Math.round(sum / respectiveLength * 10)/10 : Math.round(sum / respectiveLength);
         eachStat.absMax = absMax;
         eachStat.value = average;
-        eachStat.percentage = Math.round(Math.abs(average)/absMax * 100);
+        eachStat.percentage = Math.round(Math.sqrt(Math.abs(average))/Math.sqrt(absMax) * 100);
         this.state.searchResult.securityGroupList.forEach((eachGroup) => {
           const targetStat = eachGroup.data.stats.find((eachGroupStat) => {
             return eachGroupStat.label === eachStat.label && eachGroupStat.deltaScope === eachStat.deltaScope;
           });
           if (!!targetStat) {
             targetStat.absMax = absMax;
-            targetStat.percentage = Math.round(Math.abs(targetStat.value)/targetStat.absMax * 100);
+            targetStat.percentage = Math.round(Math.sqrt(Math.abs(targetStat.value))/Math.sqrt(targetStat.absMax) * 100);
           }
         });
       }
@@ -510,6 +525,18 @@ export class MarketGroupPanel implements OnDestroy {
       } else if (groupA.data.sort.tertiarySortMetricValue < groupB.data.sort.tertiarySortMetricValue) {
         return 1;
       } else if (groupA.data.sort.tertiarySortMetricValue > groupB.data.sort.tertiarySortMetricValue) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+  }
+
+  private performDefaultSort(){
+    this.state.searchResult.securityGroupList.sort((groupA, groupB) => {
+      if (groupA.data.numOfSecurities < groupB.data.numOfSecurities) {
+        return 1;
+      } else if (groupA.data.numOfSecurities > groupB.data.numOfSecurities) {
         return -1;
       } else {
         return 0;
