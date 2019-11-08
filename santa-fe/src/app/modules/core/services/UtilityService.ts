@@ -131,8 +131,34 @@ export class UtilityService {
     }
   }
 
-  public isCDS(input: string): boolean {
-    return input.indexOf('Cds') >= 0;
+  public isCDS(input: SecurityGroupDTO | BESecurityGroupDTO): boolean {
+    if (input['data']) {
+      const dtoInput = input as SecurityGroupDTO;
+      return dtoInput.data.name.indexOf('Cds') >= 0;
+    } else {
+      const rawDataInput = input as BESecurityGroupDTO;
+      return rawDataInput.groupName.indexOf('Cds') >= 0;
+    }
+  }
+
+  public isEURorGBP(input: SecurityGroupDTO | BESecurityGroupDTO): boolean {
+    if (input['data']) {
+      const dtoInput = input as SecurityGroupDTO;
+      return dtoInput.data.name.indexOf('EUR') >= 0 || dtoInput.data.name.indexOf('GBP') >= 0;
+    } else {
+      const rawDataInput = input as BESecurityGroupDTO;
+      return rawDataInput.groupName.indexOf('EUR') >= 0 || rawDataInput.groupName.indexOf('GBP') >= 0;
+    }
+  }
+
+  public isFloat(input: SecurityGroupDTO | BESecurityGroupDTO): boolean {
+    if (input['data']) {
+      const dtoInput = input as SecurityGroupDTO;
+      return dtoInput.data.definitionConfig['CouponType'] && dtoInput.data.definitionConfig['CouponType'] === ['Float'];
+    } else {
+      const rawDataInput = input as BESecurityGroupDTO;
+      return rawDataInput.groupIdentifier.groupOptionValues['CouponType'] && rawDataInput.groupIdentifier.groupOptionValues['CouponType'] === ['Float'];
+    }
   }
 
   public mapRatingsReverse(input): string {
@@ -184,41 +210,34 @@ export class UtilityService {
     };
     if (!!rawData) {
       this.metricOptions.forEach((eachMetric) => {
-        const rawValue = rawData.metrics[eachMetric.backendDtoAttrName];
+        let keyToRetrieveMetric = eachMetric.backendDtoAttrName;
+        if (eachMetric.label === 'Default Spread') {
+          if (this.isCDS(rawData)) {
+            keyToRetrieveMetric = 'spread';
+          } else if (this.isFloat(rawData)) {
+            keyToRetrieveMetric = 'zSpread';
+          } else if (this.isEURorGBP(rawData)) {
+            keyToRetrieveMetric = 'zSpread';
+          } else {
+            keyToRetrieveMetric = 'oasSpread';
+          }
+        }
+        const rawValue = rawData.metrics[keyToRetrieveMetric];
         if (rawValue === null || rawValue === undefined) {
           object.raw[eachMetric.label] = null;
         } else {
-          if (eachMetric.label === 'Size') {
-            object.raw[eachMetric.label] = Math.round(rawValue/100)/10000;
-          } else {
-            object.raw[eachMetric.label] = Math.round(rawValue*100)/100;
-          }
+          object.raw[eachMetric.label] = Math.round(rawValue);
         }
         eachMetric.deltaOptions.forEach((eachDeltaScope) => {
           const deltaSubPack = rawData.deltaMetrics[eachDeltaScope];
-          const deltaValue = !!deltaSubPack ? deltaSubPack[eachMetric.backendDtoAttrName] : null;
+          const deltaValue = !!deltaSubPack ? deltaSubPack[keyToRetrieveMetric] : null;
           if (deltaValue === null || deltaValue === undefined) {
             object.delta[eachDeltaScope][eachMetric.label] = null;
           } else {
-            if (eachMetric.label === 'Size') {
-              object.delta[eachDeltaScope][eachMetric.label] = Math.round(deltaValue/100)/10000;
-            } else {
-              object.delta[eachDeltaScope][eachMetric.label] = Math.round(deltaValue*1000)/1000;
-            }
+            object.delta[eachDeltaScope][eachMetric.label] = Math.round(deltaValue*100)/100;
           }
         })
       });
-      // Hack Flag: For CDS, populate all the types of spreads with CDS spread data ("spread")
-      const spreadMerics = [this.metricOptions[0].label];
-      if (this.isCDS(rawData.groupName)) {
-        spreadMerics.forEach((eachTypeOfBondSpread) => {
-          object.raw[eachTypeOfBondSpread] = rawData.metrics['spread'];
-          object.delta.DoD[eachTypeOfBondSpread] = rawData.deltaMetrics.DoD['spread'];
-          object.delta.WoW[eachTypeOfBondSpread] = rawData.deltaMetrics.WoW['spread'];
-          object.delta.MoM[eachTypeOfBondSpread] = rawData.deltaMetrics.MoM['spread'];
-          object.delta.Ytd[eachTypeOfBondSpread] = rawData.deltaMetrics.Ytd['spread'];
-        })
-      }
     }
     return object;
   }
@@ -238,12 +257,7 @@ export class UtilityService {
       if (value === null || value === undefined) {
         return -3.1415926;
       } else {
-        // further round the metric if it is Size
-        if (metricLabel === 'Size') {
-          return Math.round(value);
-        } else {
-          return value;
-        }
+        return value;
       }
     }
     return -3.1415926;
@@ -255,8 +269,7 @@ export class UtilityService {
       // disable the automatic differentiation betwen IG & HY
       // const rating = rawData.metrics[this.keyDictionary.RATING];
       // if (this.isIG(rating)) {
-      // Hack Flag:
-      const spread = this.isCDS(rawData.groupName) ? rawData.metrics['spread'] : rawData.metrics[this.keyDictionary.SPREAD];
+      const spread = rawData.metrics[this.keyDictionary.SPREAD];
       value = `${Math.round(spread)}`;
       // } else {
       //   const price = rawData.metrics[this.keyDictionary.PRICE];

@@ -491,28 +491,8 @@ export const BackendKeyDictionary = {
 
 export const MetricOptions:Array<SecurityMetricOptionStub> = [
   {
-    label: 'OAS Spread',
-    backendDtoAttrName: 'oasSpread',
-    deltaOptions: [
-      'DoD',
-      'WoW',
-      'MoM',
-      'Ytd'
-    ]
-  },
-  {
-    label: 'Tenor',
-    backendDtoAttrName: 'workoutTerm',
-    deltaOptions: [
-      'DoD',
-      'WoW',
-      'MoM',
-      'Ytd'
-    ]
-  },
-  {
-    label: 'Size',
-    backendDtoAttrName: 'marketValue',
+    label: 'Default Spread',
+    backendDtoAttrName: 'defaultSpread',
     deltaOptions: [
       'DoD',
       'WoW',
@@ -531,8 +511,28 @@ export const MetricOptions:Array<SecurityMetricOptionStub> = [
     ]
   },
   {
-    label: 'YieldMaturity',
-    backendDtoAttrName: 'yieldMaturity',
+    label: 'Rating',
+    backendDtoAttrName: 'ratingDouble',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'OAS Spread',
+    backendDtoAttrName: 'oasSpread',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'Z-Spread',
+    backendDtoAttrName: 'zSpread',
     deltaOptions: [
       'DoD',
       'WoW',
@@ -543,6 +543,16 @@ export const MetricOptions:Array<SecurityMetricOptionStub> = [
   {
     label: 'YieldWorst',
     backendDtoAttrName: 'yieldWorst',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'Asset Swap Spread (into USD)',
+    backendDtoAttrName: 'aswUsd',
     deltaOptions: [
       'DoD',
       'WoW',
