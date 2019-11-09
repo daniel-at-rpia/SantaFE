@@ -9,24 +9,30 @@
   }">
   <section class="sat-securityGroupDefinitionConfigurator__definitions">
     <ul class="sat-securityGroupDefinitionConfigurator__definitions-list">
-      <li *ngFor="let eachDefinition of configuratorData?.data.definitionList" class="sat-securityGroupDefinitionConfigurator__definitions-list-item">
-        <button
-          (click)="selectDefinitionForGrouping(eachDefinition)"
-          [ngClass]="{
-            'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn': true,
-            'santaBtn--iconOnly': true,
-            'fal': true,
-            'fa-square': !eachDefinition.state.groupByActive && !eachDefinition.state.isLocked,
-            'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn--selected': eachDefinition.state.groupByActive,
-            'fa-check-square': eachDefinition.state.groupByActive || eachDefinition.state.isLocked,
-            'sat-securityGroupDefinitionConfigurator__definitions-list-item-selectBtn--locked': eachDefinition.state.isLocked
-          }"></button>
-        <security-group-definition
-          [definitionData]="eachDefinition"
-          (onClick)="onClickDefinition($event)"
-          [selected]="configuratorData.state.showFiltersFromDefinition === eachDefinition"
-          [interactionDisabled]="configuratorData.state.isLoadingLongOptionListFromServer">
-        </security-group-definition>
+      <li *ngFor="let eachLayoutSection of configuratorDefinitionlayout" class="sat-securityGroupDefinitionConfigurator__definitions-list-section">
+        <div class="sat-securityGroupDefinitionConfigurator__definitions-list-section-label">
+          <span class="sat-securityGroupDefinitionConfigurator__definitions-list-section-label-text">{{eachLayoutSection.label}}</span>
+          <div class="sat-securityGroupDefinitionConfigurator__definitions-list-section-label-line"></div>
+        </div>
+        <div *ngFor="let eachDefinition of eachLayoutSection.list" class="sat-securityGroupDefinitionConfigurator__definitions-list-section-item">
+          <button
+            (click)="selectDefinitionForGrouping(eachDefinition)"
+            [ngClass]="{
+              'sat-securityGroupDefinitionConfigurator__definitions-list-section-item-selectBtn': true,
+              'santaBtn--iconOnly': true,
+              'fal': true,
+              'fa-square': !eachDefinition.state.groupByActive && !eachDefinition.state.isLocked,
+              'sat-securityGroupDefinitionConfigurator__definitions-list-section-item-selectBtn--selected': eachDefinition.state.groupByActive,
+              'fa-check-square': eachDefinition.state.groupByActive || eachDefinition.state.isLocked,
+              'sat-securityGroupDefinitionConfigurator__definitions-list-section-item-selectBtn--locked': eachDefinition.state.isLocked
+            }"></button>
+          <security-group-definition
+            [definitionData]="eachDefinition"
+            (onClick)="onClickDefinition($event)"
+            [selected]="configuratorData.state.showFiltersFromDefinition === eachDefinition"
+            [interactionDisabled]="configuratorData.state.isLoadingLongOptionListFromServer">
+          </security-group-definition>
+        </div>
       </li>
     </ul>
   </section>

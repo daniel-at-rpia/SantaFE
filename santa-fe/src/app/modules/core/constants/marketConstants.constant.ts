@@ -1,5 +1,6 @@
 import {
   SecurityDefinitionStub,
+  SecurityDefinitionSectionStub,
   SecurityMetricOptionStub,
   SearchShortcutStub
 } from 'FEModels/frontend-stub-models.interface';
@@ -414,7 +415,7 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     urlForGetLongOptionListFromServer: 'santaSecurity/get-santa-issuers'
   },{
     key: 'MATURITY',
-    displayName: 'Maturity',
+    displayName: 'Maturity Type',
     icon: 'fal fa-seedling',
     optionList: FilterOptionsMaturityType
   },{
@@ -459,6 +460,42 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
     displayName: 'Tenor',
     icon: 'fal fa-history',
     optionList: FilterOptionsTenor
+  }
+];
+
+export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionSectionStub> = [
+  {
+    label: 'Basic',
+    list: [
+      SecurityGroupDefinitionMap[3],
+      SecurityGroupDefinitionMap[4],
+      SecurityGroupDefinitionMap[10],
+      SecurityGroupDefinitionMap[12],
+      SecurityGroupDefinitionMap[15]
+    ]
+  },{
+    label: 'Quality',
+    list: [
+      SecurityGroupDefinitionMap[11],
+      SecurityGroupDefinitionMap[13]
+    ]
+  },{
+    label: 'Issuer',
+    list: [
+      SecurityGroupDefinitionMap[5],
+      SecurityGroupDefinitionMap[14],
+      SecurityGroupDefinitionMap[6]
+    ]
+  },{
+    label: 'Bond',
+    list: [
+      SecurityGroupDefinitionMap[0],
+      SecurityGroupDefinitionMap[1],
+      SecurityGroupDefinitionMap[2],
+      SecurityGroupDefinitionMap[7],
+      SecurityGroupDefinitionMap[8],
+      SecurityGroupDefinitionMap[9]
+    ]
   }
 ];
 

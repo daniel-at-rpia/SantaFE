@@ -7,13 +7,9 @@ import {
   EventEmitter
 } from '@angular/core';
 
-import {
-  SecurityGroupDefinitionConfiguratorDTO,
-  SecurityGroupDefinitionDTO
-} from 'FEModels/frontend-models.interface';
-import {
-  SecurityGroupDefinitionFilterBlock
-} from 'FEModels/frontend-blocks.interface';
+import { SecurityGroupDefinitionConfiguratorDTO,SecurityGroupDefinitionDTO } from 'FEModels/frontend-models.interface';
+import { SecurityGroupDefinitionFilterBlock } from 'FEModels/frontend-blocks.interface';
+import { ConfiguratorDefinitionLayout } from 'Core/constants/marketConstants.constant';
 
 @Component({
   selector: 'security-group-definition-configurator',
@@ -23,6 +19,7 @@ import {
 })
 
 export class SecurityGroupDefinitionConfigurator implements OnInit {
+  configuratorDefinitionlayout: Array<any>;
   @Input() configuratorData: SecurityGroupDefinitionConfiguratorDTO;
   @Input() highlightedVariant: boolean;
   @Output() onClickLoadLongOptionList = new EventEmitter<SecurityGroupDefinitionDTO>();
@@ -36,6 +33,18 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
       if (eachDefinition.state.isLocked) {
         eachDefinition.state.isUnactivated = false;
       }
+    });
+    this.configuratorDefinitionlayout = ConfiguratorDefinitionLayout.map((eachSection) => {
+      const newList = eachSection.list.map((eachStub) => {
+        const dto = this.configuratorData.data.definitionList.find((eachDef) => {
+          return eachDef.data.key === eachStub.key;
+        })
+        return dto;
+      });
+      return {
+        label: eachSection.label,
+        list: newList
+      };
     });
   }
 

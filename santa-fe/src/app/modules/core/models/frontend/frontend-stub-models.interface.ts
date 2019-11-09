@@ -20,6 +20,11 @@ export interface SecurityDefinitionStub {
   urlForGetLongOptionListFromServer?: string;
 }
 
+export interface SecurityDefinitionSectionStub {
+  label: string;
+  list: Array<SecurityDefinitionStub>;
+}
+
 export interface SecurityMetricOptionStub {
   label: string;
   backendDtoAttrName: string;
