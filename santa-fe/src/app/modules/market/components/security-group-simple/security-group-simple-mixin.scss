@@ -1,0 +1,205 @@
+
+
+@mixin mix_securityGroupSimple(){
+  $securityGroupSimpleBlockName: &;
+  &--type-0 {
+    #{$securityGroupSimpleBlockName} {
+      &__base {
+        &-center {
+          background-color: $color_rating_nr;
+        }
+      }
+      &__content {
+        &-canvases {
+          &-left-content {
+            &-size-text {
+              color: $color_rating_nr;
+            }
+          }
+          &-right {
+            &-metric {
+              &-negative-mask, &-positive-mask {
+                background-color: $color_rating_nr;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--type-1 {
+    #{$securityGroupSimpleBlockName} {
+      &__base {
+        &-center {
+          background-color: $color_rating_aaa;
+        }
+      }
+      &__content {
+        &-canvases {
+          &-left-content {
+            &-size-text {
+              color: $color_rating_aaa;
+            }
+          }
+          &-right {
+            &-metric {
+              &-negative-mask, &-positive-mask {
+                background-color: $color_rating_aaa;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--type-2 {
+    #{$securityGroupSimpleBlockName} {
+      &__base {
+        &-center {
+          background-color: $color_rating_aa;
+        }
+      }
+      &__content {
+        &-canvases {
+          &-left-content {
+            &-size-text {
+              color: $color_rating_aa;
+            }
+          }
+          &-right {
+            &-metric {
+              &-negative-mask, &-positive-mask {
+                background-color: $color_rating_aa;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--type-3 {
+    #{$securityGroupSimpleBlockName} {
+      &__base {
+        &-center {
+          background-color: $color_rating_a;
+        }
+      }
+      &__content {
+        &-canvases {
+          &-left-content {
+            &-size-text {
+              color: $color_rating_a;
+            }
+          }
+          &-right {
+            &-metric {
+              &-negative-mask, &-positive-mask {
+                background-color: $color_rating_a;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--type-4 {
+    #{$securityGroupSimpleBlockName} {
+      &__base {
+        &-center {
+          background-color: $color_rating_bbb;
+        }
+      }
+      &__content {
+        &-canvases {
+          &-left-content {
+            &-size-text {
+              color: $color_rating_bbb;
+            }
+          }
+          &-right {
+            &-metric {
+              &-negative-mask, &-positive-mask {
+                background-color: $color_rating_bbb;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--type-5 {
+    #{$securityGroupSimpleBlockName} {
+      &__base {
+        &-center {
+          background-color: $color_rating_bb;
+        }
+      }
+      &__content {
+        &-canvases {
+          &-left-content {
+            &-size-text {
+              color: $color_rating_bb;
+            }
+          }
+          &-right {
+            &-metric {
+              &-negative-mask, &-positive-mask {
+                background-color: $color_rating_bb;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--type-6 {
+    #{$securityGroupSimpleBlockName} {
+      &__base {
+        &-center {
+          background-color: $color_rating_b;
+        }
+      }
+      &__content {
+        &-canvases {
+          &-left-content {
+            &-size-text {
+              color: $color_rating_b;
+            }
+          }
+          &-right {
+            &-metric {
+              &-negative-mask, &-positive-mask {
+                background-color: $color_rating_b;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--type-7 {
+    #{$securityGroupSimpleBlockName} {
+      &__base {
+        &-center {
+          background-color: $color_rating_ccctod;
+        }
+      }
+      &__content {
+        &-canvases {
+          &-left-content {
+            &-size-text {
+              color: $color_rating_ccctod;
+            }
+          }
+          &-right {
+            &-metric {
+              &-negative-mask, &-positive-mask {
+                background-color: $color_rating_ccctod;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

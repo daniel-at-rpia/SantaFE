@@ -1,46 +1,53 @@
-import {
-  Component,
-  ViewEncapsulation,
-  OnDestroy
-} from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import {
-  interval,
-  from,
-  of
-} from 'rxjs';
-import {
-  tap,
-  first,
-  combineLatest,
-  buffer,
-  bufferTime,
-  throttleTime,
-  delay,
-  concatMap,
-  catchError
-} from 'rxjs/operators';
-import { HttpClient, HttpParams } from '@angular/common/http';
+  // dependencies
+    import {
+      Component,
+      ViewEncapsulation,
+      OnDestroy
+    } from '@angular/core';
+    import { Observable, Subscription } from 'rxjs';
+    import {
+      interval,
+      from,
+      of
+    } from 'rxjs';
+    import {
+      tap,
+      first,
+      combineLatest,
+      buffer,
+      bufferTime,
+      throttleTime,
+      delay,
+      concatMap,
+      catchError
+    } from 'rxjs/operators';
+    import { HttpClient, HttpParams } from '@angular/common/http';
 
-import { DTOService } from 'Core/services/DTOService';
-import { UtilityService } from 'Core/services/UtilityService';
-import { RestfulCommService } from 'Core/services/RestfulCommService';
+    import { DTOService } from 'Core/services/DTOService';
+    import { UtilityService } from 'Core/services/UtilityService';
+    import { RestfulCommService } from 'Core/services/RestfulCommService';
 
-import { MarketGroupPanelState } from 'FEModels/frontend-page-states.interface';
-import { SecurityGroupMetricBlock } from 'FEModels/frontend-blocks.interface';
-import {
-  SecurityGroupDTO,
-  SecurityGroupDefinitionConfiguratorDTO
-} from 'FEModels/frontend-models.interface';
-import { BESecurityGroupDTO } from 'BEModels/backend-models.interface';
+    import { MarketGroupPanelState } from 'FEModels/frontend-page-states.interface';
+    import { SecurityGroupMetricBlock } from 'FEModels/frontend-blocks.interface';
+    import {
+      SecurityGroupDTO,
+      SecurityGroupDefinitionDTO,
+      SecurityGroupDefinitionConfiguratorDTO,
+      SearchShortcutDTO
+    } from 'FEModels/frontend-models.interface';
+    import { BESecurityGroupDTO } from 'BEModels/backend-models.interface';
+    import { PayloadGetSantaGroups } from 'BEModels/backend-payloads.interface';
 
-import { SecurityGroupList, SecurityGroupList2 } from 'Core/stubs/securityGroups.stub';
-import { SecurityDefinitionStub } from 'FEModels/frontend-stub-models.interface';
-import {
-  PieChartConfiguratorOptions,
-  SecurityGroupDefinitionMap,
-  BackendKeyDictionary
-} from 'Core/constants/marketConstants.constant';
+    import { SecurityGroupList, SecurityGroupList2 } from 'Core/stubs/securityGroups.stub';
+    import { SecurityDefinitionStub } from 'FEModels/frontend-stub-models.interface';
+    import {
+      PieChartConfiguratorOptions,
+      SecurityGroupDefinitionMap,
+      BackendKeyDictionary,
+      MetricRenderDelay,
+      SearchShortcuts
+    } from 'Core/constants/marketConstants.constant';
+  //
 
 @Component({
   selector: 'market-group-panel',
@@ -55,17 +62,24 @@ export class MarketGroupPanel implements OnDestroy {
   searchServerReturnPackedInChunk$: Observable<Array<SecurityGroupDTO>>;
   getGroupsFromSearchSub: Subscription;
   PieChartConfigurationOptions = PieChartConfiguratorOptions;
-  SecurityGroupDefinitionMap = SecurityGroupDefinitionMap;
+  constants = {
+    securityGroupDefinitionMap: SecurityGroupDefinitionMap,
+    searchShortcuts: SearchShortcuts
+  }
 
   private initiateComponentState(){
     this.state = {
+      powerModeActivated: false,
+      landscapeViewActivated: false,
+      isConfiguratorCollapsed: false,
+      isGroupDataLoaded: false,
       configurator: {
         dto: this.dtoService.createSecurityGroupDefinitionConfigurator(),
         showSelectedGroupConfig: false,
-        cachedOriginalConfig: null
+        cachedOriginalConfig: null,
+        shortcutList: [],
+        selectedShortcut: null
       },
-      isConfiguratorCollapsed: false,
-      isGroupDataLoaded: false,
       utility: {
         selectedWidget: 'AVERAGE_VISUALIZER',
         visualizer: this.dtoService.formAverageVisualizerObject(),
@@ -86,47 +100,26 @@ export class MarketGroupPanel implements OnDestroy {
       },
       searchResult: {
         securityGroupList: [],
-        renderProgress: 0
+        renderProgress: 0,
+        searchFailed: false,
+        searchFailedError: ''
       }
     };
     this.state.utility.pieConfigurator.left.options = this.PieChartConfigurationOptions.left.map((eachOption) => {
-      const targetDefinition = SecurityGroupDefinitionMap.find((eachDefinition) => {
+      const targetDefinition = this.constants.securityGroupDefinitionMap.find((eachDefinition) => {
         return eachDefinition.key === eachOption;
       })
       return targetDefinition;
     });
     this.state.utility.pieConfigurator.right.options = this.PieChartConfigurationOptions.right.map((eachOption) => {
-      const targetDefinition = SecurityGroupDefinitionMap.find((eachDefinition) => {
+      const targetDefinition = this.constants.securityGroupDefinitionMap.find((eachDefinition) => {
         return eachDefinition.key === eachOption;
       })
       return targetDefinition;
     });
     this.onSelectPieConfiguratorMetric(this.state.utility.pieConfigurator.left, this.state.utility.pieConfigurator.left.options[5]);
     this.onSelectPieConfiguratorMetric(this.state.utility.pieConfigurator.right, this.state.utility.pieConfigurator.right.options[2]);
-    const payload = {
-      "groupOptions": ["Ccy", "Tenor"],
-      "yyyyMMdd": 20190920,
-      "source": "FO",
-      "tenorOptions": ["2Y", "3Y", "5Y", "7Y", "10Y", "30Y"]
-    };
-    this.restfulCommonService.callAPI('https://rpia-msmith-dt:51225/santaSecurity/get-santa-securities', {req: 'GET'}, payload).pipe(
-      tap((serverReturn) => {
-        console.log('return is ', serverReturn)
-      }),
-      catchError(err => {
-        console.log('error', err);
-        return of('error');
-      })
-    ).subscribe();
-    this.restfulCommonService.callAPI('https://rpia-msmith-dt:51225/santaGroup/get-santa-groups', {req: 'POST'}, payload).pipe(
-      tap((serverReturn) => {
-        console.log('return is ', serverReturn)
-      }),
-      catchError(err => {
-        console.log('error', err);
-        return of('error');
-      })
-    ).subscribe();
+    this.populateSearchShortcuts();
   }
 
   constructor(
@@ -141,20 +134,47 @@ export class MarketGroupPanel implements OnDestroy {
     this.getGroupsFromSearchSub.unsubscribe();
   }
 
-  public onClickSearchInConfigurator(){
-    this.startSearch();
-    // this.http.post<any>('https://rpiadev01:1225/santaGroup/get-santa-groups', payload, {}).pipe(
-    //   tap((serverReturn) => 
-    //     console.log('return is ', serverReturn)),
-    //   catchError(err => {
-    //     console.log('error', err);
-    //     return of('error');
-    //   })
-    // ).subscribe();
+  public switchMode() {
+    this.state.powerModeActivated = !this.state.powerModeActivated;
+    if (this.state.powerModeActivated) {
+      !!this.state.configurator.selectedShortcut && this.applyShortcutToConfigurator(this.state.configurator.selectedShortcut);
+      this.toggleLandscapeView(true, false);
+    }
+  }
 
-    // this.http.options<any>('https://rpiadev01:1225/santaSecurity/get-santa-securities', {}).pipe(
-    //   tap((serverReturn) => 
-    //     console.log('return is ', serverReturn)),
+  public toggleLandscapeView(overwrite?: boolean, overwriteValue?: boolean) {
+    if (overwrite || !this.state.powerModeActivated) {
+      this.state.landscapeViewActivated = overwrite ? overwriteValue : !this.state.landscapeViewActivated;
+      this.state.searchResult.securityGroupList.forEach((eachGroup) => {
+        eachGroup.state.isLandscapeView = this.state.landscapeViewActivated;
+      });
+    }
+  }
+
+  public onClickSearchShortcut(targetShortcut: SearchShortcutDTO){
+    if (this.state.configurator.selectedShortcut && this.state.configurator.selectedShortcut !== targetShortcut) {
+      this.state.configurator.selectedShortcut.state.isSelected = false;
+    }
+    targetShortcut.state.isSelected = !targetShortcut.state.isSelected;
+    this.state.configurator.selectedShortcut = this.state.configurator.selectedShortcut === targetShortcut ? null : targetShortcut;
+    if (this.state.configurator.selectedShortcut) {
+      this.state.configurator.shortcutList.forEach((eachShortcut) => {
+        eachShortcut.state.isUserInputBlocked = true;
+      });
+      this.startSearch(this.state.configurator.selectedShortcut.data.configuration);
+    } else {
+      this.state.searchResult.securityGroupList = [];
+      this.state.isGroupDataLoaded = false;
+      this.state.utility.visualizer.state.isEmpty = true;
+    }
+  }
+
+  public onClickSearchInConfigurator(){
+    this.startSearch(this.utilityService.flattenDefinitionList(this.state.configurator.dto));
+    // this.restfulCommonService.callAPI('santaSecurity/get-santa-securities', {req: 'GET'}).pipe(
+    //   tap((serverReturn) => {
+    //     console.log('return is ', serverReturn)
+    //   }),
     //   catchError(err => {
     //     console.log('error', err);
     //     return of('error');
@@ -209,7 +229,8 @@ export class MarketGroupPanel implements OnDestroy {
       if (primarySortIndex >= 0) {
         // if there is at least a primarySortIndex, then it's worth to sort
         this.performSort();
-      } else{
+      } else {
+        this.performDefaultSort();
         // default sorting algorithm
       }
     }
@@ -236,73 +257,207 @@ export class MarketGroupPanel implements OnDestroy {
     this.state.configurator.showSelectedGroupConfig = false;
   }
 
-  private startSearch(){
+  public onClearConfig(){
+    this.state.configurator.dto = this.dtoService.createSecurityGroupDefinitionConfigurator();
+  }
+
+  public loadLongDefinitionOptionList(targetDefinition: SecurityGroupDefinitionDTO){
+    this.restfulCommonService.callAPI(targetDefinition.data.urlForGetLongOptionListFromServer, {req: 'GET'}).pipe(
+      first(),
+      delay(200),
+      tap((serverReturn: Array<string>) => {
+        targetDefinition.data.filterOptionList = this.dtoService.generateSecurityGroupDefinitionFilterOptionList(targetDefinition.data.key, serverReturn);
+        this.state.configurator.dto.state.isLoadingLongOptionListFromServer = false;
+      }),
+      catchError(err => {
+        console.log('error', err);
+        return of('error');
+      })
+    ).subscribe();
+  }
+
+  private populateSearchShortcuts(){
+    this.constants.searchShortcuts.forEach((eachShortcutStub) => {
+      const definitionList = eachShortcutStub.includedDefinitions.map((eachIncludedDef) => {
+        const definitionDTO = this.dtoService.formSecurityGroupDefinitionObject(this.constants.securityGroupDefinitionMap.find((eachDef) => {return eachDef.key === eachIncludedDef.definitionKey}));
+        definitionDTO.state.groupByActive = !!eachIncludedDef.groupByActive;
+        if (eachIncludedDef.selectedOptions.length > 0) {
+          definitionDTO.state.filterActive = true;
+          definitionDTO.data.filterOptionList.forEach((eachFilterOption) => {
+            if (eachIncludedDef.selectedOptions.indexOf(eachFilterOption.shortKey) >= 0) {
+              eachFilterOption.isSelected = true;
+            }
+          });
+        }
+        return definitionDTO;
+      });
+      this.state.configurator.shortcutList.push(this.dtoService.formSearchShortcutObject(definitionList, eachShortcutStub.displayTitle));
+    });
+  }
+
+  private applyShortcutToConfigurator(targetShortcut: SearchShortcutDTO){
+    this.onClearConfig();
+    targetShortcut.data.configuration.forEach((eachShortcutDef) => {
+      this.state.configurator.dto.data.definitionList.forEach((eachBundle) => {
+        eachBundle.data.list.forEach((eachDefinition) => {
+          if (eachDefinition.data.key === eachShortcutDef.data.key) {
+            eachDefinition.data.filterOptionList = eachShortcutDef.data.filterOptionList;
+            eachDefinition.state.groupByActive = eachShortcutDef.state.groupByActive;
+            eachDefinition.state.filterActive = eachShortcutDef.state.filterActive;
+          }
+        });
+      });
+    });
+  }
+
+  private startSearch(definitionList: Array<SecurityGroupDefinitionDTO>){
     this.state.configurator.cachedOriginalConfig = null;
     this.state.configurator.showSelectedGroupConfig = false;
     this.state.isGroupDataLoaded = false;
     this.state.utility.visualizer.state.isEmpty = false;
     this.state.utility.visualizer.state.isStencil = true;
+    this.state.searchResult.searchFailed = false;
     this.state.searchResult.renderProgress = 0;
-    this.performSearch();
+    const payload = this.formSearchPayload(definitionList);
+    this.performSearch(payload);
   }
 
-  private performSearch(){
-    // using stubs
-    const serverReturn = SecurityGroupList2;
-
-    this.state.searchResult.securityGroupList = serverReturn.map((eachStub) => {
-      return this.dtoService.formSecurityGroupObject(eachStub, false);
-    });
-    this.initializeGroupStats();
-    this.updateSort();
-
-    this.searchServerReturn$ = from(this.state.searchResult.securityGroupList).pipe(
-      concatMap(item => of(item).pipe(delay(150)))
-    );
-    this.searchServerReturnPackedInChunk$ = this.searchServerReturn$.pipe(
-      bufferTime(1000)
-    );
-    let fullyLoadedCount = 0;
-    
-    this.getGroupsFromSearchSub = this.searchServerReturnPackedInChunk$.pipe(
-      delay(2000),  // this delay is to simulate the delay from server
-      tap((arrayOfGroups:Array<SecurityGroupDTO>) => {
-        console.log('received', arrayOfGroups);
-        arrayOfGroups.forEach((eachGroup) => {
-          // when sort is already active before the search, the index of the rawData is likely not gonna be the same as the index of the DTOs, therefore need to do "find"
-          let rawData;
-          if (this.state.utility.visualizer.data.stats[0].sortHierarchy > 0 || this.state.utility.visualizer.data.stats[1].sortHierarchy > 0 || this.state.utility.visualizer.data.stats[2].sortHierarchy > 0) {
-            rawData = serverReturn.find((eachRawGroup) => {
-              return eachRawGroup.groupName === eachGroup.data.name;
-            });
-          } else {
-            rawData = serverReturn[fullyLoadedCount];
-          }
-          //this.state.searchResult.securityGroupList[index];
-          this.dtoService.updateSecurityGroupWithPieCharts(rawData, eachGroup);
-          //this.initializeStatForGroup(targetGroupCard);
-          fullyLoadedCount++;
-        });
-        this.state.searchResult.renderProgress = Math.round(fullyLoadedCount/serverReturn.length*100);
-        if (fullyLoadedCount === serverReturn.length) {
-          this.searchComplete();
+  private formSearchPayload(definitionList: Array<SecurityGroupDefinitionDTO>): PayloadGetSantaGroups{
+    const currentTime = new Date();
+    if (currentTime.getDay() === 1) {
+      currentTime.setDate(currentTime.getDate() - 3);
+    } else if (currentTime.getDay() === 7) {
+      currentTime.setDate(currentTime.getDate() - 2);
+    } else {
+      currentTime.setDate(currentTime.getDate() - 1);
+    }
+    const parsedMonth = ('0' + (currentTime.getMonth()+1)).slice(-2);
+    const parsedDate = ('0' + currentTime.getDate()).slice(-2);
+    const payload: PayloadGetSantaGroups = {
+      yyyyMMdd: parseInt(`${currentTime.getFullYear()}${parsedMonth}${parsedDate}`),
+      //yyyyMMdd: 20191031,
+      source: "Default",
+      santaGroupDefinition: {},
+      santaGroupFilters: {},
+      tenorOptions: ["2Y", "3Y", "5Y", "7Y", "10Y", "30Y"]
+    };
+    definitionList.forEach((eachDefinition) => {
+      if (eachDefinition.state.groupByActive || eachDefinition.state.isLocked) {
+        const attributeName = this.utilityService.convertFEKey(eachDefinition.data.key);
+        if (attributeName !== 'n/a') {
+          payload.santaGroupDefinition[attributeName] = [];
         }
+      }
+      if (eachDefinition.state.filterActive) {
+        const attributeName = this.utilityService.convertFEKey(eachDefinition.data.key);
+        if (attributeName !== 'n/a') {
+          payload.santaGroupFilters[attributeName] = [];
+          eachDefinition.data.filterOptionList.forEach((eachOption) => {
+            if (eachOption.isSelected) {
+              payload.santaGroupFilters[attributeName].push(eachOption.displayLabel);
+            }
+          });
+        }
+      }
+    });
+    return payload;
+  }
+
+  private performSearch(payload: PayloadGetSantaGroups){
+    this.state.searchResult.securityGroupList = [this.dtoService.formSecurityGroupObject(null), this.dtoService.formSecurityGroupObject(null), this.dtoService.formSecurityGroupObject(null)];
+    this.initializeGroupStats();
+    this.restfulCommonService.callAPI('santaGroup/get-santa-groups', {req: 'POST'}, payload).pipe(
+      first(),
+      tap((serverReturn) => {
+        console.log('return is ', serverReturn);
+        //this.loadSearchResults(serverReturn);
+        this.loadSimpleSearchResults(serverReturn);
+      }),
+      catchError(err => {
+        console.log('error', err);
+        this.state.searchResult.searchFailed = true;
+        this.state.searchResult.searchFailedError = err.message;
+        this.searchComplete();
+        return of('error');
       })
     ).subscribe();
   }
 
-  private searchComplete(){
-    this.state.searchResult.securityGroupList.forEach((eachGroup) => {
-      eachGroup.state.averageCalculationComplete = true;
+  private loadSimpleSearchResults(serverReturn){
+    this.state.searchResult.securityGroupList = serverReturn.map((eachRawGroup) => {
+      const newGroupDTO = this.dtoService.formSecurityGroupObject(eachRawGroup);
+      newGroupDTO.state.isLandscapeView = this.state.landscapeViewActivated;
+      return newGroupDTO;
     });
-    this.calculateGroupAverage(this.state.searchResult.securityGroupList.length);
+    this.state.searchResult.renderProgress = 100;
+    this.initializeGroupStats();
+    this.updateSort();
+    setTimeout(this.searchComplete.bind(this), MetricRenderDelay);
+  }
+
+  // private loadSearchResults(serverReturn){
+    //   this.state.searchResult.securityGroupList = serverReturn.map((eachStub) => {
+    //     return this.dtoService.formSecurityGroupObject(eachStub, false);
+    //   });
+    //   this.initializeGroupStats();
+    //   this.updateSort();
+
+    //   this.searchServerReturn$ = from(this.state.searchResult.securityGroupList).pipe(
+    //     concatMap(item => of(item).pipe(delay(150)))
+    //   );
+    //   this.searchServerReturnPackedInChunk$ = this.searchServerReturn$.pipe(
+    //     bufferTime(1000)
+    //   );
+    //   let fullyLoadedCount = 0;
+      
+    //   this.getGroupsFromSearchSub = this.searchServerReturnPackedInChunk$.pipe(
+    //     //delay(2000),  // this delay is to simulate the delay from server
+    //     tap((arrayOfGroups:Array<SecurityGroupDTO>) => {
+    //       console.log('received', arrayOfGroups);
+    //       arrayOfGroups.forEach((eachGroup) => {
+    //         // when sort is already active before the search, the index of the rawData is likely not gonna be the same as the index of the DTOs, therefore need to do "find"
+    //         let rawData;
+    //         if (this.state.utility.visualizer.data.stats[0].sortHierarchy > 0 || this.state.utility.visualizer.data.stats[1].sortHierarchy > 0 || this.state.utility.visualizer.data.stats[2].sortHierarchy > 0) {
+    //           rawData = serverReturn.find((eachRawGroup) => {
+    //             return eachRawGroup.groupName === eachGroup.data.name;
+    //           });
+    //         } else {
+    //           rawData = serverReturn[fullyLoadedCount];
+    //         }
+    //         this.dtoService.updateSecurityGroupWithPieCharts(rawData, eachGroup);
+    //         fullyLoadedCount++;
+    //       });
+    //       this.state.searchResult.renderProgress = Math.round(fullyLoadedCount/serverReturn.length*100);
+    //       if (fullyLoadedCount === serverReturn.length) {
+    //         this.searchComplete();
+    //       }
+    //     })
+    //   ).subscribe();
+  // }
+
+  private searchComplete(){
+    if (this.state.configurator.selectedShortcut) {
+      this.state.configurator.shortcutList.forEach((eachShortcut) => {
+        eachShortcut.state.isUserInputBlocked = false;
+      });
+    }
+    if (this.state.searchResult.securityGroupList.length > 0) {
+      this.calculateGroupAverage(this.state.searchResult.securityGroupList.length);
+    }
+    this.state.searchResult.securityGroupList.forEach((eachGroup) => {
+      eachGroup.state.isMetricCompleted = true;
+    });
     this.state.utility.visualizer.state.isStencil = false;
     this.state.configurator.dto.state.isLoading = false;
     this.state.isGroupDataLoaded = true;
-    this.getGroupsFromSearchSub.unsubscribe();
+    !!this.getGroupsFromSearchSub && this.getGroupsFromSearchSub.unsubscribe();
   }
 
   private initializeGroupStats(){
+    this.state.utility.visualizer.data.stats.forEach((eachStat) => {
+      eachStat.value = 0;
+      eachStat.percentage = 75;
+    });
     this.state.searchResult.securityGroupList.forEach((eachGroup) => {
       eachGroup.data.stats = [];
       this.initializeStatForGroup(eachGroup);
@@ -342,17 +497,17 @@ export class MarketGroupPanel implements OnDestroy {
             }
           }
         });
-        let average = !!eachStat.deltaScope ? Math.round(sum / respectiveLength * 10000)/10000 : Math.round(sum / respectiveLength * 100)/100;
+        let average = !!eachStat.deltaScope ? Math.round(sum / respectiveLength * 10)/10 : Math.round(sum / respectiveLength);
         eachStat.absMax = absMax;
         eachStat.value = average;
-        eachStat.percentage = Math.round(Math.abs(average)/absMax * 10000)/100;
+        eachStat.percentage = Math.round(Math.sqrt(Math.abs(average))/Math.sqrt(absMax) * 100);
         this.state.searchResult.securityGroupList.forEach((eachGroup) => {
           const targetStat = eachGroup.data.stats.find((eachGroupStat) => {
             return eachGroupStat.label === eachStat.label && eachGroupStat.deltaScope === eachStat.deltaScope;
           });
           if (!!targetStat) {
             targetStat.absMax = absMax;
-            targetStat.percentage = Math.round(Math.abs(targetStat.value)/targetStat.absMax * 10000)/100;
+            targetStat.percentage = Math.round(Math.sqrt(Math.abs(targetStat.value))/Math.sqrt(targetStat.absMax) * 100);
           }
         });
       }
@@ -399,6 +554,18 @@ export class MarketGroupPanel implements OnDestroy {
     });
   }
 
+  private performDefaultSort(){
+    this.state.searchResult.securityGroupList.sort((groupA, groupB) => {
+      if (groupA.data.numOfSecurities < groupB.data.numOfSecurities) {
+        return 1;
+      } else if (groupA.data.numOfSecurities > groupB.data.numOfSecurities) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+  }
+
   private updateConfigurator(selectedGroupList: Array<SecurityGroupDTO>){
     if (!this.state.configurator.cachedOriginalConfig) {
       this.state.configurator.cachedOriginalConfig = this.utilityService.deepCopy(this.state.configurator.dto);
@@ -414,35 +581,37 @@ export class MarketGroupPanel implements OnDestroy {
   private updateConfiguratorPerGroup(targetGroup: SecurityGroupDTO, config: SecurityGroupDefinitionConfiguratorDTO){
     for (const eachBEDefinition in targetGroup.data.definitionConfig) {
       const targetDefinition = this.utilityService.convertBEKey(eachBEDefinition);
-      const targetDefinitionValue = targetGroup.data.definitionConfig[eachBEDefinition];
+      const targetDefinitionValue = targetGroup.data.definitionConfig[eachBEDefinition][0];
       if (!!targetDefinition) {
-        config.data.definitionList.forEach((eachDefinition) => {
-          if (eachDefinition.data.key === targetDefinition) {
-            eachDefinition.state.groupByActive = true;
-            let allFiltersAreSelected = true;
-            eachDefinition.data.filterOptionList.forEach((eachFilter) => {
-              if (eachDefinition.data.key === 'TENOR') {
-                if (eachFilter.shortKey === this.utilityService.convertBETenorToFE(targetDefinitionValue)) {
-                  eachFilter.isSelected = true;
-                  eachDefinition.state.filterActive = true;
-                }
-              } else {
-                if (eachFilter.shortKey === targetDefinitionValue) {
-                  eachFilter.isSelected = true;
-                  eachDefinition.state.filterActive = true;
-                };
-              }
-              if (!eachFilter.isSelected) {
-                allFiltersAreSelected = false;
-              }
-            });
-            if (allFiltersAreSelected) {
+        config.data.definitionList.forEach((eachBundle) => {
+          eachBundle.data.list.forEach((eachDefinition) => {
+            if (eachDefinition.data.key === targetDefinition && !eachDefinition.state.isLocked) {
+              eachDefinition.state.groupByActive = true;
+              let allFiltersAreSelected = true;
               eachDefinition.data.filterOptionList.forEach((eachFilter) => {
-                eachFilter.isSelected = false;
+                if (eachDefinition.data.key === 'TENOR') {
+                  if (eachFilter.shortKey === this.utilityService.convertBETenorToFE(targetDefinitionValue)) {
+                    eachFilter.isSelected = true;
+                    eachDefinition.state.filterActive = true;
+                  }
+                } else {
+                  if (eachFilter.shortKey === targetDefinitionValue) {
+                    eachFilter.isSelected = true;
+                    eachDefinition.state.filterActive = true;
+                  };
+                }
+                if (!eachFilter.isSelected) {
+                  allFiltersAreSelected = false;
+                }
               });
-              eachDefinition.state.filterActive = false;
+              if (allFiltersAreSelected) {
+                eachDefinition.data.filterOptionList.forEach((eachFilter) => {
+                  eachFilter.isSelected = false;
+                });
+                eachDefinition.state.filterActive = false;
+              }
             }
-          }
+          });
         })
       }
     }

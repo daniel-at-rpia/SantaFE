@@ -20,6 +20,8 @@ export class SecurityGroupDefinition implements OnInit {
   @Input() definitionData: SecurityGroupDefinitionDTO;
   @Input() selected: boolean;
   @Input() backgroundVariant: boolean;
+  @Input() heroVariant: boolean;
+  @Input() interactionDisabled: boolean;
   @Output() onClick = new EventEmitter<SecurityGroupDefinitionDTO>();
   constructor(
   ) {
@@ -30,7 +32,9 @@ export class SecurityGroupDefinition implements OnInit {
   }
 
   onClickDefinition() {
-    this.onClick.emit(this.definitionData);
+    if (!this.interactionDisabled) {
+      this.onClick.emit(this.definitionData);
+    }
   }
 
 }

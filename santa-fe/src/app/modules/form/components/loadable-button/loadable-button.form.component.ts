@@ -17,6 +17,7 @@ export class SantaLoadableButton {
   @Input() isLoading: boolean;
   @Input() icon: string;
   @Input() text: string;
+  @Input() columnLayout: boolean;
   @Output() onClickButton = new EventEmitter();
   constructor(
   ) {

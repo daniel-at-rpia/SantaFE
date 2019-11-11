@@ -1,9 +1,6 @@
 @import "global.scss";
 @import "modules/market/market.scss";
 
-$securityGroupDefinitionConfigurator_filters_width: 10rem;
-//$securityGroupDefinitionConfigurator_filters_width: 12.5rem;
-$securityGroupDefinitionConfigurator_width: $iconButton_size_regular + $spacing_small + $securityGroupDefinition_width + $securityGroupDefinitionConfigurator_gapBetweenDefAndFilter + $securityGroupDefinitionConfigurator_filters_width;
 $securityGroupDefinitionConfigurator_ctas_height: 6rem;
 .sat-securityGroupDefinitionConfigurator {
   $securityGroupDefinitionConfiguratorBlockName: &;
@@ -12,7 +9,7 @@ $securityGroupDefinitionConfigurator_ctas_height: 6rem;
   flex-direction: column;
   width: $securityGroupDefinitionConfigurator_width;
   &__definitions {
-    @include mix_fixed_div(relative, $z_index_standard_base_item);
+    @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
     @include mix_enable_scrollbar('vertical');
     flex: 1 1 auto;
     display: flex;
@@ -23,32 +20,62 @@ $securityGroupDefinitionConfigurator_ctas_height: 6rem;
       display: flex;
       flex-direction: column;
       direction: ltr;
-      &-item {
+      &-section {
         display: flex;
-        align-items: center;
-        margin-top: $spacing_medium;
-        &-selectBtn {
-          margin-right: $spacing_medium;
-          font-size: $font_size_x_large;
-          &--selected {
-            @include material('none');
-            background-color: $color_active;
-            color: $font_color_inverse;
-          }
-          &--locked {
-            @include material('none');
+        flex-direction: column;
+        &-label {
+          @include mix_fixed_div(relative, $z_index_standard_base_item);
+          display: flex;
+          margin-top: $spacing_large;
+          &-text {
+            @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
             color: $font_color_major;
-            background-color: inherit;
+            background-color: $color_gray_2;
+            padding: $spacing_x_small;
+            font-size: $font_size_x_large;
+            margin-left: $spacing_small;
+          }
+          &-line {
+            @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
+            @include mix_border_generator($typical_border_width 0 0 0);
+            margin-top: $spacing_large - $spacing_xx_small;
+            width: 100%;
+            height: 50%;
           }
         }
-        &:last-of-type {
-          margin-bottom: $spacing_large;
+        &-item {
+          display: flex;
+          flex-direction: column;
+          margin-top: $spacing_large;
+          &-selectBtn {
+            @include mix_border_radius(5px, 'top');
+            margin-left: $securityGroupDefinition_width/4;
+            width: $securityGroupDefinition_width/2 !important;
+            font-size: $font_size_x_large;
+            align-self: flex-start;
+            &--selected {
+              @include material('none');
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
+            &--locked {
+              @include material('none');
+              color: $font_color_major;
+              background-color: inherit;
+            }
+          }
+          security-group-definition {
+            align-self: flex-start;
+          }
+          &:last-of-type {
+            margin-bottom: $spacing_large;
+          }
         }
       }
     }
   }
   &__filters {
-    @include mix_fixed_div(absolute, $z_index_standard_base_item);
+    @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
     @include mix_calculate(height, 100%, $securityGroupDefinitionConfigurator_ctas_height, '-');
     display: flex;
     top: 0;
@@ -59,9 +86,18 @@ $securityGroupDefinitionConfigurator_ctas_height: 6rem;
     &-content {
       @include mix_alive('custom', $animation_duration_light transform);
       @include mix_border_radius(5px);
+      flex: 1 1 auto;
       display: flex;
       flex-direction: column;
+      align-items: center;
       transform: translate(-125%, 0) scale(0.01, 1);
+      &-closeBtn {
+        @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+        top: $spacing_small;
+        right: $spacing_small;
+        background-color: $color_kill;
+        color: $font_color_inverse;
+      }
       &-title {
         display: flex;
         flex-direction: column;
@@ -77,6 +113,10 @@ $securityGroupDefinitionConfigurator_ctas_height: 6rem;
         input {
           width: 100%;
         }
+      }
+      &-loadLongOptionCta {
+        display: none;
+        margin: 0 $spacing_medium;
       }
       &-optionList {
         @include mix_enable_scrollbar('vertical');
@@ -153,17 +193,20 @@ $securityGroupDefinitionConfigurator_ctas_height: 6rem;
   }
   &--filterActiveState {
     #{$securityGroupDefinitionConfiguratorBlockName} {
-      &__filters-content {
-        @include mix_border_generator(3px, $color_active);
-        transform: translate(0, 0) scale(1, 1);
-        background-color: $color_white;
+      &__filters {
+        @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+        &-content {
+          @include mix_border_generator(3px, $color_active);
+          transform: translate(0, 0) scale(1, 1);
+          background-color: $color_white;
+        }
       }
     }
   }
   &--highlightedVariant {
     #{$securityGroupDefinitionConfiguratorBlockName} {
       &__definitions {
-        &-list-item-selectBtn--selected {
+        &-list-section-item-selectBtn--selected {
           background-color: $color_highlight;
         }
       }
@@ -176,6 +219,28 @@ $securityGroupDefinitionConfigurator_ctas_height: 6rem;
             transform: translate(0, 0);
           }
         }
+      }
+    }
+  }
+  &--filterShowingLongDefinitionState {
+    #{$securityGroupDefinitionConfiguratorBlockName} {
+      &__filters-content {
+        &-search {
+          display: none;
+        }
+        &-loadLongOptionCta {
+          display: flex;
+        }
+        &-optionList {
+          display: none;
+        }
+      }
+    }
+  }
+  &--filterLoadingLongOptionListState {
+    #{$securityGroupDefinitionConfiguratorBlockName} {
+      &__definitions {
+
       }
     }
   }

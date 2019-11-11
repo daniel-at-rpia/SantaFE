@@ -1,117 +1,93 @@
 @import "global.scss";
 @import "modules/market/market.scss";
 
-$averageVisualizer_metricNames_width: $securityGroup_content_canvases_left_width + $securityGroup_content_canvases_right_metricName_width + $securityGroup_base_wheel_size;
-$averageVisualizer_metricNames_width_expanded: $securityGroup_content_canvases_left_width_expanded + $securityGroup_content_canvases_right_metricName_width + $securityGroup_base_wheel_size;
 .sat-securityGroupAverageVisualizer {
   $averageVisualizerBlockName: &;
   display: flex;
-  &__metricNames {
-    flex: 0 0 $averageVisualizer_metricNames_width;
-    display: flex;
-    flex-direction: column;
+  flex-direction: row;
+  &__groupName {
+    flex: 0 0 $securityGroup_content_canvases_left_width;
   }
-  &__alignmentLine {
-    @include mix_border_generator(0 0 0 $typical_border_width);
-    flex: 0 0 auto;
-    margin-left: $securityGroup_content_canvases_right_alignmentLine_marginLeft;
-    width: $securityGroup_content_canvases_right_alignmentLine_marginLeft;
-  }
-  &__metricValues {
-    @include mix_fixed_div(relative, $z_index_standard_base_item);
+  &__metrics {
     flex: 1 1 auto;
     display: flex;
-    flex-direction: column;
-    margin-right: $securityGroup_base_wheel_size;
-    &-mask {
-      @include mix_fixed_div(absolute, $z_index_standard_base_item_lift);
-      @include mix_alive('custom', $animation_duration_heavy transform);
-      width: 100%;
-      height: 100%;
-      transform: translate(100%, 0);
-      background-color: $color_gray_2;
+    margin-right: $spacing_small; // to align perfectly with each securityGroup card
+    &-item {
+      flex: 1 1 33.33%;
+      display: flex;
+      flex-direction: column;
+      &-line {
+        margin-top: $spacing_small;
+      }
     }
   }
   &--expandedState {
     #{$averageVisualizerBlockName} {
-      &__metricNames {
-        flex: 0 0 $averageVisualizer_metricNames_width_expanded;
+      &__groupName {
+        flex: 0 0 $securityGroup_content_canvases_left_width_expanded;
       }
     }
   }
-  @include mq-xx-large-min {
-    &__metricNames {
-      flex: 0 0 $averageVisualizer_metricNames_width_expanded;
-    }
-  }
-  &--stencilState {
+  &--panelEmptyState {
     #{$averageVisualizerBlockName} {
-      &__metricValues-mask {
-        opacity: 0;
-        transform: translate(0, 0);
+      &__metrics {
+        &-item-line {
+          opacity: 0;
+        }
       }
     }
   }
 }
 
-$averageVisualizerName_nameCTA_width: 9rem;
 $averageVisualizerName_nameCTA_height: 1.5rem;
-$averageVisualizerName_value_width: 3.25rem;
 $averageVisualizerName_metricSelectionDropdown_width: 24rem;
 $averageVisualizerName_metricSelectionDropdown_height: 27rem;
 $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
 .sat-securityGroupAverageVisualizerName {
   $averageVisualizerNameBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
-  flex: 1 0 auto;
+  flex: 1 1 auto;
   display: flex;
-  flex-wrap: nowrap;
-  justify-content: flex-end;
-  align-items: center;
-  margin: $spacing_small 0;
-  &__leftMargin {
-    flex: 0 1 $securityGroup_base_wheel_size;
-  }
-  &__sortHierarchy {
-    @include mix_border_radius(5px);
-    display: none;
-    align-items: center;
-    background-color: $color_active;
-    padding: $spacing_xx_small $spacing_x_small;
-    &-icon {
-      color: $font_color_inverse;
-      font-size: $font_size_x_small;
+  flex-direction: column;
+  &__ctas {
+    display: flex;
+    justify-content: space-around;
+    margin: 0 $spacing_medium $spacing_small $spacing_medium;
+    &-editBtn {
+      flex: 1 1 50%;
+      background-color: $color_edit;
+      padding: $spacing_x_small $spacing_small;
+      margin: 0 $spacing_small;
     }
-    &-text {
-      margin-left: $spacing_x_small;
-      color: $font_color_inverse;
-      font-size: $font_size_x_small;
+    &-sortBtn {
+      flex: 1 1 50%;
+      padding: $spacing_x_small $spacing_small;
+      margin: 0 $spacing_small;
     }
   }
-  &__nameCTA {
-    flex: 0 0 $averageVisualizerName_nameCTA_width;
+  &__name {
+    @include mix_border_generator;
+    @include mix_border_radius(3px);
+    flex: 1 1 auto;
+    justify-content: center;
+    background-color: $color_white;
     height: $averageVisualizerName_nameCTA_height;
     padding: 0;
+    margin: 0 $spacing_medium;
+    color: $font_color_major;
     font-size: $font_size_small;
+    text-align: center;
     &--delta {
       display: none;
     }
   }
-  &__value {
-    flex: 0 0 $averageVisualizerName_value_width;
-    text-align: right;
-    color: $font_color_major;
-    font-size: $font_size_small;
-    margin-left: $spacing_small;
-  }
   &__addMetric {
-    flex: 0 0 $averageVisualizerName_nameCTA_width;
+    flex: 1 1 auto;
     display: none;
     justify-content: center;
     height: $averageVisualizerName_nameCTA_height;
     padding: 0;
     background-color: $color_create;
-    margin-right: $averageVisualizerName_value_width + $spacing_small;
     &>&-icon {
       font-size: $font_size_normal;
     }
@@ -119,31 +95,10 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
       font-size: $font_size_x_small;
     }
   }
-  &__actionMenu {
-    @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
-    @include mix_alive('custom', $animation_duration_light transform);
-    display: flex;
-    justify-content: space-between;
-    top: -$iconButton_size_small - $spacing_small;
-    right: $averageVisualizerName_value_width + $spacing_small;
-    width: $averageVisualizerName_nameCTA_width;
-    transform: scale(0.01);
-    &-deleteBtn {
-      background-color: $color_kill;
-      color: $font_color_inverse;
-    }
-    &-editBtn {
-      background-color: $color_edit;
-      color: $font_color_inverse;
-    }
-    &-sortBtn {
-
-    }
-  }
   &__metricSelectionDropdown {
     @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
     top: $spacing_large;
-    right: -50%;
+    right: 0;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -158,7 +113,7 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
   }
   &--showingDeltaState {
     #{$averageVisualizerNameBlockName} {
-      &__nameCTA {
+      &__name {
         display: none;
         &--delta {
           display: flex;
@@ -166,26 +121,18 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
       }
     }
   }
-  &--selectedState {
-    #{$averageVisualizerNameBlockName} {
-      &__nameCTA {
-        @include material('none');
-        background-color: $color_active;
-        color: $font_color_inverse;
-      }
-      &__actionMenu {
-        transform: scale(1);
-      }
-    }
-  }
   &--editingState {
     #{$averageVisualizerNameBlockName} {
+      &__ctas {
+        &-editBtn {
+          @include material('none');
+          @extend .santaBtn--inverseLabelled;
+          background-color: $color_active;
+        }
+      }
       &__addMetric {
         @include material('none');
         background-color: $color_active;
-      }
-      &__actionMenu {
-        transform: scale(0.01);
       }
       &__metricSelectionDropdown-content {
         @include mix_border_generator;
@@ -198,32 +145,19 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
   }
   &--sortActiveState {
     #{$averageVisualizerNameBlockName} {
-      &__sortHierarchy {
-        display: flex;
-        margin-right: $spacing_small;
-      }
-      &__actionMenu {
+      &__ctas {
         &-sortBtn {
+          @include material('none');
+          @extend .santaBtn--inverseLabelled;
           background-color: $color_active;
-          color: $font_color_inverse;
         }
       }
     }
   }
   &--stencilState {
     #{$averageVisualizerNameBlockName} {
-      &__value {
-        @include mix_stencil_animation;
-      }
-      &__nameCTA {
-        @include material('none');
-        @include mix_border_generator;
-      }
       &__addMetric {
         @include material('none');
-      }
-      &__actionMenu {
-        display: none;
       }
       &__metricSelectionDropdown {
         display: none;
@@ -232,27 +166,11 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
   }
   &--emptyState {
     #{$averageVisualizerNameBlockName} {
-      &__nameCTA, &__value, &__actionMenu{
+      &__name {
         display: none;
       }
       &__addMetric {
         display: flex;
-      }
-    }
-  }
-  &--emptyState#{$averageVisualizerNameBlockName}--nextEmpty {
-    margin: 0;
-    #{$averageVisualizerNameBlockName} {
-      &__addMetric, &__metricSelectionDropdown {
-        display: none;
-      }
-    }
-  }
-  &--panelEmptyState {
-    #{$averageVisualizerNameBlockName} {
-      &__value {
-        opacity: 0;
-        user-select: none;
       }
     }
   }
@@ -263,60 +181,111 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
   flex: 1 1 auto;
   display: flex;
   align-items: center;
-  &__line {
-    @include mix_border_radius(3px);
+  &__value {
+    @include mix_text_overflow;
+    flex: 0 0 $securityGroup_content_canvases_right_metricValue_width;
+    margin-right: $spacing_xx_small;
+    font-size: $font_size_x_small;
+    color: $font_color_major;
+    text-align: right;
+    user-select: none;
+  }
+  &__negative {
+    @include mix_fixed_div(relative, $z_index_standard_base_item);
+    flex: 1 1 50%;
+    direction: rtl;
     display: flex;
     align-items: center;
-    background-color: $color_active;
-    height: $securityGroup_content_canvases_right_metricLines_thickness*1.5;
-    opacity: $securityGroup_content_canvases_right_metricLines_opacity;
-  }
-  &--highlightState {
-    #{$averageVisualizerValueBlockName} {
-      &__line {
-        opacity: $securityGroup_content_canvases_right_metricLines_highlight_opacity;
-      }
+    height: 100%;
+    overflow: hidden;
+    &-line {
+      @include mix_border_radius(3px, 'left');
+      visibility: hidden;
+      height: $securityGroup_content_canvases_right_metricLines_thickness;
+      background-color: $color_negative;
+    }
+    &-mask {
+      @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
+      @include mix_alive('custom', transform $animation_duration_heavy);
+      height: 100%;
+      width: 100%;
+      transform: translate(-100%, 0);
+      opacity: 1;
     }
   }
-  &--negativeState {
+  &__positive {
+    @include mix_fixed_div(relative, $z_index_standard_base_item);
+    @include mix_border_generator(0 0 0 $typical_border_width, $font_color_major);
+    flex: 1 1 50%;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    overflow: hidden;
+    &-line {
+      @include mix_border_radius(3px, 'right');
+      height: $securityGroup_content_canvases_right_metricLines_thickness;
+      background-color: $font_color_major;
+    }
+    &-mask {
+      @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
+      @include mix_alive('custom', transform $animation_duration_heavy);
+      height: 100%;
+      width: 100%;
+      transform: translate(100%, 0);
+    }
+  }
+  &--negative {
     #{$averageVisualizerValueBlockName} {
-      &__line {
-        background-color: $color_negative;
+      &__negative {
+        @include mix_border_generator(0 $typical_border_width 0 0, $color_negative);
+        &-line {
+          visibility: visible;
+        }
+      }
+      &__positive {
+        @include mix_border_generator(0);
+        &-line {
+          visibility: hidden;
+        }
       }
     }
   }
   &--stencilState {
     #{$averageVisualizerValueBlockName} {
-      &__line {
+      &__negative-mask, &__positive-mask {
+        transform: translate(0, 0);
+        opacity: 0;
+      }
+      &__value {
         @include mix_stencil_animation;
+      }
+      &__negative-line, &__positive-line {
+        @include mix_stencil_animation;
+        width: 75%;
+        visibility: visible;
       }
     }
   }
   &--emptyState {
-    #{$averageVisualizerValueBlockName} {
-      &__line {
-        width: 0!important;
-      }
-    }
-  }
-  &--emptyState#{$averageVisualizerValueBlockName}--nextEmpty {
-    display: none;
-  }
-  &--panelEmptyState {
-    #{$averageVisualizerValueBlockName} {
-      &__line {
-        display: none;
-      }
-    }
+    opacity: 0;
+    user-select: none;
   }
 }
 
 .sat-securityGroupAverageVisualizerNameDropdownContent {
   $averageVisualizerNameDropdownBlockName: &;
+  @include mix_fixed_div(relative, $z_index_standard_base_item);
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   padding: $spacing_medium;
+  &__closeBtn {
+    @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+    top: $spacing_small;
+    right: $spacing_small;
+    background-color: $color_kill;
+    color: $font_color_inverse;
+  }
   &__chooseMetric {
     display: flex;
     flex-direction: column;

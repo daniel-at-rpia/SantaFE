@@ -1,3 +1,14 @@
+export interface SearchShortcutStub {
+  displayTitle: string;
+  includedDefinitions: Array<SearchShortcutIncludedDefinitionStub>
+}
+
+interface SearchShortcutIncludedDefinitionStub {
+  definitionKey: string;
+  groupByActive: boolean;
+  selectedOptions: Array<string>;
+}
+
 export interface SecurityDefinitionStub {
   key: string;
   backendDtoAttrName?: string;
@@ -6,6 +17,12 @@ export interface SecurityDefinitionStub {
   optionList: Array<string>,
   secondaryIcon?: string;
   locked?: boolean;
+  urlForGetLongOptionListFromServer?: string;
+}
+
+export interface SecurityDefinitionBundleStub {
+  label: string;
+  list: Array<SecurityDefinitionStub>;
 }
 
 export interface SecurityMetricOptionStub {

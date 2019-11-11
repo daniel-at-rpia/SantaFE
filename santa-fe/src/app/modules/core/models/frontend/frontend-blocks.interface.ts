@@ -23,7 +23,6 @@ export interface SecurityGroupMetricPackBlock {
   delta: {
     DoD: object;
     WoW: object;
-    Mtd: object;
     MoM: object;
     Ytd: object;
   }
@@ -49,8 +48,8 @@ export interface SecurityGroupPieChartColorSchemeBlock {
 }
 
 export interface SecurityGroupDefinitionFilterBlock {
-  isSelected: boolean;
-  isFilteredOut: boolean;
+  isSelected: boolean;  // means it is selected for filtering
+  isFilteredOut: boolean;  // means it is hidden/disabled in the UI, sry about this naming failure, it's just not worth it to mass-rename it in the code
   displayLabel: string;
   shortKey: string;
   key: string;

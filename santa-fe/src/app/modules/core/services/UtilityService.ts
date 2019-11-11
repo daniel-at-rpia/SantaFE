@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BESecurityGroupDTO } from 'BEModels/backend-models.interface';
-import { SecurityGroupDTO } from 'FEModels/frontend-models.interface';
+import {
+  SecurityGroupDTO,
+  SecurityGroupDefinitionDTO,
+  SecurityGroupDefinitionConfiguratorDTO
+} from 'FEModels/frontend-models.interface';
 import {
   SecurityGroupMetricBlock,
   SecurityGroupMetricPackBlock
@@ -32,33 +36,29 @@ export class UtilityService {
 
   public mapSeniorities(input): number {
     switch (input) {
-      case "1st Lien Secured":
-        return 1;
-      case "1st lien":
-        return 1;
-      case "2nd lien":
-        return 1;
-      case "2nd lien Secured":
-        return 1;
       case "Secured":
+        return 2;
+      case "1st lien":
+        return 2;
+      case "2nd lien":
+        return 2;
+      case "3rd lien":
         return 2;
       case "Asset Backed":
         return 2;
-      case "Sr Unsecured":
-        return 2;
-      case "Sr Subordinated":
-        return 3;
-      case "Subordinated":
-        return 3;
-      case "Jr Subordinated":
-        return 3;
       case "Sr Preferred":
-        return 4;
-      case "Preferred":
-        return 4;
+        return 3;
+      case "Sr Unsecured":
+        return 3;
       case "Sr Non Preferred":
-        return 4;
+        return 3;
       case "Unsecured":
+        return 3;
+      case "Sr Subordinated":
+        return 4;
+      case "Subordinated":
+        return 4;
+      case "Jr Subordinated":
         return 4;
       default:
         return 5;
@@ -127,11 +127,41 @@ export class UtilityService {
     }
   }
 
-  public isIG(input:string): boolean {
+  public isIG(input: string): boolean {
     if (input === 'AAA' || input === 'AA' || input === 'A' || input === 'BBB') {
       return true;
     } else {
       return false;
+    }
+  }
+
+  public isCDS(input: SecurityGroupDTO | BESecurityGroupDTO): boolean {
+    if (input['data']) {
+      const dtoInput = input as SecurityGroupDTO;
+      return dtoInput.data.name.indexOf('Cds') >= 0;
+    } else {
+      const rawDataInput = input as BESecurityGroupDTO;
+      return rawDataInput.groupName.indexOf('Cds') >= 0;
+    }
+  }
+
+  public isEURorGBP(input: SecurityGroupDTO | BESecurityGroupDTO): boolean {
+    if (input['data']) {
+      const dtoInput = input as SecurityGroupDTO;
+      return dtoInput.data.name.indexOf('EUR') >= 0 || dtoInput.data.name.indexOf('GBP') >= 0;
+    } else {
+      const rawDataInput = input as BESecurityGroupDTO;
+      return rawDataInput.groupName.indexOf('EUR') >= 0 || rawDataInput.groupName.indexOf('GBP') >= 0;
+    }
+  }
+
+  public isFloat(input: SecurityGroupDTO | BESecurityGroupDTO): boolean {
+    if (input['data']) {
+      const dtoInput = input as SecurityGroupDTO;
+      return dtoInput.data.definitionConfig['CouponType'] && dtoInput.data.definitionConfig['CouponType'] === ['Float'];
+    } else {
+      const rawDataInput = input as BESecurityGroupDTO;
+      return rawDataInput.groupIdentifier.groupOptionValues['CouponType'] && rawDataInput.groupIdentifier.groupOptionValues['CouponType'] === ['Float'];
     }
   }
 
@@ -165,7 +195,7 @@ export class UtilityService {
   }
 
   public normalizeDefinitionFilterOption(rawString): string {
-    return rawString.replace(' ', '');
+    return rawString;//.replace(' ', '');
   }
 
   public formDefinitionFilterOptionKey(name, normalizedOption): string {
@@ -178,34 +208,37 @@ export class UtilityService {
       delta: {
         DoD: {},
         WoW: {},
-        Mtd: {},
         MoM: {},
         Ytd: {}
       }
     };
     if (!!rawData) {
       this.metricOptions.forEach((eachMetric) => {
-        const rawValue = rawData.metrics[eachMetric.backendDtoAttrName];
+        let keyToRetrieveMetric = eachMetric.backendDtoAttrName;
+        if (eachMetric.label === 'Default Spread') {
+          if (this.isCDS(rawData)) {
+            keyToRetrieveMetric = 'spread';
+          } else if (this.isFloat(rawData)) {
+            keyToRetrieveMetric = 'zSpread';
+          } else if (this.isEURorGBP(rawData)) {
+            keyToRetrieveMetric = 'zSpread';
+          } else {
+            keyToRetrieveMetric = 'oasSpread';
+          }
+        }
+        const rawValue = rawData.metrics[keyToRetrieveMetric];
         if (rawValue === null || rawValue === undefined) {
           object.raw[eachMetric.label] = null;
         } else {
-          if (eachMetric.label === 'Size') {
-            object.raw[eachMetric.label] = Math.round(rawValue/100)/10000;
-          } else {
-            object.raw[eachMetric.label] = Math.round(rawValue*100)/100;
-          }
+          object.raw[eachMetric.label] = Math.round(rawValue);
         }
         eachMetric.deltaOptions.forEach((eachDeltaScope) => {
           const deltaSubPack = rawData.deltaMetrics[eachDeltaScope];
-          const deltaValue = !!deltaSubPack ? deltaSubPack[eachMetric.backendDtoAttrName] : null;
+          const deltaValue = !!deltaSubPack ? deltaSubPack[keyToRetrieveMetric] : null;
           if (deltaValue === null || deltaValue === undefined) {
             object.delta[eachDeltaScope][eachMetric.label] = null;
           } else {
-            if (eachMetric.label === 'Size') {
-              object.delta[eachDeltaScope][eachMetric.label] = Math.round(deltaValue/100)/10000;
-            } else {
-              object.delta[eachDeltaScope][eachMetric.label] = Math.round(deltaValue*1000)/1000;
-            }
+            object.delta[eachDeltaScope][eachMetric.label] = Math.round(deltaValue*100)/100;
           }
         })
       });
@@ -220,20 +253,15 @@ export class UtilityService {
       if (!!metricDTO.deltaScope) {
         deltaSubPack = groupDTO.data.metricPack.delta[metricDTO.deltaScope];
         value = !!deltaSubPack ? deltaSubPack[metricLabel] : null;
-        value = Math.round(value*1000)/1000;
+        value = Math.round(value*10)/10;
       } else {
         value = groupDTO.data.metricPack.raw[metricLabel];
-        value = Math.round(value*100)/100;
+        value = Math.round(value);
       }
       if (value === null || value === undefined) {
         return -3.1415926;
       } else {
-        // further round the metric if it is Size
-        if (metricLabel === 'Size') {
-          return Math.round(value);
-        } else {
-          return value;
-        }
+        return value;
       }
     }
     return -3.1415926;
@@ -242,22 +270,23 @@ export class UtilityService {
   public retrievePrimaryMetricValue(rawData: BESecurityGroupDTO): string {
     let value = `n/a`;
     if (!!rawData) {
-      const rating = rawData.metrics[this.keyDictionary.RATING];
-      if (this.isIG(rating)) {
-        const spread = rawData.metrics[this.keyDictionary.SPREAD];
-        value = `${Math.round(spread)}`;
-      } else {
-        const price = rawData.metrics[this.keyDictionary.PRICE];
-        const yieldVal = rawData.metrics[this.keyDictionary.YIELD];
-        value = `${Math.round(price*100)/100} / ${Math.round(yieldVal*100)/100}`;
-      }
+      // disable the automatic differentiation betwen IG & HY
+      // const rating = rawData.metrics[this.keyDictionary.RATING];
+      // if (this.isIG(rating)) {
+      const spread = rawData.metrics[this.keyDictionary.SPREAD];
+      value = `${Math.round(spread)}`;
+      // } else {
+      //   const price = rawData.metrics[this.keyDictionary.PRICE];
+      //   const yieldVal = rawData.metrics[this.keyDictionary.YIELD];
+      //   value = `${Math.round(price*100)/100} / ${Math.round(yieldVal*100)/100}`;
+      // }
     }
     return value;
   }
 
   public retrieveRawSupportingDataForLeftPie(rawData: BESecurityGroupDTO): object {
-    if (!!rawData) {
-      const object = rawData.descriptiveMetrics[this.keyDictionary.RATING_DES];
+    if (!!rawData && !!rawData.descriptiveMetrics) {
+      const object = rawData.descriptiveMetrics[this.keyDictionary.RATING];
       if (!!object) {
         return object;
       } else {
@@ -269,7 +298,7 @@ export class UtilityService {
   }
 
   public retrieveRawSupportingDataForRightPie(rawData: BESecurityGroupDTO): object {
-    if (!!rawData) {
+    if (!!rawData && !!rawData.descriptiveMetrics) {
       const object = rawData.descriptiveMetrics[this.keyDictionary.SENIORITY];
       if (!!object) {
         return object;
@@ -306,6 +335,14 @@ export class UtilityService {
     return null;
   }
 
+  public convertFEKey(frontendKey: string): string {
+    if (!!this.keyDictionary[frontendKey]) {
+      return this.keyDictionary[frontendKey];
+    } else {
+      return 'n/a';
+    }
+  }
+
   public convertBETenorToFE(backendTenor: string): string {
     switch (backendTenor) {
       case "3M":
@@ -320,5 +357,15 @@ export class UtilityService {
       default:
         return backendTenor;
     }
+  }
+
+  public flattenDefinitionList(configurator: SecurityGroupDefinitionConfiguratorDTO): Array<SecurityGroupDefinitionDTO> {
+    const flattenDefinitionList = [];
+    configurator.data.definitionList.forEach((eachBundle) => {
+      eachBundle.data.list.forEach((eachDefinition) => {
+        flattenDefinitionList.push(eachDefinition);
+      });
+    });
+    return flattenDefinitionList;
   }
 }

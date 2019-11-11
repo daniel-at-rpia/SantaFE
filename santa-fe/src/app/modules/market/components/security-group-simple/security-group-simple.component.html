@@ -1,0 +1,57 @@
+<article
+  (click)="onClickGroup()"
+  class="sat-securityGroupSimple--type-{{groupData.data.ratingLevel}}"
+  [ngClass]="{
+    'sat-securityGroupSimple': true,
+    'sat-securityGroupSimple--stencilState': groupData.state.isStencil,
+    'sat-securityGroupSimple--selectedState': groupData.state.isSelected,
+    'sat-securityGroupSimple--expandedState': groupData.state.isExpanded,
+    'sat-securityGroupSimple--metricCompleteState': groupData.state.isMetricCompleted,
+    'sat-securityGroupSimple--landscapeViewState': groupData.state.isLandscapeView
+  }">
+  <section class="sat-securityGroupSimple__base">
+    <div class="sat-securityGroupSimple__base-center"></div>
+  </section>
+  <section class="sat-securityGroupSimple__content">
+    <div class="sat-securityGroupSimple__content-canvases">
+      <div class="sat-securityGroupSimple__content-canvases-left">
+        <div class="sat-securityGroupSimple__content-canvases-left-content">
+          <div class="sat-securityGroupSimple__content-canvases-left-content-size">
+            <span class="sat-securityGroupSimple__content-canvases-left-content-size-text">{{groupData.data.numOfSecurities}}</span>
+          </div>
+          <div class="sat-securityGroupSimple__content-canvases-left-content-name">
+            <span class="sat-securityGroupSimple__content-canvases-left-content-name-text">{{groupData.data.name}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="sat-securityGroupSimple__content-canvases-right">
+        <div
+          *ngFor="let eachStat of groupData.data.stats"
+          [ngClass]="{
+            'sat-securityGroupSimple__content-canvases-right-metric': true,
+            'sat-securityGroupSimple__content-canvases-right-metric--negative': eachStat.value < 0
+          }">
+          <div class="sat-securityGroupSimple__content-canvases-right-metric-value">{{eachStat.value}}</div>
+          <div class="sat-securityGroupSimple__content-canvases-right-metric-negative">
+            <div [ngStyle]="{'width': eachStat.percentage + '%'}" class="sat-securityGroupSimple__content-canvases-right-metric-negative-line"></div>
+            <div class="sat-securityGroupSimple__content-canvases-right-metric-negative-mask"></div>
+          </div>
+          <div class="sat-securityGroupSimple__content-canvases-right-metric-positive">
+            <div [ngStyle]="{'width': eachStat.percentage + '%'}" class="sat-securityGroupSimple__content-canvases-right-metric-positive-line"></div>
+            <div class="sat-securityGroupSimple__content-canvases-right-metric-positive-mask"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sat-securityGroupSimple__content-canvases-behind">
+        <!--
+        <div class="sat-securityGroupSimple__content-canvases-behind-size">
+          {{groupData.data.numOfSecurities}}
+        </div>
+        -->
+        <div class="sat-securityGroupSimple__content-canvases-behind-rating">
+          {{groupData.data.ratingValue}}
+        </div>
+      </div>
+    </div>
+  </section>
+</article>

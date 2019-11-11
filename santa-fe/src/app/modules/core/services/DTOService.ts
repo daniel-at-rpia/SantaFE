@@ -7,15 +7,20 @@ import {
   SecurityDTO,
   SecurityGroupDTO,
   SecurityGroupDefinitionDTO,
+  SecurityGroupDefinitionBundleDTO,
   SecurityGroupDefinitionConfiguratorDTO,
   SecurityGroupAverageVisualizerDTO,
-  QuantComparerDTO
+  QuantComparerDTO,
+  SearchShortcutDTO
 } from 'FEModels/frontend-models.interface';
 import {
   SecurityGroupMetricBlock,
   SecurityGroupDefinitionFilterBlock
 } from 'FEModels/frontend-blocks.interface';
-import { SecurityDefinitionStub } from 'FEModels/frontend-stub-models.interface';
+import {
+  SecurityDefinitionStub,
+  SecurityDefinitionBundleStub
+} from 'FEModels/frontend-stub-models.interface';
 import { UtilityService } from './UtilityService';
 import {
   SecurityGroupRatingColorScheme,
@@ -23,7 +28,7 @@ import {
 } from 'Core/constants/colorSchemes.constant';
 import {
   MetricOptions,
-  SecurityGroupDefinitionMap
+  ConfiguratorDefinitionLayout
 } from 'Core/constants/marketConstants.constant';
 
 @Injectable()
@@ -54,12 +59,11 @@ export class DTOService {
   }
 
   public formSecurityGroupObject(
-    rawData: BESecurityGroupDTO,
-    areChartsReady: boolean
+    rawData: BESecurityGroupDTO
   ): SecurityGroupDTO {
     const object:SecurityGroupDTO = {
       data: {
-        name: !!rawData ?  rawData.groupName : 'PLACEHOLDER',
+        name: !!rawData ?  rawData.groupName.replace(/\|/g, ' | ') : 'PLACEHOLDER',
         ratingLevel: !!rawData ? this.utility.mapRatings(rawData.metrics['ratingNoNotch']) : 1,
         ratingValue: !!rawData ? rawData.metrics['ratingNoNotch'] : 'AA',
         numOfSecurities: !!rawData ? rawData.numSecurities : 32,
@@ -77,36 +81,27 @@ export class DTOService {
         isSelected: false,
         isExpanded: false,
         isStencil: !rawData,
-        areChartsReady: !!areChartsReady,
-        averageCalculationComplete: false,
-        pieChartComplete: false
+        isMetricCompleted: false,
+        isLandscapeView: false
       },
       graph: {
         leftPie: {
           name: this.utility.generateUUID(),
           colorScheme: SecurityGroupRatingColorScheme,
           chart: null,
-          rawSupportingData: !areChartsReady ? {} : this.utility.retrieveRawSupportingDataForLeftPie(rawData)
+          rawSupportingData: {}
+          // rawSupportingData: this.utility.retrieveRawSupportingDataForLeftPie(rawData)
         },
         rightPie: {
           name: this.utility.generateUUID(),
           colorScheme: SecurityGroupSeniorityColorScheme,
           chart: null,
-          rawSupportingData: !areChartsReady ? {} : this.utility.retrieveRawSupportingDataForRightPie(rawData)
+          rawSupportingData: {} 
+          // rawSupportingData: this.utility.retrieveRawSupportingDataForRightPie(rawData)
         }
       }
     };
     return object;
-  }
-
-  public updateSecurityGroupWithPieCharts(
-    rawData: BESecurityGroupDTO,
-    groupDTO: SecurityGroupDTO
-  ) {
-    const newObject = this.formSecurityGroupObject(rawData, true);
-    groupDTO.graph.leftPie.rawSupportingData = newObject.graph.leftPie.rawSupportingData;
-    groupDTO.graph.rightPie.rawSupportingData = newObject.graph.rightPie.rawSupportingData;
-    groupDTO.state.areChartsReady = true;
   }
 
   public generateSecurityGroupDefinitionFilterOptionList(
@@ -133,6 +128,7 @@ export class DTOService {
       data: {
         name: rawData.displayName,
         key: rawData.key,
+        urlForGetLongOptionListFromServer: rawData.urlForGetLongOptionListFromServer || null,
         filterOptionList: this.generateSecurityGroupDefinitionFilterOptionList(rawData.key, rawData.optionList)
       },
       style: {
@@ -150,51 +146,67 @@ export class DTOService {
     return object;
   }
 
-  public createSecurityGroupDefinitionConfigurator():SecurityGroupDefinitionConfiguratorDTO {
+  public formSecurityGroupDefinitionBundleObject(
+    stubData: SecurityDefinitionBundleStub
+  ): SecurityGroupDefinitionBundleDTO {
+    const object: SecurityGroupDefinitionBundleDTO = {
+      data: {
+        label: stubData.label,
+        list: stubData.list.map((eachStubDefinition) => {
+          return this.formSecurityGroupDefinitionObject(eachStubDefinition);
+        })
+      },
+      state: {
+
+      }
+    }
+    return object;
+  }
+
+  public createSecurityGroupDefinitionConfigurator(): SecurityGroupDefinitionConfiguratorDTO {
     const object:SecurityGroupDefinitionConfiguratorDTO = {
       data: {
         filterSearchInputValue: '',
-        definitionList: SecurityGroupDefinitionMap.map((eachDefinitionStub) => {
-          return this.formSecurityGroupDefinitionObject(eachDefinitionStub);
+        definitionList: ConfiguratorDefinitionLayout.map((eachBundle) => {
+          return this.formSecurityGroupDefinitionBundleObject(eachBundle);
         })
       },
       state: {
         showFiltersFromDefinition: null,
         showLongFilterOptions: false,
-        isLoading: false
+        isLoading: false,
+        isLoadingLongOptionListFromServer: false
       }
     };
     return object;
   }
 
-  public formAverageVisualizerObject():SecurityGroupAverageVisualizerDTO{
+  public formAverageVisualizerObject(): SecurityGroupAverageVisualizerDTO {
     const object:SecurityGroupAverageVisualizerDTO = {
       data: {
         stats: [
-          this.formSecurityGroupMetricObject(MetricOptions[2].label, 'DoD'),
-          this.formSecurityGroupMetricObject(MetricOptions[2].label, 'WoW'),
-          this.formSecurityGroupMetricObject(MetricOptions[2].label, 'MoM')
+          this.formSecurityGroupMetricObject(MetricOptions[0].label, 'DoD'),
+          this.formSecurityGroupMetricObject(MetricOptions[0].label, 'WoW'),
+          this.formSecurityGroupMetricObject(MetricOptions[0].label, 'MoM')
         ]
       },
       state: {
         isEmpty: true,
         isStencil: false,
         isExpanded: false,
-        selectingStat: null,
         editingStat: null,
         editingStatSelectedMetric: null,
         editingStatSelectedMetricValueType: null,
         editingStatSelectedMetricDeltaType: null
       }
     }
-    object.data.stats[1].sortHierarchy = 1;
     return object;
   }
 
   public formSecurityGroupMetricObject(
     label?: string,
     deltaScope?: string
-  ): SecurityGroupMetricBlock{
+  ): SecurityGroupMetricBlock {
     const object = {
       isEmpty: !label,
       sortHierarchy: null,
@@ -202,8 +214,33 @@ export class DTOService {
       label: label || '',
       value: 100,
       absMax: 100,
-      percentage: 100
+      percentage: 75
     }
+    return object;
+  }
+
+  public formSearchShortcutObject(
+    definitionList: Array<SecurityGroupDefinitionDTO>,
+    title: string
+  ): SearchShortcutDTO {
+    const object: SearchShortcutDTO = {
+      data: {
+        displayTitle: title,
+        configuration: definitionList
+      },
+      style: {
+        slotList: [null, null, null, null, null]
+      },
+      state: {
+        isSelected: false,
+        isUserInputBlocked: false
+      }
+    };
+    definitionList.forEach((eachDefinition, index) => {
+      if ( index !== 0 && index <= 5 ) {
+        object.style.slotList[index-1] = eachDefinition;
+      }
+    });
     return object;
   }
 

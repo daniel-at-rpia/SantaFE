@@ -46,9 +46,8 @@ export interface SecurityGroupDTO extends BasicDTOStructure {
     isExpanded: boolean;
     isStencil: boolean;
     isSelected: boolean;
-    areChartsReady: boolean;
-    averageCalculationComplete: boolean;
-    pieChartComplete: boolean;
+    isMetricCompleted: boolean;
+    isLandscapeView: boolean;
   }
   graph: {
     leftPie: SecurityGroupPieChartBlock;
@@ -60,6 +59,7 @@ export interface SecurityGroupDefinitionDTO extends BasicDTOStructure {
   data: {
     name: string;
     key: string;
+    urlForGetLongOptionListFromServer: string;
     filterOptionList: Array<SecurityGroupDefinitionFilterBlock>;
   }
   style: {
@@ -74,14 +74,22 @@ export interface SecurityGroupDefinitionDTO extends BasicDTOStructure {
   }
 }
 
+export interface SecurityGroupDefinitionBundleDTO extends BasicDTOStructure {
+  data: {
+    label: string;
+    list: Array<SecurityGroupDefinitionDTO>
+  }
+}
+
 export interface SecurityGroupDefinitionConfiguratorDTO extends BasicDTOStructure {
   data: {
-    definitionList: Array<SecurityGroupDefinitionDTO>;
+    definitionList: Array<SecurityGroupDefinitionBundleDTO>;
     filterSearchInputValue: string;
   }
   state: {
     showLongFilterOptions: boolean;
     isLoading: boolean;
+    isLoadingLongOptionListFromServer: boolean;
     showFiltersFromDefinition: SecurityGroupDefinitionDTO;
   }
 }
@@ -94,11 +102,24 @@ export interface SecurityGroupAverageVisualizerDTO extends BasicDTOStructure {
     isEmpty: boolean;
     isStencil: boolean;
     isExpanded: boolean;
-    selectingStat: SecurityGroupMetricBlock;
     editingStat: SecurityGroupMetricBlock;
     editingStatSelectedMetric: any;
     editingStatSelectedMetricValueType: string;
     editingStatSelectedMetricDeltaType: string;
+  }
+}
+
+export interface SearchShortcutDTO extends BasicDTOStructure {
+  data: {
+    displayTitle: string;
+    configuration: Array<SecurityGroupDefinitionDTO>
+  },
+  style: {
+    slotList: Array<SecurityGroupDefinitionDTO>
+  },
+  state: {
+    isSelected: boolean;
+    isUserInputBlocked: boolean;
   }
 }
 

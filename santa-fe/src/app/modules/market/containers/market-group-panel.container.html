@@ -1,13 +1,54 @@
 <article [ngClass]="{
   'sat-marketGroupPanel': true, 
+  'sat-marketGroupPanel--powerMode': state.powerModeActivated,
+  'sat-marketGroupPanel--landscapeViewActiveState': state.landscapeViewActivated,
   'sat-marketGroupPanel--selectedGroupConfigActiveState': state.configurator.showSelectedGroupConfig,
   'sat-marketGroupPanel--configuratorCollapsedState': state.isConfiguratorCollapsed,
   'sat-marketGroupPanel--averageVisualizerEnabledState': state.utility.selectedWidget === 'AVERAGE_VISUALIZER',
   'sat-marketGroupPanel--pieConfiguratorEnabledState': state.utility.selectedWidget === 'PIE_CONFIGURATOR',
   'sat-marketGroupPanel--searchInProgressState': state.configurator.dto.state.isLoading,
-  'sat-marketGroupPanel--searchCompletedState': state.isGroupDataLoaded
+  'sat-marketGroupPanel--searchCompletedState': state.isGroupDataLoaded,
+  'sat-marketGroupPanel--searchFailedState': state.searchResult.searchFailed
 }">
   <section class="sat-marketGroupPanel__configurator">
+    <div class="sat-marketGroupPanel__configurator-utility">
+      <div class="sat-marketGroupPanel__configurator-utility-hero sat-marketGroupPanel__configurator-utility-hero--left">
+        <i class="sat-marketGroupPanel__configurator-utility-hero-icon fal fa-satellite-dish"></i>
+      </div>
+      <div class="sat-marketGroupPanel__configurator-utility-modeCTA">
+        <span class="sat-marketGroupPanel__configurator-utility-modeCTA-title">Explore Mode</span>
+        <span class="sat-marketGroupPanel__configurator-utility-modeCTA-title sat-marketGroupPanel__configurator-utility-modeCTA-title--power">Power Mode</span>
+        <button (click)="switchMode()" class="santaBtn--labelled">
+          <i class="fal fa-repeat"></i>
+          <span>Switch</span>
+        </button>
+        <button (click)="toggleLandscapeView()" class="sat-marketGroupPanel__configurator-utility-modeCTA-landscapeBtn santaBtn--labelled santaBtn--small">
+          <i class="fas fa-mountains"></i>
+          <span>Landscape</span>
+        </button>
+      </div>
+      <div class="sat-marketGroupPanel__configurator-utility-hero sat-marketGroupPanel__configurator-utility-hero--right">
+        <i class="sat-marketGroupPanel__configurator-utility-hero-icon fal fa-rocket"></i>
+      </div>
+    </div>
+    <div class="sat-marketGroupPanel__configurator-mainCanvas">
+      <ul class="sat-marketGroupPanel__configurator-mainCanvas-shortcutList">
+        <li *ngFor="let eachShortcut of state.configurator.shortcutList" class="sat-marketGroupPanel__configurator-mainCanvas-shortcutList-item">
+          <search-shortcut
+            [shortcutData]="eachShortcut"
+            (onClickShortcutCallback)="onClickSearchShortcut($event)"></search-shortcut>
+        </li>
+      </ul>
+      <div class="sat-marketGroupPanel__configurator-mainCanvas-configurator">
+        <security-group-definition-configurator
+          (onClickSearch)="onClickSearchInConfigurator($event)"
+          (onClickLoadLongOptionList)="loadLongDefinitionOptionList($event)"
+          [configuratorData]="state.configurator.dto"
+          [highlightedVariant]="state.configurator.showSelectedGroupConfig"
+        ></security-group-definition-configurator>
+      </div>
+    </div>
+    <!--
     <div class="sat-marketGroupPanel__configurator-selectedGroupConfigNotice">
       <div class="sat-marketGroupPanel__configurator-selectedGroupConfigNotice-content">
         <div class="sat-marketGroupPanel__configurator-selectedGroupConfigNotice-content-title">
@@ -16,11 +57,7 @@
         <button (click)="onRestoreConfig()" class="sat-marketGroupPanel__configurator-selectedGroupConfigNotice-content-btn">Restore Config</button>
       </div>
     </div>
-    <security-group-definition-configurator
-      (onClickSearch)="onClickSearchInConfigurator($event)"
-      [configuratorData]="state.configurator.dto"
-      [highlightedVariant]="state.configurator.showSelectedGroupConfig"
-    ></security-group-definition-configurator>
+    -->
   </section>
   <section class="sat-marketGroupPanel__configuratorCollapseCTA">
     <button
@@ -36,12 +73,13 @@
   <section class="sat-marketGroupPanel__groups">
     <div class="sat-marketGroupPanel__groups-utility">
       <div class="sat-marketGroupPanel__groups-utility-prompt">
-        <span class="sat-marketGroupPanel__groups-utility-prompt-emptyText">Use "Go Hunt" to Search for Security Groups</span>
+        <span class="sat-marketGroupPanel__groups-utility-prompt-emptyText">Use the Configurator on the left to search for security groups</span>
         <span class="sat-marketGroupPanel__groups-utility-prompt-highlightText">{{state.searchResult.securityGroupList.length}}</span>
         <span class="sat-marketGroupPanel__groups-utility-prompt-text">groups matched your search</span>
         <span class="sat-marketGroupPanel__groups-utility-prompt-inProgressText">Loading...</span>
         <span class="sat-marketGroupPanel__groups-utility-prompt-inProgressHighlightText">{{state.searchResult.renderProgress}}%</span>
       </div>
+      <!--
       <div class="sat-marketGroupPanel__groups-utility-widgetSelector">
         <div class="sat-marketGroupPanel__groups-utility-widgetSelector-btnGroup santaBtnGroup">
           <button
@@ -68,6 +106,7 @@
           </button>
         </div>
       </div>
+      -->
       <div class="sat-marketGroupPanel__groups-utility-pieConfigurator">
         <div
           (click)="onClickPieConfigurator(state.utility.pieConfigurator.left)"
@@ -109,6 +148,7 @@
       <div class="sat-marketGroupPanel__groups-utility-groupAverage">
         <security-group-average-visualizer
           [visualizerData]="state.utility.visualizer"
+          [expandedState]="state.isConfiguratorCollapsed"
           [panelAtEmptyState]="!state.configurator.dto.state.isLoading && !this.state.isGroupDataLoaded"
           (onMetricChange)="updateGroupStats()"
           (onSortHierarchyChange)="updateSort()">
@@ -117,12 +157,16 @@
     </div>
     <ul class="sat-marketGroupPanel__groups-list">
       <li *ngFor="let eachGroup of state.searchResult.securityGroupList; let i = index" class="sat-marketGroupPanel__groups-list-item">
-        <security-group
+        <security-group-simple
           [groupData]="eachGroup"
-          [areChartsReady]="!eachGroup.state.areChartsReady"
           (onGroupSelect)="onSecurityGroupSelected($event)">
-        </security-group>
+        </security-group-simple>
       </li>
     </ul>
+    <div class="sat-marketGroupPanel__groups-errorPrompt">
+      <i class="sat-marketGroupPanel__groups-errorPrompt-icon fal fa-sad-tear"></i>
+      <span class="sat-marketGroupPanel__groups-errorPrompt-title">Search failed due to </span>
+      <span class="sat-marketGroupPanel__groups-errorPrompt-errorText">{{state.searchResult.searchFailedError}}</span>
+    </div>
   </section>
 </article>

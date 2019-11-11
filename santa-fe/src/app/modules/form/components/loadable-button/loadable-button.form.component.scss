@@ -38,4 +38,18 @@
       }
     }
   }
+  &--columnLayout {
+    #{$loadableButtonBlockName} {
+      &__btn {
+        flex-direction: column;
+        &-loadingIcon {
+          font-size: $font_size_xx_large;
+        }
+        &>i {
+          margin-bottom: $spacing_small;
+          margin-right: 0;
+        }
+      }
+    }
+  }
 }
