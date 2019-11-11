@@ -8,6 +8,11 @@ const routes: Routes = [
         pathMatch: 'full'
       },
       {
+        path: 'trade',
+        redirectTo: 'trade',
+        pathMatch: 'full'
+      },
+      {
         path: '**',
         redirectTo: 'market',
         pathMatch: 'full'
