@@ -26,7 +26,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
       },{
         definitionKey: 'COUPON_TYPE',
         groupByActive: true,
-        selectedOptions: []
+        selectedOptions: ['Fixed', 'Float']
       }
     ]
   },{
@@ -47,7 +47,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
       },{
         definitionKey: 'COUPON_TYPE',
         groupByActive: true,
-        selectedOptions: []
+        selectedOptions: ['Fixed', 'Float']
       }
     ]
   },{
@@ -68,7 +68,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
       },{
         definitionKey: 'COUPON_TYPE',
         groupByActive: true,
-        selectedOptions: []
+        selectedOptions: ['Fixed', 'Float']
       }
     ]
   },{
@@ -93,7 +93,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
       },{
         definitionKey: 'COUPON_TYPE',
         groupByActive: true,
-        selectedOptions: []
+        selectedOptions: ['Fixed', 'Float']
       }
     ]
   },{
@@ -118,7 +118,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
       },{
         definitionKey: 'COUPON_TYPE',
         groupByActive: true,
-        selectedOptions: []
+        selectedOptions: ['Fixed', 'Float']
       }
     ]
   },{
@@ -147,7 +147,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
       },{
         definitionKey: 'COUPON_TYPE',
         groupByActive: true,
-        selectedOptions: []
+        selectedOptions: ['Fixed', 'Float']
       }
     ]
   },{
@@ -180,7 +180,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
       },{
         definitionKey: 'COUPON_TYPE',
         groupByActive: true,
-        selectedOptions: []
+        selectedOptions: ['Fixed', 'Float']
       }
     ]
   },
