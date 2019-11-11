@@ -2,7 +2,7 @@
 @import "modules/market/market.scss";
 @import "./security-group-simple-mixin.scss";
 
-$securityGroupSimple_height: 2.5rem;
+$securityGroupSimple_height: 1.75rem;
 .sat-securityGroupSimple {
   $securityGroupSimpleBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
@@ -58,7 +58,7 @@ $securityGroupSimple_height: 2.5rem;
             overflow: hidden;
             &-text {
               @include mix_text_overflow();
-              line-height: $line_height_normal;
+              line-height: $line_height_minimum;
               color: $font_color_major;
               font-size: $font_size_small;
               text-align: center;
@@ -70,7 +70,7 @@ $securityGroupSimple_height: 2.5rem;
             display: flex;
             overflow: hidden;
             &-text {
-              @include mix_text_overflow_multi_line(2);
+              @include mix_text_overflow_multi_line(1);
               line-height: $line_height_small;
               color: $font_color_inverse;
               font-size: $font_size_small;

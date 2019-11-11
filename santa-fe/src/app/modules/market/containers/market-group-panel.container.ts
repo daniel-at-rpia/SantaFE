@@ -136,7 +136,10 @@ export class MarketGroupPanel implements OnDestroy {
 
   public switchMode() {
     this.state.powerModeActivated = !this.state.powerModeActivated;
-    this.state.powerModeActivated && this.toggleLandscapeView(true, false);
+    if (this.state.powerModeActivated) {
+      !!this.state.configurator.selectedShortcut && this.applyShortcutToConfigurator(this.state.configurator.selectedShortcut);
+      this.toggleLandscapeView(true, false);
+    }
   }
 
   public toggleLandscapeView(overwrite?: boolean, overwriteValue?: boolean) {
@@ -254,6 +257,10 @@ export class MarketGroupPanel implements OnDestroy {
     this.state.configurator.showSelectedGroupConfig = false;
   }
 
+  public onClearConfig(){
+    this.state.configurator.dto = this.dtoService.createSecurityGroupDefinitionConfigurator();
+  }
+
   public loadLongDefinitionOptionList(targetDefinition: SecurityGroupDefinitionDTO){
     this.restfulCommonService.callAPI(targetDefinition.data.urlForGetLongOptionListFromServer, {req: 'GET'}).pipe(
       first(),
@@ -285,6 +292,21 @@ export class MarketGroupPanel implements OnDestroy {
         return definitionDTO;
       });
       this.state.configurator.shortcutList.push(this.dtoService.formSearchShortcutObject(definitionList, eachShortcutStub.displayTitle));
+    });
+  }
+
+  private applyShortcutToConfigurator(targetShortcut: SearchShortcutDTO){
+    this.onClearConfig();
+    targetShortcut.data.configuration.forEach((eachShortcutDef) => {
+      this.state.configurator.dto.data.definitionList.forEach((eachBundle) => {
+        eachBundle.data.list.forEach((eachDefinition) => {
+          if (eachDefinition.data.key === eachShortcutDef.data.key) {
+            eachDefinition.data.filterOptionList = eachShortcutDef.data.filterOptionList;
+            eachDefinition.state.groupByActive = eachShortcutDef.state.groupByActive;
+            eachDefinition.state.filterActive = eachShortcutDef.state.filterActive;
+          }
+        });
+      });
     });
   }
 
