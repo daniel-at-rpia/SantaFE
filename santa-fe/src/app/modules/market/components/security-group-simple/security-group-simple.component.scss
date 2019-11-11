@@ -19,8 +19,8 @@ $securityGroupSimple_height: 1.75rem;
     &-center {
       @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
       @include mix_alive('custom', $animation_duration_light box-shadow);
-      @include mix_border_radius(10px);
-      @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
+      @include mix_border_generator();
+      border-radius: $spacing_small $spacing_x_small $spacing_x_small $spacing_small;
       flex: 1 1 auto;
       height: 100%;
     }
@@ -187,6 +187,7 @@ $securityGroupSimple_height: 1.75rem;
       &__base {
         &-center {
           @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
+          border-color: $font_color_major;
         }
       }
     }
@@ -295,6 +296,7 @@ $securityGroupSimple_height: 1.75rem;
         &-center {
           @include material('none');
           @include mix_border_radius(0);
+          @include mix_border_generator(0);
         }
       }
       &__content {

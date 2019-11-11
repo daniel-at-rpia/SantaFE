@@ -199,16 +199,15 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
 
   const FilterOptionsCurrency = [
     'CAD',
-    'USD',
     'EUR',
-    'GBP'
+    'GBP',
+    'USD'
   ];
 
   const FilterOptionsCouponType = [
     'Float',
-    'None',
-    'Fixed for Life',
-    'Fixed'
+    'Fixed',
+    'None'
   ];
 
   const FilterOptionsRating = [
@@ -226,10 +225,10 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
   ];
 
   const FilterOptionsRatingBucket = [
-    'Xover',
-    'IG',
     'HY',
-    'NR'
+    'IG',
+    'NR',
+    'Xover'
   ];
 
   const FilterOptionsTenor = [
