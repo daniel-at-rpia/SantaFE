@@ -19,8 +19,8 @@ $securityGroupSimple_height: 1.75rem;
     &-center {
       @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
       @include mix_alive('custom', $animation_duration_light box-shadow);
+      @include mix_border_radius(5px);
       @include mix_border_generator();
-      border-radius: $spacing_small $spacing_x_small $spacing_x_small $spacing_small;
       flex: 1 1 auto;
       height: 100%;
     }
@@ -48,13 +48,13 @@ $securityGroupSimple_height: 1.75rem;
           align-items: center;
           overflow: hidden;
           &-size {
-            @include mix_border_radius(5px);
+            @include mix_border_radius(3px);
             flex: 0 0 3rem;
             display: flex;
             justify-content: center;
             margin-right: $spacing_x_small;
             background-color: $color_white;
-            padding: $spacing_xx_small 0;
+            padding: $spacing_minimum 0;
             overflow: hidden;
             &-text {
               @include mix_text_overflow();
