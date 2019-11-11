@@ -77,3 +77,6 @@ html {
     font-weight: 400;
     font-family: "SantaOpenSans";
   }
+  table{
+    @extend .santaTable;
+  }

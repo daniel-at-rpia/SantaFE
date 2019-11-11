@@ -11,7 +11,10 @@ import {
   SecurityGroupDefinitionConfiguratorDTO,
   SecurityGroupAverageVisualizerDTO,
   QuantComparerDTO,
-  SearchShortcutDTO
+  SearchShortcutDTO,
+  SecurityTableDTO,
+  SecurityTableRowDTO,
+  SecurityTableHeaderDTO
 } from 'FEModels/frontend-models.interface';
 import {
   SecurityGroupMetricBlock,
@@ -279,6 +282,50 @@ export class DTOService {
         isCalculated: false,
         isCrossed: !isStencil && delta <= 0,
         isCrossedTier2: delta <= -tier2Shreshold,
+      }
+    };
+    return object;
+  }
+
+  public formSecurityTableObject(): SecurityTableDTO {
+    const object: SecurityTableDTO = {
+      data: {
+        headers: [
+          this.formSecurityTableHeaderObject('Security'),
+          this.formSecurityTableHeaderObject('Best Bid vs Best Ask')
+        ],
+        rows: []
+      },
+      state: {
+        isStencil: false
+      }
+    };
+    return object;
+  }
+
+  public formSecurityTableRowObject(
+    securityDTO: SecurityDTO
+  ): SecurityTableRowDTO {
+    const object: SecurityTableRowDTO = {
+      data: {
+        security: securityDTO
+      },
+      state: {
+
+      }
+    };
+    return object;
+  }
+
+  public formSecurityTableHeaderObject(
+    headerLabel: string
+  ): SecurityTableHeaderDTO {
+    const object: SecurityTableHeaderDTO = {
+      data: {
+        displayLabel: headerLabel
+      },
+      state: {
+
       }
     };
     return object;

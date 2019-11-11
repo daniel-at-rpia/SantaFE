@@ -30,6 +30,7 @@ export class TradeCenterPanel {
 
   private initiatePageState() {
     this.state = {
+      table: this.dtoService.formSecurityTableObject(),
       demoList: []
     };
     for (let i = 0; i < 30; ++i) {
@@ -45,7 +46,7 @@ export class TradeCenterPanel {
     const func = () => {
       this.loadDemoData();
     };
-    setTimeout(func.bind(this), 3000);
+    setTimeout(func.bind(this), 300);
   }
 
   private loadDemoData() {
@@ -63,6 +64,7 @@ export class TradeCenterPanel {
         comparer: this.dtoService.formQuantComparerObject(false, isSpread, bidNumber, bidSize, offerNumber, offerSize)
       };
       this.state.demoList.push(newObject);
+      this.state.table.data.rows.push(this.dtoService.formSecurityTableRowObject(newSecurity));
     });
     this.calculateQuantComparerWidthAndHeight();
   }

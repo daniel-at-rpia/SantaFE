@@ -1,0 +1,25 @@
+<article
+  [ngClass]="{
+    'sat-securityTable': true,
+    'sat-securityTable--stencilState': tableData.state.isStencil
+  }">
+  <section class="sat-securityTable__main">
+    <table class="sat-securityTable__main-table santaTable">
+      <thead>
+      <tr>
+        <th *ngFor="let eachHead of tableData.data.headers">
+          <span>{{eachHead.data.displayLabel}}</span>
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let eachRow of tableData.data.rows">
+        <td>
+          <security-card [cardData]="eachRow.data.security"></security-card>
+        </td>
+        <td>Something else</td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+</article>

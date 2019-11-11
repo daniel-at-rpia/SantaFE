@@ -150,3 +150,31 @@ export interface QuantComparerDTO extends BasicDTOStructure {
     isCrossedTier2: boolean;
   }
 }
+
+export interface SecurityTableDTO extends BasicDTOStructure {
+  data: {
+    headers: Array<SecurityTableHeaderDTO>;
+    rows: Array<SecurityTableRowDTO>
+  },
+  state: {
+    isStencil: boolean
+  }
+}
+
+export interface SecurityTableRowDTO extends BasicDTOStructure {
+  data: {
+    security: SecurityDTO;
+  },
+  state: {
+
+  }
+}
+
+export interface SecurityTableHeaderDTO extends BasicDTOStructure {
+  data: {
+    displayLabel: string;
+  },
+  state: {
+
+  }
+}

@@ -10,10 +10,12 @@ import { GraphService } from 'Core/services/GraphService';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 
 import { SecurityCard } from 'Core/components/security-card/security-card.component';
+import { SecurityTable } from 'Core/components/security-table/security-table.component';
 
 @NgModule({
   declarations: [
-    SecurityCard
+    SecurityCard,
+    SecurityTable
   ],
   imports: [
     CommonModule,
@@ -26,7 +28,8 @@ import { SecurityCard } from 'Core/components/security-card/security-card.compon
     RestfulCommService
   ], 
   exports: [
-    SecurityCard
+    SecurityCard,
+    SecurityTable
   ]
 })
 export class CoreModule { }
