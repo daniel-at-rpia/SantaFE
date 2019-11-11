@@ -74,9 +74,16 @@ export interface SecurityGroupDefinitionDTO extends BasicDTOStructure {
   }
 }
 
+export interface SecurityGroupDefinitionBundleDTO extends BasicDTOStructure {
+  data: {
+    label: string;
+    list: Array<SecurityGroupDefinitionDTO>
+  }
+}
+
 export interface SecurityGroupDefinitionConfiguratorDTO extends BasicDTOStructure {
   data: {
-    definitionList: Array<SecurityGroupDefinitionDTO>;
+    definitionList: Array<SecurityGroupDefinitionBundleDTO>;
     filterSearchInputValue: string;
   }
   state: {

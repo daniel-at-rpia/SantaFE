@@ -20,7 +20,7 @@ export interface SecurityDefinitionStub {
   urlForGetLongOptionListFromServer?: string;
 }
 
-export interface SecurityDefinitionSectionStub {
+export interface SecurityDefinitionBundleStub {
   label: string;
   list: Array<SecurityDefinitionStub>;
 }

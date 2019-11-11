@@ -29,22 +29,12 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
   }
 
   ngOnInit() {
-    this.configuratorData.data.definitionList.forEach((eachDefinition) => {
-      if (eachDefinition.state.isLocked) {
-        eachDefinition.state.isUnactivated = false;
-      }
-    });
-    this.configuratorDefinitionlayout = ConfiguratorDefinitionLayout.map((eachSection) => {
-      const newList = eachSection.list.map((eachStub) => {
-        const dto = this.configuratorData.data.definitionList.find((eachDef) => {
-          return eachDef.data.key === eachStub.key;
-        })
-        return dto;
+    this.configuratorData.data.definitionList.forEach((eachBundle) => {
+      eachBundle.data.list.forEach((eachDefinition) => {
+        if (eachDefinition.state.isLocked) {
+          eachDefinition.state.isUnactivated = false;
+        }
       });
-      return {
-        label: eachSection.label,
-        list: newList
-      };
     });
   }
 

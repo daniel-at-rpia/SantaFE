@@ -7,6 +7,7 @@ import {
   SecurityDTO,
   SecurityGroupDTO,
   SecurityGroupDefinitionDTO,
+  SecurityGroupDefinitionBundleDTO,
   SecurityGroupDefinitionConfiguratorDTO,
   SecurityGroupAverageVisualizerDTO,
   QuantComparerDTO,
@@ -16,7 +17,10 @@ import {
   SecurityGroupMetricBlock,
   SecurityGroupDefinitionFilterBlock
 } from 'FEModels/frontend-blocks.interface';
-import { SecurityDefinitionStub } from 'FEModels/frontend-stub-models.interface';
+import {
+  SecurityDefinitionStub,
+  SecurityDefinitionBundleStub
+} from 'FEModels/frontend-stub-models.interface';
 import { UtilityService } from './UtilityService';
 import {
   SecurityGroupRatingColorScheme,
@@ -24,7 +28,7 @@ import {
 } from 'Core/constants/colorSchemes.constant';
 import {
   MetricOptions,
-  SecurityGroupDefinitionMap
+  ConfiguratorDefinitionLayout
 } from 'Core/constants/marketConstants.constant';
 
 @Injectable()
@@ -142,12 +146,29 @@ export class DTOService {
     return object;
   }
 
+  public formSecurityGroupDefinitionBundleObject(
+    stubData: SecurityDefinitionBundleStub
+  ): SecurityGroupDefinitionBundleDTO {
+    const object: SecurityGroupDefinitionBundleDTO = {
+      data: {
+        label: stubData.label,
+        list: stubData.list.map((eachStubDefinition) => {
+          return this.formSecurityGroupDefinitionObject(eachStubDefinition);
+        })
+      },
+      state: {
+
+      }
+    }
+    return object;
+  }
+
   public createSecurityGroupDefinitionConfigurator(): SecurityGroupDefinitionConfiguratorDTO {
     const object:SecurityGroupDefinitionConfiguratorDTO = {
       data: {
         filterSearchInputValue: '',
-        definitionList: SecurityGroupDefinitionMap.map((eachDefinitionStub) => {
-          return this.formSecurityGroupDefinitionObject(eachDefinitionStub);
+        definitionList: ConfiguratorDefinitionLayout.map((eachBundle) => {
+          return this.formSecurityGroupDefinitionBundleObject(eachBundle);
         })
       },
       state: {

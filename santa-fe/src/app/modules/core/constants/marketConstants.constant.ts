@@ -1,6 +1,6 @@
 import {
   SecurityDefinitionStub,
-  SecurityDefinitionSectionStub,
+  SecurityDefinitionBundleStub,
   SecurityMetricOptionStub,
   SearchShortcutStub
 } from 'FEModels/frontend-stub-models.interface';
@@ -463,7 +463,7 @@ export const SecurityGroupDefinitionMap: Array<SecurityDefinitionStub> = [
   }
 ];
 
-export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionSectionStub> = [
+export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> = [
   {
     label: 'Basic',
     list: [

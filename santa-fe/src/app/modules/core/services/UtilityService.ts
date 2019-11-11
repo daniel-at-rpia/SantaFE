@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BESecurityGroupDTO } from 'BEModels/backend-models.interface';
-import { SecurityGroupDTO } from 'FEModels/frontend-models.interface';
+import {
+  SecurityGroupDTO,
+  SecurityGroupDefinitionDTO,
+  SecurityGroupDefinitionConfiguratorDTO
+} from 'FEModels/frontend-models.interface';
 import {
   SecurityGroupMetricBlock,
   SecurityGroupMetricPackBlock
@@ -353,5 +357,15 @@ export class UtilityService {
       default:
         return backendTenor;
     }
+  }
+
+  public flattenDefinitionList(configurator: SecurityGroupDefinitionConfiguratorDTO): Array<SecurityGroupDefinitionDTO> {
+    const flattenDefinitionList = [];
+    configurator.data.definitionList.forEach((eachBundle) => {
+      eachBundle.data.list.forEach((eachDefinition) => {
+        flattenDefinitionList.push(eachDefinition);
+      });
+    });
+    return flattenDefinitionList;
   }
 }

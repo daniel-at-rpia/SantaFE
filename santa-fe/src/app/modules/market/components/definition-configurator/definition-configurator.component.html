@@ -9,12 +9,12 @@
   }">
   <section class="sat-securityGroupDefinitionConfigurator__definitions">
     <ul class="sat-securityGroupDefinitionConfigurator__definitions-list">
-      <li *ngFor="let eachLayoutSection of configuratorDefinitionlayout" class="sat-securityGroupDefinitionConfigurator__definitions-list-section">
+      <li *ngFor="let eachLayoutSection of configuratorData.data.definitionList" class="sat-securityGroupDefinitionConfigurator__definitions-list-section">
         <div class="sat-securityGroupDefinitionConfigurator__definitions-list-section-label">
-          <span class="sat-securityGroupDefinitionConfigurator__definitions-list-section-label-text">{{eachLayoutSection.label}}</span>
+          <span class="sat-securityGroupDefinitionConfigurator__definitions-list-section-label-text">{{eachLayoutSection.data.label}}</span>
           <div class="sat-securityGroupDefinitionConfigurator__definitions-list-section-label-line"></div>
         </div>
-        <div *ngFor="let eachDefinition of eachLayoutSection.list" class="sat-securityGroupDefinitionConfigurator__definitions-list-section-item">
+        <div *ngFor="let eachDefinition of eachLayoutSection.data.list" class="sat-securityGroupDefinitionConfigurator__definitions-list-section-item">
           <button
             (click)="selectDefinitionForGrouping(eachDefinition)"
             [ngClass]="{

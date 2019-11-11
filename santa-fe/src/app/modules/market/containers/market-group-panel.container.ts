@@ -167,7 +167,7 @@ export class MarketGroupPanel implements OnDestroy {
   }
 
   public onClickSearchInConfigurator(){
-    this.startSearch(this.state.configurator.dto.data.definitionList);
+    this.startSearch(this.utilityService.flattenDefinitionList(this.state.configurator.dto));
     // this.restfulCommonService.callAPI('santaSecurity/get-santa-securities', {req: 'GET'}).pipe(
     //   tap((serverReturn) => {
     //     console.log('return is ', serverReturn)
@@ -561,33 +561,35 @@ export class MarketGroupPanel implements OnDestroy {
       const targetDefinition = this.utilityService.convertBEKey(eachBEDefinition);
       const targetDefinitionValue = targetGroup.data.definitionConfig[eachBEDefinition][0];
       if (!!targetDefinition) {
-        config.data.definitionList.forEach((eachDefinition) => {
-          if (eachDefinition.data.key === targetDefinition && !eachDefinition.state.isLocked) {
-            eachDefinition.state.groupByActive = true;
-            let allFiltersAreSelected = true;
-            eachDefinition.data.filterOptionList.forEach((eachFilter) => {
-              if (eachDefinition.data.key === 'TENOR') {
-                if (eachFilter.shortKey === this.utilityService.convertBETenorToFE(targetDefinitionValue)) {
-                  eachFilter.isSelected = true;
-                  eachDefinition.state.filterActive = true;
-                }
-              } else {
-                if (eachFilter.shortKey === targetDefinitionValue) {
-                  eachFilter.isSelected = true;
-                  eachDefinition.state.filterActive = true;
-                };
-              }
-              if (!eachFilter.isSelected) {
-                allFiltersAreSelected = false;
-              }
-            });
-            if (allFiltersAreSelected) {
+        config.data.definitionList.forEach((eachBundle) => {
+          eachBundle.data.list.forEach((eachDefinition) => {
+            if (eachDefinition.data.key === targetDefinition && !eachDefinition.state.isLocked) {
+              eachDefinition.state.groupByActive = true;
+              let allFiltersAreSelected = true;
               eachDefinition.data.filterOptionList.forEach((eachFilter) => {
-                eachFilter.isSelected = false;
+                if (eachDefinition.data.key === 'TENOR') {
+                  if (eachFilter.shortKey === this.utilityService.convertBETenorToFE(targetDefinitionValue)) {
+                    eachFilter.isSelected = true;
+                    eachDefinition.state.filterActive = true;
+                  }
+                } else {
+                  if (eachFilter.shortKey === targetDefinitionValue) {
+                    eachFilter.isSelected = true;
+                    eachDefinition.state.filterActive = true;
+                  };
+                }
+                if (!eachFilter.isSelected) {
+                  allFiltersAreSelected = false;
+                }
               });
-              eachDefinition.state.filterActive = false;
+              if (allFiltersAreSelected) {
+                eachDefinition.data.filterOptionList.forEach((eachFilter) => {
+                  eachFilter.isSelected = false;
+                });
+                eachDefinition.state.filterActive = false;
+              }
             }
-          }
+          });
         })
       }
     }
