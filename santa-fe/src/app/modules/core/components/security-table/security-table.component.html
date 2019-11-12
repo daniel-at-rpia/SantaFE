@@ -25,7 +25,7 @@
           (click)="onClickRow(eachRow)"
           [ngClass]="{
             'sat-securityTableRow': true,
-            'sat-securityTableRow--expanded': eachRow.state.isExpanded
+            'sat-securityTableRow--expandedState': eachRow.state.isExpanded
           }">
           <section class="sat-securityTableRow__tableCanvas">
             <article class="sat-securityTableCell sat-securityTableCell--securityCardVariant">
@@ -35,7 +35,8 @@
               *ngFor="let eachCell of eachRow.data.cells"
               [ngClass]="{
                 'sat-securityTableCell': true,
-                'sat-securityTableCell--quantVariant': eachCell.state.isQuantVariant 
+                'sat-securityTableCell--quantVariant': eachCell.state.isQuantVariant,
+                'sat-securityTableCell--stencilState': eachCell.state.isStencil
               }">
               <section class="sat-securityTableCell__metric">
                 <span class="sat-securityTableCell__metric-text">

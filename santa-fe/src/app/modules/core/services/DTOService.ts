@@ -309,21 +309,6 @@ export class DTOService {
     return object;
   }
 
-  public formSecurityTableRowObject(
-    securityDTO: SecurityDTO
-  ): SecurityTableRowDTO {
-    const object: SecurityTableRowDTO = {
-      data: {
-        security: securityDTO,
-        cells: []
-      },
-      state: {
-        isExpanded: false
-      }
-    };
-    return object;
-  }
-
   public formSecurityTableHeaderObject(
     headerLabel: string,
     isQuantVariant: boolean
@@ -339,17 +324,34 @@ export class DTOService {
     return object;
   }
 
+  public formSecurityTableRowObject(
+    securityDTO: SecurityDTO
+  ): SecurityTableRowDTO {
+    const object: SecurityTableRowDTO = {
+      data: {
+        security: securityDTO,
+        cells: []
+      },
+      state: {
+        isExpanded: false
+      }
+    };
+    return object;
+  }
+
   public formSecurityTableCellObject(
+    isStencil: boolean,
     textData: string,
-    quantComparerDTO: QuantComparerDTO
+    quantComparerDTO?: QuantComparerDTO
   ): SecurityTableCellDTO {
     const object: SecurityTableCellDTO = {
       data: {
-        textData: textData,
-        quantComparerDTO: quantComparerDTO || this.formQuantComparerObject(false, false, 1, 1, 1, 1)
+        textData: !!isStencil ? 'PLACE' : textData,
+        quantComparerDTO: quantComparerDTO || this.formQuantComparerObject(false, false, null, null, null, null)
       },
       state: {
-        isQuantVariant: !!quantComparerDTO
+        isQuantVariant: !!quantComparerDTO,
+        isStencil: isStencil
       }
     }
     return object;

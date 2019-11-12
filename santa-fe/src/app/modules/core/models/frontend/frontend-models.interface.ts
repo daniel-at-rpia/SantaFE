@@ -161,6 +161,15 @@ export interface SecurityTableDTO extends BasicDTOStructure {
   }
 }
 
+export interface SecurityTableHeaderDTO extends BasicDTOStructure {
+  data: {
+    displayLabel: string;
+  },
+  state: {
+    isQuantVariant: boolean;
+  }
+}
+
 export interface SecurityTableRowDTO extends BasicDTOStructure {
   data: {
     security: SecurityDTO;
@@ -171,15 +180,6 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
   }
 }
 
-export interface SecurityTableHeaderDTO extends BasicDTOStructure {
-  data: {
-    displayLabel: string;
-  },
-  state: {
-    isQuantVariant: boolean;
-  }
-}
-
 export interface SecurityTableCellDTO extends BasicDTOStructure {
   data: {
     textData: string;
@@ -187,5 +187,6 @@ export interface SecurityTableCellDTO extends BasicDTOStructure {
   },
   state: {
     isQuantVariant: boolean;
+    isStencil: boolean;
   }
 }

@@ -83,7 +83,7 @@ $securityTable_cell_width_quant: 8.75rem * 2;
       }
     }
   }
-  &--expanded {
+  &--expandedState {
     #{$securityTableRowBlockName} {
       &__tableCanvas {
         background-color: $color_active;
@@ -103,7 +103,7 @@ $securityTable_cell_width_quant: 8.75rem * 2;
       }
     }
   }
-  &--expanded:hover {
+  &--expandedState:hover {
     #{$securityTableRowBlockName} {
       &__tableCanvas {
         background-color: $color_active;
@@ -183,6 +183,13 @@ $securityTable_cell_width_quant: 8.75rem * 2;
       }
       &__quant {
         display: flex;
+      }
+    }
+  }
+  &--stencilState {
+    #{$securityTableCellBlockName} {
+      &__metric-text {
+        @include mix_stencil_animation;
       }
     }
   }

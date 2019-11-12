@@ -183,9 +183,11 @@ $quantComparer_min_height: 2.5rem;
           &-edge {
             &-number {
               @include mix_stencil_animation();
+              line-height: $line_height_stencil_slim;
             }
             &-broker {
               @include mix_stencil_animation();
+              line-height: $line_height_stencil_slim;
             }
           }
           &-line-content {

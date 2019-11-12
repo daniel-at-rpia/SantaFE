@@ -36,39 +36,64 @@ export class TradeCenterPanel {
       table: this.dtoService.formSecurityTableObject(),
       demoList: []
     };
-    for (let i = 0; i < 30; ++i) {
+    for (let i = 0; i < 10; ++i) {
       const stencilSecurity = this.dtoService.formSecurityCardObject(null, true);
       stencilSecurity.state.isTable = true;
-      const stencilComparer = this.dtoService.formQuantComparerObject(true, false, null, null, null, null);
-      const newObject = {
-        security: stencilSecurity,
-        comparer: stencilComparer
-      };
-      this.state.demoList.push(newObject);
+      this.populateRowWithNewSecurityAndQuants(true, stencilSecurity);
     }
     const func = () => {
-      this.state.demoList = [];
+      this.state.table = this.dtoService.formSecurityTableObject();
+      this.loadDemoData();
+      this.loadDemoData();
+      this.loadDemoData();
+      this.loadDemoData();
+      this.loadDemoData();
+      this.loadDemoData();
+      this.loadDemoData();
+      this.loadDemoData();
+      this.loadDemoData();
+      this.loadDemoData();
+      this.loadDemoData();
+      this.loadDemoData();
+      this.loadDemoData();
       this.loadDemoData();
       this.calculateQuantComparerWidthAndHeight();
     };
-    setTimeout(func.bind(this), 300);
+    setTimeout(func.bind(this), 5000);
   }
 
   private loadDemoData() {
     SecurityList.forEach((eachSecurity) => {
       const newSecurity = this.dtoService.formSecurityCardObject(eachSecurity, false);
       newSecurity.state.isTable = true;
+      this.populateRowWithNewSecurityAndQuants(false, newSecurity);
+    });
+  }
+
+  private populateRowWithNewSecurityAndQuants(
+    isStencil: boolean,
+    newSecurity: SecurityDTO
+  ) {
+    const newRow = this.dtoService.formSecurityTableRowObject(newSecurity);
+    if (isStencil) {
+      const stencilQuant = this.dtoService.formQuantComparerObject(true, false, null, null, null, null);
+      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, stencilQuant));
+      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null));
+      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null));
+      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null));
+      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null));
+      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, stencilQuant));
+    } else {
       const bestRun = this.generateRandomQuantComparer(newSecurity);
       const bestAxe = this.generateRandomQuantComparer(newSecurity);
-      const newRow = this.dtoService.formSecurityTableRowObject(newSecurity);
-      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(null, bestRun));
-      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject('390', null));
-      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject('-5', null));
-      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject('Long', null));
-      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject('+4', null));
-      this.state.table.data.rows.push(newRow);
-      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(null, bestAxe));
-    });
+      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, null, bestRun));
+      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, '390'));
+      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, '-5'));
+      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, 'Long'));
+      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, '+4'));
+      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, null, bestAxe));
+    }
+    this.state.table.data.rows.push(newRow);
   }
 
   private generateRandomQuantComparer(newSecurity: SecurityDTO): QuantComparerDTO {
