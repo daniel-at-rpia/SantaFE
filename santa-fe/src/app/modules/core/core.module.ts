@@ -10,11 +10,13 @@ import { GraphService } from 'Core/services/GraphService';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 
 import { SecurityCard } from 'Core/components/security-card/security-card.component';
+import { QuantitativeComparer } from 'Core/components/quantitative-comparer/quantitative-comparer.component';
 import { SecurityTable } from 'Core/components/security-table/security-table.component';
 
 @NgModule({
   declarations: [
     SecurityCard,
+    QuantitativeComparer,
     SecurityTable
   ],
   imports: [
@@ -29,6 +31,7 @@ import { SecurityTable } from 'Core/components/security-table/security-table.com
   ], 
   exports: [
     SecurityCard,
+    QuantitativeComparer,
     SecurityTable
   ]
 })

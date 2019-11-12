@@ -7,9 +7,16 @@
     <div class="sat-securityTable__main-table">
       <div class="sat-securityTable__main-table-head">
         <div class="sat-securityTable__main-table-head-row">
-          <div class="sat-securityTable__main-table-head-row-cell" *ngFor="let eachHead of tableData.data.headers">
-            <span class="sat-securityTable__main-table-head-row-cell-text">{{eachHead.data.displayLabel}}</span>
-          </div>
+          <article
+            *ngFor="let eachHead of tableData.data.headers; let headIndex = index"
+            [ngClass]="{
+              'sat-securityTableHead': true,
+              'sat-securityTableHead--securityCardVariant': headIndex === 0,
+              'sat-securityTableHead--quantVariant': eachHead.state.isQuantVariant
+            }">
+            <span class="sat-securityTableHead__text">{{eachHead.data.displayLabel}}</span>
+            <span class="sat-securityTableHead__cta">{{eachHead.data.displayLabel}}</span>
+          </article>
         </div>
       </div>
       <div class="sat-securityTable__main-table-body">
@@ -21,12 +28,24 @@
             'sat-securityTableRow--expanded': eachRow.state.isExpanded
           }">
           <section class="sat-securityTableRow__tableCanvas">
-            <div class="sat-securityTableRow__tableCanvas-cell">
+            <article class="sat-securityTableCell sat-securityTableCell--securityCardVariant">
               <security-card [cardData]="eachRow.data.security"></security-card>
-            </div>
-            <div class="sat-securityTableRow__tableCanvas-cell">
-              <span class="sat-securityTableRow__tableCanvas-cell-text">Lorem ipsum</span>
-            </div>
+            </article>
+            <article
+              *ngFor="let eachCell of eachRow.data.cells"
+              [ngClass]="{
+                'sat-securityTableCell': true,
+                'sat-securityTableCell--quantVariant': eachCell.state.isQuantVariant 
+              }">
+              <section class="sat-securityTableCell__metric">
+                <span class="sat-securityTableCell__metric-text">
+                  {{eachCell.data.textData}}
+                </span>
+              </section>
+              <section class="sat-securityTableCell__quant">
+                <quant-comparer [quantData]="eachCell.data.quantComparerDTO"></quant-comparer>
+              </section>
+            </article>
           </section>
           <section class="sat-securityTableRow__expandCanvas">
             <div class="sat-securityTableRow__expandCanvas-content"></div>

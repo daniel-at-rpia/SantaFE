@@ -58,11 +58,13 @@ $quantComparer_min_height: 2.5rem;
           color: $font_color_major;
           font-size: $font_size_x_small;
           line-height: $line_height_minimum;
+          user-select: none;
         }
         &-broker {
           color: $color_quant_left;
           font-size: $font_size_x_small;
           line-height: $line_height_minimum;
+          user-select: none;
         }
       }
       &-line {
@@ -130,6 +132,7 @@ $quantComparer_min_height: 2.5rem;
       background-color: $color_quant_crossed;
       &-value {
         color: $color_quant_crossed_background;
+        user-select: none;
       }
     }
   }

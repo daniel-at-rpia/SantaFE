@@ -10,7 +10,6 @@ import { TradeAlertPanel } from 'Trade/containers/trade-alert-panel.container';
 import { TradeUtilityPanel } from 'Trade/containers/trade-utility-panel.container';
 import { TradeLiveGraphPanel } from 'Trade/containers/trade-live-graph-panel.container';
 import { TradeOverviewGraphPanel } from 'Trade/containers/trade-overview-graph-panel.container';
-import { QuantitativeComparer } from 'Trade/components/quantitative-comparer/quantitative-comparer.component';
 
 @NgModule({
   declarations: [
@@ -19,8 +18,7 @@ import { QuantitativeComparer } from 'Trade/components/quantitative-comparer/qua
     TradeAlertPanel,
     TradeUtilityPanel,
     TradeLiveGraphPanel,
-    TradeOverviewGraphPanel,
-    QuantitativeComparer
+    TradeOverviewGraphPanel
   ],
   imports: [
     CommonModule,

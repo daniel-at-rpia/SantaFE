@@ -3,6 +3,7 @@
 
 $securityTable_cell_width: 8.75rem;
 $securityTable_cell_width_primary: 14rem + $spacing_small * 2;
+$securityTable_cell_width_quant: 8.75rem * 2;
 .sat-securityTable {
   $securityTableBlockName: &;
   flex: 1 1 auto;
@@ -17,26 +18,13 @@ $securityTable_cell_width_primary: 14rem + $spacing_small * 2;
       flex-direction: column;
       &-head {
         flex: 0 0 auto;
+        padding: 0 $spacing_medium;
+        margin-left: $scroll_bar_width;
         &-row {
           display: flex;
           text-align: center;
           background-color: $color_blue_gray_5;
           color: $font_color_inverse;
-          &-cell {
-            display: flex;
-            justify-content: center;
-            align-item: center;
-            width: $securityTable_cell_width;
-            padding: $spacing_small;
-            &-text {
-              font-size: $font_size_small;
-              text-align: center;
-              white-space: nowrap;
-            }
-            &:first-of-type {
-              width: $securityTable_cell_width_primary;
-            }
-          }
         }
       }
       &-body {
@@ -45,6 +33,7 @@ $securityTable_cell_width_primary: 14rem + $spacing_small * 2;
         display: flex;
         flex-direction: column;
         direction: rtl;
+        padding: 0 $spacing_medium;
         .sat-securityTableRow {
           direction: ltr;
         }
@@ -63,21 +52,6 @@ $securityTable_cell_width_primary: 14rem + $spacing_small * 2;
   &__tableCanvas {
     @include mix_alive('material');
     display: flex;
-    &-cell {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: $securityTable_cell_width;
-      padding: $spacing_x_small $spacing_small;
-      &-text {
-        text-align: center;
-        white-space: nowrap;
-        padding: $spacing_small;
-      }
-      &:first-of-type {
-        width: $securityTable_cell_width_primary;
-      }
-    }
   }
   &__expandCanvas {
     // @include mix_alive('light');
@@ -113,9 +87,11 @@ $securityTable_cell_width_primary: 14rem + $spacing_small * 2;
     #{$securityTableRowBlockName} {
       &__tableCanvas {
         background-color: $color_active;
-        &-cell {
-          &-text {
-            color: $font_color_inverse;
+        .sat-securityTableCell {
+          &__metric {
+            &-text {
+              color: $font_color_inverse;
+            }
           }
         }
       }
@@ -132,6 +108,81 @@ $securityTable_cell_width_primary: 14rem + $spacing_small * 2;
       &__tableCanvas {
         background-color: $color_active;
         @include material('none');
+      }
+    }
+  }
+}
+
+.sat-securityTableHead {
+  $securityTableHeadBlockName: &;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: $securityTable_cell_width;
+  padding: $spacing_small 0;
+  &__text {
+    display: none;
+    font-size: $font_size_small;
+    text-align: center;
+    white-space: nowrap;
+  }
+  &__cta {
+    font-size: $font_size_small;
+    text-align: center;
+    white-space: nowrap;
+  }
+  &--securityCardVariant {
+    width: $securityTable_cell_width_primary;
+    #{$securityTableHeadBlockName} {
+      &__text {
+        display: inline-block;
+      }
+      &__cta {
+        display: none;
+      }
+    }
+  }
+  &--quantVariant {
+    width: $securityTable_cell_width_quant;
+  }
+}
+
+.sat-securityTableCell {
+  $securityTableCellBlockName: &;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: $securityTable_cell_width;
+  padding: $spacing_x_small 0;
+  &__metric {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &-text {
+      text-align: center;
+      padding: 0 $spacing_small;
+      user-select: none;
+    }
+  }
+  &__quant {
+    flex: 1 1 auto;
+    display: none;
+    quant-comparer {
+      flex: 1 1 auto;
+    }
+  }
+  &--securityCardVariant {
+    width: $securityTable_cell_width_primary;
+  }
+  &--quantVariant {
+    width: $securityTable_cell_width_quant;
+    #{$securityTableCellBlockName} {
+      &__metric {
+        display: none;
+      }
+      &__quant {
+        display: flex;
       }
     }
   }

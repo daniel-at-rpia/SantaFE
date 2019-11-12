@@ -14,7 +14,8 @@ import {
   SearchShortcutDTO,
   SecurityTableDTO,
   SecurityTableRowDTO,
-  SecurityTableHeaderDTO
+  SecurityTableHeaderDTO,
+  SecurityTableCellDTO
 } from 'FEModels/frontend-models.interface';
 import {
   SecurityGroupMetricBlock,
@@ -280,7 +281,7 @@ export class DTOService {
       state: {
         isStencil: isStencil,
         isCalculated: false,
-        isCrossed: !isStencil && delta <= 0,
+        isCrossed: !isStencil && delta < 0,
         isCrossedTier2: delta <= -tier2Shreshold,
       }
     };
@@ -291,13 +292,13 @@ export class DTOService {
     const object: SecurityTableDTO = {
       data: {
         headers: [
-          this.formSecurityTableHeaderObject('Security'),
-          this.formSecurityTableHeaderObject('Best Bid vs Best Ask'),
-          this.formSecurityTableHeaderObject('Metric Column 1'),
-          this.formSecurityTableHeaderObject('Metric Column 2'),
-          this.formSecurityTableHeaderObject('Metric Column 3'),
-          this.formSecurityTableHeaderObject('Metric Column 2'),
-          this.formSecurityTableHeaderObject('Metric Column 3')
+          this.formSecurityTableHeaderObject('Security', false),
+          this.formSecurityTableHeaderObject('Best Run (Bid vs Ask)', true),
+          this.formSecurityTableHeaderObject('Mark', false),
+          this.formSecurityTableHeaderObject('Mark Discrepancy', false),
+          this.formSecurityTableHeaderObject('Position', false),
+          this.formSecurityTableHeaderObject('30 day delta', false),
+          this.formSecurityTableHeaderObject('Best Axe (Bid vs Ask)', true)
         ],
         rows: []
       },
@@ -313,7 +314,8 @@ export class DTOService {
   ): SecurityTableRowDTO {
     const object: SecurityTableRowDTO = {
       data: {
-        security: securityDTO
+        security: securityDTO,
+        cells: []
       },
       state: {
         isExpanded: false
@@ -323,16 +325,33 @@ export class DTOService {
   }
 
   public formSecurityTableHeaderObject(
-    headerLabel: string
+    headerLabel: string,
+    isQuantVariant: boolean
   ): SecurityTableHeaderDTO {
     const object: SecurityTableHeaderDTO = {
       data: {
         displayLabel: headerLabel
       },
       state: {
-
+        isQuantVariant: isQuantVariant
       }
     };
+    return object;
+  }
+
+  public formSecurityTableCellObject(
+    textData: string,
+    quantComparerDTO: QuantComparerDTO
+  ): SecurityTableCellDTO {
+    const object: SecurityTableCellDTO = {
+      data: {
+        textData: textData,
+        quantComparerDTO: quantComparerDTO || this.formQuantComparerObject(false, false, 1, 1, 1, 1)
+      },
+      state: {
+        isQuantVariant: !!quantComparerDTO
+      }
+    }
     return object;
   }
 }
