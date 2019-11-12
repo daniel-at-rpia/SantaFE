@@ -292,7 +292,12 @@ export class DTOService {
       data: {
         headers: [
           this.formSecurityTableHeaderObject('Security'),
-          this.formSecurityTableHeaderObject('Best Bid vs Best Ask')
+          this.formSecurityTableHeaderObject('Best Bid vs Best Ask'),
+          this.formSecurityTableHeaderObject('Metric Column 1'),
+          this.formSecurityTableHeaderObject('Metric Column 2'),
+          this.formSecurityTableHeaderObject('Metric Column 3'),
+          this.formSecurityTableHeaderObject('Metric Column 2'),
+          this.formSecurityTableHeaderObject('Metric Column 3')
         ],
         rows: []
       },
@@ -311,7 +316,7 @@ export class DTOService {
         security: securityDTO
       },
       state: {
-
+        isExpanded: false
       }
     };
     return object;

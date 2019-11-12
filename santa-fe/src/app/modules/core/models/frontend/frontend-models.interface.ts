@@ -157,7 +157,7 @@ export interface SecurityTableDTO extends BasicDTOStructure {
     rows: Array<SecurityTableRowDTO>
   },
   state: {
-    isStencil: boolean
+    isStencil: boolean;
   }
 }
 
@@ -166,7 +166,7 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
     security: SecurityDTO;
   },
   state: {
-
+    isExpanded: boolean;
   }
 }
 

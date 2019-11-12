@@ -6,7 +6,10 @@ import {
   Output
 } from '@angular/core';
 
-import { SecurityTableDTO } from 'FEModels/frontend-models.interface';
+import {
+  SecurityTableDTO,
+  SecurityTableRowDTO
+} from 'FEModels/frontend-models.interface';
 
 @Component({
   selector: 'security-table',
@@ -17,5 +20,9 @@ import { SecurityTableDTO } from 'FEModels/frontend-models.interface';
 export class SecurityTable {
   @Input() tableData: SecurityTableDTO;
   constructor() { }
+
+  public onClickRow(targetRow: SecurityTableRowDTO) {
+    targetRow.state.isExpanded = !targetRow.state.isExpanded;
+  }
 
 }

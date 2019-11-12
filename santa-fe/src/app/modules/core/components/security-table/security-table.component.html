@@ -4,22 +4,35 @@
     'sat-securityTable--stencilState': tableData.state.isStencil
   }">
   <section class="sat-securityTable__main">
-    <table class="sat-securityTable__main-table santaTable">
-      <thead>
-      <tr>
-        <th *ngFor="let eachHead of tableData.data.headers">
-          <span>{{eachHead.data.displayLabel}}</span>
-        </th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let eachRow of tableData.data.rows">
-        <td>
-          <security-card [cardData]="eachRow.data.security"></security-card>
-        </td>
-        <td>Something else</td>
-      </tr>
-      </tbody>
-    </table>
+    <div class="sat-securityTable__main-table">
+      <div class="sat-securityTable__main-table-head">
+        <div class="sat-securityTable__main-table-head-row">
+          <div class="sat-securityTable__main-table-head-row-cell" *ngFor="let eachHead of tableData.data.headers">
+            <span class="sat-securityTable__main-table-head-row-cell-text">{{eachHead.data.displayLabel}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="sat-securityTable__main-table-body">
+        <article
+          *ngFor="let eachRow of tableData.data.rows"
+          (click)="onClickRow(eachRow)"
+          [ngClass]="{
+            'sat-securityTableRow': true,
+            'sat-securityTableRow--expanded': eachRow.state.isExpanded
+          }">
+          <section class="sat-securityTableRow__tableCanvas">
+            <div class="sat-securityTableRow__tableCanvas-cell">
+              <security-card [cardData]="eachRow.data.security"></security-card>
+            </div>
+            <div class="sat-securityTableRow__tableCanvas-cell">
+              <span class="sat-securityTableRow__tableCanvas-cell-text">Lorem ipsum</span>
+            </div>
+          </section>
+          <section class="sat-securityTableRow__expandCanvas">
+            <div class="sat-securityTableRow__expandCanvas-content"></div>
+          </section>
+        </article>
+      </div>
+    </div>
   </section>
 </article>

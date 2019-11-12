@@ -109,9 +109,9 @@
   }
 
   .santaTable {
-    thead, {
-      &>tr {
-        &>th {
+    thead {
+      tr {
+        th {
           padding: $spacing_small;
           text-align: center;
           background-color: $color_blue_gray_5;
@@ -126,8 +126,8 @@
     }
     tbody {
       border-collapse: collapse;
-      &>tr {
-        &>td {
+      tr {
+        td {
           padding: $spacing_small;
           text-align: center;
           &>span {

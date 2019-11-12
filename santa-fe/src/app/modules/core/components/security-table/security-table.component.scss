@@ -1,7 +1,138 @@
 @import "global.scss";
 
+
+$securityTable_cell_width: 8.75rem;
+$securityTable_cell_width_primary: 14rem + $spacing_small * 2;
 .sat-securityTable {
   $securityTableBlockName: &;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  &__main {
+    @include mix_enable_scrollbar('horizontal');
+    display: flex;
+    &-table {
+      display: flex;
+      flex-direction: column;
+      &-head {
+        flex: 0 0 auto;
+        &-row {
+          display: flex;
+          text-align: center;
+          background-color: $color_blue_gray_5;
+          color: $font_color_inverse;
+          &-cell {
+            display: flex;
+            justify-content: center;
+            align-item: center;
+            width: $securityTable_cell_width;
+            padding: $spacing_small;
+            &-text {
+              font-size: $font_size_small;
+              text-align: center;
+              white-space: nowrap;
+            }
+            &:first-of-type {
+              width: $securityTable_cell_width_primary;
+            }
+          }
+        }
+      }
+      &-body {
+        @include mix_enable_scrollbar('vertial');
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        direction: rtl;
+        .sat-securityTableRow {
+          direction: ltr;
+        }
+      }
+    }
+  }
   &--stencilState {
+  }
+}
+
+.sat-securityTableRow {
+  $securityTableRowBlockName: &;
+  @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
+  display: flex;
+  flex-direction: column;
+  &__tableCanvas {
+    @include mix_alive('material');
+    display: flex;
+    &-cell {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: $securityTable_cell_width;
+      padding: $spacing_x_small $spacing_small;
+      &-text {
+        text-align: center;
+        white-space: nowrap;
+        padding: $spacing_small;
+      }
+      &:first-of-type {
+        width: $securityTable_cell_width_primary;
+      }
+    }
+  }
+  &__expandCanvas {
+    // @include mix_alive('light');
+    display: flex;
+    flex-direction: column;
+    height: 0;
+    overflow: hidden;
+    &-content {
+      @include mix_alive('custom', transform $animation_duration_light);
+      flex: 1 1 auto;
+      transform: translate(0, -100%);
+      background-color: $color_active;
+    }
+  }
+  &:nth-child(odd) {
+    background-color: $color_gray_2;
+    color: $font_color_minor;
+  }
+  &:nth-child(even) {
+    background-color: $color_blue_gray_1;
+    color: $color_blue_gray_8;
+  }
+  &:hover {
+    @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
+    #{$securityTableRowBlockName} {
+      &__tableCanvas {
+        @include material();
+        background-color: $color_white;
+      }
+    }
+  }
+  &--expanded {
+    #{$securityTableRowBlockName} {
+      &__tableCanvas {
+        background-color: $color_active;
+        &-cell {
+          &-text {
+            color: $font_color_inverse;
+          }
+        }
+      }
+      &__expandCanvas {
+        height: 25rem;
+        &-content {
+          transform: translate(0, 0);
+        }
+      }
+    }
+  }
+  &--expanded:hover {
+    #{$securityTableRowBlockName} {
+      &__tableCanvas {
+        background-color: $color_active;
+        @include material('none');
+      }
+    }
   }
 }
