@@ -71,6 +71,7 @@ $font_size_xxx_large: 2.5rem;   // 40px
 $font_size_xxxx_large: 3rem;    // 48px
 $font_size_hero: 4rem;          // 64px
 $font_size_hero_large: 5rem;    // 80px
+$font_size_hero_x_large: 8rem;    // 128px
 
 $line_height_stencil_slim: 0.75;
 $line_height_minimum: 1;
@@ -83,6 +84,7 @@ $line_height_x_large: 2.5;
 
 $font_color_major: $color_gray_9;
 $font_color_minor: $color_gray_6;
+$font_color_trivial: $color_gray_4;
 $font_color_inverse: $color_white;
 
 $base-size: 16;

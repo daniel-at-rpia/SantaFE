@@ -17,7 +17,7 @@ export class TradePage {
   constructor(
   ) {
     this.state = {
-      graphsCollapsed: false
+      graphsCollapsed: true
     };
   }
 
