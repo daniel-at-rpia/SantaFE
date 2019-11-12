@@ -3,6 +3,8 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
+import { TradeState } from 'FEModels/frontend-page-states.interface';
+
 @Component({
   selector: 'santa-trade',
   templateUrl: './trade.page.html',
@@ -10,7 +12,17 @@ import {
   encapsulation: ViewEncapsulation.Emulated
 })
 export class TradePage {
+  state: TradeState;
 
-  constructor() { }
+  constructor(
+  ) {
+    this.state = {
+      graphsCollapsed: false
+    };
+  }
+
+  public onToggleCollapseGraphs() {
+    this.state.graphsCollapsed = !this.state.graphsCollapsed;
+  }
 
 }

@@ -51,6 +51,10 @@ export interface MarketGroupPanelState {
   }
 }
 
+export interface TradeState {
+  graphsCollapsed: boolean;
+}
+
 export interface TradeCenterPanelState {
   table: SecurityTableDTO;
   demoList: Array<any>;

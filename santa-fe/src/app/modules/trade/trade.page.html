@@ -1,4 +1,8 @@
-<article class="sat-trade">
+<article
+  [ngClass]="{
+    'sat-trade': true,
+    'sat-trade--graphsCollapsed': state.graphsCollapsed
+  }">
   <section class="sat-trade__left">
     <div class="sat-trade__left-top">
       <div class="sat-trade__left-top-alertPanel">
@@ -20,4 +24,14 @@
       <trade-overview-graph-panel></trade-overview-graph-panel>
     </div>
   </section>
+  <button
+    (click)="onToggleCollapseGraphs()"
+    [ngClass]="{
+      'sat-trade__collapseGraphsCTA': true,
+      'santaBtn--iconOnly': true,
+      'fal': true,
+      'fa-chart-line': state.graphsCollapsed,
+      'fa-chevron-right': !state.graphsCollapsed
+    }">
+  </button>
 </article>
