@@ -557,6 +557,16 @@ export const MetricOptions:Array<SecurityMetricOptionStub> = [
     ]
   },
   {
+    label: 'G Spread',
+    backendDtoAttrName: 'gSpread',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
     label: 'OAS Spread',
     backendDtoAttrName: 'oasSpread',
     deltaOptions: [
