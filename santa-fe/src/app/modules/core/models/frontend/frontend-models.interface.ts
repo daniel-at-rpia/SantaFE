@@ -174,6 +174,7 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
   data: {
     security: SecurityDTO;
     cells: Array<SecurityTableCellDTO>;
+    tradingMessages: Array<SecurityTradingMessageDTO>;
   },
   state: {
     isExpanded: boolean;
@@ -197,20 +198,23 @@ export interface SecurityTradingMessageDTO extends BasicDTOStructure {
     time: string;
     dataSource: string;
     bid: {
-      size: number;
+      isAxe: boolean;
+      size: string;
       price: number;
       tspread: number;
       yield: number;
     };
     ask: {
-      size: number;
+      isAxe: boolean;
+      size: string;
       price: number;
       tspread: number;
       yield: number;
     }
   },
   state: {
-    isAxe: boolean;
     isStencil: boolean;
-  } 
+    hasBid: boolean;
+    hasAsk: boolean;
+  }
 }

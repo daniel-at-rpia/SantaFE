@@ -54,7 +54,7 @@
                 The ngIf optimizes the performance as it allows us to lazy-load the SecurityTradingMessage components
               -->
               <div class="sat-securityTableRow__expandCanvas-content-label">
-                <span class="sat-securityTableRow__expandCanvas-content-label-entry">Source</span>
+                <span class="sat-securityTableRow__expandCanvas-content-label-entry">Data Venue</span>
                 <span class="sat-securityTableRow__expandCanvas-content-label-entry">Dealer</span>
                 <span class="sat-securityTableRow__expandCanvas-content-label-entry sat-securityTableRow__expandCanvas-content-label-entry--runOrAxe">Run / Axe</span>
                 <span class="sat-securityTableRow__expandCanvas-content-label-entry sat-securityTableRow__expandCanvas-content-label-entry--noSpacing">Size</span>
@@ -64,15 +64,10 @@
                 <span class="sat-securityTableRow__expandCanvas-content-label-entry">Benchmark</span>
               </div>
               <ul *ngIf="eachRow.state.isExpanded" class="sat-securityTableRow__expandCanvas-content-messageList">
-                <security-trading-message></security-trading-message>
-                <security-trading-message></security-trading-message>
-                <security-trading-message></security-trading-message>
-                <security-trading-message></security-trading-message>
-                <security-trading-message></security-trading-message>
-                <security-trading-message></security-trading-message>
-                <security-trading-message></security-trading-message>
-                <security-trading-message></security-trading-message>
-                <security-trading-message></security-trading-message>
+                <security-trading-message
+                  *ngFor="let eachMessage of eachRow.data.tradingMessages"
+                  [messageData]="eachMessage">
+                </security-trading-message>
               </ul>
             </div>
           </section>

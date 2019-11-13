@@ -3,12 +3,12 @@
     'sat-securityTradingMessage': true
   }">
   <section class="sat-securityTradingMessage__time">
-    <span class="sat-securityTradingMessage__time-text">12:02 pm</span>
+    <span class="sat-securityTradingMessage__time-text">{{messageData.data.time}}</span>
   </section>
   <section class="sat-securityTradingMessage__main">
-    <div class="sat-securityTradingMessage__main-entry">RUN</div>
+    <div class="sat-securityTradingMessage__main-entry">{{messageData.data.dataSource}}</div>
     <div class="sat-securityTradingMessage__main-spacing"></div>
-    <div class="sat-securityTradingMessage__main-entry">GS</div>
+    <div class="sat-securityTradingMessage__main-entry">{{messageData.data.broker}}</div>
     <div class="sat-securityTradingMessage__main-thumbnail">
       <div class="sat-securityTradingMessage__main-thumbnail-bid">
         <i class="sat-securityTradingMessage__main-thumbnail-bid-icon far fa-running"></i>
@@ -19,37 +19,37 @@
     </div>
     <div class="sat-securityTradingMessage__main-twoSideEntry">
       <span class="sat-securityTradingMessage__main-twoSideEntry-bid">
-        10MM
+        {{messageData.data.bid.size}}
       </span>
       <span class="sat-securityTradingMessage__main-twoSideEntry-ask">
-        5MM
+        {{messageData.data.ask.size}}
       </span>
     </div>
     <div class="sat-securityTradingMessage__main-spacing"></div>
     <div class="sat-securityTradingMessage__main-twoSideEntry">
       <span class="sat-securityTradingMessage__main-twoSideEntry-bid">
-        105.483
+        {{messageData.data.bid.price}}
       </span>
       <span class="sat-securityTradingMessage__main-twoSideEntry-ask">
-        106.338
+        {{messageData.data.ask.price}}
       </span>
     </div>
     <div class="sat-securityTradingMessage__main-spacing"></div>
     <div class="sat-securityTradingMessage__main-twoSideEntry">
       <span class="sat-securityTradingMessage__main-twoSideEntry-bid">
-        4.16
+        {{messageData.data.bid.yield}}
       </span>
       <span class="sat-securityTradingMessage__main-twoSideEntry-ask">
-        4.11
+        {{messageData.data.ask.yield}}
       </span>
     </div>
     <div class="sat-securityTradingMessage__main-spacing"></div>
     <div class="sat-securityTradingMessage__main-twoSideEntry">
       <span class="sat-securityTradingMessage__main-twoSideEntry-bid">
-        181.00
+        {{messageData.data.bid.spread}}
       </span>
       <span class="sat-securityTradingMessage__main-twoSideEntry-ask">
-        176.00
+        {{messageData.data.ask.spread}}
       </span>
     </div>
   </section>

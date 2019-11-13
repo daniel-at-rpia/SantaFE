@@ -333,7 +333,8 @@ export class DTOService {
     const object: SecurityTableRowDTO = {
       data: {
         security: securityDTO,
-        cells: []
+        cells: [],
+        tradingMessages: []
       },
       state: {
         isExpanded: false
@@ -366,19 +367,27 @@ export class DTOService {
     const object: SecurityTradingMessageDTO = {
       data: {
         broker: 'GS',
-        time: '11/01 19:23',
-        dataSource: 'MSG1',
-        bid: null,
+        time: '12:01 pm',
+        dataSource: 'RUN',
+        bid: {
+          isAxe: false,
+          size: '10MM',
+          price: 105.483,
+          yield: 4.16,
+          tspread: 181.00
+        },
         ask: {
-          size: 123,
-          price: 123,
-          tspread: 123,
-          yield: 123
+          isAxe: false,
+          size: '5MM',
+          price: 106.338,
+          yield: 4.13,
+          tspread: 176.00
         }
       },
       state: {
-        isAxe: false,
-        isStencil: isStencil
+        isStencil: isStencil,
+        hasBid: true,
+        hasAsk: true
       }
     };
     return object;
