@@ -13,8 +13,8 @@ import {
 
 @Component({
   selector: 'security-table',
-  templateUrl: './security-table.component.html',
-  styleUrls: ['./security-table.component.scss'],
+  templateUrl: './security-table.container.html',
+  styleUrls: ['./security-table.container.scss'],
   encapsulation: ViewEncapsulation.Emulated
 })
 export class SecurityTable {
