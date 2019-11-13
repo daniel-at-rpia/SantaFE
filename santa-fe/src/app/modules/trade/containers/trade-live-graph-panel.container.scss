@@ -9,6 +9,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  background-color: $color_white;
   &__underConstruction {
     font-size: $font_size_hero_x_large;
     color: $font_color_trivial;

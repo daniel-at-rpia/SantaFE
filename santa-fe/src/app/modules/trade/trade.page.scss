@@ -7,8 +7,9 @@
   height: 100%;
   width: 100%;
   &__left {
-    @include mix_alive('light');
-    flex: 0 1 60%;
+    @include mix_fixed_div(absolute, $z_index_standard_base_item);
+    width: 60%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     padding: $spacing_medium;
@@ -47,8 +48,11 @@
     }
   }
   &__right {
-    @include mix_alive('light');
-    flex: 0 1 40%;
+    @include mix_fixed_div(absolute, $z_index_standard_base_item_lift);
+    @include mix_alive('custom', transform $animation_duration_normal);
+    right: 0;
+    width: 40%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     padding: $spacing_medium $spacing_medium $spacing_medium 0;
@@ -83,11 +87,11 @@
   &--graphsCollapsed {
     #{$tradeBlockName} {
       &__left {
-        @include mix_calculate(flex-basis, 100%, $iconButton_size_regular, '-');
+        @include mix_calculate(width, 100%, $iconButton_size_regular, '-');
         margin-right: $iconButton_size_regular/2;
       }
       &__right {
-        flex: 0 0 0;
+        transform: translate(100%, 0);
         padding: 0;
       }
       &__collapseGraphsCTA {
