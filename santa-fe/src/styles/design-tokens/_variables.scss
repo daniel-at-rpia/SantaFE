@@ -38,18 +38,7 @@ $color_edit: $color_blue_gray_5;
 $color_stencil: $color_gray_4;
 
 $color_modal_background_hide: rgba(black, 0);
-$color_modal_background_show: rgba(black, 0.5); 
-
-// Store variables that are used globally, in order to avoid hierarchy problem
-$iconButton_size_regular: 2.25rem;
-$iconButton_size_small: 1.75rem;
-$typical_border_width: 0.0625rem;
-$scroll_bar_width: 0.5rem;
-$textarea_minimum_height: 2.125rem;   // Smallest height that doesn't trigger scroll bar with normal font size
-
-$securityCard_labelVariant_height: 2rem;
-$securityCard_previewVariant_height: 10rem;
-$securityCard_width: 14rem;
+$color_modal_background_show: rgba(black, 0.5);
 
 $spacing_xx_large: 6.25rem;   // 100px
 $spacing_x_large: 3.125rem;   // 50px
@@ -117,3 +106,16 @@ $mediaQuery_size_medium: 48rem;
 $mediaQuery_size_large: 64rem;
 $mediaQuery_size_xLarge: 100rem;
 $mediaQuery_size_xxLarge: 120rem;
+
+// Store variables that are used globally, in order to avoid hierarchy problem
+$iconButton_size_regular: 2.25rem;
+$iconButton_size_small: 1.75rem;
+$typical_border_width: 0.0625rem;
+$scroll_bar_width: 0.5rem;
+$textarea_minimum_height: 2.125rem;   // Smallest height that doesn't trigger scroll bar with normal font size
+
+$securityCard_labelVariant_height: 2rem;
+$securityCard_previewVariant_height: 10rem;
+$securityCard_width: 14rem;
+
+$securityTradingMessage_spacing_height: $spacing_small;

@@ -59,7 +59,7 @@ export class TradeCenterPanel {
       // this.loadDemoData();
       this.calculateQuantComparerWidthAndHeight();
     };
-    setTimeout(func.bind(this), 5000);
+    setTimeout(func.bind(this), 500);
   }
 
   private loadDemoData() {

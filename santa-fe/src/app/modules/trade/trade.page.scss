@@ -6,6 +6,7 @@
   display: flex;
   height: 100%;
   width: 100%;
+  overflow: hidden;
   &__left {
     @include mix_fixed_div(absolute, $z_index_standard_base_item);
     width: 60%;

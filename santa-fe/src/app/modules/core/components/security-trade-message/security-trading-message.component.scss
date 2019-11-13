@@ -1,12 +1,111 @@
 @import "global.scss";
 
+$securityTradingMessage_height: 23rem;
+$securityTradingMessage_width: 9rem;
 .sat-securityTradingMessage {
   $securityTradeMessageBlockName: &;
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  width: $securityTradingMessage_width;
+  height: $securityTradingMessage_height;
+  margin-left: $spacing_small;
+  &__time {
+    flex: 0 1 auto;
+    display: flex;
+    justify-content: center;
+    &-text {
+      color: $font_color_inverse;
+      margin: $spacing_small 0;
+      text-align: center;
+      line-height: $line_height_small;
+    }
+  }
   &__main {
+    @include mix_border_radius(10px);
+    flex: 1 1 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    background-color: $color_white;
+    padding: $spacing_small;
+    &-entry {
+      flex: 0 1 100%;
+      text-align: center;
+      font-size: $font_size_small;
+    }
+    &-spacing {
+      flex: 0 1 100%;
+      @include mix_border_generator(0 0 $typical_border_width 0);
+      height: $securityTradingMessage_spacing_height;
+      margin-bottom: $securityTradingMessage_spacing_height;
+      &--small {
+        margin-left: $spacing_x_large;
+        margin-right: $spacing_x_large;
+      }
+    }
+    &-thumbnail {
+      flex: 0 1 100%;
+      display: flex;
+      justify-content: center;
+      margin: $spacing_small;
+      &-bid, &-ask {
+        @include mix_border_radius(5px);
+        @include mix_border_generator();
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: $iconButton_size_regular;
+        height: $iconButton_size_regular;
+        &-icon {
+          font-size: $font_size_xx_large;
+        }
+        &--axe {
+          border-color: $color_blue_5;
+          background-color: $color_blue_5;
+          #{$securityTradeMessageBlockName} {
+            &__main-thumbnail {
+              &-bid, &-ask {
+                &-icon {
+                  font-size: $font_size_x_large;
+                  color: $font_color_inverse;
+                }
+              }
+            }
+          }
+        }
+      }
+      &-bid {
+        margin-right: $spacing_x_small;
+      }
+      &-ask {
+        margin-left: $spacing_x_small;
+      }
+    }
+    &-twoSideEntry {
+      flex: 0 1 100%;
+      display: flex;
+      justify-content: center;
+      &-bid {
+        font-size: $font_size_small;
+        margin-right: $spacing_x_small;
+      }
+      &-ask {
+        margin-left: $spacing_x_small;
+        font-size: $font_size_small;
+      }
+    }
+  }
+  &__arrow {
+    flex: 0 1 auto;
+    display: flex;
+    display: none;
+    align-items: center;
+    &-icon {
+      font-size: $font_size_xx_large;
+      color: $font_color_inverse;
+      margin-left: $spacing_medium;
+    }
   }
   &--stencilState {
   }
