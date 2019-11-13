@@ -12,12 +12,14 @@ import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { SecurityCard } from 'Core/components/security-card/security-card.component';
 import { QuantitativeComparer } from 'Core/components/quantitative-comparer/quantitative-comparer.component';
 import { SecurityTable } from 'Core/components/security-table/security-table.component';
+import { SecurityTradingMessage } from 'Core/components/security-trade-message/security-trading-message.component';
 
 @NgModule({
   declarations: [
     SecurityCard,
     QuantitativeComparer,
-    SecurityTable
+    SecurityTable,
+    SecurityTradingMessage
   ],
   imports: [
     CommonModule,
@@ -32,7 +34,8 @@ import { SecurityTable } from 'Core/components/security-table/security-table.com
   exports: [
     SecurityCard,
     QuantitativeComparer,
-    SecurityTable
+    SecurityTable,
+    SecurityTradingMessage
   ]
 })
 export class CoreModule { }

@@ -1,39 +1,42 @@
-import { Injectable } from '@angular/core';
-import {
-  BESecurityDTO,
-  BESecurityGroupDTO
-} from 'BEModels/backend-models.interface';
-import {
-  SecurityDTO,
-  SecurityGroupDTO,
-  SecurityGroupDefinitionDTO,
-  SecurityGroupDefinitionBundleDTO,
-  SecurityGroupDefinitionConfiguratorDTO,
-  SecurityGroupAverageVisualizerDTO,
-  QuantComparerDTO,
-  SearchShortcutDTO,
-  SecurityTableDTO,
-  SecurityTableRowDTO,
-  SecurityTableHeaderDTO,
-  SecurityTableCellDTO
-} from 'FEModels/frontend-models.interface';
-import {
-  SecurityGroupMetricBlock,
-  SecurityGroupDefinitionFilterBlock
-} from 'FEModels/frontend-blocks.interface';
-import {
-  SecurityDefinitionStub,
-  SecurityDefinitionBundleStub
-} from 'FEModels/frontend-stub-models.interface';
-import { UtilityService } from './UtilityService';
-import {
-  SecurityGroupRatingColorScheme,
-  SecurityGroupSeniorityColorScheme
-} from 'Core/constants/colorSchemes.constant';
-import {
-  MetricOptions,
-  ConfiguratorDefinitionLayout
-} from 'Core/constants/marketConstants.constant';
+  // dependencies
+    import { Injectable } from '@angular/core';
+    import {
+      BESecurityDTO,
+      BESecurityGroupDTO
+    } from 'BEModels/backend-models.interface';
+    import {
+      SecurityDTO,
+      SecurityGroupDTO,
+      SecurityGroupDefinitionDTO,
+      SecurityGroupDefinitionBundleDTO,
+      SecurityGroupDefinitionConfiguratorDTO,
+      SecurityGroupAverageVisualizerDTO,
+      QuantComparerDTO,
+      SearchShortcutDTO,
+      SecurityTableDTO,
+      SecurityTableRowDTO,
+      SecurityTableHeaderDTO,
+      SecurityTableCellDTO,
+      SecurityTradingMessageDTO
+    } from 'FEModels/frontend-models.interface';
+    import {
+      SecurityGroupMetricBlock,
+      SecurityGroupDefinitionFilterBlock
+    } from 'FEModels/frontend-blocks.interface';
+    import {
+      SecurityDefinitionStub,
+      SecurityDefinitionBundleStub
+    } from 'FEModels/frontend-stub-models.interface';
+    import { UtilityService } from './UtilityService';
+    import {
+      SecurityGroupRatingColorScheme,
+      SecurityGroupSeniorityColorScheme
+    } from 'Core/constants/colorSchemes.constant';
+    import {
+      MetricOptions,
+      ConfiguratorDefinitionLayout
+    } from 'Core/constants/marketConstants.constant';
+  // 
 
 @Injectable()
 export class DTOService {
@@ -354,6 +357,30 @@ export class DTOService {
         isStencil: isStencil
       }
     }
+    return object;
+  }
+
+  public formSecurityTradingMessageObject(
+    isStencil: boolean,
+  ):SecurityTradingMessageDTO {
+    const object: SecurityTradingMessageDTO = {
+      data: {
+        broker: 'GS',
+        time: '11/01 19:23',
+        dataSource: 'MSG1',
+        bid: null,
+        ask: {
+          size: 123,
+          price: 123,
+          tspread: 123,
+          yield: 123
+        }
+      },
+      state: {
+        isAxe: false,
+        isStencil: isStencil
+      }
+    };
     return object;
   }
 }

@@ -49,7 +49,14 @@
             </article>
           </section>
           <section class="sat-securityTableRow__expandCanvas">
-            <div class="sat-securityTableRow__expandCanvas-content"></div>
+            <div class="sat-securityTableRow__expandCanvas-content">
+              <!--
+                The ngIf optimizes the performance as it allows us to lazy-load the SecurityTradingMessage components
+              -->
+              <ul *ngIf="eachRow.state.isExpanded" class="sat-securityTableRow__expandCanvas-content-list">
+                <security-trading-message></security-trading-message>
+              </ul>
+            </div>
           </section>
         </article>
       </div>

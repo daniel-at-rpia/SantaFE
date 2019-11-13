@@ -190,3 +190,27 @@ export interface SecurityTableCellDTO extends BasicDTOStructure {
     isStencil: boolean;
   }
 }
+
+export interface SecurityTradingMessageDTO extends BasicDTOStructure {
+  data: {
+    broker: string;
+    time: string;
+    dataSource: string;
+    bid: {
+      size: number;
+      price: number;
+      tspread: number;
+      yield: number;
+    };
+    ask: {
+      size: number;
+      price: number;
+      tspread: number;
+      yield: number;
+    }
+  },
+  state: {
+    isAxe: boolean;
+    isStencil: boolean;
+  } 
+}
