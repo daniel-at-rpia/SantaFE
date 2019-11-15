@@ -21,7 +21,7 @@
       </div>
       <div class="sat-securityTable__main-table-body">
         <article
-          *ngFor="let eachRow of tableData.data.rows"
+          *ngFor="let eachRow of tableData.data.rows; let rowIndex = index;"
           (click)="onClickRow(eachRow)"
           [ngClass]="{
             'sat-securityTableRow': true,
@@ -63,7 +63,7 @@
                 <span class="sat-securityTableRow__expandCanvas-content-label-entry">Spread</span>
                 <span class="sat-securityTableRow__expandCanvas-content-label-entry">Benchmark</span>
               </div>
-              <ul *ngIf="eachRow.state.isExpanded" class="sat-securityTableRow__expandCanvas-content-messageList">
+              <ul *ngIf="eachRow.state.isExpanded || rowIndex === 0" class="sat-securityTableRow__expandCanvas-content-messageList">
                 <security-trading-message
                   *ngFor="let eachMessage of eachRow.data.tradingMessages"
                   [messageData]="eachMessage">

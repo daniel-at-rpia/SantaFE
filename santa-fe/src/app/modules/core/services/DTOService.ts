@@ -301,7 +301,7 @@ export class DTOService {
           this.formSecurityTableHeaderObject('Mark Discrepancy', false),
           this.formSecurityTableHeaderObject('Position', false),
           this.formSecurityTableHeaderObject('30 day delta', false),
-          this.formSecurityTableHeaderObject('Best Axe (Bid vs Ask)', true)
+          this.formSecurityTableHeaderObject('Trade Frequency (48hrs)', false)
         ],
         rows: []
       },
@@ -377,7 +377,7 @@ export class DTOService {
           tspread: 181.00
         },
         ask: {
-          isAxe: false,
+          isAxe: true,
           size: '5MM',
           price: 106.338,
           yield: 4.13,

@@ -1,6 +1,11 @@
 <article
   [ngClass]="{
-    'sat-securityTradingMessage': true
+    'sat-securityTradingMessage': true,
+    'sat-securityTradingMessage--noBid': !messageData.state.hasBid,
+    'sat-securityTradingMessage--noAsk': !messageData.state.hasAsk,
+    'sat-securityTradingMessage--bidIsAxe': messageData.state.hasBid && messageData.data.bid.isAxe,
+    'sat-securityTradingMessage--askIsAxe':
+    messageData.state.hasAsk && messageData.data.ask.isAxe
   }">
   <section class="sat-securityTradingMessage__time">
     <span class="sat-securityTradingMessage__time-text">{{messageData.data.time}}</span>
@@ -12,9 +17,11 @@
     <div class="sat-securityTradingMessage__main-thumbnail">
       <div class="sat-securityTradingMessage__main-thumbnail-bid">
         <i class="sat-securityTradingMessage__main-thumbnail-bid-icon far fa-running"></i>
+        <i class="sat-securityTradingMessage__main-thumbnail-bid-axeIcon fas fa-axe"></i>
       </div>
-      <div class="sat-securityTradingMessage__main-thumbnail-ask sat-securityTradingMessage__main-thumbnail-ask--axe">
-        <i class="sat-securityTradingMessage__main-thumbnail-ask-icon fas fa-axe"></i>
+      <div class="sat-securityTradingMessage__main-thumbnail-ask">
+        <i class="sat-securityTradingMessage__main-thumbnail-ask-icon far fa-running"></i>
+        <i class="sat-securityTradingMessage__main-thumbnail-ask-axeIcon fas fa-axe"></i>
       </div>
     </div>
     <div class="sat-securityTradingMessage__main-twoSideEntry">
@@ -46,10 +53,10 @@
     <div class="sat-securityTradingMessage__main-spacing"></div>
     <div class="sat-securityTradingMessage__main-twoSideEntry">
       <span class="sat-securityTradingMessage__main-twoSideEntry-bid">
-        {{messageData.data.bid.spread}}
+        {{messageData.data.bid.tspread}}
       </span>
       <span class="sat-securityTradingMessage__main-twoSideEntry-ask">
-        {{messageData.data.ask.spread}}
+        {{messageData.data.ask.tspread}}
       </span>
     </div>
   </section>

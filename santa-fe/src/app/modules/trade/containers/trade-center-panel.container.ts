@@ -82,7 +82,7 @@ export class TradeCenterPanel {
       newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null));
       newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null));
       newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null));
-      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, stencilQuant));
+      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null));
     } else {
       const bestRun = this.generateRandomQuantComparer(newSecurity);
       const bestAxe = this.generateRandomQuantComparer(newSecurity);
@@ -91,7 +91,7 @@ export class TradeCenterPanel {
       newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, '-5'));
       newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, 'Long'));
       newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, '+4'));
-      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, null, bestAxe));
+      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, '12'));
     }
     this.state.table.data.rows.push(newRow);
   }

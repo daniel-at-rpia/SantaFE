@@ -60,19 +60,10 @@ $securityTradingMessage_width: 9rem;
         &-icon {
           font-size: $font_size_xx_large;
         }
-        &--axe {
-          border-color: $color_blue_5;
-          background-color: $color_blue_5;
-          #{$securityTradeMessageBlockName} {
-            &__main-thumbnail {
-              &-bid, &-ask {
-                &-icon {
-                  font-size: $font_size_x_large;
-                  color: $font_color_inverse;
-                }
-              }
-            }
-          }
+        &-axeIcon {
+          display: none;
+          font-size: $font_size_x_large;
+          color: $font_color_inverse;
         }
       }
       &-bid {
@@ -105,6 +96,66 @@ $securityTradingMessage_width: 9rem;
       font-size: $font_size_xx_large;
       color: $font_color_inverse;
       margin-left: $spacing_medium;
+    }
+  }
+  &--noBid {
+    #{$securityTradeMessageBlockName} {
+      &__main {
+        &-thumbnail-bid {
+          visibility: hidden;
+        }
+        &-twoSideEntry {
+          &-bid {
+            visibility: hidden;
+          }
+        }
+      }
+    }
+  }
+  &--noAsk {
+    #{$securityTradeMessageBlockName} {
+      &__main {
+        &-thumbnail-ask {
+          visibility: hidden;
+        }
+        &-twoSideEntry {
+          &-ask {
+            visibility: hidden;
+          }
+        }
+      }
+    }
+  }
+  &--bidIsAxe {
+    #{$securityTradeMessageBlockName} {
+      &__main {
+        &-thumbnail-bid {
+          border-color: $color_blue_5;
+          background-color: $color_blue_5;
+          &-icon {
+            display: none;
+          }
+          &-axeIcon {
+            display: inline-block;
+          }
+        }
+      }
+    }
+  }
+  &--askIsAxe {
+    #{$securityTradeMessageBlockName} {
+      &__main {
+        &-thumbnail-ask {
+          border-color: $color_blue_5;
+          background-color: $color_blue_5;
+          &-icon {
+            display: none;
+          }
+          &-axeIcon {
+            display: inline-block;
+          }
+        }
+      }
     }
   }
   &--stencilState {
