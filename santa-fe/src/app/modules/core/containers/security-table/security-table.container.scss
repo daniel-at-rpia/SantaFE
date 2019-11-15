@@ -77,7 +77,7 @@ $securityTable_cell_width_quant: 8.75rem * 2;
 }
 
 
-$securityTableRow_expandCanvas_height: 30rem + $spacing_medium * 2;
+$securityTableRow_expandCanvas_height: 40rem + $spacing_medium * 2;
 .sat-securityTableRow {
   $securityTableRowBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
@@ -106,15 +106,28 @@ $securityTableRow_expandCanvas_height: 30rem + $spacing_medium * 2;
       }
       &-label {
         display: flex;
-        padding-left: $securityTradingMessage_time_width;
+        padding-left: $securityTradingMessage_time_width + $spacing_small;
         padding-right: $spacing_large;
+        margin-bottom: $spacing_x_small;
+        &-spacing {
+          @include mix_border_generator(0 $typical_border_width 0 0);
+          width: $securityTradingMessage_spacing_height;
+          height: 100%;
+          margin-right: $securityTradingMessage_spacing_height;
+        }
       }
       &-messageList {
         @include mix_enable_scrollbar('vertical');
         display: flex;
         flex-direction: column;
         margin-right: $spacing_medium;
-        margin-bottom: $spacing_medium;
+      }
+      &-collapseBtn {
+        @include mix_border_radius(50%);
+        align-self: center;
+        margin: $spacing_medium;
+        background-color: $color_kill;
+        color: $font_color_inverse;
       }
     }
   }
@@ -171,12 +184,16 @@ $securityTableRow_expandCanvas_height: 30rem + $spacing_medium * 2;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0 $securityTradingMessage_spacing_height;
   color: $font_color_inverse;
   font-size: $font_size_small;
-  &>button {
-    padding-top: $spacing_x_small;
-    padding-bottom: $spacing_x_small;
+  &-cta {
+    padding: $spacing_x_small;
+    &:first-of-type {
+      margin-right: $spacing_x_small;
+    }
+    &:nth-of-type(2) {
+      margin-left: $spacing_x_small;
+    }
   }
   &--long {
     flex: 1 1 10%;

@@ -16,28 +16,6 @@
     <div class="sat-securityTradingMessage__main-spacing"></div>
     <div class="sat-securityTradingMessage__main-entry">{{messageData.data.broker}}</div>
     <div class="sat-securityTradingMessage__main-spacing"></div>
-    <div class="sat-securityTradingMessage__main-twoSideEntry sat-securityTradingMessage__main-twoSideEntry--veryLong">
-      <i class="sat-securityTradingMessage__main-twoSideEntry-bidAxeIcon fas fa-axe"></i>
-      <span class="sat-securityTradingMessage__main-twoSideEntry-bid">
-        {{messageData.data.bid.size}}
-      </span>
-      <i class="sat-securityTradingMessage__main-twoSideEntry-mid fal fa-arrows-h"></i>
-      <span class="sat-securityTradingMessage__main-twoSideEntry-ask">
-        {{messageData.data.ask.size}}
-      </span>
-      <i class="sat-securityTradingMessage__main-twoSideEntry-askAxeIcon fas fa-axe"></i>
-    </div>
-    <div class="sat-securityTradingMessage__main-spacing"></div>
-    <div class="sat-securityTradingMessage__main-twoSideEntry">
-      <span class="sat-securityTradingMessage__main-twoSideEntry-bid">
-        {{messageData.data.bid.tspread}}
-      </span>
-      <i class="sat-securityTradingMessage__main-twoSideEntry-mid fal fa-arrows-h"></i>
-      <span class="sat-securityTradingMessage__main-twoSideEntry-ask">
-        {{messageData.data.ask.tspread}}
-      </span>
-    </div>
-    <div class="sat-securityTradingMessage__main-spacing"></div>
     <div class="sat-securityTradingMessage__main-twoSideEntry">
       <span class="sat-securityTradingMessage__main-twoSideEntry-bid">
         {{messageData.data.bid.price}}
@@ -56,6 +34,28 @@
       <span class="sat-securityTradingMessage__main-twoSideEntry-ask">
         {{messageData.data.ask.yield}}
       </span>
+    </div>
+    <div class="sat-securityTradingMessage__main-spacing"></div>
+    <div class="sat-securityTradingMessage__main-twoSideEntry">
+      <span class="sat-securityTradingMessage__main-twoSideEntry-bid">
+        {{messageData.data.bid.tspread}}
+      </span>
+      <i class="sat-securityTradingMessage__main-twoSideEntry-mid fal fa-arrows-h"></i>
+      <span class="sat-securityTradingMessage__main-twoSideEntry-ask">
+        {{messageData.data.ask.tspread}}
+      </span>
+    </div>
+    <div class="sat-securityTradingMessage__main-spacing"></div>
+    <div class="sat-securityTradingMessage__main-twoSideEntry sat-securityTradingMessage__main-twoSideEntry--veryLong">
+      <i class="sat-securityTradingMessage__main-twoSideEntry-bidAxeIcon fas fa-axe"></i>
+      <span class="sat-securityTradingMessage__main-twoSideEntry-bid">
+        {{messageData.data.bid.size}}
+      </span>
+      <i class="sat-securityTradingMessage__main-twoSideEntry-mid fal fa-arrows-h"></i>
+      <span class="sat-securityTradingMessage__main-twoSideEntry-ask">
+        {{messageData.data.ask.size}}
+      </span>
+      <i class="sat-securityTradingMessage__main-twoSideEntry-askAxeIcon fas fa-axe"></i>
     </div>
     <div class="sat-securityTradingMessage__main-spacing"></div>
     <div class="sat-securityTradingMessage__main-benchmarkEntry">

@@ -27,7 +27,7 @@ export class SecurityTable {
     private dtoService: DTOService
   ) { }
 
-  public onClickRow(targetRow: SecurityTableRowDTO) {
+  public onClickRowTableCanvas(targetRow: SecurityTableRowDTO) {
     targetRow.state.isExpanded = !targetRow.state.isExpanded;
     const msg1 = this.dtoService.formSecurityTradingMessageObject(false, true, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
     const msg2 = this.dtoService.formSecurityTradingMessageObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
@@ -51,10 +51,17 @@ export class SecurityTable {
       const msg7 = this.dtoService.formSecurityTradingMessageObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
       const msg8 = this.dtoService.formSecurityTradingMessageObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
       const msg9 = this.dtoService.formSecurityTradingMessageObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-      targetRow.data.tradingMessages = [msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8, msg9];
+      const msg10 = this.dtoService.formSecurityTradingMessageObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
+      const msg11 = this.dtoService.formSecurityTradingMessageObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
+      const msg12 = this.dtoService.formSecurityTradingMessageObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
+      targetRow.data.tradingMessages = [msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8, msg9, msg10, msg11, msg12];
     } else {
       targetRow.data.tradingMessages = [msg1, msg2, msg3, msg4, msg5, msg6];
     }
+  }
+
+  public onClickCollapseExpandView(targetRow: SecurityTableRowDTO) {
+    targetRow.state.isExpanded = false;
   }
 
 }
