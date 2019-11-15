@@ -27,8 +27,23 @@ export class SecurityTable {
     private dtoService: DTOService
   ) { }
 
+  public onClickCollapseExpandView(targetRow: SecurityTableRowDTO) {
+    targetRow.state.isExpanded = false;
+  }
+
   public onClickRowTableCanvas(targetRow: SecurityTableRowDTO) {
-    targetRow.state.isExpanded = !targetRow.state.isExpanded;
+    if (!this.tableData.state.isStencil) {
+      targetRow.state.isExpanded = !targetRow.state.isExpanded;
+      const row = targetRow;
+      this.renderStencilQuotes(targetRow);
+      const func = () => {
+        this.fetchSecurityQuotes(row);
+      };
+      setTimeout(func.bind(this), 3000);
+    }
+  }
+
+  private fetchSecurityQuotes(targetRow: SecurityTableRowDTO){
     const msg1 = this.dtoService.formSecurityQuoteObject(false, true, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
     const msg2 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
     msg2.data.ask.isAxe = false;
@@ -60,8 +75,10 @@ export class SecurityTable {
     }
   }
 
-  public onClickCollapseExpandView(targetRow: SecurityTableRowDTO) {
-    targetRow.state.isExpanded = false;
+  private renderStencilQuotes(targetRow: SecurityTableRowDTO){
+    const stencilQuote = this.dtoService.formSecurityQuoteObject(true, true, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
+    stencilQuote.data.ask.isAxe = false;
+    targetRow.data.tradingMessages = [stencilQuote, stencilQuote, stencilQuote];
   }
 
 }

@@ -186,6 +186,7 @@
     animation: stencilPulse $animation_duration_loading infinite ease-in-out;
     color: $color_stencil;
     background: $color_stencil;
+    user-select: none;
   }
 
   //Material

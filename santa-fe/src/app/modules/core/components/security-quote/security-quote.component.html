@@ -6,7 +6,8 @@
     'sat-SecurityQuote--bidIsAxe': messageData.state.hasBid && messageData.data.bid.isAxe,
     'sat-SecurityQuote--askIsAxe':
     messageData.state.hasAsk && messageData.data.ask.isAxe,
-    'sat-SecurityQuote--diffBenchmark': messageData.state.diffBenchmark
+    'sat-SecurityQuote--diffBenchmark': messageData.state.diffBenchmark,
+    'sat-SecurityQuote--stencilState': messageData.state.isStencil
   }">
   <section class="sat-SecurityQuote__time">
     <span class="sat-SecurityQuote__time-text">{{messageData.data.time}}</span>

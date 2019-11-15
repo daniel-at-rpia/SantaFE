@@ -231,7 +231,26 @@ $SecurityQuote_twoSideEntry_axeIconSize: 1.5rem;
   }
   &--stencilState {
     #{$securityQuoteBlockName} {
-      
+      &__time {
+        &-text {
+          @include mix_stencil_animation;
+        }
+      }
+      &__main {
+        &-entry {
+          @include mix_stencil_animation;
+        }
+        &-twoSideEntry {
+          &-bid, &-ask {
+            @include mix_stencil_animation;
+          }
+        }
+        &-benchmarkEntry {
+          &-consolidated, &-bid, &-ask {
+            @include mix_stencil_animation;
+          }
+        }
+      }
     }
   }
 }
