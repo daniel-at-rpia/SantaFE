@@ -1,14 +1,14 @@
 @import "global.scss";
 
-$securityTradingMessage_twoSideEntry_axeIconSize: 1.5rem;
-.sat-securityTradingMessage {
-  $securityTradeMessageBlockName: &;
+$SecurityQuote_twoSideEntry_axeIconSize: 1.5rem;
+.sat-SecurityQuote {
+  $securityQuoteBlockName: &;
   flex: 1 1 auto;
   display: flex;
   align-items: center;
   margin-top: $spacing_x_small;
   &__time {
-    flex: 0 0 $securityTradingMessage_time_width;
+    flex: 0 0 $SecurityQuote_time_width;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -36,9 +36,9 @@ $securityTradingMessage_twoSideEntry_axeIconSize: 1.5rem;
     }
     &-spacing {
       @include mix_border_generator(0 $typical_border_width 0 0);
-      width: $securityTradingMessage_spacing_height;
+      width: $SecurityQuote_spacing_height;
       height: 100%;
-      margin-right: $securityTradingMessage_spacing_height;
+      margin-right: $SecurityQuote_spacing_height;
     }
     &-thumbnail {
       flex: 0 1 100%;
@@ -76,12 +76,12 @@ $securityTradingMessage_twoSideEntry_axeIconSize: 1.5rem;
       align-items: center;
       &-bidAxeIcon, &-askAxeIcon {
         @include mix_border_radius(3px);
-        flex: 0 0 $securityTradingMessage_twoSideEntry_axeIconSize;
+        flex: 0 0 $SecurityQuote_twoSideEntry_axeIconSize;
         display: flex;
         align-items: center;
         justify-content: center;
         visibility: hidden;
-        height: $securityTradingMessage_twoSideEntry_axeIconSize;
+        height: $SecurityQuote_twoSideEntry_axeIconSize;
         color: $color_white;
         background-color: $color_axe;
         font-size: $font_size_small;
@@ -154,7 +154,7 @@ $securityTradingMessage_twoSideEntry_axeIconSize: 1.5rem;
     }
   }
   &__ctas {
-    flex: 0 0 $securityTradingMessage_ctas_width;
+    flex: 0 0 $SecurityQuote_ctas_width;
     display: flex;
     &-upvote {
       @include mix_border_radius(50%);
@@ -167,7 +167,7 @@ $securityTradingMessage_twoSideEntry_axeIconSize: 1.5rem;
     }
   }
   &--noBid {
-    #{$securityTradeMessageBlockName} {
+    #{$securityQuoteBlockName} {
       &__main {
         &-thumbnail-bid {
           visibility: hidden;
@@ -181,7 +181,7 @@ $securityTradingMessage_twoSideEntry_axeIconSize: 1.5rem;
     }
   }
   &--noAsk {
-    #{$securityTradeMessageBlockName} {
+    #{$securityQuoteBlockName} {
       &__main {
         &-thumbnail-ask {
           visibility: hidden;
@@ -195,7 +195,7 @@ $securityTradingMessage_twoSideEntry_axeIconSize: 1.5rem;
     }
   }
   &--bidIsAxe {
-    #{$securityTradeMessageBlockName} {
+    #{$securityQuoteBlockName} {
       &__main {
         &-twoSideEntry-bidAxeIcon {
           visibility: visible;
@@ -204,7 +204,7 @@ $securityTradingMessage_twoSideEntry_axeIconSize: 1.5rem;
     }
   }
   &--askIsAxe {
-    #{$securityTradeMessageBlockName} {
+    #{$securityQuoteBlockName} {
       &__main {
         &-twoSideEntry-askAxeIcon {
           visibility: visible;
@@ -213,7 +213,7 @@ $securityTradingMessage_twoSideEntry_axeIconSize: 1.5rem;
     }
   }
   &--diffBenchmark {
-    #{$securityTradeMessageBlockName} {
+    #{$securityQuoteBlockName} {
       &__main {
         &-entry--benchmark {
           display: none;
@@ -230,5 +230,8 @@ $securityTradingMessage_twoSideEntry_axeIconSize: 1.5rem;
     }
   }
   &--stencilState {
+    #{$securityQuoteBlockName} {
+      
+    }
   }
 }

@@ -17,7 +17,7 @@
       SecurityTableRowDTO,
       SecurityTableHeaderDTO,
       SecurityTableCellDTO,
-      SecurityTradingMessageDTO
+      SecurityQuoteDTO
     } from 'FEModels/frontend-models.interface';
     import {
       SecurityGroupMetricBlock,
@@ -296,7 +296,7 @@ export class DTOService {
       data: {
         headers: [
           this.formSecurityTableHeaderObject('Security', false),
-          this.formSecurityTableHeaderObject('Best Run (Bid vs Ask)', true),
+          this.formSecurityTableHeaderObject('Best Quote (Bid vs Ask)', true),
           this.formSecurityTableHeaderObject('Mark', false),
           this.formSecurityTableHeaderObject('Mark Discrepancy', false),
           this.formSecurityTableHeaderObject('Position', false),
@@ -361,14 +361,14 @@ export class DTOService {
     return object;
   }
 
-  public formSecurityTradingMessageObject(
+  public formSecurityQuoteObject(
     isStencil: boolean,
     hasBid: boolean,
     hasAsk: boolean,
     bidBenchmark: string,
     askBenchmark: string
-  ) : SecurityTradingMessageDTO {
-    const object: SecurityTradingMessageDTO = {
+  ) : SecurityQuoteDTO {
+    const object: SecurityQuoteDTO = {
       data: {
         broker: 'GS',
         time: '12:01 pm',

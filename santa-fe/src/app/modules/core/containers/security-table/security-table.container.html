@@ -82,13 +82,13 @@
                 <article class="sat-securityTableRowExpandViewLabel sat-securityTableRowExpandViewLabel--veryLong">Benchmarks</article>
               </div>
               <!--
-                The ngIf optimizes the performance as it allows us to lazy-load the SecurityTradingMessage components
+                The ngIf optimizes the performance as it allows us to lazy-load the SecurityQuote components
               -->
               <ul *ngIf="eachRow.state.isExpanded || rowIndex === 0" class="sat-securityTableRow__expandCanvas-content-messageList">
-                <security-trading-message
+                <security-quote
                   *ngFor="let eachMessage of eachRow.data.tradingMessages"
                   [messageData]="eachMessage">
-                </security-trading-message>
+                </security-quote>
               </ul>
               <button (click)="onClickCollapseExpandView(eachRow)" class="sat-securityTableRow__expandCanvas-content-collapseBtn santaBtn--iconOnly fal fa-times"></button>
             </div>

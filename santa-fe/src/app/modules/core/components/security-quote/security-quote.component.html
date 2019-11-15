@@ -1,0 +1,78 @@
+<article
+  [ngClass]="{
+    'sat-SecurityQuote': true,
+    'sat-SecurityQuote--noBid': !messageData.state.hasBid,
+    'sat-SecurityQuote--noAsk': !messageData.state.hasAsk,
+    'sat-SecurityQuote--bidIsAxe': messageData.state.hasBid && messageData.data.bid.isAxe,
+    'sat-SecurityQuote--askIsAxe':
+    messageData.state.hasAsk && messageData.data.ask.isAxe,
+    'sat-SecurityQuote--diffBenchmark': messageData.state.diffBenchmark
+  }">
+  <section class="sat-SecurityQuote__time">
+    <span class="sat-SecurityQuote__time-text">{{messageData.data.time}}</span>
+  </section>
+  <section class="sat-SecurityQuote__main">
+    <div class="sat-SecurityQuote__main-entry">{{messageData.data.dataSource}}</div>
+    <div class="sat-SecurityQuote__main-spacing"></div>
+    <div class="sat-SecurityQuote__main-entry">{{messageData.data.broker}}</div>
+    <div class="sat-SecurityQuote__main-spacing"></div>
+    <div class="sat-SecurityQuote__main-twoSideEntry">
+      <span class="sat-SecurityQuote__main-twoSideEntry-bid">
+        {{messageData.data.bid.price}}
+      </span>
+      <i class="sat-SecurityQuote__main-twoSideEntry-mid fal fa-arrows-h"></i>
+      <span class="sat-SecurityQuote__main-twoSideEntry-ask">
+        {{messageData.data.ask.price}}
+      </span>
+    </div>
+    <div class="sat-SecurityQuote__main-spacing"></div>
+    <div class="sat-SecurityQuote__main-twoSideEntry">
+      <span class="sat-SecurityQuote__main-twoSideEntry-bid">
+        {{messageData.data.bid.yield}}
+      </span>
+      <i class="sat-SecurityQuote__main-twoSideEntry-mid fal fa-arrows-h"></i>
+      <span class="sat-SecurityQuote__main-twoSideEntry-ask">
+        {{messageData.data.ask.yield}}
+      </span>
+    </div>
+    <div class="sat-SecurityQuote__main-spacing"></div>
+    <div class="sat-SecurityQuote__main-twoSideEntry">
+      <span class="sat-SecurityQuote__main-twoSideEntry-bid">
+        {{messageData.data.bid.tspread}}
+      </span>
+      <i class="sat-SecurityQuote__main-twoSideEntry-mid fal fa-arrows-h"></i>
+      <span class="sat-SecurityQuote__main-twoSideEntry-ask">
+        {{messageData.data.ask.tspread}}
+      </span>
+    </div>
+    <div class="sat-SecurityQuote__main-spacing"></div>
+    <div class="sat-SecurityQuote__main-twoSideEntry sat-SecurityQuote__main-twoSideEntry--veryLong">
+      <i class="sat-SecurityQuote__main-twoSideEntry-bidAxeIcon fas fa-axe"></i>
+      <span class="sat-SecurityQuote__main-twoSideEntry-bid">
+        {{messageData.data.bid.size}}
+      </span>
+      <i class="sat-SecurityQuote__main-twoSideEntry-mid fal fa-arrows-h"></i>
+      <span class="sat-SecurityQuote__main-twoSideEntry-ask">
+        {{messageData.data.ask.size}}
+      </span>
+      <i class="sat-SecurityQuote__main-twoSideEntry-askAxeIcon fas fa-axe"></i>
+    </div>
+    <div class="sat-SecurityQuote__main-spacing"></div>
+    <div class="sat-SecurityQuote__main-benchmarkEntry">
+      <span class="sat-SecurityQuote__main-benchmarkEntry-consolidated">
+        {{messageData.data.consolidatedBenchmark}}
+      </span>
+      <span class="sat-SecurityQuote__main-benchmarkEntry-bid">
+        {{messageData.data.bid.benchmark}}
+      </span>
+      <i class="sat-SecurityQuote__main-benchmarkEntry-mid fal fa-arrows-h"></i>
+      <span class="sat-SecurityQuote__main-benchmarkEntry-ask">
+        {{messageData.data.ask.benchmark}}
+      </span>
+    </div>
+  </section>
+  <section class="sat-SecurityQuote__ctas">
+    <button class="sat-SecurityQuote__ctas-upvote santaBtn--iconOnly fal fa-thumbs-up"></button>
+    <button class="sat-SecurityQuote__ctas-downvote santaBtn--iconOnly fal fa-thumbs-down"></button>
+  </section>
+</article>

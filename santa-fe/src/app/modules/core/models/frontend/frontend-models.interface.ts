@@ -174,7 +174,7 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
   data: {
     security: SecurityDTO;
     cells: Array<SecurityTableCellDTO>;
-    tradingMessages: Array<SecurityTradingMessageDTO>;
+    tradingMessages: Array<SecurityQuoteDTO>;
   },
   state: {
     isExpanded: boolean;
@@ -192,7 +192,7 @@ export interface SecurityTableCellDTO extends BasicDTOStructure {
   }
 }
 
-export interface SecurityTradingMessageDTO extends BasicDTOStructure {
+export interface SecurityQuoteDTO extends BasicDTOStructure {
   data: {
     broker: string;
     time: string;
