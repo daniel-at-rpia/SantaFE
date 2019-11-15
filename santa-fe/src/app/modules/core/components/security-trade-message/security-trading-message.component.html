@@ -5,7 +5,8 @@
     'sat-securityTradingMessage--noAsk': !messageData.state.hasAsk,
     'sat-securityTradingMessage--bidIsAxe': messageData.state.hasBid && messageData.data.bid.isAxe,
     'sat-securityTradingMessage--askIsAxe':
-    messageData.state.hasAsk && messageData.data.ask.isAxe
+    messageData.state.hasAsk && messageData.data.ask.isAxe,
+    'sat-securityTradingMessage--diffBenchmark': messageData.state.diffBenchmark
   }">
   <section class="sat-securityTradingMessage__time">
     <span class="sat-securityTradingMessage__time-text">{{messageData.data.time}}</span>
@@ -14,22 +15,26 @@
     <div class="sat-securityTradingMessage__main-entry">{{messageData.data.dataSource}}</div>
     <div class="sat-securityTradingMessage__main-spacing"></div>
     <div class="sat-securityTradingMessage__main-entry">{{messageData.data.broker}}</div>
-    <div class="sat-securityTradingMessage__main-thumbnail">
-      <div class="sat-securityTradingMessage__main-thumbnail-bid">
-        <i class="sat-securityTradingMessage__main-thumbnail-bid-icon far fa-running"></i>
-        <i class="sat-securityTradingMessage__main-thumbnail-bid-axeIcon fas fa-axe"></i>
-      </div>
-      <div class="sat-securityTradingMessage__main-thumbnail-ask">
-        <i class="sat-securityTradingMessage__main-thumbnail-ask-icon far fa-running"></i>
-        <i class="sat-securityTradingMessage__main-thumbnail-ask-axeIcon fas fa-axe"></i>
-      </div>
-    </div>
-    <div class="sat-securityTradingMessage__main-twoSideEntry">
+    <div class="sat-securityTradingMessage__main-spacing"></div>
+    <div class="sat-securityTradingMessage__main-twoSideEntry sat-securityTradingMessage__main-twoSideEntry--veryLong">
+      <i class="sat-securityTradingMessage__main-twoSideEntry-bidAxeIcon fas fa-axe"></i>
       <span class="sat-securityTradingMessage__main-twoSideEntry-bid">
         {{messageData.data.bid.size}}
       </span>
+      <i class="sat-securityTradingMessage__main-twoSideEntry-mid fal fa-arrows-h"></i>
       <span class="sat-securityTradingMessage__main-twoSideEntry-ask">
         {{messageData.data.ask.size}}
+      </span>
+      <i class="sat-securityTradingMessage__main-twoSideEntry-askAxeIcon fas fa-axe"></i>
+    </div>
+    <div class="sat-securityTradingMessage__main-spacing"></div>
+    <div class="sat-securityTradingMessage__main-twoSideEntry">
+      <span class="sat-securityTradingMessage__main-twoSideEntry-bid">
+        {{messageData.data.bid.tspread}}
+      </span>
+      <i class="sat-securityTradingMessage__main-twoSideEntry-mid fal fa-arrows-h"></i>
+      <span class="sat-securityTradingMessage__main-twoSideEntry-ask">
+        {{messageData.data.ask.tspread}}
       </span>
     </div>
     <div class="sat-securityTradingMessage__main-spacing"></div>
@@ -37,6 +42,7 @@
       <span class="sat-securityTradingMessage__main-twoSideEntry-bid">
         {{messageData.data.bid.price}}
       </span>
+      <i class="sat-securityTradingMessage__main-twoSideEntry-mid fal fa-arrows-h"></i>
       <span class="sat-securityTradingMessage__main-twoSideEntry-ask">
         {{messageData.data.ask.price}}
       </span>
@@ -46,21 +52,23 @@
       <span class="sat-securityTradingMessage__main-twoSideEntry-bid">
         {{messageData.data.bid.yield}}
       </span>
+      <i class="sat-securityTradingMessage__main-twoSideEntry-mid fal fa-arrows-h"></i>
       <span class="sat-securityTradingMessage__main-twoSideEntry-ask">
         {{messageData.data.ask.yield}}
       </span>
     </div>
     <div class="sat-securityTradingMessage__main-spacing"></div>
-    <div class="sat-securityTradingMessage__main-twoSideEntry">
-      <span class="sat-securityTradingMessage__main-twoSideEntry-bid">
-        {{messageData.data.bid.tspread}}
+    <div class="sat-securityTradingMessage__main-benchmarkEntry">
+      <span class="sat-securityTradingMessage__main-benchmarkEntry-consolidated">
+        {{messageData.data.consolidatedBenchmark}}
       </span>
-      <span class="sat-securityTradingMessage__main-twoSideEntry-ask">
-        {{messageData.data.ask.tspread}}
+      <span class="sat-securityTradingMessage__main-benchmarkEntry-bid">
+        {{messageData.data.bid.benchmark}}
+      </span>
+      <i class="sat-securityTradingMessage__main-benchmarkEntry-mid fal fa-arrows-h"></i>
+      <span class="sat-securityTradingMessage__main-benchmarkEntry-ask">
+        {{messageData.data.ask.benchmark}}
       </span>
     </div>
-  </section>
-  <section class="sat-securityTradingMessage__arrow">
-    <i class="sat-securityTradingMessage__arrow-icon fal fa-arrow-left"></i>
   </section>
 </article>

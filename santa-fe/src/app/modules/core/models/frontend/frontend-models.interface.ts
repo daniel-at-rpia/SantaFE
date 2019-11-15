@@ -197,12 +197,14 @@ export interface SecurityTradingMessageDTO extends BasicDTOStructure {
     broker: string;
     time: string;
     dataSource: string;
+    consolidatedBenchmark: string;
     bid: {
       isAxe: boolean;
       size: string;
       price: number;
       tspread: number;
       yield: number;
+      benchmark: string;
     };
     ask: {
       isAxe: boolean;
@@ -210,11 +212,13 @@ export interface SecurityTradingMessageDTO extends BasicDTOStructure {
       price: number;
       tspread: number;
       yield: number;
+      benchmark: string;
     }
   },
   state: {
     isStencil: boolean;
     hasBid: boolean;
     hasAsk: boolean;
+    diffBenchmark: boolean;
   }
 }

@@ -46,6 +46,7 @@
     &--iconOnly#{$btnBlockName}--small {
       width: $iconButton_size_small;
       height: $iconButton_size_small;
+      font-size: $font_size_normal;
     }
     &--labelled#{$btnBlockName}--loading {
       @include material('none');

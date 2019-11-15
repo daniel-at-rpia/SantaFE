@@ -1,48 +1,42 @@
 @import "global.scss";
 
-$securityTradingMessage_height: 23rem;
-$securityTradingMessage_width: 9rem;
 .sat-securityTradingMessage {
   $securityTradeMessageBlockName: &;
   flex: 1 1 auto;
   display: flex;
-  flex-direction: column;
-  width: $securityTradingMessage_width;
-  height: $securityTradingMessage_height;
-  margin-left: $spacing_small;
+  margin-top: $spacing_x_small;
   &__time {
-    flex: 0 1 auto;
+    flex: 0 0 $securityTradingMessage_time_width;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: $spacing_small;
     &-text {
       color: $font_color_inverse;
-      margin: $spacing_small 0;
       text-align: center;
       line-height: $line_height_small;
+      font-size: $font_size_small;
     }
   }
   &__main {
-    @include mix_border_radius(10px);
+    @include mix_border_radius(5px);
     flex: 1 1 auto;
     display: flex;
-    flex-wrap: wrap;
-    align-content: flex-start;
+    flex-wrap: nowrap;
+    align-items: center;
     background-color: $color_white;
-    padding: $spacing_small;
+    padding: $spacing_x_small;
     &-entry {
-      flex: 0 1 100%;
+      flex: 1 1 5%;
       text-align: center;
       font-size: $font_size_small;
+      color: $font_color_minor;
     }
     &-spacing {
-      flex: 0 1 100%;
-      @include mix_border_generator(0 0 $typical_border_width 0);
-      height: $securityTradingMessage_spacing_height;
-      margin-bottom: $securityTradingMessage_spacing_height;
-      &--small {
-        margin-left: $spacing_x_large;
-        margin-right: $spacing_x_large;
-      }
+      @include mix_border_generator(0 $typical_border_width 0 0);
+      width: $securityTradingMessage_spacing_height;
+      height: 100%;
+      margin-right: $securityTradingMessage_spacing_height;
     }
     &-thumbnail {
       flex: 0 1 100%;
@@ -74,28 +68,86 @@ $securityTradingMessage_width: 9rem;
       }
     }
     &-twoSideEntry {
-      flex: 0 1 100%;
+      flex: 1 1 10%;
       display: flex;
       justify-content: center;
-      &-bid {
-        font-size: $font_size_small;
+      align-items: center;
+      &-bidAxeIcon, &-askAxeIcon {
+        @include mix_border_radius(3px);
+        flex: 0 0 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        visibility: hidden;
+        height: 1.5rem;
+        color: $color_white;
+        background-color: $color_axe;
+      }
+      &-bidAxeIcon {
         margin-right: $spacing_x_small;
       }
+      &-askAxeIcon {
+        margin-left: $spacing_x_small;
+      }
+      &-bid {
+        flex: 1 1 50%;
+        display: flex;
+        justify-content: flex-end;
+        color: $font_color_major;
+        font-size: $font_size_small;
+        margin-right: $spacing_x_small;
+        font-weight: bold;
+        text-align: center;
+      }
+      &-mid {
+        color: $font_color_trivial;
+      }
       &-ask {
+        flex: 1 1 50%;
+        display: flex;
+        justify-content: flex-start;
+        color: $font_color_major;
         margin-left: $spacing_x_small;
         font-size: $font_size_small;
+        font-weight: bold;
+        text-align: center;
+      }
+      &--veryLong {
+        flex: 1 1 15%;
       }
     }
-  }
-  &__arrow {
-    flex: 0 1 auto;
-    display: flex;
-    display: none;
-    align-items: center;
-    &-icon {
-      font-size: $font_size_xx_large;
-      color: $font_color_inverse;
-      margin-left: $spacing_medium;
+    &-benchmarkEntry {
+      flex: 1 1 15%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      &-consolidated {
+        color: $font_color_minor;
+        font-size: $font_size_small;
+        display: flex;
+      }
+      &-bid {
+        display: none;
+        flex: 1 1 50%;
+        justify-content: flex-end;
+        color: $font_color_minor;
+        font-size: $font_size_small;
+        margin-right: $spacing_x_small;
+        text-align: center;
+      }
+      &-mid {
+        display: none;
+        color: $font_color_trivial;
+      }
+      &-ask {
+        display: none;
+        flex: 1 1 50%;
+        justify-content: flex-start;
+        color: $font_color_minor;
+        margin-left: $spacing_x_small;
+        font-size: $font_size_small;
+        text-align: center;
+      }
     }
   }
   &--noBid {
@@ -129,15 +181,8 @@ $securityTradingMessage_width: 9rem;
   &--bidIsAxe {
     #{$securityTradeMessageBlockName} {
       &__main {
-        &-thumbnail-bid {
-          border-color: $color_blue_5;
-          background-color: $color_blue_5;
-          &-icon {
-            display: none;
-          }
-          &-axeIcon {
-            display: inline-block;
-          }
+        &-twoSideEntry-bidAxeIcon {
+          visibility: visible;
         }
       }
     }
@@ -145,14 +190,24 @@ $securityTradingMessage_width: 9rem;
   &--askIsAxe {
     #{$securityTradeMessageBlockName} {
       &__main {
-        &-thumbnail-ask {
-          border-color: $color_blue_5;
-          background-color: $color_blue_5;
-          &-icon {
+        &-twoSideEntry-askAxeIcon {
+          visibility: visible;
+        }
+      }
+    }
+  }
+  &--diffBenchmark {
+    #{$securityTradeMessageBlockName} {
+      &__main {
+        &-entry--benchmark {
+          display: none;
+        }
+        &-benchmarkEntry {
+          &-consolidated {
             display: none;
           }
-          &-axeIcon {
-            display: inline-block;
+          &-bid, &-ask, &-mid {
+            display: flex;
           }
         }
       }

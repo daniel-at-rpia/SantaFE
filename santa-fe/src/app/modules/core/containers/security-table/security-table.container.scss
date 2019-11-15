@@ -76,8 +76,8 @@ $securityTable_cell_width_quant: 8.75rem * 2;
   }
 }
 
-$securityTableRow_expandCanvas_label_width: 6rem;
-$securityTableRow_expandCanvas_height: 23rem + $spacing_medium * 2;
+
+$securityTableRow_expandCanvas_height: 30rem + $spacing_medium * 2;
 .sat-securityTableRow {
   $securityTableRowBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
@@ -88,50 +88,33 @@ $securityTableRow_expandCanvas_height: 23rem + $spacing_medium * 2;
     display: flex;
   }
   &__expandCanvas {
-    @include mix_fixed_div(absolute, $z_index_standard_base_item); // remove this for single scrollbar
     display: flex;
     flex-direction: column;
-    width: 100%; // remove this for single scrollbar
-    height: 0;
-    top: $spacing_x_large; // remove this for single scrollbar
+    max-height: 0;
     overflow: hidden;
     &-content {
       @include mix_alive('custom', transform $animation_duration_light);
       flex: 1 1 auto;
       display: flex;
+      flex-direction: column;
       transform: translate(0, -100%);
       background-color: $color_active;
+      &-spacing {
+        @include mix_border_generator($typical_border_width 0 0 0, $color_white);
+        height: $spacing_small;
+        margin: $spacing_small $spacing_large 0 $spacing_large;
+      }
       &-label {
-        flex: 0 0 $securityTableRow_expandCanvas_label_width;
         display: flex;
-        flex-direction: column;
-        padding: 0 $spacing_x_small 0 $spacing_medium;
-        &-entry {
-          display: flex;
-          justify-content: flex-end;
-          align-items: center;
-          margin-top: $securityTradingMessage_spacing_height * 2;
-          color: $font_color_inverse;
-          font-size: $font_size_small;
-          &:first-of-type {
-            margin-top: $spacing_medium + $spacing_small*2 + $font_size_normal*$line_height_small + $spacing_small;
-          }
-          &--runOrAxe {
-            margin-top: $spacing_small;
-            height: $iconButton_size_regular;
-          }
-          &--noSpacing {
-            margin-top: $spacing_small;
-          }
-        }
+        padding-left: $securityTradingMessage_time_width;
+        padding-right: $spacing_large;
       }
       &-messageList {
-        @include mix_enable_scrollbar('horizontal');
-        @include mix_border_generator($typical_border_width 0 0 0, $color_white);
-        @include mix_calculate(flex-basis, 100%, 5rem + $spacing_medium, '-'); // remove this for single scrollbar
+        @include mix_enable_scrollbar('vertical');
         display: flex;
-        flex-wrap: nowrap;
-        margin: $spacing_medium $spacing_medium $spacing_medium 0;
+        flex-direction: column;
+        margin-right: $spacing_medium;
+        margin-bottom: $spacing_medium;
       }
     }
   }
@@ -156,7 +139,6 @@ $securityTableRow_expandCanvas_height: 23rem + $spacing_medium * 2;
     #{$securityTableRowBlockName} {
       &__tableCanvas {
         background-color: $color_active;
-        margin-bottom: $securityTableRow_expandCanvas_height; // remove this for single scrollbar
         .sat-securityTableCell {
           &__metric {
             &-text {
@@ -166,7 +148,7 @@ $securityTableRow_expandCanvas_height: 23rem + $spacing_medium * 2;
         }
       }
       &__expandCanvas {
-        height: $securityTableRow_expandCanvas_height;
+        max-height: $securityTableRow_expandCanvas_height;
         &-content {
           transform: translate(0, 0);
         }
@@ -180,6 +162,27 @@ $securityTableRow_expandCanvas_height: 23rem + $spacing_medium * 2;
         @include material('none');
       }
     }
+  }
+}
+
+.sat-securityTableRowExpandViewLabel {
+  $securityTableRowExpandViewLabel: &;
+  flex: 1 1 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 $securityTradingMessage_spacing_height;
+  color: $font_color_inverse;
+  font-size: $font_size_small;
+  &>button {
+    padding-top: $spacing_x_small;
+    padding-bottom: $spacing_x_small;
+  }
+  &--long {
+    flex: 1 1 10%;
+  }
+  &--veryLong {
+    flex: 1 1 15%;
   }
 }
 

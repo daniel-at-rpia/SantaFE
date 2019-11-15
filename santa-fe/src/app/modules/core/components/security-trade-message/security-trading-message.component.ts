@@ -7,8 +7,7 @@ import {
 } from '@angular/core';
 
 import {
-  SecurityTableDTO,
-  SecurityTableRowDTO
+  SecurityTradingMessageDTO
 } from 'FEModels/frontend-models.interface';
 
 @Component({
@@ -18,7 +17,7 @@ import {
   encapsulation: ViewEncapsulation.Emulated
 })
 export class SecurityTradingMessage {
-  @Input() messageData: SecurityTableDTO;
+  @Input() messageData: SecurityTradingMessageDTO;
   constructor() { }
 
 }

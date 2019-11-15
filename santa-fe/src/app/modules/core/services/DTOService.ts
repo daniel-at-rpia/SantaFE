@@ -363,31 +363,39 @@ export class DTOService {
 
   public formSecurityTradingMessageObject(
     isStencil: boolean,
-  ):SecurityTradingMessageDTO {
+    hasBid: boolean,
+    hasAsk: boolean,
+    bidBenchmark: string,
+    askBenchmark: string
+  ) : SecurityTradingMessageDTO {
     const object: SecurityTradingMessageDTO = {
       data: {
         broker: 'GS',
         time: '12:01 pm',
         dataSource: 'RUN',
+        consolidatedBenchmark: hasBid ? bidBenchmark : askBenchmark,
         bid: {
           isAxe: false,
           size: '10MM',
           price: 105.483,
           yield: 4.16,
-          tspread: 181.00
+          tspread: 181.00,
+          benchmark: bidBenchmark
         },
         ask: {
           isAxe: true,
           size: '5MM',
           price: 106.338,
           yield: 4.13,
-          tspread: 176.00
+          tspread: 176.00,
+          benchmark: askBenchmark
         }
       },
       state: {
         isStencil: isStencil,
-        hasBid: true,
-        hasAsk: true
+        hasBid: hasBid,
+        hasAsk: hasAsk,
+        diffBenchmark: bidBenchmark !== askBenchmark && hasBid && hasAsk
       }
     };
     return object;
