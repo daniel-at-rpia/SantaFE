@@ -5,6 +5,7 @@ $securityTradingMessage_twoSideEntry_axeIconSize: 1.5rem;
   $securityTradeMessageBlockName: &;
   flex: 1 1 auto;
   display: flex;
+  align-items: center;
   margin-top: $spacing_x_small;
   &__time {
     flex: 0 0 $securityTradingMessage_time_width;
@@ -150,6 +151,19 @@ $securityTradingMessage_twoSideEntry_axeIconSize: 1.5rem;
         font-size: $font_size_small;
         text-align: center;
       }
+    }
+  }
+  &__ctas {
+    flex: 0 0 $securityTradingMessage_ctas_width;
+    display: flex;
+    &-upvote {
+      @include mix_border_radius(50%);
+      margin-left: $spacing_small;
+      margin-right: $spacing_small;
+    }
+    &-downvote {
+      @include mix_border_radius(50%);
+      margin-right: $spacing_small;
     }
   }
   &--noBid {

@@ -99,6 +99,7 @@ $securityTableRow_expandCanvas_height: 40rem + $spacing_medium * 2;
       flex-direction: column;
       transform: translate(0, -100%);
       background-color: $color_active;
+      overflow: hidden;
       &-spacing {
         @include mix_border_generator($typical_border_width 0 0 0, $color_white);
         height: $spacing_small;
@@ -107,7 +108,7 @@ $securityTableRow_expandCanvas_height: 40rem + $spacing_medium * 2;
       &-label {
         display: flex;
         padding-left: $securityTradingMessage_time_width + $spacing_small;
-        padding-right: $spacing_large;
+        padding-right: $securityTradingMessage_ctas_width + $spacing_small + $scroll_bar_width;
         margin-bottom: $spacing_x_small;
         &-spacing {
           @include mix_border_generator(0 $typical_border_width 0 0);
@@ -120,7 +121,7 @@ $securityTableRow_expandCanvas_height: 40rem + $spacing_medium * 2;
         @include mix_enable_scrollbar('vertical');
         display: flex;
         flex-direction: column;
-        margin-right: $spacing_medium;
+        margin-right: $spacing_small;
       }
       &-collapseBtn {
         @include mix_border_radius(50%);
