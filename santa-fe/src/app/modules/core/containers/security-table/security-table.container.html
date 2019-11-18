@@ -12,10 +12,22 @@
             [ngClass]="{
               'sat-securityTableHead': true,
               'sat-securityTableHead--securityCardVariant': headIndex === 0,
-              'sat-securityTableHead--quantVariant': eachHead.state.isQuantVariant
+              'sat-securityTableHead--quantVariant': eachHead.state.isQuantVariant,
+              'sat-securityTableHead--selectedState': tableData.state.selectedHeader === eachHead,
+              'sat-securityTableHead--sortedState': tableData.state.sortedByHeader === eachHead
             }">
             <span class="sat-securityTableHead__text">{{eachHead.data.displayLabel}}</span>
-            <span class="sat-securityTableHead__cta">{{eachHead.data.displayLabel}}</span>
+            <button (click)="onClickHeaderCTA(eachHead)" class="sat-securityTableHead__cta">
+              <i class="sat-securityTableHead__cta-icon fal fa-sort-amount-down">
+                <div class="sat-securityTableHead__cta-icon-mask"></div>
+              </i>
+              <span class="sat-securityTableHead__cta-text">{{eachHead.data.displayLabel}}</span>
+            </button>
+            <div class="sat-securityTableHead__actionMenu">
+              <button class="sat-securityTableHead__actionMenu-deleteBtn santaBtn--iconOnly fal fa-times"></button>
+              <button class="sat-securityTableHead__actionMenu-editBtn santaBtn--iconOnly fal fa-pencil"></button>
+              <button (click)="onClickSortBy(eachHead)" class="sat-securityTableHead__actionMenu-sortBtn santaBtn--iconOnly fal fa-sort-amount-down"></button>
+            </div>
           </article>
         </div>
       </div>
@@ -49,7 +61,10 @@
           </section>
           <section class="sat-securityTableRow__expandCanvas">
             <div class="sat-securityTableRow__expandCanvas-content">
-              <div class="sat-securityTableRow__expandCanvas-content-spacing"></div>
+              <!--
+                The ngIf optimizes the performance as it allows us to lazy-load the SecurityQuote components
+              -->
+              <div *ngIf="eachRow.state.isExpanded" class="sat-securityTableRow__expandCanvas-content-spacing"></div>
               <div class="sat-securityTableRow__expandCanvas-content-label">
                 <article class="sat-securityTableRowExpandViewLabel">
                   <button class="sat-securityTableRowExpandViewLabel-cta santaBtn--small">Source</button>
@@ -81,10 +96,7 @@
                 <div class="sat-securityTableRow__expandCanvas-content-label-spacing"></div>
                 <article class="sat-securityTableRowExpandViewLabel sat-securityTableRowExpandViewLabel--veryLong">Benchmarks</article>
               </div>
-              <!--
-                The ngIf optimizes the performance as it allows us to lazy-load the SecurityQuote components
-              -->
-              <ul *ngIf="eachRow.state.isExpanded || rowIndex === 0" class="sat-securityTableRow__expandCanvas-content-messageList">
+              <ul *ngIf="eachRow.state.isExpanded" class="sat-securityTableRow__expandCanvas-content-messageList">
                 <security-quote
                   *ngFor="let eachMessage of eachRow.data.tradingMessages"
                   [messageData]="eachMessage">

@@ -1,19 +1,22 @@
-import {
-  Component,
-  OnInit,
-  ViewEncapsulation,
-  Input,
-  Output
-} from '@angular/core';
+  // dependencies
+    import {
+      Component,
+      OnInit,
+      ViewEncapsulation,
+      Input,
+      Output
+    } from '@angular/core';
 
-import {
-  DTOService
-} from 'Core/services/DTOService';
+    import {
+      DTOService
+    } from 'Core/services/DTOService';
 
-import {
-  SecurityTableDTO,
-  SecurityTableRowDTO
-} from 'FEModels/frontend-models.interface';
+    import {
+      SecurityTableDTO,
+      SecurityTableRowDTO,
+      SecurityTableHeaderDTO
+    } from 'FEModels/frontend-models.interface';
+  //
 
 @Component({
   selector: 'security-table',
@@ -26,6 +29,15 @@ export class SecurityTable {
   constructor(
     private dtoService: DTOService
   ) { }
+
+  public onClickHeaderCTA(targetHeader: SecurityTableHeaderDTO) {
+    this.tableData.state.selectedHeader = this.tableData.state.selectedHeader === targetHeader ? null : targetHeader;
+  }
+
+  public onClickSortBy(targetHeader: SecurityTableHeaderDTO) {
+    this.tableData.state.sortedByHeader = this.tableData.state.sortedByHeader === targetHeader ? null : targetHeader;
+    this.tableData.state.selectedHeader = null;
+  }
 
   public onClickCollapseExpandView(targetRow: SecurityTableRowDTO) {
     targetRow.state.isExpanded = false;

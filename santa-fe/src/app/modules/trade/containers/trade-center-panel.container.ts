@@ -44,15 +44,15 @@ export class TradeCenterPanel {
     const func = () => {
       this.state.table = this.dtoService.formSecurityTableObject();
       this.loadDemoData();
-      this.loadDemoData();
-      this.loadDemoData();
-      this.loadDemoData();
-      this.loadDemoData();
-      this.loadDemoData();
-      this.loadDemoData();
-      this.loadDemoData();
-      this.loadDemoData();
-      this.loadDemoData();
+      // this.loadDemoData();
+      // this.loadDemoData();
+      // this.loadDemoData();
+      // this.loadDemoData();
+      // this.loadDemoData();
+      // this.loadDemoData();
+      // this.loadDemoData();
+      // this.loadDemoData();
+      // this.loadDemoData();
       // this.loadDemoData();
       // this.loadDemoData();
       // this.loadDemoData();

@@ -18,7 +18,7 @@ $securityTable_cell_width_quant: 8.75rem * 2;
       flex-direction: column;
       &-head {
         flex: 0 0 auto;
-        padding: 0 $spacing_medium;
+        padding: 0 $spacing_medium 0 $spacing_medium;
         margin-left: $scroll_bar_width;
         &-row {
           display: flex;
@@ -46,9 +46,9 @@ $securityTable_cell_width_quant: 8.75rem * 2;
 
 .sat-securityTableHead {
   $securityTableHeadBlockName: &;
+  @include mix_fixed_div(relative, $z_index_standard_base_item);
   display: flex;
   justify-content: center;
-  align-items: center;
   width: $securityTable_cell_width;
   padding: $spacing_small 0;
   &__text {
@@ -57,11 +57,54 @@ $securityTable_cell_width_quant: 8.75rem * 2;
     text-align: center;
   }
   &__cta {
-    font-size: $font_size_small;
-    text-align: center;
+    @include mix_fixed_div(relative, $z_index_standard_base_item);
+    flex: 1 1 auto;
+    padding: $spacing_x_small $spacing_small;
+    margin: 0 $spacing_small;
+    &-icon {
+      @include mix_fixed_div(absolute, $z_index_standard_base_item_lift);
+      @include mix_border_radius(50%);
+      @include mix_alive('light');
+      display: none;
+      justify-content: center;
+      align-items: center;
+      width: $iconButton_size_small;
+      height: $iconButton_size_small;
+      top: -$iconButton_size_small/3;
+      right: -$iconButton_size_small/3;
+      background-color: $color_sort;
+      color: $font_color_inverse;
+    }
+    &-text {
+      font-size: $font_size_small;
+    }
+  }
+  &__actionMenu {
+    @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+    @include mix_alive('custom', transform $animation_duration_light);
+    display: flex;
+    transform: scale(0.01) translate(0, -200%);
+    top: 80%;
+    &-deleteBtn {
+      @include mix_border_radius(50%);
+      margin: 0 $spacing_x_small;
+      background-color: $color_kill;
+      color: $font_color_inverse;
+    }
+    &-editBtn {
+      @include mix_border_radius(50%);
+      margin: 0 $spacing_x_small;
+    }
+    &-sortBtn {
+      @include mix_border_radius(50%);
+      margin: 0 $spacing_x_small;
+      background-color: $color_sort;
+      color: $font_color_inverse;
+    }
   }
   &--securityCardVariant {
     width: $securityTable_cell_width_primary;
+    align-items: center;
     #{$securityTableHeadBlockName} {
       &__text {
         display: inline-block;
@@ -69,10 +112,42 @@ $securityTable_cell_width_quant: 8.75rem * 2;
       &__cta {
         display: none;
       }
+      &__actionMenu {
+        display: none;
+      }
     }
   }
   &--quantVariant {
     width: $securityTable_cell_width_quant;
+  }
+  &--sortedState {
+    #{$securityTableHeadBlockName} {
+      &__cta {
+        background-color: $color_sort;
+        &-icon {
+          display: flex;
+        }
+        &-text {
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--selectedState {
+    #{$securityTableHeadBlockName} {
+      &__cta {
+        @include material('none');
+        background-color: $color_active;
+        color: $font_color_inverse;
+        &-icon {
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+      }
+      &__actionMenu {
+        transform: scale(1) translate(0, 0);
+      }
+    }
   }
 }
 

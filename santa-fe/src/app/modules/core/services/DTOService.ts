@@ -301,12 +301,14 @@ export class DTOService {
           this.formSecurityTableHeaderObject('Mark Discrepancy', false),
           this.formSecurityTableHeaderObject('Position', false),
           this.formSecurityTableHeaderObject('30 day delta', false),
-          this.formSecurityTableHeaderObject('Trade Frequency (48hrs)', false)
+          this.formSecurityTableHeaderObject('Quote Count (48hrs)', false)
         ],
         rows: []
       },
       state: {
-        isStencil: false
+        isStencil: false,
+        selectedHeader: null,
+        sortedByHeader: null
       }
     };
     return object;
