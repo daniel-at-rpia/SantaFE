@@ -1,7 +1,7 @@
 <article
   [ngClass]="{
     'sat-securityTable': true,
-    'sat-securityTable--stencilState': tableData.state.isStencil
+    'sat-securityTable--showAddColumnDropdownState': tableData.state.isAddingColumn
   }">
   <section class="sat-securityTable__main">
     <div class="sat-securityTable__main-table">
@@ -25,7 +25,6 @@
             </button>
             <div class="sat-securityTableHead__actionMenu">
               <button class="sat-securityTableHead__actionMenu-deleteBtn santaBtn--iconOnly fal fa-times"></button>
-              <button class="sat-securityTableHead__actionMenu-editBtn santaBtn--iconOnly fal fa-pencil"></button>
               <button (click)="onClickSortBy(eachHead)" class="sat-securityTableHead__actionMenu-sortBtn santaBtn--iconOnly fal fa-sort-amount-down"></button>
             </div>
           </article>
@@ -106,6 +105,23 @@
             </div>
           </section>
         </article>
+      </div>
+      <button (click)="onClickAddColumn()" class="sat-securityTable__main-table-addColumnCTA santaBtn--labelled santaBtn--inverseLabelled">
+        <i class="fal fa-plus"></i>
+        <span>Add Column</span>
+      </button>
+      <div class="sat-securityTable__main-table-addColumnDropdown">
+        <ul class="sat-securityTable__main-table-addColumnDropdown-optionList">
+          <li class="sat-securityTable__main-table-addColumnDropdown-optionList-item">Rating</li>
+          <li class="sat-securityTable__main-table-addColumnDropdown-optionList-item">Spread</li>
+          <li class="sat-securityTable__main-table-addColumnDropdown-optionList-item">Tenor</li>
+          <li class="sat-securityTable__main-table-addColumnDropdown-optionList-item">Yield</li>
+          <li class="sat-securityTable__main-table-addColumnDropdown-optionList-item">Price</li>
+          <li class="sat-securityTable__main-table-addColumnDropdown-optionList-item">Size</li>
+          <li class="sat-securityTable__main-table-addColumnDropdown-optionList-item">Senority</li>
+          <li class="sat-securityTable__main-table-addColumnDropdown-optionList-item">Obligor</li>
+        </ul>
+        <button (click)="onCollapseAddColumnDropdown()" class="sat-securityTable__main-table-addColumnDropdown-collapseBtn santaBtn--iconOnly santaBtn--small fal fa-times"></button>
       </div>
     </div>
   </section>

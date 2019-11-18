@@ -68,6 +68,7 @@ export class TradeCenterPanel {
       newSecurity.state.isTable = true;
       this.populateRowWithNewSecurityAndQuants(false, newSecurity);
     });
+    this.state.table.state.initialDataLoaded = true;
   }
 
   private populateRowWithNewSecurityAndQuants(

@@ -39,12 +39,20 @@ export class SecurityTable {
     this.tableData.state.selectedHeader = null;
   }
 
+  public onClickAddColumn() {
+    this.tableData.state.isAddingColumn = !this.tableData.state.isAddingColumn;
+  }
+
+  public onCollapseAddColumnDropdown() {
+    this.tableData.state.isAddingColumn = false;
+  }
+
   public onClickCollapseExpandView(targetRow: SecurityTableRowDTO) {
     targetRow.state.isExpanded = false;
   }
 
   public onClickRowTableCanvas(targetRow: SecurityTableRowDTO) {
-    if (!this.tableData.state.isStencil) {
+    if (this.tableData.state.initialDataLoaded) {
       targetRow.state.isExpanded = !targetRow.state.isExpanded;
       const row = targetRow;
       this.renderStencilQuotes(targetRow);

@@ -306,7 +306,8 @@ export class DTOService {
         rows: []
       },
       state: {
-        isStencil: false,
+        initialDataLoaded: false,
+        isAddingColumn: false,
         selectedHeader: null,
         sortedByHeader: null
       }

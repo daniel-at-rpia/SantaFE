@@ -157,7 +157,8 @@ export interface SecurityTableDTO extends BasicDTOStructure {
     rows: Array<SecurityTableRowDTO>
   },
   state: {
-    isStencil: boolean;
+    initialDataLoaded: boolean;
+    isAddingColumn: boolean;
     selectedHeader: SecurityTableHeaderDTO;
     sortedByHeader: SecurityTableHeaderDTO;
   }

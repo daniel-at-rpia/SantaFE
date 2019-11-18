@@ -5,7 +5,6 @@ $SecurityQuote_twoSideEntry_axeIconSize: 1.5rem;
   $securityQuoteBlockName: &;
   flex: 1 1 auto;
   display: flex;
-  align-items: center;
   margin-top: $spacing_x_small;
   &__time {
     flex: 0 0 $SecurityQuote_time_width;
@@ -98,19 +97,21 @@ $SecurityQuote_twoSideEntry_axeIconSize: 1.5rem;
         justify-content: flex-end;
         color: $font_color_major;
         font-size: $font_size_small;
-        margin-right: $spacing_x_small;
+        margin-right: $spacing_xx_small;
         font-weight: bold;
         text-align: center;
       }
       &-mid {
+        margin-top: $spacing_minimum;
         color: $font_color_trivial;
+        font-size: $font_size_x_small;
       }
       &-ask {
         flex: 1 1 50%;
         display: flex;
         justify-content: flex-start;
         color: $font_color_major;
-        margin-left: $spacing_x_small;
+        margin-left: $spacing_xx_small;
         font-size: $font_size_small;
         font-weight: bold;
         text-align: center;
@@ -156,6 +157,7 @@ $SecurityQuote_twoSideEntry_axeIconSize: 1.5rem;
   &__ctas {
     flex: 0 0 $SecurityQuote_ctas_width;
     display: flex;
+    align-items: center;
     &-upvote {
       @include mix_border_radius(50%);
       margin-left: $spacing_small;
