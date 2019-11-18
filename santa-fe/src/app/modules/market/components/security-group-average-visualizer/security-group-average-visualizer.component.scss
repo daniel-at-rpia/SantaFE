@@ -55,7 +55,6 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
     margin: 0 $spacing_medium $spacing_small $spacing_medium;
     &-editBtn {
       flex: 1 1 50%;
-      background-color: $color_edit;
       padding: $spacing_x_small $spacing_small;
       margin: 0 $spacing_small;
     }
@@ -63,6 +62,7 @@ $averageVisualizerName_metricSelectionDropdown_item_label_width: 7rem;
       flex: 1 1 50%;
       padding: $spacing_x_small $spacing_small;
       margin: 0 $spacing_small;
+      background-color: $color_sort;
     }
   }
   &__name {
