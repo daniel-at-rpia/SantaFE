@@ -16,6 +16,13 @@
       SecurityTableRowDTO,
       SecurityTableHeaderDTO
     } from 'FEModels/frontend-models.interface';
+
+    import {
+      QuoteMetricBlock
+    } from 'FEModels/frontend-blocks.interface';
+    import {
+      ClickedSortQuotesByMetricEmitterParams
+    } from 'FEModels/frontend-adhoc-packages.interface';
   //
 
 @Component({
@@ -61,6 +68,10 @@ export class SecurityTable {
       };
       setTimeout(func.bind(this), 3000);
     }
+  }
+
+  public onClickSortQuotesByMetric(payload: ClickedSortQuotesByMetricEmitterParams) {
+    payload.targetRow.state.expandViewSortByQuoteMetric = payload.targetRow.state.expandViewSortByQuoteMetric === payload.targetMetricLabel ? null : payload.targetMetricLabel;
   }
 
   private fetchSecurityQuotes(targetRow: SecurityTableRowDTO){

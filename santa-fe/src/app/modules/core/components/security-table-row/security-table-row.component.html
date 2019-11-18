@@ -42,7 +42,17 @@
             'sat-securityTableRowExpandViewLabel--last': metricIndex === rowData.data.quoteHeaders.length - 1
           }">
           <section *ngFor="let eachLabel of eachQuoteMetric.displayLabelList" class="sat-securityTableRowExpandViewLabel__content">
-            <button class="sat-securityTableRowExpandViewLabel__content-cta santaBtn--small">{{eachLabel}}</button>
+            <button
+              (click)="onClickSortQuotesByMetric(eachQuoteMetric, eachLabel)"
+              [ngClass]="{
+                'sat-securityTableRowExpandViewLabel__content-cta': true,
+                'sat-securityTableRowExpandViewLabel__content-cta--sortActive': rowData.state.expandViewSortByQuoteMetric === eachLabel,
+                'santaBtn--small': true
+              }">
+              <span class="sat-securityTableRowExpandViewLabel__content-cta-text">{{eachLabel}}</span>
+              <i class="sat-securityTableRowExpandViewLabel__content-cta-icon fal fa-sort-amount-down">
+              </i>
+            </button>
             <span class="sat-securityTableRowExpandViewLabel__content-text">{{eachLabel}}</span>
           </section>
         </article>

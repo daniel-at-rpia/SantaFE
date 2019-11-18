@@ -10,6 +10,12 @@ import {
 import {
   SecurityTableRowDTO
 } from 'FEModels/frontend-models.interface';
+import {
+  QuoteMetricBlock
+} from 'FEModels/frontend-blocks.interface';
+import {
+  ClickedSortQuotesByMetricEmitterParams
+} from 'FEModels/frontend-adhoc-packages.interface';
 
 @Component({
   selector: 'security-table-row',
@@ -21,6 +27,7 @@ export class SecurityTableRow {
   @Input() rowData: SecurityTableRowDTO;
   @Output() clickedCollapseExpandView = new EventEmitter<SecurityTableRowDTO>();
   @Output() clickedRowTableCanvas = new EventEmitter<SecurityTableRowDTO>();
+  @Output() clickedSortQuotesByMetric = new EventEmitter<ClickedSortQuotesByMetricEmitterParams>();
   constructor() { }
 
   public onClickCollapseExpandView() {
@@ -29,6 +36,14 @@ export class SecurityTableRow {
 
   public onClickRowTableCanvas() {
     this.clickedRowTableCanvas.emit(this.rowData);
+  }
+
+  public onClickSortQuotesByMetric(targetBlock: QuoteMetricBlock, targetLabel: string) {
+    this.clickedSortQuotesByMetric.emit({
+      targetRow: this.rowData,
+      targetBlock: targetBlock,
+      targetMetricLabel: targetLabel
+    });
   }
 
 }
