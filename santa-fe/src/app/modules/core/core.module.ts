@@ -12,6 +12,7 @@ import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { SecurityCard } from 'Core/components/security-card/security-card.component';
 import { QuantitativeComparer } from 'Core/components/quantitative-comparer/quantitative-comparer.component';
 import { SecurityQuote } from 'Core/components/security-quote/security-quote.component';
+import { SecurityTableRow } from 'Core/components/security-table-row/security-table-row.component';
 
 import { SecurityTable } from 'Core/containers/security-table/security-table.container';
 
@@ -20,7 +21,8 @@ import { SecurityTable } from 'Core/containers/security-table/security-table.con
     SecurityCard,
     QuantitativeComparer,
     SecurityQuote,
-    SecurityTable
+    SecurityTable,
+    SecurityTableRow
   ],
   imports: [
     CommonModule,
@@ -34,8 +36,6 @@ import { SecurityTable } from 'Core/containers/security-table/security-table.con
   ], 
   exports: [
     SecurityCard,
-    QuantitativeComparer,
-    SecurityQuote,
     SecurityTable
   ]
 })

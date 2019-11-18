@@ -1,0 +1,59 @@
+<article
+  [ngClass]="{
+    'sat-securityTableRow': true,
+    'sat-securityTableRow--expandedState': rowData.state.isExpanded
+  }">
+  <section (click)="onClickRowTableCanvas()" class="sat-securityTableRow__tableCanvas">
+    <article class="sat-securityTableCell sat-securityTableCell--securityCardVariant">
+      <security-card [cardData]="rowData.data.security"></security-card>
+    </article>
+    <article
+      *ngFor="let eachCell of rowData.data.cells"
+      [ngClass]="{
+        'sat-securityTableCell': true,
+        'sat-securityTableCell--quantVariant': eachCell.state.isQuantVariant,
+        'sat-securityTableCell--stencilState': eachCell.state.isStencil
+      }">
+      <section class="sat-securityTableCell__metric">
+        <span class="sat-securityTableCell__metric-text">
+          {{eachCell.data.textData}}
+        </span>
+      </section>
+      <section class="sat-securityTableCell__quant">
+        <quant-comparer [quantData]="eachCell.data.quantComparerDTO"></quant-comparer>
+      </section>
+    </article>
+  </section>
+  <section class="sat-securityTableRow__expandCanvas">
+    <div class="sat-securityTableRow__expandCanvas-content">
+      <!--
+        The ngIf optimizes the performance as it allows us to lazy-load the SecurityQuote components
+      -->
+      <div *ngIf="rowData.state.isExpanded" class="sat-securityTableRow__expandCanvas-content-spacing"></div>
+      <div class="sat-securityTableRow__expandCanvas-content-label">
+        <article
+          *ngFor="let eachQuoteMetric of rowData.data.quoteHeaders; let metricIndex = index;"
+          [ngClass]="{
+            'sat-securityTableRowExpandViewLabel': true,
+            'sat-securityTableRowExpandViewLabel--doubleWidth': eachQuoteMetric.isDoubleWidthColumn,
+            'sat-securityTableRowExpandViewLabel--tripleWidth': eachQuoteMetric.isTripleWidthColumn,
+            'sat-securityTableRowExpandViewLabel--textOnly': !eachQuoteMetric.sortable,
+            'sat-securityTableRowExpandViewLabel--first': metricIndex === 0,
+            'sat-securityTableRowExpandViewLabel--last': metricIndex === rowData.data.quoteHeaders.length - 1
+          }">
+          <section *ngFor="let eachLabel of eachQuoteMetric.displayLabelList" class="sat-securityTableRowExpandViewLabel__content">
+            <button class="sat-securityTableRowExpandViewLabel__content-cta santaBtn--small">{{eachLabel}}</button>
+            <span class="sat-securityTableRowExpandViewLabel__content-text">{{eachLabel}}</span>
+          </section>
+        </article>
+      </div>
+      <ul *ngIf="rowData.state.isExpanded" class="sat-securityTableRow__expandCanvas-content-messageList">
+        <security-quote
+          *ngFor="let eachMessage of rowData.data.tradingMessages"
+          [messageData]="eachMessage">
+        </security-quote>
+      </ul>
+      <button (click)="onClickCollapseExpandView()" class="sat-securityTableRow__expandCanvas-content-collapseBtn santaBtn--iconOnly fal fa-times"></button>
+    </div>
+  </section>
+</article>

@@ -30,3 +30,10 @@ export interface SecurityMetricOptionStub {
   backendDtoAttrName: string;
   deltaOptions: Array<string>
 }
+
+export interface SecurityTableQuoteMetric {
+  isDoubleWidthColumn: boolean;
+  isTripleWidthColumn: boolean;
+  labelList: Array<string>;
+  textOnly: boolean;
+}

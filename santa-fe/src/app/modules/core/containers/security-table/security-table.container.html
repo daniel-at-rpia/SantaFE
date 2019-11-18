@@ -31,80 +31,12 @@
         </div>
       </div>
       <div class="sat-securityTable__main-table-body">
-        <article
-          *ngFor="let eachRow of tableData.data.rows; let rowIndex = index;"
-          [ngClass]="{
-            'sat-securityTableRow': true,
-            'sat-securityTableRow--expandedState': eachRow.state.isExpanded
-          }">
-          <section (click)="onClickRowTableCanvas(eachRow)" class="sat-securityTableRow__tableCanvas">
-            <article class="sat-securityTableCell sat-securityTableCell--securityCardVariant">
-              <security-card [cardData]="eachRow.data.security"></security-card>
-            </article>
-            <article
-              *ngFor="let eachCell of eachRow.data.cells"
-              [ngClass]="{
-                'sat-securityTableCell': true,
-                'sat-securityTableCell--quantVariant': eachCell.state.isQuantVariant,
-                'sat-securityTableCell--stencilState': eachCell.state.isStencil
-              }">
-              <section class="sat-securityTableCell__metric">
-                <span class="sat-securityTableCell__metric-text">
-                  {{eachCell.data.textData}}
-                </span>
-              </section>
-              <section class="sat-securityTableCell__quant">
-                <quant-comparer [quantData]="eachCell.data.quantComparerDTO"></quant-comparer>
-              </section>
-            </article>
-          </section>
-          <section class="sat-securityTableRow__expandCanvas">
-            <div class="sat-securityTableRow__expandCanvas-content">
-              <!--
-                The ngIf optimizes the performance as it allows us to lazy-load the SecurityQuote components
-              -->
-              <div *ngIf="eachRow.state.isExpanded" class="sat-securityTableRow__expandCanvas-content-spacing"></div>
-              <div class="sat-securityTableRow__expandCanvas-content-label">
-                <article class="sat-securityTableRowExpandViewLabel">
-                  <button class="sat-securityTableRowExpandViewLabel-cta santaBtn--small">Source</button>
-                </article>
-                <div class="sat-securityTableRow__expandCanvas-content-label-spacing"></div>
-                <article class="sat-securityTableRowExpandViewLabel">
-                  <button class="sat-securityTableRowExpandViewLabel-cta santaBtn--small">Dealer</button>
-                </article>
-                <div class="sat-securityTableRow__expandCanvas-content-label-spacing"></div>
-                <article class="sat-securityTableRowExpandViewLabel sat-securityTableRowExpandViewLabel--long">
-                  <button class="sat-securityTableRowExpandViewLabel-cta santaBtn--small">B Px</button>
-                  <button class="sat-securityTableRowExpandViewLabel-cta santaBtn--small">A Px</button>
-                </article>
-                <div class="sat-securityTableRow__expandCanvas-content-label-spacing"></div>
-                <article class="sat-securityTableRowExpandViewLabel sat-securityTableRowExpandViewLabel--long">
-                  <button class="sat-securityTableRowExpandViewLabel-cta santaBtn--small">B YTW</button>
-                  <button class="sat-securityTableRowExpandViewLabel-cta santaBtn--small">A YTW</button>
-                </article>
-                <div class="sat-securityTableRow__expandCanvas-content-label-spacing"></div>
-                <article class="sat-securityTableRowExpandViewLabel sat-securityTableRowExpandViewLabel--long">
-                  <button class="sat-securityTableRowExpandViewLabel-cta santaBtn--small">B Sprd</button>
-                  <button class="sat-securityTableRowExpandViewLabel-cta santaBtn--small">A Sprd</button>
-                </article>
-                <div class="sat-securityTableRow__expandCanvas-content-label-spacing"></div>
-                <article class="sat-securityTableRowExpandViewLabel sat-securityTableRowExpandViewLabel--veryLong">
-                  <button class="sat-securityTableRowExpandViewLabel-cta santaBtn--small">B Size</button>
-                  <button class="sat-securityTableRowExpandViewLabel-cta santaBtn--small">A Size</button>
-                </article>
-                <div class="sat-securityTableRow__expandCanvas-content-label-spacing"></div>
-                <article class="sat-securityTableRowExpandViewLabel sat-securityTableRowExpandViewLabel--veryLong">Benchmarks</article>
-              </div>
-              <ul *ngIf="eachRow.state.isExpanded" class="sat-securityTableRow__expandCanvas-content-messageList">
-                <security-quote
-                  *ngFor="let eachMessage of eachRow.data.tradingMessages"
-                  [messageData]="eachMessage">
-                </security-quote>
-              </ul>
-              <button (click)="onClickCollapseExpandView(eachRow)" class="sat-securityTableRow__expandCanvas-content-collapseBtn santaBtn--iconOnly fal fa-times"></button>
-            </div>
-          </section>
-        </article>
+        <security-table-row 
+          *ngFor="let eachRow of tableData.data.rows"
+          [rowData]="eachRow"
+          (clickedCollapseExpandView)="onClickCollapseExpandView($event)"
+          (clickedRowTableCanvas)="onClickRowTableCanvas($event)">
+        </security-table-row>
       </div>
       <button (click)="onClickAddColumn()" class="sat-securityTable__main-table-addColumnCTA santaBtn--labelled santaBtn--inverseLabelled">
         <i class="fal fa-plus"></i>

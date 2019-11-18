@@ -21,7 +21,8 @@
     } from 'FEModels/frontend-models.interface';
     import {
       SecurityGroupMetricBlock,
-      SecurityGroupDefinitionFilterBlock
+      SecurityGroupDefinitionFilterBlock,
+      QuoteMetricBlock
     } from 'FEModels/frontend-blocks.interface';
     import {
       SecurityDefinitionStub,
@@ -36,6 +37,9 @@
       MetricOptions,
       ConfiguratorDefinitionLayout
     } from 'Core/constants/marketConstants.constant';
+    import {
+      QuoteMetricList
+    } from 'Core/constants/securityTableConstants.constant';
   // 
 
 @Injectable()
@@ -337,9 +341,19 @@ export class DTOService {
       data: {
         security: securityDTO,
         cells: [],
-        tradingMessages: []
+        tradingMessages: [],
+        quoteHeaders: QuoteMetricList.map((eachQuoteMetricStub) => {
+          const metricBlock: QuoteMetricBlock = {
+            displayLabelList: eachQuoteMetricStub.labelList,
+            isDoubleWidthColumn: eachQuoteMetricStub.isDoubleWidthColumn,
+            isTripleWidthColumn: eachQuoteMetricStub.isTripleWidthColumn,
+            sortable: !eachQuoteMetricStub.textOnly
+          };
+          return metricBlock;
+        })
       },
       state: {
+        expandViewSortByQuoteMetric: null,
         isExpanded: false
       }
     };

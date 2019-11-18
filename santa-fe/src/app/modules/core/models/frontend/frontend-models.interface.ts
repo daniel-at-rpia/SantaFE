@@ -2,7 +2,8 @@ import {
   SecurityGroupMetricBlock,
   SecurityGroupMetricPackBlock,
   SecurityGroupPieChartBlock,
-  SecurityGroupDefinitionFilterBlock
+  SecurityGroupDefinitionFilterBlock,
+  QuoteMetricBlock
 } from 'FEModels/frontend-blocks.interface';
 
 interface BasicDTOStructure {
@@ -154,7 +155,7 @@ export interface QuantComparerDTO extends BasicDTOStructure {
 export interface SecurityTableDTO extends BasicDTOStructure {
   data: {
     headers: Array<SecurityTableHeaderDTO>;
-    rows: Array<SecurityTableRowDTO>
+    rows: Array<SecurityTableRowDTO>;
   },
   state: {
     initialDataLoaded: boolean;
@@ -178,8 +179,10 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
     security: SecurityDTO;
     cells: Array<SecurityTableCellDTO>;
     tradingMessages: Array<SecurityQuoteDTO>;
+    quoteHeaders: Array<QuoteMetricBlock>;
   },
   state: {
+    expandViewSortByQuoteMetric: string;
     isExpanded: boolean;
   }
 }

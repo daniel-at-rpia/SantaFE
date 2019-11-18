@@ -54,3 +54,10 @@ export interface SecurityGroupDefinitionFilterBlock {
   shortKey: string;
   key: string;
 }
+
+export interface QuoteMetricBlock {
+  displayLabelList: Array<string>;
+  isDoubleWidthColumn: boolean;
+  isTripleWidthColumn: boolean;
+  sortable: boolean;
+}

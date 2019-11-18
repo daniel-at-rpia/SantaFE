@@ -121,6 +121,10 @@ $securityCard_labelVariant_height: 2rem;
 $securityCard_previewVariant_height: 10rem;
 $securityCard_width: 14rem;
 
+$securityTable_cell_width: 8.75rem;
+$securityTable_cell_width_primary: $securityCard_width + $spacing_small * 2;
+$securityTable_cell_width_quant: 8.75rem * 2;
+
 $SecurityQuote_time_width: 5.5rem;
 $SecurityQuote_spacing_height: $spacing_small;
 $SecurityQuote_ctas_width: 7rem;
