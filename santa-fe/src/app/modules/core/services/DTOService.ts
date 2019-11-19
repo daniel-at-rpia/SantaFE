@@ -26,7 +26,8 @@
     } from 'FEModels/frontend-blocks.interface';
     import {
       SecurityDefinitionStub,
-      SecurityDefinitionBundleStub
+      SecurityDefinitionBundleStub,
+      SecurityTableMetricStub
     } from 'FEModels/frontend-stub-models.interface';
     import { UtilityService } from './UtilityService';
     import {
@@ -58,7 +59,9 @@ export class DTOService {
         name: !isStencil ? rawData.name : 'PLACEHOLDER',
         ratingLevel: !isStencil ? this.utility.mapRatings(rawData.metrics.ratingNoNotch) : 0,
         ratingValue: !isStencil ? rawData.metrics.ratingNoNotch : 'NR',
-        seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.seniority) : 5
+        seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.seniority) : 5,
+        position: 0,
+        positionInMM: 'n/a'
       },
       state: {
         isSelected: false,
@@ -298,15 +301,7 @@ export class DTOService {
   public formSecurityTableObject(): SecurityTableDTO {
     const object: SecurityTableDTO = {
       data: {
-        headers: [
-          this.formSecurityTableHeaderObject('Security', false),
-          this.formSecurityTableHeaderObject('Best Quote (Bid vs Ask)', true),
-          this.formSecurityTableHeaderObject('Mark', false),
-          this.formSecurityTableHeaderObject('Mark Discrepancy', false),
-          this.formSecurityTableHeaderObject('Position', false),
-          this.formSecurityTableHeaderObject('30 day delta', false),
-          this.formSecurityTableHeaderObject('Quote Count (48hrs)', false)
-        ],
+        headers: [],
         rows: []
       },
       state: {
@@ -320,15 +315,18 @@ export class DTOService {
   }
 
   public formSecurityTableHeaderObject(
-    headerLabel: string,
-    isQuantVariant: boolean
+    stub: SecurityTableMetricStub
   ): SecurityTableHeaderDTO {
     const object: SecurityTableHeaderDTO = {
       data: {
-        displayLabel: headerLabel
+        displayLabel: stub.label,
+        attrName: stub.attrName,
+        underlineAttrName: stub.underlineAttrName,
+        readyStage: stub.readyStage
       },
       state: {
-        isQuantVariant: isQuantVariant
+        isQuantVariant: stub.isForQuantComparer,
+        isPureTextVariant: stub.pureText
       }
     };
     return object;

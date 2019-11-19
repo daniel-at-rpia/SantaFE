@@ -37,3 +37,12 @@ export interface SecurityTableQuoteMetric {
   labelList: Array<string>;
   textOnly: boolean;
 }
+
+export interface SecurityTableMetricStub {
+  label: string;
+  attrName: string;
+  underlineAttrName: string;
+  readyStage: number;
+  isForQuantComparer: boolean;
+  pureText: boolean;
+}

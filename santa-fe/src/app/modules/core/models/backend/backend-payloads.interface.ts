@@ -5,3 +5,9 @@ export interface PayloadGetSantaGroups {
   santaGroupFilters: object;
   tenorOptions: Array<string>;
 }
+
+export interface PayloadGetPositions {
+  source: string;
+  yyyyMMdd?: number;
+  partitionOptions: Array<string>
+}

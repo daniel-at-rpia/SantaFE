@@ -19,6 +19,8 @@ export interface SecurityDTO extends BasicDTOStructure {
     ratingLevel: number;
     ratingValue: string;
     seniorityLevel: number;
+    position: number;
+    positionInMM: string;
   }
   state: {
     isStencil: boolean;
@@ -168,8 +170,12 @@ export interface SecurityTableDTO extends BasicDTOStructure {
 export interface SecurityTableHeaderDTO extends BasicDTOStructure {
   data: {
     displayLabel: string;
+    attrName: string;
+    underlineAttrName: string;
+    readyStage: number;
   },
   state: {
+    isPureTextVariant: boolean;
     isQuantVariant: boolean;
   }
 }

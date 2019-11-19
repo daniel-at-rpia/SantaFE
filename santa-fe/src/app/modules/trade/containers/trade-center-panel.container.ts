@@ -30,7 +30,10 @@
       SecurityDTO,
       QuantComparerDTO
     } from 'FEModels/frontend-models.interface';
+    import { PayloadGetPositions } from 'BEModels/backend-payloads.interface';
     import { BEPortfolioDTO, BESecurityDTO } from 'BEModels/backend-models.interface';
+
+    import { SecurityTableMetrics } from 'Core/constants/coreConstants.constant';
   //
 
 @Component({
@@ -48,14 +51,15 @@ export class TradeCenterPanel {
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService
   ){
-    this.initiatePageState();
+    this.initializePageState();
   }
 
-  private initiatePageState() {
+  private initializePageState() {
     this.state = {
       table: this.dtoService.formSecurityTableObject()
     };
-    const payload = {
+    this.loadDefaultTableHeaders();
+    const payload : PayloadGetPositions = {
       source: 'FO',
       partitionOptions: ['Portfolio']
     };
@@ -64,7 +68,7 @@ export class TradeCenterPanel {
       stencilSecurity.state.isTable = true;
       this.populateRowWithNewSecurityAndQuants(true, stencilSecurity);
     }
-    this.restfulCommService.callAPI('santaPortfolio/get-santa-positions', {req: 'POST'}, payload, true).pipe(
+    this.restfulCommService.callAPI('santaPortfolio/get-santa-credit-positions', {req: 'POST'}, payload, true).pipe(
       first(),
       tap((serverReturn) => {
         console.log('return is ', serverReturn);
@@ -75,6 +79,19 @@ export class TradeCenterPanel {
         return of('error');
       })
     ).subscribe();
+  }
+
+  private loadDefaultTableHeaders() {
+    this.state.table.data.headers = SecurityTableMetrics.map((eachStub) => {
+      return this.dtoService.formSecurityTableHeaderObject(eachStub);
+    });
+      // this.dtoService.formSecurityTableHeaderObject('Security', false),
+      // this.dtoService.formSecurityTableHeaderObject('Best Quote (Bid vs Ask)', true),
+      // this.dtoService.formSecurityTableHeaderObject('Mark', false),
+      // this.dtoService.formSecurityTableHeaderObject('Mark Discrepancy', false),
+      // this.dtoService.formSecurityTableHeaderObject('Position', false),
+      // this.dtoService.formSecurityTableHeaderObject('30 day delta', false),
+      // this.dtoService.formSecurityTableHeaderObject('Quote Count (48hrs)', false)
   }
 
   private loadInitialDataForTable(serverReturn: Object) {
@@ -90,14 +107,17 @@ export class TradeCenterPanel {
         let sumSize = 0;
         let isValidFlag = true;
         const newBESecurity:BESecurityDTO = serverReturn[eachKey][0].santaSecurity;
+        const newSecurity = this.dtoService.formSecurityCardObject(newBESecurity, false);
         serverReturn[eachKey].forEach((eachPortfolio: BEPortfolioDTO) => {
           if (eachPortfolio.quantity !== 0 && eachPortfolio.marketValueCad !== 0 && !eachPortfolio.santaSecurity.isGovt && eachPortfolio.santaSecurity.metrics) {
+            newSecurity.data.position = newSecurity.data.position + eachPortfolio.marketValueCad;
           } else {
             isValidFlag = false;
           }
         });
         if (isValidFlag) {
-          this.populateRowWithNewSecurityAndQuants(false, this.dtoService.formSecurityCardObject(newBESecurity, false));
+          newSecurity.data.positionInMM = this.utilityService.parsePositionToMM(newSecurity.data.position);
+          this.populateRowWithNewSecurityAndQuants(false, newSecurity);
           validCount++;
         }
       }
@@ -112,33 +132,22 @@ export class TradeCenterPanel {
   ) {
     newSecurity.state.isTable = true;
     const newRow = this.dtoService.formSecurityTableRowObject(newSecurity);
-    if (isStencil) {
-      const stencilQuant = this.dtoService.formQuantComparerObject(true, false, null, null, null, null);
-      this.state.table.data.headers.forEach((eachHeader, index) => {
-        // 0 is for the security card
-        if (index !== 0) {
-          if (eachHeader.state.isQuantVariant) {
-            newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, stencilQuant));
+    // const bestRun = this.dtoService.formQuantComparerObject(true, false, null, null, null, null);
+    const bestQuote = this.generateRandomQuantComparer(newSecurity);
+    this.state.table.data.headers.forEach((eachHeader, index) => {
+      if (!eachHeader.state.isPureTextVariant) {
+        if (eachHeader.state.isQuantVariant) {
+          newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, bestQuote));
+        } else {
+          if (isStencil) {
+            newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, '390'));
           } else {
-            newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null));
+            const value = newRow.data.security.data[eachHeader.data.attrName];
+            newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, value));
           }
         }
-      });
-    } else {
-      // const bestRun = this.dtoService.formQuantComparerObject(true, false, null, null, null, null);
-      const bestRun = this.generateRandomQuantComparer(newSecurity);
-      const bestAxe = this.generateRandomQuantComparer(newSecurity);
-      this.state.table.data.headers.forEach((eachHeader, index) => {
-        // 0 is for the security card
-        if (index !== 0) {
-          if (eachHeader.state.isQuantVariant) {
-            newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, bestRun));
-          } else {
-            newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, '390'));
-          }
-        }
-      });
-    }
+      }
+    });
     this.state.table.data.rows.push(newRow);
   }
 

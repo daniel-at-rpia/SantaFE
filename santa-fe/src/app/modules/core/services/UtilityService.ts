@@ -374,4 +374,9 @@ export class UtilityService {
     });
     return flattenDefinitionList;
   }
+
+  public parsePositionToMM(position: number): string {
+    const value = Math.round(position/10000)/100;
+    return `${value} MM`;
+  }
 }
