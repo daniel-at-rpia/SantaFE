@@ -125,7 +125,7 @@ export class MarketGroupPanel implements OnDestroy {
   constructor(
     private dtoService: DTOService,
     private utilityService: UtilityService,
-    private restfulCommonService: RestfulCommService
+    private restfulCommService: RestfulCommService
   ){
     this.initiateComponentState();
   }
@@ -171,7 +171,7 @@ export class MarketGroupPanel implements OnDestroy {
 
   public onClickSearchInConfigurator(){
     this.startSearch(this.utilityService.flattenDefinitionList(this.state.configurator.dto));
-    // this.restfulCommonService.callAPI('santaSecurity/get-santa-securities', {req: 'GET'}).pipe(
+    // this.restfulCommService.callAPI('santaSecurity/get-santa-securities', {req: 'GET'}).pipe(
     //   tap((serverReturn) => {
     //     console.log('return is ', serverReturn)
     //   }),
@@ -262,7 +262,7 @@ export class MarketGroupPanel implements OnDestroy {
   }
 
   public loadLongDefinitionOptionList(targetDefinition: SecurityGroupDefinitionDTO){
-    this.restfulCommonService.callAPI(targetDefinition.data.urlForGetLongOptionListFromServer, {req: 'GET'}).pipe(
+    this.restfulCommService.callAPI(targetDefinition.data.urlForGetLongOptionListFromServer, {req: 'GET'}).pipe(
       first(),
       delay(200),
       tap((serverReturn: Array<string>) => {
@@ -354,7 +354,7 @@ export class MarketGroupPanel implements OnDestroy {
   private performSearch(payload: PayloadGetSantaGroups){
     this.state.searchResult.securityGroupList = [this.dtoService.formSecurityGroupObject(null), this.dtoService.formSecurityGroupObject(null), this.dtoService.formSecurityGroupObject(null)];
     this.initializeGroupStats();
-    this.restfulCommonService.callAPI('santaGroup/get-santa-groups', {req: 'POST'}, payload, true).pipe(
+    this.restfulCommService.callAPI('santaGroup/get-santa-groups', {req: 'POST'}, payload, true).pipe(
       first(),
       tap((serverReturn) => {
         console.log('return is ', serverReturn);
