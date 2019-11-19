@@ -10,18 +10,39 @@ export class RestfulCommService {
 
   constructor(private http: HttpClient){}
 
-  callAPI(url: string, opts: any ={}, body: any = null): Observable<any>{
-    console.log('Start REST call', url, opts, body);
+  public callAPI(
+    url: string,
+    opts: Object = {},
+    payload: Object = {},
+    needDateStamp: boolean = false
+  ) : Observable<any>{
     const fullUrl = `${this.endpoint}/${url}`;
     const queryOpts = {
       ...opts,
       withCredentials: true
     };
-    switch (opts.req) {
+    !!needDateStamp && this.generateCurrentTimeForPayload(payload);
+    const method = opts['req'];
+    console.log('Start REST call', url, opts, payload);
+    switch (method) {
       case 'POST':
-        return this.http.post<any>(fullUrl, body, queryOpts);
+        return this.http.post<any>(fullUrl, payload, queryOpts);
       case 'GET':
         return this.http.get<any>(fullUrl, queryOpts);
     }
+  }
+
+  public generateCurrentTimeForPayload(payload: Object) {
+    const currentTime = new Date();
+    if (currentTime.getDay() === 1) {
+      currentTime.setDate(currentTime.getDate() - 3);
+    } else if (currentTime.getDay() === 7) {
+      currentTime.setDate(currentTime.getDate() - 2);
+    } else {
+      currentTime.setDate(currentTime.getDate() - 1);
+    }
+    const parsedMonth = ('0' + (currentTime.getMonth()+1)).slice(-2);
+    const parsedDate = ('0' + currentTime.getDate()).slice(-2);
+    payload['yyyyMMdd'] = parseInt(`${currentTime.getFullYear()}${parsedMonth}${parsedDate}`);
   }
 }

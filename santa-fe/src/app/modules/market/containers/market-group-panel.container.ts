@@ -323,19 +323,7 @@ export class MarketGroupPanel implements OnDestroy {
   }
 
   private formSearchPayload(definitionList: Array<SecurityGroupDefinitionDTO>): PayloadGetSantaGroups{
-    const currentTime = new Date();
-    if (currentTime.getDay() === 1) {
-      currentTime.setDate(currentTime.getDate() - 3);
-    } else if (currentTime.getDay() === 7) {
-      currentTime.setDate(currentTime.getDate() - 2);
-    } else {
-      currentTime.setDate(currentTime.getDate() - 1);
-    }
-    const parsedMonth = ('0' + (currentTime.getMonth()+1)).slice(-2);
-    const parsedDate = ('0' + currentTime.getDate()).slice(-2);
     const payload: PayloadGetSantaGroups = {
-      yyyyMMdd: parseInt(`${currentTime.getFullYear()}${parsedMonth}${parsedDate}`),
-      //yyyyMMdd: 20191031,
       source: "Default",
       santaGroupDefinition: {},
       santaGroupFilters: {},
@@ -366,7 +354,7 @@ export class MarketGroupPanel implements OnDestroy {
   private performSearch(payload: PayloadGetSantaGroups){
     this.state.searchResult.securityGroupList = [this.dtoService.formSecurityGroupObject(null), this.dtoService.formSecurityGroupObject(null), this.dtoService.formSecurityGroupObject(null)];
     this.initializeGroupStats();
-    this.restfulCommonService.callAPI('santaGroup/get-santa-groups', {req: 'POST'}, payload).pipe(
+    this.restfulCommonService.callAPI('santaGroup/get-santa-groups', {req: 'POST'}, payload, true).pipe(
       first(),
       tap((serverReturn) => {
         console.log('return is ', serverReturn);
