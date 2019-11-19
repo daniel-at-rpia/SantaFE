@@ -19,8 +19,8 @@ $securityGroupSimple_height: 1.75rem;
     &-center {
       @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
       @include mix_alive('custom', $animation_duration_light box-shadow);
-      @include mix_border_radius(10px);
-      @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
+      @include mix_border_radius(5px);
+      @include mix_border_generator();
       flex: 1 1 auto;
       height: 100%;
     }
@@ -48,13 +48,13 @@ $securityGroupSimple_height: 1.75rem;
           align-items: center;
           overflow: hidden;
           &-size {
-            @include mix_border_radius(5px);
+            @include mix_border_radius(3px);
             flex: 0 0 3rem;
             display: flex;
             justify-content: center;
             margin-right: $spacing_x_small;
             background-color: $color_white;
-            padding: $spacing_xx_small 0;
+            padding: $spacing_minimum 0;
             overflow: hidden;
             &-text {
               @include mix_text_overflow();
@@ -74,7 +74,6 @@ $securityGroupSimple_height: 1.75rem;
               line-height: $line_height_small;
               color: $font_color_inverse;
               font-size: $font_size_small;
-              text-align: center;
               user-select: none;
             }
           }
@@ -188,6 +187,7 @@ $securityGroupSimple_height: 1.75rem;
       &__base {
         &-center {
           @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
+          border-color: $font_color_major;
         }
       }
     }
@@ -296,6 +296,7 @@ $securityGroupSimple_height: 1.75rem;
         &-center {
           @include material('none');
           @include mix_border_radius(0);
+          @include mix_border_generator(0);
         }
       }
       &__content {

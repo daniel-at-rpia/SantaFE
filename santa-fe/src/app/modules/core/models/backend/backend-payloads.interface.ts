@@ -1,6 +1,6 @@
 export interface PayloadGetSantaGroups {
   source: string;
-  yyyyMMdd: number;
+  yyyyMMdd?: number;
   santaGroupDefinition: object;
   santaGroupFilters: object;
   tenorOptions: Array<string>;

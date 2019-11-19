@@ -26,7 +26,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
       },{
         definitionKey: 'COUPON_TYPE',
         groupByActive: true,
-        selectedOptions: []
+        selectedOptions: ['Fixed', 'Float']
       }
     ]
   },{
@@ -47,7 +47,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
       },{
         definitionKey: 'COUPON_TYPE',
         groupByActive: true,
-        selectedOptions: []
+        selectedOptions: ['Fixed', 'Float']
       }
     ]
   },{
@@ -68,7 +68,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
       },{
         definitionKey: 'COUPON_TYPE',
         groupByActive: true,
-        selectedOptions: []
+        selectedOptions: ['Fixed', 'Float']
       }
     ]
   },{
@@ -93,7 +93,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
       },{
         definitionKey: 'COUPON_TYPE',
         groupByActive: true,
-        selectedOptions: []
+        selectedOptions: ['Fixed', 'Float']
       }
     ]
   },{
@@ -118,7 +118,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
       },{
         definitionKey: 'COUPON_TYPE',
         groupByActive: true,
-        selectedOptions: []
+        selectedOptions: ['Fixed', 'Float']
       }
     ]
   },{
@@ -147,7 +147,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
       },{
         definitionKey: 'COUPON_TYPE',
         groupByActive: true,
-        selectedOptions: []
+        selectedOptions: ['Fixed', 'Float']
       }
     ]
   },{
@@ -180,7 +180,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
       },{
         definitionKey: 'COUPON_TYPE',
         groupByActive: true,
-        selectedOptions: []
+        selectedOptions: ['Fixed', 'Float']
       }
     ]
   },
@@ -199,16 +199,15 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
 
   const FilterOptionsCurrency = [
     'CAD',
-    'USD',
     'EUR',
-    'GBP'
+    'GBP',
+    'USD'
   ];
 
   const FilterOptionsCouponType = [
     'Float',
-    'None',
-    'Fixed for Life',
-    'Fixed'
+    'Fixed',
+    'None'
   ];
 
   const FilterOptionsRating = [
@@ -226,10 +225,10 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
   ];
 
   const FilterOptionsRatingBucket = [
-    'Xover',
-    'IG',
     'HY',
-    'NR'
+    'IG',
+    'NR',
+    'Xover'
   ];
 
   const FilterOptionsTenor = [
@@ -550,6 +549,16 @@ export const MetricOptions:Array<SecurityMetricOptionStub> = [
   {
     label: 'Rating',
     backendDtoAttrName: 'ratingDouble',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'G Spread',
+    backendDtoAttrName: 'gSpread',
     deltaOptions: [
       'DoD',
       'WoW',
