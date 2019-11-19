@@ -218,8 +218,8 @@ export class UtilityService {
         if (eachMetric.label === 'Default Spread') {
           if (this.isCDS(rawData)) {
             keyToRetrieveMetric = 'spread';
-          // } else if (this.isFloat(rawData)) {
-          //   keyToRetrieveMetric = 'zSpread';
+          } else if (this.isFloat(rawData)) {
+            keyToRetrieveMetric = 'zSpread';
           // } else if (this.isEURorGBP(rawData)) {
           //   keyToRetrieveMetric = 'zSpread';
           } else {
