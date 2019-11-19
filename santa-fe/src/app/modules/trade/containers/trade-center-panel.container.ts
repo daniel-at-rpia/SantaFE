@@ -1,18 +1,37 @@
-import {
-  Component,
-  ViewEncapsulation
-} from '@angular/core';
+  // dependencies
+    import {
+      Component,
+      ViewEncapsulation
+    } from '@angular/core';
+    import { Observable, Subscription } from 'rxjs';
+    import {
+      interval,
+      from,
+      of
+    } from 'rxjs';
+    import {
+      tap,
+      first,
+      combineLatest,
+      buffer,
+      bufferTime,
+      throttleTime,
+      delay,
+      concatMap,
+      catchError
+    } from 'rxjs/operators';
 
-import { DTOService } from 'Core/services/DTOService';
-import { UtilityService } from 'Core/services/UtilityService';
+    import { DTOService } from 'Core/services/DTOService';
+    import { UtilityService } from 'Core/services/UtilityService';
+    import { RestfulCommService } from 'Core/services/RestfulCommService';
 
-import { TradeCenterPanelState } from 'FEModels/frontend-page-states.interface';
-import {
-  SecurityDTO,
-  QuantComparerDTO
-} from 'FEModels/frontend-models.interface';
-
-import { SecurityList } from 'Core/stubs/securities.stub';
+    import { TradeCenterPanelState } from 'FEModels/frontend-page-states.interface';
+    import {
+      SecurityDTO,
+      QuantComparerDTO
+    } from 'FEModels/frontend-models.interface';
+    import { BEPortfolioDTO, BESecurityDTO } from 'BEModels/backend-models.interface';
+  //
 
 @Component({
   selector: 'trade-center-panel',
@@ -26,48 +45,64 @@ export class TradeCenterPanel {
 
   constructor(
     private dtoService: DTOService,
-    private utilityService: UtilityService
+    private utilityService: UtilityService,
+    private restfulCommService: RestfulCommService
   ){
     this.initiatePageState();
   }
 
   private initiatePageState() {
     this.state = {
-      table: this.dtoService.formSecurityTableObject(),
-      demoList: []
+      table: this.dtoService.formSecurityTableObject()
+    };
+    const payload = {
+      source: 'FO',
+      partitionOptions: ['Portfolio']
     };
     for (let i = 0; i < 10; ++i) {
       const stencilSecurity = this.dtoService.formSecurityCardObject(null, true);
       stencilSecurity.state.isTable = true;
       this.populateRowWithNewSecurityAndQuants(true, stencilSecurity);
     }
-    const func = () => {
-      this.state.table = this.dtoService.formSecurityTableObject();
-      this.loadDemoData();
-      // this.loadDemoData();
-      // this.loadDemoData();
-      // this.loadDemoData();
-      // this.loadDemoData();
-      // this.loadDemoData();
-      // this.loadDemoData();
-      // this.loadDemoData();
-      // this.loadDemoData();
-      // this.loadDemoData();
-      // this.loadDemoData();
-      // this.loadDemoData();
-      // this.loadDemoData();
-      // this.loadDemoData();
-      this.calculateQuantComparerWidthAndHeight();
-    };
-    setTimeout(func.bind(this), 3000);
+    this.restfulCommService.callAPI('santaPortfolio/get-santa-positions', {req: 'POST'}, payload, true).pipe(
+      first(),
+      tap((serverReturn) => {
+        console.log('return is ', serverReturn);
+        this.loadInitialDataForTable(serverReturn);
+      }),
+      catchError(err => {
+        console.error('error', err);
+        return of('error');
+      })
+    ).subscribe();
   }
 
-  private loadDemoData() {
-    SecurityList.forEach((eachSecurity) => {
-      const newSecurity = this.dtoService.formSecurityCardObject(eachSecurity, false);
-      newSecurity.state.isTable = true;
-      this.populateRowWithNewSecurityAndQuants(false, newSecurity);
-    });
+  private loadInitialDataForTable(serverReturn: Object) {
+    this.state.table.data.rows = [];  // flush out the stencils
+    const securityList = [];
+    let count = 0;
+    let nonEmptyCount = 0;
+    let validCount = 0;
+    for (const eachKey in serverReturn){
+      count++;
+      if (serverReturn[eachKey].length > 0) {
+        nonEmptyCount++;
+        let sumSize = 0;
+        let isValidFlag = true;
+        const newBESecurity:BESecurityDTO = serverReturn[eachKey][0].santaSecurity;
+        serverReturn[eachKey].forEach((eachPortfolio: BEPortfolioDTO) => {
+          if (eachPortfolio.quantity !== 0 && eachPortfolio.marketValueCad !== 0 && !eachPortfolio.santaSecurity.isGovt && eachPortfolio.santaSecurity.metrics) {
+          } else {
+            isValidFlag = false;
+          }
+        });
+        if (isValidFlag) {
+          this.populateRowWithNewSecurityAndQuants(false, this.dtoService.formSecurityCardObject(newBESecurity, false));
+          validCount++;
+        }
+      }
+    }
+    console.log('count is', count, nonEmptyCount, validCount);
     this.state.table.state.initialDataLoaded = true;
   }
 
@@ -75,24 +110,34 @@ export class TradeCenterPanel {
     isStencil: boolean,
     newSecurity: SecurityDTO
   ) {
+    newSecurity.state.isTable = true;
     const newRow = this.dtoService.formSecurityTableRowObject(newSecurity);
     if (isStencil) {
       const stencilQuant = this.dtoService.formQuantComparerObject(true, false, null, null, null, null);
-      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, stencilQuant));
-      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null));
-      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null));
-      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null));
-      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null));
-      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null));
+      this.state.table.data.headers.forEach((eachHeader, index) => {
+        // 0 is for the security card
+        if (index !== 0) {
+          if (eachHeader.state.isQuantVariant) {
+            newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, stencilQuant));
+          } else {
+            newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null));
+          }
+        }
+      });
     } else {
+      // const bestRun = this.dtoService.formQuantComparerObject(true, false, null, null, null, null);
       const bestRun = this.generateRandomQuantComparer(newSecurity);
       const bestAxe = this.generateRandomQuantComparer(newSecurity);
-      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, null, bestRun));
-      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, '390'));
-      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, '-5'));
-      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, 'Long'));
-      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, '+4'));
-      newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, '12'));
+      this.state.table.data.headers.forEach((eachHeader, index) => {
+        // 0 is for the security card
+        if (index !== 0) {
+          if (eachHeader.state.isQuantVariant) {
+            newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, bestRun));
+          } else {
+            newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, '390'));
+          }
+        }
+      });
     }
     this.state.table.data.rows.push(newRow);
   }

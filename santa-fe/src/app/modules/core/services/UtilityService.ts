@@ -38,6 +38,8 @@ export class UtilityService {
     switch (input) {
       case "Secured":
         return 2;
+      case "1st Lien Secured":
+        return 2;
       case "1st lien":
         return 2;
       case "2nd lien":
@@ -59,6 +61,10 @@ export class UtilityService {
       case "Subordinated":
         return 4;
       case "Jr Subordinated":
+        return 4;
+      case "Subordinated Unsecured":
+        return 4;
+      case "Jr Subordinated Unsecured":
         return 4;
       default:
         return 5;

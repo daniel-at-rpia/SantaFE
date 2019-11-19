@@ -57,5 +57,4 @@ export interface TradeState {
 
 export interface TradeCenterPanelState {
   table: SecurityTableDTO;
-  demoList: Array<any>;
 }

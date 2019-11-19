@@ -1,23 +1,4 @@
-export interface BESecurityDTO {
-  securitySubType: string;
-  paymentRank: string;
-  couponType: string;
-  isBailIn: boolean;
-  isGovt: boolean;
-  securityIdentifier: {
-    securityId: string;
-  }
-  isValidForCreditGrouping: boolean;
-  issuer: string;
-  ticker: string;
-  name: string;
-  sector: string;
-  industry: string;
-  subIndustry: string;
-  seniority: string;
-  ccy: string;
-  mostRecentDeltaMetrics: object;
-}
+
 
 export interface BESecurityGroupDTO {
   source: string;
@@ -34,13 +15,13 @@ export interface BESecurityGroupDTO {
   }
   numSecurities: number;
   groupName: string;
-  metrics: BEMetricDTO,
+  metrics: BEGroupMetricDTO,
   deltaMetrics: {
-    DoD: BEMetricDTO,
-    WoW?: BEMetricDTO,
-    Mtd?: BEMetricDTO,
-    MoM?: BEMetricDTO,
-    Ytd?: BEMetricDTO
+    DoD: BEGroupMetricDTO,
+    WoW?: BEGroupMetricDTO,
+    Mtd?: BEGroupMetricDTO,
+    MoM?: BEGroupMetricDTO,
+    Ytd?: BEGroupMetricDTO
   },
   descriptiveMetrics: {
     SecurityType: any;
@@ -58,7 +39,7 @@ export interface BESecurityGroupDTO {
   }
 }
 
-interface BEMetricDTO {
+interface BEGroupMetricDTO {
   tenor: string;
   propertyToNumSecurities: {
     WorkoutTerm: number;
@@ -89,4 +70,66 @@ interface BEMetricDTO {
   rating?: string;
   ratingNoNotch?: string;
   ratingDouble?: number;
+}
+
+export interface BESecurityDTO {
+  securityIdentifier: {
+    securityId: string;
+  };
+  name: string;
+  baseType: string;
+  securityType: string;
+  securitySubType: string;
+  couponType?: string;
+  ccy: string;
+  sector: string;
+  seniority: string;
+  industry: string;
+  subIndustry: string;
+  issuer: string;
+  ticker: string;
+  maturityType: string;
+  isGovt: boolean;
+  isBailIn: boolean;
+  isCallable: boolean;
+  isPerpetual: boolean;
+  metrics: BESecurityMetricDTO;
+  deltaMetrics: Object;
+  issueDate: string;
+  isValidForCreditGrouping: boolean;
+  paymentRank: string;
+}
+
+interface BESecurityMetricDTO {
+  isFixedForLife: boolean;
+  isFixedToFloatInFixed: boolean;
+  isFloat: boolean;
+  isNewIssue: boolean,
+  isOnTheRun: boolean,
+  benchmarkId: number,
+  benchmarkName: string,
+  underlyingSecurityId: number,
+  workoutTerm: number,
+  ratingDouble: number,
+  price: number,
+  backendWorkoutTerm: number,
+  oasSpread: number,
+  zSpread: number,
+  aswUsd: number,
+  gSpread: number,
+  yieldWorst: number,
+  amtOutstanding: number,
+  marketValue: number,
+  rating: string,
+  ratingNoNotch: string,
+  ratingBucket: string
+}
+
+export interface BEPortfolioDTO {
+  marketValueCad: number;
+  marketValueLocal: number;
+  portfolioShortName: string;
+  quantity: number;
+  santaSecurity: BESecurityDTO;
+  [property: string]: any;
 }

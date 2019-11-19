@@ -3,6 +3,12 @@
 @mixin mix_securityCard(){
   @include material();
   @include mix_alive('light');
+  &--type-01 { @include mix_santaCard($color_rating_nr, $color_seniority_1); }
+  &--type-02 { @include mix_santaCard($color_rating_nr, $color_seniority_2); }
+  &--type-03 { @include mix_santaCard($color_rating_nr, $color_seniority_3); }
+  &--type-04 { @include mix_santaCard($color_rating_nr, $color_seniority_4); }
+  &--type-05 { @include mix_santaCard($color_rating_nr, $color_seniority_5); }
+
   &--type-11 { @include mix_santaCard($color_rating_aaa, $color_seniority_1); }
   &--type-12 { @include mix_santaCard($color_rating_aaa, $color_seniority_2); }
   &--type-13 { @include mix_santaCard($color_rating_aaa, $color_seniority_3); }

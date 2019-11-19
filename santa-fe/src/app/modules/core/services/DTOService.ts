@@ -52,13 +52,13 @@ export class DTOService {
     rawData: BESecurityDTO,
     isStencil: boolean
   ): SecurityDTO {
-    const ratingLevel = Math.floor(Math.random()*7 + 1);
+    // !isStencil && console.log('rawData', rawData.name, rawData);
     const object:SecurityDTO = {
       data: {
         name: !isStencil ? rawData.name : 'PLACEHOLDER',
-        ratingLevel: ratingLevel,
-        ratingValue: !isStencil ? this.utility.mapRatingsReverse(ratingLevel) : 'AA',
-        seniorityLevel: Math.floor(Math.random()*5 + 1)
+        ratingLevel: !isStencil ? this.utility.mapRatings(rawData.metrics.ratingNoNotch) : 0,
+        ratingValue: !isStencil ? rawData.metrics.ratingNoNotch : 'NR',
+        seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.seniority) : 5
       },
       state: {
         isSelected: false,
