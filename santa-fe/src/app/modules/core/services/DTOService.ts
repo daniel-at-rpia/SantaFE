@@ -61,7 +61,9 @@ export class DTOService {
         ratingValue: !isStencil ? rawData.metrics.ratingNoNotch : 'NR',
         seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.seniority) : 5,
         position: 0,
-        positionInMM: 'n/a'
+        positionInMM: 'n/a',
+        spread: !isStencil ? this.utility.getSecuritySpread(rawData) : null,
+        spreadDelta30: !isStencil ? this.utility.getSecuritySpread(rawData, 'MoM') : null
       },
       state: {
         isSelected: false,
@@ -322,11 +324,12 @@ export class DTOService {
         displayLabel: stub.label,
         attrName: stub.attrName,
         underlineAttrName: stub.underlineAttrName,
-        readyStage: stub.readyStage
+        readyStage: stub.readyStage,
+        frontendMetric: !!stub.isFrontEndMetric
       },
       state: {
-        isQuantVariant: stub.isForQuantComparer,
-        isPureTextVariant: stub.pureText
+        isQuantVariant: !!stub.isForQuantComparer,
+        isPureTextVariant: !!stub.pureText
       }
     };
     return object;
@@ -361,15 +364,16 @@ export class DTOService {
   public formSecurityTableCellObject(
     isStencil: boolean,
     textData: string,
+    isQuantVariant: boolean,
     quantComparerDTO?: QuantComparerDTO
   ): SecurityTableCellDTO {
     const object: SecurityTableCellDTO = {
       data: {
         textData: !!isStencil ? 'PLACE' : textData,
-        quantComparerDTO: quantComparerDTO || this.formQuantComparerObject(false, false, null, null, null, null)
+        quantComparerDTO: quantComparerDTO
       },
       state: {
-        isQuantVariant: !!quantComparerDTO,
+        isQuantVariant: isQuantVariant,
         isStencil: isStencil
       }
     }

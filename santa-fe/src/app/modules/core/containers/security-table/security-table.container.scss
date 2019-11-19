@@ -116,6 +116,7 @@ $securityTable_addColumnCTA_width: 9rem;
     flex: 1 1 auto;
     padding: $spacing_x_small $spacing_small;
     margin: 0 $spacing_small;
+    min-height: 2.5rem; // to align with "Add Column" CTA for better aesthetics
     &-icon {
       @include mix_fixed_div(absolute, $z_index_standard_base_item_lift);
       @include mix_border_radius(50%);
@@ -174,6 +175,18 @@ $securityTable_addColumnCTA_width: 9rem;
   }
   &--quantVariant {
     width: $securityTable_cell_width_quant;
+    align-items: center;
+    #{$securityTableHeadBlockName} {
+      &__text {
+        display: inline-block;
+      }
+      &__cta {
+        display: none;
+      }
+      &__actionMenu {
+        display: none;
+      }
+    }
   }
   &--sortedState {
     #{$securityTableHeadBlockName} {

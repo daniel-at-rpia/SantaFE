@@ -59,26 +59,12 @@ export class TradeCenterPanel {
       table: this.dtoService.formSecurityTableObject()
     };
     this.loadDefaultTableHeaders();
-    const payload : PayloadGetPositions = {
-      source: 'FO',
-      partitionOptions: ['Portfolio']
-    };
     for (let i = 0; i < 10; ++i) {
       const stencilSecurity = this.dtoService.formSecurityCardObject(null, true);
       stencilSecurity.state.isTable = true;
       this.populateRowWithNewSecurityAndQuants(true, stencilSecurity);
-    }
-    this.restfulCommService.callAPI('santaPortfolio/get-santa-credit-positions', {req: 'POST'}, payload, true).pipe(
-      first(),
-      tap((serverReturn) => {
-        console.log('return is ', serverReturn);
-        this.loadInitialDataForTable(serverReturn);
-      }),
-      catchError(err => {
-        console.error('error', err);
-        return of('error');
-      })
-    ).subscribe();
+    };
+    this.fetchStageOneContent();
   }
 
   private loadDefaultTableHeaders() {
@@ -94,7 +80,25 @@ export class TradeCenterPanel {
       // this.dtoService.formSecurityTableHeaderObject('Quote Count (48hrs)', false)
   }
 
-  private loadInitialDataForTable(serverReturn: Object) {
+  private fetchStageOneContent() {
+    const payload : PayloadGetPositions = {
+      source: 'FO',
+      partitionOptions: ['Portfolio']
+    };
+    this.restfulCommService.callAPI('santaPortfolio/get-santa-credit-positions', {req: 'POST'}, payload, true).pipe(
+      first(),
+      tap((serverReturn) => {
+        console.log('return is ', serverReturn);
+        this.loadStageOneContent(serverReturn);
+      }),
+      catchError(err => {
+        console.error('error', err);
+        return of('error');
+      })
+    ).subscribe();
+  }
+
+  private loadStageOneContent(serverReturn: Object) {
     this.state.table.data.rows = [];  // flush out the stencils
     const securityList = [];
     let count = 0;
@@ -132,18 +136,19 @@ export class TradeCenterPanel {
   ) {
     newSecurity.state.isTable = true;
     const newRow = this.dtoService.formSecurityTableRowObject(newSecurity);
-    // const bestRun = this.dtoService.formQuantComparerObject(true, false, null, null, null, null);
-    const bestQuote = this.generateRandomQuantComparer(newSecurity);
+    const bestQuote = this.dtoService.formQuantComparerObject(true, false, null, null, null, null);
+    // const bestQuote = this.generateRandomQuantComparer(newSecurity);
     this.state.table.data.headers.forEach((eachHeader, index) => {
       if (!eachHeader.state.isPureTextVariant) {
         if (eachHeader.state.isQuantVariant) {
-          newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, bestQuote));
+          newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, true, null));
         } else {
-          if (isStencil) {
-            newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, '390'));
+          // TODO: once implemented two-step process to fetch security data, this if statement should only populate stage one metrics
+          if (isStencil || eachHeader.data.readyStage > 2) {
+            newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, 'PLACE', false));
           } else {
-            const value = newRow.data.security.data[eachHeader.data.attrName];
-            newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, value));
+            const value = (newRow.data.security.data[eachHeader.data.attrName] == null || newRow.data.security.data[eachHeader.data.attrName] === 'n/a') ? 'n/a' : newRow.data.security.data[eachHeader.data.attrName];
+            newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, value, false));
           }
         }
       }

@@ -21,6 +21,8 @@ export interface SecurityDTO extends BasicDTOStructure {
     seniorityLevel: number;
     position: number;
     positionInMM: string;
+    spread: number;
+    spreadDelta30: number;
   }
   state: {
     isStencil: boolean;
@@ -173,6 +175,7 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     attrName: string;
     underlineAttrName: string;
     readyStage: number;
+    frontendMetric: boolean;
   },
   state: {
     isPureTextVariant: boolean;

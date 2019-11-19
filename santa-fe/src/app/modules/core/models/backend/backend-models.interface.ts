@@ -94,7 +94,12 @@ export interface BESecurityDTO {
   isCallable: boolean;
   isPerpetual: boolean;
   metrics: BESecurityMetricDTO;
-  deltaMetrics: Object;
+  deltaMetrics: {
+    DoD: BESecurityDeltaMetricDTO;
+    WoW: BESecurityDeltaMetricDTO;
+    MoM: BESecurityDeltaMetricDTO;
+    Ytd: BESecurityDeltaMetricDTO;
+  };
   issueDate: string;
   isValidForCreditGrouping: boolean;
   paymentRank: string;
@@ -123,6 +128,23 @@ interface BESecurityMetricDTO {
   rating: string,
   ratingNoNotch: string,
   ratingBucket: string
+}
+
+export interface BESecurityDeltaMetricDTO {
+  workoutTerm: number;
+  ratingDouble: number;
+  price: number;
+  backendWorkoutTerm: number;
+  oasSpread: number;
+  zSpread: number;
+  aswUsd: number;
+  gSpread: number;
+  yieldWorst: number;
+  amtOutstanding: number;
+  marketValue: number;
+  rating: number;
+  ratingNoNotch: string;
+  ratingBucket: string;
 }
 
 export interface BEPortfolioDTO {

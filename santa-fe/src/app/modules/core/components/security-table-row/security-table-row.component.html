@@ -20,7 +20,7 @@
         </span>
       </section>
       <section class="sat-securityTableCell__quant">
-        <quant-comparer [quantData]="eachCell.data.quantComparerDTO"></quant-comparer>
+        <quant-comparer *ngIf="eachCell.data.quantComparerDTO" [quantData]="eachCell.data.quantComparerDTO"></quant-comparer>
       </section>
     </article>
   </section>
