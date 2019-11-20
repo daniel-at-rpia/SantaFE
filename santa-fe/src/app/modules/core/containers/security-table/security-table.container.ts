@@ -2,14 +2,14 @@
     import {
       Component,
       OnInit,
+      OnChanges,
       ViewEncapsulation,
       Input,
       Output
     } from '@angular/core';
 
-    import {
-      DTOService
-    } from 'Core/services/DTOService';
+    import { DTOService } from 'Core/services/DTOService';
+    import { UtilityService } from 'Core/services/UtilityService';
 
     import {
       SecurityTableDTO,
@@ -31,11 +31,24 @@
   styleUrls: ['./security-table.container.scss'],
   encapsulation: ViewEncapsulation.Emulated
 })
-export class SecurityTable {
+export class SecurityTable implements OnChanges {
   @Input() tableData: SecurityTableDTO;
+  @Input() initialDataLoaded: boolean;
   constructor(
-    private dtoService: DTOService
+    private dtoService: DTOService,
+    private utilityService: UtilityService
   ) { }
+
+  public ngOnChanges() {
+    if (this.tableData.state.initialDataLoaded && !this.tableData.state.initialDataRendered) {
+      this.tableData.state.initialDataRendered = true;
+      if (this.tableData.state.sortedByHeader) {
+        this.performSort(this.tableData.state.sortedByHeader);
+      } else {
+        this.performDefaultSort();
+      }
+    }
+  }
 
   public onClickHeaderCTA(targetHeader: SecurityTableHeaderDTO) {
     this.tableData.state.selectedHeader = this.tableData.state.selectedHeader === targetHeader ? null : targetHeader;
@@ -44,6 +57,13 @@ export class SecurityTable {
   public onClickSortBy(targetHeader: SecurityTableHeaderDTO) {
     this.tableData.state.sortedByHeader = this.tableData.state.sortedByHeader === targetHeader ? null : targetHeader;
     this.tableData.state.selectedHeader = null;
+    if (this.tableData.state.initialDataRendered) {
+      if (this.tableData.state.sortedByHeader) {
+        this.performSort(this.tableData.state.sortedByHeader);
+      } else {
+        this.performDefaultSort();
+      }
+    }
   }
 
   public onClickAddColumn() {
@@ -100,16 +120,54 @@ export class SecurityTable {
       const msg10 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
       const msg11 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
       const msg12 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-      targetRow.data.tradingMessages = [msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8, msg9, msg10, msg11, msg12];
+      targetRow.data.quotes = [msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8, msg9, msg10, msg11, msg12];
     } else {
-      targetRow.data.tradingMessages = [msg1, msg2, msg3, msg4, msg5, msg6];
+      targetRow.data.quotes = [msg1, msg2, msg3, msg4, msg5, msg6];
     }
   }
 
   private renderStencilQuotes(targetRow: SecurityTableRowDTO){
     const stencilQuote = this.dtoService.formSecurityQuoteObject(true, true, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
     stencilQuote.data.ask.isAxe = false;
-    targetRow.data.tradingMessages = [stencilQuote, stencilQuote, stencilQuote];
+    targetRow.data.quotes = [stencilQuote, stencilQuote, stencilQuote];
+  }
+
+  private performSort(targetHeader: SecurityTableHeaderDTO) {
+    this.tableData.data.rows.sort((rowA, rowB) => {
+      const securityA = rowA.data.security;
+      const securityB = rowB.data.security;
+      const valueA = targetHeader.data.isPartOfMetricPack ? this.utilityService.retrieveSecurityMetricFromMetricPack(securityA, targetHeader) : securityA.data[targetHeader.data.underlineAttrName];
+      const valueB = targetHeader.data.isPartOfMetricPack ? this.utilityService.retrieveSecurityMetricFromMetricPack(securityB, targetHeader) : securityB.data[targetHeader.data.underlineAttrName];
+      if (!!securityA && !!securityB && !securityA.state.isStencil && !securityB.state.isStencil) {
+        if (valueA == null && valueB != null) {
+          return 4;
+        } else if (valueA != null && valueB == null) {
+          return -4;
+        } else if (valueA < valueB) {
+          return 1;
+        } else if (valueA > valueB) {
+          return -1;
+        }
+      } else {
+        return 0;
+      }
+    })
+  }
+
+  private performDefaultSort() {
+    this.tableData.data.rows.sort((rowA, rowB) => {
+      const securityA = rowA.data.security;
+      const securityB = rowB.data.security;
+      if (!!securityA && !!securityB && !securityA.state.isStencil && !securityB.state.isStencil) {
+        if (securityA.data.name < securityB.data.name) {
+          return -1;
+        } else if (securityA.data.name > securityB.data.name) {
+          return 1;
+        }
+      } else {
+        return 0;
+      }
+    })
   }
 
 }

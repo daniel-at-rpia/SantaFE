@@ -1,23 +1,30 @@
-import { Injectable } from '@angular/core';
-import {
-  BESecurityDTO,
-  BESecurityDeltaMetricDTO,
-  BESecurityGroupDTO
-} from 'BEModels/backend-models.interface';
-import {
-  SecurityGroupDTO,
-  SecurityGroupDefinitionDTO,
-  SecurityGroupDefinitionConfiguratorDTO
-} from 'FEModels/frontend-models.interface';
-import {
-  SecurityGroupMetricBlock,
-  SecurityGroupMetricPackBlock
-} from 'FEModels/frontend-blocks.interface';
-import {
-  MetricOptions,
-  BackendKeyDictionary
-} from 'Core/constants/marketConstants.constant';
-import uuid from 'uuidv4';
+  // dependencies
+    import { Injectable } from '@angular/core';
+    import {
+      BESecurityDTO,
+      BESecurityDeltaMetricDTO,
+      BESecurityGroupDTO
+    } from 'BEModels/backend-models.interface';
+    import {
+      SecurityDTO,
+      SecurityTableHeaderDTO,
+      SecurityGroupDTO,
+      SecurityGroupDefinitionDTO,
+      SecurityGroupDefinitionConfiguratorDTO
+    } from 'FEModels/frontend-models.interface';
+    import {
+      SecurityGroupMetricBlock,
+      SecurityGroupMetricPackBlock
+    } from 'FEModels/frontend-blocks.interface';
+    import {
+      GroupMetricOptions,
+      BackendKeyDictionary
+    } from 'Core/constants/marketConstants.constant';
+    import {
+      SecurityMetricOptions
+    } from 'Core/constants/coreConstants.constant';
+    import uuid from 'uuidv4';
+  // dependencies
 
 declare const require: any;
 export const cloneDeep = require('lodash.cloneDeep');
@@ -25,7 +32,8 @@ export const cloneDeep = require('lodash.cloneDeep');
 @Injectable()
 export class UtilityService {
   // Any code about naming stuff goes into this service
-  metricOptions = MetricOptions;
+  groupGroupMetricOptions = GroupMetricOptions;
+  securityMetricOptions = SecurityMetricOptions;
   keyDictionary = BackendKeyDictionary;
 
   constructor(){}
@@ -154,29 +162,32 @@ export class UtilityService {
       }
     }
 
-    public isCDS(input: SecurityGroupDTO | BESecurityGroupDTO): boolean {
-      if (input['data']) {
-        const dtoInput = input as SecurityGroupDTO;
-        return dtoInput.data.name.indexOf('Cds') >= 0;
+    public isCDS(
+      isGroup: boolean,
+      input: SecurityGroupDTO | BESecurityGroupDTO | SecurityDTO | BESecurityDTO
+    ): boolean {
+      if (isGroup) {
+        if (input['data']) {
+          const dtoInput = input as SecurityGroupDTO;
+          return dtoInput.data.name.indexOf('Cds') >= 0;
+        } else {
+          const rawDataInput = input as BESecurityGroupDTO;
+          return rawDataInput.groupName.indexOf('Cds') >= 0;
+        }
       } else {
-        const rawDataInput = input as BESecurityGroupDTO;
-        return rawDataInput.groupName.indexOf('Cds') >= 0;
-      }
-    }
-
-    public isEURorGBP(input: SecurityGroupDTO | BESecurityGroupDTO): boolean {
-      if (input['data']) {
-        const dtoInput = input as SecurityGroupDTO;
-        return dtoInput.data.name.indexOf('EUR') >= 0 || dtoInput.data.name.indexOf('GBP') >= 0;
-      } else {
-        const rawDataInput = input as BESecurityGroupDTO;
-        return rawDataInput.groupName.indexOf('EUR') >= 0 || rawDataInput.groupName.indexOf('GBP') >= 0;
+        if (input['data']) {
+          const dtoInput = input as SecurityDTO;
+          return dtoInput.data.name.indexOf('CDS') >= 0;
+        } else {
+          const rawDataInput = input as BESecurityDTO;
+          return rawDataInput.name.indexOf('CDS') >= 0;
+        }
       }
     }
 
     public isFloat(
       isGroup: boolean, 
-      input: SecurityGroupDTO | BESecurityGroupDTO | BESecurityDTO
+      input: SecurityGroupDTO | BESecurityGroupDTO | SecurityDTO | BESecurityDTO
     ): boolean {
       if (isGroup) {
         if (input['data']) {
@@ -187,8 +198,12 @@ export class UtilityService {
           return rawDataInput.groupIdentifier.groupOptionValues['CouponType'] && rawDataInput.groupIdentifier.groupOptionValues['CouponType'] === ['Float'];
         }
       } else {
-        const rawDataInput = input as BESecurityDTO;
-        return rawDataInput.metrics.isFloat;
+        if (input['data']) {
+          return false;  // TODO: haven't isFloat in FE yet
+        } else {
+          const rawDataInput = input as BESecurityDTO;
+          return rawDataInput.metrics.isFloat;
+        }
       }
     }
 
@@ -245,18 +260,8 @@ export class UtilityService {
           return backendTenor;
       }
     }
-  // shared end
 
-  // market specific 
-    public normalizeDefinitionFilterOption(rawString): string {
-      return rawString;//.replace(' ', '');
-    }
-
-    public formDefinitionFilterOptionKey(name, normalizedOption): string {
-      return `${name}/${normalizedOption}`;
-    }
-
-    public packMetricData(rawData: BESecurityGroupDTO): SecurityGroupMetricPackBlock {
+    public packMetricData(rawData: BESecurityGroupDTO | BESecurityDTO): SecurityGroupMetricPackBlock {
       const object: SecurityGroupMetricPackBlock = {
         raw: {},
         delta: {
@@ -267,19 +272,19 @@ export class UtilityService {
         }
       };
       if (!!rawData) {
-        this.metricOptions.forEach((eachMetric) => {
+        const isGroup = !!rawData['groupName'];
+        const metricList = isGroup ? this.groupGroupMetricOptions : this.securityMetricOptions;
+        metricList.forEach((eachMetric) => {
           let keyToRetrieveMetric = eachMetric.backendDtoAttrName;
           if (eachMetric.label === 'Default Spread') {
-            if (this.isCDS(rawData)) {
+            if (this.isCDS(isGroup, rawData)) {
               keyToRetrieveMetric = 'spread';
-             } else if (this.isFloat(true, rawData)) {
+             } else if (this.isFloat(isGroup, rawData)) {
                keyToRetrieveMetric = 'zSpread';
-            // } else if (this.isEURorGBP(rawData)) {
-            //   keyToRetrieveMetric = 'zSpread';
             } else {
               keyToRetrieveMetric = 'gSpread';
             }
-          }
+          };
           const rawValue = rawData.metrics[keyToRetrieveMetric];
           if (rawValue === null || rawValue === undefined) {
             object.raw[eachMetric.label] = null;
@@ -299,6 +304,16 @@ export class UtilityService {
       }
       return object;
     }
+  // shared end
+
+  // market specific 
+    public normalizeDefinitionFilterOption(rawString): string {
+      return rawString;//.replace(' ', '');
+    }
+
+    public formDefinitionFilterOptionKey(name, normalizedOption): string {
+      return `${name}/${normalizedOption}`;
+    }
 
     public retrieveGroupMetricValue(metricDTO: SecurityGroupMetricBlock, groupDTO: SecurityGroupDTO): number {
       if (!!groupDTO && !!metricDTO) {
@@ -312,13 +327,9 @@ export class UtilityService {
           value = groupDTO.data.metricPack.raw[metricLabel];
           value = Math.round(value);
         }
-        if (value === null || value === undefined) {
-          return -3.1415926;
-        } else {
-          return value;
-        }
+        return value;
       }
-      return -3.1415926;
+      return null;
     }
 
     public retrievePrimaryMetricValue(rawData: BESecurityGroupDTO): string {
@@ -397,29 +408,28 @@ export class UtilityService {
       return `${value} MM`;
     }
 
-    public getSecuritySpread(
-      rawData: BESecurityDTO,
-      deltaScope?: string
-    ): number {
-      if (!!deltaScope) {
-        const deltaPack: BESecurityDeltaMetricDTO = rawData.deltaMetrics[deltaScope];
-        if (!!deltaPack) {
-          let value;
-          if (this.isFloat(false, rawData)) {
-            value = deltaPack.zSpread;
-          } else {
-            value = deltaPack.gSpread;
+    public retrieveSecurityMetricFromMetricPack(dto: SecurityDTO, header: SecurityTableHeaderDTO): number {
+      if (!!dto && !!header) {
+        const metricLabel = header.data.attrName;
+        if (dto.data.securityID == '24365') {
+          console.log('test, value is', dto);
+        }
+        let value, deltaSubPack;
+        if (!!header.data.metricPackDeltaScope) {
+          deltaSubPack = dto.data.metricPack.delta[header.data.metricPackDeltaScope];
+          value = !!deltaSubPack ? deltaSubPack[metricLabel] : null;
+          if (!!value) {
+            value = Math.round(value*10)/10;
           }
-          return Math.round(value);
         } else {
-          return null;
+          value = dto.data.metricPack.raw[metricLabel];
+          if (!!value) {
+            value = Math.round(value);
+          }
         }
+        return value;
       } else {
-        if (this.isFloat(false, rawData)) {
-          return rawData.metrics.zSpread;
-        } else {
-          return rawData.metrics.gSpread;
-        }
+        return null;
       }
     }
   // trade specific end

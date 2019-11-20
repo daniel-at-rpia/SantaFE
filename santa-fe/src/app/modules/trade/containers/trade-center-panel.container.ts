@@ -147,7 +147,13 @@ export class TradeCenterPanel {
           if (isStencil || eachHeader.data.readyStage > 2) {
             newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, 'PLACE', false));
           } else {
-            const value = (newRow.data.security.data[eachHeader.data.attrName] == null || newRow.data.security.data[eachHeader.data.attrName] === 'n/a') ? 'n/a' : newRow.data.security.data[eachHeader.data.attrName];
+            let value;
+            if (eachHeader.data.isPartOfMetricPack) {
+              value = this.utilityService.retrieveSecurityMetricFromMetricPack(newRow.data.security, eachHeader);
+            } else {
+              value = newRow.data.security.data[eachHeader.data.attrName];
+            }
+            value = (value == null || value === 'n/a') ? 'n/a' : value;
             newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, value, false));
           }
         }

@@ -35,7 +35,7 @@
       SecurityGroupSeniorityColorScheme
     } from 'Core/constants/colorSchemes.constant';
     import {
-      MetricOptions,
+      GroupMetricOptions,
       ConfiguratorDefinitionLayout
     } from 'Core/constants/marketConstants.constant';
     import {
@@ -56,14 +56,14 @@ export class DTOService {
     // !isStencil && console.log('rawData', rawData.name, rawData);
     const object:SecurityDTO = {
       data: {
+        securityID: !isStencil ? rawData.securityIdentifier.securityId : null,
         name: !isStencil ? rawData.name : 'PLACEHOLDER',
         ratingLevel: !isStencil ? this.utility.mapRatings(rawData.metrics.ratingNoNotch) : 0,
         ratingValue: !isStencil ? rawData.metrics.ratingNoNotch : 'NR',
         seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.seniority) : 5,
         position: 0,
         positionInMM: 'n/a',
-        spread: !isStencil ? this.utility.getSecuritySpread(rawData) : null,
-        spreadDelta30: !isStencil ? this.utility.getSecuritySpread(rawData, 'MoM') : null
+        metricPack: this.utility.packMetricData(rawData)
       },
       state: {
         isSelected: false,
@@ -201,9 +201,9 @@ export class DTOService {
     const object:SecurityGroupAverageVisualizerDTO = {
       data: {
         stats: [
-          this.formSecurityGroupMetricObject(MetricOptions[0].label, 'DoD'),
-          this.formSecurityGroupMetricObject(MetricOptions[0].label, 'WoW'),
-          this.formSecurityGroupMetricObject(MetricOptions[0].label, 'MoM')
+          this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'DoD'),
+          this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'WoW'),
+          this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'MoM')
         ]
       },
       state: {
@@ -308,6 +308,7 @@ export class DTOService {
       },
       state: {
         initialDataLoaded: false,
+        initialDataRendered: false,
         isAddingColumn: false,
         selectedHeader: null,
         sortedByHeader: null
@@ -325,6 +326,8 @@ export class DTOService {
         attrName: stub.attrName,
         underlineAttrName: stub.underlineAttrName,
         readyStage: stub.readyStage,
+        isPartOfMetricPack: stub.isPartOfMetricPack,
+        metricPackDeltaScope: stub.metricPackDeltaScope || null,
         frontendMetric: !!stub.isFrontEndMetric
       },
       state: {
@@ -342,7 +345,7 @@ export class DTOService {
       data: {
         security: securityDTO,
         cells: [],
-        tradingMessages: [],
+        quotes: [],
         quoteHeaders: QuoteMetricList.map((eachQuoteMetricStub) => {
           const metricBlock: QuoteMetricBlock = {
             displayLabelList: eachQuoteMetricStub.labelList,

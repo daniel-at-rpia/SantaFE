@@ -525,7 +525,7 @@ export const BackendKeyDictionary = {
   'SIZE': 'marketValue'
 };
 
-export const MetricOptions:Array<SecurityMetricOptionStub> = [
+export const GroupMetricOptions:Array<SecurityMetricOptionStub> = [
   {
     label: 'Default Spread',
     backendDtoAttrName: 'defaultSpread',

@@ -9,7 +9,7 @@ import {
 
 import { SecurityGroupAverageVisualizerDTO } from 'FEModels/frontend-models.interface';
 import { SecurityGroupMetricBlock } from 'FEModels/frontend-blocks.interface';
-import { MetricOptions } from 'Core/constants/marketConstants.constant';
+import { GroupMetricOptions } from 'Core/constants/marketConstants.constant';
 
 @Component({
   selector: 'security-group-average-visualizer',
@@ -20,7 +20,7 @@ import { MetricOptions } from 'Core/constants/marketConstants.constant';
 
 export class SecurityGroupAverageVisualizer implements OnInit {
 
-  metricOptions = MetricOptions;
+  metricOptions = GroupMetricOptions;
   @Input() visualizerData: SecurityGroupAverageVisualizerDTO;
   @Input() expandedState: boolean;
   @Input() panelAtEmptyState: boolean;

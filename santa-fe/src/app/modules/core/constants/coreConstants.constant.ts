@@ -1,6 +1,90 @@
 import {
-  SecurityTableMetricStub
+  SecurityTableMetricStub,
+  SecurityMetricOptionStub
 } from 'FEModels/frontend-stub-models.interface';
+
+export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
+  {
+    label: 'Default Spread',
+    backendDtoAttrName: 'defaultSpread',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'Price',
+    backendDtoAttrName: 'price',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'Rating',
+    backendDtoAttrName: 'ratingDouble',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'G Spread',
+    backendDtoAttrName: 'gSpread',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'OAS Spread',
+    backendDtoAttrName: 'oasSpread',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'Z-Spread',
+    backendDtoAttrName: 'zSpread',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'YieldWorst',
+    backendDtoAttrName: 'yieldWorst',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'MoM',
+      'Ytd'
+    ]
+  },
+  {
+    label: 'Asset Swap Spread (into USD)',
+    backendDtoAttrName: 'aswUsd',
+    deltaOptions: [
+      'DoD',
+      'WoW',
+      'MoM',
+      'Ytd'
+    ]
+  }
+];
 
 /* Stages:
 1: ready after the get-position call
@@ -40,13 +124,15 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     readyStage: 1
   },{
     label: '30 Day Delta',
-    attrName: 'spreadDelta30',
-    underlineAttrName: 'spreadDelta30',
-    readyStage: 2
+    attrName: SecurityMetricOptions[0].label,
+    underlineAttrName: SecurityMetricOptions[0].label,
+    readyStage: 2,
+    isPartOfMetricPack: true,
+    metricPackDeltaScope: 'MoM'
   },{
     label: 'Quote Count (48hrs)',
     attrName: null,
     underlineAttrName: null,
     readyStage: 3
   }
-]
+];

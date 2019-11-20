@@ -15,14 +15,14 @@ interface BasicDTOStructure {
 
 export interface SecurityDTO extends BasicDTOStructure {
   data: {
+    securityID: string;
     name: string;
     ratingLevel: number;
     ratingValue: string;
     seniorityLevel: number;
     position: number;
     positionInMM: string;
-    spread: number;
-    spreadDelta30: number;
+    metricPack: SecurityGroupMetricPackBlock;
   }
   state: {
     isStencil: boolean;
@@ -163,6 +163,7 @@ export interface SecurityTableDTO extends BasicDTOStructure {
   },
   state: {
     initialDataLoaded: boolean;
+    initialDataRendered: boolean;
     isAddingColumn: boolean;
     selectedHeader: SecurityTableHeaderDTO;
     sortedByHeader: SecurityTableHeaderDTO;
@@ -175,6 +176,8 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     attrName: string;
     underlineAttrName: string;
     readyStage: number;
+    isPartOfMetricPack: boolean;
+    metricPackDeltaScope: string;
     frontendMetric: boolean;
   },
   state: {
@@ -187,7 +190,7 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
   data: {
     security: SecurityDTO;
     cells: Array<SecurityTableCellDTO>;
-    tradingMessages: Array<SecurityQuoteDTO>;
+    quotes: Array<SecurityQuoteDTO>;
     quoteHeaders: Array<QuoteMetricBlock>;
   },
   state: {

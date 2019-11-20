@@ -43,6 +43,8 @@ export interface SecurityTableMetricStub {
   attrName: string;
   underlineAttrName: string;
   readyStage: number;
+  isPartOfMetricPack?: boolean;
+  metricPackDeltaScope?: string;
   isFrontEndMetric?: boolean;
   isForQuantComparer?: boolean;
   pureText?: boolean;

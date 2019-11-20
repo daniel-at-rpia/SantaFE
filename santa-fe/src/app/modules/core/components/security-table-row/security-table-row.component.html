@@ -59,7 +59,7 @@
       </div>
       <ul *ngIf="rowData.state.isExpanded" class="sat-securityTableRow__expandCanvas-content-messageList">
         <security-quote
-          *ngFor="let eachMessage of rowData.data.tradingMessages"
+          *ngFor="let eachMessage of rowData.data.quotes"
           [messageData]="eachMessage">
         </security-quote>
       </ul>
