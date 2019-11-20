@@ -54,6 +54,21 @@ export class SecurityTable implements OnChanges {
     this.tableData.state.selectedHeader = this.tableData.state.selectedHeader === targetHeader ? null : targetHeader;
   }
 
+  public onClickDelete(targetHeader: SecurityTableHeaderDTO) {
+    const targetIndex = this.tableData.data.headers.indexOf(targetHeader);
+    this.tableData.state.selectedHeader = null;
+    if (targetIndex > 0) {
+      if (this.tableData.state.sortedByHeader === targetHeader) {
+        this.tableData.state.sortedByHeader = null;
+        this.performDefaultSort();
+      }
+      this.tableData.data.headers.splice(targetIndex, 1);
+      this.tableData.data.rows.forEach((eachRow) => {
+        eachRow.data.cells.splice(targetIndex-1, 1);
+      });
+    }
+  }
+
   public onClickSortBy(targetHeader: SecurityTableHeaderDTO) {
     this.tableData.state.sortedByHeader = this.tableData.state.sortedByHeader === targetHeader ? null : targetHeader;
     this.tableData.state.selectedHeader = null;

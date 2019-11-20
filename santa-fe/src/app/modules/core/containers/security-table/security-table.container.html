@@ -23,7 +23,7 @@
               <span class="sat-securityTableHead__cta-text">{{eachHead.data.displayLabel}}</span>
             </button>
             <div class="sat-securityTableHead__actionMenu">
-              <button class="sat-securityTableHead__actionMenu-deleteBtn santaBtn--iconOnly fal fa-times"></button>
+              <button (click)="onClickDelete(eachHead)" class="sat-securityTableHead__actionMenu-deleteBtn santaBtn--iconOnly fal fa-times"></button>
               <button (click)="onClickSortBy(eachHead)" class="sat-securityTableHead__actionMenu-sortBtn santaBtn--iconOnly fal fa-sort-amount-down"></button>
             </div>
           </article>
