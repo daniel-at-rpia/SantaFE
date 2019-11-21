@@ -304,6 +304,16 @@ export class UtilityService {
       }
       return object;
     }
+
+    public extractSecurityId(input: string): number {
+      if (!!input) {
+        const removeBackslash = input.replace("\\", '');
+        const startWithNumber = input.replace(`{"SecurityId":`, '');
+        return parseInt(startWithNumber);
+      } else {
+        return null;
+      }
+    }
   // shared end
 
   // market specific 

@@ -266,8 +266,10 @@ export class DTOService {
     isSpread: boolean,
     bidNumber: number,
     bidSize: number,
+    bidBroker: string,
     offerNumber: number,
-    offerSize: number
+    offerSize: number,
+    offerBroker: string
   ): QuantComparerDTO {
     const tier2Shreshold = isSpread ? 20 : 10;
     const delta = isSpread ? bidNumber - offerNumber : offerNumber - bidNumber;
@@ -277,12 +279,12 @@ export class DTOService {
         delta: delta,
         bid: {
           number: !isStencil ? bidNumber : 33,
-          broker: !isStencil ? 'GS' : 'PL',
+          broker: !isStencil ? 'GS' : bidBroker,
           size: bidSize
         },
         offer: {
           number: !isStencil ? offerNumber : 33,
-          broker: !isStencil ? 'JPM' : 'PL',
+          broker: !isStencil ? 'JPM' : offerBroker,
           size: offerSize
         }
       },
@@ -378,6 +380,7 @@ export class DTOService {
       },
       state: {
         isQuantVariant: isQuantVariant,
+        quantComparerUnavail: false,
         isStencil: isStencil
       }
     }

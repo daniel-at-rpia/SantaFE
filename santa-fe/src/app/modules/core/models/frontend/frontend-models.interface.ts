@@ -15,7 +15,7 @@ interface BasicDTOStructure {
 
 export interface SecurityDTO extends BasicDTOStructure {
   data: {
-    securityID: string;
+    securityID: number;
     name: string;
     ratingLevel: number;
     ratingValue: string;
@@ -206,6 +206,7 @@ export interface SecurityTableCellDTO extends BasicDTOStructure {
   },
   state: {
     isQuantVariant: boolean;
+    quantComparerUnavail: boolean;
     isStencil: boolean;
   }
 }

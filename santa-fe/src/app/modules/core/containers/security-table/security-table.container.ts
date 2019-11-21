@@ -37,6 +37,7 @@
 })
 export class SecurityTable implements OnChanges {
   @Input() tableData: SecurityTableDTO;
+  @Input() newRows: Array<SecurityTableRowDTO>;
   @Input() initialDataLoaded: boolean;
   securityMetricOptions = SecurityMetricOptions;
   constructor(
@@ -45,7 +46,11 @@ export class SecurityTable implements OnChanges {
   ) { }
 
   public ngOnChanges() {
-    if (this.tableData.state.initialDataLoaded && !this.tableData.state.initialDataRendered) {
+    console.log('security table detected update', this.tableData, this.newRows, this.initialDataLoaded);
+    if (!!this.newRows) {
+      this.tableData.data.rows = this.newRows;
+    }
+    if (this.tableData.state.initialDataLoaded && !this.tableData.state.initialDataRendered && !!this.newRows) {
       this.tableData.state.initialDataRendered = true;
       if (this.tableData.state.sortedByHeader) {
         this.performSort(this.tableData.state.sortedByHeader);

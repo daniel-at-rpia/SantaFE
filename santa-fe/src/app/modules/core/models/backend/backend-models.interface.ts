@@ -74,7 +74,7 @@ interface BEGroupMetricDTO {
 
 export interface BESecurityDTO {
   securityIdentifier: {
-    securityId: string;
+    securityId: number;
   };
   name: string;
   baseType: string;
@@ -154,4 +154,21 @@ export interface BEPortfolioDTO {
   quantity: number;
   santaSecurity: BESecurityDTO;
   [property: string]: any;
+}
+
+export interface BEQuoteDTO {
+  isValid: boolean;
+  quoteMetric: number
+  bidType: number;
+  askType: number;
+  bidDealer: string;
+  askDealer: string;
+  bidQuantity: number;
+  askQuantity: number;
+  bidQuote: number;
+  askQuote: number;
+  bidTime: number;
+  askTime: string;
+  bidVenue: string;
+  askVenue: string;
 }

@@ -1,6 +1,7 @@
 import {
   SecurityDTO,
   SecurityTableDTO,
+  SecurityTableRowDTO,
   SecurityGroupDTO,
   SecurityGroupDefinitionDTO,
   SecurityGroupDefinitionConfiguratorDTO,
@@ -57,4 +58,5 @@ export interface TradeState {
 
 export interface TradeCenterPanelState {
   table: SecurityTableDTO;
+  rowList: Array<SecurityTableRowDTO>;
 }

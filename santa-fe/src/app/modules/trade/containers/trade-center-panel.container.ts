@@ -30,10 +30,14 @@
       SecurityDTO,
       SecurityTableHeaderDTO,
       SecurityTableRowDTO,
-      QuantComparerDTO
+      QuantComparerDTO,
     } from 'FEModels/frontend-models.interface';
     import { PayloadGetPositions } from 'BEModels/backend-payloads.interface';
-    import { BEPortfolioDTO, BESecurityDTO } from 'BEModels/backend-models.interface';
+    import {
+      BEPortfolioDTO,
+      BESecurityDTO,
+      BEQuoteDTO
+    } from 'BEModels/backend-models.interface';
 
     import { SecurityTableMetrics } from 'Core/constants/coreConstants.constant';
   //
@@ -58,13 +62,14 @@ export class TradeCenterPanel {
 
   private initializePageState() {
     this.state = {
-      table: this.dtoService.formSecurityTableObject()
+      table: this.dtoService.formSecurityTableObject(),
+      rowList: []
     };
     this.loadDefaultTableHeaders();
     for (let i = 0; i < 10; ++i) {
       const stencilSecurity = this.dtoService.formSecurityCardObject(null, true);
       stencilSecurity.state.isTable = true;
-      this.populateRowWithNewSecurityAndQuants(true, stencilSecurity);
+      this.populateEachRowWithStageOneContent(true, stencilSecurity);
     };
     this.fetchStageOneContent();
   }
@@ -101,7 +106,7 @@ export class TradeCenterPanel {
   }
 
   private loadStageOneContent(serverReturn: Object) {
-    this.state.table.data.rows = [];  // flush out the stencils
+    this.state.rowList = [];  // flush out the stencils
     const securityList = [];
     let count = 0;
     let nonEmptyCount = 0;
@@ -123,16 +128,56 @@ export class TradeCenterPanel {
         });
         if (isValidFlag) {
           newSecurity.data.positionInMM = this.utilityService.parsePositionToMM(newSecurity.data.position);
-          this.populateRowWithNewSecurityAndQuants(false, newSecurity);
+          this.populateEachRowWithStageOneContent(false, newSecurity);
           validCount++;
         }
       }
     }
     console.log('count is', count, nonEmptyCount, validCount);
     this.state.table.state.initialDataLoaded = true;
+    this.fetchStageThreeContent();
   }
 
-  private populateRowWithNewSecurityAndQuants(
+  private fetchStageThreeContent(){
+    const payload = {
+      quoteMetric: "TSpread",
+      identifiers: []
+    };
+    const test = this.state.rowList.forEach((eachRow) => {
+      const newSecurityId = {
+        "SecurityId": eachRow.data.security.data.securityID
+      };
+      payload.identifiers.push(newSecurityId);
+    });
+    this.restfulCommService.callAPI('liveQuote/get-best-quotes', {req: 'POST'}, payload).pipe(
+      first(),
+      tap((serverReturn) => {
+        this.loadStageThreeContent(serverReturn);
+      }),
+      catchError(err => {
+        console.log('liveQuote/get-best-quotes failed', err);
+        return of('error');
+      })
+    ).subscribe();
+  }
+
+  private loadStageThreeContent(serverReturn){
+    for (const eachKey in serverReturn) {
+      const securityId = this.utilityService.extractSecurityId(eachKey);
+      const results = this.state.rowList.filter((eachRow) => {
+        return eachRow.data.security.data.securityID === securityId;
+      });
+      if (!!results && results.length > 0) {
+        const targetRow = results[0];
+        this.populateEachRowWithStageThreeContent(targetRow, serverReturn[eachKey]);
+      }
+    }
+    // deepcopy & re-assign trigger change on table
+    const updatedRowList = this.utilityService.deepCopy(this.state.rowList);
+    this.state.rowList = updatedRowList;
+  }
+
+  private populateEachRowWithStageOneContent(
     isStencil: boolean,
     newSecurity: SecurityDTO
   ) {
@@ -141,29 +186,36 @@ export class TradeCenterPanel {
     this.state.table.data.headers.forEach((eachHeader, index) => {
       // TODO: once implemented two-step process to fetch security data, this if statement should only populate stage one metrics
       if (isStencil) {
-        this.populateEachCell(eachHeader, newRow, true, false);
+        this.populateEachCellWithStageOneContent(eachHeader, newRow, true, false);
       } else if(eachHeader.data.readyStage > 2) {
-        this.populateEachCell(eachHeader, newRow, false, false);
+        this.populateEachCellWithStageOneContent(eachHeader, newRow, false, false);
       } else {
-        this.populateEachCell(eachHeader, newRow, false, true);
+        this.populateEachCellWithStageOneContent(eachHeader, newRow, false, true);
       }
     });
-    this.state.table.data.rows.push(newRow);
+    this.state.rowList.push(newRow);
   }
 
-  private populateEachCell(targetHeader: SecurityTableHeaderDTO, targetRow: SecurityTableRowDTO, isStencil: boolean, dataReady: boolean) {
+  private populateEachCellWithStageOneContent(
+    targetHeader: SecurityTableHeaderDTO,
+    targetRow: SecurityTableRowDTO,
+    isStencil: boolean,
+    dataReady: boolean
+  ) {
     if (!targetHeader.state.isPureTextVariant) {
       if (!dataReady) {
         if (targetHeader.state.isQuantVariant) {
-          const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, false, null, null, null, null);
-          isStencil && targetRow.data.cells.push(this.dtoService.formSecurityTableCellObject(isStencil, null, true, bestQuoteStencil));
+          const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, false, null, null, null, null, null, null);
+          if (isStencil) {
+            targetRow.data.cells.push(this.dtoService.formSecurityTableCellObject(isStencil, null, true, bestQuoteStencil));
+          } else {
+            targetRow.data.cells.push(this.dtoService.formSecurityTableCellObject(isStencil, null, true, null));
+          }
         } else {
           targetRow.data.cells.push(this.dtoService.formSecurityTableCellObject(isStencil, null, false));
         }
       } else {
-        if (targetHeader.state.isQuantVariant) {
-          // TODO: fill this
-        } else {
+        if (!targetHeader.state.isQuantVariant) { // just a safe check, best quotes don't come in at stage one
           let value;
           if (targetHeader.data.isPartOfMetricPack) {
             value = this.utilityService.retrieveSecurityMetricFromMetricPack(targetRow.data.security, targetHeader);
@@ -177,13 +229,31 @@ export class TradeCenterPanel {
     }
   }
 
+  private populateEachRowWithStageThreeContent(
+    targetRow: SecurityTableRowDTO,
+    quote: BEQuoteDTO
+  ){
+    const bestQuoteColumnIndex = 0;  // for now the bestQuote is fixed
+    const bestQuoteCell = targetRow.data.cells[bestQuoteColumnIndex];
+    const newQuant = this.dtoService.formQuantComparerObject(false,
+      true,
+      quote.bidQuote,
+      Math.round(quote.bidQuantity/100000)/10,
+      quote.bidDealer, 
+      quote.askQuote,
+      Math.round(quote.askQuantity/100000)/10,
+      quote.askDealer
+    );
+    bestQuoteCell.data.quantComparerDTO = newQuant;
+  }
+
   private calculateQuantComparerWidthAndHeight() {
-    const bestRunList = this.state.table.data.rows.map((eachRow) => {
+    const bestRunList = this.state.rowList.map((eachRow) => {
       const targetCell = eachRow.data.cells[0];
       return targetCell.data.quantComparerDTO;
     });
     this.calculateQuantComparerWidthAndHeightPerSet(bestRunList);
-    const bestAxeList = this.state.table.data.rows.map((eachRow) => {
+    const bestAxeList = this.state.rowList.map((eachRow) => {
       const targetCell = eachRow.data.cells[5];
       return targetCell.data.quantComparerDTO;
     });

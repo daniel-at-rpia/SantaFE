@@ -4,7 +4,7 @@ const PortfolioList: Array<BEPortfolioDTO> = [
   {
     "date":"2019-11-18T00:00:00",
     "securityIdentifier":{
-      "securityId":"2"
+      "securityId":2
     },
     "source":2,
     "santaSecurity":{
@@ -25,7 +25,7 @@ const PortfolioList: Array<BEPortfolioDTO> = [
       "subIndustry":"Sovereign",
       "ticker":"CAN",
       "securityIdentifier":{
-        "securityId":"2"
+        "securityId":2
       },
       "metrics":{
         "isFixedForLife":true,
@@ -150,7 +150,7 @@ const PortfolioList: Array<BEPortfolioDTO> = [
   },{
     "date":"2019-11-18T00:00:00",
     "securityIdentifier":{
-      "securityId":"4"
+      "securityId":4
     },
     "source":2,
     "santaSecurity":{
@@ -171,7 +171,7 @@ const PortfolioList: Array<BEPortfolioDTO> = [
       "subIndustry":"Sovereign",
       "ticker":"CAN",
       "securityIdentifier":{
-        "securityId":"4"
+        "securityId":4
       },
       "metrics":{
         "isFixedForLife":true,
@@ -296,7 +296,7 @@ const PortfolioList: Array<BEPortfolioDTO> = [
   },{
       "date":"2019-11-18T00:00:00",
       "securityIdentifier":{
-        "securityId":"14"
+        "securityId":14
       },
       "source":2,
       "santaSecurity":{
@@ -317,7 +317,7 @@ const PortfolioList: Array<BEPortfolioDTO> = [
         "subIndustry":"Sovereign",
         "ticker":"CAN",
         "securityIdentifier":{
-          "securityId":"14"
+          "securityId":14
         },
         "metrics":{
           "isFixedForLife":true,
