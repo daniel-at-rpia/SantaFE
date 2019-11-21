@@ -120,7 +120,7 @@ export class TradeCenterPanel {
         const newBESecurity:BESecurityDTO = serverReturn[eachKey][0].santaSecurity;
         const newSecurity = this.dtoService.formSecurityCardObject(newBESecurity, false);
         serverReturn[eachKey].forEach((eachPortfolio: BEPortfolioDTO) => {
-          if (eachPortfolio.quantity !== 0 && eachPortfolio.marketValueCad !== 0 && !eachPortfolio.santaSecurity.isGovt && eachPortfolio.santaSecurity.metrics) {
+          if (eachPortfolio.quantity !== 0 && eachPortfolio.marketValueCad !== 0 && !eachPortfolio.santaSecurity.isGovt && eachPortfolio.santaSecurity.metrics && eachPortfolio.portfolioShortName === 'DOF') {
             newSecurity.data.position = newSecurity.data.position + eachPortfolio.marketValueCad;
           } else {
             isValidFlag = false;

@@ -123,8 +123,10 @@ $SecurityQuote_twoSideEntry_axeIconSize: 1.5rem;
     &-benchmarkEntry {
       flex: 1 1 15%;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
       &-consolidated {
         color: $font_color_minor;
         font-size: $font_size_small;
@@ -136,7 +138,7 @@ $SecurityQuote_twoSideEntry_axeIconSize: 1.5rem;
         justify-content: flex-end;
         color: $font_color_minor;
         font-size: $font_size_small;
-        margin-right: $spacing_x_small;
+        margin-bottom: $spacing_x_small;
         text-align: center;
       }
       &-mid {
@@ -148,7 +150,7 @@ $SecurityQuote_twoSideEntry_axeIconSize: 1.5rem;
         flex: 1 1 50%;
         justify-content: flex-start;
         color: $font_color_minor;
-        margin-left: $spacing_x_small;
+        margin-top: $spacing_x_small;
         font-size: $font_size_small;
         text-align: center;
       }
