@@ -5,11 +5,13 @@ import { FormsModule } from '@angular/forms';
 
 import { SantaInput } from './components/input/input.form.component';
 import { SantaLoadableButton } from './components/loadable-button/loadable-button.form.component';
+import { MetricSelectionDropdown } from './components/metric-selection-dropdown/metric-selection-dropdown.component';
 
 @NgModule({
   declarations: [
     SantaInput,
-    SantaLoadableButton
+    SantaLoadableButton,
+    MetricSelectionDropdown
   ],
   imports: [
     CommonModule,
@@ -17,7 +19,8 @@ import { SantaLoadableButton } from './components/loadable-button/loadable-butto
   ],
   exports: [
     SantaInput,
-    SantaLoadableButton
+    SantaLoadableButton,
+    MetricSelectionDropdown
   ],
   providers: [
   ]

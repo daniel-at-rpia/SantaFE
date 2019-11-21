@@ -1,0 +1,115 @@
+@import "global.scss";
+
+.sat-metricSelectionDropdown {
+  $metricSelectionDropdownBlockName: &;
+  @include mix_fixed_div(relative, $z_index_standard_base_item);
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  padding: $spacing_medium;
+  &__closeBtn {
+    @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+    top: $spacing_small;
+    right: $spacing_small;
+    background-color: $color_kill;
+    color: $font_color_inverse;
+  }
+  &__chooseMetric {
+    display: flex;
+    flex-direction: column;
+    &-label {
+      font-size: $font_size_large;
+      color: $font_color_minor;
+      text-align: left;
+    }
+    &-list {
+      display: flex;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      margin: 0 0 0 $spacing_large;
+      &-item {
+        flex: 1 1 auto;
+        margin-top: $spacing_medium;
+        margin-right: $spacing_medium;
+        font-size: $font_size_small;
+        &--selected {
+          @include material('none');
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &__chooseValueType {
+    @include mix_border_generator($typical_border_width 0 0 0);
+    display: none;
+    flex-direction: column;
+    margin-top: $spacing_medium;
+    padding-top: $spacing_medium;
+    &-label {
+      font-size: $font_size_large;
+      color: $font_color_minor;
+      text-align: left;
+    }
+    &-list {
+      display: flex;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      margin: 0 0 0 $spacing_large;
+      &-item {
+        flex: 1 1 auto;
+        margin-top: $spacing_medium;
+        margin-right: $spacing_medium;
+        font-size: $font_size_small;
+        &--selected {
+          @include material('none');
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &__chooseDeltaType {
+    @include mix_border_generator($typical_border_width 0 0 0);
+    display: none;
+    flex-direction: column;
+    margin-top: $spacing_medium;
+    padding-top: $spacing_medium;
+    &-label {
+      font-size: $font_size_large;
+      color: $font_color_minor;
+      text-align: left;
+    }
+    &-list {
+      display: flex;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      margin: 0 0 0 $spacing_large;
+      &-item {
+        flex: 1 1 auto;
+        margin-top: $spacing_medium;
+        margin-right: $spacing_medium;
+        font-size: $font_size_small;
+        &--selected {
+          @include material('none');
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--selectedMetric {
+    #{$metricSelectionDropdownBlockName} {
+      &__chooseValueType {
+        display: flex;
+      }
+    }
+  }
+  &--selectedValueType {
+    #{$metricSelectionDropdownBlockName} {
+      &__chooseDeltaType {
+        display: flex;
+      }
+    }
+  }
+}

@@ -27,7 +27,8 @@
     import {
       SecurityDefinitionStub,
       SecurityDefinitionBundleStub,
-      SecurityTableMetricStub
+      SecurityTableMetricStub,
+      SecurityMetricOptionStub
     } from 'FEModels/frontend-stub-models.interface';
     import { UtilityService } from './UtilityService';
     import {
@@ -422,4 +423,5 @@ export class DTOService {
     };
     return object;
   }
+
 }

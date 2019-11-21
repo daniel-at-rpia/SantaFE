@@ -411,9 +411,6 @@ export class UtilityService {
     public retrieveSecurityMetricFromMetricPack(dto: SecurityDTO, header: SecurityTableHeaderDTO): number {
       if (!!dto && !!header) {
         const metricLabel = header.data.attrName;
-        if (dto.data.securityID == '24365') {
-          console.log('test, value is', dto);
-        }
         let value, deltaSubPack;
         if (!!header.data.metricPackDeltaScope) {
           deltaSubPack = dto.data.metricPack.delta[header.data.metricPackDeltaScope];

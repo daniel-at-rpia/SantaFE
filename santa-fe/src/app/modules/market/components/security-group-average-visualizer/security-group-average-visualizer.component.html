@@ -40,63 +40,16 @@
           </button>
           <section class="sat-securityGroupAverageVisualizerName__metricSelectionDropdown">
             <div class="sat-securityGroupAverageVisualizerName__metricSelectionDropdown-content">
-              <article
-                [ngClass]="{
-                  'sat-securityGroupAverageVisualizerNameDropdownContent': true,
-                  'sat-securityGroupAverageVisualizerNameDropdownContent--selectedMetric': !!visualizerData.state.editingStatSelectedMetric,
-                  'sat-securityGroupAverageVisualizerNameDropdownContent--selectedValueType': visualizerData.state.editingStatSelectedMetricValueType === 'DELTA'
-                }">
-                <button (click)="dropdownClose()" class="sat-securityGroupAverageVisualizerNameDropdownContent__closeBtn santaBtn--iconOnly santaBtn--small fal fa-times"></button>
-                <section class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseMetric">
-                  <span class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseMetric-label">Choose Metric :</span>
-                  <ul class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseMetric-list">
-                    <button
-                      *ngFor="let eachMetric of metricOptions"
-                      (click)="dropdownSelectMetric(eachMetric)"
-                      [ngClass]="{
-                        'sat-securityGroupAverageVisualizerNameDropdownContent__chooseMetric-list-item': true,
-                        'sat-securityGroupAverageVisualizerNameDropdownContent__chooseMetric-list-item--selected': visualizerData.state.editingStatSelectedMetric === eachMetric
-                      }">
-                      {{eachMetric.label}}
-                    </button>
-                  </ul>
-                </section>
-                <section class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseValueType">
-                  <span class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseValueType-label">Choose Value Type :</span>
-                  <ul class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseValueType-list">
-                    <button
-                      (click)="dropdownSelectMetricValueType('RAW')"
-                      [ngClass]="{
-                        'sat-securityGroupAverageVisualizerNameDropdownContent__chooseValueType-list-item': true,
-                        'sat-securityGroupAverageVisualizerNameDropdownContent__chooseValueType-list-item--selected': visualizerData.state.editingStatSelectedMetricValueType === 'RAW'
-                      }">
-                      Raw Value
-                    </button>
-                    <button
-                      (click)="dropdownSelectMetricValueType('DELTA')"
-                      [ngClass]="{
-                        'sat-securityGroupAverageVisualizerNameDropdownContent__chooseValueType-list-item': true,
-                        'sat-securityGroupAverageVisualizerNameDropdownContent__chooseValueType-list-item--selected': visualizerData.state.editingStatSelectedMetricValueType === 'DELTA'
-                      }">
-                      Delta Value
-                    </button>
-                  </ul>
-                </section>
-                <section class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseDeltaType">
-                  <span class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseDeltaType-label">Choose Delta Scope :</span>
-                  <ul class="sat-securityGroupAverageVisualizerNameDropdownContent__chooseDeltaType-list">
-                    <button
-                      (click)="dropdownSelectMetricDeltaType(eachDeltaType)"
-                      *ngFor="let eachDeltaType of visualizerData.state.editingStatSelectedMetric?.deltaOptions"
-                      [ngClass]="{
-                        'sat-securityGroupAverageVisualizerNameDropdownContent__chooseDeltaType-list-item': true,
-                        'sat-securityGroupAverageVisualizerNameDropdownContent__chooseDeltaType-list-item--selected': visualizerData.state.editingStatSelectedMetricDeltaType === eachDeltaType
-                      }">
-                      {{eachDeltaType}}
-                    </button>
-                  </ul>
-                </section>
-              </article>
+              <metric-selection-dropdown
+                [metricList]="metricOptions"
+                [selectedMetric]="visualizerData.state.editingStatSelectedMetric"
+                [selectedMetricValueType]="visualizerData.state.editingStatSelectedMetricValueType"
+                [selectedMetricDeltaType]="visualizerData.state.editingStatSelectedMetricDeltaType"
+                (dropdownClosed)="dropdownClose()"
+                (dropdownMetricSelected)="dropdownSelectMetric($event)"
+                (dropdownMetricValueTypeSelected)="dropdownSelectMetricValueType($event)"
+                (dropdownMetricDeltaTypeSelected)="dropdownSelectMetricDeltaType($event)">
+              </metric-selection-dropdown>
             </div>
           </section>
         </article>

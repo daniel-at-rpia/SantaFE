@@ -1,0 +1,57 @@
+<article
+  [ngClass]="{
+    'sat-metricSelectionDropdown': true,
+    'sat-metricSelectionDropdown--selectedMetric': !!selectedMetric,
+    'sat-metricSelectionDropdown--selectedValueType': selectedMetricValueType === 'DELTA'
+  }">
+  <button (click)="onClickCloseDropdown()" class="sat-metricSelectionDropdown__closeBtn santaBtn--iconOnly santaBtn--small fal fa-times"></button>
+  <section class="sat-metricSelectionDropdown__chooseMetric">
+    <span class="sat-metricSelectionDropdown__chooseMetric-label">Choose Metric :</span>
+    <ul class="sat-metricSelectionDropdown__chooseMetric-list">
+      <button
+        *ngFor="let eachMetric of metricList"
+        (click)="onSelectMetric(eachMetric)"
+        [ngClass]="{
+          'sat-metricSelectionDropdown__chooseMetric-list-item': true,
+          'sat-metricSelectionDropdown__chooseMetric-list-item--selected': selectedMetric === eachMetric
+        }">
+        {{eachMetric.label}}
+      </button>
+    </ul>
+  </section>
+  <section class="sat-metricSelectionDropdown__chooseValueType">
+    <span class="sat-metricSelectionDropdown__chooseValueType-label">Choose Value Type :</span>
+    <ul class="sat-metricSelectionDropdown__chooseValueType-list">
+      <button
+        (click)="onSelectMetricValue('RAW')"
+        [ngClass]="{
+          'sat-metricSelectionDropdown__chooseValueType-list-item': true,
+          'sat-metricSelectionDropdown__chooseValueType-list-item--selected': selectedMetricValueType === 'RAW'
+        }">
+        Raw Value
+      </button>
+      <button
+        (click)="onSelectMetricValue('DELTA')"
+        [ngClass]="{
+          'sat-metricSelectionDropdown__chooseValueType-list-item': true,
+          'sat-metricSelectionDropdown__chooseValueType-list-item--selected': selectedMetricValueType === 'DELTA'
+        }">
+        Delta Value
+      </button>
+    </ul>
+  </section>
+  <section class="sat-metricSelectionDropdown__chooseDeltaType">
+    <span class="sat-metricSelectionDropdown__chooseDeltaType-label">Choose Delta Scope :</span>
+    <ul class="sat-metricSelectionDropdown__chooseDeltaType-list">
+      <button
+        (click)="onSelectMetricDelta(eachDeltaType)"
+        *ngFor="let eachDeltaType of selectedMetric?.deltaOptions"
+        [ngClass]="{
+          'sat-metricSelectionDropdown__chooseDeltaType-list-item': true,
+          'sat-metricSelectionDropdown__chooseDeltaType-list-item--selected': selectedMetricDeltaType === eachDeltaType
+        }">
+        {{eachDeltaType}}
+      </button>
+    </ul>
+  </section>
+</article>
