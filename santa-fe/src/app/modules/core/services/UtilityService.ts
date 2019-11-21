@@ -403,6 +403,16 @@ export class UtilityService {
   // market specific end
 
   // trade specific
+
+    private generateRandomQuantComparer(newSecurity: SecurityDTO){
+      const isSpread = this.isIG(newSecurity.data.ratingValue);
+      const bidNumber = isSpread ?  Math.round(Math.random() * 300) + 200 : Math.round(Math.random() * 30) + 90;
+      const offerNumber = isSpread ? bidNumber - Math.round(Math.random() * 100) + 21 : bidNumber + Math.round(Math.random() * 10) - 10;
+      const bidSize = Math.round(Math.random() * 100) + 10;
+      const offerSize = Math.round(Math.random() * 100) + 10;
+      // return this.dtoService.formQuantComparerObject(false, isSpread, bidNumber, bidSize, offerNumber, offerSize);
+    }
+
     public parsePositionToMM(position: number): string {
       const value = Math.round(position/10000)/100;
       return `${value} MM`;

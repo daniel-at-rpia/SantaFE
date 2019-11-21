@@ -25,6 +25,7 @@ import {
 })
 export class SecurityTableRow {
   @Input() rowData: SecurityTableRowDTO;
+  @Input() initialDataRendered: boolean;
   @Output() clickedCollapseExpandView = new EventEmitter<SecurityTableRowDTO>();
   @Output() clickedRowTableCanvas = new EventEmitter<SecurityTableRowDTO>();
   @Output() clickedSortQuotesByMetric = new EventEmitter<ClickedSortQuotesByMetricEmitterParams>();

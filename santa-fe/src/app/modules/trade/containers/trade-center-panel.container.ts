@@ -28,6 +28,8 @@
     import { TradeCenterPanelState } from 'FEModels/frontend-page-states.interface';
     import {
       SecurityDTO,
+      SecurityTableHeaderDTO,
+      SecurityTableRowDTO,
       QuantComparerDTO
     } from 'FEModels/frontend-models.interface';
     import { PayloadGetPositions } from 'BEModels/backend-payloads.interface';
@@ -134,41 +136,45 @@ export class TradeCenterPanel {
     isStencil: boolean,
     newSecurity: SecurityDTO
   ) {
-    newSecurity.state.isTable = true;
     const newRow = this.dtoService.formSecurityTableRowObject(newSecurity);
-    const bestQuote = this.dtoService.formQuantComparerObject(true, false, null, null, null, null);
-    // const bestQuote = this.generateRandomQuantComparer(newSecurity);
+    newSecurity.state.isTable = true;
     this.state.table.data.headers.forEach((eachHeader, index) => {
-      if (!eachHeader.state.isPureTextVariant) {
-        if (eachHeader.state.isQuantVariant) {
-          newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, true, null));
-        } else {
-          // TODO: once implemented two-step process to fetch security data, this if statement should only populate stage one metrics
-          if (isStencil || eachHeader.data.readyStage > 2) {
-            newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, 'PLACE', false));
-          } else {
-            let value;
-            if (eachHeader.data.isPartOfMetricPack) {
-              value = this.utilityService.retrieveSecurityMetricFromMetricPack(newRow.data.security, eachHeader);
-            } else {
-              value = newRow.data.security.data[eachHeader.data.attrName];
-            }
-            value = (value == null || value === 'n/a') ? 'n/a' : value;
-            newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, value, false));
-          }
-        }
+      // TODO: once implemented two-step process to fetch security data, this if statement should only populate stage one metrics
+      if (isStencil) {
+        this.populateEachCell(eachHeader, newRow, true, false);
+      } else if(eachHeader.data.readyStage > 2) {
+        this.populateEachCell(eachHeader, newRow, false, false);
+      } else {
+        this.populateEachCell(eachHeader, newRow, false, true);
       }
     });
     this.state.table.data.rows.push(newRow);
   }
 
-  private generateRandomQuantComparer(newSecurity: SecurityDTO): QuantComparerDTO {
-    const isSpread = this.utilityService.isIG(newSecurity.data.ratingValue);
-    const bidNumber = isSpread ?  Math.round(Math.random() * 300) + 200 : Math.round(Math.random() * 30) + 90;
-    const offerNumber = isSpread ? bidNumber - Math.round(Math.random() * 100) + 21 : bidNumber + Math.round(Math.random() * 10) - 10;
-    const bidSize = Math.round(Math.random() * 100) + 10;
-    const offerSize = Math.round(Math.random() * 100) + 10;
-    return this.dtoService.formQuantComparerObject(false, isSpread, bidNumber, bidSize, offerNumber, offerSize);
+  private populateEachCell(targetHeader: SecurityTableHeaderDTO, targetRow: SecurityTableRowDTO, isStencil: boolean, dataReady: boolean) {
+    if (!targetHeader.state.isPureTextVariant) {
+      if (!dataReady) {
+        if (targetHeader.state.isQuantVariant) {
+          const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, false, null, null, null, null);
+          isStencil && targetRow.data.cells.push(this.dtoService.formSecurityTableCellObject(isStencil, null, true, bestQuoteStencil));
+        } else {
+          targetRow.data.cells.push(this.dtoService.formSecurityTableCellObject(isStencil, null, false));
+        }
+      } else {
+        if (targetHeader.state.isQuantVariant) {
+          // TODO: fill this
+        } else {
+          let value;
+          if (targetHeader.data.isPartOfMetricPack) {
+            value = this.utilityService.retrieveSecurityMetricFromMetricPack(targetRow.data.security, targetHeader);
+          } else {
+            value = targetRow.data.security.data[targetHeader.data.attrName];
+          }
+          value = (value == null || value === 'n/a') ? 'n/a' : value;
+          targetRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, value, false));
+        }
+      }
+    }
   }
 
   private calculateQuantComparerWidthAndHeight() {

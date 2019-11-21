@@ -23,6 +23,10 @@
     import {
       ClickedSortQuotesByMetricEmitterParams
     } from 'FEModels/frontend-adhoc-packages.interface';
+
+    import {
+      SecurityMetricOptions
+    } from 'Core/constants/coreConstants.constant';
   //
 
 @Component({
@@ -34,6 +38,7 @@
 export class SecurityTable implements OnChanges {
   @Input() tableData: SecurityTableDTO;
   @Input() initialDataLoaded: boolean;
+  securityMetricOptions = SecurityMetricOptions;
   constructor(
     private dtoService: DTOService,
     private utilityService: UtilityService
