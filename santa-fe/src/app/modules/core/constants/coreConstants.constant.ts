@@ -97,42 +97,78 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: null,
     underlineAttrName: null,
     readyStage: 1,
-    pureText: true
+    pureText: true,
+    active: true
   },
   {
     label: 'Best Quote (Bid vs Ask)',
     attrName: null,
     underlineAttrName: null,
     readyStage: 3,
-    isForQuantComparer: true
+    isForQuantComparer: true,
+    active: true
   },{
     label: 'Mark',
     attrName: null,
     underlineAttrName: null,
-    readyStage: 3
+    readyStage: 3,
+    active: true
   },{
     label: 'Mark Discrepancy',
     attrName: null,
     underlineAttrName: null,
     readyStage: 3,
-    isFrontEndMetric: true
+    isFrontEndMetric: true,
+    active: true
   },
   {
     label: 'Position',
     attrName: 'positionInMM',
     underlineAttrName: 'position',
-    readyStage: 1
+    readyStage: 1,
+    active: true
   },{
     label: '30 Day Delta',
     attrName: SecurityMetricOptions[0].label,
     underlineAttrName: SecurityMetricOptions[0].label,
     readyStage: 2,
     isPartOfMetricPack: true,
-    metricPackDeltaScope: 'MoM'
+    metricPackDeltaScope: 'MoM',
+    active: true
   },{
     label: 'Quote Count (48hrs)',
     attrName: null,
     underlineAttrName: null,
-    readyStage: 3
+    readyStage: 3,
+    active: false,
+    disabled: true
+  },{
+    label: 'Rating',
+    attrName: null,
+    underlineAttrName: null,
+    readyStage: 2,
+    active: false,
+    disabled: true
+  },{
+    label: 'Tenor',
+    attrName: null,
+    underlineAttrName: null,
+    readyStage: 2,
+    active: false,
+    disabled: true
+  },{
+    label: 'Seniority',
+    attrName: null,
+    underlineAttrName: null,
+    readyStage: 2,
+    active: false,
+    disabled: true
+  },{
+    label: 'Obligor',
+    attrName: null,
+    underlineAttrName: null,
+    readyStage: 2,
+    active: false,
+    disabled: true
   }
 ];

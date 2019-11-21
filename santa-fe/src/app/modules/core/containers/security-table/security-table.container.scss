@@ -53,14 +53,13 @@ $securityTable_addColumnCTA_width: 9rem;
         top: $spacing_x_large + $spacing_small;
         background-color: $color_white;
         width: $securityTable_addColumnCTA_width * 2;
-        overflow: hidden;
         transform: scale(0.01) translate(0, -100%);
         transform-origin: 100% 0;
         &-optionList {
           flex: 1 1 auto;
           display: flex;
           flex-wrap: wrap;
-          margin: 0 $spacing_small 0 0;
+          margin: 0 $spacing_small $spacing_medium 0;
           padding: $spacing_medium 0 0 $spacing_small*2;
           &-item {
             @include mix_alive('material');
@@ -70,14 +69,27 @@ $securityTable_addColumnCTA_width: 9rem;
             text-align: center;
             margin: 0 $spacing_small $spacing_small 0;
             padding: $spacing_x_small $spacing_small;
+            &--hidden {
+              display: none;
+            }
+            &--active {
+              @include material('none');
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
+            &--disabled {
+              @include material('none');
+              color: $color_disabled;
+            }
           }
         }
         &-collapseBtn {
+          @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
           @include mix_border_radius(50%);
           flex: 0 0 auto;
           background-color: $color_kill;
           color: $font_color_inverse;
-          margin-bottom: $spacing_small;
+          bottom: -$spacing_medium;
         }
       }
     }

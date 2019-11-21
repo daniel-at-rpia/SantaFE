@@ -23,7 +23,7 @@
               <span class="sat-securityTableHead__cta-text">{{eachHead.data.displayLabel}}</span>
             </button>
             <div class="sat-securityTableHead__actionMenu">
-              <button (click)="onClickDelete(eachHead)" class="sat-securityTableHead__actionMenu-deleteBtn santaBtn--iconOnly fal fa-times"></button>
+              <button (click)="onClickRemoveHeader(eachHead)" class="sat-securityTableHead__actionMenu-deleteBtn santaBtn--iconOnly fal fa-times"></button>
               <button (click)="onClickSortBy(eachHead)" class="sat-securityTableHead__actionMenu-sortBtn santaBtn--iconOnly fal fa-sort-amount-down"></button>
             </div>
           </article>
@@ -38,22 +38,23 @@
           (clickedSortQuotesByMetric)="onClickSortQuotesByMetric($event)">
         </security-table-row>
       </div>
-      <button (click)="onClickAddColumn()" class="sat-securityTable__main-table-addColumnCTA santaBtn--labelled santaBtn--inverseLabelled">
+      <button (click)="onClickShowAddColumnDropdown()" class="sat-securityTable__main-table-addColumnCTA santaBtn--labelled santaBtn--inverseLabelled">
         <i class="fal fa-plus"></i>
         <span>Add Column</span>
       </button>
       <div class="sat-securityTable__main-table-addColumnDropdown">
         <ul class="sat-securityTable__main-table-addColumnDropdown-optionList">
-          <li class="sat-securityTable__main-table-addColumnDropdown-optionList-item">Rating</li>
-          <li class="sat-securityTable__main-table-addColumnDropdown-optionList-item">Spread</li>
-          <li class="sat-securityTable__main-table-addColumnDropdown-optionList-item">Tenor</li>
-          <li class="sat-securityTable__main-table-addColumnDropdown-optionList-item">Yield</li>
-          <li class="sat-securityTable__main-table-addColumnDropdown-optionList-item">Price</li>
-          <li class="sat-securityTable__main-table-addColumnDropdown-optionList-item">Size</li>
-          <li class="sat-securityTable__main-table-addColumnDropdown-optionList-item">Senority</li>
-          <li class="sat-securityTable__main-table-addColumnDropdown-optionList-item">Obligor</li>
+          <li
+            *ngFor="let eachOption of securityTableMetrics"
+            (click)="onClickAddHeader(eachOption)"
+            [ngClass]="{
+              'sat-securityTable__main-table-addColumnDropdown-optionList-item': true,
+              'sat-securityTable__main-table-addColumnDropdown-optionList-item--hidden': eachOption.label === 'Security' || eachOption.isForQuantComparer,
+              'sat-securityTable__main-table-addColumnDropdown-optionList-item--active': eachOption.active,
+              'sat-securityTable__main-table-addColumnDropdown-optionList-item--disabled': eachOption.disabled
+            }">{{eachOption.label}}</li>
         </ul>
-        <button (click)="onCollapseAddColumnDropdown()" class="sat-securityTable__main-table-addColumnDropdown-collapseBtn santaBtn--iconOnly santaBtn--small fal fa-times"></button>
+        <button (click)="onCollapseAddColumnDropdown()" class="sat-securityTable__main-table-addColumnDropdown-collapseBtn santaBtn--iconOnly fal fa-times"></button>
       </div>
     </div>
   </section>

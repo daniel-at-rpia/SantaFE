@@ -8,6 +8,8 @@
     import {
       SecurityDTO,
       SecurityTableHeaderDTO,
+      SecurityTableRowDTO,
+      SecurityTableCellDTO,
       SecurityGroupDTO,
       SecurityGroupDefinitionDTO,
       SecurityGroupDefinitionConfiguratorDTO
@@ -447,6 +449,24 @@ export class UtilityService {
         return value;
       } else {
         return null;
+      }
+    }
+
+    public populateSecurityTableCellFromSecurityCard(targetHeader: SecurityTableHeaderDTO, targetRow: SecurityTableRowDTO, newCellDTO: SecurityTableCellDTO): SecurityTableCellDTO{
+      if (targetHeader.data.readyStage > 2) {
+        newCellDTO.data.textData = null;
+        newCellDTO.data.quantComparerDTO = null;
+        return newCellDTO;
+      } else {
+        let value;
+        if (targetHeader.data.isPartOfMetricPack) {
+          value = this.retrieveSecurityMetricFromMetricPack(targetRow.data.security, targetHeader);
+        } else {
+          value = targetRow.data.security.data[targetHeader.data.attrName];
+        }
+        value = (value == null || value === 'n/a') ? 'n/a' : value;
+        newCellDTO.data.textData = value;
+        return newCellDTO;
       }
     }
   // trade specific end

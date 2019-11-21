@@ -23,9 +23,12 @@
     import {
       ClickedSortQuotesByMetricEmitterParams
     } from 'FEModels/frontend-adhoc-packages.interface';
+    import {
+      SecurityTableMetricStub
+    } from 'FEModels/frontend-stub-models.interface';
 
     import {
-      SecurityMetricOptions
+      SecurityTableMetrics
     } from 'Core/constants/coreConstants.constant';
   //
 
@@ -35,15 +38,19 @@
   styleUrls: ['./security-table.container.scss'],
   encapsulation: ViewEncapsulation.Emulated
 })
-export class SecurityTable implements OnChanges {
+export class SecurityTable implements OnInit, OnChanges {
   @Input() tableData: SecurityTableDTO;
   @Input() newRows: Array<SecurityTableRowDTO>;
   @Input() initialDataLoaded: boolean;
-  securityMetricOptions = SecurityMetricOptions;
+  securityTableMetrics = SecurityTableMetrics;
   constructor(
     private dtoService: DTOService,
     private utilityService: UtilityService
   ) { }
+
+  public ngOnInit() {
+    this.loadTableHeaders();
+  }
 
   public ngOnChanges() {
     console.log('security table detected update', this.tableData, this.newRows, this.initialDataLoaded);
@@ -64,9 +71,14 @@ export class SecurityTable implements OnChanges {
     this.tableData.state.selectedHeader = this.tableData.state.selectedHeader === targetHeader ? null : targetHeader;
   }
 
-  public onClickDelete(targetHeader: SecurityTableHeaderDTO) {
+  public onClickRemoveHeader(targetHeader: SecurityTableHeaderDTO) {
     const targetIndex = this.tableData.data.headers.indexOf(targetHeader);
     this.tableData.state.selectedHeader = null;
+    this.securityTableMetrics.forEach((eachStub) => {
+      if (eachStub.label === targetHeader.data.displayLabel) {
+        eachStub.active = false;
+      }
+    });
     if (targetIndex > 0) {
       if (this.tableData.state.sortedByHeader === targetHeader) {
         this.tableData.state.sortedByHeader = null;
@@ -76,6 +88,23 @@ export class SecurityTable implements OnChanges {
       this.tableData.data.rows.forEach((eachRow) => {
         eachRow.data.cells.splice(targetIndex-1, 1);
       });
+    }
+  }
+
+  public onClickShowAddColumnDropdown() {
+    this.tableData.state.isAddingColumn = !this.tableData.state.isAddingColumn;
+  }
+
+  public onCollapseAddColumnDropdown() {
+    this.tableData.state.isAddingColumn = false;
+  }
+
+  public onClickAddHeader(targetStub: SecurityTableMetricStub) {
+    if (!targetStub.active && !targetStub.disabled) {
+      targetStub.active = true;
+      this.loadTableHeaders();
+      this.loadTableRowsUponHeaderChange();
+      this.onCollapseAddColumnDropdown();
     }
   }
 
@@ -89,14 +118,6 @@ export class SecurityTable implements OnChanges {
         this.performDefaultSort();
       }
     }
-  }
-
-  public onClickAddColumn() {
-    this.tableData.state.isAddingColumn = !this.tableData.state.isAddingColumn;
-  }
-
-  public onCollapseAddColumnDropdown() {
-    this.tableData.state.isAddingColumn = false;
   }
 
   public onClickCollapseExpandView(targetRow: SecurityTableRowDTO) {
@@ -117,6 +138,35 @@ export class SecurityTable implements OnChanges {
 
   public onClickSortQuotesByMetric(payload: ClickedSortQuotesByMetricEmitterParams) {
     payload.targetRow.state.expandViewSortByQuoteMetric = payload.targetRow.state.expandViewSortByQuoteMetric === payload.targetMetricLabel ? null : payload.targetMetricLabel;
+  }
+
+  private loadTableHeaders() {
+    this.tableData.data.headers = [];
+    this.securityTableMetrics.forEach((eachStub) => {
+      if (eachStub.label === 'Security' || eachStub.active) {
+        this.tableData.data.headers.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
+      }
+    });
+  }
+
+  private loadTableRowsUponHeaderChange() {
+    this.tableData.data.headers.forEach((eachHeader, index) => {
+      if (!eachHeader.state.isPureTextVariant && !eachHeader.state.isQuantVariant) {
+        this.tableData.data.rows.forEach((eachRow) => {
+          const targetCell = eachRow.data.cells[index-1];
+          if (!!targetCell) {
+            this.utilityService.populateSecurityTableCellFromSecurityCard(eachHeader, eachRow, targetCell);
+          } else {
+            const newCell = this.utilityService.populateSecurityTableCellFromSecurityCard(
+              eachHeader,
+              eachRow,
+              this.dtoService.formSecurityTableCellObject(false, null, false)
+            );
+            eachRow.data.cells[index-1] = newCell;
+          }
+        });
+      }
+    });
   }
 
   private fetchSecurityQuotes(targetRow: SecurityTableRowDTO){

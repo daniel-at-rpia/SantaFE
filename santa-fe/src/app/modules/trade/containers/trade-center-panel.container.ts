@@ -65,26 +65,33 @@ export class TradeCenterPanel {
       table: this.dtoService.formSecurityTableObject(),
       rowList: []
     };
-    this.loadDefaultTableHeaders();
-    for (let i = 0; i < 10; ++i) {
-      const stencilSecurity = this.dtoService.formSecurityCardObject(null, true);
-      stencilSecurity.state.isTable = true;
-      this.populateEachRowWithStageOneContent(true, stencilSecurity);
-    };
+    this.loadInitialStencilTable();
     this.fetchStageOneContent();
   }
 
-  private loadDefaultTableHeaders() {
-    this.state.table.data.headers = SecurityTableMetrics.map((eachStub) => {
-      return this.dtoService.formSecurityTableHeaderObject(eachStub);
+  private loadInitialStencilTable() {
+    const stencilHeaderBuffer: Array<SecurityTableHeaderDTO> = [];
+    SecurityTableMetrics.forEach((eachStub) => {
+      if (eachStub.label === 'Security' || eachStub.active) {
+        stencilHeaderBuffer.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
+      }
     });
-      // this.dtoService.formSecurityTableHeaderObject('Security', false),
-      // this.dtoService.formSecurityTableHeaderObject('Best Quote (Bid vs Ask)', true),
-      // this.dtoService.formSecurityTableHeaderObject('Mark', false),
-      // this.dtoService.formSecurityTableHeaderObject('Mark Discrepancy', false),
-      // this.dtoService.formSecurityTableHeaderObject('Position', false),
-      // this.dtoService.formSecurityTableHeaderObject('30 day delta', false),
-      // this.dtoService.formSecurityTableHeaderObject('Quote Count (48hrs)', false)
+    for (let i = 0; i < 10; ++i) {
+      const stencilSecurity = this.dtoService.formSecurityCardObject(null, true);
+      stencilSecurity.state.isTable = true;
+      const newRow = this.dtoService.formSecurityTableRowObject(stencilSecurity);
+      stencilHeaderBuffer.forEach((eachHeader) => {
+        if (eachHeader.data.displayLabel !== 'Security') {
+          if (eachHeader.state.isQuantVariant) {
+            const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, false, null, null, null, null, null, null);
+            newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, true, bestQuoteStencil));
+          } else {
+            newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, false));
+          }
+        }
+      });
+      this.state.rowList.push(newRow);
+    };
   }
 
   private fetchStageOneContent() {
@@ -128,7 +135,7 @@ export class TradeCenterPanel {
         });
         if (isValidFlag) {
           newSecurity.data.positionInMM = this.utilityService.parsePositionToMM(newSecurity.data.position);
-          this.populateEachRowWithStageOneContent(false, newSecurity);
+          this.populateEachRowWithStageOneContent(newSecurity);
           validCount++;
         }
       }
@@ -178,54 +185,28 @@ export class TradeCenterPanel {
   }
 
   private populateEachRowWithStageOneContent(
-    isStencil: boolean,
     newSecurity: SecurityDTO
   ) {
     const newRow = this.dtoService.formSecurityTableRowObject(newSecurity);
     newSecurity.state.isTable = true;
     this.state.table.data.headers.forEach((eachHeader, index) => {
       // TODO: once implemented two-step process to fetch security data, this if statement should only populate stage one metrics
-      if (isStencil) {
-        this.populateEachCellWithStageOneContent(eachHeader, newRow, true, false);
-      } else if(eachHeader.data.readyStage > 2) {
-        this.populateEachCellWithStageOneContent(eachHeader, newRow, false, false);
-      } else {
-        this.populateEachCellWithStageOneContent(eachHeader, newRow, false, true);
-      }
+      this.populateEachCellWithStageOneContent(eachHeader, newRow);
     });
     this.state.rowList.push(newRow);
   }
 
   private populateEachCellWithStageOneContent(
     targetHeader: SecurityTableHeaderDTO,
-    targetRow: SecurityTableRowDTO,
-    isStencil: boolean,
-    dataReady: boolean
+    targetRow: SecurityTableRowDTO
   ) {
     if (!targetHeader.state.isPureTextVariant) {
-      if (!dataReady) {
-        if (targetHeader.state.isQuantVariant) {
-          const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, false, null, null, null, null, null, null);
-          if (isStencil) {
-            targetRow.data.cells.push(this.dtoService.formSecurityTableCellObject(isStencil, null, true, bestQuoteStencil));
-          } else {
-            targetRow.data.cells.push(this.dtoService.formSecurityTableCellObject(isStencil, null, true, null));
-          }
-        } else {
-          targetRow.data.cells.push(this.dtoService.formSecurityTableCellObject(isStencil, null, false));
-        }
-      } else {
-        if (!targetHeader.state.isQuantVariant) { // just a safe check, best quotes don't come in at stage one
-          let value;
-          if (targetHeader.data.isPartOfMetricPack) {
-            value = this.utilityService.retrieveSecurityMetricFromMetricPack(targetRow.data.security, targetHeader);
-          } else {
-            value = targetRow.data.security.data[targetHeader.data.attrName];
-          }
-          value = (value == null || value === 'n/a') ? 'n/a' : value;
-          targetRow.data.cells.push(this.dtoService.formSecurityTableCellObject(false, value, false));
-        }
-      }
+      const newCell = this.utilityService.populateSecurityTableCellFromSecurityCard(
+        targetHeader,
+        targetRow,
+        this.dtoService.formSecurityTableCellObject(false, null, targetHeader.state.isQuantVariant)
+      );
+      targetRow.data.cells.push(newCell);
     }
   }
 
