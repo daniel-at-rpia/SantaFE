@@ -33,6 +33,20 @@ $securityTable_addColumnCTA_width: 9rem;
         flex-direction: column;
         direction: rtl;
         padding: 0 $spacing_medium;
+        security-table-row {
+          &:nth-child(odd) {
+            .sat-securityTableRow {
+              background-color: $color_gray_2;
+              color: $font_color_minor;
+            }
+          }
+          &:nth-child(even) {
+            .sat-securityTableRow {
+              background-color: $color_blue_gray_1;
+              color: $color_blue_gray_8;
+            }
+          }
+        }
       }
       &-addColumnCTA {
         @include mix_fixed_div(absolute, $z_index_standard_hovering_item);

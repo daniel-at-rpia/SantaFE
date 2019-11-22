@@ -51,14 +51,6 @@ $securityTableRow_expandCanvas_height: 40rem + $spacing_medium * 2;
       }
     }
   }
-  &:nth-child(odd) {
-    background-color: $color_gray_2;
-    color: $font_color_minor;
-  }
-  &:nth-child(even) {
-    background-color: $color_blue_gray_1;
-    color: $color_blue_gray_8;
-  }
   &:hover {
     @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
     #{$securityTableRowBlockName} {

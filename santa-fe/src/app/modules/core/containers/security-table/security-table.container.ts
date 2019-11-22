@@ -37,7 +37,7 @@
   selector: 'security-table',
   templateUrl: './security-table.container.html',
   styleUrls: ['./security-table.container.scss'],
-  encapsulation: ViewEncapsulation.Emulated
+  encapsulation: ViewEncapsulation.None
 })
 export class SecurityTable implements OnInit, OnChanges {
   @Input() tableData: SecurityTableDTO;

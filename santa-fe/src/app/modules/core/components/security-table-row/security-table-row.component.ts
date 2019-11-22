@@ -21,7 +21,7 @@ import {
   selector: 'security-table-row',
   templateUrl: './security-table-row.component.html',
   styleUrls: ['./security-table-row.component.scss'],
-  encapsulation: ViewEncapsulation.Emulated
+  encapsulation: ViewEncapsulation.None
 })
 export class SecurityTableRow {
   @Input() rowData: SecurityTableRowDTO;
