@@ -3,7 +3,9 @@
     'sat-quantComparer': true,
     'sat-quantComparer--crossedState': quantData.state.isCrossed,
     'sat-quantComparer--crossedStateTier2': quantData.state.isCrossedTier2,
-    'sat-quantComparer--stencilState': quantData.state.isStencil
+    'sat-quantComparer--stencilState': quantData.state.isStencil,
+    'sat-quantComparer--noBidState': !quantData.state.hasBid,
+    'sat-quantComparer--noOfferState': !quantData.state.hasOffer
   }">
   <section class="sat-quantComparer__base">
     <div class="sat-quantComparer__base-line"></div>

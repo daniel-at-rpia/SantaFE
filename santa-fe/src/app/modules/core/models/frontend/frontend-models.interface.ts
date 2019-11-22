@@ -135,7 +135,7 @@ export interface SearchShortcutDTO extends BasicDTOStructure {
 
 export interface QuantComparerDTO extends BasicDTOStructure {
   data: {
-    isSpread: boolean;
+    metricType: string;
     delta: number;
     bid: {
       number: number;
@@ -154,6 +154,8 @@ export interface QuantComparerDTO extends BasicDTOStructure {
     offerLineHeight: number;
   }
   state: {
+    hasBid: boolean;
+    hasOffer: boolean;
     isStencil: boolean;
     isCalculated: boolean;
     isCrossed: boolean;

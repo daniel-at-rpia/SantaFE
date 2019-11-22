@@ -197,4 +197,22 @@ $quantComparer_min_height: 2.5rem;
       }
     }
   }
+  &--noBidState {
+    #{$quantComparerBlockName} {
+      &__content {
+        &-driver--left {
+          visibility: hidden;
+        }
+      }
+    }
+  }
+  &--noOfferState {
+    #{$quantComparerBlockName} {
+      &__content {
+        &-driver--right {
+          visibility: hidden;
+        }
+      }
+    }
+  }
 }

@@ -39,7 +39,7 @@
       BEQuoteDTO
     } from 'BEModels/backend-models.interface';
 
-    import { SecurityTableMetrics } from 'Core/constants/coreConstants.constant';
+    import { SecurityTableMetrics } from 'Core/constants/securityTableConstants.constant';
   //
 
 @Component({
@@ -65,7 +65,12 @@ export class TradeCenterPanel {
       table: this.dtoService.formSecurityTableObject(),
       rowList: [],
       prinstineRowList: [],
-      currentContentStage: 0
+      currentContentStage: 0,
+      filters: {
+        quickFilters: {
+          metricType: 'Yield'
+        }
+      }
     };
     this.loadInitialStencilTable();
     this.fetchStageOneContent();
@@ -85,7 +90,7 @@ export class TradeCenterPanel {
       stencilHeaderBuffer.forEach((eachHeader) => {
         if (eachHeader.data.displayLabel !== 'Security') {
           if (eachHeader.state.isQuantVariant) {
-            const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, false, null, null, null, null, null, null);
+            const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, this.state.filters.quickFilters.metricType, null, null, null, null, null, null);
             newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, true, bestQuoteStencil));
           } else {
             newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, false));
@@ -190,7 +195,7 @@ export class TradeCenterPanel {
         this.populateEachRowWithStageThreeContent(targetRow, serverReturn[eachKey]);
       }
     }
-    this.state.currentContentStage = 3;
+    this.calculateQuantComparerWidthAndHeight();
     this.updateStage(3);
     // deepcopy & re-assign trigger change on table
     // const updatedRowList = this.utilityService.deepCopy(this.state.prinstineRowList);
@@ -230,11 +235,11 @@ export class TradeCenterPanel {
     const bestQuoteColumnIndex = 0;  // for now the bestQuote is fixed
     const bestQuoteCell = targetRow.data.cells[bestQuoteColumnIndex];
     const newQuant = this.dtoService.formQuantComparerObject(false,
-      true,
-      quote.bidQuote,
+      this.state.filters.quickFilters.metricType,
+      quote.bidQuoteValue,
       Math.round(quote.bidQuantity/100000)/10,
       quote.bidDealer, 
-      quote.askQuote,
+      quote.askQuoteValue,
       Math.round(quote.askQuantity/100000)/10,
       quote.askDealer
     );
@@ -257,34 +262,30 @@ export class TradeCenterPanel {
   }
 
   private calculateQuantComparerWidthAndHeight() {
-    const bestRunList = this.state.rowList.map((eachRow) => {
+    const bestRunList = [];
+    this.state.prinstineRowList.forEach((eachRow) => {
       const targetCell = eachRow.data.cells[0];
-      return targetCell.data.quantComparerDTO;
+      !!targetCell.data.quantComparerDTO && bestRunList.push(targetCell.data.quantComparerDTO);
     });
     this.calculateQuantComparerWidthAndHeightPerSet(bestRunList);
-    const bestAxeList = this.state.rowList.map((eachRow) => {
-      const targetCell = eachRow.data.cells[5];
-      return targetCell.data.quantComparerDTO;
-    });
-    this.calculateQuantComparerWidthAndHeightPerSet(bestAxeList);
+    // const bestAxeList = this.state.prinstineRowList.map((eachRow) => {
+    //   const targetCell = eachRow.data.cells[5];
+    //   return targetCell.data.quantComparerDTO;
+    // });
+    // this.calculateQuantComparerWidthAndHeightPerSet(bestAxeList);
   }
 
   private calculateQuantComparerWidthAndHeightPerSet(list: Array<QuantComparerDTO>) {
-    let maxSpreadAbsDelta = 0;
-    let maxPriceAbsDelta = 0;
+    let maxDelta = 0;
     let maxSize = 0;
     list.forEach((eachComparer) => {
-      if (eachComparer.data.isSpread) {
-        maxSpreadAbsDelta = Math.abs(eachComparer.data.delta) > maxSpreadAbsDelta ? Math.abs(eachComparer.data.delta) : maxSpreadAbsDelta
-      } else {
-        maxPriceAbsDelta = Math.abs(eachComparer.data.delta) > maxPriceAbsDelta ? Math.abs(eachComparer.data.delta) : maxPriceAbsDelta;
-      }
+      maxDelta = Math.abs(eachComparer.data.delta) > maxDelta ? Math.abs(eachComparer.data.delta) : maxDelta;
       maxSize = eachComparer.data.bid.size > maxSize ? eachComparer.data.bid.size : maxSize;
       maxSize = eachComparer.data.offer.size > maxSize ? eachComparer.data.offer.size : maxSize;
     });
 
     list.forEach((eachComparer) => {
-      eachComparer.style.lineWidth = eachComparer.data.isSpread ? this.calculateSingleQuantComparerWidth(eachComparer.data.delta, maxSpreadAbsDelta): this.calculateSingleQuantComparerWidth(eachComparer.data.delta, maxPriceAbsDelta);
+      eachComparer.style.lineWidth = this.calculateSingleQuantComparerWidth(eachComparer.data.delta, maxDelta);
       eachComparer.style.bidLineHeight = Math.round(eachComparer.data.bid.size/maxSize * 100);
       eachComparer.style.offerLineHeight = Math.round(eachComparer.data.offer.size/maxSize * 100);
       eachComparer.state.isCalculated = true;

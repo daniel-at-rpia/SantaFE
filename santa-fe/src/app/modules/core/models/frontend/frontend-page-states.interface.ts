@@ -61,4 +61,9 @@ export interface TradeCenterPanelState {
   rowList: Array<SecurityTableRowDTO>;
   prinstineRowList: Array<SecurityTableRowDTO>;
   currentContentStage: number;
+  filters: {
+    quickFilters: {
+      metricType: string
+    }
+  }
 }

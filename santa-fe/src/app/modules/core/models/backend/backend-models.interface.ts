@@ -165,8 +165,8 @@ export interface BEQuoteDTO {
   askDealer: string;
   bidQuantity: number;
   askQuantity: number;
-  bidQuote: number;
-  askQuote: number;
+  bidQuoteValue: number;
+  askQuoteValue: number;
   bidTime: number;
   askTime: string;
   bidVenue: string;

@@ -30,7 +30,7 @@
     import {
       SecurityTableMetrics,
       SECURITY_TABLE_FINAL_STAGE
-    } from 'Core/constants/coreConstants.constant';
+    } from 'Core/constants/securityTableConstants.constant';
   //
 
 @Component({

@@ -36,6 +36,9 @@
       SecurityGroupSeniorityColorScheme
     } from 'Core/constants/colorSchemes.constant';
     import {
+      QuantComparerConfig
+    } from 'Core/constants/coreConstants.constant';
+    import {
       GroupMetricOptions,
       ConfiguratorDefinitionLayout
     } from 'Core/constants/marketConstants.constant';
@@ -268,7 +271,7 @@ export class DTOService {
 
   public formQuantComparerObject(
     isStencil: boolean,
-    isSpread: boolean,
+    quantMetricType: string,
     bidNumber: number,
     bidSize: number,
     bidBroker: string,
@@ -276,20 +279,30 @@ export class DTOService {
     offerSize: number,
     offerBroker: string
   ): QuantComparerDTO {
-    const tier2Shreshold = isSpread ? 20 : 10;
-    const delta = isSpread ? bidNumber - offerNumber : offerNumber - bidNumber;
+    const metricType = !isStencil ? quantMetricType : 'Spread';
+    const tier2Shreshold = QuantComparerConfig[metricType]['tier2Threshold'];
+    const inversed = QuantComparerConfig[metricType]['inversed'];
+    bidNumber = Math.round(bidNumber*10)/10;
+    offerNumber = Math.round(offerNumber*10)/10;
+    let delta;
+    if (bidNumber !== 0 && offerNumber !== 0) {
+      delta = inversed ? offerNumber - bidNumber : bidNumber - offerNumber;
+      delta = Math.round(delta * 10)/ 10;
+    } else {
+      delta = 0;
+    }
     const object: QuantComparerDTO = {
       data: {
-        isSpread: isSpread,
+        metricType: metricType,
         delta: delta,
         bid: {
           number: !isStencil ? bidNumber : 33,
-          broker: !isStencil ? 'GS' : bidBroker,
+          broker: !isStencil ? bidBroker : 'GS',
           size: bidSize
         },
         offer: {
           number: !isStencil ? offerNumber : 33,
-          broker: !isStencil ? 'JPM' : offerBroker,
+          broker: !isStencil ? offerBroker: 'JPM',
           size: offerSize
         }
       },
@@ -299,6 +312,8 @@ export class DTOService {
         offerLineHeight: 30
       },
       state: {
+        hasBid: !isStencil ? (!!bidNumber && !!bidBroker) : true,
+        hasOffer: !isStencil ? (!!offerNumber && !!offerBroker) : true,
         isStencil: isStencil,
         isCalculated: false,
         isCrossed: !isStencil && delta < 0,
