@@ -310,8 +310,7 @@ export class DTOService {
         rows: []
       },
       state: {
-        initialDataLoaded: false,
-        initialDataRendered: false,
+        loadedContentStage: 0,
         isAddingColumn: false,
         selectedHeader: null,
         sortedByHeader: null

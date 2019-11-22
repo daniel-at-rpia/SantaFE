@@ -63,7 +63,8 @@ export class TradeCenterPanel {
   private initializePageState() {
     this.state = {
       table: this.dtoService.formSecurityTableObject(),
-      rowList: []
+      rowList: [],
+      currentContentStage: 0
     };
     this.loadInitialStencilTable();
     this.fetchStageOneContent();
@@ -141,7 +142,8 @@ export class TradeCenterPanel {
       }
     }
     console.log('count is', count, nonEmptyCount, validCount);
-    this.state.table.state.initialDataLoaded = true;
+    // right now stage 1 and stage 2 are combined
+    this.state.currentContentStage = 2;
     this.fetchStageThreeContent();
   }
 
@@ -179,9 +181,10 @@ export class TradeCenterPanel {
         this.populateEachRowWithStageThreeContent(targetRow, serverReturn[eachKey]);
       }
     }
+    this.state.currentContentStage = 3;
     // deepcopy & re-assign trigger change on table
-    const updatedRowList = this.utilityService.deepCopy(this.state.rowList);
-    this.state.rowList = updatedRowList;
+    // const updatedRowList = this.utilityService.deepCopy(this.state.rowList);
+    // this.state.rowList = updatedRowList;
   }
 
   private populateEachRowWithStageOneContent(

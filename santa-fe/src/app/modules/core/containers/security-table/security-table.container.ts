@@ -28,7 +28,8 @@
     } from 'FEModels/frontend-stub-models.interface';
 
     import {
-      SecurityTableMetrics
+      SecurityTableMetrics,
+      SECURITY_TABLE_FINAL_STAGE
     } from 'Core/constants/coreConstants.constant';
   //
 
@@ -41,7 +42,7 @@
 export class SecurityTable implements OnInit, OnChanges {
   @Input() tableData: SecurityTableDTO;
   @Input() newRows: Array<SecurityTableRowDTO>;
-  @Input() initialDataLoaded: boolean;
+  @Input() receivedContentStage: number;
   securityTableMetrics = SecurityTableMetrics;
   constructor(
     private dtoService: DTOService,
@@ -53,17 +54,18 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   public ngOnChanges() {
-    console.log('security table detected update', this.tableData, this.newRows, this.initialDataLoaded);
-    if (!!this.newRows) {
+    if (this.tableData.state.loadedContentStage !== this.receivedContentStage) {
+      console.log('rows updated for inter-stage change', this.receivedContentStage);
+      this.tableData.state.loadedContentStage = this.receivedContentStage;
       this.tableData.data.rows = this.newRows;
-    }
-    if (this.tableData.state.initialDataLoaded && !this.tableData.state.initialDataRendered && !!this.newRows) {
-      this.tableData.state.initialDataRendered = true;
       if (this.tableData.state.sortedByHeader) {
         this.performSort(this.tableData.state.sortedByHeader);
       } else {
         this.performDefaultSort();
       }
+    } else if (!!this.newRows && this.newRows != this.tableData.data.rows && this.tableData.state.loadedContentStage === this.receivedContentStage) {
+      console.log('rows updated for change within same stage', this.tableData.state.loadedContentStage);
+      this.tableData.data.rows = this.newRows;
     }
   }
 
@@ -111,7 +113,7 @@ export class SecurityTable implements OnInit, OnChanges {
   public onClickSortBy(targetHeader: SecurityTableHeaderDTO) {
     this.tableData.state.sortedByHeader = this.tableData.state.sortedByHeader === targetHeader ? null : targetHeader;
     this.tableData.state.selectedHeader = null;
-    if (this.tableData.state.initialDataRendered) {
+    if (this.tableData.state.loadedContentStage >= 2) {
       if (this.tableData.state.sortedByHeader) {
         this.performSort(this.tableData.state.sortedByHeader);
       } else {
@@ -125,7 +127,7 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   public onClickRowTableCanvas(targetRow: SecurityTableRowDTO) {
-    if (this.tableData.state.initialDataLoaded) {
+    if (this.tableData.state.loadedContentStage === SECURITY_TABLE_FINAL_STAGE) {
       targetRow.state.isExpanded = !targetRow.state.isExpanded;
       const row = targetRow;
       this.renderStencilQuotes(targetRow);
