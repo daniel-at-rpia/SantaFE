@@ -62,8 +62,13 @@ export class DTOService {
         ratingLevel: !isStencil ? this.utility.mapRatings(rawData.metrics.ratingNoNotch) : 0,
         ratingValue: !isStencil ? rawData.metrics.ratingNoNotch : 'NR',
         seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.seniority) : 5,
+        portfolios: [],
         position: 0,
         positionInMM: 'n/a',
+        positionHF: 0,
+        positionHFInMM: 'n/a',
+        positionNLF: 0,
+        positionNLFInMM: 'n/a',
         metricPack: this.utility.packMetricData(rawData)
       },
       state: {

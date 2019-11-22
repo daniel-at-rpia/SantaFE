@@ -125,11 +125,25 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: true
   },
   {
-    label: 'Position',
+    label: 'Aggregated Position',
     attrName: 'positionInMM',
     underlineAttrName: 'position',
     readyStage: 1,
     active: true
+  },
+  {
+    label: 'HF Position',
+    attrName: 'positionHFInMM',
+    underlineAttrName: 'positionHF',
+    readyStage: 1,
+    active: false
+  },
+  {
+    label: 'NLF Position',
+    attrName: 'positionNLFInMM',
+    underlineAttrName: 'positionNLF',
+    readyStage: 1,
+    active: false
   },{
     label: '30 Day Delta',
     attrName: SecurityMetricOptions[0].label,

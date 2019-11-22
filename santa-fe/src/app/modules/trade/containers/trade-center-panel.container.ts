@@ -64,6 +64,7 @@ export class TradeCenterPanel {
     this.state = {
       table: this.dtoService.formSecurityTableObject(),
       rowList: [],
+      prinstineRowList: [],
       currentContentStage: 0
     };
     this.loadInitialStencilTable();
@@ -91,7 +92,7 @@ export class TradeCenterPanel {
           }
         }
       });
-      this.state.rowList.push(newRow);
+      this.state.prinstineRowList.push(newRow);
     };
   }
 
@@ -114,7 +115,7 @@ export class TradeCenterPanel {
   }
 
   private loadStageOneContent(serverReturn: Object) {
-    this.state.rowList = [];  // flush out the stencils
+    this.state.prinstineRowList = [];  // flush out the stencils
     const securityList = [];
     let count = 0;
     let nonEmptyCount = 0;
@@ -128,14 +129,22 @@ export class TradeCenterPanel {
         const newBESecurity:BESecurityDTO = serverReturn[eachKey][0].santaSecurity;
         const newSecurity = this.dtoService.formSecurityCardObject(newBESecurity, false);
         serverReturn[eachKey].forEach((eachPortfolio: BEPortfolioDTO) => {
-          if (eachPortfolio.quantity !== 0 && eachPortfolio.marketValueCad !== 0 && !eachPortfolio.santaSecurity.isGovt && eachPortfolio.santaSecurity.metrics && eachPortfolio.portfolioShortName === 'DOF') {
+          if (eachPortfolio.quantity !== 0 && eachPortfolio.marketValueCad !== 0 && !eachPortfolio.santaSecurity.isGovt && eachPortfolio.santaSecurity.metrics) {
             newSecurity.data.position = newSecurity.data.position + eachPortfolio.marketValueCad;
+            newSecurity.data.portfolios.push(eachPortfolio.portfolioShortName);
+            if (eachPortfolio.portfolioShortName === 'DOF' || eachPortfolio.portfolioShortName === 'SOF') {
+              newSecurity.data.positionHF = newSecurity.data.positionHF + eachPortfolio.marketValueCad;
+            } else if (eachPortfolio.portfolioShortName === 'STIP' || eachPortfolio.portfolioShortName === 'FIP' || eachPortfolio.portfolioShortName === 'CIP') {
+              newSecurity.data.positionNLF = newSecurity.data.positionNLF + eachPortfolio.marketValueCad;
+            }
           } else {
             isValidFlag = false;
           }
         });
         if (isValidFlag) {
           newSecurity.data.positionInMM = this.utilityService.parsePositionToMM(newSecurity.data.position);
+          newSecurity.data.positionHFInMM = this.utilityService.parsePositionToMM(newSecurity.data.positionHF);
+          newSecurity.data.positionNLFInMM = this.utilityService.parsePositionToMM(newSecurity.data.positionNLF);
           this.populateEachRowWithStageOneContent(newSecurity);
           validCount++;
         }
@@ -143,16 +152,16 @@ export class TradeCenterPanel {
     }
     console.log('count is', count, nonEmptyCount, validCount);
     // right now stage 1 and stage 2 are combined
-    this.state.currentContentStage = 2;
+    this.updateStage(2);
     this.fetchStageThreeContent();
   }
 
   private fetchStageThreeContent(){
     const payload = {
-      quoteMetric: "TSpread",
+      quoteMetric: "Yield",
       identifiers: []
     };
-    const test = this.state.rowList.forEach((eachRow) => {
+    this.state.prinstineRowList.forEach((eachRow) => {
       const newSecurityId = {
         "SecurityId": eachRow.data.security.data.securityID
       };
@@ -173,7 +182,7 @@ export class TradeCenterPanel {
   private loadStageThreeContent(serverReturn){
     for (const eachKey in serverReturn) {
       const securityId = this.utilityService.extractSecurityId(eachKey);
-      const results = this.state.rowList.filter((eachRow) => {
+      const results = this.state.prinstineRowList.filter((eachRow) => {
         return eachRow.data.security.data.securityID === securityId;
       });
       if (!!results && results.length > 0) {
@@ -182,9 +191,10 @@ export class TradeCenterPanel {
       }
     }
     this.state.currentContentStage = 3;
+    this.updateStage(3);
     // deepcopy & re-assign trigger change on table
-    // const updatedRowList = this.utilityService.deepCopy(this.state.rowList);
-    // this.state.rowList = updatedRowList;
+    // const updatedRowList = this.utilityService.deepCopy(this.state.prinstineRowList);
+    // this.state.prinstineRowList = updatedRowList;
   }
 
   private populateEachRowWithStageOneContent(
@@ -196,7 +206,7 @@ export class TradeCenterPanel {
       // TODO: once implemented two-step process to fetch security data, this if statement should only populate stage one metrics
       this.populateEachCellWithStageOneContent(eachHeader, newRow);
     });
-    this.state.rowList.push(newRow);
+    this.state.prinstineRowList.push(newRow);
   }
 
   private populateEachCellWithStageOneContent(
@@ -229,6 +239,21 @@ export class TradeCenterPanel {
       quote.askDealer
     );
     bestQuoteCell.data.quantComparerDTO = newQuant;
+  }
+
+  private updateStage(stageNumber: number){
+    this.updateRowListWithFilters();
+    this.state.currentContentStage = stageNumber;
+  }
+
+  private updateRowListWithFilters(){
+    const filteredList: Array<SecurityTableRowDTO> = [];
+    this.state.prinstineRowList.forEach((eachRow) => {
+      if (eachRow.data.security.data.portfolios.indexOf('DOF') >= 0) {
+        filteredList.push(eachRow);
+      }
+    });
+    this.state.rowList = this.utilityService.deepCopy(filteredList);
   }
 
   private calculateQuantComparerWidthAndHeight() {

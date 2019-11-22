@@ -59,5 +59,6 @@ export interface TradeState {
 export interface TradeCenterPanelState {
   table: SecurityTableDTO;
   rowList: Array<SecurityTableRowDTO>;
+  prinstineRowList: Array<SecurityTableRowDTO>;
   currentContentStage: number;
 }

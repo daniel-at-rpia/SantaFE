@@ -20,8 +20,13 @@ export interface SecurityDTO extends BasicDTOStructure {
     ratingLevel: number;
     ratingValue: string;
     seniorityLevel: number;
+    portfolios: Array<string>;
     position: number;
     positionInMM: string;
+    positionHF: number;
+    positionHFInMM: string;
+    positionNLF: number;
+    positionNLFInMM: string;
     metricPack: SecurityGroupMetricPackBlock;
   }
   state: {
