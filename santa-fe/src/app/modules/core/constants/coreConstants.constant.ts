@@ -6,15 +6,18 @@ import {
 export const QuantComparerConfig = {
   Spread: {
     tier2Threshold: 20,
-    inversed: false
+    inversed: false,
+    rounding: 0
   },
   Yield: {
     tier2Threshold: 1,
-    inversed: false
+    inversed: false,
+    rounding: 3
   },
   Price: {
     tier2Threshold: 3,
-    inverse: true
+    inverse: true,
+    rounding: 1
   }
 }
 

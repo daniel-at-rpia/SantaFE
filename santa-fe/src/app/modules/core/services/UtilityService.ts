@@ -1,5 +1,8 @@
   // dependencies
     import { Injectable } from '@angular/core';
+
+    import * as _ from 'lodash';
+
     import {
       BESecurityDTO,
       BESecurityDeltaMetricDTO,
@@ -28,9 +31,6 @@
     import uuid from 'uuidv4';
   // dependencies
 
-declare const require: any;
-export const cloneDeep = require('lodash.cloneDeep');
-
 @Injectable()
 export class UtilityService {
   // Any code about naming stuff goes into this service
@@ -43,10 +43,14 @@ export class UtilityService {
   // shared
     public deepCopy(input): any {
       if (!!input) {
-        return cloneDeep(input);
+        return _.cloneDeep(input);
       } else {
         return null;
       }
+    }
+
+    public round(input, precision): any {
+      return _.round(input, precision);
     }
 
     public generateUUID() {

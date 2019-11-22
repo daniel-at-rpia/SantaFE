@@ -65,6 +65,7 @@ export interface TradeCenterPanelState {
     quickFilters: {
       metricType: string;
       portfolios: Array<string>;
+      keyword: string;
     }
   }
 }

@@ -54,6 +54,7 @@ $quantComparer_min_height: 2.5rem;
         height: 100%;
         width: $quantComparer_edge_width;
         padding: $spacing_xx_small;
+        direction: ltr;
         &-number {
           color: $font_color_major;
           font-size: $font_size_x_small;

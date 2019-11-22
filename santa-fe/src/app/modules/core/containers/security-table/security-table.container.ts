@@ -57,6 +57,7 @@ export class SecurityTable implements OnInit, OnChanges {
 
   public ngOnInit() {
     this.loadTableHeaders();
+    this.utilityService.round(23, 213);
   }
 
   public ngOnChanges() {

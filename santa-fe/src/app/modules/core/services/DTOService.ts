@@ -285,12 +285,13 @@ export class DTOService {
     const inversed = QuantComparerConfig[metricType]['inversed'];
     const hasBid = !isStencil ? (!!bidNumber && !!bidBroker) : true;
     const hasOffer = !isStencil ? (!!offerNumber && !!offerBroker) : true;
-    bidNumber = Math.round(bidNumber*10)/10;
-    offerNumber = Math.round(offerNumber*10)/10;
+    const rounding = QuantComparerConfig[metricType]['rounding'];
+    bidNumber = this.utility.round(bidNumber, rounding).toFixed(rounding);
+    offerNumber = this.utility.round(offerNumber, rounding).toFixed(rounding);
     let delta;
     if (hasBid && hasOffer) {
       delta = inversed ? offerNumber - bidNumber : bidNumber - offerNumber;
-      delta = Math.round(delta * 10)/ 10;
+      delta = this.utility.round(delta, rounding);
     } else {
       delta = 0;
     }

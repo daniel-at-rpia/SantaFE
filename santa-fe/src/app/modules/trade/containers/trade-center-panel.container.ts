@@ -82,7 +82,8 @@ export class TradeCenterPanel {
       filters: {
         quickFilters: {
           metricType: 'Yield',
-          portfolios: ['DOF']
+          portfolios: ['DOF'],
+          keyword: ''
         }
       }
     };
@@ -269,11 +270,13 @@ export class TradeCenterPanel {
     const filteredList: Array<SecurityTableRowDTO> = [];
     this.state.prinstineRowList.forEach((eachRow) => {
       let includeFlag = false;
-      this.state.filters.quickFilters.portfolios.forEach((eachPortfolio) => {
-        if (eachRow.data.security.data.portfolios.indexOf(eachPortfolio) >= 0) {
-          includeFlag = true;
-        }
-      });
+      if ( this.state.filters.quickFilters.keyword.length < 3 || eachRow.data.security.data.name.indexOf(this.state.filters.quickFilters.keyword) >= 0) {
+        this.state.filters.quickFilters.portfolios.forEach((eachPortfolio) => {
+          if (eachRow.data.security.data.portfolios.indexOf(eachPortfolio) >= 0) {
+            includeFlag = true;
+          }
+        });
+      }
       includeFlag && filteredList.push(eachRow);
     });
     this.state.rowList = this.utilityService.deepCopy(filteredList);
