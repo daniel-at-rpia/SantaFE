@@ -2,7 +2,8 @@
     import { Injectable } from '@angular/core';
     import {
       BESecurityDTO,
-      BESecurityGroupDTO
+      BESecurityGroupDTO,
+      BEQuoteDTO
     } from 'BEModels/backend-models.interface';
     import {
       SecurityDTO,
@@ -408,31 +409,33 @@ export class DTOService {
 
   public formSecurityQuoteObject(
     isStencil: boolean,
-    hasBid: boolean,
-    hasAsk: boolean,
-    bidBenchmark: string,
-    askBenchmark: string
+    rawData: BEQuoteDTO
   ) : SecurityQuoteDTO {
+    const hasBid = true;
+    const hasAsk = false;
+    const bidBenchmark = '';
+    const askBenchmark = '';
+    const consolidatedBenchmark = '';
     const object: SecurityQuoteDTO = {
       data: {
-        broker: 'GS',
+        broker: !isStencil ? rawData.dealer : 'RBC',
         time: '12:01 pm',
-        dataSource: 'RUN',
-        consolidatedBenchmark: hasBid ? bidBenchmark : askBenchmark,
+        dataSource: !isStencil ? rawData.venue : 'PLACEHOLDER',
+        consolidatedBenchmark: !isStencil ? consolidatedBenchmark : 'T 0.5 01/01/2020',
         bid: {
           isAxe: false,
-          size: '10MM',
-          price: 105.483,
-          yield: 4.16,
-          tspread: 181.00,
+          size: !isStencil ? this.utility.parsePositionToMM(rawData.quantity) : '10MM',
+          price: !isStencil ? rawData.price : 100,
+          yield: !isStencil ? rawData.yield : 5,
+          tspread: !isStencil ? null : 300,
           benchmark: bidBenchmark
         },
         ask: {
-          isAxe: true,
-          size: '5MM',
-          price: 106.338,
-          yield: 4.13,
-          tspread: 176.00,
+          isAxe: false,
+          size: !isStencil ? null : '10MM',
+          price: !isStencil ? null : 100,
+          yield: !isStencil ? null : 5,
+          tspread: !isStencil ? null : 300,
           benchmark: askBenchmark
         }
       },

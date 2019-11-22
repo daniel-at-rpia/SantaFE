@@ -36,7 +36,7 @@
     import {
       BEPortfolioDTO,
       BESecurityDTO,
-      BEQuoteDTO
+      BEBestQuoteDTO
     } from 'BEModels/backend-models.interface';
 
     import { SecurityTableMetrics } from 'Core/constants/securityTableConstants.constant';
@@ -230,7 +230,7 @@ export class TradeCenterPanel {
 
   private populateEachRowWithStageThreeContent(
     targetRow: SecurityTableRowDTO,
-    quote: BEQuoteDTO
+    quote: BEBestQuoteDTO
   ){
     const bestQuoteColumnIndex = 0;  // for now the bestQuote is fixed
     const bestQuoteCell = targetRow.data.cells[bestQuoteColumnIndex];

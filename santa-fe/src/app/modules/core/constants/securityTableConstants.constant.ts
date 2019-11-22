@@ -51,21 +51,21 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: 'positionInMM',
     underlineAttrName: 'position',
     readyStage: 1,
-    active: true
+    active: false
   },
   {
     label: 'HF Position',
     attrName: 'positionHFInMM',
     underlineAttrName: 'positionHF',
     readyStage: 1,
-    active: false
+    active: true
   },
   {
     label: 'NLF Position',
     attrName: 'positionNLFInMM',
     underlineAttrName: 'positionNLF',
     readyStage: 1,
-    active: false
+    active: true
   },{
     label: '30 Day Delta',
     attrName: SecurityMetricOptions[0].label,

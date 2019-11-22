@@ -100,6 +100,7 @@ $SecurityQuote_twoSideEntry_axeIconSize: 1.5rem;
         margin-right: $spacing_xx_small;
         font-weight: bold;
         text-align: center;
+        white-space: nowrap;
       }
       &-mid {
         margin-top: $spacing_minimum;
@@ -115,6 +116,7 @@ $SecurityQuote_twoSideEntry_axeIconSize: 1.5rem;
         font-size: $font_size_small;
         font-weight: bold;
         text-align: center;
+        white-space: nowrap;
       }
       &--veryLong {
         flex: 1 1 15%;

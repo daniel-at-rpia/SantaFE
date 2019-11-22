@@ -7,25 +7,30 @@
       Input,
       Output
     } from '@angular/core';
+    import { Observable, Subscription } from 'rxjs';
+    import {
+      of
+    } from 'rxjs';
+    import {
+      tap,
+      first,
+      delay,
+      catchError
+    } from 'rxjs/operators';
 
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
+    import { RestfulCommService } from 'Core/services/RestfulCommService';
 
     import {
       SecurityTableDTO,
       SecurityTableRowDTO,
       SecurityTableHeaderDTO
     } from 'FEModels/frontend-models.interface';
-
-    import {
-      QuoteMetricBlock
-    } from 'FEModels/frontend-blocks.interface';
-    import {
-      ClickedSortQuotesByMetricEmitterParams
-    } from 'FEModels/frontend-adhoc-packages.interface';
-    import {
-      SecurityTableMetricStub
-    } from 'FEModels/frontend-stub-models.interface';
+    import { QuoteMetricBlock } from 'FEModels/frontend-blocks.interface';
+    import { ClickedSortQuotesByMetricEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
+    import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
+    import { BEQuoteDTO } from 'BEModels/backend-models.interface';
 
     import {
       SecurityTableMetrics,
@@ -46,7 +51,8 @@ export class SecurityTable implements OnInit, OnChanges {
   securityTableMetrics = SecurityTableMetrics;
   constructor(
     private dtoService: DTOService,
-    private utilityService: UtilityService
+    private utilityService: UtilityService,
+    private restfulCommService: RestfulCommService
   ) { }
 
   public ngOnInit() {
@@ -131,10 +137,7 @@ export class SecurityTable implements OnInit, OnChanges {
       targetRow.state.isExpanded = !targetRow.state.isExpanded;
       const row = targetRow;
       this.renderStencilQuotes(targetRow);
-      const func = () => {
-        this.fetchSecurityQuotes(row);
-      };
-      setTimeout(func.bind(this), 3000);
+      this.fetchSecurityQuotes(row);
     }
   }
 
@@ -172,40 +175,58 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   private fetchSecurityQuotes(targetRow: SecurityTableRowDTO){
-    const msg1 = this.dtoService.formSecurityQuoteObject(false, true, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-    const msg2 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-    msg2.data.ask.isAxe = false;
-    msg2.data.dataSource = 'IB';
-    msg2.data.broker = 'DB';
-    const msg3 = this.dtoService.formSecurityQuoteObject(false, true, false, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-    msg3.data.bid.isAxe = true;
-    msg3.data.dataSource = 'MSG';
-    msg3.data.broker = 'BARC';
-    const msg4 = this.dtoService.formSecurityQuoteObject(false, true, false, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-    msg4.data.ask.isAxe = false;
-    msg4.data.broker = 'BARC';
-    const msg5 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-    msg5.data.ask.isAxe = false;
-    msg5.data.broker = 'USBC';
-    const msg6 = this.dtoService.formSecurityQuoteObject(false, true, true, 'T 0.5 01/01/2020', 'T 0.8 01/01/2025');
-    msg6.data.bid.isAxe = true;
-    msg6.data.broker = 'MUFG';
-    if (targetRow.data.security.data.ratingLevel >= 5) {
-      const msg7 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-      const msg8 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-      const msg9 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-      const msg10 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-      const msg11 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-      const msg12 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-      targetRow.data.quotes = [msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8, msg9, msg10, msg11, msg12];
-    } else {
-      targetRow.data.quotes = [msg1, msg2, msg3, msg4, msg5, msg6];
-    }
+    const payload = {
+      "identifier": "XS1001476610"
+    };
+    this.restfulCommService.callAPI('liveQuote/get-all-quotes', {req: 'POST'}, payload).pipe(
+      first(),
+      delay(200),
+      tap((serverReturn) => {
+        targetRow.data.quotes = [];
+        for (const eachKey in serverReturn) {
+          const rawQuote: BEQuoteDTO = serverReturn[eachKey];
+          const newQuote = this.dtoService.formSecurityQuoteObject(false, rawQuote);
+          targetRow.data.quotes.push(newQuote);
+        }
+      }),
+      catchError(err => {
+        console.error('liveQuote/get-all-quotes failed', err);
+        return of('error')
+      })
+    ).subscribe();
+    // const msg1 = this.dtoService.formSecurityQuoteObject(false, true, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
+    // const msg2 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
+    // msg2.data.ask.isAxe = false;
+    // msg2.data.dataSource = 'IB';
+    // msg2.data.broker = 'DB';
+    // const msg3 = this.dtoService.formSecurityQuoteObject(false, true, false, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
+    // msg3.data.bid.isAxe = true;
+    // msg3.data.dataSource = 'MSG';
+    // msg3.data.broker = 'BARC';
+    // const msg4 = this.dtoService.formSecurityQuoteObject(false, true, false, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
+    // msg4.data.ask.isAxe = false;
+    // msg4.data.broker = 'BARC';
+    // const msg5 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
+    // msg5.data.ask.isAxe = false;
+    // msg5.data.broker = 'USBC';
+    // const msg6 = this.dtoService.formSecurityQuoteObject(false, true, true, 'T 0.5 01/01/2020', 'T 0.8 01/01/2025');
+    // msg6.data.bid.isAxe = true;
+    // msg6.data.broker = 'MUFG';
+    // if (targetRow.data.security.data.ratingLevel >= 5) {
+    //   const msg7 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
+    //   const msg8 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
+    //   const msg9 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
+    //   const msg10 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
+    //   const msg11 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
+    //   const msg12 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
+    //   targetRow.data.quotes = [msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8, msg9, msg10, msg11, msg12];
+    // } else {
+    //   targetRow.data.quotes = [msg1, msg2, msg3, msg4, msg5, msg6];
+    // }
   }
 
   private renderStencilQuotes(targetRow: SecurityTableRowDTO){
-    const stencilQuote = this.dtoService.formSecurityQuoteObject(true, true, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-    stencilQuote.data.ask.isAxe = false;
+    const stencilQuote = this.dtoService.formSecurityQuoteObject(true, null);
     targetRow.data.quotes = [stencilQuote, stencilQuote, stencilQuote];
   }
 

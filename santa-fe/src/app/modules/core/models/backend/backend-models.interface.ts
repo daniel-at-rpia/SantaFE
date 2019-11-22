@@ -156,7 +156,7 @@ export interface BEPortfolioDTO {
   [property: string]: any;
 }
 
-export interface BEQuoteDTO {
+export interface BEBestQuoteDTO {
   isValid: boolean;
   quoteMetric: number
   bidType: number;
@@ -171,4 +171,19 @@ export interface BEQuoteDTO {
   askTime: string;
   bidVenue: string;
   askVenue: string;
+}
+
+export interface BEQuoteDTO {
+  side: number,
+  quoteType: number,
+  dealer: string,
+  time: string,
+  isActive: boolean,
+  venue: string,
+  isNatural: boolean,
+  yieldType: string,
+  yield: number,
+  price: number,
+  quantity: number,
+  qualifier: string
 }

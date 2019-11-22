@@ -32,8 +32,8 @@ $securityTableRow_expandCanvas_height: 40rem + $spacing_medium * 2;
       }
       &-label {
         display: flex;
-        padding-left: $SecurityQuote_time_width;
-        padding-right: $SecurityQuote_ctas_width + $spacing_small + $scroll_bar_width;
+        padding-left: $SecurityQuote_time_width + $spacing_x_small;
+        padding-right: $SecurityQuote_ctas_width + $spacing_small + $scroll_bar_width + $spacing_x_small;
         margin-bottom: $spacing_x_small;
       }
       &-messageList {
