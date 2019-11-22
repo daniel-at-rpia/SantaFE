@@ -283,10 +283,12 @@ export class DTOService {
     const metricType = !isStencil ? quantMetricType : 'Spread';
     const tier2Shreshold = QuantComparerConfig[metricType]['tier2Threshold'];
     const inversed = QuantComparerConfig[metricType]['inversed'];
+    const hasBid = !isStencil ? (!!bidNumber && !!bidBroker) : true;
+    const hasOffer = !isStencil ? (!!offerNumber && !!offerBroker) : true;
     bidNumber = Math.round(bidNumber*10)/10;
     offerNumber = Math.round(offerNumber*10)/10;
     let delta;
-    if (bidNumber !== 0 && offerNumber !== 0) {
+    if (hasBid && hasOffer) {
       delta = inversed ? offerNumber - bidNumber : bidNumber - offerNumber;
       delta = Math.round(delta * 10)/ 10;
     } else {
@@ -313,8 +315,10 @@ export class DTOService {
         offerLineHeight: 30
       },
       state: {
-        hasBid: !isStencil ? (!!bidNumber && !!bidBroker) : true,
-        hasOffer: !isStencil ? (!!offerNumber && !!offerBroker) : true,
+        hasBid: hasBid,
+        hasOffer: hasOffer,
+        bidWithNoSize: hasBid && bidSize === 0,
+        offerWithNoSize: hasOffer && offerSize === 0,
         isStencil: isStencil,
         isCalculated: false,
         isCrossed: !isStencil && delta < 0,

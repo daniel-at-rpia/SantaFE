@@ -297,13 +297,19 @@ export class TradeCenterPanel {
     let maxDelta = 0;
     let maxSize = 0;
     list.forEach((eachComparer) => {
-      maxDelta = Math.abs(eachComparer.data.delta) > maxDelta ? Math.abs(eachComparer.data.delta) : maxDelta;
+      if (eachComparer.state.hasBid && eachComparer.state.hasOffer) {
+        maxDelta = Math.abs(eachComparer.data.delta) > maxDelta ? Math.abs(eachComparer.data.delta) : maxDelta;
+      }
       maxSize = eachComparer.data.bid.size > maxSize ? eachComparer.data.bid.size : maxSize;
       maxSize = eachComparer.data.offer.size > maxSize ? eachComparer.data.offer.size : maxSize;
     });
 
     list.forEach((eachComparer) => {
-      eachComparer.style.lineWidth = this.calculateSingleQuantComparerWidth(eachComparer.data.delta, maxDelta);
+      if (eachComparer.state.hasBid && eachComparer.state.hasOffer) {
+        eachComparer.style.lineWidth = this.calculateSingleQuantComparerWidth(eachComparer.data.delta, maxDelta);
+      } else {
+        eachComparer.style.lineWidth = 15;
+      }
       eachComparer.style.bidLineHeight = Math.round(eachComparer.data.bid.size/maxSize * 100);
       eachComparer.style.offerLineHeight = Math.round(eachComparer.data.offer.size/maxSize * 100);
       eachComparer.state.isCalculated = true;

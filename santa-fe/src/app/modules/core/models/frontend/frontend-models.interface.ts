@@ -156,6 +156,8 @@ export interface QuantComparerDTO extends BasicDTOStructure {
   state: {
     hasBid: boolean;
     hasOffer: boolean;
+    bidWithNoSize: boolean;
+    offerWithNoSize: boolean;
     isStencil: boolean;
     isCalculated: boolean;
     isCrossed: boolean;

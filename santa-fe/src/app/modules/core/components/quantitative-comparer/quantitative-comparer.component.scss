@@ -176,6 +176,32 @@ $quantComparer_min_height: 2.5rem;
       }
     }
   }
+  &--bidWithNoSizeState {
+    #{$quantComparerBlockName} {
+      &__content {
+        &-driver--left {
+          #{$quantComparerBlockName} {
+            &__content-driver-line-content {
+              height: $typical_border_width!important;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--offerWithNoSizeState {
+    #{$quantComparerBlockName} {
+      &__content {
+        &-driver--right {
+          #{$quantComparerBlockName} {
+            &__content-driver-line-content {
+              height: $typical_border_width!important;
+            }
+          }
+        }
+      }
+    }
+  }
   &--stencilState {
     #{$quantComparerBlockName} {
       &__content {

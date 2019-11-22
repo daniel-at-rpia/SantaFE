@@ -213,17 +213,25 @@ export class SecurityTable implements OnInit, OnChanges {
       let valueA;
       let valueB;
       if (targetHeader.state.isQuantVariant) {
-        valueA = !!rowA.data.cells[0].data.quantComparerDTO ? rowA.data.cells[0].data.quantComparerDTO.data.delta : null;
-        valueB = !!rowB.data.cells[0].data.quantComparerDTO ? rowB.data.cells[0].data.quantComparerDTO.data.delta : null;
+        const quantA = rowA.data.cells[0].data.quantComparerDTO;
+        const quantB = rowB.data.cells[0].data.quantComparerDTO;
+        valueA = !!quantA ? quantA.data.delta : null;
+        valueB = !!quantB ? quantB.data.delta : null;
         if (!!securityA && !!securityB && !securityA.state.isStencil && !securityB.state.isStencil) {
           if (valueA == null && valueB != null) {
-            return 4;
+            return 9;
           } else if (valueA != null && valueB == null) {
+            return -9;
+          } else if (quantA && quantB && quantA.state.hasBid && quantA.state.hasOffer && (!quantB.state.hasBid || !quantB.state.hasOffer)) {
             return -4;
+          } else if (quantA && quantB && (!quantA.state.hasBid || !quantA.state.hasOffer) && quantB.state.hasBid && quantB.state.hasOffer) {
+            return 4;
           } else if (valueA > valueB) {
             return 1;
           } else if (valueA < valueB) {
             return -1;
+          } else {
+            return 0;
           }
         } else {
           return 0;
@@ -240,6 +248,8 @@ export class SecurityTable implements OnInit, OnChanges {
             return 1;
           } else if (valueA > valueB) {
             return -1;
+          } else {
+            return 0;
           }
         } else {
           return 0;
