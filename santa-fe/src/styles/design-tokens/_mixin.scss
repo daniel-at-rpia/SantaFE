@@ -113,6 +113,7 @@
     -webkit-line-clamp: $num_of_lines;
     -webkit-box-orient: vertical;
     word-break: break-word;
+    white-space: normal;
     overflow: hidden;
   }
 

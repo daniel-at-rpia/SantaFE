@@ -39,6 +39,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     isStencil: boolean;
     isTable: boolean;
     isSelected: boolean;
+    isTableExpanded: boolean;
   }
 }
 

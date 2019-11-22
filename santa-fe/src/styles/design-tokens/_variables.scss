@@ -115,8 +115,9 @@ $scroll_bar_width: 0.5rem;
 $textarea_minimum_height: 2.125rem;   // Smallest height that doesn't trigger scroll bar with normal font size
 
 $securityCard_labelVariant_height: 2rem;
+$securityCard_labelVariant_expanded_height: 2.75rem;
 $securityCard_previewVariant_height: 10rem;
-$securityCard_width: 16rem;
+$securityCard_width: 18rem;
 
 $securityTable_cell_width: 8.75rem;
 $securityTable_cell_width_primary: $securityCard_width + $spacing_small * 2;

@@ -136,11 +136,13 @@ export class SecurityTable implements OnInit, OnChanges {
 
   public onClickCollapseExpandView(targetRow: SecurityTableRowDTO) {
     targetRow.state.isExpanded = false;
+    targetRow.data.security.state.isTableExpanded = false;
   }
 
   public onClickRowTableCanvas(targetRow: SecurityTableRowDTO) {
     if (this.tableData.state.loadedContentStage === SECURITY_TABLE_FINAL_STAGE) {
       targetRow.state.isExpanded = !targetRow.state.isExpanded;
+      targetRow.data.security.state.isTableExpanded = targetRow.state.isExpanded;
       const row = targetRow;
       this.renderStencilQuotes(targetRow);
       this.fetchSecurityQuotes(row);

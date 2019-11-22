@@ -84,7 +84,8 @@ export class DTOService {
       state: {
         isSelected: false,
         isStencil: isStencil,
-        isTable: false
+        isTable: false,
+        isTableExpanded: false
       }
     };
     return object;

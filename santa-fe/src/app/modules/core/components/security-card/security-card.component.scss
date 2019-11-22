@@ -23,7 +23,7 @@ $securityCard_name_rightGap: 3rem;
     align-items: center;
     overflow: hidden;
     &-text {
-      @include mix_text_overflow;
+      @include mix_text_overflow();
       @include mix_break_word;
       color: $font_color_inverse;
       margin-left: $spacing_small;
@@ -97,6 +97,17 @@ $securityCard_name_rightGap: 3rem;
   &--tableState {
     @include material('none');
     @include mix_border_generator($typical_border_width, $color_gray_85);
+  }
+  &--tableExpandedState {
+    height: $securityCard_labelVariant_expanded_height;
+    #{$securityCardBlockName} {
+      &__name {
+        &-text {
+          @include mix_text_overflow_multi_line(2);
+          line-height: 1.25;
+        }
+      }
+    }
   }
   &--detailState {
     @include material('none');
