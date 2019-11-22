@@ -40,7 +40,11 @@
     } from 'BEModels/backend-models.interface';
 
     import { SecurityTableMetrics } from 'Core/constants/securityTableConstants.constant';
-    import { PortfolioList } from 'Core/constants/tradeConstants.constant';
+    import {
+      PortfolioList,
+      CurrencyList,
+      SecurityTypeList
+    } from 'Core/constants/tradeConstants.constant';
   //
 
 @Component({
@@ -53,6 +57,8 @@
 export class TradeCenterPanel {
   state: TradeCenterPanelState;
   portfolioList = PortfolioList;
+  currencyList = CurrencyList;
+  securityTypeList = SecurityTypeList;
 
   constructor(
     private dtoService: DTOService,
@@ -62,13 +68,23 @@ export class TradeCenterPanel {
     this.initializePageState();
   }
 
-  public onClickQuickFilterPortfolio(targetPortfolio) {
-    if (this.state.filters.quickFilters.portfolios.indexOf(targetPortfolio) >= 0) {
-      this.state.filters.quickFilters.portfolios = this.state.filters.quickFilters.portfolios.filter((eachP) => {
-        return eachP !== targetPortfolio;
-      })
+  public onClickQuickFilterList(targetList, targetItem) {
+    if (targetList.indexOf(targetItem) >= 0) {
+      if (targetList === this.state.filters.quickFilters.currency) {
+        this.state.filters.quickFilters.currency = targetList.filter((eachItem) => {
+          return eachItem !== targetItem;
+        })
+      } else if (targetList === this.state.filters.quickFilters.securityType) {
+        this.state.filters.quickFilters.securityType = targetList.filter((eachItem) => {
+          return eachItem !== targetItem;
+        })
+      } else if (targetList === this.state.filters.quickFilters.portfolios) {
+        this.state.filters.quickFilters.portfolios = targetList.filter((eachItem) => {
+          return eachItem !== targetItem;
+        })
+      }
     } else {
-      this.state.filters.quickFilters.portfolios.push(targetPortfolio);
+      targetList.push(targetItem);
     }
     this.updateRowListWithFilters();
   }
@@ -83,6 +99,8 @@ export class TradeCenterPanel {
         quickFilters: {
           metricType: 'Yield',
           portfolios: ['DOF'],
+          securityType: ['Bond', 'Preferred'],
+          currency: ['USD'],
           keyword: ''
         }
       }
@@ -269,17 +287,44 @@ export class TradeCenterPanel {
   private updateRowListWithFilters(){
     const filteredList: Array<SecurityTableRowDTO> = [];
     this.state.prinstineRowList.forEach((eachRow) => {
-      let includeFlag = false;
       if ( this.state.filters.quickFilters.keyword.length < 3 || eachRow.data.security.data.name.indexOf(this.state.filters.quickFilters.keyword) >= 0) {
-        this.state.filters.quickFilters.portfolios.forEach((eachPortfolio) => {
-          if (eachRow.data.security.data.portfolios.indexOf(eachPortfolio) >= 0) {
-            includeFlag = true;
-          }
-        });
+        let currencyIncludeFlag = this.filterByCurrency(eachRow);
+        let securityTypeIncludeFlag = this.filterBySecurityType(eachRow);
+        let portfolioIncludeFlag = this.filterByPortfolio(eachRow);
+        currencyIncludeFlag && securityTypeIncludeFlag && portfolioIncludeFlag && filteredList.push(eachRow);
       }
-      includeFlag && filteredList.push(eachRow);
     });
     this.state.rowList = this.utilityService.deepCopy(filteredList);
+  }
+
+  private filterByCurrency(targetRow: SecurityTableRowDTO): boolean {
+    let includeFlag = false;
+    this.state.filters.quickFilters.currency.forEach((eachCurrency) => {
+      if (targetRow.data.security.data.currency === eachCurrency) {
+        includeFlag = true;
+      }
+    });
+    return includeFlag;
+  }
+
+  private filterBySecurityType(targetRow: SecurityTableRowDTO): boolean {
+    let includeFlag = false;
+    this.state.filters.quickFilters.securityType.forEach((eachType) => {
+      if (targetRow.data.security.data.securityType === eachType) {
+        includeFlag = true;
+      }
+    });
+    return includeFlag;
+  }
+
+  private filterByPortfolio(targetRow: SecurityTableRowDTO): boolean {
+    let includeFlag = false;
+    this.state.filters.quickFilters.portfolios.forEach((eachPortfolio) => {
+      if (targetRow.data.security.data.portfolios.indexOf(eachPortfolio) >= 0) {
+        includeFlag = true;
+      }
+    });
+    return includeFlag;
   }
 
   private calculateQuantComparerWidthAndHeight() {

@@ -11,12 +11,21 @@
   padding: $spacing_medium;
   &__quickFilters {
     display: flex;
-    margin-bottom: $spacing_medium;
-    &-btn {
-      margin-right: $spacing_medium;
-      &--active {
-        @include material('none');
-        background-color: $color_active;
+    flex-direction: column;
+    &-row {
+      display: flex;
+      margin-bottom: $spacing_medium;
+      &-label {
+        color: $font_color_minor;
+        font-size: $font_size_large;
+        margin-right: $spacing_medium;
+      }
+      &-btn {
+        margin-right: $spacing_medium;
+        &--active {
+          @include material('none');
+          background-color: $color_active;
+        }
       }
     }
   }

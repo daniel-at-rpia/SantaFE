@@ -32,7 +32,8 @@ $securityTable_addColumnCTA_width: 9rem;
         display: flex;
         flex-direction: column;
         direction: rtl;
-        padding: 0 $spacing_medium;
+        padding: 0 $spacing_medium $spacing_large $spacing_medium;
+        min-height: 30rem;
         security-table-row {
           &:nth-child(odd) {
             .sat-securityTableRow {
