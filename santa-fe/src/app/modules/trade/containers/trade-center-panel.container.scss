@@ -9,7 +9,18 @@
   flex-direction: column;
   overflow: hidden;
   padding: $spacing_medium;
-  &__demo {
+  &__quickFilters {
+    display: flex;
+    margin-bottom: $spacing_medium;
+    &-btn {
+      margin-right: $spacing_medium;
+      &--active {
+        @include material('none');
+        background-color: $color_active;
+      }
+    }
+  }
+  &__table {
     display: flex;
     flex-direction: column;
     overflow: hidden;

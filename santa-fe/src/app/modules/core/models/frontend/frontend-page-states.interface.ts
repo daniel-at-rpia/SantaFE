@@ -63,7 +63,8 @@ export interface TradeCenterPanelState {
   currentContentStage: number;
   filters: {
     quickFilters: {
-      metricType: string
+      metricType: string;
+      portfolios: Array<string>;
     }
   }
 }

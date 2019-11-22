@@ -72,6 +72,11 @@ export class SecurityTable implements OnInit, OnChanges {
     } else if (!!this.newRows && this.newRows != this.tableData.data.rows && this.tableData.state.loadedContentStage === this.receivedContentStage) {
       console.log('rows updated for change within same stage', this.tableData.state.loadedContentStage);
       this.tableData.data.rows = this.newRows;
+      if (this.tableData.state.sortedByHeader) {
+        this.performSort(this.tableData.state.sortedByHeader);
+      } else {
+        this.performDefaultSort();
+      }
     }
   }
 

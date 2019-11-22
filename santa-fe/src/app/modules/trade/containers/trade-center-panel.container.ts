@@ -40,6 +40,7 @@
     } from 'BEModels/backend-models.interface';
 
     import { SecurityTableMetrics } from 'Core/constants/securityTableConstants.constant';
+    import { PortfolioList } from 'Core/constants/tradeConstants.constant';
   //
 
 @Component({
@@ -51,6 +52,7 @@
 
 export class TradeCenterPanel {
   state: TradeCenterPanelState;
+  portfolioList = PortfolioList;
 
   constructor(
     private dtoService: DTOService,
@@ -58,6 +60,17 @@ export class TradeCenterPanel {
     private restfulCommService: RestfulCommService
   ){
     this.initializePageState();
+  }
+
+  public onClickQuickFilterPortfolio(targetPortfolio) {
+    if (this.state.filters.quickFilters.portfolios.indexOf(targetPortfolio) >= 0) {
+      this.state.filters.quickFilters.portfolios = this.state.filters.quickFilters.portfolios.filter((eachP) => {
+        return eachP !== targetPortfolio;
+      })
+    } else {
+      this.state.filters.quickFilters.portfolios.push(targetPortfolio);
+    }
+    this.updateRowListWithFilters();
   }
 
   private initializePageState() {
@@ -68,7 +81,8 @@ export class TradeCenterPanel {
       currentContentStage: 0,
       filters: {
         quickFilters: {
-          metricType: 'Yield'
+          metricType: 'Yield',
+          portfolios: ['DOF']
         }
       }
     };
@@ -254,9 +268,13 @@ export class TradeCenterPanel {
   private updateRowListWithFilters(){
     const filteredList: Array<SecurityTableRowDTO> = [];
     this.state.prinstineRowList.forEach((eachRow) => {
-      if (eachRow.data.security.data.portfolios.indexOf('DOF') >= 0) {
-        filteredList.push(eachRow);
-      }
+      let includeFlag = false;
+      this.state.filters.quickFilters.portfolios.forEach((eachPortfolio) => {
+        if (eachRow.data.security.data.portfolios.indexOf(eachPortfolio) >= 0) {
+          includeFlag = true;
+        }
+      });
+      includeFlag && filteredList.push(eachRow);
     });
     this.state.rowList = this.utilityService.deepCopy(filteredList);
   }

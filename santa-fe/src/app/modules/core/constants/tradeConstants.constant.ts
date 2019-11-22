@@ -1,0 +1,1 @@
+export const PortfolioList = ['DOF', 'SOF', 'STIP', 'FIP', 'CIP', 'AGB']; 

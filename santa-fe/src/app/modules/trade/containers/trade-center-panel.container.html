@@ -1,5 +1,19 @@
 <article class="sat-tradeCenterPanel">
-  <section class="sat-tradeCenterPanel__demo">
+  <section class="sat-tradeCenterPanel__quickFilters">
+    <button
+      *ngFor="let eachPortfolio of portfolioList"
+      (click)="onClickQuickFilterPortfolio(eachPortfolio)"
+      [ngClass]="{
+        'sat-tradeCenterPanel__quickFilters-btn': true,
+        'sat-tradeCenterPanel__quickFilters-btn--active': state.filters.quickFilters.portfolios.indexOf(eachPortfolio) >= 0,
+        'santaBtn--labelled': true,
+        'santaBtn--inverseLabelled': state.filters.quickFilters.portfolios.indexOf(eachPortfolio) >= 0
+      }">
+      <i class="fal fa-file-invoice-dollar"></i>
+      <span>{{eachPortfolio}}</span>
+    </button>
+  </section>
+  <section class="sat-tradeCenterPanel__table">
     <security-table
       [tableData]="state.table"
       [newRows]="state.rowList"
