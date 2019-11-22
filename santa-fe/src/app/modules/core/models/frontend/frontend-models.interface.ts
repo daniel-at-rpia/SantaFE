@@ -20,6 +20,12 @@ export interface SecurityDTO extends BasicDTOStructure {
     ratingLevel: number;
     ratingValue: string;
     seniorityLevel: number;
+    currency: string;
+    sector: string;
+    couponType: string;
+    industry: string;
+    securityType: string;
+    seniority: string;
     portfolios: Array<string>;
     position: number;
     positionInMM: string;
@@ -187,6 +193,7 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     isPartOfMetricPack: boolean;
     metricPackDeltaScope: string;
     frontendMetric: boolean;
+    inversedSortingForText: boolean;
   },
   state: {
     isPureTextVariant: boolean;

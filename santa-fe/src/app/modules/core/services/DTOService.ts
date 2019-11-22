@@ -66,6 +66,12 @@ export class DTOService {
         ratingLevel: !isStencil ? this.utility.mapRatings(rawData.metrics.ratingNoNotch) : 0,
         ratingValue: !isStencil ? rawData.metrics.ratingNoNotch : 'NR',
         seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.seniority) : 5,
+        currency: !isStencil ? rawData.ccy : null,
+        sector: !isStencil ? rawData.sector : null,
+        couponType: !isStencil ? rawData.couponType : null,
+        industry: !isStencil ? rawData.industry : null,
+        securityType: !isStencil ? rawData.securityType : null,
+        seniority: !isStencil ? rawData.seniority : null,
         portfolios: [],
         position: 0,
         positionInMM: 'n/a',
@@ -356,7 +362,8 @@ export class DTOService {
         readyStage: stub.readyStage,
         isPartOfMetricPack: stub.isPartOfMetricPack,
         metricPackDeltaScope: stub.metricPackDeltaScope || null,
-        frontendMetric: !!stub.isFrontEndMetric
+        frontendMetric: !!stub.isFrontEndMetric,
+        inversedSortingForText: !!stub.inversedSortingForText
       },
       state: {
         isQuantVariant: !!stub.isForQuantComparer,

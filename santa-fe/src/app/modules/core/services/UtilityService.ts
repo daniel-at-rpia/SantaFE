@@ -421,8 +421,12 @@ export class UtilityService {
   // trade specific
 
     public parsePositionToMM(position: number): string {
-      const value = Math.round(position/10000)/100;
-      return `${value} MM`;
+      const value = this.round(position/1000000, 2);
+      if (value === 0) {
+        return null;
+      } else {
+        return `${value}`;
+      }
     }
 
     public retrieveSecurityMetricFromMetricPack(dto: SecurityDTO, header: SecurityTableHeaderDTO): number {
@@ -459,7 +463,7 @@ export class UtilityService {
         } else {
           value = targetRow.data.security.data[targetHeader.data.attrName];
         }
-        value = (value == null || value === 'n/a') ? 'n/a' : value;
+        value = (value == null || value === 'n/a') ? null : value;
         newCellDTO.data.textData = value;
         return newCellDTO;
       }

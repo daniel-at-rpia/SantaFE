@@ -246,9 +246,17 @@ export class SecurityTable implements OnInit, OnChanges {
           } else if (valueA != null && valueB == null) {
             return -4;
           } else if (valueA < valueB) {
-            return 1;
+            if (targetHeader.data.inversedSortingForText) {
+              return -1;
+            } else {
+              return 1;
+            }
           } else if (valueA > valueB) {
-            return -1;
+            if (targetHeader.data.inversedSortingForText) {
+              return 1;
+            } else {
+              return -1;
+            }
           } else {
             return 0;
           }

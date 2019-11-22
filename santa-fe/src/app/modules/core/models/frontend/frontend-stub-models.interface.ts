@@ -50,4 +50,5 @@ export interface SecurityTableMetricStub {
   isForQuantComparer?: boolean;
   pureText?: boolean;
   disabled?: boolean;
+  inversedSortingForText?: boolean;
 }

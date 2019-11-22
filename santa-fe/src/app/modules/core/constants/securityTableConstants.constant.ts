@@ -37,31 +37,31 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: null,
     underlineAttrName: null,
     readyStage: 3,
-    active: true
+    active: false
   },{
     label: 'Mark Discrepancy',
     attrName: null,
     underlineAttrName: null,
     readyStage: 3,
     isFrontEndMetric: true,
-    active: true
+    active: false
   },
   {
-    label: 'Aggregated Position',
+    label: 'Aggregated Position (MM)',
     attrName: 'positionInMM',
     underlineAttrName: 'position',
     readyStage: 1,
     active: false
   },
   {
-    label: 'HF Position',
+    label: 'HF Position (MM)',
     attrName: 'positionHFInMM',
     underlineAttrName: 'positionHF',
     readyStage: 1,
     active: true
   },
   {
-    label: 'NLF Position',
+    label: 'NLF Position (MM)',
     attrName: 'positionNLFInMM',
     underlineAttrName: 'positionNLF',
     readyStage: 1,
@@ -83,32 +83,53 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     disabled: true
   },{
     label: 'Rating',
-    attrName: null,
-    underlineAttrName: null,
+    attrName: 'ratingValue',
+    underlineAttrName: 'ratingValue',
     readyStage: 2,
     active: false,
-    disabled: true
+    inversedSortingForText: true
   },{
-    label: 'Tenor',
-    attrName: null,
-    underlineAttrName: null,
+    label: 'Currency',
+    attrName: 'currency',
+    underlineAttrName: 'currency',
     readyStage: 2,
     active: false,
-    disabled: true
+    inversedSortingForText: true
+  },{
+    label: 'Sector',
+    attrName: 'sector',
+    underlineAttrName: 'sector',
+    readyStage: 2,
+    active: true,
+    inversedSortingForText: true
+  },{
+    label: 'Industry',
+    attrName: 'industry',
+    underlineAttrName: 'industry',
+    readyStage: 2,
+    active: false,
+    inversedSortingForText: true
+  },{
+    label: 'CouponType',
+    attrName: 'couponType',
+    underlineAttrName: 'couponType',
+    readyStage: 2,
+    active: false,
+    inversedSortingForText: true
+  },{
+    label: 'Security Type',
+    attrName: 'securityType',
+    underlineAttrName: 'securityType',
+    readyStage: 2,
+    active: true,
+    inversedSortingForText: true
   },{
     label: 'Seniority',
-    attrName: null,
-    underlineAttrName: null,
+    attrName: 'seniority',
+    underlineAttrName: 'seniority',
     readyStage: 2,
     active: false,
-    disabled: true
-  },{
-    label: 'Obligor',
-    attrName: null,
-    underlineAttrName: null,
-    readyStage: 2,
-    active: false,
-    disabled: true
+    inversedSortingForText: true
   }
 ];
 
