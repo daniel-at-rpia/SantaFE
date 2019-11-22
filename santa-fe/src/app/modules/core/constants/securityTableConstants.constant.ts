@@ -67,9 +67,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     readyStage: 1,
     active: true
   },{
-    label: '30 Day Delta',
-    attrName: SecurityMetricOptions[0].label,
-    underlineAttrName: SecurityMetricOptions[0].label,
+    label: '30 Day Delta (Yield)',
+    attrName: SecurityMetricOptions[6].label,
+    underlineAttrName: SecurityMetricOptions[6].label,
     readyStage: 2,
     isPartOfMetricPack: true,
     metricPackDeltaScope: 'MoM',

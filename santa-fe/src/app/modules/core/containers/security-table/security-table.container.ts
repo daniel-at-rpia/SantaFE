@@ -199,35 +199,6 @@ export class SecurityTable implements OnInit, OnChanges {
         return of('error')
       })
     ).subscribe();
-    // const msg1 = this.dtoService.formSecurityQuoteObject(false, true, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-    // const msg2 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-    // msg2.data.ask.isAxe = false;
-    // msg2.data.dataSource = 'IB';
-    // msg2.data.broker = 'DB';
-    // const msg3 = this.dtoService.formSecurityQuoteObject(false, true, false, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-    // msg3.data.bid.isAxe = true;
-    // msg3.data.dataSource = 'MSG';
-    // msg3.data.broker = 'BARC';
-    // const msg4 = this.dtoService.formSecurityQuoteObject(false, true, false, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-    // msg4.data.ask.isAxe = false;
-    // msg4.data.broker = 'BARC';
-    // const msg5 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-    // msg5.data.ask.isAxe = false;
-    // msg5.data.broker = 'USBC';
-    // const msg6 = this.dtoService.formSecurityQuoteObject(false, true, true, 'T 0.5 01/01/2020', 'T 0.8 01/01/2025');
-    // msg6.data.bid.isAxe = true;
-    // msg6.data.broker = 'MUFG';
-    // if (targetRow.data.security.data.ratingLevel >= 5) {
-    //   const msg7 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-    //   const msg8 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-    //   const msg9 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-    //   const msg10 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-    //   const msg11 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-    //   const msg12 = this.dtoService.formSecurityQuoteObject(false, false, true, 'T 0.5 01/01/2020', 'T 0.5 01/01/2020');
-    //   targetRow.data.quotes = [msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8, msg9, msg10, msg11, msg12];
-    // } else {
-    //   targetRow.data.quotes = [msg1, msg2, msg3, msg4, msg5, msg6];
-    // }
   }
 
   private renderStencilQuotes(targetRow: SecurityTableRowDTO){
@@ -239,20 +210,40 @@ export class SecurityTable implements OnInit, OnChanges {
     this.tableData.data.rows.sort((rowA, rowB) => {
       const securityA = rowA.data.security;
       const securityB = rowB.data.security;
-      const valueA = targetHeader.data.isPartOfMetricPack ? this.utilityService.retrieveSecurityMetricFromMetricPack(securityA, targetHeader) : securityA.data[targetHeader.data.underlineAttrName];
-      const valueB = targetHeader.data.isPartOfMetricPack ? this.utilityService.retrieveSecurityMetricFromMetricPack(securityB, targetHeader) : securityB.data[targetHeader.data.underlineAttrName];
-      if (!!securityA && !!securityB && !securityA.state.isStencil && !securityB.state.isStencil) {
-        if (valueA == null && valueB != null) {
-          return 4;
-        } else if (valueA != null && valueB == null) {
-          return -4;
-        } else if (valueA < valueB) {
-          return 1;
-        } else if (valueA > valueB) {
-          return -1;
+      let valueA;
+      let valueB;
+      if (targetHeader.state.isQuantVariant) {
+        valueA = !!rowA.data.cells[0].data.quantComparerDTO ? rowA.data.cells[0].data.quantComparerDTO.data.delta : null;
+        valueB = !!rowB.data.cells[0].data.quantComparerDTO ? rowB.data.cells[0].data.quantComparerDTO.data.delta : null;
+        if (!!securityA && !!securityB && !securityA.state.isStencil && !securityB.state.isStencil) {
+          if (valueA == null && valueB != null) {
+            return 4;
+          } else if (valueA != null && valueB == null) {
+            return -4;
+          } else if (valueA > valueB) {
+            return 1;
+          } else if (valueA < valueB) {
+            return -1;
+          }
+        } else {
+          return 0;
         }
       } else {
-        return 0;
+        valueA = targetHeader.data.isPartOfMetricPack ? this.utilityService.retrieveSecurityMetricFromMetricPack(securityA, targetHeader) : securityA.data[targetHeader.data.underlineAttrName];
+        valueB = targetHeader.data.isPartOfMetricPack ? this.utilityService.retrieveSecurityMetricFromMetricPack(securityB, targetHeader) : securityB.data[targetHeader.data.underlineAttrName];
+        if (!!securityA && !!securityB && !securityA.state.isStencil && !securityB.state.isStencil) {
+          if (valueA == null && valueB != null) {
+            return 4;
+          } else if (valueA != null && valueB == null) {
+            return -4;
+          } else if (valueA < valueB) {
+            return 1;
+          } else if (valueA > valueB) {
+            return -1;
+          }
+        } else {
+          return 0;
+        }
       }
     })
   }

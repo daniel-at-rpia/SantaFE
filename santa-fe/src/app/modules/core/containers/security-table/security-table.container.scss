@@ -203,14 +203,10 @@ $securityTable_addColumnCTA_width: 9rem;
     width: $securityTable_cell_width_quant;
     align-items: center;
     #{$securityTableHeadBlockName} {
-      &__text {
-        display: inline-block;
-      }
-      &__cta {
-        display: none;
-      }
       &__actionMenu {
-        display: none;
+        &-deleteBtn {
+          display: none;
+        }
       }
     }
   }
