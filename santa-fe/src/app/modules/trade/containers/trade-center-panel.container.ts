@@ -43,7 +43,8 @@
     import {
       PortfolioList,
       CurrencyList,
-      SecurityTypeList
+      SecurityTypeList,
+      QUANT_COMPARER_PERCENTILE
     } from 'Core/constants/tradeConstants.constant';
   //
 
@@ -338,15 +339,16 @@ export class TradeCenterPanel {
   }
 
   private calculateQuantComparerWidthAndHeightPerSet(list: Array<QuantComparerDTO>) {
-    let maxDelta = 0;
-    let maxSize = 0;
+    const deltaList = [];
+    const sizeList = [];
     list.forEach((eachComparer) => {
-      if (eachComparer.state.hasBid && eachComparer.state.hasOffer) {
-        maxDelta = Math.abs(eachComparer.data.delta) > maxDelta ? Math.abs(eachComparer.data.delta) : maxDelta;
+      if (!!eachComparer && eachComparer.state.hasBid && eachComparer.state.hasOffer) {
+        deltaList.push(Math.abs(eachComparer.data.delta));
+        sizeList.push(eachComparer.data.bid.size, eachComparer.data.offer.size);
       }
-      maxSize = eachComparer.data.bid.size > maxSize ? eachComparer.data.bid.size : maxSize;
-      maxSize = eachComparer.data.offer.size > maxSize ? eachComparer.data.offer.size : maxSize;
     });
+    const maxDelta = this.utilityService.findPercentile(deltaList, QUANT_COMPARER_PERCENTILE);
+    const maxSize = this.utilityService.findPercentile(sizeList, QUANT_COMPARER_PERCENTILE);
 
     list.forEach((eachComparer) => {
       if (eachComparer.state.hasBid && eachComparer.state.hasOffer) {

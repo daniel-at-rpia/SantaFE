@@ -320,6 +320,28 @@ export class UtilityService {
         return null;
       }
     }
+
+    public findPercentile(list: Array<number>, percentile: number): number {
+      const arrayLength = list.length;
+      const copyList: Array<number> = this.deepCopy(list);
+      copyList.sort((valueA, valueB) => {
+        if (!!valueA && !valueB) {
+          return -4;
+        } else if (!valueA && !!valueB) {
+          return 4;
+        } else if (valueA < valueB) {
+          return 1;
+        } else if (valueA > valueB) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+      const cutAmount = Math.floor(arrayLength / 100 * percentile);
+      const startPoint = Math.floor((arrayLength - cutAmount)/2);
+      const percentileList = copyList.splice(startPoint, Math.ceil(cutAmount/2));
+      return percentileList[0];
+    }
   // shared end
 
   // market specific 
