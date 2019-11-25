@@ -54,7 +54,7 @@ export interface SecurityTableMetricStub {
 }
 
 export interface TriCoreMetricConfigStub {
-  Spread: TriCoreMetricIndividualConfigStub;
+  TSpread: TriCoreMetricIndividualConfigStub;
   Yield: TriCoreMetricIndividualConfigStub;
   Price: TriCoreMetricIndividualConfigStub;
 }

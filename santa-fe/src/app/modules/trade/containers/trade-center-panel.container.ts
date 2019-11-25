@@ -97,7 +97,7 @@ export class TradeCenterPanel {
       currentContentStage: 0,
       filters: {
         quickFilters: {
-          metricType: 'Yield',
+          metricType: 'TSpread',
           portfolios: ['DOF'],
           securityType: ['Bond', 'Preferred'],
           currency: ['USD'],
@@ -180,9 +180,9 @@ export class TradeCenterPanel {
           }
         });
         if (isValidFlag) {
-          newSecurity.data.positionInMM = this.utilityService.parsePositionToMM(newSecurity.data.position);
-          newSecurity.data.positionHFInMM = this.utilityService.parsePositionToMM(newSecurity.data.positionHF);
-          newSecurity.data.positionNLFInMM = this.utilityService.parsePositionToMM(newSecurity.data.positionNLF);
+          newSecurity.data.positionInMM = this.utilityService.parsePositionToMM(newSecurity.data.position, false);
+          newSecurity.data.positionHFInMM = this.utilityService.parsePositionToMM(newSecurity.data.positionHF, false);
+          newSecurity.data.positionNLFInMM = this.utilityService.parsePositionToMM(newSecurity.data.positionNLF, false);
           this.populateEachRowWithStageOneContent(newSecurity);
           validCount++;
         }

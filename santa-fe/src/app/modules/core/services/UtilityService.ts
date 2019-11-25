@@ -420,12 +420,12 @@ export class UtilityService {
 
   // trade specific
 
-    public parsePositionToMM(position: number): string {
+    public parsePositionToMM(position: number, hasUnitSuffix: boolean): string {
       const value = this.round(position/1000000, 2);
       if (value === 0) {
         return null;
       } else {
-        return `${value}`;
+        return !!hasUnitSuffix ? `${value}MM` : `${value}`;
       }
     }
 

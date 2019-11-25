@@ -163,7 +163,7 @@ export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
     isTripleWidthColumn: false,
     textOnly: false
   },{
-    labelList: ['B Size', 'A Size'],
+    labelList: ['B Size (MM)', 'A Size (MM)'],
     isDoubleWidthColumn: false,
     isTripleWidthColumn: true,
     textOnly: false

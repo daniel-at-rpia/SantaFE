@@ -5,7 +5,7 @@ import {
 } from 'FEModels/frontend-stub-models.interface';
 
 export const TriCoreMetricConfig: TriCoreMetricConfigStub = {
-  Spread: {
+  TSpread: {
     tier2Threshold: 20,
     inversed: false,
     rounding: 0

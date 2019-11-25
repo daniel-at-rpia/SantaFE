@@ -291,7 +291,7 @@ export class DTOService {
     offerSize: number,
     offerBroker: string
   ): QuantComparerDTO {
-    const metricType = !isStencil ? quantMetricType : 'Spread';
+    const metricType = !isStencil ? quantMetricType : 'TSpread';
     const tier2Shreshold = TriCoreMetricConfig[metricType]['tier2Threshold'];
     const inversed = TriCoreMetricConfig[metricType]['inversed'];
     const hasBid = !isStencil ? (!!bidNumber && !!bidBroker) : true;
@@ -449,19 +449,19 @@ export class DTOService {
         dataSource: dataSource,
         consolidatedBenchmark: consolidatedBenchmark,
         bid: {
-          isAxe: !isStencil ? rawData.quoteType === SECURITY_TABLE_QUOTE_TYPE_AXE : false,
-          size: !isStencil ? this.utility.parsePositionToMM(rawData.bidQuantity) : '10MM',
-          price: !isStencil ? this.utility.round(rawData.bidPrice , TriCoreMetricConfig.Price.rounding): 100,
-          yield: !isStencil ? this.utility.round(rawData.bidYield, TriCoreMetricConfig.Yield.rounding) : 5,
-          tspread: !isStencil ? this.utility.round(rawData.bidTSpread, TriCoreMetricConfig.Spread.rounding) : 300,
+          isAxe: false,
+          size: '150',
+          price: 100,
+          yield: 5,
+          tspread: 300,
           benchmark: bidBenchmark
         },
         ask: {
-          isAxe: !isStencil ? rawData.quoteType === SECURITY_TABLE_QUOTE_TYPE_AXE : false,
-          size: !isStencil ? this.utility.parsePositionToMM(rawData.askQuantity) : '10MM',
-          price: !isStencil ? this.utility.round(rawData.askPrice , TriCoreMetricConfig.Price.rounding): 100,
-          yield: !isStencil ? this.utility.round(rawData.askYield, TriCoreMetricConfig.Yield.rounding) : 5,
-          tspread: !isStencil ? this.utility.round(rawData.askTSpread, TriCoreMetricConfig.Spread.rounding) : 300,
+          isAxe: false,
+          size: '150',
+          price: 100,
+          yield: 5,
+          tspread: 300,
           benchmark: bidBenchmark
         }
       },
@@ -472,6 +472,24 @@ export class DTOService {
         diffBenchmark: bidBenchmark !== askBenchmark && hasBid && hasAsk
       }
     };
+    if (!isStencil) {
+      object.data.bid = {
+        isAxe: rawData.quoteType === SECURITY_TABLE_QUOTE_TYPE_AXE,
+        size: !!rawData.bidQuantity ? this.utility.parsePositionToMM(rawData.bidQuantity, false) : null,
+        price: !!rawData.bidPrice ? this.utility.round(rawData.bidPrice , TriCoreMetricConfig.Price.rounding) : null,
+        yield: !!rawData.bidYield ? this.utility.round(rawData.bidYield, TriCoreMetricConfig.Yield.rounding) : null,
+        tspread: !!rawData.bidTSpread ? this.utility.round(rawData.bidTSpread, TriCoreMetricConfig.TSpread.rounding) : null,
+        benchmark: bidBenchmark
+      };
+      object.data.ask = {
+        isAxe: rawData.quoteType === SECURITY_TABLE_QUOTE_TYPE_AXE,
+        size: !!rawData.askQuantity ? this.utility.parsePositionToMM(rawData.askQuantity, false) : null,
+        price: !!rawData.askPrice ? this.utility.round(rawData.askPrice , TriCoreMetricConfig.Price.rounding) : null,
+        yield: !!rawData.askYield ? this.utility.round(rawData.askYield, TriCoreMetricConfig.Yield.rounding) : null,
+        tspread: !!rawData.askTSpread ? this.utility.round(rawData.askTSpread, TriCoreMetricConfig.TSpread.rounding) : null,
+        benchmark: askBenchmark
+      }
+    }
     return object;
   }
 
