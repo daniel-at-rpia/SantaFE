@@ -73,6 +73,9 @@ $quantComparer_min_height: 2.5rem;
         display: flex;
         align-items: center;
         height: 100%;
+        &-content {
+          min-height: $typical_border_width;
+        }
       }
       &--left {
         #{$quantComparerBlockName}__content-driver {
@@ -173,32 +176,6 @@ $quantComparer_min_height: 2.5rem;
           height: 100%;
           display: flex;
           align-items: center;
-        }
-      }
-    }
-  }
-  &--bidWithNoSizeState {
-    #{$quantComparerBlockName} {
-      &__content {
-        &-driver--left {
-          #{$quantComparerBlockName} {
-            &__content-driver-line-content {
-              height: $typical_border_width!important;
-            }
-          }
-        }
-      }
-    }
-  }
-  &--offerWithNoSizeState {
-    #{$quantComparerBlockName} {
-      &__content {
-        &-driver--right {
-          #{$quantComparerBlockName} {
-            &__content-driver-line-content {
-              height: $typical_border_width!important;
-            }
-          }
         }
       }
     }

@@ -329,8 +329,6 @@ export class DTOService {
       state: {
         hasBid: hasBid,
         hasOffer: hasOffer,
-        bidWithNoSize: hasBid && bidSize === 0,
-        offerWithNoSize: hasOffer && offerSize === 0,
         isStencil: isStencil,
         isCalculated: false,
         isCrossed: !isStencil && delta < 0,
