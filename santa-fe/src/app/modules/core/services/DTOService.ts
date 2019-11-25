@@ -299,10 +299,12 @@ export class DTOService {
     const rounding = TriCoreMetricConfig[metricType]['rounding'];
     bidNumber = this.utility.round(bidNumber, rounding).toFixed(rounding);
     offerNumber = this.utility.round(offerNumber, rounding).toFixed(rounding);
+    const bidSkew = Math.round(0.5 / (0.5 + 0.5) * 100);
     let delta;
     if (hasBid && hasOffer) {
       delta = inversed ? offerNumber - bidNumber : bidNumber - offerNumber;
       delta = this.utility.round(delta, rounding);
+      delta = delta - 10;
     } else {
       delta = 0;
     }
@@ -324,7 +326,9 @@ export class DTOService {
       style: {
         lineWidth: 80,
         bidLineHeight: 30,
-        offerLineHeight: 30
+        offerLineHeight: 30,
+        bidSkew: bidSkew,
+        offerSkew: 100 - bidSkew
       },
       state: {
         hasBid: hasBid,

@@ -3,6 +3,7 @@
 
 $quantComparer_edge_width: 2.5rem;
 $quantComparer_min_height: 2.5rem;
+$quantComparer_skew_color: $color_pink_4_A;
 .sat-quantComparer {
   $quantComparerBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
@@ -39,7 +40,7 @@ $quantComparer_min_height: 2.5rem;
     display: flex;
     height: 100%;
     width: 100%;
-    padding: $spacing_x_small;
+    padding: $spacing_small 0 $spacing_minimum 0;
     &-driver {
       flex: 1 1 auto;
       display: flex;
@@ -124,10 +125,10 @@ $quantComparer_min_height: 2.5rem;
   &__crossing {
     @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
     @include mix_border_radius(5px);
-    @include mix_calculate(height, 100%, $spacing_x_small * 2, '-');
+    @include mix_calculate(height, 100%, $spacing_small * 2, '-');
     display: none;
     align-items: center;
-    margin: $spacing_x_small 0;
+    margin: $spacing_small 0;
     padding: 0 $spacing_medium;
     background-color: $color_quant_crossed_background;
     &-content {
@@ -138,6 +139,35 @@ $quantComparer_min_height: 2.5rem;
         color: $color_quant_crossed_background;
         user-select: none;
       }
+    }
+  }
+  &__skew {
+    @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+    display: flex;
+    height: 100%;
+    width: 100%;
+    &-leftSpacing {
+      flex: 0 1 50%;
+      margin-left: $quantComparer_edge_width;
+    }
+    &-indicator {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      &-icon {
+        flex: 0 0 auto;
+        font-size: $font_size_small;
+        color: $quantComparer_skew_color;
+      }
+      &-line {
+        @include mix_border_generator(0 $typical_border_width*2 0 0, $quantComparer_skew_color);
+        flex: 1 1 auto;
+      }
+    }
+    &-rightSpacing {
+      flex: 0 1 50%;
+      margin-right: $quantComparer_edge_width;
     }
   }
   &--crossedState {
@@ -199,6 +229,9 @@ $quantComparer_min_height: 2.5rem;
           }
         }
       }
+      &__skew {
+        display: none;
+      }
     }
   }
   &--noBidState {
@@ -208,6 +241,9 @@ $quantComparer_min_height: 2.5rem;
           visibility: hidden;
         }
       }
+      &__skew {
+        display: none;
+      }
     }
   }
   &--noOfferState {
@@ -216,6 +252,9 @@ $quantComparer_min_height: 2.5rem;
         &-driver--right {
           visibility: hidden;
         }
+      }
+      &__skew {
+        display: none;
       }
     }
   }

@@ -159,6 +159,8 @@ export interface QuantComparerDTO extends BasicDTOStructure {
     lineWidth: number;
     bidLineHeight: number;
     offerLineHeight: number;
+    bidSkew: number;
+    offerSkew: number;
   }
   state: {
     hasBid: boolean;

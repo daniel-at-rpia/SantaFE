@@ -43,6 +43,23 @@
       </div>
     </div>
   </section>
+  <section class="sat-quantComparer__skew">
+    <div
+      class="sat-quantComparer__skew-leftSpacing"
+      [ngStyle]="{
+        'flex-basis': quantData.style.bidSkew + '%'
+      }"></div>
+    <div class="sat-quantComparer__skew-indicator">
+      <i class="sat-quantComparer__skew-indicator-icon fas fa-map-marker"></i>
+      <div class="sat-quantComparer__skew-indicator-line"></div>
+    </div>
+    <div
+      class="sat-quantComparer__skew-rightSpacing"
+      [ngStyle]="{
+        'flex-basis': quantData.style.offerSkew + '%'
+      }"
+    ></div>
+  </section>
   <section class="sat-quantComparer__crossing">
     <div class="sat-quantComparer__crossing-content">
       <span class="sat-quantComparer__crossing-content-value">{{-quantData.data.delta}}</span>
