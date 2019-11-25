@@ -436,15 +436,15 @@ export class DTOService {
     isStencil: boolean,
     rawData: BEQuoteDTO
   ) : SecurityQuoteDTO {
-    const hasBid = !isStencil ? (!!rawData.bidIsActive && !!rawData.bidTime) : true;
-    const hasAsk = !isStencil ? (!!rawData.askIsActive && !!rawData.askTime) : true;
+    const hasBid = !isStencil ? (!!rawData.isActive && !!rawData.bidVenue) : true;
+    const hasAsk = !isStencil ? (!!rawData.isActive && !!rawData.askVenue) : true;
     const bidBenchmark = !isStencil ? rawData.bidQualifier : 'T 0.5 01/01/2020';
     const askBenchmark = !isStencil ? rawData.askQualifier : 'T 0.5 01/01/2020';
     const dataSource = !isStencil ? (hasBid ? rawData.bidVenue : rawData.askVenue) : 'PLACEHOLDER';
     const consolidatedBenchmark = bidBenchmark === askBenchmark ? bidBenchmark : null;
     let convertedDate: Date = null;
     if (!isStencil) {
-      const convertBuffer = hasBid ? new Date(rawData.bidTime) : new Date(rawData.askTime);
+      const convertBuffer = new Date(rawData.time);
       const test = `${convertBuffer.getFullYear()} - ${convertBuffer.getMonth()} - ${convertBuffer.getDate()} - ${convertBuffer.getHours()} - ${convertBuffer.getMinutes()} - ${convertBuffer.getSeconds()}`;
       convertedDate = new Date(Date.UTC(convertBuffer.getFullYear(), convertBuffer.getMonth(), convertBuffer.getDate(), convertBuffer.getHours(), convertBuffer.getMinutes(), convertBuffer.getSeconds()));
     }

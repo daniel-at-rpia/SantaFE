@@ -178,10 +178,8 @@ export interface BEBestQuoteDTO {
 export interface BEQuoteDTO {
   quoteType: string; //Run,
   dealer: string; // JEFF,
-  bidTime: string; // 2019-11-22T13:32:40,
-  askTime: string; // null,
-  bidIsActive: boolean; // true,
-  askIsActive: boolean; // null,
+  time: string; // 2019-11-22T13:32:40,
+  isActive: boolean; // true,
   bidVenue: string; // MSG1,
   askVenue: string; // null,
   bidIsNatural: boolean; // false,
