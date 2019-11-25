@@ -220,18 +220,26 @@ export class SecurityTable implements OnInit, OnChanges {
       let valueA;
       let valueB;
       if (targetHeader.state.isQuantVariant) {
-        const quantA = rowA.data.cells[0].data.quantComparerDTO;
-        const quantB = rowB.data.cells[0].data.quantComparerDTO;
-        valueA = !!quantA ? quantA.data.delta : null;
-        valueB = !!quantB ? quantB.data.delta : null;
+        const qA = rowA.data.cells[0].data.quantComparerDTO;
+        const qB = rowB.data.cells[0].data.quantComparerDTO;
+        valueA = !!qA ? qA.data.delta : null;
+        valueB = !!qB ? qB.data.delta : null;
         if (!!securityA && !!securityB && !securityA.state.isStencil && !securityB.state.isStencil) {
-          if (valueA == null && valueB != null) {
-            return 9;
+          if (valueA == null && valueB == null) {
+            return 0;
+          } else if (valueA == null && valueB != null) {
+            return 16;
           } else if (valueA != null && valueB == null) {
+            return -16;
+          } else if (qA.state.hasBid && qA.state.hasOffer && (!qB.state.hasBid || !qB.state.hasOffer)) {
+            // A has both bid & offer vs B has only bid or only offer
             return -9;
-          } else if (quantA && quantB && quantA.state.hasBid && quantA.state.hasOffer && (!quantB.state.hasBid || !quantB.state.hasOffer)) {
+          } else if ((!qA.state.hasBid || !qA.state.hasOffer) && qB.state.hasBid && qB.state.hasOffer) {
+            return 9;
+          } else if ((qA.state.hasBid || qA.state.hasOffer) && (!qB.state.hasBid && !qB.state.hasOffer)) {
+            // A has only bid or only offer vs B has no bid or offer
             return -4;
-          } else if (quantA && quantB && (!quantA.state.hasBid || !quantA.state.hasOffer) && quantB.state.hasBid && quantB.state.hasOffer) {
+          } else if ((!qA.state.hasBid && !qA.state.hasOffer) && (qB.state.hasBid || qB.state.hasOffer)) {
             return 4;
           } else if (valueA > valueB) {
             return 1;

@@ -436,7 +436,6 @@ export class DTOService {
     if (!isStencil) {
       const convertBuffer = hasBid ? new Date(rawData.bidTime) : new Date(rawData.askTime);
       const test = `${convertBuffer.getFullYear()} - ${convertBuffer.getMonth()} - ${convertBuffer.getDate()} - ${convertBuffer.getHours()} - ${convertBuffer.getMinutes()} - ${convertBuffer.getSeconds()}`;
-      console.log('test', test);
       convertedDate = new Date(Date.UTC(convertBuffer.getFullYear(), convertBuffer.getMonth(), convertBuffer.getDate(), convertBuffer.getHours(), convertBuffer.getMinutes(), convertBuffer.getSeconds()));
     }
     // const quoteDate: Date = !isStencil ? (hasBid ? new Date(rawData.bidTime) : new Date(rawData.askTime)) : null;

@@ -132,6 +132,7 @@ export class TradeCenterPanel {
       });
       this.state.prinstineRowList.push(newRow);
     };
+    this.state.rowList = this.utilityService.deepCopy(this.state.prinstineRowList);
   }
 
   private fetchStageOneContent() {
