@@ -1,9 +1,10 @@
 import {
   SecurityTableMetricStub,
-  SecurityMetricOptionStub
+  SecurityMetricOptionStub,
+  TriCoreMetricConfigStub
 } from 'FEModels/frontend-stub-models.interface';
 
-export const QuantComparerConfig = {
+export const TriCoreMetricConfig: TriCoreMetricConfigStub = {
   Spread: {
     tier2Threshold: 20,
     inversed: false,
@@ -16,7 +17,7 @@ export const QuantComparerConfig = {
   },
   Price: {
     tier2Threshold: 3,
-    inverse: true,
+    inversed: true,
     rounding: 1
   }
 }

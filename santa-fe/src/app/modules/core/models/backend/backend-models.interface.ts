@@ -174,16 +174,26 @@ export interface BEBestQuoteDTO {
 }
 
 export interface BEQuoteDTO {
-  side: number,
-  quoteType: number,
-  dealer: string,
-  time: string,
-  isActive: boolean,
-  venue: string,
-  isNatural: boolean,
-  yieldType: string,
-  yield: number,
-  price: number,
-  quantity: number,
-  qualifier: string
+  quoteType: string; //Run,
+  dealer: string; // JEFF,
+  bidTime: string; // 2019-11-22T13:32:40,
+  askTime: string; // null,
+  bidIsActive: boolean; // true,
+  askIsActive: boolean; // null,
+  bidVenue: string; // MSG1,
+  askVenue: string; // null,
+  bidIsNatural: boolean; // false,
+  askIsNatural: boolean; // null,
+  bidYieldType: number; // null,
+  askYieldType: number; // null,
+  bidYield: number; // null,
+  askYield: number; // null,
+  bidTSpread: number; // null,
+  askTSpread: number; // null,
+  bidPrice: number; // 97.2099990844726,
+  askPrice: number; // null,
+  bidQuantity: number; // null,
+  askQuantity: number; // null,
+  bidQualifier: string; // null,
+  askQualifier: string; // null
 }

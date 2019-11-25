@@ -37,7 +37,7 @@
       SecurityGroupSeniorityColorScheme
     } from 'Core/constants/colorSchemes.constant';
     import {
-      QuantComparerConfig
+      TriCoreMetricConfig
     } from 'Core/constants/coreConstants.constant';
     import {
       GroupMetricOptions,
@@ -288,11 +288,11 @@ export class DTOService {
     offerBroker: string
   ): QuantComparerDTO {
     const metricType = !isStencil ? quantMetricType : 'Spread';
-    const tier2Shreshold = QuantComparerConfig[metricType]['tier2Threshold'];
-    const inversed = QuantComparerConfig[metricType]['inversed'];
+    const tier2Shreshold = TriCoreMetricConfig[metricType]['tier2Threshold'];
+    const inversed = TriCoreMetricConfig[metricType]['inversed'];
     const hasBid = !isStencil ? (!!bidNumber && !!bidBroker) : true;
     const hasOffer = !isStencil ? (!!offerNumber && !!offerBroker) : true;
-    const rounding = QuantComparerConfig[metricType]['rounding'];
+    const rounding = TriCoreMetricConfig[metricType]['rounding'];
     bidNumber = this.utility.round(bidNumber, rounding).toFixed(rounding);
     offerNumber = this.utility.round(offerNumber, rounding).toFixed(rounding);
     let delta;
@@ -424,32 +424,33 @@ export class DTOService {
     isStencil: boolean,
     rawData: BEQuoteDTO
   ) : SecurityQuoteDTO {
-    const hasBid = true;
-    const hasAsk = false;
-    const bidBenchmark = '';
-    const askBenchmark = '';
-    const consolidatedBenchmark = '';
+    const hasBid = !isStencil ? (!!rawData.bidIsActive && !!rawData.bidTime) : true;
+    const hasAsk = !isStencil ? (!!rawData.askIsActive && !!rawData.askTime) : true;
+    const bidBenchmark = !isStencil ? rawData.bidQualifier : 'T 0.5 01/01/2020';
+    const askBenchmark = !isStencil ? rawData.askQualifier : 'T 0.5 01/01/2020';
+    const dataSource = !isStencil ? (hasBid ? rawData.bidVenue : rawData.askVenue) : 'PLACEHOLDER';
+    const consolidatedBenchmark = bidBenchmark === askBenchmark ? bidBenchmark : null;
     const object: SecurityQuoteDTO = {
       data: {
         broker: !isStencil ? rawData.dealer : 'RBC',
         time: '12:01 pm',
-        dataSource: !isStencil ? rawData.venue : 'PLACEHOLDER',
-        consolidatedBenchmark: !isStencil ? consolidatedBenchmark : 'T 0.5 01/01/2020',
+        dataSource: dataSource,
+        consolidatedBenchmark: consolidatedBenchmark,
         bid: {
           isAxe: false,
-          size: !isStencil ? this.utility.parsePositionToMM(rawData.quantity) : '10MM',
-          price: !isStencil ? rawData.price : 100,
-          yield: !isStencil ? rawData.yield : 5,
-          tspread: !isStencil ? null : 300,
+          size: !isStencil ? this.utility.parsePositionToMM(rawData.bidQuantity) : '10MM',
+          price: !isStencil ? this.utility.round(rawData.bidPrice , TriCoreMetricConfig.Price.rounding): 100,
+          yield: !isStencil ? this.utility.round(rawData.bidYield, TriCoreMetricConfig.Yield.rounding) : 5,
+          tspread: !isStencil ? this.utility.round(rawData.bidTSpread, TriCoreMetricConfig.Spread.rounding) : 300,
           benchmark: bidBenchmark
         },
         ask: {
           isAxe: false,
-          size: !isStencil ? null : '10MM',
-          price: !isStencil ? null : 100,
-          yield: !isStencil ? null : 5,
-          tspread: !isStencil ? null : 300,
-          benchmark: askBenchmark
+          size: !isStencil ? this.utility.parsePositionToMM(rawData.askQuantity) : '10MM',
+          price: !isStencil ? this.utility.round(rawData.askPrice , TriCoreMetricConfig.Price.rounding): 100,
+          yield: !isStencil ? this.utility.round(rawData.askYield, TriCoreMetricConfig.Yield.rounding) : 5,
+          tspread: !isStencil ? this.utility.round(rawData.askTSpread, TriCoreMetricConfig.Spread.rounding) : 300,
+          benchmark: bidBenchmark
         }
       },
       state: {

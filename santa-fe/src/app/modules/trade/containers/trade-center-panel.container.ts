@@ -196,7 +196,7 @@ export class TradeCenterPanel {
 
   private fetchStageThreeContent(){
     const payload = {
-      quoteMetric: "Yield",
+      quoteMetric: this.state.filters.quickFilters.metricType,
       identifiers: []
     };
     this.state.prinstineRowList.forEach((eachRow) => {

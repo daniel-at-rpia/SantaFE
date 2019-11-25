@@ -52,3 +52,15 @@ export interface SecurityTableMetricStub {
   disabled?: boolean;
   inversedSortingForText?: boolean;
 }
+
+export interface TriCoreMetricConfigStub {
+  Spread: TriCoreMetricIndividualConfigStub;
+  Yield: TriCoreMetricIndividualConfigStub;
+  Price: TriCoreMetricIndividualConfigStub;
+}
+
+interface TriCoreMetricIndividualConfigStub {
+  tier2Threshold: number;
+  inversed: boolean;
+  rounding: number;
+}
