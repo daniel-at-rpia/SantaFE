@@ -123,7 +123,7 @@ export class TradeCenterPanel {
       stencilHeaderBuffer.forEach((eachHeader) => {
         if (eachHeader.data.displayLabel !== 'Security') {
           if (eachHeader.state.isQuantVariant) {
-            const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, this.state.filters.quickFilters.metricType, null, null, null, null, null, null);
+            const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, this.state.filters.quickFilters.metricType, null);
             newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, true, bestQuoteStencil));
           } else {
             newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, false));
@@ -270,12 +270,7 @@ export class TradeCenterPanel {
     const bestQuoteCell = targetRow.data.cells[bestQuoteColumnIndex];
     const newQuant = this.dtoService.formQuantComparerObject(false,
       this.state.filters.quickFilters.metricType,
-      quote.bidQuoteValue,
-      Math.round(quote.bidQuantity/100000)/10,
-      quote.bidDealer, 
-      quote.askQuoteValue,
-      Math.round(quote.askQuantity/100000)/10,
-      quote.askDealer
+      quote
     );
     bestQuoteCell.data.quantComparerDTO = newQuant;
   }

@@ -39,7 +39,7 @@ $quantComparer_min_height: 2.5rem;
     display: flex;
     height: 100%;
     width: 100%;
-    padding: $spacing_small 0 $spacing_minimum 0;
+    padding: $spacing_x_small;
     &-driver {
       flex: 1 1 auto;
       display: flex;
@@ -124,16 +124,17 @@ $quantComparer_min_height: 2.5rem;
   &__crossing {
     @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
     @include mix_border_radius(5px);
-    @include mix_calculate(height, 100%, $spacing_small * 2, '-');
+    @include mix_calculate(height, 100%, $spacing_x_small * 2, '-');
     display: none;
     align-items: center;
-    margin: $spacing_small 0;
+    margin: $spacing_x_small 0;
     padding: 0 $spacing_medium;
     background-color: $color_quant_crossed_background;
     &-content {
       @include mix_border_radius(5px);
-      padding: 0 $spacing_small;
+      padding: $spacing_xx_small $spacing_small;
       background-color: $color_quant_crossed;
+      line-height: $line_height_minimum;
       &-value {
         color: $color_quant_crossed_background;
         user-select: none;

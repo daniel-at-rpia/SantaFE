@@ -3,6 +3,7 @@
     import {
       BESecurityDTO,
       BESecurityGroupDTO,
+      BEBestQuoteDTO,
       BEQuoteDTO
     } from 'BEModels/backend-models.interface';
     import {
@@ -284,27 +285,30 @@ export class DTOService {
   public formQuantComparerObject(
     isStencil: boolean,
     quantMetricType: string,
-    bidNumber: number,
-    bidSize: number,
-    bidBroker: string,
-    offerNumber: number,
-    offerSize: number,
-    offerBroker: string
+    rawData: BEBestQuoteDTO
+    // bidNumber: number,
+    // bidSize: number,
+    // bidBroker: string,
+    // offerNumber: number,
+    // offerSize: number,
+    // offerBroker: string
   ): QuantComparerDTO {
+    const bidSize = !isStencil ? this.utility.round(rawData.bidQuantity/1000000, 1) : null;
+    const offerSize = !isStencil ? this.utility.round(rawData.askQuantity/1000000, 1) : null;
     const metricType = !isStencil ? quantMetricType : 'TSpread';
     const tier2Shreshold = TriCoreMetricConfig[metricType]['tier2Threshold'];
     const inversed = TriCoreMetricConfig[metricType]['inversed'];
-    const hasBid = !isStencil ? (!!bidNumber && !!bidBroker) : true;
-    const hasOffer = !isStencil ? (!!offerNumber && !!offerBroker) : true;
+    const hasBid = !isStencil ? (!!rawData.bidQuoteValue && !!rawData.bidDealer) : true;
+    const hasOffer = !isStencil ? (!!rawData.askQuoteValue && !!rawData.askDealer) : true;
     const rounding = TriCoreMetricConfig[metricType]['rounding'];
-    bidNumber = this.utility.round(bidNumber, rounding).toFixed(rounding);
-    offerNumber = this.utility.round(offerNumber, rounding).toFixed(rounding);
-    const bidSkew = Math.round(0.5 / (0.5 + 0.5) * 100);
+    const bidNumber = !isStencil ? this.utility.round(rawData.bidQuoteValue, rounding).toFixed(rounding) : 33;
+    const offerNumber = !isStencil ? this.utility.round(rawData.askQuoteValue, rounding).toFixed(rounding) : 33;
+    const bidSkew =  !isStencil ? rawData.axeSkew * 100 : 50;
     let delta;
     if (hasBid && hasOffer) {
       delta = inversed ? offerNumber - bidNumber : bidNumber - offerNumber;
       delta = this.utility.round(delta, rounding);
-      delta = delta - 10;
+      delta = delta;
     } else {
       delta = 0;
     }
@@ -313,13 +317,13 @@ export class DTOService {
         metricType: metricType,
         delta: delta,
         bid: {
-          number: !isStencil ? bidNumber : 33,
-          broker: !isStencil ? bidBroker : 'GS',
+          number: bidNumber,
+          broker: !isStencil ? rawData.bidDealer : 'GS',
           size: bidSize
         },
         offer: {
-          number: !isStencil ? offerNumber : 33,
-          broker: !isStencil ? offerBroker: 'JPM',
+          number: offerNumber,
+          broker: !isStencil ? rawData.askDealer: 'JPM',
           size: offerSize
         }
       },
