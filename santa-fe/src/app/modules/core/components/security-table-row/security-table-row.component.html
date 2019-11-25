@@ -1,6 +1,7 @@
 <article
   [ngClass]="{
     'sat-securityTableRow': true,
+    'sat-securityTableRow--evenState': !!rowIsEven,
     'sat-securityTableRow--expandedState': rowData.state.isExpanded
   }">
   <section (click)="onClickRowTableCanvas()" class="sat-securityTableRow__tableCanvas">

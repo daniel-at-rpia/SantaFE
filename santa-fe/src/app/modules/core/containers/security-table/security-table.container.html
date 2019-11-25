@@ -25,6 +25,7 @@
             <div class="sat-securityTableHead__actionMenu">
               <button (click)="onClickRemoveHeader(eachHead)" class="sat-securityTableHead__actionMenu-deleteBtn santaBtn--iconOnly fal fa-times"></button>
               <button (click)="onClickSortBy(eachHead)" class="sat-securityTableHead__actionMenu-sortBtn santaBtn--iconOnly fal fa-sort-amount-down"></button>
+              <button (click)="onClickToggleQuantSkew(eachHead)" class="sat-securityTableHead__actionMenu-skewBtn santaBtn--iconOnly fas fa-map-marker"></button>
             </div>
           </article>
         </div>
@@ -33,6 +34,7 @@
         <security-table-row 
           *ngFor="let eachRow of tableData.data.rows"
           [rowData]="eachRow"
+          [rowIsEven]="tableData.data.rows.indexOf(eachRow)%2 === 1"
           (clickedCollapseExpandView)="onClickCollapseExpandView($event)"
           (clickedRowTableCanvas)="onClickRowTableCanvas($event)"
           (clickedSortQuotesByMetric)="onClickSortQuotesByMetric($event)">

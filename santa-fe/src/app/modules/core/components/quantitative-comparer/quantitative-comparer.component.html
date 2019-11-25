@@ -1,6 +1,7 @@
 <article
   [ngClass]="{
     'sat-quantComparer': true,
+    'sat-quantComparer--skewEnabledState': quantData.state.skewEnabled,
     'sat-quantComparer--crossedState': quantData.state.isCrossed,
     'sat-quantComparer--crossedStateTier2': quantData.state.isCrossedTier2,
     'sat-quantComparer--stencilState': quantData.state.isStencil,

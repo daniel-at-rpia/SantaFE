@@ -21,10 +21,11 @@ import {
   selector: 'security-table-row',
   templateUrl: './security-table-row.component.html',
   styleUrls: ['./security-table-row.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.Emulated
 })
 export class SecurityTableRow {
   @Input() rowData: SecurityTableRowDTO;
+  @Input() rowIsEven: boolean;
   @Output() clickedCollapseExpandView = new EventEmitter<SecurityTableRowDTO>();
   @Output() clickedRowTableCanvas = new EventEmitter<SecurityTableRowDTO>();
   @Output() clickedSortQuotesByMetric = new EventEmitter<ClickedSortQuotesByMetricEmitterParams>();

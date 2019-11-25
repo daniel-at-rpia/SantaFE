@@ -8,6 +8,7 @@ $securityTableRow_expandCanvas_height: 40rem + $spacing_medium * 2;
   direction: ltr;
   display: flex;
   flex-direction: column;
+  background-color: $color_gray_2;
   &__tableCanvas {
     @include mix_alive('material');
     display: flex;
@@ -59,6 +60,10 @@ $securityTableRow_expandCanvas_height: 40rem + $spacing_medium * 2;
         background-color: $color_white;
       }
     }
+  }
+  &--evenState {
+    background-color: $color_blue_gray_1;
+    color: $color_blue_gray_8;
   }
   &--expandedState {
     #{$securityTableRowBlockName} {

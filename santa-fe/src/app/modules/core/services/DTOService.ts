@@ -337,6 +337,7 @@ export class DTOService {
         isCalculated: false,
         isCrossed: !isStencil && delta < 0,
         isCrossedTier2: delta <= -tier2Shreshold,
+        skewEnabled: false
       }
     };
     return object;
@@ -374,7 +375,8 @@ export class DTOService {
       },
       state: {
         isQuantVariant: !!stub.isForQuantComparer,
-        isPureTextVariant: !!stub.pureText
+        isPureTextVariant: !!stub.pureText,
+        isSkewEnabled: false
       }
     };
     return object;

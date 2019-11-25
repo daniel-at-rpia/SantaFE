@@ -34,20 +34,6 @@ $securityTable_addColumnCTA_width: 9rem;
         direction: rtl;
         padding: 0 $spacing_medium $spacing_large $spacing_medium;
         min-height: 30rem;
-        security-table-row {
-          &:nth-child(odd) {
-            .sat-securityTableRow {
-              background-color: $color_gray_2;
-              color: $font_color_minor;
-            }
-          }
-          &:nth-child(even) {
-            .sat-securityTableRow {
-              background-color: $color_blue_gray_1;
-              color: $color_blue_gray_8;
-            }
-          }
-        }
       }
       &-addColumnCTA {
         @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
@@ -184,6 +170,13 @@ $securityTable_addColumnCTA_width: 9rem;
       background-color: $color_sort;
       color: $font_color_inverse;
     }
+    &-skewBtn {
+      @include mix_border_radius(50%);
+      display: none;
+      margin: 0 $spacing_x_small;
+      background-color: $color_quant_skew;
+      color: $font_color_inverse;
+    }
   }
   &--securityCardVariant {
     width: $securityTable_cell_width_primary;
@@ -207,6 +200,9 @@ $securityTable_addColumnCTA_width: 9rem;
       &__actionMenu {
         &-deleteBtn {
           display: none;
+        }
+        &-skewBtn {
+          display: flex;
         }
       }
     }

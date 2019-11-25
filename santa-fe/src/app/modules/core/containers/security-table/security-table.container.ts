@@ -42,7 +42,7 @@
   selector: 'security-table',
   templateUrl: './security-table.container.html',
   styleUrls: ['./security-table.container.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.Emulated
 })
 export class SecurityTable implements OnInit, OnChanges {
   @Input() tableData: SecurityTableDTO;
@@ -132,6 +132,16 @@ export class SecurityTable implements OnInit, OnChanges {
         this.performDefaultSort();
       }
     }
+  }
+
+  public onClickToggleQuantSkew(targetHeader: SecurityTableHeaderDTO) {
+    if (targetHeader.state.isQuantVariant) {
+      targetHeader.state.isSkewEnabled = !targetHeader.state.isSkewEnabled;
+      if (this.tableData.state.loadedContentStage >= 2) {
+        this.applySkewToggleToRows(targetHeader);
+      }
+    }
+    this.tableData.state.selectedHeader = null;
   }
 
   public onClickCollapseExpandView(targetRow: SecurityTableRowDTO) {
@@ -297,4 +307,13 @@ export class SecurityTable implements OnInit, OnChanges {
     })
   }
 
+  private applySkewToggleToRows(targetHeader: SecurityTableHeaderDTO) {
+    const columnIndex = this.tableData.data.headers.indexOf(targetHeader) - 1;
+    this.tableData.data.rows.forEach((eachRow) => {
+      const targetQuant = eachRow.data.cells[columnIndex].data.quantComparerDTO;
+      if (!!targetQuant) {
+        targetQuant.state.skewEnabled = targetHeader.state.isSkewEnabled;
+      }
+    });
+  }
 }

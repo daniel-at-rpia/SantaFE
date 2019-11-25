@@ -3,7 +3,6 @@
 
 $quantComparer_edge_width: 2.5rem;
 $quantComparer_min_height: 2.5rem;
-$quantComparer_skew_color: $color_pink_4_A;
 .sat-quantComparer {
   $quantComparerBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
@@ -143,7 +142,7 @@ $quantComparer_skew_color: $color_pink_4_A;
   }
   &__skew {
     @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
-    display: flex;
+    display: none;
     height: 100%;
     width: 100%;
     &-leftSpacing {
@@ -158,16 +157,23 @@ $quantComparer_skew_color: $color_pink_4_A;
       &-icon {
         flex: 0 0 auto;
         font-size: $font_size_small;
-        color: $quantComparer_skew_color;
+        color: $color_quant_skew;
       }
       &-line {
-        @include mix_border_generator(0 $typical_border_width*2 0 0, $quantComparer_skew_color);
+        @include mix_border_generator(0 $typical_border_width*2 0 0, $color_quant_skew);
         flex: 1 1 auto;
       }
     }
     &-rightSpacing {
       flex: 0 1 50%;
       margin-right: $quantComparer_edge_width;
+    }
+  }
+  &--skewEnabledState {
+    #{$quantComparerBlockName} {
+      &__skew {
+        display: flex;
+      }
     }
   }
   &--crossedState {

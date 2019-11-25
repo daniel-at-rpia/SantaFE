@@ -169,6 +169,7 @@ export interface QuantComparerDTO extends BasicDTOStructure {
     isCalculated: boolean;
     isCrossed: boolean;
     isCrossedTier2: boolean;
+    skewEnabled: boolean;
   }
 }
 
@@ -199,6 +200,7 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
   state: {
     isPureTextVariant: boolean;
     isQuantVariant: boolean;
+    isSkewEnabled: boolean;
   }
 }
 
