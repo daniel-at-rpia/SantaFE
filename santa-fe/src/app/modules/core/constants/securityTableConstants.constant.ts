@@ -8,6 +8,9 @@ import {
 } from 'Core/constants/coreConstants.constant';
 
 
+export const SECURITY_TABLE_QUOTE_TYPE_RUN = 'Run';
+export const SECURITY_TABLE_QUOTE_TYPE_AXE = 'Axe';
+
 /* Stages:
 1: ready after the get-position call
 2. ready after the get-securities call

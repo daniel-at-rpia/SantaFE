@@ -40,6 +40,10 @@
       TriCoreMetricConfig
     } from 'Core/constants/coreConstants.constant';
     import {
+      SECURITY_TABLE_QUOTE_TYPE_RUN,
+      SECURITY_TABLE_QUOTE_TYPE_AXE
+    } from 'Core/constants/securityTableConstants.constant';
+    import {
       GroupMetricOptions,
       ConfiguratorDefinitionLayout
     } from 'Core/constants/marketConstants.constant';
@@ -430,14 +434,22 @@ export class DTOService {
     const askBenchmark = !isStencil ? rawData.askQualifier : 'T 0.5 01/01/2020';
     const dataSource = !isStencil ? (hasBid ? rawData.bidVenue : rawData.askVenue) : 'PLACEHOLDER';
     const consolidatedBenchmark = bidBenchmark === askBenchmark ? bidBenchmark : null;
+    let convertedDate: Date = null;
+    if (!isStencil) {
+      const convertBuffer = hasBid ? new Date(rawData.bidTime) : new Date(rawData.askTime);
+      const test = `${convertBuffer.getFullYear()} - ${convertBuffer.getMonth()} - ${convertBuffer.getDate()} - ${convertBuffer.getHours()} - ${convertBuffer.getMinutes()} - ${convertBuffer.getSeconds()}`;
+      console.log('test', test);
+      convertedDate = new Date(Date.UTC(convertBuffer.getFullYear(), convertBuffer.getMonth(), convertBuffer.getDate(), convertBuffer.getHours(), convertBuffer.getMinutes(), convertBuffer.getSeconds()));
+    }
+    // const quoteDate: Date = !isStencil ? (hasBid ? new Date(rawData.bidTime) : new Date(rawData.askTime)) : null;
     const object: SecurityQuoteDTO = {
       data: {
         broker: !isStencil ? rawData.dealer : 'RBC',
-        time: '12:01 pm',
+        time: !isStencil ? `${convertedDate.toTimeString().slice(0, 5)}` : '12:01 pm',
         dataSource: dataSource,
         consolidatedBenchmark: consolidatedBenchmark,
         bid: {
-          isAxe: false,
+          isAxe: !isStencil ? rawData.quoteType === SECURITY_TABLE_QUOTE_TYPE_AXE : false,
           size: !isStencil ? this.utility.parsePositionToMM(rawData.bidQuantity) : '10MM',
           price: !isStencil ? this.utility.round(rawData.bidPrice , TriCoreMetricConfig.Price.rounding): 100,
           yield: !isStencil ? this.utility.round(rawData.bidYield, TriCoreMetricConfig.Yield.rounding) : 5,
@@ -445,7 +457,7 @@ export class DTOService {
           benchmark: bidBenchmark
         },
         ask: {
-          isAxe: false,
+          isAxe: !isStencil ? rawData.quoteType === SECURITY_TABLE_QUOTE_TYPE_AXE : false,
           size: !isStencil ? this.utility.parsePositionToMM(rawData.askQuantity) : '10MM',
           price: !isStencil ? this.utility.round(rawData.askPrice , TriCoreMetricConfig.Price.rounding): 100,
           yield: !isStencil ? this.utility.round(rawData.askYield, TriCoreMetricConfig.Yield.rounding) : 5,
