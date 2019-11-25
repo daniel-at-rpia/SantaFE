@@ -71,6 +71,8 @@ export class UtilityService {
           return 2;
         case "2nd lien":
           return 2;
+        case "2nd Lien Secured":
+          return 2;
         case "3rd lien":
           return 2;
         case "Asset Backed":

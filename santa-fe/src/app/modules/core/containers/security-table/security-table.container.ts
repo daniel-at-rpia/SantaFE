@@ -134,11 +134,25 @@ export class SecurityTable implements OnInit, OnChanges {
     }
   }
 
-  public onClickToggleQuantSkew(targetHeader: SecurityTableHeaderDTO) {
+  public onClickToggleQuantAxeSkew(targetHeader: SecurityTableHeaderDTO) {
     if (targetHeader.state.isQuantVariant) {
-      targetHeader.state.isSkewEnabled = !targetHeader.state.isSkewEnabled;
+      targetHeader.state.isAxeSkewEnabled = !targetHeader.state.isAxeSkewEnabled;
       if (this.tableData.state.loadedContentStage >= 2) {
-        this.applySkewToggleToRows(targetHeader);
+        this.applySkewToggleToRows(targetHeader, true);
+      }
+    }
+    this.tableData.state.selectedHeader = null;
+  }
+
+  public onClickToggleQuantSkew(targetHeader: SecurityTableHeaderDTO, isAxe: boolean) {
+    if (targetHeader.state.isQuantVariant) {
+      if (isAxe) {
+        targetHeader.state.isAxeSkewEnabled = !targetHeader.state.isAxeSkewEnabled;
+      } else {
+        targetHeader.state.isRunSkewEnabled = !targetHeader.state.isRunSkewEnabled;
+      }
+      if (this.tableData.state.loadedContentStage >= 2) {
+        this.applySkewToggleToRows(targetHeader, isAxe);
       }
     }
     this.tableData.state.selectedHeader = null;
@@ -307,12 +321,16 @@ export class SecurityTable implements OnInit, OnChanges {
     })
   }
 
-  private applySkewToggleToRows(targetHeader: SecurityTableHeaderDTO) {
+  private applySkewToggleToRows(targetHeader: SecurityTableHeaderDTO, isAxe: boolean) {
     const columnIndex = this.tableData.data.headers.indexOf(targetHeader) - 1;
     this.tableData.data.rows.forEach((eachRow) => {
       const targetQuant = eachRow.data.cells[columnIndex].data.quantComparerDTO;
       if (!!targetQuant) {
-        targetQuant.state.skewEnabled = targetHeader.state.isSkewEnabled;
+        if (isAxe) {
+          targetQuant.state.axeSkewEnabled = targetHeader.state.isAxeSkewEnabled;
+        } else {
+          targetQuant.state.runSkewEnabled = targetHeader.state.isRunSkewEnabled;
+        }
       }
     });
   }

@@ -170,12 +170,19 @@ $securityTable_addColumnCTA_width: 9rem;
       background-color: $color_sort;
       color: $font_color_inverse;
     }
-    &-skewBtn {
-      @include mix_border_radius(50%);
+    &-axeSkewBtn {
+      @include mix_border_radius(5px);
       display: none;
       margin: 0 $spacing_x_small;
-      background-color: $color_quant_skew;
-      color: $font_color_inverse;
+      background-color: $color_quant_axe_skew;
+      padding: $spacing_x_small;
+    }
+    &-runSkewBtn {
+      @include mix_border_radius(5px);
+      display: none;
+      margin: 0 $spacing_x_small;
+      background-color: $color_quant_run_skew;
+      padding: $spacing_x_small;
     }
   }
   &--securityCardVariant {
@@ -201,7 +208,7 @@ $securityTable_addColumnCTA_width: 9rem;
         &-deleteBtn {
           display: none;
         }
-        &-skewBtn {
+        &-axeSkewBtn, &-runSkewBtn {
           display: flex;
         }
       }

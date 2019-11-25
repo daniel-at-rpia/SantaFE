@@ -25,7 +25,14 @@
             <div class="sat-securityTableHead__actionMenu">
               <button (click)="onClickRemoveHeader(eachHead)" class="sat-securityTableHead__actionMenu-deleteBtn santaBtn--iconOnly fal fa-times"></button>
               <button (click)="onClickSortBy(eachHead)" class="sat-securityTableHead__actionMenu-sortBtn santaBtn--iconOnly fal fa-sort-amount-down"></button>
-              <button (click)="onClickToggleQuantSkew(eachHead)" class="sat-securityTableHead__actionMenu-skewBtn santaBtn--iconOnly fas fa-map-marker"></button>
+              <button (click)="onClickToggleQuantSkew(eachHead, true)" class="sat-securityTableHead__actionMenu-axeSkewBtn santaBtn--labelled santaBtn--small santaBtn--inverseLabelled">
+                <i class="fal fa-balance-scale"></i>
+                <span>Axe Skew</span>
+              </button>
+              <button (click)="onClickToggleQuantSkew(eachHead, false)" class="sat-securityTableHead__actionMenu-runSkewBtn santaBtn--labelled santaBtn--small santaBtn--inverseLabelled">
+                <i class="fal fa-balance-scale"></i>
+                <span>Run Skew</span>
+              </button>
             </div>
           </article>
         </div>

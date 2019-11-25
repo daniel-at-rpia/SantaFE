@@ -159,10 +159,8 @@ $quantComparer_min_height: 2.5rem;
       &-icon {
         flex: 0 0 auto;
         font-size: $font_size_small;
-        color: $color_quant_skew;
       }
       &-line {
-        @include mix_border_generator(0 $typical_border_width*2 0 0, $color_quant_skew);
         flex: 1 1 auto;
       }
     }
@@ -170,10 +168,45 @@ $quantComparer_min_height: 2.5rem;
       flex: 0 1 50%;
       margin-right: $quantComparer_edge_width;
     }
+    &--axe {
+      #{$quantComparerBlockName} {
+        &__skew {
+          &-indicator {
+            &-icon {
+              color: $color_quant_axe_skew;
+            }
+            &-line {
+              @include mix_border_generator(0 $typical_border_width*2 0 0, $color_quant_axe_skew);
+            }
+          }
+        }
+      }
+    }
+    &--run {
+      #{$quantComparerBlockName} {
+        &__skew {
+          &-indicator {
+            &-icon {
+              color: $color_quant_run_skew;
+            }
+            &-line {
+              @include mix_border_generator(0 $typical_border_width*2 0 0, $color_quant_run_skew);
+            }
+          }
+        }
+      }
+    }
   }
-  &--skewEnabledState {
+  &--axeSkewEnabledState {
     #{$quantComparerBlockName} {
-      &__skew {
+      &__skew--axe {
+        display: flex;
+      }
+    }
+  }
+  &--runSkewEnabledState {
+    #{$quantComparerBlockName} {
+      &__skew--run {
         display: flex;
       }
     }

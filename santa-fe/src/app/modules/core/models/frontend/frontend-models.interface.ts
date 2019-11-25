@@ -159,8 +159,8 @@ export interface QuantComparerDTO extends BasicDTOStructure {
     lineWidth: number;
     bidLineHeight: number;
     offerLineHeight: number;
-    bidSkew: number;
-    offerSkew: number;
+    axeSkew: number;
+    runSkew: number;
   }
   state: {
     hasBid: boolean;
@@ -169,7 +169,10 @@ export interface QuantComparerDTO extends BasicDTOStructure {
     isCalculated: boolean;
     isCrossed: boolean;
     isCrossedTier2: boolean;
-    skewEnabled: boolean;
+    axeSkewEnabled: boolean;
+    runSkewEnabled: boolean;
+    noAxeSkew: boolean;
+    noRunSkew: boolean;
   }
 }
 
@@ -200,7 +203,8 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
   state: {
     isPureTextVariant: boolean;
     isQuantVariant: boolean;
-    isSkewEnabled: boolean;
+    isAxeSkewEnabled: boolean;
+    isRunSkewEnabled: boolean;
   }
 }
 
