@@ -4,24 +4,6 @@ import {
   TriCoreMetricConfigStub
 } from 'FEModels/frontend-stub-models.interface';
 
-export const TriCoreMetricConfig: TriCoreMetricConfigStub = {
-  TSpread: {
-    tier2Threshold: 20,
-    inversed: false,
-    rounding: 0
-  },
-  Yield: {
-    tier2Threshold: 1,
-    inversed: false,
-    rounding: 3
-  },
-  Price: {
-    tier2Threshold: 3,
-    inversed: true,
-    rounding: 1
-  }
-}
-
 export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
   {
     label: 'Default Spread',
@@ -104,3 +86,27 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     ]
   }
 ];
+
+export const TriCoreMetricConfig: TriCoreMetricConfigStub = {
+  TSpread: {
+    label: 'TSpread',
+    tier2Threshold: 20,
+    inversed: false,
+    rounding: 0,
+    metricLabel: SecurityMetricOptions[0].label
+  },
+  Yield: {
+    label: 'Yield',
+    tier2Threshold: 1,
+    inversed: false,
+    rounding: 3,
+    metricLabel: SecurityMetricOptions[6].label
+  },
+  Price: {
+    label: 'Price',
+    tier2Threshold: 3,
+    inversed: true,
+    rounding: 1,
+    metricLabel: SecurityMetricOptions[1].label
+  }
+}

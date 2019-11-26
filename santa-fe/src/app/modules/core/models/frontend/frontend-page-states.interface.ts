@@ -9,7 +9,10 @@ import {
   SearchShortcutDTO,
   QuantComparerDTO
 } from 'FEModels/frontend-models.interface';
-import { SecurityDefinitionStub } from 'FEModels/frontend-stub-models.interface';
+import {
+  SecurityDefinitionStub,
+  SecurityTableMetricStub
+} from 'FEModels/frontend-stub-models.interface';
 
 export interface MarketState {
 }
@@ -58,6 +61,7 @@ export interface TradeState {
 
 export interface TradeCenterPanelState {
   table: SecurityTableDTO;
+  tableMetrics: Array<SecurityTableMetricStub>;
   rowList: Array<SecurityTableRowDTO>;
   prinstineRowList: Array<SecurityTableRowDTO>;
   currentContentStage: number;

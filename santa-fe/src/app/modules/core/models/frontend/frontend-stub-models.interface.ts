@@ -60,7 +60,9 @@ export interface TriCoreMetricConfigStub {
 }
 
 interface TriCoreMetricIndividualConfigStub {
+  label: string;
   tier2Threshold: number;
   inversed: boolean;
   rounding: number;
+  metricLabel: string;
 }

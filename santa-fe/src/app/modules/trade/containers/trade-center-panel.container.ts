@@ -39,6 +39,7 @@
       BEBestQuoteDTO
     } from 'BEModels/backend-models.interface';
 
+    import { TriCoreMetricConfig } from 'Core/constants/coreConstants.constant';
     import { SecurityTableMetrics } from 'Core/constants/securityTableConstants.constant';
     import {
       PortfolioList,
@@ -93,6 +94,13 @@ export class TradeCenterPanel {
   public onSwitchMetric(targetMetric){
     if (this.state.filters.quickFilters.metricType !== targetMetric) {
       this.state.filters.quickFilters.metricType = targetMetric;
+      const thrityDayDeltaMetric = this.state.tableMetrics[7];
+      if (thrityDayDeltaMetric.label === '30 Day Delta') {
+        thrityDayDeltaMetric.attrName = TriCoreMetricConfig[targetMetric].metricLabel;
+        thrityDayDeltaMetric.underlineAttrName = TriCoreMetricConfig[targetMetric].metricLabel;
+      } else {
+        console.error('Code Maintainence flag: this is not the 30 day delta');
+      }
       this.loadFreshData(); 
     }
   }
@@ -100,12 +108,13 @@ export class TradeCenterPanel {
   private initializePageState() {
     this.state = {
       table: this.dtoService.formSecurityTableObject(),
+      tableMetrics: SecurityTableMetrics,
       rowList: [],
       prinstineRowList: [],
       currentContentStage: 0,
       filters: {
         quickFilters: {
-          metricType: 'TSpread',
+          metricType: TriCoreMetricConfig.TSpread.label,
           portfolios: ['DOF'],
           securityType: ['Bond', 'Preferred'],
           currency: ['USD'],

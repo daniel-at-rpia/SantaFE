@@ -169,6 +169,7 @@ $securityTableRow_expandCanvas_height: 40rem + $spacing_medium * 2;
   align-items: center;
   width: $securityTable_cell_width;
   padding: $spacing_x_small 0;
+  min-height: 3.125rem; // so when QuantComparer is rendered the dimension doesn't change
   &__metric {
     flex: 1 1 auto;
     display: flex;

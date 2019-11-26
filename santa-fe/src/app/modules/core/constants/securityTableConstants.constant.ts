@@ -4,6 +4,7 @@ import {
 } from 'FEModels/frontend-stub-models.interface';
 
 import {
+  TriCoreMetricConfig,
   SecurityMetricOptions
 } from 'Core/constants/coreConstants.constant';
 
@@ -27,8 +28,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     readyStage: 1,
     pureText: true,
     active: true
-  },
-  {
+  },{
     label: 'Best Quote (Bid vs Ask)',
     attrName: null,
     underlineAttrName: null,
@@ -48,31 +48,28 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     readyStage: 3,
     isFrontEndMetric: true,
     active: false
-  },
-  {
+  },{
     label: 'Aggregated Position (MM)',
     attrName: 'positionInMM',
     underlineAttrName: 'position',
     readyStage: 1,
     active: false
-  },
-  {
+  },{
     label: 'HF Position (MM)',
     attrName: 'positionHFInMM',
     underlineAttrName: 'positionHF',
     readyStage: 1,
     active: true
-  },
-  {
+  },{
     label: 'NLF Position (MM)',
     attrName: 'positionNLFInMM',
     underlineAttrName: 'positionNLF',
     readyStage: 1,
     active: true
   },{
-    label: '30 Day Delta (Yield)',
-    attrName: SecurityMetricOptions[6].label,
-    underlineAttrName: SecurityMetricOptions[6].label,
+    label: '30 Day Delta',
+    attrName: TriCoreMetricConfig.TSpread.metricLabel,
+    underlineAttrName: TriCoreMetricConfig.TSpread.metricLabel,
     readyStage: 2,
     isPartOfMetricPack: true,
     metricPackDeltaScope: 'MoM',

@@ -33,7 +33,6 @@
     import { BEQuoteDTO } from 'BEModels/backend-models.interface';
 
     import {
-      SecurityTableMetrics,
       SECURITY_TABLE_FINAL_STAGE
     } from 'Core/constants/securityTableConstants.constant';
   //
@@ -48,7 +47,8 @@ export class SecurityTable implements OnInit, OnChanges {
   @Input() tableData: SecurityTableDTO;
   @Input() newRows: Array<SecurityTableRowDTO>;
   @Input() receivedContentStage: number;
-  securityTableMetrics = SecurityTableMetrics;
+  @Input() securityTableMetrics: Array<SecurityTableMetricStub>;
+  securityTableMetricsDiffDetect: Array<SecurityTableMetricStub>;  // use this only for detecting diff
   constructor(
     private dtoService: DTOService,
     private utilityService: UtilityService,
@@ -57,7 +57,6 @@ export class SecurityTable implements OnInit, OnChanges {
 
   public ngOnInit() {
     this.loadTableHeaders();
-    this.utilityService.round(23, 213);
   }
 
   public ngOnChanges() {
@@ -65,11 +64,15 @@ export class SecurityTable implements OnInit, OnChanges {
       console.log('rows updated for inter-stage change', this.receivedContentStage);
       this.tableData.state.loadedContentStage = this.receivedContentStage;
       this.tableData.data.rows = this.newRows;
-      if (this.tableData.state.sortedByHeader) {
-        this.performSort(this.tableData.state.sortedByHeader);
-      } else {
-        this.performDefaultSort();
+      if (this.securityTableMetrics !== this.securityTableMetricsDiffDetect) {
+        this.securityTableMetricsDiffDetect = this.utilityService.deepCopy(this.securityTableMetrics);
+        this.loadTableHeaders();
       }
+        if (this.tableData.state.sortedByHeader) {
+          this.performSort(this.tableData.state.sortedByHeader);
+        } else {
+          this.performDefaultSort();
+        }
     } else if (!!this.newRows && this.newRows != this.tableData.data.rows && this.tableData.state.loadedContentStage === this.receivedContentStage) {
       console.log('rows updated for change within same stage', this.tableData.state.loadedContentStage);
       this.tableData.data.rows = this.newRows;
