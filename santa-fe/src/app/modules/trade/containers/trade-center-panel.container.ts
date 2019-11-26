@@ -165,7 +165,7 @@ export class TradeCenterPanel {
       source: 'FO',
       partitionOptions: ['Portfolio']
     };
-    this.restfulCommService.callAPI('santaPortfolio/get-santa-credit-positions', {req: 'POST'}, payload, true).pipe(
+    this.restfulCommService.callAPI('santaPortfolio/get-santa-credit-positions', {req: 'POST'}, payload, true, false).pipe(
       first(),
       tap((serverReturn) => {
         console.log('return is ', serverReturn);
