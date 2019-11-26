@@ -13,8 +13,8 @@
               'sat-securityTableHead': true,
               'sat-securityTableHead--securityCardVariant': eachHead.state.isPureTextVariant,
               'sat-securityTableHead--quantVariant': eachHead.state.isQuantVariant,
-              'sat-securityTableHead--selectedState': tableData.state.selectedHeader === eachHead,
-              'sat-securityTableHead--sortedState': tableData.state.sortedByHeader === eachHead
+              'sat-securityTableHead--selectedState': tableData.state.selectedHeader?.data.displayLabel === eachHead.data.displayLabel,
+              'sat-securityTableHead--sortedState': tableData.state.sortedByHeader?.data.displayLabel === eachHead.data.displayLabel
             }">
             <span class="sat-securityTableHead__text">{{eachHead.data.displayLabel}}</span>
             <button (click)="onClickHeaderCTA(eachHead)" class="sat-securityTableHead__cta">

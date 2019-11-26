@@ -47,8 +47,11 @@ export class SecurityTable implements OnInit, OnChanges {
   @Input() tableData: SecurityTableDTO;
   @Input() newRows: Array<SecurityTableRowDTO>;
   @Input() receivedContentStage: number;
-  @Input() securityTableMetrics: Array<SecurityTableMetricStub>;
-  securityTableMetricsDiffDetect: Array<SecurityTableMetricStub>;  // use this only for detecting diff
+
+  securityTableMetrics: Array<SecurityTableMetricStub>;
+  @Input() receivedSecurityTableMetricsUpdate: Array<SecurityTableMetricStub>;
+  receivedSecurityTableMetricsCache: Array<SecurityTableMetricStub>;// use this only for detecting diff
+
   constructor(
     private dtoService: DTOService,
     private utilityService: UtilityService,
@@ -56,6 +59,7 @@ export class SecurityTable implements OnInit, OnChanges {
   ) { }
 
   public ngOnInit() {
+    this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
     this.loadTableHeaders();
   }
 
@@ -64,8 +68,11 @@ export class SecurityTable implements OnInit, OnChanges {
       console.log('rows updated for inter-stage change', this.receivedContentStage);
       this.tableData.state.loadedContentStage = this.receivedContentStage;
       this.tableData.data.rows = this.newRows;
-      if (this.securityTableMetrics !== this.securityTableMetricsDiffDetect) {
-        this.securityTableMetricsDiffDetect = this.utilityService.deepCopy(this.securityTableMetrics);
+      if (this.receivedSecurityTableMetricsCache !== this.receivedSecurityTableMetricsUpdate) {
+        this.receivedSecurityTableMetricsCache = this.utilityService.deepCopy(this.securityTableMetrics);
+        // currently the only thing the parent can change is the 30 day delta metric's attribute, so we only need to update that
+        this.securityTableMetrics[7].attrName = this.receivedSecurityTableMetricsUpdate[7].attrName;
+        this.securityTableMetrics[7].underlineAttrName = this.receivedSecurityTableMetricsUpdate[7].underlineAttrName;
         this.loadTableHeaders();
       }
         if (this.tableData.state.sortedByHeader) {
