@@ -2,6 +2,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 
+import { StoreModule } from '@ngrx/store';
+import { reducers, metaReducers } from './reducers';
+import { EffectsModule } from '@ngrx/effects';
+import { AppEffects } from './app.effects';
+
 import { AppRoutingModule } from './app-routing.module';
 
 import { CoreModule } from 'Core/core.module';
@@ -19,6 +24,14 @@ import { AppRoot } from './app.root';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    StoreModule.forRoot(reducers, {
+      metaReducers,
+      runtimeChecks: {
+        strictStateImmutability: true,
+        strictActionImmutability: true
+      }
+    }),
+    EffectsModule.forRoot([AppEffects]),
 
     // Native modules
     CoreModule,
