@@ -120,7 +120,7 @@ export class TradeCenterPanel {
           portfolios: ['DOF'],
           securityType: ['Bond', 'Preferred'],
           currency: ['USD'],
-          keyword: 'SVC'
+          keyword: ''
         }
       }
     };
