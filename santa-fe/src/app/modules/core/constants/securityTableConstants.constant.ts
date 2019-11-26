@@ -130,6 +130,13 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     readyStage: 2,
     active: false,
     inversedSortingForText: true
+  },{
+    label: 'Country',
+    attrName: 'country',
+    underlineAttrName: 'country',
+    readyStage: 2,
+    active: false,
+    inversedSortingForText: true
   }
 ];
 

@@ -72,6 +72,7 @@ export class DTOService {
         ratingValue: !isStencil ? rawData.metrics.ratingNoNotch : 'NR',
         seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.seniority) : 5,
         currency: !isStencil ? rawData.ccy : null,
+        country: !isStencil ? rawData.country : null,
         sector: !isStencil ? rawData.sector : null,
         couponType: !isStencil ? rawData.couponType : null,
         industry: !isStencil ? rawData.industry : null,

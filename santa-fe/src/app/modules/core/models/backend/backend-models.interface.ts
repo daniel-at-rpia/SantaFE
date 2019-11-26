@@ -82,11 +82,14 @@ export interface BESecurityDTO {
   securitySubType: string;
   couponType?: string;
   ccy: string;
+  country: string;
   sector: string;
   seniority: string;
   industry: string;
   subIndustry: string;
   issuer: string;
+  obligorName: string;
+  obligorId: number;
   ticker: string;
   maturityType: string;
   isGovt: boolean;
