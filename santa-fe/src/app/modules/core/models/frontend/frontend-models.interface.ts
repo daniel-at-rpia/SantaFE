@@ -238,6 +238,7 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
   data: {
     broker: string;
     time: string;
+    unixTimestamp: number;
     dataSource: string;
     consolidatedBenchmark: string;
     bid: {

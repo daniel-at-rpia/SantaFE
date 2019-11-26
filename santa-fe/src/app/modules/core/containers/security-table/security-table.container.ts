@@ -234,6 +234,7 @@ export class SecurityTable implements OnInit, OnChanges {
             targetRow.data.quotes.push(newQuote);
           }
         }
+        this.performChronologicalSortOnQuotes(targetRow);
       }),
       catchError(err => {
         console.error('liveQuote/get-all-quotes failed', err);
@@ -341,6 +342,18 @@ export class SecurityTable implements OnInit, OnChanges {
         } else {
           targetQuant.state.runSkewEnabled = targetHeader.state.isRunSkewEnabled;
         }
+      }
+    });
+  }
+
+  private performChronologicalSortOnQuotes(targetRow: SecurityTableRowDTO) {
+    targetRow.data.quotes.sort((quoteA, quoteB) => {
+      if (quoteA.data.unixTimestamp < quoteB.data.unixTimestamp) {
+        return 1;
+      } else if (quoteA.data.unixTimestamp > quoteB.data.unixTimestamp) {
+        return -1;
+      } else {
+        return 0;
       }
     });
   }

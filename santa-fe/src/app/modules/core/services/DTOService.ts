@@ -458,6 +458,7 @@ export class DTOService {
       data: {
         broker: !isStencil ? rawData.dealer : 'RBC',
         time: !isStencil ? `${convertedDate.toTimeString().slice(0, 5)}` : '12:01 pm',
+        unixTimestamp: !isStencil ? convertedDate.getTime() : 0,
         dataSource: dataSource,
         consolidatedBenchmark: consolidatedBenchmark,
         bid: {
