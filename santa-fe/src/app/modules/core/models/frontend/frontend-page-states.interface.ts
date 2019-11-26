@@ -60,6 +60,8 @@ export interface TradeState {
 }
 
 export interface TradeCenterPanelState {
+  fetchTableDataFailed: boolean;
+  fetchTableDataFailedError: string;
   table: SecurityTableDTO;
   tableMetrics: Array<SecurityTableMetricStub>;
   rowList: Array<SecurityTableRowDTO>;

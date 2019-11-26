@@ -107,6 +107,8 @@ export class TradeCenterPanel {
 
   private initializePageState() {
     this.state = {
+      fetchTableDataFailed: false,
+      fetchTableDataFailedError: '',
       table: this.dtoService.formSecurityTableObject(),
       tableMetrics: SecurityTableMetrics,
       rowList: [],
@@ -171,6 +173,10 @@ export class TradeCenterPanel {
       }),
       catchError(err => {
         console.error('error', err);
+        this.state.fetchTableDataFailed = true;
+        this.state.fetchTableDataFailedError = err.message;
+        this.state.prinstineRowList = [];
+        this.updateRowListWithFilters();
         return of('error');
       })
     ).subscribe();
@@ -236,6 +242,10 @@ export class TradeCenterPanel {
       }),
       catchError(err => {
         console.log('liveQuote/get-best-quotes failed', err);
+        this.state.fetchTableDataFailed = true;
+        this.state.fetchTableDataFailedError = err.message;
+        this.state.prinstineRowList = [];
+        this.updateRowListWithFilters();
         return of('error');
       })
     ).subscribe();

@@ -1,4 +1,8 @@
-<article class="sat-tradeCenterPanel">
+<article
+  [ngClass]="{
+    'sat-tradeCenterPanel': true,
+    'sat-tradeCenterPanel--fetchDataFailedState': state.fetchTableDataFailed
+  }">
   <section class="sat-tradeCenterPanel__quickFilters">
     <div class="sat-tradeCenterPanel__quickFilters-row">
       <span class="sat-tradeCenterPanel__quickFilters-row-label">Metric :</span>
@@ -74,6 +78,11 @@
         <span>{{eachPortfolio}}</span>
       </button>
     </div>
+  </section>
+  <section class="sat-tradeCenterPanel__errorPrompt">
+    <i class="sat-tradeCenterPanel__errorPrompt-icon fal fa-sad-tear"></i>
+    <span class="sat-tradeCenterPanel__errorPrompt-title">Backend request failed due to </span>
+    <span class="sat-tradeCenterPanel__errorPrompt-errorText">{{state.fetchTableDataFailedError}}</span>
   </section>
   <section class="sat-tradeCenterPanel__table">
     <security-table
