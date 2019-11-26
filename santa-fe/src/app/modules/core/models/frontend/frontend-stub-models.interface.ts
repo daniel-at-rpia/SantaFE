@@ -66,3 +66,8 @@ interface TriCoreMetricIndividualConfigStub {
   rounding: number;
   metricLabel: string;
 }
+
+export interface TradeFilterConstantStub {
+  displayLabel: string;
+  value: string;
+}
