@@ -177,7 +177,7 @@ $securityTable_addColumnCTA_width: 9rem;
       background-color: $color_quant_axe_skew;
       padding: $spacing_x_small;
     }
-    &-runSkewBtn {
+    &-totalSkewBtn {
       @include mix_border_radius(5px);
       display: none;
       margin: 0 $spacing_x_small;
@@ -208,7 +208,7 @@ $securityTable_addColumnCTA_width: 9rem;
         &-deleteBtn {
           display: none;
         }
-        &-axeSkewBtn, &-runSkewBtn {
+        &-axeSkewBtn, &-totalSkewBtn {
           display: flex;
         }
       }

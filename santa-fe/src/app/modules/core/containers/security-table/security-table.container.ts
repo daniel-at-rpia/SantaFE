@@ -159,7 +159,7 @@ export class SecurityTable implements OnInit, OnChanges {
       if (isAxe) {
         targetHeader.state.isAxeSkewEnabled = !targetHeader.state.isAxeSkewEnabled;
       } else {
-        targetHeader.state.isRunSkewEnabled = !targetHeader.state.isRunSkewEnabled;
+        targetHeader.state.istotalSkewEnabled = !targetHeader.state.istotalSkewEnabled;
       }
       if (this.tableData.state.loadedContentStage >= 2) {
         this.applySkewToggleToRows(targetHeader, isAxe);
@@ -340,7 +340,7 @@ export class SecurityTable implements OnInit, OnChanges {
         if (isAxe) {
           targetQuant.state.axeSkewEnabled = targetHeader.state.isAxeSkewEnabled;
         } else {
-          targetQuant.state.runSkewEnabled = targetHeader.state.isRunSkewEnabled;
+          targetQuant.state.totalSkewEnabled = targetHeader.state.istotalSkewEnabled;
         }
       }
     });

@@ -333,7 +333,7 @@ export class DTOService {
         bidLineHeight: 30,
         offerLineHeight: 30,
         axeSkew: !isStencil ? rawData.axeSkew * 100 : 50,
-        runSkew: !isStencil ? rawData.runSkew * 100 : 50
+        totalSkew: !isStencil ? rawData.totalSkew * 100 : 50
       },
       state: {
         hasBid: hasBid,
@@ -343,9 +343,9 @@ export class DTOService {
         isCrossed: !isStencil && delta < 0,
         isCrossedTier2: delta <= -tier2Shreshold,
         axeSkewEnabled: false,
-        runSkewEnabled: false,
+        totalSkewEnabled: false,
         noAxeSkew: !isStencil ? !rawData.axeSkew : true,
-        noRunSkew: !isStencil ? !rawData.runSkew : true
+        nototalSkew: !isStencil ? !rawData.totalSkew : true
       }
     };
     return object;
@@ -385,7 +385,7 @@ export class DTOService {
         isQuantVariant: !!stub.isForQuantComparer,
         isPureTextVariant: !!stub.pureText,
         isAxeSkewEnabled: false,
-        isRunSkewEnabled: false
+        istotalSkewEnabled: false
       }
     };
     return object;

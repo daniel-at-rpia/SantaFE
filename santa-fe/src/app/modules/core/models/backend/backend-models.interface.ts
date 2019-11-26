@@ -175,7 +175,7 @@ export interface BEBestQuoteDTO {
   bidVenue: string;
   askVenue: string;
   axeSkew: number;
-  runSkew: number;
+  totalSkew: number;
 }
 
 export interface BEQuoteDTO {

@@ -204,7 +204,7 @@ $quantComparer_min_height: 2.5rem;
       }
     }
   }
-  &--runSkewEnabledState {
+  &--totalSkewEnabledState {
     #{$quantComparerBlockName} {
       &__skew--run {
         display: flex;

@@ -2,7 +2,7 @@
   [ngClass]="{
     'sat-quantComparer': true,
     'sat-quantComparer--axeSkewEnabledState': quantData.state.axeSkewEnabled,
-    'sat-quantComparer--runSkewEnabledState': quantData.state.runSkewEnabled,
+    'sat-quantComparer--totalSkewEnabledState': quantData.state.totalSkewEnabled,
     'sat-quantComparer--crossedState': quantData.state.isCrossed,
     'sat-quantComparer--crossedStateTier2': quantData.state.isCrossedTier2,
     'sat-quantComparer--stencilState': quantData.state.isStencil,
@@ -54,7 +54,7 @@
     <div
       class="sat-quantComparer__skew-leftSpacing"
       [ngStyle]="{
-        'flex-basis': quantData.style.runSkew + '%'
+        'flex-basis': quantData.style.totalSkew + '%'
       }"></div>
     <div class="sat-quantComparer__skew-indicator">
       <i class="sat-quantComparer__skew-indicator-icon fas fa-map-marker"></i>
@@ -63,7 +63,7 @@
     <div
       class="sat-quantComparer__skew-rightSpacing"
       [ngStyle]="{
-        'flex-basis': 100 - quantData.style.runSkew + '%'
+        'flex-basis': 100 - quantData.style.totalSkew + '%'
       }"
     ></div>
   </section>
