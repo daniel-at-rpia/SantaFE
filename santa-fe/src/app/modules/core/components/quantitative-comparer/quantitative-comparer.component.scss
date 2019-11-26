@@ -182,7 +182,7 @@ $quantComparer_min_height: 2.5rem;
         }
       }
     }
-    &--run {
+    &--total {
       #{$quantComparerBlockName} {
         &__skew {
           &-indicator {
@@ -206,8 +206,22 @@ $quantComparer_min_height: 2.5rem;
   }
   &--totalSkewEnabledState {
     #{$quantComparerBlockName} {
-      &__skew--run {
+      &__skew--total {
         display: flex;
+      }
+    }
+  }
+  &--noAxeSkewState {
+    #{$quantComparerBlockName} {
+      &__skew--axe {
+        display: none;
+      }
+    }
+  }
+  &--noTotalSkewState {
+    #{$quantComparerBlockName} {
+      &__skew--total {
+        display: none;
       }
     }
   }

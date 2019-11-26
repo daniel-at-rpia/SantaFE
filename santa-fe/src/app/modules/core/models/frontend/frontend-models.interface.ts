@@ -173,7 +173,7 @@ export interface QuantComparerDTO extends BasicDTOStructure {
     axeSkewEnabled: boolean;
     totalSkewEnabled: boolean;
     noAxeSkew: boolean;
-    nototalSkew: boolean;
+    noTotalSkew: boolean;
   }
 }
 

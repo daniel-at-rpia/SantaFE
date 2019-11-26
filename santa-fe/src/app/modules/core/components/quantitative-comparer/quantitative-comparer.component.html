@@ -3,6 +3,8 @@
     'sat-quantComparer': true,
     'sat-quantComparer--axeSkewEnabledState': quantData.state.axeSkewEnabled,
     'sat-quantComparer--totalSkewEnabledState': quantData.state.totalSkewEnabled,
+    'sat-quantComparer--noAxeSkewState': quantData.state.noAxeSkew,
+    'sat-quantComparer--noTotalSkewState': quantData.state.noTotalSkew,
     'sat-quantComparer--crossedState': quantData.state.isCrossed,
     'sat-quantComparer--crossedStateTier2': quantData.state.isCrossedTier2,
     'sat-quantComparer--stencilState': quantData.state.isStencil,
@@ -50,7 +52,7 @@
       <span class="sat-quantComparer__crossing-content-value">{{-quantData.data.delta}}</span>
     </div>
   </section>
-  <section class="sat-quantComparer__skew sat-quantComparer__skew--run">
+  <section class="sat-quantComparer__skew sat-quantComparer__skew--total">
     <div
       class="sat-quantComparer__skew-leftSpacing"
       [ngStyle]="{

@@ -344,8 +344,8 @@ export class DTOService {
         isCrossedTier2: delta <= -tier2Shreshold,
         axeSkewEnabled: false,
         totalSkewEnabled: false,
-        noAxeSkew: !isStencil ? !rawData.axeSkew : true,
-        nototalSkew: !isStencil ? !rawData.totalSkew : true
+        noAxeSkew: !isStencil ? rawData.axeSkew === null : true,
+        noTotalSkew: !isStencil ? rawData.totalSkew === null : true
       }
     };
     return object;
