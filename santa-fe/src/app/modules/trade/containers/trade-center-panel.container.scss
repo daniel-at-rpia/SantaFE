@@ -24,6 +24,7 @@
         margin-right: $spacing_medium;
         &--active {
           @include material('none');
+          @extend .santaBtn--inverseLabelled;
           background-color: $color_active;
         }
       }

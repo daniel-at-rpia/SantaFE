@@ -1,6 +1,39 @@
 <article class="sat-tradeCenterPanel">
   <section class="sat-tradeCenterPanel__quickFilters">
     <div class="sat-tradeCenterPanel__quickFilters-row">
+      <span class="sat-tradeCenterPanel__quickFilters-row-label">Metric :</span>
+      <button
+        (click)="onSwitchMetric('TSpread')"
+        [ngClass]="{
+          'sat-tradeCenterPanel__quickFilters-row-btn': true,
+          'santaBtn--labelled': true,
+          'sat-tradeCenterPanel__quickFilters-row-btn--active': state.filters.quickFilters.metricType === 'TSpread'
+        }">
+        <i class="fal fa-ruler"></i>
+        <span>Spread</span>
+      </button>
+      <button
+        (click)="onSwitchMetric('Yield')"
+        [ngClass]="{
+          'sat-tradeCenterPanel__quickFilters-row-btn': true,
+          'santaBtn--labelled': true,
+          'sat-tradeCenterPanel__quickFilters-row-btn--active': state.filters.quickFilters.metricType === 'Yield'
+        }">
+        <i class="fal fa-ruler"></i>
+        <span>Yield</span>
+      </button>
+      <button
+        (click)="onSwitchMetric('Price')"
+        [ngClass]="{
+          'sat-tradeCenterPanel__quickFilters-row-btn': true,
+          'santaBtn--labelled': true,
+          'sat-tradeCenterPanel__quickFilters-row-btn--active': state.filters.quickFilters.metricType === 'Price'
+        }">
+        <i class="fal fa-ruler"></i>
+        <span>Price</span>
+      </button>
+    </div>
+    <div class="sat-tradeCenterPanel__quickFilters-row">
       <span class="sat-tradeCenterPanel__quickFilters-row-label">Currency :</span>
       <button
         *ngFor="let eachCcy of currencyList"
@@ -8,8 +41,7 @@
         [ngClass]="{
           'sat-tradeCenterPanel__quickFilters-row-btn': true,
           'sat-tradeCenterPanel__quickFilters-row-btn--active': state.filters.quickFilters.currency.indexOf(eachCcy) >= 0,
-          'santaBtn--labelled': true,
-          'santaBtn--inverseLabelled': state.filters.quickFilters.currency.indexOf(eachCcy) >= 0
+          'santaBtn--labelled': true
         }">
         <i class="fal fa-dollar-sign"></i>
         <span>{{eachCcy}}</span>
@@ -23,8 +55,7 @@
         [ngClass]="{
           'sat-tradeCenterPanel__quickFilters-row-btn': true,
           'sat-tradeCenterPanel__quickFilters-row-btn--active': state.filters.quickFilters.securityType.indexOf(eachType) >= 0,
-          'santaBtn--labelled': true,
-          'santaBtn--inverseLabelled': state.filters.quickFilters.securityType.indexOf(eachType) >= 0
+          'santaBtn--labelled': true
         }">
         <span>{{eachType}}</span>
       </button>
@@ -37,8 +68,7 @@
         [ngClass]="{
           'sat-tradeCenterPanel__quickFilters-row-btn': true,
           'sat-tradeCenterPanel__quickFilters-row-btn--active': state.filters.quickFilters.portfolios.indexOf(eachPortfolio) >= 0,
-          'santaBtn--labelled': true,
-          'santaBtn--inverseLabelled': state.filters.quickFilters.portfolios.indexOf(eachPortfolio) >= 0
+          'santaBtn--labelled': true
         }">
         <i class="fal fa-file-invoice-dollar"></i>
         <span>{{eachPortfolio}}</span>

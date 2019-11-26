@@ -90,6 +90,13 @@ export class TradeCenterPanel {
     this.updateRowListWithFilters();
   }
 
+  public onSwitchMetric(targetMetric){
+    if (this.state.filters.quickFilters.metricType !== targetMetric) {
+      this.state.filters.quickFilters.metricType = targetMetric;
+      this.loadFreshData(); 
+    }
+  }
+
   private initializePageState() {
     this.state = {
       table: this.dtoService.formSecurityTableObject(),
@@ -106,6 +113,12 @@ export class TradeCenterPanel {
         }
       }
     };
+    this.loadFreshData();
+  }
+
+  private loadFreshData() {
+    this.state.prinstineRowList = [];
+    this.updateStage(0);
     this.loadInitialStencilTable();
     this.fetchStageOneContent();
   }
