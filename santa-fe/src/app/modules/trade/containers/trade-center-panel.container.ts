@@ -197,13 +197,13 @@ export class TradeCenterPanel {
         const newBESecurity:BESecurityDTO = serverReturn[eachKey][0].santaSecurity;
         const newSecurity = this.dtoService.formSecurityCardObject(newBESecurity, false);
         serverReturn[eachKey].forEach((eachPortfolio: BEPortfolioDTO) => {
-          if (eachPortfolio.quantity !== 0 && eachPortfolio.marketValueCad !== 0 && !eachPortfolio.santaSecurity.isGovt && eachPortfolio.santaSecurity.metrics) {
-            newSecurity.data.position = newSecurity.data.position + eachPortfolio.marketValueCad;
+          if (eachPortfolio.quantity !== 0 && !eachPortfolio.santaSecurity.isGovt && eachPortfolio.santaSecurity.metrics) {
+            newSecurity.data.position = newSecurity.data.position + eachPortfolio.quantity;
             newSecurity.data.portfolios.push(eachPortfolio.portfolioShortName);
             if (eachPortfolio.portfolioShortName === 'DOF' || eachPortfolio.portfolioShortName === 'SOF') {
-              newSecurity.data.positionHF = newSecurity.data.positionHF + eachPortfolio.marketValueCad;
+              newSecurity.data.positionHF = newSecurity.data.positionHF + eachPortfolio.quantity;
             } else if (eachPortfolio.portfolioShortName === 'STIP' || eachPortfolio.portfolioShortName === 'FIP' || eachPortfolio.portfolioShortName === 'CIP') {
-              newSecurity.data.positionNLF = newSecurity.data.positionNLF + eachPortfolio.marketValueCad;
+              newSecurity.data.positionNLF = newSecurity.data.positionNLF + eachPortfolio.quantity;
             }
           } else {
             isValidFlag = false;
