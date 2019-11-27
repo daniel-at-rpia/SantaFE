@@ -64,13 +64,17 @@ export class TradeCenterPanel {
 
   private initializePageState() {
     this.state = {
-      fetchTableDataFailed: false,
-      fetchTableDataFailedError: '',
-      table: this.dtoService.formSecurityTableObject(),
-      tableMetrics: SecurityTableMetrics,
-      rowList: [],
-      prinstineRowList: [],
       currentContentStage: 0,
+      table: {
+        metrics: SecurityTableMetrics,
+        dto: this.dtoService.formSecurityTableObject()
+      },
+      fetchResult: {
+        fetchTableDataFailed: false,
+        fetchTableDataFailedError: '',
+        rowList: [],
+        prinstineRowList: []
+      },
       filters: {
         quickFilters: {
           metricType: TriCoreMetricConfig.TSpread.label,
@@ -116,7 +120,7 @@ export class TradeCenterPanel {
   public onSwitchMetric(targetMetric){
     if (this.state.filters.quickFilters.metricType !== targetMetric) {
       this.state.filters.quickFilters.metricType = targetMetric;
-      const thrityDayDeltaMetric = this.state.tableMetrics[7];
+      const thrityDayDeltaMetric = this.state.table.metrics[7];
       if (thrityDayDeltaMetric.label === '30 Day Delta') {
         thrityDayDeltaMetric.attrName = TriCoreMetricConfig[targetMetric].metricLabel;
         thrityDayDeltaMetric.underlineAttrName = TriCoreMetricConfig[targetMetric].metricLabel;
@@ -128,7 +132,7 @@ export class TradeCenterPanel {
   }
 
   private loadFreshData() {
-    this.state.prinstineRowList = [];
+    this.state.fetchResult.prinstineRowList = [];
     this.updateStage(0);
     this.loadInitialStencilTable();
     this.fetchStageOneContent();
@@ -155,9 +159,9 @@ export class TradeCenterPanel {
           }
         }
       });
-      this.state.prinstineRowList.push(newRow);
+      this.state.fetchResult.prinstineRowList.push(newRow);
     };
-    this.state.rowList = this.utilityService.deepCopy(this.state.prinstineRowList);
+    this.state.fetchResult.rowList = this.utilityService.deepCopy(this.state.fetchResult.prinstineRowList);
   }
 
   private fetchStageOneContent() {
@@ -173,9 +177,9 @@ export class TradeCenterPanel {
       }),
       catchError(err => {
         console.error('error', err);
-        this.state.fetchTableDataFailed = true;
-        this.state.fetchTableDataFailedError = err.message;
-        this.state.prinstineRowList = [];
+        this.state.fetchResult.fetchTableDataFailed = true;
+        this.state.fetchResult.fetchTableDataFailedError = err.message;
+        this.state.fetchResult.prinstineRowList = [];
         this.updateRowListWithFilters();
         return of('error');
       })
@@ -183,7 +187,7 @@ export class TradeCenterPanel {
   }
 
   private loadStageOneContent(serverReturn: Object) {
-    this.state.prinstineRowList = [];  // flush out the stencils
+    this.state.fetchResult.prinstineRowList = [];  // flush out the stencils
     const securityList = [];
     let count = 0;
     let nonEmptyCount = 0;
@@ -229,7 +233,7 @@ export class TradeCenterPanel {
       quoteMetric: this.state.filters.quickFilters.metricType,
       identifiers: []
     };
-    this.state.prinstineRowList.forEach((eachRow) => {
+    this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
       const newSecurityId = {
         "SecurityId": eachRow.data.security.data.securityID
       };
@@ -242,9 +246,9 @@ export class TradeCenterPanel {
       }),
       catchError(err => {
         console.log('liveQuote/get-best-quotes failed', err);
-        this.state.fetchTableDataFailed = true;
-        this.state.fetchTableDataFailedError = err.message;
-        this.state.prinstineRowList = [];
+        this.state.fetchResult.fetchTableDataFailed = true;
+        this.state.fetchResult.fetchTableDataFailedError = err.message;
+        this.state.fetchResult.prinstineRowList = [];
         this.updateRowListWithFilters();
         return of('error');
       })
@@ -254,7 +258,7 @@ export class TradeCenterPanel {
   private loadStageThreeContent(serverReturn){
     for (const eachKey in serverReturn) {
       const securityId = this.utilityService.extractSecurityId(eachKey);
-      const results = this.state.prinstineRowList.filter((eachRow) => {
+      const results = this.state.fetchResult.prinstineRowList.filter((eachRow) => {
         return eachRow.data.security.data.securityID === securityId;
       });
       if (!!results && results.length > 0) {
@@ -274,11 +278,11 @@ export class TradeCenterPanel {
   ) {
     const newRow = this.dtoService.formSecurityTableRowObject(newSecurity);
     newSecurity.state.isTable = true;
-    this.state.table.data.headers.forEach((eachHeader, index) => {
+    this.state.table.dto.data.headers.forEach((eachHeader, index) => {
       // TODO: once implemented two-step process to fetch security data, this if statement should only populate stage one metrics
       this.populateEachCellWithStageOneContent(eachHeader, newRow);
     });
-    this.state.prinstineRowList.push(newRow);
+    this.state.fetchResult.prinstineRowList.push(newRow);
   }
 
   private populateEachCellWithStageOneContent(
@@ -315,7 +319,7 @@ export class TradeCenterPanel {
 
   private updateRowListWithFilters(){
     const filteredList: Array<SecurityTableRowDTO> = [];
-    this.state.prinstineRowList.forEach((eachRow) => {
+    this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
       if ( this.state.filters.quickFilters.keyword.length < 3 || eachRow.data.security.data.name.indexOf(this.state.filters.quickFilters.keyword) >= 0) {
         let currencyIncludeFlag = this.filterByCurrency(eachRow);
         let securityTypeIncludeFlag = this.filterBySecurityType(eachRow);
@@ -323,7 +327,7 @@ export class TradeCenterPanel {
         currencyIncludeFlag && securityTypeIncludeFlag && portfolioIncludeFlag && filteredList.push(eachRow);
       }
     });
-    this.state.rowList = this.utilityService.deepCopy(filteredList);
+    this.state.fetchResult.rowList = this.utilityService.deepCopy(filteredList);
   }
 
   private filterByCurrency(targetRow: SecurityTableRowDTO): boolean {
@@ -358,7 +362,7 @@ export class TradeCenterPanel {
 
   private calculateQuantComparerWidthAndHeight() {
     const bestRunList = [];
-    this.state.prinstineRowList.forEach((eachRow) => {
+    this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
       const targetCell = eachRow.data.cells[0];
       !!targetCell.data.quantComparerDTO && bestRunList.push(targetCell.data.quantComparerDTO);
     });

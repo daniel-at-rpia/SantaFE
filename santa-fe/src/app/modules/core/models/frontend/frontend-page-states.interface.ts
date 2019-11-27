@@ -60,13 +60,17 @@ export interface TradeState {
 }
 
 export interface TradeCenterPanelState {
-  fetchTableDataFailed: boolean;
-  fetchTableDataFailedError: string;
-  table: SecurityTableDTO;
-  tableMetrics: Array<SecurityTableMetricStub>;
-  rowList: Array<SecurityTableRowDTO>;
-  prinstineRowList: Array<SecurityTableRowDTO>;
   currentContentStage: number;
+  table: {
+    metrics: Array<SecurityTableMetricStub>;
+    dto: SecurityTableDTO;
+  }
+  fetchResult: {
+    fetchTableDataFailed: boolean;
+    fetchTableDataFailedError: string;
+    rowList: Array<SecurityTableRowDTO>;
+    prinstineRowList: Array<SecurityTableRowDTO>;
+  }
   filters: {
     quickFilters: {
       metricType: string;

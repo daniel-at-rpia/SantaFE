@@ -6,68 +6,83 @@
   @include mix_border_radius(10px);
   flex: 1 1 auto;
   display: flex;
-  flex-direction: column;
   overflow: hidden;
-  padding: $spacing_medium;
-  &__quickFilters {
+  &__presetCanvas {
+    flex: 1 1 auto;
     display: flex;
-    flex-direction: column;
-    &-row {
-      display: flex;
-      margin-bottom: $spacing_medium;
-      &-label {
-        color: $font_color_minor;
-        font-size: $font_size_large;
-        margin-right: $spacing_medium;
-      }
-      &-btn {
-        margin-right: $spacing_medium;
-        &--active {
-          @include material('none');
-          @extend .santaBtn--inverseLabelled;
-          background-color: $color_active;
-        }
-      }
-    }
   }
-  &__errorPrompt {
-    @include mix_border_radius(10px);
-    flex: 0 1 auto;
+  &__configurator {
+    flex: 0 0 auto;
     display: none;
-    flex-direction: column;
-    align-items: center;
-    background-color: $color_red_1;
-    padding: $spacing_large;
-    margin: $spacing_small 0;
-    &-icon {
-      font-size: $font_size_xxxx_large;
-      color: $color_kill;
-    }
-    &-title {
-      text-align: center;
-      font-size: $font_size_xx_large;
-      color: $color_kill;
-      margin: $spacing_large 0;
-    }
-    &-errorText {
-      text-align: center;
-      font-size: $font_size_large;
-      color: $font_color_major;
-    }
   }
-  &__table {
+  &__result {
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    security-table {
+    padding: $spacing_medium;
+    &-quickFilters {
       display: flex;
+      flex-direction: column;
+      &-row {
+        display: flex;
+        margin-bottom: $spacing_medium;
+        &-label {
+          color: $font_color_minor;
+          font-size: $font_size_large;
+          margin-right: $spacing_medium;
+        }
+        &-btn {
+          margin-right: $spacing_medium;
+          &--active {
+            @include material('none');
+            @extend .santaBtn--inverseLabelled;
+            background-color: $color_active;
+          }
+        }
+      }
+    }
+    &-errorPrompt {
+      @include mix_border_radius(10px);
+      flex: 0 1 auto;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      background-color: $color_red_1;
+      padding: $spacing_large;
+      margin: $spacing_small 0;
+      &-icon {
+        font-size: $font_size_xxxx_large;
+        color: $color_kill;
+      }
+      &-title {
+        text-align: center;
+        font-size: $font_size_xx_large;
+        color: $color_kill;
+        margin: $spacing_large 0;
+      }
+      &-errorText {
+        text-align: center;
+        font-size: $font_size_large;
+        color: $font_color_major;
+      }
+    }
+    &-table {
+      display: flex;
+      flex-direction: column;
       overflow: hidden;
+      security-table {
+        display: flex;
+        overflow: hidden;
+      }
     }
   }
   &--fetchDataFailedState {
     #{$tradeCenterPanelBlockName} {
-      &__errorPrompt {
-        display: flex;
+      &__result {
+        &-errorPrompt {
+          display: flex;
+        }
       }
     }
   }

@@ -121,7 +121,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: 'securityType',
     underlineAttrName: 'securityType',
     readyStage: 2,
-    active: true,
+    active: false,
     inversedSortingForText: true
   },{
     label: 'Seniority',
