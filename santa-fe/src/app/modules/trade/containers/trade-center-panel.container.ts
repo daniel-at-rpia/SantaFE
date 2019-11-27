@@ -62,6 +62,28 @@ export class TradeCenterPanel {
   currencyList = CurrencyList;
   securityTypeList = SecurityTypeList;
 
+  private initializePageState() {
+    this.state = {
+      fetchTableDataFailed: false,
+      fetchTableDataFailedError: '',
+      table: this.dtoService.formSecurityTableObject(),
+      tableMetrics: SecurityTableMetrics,
+      rowList: [],
+      prinstineRowList: [],
+      currentContentStage: 0,
+      filters: {
+        quickFilters: {
+          metricType: TriCoreMetricConfig.TSpread.label,
+          portfolios: ['DOF'],
+          securityType: ['Bond', 'CdsIndex', 'Cds', 'Preferred'],
+          currency: ['USD'],
+          keyword: ''
+        }
+      }
+    };
+    this.loadFreshData();
+  }
+
   constructor(
     private dtoService: DTOService,
     private utilityService: UtilityService,
@@ -103,28 +125,6 @@ export class TradeCenterPanel {
       }
       this.loadFreshData(); 
     }
-  }
-
-  private initializePageState() {
-    this.state = {
-      fetchTableDataFailed: false,
-      fetchTableDataFailedError: '',
-      table: this.dtoService.formSecurityTableObject(),
-      tableMetrics: SecurityTableMetrics,
-      rowList: [],
-      prinstineRowList: [],
-      currentContentStage: 0,
-      filters: {
-        quickFilters: {
-          metricType: TriCoreMetricConfig.TSpread.label,
-          portfolios: ['DOF'],
-          securityType: ['Bond', 'Preferred'],
-          currency: ['USD'],
-          keyword: ''
-        }
-      }
-    };
-    this.loadFreshData();
   }
 
   private loadFreshData() {
