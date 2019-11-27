@@ -12,9 +12,9 @@ import { SecurityDefinitionFilterBlock } from 'FEModels/frontend-blocks.interfac
 import { ConfiguratorDefinitionLayout } from 'Core/constants/securityDefinitionConstants.constant';
 
 @Component({
-  selector: 'security-group-definition-configurator',
-  templateUrl: './definition-configurator.component.html',
-  styleUrls: ['./definition-configurator.component.scss'],
+  selector: 'security-definition-configurator',
+  templateUrl: './security-definition-configurator.container.html',
+  styleUrls: ['./security-definition-configurator.container.scss'],
   encapsulation: ViewEncapsulation.None
 })
 

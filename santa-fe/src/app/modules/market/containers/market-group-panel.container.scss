@@ -91,7 +91,7 @@ $marketGroupPanel_configurator_width: $securityDefinitionConfigurator_width + $s
         width: 100%;
         display: flex;
         transform: translate(100%, 0);
-        security-group-definition-configurator {
+        security-definition-configurator {
           flex: 1 1 auto;
           display: flex;
           overflow: hidden;

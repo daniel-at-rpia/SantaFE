@@ -14,6 +14,7 @@ import { QuantitativeComparer } from 'Core/components/quantitative-comparer/quan
 import { SecurityQuote } from 'Core/components/security-quote/security-quote.component';
 import { SecurityTableRow } from 'Core/components/security-table-row/security-table-row.component';
 import { SecurityDefinition } from 'Core/components/security-definition/security-definition.component';
+import { SecurityDefinitionConfigurator } from 'Core/containers/security-definition-configurator/security-definition-configurator.container';
 
 import { SecurityTable } from 'Core/containers/security-table/security-table.container';
 
@@ -24,7 +25,8 @@ import { SecurityTable } from 'Core/containers/security-table/security-table.con
     SecurityQuote,
     SecurityTable,
     SecurityTableRow,
-    SecurityDefinition
+    SecurityDefinition,
+    SecurityDefinitionConfigurator
   ],
   imports: [
     CommonModule,
@@ -39,7 +41,8 @@ import { SecurityTable } from 'Core/containers/security-table/security-table.con
   exports: [
     SecurityCard,
     SecurityTable,
-    SecurityDefinition
+    SecurityDefinition,
+    SecurityDefinitionConfigurator
   ]
 })
 export class CoreModule { }
