@@ -61,6 +61,9 @@ export interface TradeState {
 
 export interface TradeCenterPanelState {
   currentContentStage: number;
+  configurator: {
+    dto: SecurityDefinitionConfiguratorDTO;
+  }
   table: {
     metrics: Array<SecurityTableMetricStub>;
     dto: SecurityTableDTO;

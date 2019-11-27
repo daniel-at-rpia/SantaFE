@@ -65,6 +65,9 @@ export class TradeCenterPanel {
   private initializePageState() {
     this.state = {
       currentContentStage: 0,
+      configurator: {
+        dto: this.dtoService.createSecurityDefinitionConfigurator()
+      },
       table: {
         metrics: SecurityTableMetrics,
         dto: this.dtoService.formSecurityTableObject()
