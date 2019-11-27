@@ -31,8 +31,8 @@
     import { SecurityGroupMetricBlock } from 'FEModels/frontend-blocks.interface';
     import {
       SecurityGroupDTO,
-      SecurityGroupDefinitionDTO,
-      SecurityGroupDefinitionConfiguratorDTO,
+      SecurityDefinitionDTO,
+      SecurityDefinitionConfiguratorDTO,
       SearchShortcutDTO
     } from 'FEModels/frontend-models.interface';
     import { BESecurityGroupDTO } from 'BEModels/backend-models.interface';
@@ -42,11 +42,12 @@
     import { SecurityDefinitionStub } from 'FEModels/frontend-stub-models.interface';
     import {
       PieChartConfiguratorOptions,
-      SecurityGroupDefinitionMap,
-      BackendKeyDictionary,
       MetricRenderDelay,
       SearchShortcuts
     } from 'Core/constants/marketConstants.constant';
+    import {  
+      SecurityDefinitionMap
+    } from 'Core/constants/securityDefinitionConstants.constant';
   //
 
 @Component({
@@ -63,7 +64,7 @@ export class MarketGroupPanel implements OnDestroy {
   getGroupsFromSearchSub: Subscription;
   PieChartConfigurationOptions = PieChartConfiguratorOptions;
   constants = {
-    securityGroupDefinitionMap: SecurityGroupDefinitionMap,
+    securityGroupDefinitionMap: SecurityDefinitionMap,
     searchShortcuts: SearchShortcuts
   }
 
@@ -74,7 +75,7 @@ export class MarketGroupPanel implements OnDestroy {
       isConfiguratorCollapsed: false,
       isGroupDataLoaded: false,
       configurator: {
-        dto: this.dtoService.createSecurityGroupDefinitionConfigurator(),
+        dto: this.dtoService.createSecurityDefinitionConfigurator(),
         showSelectedGroupConfig: false,
         cachedOriginalConfig: null,
         shortcutList: [],
@@ -258,15 +259,15 @@ export class MarketGroupPanel implements OnDestroy {
   }
 
   public onClearConfig(){
-    this.state.configurator.dto = this.dtoService.createSecurityGroupDefinitionConfigurator();
+    this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator();
   }
 
-  public loadLongDefinitionOptionList(targetDefinition: SecurityGroupDefinitionDTO){
+  public loadLongDefinitionOptionList(targetDefinition: SecurityDefinitionDTO){
     this.restfulCommService.callAPI(targetDefinition.data.urlForGetLongOptionListFromServer, {req: 'GET'}).pipe(
       first(),
       delay(200),
       tap((serverReturn: Array<string>) => {
-        targetDefinition.data.filterOptionList = this.dtoService.generateSecurityGroupDefinitionFilterOptionList(targetDefinition.data.key, serverReturn);
+        targetDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, serverReturn);
         this.state.configurator.dto.state.isLoadingLongOptionListFromServer = false;
       }),
       catchError(err => {
@@ -279,7 +280,7 @@ export class MarketGroupPanel implements OnDestroy {
   private populateSearchShortcuts(){
     this.constants.searchShortcuts.forEach((eachShortcutStub) => {
       const definitionList = eachShortcutStub.includedDefinitions.map((eachIncludedDef) => {
-        const definitionDTO = this.dtoService.formSecurityGroupDefinitionObject(this.constants.securityGroupDefinitionMap.find((eachDef) => {return eachDef.key === eachIncludedDef.definitionKey}));
+        const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityGroupDefinitionMap.find((eachDef) => {return eachDef.key === eachIncludedDef.definitionKey}));
         definitionDTO.state.groupByActive = !!eachIncludedDef.groupByActive;
         if (eachIncludedDef.selectedOptions.length > 0) {
           definitionDTO.state.filterActive = true;
@@ -310,7 +311,7 @@ export class MarketGroupPanel implements OnDestroy {
     });
   }
 
-  private startSearch(definitionList: Array<SecurityGroupDefinitionDTO>){
+  private startSearch(definitionList: Array<SecurityDefinitionDTO>){
     this.state.configurator.cachedOriginalConfig = null;
     this.state.configurator.showSelectedGroupConfig = false;
     this.state.isGroupDataLoaded = false;
@@ -322,7 +323,7 @@ export class MarketGroupPanel implements OnDestroy {
     this.performSearch(payload);
   }
 
-  private formSearchPayload(definitionList: Array<SecurityGroupDefinitionDTO>): PayloadGetSantaGroups{
+  private formSearchPayload(definitionList: Array<SecurityDefinitionDTO>): PayloadGetSantaGroups{
     const payload: PayloadGetSantaGroups = {
       source: "Default",
       santaGroupDefinition: {},
@@ -558,7 +559,7 @@ export class MarketGroupPanel implements OnDestroy {
     if (!this.state.configurator.cachedOriginalConfig) {
       this.state.configurator.cachedOriginalConfig = this.utilityService.deepCopy(this.state.configurator.dto);
     }
-    const newConfig = this.dtoService.createSecurityGroupDefinitionConfigurator();
+    const newConfig = this.dtoService.createSecurityDefinitionConfigurator();
     selectedGroupList.forEach((eachGroup) => {
       this.updateConfiguratorPerGroup(eachGroup, newConfig);
     });
@@ -566,7 +567,7 @@ export class MarketGroupPanel implements OnDestroy {
     this.state.configurator.showSelectedGroupConfig = true;
   }
 
-  private updateConfiguratorPerGroup(targetGroup: SecurityGroupDTO, config: SecurityGroupDefinitionConfiguratorDTO){
+  private updateConfiguratorPerGroup(targetGroup: SecurityGroupDTO, config: SecurityDefinitionConfiguratorDTO){
     for (const eachBEDefinition in targetGroup.data.definitionConfig) {
       const targetDefinition = this.utilityService.convertBEKey(eachBEDefinition);
       const targetDefinitionValue = targetGroup.data.definitionConfig[eachBEDefinition][0];

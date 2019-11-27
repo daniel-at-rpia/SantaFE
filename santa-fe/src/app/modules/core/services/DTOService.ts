@@ -9,9 +9,9 @@
     import {
       SecurityDTO,
       SecurityGroupDTO,
-      SecurityGroupDefinitionDTO,
-      SecurityGroupDefinitionBundleDTO,
-      SecurityGroupDefinitionConfiguratorDTO,
+      SecurityDefinitionDTO,
+      SecurityDefinitionBundleDTO,
+      SecurityDefinitionConfiguratorDTO,
       SecurityGroupAverageVisualizerDTO,
       QuantComparerDTO,
       SearchShortcutDTO,
@@ -23,7 +23,7 @@
     } from 'FEModels/frontend-models.interface';
     import {
       SecurityGroupMetricBlock,
-      SecurityGroupDefinitionFilterBlock,
+      SecurityDefinitionFilterBlock,
       QuoteMetricBlock
     } from 'FEModels/frontend-blocks.interface';
     import {
@@ -45,9 +45,11 @@
       SECURITY_TABLE_QUOTE_TYPE_AXE
     } from 'Core/constants/securityTableConstants.constant';
     import {
-      GroupMetricOptions,
-      ConfiguratorDefinitionLayout
+      GroupMetricOptions
     } from 'Core/constants/marketConstants.constant';
+    import {
+      ConfiguratorDefinitionLayout
+    } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       QuoteMetricList
     } from 'Core/constants/securityTableConstants.constant';
@@ -143,13 +145,13 @@ export class DTOService {
     return object;
   }
 
-  public generateSecurityGroupDefinitionFilterOptionList(
+  public generateSecurityDefinitionFilterOptionList(
     name,
     options
-  ): Array<SecurityGroupDefinitionFilterBlock> {
+  ): Array<SecurityDefinitionFilterBlock> {
     return options.map((eachOption) => {
       const normalizedOption = this.utility.normalizeDefinitionFilterOption(eachOption);
-      const newFilterDTO:SecurityGroupDefinitionFilterBlock = {
+      const newFilterDTO:SecurityDefinitionFilterBlock = {
         isSelected: false,
         isFilteredOut: false,
         displayLabel: eachOption,
@@ -160,15 +162,15 @@ export class DTOService {
     })
   };
 
-  public formSecurityGroupDefinitionObject(
+  public formSecurityDefinitionObject(
     rawData: SecurityDefinitionStub
-  ): SecurityGroupDefinitionDTO {
-    const object:SecurityGroupDefinitionDTO = {
+  ): SecurityDefinitionDTO {
+    const object:SecurityDefinitionDTO = {
       data: {
         name: rawData.displayName,
         key: rawData.key,
         urlForGetLongOptionListFromServer: rawData.urlForGetLongOptionListFromServer || null,
-        filterOptionList: this.generateSecurityGroupDefinitionFilterOptionList(rawData.key, rawData.optionList)
+        filterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList)
       },
       style: {
         icon: rawData.icon,
@@ -185,14 +187,14 @@ export class DTOService {
     return object;
   }
 
-  public formSecurityGroupDefinitionBundleObject(
+  public formSecurityDefinitionBundleObject(
     stubData: SecurityDefinitionBundleStub
-  ): SecurityGroupDefinitionBundleDTO {
-    const object: SecurityGroupDefinitionBundleDTO = {
+  ): SecurityDefinitionBundleDTO {
+    const object: SecurityDefinitionBundleDTO = {
       data: {
         label: stubData.label,
         list: stubData.list.map((eachStubDefinition) => {
-          return this.formSecurityGroupDefinitionObject(eachStubDefinition);
+          return this.formSecurityDefinitionObject(eachStubDefinition);
         })
       },
       state: {
@@ -202,12 +204,12 @@ export class DTOService {
     return object;
   }
 
-  public createSecurityGroupDefinitionConfigurator(): SecurityGroupDefinitionConfiguratorDTO {
-    const object:SecurityGroupDefinitionConfiguratorDTO = {
+  public createSecurityDefinitionConfigurator(): SecurityDefinitionConfiguratorDTO {
+    const object:SecurityDefinitionConfiguratorDTO = {
       data: {
         filterSearchInputValue: '',
         definitionList: ConfiguratorDefinitionLayout.map((eachBundle) => {
-          return this.formSecurityGroupDefinitionBundleObject(eachBundle);
+          return this.formSecurityDefinitionBundleObject(eachBundle);
         })
       },
       state: {
@@ -259,7 +261,7 @@ export class DTOService {
   }
 
   public formSearchShortcutObject(
-    definitionList: Array<SecurityGroupDefinitionDTO>,
+    definitionList: Array<SecurityDefinitionDTO>,
     title: string
   ): SearchShortcutDTO {
     const object: SearchShortcutDTO = {

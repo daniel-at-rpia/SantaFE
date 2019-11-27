@@ -7,9 +7,9 @@ import {
   EventEmitter
 } from '@angular/core';
 
-import { SecurityGroupDefinitionConfiguratorDTO,SecurityGroupDefinitionDTO } from 'FEModels/frontend-models.interface';
-import { SecurityGroupDefinitionFilterBlock } from 'FEModels/frontend-blocks.interface';
-import { ConfiguratorDefinitionLayout } from 'Core/constants/marketConstants.constant';
+import { SecurityDefinitionConfiguratorDTO,SecurityDefinitionDTO } from 'FEModels/frontend-models.interface';
+import { SecurityDefinitionFilterBlock } from 'FEModels/frontend-blocks.interface';
+import { ConfiguratorDefinitionLayout } from 'Core/constants/securityDefinitionConstants.constant';
 
 @Component({
   selector: 'security-group-definition-configurator',
@@ -18,11 +18,11 @@ import { ConfiguratorDefinitionLayout } from 'Core/constants/marketConstants.con
   encapsulation: ViewEncapsulation.None
 })
 
-export class SecurityGroupDefinitionConfigurator implements OnInit {
+export class SecurityDefinitionConfigurator implements OnInit {
   configuratorDefinitionlayout: Array<any>;
-  @Input() configuratorData: SecurityGroupDefinitionConfiguratorDTO;
+  @Input() configuratorData: SecurityDefinitionConfiguratorDTO;
   @Input() highlightedVariant: boolean;
-  @Output() onClickLoadLongOptionList = new EventEmitter<SecurityGroupDefinitionDTO>();
+  @Output() onClickLoadLongOptionList = new EventEmitter<SecurityDefinitionDTO>();
   @Output() onClickSearch = new EventEmitter();
   constructor(
   ) {
@@ -38,12 +38,12 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
     });
   }
 
-  public onClickLoadLongOptionListForDefinition(targetDefinition: SecurityGroupDefinitionDTO) {
+  public onClickLoadLongOptionListForDefinition(targetDefinition: SecurityDefinitionDTO) {
     this.configuratorData.state.isLoadingLongOptionListFromServer = true;
     this.onClickLoadLongOptionList.emit(targetDefinition);
   }
 
-  selectDefinitionForGrouping(targetDefinition: SecurityGroupDefinitionDTO) {
+  selectDefinitionForGrouping(targetDefinition: SecurityDefinitionDTO) {
     if (!targetDefinition.state.isLocked) {
       targetDefinition.state.groupByActive = !targetDefinition.state.groupByActive;
       // disable the two-step config workflow through commenting, so we can bring it back up easily if necessary
@@ -63,7 +63,7 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
     }
   }
 
-  onClickDefinition(targetDefinition: SecurityGroupDefinitionDTO){
+  onClickDefinition(targetDefinition: SecurityDefinitionDTO){
     if (!targetDefinition.state.isUnactivated) {
       this.clearSearchFilter();
       if (this.configuratorData.state.showFiltersFromDefinition && this.configuratorData.state.showFiltersFromDefinition.data.urlForGetLongOptionListFromServer) {
@@ -77,7 +77,7 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
     }
   }
 
-  onClickFilterOption(targetOption:SecurityGroupDefinitionFilterBlock){
+  onClickFilterOption(targetOption:SecurityDefinitionFilterBlock){
     const targetDefinition = this.configuratorData.state.showFiltersFromDefinition;
     targetOption.isSelected = !targetOption.isSelected;
     let filterActive = false;
@@ -108,7 +108,7 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
     }
   }
 
-  applySearchFilter(targetOption: SecurityGroupDefinitionFilterBlock, keyword: string):boolean {
+  applySearchFilter(targetOption: SecurityDefinitionFilterBlock, keyword: string):boolean {
     const normalizedTarget = targetOption.displayLabel.toLowerCase();
     const normalizedKeyword = keyword.toLowerCase();
     return normalizedTarget.includes(normalizedKeyword);
@@ -119,7 +119,7 @@ export class SecurityGroupDefinitionConfigurator implements OnInit {
     this.onSearchKeywordChange('');
   }
 
-  clearDefinitionFilterOptions(targetDefinition: SecurityGroupDefinitionDTO){
+  clearDefinitionFilterOptions(targetDefinition: SecurityDefinitionDTO){
     targetDefinition.data.filterOptionList.forEach((eachOption) => {
       eachOption.isSelected = false;
     });

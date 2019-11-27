@@ -3,8 +3,8 @@ import {
   SecurityTableDTO,
   SecurityTableRowDTO,
   SecurityGroupDTO,
-  SecurityGroupDefinitionDTO,
-  SecurityGroupDefinitionConfiguratorDTO,
+  SecurityDefinitionDTO,
+  SecurityDefinitionConfiguratorDTO,
   SecurityGroupAverageVisualizerDTO,
   SearchShortcutDTO,
   QuantComparerDTO
@@ -23,9 +23,9 @@ export interface MarketGroupPanelState {
   isConfiguratorCollapsed: boolean;
   isGroupDataLoaded: boolean;
   configurator: {
-    dto: SecurityGroupDefinitionConfiguratorDTO;
+    dto: SecurityDefinitionConfiguratorDTO;
     showSelectedGroupConfig: boolean;
-    cachedOriginalConfig: SecurityGroupDefinitionConfiguratorDTO;
+    cachedOriginalConfig: SecurityDefinitionConfiguratorDTO;
     shortcutList: Array<SearchShortcutDTO>;
     selectedShortcut: SearchShortcutDTO;
   }

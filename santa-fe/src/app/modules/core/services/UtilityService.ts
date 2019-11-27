@@ -14,8 +14,8 @@
       SecurityTableRowDTO,
       SecurityTableCellDTO,
       SecurityGroupDTO,
-      SecurityGroupDefinitionDTO,
-      SecurityGroupDefinitionConfiguratorDTO
+      SecurityDefinitionDTO,
+      SecurityDefinitionConfiguratorDTO
     } from 'FEModels/frontend-models.interface';
     import {
       SecurityGroupMetricBlock,
@@ -431,7 +431,7 @@ export class UtilityService {
       }
     }
 
-    public flattenDefinitionList(configurator: SecurityGroupDefinitionConfiguratorDTO): Array<SecurityGroupDefinitionDTO> {
+    public flattenDefinitionList(configurator: SecurityDefinitionConfiguratorDTO): Array<SecurityDefinitionDTO> {
       const flattenDefinitionList = [];
       configurator.data.definitionList.forEach((eachBundle) => {
         eachBundle.data.list.forEach((eachDefinition) => {

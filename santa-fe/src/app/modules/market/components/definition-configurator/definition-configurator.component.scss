@@ -1,13 +1,13 @@
 @import "global.scss";
 @import "modules/market/market.scss";
 
-$securityGroupDefinitionConfigurator_ctas_height: 6rem;
-.sat-securityGroupDefinitionConfigurator {
-  $securityGroupDefinitionConfiguratorBlockName: &;
+$securityDefinitionConfigurator_ctas_height: 6rem;
+.sat-securityDefinitionConfigurator {
+  $securityDefinitionConfiguratorBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
   display: flex;
   flex-direction: column;
-  width: $securityGroupDefinitionConfigurator_width;
+  width: $securityDefinitionConfigurator_width;
   &__definitions {
     @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
     @include mix_enable_scrollbar('vertical');
@@ -49,8 +49,8 @@ $securityGroupDefinitionConfigurator_ctas_height: 6rem;
           margin-top: $spacing_large;
           &-selectBtn {
             @include mix_border_radius(5px, 'top');
-            margin-left: $securityGroupDefinition_width/4;
-            width: $securityGroupDefinition_width/2 !important;
+            margin-left: $securityDefinition_width/4;
+            width: $securityDefinition_width/2 !important;
             font-size: $font_size_x_large;
             align-self: flex-start;
             &--selected {
@@ -64,7 +64,7 @@ $securityGroupDefinitionConfigurator_ctas_height: 6rem;
               background-color: inherit;
             }
           }
-          security-group-definition {
+          security-definition {
             align-self: flex-start;
           }
           &:last-of-type {
@@ -76,12 +76,12 @@ $securityGroupDefinitionConfigurator_ctas_height: 6rem;
   }
   &__filters {
     @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
-    @include mix_calculate(height, 100%, $securityGroupDefinitionConfigurator_ctas_height, '-');
+    @include mix_calculate(height, 100%, $securityDefinitionConfigurator_ctas_height, '-');
     display: flex;
     top: 0;
     right: 0;
-    width: $securityGroupDefinitionConfigurator_filters_width;
-    padding-left: $securityGroupDefinitionConfigurator_gapBetweenDefAndFilter - $spacing_xx_small;  // $spacing_xx_small for covering the undesirable border radius look on the left upper corner when not aligned perfectly with the definition
+    width: $securityDefinitionConfigurator_filters_width;
+    padding-left: $securityDefinitionConfigurator_gapBetweenDefAndFilter - $spacing_xx_small;  // $spacing_xx_small for covering the undesirable border radius look on the left upper corner when not aligned perfectly with the definition
     overflow: hidden;
     &-content {
       @include mix_alive('custom', $animation_duration_light transform);
@@ -103,7 +103,7 @@ $securityGroupDefinitionConfigurator_ctas_height: 6rem;
         flex-direction: column;
         padding: $spacing_large 0;
         margin-top: 100%;
-        &>security-group-definition {
+        &>security-definition {
           display: flex;
         }
       }
@@ -144,7 +144,7 @@ $securityGroupDefinitionConfigurator_ctas_height: 6rem;
   }
   &__ctas {
     @include mix_fixed_div(relative, $z_index_standard_hovering_item);
-    flex: 0 0 $securityGroupDefinitionConfigurator_ctas_height;
+    flex: 0 0 $securityDefinitionConfigurator_ctas_height;
     display: flex;
     overflow: hidden;
     &-content {
@@ -185,14 +185,14 @@ $securityGroupDefinitionConfigurator_ctas_height: 6rem;
     }
   }
   &--longFilterOptionsState {
-    #{$securityGroupDefinitionConfiguratorBlockName} {
+    #{$securityDefinitionConfiguratorBlockName} {
       &__filters-content-title {
         margin-top: 0;
       }
     }
   }
   &--filterActiveState {
-    #{$securityGroupDefinitionConfiguratorBlockName} {
+    #{$securityDefinitionConfiguratorBlockName} {
       &__filters {
         @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
         &-content {
@@ -204,7 +204,7 @@ $securityGroupDefinitionConfigurator_ctas_height: 6rem;
     }
   }
   &--highlightedVariant {
-    #{$securityGroupDefinitionConfiguratorBlockName} {
+    #{$securityDefinitionConfiguratorBlockName} {
       &__definitions {
         &-list-section-item-selectBtn--selected {
           background-color: $color_highlight;
@@ -223,7 +223,7 @@ $securityGroupDefinitionConfigurator_ctas_height: 6rem;
     }
   }
   &--filterShowingLongDefinitionState {
-    #{$securityGroupDefinitionConfiguratorBlockName} {
+    #{$securityDefinitionConfiguratorBlockName} {
       &__filters-content {
         &-search {
           display: none;
@@ -238,7 +238,7 @@ $securityGroupDefinitionConfigurator_ctas_height: 6rem;
     }
   }
   &--filterLoadingLongOptionListState {
-    #{$securityGroupDefinitionConfiguratorBlockName} {
+    #{$securityDefinitionConfiguratorBlockName} {
       &__definitions {
 
       }

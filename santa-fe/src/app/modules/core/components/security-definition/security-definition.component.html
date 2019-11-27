@@ -1,0 +1,43 @@
+<article
+  (click)="onClickDefinition()"
+  [ngClass]="{
+    'sat-securityDefinition': true,
+    'sat-securityDefinition--isBackendTenor': definitionData?.data.key === 'BACKEND_TENOR',
+    'sat-securityDefinition--isRatingBucket': definitionData?.data.key === 'RATING_BUCKET',
+    'sat-securityDefinition--isSecurityType': definitionData?.data.key === 'SECURITY_TYPE',
+    'sat-securityDefinition--selectedState': !!selected,
+    'sat-securityDefinition--groupByActiveState': definitionData?.state.groupByActive || definitionData?.state.isLocked,
+    'sat-securityDefinition--filterActiveState': definitionData?.state.filterActive,
+    'sat-securityDefinition--unactivated': definitionData?.state.isUnactivated,
+    'sat-securityDefinition--backgroundVariant': !!backgroundVariant,
+    'sat-securityDefinition--heroVariant': !!heroVariant
+  }">
+  <section class="sat-securityDefinition__icon" title="{{definitionData?.data.name}}">
+    <i [ngClass]="
+      'sat-securityDefinition__icon-regularImg ' + definitionData?.style.icon"></i>
+    <span class="sat-securityDefinition__icon-ratingBucket fa-stack">
+      <i [ngClass]="'sat-securityDefinition__icon-ratingBucket-primaryImg fa-stack-2x ' + definitionData?.style.icon"></i>
+      <i [ngClass]="'sat-securityDefinition__icon-ratingBucket-secondaryImg fa-stack-1x ' + definitionData?.style.secondaryIcon"></i>
+    </span>
+    <span class="sat-securityDefinition__icon-securityType">
+      <div class="sat-securityDefinition__icon-securityType-box">
+        <span class="sat-securityDefinition__icon-securityType-box-text">CDS</span>
+        <span class="sat-securityDefinition__icon-securityType-box-text">Bond</span>
+      </div>
+    </span>
+    <span class="sat-securityDefinition__icon-backendTenor fa-stack">
+      <i [ngClass]="'sat-securityDefinition__icon-backendTenor-primaryImg fa-stack-2x ' + definitionData?.style.icon"></i>
+      <i [ngClass]="'sat-securityDefinition__icon-backendTenor-secondaryImg fa-stack-1x ' + definitionData?.style.secondaryIcon"></i>
+    </span>
+  </section>
+  <section class="sat-securityDefinition__label">
+    <span class="sat-securityDefinition__label-text">{{definitionData?.data.name}}</span>
+  </section>
+  <section class="sat-securityDefinition__filter">
+    <div class="sat-securityDefinition__filter-icon">
+      <i class="sat-securityDefinition__filter-icon-img fal fa-filter"></i>
+    </div>
+  </section>
+  <section class="sat-securityDefinition__filterMask"></section>
+  <section class="sat-securityDefinition__selectedGap"></section>
+</article>

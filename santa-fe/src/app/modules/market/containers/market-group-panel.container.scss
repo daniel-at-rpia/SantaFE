@@ -3,7 +3,7 @@
 @import "./market-group-panel-mixin.container.scss";
 
 $marketGroupPanel_utility_widgetHeight: 8.25rem;
-$marketGroupPanel_configurator_width: $securityGroupDefinitionConfigurator_width + $spacing_medium;
+$marketGroupPanel_configurator_width: $securityDefinitionConfigurator_width + $spacing_medium;
 .sat-marketGroupPanel {
   $marketGroupPanelBlockName: &;
   @include mix_border_generator;

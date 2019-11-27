@@ -8,8 +8,7 @@ import { FormModule } from 'App/modules/form/form.module';
 import { MarketPage } from 'Market/market.page';
 import { MarketGroupPanel } from 'Market/containers/market-group-panel.container';
 import { SecurityGroupSimple } from 'Market/components/security-group-simple/security-group-simple.component';
-import { SecurityGroupDefinition } from 'Market/components/security-group-definition/security-group-definition.component';
-import { SecurityGroupDefinitionConfigurator } from 'Market/components/definition-configurator/definition-configurator.component';
+import { SecurityDefinitionConfigurator } from 'Market/components/definition-configurator/definition-configurator.component';
 import { SecurityGroupAverageVisualizer } from 'Market/components/security-group-average-visualizer/security-group-average-visualizer.component';
 import { SearchShortcut } from 'Market/components/search-shortcut/search-shortcut.component';
 
@@ -18,8 +17,7 @@ import { SearchShortcut } from 'Market/components/search-shortcut/search-shortcu
     MarketPage,
     MarketGroupPanel,
     SecurityGroupSimple,
-    SecurityGroupDefinition,
-    SecurityGroupDefinitionConfigurator,
+    SecurityDefinitionConfigurator,
     SecurityGroupAverageVisualizer,
     SearchShortcut
   ],
