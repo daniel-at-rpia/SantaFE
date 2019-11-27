@@ -5,7 +5,7 @@
   }">
   <section class="sat-tradeCenterPanel__configurator">
     <security-definition-configurator
-      (clickedApplyFilter)="onApplyFilter()"
+      (clickedApplyFilter)="onApplyFilter($event)"
       [configuratorData]="state.configurator.dto"
     ></security-definition-configurator>
   </section>

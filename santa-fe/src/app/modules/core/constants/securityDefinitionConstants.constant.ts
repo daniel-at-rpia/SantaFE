@@ -198,7 +198,8 @@ export const SecurityDefinitionMap: Array<SecurityDefinitionStub> = [
     displayName: 'Security Type',
     icon: 'fal fa-slash',
     optionList: FilterOptionsSecurityType,
-    locked: true
+    locked: true,
+    correspondSecurityDTOAttribute: 'securityType'
   },{
     key: 'BACKEND_TENOR',
     displayName: 'Backend Tenor',

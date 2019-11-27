@@ -13,6 +13,7 @@ import {
   SecurityDefinitionStub,
   SecurityTableMetricStub
 } from 'FEModels/frontend-stub-models.interface';
+import { DefinitionConfiguratorEmitterParamsItem } from 'FEModels/frontend-adhoc-packages.interface';
 
 export interface MarketState {
 }
@@ -78,9 +79,8 @@ export interface TradeCenterPanelState {
     quickFilters: {
       metricType: string;
       portfolios: Array<string>;
-      securityType: Array<string>;
-      currency: Array<string>;
       keyword: string;
     }
+    securityFilters: Array<DefinitionConfiguratorEmitterParamsItem>
   }
 }

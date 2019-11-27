@@ -23,6 +23,10 @@
     import { SecurityDefinitionConfiguratorDTO,SecurityDefinitionDTO } from 'FEModels/frontend-models.interface';
     import { SecurityDefinitionFilterBlock } from 'FEModels/frontend-blocks.interface';
     import { ConfiguratorDefinitionLayout } from 'Core/constants/securityDefinitionConstants.constant';
+    import {
+      DefinitionConfiguratorEmitterParams,
+      DefinitionConfiguratorEmitterParamsItem
+    } from 'FEModels/frontend-adhoc-packages.interface';
   //
 
 @Component({
@@ -37,7 +41,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   @Input() configuratorData: SecurityDefinitionConfiguratorDTO;
   @Input() highlightedVariant: boolean;
   @Output() clickedSearch = new EventEmitter();
-  @Output() clickedApplyFilter = new EventEmitter();
+  @Output() clickedApplyFilter = new EventEmitter<DefinitionConfiguratorEmitterParams>();
   lastExecutedConfiguration: SecurityDefinitionConfiguratorDTO;
 
   constructor(
@@ -55,6 +59,16 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         }
       });
     });
+    if (this.configuratorData.state.groupByDisabled) {
+      this.configuratorData.data.definitionList.forEach((eachBundle) => {
+        eachBundle.data.list = eachBundle.data.list.filter((eachDefinition) => {
+          return !!eachDefinition.data.correspondSecurityDTOAttribute;
+        });
+      })
+      this.configuratorData.data.definitionList = this.configuratorData.data.definitionList.filter((eachBundle) => {
+        return eachBundle.data.list.length > 0;
+      });
+    }
   }
 
   ngOnChanges() {
@@ -153,7 +167,23 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   }
 
   public triggerApplyFilter() {
-    this.clickedApplyFilter.emit();
+    const params: DefinitionConfiguratorEmitterParams = {
+      filterList: []
+    };
+    this.configuratorData.data.definitionList.forEach((eachBundle) => {
+      eachBundle.data.list.forEach((eachDefinition) => {
+        const activeFilters = eachDefinition.data.filterOptionList.filter((eachOption) => {
+          return eachOption.isSelected;
+        });
+        activeFilters.length > 0 && params.filterList.push({
+          targetAttribute: eachDefinition.data.correspondSecurityDTOAttribute,
+          filterBy: activeFilters.map((eachFilter) => {
+            return eachFilter.displayLabel;
+          })
+        });
+      });
+    });
+    this.clickedApplyFilter.emit(params);
     this.lastExecutedConfiguration = this.utilityService.deepCopy(this.configuratorData);
     this.configuratorData.state.canApplyFilter = false;
   }

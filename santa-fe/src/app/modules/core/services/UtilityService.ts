@@ -22,11 +22,11 @@
       SecurityGroupMetricPackBlock
     } from 'FEModels/frontend-blocks.interface';
     import {
-      GroupMetricOptions,
-      BackendKeyDictionary
+      GroupMetricOptions
     } from 'Core/constants/marketConstants.constant';
     import {
-      SecurityMetricOptions
+      SecurityMetricOptions,
+      BackendKeyDictionary
     } from 'Core/constants/coreConstants.constant';
     import uuid from 'uuidv4';
   // dependencies

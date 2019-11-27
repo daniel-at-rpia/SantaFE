@@ -14,10 +14,11 @@ export interface SecurityDefinitionStub {
   backendDtoAttrName?: string;
   displayName: string;
   icon: string;
-  optionList: Array<string>,
+  optionList: Array<string>;
   secondaryIcon?: string;
   locked?: boolean;
   urlForGetLongOptionListFromServer?: string;
+  correspondSecurityDTOAttribute?: string;
 }
 
 export interface SecurityDefinitionBundleStub {

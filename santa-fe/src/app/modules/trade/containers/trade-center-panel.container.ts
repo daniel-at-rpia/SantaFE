@@ -47,6 +47,7 @@
       SecurityTypeList,
       QUANT_COMPARER_PERCENTILE
     } from 'Core/constants/tradeConstants.constant';
+    import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
   //
 
 @Component({
@@ -82,10 +83,9 @@ export class TradeCenterPanel {
         quickFilters: {
           metricType: TriCoreMetricConfig.TSpread.label,
           portfolios: ['DOF'],
-          securityType: ['Bond', 'CdsIndex', 'Cds', 'Preferred'],
-          currency: ['USD'],
           keyword: ''
-        }
+        },
+        securityFilters: []
       }
     };
     this.loadFreshData();
@@ -101,15 +101,7 @@ export class TradeCenterPanel {
 
   public onClickQuickFilterList(targetList, targetItem) {
     if (targetList.indexOf(targetItem) >= 0) {
-      if (targetList === this.state.filters.quickFilters.currency) {
-        this.state.filters.quickFilters.currency = targetList.filter((eachItem) => {
-          return eachItem !== targetItem;
-        })
-      } else if (targetList === this.state.filters.quickFilters.securityType) {
-        this.state.filters.quickFilters.securityType = targetList.filter((eachItem) => {
-          return eachItem !== targetItem;
-        })
-      } else if (targetList === this.state.filters.quickFilters.portfolios) {
+      if (targetList === this.state.filters.quickFilters.portfolios) {
         this.state.filters.quickFilters.portfolios = targetList.filter((eachItem) => {
           return eachItem !== targetItem;
         })
@@ -134,8 +126,9 @@ export class TradeCenterPanel {
     }
   }
 
-  public onApplyFilter() {
-    console.log('test, got here');
+  public onApplyFilter(params: DefinitionConfiguratorEmitterParams) {
+    this.state.filters.securityFilters = params.filterList;
+    this.updateRowListWithFilters();
   }
 
   private loadFreshData() {
@@ -328,34 +321,49 @@ export class TradeCenterPanel {
     const filteredList: Array<SecurityTableRowDTO> = [];
     this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
       if ( this.state.filters.quickFilters.keyword.length < 3 || eachRow.data.security.data.name.indexOf(this.state.filters.quickFilters.keyword) >= 0) {
-        let currencyIncludeFlag = this.filterByCurrency(eachRow);
-        let securityTypeIncludeFlag = this.filterBySecurityType(eachRow);
         let portfolioIncludeFlag = this.filterByPortfolio(eachRow);
-        currencyIncludeFlag && securityTypeIncludeFlag && portfolioIncludeFlag && filteredList.push(eachRow);
+        const securityLevelFilterResult = this.state.filters.securityFilters.map((eachFilter) => {
+          return this.filterBySecurityAttribute(eachRow, eachFilter.targetAttribute, eachFilter.filterBy);
+        });
+        // as long as one of the filters failed, this security will not show
+        const securityLevelFilterResultCombined = securityLevelFilterResult.filter((eachResult) => {
+          return eachResult;
+        }).length > 0;
+        securityLevelFilterResultCombined && portfolioIncludeFlag && filteredList.push(eachRow);
       }
     });
     this.state.fetchResult.rowList = this.utilityService.deepCopy(filteredList);
   }
 
-  private filterByCurrency(targetRow: SecurityTableRowDTO): boolean {
+  private filterBySecurityAttribute(targetRow: SecurityTableRowDTO, targetAttribute: string, filterBy: Array<string>): boolean {
     let includeFlag = false;
-    this.state.filters.quickFilters.currency.forEach((eachCurrency) => {
-      if (targetRow.data.security.data.currency === eachCurrency) {
+    filterBy.forEach((eachValue) => {
+      if (targetRow.data.security.data[targetAttribute] === eachValue) {
         includeFlag = true;
       }
     });
     return includeFlag;
   }
 
-  private filterBySecurityType(targetRow: SecurityTableRowDTO): boolean {
-    let includeFlag = false;
-    this.state.filters.quickFilters.securityType.forEach((eachType) => {
-      if (targetRow.data.security.data.securityType === eachType) {
-        includeFlag = true;
-      }
-    });
-    return includeFlag;
-  }
+  // private filterByCurrency(targetRow: SecurityTableRowDTO): boolean {
+  //   let includeFlag = false;
+  //   this.state.filters.quickFilters.currency.forEach((eachCurrency) => {
+  //     if (targetRow.data.security.data.currency === eachCurrency) {
+  //       includeFlag = true;
+  //     }
+  //   });
+  //   return includeFlag;
+  // }
+
+  // private filterBySecurityType(targetRow: SecurityTableRowDTO): boolean {
+  //   let includeFlag = false;
+  //   this.state.filters.quickFilters.securityType.forEach((eachType) => {
+  //     if (targetRow.data.security.data.securityType === eachType) {
+  //       includeFlag = true;
+  //     }
+  //   });
+  //   return includeFlag;
+  // }
 
   private filterByPortfolio(targetRow: SecurityTableRowDTO): boolean {
     let includeFlag = false;
