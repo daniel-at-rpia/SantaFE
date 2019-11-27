@@ -5,6 +5,7 @@
   }">
   <section class="sat-tradeCenterPanel__configurator">
     <security-definition-configurator
+      (clickedApplyFilter)="onApplyFilter()"
       [configuratorData]="state.configurator.dto"
     ></security-definition-configurator>
   </section>
@@ -41,33 +42,6 @@
           }">
           <i class="fal fa-ruler"></i>
           <span>Price</span>
-        </button>
-      </div>
-      <div class="sat-tradeCenterPanel__result-quickFilters-row">
-        <span class="sat-tradeCenterPanel__result-quickFilters-row-label">Currency :</span>
-        <button
-          *ngFor="let eachCcy of currencyList"
-          (click)="onClickQuickFilterList(state.filters.quickFilters.currency, eachCcy.value)"
-          [ngClass]="{
-            'sat-tradeCenterPanel__result-quickFilters-row-btn': true,
-            'sat-tradeCenterPanel__result-quickFilters-row-btn--active': state.filters.quickFilters.currency.indexOf(eachCcy.value) >= 0,
-            'santaBtn--labelled': true
-          }">
-          <i class="fal fa-dollar-sign"></i>
-          <span>{{eachCcy.displayLabel}}</span>
-        </button>
-      </div>
-      <div class="sat-tradeCenterPanel__result-quickFilters-row">
-        <span class="sat-tradeCenterPanel__result-quickFilters-row-label">Security Type :</span>
-        <button
-          *ngFor="let eachType of securityTypeList"
-          (click)="onClickQuickFilterList(state.filters.quickFilters.securityType, eachType.value)"
-          [ngClass]="{
-            'sat-tradeCenterPanel__result-quickFilters-row-btn': true,
-            'sat-tradeCenterPanel__result-quickFilters-row-btn--active': state.filters.quickFilters.securityType.indexOf(eachType.value) >= 0,
-            'santaBtn--labelled': true
-          }">
-          <span>{{eachType.displayLabel}}</span>
         </button>
       </div>
       <div class="sat-tradeCenterPanel__result-quickFilters-row">

@@ -5,7 +5,9 @@
     'sat-securityDefinitionConfigurator--filterActiveState': configuratorData.state.showFiltersFromDefinition,
     'sat-securityDefinitionConfigurator--highlightedVariant': highlightedVariant,
     'sat-securityDefinitionConfigurator--filterShowingLongDefinitionState': configuratorData.state.showFiltersFromDefinition?.data.urlForGetLongOptionListFromServer && configuratorData.state.showFiltersFromDefinition?.data.filterOptionList.length === 0,
-    'sat-securityDefinitionConfigurator--filterLoadingLongOptionListState': configuratorData.state.isLoadingLongOptionListFromServer
+    'sat-securityDefinitionConfigurator--filterLoadingLongOptionListState': configuratorData.state.isLoadingLongOptionListFromServer,
+    'sat-securityDefinitionConfigurator--groupByDisabledState': configuratorData.state.groupByDisabled,
+    'sat-securityDefinitionConfigurator--canApplyFilterState': configuratorData.state.canApplyFilter
   }">
   <section class="sat-securityDefinitionConfigurator__definitions">
     <ul class="sat-securityDefinitionConfigurator__definitions-list">
@@ -30,7 +32,8 @@
             [definitionData]="eachDefinition"
             (onClick)="onClickDefinition($event)"
             [selected]="configuratorData.state.showFiltersFromDefinition === eachDefinition"
-            [interactionDisabled]="configuratorData.state.isLoadingLongOptionListFromServer">
+            [interactionDisabled]="configuratorData.state.isLoadingLongOptionListFromServer"
+            [groupByDisabled]="configuratorData.state.groupByDisabled">
           </security-definition>
         </div>
       </li>
@@ -90,6 +93,12 @@
         [icon]="'fal fa-flashlight'"
         [text]="'Focus on Selected Groups'">
       </santa-loadable-button>
+      <div class="sat-securityDefinitionConfigurator__ctas-content-filterApply">
+        <button (click)="triggerApplyFilter()" class="sat-securityDefinitionConfigurator__ctas-content-filterApply-btn santaBtn--labelled santaBtn--inverseLabelled">
+          <i class="fal fa-filter"></i>
+          <span>Apply Filter</span>
+        </button>
+      </div>
     </div>
   </section>
 </article>

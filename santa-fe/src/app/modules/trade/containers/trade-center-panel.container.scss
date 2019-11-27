@@ -30,10 +30,11 @@
     padding: $spacing_medium $spacing_medium $spacing_medium 0;
     &-quickFilters {
       display: flex;
-      flex-direction: column;
       &-row {
         display: flex;
+        align-items: center;
         margin-bottom: $spacing_medium;
+        margin-right: $spacing_medium;
         &-label {
           color: $font_color_minor;
           font-size: $font_size_large;

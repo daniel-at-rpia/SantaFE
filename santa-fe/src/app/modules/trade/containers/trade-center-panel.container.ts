@@ -66,7 +66,7 @@ export class TradeCenterPanel {
     this.state = {
       currentContentStage: 0,
       configurator: {
-        dto: this.dtoService.createSecurityDefinitionConfigurator()
+        dto: this.dtoService.createSecurityDefinitionConfigurator(true)
       },
       table: {
         metrics: SecurityTableMetrics,
@@ -120,7 +120,7 @@ export class TradeCenterPanel {
     this.updateRowListWithFilters();
   }
 
-  public onSwitchMetric(targetMetric){
+  public onSwitchMetric(targetMetric) {
     if (this.state.filters.quickFilters.metricType !== targetMetric) {
       this.state.filters.quickFilters.metricType = targetMetric;
       const thrityDayDeltaMetric = this.state.table.metrics[7];
@@ -132,6 +132,10 @@ export class TradeCenterPanel {
       }
       this.loadFreshData(); 
     }
+  }
+
+  public onApplyFilter() {
+    console.log('test, got here');
   }
 
   private loadFreshData() {
@@ -231,7 +235,7 @@ export class TradeCenterPanel {
     this.fetchStageThreeContent();
   }
 
-  private fetchStageThreeContent(){
+  private fetchStageThreeContent() {
     const payload = {
       quoteMetric: this.state.filters.quickFilters.metricType,
       identifiers: []
@@ -258,7 +262,7 @@ export class TradeCenterPanel {
     ).subscribe();
   }
 
-  private loadStageThreeContent(serverReturn){
+  private loadStageThreeContent(serverReturn) {
     for (const eachKey in serverReturn) {
       const securityId = this.utilityService.extractSecurityId(eachKey);
       const results = this.state.fetchResult.prinstineRowList.filter((eachRow) => {
@@ -315,12 +319,12 @@ export class TradeCenterPanel {
     bestQuoteCell.data.quantComparerDTO = newQuant;
   }
 
-  private updateStage(stageNumber: number){
+  private updateStage(stageNumber: number) {
     this.updateRowListWithFilters();
     this.state.currentContentStage = stageNumber;
   }
 
-  private updateRowListWithFilters(){
+  private updateRowListWithFilters() {
     const filteredList: Array<SecurityTableRowDTO> = [];
     this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
       if ( this.state.filters.quickFilters.keyword.length < 3 || eachRow.data.security.data.name.indexOf(this.state.filters.quickFilters.keyword) >= 0) {

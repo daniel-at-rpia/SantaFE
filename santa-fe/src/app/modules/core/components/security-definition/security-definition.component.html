@@ -6,7 +6,7 @@
     'sat-securityDefinition--isRatingBucket': definitionData?.data.key === 'RATING_BUCKET',
     'sat-securityDefinition--isSecurityType': definitionData?.data.key === 'SECURITY_TYPE',
     'sat-securityDefinition--selectedState': !!selected,
-    'sat-securityDefinition--groupByActiveState': definitionData?.state.groupByActive || definitionData?.state.isLocked,
+    'sat-securityDefinition--groupByActiveState': definitionData?.state.groupByActive || definitionData?.state.isLocked || groupByDisabled,
     'sat-securityDefinition--filterActiveState': definitionData?.state.filterActive,
     'sat-securityDefinition--unactivated': definitionData?.state.isUnactivated,
     'sat-securityDefinition--backgroundVariant': !!backgroundVariant,

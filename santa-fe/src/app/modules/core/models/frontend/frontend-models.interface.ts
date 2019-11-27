@@ -105,6 +105,8 @@ export interface SecurityDefinitionConfiguratorDTO extends BasicDTOStructure {
     filterSearchInputValue: string;
   }
   state: {
+    groupByDisabled: boolean;
+    canApplyFilter: boolean;
     showLongFilterOptions: boolean;
     isLoading: boolean;
     isLoadingLongOptionListFromServer: boolean;

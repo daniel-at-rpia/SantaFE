@@ -1,15 +1,29 @@
-import {
-  Component,
-  OnInit,
-  ViewEncapsulation,
-  Input,
-  Output,
-  EventEmitter
-} from '@angular/core';
+  // dependencies
+    import {
+      Component,
+      OnInit,
+      OnChanges,
+      ViewEncapsulation,
+      Input,
+      Output,
+      EventEmitter
+    } from '@angular/core';
+    import { of } from 'rxjs';
+    import {
+      tap,
+      first,
+      delay,
+      catchError
+    } from 'rxjs/operators';
 
-import { SecurityDefinitionConfiguratorDTO,SecurityDefinitionDTO } from 'FEModels/frontend-models.interface';
-import { SecurityDefinitionFilterBlock } from 'FEModels/frontend-blocks.interface';
-import { ConfiguratorDefinitionLayout } from 'Core/constants/securityDefinitionConstants.constant';
+
+    import { DTOService } from 'Core/services/DTOService';
+    import { RestfulCommService } from 'Core/services/RestfulCommService';
+    import { UtilityService } from 'Core/services/UtilityService';
+    import { SecurityDefinitionConfiguratorDTO,SecurityDefinitionDTO } from 'FEModels/frontend-models.interface';
+    import { SecurityDefinitionFilterBlock } from 'FEModels/frontend-blocks.interface';
+    import { ConfiguratorDefinitionLayout } from 'Core/constants/securityDefinitionConstants.constant';
+  //
 
 @Component({
   selector: 'security-definition-configurator',
@@ -18,13 +32,18 @@ import { ConfiguratorDefinitionLayout } from 'Core/constants/securityDefinitionC
   encapsulation: ViewEncapsulation.None
 })
 
-export class SecurityDefinitionConfigurator implements OnInit {
+export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   configuratorDefinitionlayout: Array<any>;
   @Input() configuratorData: SecurityDefinitionConfiguratorDTO;
   @Input() highlightedVariant: boolean;
-  @Output() onClickLoadLongOptionList = new EventEmitter<SecurityDefinitionDTO>();
-  @Output() onClickSearch = new EventEmitter();
+  @Output() clickedSearch = new EventEmitter();
+  @Output() clickedApplyFilter = new EventEmitter();
+  lastExecutedConfiguration: SecurityDefinitionConfiguratorDTO;
+
   constructor(
+    private dtoService: DTOService,
+    private restfulCommService: RestfulCommService,
+    private utilityService: UtilityService
   ) {
   }
 
@@ -38,12 +57,29 @@ export class SecurityDefinitionConfigurator implements OnInit {
     });
   }
 
-  public onClickLoadLongOptionListForDefinition(targetDefinition: SecurityDefinitionDTO) {
-    this.configuratorData.state.isLoadingLongOptionListFromServer = true;
-    this.onClickLoadLongOptionList.emit(targetDefinition);
+  ngOnChanges() {
+    if (!!this.configuratorData) {
+      this.lastExecutedConfiguration = this.utilityService.deepCopy(this.configuratorData);
+    }
   }
 
-  selectDefinitionForGrouping(targetDefinition: SecurityDefinitionDTO) {
+  public onClickLoadLongOptionListForDefinition(targetDefinition: SecurityDefinitionDTO) {
+    this.configuratorData.state.isLoadingLongOptionListFromServer = true;
+    this.restfulCommService.callAPI(targetDefinition.data.urlForGetLongOptionListFromServer, {req: 'GET'}).pipe(
+      first(),
+      delay(200),
+      tap((serverReturn: Array<string>) => {
+        targetDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, serverReturn);
+        this.configuratorData.state.isLoadingLongOptionListFromServer = false;
+      }),
+      catchError(err => {
+        console.log('error', err);
+        return of('error');
+      })
+    ).subscribe();
+  }
+
+  public selectDefinitionForGrouping(targetDefinition: SecurityDefinitionDTO) {
     if (!targetDefinition.state.isLocked) {
       targetDefinition.state.groupByActive = !targetDefinition.state.groupByActive;
       // disable the two-step config workflow through commenting, so we can bring it back up easily if necessary
@@ -63,7 +99,7 @@ export class SecurityDefinitionConfigurator implements OnInit {
     }
   }
 
-  onClickDefinition(targetDefinition: SecurityDefinitionDTO){
+  public onClickDefinition(targetDefinition: SecurityDefinitionDTO) {
     if (!targetDefinition.state.isUnactivated) {
       this.clearSearchFilter();
       if (this.configuratorData.state.showFiltersFromDefinition && this.configuratorData.state.showFiltersFromDefinition.data.urlForGetLongOptionListFromServer) {
@@ -77,7 +113,7 @@ export class SecurityDefinitionConfigurator implements OnInit {
     }
   }
 
-  onClickFilterOption(targetOption:SecurityDefinitionFilterBlock){
+  public onClickFilterOption(targetOption:SecurityDefinitionFilterBlock) {
     const targetDefinition = this.configuratorData.state.showFiltersFromDefinition;
     targetOption.isSelected = !targetOption.isSelected;
     let filterActive = false;
@@ -87,9 +123,12 @@ export class SecurityDefinitionConfigurator implements OnInit {
       }
     });
     targetDefinition.state.filterActive = filterActive;
+    if (this.configuratorData.state.groupByDisabled) {
+      this.configuratorData.state.canApplyFilter = this.checkFilterCanApply();
+    }
   }
 
-  onSearchKeywordChange(newKeyword){
+  public onSearchKeywordChange(newKeyword) {
     if (this.configuratorData.state.showFiltersFromDefinition) {
       this.configuratorData.data.filterSearchInputValue = newKeyword;
       if (!!newKeyword && newKeyword.length >= 1) {
@@ -108,27 +147,58 @@ export class SecurityDefinitionConfigurator implements OnInit {
     }
   }
 
-  applySearchFilter(targetOption: SecurityDefinitionFilterBlock, keyword: string):boolean {
+  public triggerSearch() {
+    this.configuratorData.state.isLoading = true;
+    this.clickedSearch.emit();
+  }
+
+  public triggerApplyFilter() {
+    this.clickedApplyFilter.emit();
+    this.lastExecutedConfiguration = this.utilityService.deepCopy(this.configuratorData);
+    this.configuratorData.state.canApplyFilter = false;
+  }
+
+  private applySearchFilter(targetOption: SecurityDefinitionFilterBlock, keyword: string): boolean {
     const normalizedTarget = targetOption.displayLabel.toLowerCase();
     const normalizedKeyword = keyword.toLowerCase();
     return normalizedTarget.includes(normalizedKeyword);
   }
 
-  clearSearchFilter(){
+  private clearSearchFilter() {
     this.configuratorData.data.filterSearchInputValue = '';
     this.onSearchKeywordChange('');
   }
 
-  clearDefinitionFilterOptions(targetDefinition: SecurityDefinitionDTO){
+  private clearDefinitionFilterOptions(targetDefinition: SecurityDefinitionDTO) {
     targetDefinition.data.filterOptionList.forEach((eachOption) => {
       eachOption.isSelected = false;
     });
     targetDefinition.state.filterActive = false;
   }
 
-  triggerSearch(){
-    this.configuratorData.state.isLoading = true;
-    this.onClickSearch.emit();
+  private checkFilterCanApply(): boolean {
+    let canApply = false;
+    this.configuratorData.data.definitionList.forEach((eachDefinitionBundle, bundleIndex) => {
+      eachDefinitionBundle.data.list.forEach((eachDefinition, definitionIndex) => {
+        const activeFilters = eachDefinition.data.filterOptionList.filter((eachOption) => {
+          return eachOption.isSelected;
+        })
+        const prevActiveFilters = this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.filterOptionList.filter((eachOption) => {
+          return eachOption.isSelected;
+        })
+        if (activeFilters.length === prevActiveFilters.length) {
+          for (let i = 0; i < length; ++i) {
+            if (activeFilters[i] !== prevActiveFilters[i]) {
+              canApply = true;
+              break;
+            }
+          }
+        } else {
+          canApply = true;
+        }
+      });
+    });
+    return canApply;
   }
 
 }

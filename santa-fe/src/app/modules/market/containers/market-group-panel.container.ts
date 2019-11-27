@@ -21,7 +21,6 @@
       concatMap,
       catchError
     } from 'rxjs/operators';
-    import { HttpClient, HttpParams } from '@angular/common/http';
 
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
@@ -75,7 +74,7 @@ export class MarketGroupPanel implements OnDestroy {
       isConfiguratorCollapsed: false,
       isGroupDataLoaded: false,
       configurator: {
-        dto: this.dtoService.createSecurityDefinitionConfigurator(),
+        dto: this.dtoService.createSecurityDefinitionConfigurator(false),
         showSelectedGroupConfig: false,
         cachedOriginalConfig: null,
         shortcutList: [],
@@ -259,22 +258,7 @@ export class MarketGroupPanel implements OnDestroy {
   }
 
   public onClearConfig(){
-    this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator();
-  }
-
-  public loadLongDefinitionOptionList(targetDefinition: SecurityDefinitionDTO){
-    this.restfulCommService.callAPI(targetDefinition.data.urlForGetLongOptionListFromServer, {req: 'GET'}).pipe(
-      first(),
-      delay(200),
-      tap((serverReturn: Array<string>) => {
-        targetDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, serverReturn);
-        this.state.configurator.dto.state.isLoadingLongOptionListFromServer = false;
-      }),
-      catchError(err => {
-        console.log('error', err);
-        return of('error');
-      })
-    ).subscribe();
+    this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(false);
   }
 
   private populateSearchShortcuts(){
@@ -559,7 +543,7 @@ export class MarketGroupPanel implements OnDestroy {
     if (!this.state.configurator.cachedOriginalConfig) {
       this.state.configurator.cachedOriginalConfig = this.utilityService.deepCopy(this.state.configurator.dto);
     }
-    const newConfig = this.dtoService.createSecurityDefinitionConfigurator();
+    const newConfig = this.dtoService.createSecurityDefinitionConfigurator(false);
     selectedGroupList.forEach((eachGroup) => {
       this.updateConfiguratorPerGroup(eachGroup, newConfig);
     });

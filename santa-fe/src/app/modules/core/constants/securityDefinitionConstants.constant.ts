@@ -230,7 +230,7 @@ export const SecurityDefinitionMap: Array<SecurityDefinitionStub> = [
     displayName: 'Issuer',
     icon: 'fas fa-user-tie',
     optionList: [],
-    urlForGetLongOptionListFromServer: 'santaSecurity/get-santa-issuers'
+    urlForGetLongOptionListFromServer: 'santaObligor/get-santa-issuers'
   },{
     key: 'MATURITY',
     displayName: 'Maturity Type',
@@ -272,7 +272,7 @@ export const SecurityDefinitionMap: Array<SecurityDefinitionStub> = [
     displayName: 'Sub-Industry',
     icon: 'fal fa-building',
     optionList: [],
-    urlForGetLongOptionListFromServer: 'santaSecurity/get-santa-subindustries'
+    urlForGetLongOptionListFromServer: 'santaObligor/get-santa-subindustries'
   },{
     key: 'TENOR',
     displayName: 'Tenor',

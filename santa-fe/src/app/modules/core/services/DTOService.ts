@@ -204,7 +204,9 @@ export class DTOService {
     return object;
   }
 
-  public createSecurityDefinitionConfigurator(): SecurityDefinitionConfiguratorDTO {
+  public createSecurityDefinitionConfigurator(
+    groupByDisabled: boolean
+  ): SecurityDefinitionConfiguratorDTO {
     const object:SecurityDefinitionConfiguratorDTO = {
       data: {
         filterSearchInputValue: '',
@@ -213,6 +215,8 @@ export class DTOService {
         })
       },
       state: {
+        groupByDisabled: !!groupByDisabled,
+        canApplyFilter: false,
         showFiltersFromDefinition: null,
         showLongFilterOptions: false,
         isLoading: false,
