@@ -1,13 +1,31 @@
 <article
   [ngClass]="{
     'sat-tradeCenterPanel': true,
+    'sat-tradeCenterPanel--presetSelectedState': state.presets.selectedPreset,
     'sat-tradeCenterPanel--fetchDataFailedState': state.fetchResult.fetchTableDataFailed
   }">
-  <section class="sat-tradeCenterPanel__configurator">
-    <security-definition-configurator
-      (clickedApplyFilter)="onApplyFilter($event)"
-      [configuratorData]="state.configurator.dto"
-    ></security-definition-configurator>
+  <section class="sat-tradeCenterPanel__presetsAndFilters">
+    <div class="sat-tradeCenterPanel__presetsAndFilters-presets">
+      <ul class="sat-tradeCenterPanel__presetsAndFilters-presets-list">
+        <li
+          *ngFor="let eachShortcut of state.presets.shortcutList"
+          [ngClass]="{
+            'sat-tradeCenterPanel__presetsAndFilters-presets-list-item': true,
+            'sat-tradeCenterPanel__presetsAndFilters-presets-list-item--selected': state.presets.selectedPreset === eachShortcut
+          }">
+          <search-shortcut
+            [shortcutData]="eachShortcut"
+            (onClickShortcutCallback)="onSelectPreset($event)"
+          ></search-shortcut>
+        </li>
+      </ul>
+    </div>
+    <div class="sat-tradeCenterPanel__presetsAndFilters-configurator">
+      <security-definition-configurator
+        (clickedApplyFilter)="onApplyFilter($event)"
+        [configuratorData]="state.configurator.dto"
+      ></security-definition-configurator>
+    </div>
   </section>
   <section class="sat-tradeCenterPanel__result">
     <div class="sat-tradeCenterPanel__result-quickFilters">
@@ -47,7 +65,7 @@
       <div class="sat-tradeCenterPanel__result-quickFilters-row">
         <span class="sat-tradeCenterPanel__result-quickFilters-row-label">Portfolio :</span>
         <button
-          *ngFor="let eachPortfolio of portfolioList"
+          *ngFor="let eachPortfolio of constants.portfolioList"
           (click)="onClickQuickFilterList(state.filters.quickFilters.portfolios, eachPortfolio.value)"
           [ngClass]="{
             'sat-tradeCenterPanel__result-quickFilters-row-btn': true,

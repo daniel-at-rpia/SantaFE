@@ -62,6 +62,10 @@ export interface TradeState {
 
 export interface TradeCenterPanelState {
   currentContentStage: number;
+  presets : {
+    selectedPreset: any;
+    shortcutList: Array<SearchShortcutDTO>;
+  }
   configurator: {
     dto: SecurityDefinitionConfiguratorDTO;
   }

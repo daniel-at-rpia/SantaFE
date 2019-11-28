@@ -7,24 +7,49 @@
   flex: 1 1 auto;
   display: flex;
   overflow: hidden;
-  &__presetCanvas {
-    flex: 1 1 auto;
+  &__presetsAndFilters {
+    flex: 0 0 $securityDefinitionConfigurator_width + $spacing_medium;
     display: flex;
-  }
-  &__configurator {
-    flex: 0 0 auto;
-    display: flex;
+    flex-direction: column;
     overflow: hidden;
-    padding: $spacing_medium 0 $spacing_medium $spacing_medium;
-    security-definition-configurator {
-      flex: 1 1 auto;
+    &-presets {
+      @include mix_alive('normal');
+      flex: 0 0 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      &-list {
+        @include mix_enable_scrollbar('vertical');
+        display: flex;
+        flex-direction: column;
+        &-item {
+          @include mix_alive('light');
+          display: flex;
+          align-items: center;
+          padding: 0 $spacing_medium;
+          overflow: hidden;
+          height: 10rem;
+          search-shortcut {
+            flex: 1 1 auto;
+          }
+        }
+      }
+    }
+    &-configurator {
+      flex: 0 0 100%;
       display: flex;
       overflow: hidden;
+      padding: 0 0 $spacing_medium $spacing_medium;
+      security-definition-configurator {
+        flex: 1 1 auto;
+        display: flex;
+        overflow: hidden;
+      }
     }
   }
   &__result {
     flex: 1 1 auto;
-    display: flex;
+    display: none;
     flex-direction: column;
     overflow: hidden;
     padding: $spacing_medium $spacing_medium $spacing_medium 0;
@@ -91,6 +116,24 @@
         &-errorPrompt {
           display: flex;
         }
+      }
+    }
+  }
+  &--presetSelectedState {
+    #{$tradeCenterPanelBlockName} {
+      &__presetsAndFilters {
+        &-presets {
+          flex: 0 0 10rem;
+          &-list-item {
+            height: 0;
+            &--selected {
+              height: 9.5rem;
+            }
+          }
+        }
+      }
+      &__result {
+        display: flex;
       }
     }
   }

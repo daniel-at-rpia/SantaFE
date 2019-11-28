@@ -31,6 +31,7 @@
       SecurityTableHeaderDTO,
       SecurityTableRowDTO,
       QuantComparerDTO,
+      SearchShortcutDTO
     } from 'FEModels/frontend-models.interface';
     import { PayloadGetPositions } from 'BEModels/backend-payloads.interface';
     import {
@@ -41,11 +42,11 @@
 
     import { TriCoreMetricConfig } from 'Core/constants/coreConstants.constant';
     import { SecurityTableMetrics } from 'Core/constants/securityTableConstants.constant';
+    import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       PortfolioList,
-      CurrencyList,
-      SecurityTypeList,
-      QUANT_COMPARER_PERCENTILE
+      QUANT_COMPARER_PERCENTILE,
+      SearchShortcuts
     } from 'Core/constants/tradeConstants.constant';
     import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
   //
@@ -59,13 +60,19 @@
 
 export class TradeCenterPanel {
   state: TradeCenterPanelState;
-  portfolioList = PortfolioList;
-  currencyList = CurrencyList;
-  securityTypeList = SecurityTypeList;
+  constants = {
+    portfolioList: PortfolioList,
+    searchShortcuts: SearchShortcuts,
+    securityGroupDefinitionMap: SecurityDefinitionMap
+  }
 
   private initializePageState() {
     this.state = {
       currentContentStage: 0,
+      presets: {
+        selectedPreset: null,
+        shortcutList: []
+      },
       configurator: {
         dto: this.dtoService.createSecurityDefinitionConfigurator(true)
       },
@@ -88,7 +95,7 @@ export class TradeCenterPanel {
         securityFilters: []
       }
     };
-    this.loadFreshData();
+    this.populateSearchShortcuts();
   }
 
   constructor(
@@ -97,6 +104,17 @@ export class TradeCenterPanel {
     private restfulCommService: RestfulCommService
   ){
     this.initializePageState();
+  }
+
+  public onSelectPreset(targetPreset: SearchShortcutDTO) {
+    if (this.state.presets.selectedPreset === targetPreset) {
+      targetPreset.state.isSelected = false;
+      this.state.presets.selectedPreset = null;
+    } else {
+      targetPreset.state.isSelected = true;
+      this.state.presets.selectedPreset = targetPreset;
+      setTimeout(this.loadFreshData.bind(this), 500);
+    }
   }
 
   public onClickQuickFilterList(targetList, targetItem) {
@@ -129,6 +147,25 @@ export class TradeCenterPanel {
   public onApplyFilter(params: DefinitionConfiguratorEmitterParams) {
     this.state.filters.securityFilters = params.filterList;
     this.updateRowListWithFilters();
+  }
+
+  private populateSearchShortcuts(){
+    this.constants.searchShortcuts.forEach((eachShortcutStub) => {
+      const definitionList = eachShortcutStub.includedDefinitions.map((eachIncludedDef) => {
+        const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityGroupDefinitionMap.find((eachDef) => {return eachDef.key === eachIncludedDef.definitionKey}));
+        definitionDTO.state.groupByActive = !!eachIncludedDef.groupByActive;
+        if (eachIncludedDef.selectedOptions.length > 0) {
+          definitionDTO.state.filterActive = true;
+          definitionDTO.data.filterOptionList.forEach((eachFilterOption) => {
+            if (eachIncludedDef.selectedOptions.indexOf(eachFilterOption.shortKey) >= 0) {
+              eachFilterOption.isSelected = true;
+            }
+          });
+        }
+        return definitionDTO;
+      });
+      this.state.presets.shortcutList.push(this.dtoService.formSearchShortcutObject(definitionList, eachShortcutStub.displayTitle));
+    });
   }
 
   private loadFreshData() {
