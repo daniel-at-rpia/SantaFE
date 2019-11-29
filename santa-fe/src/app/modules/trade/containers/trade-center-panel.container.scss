@@ -48,8 +48,8 @@ $tradeCenterPanel_preset_height: 8rem;
       flex: 1 1 auto;
       display: flex;
       flex-direction: column;
-      opacity: 0;
-      transition-delay: 0.5s;
+      //opacity: 0;
+      //transition-delay: 0.5s;
       overflow: hidden;
       padding: 0 0 $spacing_medium $spacing_medium;
       &-title {
@@ -141,12 +141,13 @@ $tradeCenterPanel_preset_height: 8rem;
     #{$tradeCenterPanelBlockName} {
       &__presetsAndFilters {
         &-presets {
-          flex: 0 0 $tradeCenterPanel_preset_height + 3rem;
+          flex: 0 0 $tradeCenterPanel_preset_height + 3rem; // 3 rem for the title
           &-list-item {
             height: 0;
             padding: 0 $spacing_medium;
             &--selected {
               height: $tradeCenterPanel_preset_height;
+              padding: $spacing_x_small $spacing_medium $spacing_medium $spacing_medium;
             }
           }
         }

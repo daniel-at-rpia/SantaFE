@@ -457,7 +457,8 @@ export class TradeCenterPanel {
     if (delta < 0 ) {
       return 100;
     } else {
-      return 100 - Math.round(delta / maxAbsDelta * 10)*10;
+      const result = 100 - Math.round(delta / maxAbsDelta * 100);
+      return result;
     }
   }
 
