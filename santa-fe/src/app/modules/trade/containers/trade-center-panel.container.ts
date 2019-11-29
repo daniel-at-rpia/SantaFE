@@ -367,7 +367,7 @@ export class TradeCenterPanel {
           // as long as one of the filters failed, this security will not show
           securityLevelFilterResultCombined = securityLevelFilterResult.filter((eachResult) => {
             return eachResult;
-          }).length > 0;
+          }).length === securityLevelFilterResult.length;
         }
         securityLevelFilterResultCombined && portfolioIncludeFlag && filteredList.push(eachRow);
       }
