@@ -85,6 +85,7 @@ export class DTOService {
         backupPmName: !isStencil ? rawData.metrics.backupPmName : null,
         researchName: !isStencil ? rawData.metrics.researchName : null,
         portfolios: [],
+        portfolioStrategies: '',
         position: 0,
         positionInMM: 'n/a',
         positionHF: 0,

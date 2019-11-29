@@ -165,6 +165,13 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     readyStage: 2,
     active: false,
     inversedSortingForText: true
+  },{
+    label: 'Strategy',
+    attrName: 'portfolioStrategies',
+    underlineAttrName: 'portfolioStrategies',
+    readyStage: 2,
+    active: false,
+    inversedSortingForText: true
   }
 ];
 

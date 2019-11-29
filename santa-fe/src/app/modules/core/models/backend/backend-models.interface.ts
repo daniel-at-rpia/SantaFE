@@ -162,6 +162,7 @@ export interface BEPortfolioDTO {
   portfolioShortName: string;
   quantity: number;
   santaSecurity: BESecurityDTO;
+  strategyName: string;
   [property: string]: any;
 }
 

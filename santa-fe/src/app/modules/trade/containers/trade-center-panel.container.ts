@@ -204,7 +204,7 @@ export class TradeCenterPanel {
   private fetchStageOneContent() {
     const payload : PayloadGetPositions = {
       source: 'FO',
-      partitionOptions: ['Portfolio']
+      partitionOptions: ['Portfolio', 'Strategy']
     };
     this.restfulCommService.callAPI('santaPortfolio/get-santa-credit-positions', {req: 'POST'}, payload, true, false).pipe(
       first(),
@@ -241,6 +241,9 @@ export class TradeCenterPanel {
           if (eachPortfolio.quantity !== 0 && !eachPortfolio.santaSecurity.isGovt && eachPortfolio.santaSecurity.metrics) {
             newSecurity.data.position = newSecurity.data.position + eachPortfolio.quantity;
             newSecurity.data.portfolios.push(eachPortfolio.portfolioShortName);
+            if (eachPortfolio.strategyName.length > 0 && newSecurity.data.portfolioStrategies.indexOf(eachPortfolio.strategyName) < 0) {
+              newSecurity.data.portfolioStrategies = newSecurity.data.portfolioStrategies.length === 0 ? `${eachPortfolio.strategyName}` : `${newSecurity.data.portfolioStrategies} & ${eachPortfolio.strategyName}`;
+            }
             if (eachPortfolio.portfolioShortName === 'DOF' || eachPortfolio.portfolioShortName === 'SOF') {
               newSecurity.data.positionHF = newSecurity.data.positionHF + eachPortfolio.quantity;
             } else if (eachPortfolio.portfolioShortName === 'STIP' || eachPortfolio.portfolioShortName === 'FIP' || eachPortfolio.portfolioShortName === 'CIP') {
