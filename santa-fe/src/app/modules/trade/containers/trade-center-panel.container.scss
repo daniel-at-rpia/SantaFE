@@ -1,6 +1,6 @@
 @import "global.scss";
 
-$tradeCenterPanel_preset_height: 8rem;
+$tradeCenterPanel_preset_height: 9rem;
 .sat-tradeCenterPanel {
   $tradeCenterPanelBlockName: &;
   @include mix_border_generator;
