@@ -75,6 +75,8 @@ interface BEGroupMetricDTO {
 export interface BESecurityDTO {
   securityIdentifier: {
     securityId: number;
+    isCurveSecurity: boolean;
+    isSingleSecurity: boolean;
   };
   name: string;
   baseType: string;
@@ -92,6 +94,7 @@ export interface BESecurityDTO {
   obligorId: number;
   ticker: string;
   maturityType: string;
+  maturityDate: string;
   isGovt: boolean;
   isBailIn: boolean;
   isCallable: boolean;
@@ -109,6 +112,9 @@ export interface BESecurityDTO {
 }
 
 interface BESecurityMetricDTO {
+  primaryPmName: string;
+  backupPmName: string;
+  researchName: string;
   isFixedForLife: boolean;
   isFixedToFloatInFixed: boolean;
   isFloat: boolean;

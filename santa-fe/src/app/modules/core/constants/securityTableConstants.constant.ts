@@ -53,19 +53,19 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: 'positionInMM',
     underlineAttrName: 'position',
     readyStage: 1,
-    active: false
+    active: true
   },{
     label: 'HF Position (MM)',
     attrName: 'positionHFInMM',
     underlineAttrName: 'positionHF',
     readyStage: 1,
-    active: true
+    active: false
   },{
     label: 'NLF Position (MM)',
     attrName: 'positionNLFInMM',
     underlineAttrName: 'positionNLF',
     readyStage: 1,
-    active: true
+    active: false
   },{
     label: '30 Day Delta',
     attrName: TriCoreMetricConfig.TSpread.metricLabel,
@@ -134,6 +134,34 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     label: 'Country',
     attrName: 'country',
     underlineAttrName: 'country',
+    readyStage: 2,
+    active: false,
+    inversedSortingForText: true
+  },{
+    label: 'Maturity Type',
+    attrName: 'maturityType',
+    underlineAttrName: 'maturityType',
+    readyStage: 2,
+    active: false,
+    inversedSortingForText: true
+  },{
+    label: 'Primary PM',
+    attrName: 'primaryPmName',
+    underlineAttrName: 'primaryPmName',
+    readyStage: 2,
+    active: true,
+    inversedSortingForText: true
+  },{
+    label: 'Backup PM',
+    attrName: 'backupPmName',
+    underlineAttrName: 'backupPmName',
+    readyStage: 2,
+    active: false,
+    inversedSortingForText: true
+  },{
+    label: 'Research',
+    attrName: 'researchName',
+    underlineAttrName: 'researchName',
     readyStage: 2,
     active: false,
     inversedSortingForText: true

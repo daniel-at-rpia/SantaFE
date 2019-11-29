@@ -27,6 +27,10 @@ export interface SecurityDTO extends BasicDTOStructure {
     industry: string;
     securityType: string;
     seniority: string;
+    maturityType: string;
+    primaryPmName: string;
+    backupPmName: string;
+    researchName: string;
     portfolios: Array<string>;
     position: number;
     positionInMM: string;
