@@ -201,38 +201,5 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
         selectedOptions: ['Fixed', 'Float']
       }
     ]
-  },{
-    displayTitle: 'Financials grouped by rating, seniority, and tenor',
-    includedDefinitions: [
-      {
-        definitionKey: 'SECURITY_TYPE',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'SECTOR',
-        groupByActive: false,
-        selectedOptions: ['Financials']
-      },{
-        definitionKey: 'CURRENCY',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'RATING',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'TENOR',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'SENIORITY',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'COUPON_TYPE',
-        groupByActive: true,
-        selectedOptions: ['Fixed', 'Float']
-      }
-    ]
-  },
+  }
 ];

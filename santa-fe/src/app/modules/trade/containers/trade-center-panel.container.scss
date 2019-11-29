@@ -1,5 +1,6 @@
 @import "global.scss";
 
+$tradeCenterPanel_preset_height: 8rem;
 .sat-tradeCenterPanel {
   $tradeCenterPanelBlockName: &;
   @include mix_border_generator;
@@ -18,28 +19,45 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      &-title {
+        padding: $spacing_small;
+        text-align: center;
+        font-size: $font_size_large;
+        color: $font_color_minor;
+      }
       &-list {
         @include mix_enable_scrollbar('vertical');
         display: flex;
         flex-direction: column;
         &-item {
           @include mix_alive('light');
+          flex: 0 0 auto;
           display: flex;
-          align-items: center;
-          padding: 0 $spacing_medium;
+          padding: $spacing_x_small $spacing_medium $spacing_medium $spacing_medium;
           overflow: hidden;
-          height: 10rem;
+          height: $tradeCenterPanel_preset_height;
           search-shortcut {
+            display: flex;
             flex: 1 1 auto;
           }
         }
       }
     }
     &-configurator {
-      flex: 0 0 100%;
+      @include mix_alive('custom', opacity $animation_duration_light);
+      flex: 1 1 auto;
       display: flex;
+      flex-direction: column;
+      opacity: 0;
+      transition-delay: 0.5s;
       overflow: hidden;
       padding: 0 0 $spacing_medium $spacing_medium;
+      &-title {
+        padding-top: $spacing_large;
+        text-align: center;
+        font-size: $font_size_large;
+        color: $font_color_minor;
+      }
       security-definition-configurator {
         flex: 1 1 auto;
         display: flex;
@@ -123,13 +141,17 @@
     #{$tradeCenterPanelBlockName} {
       &__presetsAndFilters {
         &-presets {
-          flex: 0 0 10rem;
+          flex: 0 0 $tradeCenterPanel_preset_height + 3rem;
           &-list-item {
             height: 0;
+            padding: 0 $spacing_medium;
             &--selected {
-              height: 9.5rem;
+              height: $tradeCenterPanel_preset_height;
             }
           }
+        }
+        &-configurator {
+          opacity: 1;
         }
       }
       &__result {

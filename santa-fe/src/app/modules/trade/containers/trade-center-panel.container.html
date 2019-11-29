@@ -6,6 +6,7 @@
   }">
   <section class="sat-tradeCenterPanel__presetsAndFilters">
     <div class="sat-tradeCenterPanel__presetsAndFilters-presets">
+      <span class="sat-tradeCenterPanel__presetsAndFilters-presets-title">Select Preset</span>
       <ul class="sat-tradeCenterPanel__presetsAndFilters-presets-list">
         <li
           *ngFor="let eachShortcut of state.presets.shortcutList"
@@ -21,6 +22,7 @@
       </ul>
     </div>
     <div class="sat-tradeCenterPanel__presetsAndFilters-configurator">
+      <span class="sat-tradeCenterPanel__presetsAndFilters-configurator-title">Filter Securities</span>
       <security-definition-configurator
         (clickedApplyFilter)="onApplyFilter($event)"
         [configuratorData]="state.configurator.dto"

@@ -357,15 +357,18 @@ export class TradeCenterPanel {
   private updateRowListWithFilters() {
     const filteredList: Array<SecurityTableRowDTO> = [];
     this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
-      if ( this.state.filters.quickFilters.keyword.length < 3 || eachRow.data.security.data.name.indexOf(this.state.filters.quickFilters.keyword) >= 0) {
+      if (this.state.filters.quickFilters.keyword.length < 3 || eachRow.data.security.data.name.indexOf(this.state.filters.quickFilters.keyword) >= 0) {
         let portfolioIncludeFlag = this.filterByPortfolio(eachRow);
-        const securityLevelFilterResult = this.state.filters.securityFilters.map((eachFilter) => {
-          return this.filterBySecurityAttribute(eachRow, eachFilter.targetAttribute, eachFilter.filterBy);
-        });
-        // as long as one of the filters failed, this security will not show
-        const securityLevelFilterResultCombined = securityLevelFilterResult.filter((eachResult) => {
-          return eachResult;
-        }).length > 0;
+        let securityLevelFilterResultCombined = true;
+        if (this.state.filters.securityFilters.length > 0) {
+          const securityLevelFilterResult = this.state.filters.securityFilters.map((eachFilter) => {
+            return this.filterBySecurityAttribute(eachRow, eachFilter.targetAttribute, eachFilter.filterBy);
+          });
+          // as long as one of the filters failed, this security will not show
+          securityLevelFilterResultCombined = securityLevelFilterResult.filter((eachResult) => {
+            return eachResult;
+          }).length > 0;
+        }
         securityLevelFilterResultCombined && portfolioIncludeFlag && filteredList.push(eachRow);
       }
     });

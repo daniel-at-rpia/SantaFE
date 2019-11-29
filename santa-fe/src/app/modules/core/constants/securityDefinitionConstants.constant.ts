@@ -215,17 +215,20 @@ export const SecurityDefinitionMap: Array<SecurityDefinitionStub> = [
     key: 'COUPON_TYPE',
     displayName: 'Coupon Type',
     icon: 'fas fa-ticket-alt',
-    optionList: FilterOptionsCouponType
+    optionList: FilterOptionsCouponType,
+    correspondSecurityDTOAttribute: 'couponType'
   },{
     key: 'CURRENCY',
     displayName: 'Currency',
     icon: 'fal fa-dollar-sign',
-    optionList: FilterOptionsCurrency
+    optionList: FilterOptionsCurrency,
+    correspondSecurityDTOAttribute: 'currency'
   },{
     key: 'INDUSTRY',
     displayName: 'Industry',
     icon: 'fal fa-city',
-    optionList: FilterOptionsIndustryType
+    optionList: FilterOptionsIndustryType,
+    correspondSecurityDTOAttribute: 'industry'
   },{
     key: 'ISSUER',
     displayName: 'Issuer',
@@ -251,7 +254,8 @@ export const SecurityDefinitionMap: Array<SecurityDefinitionStub> = [
     key: 'RATING',
     displayName: 'Rating',
     icon: 'fas fa-award',
-    optionList: FilterOptionsRating
+    optionList: FilterOptionsRating,
+    correspondSecurityDTOAttribute: 'ratingValue'
   },{
     key: 'RATING_BUCKET',
     displayName: 'Rating Bucket',
@@ -262,12 +266,14 @@ export const SecurityDefinitionMap: Array<SecurityDefinitionStub> = [
     key: 'SECTOR',
     displayName: 'Sector',
     icon: 'fal fa-chart-pie',
-    optionList: FilterOptionsSectorType
+    optionList: FilterOptionsSectorType,
+    correspondSecurityDTOAttribute: 'sector'
   },{
     key: 'SENIORITY',
     displayName: 'Seniority',
     icon: 'fal fa-gavel',
-    optionList: FilterOptionsSeniorityType
+    optionList: FilterOptionsSeniorityType,
+    correspondSecurityDTOAttribute: 'seniority'
   },{
     key: 'SUB_INDUSTRY',
     displayName: 'Sub-Industry',
