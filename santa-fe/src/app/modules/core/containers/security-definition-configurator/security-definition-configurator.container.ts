@@ -217,8 +217,8 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
           return eachOption.isSelected;
         })
         if (activeFilters.length === prevActiveFilters.length) {
-          for (let i = 0; i < length; ++i) {
-            if (activeFilters[i] !== prevActiveFilters[i]) {
+          for (let i = 0; i < activeFilters.length; ++i) {
+            if (activeFilters[i].shortKey !== prevActiveFilters[i].shortKey) {
               canApply = true;
               break;
             }
