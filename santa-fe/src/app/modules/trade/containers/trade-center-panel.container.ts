@@ -113,7 +113,8 @@ export class TradeCenterPanel {
     } else {
       targetPreset.state.isSelected = true;
       this.state.presets.selectedPreset = targetPreset;
-      setTimeout(this.loadFreshData.bind(this), 500);
+      this.loadFreshData();
+      // setTimeout(this.loadFreshData.bind(this), 800);
     }
   }
 
@@ -264,7 +265,7 @@ export class TradeCenterPanel {
     }
     console.log('count is', count, nonEmptyCount, validCount);
     // right now stage 1 and stage 2 are combined
-    this.updateStage(2);
+    // this.updateStage(2); // disabling this now for a smoothier transition on the UI
     this.fetchStageThreeContent();
   }
 

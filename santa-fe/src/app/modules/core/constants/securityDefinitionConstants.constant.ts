@@ -192,6 +192,35 @@ import {
     'Wireless Telecommunications Services'
   ];
 
+  const FilterOptionsPortfolioList = [
+    'DOF',
+    'SOF',
+    'STIP',
+    'FIP',
+    'CIP',
+    'AGB'
+  ];
+
+  const FilterOptionsPortfolioManagerList = [
+    'BT',
+    'DA',
+    'DJ',
+    'DM',
+    'IL',
+    'PM',
+    'RS',
+    'SP',
+    'ST'
+  ];
+
+  const FilterOptionsPortfolioResearchList = [
+    'AG',
+    'LC',
+    'LP',
+    'PD',
+    'TW'
+  ];
+
 export const SecurityDefinitionMap: Array<SecurityDefinitionStub> = [
   {
     key: 'SECURITY_TYPE',
@@ -285,6 +314,30 @@ export const SecurityDefinitionMap: Array<SecurityDefinitionStub> = [
     displayName: 'Tenor',
     icon: 'fal fa-history',
     optionList: FilterOptionsTenor
+  },{
+    key: 'PORTFOLIO',
+    displayName: 'Portfolio',
+    icon: 'fal fa-file-invoice-dollar',
+    optionList: FilterOptionsPortfolioList,
+    correspondSecurityDTOAttribute: 'portfolios'
+  },{
+    key: 'PRIMARY_PORTFOLIO_MANAGER',
+    displayName: 'Primary PM',
+    icon: 'fas fa-user-tie',
+    optionList: FilterOptionsPortfolioManagerList,
+    correspondSecurityDTOAttribute: 'primaryPmName'
+  },{
+    key: 'BACKUP_PORTFOLIO_MANAGER',
+    displayName: 'Backup PM',
+    icon: 'fal fa-user-tie',
+    optionList: FilterOptionsPortfolioManagerList,
+    correspondSecurityDTOAttribute: 'backupPmName'
+  },{
+    key: 'RESEARCH',
+    displayName: 'Research',
+    icon: 'fal fa-user-chart',
+    optionList: FilterOptionsPortfolioResearchList,
+    correspondSecurityDTOAttribute: 'researchName'
   }
 ];
 
@@ -292,11 +345,19 @@ export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> =
   {
     label: 'Basic',
     list: [
+      SecurityDefinitionMap[16],
       SecurityDefinitionMap[3],
       SecurityDefinitionMap[4],
       SecurityDefinitionMap[10],
       SecurityDefinitionMap[12],
       SecurityDefinitionMap[15]
+    ]
+  },{
+    label: 'Owner',
+    list: [
+      SecurityDefinitionMap[17],
+      SecurityDefinitionMap[18],
+      SecurityDefinitionMap[19]
     ]
   },{
     label: 'Quality',
