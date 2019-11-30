@@ -92,7 +92,7 @@ export class TradeCenterPanel {
       filters: {
         quickFilters: {
           metricType: TriCoreMetricConfig.TSpread.label,
-          portfolios: ['DOF'],
+          portfolios: [],
           keyword: ''
         },
         securityFilters: []
@@ -137,6 +137,7 @@ export class TradeCenterPanel {
 
   public onApplyFilter(params: DefinitionConfiguratorEmitterParams) {
     this.state.filters.securityFilters = params.filterList;
+    this.state.filters.quickFilters.portfolios = [];
     params.filterList.forEach((eachFilter) => {
       if (eachFilter.targetAttribute === 'portfolios') {
         this.state.filters.quickFilters.portfolios = eachFilter.filterBy;
@@ -148,7 +149,7 @@ export class TradeCenterPanel {
   private populateSearchShortcuts(){
     this.constants.searchShortcuts.forEach((eachShortcutStub) => {
       const definitionList = eachShortcutStub.includedDefinitions.map((eachIncludedDef) => {
-        const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityGroupDefinitionMap.find((eachDef) => {return eachDef.key === eachIncludedDef.definitionKey}));
+        const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityGroupDefinitionMap[eachIncludedDef.definitionKey]);
         definitionDTO.state.groupByActive = !!eachIncludedDef.groupByActive;
         if (eachIncludedDef.selectedOptions.length > 0) {
           definitionDTO.state.filterActive = true;
@@ -390,12 +391,16 @@ export class TradeCenterPanel {
 
   private filterByPortfolio(targetRow: SecurityTableRowDTO): boolean {
     let includeFlag = false;
-    this.state.filters.quickFilters.portfolios.forEach((eachPortfolio) => {
-      if (targetRow.data.security.data.portfolios.indexOf(eachPortfolio) >= 0) {
-        includeFlag = true;
-      }
-    });
-    return includeFlag;
+    if (this.state.filters.quickFilters.portfolios.length > 0) {
+      this.state.filters.quickFilters.portfolios.forEach((eachPortfolio) => {
+        if (targetRow.data.security.data.portfolios.indexOf(eachPortfolio) >= 0) {
+          includeFlag = true;
+        }
+      });
+      return includeFlag;
+    } else {
+      return true;
+    }
   }
 
   private calculateQuantComparerWidthAndHeight() {

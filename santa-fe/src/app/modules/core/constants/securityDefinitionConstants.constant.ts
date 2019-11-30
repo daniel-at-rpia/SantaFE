@@ -1,6 +1,7 @@
 import {
   SecurityDefinitionStub,
   SecurityDefinitionBundleStub,
+  SecurityDefinitionMapStub,
   SecurityMetricOptionStub,
   SearchShortcutStub
 } from 'FEModels/frontend-stub-models.interface';
@@ -221,166 +222,185 @@ import {
     'TW'
   ];
 
-export const SecurityDefinitionMap: Array<SecurityDefinitionStub> = [
-  {
+export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
+  'SECURITY_TYPE': {
     key: 'SECURITY_TYPE',
     displayName: 'Security Type',
     icon: 'fal fa-slash',
     optionList: FilterOptionsSecurityType,
     locked: true,
     securityDTOAttr: 'securityType'
-  },{
+  },
+  'BACKEND_TENOR': {
     key: 'BACKEND_TENOR',
     displayName: 'Backend Tenor',
     icon: 'fal fa-desktop',
     secondaryIcon: 'fas fa-history',
     optionList: FilterOptionsTenor
-  },{
+  },
+  'BAIL_IN_STATUS': {
     key: 'BAIL_IN_STATUS',
     displayName: 'Bail-in Status',
     icon: 'fas fa-shield-alt',
     optionList: FilterOptionsBailInStatus
-  },{
+  },
+  'COUPON_TYPE': {
     key: 'COUPON_TYPE',
     displayName: 'Coupon Type',
     icon: 'fas fa-ticket-alt',
     optionList: FilterOptionsCouponType,
     securityDTOAttr: 'couponType'
-  },{
+  },
+  'CURRENCY': {
     key: 'CURRENCY',
     displayName: 'Currency',
     icon: 'fal fa-dollar-sign',
     optionList: FilterOptionsCurrency,
     securityDTOAttr: 'currency'
-  },{
+  },
+  'INDUSTRY': {
     key: 'INDUSTRY',
     displayName: 'Industry',
     icon: 'fal fa-city',
     optionList: FilterOptionsIndustryType,
     securityDTOAttr: 'industry'
-  },{
+  },
+  'ISSUER': {
     key: 'ISSUER',
     displayName: 'Issuer',
     icon: 'fas fa-user-tie',
     optionList: [],
     urlForGetLongOptionListFromServer: 'santaObligor/get-santa-issuers'
-  },{
+  },
+  'MATURITY': {
     key: 'MATURITY',
     displayName: 'Maturity Type',
     icon: 'fal fa-seedling',
     optionList: FilterOptionsMaturityType
-  },{
+  },
+  'IS_NEWISSUE': {
     key: 'IS_NEWISSUE',
     displayName: 'New Issue',
     icon: 'far fa-sparkles',
     optionList: FilterOptionsBoolean
-  },{
+  },
+  'IS_ONTHERUN': {
     key: 'IS_ONTHERUN',
     displayName: 'On-the-Run',
     icon: 'fal fa-handshake',
     optionList: FilterOptionsBoolean
-  },{
+  },
+  'RATING': {
     key: 'RATING',
     displayName: 'Rating',
     icon: 'fas fa-award',
     optionList: FilterOptionsRating,
     securityDTOAttr: 'ratingValue'
-  },{
+  },
+  'RATING_BUCKET': {
     key: 'RATING_BUCKET',
     displayName: 'Rating Bucket',
     icon: 'fas fa-trash',
     optionList: FilterOptionsRatingBucket,
     secondaryIcon: 'fas fa-award'
-  },{
+  },
+  'SECTOR': {
     key: 'SECTOR',
     displayName: 'Sector',
     icon: 'fal fa-chart-pie',
     optionList: FilterOptionsSectorType,
     securityDTOAttr: 'sector'
-  },{
+  },
+  'SENIORITY': {
     key: 'SENIORITY',
     displayName: 'Seniority',
     icon: 'fal fa-gavel',
     optionList: FilterOptionsSeniorityType,
     securityDTOAttr: 'seniority'
-  },{
+  },
+  'SUB_INDUSTRY': {
     key: 'SUB_INDUSTRY',
     displayName: 'Sub-Industry',
     icon: 'fal fa-building',
     optionList: [],
     urlForGetLongOptionListFromServer: 'santaObligor/get-santa-subindustries'
-  },{
+  },
+  'TENOR': {
     key: 'TENOR',
     displayName: 'Tenor',
     icon: 'fal fa-history',
     optionList: FilterOptionsTenor
-  },{
+  },
+  'PORTFOLIO': {
     key: 'PORTFOLIO',
     displayName: 'Portfolio',
     icon: 'fal fa-file-invoice-dollar',
     optionList: FilterOptionsPortfolioList,
     securityDTOAttr: 'portfolios'
-  },{
+  },
+  'PRIMARY_PORTFOLIO_MANAGER': {
     key: 'PRIMARY_PORTFOLIO_MANAGER',
     displayName: 'Primary PM',
     icon: 'fas fa-user-tie',
     optionList: FilterOptionsPortfolioManagerList,
     securityDTOAttr: 'primaryPmName'
-  },{
+  },
+  'BACKUP_PORTFOLIO_MANAGER': {
     key: 'BACKUP_PORTFOLIO_MANAGER',
     displayName: 'Backup PM',
     icon: 'fal fa-user-tie',
     optionList: FilterOptionsPortfolioManagerList,
     securityDTOAttr: 'backupPmName'
-  },{
+  },
+  'RESEARCH': {
     key: 'RESEARCH',
     displayName: 'Research',
     icon: 'fal fa-user-chart',
     optionList: FilterOptionsPortfolioResearchList,
     securityDTOAttr: 'researchName'
   }
-];
+};
 
 export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> = [
   {
     label: 'Basic',
     list: [
-      SecurityDefinitionMap[16],
-      SecurityDefinitionMap[3],
-      SecurityDefinitionMap[4],
-      SecurityDefinitionMap[10],
-      SecurityDefinitionMap[12],
-      SecurityDefinitionMap[15]
+      SecurityDefinitionMap.PORTFOLIO,
+      SecurityDefinitionMap.COUPON_TYPE,
+      SecurityDefinitionMap.CURRENCY,
+      SecurityDefinitionMap.RATING,
+      SecurityDefinitionMap.SECTOR,
+      SecurityDefinitionMap.TENOR
     ]
   },{
     label: 'Owner',
     list: [
-      SecurityDefinitionMap[17],
-      SecurityDefinitionMap[18],
-      SecurityDefinitionMap[19]
+      SecurityDefinitionMap.PRIMARY_PORTFOLIO_MANAGER,
+      SecurityDefinitionMap.BACKUP_PORTFOLIO_MANAGER,
+      SecurityDefinitionMap.RESEARCH
     ]
   },{
     label: 'Quality',
     list: [
-      SecurityDefinitionMap[11],
-      SecurityDefinitionMap[13]
+      SecurityDefinitionMap.RATING_BUCKET,
+      SecurityDefinitionMap.SENIORITY
     ]
   },{
     label: 'Issuer',
     list: [
-      SecurityDefinitionMap[5],
-      SecurityDefinitionMap[14],
-      SecurityDefinitionMap[6]
+      SecurityDefinitionMap.INDUSTRY,
+      SecurityDefinitionMap.SUB_INDUSTRY,
+      SecurityDefinitionMap.ISSUER
     ]
   },{
     label: 'Bond',
     list: [
-      SecurityDefinitionMap[0],
-      SecurityDefinitionMap[1],
-      SecurityDefinitionMap[2],
-      SecurityDefinitionMap[7],
-      SecurityDefinitionMap[8],
-      SecurityDefinitionMap[9]
+      SecurityDefinitionMap.SECURITY_TYPE,
+      SecurityDefinitionMap.BACKEND_TENOR,
+      SecurityDefinitionMap.BAIL_IN_STATUS,
+      SecurityDefinitionMap.MATURITY,
+      SecurityDefinitionMap.IS_NEWISSUE,
+      SecurityDefinitionMap.IS_ONTHERUN
     ]
   }
 ];

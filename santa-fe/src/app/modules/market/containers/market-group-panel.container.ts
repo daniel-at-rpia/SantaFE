@@ -106,15 +106,11 @@ export class MarketGroupPanel implements OnDestroy {
       }
     };
     this.state.utility.pieConfigurator.left.options = this.PieChartConfigurationOptions.left.map((eachOption) => {
-      const targetDefinition = this.constants.securityGroupDefinitionMap.find((eachDefinition) => {
-        return eachDefinition.key === eachOption;
-      })
+      const targetDefinition = this.constants.securityGroupDefinitionMap[eachOption];
       return targetDefinition;
     });
     this.state.utility.pieConfigurator.right.options = this.PieChartConfigurationOptions.right.map((eachOption) => {
-      const targetDefinition = this.constants.securityGroupDefinitionMap.find((eachDefinition) => {
-        return eachDefinition.key === eachOption;
-      })
+      const targetDefinition = this.constants.securityGroupDefinitionMap[eachOption];
       return targetDefinition;
     });
     this.onSelectPieConfiguratorMetric(this.state.utility.pieConfigurator.left, this.state.utility.pieConfigurator.left.options[5]);
@@ -264,7 +260,7 @@ export class MarketGroupPanel implements OnDestroy {
   private populateSearchShortcuts(){
     this.constants.searchShortcuts.forEach((eachShortcutStub) => {
       const definitionList = eachShortcutStub.includedDefinitions.map((eachIncludedDef) => {
-        const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityGroupDefinitionMap.find((eachDef) => {return eachDef.key === eachIncludedDef.definitionKey}));
+        const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityGroupDefinitionMap[eachIncludedDef.definitionKey]);
         definitionDTO.state.groupByActive = !!eachIncludedDef.groupByActive;
         if (eachIncludedDef.selectedOptions.length > 0) {
           definitionDTO.state.filterActive = true;
