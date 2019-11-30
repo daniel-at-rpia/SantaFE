@@ -84,7 +84,7 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     key: string;
     urlForGetLongOptionListFromServer: string;
     filterOptionList: Array<SecurityDefinitionFilterBlock>;
-    correspondSecurityDTOAttribute: string;
+    securityDTOAttr: string;
   }
   style: {
     icon: string;

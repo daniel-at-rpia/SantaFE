@@ -228,7 +228,7 @@ export const SecurityDefinitionMap: Array<SecurityDefinitionStub> = [
     icon: 'fal fa-slash',
     optionList: FilterOptionsSecurityType,
     locked: true,
-    correspondSecurityDTOAttribute: 'securityType'
+    securityDTOAttr: 'securityType'
   },{
     key: 'BACKEND_TENOR',
     displayName: 'Backend Tenor',
@@ -245,19 +245,19 @@ export const SecurityDefinitionMap: Array<SecurityDefinitionStub> = [
     displayName: 'Coupon Type',
     icon: 'fas fa-ticket-alt',
     optionList: FilterOptionsCouponType,
-    correspondSecurityDTOAttribute: 'couponType'
+    securityDTOAttr: 'couponType'
   },{
     key: 'CURRENCY',
     displayName: 'Currency',
     icon: 'fal fa-dollar-sign',
     optionList: FilterOptionsCurrency,
-    correspondSecurityDTOAttribute: 'currency'
+    securityDTOAttr: 'currency'
   },{
     key: 'INDUSTRY',
     displayName: 'Industry',
     icon: 'fal fa-city',
     optionList: FilterOptionsIndustryType,
-    correspondSecurityDTOAttribute: 'industry'
+    securityDTOAttr: 'industry'
   },{
     key: 'ISSUER',
     displayName: 'Issuer',
@@ -284,7 +284,7 @@ export const SecurityDefinitionMap: Array<SecurityDefinitionStub> = [
     displayName: 'Rating',
     icon: 'fas fa-award',
     optionList: FilterOptionsRating,
-    correspondSecurityDTOAttribute: 'ratingValue'
+    securityDTOAttr: 'ratingValue'
   },{
     key: 'RATING_BUCKET',
     displayName: 'Rating Bucket',
@@ -296,13 +296,13 @@ export const SecurityDefinitionMap: Array<SecurityDefinitionStub> = [
     displayName: 'Sector',
     icon: 'fal fa-chart-pie',
     optionList: FilterOptionsSectorType,
-    correspondSecurityDTOAttribute: 'sector'
+    securityDTOAttr: 'sector'
   },{
     key: 'SENIORITY',
     displayName: 'Seniority',
     icon: 'fal fa-gavel',
     optionList: FilterOptionsSeniorityType,
-    correspondSecurityDTOAttribute: 'seniority'
+    securityDTOAttr: 'seniority'
   },{
     key: 'SUB_INDUSTRY',
     displayName: 'Sub-Industry',
@@ -319,25 +319,25 @@ export const SecurityDefinitionMap: Array<SecurityDefinitionStub> = [
     displayName: 'Portfolio',
     icon: 'fal fa-file-invoice-dollar',
     optionList: FilterOptionsPortfolioList,
-    correspondSecurityDTOAttribute: 'portfolios'
+    securityDTOAttr: 'portfolios'
   },{
     key: 'PRIMARY_PORTFOLIO_MANAGER',
     displayName: 'Primary PM',
     icon: 'fas fa-user-tie',
     optionList: FilterOptionsPortfolioManagerList,
-    correspondSecurityDTOAttribute: 'primaryPmName'
+    securityDTOAttr: 'primaryPmName'
   },{
     key: 'BACKUP_PORTFOLIO_MANAGER',
     displayName: 'Backup PM',
     icon: 'fal fa-user-tie',
     optionList: FilterOptionsPortfolioManagerList,
-    correspondSecurityDTOAttribute: 'backupPmName'
+    securityDTOAttr: 'backupPmName'
   },{
     key: 'RESEARCH',
     displayName: 'Research',
     icon: 'fal fa-user-chart',
     optionList: FilterOptionsPortfolioResearchList,
-    correspondSecurityDTOAttribute: 'researchName'
+    securityDTOAttr: 'researchName'
   }
 ];
 

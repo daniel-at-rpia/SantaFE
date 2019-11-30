@@ -176,7 +176,7 @@ export class DTOService {
         key: rawData.key,
         urlForGetLongOptionListFromServer: rawData.urlForGetLongOptionListFromServer || null,
         filterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
-        correspondSecurityDTOAttribute: rawData.correspondSecurityDTOAttribute
+        securityDTOAttr: rawData.securityDTOAttr
       },
       style: {
         icon: rawData.icon,

@@ -18,7 +18,7 @@ export interface SecurityDefinitionStub {
   secondaryIcon?: string;
   locked?: boolean;
   urlForGetLongOptionListFromServer?: string;
-  correspondSecurityDTOAttribute?: string;
+  securityDTOAttr?: string;
 }
 
 export interface SecurityDefinitionBundleStub {

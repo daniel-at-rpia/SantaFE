@@ -28,6 +28,7 @@
       SecurityTableHeaderDTO
     } from 'FEModels/frontend-models.interface';
     import { QuoteMetricBlock } from 'FEModels/frontend-blocks.interface';
+    import { PayloadGetAllQuotes } from 'BEModels/backend-payloads.interface';
     import { ClickedSortQuotesByMetricEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
     import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
     import { BEQuoteDTO } from 'BEModels/backend-models.interface';
@@ -218,7 +219,7 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   private fetchSecurityQuotes(targetRow: SecurityTableRowDTO){
-    const payload = {
+    const payload: PayloadGetAllQuotes = {
       "identifier": {
         "SecurityId": targetRow.data.security.data.securityID
       }

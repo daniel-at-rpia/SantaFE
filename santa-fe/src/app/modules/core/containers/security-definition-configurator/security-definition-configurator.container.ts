@@ -62,7 +62,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     if (this.configuratorData.state.groupByDisabled) {
       this.configuratorData.data.definitionList.forEach((eachBundle) => {
         eachBundle.data.list = eachBundle.data.list.filter((eachDefinition) => {
-          return !!eachDefinition.data.correspondSecurityDTOAttribute;
+          return !!eachDefinition.data.securityDTOAttr;
         });
       })
       this.configuratorData.data.definitionList = this.configuratorData.data.definitionList.filter((eachBundle) => {
@@ -176,7 +176,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
           return eachOption.isSelected;
         });
         activeFilters.length > 0 && params.filterList.push({
-          targetAttribute: eachDefinition.data.correspondSecurityDTOAttribute,
+          targetAttribute: eachDefinition.data.securityDTOAttr,
           filterBy: activeFilters.map((eachFilter) => {
             return eachFilter.displayLabel;
           })

@@ -7,7 +7,16 @@ export interface PayloadGetSantaGroups {
 }
 
 export interface PayloadGetPositions {
-  source: string;
+  source?: string;
   yyyyMMdd?: number;
   partitionOptions: Array<string>
+}
+
+export interface PayloadGetBestQuotes {
+  quoteMetric: string,
+  identifiers: Array<object>
+}
+
+export interface PayloadGetAllQuotes {
+  identifier: object
 }

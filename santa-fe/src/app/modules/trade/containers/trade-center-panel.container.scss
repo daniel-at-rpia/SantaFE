@@ -54,6 +54,7 @@ $tradeCenterPanel_preset_height: 9rem;
       padding: 0 0 $spacing_medium $spacing_medium;
       &-title {
         padding-top: $spacing_large;
+        padding-bottom: $spacing_x_small;
         text-align: center;
         font-size: $font_size_large;
         color: $font_color_minor;
@@ -70,7 +71,7 @@ $tradeCenterPanel_preset_height: 9rem;
     display: none;
     flex-direction: column;
     overflow: hidden;
-    padding: $spacing_medium $spacing_medium $spacing_medium 0;
+    padding: $spacing_medium;
     &-quickFilters {
       display: flex;
       &-row {

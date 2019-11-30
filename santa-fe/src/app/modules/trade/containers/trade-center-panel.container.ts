@@ -33,7 +33,10 @@
       QuantComparerDTO,
       SearchShortcutDTO
     } from 'FEModels/frontend-models.interface';
-    import { PayloadGetPositions } from 'BEModels/backend-payloads.interface';
+    import {
+      PayloadGetPositions,
+      PayloadGetBestQuotes
+    } from 'BEModels/backend-payloads.interface';
     import {
       BEPortfolioDTO,
       BESecurityDTO,
@@ -118,19 +121,6 @@ export class TradeCenterPanel {
     }
   }
 
-  public onClickQuickFilterList(targetList, targetItem) {
-    if (targetList.indexOf(targetItem) >= 0) {
-      if (targetList === this.state.filters.quickFilters.portfolios) {
-        this.state.filters.quickFilters.portfolios = targetList.filter((eachItem) => {
-          return eachItem !== targetItem;
-        })
-      }
-    } else {
-      targetList.push(targetItem);
-    }
-    this.updateRowListWithFilters();
-  }
-
   public onSwitchMetric(targetMetric) {
     if (this.state.filters.quickFilters.metricType !== targetMetric) {
       this.state.filters.quickFilters.metricType = targetMetric;
@@ -147,6 +137,11 @@ export class TradeCenterPanel {
 
   public onApplyFilter(params: DefinitionConfiguratorEmitterParams) {
     this.state.filters.securityFilters = params.filterList;
+    params.filterList.forEach((eachFilter) => {
+      if (eachFilter.targetAttribute === 'portfolios') {
+        this.state.filters.quickFilters.portfolios = eachFilter.filterBy;
+      };
+    });
     this.updateRowListWithFilters();
   }
 
@@ -204,7 +199,6 @@ export class TradeCenterPanel {
 
   private fetchStageOneContent() {
     const payload : PayloadGetPositions = {
-      source: 'FO',
       partitionOptions: ['Portfolio', 'Strategy']
     };
     this.restfulCommService.callAPI('santaPortfolio/get-santa-credit-positions', {req: 'POST'}, payload, true, false).pipe(
@@ -270,7 +264,7 @@ export class TradeCenterPanel {
   }
 
   private fetchStageThreeContent() {
-    const payload = {
+    const payload: PayloadGetBestQuotes = {
       quoteMetric: this.state.filters.quickFilters.metricType,
       identifiers: []
     };
@@ -381,33 +375,18 @@ export class TradeCenterPanel {
 
   private filterBySecurityAttribute(targetRow: SecurityTableRowDTO, targetAttribute: string, filterBy: Array<string>): boolean {
     let includeFlag = false;
-    filterBy.forEach((eachValue) => {
-      if (targetRow.data.security.data[targetAttribute] === eachValue) {
-        includeFlag = true;
-      }
-    });
-    return includeFlag;
+    if (targetAttribute === 'portfolios') {
+      // bypass portfolio filter since it is handled via this.filterByPortfolio()
+      return true;
+    } else {
+      filterBy.forEach((eachValue) => {
+        if (targetRow.data.security.data[targetAttribute] === eachValue) {
+          includeFlag = true;
+        }
+      });
+      return includeFlag;
+    }
   }
-
-  // private filterByCurrency(targetRow: SecurityTableRowDTO): boolean {
-  //   let includeFlag = false;
-  //   this.state.filters.quickFilters.currency.forEach((eachCurrency) => {
-  //     if (targetRow.data.security.data.currency === eachCurrency) {
-  //       includeFlag = true;
-  //     }
-  //   });
-  //   return includeFlag;
-  // }
-
-  // private filterBySecurityType(targetRow: SecurityTableRowDTO): boolean {
-  //   let includeFlag = false;
-  //   this.state.filters.quickFilters.securityType.forEach((eachType) => {
-  //     if (targetRow.data.security.data.securityType === eachType) {
-  //       includeFlag = true;
-  //     }
-  //   });
-  //   return includeFlag;
-  // }
 
   private filterByPortfolio(targetRow: SecurityTableRowDTO): boolean {
     let includeFlag = false;
