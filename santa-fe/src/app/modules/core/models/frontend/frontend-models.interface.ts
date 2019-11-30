@@ -3,7 +3,8 @@ import {
   SecurityGroupMetricPackBlock,
   SecurityGroupPieChartBlock,
   SecurityDefinitionFilterBlock,
-  QuoteMetricBlock
+  QuoteMetricBlock,
+  SecurityPortfolioBlock
 } from 'FEModels/frontend-blocks.interface';
 
 interface BasicDTOStructure {
@@ -31,10 +32,13 @@ export interface SecurityDTO extends BasicDTOStructure {
     primaryPmName: string;
     backupPmName: string;
     researchName: string;
-    portfolios: Array<string>;
-    portfolioStrategies: string;
-    position: number;
-    positionInMM: string;
+    portfolios: Array<SecurityPortfolioBlock>;
+    strategyCurrent: string;
+    strategyFirm: string;
+    positionCurrent: number;
+    positionCurrentInMM: string;
+    positionFirm: number;
+    positionFirmInMM: string;
     positionHF: number;
     positionHFInMM: string;
     positionNLF: number;

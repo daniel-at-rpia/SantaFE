@@ -4,7 +4,8 @@
       BESecurityDTO,
       BESecurityGroupDTO,
       BEBestQuoteDTO,
-      BEQuoteDTO
+      BEQuoteDTO,
+      BEPortfolioDTO
     } from 'BEModels/backend-models.interface';
     import {
       SecurityDTO,
@@ -24,7 +25,8 @@
     import {
       SecurityGroupMetricBlock,
       SecurityDefinitionFilterBlock,
-      QuoteMetricBlock
+      QuoteMetricBlock,
+      SecurityPortfolioBlock
     } from 'FEModels/frontend-blocks.interface';
     import {
       SecurityDefinitionStub,
@@ -85,9 +87,12 @@ export class DTOService {
         backupPmName: !isStencil ? rawData.metrics.backupPmName : null,
         researchName: !isStencil ? rawData.metrics.researchName : null,
         portfolios: [],
-        portfolioStrategies: '',
-        position: 0,
-        positionInMM: 'n/a',
+        strategyCurrent: '',
+        strategyFirm: '',
+        positionCurrent: 0,
+        positionCurrentInMM: 'n/a',
+        positionFirm: 0,
+        positionFirmInMM: 'n/a',
         positionHF: 0,
         positionHFInMM: 'n/a',
         positionNLF: 0,
@@ -102,6 +107,38 @@ export class DTOService {
       }
     };
     return object;
+  }
+
+  public appendPortfolioInfoToSecurityDTO(
+    dto: SecurityDTO,
+    targetPortfolio: BEPortfolioDTO
+  ) {
+    const newBlock: SecurityPortfolioBlock = {
+      portfolioName: targetPortfolio.portfolioShortName,
+      quantity: targetPortfolio.quantity,
+      marketValueCad: targetPortfolio.marketValueCad,
+      strategy: targetPortfolio.strategyName
+    };
+    dto.data.portfolios.push(newBlock);
+  }
+
+  public appendPortfolioOverviewInfoForSecurityDTO(
+    dto: SecurityDTO
+  ) {
+    dto.data.portfolios.forEach((eachPortfolioBlock) => {
+      dto.data.positionFirm = dto.data.positionFirm + eachPortfolioBlock.quantity;
+      if (eachPortfolioBlock.portfolioName === 'DOF' || eachPortfolioBlock.portfolioName === 'SOF') {
+        dto.data.positionHF = dto.data.positionHF + eachPortfolioBlock.quantity;
+      } else if (eachPortfolioBlock.portfolioName === 'STIP' || eachPortfolioBlock.portfolioName === 'FIP' || eachPortfolioBlock.portfolioName === 'CIP') {
+        dto.data.positionNLF = dto.data.positionNLF + eachPortfolioBlock.quantity;
+      }
+      if (eachPortfolioBlock.strategy.length > 0 && dto.data.strategyFirm.indexOf(eachPortfolioBlock.strategy) < 0) {
+        dto.data.strategyFirm = dto.data.strategyFirm.length === 0 ? `${eachPortfolioBlock.strategy}` : `${dto.data.strategyFirm} & ${eachPortfolioBlock.strategy}`;
+      }
+    });
+    dto.data.positionFirmInMM = this.utility.parsePositionToMM(dto.data.positionFirm, false);
+    dto.data.positionHFInMM = this.utility.parsePositionToMM(dto.data.positionHF, false);
+    dto.data.positionNLFInMM = this.utility.parsePositionToMM(dto.data.positionNLF, false);
   }
 
   public formSecurityGroupObject(

@@ -8,6 +8,13 @@ Because of this, while component models need to follow "BasicDTOStructure", bloc
 
 import * as am4charts from "@amcharts/amcharts4/charts";
 
+export interface SecurityPortfolioBlock {
+  portfolioName: string;
+  quantity: number;
+  marketValueCad: number;
+  strategy: string;
+}
+
 export interface SecurityGroupMetricBlock {
   isEmpty: boolean;
   sortHierarchy: number;

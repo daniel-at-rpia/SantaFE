@@ -235,24 +235,13 @@ export class TradeCenterPanel {
         const newSecurity = this.dtoService.formSecurityCardObject(newBESecurity, false);
         serverReturn[eachKey].forEach((eachPortfolio: BEPortfolioDTO) => {
           if (eachPortfolio.quantity !== 0 && !eachPortfolio.santaSecurity.isGovt && eachPortfolio.santaSecurity.metrics) {
-            newSecurity.data.position = newSecurity.data.position + eachPortfolio.quantity;
-            newSecurity.data.portfolios.push(eachPortfolio.portfolioShortName);
-            if (eachPortfolio.strategyName.length > 0 && newSecurity.data.portfolioStrategies.indexOf(eachPortfolio.strategyName) < 0) {
-              newSecurity.data.portfolioStrategies = newSecurity.data.portfolioStrategies.length === 0 ? `${eachPortfolio.strategyName}` : `${newSecurity.data.portfolioStrategies} & ${eachPortfolio.strategyName}`;
-            }
-            if (eachPortfolio.portfolioShortName === 'DOF' || eachPortfolio.portfolioShortName === 'SOF') {
-              newSecurity.data.positionHF = newSecurity.data.positionHF + eachPortfolio.quantity;
-            } else if (eachPortfolio.portfolioShortName === 'STIP' || eachPortfolio.portfolioShortName === 'FIP' || eachPortfolio.portfolioShortName === 'CIP') {
-              newSecurity.data.positionNLF = newSecurity.data.positionNLF + eachPortfolio.quantity;
-            }
+            this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio);
           } else {
             isValidFlag = false;
           }
         });
         if (isValidFlag) {
-          newSecurity.data.positionInMM = this.utilityService.parsePositionToMM(newSecurity.data.position, false);
-          newSecurity.data.positionHFInMM = this.utilityService.parsePositionToMM(newSecurity.data.positionHF, false);
-          newSecurity.data.positionNLFInMM = this.utilityService.parsePositionToMM(newSecurity.data.positionNLF, false);
+          this.dtoService.appendPortfolioOverviewInfoForSecurityDTO(newSecurity);
           this.populateEachRowWithStageOneContent(newSecurity);
           validCount++;
         }
@@ -393,7 +382,10 @@ export class TradeCenterPanel {
     let includeFlag = false;
     if (this.state.filters.quickFilters.portfolios.length > 0) {
       this.state.filters.quickFilters.portfolios.forEach((eachPortfolio) => {
-        if (targetRow.data.security.data.portfolios.indexOf(eachPortfolio) >= 0) {
+        const portfolioExist = targetRow.data.security.data.portfolios.filter((eachPortfolioBlock) => {
+          return eachPortfolioBlock.portfolioName === eachPortfolio;
+        });
+        if (!!portfolioExist) {
           includeFlag = true;
         }
       });
