@@ -379,20 +379,25 @@ export class TradeCenterPanel {
   }
 
   private filterByPortfolio(targetRow: SecurityTableRowDTO): boolean {
+    const targetSecurity = targetRow.data.security;
     let includeFlag = false;
     if (this.state.filters.quickFilters.portfolios.length > 0) {
+      targetRow.data.security.data.positionCurrent = 0;
       this.state.filters.quickFilters.portfolios.forEach((eachPortfolio) => {
-        const portfolioExist = targetRow.data.security.data.portfolios.filter((eachPortfolioBlock) => {
+        const portfolioExist = targetRow.data.security.data.portfolios.find((eachPortfolioBlock) => {
           return eachPortfolioBlock.portfolioName === eachPortfolio;
         });
         if (!!portfolioExist) {
+          targetRow.data.security.data.positionCurrent = targetRow.data.security.data.positionCurrent + portfolioExist.quantity;
           includeFlag = true;
         }
       });
-      return includeFlag;
     } else {
-      return true;
+      includeFlag = true;
+      targetRow.data.security.data.positionCurrent = targetRow.data.security.data.positionFirm;
     }
+    targetRow.data.security.data.positionCurrentInMM = this.utilityService.parsePositionToMM(targetRow.data.security.data.positionCurrent, false);
+    return includeFlag;
   }
 
   private calculateQuantComparerWidthAndHeight() {

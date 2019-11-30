@@ -59,13 +59,13 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: 'positionFirmInMM',
     underlineAttrName: 'positionFirm',
     readyStage: 1,
-    active: false
+    active: true
   },{
     label: 'HF Position (MM)',
     attrName: 'positionHFInMM',
     underlineAttrName: 'positionHF',
     readyStage: 1,
-    active: false
+    active: true
   },{
     label: 'NLF Position (MM)',
     attrName: 'positionNLFInMM',
@@ -77,7 +77,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: 'strategyFirm',
     underlineAttrName: 'strategyFirm',
     readyStage: 1,
-    active: false,
+    active: true,
     inversedSortingForText: true
   },{
     label: 'Strategy',
