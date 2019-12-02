@@ -22,11 +22,9 @@
     } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
 
-    import { } from 'Trade/actions/trade.actions';
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
-
     import { TradeCenterPanelState } from 'FEModels/frontend-page-states.interface';
     import {
       SecurityDTO,
@@ -202,7 +200,6 @@ export class TradeCenterPanel {
   }
 
   private fetchStageOneContent() {
-    // this.store.dispatch(new TradeTestEvent());
     const payload : PayloadGetPositions = {
       partitionOptions: ['Portfolio', 'Strategy']
     };

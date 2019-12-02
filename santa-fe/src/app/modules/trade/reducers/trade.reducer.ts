@@ -18,7 +18,7 @@ export interface TradeState {
   liveUpdateTick: number;
   liveUpdateInProgress: boolean;
   liveUpdatePaused: boolean;
-  tableContentList: Array<SecurityTableRowDTO>;
+  positionsServerReturn: object;
 }
 
 const initialState: TradeState = {
@@ -26,7 +26,7 @@ const initialState: TradeState = {
   liveUpdateTick: 0,
   liveUpdateInProgress: false,
   liveUpdatePaused: false,
-  tableContentList: []
+  positionsServerReturn: null
 };
 
 export function tradeReducer(
@@ -51,7 +51,7 @@ export function tradeReducer(
       return {
         ...state,
         liveUpdateInProgress: false,
-        tableContentList: action.rowList
+        positionsServerReturn: action.serverReturn
       };
     case TradeActions.LiveUpdateCount:
       const oldCount = state.liveUpdateSecondCount;

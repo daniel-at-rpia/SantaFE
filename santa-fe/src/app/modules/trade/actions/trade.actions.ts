@@ -28,8 +28,12 @@ export class TradeLiveUpdateReceiveRawDataEvent implements Action {
 
 export class TradeLiveUpdatePassTableContentEvent implements Action {
   readonly type = TradeActions.LiveUpdatePassTableContentEvent;
-  readonly rowList: Array<SecurityTableRowDTO>;
-  constructor(){}
+  readonly serverReturn: object;
+  constructor(
+    serverReturn: object
+  ){
+    this.serverReturn = serverReturn;
+  }
 }
 
 export class TradeLiveUpdateUtilityInternalCountEvent implements Action {

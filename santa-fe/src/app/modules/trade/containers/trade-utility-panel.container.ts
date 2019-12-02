@@ -45,7 +45,6 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
   state: TradeUtilityPanelState;
   internalCount$: Observable<any>;
   subscriptions = {
-    startNewUpdateSub: null,
     internalCountSub: null,
     externalCountSub: null
   };
@@ -76,12 +75,6 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
       if (count >= 30) {
         this.store$.dispatch(new TradeLiveUpdateStartEvent())
       }
-    });
-
-    this.subscriptions.startNewUpdateSub = this.store$.pipe(
-      select(selectLiveUpdateTick)
-    ).subscribe(tick => {
-      console.log('test, got tick', tick);
     });
   }
 
