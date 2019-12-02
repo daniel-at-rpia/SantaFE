@@ -1,11 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { environment } from '../environments/environment';
 
 import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './reducers';
 import { EffectsModule } from '@ngrx/effects';
 import { AppEffects } from './app.effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -32,6 +34,10 @@ import { AppRoot } from './app.root';
       }
     }),
     EffectsModule.forRoot([AppEffects]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 5,
+      logOnly: environment.production
+    }),
 
     // Native modules
     CoreModule,
