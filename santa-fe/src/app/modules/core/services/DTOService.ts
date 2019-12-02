@@ -86,6 +86,7 @@ export class DTOService {
         primaryPmName: !isStencil ? rawData.metrics.primaryPmName : null,
         backupPmName: !isStencil ? rawData.metrics.backupPmName : null,
         researchName: !isStencil ? rawData.metrics.researchName : null,
+        mark: 123,
         portfolios: [],
         strategyCurrent: '',
         strategyFirm: '',

@@ -37,9 +37,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: true
   },{
     label: 'Mark',
-    attrName: null,
-    underlineAttrName: null,
-    readyStage: 3,
+    attrName: 'mark',
+    underlineAttrName: 'mark',
+    readyStage: 2,
     active: false
   },{
     label: 'Mark Discrepancy',
