@@ -2,8 +2,9 @@ import {
   SecurityGroupMetricBlock,
   SecurityGroupMetricPackBlock,
   SecurityGroupPieChartBlock,
-  SecurityGroupDefinitionFilterBlock,
-  QuoteMetricBlock
+  SecurityDefinitionFilterBlock,
+  QuoteMetricBlock,
+  SecurityPortfolioBlock
 } from 'FEModels/frontend-blocks.interface';
 
 interface BasicDTOStructure {
@@ -27,9 +28,17 @@ export interface SecurityDTO extends BasicDTOStructure {
     industry: string;
     securityType: string;
     seniority: string;
-    portfolios: Array<string>;
-    position: number;
-    positionInMM: string;
+    maturityType: string;
+    primaryPmName: string;
+    backupPmName: string;
+    researchName: string;
+    portfolios: Array<SecurityPortfolioBlock>;
+    strategyCurrent: string;
+    strategyFirm: string;
+    positionCurrent: number;
+    positionCurrentInMM: string;
+    positionFirm: number;
+    positionFirmInMM: string;
     positionHF: number;
     positionHFInMM: string;
     positionNLF: number;
@@ -73,12 +82,13 @@ export interface SecurityGroupDTO extends BasicDTOStructure {
   }
 }
 
-export interface SecurityGroupDefinitionDTO extends BasicDTOStructure {
+export interface SecurityDefinitionDTO extends BasicDTOStructure {
   data: {
     name: string;
     key: string;
     urlForGetLongOptionListFromServer: string;
-    filterOptionList: Array<SecurityGroupDefinitionFilterBlock>;
+    filterOptionList: Array<SecurityDefinitionFilterBlock>;
+    securityDTOAttr: string;
   }
   style: {
     icon: string;
@@ -92,23 +102,25 @@ export interface SecurityGroupDefinitionDTO extends BasicDTOStructure {
   }
 }
 
-export interface SecurityGroupDefinitionBundleDTO extends BasicDTOStructure {
+export interface SecurityDefinitionBundleDTO extends BasicDTOStructure {
   data: {
     label: string;
-    list: Array<SecurityGroupDefinitionDTO>
+    list: Array<SecurityDefinitionDTO>
   }
 }
 
-export interface SecurityGroupDefinitionConfiguratorDTO extends BasicDTOStructure {
+export interface SecurityDefinitionConfiguratorDTO extends BasicDTOStructure {
   data: {
-    definitionList: Array<SecurityGroupDefinitionBundleDTO>;
+    definitionList: Array<SecurityDefinitionBundleDTO>;
     filterSearchInputValue: string;
   }
   state: {
+    groupByDisabled: boolean;
+    canApplyFilter: boolean;
     showLongFilterOptions: boolean;
     isLoading: boolean;
     isLoadingLongOptionListFromServer: boolean;
-    showFiltersFromDefinition: SecurityGroupDefinitionDTO;
+    showFiltersFromDefinition: SecurityDefinitionDTO;
   }
 }
 
@@ -130,10 +142,10 @@ export interface SecurityGroupAverageVisualizerDTO extends BasicDTOStructure {
 export interface SearchShortcutDTO extends BasicDTOStructure {
   data: {
     displayTitle: string;
-    configuration: Array<SecurityGroupDefinitionDTO>
+    configuration: Array<SecurityDefinitionDTO>
   },
   style: {
-    slotList: Array<SecurityGroupDefinitionDTO>
+    slotList: Array<SecurityDefinitionDTO>
   },
   state: {
     isSelected: boolean;

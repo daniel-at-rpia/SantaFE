@@ -28,6 +28,7 @@
       SecurityTableHeaderDTO
     } from 'FEModels/frontend-models.interface';
     import { QuoteMetricBlock } from 'FEModels/frontend-blocks.interface';
+    import { PayloadGetAllQuotes } from 'BEModels/backend-payloads.interface';
     import { ClickedSortQuotesByMetricEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
     import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
     import { BEQuoteDTO } from 'BEModels/backend-models.interface';
@@ -67,7 +68,6 @@ export class SecurityTable implements OnInit, OnChanges {
     if (this.tableData.state.loadedContentStage !== this.receivedContentStage) {
       console.log('rows updated for inter-stage change', this.receivedContentStage);
       this.tableData.state.loadedContentStage = this.receivedContentStage;
-      this.tableData.data.rows = this.newRows;
       if (this.receivedSecurityTableMetricsCache !== this.receivedSecurityTableMetricsUpdate) {
         this.receivedSecurityTableMetricsCache = this.utilityService.deepCopy(this.securityTableMetrics);
         // currently the only thing the parent can change is the 30 day delta metric's attribute, so we only need to update that
@@ -75,19 +75,10 @@ export class SecurityTable implements OnInit, OnChanges {
         this.securityTableMetrics[7].underlineAttrName = this.receivedSecurityTableMetricsUpdate[7].underlineAttrName;
         this.loadTableHeaders();
       }
-        if (this.tableData.state.sortedByHeader) {
-          this.performSort(this.tableData.state.sortedByHeader);
-        } else {
-          this.performDefaultSort();
-        }
+      this.loadTableRows(this.newRows);
     } else if (!!this.newRows && this.newRows != this.tableData.data.rows && this.tableData.state.loadedContentStage === this.receivedContentStage) {
       console.log('rows updated for change within same stage', this.tableData.state.loadedContentStage);
-      this.tableData.data.rows = this.newRows;
-      if (this.tableData.state.sortedByHeader) {
-        this.performSort(this.tableData.state.sortedByHeader);
-      } else {
-        this.performDefaultSort();
-      }
+      this.loadTableRows(this.newRows);
     }
   }
 
@@ -177,9 +168,10 @@ export class SecurityTable implements OnInit, OnChanges {
     if (this.tableData.state.loadedContentStage === SECURITY_TABLE_FINAL_STAGE) {
       targetRow.state.isExpanded = !targetRow.state.isExpanded;
       targetRow.data.security.state.isTableExpanded = targetRow.state.isExpanded;
-      const row = targetRow;
-      this.renderStencilQuotes(targetRow);
-      this.fetchSecurityQuotes(row);
+      if (targetRow.state.isExpanded) {
+        this.renderStencilQuotes(targetRow);
+        this.fetchSecurityQuotes(targetRow);
+      }
     }
   }
 
@@ -194,6 +186,29 @@ export class SecurityTable implements OnInit, OnChanges {
         this.tableData.data.headers.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
       }
     });
+  }
+
+  private loadTableRows(rowList: Array<SecurityTableRowDTO>) {
+    this.tableData.data.rows = rowList;
+    this.updateDynamicColumns();
+    if (this.tableData.state.sortedByHeader) {
+      this.performSort(this.tableData.state.sortedByHeader);
+    } else {
+      this.performDefaultSort();
+    }
+  }
+
+  private updateDynamicColumns() {
+    // right now the only dynamic column is positionCurrent
+    const showingPositionCurrent = this.tableData.data.headers.find((eachHeader) => {
+      return eachHeader.data.underlineAttrName === 'positionCurrent';
+    });
+    if (!!showingPositionCurrent && this.receivedContentStage >= showingPositionCurrent.data.readyStage) {
+      const cellIndex = this.tableData.data.headers.indexOf(showingPositionCurrent) - 1;
+      this.tableData.data.rows.forEach((eachRow) => {
+        eachRow.data.cells[cellIndex] = this.utilityService.populateSecurityTableCellFromSecurityCard(showingPositionCurrent, eachRow, eachRow.data.cells[cellIndex]);
+      });
+    }
   }
 
   private loadTableRowsUponHeaderChange() {
@@ -217,7 +232,7 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   private fetchSecurityQuotes(targetRow: SecurityTableRowDTO){
-    const payload = {
+    const payload: PayloadGetAllQuotes = {
       "identifier": {
         "SecurityId": targetRow.data.security.data.securityID
       }

@@ -4,14 +4,15 @@
       BESecurityDTO,
       BESecurityGroupDTO,
       BEBestQuoteDTO,
-      BEQuoteDTO
+      BEQuoteDTO,
+      BEPortfolioDTO
     } from 'BEModels/backend-models.interface';
     import {
       SecurityDTO,
       SecurityGroupDTO,
-      SecurityGroupDefinitionDTO,
-      SecurityGroupDefinitionBundleDTO,
-      SecurityGroupDefinitionConfiguratorDTO,
+      SecurityDefinitionDTO,
+      SecurityDefinitionBundleDTO,
+      SecurityDefinitionConfiguratorDTO,
       SecurityGroupAverageVisualizerDTO,
       QuantComparerDTO,
       SearchShortcutDTO,
@@ -23,8 +24,9 @@
     } from 'FEModels/frontend-models.interface';
     import {
       SecurityGroupMetricBlock,
-      SecurityGroupDefinitionFilterBlock,
-      QuoteMetricBlock
+      SecurityDefinitionFilterBlock,
+      QuoteMetricBlock,
+      SecurityPortfolioBlock
     } from 'FEModels/frontend-blocks.interface';
     import {
       SecurityDefinitionStub,
@@ -45,9 +47,11 @@
       SECURITY_TABLE_QUOTE_TYPE_AXE
     } from 'Core/constants/securityTableConstants.constant';
     import {
-      GroupMetricOptions,
-      ConfiguratorDefinitionLayout
+      GroupMetricOptions
     } from 'Core/constants/marketConstants.constant';
+    import {
+      ConfiguratorDefinitionLayout
+    } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       QuoteMetricList
     } from 'Core/constants/securityTableConstants.constant';
@@ -78,9 +82,17 @@ export class DTOService {
         industry: !isStencil ? rawData.industry : null,
         securityType: !isStencil ? rawData.securityType : null,
         seniority: !isStencil ? rawData.seniority : null,
+        maturityType: !isStencil ? rawData.maturityType : null,
+        primaryPmName: !isStencil ? rawData.metrics.primaryPmName : null,
+        backupPmName: !isStencil ? rawData.metrics.backupPmName : null,
+        researchName: !isStencil ? rawData.metrics.researchName : null,
         portfolios: [],
-        position: 0,
-        positionInMM: 'n/a',
+        strategyCurrent: '',
+        strategyFirm: '',
+        positionCurrent: 0,
+        positionCurrentInMM: 'n/a',
+        positionFirm: 0,
+        positionFirmInMM: 'n/a',
         positionHF: 0,
         positionHFInMM: 'n/a',
         positionNLF: 0,
@@ -95,6 +107,38 @@ export class DTOService {
       }
     };
     return object;
+  }
+
+  public appendPortfolioInfoToSecurityDTO(
+    dto: SecurityDTO,
+    targetPortfolio: BEPortfolioDTO
+  ) {
+    const newBlock: SecurityPortfolioBlock = {
+      portfolioName: targetPortfolio.portfolioShortName,
+      quantity: targetPortfolio.quantity,
+      marketValueCad: targetPortfolio.marketValueCad,
+      strategy: targetPortfolio.strategyName
+    };
+    dto.data.portfolios.push(newBlock);
+  }
+
+  public appendPortfolioOverviewInfoForSecurityDTO(
+    dto: SecurityDTO
+  ) {
+    dto.data.portfolios.forEach((eachPortfolioBlock) => {
+      dto.data.positionFirm = dto.data.positionFirm + eachPortfolioBlock.quantity;
+      if (eachPortfolioBlock.portfolioName === 'DOF' || eachPortfolioBlock.portfolioName === 'SOF') {
+        dto.data.positionHF = dto.data.positionHF + eachPortfolioBlock.quantity;
+      } else if (eachPortfolioBlock.portfolioName === 'STIP' || eachPortfolioBlock.portfolioName === 'FIP' || eachPortfolioBlock.portfolioName === 'CIP') {
+        dto.data.positionNLF = dto.data.positionNLF + eachPortfolioBlock.quantity;
+      }
+      if (eachPortfolioBlock.strategy.length > 0 && dto.data.strategyFirm.indexOf(eachPortfolioBlock.strategy) < 0) {
+        dto.data.strategyFirm = dto.data.strategyFirm.length === 0 ? `${eachPortfolioBlock.strategy}` : `${dto.data.strategyFirm} & ${eachPortfolioBlock.strategy}`;
+      }
+    });
+    dto.data.positionFirmInMM = this.utility.parsePositionToMM(dto.data.positionFirm, false);
+    dto.data.positionHFInMM = this.utility.parsePositionToMM(dto.data.positionHF, false);
+    dto.data.positionNLFInMM = this.utility.parsePositionToMM(dto.data.positionNLF, false);
   }
 
   public formSecurityGroupObject(
@@ -143,13 +187,13 @@ export class DTOService {
     return object;
   }
 
-  public generateSecurityGroupDefinitionFilterOptionList(
+  public generateSecurityDefinitionFilterOptionList(
     name,
     options
-  ): Array<SecurityGroupDefinitionFilterBlock> {
+  ): Array<SecurityDefinitionFilterBlock> {
     return options.map((eachOption) => {
       const normalizedOption = this.utility.normalizeDefinitionFilterOption(eachOption);
-      const newFilterDTO:SecurityGroupDefinitionFilterBlock = {
+      const newFilterDTO:SecurityDefinitionFilterBlock = {
         isSelected: false,
         isFilteredOut: false,
         displayLabel: eachOption,
@@ -160,15 +204,16 @@ export class DTOService {
     })
   };
 
-  public formSecurityGroupDefinitionObject(
+  public formSecurityDefinitionObject(
     rawData: SecurityDefinitionStub
-  ): SecurityGroupDefinitionDTO {
-    const object:SecurityGroupDefinitionDTO = {
+  ): SecurityDefinitionDTO {
+    const object:SecurityDefinitionDTO = {
       data: {
         name: rawData.displayName,
         key: rawData.key,
         urlForGetLongOptionListFromServer: rawData.urlForGetLongOptionListFromServer || null,
-        filterOptionList: this.generateSecurityGroupDefinitionFilterOptionList(rawData.key, rawData.optionList)
+        filterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
+        securityDTOAttr: rawData.securityDTOAttr
       },
       style: {
         icon: rawData.icon,
@@ -185,14 +230,14 @@ export class DTOService {
     return object;
   }
 
-  public formSecurityGroupDefinitionBundleObject(
+  public formSecurityDefinitionBundleObject(
     stubData: SecurityDefinitionBundleStub
-  ): SecurityGroupDefinitionBundleDTO {
-    const object: SecurityGroupDefinitionBundleDTO = {
+  ): SecurityDefinitionBundleDTO {
+    const object: SecurityDefinitionBundleDTO = {
       data: {
         label: stubData.label,
         list: stubData.list.map((eachStubDefinition) => {
-          return this.formSecurityGroupDefinitionObject(eachStubDefinition);
+          return this.formSecurityDefinitionObject(eachStubDefinition);
         })
       },
       state: {
@@ -202,15 +247,19 @@ export class DTOService {
     return object;
   }
 
-  public createSecurityGroupDefinitionConfigurator(): SecurityGroupDefinitionConfiguratorDTO {
-    const object:SecurityGroupDefinitionConfiguratorDTO = {
+  public createSecurityDefinitionConfigurator(
+    groupByDisabled: boolean
+  ): SecurityDefinitionConfiguratorDTO {
+    const object:SecurityDefinitionConfiguratorDTO = {
       data: {
         filterSearchInputValue: '',
         definitionList: ConfiguratorDefinitionLayout.map((eachBundle) => {
-          return this.formSecurityGroupDefinitionBundleObject(eachBundle);
+          return this.formSecurityDefinitionBundleObject(eachBundle);
         })
       },
       state: {
+        groupByDisabled: !!groupByDisabled,
+        canApplyFilter: false,
         showFiltersFromDefinition: null,
         showLongFilterOptions: false,
         isLoading: false,
@@ -259,7 +308,7 @@ export class DTOService {
   }
 
   public formSearchShortcutObject(
-    definitionList: Array<SecurityGroupDefinitionDTO>,
+    definitionList: Array<SecurityDefinitionDTO>,
     title: string
   ): SearchShortcutDTO {
     const object: SearchShortcutDTO = {

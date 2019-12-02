@@ -14,15 +14,39 @@ export interface SecurityDefinitionStub {
   backendDtoAttrName?: string;
   displayName: string;
   icon: string;
-  optionList: Array<string>,
+  optionList: Array<string>;
   secondaryIcon?: string;
   locked?: boolean;
   urlForGetLongOptionListFromServer?: string;
+  securityDTOAttr?: string;
 }
 
 export interface SecurityDefinitionBundleStub {
   label: string;
   list: Array<SecurityDefinitionStub>;
+}
+
+export interface SecurityDefinitionMapStub {
+  SECURITY_TYPE: SecurityDefinitionStub;
+  BACKEND_TENOR: SecurityDefinitionStub;
+  BAIL_IN_STATUS: SecurityDefinitionStub;
+  COUPON_TYPE: SecurityDefinitionStub;
+  CURRENCY: SecurityDefinitionStub;
+  INDUSTRY: SecurityDefinitionStub;
+  ISSUER: SecurityDefinitionStub;
+  MATURITY: SecurityDefinitionStub;
+  IS_NEWISSUE: SecurityDefinitionStub;
+  IS_ONTHERUN: SecurityDefinitionStub;
+  RATING: SecurityDefinitionStub;
+  RATING_BUCKET: SecurityDefinitionStub;
+  SECTOR: SecurityDefinitionStub;
+  SENIORITY: SecurityDefinitionStub;
+  SUB_INDUSTRY: SecurityDefinitionStub;
+  TENOR: SecurityDefinitionStub;
+  PORTFOLIO: SecurityDefinitionStub;
+  PRIMARY_PORTFOLIO_MANAGER: SecurityDefinitionStub;
+  BACKUP_PORTFOLIO_MANAGER: SecurityDefinitionStub;
+  RESEARCH: SecurityDefinitionStub;
 }
 
 export interface SecurityMetricOptionStub {

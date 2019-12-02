@@ -33,8 +33,12 @@
       SecurityTableHeaderDTO,
       SecurityTableRowDTO,
       QuantComparerDTO,
+      SearchShortcutDTO
     } from 'FEModels/frontend-models.interface';
-    import { PayloadGetPositions } from 'BEModels/backend-payloads.interface';
+    import {
+      PayloadGetPositions,
+      PayloadGetBestQuotes
+    } from 'BEModels/backend-payloads.interface';
     import {
       BEPortfolioDTO,
       BESecurityDTO,
@@ -43,12 +47,13 @@
 
     import { TriCoreMetricConfig } from 'Core/constants/coreConstants.constant';
     import { SecurityTableMetrics } from 'Core/constants/securityTableConstants.constant';
+    import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       PortfolioList,
-      CurrencyList,
-      SecurityTypeList,
-      QUANT_COMPARER_PERCENTILE
+      QUANT_COMPARER_PERCENTILE,
+      SearchShortcuts
     } from 'Core/constants/tradeConstants.constant';
+    import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
   //
 
 @Component({
@@ -60,9 +65,43 @@
 
 export class TradeCenterPanel {
   state: TradeCenterPanelState;
-  portfolioList = PortfolioList;
-  currencyList = CurrencyList;
-  securityTypeList = SecurityTypeList;
+  constants = {
+    portfolioList: PortfolioList,
+    searchShortcuts: SearchShortcuts,
+    securityGroupDefinitionMap: SecurityDefinitionMap
+  }
+
+  private initializePageState() {
+    this.state = {
+      currentContentStage: 0,
+      presets: {
+        selectedPreset: null,
+        shortcutList: []
+      },
+      configurator: {
+        dto: this.dtoService.createSecurityDefinitionConfigurator(true)
+      },
+      table: {
+        metrics: SecurityTableMetrics,
+        dto: this.dtoService.formSecurityTableObject()
+      },
+      fetchResult: {
+        fetchTableDataFailed: false,
+        fetchTableDataFailedError: '',
+        rowList: [],
+        prinstineRowList: []
+      },
+      filters: {
+        quickFilters: {
+          metricType: TriCoreMetricConfig.TSpread.label,
+          portfolios: [],
+          keyword: ''
+        },
+        securityFilters: []
+      }
+    };
+    this.populateSearchShortcuts();
+  }
 
   constructor(
     private store: Store<any>,
@@ -73,31 +112,22 @@ export class TradeCenterPanel {
     this.initializePageState();
   }
 
-  public onClickQuickFilterList(targetList, targetItem) {
-    if (targetList.indexOf(targetItem) >= 0) {
-      if (targetList === this.state.filters.quickFilters.currency) {
-        this.state.filters.quickFilters.currency = targetList.filter((eachItem) => {
-          return eachItem !== targetItem;
-        })
-      } else if (targetList === this.state.filters.quickFilters.securityType) {
-        this.state.filters.quickFilters.securityType = targetList.filter((eachItem) => {
-          return eachItem !== targetItem;
-        })
-      } else if (targetList === this.state.filters.quickFilters.portfolios) {
-        this.state.filters.quickFilters.portfolios = targetList.filter((eachItem) => {
-          return eachItem !== targetItem;
-        })
-      }
+  public onSelectPreset(targetPreset: SearchShortcutDTO) {
+    if (this.state.presets.selectedPreset === targetPreset) {
+      targetPreset.state.isSelected = false;
+      this.state.presets.selectedPreset = null;
     } else {
-      targetList.push(targetItem);
+      targetPreset.state.isSelected = true;
+      this.state.presets.selectedPreset = targetPreset;
+      this.loadFreshData();
+      // setTimeout(this.loadFreshData.bind(this), 800);
     }
-    this.updateRowListWithFilters();
   }
 
-  public onSwitchMetric(targetMetric){
+  public onSwitchMetric(targetMetric) {
     if (this.state.filters.quickFilters.metricType !== targetMetric) {
       this.state.filters.quickFilters.metricType = targetMetric;
-      const thrityDayDeltaMetric = this.state.tableMetrics[7];
+      const thrityDayDeltaMetric = this.state.table.metrics[7];
       if (thrityDayDeltaMetric.label === '30 Day Delta') {
         thrityDayDeltaMetric.attrName = TriCoreMetricConfig[targetMetric].metricLabel;
         thrityDayDeltaMetric.underlineAttrName = TriCoreMetricConfig[targetMetric].metricLabel;
@@ -108,30 +138,38 @@ export class TradeCenterPanel {
     }
   }
 
-  private initializePageState() {
-    this.state = {
-      fetchTableDataFailed: false,
-      fetchTableDataFailedError: '',
-      table: this.dtoService.formSecurityTableObject(),
-      tableMetrics: SecurityTableMetrics,
-      rowList: [],
-      prinstineRowList: [],
-      currentContentStage: 0,
-      filters: {
-        quickFilters: {
-          metricType: TriCoreMetricConfig.TSpread.label,
-          portfolios: ['DOF'],
-          securityType: ['Bond', 'Preferred'],
-          currency: ['USD'],
-          keyword: ''
+  public onApplyFilter(params: DefinitionConfiguratorEmitterParams) {
+    this.state.filters.securityFilters = params.filterList;
+    this.state.filters.quickFilters.portfolios = [];
+    params.filterList.forEach((eachFilter) => {
+      if (eachFilter.targetAttribute === 'portfolios') {
+        this.state.filters.quickFilters.portfolios = eachFilter.filterBy;
+      };
+    });
+    this.updateRowListWithFilters();
+  }
+
+  private populateSearchShortcuts(){
+    this.constants.searchShortcuts.forEach((eachShortcutStub) => {
+      const definitionList = eachShortcutStub.includedDefinitions.map((eachIncludedDef) => {
+        const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityGroupDefinitionMap[eachIncludedDef.definitionKey]);
+        definitionDTO.state.groupByActive = !!eachIncludedDef.groupByActive;
+        if (eachIncludedDef.selectedOptions.length > 0) {
+          definitionDTO.state.filterActive = true;
+          definitionDTO.data.filterOptionList.forEach((eachFilterOption) => {
+            if (eachIncludedDef.selectedOptions.indexOf(eachFilterOption.shortKey) >= 0) {
+              eachFilterOption.isSelected = true;
+            }
+          });
         }
-      }
-    };
-    this.loadFreshData();
+        return definitionDTO;
+      });
+      this.state.presets.shortcutList.push(this.dtoService.formSearchShortcutObject(definitionList, eachShortcutStub.displayTitle));
+    });
   }
 
   private loadFreshData() {
-    this.state.prinstineRowList = [];
+    this.state.fetchResult.prinstineRowList = [];
     this.updateStage(0);
     this.loadInitialStencilTable();
     this.fetchStageOneContent();
@@ -158,16 +196,15 @@ export class TradeCenterPanel {
           }
         }
       });
-      this.state.prinstineRowList.push(newRow);
+      this.state.fetchResult.prinstineRowList.push(newRow);
     };
-    this.state.rowList = this.utilityService.deepCopy(this.state.prinstineRowList);
+    this.state.fetchResult.rowList = this.utilityService.deepCopy(this.state.fetchResult.prinstineRowList);
   }
 
   private fetchStageOneContent() {
     this.store.dispatch(new TradeTestEvent());
     const payload : PayloadGetPositions = {
-      source: 'FO',
-      partitionOptions: ['Portfolio']
+      partitionOptions: ['Portfolio', 'Strategy']
     };
     this.restfulCommService.callAPI('santaPortfolio/get-santa-credit-positions', {req: 'POST'}, payload, true, false).pipe(
       first(),
@@ -177,9 +214,9 @@ export class TradeCenterPanel {
       }),
       catchError(err => {
         console.error('error', err);
-        this.state.fetchTableDataFailed = true;
-        this.state.fetchTableDataFailedError = err.message;
-        this.state.prinstineRowList = [];
+        this.state.fetchResult.fetchTableDataFailed = true;
+        this.state.fetchResult.fetchTableDataFailedError = err.message;
+        this.state.fetchResult.prinstineRowList = [];
         this.updateRowListWithFilters();
         return of('error');
       })
@@ -187,7 +224,7 @@ export class TradeCenterPanel {
   }
 
   private loadStageOneContent(serverReturn: Object) {
-    this.state.prinstineRowList = [];  // flush out the stencils
+    this.state.fetchResult.prinstineRowList = [];  // flush out the stencils
     const securityList = [];
     let count = 0;
     let nonEmptyCount = 0;
@@ -201,22 +238,14 @@ export class TradeCenterPanel {
         const newBESecurity:BESecurityDTO = serverReturn[eachKey][0].santaSecurity;
         const newSecurity = this.dtoService.formSecurityCardObject(newBESecurity, false);
         serverReturn[eachKey].forEach((eachPortfolio: BEPortfolioDTO) => {
-          if (eachPortfolio.quantity !== 0 && eachPortfolio.marketValueCad !== 0 && !eachPortfolio.santaSecurity.isGovt && eachPortfolio.santaSecurity.metrics) {
-            newSecurity.data.position = newSecurity.data.position + eachPortfolio.marketValueCad;
-            newSecurity.data.portfolios.push(eachPortfolio.portfolioShortName);
-            if (eachPortfolio.portfolioShortName === 'DOF' || eachPortfolio.portfolioShortName === 'SOF') {
-              newSecurity.data.positionHF = newSecurity.data.positionHF + eachPortfolio.marketValueCad;
-            } else if (eachPortfolio.portfolioShortName === 'STIP' || eachPortfolio.portfolioShortName === 'FIP' || eachPortfolio.portfolioShortName === 'CIP') {
-              newSecurity.data.positionNLF = newSecurity.data.positionNLF + eachPortfolio.marketValueCad;
-            }
+          if (eachPortfolio.quantity !== 0 && !eachPortfolio.santaSecurity.isGovt && eachPortfolio.santaSecurity.metrics) {
+            this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio);
           } else {
             isValidFlag = false;
           }
         });
         if (isValidFlag) {
-          newSecurity.data.positionInMM = this.utilityService.parsePositionToMM(newSecurity.data.position, false);
-          newSecurity.data.positionHFInMM = this.utilityService.parsePositionToMM(newSecurity.data.positionHF, false);
-          newSecurity.data.positionNLFInMM = this.utilityService.parsePositionToMM(newSecurity.data.positionNLF, false);
+          this.dtoService.appendPortfolioOverviewInfoForSecurityDTO(newSecurity);
           this.populateEachRowWithStageOneContent(newSecurity);
           validCount++;
         }
@@ -224,16 +253,16 @@ export class TradeCenterPanel {
     }
     console.log('count is', count, nonEmptyCount, validCount);
     // right now stage 1 and stage 2 are combined
-    this.updateStage(2);
+    // this.updateStage(2); // disabling this now for a smoothier transition on the UI
     this.fetchStageThreeContent();
   }
 
-  private fetchStageThreeContent(){
-    const payload = {
+  private fetchStageThreeContent() {
+    const payload: PayloadGetBestQuotes = {
       quoteMetric: this.state.filters.quickFilters.metricType,
       identifiers: []
     };
-    this.state.prinstineRowList.forEach((eachRow) => {
+    this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
       const newSecurityId = {
         "SecurityId": eachRow.data.security.data.securityID
       };
@@ -246,19 +275,19 @@ export class TradeCenterPanel {
       }),
       catchError(err => {
         console.log('liveQuote/get-best-quotes failed', err);
-        this.state.fetchTableDataFailed = true;
-        this.state.fetchTableDataFailedError = err.message;
-        this.state.prinstineRowList = [];
+        this.state.fetchResult.fetchTableDataFailed = true;
+        this.state.fetchResult.fetchTableDataFailedError = err.message;
+        this.state.fetchResult.prinstineRowList = [];
         this.updateRowListWithFilters();
         return of('error');
       })
     ).subscribe();
   }
 
-  private loadStageThreeContent(serverReturn){
+  private loadStageThreeContent(serverReturn) {
     for (const eachKey in serverReturn) {
       const securityId = this.utilityService.extractSecurityId(eachKey);
-      const results = this.state.prinstineRowList.filter((eachRow) => {
+      const results = this.state.fetchResult.prinstineRowList.filter((eachRow) => {
         return eachRow.data.security.data.securityID === securityId;
       });
       if (!!results && results.length > 0) {
@@ -278,11 +307,11 @@ export class TradeCenterPanel {
   ) {
     const newRow = this.dtoService.formSecurityTableRowObject(newSecurity);
     newSecurity.state.isTable = true;
-    this.state.table.data.headers.forEach((eachHeader, index) => {
+    this.state.table.dto.data.headers.forEach((eachHeader, index) => {
       // TODO: once implemented two-step process to fetch security data, this if statement should only populate stage one metrics
       this.populateEachCellWithStageOneContent(eachHeader, newRow);
     });
-    this.state.prinstineRowList.push(newRow);
+    this.state.fetchResult.prinstineRowList.push(newRow);
   }
 
   private populateEachCellWithStageOneContent(
@@ -312,57 +341,72 @@ export class TradeCenterPanel {
     bestQuoteCell.data.quantComparerDTO = newQuant;
   }
 
-  private updateStage(stageNumber: number){
+  private updateStage(stageNumber: number) {
     this.updateRowListWithFilters();
     this.state.currentContentStage = stageNumber;
   }
 
-  private updateRowListWithFilters(){
+  private updateRowListWithFilters() {
     const filteredList: Array<SecurityTableRowDTO> = [];
-    this.state.prinstineRowList.forEach((eachRow) => {
-      if ( this.state.filters.quickFilters.keyword.length < 3 || eachRow.data.security.data.name.indexOf(this.state.filters.quickFilters.keyword) >= 0) {
-        let currencyIncludeFlag = this.filterByCurrency(eachRow);
-        let securityTypeIncludeFlag = this.filterBySecurityType(eachRow);
+    this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
+      if (this.state.filters.quickFilters.keyword.length < 3 || eachRow.data.security.data.name.indexOf(this.state.filters.quickFilters.keyword) >= 0) {
         let portfolioIncludeFlag = this.filterByPortfolio(eachRow);
-        currencyIncludeFlag && securityTypeIncludeFlag && portfolioIncludeFlag && filteredList.push(eachRow);
+        let securityLevelFilterResultCombined = true;
+        if (this.state.filters.securityFilters.length > 0) {
+          const securityLevelFilterResult = this.state.filters.securityFilters.map((eachFilter) => {
+            return this.filterBySecurityAttribute(eachRow, eachFilter.targetAttribute, eachFilter.filterBy);
+          });
+          // as long as one of the filters failed, this security will not show
+          securityLevelFilterResultCombined = securityLevelFilterResult.filter((eachResult) => {
+            return eachResult;
+          }).length === securityLevelFilterResult.length;
+        }
+        securityLevelFilterResultCombined && portfolioIncludeFlag && filteredList.push(eachRow);
       }
     });
-    this.state.rowList = this.utilityService.deepCopy(filteredList);
+    this.state.fetchResult.rowList = this.utilityService.deepCopy(filteredList);
   }
 
-  private filterByCurrency(targetRow: SecurityTableRowDTO): boolean {
+  private filterBySecurityAttribute(targetRow: SecurityTableRowDTO, targetAttribute: string, filterBy: Array<string>): boolean {
     let includeFlag = false;
-    this.state.filters.quickFilters.currency.forEach((eachCurrency) => {
-      if (targetRow.data.security.data.currency === eachCurrency) {
-        includeFlag = true;
-      }
-    });
-    return includeFlag;
-  }
-
-  private filterBySecurityType(targetRow: SecurityTableRowDTO): boolean {
-    let includeFlag = false;
-    this.state.filters.quickFilters.securityType.forEach((eachType) => {
-      if (targetRow.data.security.data.securityType === eachType) {
-        includeFlag = true;
-      }
-    });
-    return includeFlag;
+    if (targetAttribute === 'portfolios') {
+      // bypass portfolio filter since it is handled via this.filterByPortfolio()
+      return true;
+    } else {
+      filterBy.forEach((eachValue) => {
+        if (targetRow.data.security.data[targetAttribute] === eachValue) {
+          includeFlag = true;
+        }
+      });
+      return includeFlag;
+    }
   }
 
   private filterByPortfolio(targetRow: SecurityTableRowDTO): boolean {
+    const targetSecurity = targetRow.data.security;
     let includeFlag = false;
-    this.state.filters.quickFilters.portfolios.forEach((eachPortfolio) => {
-      if (targetRow.data.security.data.portfolios.indexOf(eachPortfolio) >= 0) {
-        includeFlag = true;
-      }
-    });
+    if (this.state.filters.quickFilters.portfolios.length > 0) {
+      targetRow.data.security.data.positionCurrent = 0;
+      this.state.filters.quickFilters.portfolios.forEach((eachPortfolio) => {
+        const portfolioExist = targetRow.data.security.data.portfolios.find((eachPortfolioBlock) => {
+          return eachPortfolioBlock.portfolioName === eachPortfolio;
+        });
+        if (!!portfolioExist) {
+          targetRow.data.security.data.positionCurrent = targetRow.data.security.data.positionCurrent + portfolioExist.quantity;
+          includeFlag = true;
+        }
+      });
+    } else {
+      includeFlag = true;
+      targetRow.data.security.data.positionCurrent = targetRow.data.security.data.positionFirm;
+    }
+    targetRow.data.security.data.positionCurrentInMM = this.utilityService.parsePositionToMM(targetRow.data.security.data.positionCurrent, false);
     return includeFlag;
   }
 
   private calculateQuantComparerWidthAndHeight() {
     const bestRunList = [];
-    this.state.prinstineRowList.forEach((eachRow) => {
+    this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
       const targetCell = eachRow.data.cells[0];
       !!targetCell.data.quantComparerDTO && bestRunList.push(targetCell.data.quantComparerDTO);
     });
@@ -402,7 +446,8 @@ export class TradeCenterPanel {
     if (delta < 0 ) {
       return 100;
     } else {
-      return 100 - Math.round(delta / maxAbsDelta * 10)*10;
+      const result = 100 - Math.round(delta / maxAbsDelta * 100);
+      return result;
     }
   }
 

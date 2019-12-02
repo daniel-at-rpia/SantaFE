@@ -1,13 +1,13 @@
 @import "global.scss";
 
-$SecurityQuote_twoSideEntry_axeIconSize: 1.5rem;
+$securityQuote_twoSideEntry_axeIconSize: 1.5rem;
 .sat-SecurityQuote {
   $securityQuoteBlockName: &;
   flex: 1 1 auto;
   display: flex;
   margin-top: $spacing_x_small;
   &__time {
-    flex: 0 0 $SecurityQuote_time_width;
+    flex: 0 0 $securityQuote_time_width;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -35,9 +35,9 @@ $SecurityQuote_twoSideEntry_axeIconSize: 1.5rem;
     }
     &-spacing {
       @include mix_border_generator(0 $typical_border_width 0 0);
-      width: $SecurityQuote_spacing_height;
+      width: $securityQuote_spacing_height;
       height: 100%;
-      margin-right: $SecurityQuote_spacing_height;
+      margin-right: $securityQuote_spacing_height;
     }
     &-thumbnail {
       flex: 0 1 100%;
@@ -75,12 +75,12 @@ $SecurityQuote_twoSideEntry_axeIconSize: 1.5rem;
       align-items: center;
       &-bidAxeIcon, &-askAxeIcon {
         @include mix_border_radius(3px);
-        flex: 0 0 $SecurityQuote_twoSideEntry_axeIconSize;
+        flex: 0 0 $securityQuote_twoSideEntry_axeIconSize;
         display: flex;
         align-items: center;
         justify-content: center;
         visibility: hidden;
-        height: $SecurityQuote_twoSideEntry_axeIconSize;
+        height: $securityQuote_twoSideEntry_axeIconSize;
         color: $color_white;
         background-color: $color_axe;
         font-size: $font_size_small;
@@ -159,7 +159,7 @@ $SecurityQuote_twoSideEntry_axeIconSize: 1.5rem;
     }
   }
   &__ctas {
-    flex: 0 0 $SecurityQuote_ctas_width;
+    flex: 0 0 $securityQuote_ctas_width;
     display: flex;
     align-items: center;
     &-upvote {

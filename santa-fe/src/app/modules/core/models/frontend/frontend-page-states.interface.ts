@@ -3,8 +3,8 @@ import {
   SecurityTableDTO,
   SecurityTableRowDTO,
   SecurityGroupDTO,
-  SecurityGroupDefinitionDTO,
-  SecurityGroupDefinitionConfiguratorDTO,
+  SecurityDefinitionDTO,
+  SecurityDefinitionConfiguratorDTO,
   SecurityGroupAverageVisualizerDTO,
   SearchShortcutDTO,
   QuantComparerDTO
@@ -13,6 +13,7 @@ import {
   SecurityDefinitionStub,
   SecurityTableMetricStub
 } from 'FEModels/frontend-stub-models.interface';
+import { DefinitionConfiguratorEmitterParamsItem } from 'FEModels/frontend-adhoc-packages.interface';
 
 export interface MarketState {
 }
@@ -23,9 +24,9 @@ export interface MarketGroupPanelState {
   isConfiguratorCollapsed: boolean;
   isGroupDataLoaded: boolean;
   configurator: {
-    dto: SecurityGroupDefinitionConfiguratorDTO;
+    dto: SecurityDefinitionConfiguratorDTO;
     showSelectedGroupConfig: boolean;
-    cachedOriginalConfig: SecurityGroupDefinitionConfiguratorDTO;
+    cachedOriginalConfig: SecurityDefinitionConfiguratorDTO;
     shortcutList: Array<SearchShortcutDTO>;
     selectedShortcut: SearchShortcutDTO;
   }
@@ -60,20 +61,30 @@ export interface TradeState {
 }
 
 export interface TradeCenterPanelState {
-  fetchTableDataFailed: boolean;
-  fetchTableDataFailedError: string;
-  table: SecurityTableDTO;
-  tableMetrics: Array<SecurityTableMetricStub>;
-  rowList: Array<SecurityTableRowDTO>;
-  prinstineRowList: Array<SecurityTableRowDTO>;
   currentContentStage: number;
+  presets : {
+    selectedPreset: any;
+    shortcutList: Array<SearchShortcutDTO>;
+  }
+  configurator: {
+    dto: SecurityDefinitionConfiguratorDTO;
+  }
+  table: {
+    metrics: Array<SecurityTableMetricStub>;
+    dto: SecurityTableDTO;
+  }
+  fetchResult: {
+    fetchTableDataFailed: boolean;
+    fetchTableDataFailedError: string;
+    rowList: Array<SecurityTableRowDTO>;
+    prinstineRowList: Array<SecurityTableRowDTO>;
+  }
   filters: {
     quickFilters: {
       metricType: string;
       portfolios: Array<string>;
-      securityType: Array<string>;
-      currency: Array<string>;
       keyword: string;
     }
+    securityFilters: Array<DefinitionConfiguratorEmitterParamsItem>
   }
 }

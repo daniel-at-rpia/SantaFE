@@ -49,11 +49,17 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     isFrontEndMetric: true,
     active: false
   },{
-    label: 'Aggregated Position (MM)',
-    attrName: 'positionInMM',
-    underlineAttrName: 'position',
+    label: 'Position (MM)',
+    attrName: 'positionCurrentInMM',
+    underlineAttrName: 'positionCurrent',
     readyStage: 1,
-    active: false
+    active: true
+  },{
+    label: 'Firm Position (MM)',
+    attrName: 'positionFirmInMM',
+    underlineAttrName: 'positionFirm',
+    readyStage: 1,
+    active: true
   },{
     label: 'HF Position (MM)',
     attrName: 'positionHFInMM',
@@ -65,7 +71,21 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: 'positionNLFInMM',
     underlineAttrName: 'positionNLF',
     readyStage: 1,
-    active: true
+    active: false
+  },{
+    label: 'Firm Strategy',
+    attrName: 'strategyFirm',
+    underlineAttrName: 'strategyFirm',
+    readyStage: 1,
+    active: true,
+    inversedSortingForText: true
+  },{
+    label: 'Strategy',
+    attrName: 'strategyCurrent',
+    underlineAttrName: 'strategyCurrent',
+    readyStage: 1,
+    active: false,
+    inversedSortingForText: true
   },{
     label: '30 Day Delta',
     attrName: TriCoreMetricConfig.TSpread.metricLabel,
@@ -121,7 +141,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: 'securityType',
     underlineAttrName: 'securityType',
     readyStage: 2,
-    active: true,
+    active: false,
     inversedSortingForText: true
   },{
     label: 'Seniority',
@@ -134,6 +154,34 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     label: 'Country',
     attrName: 'country',
     underlineAttrName: 'country',
+    readyStage: 2,
+    active: false,
+    inversedSortingForText: true
+  },{
+    label: 'Maturity Type',
+    attrName: 'maturityType',
+    underlineAttrName: 'maturityType',
+    readyStage: 2,
+    active: false,
+    inversedSortingForText: true
+  },{
+    label: 'Primary PM',
+    attrName: 'primaryPmName',
+    underlineAttrName: 'primaryPmName',
+    readyStage: 2,
+    active: true,
+    inversedSortingForText: true
+  },{
+    label: 'Backup PM',
+    attrName: 'backupPmName',
+    underlineAttrName: 'backupPmName',
+    readyStage: 2,
+    active: false,
+    inversedSortingForText: true
+  },{
+    label: 'Research',
+    attrName: 'researchName',
+    underlineAttrName: 'researchName',
     readyStage: 2,
     active: false,
     inversedSortingForText: true

@@ -14,19 +14,19 @@
       SecurityTableRowDTO,
       SecurityTableCellDTO,
       SecurityGroupDTO,
-      SecurityGroupDefinitionDTO,
-      SecurityGroupDefinitionConfiguratorDTO
+      SecurityDefinitionDTO,
+      SecurityDefinitionConfiguratorDTO
     } from 'FEModels/frontend-models.interface';
     import {
       SecurityGroupMetricBlock,
       SecurityGroupMetricPackBlock
     } from 'FEModels/frontend-blocks.interface';
     import {
-      GroupMetricOptions,
-      BackendKeyDictionary
+      GroupMetricOptions
     } from 'Core/constants/marketConstants.constant';
     import {
-      SecurityMetricOptions
+      SecurityMetricOptions,
+      BackendKeyDictionary
     } from 'Core/constants/coreConstants.constant';
     import uuid from 'uuidv4';
   // dependencies
@@ -64,36 +64,38 @@ export class UtilityService {
     public mapSeniorities(input): number {
       switch (input) {
         case "Secured":
-          return 2;
+          return 1;
         case "1st Lien Secured":
-          return 2;
+          return 1;
         case "1st lien":
-          return 2;
+          return 1;
         case "2nd lien":
-          return 2;
+          return 1;
         case "2nd Lien Secured":
-          return 2;
+          return 1;
         case "3rd lien":
-          return 2;
+          return 1;
         case "Asset Backed":
-          return 2;
+          return 1;
         case "Sr Preferred":
-          return 3;
+          return 2;
         case "Sr Unsecured":
-          return 3;
+          return 2;
         case "Sr Non Preferred":
-          return 3;
+          return 2;
         case "Unsecured":
-          return 3;
+          return 2;
         case "Sr Subordinated":
-          return 4;
+          return 3;
         case "Subordinated":
-          return 4;
+          return 3;
         case "Jr Subordinated":
-          return 4;
+          return 3;
         case "Subordinated Unsecured":
-          return 4;
+          return 3;
         case "Jr Subordinated Unsecured":
+          return 3;
+        case "Preferred":
           return 4;
         default:
           return 5;
@@ -431,7 +433,7 @@ export class UtilityService {
       }
     }
 
-    public flattenDefinitionList(configurator: SecurityGroupDefinitionConfiguratorDTO): Array<SecurityGroupDefinitionDTO> {
+    public flattenDefinitionList(configurator: SecurityDefinitionConfiguratorDTO): Array<SecurityDefinitionDTO> {
       const flattenDefinitionList = [];
       configurator.data.definitionList.forEach((eachBundle) => {
         eachBundle.data.list.forEach((eachDefinition) => {
@@ -445,7 +447,7 @@ export class UtilityService {
   // trade specific
 
     public parsePositionToMM(position: number, hasUnitSuffix: boolean): string {
-      const value = this.round(position/1000000, 2);
+      const value = this.round(position/1000000, 2).toFixed(2);
       if (value === 0) {
         return null;
       } else {

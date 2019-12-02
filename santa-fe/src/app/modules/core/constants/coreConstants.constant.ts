@@ -110,3 +110,30 @@ export const TriCoreMetricConfig: TriCoreMetricConfigStub = {
     metricLabel: SecurityMetricOptions[1].label
   }
 }
+
+export const BackendKeyDictionary = {
+  // definitions
+  'SECURITY_TYPE': 'SecurityType',
+  'RATING': 'RatingNoNotch',
+  'CURRENCY': 'Ccy',
+  'TENOR': 'Tenor',
+  'IS_ONTHERUN': 'IsOnTheRun',
+  'RATING_BUCKET': 'RatingBucket',
+  'BAIL_IN_STATUS': 'BailInStatus',
+  'COUPON_TYPE': 'CouponType',
+  'INDUSTRY': 'Industry',
+  'IS_NEWISSUE': 'IsNewIssue',
+  'ISSUER': 'Issuer',
+  'MATURITY': 'MaturityType',
+  'SECTOR': 'Sector',
+  'SENIORITY': 'Seniority',
+  'SUB_INDUSTRY': 'SubIndustry',
+  'BACKEND_TENOR': 'BackendTenor',
+
+
+  // metrics
+  'SPREAD': 'oasSpread',
+  'PRICE': 'price',
+  'YIELD': 'yieldWorst',
+  'SIZE': 'marketValue'
+};

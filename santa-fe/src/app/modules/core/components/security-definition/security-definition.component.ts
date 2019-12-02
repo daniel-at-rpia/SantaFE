@@ -7,22 +7,23 @@ import {
   EventEmitter
 } from '@angular/core';
 
-import { SecurityGroupDefinitionDTO } from 'FEModels/frontend-models.interface';
+import { SecurityDefinitionDTO } from 'FEModels/frontend-models.interface';
 
 @Component({
-  selector: 'security-group-definition',
-  templateUrl: './security-group-definition.component.html',
-  styleUrls: ['./security-group-definition.component.scss'],
+  selector: 'security-definition',
+  templateUrl: './security-definition.component.html',
+  styleUrls: ['./security-definition.component.scss'],
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class SecurityGroupDefinition implements OnInit {
-  @Input() definitionData: SecurityGroupDefinitionDTO;
+export class SecurityDefinition implements OnInit {
+  @Input() definitionData: SecurityDefinitionDTO;
   @Input() selected: boolean;
   @Input() backgroundVariant: boolean;
   @Input() heroVariant: boolean;
   @Input() interactionDisabled: boolean;
-  @Output() onClick = new EventEmitter<SecurityGroupDefinitionDTO>();
+  @Input() groupByDisabled: boolean;
+  @Output() onClick = new EventEmitter<SecurityDefinitionDTO>();
   constructor(
   ) {
   }

@@ -40,12 +40,11 @@
         </li>
       </ul>
       <div class="sat-marketGroupPanel__configurator-mainCanvas-configurator">
-        <security-group-definition-configurator
-          (onClickSearch)="onClickSearchInConfigurator($event)"
-          (onClickLoadLongOptionList)="loadLongDefinitionOptionList($event)"
+        <security-definition-configurator
+          (clickedSearch)="onClickSearchInConfigurator($event)"
           [configuratorData]="state.configurator.dto"
           [highlightedVariant]="state.configurator.showSelectedGroupConfig"
-        ></security-group-definition-configurator>
+        ></security-definition-configurator>
       </div>
     </div>
     <!--

@@ -13,7 +13,10 @@ import { SecurityCard } from 'Core/components/security-card/security-card.compon
 import { QuantitativeComparer } from 'Core/components/quantitative-comparer/quantitative-comparer.component';
 import { SecurityQuote } from 'Core/components/security-quote/security-quote.component';
 import { SecurityTableRow } from 'Core/components/security-table-row/security-table-row.component';
+import { SecurityDefinition } from 'Core/components/security-definition/security-definition.component';
+import { SearchShortcut } from 'Core/components/search-shortcut/search-shortcut.component';
 
+import { SecurityDefinitionConfigurator } from 'Core/containers/security-definition-configurator/security-definition-configurator.container';
 import { SecurityTable } from 'Core/containers/security-table/security-table.container';
 
 @NgModule({
@@ -22,7 +25,10 @@ import { SecurityTable } from 'Core/containers/security-table/security-table.con
     QuantitativeComparer,
     SecurityQuote,
     SecurityTable,
-    SecurityTableRow
+    SecurityTableRow,
+    SecurityDefinition,
+    SecurityDefinitionConfigurator,
+    SearchShortcut
   ],
   imports: [
     CommonModule,
@@ -36,7 +42,10 @@ import { SecurityTable } from 'Core/containers/security-table/security-table.con
   ], 
   exports: [
     SecurityCard,
-    SecurityTable
+    SecurityTable,
+    SecurityDefinition,
+    SecurityDefinitionConfigurator,
+    SearchShortcut
   ]
 })
 export class CoreModule { }

@@ -1,95 +1,82 @@
 <article
   [ngClass]="{
     'sat-tradeCenterPanel': true,
-    'sat-tradeCenterPanel--fetchDataFailedState': state.fetchTableDataFailed
+    'sat-tradeCenterPanel--presetSelectedState': state.presets.selectedPreset,
+    'sat-tradeCenterPanel--fetchDataFailedState': state.fetchResult.fetchTableDataFailed
   }">
-  <section class="sat-tradeCenterPanel__quickFilters">
-    <div class="sat-tradeCenterPanel__quickFilters-row">
-      <span class="sat-tradeCenterPanel__quickFilters-row-label">Metric :</span>
-      <button
-        (click)="onSwitchMetric('TSpread')"
-        [ngClass]="{
-          'sat-tradeCenterPanel__quickFilters-row-btn': true,
-          'santaBtn--labelled': true,
-          'sat-tradeCenterPanel__quickFilters-row-btn--active': state.filters.quickFilters.metricType === 'TSpread'
-        }">
-        <i class="fal fa-ruler"></i>
-        <span>Spread</span>
-      </button>
-      <button
-        (click)="onSwitchMetric('Yield')"
-        [ngClass]="{
-          'sat-tradeCenterPanel__quickFilters-row-btn': true,
-          'santaBtn--labelled': true,
-          'sat-tradeCenterPanel__quickFilters-row-btn--active': state.filters.quickFilters.metricType === 'Yield'
-        }">
-        <i class="fal fa-ruler"></i>
-        <span>Yield</span>
-      </button>
-      <button
-        (click)="onSwitchMetric('Price')"
-        [ngClass]="{
-          'sat-tradeCenterPanel__quickFilters-row-btn': true,
-          'santaBtn--labelled': true,
-          'sat-tradeCenterPanel__quickFilters-row-btn--active': state.filters.quickFilters.metricType === 'Price'
-        }">
-        <i class="fal fa-ruler"></i>
-        <span>Price</span>
-      </button>
+  <section class="sat-tradeCenterPanel__presetsAndFilters">
+    <div class="sat-tradeCenterPanel__presetsAndFilters-presets">
+      <span class="sat-tradeCenterPanel__presetsAndFilters-presets-title">Select Preset</span>
+      <ul class="sat-tradeCenterPanel__presetsAndFilters-presets-list">
+        <li
+          *ngFor="let eachShortcut of state.presets.shortcutList"
+          [ngClass]="{
+            'sat-tradeCenterPanel__presetsAndFilters-presets-list-item': true,
+            'sat-tradeCenterPanel__presetsAndFilters-presets-list-item--selected': state.presets.selectedPreset === eachShortcut
+          }">
+          <search-shortcut
+            [shortcutData]="eachShortcut"
+            (onClickShortcutCallback)="onSelectPreset($event)"
+          ></search-shortcut>
+        </li>
+      </ul>
     </div>
-    <div class="sat-tradeCenterPanel__quickFilters-row">
-      <span class="sat-tradeCenterPanel__quickFilters-row-label">Currency :</span>
-      <button
-        *ngFor="let eachCcy of currencyList"
-        (click)="onClickQuickFilterList(state.filters.quickFilters.currency, eachCcy.value)"
-        [ngClass]="{
-          'sat-tradeCenterPanel__quickFilters-row-btn': true,
-          'sat-tradeCenterPanel__quickFilters-row-btn--active': state.filters.quickFilters.currency.indexOf(eachCcy.value) >= 0,
-          'santaBtn--labelled': true
-        }">
-        <i class="fal fa-dollar-sign"></i>
-        <span>{{eachCcy.displayLabel}}</span>
-      </button>
-    </div>
-    <div class="sat-tradeCenterPanel__quickFilters-row">
-      <span class="sat-tradeCenterPanel__quickFilters-row-label">Security Type :</span>
-      <button
-        *ngFor="let eachType of securityTypeList"
-        (click)="onClickQuickFilterList(state.filters.quickFilters.securityType, eachType.value)"
-        [ngClass]="{
-          'sat-tradeCenterPanel__quickFilters-row-btn': true,
-          'sat-tradeCenterPanel__quickFilters-row-btn--active': state.filters.quickFilters.securityType.indexOf(eachType.value) >= 0,
-          'santaBtn--labelled': true
-        }">
-        <span>{{eachType.displayLabel}}</span>
-      </button>
-    </div>
-    <div class="sat-tradeCenterPanel__quickFilters-row">
-      <span class="sat-tradeCenterPanel__quickFilters-row-label">Portfolio :</span>
-      <button
-        *ngFor="let eachPortfolio of portfolioList"
-        (click)="onClickQuickFilterList(state.filters.quickFilters.portfolios, eachPortfolio.value)"
-        [ngClass]="{
-          'sat-tradeCenterPanel__quickFilters-row-btn': true,
-          'sat-tradeCenterPanel__quickFilters-row-btn--active': state.filters.quickFilters.portfolios.indexOf(eachPortfolio.value) >= 0,
-          'santaBtn--labelled': true
-        }">
-        <i class="fal fa-file-invoice-dollar"></i>
-        <span>{{eachPortfolio.displayLabel}}</span>
-      </button>
+    <div class="sat-tradeCenterPanel__presetsAndFilters-configurator">
+      <span class="sat-tradeCenterPanel__presetsAndFilters-configurator-title">Filter Securities</span>
+      <security-definition-configurator
+        (clickedApplyFilter)="onApplyFilter($event)"
+        [configuratorData]="state.configurator.dto"
+      ></security-definition-configurator>
     </div>
   </section>
-  <section class="sat-tradeCenterPanel__errorPrompt">
-    <i class="sat-tradeCenterPanel__errorPrompt-icon fal fa-sad-tear"></i>
-    <span class="sat-tradeCenterPanel__errorPrompt-title">Backend request failed due to </span>
-    <span class="sat-tradeCenterPanel__errorPrompt-errorText">{{state.fetchTableDataFailedError}}</span>
-  </section>
-  <section class="sat-tradeCenterPanel__table">
-    <security-table
-      [tableData]="state.table"
-      [newRows]="state.rowList"
-      [receivedContentStage]="state.currentContentStage"
-      [receivedSecurityTableMetricsUpdate]="state.tableMetrics"
-    ></security-table>
+  <section class="sat-tradeCenterPanel__result">
+    <div class="sat-tradeCenterPanel__result-quickFilters">
+      <div class="sat-tradeCenterPanel__result-quickFilters-row">
+        <span class="sat-tradeCenterPanel__result-quickFilters-row-label">Metric :</span>
+        <button
+          (click)="onSwitchMetric('TSpread')"
+          [ngClass]="{
+            'sat-tradeCenterPanel__result-quickFilters-row-btn': true,
+            'santaBtn--labelled': true,
+            'sat-tradeCenterPanel__result-quickFilters-row-btn--active': state.filters.quickFilters.metricType === 'TSpread'
+          }">
+          <i class="fal fa-ruler"></i>
+          <span>Spread</span>
+        </button>
+        <button
+          (click)="onSwitchMetric('Yield')"
+          [ngClass]="{
+            'sat-tradeCenterPanel__result-quickFilters-row-btn': true,
+            'santaBtn--labelled': true,
+            'sat-tradeCenterPanel__result-quickFilters-row-btn--active': state.filters.quickFilters.metricType === 'Yield'
+          }">
+          <i class="fal fa-ruler"></i>
+          <span>Yield</span>
+        </button>
+        <button
+          (click)="onSwitchMetric('Price')"
+          [ngClass]="{
+            'sat-tradeCenterPanel__result-quickFilters-row-btn': true,
+            'santaBtn--labelled': true,
+            'sat-tradeCenterPanel__result-quickFilters-row-btn--active': state.filters.quickFilters.metricType === 'Price'
+          }">
+          <i class="fal fa-ruler"></i>
+          <span>Price</span>
+        </button>
+      </div>
+    </div>
+    <div class="sat-tradeCenterPanel__result-errorPrompt">
+      <i class="sat-tradeCenterPanel__result-errorPrompt-icon fal fa-sad-tear"></i>
+      <span class="sat-tradeCenterPanel__result-errorPrompt-title">Backend request failed due to </span>
+      <span class="sat-tradeCenterPanel__result-errorPrompt-errorText">{{state.fetchResult.fetchTableDataFailedError}}</span>
+    </div>
+    <div class="sat-tradeCenterPanel__result-table">
+      <security-table
+        [tableData]="state.table.dto"
+        [newRows]="state.fetchResult.rowList"
+        [receivedContentStage]="state.currentContentStage"
+        [receivedSecurityTableMetricsUpdate]="state.table.metrics"
+      ></security-table>
+    </div>
   </section>
 </article>

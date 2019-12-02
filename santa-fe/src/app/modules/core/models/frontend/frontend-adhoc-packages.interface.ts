@@ -12,3 +12,12 @@ export interface ClickedSortQuotesByMetricEmitterParams {
   targetBlock: QuoteMetricBlock;
   targetMetricLabel: string; 
 }
+
+export interface DefinitionConfiguratorEmitterParams {
+  filterList: Array<DefinitionConfiguratorEmitterParamsItem>;
+}
+
+export interface DefinitionConfiguratorEmitterParamsItem {
+  targetAttribute: string;
+  filterBy: Array<string>;
+}
