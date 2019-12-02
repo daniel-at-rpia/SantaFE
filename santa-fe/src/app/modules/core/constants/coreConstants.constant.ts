@@ -106,7 +106,7 @@ export const TriCoreMetricConfig: TriCoreMetricConfigStub = {
     label: 'Price',
     tier2Threshold: 3,
     inversed: true,
-    rounding: 1,
+    rounding: 3,
     metricLabel: SecurityMetricOptions[1].label
   }
 }
