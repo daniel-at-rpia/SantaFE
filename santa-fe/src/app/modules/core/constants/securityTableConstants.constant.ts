@@ -59,33 +59,19 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: 'positionFirmInMM',
     underlineAttrName: 'positionFirm',
     readyStage: 1,
-    active: true
+    active: false
   },{
     label: 'HF Position (MM)',
     attrName: 'positionHFInMM',
     underlineAttrName: 'positionHF',
     readyStage: 1,
-    active: true
+    active: false
   },{
     label: 'NLF Position (MM)',
     attrName: 'positionNLFInMM',
     underlineAttrName: 'positionNLF',
     readyStage: 1,
     active: false
-  },{
-    label: 'Firm Strategy',
-    attrName: 'strategyFirm',
-    underlineAttrName: 'strategyFirm',
-    readyStage: 1,
-    active: true,
-    inversedSortingForText: true
-  },{
-    label: 'Strategy',
-    attrName: 'strategyCurrent',
-    underlineAttrName: 'strategyCurrent',
-    readyStage: 1,
-    active: false,
-    inversedSortingForText: true
   },{
     label: '30 Day Delta',
     attrName: TriCoreMetricConfig.TSpread.metricLabel,
@@ -183,6 +169,20 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: 'researchName',
     underlineAttrName: 'researchName',
     readyStage: 2,
+    active: false,
+    inversedSortingForText: true
+  },{
+    label: 'Firm Strategy',
+    attrName: 'strategyFirm',
+    underlineAttrName: 'strategyFirm',
+    readyStage: 1,
+    active: true,
+    inversedSortingForText: true
+  },{
+    label: 'Strategy',
+    attrName: 'strategyCurrent',
+    underlineAttrName: 'strategyCurrent',
+    readyStage: 1,
     active: false,
     inversedSortingForText: true
   }
