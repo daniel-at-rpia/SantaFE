@@ -16,7 +16,8 @@ import {
 } from 'Trade/actions/trade.actions';
 import {
   selectLiveUpdatePaused,
-  selectLiveUpdateInProgress
+  selectLiveUpdateInProgress,
+  selectLiveUpdateProcessingRawData
 } from 'Trade/selectors/trade.selectors';
 
 @Injectable()
@@ -34,10 +35,11 @@ export class TradeEffect {
     ),
     withLatestFrom(
       this.store$.pipe(select(selectLiveUpdatePaused)),
-      this.store$.pipe(select(selectLiveUpdateInProgress))
+      this.store$.pipe(select(selectLiveUpdateInProgress)),
+      this.store$.pipe(select(selectLiveUpdateProcessingRawData))
     ),
-    filter(([tick, isPaused, isInProgress]) => {
-      return !isPaused && !isInProgress;
+    filter(([tick, isPaused, isInProgress, isProcessingRawData]) => {
+      return !isPaused && !isInProgress && !isProcessingRawData;
     }),
     switchMap(() => {
       return of(new TradeLiveUpdateCount());

@@ -22,3 +22,13 @@ export const selectLiveUpdateInProgress = createSelector(
   getTradeState,
   (state: TradeState) => state.liveUpdateInProgress
 );
+
+export const selectLiveUpdateProcessingRawData = createSelector(
+  getTradeState,
+  (state: TradeState) => state.liveUpdateProcessingRawData
+);
+
+export const selectPositionsServerReturn = createSelector(
+  getTradeState,
+  (state: TradeState) => state.positionsServerReturn
+);

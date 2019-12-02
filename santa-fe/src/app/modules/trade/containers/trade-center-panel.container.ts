@@ -1,23 +1,19 @@
   // dependencies
     import {
       Component,
-      ViewEncapsulation
+      ViewEncapsulation,
+      OnInit,
+      OnDestroy
     } from '@angular/core';
     import { Observable, Subscription } from 'rxjs';
     import {
       interval,
-      from,
       of
     } from 'rxjs';
     import {
       tap,
       first,
-      combineLatest,
-      buffer,
-      bufferTime,
-      throttleTime,
       delay,
-      concatMap,
       catchError
     } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
@@ -52,6 +48,7 @@
       SearchShortcuts
     } from 'Core/constants/tradeConstants.constant';
     import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
+    import { selectPositionsServerReturn } from 'Trade/selectors/trade.selectors';
   //
 
 @Component({
@@ -61,8 +58,11 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class TradeCenterPanel {
+export class TradeCenterPanel implements OnInit, OnDestroy {
   state: TradeCenterPanelState;
+  subscriptions = {
+    receivePositionsUpdateSub: null
+  }
   constants = {
     portfolioList: PortfolioList,
     searchShortcuts: SearchShortcuts,
@@ -102,12 +102,29 @@ export class TradeCenterPanel {
   }
 
   constructor(
-    private store: Store<any>,
+    private store$: Store<any>,
     private dtoService: DTOService,
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService
   ){
     this.initializePageState();
+  }
+
+  public ngOnInit() {
+    this.subscriptions.receivePositionsUpdateSub = this.store$.pipe(
+      select(selectPositionsServerReturn)
+    ).subscribe(serverReturn => {
+      if (!!serverReturn) {
+        console.log('at Trade Center Panel, got server return', serverReturn);
+      }
+    });
+  }
+
+  public ngOnDestroy() {
+    for (const eachItem in this.subscriptions) {
+      const eachSub = this.subscriptions[eachItem] as Subscription;
+      eachSub.unsubscribe();
+    }
   }
 
   public onSelectPreset(targetPreset: SearchShortcutDTO) {

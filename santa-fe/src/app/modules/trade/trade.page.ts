@@ -24,7 +24,7 @@
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { TradeState } from 'FEModels/frontend-page-states.interface';
-    import { TradeLiveUpdatePassTableContentEvent } from 'Trade/actions/trade.actions';
+    import { TradeLiveUpdatePassRawDataEvent } from 'Trade/actions/trade.actions';
     import {
       selectLiveUpdateTick
     } from 'Trade/selectors/trade.selectors';
@@ -89,8 +89,7 @@ export class TradePage implements OnInit, OnDestroy {
     this.restfulCommService.callAPI('santaPortfolio/get-santa-credit-positions', {req: 'POST'}, payload, false, false).pipe(
       first(),
       tap((serverReturn) => {
-        console.log('return is ', serverReturn);
-        this.store$.dispatch(new TradeLiveUpdatePassTableContentEvent(serverReturn));
+        this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent(serverReturn));
       }),
       catchError(err => {
         console.error('error', err);

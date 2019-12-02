@@ -5,7 +5,7 @@ import { SecurityTableRowDTO } from 'FEModels/frontend-models.interface';
 export enum TradeActions {
   LiveUpdateStartEvent = '[Trade] Live Update Start',
   LiveUpdateInProgressEvent = '[Trade] Live Update Processing',
-  LiveUpdateReceiveRawDataEvent = '[Trade] Live Update Receive Raw Data',
+  LiveUpdatePassRawDataEvent = '[Trade] Live Update Pass Raw Data',
   LiveUpdatePassTableContentEvent = '[Trade] Live Update Pass Table Content',
   LiveUpdateUtilityInternalCountEvent = '[Trade] Live Update Utility Internal Count',
   LiveUpdateCount = '[Trade] Live Update Count'
@@ -21,18 +21,23 @@ export class TradeLiveUpdateInProgressEvent implements Action {
   constructor(){}
 }
 
-export class TradeLiveUpdateReceiveRawDataEvent implements Action {
-  readonly type = TradeActions.LiveUpdateReceiveRawDataEvent;
-  constructor(){}
-}
-
-export class TradeLiveUpdatePassTableContentEvent implements Action {
-  readonly type = TradeActions.LiveUpdatePassTableContentEvent;
+export class TradeLiveUpdatePassRawDataEvent implements Action {
+  readonly type = TradeActions.LiveUpdatePassRawDataEvent;
   readonly serverReturn: object;
   constructor(
     serverReturn: object
   ){
     this.serverReturn = serverReturn;
+  }
+}
+
+export class TradeLiveUpdatePassTableContentEvent implements Action {
+  readonly type = TradeActions.LiveUpdatePassTableContentEvent;
+  readonly rowList: Array<SecurityTableRowDTO>;
+  constructor(
+    rowList: Array<SecurityTableRowDTO>
+  ){
+    this.rowList = rowList;
   }
 }
 
