@@ -4,7 +4,7 @@ import { tap } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Effect, Actions, ofType } from '@ngrx/effects';
 
-import { TradeTestEvent } from 'Trade/actions/trade.actions';
+// import { TradeTestEvent } from 'Trade/actions/trade.actions';
 
 @Injectable()
 export class TradeEffect {

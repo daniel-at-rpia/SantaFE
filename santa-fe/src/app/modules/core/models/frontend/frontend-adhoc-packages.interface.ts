@@ -1,10 +1,7 @@
-import {
-  SecurityTableRowDTO
-} from 'FEModels/frontend-models.interface';
+import { Subscription } from 'rxjs';
 
-import {
-  QuoteMetricBlock
-} from 'FEModels/frontend-blocks.interface';
+import { SecurityTableRowDTO } from 'FEModels/frontend-models.interface';
+import { QuoteMetricBlock } from 'FEModels/frontend-blocks.interface';
 
 
 export interface ClickedSortQuotesByMetricEmitterParams {

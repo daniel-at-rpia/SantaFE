@@ -88,3 +88,7 @@ export interface TradeCenterPanelState {
     securityFilters: Array<DefinitionConfiguratorEmitterParamsItem>
   }
 }
+
+export interface TradeUtilityPanelState {
+
+}

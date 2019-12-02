@@ -1,22 +1,61 @@
-import { TradeTestEvent } from 'Trade/actions/trade.actions';
+import {
+  Action,
+  ActionReducer,
+  ActionReducerMap
+} from '@ngrx/store';
+
+import { SecurityTableRowDTO } from 'FEModels/frontend-models.interface';
+import {
+  TradeActions,
+  TradeLiveUpdateStartEvent,
+  TradeLiveUpdateInProgressEvent,
+  TradeLiveUpdateReceiveRawData,
+  TradeLiveUpdatePassTableContent
+} from 'Trade/actions/trade.actions';
 
 export interface TradeState {
-  testString: string;
+  liveUpdateTimeCount: number;
+  liveUpdateTick: number;
+  liveUpdateInProgress: boolean;
+  tableContentList: Array<SecurityTableRowDTO>;
 }
 
 const initialState: TradeState = {
-  testString: ''
+  liveUpdateTimeCount: 0,
+  liveUpdateTick: 0,
+  liveUpdateInProgress: false,
+  tableContentList: []
 };
 
-export function TradeReducer(
+export function tradeReducer(
   state = initialState,
   action
   ): TradeState {
   switch (action.type) {
-    case 'test':
-      console.log('test, at reducer', state);
-      return { ...state, testString: 'aloha'};
+    case TradeActions.LiveUpdateStartEvent:
+      let newTick = state.liveUpdateTick;
+      newTick = newTick + 1;
+      console.log('at reducer, tick =', newTick);
+      return {
+        ...state,
+        liveUpdateTick: newTick
+      };
+    case TradeActions.LiveUpdateInProgressEvent:
+      return {
+        ...state,
+        liveUpdateInProgress: true
+      };
+    case TradeActions.LiveUpdatePassTableContent:
+      return {
+        ...state,
+        liveUpdateInProgress: false,
+        tableContentList: action.rowList
+      };
     default:
       return state;
   }
+}
+
+export function reducer(state: TradeState | undefined, action: Action) {
+  return tradeReducer(state, action);
 }

@@ -22,7 +22,7 @@
     } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
 
-    import { TradeTestEvent } from 'Trade/actions/trade.actions';
+    import { } from 'Trade/actions/trade.actions';
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
@@ -202,7 +202,7 @@ export class TradeCenterPanel {
   }
 
   private fetchStageOneContent() {
-    this.store.dispatch(new TradeTestEvent());
+    // this.store.dispatch(new TradeTestEvent());
     const payload : PayloadGetPositions = {
       partitionOptions: ['Portfolio', 'Strategy']
     };

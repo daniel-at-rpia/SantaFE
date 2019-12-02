@@ -6,7 +6,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
 import { CoreModule } from 'Core/core.module';
-
+import { reducer } from 'Trade/reducers/trade.reducer';
 import { TradeEffect } from 'Trade/effects/trade.effects';
 import { TradePage } from 'Trade/trade.page';
 import { TradeCenterPanel } from 'Trade/containers/trade-center-panel.container';
@@ -31,6 +31,7 @@ import { TradeOverviewGraphPanel } from 'Trade/containers/trade-overview-graph-p
         path: 'trade', component: TradePage
       }
     ]),
+    StoreModule.forFeature('trade', reducer),
     EffectsModule.forFeature([TradeEffect]),
 
     CoreModule
