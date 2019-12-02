@@ -8,11 +8,14 @@
     import {
       Observable,
       Subscription,
-      interval
+      interval,
+      of
     } from 'rxjs';
     import {
       tap,
-      first
+      first,
+      withLatestFrom,
+      switchMap
     } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
 
@@ -20,8 +23,15 @@
     import { TradeUtilityPanelState } from 'FEModels/frontend-page-states.interface';
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
-    import { TradeLiveUpdateStartEvent } from 'Trade/actions/trade.actions';
-    import { selectLiveUpdateTick } from 'Trade/selectors/trade.selectors';
+    import {
+      TradeLiveUpdateStartEvent,
+      TradeLiveUpdateUtilityInternalCountEvent
+    } from 'Trade/actions/trade.actions';
+    import {
+      selectLiveUpdateTick,
+      selectLiveUpdatePaused,
+      selectLiveUpdateCount
+    } from 'Trade/selectors/trade.selectors';
   //
 
 @Component({
@@ -33,10 +43,11 @@
 
 export class TradeUtilityPanel implements OnInit, OnDestroy {
   state: TradeUtilityPanelState;
-  countSecond$: Observable<any>;
+  internalCount$: Observable<any>;
   subscriptions = {
     startNewUpdateSub: null,
-    countSecondSub: null
+    internalCountSub: null,
+    externalCountSub: null
   };
 
   private initializePageState() {
@@ -44,26 +55,33 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
   }
 
   constructor(
-    private store: Store<any>
+    private store$: Store<any>
   ){
     this.initializePageState();
   }
 
   public ngOnInit() {
-    this.countSecond$ = interval(1000);
-    this.subscriptions.countSecondSub = this.countSecond$.subscribe(
-      // (number) => {
-      // console.log('test, number is', number);
-      // if (number % 30 === 0) {
-      //   console.log('updating...');
-      //   this.store.dispatch(new TradeLiveUpdateStartEvent());
-      // }
-    // }
-    );
-    this.subscriptions.startNewUpdateSub = this.store.pipe(
+    this.internalCount$ = interval(1000);
+    
+    this.subscriptions.internalCountSub = this.internalCount$.subscribe(internalCount => {
+      if (internalCount > 0) {  // skip the first beat to sync both counts
+        this.store$.dispatch(new TradeLiveUpdateUtilityInternalCountEvent());
+      }
+    });
+
+    this.subscriptions.externalCountSub = this.store$.pipe(
+      select(selectLiveUpdateCount)
+    ).subscribe(count => {
+      console.log('external count is ', count);
+      if (count >= 30) {
+        this.store$.dispatch(new TradeLiveUpdateStartEvent())
+      }
+    });
+
+    this.subscriptions.startNewUpdateSub = this.store$.pipe(
       select(selectLiveUpdateTick)
     ).subscribe(tick => {
-      console.log('test, got to tick', tick);
+      console.log('test, got tick', tick);
     });
   }
 

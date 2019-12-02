@@ -35,7 +35,7 @@ import { AppRoot } from './app.root';
     }),
     EffectsModule.forRoot([AppEffects]),
     StoreDevtoolsModule.instrument({
-      maxAge: 5,
+      maxAge: 25,
       logOnly: environment.production
     }),
 
