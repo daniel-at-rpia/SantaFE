@@ -39,30 +39,59 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     label: 'Mark',
     attrName: 'mark',
     underlineAttrName: 'markRaw',
+    blockAttrName: 'mark',
     readyStage: 2,
     active: true
   },{
     label: 'Mark Driver',
     attrName: 'markDriver',
     underlineAttrName: 'markDriver',
+    blockAttrName: 'mark',
     readyStage: 2,
     active: false
   },{
     label: 'Mark Last Updated By',
     attrName: 'markChangedBy',
     underlineAttrName: 'markChangedBy',
+    blockAttrName: 'mark',
     readyStage: 2,
     active: false
   },{
     label: 'Mark Last Update Time',
     attrName: 'markChangedTime',
     underlineAttrName: 'markChangedTime',
+    blockAttrName: 'mark',
     readyStage: 2,
     active: false
   },{
-    label: 'Mark Discrepancy',
-    attrName: null,
-    underlineAttrName: null,
+    label: 'Mark Delta to Bid',
+    attrName: 'markDisBid',
+    underlineAttrName: 'markDisBidRaw',
+    blockAttrName: 'mark',
+    readyStage: 3,
+    isFrontEndMetric: true,
+    active: false
+  },{
+    label: 'Mark Delta to Ask',
+    attrName: 'markDisAsk',
+    underlineAttrName: 'markDisAskRaw',
+    blockAttrName: 'mark',
+    readyStage: 3,
+    isFrontEndMetric: true,
+    active: false
+  },{
+    label: 'Mark Delta to Mid',
+    attrName: 'markDisMid',
+    underlineAttrName: 'markDisMidRaw',
+    blockAttrName: 'mark',
+    readyStage: 3,
+    isFrontEndMetric: true,
+    active: false
+  },{
+    label: 'Mark Delta to Liquidation',
+    attrName: 'markDisLiquidation',
+    underlineAttrName: 'markDisLiquidationRaw',
+    blockAttrName: 'mark',
     readyStage: 3,
     isFrontEndMetric: true,
     active: false
@@ -92,10 +121,10 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false
   },{
     label: '30 Day Delta',
-    attrName: TriCoreMetricConfig.TSpread.metricLabel,
-    underlineAttrName: TriCoreMetricConfig.TSpread.metricLabel,
+    attrName: TriCoreMetricConfig.Spread.metricLabel,
+    underlineAttrName: TriCoreMetricConfig.Spread.metricLabel,
+    blockAttrName: 'metricPack',
     readyStage: 2,
-    isPartOfMetricPack: true,
     metricPackDeltaScope: 'MoM',
     active: true
   },{

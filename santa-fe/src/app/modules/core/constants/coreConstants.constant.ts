@@ -88,8 +88,8 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
 ];
 
 export const TriCoreMetricConfig: TriCoreMetricConfigStub = {
-  TSpread: {
-    label: 'TSpread',
+  Spread: {
+    label: 'Spread',
     tier2Threshold: 20,
     inversed: false,
     rounding: 0,

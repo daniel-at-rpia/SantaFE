@@ -302,8 +302,8 @@ export class SecurityTable implements OnInit, OnChanges {
           return 0;
         }
       } else {
-        valueA = targetHeader.data.isPartOfMetricPack ? this.utilityService.retrieveSecurityMetricFromMetricPack(securityA, targetHeader) : securityA.data[targetHeader.data.underlineAttrName];
-        valueB = targetHeader.data.isPartOfMetricPack ? this.utilityService.retrieveSecurityMetricFromMetricPack(securityB, targetHeader) : securityB.data[targetHeader.data.underlineAttrName];
+        valueA = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityA, true);
+        valueB = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityB, true);
         if (!!securityA && !!securityB && !securityA.state.isStencil && !securityB.state.isStencil) {
           if (valueA == null && valueB != null) {
             return 4;

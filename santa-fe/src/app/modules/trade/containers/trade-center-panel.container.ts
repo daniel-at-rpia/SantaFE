@@ -99,7 +99,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       },
       filters: {
         quickFilters: {
-          metricType: TriCoreMetricConfig.TSpread.label,
+          metricType: TriCoreMetricConfig.Spread.label,
           portfolios: [],
           keyword: ''
         },
@@ -363,6 +363,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       quote
     );
     bestQuoteCell.data.quantComparerDTO = newQuant;
+    this.utilityService.calculateMarkDiscrepancies(targetRow.data.security, bestQuoteCell.data.quantComparerDTO);
   }
 
   private updateStage(stageNumber: number) {
