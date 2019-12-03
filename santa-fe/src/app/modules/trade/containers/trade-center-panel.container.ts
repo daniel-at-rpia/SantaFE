@@ -42,7 +42,8 @@
     import { TriCoreMetricConfig } from 'Core/constants/coreConstants.constant';
     import {
       SecurityTableMetrics,
-      SECURITY_TABLE_FINAL_STAGE
+      SECURITY_TABLE_FINAL_STAGE,
+      THIRTY_DAY_DELTA_METRIC_INDEX
     } from 'Core/constants/securityTableConstants.constant';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
     import {
@@ -74,7 +75,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     portfolioList: PortfolioList,
     searchShortcuts: SearchShortcuts,
     securityGroupDefinitionMap: SecurityDefinitionMap,
-    securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE
+    securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
+    thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX
   }
 
   private initializePageState() {
@@ -152,7 +154,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   public onSwitchMetric(targetMetric) {
     if (this.state.filters.quickFilters.metricType !== targetMetric) {
       this.state.filters.quickFilters.metricType = targetMetric;
-      const thrityDayDeltaMetric = this.state.table.metrics[7];
+      const thrityDayDeltaMetric = this.state.table.metrics[this.constants.thirtyDayDeltaIndex];
       if (thrityDayDeltaMetric.label === '30 Day Delta') {
         thrityDayDeltaMetric.attrName = TriCoreMetricConfig[targetMetric].metricLabel;
         thrityDayDeltaMetric.underlineAttrName = TriCoreMetricConfig[targetMetric].metricLabel;
@@ -263,7 +265,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         const newSecurity = this.dtoService.formSecurityCardObject(newBESecurity, false);
         serverReturn[eachKey].forEach((eachPortfolio: BEPortfolioDTO) => {
           if (eachPortfolio.quantity !== 0 && !eachPortfolio.santaSecurity.isGovt && eachPortfolio.santaSecurity.metrics) {
-            this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio);
+            this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio, this.state.filters.quickFilters.metricType);
           } else {
             isValidFlag = false;
           }
@@ -309,6 +311,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   }
 
   private loadStageThreeContent(serverReturn) {
+    // TODO: this logic needs to be improved, it's exponentially slowing down the performance
     for (const eachKey in serverReturn) {
       const securityId = this.utilityService.extractSecurityId(eachKey);
       const results = this.state.fetchResult.prinstineRowList.filter((eachRow) => {
@@ -363,7 +366,12 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       quote
     );
     bestQuoteCell.data.quantComparerDTO = newQuant;
-    this.utilityService.calculateMarkDiscrepancies(targetRow.data.security, bestQuoteCell.data.quantComparerDTO);
+    this.utilityService.calculateMarkDiscrepancies(targetRow.data.security, newQuant, this.state.filters.quickFilters.metricType);
+    this.state.table.dto.data.headers.forEach((eachHeader, index) => {
+      if (eachHeader.data.readyStage === 3) {
+        targetRow.data.cells[index-1] = this.utilityService.populateSecurityTableCellFromSecurityCard(eachHeader, targetRow, targetRow.data.cells[index-1]);
+      }
+    });
   }
 
   private updateStage(stageNumber: number) {

@@ -27,7 +27,8 @@
     } from 'Core/constants/marketConstants.constant';
     import {
       SecurityMetricOptions,
-      BackendKeyDictionary
+      BackendKeyDictionary,
+      TriCoreMetricConfig
     } from 'Core/constants/coreConstants.constant';
     import uuid from 'uuidv4';
   // dependencies
@@ -38,6 +39,7 @@ export class UtilityService {
   groupGroupMetricOptions = GroupMetricOptions;
   securityMetricOptions = SecurityMetricOptions;
   keyDictionary = BackendKeyDictionary;
+  triCoreMetricConfig = TriCoreMetricConfig;
 
   constructor(){}
 
@@ -480,17 +482,11 @@ export class UtilityService {
 
     // TODO: move this into a SecurityTableHelper service 
     public populateSecurityTableCellFromSecurityCard(targetHeader: SecurityTableHeaderDTO, targetRow: SecurityTableRowDTO, newCellDTO: SecurityTableCellDTO): SecurityTableCellDTO{
-      if (targetHeader.data.readyStage > 2) {
-        newCellDTO.data.textData = null;
-        newCellDTO.data.quantComparerDTO = null;
-        return newCellDTO;
-      } else {
         let value;
         value = this.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, targetRow.data.security, false);
         value = (value == null || value === 'n/a') ? null : value;
         newCellDTO.data.textData = value;
         return newCellDTO;
-      }
     }
 
     // TODO: move this into a SecurityTableHelper service 
@@ -509,12 +505,37 @@ export class UtilityService {
         return isRetrievingUnderlineValue ? securityCard.data[targetHeader.data.underlineAttrName] : securityCard.data[targetHeader.data.attrName];
       }
     }
+
     // TODO: move this into a SecurityTableHelper service 
     public calculateMarkDiscrepancies(
       targetSecurity: SecurityDTO,
-      targetQuantComparer: QuantComparerDTO
+      targetQuant: QuantComparerDTO,
+      currentSelectedMetric: string
     ) {
-
+      if (!!targetQuant && targetSecurity.data.mark.markRaw && targetSecurity.data.mark.markDriver === currentSelectedMetric) {
+        const rounding = this.triCoreMetricConfig[targetSecurity.data.mark.markDriver].rounding;
+        const markBlock = targetSecurity.data.mark;
+        if (targetQuant.state.hasBid) {
+          markBlock.markDisBidRaw = markBlock.markRaw - targetQuant.data.bid.number;
+          markBlock.markDisBid = this.round(markBlock.markDisBidRaw, rounding).toFixed(rounding);
+          if (targetSecurity.data.positionFirm > 0) {
+            markBlock.markDisLiquidationRaw = markBlock.markDisBidRaw;
+            markBlock.markDisLiquidation = markBlock.markDisBid;
+          }
+        }
+        if (targetQuant.state.hasOffer) {
+          markBlock.markDisAskRaw = markBlock.markRaw - targetQuant.data.offer.number;
+          markBlock.markDisAsk = this.round(markBlock.markDisAskRaw, rounding).toFixed(rounding);
+          if (targetSecurity.data.positionFirm < 0) {
+            markBlock.markDisLiquidationRaw = markBlock.markDisAskRaw;
+            markBlock.markDisLiquidation = markBlock.markDisAsk;
+          }
+        }
+        if (targetQuant.state.hasBid && targetQuant.state.hasOffer) {
+          markBlock.markDisMidRaw = markBlock.markRaw - targetQuant.data.mid;
+          markBlock.markDisMid = this.round(markBlock.markDisMidRaw, rounding).toFixed(rounding);
+        }
+      }
     }
 
   // trade specific end

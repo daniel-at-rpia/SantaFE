@@ -70,7 +70,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     blockAttrName: 'mark',
     readyStage: 3,
     isFrontEndMetric: true,
-    active: false
+    active: true
   },{
     label: 'Mark Delta to Ask',
     attrName: 'markDisAsk',
@@ -78,7 +78,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     blockAttrName: 'mark',
     readyStage: 3,
     isFrontEndMetric: true,
-    active: false
+    active: true
   },{
     label: 'Mark Delta to Mid',
     attrName: 'markDisMid',
@@ -86,7 +86,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     blockAttrName: 'mark',
     readyStage: 3,
     isFrontEndMetric: true,
-    active: false
+    active: true
   },{
     label: 'Mark Delta to Liquidation',
     attrName: 'markDisLiquidation',
@@ -94,7 +94,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     blockAttrName: 'mark',
     readyStage: 3,
     isFrontEndMetric: true,
-    active: false
+    active: true
   },{
     label: 'Position (MM)',
     attrName: 'positionCurrentInMM',
@@ -128,7 +128,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     metricPackDeltaScope: 'MoM',
     active: true
   },{
-    label: 'Quote Count (48hrs)',
+    label: 'Quote Count',
     attrName: null,
     underlineAttrName: null,
     readyStage: 3,
@@ -234,6 +234,10 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     inversedSortingForText: true
   }
 ];
+
+export const THIRTY_DAY_DELTA_METRIC_INDEX = SecurityTableMetrics.findIndex((eachMetric) => {
+  return eachMetric.label === '30 Day Delta';
+});
 
 export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
   {

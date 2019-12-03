@@ -159,6 +159,7 @@ export interface QuantComparerDTO extends BasicDTOStructure {
   data: {
     metricType: string;
     delta: number;
+    mid: number;
     bid: {
       number: number;
       broker: string;
