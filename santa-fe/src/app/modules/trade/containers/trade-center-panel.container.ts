@@ -116,6 +116,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     ).subscribe(serverReturn => {
       if (!!serverReturn) {
         console.log('at Trade Center Panel, got server return', serverReturn);
+        this.loadStageOneContent(serverReturn);
       }
     });
   }

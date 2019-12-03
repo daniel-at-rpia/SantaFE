@@ -32,6 +32,11 @@
       selectLiveUpdatePaused,
       selectLiveUpdateCount
     } from 'Trade/selectors/trade.selectors';
+    import {
+      LIVE_UPDATE_COUNTDOWN,
+      LIVE_UPDATE_INPROG_PROMPT,
+      LIVE_UPDATE_PROCESSING_PROMPT
+    } from 'Core/constants/tradeConstants.constant';
   //
 
 @Component({
@@ -43,6 +48,11 @@
 
 export class TradeUtilityPanel implements OnInit, OnDestroy {
   state: TradeUtilityPanelState;
+  constants = {
+    liveUpdateCountdown: LIVE_UPDATE_COUNTDOWN,
+    liveUpdateInprogPrompt: LIVE_UPDATE_INPROG_PROMPT,
+    liveUpdateProcessingPrompt: LIVE_UPDATE_PROCESSING_PROMPT
+  }
   internalCount$: Observable<any>;
   subscriptions = {
     internalCountSub: null,
@@ -50,7 +60,13 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
   };
 
   private initializePageState() {
-    this.state = {};
+    this.state = {
+      prompt: this.constants.liveUpdateInprogPrompt,
+      updateCountdown: this.constants.liveUpdateCountdown,
+      isPaused: true,
+      isCallingAPI: false,
+      isProcessingData: false
+    };
   }
 
   constructor(
@@ -64,7 +80,10 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
     
     this.subscriptions.internalCountSub = this.internalCount$.subscribe(internalCount => {
       if (internalCount > 0) {  // skip the first beat to sync both counts
-        this.store$.dispatch(new TradeLiveUpdateUtilityInternalCountEvent());
+        if (!this.state.isPaused) {
+          this.state.updateCountdown = this.state.updateCountdown - 1;
+          this.store$.dispatch(new TradeLiveUpdateUtilityInternalCountEvent());
+        }
       }
     });
 
@@ -72,8 +91,10 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
       select(selectLiveUpdateCount)
     ).subscribe(count => {
       console.log('external count is ', count);
-      if (count >= 30) {
-        this.store$.dispatch(new TradeLiveUpdateStartEvent())
+      if (count >= this.constants.liveUpdateCountdown) {
+        this.state.updateCountdown = this.constants.liveUpdateCountdown;
+        this.state.isCallingAPI = true;
+        this.store$.dispatch(new TradeLiveUpdateStartEvent());
       }
     });
   }
@@ -83,5 +104,9 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
       const eachSub = this.subscriptions[eachItem] as Subscription;
       eachSub.unsubscribe();
     }
+  }
+
+  public onClickPause() {
+    this.state.isPaused = !this.state.isPaused;
   }
 }

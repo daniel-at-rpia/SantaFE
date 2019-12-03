@@ -1,1 +1,29 @@
-<article class="sat-tradeUtilityPanel"></article>
+<article
+  [ngClass]="{
+    'sat-tradeUtilityPanel': true,
+    'sat-tradeUtilityPanel--pausedState': state.isPaused,
+    'sat-tradeUtilityPanel--loadingState': state.isCallingAPI || state.isProcessingData
+  }">
+  <section class="sat-tradeUtilityPanel__prompt">
+    <div class="sat-tradeUtilityPanel__prompt-loading">
+      <div class="sat-tradeUtilityPanel__prompt-loading-icon">
+        <i class="fal fa-circle-notch fa-spin"></i>
+      </div>
+      <span class="sat-tradeUtilityPanel__prompt-loading-text">{{state.prompt}}</span>
+    </div>
+  </section>
+  <section class="sat-tradeUtilityPanel__countdown">
+    <span class="sat-tradeUtilityPanel__countdown-clock">00 : {{state.updateCountdown}}</span>
+    <span class="sat-tradeUtilityPanel__countdown-label">Countdown to Next Update</span>
+  </section>
+  <section class="sat-tradeUtilityPanel__cta">
+    <button (click)="onClickPause()" class="sat-tradeUtilityPanel__cta-pause santaBtn--labelled">
+      <i class="fal fa-pause"></i>
+      <span>Pause</span>
+    </button>
+    <button class="sat-tradeUtilityPanel__cta-refresh santaBtn--labelled">
+      <i class="fal fa-sync"></i>
+      <span>Refresh Data</span>
+    </button>
+  </section>
+</article>
