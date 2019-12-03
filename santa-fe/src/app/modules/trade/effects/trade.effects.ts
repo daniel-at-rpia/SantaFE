@@ -15,7 +15,6 @@ import {
   TradeLiveUpdateCount
 } from 'Trade/actions/trade.actions';
 import {
-  selectLiveUpdatePaused,
   selectLiveUpdateInProgress,
   selectLiveUpdateProcessingRawData
 } from 'Trade/selectors/trade.selectors';
@@ -34,12 +33,11 @@ export class TradeEffect {
       TradeActions.LiveUpdateUtilityInternalCountEvent
     ),
     withLatestFrom(
-      this.store$.pipe(select(selectLiveUpdatePaused)),
       this.store$.pipe(select(selectLiveUpdateInProgress)),
       this.store$.pipe(select(selectLiveUpdateProcessingRawData))
     ),
-    filter(([tick, isPaused, isInProgress, isProcessingRawData]) => {
-      return !isPaused && !isInProgress && !isProcessingRawData;
+    filter(([tick, isInProgress, isProcessingRawData]) => {
+      return !isInProgress && !isProcessingRawData;
     }),
     switchMap(() => {
       return of(new TradeLiveUpdateCount());

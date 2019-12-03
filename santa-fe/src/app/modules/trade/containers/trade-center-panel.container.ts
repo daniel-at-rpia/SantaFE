@@ -40,7 +40,10 @@
     } from 'BEModels/backend-models.interface';
 
     import { TriCoreMetricConfig } from 'Core/constants/coreConstants.constant';
-    import { SecurityTableMetrics } from 'Core/constants/securityTableConstants.constant';
+    import {
+      SecurityTableMetrics,
+      SECURITY_TABLE_FINAL_STAGE
+    } from 'Core/constants/securityTableConstants.constant';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       PortfolioList,
@@ -49,6 +52,7 @@
     } from 'Core/constants/tradeConstants.constant';
     import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
     import { selectPositionsServerReturn } from 'Trade/selectors/trade.selectors';
+    import { TradeLiveUpdateProcessDataCompleteEvent } from 'Trade/actions/trade.actions';
   //
 
 @Component({
@@ -66,7 +70,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   constants = {
     portfolioList: PortfolioList,
     searchShortcuts: SearchShortcuts,
-    securityGroupDefinitionMap: SecurityDefinitionMap
+    securityGroupDefinitionMap: SecurityDefinitionMap,
+    securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE
   }
 
   private initializePageState() {
@@ -359,6 +364,9 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   private updateStage(stageNumber: number) {
     this.updateRowListWithFilters();
     this.state.currentContentStage = stageNumber;
+    if (this.state.currentContentStage === this.constants.securityTableFinalStage) {
+      this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
+    }
   }
 
   private updateRowListWithFilters() {

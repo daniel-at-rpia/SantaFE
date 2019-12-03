@@ -13,11 +13,6 @@ export const selectLiveUpdateCount = createSelector(
   (state: TradeState) => state.liveUpdateSecondCount
 );
 
-export const selectLiveUpdatePaused = createSelector(
-  getTradeState,
-  (state: TradeState) => state.liveUpdatePaused
-);
-
 export const selectLiveUpdateInProgress = createSelector(
   getTradeState,
   (state: TradeState) => state.liveUpdateInProgress

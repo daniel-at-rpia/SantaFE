@@ -29,7 +29,7 @@
     } from 'Trade/actions/trade.actions';
     import {
       selectLiveUpdateTick,
-      selectLiveUpdatePaused,
+      selectLiveUpdateProcessingRawData,
       selectLiveUpdateCount
     } from 'Trade/selectors/trade.selectors';
     import {
@@ -56,13 +56,14 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
   internalCount$: Observable<any>;
   subscriptions = {
     internalCountSub: null,
-    externalCountSub: null
+    externalCountSub: null,
+    processingRawDataSub: null
   };
 
   private initializePageState() {
     this.state = {
       prompt: this.constants.liveUpdateInprogPrompt,
-      updateCountdown: this.constants.liveUpdateCountdown,
+      updateCountdown: this.constants.liveUpdateCountdown.toString(),
       isPaused: true,
       isCallingAPI: false,
       isProcessingData: false
@@ -80,8 +81,9 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
     
     this.subscriptions.internalCountSub = this.internalCount$.subscribe(internalCount => {
       if (internalCount > 0) {  // skip the first beat to sync both counts
-        if (!this.state.isPaused) {
-          this.state.updateCountdown = this.state.updateCountdown - 1;
+        if (!this.state.isPaused && !this.state.isCallingAPI && !this.state.isProcessingData) {
+          const newCountdown = parseInt(this.state.updateCountdown) - 1;
+          this.state.updateCountdown = newCountdown < 10 ? `0${newCountdown}` : `${newCountdown}`;
           this.store$.dispatch(new TradeLiveUpdateUtilityInternalCountEvent());
         }
       }
@@ -90,11 +92,23 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
     this.subscriptions.externalCountSub = this.store$.pipe(
       select(selectLiveUpdateCount)
     ).subscribe(count => {
-      console.log('external count is ', count);
       if (count >= this.constants.liveUpdateCountdown) {
-        this.state.updateCountdown = this.constants.liveUpdateCountdown;
+        this.state.updateCountdown = this.constants.liveUpdateCountdown.toString();
         this.state.isCallingAPI = true;
         this.store$.dispatch(new TradeLiveUpdateStartEvent());
+      }
+    });
+
+    this.subscriptions.processingRawDataSub = this.store$.pipe(
+      select(selectLiveUpdateProcessingRawData)
+    ).subscribe(flag => {
+      if (!!flag) {
+        this.state.isCallingAPI = false;
+        this.state.isProcessingData = true;
+        this.state.prompt = this.constants.liveUpdateProcessingPrompt;
+      } else {
+        this.state.isProcessingData = false;
+        this.state.prompt = this.constants.liveUpdateInprogPrompt;
       }
     });
   }
@@ -107,6 +121,8 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
   }
 
   public onClickPause() {
-    this.state.isPaused = !this.state.isPaused;
+    if (!this.state.isCallingAPI && !this.state.isProcessingData) {
+      this.state.isPaused = !this.state.isPaused;
+    }
   }
 }

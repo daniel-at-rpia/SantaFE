@@ -91,7 +91,7 @@ export interface TradeCenterPanelState {
 
 export interface TradeUtilityPanelState {
   prompt: string;
-  updateCountdown: number;
+  updateCountdown: string;
   isPaused: boolean;
   isCallingAPI: boolean;
   isProcessingData: boolean;

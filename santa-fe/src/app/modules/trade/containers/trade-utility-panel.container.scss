@@ -91,7 +91,9 @@
         }
       }
       &__countdown {
-        visibility: hidden;
+        &-clock, &-label {
+          visibility: hidden;
+        }
       }
       &__cta {
         &-pause {
