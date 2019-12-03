@@ -68,7 +68,8 @@ export interface SecurityTableMetricStub {
   underlineAttrName: string;
   readyStage: number;
   active: boolean;
-  isPartOfMetricPack?: boolean;
+  blockAttrName?: string;
+  isPartOfMarkBlock?: boolean;
   metricPackDeltaScope?: string;
   isFrontEndMetric?: boolean;
   isForQuantComparer?: boolean;
@@ -78,7 +79,7 @@ export interface SecurityTableMetricStub {
 }
 
 export interface TriCoreMetricConfigStub {
-  TSpread: TriCoreMetricIndividualConfigStub;
+  Spread: TriCoreMetricIndividualConfigStub;
   Yield: TriCoreMetricIndividualConfigStub;
   Price: TriCoreMetricIndividualConfigStub;
 }

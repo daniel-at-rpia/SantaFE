@@ -15,6 +15,22 @@ export interface SecurityPortfolioBlock {
   strategy: string;
 }
 
+export interface SecurityMarkBlock {
+  mark: string;
+  markDriver: string;
+  markChangedBy: string;
+  markChangedTime: string;
+  markRaw: number;
+  markDisBid: string;
+  markDisBidRaw: number;
+  markDisAsk: string;
+  markDisAskRaw: number;
+  markDisMid: string;
+  markDisMidRaw: number;
+  markDisLiquidation: string;
+  markDisLiquidationRaw: number;
+}
+
 export interface SecurityGroupMetricBlock {
   isEmpty: boolean;
   sortHierarchy: number;
