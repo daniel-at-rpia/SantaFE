@@ -112,9 +112,6 @@ export interface BESecurityDTO {
 }
 
 interface BESecurityMetricDTO {
-  primaryPmName: string;
-  backupPmName: string;
-  researchName: string;
   isFixedForLife: boolean;
   isFixedToFloatInFixed: boolean;
   isFloat: boolean;
@@ -163,6 +160,15 @@ export interface BEPortfolioDTO {
   quantity: number;
   santaSecurity: BESecurityDTO;
   strategyName: string;
+  primaryPmName: string;
+  backupPmName: string;
+  researchName: string;
+  mark: {
+    driver: string;
+    enteredTime: string;
+    user: string;
+    value: number;
+  }
   [property: string]: any;
 }
 

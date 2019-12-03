@@ -74,7 +74,7 @@ $quantComparer_min_height: 2.5rem;
         align-items: center;
         height: 100%;
         &-content {
-          min-height: $typical_border_width;
+          min-height: $typical_border_width*2;
           max-height: 100%;
         }
       }

@@ -83,10 +83,14 @@ export class DTOService {
         securityType: !isStencil ? rawData.securityType : null,
         seniority: !isStencil ? rawData.seniority : null,
         maturityType: !isStencil ? rawData.maturityType : null,
-        primaryPmName: !isStencil ? rawData.metrics.primaryPmName : null,
-        backupPmName: !isStencil ? rawData.metrics.backupPmName : null,
-        researchName: !isStencil ? rawData.metrics.researchName : null,
-        mark: 123,
+        primaryPmName: null,
+        backupPmName: null,
+        researchName: null,
+        mark: null,
+        markDriver: null,
+        markChangedBy: null,
+        markChangedTime: null,
+        markRaw: null,
         portfolios: [],
         strategyCurrent: '',
         strategyFirm: '',
@@ -114,6 +118,17 @@ export class DTOService {
     dto: SecurityDTO,
     targetPortfolio: BEPortfolioDTO
   ) {
+    dto.data.primaryPmName = targetPortfolio.primaryPmName;
+    dto.data.backupPmName = targetPortfolio.backupPmName;
+    dto.data.researchName = targetPortfolio.researchName;
+    dto.data.markRaw = targetPortfolio.mark.value;
+    dto.data.markDriver = targetPortfolio.mark.driver;
+    dto.data.markChangedBy = targetPortfolio.mark.user;
+    dto.data.markChangedTime = targetPortfolio.mark.enteredTime;
+    if (!!TriCoreMetricConfig[targetPortfolio.mark.driver]) {
+      const rounding = TriCoreMetricConfig[targetPortfolio.mark.driver].rounding;
+      dto.data.mark = this.utility.round(dto.data.markRaw, rounding).toFixed(rounding);
+    }
     const newBlock: SecurityPortfolioBlock = {
       portfolioName: targetPortfolio.portfolioShortName,
       quantity: targetPortfolio.quantity,

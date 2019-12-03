@@ -38,7 +38,25 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
   },{
     label: 'Mark',
     attrName: 'mark',
-    underlineAttrName: 'mark',
+    underlineAttrName: 'markRaw',
+    readyStage: 2,
+    active: true
+  },{
+    label: 'Mark Driver',
+    attrName: 'markDriver',
+    underlineAttrName: 'markDriver',
+    readyStage: 2,
+    active: false
+  },{
+    label: 'Mark Last Updated By',
+    attrName: 'markChangedBy',
+    underlineAttrName: 'markChangedBy',
+    readyStage: 2,
+    active: false
+  },{
+    label: 'Mark Last Update Time',
+    attrName: 'markChangedTime',
+    underlineAttrName: 'markChangedTime',
     readyStage: 2,
     active: false
   },{
