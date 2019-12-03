@@ -14,6 +14,7 @@ import {
 } from 'Trade/actions/trade.actions';
 
 export interface TradeState {
+  presetSelected: boolean;
   liveUpdateSecondCount: number;
   liveUpdateTick: number;
   liveUpdateInProgress: boolean;
@@ -23,6 +24,7 @@ export interface TradeState {
 }
 
 const initialState: TradeState = {
+  presetSelected: false,
   liveUpdateSecondCount: 0,
   liveUpdateTick: 0,
   liveUpdateInProgress: false,
@@ -36,6 +38,12 @@ export function tradeReducer(
   action
   ): TradeState {
   switch (action.type) {
+    case TradeActions.TogglePresetEvent:
+      const oldFlag = state.presetSelected;
+      return {
+        ...state,
+        presetSelected: !oldFlag
+      };
     case TradeActions.LiveUpdateCount:
       const oldCount = state.liveUpdateSecondCount;
       return {

@@ -29,8 +29,10 @@
     } from 'Trade/actions/trade.actions';
     import {
       selectLiveUpdateTick,
+      selectLiveUpdateInProgress,
       selectLiveUpdateProcessingRawData,
-      selectLiveUpdateCount
+      selectLiveUpdateCount,
+      selectPresetSelected
     } from 'Trade/selectors/trade.selectors';
     import {
       LIVE_UPDATE_COUNTDOWN,
@@ -57,7 +59,8 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
   subscriptions = {
     internalCountSub: null,
     externalCountSub: null,
-    processingRawDataSub: null
+    processingRawDataSub: null,
+    presetSelectedSub: null
   };
 
   private initializePageState() {
@@ -66,7 +69,8 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
       updateCountdown: this.constants.liveUpdateCountdown.toString(),
       isPaused: true,
       isCallingAPI: false,
-      isProcessingData: false
+      isProcessingData: false,
+      isPresetSelected: false
     };
   }
 
@@ -81,7 +85,7 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
     
     this.subscriptions.internalCountSub = this.internalCount$.subscribe(internalCount => {
       if (internalCount > 0) {  // skip the first beat to sync both counts
-        if (!this.state.isPaused && !this.state.isCallingAPI && !this.state.isProcessingData) {
+        if (this.state.isPresetSelected && !this.state.isPaused && !this.state.isCallingAPI && !this.state.isProcessingData) {
           const newCountdown = parseInt(this.state.updateCountdown) - 1;
           this.state.updateCountdown = newCountdown < 10 ? `0${newCountdown}` : `${newCountdown}`;
           this.store$.dispatch(new TradeLiveUpdateUtilityInternalCountEvent());
@@ -89,10 +93,16 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
       }
     });
 
+    // triggering new update needs to be guarded with highest degree of async protection, so use selectors for fetching all flags here
     this.subscriptions.externalCountSub = this.store$.pipe(
-      select(selectLiveUpdateCount)
-    ).subscribe(count => {
-      if (count >= this.constants.liveUpdateCountdown) {
+      select(selectLiveUpdateCount),
+      withLatestFrom(
+        this.store$.pipe(select(selectPresetSelected)),
+        this.store$.pipe(select(selectLiveUpdateInProgress)),
+        this.store$.pipe(select(selectLiveUpdateProcessingRawData))
+      )
+    ).subscribe(([count, isPresetSelected, isUpdateInProgress, isProcessingRawData]) => {
+      if (isPresetSelected && !isUpdateInProgress && !isProcessingRawData && count >= this.constants.liveUpdateCountdown) {
         this.state.updateCountdown = this.constants.liveUpdateCountdown.toString();
         this.state.isCallingAPI = true;
         this.store$.dispatch(new TradeLiveUpdateStartEvent());
@@ -111,6 +121,13 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
         this.state.prompt = this.constants.liveUpdateInprogPrompt;
       }
     });
+
+    this.subscriptions.presetSelectedSub = this.store$.pipe(
+      select(selectPresetSelected)
+    ).subscribe(flag => {
+      this.state.isPresetSelected = flag;
+      this.state.isPaused = !this.state.isPresetSelected;
+    });
   }
 
   public ngOnDestroy() {
@@ -121,7 +138,7 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
   }
 
   public onClickPause() {
-    if (!this.state.isCallingAPI && !this.state.isProcessingData) {
+    if (!this.state.isCallingAPI && !this.state.isProcessingData && this.state.isPresetSelected) {
       this.state.isPaused = !this.state.isPaused;
     }
   }

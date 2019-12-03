@@ -95,4 +95,5 @@ export interface TradeUtilityPanelState {
   isPaused: boolean;
   isCallingAPI: boolean;
   isProcessingData: boolean;
+  isPresetSelected: boolean;
 }

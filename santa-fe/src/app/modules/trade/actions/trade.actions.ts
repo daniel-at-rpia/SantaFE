@@ -9,7 +9,8 @@ export enum TradeActions {
   LiveUpdatePassTableContentEvent = '[Trade] Live Update Pass Table Content',
   LiveUpdateUtilityInternalCountEvent = '[Trade] Live Update Utility Internal Count',
   LiveUpdateCount = '[Trade] Live Update Count',
-  LiveUpdateProcessingDataCompleteEvent = '[Trade] Live Update Processing Data Complete Event'
+  LiveUpdateProcessingDataCompleteEvent = '[Trade] Live Update Processing Data Complete Event',
+  TogglePresetEvent = '[Trade] Toggle Preset Event'
 }
 
 export class TradeLiveUpdateStartEvent implements Action {
@@ -54,5 +55,10 @@ export class TradeLiveUpdateCount implements Action {
 
 export class TradeLiveUpdateProcessDataCompleteEvent implements Action {
   readonly type = TradeActions.LiveUpdateProcessingDataCompleteEvent;
+  constructor(){}
+}
+
+export class TradeTogglePresetEvent implements Action {
+  readonly type = TradeActions.TogglePresetEvent;
   constructor(){}
 }

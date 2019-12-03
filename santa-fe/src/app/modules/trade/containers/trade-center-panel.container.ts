@@ -52,7 +52,10 @@
     } from 'Core/constants/tradeConstants.constant';
     import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
     import { selectPositionsServerReturn } from 'Trade/selectors/trade.selectors';
-    import { TradeLiveUpdateProcessDataCompleteEvent } from 'Trade/actions/trade.actions';
+    import {
+      TradeLiveUpdateProcessDataCompleteEvent,
+      TradeTogglePresetEvent
+    } from 'Trade/actions/trade.actions';
   //
 
 @Component({
@@ -143,6 +146,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       this.loadFreshData();
       // setTimeout(this.loadFreshData.bind(this), 800);
     }
+    this.store$.dispatch(new TradeTogglePresetEvent);
   }
 
   public onSwitchMetric(targetMetric) {

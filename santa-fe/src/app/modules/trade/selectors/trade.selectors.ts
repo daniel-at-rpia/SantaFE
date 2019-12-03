@@ -27,3 +27,8 @@ export const selectPositionsServerReturn = createSelector(
   getTradeState,
   (state: TradeState) => state.positionsServerReturn
 );
+
+export const selectPresetSelected = createSelector(
+  getTradeState,
+  (state: TradeState) => state.presetSelected
+);

@@ -63,6 +63,10 @@
       @include mix_border_radius(5px);
       @include mix_border_generator($typical_border_width, $color_white);
       flex: 0 1 50%;
+      @include material('none');
+      border-color: $color_disabled;
+      background-color: inherit;
+      color: $color_disabled;
     }
   }
   &--pausedState {
