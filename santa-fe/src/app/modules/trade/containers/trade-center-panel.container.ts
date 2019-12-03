@@ -1,32 +1,26 @@
   // dependencies
     import {
       Component,
-      ViewEncapsulation
+      ViewEncapsulation,
+      OnInit,
+      OnDestroy
     } from '@angular/core';
     import { Observable, Subscription } from 'rxjs';
     import {
       interval,
-      from,
       of
     } from 'rxjs';
     import {
       tap,
       first,
-      combineLatest,
-      buffer,
-      bufferTime,
-      throttleTime,
       delay,
-      concatMap,
       catchError
     } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
 
-    import { TradeTestEvent } from 'Trade/actions/trade.actions';
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
-
     import { TradeCenterPanelState } from 'FEModels/frontend-page-states.interface';
     import {
       SecurityDTO,
@@ -46,7 +40,10 @@
     } from 'BEModels/backend-models.interface';
 
     import { TriCoreMetricConfig } from 'Core/constants/coreConstants.constant';
-    import { SecurityTableMetrics } from 'Core/constants/securityTableConstants.constant';
+    import {
+      SecurityTableMetrics,
+      SECURITY_TABLE_FINAL_STAGE
+    } from 'Core/constants/securityTableConstants.constant';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       PortfolioList,
@@ -54,6 +51,11 @@
       SearchShortcuts
     } from 'Core/constants/tradeConstants.constant';
     import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
+    import { selectPositionsServerReturn } from 'Trade/selectors/trade.selectors';
+    import {
+      TradeLiveUpdateProcessDataCompleteEvent,
+      TradeTogglePresetEvent
+    } from 'Trade/actions/trade.actions';
   //
 
 @Component({
@@ -63,12 +65,16 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class TradeCenterPanel {
+export class TradeCenterPanel implements OnInit, OnDestroy {
   state: TradeCenterPanelState;
+  subscriptions = {
+    receivePositionsUpdateSub: null
+  }
   constants = {
     portfolioList: PortfolioList,
     searchShortcuts: SearchShortcuts,
-    securityGroupDefinitionMap: SecurityDefinitionMap
+    securityGroupDefinitionMap: SecurityDefinitionMap,
+    securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE
   }
 
   private initializePageState() {
@@ -104,12 +110,30 @@ export class TradeCenterPanel {
   }
 
   constructor(
-    private store: Store<any>,
+    private store$: Store<any>,
     private dtoService: DTOService,
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService
   ){
     this.initializePageState();
+  }
+
+  public ngOnInit() {
+    this.subscriptions.receivePositionsUpdateSub = this.store$.pipe(
+      select(selectPositionsServerReturn)
+    ).subscribe(serverReturn => {
+      if (!!serverReturn) {
+        console.log('at Trade Center Panel, got server return', serverReturn);
+        this.loadStageOneContent(serverReturn);
+      }
+    });
+  }
+
+  public ngOnDestroy() {
+    for (const eachItem in this.subscriptions) {
+      const eachSub = this.subscriptions[eachItem] as Subscription;
+      eachSub.unsubscribe();
+    }
   }
 
   public onSelectPreset(targetPreset: SearchShortcutDTO) {
@@ -122,6 +146,7 @@ export class TradeCenterPanel {
       this.loadFreshData();
       // setTimeout(this.loadFreshData.bind(this), 800);
     }
+    this.store$.dispatch(new TradeTogglePresetEvent);
   }
 
   public onSwitchMetric(targetMetric) {
@@ -202,7 +227,6 @@ export class TradeCenterPanel {
   }
 
   private fetchStageOneContent() {
-    this.store.dispatch(new TradeTestEvent());
     const payload : PayloadGetPositions = {
       partitionOptions: ['Portfolio', 'Strategy']
     };
@@ -344,6 +368,9 @@ export class TradeCenterPanel {
   private updateStage(stageNumber: number) {
     this.updateRowListWithFilters();
     this.state.currentContentStage = stageNumber;
+    if (this.state.currentContentStage === this.constants.securityTableFinalStage) {
+      this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
+    }
   }
 
   private updateRowListWithFilters() {

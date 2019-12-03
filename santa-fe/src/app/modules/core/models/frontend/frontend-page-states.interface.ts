@@ -88,3 +88,12 @@ export interface TradeCenterPanelState {
     securityFilters: Array<DefinitionConfiguratorEmitterParamsItem>
   }
 }
+
+export interface TradeUtilityPanelState {
+  prompt: string;
+  updateCountdown: string;
+  isPaused: boolean;
+  isCallingAPI: boolean;
+  isProcessingData: boolean;
+  isPresetSelected: boolean;
+}

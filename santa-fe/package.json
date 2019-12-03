@@ -22,6 +22,7 @@
     "@angular/router": "~8.2.4",
     "@ngrx/effects": "^8.5.2",
     "@ngrx/store": "^8.5.2",
+    "@ngrx/store-devtools": "^8.5.2",
     "lodash": "^4.17.15",
     "lodash.clonedeep": "^4.5.0",
     "rxjs": "~6.4.0",

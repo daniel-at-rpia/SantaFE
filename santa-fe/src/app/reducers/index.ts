@@ -6,14 +6,17 @@ import {
   MetaReducer
 } from '@ngrx/store';
 import { environment } from '../../environments/environment';
+import {
+  TradeState,
+  tradeReducer
+} from 'Trade/reducers/trade.reducer';
 
-export interface State {
-
+export interface AppState {
+  trade: TradeState
 }
 
-export const reducers: ActionReducerMap<State> = {
-
+export const appReducers: ActionReducerMap<AppState> = {
+  trade: tradeReducer
 };
 
-
-export const metaReducers: MetaReducer<State>[] = !environment.production ? [] : [];
+export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [] : [];

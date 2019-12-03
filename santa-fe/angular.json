@@ -130,6 +130,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "santa-fe"
+    }
+  },
+  "defaultProject": "santa-fe",
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
+  }
 }

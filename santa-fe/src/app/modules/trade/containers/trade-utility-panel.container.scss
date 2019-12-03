@@ -1,4 +1,5 @@
 @import "global.scss";
+@import "modules/trade/trade.scss";
 
 .sat-tradeUtilityPanel {
   $tradeUtilityPanelBlockName: &;
@@ -7,5 +8,111 @@
   flex: 1 1 auto;
   display: flex;
   overflow: hidden;
-  height: 6rem;
+  height: $tradeUtility_height;
+  padding: $spacing_medium;
+  &__prompt {
+    flex: 0 1 33.33%;
+    display: flex;
+    align-items: center;
+    &-loading {
+      flex: 1 1 auto;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      &-icon {
+        &>i {
+          color: $font_color_major;
+          font-size: $font_size_x_large;
+        }
+      }
+      &-text {
+        margin-top: $spacing_small;
+        color: $font_color_major;
+      }
+    }
+  }
+  &__countdown {
+    @include mix_border_generator(0 $typical_border_width 0 $typical_border_width);
+    flex: 0 1 33.33%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &-clock {
+      @include mix_border_radius(5px);
+      padding: $spacing_xx_small $spacing_small;
+      background-color: $color_active;
+      font-size: $font_size_large;
+      color: $font_color_inverse;
+    }
+    &-label {
+      margin-top: $spacing_small;
+      color: $font_color_minor;
+    }
+  }
+  &__cta {
+    flex: 0 1 33.33%;
+    display: flex;
+    padding-left: $spacing_medium;
+    &-pause {
+      @include mix_border_radius(5px);
+      @include mix_border_generator($typical_border_width, $color_white);
+      flex: 0 1 50%;
+      margin-right: $spacing_medium;
+    }
+    &-refresh {
+      @include mix_border_radius(5px);
+      @include mix_border_generator($typical_border_width, $color_white);
+      flex: 0 1 50%;
+      @include material('none');
+      border-color: $color_disabled;
+      background-color: inherit;
+      color: $color_disabled;
+    }
+  }
+  &--pausedState {
+    #{$tradeUtilityPanelBlockName} {
+      &__cta {
+        &-pause {
+          @include material('none');
+          @extend .santaBtn--inverseLabelled;
+          border-color: $color_active;
+          background-color: $color_active;
+        }
+        &-refresh {
+          @include material('none');
+          border-color: $color_disabled;
+          background-color: inherit;
+          color: $color_disabled;
+        }
+      }
+    }
+  }
+  &--loadingState {
+    #{$tradeUtilityPanelBlockName} {
+      &__prompt {
+        &-loading {
+          display: flex;
+        }
+      }
+      &__countdown {
+        &-clock, &-label {
+          visibility: hidden;
+        }
+      }
+      &__cta {
+        &-pause {
+          @include material('none');
+          border-color: $color_disabled;
+          background-color: inherit;
+          color: $color_disabled;
+        }
+        &-refresh {
+          @include material('none');
+          border-color: $color_disabled;
+          background-color: inherit;
+          color: $color_disabled;
+        }
+      }
+    }
+  }
 }
