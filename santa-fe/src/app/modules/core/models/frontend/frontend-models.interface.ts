@@ -4,7 +4,8 @@ import {
   SecurityGroupPieChartBlock,
   SecurityDefinitionFilterBlock,
   QuoteMetricBlock,
-  SecurityPortfolioBlock
+  SecurityPortfolioBlock,
+  SecurityMarkBlock
 } from 'FEModels/frontend-blocks.interface';
 
 interface BasicDTOStructure {
@@ -32,11 +33,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     primaryPmName: string;
     backupPmName: string;
     researchName: string;
-    mark: string;
-    markDriver: string;
-    markChangedBy: string;
-    markChangedTime: string;
-    markRaw: number;
+    mark: SecurityMarkBlock;
     portfolios: Array<SecurityPortfolioBlock>;
     strategyCurrent: string;
     strategyFirm: string;
@@ -212,8 +209,8 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     displayLabel: string;
     attrName: string;
     underlineAttrName: string;
+    blockAttrName: string;
     readyStage: number;
-    isPartOfMetricPack: boolean;
     metricPackDeltaScope: string;
     frontendMetric: boolean;
     inversedSortingForText: boolean;

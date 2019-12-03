@@ -15,7 +15,8 @@
       SecurityTableCellDTO,
       SecurityGroupDTO,
       SecurityDefinitionDTO,
-      SecurityDefinitionConfiguratorDTO
+      SecurityDefinitionConfiguratorDTO,
+      QuantComparerDTO
     } from 'FEModels/frontend-models.interface';
     import {
       SecurityGroupMetricBlock,
@@ -212,7 +213,7 @@ export class UtilityService {
           return false;  // TODO: haven't isFloat in FE yet
         } else {
           const rawDataInput = input as BESecurityDTO;
-          return rawDataInput.metrics.isFloat;
+          return rawDataInput.metrics ? rawDataInput.metrics.isFloat : false;
         }
       }
     }
@@ -295,7 +296,7 @@ export class UtilityService {
               keyToRetrieveMetric = 'gSpread';
             }
           };
-          const rawValue = rawData.metrics[keyToRetrieveMetric];
+          const rawValue = rawData.metrics ? rawData.metrics[keyToRetrieveMetric] : null;
           if (rawValue === null || rawValue === undefined) {
             object.raw[eachMetric.label] = null;
           } else {
@@ -380,7 +381,7 @@ export class UtilityService {
         // disable the automatic differentiation betwen IG & HY
         // const rating = rawData.metrics[this.keyDictionary.RATING];
         // if (this.isIG(rating)) {
-        const spread = rawData.metrics[this.keyDictionary.SPREAD];
+        const spread = rawData.metrics ? rawData.metrics[this.keyDictionary.SPREAD] : null;
         value = `${Math.round(spread)}`;
         // } else {
         //   const price = rawData.metrics[this.keyDictionary.PRICE];
@@ -477,6 +478,7 @@ export class UtilityService {
       }
     }
 
+    // TODO: move this into a SecurityTableHelper service 
     public populateSecurityTableCellFromSecurityCard(targetHeader: SecurityTableHeaderDTO, targetRow: SecurityTableRowDTO, newCellDTO: SecurityTableCellDTO): SecurityTableCellDTO{
       if (targetHeader.data.readyStage > 2) {
         newCellDTO.data.textData = null;
@@ -484,15 +486,36 @@ export class UtilityService {
         return newCellDTO;
       } else {
         let value;
-        if (targetHeader.data.isPartOfMetricPack) {
-          value = this.retrieveSecurityMetricFromMetricPack(targetRow.data.security, targetHeader);
-        } else {
-          value = targetRow.data.security.data[targetHeader.data.attrName];
-        }
+        value = this.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, targetRow.data.security, false);
         value = (value == null || value === 'n/a') ? null : value;
         newCellDTO.data.textData = value;
         return newCellDTO;
       }
     }
+
+    // TODO: move this into a SecurityTableHelper service 
+    public retrieveAttrFromSecurityBasedOnTableHeader(
+      targetHeader: SecurityTableHeaderDTO,
+      securityCard: SecurityDTO,
+      isRetrievingUnderlineValue: boolean
+    ): any {
+      if (!!targetHeader.data.blockAttrName) {
+        if (targetHeader.data.blockAttrName === 'metricPack') {
+          return this.retrieveSecurityMetricFromMetricPack(securityCard, targetHeader);
+        } else {
+          return isRetrievingUnderlineValue ? securityCard.data[targetHeader.data.blockAttrName][targetHeader.data.underlineAttrName] : securityCard.data[targetHeader.data.blockAttrName][targetHeader.data.attrName];
+        }
+      } else {
+        return isRetrievingUnderlineValue ? securityCard.data[targetHeader.data.underlineAttrName] : securityCard.data[targetHeader.data.attrName];
+      }
+    }
+    // TODO: move this into a SecurityTableHelper service 
+    public calculateMarkDiscrepancies(
+      targetSecurity: SecurityDTO,
+      targetQuantComparer: QuantComparerDTO
+    ) {
+
+    }
+
   // trade specific end
 }

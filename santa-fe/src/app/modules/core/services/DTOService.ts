@@ -72,8 +72,8 @@ export class DTOService {
       data: {
         securityID: !isStencil ? rawData.securityIdentifier.securityId : null,
         name: !isStencil ? rawData.name : 'PLACEHOLDER',
-        ratingLevel: !isStencil ? this.utility.mapRatings(rawData.metrics.ratingNoNotch) : 0,
-        ratingValue: !isStencil ? rawData.metrics.ratingNoNotch : 'NR',
+        ratingLevel: !isStencil && rawData.metrics ? this.utility.mapRatings(rawData.metrics.ratingNoNotch) : 0,
+        ratingValue: !isStencil && rawData.metrics ? rawData.metrics.ratingNoNotch : null,
         seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.seniority) : 5,
         currency: !isStencil ? rawData.ccy : null,
         country: !isStencil ? rawData.country : null,
@@ -86,11 +86,21 @@ export class DTOService {
         primaryPmName: null,
         backupPmName: null,
         researchName: null,
-        mark: null,
-        markDriver: null,
-        markChangedBy: null,
-        markChangedTime: null,
-        markRaw: null,
+        mark: {
+          mark: null,
+          markRaw: null,
+          markDriver: null,
+          markChangedBy: null,
+          markChangedTime: null,
+          markDisBid: null,
+          markDisBidRaw: null,
+          markDisAsk: null,
+          markDisAskRaw: null,
+          markDisMid: null,
+          markDisMidRaw: null,
+          markDisLiquidation: null,
+          markDisLiquidationRaw: null
+        },
         portfolios: [],
         strategyCurrent: '',
         strategyFirm: '',
@@ -121,13 +131,13 @@ export class DTOService {
     dto.data.primaryPmName = targetPortfolio.primaryPmName;
     dto.data.backupPmName = targetPortfolio.backupPmName;
     dto.data.researchName = targetPortfolio.researchName;
-    dto.data.markRaw = targetPortfolio.mark.value;
-    dto.data.markDriver = targetPortfolio.mark.driver;
-    dto.data.markChangedBy = targetPortfolio.mark.user;
-    dto.data.markChangedTime = targetPortfolio.mark.enteredTime;
+    dto.data.mark.markRaw = targetPortfolio.mark.value;
+    dto.data.mark.markDriver = targetPortfolio.mark.driver;
+    dto.data.mark.markChangedBy = targetPortfolio.mark.user;
+    dto.data.mark.markChangedTime = targetPortfolio.mark.enteredTime;
     if (!!TriCoreMetricConfig[targetPortfolio.mark.driver]) {
       const rounding = TriCoreMetricConfig[targetPortfolio.mark.driver].rounding;
-      dto.data.mark = this.utility.round(dto.data.markRaw, rounding).toFixed(rounding);
+      dto.data.mark.mark = this.utility.round(dto.data.mark.markRaw, rounding).toFixed(rounding);
     }
     const newBlock: SecurityPortfolioBlock = {
       portfolioName: targetPortfolio.portfolioShortName,
@@ -163,8 +173,8 @@ export class DTOService {
     const object:SecurityGroupDTO = {
       data: {
         name: !!rawData ?  rawData.groupName.replace(/\|/g, ' | ') : 'PLACEHOLDER',
-        ratingLevel: !!rawData ? this.utility.mapRatings(rawData.metrics['ratingNoNotch']) : 1,
-        ratingValue: !!rawData ? rawData.metrics['ratingNoNotch'] : 'AA',
+        ratingLevel: !!rawData && rawData.metrics ? this.utility.mapRatings(rawData.metrics.ratingNoNotch) : 0,
+        ratingValue: !!rawData && rawData.metrics ? rawData.metrics.ratingNoNotch : null,
         numOfSecurities: !!rawData ? rawData.numSecurities : 32,
         stats: [],
         metricPack: this.utility.packMetricData(rawData),
@@ -361,7 +371,7 @@ export class DTOService {
   ): QuantComparerDTO {
     const bidSize = !isStencil ? this.utility.round(rawData.bidQuantity/1000000, 1) : null;
     const offerSize = !isStencil ? this.utility.round(rawData.askQuantity/1000000, 1) : null;
-    const metricType = !isStencil ? quantMetricType : 'TSpread';
+    const metricType = !isStencil ? quantMetricType : 'Spread';
     const tier2Shreshold = TriCoreMetricConfig[metricType]['tier2Threshold'];
     const inversed = TriCoreMetricConfig[metricType]['inversed'];
     const hasBid = !isStencil ? (!!rawData.bidQuoteValue && !!rawData.bidDealer) : true;
@@ -440,8 +450,8 @@ export class DTOService {
         displayLabel: stub.label,
         attrName: stub.attrName,
         underlineAttrName: stub.underlineAttrName,
+        blockAttrName: stub.blockAttrName || null,
         readyStage: stub.readyStage,
-        isPartOfMetricPack: stub.isPartOfMetricPack,
         metricPackDeltaScope: stub.metricPackDeltaScope || null,
         frontendMetric: !!stub.isFrontEndMetric,
         inversedSortingForText: !!stub.inversedSortingForText
@@ -556,7 +566,7 @@ export class DTOService {
         size: !!rawData.bidQuantity ? this.utility.parsePositionToMM(rawData.bidQuantity, false) : null,
         price: !!rawData.bidPrice ? this.utility.round(rawData.bidPrice , TriCoreMetricConfig.Price.rounding) : null,
         yield: !!rawData.bidYield ? this.utility.round(rawData.bidYield, TriCoreMetricConfig.Yield.rounding) : null,
-        tspread: !!rawData.bidTSpread ? this.utility.round(rawData.bidTSpread, TriCoreMetricConfig.TSpread.rounding) : null,
+        tspread: !!rawData.bidSpread ? this.utility.round(rawData.bidSpread, TriCoreMetricConfig.Spread.rounding) : null,
         benchmark: bidBenchmark
       };
       object.data.ask = {
@@ -564,7 +574,7 @@ export class DTOService {
         size: !!rawData.askQuantity ? this.utility.parsePositionToMM(rawData.askQuantity, false) : null,
         price: !!rawData.askPrice ? this.utility.round(rawData.askPrice , TriCoreMetricConfig.Price.rounding) : null,
         yield: !!rawData.askYield ? this.utility.round(rawData.askYield, TriCoreMetricConfig.Yield.rounding) : null,
-        tspread: !!rawData.askTSpread ? this.utility.round(rawData.askTSpread, TriCoreMetricConfig.TSpread.rounding) : null,
+        tspread: !!rawData.askSpread ? this.utility.round(rawData.askSpread, TriCoreMetricConfig.Spread.rounding) : null,
         benchmark: askBenchmark
       }
     }

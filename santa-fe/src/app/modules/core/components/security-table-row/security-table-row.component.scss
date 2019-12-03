@@ -173,11 +173,11 @@ $securityTableRow_expandCanvas_height: 40rem + $spacing_medium * 2;
   &__metric {
     flex: 1 1 auto;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     &-text {
-      text-align: center;
-      padding: 0 $spacing_small;
+      text-align: right;
+      margin-right: $spacing_large;
       user-select: none;
     }
   }
