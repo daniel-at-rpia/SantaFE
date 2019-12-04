@@ -340,7 +340,8 @@ export class DTOService {
 
   public formSearchShortcutObject(
     definitionList: Array<SecurityDefinitionDTO>,
-    title: string
+    title: string,
+    skipFirstForDefaultGroupBy: boolean
   ): SearchShortcutDTO {
     const object: SearchShortcutDTO = {
       data: {
@@ -356,8 +357,14 @@ export class DTOService {
       }
     };
     definitionList.forEach((eachDefinition, index) => {
-      if ( index !== 0 && index <= 5 ) {
-        object.style.slotList[index-1] = eachDefinition;
+      if (skipFirstForDefaultGroupBy) {
+        if (index !== 0 && index <= 5 ) {
+          object.style.slotList[index-1] = eachDefinition;
+        }
+      } else {
+        if (index <= 4 ) {
+          object.style.slotList[index] = eachDefinition;
+        }
       }
     });
     return object;

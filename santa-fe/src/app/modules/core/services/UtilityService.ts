@@ -16,12 +16,14 @@
       SecurityGroupDTO,
       SecurityDefinitionDTO,
       SecurityDefinitionConfiguratorDTO,
-      QuantComparerDTO
+      QuantComparerDTO,
+      SearchShortcutDTO
     } from 'FEModels/frontend-models.interface';
     import {
       SecurityGroupMetricBlock,
       SecurityGroupMetricPackBlock
     } from 'FEModels/frontend-blocks.interface';
+    import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       GroupMetricOptions
     } from 'Core/constants/marketConstants.constant';
@@ -348,6 +350,42 @@ export class UtilityService {
       const startPoint = Math.floor((arrayLength - cutAmount)/2);
       const percentileList = copyList.splice(startPoint, Math.ceil(cutAmount/2));
       return percentileList[0];
+    }
+
+    public applyShortcutToConfigurator(targetShortcut: SearchShortcutDTO, targetConfigurator: SecurityDefinitionConfiguratorDTO){
+      targetShortcut.data.configuration.forEach((eachShortcutDef) => {
+        targetConfigurator.data.definitionList.forEach((eachBundle) => {
+          eachBundle.data.list.forEach((eachDefinition) => {
+            if (eachDefinition.data.key === eachShortcutDef.data.key) {
+              eachDefinition.data.filterOptionList = eachShortcutDef.data.filterOptionList;
+              eachDefinition.state.groupByActive = eachShortcutDef.state.groupByActive;
+              eachDefinition.state.filterActive = eachShortcutDef.state.filterActive;
+            }
+          });
+        });
+      });
+    }
+
+    public packDefinitionConfiguratorEmitterParams(
+      configuratorData: SecurityDefinitionConfiguratorDTO
+    ): DefinitionConfiguratorEmitterParams {
+      const params: DefinitionConfiguratorEmitterParams = {
+        filterList: []
+      };
+      configuratorData.data.definitionList.forEach((eachBundle) => {
+        eachBundle.data.list.forEach((eachDefinition) => {
+          const activeFilters = eachDefinition.data.filterOptionList.filter((eachOption) => {
+            return eachOption.isSelected;
+          });
+          activeFilters.length > 0 && params.filterList.push({
+            targetAttribute: eachDefinition.data.securityDTOAttr,
+            filterBy: activeFilters.map((eachFilter) => {
+              return eachFilter.displayLabel;
+            })
+          });
+        });
+      });
+      return params;
     }
   // shared end
 

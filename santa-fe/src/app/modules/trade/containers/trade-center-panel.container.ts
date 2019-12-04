@@ -125,7 +125,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       select(selectPositionsServerReturn)
     ).subscribe(serverReturn => {
       if (!!serverReturn) {
-        console.log('at Trade Center Panel, got server return', serverReturn);
+        this.updateStage(0);
         this.loadStageOneContent(serverReturn);
       }
     });
@@ -142,11 +142,14 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     if (this.state.presets.selectedPreset === targetPreset) {
       targetPreset.state.isSelected = false;
       this.state.presets.selectedPreset = null;
+      this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true);
     } else {
       targetPreset.state.isSelected = true;
       this.state.presets.selectedPreset = targetPreset;
+      this.utilityService.applyShortcutToConfigurator(targetPreset, this.state.configurator.dto);
+      const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
+      this.onApplyFilter(params);
       this.loadFreshData();
-      // setTimeout(this.loadFreshData.bind(this), 800);
     }
     this.store$.dispatch(new TradeTogglePresetEvent);
   }
@@ -173,7 +176,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         this.state.filters.quickFilters.portfolios = eachFilter.filterBy;
       };
     });
-    this.updateRowListWithFilters();
+    this.state.currentContentStage === this.constants.securityTableFinalStage && this.updateRowListWithFilters();
   }
 
   private populateSearchShortcuts(){
@@ -191,7 +194,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         }
         return definitionDTO;
       });
-      this.state.presets.shortcutList.push(this.dtoService.formSearchShortcutObject(definitionList, eachShortcutStub.displayTitle));
+      this.state.presets.shortcutList.push(this.dtoService.formSearchShortcutObject(definitionList, eachShortcutStub.displayTitle, false));
     });
   }
 

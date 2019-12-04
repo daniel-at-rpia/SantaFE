@@ -60,145 +60,24 @@ export const QUANT_COMPARER_PERCENTILE = 90;
 
 export const SearchShortcuts: Array<SearchShortcutStub> = [
   {
-    displayTitle: 'Grouped by rating',
+    displayTitle: 'All Portfolios',
+    includedDefinitions: []
+  },{
+    displayTitle: 'DOF + SOF',
     includedDefinitions: [
       {
-        definitionKey: 'SECURITY_TYPE',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'RATING',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'CURRENCY',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'COUPON_TYPE',
-        groupByActive: true,
-        selectedOptions: ['Fixed', 'Float']
+        definitionKey: 'PORTFOLIO',
+        groupByActive: false,
+        selectedOptions: ['DOF', 'SOF']
       }
     ]
   },{
-    displayTitle: 'Grouped by sector',
+    displayTitle: 'STIP + FIP + CIP + AGB',
     includedDefinitions: [
       {
-        definitionKey: 'SECURITY_TYPE',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'SECTOR',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'CURRENCY',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'COUPON_TYPE',
-        groupByActive: true,
-        selectedOptions: ['Fixed', 'Float']
-      }
-    ]
-  },{
-    displayTitle: 'Grouped by tenor',
-    includedDefinitions: [
-      {
-        definitionKey: 'SECURITY_TYPE',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'TENOR',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'CURRENCY',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'COUPON_TYPE',
-        groupByActive: true,
-        selectedOptions: ['Fixed', 'Float']
-      }
-    ]
-  },{
-    displayTitle: 'Grouped by rating and sector',
-    includedDefinitions: [
-      {
-        definitionKey: 'SECURITY_TYPE',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'RATING',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'SECTOR',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'CURRENCY',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'COUPON_TYPE',
-        groupByActive: true,
-        selectedOptions: ['Fixed', 'Float']
-      }
-    ]
-  },{
-    displayTitle: 'Grouped by sector and tenor',
-    includedDefinitions: [
-      {
-        definitionKey: 'SECURITY_TYPE',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'SECTOR',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'TENOR',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'CURRENCY',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'COUPON_TYPE',
-        groupByActive: true,
-        selectedOptions: ['Fixed', 'Float']
-      }
-    ]
-  },{
-    displayTitle: 'Grouped by rating, sector and tenor',
-    includedDefinitions: [
-      {
-        definitionKey: 'SECURITY_TYPE',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'RATING',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'SECTOR',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'TENOR',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'CURRENCY',
-        groupByActive: true,
-        selectedOptions: []
-      },{
-        definitionKey: 'COUPON_TYPE',
-        groupByActive: true,
-        selectedOptions: ['Fixed', 'Float']
+        definitionKey: 'PORTFOLIO',
+        groupByActive: false,
+        selectedOptions: ['STIP', 'FIP', 'CIP', 'AGB']
       }
     ]
   }
