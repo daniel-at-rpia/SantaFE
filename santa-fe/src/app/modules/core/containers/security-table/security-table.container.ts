@@ -88,7 +88,7 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   public onClickHeaderCTA(targetHeader: SecurityTableHeaderDTO) {
-    this.tableData.state.selectedHeader = this.tableData.state.selectedHeader === targetHeader ? null : targetHeader;
+    this.tableData.state.selectedHeader = this.tableData.state.selectedHeader && this.tableData.state.selectedHeader.data.displayLabel === targetHeader.data.displayLabel ? null : targetHeader;
   }
 
   public onClickRemoveHeader(targetHeader: SecurityTableHeaderDTO) {
@@ -129,7 +129,7 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   public onClickSortBy(targetHeader: SecurityTableHeaderDTO) {
-    this.tableData.state.sortedByHeader = this.tableData.state.sortedByHeader === targetHeader ? null : targetHeader;
+    this.tableData.state.sortedByHeader = this.tableData.state.sortedByHeader && this.tableData.state.sortedByHeader.data.displayLabel === targetHeader.data.displayLabel ? null : targetHeader;
     this.tableData.state.selectedHeader = null;
     if (this.tableData.state.loadedContentStage >= 2) {
       if (this.tableData.state.sortedByHeader) {

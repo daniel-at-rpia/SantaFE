@@ -540,9 +540,10 @@ export class DTOService {
     const consolidatedBenchmark = bidBenchmark === askBenchmark ? bidBenchmark : null;
     let convertedDate: Date = null;
     if (!isStencil) {
-      const convertBuffer = new Date(rawData.time);
-      const test = `${convertBuffer.getFullYear()} - ${convertBuffer.getMonth()} - ${convertBuffer.getDate()} - ${convertBuffer.getHours()} - ${convertBuffer.getMinutes()} - ${convertBuffer.getSeconds()}`;
-      convertedDate = new Date(Date.UTC(convertBuffer.getFullYear(), convertBuffer.getMonth(), convertBuffer.getDate(), convertBuffer.getHours(), convertBuffer.getMinutes(), convertBuffer.getSeconds()));
+      // stopped converting since BE is in EST now
+      // TODO: clean up code
+      convertedDate = new Date(rawData.time);
+      // convertedDate = new Date(Date.UTC(convertBuffer.getFullYear(), convertBuffer.getMonth(), convertBuffer.getDate(), convertBuffer.getHours(), convertBuffer.getMinutes(), convertBuffer.getSeconds()));
     }
     // const quoteDate: Date = !isStencil ? (hasBid ? new Date(rawData.bidTime) : new Date(rawData.askTime)) : null;
     const object: SecurityQuoteDTO = {
