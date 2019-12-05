@@ -21,6 +21,7 @@
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
+    import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
     import { TradeCenterPanelState } from 'FEModels/frontend-page-states.interface';
     import {
       SecurityDTO,
@@ -52,11 +53,15 @@
       SearchShortcuts
     } from 'Core/constants/tradeConstants.constant';
     import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
-    import { selectPositionsServerReturn } from 'Trade/selectors/trade.selectors';
+    import {
+      selectPositionsServerReturn,
+      selectLiveUpdateTick
+    } from 'Trade/selectors/trade.selectors';
     import {
       TradeLiveUpdateProcessDataCompleteEvent,
       TradeTogglePresetEvent
     } from 'Trade/actions/trade.actions';
+    import { TradeLiveUpdatePassRawDataEvent } from 'Trade/actions/trade.actions';
   //
 
 @Component({
@@ -69,6 +74,7 @@
 export class TradeCenterPanel implements OnInit, OnDestroy {
   state: TradeCenterPanelState;
   subscriptions = {
+    startNewUpdateSub: null,
     receivePositionsUpdateSub: null
   }
   constants = {
@@ -115,12 +121,21 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     private store$: Store<any>,
     private dtoService: DTOService,
     private utilityService: UtilityService,
-    private restfulCommService: RestfulCommService
+    private restfulCommService: RestfulCommService,
+    private processingService: LiveDataProcessingService
   ){
     this.initializePageState();
   }
 
   public ngOnInit() {
+    this.subscriptions.startNewUpdateSub = this.store$.pipe(
+      select(selectLiveUpdateTick)
+    ).subscribe(tick => {
+      console.log('at Trade Page, got tick', tick);
+      if (tick > 0) {  // skip first beat
+        this.fetchUpdate();
+      }
+    });
     this.subscriptions.receivePositionsUpdateSub = this.store$.pipe(
       select(selectPositionsServerReturn)
     ).subscribe(serverReturn => {
@@ -197,6 +212,22 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       this.state.presets.shortcutList.push(this.dtoService.formSearchShortcutObject(definitionList, eachShortcutStub.displayTitle, false));
     });
   }
+  
+  private fetchUpdate() {
+    const payload : PayloadGetPositions = {
+      partitionOptions: ['Portfolio', 'Strategy']
+    };
+    this.restfulCommService.callAPI('santaPortfolio/get-santa-credit-positions', {req: 'POST'}, payload, false, false).pipe(
+      first(),
+      tap((serverReturn) => {
+        this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent(serverReturn));
+      }),
+      catchError(err => {
+        console.error('error', err);
+        return of('error');
+      })
+    ).subscribe();
+  }
 
   private loadFreshData() {
     this.state.fetchResult.prinstineRowList = [];
@@ -238,7 +269,6 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     this.restfulCommService.callAPI('santaPortfolio/get-santa-credit-positions', {req: 'POST'}, payload, false, false).pipe(
       first(),
       tap((serverReturn) => {
-        console.log('return is ', serverReturn);
         this.loadStageOneContent(serverReturn);
       }),
       catchError(err => {
@@ -254,33 +284,11 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
 
   private loadStageOneContent(serverReturn: Object) {
     this.state.fetchResult.prinstineRowList = [];  // flush out the stencils
-    const securityList = [];
-    let count = 0;
-    let nonEmptyCount = 0;
-    let validCount = 0;
-    for (const eachKey in serverReturn){
-      count++;
-      if (serverReturn[eachKey].length > 0) {
-        nonEmptyCount++;
-        let sumSize = 0;
-        let isValidFlag = true;
-        const newBESecurity:BESecurityDTO = serverReturn[eachKey][0].santaSecurity;
-        const newSecurity = this.dtoService.formSecurityCardObject(newBESecurity, false);
-        serverReturn[eachKey].forEach((eachPortfolio: BEPortfolioDTO) => {
-          if (eachPortfolio.quantity !== 0 && !eachPortfolio.santaSecurity.isGovt && eachPortfolio.santaSecurity.metrics) {
-            this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio, this.state.filters.quickFilters.metricType);
-          } else {
-            isValidFlag = false;
-          }
-        });
-        if (isValidFlag) {
-          this.dtoService.appendPortfolioOverviewInfoForSecurityDTO(newSecurity);
-          this.populateEachRowWithStageOneContent(newSecurity);
-          validCount++;
-        }
-      }
-    }
-    console.log('count is', count, nonEmptyCount, validCount);
+    this.state.fetchResult.prinstineRowList = this.processingService.loadStageOneContent(
+      this.state.table.dto.data.headers,
+      this.state.filters.quickFilters.metricType,
+      serverReturn
+    );
     // right now stage 1 and stage 2 are combined
     // this.updateStage(2); // disabling this now for a smoothier transition on the UI
     this.fetchStageThreeContent();
@@ -330,32 +338,6 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     // deepcopy & re-assign trigger change on table
     // const updatedRowList = this.utilityService.deepCopy(this.state.prinstineRowList);
     // this.state.prinstineRowList = updatedRowList;
-  }
-
-  private populateEachRowWithStageOneContent(
-    newSecurity: SecurityDTO
-  ) {
-    const newRow = this.dtoService.formSecurityTableRowObject(newSecurity);
-    newSecurity.state.isTable = true;
-    this.state.table.dto.data.headers.forEach((eachHeader, index) => {
-      // TODO: once implemented two-step process to fetch security data, this if statement should only populate stage one metrics
-      this.populateEachCellWithStageOneContent(eachHeader, newRow);
-    });
-    this.state.fetchResult.prinstineRowList.push(newRow);
-  }
-
-  private populateEachCellWithStageOneContent(
-    targetHeader: SecurityTableHeaderDTO,
-    targetRow: SecurityTableRowDTO
-  ) {
-    if (!targetHeader.state.isPureTextVariant) {
-      const newCell = this.utilityService.populateSecurityTableCellFromSecurityCard(
-        targetHeader,
-        targetRow,
-        this.dtoService.formSecurityTableCellObject(false, null, targetHeader.state.isQuantVariant)
-      );
-      targetRow.data.cells.push(newCell);
-    }
   }
 
   private populateEachRowWithStageThreeContent(
