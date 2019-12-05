@@ -6,8 +6,32 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
   flex: 1 1 auto;
   display: flex;
   margin-top: $spacing_x_small;
+  &__bestQuote{
+    display: flex;   
+    justify-content: center; 
+    align-items: center; 
+    visibility: hidden;
+    padding: $spacing_x_small;
+    &-bestBidText {
+      @include mix_border_radius(5px);
+      color: $font_color_inverse;
+      line-height: $line_height_small;
+      font-size: $font_size_small;
+      background-color: $color_quant_left;
+      padding: $spacing_x_small;
+    }
+    &-bestOfferText {
+      @include mix_border_radius(5px);
+      margin-left: $spacing_x_small;
+      color: $font_color_inverse;
+      line-height: $line_height_small;
+      font-size: $font_size_small;
+      background-color: $color_quant_right;
+      padding: $spacing_x_small;
+    }
+  }
   &__time {
-    flex: 0 0 $securityQuote_time_width;
+    flex: 0 0 auto;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -174,13 +198,18 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
   }
   &--bestBidState#{$securityQuoteBlockName}--filteredBySpreadState {
     #{$securityQuoteBlockName} {
-      &__main {
+      &__bestQuote{
+        &-bestBidText {
+          visibility: visible;
+        }
+      }
+      &__main { 
         &-twoSideEntry{
           &-bid--spread{
             background-color: $color_quant_left;
-            border-radius: 5px;
-            padding: 3px;
-            width: 20px;
+            border-radius: 0.313rem;
+            padding: 0.188rem;
+            width: 1.25rem;
             color: white;
           }
         }
@@ -190,13 +219,18 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
 
   &--bestOfferState#{$securityQuoteBlockName}--filteredBySpreadState {
     #{$securityQuoteBlockName} {
+      &__bestQuote{
+        &-bestOfferText {
+          visibility: visible;
+        }
+      }
       &__main {
         &-twoSideEntry{
           &-ask--spread{
             background-color: $color_quant_right;
-            border-radius: 5px;
-            padding: 3px;
-            width: 20px;
+            border-radius: 0.313rem;
+            padding: 0.188rem;
+            width: 1.25rem;
             color: white;
           }
         }
@@ -207,13 +241,18 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
 
   &--bestBidState#{$securityQuoteBlockName}--filteredByPriceState {
     #{$securityQuoteBlockName} {
+      &__bestQuote{
+        &-bestBidText {
+          visibility: visible;
+        }
+      }
       &__main {
         &-twoSideEntry{
           &-bid--price{
             background-color: $color_quant_left;
-            border-radius: 5px;
-            padding: 3px;
-            width: 20px;
+            border-radius: 0.313rem;
+            padding: 0.188rem;
+            width: 1.25rem;
             color: white;
           }
         }
@@ -223,13 +262,18 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
 
   &--bestOfferState#{$securityQuoteBlockName}--filteredByPriceState {
     #{$securityQuoteBlockName} {
+      &__bestQuote{
+        &-bestOfferText {
+          visibility: visible;
+        }
+      }
       &__main {
         &-twoSideEntry{
           &-ask--price{
             background-color: $color_quant_right;
-            border-radius: 5px;
-            padding: 3px;
-            width: 20px;
+            border-radius: 0.313rem;
+            padding: 0.188rem;
+            width: 1.25rem;
             color: white;
           }
         }
@@ -239,13 +283,18 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
 
   &--bestBidState#{$securityQuoteBlockName}--filteredByYieldState {
     #{$securityQuoteBlockName} {
+      &__bestQuote{
+        &-bestBidText {
+          visibility: visible;
+        }
+      }
       &__main {
         &-twoSideEntry{
           &-bid--yield{
             background-color: $color_quant_left;
-            border-radius: 5px;
-            padding: 3px;
-            width: 20px;
+            border-radius: 0.313rem;
+            padding: 0.188rem;
+            width: 1.25rem;
             color: white;
           }
         }
@@ -255,13 +304,18 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
 
   &--bestOfferState#{$securityQuoteBlockName}--filteredByYieldState {
     #{$securityQuoteBlockName} {
+      &__bestQuote{
+        &-bestOfferText {
+          visibility: visible;
+        }
+      }
       &__main {
         &-twoSideEntry{
           &-ask--yield{
             background-color: $color_quant_right;
-            border-radius: 5px;
-            padding: 3px;
-            width: 20px;
+            border-radius: 0.313rem;
+            padding: 0.188rem;
+            width: 1.25rem;
             color: white;
           }
         }
