@@ -52,27 +52,21 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.configuratorData.data.definitionList.forEach((eachBundle) => {
-      eachBundle.data.list.forEach((eachDefinition) => {
-        if (eachDefinition.state.isLocked) {
-          eachDefinition.state.isUnactivated = false;
-        }
-      });
-    });
-    if (this.configuratorData.state.groupByDisabled) {
-      this.configuratorData.data.definitionList.forEach((eachBundle) => {
-        eachBundle.data.list = eachBundle.data.list.filter((eachDefinition) => {
-          return !!eachDefinition.data.securityDTOAttr;
-        });
-      })
-      this.configuratorData.data.definitionList = this.configuratorData.data.definitionList.filter((eachBundle) => {
-        return eachBundle.data.list.length > 0;
-      });
-    }
   }
 
   ngOnChanges() {
     if (!!this.configuratorData) {
+      if (this.configuratorData.state.groupByDisabled) {
+        this.hideFiltersForGroupByDisabledVariant();
+      } else {
+        this.configuratorData.data.definitionList.forEach((eachBundle) => {
+          eachBundle.data.list.forEach((eachDefinition) => {
+            if (eachDefinition.state.isLocked) {
+              eachDefinition.state.isUnactivated = false;
+            }
+          });
+        });
+      }
       this.lastExecutedConfiguration = this.utilityService.deepCopy(this.configuratorData);
     }
   }
@@ -167,22 +161,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   }
 
   public triggerApplyFilter() {
-    const params: DefinitionConfiguratorEmitterParams = {
-      filterList: []
-    };
-    this.configuratorData.data.definitionList.forEach((eachBundle) => {
-      eachBundle.data.list.forEach((eachDefinition) => {
-        const activeFilters = eachDefinition.data.filterOptionList.filter((eachOption) => {
-          return eachOption.isSelected;
-        });
-        activeFilters.length > 0 && params.filterList.push({
-          targetAttribute: eachDefinition.data.securityDTOAttr,
-          filterBy: activeFilters.map((eachFilter) => {
-            return eachFilter.displayLabel;
-          })
-        });
-      });
-    });
+    const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.configuratorData);
     this.clickedApplyFilter.emit(params);
     this.lastExecutedConfiguration = this.utilityService.deepCopy(this.configuratorData);
     this.configuratorData.state.canApplyFilter = false;
@@ -229,6 +208,19 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       });
     });
     return canApply;
+  }
+
+  private hideFiltersForGroupByDisabledVariant() {
+    if (this.configuratorData.state.groupByDisabled) {
+      this.configuratorData.data.definitionList.forEach((eachBundle) => {
+        eachBundle.data.list = eachBundle.data.list.filter((eachDefinition) => {
+          return !!eachDefinition.data.securityDTOAttr;
+        });
+      })
+      this.configuratorData.data.definitionList = this.configuratorData.data.definitionList.filter((eachBundle) => {
+        return eachBundle.data.list.length > 0;
+      });
+    }
   }
 
 }

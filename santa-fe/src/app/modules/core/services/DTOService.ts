@@ -126,7 +126,8 @@ export class DTOService {
 
   public appendPortfolioInfoToSecurityDTO(
     dto: SecurityDTO,
-    targetPortfolio: BEPortfolioDTO
+    targetPortfolio: BEPortfolioDTO,
+    currentSelectedMetric: string,
   ) {
     dto.data.primaryPmName = targetPortfolio.primaryPmName;
     dto.data.backupPmName = targetPortfolio.backupPmName;
@@ -135,9 +136,13 @@ export class DTOService {
     dto.data.mark.markDriver = targetPortfolio.mark.driver;
     dto.data.mark.markChangedBy = targetPortfolio.mark.user;
     dto.data.mark.markChangedTime = targetPortfolio.mark.enteredTime;
-    if (!!TriCoreMetricConfig[targetPortfolio.mark.driver]) {
+    // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
+    if (!!TriCoreMetricConfig[targetPortfolio.mark.driver] && (targetPortfolio.mark.driver === currentSelectedMetric || currentSelectedMetric === 'Default')){
       const rounding = TriCoreMetricConfig[targetPortfolio.mark.driver].rounding;
       dto.data.mark.mark = this.utility.round(dto.data.mark.markRaw, rounding).toFixed(rounding);
+    } else {
+      dto.data.mark.mark = null;
+      dto.data.mark.markRaw = null;
     }
     const newBlock: SecurityPortfolioBlock = {
       portfolioName: targetPortfolio.portfolioShortName,
@@ -335,7 +340,8 @@ export class DTOService {
 
   public formSearchShortcutObject(
     definitionList: Array<SecurityDefinitionDTO>,
-    title: string
+    title: string,
+    skipFirstForDefaultGroupBy: boolean
   ): SearchShortcutDTO {
     const object: SearchShortcutDTO = {
       data: {
@@ -351,8 +357,14 @@ export class DTOService {
       }
     };
     definitionList.forEach((eachDefinition, index) => {
-      if ( index !== 0 && index <= 5 ) {
-        object.style.slotList[index-1] = eachDefinition;
+      if (skipFirstForDefaultGroupBy) {
+        if (index !== 0 && index <= 5 ) {
+          object.style.slotList[index-1] = eachDefinition;
+        }
+      } else {
+        if (index <= 4 ) {
+          object.style.slotList[index] = eachDefinition;
+        }
       }
     });
     return object;
@@ -381,17 +393,21 @@ export class DTOService {
     const offerNumber = !isStencil ? this.utility.round(rawData.askQuoteValue, rounding).toFixed(rounding) : 33;
     const bidSkew =  !isStencil ? rawData.axeSkew * 100 : 50;
     let delta;
-    if (hasBid && hasOffer) {
+    let mid;
+    if (hasBid && hasOffer && !isStencil) {
       delta = inversed ? offerNumber - bidNumber : bidNumber - offerNumber;
       delta = this.utility.round(delta, rounding);
-      delta = delta;
+      mid = (rawData.bidQuoteValue + rawData.askQuoteValue)/2;
+      mid = this.utility.round(mid, rounding);
     } else {
       delta = 0;
+      mid = null;
     }
     const object: QuantComparerDTO = {
       data: {
         metricType: metricType,
         delta: delta,
+        mid: mid,
         bid: {
           number: bidNumber,
           broker: !isStencil ? rawData.bidDealer : 'GS',
@@ -527,9 +543,10 @@ export class DTOService {
     const consolidatedBenchmark = bidBenchmark === askBenchmark ? bidBenchmark : null;
     let convertedDate: Date = null;
     if (!isStencil) {
-      const convertBuffer = new Date(rawData.time);
-      const test = `${convertBuffer.getFullYear()} - ${convertBuffer.getMonth()} - ${convertBuffer.getDate()} - ${convertBuffer.getHours()} - ${convertBuffer.getMinutes()} - ${convertBuffer.getSeconds()}`;
-      convertedDate = new Date(Date.UTC(convertBuffer.getFullYear(), convertBuffer.getMonth(), convertBuffer.getDate(), convertBuffer.getHours(), convertBuffer.getMinutes(), convertBuffer.getSeconds()));
+      // stopped converting since BE is in EST now
+      // TODO: clean up code
+      convertedDate = new Date(rawData.time);
+      // convertedDate = new Date(Date.UTC(convertBuffer.getFullYear(), convertBuffer.getMonth(), convertBuffer.getDate(), convertBuffer.getHours(), convertBuffer.getMinutes(), convertBuffer.getSeconds()));
     }
     // const quoteDate: Date = !isStencil ? (hasBid ? new Date(rawData.bidTime) : new Date(rawData.askTime)) : null;
     const object: SecurityQuoteDTO = {

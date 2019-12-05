@@ -133,7 +133,10 @@ export class MarketGroupPanel implements OnDestroy {
   public switchMode() {
     this.state.powerModeActivated = !this.state.powerModeActivated;
     if (this.state.powerModeActivated) {
-      !!this.state.configurator.selectedShortcut && this.applyShortcutToConfigurator(this.state.configurator.selectedShortcut);
+      if (this.state.configurator.selectedShortcut) {
+        this.onClearConfig();
+        this.utilityService.applyShortcutToConfigurator(this.state.configurator.selectedShortcut, this.state.configurator.dto);
+      }
       this.toggleLandscapeView(true, false);
     }
   }
@@ -272,22 +275,7 @@ export class MarketGroupPanel implements OnDestroy {
         }
         return definitionDTO;
       });
-      this.state.configurator.shortcutList.push(this.dtoService.formSearchShortcutObject(definitionList, eachShortcutStub.displayTitle));
-    });
-  }
-
-  private applyShortcutToConfigurator(targetShortcut: SearchShortcutDTO){
-    this.onClearConfig();
-    targetShortcut.data.configuration.forEach((eachShortcutDef) => {
-      this.state.configurator.dto.data.definitionList.forEach((eachBundle) => {
-        eachBundle.data.list.forEach((eachDefinition) => {
-          if (eachDefinition.data.key === eachShortcutDef.data.key) {
-            eachDefinition.data.filterOptionList = eachShortcutDef.data.filterOptionList;
-            eachDefinition.state.groupByActive = eachShortcutDef.state.groupByActive;
-            eachDefinition.state.filterActive = eachShortcutDef.state.filterActive;
-          }
-        });
-      });
+      this.state.configurator.shortcutList.push(this.dtoService.formSearchShortcutObject(definitionList, eachShortcutStub.displayTitle, true));
     });
   }
 

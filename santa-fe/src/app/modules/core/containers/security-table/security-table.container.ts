@@ -34,7 +34,8 @@
     import { BEQuoteDTO } from 'BEModels/backend-models.interface';
 
     import {
-      SECURITY_TABLE_FINAL_STAGE
+      SECURITY_TABLE_FINAL_STAGE,
+      THIRTY_DAY_DELTA_METRIC_INDEX
     } from 'Core/constants/securityTableConstants.constant';
   //
 
@@ -49,6 +50,10 @@ export class SecurityTable implements OnInit, OnChanges {
   @Input() newRows: Array<SecurityTableRowDTO>;
   @Input() receivedContentStage: number;
 
+  constants = {
+    securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
+    thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX
+  }
   securityTableMetrics: Array<SecurityTableMetricStub>;
   @Input() receivedSecurityTableMetricsUpdate: Array<SecurityTableMetricStub>;
   receivedSecurityTableMetricsCache: Array<SecurityTableMetricStub>;// use this only for detecting diff
@@ -71,8 +76,8 @@ export class SecurityTable implements OnInit, OnChanges {
       if (this.receivedSecurityTableMetricsCache !== this.receivedSecurityTableMetricsUpdate) {
         this.receivedSecurityTableMetricsCache = this.utilityService.deepCopy(this.securityTableMetrics);
         // currently the only thing the parent can change is the 30 day delta metric's attribute, so we only need to update that
-        this.securityTableMetrics[7].attrName = this.receivedSecurityTableMetricsUpdate[7].attrName;
-        this.securityTableMetrics[7].underlineAttrName = this.receivedSecurityTableMetricsUpdate[7].underlineAttrName;
+        this.securityTableMetrics[this.constants.thirtyDayDeltaIndex].attrName = this.receivedSecurityTableMetricsUpdate[this.constants.thirtyDayDeltaIndex].attrName;
+        this.securityTableMetrics[this.constants.thirtyDayDeltaIndex].underlineAttrName = this.receivedSecurityTableMetricsUpdate[this.constants.thirtyDayDeltaIndex].underlineAttrName;
         this.loadTableHeaders();
       }
       this.loadTableRows(this.newRows);
@@ -83,7 +88,7 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   public onClickHeaderCTA(targetHeader: SecurityTableHeaderDTO) {
-    this.tableData.state.selectedHeader = this.tableData.state.selectedHeader === targetHeader ? null : targetHeader;
+    this.tableData.state.selectedHeader = this.tableData.state.selectedHeader && this.tableData.state.selectedHeader.data.displayLabel === targetHeader.data.displayLabel ? null : targetHeader;
   }
 
   public onClickRemoveHeader(targetHeader: SecurityTableHeaderDTO) {
@@ -124,7 +129,7 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   public onClickSortBy(targetHeader: SecurityTableHeaderDTO) {
-    this.tableData.state.sortedByHeader = this.tableData.state.sortedByHeader === targetHeader ? null : targetHeader;
+    this.tableData.state.sortedByHeader = this.tableData.state.sortedByHeader && this.tableData.state.sortedByHeader.data.displayLabel === targetHeader.data.displayLabel ? null : targetHeader;
     this.tableData.state.selectedHeader = null;
     if (this.tableData.state.loadedContentStage >= 2) {
       if (this.tableData.state.sortedByHeader) {
@@ -165,7 +170,7 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   public onClickRowTableCanvas(targetRow: SecurityTableRowDTO) {
-    if (this.tableData.state.loadedContentStage === SECURITY_TABLE_FINAL_STAGE) {
+    if (this.tableData.state.loadedContentStage === this.constants.securityTableFinalStage) {
       targetRow.state.isExpanded = !targetRow.state.isExpanded;
       targetRow.data.security.state.isTableExpanded = targetRow.state.isExpanded;
       if (targetRow.state.isExpanded) {
