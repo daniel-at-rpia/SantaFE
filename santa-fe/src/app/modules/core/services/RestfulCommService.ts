@@ -5,8 +5,8 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class RestfulCommService {
 
-  //private endpoint = 'https://rpiadev01:1225';
-  private endpoint = 'https://rpia-trader17:51225';
+  private endpoint = 'https://rpiadev01:1225';
+  //private endpoint = 'https://rpia-msmith-dt:51225';
 
   constructor(private http: HttpClient){}
 
