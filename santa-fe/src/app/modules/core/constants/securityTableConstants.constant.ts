@@ -70,7 +70,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     blockAttrName: 'mark',
     readyStage: 3,
     isFrontEndMetric: true,
-    active: true
+    active: false
   },{
     label: 'Mark Delta to Ask',
     attrName: 'markDisAsk',
@@ -78,7 +78,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     blockAttrName: 'mark',
     readyStage: 3,
     isFrontEndMetric: true,
-    active: true
+    active: false
   },{
     label: 'Mark Delta to Mid',
     attrName: 'markDisMid',
@@ -86,7 +86,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     blockAttrName: 'mark',
     readyStage: 3,
     isFrontEndMetric: true,
-    active: true
+    active: false
   },{
     label: 'Mark Delta to Liquidation',
     attrName: 'markDisLiquidation',
