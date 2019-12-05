@@ -25,12 +25,7 @@ export class TradeLiveUpdateInProgressEvent implements Action {
 
 export class TradeLiveUpdatePassRawDataEvent implements Action {
   readonly type = TradeActions.LiveUpdatePassRawDataEvent;
-  readonly serverReturn: object;
-  constructor(
-    serverReturn: object
-  ){
-    this.serverReturn = serverReturn;
-  }
+  constructor(){}
 }
 
 export class TradeLiveUpdatePassTableContentEvent implements Action {

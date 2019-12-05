@@ -14,7 +14,9 @@
       tap,
       first,
       delay,
-      catchError
+      catchError,
+      withLatestFrom,
+      filter
     } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
 
@@ -54,14 +56,14 @@
     } from 'Core/constants/tradeConstants.constant';
     import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
     import {
-      selectPositionsServerReturn,
-      selectLiveUpdateTick
+      selectLiveUpdateTick,
+      selectInitialDataLoaded
     } from 'Trade/selectors/trade.selectors';
     import {
       TradeLiveUpdateProcessDataCompleteEvent,
-      TradeTogglePresetEvent
+      TradeTogglePresetEvent,
+      TradeLiveUpdatePassRawDataEvent
     } from 'Trade/actions/trade.actions';
-    import { TradeLiveUpdatePassRawDataEvent } from 'Trade/actions/trade.actions';
   //
 
 @Component({
@@ -74,8 +76,7 @@
 export class TradeCenterPanel implements OnInit, OnDestroy {
   state: TradeCenterPanelState;
   subscriptions = {
-    startNewUpdateSub: null,
-    receivePositionsUpdateSub: null
+    startNewUpdateSub: null
   }
   constants = {
     portfolioList: PortfolioList,
@@ -103,7 +104,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         fetchTableDataFailed: false,
         fetchTableDataFailedError: '',
         rowList: [],
-        prinstineRowList: []
+        prinstineRowList: [],
+        liveUpdatedRowList: []
       },
       filters: {
         quickFilters: {
@@ -129,19 +131,14 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.subscriptions.startNewUpdateSub = this.store$.pipe(
-      select(selectLiveUpdateTick)
-    ).subscribe(tick => {
-      console.log('at Trade Page, got tick', tick);
-      if (tick > 0) {  // skip first beat
-        this.fetchUpdate();
-      }
-    });
-    this.subscriptions.receivePositionsUpdateSub = this.store$.pipe(
-      select(selectPositionsServerReturn)
-    ).subscribe(serverReturn => {
-      if (!!serverReturn) {
-        this.updateStage(0);
-        this.loadStageOneContent(serverReturn);
+      select(selectLiveUpdateTick),
+      withLatestFrom(
+        this.store$.pipe(select(selectInitialDataLoaded))
+      )
+    ).subscribe(([tick, isInitialDataLoaded]) => {
+      console.log('at Trade Center Panel, got tick', tick);
+      if (tick > 0 && isInitialDataLoaded) {  // skip first beat
+        this.fetchStageOneContent(false);
       }
     });
   }
@@ -191,7 +188,9 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         this.state.filters.quickFilters.portfolios = eachFilter.filterBy;
       };
     });
-    this.state.currentContentStage === this.constants.securityTableFinalStage && this.updateRowListWithFilters();
+    if (this.state.currentContentStage === this.constants.securityTableFinalStage) {
+      this.state.fetchResult.rowList = this.FilterPrinstineRowList();
+    }
   }
 
   private populateSearchShortcuts(){
@@ -212,28 +211,12 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       this.state.presets.shortcutList.push(this.dtoService.formSearchShortcutObject(definitionList, eachShortcutStub.displayTitle, false));
     });
   }
-  
-  private fetchUpdate() {
-    const payload : PayloadGetPositions = {
-      partitionOptions: ['Portfolio', 'Strategy']
-    };
-    this.restfulCommService.callAPI('santaPortfolio/get-santa-credit-positions', {req: 'POST'}, payload, false, false).pipe(
-      first(),
-      tap((serverReturn) => {
-        this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent(serverReturn));
-      }),
-      catchError(err => {
-        console.error('error', err);
-        return of('error');
-      })
-    ).subscribe();
-  }
 
   private loadFreshData() {
     this.state.fetchResult.prinstineRowList = [];
     this.updateStage(0);
     this.loadInitialStencilTable();
-    this.fetchStageOneContent();
+    this.fetchStageOneContent(true);
   }
 
   private loadInitialStencilTable() {
@@ -262,13 +245,17 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     this.state.fetchResult.rowList = this.utilityService.deepCopy(this.state.fetchResult.prinstineRowList);
   }
 
-  private fetchStageOneContent() {
+  private fetchStageOneContent(isInitialFetch: boolean) {
     const payload : PayloadGetPositions = {
       partitionOptions: ['Portfolio', 'Strategy']
     };
     this.restfulCommService.callAPI('santaPortfolio/get-santa-credit-positions', {req: 'POST'}, payload, false, false).pipe(
       first(),
       tap((serverReturn) => {
+        if (!isInitialFetch) {
+          this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
+        }
+        this.updateStage(0);
         this.loadStageOneContent(serverReturn);
       }),
       catchError(err => {
@@ -276,7 +263,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         this.state.fetchResult.fetchTableDataFailed = true;
         this.state.fetchResult.fetchTableDataFailedError = err.message;
         this.state.fetchResult.prinstineRowList = [];
-        this.updateRowListWithFilters();
+        this.state.fetchResult.rowList = this.FilterPrinstineRowList();
         return of('error');
       })
     ).subscribe();
@@ -315,7 +302,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         this.state.fetchResult.fetchTableDataFailed = true;
         this.state.fetchResult.fetchTableDataFailedError = err.message;
         this.state.fetchResult.prinstineRowList = [];
-        this.updateRowListWithFilters();
+        this.state.fetchResult.rowList = this.FilterPrinstineRowList();
         return of('error');
       })
     ).subscribe();
@@ -360,14 +347,25 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   }
 
   private updateStage(stageNumber: number) {
-    this.updateRowListWithFilters();
     this.state.currentContentStage = stageNumber;
     if (this.state.currentContentStage === this.constants.securityTableFinalStage) {
-      this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
+      this.store$.pipe(
+        select(selectInitialDataLoaded),
+        first(),
+        tap(isInitialDataLoaded => {
+          if (isInitialDataLoaded) {
+            const newFilteredList = this.FilterPrinstineRowList();
+            this.state.fetchResult.liveUpdatedRowList = this.processingService.returnDiff(this.state.table.dto, newFilteredList);
+          } else {
+            this.state.fetchResult.rowList = this.FilterPrinstineRowList();
+          }
+          this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
+        })
+      ).subscribe();
     }
   }
 
-  private updateRowListWithFilters() {
+  private FilterPrinstineRowList(): Array<SecurityTableRowDTO> {
     const filteredList: Array<SecurityTableRowDTO> = [];
     this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
       if (this.state.filters.quickFilters.keyword.length < 3 || eachRow.data.security.data.name.indexOf(this.state.filters.quickFilters.keyword) >= 0) {
@@ -385,7 +383,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         securityLevelFilterResultCombined && portfolioIncludeFlag && filteredList.push(eachRow);
       }
     });
-    this.state.fetchResult.rowList = this.utilityService.deepCopy(filteredList);
+    return filteredList;
   }
 
   private filterBySecurityAttribute(targetRow: SecurityTableRowDTO, targetAttribute: string, filterBy: Array<string>): boolean {

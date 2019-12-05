@@ -5,6 +5,7 @@
     import { DTOService } from 'Core/services/DTOService';
     import {
       SecurityDTO,
+      SecurityTableDTO,
       SecurityTableHeaderDTO,
       SecurityTableRowDTO,
       QuantComparerDTO,
@@ -74,6 +75,22 @@ export class LiveDataProcessingService {
     return prinstineRowList;
   }
 
+  public returnDiff(
+    table: SecurityTableDTO,
+    newList: Array<SecurityTableRowDTO>
+  ): Array<SecurityTableRowDTO> {
+    const updateList = [];
+    if (table.data.rows.length === newList.length) {
+      for (let i = 0; i < table.data.rows.length; ++i) {
+        const newRow = newList[i];
+        const oldRow = table.data.rows[i];
+      }
+    } else {
+      console.error('the new list length is different, something is wrong');
+    }
+    return updateList;
+  }
+
   private populateEachRowWithStageOneContent(
     headerList: Array<SecurityTableHeaderDTO>,
     prinstineRowList: Array<SecurityTableRowDTO>,
@@ -92,5 +109,13 @@ export class LiveDataProcessingService {
       }
     });
     prinstineRowList.push(newRow);
+  }
+
+  private isThereDiffInSecurity(oldSecurity: SecurityDTO, newSecurity: SecurityDTO): boolean {
+    return false;
+  }
+
+  private isThereDiffInQuantComparer(oldQuant: QuantComparerDTO, newQuant: QuantComparerDTO): boolean {
+    return false;
   }
 }

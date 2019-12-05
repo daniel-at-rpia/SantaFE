@@ -78,6 +78,7 @@ export interface TradeCenterPanelState {
     fetchTableDataFailedError: string;
     rowList: Array<SecurityTableRowDTO>;
     prinstineRowList: Array<SecurityTableRowDTO>;
+    liveUpdatedRowList: Array<SecurityTableRowDTO>;
   }
   filters: {
     quickFilters: {
