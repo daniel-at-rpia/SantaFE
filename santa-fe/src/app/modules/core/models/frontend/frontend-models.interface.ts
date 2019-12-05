@@ -255,6 +255,7 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
     unixTimestamp: number;
     dataSource: string;
     consolidatedBenchmark: string;
+    currentMetric: string;
     bid: {
       isAxe: boolean;
       size: string;
@@ -277,5 +278,10 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
     hasBid: boolean;
     hasAsk: boolean;
     diffBenchmark: boolean;
+    isBestBid: boolean;
+    isBestOffer: boolean;
+    filteredBySpread: boolean;
+    filteredByYield: boolean;
+    filteredByPrice: boolean;
   }
 }

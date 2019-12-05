@@ -231,7 +231,15 @@ export class SecurityTable implements OnInit, OnChanges {
     });
   }
 
-  private fetchSecurityQuotes(targetRow: SecurityTableRowDTO){
+  private fetchSecurityQuotes(targetRow: SecurityTableRowDTO){ 
+    var bestBid: number; 
+    var bestOffer: number;
+    var metricType: string;
+
+    bestBid = targetRow.data.cells[0].data.quantComparerDTO.data.bid.number;
+    bestOffer = targetRow.data.cells[0].data.quantComparerDTO.data.offer.number;
+    metricType = targetRow.data.cells[0].data.quantComparerDTO.data.metricType;
+
     const payload: PayloadGetAllQuotes = {
       "identifier": {
         "SecurityId": targetRow.data.security.data.securityID
@@ -244,7 +252,8 @@ export class SecurityTable implements OnInit, OnChanges {
         targetRow.data.quotes = [];
         for (const eachKey in serverReturn) {
           const rawQuote: BEQuoteDTO = serverReturn[eachKey];
-          const newQuote = this.dtoService.formSecurityQuoteObject(false, rawQuote);
+
+         const newQuote = this.dtoService.formSecurityQuoteObject(false, rawQuote, bestBid, bestOffer, metricType);
           if (newQuote.state.hasAsk || newQuote.state.hasBid) {
             targetRow.data.quotes.push(newQuote);
           }
@@ -259,7 +268,7 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   private renderStencilQuotes(targetRow: SecurityTableRowDTO){
-    const stencilQuote = this.dtoService.formSecurityQuoteObject(true, null);
+    const stencilQuote = this.dtoService.formSecurityQuoteObject(true, null, null, null, null);
     targetRow.data.quotes = [stencilQuote, stencilQuote, stencilQuote];
   }
 

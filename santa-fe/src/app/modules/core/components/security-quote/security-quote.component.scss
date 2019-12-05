@@ -172,6 +172,103 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       margin-right: $spacing_small;
     }
   }
+  &--bestBidState#{$securityQuoteBlockName}--filteredBySpreadState {
+    #{$securityQuoteBlockName} {
+      &__main {
+        &-twoSideEntry{
+          &-bid--spread{
+            background-color: $color_quant_left;
+            border-radius: 5px;
+            padding: 3px;
+            width: 20px;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+
+  &--bestOfferState#{$securityQuoteBlockName}--filteredBySpreadState {
+    #{$securityQuoteBlockName} {
+      &__main {
+        &-twoSideEntry{
+          &-ask--spread{
+            background-color: $color_quant_right;
+            border-radius: 5px;
+            padding: 3px;
+            width: 20px;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+
+
+  &--bestBidState#{$securityQuoteBlockName}--filteredByPriceState {
+    #{$securityQuoteBlockName} {
+      &__main {
+        &-twoSideEntry{
+          &-bid--price{
+            background-color: $color_quant_left;
+            border-radius: 5px;
+            padding: 3px;
+            width: 20px;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+
+  &--bestOfferState#{$securityQuoteBlockName}--filteredByPriceState {
+    #{$securityQuoteBlockName} {
+      &__main {
+        &-twoSideEntry{
+          &-ask--price{
+            background-color: $color_quant_right;
+            border-radius: 5px;
+            padding: 3px;
+            width: 20px;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+
+  &--bestBidState#{$securityQuoteBlockName}--filteredByYieldState {
+    #{$securityQuoteBlockName} {
+      &__main {
+        &-twoSideEntry{
+          &-bid--yield{
+            background-color: $color_quant_left;
+            border-radius: 5px;
+            padding: 3px;
+            width: 20px;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+
+  &--bestOfferState#{$securityQuoteBlockName}--filteredByYieldState {
+    #{$securityQuoteBlockName} {
+      &__main {
+        &-twoSideEntry{
+          &-ask--yield{
+            background-color: $color_quant_right;
+            border-radius: 5px;
+            padding: 3px;
+            width: 20px;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+
   &--noBid {
     #{$securityQuoteBlockName} {
       &__main {
@@ -179,7 +276,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
           visibility: hidden;
         }
         &-twoSideEntry {
-          &-bid {
+          &-bid{
             visibility: hidden;
           }
         }
@@ -259,4 +356,5 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
+ 
 }
