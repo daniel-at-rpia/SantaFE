@@ -62,7 +62,8 @@
     import {
       TradeLiveUpdateProcessDataCompleteEvent,
       TradeTogglePresetEvent,
-      TradeLiveUpdatePassRawDataEvent
+      TradeLiveUpdatePassRawDataEvent,
+      TradeToggleMetricEvent
     } from 'Trade/actions/trade.actions';
   //
 
@@ -176,6 +177,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       } else {
         console.error('Code Maintainence flag: this is not the 30 day delta');
       }
+      this.store$.dispatch(new TradeToggleMetricEvent());
       this.loadFreshData(); 
     }
   }
@@ -214,8 +216,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
 
   private loadFreshData() {
     this.state.fetchResult.prinstineRowList = [];
-    this.updateStage(0);
     this.loadInitialStencilTable();
+    this.updateStage(0);
     this.fetchStageOneContent(true);
   }
 
@@ -254,8 +256,9 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       tap((serverReturn) => {
         if (!isInitialFetch) {
           this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
+        } else {
+          this.updateStage(0);
         }
-        this.updateStage(0);
         this.loadStageOneContent(serverReturn);
       }),
       catchError(err => {

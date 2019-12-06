@@ -97,4 +97,5 @@ export interface TradeUtilityPanelState {
   isCallingAPI: boolean;
   isProcessingData: boolean;
   isPresetSelected: boolean;
+  isInitialDataLoaded: boolean;
 }

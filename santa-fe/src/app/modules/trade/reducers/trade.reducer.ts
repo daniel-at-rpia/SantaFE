@@ -90,6 +90,11 @@ export function tradeReducer(
           initialDataLoaded: true
         }
       }
+    case TradeActions.ToggleMetricEvent:
+      return {
+        ...state,
+        initialDataLoaded: false
+      }
     default:
       return state;
   }

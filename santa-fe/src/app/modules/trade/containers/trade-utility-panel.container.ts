@@ -32,7 +32,8 @@
       selectLiveUpdateInProgress,
       selectLiveUpdateProcessingRawData,
       selectLiveUpdateCount,
-      selectPresetSelected
+      selectPresetSelected,
+      selectInitialDataLoaded
     } from 'Trade/selectors/trade.selectors';
     import {
       LIVE_UPDATE_COUNTDOWN,
@@ -60,7 +61,8 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
     internalCountSub: null,
     externalCountSub: null,
     processingRawDataSub: null,
-    presetSelectedSub: null
+    presetSelectedSub: null,
+    initialDataLoadedSub: null
   };
 
   private initializePageState() {
@@ -70,7 +72,8 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
       isPaused: true,
       isCallingAPI: false,
       isProcessingData: false,
-      isPresetSelected: false
+      isPresetSelected: false,
+      isInitialDataLoaded: false
     };
   }
 
@@ -99,10 +102,11 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
       withLatestFrom(
         this.store$.pipe(select(selectPresetSelected)),
         this.store$.pipe(select(selectLiveUpdateInProgress)),
-        this.store$.pipe(select(selectLiveUpdateProcessingRawData))
+        this.store$.pipe(select(selectLiveUpdateProcessingRawData)),
+        this.store$.pipe(select(selectInitialDataLoaded))
       )
-    ).subscribe(([count, isPresetSelected, isUpdateInProgress, isProcessingRawData]) => {
-      if (isPresetSelected && !isUpdateInProgress && !isProcessingRawData && count >= this.constants.liveUpdateCountdown) {
+    ).subscribe(([count, isPresetSelected, isUpdateInProgress, isProcessingRawData, isInitialDataLoaded]) => {
+      if (isPresetSelected && !isUpdateInProgress && !isProcessingRawData && isInitialDataLoaded && count >= this.constants.liveUpdateCountdown) {
         this.state.updateCountdown = this.constants.liveUpdateCountdown.toString();
         this.state.isCallingAPI = true;
         this.store$.dispatch(new TradeLiveUpdateStartEvent());
@@ -126,7 +130,14 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
       select(selectPresetSelected)
     ).subscribe(flag => {
       this.state.isPresetSelected = flag;
-      this.state.isPaused = !this.state.isPresetSelected;
+      this.state.isPaused = !this.state.isPresetSelected || !this.state.isInitialDataLoaded;
+    });
+
+    this.subscriptions.initialDataLoadedSub = this.store$.pipe(
+      select(selectInitialDataLoaded)
+    ).subscribe(flag => {
+      this.state.isInitialDataLoaded = flag;
+      this.state.isPaused = !this.state.isPresetSelected || !this.state.isInitialDataLoaded;
     });
   }
 

@@ -10,7 +10,8 @@ export enum TradeActions {
   LiveUpdateUtilityInternalCountEvent = '[Trade] Live Update Utility Internal Count',
   LiveUpdateCount = '[Trade] Live Update Count',
   LiveUpdateProcessingDataCompleteEvent = '[Trade] Live Update Processing Data Complete Event',
-  TogglePresetEvent = '[Trade] Toggle Preset Event'
+  TogglePresetEvent = '[Trade] Toggle Preset Event',
+  ToggleMetricEvent = '[Trade] Toggle Metric Event'
 }
 
 export class TradeLiveUpdateStartEvent implements Action {
@@ -55,5 +56,10 @@ export class TradeLiveUpdateProcessDataCompleteEvent implements Action {
 
 export class TradeTogglePresetEvent implements Action {
   readonly type = TradeActions.TogglePresetEvent;
+  constructor(){}
+}
+
+export class TradeToggleMetricEvent implements Action {
+  readonly type = TradeActions.ToggleMetricEvent;
   constructor(){}
 }

@@ -83,8 +83,8 @@ export class SecurityTable implements OnInit, OnChanges {
           this.securityTableMetrics[this.constants.thirtyDayDeltaIndex].underlineAttrName = this.receivedSecurityTableMetricsUpdate[this.constants.thirtyDayDeltaIndex].underlineAttrName;
           this.loadTableHeaders();
         }
-        this.loadTableRows(this.newRows);
       }
+      this.loadTableRows(this.newRows);
     } else if (!!this.newRows && this.newRows != this.tableData.data.rows && this.tableData.state.loadedContentStage === this.receivedContentStage) {
       console.log('rows updated for change within same stage', this.tableData.state.loadedContentStage);
       this.loadTableRows(this.newRows);
