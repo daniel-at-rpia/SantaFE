@@ -89,7 +89,12 @@ export class SecurityTable implements OnInit, OnChanges {
       console.log('rows updated for change within same stage', this.tableData.state.loadedContentStage);
       this.loadTableRows(this.newRows);
     } else if (this.liveUpdateRowsCache !== this.liveUpdatedRows && this.tableData.state.loadedContentStage === this.constants.securityTableFinalStage) {
+      this.liveUpdateRowsCache = this.utilityService.deepCopy(this.liveUpdatedRows);
       console.log('rows updated from live update', this.liveUpdatedRows);
+      if (this.liveUpdateRowsCache.length > 0) {
+        this.liveUpdateRows(this.liveUpdateRowsCache);
+      }
+      this.liveUpdateAllQuotesForExpandedRows();
     }
   }
 
@@ -382,5 +387,26 @@ export class SecurityTable implements OnInit, OnChanges {
         return 0;
       }
     });
+  }
+
+  private liveUpdateRows(targetRows: Array<SecurityTableRowDTO>) {
+    targetRows.forEach((eachNewRow) => {
+      const matchedOldRow = this.tableData.data.rows.find((eachOldRow) => {
+        return eachOldRow.data.security.data.securityID === eachNewRow.data.security.data.securityID;
+      });
+      if (!!matchedOldRow) {
+        matchedOldRow.data = eachNewRow.data;
+      } else {
+        this.tableData.data.rows.push(eachNewRow);
+      }
+    });
+  }
+
+  private liveUpdateAllQuotesForExpandedRows() {
+    this.tableData.data.rows.forEach((eachRow) => {
+      if (eachRow.state.isExpanded) {
+        this.fetchSecurityQuotes(eachRow);
+      }
+    })
   }
 }

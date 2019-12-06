@@ -64,13 +64,14 @@ export class DTOService {
   ){}
 
   public formSecurityCardObject(
+    securityIdFull: string,
     rawData: BESecurityDTO,
     isStencil: boolean
   ): SecurityDTO {
     // !isStencil && console.log('rawData', rawData.name, rawData);
     const object:SecurityDTO = {
       data: {
-        securityID: !isStencil ? rawData.securityIdentifier.securityId : null,
+        securityID: !isStencil ? securityIdFull : null,
         name: !isStencil ? rawData.name : 'PLACEHOLDER',
         ratingLevel: !isStencil && rawData.metrics ? this.utility.mapRatings(rawData.metrics.ratingNoNotch) : 0,
         ratingValue: !isStencil && rawData.metrics ? rawData.metrics.ratingNoNotch : null,
@@ -442,7 +443,9 @@ export class DTOService {
     return object;
   }
 
-  public formSecurityTableObject(): SecurityTableDTO {
+  public formSecurityTableObject(
+    isLiveVariant: boolean
+  ): SecurityTableDTO {
     const object: SecurityTableDTO = {
       data: {
         headers: [],
@@ -452,7 +455,8 @@ export class DTOService {
         loadedContentStage: 0,
         isAddingColumn: false,
         selectedHeader: null,
-        sortedByHeader: null
+        sortedByHeader: null,
+        isLiveVariant: isLiveVariant
       }
     };
     return object;

@@ -99,7 +99,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       },
       table: {
         metrics: SecurityTableMetrics,
-        dto: this.dtoService.formSecurityTableObject()
+        dto: this.dtoService.formSecurityTableObject(true)
       },
       fetchResult: {
         fetchTableDataFailed: false,
@@ -229,7 +229,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       }
     });
     for (let i = 0; i < 10; ++i) {
-      const stencilSecurity = this.dtoService.formSecurityCardObject(null, true);
+      const stencilSecurity = this.dtoService.formSecurityCardObject(null, null, true);
       stencilSecurity.state.isTable = true;
       const newRow = this.dtoService.formSecurityTableRowObject(stencilSecurity);
       stencilHeaderBuffer.forEach((eachHeader) => {
@@ -290,9 +290,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       identifiers: []
     };
     this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
-      const newSecurityId = {
-        "SecurityId": eachRow.data.security.data.securityID
-      };
+      const newSecurityId = eachRow.data.security.data.securityID;
       payload.identifiers.push(newSecurityId);
     });
     this.restfulCommService.callAPI('liveQuote/get-best-quotes', {req: 'POST'}, payload).pipe(
@@ -313,16 +311,26 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
 
   private loadStageThreeContent(serverReturn) {
     // TODO: this logic needs to be improved, it's exponentially slowing down the performance
-    for (const eachKey in serverReturn) {
-      const securityId = this.utilityService.extractSecurityId(eachKey);
-      const results = this.state.fetchResult.prinstineRowList.filter((eachRow) => {
-        return eachRow.data.security.data.securityID === securityId;
-      });
-      if (!!results && results.length > 0) {
-        const targetRow = results[0];
-        this.populateEachRowWithStageThreeContent(targetRow, serverReturn[eachKey]);
-      }
+    if (!!serverReturn) {
+      this.state.fetchResult.prinstineRowList.forEach((eachPrinstineRow) => {
+        const securityIdFull = eachPrinstineRow.data.security.data.securityID;
+        if (!!serverReturn[securityIdFull]) {
+          this.populateEachRowWithStageThreeContent(eachPrinstineRow, serverReturn[securityIdFull]);
+        } else {
+          console.error("best quote did not return data for ", securityIdFull);
+        }
+      })
     }
+    // for (const eachKey in serverReturn) {
+    //   const securityId = this.utilityService.extractSecurityId(eachKey);
+    //   const results = this.state.fetchResult.prinstineRowList.filter((eachRow) => {
+    //     return eachRow.data.security.data.securityID === securityId;
+    //   });
+    //   if (!!results && results.length > 0) {
+    //     const targetRow = results[0];
+    //     this.populateEachRowWithStageThreeContent(targetRow, serverReturn[eachKey]);
+    //   }
+    // }
     this.calculateQuantComparerWidthAndHeight();
     this.updateStage(3);
     // deepcopy & re-assign trigger change on table
@@ -358,7 +366,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         tap(isInitialDataLoaded => {
           if (isInitialDataLoaded) {
             const newFilteredList = this.FilterPrinstineRowList();
-            this.state.fetchResult.liveUpdatedRowList = this.processingService.returnDiff(this.state.table.dto, newFilteredList);
+            this.state.fetchResult.liveUpdatedRowList = this.processingService.returnDiff(this.state.table.dto, newFilteredList).newRowList;
           } else {
             this.state.fetchResult.rowList = this.FilterPrinstineRowList();
           }

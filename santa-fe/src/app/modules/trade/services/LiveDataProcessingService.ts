@@ -12,9 +12,8 @@
       SearchShortcutDTO
     } from 'FEModels/frontend-models.interface';
     import {
-      PayloadGetPositions,
-      PayloadGetBestQuotes
-    } from 'BEModels/backend-payloads.interface';
+      LiveDataDiffingResult
+    } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       BEPortfolioDTO,
       BESecurityDTO,
@@ -52,7 +51,7 @@ export class LiveDataProcessingService {
         let sumSize = 0;
         let isValidFlag = true;
         const newBESecurity:BESecurityDTO = serverReturn[eachKey][0].santaSecurity;
-        const newSecurity = this.dtoService.formSecurityCardObject(newBESecurity, false);
+        const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false);
         serverReturn[eachKey].forEach((eachPortfolio: BEPortfolioDTO) => {
           if (eachPortfolio.quantity !== 0 && !eachPortfolio.santaSecurity.isGovt && eachPortfolio.santaSecurity.metrics) {
             this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio, activeMetricType);
@@ -78,17 +77,30 @@ export class LiveDataProcessingService {
   public returnDiff(
     table: SecurityTableDTO,
     newList: Array<SecurityTableRowDTO>
-  ): Array<SecurityTableRowDTO> {
-    const updateList = [];
-    if (table.data.rows.length === newList.length) {
-      for (let i = 0; i < table.data.rows.length; ++i) {
-        const newRow = newList[i];
-        const oldRow = table.data.rows[i];
+  ): LiveDataDiffingResult {
+    const updateList: Array<SecurityTableRowDTO> = [];
+    let markDiffCount = 0;
+    let quantDiffCount = 0;
+    newList.forEach((eachNewRow) => {
+      const oldRow = table.data.rows.find((eachOldRow) => {
+        return eachOldRow.data.security.data.securityID === eachNewRow.data.security.data.securityID;
+      })
+      if (!!oldRow) {
+        const isSecurityDiff = this.isThereDiffInSecurity(oldRow.data.security, eachNewRow.data.security);
+        const isQuantDiff = this.isThereDiffInQuantComparer(oldRow.data.cells[0].data.quantComparerDTO, eachNewRow.data.cells[0].data.quantComparerDTO);
+        if ( isSecurityDiff || isQuantDiff) {
+          console.log('test, there is an update', oldRow, eachNewRow, isSecureContext, isQuantDiff);
+          updateList.push(eachNewRow);
+        }
+      } else {
+        updateList.push(eachNewRow);
       }
-    } else {
-      console.error('the new list length is different, something is wrong');
-    }
-    return updateList;
+    })
+    return {
+      newRowList: updateList,
+      markDiffCount: markDiffCount,
+      quantDiffCount: quantDiffCount
+    };
   }
 
   private populateEachRowWithStageOneContent(
@@ -111,11 +123,42 @@ export class LiveDataProcessingService {
     prinstineRowList.push(newRow);
   }
 
-  private isThereDiffInSecurity(oldSecurity: SecurityDTO, newSecurity: SecurityDTO): boolean {
+  private isThereDiffInSecurity(
+    oldSecurity: SecurityDTO,
+    newSecurity: SecurityDTO
+  ): boolean {
+    if (oldSecurity.data.positionFirm !== newSecurity.data.positionFirm) {
+      return true;
+    }
+    if (oldSecurity.data.mark.markRaw !== newSecurity.data.mark.markRaw) {
+      return true;
+    }
     return false;
   }
 
-  private isThereDiffInQuantComparer(oldQuant: QuantComparerDTO, newQuant: QuantComparerDTO): boolean {
+  private isThereDiffInQuantComparer(
+    oldQuant: QuantComparerDTO,
+    newQuant: QuantComparerDTO
+  ): boolean {
+    if (oldQuant && !newQuant) {
+      return true;
+    }
+    if (!oldQuant && newQuant) {
+      return true;
+    }
+    if (!oldQuant && !newQuant) {
+      return false;
+    }
+    for (const eachAttr in oldQuant.data.bid) {
+      if (oldQuant.data.bid[eachAttr] !== newQuant.data.bid[eachAttr]) {
+        return false;
+      }
+    }
+    for (const eachAttr in oldQuant.data.offer) {
+      if (oldQuant.data.offer[eachAttr] !== newQuant.data.offer[eachAttr]) {
+        return false;
+      }
+    }
     return false;
   }
 }
