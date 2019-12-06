@@ -167,6 +167,13 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     this.store$.dispatch(new TradeTogglePresetEvent);
   }
 
+  public onUnselectPreset() {
+    this.state.presets.selectedPreset.state.isSelected = false;
+    this.state.presets.selectedPreset = null;
+    this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true);
+    this.store$.dispatch(new TradeTogglePresetEvent);
+  }
+
   public onSwitchMetric(targetMetric) {
     if (this.state.filters.quickFilters.metricType !== targetMetric) {
       this.state.filters.quickFilters.metricType = targetMetric;
