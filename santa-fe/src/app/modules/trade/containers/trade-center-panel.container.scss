@@ -8,7 +8,7 @@
   display: flex;
   overflow: hidden;
   &__presetsAndFilters {
-    @include mix_fixed_div(relative, $z_index_standard_base_item);
+    @include mix_fixed_div(relative, $z_index_standard_tooltip);
     flex: 0 0 $securityDefinitionConfigurator_width + $spacing_medium;
     display: flex;
     flex-direction: column;
@@ -51,24 +51,23 @@
       display: flex;
       flex-direction: column;
       height: 100%;
+      width: 100%;
       transform: translate(100%, 0);
-      overflow: hidden;
-      padding: 0 0 $spacing_medium $spacing_medium;
+      &-backBtn {
+        margin: $spacing_medium $spacing_medium 0 $spacing_medium;
+        &>i {
+          margin-bottom: $spacing_x_small;
+        }
+      }
       &-title {
-        padding-top: $spacing_large;
-        padding-bottom: $spacing_x_small;
+        padding: $spacing_large 0 $spacing_x_small $spacing_medium;
         text-align: center;
         font-size: $font_size_large;
         color: $font_color_minor;
       }
-      &-backBtn {
-        margin-top: $spacing_medium;
-        margin-right: $spacing_medium;
-      }
       security-definition-configurator {
-        flex: 1 1 auto;
+        @include mix_calculate(height, 100%, 11rem, '-'); // 11rem is the sum of the height of title and backBtn
         display: flex;
-        overflow: hidden;
       }
     }
   }
@@ -147,6 +146,8 @@
   &--presetSelectedState {
     #{$tradeCenterPanelBlockName} {
       &__presetsAndFilters {
+        flex: 0 0 9rem;
+        overflow: visible;
         &-presets {
           transform: translate(-100%, 0);
           &-list-item {

@@ -1,7 +1,7 @@
 @import "global.scss";
 @import "modules/market/market.scss";
 
-$securityDefinitionConfigurator_ctas_height: 6rem;
+$securityDefinitionConfigurator_ctas_height: 7rem;
 .sat-securityDefinitionConfigurator {
   $securityDefinitionConfiguratorBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
@@ -79,7 +79,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
     @include mix_calculate(height, 100%, $securityDefinitionConfigurator_ctas_height, '-');
     display: flex;
     top: 0;
-    right: 0;
+    left: $securityDefinition_width + $securityDefinitionConfigurator_gapBetweenDefAndFilter;
     width: $securityDefinitionConfigurator_filters_width;
     padding-left: $securityDefinitionConfigurator_gapBetweenDefAndFilter - $spacing_xx_small;  // $spacing_xx_small for covering the undesirable border radius look on the left upper corner when not aligned perfectly with the definition
     overflow: hidden;
@@ -187,7 +187,8 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
         align-items: flex-start;
         &-btn {
           transform: translate(0, 150%);
-          padding: $spacing_small $spacing_large;
+          padding: $spacing_x_small $spacing_medium;
+          margin: 0 $spacing_medium $spacing_medium $spacing_medium;
           background-color: $color_filter;
           &>i {
             font-size: $font_size_xx_large;
