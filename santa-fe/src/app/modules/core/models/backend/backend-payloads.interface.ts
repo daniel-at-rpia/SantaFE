@@ -18,5 +18,5 @@ export interface PayloadGetBestQuotes {
 }
 
 export interface PayloadGetAllQuotes {
-  identifier: object
+  identifier: string;
 }

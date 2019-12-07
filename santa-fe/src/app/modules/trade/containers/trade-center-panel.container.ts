@@ -317,51 +317,9 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   }
 
   private loadStageThreeContent(serverReturn) {
-    // TODO: this logic needs to be improved, it's exponentially slowing down the performance
-    if (!!serverReturn) {
-      this.state.fetchResult.prinstineRowList.forEach((eachPrinstineRow) => {
-        const securityIdFull = eachPrinstineRow.data.security.data.securityID;
-        if (!!serverReturn[securityIdFull]) {
-          this.populateEachRowWithStageThreeContent(eachPrinstineRow, serverReturn[securityIdFull]);
-        } else {
-          console.error("best quote did not return data for ", securityIdFull);
-        }
-      })
-    }
-    // for (const eachKey in serverReturn) {
-    //   const securityId = this.utilityService.extractSecurityId(eachKey);
-    //   const results = this.state.fetchResult.prinstineRowList.filter((eachRow) => {
-    //     return eachRow.data.security.data.securityID === securityId;
-    //   });
-    //   if (!!results && results.length > 0) {
-    //     const targetRow = results[0];
-    //     this.populateEachRowWithStageThreeContent(targetRow, serverReturn[eachKey]);
-    //   }
-    // }
+    this.processingService.loadStageThreeContent(this.state.table.dto.data.headers, this.state.fetchResult.prinstineRowList, this.state.filters.quickFilters.metricType, serverReturn);
     this.calculateQuantComparerWidthAndHeight();
     this.updateStage(3);
-    // deepcopy & re-assign trigger change on table
-    // const updatedRowList = this.utilityService.deepCopy(this.state.prinstineRowList);
-    // this.state.prinstineRowList = updatedRowList;
-  }
-
-  private populateEachRowWithStageThreeContent(
-    targetRow: SecurityTableRowDTO,
-    quote: BEBestQuoteDTO
-  ){
-    const bestQuoteColumnIndex = 0;  // for now the bestQuote is fixed
-    const bestQuoteCell = targetRow.data.cells[bestQuoteColumnIndex];
-    const newQuant = this.dtoService.formQuantComparerObject(false,
-      this.state.filters.quickFilters.metricType,
-      quote
-    );
-    bestQuoteCell.data.quantComparerDTO = newQuant;
-    this.utilityService.calculateMarkDiscrepancies(targetRow.data.security, newQuant, this.state.filters.quickFilters.metricType);
-    this.state.table.dto.data.headers.forEach((eachHeader, index) => {
-      if (eachHeader.data.readyStage === 3) {
-        targetRow.data.cells[index-1] = this.utilityService.populateSecurityTableCellFromSecurityCard(eachHeader, targetRow, targetRow.data.cells[index-1]);
-      }
-    });
   }
 
   private updateStage(stageNumber: number) {

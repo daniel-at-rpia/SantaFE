@@ -74,6 +74,62 @@ export class LiveDataProcessingService {
     return prinstineRowList;
   }
 
+  public loadStageThreeContent(
+    tableHeaderList: Array<SecurityTableHeaderDTO>,
+    rowList: Array<SecurityTableRowDTO>,
+    metricType: string,
+    serverReturn
+  ) {
+    if (!!serverReturn) {
+      const trackRowsWithoutReturn = [];
+      rowList.forEach((eachPrinstineRow) => {
+        const securityIdFull = eachPrinstineRow.data.security.data.securityID;
+        if (!!serverReturn[securityIdFull]) {
+          this.populateEachRowWithStageThreeContent(
+            tableHeaderList,
+            eachPrinstineRow,
+            metricType,
+            serverReturn[securityIdFull]
+          );
+        } else {
+          trackRowsWithoutReturn.push(securityIdFull);
+        }
+      })
+      if (trackRowsWithoutReturn.length > 0) {
+        console.error("best quote did not return data for ", trackRowsWithoutReturn);
+      }
+    }
+  }
+
+  private populateEachRowWithStageThreeContent(
+    tableHeaderList: Array<SecurityTableHeaderDTO>,
+    targetRow: SecurityTableRowDTO,
+    metricType: string,
+    quote: BEBestQuoteDTO
+  ){
+    const bestQuoteColumnIndex = 0;  // for now the bestQuote is fixed
+    const bestQuoteCell = targetRow.data.cells[bestQuoteColumnIndex];
+    const newQuant = this.dtoService.formQuantComparerObject(false,
+      metricType,
+      quote
+    );
+    bestQuoteCell.data.quantComparerDTO = newQuant;
+    this.utilityService.calculateMarkDiscrepancies(
+      targetRow.data.security,
+      newQuant,
+      metricType
+    );
+    tableHeaderList.forEach((eachHeader, index) => {
+      if (eachHeader.data.readyStage === 3) {
+        targetRow.data.cells[index-1] = this.utilityService.populateSecurityTableCellFromSecurityCard(
+          eachHeader,
+          targetRow,
+          targetRow.data.cells[index-1]
+        );
+      }
+    });
+  }
+
   public returnDiff(
     table: SecurityTableDTO,
     newList: Array<SecurityTableRowDTO>

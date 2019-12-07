@@ -249,9 +249,7 @@ export class SecurityTable implements OnInit, OnChanges {
 
   private fetchSecurityQuotes(targetRow: SecurityTableRowDTO){
     const payload: PayloadGetAllQuotes = {
-      "identifier": {
-        "SecurityId": targetRow.data.security.data.securityID
-      }
+      "identifier": targetRow.data.security.data.securityID
     };
     this.restfulCommService.callAPI('liveQuote/get-all-quotes', {req: 'POST'}, payload).pipe(
       first(),
