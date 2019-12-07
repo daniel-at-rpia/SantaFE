@@ -173,6 +173,13 @@ export interface BEPortfolioDTO {
 }
 
 export interface BEBestQuoteDTO {
+  bestDiscountQuote: BESingleBestQuoteDTO;
+  bestSpreadQuote: BESingleBestQuoteDTO;
+  bestPriceQuote: BESingleBestQuoteDTO;
+  bestYieldQuote: BESingleBestQuoteDTO;
+}
+
+interface BESingleBestQuoteDTO {
   isValid: boolean;
   quoteMetric: number
   bidType: number;

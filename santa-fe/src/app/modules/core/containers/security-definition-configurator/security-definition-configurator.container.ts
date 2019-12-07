@@ -108,7 +108,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   }
 
   public onClickDefinition(targetDefinition: SecurityDefinitionDTO) {
-    if (!targetDefinition.state.isUnactivated) {
+    if (!!targetDefinition && !targetDefinition.state.isUnactivated) {
       this.clearSearchFilter();
       if (this.configuratorData.state.showFiltersFromDefinition && this.configuratorData.state.showFiltersFromDefinition.data.urlForGetLongOptionListFromServer) {
         // have to flush out the long options for performance concerns
@@ -119,6 +119,10 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         this.configuratorData.state.showLongFilterOptions = this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.length > 5 || !!this.configuratorData.state.showFiltersFromDefinition.data.urlForGetLongOptionListFromServer;  // any list with more than five options or need to be loaded from server is considered a long list, will need extra room on the UI
       }
     }
+  }
+
+  public onMouseLeaveFilter(targetDefinition: SecurityDefinitionDTO) {
+    this.configuratorData.state.groupByDisabled && this.onClickDefinition(targetDefinition);
   }
 
   public onClickFilterOption(targetOption:SecurityDefinitionFilterBlock) {

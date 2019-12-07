@@ -1,4 +1,5 @@
 <article
+  (mouseleave)="onMouseLeaveFilter(configuratorData.state.showFiltersFromDefinition)"
   [ngClass]="{
     'sat-securityDefinitionConfigurator': true,
     'sat-securityDefinitionConfigurator--longFilterOptionsState': configuratorData.state.showLongFilterOptions,

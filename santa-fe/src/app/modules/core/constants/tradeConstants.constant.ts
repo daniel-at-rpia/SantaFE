@@ -83,7 +83,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
   }
 ];
 
-export const LIVE_UPDATE_COUNTDOWN = 59;
+export const LIVE_UPDATE_COUNTDOWN = 15;
 
 export const LIVE_UPDATE_INPROG_PROMPT = 'Fetching Update ...';
 export const LIVE_UPDATE_PROCESSING_PROMPT = 'Processing ...';

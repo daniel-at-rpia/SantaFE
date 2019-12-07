@@ -1,6 +1,5 @@
 @import "global.scss";
 
-$tradeCenterPanel_preset_height: 9rem;
 .sat-tradeCenterPanel {
   $tradeCenterPanelBlockName: &;
   @include mix_border_generator;
@@ -9,15 +8,19 @@ $tradeCenterPanel_preset_height: 9rem;
   display: flex;
   overflow: hidden;
   &__presetsAndFilters {
+    @include mix_fixed_div(relative, $z_index_standard_tooltip);
     flex: 0 0 $securityDefinitionConfigurator_width + $spacing_medium;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     &-presets {
-      @include mix_alive('normal');
-      flex: 0 0 100%;
+      @include mix_fixed_div(absolute, $z_index_standard_base_item);
+      @include mix_alive('custom', transform $animation_duration_light);
       display: flex;
       flex-direction: column;
+      height: 100%;
+      width: 100%;
+      transform: translate(0, 0);
       overflow: hidden;
       &-title {
         padding: $spacing_small;
@@ -35,7 +38,6 @@ $tradeCenterPanel_preset_height: 9rem;
           display: flex;
           padding: $spacing_x_small $spacing_medium $spacing_medium $spacing_medium;
           overflow: hidden;
-          height: $tradeCenterPanel_preset_height;
           search-shortcut {
             display: flex;
             flex: 1 1 auto;
@@ -44,25 +46,28 @@ $tradeCenterPanel_preset_height: 9rem;
       }
     }
     &-configurator {
-      @include mix_alive('custom', opacity $animation_duration_light);
-      flex: 1 1 auto;
+      @include mix_fixed_div(absolute, $z_index_standard_base_item);
+      @include mix_alive('custom', opacity $animation_duration_light, transform $animation_duration_light);
       display: flex;
       flex-direction: column;
-      //opacity: 0;
-      //transition-delay: 0.5s;
-      overflow: hidden;
-      padding: 0 0 $spacing_medium $spacing_medium;
+      height: 100%;
+      width: 100%;
+      transform: translate(100%, 0);
+      &-backBtn {
+        margin: $spacing_medium $spacing_medium 0 $spacing_medium;
+        &>i {
+          margin-bottom: $spacing_x_small;
+        }
+      }
       &-title {
-        padding-top: $spacing_large;
-        padding-bottom: $spacing_x_small;
+        padding: $spacing_large 0 $spacing_x_small $spacing_medium;
         text-align: center;
         font-size: $font_size_large;
         color: $font_color_minor;
       }
       security-definition-configurator {
-        flex: 1 1 auto;
+        @include mix_calculate(height, 100%, 11rem, '-'); // 11rem is the sum of the height of title and backBtn
         display: flex;
-        overflow: hidden;
       }
     }
   }
@@ -141,19 +146,21 @@ $tradeCenterPanel_preset_height: 9rem;
   &--presetSelectedState {
     #{$tradeCenterPanelBlockName} {
       &__presetsAndFilters {
+        flex: 0 0 9rem;
+        overflow: visible;
         &-presets {
-          flex: 0 0 $tradeCenterPanel_preset_height + 3rem; // 3 rem for the title
+          transform: translate(-100%, 0);
           &-list-item {
             height: 0;
             padding: 0 $spacing_medium;
             &--selected {
-              height: $tradeCenterPanel_preset_height;
               padding: $spacing_x_small $spacing_medium $spacing_medium $spacing_medium;
             }
           }
         }
         &-configurator {
           opacity: 1;
+          transform: translate(0, 0);
         }
       }
       &__result {

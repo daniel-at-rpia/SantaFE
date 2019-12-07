@@ -24,13 +24,6 @@
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { TradeState } from 'FEModels/frontend-page-states.interface';
-    import { TradeLiveUpdatePassRawDataEvent } from 'Trade/actions/trade.actions';
-    import {
-      selectLiveUpdateTick
-    } from 'Trade/selectors/trade.selectors';
-    import {
-      PayloadGetPositions
-    } from 'BEModels/backend-payloads.interface';
   //
 
 @Component({
@@ -41,9 +34,7 @@
 })
 export class TradePage implements OnInit, OnDestroy {
   state: TradeState;
-  subscriptions = {
-    startNewUpdateSub: null
-  }
+  subscriptions = {}
 
   private initializePageState() {
     this.state = {
@@ -61,14 +52,6 @@ export class TradePage implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.subscriptions.startNewUpdateSub = this.store$.pipe(
-      select(selectLiveUpdateTick)
-    ).subscribe(tick => {
-      console.log('at Trade Page, got tick', tick);
-      if (tick > 0) {  // skip first beat
-        this.fetchUpdate();
-      }
-    });
   }
 
   public ngOnDestroy() {
@@ -80,22 +63,6 @@ export class TradePage implements OnInit, OnDestroy {
 
   public onToggleCollapseGraphs() {
     this.state.graphsCollapsed = !this.state.graphsCollapsed;
-  }
-
-  private fetchUpdate() {
-    const payload : PayloadGetPositions = {
-      partitionOptions: ['Portfolio', 'Strategy']
-    };
-    this.restfulCommService.callAPI('santaPortfolio/get-santa-credit-positions', {req: 'POST'}, payload, false, false).pipe(
-      first(),
-      tap((serverReturn) => {
-        this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent(serverReturn));
-      }),
-      catchError(err => {
-        console.error('error', err);
-        return of('error');
-      })
-    ).subscribe();
   }
 
 }

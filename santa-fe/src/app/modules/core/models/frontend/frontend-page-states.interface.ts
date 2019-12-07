@@ -78,6 +78,7 @@ export interface TradeCenterPanelState {
     fetchTableDataFailedError: string;
     rowList: Array<SecurityTableRowDTO>;
     prinstineRowList: Array<SecurityTableRowDTO>;
+    liveUpdatedRowList: Array<SecurityTableRowDTO>;
   }
   filters: {
     quickFilters: {
@@ -96,4 +97,5 @@ export interface TradeUtilityPanelState {
   isCallingAPI: boolean;
   isProcessingData: boolean;
   isPresetSelected: boolean;
+  isInitialDataLoaded: boolean;
 }
