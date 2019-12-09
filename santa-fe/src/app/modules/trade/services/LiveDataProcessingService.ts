@@ -96,7 +96,7 @@ export class LiveDataProcessingService {
         }
       })
       if (trackRowsWithoutReturn.length > 0) {
-        console.error("best quote did not return data for ", trackRowsWithoutReturn);
+        console.warn("best quote did not return data for ", trackRowsWithoutReturn);
       }
     }
   }
@@ -135,17 +135,18 @@ export class LiveDataProcessingService {
     newList: Array<SecurityTableRowDTO>
   ): LiveDataDiffingResult {
     const updateList: Array<SecurityTableRowDTO> = [];
+    const oldRowList: Array<SecurityTableRowDTO> = this.utilityService.deepCopy(table.data.rows);
     let markDiffCount = 0;
     let quantDiffCount = 0;
     newList.forEach((eachNewRow) => {
-      const oldRow = table.data.rows.find((eachOldRow) => {
+      const oldRow = oldRowList.find((eachOldRow) => {
         return eachOldRow.data.security.data.securityID === eachNewRow.data.security.data.securityID;
-      })
+      });
       if (!!oldRow) {
         const isSecurityDiff = this.isThereDiffInSecurity(oldRow.data.security, eachNewRow.data.security);
         const isQuantDiff = this.isThereDiffInQuantComparer(oldRow.data.cells[0].data.quantComparerDTO, eachNewRow.data.cells[0].data.quantComparerDTO);
-        if ( isSecurityDiff || isQuantDiff) {
-          console.log('test, there is an update', oldRow, eachNewRow, isSecureContext, isQuantDiff);
+        if ( isSecurityDiff > 0 || isQuantDiff > 0) {
+          console.log('Diffing Logic test, there is an update', oldRow, eachNewRow, isSecurityDiff, isQuantDiff);
           updateList.push(eachNewRow);
         }
       } else {
@@ -182,39 +183,39 @@ export class LiveDataProcessingService {
   private isThereDiffInSecurity(
     oldSecurity: SecurityDTO,
     newSecurity: SecurityDTO
-  ): boolean {
+  ): number {
     if (oldSecurity.data.positionFirm !== newSecurity.data.positionFirm) {
-      return true;
+      return 1;
     }
     if (oldSecurity.data.mark.markRaw !== newSecurity.data.mark.markRaw) {
-      return true;
+      return 2;
     }
-    return false;
+    return 0;
   }
 
   private isThereDiffInQuantComparer(
     oldQuant: QuantComparerDTO,
     newQuant: QuantComparerDTO
-  ): boolean {
+  ): number {
     if (oldQuant && !newQuant) {
-      return true;
+      return 1;
     }
     if (!oldQuant && newQuant) {
-      return true;
+      return 2;
     }
     if (!oldQuant && !newQuant) {
-      return false;
+      return -1;
     }
     for (const eachAttr in oldQuant.data.bid) {
       if (oldQuant.data.bid[eachAttr] !== newQuant.data.bid[eachAttr]) {
-        return false;
+        return 3;
       }
     }
     for (const eachAttr in oldQuant.data.offer) {
       if (oldQuant.data.offer[eachAttr] !== newQuant.data.offer[eachAttr]) {
-        return false;
+        return 4;
       }
     }
-    return false;
+    return 0;
   }
 }

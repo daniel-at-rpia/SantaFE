@@ -228,8 +228,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     displayName: 'Security Type',
     icon: 'fal fa-slash',
     optionList: FilterOptionsSecurityType,
-    locked: true,
-    securityDTOAttr: 'securityType'
+    locked: true
   },
   'BACKEND_TENOR': {
     key: 'BACKEND_TENOR',
@@ -248,8 +247,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     key: 'COUPON_TYPE',
     displayName: 'Coupon Type',
     icon: 'fas fa-ticket-alt',
-    optionList: FilterOptionsCouponType,
-    securityDTOAttr: 'couponType'
+    optionList: FilterOptionsCouponType
   },
   'CURRENCY': {
     key: 'CURRENCY',
