@@ -53,6 +53,7 @@ export class SecurityTable implements OnInit, OnChanges {
   @Input() receivedSecurityTableMetricsUpdate: Array<SecurityTableMetricStub>;
   securityTableMetricsCache: Array<SecurityTableMetricStub>;// use this only for detecting diff
   @Input() liveUpdatedRows: Array<SecurityTableRowDTO>;
+  @Input() activeTriCoreMetric: string;
   liveUpdateRowsCache: Array<SecurityTableRowDTO>;
 
   constants = {
@@ -76,14 +77,14 @@ export class SecurityTable implements OnInit, OnChanges {
       console.log('rows updated for inter-stage change', this.receivedContentStage);
       this.tableData.state.loadedContentStage = this.receivedContentStage;
       this.loadTableRows(this.newRows);
+    } else if (this.securityTableMetricsCache !== this.receivedSecurityTableMetricsUpdate && this.receivedContentStage === this.constants.securityTableFinalStage) {
+      console.log("metrics update", this.receivedSecurityTableMetricsUpdate);
+      this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate;
+      this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
+      this.loadTableHeaders();
+      this.loadTableRows(this.newRows);
     } else if (!!this.newRows && this.newRows != this.tableData.data.rows && this.tableData.state.loadedContentStage === this.receivedContentStage) {
-      console.log('rows updated for change within same stage, triggered when filters are applied or switched metric', this.tableData.state.loadedContentStage);
-      if (this.securityTableMetricsCache !== this.receivedSecurityTableMetricsUpdate && this.receivedContentStage === this.constants.securityTableFinalStage) {
-        console.log("new metrics", this.receivedSecurityTableMetricsUpdate);
-        this.securityTableMetricsCache = this.utilityService.deepCopy(this.securityTableMetrics);
-        this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
-        this.loadTableHeaders();
-      }
+      console.log('rows updated for change within same stage, triggered when filters are applied', this.tableData.state.loadedContentStage);
       this.loadTableRows(this.newRows);
     } else if (this.liveUpdateRowsCache !== this.liveUpdatedRows && this.tableData.state.loadedContentStage === this.constants.securityTableFinalStage) {
       this.liveUpdateRowsCache = this.utilityService.deepCopy(this.liveUpdatedRows);
@@ -213,12 +214,22 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   private updateDynamicColumns() {
-    // right now the only three dynamic columns are positionCurrent, 30 day delta and quantComparer column, ideally, we should only update those three for optimal performance, but I believe the performance improvement is small that this optimization is of low priority
+    /* the dynamic columns are:
+      1. QuantComparer
+      2. Mark
+      3. three mark delta columns
+      4. 30 day delta
+    */
     this.tableData.data.headers.forEach((eachHeader, index) => {
       if (!eachHeader.state.isPureTextVariant) {
         const cellIndex = index - 1;
         this.tableData.data.rows.forEach((eachRow) => {
-          eachRow.data.cells[cellIndex] = this.utilityService.populateSecurityTableCellFromSecurityCard(eachHeader, eachRow, eachRow.data.cells[cellIndex]);
+          eachRow.data.cells[cellIndex] = this.utilityService.populateSecurityTableCellFromSecurityCard(
+            eachHeader,
+            eachRow,
+            eachRow.data.cells[cellIndex],
+            this.activeTriCoreMetric
+          );
         });
       }
     });
@@ -230,12 +241,18 @@ export class SecurityTable implements OnInit, OnChanges {
         this.tableData.data.rows.forEach((eachRow) => {
           const targetCell = eachRow.data.cells[index-1];
           if (!!targetCell) {
-            this.utilityService.populateSecurityTableCellFromSecurityCard(eachHeader, eachRow, targetCell);
+            this.utilityService.populateSecurityTableCellFromSecurityCard(
+              eachHeader,
+              eachRow,
+              targetCell,
+              this.activeTriCoreMetric
+            );
           } else {
             const newCell = this.utilityService.populateSecurityTableCellFromSecurityCard(
               eachHeader,
               eachRow,
-              this.dtoService.formSecurityTableCellObject(false, null, false)
+              this.dtoService.formSecurityTableCellObject(false, null, false),
+              this.activeTriCoreMetric
             );
             eachRow.data.cells[index-1] = newCell;
           }

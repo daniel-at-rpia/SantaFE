@@ -520,10 +520,25 @@ export class UtilityService {
     }
 
     // TODO: move this into a SecurityTableHelper service 
-    public populateSecurityTableCellFromSecurityCard(targetHeader: SecurityTableHeaderDTO, targetRow: SecurityTableRowDTO, newCellDTO: SecurityTableCellDTO): SecurityTableCellDTO{
+    public populateSecurityTableCellFromSecurityCard(
+      targetHeader: SecurityTableHeaderDTO,
+      targetRow: SecurityTableRowDTO,
+      newCellDTO: SecurityTableCellDTO,
+      triCoreMetric: string
+    ): SecurityTableCellDTO {
       if (targetHeader.state.isQuantVariant) {
-        const targetQuantAttr = TriCoreMetricConfig.Spread.backendTargetQuoteAttr;
+        const targetQuantAttr = targetHeader.data.targetQuantLocationFromRow;
+        const targetSecurity = targetRow.data.security;
         newCellDTO.data.quantComparerDTO = targetRow.data.bestQuotes[targetQuantAttr];
+        // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
+        if ( targetSecurity.data.mark.markDriver === triCoreMetric || triCoreMetric === 'Default') {
+          targetSecurity.data.mark.markRaw = targetRow.data.security.data.mark.markBackend;
+          const rounding = TriCoreMetricConfig[triCoreMetric].rounding;
+          targetSecurity.data.mark.mark = targetSecurity.data.mark.markRaw > 0 ? this.round(targetSecurity.data.mark.markRaw, rounding).toFixed(rounding) : null;
+        } else {
+          targetSecurity.data.mark.markRaw = null;
+          targetSecurity.data.mark.mark = null;
+        }
         this.calculateMarkDiscrepancies(
           targetRow.data.security,
           newCellDTO.data.quantComparerDTO,
@@ -560,9 +575,9 @@ export class UtilityService {
       targetSecurity: SecurityDTO,
       targetQuant: QuantComparerDTO
     ) {
+      const markBlock = targetSecurity.data.mark;
       if (!!targetQuant && targetSecurity.data.mark.markRaw) {
         const rounding = this.triCoreMetricConfig[targetSecurity.data.mark.markDriver].rounding;
-        const markBlock = targetSecurity.data.mark;
         if (targetQuant.state.hasBid) {
           markBlock.markDisBidRaw = markBlock.markRaw - targetQuant.data.bid.number;
           markBlock.markDisBid = this.round(markBlock.markDisBidRaw, rounding).toFixed(rounding);
@@ -583,6 +598,15 @@ export class UtilityService {
           markBlock.markDisMidRaw = markBlock.markRaw - targetQuant.data.mid;
           markBlock.markDisMid = this.round(markBlock.markDisMidRaw, rounding).toFixed(rounding);
         }
+      } else {
+        markBlock.markDisBid = null;
+        markBlock.markDisBidRaw = null;
+        markBlock.markDisMid = null;
+        markBlock.markDisMidRaw = null;
+        markBlock.markDisAsk = null;
+        markBlock.markDisAskRaw = null;
+        markBlock.markDisLiquidation = null;
+        markBlock.markDisLiquidationRaw = null;
       }
     }
 

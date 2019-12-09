@@ -34,7 +34,8 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: null,
     readyStage: 3,
     isForQuantComparer: true,
-    active: true
+    active: true,
+    targetQuantLocationFromRow: 'bestSpreadQuote'
   },{
     label: 'Mark',
     attrName: 'mark',

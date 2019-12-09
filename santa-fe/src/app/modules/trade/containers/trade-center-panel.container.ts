@@ -65,6 +65,7 @@
       TradeLiveUpdatePassRawDataEvent,
       TradeToggleMetricEvent
     } from 'Trade/actions/trade.actions';
+    import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
   //
 
 @Component({
@@ -176,13 +177,20 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   public onSwitchMetric(targetMetric) {
     if (this.state.filters.quickFilters.metricType !== targetMetric) {
       this.state.filters.quickFilters.metricType = targetMetric;
-      const thrityDayDeltaMetric = this.state.table.metrics[this.constants.thirtyDayDeltaIndex];
+      const newMetrics: Array<SecurityTableMetricStub> = this.utilityService.deepCopy(this.state.table.metrics);
+      const thrityDayDeltaMetric = newMetrics[this.constants.thirtyDayDeltaIndex];
       if (thrityDayDeltaMetric.label === '30 Day Delta') {
         thrityDayDeltaMetric.attrName = TriCoreMetricConfig[targetMetric].metricLabel;
         thrityDayDeltaMetric.underlineAttrName = TriCoreMetricConfig[targetMetric].metricLabel;
       } else {
         console.error('Code Maintainence flag: this is not the 30 day delta');
       }
+      if (newMetrics[1].isForQuantComparer) {
+        newMetrics[1].targetQuantLocationFromRow = TriCoreMetricConfig[targetMetric].backendTargetQuoteAttr;
+      } else {
+        console.error('Code Maintainence flag: this is not the Quant Comparer column');
+      }
+      this.state.table.metrics = newMetrics;
       // TODO: remove this event and all associated logic from ngrx
       // this.store$.dispatch(new TradeToggleMetricEvent());
     }
@@ -316,7 +324,12 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   }
 
   private loadStageThreeContent(serverReturn) {
-    this.processingService.loadStageThreeContent(this.state.table.dto.data.headers, this.state.fetchResult.prinstineRowList, this.state.filters.quickFilters.metricType, serverReturn);
+    this.processingService.loadStageThreeContent(
+      this.state.table.dto.data.headers,
+      this.state.fetchResult.prinstineRowList,
+      this.state.filters.quickFilters.metricType,
+      serverReturn
+    );
     this.calculateQuantComparerWidthAndHeight();
     this.updateStage(3);
   }

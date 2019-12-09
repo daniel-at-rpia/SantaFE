@@ -108,8 +108,10 @@ export class LiveDataProcessingService {
     metricType: string,
     quote: BEBestQuoteDTO
   ){
-    const bestQuoteColumnIndex = 0;  // for now the bestQuote is fixed
-    const bestQuoteCell = targetRow.data.cells[bestQuoteColumnIndex];
+    const bestQuoteHeaderIndex = tableHeaderList.findIndex((eachHeader) => {
+      return eachHeader.state.isQuantVariant;
+    });
+    const bestQuoteCell = targetRow.data.cells[bestQuoteHeaderIndex - 1];
     const newPriceQuant = this.dtoService.formQuantComparerObject(
       false,
       TriCoreMetricConfig.Price.label,
@@ -130,13 +132,15 @@ export class LiveDataProcessingService {
       bestYieldQuote: newYieldQuant,
       bestSpreadQuote: newSpreadQuant
     }
-    bestQuoteCell.data.quantComparerDTO = targetRow.data.bestQuotes[TriCoreMetricConfig[metricType]['backendTargetQuoteAttr']];
+    const targetQuantLocationFromRow = tableHeaderList[bestQuoteHeaderIndex].data.targetQuantLocationFromRow;
+    bestQuoteCell.data.quantComparerDTO = targetRow.data.bestQuotes[targetQuantLocationFromRow];
     tableHeaderList.forEach((eachHeader, index) => {
       if (eachHeader.data.readyStage === 3) {
         targetRow.data.cells[index-1] = this.utilityService.populateSecurityTableCellFromSecurityCard(
           eachHeader,
           targetRow,
-          targetRow.data.cells[index-1]
+          targetRow.data.cells[index-1],
+          metricType
         );
       }
     });
@@ -181,12 +185,18 @@ export class LiveDataProcessingService {
     newSecurity.state.isTable = true;
     headerList.forEach((eachHeader, index) => {
       if (!eachHeader.state.isPureTextVariant) {
-        const newCell = this.utilityService.populateSecurityTableCellFromSecurityCard(
-          eachHeader,
-          newRow,
-          this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant)
-        );
-        newRow.data.cells.push(newCell);
+        if (eachHeader.data.readyStage === 1 || eachHeader.data.readyStage === 2) {
+          const newCell = this.utilityService.populateSecurityTableCellFromSecurityCard(
+            eachHeader,
+            newRow,
+            this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant),
+            null
+          );
+          newRow.data.cells.push(newCell);
+        } else {
+          const emptyCell = this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant);
+          newRow.data.cells.push(emptyCell);
+        }
       }
     });
     prinstineRowList.push(newRow);

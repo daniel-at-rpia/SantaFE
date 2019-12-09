@@ -73,6 +73,7 @@ export interface SecurityTableMetricStub {
   metricPackDeltaScope?: string;
   isFrontEndMetric?: boolean;
   isForQuantComparer?: boolean;
+  targetQuantLocationFromRow?: string;
   pureText?: boolean;
   disabled?: boolean;
   inversedSortingForText?: boolean;

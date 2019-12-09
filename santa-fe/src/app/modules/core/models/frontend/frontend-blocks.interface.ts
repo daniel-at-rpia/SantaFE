@@ -21,6 +21,7 @@ export interface SecurityMarkBlock {
   markChangedBy: string;
   markChangedTime: string;
   markRaw: number;
+  markBackend: number;
   markDisBid: string;
   markDisBidRaw: number;
   markDisAsk: string;

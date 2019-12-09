@@ -90,6 +90,7 @@ export class DTOService {
         mark: {
           mark: null,
           markRaw: null,
+          markBackend: null,
           markDriver: null,
           markChangedBy: null,
           markChangedTime: null,
@@ -134,6 +135,7 @@ export class DTOService {
     dto.data.backupPmName = targetPortfolio.backupPmName;
     dto.data.researchName = targetPortfolio.researchName;
     dto.data.mark.markRaw = targetPortfolio.mark.value;
+    dto.data.mark.markBackend = targetPortfolio.mark.value;
     dto.data.mark.markDriver = targetPortfolio.mark.driver;
     dto.data.mark.markChangedBy = targetPortfolio.mark.user;
     dto.data.mark.markChangedTime = targetPortfolio.mark.enteredTime;
@@ -144,6 +146,7 @@ export class DTOService {
     } else {
       dto.data.mark.mark = null;
       dto.data.mark.markRaw = null;
+      dto.data.mark.markBackend = null;
     }
     const newBlock: SecurityPortfolioBlock = {
       portfolioName: targetPortfolio.portfolioShortName,
@@ -470,7 +473,8 @@ export class DTOService {
         readyStage: stub.readyStage,
         metricPackDeltaScope: stub.metricPackDeltaScope || null,
         frontendMetric: !!stub.isFrontEndMetric,
-        inversedSortingForText: !!stub.inversedSortingForText
+        inversedSortingForText: !!stub.inversedSortingForText,
+        targetQuantLocationFromRow: !!stub.isForQuantComparer ? stub.targetQuantLocationFromRow : 'n/a'
       },
       state: {
         isQuantVariant: !!stub.isForQuantComparer,
