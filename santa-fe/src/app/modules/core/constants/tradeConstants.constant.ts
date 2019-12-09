@@ -63,7 +63,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
     displayTitle: 'All Securties I Own',
     includedDefinitions: [
       {
-        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
+        definitionKey: 'OWNER',
         groupByActive: false,
         selectedOptions: ['PLACEHOLDER']
       }

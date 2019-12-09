@@ -373,6 +373,13 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-user-chart',
     optionList: FilterOptionsPortfolioResearchList,
     securityDTOAttr: 'researchName'
+  },
+  'OWNER': {
+    key: 'OWNER',
+    displayName: 'Owner',
+    icon: 'fad fa-users',
+    optionList: FullOwnerList,
+    securityDTOAttr: 'owner'
   }
 };
 
@@ -390,6 +397,7 @@ export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> =
   },{
     label: 'Owner',
     list: [
+      SecurityDefinitionMap.OWNER,
       SecurityDefinitionMap.PRIMARY_PORTFOLIO_MANAGER,
       SecurityDefinitionMap.BACKUP_PORTFOLIO_MANAGER,
       SecurityDefinitionMap.RESEARCH

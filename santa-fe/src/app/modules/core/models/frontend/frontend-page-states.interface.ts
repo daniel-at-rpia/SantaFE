@@ -86,6 +86,7 @@ export interface TradeCenterPanelState {
       metricType: string;
       portfolios: Array<string>;
       keyword: string;
+      owner: Array<string>;
     }
     securityFilters: Array<DefinitionConfiguratorEmitterParamsItem>
   }

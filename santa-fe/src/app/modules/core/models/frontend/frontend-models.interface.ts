@@ -33,6 +33,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     primaryPmName: string;
     backupPmName: string;
     researchName: string;
+    owner: Array<string>;
     mark: SecurityMarkBlock;
     portfolios: Array<SecurityPortfolioBlock>;
     strategyCurrent: string;

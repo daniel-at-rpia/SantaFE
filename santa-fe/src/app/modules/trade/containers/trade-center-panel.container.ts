@@ -116,7 +116,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         quickFilters: {
           metricType: TriCoreMetricConfig.Spread.label,
           portfolios: [],
-          keyword: ''
+          keyword: '',
+          owner: []
         },
         securityFilters: []
       }
@@ -213,6 +214,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     params.filterList.forEach((eachFilter) => {
       if (eachFilter.targetAttribute === 'portfolios') {
         this.state.filters.quickFilters.portfolios = eachFilter.filterBy;
+      } else if (eachFilter.targetAttribute === 'owner') {
+        this.state.filters.quickFilters.owner = eachFilter.filterBy;
       };
     });
     if (this.state.currentContentStage === this.constants.securityTableFinalStage) {
@@ -370,6 +373,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
       if (this.state.filters.quickFilters.keyword.length < 3 || eachRow.data.security.data.name.indexOf(this.state.filters.quickFilters.keyword) >= 0) {
         let portfolioIncludeFlag = this.filterByPortfolio(eachRow);
+        let ownerFlag = this.filterByOwner(eachRow);
         let securityLevelFilterResultCombined = true;
         if (this.state.filters.securityFilters.length > 0) {
           const securityLevelFilterResult = this.state.filters.securityFilters.map((eachFilter) => {
@@ -380,7 +384,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
             return eachResult;
           }).length === securityLevelFilterResult.length;
         }
-        securityLevelFilterResultCombined && portfolioIncludeFlag && filteredList.push(eachRow);
+        ownerFlag && securityLevelFilterResultCombined && portfolioIncludeFlag && filteredList.push(eachRow);
       }
     });
     return filteredList;
@@ -388,8 +392,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
   private filterBySecurityAttribute(targetRow: SecurityTableRowDTO, targetAttribute: string, filterBy: Array<string>): boolean {
     let includeFlag = false;
-    if (targetAttribute === 'portfolios') {
-      // bypass portfolio filter since it is handled via this.filterByPortfolio()
+    if (targetAttribute === 'portfolios' || targetAttribute === 'owner') {
+      // bypass portfolio filter since it is handled via this.filterByPortfolio() and this.filterByOwner()
       return true;
     } else {
       filterBy.forEach((eachValue) => {
@@ -420,6 +424,21 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       targetRow.data.security.data.positionCurrent = targetRow.data.security.data.positionFirm;
     }
     targetRow.data.security.data.positionCurrentInMM = this.utilityService.parsePositionToMM(targetRow.data.security.data.positionCurrent, false);
+    return includeFlag;
+  }
+
+  private filterByOwner(targetRow: SecurityTableRowDTO): boolean {
+    let includeFlag = false;
+    if (this.state.filters.quickFilters.owner.length > 0) {
+      this.state.filters.quickFilters.owner.forEach((eachOwner) => {
+        const ownerExist = targetRow.data.security.data.owner.indexOf(eachOwner) > -1;
+        if (!!ownerExist) {
+          includeFlag = true;
+        }
+      });
+    } else {
+      includeFlag = true;
+    }
     return includeFlag;
   }
 

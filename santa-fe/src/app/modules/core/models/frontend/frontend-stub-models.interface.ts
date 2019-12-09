@@ -47,6 +47,7 @@ export interface SecurityDefinitionMapStub {
   PRIMARY_PORTFOLIO_MANAGER: SecurityDefinitionStub;
   BACKUP_PORTFOLIO_MANAGER: SecurityDefinitionStub;
   RESEARCH: SecurityDefinitionStub;
+  OWNER: SecurityDefinitionStub;
 }
 
 export interface SecurityMetricOptionStub {

@@ -87,6 +87,7 @@ export class DTOService {
         primaryPmName: null,
         backupPmName: null,
         researchName: null,
+        owner: [],
         mark: {
           mark: null,
           markRaw: null,
@@ -139,6 +140,9 @@ export class DTOService {
     dto.data.mark.markDriver = targetPortfolio.mark.driver;
     dto.data.mark.markChangedBy = targetPortfolio.mark.user;
     dto.data.mark.markChangedTime = targetPortfolio.mark.enteredTime;
+    !!targetPortfolio.primaryPmName && dto.data.owner.push(targetPortfolio.primaryPmName);
+    !!targetPortfolio.backupPmName && dto.data.owner.push(targetPortfolio.backupPmName);
+    !!targetPortfolio.researchName && dto.data.owner.push(targetPortfolio.researchName);
     // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
     if (!!TriCoreMetricConfig[targetPortfolio.mark.driver] && (targetPortfolio.mark.driver === currentSelectedMetric || currentSelectedMetric === 'Default')){
       const rounding = TriCoreMetricConfig[targetPortfolio.mark.driver].rounding;
