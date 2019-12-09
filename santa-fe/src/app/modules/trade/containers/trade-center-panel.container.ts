@@ -3,7 +3,9 @@
       Component,
       ViewEncapsulation,
       OnInit,
-      OnDestroy
+      OnChanges,
+      OnDestroy,
+      Input
     } from '@angular/core';
     import { Observable, Subscription } from 'rxjs';
     import {
@@ -75,7 +77,8 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class TradeCenterPanel implements OnInit, OnDestroy {
+export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
+  @Input() ownerInitial: string;
   state: TradeCenterPanelState;
   subscriptions = {
     startNewUpdateSub: null
@@ -118,7 +121,6 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         securityFilters: []
       }
     };
-    this.populateSearchShortcuts();
   }
 
   constructor(
@@ -142,6 +144,15 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         this.fetchStageOneContent(false);
       }
     });
+  }
+
+  public ngOnChanges() {
+    if (!!this.ownerInitial) {
+      const filter = [];
+      filter.push(this.ownerInitial);
+      this.constants.searchShortcuts[0].includedDefinitions[0].selectedOptions = filter;
+      this.populateSearchShortcuts();
+    }
   }
 
   public ngOnDestroy() {
@@ -210,6 +221,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   }
 
   private populateSearchShortcuts(){
+    this.state.presets.shortcutList = [];
     this.constants.searchShortcuts.forEach((eachShortcutStub) => {
       const definitionList = eachShortcutStub.includedDefinitions.map((eachIncludedDef) => {
         const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityGroupDefinitionMap[eachIncludedDef.definitionKey]);

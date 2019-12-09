@@ -58,6 +58,7 @@ export interface MarketGroupPanelState {
 
 export interface TradeState {
   graphsCollapsed: boolean;
+  ownerInitial: string;
 }
 
 export interface TradeCenterPanelState {

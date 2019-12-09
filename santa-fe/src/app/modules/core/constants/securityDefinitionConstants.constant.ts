@@ -222,6 +222,23 @@ import {
     'TW'
   ];
 
+  export const FullOwnerList = [
+    'AG',
+    'BT',
+    'DA',
+    'DJ',
+    'DM',
+    'LC',
+    'LP',
+    'IL',
+    'PD',
+    'PM',
+    'RS',
+    'SP',
+    'ST',
+    'TW'
+  ];
+
 export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
   'SECURITY_TYPE': {
     key: 'SECURITY_TYPE',
