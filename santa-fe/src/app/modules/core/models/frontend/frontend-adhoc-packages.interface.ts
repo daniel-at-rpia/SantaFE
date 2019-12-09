@@ -18,3 +18,9 @@ export interface DefinitionConfiguratorEmitterParamsItem {
   targetAttribute: string;
   filterBy: Array<string>;
 }
+
+export interface LiveDataDiffingResult {
+  newRowList: Array<SecurityTableRowDTO>;
+  markDiffCount: number;
+  quantDiffCount: number;
+}

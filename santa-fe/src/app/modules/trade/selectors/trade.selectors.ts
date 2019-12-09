@@ -23,12 +23,12 @@ export const selectLiveUpdateProcessingRawData = createSelector(
   (state: TradeState) => state.liveUpdateProcessingRawData
 );
 
-export const selectPositionsServerReturn = createSelector(
-  getTradeState,
-  (state: TradeState) => state.positionsServerReturn
-);
-
 export const selectPresetSelected = createSelector(
   getTradeState,
   (state: TradeState) => state.presetSelected
+);
+
+export const selectInitialDataLoaded = createSelector(
+  getTradeState,
+  (state: TradeState) => state.initialDataLoaded
 );

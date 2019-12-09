@@ -17,7 +17,7 @@ interface BasicDTOStructure {
 
 export interface SecurityDTO extends BasicDTOStructure {
   data: {
-    securityID: number;
+    securityID: string;
     name: string;
     country: string;
     ratingLevel: number;
@@ -202,6 +202,7 @@ export interface SecurityTableDTO extends BasicDTOStructure {
     isAddingColumn: boolean;
     selectedHeader: SecurityTableHeaderDTO;
     sortedByHeader: SecurityTableHeaderDTO;
+    isLiveVariant: boolean;
   }
 }
 

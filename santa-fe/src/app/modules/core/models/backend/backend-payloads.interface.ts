@@ -14,9 +14,9 @@ export interface PayloadGetPositions {
 
 export interface PayloadGetBestQuotes {
   quoteMetric: string,
-  identifiers: Array<object>
+  identifiers: Array<string>
 }
 
 export interface PayloadGetAllQuotes {
-  identifier: object
+  identifier: string;
 }

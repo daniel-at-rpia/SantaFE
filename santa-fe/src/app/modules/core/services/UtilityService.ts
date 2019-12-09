@@ -320,11 +320,12 @@ export class UtilityService {
       return object;
     }
 
-    public extractSecurityId(input: string): number {
+    public extractSecurityId(input: string): string {
       if (!!input) {
-        const removeBackslash = input.replace("\\", '');
-        const startWithNumber = input.replace(`{"SecurityId":`, '');
-        return parseInt(startWithNumber);
+        // const removeBackslash = input.replace("\\", '');
+        // const startWithNumber = input.replace(`{"SecurityId":`, '');
+        // return parseInt(startWithNumber);
+        return input;
       } else {
         return null;
       }

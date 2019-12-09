@@ -93,21 +93,24 @@ export const TriCoreMetricConfig: TriCoreMetricConfigStub = {
     tier2Threshold: 20,
     inversed: false,
     rounding: 0,
-    metricLabel: SecurityMetricOptions[0].label
+    metricLabel: SecurityMetricOptions[0].label,
+    backendTargetQuoteAttr: 'bestSpreadQuote'
   },
   Yield: {
     label: 'Yield',
     tier2Threshold: 1,
     inversed: false,
     rounding: 3,
-    metricLabel: SecurityMetricOptions[6].label
+    metricLabel: SecurityMetricOptions[6].label,
+    backendTargetQuoteAttr: 'bestYieldQuote'
   },
   Price: {
     label: 'Price',
     tier2Threshold: 3,
     inversed: true,
     rounding: 3,
-    metricLabel: SecurityMetricOptions[1].label
+    metricLabel: SecurityMetricOptions[1].label,
+    backendTargetQuoteAttr: 'bestPriceQuote'
   }
 }
 

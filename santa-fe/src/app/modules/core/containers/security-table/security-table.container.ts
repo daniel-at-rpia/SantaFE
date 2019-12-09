@@ -49,14 +49,16 @@ export class SecurityTable implements OnInit, OnChanges {
   @Input() tableData: SecurityTableDTO;
   @Input() newRows: Array<SecurityTableRowDTO>;
   @Input() receivedContentStage: number;
+  securityTableMetrics: Array<SecurityTableMetricStub>;
+  @Input() receivedSecurityTableMetricsUpdate: Array<SecurityTableMetricStub>;
+  receivedSecurityTableMetricsCache: Array<SecurityTableMetricStub>;// use this only for detecting diff
+  @Input() liveUpdatedRows: Array<SecurityTableRowDTO>;
+  liveUpdateRowsCache: Array<SecurityTableRowDTO>;
 
   constants = {
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
     thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX
   }
-  securityTableMetrics: Array<SecurityTableMetricStub>;
-  @Input() receivedSecurityTableMetricsUpdate: Array<SecurityTableMetricStub>;
-  receivedSecurityTableMetricsCache: Array<SecurityTableMetricStub>;// use this only for detecting diff
 
   constructor(
     private dtoService: DTOService,
@@ -73,17 +75,26 @@ export class SecurityTable implements OnInit, OnChanges {
     if (this.tableData.state.loadedContentStage !== this.receivedContentStage) {
       console.log('rows updated for inter-stage change', this.receivedContentStage);
       this.tableData.state.loadedContentStage = this.receivedContentStage;
-      if (this.receivedSecurityTableMetricsCache !== this.receivedSecurityTableMetricsUpdate) {
-        this.receivedSecurityTableMetricsCache = this.utilityService.deepCopy(this.securityTableMetrics);
-        // currently the only thing the parent can change is the 30 day delta metric's attribute, so we only need to update that
-        this.securityTableMetrics[this.constants.thirtyDayDeltaIndex].attrName = this.receivedSecurityTableMetricsUpdate[this.constants.thirtyDayDeltaIndex].attrName;
-        this.securityTableMetrics[this.constants.thirtyDayDeltaIndex].underlineAttrName = this.receivedSecurityTableMetricsUpdate[this.constants.thirtyDayDeltaIndex].underlineAttrName;
-        this.loadTableHeaders();
+      if (this.receivedContentStage === this.constants.securityTableFinalStage) {
+        if (this.receivedSecurityTableMetricsCache !== this.receivedSecurityTableMetricsUpdate) {
+          this.receivedSecurityTableMetricsCache = this.utilityService.deepCopy(this.securityTableMetrics);
+          // currently the only thing the parent can change is the 30 day delta metric's attribute, so we only need to update that
+          this.securityTableMetrics[this.constants.thirtyDayDeltaIndex].attrName = this.receivedSecurityTableMetricsUpdate[this.constants.thirtyDayDeltaIndex].attrName;
+          this.securityTableMetrics[this.constants.thirtyDayDeltaIndex].underlineAttrName = this.receivedSecurityTableMetricsUpdate[this.constants.thirtyDayDeltaIndex].underlineAttrName;
+          this.loadTableHeaders();
+        }
       }
       this.loadTableRows(this.newRows);
     } else if (!!this.newRows && this.newRows != this.tableData.data.rows && this.tableData.state.loadedContentStage === this.receivedContentStage) {
       console.log('rows updated for change within same stage', this.tableData.state.loadedContentStage);
       this.loadTableRows(this.newRows);
+    } else if (this.liveUpdateRowsCache !== this.liveUpdatedRows && this.tableData.state.loadedContentStage === this.constants.securityTableFinalStage) {
+      this.liveUpdateRowsCache = this.utilityService.deepCopy(this.liveUpdatedRows);
+      console.log('rows updated from live update', this.liveUpdatedRows);
+      if (this.liveUpdateRowsCache.length > 0) {
+        this.liveUpdateRows(this.liveUpdateRowsCache);
+      }
+      this.liveUpdateAllQuotesForExpandedRows();
     }
   }
 
@@ -246,9 +257,7 @@ export class SecurityTable implements OnInit, OnChanges {
     metricType = targetRow.data.cells[0].data.quantComparerDTO.data.metricType;
 
     const payload: PayloadGetAllQuotes = {
-      "identifier": {
-        "SecurityId": targetRow.data.security.data.securityID
-      }
+      "identifier": targetRow.data.security.data.securityID
     };
     this.restfulCommService.callAPI('liveQuote/get-all-quotes', {req: 'POST'}, payload).pipe(
       first(),
@@ -385,5 +394,26 @@ export class SecurityTable implements OnInit, OnChanges {
         return 0;
       }
     });
+  }
+
+  private liveUpdateRows(targetRows: Array<SecurityTableRowDTO>) {
+    targetRows.forEach((eachNewRow) => {
+      const matchedOldRow = this.tableData.data.rows.find((eachOldRow) => {
+        return eachOldRow.data.security.data.securityID === eachNewRow.data.security.data.securityID;
+      });
+      if (!!matchedOldRow) {
+        matchedOldRow.data = eachNewRow.data;
+      } else {
+        this.tableData.data.rows.push(eachNewRow);
+      }
+    });
+  }
+
+  private liveUpdateAllQuotesForExpandedRows() {
+    this.tableData.data.rows.forEach((eachRow) => {
+      if (eachRow.state.isExpanded) {
+        this.fetchSecurityQuotes(eachRow);
+      }
+    })
   }
 }

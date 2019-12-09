@@ -14,6 +14,7 @@ import { TradeAlertPanel } from 'Trade/containers/trade-alert-panel.container';
 import { TradeUtilityPanel } from 'Trade/containers/trade-utility-panel.container';
 import { TradeLiveGraphPanel } from 'Trade/containers/trade-live-graph-panel.container';
 import { TradeOverviewGraphPanel } from 'Trade/containers/trade-overview-graph-panel.container';
+import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { TradeOverviewGraphPanel } from 'Trade/containers/trade-overview-graph-p
     CoreModule
   ],
   providers: [
+    LiveDataProcessingService
   ]
 })
 export class TradeModule { }

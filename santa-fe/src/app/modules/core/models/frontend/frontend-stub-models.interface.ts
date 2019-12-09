@@ -90,6 +90,7 @@ interface TriCoreMetricIndividualConfigStub {
   inversed: boolean;
   rounding: number;
   metricLabel: string;
+  backendTargetQuoteAttr: string;
 }
 
 export interface TradeFilterConstantStub {

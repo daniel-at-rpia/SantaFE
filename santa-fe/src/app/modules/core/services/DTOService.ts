@@ -64,13 +64,14 @@ export class DTOService {
   ){}
 
   public formSecurityCardObject(
+    securityIdFull: string,
     rawData: BESecurityDTO,
     isStencil: boolean
   ): SecurityDTO {
     // !isStencil && console.log('rawData', rawData.name, rawData);
     const object:SecurityDTO = {
       data: {
-        securityID: !isStencil ? rawData.securityIdentifier.securityId : null,
+        securityID: !isStencil ? securityIdFull : null,
         name: !isStencil ? rawData.name : 'PLACEHOLDER',
         ratingLevel: !isStencil && rawData.metrics ? this.utility.mapRatings(rawData.metrics.ratingNoNotch) : 0,
         ratingValue: !isStencil && rawData.metrics ? rawData.metrics.ratingNoNotch : null,
@@ -373,17 +374,13 @@ export class DTOService {
   public formQuantComparerObject(
     isStencil: boolean,
     quantMetricType: string,
-    rawData: BEBestQuoteDTO
-    // bidNumber: number,
-    // bidSize: number,
-    // bidBroker: string,
-    // offerNumber: number,
-    // offerSize: number,
-    // offerBroker: string
+    BEdto: BEBestQuoteDTO
   ): QuantComparerDTO {
+    const metricType = !isStencil ? quantMetricType : 'Spread';
+    const backendTargetQuoteAttr = TriCoreMetricConfig[metricType]['backendTargetQuoteAttr'];
+    const rawData = !!BEdto && !!BEdto[backendTargetQuoteAttr] ? BEdto[backendTargetQuoteAttr] : {};
     const bidSize = !isStencil ? this.utility.round(rawData.bidQuantity/1000000, 1) : null;
     const offerSize = !isStencil ? this.utility.round(rawData.askQuantity/1000000, 1) : null;
-    const metricType = !isStencil ? quantMetricType : 'Spread';
     const tier2Shreshold = TriCoreMetricConfig[metricType]['tier2Threshold'];
     const inversed = TriCoreMetricConfig[metricType]['inversed'];
     const hasBid = !isStencil ? (!!rawData.bidQuoteValue && !!rawData.bidDealer) : true;
@@ -442,7 +439,9 @@ export class DTOService {
     return object;
   }
 
-  public formSecurityTableObject(): SecurityTableDTO {
+  public formSecurityTableObject(
+    isLiveVariant: boolean
+  ): SecurityTableDTO {
     const object: SecurityTableDTO = {
       data: {
         headers: [],
@@ -452,7 +451,8 @@ export class DTOService {
         loadedContentStage: 0,
         isAddingColumn: false,
         selectedHeader: null,
-        sortedByHeader: null
+        sortedByHeader: null,
+        isLiveVariant: isLiveVariant
       }
     };
     return object;
