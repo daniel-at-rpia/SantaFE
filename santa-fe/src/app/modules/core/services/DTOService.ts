@@ -530,7 +530,10 @@ export class DTOService {
 
   public formSecurityQuoteObject(
     isStencil: boolean,
-    rawData: BEQuoteDTO
+    rawData: BEQuoteDTO,
+    bestBidNum: number,
+    bestAskNum: number,
+    filteredMetricType: string
   ) : SecurityQuoteDTO {
     const hasBid = !isStencil ? (!!rawData.isActive && !!rawData.bidVenue) : true;
     const hasAsk = !isStencil ? (!!rawData.isActive && !!rawData.askVenue) : true;
@@ -568,13 +571,19 @@ export class DTOService {
           yield: 5,
           tspread: 300,
           benchmark: bidBenchmark
-        }
+        },
+        currentMetric: filteredMetricType
       },
       state: {
         isStencil: isStencil,
         hasBid: hasBid,
         hasAsk: hasAsk,
-        diffBenchmark: bidBenchmark !== askBenchmark && hasBid && hasAsk
+        diffBenchmark: bidBenchmark !== askBenchmark && hasBid && hasAsk,
+        isBestOffer: false,
+        isBestBid: false,
+        filteredByPrice:  filteredMetricType === TriCoreMetricConfig.Price.label,
+        filteredBySpread:  filteredMetricType === TriCoreMetricConfig.Spread.label,
+        filteredByYield: filteredMetricType === TriCoreMetricConfig.Yield.label
       }
     };
     if (!isStencil) {
@@ -593,7 +602,12 @@ export class DTOService {
         yield: !!rawData.askYield ? this.utility.round(rawData.askYield, TriCoreMetricConfig.Yield.rounding) : null,
         tspread: !!rawData.askSpread ? this.utility.round(rawData.askSpread, TriCoreMetricConfig.Spread.rounding) : null,
         benchmark: askBenchmark
-      }
+      };
+
+      object.state.isBestBid = object.data.bid.tspread == bestBidNum || object.data.bid.price == bestBidNum || object.data.bid.yield == bestBidNum;
+
+      object.state.isBestOffer =object.data.ask.tspread == bestAskNum || object.data.ask.price == bestAskNum || object.data.ask.yield == bestAskNum;
+      
     }
     return object;
   }

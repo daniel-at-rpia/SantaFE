@@ -36,6 +36,7 @@ $securityTableRow_expandCanvas_height: 40rem + $spacing_medium * 2;
         padding-left: $securityQuote_time_width + $spacing_x_small;
         padding-right: $securityQuote_ctas_width + $spacing_small + $scroll_bar_width + $spacing_x_small;
         margin-bottom: $spacing_x_small;
+        padding-left: $securityQuote_time_width + $securityQuote_bestQuote_width + $spacing_x_small;
       }
       &-messageList {
         @include mix_enable_scrollbar('vertical');

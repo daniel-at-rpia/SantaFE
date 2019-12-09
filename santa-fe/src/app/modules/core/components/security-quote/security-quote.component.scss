@@ -6,6 +6,30 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
   flex: 1 1 auto;
   display: flex;
   margin-top: $spacing_x_small;
+  &__bestQuote{
+    display: flex;   
+    justify-content: center; 
+    align-items: center; 
+    visibility: hidden;
+    padding: $spacing_x_small;
+    &-bestBidText {
+      @include mix_border_radius(3px);
+      color: $font_color_inverse;
+      line-height: $line_height_small;
+      font-size: $font_size_small;
+      background-color: $color_quant_left;
+      padding: $spacing_x_small;
+    }
+    &-bestOfferText {
+      @include mix_border_radius(3px);
+      margin-left: $spacing_x_small;
+      color: $font_color_inverse;
+      line-height: $line_height_small;
+      font-size: $font_size_small;
+      background-color: $color_quant_right;
+      padding: $spacing_x_small;
+    }
+  }
   &__time {
     flex: 0 0 $securityQuote_time_width;
     display: flex;
@@ -172,6 +196,133 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       margin-right: $spacing_small;
     }
   }
+  &--bestBidState#{$securityQuoteBlockName}--filteredBySpreadState {
+    #{$securityQuoteBlockName} {
+      &__bestQuote{
+        &-bestBidText {
+          visibility: visible;
+        }
+      }
+      &__main { 
+        &-twoSideEntry{
+          &-bid--spread{
+            background-color: $color_quant_left;
+            @include mix_border_radius(3px);
+            padding: $spacing_x_small;
+            width: $spacing_x_small;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+
+  &--bestOfferState#{$securityQuoteBlockName}--filteredBySpreadState {
+    #{$securityQuoteBlockName} {
+      &__bestQuote{
+        &-bestOfferText {
+          visibility: visible;
+        }
+      }
+      &__main {
+        &-twoSideEntry{
+          &-ask--spread{
+            background-color: $color_quant_right;
+            @include mix_border_radius(3px);
+            padding: $spacing_x_small;
+            width: $spacing_x_small;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+
+
+  &--bestBidState#{$securityQuoteBlockName}--filteredByPriceState {
+    #{$securityQuoteBlockName} {
+      &__bestQuote{
+        &-bestBidText {
+          visibility: visible;
+        }
+      }
+      &__main {
+        &-twoSideEntry{
+          &-bid--price{
+            background-color: $color_quant_left;
+            @include mix_border_radius(3px);
+            padding: $spacing_x_small;
+            width: $spacing_x_small;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+
+  &--bestOfferState#{$securityQuoteBlockName}--filteredByPriceState {
+    #{$securityQuoteBlockName} {
+      &__bestQuote{
+        &-bestOfferText {
+          visibility: visible;
+        }
+      }
+      &__main {
+        &-twoSideEntry{
+          &-ask--price{
+            background-color: $color_quant_right;
+            @include mix_border_radius(3px);
+            padding: $spacing_x_small;
+            width: $spacing_x_small;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+
+  &--bestBidState#{$securityQuoteBlockName}--filteredByYieldState {
+    #{$securityQuoteBlockName} {
+      &__bestQuote{
+        &-bestBidText {
+          visibility: visible;
+        }
+      }
+      &__main {
+        &-twoSideEntry{
+          &-bid--yield{
+            background-color: $color_quant_left;
+            @include mix_border_radius(3px);
+            padding: $spacing_x_small;
+            width: $spacing_x_small;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+
+  &--bestOfferState#{$securityQuoteBlockName}--filteredByYieldState {
+    #{$securityQuoteBlockName} {
+      &__bestQuote{
+        &-bestOfferText {
+          visibility: visible;
+        }
+      }
+      &__main {
+        &-twoSideEntry{
+          &-ask--yield{
+            background-color: $color_quant_right;
+            @include mix_border_radius(3px);
+            padding: $spacing_x_small;
+            width: $spacing_x_small;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+
   &--noBid {
     #{$securityQuoteBlockName} {
       &__main {
@@ -179,7 +330,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
           visibility: hidden;
         }
         &-twoSideEntry {
-          &-bid {
+          &-bid{
             visibility: hidden;
           }
         }
@@ -259,4 +410,5 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
+ 
 }

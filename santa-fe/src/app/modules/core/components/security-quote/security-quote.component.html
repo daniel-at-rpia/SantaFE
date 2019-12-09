@@ -7,8 +7,17 @@
     'sat-SecurityQuote--askIsAxe':
     messageData.state.hasAsk && messageData.data.ask.isAxe,
     'sat-SecurityQuote--diffBenchmark': messageData.state.diffBenchmark,
-    'sat-SecurityQuote--stencilState': messageData.state.isStencil
+    'sat-SecurityQuote--stencilState': messageData.state.isStencil,
+    'sat-SecurityQuote--bestBidState': messageData.state.isBestBid,
+    'sat-SecurityQuote--bestOfferState': messageData.state.isBestOffer,
+    'sat-SecurityQuote--filteredByPriceState': messageData.state.filteredByPrice,
+    'sat-SecurityQuote--filteredBySpreadState': messageData.state.filteredBySpread,
+    'sat-SecurityQuote--filteredByYieldState': messageData.state.filteredByYield
   }">
+  <section class="sat-SecurityQuote__bestQuote">
+    <div class="sat-SecurityQuote__bestQuote-bestBidText">Best Bid</div>
+    <div class="sat-SecurityQuote__bestQuote-bestOfferText"> Best Ask</div>
+  </section>
   <section class="sat-SecurityQuote__time">
     <span class="sat-SecurityQuote__time-text">{{messageData.data.time}}</span>
   </section>
@@ -18,31 +27,31 @@
     <div class="sat-SecurityQuote__main-entry">{{messageData.data.broker}}</div>
     <div class="sat-SecurityQuote__main-spacing"></div>
     <div class="sat-SecurityQuote__main-twoSideEntry">
-      <span class="sat-SecurityQuote__main-twoSideEntry-bid">
+      <span class="sat-SecurityQuote__main-twoSideEntry-bid sat-SecurityQuote__main-twoSideEntry-bid--price">
         {{messageData.data.bid.price}}
       </span>
       <i class="sat-SecurityQuote__main-twoSideEntry-mid fal fa-arrows-h"></i>
-      <span class="sat-SecurityQuote__main-twoSideEntry-ask">
+      <span class="sat-SecurityQuote__main-twoSideEntry-ask sat-SecurityQuote__main-twoSideEntry-ask--price">
         {{messageData.data.ask.price}}
       </span>
     </div>
     <div class="sat-SecurityQuote__main-spacing"></div>
     <div class="sat-SecurityQuote__main-twoSideEntry">
-      <span class="sat-SecurityQuote__main-twoSideEntry-bid">
+      <span class="sat-SecurityQuote__main-twoSideEntry-bid sat-SecurityQuote__main-twoSideEntry-bid--yield">
         {{messageData.data.bid.yield}}
       </span>
       <i class="sat-SecurityQuote__main-twoSideEntry-mid fal fa-arrows-h"></i>
-      <span class="sat-SecurityQuote__main-twoSideEntry-ask">
+      <span class="sat-SecurityQuote__main-twoSideEntry-ask sat-SecurityQuote__main-twoSideEntry-ask--yield">
         {{messageData.data.ask.yield}}
       </span>
     </div>
     <div class="sat-SecurityQuote__main-spacing"></div>
     <div class="sat-SecurityQuote__main-twoSideEntry">
-      <span class="sat-SecurityQuote__main-twoSideEntry-bid">
+      <span class="sat-SecurityQuote__main-twoSideEntry-bid sat-SecurityQuote__main-twoSideEntry-bid--spread">
         {{messageData.data.bid.tspread}}
       </span>
       <i class="sat-SecurityQuote__main-twoSideEntry-mid fal fa-arrows-h"></i>
-      <span class="sat-SecurityQuote__main-twoSideEntry-ask">
+      <span class="sat-SecurityQuote__main-twoSideEntry-ask sat-SecurityQuote__main-twoSideEntry-ask--spread">
         {{messageData.data.ask.tspread}}
       </span>
     </div>
