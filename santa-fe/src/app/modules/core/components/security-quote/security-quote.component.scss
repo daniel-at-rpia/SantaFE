@@ -13,7 +13,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
     visibility: hidden;
     padding: $spacing_x_small;
     &-bestBidText {
-      @include mix_border_radius(5px);
+      @include mix_border_radius(3px);
       color: $font_color_inverse;
       line-height: $line_height_small;
       font-size: $font_size_small;
@@ -21,7 +21,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       padding: $spacing_x_small;
     }
     &-bestOfferText {
-      @include mix_border_radius(5px);
+      @include mix_border_radius(3px);
       margin-left: $spacing_x_small;
       color: $font_color_inverse;
       line-height: $line_height_small;
@@ -31,7 +31,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
     }
   }
   &__time {
-    flex: 0 0 auto;
+    flex: 0 0 $securityQuote_time_width;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -207,9 +207,9 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
         &-twoSideEntry{
           &-bid--spread{
             background-color: $color_quant_left;
-            border-radius: 0.313rem;
-            padding: 0.188rem;
-            width: 1.25rem;
+            @include mix_border_radius(3px);
+            padding: $spacing_x_small;
+            width: $spacing_x_small;
             color: white;
           }
         }
@@ -228,9 +228,9 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
         &-twoSideEntry{
           &-ask--spread{
             background-color: $color_quant_right;
-            border-radius: 0.313rem;
-            padding: 0.188rem;
-            width: 1.25rem;
+            @include mix_border_radius(3px);
+            padding: $spacing_x_small;
+            width: $spacing_x_small;
             color: white;
           }
         }
@@ -250,9 +250,9 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
         &-twoSideEntry{
           &-bid--price{
             background-color: $color_quant_left;
-            border-radius: 0.313rem;
-            padding: 0.188rem;
-            width: 1.25rem;
+            @include mix_border_radius(3px);
+            padding: $spacing_x_small;
+            width: $spacing_x_small;
             color: white;
           }
         }
@@ -271,9 +271,9 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
         &-twoSideEntry{
           &-ask--price{
             background-color: $color_quant_right;
-            border-radius: 0.313rem;
-            padding: 0.188rem;
-            width: 1.25rem;
+            @include mix_border_radius(3px);
+            padding: $spacing_x_small;
+            width: $spacing_x_small;
             color: white;
           }
         }
@@ -292,9 +292,9 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
         &-twoSideEntry{
           &-bid--yield{
             background-color: $color_quant_left;
-            border-radius: 0.313rem;
-            padding: 0.188rem;
-            width: 1.25rem;
+            @include mix_border_radius(3px);
+            padding: $spacing_x_small;
+            width: $spacing_x_small;
             color: white;
           }
         }
@@ -313,9 +313,9 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
         &-twoSideEntry{
           &-ask--yield{
             background-color: $color_quant_right;
-            border-radius: 0.313rem;
-            padding: 0.188rem;
-            width: 1.25rem;
+            @include mix_border_radius(3px);
+            padding: $spacing_x_small;
+            width: $spacing_x_small;
             color: white;
           }
         }
