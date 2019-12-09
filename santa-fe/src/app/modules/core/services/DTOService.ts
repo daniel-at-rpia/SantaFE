@@ -498,7 +498,12 @@ export class DTOService {
             sortable: !eachQuoteMetricStub.textOnly
           };
           return metricBlock;
-        })
+        }),
+        bestQuotes: {
+          bestPriceQuote: null,
+          bestSpreadQuote: null,
+          bestYieldQuote: null
+        }
       },
       state: {
         expandViewSortByQuoteMetric: null,

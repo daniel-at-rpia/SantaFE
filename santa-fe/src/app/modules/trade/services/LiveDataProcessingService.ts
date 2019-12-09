@@ -19,6 +19,7 @@
       BESecurityDTO,
       BEBestQuoteDTO
     } from 'BEModels/backend-models.interface';
+    import { TriCoreMetricConfig } from 'Core/constants/coreConstants.constant';
   // dependencies
 
 @Injectable()
@@ -109,16 +110,27 @@ export class LiveDataProcessingService {
   ){
     const bestQuoteColumnIndex = 0;  // for now the bestQuote is fixed
     const bestQuoteCell = targetRow.data.cells[bestQuoteColumnIndex];
-    const newQuant = this.dtoService.formQuantComparerObject(false,
-      metricType,
+    const newPriceQuant = this.dtoService.formQuantComparerObject(
+      false,
+      TriCoreMetricConfig.Price.label,
       quote
     );
-    bestQuoteCell.data.quantComparerDTO = newQuant;
-    this.utilityService.calculateMarkDiscrepancies(
-      targetRow.data.security,
-      newQuant,
-      metricType
+    const newSpreadQuant = this.dtoService.formQuantComparerObject(
+      false,
+      TriCoreMetricConfig.Spread.label,
+      quote
     );
+    const newYieldQuant = this.dtoService.formQuantComparerObject(
+      false,
+      TriCoreMetricConfig.Yield.label,
+      quote
+    );
+    targetRow.data.bestQuotes = {
+      bestPriceQuote: newPriceQuant,
+      bestYieldQuote: newYieldQuant,
+      bestSpreadQuote: newSpreadQuant
+    }
+    bestQuoteCell.data.quantComparerDTO = targetRow.data.bestQuotes[TriCoreMetricConfig[metricType]['backendTargetQuoteAttr']];
     tableHeaderList.forEach((eachHeader, index) => {
       if (eachHeader.data.readyStage === 3) {
         targetRow.data.cells[index-1] = this.utilityService.populateSecurityTableCellFromSecurityCard(

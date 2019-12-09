@@ -183,8 +183,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       } else {
         console.error('Code Maintainence flag: this is not the 30 day delta');
       }
-      this.store$.dispatch(new TradeToggleMetricEvent());
-      this.loadFreshData(); 
+      // TODO: remove this event and all associated logic from ngrx
+      // this.store$.dispatch(new TradeToggleMetricEvent());
     }
   }
 

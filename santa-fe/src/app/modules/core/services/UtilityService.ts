@@ -521,11 +521,21 @@ export class UtilityService {
 
     // TODO: move this into a SecurityTableHelper service 
     public populateSecurityTableCellFromSecurityCard(targetHeader: SecurityTableHeaderDTO, targetRow: SecurityTableRowDTO, newCellDTO: SecurityTableCellDTO): SecurityTableCellDTO{
+      if (targetHeader.state.isQuantVariant) {
+        const targetQuantAttr = TriCoreMetricConfig.Spread.backendTargetQuoteAttr;
+        newCellDTO.data.quantComparerDTO = targetRow.data.bestQuotes[targetQuantAttr];
+        this.calculateMarkDiscrepancies(
+          targetRow.data.security,
+          newCellDTO.data.quantComparerDTO,
+        );
+        return newCellDTO;
+      } else {
         let value;
         value = this.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, targetRow.data.security, false);
         value = (value == null || value === 'n/a') ? null : value;
         newCellDTO.data.textData = value;
         return newCellDTO;
+      }
     }
 
     // TODO: move this into a SecurityTableHelper service 
@@ -548,10 +558,9 @@ export class UtilityService {
     // TODO: move this into a SecurityTableHelper service 
     public calculateMarkDiscrepancies(
       targetSecurity: SecurityDTO,
-      targetQuant: QuantComparerDTO,
-      currentSelectedMetric: string
+      targetQuant: QuantComparerDTO
     ) {
-      if (!!targetQuant && targetSecurity.data.mark.markRaw && targetSecurity.data.mark.markDriver === currentSelectedMetric) {
+      if (!!targetQuant && targetSecurity.data.mark.markRaw) {
         const rounding = this.triCoreMetricConfig[targetSecurity.data.mark.markDriver].rounding;
         const markBlock = targetSecurity.data.mark;
         if (targetQuant.state.hasBid) {
