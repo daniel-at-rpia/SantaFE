@@ -96,7 +96,7 @@ export class LiveDataProcessingService {
         }
       })
       if (trackRowsWithoutReturn.length > 0) {
-        console.error("best quote did not return data for ", trackRowsWithoutReturn);
+        console.warn("best quote did not return data for ", trackRowsWithoutReturn);
       }
     }
   }
@@ -145,7 +145,7 @@ export class LiveDataProcessingService {
         const isSecurityDiff = this.isThereDiffInSecurity(oldRow.data.security, eachNewRow.data.security);
         const isQuantDiff = this.isThereDiffInQuantComparer(oldRow.data.cells[0].data.quantComparerDTO, eachNewRow.data.cells[0].data.quantComparerDTO);
         if ( isSecurityDiff || isQuantDiff) {
-          console.log('test, there is an update', oldRow, eachNewRow, isSecureContext, isQuantDiff);
+          console.log('Diffing Logic test, there is an update', oldRow, eachNewRow, isSecureContext, isQuantDiff);
           updateList.push(eachNewRow);
         }
       } else {

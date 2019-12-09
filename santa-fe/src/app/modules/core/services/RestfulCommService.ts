@@ -24,7 +24,6 @@ export class RestfulCommService {
     };
     !!needDateStamp && this.generateCurrentTimeForPayload(payload, dateStampForPrevDay);
     const method = opts['req'];
-    console.log('Start REST call', url, opts, payload);
     switch (method) {
       case 'POST':
         return this.http.post<any>(fullUrl, payload, queryOpts);

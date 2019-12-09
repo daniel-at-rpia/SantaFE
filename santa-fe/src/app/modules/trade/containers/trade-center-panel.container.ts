@@ -137,7 +137,6 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         this.store$.pipe(select(selectInitialDataLoaded))
       )
     ).subscribe(([tick, isInitialDataLoaded]) => {
-      console.log('at Trade Center Panel, got tick', tick);
       if (tick > 0 && isInitialDataLoaded) {  // skip first beat
         this.fetchStageOneContent(false);
       }
