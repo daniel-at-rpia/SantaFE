@@ -98,7 +98,9 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   public onClickHeaderCTA(targetHeader: SecurityTableHeaderDTO) {
-    this.tableData.state.selectedHeader = this.tableData.state.selectedHeader && this.tableData.state.selectedHeader.data.displayLabel === targetHeader.data.displayLabel ? null : targetHeader;
+    this.onClickSortBy(targetHeader);
+    // TODO: remove action menu and all CTA related logic and styling
+    // this.tableData.state.selectedHeader = this.tableData.state.selectedHeader && this.tableData.state.selectedHeader.data.displayLabel === targetHeader.data.displayLabel ? null : targetHeader;
   }
 
   public onClickRemoveHeader(targetHeader: SecurityTableHeaderDTO) {
@@ -130,11 +132,19 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   public onClickAddHeader(targetStub: SecurityTableMetricStub) {
-    if (!targetStub.active && !targetStub.disabled) {
-      targetStub.active = true;
-      this.loadTableHeaders();
-      this.loadTableRowsUponHeaderChange();
-      this.onCollapseAddColumnDropdown();
+    if (!targetStub.disabled) {
+      if (!targetStub.active) {
+        targetStub.active = true;
+        this.loadTableHeaders();
+        this.loadTableRowsUponHeaderChange();
+        this.onCollapseAddColumnDropdown();
+      } else {
+        const targetHeader = this.tableData.data.headers.find((eachHeader) => {
+          return targetStub.label === eachHeader.data.displayLabel;
+        })
+        !!targetHeader && this.onClickRemoveHeader(targetHeader);
+        this.onCollapseAddColumnDropdown();
+      }
     }
   }
 
