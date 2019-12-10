@@ -2,6 +2,7 @@
 @import "modules/trade/trade.scss";
 
 $quantComparer_edge_width: 2.5rem;
+$quantComparer_edge_width_long: 4.5rem;
 $quantComparer_min_height: 2.5rem;
 .sat-quantComparer {
   $quantComparerBlockName: &;
@@ -57,13 +58,13 @@ $quantComparer_min_height: 2.5rem;
         direction: ltr;
         &-number {
           color: $font_color_major;
-          font-size: $font_size_x_small;
+          font-size: $font_size_normal;
           line-height: $line_height_minimum;
           user-select: none;
         }
         &-broker {
           color: $color_quant_left;
-          font-size: $font_size_x_small;
+          font-size: $font_size_minimum;
           line-height: $line_height_minimum;
           user-select: none;
         }
@@ -310,6 +311,15 @@ $quantComparer_min_height: 2.5rem;
       }
       &__skew {
         display: none;
+      }
+    }
+  }
+  &--longEdgeState {
+    #{$quantComparerBlockName} {
+      &__content {
+        &-driver-edge {
+          width: $quantComparer_edge_width_long;
+        }
       }
     }
   }

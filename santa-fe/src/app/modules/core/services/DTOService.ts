@@ -440,7 +440,8 @@ export class DTOService {
         axeSkewEnabled: false,
         totalSkewEnabled: false,
         noAxeSkew: !isStencil ? rawData.axeSkew === null : true,
-        noTotalSkew: !isStencil ? rawData.totalSkew === null : true
+        noTotalSkew: !isStencil ? rawData.totalSkew === null : true,
+        longEdgeState: !isStencil ? bidNumber.toString().length > 4 || offerNumber.toString().length > 4 : false
       }
     };
     return object;
