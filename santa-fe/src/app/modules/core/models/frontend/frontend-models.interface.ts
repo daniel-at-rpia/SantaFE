@@ -33,6 +33,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     primaryPmName: string;
     backupPmName: string;
     researchName: string;
+    owner: Array<string>;
     mark: SecurityMarkBlock;
     portfolios: Array<SecurityPortfolioBlock>;
     strategyCurrent: string;
@@ -189,6 +190,7 @@ export interface QuantComparerDTO extends BasicDTOStructure {
     totalSkewEnabled: boolean;
     noAxeSkew: boolean;
     noTotalSkew: boolean;
+    longEdgeState: boolean;
   }
 }
 
@@ -216,6 +218,7 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     metricPackDeltaScope: string;
     frontendMetric: boolean;
     inversedSortingForText: boolean;
+    targetQuantLocationFromRow: string;
   },
   state: {
     isPureTextVariant: boolean;
@@ -231,6 +234,11 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
     cells: Array<SecurityTableCellDTO>;
     quotes: Array<SecurityQuoteDTO>;
     quoteHeaders: Array<QuoteMetricBlock>;
+    bestQuotes: {
+      bestSpreadQuote: QuantComparerDTO;
+      bestYieldQuote: QuantComparerDTO;
+      bestPriceQuote: QuantComparerDTO;
+    }
   },
   state: {
     expandViewSortByQuoteMetric: string;

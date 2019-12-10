@@ -58,6 +58,7 @@ export interface MarketGroupPanelState {
 
 export interface TradeState {
   graphsCollapsed: boolean;
+  ownerInitial: string;
 }
 
 export interface TradeCenterPanelState {
@@ -85,6 +86,7 @@ export interface TradeCenterPanelState {
       metricType: string;
       portfolios: Array<string>;
       keyword: string;
+      owner: Array<string>;
     }
     securityFilters: Array<DefinitionConfiguratorEmitterParamsItem>
   }

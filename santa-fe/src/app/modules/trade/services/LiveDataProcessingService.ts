@@ -19,6 +19,7 @@
       BESecurityDTO,
       BEBestQuoteDTO
     } from 'BEModels/backend-models.interface';
+    import { TriCoreMetricConfig } from 'Core/constants/coreConstants.constant';
   // dependencies
 
 @Injectable()
@@ -107,24 +108,39 @@ export class LiveDataProcessingService {
     metricType: string,
     quote: BEBestQuoteDTO
   ){
-    const bestQuoteColumnIndex = 0;  // for now the bestQuote is fixed
-    const bestQuoteCell = targetRow.data.cells[bestQuoteColumnIndex];
-    const newQuant = this.dtoService.formQuantComparerObject(false,
-      metricType,
+    const bestQuoteHeaderIndex = tableHeaderList.findIndex((eachHeader) => {
+      return eachHeader.state.isQuantVariant;
+    });
+    const bestQuoteCell = targetRow.data.cells[bestQuoteHeaderIndex - 1];
+    const newPriceQuant = this.dtoService.formQuantComparerObject(
+      false,
+      TriCoreMetricConfig.Price.label,
       quote
     );
-    bestQuoteCell.data.quantComparerDTO = newQuant;
-    this.utilityService.calculateMarkDiscrepancies(
-      targetRow.data.security,
-      newQuant,
-      metricType
+    const newSpreadQuant = this.dtoService.formQuantComparerObject(
+      false,
+      TriCoreMetricConfig.Spread.label,
+      quote
     );
+    const newYieldQuant = this.dtoService.formQuantComparerObject(
+      false,
+      TriCoreMetricConfig.Yield.label,
+      quote
+    );
+    targetRow.data.bestQuotes = {
+      bestPriceQuote: newPriceQuant,
+      bestYieldQuote: newYieldQuant,
+      bestSpreadQuote: newSpreadQuant
+    }
+    const targetQuantLocationFromRow = tableHeaderList[bestQuoteHeaderIndex].data.targetQuantLocationFromRow;
+    bestQuoteCell.data.quantComparerDTO = targetRow.data.bestQuotes[targetQuantLocationFromRow];
     tableHeaderList.forEach((eachHeader, index) => {
       if (eachHeader.data.readyStage === 3) {
         targetRow.data.cells[index-1] = this.utilityService.populateSecurityTableCellFromSecurityCard(
           eachHeader,
           targetRow,
-          targetRow.data.cells[index-1]
+          targetRow.data.cells[index-1],
+          metricType
         );
       }
     });
@@ -169,12 +185,18 @@ export class LiveDataProcessingService {
     newSecurity.state.isTable = true;
     headerList.forEach((eachHeader, index) => {
       if (!eachHeader.state.isPureTextVariant) {
-        const newCell = this.utilityService.populateSecurityTableCellFromSecurityCard(
-          eachHeader,
-          newRow,
-          this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant)
-        );
-        newRow.data.cells.push(newCell);
+        if (eachHeader.data.readyStage === 1 || eachHeader.data.readyStage === 2) {
+          const newCell = this.utilityService.populateSecurityTableCellFromSecurityCard(
+            eachHeader,
+            newRow,
+            this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant),
+            null
+          );
+          newRow.data.cells.push(newCell);
+        } else {
+          const emptyCell = this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant);
+          newRow.data.cells.push(emptyCell);
+        }
       }
     });
     prinstineRowList.push(newRow);

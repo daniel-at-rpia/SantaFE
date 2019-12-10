@@ -24,6 +24,7 @@
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { TradeState } from 'FEModels/frontend-page-states.interface';
+    import { FullOwnerList } from 'Core/constants/securityDefinitionConstants.constant';
   //
 
 @Component({
@@ -34,11 +35,15 @@
 })
 export class TradePage implements OnInit, OnDestroy {
   state: TradeState;
-  subscriptions = {}
+  subscriptions = {};
+  constants = {
+    fullOwnerList: FullOwnerList
+  };
 
   private initializePageState() {
     this.state = {
-      graphsCollapsed: true
+      graphsCollapsed: true,
+      ownerInitial: ''
     }
   }
 
@@ -52,6 +57,16 @@ export class TradePage implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    this.restfulCommService.callAPI('user/get-user-initials', {req: 'GET'}).pipe(
+      first(),
+      tap((serverReturn) => {
+        this.loadOwnerInitial(serverReturn);
+      }),
+      catchError(err => {
+        this.loadOwnerInitial('n/a');
+        return of('error');
+      })
+    ).subscribe();
   }
 
   public ngOnDestroy() {
@@ -63,6 +78,13 @@ export class TradePage implements OnInit, OnDestroy {
 
   public onToggleCollapseGraphs() {
     this.state.graphsCollapsed = !this.state.graphsCollapsed;
+  }
+
+  private loadOwnerInitial(serverReturn: string) {
+    const matchedInitial = this.constants.fullOwnerList.find((eachInitial) => {
+      eachInitial === serverReturn;
+    })
+    this.state.ownerInitial = matchedInitial || 'DM';
   }
 
 }

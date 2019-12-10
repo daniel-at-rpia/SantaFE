@@ -87,9 +87,11 @@ export class DTOService {
         primaryPmName: null,
         backupPmName: null,
         researchName: null,
+        owner: [],
         mark: {
           mark: null,
           markRaw: null,
+          markBackend: null,
           markDriver: null,
           markChangedBy: null,
           markChangedTime: null,
@@ -134,9 +136,13 @@ export class DTOService {
     dto.data.backupPmName = targetPortfolio.backupPmName;
     dto.data.researchName = targetPortfolio.researchName;
     dto.data.mark.markRaw = targetPortfolio.mark.value;
+    dto.data.mark.markBackend = targetPortfolio.mark.value;
     dto.data.mark.markDriver = targetPortfolio.mark.driver;
     dto.data.mark.markChangedBy = targetPortfolio.mark.user;
     dto.data.mark.markChangedTime = targetPortfolio.mark.enteredTime;
+    !!targetPortfolio.primaryPmName && dto.data.owner.push(targetPortfolio.primaryPmName);
+    !!targetPortfolio.backupPmName && dto.data.owner.push(targetPortfolio.backupPmName);
+    !!targetPortfolio.researchName && dto.data.owner.push(targetPortfolio.researchName);
     // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
     if (!!TriCoreMetricConfig[targetPortfolio.mark.driver] && (targetPortfolio.mark.driver === currentSelectedMetric || currentSelectedMetric === 'Default')){
       const rounding = TriCoreMetricConfig[targetPortfolio.mark.driver].rounding;
@@ -144,6 +150,7 @@ export class DTOService {
     } else {
       dto.data.mark.mark = null;
       dto.data.mark.markRaw = null;
+      dto.data.mark.markBackend = null;
     }
     const newBlock: SecurityPortfolioBlock = {
       portfolioName: targetPortfolio.portfolioShortName,
@@ -433,7 +440,8 @@ export class DTOService {
         axeSkewEnabled: false,
         totalSkewEnabled: false,
         noAxeSkew: !isStencil ? rawData.axeSkew === null : true,
-        noTotalSkew: !isStencil ? rawData.totalSkew === null : true
+        noTotalSkew: !isStencil ? rawData.totalSkew === null : true,
+        longEdgeState: !isStencil ? bidNumber.toString().length > 4 || offerNumber.toString().length > 4 : false
       }
     };
     return object;
@@ -470,7 +478,8 @@ export class DTOService {
         readyStage: stub.readyStage,
         metricPackDeltaScope: stub.metricPackDeltaScope || null,
         frontendMetric: !!stub.isFrontEndMetric,
-        inversedSortingForText: !!stub.inversedSortingForText
+        inversedSortingForText: !!stub.inversedSortingForText,
+        targetQuantLocationFromRow: !!stub.isForQuantComparer ? stub.targetQuantLocationFromRow : 'n/a'
       },
       state: {
         isQuantVariant: !!stub.isForQuantComparer,
@@ -498,7 +507,12 @@ export class DTOService {
             sortable: !eachQuoteMetricStub.textOnly
           };
           return metricBlock;
-        })
+        }),
+        bestQuotes: {
+          bestPriceQuote: null,
+          bestSpreadQuote: null,
+          bestYieldQuote: null
+        }
       },
       state: {
         expandViewSortByQuoteMetric: null,

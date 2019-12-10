@@ -3,7 +3,9 @@
       Component,
       ViewEncapsulation,
       OnInit,
-      OnDestroy
+      OnChanges,
+      OnDestroy,
+      Input
     } from '@angular/core';
     import { Observable, Subscription } from 'rxjs';
     import {
@@ -65,6 +67,7 @@
       TradeLiveUpdatePassRawDataEvent,
       TradeToggleMetricEvent
     } from 'Trade/actions/trade.actions';
+    import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
   //
 
 @Component({
@@ -74,7 +77,8 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class TradeCenterPanel implements OnInit, OnDestroy {
+export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
+  @Input() ownerInitial: string;
   state: TradeCenterPanelState;
   subscriptions = {
     startNewUpdateSub: null
@@ -112,12 +116,12 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         quickFilters: {
           metricType: TriCoreMetricConfig.Spread.label,
           portfolios: [],
-          keyword: ''
+          keyword: '',
+          owner: []
         },
         securityFilters: []
       }
     };
-    this.populateSearchShortcuts();
   }
 
   constructor(
@@ -141,6 +145,15 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         this.fetchStageOneContent(false);
       }
     });
+  }
+
+  public ngOnChanges() {
+    if (!!this.ownerInitial) {
+      const filter = [];
+      filter.push(this.ownerInitial);
+      this.constants.searchShortcuts[0].includedDefinitions[0].selectedOptions = filter;
+      this.populateSearchShortcuts();
+    }
   }
 
   public ngOnDestroy() {
@@ -176,15 +189,22 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   public onSwitchMetric(targetMetric) {
     if (this.state.filters.quickFilters.metricType !== targetMetric) {
       this.state.filters.quickFilters.metricType = targetMetric;
-      const thrityDayDeltaMetric = this.state.table.metrics[this.constants.thirtyDayDeltaIndex];
+      const newMetrics: Array<SecurityTableMetricStub> = this.utilityService.deepCopy(this.state.table.metrics);
+      const thrityDayDeltaMetric = newMetrics[this.constants.thirtyDayDeltaIndex];
       if (thrityDayDeltaMetric.label === '30 Day Delta') {
         thrityDayDeltaMetric.attrName = TriCoreMetricConfig[targetMetric].metricLabel;
         thrityDayDeltaMetric.underlineAttrName = TriCoreMetricConfig[targetMetric].metricLabel;
       } else {
         console.error('Code Maintainence flag: this is not the 30 day delta');
       }
-      this.store$.dispatch(new TradeToggleMetricEvent());
-      this.loadFreshData(); 
+      if (newMetrics[1].isForQuantComparer) {
+        newMetrics[1].targetQuantLocationFromRow = TriCoreMetricConfig[targetMetric].backendTargetQuoteAttr;
+      } else {
+        console.error('Code Maintainence flag: this is not the Quant Comparer column');
+      }
+      this.state.table.metrics = newMetrics;
+      // TODO: remove this event and all associated logic from ngrx
+      // this.store$.dispatch(new TradeToggleMetricEvent());
     }
   }
 
@@ -194,6 +214,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     params.filterList.forEach((eachFilter) => {
       if (eachFilter.targetAttribute === 'portfolios') {
         this.state.filters.quickFilters.portfolios = eachFilter.filterBy;
+      } else if (eachFilter.targetAttribute === 'owner') {
+        this.state.filters.quickFilters.owner = eachFilter.filterBy;
       };
     });
     if (this.state.currentContentStage === this.constants.securityTableFinalStage) {
@@ -202,6 +224,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   }
 
   private populateSearchShortcuts(){
+    this.state.presets.shortcutList = [];
     this.constants.searchShortcuts.forEach((eachShortcutStub) => {
       const definitionList = eachShortcutStub.includedDefinitions.map((eachIncludedDef) => {
         const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityGroupDefinitionMap[eachIncludedDef.definitionKey]);
@@ -316,7 +339,12 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   }
 
   private loadStageThreeContent(serverReturn) {
-    this.processingService.loadStageThreeContent(this.state.table.dto.data.headers, this.state.fetchResult.prinstineRowList, this.state.filters.quickFilters.metricType, serverReturn);
+    this.processingService.loadStageThreeContent(
+      this.state.table.dto.data.headers,
+      this.state.fetchResult.prinstineRowList,
+      this.state.filters.quickFilters.metricType,
+      serverReturn
+    );
     this.calculateQuantComparerWidthAndHeight();
     this.updateStage(3);
   }
@@ -345,6 +373,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
       if (this.state.filters.quickFilters.keyword.length < 3 || eachRow.data.security.data.name.indexOf(this.state.filters.quickFilters.keyword) >= 0) {
         let portfolioIncludeFlag = this.filterByPortfolio(eachRow);
+        let ownerFlag = this.filterByOwner(eachRow);
         let securityLevelFilterResultCombined = true;
         if (this.state.filters.securityFilters.length > 0) {
           const securityLevelFilterResult = this.state.filters.securityFilters.map((eachFilter) => {
@@ -355,7 +384,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
             return eachResult;
           }).length === securityLevelFilterResult.length;
         }
-        securityLevelFilterResultCombined && portfolioIncludeFlag && filteredList.push(eachRow);
+        ownerFlag && securityLevelFilterResultCombined && portfolioIncludeFlag && filteredList.push(eachRow);
       }
     });
     return filteredList;
@@ -363,8 +392,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
 
   private filterBySecurityAttribute(targetRow: SecurityTableRowDTO, targetAttribute: string, filterBy: Array<string>): boolean {
     let includeFlag = false;
-    if (targetAttribute === 'portfolios') {
-      // bypass portfolio filter since it is handled via this.filterByPortfolio()
+    if (targetAttribute === 'portfolios' || targetAttribute === 'owner') {
+      // bypass portfolio filter since it is handled via this.filterByPortfolio() and this.filterByOwner()
       return true;
     } else {
       filterBy.forEach((eachValue) => {
@@ -395,6 +424,21 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       targetRow.data.security.data.positionCurrent = targetRow.data.security.data.positionFirm;
     }
     targetRow.data.security.data.positionCurrentInMM = this.utilityService.parsePositionToMM(targetRow.data.security.data.positionCurrent, false);
+    return includeFlag;
+  }
+
+  private filterByOwner(targetRow: SecurityTableRowDTO): boolean {
+    let includeFlag = false;
+    if (this.state.filters.quickFilters.owner.length > 0) {
+      this.state.filters.quickFilters.owner.forEach((eachOwner) => {
+        const ownerExist = targetRow.data.security.data.owner.indexOf(eachOwner) > -1;
+        if (!!ownerExist) {
+          includeFlag = true;
+        }
+      });
+    } else {
+      includeFlag = true;
+    }
     return includeFlag;
   }
 

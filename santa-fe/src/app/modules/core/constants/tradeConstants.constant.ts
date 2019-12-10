@@ -60,8 +60,14 @@ export const QUANT_COMPARER_PERCENTILE = 90;
 
 export const SearchShortcuts: Array<SearchShortcutStub> = [
   {
-    displayTitle: 'All Portfolios',
-    includedDefinitions: []
+    displayTitle: 'All Securties I Own',
+    includedDefinitions: [
+      {
+        definitionKey: 'OWNER',
+        groupByActive: false,
+        selectedOptions: ['PLACEHOLDER']
+      }
+    ]
   },{
     displayTitle: 'DOF + SOF',
     includedDefinitions: [

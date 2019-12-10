@@ -222,6 +222,23 @@ import {
     'TW'
   ];
 
+  export const FullOwnerList = [
+    'AG',
+    'BT',
+    'DA',
+    'DJ',
+    'DM',
+    'LC',
+    'LP',
+    'IL',
+    'PD',
+    'PM',
+    'RS',
+    'SP',
+    'ST',
+    'TW'
+  ];
+
 export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
   'SECURITY_TYPE': {
     key: 'SECURITY_TYPE',
@@ -356,6 +373,13 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-user-chart',
     optionList: FilterOptionsPortfolioResearchList,
     securityDTOAttr: 'researchName'
+  },
+  'OWNER': {
+    key: 'OWNER',
+    displayName: 'Owner',
+    icon: 'fad fa-users',
+    optionList: FullOwnerList,
+    securityDTOAttr: 'owner'
   }
 };
 
@@ -373,6 +397,7 @@ export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> =
   },{
     label: 'Owner',
     list: [
+      SecurityDefinitionMap.OWNER,
       SecurityDefinitionMap.PRIMARY_PORTFOLIO_MANAGER,
       SecurityDefinitionMap.BACKUP_PORTFOLIO_MANAGER,
       SecurityDefinitionMap.RESEARCH

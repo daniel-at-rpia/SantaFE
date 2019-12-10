@@ -51,8 +51,9 @@ export class SecurityTable implements OnInit, OnChanges {
   @Input() receivedContentStage: number;
   securityTableMetrics: Array<SecurityTableMetricStub>;
   @Input() receivedSecurityTableMetricsUpdate: Array<SecurityTableMetricStub>;
-  receivedSecurityTableMetricsCache: Array<SecurityTableMetricStub>;// use this only for detecting diff
+  securityTableMetricsCache: Array<SecurityTableMetricStub>;// use this only for detecting diff
   @Input() liveUpdatedRows: Array<SecurityTableRowDTO>;
+  @Input() activeTriCoreMetric: string;
   liveUpdateRowsCache: Array<SecurityTableRowDTO>;
 
   constants = {
@@ -74,19 +75,17 @@ export class SecurityTable implements OnInit, OnChanges {
   public ngOnChanges() {
     if (this.tableData.state.loadedContentStage !== this.receivedContentStage) {
       console.log('rows updated for inter-stage change', this.receivedContentStage);
+      this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate; // saving initial cache
       this.tableData.state.loadedContentStage = this.receivedContentStage;
-      if (this.receivedContentStage === this.constants.securityTableFinalStage) {
-        if (this.receivedSecurityTableMetricsCache !== this.receivedSecurityTableMetricsUpdate) {
-          this.receivedSecurityTableMetricsCache = this.utilityService.deepCopy(this.securityTableMetrics);
-          // currently the only thing the parent can change is the 30 day delta metric's attribute, so we only need to update that
-          this.securityTableMetrics[this.constants.thirtyDayDeltaIndex].attrName = this.receivedSecurityTableMetricsUpdate[this.constants.thirtyDayDeltaIndex].attrName;
-          this.securityTableMetrics[this.constants.thirtyDayDeltaIndex].underlineAttrName = this.receivedSecurityTableMetricsUpdate[this.constants.thirtyDayDeltaIndex].underlineAttrName;
-          this.loadTableHeaders();
-        }
-      }
+      this.loadTableRows(this.newRows);
+    } else if (this.securityTableMetricsCache !== this.receivedSecurityTableMetricsUpdate && this.receivedContentStage === this.constants.securityTableFinalStage) {
+      console.log("metrics update", this.receivedSecurityTableMetricsUpdate);
+      this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate;
+      this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
+      this.loadTableHeaders();
       this.loadTableRows(this.newRows);
     } else if (!!this.newRows && this.newRows != this.tableData.data.rows && this.tableData.state.loadedContentStage === this.receivedContentStage) {
-      console.log('rows updated for change within same stage', this.tableData.state.loadedContentStage);
+      console.log('rows updated for change within same stage, triggered when filters are applied', this.tableData.state.loadedContentStage);
       this.loadTableRows(this.newRows);
     } else if (this.liveUpdateRowsCache !== this.liveUpdatedRows && this.tableData.state.loadedContentStage === this.constants.securityTableFinalStage) {
       this.liveUpdateRowsCache = this.utilityService.deepCopy(this.liveUpdatedRows);
@@ -99,7 +98,11 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   public onClickHeaderCTA(targetHeader: SecurityTableHeaderDTO) {
-    this.tableData.state.selectedHeader = this.tableData.state.selectedHeader && this.tableData.state.selectedHeader.data.displayLabel === targetHeader.data.displayLabel ? null : targetHeader;
+    if (targetHeader.state.isQuantVariant) {
+      this.tableData.state.selectedHeader = this.tableData.state.selectedHeader && this.tableData.state.selectedHeader.data.displayLabel === targetHeader.data.displayLabel ? null : targetHeader;
+    } else {
+      this.onClickSortBy(targetHeader);
+    }
   }
 
   public onClickRemoveHeader(targetHeader: SecurityTableHeaderDTO) {
@@ -131,11 +134,19 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   public onClickAddHeader(targetStub: SecurityTableMetricStub) {
-    if (!targetStub.active && !targetStub.disabled) {
-      targetStub.active = true;
-      this.loadTableHeaders();
-      this.loadTableRowsUponHeaderChange();
-      this.onCollapseAddColumnDropdown();
+    if (!targetStub.disabled) {
+      if (!targetStub.active) {
+        targetStub.active = true;
+        this.loadTableHeaders();
+        this.loadTableRowsUponHeaderChange();
+        this.onCollapseAddColumnDropdown();
+      } else {
+        const targetHeader = this.tableData.data.headers.find((eachHeader) => {
+          return targetStub.label === eachHeader.data.displayLabel;
+        })
+        !!targetHeader && this.onClickRemoveHeader(targetHeader);
+        this.onCollapseAddColumnDropdown();
+      }
     }
   }
 
@@ -206,7 +217,8 @@ export class SecurityTable implements OnInit, OnChanges {
 
   private loadTableRows(rowList: Array<SecurityTableRowDTO>) {
     this.tableData.data.rows = rowList;
-    this.updateDynamicColumns();
+    // doesn't need to update dynamic columns if the entire data is not loaded
+    this.receivedContentStage === this.constants.securityTableFinalStage && this.updateDynamicColumns();
     if (this.tableData.state.sortedByHeader) {
       this.performSort(this.tableData.state.sortedByHeader);
     } else {
@@ -215,16 +227,25 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   private updateDynamicColumns() {
-    // right now the only dynamic column is positionCurrent
-    const showingPositionCurrent = this.tableData.data.headers.find((eachHeader) => {
-      return eachHeader.data.underlineAttrName === 'positionCurrent';
+    /* the dynamic columns are:
+      1. QuantComparer
+      2. Mark
+      3. three mark delta columns
+      4. 30 day delta
+    */
+    this.tableData.data.headers.forEach((eachHeader, index) => {
+      if (!eachHeader.state.isPureTextVariant) {
+        const cellIndex = index - 1;
+        this.tableData.data.rows.forEach((eachRow) => {
+          eachRow.data.cells[cellIndex] = this.utilityService.populateSecurityTableCellFromSecurityCard(
+            eachHeader,
+            eachRow,
+            eachRow.data.cells[cellIndex],
+            this.activeTriCoreMetric
+          );
+        });
+      }
     });
-    if (!!showingPositionCurrent && this.receivedContentStage >= showingPositionCurrent.data.readyStage) {
-      const cellIndex = this.tableData.data.headers.indexOf(showingPositionCurrent) - 1;
-      this.tableData.data.rows.forEach((eachRow) => {
-        eachRow.data.cells[cellIndex] = this.utilityService.populateSecurityTableCellFromSecurityCard(showingPositionCurrent, eachRow, eachRow.data.cells[cellIndex]);
-      });
-    }
   }
 
   private loadTableRowsUponHeaderChange() {
@@ -233,12 +254,18 @@ export class SecurityTable implements OnInit, OnChanges {
         this.tableData.data.rows.forEach((eachRow) => {
           const targetCell = eachRow.data.cells[index-1];
           if (!!targetCell) {
-            this.utilityService.populateSecurityTableCellFromSecurityCard(eachHeader, eachRow, targetCell);
+            this.utilityService.populateSecurityTableCellFromSecurityCard(
+              eachHeader,
+              eachRow,
+              targetCell,
+              this.activeTriCoreMetric
+            );
           } else {
             const newCell = this.utilityService.populateSecurityTableCellFromSecurityCard(
               eachHeader,
               eachRow,
-              this.dtoService.formSecurityTableCellObject(false, null, false)
+              this.dtoService.formSecurityTableCellObject(false, null, false),
+              this.activeTriCoreMetric
             );
             eachRow.data.cells[index-1] = newCell;
           }
