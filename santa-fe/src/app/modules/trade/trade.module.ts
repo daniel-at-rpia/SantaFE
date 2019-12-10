@@ -12,8 +12,8 @@ import { TradePage } from 'Trade/trade.page';
 import { TradeCenterPanel } from 'Trade/containers/trade-center-panel.container';
 import { TradeAlertPanel } from 'Trade/containers/trade-alert-panel.container';
 import { TradeUtilityPanel } from 'Trade/containers/trade-utility-panel.container';
-import { TradeLiveGraphPanel } from 'Trade/containers/trade-live-graph-panel.container';
-import { TradeOverviewGraphPanel } from 'Trade/containers/trade-overview-graph-panel.container';
+import { TradeMarketAnalysisPanel } from 'Trade/containers/trade-market-analysis-panel.container';
+import { TradeObligorGraphPanel } from 'Trade/containers/trade-obligor-graph-panel.container';
 import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
 
 @NgModule({
@@ -22,8 +22,8 @@ import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingServ
     TradeCenterPanel,
     TradeAlertPanel,
     TradeUtilityPanel,
-    TradeLiveGraphPanel,
-    TradeOverviewGraphPanel
+    TradeMarketAnalysisPanel,
+    TradeObligorGraphPanel
   ],
   imports: [
     CommonModule,
