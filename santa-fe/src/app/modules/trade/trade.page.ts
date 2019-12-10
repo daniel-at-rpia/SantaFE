@@ -42,7 +42,7 @@ export class TradePage implements OnInit, OnDestroy {
 
   private initializePageState() {
     this.state = {
-      graphsCollapsed: true,
+      graphsCollapsed: false,
       ownerInitial: ''
     }
   }
