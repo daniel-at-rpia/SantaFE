@@ -98,9 +98,11 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   public onClickHeaderCTA(targetHeader: SecurityTableHeaderDTO) {
-    this.onClickSortBy(targetHeader);
-    // TODO: remove action menu and all CTA related logic and styling
-    // this.tableData.state.selectedHeader = this.tableData.state.selectedHeader && this.tableData.state.selectedHeader.data.displayLabel === targetHeader.data.displayLabel ? null : targetHeader;
+    if (targetHeader.state.isQuantVariant) {
+      this.tableData.state.selectedHeader = this.tableData.state.selectedHeader && this.tableData.state.selectedHeader.data.displayLabel === targetHeader.data.displayLabel ? null : targetHeader;
+    } else {
+      this.onClickSortBy(targetHeader);
+    }
   }
 
   public onClickRemoveHeader(targetHeader: SecurityTableHeaderDTO) {
