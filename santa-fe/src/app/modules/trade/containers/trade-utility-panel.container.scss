@@ -47,6 +47,9 @@
     &-label {
       margin-top: $spacing_small;
       color: $font_color_minor;
+      font-size: $font_size_small;
+      line-height: $line_height_x_small;
+      text-align: center;
     }
   }
   &__cta {
