@@ -12,7 +12,7 @@
       </button>
     </div>
     <div class="sat-tradeMarketAnalysisPanel__visualizer-main">
-      <quantitative-visualizer [visualizerData]="state.quantVisualizer.dto"></quantitative-visualizer>
+      <quantitative-visualizer *ngIf="state.quantVisualizer.dto" [visualizerData]="state.quantVisualizer.dto"></quantitative-visualizer>
     </div>
   </section>
   <section class="sat-tradeMarketAnalysisPanel__table">

@@ -29,6 +29,7 @@
       QuoteMetricBlock,
       SecurityPortfolioBlock
     } from 'FEModels/frontend-blocks.interface';
+    import { QuantVisualizerParams } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       SecurityDefinitionStub,
       SecurityDefinitionBundleStub,
@@ -628,36 +629,29 @@ export class DTOService {
   }
 
   public formQuantVisualizerObject(
-    tRaw: number,
-    gRaw: number,
-    tWoW: number,
-    gWow: number,
-    tMoM: number,
-    gMoM: number,
-    tYtD: number,
-    gYtD: number
+    params: QuantVisualizerParams
   ): QuantitativeVisualizerDTO {
-    const min = Math.min(tRaw, gRaw) / 1.25;
-    const max = Math.max(tRaw, gRaw) / 1.25;
-    const minDelta = Math.min(tWoW, tMoM, tYtD, gWow, gMoM, gYtD) * 1.25;
-    const maxDelta = Math.max(tWoW, tMoM, tYtD, gWow, gMoM, gYtD) * 1.25;
+    const min = Math.min(params.tRaw, params.gRaw) / 1.25;
+    const max = Math.max(params.tRaw, params.gRaw) / 1.25;
+    const minDelta = Math.min(params.tWoW, params.tMoM, params.tYtD, params.gWow, params.gMoM, params.gYtD) * 1.25;
+    const maxDelta = Math.max(params.tWoW, params.tMoM, params.tYtD, params.gWow, params.gMoM, params.gYtD) * 1.25;
     const object: QuantitativeVisualizerDTO = {
       data: {
         rawEntry: {
-          target: tRaw,
-          group: gRaw
+          target: params.tRaw,
+          group: params.gRaw
         },
         wow: {
-          target: tWoW,
-          group: gWow
+          target: params.tWoW,
+          group: params.gWow
         },
         mom: {
-          target: tMoM,
-          group: gMoM
+          target: params.tMoM,
+          group: params.gMoM
         },
         ytd: {
-          target: tYtD,
-          group: gYtD
+          target: params.tYtD,
+          group: params.gYtD
         },
         min: min,
         max: max,
@@ -666,25 +660,38 @@ export class DTOService {
       },
       style: {
         wow: {
-          inversed: false,
+          inversed: params.gWow < params.tWoW,
           leftSpaceWidth: 10,
-          rightSpaceWidth: 20
+          rightSpaceWidth: 10
         },
         mom: {
-          inversed: false,
-          leftSpaceWidth: 30,
-          rightSpaceWidth: 55
+          inversed: params.gMoM < params.tMoM,
+          leftSpaceWidth: 10,
+          rightSpaceWidth: 10
         },
         ytd: {
-          inversed: true,
-          leftSpaceWidth: 40,
-          rightSpaceWidth: 30
+          inversed: params.gYtD < params.tYtD,
+          leftSpaceWidth: 10,
+          rightSpaceWidth: 10
         }
       },
       state: {
         isStencil: false
       }
     }
+    const fullWidthDelta = maxDelta - minDelta;
+    const wowLeft = object.style.wow.inversed ? params.gWow : params.tWoW;
+    const wowRight = object.style.wow.inversed ? params.tWoW : params.gWow;
+    const momLeft = object.style.mom.inversed ? params.gMoM : params.tMoM;
+    const momRight = object.style.mom.inversed ? params.tMoM : params.gMoM;
+    const ytdLeft = object.style.ytd.inversed ? params.gYtD : params.tYtD;
+    const ytdRight = object.style.ytd.inversed ? params.tYtD : params.gYtD;
+    object.style.wow.leftSpaceWidth = Math.round((minDelta - wowLeft) / fullWidthDelta * 100);
+    object.style.wow.rightSpaceWidth = Math.round((maxDelta - wowRight) / fullWidthDelta * 100);
+    object.style.mom.leftSpaceWidth = Math.round((minDelta - momLeft) / fullWidthDelta * 100);
+    object.style.mom.rightSpaceWidth = Math.round((maxDelta - momRight) / fullWidthDelta * 100);
+    object.style.ytd.leftSpaceWidth = Math.round((minDelta - ytdLeft) / fullWidthDelta * 100);
+    object.style.ytd.rightSpaceWidth = Math.round((maxDelta - ytdRight) / fullWidthDelta * 100);
     return object;
   }
 

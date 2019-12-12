@@ -19,6 +19,11 @@
     import { TradeMarketAnalysisPanelState } from 'FEModels/frontend-page-states.interface';
     import { PayloadGetTargetSecurityGroup } from 'BEModels/backend-payloads.interface';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
+    import {
+      MARKET_ANALYSIS_SPREAD_METRIC_KEY,
+      MARKET_ANALYSIS_YIELD_METRIC_KEY
+    } from 'Core/constants/tradeConstants.constant';
+    import { QuantVisualizerParams } from 'FEModels/frontend-adhoc-packages.interface';
 
 @Component({
   selector: 'trade-market-analysis-panel',
@@ -30,7 +35,9 @@
 export class TradeMarketAnalysisPanel {
   state: TradeMarketAnalysisPanelState;
   constants = {
-    securityDefinitionMap: SecurityDefinitionMap
+    securityDefinitionMap: SecurityDefinitionMap,
+    spreadMetricKey: MARKET_ANALYSIS_SPREAD_METRIC_KEY,
+    yieldMetricKey: MARKET_ANALYSIS_YIELD_METRIC_KEY
   };
 
   constructor(
@@ -41,7 +48,7 @@ export class TradeMarketAnalysisPanel {
     this.state = {
       quantVisualizer: {
         groupByOptions: [],
-        dto: this.dtoService.formQuantVisualizerObject(1, 1, 123, 145, -32, -45, 309, 210)
+        dto: null
       }
     }
     this.populateDefinitionOptions();
@@ -51,6 +58,12 @@ export class TradeMarketAnalysisPanel {
 
   public onClickGroupByOption(targetOption: SecurityDefinitionDTO){
     targetOption.state.groupByActive = !targetOption.state.groupByActive;
+    const activeOptions = this.state.quantVisualizer.groupByOptions.filter((eachOption) => {
+      return eachOption.state.groupByActive;
+    })
+    if (activeOptions.length > 0) {
+      this.fetchGroupData();
+    }
   }
 
   private populateDefinitionOptions() {
@@ -82,13 +95,29 @@ export class TradeMarketAnalysisPanel {
     this.restfulCommService.callAPI('santaGroup/get-santa-group', {req: 'POST'}, payload, true).pipe(
       first(),
       tap((serverReturn) => {
-        console.log('test', serverReturn);
+        this.populateVisualizer(serverReturn);
       }),
       catchError(err => {
         console.error('error', err);
         return of('error');
       })
     ).subscribe();
+  }
+
+  private populateVisualizer(serverReturn) {
+    const groupDTO = this.dtoService.formSecurityGroupObject(serverReturn);
+    console.log('group is', groupDTO);
+    const params: QuantVisualizerParams = {
+      tRaw: 1,
+      gRaw: groupDTO.data.metricPack.raw[this.constants.spreadMetricKey],
+      tWoW: 123,
+      gWow: groupDTO.data.metricPack.delta.WoW[this.constants.spreadMetricKey],
+      tMoM: -32,
+      gMoM: groupDTO.data.metricPack.delta.MoM[this.constants.spreadMetricKey],
+      tYtD: 309,
+      gYtD: groupDTO.data.metricPack.delta.Ytd[this.constants.spreadMetricKey]
+    }
+    this.state.quantVisualizer.dto = this.dtoService.formQuantVisualizerObject(params);
   }
 
 }

@@ -2,6 +2,7 @@ import {
   TradeFilterConstantStub,
   SearchShortcutStub
 } from 'FEModels/frontend-stub-models.interface';
+import { SecurityMetricOptions } from 'Core/constants/coreConstants.constant';
 
 export const PortfolioList: Array<TradeFilterConstantStub> = [
   {
@@ -93,3 +94,6 @@ export const LIVE_UPDATE_COUNTDOWN = 30;
 
 export const LIVE_UPDATE_INPROG_PROMPT = 'Fetching Update ...';
 export const LIVE_UPDATE_PROCESSING_PROMPT = 'Processing ...';
+
+export const MARKET_ANALYSIS_SPREAD_METRIC_KEY = SecurityMetricOptions[0].label;
+export const MARKET_ANALYSIS_YIELD_METRIC_KEY = SecurityMetricOptions[6].label;

@@ -24,3 +24,14 @@ export interface LiveDataDiffingResult {
   markDiffCount: number;
   quantDiffCount: number;
 }
+
+export interface QuantVisualizerParams {
+  tRaw: number;
+  gRaw: number;
+  tWoW: number;
+  gWow: number;
+  tMoM: number;
+  gMoM: number;
+  tYtD: number;
+  gYtD: number;
+}
