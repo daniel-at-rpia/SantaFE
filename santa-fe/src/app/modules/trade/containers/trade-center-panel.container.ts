@@ -172,7 +172,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     } else {
       targetPreset.state.isSelected = true;
       this.state.presets.selectedPreset = targetPreset;
-      this.utilityService.applyShortcutToConfigurator(targetPreset, this.state.configurator.dto);
+      this.state.configurator.dto = this.utilityService.applyShortcutToConfigurator(targetPreset, this.state.configurator.dto);
       const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
       this.onApplyFilter(params);
       this.loadFreshData();
@@ -225,7 +225,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   public onSelectSecurityForAnalysis(targetSecurity: SecurityDTO) {
-    this.store$.dispatch(new TradeSelectedSecurityForAnalysisEvent(targetSecurity));
+    this.store$.dispatch(new TradeSelectedSecurityForAnalysisEvent(this.utilityService.deepCopy(targetSecurity)));
   }
 
   private populateSearchShortcuts(){
