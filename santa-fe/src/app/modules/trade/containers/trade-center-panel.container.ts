@@ -225,7 +225,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   public onSelectSecurityForAnalysis(targetSecurity: SecurityDTO) {
-    this.store$.dispatch(new TradeSelectedSecurityForAnalysisEvent(targetSecurity));
+    this.store$.dispatch(new TradeSelectedSecurityForAnalysisEvent(this.utilityService.deepCopy(targetSecurity)));
   }
 
   private populateSearchShortcuts(){
