@@ -5,7 +5,9 @@ import {
   SecurityDefinitionFilterBlock,
   QuoteMetricBlock,
   SecurityPortfolioBlock,
-  SecurityMarkBlock
+  SecurityMarkBlock,
+  QuantitativeEntryBlock,
+  QuantitativeEntryStyleBlock
 } from 'FEModels/frontend-blocks.interface';
 
 interface BasicDTOStructure {
@@ -293,5 +295,26 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
     filteredBySpread: boolean;
     filteredByYield: boolean;
     filteredByPrice: boolean;
+  }
+}
+
+export interface QuantitativeVisualizerDTO extends BasicDTOStructure {
+  data: {
+    rawEntry: QuantitativeEntryBlock;
+    wow: QuantitativeEntryBlock;
+    mom: QuantitativeEntryBlock;
+    ytd: QuantitativeEntryBlock;
+    min: number;
+    max: number;
+    minDelta: number;
+    maxDelta: number;
+  }
+  style: {
+    wow: QuantitativeEntryStyleBlock;
+    mom: QuantitativeEntryStyleBlock;
+    ytd: QuantitativeEntryStyleBlock;
+  }
+  state: {
+    isStencil: boolean;
   }
 }

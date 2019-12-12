@@ -85,3 +85,14 @@ export interface QuoteMetricBlock {
   isTripleWidthColumn: boolean;
   sortable: boolean;
 }
+
+export interface QuantitativeEntryBlock {
+  target: number;
+  group: number;
+}
+
+export interface QuantitativeEntryStyleBlock {
+  inversed: boolean;
+  leftSpaceWidth: number;
+  rightSpaceWidth: number;
+}

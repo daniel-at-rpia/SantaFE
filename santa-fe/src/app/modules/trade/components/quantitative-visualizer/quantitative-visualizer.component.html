@@ -1,0 +1,118 @@
+<article class="sat-quantVisualizer">
+  <ul class="sat-quantVisualizer__entryList">
+    <li class="sat-quantVisualizer__entryList-item">
+      <span class="sat-quantVisualizer__entryList-item-label">WoW :</span>
+      <div class="sat-quantVisualizer__entryList-item-content">
+        <article
+          [ngClass]="{
+            'sat-quantVisualizerEntry': true,
+            'sat-quantVisualizerEntry--inversed': visualizerData.style.wow.inversed
+          }">
+          <section class="sat-quantVisualizerEntry__baseLine">
+            <div class="sat-quantVisualizerEntry__baseLine-content"></div>
+          </section>
+          <section class="sat-quantVisualizerEntry__main">
+            <div
+              class="sat-quantVisualizerEntry__main-leftSpacing"
+              [ngStyle]="{
+                'flex-basis': visualizerData.style.wow.leftSpaceWidth + '%'
+              }">
+            </div>
+            <div class="sat-quantVisualizerEntry__main-content">
+              <div class="sat-quantVisualizerEntry__main-content-line">
+              </div>
+              <div class="sat-quantVisualizerEntry__main-content-node sat-quantVisualizerEntry__main-content-node--target">
+                <i class="fal fa-cube"></i>
+              </div>
+              <div class="sat-quantVisualizerEntry__main-content-node sat-quantVisualizerEntry__main-content-node--group">
+                <i class="fal fa-cubes"></i>
+              </div>
+            </div>
+            <div
+              class="sat-quantVisualizerEntry__main-rightSpacing"
+              [ngStyle]="{
+                'flex-basis': visualizerData.style.wow.rightSpaceWidth + '%'
+              }">
+            </div>
+          </section>
+        </article>
+      </div>
+    </li>
+    <li class="sat-quantVisualizer__entryList-item">
+      <span class="sat-quantVisualizer__entryList-item-label">MoM :</span>
+      <div class="sat-quantVisualizer__entryList-item-content">
+        <article
+          [ngClass]="{
+            'sat-quantVisualizerEntry': true,
+            'sat-quantVisualizerEntry--inversed': visualizerData.style.mom.inversed
+          }">
+          <section class="sat-quantVisualizerEntry__baseLine">
+            <div class="sat-quantVisualizerEntry__baseLine-content"></div>
+          </section>
+          <section class="sat-quantVisualizerEntry__main">
+            <div
+              class="sat-quantVisualizerEntry__main-leftSpacing"
+              [ngStyle]="{
+                'flex-basis': visualizerData.style.mom.leftSpaceWidth + '%'
+              }">
+            </div>
+            <div class="sat-quantVisualizerEntry__main-content">
+              <div class="sat-quantVisualizerEntry__main-content-line">
+              </div>
+              <div class="sat-quantVisualizerEntry__main-content-node sat-quantVisualizerEntry__main-content-node--target">
+                <i class="fal fa-cube"></i>
+              </div>
+              <div class="sat-quantVisualizerEntry__main-content-node sat-quantVisualizerEntry__main-content-node--group">
+                <i class="fal fa-cubes"></i>
+              </div>
+            </div>
+            <div
+              class="sat-quantVisualizerEntry__main-rightSpacing"
+              [ngStyle]="{
+                'flex-basis': visualizerData.style.mom.rightSpaceWidth + '%'
+              }">
+            </div>
+          </section>
+        </article>
+      </div>
+    </li>
+    <li class="sat-quantVisualizer__entryList-item">
+      <span class="sat-quantVisualizer__entryList-item-label">YtD :</span>
+      <div class="sat-quantVisualizer__entryList-item-content">
+        <article
+          [ngClass]="{
+            'sat-quantVisualizerEntry': true,
+            'sat-quantVisualizerEntry--inversed': visualizerData.style.ytd.inversed
+          }">
+          <section class="sat-quantVisualizerEntry__baseLine">
+            <div class="sat-quantVisualizerEntry__baseLine-content"></div>
+          </section>
+          <section class="sat-quantVisualizerEntry__main">
+            <div
+              class="sat-quantVisualizerEntry__main-leftSpacing"
+              [ngStyle]="{
+                'flex-basis': visualizerData.style.ytd.leftSpaceWidth + '%'
+              }">
+            </div>
+            <div class="sat-quantVisualizerEntry__main-content">
+              <div class="sat-quantVisualizerEntry__main-content-line">
+              </div>
+              <div class="sat-quantVisualizerEntry__main-content-node sat-quantVisualizerEntry__main-content-node--target">
+                <i class="fal fa-cube"></i>
+              </div>
+              <div class="sat-quantVisualizerEntry__main-content-node sat-quantVisualizerEntry__main-content-node--group">
+                <i class="fal fa-cubes"></i>
+              </div>
+            </div>
+            <div
+              class="sat-quantVisualizerEntry__main-rightSpacing"
+              [ngStyle]="{
+                'flex-basis': visualizerData.style.ytd.rightSpaceWidth + '%'
+              }">
+            </div>
+          </section>
+        </article>
+      </div>
+    </li>
+  </ul>
+</article>

@@ -59,7 +59,7 @@
     padding: $spacing_medium $spacing_medium $spacing_medium 0;
     overflow: hidden;
     &-marketAnalysisPanel {
-      flex: 1 1 auto;
+      flex: 1 1 50%;
       display: flex;
       margin-bottom: $spacing_medium/2;
       trade-market-analysis-panel {
@@ -68,7 +68,7 @@
       }
     }
     &-obligorGraphPanel {
-      flex: 1 1 auto;
+      flex: 1 1 50%;
       display: flex;
       margin-top: $spacing_medium/2;
       trade-obligor-graph-panel {
