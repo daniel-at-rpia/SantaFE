@@ -4,7 +4,10 @@ import {
   ActionReducerMap
 } from '@ngrx/store';
 
-import { SecurityTableRowDTO } from 'FEModels/frontend-models.interface';
+import {
+  SecurityTableRowDTO,
+  SecurityDTO
+} from 'FEModels/frontend-models.interface';
 import {
   TradeActions,
   TradeLiveUpdateStartEvent,

@@ -82,6 +82,7 @@
         [receivedSecurityTableMetricsUpdate]="state.table.metrics"
         [liveUpdatedRows]="state.fetchResult.liveUpdatedRowList"
         [activeTriCoreMetric]="state.filters.quickFilters.metricType"
+        (selectedSecurityForAnalysis)="onSelectSecurityForAnalysis($event)"
       ></security-table>
     </div>
   </section>

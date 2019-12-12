@@ -65,7 +65,8 @@
       TradeLiveUpdateProcessDataCompleteEvent,
       TradeTogglePresetEvent,
       TradeLiveUpdatePassRawDataEvent,
-      TradeToggleMetricEvent
+      TradeToggleMetricEvent,
+      TradeSelectedSecurityForAnalysisEvent
     } from 'Trade/actions/trade.actions';
     import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
   //
@@ -221,6 +222,10 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     if (this.state.currentContentStage === this.constants.securityTableFinalStage) {
       this.state.fetchResult.rowList = this.FilterPrinstineRowList();
     }
+  }
+
+  public onSelectSecurityForAnalysis(targetSecurity: SecurityDTO) {
+    this.store$.dispatch(new TradeSelectedSecurityForAnalysisEvent(targetSecurity));
   }
 
   private populateSearchShortcuts(){

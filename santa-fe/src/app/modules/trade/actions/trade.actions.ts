@@ -1,6 +1,9 @@
 import { Action } from '@ngrx/store';
 
-import { SecurityTableRowDTO } from 'FEModels/frontend-models.interface';
+import {
+  SecurityTableRowDTO,
+  SecurityDTO
+} from 'FEModels/frontend-models.interface';
 
 export enum TradeActions {
   LiveUpdateStartEvent = '[Trade] Live Update Start',
@@ -11,7 +14,8 @@ export enum TradeActions {
   LiveUpdateCount = '[Trade] Live Update Count',
   LiveUpdateProcessingDataCompleteEvent = '[Trade] Live Update Processing Data Complete Event',
   TogglePresetEvent = '[Trade] Toggle Preset Event',
-  ToggleMetricEvent = '[Trade] Toggle Metric Event'
+  ToggleMetricEvent = '[Trade] Toggle Metric Event',
+  SelectSecurityForAnalysisEvent = '[Trade] Select Security For Analysis Event'
 }
 
 export class TradeLiveUpdateStartEvent implements Action {
@@ -62,4 +66,14 @@ export class TradeTogglePresetEvent implements Action {
 export class TradeToggleMetricEvent implements Action {
   readonly type = TradeActions.ToggleMetricEvent;
   constructor(){}
+}
+
+export class TradeSelectedSecurityForAnalysisEvent implements Action {
+  readonly type = TradeActions.SelectSecurityForAnalysisEvent;
+  readonly targetSecurity: SecurityDTO;
+  constructor(
+    targetSecurity: SecurityDTO
+  ){
+    this.targetSecurity = targetSecurity;
+  }
 }
