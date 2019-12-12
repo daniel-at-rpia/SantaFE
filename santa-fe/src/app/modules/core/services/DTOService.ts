@@ -140,6 +140,7 @@ export class DTOService {
     dto.data.mark.markDriver = targetPortfolio.mark.driver;
     dto.data.mark.markChangedBy = targetPortfolio.mark.user;
     dto.data.mark.markChangedTime = targetPortfolio.mark.enteredTime;
+    dto.data.owner = [];
     !!targetPortfolio.primaryPmName && dto.data.owner.push(targetPortfolio.primaryPmName);
     !!targetPortfolio.backupPmName && dto.data.owner.push(targetPortfolio.backupPmName);
     !!targetPortfolio.researchName && dto.data.owner.push(targetPortfolio.researchName);
@@ -150,7 +151,6 @@ export class DTOService {
     } else {
       dto.data.mark.mark = null;
       dto.data.mark.markRaw = null;
-      dto.data.mark.markBackend = null;
     }
     const newBlock: SecurityPortfolioBlock = {
       portfolioName: targetPortfolio.portfolioShortName,

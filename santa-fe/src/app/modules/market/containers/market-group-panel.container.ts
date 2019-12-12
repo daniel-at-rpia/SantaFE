@@ -135,7 +135,7 @@ export class MarketGroupPanel implements OnDestroy {
     if (this.state.powerModeActivated) {
       if (this.state.configurator.selectedShortcut) {
         this.onClearConfig();
-        this.utilityService.applyShortcutToConfigurator(this.state.configurator.selectedShortcut, this.state.configurator.dto);
+        this.state.configurator.dto = this.utilityService.applyShortcutToConfigurator(this.state.configurator.selectedShortcut, this.state.configurator.dto);
       }
       this.toggleLandscapeView(true, false);
     }

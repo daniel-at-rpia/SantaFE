@@ -353,9 +353,13 @@ export class UtilityService {
       return percentileList[0];
     }
 
-    public applyShortcutToConfigurator(targetShortcut: SearchShortcutDTO, targetConfigurator: SecurityDefinitionConfiguratorDTO){
+    public applyShortcutToConfigurator(
+      targetShortcut: SearchShortcutDTO,
+      targetConfigurator: SecurityDefinitionConfiguratorDTO
+    ): SecurityDefinitionConfiguratorDTO {
+      const newConfig = this.deepCopy(targetConfigurator);
       targetShortcut.data.configuration.forEach((eachShortcutDef) => {
-        targetConfigurator.data.definitionList.forEach((eachBundle) => {
+        newConfig.data.definitionList.forEach((eachBundle) => {
           eachBundle.data.list.forEach((eachDefinition) => {
             if (eachDefinition.data.key === eachShortcutDef.data.key) {
               eachDefinition.data.filterOptionList = eachShortcutDef.data.filterOptionList;
@@ -365,6 +369,7 @@ export class UtilityService {
           });
         });
       });
+      return newConfig;
     }
 
     public packDefinitionConfiguratorEmitterParams(
