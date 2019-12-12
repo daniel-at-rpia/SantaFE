@@ -6,6 +6,14 @@ export interface PayloadGetSantaGroups {
   tenorOptions: Array<string>;
 }
 
+export interface PayloadGetTargetSecurityGroup {
+  source: string;
+  yyyyMMdd?: number;
+  santaGroupIdentifier: object;
+  santaGroupFilters: object;
+  tenorOptions: Array<string>;
+}
+
 export interface PayloadGetPositions {
   source?: string;
   yyyyMMdd?: number;

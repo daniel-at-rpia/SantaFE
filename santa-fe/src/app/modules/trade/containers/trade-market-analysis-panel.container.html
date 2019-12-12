@@ -2,44 +2,13 @@
   <section class="sat-tradeMarketAnalysisPanel__visualizer">
     <div class="sat-tradeMarketAnalysisPanel__visualizer-ctas">
       <button
-        (click)="onClickGroupByOption('Currency')"
+        *ngFor="let eachOption of state.quantVisualizer.groupByOptions"
+        (click)="onClickGroupByOption(eachOption)"
         [ngClass]="{
           'sat-tradeMarketAnalysisPanel__visualizer-ctas-btn': true,
-          'sat-tradeMarketAnalysisPanel__visualizer-ctas-btn--selected': state.quantVisualizer.groupByOptions.indexOf('Currency') >= 0
+          'sat-tradeMarketAnalysisPanel__visualizer-ctas-btn--selected': eachOption.state.groupByActive
         }">
-        Currency
-      </button>
-      <button
-        (click)="onClickGroupByOption('Industry')"
-        [ngClass]="{
-          'sat-tradeMarketAnalysisPanel__visualizer-ctas-btn': true,
-          'sat-tradeMarketAnalysisPanel__visualizer-ctas-btn--selected': state.quantVisualizer.groupByOptions.indexOf('Industry') >= 0
-        }">
-        Industry
-      </button>
-      <button
-        (click)="onClickGroupByOption('Rating')"
-        [ngClass]="{
-          'sat-tradeMarketAnalysisPanel__visualizer-ctas-btn': true,
-          'sat-tradeMarketAnalysisPanel__visualizer-ctas-btn--selected': state.quantVisualizer.groupByOptions.indexOf('Rating') >= 0
-        }">
-        Rating
-      </button>
-      <button
-        (click)="onClickGroupByOption('Sector')"
-        [ngClass]="{
-          'sat-tradeMarketAnalysisPanel__visualizer-ctas-btn': true,
-          'sat-tradeMarketAnalysisPanel__visualizer-ctas-btn--selected': state.quantVisualizer.groupByOptions.indexOf('Sector') >= 0
-        }">
-        Sector
-      </button>
-      <button
-        (click)="onClickGroupByOption('Seniority')"
-        [ngClass]="{
-          'sat-tradeMarketAnalysisPanel__visualizer-ctas-btn': true,
-          'sat-tradeMarketAnalysisPanel__visualizer-ctas-btn--selected': state.quantVisualizer.groupByOptions.indexOf('Seniority') >= 0
-        }">
-        Seniority
+        {{eachOption.data.name}}
       </button>
     </div>
     <div class="sat-tradeMarketAnalysisPanel__visualizer-main">
