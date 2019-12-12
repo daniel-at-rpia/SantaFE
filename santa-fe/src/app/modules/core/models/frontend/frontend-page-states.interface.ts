@@ -7,7 +7,8 @@ import {
   SecurityDefinitionConfiguratorDTO,
   SecurityGroupAverageVisualizerDTO,
   SearchShortcutDTO,
-  QuantComparerDTO
+  QuantComparerDTO,
+  QuantitativeVisualizerDTO
 } from 'FEModels/frontend-models.interface';
 import {
   SecurityDefinitionStub,
@@ -100,4 +101,11 @@ export interface TradeUtilityPanelState {
   isProcessingData: boolean;
   isPresetSelected: boolean;
   isInitialDataLoaded: boolean;
+}
+
+export interface TradeMarketAnalysisPanelState {
+  quantVisualizer: {
+    groupByOptions: Array<string>,
+    dto: QuantitativeVisualizerDTO
+  }
 }
