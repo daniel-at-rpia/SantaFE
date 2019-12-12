@@ -20,7 +20,8 @@
       SecurityTableRowDTO,
       SecurityTableHeaderDTO,
       SecurityTableCellDTO,
-      SecurityQuoteDTO
+      SecurityQuoteDTO,
+      QuantitativeVisualizerDTO
     } from 'FEModels/frontend-models.interface';
     import {
       SecurityGroupMetricBlock,
@@ -548,7 +549,7 @@ export class DTOService {
     bestBidNum: number,
     bestAskNum: number,
     filteredMetricType: string
-  ) : SecurityQuoteDTO {
+  ): SecurityQuoteDTO {
     const hasBid = !isStencil ? (!!rawData.isActive && !!rawData.bidVenue) : true;
     const hasAsk = !isStencil ? (!!rawData.isActive && !!rawData.askVenue) : true;
     const bidBenchmark = !isStencil ? rawData.bidQualifier : 'T 0.5 01/01/2020';
@@ -622,6 +623,67 @@ export class DTOService {
 
       object.state.isBestOffer =object.data.ask.tspread == bestAskNum || object.data.ask.price == bestAskNum || object.data.ask.yield == bestAskNum;
       
+    }
+    return object;
+  }
+
+  public formQuantVisualizerObject(
+    tRaw: number,
+    gRaw: number,
+    tWoW: number,
+    gWow: number,
+    tMoM: number,
+    gMoM: number,
+    tYtD: number,
+    gYtD: number
+  ): QuantitativeVisualizerDTO {
+    const min = Math.min(tRaw, gRaw) / 1.25;
+    const max = Math.max(tRaw, gRaw) / 1.25;
+    const minDelta = Math.min(tWoW, tMoM, tYtD, gWow, gMoM, gYtD) * 1.25;
+    const maxDelta = Math.max(tWoW, tMoM, tYtD, gWow, gMoM, gYtD) * 1.25;
+    const object: QuantitativeVisualizerDTO = {
+      data: {
+        rawEntry: {
+          target: tRaw,
+          group: gRaw
+        },
+        wow: {
+          target: tWoW,
+          group: gWow
+        },
+        mom: {
+          target: tMoM,
+          group: gMoM
+        },
+        ytd: {
+          target: tYtD,
+          group: gYtD
+        },
+        min: min,
+        max: max,
+        minDelta: minDelta,
+        maxDelta: maxDelta
+      },
+      style: {
+        wow: {
+          inversed: false,
+          leftSpaceWidth: 10,
+          rightSpaceWidth: 20
+        },
+        mom: {
+          inversed: false,
+          leftSpaceWidth: 30,
+          rightSpaceWidth: 55
+        },
+        ytd: {
+          inversed: true,
+          leftSpaceWidth: 40,
+          rightSpaceWidth: 30
+        }
+      },
+      state: {
+        isStencil: false
+      }
     }
     return object;
   }

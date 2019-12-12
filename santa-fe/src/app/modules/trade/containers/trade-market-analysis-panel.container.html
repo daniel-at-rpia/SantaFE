@@ -1,3 +1,17 @@
 <article class="sat-tradeMarketAnalysisPanel">
-  <i class="sat-tradeMarketAnalysisPanel__underConstruction fal fa-construction"></i>
+  <section class="sat-tradeMarketAnalysisPanel__visualizer">
+    <div class="sat-tradeMarketAnalysisPanel__visualizer-ctas">
+      <button>Sector</button>
+      <button>Rating</button>
+      <button>Senioirity</button>
+      <button>Issuer</button>
+      <button>Industry</button>
+    </div>
+    <div class="sat-tradeMarketAnalysisPanel__visualizer-main">
+      <quantitative-visualizer [visualizerData]="testData"></quantitative-visualizer>
+    </div>
+  </section>
+  <section class="sat-tradeMarketAnalysisPanel__table">
+    
+  </section>
 </article>

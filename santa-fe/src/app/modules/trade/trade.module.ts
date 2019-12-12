@@ -15,6 +15,7 @@ import { TradeUtilityPanel } from 'Trade/containers/trade-utility-panel.containe
 import { TradeMarketAnalysisPanel } from 'Trade/containers/trade-market-analysis-panel.container';
 import { TradeObligorGraphPanel } from 'Trade/containers/trade-obligor-graph-panel.container';
 import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
+import { QuantitativeVisualizer } from 'Trade/components/quantitative-visualizer/quantitative-visualizer.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingServ
     TradeAlertPanel,
     TradeUtilityPanel,
     TradeMarketAnalysisPanel,
-    TradeObligorGraphPanel
+    TradeObligorGraphPanel,
+    QuantitativeVisualizer
   ],
   imports: [
     CommonModule,
