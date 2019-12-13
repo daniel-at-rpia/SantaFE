@@ -1,18 +1,26 @@
     import {
       Component,
-      ViewEncapsulation
+      ViewEncapsulation,
+      OnInit,
+      OnDestroy
     } from '@angular/core';
-    import { of } from 'rxjs';
+    import {
+      Observable,
+      Subscription,
+      of
+    } from 'rxjs';
     import {
       tap,
       first,
       catchError
     } from 'rxjs/operators';
+    import { Store, select } from '@ngrx/store';
 
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import {
+      SecurityDTO,
       QuantitativeVisualizerDTO,
       SecurityDefinitionDTO
     } from 'FEModels/frontend-models.interface';
@@ -24,6 +32,7 @@
       MARKET_ANALYSIS_YIELD_METRIC_KEY
     } from 'Core/constants/tradeConstants.constant';
     import { QuantVisualizerParams } from 'FEModels/frontend-adhoc-packages.interface';
+    import { selectSelectedSecurityForAnalysis } from 'Trade/selectors/trade.selectors';
 
 @Component({
   selector: 'trade-market-analysis-panel',
@@ -32,8 +41,11 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class TradeMarketAnalysisPanel {
+export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
   state: TradeMarketAnalysisPanelState;
+  subscriptions = {
+    receiveSelectedSecuritySub: null
+  }
   constants = {
     securityDefinitionMap: SecurityDefinitionMap,
     spreadMetricKey: MARKET_ANALYSIS_SPREAD_METRIC_KEY,
@@ -41,6 +53,7 @@ export class TradeMarketAnalysisPanel {
   };
 
   constructor(
+    private store$: Store<any>,
     private dtoService: DTOService,
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService
@@ -48,12 +61,27 @@ export class TradeMarketAnalysisPanel {
     this.state = {
       quantVisualizer: {
         groupByOptions: [],
-        dto: null
+        dto: null,
+        targetSecurity: null
       }
     }
     this.populateDefinitionOptions();
     this.state.quantVisualizer.groupByOptions[0].state.groupByActive = true;
-    this.fetchGroupData();
+  }
+
+  public ngOnInit() {
+    this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
+      select(selectSelectedSecurityForAnalysis)
+    ).subscribe((targetSecurity) => {
+      !!targetSecurity && this.onSecuritySelected(targetSecurity);
+    });
+  }
+
+  public ngOnDestroy() {
+    for (const eachItem in this.subscriptions) {
+      const eachSub = this.subscriptions[eachItem] as Subscription;
+      eachSub.unsubscribe();
+    }
   }
 
   public onClickGroupByOption(targetOption: SecurityDefinitionDTO){
@@ -64,6 +92,11 @@ export class TradeMarketAnalysisPanel {
     if (activeOptions.length > 0) {
       this.fetchGroupData();
     }
+  }
+
+  private onSecuritySelected(targetSecurity: SecurityDTO) {
+    this.state.quantVisualizer.targetSecurity = targetSecurity;
+    this.fetchGroupData();
   }
 
   private populateDefinitionOptions() {
@@ -77,6 +110,7 @@ export class TradeMarketAnalysisPanel {
   }
 
   private fetchGroupData() {
+    this.state.quantVisualizer.dto = null;
     const payload : PayloadGetTargetSecurityGroup = {
       source: "Default",
       santaGroupIdentifier: {},
@@ -106,15 +140,15 @@ export class TradeMarketAnalysisPanel {
 
   private populateVisualizer(serverReturn) {
     const groupDTO = this.dtoService.formSecurityGroupObject(serverReturn);
-    console.log('group is', groupDTO);
+    const securityMetricPack = this.state.quantVisualizer.targetSecurity.data.metricPack;
     const params: QuantVisualizerParams = {
-      tRaw: 1,
+      tRaw: securityMetricPack.raw[this.constants.spreadMetricKey],
       gRaw: groupDTO.data.metricPack.raw[this.constants.spreadMetricKey],
-      tWoW: 123,
-      gWow: groupDTO.data.metricPack.delta.WoW[this.constants.spreadMetricKey],
-      tMoM: -32,
+      tWoW: securityMetricPack.delta.WoW[this.constants.spreadMetricKey],
+      gWoW: groupDTO.data.metricPack.delta.WoW[this.constants.spreadMetricKey],
+      tMoM: securityMetricPack.delta.MoM[this.constants.spreadMetricKey],
       gMoM: groupDTO.data.metricPack.delta.MoM[this.constants.spreadMetricKey],
-      tYtD: 309,
+      tYtD: securityMetricPack.delta.Ytd[this.constants.spreadMetricKey],
       gYtD: groupDTO.data.metricPack.delta.Ytd[this.constants.spreadMetricKey]
     }
     this.state.quantVisualizer.dto = this.dtoService.formQuantVisualizerObject(params);

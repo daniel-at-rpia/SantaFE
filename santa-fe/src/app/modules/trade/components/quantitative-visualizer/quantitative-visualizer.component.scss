@@ -96,7 +96,7 @@ $quantVisualizerEntry_node_size: 1.75rem;
       flex: 0 0 auto;
     }
   }
-  &--inversed {
+  &--inversedState {
     #{$quantVisualizerEntryBlockName} {
       &__main {
         &-content {
@@ -112,6 +112,20 @@ $quantVisualizerEntry_node_size: 1.75rem;
               right: inherit;
               left: 0;
             }
+          }
+        }
+      }
+    }
+  }
+  &--invalidState {
+    #{$quantVisualizerEntryBlockName} {
+      &__main {
+        &-content {
+          &-line {
+            display: none;
+          }
+          &-node {
+            display: none;
           }
         }
       }

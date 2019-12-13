@@ -6,7 +6,8 @@
         <article
           [ngClass]="{
             'sat-quantVisualizerEntry': true,
-            'sat-quantVisualizerEntry--inversed': visualizerData.style.wow.inversed
+            'sat-quantVisualizerEntry--inversedState': visualizerData.style.wow.inversed,
+            'sat-quantVisualizerEntry--invalidState': !visualizerData.state.isWoWValid
           }">
           <section class="sat-quantVisualizerEntry__baseLine">
             <div class="sat-quantVisualizerEntry__baseLine-content"></div>
@@ -46,7 +47,8 @@
         <article
           [ngClass]="{
             'sat-quantVisualizerEntry': true,
-            'sat-quantVisualizerEntry--inversed': visualizerData.style.mom.inversed
+            'sat-quantVisualizerEntry--inversedState': visualizerData.style.mom.inversed,
+            'sat-quantVisualizerEntry--invalidState': !visualizerData.state.isMoMValid
           }">
           <section class="sat-quantVisualizerEntry__baseLine">
             <div class="sat-quantVisualizerEntry__baseLine-content"></div>
@@ -86,7 +88,8 @@
         <article
           [ngClass]="{
             'sat-quantVisualizerEntry': true,
-            'sat-quantVisualizerEntry--inversed': visualizerData.style.ytd.inversed
+            'sat-quantVisualizerEntry--inversedState': visualizerData.style.ytd.inversed,
+            'sat-quantVisualizerEntry--invalidState': !visualizerData.state.isYtDValid
           }">
           <section class="sat-quantVisualizerEntry__baseLine">
             <div class="sat-quantVisualizerEntry__baseLine-content"></div>

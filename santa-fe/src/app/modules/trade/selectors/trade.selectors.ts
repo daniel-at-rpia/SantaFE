@@ -32,3 +32,8 @@ export const selectInitialDataLoaded = createSelector(
   getTradeState,
   (state: TradeState) => state.initialDataLoaded
 );
+
+export const selectSelectedSecurityForAnalysis = createSelector(
+  getTradeState,
+  (state: TradeState) => state.selectedSecurityForAnalysis
+);

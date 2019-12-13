@@ -29,7 +29,7 @@ export interface QuantVisualizerParams {
   tRaw: number;
   gRaw: number;
   tWoW: number;
-  gWow: number;
+  gWoW: number;
   tMoM: number;
   gMoM: number;
   tYtD: number;

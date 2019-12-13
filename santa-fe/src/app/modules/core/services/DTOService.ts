@@ -633,8 +633,15 @@ export class DTOService {
   ): QuantitativeVisualizerDTO {
     const min = Math.min(params.tRaw, params.gRaw) / 1.25;
     const max = Math.max(params.tRaw, params.gRaw) / 1.25;
-    const minDelta = Math.min(params.tWoW, params.tMoM, params.tYtD, params.gWow, params.gMoM, params.gYtD) * 1.25;
-    const maxDelta = Math.max(params.tWoW, params.tMoM, params.tYtD, params.gWow, params.gMoM, params.gYtD) * 1.25;
+    const validDeltaParamsList: Array<number> = [0];
+    params.tWoW !== null && validDeltaParamsList.push(params.tWoW);
+    params !== null && validDeltaParamsList.push(params.tMoM);
+    params !== null && validDeltaParamsList.push(params.tYtD);
+    params !== null && validDeltaParamsList.push(params.gWoW);
+    params !== null && validDeltaParamsList.push(params.gMoM);
+    params !== null && validDeltaParamsList.push(params.gYtD);
+    const minDelta = Math.min(...validDeltaParamsList) === 0 ? -1: Math.min(...validDeltaParamsList) * 1.25;
+    const maxDelta = Math.max(...validDeltaParamsList) === 0 ? 1 : Math.max(...validDeltaParamsList) * 1.25;
     const object: QuantitativeVisualizerDTO = {
       data: {
         rawEntry: {
@@ -643,7 +650,7 @@ export class DTOService {
         },
         wow: {
           target: params.tWoW,
-          group: params.gWow
+          group: params.gWoW
         },
         mom: {
           target: params.tMoM,
@@ -660,7 +667,7 @@ export class DTOService {
       },
       style: {
         wow: {
-          inversed: params.gWow < params.tWoW,
+          inversed: params.gWoW < params.tWoW,
           leftSpaceWidth: 10,
           rightSpaceWidth: 10
         },
@@ -676,12 +683,15 @@ export class DTOService {
         }
       },
       state: {
+        isWoWValid: params.tWoW !== null && params.gWoW !== null,
+        isMoMValid: params.tMoM !== null && params.gMoM !== null,
+        isYtDValid: params.tYtD !== null && params.gYtD !== null,
         isStencil: false
       }
     }
     const fullWidthDelta = maxDelta - minDelta;
-    const wowLeft = object.style.wow.inversed ? params.gWow : params.tWoW;
-    const wowRight = object.style.wow.inversed ? params.tWoW : params.gWow;
+    const wowLeft = object.style.wow.inversed ? params.gWoW : params.tWoW;
+    const wowRight = object.style.wow.inversed ? params.tWoW : params.gWoW;
     const momLeft = object.style.mom.inversed ? params.gMoM : params.tMoM;
     const momRight = object.style.mom.inversed ? params.tMoM : params.gMoM;
     const ytdLeft = object.style.ytd.inversed ? params.gYtD : params.tYtD;

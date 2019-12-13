@@ -105,7 +105,8 @@ export interface TradeUtilityPanelState {
 
 export interface TradeMarketAnalysisPanelState {
   quantVisualizer: {
-    groupByOptions: Array<SecurityDefinitionDTO>,
-    dto: QuantitativeVisualizerDTO
+    groupByOptions: Array<SecurityDefinitionDTO>;
+    dto: QuantitativeVisualizerDTO;
+    targetSecurity: SecurityDTO;
   }
 }
