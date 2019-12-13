@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { UtilityService } from './UtilityService';
 import {
   SecurityGroupPieChartBlock,
-  SecurityGroupPieChartDataBlock
+  SecurityGroupPieChartDataBlock,
+  ObligorChartBlock
 } from 'FEModels/frontend-blocks.interface';
 
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import am4themes_material from "@amcharts/amcharts4/themes/material";
+import * as am4plugins_regression from "@amcharts/amcharts4/plugins/regression";
 
 // Apply the themes
 //am4core.useTheme(am4themes_animated);
@@ -127,4 +129,129 @@ export class GraphService {
       return this.utility.mapSeniorities(attrName);
     }
   }
+
+
+  generateObligorChartDumbells(obligorChartDTO: ObligorChartBlock): am4charts.ColumnSeries
+  {
+    // Create the column representing the mark discrepency.
+    let dumbBellseries = obligorChartDTO.chart.series.push(new am4charts.ColumnSeries());
+    dumbBellseries.data = obligorChartDTO.rawData;
+    dumbBellseries.dataFields.categoryX = "category";
+    dumbBellseries.dataFields.openValueY = "mid";
+    dumbBellseries.dataFields.valueY = "mark";
+    dumbBellseries.sequencedInterpolation = true;
+    dumbBellseries.strokeOpacity = 1;
+    dumbBellseries.columns.template.width = 3;
+    dumbBellseries.tooltip.pointerOrientation = "horizontal";
+    dumbBellseries.dataFields.value = "securityCount";
+    dumbBellseries.name = obligorChartDTO.name;
+    dumbBellseries.fill = am4core.color(obligorChartDTO.colorScheme);
+    dumbBellseries.stroke = am4core.color(obligorChartDTO.colorScheme);
+    dumbBellseries.legendSettings.labelText = "[bold {color}]{name}[/]";
+
+    // Modify the column color based on mark discrepency.
+    let columnTemplate = dumbBellseries.columns.template;
+    columnTemplate.strokeWidth = 2;
+    columnTemplate.strokeOpacity = 1;
+    columnTemplate.stroke = am4core.color(obligorChartDTO.colorScheme);
+    columnTemplate.adapter.add("fill", function (fill, target) {
+      let index: number = target.dataItem.index;
+      if (dumbBellseries.data[index].mid > dumbBellseries.data[index].mark) {
+        return am4core.color("#cc3300"); // red
+      }
+      else
+      {
+        return am4core.color("#5cd65c"); // green
+      }
+    })
+    
+    columnTemplate.adapter.add("stroke", function (stroke, target) {
+      let index: number = target.dataItem.index;
+      if (dumbBellseries.data[index].mid > dumbBellseries.data[index].mark) {
+        return am4core.color("#cc3300"); // red
+      }
+      else
+      {
+        return am4core.color("#5cd65c"); // green
+      }
+    })
+
+    // Add a circle bullet to represent the mid.
+    let midBullet = dumbBellseries.bullets.push(new am4charts.CircleBullet());
+    midBullet.fill = am4core.color(obligorChartDTO.colorScheme);
+    midBullet.locationY = 1;
+
+    //Add a circle bullet to represent the mark.
+    var bullet = dumbBellseries.bullets.push(new am4charts.CircleBullet());
+    bullet.circle.fill = am4core.color(obligorChartDTO.colorScheme);
+    bullet.circle.fillOpacity = 0.5;
+    bullet.circle.stroke = am4core.color(obligorChartDTO.colorScheme);
+    bullet.circle.strokeOpacity = 0.5;
+    bullet.strokeOpacity = 5;
+    bullet.fillOpacity = 10;
+    bullet.nonScalingStroke = true;
+    dumbBellseries.heatRules.push({
+      target: bullet.circle,
+      min: 5,
+      max: 20,
+      property: "radius",
+    });
+
+    dumbBellseries.events.on("hidden", function () {
+      dumbBellseries.hide();
+    });
+
+    return dumbBellseries;
+  }
+
+  generateObligorChartTrendCurve(obligorChartDTO: ObligorChartBlock): am4charts.LineSeries
+  {
+    let curveData = [];
+    for (var i = 0; i < obligorChartDTO.rawData.length; i++) {
+      curveData.push({ x: obligorChartDTO.rawData[i].category, y: obligorChartDTO.rawData[i].mark });
+    }
+
+    let curveSeries = obligorChartDTO.chart.series.push(new am4charts.LineSeries());
+    curveSeries.dataFields.categoryX = "x";
+    curveSeries.dataFields.valueY = "y";
+    curveSeries.strokeWidth = 2
+    curveSeries.stroke = am4core.color(obligorChartDTO.colorScheme);
+    curveSeries.strokeOpacity = 0.7;
+    curveSeries.hiddenInLegend = true;
+    curveSeries.data = curveData;
+    curveSeries.tensionY = 1;
+    curveSeries.tensionX = 1;
+
+    var reg2 = curveSeries.plugins.push(new am4plugins_regression.Regression());
+    reg2.method = "polynomial";
+
+    return curveSeries;
+  }
+
+  initializeObligorChartXAxis(obligorChartDTO: ObligorChartBlock) {
+    let xAxis = obligorChartDTO.chart.xAxes.push(new am4charts.CategoryAxis());
+    xAxis.renderer.grid.template.location = 0;
+    xAxis.dataFields.category = "category";
+    xAxis.renderer.minGridDistance = 15;
+    xAxis.renderer.grid.template.location = 0.5;
+    xAxis.renderer.grid.template.strokeDasharray = "1,3";
+    xAxis.renderer.labels.template.rotation = -90;
+    xAxis.renderer.labels.template.horizontalCenter = "left";
+    xAxis.renderer.labels.template.location = 0.5;
+    xAxis.renderer.inside = true;
+    xAxis.data = obligorChartDTO.rawData;
+
+    xAxis.renderer.labels.template.adapter.add("dx", function (dx, target) {
+    return -target.maxRight / 2;
+    })
+  }
+
+initializeObligorChartYAxis(obligorChartDTO: ObligorChartBlock)
+{
+  let yAxis = obligorChartDTO.chart.yAxes.push(new am4charts.ValueAxis());
+  yAxis.tooltip.disabled = true;
+  yAxis.renderer.ticks.template.disabled = true;
+  yAxis.renderer.axisFills.template.disabled = true;
+  yAxis.data = obligorChartDTO.rawData;
+}
 }
