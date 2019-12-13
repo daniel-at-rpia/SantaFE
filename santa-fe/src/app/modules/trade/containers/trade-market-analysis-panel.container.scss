@@ -9,15 +9,16 @@
   flex-direction: column;
   overflow: hidden;
   &__visualizer {
-    @include mix_border_generator(0 0 $typical_border_width 0);
+    flex: 0 0 auto;
     display: flex;
-    flex-direction: column;
-    margin: $spacing_small;
+    padding: $spacing_medium $spacing_medium 0 $spacing_medium;
     &-ctas {
+      flex: 0 0 auto;
       display: flex;
-      justify-content: space-between;
-      margin-bottom: $spacing_small;
+      flex-direction: column;
+      margin-right: $spacing_medium;
       &-btn {
+        margin-bottom: $spacing_small;
         &--selected {
           @include material('none');
           background-color: $color_active;
@@ -26,11 +27,22 @@
       }
     }
     &-main {
-      display: flex;
+      flex: 1 1 auto;
+      display: none;
       justify-content: center;
     }
   }
   &__table {
-
+    @include mix_border_generator($typical_border_width 0 0 0);
+    flex: 1 1 auto;
+    margin: $spacing_medium;
+    padding-top: $spacing_medium;
+  }
+  &--hasSecurityState {
+    #{$tradeMarketAnalysisPanelBlockName} {
+      &__visualizer-main {
+        display: flex;
+      }
+    }
   }
 }

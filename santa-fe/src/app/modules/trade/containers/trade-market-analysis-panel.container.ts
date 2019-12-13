@@ -59,9 +59,10 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     private restfulCommService: RestfulCommService
   ){
     this.state = {
+      receivedSecurity: false,
       quantVisualizer: {
         groupByOptions: [],
-        dto: null,
+        dto: this.dtoService.formQuantVisualizerObject(true, null),
         targetSecurity: null
       }
     }
@@ -95,6 +96,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
   }
 
   private onSecuritySelected(targetSecurity: SecurityDTO) {
+    this.state.receivedSecurity = true;
     this.state.quantVisualizer.targetSecurity = targetSecurity;
     this.fetchGroupData();
   }
@@ -110,7 +112,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
   }
 
   private fetchGroupData() {
-    this.state.quantVisualizer.dto = null;
     const payload : PayloadGetTargetSecurityGroup = {
       source: "Default",
       santaGroupIdentifier: {},
@@ -151,7 +152,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
       tYtD: securityMetricPack.delta.Ytd[this.constants.spreadMetricKey],
       gYtD: groupDTO.data.metricPack.delta.Ytd[this.constants.spreadMetricKey]
     }
-    this.state.quantVisualizer.dto = this.dtoService.formQuantVisualizerObject(params);
+    this.state.quantVisualizer.dto = this.dtoService.formQuantVisualizerObject(false, params);
   }
 
 }

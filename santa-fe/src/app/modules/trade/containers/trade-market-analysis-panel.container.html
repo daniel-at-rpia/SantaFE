@@ -1,4 +1,8 @@
-<article class="sat-tradeMarketAnalysisPanel">
+<article
+  [ngClass]="{
+    'sat-tradeMarketAnalysisPanel': true,
+    'sat-tradeMarketAnalysisPanel--hasSecurityState': state.receivedSecurity
+  }">
   <section class="sat-tradeMarketAnalysisPanel__visualizer">
     <div class="sat-tradeMarketAnalysisPanel__visualizer-ctas">
       <button
@@ -12,7 +16,7 @@
       </button>
     </div>
     <div class="sat-tradeMarketAnalysisPanel__visualizer-main">
-      <quantitative-visualizer *ngIf="state.quantVisualizer.dto" [visualizerData]="state.quantVisualizer.dto"></quantitative-visualizer>
+      <quantitative-visualizer [visualizerData]="state.quantVisualizer.dto"></quantitative-visualizer>
     </div>
   </section>
   <section class="sat-tradeMarketAnalysisPanel__table">

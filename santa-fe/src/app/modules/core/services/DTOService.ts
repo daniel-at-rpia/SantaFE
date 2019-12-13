@@ -77,6 +77,7 @@ export class DTOService {
         name: !isStencil ? rawData.name : 'PLACEHOLDER',
         ratingLevel: !isStencil && rawData.metrics ? this.utility.mapRatings(rawData.metrics.ratingNoNotch) : 0,
         ratingValue: !isStencil && rawData.metrics ? rawData.metrics.ratingNoNotch : null,
+        ratingBucket: !isStencil && rawData.metrics ? rawData.metrics.ratingBucket : null,
         seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.seniority) : 5,
         currency: !isStencil ? rawData.ccy : null,
         country: !isStencil ? rawData.country : null,
@@ -629,80 +630,120 @@ export class DTOService {
   }
 
   public formQuantVisualizerObject(
+    isStencil: boolean,
     params: QuantVisualizerParams
   ): QuantitativeVisualizerDTO {
-    const min = Math.min(params.tRaw, params.gRaw) / 1.25;
-    const max = Math.max(params.tRaw, params.gRaw) / 1.25;
-    const validDeltaParamsList: Array<number> = [0];
-    params.tWoW !== null && validDeltaParamsList.push(params.tWoW);
-    params !== null && validDeltaParamsList.push(params.tMoM);
-    params !== null && validDeltaParamsList.push(params.tYtD);
-    params !== null && validDeltaParamsList.push(params.gWoW);
-    params !== null && validDeltaParamsList.push(params.gMoM);
-    params !== null && validDeltaParamsList.push(params.gYtD);
-    const minDelta = Math.min(...validDeltaParamsList) === 0 ? -1: Math.min(...validDeltaParamsList) * 1.25;
-    const maxDelta = Math.max(...validDeltaParamsList) === 0 ? 1 : Math.max(...validDeltaParamsList) * 1.25;
-    const object: QuantitativeVisualizerDTO = {
-      data: {
-        rawEntry: {
-          target: params.tRaw,
-          group: params.gRaw
+    if (isStencil) {
+      const stencilObject: QuantitativeVisualizerDTO = {
+        data: {
+          rawEntry: { target: 10, group: 10 },
+          wow: { target: 10, group: 10},
+          mom: { target: 10, group: 10},
+          ytd: { target: 10, group: 10},
+          min: 15,
+          max: 15,
+          minDelta: 15,
+          maxDelta: 15
         },
-        wow: {
-          target: params.tWoW,
-          group: params.gWoW
+        style: {
+          wow: {
+            inversed: false,
+            leftSpaceWidth: 10,
+            rightSpaceWidth: 10
+          },
+          mom: {
+            inversed: false,
+            leftSpaceWidth: 10,
+            rightSpaceWidth: 10
+          },
+          ytd: {
+            inversed: false,
+            leftSpaceWidth: 10,
+            rightSpaceWidth: 10
+          }
         },
-        mom: {
-          target: params.tMoM,
-          group: params.gMoM
-        },
-        ytd: {
-          target: params.tYtD,
-          group: params.gYtD
-        },
-        min: min,
-        max: max,
-        minDelta: minDelta,
-        maxDelta: maxDelta
-      },
-      style: {
-        wow: {
-          inversed: params.gWoW < params.tWoW,
-          leftSpaceWidth: 10,
-          rightSpaceWidth: 10
-        },
-        mom: {
-          inversed: params.gMoM < params.tMoM,
-          leftSpaceWidth: 10,
-          rightSpaceWidth: 10
-        },
-        ytd: {
-          inversed: params.gYtD < params.tYtD,
-          leftSpaceWidth: 10,
-          rightSpaceWidth: 10
+        state: {
+          isWoWValid: true,
+          isMoMValid: true,
+          isYtDValid: true,
+          isStencil: true
         }
-      },
-      state: {
-        isWoWValid: params.tWoW !== null && params.gWoW !== null,
-        isMoMValid: params.tMoM !== null && params.gMoM !== null,
-        isYtDValid: params.tYtD !== null && params.gYtD !== null,
-        isStencil: false
+      };
+      return stencilObject;
+    } else {
+      const min = Math.min(params.tRaw, params.gRaw) / 1.25;
+      const max = Math.max(params.tRaw, params.gRaw) / 1.25;
+      const validDeltaParamsList: Array<number> = [0];
+      params.tWoW !== null && validDeltaParamsList.push(params.tWoW);
+      params !== null && validDeltaParamsList.push(params.tMoM);
+      params !== null && validDeltaParamsList.push(params.tYtD);
+      params !== null && validDeltaParamsList.push(params.gWoW);
+      params !== null && validDeltaParamsList.push(params.gMoM);
+      params !== null && validDeltaParamsList.push(params.gYtD);
+      const minDelta = Math.min(...validDeltaParamsList) === 0 ? -1: Math.min(...validDeltaParamsList) * 1.25;
+      const maxDelta = Math.max(...validDeltaParamsList) === 0 ? 1 : Math.max(...validDeltaParamsList) * 1.25;
+      const object: QuantitativeVisualizerDTO = {
+        data: {
+          rawEntry: {
+            target: params.tRaw,
+            group: params.gRaw
+          },
+          wow: {
+            target: params.tWoW,
+            group: params.gWoW
+          },
+          mom: {
+            target: params.tMoM,
+            group: params.gMoM
+          },
+          ytd: {
+            target: params.tYtD,
+            group: params.gYtD
+          },
+          min: min,
+          max: max,
+          minDelta: minDelta,
+          maxDelta: maxDelta
+        },
+        style: {
+          wow: {
+            inversed: params.gWoW < params.tWoW,
+            leftSpaceWidth: 10,
+            rightSpaceWidth: 10
+          },
+          mom: {
+            inversed: params.gMoM < params.tMoM,
+            leftSpaceWidth: 10,
+            rightSpaceWidth: 10
+          },
+          ytd: {
+            inversed: params.gYtD < params.tYtD,
+            leftSpaceWidth: 10,
+            rightSpaceWidth: 10
+          }
+        },
+        state: {
+          isWoWValid: params.tWoW !== null && params.gWoW !== null,
+          isMoMValid: params.tMoM !== null && params.gMoM !== null,
+          isYtDValid: params.tYtD !== null && params.gYtD !== null,
+          isStencil: false
+        }
       }
+      const fullWidthDelta = maxDelta - minDelta;
+      const wowLeft = object.style.wow.inversed ? params.gWoW : params.tWoW;
+      const wowRight = object.style.wow.inversed ? params.tWoW : params.gWoW;
+      const momLeft = object.style.mom.inversed ? params.gMoM : params.tMoM;
+      const momRight = object.style.mom.inversed ? params.tMoM : params.gMoM;
+      const ytdLeft = object.style.ytd.inversed ? params.gYtD : params.tYtD;
+      const ytdRight = object.style.ytd.inversed ? params.tYtD : params.gYtD;
+      object.style.wow.leftSpaceWidth = Math.round((minDelta - wowLeft) / fullWidthDelta * 100);
+      object.style.wow.rightSpaceWidth = Math.round((maxDelta - wowRight) / fullWidthDelta * 100);
+      object.style.mom.leftSpaceWidth = Math.round((minDelta - momLeft) / fullWidthDelta * 100);
+      object.style.mom.rightSpaceWidth = Math.round((maxDelta - momRight) / fullWidthDelta * 100);
+      object.style.ytd.leftSpaceWidth = Math.round((minDelta - ytdLeft) / fullWidthDelta * 100);
+      object.style.ytd.rightSpaceWidth = Math.round((maxDelta - ytdRight) / fullWidthDelta * 100);
+      return object;
     }
-    const fullWidthDelta = maxDelta - minDelta;
-    const wowLeft = object.style.wow.inversed ? params.gWoW : params.tWoW;
-    const wowRight = object.style.wow.inversed ? params.tWoW : params.gWoW;
-    const momLeft = object.style.mom.inversed ? params.gMoM : params.tMoM;
-    const momRight = object.style.mom.inversed ? params.tMoM : params.gMoM;
-    const ytdLeft = object.style.ytd.inversed ? params.gYtD : params.tYtD;
-    const ytdRight = object.style.ytd.inversed ? params.tYtD : params.gYtD;
-    object.style.wow.leftSpaceWidth = Math.round((minDelta - wowLeft) / fullWidthDelta * 100);
-    object.style.wow.rightSpaceWidth = Math.round((maxDelta - wowRight) / fullWidthDelta * 100);
-    object.style.mom.leftSpaceWidth = Math.round((minDelta - momLeft) / fullWidthDelta * 100);
-    object.style.mom.rightSpaceWidth = Math.round((maxDelta - momRight) / fullWidthDelta * 100);
-    object.style.ytd.leftSpaceWidth = Math.round((minDelta - ytdLeft) / fullWidthDelta * 100);
-    object.style.ytd.rightSpaceWidth = Math.round((maxDelta - ytdRight) / fullWidthDelta * 100);
-    return object;
   }
 
 }

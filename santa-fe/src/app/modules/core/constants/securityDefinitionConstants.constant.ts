@@ -317,7 +317,8 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     displayName: 'Rating Bucket',
     icon: 'fas fa-trash',
     optionList: FilterOptionsRatingBucket,
-    secondaryIcon: 'fas fa-award'
+    secondaryIcon: 'fas fa-award',
+    securityDTOAttr: 'ratingBucket'
   },
   'SECTOR': {
     key: 'SECTOR',
