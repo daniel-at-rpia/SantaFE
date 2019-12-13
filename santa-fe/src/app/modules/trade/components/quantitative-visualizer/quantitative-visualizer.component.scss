@@ -3,8 +3,8 @@
 
 .sat-quantVisualizer {
   $quantVisualizerBlockName: &;
+  flex: 1 1 auto;
   display: flex;
-  width: 20rem;
   &__entryList {
     flex: 1 1 auto;
     display: flex;
@@ -14,7 +14,7 @@
       align-items: center;
       margin-bottom: $spacing_large;
       &-label {
-        flex: 0 0 3rem;
+        flex: 0 0 4rem;
         margin-right: $spacing_small;
         text-align: right;
       }
@@ -79,16 +79,19 @@ $quantVisualizerEntry_node_size: 1.75rem;
         justify-content: center;
         height: $quantVisualizerEntry_node_size;
         width: $quantVisualizerEntry_node_size;
-        background-color: $color_white;
+        color: $font_color_inverse;
         &-value {
           @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
           top: 100%;
+          color: $font_color_major;
         }
         &--target {
           left: 0;
+          background-color: $color_blue_5;
         }
         &--group {
           right: 0;
+          background-color: $color_indigo_5;
         }
       }
     }

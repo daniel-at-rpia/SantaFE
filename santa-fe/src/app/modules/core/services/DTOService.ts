@@ -646,6 +646,11 @@ export class DTOService {
           maxDelta: 15
         },
         style: {
+          raw: {
+            inversed: false,
+            leftSpaceWidth: 10,
+            rightSpaceWidth: 10
+          },
           wow: {
             inversed: false,
             leftSpaceWidth: 10,
@@ -706,6 +711,11 @@ export class DTOService {
           maxDelta: maxDelta
         },
         style: {
+          raw: {
+            inversed: params.gRaw < params.tRaw,
+            leftSpaceWidth: 10,
+            rightSpaceWidth: 10
+          },
           wow: {
             inversed: params.gWoW < params.tWoW,
             leftSpaceWidth: 10,
@@ -729,6 +739,11 @@ export class DTOService {
           isStencil: false
         }
       }
+      const fullWidth = max - min;
+      const rawLeft = object.style.raw.inversed ? params.gRaw : params.tRaw;
+      const rawRight = object.style.raw.inversed ? params.tRaw : params.gRaw;
+      object.style.raw.leftSpaceWidth = Math.round((min - rawLeft) / fullWidth * 100);
+      object.style.raw.rightSpaceWidth = Math.round((max - rawRight) / fullWidth * 100);
       const fullWidthDelta = maxDelta - minDelta;
       const wowLeft = object.style.wow.inversed ? params.gWoW : params.tWoW;
       const wowRight = object.style.wow.inversed ? params.tWoW : params.gWoW;

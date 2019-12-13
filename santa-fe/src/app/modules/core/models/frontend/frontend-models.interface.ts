@@ -311,6 +311,7 @@ export interface QuantitativeVisualizerDTO extends BasicDTOStructure {
     maxDelta: number;
   }
   style: {
+    raw: QuantitativeEntryStyleBlock;
     wow: QuantitativeEntryStyleBlock;
     mom: QuantitativeEntryStyleBlock;
     ytd: QuantitativeEntryStyleBlock;

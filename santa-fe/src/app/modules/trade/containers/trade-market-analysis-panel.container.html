@@ -3,20 +3,36 @@
     'sat-tradeMarketAnalysisPanel': true,
     'sat-tradeMarketAnalysisPanel--hasSecurityState': state.receivedSecurity
   }">
-  <section class="sat-tradeMarketAnalysisPanel__visualizer">
-    <div class="sat-tradeMarketAnalysisPanel__visualizer-ctas">
+  <section class="sat-tradeMarketAnalysisPanel__overview">
+    <div class="sat-tradeMarketAnalysisPanel__overview-ctas">
       <button
         *ngFor="let eachOption of state.quantVisualizer.groupByOptions"
         (click)="onClickGroupByOption(eachOption)"
         [ngClass]="{
-          'sat-tradeMarketAnalysisPanel__visualizer-ctas-btn': true,
-          'sat-tradeMarketAnalysisPanel__visualizer-ctas-btn--selected': eachOption.state.groupByActive
+          'sat-tradeMarketAnalysisPanel__overview-ctas-btn': true,
+          'sat-tradeMarketAnalysisPanel__overview-ctas-btn--selected': eachOption.state.groupByActive
         }">
         {{eachOption.data.name}}
       </button>
     </div>
-    <div class="sat-tradeMarketAnalysisPanel__visualizer-main">
-      <quantitative-visualizer [visualizerData]="state.quantVisualizer.dto"></quantitative-visualizer>
+    <div class="sat-tradeMarketAnalysisPanel__overview-main">
+      <div class="sat-tradeMarketAnalysisPanel__overview-main-label">
+        <div class="sat-tradeMarketAnalysisPanel__overview-main-label-entry">
+          <div class="sat-tradeMarketAnalysisPanel__overview-main-label-entry-node sat-tradeMarketAnalysisPanel__overview-main-label-entry-node--target">
+            <i class="fal fa-coin"></i>
+          </div>
+          <span class="sat-tradeMarketAnalysisPanel__overview-main-label-entry-text">Target Security</span>
+        </div>
+        <div class="sat-tradeMarketAnalysisPanel__overview-main-label-entry">
+          <div class="sat-tradeMarketAnalysisPanel__overview-main-label-entry-node sat-tradeMarketAnalysisPanel__overview-main-label-entry-node--group">
+            <i class="fal fa-sack-dollar"></i>
+          </div>
+          <span class="sat-tradeMarketAnalysisPanel__overview-main-label-entry-text">Security Group</span>
+        </div>
+      </div>
+      <div class="sat-tradeMarketAnalysisPanel__overview-main-visualizer">
+        <quantitative-visualizer [visualizerData]="state.quantVisualizer.dto"></quantitative-visualizer>
+      </div>
     </div>
   </section>
   <section class="sat-tradeMarketAnalysisPanel__table">
