@@ -15,7 +15,8 @@ export enum TradeActions {
   LiveUpdateProcessingDataCompleteEvent = '[Trade] Live Update Processing Data Complete Event',
   TogglePresetEvent = '[Trade] Toggle Preset Event',
   ToggleMetricEvent = '[Trade] Toggle Metric Event',
-  SelectSecurityForAnalysisEvent = '[Trade] Select Security For Analysis Event'
+  SelectSecurityForAnalysisEvent = '[Trade] Select Security For Analysis Event',
+  SecurityIDListFromAnalysisEvent = '[Trade] Security ID List From Analysis Event'
 }
 
 export class TradeLiveUpdateStartEvent implements Action {
@@ -75,5 +76,15 @@ export class TradeSelectedSecurityForAnalysisEvent implements Action {
     targetSecurity: SecurityDTO
   ){
     this.targetSecurity = targetSecurity;
+  }
+}
+
+export class TradeSecurityIDsFromAnalysisEvent implements Action {
+  readonly type = TradeActions.SecurityIDListFromAnalysisEvent;
+  readonly securityIDList: Array<string>;
+  constructor(
+    securityIDList: Array<string>
+  ){
+    this.securityIDList = securityIDList;
   }
 }

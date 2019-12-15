@@ -131,14 +131,25 @@ export class GraphService {
   }
 
 
-  generateObligorChartDumbells(obligorChartDTO: ObligorChartBlock): am4charts.ColumnSeries
+  generateObligorChartDumbells(obligorChartDTO: ObligorChartBlock, yAxisValue: string): am4charts.ColumnSeries
   {
+
     // Create the column representing the mark discrepency.
     let dumbBellseries = obligorChartDTO.chart.series.push(new am4charts.ColumnSeries());
     dumbBellseries.data = obligorChartDTO.rawData;
     dumbBellseries.dataFields.categoryX = "category";
-    dumbBellseries.dataFields.openValueY = "mid";
-    dumbBellseries.dataFields.valueY = "mark";
+
+    if(yAxisValue === "spread")
+    {
+      dumbBellseries.dataFields.openValueY = "spreadMid";
+      dumbBellseries.dataFields.valueY = "spreadMark";
+    }
+    else if(yAxisValue === "yield")
+    {
+      dumbBellseries.dataFields.openValueY = "yieldMid";
+      dumbBellseries.dataFields.valueY = "yieldMark";
+    }
+
     dumbBellseries.sequencedInterpolation = true;
     dumbBellseries.strokeOpacity = 1;
     dumbBellseries.columns.template.width = 3;
@@ -156,7 +167,7 @@ export class GraphService {
     columnTemplate.stroke = am4core.color(obligorChartDTO.colorScheme);
     columnTemplate.adapter.add("fill", function (fill, target) {
       let index: number = target.dataItem.index;
-      if (dumbBellseries.data[index].mid > dumbBellseries.data[index].mark) {
+      if (dumbBellseries.data[index].spreadMid > dumbBellseries.data[index].spreadMark) {
         return am4core.color("#cc3300"); // red
       }
       else
@@ -167,7 +178,7 @@ export class GraphService {
     
     columnTemplate.adapter.add("stroke", function (stroke, target) {
       let index: number = target.dataItem.index;
-      if (dumbBellseries.data[index].mid > dumbBellseries.data[index].mark) {
+      if (dumbBellseries.data[index].spreadMid > dumbBellseries.data[index].spreadMark) {
         return am4core.color("#cc3300"); // red
       }
       else
@@ -180,18 +191,20 @@ export class GraphService {
     let midBullet = dumbBellseries.bullets.push(new am4charts.CircleBullet());
     midBullet.fill = am4core.color(obligorChartDTO.colorScheme);
     midBullet.locationY = 1;
+    midBullet.tooltipHTML = `<b>{security}</b>`;
 
     //Add a circle bullet to represent the mark.
-    var bullet = dumbBellseries.bullets.push(new am4charts.CircleBullet());
-    bullet.circle.fill = am4core.color(obligorChartDTO.colorScheme);
-    bullet.circle.fillOpacity = 0.5;
-    bullet.circle.stroke = am4core.color(obligorChartDTO.colorScheme);
-    bullet.circle.strokeOpacity = 0.5;
-    bullet.strokeOpacity = 5;
-    bullet.fillOpacity = 10;
-    bullet.nonScalingStroke = true;
+    var markBullet = dumbBellseries.bullets.push(new am4charts.CircleBullet());
+    markBullet.circle.fill = am4core.color(obligorChartDTO.colorScheme);
+    markBullet.circle.fillOpacity = 0.5;
+    markBullet.circle.stroke = am4core.color(obligorChartDTO.colorScheme);
+    markBullet.circle.strokeOpacity = 0.5;
+    markBullet.strokeOpacity = 5;
+    markBullet.fillOpacity = 10;
+    markBullet.nonScalingStroke = true;
+    markBullet.tooltipHTML = `<b>{security}</b>`;
     dumbBellseries.heatRules.push({
-      target: bullet.circle,
+      target: markBullet.circle,
       min: 5,
       max: 20,
       property: "radius",
@@ -208,7 +221,7 @@ export class GraphService {
   {
     let curveData = [];
     for (var i = 0; i < obligorChartDTO.rawData.length; i++) {
-      curveData.push({ x: obligorChartDTO.rawData[i].category, y: obligorChartDTO.rawData[i].mark });
+      curveData.push({ x: obligorChartDTO.rawData[i].category, y: obligorChartDTO.rawData[i].spreadMark });
     }
 
     let curveSeries = obligorChartDTO.chart.series.push(new am4charts.LineSeries());
@@ -228,30 +241,30 @@ export class GraphService {
     return curveSeries;
   }
 
-  initializeObligorChartXAxis(obligorChartDTO: ObligorChartBlock) {
-    let xAxis = obligorChartDTO.chart.xAxes.push(new am4charts.CategoryAxis());
+  initializeObligorChartXAxis(data: any[], chart: am4charts.XYChart) {
+    let xAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     xAxis.renderer.grid.template.location = 0;
     xAxis.dataFields.category = "category";
-    xAxis.renderer.minGridDistance = 15;
+    xAxis.renderer.minGridDistance = 0.1;
     xAxis.renderer.grid.template.location = 0.5;
     xAxis.renderer.grid.template.strokeDasharray = "1,3";
     xAxis.renderer.labels.template.rotation = -90;
     xAxis.renderer.labels.template.horizontalCenter = "left";
     xAxis.renderer.labels.template.location = 0.5;
     xAxis.renderer.inside = true;
-    xAxis.data = obligorChartDTO.rawData;
+    xAxis.data = data;
 
     xAxis.renderer.labels.template.adapter.add("dx", function (dx, target) {
     return -target.maxRight / 2;
     })
   }
 
-initializeObligorChartYAxis(obligorChartDTO: ObligorChartBlock)
+initializeObligorChartYAxis(data: any[], chart: am4charts.XYChart)
 {
-  let yAxis = obligorChartDTO.chart.yAxes.push(new am4charts.ValueAxis());
+  let yAxis = chart.yAxes.push(new am4charts.ValueAxis());
   yAxis.tooltip.disabled = true;
   yAxis.renderer.ticks.template.disabled = true;
   yAxis.renderer.axisFills.template.disabled = true;
-  yAxis.data = obligorChartDTO.rawData;
+  yAxis.data = data;
 }
 }

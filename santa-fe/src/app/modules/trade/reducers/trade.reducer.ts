@@ -26,6 +26,7 @@ export interface TradeState {
   liveUpdateProcessingRawData: boolean;
   tableRowUpdateList: Array<SecurityTableRowDTO>;
   securityUpdateListForAnalysis: SecurityDTO;
+  securityIDListFromAnalysis: Array<string>
 }
 
 const initialState: TradeState = {
@@ -36,7 +37,8 @@ const initialState: TradeState = {
   liveUpdateInProgress: false,
   liveUpdateProcessingRawData: false,
   tableRowUpdateList: [],
-  securityUpdateListForAnalysis: null
+  securityUpdateListForAnalysis: null,
+  securityIDListFromAnalysis: []
 };
 
 export function tradeReducer(
@@ -105,6 +107,11 @@ export function tradeReducer(
       return {
         ...state,
         securityUpdateListForAnalysis: action.targetSecurity
+      }
+    case TradeActions.SecurityIDListFromAnalysisEvent:
+      return {
+        ...state,
+        securityIDListFromAnalysis: action.securityIDList
       }
     default:
       return state;
