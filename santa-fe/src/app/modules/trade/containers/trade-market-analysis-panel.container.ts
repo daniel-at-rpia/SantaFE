@@ -32,7 +32,9 @@
       MARKET_ANALYSIS_YIELD_METRIC_KEY
     } from 'Core/constants/tradeConstants.constant';
     import { QuantVisualizerParams } from 'FEModels/frontend-adhoc-packages.interface';
-    import { selectSelectedSecurityForAnalysis } from 'Trade/selectors/trade.selectors';
+    import {
+      selectSelectedSecurityForAnalysis
+    } from 'Trade/selectors/trade.selectors';
 
 @Component({
   selector: 'trade-market-analysis-panel',
