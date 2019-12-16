@@ -676,17 +676,21 @@ export class DTOService {
       };
       return stencilObject;
     } else {
-      const min = Math.min(params.tRaw, params.gRaw) / 1.25;
-      const max = Math.max(params.tRaw, params.gRaw) / 1.25;
+      let min = Math.min(params.tRaw, params.gRaw);
+      let max = Math.max(params.tRaw, params.gRaw);
+      min = min - (max - min) * 0.15;
+      max = max + (max - min) * 0.15;
       const validDeltaParamsList: Array<number> = [0];
       params.tWoW !== null && validDeltaParamsList.push(params.tWoW);
       params !== null && validDeltaParamsList.push(params.tMoM);
-      params !== null && validDeltaParamsList.push(params.tYtD);
+      params !== null && validDeltaParamsList.push(params.tYTD);
       params !== null && validDeltaParamsList.push(params.gWoW);
       params !== null && validDeltaParamsList.push(params.gMoM);
-      params !== null && validDeltaParamsList.push(params.gYtD);
-      const minDelta = Math.min(...validDeltaParamsList) === 0 ? -1: Math.min(...validDeltaParamsList) * 1.25;
-      const maxDelta = Math.max(...validDeltaParamsList) === 0 ? 1 : Math.max(...validDeltaParamsList) * 1.25;
+      params !== null && validDeltaParamsList.push(params.gYTD);
+      let minDelta = Math.min(...validDeltaParamsList);
+      let maxDelta = Math.max(...validDeltaParamsList);
+      minDelta = minDelta - (maxDelta - minDelta) * 0.15;
+      maxDelta = maxDelta + (maxDelta - minDelta) * 0.15;
       const object: QuantitativeVisualizerDTO = {
         data: {
           rawEntry: {

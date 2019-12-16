@@ -25,7 +25,7 @@
       SecurityDefinitionDTO
     } from 'FEModels/frontend-models.interface';
     import { TradeMarketAnalysisPanelState } from 'FEModels/frontend-page-states.interface';
-    import { PayloadGetTargetSecurityGroup } from 'BEModels/backend-payloads.interface';
+    import { PayloadGetSecurityGroupBasedOnSecurity } from 'BEModels/backend-payloads.interface';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       MARKET_ANALYSIS_SPREAD_METRIC_KEY,
@@ -112,31 +112,31 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
   }
 
   private fetchGroupData() {
-    const payload : PayloadGetTargetSecurityGroup = {
-      source: "Default",
-      santaGroupIdentifier: {},
-      santaGroupFilters: {},
-      tenorOptions: ["2Y", "3Y", "5Y", "7Y", "10Y", "30Y"]
-    }
-    this.state.quantVisualizer.groupByOptions.forEach((eachOption) => {
-      if (eachOption.state.groupByActive) {
-        const backendKey = this.utilityService.convertFEKey(eachOption.data.key);
-        const value = [];
-        value.push(eachOption.data.filterOptionList[0].displayLabel);
-        payload.santaGroupIdentifier[backendKey] = value;
+    if (this.state.receivedSecurity) {
+      const payload : PayloadGetSecurityGroupBasedOnSecurity = {
+        source: "Default",
+        identifier: this.state.quantVisualizer.targetSecurity.data.securityID,
+        santaGroupIdentifier: {},
+        tenorOptions: ["2Y", "3Y", "5Y", "7Y", "10Y", "30Y"]
       }
-    });
-    payload.santaGroupIdentifier['SecurityType'] = ["Bond"];
-    this.restfulCommService.callAPI('santaGroup/get-santa-group', {req: 'POST'}, payload, true).pipe(
-      first(),
-      tap((serverReturn) => {
-        this.populateVisualizer(serverReturn);
-      }),
-      catchError(err => {
-        console.error('error', err);
-        return of('error');
-      })
-    ).subscribe();
+      this.state.quantVisualizer.groupByOptions.forEach((eachOption) => {
+        if (eachOption.state.groupByActive) {
+          const backendKey = this.utilityService.convertFEKey(eachOption.data.key);
+          payload.santaGroupIdentifier[backendKey] = [];
+        }
+      });
+      payload.santaGroupIdentifier['SecurityType'] = [];
+      this.restfulCommService.callAPI('santaGroup/get-santa-group-from-security', {req: 'POST'}, payload, true).pipe(
+        first(),
+        tap((serverReturn) => {
+          this.populateVisualizer(serverReturn);
+        }),
+        catchError(err => {
+          console.error('error', err);
+          return of('error');
+        })
+      ).subscribe();
+    }
   }
 
   private populateVisualizer(serverReturn) {

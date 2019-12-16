@@ -14,6 +14,16 @@ export interface PayloadGetTargetSecurityGroup {
   tenorOptions: Array<string>;
 }
 
+export interface PayloadGetSecurityGroupBasedOnSecurity {
+  source: string;
+  identifier: string;
+  santaGroupIdentifier: {
+    [property: string]: Array<string>;
+  };
+  tenorOptions: Array<string>;
+  yyyyMMdd?: number;
+}
+
 export interface PayloadGetPositions {
   source?: string;
   yyyyMMdd?: number;
