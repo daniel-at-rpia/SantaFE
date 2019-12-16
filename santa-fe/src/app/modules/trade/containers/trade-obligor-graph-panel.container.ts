@@ -1,13 +1,30 @@
-import { Component, ViewEncapsulation, NgZone } from "@angular/core";
+import { Component, ViewEncapsulation, NgZone, EventEmitter, Output } from "@angular/core";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
-import * as am4plugins_regression from "@amcharts/amcharts4/plugins/regression";
-import { TradeCenterPanel } from './trade-center-panel.container';
-import { CoreModule } from 'App/modules/core/core.module';
+import { GraphService } from 'Core/services/GraphService';
+import { ObligorChartBlock } from 'Core/models/frontend/frontend-blocks.interface'
+import { selectSelectedSecurityForAnalysis   } from 'Trade/selectors/trade.selectors';
+import { Store, select } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { RestfulCommService } from 'Core/services/RestfulCommService';
+import { PayloadObligorSecurityIDs } from 'BEModels/backend-payloads.interface';
+import { SecurityDTO } from 'App/modules/core/models/frontend/frontend-models.interface';
+import { BEBestQuoteDTO, BESecurityDTO } from 'Core/models/backend/backend-models.interface.ts';
+import {
+  tap,
+  first,
+  delay,
+  catchError,
+  withLatestFrom,
+  filter,
+  sample
+} from 'rxjs/operators';
+import { TradeSecurityIDsFromAnalysisEvent } from 'Trade/actions/trade.actions';
+import { runInThisContext } from 'vm';
+
 
 am4core.useTheme(am4themes_animated);
-
 
 @Component({
   selector: 'trade-obligor-graph-panel',
@@ -17,225 +34,261 @@ am4core.useTheme(am4themes_animated);
 })
 
 export class TradeObligorGraphPanel {
-  private chart: am4charts.XYChart;
-  private sampleData = [];
+  @Output() securityIDListFromAnalysis = new EventEmitter<Array<string>>();
+  private bestQuotes: any[] = [];
+  private isSecurityValueCS01 = false;
+  private isSecurityValueQuantity = false;   //Security Value for Quantity button will always start as enabled.
+  private isYAxisSpread = false;;
+  private isYAxisYield = false;
+  securityForAnalysis$: Observable<string>;
 
-  constructor(private zone: NgZone) {
+  constructor(
+    private store$: Store<any>,
+    private zone: NgZone,
+    private graphService: GraphService,
+    private restfulCommService: RestfulCommService
+  ) {
+  }
+
+  subscriptions = {
+    selectSecurityUpdateForAnalysis: null
+  }
+
+
+  fetchSecurityIDs(data: SecurityDTO) {
+
+    let SecurityIDList: string[] = [];
+
+    if (data != null) {
+      const payload: PayloadObligorSecurityIDs = {
+        identifier: data.data.securityID
+      };
+      this.restfulCommService.callAPI('SantaCurve/get-santa-obligor-curves-per-ccy', { req: 'POST' }, payload).pipe(
+        first(),
+        tap((serverReturn) => {
+          for (let category in serverReturn) {
+            if (category != "ObligorId") {
+              if (serverReturn[category].BestQuotes != null) {
+                for (let bestQuote in serverReturn[category].BestQuotes) {
+                  if (serverReturn[category].BestQuotes[bestQuote] != null) {
+                    for (let security in serverReturn[category].BestQuotes) {
+                      if (serverReturn[category].BestQuotes[security]) {
+                        if (serverReturn[category].BestQuotes[security].bestSpreadQuote || serverReturn[category].BestQuotes[security].bestYieldQuote) {
+                          
+                          SecurityIDList.push(security);
+
+                          this.bestQuotes.push({ SecurityID: security, quote: serverReturn[category].BestQuotes[security] });
+                        
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          if (this.bestQuotes != null) {
+            this.store$.dispatch(new TradeSecurityIDsFromAnalysisEvent(SecurityIDList));
+            this.buildChart();
+          }
+        }),
+      ).subscribe();
+    }
+  }
+
+  buildChartData(){
+
   }
 
   ngAfterViewInit() {
-    this.zone.runOutsideAngular(() => {
-      this.chart = am4core.create("chartdiv", am4charts.XYChart);
+    this.subscriptions.selectSecurityUpdateForAnalysis = this.store$.pipe(select(selectSelectedSecurityForAnalysis)).subscribe((data) => { this.fetchSecurityIDs(data) });
+  }
 
-      this.populateSampleData();
+  buildChart() {
+    this.zone.runOutsideAngular(() => {
+
+      let chart: am4charts.XYChart;
+
+      chart = am4core.create("chartdiv", am4charts.XYChart);
+    
+      //this.securityIDListFromAnalysis.emit(SecurityIDs);
 
       let srBondData = [];
       let srCDSData = [];
       let subBondData = [];
-      let subCDS = [];
+      let subCDSData = [];
 
-      for (let sample of this.sampleData) {
+      let xAxisData = [];
+      let yAxisData = [];
+  
+      // This is all test data for now.
+      let sampleData: any[] = this.populateSampleData();
+  
+      // Will hopefully still use this logic when real data is received.
+      for (let sample of sampleData) {
+        xAxisData.push({category: sample.category });
+        yAxisData.push(sample.spreadMark);
+        yAxisData.push(sample.spreadMid);
         if (sample.seniority === "Sr Bond") {
-          srBondData.push({ seniority: sample.seniority, category: sample.category, mid: sample.mid, mark: sample.mark, security: sample.security, securityCount: sample.securityCount });
+          srBondData.push({ seniority: sample.seniority, category: sample.category, spreadMid: sample.spreadMid, spreadMark: sample.spreadMark, security: sample.security, securityCount: sample.securityCount }); 
         }
         if (sample.seniority === "Sr CDS") {
-          srCDSData.push({ seniority: sample.seniority, category: sample.category, mid: sample.mid, mark: sample.mark, security: sample.security, securityCount: sample.securityCount });
+          srCDSData.push({ seniority: sample.seniority, category: sample.category, spreadMid: sample.spreadMid, spreadMark: sample.spreadMark, security: sample.security, securityCount: sample.securityCount });
         }
         if (sample.seniority === "Sub Bond") {
-          subBondData.push({ seniority: sample.seniority, category: sample.category, mid: sample.mid, mark: sample.mark, security: sample.security, securityCount: sample.securityCount });
+          subBondData.push({ seniority: sample.seniority, category: sample.category, spreadMid: sample.spreadMid, spreadMark: sample.spreadMark, security: sample.security, securityCount: sample.securityCount });
         }
         if (sample.seniority === "Sub CDS") {
-          subCDS.push({ seniority: sample.seniority, category: sample.category, mid: sample.mid, mark: sample.mark, security: sample.security, securityCount: sample.securityCount });
+          subCDSData.push({ seniority: sample.seniority, category: sample.category, spreadMid: sample.spreadMid, spreadMark: sample.spreadMark, security: sample.security, securityCount: sample.securityCount });
         }
       }
 
-      this.initializeAxis(srBondData);
-      this.createGraph(srBondData, "#712f79");
+      this.buildChartData();
+      
+      // Initialize the X Axis.
+      this.graphService.initializeObligorChartXAxis(xAxisData, chart);
 
-      this.initializeAxis(srBondData);
-      this.createGraph(srCDSData, "#293881");
+      // Initialize the Y Axis.
+      this.graphService.initializeObligorChartYAxis(yAxisData, chart);
 
-      this.initializeAxis(srBondData);
-      this.createGraph(subBondData, "#0f8276");
+      // Generate a graph for each data type, sending in the raw data,  the color scheme and the name.
+      this.buildSingleObligorGraph(chart, srBondData, "#712f79", "Sr Bond", "spreadMid");
+      this.buildSingleObligorGraph(chart, srCDSData, "#293881", "Sr CDS",  "spreadMid");
+      this.buildSingleObligorGraph(chart, subBondData, "#0f8276", "Sub Bond",  "spreadMid");
+      this.buildSingleObligorGraph(chart, subCDSData, "#ff9933", "Sub CDS",  "spreadMid");
 
-      this.initializeAxis(srBondData);
-      this.createGraph(subCDS, "#ff9933");
+      // Add legend for each chart type.
+      chart.legend = new am4charts.Legend();
 
-      this.chart.cursor = new am4charts.XYCursor();
-      this.chart.legend = new am4charts.Legend();
-      this.chart.legend.markers.template.disabled = true;
-
-
-      this.chart.seriesContainer.draggable = false;
-      this.chart.seriesContainer.resizable = false;
+      // Disable the lengend markers. We only want the name of the graph for now.
+      chart.legend.markers.template.disabled = true;
 
     });
   }
 
-  createGraph(data: any, color: string) {
-
-    let series = this.chart.series.push(new am4charts.ColumnSeries());
-    series.data = data;
-    series.dataFields.categoryX = "category";
-    series.dataFields.openValueY = "mid";
-    series.dataFields.valueY = "mark";
-    series.tooltipText = " {security} | mid: {openValueY.value} mark: {valueY.value}";
-    series.sequencedInterpolation = true;
-    series.strokeOpacity = 1;
-    series.columns.template.width = 3;
-    series.tooltip.pointerOrientation = "horizontal";
-    series.dataFields.value = "securityCount";
-    series.name = data[0].seniority;
-    series.fill = am4core.color(color);
-    series.stroke = am4core.color(color);
-    series.legendSettings.labelText = "[bold {color}]{name}[/]";
-
-    let columnTemplate = series.columns.template;
-    columnTemplate.strokeWidth = 2;
-    columnTemplate.strokeOpacity = 1;
-    columnTemplate.stroke = am4core.color(color);
-
-    columnTemplate.adapter.add("fill", function (fill, target) {
-      let index: number = target.dataItem.index;
-
-      if (series.data[index].mid > series.data[index].mark) {
-        return am4core.color("#cc3300");
-      }
-    })
-
-    columnTemplate.adapter.add("stroke", function (stroke, target) {
-      let index: number = target.dataItem.index;
-
-      if (series.data[index].mid > series.data[index].mark) {
-        return am4core.color("#cc3300");
-      }
-    })
-
-    let curveData = [];
-    for (var i = 0; i < data.length; i++) {
-      curveData.push({ x: data[i].category, y: data[i].mark });
+  buildSingleObligorGraph(chart: am4charts.XYChart, data: any, colorScheme: string, name: string, yAxisValue: string) {
+    
+    // Generate Sr Bond chart.
+    let chartBlock: ObligorChartBlock = {
+      name: name,
+      chart: chart,
+      rawData: data,
+      colorScheme: colorScheme
     }
-    //add the trendlines
-    let trend = this.chart.series.push(new am4charts.LineSeries());
-    trend.dataFields.categoryX = "x";
-    trend.dataFields.valueY = "y";
-    trend.strokeWidth = 2
-    trend.stroke = am4core.color(color);
-    trend.strokeOpacity = 0.7;
-    trend.hiddenInLegend = true;
-    trend.data = curveData;
-    trend.tensionY = 1;
-    trend.tensionX = 1;
 
-    var reg2 = trend.plugins.push(new am4plugins_regression.Regression());
-    reg2.method = "polynomial";
+    if(!this.isYAxisYield && !this.isYAxisSpread)
+    {
+      this.isYAxisSpread = true;
+    }
 
-    // Add simple bullet
-    let midBullet = series.bullets.push(new am4charts.CircleBullet());
-    midBullet.fill = am4core.color(color);
-    midBullet.locationY = 1;
+    // Create a dumbbell series. https://www.amcharts.com/demos/dumbbell-plot/
+    let dumbBellSeries: am4charts.ColumnSeries;
+    if(this.isYAxisSpread)
+    {
+      dumbBellSeries = this.graphService.generateObligorChartDumbells(chartBlock, "spread");
+    }
+    else if(this.isYAxisYield)
+    {
+      dumbBellSeries = this.graphService.generateObligorChartDumbells(chartBlock, "yield");
+    }
 
-    var bullet = series.bullets.push(new am4charts.CircleBullet());
-    bullet.circle.fill = am4core.color(color);
-    bullet.circle.fillOpacity = 0.5;
-    bullet.circle.stroke = am4core.color(color);
-    bullet.circle.strokeOpacity = 0.5;
-    bullet.strokeOpacity = 5;
-    bullet.fillOpacity = 10;
-    bullet.nonScalingStroke = true;
-    series.heatRules.push({
-      target: bullet.circle,
-      min: 5,
-      max: 20,
-      property: "radius",
+    // Create a curve line series.
+    let curveSeries: am4charts.LineSeries = this.graphService.generateObligorChartTrendCurve(chartBlock);
+
+    // Show the dumbbell series and the curve series when legend item is clicked.
+    dumbBellSeries.events.on("shown", function () {
+      dumbBellSeries.show();
+      curveSeries.show();
     });
 
-    series.events.on("hidden", function () {
-      series.hide();
-      trend.hide();
+    // Hide the dumbbell series and the curve series when legend item is clicked.
+    dumbBellSeries.events.on("hidden", function () {
+      dumbBellSeries.hide();
+      curveSeries.hide();
     });
-
-    series.events.on("shown", function () {
-      series.show();
-      trend.show();
-    });
-
-  }
-
-  initializeAxis(data: any) {
-    let tenorAxis = this.chart.xAxes.push(new am4charts.CategoryAxis());
-    tenorAxis.renderer.grid.template.location = 0;
-    tenorAxis.dataFields.category = "category";
-    tenorAxis.renderer.minGridDistance = 15;
-    tenorAxis.renderer.grid.template.location = 0.5;
-    tenorAxis.renderer.grid.template.strokeDasharray = "1,3";
-    tenorAxis.renderer.labels.template.rotation = -90;
-    tenorAxis.renderer.labels.template.horizontalCenter = "left";
-    tenorAxis.renderer.labels.template.location = 0.5;
-    tenorAxis.renderer.inside = true;
-    tenorAxis.data = data;
-
-    tenorAxis.renderer.labels.template.adapter.add("dx", function (dx, target) {
-      return -target.maxRight / 2;
-    })
-
-    let valueAxis = this.chart.yAxes.push(new am4charts.ValueAxis());
-    valueAxis.tooltip.disabled = true;
-    valueAxis.renderer.ticks.template.disabled = true;
-    valueAxis.renderer.axisFills.template.disabled = true;
-    valueAxis.data = data;
   }
 
   ngOnDestroy() {
     this.zone.runOutsideAngular(() => {
-      if (this.chart) {
-        this.chart.dispose();
-      }
+
     });
   }
 
-  populateSampleData() {
-    this.sampleData.push({ category: "1Y", mid: 100.5, mark: 100.5, security: "ZHPRHK 9.15 03/08/22", securityCount: 1, seniority: "Sr Bond" });
-    this.sampleData.push({ category: "2Y", mid: 100, mark: 100, security: "CHIWIN 7.9 01/23/21", securityCount: 1, seniority: "Sr Bond" });
-    this.sampleData.push({ category: "3Y", mid: 105, mark: 105, security: "SUNAU 1.85 07/30/24", securityCount: 1, seniority: "Sr Bond" });
-    this.sampleData.push({ category: "4Y", mid: 101, mark: 101, security: "CMZB 5 ½ 08/29/28", securityCount: 1, seniority: "Sr Bond" });
-    this.sampleData.push({ category: "5Y", mid: 102, mark: 102, security: "FBAVP 3.4 03/12/20", securityCount: 1, seniority: "Sr Bond" });
-    this.sampleData.push({ category: "6Y", mid: 106, mark: 104, security: "NESNVX 3 ⅝ 11/03/20", securityCount: 1, seniority: "Sr Bond" });
-    this.sampleData.push({ category: "7Y", mid: 100, mark: 100, security: "WFC 5 ¼ 09/07/22", securityCount: 2, seniority: "Sr Bond" });
-    this.sampleData.push({ category: "8Y", mid: 110, mark: 110, security: "CSCHCN 10 ⅞ 08/24/20", securityCount: 1, seniority: "Sr Bond" });
-    this.sampleData.push({ category: "9Y", mid: 102, mark: 105, security: "EVERRE 8.9 05/24/21", securityCount: 1, seniority: "Sr Bond" });
-    this.sampleData.push({ category: "10Y", mid: 108, mark: 108, security: "MITSRE 2.95 01/23/23", securityCount: 1, seniority: "Sr Bond" });
+  populateSampleData(): any[] {
 
-    this.sampleData.push({ category: "1Y", mid: 104, mark: 104, security: "ZHPRHK 9.15 03/08/22", securityCount: 1, seniority: "Sr CDS" });
-    this.sampleData.push({ category: "2Y", mid: 100, mark: 100, security: "CHIWIN 7.9 01/23/21", securityCount: 1, seniority: "Sr CDS" });
-    this.sampleData.push({ category: "3Y", mid: 105, mark: 105, security: "SUNAU 1.85 07/30/24", securityCount: 1, seniority: "Sr CDS" });
-    this.sampleData.push({ category: "4Y", mid: 102, mark: 102, security: "CMZB 5 ½ 08/29/28", securityCount: 1, seniority: "Sr CDS" });
-    this.sampleData.push({ category: "5Y", mid: 102, mark: 102, security: "FBAVP 3.4 03/12/20", securityCount: 1, seniority: "Sr CDS" });
-    this.sampleData.push({ category: "6Y", mid: 106, mark: 104, security: "NESNVX 3 ⅝ 11/03/20", securityCount: 1, seniority: "Sr CDS" });
-    this.sampleData.push({ category: "7Y", mid: 110, mark: 110, security: "WFC 5 ¼ 09/07/22", securityCount: 2, seniority: "Sr CDS" });
-    this.sampleData.push({ category: "8Y", mid: 110, mark: 110, security: "CSCHCN 10 ⅞ 08/24/20", securityCount: 1, seniority: "Sr CDS" });
-    this.sampleData.push({ category: "9Y", mid: 103, mark: 105, security: "EVERRE 8.9 05/24/21", securityCount: 1, seniority: "Sr CDS" });
-    this.sampleData.push({ category: "10Y", mid: 114, mark: 114, security: "MITSRE 2.95 01/23/23", securityCount: 1, seniority: "Sr CDS" });
+    let sampleData = [];
+    // Test data.
+    sampleData.push({ category: "1Y", spreadMid: 100.5, spreadMark: 100.5, security: "ZHPRHK 9.15 03/08/22", securityCount: 1, seniority: "Sr Bond" });
+    sampleData.push({ category: "2Y", spreadMid: 100, spreadMark: 100, security: "CHIWIN 7.9 01/23/21", securityCount: 1, seniority: "Sr Bond" });
+    sampleData.push({ category: "3Y", spreadMid: 105, spreadMark: 105, security: "SUNAU 1.85 07/30/24", securityCount: 1, seniority: "Sr Bond" });
+    sampleData.push({ category: "4Y", spreadMid: 101, spreadMark: 101, security: "CMZB 5 ½ 08/29/28", securityCount: 1, seniority: "Sr Bond" });
+    sampleData.push({ category: "5Y", spreadMid: 102, spreadMark: 102, security: "FBAVP 3.4 03/12/20", securityCount: 1, seniority: "Sr Bond" });
+    sampleData.push({ category: "6Y", spreadMid: 106, spreadMark: 104, security: "NESNVX 3 ⅝ 11/03/20", securityCount: 1, seniority: "Sr Bond" });
+    sampleData.push({ category: "7Y", spreadMid: 100, spreadMark: 100, security: "WFC 5 ¼ 09/07/22", securityCount: 2, seniority: "Sr Bond" });
+    sampleData.push({ category: "8Y", spreadMid: 110, spreadMark: 110, security: "CSCHCN 10 ⅞ 08/24/20", securityCount: 1, seniority: "Sr Bond" });
+    sampleData.push({ category: "9Y", spreadMid: 102, spreadMark: 105, security: "EVERRE 8.9 05/24/21", securityCount: 1, seniority: "Sr Bond" });
+    sampleData.push({ category: "10Y", spreadMid: 108, spreadMark: 108, security: "MITSRE 2.95 01/23/23", securityCount: 1, seniority: "Sr Bond" });
 
-    this.sampleData.push({ category: "1Y", mid: 100.5, mark: 100.5, security: "ZHPRHK 9.15 03/08/22", securityCount: 1, seniority: "Sub Bond" });
-    this.sampleData.push({ category: "2Y", mid: 101, mark: 101, security: "CHIWIN 7.9 01/23/21", securityCount: 1, seniority: "Sub Bond" });
-    this.sampleData.push({ category: "3Y", mid: 105.6, mark: 105, security: "SUNAU 1.85 07/30/24", securityCount: 1, seniority: "Sub Bond" });
-    this.sampleData.push({ category: "4Y", mid: 101, mark: 101, security: "CMZB 5 ½ 08/29/28", securityCount: 1, seniority: "Sub Bond" });
-    this.sampleData.push({ category: "5Y", mid: 102, mark: 102, security: "FBAVP 3.4 03/12/20", securityCount: 1, seniority: "Sub Bond" });
-    this.sampleData.push({ category: "6Y", mid: 106, mark: 104.5, security: "NESNVX 3 ⅝ 11/03/20", securityCount: 1, seniority: "Sub Bond" });
-    this.sampleData.push({ category: "7Y", mid: 100, mark: 100, security: "WFC 5 ¼ 09/07/22", securityCount: 2, seniority: "Sub Bond" });
-    this.sampleData.push({ category: "8Y", mid: 109.2, mark: 109.2, security: "CSCHCN 10 ⅞ 08/24/20", securityCount: 1, seniority: "Sub Bond" });
-    this.sampleData.push({ category: "9Y", mid: 104.6, mark: 105, security: "EVERRE 8.9 05/24/21", securityCount: 1, seniority: "Sub Bond" });
-    this.sampleData.push({ category: "10Y", mid: 99, mark: 99, security: "MITSRE 2.95 01/23/23", securityCount: 1, seniority: "Sub Bond" });
+    sampleData.push({ category: "1Y", spreadMid: 104, spreadMark: 104, security: "ZHPRHK 9.15 03/08/22", securityCount: 1, seniority: "Sr CDS" });
+    sampleData.push({ category: "2Y", spreadMid: 100, spreadMark: 100, security: "CHIWIN 7.9 01/23/21", securityCount: 1, seniority: "Sr CDS" });
+    sampleData.push({ category: "3Y", spreadMid: 105, spreadMark: 105, security: "SUNAU 1.85 07/30/24", securityCount: 1, seniority: "Sr CDS" });
+    sampleData.push({ category: "4Y", spreadMid: 102, spreadMark: 102, security: "CMZB 5 ½ 08/29/28", securityCount: 1, seniority: "Sr CDS" });
+    sampleData.push({ category: "5Y", spreadMid: 102, spreadMark: 102, security: "FBAVP 3.4 03/12/20", securityCount: 1, seniority: "Sr CDS" });
+    sampleData.push({ category: "6Y", spreadMid: 106, spreadMark: 104, security: "NESNVX 3 ⅝ 11/03/20", securityCount: 1, seniority: "Sr CDS" });
+    sampleData.push({ category: "7Y", spreadMid: 110, spreadMark: 110, security: "WFC 5 ¼ 09/07/22", securityCount: 2, seniority: "Sr CDS" });
+    sampleData.push({ category: "8Y", spreadMid: 110, spreadMark: 110, security: "CSCHCN 10 ⅞ 08/24/20", securityCount: 1, seniority: "Sr CDS" });
+    sampleData.push({ category: "9Y", spreadMid: 103, spreadMark: 105, security: "EVERRE 8.9 05/24/21", securityCount: 1, seniority: "Sr CDS" });
+    sampleData.push({ category: "10Y", spreadMid: 114, spreadMark: 114, security: "MITSRE 2.95 01/23/23", securityCount: 1, seniority: "Sr CDS" });
 
-    this.sampleData.push({ category: "1Y", mid: 100.5, mark: 100.5, security: "ZHPRHK 9.15 03/08/22", securityCount: 1, seniority: "Sub CDS" });
-    this.sampleData.push({ category: "3Y", mid: 102.6, mark: 102.6, security: "SUNAU 1.85 07/30/24", securityCount: 1, seniority: "Sub CDS" });
-    this.sampleData.push({ category: "5Y", mid: 103, mark: 103, security: "FBAVP 3.4 03/12/20", securityCount: 1, seniority: "Sub CDS" });
-    this.sampleData.push({ category: "6Y", mid: 103.45, mark: 100, security: "NESNVX 3 ⅝ 11/03/20", securityCount: 1, seniority: "Sub CDS" });
-    this.sampleData.push({ category: "7Y", mid: 106, mark: 101, security: "WFC 5 ¼ 09/07/22", securityCount: 2, seniority: "Sub CDS" });
-    this.sampleData.push({ category: "8Y", mid: 108, mark: 108, security: "CSCHCN 10 ⅞ 08/24/20", securityCount: 1, seniority: "Sub CDS" });
-    this.sampleData.push({ category: "9Y", mid: 100, mark: 103, security: "EVERRE 8.9 05/24/21", securityCount: 1, seniority: "Sub CDS" });
-    this.sampleData.push({ category: "10Y", mid: 99.78, mark: 99.78, security: "MITSRE 2.95 01/23/23", securityCount: 1, seniority: "Sub CDS" });
+    sampleData.push({ category: "1Y", spreadMid: 100.5, spreadMark: 100.5, security: "ZHPRHK 9.15 03/08/22", securityCount: 1, seniority: "Sub Bond" });
+    sampleData.push({ category: "2Y", spreadMid: 101, spreadMark: 101, security: "CHIWIN 7.9 01/23/21", securityCount: 1, seniority: "Sub Bond" });
+    sampleData.push({ category: "3Y", spreadMid: 105.6, spreadMark: 105, security: "SUNAU 1.85 07/30/24", securityCount: 1, seniority: "Sub Bond" });
+    sampleData.push({ category: "4Y", spreadMid: 101, spreadMark: 101, security: "CMZB 5 ½ 08/29/28", securityCount: 1, seniority: "Sub Bond" });
+    sampleData.push({ category: "5Y", spreadMid: 102, spreadMark: 102, security: "FBAVP 3.4 03/12/20", securityCount: 1, seniority: "Sub Bond" });
+    sampleData.push({ category: "6Y", spreadMid: 106, spreadMark: 104.5, security: "NESNVX 3 ⅝ 11/03/20", securityCount: 1, seniority: "Sub Bond" });
+    sampleData.push({ category: "7Y", spreadMid: 100, spreadMark: 100, security: "WFC 5 ¼ 09/07/22", securityCount: 2, seniority: "Sub Bond" });
+    sampleData.push({ category: "8Y", spreadMid: 109.2, spreadMark: 109.2, security: "CSCHCN 10 ⅞ 08/24/20", securityCount: 1, seniority: "Sub Bond" });
+    sampleData.push({ category: "9Y", spreadMid: 104.6, spreadMark: 105, security: "EVERRE 8.9 05/24/21", securityCount: 1, seniority: "Sub Bond" });
+    sampleData.push({ category: "10Y", spreadMid: 99, spreadMark: 99, security: "MITSRE 2.95 01/23/23", securityCount: 1, seniority: "Sub Bond" });
+
+    sampleData.push({ category: "1Y", spreadMid: 100.5, spreadMark: 100.5, security: "ZHPRHK 9.15 03/08/22", securityCount: 1, seniority: "Sub CDS" });
+    sampleData.push({ category: "3Y", spreadMid: 102.6, spreadMark: 102.6, security: "SUNAU 1.85 07/30/24", securityCount: 1, seniority: "Sub CDS" });
+    sampleData.push({ category: "5Y", spreadMid: 103, spreadMark: 103, security: "FBAVP 3.4 03/12/20", securityCount: 1, seniority: "Sub CDS" });
+    sampleData.push({ category: "6Y", spreadMid: 103.45, spreadMark: 100, security: "NESNVX 3 ⅝ 11/03/20", securityCount: 1, seniority: "Sub CDS" });
+    sampleData.push({ category: "7Y", spreadMid: 106, spreadMark: 101, security: "WFC 5 ¼ 09/07/22", securityCount: 2, seniority: "Sub CDS" });
+    sampleData.push({ category: "8Y", spreadMid: 108, spreadMark: 108, security: "CSCHCN 10 ⅞ 08/24/20", securityCount: 1, seniority: "Sub CDS" });
+    sampleData.push({ category: "9Y", spreadMid: 100, spreadMark: 103, security: "EVERRE 8.9 05/24/21", securityCount: 1, seniority: "Sub CDS" });
+    sampleData.push({ category: "10Y", spreadMid: 99.78, spreadMark: 99.78, security: "MITSRE 2.95 01/23/23", securityCount: 1, seniority: "Sub CDS" });
+
+    return sampleData;
+  }
+
+  btnYAxisSpreadClick()
+  {
+    this.isYAxisSpread = true;
+    this.isYAxisYield = false;
+  }
+
+  btnYAxisYieldClick()
+  {
+    this.isYAxisYield = true;
+    this.isYAxisSpread = false;
+  }
+
+  btnCS01Click()
+  {
+    this.isSecurityValueQuantity = false;
+    if(this.isSecurityValueCS01 === true) this.isSecurityValueCS01 = false;
+    else if(this.isSecurityValueCS01 === false) this.isSecurityValueCS01 = true;
+
+  }
+
+  btnQuantityClick()
+  {
+    this.isSecurityValueCS01 = false;
+    if(this.isSecurityValueQuantity === true) this.isSecurityValueQuantity = false;
+    else if(this.isSecurityValueQuantity === false) this.isSecurityValueQuantity = true;
+
   }
 
 }

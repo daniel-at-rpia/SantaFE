@@ -6,12 +6,70 @@
   @include mix_border_radius(10px);
   flex: 1 1 50%;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
   overflow: hidden;
   background-color: $color_white;
-  &__underConstruction {
-    font-size: $font_size_hero_x_large;
-    color: $font_color_trivial;
+  &__visualizer {
+    @include mix_border_generator(0 0 $typical_border_width 0);
+    display: flex;
+    flex-direction: column;
+    margin: $spacing_small;
+    &_Options {
+      display: flex;
+      height: 2.5rem;
+      align-content: center;
+      justify-content: center;
+      &_YAxis {
+        display: flex;
+        &_btnSpread {
+          margin-left: 1rem;
+          margin-right: 1rem;
+          &--selected {
+            margin-left: 1rem;
+            margin-right:  1rem;
+            @include material('none');
+            background-color: $color_active;
+            color: $font_color_inverse;
+          }
+        }
+        &_btnYield{
+          margin-right: 1rem;
+          &--selected {
+            margin-right:  1rem;
+            @include material('none');
+            background-color: $color_active;
+            color: $font_color_inverse;
+          }
+        }
+      }
+      &_SecurityValue {
+        display: flex;
+        margin-left: 5rem;
+        &_btnQuantity{
+          margin-left: 1rem;
+          &--selected {
+            margin-left: 1rem;
+            @include material('none');
+            background-color: $color_active;
+            color: $font_color_inverse;
+          }
+        }
+        &_btnCS01{
+          margin-left: 1rem;
+          &--selected {
+            margin-left: 1rem;
+            @include material('none');
+            background-color: $color_active;
+            color: $font_color_inverse;
+          }
+        }
+      }
+    }
+    &-main {
+      display: flex;
+      justify-content: center;
+      margin-top: 5rem;
+    }
   }
 }
+

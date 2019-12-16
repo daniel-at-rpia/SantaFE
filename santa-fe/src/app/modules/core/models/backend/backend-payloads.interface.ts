@@ -38,3 +38,7 @@ export interface PayloadGetBestQuotes {
 export interface PayloadGetAllQuotes {
   identifier: string;
 }
+
+export interface PayloadObligorSecurityIDs {
+  identifier: string
+}

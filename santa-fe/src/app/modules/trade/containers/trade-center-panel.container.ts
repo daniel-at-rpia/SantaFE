@@ -82,7 +82,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   @Input() ownerInitial: string;
   state: TradeCenterPanelState;
   subscriptions = {
-    startNewUpdateSub: null
+    startNewUpdateSub: null,
+    securityIDListFromAnalysis: null
   }
   constants = {
     portfolioList: PortfolioList,

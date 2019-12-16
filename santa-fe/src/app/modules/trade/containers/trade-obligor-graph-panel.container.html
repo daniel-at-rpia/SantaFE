@@ -1,3 +1,30 @@
 <article class="sat-tradeObligorGraphPanel">
-    <div id="chartdiv" style="width: 100%; height: 300px"></div>
+    <section class="sat-tradeObligorGraphPanel__visualizer">
+        <div class="sat-tradeObligorGraphPanel__visualizer_Options">
+            <div class="sat-tradeObligorGraphPanel__visualizer_Options_YAxis">
+                <p>Y Axis: </p>
+                <button (click)="this.btnYAxisSpreadClick()" [ngClass]="{
+                                'sat-tradeObligorGraphPanel__visualizer_Options_YAxis_btnSpread': this.isYAxisSpread === false,
+                                'sat-tradeObligorGraphPanel__visualizer_Options_YAxis_btnSpread--selected': this.isYAxisSpread === true }">Spread</button>
+
+                <button (click)="this.btnYAxisYieldClick()" [ngClass]="{
+                                'sat-tradeObligorGraphPanel__visualizer_Options_YAxis_btnYield': this.isYAxisYield === false,
+                                'sat-tradeObligorGraphPanel__visualizer_Options_YAxis_btnYield--selected': this.isYAxisYield === true }">Yield</button>
+            </div>
+            <div class="sat-tradeObligorGraphPanel__visualizer_Options_SecurityValue">
+                <p>Security Value: </p>
+                   <button (click)="this.btnQuantityClick()" [ngClass]="{
+                                                     'sat-tradeObligorGraphPanel__visualizer_Options_SecurityValue_btnQuantity': this.isSecurityValueQuantity === false,
+                                                     'sat-tradeObligorGraphPanel__visualizer_Options_SecurityValue_btnQuantity--selected': this.isSecurityValueQuantity === true }">Quantity</button>
+
+                    <button (click)="this.btnCS01Click()" [ngClass]="{
+                                                        'sat-tradeObligorGraphPanel__visualizer_Options_SecurityValue_btnCS01': this.isSecurityValueCS01 === false,
+                                                        'sat-tradeObligorGraphPanel__visualizer_Options_SecurityValue_btnCS01--selected': this.isSecurityValueCS01 === true }">CS01</button>
+   
+            </div>
+        </div>
+        <div class="sat-tradeObligorGraphPanel__visualizer-main">
+            <div id="chartdiv" style="width: 100%; height: 300px"></div>
+        </div>
+      </section>
 </article>
