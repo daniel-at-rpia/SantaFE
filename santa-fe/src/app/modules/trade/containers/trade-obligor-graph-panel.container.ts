@@ -21,7 +21,6 @@ import {
   sample
 } from 'rxjs/operators';
 import { TradeSecurityIDsFromAnalysisEvent } from 'Trade/actions/trade.actions';
-import { runInThisContext } from 'vm';
 
 
 am4core.useTheme(am4themes_animated);
