@@ -44,7 +44,7 @@
 }
 
 $quantVisualizerEntry_height: 2.25rem;
-$quantVisualizerEntry_node_size: 1.75rem;
+$quantVisualizerEntry_node_size: 1.5rem;
 .sat-quantVisualizerEntry {
   $quantVisualizerEntryBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
@@ -85,15 +85,20 @@ $quantVisualizerEntry_node_size: 1.75rem;
       }
       &-node {
         @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
-        @include mix_border_radius(50%);
-        @include material();
-        @include mix_alive('material');
         display: flex;
-        align-items: center;
         justify-content: center;
-        height: $quantVisualizerEntry_node_size;
-        width: $quantVisualizerEntry_node_size;
-        color: $font_color_inverse;
+        &-pinText {
+          @include mix_border_radius(50%);
+          @include material();
+          @include mix_alive('material');
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: $quantVisualizerEntry_node_size;
+          width: $quantVisualizerEntry_node_size;
+          color: $font_color_inverse;
+          font-size: $font_size_small;
+        }
         &-value {
           @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
           top: 100%;
@@ -101,11 +106,19 @@ $quantVisualizerEntry_node_size: 1.75rem;
         }
         &--target {
           left: 0;
-          background-color: $color_blue_5;
+          #{$quantVisualizerEntryBlockName} {
+            &__main-content-node-pinText {
+              background-color: $color_blue_5;
+            }
+          }
         }
         &--group {
           right: 0;
-          background-color: $color_indigo_5;
+          #{$quantVisualizerEntryBlockName} {
+            &__main-content-node-pinText {
+              background-color: $color_indigo_5;
+            }
+          }
         }
       }
     }

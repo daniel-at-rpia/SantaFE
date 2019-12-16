@@ -100,6 +100,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
   private onSecuritySelected(targetSecurity: SecurityDTO) {
     this.state.receivedSecurity = true;
     this.state.quantVisualizer.targetSecurity = targetSecurity;
+    this.state.quantVisualizer.dto = this.dtoService.formQuantVisualizerObject(true, null);
     this.fetchGroupData();
   }
 
@@ -115,7 +116,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
 
   private fetchGroupData() {
     if (this.state.receivedSecurity) {
-      this.state.quantVisualizer.dto = this.dtoService.formQuantVisualizerObject(true, null);
       const payload : PayloadGetSecurityGroupBasedOnSecurity = {
         source: "Default",
         identifier: this.state.quantVisualizer.targetSecurity.data.securityID,
@@ -129,6 +129,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
         }
       });
       payload.santaGroupIdentifier['SecurityType'] = [];
+      payload.santaGroupIdentifier['CouponType'] = [];
       this.restfulCommService.callAPI('santaGroup/get-santa-group-from-security', {req: 'POST'}, payload).pipe(
         first(),
         tap((serverReturn) => {

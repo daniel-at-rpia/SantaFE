@@ -755,12 +755,12 @@ export class DTOService {
       const momRight = object.style.mom.inversed ? params.tMom : params.gMom;
       const ytdLeft = object.style.ytd.inversed ? params.gYtd : params.tYtd;
       const ytdRight = object.style.ytd.inversed ? params.tYtd : params.gYtd;
-      object.style.wow.leftSpaceWidth = Math.round(Math.abs(minDelta - wowLeft) / fullWidthDelta * 100);
-      object.style.wow.rightSpaceWidth = Math.round(Math.abs(maxDelta - wowRight) / fullWidthDelta * 100);
-      object.style.mom.leftSpaceWidth = Math.round(Math.abs(minDelta - momLeft) / fullWidthDelta * 100);
-      object.style.mom.rightSpaceWidth = Math.round(Math.abs(maxDelta - momRight) / fullWidthDelta * 100);
-      object.style.ytd.leftSpaceWidth = Math.round(Math.abs(minDelta - ytdLeft) / fullWidthDelta * 100);
-      object.style.ytd.rightSpaceWidth = Math.round(Math.abs(maxDelta - ytdRight) / fullWidthDelta * 100);
+      object.style.wow.leftSpaceWidth = Math.round(this.utility.skewedNumber(Math.abs(minDelta - wowLeft) / fullWidthDelta) * 100);
+      object.style.wow.rightSpaceWidth = Math.round(this.utility.skewedNumber(Math.abs(maxDelta - wowRight) / fullWidthDelta) * 100);
+      object.style.mom.leftSpaceWidth = Math.round(this.utility.skewedNumber(Math.abs(minDelta - momLeft) / fullWidthDelta) * 100);
+      object.style.mom.rightSpaceWidth = Math.round(this.utility.skewedNumber(Math.abs(maxDelta - momRight) / fullWidthDelta) * 100);
+      object.style.ytd.leftSpaceWidth = Math.round(this.utility.skewedNumber(Math.abs(minDelta - ytdLeft) / fullWidthDelta) * 100);
+      object.style.ytd.rightSpaceWidth = Math.round(this.utility.skewedNumber(Math.abs(maxDelta - ytdRight) / fullWidthDelta) * 100);
       return object;
     }
   }

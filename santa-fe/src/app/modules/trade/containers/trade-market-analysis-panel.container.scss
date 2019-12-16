@@ -46,9 +46,10 @@
             align-items: center;
             justify-content: center;
             color: $font_color_inverse;
-            width: 1.75rem;
-            height: 1.75rem;
+            width: 1.5rem;
+            height: 1.5rem;
             margin-right: $spacing_small;
+            font-size: $font_size_small;
             &--target {
               background-color: $color_blue_5;
             }

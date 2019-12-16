@@ -393,6 +393,10 @@ export class UtilityService {
       });
       return params;
     }
+
+    public skewedNumber(input: number): number {
+      return input * input;
+    } 
   // shared end
 
   // market specific 
