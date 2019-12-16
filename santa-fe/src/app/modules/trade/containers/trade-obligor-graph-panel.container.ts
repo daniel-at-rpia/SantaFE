@@ -40,7 +40,6 @@ export class TradeObligorGraphPanel {
   private isSecurityValueQuantity = false;   //Security Value for Quantity button will always start as enabled.
   private isYAxisSpread = false;;
   private isYAxisYield = false;
-  securityForAnalysis$: Observable<string>;
 
   constructor(
     private store$: Store<any>,
@@ -53,7 +52,6 @@ export class TradeObligorGraphPanel {
   subscriptions = {
     selectSecurityUpdateForAnalysis: null
   }
-
 
   fetchSecurityIDs(data: SecurityDTO) {
 
