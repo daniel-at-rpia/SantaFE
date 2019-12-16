@@ -3,7 +3,7 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import { GraphService } from 'Core/services/GraphService';
-import { ObligorChartBlock } from 'Core/models/frontend/frontend-blocks.interface'
+import { ObligorChartBlock } from 'Core/models/frontend/frontend-adhoc-packages.interface'
 import { selectSelectedSecurityForAnalysis   } from 'Trade/selectors/trade.selectors';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -39,7 +39,6 @@ export class TradeObligorGraphPanel {
   private isSecurityValueQuantity = false;   //Security Value for Quantity button will always start as enabled.
   private isYAxisSpread = false;;
   private isYAxisYield = false;
-  securityForAnalysis$: Observable<string>;
 
   constructor(
     private store$: Store<any>,
@@ -52,7 +51,6 @@ export class TradeObligorGraphPanel {
   subscriptions = {
     selectSecurityUpdateForAnalysis: null
   }
-
 
   fetchSecurityIDs(data: SecurityDTO) {
 
