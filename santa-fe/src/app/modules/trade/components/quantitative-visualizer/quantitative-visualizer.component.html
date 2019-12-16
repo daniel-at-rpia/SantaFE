@@ -1,4 +1,8 @@
-<article class="sat-quantVisualizer">
+<article
+  [ngClass]="{
+    'sat-quantVisualizer': true,
+    'sat-quantVisualizer--stencilState': visualizerData.state.isStencil
+  }">
   <ul class="sat-quantVisualizer__entryList">
     <li class="sat-quantVisualizer__entryList-item">
       <span class="sat-quantVisualizer__entryList-item-label">Current: </span>

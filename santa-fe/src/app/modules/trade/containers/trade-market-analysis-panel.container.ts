@@ -113,6 +113,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
 
   private fetchGroupData() {
     if (this.state.receivedSecurity) {
+      this.state.quantVisualizer.dto = this.dtoService.formQuantVisualizerObject(true, null);
       const payload : PayloadGetSecurityGroupBasedOnSecurity = {
         source: "Default",
         identifier: this.state.quantVisualizer.targetSecurity.data.securityID,

@@ -27,6 +27,20 @@
       }
     }
   }
+  &--stencilState {
+    #{$quantVisualizerBlockName} {
+      &__entryList {
+        &-item {
+          &-label {
+            @include mix_stencil_animation();
+          }
+          &-content {
+            visibility: hidden;
+          }
+        }
+      }
+    }
+  }
 }
 
 $quantVisualizerEntry_height: 2.25rem;
