@@ -16,6 +16,7 @@
     } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
 
+    import { SecurityCard } from 'Core/components/security-card/security-card.component';
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
@@ -40,11 +41,14 @@
   selector: 'trade-market-analysis-panel',
   templateUrl: './trade-market-analysis-panel.container.html',
   styleUrls: ['./trade-market-analysis-panel.container.scss'],
-  encapsulation: ViewEncapsulation.Emulated
+  encapsulation: ViewEncapsulation.ShadowDom
 })
 
 export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
   state: TradeMarketAnalysisPanelState;
+  rowData = [];
+  columnDefs = [];
+  frameworkComponents = null;
   subscriptions = {
     receiveSelectedSecuritySub: null
   }
@@ -78,6 +82,20 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     ).subscribe((targetSecurity) => {
       !!targetSecurity && this.onSecuritySelected(targetSecurity);
     });
+    this.columnDefs = [
+        {headerName: 'Make', field: 'make' },
+        {headerName: 'Model', field: 'model' },
+        {headerName: 'Price', field: 'price', width: 350, cellRenderer: "securityCard"}
+    ];
+
+    this.rowData = [
+      { make: 'Toyota', model: 'Celica', price: 35000 },
+      { make: 'Ford', model: 'Mondeo', price: 32000 },
+      { make: 'Porsche', model: 'Boxter', price: 72000 },this.state.quantVisualizer.targetSecurity
+    ];
+    this.frameworkComponents = {
+      securityCard: SecurityCard
+    }
   }
 
   public ngOnDestroy() {

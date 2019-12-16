@@ -36,6 +36,12 @@
     </div>
   </section>
   <section class="sat-tradeMarketAnalysisPanel__table">
-    
+    <ag-grid-angular
+        class="ag-theme-balham"
+        [rowData]="rowData"
+        [columnDefs]="columnDefs"
+        [frameworkComponents]="frameworkComponents"
+        >
+    </ag-grid-angular>
   </section>
 </article>

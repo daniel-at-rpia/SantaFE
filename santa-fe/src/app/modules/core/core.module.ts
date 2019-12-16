@@ -9,6 +9,8 @@ import { UtilityService } from 'Core/services/UtilityService';
 import { GraphService } from 'Core/services/GraphService';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 
+import { AgGridModule } from 'ag-grid-angular';
+
 import { SecurityCard } from 'Core/components/security-card/security-card.component';
 import { QuantitativeComparer } from 'Core/components/quantitative-comparer/quantitative-comparer.component';
 import { SecurityQuote } from 'Core/components/security-quote/security-quote.component';
@@ -32,7 +34,10 @@ import { SecurityTable } from 'Core/containers/security-table/security-table.con
   ],
   imports: [
     CommonModule,
-    FormModule
+    FormModule,
+
+    AgGridModule.withComponents([SecurityCard])
+
   ],
   providers: [
     DTOService,

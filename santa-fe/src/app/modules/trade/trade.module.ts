@@ -5,6 +5,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
+import { AgGridModule } from 'ag-grid-angular';
+
+
+import { SecurityCard } from 'Core/components/security-card/security-card.component';
 import { CoreModule } from 'Core/core.module';
 import { reducer } from 'Trade/reducers/trade.reducer';
 import { TradeEffect } from 'Trade/effects/trade.effects';
@@ -28,6 +32,7 @@ import { QuantitativeVisualizer } from 'Trade/components/quantitative-visualizer
     QuantitativeVisualizer
   ],
   imports: [
+    // Angular framework modules
     CommonModule,
     RouterModule.forChild([
       {
@@ -37,6 +42,10 @@ import { QuantitativeVisualizer } from 'Trade/components/quantitative-visualizer
     StoreModule.forFeature('trade', reducer),
     EffectsModule.forFeature([TradeEffect]),
 
+    // 3rd party dependencies
+    AgGridModule.withComponents([SecurityCard]),
+
+    // Native modules
     CoreModule
   ],
   providers: [
