@@ -316,8 +316,8 @@ export class DTOService {
       data: {
         stats: [
           this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'DoD'),
-          this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'WoW'),
-          this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'MoM')
+          this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'Wow'),
+          this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'Mom')
         ]
       },
       state: {
@@ -668,9 +668,9 @@ export class DTOService {
           }
         },
         state: {
-          isWoWValid: true,
-          isMoMValid: true,
-          isYtDValid: true,
+          isWowValid: true,
+          isMomValid: true,
+          isYtdValid: true,
           isStencil: true
         }
       };
@@ -681,12 +681,12 @@ export class DTOService {
       min = min - (max - min) * 0.15;
       max = max + (max - min) * 0.15;
       const validDeltaParamsList: Array<number> = [0];
-      params.tWoW !== null && validDeltaParamsList.push(params.tWoW);
-      params !== null && validDeltaParamsList.push(params.tMoM);
-      params !== null && validDeltaParamsList.push(params.tYTD);
-      params !== null && validDeltaParamsList.push(params.gWoW);
-      params !== null && validDeltaParamsList.push(params.gMoM);
-      params !== null && validDeltaParamsList.push(params.gYTD);
+      params.tWow !== null && validDeltaParamsList.push(params.tWow);
+      params !== null && validDeltaParamsList.push(params.tMom);
+      params !== null && validDeltaParamsList.push(params.tYtd);
+      params !== null && validDeltaParamsList.push(params.gWow);
+      params !== null && validDeltaParamsList.push(params.gMom);
+      params !== null && validDeltaParamsList.push(params.gYtd);
       let minDelta = Math.min(...validDeltaParamsList);
       let maxDelta = Math.max(...validDeltaParamsList);
       minDelta = minDelta - (maxDelta - minDelta) * 0.15;
@@ -698,16 +698,16 @@ export class DTOService {
             group: params.gRaw
           },
           wow: {
-            target: params.tWoW,
-            group: params.gWoW
+            target: params.tWow,
+            group: params.gWow
           },
           mom: {
-            target: params.tMoM,
-            group: params.gMoM
+            target: params.tMom,
+            group: params.gMom
           },
           ytd: {
-            target: params.tYtD,
-            group: params.gYtD
+            target: params.tYtd,
+            group: params.gYtd
           },
           min: min,
           max: max,
@@ -721,25 +721,25 @@ export class DTOService {
             rightSpaceWidth: 10
           },
           wow: {
-            inversed: params.gWoW < params.tWoW,
+            inversed: params.gWow < params.tWow,
             leftSpaceWidth: 10,
             rightSpaceWidth: 10
           },
           mom: {
-            inversed: params.gMoM < params.tMoM,
+            inversed: params.gMom < params.tMom,
             leftSpaceWidth: 10,
             rightSpaceWidth: 10
           },
           ytd: {
-            inversed: params.gYtD < params.tYtD,
+            inversed: params.gYtd < params.tYtd,
             leftSpaceWidth: 10,
             rightSpaceWidth: 10
           }
         },
         state: {
-          isWoWValid: params.tWoW !== null && params.gWoW !== null,
-          isMoMValid: params.tMoM !== null && params.gMoM !== null,
-          isYtDValid: params.tYtD !== null && params.gYtD !== null,
+          isWowValid: params.tWow !== null && params.gWow !== null,
+          isMomValid: params.tMom !== null && params.gMom !== null,
+          isYtdValid: params.tYtd !== null && params.gYtd !== null,
           isStencil: false
         }
       }
@@ -749,12 +749,12 @@ export class DTOService {
       object.style.raw.leftSpaceWidth = Math.round((min - rawLeft) / fullWidth * 100);
       object.style.raw.rightSpaceWidth = Math.round((max - rawRight) / fullWidth * 100);
       const fullWidthDelta = maxDelta - minDelta;
-      const wowLeft = object.style.wow.inversed ? params.gWoW : params.tWoW;
-      const wowRight = object.style.wow.inversed ? params.tWoW : params.gWoW;
-      const momLeft = object.style.mom.inversed ? params.gMoM : params.tMoM;
-      const momRight = object.style.mom.inversed ? params.tMoM : params.gMoM;
-      const ytdLeft = object.style.ytd.inversed ? params.gYtD : params.tYtD;
-      const ytdRight = object.style.ytd.inversed ? params.tYtD : params.gYtD;
+      const wowLeft = object.style.wow.inversed ? params.gWow : params.tWow;
+      const wowRight = object.style.wow.inversed ? params.tWow : params.gWow;
+      const momLeft = object.style.mom.inversed ? params.gMom : params.tMom;
+      const momRight = object.style.mom.inversed ? params.tMom : params.gMom;
+      const ytdLeft = object.style.ytd.inversed ? params.gYtd : params.tYtd;
+      const ytdRight = object.style.ytd.inversed ? params.tYtd : params.gYtd;
       object.style.wow.leftSpaceWidth = Math.round(Math.abs(minDelta - wowLeft) / fullWidthDelta * 100);
       object.style.wow.rightSpaceWidth = Math.round(Math.abs(maxDelta - wowRight) / fullWidthDelta * 100);
       object.style.mom.leftSpaceWidth = Math.round(Math.abs(minDelta - momLeft) / fullWidthDelta * 100);

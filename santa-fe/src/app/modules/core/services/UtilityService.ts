@@ -281,8 +281,8 @@ export class UtilityService {
         raw: {},
         delta: {
           DoD: {},
-          WoW: {},
-          MoM: {},
+          Wow: {},
+          Mom: {},
           Ytd: {}
         }
       };

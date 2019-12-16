@@ -46,8 +46,8 @@ export interface SecurityGroupMetricPackBlock {
   raw: object;
   delta: {
     DoD: object;
-    WoW: object;
-    MoM: object;
+    Wow: object;
+    Mom: object;
     Ytd: object;
   }
 }

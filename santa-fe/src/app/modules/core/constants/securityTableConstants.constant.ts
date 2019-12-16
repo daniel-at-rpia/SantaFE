@@ -126,7 +126,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: TriCoreMetricConfig.Spread.metricLabel,
     blockAttrName: 'metricPack',
     readyStage: 2,
-    metricPackDeltaScope: 'MoM',
+    metricPackDeltaScope: 'Mom',
     active: true
   },{
     label: 'Quote Count',

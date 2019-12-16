@@ -317,9 +317,9 @@ export interface QuantitativeVisualizerDTO extends BasicDTOStructure {
     ytd: QuantitativeEntryStyleBlock;
   }
   state: {
-    isWoWValid: boolean;
-    isMoMValid: boolean;
-    isYtDValid: boolean;
+    isWowValid: boolean;
+    isMomValid: boolean;
+    isYtdValid: boolean;
     isStencil: boolean;
   }
 }

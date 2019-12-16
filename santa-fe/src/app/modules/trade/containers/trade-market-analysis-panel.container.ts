@@ -126,7 +126,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
         }
       });
       payload.santaGroupIdentifier['SecurityType'] = [];
-      this.restfulCommService.callAPI('santaGroup/get-santa-group-from-security', {req: 'POST'}, payload, true).pipe(
+      this.restfulCommService.callAPI('santaGroup/get-santa-group-from-security', {req: 'POST'}, payload).pipe(
         first(),
         tap((serverReturn) => {
           this.populateVisualizer(serverReturn);
@@ -145,12 +145,12 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     const params: QuantVisualizerParams = {
       tRaw: securityMetricPack.raw[this.constants.spreadMetricKey],
       gRaw: groupDTO.data.metricPack.raw[this.constants.spreadMetricKey],
-      tWoW: securityMetricPack.delta.WoW[this.constants.spreadMetricKey],
-      gWoW: groupDTO.data.metricPack.delta.WoW[this.constants.spreadMetricKey],
-      tMoM: securityMetricPack.delta.MoM[this.constants.spreadMetricKey],
-      gMoM: groupDTO.data.metricPack.delta.MoM[this.constants.spreadMetricKey],
-      tYtD: securityMetricPack.delta.Ytd[this.constants.spreadMetricKey],
-      gYtD: groupDTO.data.metricPack.delta.Ytd[this.constants.spreadMetricKey]
+      tWow: securityMetricPack.delta.Wow[this.constants.spreadMetricKey],
+      gWow: groupDTO.data.metricPack.delta.Wow[this.constants.spreadMetricKey],
+      tMom: securityMetricPack.delta.Mom[this.constants.spreadMetricKey],
+      gMom: groupDTO.data.metricPack.delta.Mom[this.constants.spreadMetricKey],
+      tYtd: securityMetricPack.delta.Ytd[this.constants.spreadMetricKey],
+      gYtd: groupDTO.data.metricPack.delta.Ytd[this.constants.spreadMetricKey]
     }
     this.state.quantVisualizer.dto = this.dtoService.formQuantVisualizerObject(false, params);
   }

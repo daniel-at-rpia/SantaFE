@@ -18,9 +18,9 @@ export interface BESecurityGroupDTO {
   metrics: BEGroupMetricDTO,
   deltaMetrics: {
     DoD: BEGroupMetricDTO,
-    WoW?: BEGroupMetricDTO,
+    Wow?: BEGroupMetricDTO,
     Mtd?: BEGroupMetricDTO,
-    MoM?: BEGroupMetricDTO,
+    Mom?: BEGroupMetricDTO,
     Ytd?: BEGroupMetricDTO
   },
   descriptiveMetrics: {
@@ -102,8 +102,8 @@ export interface BESecurityDTO {
   metrics: BESecurityMetricDTO;
   deltaMetrics: {
     DoD: BESecurityDeltaMetricDTO;
-    WoW: BESecurityDeltaMetricDTO;
-    MoM: BESecurityDeltaMetricDTO;
+    Wow: BESecurityDeltaMetricDTO;
+    Mom: BESecurityDeltaMetricDTO;
     Ytd: BESecurityDeltaMetricDTO;
   };
   issueDate: string;

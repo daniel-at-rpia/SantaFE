@@ -10,8 +10,8 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     backendDtoAttrName: 'defaultSpread',
     deltaOptions: [
       'DoD',
-      'WoW',
-      'MoM',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   },
@@ -20,8 +20,8 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     backendDtoAttrName: 'price',
     deltaOptions: [
       'DoD',
-      'WoW',
-      'MoM',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   },
@@ -30,8 +30,8 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     backendDtoAttrName: 'ratingDouble',
     deltaOptions: [
       'DoD',
-      'WoW',
-      'MoM',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   },
@@ -40,8 +40,8 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     backendDtoAttrName: 'gSpread',
     deltaOptions: [
       'DoD',
-      'WoW',
-      'MoM',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   },
@@ -50,8 +50,8 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     backendDtoAttrName: 'oasSpread',
     deltaOptions: [
       'DoD',
-      'WoW',
-      'MoM',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   },
@@ -60,8 +60,8 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     backendDtoAttrName: 'zSpread',
     deltaOptions: [
       'DoD',
-      'WoW',
-      'MoM',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   },
@@ -70,8 +70,8 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     backendDtoAttrName: 'yieldWorst',
     deltaOptions: [
       'DoD',
-      'WoW',
-      'MoM',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   },
@@ -80,8 +80,8 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     backendDtoAttrName: 'aswUsd',
     deltaOptions: [
       'DoD',
-      'WoW',
-      'MoM',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   }

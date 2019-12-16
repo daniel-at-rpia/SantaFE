@@ -28,10 +28,10 @@ export interface LiveDataDiffingResult {
 export interface QuantVisualizerParams {
   tRaw: number;
   gRaw: number;
-  tWoW: number;
-  gWoW: number;
-  tMoM: number;
-  gMoM: number;
-  tYtD: number;
-  gYtD: number;
+  tWow: number;
+  gWow: number;
+  tMom: number;
+  gMom: number;
+  tYtd: number;
+  gYtd: number;
 }
