@@ -15,6 +15,7 @@ import {
   TradeLiveUpdatePassRawDataEvent,
   TradeLiveUpdatePassTableContentEvent
 } from 'Trade/actions/trade.actions';
+import { RouterLinkWithHref } from '@angular/router';
 
 export interface TradeState {
   presetSelected: boolean;
@@ -25,6 +26,7 @@ export interface TradeState {
   liveUpdateProcessingRawData: boolean;
   tableRowUpdateList: Array<SecurityTableRowDTO>;
   selectedSecurityForAnalysis: SecurityDTO;
+  securityIDListFromAnalysis: Array<string>
 }
 
 const initialState: TradeState = {
@@ -35,7 +37,8 @@ const initialState: TradeState = {
   liveUpdateInProgress: false,
   liveUpdateProcessingRawData: false,
   tableRowUpdateList: [],
-  selectedSecurityForAnalysis: null
+  selectedSecurityForAnalysis: null,
+  securityIDListFromAnalysis: []
 };
 
 export function tradeReducer(
@@ -104,6 +107,11 @@ export function tradeReducer(
       return {
         ...state,
         selectedSecurityForAnalysis: action.targetSecurity
+      }
+    case TradeActions.SecurityIDListFromAnalysisEvent:
+      return {
+        ...state,
+        securityIDListFromAnalysis: action.securityIDList
       }
     default:
       return state;
