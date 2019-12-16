@@ -96,10 +96,3 @@ export interface QuantitativeEntryStyleBlock {
   leftSpaceWidth: number;
   rightSpaceWidth: number;
 }
-
-export interface ObligorChartBlock {
-  name: string;
-  chart: am4charts.XYChart;
-  rawData: any[];
-  colorScheme: string;
-}
