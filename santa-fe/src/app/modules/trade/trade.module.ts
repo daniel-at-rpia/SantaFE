@@ -7,7 +7,6 @@ import { EffectsModule } from '@ngrx/effects';
 
 import { AgGridModule } from 'ag-grid-angular';
 
-
 import { SecurityCard } from 'Core/components/security-card/security-card.component';
 import { CoreModule } from 'Core/core.module';
 import { reducer } from 'Trade/reducers/trade.reducer';
@@ -20,6 +19,7 @@ import { TradeMarketAnalysisPanel } from 'Trade/containers/trade-market-analysis
 import { TradeObligorGraphPanel } from 'Trade/containers/trade-obligor-graph-panel.container';
 import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
 import { QuantitativeVisualizer } from 'Trade/components/quantitative-visualizer/quantitative-visualizer.component';
+import { TradeMarketAnalysisTable } from 'Trade/components/market-analysis-table/market-analysis-table.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +29,8 @@ import { QuantitativeVisualizer } from 'Trade/components/quantitative-visualizer
     TradeUtilityPanel,
     TradeMarketAnalysisPanel,
     TradeObligorGraphPanel,
-    QuantitativeVisualizer
+    QuantitativeVisualizer,
+    TradeMarketAnalysisTable
   ],
   imports: [
     // Angular framework modules
