@@ -9,6 +9,7 @@
   flex-direction: column;
   overflow: hidden;
   background-color: $color_white;
+  justify-content: center;
   &__visualizer {
     @include mix_border_generator(0 0 $typical_border_width 0);
     display: flex;
@@ -65,9 +66,10 @@
         }
       }
     }
-    &-main {
+    &__ObligorGraph {
       display: flex;
       justify-content: center;
+      align-content: center;
       margin-top: 5rem;
     }
   }
