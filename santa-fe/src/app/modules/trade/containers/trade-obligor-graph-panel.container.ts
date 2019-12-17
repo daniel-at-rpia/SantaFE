@@ -3,7 +3,6 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import { GraphService } from 'Core/services/GraphService';
-import { ObligorChartBlock } from 'Core/models/frontend/frontend-adhoc-packages.interface'
 import { selectSelectedSecurityForAnalysis   } from 'Trade/selectors/trade.selectors';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -21,7 +20,6 @@ import {
   sample
 } from 'rxjs/operators';
 import { TradeSecurityIDsFromAnalysisEvent } from 'Trade/actions/trade.actions';
-
 
 am4core.useTheme(am4themes_animated);
 
@@ -63,24 +61,11 @@ export class TradeObligorGraphPanel {
       this.restfulCommService.callAPI('SantaCurve/get-santa-obligor-curves-per-ccy', { req: 'POST' }, payload).pipe(
         first(),
         tap((serverReturn) => {
-          for (let category in serverReturn) {
-            if (category != "ObligorId") {
-              if (serverReturn[category].BestQuotes != null) {
-                for (let bestQuote in serverReturn[category].BestQuotes) {
-                  if (serverReturn[category].BestQuotes[bestQuote] != null) {
-                    for (let security in serverReturn[category].BestQuotes) {
-                      if (serverReturn[category].BestQuotes[security]) {
-                        if (serverReturn[category].BestQuotes[security].bestSpreadQuote || serverReturn[category].BestQuotes[security].bestYieldQuote) {
-                          
-                          SecurityIDList.push(security);
-
-                          this.bestQuotes.push({ SecurityID: security, quote: serverReturn[category].BestQuotes[security] });
-                        
-                        }
-                      }
-                    }
-                  }
-                }
+          for (let curve in serverReturn.Curves) {
+            for (let security in serverReturn.Curves[curve].BestQuotes) {
+              SecurityIDList.push(security);
+              if (serverReturn.Curves[curve].BestQuotes[security] !== null) {
+                this.bestQuotes.push({ seniority: serverReturn.Curves[curve].Seniority + " " + serverReturn.Curves[curve].CurveType, securityID: security, bestQuote: serverReturn.Curves[curve].BestQuotes[security] })
               }
             }
           }
@@ -141,18 +126,20 @@ export class TradeObligorGraphPanel {
       }
 
       this.buildChartData();
-      
-      // Initialize the X Axis.
-      this.graphService.initializeObligorChartXAxis(xAxisData, chart);
 
-      // Initialize the Y Axis.
-      this.graphService.initializeObligorChartYAxis(yAxisData, chart);
+      if(!this.isYAxisYield && !this.isYAxisSpread)
+      {
+        this.isYAxisSpread = true;
+      }
+
+      //Initialize chart Axes
+      this.graphService.initializeObligorChartAxes(xAxisData, yAxisData, chart);
 
       // Generate a graph for each data type, sending in the raw data,  the color scheme and the name.
-      this.buildSingleObligorGraph(chart, srBondData, "#712f79", "Sr Bond", "spreadMid");
-      this.buildSingleObligorGraph(chart, srCDSData, "#293881", "Sr CDS",  "spreadMid");
-      this.buildSingleObligorGraph(chart, subBondData, "#0f8276", "Sub Bond",  "spreadMid");
-      this.buildSingleObligorGraph(chart, subCDSData, "#ff9933", "Sub CDS",  "spreadMid");
+      this.graphService.buildObligorGraph(chart, srBondData, "#712f79", "Sr Bond", "spreadMid");
+      this.graphService.buildObligorGraph(chart, srCDSData, "#293881", "Sr CDS",  "spreadMid");
+      this.graphService.buildObligorGraph(chart, subBondData, "#0f8276", "Sub Bond",  "spreadMid");
+      this.graphService.buildObligorGraph(chart, subCDSData, "#ff9933", "Sub CDS",  "spreadMid");
 
       // Add legend for each chart type.
       chart.legend = new am4charts.Legend();
@@ -163,52 +150,7 @@ export class TradeObligorGraphPanel {
     });
   }
 
-  buildSingleObligorGraph(chart: am4charts.XYChart, data: any, colorScheme: string, name: string, yAxisValue: string) {
-    
-    // Generate Sr Bond chart.
-    let chartBlock: ObligorChartBlock = {
-      name: name,
-      chart: chart,
-      rawData: data,
-      colorScheme: colorScheme
-    }
-
-    if(!this.isYAxisYield && !this.isYAxisSpread)
-    {
-      this.isYAxisSpread = true;
-    }
-
-    // Create a dumbbell series. https://www.amcharts.com/demos/dumbbell-plot/
-    let dumbBellSeries: am4charts.ColumnSeries;
-    if(this.isYAxisSpread)
-    {
-      dumbBellSeries = this.graphService.generateObligorChartDumbells(chartBlock, "spread");
-    }
-    else if(this.isYAxisYield)
-    {
-      dumbBellSeries = this.graphService.generateObligorChartDumbells(chartBlock, "yield");
-    }
-
-    // Create a curve line series.
-    let curveSeries: am4charts.LineSeries = this.graphService.generateObligorChartTrendCurve(chartBlock);
-
-    // Show the dumbbell series and the curve series when legend item is clicked.
-    dumbBellSeries.events.on("shown", function () {
-      dumbBellSeries.show();
-      curveSeries.show();
-    });
-
-    // Hide the dumbbell series and the curve series when legend item is clicked.
-    dumbBellSeries.events.on("hidden", function () {
-      dumbBellSeries.hide();
-      curveSeries.hide();
-    });
-  }
-
   ngOnDestroy() {
-    this.zone.runOutsideAngular(() => {
-
-    });
   }
 
   populateSampleData(): any[] {

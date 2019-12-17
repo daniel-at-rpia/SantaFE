@@ -10,6 +10,8 @@ import {
   QuantitativeEntryStyleBlock
 } from 'FEModels/frontend-blocks.interface';
 
+import * as am4charts from "@amcharts/amcharts4/charts";
+
 interface BasicDTOStructure {
   [property: string]: object; 
   data: object;
@@ -322,4 +324,12 @@ export interface QuantitativeVisualizerDTO extends BasicDTOStructure {
     isYtdValid: boolean;
     isStencil: boolean;
   }
+
+}
+
+export interface ObligorChartBlock {
+  name: string;
+  chart: am4charts.XYChart;
+  rawData: any[];
+  colorScheme: string;
 }

@@ -7,7 +7,7 @@ import {
 
 import {
   ObligorChartBlock
-} from 'FEModels/frontend-adhoc-packages.interface';
+} from 'FEModels/frontend-models.interface';
 
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
@@ -133,8 +133,37 @@ export class GraphService {
     }
   }
 
+  public buildObligorGraph(chart: am4charts.XYChart, data: any, colorScheme: string, name: string, yAxisValue: string) {
+    
+    // Generate Sr Bond chart.
+    let chartBlock: ObligorChartBlock = {
+      name: name,
+      chart: chart,
+      rawData: data,
+      colorScheme: colorScheme
+    }
 
-  generateObligorChartDumbells(obligorChartDTO: ObligorChartBlock, yAxisValue: string): am4charts.ColumnSeries
+    // Create a dumbbell series. https://www.amcharts.com/demos/dumbbell-plot/
+    let dumbBellSeries: am4charts.ColumnSeries;
+    dumbBellSeries = this.generateObligorChartDumbells(chartBlock, "spread");
+
+    // Create a curve line series.
+    let curveSeries: am4charts.LineSeries = this.generateObligorChartTrendCurve(chartBlock);
+
+    // Show the dumbbell series and the curve series when legend item is clicked.
+    dumbBellSeries.events.on("shown", function () {
+      dumbBellSeries.show();
+      curveSeries.show();
+    });
+
+    // Hide the dumbbell series and the curve series when legend item is clicked.
+    dumbBellSeries.events.on("hidden", function () {
+      dumbBellSeries.hide();
+      curveSeries.hide();
+    });
+  }
+
+  private generateObligorChartDumbells(obligorChartDTO: ObligorChartBlock, yAxisValue: string): am4charts.ColumnSeries
   {
 
     // Create the column representing the mark discrepency.
@@ -220,7 +249,7 @@ export class GraphService {
     return dumbBellseries;
   }
 
-  generateObligorChartTrendCurve(obligorChartDTO: ObligorChartBlock): am4charts.LineSeries
+  private generateObligorChartTrendCurve(obligorChartDTO: ObligorChartBlock): am4charts.LineSeries
   {
     let curveData = [];
     for (var i = 0; i < obligorChartDTO.rawData.length; i++) {
@@ -244,7 +273,13 @@ export class GraphService {
     return curveSeries;
   }
 
-  initializeObligorChartXAxis(data: any[], chart: am4charts.XYChart) {
+  public initializeObligorChartAxes(xAxisData: any[], yAxesData: any[], chart: am4charts.XYChart)
+  {
+    this.initializeObligorChartXAxis(xAxisData, chart);
+    this.initializeObligorChartYAxis(yAxesData, chart);
+  }
+
+  private initializeObligorChartXAxis(data: any[], chart: am4charts.XYChart) {
     let xAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     xAxis.renderer.grid.template.location = 0;
     xAxis.dataFields.category = "category";
@@ -262,7 +297,7 @@ export class GraphService {
     })
   }
 
-initializeObligorChartYAxis(data: any[], chart: am4charts.XYChart)
+private initializeObligorChartYAxis(data: any[], chart: am4charts.XYChart)
 {
   let yAxis = chart.yAxes.push(new am4charts.ValueAxis());
   yAxis.tooltip.disabled = true;

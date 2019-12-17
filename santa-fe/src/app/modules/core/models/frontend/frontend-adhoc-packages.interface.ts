@@ -1,6 +1,5 @@
 import { Subscription } from 'rxjs';
 
-import * as am4charts from "@amcharts/amcharts4/charts";
 import { SecurityTableRowDTO } from 'FEModels/frontend-models.interface';
 import { QuoteMetricBlock } from 'FEModels/frontend-blocks.interface';
 
@@ -35,11 +34,4 @@ export interface QuantVisualizerParams {
   gMom: number;
   tYtd: number;
   gYtd: number;
-}
-
-export interface ObligorChartBlock {
-  name: string;
-  chart: am4charts.XYChart;
-  rawData: any[];
-  colorScheme: string;
 }
