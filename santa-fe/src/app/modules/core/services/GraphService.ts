@@ -128,7 +128,13 @@ export class GraphService {
     }
   }
 
-  public buildObligorGraph(chart: am4charts.XYChart, data: any, colorScheme: string, name: string, yAxisValue: string, displayChart: boolean, displayMark: boolean) {
+  public buildObligorGraph(chart: am4charts.XYChart, 
+                           data: any,
+                           colorScheme: string, 
+                           name: string, 
+                           yAxisValue: string, 
+                           displayChart: boolean, 
+                           displayMark: boolean) {
 
     // Generate Sr Bond chart.
     let chartBlock: ObligorChartBlock = {
@@ -204,7 +210,8 @@ export class GraphService {
       markBullet.fillOpacity = 10;
       markBullet.nonScalingStroke = true;
       markBullet.tooltipHTML = `<center><b>{security}</b> </br>
-                                Mark: {valueY.value} </br>
+                                Mid: {spreadMid}</br>
+                                Mark: {spreadMark}</br>
                                 Value: {positionCurrent} </center`;
       dumbBellseries.heatRules.push({
         target: markBullet.circle,
@@ -219,7 +226,7 @@ export class GraphService {
     midBullet.fill = am4core.color(obligorChartDTO.colorScheme);
     midBullet.locationY = 1;
     midBullet.tooltipHTML = `<center><b>{security}</b> </br>
-                              Mid: {openValueY.value}</center`;
+                              Mid: {openValueY}</br>`;
 
     dumbBellseries.events.on("hidden", function () {
       dumbBellseries.hide();
@@ -278,6 +285,6 @@ export class GraphService {
     yAxis.title.text = "Spread";
     yAxis.min = 0;
     yAxis.data = data;
-    yAxis.renderer.minGridDistance = 10;
+    yAxis.renderer.minGridDistance = 30;
   }
 }

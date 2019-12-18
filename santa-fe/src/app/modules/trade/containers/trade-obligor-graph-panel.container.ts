@@ -10,19 +10,9 @@ import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { PayloadObligorSecurityIDs } from 'BEModels/backend-payloads.interface';
 import { SecurityDTO } from 'App/modules/core/models/frontend/frontend-models.interface';
 import { BEBestQuoteDTO, BESecurityDTO } from 'Core/models/backend/backend-models.interface.ts';
-import {
-  tap,
-  first,
-  delay,
-  catchError,
-  withLatestFrom,
-  filter,
-  sample
-} from 'rxjs/operators';
+import {tap,first,delay,catchError,withLatestFrom,filter,sample} from 'rxjs/operators';
 import { TradeSecurityIDsFromAnalysisEvent } from 'Trade/actions/trade.actions';
-import {
-  TriCoreMetricConfig
-} from 'Core/constants/coreConstants.constant';
+import {TriCoreMetricConfig} from 'Core/constants/coreConstants.constant';
 import { ThrowStmt } from '@angular/compiler';
 
 @Component({
