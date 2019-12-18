@@ -5,9 +5,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
-import { AgGridModule } from 'ag-grid-angular';
-
-import { SecurityCard } from 'Core/components/security-card/security-card.component';
 import { CoreModule } from 'Core/core.module';
 import { reducer } from 'Trade/reducers/trade.reducer';
 import { TradeEffect } from 'Trade/effects/trade.effects';
@@ -19,7 +16,6 @@ import { TradeMarketAnalysisPanel } from 'Trade/containers/trade-market-analysis
 import { TradeObligorGraphPanel } from 'Trade/containers/trade-obligor-graph-panel.container';
 import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
 import { QuantitativeVisualizer } from 'Trade/components/quantitative-visualizer/quantitative-visualizer.component';
-import { TradeMarketAnalysisTable } from 'Trade/components/market-analysis-table/market-analysis-table.component';
 
 @NgModule({
   declarations: [
@@ -29,8 +25,7 @@ import { TradeMarketAnalysisTable } from 'Trade/components/market-analysis-table
     TradeUtilityPanel,
     TradeMarketAnalysisPanel,
     TradeObligorGraphPanel,
-    QuantitativeVisualizer,
-    TradeMarketAnalysisTable
+    QuantitativeVisualizer
   ],
   imports: [
     // Angular framework modules
@@ -42,9 +37,6 @@ import { TradeMarketAnalysisTable } from 'Trade/components/market-analysis-table
     ]),
     StoreModule.forFeature('trade', reducer),
     EffectsModule.forFeature([TradeEffect]),
-
-    // 3rd party dependencies
-    AgGridModule.withComponents([SecurityCard]),
 
     // Native modules
     CoreModule

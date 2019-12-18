@@ -1,0 +1,10 @@
+@import "global.scss";
+@import "ag-grid/ag-grid-basic.scss";
+@import "ag-grid/ag-theme-balham.scss";
+
+.santaTable {
+  $santaTableBlockName: &;
+  &__row {
+    // height: $securityCard_labelVariant_height * 1.5!important;
+  }
+}

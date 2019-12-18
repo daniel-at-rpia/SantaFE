@@ -110,4 +110,7 @@ export interface TradeMarketAnalysisPanelState {
     dto: QuantitativeVisualizerDTO;
     targetSecurity: SecurityDTO;
   }
+  table: {
+    securityList: Array<SecurityDTO>;
+  }
 }

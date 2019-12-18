@@ -20,6 +20,8 @@ import { SearchShortcut } from 'Core/components/search-shortcut/search-shortcut.
 
 import { SecurityDefinitionConfigurator } from 'Core/containers/security-definition-configurator/security-definition-configurator.container';
 import { SecurityTable } from 'Core/containers/security-table/security-table.container';
+import { SantaTable } from 'Core/containers/santa-table/santa-table.container';
+import { SantaTableSecurityCell } from 'Core/components/santa-table-security-cell/santa-table-security-cell.component';
 
 @NgModule({
   declarations: [
@@ -30,13 +32,15 @@ import { SecurityTable } from 'Core/containers/security-table/security-table.con
     SecurityTableRow,
     SecurityDefinition,
     SecurityDefinitionConfigurator,
-    SearchShortcut
+    SearchShortcut,
+    SantaTable,
+    SantaTableSecurityCell
   ],
   imports: [
     CommonModule,
     FormModule,
 
-    AgGridModule.withComponents([SecurityCard])
+    AgGridModule.withComponents([SantaTableSecurityCell])
 
   ],
   providers: [
@@ -46,6 +50,7 @@ import { SecurityTable } from 'Core/containers/security-table/security-table.con
     RestfulCommService
   ], 
   exports: [
+    SantaTable,
     SecurityCard,
     SecurityTable,
     SecurityDefinition,
