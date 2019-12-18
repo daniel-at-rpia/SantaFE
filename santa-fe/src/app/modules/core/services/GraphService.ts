@@ -173,8 +173,8 @@ export class GraphService {
     let dumbBellseries = obligorChartDTO.chart.series.push(new am4charts.ColumnSeries());
     dumbBellseries.data = obligorChartDTO.rawData;
     dumbBellseries.dataFields.valueX = "category";
-    dumbBellseries.dataFields.openValueY = "spreadMid";
-    dumbBellseries.dataFields.valueY = "spreadMark";
+    dumbBellseries.dataFields.openValueY = "mid";
+    dumbBellseries.dataFields.valueY = "mark";
     dumbBellseries.fill = am4core.color(obligorChartDTO.colorScheme);
     dumbBellseries.stroke = am4core.color(obligorChartDTO.colorScheme);
     dumbBellseries.name = obligorChartDTO.name;
@@ -210,8 +210,8 @@ export class GraphService {
       markBullet.fillOpacity = 10;
       markBullet.nonScalingStroke = true;
       markBullet.tooltipHTML = `<center><b>{security}</b> </br>
-                                Mid: {spreadMid}</br>
-                                Mark: {spreadMark}</br>
+                                Mid: {mid}</br>
+                                Mark: {mark}</br>
                                 Value: {positionCurrent} </center`;
       dumbBellseries.heatRules.push({
         target: markBullet.circle,
@@ -226,7 +226,7 @@ export class GraphService {
     midBullet.fill = am4core.color(obligorChartDTO.colorScheme);
     midBullet.locationY = 1;
     midBullet.tooltipHTML = `<center><b>{security}</b> </br>
-                              Mid: {openValueY}</br>`;
+                              Mid: {mid}</br>`;
 
     dumbBellseries.events.on("hidden", function () {
       dumbBellseries.hide();

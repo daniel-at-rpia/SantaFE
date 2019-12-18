@@ -114,15 +114,15 @@ export class TradeObligorGraphPanel {
     let mark: string;
     let name: string;
     let positionCurrent: number;
-    let spreadMid;
+    let mid;
 
     for (let quote in this.state.bestQuotes) {
 
       // Initial values to be pushed to data array, reset each iteration.
-      spreadMid = null;
+      mid = null;
       mark = null;
       name = null;
-      spreadMid = null;
+      mid = null;
       positionCurrent = null;
 
       if(this.state.bestQuotes[quote].securityID === this.state.obligorSecurityID  )
@@ -131,14 +131,14 @@ export class TradeObligorGraphPanel {
       }
 
       if (this.state.bestQuotes[quote].bestQuote.bestSpreadQuote.bidQuoteValue > 0 && this.state.bestQuotes[quote].bestQuote.bestSpreadQuote.askQuoteValue > 0) {
-        spreadMid = (this.state.bestQuotes[quote].bestQuote.bestSpreadQuote.bidQuoteValue + this.state.bestQuotes[quote].bestQuote.bestSpreadQuote.askQuoteValue) / 2
-        spreadMid = this.utility.round(spreadMid, spreadRounding);
+        mid = (this.state.bestQuotes[quote].bestQuote.bestSpreadQuote.bidQuoteValue + this.state.bestQuotes[quote].bestQuote.bestSpreadQuote.askQuoteValue) / 2
+        mid = this.utility.round(mid, spreadRounding);
       }
       else if (this.state.bestQuotes[quote].bestQuote.bestSpreadQuote.bidQuoteValue > 0) {
-        spreadMid = this.state.bestQuotes[quote].bestQuote.bestSpreadQuote.bidQuoteValue
+        mid = this.state.bestQuotes[quote].bestQuote.bestSpreadQuote.bidQuoteValue
       }
       else if (this.state.bestQuotes[quote].bestQuote.bestSpreadQuote.askQuoteValue > 0) {
-        spreadMid = this.state.bestQuotes[quote].bestQuote.bestSpreadQuote.askQuoteValue
+        mid = this.state.bestQuotes[quote].bestQuote.bestSpreadQuote.askQuoteValue
       }
 
       let yieldMid = (this.state.bestQuotes[quote].bestQuote.bestYieldQuote.bidQuoteValue + this.state.bestQuotes[quote].bestQuote.bestYieldQuote.askQuoteValue) / 2
@@ -155,23 +155,23 @@ export class TradeObligorGraphPanel {
 
       this.state.xAxisData.push({ category: this.state.bestQuotes[quote].term });
       this.state.yAxisData.push(mark);
-      this.state.yAxisData.push(spreadMid);
+      this.state.yAxisData.push(mid);
 
       // This is a hacky way of doing things right now. 
       // The reason for this code is we need to "hide" the non-existing mark under the mid. 
       // The alternative is to create a new series specifically for mark. But that was proving to be more troublesome then this piece of logic.
       if(mark === null )
       {
-        mark = spreadMid;
+        mark = mid;
       }
 
       if (this.state.bestQuotes[quote].seniority === "SR Bond") {
-        if( spreadMid !== null )
+        if( mid !== null )
         {
           this.state.chartData.srBond.push({
             category: this.state.bestQuotes[quote].term,
-            spreadMid: spreadMid,
-            spreadMark: mark,
+            mid: mid,
+            mark: mark,
             security: name,
             seniority: this.state.bestQuotes[quote].seniority,
             positionCurrent: positionCurrent
@@ -181,8 +181,8 @@ export class TradeObligorGraphPanel {
       else if (this.state.bestQuotes[quote].seniority === "SUB Bond") {
         this.state.chartData.subBond.push({
           category: this.state.bestQuotes[quote].term,
-          spreadMid: spreadMid,
-          spreadMark: mark,
+          mid: mid,
+          mark: mark,
           security: name,
           seniority: this.state.bestQuotes[quote].seniority,
           positionCurrent: positionCurrent
