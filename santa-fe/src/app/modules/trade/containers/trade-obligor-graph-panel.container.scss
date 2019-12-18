@@ -8,9 +8,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: $color_white;
   &__visualizer {
-    @include mix_border_generator(0 0 $typical_border_width 0);
     display: flex;
     flex-direction: column;
     margin: $spacing_small;
@@ -18,33 +16,11 @@
       display: flex;
       height: 2.5rem;
       align-content: center;
-      justify-content: center;
-      &_YAxis {
-        display: flex;
-        &_btnSpread {
-          margin-left: 1rem;
-          margin-right: 1rem;
-          &--selected {
-            margin-left: 1rem;
-            margin-right:  1rem;
-            @include material('none');
-            background-color: $color_active;
-            color: $font_color_inverse;
-          }
-        }
-        &_btnYield{
-          margin-right: 1rem;
-          &--selected {
-            margin-right:  1rem;
-            @include material('none');
-            background-color: $color_active;
-            color: $font_color_inverse;
-          }
-        }
-      }
+      justify-content: right;
+      font-weight: bold;
+      margin-bottom: 1rem;
       &_SecurityValue {
         display: flex;
-        margin-left: 5rem;
         &_btnQuantity{
           margin-left: 1rem;
           &--selected {
@@ -65,11 +41,11 @@
         }
       }
     }
-    &-main {
-      display: flex;
-      justify-content: center;
-      margin-top: 5rem;
-    }
+  }
+  &_Title{
+    display: flex;
+    text-align:center;
+    padding-left: 23rem
   }
 }
 

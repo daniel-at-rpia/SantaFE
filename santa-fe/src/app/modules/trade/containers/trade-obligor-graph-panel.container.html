@@ -1,18 +1,8 @@
 <article class="sat-tradeObligorGraphPanel">
     <section class="sat-tradeObligorGraphPanel__visualizer">
         <div class="sat-tradeObligorGraphPanel__visualizer_Options">
-            <div class="sat-tradeObligorGraphPanel__visualizer_Options_YAxis">
-                <p>Y Axis: </p>
-                <button (click)="this.btnYAxisSpreadClick()" [ngClass]="{
-                                'sat-tradeObligorGraphPanel__visualizer_Options_YAxis_btnSpread': this.isYAxisSpread === false,
-                                'sat-tradeObligorGraphPanel__visualizer_Options_YAxis_btnSpread--selected': this.isYAxisSpread === true }">Spread</button>
-
-                <button (click)="this.btnYAxisYieldClick()" [ngClass]="{
-                                'sat-tradeObligorGraphPanel__visualizer_Options_YAxis_btnYield': this.isYAxisYield === false,
-                                'sat-tradeObligorGraphPanel__visualizer_Options_YAxis_btnYield--selected': this.isYAxisYield === true }">Yield</button>
-            </div>
             <div class="sat-tradeObligorGraphPanel__visualizer_Options_SecurityValue">
-                <p>Security Value: </p>
+                <p>Mark Value: </p>
                    <button (click)="this.btnQuantityClick()" [ngClass]="{
                                                      'sat-tradeObligorGraphPanel__visualizer_Options_SecurityValue_btnQuantity': this.isSecurityValueQuantity === false,
                                                      'sat-tradeObligorGraphPanel__visualizer_Options_SecurityValue_btnQuantity--selected': this.isSecurityValueQuantity === true }">Quantity</button>
@@ -23,8 +13,9 @@
    
             </div>
         </div>
-        <div class="sat-tradeObligorGraphPanel__visualizer-main">
-            <div id="chartdiv" style="width: 100%; height: 300px"></div>
-        </div>
-      </section>
+    </section>
+    <div class="sat-tradeObligorGraphPanel_Title"><h1>{{chartTitle}}</h1> </div>
+    <div class="sat-tradeObligorGraphPanel_ObligorGraph">
+        <obligor-graph></obligor-graph>
+    </div>
 </article>

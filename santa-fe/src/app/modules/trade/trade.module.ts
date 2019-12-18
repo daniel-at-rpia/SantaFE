@@ -16,6 +16,7 @@ import { TradeMarketAnalysisPanel } from 'Trade/containers/trade-market-analysis
 import { TradeObligorGraphPanel } from 'Trade/containers/trade-obligor-graph-panel.container';
 import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
 import { QuantitativeVisualizer } from 'Trade/components/quantitative-visualizer/quantitative-visualizer.component';
+import { ObligorGraph } from './components/obligor-graph/obligor-graph';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { QuantitativeVisualizer } from 'Trade/components/quantitative-visualizer
     TradeUtilityPanel,
     TradeMarketAnalysisPanel,
     TradeObligorGraphPanel,
-    QuantitativeVisualizer
+    QuantitativeVisualizer,
+    ObligorGraph
   ],
   imports: [
     // Angular framework modules
