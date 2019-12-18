@@ -46,8 +46,8 @@ export interface SecurityGroupMetricPackBlock {
   raw: object;
   delta: {
     DoD: object;
-    WoW: object;
-    MoM: object;
+    Wow: object;
+    Mom: object;
     Ytd: object;
   }
 }
@@ -84,4 +84,15 @@ export interface QuoteMetricBlock {
   isDoubleWidthColumn: boolean;
   isTripleWidthColumn: boolean;
   sortable: boolean;
+}
+
+export interface QuantitativeEntryBlock {
+  target: number;
+  group: number;
+}
+
+export interface QuantitativeEntryStyleBlock {
+  inversed: boolean;
+  leftSpaceWidth: number;
+  rightSpaceWidth: number;
 }

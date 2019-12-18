@@ -75,7 +75,7 @@ const PortfolioList: Array<BEPortfolioDTO> = [
           "ratingNoNotch":null,
           "ratingBucket":"NR"
         },
-        "WoW":{
+        "Wow":{
           "workoutTerm":0.0,
           "ratingDouble":-1.0,
           "price":0.4519999999999982,
@@ -91,7 +91,7 @@ const PortfolioList: Array<BEPortfolioDTO> = [
           "ratingNoNotch":null,
           "ratingBucket":"NR"
         },
-        "MoM":{
+        "Mom":{
           "workoutTerm":0.0,
           "ratingDouble":-1.0,
           "price":-0.695999999999998,

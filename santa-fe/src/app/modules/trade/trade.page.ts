@@ -25,6 +25,7 @@
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { TradeState } from 'FEModels/frontend-page-states.interface';
     import { FullOwnerList } from 'Core/constants/securityDefinitionConstants.constant';
+    import { selectSelectedSecurityForAnalysis } from 'Trade/selectors/trade.selectors';
   //
 
 @Component({
@@ -35,7 +36,9 @@
 })
 export class TradePage implements OnInit, OnDestroy {
   state: TradeState;
-  subscriptions = {};
+  subscriptions = {
+    receiveSelectedSecuritySub: null
+  };
   constants = {
     fullOwnerList: FullOwnerList
   };
@@ -67,6 +70,11 @@ export class TradePage implements OnInit, OnDestroy {
         return of('error');
       })
     ).subscribe();
+    this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
+      select(selectSelectedSecurityForAnalysis)
+    ).subscribe((targetSecurity) => {
+      this.state.graphsCollapsed = !targetSecurity;
+    });
   }
 
   public ngOnDestroy() {

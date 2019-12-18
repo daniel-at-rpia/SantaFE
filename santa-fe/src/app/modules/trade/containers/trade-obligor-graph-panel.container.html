@@ -1,0 +1,21 @@
+<article class="sat-tradeObligorGraphPanel">
+    <section class="sat-tradeObligorGraphPanel__visualizer">
+        <div class="sat-tradeObligorGraphPanel__visualizer_Options">
+            <div class="sat-tradeObligorGraphPanel__visualizer_Options_SecurityValue">
+                <p>Mark Value: </p>
+                   <button (click)="this.btnQuantityClick()" [ngClass]="{
+                                                     'sat-tradeObligorGraphPanel__visualizer_Options_SecurityValue_btnQuantity': this.isSecurityValueQuantity === false,
+                                                     'sat-tradeObligorGraphPanel__visualizer_Options_SecurityValue_btnQuantity--selected': this.isSecurityValueQuantity === true }">Quantity</button>
+
+                    <button (click)="this.btnCS01Click()" [ngClass]="{
+                                                        'sat-tradeObligorGraphPanel__visualizer_Options_SecurityValue_btnCS01': this.isSecurityValueCS01 === false,
+                                                        'sat-tradeObligorGraphPanel__visualizer_Options_SecurityValue_btnCS01--selected': this.isSecurityValueCS01 === true }">CS01</button>
+   
+            </div>
+        </div>
+    </section>
+    <div class="sat-tradeObligorGraphPanel_Title"><h1>{{chartTitle}}</h1> </div>
+    <div class="sat-tradeObligorGraphPanel_ObligorGraph">
+        <obligor-graph></obligor-graph>
+    </div>
+</article>

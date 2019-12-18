@@ -5,8 +5,12 @@ import {
   SecurityDefinitionFilterBlock,
   QuoteMetricBlock,
   SecurityPortfolioBlock,
-  SecurityMarkBlock
+  SecurityMarkBlock,
+  QuantitativeEntryBlock,
+  QuantitativeEntryStyleBlock
 } from 'FEModels/frontend-blocks.interface';
+
+import * as am4charts from "@amcharts/amcharts4/charts";
 
 interface BasicDTOStructure {
   [property: string]: object; 
@@ -22,6 +26,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     country: string;
     ratingLevel: number;
     ratingValue: string;
+    ratingBucket: string;
     seniorityLevel: number;
     currency: string;
     sector: string;
@@ -294,4 +299,39 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
     filteredByYield: boolean;
     filteredByPrice: boolean;
   }
+}
+
+export interface QuantitativeVisualizerDTO extends BasicDTOStructure {
+  data: {
+    rawEntry: QuantitativeEntryBlock;
+    wow: QuantitativeEntryBlock;
+    mom: QuantitativeEntryBlock;
+    ytd: QuantitativeEntryBlock;
+    min: number;
+    max: number;
+    minDelta: number;
+    maxDelta: number;
+  }
+  style: {
+    raw: QuantitativeEntryStyleBlock;
+    wow: QuantitativeEntryStyleBlock;
+    mom: QuantitativeEntryStyleBlock;
+    ytd: QuantitativeEntryStyleBlock;
+  }
+  state: {
+    isWowValid: boolean;
+    isMomValid: boolean;
+    isYtdValid: boolean;
+    isStencil: boolean;
+  }
+
+}
+
+export interface ObligorChartBlock {
+  name: string;
+  chart: am4charts.XYChart;
+  rawData: any[];
+  colorScheme: string;
+  displayMark: boolean;
+  displayChart: boolean;
 }

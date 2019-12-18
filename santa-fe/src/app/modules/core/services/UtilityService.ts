@@ -281,8 +281,8 @@ export class UtilityService {
         raw: {},
         delta: {
           DoD: {},
-          WoW: {},
-          MoM: {},
+          Wow: {},
+          Mom: {},
           Ytd: {}
         }
       };
@@ -393,6 +393,10 @@ export class UtilityService {
       });
       return params;
     }
+
+    public skewedNumber(input: number): number {
+      return input * input;
+    } 
   // shared end
 
   // market specific 

@@ -29,6 +29,7 @@ export class SecurityTableRow {
   @Output() clickedCollapseExpandView = new EventEmitter<SecurityTableRowDTO>();
   @Output() clickedRowTableCanvas = new EventEmitter<SecurityTableRowDTO>();
   @Output() clickedSortQuotesByMetric = new EventEmitter<ClickedSortQuotesByMetricEmitterParams>();
+  @Output() clickedSelectForAnalysis = new EventEmitter<SecurityTableRowDTO>();
   constructor() { }
 
   public onClickCollapseExpandView() {
@@ -45,6 +46,10 @@ export class SecurityTableRow {
       targetBlock: targetBlock,
       targetMetricLabel: targetLabel
     });
+  }
+
+  public onClickSelectForAnalysis() {
+    this.clickedSelectForAnalysis.emit(this.rowData);
   }
 
 }

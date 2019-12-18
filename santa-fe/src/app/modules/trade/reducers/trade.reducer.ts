@@ -4,7 +4,10 @@ import {
   ActionReducerMap
 } from '@ngrx/store';
 
-import { SecurityTableRowDTO } from 'FEModels/frontend-models.interface';
+import {
+  SecurityTableRowDTO,
+  SecurityDTO
+} from 'FEModels/frontend-models.interface';
 import {
   TradeActions,
   TradeLiveUpdateStartEvent,
@@ -12,6 +15,7 @@ import {
   TradeLiveUpdatePassRawDataEvent,
   TradeLiveUpdatePassTableContentEvent
 } from 'Trade/actions/trade.actions';
+import { RouterLinkWithHref } from '@angular/router';
 
 export interface TradeState {
   presetSelected: boolean;
@@ -21,6 +25,9 @@ export interface TradeState {
   liveUpdateInProgress: boolean;
   liveUpdateProcessingRawData: boolean;
   tableRowUpdateList: Array<SecurityTableRowDTO>;
+  selectedSecurityForAnalysis: SecurityDTO;
+  securityIDListFromAnalysis: Array<string>;
+  securityTableRowDTOListForAnalysis: Array<SecurityTableRowDTO>;
 }
 
 const initialState: TradeState = {
@@ -30,7 +37,10 @@ const initialState: TradeState = {
   liveUpdateTick: 0,
   liveUpdateInProgress: false,
   liveUpdateProcessingRawData: false,
-  tableRowUpdateList: []
+  tableRowUpdateList: [],
+  selectedSecurityForAnalysis: null,
+  securityIDListFromAnalysis: [],
+  securityTableRowDTOListForAnalysis: []
 };
 
 export function tradeReducer(
@@ -95,6 +105,21 @@ export function tradeReducer(
         ...state,
         initialDataLoaded: false
       }
+    case TradeActions.SelectSecurityForAnalysisEvent:
+      return {
+        ...state,
+        selectedSecurityForAnalysis: action.targetSecurity
+      }
+    case TradeActions.SecurityIDListFromAnalysisEvent:
+      return {
+        ...state,
+        securityIDListFromAnalysis: action.securityIDList
+      }
+      case TradeActions.SecurityTableRowDTOListForAnalysisEvent:
+        return {
+          ...state,
+          securityTableRowDTOListForAnalysis: action.securityTableRowDTOList
+        }
     default:
       return state;
   }

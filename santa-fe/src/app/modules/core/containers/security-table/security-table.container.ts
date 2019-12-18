@@ -5,7 +5,8 @@
       OnChanges,
       ViewEncapsulation,
       Input,
-      Output
+      Output,
+      EventEmitter
     } from '@angular/core';
     import { Observable, Subscription } from 'rxjs';
     import {
@@ -23,6 +24,7 @@
     import { RestfulCommService } from 'Core/services/RestfulCommService';
 
     import {
+      SecurityDTO,
       SecurityTableDTO,
       SecurityTableRowDTO,
       SecurityTableHeaderDTO
@@ -54,6 +56,7 @@ export class SecurityTable implements OnInit, OnChanges {
   securityTableMetricsCache: Array<SecurityTableMetricStub>;// use this only for detecting diff
   @Input() liveUpdatedRows: Array<SecurityTableRowDTO>;
   @Input() activeTriCoreMetric: string;
+  @Output() selectedSecurityForAnalysis = new EventEmitter<SecurityDTO>();
   liveUpdateRowsCache: Array<SecurityTableRowDTO>;
 
   constants = {
@@ -204,6 +207,10 @@ export class SecurityTable implements OnInit, OnChanges {
 
   public onClickSortQuotesByMetric(payload: ClickedSortQuotesByMetricEmitterParams) {
     payload.targetRow.state.expandViewSortByQuoteMetric = payload.targetRow.state.expandViewSortByQuoteMetric === payload.targetMetricLabel ? null : payload.targetMetricLabel;
+  }
+
+  public onClickSelectForAnalysis(targetRow: SecurityTableRowDTO) {
+    this.selectedSecurityForAnalysis.emit(targetRow.data.security)
   }
 
   private loadTableHeaders() {

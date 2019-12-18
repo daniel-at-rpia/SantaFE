@@ -1,74 +1,77 @@
-  // dependencies
-    import {
-      Component,
-      ViewEncapsulation,
-      OnInit,
-      OnChanges,
-      OnDestroy,
-      Input
-    } from '@angular/core';
-    import { Observable, Subscription } from 'rxjs';
-    import {
-      interval,
-      of
-    } from 'rxjs';
-    import {
-      tap,
-      first,
-      delay,
-      catchError,
-      withLatestFrom,
-      filter
-    } from 'rxjs/operators';
-    import { Store, select } from '@ngrx/store';
+// dependencies
+import {
+  Component,
+  ViewEncapsulation,
+  OnInit,
+  OnChanges,
+  OnDestroy,
+  Input
+} from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
+import {
+  interval,
+  of
+} from 'rxjs';
+import {
+  tap,
+  first,
+  delay,
+  catchError,
+  withLatestFrom,
+  filter
+} from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
 
-    import { DTOService } from 'Core/services/DTOService';
-    import { UtilityService } from 'Core/services/UtilityService';
-    import { RestfulCommService } from 'Core/services/RestfulCommService';
-    import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
-    import { TradeCenterPanelState } from 'FEModels/frontend-page-states.interface';
-    import {
-      SecurityDTO,
-      SecurityTableHeaderDTO,
-      SecurityTableRowDTO,
-      QuantComparerDTO,
-      SearchShortcutDTO
-    } from 'FEModels/frontend-models.interface';
-    import {
-      PayloadGetPositions,
-      PayloadGetBestQuotes
-    } from 'BEModels/backend-payloads.interface';
-    import {
-      BEPortfolioDTO,
-      BESecurityDTO,
-      BEBestQuoteDTO
-    } from 'BEModels/backend-models.interface';
+import { DTOService } from 'Core/services/DTOService';
+import { UtilityService } from 'Core/services/UtilityService';
+import { RestfulCommService } from 'Core/services/RestfulCommService';
+import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
+import { TradeCenterPanelState } from 'FEModels/frontend-page-states.interface';
+import {
+  SecurityDTO,
+  SecurityTableHeaderDTO,
+  SecurityTableRowDTO,
+  QuantComparerDTO,
+  SearchShortcutDTO
+} from 'FEModels/frontend-models.interface';
+import {
+  PayloadGetPositions,
+  PayloadGetBestQuotes
+} from 'BEModels/backend-payloads.interface';
+import {
+  BEPortfolioDTO,
+  BESecurityDTO,
+  BEBestQuoteDTO
+} from 'BEModels/backend-models.interface';
 
-    import { TriCoreMetricConfig } from 'Core/constants/coreConstants.constant';
-    import {
-      SecurityTableMetrics,
-      SECURITY_TABLE_FINAL_STAGE,
-      THIRTY_DAY_DELTA_METRIC_INDEX
-    } from 'Core/constants/securityTableConstants.constant';
-    import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
-    import {
-      PortfolioList,
-      QUANT_COMPARER_PERCENTILE,
-      SearchShortcuts
-    } from 'Core/constants/tradeConstants.constant';
-    import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
-    import {
-      selectLiveUpdateTick,
-      selectInitialDataLoaded
-    } from 'Trade/selectors/trade.selectors';
-    import {
-      TradeLiveUpdateProcessDataCompleteEvent,
-      TradeTogglePresetEvent,
-      TradeLiveUpdatePassRawDataEvent,
-      TradeToggleMetricEvent
-    } from 'Trade/actions/trade.actions';
-    import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
-  //
+import { TriCoreMetricConfig } from 'Core/constants/coreConstants.constant';
+import {
+  SecurityTableMetrics,
+  SECURITY_TABLE_FINAL_STAGE,
+  THIRTY_DAY_DELTA_METRIC_INDEX
+} from 'Core/constants/securityTableConstants.constant';
+import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
+import {
+  PortfolioList,
+  QUANT_COMPARER_PERCENTILE,
+  SearchShortcuts
+} from 'Core/constants/tradeConstants.constant';
+import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
+import {
+  selectLiveUpdateTick,
+  selectInitialDataLoaded,
+  selectSecurityIDsFromAnalysis
+} from 'Trade/selectors/trade.selectors';
+import {
+  TradeLiveUpdateProcessDataCompleteEvent,
+  TradeTogglePresetEvent,
+  TradeLiveUpdatePassRawDataEvent,
+  TradeToggleMetricEvent,
+  TradeSelectedSecurityForAnalysisEvent,
+  TradeSecurityTableRowDTOListForAnalysisEvent
+} from 'Trade/actions/trade.actions';
+import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
+//
 
 @Component({
   selector: 'trade-center-panel',
@@ -81,7 +84,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   @Input() ownerInitial: string;
   state: TradeCenterPanelState;
   subscriptions = {
-    startNewUpdateSub: null
+    startNewUpdateSub: null,
+    securityIDListFromAnalysis: null
   }
   constants = {
     portfolioList: PortfolioList,
@@ -91,8 +95,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX
   }
 
-  private initializePageState() {
-    this.state = {
+  private initializePageState(): TradeCenterPanelState {
+    const state = {
       currentContentStage: 0,
       presets: {
         selectedPreset: null,
@@ -122,6 +126,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         securityFilters: []
       }
     };
+    return state;
   }
 
   constructor(
@@ -130,8 +135,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
     private processingService: LiveDataProcessingService
-  ){
-    this.initializePageState();
+  ) {
+    this.state = this.initializePageState();
   }
 
   public ngOnInit() {
@@ -145,6 +150,25 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         this.fetchStageOneContent(false);
       }
     });
+
+    this.subscriptions.securityIDListFromAnalysis = this.store$.pipe(select(selectSecurityIDsFromAnalysis)).subscribe((data) => { this.processSecurityIDsFromAnalysis(data) });
+  }
+
+  private processSecurityIDsFromAnalysis(securityIDList: any[]) {
+    if (securityIDList) {
+      if (securityIDList.length > 0) {
+        let securityTableRowDTOList: SecurityTableRowDTO[] = [];
+        for (let securityTableRowDTO in this.state.fetchResult.prinstineRowList) {
+          for (let securityID of securityIDList) {
+            if (this.state.fetchResult.prinstineRowList[securityTableRowDTO].data.security.data.securityID === securityID) {
+              securityTableRowDTOList.push(this.state.fetchResult.prinstineRowList[securityTableRowDTO])
+            }
+          }
+        }
+
+        this.store$.dispatch(new TradeSecurityTableRowDTOListForAnalysisEvent(securityTableRowDTOList));
+      }
+    }
   }
 
   public ngOnChanges() {
@@ -183,6 +207,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.state.presets.selectedPreset.state.isSelected = false;
     this.state.presets.selectedPreset = null;
     this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true);
+    this.state.filters.quickFilters = this.initializePageState().filters.quickFilters;
     this.store$.dispatch(new TradeTogglePresetEvent);
   }
 
@@ -219,11 +244,15 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       };
     });
     if (this.state.currentContentStage === this.constants.securityTableFinalStage) {
-      this.state.fetchResult.rowList = this.FilterPrinstineRowList();
+      this.state.fetchResult.rowList = this.filterPrinstineRowList();
     }
   }
 
-  private populateSearchShortcuts(){
+  public onSelectSecurityForAnalysis(targetSecurity: SecurityDTO) {
+    this.store$.dispatch(new TradeSelectedSecurityForAnalysisEvent(this.utilityService.deepCopy(targetSecurity)));
+  }
+
+  private populateSearchShortcuts() {
     this.state.presets.shortcutList = [];
     this.constants.searchShortcuts.forEach((eachShortcutStub) => {
       const definitionList = eachShortcutStub.includedDefinitions.map((eachIncludedDef) => {
@@ -277,10 +306,10 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private fetchStageOneContent(isInitialFetch: boolean) {
-    const payload : PayloadGetPositions = {
+    const payload: PayloadGetPositions = {
       partitionOptions: ['Portfolio', 'Strategy']
     };
-    this.restfulCommService.callAPI('santaPortfolio/get-santa-credit-positions', {req: 'POST'}, payload, false, false).pipe(
+    this.restfulCommService.callAPI('santaPortfolio/get-santa-credit-positions', { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn) => {
         if (!isInitialFetch) {
@@ -295,7 +324,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         this.state.fetchResult.fetchTableDataFailed = true;
         this.state.fetchResult.fetchTableDataFailedError = err.message;
         this.state.fetchResult.prinstineRowList = [];
-        this.state.fetchResult.rowList = this.FilterPrinstineRowList();
+        this.state.fetchResult.rowList = this.filterPrinstineRowList();
         return of('error');
       })
     ).subscribe();
@@ -322,7 +351,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       const newSecurityId = eachRow.data.security.data.securityID;
       payload.identifiers.push(newSecurityId);
     });
-    this.restfulCommService.callAPI('liveQuote/get-best-quotes', {req: 'POST'}, payload).pipe(
+    this.restfulCommService.callAPI('liveQuote/get-best-quotes', { req: 'POST' }, payload).pipe(
       first(),
       tap((serverReturn) => {
         this.loadStageThreeContent(serverReturn);
@@ -332,7 +361,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         this.state.fetchResult.fetchTableDataFailed = true;
         this.state.fetchResult.fetchTableDataFailedError = err.message;
         this.state.fetchResult.prinstineRowList = [];
-        this.state.fetchResult.rowList = this.FilterPrinstineRowList();
+        this.state.fetchResult.rowList = this.filterPrinstineRowList();
         return of('error');
       })
     ).subscribe();
@@ -357,10 +386,10 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         first(),
         tap(isInitialDataLoaded => {
           if (isInitialDataLoaded) {
-            const newFilteredList = this.FilterPrinstineRowList();
+            const newFilteredList = this.filterPrinstineRowList();
             this.state.fetchResult.liveUpdatedRowList = this.processingService.returnDiff(this.state.table.dto, newFilteredList).newRowList;
           } else {
-            this.state.fetchResult.rowList = this.FilterPrinstineRowList();
+            this.state.fetchResult.rowList = this.filterPrinstineRowList();
           }
           this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
         })
@@ -368,7 +397,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  private FilterPrinstineRowList(): Array<SecurityTableRowDTO> {
+  private filterPrinstineRowList(): Array<SecurityTableRowDTO> {
     const filteredList: Array<SecurityTableRowDTO> = [];
     this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
       if (this.state.filters.quickFilters.keyword.length < 3 || eachRow.data.security.data.name.indexOf(this.state.filters.quickFilters.keyword) >= 0) {
@@ -474,14 +503,14 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       } else {
         eachComparer.style.lineWidth = 15;
       }
-      eachComparer.style.bidLineHeight = Math.round(eachComparer.data.bid.size/maxSize * 100);
-      eachComparer.style.offerLineHeight = Math.round(eachComparer.data.offer.size/maxSize * 100);
+      eachComparer.style.bidLineHeight = Math.round(eachComparer.data.bid.size / maxSize * 100);
+      eachComparer.style.offerLineHeight = Math.round(eachComparer.data.offer.size / maxSize * 100);
       eachComparer.state.isCalculated = true;
     });
   }
 
   private calculateSingleQuantComparerWidth(delta: number, maxAbsDelta: number): number {
-    if (delta < 0 ) {
+    if (delta < 0) {
       return 100;
     } else {
       const result = 100 - Math.round(delta / maxAbsDelta * 100);

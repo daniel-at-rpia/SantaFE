@@ -1,6 +1,9 @@
 import { Action } from '@ngrx/store';
 
-import { SecurityTableRowDTO } from 'FEModels/frontend-models.interface';
+import {
+  SecurityTableRowDTO,
+  SecurityDTO
+} from 'FEModels/frontend-models.interface';
 
 export enum TradeActions {
   LiveUpdateStartEvent = '[Trade] Live Update Start',
@@ -11,7 +14,10 @@ export enum TradeActions {
   LiveUpdateCount = '[Trade] Live Update Count',
   LiveUpdateProcessingDataCompleteEvent = '[Trade] Live Update Processing Data Complete Event',
   TogglePresetEvent = '[Trade] Toggle Preset Event',
-  ToggleMetricEvent = '[Trade] Toggle Metric Event'
+  ToggleMetricEvent = '[Trade] Toggle Metric Event',
+  SelectSecurityForAnalysisEvent = '[Trade] Select Security For Analysis Event',
+  SecurityIDListFromAnalysisEvent = '[Trade] Security ID List From Analysis Event',
+  SecurityTableRowDTOListForAnalysisEvent = '[Trade] SecurityTableRowDTO List For Analysis'
 }
 
 export class TradeLiveUpdateStartEvent implements Action {
@@ -62,4 +68,34 @@ export class TradeTogglePresetEvent implements Action {
 export class TradeToggleMetricEvent implements Action {
   readonly type = TradeActions.ToggleMetricEvent;
   constructor(){}
+}
+
+export class TradeSelectedSecurityForAnalysisEvent implements Action {
+  readonly type = TradeActions.SelectSecurityForAnalysisEvent;
+  readonly targetSecurity: SecurityDTO;
+  constructor(
+    targetSecurity: SecurityDTO
+  ){
+    this.targetSecurity = targetSecurity;
+  }
+}
+
+export class TradeSecurityIDsFromAnalysisEvent implements Action {
+  readonly type = TradeActions.SecurityIDListFromAnalysisEvent;
+  readonly securityIDList: Array<string>;
+  constructor(
+    securityIDList: Array<string>
+  ){
+    this.securityIDList = securityIDList;
+  }
+}
+
+export class TradeSecurityTableRowDTOListForAnalysisEvent implements Action {
+  readonly type = TradeActions.SecurityTableRowDTOListForAnalysisEvent;
+  readonly securityTableRowDTOList: Array<SecurityTableRowDTO>;
+  constructor(
+    securityTableRowDTOList: Array<SecurityTableRowDTO>
+  ){
+    this.securityTableRowDTOList = securityTableRowDTOList;
+  }
 }
