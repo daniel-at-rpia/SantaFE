@@ -97,3 +97,21 @@ export const LIVE_UPDATE_PROCESSING_PROMPT = 'Processing ...';
 
 export const MARKET_ANALYSIS_SPREAD_METRIC_KEY = SecurityMetricOptions[0].label;
 export const MARKET_ANALYSIS_YIELD_METRIC_KEY = SecurityMetricOptions[6].label;
+
+export const UTILITY_VALID_WINDOW_OPTIONS = [
+  {
+    value: 1,
+    label: '1 hr',
+  },{
+    value: 2,
+    label: '2 hrs',
+  },{
+    value: 4,
+    label: '4 hrs'
+  },{
+    value: 8,
+    label: '8 hrs'
+  },{
+    value: 99,
+    label: 'always valid'
+  }];
