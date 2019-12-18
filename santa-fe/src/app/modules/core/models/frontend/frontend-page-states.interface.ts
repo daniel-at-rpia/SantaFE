@@ -114,3 +114,34 @@ export interface TradeMarketAnalysisPanelState {
     securityList: Array<SecurityDTO>;
   }
 }
+
+export interface TradeObligorGraphPanelState {
+  obligorChart: any;
+  obligorSecurityID: string;
+  obligorName: string;
+  obligorCurrency: string;
+  bestQuotes: any[];
+  securityTableRowDTOList: SecurityTableRowDTO[];
+  metric: {
+    spread:boolean;
+    yield:boolean;
+  }
+  markValue: {
+    cS01:boolean;
+    quantity:boolean;
+  }
+  xAxisData: any[];
+  yAxisData: any[];
+  activeCharts: {
+    srBond: boolean;
+    subBond: boolean;
+    srCDS: boolean;
+    subCDS: boolean;
+  }
+  chartData: {
+    subBond: any[];
+    srBond: any[];
+    srCDS: any[];
+    subCDS: any[];
+  }
+}
