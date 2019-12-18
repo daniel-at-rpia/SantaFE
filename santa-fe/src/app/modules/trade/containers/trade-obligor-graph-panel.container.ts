@@ -265,10 +265,10 @@ export class TradeObligorGraphPanel {
 
     for(let value in this.chart.series.values)
     {
-      if(this.chart.series.values[value].name === "Sr Bond" && this.chart.series.values[value].visible === true) displaySrBond = true;
-      if(this.chart.series.values[value].name === "Sub Bond" && this.chart.series.values[value].visible === true) displaySubBond = true;
-      if(this.chart.series.values[value].name === "Sr CDS" && this.chart.series.values[value].visible === true) displaySrCDS = true;
-      if(this.chart.series.values[value].name === "Sub CDS" && this.chart.series.values[value].visible === true) displaySubCDS = true;
+      if(this.chart.series.values[value].name === "Sr Bond" && this.chart.series.values[value].isHidden === false) displaySrBond = true;
+      if(this.chart.series.values[value].name === "Sub Bond" && this.chart.series.values[value].isHidden === false) displaySubBond = true;
+      if(this.chart.series.values[value].name === "Sr CDS" && this.chart.series.values[value].isHidden === false) displaySrCDS = true;
+      if(this.chart.series.values[value].name === "Sub CDS" && this.chart.series.values[value].isHidden === false) displaySubCDS = true;
     }
 
     this.chart.series.clear();
