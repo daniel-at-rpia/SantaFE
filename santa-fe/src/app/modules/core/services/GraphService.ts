@@ -11,8 +11,6 @@ import {
 
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
-import am4themes_animated from "@amcharts/amcharts4/themes/animated";
-import am4themes_material from "@amcharts/amcharts4/themes/material";
 import * as am4plugins_regression from "@amcharts/amcharts4/plugins/regression";
 
 
@@ -177,7 +175,6 @@ export class GraphService {
     dumbBellseries.strokeOpacity = 1;
     dumbBellseries.showOnInit = false;
     dumbBellseries.className  = obligorChartDTO.name;
-    dumbBellseries.interpolationDuration = 5000;
     
     if (obligorChartDTO.displayChart === false) {
       dumbBellseries.hidden = true;
@@ -234,7 +231,7 @@ export class GraphService {
   private generateObligorChartTrendCurve(obligorChartDTO: ObligorChartBlock): am4charts.LineSeries {
     let curveData = [];
     for (var i = 0; i < obligorChartDTO.rawData.length; i++) {
-      curveData.push({ x: i, y: i + 10 });
+      curveData.push({ x: i, y: obligorChartDTO.rawData[i].spreadMid });
     }
 
     let curveSeries = obligorChartDTO.chart.series.push(new am4charts.LineSeries());
@@ -282,6 +279,5 @@ export class GraphService {
     yAxis.min = 0;
     yAxis.data = data;
     yAxis.renderer.minGridDistance = 10;
-    yAxis.rangeChangeDuration = 500;
   }
 }

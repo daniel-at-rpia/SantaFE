@@ -1,7 +1,6 @@
 import { Component, ViewEncapsulation, NgZone, EventEmitter, Output } from "@angular/core";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
-import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import { GraphService } from 'Core/services/GraphService';
 import { UtilityService } from 'Core/services/UtilityService';
 import { selectSelectedSecurityForAnalysis, securityTableRowDTOListForAnalysis } from 'Trade/selectors/trade.selectors';
@@ -25,8 +24,6 @@ import {
   TriCoreMetricConfig
 } from 'Core/constants/coreConstants.constant';
 import { ThrowStmt } from '@angular/compiler';
-
-am4core.useTheme(am4themes_animated);
 
 @Component({
   selector: 'trade-obligor-graph-panel',
@@ -272,8 +269,6 @@ export class TradeObligorGraphPanel {
     }
 
     this.chart.series.clear();
-    this.chart.yAxes.values[0].rangeChangeDuration = 0;
-    this.chart.xAxes.values[0].rangeChangeDuration = 0;
 
     let displayMark: boolean = false;
     
