@@ -30,6 +30,7 @@ import { ObligorGraph } from './components/obligor-graph/obligor-graph';
     ObligorGraph
   ],
   imports: [
+    // Angular framework modules
     CommonModule,
     RouterModule.forChild([
       {
@@ -39,6 +40,7 @@ import { ObligorGraph } from './components/obligor-graph/obligor-graph';
     StoreModule.forFeature('trade', reducer),
     EffectsModule.forFeature([TradeEffect]),
 
+    // Native modules
     CoreModule
   ],
   providers: [

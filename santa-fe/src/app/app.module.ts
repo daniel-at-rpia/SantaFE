@@ -15,6 +15,7 @@ import { CoreModule } from 'Core/core.module';
 import { HomeModule } from './modules/home/home.module';
 import { MarketModule } from 'Market/market.module';
 import { TradeModule } from 'Trade/trade.module';
+import { AgGridModule } from 'ag-grid-angular';
 
 import { AppRoot } from './app.root';
 
@@ -23,6 +24,7 @@ import { AppRoot } from './app.root';
     AppRoot
   ],
   imports: [
+    // Angular framework modules
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
@@ -38,6 +40,9 @@ import { AppRoot } from './app.root';
       maxAge: 25,
       logOnly: environment.production
     }),
+
+    // 3rd party dependencies
+    AgGridModule,
 
     // Native modules
     CoreModule,
