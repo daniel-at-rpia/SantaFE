@@ -117,7 +117,7 @@ export class TradeObligorGraphPanel {
   private buildChartData() {
     let spreadRounding = TriCoreMetricConfig['Spread']['rounding'];
     let yieldRounding = TriCoreMetricConfig['Yield']['rounding'];
-    let mark: any;
+    let mark: number;
     let name: string;
     let positionCurrent: number;
     let spreadMid;
@@ -175,14 +175,17 @@ export class TradeObligorGraphPanel {
       }
 
       if (this.bestQuotes[quote].seniority === "SR Bond") {
-        this.srBondChartData.push({
-          category: this.bestQuotes[quote].term,
-          spreadMid: spreadMid,
-          spreadMark: mark,
-          security: name,
-          seniority: this.bestQuotes[quote].seniority,
-          positionCurrent: positionCurrent
-        });
+        if( spreadMid !== null )
+        {
+          this.srBondChartData.push({
+            category: this.bestQuotes[quote].term,
+            spreadMid: spreadMid,
+            spreadMark: mark,
+            security: name,
+            seniority: this.bestQuotes[quote].seniority,
+            positionCurrent: positionCurrent
+          });
+        }
       }
       else if (this.bestQuotes[quote].seniority === "SUB Bond") {
         this.subBondChartData.push({

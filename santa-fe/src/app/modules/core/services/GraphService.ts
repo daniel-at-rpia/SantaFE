@@ -234,7 +234,7 @@ export class GraphService {
   private generateObligorChartTrendCurve(obligorChartDTO: ObligorChartBlock): am4charts.LineSeries {
     let curveData = [];
     for (var i = 0; i < obligorChartDTO.rawData.length; i++) {
-      curveData.push({ x: obligorChartDTO.rawData[i].category, y: obligorChartDTO.rawData[i].spreadMark });
+      curveData.push({ x: i, y: i + 10 });
     }
 
     let curveSeries = obligorChartDTO.chart.series.push(new am4charts.LineSeries());
@@ -242,15 +242,13 @@ export class GraphService {
     curveSeries.dataFields.valueY = "y";
     curveSeries.strokeWidth = 2
     curveSeries.stroke = am4core.color(obligorChartDTO.colorScheme);
-    curveSeries.strokeOpacity = 0.7;
     curveSeries.hiddenInLegend = true;
     curveSeries.data = curveData;
-    curveSeries.tensionY = 1;
-    curveSeries.tensionX = 1;
     curveSeries.name = "CurveSeries";
 
-    var reg2 = curveSeries.plugins.push(new am4plugins_regression.Regression());
-    reg2.method = "polynomial";
+
+    //var reg2 = curveSeries.plugins.push(new am4plugins_regression.Regression());
+    //reg2.method = "polynomial";
 
     return curveSeries;
   }
@@ -283,6 +281,7 @@ export class GraphService {
     yAxis.title.text = "Spread";
     yAxis.min = 0;
     yAxis.data = data;
+    yAxis.renderer.minGridDistance = 10;
     yAxis.rangeChangeDuration = 500;
   }
 }
