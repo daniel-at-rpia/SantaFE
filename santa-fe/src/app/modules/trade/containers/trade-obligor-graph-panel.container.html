@@ -1,31 +1,31 @@
 <article class="sat-tradeObligorGraphPanel">
-  <section class="sat-tradeObligorGraphPanel__visualizer">
-    <div class="sat-tradeObligorGraphPanel__visualizer_Options">
-      <div class="sat-tradeObligorGraphPanel__visualizer_Options_SecurityValue">
+  <section class="sat-tradeObligorGraphPanel__markValue">
+    <div class="sat-tradeObligorGraphPanel__markValue_Options">
+      <div class="sat-tradeObligorGraphPanel__markValue_Options_SecurityValue">
         <span>Mark Value: </span>
         <button
           (click)="this.btnQuantityClick()"
           [ngClass]="{
-            'sat-tradeObligorGraphPanel__visualizer_Options_SecurityValue_btnQuantity': this.state.markValue.quantity === false,
-            'sat-tradeObligorGraphPanel__visualizer_Options_SecurityValue_btnQuantity--selected': this.state.markValue.quantity === true
+            'sat-tradeObligorGraphPanel__markValue_Options_SecurityValue_btnQuantity': this.state.markValue.quantity === false,
+            'sat-tradeObligorGraphPanel__markValue_Options_SecurityValue_btnQuantity--selected': this.state.markValue.quantity === true
           }">
           Quantity
         </button>
         <button
           (click)="this.btnCS01Click()"
           [ngClass]="{
-            'sat-tradeObligorGraphPanel__visualizer_Options_SecurityValue_btnCS01': this.state.markValue.cS01 === false,
-            'sat-tradeObligorGraphPanel__visualizer_Options_SecurityValue_btnCS01--selected': this.state.markValue.cS01 === true
+            'sat-tradeObligorGraphPanel__markValue_Options_SecurityValue_btnCS01': this.state.markValue.cS01 === false,
+            'sat-tradeObligorGraphPanel__markValue_Options_SecurityValue_btnCS01--selected': this.state.markValue.cS01 === true
           }">
           CS01
         </button>
       </div>
     </div>
   </section>
-  <div class="sat-tradeObligorGraphPanel_Title">
-    <span>{{chartTitle}}</span>
+  <div class="sat-tradeObligorGraphPanel_title">
+    <span>{{this.state.obligorName}}</span>
   </div>
-  <div class="sat-tradeObligorGraphPanel_ObligorGraph">
+  <div class="sat-tradeObligorGraphPanel_obligorGraph">
     <obligor-graph></obligor-graph>
   </div>
 </article>

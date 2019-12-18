@@ -37,7 +37,7 @@ export class TradeObligorGraphPanel {
     this.state = {
       obligorChart: am4charts.XYChart,
       obligorSecurityID: null,
-      obligorName: null,
+      obligorName: "DEUTSCHE BANK AG EUR",
       obligorCurrency: null,
       bestQuotes: [],
       securityTableRowDTOList: [],
