@@ -332,4 +332,6 @@ export interface ObligorChartBlock {
   chart: am4charts.XYChart;
   rawData: any[];
   colorScheme: string;
+  displayMark: boolean;
+  displayChart: boolean;
 }
