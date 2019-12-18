@@ -12,14 +12,16 @@
     display: flex;
     flex-direction: column;
     margin: $spacing_small;
-    &_Options {
+    align-content: center;
+    &_options {
       display: flex;
-      height: 2.5rem;
-      align-content: center;
-      justify-content: right;
-      font-weight: bold;
-      margin-bottom: 1rem;
-      &_SecurityValue {
+      &_text {
+        padding-top: 0.3rem;
+        text-align: center;
+        align-content: center;
+        font-weight: bold;
+      }
+      &_securityValue {
         display: flex;
         &_btnQuantity{
           margin-left: 1rem;
