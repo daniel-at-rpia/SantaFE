@@ -93,8 +93,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX
   }
 
-  private initializePageState() {
-    this.state = {
+  private initializePageState(): TradeCenterPanelState {
+    const state = {
       currentContentStage: 0,
       presets: {
         selectedPreset: null,
@@ -124,6 +124,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         securityFilters: []
       }
     };
+    return state;
   }
 
   constructor(
@@ -133,7 +134,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     private restfulCommService: RestfulCommService,
     private processingService: LiveDataProcessingService
   ){
-    this.initializePageState();
+    this.state = this.initializePageState();
   }
 
   public ngOnInit() {
@@ -185,6 +186,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.state.presets.selectedPreset.state.isSelected = false;
     this.state.presets.selectedPreset = null;
     this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true);
+    this.state.filters.quickFilters = this.initializePageState().filters.quickFilters;
     this.store$.dispatch(new TradeTogglePresetEvent);
   }
 
@@ -221,7 +223,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       };
     });
     if (this.state.currentContentStage === this.constants.securityTableFinalStage) {
-      this.state.fetchResult.rowList = this.FilterPrinstineRowList();
+      this.state.fetchResult.rowList = this.filterPrinstineRowList();
     }
   }
 
@@ -301,7 +303,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         this.state.fetchResult.fetchTableDataFailed = true;
         this.state.fetchResult.fetchTableDataFailedError = err.message;
         this.state.fetchResult.prinstineRowList = [];
-        this.state.fetchResult.rowList = this.FilterPrinstineRowList();
+        this.state.fetchResult.rowList = this.filterPrinstineRowList();
         return of('error');
       })
     ).subscribe();
@@ -338,7 +340,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         this.state.fetchResult.fetchTableDataFailed = true;
         this.state.fetchResult.fetchTableDataFailedError = err.message;
         this.state.fetchResult.prinstineRowList = [];
-        this.state.fetchResult.rowList = this.FilterPrinstineRowList();
+        this.state.fetchResult.rowList = this.filterPrinstineRowList();
         return of('error');
       })
     ).subscribe();
@@ -363,10 +365,10 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         first(),
         tap(isInitialDataLoaded => {
           if (isInitialDataLoaded) {
-            const newFilteredList = this.FilterPrinstineRowList();
+            const newFilteredList = this.filterPrinstineRowList();
             this.state.fetchResult.liveUpdatedRowList = this.processingService.returnDiff(this.state.table.dto, newFilteredList).newRowList;
           } else {
-            this.state.fetchResult.rowList = this.FilterPrinstineRowList();
+            this.state.fetchResult.rowList = this.filterPrinstineRowList();
           }
           this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
         })
@@ -374,7 +376,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  private FilterPrinstineRowList(): Array<SecurityTableRowDTO> {
+  private filterPrinstineRowList(): Array<SecurityTableRowDTO> {
     const filteredList: Array<SecurityTableRowDTO> = [];
     this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
       if (this.state.filters.quickFilters.keyword.length < 3 || eachRow.data.security.data.name.indexOf(this.state.filters.quickFilters.keyword) >= 0) {
