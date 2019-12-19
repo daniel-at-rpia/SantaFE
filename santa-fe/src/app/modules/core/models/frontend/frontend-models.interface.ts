@@ -215,6 +215,7 @@ export interface SecurityTableDTO extends BasicDTOStructure {
     selectedHeader: SecurityTableHeaderDTO;
     sortedByHeader: SecurityTableHeaderDTO;
     isLiveVariant: boolean;
+    isAgGridReady: boolean;
   },
   api: {
     agGrid: {
@@ -226,6 +227,7 @@ export interface SecurityTableDTO extends BasicDTOStructure {
 
 export interface SecurityTableHeaderDTO extends BasicDTOStructure {
   data: {
+    key: string;
     displayLabel: string;
     attrName: string;
     underlineAttrName: string;

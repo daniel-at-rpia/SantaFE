@@ -466,7 +466,8 @@ export class DTOService {
         isAddingColumn: false,
         selectedHeader: null,
         sortedByHeader: null,
-        isLiveVariant: isLiveVariant
+        isLiveVariant: isLiveVariant,
+        isAgGridReady: false
       },
       api: {
         agGrid: {
@@ -483,6 +484,7 @@ export class DTOService {
   ): SecurityTableHeaderDTO {
     const object: SecurityTableHeaderDTO = {
       data: {
+        key: stub.key,
         displayLabel: stub.label,
         attrName: stub.attrName,
         underlineAttrName: stub.underlineAttrName,

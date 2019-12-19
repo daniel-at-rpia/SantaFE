@@ -1,10 +1,52 @@
-@import "global.scss";
+@import "global";
 @import "ag-grid/ag-grid-basic.scss";
 @import "ag-grid/ag-theme-balham.scss";
 
+// porting over some basic stylings
+  ::-webkit-scrollbar-thumb {
+    @include mix_border_radius(3px);
+    @include mix_border_generator(0.1875rem,  $theme_color_1);
+    background-color: $color_white;
+  }
+  ::-webkit-scrollbar-thumb:horizontal {
+    //border-width: $scroll_bar_width/8*7 0 $scroll_bar_width/8*7 0;
+  }
+  ::-webkit-scrollbar {
+    width: $scroll_bar_width;
+  }
+  ::-webkit-scrollbar:horizontal {
+    height: $scroll_bar_width;
+  }
+  ::-webkit-scrollbar-track {
+    //background-color: $color_theme_darkgray;
+  }
+  ::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
+
 .santaTable {
   $santaTableBlockName: &;
-  &__row {
-    // height: $securityCard_labelVariant_height * 1.5!important;
+  font-weight: 300;
+  font-family:"SantaOpenSans"; 
+  display: flex;
+  overflow: hidden;
+  &__main {
+    @include mix_enable_scrollbar('both');
+    &-agGrid {
+      height: 100%;
+      &-row {
+
+      }
+      &-cell {
+        height: 4rem;
+        color: $font_color_minor;
+        &--securityCard {
+          color: $font_color_major;
+        }
+      }
+    }
   }
 }
+
+// @import "~ag-grid-community/src/styles/ag-grid";
+// @import '~ag-grid-community/src/styles/ag-theme-balham/sass/ag-theme-balham';

@@ -21,7 +21,8 @@
     } from 'rxjs/operators';
     import {
       GridApi,
-      ColumnApi
+      ColumnApi,
+      Column
     } from 'ag-grid-community';
 
     import { DTOService } from 'Core/services/DTOService';
@@ -49,7 +50,7 @@
   selector: 'santa-table',
   templateUrl: './santa-table.container.html',
   styleUrls: ['./santa-table.container.scss'],
-  encapsulation: ViewEncapsulation.Native
+  encapsulation: ViewEncapsulation.ShadowDom
 })
 
 export class SantaTable implements OnInit, OnChanges {
@@ -70,6 +71,12 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   agGridRowClassRules = "santaTable__row";
+  defaultColDef = {
+    sortable: true,
+    filter: true,
+    autoWidth: true,
+    autoHeight: true
+  };
 
   constructor(
     private dtoService: DTOService,
@@ -87,8 +94,8 @@ export class SantaTable implements OnInit, OnChanges {
       console.log('rows updated for inter-stage change', this.receivedContentStage);
       this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate; // saving initial cache
       this.tableData.state.loadedContentStage = this.receivedContentStage;
+      this.loadTableHeaders();
       this.loadTableRows(this.newRows);
-      this.loadAgGridRows();
     } else if (this.securityTableMetricsCache !== this.receivedSecurityTableMetricsUpdate && this.receivedContentStage === this.constants.securityTableFinalStage) {
       this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate;
       this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
@@ -113,7 +120,6 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   public onGridReady(params) {
-    console.log('tabledata is', this.tableData);
     this.tableData.api.agGrid.gridApi = params.api;
     this.tableData.data.agGridColumnDefs = [
       {
@@ -124,6 +130,7 @@ export class SantaTable implements OnInit, OnChanges {
     this.tableData.data.agGridRowData = [];
     this.tableData.api.agGrid.gridApi = params.api;
     this.tableData.api.agGrid.columnApi = params.columnApi;
+    this.tableData.state.isAgGridReady = true;
   }
 
   private loadTableHeaders() {
@@ -133,6 +140,7 @@ export class SantaTable implements OnInit, OnChanges {
         this.tableData.data.headers.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
       }
     });
+    this.tableData.state.isAgGridReady && this.loadAgGridHeaders();
   }
 
   private loadTableRows(rowList: Array<SecurityTableRowDTO>) {
@@ -144,6 +152,7 @@ export class SantaTable implements OnInit, OnChanges {
     } else {
       this.performDefaultSort();
     }
+    this.tableData.state.isAgGridReady && this.loadAgGridRows();
   }
 
   private updateDynamicColumns() {
@@ -252,16 +261,39 @@ export class SantaTable implements OnInit, OnChanges {
     })
   }
 
+  private loadAgGridHeaders() {
+    const list = [];
+    this.tableData.data.headers.forEach((eachHeader) => {
+      const newAgColumn = {
+        headerName: eachHeader.data.displayLabel,
+        field: eachHeader.data.key,
+        cellClass: 'santaTable__main-agGrid-cell'
+      };
+      list.push(newAgColumn);
+    })
+    this.tableData.data.agGridColumnDefs = list;
+    this.tableData.api.agGrid.gridApi.setColumnDefs(list);
+  }
+
   private loadAgGridRows() {
     const list = [];
     this.tableData.data.rows.forEach((eachRow) => {
       const eachSecurity = eachRow.data.security;
-      const newRow = {
-        id: eachSecurity.data.securityID,
-        securityCard: eachSecurity.data.name
+      const newAgRow = {
+        id: eachSecurity.data.securityID
       };
-      list.push(newRow);
+      this.tableData.data.headers.forEach((eachHeader, index) => {
+        if (eachHeader.data.key === 'security' || index === 0) {
+          newAgRow[eachHeader.data.key] = eachSecurity.data.name;
+        } else if (eachHeader.state.isQuantVariant) {
+          newAgRow[eachHeader.data.key] = eachRow.data.cells[0].data.quantComparerDTO ? eachRow.data.cells[0].data.quantComparerDTO.data.mid : 'n/a';
+        } else {
+          newAgRow[eachHeader.data.key] = eachRow.data.cells[index-1].data.textData;
+        }
+      });
+      list.push(newAgRow);
     });
+    this.tableData.data.agGridRowData = list;
     this.tableData.api.agGrid.gridApi.setRowData(list);
   }
 }
