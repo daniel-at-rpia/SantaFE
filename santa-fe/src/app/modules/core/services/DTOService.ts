@@ -462,7 +462,7 @@ export class DTOService {
         agGridFrameworkComponents: {}
       },
       state: {
-        loadedContentStage: 0,
+        loadedContentStage: null,
         isAddingColumn: false,
         selectedHeader: null,
         sortedByHeader: null,

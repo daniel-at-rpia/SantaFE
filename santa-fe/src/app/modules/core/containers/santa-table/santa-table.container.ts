@@ -85,23 +85,25 @@ export class SantaTable implements OnInit, OnChanges {
   ) { }
 
   public ngOnInit() {
-    this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
-    this.loadTableHeaders();
+
   }
 
   public ngOnChanges() {
     if (this.tableData.state.loadedContentStage !== this.receivedContentStage) {
       console.log('rows updated for inter-stage change', this.receivedContentStage);
       this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate; // saving initial cache
+      this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
       this.tableData.state.loadedContentStage = this.receivedContentStage;
-      this.loadTableHeaders();
       this.loadTableRows(this.newRows);
     } else if (this.securityTableMetricsCache !== this.receivedSecurityTableMetricsUpdate && this.receivedContentStage === this.constants.securityTableFinalStage) {
       this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate;
       this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
       this.loadTableHeaders();
       this.loadTableRows(this.newRows);
-    }
+    } else if (!!this.newRows && this.newRows != this.tableData.data.rows && this.tableData.state.loadedContentStage === this.receivedContentStage) {
+      console.log('rows updated for change within same stage, triggered when filters are applied', this.tableData.state.loadedContentStage);
+      this.loadTableRows(this.newRows);
+    } 
     // console.log('test, at santa table, received list', this.securityList);
     // if (!!this.securityList && this.securityList.length > 0) {
     //   const list = [];
@@ -121,16 +123,11 @@ export class SantaTable implements OnInit, OnChanges {
 
   public onGridReady(params) {
     this.tableData.api.agGrid.gridApi = params.api;
-    this.tableData.data.agGridColumnDefs = [
-      {
-        headerName: 'Security',
-        field: 'securityCard'
-      }
-    ];
     this.tableData.data.agGridRowData = [];
     this.tableData.api.agGrid.gridApi = params.api;
     this.tableData.api.agGrid.columnApi = params.columnApi;
     this.tableData.state.isAgGridReady = true;
+    this.loadTableHeaders();
   }
 
   private loadTableHeaders() {
@@ -269,6 +266,11 @@ export class SantaTable implements OnInit, OnChanges {
         field: eachHeader.data.key,
         cellClass: 'santaTable__main-agGrid-cell'
       };
+      if (eachHeader.data.key === 'security') {
+        newAgColumn.cellClass = 'santaTable__main-agGrid-cell santaTable__main-agGrid-cell--securityCard';
+      } else {
+        newAgColumn.cellClass = 'santaTable__main-agGrid-cell';
+      }
       list.push(newAgColumn);
     })
     this.tableData.data.agGridColumnDefs = list;
