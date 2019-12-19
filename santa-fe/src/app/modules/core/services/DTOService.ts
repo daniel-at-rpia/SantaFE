@@ -456,7 +456,10 @@ export class DTOService {
     const object: SecurityTableDTO = {
       data: {
         headers: [],
-        rows: []
+        rows: [],
+        agGridColumnDefs: [],
+        agGridRowData: [],
+        agGridFrameworkComponents: {}
       },
       state: {
         loadedContentStage: 0,
@@ -464,6 +467,12 @@ export class DTOService {
         selectedHeader: null,
         sortedByHeader: null,
         isLiveVariant: isLiveVariant
+      },
+      api: {
+        agGrid: {
+          gridApi: null,
+          columnApi: null
+        }
       }
     };
     return object;

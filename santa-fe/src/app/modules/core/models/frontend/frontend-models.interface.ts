@@ -9,6 +9,7 @@ import {
   QuantitativeEntryBlock,
   QuantitativeEntryStyleBlock
 } from 'FEModels/frontend-blocks.interface';
+import * as agGrid from 'ag-grid-community';
 
 import * as am4charts from "@amcharts/amcharts4/charts";
 
@@ -17,6 +18,7 @@ interface BasicDTOStructure {
   data: object;
   state: object;
   style?: object;
+  api?: object;
 }
 
 export interface SecurityDTO extends BasicDTOStructure {
@@ -203,6 +205,9 @@ export interface SecurityTableDTO extends BasicDTOStructure {
   data: {
     headers: Array<SecurityTableHeaderDTO>;
     rows: Array<SecurityTableRowDTO>;
+    agGridColumnDefs: Array<any>;
+    agGridRowData: Array<any>;
+    agGridFrameworkComponents: object;
   },
   state: {
     loadedContentStage: number;
@@ -210,6 +215,12 @@ export interface SecurityTableDTO extends BasicDTOStructure {
     selectedHeader: SecurityTableHeaderDTO;
     sortedByHeader: SecurityTableHeaderDTO;
     isLiveVariant: boolean;
+  },
+  api: {
+    agGrid: {
+      gridApi: agGrid.GridApi,
+      columnApi: agGrid.ColumnApi
+    }
   }
 }
 

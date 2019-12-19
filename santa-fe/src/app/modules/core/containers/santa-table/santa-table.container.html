@@ -5,9 +5,8 @@
   <section class="santaTable__main">
     <ag-grid-angular
       class="ag-theme-balham"
-      [columnDefs]="agGridColumnDefs"
-      [rowData]="agGridRowData"
-      [frameworkComponents]="agGridFrameworkComponents"
+      [columnDefs]="tableData.data.agGridColumnDefs"
+      [frameworkComponents]="tableData.data.agGridFrameworkComponents"
       [rowClass]="agGridRowClassRules"
       (gridReady)="onGridReady($event)">
     </ag-grid-angular>
