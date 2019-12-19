@@ -8,6 +8,9 @@
         "dev": [
           "dev-santa-rpia"
         ],
+        "dev2": [
+          "dev2-santa-rpia"
+        ],
         "prod": [
           "santa-rpia"
         ]
