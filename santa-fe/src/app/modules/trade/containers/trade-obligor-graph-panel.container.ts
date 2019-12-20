@@ -237,12 +237,12 @@ export class TradeObligorGraphPanel {
     if (this.state.markValue.quantity) this.state.markValue.quantity = false;
     else if (this.state.markValue.quantity === false) this.state.markValue.quantity = true;
 
-    let displayMark: boolean = false;
-    if (this.state.markValue.quantity) displayMark = true
+    let isMarkHidden: boolean = true;
+    if (this.state.markValue.quantity) isMarkHidden = false
 
     for (let categoryIndex in this.state.obligorChart.series.values) {
       if (this.state.obligorChart.series.values[categoryIndex].isHidden === false) this.state.chartCategories[categoryIndex].state.isHidden = false;
-      this.state.chartCategories[categoryIndex].state.isMarkHidden = displayMark;
+      this.state.chartCategories[categoryIndex].state.isMarkHidden = isMarkHidden;
     }
 
     this.state.obligorChart.series.clear();
