@@ -85,7 +85,6 @@ export class SantaTable implements OnInit, OnChanges {
   ) { }
 
   public ngOnInit() {
-
   }
 
   public ngOnChanges() {
@@ -103,7 +102,15 @@ export class SantaTable implements OnInit, OnChanges {
     } else if (!!this.newRows && this.newRows != this.tableData.data.rows && this.tableData.state.loadedContentStage === this.receivedContentStage) {
       console.log('rows updated for change within same stage, triggered when filters are applied', this.tableData.state.loadedContentStage);
       this.loadTableRows(this.newRows);
-    } 
+    } else if (this.liveUpdateRowsCache !== this.liveUpdatedRows && this.tableData.state.loadedContentStage === this.constants.securityTableFinalStage) {
+      this.liveUpdateRowsCache = this.utilityService.deepCopy(this.liveUpdatedRows);
+      console.log('rows updated from live update', this.liveUpdatedRows);
+      if (this.liveUpdateRowsCache.length > 0) {
+        this.liveUpdateRows(this.liveUpdateRowsCache);
+      }
+      // TODO: enable this
+      // this.liveUpdateAllQuotesForExpandedRows();
+    }
     // console.log('test, at santa table, received list', this.securityList);
     // if (!!this.securityList && this.securityList.length > 0) {
     //   const list = [];
@@ -130,6 +137,11 @@ export class SantaTable implements OnInit, OnChanges {
     this.loadTableHeaders();
   }
 
+  public getRowNodeId(row) {
+    console.log('test, data is', row);
+    return row.id;
+  }
+
   private loadTableHeaders() {
     this.tableData.data.headers = [];
     this.securityTableMetrics.forEach((eachStub) => {
@@ -149,7 +161,9 @@ export class SantaTable implements OnInit, OnChanges {
     } else {
       this.performDefaultSort();
     }
-    this.tableData.state.isAgGridReady && this.loadAgGridRows();
+    if (this.tableData.state.isAgGridReady) {
+      this.tableData.data.agGridRowData = this.loadAgGridRows(this.tableData.data.rows, this.tableData.data.headers);
+    }
   }
 
   private updateDynamicColumns() {
@@ -258,6 +272,20 @@ export class SantaTable implements OnInit, OnChanges {
     })
   }
 
+  private liveUpdateRows(targetRows: Array<SecurityTableRowDTO>) {
+    targetRows.forEach((eachNewRow) => {
+      const matchedOldRow = this.tableData.data.rows.find((eachOldRow) => {
+        return eachOldRow.data.security.data.securityID === eachNewRow.data.security.data.securityID;
+      });
+      if (!!matchedOldRow) {
+        matchedOldRow.data = eachNewRow.data;
+      } else {
+        this.tableData.data.rows.push(eachNewRow);
+      }
+    });
+    this.updateAgGridRows(targetRows);
+  }
+
   private loadAgGridHeaders() {
     const list = [];
     this.tableData.data.headers.forEach((eachHeader) => {
@@ -277,25 +305,47 @@ export class SantaTable implements OnInit, OnChanges {
     this.tableData.api.agGrid.gridApi.setColumnDefs(list);
   }
 
-  private loadAgGridRows() {
+  private loadAgGridRows(targetRows: Array<SecurityTableRowDTO>, targetHeaders: Array<SecurityTableHeaderDTO>): Array<any> {
     const list = [];
-    this.tableData.data.rows.forEach((eachRow) => {
-      const eachSecurity = eachRow.data.security;
-      const newAgRow = {
-        id: eachSecurity.data.securityID
-      };
-      this.tableData.data.headers.forEach((eachHeader, index) => {
-        if (eachHeader.data.key === 'security' || index === 0) {
-          newAgRow[eachHeader.data.key] = eachSecurity.data.name;
-        } else if (eachHeader.state.isQuantVariant) {
-          newAgRow[eachHeader.data.key] = eachRow.data.cells[0].data.quantComparerDTO ? eachRow.data.cells[0].data.quantComparerDTO.data.mid : 'n/a';
-        } else {
-          newAgRow[eachHeader.data.key] = eachRow.data.cells[index-1].data.textData;
-        }
-      });
+    targetRows.forEach((eachRow) => {
+      const newAgRow = this.formAgGridRow(eachRow, targetHeaders);
       list.push(newAgRow);
     });
-    this.tableData.data.agGridRowData = list;
     this.tableData.api.agGrid.gridApi.setRowData(list);
+    return list;
+  }
+
+  private updateAgGridRows(targetRows: Array<SecurityTableRowDTO>) {
+    targetRows.forEach((eachRow) => {
+      const id = eachRow.data.security.data.securityID;
+      const targetNode = this.tableData.api.agGrid.gridApi.getRowNode(id);
+      const newAgRow = this.formAgGridRow(eachRow, this.tableData.data.headers);
+      targetNode.setData(newAgRow);
+    });
+  }
+
+  private formAgGridRow(targetRow: SecurityTableRowDTO,targetHeaders: Array<SecurityTableHeaderDTO>): object {
+    const eachSecurity = targetRow.data.security;
+    const newAgRow = {
+      id: eachSecurity.data.securityID
+    };
+    targetHeaders.forEach((eachHeader, index) => {
+      if (eachHeader.data.key === 'security' || index === 0) {
+        newAgRow[eachHeader.data.key] = eachSecurity.data.name;
+      } else if (eachHeader.state.isQuantVariant) {
+        const quantComparer = targetRow.data.cells[0].data.quantComparerDTO;
+        if (quantComparer) {
+          const mid = quantComparer.data.mid;
+          const bid = quantComparer.data.bid.number;
+          const ask = quantComparer.data.offer.number;
+          newAgRow[eachHeader.data.key] = `${bid} - ${mid} - ${ask}`;
+        } else {
+          newAgRow[eachHeader.data.key] = 'No Quotes';
+        }
+      } else {
+        newAgRow[eachHeader.data.key] = targetRow.data.cells[index-1].data.textData;
+      }
+    });
+    return newAgRow;
   }
 }

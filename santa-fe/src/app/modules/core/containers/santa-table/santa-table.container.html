@@ -9,6 +9,7 @@
       [defaultColDef]="defaultColDef"
       [frameworkComponents]="tableData.data.agGridFrameworkComponents"
       [rowClass]="agGridRowClassRules"
+      [getRowNodeId]="getRowNodeId"
       (gridReady)="onGridReady($event)">
     </ag-grid-angular>
   </section>
