@@ -42,7 +42,7 @@ export class TradeObligorGraphPanel {
     this.state = {
       obligorChart: am4charts.XYChart,
       obligorSecurityID: null,
-      obligorName: "DEUTSCHE BANK AG EUR",
+      obligorName: null,
       obligorCurrency: null,
       securityTableRowDTOList: [],
       metric: {
@@ -90,7 +90,10 @@ export class TradeObligorGraphPanel {
 
             // Set the MID data for the category.
             for (let bestQuote in serverReturn[curve].bestQuotes) {
+
               if (this.state.obligorSecurityID === bestQuote) chartCategory.state.isHidden = false;
+
+              this.state.obligorName = serverReturn[curve].securities[bestQuote].issuer + " " + serverReturn[curve].securities[bestQuote].ccy
 
               if (bestQuote !== null) {
                 let categoryDataItem: ObligorCategoryDataItemDTO = {
