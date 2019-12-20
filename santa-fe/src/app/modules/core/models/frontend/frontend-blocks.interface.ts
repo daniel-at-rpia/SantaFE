@@ -96,3 +96,14 @@ export interface QuantitativeEntryStyleBlock {
   leftSpaceWidth: number;
   rightSpaceWidth: number;
 }
+
+export interface AgGridColumnDefinition {
+  headerName: string;
+  field: string;
+  cellClass: string;
+}
+
+export interface AgGridRow {
+  id: string;
+  [property: string]: any;
+}

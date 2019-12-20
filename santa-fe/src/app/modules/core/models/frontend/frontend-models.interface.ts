@@ -7,7 +7,9 @@ import {
   SecurityPortfolioBlock,
   SecurityMarkBlock,
   QuantitativeEntryBlock,
-  QuantitativeEntryStyleBlock
+  QuantitativeEntryStyleBlock,
+  AgGridColumnDefinition,
+  AgGridRow
 } from 'FEModels/frontend-blocks.interface';
 import * as agGrid from 'ag-grid-community';
 
@@ -205,8 +207,8 @@ export interface SecurityTableDTO extends BasicDTOStructure {
   data: {
     headers: Array<SecurityTableHeaderDTO>;
     rows: Array<SecurityTableRowDTO>;
-    agGridColumnDefs: Array<any>;
-    agGridRowData: Array<any>;
+    agGridColumnDefs: Array<AgGridColumnDefinition>;
+    agGridRowData: Array<AgGridRow>;
     agGridFrameworkComponents: object;
   },
   state: {

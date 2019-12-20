@@ -34,7 +34,7 @@
       SecurityTableRowDTO,
       SecurityTableHeaderDTO
     } from 'FEModels/frontend-models.interface';
-    import { QuoteMetricBlock } from 'FEModels/frontend-blocks.interface';
+    import { QuoteMetricBlock, AgGridRow, AgGridColumnDefinition } from 'FEModels/frontend-blocks.interface';
     import { PayloadGetAllQuotes } from 'BEModels/backend-payloads.interface';
     import { ClickedSortQuotesByMetricEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
     import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
@@ -111,21 +111,6 @@ export class SantaTable implements OnInit, OnChanges {
       // TODO: enable this
       // this.liveUpdateAllQuotesForExpandedRows();
     }
-    // console.log('test, at santa table, received list', this.securityList);
-    // if (!!this.securityList && this.securityList.length > 0) {
-    //   const list = [];
-    //   this.securityList.forEach((eachSecurity) => {
-    //     const newRow = {
-    //       id: eachSecurity.data.securityID,
-    //       securityCard: eachSecurity,
-    //       wow: eachSecurity.data.metricPack.delta.Wow['Default Spread'],
-    //       mom: eachSecurity.data.metricPack.delta.Mom['Default Spread'],
-    //       ytd: eachSecurity.data.metricPack.delta.Ytd['Default Spread']
-    //     };
-    //     list.push(newRow);
-    //   });
-    //   this.agGridApi.setRowData(list);
-    // }
   }
 
   public onGridReady(params) {
@@ -138,7 +123,6 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   public getRowNodeId(row) {
-    console.log('test, data is', row);
     return row.id;
   }
 
@@ -289,7 +273,7 @@ export class SantaTable implements OnInit, OnChanges {
   private loadAgGridHeaders() {
     const list = [];
     this.tableData.data.headers.forEach((eachHeader) => {
-      const newAgColumn = {
+      const newAgColumn: AgGridColumnDefinition = {
         headerName: eachHeader.data.displayLabel,
         field: eachHeader.data.key,
         cellClass: 'santaTable__main-agGrid-cell'
@@ -309,7 +293,7 @@ export class SantaTable implements OnInit, OnChanges {
     const list = [];
     targetRows.forEach((eachRow) => {
       const newAgRow = this.formAgGridRow(eachRow, targetHeaders);
-      list.push(newAgRow);
+      !!newAgRow.id && list.push(newAgRow);
     });
     this.tableData.api.agGrid.gridApi.setRowData(list);
     return list;
@@ -324,10 +308,10 @@ export class SantaTable implements OnInit, OnChanges {
     });
   }
 
-  private formAgGridRow(targetRow: SecurityTableRowDTO,targetHeaders: Array<SecurityTableHeaderDTO>): object {
+  private formAgGridRow(targetRow: SecurityTableRowDTO,targetHeaders: Array<SecurityTableHeaderDTO>): AgGridRow {
     const eachSecurity = targetRow.data.security;
-    const newAgRow = {
-      id: eachSecurity.data.securityID
+    const newAgRow: AgGridRow = {
+      id: !eachSecurity.state.isStencil ? eachSecurity.data.securityID : this.utilityService.generateUUID()
     };
     targetHeaders.forEach((eachHeader, index) => {
       if (eachHeader.data.key === 'security' || index === 0) {
