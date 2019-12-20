@@ -7,10 +7,12 @@ import {
   SecurityPortfolioBlock,
   SecurityMarkBlock,
   QuantitativeEntryBlock,
-  QuantitativeEntryStyleBlock
+  QuantitativeEntryStyleBlock,
+  ObligorChartCategoryColorSchemeBlock
 } from 'FEModels/frontend-blocks.interface';
 
 import * as am4charts from "@amcharts/amcharts4/charts";
+import { ObligorGraph } from 'App/modules/trade/components/obligor-graph/obligor-graph';
 
 interface BasicDTOStructure {
   [property: string]: object; 
@@ -233,6 +235,14 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
   }
 }
 
+export interface BestQuotesDTO extends BasicDTOStructure {
+  data: {
+    bestSpreadQuote: QuantComparerDTO;
+    bestYieldQuote: QuantComparerDTO;
+    bestPriceQuote: QuantComparerDTO;
+  }
+}
+
 export interface SecurityTableRowDTO extends BasicDTOStructure {
   data: {
     security: SecurityDTO;
@@ -327,11 +337,27 @@ export interface QuantitativeVisualizerDTO extends BasicDTOStructure {
 
 }
 
-export interface ObligorChartBlock {
-  name: string;
-  chart: am4charts.XYChart;
-  rawData: any[];
-  colorScheme: string;
-  displayMark: boolean;
-  displayChart: boolean;
+export interface ObligorChartCategoryDTO extends BasicDTOStructure{
+  data: { 
+    name: string;
+    color: string;
+    obligorCategoryDataItemDTO: Array<ObligorCategoryDataItemDTO>;
+  };
+
+  state: {
+    isHidden: boolean;
+    isMarkHidden: boolean;
+  }
+}
+
+export interface ObligorCategoryDataItemDTO extends BasicDTOStructure{
+  data: {
+    name: string,
+    securityID: string;
+    mark: string;
+    mid: number;
+    workoutTerm: number;
+    positionCurrent: number;
+  }
+  state: {}
 }

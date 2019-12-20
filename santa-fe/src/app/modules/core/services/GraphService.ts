@@ -6,7 +6,7 @@ import {
 } from 'FEModels/frontend-blocks.interface';
 
 import {
-  ObligorChartBlock
+  ObligorChartCategoryDTO
 } from 'FEModels/frontend-models.interface';
 
 import * as am4core from "@amcharts/amcharts4/core";
@@ -128,80 +128,54 @@ export class GraphService {
     }
   }
 
-  public buildObligorGraph(chart: am4charts.XYChart, 
-                           data: any,
-                           colorScheme: string, 
-                           name: string, 
-                           yAxisValue: string, 
-                           displayChart: boolean, 
-                           displayMark: boolean) {
+  public addCategoryToObligorGraph(chart: am4charts.XYChart, category: ObligorChartCategoryDTO) {
+    // Create data array that can be handled by amCharts from out category DataItems.
+    let amChartsData: any[] = [];
+    for (let dataItem in category.data.obligorCategoryDataItemDTO) {
+      // The dumbbell chart will not work if the mark is null. If it is, we will set it to the value of mid to be "hidden" behind it.
+      if (category.data.obligorCategoryDataItemDTO[dataItem].data.mark === null) {
+        category.data.obligorCategoryDataItemDTO[dataItem].data.mark = category.data.obligorCategoryDataItemDTO[dataItem].data.mid.toLocaleString();
+      }
 
-    // Generate Sr Bond chart.
-    let chartBlock: ObligorChartBlock = {
-      name: name,
-      chart: chart,
-      rawData: data,
-      colorScheme: colorScheme,
-      displayChart: displayChart,
-      displayMark: displayMark
+      amChartsData.push({
+        name: category.data.obligorCategoryDataItemDTO[dataItem].data.name,
+        mid: category.data.obligorCategoryDataItemDTO[dataItem].data.mid,
+        mark: category.data.obligorCategoryDataItemDTO[dataItem].data.mark,
+        workoutTerm: category.data.obligorCategoryDataItemDTO[dataItem].data.workoutTerm,
+        positionCurrent: category.data.obligorCategoryDataItemDTO[dataItem].data.positionCurrent
+      })
     }
 
-    let dumbBellSeries: am4charts.ColumnSeries;
-    // Create a dumbbell series. https://www.amcharts.com/demos/dumbbell-plot/
-    dumbBellSeries = this.generateObligorChartDumbells(chartBlock, "spread");
-
-    // Create a curve line series.
-    //let curveSeries: am4charts.LineSeries = this.generateObligorChartTrendCurve(chartBlock);
-
-    // Show the dumbbell series and the curve series when legend item is clicked.
-    dumbBellSeries.events.on("shown", function () {
-      dumbBellSeries.show();
-      //curveSeries.show();
-    });
-
-    //Hide the dumbbell series and the curve series when legend item is clicked.
-    dumbBellSeries.events.on("hidden", function () {
-      dumbBellSeries.hide();
-      //curveSeries.hide();
-    });
-
+    this.generateObligorChartDumbells(chart, category, amChartsData);
   }
 
-  private generateObligorChartDumbells(obligorChartDTO: ObligorChartBlock, yAxisValue: string): am4charts.ColumnSeries {
+  private generateObligorChartDumbells(chart: am4charts.XYChart, category: ObligorChartCategoryDTO, amChartsData: any[]): am4charts.ColumnSeries {
 
     // Create the column representing the mark discrepency.
-    let dumbBellseries = obligorChartDTO.chart.series.push(new am4charts.ColumnSeries());
-    dumbBellseries.data = obligorChartDTO.rawData;
-    dumbBellseries.dataFields.valueX = "category";
+    let dumbBellseries = chart.series.push(new am4charts.ColumnSeries());
+    dumbBellseries.data = amChartsData;
+    dumbBellseries.dataFields.valueX = "workoutTerm";
     dumbBellseries.dataFields.openValueY = "mid";
     dumbBellseries.dataFields.valueY = "mark";
-    dumbBellseries.fill = am4core.color(obligorChartDTO.colorScheme);
-    dumbBellseries.stroke = am4core.color(obligorChartDTO.colorScheme);
-    dumbBellseries.name = obligorChartDTO.name;
+    dumbBellseries.fill = am4core.color(category.data.color);
+    dumbBellseries.stroke = am4core.color(category.data.color);
+    dumbBellseries.name = category.data.name;
     dumbBellseries.strokeOpacity = 1;
-    dumbBellseries.showOnInit = false;
-    dumbBellseries.className  = obligorChartDTO.name;
-    
-    if (obligorChartDTO.displayChart === false) {
-      dumbBellseries.hidden = true;
-    }
+    dumbBellseries.hidden = category.state.isHidden;
+    dumbBellseries.sequencedInterpolation = true;
+    dumbBellseries.columns.template.width = 3;
+    dumbBellseries.dataFields.value = "positionCurrent";
 
-    if (obligorChartDTO.displayMark) {
-      dumbBellseries.sequencedInterpolation = true;
-      dumbBellseries.columns.template.width = 3;
-      dumbBellseries.tooltip.pointerOrientation = "horizontal";
-      dumbBellseries.dataFields.value = "positionCurrent";
+    // Modify the column color based on mark discrepency.
+    let columnTemplate = dumbBellseries.columns.template;
+    columnTemplate.strokeWidth = 1;
+    columnTemplate.strokeOpacity = 1;
+    columnTemplate.stroke = am4core.color(category.data.color);
 
-      // Modify the column color based on mark discrepency.
-      let columnTemplate = dumbBellseries.columns.template;
-      columnTemplate.strokeWidth = 1;
-      columnTemplate.strokeOpacity = 1;
-      columnTemplate.stroke = am4core.color(obligorChartDTO.colorScheme);
+    var markDot = dumbBellseries.bullets.push(new am4charts.CircleBullet());
+    markDot.circle.radius = 3;
 
-      //Add a circle bullet to represent the mark.
-      var markDot = dumbBellseries.bullets.push(new am4charts.CircleBullet());
-      markDot.circle.radius = 3;
-
+    if (category.state.isMarkHidden === false) {
       //Add a circle bullet to represent the mark.
       var markBullet = dumbBellseries.bullets.push(new am4charts.CircleBullet());
       markBullet.circle.fillOpacity = 0.5;
@@ -209,10 +183,9 @@ export class GraphService {
       markBullet.strokeOpacity = 5;
       markBullet.fillOpacity = 10;
       markBullet.nonScalingStroke = true;
-      markBullet.tooltipHTML = `<center><b>{security}</b> </br>
-                                Mid: {mid}</br>
-                                Mark: {mark}</br>
-                                Value: {positionCurrent} </center`;
+      markBullet.tooltipHTML = `<center><b>{name}</b> </br>
+                              Mark: {mark}</br>
+                              Current Position: {positionCurrent}</center>`;
       dumbBellseries.heatRules.push({
         target: markBullet.circle,
         min: 5,
@@ -223,10 +196,10 @@ export class GraphService {
 
     // Add a circle bullet to represent the mid.
     let midBullet = dumbBellseries.bullets.push(new am4charts.CircleBullet());
-    midBullet.fill = am4core.color(obligorChartDTO.colorScheme);
+    midBullet.fill = am4core.color(category.data.color);
     midBullet.locationY = 1;
-    midBullet.tooltipHTML = `<center><b>{security}</b> </br>
-                              Mid: {mid}</br>`;
+    midBullet.tooltipHTML = `<center><b>{name}</b> </br>
+                                Mid: {mid}</br>`;
 
     dumbBellseries.events.on("hidden", function () {
       dumbBellseries.hide();
@@ -235,26 +208,29 @@ export class GraphService {
     return dumbBellseries;
   }
 
-  private generateObligorChartTrendCurve(obligorChartDTO: ObligorChartBlock): am4charts.LineSeries {
-    let curveData = [];
-    for (var i = 0; i < obligorChartDTO.rawData.length; i++) {
-      curveData.push({ x: i, y: obligorChartDTO.rawData[i].spreadMid });
-    }
+  private generateObligorChartTrendCurve(category: ObligorChartCategoryDTO): am4charts.LineSeries {
 
-    let curveSeries = obligorChartDTO.chart.series.push(new am4charts.LineSeries());
-    curveSeries.dataFields.categoryX = "x";
-    curveSeries.dataFields.valueY = "y";
-    curveSeries.strokeWidth = 2
-    curveSeries.stroke = am4core.color(obligorChartDTO.colorScheme);
-    curveSeries.hiddenInLegend = true;
-    curveSeries.data = curveData;
-    curveSeries.name = "CurveSeries";
+    //TODO: This whole thing.
+
+    //let curveData = [];
+    //for (var i = 0; i < obligorChartDTO.rawData.length; i++) {
+    //  curveData.push({ x: i, y: obligorChartDTO.rawData[i].spreadMid });
+    // }
+
+    //let curveSeries = obligorChartDTO.chart.series.push(new am4charts.LineSeries());
+    //curveSeries.dataFields.categoryX = "x";
+    //curveSeries.dataFields.valueY = "y";
+    //curveSeries.strokeWidth = 2
+    //curveSeries.stroke = am4core.color(obligorChartDTO.colorScheme);
+    // curveSeries.hiddenInLegend = true;
+    //curveSeries.data = curveData;
+    //curveSeries.name = "CurveSeries";
 
 
     //var reg2 = curveSeries.plugins.push(new am4plugins_regression.Regression());
     //reg2.method = "polynomial";
 
-    return curveSeries;
+    return null;
   }
 
   public initializeObligorChartAxes(xAxisData: any[], yAxesData: any[], chart: am4charts.XYChart) {

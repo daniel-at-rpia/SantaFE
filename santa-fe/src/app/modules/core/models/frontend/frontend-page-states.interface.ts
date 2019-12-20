@@ -8,7 +8,8 @@ import {
   SecurityGroupAverageVisualizerDTO,
   SearchShortcutDTO,
   QuantComparerDTO,
-  QuantitativeVisualizerDTO
+  QuantitativeVisualizerDTO,
+  ObligorChartCategoryDTO
 } from 'FEModels/frontend-models.interface';
 import {
   SecurityDefinitionStub,
@@ -120,7 +121,6 @@ export interface TradeObligorGraphPanelState {
   obligorSecurityID: string;
   obligorName: string;
   obligorCurrency: string;
-  bestQuotes: any[];
   securityTableRowDTOList: SecurityTableRowDTO[];
   metric: {
     spread:boolean;
@@ -138,10 +138,5 @@ export interface TradeObligorGraphPanelState {
     srCDS: boolean;
     subCDS: boolean;
   }
-  chartData: {
-    subBond: any[];
-    srBond: any[];
-    srCDS: any[];
-    subCDS: any[];
-  }
+  chartCategories: ObligorChartCategoryDTO[];
 }

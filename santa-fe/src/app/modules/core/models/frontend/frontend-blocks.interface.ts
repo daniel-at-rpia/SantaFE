@@ -96,3 +96,7 @@ export interface QuantitativeEntryStyleBlock {
   leftSpaceWidth: number;
   rightSpaceWidth: number;
 }
+
+export interface ObligorChartCategoryColorSchemeBlock {
+  categoryScheme: Array<any>;
+}
