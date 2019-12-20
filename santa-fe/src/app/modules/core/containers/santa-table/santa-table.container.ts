@@ -70,7 +70,7 @@ export class SantaTable implements OnInit, OnChanges {
     thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX
   }
 
-  agGridRowClassRules = "santaTable__row";
+  agGridRowClassRules = "santaTable__main-agGrid-row";
   defaultColDef = {
     sortable: true,
     filter: true,

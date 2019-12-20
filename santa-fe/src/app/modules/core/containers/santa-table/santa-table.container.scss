@@ -3,9 +3,27 @@
 // @import "ag-grid/ag-theme-balham.scss";
 
 $icons-path: "~ag-grid-community/src/styles/ag-theme-base/icons/";
+$font-family: "SantaOpenSans";
+
+// even row background color
+$default-background: $color_gray_2;
+// odd row background color
+$odd-row-background-color: $color_blue_gray_1;
+
+// header background color
+$chrome-background: $color_blue_gray_5;
+
+// all text color
+$foreground-color: $font_color_inverse;
+$foreground-opacity: 1;
+$secondary-foreground-color-opacity: 1;
+
+// row background color on hover
+$alt-background: $color_white;
 
 @import "~ag-grid-community/src/styles/ag-grid";
 @import '~ag-grid-community/src/styles/ag-theme-balham/sass/ag-theme-balham';
+// @import '~ag-grid-community/src/styles/ag-theme-balham-dark/sass/ag-theme-balham-dark';
 
 // porting over some basic stylings
   ::-webkit-scrollbar-thumb {
@@ -40,10 +58,12 @@ $icons-path: "~ag-grid-community/src/styles/ag-theme-base/icons/";
     &-agGrid {
       height: 100%;
       &-row {
-
+        &:hover {
+          // @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
+        }
       }
       &-cell {
-        color: $font_color_minor;
+        color: $color_blue_gray_8;
         white-space: normal;
         //width: 3rem;
         &--securityCard {
@@ -54,4 +74,8 @@ $icons-path: "~ag-grid-community/src/styles/ag-theme-base/icons/";
       }
     }
   }
+}
+
+.ag-theme-balham .ag-tab-body, .ag-theme-balham .ag-popup-editor, .ag-theme-balham .ag-menu {
+  color: $font_color_major;
 }
