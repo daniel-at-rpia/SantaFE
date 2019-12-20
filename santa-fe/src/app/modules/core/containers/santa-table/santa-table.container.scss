@@ -1,6 +1,11 @@
 @import "global";
-@import "ag-grid/ag-grid-basic.scss";
-@import "ag-grid/ag-theme-balham.scss";
+// @import "ag-grid/ag-grid-basic.scss";
+// @import "ag-grid/ag-theme-balham.scss";
+
+$icons-path: "~ag-grid-community/src/styles/ag-theme-base/icons/";
+
+@import "~ag-grid-community/src/styles/ag-grid";
+@import '~ag-grid-community/src/styles/ag-theme-balham/sass/ag-theme-balham';
 
 // porting over some basic stylings
   ::-webkit-scrollbar-thumb {
@@ -39,14 +44,14 @@
       }
       &-cell {
         color: $font_color_minor;
+        white-space: normal;
+        //width: 3rem;
         &--securityCard {
-        height: 4rem;
+          // height: 4rem;
+          // width: 12rem;
           color: $font_color_major;
         }
       }
     }
   }
 }
-
-// @import "~ag-grid-community/src/styles/ag-grid";
-// @import '~ag-grid-community/src/styles/ag-theme-balham/sass/ag-theme-balham';
