@@ -8,6 +8,7 @@ import { DTOService } from 'Core/services/DTOService';
 import { UtilityService } from 'Core/services/UtilityService';
 import { GraphService } from 'Core/services/GraphService';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
+import { AgGridMiddleLayerService } from 'Core/services/AgGridMiddleLayerService';
 
 import { AgGridModule } from 'ag-grid-angular';
 
@@ -47,7 +48,8 @@ import { SantaTableSecurityCell } from 'Core/components/santa-table-security-cel
     DTOService,
     UtilityService,
     GraphService,
-    RestfulCommService
+    RestfulCommService,
+    AgGridMiddleLayerService
   ], 
   exports: [
     SantaTable,

@@ -28,6 +28,7 @@
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
+    import { AgGridMiddleLayerService } from 'Core/services/AgGridMiddleLayerService';
     import {
       SecurityDTO,
       SecurityTableDTO,
@@ -81,7 +82,8 @@ export class SantaTable implements OnInit, OnChanges {
   constructor(
     private dtoService: DTOService,
     private utilityService: UtilityService,
-    private restfulCommService: RestfulCommService
+    private restfulCommService: RestfulCommService,
+    private agGridMiddleLayerService: AgGridMiddleLayerService
   ) { }
 
   public ngOnInit() {
@@ -133,7 +135,7 @@ export class SantaTable implements OnInit, OnChanges {
         this.tableData.data.headers.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
       }
     });
-    this.tableData.state.isAgGridReady && this.loadAgGridHeaders();
+    this.tableData.state.isAgGridReady && this.agGridMiddleLayerService.loadAgGridHeaders(this.tableData);
   }
 
   private loadTableRows(rowList: Array<SecurityTableRowDTO>) {
@@ -146,7 +148,7 @@ export class SantaTable implements OnInit, OnChanges {
       this.performDefaultSort();
     }
     if (this.tableData.state.isAgGridReady) {
-      this.tableData.data.agGridRowData = this.loadAgGridRows(this.tableData.data.rows, this.tableData.data.headers);
+      this.tableData.data.agGridRowData = this.agGridMiddleLayerService.loadAgGridRows(this.tableData);
     }
   }
 
@@ -267,69 +269,6 @@ export class SantaTable implements OnInit, OnChanges {
         this.tableData.data.rows.push(eachNewRow);
       }
     });
-    this.updateAgGridRows(targetRows);
-  }
-
-  private loadAgGridHeaders() {
-    const list = [];
-    this.tableData.data.headers.forEach((eachHeader) => {
-      const newAgColumn: AgGridColumnDefinition = {
-        headerName: eachHeader.data.displayLabel,
-        field: eachHeader.data.key,
-        cellClass: 'santaTable__main-agGrid-cell'
-      };
-      if (eachHeader.data.key === 'security') {
-        newAgColumn.cellClass = 'santaTable__main-agGrid-cell santaTable__main-agGrid-cell--securityCard';
-      } else {
-        newAgColumn.cellClass = 'santaTable__main-agGrid-cell';
-      }
-      list.push(newAgColumn);
-    })
-    this.tableData.data.agGridColumnDefs = list;
-    this.tableData.api.agGrid.gridApi.setColumnDefs(list);
-  }
-
-  private loadAgGridRows(targetRows: Array<SecurityTableRowDTO>, targetHeaders: Array<SecurityTableHeaderDTO>): Array<any> {
-    const list = [];
-    targetRows.forEach((eachRow) => {
-      const newAgRow = this.formAgGridRow(eachRow, targetHeaders);
-      !!newAgRow.id && list.push(newAgRow);
-    });
-    this.tableData.api.agGrid.gridApi.setRowData(list);
-    return list;
-  }
-
-  private updateAgGridRows(targetRows: Array<SecurityTableRowDTO>) {
-    targetRows.forEach((eachRow) => {
-      const id = eachRow.data.security.data.securityID;
-      const targetNode = this.tableData.api.agGrid.gridApi.getRowNode(id);
-      const newAgRow = this.formAgGridRow(eachRow, this.tableData.data.headers);
-      targetNode.setData(newAgRow);
-    });
-  }
-
-  private formAgGridRow(targetRow: SecurityTableRowDTO,targetHeaders: Array<SecurityTableHeaderDTO>): AgGridRow {
-    const eachSecurity = targetRow.data.security;
-    const newAgRow: AgGridRow = {
-      id: !eachSecurity.state.isStencil ? eachSecurity.data.securityID : this.utilityService.generateUUID()
-    };
-    targetHeaders.forEach((eachHeader, index) => {
-      if (eachHeader.data.key === 'security' || index === 0) {
-        newAgRow[eachHeader.data.key] = eachSecurity.data.name;
-      } else if (eachHeader.state.isQuantVariant) {
-        const quantComparer = targetRow.data.cells[0].data.quantComparerDTO;
-        if (quantComparer) {
-          const mid = quantComparer.data.mid;
-          const bid = quantComparer.data.bid.number;
-          const ask = quantComparer.data.offer.number;
-          newAgRow[eachHeader.data.key] = `${bid} - ${mid} - ${ask}`;
-        } else {
-          newAgRow[eachHeader.data.key] = 'No Quotes';
-        }
-      } else {
-        newAgRow[eachHeader.data.key] = targetRow.data.cells[index-1].data.textData;
-      }
-    });
-    return newAgRow;
+    this.agGridMiddleLayerService.updateAgGridRows(this.tableData, targetRows);
   }
 }
