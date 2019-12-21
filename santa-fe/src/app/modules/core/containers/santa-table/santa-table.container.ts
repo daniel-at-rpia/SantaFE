@@ -135,7 +135,9 @@ export class SantaTable implements OnInit, OnChanges {
         this.tableData.data.headers.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
       }
     });
-    this.tableData.state.isAgGridReady && this.agGridMiddleLayerService.loadAgGridHeaders(this.tableData);
+    if (this.tableData.state.isAgGridReady) {
+      this.tableData.data.agGridColumnDefs = this.agGridMiddleLayerService.loadAgGridHeaders(this.tableData);
+    }
   }
 
   private loadTableRows(rowList: Array<SecurityTableRowDTO>) {

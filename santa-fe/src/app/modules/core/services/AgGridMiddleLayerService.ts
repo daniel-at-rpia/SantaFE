@@ -7,6 +7,7 @@
     } from 'ag-grid-community';
 
     import { UtilityService } from './UtilityService';
+    import { DTOService }from './DTOService';
     import {
       SecurityTableDTO,
       SecurityTableRowDTO,
@@ -16,25 +17,29 @@
       AgGridRow,
       AgGridColumnDefinition
     } from 'FEModels/frontend-blocks.interface';
+    import { SecurityTableMetrics } from 'Core/constants/securityTableConstants.constant';
   //
-
 
 @Injectable()
 export class AgGridMiddleLayerService {
   constructor(
-    private utilityService: UtilityService
+    private utilityService: UtilityService,
+    private dtoService: DTOService
   ){}
 
   public loadAgGridHeaders(
     table: SecurityTableDTO
-  ) {
+  ): Array<AgGridColumnDefinition> {
     const list = [];
     table.data.headers.forEach((eachHeader) => {
       const newAgColumn: AgGridColumnDefinition = {
         headerName: eachHeader.data.displayLabel,
         field: eachHeader.data.key,
-        cellClass: 'santaTable__main-agGrid-cell'
+        cellClass: 'santaTable__main-agGrid-cell',
       };
+      if (eachHeader.data.underlineAttrName && eachHeader.data.attrName != eachHeader.data.underlineAttrName) {
+        newAgColumn.comparator = this.agCompareUnderlineValue.bind(this)
+      }
       if (eachHeader.data.key === 'security') {
         newAgColumn.cellClass = 'santaTable__main-agGrid-cell santaTable__main-agGrid-cell--securityCard';
       } else {
@@ -42,8 +47,8 @@ export class AgGridMiddleLayerService {
       }
       list.push(newAgColumn);
     })
-    table.data.agGridColumnDefs = list;
     table.api.gridApi.setColumnDefs(list);
+    return list;
   }
 
   public loadAgGridRows(
@@ -78,7 +83,9 @@ export class AgGridMiddleLayerService {
   ): AgGridRow {
     const eachSecurity = targetRow.data.security;
     const newAgRow: AgGridRow = {
-      id: !eachSecurity.state.isStencil ? eachSecurity.data.securityID : this.utilityService.generateUUID()
+      id: !eachSecurity.state.isStencil ? eachSecurity.data.securityID : this.utilityService.generateUUID(),
+      securityDTO: eachSecurity,
+      quantComparerDTO: targetRow.data.cells[0].data.quantComparerDTO
     };
     targetHeaders.forEach((eachHeader, index) => {
       if (eachHeader.data.key === 'security' || index === 0) {
@@ -98,5 +105,49 @@ export class AgGridMiddleLayerService {
       }
     });
     return newAgRow;
+  }
+
+  private agCompareUnderlineValue(valueA, valueB, nodeA, nodeB, inverted) {
+    const columns = nodeA['columnController']['allDisplayedColumns'];
+    if (!!columns) {
+      const targetColumn = columns.find((eachColumn) => {
+        return eachColumn.sort;
+      })
+      const targetColumnDef: AgGridColumnDefinition = targetColumn['colDef'];
+      if (targetColumnDef) {
+        const targetStub = SecurityTableMetrics.find((eachMetric) => {
+          return eachMetric.key === targetColumnDef.field;
+        });
+        if (targetStub) {
+          const targetHeader = this.dtoService.formSecurityTableHeaderObject(targetStub);
+          const underlineValueA = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, nodeA.data.securityDTO, true);
+          const underlineValueB = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, nodeB.data.securityDTO, true);
+          return this.returnSortValue(underlineValueA, underlineValueB);
+        } else {
+          console.error('Error at Custom AgGrid sorting, couldnt find header for column', targetColumnDef);
+          return 0;
+        }
+      } else {
+        console.error('Error at Custom AgGrid sorting, column definition does not exist');
+        return 0;
+      }
+    } else {
+      console.error('Error at Custom AgGrid sorting, column does not exist');
+      return 0;
+    }
+  }
+
+  private returnSortValue(valueA, valueB): number {
+    if (valueA == null && valueB != null) {
+      return 4;
+    } else if (valueA != null && valueB == null) {
+      return -4;
+    } else if (valueA < valueB) {
+      return 1;
+    } else if (valueA > valueB) {
+      return -1;
+    } else {
+      return 0;
+    }
   }
 }

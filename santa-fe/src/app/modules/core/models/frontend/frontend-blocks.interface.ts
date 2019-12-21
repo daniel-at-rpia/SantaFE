@@ -7,6 +7,10 @@ Because of this, while component models need to follow "BasicDTOStructure", bloc
 */
 
 import * as am4charts from "@amcharts/amcharts4/charts";
+import {
+  SecurityDTO,
+  QuantComparerDTO
+} from 'FEModels/frontend-models.interface';
 
 export interface SecurityPortfolioBlock {
   portfolioName: string;
@@ -101,9 +105,12 @@ export interface AgGridColumnDefinition {
   headerName: string;
   field: string;
   cellClass: string;
+  comparator?: Function;
 }
 
 export interface AgGridRow {
   id: string;
+  securityDTO: SecurityDTO;
+  quantComparerDTO: QuantComparerDTO;
   [property: string]: any;
 }
