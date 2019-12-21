@@ -116,10 +116,10 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   public onGridReady(params) {
-    this.tableData.api.agGrid.gridApi = params.api;
+    this.tableData.api.gridApi = params.api;
     this.tableData.data.agGridRowData = [];
-    this.tableData.api.agGrid.gridApi = params.api;
-    this.tableData.api.agGrid.columnApi = params.columnApi;
+    this.tableData.api.gridApi = params.api;
+    this.tableData.api.columnApi = params.columnApi;
     this.tableData.state.isAgGridReady = true;
     this.loadTableHeaders();
   }

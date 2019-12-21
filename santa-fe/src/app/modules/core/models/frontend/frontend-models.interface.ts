@@ -220,10 +220,8 @@ export interface SecurityTableDTO extends BasicDTOStructure {
     isAgGridReady: boolean;
   },
   api: {
-    agGrid: {
-      gridApi: agGrid.GridApi,
-      columnApi: agGrid.ColumnApi
-    }
+    gridApi: agGrid.GridApi,
+    columnApi: agGrid.ColumnApi
   }
 }
 

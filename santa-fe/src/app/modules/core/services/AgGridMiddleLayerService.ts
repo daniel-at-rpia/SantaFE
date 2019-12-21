@@ -43,7 +43,7 @@ export class AgGridMiddleLayerService {
       list.push(newAgColumn);
     })
     table.data.agGridColumnDefs = list;
-    table.api.agGrid.gridApi.setColumnDefs(list);
+    table.api.gridApi.setColumnDefs(list);
   }
 
   public loadAgGridRows(
@@ -56,7 +56,7 @@ export class AgGridMiddleLayerService {
       const newAgRow = this.formAgGridRow(eachRow, targetHeaders);
       !!newAgRow.id && list.push(newAgRow);
     });
-    table.api.agGrid.gridApi.setRowData(list);
+    table.api.gridApi.setRowData(list);
     return list;
   }
 
@@ -66,7 +66,7 @@ export class AgGridMiddleLayerService {
   ) {
     targetRows.forEach((eachRow) => {
       const id = eachRow.data.security.data.securityID;
-      const targetNode = table.api.agGrid.gridApi.getRowNode(id);
+      const targetNode = table.api.gridApi.getRowNode(id);
       const newAgRow = this.formAgGridRow(eachRow, table.data.headers);
       targetNode.setData(newAgRow);
     });

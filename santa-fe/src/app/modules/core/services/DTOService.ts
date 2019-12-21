@@ -470,10 +470,8 @@ export class DTOService {
         isAgGridReady: false
       },
       api: {
-        agGrid: {
-          gridApi: null,
-          columnApi: null
-        }
+        gridApi: null,
+        columnApi: null
       }
     };
     return object;
