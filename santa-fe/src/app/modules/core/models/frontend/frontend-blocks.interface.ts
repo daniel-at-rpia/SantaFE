@@ -105,10 +105,13 @@ export interface AgGridColumnDefinition {
   headerName: string;
   field: string;
   cellClass: string;
-  autoWidth?: boolean;
+  width?: number;
   autoHeight?: boolean;
   comparator?: Function;
   cellRenderer?: string;
+  resizable?: boolean;
+  sortable?: boolean;
+  filter?: boolean;
 }
 
 export interface AgGridRowNode {
@@ -127,6 +130,7 @@ export interface AgGridRow {
 }
 
 export interface AgGridColumn {
+  colId: string;
   colDef: AgGridColumnDefinition;
   userProvidedColDef: AgGridColumnDefinition;
   [property: string]: any;

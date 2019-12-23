@@ -65,11 +65,15 @@ $alt-background: $color_white;
       &-cell {
         color: $color_blue_gray_8;
         white-space: normal;
+        display: flex;
+        align-items: center;
+        height: 40px;
+        line-height: $line_height_x_small!important;
         //width: 3rem;
         &--securityCard {
-          // height: 4rem;
-          // width: 12rem;
-          color: $font_color_major;
+        }
+        santa-table-quote-cell {
+          flex: 1 1 auto;
         }
       }
     }

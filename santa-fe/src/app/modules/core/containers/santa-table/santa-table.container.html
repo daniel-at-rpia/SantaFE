@@ -8,8 +8,9 @@
       [columnDefs]="tableData.data.agGridColumnDefs"
       [defaultColDef]="defaultColDef"
       [frameworkComponents]="tableData.data.agGridFrameworkComponents"
-      [rowClass]="agGridRowClassRules"
+      [rowClass]="constants.agGridRowClassRules"
       [getRowNodeId]="getRowNodeId"
+      [rowHeight]="constants.agGridRowHeight"
       (gridReady)="onGridReady($event)">
     </ag-grid-angular>
   </section>

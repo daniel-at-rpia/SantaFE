@@ -17,9 +17,15 @@
     import {
       AgGridRowNode,
       AgGridRow,
-      AgGridColumnDefinition
+      AgGridColumnDefinition,
+      AgGridColumn
     } from 'FEModels/frontend-blocks.interface';
-    import { SecurityTableMetrics } from 'Core/constants/securityTableConstants.constant';
+    import {
+      SecurityTableMetrics,
+      AGGRID_QUOTE_COLUMN_WIDTH,
+      AGGRID_SIMPLE_NUM_COLUMN_WIDTH,
+      AGGRID_CELL_CLASS
+    } from 'Core/constants/securityTableConstants.constant';
   //
 
 @Injectable()
@@ -28,6 +34,10 @@ export class AgGridMiddleLayerService {
     private utilityService: UtilityService,
     private dtoService: DTOService
   ){}
+
+  public onGridReady(table: SecurityTableDTO) {
+    // do nothing at the moment
+  }
 
   public loadAgGridHeaders(
     table: SecurityTableDTO
@@ -38,6 +48,8 @@ export class AgGridMiddleLayerService {
         headerName: eachHeader.data.displayLabel,
         field: eachHeader.data.key,
         cellClass: 'santaTable__main-agGrid-cell',
+        sortable: true,
+        filter: true
       };
       this.loadAgGridHeadersComparator(eachHeader, newAgColumn);
       this.loadAgGridHeadersCellRenderer(eachHeader, newAgColumn);
@@ -58,6 +70,7 @@ export class AgGridMiddleLayerService {
       !!newAgRow.id && list.push(newAgRow);
     });
     table.api.gridApi.setRowData(list);
+    this.resizeAllAutoSizeColumns(table);
     return list;
   }
 
@@ -89,12 +102,15 @@ export class AgGridMiddleLayerService {
     newAgColumn: AgGridColumnDefinition
   ) {
     if (targetHeader.data.key === 'securityCard') {
-      newAgColumn.cellClass = 'santaTable__main-agGrid-cell santaTable__main-agGrid-cell--securityCard';
+      newAgColumn.cellClass = `${AGGRID_CELL_CLASS} ${AGGRID_CELL_CLASS}--securityCard`;
       newAgColumn.cellRenderer = targetHeader.data.key;
     } else if (targetHeader.data.key === 'bestQuote') {
       newAgColumn.cellRenderer = targetHeader.data.key;
+      newAgColumn.width = AGGRID_QUOTE_COLUMN_WIDTH;
     } else {
-      newAgColumn.cellClass = 'santaTable__main-agGrid-cell';
+      newAgColumn.cellClass = AGGRID_CELL_CLASS;
+      newAgColumn.width = AGGRID_SIMPLE_NUM_COLUMN_WIDTH;
+      newAgColumn.resizable = true;
     }
   }
 
@@ -135,15 +151,14 @@ export class AgGridMiddleLayerService {
     nodeB: AgGridRowNode,
     inverted: boolean
   ) {
-    const columns = nodeA.columnController.allDisplayedColumns;
-    if (!!columns) {
-      const targetColumn = columns.find((eachColumn) => {
-        return eachColumn.sort;
-      })
-      const targetColumnDef: AgGridColumnDefinition = targetColumn.colDef;
-      if (targetColumnDef) {
+    if (!!nodeA && !!nodeB) {  // this check is for clicking on the "menu" icon on each header
+      const columns = nodeA.columnController.allDisplayedColumns;
+      if (!!columns) {
+        const targetColumn = columns.find((eachColumn) => {
+          return eachColumn.sort;
+        })
         const targetStub = SecurityTableMetrics.find((eachMetric) => {
-          return eachMetric.key === targetColumnDef.field;
+          return eachMetric.key === targetColumn.colId;
         });
         if (targetStub) {
           const targetHeader = this.dtoService.formSecurityTableHeaderObject(targetStub);
@@ -151,15 +166,14 @@ export class AgGridMiddleLayerService {
           const underlineValueB = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, nodeB.data.securityCard, true);
           return this.returnSortValue(underlineValueA, underlineValueB);
         } else {
-          console.error('Error at Custom AgGrid sorting, couldnt find header for column', targetColumnDef);
+          console.error('Error at Custom AgGrid sorting, couldnt find header for column', targetColumn);
           return 0;
         }
       } else {
-        console.error('Error at Custom AgGrid sorting, column definition does not exist');
+        console.error('Error at Custom AgGrid sorting, column does not exist');
         return 0;
       }
     } else {
-      console.error('Error at Custom AgGrid sorting, column does not exist');
       return 0;
     }
   }
@@ -217,5 +231,16 @@ export class AgGridMiddleLayerService {
     } else {
       return 0;
     }
+  }
+
+  private resizeAllAutoSizeColumns(table: SecurityTableDTO) {
+    const allColumnIds = [];
+    table.api.columnApi.getAllColumns().forEach((column) => {
+      const colId = column.getColId();
+      if (colId === 'bestQuote') {
+        allColumnIds.push(colId);
+      }
+    });
+    table.api.columnApi.autoSizeColumns(allColumnIds);
   }
 }

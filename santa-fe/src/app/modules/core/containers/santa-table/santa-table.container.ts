@@ -44,7 +44,9 @@
     import { BEQuoteDTO } from 'BEModels/backend-models.interface';
     import {
       SECURITY_TABLE_FINAL_STAGE,
-      THIRTY_DAY_DELTA_METRIC_INDEX
+      THIRTY_DAY_DELTA_METRIC_INDEX,
+      AGGRID_ROW_HEIGHT,
+      AGGRID_ROW_CLASS
     } from 'Core/constants/securityTableConstants.constant';
   //
 
@@ -69,16 +71,10 @@ export class SantaTable implements OnInit, OnChanges {
 
   constants = {
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
-    thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX
+    thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX,
+    agGridRowHeight: AGGRID_ROW_HEIGHT,
+    agGridRowClassRules: AGGRID_ROW_CLASS
   }
-
-  agGridRowClassRules = "santaTable__main-agGrid-row";
-  defaultColDef = {
-    sortable: true,
-    filter: true,
-    autoWidth: true,
-    autoHeight: true
-  };
 
   constructor(
     private dtoService: DTOService,
@@ -126,6 +122,7 @@ export class SantaTable implements OnInit, OnChanges {
     this.tableData.api.gridApi = params.api;
     this.tableData.api.columnApi = params.columnApi;
     this.tableData.state.isAgGridReady = true;
+    this.agGridMiddleLayerService.onGridReady(this.tableData);
     this.loadTableHeaders();
   }
 
