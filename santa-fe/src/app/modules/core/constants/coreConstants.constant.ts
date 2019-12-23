@@ -4,12 +4,24 @@ import {
   TriCoreMetricConfigStub
 } from 'FEModels/frontend-stub-models.interface';
 
+export const APIUrlMap = {
+  getUserInitials: `user/get-user-initials`,
+  getPortfolios: `portfolio/get-credit-positions`,
+  getBestQuotes: `liveQuote/get-best-quotes`,
+  getAllQuotes: `liveQuote/get-all-quotes`,
+  getObligorCurves: `curve/get-obligor-curves-per-ccy`,
+  getGroups: `group/get-group`,
+  getGroupFromSecurity: `group/get-group-from-security`,
+  getIssuers: `obligor/get-issuers`,
+  getSubIndustries: `obligor/get-subindustries`
+};
+
 export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
   {
     label: 'Default Spread',
     backendDtoAttrName: 'defaultSpread',
     deltaOptions: [
-      'DoD',
+      'Dod',
       'Wow',
       'Mom',
       'Ytd'
@@ -19,7 +31,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     label: 'Price',
     backendDtoAttrName: 'price',
     deltaOptions: [
-      'DoD',
+      'Dod',
       'Wow',
       'Mom',
       'Ytd'
@@ -29,7 +41,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     label: 'Rating',
     backendDtoAttrName: 'ratingDouble',
     deltaOptions: [
-      'DoD',
+      'Dod',
       'Wow',
       'Mom',
       'Ytd'
@@ -39,7 +51,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     label: 'G Spread',
     backendDtoAttrName: 'gSpread',
     deltaOptions: [
-      'DoD',
+      'Dod',
       'Wow',
       'Mom',
       'Ytd'
@@ -49,7 +61,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     label: 'OAS Spread',
     backendDtoAttrName: 'oasSpread',
     deltaOptions: [
-      'DoD',
+      'Dod',
       'Wow',
       'Mom',
       'Ytd'
@@ -59,7 +71,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     label: 'Z-Spread',
     backendDtoAttrName: 'zSpread',
     deltaOptions: [
-      'DoD',
+      'Dod',
       'Wow',
       'Mom',
       'Ytd'
@@ -69,7 +81,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     label: 'YieldWorst',
     backendDtoAttrName: 'yieldWorst',
     deltaOptions: [
-      'DoD',
+      'Dod',
       'Wow',
       'Mom',
       'Ytd'
@@ -79,7 +91,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     label: 'Asset Swap Spread (into USD)',
     backendDtoAttrName: 'aswUsd',
     deltaOptions: [
-      'DoD',
+      'Dod',
       'Wow',
       'Mom',
       'Ytd'

@@ -6,6 +6,8 @@ import {
   SearchShortcutStub
 } from 'FEModels/frontend-stub-models.interface';
 
+import { APIUrlMap } from 'Core/constants/coreConstants.constant';
+
 // internal constants
   const FilterOptionsBoolean = [
     'Y',
@@ -285,7 +287,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     displayName: 'Issuer',
     icon: 'fas fa-user-tie',
     optionList: [],
-    urlForGetLongOptionListFromServer: 'santaObligor/get-santa-issuers'
+    urlForGetLongOptionListFromServer: APIUrlMap.getIssuers
   },
   'MATURITY': {
     key: 'MATURITY',
@@ -339,7 +341,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     displayName: 'Sub-Industry',
     icon: 'fal fa-building',
     optionList: [],
-    urlForGetLongOptionListFromServer: 'santaObligor/get-santa-subindustries'
+    urlForGetLongOptionListFromServer: APIUrlMap.getGroupFromSecurity
   },
   'TENOR': {
     key: 'TENOR',

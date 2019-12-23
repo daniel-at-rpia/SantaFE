@@ -60,7 +60,7 @@ export class TradePage implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.restfulCommService.callAPI('user/get-user-initials', {req: 'GET'}).pipe(
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getUserInitials, {req: 'GET'}).pipe(
       first(),
       tap((serverReturn) => {
         this.loadOwnerInitial(serverReturn);

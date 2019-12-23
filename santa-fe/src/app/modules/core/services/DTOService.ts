@@ -315,7 +315,7 @@ export class DTOService {
     const object:SecurityGroupAverageVisualizerDTO = {
       data: {
         stats: [
-          this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'DoD'),
+          this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'Dod'),
           this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'Wow'),
           this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'Mom')
         ]

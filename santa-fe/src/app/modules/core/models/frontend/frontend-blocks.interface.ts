@@ -49,7 +49,7 @@ export interface SecurityGroupMetricBlock {
 export interface SecurityGroupMetricPackBlock {
   raw: object;
   delta: {
-    DoD: object;
+    Dod: object;
     Wow: object;
     Mom: object;
     Ytd: object;

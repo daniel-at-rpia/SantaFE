@@ -309,7 +309,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     const payload: PayloadGetPositions = {
       partitionOptions: ['Portfolio', 'Strategy']
     };
-    this.restfulCommService.callAPI('santaPortfolio/get-santa-credit-positions', { req: 'POST' }, payload, false, false).pipe(
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolios, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn) => {
         if (!isInitialFetch) {
@@ -351,7 +351,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       const newSecurityId = eachRow.data.security.data.securityID;
       payload.identifiers.push(newSecurityId);
     });
-    this.restfulCommService.callAPI('liveQuote/get-best-quotes', { req: 'POST' }, payload).pipe(
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getBestQuotes, { req: 'POST' }, payload).pipe(
       first(),
       tap((serverReturn) => {
         this.loadStageThreeContent(serverReturn);

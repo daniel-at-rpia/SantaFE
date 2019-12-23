@@ -2,12 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+import { APIUrlMap } from 'Core/constants/coreConstants.constant';
+
 @Injectable()
 export class RestfulCommService {
 
   private endpoint = 'https://rpiadev01:1225';
   //private endpoint = 'https://rpia-solutions:51225';
   //private endpoint = 'https://rpia-msmith-dt:51225';
+  public apiMap = {
+    ...APIUrlMap
+  };
 
   constructor(private http: HttpClient){}
 
