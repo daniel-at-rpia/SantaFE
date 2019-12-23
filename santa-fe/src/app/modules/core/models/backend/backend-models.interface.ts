@@ -17,7 +17,7 @@ export interface BESecurityGroupDTO {
   groupName: string;
   metrics: BEGroupMetricDTO,
   deltaMetrics: {
-    DoD: BEGroupMetricDTO,
+    Dod: BEGroupMetricDTO,
     Wow?: BEGroupMetricDTO,
     Mtd?: BEGroupMetricDTO,
     Mom?: BEGroupMetricDTO,
@@ -73,11 +73,7 @@ interface BEGroupMetricDTO {
 }
 
 export interface BESecurityDTO {
-  securityIdentifier: {
-    securityId: number;
-    isCurveSecurity: boolean;
-    isSingleSecurity: boolean;
-  };
+  securityIdentifier: string;
   name: string;
   baseType: string;
   securityType: string;
@@ -101,10 +97,12 @@ export interface BESecurityDTO {
   isPerpetual: boolean;
   metrics: BESecurityMetricDTO;
   deltaMetrics: {
-    DoD: BESecurityDeltaMetricDTO;
+    Dod: BESecurityDeltaMetricDTO;
     Wow: BESecurityDeltaMetricDTO;
     Mom: BESecurityDeltaMetricDTO;
+    Mtd: BESecurityDeltaMetricDTO;
     Ytd: BESecurityDeltaMetricDTO;
+    Yoy: BESecurityDeltaMetricDTO;
   };
   issueDate: string;
   isValidForCreditGrouping: boolean;
@@ -137,20 +135,18 @@ interface BESecurityMetricDTO {
 }
 
 export interface BESecurityDeltaMetricDTO {
-  workoutTerm: number;
+  workoutTerm?: number;
   ratingDouble: number;
   price: number;
-  backendWorkoutTerm: number;
+  backendWorkoutTerm?: number;
   oasSpread: number;
   zSpread: number;
   aswUsd: number;
   gSpread: number;
   yieldWorst: number;
-  amtOutstanding: number;
-  marketValue: number;
-  rating: number;
-  ratingNoNotch: string;
-  ratingBucket: string;
+  amtOutstanding?: number;
+  marketValue?: number;
+  rating?: number;
 }
 
 export interface BEPortfolioDTO {
@@ -158,7 +154,7 @@ export interface BEPortfolioDTO {
   marketValueLocal: number;
   portfolioShortName: string;
   quantity: number;
-  santaSecurity: BESecurityDTO;
+  security: BESecurityDTO;
   strategyName: string;
   primaryPmName: string;
   backupPmName: string;

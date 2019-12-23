@@ -280,7 +280,7 @@ export class UtilityService {
       const object: SecurityGroupMetricPackBlock = {
         raw: {},
         delta: {
-          DoD: {},
+          Dod: {},
           Wow: {},
           Mom: {},
           Ytd: {}
