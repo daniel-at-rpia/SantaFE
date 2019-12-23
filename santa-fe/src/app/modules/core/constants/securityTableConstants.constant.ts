@@ -22,7 +22,7 @@ export const SECURITY_TABLE_FINAL_STAGE = 3;
 
 export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
   {
-    key: 'security',
+    key: 'securityCard',
     label: 'Security',
     attrName: null,
     underlineAttrName: null,

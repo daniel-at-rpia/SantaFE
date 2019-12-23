@@ -105,12 +105,29 @@ export interface AgGridColumnDefinition {
   headerName: string;
   field: string;
   cellClass: string;
+  autoWidth?: boolean;
+  autoHeight?: boolean;
   comparator?: Function;
+  cellRenderer?: string;
+}
+
+export interface AgGridRowNode {
+  columnController: {
+    allDisplayedColumns: Array<AgGridColumn>
+  }
+  data: AgGridRow;
+  [property: string]: any;
 }
 
 export interface AgGridRow {
   id: string;
-  securityDTO: SecurityDTO;
-  quantComparerDTO: QuantComparerDTO;
+  securityCard: SecurityDTO;    // this needs to identical to SecurityTableMetrics' key for Security column
+  bestQuote: QuantComparerDTO;  // this needs to identical to SecurityTableMetrics' key for Best Quote column
+  [property: string]: any;
+}
+
+export interface AgGridColumn {
+  colDef: AgGridColumnDefinition;
+  userProvidedColDef: AgGridColumnDefinition;
   [property: string]: any;
 }
