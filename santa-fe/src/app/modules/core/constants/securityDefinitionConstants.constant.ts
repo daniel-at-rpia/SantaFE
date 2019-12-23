@@ -341,7 +341,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     displayName: 'Sub-Industry',
     icon: 'fal fa-building',
     optionList: [],
-    urlForGetLongOptionListFromServer: APIUrlMap.getGroupFromSecurity
+    urlForGetLongOptionListFromServer: APIUrlMap.getSubIndustries
   },
   'TENOR': {
     key: 'TENOR',
