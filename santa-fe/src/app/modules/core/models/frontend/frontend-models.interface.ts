@@ -7,8 +7,11 @@ import {
   SecurityPortfolioBlock,
   SecurityMarkBlock,
   QuantitativeEntryBlock,
-  QuantitativeEntryStyleBlock
+  QuantitativeEntryStyleBlock,
+  AgGridColumnDefinition,
+  AgGridRow
 } from 'FEModels/frontend-blocks.interface';
+import * as agGrid from 'ag-grid-community';
 
 import * as am4charts from "@amcharts/amcharts4/charts";
 
@@ -17,6 +20,7 @@ interface BasicDTOStructure {
   data: object;
   state: object;
   style?: object;
+  api?: object;
 }
 
 export interface SecurityDTO extends BasicDTOStructure {
@@ -203,6 +207,9 @@ export interface SecurityTableDTO extends BasicDTOStructure {
   data: {
     headers: Array<SecurityTableHeaderDTO>;
     rows: Array<SecurityTableRowDTO>;
+    agGridColumnDefs: Array<AgGridColumnDefinition>;
+    agGridRowData: Array<AgGridRow>;
+    agGridFrameworkComponents: object;
   },
   state: {
     loadedContentStage: number;
@@ -210,11 +217,17 @@ export interface SecurityTableDTO extends BasicDTOStructure {
     selectedHeader: SecurityTableHeaderDTO;
     sortedByHeader: SecurityTableHeaderDTO;
     isLiveVariant: boolean;
+    isAgGridReady: boolean;
+  },
+  api: {
+    gridApi: agGrid.GridApi,
+    columnApi: agGrid.ColumnApi
   }
 }
 
 export interface SecurityTableHeaderDTO extends BasicDTOStructure {
   data: {
+    key: string;
     displayLabel: string;
     attrName: string;
     underlineAttrName: string;

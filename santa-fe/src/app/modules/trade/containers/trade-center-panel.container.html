@@ -75,7 +75,7 @@
       <span class="sat-tradeCenterPanel__result-errorPrompt-errorText">{{state.fetchResult.fetchTableDataFailedError}}</span>
     </div>
     <div class="sat-tradeCenterPanel__result-table">
-      <security-table
+      <santa-table
         [tableData]="state.table.dto"
         [newRows]="state.fetchResult.rowList"
         [receivedContentStage]="state.currentContentStage"
@@ -83,7 +83,7 @@
         [liveUpdatedRows]="state.fetchResult.liveUpdatedRowList"
         [activeTriCoreMetric]="state.filters.quickFilters.metricType"
         (selectedSecurityForAnalysis)="onSelectSecurityForAnalysis($event)"
-      ></security-table>
+      ></santa-table>
     </div>
   </section>
 </article>

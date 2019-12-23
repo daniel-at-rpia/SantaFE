@@ -14,7 +14,7 @@ const routes: Routes = [
       },
       {
         path: '**',
-        redirectTo: 'market',
+        redirectTo: 'trade',
         pathMatch: 'full'
       }
     ];
