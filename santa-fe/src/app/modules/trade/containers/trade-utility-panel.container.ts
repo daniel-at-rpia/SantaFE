@@ -38,8 +38,7 @@
     import {
       LIVE_UPDATE_COUNTDOWN,
       LIVE_UPDATE_INPROG_PROMPT,
-      LIVE_UPDATE_PROCESSING_PROMPT,
-      UTILITY_VALID_WINDOW_OPTIONS
+      LIVE_UPDATE_PROCESSING_PROMPT
     } from 'Core/constants/tradeConstants.constant';
   //
 
@@ -55,8 +54,7 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
   constants = {
     liveUpdateCountdown: LIVE_UPDATE_COUNTDOWN,
     liveUpdateInprogPrompt: LIVE_UPDATE_INPROG_PROMPT,
-    liveUpdateProcessingPrompt: LIVE_UPDATE_PROCESSING_PROMPT,
-    utilityValidWindowOptions: UTILITY_VALID_WINDOW_OPTIONS
+    liveUpdateProcessingPrompt: LIVE_UPDATE_PROCESSING_PROMPT
   }
   internalCount$: Observable<any>;
   subscriptions = {
@@ -75,12 +73,7 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
       isCallingAPI: false,
       isProcessingData: false,
       isPresetSelected: false,
-      isInitialDataLoaded: false,
-      validWindowConfig: {
-        valueRaw: 2,
-        valueDisplay: '2 Hrs',
-        isEditing: false
-      }
+      isInitialDataLoaded: false
     };
   }
 
@@ -158,22 +151,6 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
   public onClickPause() {
     if (!this.state.isCallingAPI && !this.state.isProcessingData && this.state.isPresetSelected) {
       this.state.isPaused = !this.state.isPaused;
-    }
-  }
-
-  public onClickEditValidWindow() {
-    this.state.validWindowConfig.isEditing = true;
-  }
-
-  public onClickCancelEditValidWindow() {
-    this.state.validWindowConfig.isEditing = false;
-  }
-
-  public onSelectValidWindow(eachOption) {
-    if (!!eachOption) {
-      this.state.validWindowConfig.valueRaw = eachOption['value'];
-      this.state.validWindowConfig.valueDisplay = eachOption['label'];
-      this.state.validWindowConfig.isEditing = false;
     }
   }
 }

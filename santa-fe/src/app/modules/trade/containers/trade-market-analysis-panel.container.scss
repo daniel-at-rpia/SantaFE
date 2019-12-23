@@ -71,10 +71,15 @@
     }
   }
   &__table {
+    @include mix_fixed_div(relative, $z_index_standard_base_item);
     @include mix_border_generator($typical_border_width 0 0 0);
     flex: 1 1 auto;
     margin: $spacing_medium;
     padding-top: $spacing_medium;
+    santa-table {
+      @include mix_fixed_div(absolute, $z_index_standard_base_item);
+      width: 100%;
+    }
   }
   &--hasSecurityState {
     #{$tradeMarketAnalysisPanelBlockName} {

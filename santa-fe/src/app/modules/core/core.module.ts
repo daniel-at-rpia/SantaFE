@@ -8,6 +8,9 @@ import { DTOService } from 'Core/services/DTOService';
 import { UtilityService } from 'Core/services/UtilityService';
 import { GraphService } from 'Core/services/GraphService';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
+import { AgGridMiddleLayerService } from 'Core/services/AgGridMiddleLayerService';
+
+import { AgGridModule } from 'ag-grid-angular';
 
 import { SecurityCard } from 'Core/components/security-card/security-card.component';
 import { QuantitativeComparer } from 'Core/components/quantitative-comparer/quantitative-comparer.component';
@@ -18,6 +21,8 @@ import { SearchShortcut } from 'Core/components/search-shortcut/search-shortcut.
 
 import { SecurityDefinitionConfigurator } from 'Core/containers/security-definition-configurator/security-definition-configurator.container';
 import { SecurityTable } from 'Core/containers/security-table/security-table.container';
+import { SantaTable } from 'Core/containers/santa-table/santa-table.container';
+import { SantaTableSecurityCell } from 'Core/components/santa-table-security-cell/santa-table-security-cell.component';
 
 @NgModule({
   declarations: [
@@ -28,19 +33,26 @@ import { SecurityTable } from 'Core/containers/security-table/security-table.con
     SecurityTableRow,
     SecurityDefinition,
     SecurityDefinitionConfigurator,
-    SearchShortcut
+    SearchShortcut,
+    SantaTable,
+    SantaTableSecurityCell
   ],
   imports: [
     CommonModule,
-    FormModule
+    FormModule,
+
+    AgGridModule.withComponents([SantaTableSecurityCell])
+
   ],
   providers: [
     DTOService,
     UtilityService,
     GraphService,
-    RestfulCommService
+    RestfulCommService,
+    AgGridMiddleLayerService
   ], 
   exports: [
+    SantaTable,
     SecurityCard,
     SecurityTable,
     SecurityDefinition,

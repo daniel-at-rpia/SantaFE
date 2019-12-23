@@ -101,11 +101,6 @@ export interface TradeUtilityPanelState {
   isProcessingData: boolean;
   isPresetSelected: boolean;
   isInitialDataLoaded: boolean;
-  validWindowConfig: {
-    valueRaw: number;
-    valueDisplay: string;
-    isEditing: boolean;
-  }
 }
 
 export interface TradeMarketAnalysisPanelState {
@@ -114,5 +109,8 @@ export interface TradeMarketAnalysisPanelState {
     groupByOptions: Array<SecurityDefinitionDTO>;
     dto: QuantitativeVisualizerDTO;
     targetSecurity: SecurityDTO;
+  }
+  table: {
+    securityList: Array<SecurityDTO>;
   }
 }

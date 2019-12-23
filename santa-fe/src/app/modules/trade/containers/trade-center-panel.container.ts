@@ -235,7 +235,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
   public onApplyFilter(params: DefinitionConfiguratorEmitterParams) {
     this.state.filters.securityFilters = params.filterList;
-    this.state.filters.quickFilters = this.initializePageState().filters.quickFilters;
+    this.state.filters.quickFilters.portfolios = [];
     params.filterList.forEach((eachFilter) => {
       if (eachFilter.targetAttribute === 'portfolios') {
         this.state.filters.quickFilters.portfolios = eachFilter.filterBy;

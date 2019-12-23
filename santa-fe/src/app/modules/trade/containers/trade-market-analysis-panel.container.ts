@@ -66,6 +66,9 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
         groupByOptions: [],
         dto: this.dtoService.formQuantVisualizerObject(true, null),
         targetSecurity: null
+      },
+      table: {
+        securityList: []
       }
     }
     this.populateDefinitionOptions();
@@ -99,7 +102,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
 
   private onSecuritySelected(targetSecurity: SecurityDTO) {
     this.state.receivedSecurity = true;
-    this.state.quantVisualizer.targetSecurity = targetSecurity;
+    this.state.quantVisualizer.targetSecurity = this.utilityService.deepCopy(targetSecurity);
     this.state.quantVisualizer.dto = this.dtoService.formQuantVisualizerObject(true, null);
     this.fetchGroupData();
   }
@@ -134,6 +137,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
         first(),
         tap((serverReturn) => {
           this.populateVisualizer(serverReturn);
+          this.testPopulateTableWithSamples();
         }),
         catchError(err => {
           console.error('error', err);
@@ -159,4 +163,11 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     this.state.quantVisualizer.dto = this.dtoService.formQuantVisualizerObject(false, params);
   }
 
+  private testPopulateTableWithSamples() {
+    this.state.quantVisualizer.targetSecurity.state.isTableExpanded = false;
+    const newSecurity1 = this.utilityService.deepCopy(this.state.quantVisualizer.targetSecurity);
+    const newSecurity2 = this.utilityService.deepCopy(this.state.quantVisualizer.targetSecurity);
+    const newSecurity3 = this.utilityService.deepCopy(this.state.quantVisualizer.targetSecurity);
+    this.state.table.securityList = [newSecurity1, newSecurity2, newSecurity3];
+  }
 }
