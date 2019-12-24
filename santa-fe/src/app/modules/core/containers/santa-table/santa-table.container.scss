@@ -49,12 +49,14 @@ $alt-background: $color_white;
 
 .santaTable {
   $santaTableBlockName: &;
-  font-weight: 300;
-  font-family:"SantaOpenSans"; 
+  flex: 1 1 auto;
   display: flex;
   overflow: hidden;
+  font-weight: 300;
+  font-family:"SantaOpenSans"; 
   &__main {
     @include mix_enable_scrollbar('both');
+    flex: 1 1 auto;
     &-agGrid {
       height: 100%;
       &-header {

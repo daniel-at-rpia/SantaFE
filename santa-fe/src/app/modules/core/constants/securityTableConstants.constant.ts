@@ -253,7 +253,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: 'strategyFirm',
     underlineAttrName: 'strategyFirm',
     readyStage: 1,
-    active: true,
+    active: false,
     inversedSortingForText: true
   },{
     key: 'strategy',

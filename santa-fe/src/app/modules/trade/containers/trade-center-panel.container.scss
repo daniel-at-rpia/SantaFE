@@ -125,10 +125,12 @@
       }
     }
     &-table {
+      flex: 1 1 auto;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       santa-table {
+        flex: 1 1 auto;
         display: flex;
         overflow: hidden;
       }
