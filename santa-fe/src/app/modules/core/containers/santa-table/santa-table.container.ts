@@ -73,6 +73,8 @@ export class SantaTable implements OnInit, OnChanges {
   @Output() selectedSecurityForAnalysis = new EventEmitter<SecurityDTO>();
   liveUpdateRowsCache: Array<SecurityTableRowDTO>;
 
+  private rowGroupPanelShow;
+
   constants = {
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
     thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX,
@@ -92,6 +94,7 @@ export class SantaTable implements OnInit, OnChanges {
       securityCard: SantaTableSecurityCell,
       bestQuote: SantaTableQuoteCell
     };
+    this.rowGroupPanelShow = "always";
   }
 
   public ngOnChanges() {

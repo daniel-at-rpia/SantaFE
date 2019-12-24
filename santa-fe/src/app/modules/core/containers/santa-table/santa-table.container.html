@@ -8,7 +8,12 @@
       [columnDefs]="tableData.data.agGridColumnDefs"
       [defaultColDef]="defaultColDef"
       [frameworkComponents]="tableData.data.agGridFrameworkComponents"
+      [sideBar]="true"
+      [suppressDragLeaveHidesColumns]="true"
+      [suppressMakeColumnVisibleAfterUnGroup]="true"
+      [rowGroupPanelShow]="rowGroupPanelShow"
       [rowClass]="constants.agGridRowClassRules"
+      [animateRows]="true"
       [getRowNodeId]="getRowNodeId"
       [rowHeight]="constants.agGridRowHeight"
       (gridReady)="onGridReady($event)">

@@ -113,6 +113,8 @@ export interface AgGridColumnDefinition {
   resizable?: boolean;
   sortable?: boolean;
   filter?: boolean;
+  enableRowGroup: boolean,
+  enablePivot: boolean,
 }
 
 export interface AgGridRowNode {

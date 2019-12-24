@@ -51,7 +51,9 @@ export class AgGridMiddleLayerService {
         headerClass: `${AGGRID_HEADER_CLASS} ag-numeric-header`,
         cellClass: `${AGGRID_CELL_CLASS}`,
         sortable: true,
-        filter: true
+        filter: true,
+        enablePivot: false,
+        enableRowGroup: false
       };
       this.loadAgGridHeadersComparator(eachHeader, newAgColumn);
       this.loadAgGridHeadersUILogics(eachHeader, newAgColumn);
@@ -106,6 +108,8 @@ export class AgGridMiddleLayerService {
     if (targetHeader.data.key === 'securityCard') {
       newAgColumn.cellClass = `${AGGRID_CELL_CLASS} ${AGGRID_CELL_CLASS}--securityCard`;
       newAgColumn.cellRenderer = targetHeader.data.key;
+      newAgColumn.sortable = false;
+      newAgColumn.filter = false;
     } else if (targetHeader.data.key === 'bestQuote') {
       newAgColumn.cellRenderer = targetHeader.data.key;
       newAgColumn.width = AGGRID_QUOTE_COLUMN_WIDTH;
@@ -113,6 +117,7 @@ export class AgGridMiddleLayerService {
       newAgColumn.cellClass = AGGRID_CELL_CLASS;
       newAgColumn.width = AGGRID_SIMPLE_NUM_COLUMN_WIDTH;
       newAgColumn.resizable = true;
+      newAgColumn.enableRowGroup = true;
     }
   }
 
@@ -130,7 +135,7 @@ export class AgGridMiddleLayerService {
       if (eachHeader.data.key === 'securityCard' || eachHeader.data.key === 'bestQuote') {
         // skip those two as they are already instantiated above
       } else {
-        newAgRow[eachHeader.data.key] = targetRow.data.cells[index-1].data.textData;
+        newAgRow[eachHeader.data.key] = !eachSecurity.state.isStencil ? targetRow.data.cells[index-1].data.textData : '';
       }
     });
     return newAgRow;
@@ -153,10 +158,12 @@ export class AgGridMiddleLayerService {
           return eachMetric.key === targetColumn.colId;
         });
         if (targetStub) {
+          const securityA = nodeA.data ? nodeA.data.securityCard : null;
+          const securityB = nodeB.data ? nodeB.data.securityCard : null;
           const targetHeader = this.dtoService.formSecurityTableHeaderObject(targetStub);
-          const underlineValueA = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, nodeA.data.securityCard, true);
-          const underlineValueB = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, nodeB.data.securityCard, true);
-          return this.returnSortValue(underlineValueA, underlineValueB);
+          const underlineValueA = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityA, true);
+          const underlineValueB = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityB, true);
+          return this.returnSortValue(underlineValueA, underlineValueB, securityA, securityB);
         } else {
           console.error('Error at Custom AgGrid sorting, couldnt find header for column', targetColumn);
           return 0;
@@ -215,8 +222,12 @@ export class AgGridMiddleLayerService {
     }
   }
 
-  private returnSortValue(valueA, valueB): number {
-    if (valueA == null && valueB != null) {
+  private returnSortValue(valueA, valueB, securityA, securityB): number {
+    if (securityA == null && securityB != null) {
+      return 16;
+    } else if (securityA != null && securityB == null) {
+      return -16;
+    } else if (valueA == null && valueB != null) {
       return 4;
     } else if (valueA != null && valueB == null) {
       return -4;

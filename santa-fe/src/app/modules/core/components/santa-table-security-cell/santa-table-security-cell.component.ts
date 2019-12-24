@@ -21,7 +21,7 @@ export class SantaTableSecurityCell implements ICellRendererAngularComp {
 
   agInit(params: any){
     // don't forget this is triggered when the row is updated in live too
-    this.cardData = params.value;
+    this.cardData = params.value || null;
   }
 
   refresh(): boolean {

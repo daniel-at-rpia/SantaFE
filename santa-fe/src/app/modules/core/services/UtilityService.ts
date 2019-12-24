@@ -568,14 +568,18 @@ export class UtilityService {
       securityCard: SecurityDTO,
       isRetrievingUnderlineValue: boolean
     ): any {
-      if (!!targetHeader.data.blockAttrName) {
-        if (targetHeader.data.blockAttrName === 'metricPack') {
-          return this.retrieveSecurityMetricFromMetricPack(securityCard, targetHeader);
+      if (!!targetHeader && !!securityCard) {
+        if (!!targetHeader.data.blockAttrName) {
+          if (targetHeader.data.blockAttrName === 'metricPack') {
+            return this.retrieveSecurityMetricFromMetricPack(securityCard, targetHeader);
+          } else {
+            return isRetrievingUnderlineValue ? securityCard.data[targetHeader.data.blockAttrName][targetHeader.data.underlineAttrName] : securityCard.data[targetHeader.data.blockAttrName][targetHeader.data.attrName];
+          }
         } else {
-          return isRetrievingUnderlineValue ? securityCard.data[targetHeader.data.blockAttrName][targetHeader.data.underlineAttrName] : securityCard.data[targetHeader.data.blockAttrName][targetHeader.data.attrName];
+          return isRetrievingUnderlineValue ? securityCard.data[targetHeader.data.underlineAttrName] : securityCard.data[targetHeader.data.attrName];
         }
       } else {
-        return isRetrievingUnderlineValue ? securityCard.data[targetHeader.data.underlineAttrName] : securityCard.data[targetHeader.data.attrName];
+        return null;
       }
     }
 

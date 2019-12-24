@@ -309,7 +309,7 @@ export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
   }
 ];
 
-export const AGGRID_QUOTE_COLUMN_WIDTH = 284;    // $securityTable_cell_width_quant + $spacing_small * 2 
+export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_quant + $spacing_small * 2 
 export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 100;
 export const AGGRID_ROW_HEIGHT = 40;
 export const AGGRID_HEADER_CLASS = 'santaTable__main-agGrid-header';
