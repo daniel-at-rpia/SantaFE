@@ -104,6 +104,7 @@ export interface QuantitativeEntryStyleBlock {
 export interface AgGridColumnDefinition {
   headerName: string;
   field: string;
+  headerClass: string;
   cellClass: string;
   width?: number;
   autoHeight?: boolean;

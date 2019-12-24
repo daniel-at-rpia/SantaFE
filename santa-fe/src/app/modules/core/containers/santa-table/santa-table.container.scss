@@ -57,20 +57,30 @@ $alt-background: $color_white;
     @include mix_enable_scrollbar('both');
     &-agGrid {
       height: 100%;
+      &-header {
+        justify-content: center;
+        .ag-header-cell-label {
+          padding-left: $spacing_x_small;
+        }
+      }
       &-row {
         &:hover {
           // @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
         }
       }
       &-cell {
-        color: $color_blue_gray_8;
-        white-space: normal;
         display: flex;
         align-items: center;
+        justify-content: flex-end;
+        color: $color_blue_gray_8;
+        white-space: normal;
+        word-break: break-word;
+        text-align: right;
         height: 40px;
         line-height: $line_height_x_small!important;
         //width: 3rem;
         &--securityCard {
+          justify-content: flex-end;
         }
         santa-table-quote-cell {
           flex: 1 1 auto;

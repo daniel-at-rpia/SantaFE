@@ -24,6 +24,7 @@
       SecurityTableMetrics,
       AGGRID_QUOTE_COLUMN_WIDTH,
       AGGRID_SIMPLE_NUM_COLUMN_WIDTH,
+      AGGRID_HEADER_CLASS,
       AGGRID_CELL_CLASS
     } from 'Core/constants/securityTableConstants.constant';
   //
@@ -47,12 +48,13 @@ export class AgGridMiddleLayerService {
       const newAgColumn: AgGridColumnDefinition = {
         headerName: eachHeader.data.displayLabel,
         field: eachHeader.data.key,
-        cellClass: 'santaTable__main-agGrid-cell',
+        headerClass: `${AGGRID_HEADER_CLASS} ag-numeric-header`,
+        cellClass: `${AGGRID_CELL_CLASS}`,
         sortable: true,
         filter: true
       };
       this.loadAgGridHeadersComparator(eachHeader, newAgColumn);
-      this.loadAgGridHeadersCellRenderer(eachHeader, newAgColumn);
+      this.loadAgGridHeadersUILogics(eachHeader, newAgColumn);
       list.push(newAgColumn);
     })
     table.api.gridApi.setColumnDefs(list);
@@ -97,7 +99,7 @@ export class AgGridMiddleLayerService {
     }
   }
 
-  private loadAgGridHeadersCellRenderer(
+  private loadAgGridHeadersUILogics(
     targetHeader: SecurityTableHeaderDTO,
     newAgColumn: AgGridColumnDefinition
   ) {
@@ -127,16 +129,6 @@ export class AgGridMiddleLayerService {
     targetHeaders.forEach((eachHeader, index) => {
       if (eachHeader.data.key === 'securityCard' || eachHeader.data.key === 'bestQuote') {
         // skip those two as they are already instantiated above
-      } else if (eachHeader.state.isQuantVariant) {
-        const quantComparer = targetRow.data.cells[0].data.quantComparerDTO;
-        if (quantComparer) {
-          const mid = quantComparer.data.mid;
-          const bid = quantComparer.data.bid.number;
-          const ask = quantComparer.data.offer.number;
-          newAgRow[eachHeader.data.key] = `${bid} - ${mid} - ${ask}`;
-        } else {
-          newAgRow[eachHeader.data.key] = 'No Quotes';
-        }
       } else {
         newAgRow[eachHeader.data.key] = targetRow.data.cells[index-1].data.textData;
       }
@@ -186,31 +178,35 @@ export class AgGridMiddleLayerService {
     inverted: boolean
   ) {
     // as long as we only have one quantComparer in the table there is no need to find out the column
-    const securityA = nodeA.data.securityCard;
-    const securityB = nodeB.data.securityCard;
-    const valueA = !!qA ? qA.data.delta : null;
-    const valueB = !!qB ? qB.data.delta : null;
-    if (!!securityA && !!securityB && !securityA.state.isStencil && !securityB.state.isStencil) {
-      if (valueA == null && valueB == null) {
-        return 0;
-      } else if (valueA == null && valueB != null) {
-        return 16;
-      } else if (valueA != null && valueB == null) {
-        return -16;
-      } else if (qA.state.hasBid && qA.state.hasOffer && (!qB.state.hasBid || !qB.state.hasOffer)) {
-        // A has both bid & offer vs B has only bid or only offer
-        return -9;
-      } else if ((!qA.state.hasBid || !qA.state.hasOffer) && qB.state.hasBid && qB.state.hasOffer) {
-        return 9;
-      } else if ((qA.state.hasBid || qA.state.hasOffer) && (!qB.state.hasBid && !qB.state.hasOffer)) {
-        // A has only bid or only offer vs B has no bid or offer
-        return -4;
-      } else if ((!qA.state.hasBid && !qA.state.hasOffer) && (qB.state.hasBid || qB.state.hasOffer)) {
-        return 4;
-      } else if (valueA > valueB) {
-        return 1;
-      } else if (valueA < valueB) {
-        return -1;
+    if (!!nodeA && !!nodeB) {
+      const securityA = nodeA.data.securityCard;
+      const securityB = nodeB.data.securityCard;
+      const valueA = !!qA ? qA.data.delta : null;
+      const valueB = !!qB ? qB.data.delta : null;
+      if (!!securityA && !!securityB && !securityA.state.isStencil && !securityB.state.isStencil) {
+        if (valueA == null && valueB == null) {
+          return 0;
+        } else if (valueA == null && valueB != null) {
+          return 16;
+        } else if (valueA != null && valueB == null) {
+          return -16;
+        } else if (qA.state.hasBid && qA.state.hasOffer && (!qB.state.hasBid || !qB.state.hasOffer)) {
+          // A has both bid & offer vs B has only bid or only offer
+          return -9;
+        } else if ((!qA.state.hasBid || !qA.state.hasOffer) && qB.state.hasBid && qB.state.hasOffer) {
+          return 9;
+        } else if ((qA.state.hasBid || qA.state.hasOffer) && (!qB.state.hasBid && !qB.state.hasOffer)) {
+          // A has only bid or only offer vs B has no bid or offer
+          return -4;
+        } else if ((!qA.state.hasBid && !qA.state.hasOffer) && (qB.state.hasBid || qB.state.hasOffer)) {
+          return 4;
+        } else if (valueA > valueB) {
+          return 1;
+        } else if (valueA < valueB) {
+          return -1;
+        } else {
+          return 0;
+        }
       } else {
         return 0;
       }
@@ -237,7 +233,7 @@ export class AgGridMiddleLayerService {
     const allColumnIds = [];
     table.api.columnApi.getAllColumns().forEach((column) => {
       const colId = column.getColId();
-      if (colId === 'bestQuote') {
+      if (colId === 'securityCard') {
         allColumnIds.push(colId);
       }
     });

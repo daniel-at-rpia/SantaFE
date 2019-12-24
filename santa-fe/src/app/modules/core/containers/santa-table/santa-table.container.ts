@@ -35,7 +35,11 @@
       SecurityTableRowDTO,
       SecurityTableHeaderDTO
     } from 'FEModels/frontend-models.interface';
-    import { QuoteMetricBlock, AgGridRow, AgGridColumnDefinition } from 'FEModels/frontend-blocks.interface';
+    import {
+      QuoteMetricBlock,
+      AgGridRow,
+      AgGridColumnDefinition
+    } from 'FEModels/frontend-blocks.interface';
     import { PayloadGetAllQuotes } from 'BEModels/backend-payloads.interface';
     import { ClickedSortQuotesByMetricEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
     import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
