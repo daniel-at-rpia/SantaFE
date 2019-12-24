@@ -143,6 +143,7 @@ export class SantaTable implements OnInit, OnChanges {
       if (eachStub.label === 'Security' || eachStub.active) {
         this.tableData.data.headers.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
       }
+      this.tableData.data.allHeaders.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
     });
     if (this.tableData.state.isAgGridReady) {
       this.tableData.data.agGridColumnDefs = this.agGridMiddleLayerService.loadAgGridHeaders(this.tableData);

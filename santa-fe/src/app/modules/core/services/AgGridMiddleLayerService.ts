@@ -44,7 +44,10 @@ export class AgGridMiddleLayerService {
     table: SecurityTableDTO
   ): Array<AgGridColumnDefinition> {
     const list = [];
-    table.data.headers.forEach((eachHeader) => {
+    table.data.allHeaders.forEach((eachHeader) => {
+      const isActiveByDefault = table.data.headers.find((eachActiveHeader) => {
+        return eachActiveHeader.data.key === eachHeader.data.key;
+      })
       const newAgColumn: AgGridColumnDefinition = {
         headerName: eachHeader.data.displayLabel,
         field: eachHeader.data.key,
@@ -53,7 +56,8 @@ export class AgGridMiddleLayerService {
         sortable: true,
         filter: true,
         enablePivot: false,
-        enableRowGroup: false
+        enableRowGroup: false,
+        hide: !isActiveByDefault
       };
       this.loadAgGridHeadersComparator(eachHeader, newAgColumn);
       this.loadAgGridHeadersUILogics(eachHeader, newAgColumn);
@@ -67,7 +71,7 @@ export class AgGridMiddleLayerService {
     table: SecurityTableDTO
   ): Array<AgGridRow> {
     const targetRows = table.data.rows;
-    const targetHeaders = table.data.headers;
+    const targetHeaders = table.data.allHeaders;
     const list = [];
     targetRows.forEach((eachRow) => {
       const newAgRow = this.formAgGridRow(eachRow, targetHeaders);
@@ -85,7 +89,7 @@ export class AgGridMiddleLayerService {
     targetRows.forEach((eachRow) => {
       const id = eachRow.data.security.data.securityID;
       const targetNode = table.api.gridApi.getRowNode(id);
-      const newAgRow = this.formAgGridRow(eachRow, table.data.headers);
+      const newAgRow = this.formAgGridRow(eachRow, table.data.allHeaders);
       targetNode.setData(newAgRow);
     });
   }
@@ -118,6 +122,7 @@ export class AgGridMiddleLayerService {
       newAgColumn.width = AGGRID_SIMPLE_NUM_COLUMN_WIDTH;
       newAgColumn.resizable = true;
       newAgColumn.enableRowGroup = true;
+      newAgColumn.enablePivot = true;
     }
   }
 
@@ -135,7 +140,9 @@ export class AgGridMiddleLayerService {
       if (eachHeader.data.key === 'securityCard' || eachHeader.data.key === 'bestQuote') {
         // skip those two as they are already instantiated above
       } else {
-        newAgRow[eachHeader.data.key] = !eachSecurity.state.isStencil ? targetRow.data.cells[index-1].data.textData : '';
+        // can't directly use the cells from the target row to retrieve the data because we need to populate data for ALL columns, not just the active ones
+        const textData = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(eachHeader, eachSecurity, false);
+        newAgRow[eachHeader.data.key] = !eachSecurity.state.isStencil ? textData : '';
       }
     });
     return newAgRow;

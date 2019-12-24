@@ -456,6 +456,7 @@ export class DTOService {
     const object: SecurityTableDTO = {
       data: {
         headers: [],
+        allHeaders: [],
         rows: [],
         agGridColumnDefs: [],
         agGridRowData: [],
