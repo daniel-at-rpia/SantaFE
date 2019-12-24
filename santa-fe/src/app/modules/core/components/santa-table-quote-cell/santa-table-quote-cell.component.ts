@@ -6,22 +6,22 @@ import {
   Output
 } from '@angular/core';
 
-import { SecurityDTO } from 'FEModels/frontend-models.interface';
+import { QuantComparerDTO } from 'FEModels/frontend-models.interface';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 
 @Component({
-  selector: 'santa-table-security-cell',
-  templateUrl: './santa-table-security-cell.component.html',
-  styleUrls: ['./santa-table-security-cell.component.scss'],
+  selector: 'santa-table-quote-cell',
+  templateUrl: './santa-table-quote-cell.component.html',
+  styleUrls: ['./santa-table-quote-cell.component.scss'],
   encapsulation: ViewEncapsulation.Emulated
 })
-export class SantaTableSecurityCell implements ICellRendererAngularComp {
-  @Input() cardData: SecurityDTO;
+export class SantaTableQuoteCell implements ICellRendererAngularComp {
+  @Input() comparerData: QuantComparerDTO;
   constructor() { }
 
   agInit(params: any){
     // don't forget this is triggered when the row is updated in live too
-    this.cardData = params.value || null;
+    this.comparerData = params.value;
   }
 
   refresh(): boolean {

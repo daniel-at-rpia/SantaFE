@@ -35,15 +35,22 @@
       SecurityTableRowDTO,
       SecurityTableHeaderDTO
     } from 'FEModels/frontend-models.interface';
-    import { QuoteMetricBlock, AgGridRow, AgGridColumnDefinition } from 'FEModels/frontend-blocks.interface';
+    import {
+      QuoteMetricBlock,
+      AgGridRow,
+      AgGridColumnDefinition
+    } from 'FEModels/frontend-blocks.interface';
     import { PayloadGetAllQuotes } from 'BEModels/backend-payloads.interface';
     import { ClickedSortQuotesByMetricEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
     import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
-    import { SantaTableSecurityCell} from 'Core/components/santa-table-security-cell/santa-table-security-cell.component';
+    import { SantaTableSecurityCell } from 'Core/components/santa-table-security-cell/santa-table-security-cell.component';
+    import { SantaTableQuoteCell } from 'Core/components/santa-table-quote-cell/santa-table-quote-cell.component';
     import { BEQuoteDTO } from 'BEModels/backend-models.interface';
     import {
       SECURITY_TABLE_FINAL_STAGE,
-      THIRTY_DAY_DELTA_METRIC_INDEX
+      THIRTY_DAY_DELTA_METRIC_INDEX,
+      AGGRID_ROW_HEIGHT,
+      AGGRID_ROW_CLASS
     } from 'Core/constants/securityTableConstants.constant';
   //
 
@@ -66,18 +73,14 @@ export class SantaTable implements OnInit, OnChanges {
   @Output() selectedSecurityForAnalysis = new EventEmitter<SecurityDTO>();
   liveUpdateRowsCache: Array<SecurityTableRowDTO>;
 
+  private rowGroupPanelShow;
+
   constants = {
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
-    thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX
+    thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX,
+    agGridRowHeight: AGGRID_ROW_HEIGHT,
+    agGridRowClassRules: AGGRID_ROW_CLASS
   }
-
-  agGridRowClassRules = "santaTable__main-agGrid-row";
-  defaultColDef = {
-    sortable: true,
-    filter: true,
-    autoWidth: true,
-    autoHeight: true
-  };
 
   constructor(
     private dtoService: DTOService,
@@ -87,6 +90,11 @@ export class SantaTable implements OnInit, OnChanges {
   ) { }
 
   public ngOnInit() {
+    this.tableData.data.agGridFrameworkComponents = {
+      securityCard: SantaTableSecurityCell,
+      bestQuote: SantaTableQuoteCell
+    };
+    this.rowGroupPanelShow = "always";
   }
 
   public ngOnChanges() {
@@ -121,6 +129,7 @@ export class SantaTable implements OnInit, OnChanges {
     this.tableData.api.gridApi = params.api;
     this.tableData.api.columnApi = params.columnApi;
     this.tableData.state.isAgGridReady = true;
+    this.agGridMiddleLayerService.onGridReady(this.tableData);
     this.loadTableHeaders();
   }
 
@@ -134,6 +143,7 @@ export class SantaTable implements OnInit, OnChanges {
       if (eachStub.label === 'Security' || eachStub.active) {
         this.tableData.data.headers.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
       }
+      this.tableData.data.allHeaders.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
     });
     if (this.tableData.state.isAgGridReady) {
       this.tableData.data.agGridColumnDefs = this.agGridMiddleLayerService.loadAgGridHeaders(this.tableData);

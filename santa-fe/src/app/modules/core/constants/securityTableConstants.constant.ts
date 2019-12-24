@@ -22,7 +22,7 @@ export const SECURITY_TABLE_FINAL_STAGE = 3;
 
 export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
   {
-    key: 'security',
+    key: 'securityCard',
     label: 'Security',
     attrName: null,
     underlineAttrName: null,
@@ -253,7 +253,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: 'strategyFirm',
     underlineAttrName: 'strategyFirm',
     readyStage: 1,
-    active: true,
+    active: false,
     inversedSortingForText: true
   },{
     key: 'strategy',
@@ -308,3 +308,10 @@ export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
     textOnly: true
   }
 ];
+
+export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_quant + $spacing_small * 2 
+export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 100;
+export const AGGRID_ROW_HEIGHT = 40;
+export const AGGRID_HEADER_CLASS = 'santaTable__main-agGrid-header';
+export const AGGRID_ROW_CLASS = 'santaTable__main-agGrid-row';
+export const AGGRID_CELL_CLASS = 'santaTable__main-agGrid-cell';

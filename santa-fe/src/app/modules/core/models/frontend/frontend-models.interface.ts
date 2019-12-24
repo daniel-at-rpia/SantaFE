@@ -206,6 +206,7 @@ export interface QuantComparerDTO extends BasicDTOStructure {
 export interface SecurityTableDTO extends BasicDTOStructure {
   data: {
     headers: Array<SecurityTableHeaderDTO>;
+    allHeaders: Array<SecurityTableHeaderDTO>;
     rows: Array<SecurityTableRowDTO>;
     agGridColumnDefs: Array<AgGridColumnDefinition>;
     agGridRowData: Array<AgGridRow>;

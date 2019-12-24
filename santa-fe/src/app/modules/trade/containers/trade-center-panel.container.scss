@@ -8,7 +8,7 @@
   display: flex;
   overflow: hidden;
   &__presetsAndFilters {
-    @include mix_fixed_div(relative, $z_index_standard_tooltip);
+    @include mix_fixed_div(relative, $z_index_standard_base_item);
     flex: 0 0 $securityDefinitionConfigurator_width + $spacing_medium;
     display: flex;
     flex-direction: column;
@@ -125,16 +125,25 @@
       }
     }
     &-table {
+      flex: 1 1 auto;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       santa-table {
+        flex: 1 1 auto;
         display: flex;
         overflow: hidden;
       }
       security-table {
         display: flex;
         overflow: hidden;
+      }
+    }
+  }
+  &--boostConfiguratorState {
+    #{$tradeCenterPanelBlockName} {
+      &__presetsAndFilters {
+        @include mix_fixed_div(relative, $z_index_standard_tooltip);
       }
     }
   }

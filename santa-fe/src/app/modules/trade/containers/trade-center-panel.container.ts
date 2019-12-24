@@ -103,7 +103,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         shortcutList: []
       },
       configurator: {
-        dto: this.dtoService.createSecurityDefinitionConfigurator(true)
+        dto: this.dtoService.createSecurityDefinitionConfigurator(true),
+        boosted: false
       },
       table: {
         metrics: SecurityTableMetrics,
@@ -154,23 +155,6 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.securityIDListFromAnalysis = this.store$.pipe(select(selectSecurityIDsFromAnalysis)).subscribe((data) => { this.processSecurityIDsFromAnalysis(data) });
   }
 
-  private processSecurityIDsFromAnalysis(securityIDList: any[]) {
-    if (securityIDList) {
-      if (securityIDList.length > 0) {
-        let securityTableRowDTOList: SecurityTableRowDTO[] = [];
-        for (let securityTableRowDTO in this.state.fetchResult.prinstineRowList) {
-          for (let securityID of securityIDList) {
-            if (this.state.fetchResult.prinstineRowList[securityTableRowDTO].data.security.data.securityID === securityID) {
-              securityTableRowDTOList.push(this.state.fetchResult.prinstineRowList[securityTableRowDTO])
-            }
-          }
-        }
-
-        this.store$.dispatch(new TradeSecurityTableRowDTOListForAnalysisEvent(securityTableRowDTOList));
-      }
-    }
-  }
-
   public ngOnChanges() {
     if (!!this.ownerInitial) {
       const filter = [];
@@ -209,6 +193,14 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true);
     this.state.filters.quickFilters = this.initializePageState().filters.quickFilters;
     this.store$.dispatch(new TradeTogglePresetEvent);
+  }
+
+  public buryConfigurator() {
+    this.state.configurator.boosted = false;
+  }
+
+  public boostConfigurator() {
+    this.state.configurator.boosted = true;
   }
 
   public onSwitchMetric(targetMetric) {
@@ -515,6 +507,23 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     } else {
       const result = 100 - Math.round(delta / maxAbsDelta * 100);
       return result;
+    }
+  }
+
+  private processSecurityIDsFromAnalysis(securityIDList: any[]) {
+    if (securityIDList) {
+      if (securityIDList.length > 0) {
+        let securityTableRowDTOList: SecurityTableRowDTO[] = [];
+        for (let securityTableRowDTO in this.state.fetchResult.prinstineRowList) {
+          for (let securityID of securityIDList) {
+            if (this.state.fetchResult.prinstineRowList[securityTableRowDTO].data.security.data.securityID === securityID) {
+              securityTableRowDTOList.push(this.state.fetchResult.prinstineRowList[securityTableRowDTO])
+            }
+          }
+        }
+
+        this.store$.dispatch(new TradeSecurityTableRowDTOListForAnalysisEvent(securityTableRowDTOList));
+      }
     }
   }
 

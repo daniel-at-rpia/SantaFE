@@ -2,7 +2,8 @@
   [ngClass]="{
     'sat-tradeCenterPanel': true,
     'sat-tradeCenterPanel--presetSelectedState': state.presets.selectedPreset,
-    'sat-tradeCenterPanel--fetchDataFailedState': state.fetchResult.fetchTableDataFailed
+    'sat-tradeCenterPanel--fetchDataFailedState': state.fetchResult.fetchTableDataFailed,
+    'sat-tradeCenterPanel--boostConfiguratorState': state.configurator.boosted
   }">
   <section class="sat-tradeCenterPanel__presetsAndFilters">
     <div class="sat-tradeCenterPanel__presetsAndFilters-presets">
@@ -28,8 +29,10 @@
       </button>
       <span class="sat-tradeCenterPanel__presetsAndFilters-configurator-title">Filter Securities</span>
       <security-definition-configurator
-        (clickedApplyFilter)="onApplyFilter($event)"
         [configuratorData]="state.configurator.dto"
+        (clickedApplyFilter)="onApplyFilter($event)"
+        (buryConfigurator)="buryConfigurator()"
+        (boostConfigurator)="boostConfigurator()"
       ></security-definition-configurator>
     </div>
   </section>
@@ -75,7 +78,7 @@
       <span class="sat-tradeCenterPanel__result-errorPrompt-errorText">{{state.fetchResult.fetchTableDataFailedError}}</span>
     </div>
     <div class="sat-tradeCenterPanel__result-table">
-      <security-table
+      <santa-table
         [tableData]="state.table.dto"
         [newRows]="state.fetchResult.rowList"
         [receivedContentStage]="state.currentContentStage"
@@ -83,7 +86,7 @@
         [liveUpdatedRows]="state.fetchResult.liveUpdatedRowList"
         [activeTriCoreMetric]="state.filters.quickFilters.metricType"
         (selectedSecurityForAnalysis)="onSelectSecurityForAnalysis($event)"
-      ></security-table>
+      ></santa-table>
     </div>
   </section>
 </article>

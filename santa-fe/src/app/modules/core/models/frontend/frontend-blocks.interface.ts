@@ -104,13 +104,38 @@ export interface QuantitativeEntryStyleBlock {
 export interface AgGridColumnDefinition {
   headerName: string;
   field: string;
+  headerClass: string;
   cellClass: string;
+  width?: number;
+  autoHeight?: boolean;
   comparator?: Function;
+  cellRenderer?: string;
+  resizable?: boolean;
+  sortable?: boolean;
+  filter?: boolean;
+  hide: boolean;
+  enableRowGroup: boolean,
+  enablePivot: boolean,
+}
+
+export interface AgGridRowNode {
+  columnController: {
+    allDisplayedColumns: Array<AgGridColumn>
+  }
+  data: AgGridRow;
+  [property: string]: any;
 }
 
 export interface AgGridRow {
   id: string;
-  securityDTO: SecurityDTO;
-  quantComparerDTO: QuantComparerDTO;
+  securityCard: SecurityDTO;    // this needs to identical to SecurityTableMetrics' key for Security column
+  bestQuote: QuantComparerDTO;  // this needs to identical to SecurityTableMetrics' key for Best Quote column
+  [property: string]: any;
+}
+
+export interface AgGridColumn {
+  colId: string;
+  colDef: AgGridColumnDefinition;
+  userProvidedColDef: AgGridColumnDefinition;
   [property: string]: any;
 }
