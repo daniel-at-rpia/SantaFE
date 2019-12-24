@@ -70,6 +70,7 @@ export interface TradeCenterPanelState {
   }
   configurator: {
     dto: SecurityDefinitionConfiguratorDTO;
+    boosted: boolean;
   }
   table: {
     metrics: Array<SecurityTableMetricStub>;
