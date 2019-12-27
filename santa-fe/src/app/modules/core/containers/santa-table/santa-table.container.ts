@@ -58,7 +58,7 @@
   selector: 'santa-table',
   templateUrl: './santa-table.container.html',
   styleUrls: ['./santa-table.container.scss'],
-  encapsulation: ViewEncapsulation.ShadowDom
+  encapsulation: ViewEncapsulation.None
 })
 
 export class SantaTable implements OnInit, OnChanges {

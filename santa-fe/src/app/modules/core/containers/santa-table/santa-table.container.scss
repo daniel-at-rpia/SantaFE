@@ -54,6 +54,12 @@ $alt-background: $color_white;
   overflow: hidden;
   font-weight: 300;
   font-family:"SantaOpenSans"; 
+  button {
+    @include material('none');
+    border-radius: inherit;
+    margin: inherit;
+    padding: inherit;
+  }
   &__main {
     @include mix_enable_scrollbar('both');
     flex: 1 1 auto;

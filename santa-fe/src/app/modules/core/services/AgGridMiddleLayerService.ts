@@ -22,6 +22,7 @@
     } from 'FEModels/frontend-blocks.interface';
     import {
       SecurityTableMetrics,
+      AGGRID_SECURITY_CARD_COLUMN_WIDTH,
       AGGRID_QUOTE_COLUMN_WIDTH,
       AGGRID_SIMPLE_NUM_COLUMN_WIDTH,
       AGGRID_HEADER_CLASS,
@@ -78,7 +79,7 @@ export class AgGridMiddleLayerService {
       !!newAgRow.id && list.push(newAgRow);
     });
     table.api.gridApi.setRowData(list);
-    this.resizeAllAutoSizeColumns(table);
+    // this.resizeAllAutoSizeColumns(table);
     return list;
   }
 
@@ -114,6 +115,7 @@ export class AgGridMiddleLayerService {
       newAgColumn.cellRenderer = targetHeader.data.key;
       newAgColumn.sortable = false;
       newAgColumn.filter = false;
+      newAgColumn.width = AGGRID_SECURITY_CARD_COLUMN_WIDTH;
     } else if (targetHeader.data.key === 'bestQuote') {
       newAgColumn.cellRenderer = targetHeader.data.key;
       newAgColumn.width = AGGRID_QUOTE_COLUMN_WIDTH;
