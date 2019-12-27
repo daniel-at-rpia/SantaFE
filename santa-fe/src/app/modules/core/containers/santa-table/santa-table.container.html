@@ -8,14 +8,14 @@
       [columnDefs]="tableData.data.agGridColumnDefs"
       [defaultColDef]="defaultColDef"
       [frameworkComponents]="tableData.data.agGridFrameworkComponents"
-      [sideBar]="true"
-      [suppressDragLeaveHidesColumns]="true"
-      [suppressMakeColumnVisibleAfterUnGroup]="true"
-      [rowGroupPanelShow]="rowGroupPanelShow"
       [rowClass]="constants.agGridRowClassRules"
-      [animateRows]="true"
       [getRowNodeId]="getRowNodeId"
       [rowHeight]="constants.agGridRowHeight"
+      [sideBar]="true"
+      [rowGroupPanelShow]="'always'"
+      [masterDetail]="true"
+      [detailCellRenderer]="'detailAllQuotes'"
+      [animateRows]="true"
       (gridReady)="onGridReady($event)">
     </ag-grid-angular>
   </section>

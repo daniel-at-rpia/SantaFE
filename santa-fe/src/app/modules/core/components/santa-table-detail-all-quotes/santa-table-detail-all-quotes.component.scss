@@ -1,0 +1,45 @@
+@import "global.scss";
+@import "./security-table-row.component";
+
+.santaTableDetailAllQuotes {
+  $santaTableDetailAllQuotesBlockName: &;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  height: 300px;
+  background-color: $color_active;
+  overflow: hidden;
+  padding: $spacing_small 0;
+  button {
+    @extend .santaBtn;
+  }
+  &__label {
+    display: flex;
+    padding-left: $securityQuote_time_width + $securityQuote_bestQuote_width + $spacing_x_small;
+    padding-right: $securityQuote_ctas_width + $spacing_small + $scroll_bar_width + $spacing_x_small;
+    margin-bottom: $spacing_x_small;
+  }
+  &__messageList {
+    @include mix_enable_scrollbar('vertical');
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    margin-right: $spacing_small;
+  }
+  &__ctas {
+    display: flex;
+    justify-content: center;
+    &-selectBtn {
+      margin: $spacing_medium;
+      background-color: $color_white;
+      color: $font_color_inverse;
+    }
+    &-collapseBtn {
+      @include mix_border_radius(50%);
+      align-self: center;
+      margin: $spacing_medium;
+      background-color: $color_kill;
+      color: $font_color_inverse;
+    }
+  }
+}

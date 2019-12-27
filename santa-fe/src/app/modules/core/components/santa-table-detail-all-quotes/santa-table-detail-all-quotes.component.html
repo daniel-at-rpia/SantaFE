@@ -1,0 +1,41 @@
+<article class="santaTableDetailAllQuotes">
+  <section class="santaTableDetailAllQuotes__label">
+    <article
+      *ngFor="let eachQuoteMetric of rowData.data.quoteHeaders; let metricIndex = index;"
+      [ngClass]="{
+        'sat-securityTableRowExpandViewLabel': true,
+        'sat-securityTableRowExpandViewLabel--doubleWidth': eachQuoteMetric.isDoubleWidthColumn,
+        'sat-securityTableRowExpandViewLabel--tripleWidth': eachQuoteMetric.isTripleWidthColumn,
+        'sat-securityTableRowExpandViewLabel--textOnly': !eachQuoteMetric.sortable,
+        'sat-securityTableRowExpandViewLabel--first': metricIndex === 0,
+        'sat-securityTableRowExpandViewLabel--last': metricIndex === rowData.data.quoteHeaders.length - 1
+      }">
+      <section *ngFor="let eachLabel of eachQuoteMetric.displayLabelList" class="sat-securityTableRowExpandViewLabel__content">
+        <button
+          (click)="onClickSortQuotesByMetric(eachQuoteMetric, eachLabel)"
+          [ngClass]="{
+            'sat-securityTableRowExpandViewLabel__content-cta': true,
+            'sat-securityTableRowExpandViewLabel__content-cta--sortActive': rowData.state.expandViewSortByQuoteMetric === eachLabel,
+            'santaBtn--small': true
+          }">
+          <span class="sat-securityTableRowExpandViewLabel__content-cta-text">{{eachLabel}}</span>
+          <i class="sat-securityTableRowExpandViewLabel__content-cta-icon fal fa-sort-amount-down">
+          </i>
+        </button>
+        <span class="sat-securityTableRowExpandViewLabel__content-text">{{eachLabel}}</span>
+      </section>
+    </article>
+  </section>
+  <ul class="santaTableDetailAllQuotes__messageList">
+    <security-quote
+      *ngFor="let eachMessage of rowData.data.quotes"
+      [messageData]="eachMessage">
+    </security-quote>
+  </ul>
+  <section class="santaTableDetailAllQuotes__ctas">
+    <button (click)="onClickSelectForAnalysis()" class="santaTableDetailAllQuotes__ctas-selectBtn santaBtn--labelled">
+      <i class="fal fa-chart-line"></i>
+      <span>Send to Analysis</span>
+    </button>
+  </section>
+</article>
