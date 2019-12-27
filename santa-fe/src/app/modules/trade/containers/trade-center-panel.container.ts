@@ -1,77 +1,77 @@
-// dependencies
-import {
-  Component,
-  ViewEncapsulation,
-  OnInit,
-  OnChanges,
-  OnDestroy,
-  Input
-} from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import {
-  interval,
-  of
-} from 'rxjs';
-import {
-  tap,
-  first,
-  delay,
-  catchError,
-  withLatestFrom,
-  filter
-} from 'rxjs/operators';
-import { Store, select } from '@ngrx/store';
+  // dependencies
+    import {
+      Component,
+      ViewEncapsulation,
+      OnInit,
+      OnChanges,
+      OnDestroy,
+      Input
+    } from '@angular/core';
+    import { Observable, Subscription } from 'rxjs';
+    import {
+      interval,
+      of
+    } from 'rxjs';
+    import {
+      tap,
+      first,
+      delay,
+      catchError,
+      withLatestFrom,
+      filter
+    } from 'rxjs/operators';
+    import { Store, select } from '@ngrx/store';
 
-import { DTOService } from 'Core/services/DTOService';
-import { UtilityService } from 'Core/services/UtilityService';
-import { RestfulCommService } from 'Core/services/RestfulCommService';
-import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
-import { TradeCenterPanelState } from 'FEModels/frontend-page-states.interface';
-import {
-  SecurityDTO,
-  SecurityTableHeaderDTO,
-  SecurityTableRowDTO,
-  QuantComparerDTO,
-  SearchShortcutDTO
-} from 'FEModels/frontend-models.interface';
-import {
-  PayloadGetPositions,
-  PayloadGetBestQuotes
-} from 'BEModels/backend-payloads.interface';
-import {
-  BEPortfolioDTO,
-  BESecurityDTO,
-  BEBestQuoteDTO
-} from 'BEModels/backend-models.interface';
+    import { DTOService } from 'Core/services/DTOService';
+    import { UtilityService } from 'Core/services/UtilityService';
+    import { RestfulCommService } from 'Core/services/RestfulCommService';
+    import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
+    import { TradeCenterPanelState } from 'FEModels/frontend-page-states.interface';
+    import {
+      SecurityDTO,
+      SecurityTableHeaderDTO,
+      SecurityTableRowDTO,
+      QuantComparerDTO,
+      SearchShortcutDTO
+    } from 'FEModels/frontend-models.interface';
+    import {
+      PayloadGetPositions,
+      PayloadGetBestQuotes
+    } from 'BEModels/backend-payloads.interface';
+    import {
+      BEPortfolioDTO,
+      BESecurityDTO,
+      BEBestQuoteDTO
+    } from 'BEModels/backend-models.interface';
 
-import { TriCoreMetricConfig } from 'Core/constants/coreConstants.constant';
-import {
-  SecurityTableMetrics,
-  SECURITY_TABLE_FINAL_STAGE,
-  THIRTY_DAY_DELTA_METRIC_INDEX
-} from 'Core/constants/securityTableConstants.constant';
-import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
-import {
-  PortfolioList,
-  QUANT_COMPARER_PERCENTILE,
-  SearchShortcuts
-} from 'Core/constants/tradeConstants.constant';
-import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
-import {
-  selectLiveUpdateTick,
-  selectInitialDataLoaded,
-  selectSecurityIDsFromAnalysis
-} from 'Trade/selectors/trade.selectors';
-import {
-  TradeLiveUpdateProcessDataCompleteEvent,
-  TradeTogglePresetEvent,
-  TradeLiveUpdatePassRawDataEvent,
-  TradeToggleMetricEvent,
-  TradeSelectedSecurityForAnalysisEvent,
-  TradeSecurityTableRowDTOListForAnalysisEvent
-} from 'Trade/actions/trade.actions';
-import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
-//
+    import { TriCoreMetricConfig } from 'Core/constants/coreConstants.constant';
+    import {
+      SecurityTableMetrics,
+      SECURITY_TABLE_FINAL_STAGE,
+      THIRTY_DAY_DELTA_METRIC_INDEX
+    } from 'Core/constants/securityTableConstants.constant';
+    import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
+    import {
+      PortfolioList,
+      QUANT_COMPARER_PERCENTILE,
+      SearchShortcuts
+    } from 'Core/constants/tradeConstants.constant';
+    import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
+    import {
+      selectLiveUpdateTick,
+      selectInitialDataLoaded,
+      selectSecurityIDsFromAnalysis
+    } from 'Trade/selectors/trade.selectors';
+    import {
+      TradeLiveUpdateProcessDataCompleteEvent,
+      TradeTogglePresetEvent,
+      TradeLiveUpdatePassRawDataEvent,
+      TradeToggleMetricEvent,
+      TradeSelectedSecurityForAnalysisEvent,
+      TradeSecurityTableRowDTOListForAnalysisEvent
+    } from 'Trade/actions/trade.actions';
+    import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
+  //
 
 @Component({
   selector: 'trade-center-panel',
@@ -242,6 +242,10 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
   public onSelectSecurityForAnalysis(targetSecurity: SecurityDTO) {
     this.store$.dispatch(new TradeSelectedSecurityForAnalysisEvent(this.utilityService.deepCopy(targetSecurity)));
+  }
+
+  public openLinkForCertificate() {
+    window.open('https://rpiadev01:1225/portfolio/get-credit-positions');
   }
 
   private populateSearchShortcuts() {
