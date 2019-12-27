@@ -76,6 +76,8 @@
       <i class="sat-tradeCenterPanel__result-errorPrompt-icon fal fa-sad-tear"></i>
       <span class="sat-tradeCenterPanel__result-errorPrompt-title">Backend request failed due to </span>
       <span class="sat-tradeCenterPanel__result-errorPrompt-errorText">{{state.fetchResult.fetchTableDataFailedError}}</span>
+      <span class="sat-tradeCenterPanel__result-errorPrompt-errorText">If you are seeing it for the first time, it is likely caused by a security check. Click on this link to allow your browser talk to server:</span>
+      <button (click)="openLinkForCertificate()">Link</button>
     </div>
     <div class="sat-tradeCenterPanel__result-table">
       <santa-table
