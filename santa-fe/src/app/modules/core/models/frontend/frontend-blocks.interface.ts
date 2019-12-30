@@ -8,6 +8,10 @@ Because of this, while component models need to follow "BasicDTOStructure", bloc
 
 import * as am4charts from "@amcharts/amcharts4/charts";
 import {
+  GridApi,
+  ColumnApi
+} from 'ag-grid-community';
+import {
   SecurityDTO,
   QuantComparerDTO
 } from 'FEModels/frontend-models.interface';
@@ -123,6 +127,10 @@ export interface AgGridRowNode {
     allDisplayedColumns: Array<AgGridColumn>
   }
   data: AgGridRow;
+  parent: AgGridRowNode;
+  gridApi: GridApi;
+  columnApi: ColumnApi;
+  setExpanded: Function;
   [property: string]: any;
 }
 

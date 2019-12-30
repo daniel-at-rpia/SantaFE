@@ -309,6 +309,7 @@ export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
   }
 ];
 
+export const AGGRID_DETAIL_COLUMN_WIDTH = 50;
 export const AGGRID_SECURITY_CARD_COLUMN_WIDTH = 270;
 export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_quant + $spacing_small * 2 
 export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 100;
@@ -316,3 +317,4 @@ export const AGGRID_ROW_HEIGHT = 40;
 export const AGGRID_HEADER_CLASS = 'santaTable__main-agGrid-header';
 export const AGGRID_ROW_CLASS = 'santaTable__main-agGrid-row';
 export const AGGRID_CELL_CLASS = 'santaTable__main-agGrid-cell';
+export const AGGRID_DETAIL_COLUMN_KEY = 'Quotes';

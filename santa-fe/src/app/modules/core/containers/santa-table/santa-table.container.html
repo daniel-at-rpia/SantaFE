@@ -6,17 +6,19 @@
     <ag-grid-angular
       class="ag-theme-balham santaTable__main-agGrid"
       [columnDefs]="tableData.data.agGridColumnDefs"
-      [defaultColDef]="defaultColDef"
+      [defaultColDef]="agGridConfig.defaultColDef"
+      [autoGroupColumnDef]="agGridConfig.autoGroupColumnDef"
       [frameworkComponents]="tableData.data.agGridFrameworkComponents"
-      [sideBar]="true"
-      [suppressDragLeaveHidesColumns]="true"
-      [suppressMakeColumnVisibleAfterUnGroup]="true"
-      [rowGroupPanelShow]="rowGroupPanelShow"
       [rowClass]="constants.agGridRowClassRules"
-      [animateRows]="true"
       [getRowNodeId]="getRowNodeId"
       [rowHeight]="constants.agGridRowHeight"
-      (gridReady)="onGridReady($event)">
+      [sideBar]="true"
+      [rowGroupPanelShow]="'always'"
+      [masterDetail]="true"
+      [detailCellRenderer]="'detailAllQuotes'"
+      [animateRows]="true"
+      (gridReady)="onGridReady($event)"
+      (rowClicked)="onRowClicked($event)">
     </ag-grid-angular>
   </section>
 </article>
