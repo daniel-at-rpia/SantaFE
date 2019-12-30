@@ -45,12 +45,14 @@
     import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
     import { SantaTableSecurityCell } from 'Core/components/santa-table-security-cell/santa-table-security-cell.component';
     import { SantaTableQuoteCell } from 'Core/components/santa-table-quote-cell/santa-table-quote-cell.component';
+    import { SantaTableDetailAllQuotes } from 'Core/components/santa-table-detail-all-quotes/santa-table-detail-all-quotes.component';
     import { BEQuoteDTO } from 'BEModels/backend-models.interface';
     import {
       SECURITY_TABLE_FINAL_STAGE,
       THIRTY_DAY_DELTA_METRIC_INDEX,
       AGGRID_ROW_HEIGHT,
-      AGGRID_ROW_CLASS
+      AGGRID_ROW_CLASS,
+      AGGRID_DETAIL_COLUMN_KEY
     } from 'Core/constants/securityTableConstants.constant';
   //
 
@@ -73,7 +75,14 @@ export class SantaTable implements OnInit, OnChanges {
   @Output() selectedSecurityForAnalysis = new EventEmitter<SecurityDTO>();
   liveUpdateRowsCache: Array<SecurityTableRowDTO>;
 
-  private rowGroupPanelShow;
+  agGridConfig = {
+    defaultColDef: {
+
+    },
+    autoGroupColumnDef: {
+      sort:'desc'
+    }
+  };
 
   constants = {
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
@@ -92,9 +101,9 @@ export class SantaTable implements OnInit, OnChanges {
   public ngOnInit() {
     this.tableData.data.agGridFrameworkComponents = {
       securityCard: SantaTableSecurityCell,
-      bestQuote: SantaTableQuoteCell
+      bestQuote: SantaTableQuoteCell,
+      detailAllQuotes: SantaTableDetailAllQuotes
     };
-    this.rowGroupPanelShow = "always";
   }
 
   public ngOnChanges() {
@@ -131,6 +140,10 @@ export class SantaTable implements OnInit, OnChanges {
     this.tableData.state.isAgGridReady = true;
     this.agGridMiddleLayerService.onGridReady(this.tableData);
     this.loadTableHeaders();
+  }
+
+  public onRowClicked(params) {
+    params.node.setExpanded(!params.node.expanded);
   }
 
   public getRowNodeId(row) {

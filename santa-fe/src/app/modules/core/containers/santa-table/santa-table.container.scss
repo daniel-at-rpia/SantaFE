@@ -70,6 +70,17 @@ $alt-background: $color_white;
         .ag-header-cell-label {
           padding-left: $spacing_x_small;
         }
+        &--detail {
+          padding: 0!important;
+          .ag-header-cell-menu-button {
+            display: none;
+          }
+          .ag-header-cell-label {
+            width: 100%;
+            padding: 0;
+            justify-content: center;
+          }
+        }
       }
       &-row {
         &:hover {
@@ -89,6 +100,13 @@ $alt-background: $color_white;
         //width: 3rem;
         &--securityCard {
           justify-content: flex-end;
+        }
+        &--detailCTA {
+          justify-content: center;
+          padding: 0;
+          .ag-group-checkbox {
+            display: none;
+          }
         }
         santa-table-quote-cell {
           flex: 1 1 auto;

@@ -26,7 +26,9 @@
       AGGRID_QUOTE_COLUMN_WIDTH,
       AGGRID_SIMPLE_NUM_COLUMN_WIDTH,
       AGGRID_HEADER_CLASS,
-      AGGRID_CELL_CLASS
+      AGGRID_CELL_CLASS,
+      AGGRID_DETAIL_COLUMN_KEY,
+      AGGRID_DETAIL_COLUMN_WIDTH
     } from 'Core/constants/securityTableConstants.constant';
   //
 
@@ -45,6 +47,20 @@ export class AgGridMiddleLayerService {
     table: SecurityTableDTO
   ): Array<AgGridColumnDefinition> {
     const list = [];
+    const detailColumn: AgGridColumnDefinition = {
+      headerName: AGGRID_DETAIL_COLUMN_KEY,
+      field: AGGRID_DETAIL_COLUMN_KEY,
+      headerClass: `${AGGRID_HEADER_CLASS} ${AGGRID_HEADER_CLASS}--detail ag-numeric-header`,
+      cellClass: `${AGGRID_CELL_CLASS} ${AGGRID_CELL_CLASS}--detailCTA`,
+      cellRenderer: 'agGroupCellRenderer',
+      sortable: false,
+      filter: false,
+      enablePivot: false,
+      enableRowGroup: false,
+      hide: true,
+      width: AGGRID_DETAIL_COLUMN_WIDTH
+    };
+    list.push(detailColumn);
     table.data.allHeaders.forEach((eachHeader) => {
       const isActiveByDefault = table.data.headers.find((eachActiveHeader) => {
         return eachActiveHeader.data.key === eachHeader.data.key;
@@ -138,6 +154,7 @@ export class AgGridMiddleLayerService {
       securityCard: eachSecurity,
       bestQuote: targetRow.data.cells[0].data.quantComparerDTO
     };
+    newAgRow[AGGRID_DETAIL_COLUMN_KEY] = '';
     targetHeaders.forEach((eachHeader, index) => {
       if (eachHeader.data.key === 'securityCard' || eachHeader.data.key === 'bestQuote') {
         // skip those two as they are already instantiated above
