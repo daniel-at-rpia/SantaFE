@@ -60,7 +60,8 @@
     import {
       selectLiveUpdateTick,
       selectInitialDataLoaded,
-      selectSecurityIDsFromAnalysis
+      selectSecurityIDsFromAnalysis,
+      selectBestQuoteValidWindow
     } from 'Trade/selectors/trade.selectors';
     import {
       TradeLiveUpdateProcessDataCompleteEvent,
@@ -85,7 +86,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   state: TradeCenterPanelState;
   subscriptions = {
     startNewUpdateSub: null,
-    securityIDListFromAnalysis: null
+    securityIDListFromAnalysisSub: null,
+    validWindowSub: null
   }
   constants = {
     portfolioList: PortfolioList,
@@ -98,6 +100,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   private initializePageState(): TradeCenterPanelState {
     const state = {
       currentContentStage: 0,
+      bestQuoteValidWindow: null,
       presets: {
         selectedPreset: null,
         shortcutList: []
@@ -152,7 +155,17 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       }
     });
 
-    this.subscriptions.securityIDListFromAnalysis = this.store$.pipe(select(selectSecurityIDsFromAnalysis)).subscribe((data) => { this.processSecurityIDsFromAnalysis(data) });
+    this.subscriptions.securityIDListFromAnalysisSub = this.store$.pipe(
+      select(selectSecurityIDsFromAnalysis)
+    ).subscribe((data) => {
+      this.processSecurityIDsFromAnalysis(data)
+    });
+
+    this.subscriptions.validWindowSub = this.store$.pipe(
+      select(selectBestQuoteValidWindow)
+    ).subscribe((window) => {
+      this.state.bestQuoteValidWindow = window;
+    });
   }
 
   public ngOnChanges() {
@@ -343,6 +356,9 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       quoteMetric: this.state.filters.quickFilters.metricType,
       identifiers: []
     };
+    if (!!this.state.bestQuoteValidWindow) {
+      payload.lookbackHrs = this.state.bestQuoteValidWindow;
+    }
     this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
       const newSecurityId = eachRow.data.security.data.securityID;
       payload.identifiers.push(newSecurityId);

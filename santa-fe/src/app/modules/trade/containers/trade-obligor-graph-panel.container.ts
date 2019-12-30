@@ -3,7 +3,7 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import { GraphService } from 'Core/services/GraphService';
 import { UtilityService } from 'Core/services/UtilityService';
-import { selectSelectedSecurityForAnalysis, securityTableRowDTOListForAnalysis } from 'Trade/selectors/trade.selectors';
+import { selectSelectedSecurityForAnalysis, selectSecurityTableRowDTOListForAnalysis } from 'Trade/selectors/trade.selectors';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
@@ -98,7 +98,7 @@ export class TradeObligorGraphPanel {
 
   ngAfterViewInit() {
     this.subscriptions.selectSecurityUpdateForAnalysis = this.store$.pipe(select(selectSelectedSecurityForAnalysis)).subscribe((data) => { this.fetchSecurityIDs(data) });
-    this.subscriptions.selectSecurityTableRowDTOListForAnalysis = this.store$.pipe(select(securityTableRowDTOListForAnalysis)).subscribe((data) => { this.securityTableRowDTOList = data; this.buildChartData() });
+    this.subscriptions.selectSecurityTableRowDTOListForAnalysis = this.store$.pipe(select(selectSecurityTableRowDTOListForAnalysis)).subscribe((data) => { this.securityTableRowDTOList = data; this.buildChartData() });
   }
 
   private buildChartData() {

@@ -100,8 +100,8 @@ export const MARKET_ANALYSIS_YIELD_METRIC_KEY = SecurityMetricOptions[6].label;
 
 export const UTILITY_VALID_WINDOW_OPTIONS = [
   {
-    value: 1,
-    label: '1 hr',
+    value: 0.5,
+    label: '30 mins',
   },{
     value: 2,
     label: '2 hrs',
@@ -109,9 +109,6 @@ export const UTILITY_VALID_WINDOW_OPTIONS = [
     value: 4,
     label: '4 hrs'
   },{
-    value: 8,
-    label: '8 hrs'
-  },{
     value: 99,
-    label: 'always valid'
+    label: 'Entire Day'
   }];
