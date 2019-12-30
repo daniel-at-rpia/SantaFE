@@ -17,7 +17,8 @@ export enum TradeActions {
   ToggleMetricEvent = '[Trade] Toggle Metric Event',
   SelectSecurityForAnalysisEvent = '[Trade] Select Security For Analysis Event',
   SecurityIDListFromAnalysisEvent = '[Trade] Security ID List From Analysis Event',
-  SecurityTableRowDTOListForAnalysisEvent = '[Trade] SecurityTableRowDTO List For Analysis'
+  SecurityTableRowDTOListForAnalysisEvent = '[Trade] SecurityTableRowDTO List For Analysis Event',
+  ChangeBestQuoteValidWindowEvent = '[Trade] Change Best Quote Valid Window Event'
 }
 
 export class TradeLiveUpdateStartEvent implements Action {
@@ -97,5 +98,15 @@ export class TradeSecurityTableRowDTOListForAnalysisEvent implements Action {
     securityTableRowDTOList: Array<SecurityTableRowDTO>
   ){
     this.securityTableRowDTOList = securityTableRowDTOList;
+  }
+}
+
+export class TradeChangeBestQuoteValidWindowEvent implements Action {
+  readonly type = TradeActions.ChangeBestQuoteValidWindowEvent;
+  readonly window: number;
+  constructor(
+    window: number
+  ){
+    this.window = window;
   }
 }

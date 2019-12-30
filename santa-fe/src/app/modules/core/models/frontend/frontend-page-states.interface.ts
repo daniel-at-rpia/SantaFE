@@ -67,6 +67,7 @@ export interface TradeState {
 
 export interface TradeCenterPanelState {
   currentContentStage: number;
+  bestQuoteValidWindow: number;
   presets : {
     selectedPreset: any;
     shortcutList: Array<SearchShortcutDTO>;
