@@ -90,7 +90,7 @@
           margin-right: $spacing_medium;
         }
         &-btn {
-          margin-right: $spacing_medium;
+          @include mix_border_radius(5px);
           &--active {
             @include material('none');
             @extend .santaBtn--inverseLabelled;

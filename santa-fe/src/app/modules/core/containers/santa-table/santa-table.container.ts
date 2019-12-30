@@ -114,9 +114,10 @@ export class SantaTable implements OnInit, OnChanges {
       this.tableData.state.loadedContentStage = this.receivedContentStage;
       this.loadTableRows(this.newRows);
     } else if (this.securityTableMetricsCache !== this.receivedSecurityTableMetricsUpdate && this.receivedContentStage === this.constants.securityTableFinalStage) {
+      console.log("metrics update", this.receivedSecurityTableMetricsUpdate);
       this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate;
       this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
-      this.loadTableHeaders();
+      this.loadTableHeaders(true);  // skip reloading the agGrid columns since that won't be necessary and reloading them creates a problem for identifying the columns in later use, such as sorting
       this.loadTableRows(this.newRows);
     } else if (!!this.newRows && this.newRows != this.tableData.data.rows && this.tableData.state.loadedContentStage === this.receivedContentStage) {
       console.log('rows updated for change within same stage, triggered when filters are applied', this.tableData.state.loadedContentStage);
@@ -150,15 +151,16 @@ export class SantaTable implements OnInit, OnChanges {
     return row.id;
   }
 
-  private loadTableHeaders() {
+  private loadTableHeaders(skipAgGrid = false) {
     this.tableData.data.headers = [];
+    this.tableData.data.allHeaders = [];
     this.securityTableMetrics.forEach((eachStub) => {
       if (eachStub.label === 'Security' || eachStub.active) {
         this.tableData.data.headers.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
       }
       this.tableData.data.allHeaders.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
     });
-    if (this.tableData.state.isAgGridReady) {
+    if (this.tableData.state.isAgGridReady && !skipAgGrid) {
       this.tableData.data.agGridColumnDefs = this.agGridMiddleLayerService.loadAgGridHeaders(this.tableData);
     }
   }

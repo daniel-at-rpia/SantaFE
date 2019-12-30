@@ -40,36 +40,38 @@
     <div class="sat-tradeCenterPanel__result-quickFilters">
       <div class="sat-tradeCenterPanel__result-quickFilters-row">
         <span class="sat-tradeCenterPanel__result-quickFilters-row-label">Metric :</span>
-        <button
-          (click)="onSwitchMetric('Spread')"
-          [ngClass]="{
-            'sat-tradeCenterPanel__result-quickFilters-row-btn': true,
-            'santaBtn--labelled': true,
-            'sat-tradeCenterPanel__result-quickFilters-row-btn--active': state.filters.quickFilters.metricType === 'Spread'
-          }">
-          <i class="fal fa-ruler"></i>
-          <span>Spread</span>
-        </button>
-        <button
-          (click)="onSwitchMetric('Yield')"
-          [ngClass]="{
-            'sat-tradeCenterPanel__result-quickFilters-row-btn': true,
-            'santaBtn--labelled': true,
-            'sat-tradeCenterPanel__result-quickFilters-row-btn--active': state.filters.quickFilters.metricType === 'Yield'
-          }">
-          <i class="fal fa-ruler"></i>
-          <span>Yield</span>
-        </button>
-        <button
-          (click)="onSwitchMetric('Price')"
-          [ngClass]="{
-            'sat-tradeCenterPanel__result-quickFilters-row-btn': true,
-            'santaBtn--labelled': true,
-            'sat-tradeCenterPanel__result-quickFilters-row-btn--active': state.filters.quickFilters.metricType === 'Price'
-          }">
-          <i class="fal fa-ruler"></i>
-          <span>Price</span>
-        </button>
+        <div class="santaBtnGroup">
+          <button
+            (click)="onSwitchMetric('Spread')"
+            [ngClass]="{
+              'sat-tradeCenterPanel__result-quickFilters-row-btn': true,
+              'santaBtn--labelled': true,
+              'sat-tradeCenterPanel__result-quickFilters-row-btn--active': state.filters.quickFilters.metricType === 'Spread'
+            }">
+            <i class="fal fa-ruler"></i>
+            <span>Spread</span>
+          </button>
+          <button
+            (click)="onSwitchMetric('Yield')"
+            [ngClass]="{
+              'sat-tradeCenterPanel__result-quickFilters-row-btn': true,
+              'santaBtn--labelled': true,
+              'sat-tradeCenterPanel__result-quickFilters-row-btn--active': state.filters.quickFilters.metricType === 'Yield'
+            }">
+            <i class="fal fa-ruler"></i>
+            <span>Yield</span>
+          </button>
+          <button
+            (click)="onSwitchMetric('Price')"
+            [ngClass]="{
+              'sat-tradeCenterPanel__result-quickFilters-row-btn': true,
+              'santaBtn--labelled': true,
+              'sat-tradeCenterPanel__result-quickFilters-row-btn--active': state.filters.quickFilters.metricType === 'Price'
+            }">
+            <i class="fal fa-ruler"></i>
+            <span>Price</span>
+          </button>
+        </div>
       </div>
     </div>
     <div class="sat-tradeCenterPanel__result-errorPrompt">
@@ -81,6 +83,7 @@
     </div>
     <div class="sat-tradeCenterPanel__result-table">
       <santa-table
+        *ngIf="!state.table.showNativeTable"
         [tableData]="state.table.dto"
         [newRows]="state.fetchResult.rowList"
         [receivedContentStage]="state.currentContentStage"
@@ -89,6 +92,16 @@
         [activeTriCoreMetric]="state.filters.quickFilters.metricType"
         (selectedSecurityForAnalysis)="onSelectSecurityForAnalysis($event)"
       ></santa-table>
+      <security-table
+        *ngIf="state.table.showNativeTable"
+        [tableData]="state.table.dto"
+        [newRows]="state.fetchResult.rowList"
+        [receivedContentStage]="state.currentContentStage"
+        [receivedSecurityTableMetricsUpdate]="state.table.metrics"
+        [liveUpdatedRows]="state.fetchResult.liveUpdatedRowList"
+        [activeTriCoreMetric]="state.filters.quickFilters.metricType"
+        (selectedSecurityForAnalysis)="onSelectSecurityForAnalysis($event)"
+      ></security-table>
     </div>
   </section>
 </article>

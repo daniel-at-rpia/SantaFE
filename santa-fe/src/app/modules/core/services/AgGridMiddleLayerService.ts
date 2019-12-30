@@ -106,8 +106,12 @@ export class AgGridMiddleLayerService {
     targetRows.forEach((eachRow) => {
       const id = eachRow.data.security.data.securityID;
       const targetNode = table.api.gridApi.getRowNode(id);
-      const newAgRow = this.formAgGridRow(eachRow, table.data.allHeaders);
-      targetNode.setData(newAgRow);
+      if (!!targetNode) {
+        const newAgRow = this.formAgGridRow(eachRow, table.data.allHeaders);
+        targetNode.setData(newAgRow);
+      } else {
+        console.error(`Couldn't fine AgGrid Row for ${eachRow.data.security.data.securityID}`, eachRow);
+      }
     });
   }
 
