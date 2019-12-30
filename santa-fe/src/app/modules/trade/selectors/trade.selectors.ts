@@ -43,7 +43,12 @@ export const selectSecurityIDsFromAnalysis = createSelector(
   (state: TradeState) => state.securityIDListFromAnalysis
 );
 
-export const securityTableRowDTOListForAnalysis = createSelector(
+export const selectSecurityTableRowDTOListForAnalysis = createSelector(
   getTradeState,
   (state: TradeState) => state.securityTableRowDTOListForAnalysis
+);
+
+export const selectBestQuoteValidWindow = createSelector(
+  getTradeState,
+  (state: TradeState) => state.bestQuoteValidWindow
 );
