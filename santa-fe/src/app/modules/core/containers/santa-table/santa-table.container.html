@@ -6,7 +6,8 @@
     <ag-grid-angular
       class="ag-theme-balham santaTable__main-agGrid"
       [columnDefs]="tableData.data.agGridColumnDefs"
-      [defaultColDef]="defaultColDef"
+      [defaultColDef]="agGridConfig.defaultColDef"
+      [autoGroupColumnDef]="agGridConfig.autoGroupColumnDef"
       [frameworkComponents]="tableData.data.agGridFrameworkComponents"
       [rowClass]="constants.agGridRowClassRules"
       [getRowNodeId]="getRowNodeId"
