@@ -17,7 +17,8 @@
       [masterDetail]="true"
       [detailCellRenderer]="'detailAllQuotes'"
       [animateRows]="true"
-      (gridReady)="onGridReady($event)">
+      (gridReady)="onGridReady($event)"
+      (rowClicked)="onRowClicked($event)">
     </ag-grid-angular>
   </section>
 </article>

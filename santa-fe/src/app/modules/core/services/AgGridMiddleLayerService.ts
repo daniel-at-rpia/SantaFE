@@ -57,7 +57,7 @@ export class AgGridMiddleLayerService {
       filter: false,
       enablePivot: false,
       enableRowGroup: false,
-      hide: false,
+      hide: true,
       width: AGGRID_DETAIL_COLUMN_WIDTH
     };
     list.push(detailColumn);
