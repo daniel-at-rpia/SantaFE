@@ -76,7 +76,7 @@ export class TradeObligorGraphPanel {
       const payload: PayloadObligorSecurityIDs = {
         identifier: data.data.securityID
       };
-      this.restfulCommService.callAPI('SantaCurve/get-santa-obligor-curves-per-ccy', { req: 'POST' }, payload).pipe(
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.getObligorCurves, { req: 'POST' }, payload).pipe(
         first(),
         tap((serverReturn) => {
           for (let curve in serverReturn) {

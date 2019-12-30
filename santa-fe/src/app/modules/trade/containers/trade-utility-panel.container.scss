@@ -1,6 +1,7 @@
 @import "global.scss";
 @import "modules/trade/trade.scss";
 
+$tradeUtilityPanel_spacing: $spacing_medium;
 .sat-tradeUtilityPanel {
   $tradeUtilityPanelBlockName: &;
   @include mix_border_generator;
@@ -9,11 +10,82 @@
   display: flex;
   overflow: hidden;
   height: $tradeUtility_height;
-  padding: $spacing_medium;
-  &__prompt {
-    flex: 0 1 33.33%;
+  &__validWindowConfig {
+    @include mix_alive('light');
+    flex: 0 0 13rem;
     display: flex;
     align-items: center;
+    overflow: hidden;
+    padding: $tradeUtilityPanel_spacing 0 $tradeUtilityPanel_spacing $tradeUtilityPanel_spacing;
+    &-current {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-right: $spacing_medium;
+      &-label {
+        color: $font_color_minor;
+        font-size: $font_size_small;
+      }
+      &-value {
+        @include mix_border_radius(5px);
+        margin-top: $spacing_small;
+        padding: $spacing_x_small $spacing_small;
+        background-color: $color_active;
+        color: $font_color_inverse;
+      }
+    }
+    &-editBtn {
+      flex: 0 0 auto;
+      margin-right: $spacing_medium;
+    }
+    &-optionList {
+      flex: 0 0 auto;
+      display: none;
+      &-item {
+        @include mix_alive('material');
+        @include material;
+        @include mix_border_radius(5px);
+        padding: $spacing_small;
+        margin-right: $spacing_small;
+        &--selected {
+          @include material('none');
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+      }
+    }
+    &-ctas {
+      flex: 0 0 auto;
+      display: none;
+      &-cancelBtn {
+        background-color: $color_kill;
+        margin-right: $spacing_medium;
+      }
+    }
+  }
+  &__countdown {
+    @include mix_border_generator(0 $typical_border_width 0 $typical_border_width);
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: $tradeUtilityPanel_spacing;
+    &-clock {
+      @include mix_border_radius(5px);
+      padding: $spacing_xx_small $spacing_small;
+      background-color: $color_active;
+      font-size: $font_size_large;
+      color: $font_color_inverse;
+    }
+    &-label {
+      margin-top: $spacing_small;
+      color: $font_color_minor;
+      font-size: $font_size_small;
+      line-height: $line_height_x_small;
+      text-align: center;
+    }
     &-loading {
       flex: 1 1 auto;
       display: none;
@@ -31,36 +103,14 @@
       }
     }
   }
-  &__countdown {
-    @include mix_border_generator(0 $typical_border_width 0 $typical_border_width);
-    flex: 0 1 33.33%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    &-clock {
-      @include mix_border_radius(5px);
-      padding: $spacing_xx_small $spacing_small;
-      background-color: $color_active;
-      font-size: $font_size_large;
-      color: $font_color_inverse;
-    }
-    &-label {
-      margin-top: $spacing_small;
-      color: $font_color_minor;
-      font-size: $font_size_small;
-      line-height: $line_height_x_small;
-      text-align: center;
-    }
-  }
   &__cta {
-    flex: 0 1 33.33%;
+    flex: 0 0 auto;
     display: flex;
-    padding-left: $spacing_medium;
+    padding: $tradeUtilityPanel_spacing $tradeUtilityPanel_spacing $tradeUtilityPanel_spacing 0;
     &-pause {
       @include mix_border_radius(5px);
       @include mix_border_generator($typical_border_width, $color_white);
       flex: 0 1 50%;
-      margin-right: $spacing_medium;
     }
     &-refresh {
       @include mix_border_radius(5px);
@@ -70,6 +120,22 @@
       border-color: $color_disabled;
       background-color: inherit;
       color: $color_disabled;
+    }
+  }
+  &--editingValidWindowState {
+    #{$tradeUtilityPanelBlockName} {
+      &__validWindowConfig {
+        flex: 0 0 100%;
+        &-editBtn {
+          display: none;
+        }
+        &-optionList {
+          display: flex;
+        }
+        &-ctas {
+          display: flex;
+        }
+      }
     }
   }
   &--pausedState {
@@ -92,14 +158,12 @@
   }
   &--loadingState {
     #{$tradeUtilityPanelBlockName} {
-      &__prompt {
-        &-loading {
-          display: flex;
-        }
-      }
       &__countdown {
         &-clock, &-label {
-          visibility: hidden;
+          display: none;
+        }
+        &-loading {
+          display: flex;
         }
       }
       &__cta {

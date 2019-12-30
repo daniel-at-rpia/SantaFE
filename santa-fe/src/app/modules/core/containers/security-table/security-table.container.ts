@@ -293,7 +293,7 @@ export class SecurityTable implements OnInit, OnChanges {
     const payload: PayloadGetAllQuotes = {
       "identifier": targetRow.data.security.data.securityID
     };
-    this.restfulCommService.callAPI('liveQuote/get-all-quotes', {req: 'POST'}, payload).pipe(
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAllQuotes, {req: 'POST'}, payload).pipe(
       first(),
       delay(200),
       tap((serverReturn) => {

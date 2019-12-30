@@ -318,7 +318,7 @@ export class DTOService {
     const object:SecurityGroupAverageVisualizerDTO = {
       data: {
         stats: [
-          this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'DoD'),
+          this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'Dod'),
           this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'Wow'),
           this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'Mom')
         ]
@@ -465,14 +465,23 @@ export class DTOService {
     const object: SecurityTableDTO = {
       data: {
         headers: [],
-        rows: []
+        allHeaders: [],
+        rows: [],
+        agGridColumnDefs: [],
+        agGridRowData: [],
+        agGridFrameworkComponents: {}
       },
       state: {
-        loadedContentStage: 0,
+        loadedContentStage: null,
         isAddingColumn: false,
         selectedHeader: null,
         sortedByHeader: null,
-        isLiveVariant: isLiveVariant
+        isLiveVariant: isLiveVariant,
+        isAgGridReady: false
+      },
+      api: {
+        gridApi: null,
+        columnApi: null
       }
     };
     return object;
@@ -483,6 +492,7 @@ export class DTOService {
   ): SecurityTableHeaderDTO {
     const object: SecurityTableHeaderDTO = {
       data: {
+        key: stub.key,
         displayLabel: stub.label,
         attrName: stub.attrName,
         underlineAttrName: stub.underlineAttrName,

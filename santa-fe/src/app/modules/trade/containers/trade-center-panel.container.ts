@@ -1,77 +1,77 @@
-// dependencies
-import {
-  Component,
-  ViewEncapsulation,
-  OnInit,
-  OnChanges,
-  OnDestroy,
-  Input
-} from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import {
-  interval,
-  of
-} from 'rxjs';
-import {
-  tap,
-  first,
-  delay,
-  catchError,
-  withLatestFrom,
-  filter
-} from 'rxjs/operators';
-import { Store, select } from '@ngrx/store';
+  // dependencies
+    import {
+      Component,
+      ViewEncapsulation,
+      OnInit,
+      OnChanges,
+      OnDestroy,
+      Input
+    } from '@angular/core';
+    import { Observable, Subscription } from 'rxjs';
+    import {
+      interval,
+      of
+    } from 'rxjs';
+    import {
+      tap,
+      first,
+      delay,
+      catchError,
+      withLatestFrom,
+      filter
+    } from 'rxjs/operators';
+    import { Store, select } from '@ngrx/store';
 
-import { DTOService } from 'Core/services/DTOService';
-import { UtilityService } from 'Core/services/UtilityService';
-import { RestfulCommService } from 'Core/services/RestfulCommService';
-import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
-import { TradeCenterPanelState } from 'FEModels/frontend-page-states.interface';
-import {
-  SecurityDTO,
-  SecurityTableHeaderDTO,
-  SecurityTableRowDTO,
-  QuantComparerDTO,
-  SearchShortcutDTO
-} from 'FEModels/frontend-models.interface';
-import {
-  PayloadGetPositions,
-  PayloadGetBestQuotes
-} from 'BEModels/backend-payloads.interface';
-import {
-  BEPortfolioDTO,
-  BESecurityDTO,
-  BEBestQuoteDTO
-} from 'BEModels/backend-models.interface';
+    import { DTOService } from 'Core/services/DTOService';
+    import { UtilityService } from 'Core/services/UtilityService';
+    import { RestfulCommService } from 'Core/services/RestfulCommService';
+    import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
+    import { TradeCenterPanelState } from 'FEModels/frontend-page-states.interface';
+    import {
+      SecurityDTO,
+      SecurityTableHeaderDTO,
+      SecurityTableRowDTO,
+      QuantComparerDTO,
+      SearchShortcutDTO
+    } from 'FEModels/frontend-models.interface';
+    import {
+      PayloadGetPositions,
+      PayloadGetBestQuotes
+    } from 'BEModels/backend-payloads.interface';
+    import {
+      BEPortfolioDTO,
+      BESecurityDTO,
+      BEBestQuoteDTO
+    } from 'BEModels/backend-models.interface';
 
-import { TriCoreMetricConfig } from 'Core/constants/coreConstants.constant';
-import {
-  SecurityTableMetrics,
-  SECURITY_TABLE_FINAL_STAGE,
-  THIRTY_DAY_DELTA_METRIC_INDEX
-} from 'Core/constants/securityTableConstants.constant';
-import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
-import {
-  PortfolioList,
-  QUANT_COMPARER_PERCENTILE,
-  SearchShortcuts
-} from 'Core/constants/tradeConstants.constant';
-import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
-import {
-  selectLiveUpdateTick,
-  selectInitialDataLoaded,
-  selectSecurityIDsFromAnalysis
-} from 'Trade/selectors/trade.selectors';
-import {
-  TradeLiveUpdateProcessDataCompleteEvent,
-  TradeTogglePresetEvent,
-  TradeLiveUpdatePassRawDataEvent,
-  TradeToggleMetricEvent,
-  TradeSelectedSecurityForAnalysisEvent,
-  TradeSecurityTableRowDTOListForAnalysisEvent
-} from 'Trade/actions/trade.actions';
-import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
-//
+    import { TriCoreMetricConfig } from 'Core/constants/coreConstants.constant';
+    import {
+      SecurityTableMetrics,
+      SECURITY_TABLE_FINAL_STAGE,
+      THIRTY_DAY_DELTA_METRIC_INDEX
+    } from 'Core/constants/securityTableConstants.constant';
+    import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
+    import {
+      PortfolioList,
+      QUANT_COMPARER_PERCENTILE,
+      SearchShortcuts
+    } from 'Core/constants/tradeConstants.constant';
+    import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
+    import {
+      selectLiveUpdateTick,
+      selectInitialDataLoaded,
+      selectSecurityIDsFromAnalysis
+    } from 'Trade/selectors/trade.selectors';
+    import {
+      TradeLiveUpdateProcessDataCompleteEvent,
+      TradeTogglePresetEvent,
+      TradeLiveUpdatePassRawDataEvent,
+      TradeToggleMetricEvent,
+      TradeSelectedSecurityForAnalysisEvent,
+      TradeSecurityTableRowDTOListForAnalysisEvent
+    } from 'Trade/actions/trade.actions';
+    import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
+  //
 
 @Component({
   selector: 'trade-center-panel',
@@ -103,7 +103,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         shortcutList: []
       },
       configurator: {
-        dto: this.dtoService.createSecurityDefinitionConfigurator(true)
+        dto: this.dtoService.createSecurityDefinitionConfigurator(true),
+        boosted: false
       },
       table: {
         metrics: SecurityTableMetrics,
@@ -154,23 +155,6 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.securityIDListFromAnalysis = this.store$.pipe(select(selectSecurityIDsFromAnalysis)).subscribe((data) => { this.processSecurityIDsFromAnalysis(data) });
   }
 
-  private processSecurityIDsFromAnalysis(securityIDList: any[]) {
-    if (securityIDList) {
-      if (securityIDList.length > 0) {
-        let securityTableRowDTOList: SecurityTableRowDTO[] = [];
-        for (let securityTableRowDTO in this.state.fetchResult.prinstineRowList) {
-          for (let securityID of securityIDList) {
-            if (this.state.fetchResult.prinstineRowList[securityTableRowDTO].data.security.data.securityID === securityID) {
-              securityTableRowDTOList.push(this.state.fetchResult.prinstineRowList[securityTableRowDTO])
-            }
-          }
-        }
-
-        this.store$.dispatch(new TradeSecurityTableRowDTOListForAnalysisEvent(securityTableRowDTOList));
-      }
-    }
-  }
-
   public ngOnChanges() {
     if (!!this.ownerInitial) {
       const filter = [];
@@ -209,6 +193,14 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true);
     this.state.filters.quickFilters = this.initializePageState().filters.quickFilters;
     this.store$.dispatch(new TradeTogglePresetEvent);
+  }
+
+  public buryConfigurator() {
+    this.state.configurator.boosted = false;
+  }
+
+  public boostConfigurator() {
+    this.state.configurator.boosted = true;
   }
 
   public onSwitchMetric(targetMetric) {
@@ -250,6 +242,10 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
   public onSelectSecurityForAnalysis(targetSecurity: SecurityDTO) {
     this.store$.dispatch(new TradeSelectedSecurityForAnalysisEvent(this.utilityService.deepCopy(targetSecurity)));
+  }
+
+  public openLinkForCertificate() {
+    window.open('https://rpiadev01:1225/portfolio/get-credit-positions');
   }
 
   private populateSearchShortcuts() {
@@ -309,7 +305,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     const payload: PayloadGetPositions = {
       partitionOptions: ['Portfolio', 'Strategy']
     };
-    this.restfulCommService.callAPI('santaPortfolio/get-santa-credit-positions', { req: 'POST' }, payload, false, false).pipe(
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolios, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn) => {
         if (!isInitialFetch) {
@@ -351,7 +347,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       const newSecurityId = eachRow.data.security.data.securityID;
       payload.identifiers.push(newSecurityId);
     });
-    this.restfulCommService.callAPI('liveQuote/get-best-quotes', { req: 'POST' }, payload).pipe(
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getBestQuotes, { req: 'POST' }, payload).pipe(
       first(),
       tap((serverReturn) => {
         this.loadStageThreeContent(serverReturn);
@@ -515,6 +511,23 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     } else {
       const result = 100 - Math.round(delta / maxAbsDelta * 100);
       return result;
+    }
+  }
+
+  private processSecurityIDsFromAnalysis(securityIDList: any[]) {
+    if (securityIDList) {
+      if (securityIDList.length > 0) {
+        let securityTableRowDTOList: SecurityTableRowDTO[] = [];
+        for (let securityTableRowDTO in this.state.fetchResult.prinstineRowList) {
+          for (let securityID of securityIDList) {
+            if (this.state.fetchResult.prinstineRowList[securityTableRowDTO].data.security.data.securityID === securityID) {
+              securityTableRowDTOList.push(this.state.fetchResult.prinstineRowList[securityTableRowDTO])
+            }
+          }
+        }
+
+        this.store$.dispatch(new TradeSecurityTableRowDTOListForAnalysisEvent(securityTableRowDTOList));
+      }
     }
   }
 

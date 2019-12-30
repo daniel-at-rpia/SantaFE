@@ -170,15 +170,6 @@ export class MarketGroupPanel implements OnDestroy {
 
   public onClickSearchInConfigurator(){
     this.startSearch(this.utilityService.flattenDefinitionList(this.state.configurator.dto));
-    // this.restfulCommService.callAPI('santaSecurity/get-santa-securities', {req: 'GET'}).pipe(
-    //   tap((serverReturn) => {
-    //     console.log('return is ', serverReturn)
-    //   }),
-    //   catchError(err => {
-    //     console.log('error', err);
-    //     return of('error');
-    //   })
-    // ).subscribe();
   }
 
   public onToggleCollapseConfigurator(){
@@ -323,7 +314,7 @@ export class MarketGroupPanel implements OnDestroy {
   private performSearch(payload: PayloadGetSantaGroups){
     this.state.searchResult.securityGroupList = [this.dtoService.formSecurityGroupObject(null), this.dtoService.formSecurityGroupObject(null), this.dtoService.formSecurityGroupObject(null)];
     this.initializeGroupStats();
-    this.restfulCommService.callAPI('santaGroup/get-santa-groups', {req: 'POST'}, payload, true).pipe(
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getGroups, {req: 'POST'}, payload, true).pipe(
       first(),
       tap((serverReturn) => {
         console.log('return is ', serverReturn);

@@ -22,6 +22,7 @@ export const SECURITY_TABLE_FINAL_STAGE = 3;
 
 export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
   {
+    key: 'securityCard',
     label: 'Security',
     attrName: null,
     underlineAttrName: null,
@@ -29,6 +30,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     pureText: true,
     active: true
   },{
+    key: 'bestQuote',
     label: 'Best Quote (Bid vs Ask)',
     attrName: null,
     underlineAttrName: null,
@@ -37,6 +39,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: true,
     targetQuantLocationFromRow: 'bestSpreadQuote'
   },{
+    key: 'mark',
     label: 'Mark',
     attrName: 'mark',
     underlineAttrName: 'markRaw',
@@ -44,6 +47,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     readyStage: 2,
     active: true
   },{
+    key: 'markDriver',
     label: 'Mark Driver',
     attrName: 'markDriver',
     underlineAttrName: 'markDriver',
@@ -51,6 +55,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     readyStage: 2,
     active: false
   },{
+    key: 'markLastUpdatedBy',
     label: 'Mark Last Updated By',
     attrName: 'markChangedBy',
     underlineAttrName: 'markChangedBy',
@@ -58,6 +63,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     readyStage: 2,
     active: false
   },{
+    key: 'markLastUpdateTime',
     label: 'Mark Last Update Time',
     attrName: 'markChangedTime',
     underlineAttrName: 'markChangedTime',
@@ -65,6 +71,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     readyStage: 2,
     active: false
   },{
+    key: 'markDeltaToBid',
     label: 'Mark Delta to Bid',
     attrName: 'markDisBid',
     underlineAttrName: 'markDisBidRaw',
@@ -73,6 +80,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     isFrontEndMetric: true,
     active: false
   },{
+    key: 'markDeltaToAsk',
     label: 'Mark Delta to Ask',
     attrName: 'markDisAsk',
     underlineAttrName: 'markDisAskRaw',
@@ -81,6 +89,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     isFrontEndMetric: true,
     active: false
   },{
+    key: 'markDeltaToMid',
     label: 'Mark Delta to Mid',
     attrName: 'markDisMid',
     underlineAttrName: 'markDisMidRaw',
@@ -89,6 +98,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     isFrontEndMetric: true,
     active: false
   },{
+    key: 'markDeltaToLiquidation',
     label: 'Mark Delta to Liquidation',
     attrName: 'markDisLiquidation',
     underlineAttrName: 'markDisLiquidationRaw',
@@ -97,30 +107,35 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     isFrontEndMetric: true,
     active: true
   },{
+    key: 'currentPosition',
     label: 'Position (MM)',
     attrName: 'positionCurrentInMM',
     underlineAttrName: 'positionCurrent',
     readyStage: 1,
     active: true
   },{
+    key: 'firmPosition',
     label: 'Firm Position (MM)',
     attrName: 'positionFirmInMM',
     underlineAttrName: 'positionFirm',
     readyStage: 1,
     active: false
   },{
+    key: 'hfPosition',
     label: 'HF Position (MM)',
     attrName: 'positionHFInMM',
     underlineAttrName: 'positionHF',
     readyStage: 1,
     active: false
   },{
+    key: 'nlfPosition',
     label: 'NLF Position (MM)',
     attrName: 'positionNLFInMM',
     underlineAttrName: 'positionNLF',
     readyStage: 1,
     active: false
   },{
+    key: 'thirtyDayDelta',
     label: '30 Day Delta',
     attrName: TriCoreMetricConfig.Spread.metricLabel,
     underlineAttrName: TriCoreMetricConfig.Spread.metricLabel,
@@ -129,6 +144,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     metricPackDeltaScope: 'Mom',
     active: true
   },{
+    key: 'quoteCount',
     label: 'Quote Count',
     attrName: null,
     underlineAttrName: null,
@@ -136,6 +152,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false,
     disabled: true
   },{
+    key: 'rating',
     label: 'Rating',
     attrName: 'ratingValue',
     underlineAttrName: 'ratingValue',
@@ -143,6 +160,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false,
     inversedSortingForText: true
   },{
+    key: 'currency',
     label: 'Currency',
     attrName: 'currency',
     underlineAttrName: 'currency',
@@ -150,6 +168,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false,
     inversedSortingForText: true
   },{
+    key: 'sector',
     label: 'Sector',
     attrName: 'sector',
     underlineAttrName: 'sector',
@@ -157,6 +176,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: true,
     inversedSortingForText: true
   },{
+    key: 'industry',
     label: 'Industry',
     attrName: 'industry',
     underlineAttrName: 'industry',
@@ -164,6 +184,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false,
     inversedSortingForText: true
   },{
+    key: 'couponType',
     label: 'CouponType',
     attrName: 'couponType',
     underlineAttrName: 'couponType',
@@ -171,6 +192,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false,
     inversedSortingForText: true
   },{
+    key: 'securityType',
     label: 'Security Type',
     attrName: 'securityType',
     underlineAttrName: 'securityType',
@@ -178,6 +200,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false,
     inversedSortingForText: true
   },{
+    key: 'seniority',
     label: 'Seniority',
     attrName: 'seniority',
     underlineAttrName: 'seniority',
@@ -185,6 +208,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false,
     inversedSortingForText: true
   },{
+    key: 'country',
     label: 'Country',
     attrName: 'country',
     underlineAttrName: 'country',
@@ -192,6 +216,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false,
     inversedSortingForText: true
   },{
+    key: 'maturityType',
     label: 'Maturity Type',
     attrName: 'maturityType',
     underlineAttrName: 'maturityType',
@@ -199,6 +224,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false,
     inversedSortingForText: true
   },{
+    key: 'primaryPM',
     label: 'Primary PM',
     attrName: 'primaryPmName',
     underlineAttrName: 'primaryPmName',
@@ -206,6 +232,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: true,
     inversedSortingForText: true
   },{
+    key: 'backupPM',
     label: 'Backup PM',
     attrName: 'backupPmName',
     underlineAttrName: 'backupPmName',
@@ -213,6 +240,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false,
     inversedSortingForText: true
   },{
+    key: 'research',
     label: 'Research',
     attrName: 'researchName',
     underlineAttrName: 'researchName',
@@ -220,13 +248,15 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false,
     inversedSortingForText: true
   },{
+    key: 'firmStrategy',
     label: 'Firm Strategy',
     attrName: 'strategyFirm',
     underlineAttrName: 'strategyFirm',
     readyStage: 1,
-    active: true,
+    active: false,
     inversedSortingForText: true
   },{
+    key: 'strategy',
     label: 'Strategy',
     attrName: 'strategyCurrent',
     underlineAttrName: 'strategyCurrent',
@@ -278,3 +308,11 @@ export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
     textOnly: true
   }
 ];
+
+export const AGGRID_SECURITY_CARD_COLUMN_WIDTH = 270;
+export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_quant + $spacing_small * 2 
+export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 100;
+export const AGGRID_ROW_HEIGHT = 40;
+export const AGGRID_HEADER_CLASS = 'santaTable__main-agGrid-header';
+export const AGGRID_ROW_CLASS = 'santaTable__main-agGrid-row';
+export const AGGRID_CELL_CLASS = 'santaTable__main-agGrid-cell';

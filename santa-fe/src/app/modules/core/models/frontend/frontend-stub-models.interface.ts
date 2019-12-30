@@ -64,6 +64,7 @@ export interface SecurityTableQuoteMetric {
 }
 
 export interface SecurityTableMetricStub {
+  key: string;
   label: string;
   attrName: string;
   underlineAttrName: string;

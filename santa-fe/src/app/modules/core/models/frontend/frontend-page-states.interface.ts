@@ -71,6 +71,7 @@ export interface TradeCenterPanelState {
   }
   configurator: {
     dto: SecurityDefinitionConfiguratorDTO;
+    boosted: boolean;
   }
   table: {
     metrics: Array<SecurityTableMetricStub>;
@@ -102,6 +103,11 @@ export interface TradeUtilityPanelState {
   isProcessingData: boolean;
   isPresetSelected: boolean;
   isInitialDataLoaded: boolean;
+  validWindowConfig: {
+    valueRaw: number;
+    valueDisplay: string;
+    isEditing: boolean;
+  }
 }
 
 export interface TradeMarketAnalysisPanelState {

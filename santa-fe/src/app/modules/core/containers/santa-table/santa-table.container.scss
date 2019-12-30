@@ -1,10 +1,103 @@
-@import "global.scss";
-@import "ag-grid/ag-grid-basic.scss";
-@import "ag-grid/ag-theme-balham.scss";
+@import "global";
+// @import "ag-grid/ag-grid-basic.scss";
+// @import "ag-grid/ag-theme-balham.scss";
+
+$icons-path: "~ag-grid-community/src/styles/ag-theme-base/icons/";
+$font-family: "SantaOpenSans";
+
+// even row background color
+$default-background: $color_gray_2;
+// odd row background color
+$odd-row-background-color: $color_blue_gray_1;
+
+// header background color
+$chrome-background: $color_gray_2;
+
+// all text color
+// $foreground-color: $font_color_inverse;
+$foreground-opacity: 1;
+$secondary-foreground-color-opacity: 1;
+
+// row background color on hover
+$alt-background: $color_white;
+
+@import "~ag-grid-community/src/styles/ag-grid";
+@import '~ag-grid-community/src/styles/ag-theme-balham/sass/ag-theme-balham';
+// @import '~ag-grid-community/src/styles/ag-theme-balham-dark/sass/ag-theme-balham-dark';
+
+// porting over some basic stylings
+  ::-webkit-scrollbar-thumb {
+    @include mix_border_radius(3px);
+    @include mix_border_generator(0.1875rem,  $theme_color_1);
+    background-color: $color_white;
+  }
+  ::-webkit-scrollbar-thumb:horizontal {
+    //border-width: $scroll_bar_width/8*7 0 $scroll_bar_width/8*7 0;
+  }
+  ::-webkit-scrollbar {
+    width: $scroll_bar_width;
+  }
+  ::-webkit-scrollbar:horizontal {
+    height: $scroll_bar_width;
+  }
+  ::-webkit-scrollbar-track {
+    //background-color: $color_theme_darkgray;
+  }
+  ::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
 
 .santaTable {
   $santaTableBlockName: &;
-  &__row {
-    // height: $securityCard_labelVariant_height * 1.5!important;
+  flex: 1 1 auto;
+  display: flex;
+  overflow: hidden;
+  font-weight: 300;
+  font-family:"SantaOpenSans"; 
+  button {
+    @include material('none');
+    border-radius: inherit;
+    margin: inherit;
+    padding: inherit;
   }
+  &__main {
+    @include mix_enable_scrollbar('both');
+    flex: 1 1 auto;
+    &-agGrid {
+      height: 100%;
+      &-header {
+        justify-content: center;
+        .ag-header-cell-label {
+          padding-left: $spacing_x_small;
+        }
+      }
+      &-row {
+        &:hover {
+          // @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
+        }
+      }
+      &-cell {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        color: $color_blue_gray_8;
+        white-space: normal;
+        word-break: break-word;
+        text-align: right;
+        height: 40px;
+        line-height: $line_height_x_small!important;
+        //width: 3rem;
+        &--securityCard {
+          justify-content: flex-end;
+        }
+        santa-table-quote-cell {
+          flex: 1 1 auto;
+        }
+      }
+    }
+  }
+}
+
+.ag-theme-balham .ag-tab-body, .ag-theme-balham .ag-popup-editor, .ag-theme-balham .ag-menu {
+  color: $font_color_major;
 }

@@ -51,10 +51,10 @@ export class LiveDataProcessingService {
         nonEmptyCount++;
         let sumSize = 0;
         let isValidFlag = true;
-        const newBESecurity:BESecurityDTO = serverReturn[eachKey][0].santaSecurity;
+        const newBESecurity:BESecurityDTO = serverReturn[eachKey][0].security;
         const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false);
         serverReturn[eachKey].forEach((eachPortfolio: BEPortfolioDTO) => {
-          if (eachPortfolio.quantity !== 0 && !eachPortfolio.santaSecurity.isGovt && eachPortfolio.santaSecurity.metrics) {
+          if (eachPortfolio.quantity !== 0 && !eachPortfolio.security.isGovt && eachPortfolio.security.metrics) {
             this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio, activeMetricType);
           } else {
             isValidFlag = false;

@@ -133,7 +133,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
       });
       payload.santaGroupIdentifier['SecurityType'] = [];
       payload.santaGroupIdentifier['CouponType'] = [];
-      this.restfulCommService.callAPI('santaGroup/get-santa-group-from-security', {req: 'POST'}, payload).pipe(
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.getGroupFromSecurity, {req: 'POST'}, payload).pipe(
         first(),
         tap((serverReturn) => {
           this.populateVisualizer(serverReturn);

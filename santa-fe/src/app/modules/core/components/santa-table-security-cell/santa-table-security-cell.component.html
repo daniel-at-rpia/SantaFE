@@ -1,5 +1,5 @@
 <article class="santaTableSecurityCell">
   <section class="santaTableSecurityCell__main">
-    <security-card [cardData]="this.cardData"></security-card>
+    <security-card *ngIf="cardData" [cardData]="cardData"></security-card>
   </section>
 </article>

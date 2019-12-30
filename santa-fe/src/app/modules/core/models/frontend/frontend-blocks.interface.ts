@@ -7,6 +7,10 @@ Because of this, while component models need to follow "BasicDTOStructure", bloc
 */
 
 import * as am4charts from "@amcharts/amcharts4/charts";
+import {
+  SecurityDTO,
+  QuantComparerDTO
+} from 'FEModels/frontend-models.interface';
 
 export interface SecurityPortfolioBlock {
   portfolioName: string;
@@ -45,7 +49,7 @@ export interface SecurityGroupMetricBlock {
 export interface SecurityGroupMetricPackBlock {
   raw: object;
   delta: {
-    DoD: object;
+    Dod: object;
     Wow: object;
     Mom: object;
     Ytd: object;
@@ -97,6 +101,41 @@ export interface QuantitativeEntryStyleBlock {
   rightSpaceWidth: number;
 }
 
-export interface ObligorChartCategoryColorSchemeBlock {
-  categoryScheme: Array<any>;
+export interface AgGridColumnDefinition {
+  headerName: string;
+  field: string;
+  headerClass: string;
+  cellClass: string;
+  width?: number;
+  autoHeight?: boolean;
+  comparator?: Function;
+  cellRenderer?: string;
+  resizable?: boolean;
+  sortable?: boolean;
+  filter?: boolean;
+  hide: boolean;
+  enableRowGroup: boolean,
+  enablePivot: boolean,
+}
+
+export interface AgGridRowNode {
+  columnController: {
+    allDisplayedColumns: Array<AgGridColumn>
+  }
+  data: AgGridRow;
+  [property: string]: any;
+}
+
+export interface AgGridRow {
+  id: string;
+  securityCard: SecurityDTO;    // this needs to identical to SecurityTableMetrics' key for Security column
+  bestQuote: QuantComparerDTO;  // this needs to identical to SecurityTableMetrics' key for Best Quote column
+  [property: string]: any;
+}
+
+export interface AgGridColumn {
+  colId: string;
+  colDef: AgGridColumnDefinition;
+  userProvidedColDef: AgGridColumnDefinition;
+  [property: string]: any;
 }
