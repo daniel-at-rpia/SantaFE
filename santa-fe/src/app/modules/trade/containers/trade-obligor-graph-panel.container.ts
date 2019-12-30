@@ -3,7 +3,7 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import { GraphService } from 'Core/services/GraphService';
 import { UtilityService } from 'Core/services/UtilityService';
-import { selectSelectedSecurityForAnalysis, securityTableRowDTOListForAnalysis } from 'Trade/selectors/trade.selectors';
+import { selectSelectedSecurityForAnalysis, selectSecurityTableRowDTOListForAnalysis } from 'Trade/selectors/trade.selectors';
 import { Store, select } from '@ngrx/store';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { PayloadObligorSecurityIDs } from 'BEModels/backend-payloads.interface';
@@ -49,7 +49,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     });
 
     this.subscriptions.selectSecurityTableRowDTOListForAnalysis = this.store$.pipe(
-      select(securityTableRowDTOListForAnalysis)
+      select(selectSecurityTableRowDTOListForAnalysis)
     ).subscribe((data) => {
       this.state.securityTableRowDTOList = data;
       this.addMarksTochartCategory()
@@ -214,7 +214,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
         displayMark = true;
       }
 
-      //Draw each chart category.
+      // Draw each chart category.
       this.state.chartCategories.forEach((eachCategory) =>
       {
         if (eachCategory.data.obligorCategoryDataItemDTO) this.graphService.addCategoryToObligorGraph(this.state.obligorChart, eachCategory);
@@ -252,7 +252,6 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     let isMarkHidden: boolean = true;
     if (this.state.markValue.quantity) isMarkHidden = false
 
-    // TODO: change this to forEach
     for (let categoryIndex in this.state.obligorChart.series.values) {
       this.state.chartCategories[categoryIndex].state.isHidden = this.state.obligorChart.series.values[categoryIndex].isHidden;
       this.state.chartCategories[categoryIndex].state.isMarkHidden = isMarkHidden;
