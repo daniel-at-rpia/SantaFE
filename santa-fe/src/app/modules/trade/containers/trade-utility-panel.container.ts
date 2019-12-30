@@ -25,7 +25,8 @@
     import { UtilityService } from 'Core/services/UtilityService';
     import {
       TradeLiveUpdateStartEvent,
-      TradeLiveUpdateUtilityInternalCountEvent
+      TradeLiveUpdateUtilityInternalCountEvent,
+      TradeChangeBestQuoteValidWindowEvent
     } from 'Trade/actions/trade.actions';
     import {
       selectLiveUpdateTick,
@@ -174,6 +175,7 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
       this.state.validWindowConfig.valueRaw = eachOption['value'];
       this.state.validWindowConfig.valueDisplay = eachOption['label'];
       this.state.validWindowConfig.isEditing = false;
+      this.store$.dispatch(new TradeChangeBestQuoteValidWindowEvent(this.state.validWindowConfig.valueRaw));
     }
   }
 }
