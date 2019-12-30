@@ -147,3 +147,7 @@ export interface AgGridColumn {
   userProvidedColDef: AgGridColumnDefinition;
   [property: string]: any;
 }
+
+export interface ObligorChartCategoryColorSchemeBlock {
+  categoryScheme: Array<any>;
+}

@@ -96,11 +96,15 @@ export class TradeObligorGraphPanel {
               this.state.obligorName = serverReturn[curve].securities[bestQuote].issuer + " " + serverReturn[curve].securities[bestQuote].ccy
 
               if (bestQuote !== null) {
+                let bestMid = this.addBestSpreadMidToChartCategory(serverReturn[curve].bestQuotes[bestQuote].bestSpreadQuote); 
+                if (bestMid === 0)
+                  continue;
+
                 let categoryDataItem: ObligorCategoryDataItemDTO = {
                   data: {
                     name: serverReturn[curve].securities[bestQuote].name,
                     securityID: bestQuote,
-                    mid: this.addBestSpreadMidToChartCategory(serverReturn[curve].bestQuotes[bestQuote].bestSpreadQuote),
+                    mid: bestMid,
                     mark: null,
                     workoutTerm: serverReturn[curve].securities[bestQuote].metrics.workoutTerm,
                     positionCurrent: null
@@ -156,9 +160,11 @@ export class TradeObligorGraphPanel {
     let mid: number = null;
     let spreadRounding = TriCoreMetricConfig['Spread']['rounding'];
 
+    // TODO: If anything is 0, do not add.
+
     if (bEBestQuoteDTO.bidQuoteValue !== null && bEBestQuoteDTO.askQuoteValue !== null) mid = (bEBestQuoteDTO.bidQuoteValue + bEBestQuoteDTO.askQuoteValue) / 2;
-    else if (bEBestQuoteDTO.bidQuoteValue === null && bEBestQuoteDTO.askQuoteValue > 0) mid = bEBestQuoteDTO.askQuoteValue
-    else if (bEBestQuoteDTO.bidQuoteValue > 0 && bEBestQuoteDTO.askQuoteValue === null) mid = bEBestQuoteDTO.bidQuoteValue
+    else if (bEBestQuoteDTO.bidQuoteValue === null && bEBestQuoteDTO.askQuoteValue > 0) mid = bEBestQuoteDTO.askQuoteValue;
+    else if (bEBestQuoteDTO.bidQuoteValue > 0 && bEBestQuoteDTO.askQuoteValue === null) mid = bEBestQuoteDTO.bidQuoteValue;
 
     mid = this.utility.round(mid, spreadRounding);
 

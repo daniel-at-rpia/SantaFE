@@ -248,6 +248,7 @@ export class GraphService {
     xAxis.title.text = "Tenor";
     xAxis.min = 0;
     xAxis.data = data;
+    xAxis.cursorTooltipEnabled = false;
 
     xAxis.renderer.labels.template.adapter.add("dx", function (dx, target) {
       return -target.maxRight / 2;
@@ -262,5 +263,19 @@ export class GraphService {
     yAxis.min = 0;
     yAxis.data = data;
     yAxis.renderer.minGridDistance = 30;
+    yAxis.cursorTooltipEnabled = true;
+
+    let axisTooltip = yAxis.tooltip;
+    axisTooltip.background.fill = am4core.color("#07BEB8");
+    axisTooltip.background.strokeWidth = 0;
+    axisTooltip.background.cornerRadius = 3;
+    axisTooltip.background.pointerLength = 0;
+    axisTooltip.dy = 5;
+
+    let dropShadow = new am4core.DropShadowFilter();
+    dropShadow.dy = 1;
+    dropShadow.dx = 1;
+    dropShadow.opacity = 0.5;
+    axisTooltip.filters.push(dropShadow);
   }
 }
