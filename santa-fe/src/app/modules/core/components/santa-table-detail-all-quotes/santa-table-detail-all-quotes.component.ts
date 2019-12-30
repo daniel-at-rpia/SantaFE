@@ -11,7 +11,7 @@ import { AgGridRowNode } from 'FEModels/frontend-blocks.interface';
 
 import { SecurityTableRowDTO } from 'FEModels/frontend-models.interface';
 import { QuoteMetricBlock } from 'FEModels/frontend-blocks.interface';
-import { ClickedSortQuotesByMetricEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
+import { AgGridRowParams } from 'FEModels/frontend-adhoc-packages.interface';
 import { DTOService } from 'Core/services/DTOService';
 import { QuoteMetricList } from 'Core/constants/securityTableConstants.constant';
 
@@ -23,19 +23,17 @@ import { QuoteMetricList } from 'Core/constants/securityTableConstants.constant'
 })
 export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   @Input() rowData: SecurityTableRowDTO;
-  private rowNode: AgGridRowNode;
   private parentNode: AgGridRowNode;
   constructor(
     private dtoService: DTOService
   ) { }
 
   public agInit(params: any){
-    // don't forget this is triggered when the row is updated in live to
-    console.log('params are', params);
-    // this.rowData = params.value;
-    this.rowNode = params.node;
-    this.parentNode = this.rowNode.parent;
-    this.rowData = this.dtoService.formSecurityTableRowObject(null);
+    // don't forget this is triggered when the row is updated in live too
+    const typeSafeParams = params as AgGridRowParams;
+    console.log('params are', typeSafeParams);
+    this.parentNode = typeSafeParams.node.parent;
+    this.rowData = typeSafeParams.node.data.rowDTO;
   }
 
   public refresh(): boolean {
