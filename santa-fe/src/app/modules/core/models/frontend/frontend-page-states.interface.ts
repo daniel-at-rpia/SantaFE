@@ -10,7 +10,7 @@ import {
   QuantComparerDTO,
   QuantitativeVisualizerDTO,
 } from 'FEModels/frontend-models.interface';
-import {  ObligorChartCategoryDTO } from 'FEModels/frontend-blocks.interface';
+import {  ObligorChartCategoryBlock } from 'FEModels/frontend-blocks.interface';
 import {
   SecurityDefinitionStub,
   SecurityTableMetricStub
@@ -146,5 +146,5 @@ export interface TradeObligorGraphPanelState {
     srCDS: boolean;
     subCDS: boolean;
   }
-  chartCategories: ObligorChartCategoryDTO[];
+  chartCategories: ObligorChartCategoryBlock[];
 }

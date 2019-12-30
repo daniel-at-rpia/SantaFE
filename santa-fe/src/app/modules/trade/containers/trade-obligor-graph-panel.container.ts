@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, NgZone } from "@angular/core";
+import { Component, ViewEncapsulation, NgZone, AfterViewInit, OnDestroy } from "@angular/core";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import { GraphService } from 'Core/services/GraphService';
@@ -7,14 +7,13 @@ import { selectSelectedSecurityForAnalysis, securityTableRowDTOListForAnalysis }
 import { Store, select } from '@ngrx/store';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { PayloadObligorSecurityIDs } from 'BEModels/backend-payloads.interface';
-import { SecurityDTO, QuantComparerDTO } from 'App/modules/core/models/frontend/frontend-models.interface';
+import { SecurityDTO } from 'App/modules/core/models/frontend/frontend-models.interface';
 import { DTOService } from 'Core/services/DTOService';
-import { tap, first, delay, catchError, withLatestFrom, filter, sample } from 'rxjs/operators';
+import { tap, first } from 'rxjs/operators';
 import { TradeSecurityIDsFromAnalysisEvent } from 'Trade/actions/trade.actions';
 import { TriCoreMetricConfig } from 'Core/constants/coreConstants.constant';
-import { TradeMarketAnalysisPanelState, TradeObligorGraphPanelState } from 'FEModels/frontend-page-states.interface';
-import { ObligorCategoryDataItemDTO } from 'FEModels/frontend-blocks.interface';
-import { BEBestQuoteDTO } from 'App/modules/core/models/backend/backend-models.interface';
+import { TradeObligorGraphPanelState } from 'FEModels/frontend-page-states.interface';
+import { ObligorCategoryDataItemBlock } from 'FEModels/frontend-blocks.interface';
 import { ObligorChartCategoryColorScheme } from 'App/modules/core/constants/colorSchemes.constant';
 
 @Component({
@@ -24,7 +23,7 @@ import { ObligorChartCategoryColorScheme } from 'App/modules/core/constants/colo
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class TradeObligorGraphPanel {
+export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
   state: TradeObligorGraphPanelState;
   subscriptions = {
     selectSecurityUpdateForAnalysis: null,
@@ -39,6 +38,235 @@ export class TradeObligorGraphPanel {
     private utility: UtilityService,
     private dtoService: DTOService
   ) {
+    this.initializeState();
+  }
+
+  public ngAfterViewInit() {
+    this.subscriptions.selectSecurityUpdateForAnalysis = this.store$.pipe(
+      select(selectSelectedSecurityForAnalysis)
+    ).subscribe((data) => {
+      this.setObligorSecurityID(data)
+    });
+
+    this.subscriptions.selectSecurityTableRowDTOListForAnalysis = this.store$.pipe(
+      select(securityTableRowDTOListForAnalysis)
+    ).subscribe((data) => {
+      this.state.securityTableRowDTOList = data;
+      this.addMarksTochartCategory()
+    });
+  }
+
+  private setObligorSecurityID(data: SecurityDTO) {
+    if(data) this.state.obligorSecurityID = data.data.securityID;
+    if (this.state.obligorSecurityID) this.fetchSecurityIDs();
+  }
+
+  public ngOnDestroy() {
+    if(this.state.obligorChart) this.state.obligorChart.dispose();
+    this.initializeState();
+  }
+
+  private fetchSecurityIDs() {
+
+    let securityIDsFromAnalysis: string[] = [];
+    let chartCategory = null;
+    this.state.chartCategories = [];
+
+    const payload: PayloadObligorSecurityIDs = {
+      identifier: this.state.obligorSecurityID
+    };
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getObligorCurves, { req: 'POST' }, payload).pipe(
+      first(),
+      tap((serverReturn) => {
+
+        // TODO: Create a backend-model.interface for payload. This would get rid of this first loop.
+        for (let curve in serverReturn) {
+          // Initialize a null chart category.
+          chartCategory = this.dtoService.formObligorChartCategoryDTO(true, null, null, null, true);
+
+          // Set the name of the chart category to SENIORITY / COUPON / TYPE
+          // We might want to change this to use the groupIdentifier object in serverReturn.
+          chartCategory.data.name = serverReturn[curve].seniority + " " + serverReturn[curve].couponType + " " + serverReturn[curve].curveType;
+          chartCategory.data.color = this.getObligorChartCategoryColorFromScheme(chartCategory.data.name);
+
+          // Set the MID data for the category.
+          for (let security in serverReturn[curve].bestQuotes) {
+
+            if (security !== null) {
+
+              let bestMid = this.addBestSpreadMidToChartCategory(serverReturn[curve].bestQuotes[security].bestSpreadQuote);
+
+              if (bestMid !== 0) {
+
+                if (this.state.obligorSecurityID === security) chartCategory.state.isHidden = false;
+
+                this.state.obligorName = serverReturn[curve].securities[security].issuer + " " + serverReturn[curve].securities[security].ccy;
+
+                let categoryDataItem: ObligorCategoryDataItemBlock = {
+                  data: {
+                    name: serverReturn[curve].securities[security].name,
+                    securityID: security,
+                    mid: bestMid,
+                    mark: null,
+                    workoutTerm: serverReturn[curve].securities[security].metrics.workoutTerm,
+                    positionCurrent: null
+                  },
+                  state: {}
+                }
+
+                chartCategory.data.obligorCategoryDataItemDTO.push(categoryDataItem);
+
+                //Populate list of securityIDs to be sent to trade-center-panel.
+                securityIDsFromAnalysis.push(security);
+
+                // Populate the YAxis with the mid.
+                this.state.yAxisData.push(categoryDataItem.data.mid);
+
+                // Pupulate the XAxis with the workout Term.
+                this.state.xAxisData.push({ workoutTerm: categoryDataItem.data.workoutTerm });
+              }
+            }
+          }
+
+          this.state.chartCategories.push(chartCategory);
+        }
+        // Dispatch a the list of security IDs from the related Obligor in serverReturn. This will call to trade-center-panel, which will return marks for those we own.
+        if(securityIDsFromAnalysis) 0 && this.store$.dispatch(new TradeSecurityIDsFromAnalysisEvent(securityIDsFromAnalysis));
+      }),
+    ).subscribe();
+
+  }
+
+  private getObligorChartCategoryColorFromScheme(obligorCategoryType: string): string {
+    let color: string = null;
+    let colorSchemes = ObligorChartCategoryColorScheme;
+    for (let scheme in colorSchemes.categoryScheme) {
+      if (colorSchemes.categoryScheme[scheme].label === obligorCategoryType) color = colorSchemes.categoryScheme[scheme].value;
+    }
+
+    if (color === null) color = '#000000';
+    return color;
+  }
+
+  private addBestYieldMidQuoteToChartCategory(securityID: string, bEBestQuoteDTO: any): any[] {
+    let bestQuoteData: any[] = [];
+    let spreadRounding = TriCoreMetricConfig['Yield']['rounding'];
+
+    let yieldMid = null;
+
+    // TODO: I have not added Yield logic yet.
+
+    return bestQuoteData;
+  }
+
+  private addBestSpreadMidToChartCategory(bEBestQuoteDTO: any): any {
+    let mid: number = null;
+    let spreadRounding = TriCoreMetricConfig['Spread']['rounding'];
+
+    // TODO: If anything is 0, do not add.
+
+    if (bEBestQuoteDTO.bidQuoteValue !== null && bEBestQuoteDTO.askQuoteValue !== null) mid = (bEBestQuoteDTO.bidQuoteValue + bEBestQuoteDTO.askQuoteValue) / 2;
+    else if (bEBestQuoteDTO.bidQuoteValue === null && bEBestQuoteDTO.askQuoteValue > 0) mid = bEBestQuoteDTO.askQuoteValue;
+    else if (bEBestQuoteDTO.bidQuoteValue > 0 && bEBestQuoteDTO.askQuoteValue === null) mid = bEBestQuoteDTO.bidQuoteValue;
+
+    mid = this.utility.round(mid, spreadRounding);
+
+    return mid;
+  }
+
+  private addMarksTochartCategory() {
+    // This method will loop through the list of obligor security IDs and assign a mark to those we own.
+    this.state.chartCategories.forEach((eachCategory) => {
+      eachCategory.data.obligorCategoryDataItemDTO.forEach((eachCategoryItem) => {
+        this.state.securityTableRowDTOList.forEach((eachRow) => {
+          const eachSecurity = eachRow.data.security;
+          if (!!eachSecurity && eachCategoryItem.data.securityID === eachSecurity.data.securityID) {
+            eachCategoryItem.data.mark = eachSecurity.data.mark.mark;
+            eachCategoryItem.data.positionCurrent = eachSecurity.data.positionCurrent;
+            // Insert the mark in our XAxis data fields.
+            this.state.yAxisData.push(Number(eachCategoryItem.data.mark));
+          } else {
+            console.error('this row does not have security', eachRow);
+          }
+        })
+      })
+    })
+
+    // Once we assign the marks, we have all the information we need to build the chart.
+    this.buildChart();
+  }
+
+  private buildChart() {
+    this.zone.runOutsideAngular(() => {
+
+      am4core.options.autoSetClassName = true;
+
+      // Initialize the chart as XY.
+      this.state.obligorChart = am4core.create("chartdiv", am4charts.XYChart);
+
+      // Initialize axes for the chart.
+      this.graphService.initializeObligorChartAxes(this.state.xAxisData, this.state.yAxisData, this.state.obligorChart);
+
+      // TODO: This part is incomplete. Right now this chart only handles quantity.
+      // Each chart category DTO has its own "isMarkHidden" field which should be used.
+      let displayMark: boolean = false;
+      if (this.state.markValue.cS01 || this.state.markValue.quantity) {
+        displayMark = true;
+      }
+
+      //Draw each chart category.
+      this.state.chartCategories.forEach((eachCategory) =>
+      {
+        if (eachCategory.data.obligorCategoryDataItemDTO) this.graphService.addCategoryToObligorGraph(this.state.obligorChart, eachCategory);
+      });
+
+      // Add legend for each chart type.
+      this.state.obligorChart.legend = new am4charts.Legend();
+
+      // Add a cursor to the chart, with zoom behaviour. 
+      this.state.obligorChart.cursor = new am4charts.XYCursor();
+      this.state.obligorChart.cursor.behavior = "zoomXY";
+      this.state.obligorChart.cursor.lineX.disabled = true;
+      this.state.obligorChart.cursor.lineY.disabled = true;
+
+      // Zoom out button
+      this.state.obligorChart.zoomOutButton.align = "left";
+      this.state.obligorChart.zoomOutButton.valign = "top";
+
+    });
+  }
+
+  public btnCS01Click() {
+    this.state.markValue.cS01 = false;
+    if (this.state.markValue.cS01) this.state.markValue.cS01 = false;
+    else if (this.state.markValue.cS01 === false) this.state.markValue.cS01 = true;
+
+    // TODO: CS01 is not yet supported.
+  }
+
+  public btnQuantityClick() {
+    this.state.markValue.cS01 = false;
+    if (this.state.markValue.quantity) this.state.markValue.quantity = false;
+    else if (this.state.markValue.quantity === false) this.state.markValue.quantity = true;
+
+    let isMarkHidden: boolean = true;
+    if (this.state.markValue.quantity) isMarkHidden = false
+
+    // TODO: change this to forEach
+    for (let categoryIndex in this.state.obligorChart.series.values) {
+      this.state.chartCategories[categoryIndex].state.isHidden = this.state.obligorChart.series.values[categoryIndex].isHidden;
+      this.state.chartCategories[categoryIndex].state.isMarkHidden = isMarkHidden;
+    }
+
+    this.state.obligorChart = this.graphService.clearGraphSeries(this.state.obligorChart);
+
+    // Generate a graph for each data type, sending in the raw data,  the color scheme and the name.
+    for (let category in this.state.chartCategories) {
+      if (this.state.chartCategories[category].data.obligorCategoryDataItemDTO.length > 0) this.graphService.addCategoryToObligorGraph(this.state.obligorChart, this.state.chartCategories[category]);
+    }
+  }
+
+  private initializeState() {
     this.state = {
       obligorChart: null,
       obligorSecurityID: null,
@@ -62,204 +290,6 @@ export class TradeObligorGraphPanel {
         subCDS: false
       },
       chartCategories: []
-    }
-  }
-
-  fetchSecurityIDs(data: SecurityDTO) {
-
-    let securityIDList: string[] = [];
-    let chartCategory = null;
-    this.state.chartCategories = [];
-
-    if (data != null) {
-      this.state.obligorSecurityID = data.data.securityID;
-      const payload: PayloadObligorSecurityIDs = {
-        identifier: data.data.securityID
-      };
-      this.restfulCommService.callAPI(this.restfulCommService.apiMap.getObligorCurves, { req: 'POST' }, payload).pipe(
-        first(),
-        tap((serverReturn) => {
-          for (let curve in serverReturn) {
-            // Initialize a null chart category.
-            chartCategory = this.dtoService.formObligorChartCategoryDTO(true, null, null, null, true);
-
-            // Set the name of the chart category to SENIORITY / COUPON / TYPE
-            // We might want to change this to use the groupIdentifier object in serverReturn.
-            chartCategory.data.name = serverReturn[curve].seniority + " " + serverReturn[curve].couponType + " " + serverReturn[curve].curveType;
-            chartCategory.data.color = this.getObligorChartCategoryColorFromScheme(chartCategory.data.name);
-
-            // Set the MID data for the category.
-            for (let bestQuote in serverReturn[curve].bestQuotes) {
-
-              if (this.state.obligorSecurityID === bestQuote) chartCategory.state.isHidden = false;
-
-              this.state.obligorName = serverReturn[curve].securities[bestQuote].issuer + " " + serverReturn[curve].securities[bestQuote].ccy
-
-              if (bestQuote !== null) {
-                let bestMid = this.addBestSpreadMidToChartCategory(serverReturn[curve].bestQuotes[bestQuote].bestSpreadQuote); 
-                if (bestMid === 0)
-                  continue;
-
-                let categoryDataItem: ObligorCategoryDataItemDTO = {
-                  data: {
-                    name: serverReturn[curve].securities[bestQuote].name,
-                    securityID: bestQuote,
-                    mid: bestMid,
-                    mark: null,
-                    workoutTerm: serverReturn[curve].securities[bestQuote].metrics.workoutTerm,
-                    positionCurrent: null
-                  },
-                  state: {}
-                }
-
-                chartCategory.data.obligorCategoryDataItemDTO.push(categoryDataItem);
-                securityIDList.push(bestQuote);
-
-                // Populate the YAxis with the mid.
-                this.state.yAxisData.push(categoryDataItem.data.mid);
-
-                // Pupulate the XAxis with the workout Term.
-                this.state.xAxisData.push({ workoutTerm: categoryDataItem.data.workoutTerm });
-              }
-            }
-
-            this.state.chartCategories.push(chartCategory);
-          }
-          // Dispatch a the list of security IDs from the related Obligor in serverReturn. This will call to trade-center-panel, which will return marks for those we own.
-          if (securityIDList.length > 0) this.store$.dispatch(new TradeSecurityIDsFromAnalysisEvent(securityIDList));
-        }),
-      ).subscribe();
-
-      // TODO: Error handling for API call.
-    }
-  }
-
-  getObligorChartCategoryColorFromScheme(obligorCategoryType: string): string {
-    let color: string = null;
-    let colorSchemes = ObligorChartCategoryColorScheme;
-    for (let scheme in colorSchemes.categoryScheme) {
-      if (colorSchemes.categoryScheme[scheme].label === obligorCategoryType) color = colorSchemes.categoryScheme[scheme].value;
-    }
-
-    if (color === null) color = '#000000';
-    return color;
-  }
-
-  addBestYieldMidQuoteToChartCategory(securityID: string, bEBestQuoteDTO: any): any[] {
-    let bestQuoteData: any[] = [];
-    let spreadRounding = TriCoreMetricConfig['Yield']['rounding'];
-
-    let yieldMid = null;
-
-    // TODO: I have not added Yield logic yet.
-
-    return bestQuoteData;
-  }
-
-  addBestSpreadMidToChartCategory(bEBestQuoteDTO: any): any {
-    let mid: number = null;
-    let spreadRounding = TriCoreMetricConfig['Spread']['rounding'];
-
-    // TODO: If anything is 0, do not add.
-
-    if (bEBestQuoteDTO.bidQuoteValue !== null && bEBestQuoteDTO.askQuoteValue !== null) mid = (bEBestQuoteDTO.bidQuoteValue + bEBestQuoteDTO.askQuoteValue) / 2;
-    else if (bEBestQuoteDTO.bidQuoteValue === null && bEBestQuoteDTO.askQuoteValue > 0) mid = bEBestQuoteDTO.askQuoteValue;
-    else if (bEBestQuoteDTO.bidQuoteValue > 0 && bEBestQuoteDTO.askQuoteValue === null) mid = bEBestQuoteDTO.bidQuoteValue;
-
-    mid = this.utility.round(mid, spreadRounding);
-
-    return mid;
-  }
-
-  ngAfterViewInit() {
-    this.subscriptions.selectSecurityUpdateForAnalysis = this.store$.pipe(select(selectSelectedSecurityForAnalysis)).subscribe((data) => { this.fetchSecurityIDs(data) });
-    this.subscriptions.selectSecurityTableRowDTOListForAnalysis = this.store$.pipe(select(securityTableRowDTOListForAnalysis)).subscribe((data) => { this.state.securityTableRowDTOList = data; this.addMarksTochartCategory() });
-  }
-
-  private addMarksTochartCategory() {
-    // This method will loop through the list of obligor security IDs and assign a mark to those we own.
-    // TODO: Optimize this loop? These fields should not hold many indexes, but could be done better.
-    for (let category in this.state.chartCategories) {
-      for (let categoryDataItem in this.state.chartCategories[category].data.obligorCategoryDataItemDTO) {
-        for (let security in this.state.securityTableRowDTOList) {
-          if (this.state.securityTableRowDTOList[security].data.security.data.securityID === this.state.chartCategories[category].data.obligorCategoryDataItemDTO[categoryDataItem].data.securityID) {
-            this.state.chartCategories[category].data.obligorCategoryDataItemDTO[categoryDataItem].data.mark = this.state.securityTableRowDTOList[security].data.security.data.mark.mark;
-            this.state.chartCategories[category].data.obligorCategoryDataItemDTO[categoryDataItem].data.positionCurrent = this.state.securityTableRowDTOList[security].data.security.data.positionCurrent;
-            // Insert the mark in our XAxis data fields.
-            this.state.yAxisData.push(Number(this.state.chartCategories[category].data.obligorCategoryDataItemDTO[categoryDataItem].data.mark));
-          }
-        }
-      }
-    }
-
-    // Once we assign the marks, we have all the information we need to build the chart.
-    this.buildChart();
-  }
-
-  private buildChart() {
-    this.zone.runOutsideAngular(() => {
-
-      am4core.options.autoSetClassName = true;
-      // Initialize the chart as XY.
-      this.state.obligorChart = am4core.create("chartdiv", am4charts.XYChart);
-
-      // Initialize axes for the chart.
-      this.graphService.initializeObligorChartAxes(this.state.xAxisData, this.state.yAxisData, this.state.obligorChart);
-
-      // TODO: This part is incomplete. Right now this chart only handles quantity.
-      // Each chart category DTO has its own "isMarkHidden" field which should be used.
-      let displayMark: boolean = false;
-      if (this.state.markValue.cS01 === true || this.state.markValue.quantity === true) {
-        displayMark = true;
-      }
-
-      //Draw each chart category.
-      for (let category in this.state.chartCategories) {
-        if (this.state.chartCategories[category].data.obligorCategoryDataItemDTO.length > 0) this.graphService.addCategoryToObligorGraph(this.state.obligorChart, this.state.chartCategories[category]);
-      }
-
-      // Add legend for each chart type.
-      this.state.obligorChart.legend = new am4charts.Legend();
-
-      // Add a cursor to the chart, with zoom behaviour. 
-      this.state.obligorChart.cursor = new am4charts.XYCursor();
-      this.state.obligorChart.cursor.behavior = "zoomXY";
-      this.state.obligorChart.cursor.lineX.disabled = true;
-      this.state.obligorChart.cursor.lineY.disabled = true;
-
-      // Zoom out button
-      this.state.obligorChart.zoomOutButton.align = "left";
-      this.state.obligorChart.zoomOutButton.valign = "top";
-
-    });
-  }
-
-  btnCS01Click() {
-    this.state.markValue.cS01 = false;
-    if (this.state.markValue.cS01) this.state.markValue.cS01 = false;
-    else if (this.state.markValue.cS01 === false) this.state.markValue.cS01 = true;
-
-    // TODO: CS01 is not yet supported.
-  }
-
-  btnQuantityClick() {
-    this.state.markValue.cS01 = false;
-    if (this.state.markValue.quantity) this.state.markValue.quantity = false;
-    else if (this.state.markValue.quantity === false) this.state.markValue.quantity = true;
-
-    let isMarkHidden: boolean = true;
-    if (this.state.markValue.quantity) isMarkHidden = false
-
-    for (let categoryIndex in this.state.obligorChart.series.values) {
-      if (this.state.obligorChart.series.values[categoryIndex].isHidden === false) this.state.chartCategories[categoryIndex].state.isHidden = false;
-      this.state.chartCategories[categoryIndex].state.isMarkHidden = isMarkHidden;
-    }
-
-    this.state.obligorChart.series.clear();
-
-    // Generate a graph for each data type, sending in the raw data,  the color scheme and the name.
-    for (let category in this.state.chartCategories) {
-      if (this.state.chartCategories[category].data.obligorCategoryDataItemDTO.length > 0) this.graphService.addCategoryToObligorGraph(this.state.obligorChart, this.state.chartCategories[category]);
     }
   }
 

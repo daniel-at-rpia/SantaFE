@@ -153,11 +153,11 @@ export interface ObligorChartCategoryColorSchemeBlock {
 }
 
 
-export interface ObligorChartCategoryDTO {
+export interface ObligorChartCategoryBlock {
   data: { 
     name: string;
     color: string;
-    obligorCategoryDataItemDTO: Array<ObligorCategoryDataItemDTO>;
+    obligorCategoryDataItemDTO: Array<ObligorCategoryDataItemBlock>;
   };
 
   state: {
@@ -166,7 +166,7 @@ export interface ObligorChartCategoryDTO {
   }
 }
 
-export interface ObligorCategoryDataItemDTO {
+export interface ObligorCategoryDataItemBlock {
   data: {
     name: string,
     securityID: string;

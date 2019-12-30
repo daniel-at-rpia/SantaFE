@@ -3,7 +3,7 @@ import { UtilityService } from './UtilityService';
 import {
   SecurityGroupPieChartBlock,
   SecurityGroupPieChartDataBlock,
-  ObligorChartCategoryDTO
+  ObligorChartCategoryBlock
 } from 'FEModels/frontend-blocks.interface';
 
 import * as am4core from "@amcharts/amcharts4/core";
@@ -125,7 +125,7 @@ export class GraphService {
     }
   }
 
-  public addCategoryToObligorGraph(chart: am4charts.XYChart, category: ObligorChartCategoryDTO) {
+  public addCategoryToObligorGraph(chart: am4charts.XYChart, category: ObligorChartCategoryBlock) {
     // Create data array that can be handled by amCharts from out category DataItems.
     let amChartsData: any[] = [];
     for (let dataItem in category.data.obligorCategoryDataItemDTO) {
@@ -134,6 +134,7 @@ export class GraphService {
         category.data.obligorCategoryDataItemDTO[dataItem].data.mark = category.data.obligorCategoryDataItemDTO[dataItem].data.mid.toLocaleString();
       }
 
+      // TODO: Create adhoc interface.
       amChartsData.push({
         name: category.data.obligorCategoryDataItemDTO[dataItem].data.name,
         mid: category.data.obligorCategoryDataItemDTO[dataItem].data.mid,
@@ -146,7 +147,7 @@ export class GraphService {
     this.generateObligorChartDumbells(chart, category, amChartsData);
   }
 
-  private generateObligorChartDumbells(chart: am4charts.XYChart, category: ObligorChartCategoryDTO, amChartsData: any[]): am4charts.ColumnSeries {
+  private generateObligorChartDumbells(chart: am4charts.XYChart, category: ObligorChartCategoryBlock, amChartsData: any[]): am4charts.ColumnSeries {
 
     // Create the column representing the mark discrepency.
     let dumbBellseries = chart.series.push(new am4charts.ColumnSeries());
@@ -205,7 +206,7 @@ export class GraphService {
     return dumbBellseries;
   }
 
-  private generateObligorChartTrendCurve(category: ObligorChartCategoryDTO): am4charts.LineSeries {
+  private generateObligorChartTrendCurve(category: ObligorChartCategoryBlock): am4charts.LineSeries {
 
     //TODO: This whole thing.
 
@@ -274,5 +275,11 @@ export class GraphService {
     dropShadow.dx = 1;
     dropShadow.opacity = 0.5;
     axisTooltip.filters.push(dropShadow);
+  }
+
+  public clearGraphSeries(chart: am4charts.XYChart)
+  {
+    chart.series.clear();
+    return chart;
   }
 }

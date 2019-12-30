@@ -28,8 +28,8 @@
       SecurityDefinitionFilterBlock,
       QuoteMetricBlock,
       SecurityPortfolioBlock,
-      ObligorChartCategoryDTO,
-      ObligorCategoryDataItemDTO
+      ObligorChartCategoryBlock,
+      ObligorCategoryDataItemBlock
     } from 'FEModels/frontend-blocks.interface';
     import { QuantVisualizerParams } from 'FEModels/frontend-adhoc-packages.interface';
     import {
@@ -788,13 +788,13 @@ export class DTOService {
     isStencil: boolean,
     name: string,
     colorScheme: string,
-    obligorCategoryDataItemDTO: ObligorCategoryDataItemDTO[],
+    obligorCategoryDataItemDTO: ObligorCategoryDataItemBlock[],
     isHidden
-    ): ObligorChartCategoryDTO
+    ): ObligorChartCategoryBlock
   {
     if(isStencil)
     {
-      let obligorChartCategoryDTOStencil: ObligorChartCategoryDTO = {
+      let obligorChartCategoryDTOStencil: ObligorChartCategoryBlock = {
         data: {
           name: null,
           color: null,
@@ -812,10 +812,10 @@ export class DTOService {
     }
   }
 
-  public formObligorCategoryDataItemDTO(isStencil: boolean): ObligorCategoryDataItemDTO
+  public formObligorCategoryDataItemDTO(isStencil: boolean): ObligorCategoryDataItemBlock
   {
     if(isStencil) {
-      let obligorCategoryDataDTO: ObligorCategoryDataItemDTO = {
+      let obligorCategoryDataDTO: ObligorCategoryDataItemBlock = {
         data: {
           name,
           securityID: null,
