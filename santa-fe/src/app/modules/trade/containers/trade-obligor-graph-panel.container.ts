@@ -13,7 +13,7 @@ import { tap, first, delay, catchError, withLatestFrom, filter, sample } from 'r
 import { TradeSecurityIDsFromAnalysisEvent } from 'Trade/actions/trade.actions';
 import { TriCoreMetricConfig } from 'Core/constants/coreConstants.constant';
 import { TradeMarketAnalysisPanelState, TradeObligorGraphPanelState } from 'FEModels/frontend-page-states.interface';
-import { BestQuotesDTO, ObligorChartCategoryDTO, ObligorCategoryDataItemDTO } from 'FEModels/frontend-models.interface';
+import { ObligorCategoryDataItemDTO } from 'FEModels/frontend-blocks.interface';
 import { BEBestQuoteDTO } from 'App/modules/core/models/backend/backend-models.interface';
 import { ObligorChartCategoryColorScheme } from 'App/modules/core/constants/colorSchemes.constant';
 
@@ -40,7 +40,7 @@ export class TradeObligorGraphPanel {
     private dtoService: DTOService
   ) {
     this.state = {
-      obligorChart: am4charts.XYChart,
+      obligorChart: null,
       obligorSecurityID: null,
       obligorName: null,
       obligorCurrency: null,
@@ -53,7 +53,7 @@ export class TradeObligorGraphPanel {
         cS01: false,
         quantity: true
       },
-      xAxisData: [],
+      xAxisData: null,
       yAxisData: [],
       activeCharts: {
         srBond: false,
@@ -186,7 +186,7 @@ export class TradeObligorGraphPanel {
             this.state.chartCategories[category].data.obligorCategoryDataItemDTO[categoryDataItem].data.mark = this.state.securityTableRowDTOList[security].data.security.data.mark.mark;
             this.state.chartCategories[category].data.obligorCategoryDataItemDTO[categoryDataItem].data.positionCurrent = this.state.securityTableRowDTOList[security].data.security.data.positionCurrent;
             // Insert the mark in our XAxis data fields.
-            this.state.yAxisData.push(this.state.chartCategories[category].data.obligorCategoryDataItemDTO[categoryDataItem].data.mark);
+            this.state.yAxisData.push(Number(this.state.chartCategories[category].data.obligorCategoryDataItemDTO[categoryDataItem].data.mark));
           }
         }
       }
@@ -199,6 +199,7 @@ export class TradeObligorGraphPanel {
   private buildChart() {
     this.zone.runOutsideAngular(() => {
 
+      am4core.options.autoSetClassName = true;
       // Initialize the chart as XY.
       this.state.obligorChart = am4core.create("chartdiv", am4charts.XYChart);
 

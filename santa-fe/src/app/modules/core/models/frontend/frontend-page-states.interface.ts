@@ -9,13 +9,15 @@ import {
   SearchShortcutDTO,
   QuantComparerDTO,
   QuantitativeVisualizerDTO,
-  ObligorChartCategoryDTO
 } from 'FEModels/frontend-models.interface';
+import {  ObligorChartCategoryDTO } from 'FEModels/frontend-blocks.interface';
 import {
   SecurityDefinitionStub,
   SecurityTableMetricStub
 } from 'FEModels/frontend-stub-models.interface';
 import { DefinitionConfiguratorEmitterParamsItem } from 'FEModels/frontend-adhoc-packages.interface';
+import * as am4core from "@amcharts/amcharts4/core";
+import * as am4charts from "@amcharts/amcharts4/charts";
 
 export interface MarketState {
 }
@@ -123,7 +125,7 @@ export interface TradeMarketAnalysisPanelState {
 }
 
 export interface TradeObligorGraphPanelState {
-  obligorChart: any;
+  obligorChart: am4charts.XYChart;
   obligorSecurityID: string;
   obligorName: string;
   obligorCurrency: string;
@@ -136,8 +138,8 @@ export interface TradeObligorGraphPanelState {
     cS01:boolean;
     quantity:boolean;
   }
-  xAxisData: any[];
-  yAxisData: any[];
+  xAxisData: [{workoutTerm: number}];
+  yAxisData: number[];
   activeCharts: {
     srBond: boolean;
     subBond: boolean;

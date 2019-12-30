@@ -248,14 +248,6 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
   }
 }
 
-export interface BestQuotesDTO extends BasicDTOStructure {
-  data: {
-    bestSpreadQuote: QuantComparerDTO;
-    bestYieldQuote: QuantComparerDTO;
-    bestPriceQuote: QuantComparerDTO;
-  }
-}
-
 export interface SecurityTableRowDTO extends BasicDTOStructure {
   data: {
     security: SecurityDTO;
@@ -348,29 +340,4 @@ export interface QuantitativeVisualizerDTO extends BasicDTOStructure {
     isStencil: boolean;
   }
 
-}
-
-export interface ObligorChartCategoryDTO extends BasicDTOStructure{
-  data: { 
-    name: string;
-    color: string;
-    obligorCategoryDataItemDTO: Array<ObligorCategoryDataItemDTO>;
-  };
-
-  state: {
-    isHidden: boolean;
-    isMarkHidden: boolean;
-  }
-}
-
-export interface ObligorCategoryDataItemDTO extends BasicDTOStructure{
-  data: {
-    name: string,
-    securityID: string;
-    mark: string;
-    mid: number;
-    workoutTerm: number;
-    positionCurrent: number;
-  }
-  state: {}
 }

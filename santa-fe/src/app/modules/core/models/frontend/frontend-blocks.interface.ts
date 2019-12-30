@@ -151,3 +151,29 @@ export interface AgGridColumn {
 export interface ObligorChartCategoryColorSchemeBlock {
   categoryScheme: Array<any>;
 }
+
+
+export interface ObligorChartCategoryDTO {
+  data: { 
+    name: string;
+    color: string;
+    obligorCategoryDataItemDTO: Array<ObligorCategoryDataItemDTO>;
+  };
+
+  state: {
+    isHidden: boolean;
+    isMarkHidden: boolean;
+  }
+}
+
+export interface ObligorCategoryDataItemDTO {
+  data: {
+    name: string,
+    securityID: string;
+    mark: string;
+    mid: number;
+    workoutTerm: number;
+    positionCurrent: number;
+  }
+  state: {}
+}

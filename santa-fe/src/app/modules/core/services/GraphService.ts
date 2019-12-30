@@ -2,12 +2,9 @@ import { Injectable } from '@angular/core';
 import { UtilityService } from './UtilityService';
 import {
   SecurityGroupPieChartBlock,
-  SecurityGroupPieChartDataBlock
-} from 'FEModels/frontend-blocks.interface';
-
-import {
+  SecurityGroupPieChartDataBlock,
   ObligorChartCategoryDTO
-} from 'FEModels/frontend-models.interface';
+} from 'FEModels/frontend-blocks.interface';
 
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";

@@ -13,29 +13,29 @@
     flex-direction: column;
     margin: $spacing_small;
     align-content: center;
-    &_options {
+    &-options {
       display: flex;
-      &_text {
-        padding-top: 0.3rem;
+      &-text {
+        padding-top: $spacing_x_small;
         text-align: center;
         align-content: center;
         font-weight: bold;
       }
-      &_securityValue {
+      &-securityValue {
         display: flex;
-        &_btnQuantity{
-          margin-left: 1rem;
+        &-btnQuantity{
+          margin-left: $spacing_small;
           &--selected {
-            margin-left: 1rem;
+            margin-left: $spacing_small;
             @include material('none');
             background-color: $color_active;
             color: $font_color_inverse;
           }
         }
-        &_btnCS01{
-          margin-left: 1rem;
+        &-btnCS01{
+          margin-left: $spacing_small;
           &--selected {
-            margin-left: 1rem;
+            margin-left: $spacing_small;
             @include material('none');
             background-color: $color_active;
             color: $font_color_inverse;
@@ -44,13 +44,13 @@
       }
     }
   }
-  &_title {
+  &__title {
     display: flex;
     text-align:center;
     align-content: center;
     justify-content: center;
   }
-  &_obligorGraph {
+  &__obligorGraph {
     align-content: center;
     justify-content: center;
   }

@@ -22,14 +22,14 @@
       SecurityTableCellDTO,
       SecurityQuoteDTO,
       QuantitativeVisualizerDTO,
-      ObligorChartCategoryDTO,
-      ObligorCategoryDataItemDTO
     } from 'FEModels/frontend-models.interface';
     import {
       SecurityGroupMetricBlock,
       SecurityDefinitionFilterBlock,
       QuoteMetricBlock,
-      SecurityPortfolioBlock
+      SecurityPortfolioBlock,
+      ObligorChartCategoryDTO,
+      ObligorCategoryDataItemDTO
     } from 'FEModels/frontend-blocks.interface';
     import { QuantVisualizerParams } from 'FEModels/frontend-adhoc-packages.interface';
     import {
@@ -789,7 +789,8 @@ export class DTOService {
     name: string,
     colorScheme: string,
     obligorCategoryDataItemDTO: ObligorCategoryDataItemDTO[],
-    isHidden): ObligorChartCategoryDTO
+    isHidden
+    ): ObligorChartCategoryDTO
   {
     if(isStencil)
     {
@@ -805,6 +806,9 @@ export class DTOService {
         }
       }
       return obligorChartCategoryDTOStencil;
+    }
+    else{
+      return null;
     }
   }
 
@@ -824,6 +828,8 @@ export class DTOService {
       }
       return obligorCategoryDataDTO;
     }
-
+    else {
+      return null;
+    }
   }
 }
