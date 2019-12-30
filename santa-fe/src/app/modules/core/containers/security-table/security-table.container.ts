@@ -79,6 +79,7 @@ export class SecurityTable implements OnInit, OnChanges {
     if (this.tableData.state.loadedContentStage !== this.receivedContentStage) {
       console.log('rows updated for inter-stage change', this.receivedContentStage);
       this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate; // saving initial cache
+      this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
       this.tableData.state.loadedContentStage = this.receivedContentStage;
       this.loadTableRows(this.newRows);
     } else if (this.securityTableMetricsCache !== this.receivedSecurityTableMetricsUpdate && this.receivedContentStage === this.constants.securityTableFinalStage) {
