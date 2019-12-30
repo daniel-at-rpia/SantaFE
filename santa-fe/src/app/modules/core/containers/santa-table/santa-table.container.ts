@@ -143,7 +143,7 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   public onRowClicked(params) {
-    params.node.setExpanded(!params.node.expanded)
+    params.node.setExpanded(!params.node.expanded);
   }
 
   public getRowNodeId(row) {
