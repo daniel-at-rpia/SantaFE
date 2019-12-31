@@ -151,7 +151,10 @@ export class SantaTable implements OnInit, OnChanges {
     });
     if (!!targetRow) {
       targetRow.state.isExpanded = expanded;
-      targetRow.state.isExpanded && this.fetchSecurityQuotes(targetRow);
+      if (targetRow.data.security) {
+        targetRow.data.security.state.isTableExpanded = expanded;
+        targetRow.state.isExpanded && this.fetchSecurityQuotes(targetRow);
+      }
     } else {
       console.error(`Could't find targetRow`, params);
     }
@@ -163,6 +166,14 @@ export class SantaTable implements OnInit, OnChanges {
 
   public onToggleNativeTable(toggleValue) {
     this.tableData.state.isNativeEnabled = !!toggleValue;
+  }
+
+  public onSelectSecurityForAnalysis(targetSecurity: SecurityDTO) {
+    this.selectedSecurityForAnalysis.emit(targetSecurity);
+  }
+
+  public onNativeTableFetchSecurityQuotes(targetRow: SecurityTableRowDTO){
+    this.fetchSecurityQuotes(targetRow);
   }
 
   private loadTableHeaders(skipAgGrid = false) {

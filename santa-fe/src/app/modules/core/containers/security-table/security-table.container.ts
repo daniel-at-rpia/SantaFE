@@ -60,6 +60,8 @@ export class SecurityTable implements OnInit, OnChanges {
   @Output() selectedSecurityForAnalysis = new EventEmitter<SecurityDTO>();
   liveUpdateRowsCache: Array<SecurityTableRowDTO>;
 
+  @Output() nativeTableFetchQuotes = new EventEmitter<SecurityTableRowDTO>();
+
   constants = {
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
     thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX
@@ -201,7 +203,6 @@ export class SecurityTable implements OnInit, OnChanges {
       targetRow.state.isExpanded = !targetRow.state.isExpanded;
       targetRow.data.security.state.isTableExpanded = targetRow.state.isExpanded;
       if (targetRow.state.isExpanded) {
-        this.renderStencilQuotes(targetRow);
         this.fetchSecurityQuotes(targetRow);
       }
     }
@@ -283,40 +284,8 @@ export class SecurityTable implements OnInit, OnChanges {
     });
   }
 
-  private fetchSecurityQuotes(targetRow: SecurityTableRowDTO){ 
-    if (!!targetRow && !!targetRow.data.cells[0] && !!targetRow.data.cells[0].data.quantComparerDTO) {
-      var bestBid: number; 
-      var bestOffer: number;
-      var metricType: string;
-
-      bestBid = targetRow.data.cells[0].data.quantComparerDTO.data.bid.number;
-      bestOffer = targetRow.data.cells[0].data.quantComparerDTO.data.offer.number;
-      metricType = targetRow.data.cells[0].data.quantComparerDTO.data.metricType;
-
-      const payload: PayloadGetAllQuotes = {
-        "identifier": targetRow.data.security.data.securityID
-      };
-      this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAllQuotes, {req: 'POST'}, payload).pipe(
-        first(),
-        delay(200),
-        tap((serverReturn) => {
-          targetRow.data.quotes = [];
-          for (const eachKey in serverReturn) {
-            const rawQuote: BEQuoteDTO = serverReturn[eachKey];
-
-            const newQuote = this.dtoService.formSecurityQuoteObject(false, rawQuote, bestBid, bestOffer, metricType);
-            if (newQuote.state.hasAsk || newQuote.state.hasBid) {
-              targetRow.data.quotes.push(newQuote);
-            }
-          }
-          this.performChronologicalSortOnQuotes(targetRow);
-        }),
-        catchError(err => {
-          console.error('liveQuote/get-all-quotes failed', err);
-          return of('error')
-        })
-      ).subscribe();
-    }
+  private fetchSecurityQuotes(targetRow: SecurityTableRowDTO){
+    this.nativeTableFetchQuotes.emit(targetRow); 
   }
 
   private renderStencilQuotes(targetRow: SecurityTableRowDTO){
