@@ -26,13 +26,13 @@
     <security-table
       *ngIf="tableData.state.isNativeEnabled"
       [tableData]="tableData"
-      [newRows]="newRows"
-      [receivedContentStage]="receivedContentStage"
-      [receivedSecurityTableMetricsUpdate]="receivedSecurityTableMetricsUpdate"
-      [liveUpdatedRows]="liveUpdatedRows"
+      [securityTableMetrics]="securityTableMetrics"
       [activeTriCoreMetric]="activeTriCoreMetric"
       (selectedSecurityForAnalysis)="onSelectSecurityForAnalysis($event)"
       (nativeTableFetchQuotes)="onNativeTableFetchSecurityQuotes($event)"
+      (nativeLoadTableHeader)="onNativeLoadTableHeader($event)"
+      (nativePerformSort)="onNativePerformSort($event)"
+      (nativePerformDefaultSort)="onNativePerformDefaultSort($event)"
     ></security-table>
   </section>
   <section class="santaTable__floatingCTA">

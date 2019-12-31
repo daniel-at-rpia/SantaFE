@@ -176,6 +176,18 @@ export class SantaTable implements OnInit, OnChanges {
     this.fetchSecurityQuotes(targetRow);
   }
 
+  public onNativeLoadTableHeader() {
+    this.loadTableHeaders(true);
+  }
+
+  public onNativePerformSort(targetHeader: SecurityTableHeaderDTO) {
+    this.performSort(targetHeader);
+  }
+
+  public onNativePerformDefaultSort() {
+    this.performDefaultSort();
+  }
+
   private loadTableHeaders(skipAgGrid = false) {
     this.tableData.data.headers = [];
     this.tableData.data.allHeaders = [];
