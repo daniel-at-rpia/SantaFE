@@ -45,7 +45,7 @@
     import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
     import { SantaTableSecurityCell } from 'Core/components/santa-table-security-cell/santa-table-security-cell.component';
     import { SantaTableQuoteCell } from 'Core/components/santa-table-quote-cell/santa-table-quote-cell.component';
-    import { SantaTableDetailAllQuotes } from 'Core/components/santa-table-detail-all-quotes/santa-table-detail-all-quotes.component';
+    import { SantaTableDetailAllQuotes } from 'Core/containers/santa-table-detail-all-quotes/santa-table-detail-all-quotes.container';
     import { BEQuoteDTO } from 'BEModels/backend-models.interface';
     import {
       SECURITY_TABLE_FINAL_STAGE,

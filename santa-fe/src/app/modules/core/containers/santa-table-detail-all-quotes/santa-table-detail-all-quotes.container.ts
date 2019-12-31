@@ -17,8 +17,8 @@ import { QuoteMetricList } from 'Core/constants/securityTableConstants.constant'
 
 @Component({
   selector: 'santa-table-detail-all-quotes',
-  templateUrl: './santa-table-detail-all-quotes.component.html',
-  styleUrls: ['./santa-table-detail-all-quotes.component.scss'],
+  templateUrl: './santa-table-detail-all-quotes.container.html',
+  styleUrls: ['./santa-table-detail-all-quotes.container.scss'],
   encapsulation: ViewEncapsulation.Emulated
 })
 export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
