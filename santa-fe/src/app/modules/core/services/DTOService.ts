@@ -468,7 +468,8 @@ export class DTOService {
         selectedHeader: null,
         sortedByHeader: null,
         isLiveVariant: isLiveVariant,
-        isAgGridReady: false
+        isAgGridReady: false,
+        isNativeEnabled: false
       },
       api: {
         gridApi: null,

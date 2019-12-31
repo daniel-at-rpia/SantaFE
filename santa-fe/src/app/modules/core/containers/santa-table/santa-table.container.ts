@@ -161,6 +161,10 @@ export class SantaTable implements OnInit, OnChanges {
     return row.id;
   }
 
+  public onToggleNativeTable(toggleValue) {
+    this.tableData.state.isNativeEnabled = !!toggleValue;
+  }
+
   private loadTableHeaders(skipAgGrid = false) {
     this.tableData.data.headers = [];
     this.tableData.data.allHeaders = [];
