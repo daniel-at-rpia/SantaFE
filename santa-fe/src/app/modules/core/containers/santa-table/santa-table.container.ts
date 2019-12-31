@@ -128,8 +128,7 @@ export class SantaTable implements OnInit, OnChanges {
       if (this.liveUpdateRowsCache.length > 0) {
         this.liveUpdateRows(this.liveUpdateRowsCache);
       }
-      // TODO: enable this
-      // this.liveUpdateAllQuotesForExpandedRows();
+      this.liveUpdateAllQuotesForExpandedRows();
     }
   }
 
@@ -383,5 +382,13 @@ export class SantaTable implements OnInit, OnChanges {
       }
     });
     this.agGridMiddleLayerService.updateAgGridRows(this.tableData, targetRows);
+  }
+
+  private liveUpdateAllQuotesForExpandedRows() {
+    this.tableData.data.rows.forEach((eachRow) => {
+      if (eachRow.state.isExpanded) {
+        this.fetchSecurityQuotes(eachRow);
+      }
+    })
   }
 }
