@@ -157,7 +157,8 @@ export class AgGridMiddleLayerService {
     const newAgRow: AgGridRow = {
       id: !eachSecurity.state.isStencil ? eachSecurity.data.securityID : this.utilityService.generateUUID(),
       securityCard: eachSecurity,
-      bestQuote: targetRow.data.cells[0].data.quantComparerDTO
+      bestQuote: targetRow.data.cells[0].data.quantComparerDTO,
+      rowDTO: targetRow
     };
     newAgRow[AGGRID_DETAIL_COLUMN_KEY] = '';
     targetHeaders.forEach((eachHeader, index) => {
@@ -183,7 +184,7 @@ export class AgGridMiddleLayerService {
       const columns = nodeA.columnController.allDisplayedColumns;
       if (!!columns) {
         const targetColumn = columns.find((eachColumn) => {
-          return eachColumn.sort;
+          return !!eachColumn.sort;
         })
         const targetStub = SecurityTableMetrics.find((eachMetric) => {
           return eachMetric.key === targetColumn.colId;

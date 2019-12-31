@@ -8,8 +8,9 @@
       Output,
       EventEmitter
     } from '@angular/core';
-    import { Observable, Subscription } from 'rxjs';
     import {
+      Observable,
+      Subscription,
       of
     } from 'rxjs';
     import {
