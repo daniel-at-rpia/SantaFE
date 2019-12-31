@@ -233,6 +233,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         console.error('Code Maintainence flag: this is not the Quant Comparer column');
       }
       this.state.table.metrics = newMetrics;
+      // this.calculateQuantComparerWidthAndHeight();
       // TODO: remove this event and all associated logic from ngrx
       // this.store$.dispatch(new TradeToggleMetricEvent());
     }
@@ -484,17 +485,20 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private calculateQuantComparerWidthAndHeight() {
-    const bestRunList = [];
+    const bestSpreadList = [];
+    const bestPriceList = [];
+    const bestYieldList = [];
     this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
-      const targetCell = eachRow.data.cells[0];
-      !!targetCell.data.quantComparerDTO && bestRunList.push(targetCell.data.quantComparerDTO);
+      const bestSpreadQuote = eachRow.data.bestQuotes.bestSpreadQuote;
+      const bestPriceQuote = eachRow.data.bestQuotes.bestPriceQuote;
+      const bestYieldQuote = eachRow.data.bestQuotes.bestYieldQuote;
+      !!bestSpreadQuote && bestSpreadList.push(bestSpreadQuote);
+      !!bestPriceQuote && bestPriceList.push(bestPriceQuote);
+      !!bestYieldQuote && bestYieldList.push(bestYieldQuote);
     });
-    this.calculateQuantComparerWidthAndHeightPerSet(bestRunList);
-    // const bestAxeList = this.state.prinstineRowList.map((eachRow) => {
-    //   const targetCell = eachRow.data.cells[5];
-    //   return targetCell.data.quantComparerDTO;
-    // });
-    // this.calculateQuantComparerWidthAndHeightPerSet(bestAxeList);
+    this.calculateQuantComparerWidthAndHeightPerSet(bestSpreadList);
+    this.calculateQuantComparerWidthAndHeightPerSet(bestYieldList);
+    this.calculateQuantComparerWidthAndHeightPerSet(bestPriceList);
   }
 
   private calculateQuantComparerWidthAndHeightPerSet(list: Array<QuantComparerDTO>) {
