@@ -10,7 +10,7 @@ export const APIUrlMap = {
   getBestQuotes: `liveQuote/get-best-quotes`,
   getAllQuotes: `liveQuote/get-all-quotes`,
   getObligorCurves: `curve/get-obligor-curves-per-ccy`,
-  getGroups: `group/get-group`,
+  getGroups: `group/get-groups`,
   getGroupFromSecurity: `group/get-group-from-security`,
   getIssuers: `obligor/get-issuers`,
   getSubIndustries: `obligor/get-subindustries`
