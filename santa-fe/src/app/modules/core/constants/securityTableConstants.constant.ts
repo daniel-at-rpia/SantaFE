@@ -203,10 +203,10 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     key: 'seniority',
     label: 'Seniority',
     attrName: 'seniority',
-    underlineAttrName: 'seniority',
+    underlineAttrName: 'seniorityLevel',
     readyStage: 2,
     active: false,
-    inversedSortingForText: true
+    inversedSortingForText: false
   },{
     key: 'country',
     label: 'Country',
