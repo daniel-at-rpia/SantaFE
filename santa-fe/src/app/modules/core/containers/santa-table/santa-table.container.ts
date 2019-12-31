@@ -77,7 +77,7 @@ export class SantaTable implements OnInit, OnChanges {
 
   agGridConfig = {
     defaultColDef: {
-
+      sortingOrder: ["desc", "asc", null]
     },
     autoGroupColumnDef: {
       sort:'desc'
