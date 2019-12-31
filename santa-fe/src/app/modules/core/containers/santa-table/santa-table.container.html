@@ -1,0 +1,16 @@
+<article
+  [ngClass]="{
+    'santaTable': true
+  }">
+  <section class="santaTable__main">
+    <ag-grid-angular
+      class="ag-theme-balham santaTable__main-agGrid"
+      [columnDefs]="tableData.data.agGridColumnDefs"
+      [defaultColDef]="defaultColDef"
+      [frameworkComponents]="tableData.data.agGridFrameworkComponents"
+      [rowClass]="agGridRowClassRules"
+      [getRowNodeId]="getRowNodeId"
+      (gridReady)="onGridReady($event)">
+    </ag-grid-angular>
+  </section>
+</article>

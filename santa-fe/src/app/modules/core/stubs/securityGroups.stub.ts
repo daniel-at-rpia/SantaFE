@@ -42,7 +42,7 @@ export const SecurityGroupList: Array<BESecurityGroupDTO> = [
       "modelPrice": 104.592
     },
     "deltaMetrics": {
-      "DoD": {
+      "Dod": {
         "tenor": null,
         "propertyToNumSecurities": {
           "WorkoutTerm": 2,
@@ -60,7 +60,7 @@ export const SecurityGroupList: Array<BESecurityGroupDTO> = [
         "price": 0.03350000000000364,
         "modelPrice": -0.00549999999999784
       },
-      "WoW": {
+      "Wow": {
         "tenor": null,
         "propertyToNumSecurities": {
           "WorkoutTerm": 2,
@@ -96,7 +96,7 @@ export const SecurityGroupList: Array<BESecurityGroupDTO> = [
         "price": -0.11050000000000182,
         "modelPrice": 0.017000000000010118
       },
-      "MoM": {
+      "Mom": {
         "tenor": null,
         "propertyToNumSecurities": {
           "WorkoutTerm": 2,
@@ -284,7 +284,7 @@ export const SecurityGroupList: Array<BESecurityGroupDTO> = [
       "modelPrice": 103.31869999999999
     },
     "deltaMetrics": {
-      "DoD": {
+      "Dod": {
         "tenor": null,
         "propertyToNumSecurities": {
           "WorkoutTerm": 5,
@@ -302,7 +302,7 @@ export const SecurityGroupList: Array<BESecurityGroupDTO> = [
         "price": 0.05857999999997787,
         "modelPrice": -0.00014000000000180535
       },
-      "WoW": {
+      "Wow": {
         "tenor": null,
         "propertyToNumSecurities": {
           "WorkoutTerm": 5,
@@ -338,7 +338,7 @@ export const SecurityGroupList: Array<BESecurityGroupDTO> = [
         "price": 0.22449999999999193,
         "modelPrice": 0.27111999999999625
       },
-      "MoM": {
+      "Mom": {
         "tenor": null,
         "propertyToNumSecurities": {
           "WorkoutTerm": 5,
@@ -531,7 +531,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "ratingNoNotch":"BBB"
     },
     "deltaMetrics":{
-      "DoD":{
+      "Dod":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":12,
@@ -551,7 +551,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "WoW":{
+      "Wow":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":8,
@@ -591,7 +591,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "MoM":{
+      "Mom":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":8,
@@ -1499,7 +1499,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "ratingNoNotch":"A"
     },
     "deltaMetrics":{
-      "DoD":{
+      "Dod":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":46,
@@ -1519,7 +1519,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "WoW":{
+      "Wow":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":45,
@@ -1559,7 +1559,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "MoM":{
+      "Mom":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":39,
@@ -3743,7 +3743,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "ratingNoNotch":"BBB"
     },
     "deltaMetrics":{
-      "DoD":{
+      "Dod":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":152,
@@ -3763,7 +3763,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "WoW":{
+      "Wow":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":143,
@@ -3803,7 +3803,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "MoM":{
+      "Mom":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":119,
@@ -8493,7 +8493,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "ratingNoNotch":"BBB"
     },
     "deltaMetrics":{
-      "DoD":{
+      "Dod":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":66,
@@ -8513,7 +8513,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "WoW":{
+      "Wow":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":63,
@@ -8553,7 +8553,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "MoM":{
+      "Mom":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":55,
@@ -11561,7 +11561,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "ratingNoNotch":"BBB"
     },
     "deltaMetrics":{
-      "DoD":{
+      "Dod":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":38,
@@ -11581,7 +11581,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "WoW":{
+      "Wow":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":32,
@@ -11621,7 +11621,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "MoM":{
+      "Mom":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":18,
@@ -13749,7 +13749,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "ratingNoNotch":"BB"
     },
     "deltaMetrics":{
-      "DoD":{
+      "Dod":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":61,
@@ -13769,7 +13769,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "WoW":{
+      "Wow":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":50,
@@ -13809,7 +13809,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "MoM":{
+      "Mom":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":35,
@@ -16977,7 +16977,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "ratingNoNotch":"A"
     },
     "deltaMetrics":{
-      "DoD":{
+      "Dod":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":16,
@@ -16997,7 +16997,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "WoW":{
+      "Wow":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":15,
@@ -17037,7 +17037,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "MoM":{
+      "Mom":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":14,
@@ -18305,7 +18305,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "ratingNoNotch":"BBB"
     },
     "deltaMetrics":{
-      "DoD":{
+      "Dod":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":16,
@@ -18325,7 +18325,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "WoW":{
+      "Wow":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":10,
@@ -18365,7 +18365,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "MoM":{
+      "Mom":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":7,
@@ -19673,7 +19673,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "ratingNoNotch":"BBB"
     },
     "deltaMetrics":{
-      "DoD":{
+      "Dod":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":20,
@@ -19693,7 +19693,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "WoW":{
+      "Wow":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":19,
@@ -19733,7 +19733,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "MoM":{
+      "Mom":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":13,
@@ -20641,7 +20641,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "ratingNoNotch":"A"
     },
     "deltaMetrics":{
-      "DoD":{
+      "Dod":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":14,
@@ -20661,7 +20661,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "WoW":{
+      "Wow":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":12,
@@ -20701,7 +20701,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "MoM":{
+      "Mom":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":6,
@@ -21849,7 +21849,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "ratingNoNotch":"BBB"
     },
     "deltaMetrics":{
-      "DoD":{
+      "Dod":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":12,
@@ -21869,7 +21869,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "WoW":{
+      "Wow":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":11,
@@ -21909,7 +21909,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "MoM":{
+      "Mom":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":11,
@@ -22975,7 +22975,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "ratingNoNotch":"BBB"
     },
     "deltaMetrics":{
-      "DoD":{
+      "Dod":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":6,
@@ -22995,7 +22995,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "WoW":{
+      "Wow":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":6,
@@ -23035,7 +23035,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "MoM":{
+      "Mom":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":5,
@@ -23515,7 +23515,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "ratingNoNotch":"A"
     },
     "deltaMetrics":{
-      "DoD":{
+      "Dod":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":10,
@@ -23535,7 +23535,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "WoW":{
+      "Wow":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":4,
@@ -23575,7 +23575,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "MoM":{
+      "Mom":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":3,
@@ -24523,7 +24523,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "ratingNoNotch":"BBB"
     },
     "deltaMetrics":{
-      "DoD":{
+      "Dod":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":33,
@@ -24543,7 +24543,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "WoW":{
+      "Wow":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":29,
@@ -24583,7 +24583,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "MoM":{
+      "Mom":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":14,
@@ -26876,7 +26876,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "ratingNoNotch":"BBB"
     },
     "deltaMetrics":{
-      "DoD":{
+      "Dod":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":12,
@@ -26896,7 +26896,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "WoW":{
+      "Wow":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":8,
@@ -26936,7 +26936,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "MoM":{
+      "Mom":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":6,
@@ -28101,7 +28101,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "ratingNoNotch":"BB"
     },
     "deltaMetrics":{
-      "DoD":{
+      "Dod":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":1,
@@ -28121,7 +28121,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "WoW":{
+      "Wow":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":1,
@@ -28161,7 +28161,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "MoM":{
+      "Mom":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":1,
@@ -28429,7 +28429,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "ratingNoNotch":"A"
     },
     "deltaMetrics":{
-      "DoD":{
+      "Dod":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":14,
@@ -28449,7 +28449,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "WoW":{
+      "Wow":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":12,
@@ -28489,7 +28489,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "MoM":{
+      "Mom":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":5,
@@ -29397,7 +29397,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "ratingNoNotch":"BBB"
     },
     "deltaMetrics":{
-      "DoD":{
+      "Dod":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":2,
@@ -29417,7 +29417,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "WoW":{
+      "Wow":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":1,
@@ -29844,7 +29844,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "ratingNoNotch":"B"
     },
     "deltaMetrics":{
-      "DoD":{
+      "Dod":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":6,
@@ -29863,7 +29863,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "WoW":{
+      "Wow":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":6,
@@ -29901,7 +29901,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "MoM":{
+      "Mom":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":5,
@@ -30486,7 +30486,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "ratingNoNotch":"B"
     },
     "deltaMetrics":{
-      "DoD":{
+      "Dod":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":1,
@@ -30505,7 +30505,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "WoW":{
+      "Wow":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":1,
@@ -30543,7 +30543,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "MoM":{
+      "Mom":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":1,
@@ -30783,7 +30783,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "ratingNoNotch":"BBB"
     },
     "deltaMetrics":{
-      "DoD":{
+      "Dod":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":3,
@@ -30803,7 +30803,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "WoW":{
+      "Wow":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":3,
@@ -30843,7 +30843,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "MoM":{
+      "Mom":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":2,
@@ -31191,7 +31191,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "ratingNoNotch":"BBB"
     },
     "deltaMetrics":{
-      "DoD":{
+      "Dod":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":9,
@@ -31211,7 +31211,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "WoW":{
+      "Wow":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":6,
@@ -31251,7 +31251,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
         "rating":"D",
         "ratingNoNotch":"D"
       },
-      "MoM":{
+      "Mom":{
         "tenor":null,
         "propertyToNumSecurities":{
           "WorkoutTerm":2,

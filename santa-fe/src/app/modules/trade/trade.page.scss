@@ -58,20 +58,21 @@
     flex-direction: column;
     padding: $spacing_medium $spacing_medium $spacing_medium 0;
     overflow: hidden;
-    &-liveGraphPanel {
-      flex: 1 1 auto;
+    &-marketAnalysisPanel {
+      flex: 1 1 60%;
       display: flex;
       margin-bottom: $spacing_medium/2;
-      trade-live-graph-panel {
+      trade-market-analysis-panel {
         flex: 1 1 auto;
         display: flex;
       }
     }
-    &-overviewGraphPanel {
-      flex: 1 1 auto;
+    &-obligorGraphPanel {
+      flex: 1 1 40%;
       display: flex;
       margin-top: $spacing_medium/2;
-      trade-overview-graph-panel {
+      overflow: hidden;
+      trade-obligor-graph-panel {
         flex: 1 1 auto;
         display: flex;
       }
@@ -83,7 +84,7 @@
   &__collapseGraphsCTA {
     @include mix_border_radius(50%);
     @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
-    @include mix_calculate(top, 50%, $iconButton_size_regular/2, '-');
+    @include mix_calculate(top, 60%, $iconButton_size_regular/2, '-');
     right: $spacing_x_small;
     background-color: $color_kill;
     color: $font_color_inverse;

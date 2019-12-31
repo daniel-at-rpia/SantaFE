@@ -20,7 +20,8 @@
       SecurityTableRowDTO,
       SecurityTableHeaderDTO,
       SecurityTableCellDTO,
-      SecurityQuoteDTO
+      SecurityQuoteDTO,
+      QuantitativeVisualizerDTO
     } from 'FEModels/frontend-models.interface';
     import {
       SecurityGroupMetricBlock,
@@ -28,6 +29,7 @@
       QuoteMetricBlock,
       SecurityPortfolioBlock
     } from 'FEModels/frontend-blocks.interface';
+    import { QuantVisualizerParams } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       SecurityDefinitionStub,
       SecurityDefinitionBundleStub,
@@ -64,16 +66,18 @@ export class DTOService {
   ){}
 
   public formSecurityCardObject(
+    securityIdFull: string,
     rawData: BESecurityDTO,
     isStencil: boolean
   ): SecurityDTO {
     // !isStencil && console.log('rawData', rawData.name, rawData);
     const object:SecurityDTO = {
       data: {
-        securityID: !isStencil ? rawData.securityIdentifier.securityId : null,
+        securityID: !isStencil ? securityIdFull : null,
         name: !isStencil ? rawData.name : 'PLACEHOLDER',
         ratingLevel: !isStencil && rawData.metrics ? this.utility.mapRatings(rawData.metrics.ratingNoNotch) : 0,
         ratingValue: !isStencil && rawData.metrics ? rawData.metrics.ratingNoNotch : null,
+        ratingBucket: !isStencil && rawData.metrics ? rawData.metrics.ratingBucket : null,
         seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.seniority) : 5,
         currency: !isStencil ? rawData.ccy : null,
         country: !isStencil ? rawData.country : null,
@@ -86,9 +90,11 @@ export class DTOService {
         primaryPmName: null,
         backupPmName: null,
         researchName: null,
+        owner: [],
         mark: {
           mark: null,
           markRaw: null,
+          markBackend: null,
           markDriver: null,
           markChangedBy: null,
           markChangedTime: null,
@@ -133,9 +139,14 @@ export class DTOService {
     dto.data.backupPmName = targetPortfolio.backupPmName;
     dto.data.researchName = targetPortfolio.researchName;
     dto.data.mark.markRaw = targetPortfolio.mark.value;
+    dto.data.mark.markBackend = targetPortfolio.mark.value;
     dto.data.mark.markDriver = targetPortfolio.mark.driver;
     dto.data.mark.markChangedBy = targetPortfolio.mark.user;
     dto.data.mark.markChangedTime = targetPortfolio.mark.enteredTime;
+    dto.data.owner = [];
+    !!targetPortfolio.primaryPmName && dto.data.owner.push(targetPortfolio.primaryPmName);
+    !!targetPortfolio.backupPmName && dto.data.owner.push(targetPortfolio.backupPmName);
+    !!targetPortfolio.researchName && dto.data.owner.push(targetPortfolio.researchName);
     // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
     if (!!TriCoreMetricConfig[targetPortfolio.mark.driver] && (targetPortfolio.mark.driver === currentSelectedMetric || currentSelectedMetric === 'Default')){
       const rounding = TriCoreMetricConfig[targetPortfolio.mark.driver].rounding;
@@ -304,9 +315,9 @@ export class DTOService {
     const object:SecurityGroupAverageVisualizerDTO = {
       data: {
         stats: [
-          this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'DoD'),
-          this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'WoW'),
-          this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'MoM')
+          this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'Dod'),
+          this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'Wow'),
+          this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'Mom')
         ]
       },
       state: {
@@ -373,17 +384,13 @@ export class DTOService {
   public formQuantComparerObject(
     isStencil: boolean,
     quantMetricType: string,
-    rawData: BEBestQuoteDTO
-    // bidNumber: number,
-    // bidSize: number,
-    // bidBroker: string,
-    // offerNumber: number,
-    // offerSize: number,
-    // offerBroker: string
+    BEdto: BEBestQuoteDTO
   ): QuantComparerDTO {
+    const metricType = !isStencil ? quantMetricType : 'Spread';
+    const backendTargetQuoteAttr = TriCoreMetricConfig[metricType]['backendTargetQuoteAttr'];
+    const rawData = !!BEdto && !!BEdto[backendTargetQuoteAttr] ? BEdto[backendTargetQuoteAttr] : {};
     const bidSize = !isStencil ? this.utility.round(rawData.bidQuantity/1000000, 1) : null;
     const offerSize = !isStencil ? this.utility.round(rawData.askQuantity/1000000, 1) : null;
-    const metricType = !isStencil ? quantMetricType : 'Spread';
     const tier2Shreshold = TriCoreMetricConfig[metricType]['tier2Threshold'];
     const inversed = TriCoreMetricConfig[metricType]['inversed'];
     const hasBid = !isStencil ? (!!rawData.bidQuoteValue && !!rawData.bidDealer) : true;
@@ -436,23 +443,35 @@ export class DTOService {
         axeSkewEnabled: false,
         totalSkewEnabled: false,
         noAxeSkew: !isStencil ? rawData.axeSkew === null : true,
-        noTotalSkew: !isStencil ? rawData.totalSkew === null : true
+        noTotalSkew: !isStencil ? rawData.totalSkew === null : true,
+        longEdgeState: !isStencil ? bidNumber.toString().length > 4 || offerNumber.toString().length > 4 : false
       }
     };
     return object;
   }
 
-  public formSecurityTableObject(): SecurityTableDTO {
+  public formSecurityTableObject(
+    isLiveVariant: boolean
+  ): SecurityTableDTO {
     const object: SecurityTableDTO = {
       data: {
         headers: [],
-        rows: []
+        rows: [],
+        agGridColumnDefs: [],
+        agGridRowData: [],
+        agGridFrameworkComponents: {}
       },
       state: {
-        loadedContentStage: 0,
+        loadedContentStage: null,
         isAddingColumn: false,
         selectedHeader: null,
-        sortedByHeader: null
+        sortedByHeader: null,
+        isLiveVariant: isLiveVariant,
+        isAgGridReady: false
+      },
+      api: {
+        gridApi: null,
+        columnApi: null
       }
     };
     return object;
@@ -463,6 +482,7 @@ export class DTOService {
   ): SecurityTableHeaderDTO {
     const object: SecurityTableHeaderDTO = {
       data: {
+        key: stub.key,
         displayLabel: stub.label,
         attrName: stub.attrName,
         underlineAttrName: stub.underlineAttrName,
@@ -470,7 +490,8 @@ export class DTOService {
         readyStage: stub.readyStage,
         metricPackDeltaScope: stub.metricPackDeltaScope || null,
         frontendMetric: !!stub.isFrontEndMetric,
-        inversedSortingForText: !!stub.inversedSortingForText
+        inversedSortingForText: !!stub.inversedSortingForText,
+        targetQuantLocationFromRow: !!stub.isForQuantComparer ? stub.targetQuantLocationFromRow : 'n/a'
       },
       state: {
         isQuantVariant: !!stub.isForQuantComparer,
@@ -498,7 +519,12 @@ export class DTOService {
             sortable: !eachQuoteMetricStub.textOnly
           };
           return metricBlock;
-        })
+        }),
+        bestQuotes: {
+          bestPriceQuote: null,
+          bestSpreadQuote: null,
+          bestYieldQuote: null
+        }
       },
       state: {
         expandViewSortByQuoteMetric: null,
@@ -530,8 +556,11 @@ export class DTOService {
 
   public formSecurityQuoteObject(
     isStencil: boolean,
-    rawData: BEQuoteDTO
-  ) : SecurityQuoteDTO {
+    rawData: BEQuoteDTO,
+    bestBidNum: number,
+    bestAskNum: number,
+    filteredMetricType: string
+  ): SecurityQuoteDTO {
     const hasBid = !isStencil ? (!!rawData.isActive && !!rawData.bidVenue) : true;
     const hasAsk = !isStencil ? (!!rawData.isActive && !!rawData.askVenue) : true;
     const bidBenchmark = !isStencil ? rawData.bidQualifier : 'T 0.5 01/01/2020';
@@ -568,13 +597,19 @@ export class DTOService {
           yield: 5,
           tspread: 300,
           benchmark: bidBenchmark
-        }
+        },
+        currentMetric: filteredMetricType
       },
       state: {
         isStencil: isStencil,
         hasBid: hasBid,
         hasAsk: hasAsk,
-        diffBenchmark: bidBenchmark !== askBenchmark && hasBid && hasAsk
+        diffBenchmark: bidBenchmark !== askBenchmark && hasBid && hasAsk,
+        isBestOffer: false,
+        isBestBid: false,
+        filteredByPrice:  filteredMetricType === TriCoreMetricConfig.Price.label,
+        filteredBySpread:  filteredMetricType === TriCoreMetricConfig.Spread.label,
+        filteredByYield: filteredMetricType === TriCoreMetricConfig.Yield.label
       }
     };
     if (!isStencil) {
@@ -593,9 +628,150 @@ export class DTOService {
         yield: !!rawData.askYield ? this.utility.round(rawData.askYield, TriCoreMetricConfig.Yield.rounding) : null,
         tspread: !!rawData.askSpread ? this.utility.round(rawData.askSpread, TriCoreMetricConfig.Spread.rounding) : null,
         benchmark: askBenchmark
-      }
+      };
+
+      object.state.isBestBid = object.data.bid.tspread == bestBidNum || object.data.bid.price == bestBidNum || object.data.bid.yield == bestBidNum;
+
+      object.state.isBestOffer =object.data.ask.tspread == bestAskNum || object.data.ask.price == bestAskNum || object.data.ask.yield == bestAskNum;
+      
     }
     return object;
+  }
+
+  public formQuantVisualizerObject(
+    isStencil: boolean,
+    params: QuantVisualizerParams
+  ): QuantitativeVisualizerDTO {
+    if (isStencil) {
+      const stencilObject: QuantitativeVisualizerDTO = {
+        data: {
+          rawEntry: { target: 10, group: 10 },
+          wow: { target: 10, group: 10},
+          mom: { target: 10, group: 10},
+          ytd: { target: 10, group: 10},
+          min: 15,
+          max: 15,
+          minDelta: 15,
+          maxDelta: 15
+        },
+        style: {
+          raw: {
+            inversed: false,
+            leftSpaceWidth: 10,
+            rightSpaceWidth: 10
+          },
+          wow: {
+            inversed: false,
+            leftSpaceWidth: 10,
+            rightSpaceWidth: 10
+          },
+          mom: {
+            inversed: false,
+            leftSpaceWidth: 10,
+            rightSpaceWidth: 10
+          },
+          ytd: {
+            inversed: false,
+            leftSpaceWidth: 10,
+            rightSpaceWidth: 10
+          }
+        },
+        state: {
+          isWowValid: true,
+          isMomValid: true,
+          isYtdValid: true,
+          isStencil: true
+        }
+      };
+      return stencilObject;
+    } else {
+      let min = Math.min(params.tRaw, params.gRaw);
+      let max = Math.max(params.tRaw, params.gRaw);
+      min = min - (max - min) * 0.15;
+      max = max + (max - min) * 0.15;
+      const validDeltaParamsList: Array<number> = [0];
+      params.tWow !== null && validDeltaParamsList.push(params.tWow);
+      params !== null && validDeltaParamsList.push(params.tMom);
+      params !== null && validDeltaParamsList.push(params.tYtd);
+      params !== null && validDeltaParamsList.push(params.gWow);
+      params !== null && validDeltaParamsList.push(params.gMom);
+      params !== null && validDeltaParamsList.push(params.gYtd);
+      let minDelta = Math.min(...validDeltaParamsList);
+      let maxDelta = Math.max(...validDeltaParamsList);
+      minDelta = minDelta - (maxDelta - minDelta) * 0.15;
+      maxDelta = maxDelta + (maxDelta - minDelta) * 0.15;
+      const object: QuantitativeVisualizerDTO = {
+        data: {
+          rawEntry: {
+            target: params.tRaw,
+            group: params.gRaw
+          },
+          wow: {
+            target: params.tWow,
+            group: params.gWow
+          },
+          mom: {
+            target: params.tMom,
+            group: params.gMom
+          },
+          ytd: {
+            target: params.tYtd,
+            group: params.gYtd
+          },
+          min: min,
+          max: max,
+          minDelta: minDelta,
+          maxDelta: maxDelta
+        },
+        style: {
+          raw: {
+            inversed: params.gRaw < params.tRaw,
+            leftSpaceWidth: 10,
+            rightSpaceWidth: 10
+          },
+          wow: {
+            inversed: params.gWow < params.tWow,
+            leftSpaceWidth: 10,
+            rightSpaceWidth: 10
+          },
+          mom: {
+            inversed: params.gMom < params.tMom,
+            leftSpaceWidth: 10,
+            rightSpaceWidth: 10
+          },
+          ytd: {
+            inversed: params.gYtd < params.tYtd,
+            leftSpaceWidth: 10,
+            rightSpaceWidth: 10
+          }
+        },
+        state: {
+          isWowValid: params.tWow !== null && params.gWow !== null,
+          isMomValid: params.tMom !== null && params.gMom !== null,
+          isYtdValid: params.tYtd !== null && params.gYtd !== null,
+          isStencil: false
+        }
+      }
+      const fullWidth = max - min;
+      const rawLeft = object.style.raw.inversed ? params.gRaw : params.tRaw;
+      const rawRight = object.style.raw.inversed ? params.tRaw : params.gRaw;
+      object.style.raw.leftSpaceWidth = Math.round((min - rawLeft) / fullWidth * 100);
+      object.style.raw.rightSpaceWidth = Math.round((max - rawRight) / fullWidth * 100);
+      const fullWidthDelta = maxDelta - minDelta;
+      const wowLeft = object.style.wow.inversed ? params.gWow : params.tWow;
+      const wowRight = object.style.wow.inversed ? params.tWow : params.gWow;
+      const momLeft = object.style.mom.inversed ? params.gMom : params.tMom;
+      const momRight = object.style.mom.inversed ? params.tMom : params.gMom;
+      const ytdLeft = object.style.ytd.inversed ? params.gYtd : params.tYtd;
+      const ytdRight = object.style.ytd.inversed ? params.tYtd : params.gYtd;
+      object.style.wow.leftSpaceWidth = Math.round(this.utility.skewedNumber(Math.abs(minDelta - wowLeft) / fullWidthDelta) * 100);
+      object.style.wow.rightSpaceWidth = Math.round(this.utility.skewedNumber(Math.abs(maxDelta - wowRight) / fullWidthDelta) * 100);
+      object.style.mom.leftSpaceWidth = Math.round(this.utility.skewedNumber(Math.abs(minDelta - momLeft) / fullWidthDelta) * 100);
+      object.style.mom.rightSpaceWidth = Math.round(this.utility.skewedNumber(Math.abs(maxDelta - momRight) / fullWidthDelta) * 100);
+      object.style.ytd.leftSpaceWidth = Math.round(this.utility.skewedNumber(Math.abs(minDelta - ytdLeft) / fullWidthDelta) * 100);
+      object.style.ytd.rightSpaceWidth = Math.round(this.utility.skewedNumber(Math.abs(maxDelta - ytdRight) / fullWidthDelta) * 100);
+      return object;
+    }
   }
 
 }

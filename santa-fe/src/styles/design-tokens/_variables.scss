@@ -53,6 +53,7 @@ $spacing_x_small: 0.3125rem;  // 5px
 $spacing_xx_small: 0.1873rem; // 3px
 $spacing_minimum: 0.0625rem;  // 1px
 
+$font_size_minimum: 0.5rem;     // 8px
 $font_size_xx_small: 0.625rem;  // 10px
 $font_size_x_small: 0.75rem;    // 12px
 $font_size_small: 0.875rem;     // 14px
@@ -123,11 +124,13 @@ $securityCard_width: 18rem;
 
 $securityTable_cell_width: 8.75rem;
 $securityTable_cell_width_primary: $securityCard_width + $spacing_small * 2;
-$securityTable_cell_width_quant: 8.75rem * 2;
+$securityTable_cell_width_quant: 19rem;
 
 $securityQuote_time_width: 5.5rem;
 $securityQuote_spacing_height: $spacing_small;
 $securityQuote_ctas_width: 7rem;
+$securityQuote_time_width: 3rem;
+$securityQuote_bestQuote_width:8.7rem;
 
 $securityDefinition_width: 5.5rem;
 $securityDefinitionConfigurator_filters_width: 15rem;

@@ -4,7 +4,10 @@ import {
   ActionReducerMap
 } from '@ngrx/store';
 
-import { SecurityTableRowDTO } from 'FEModels/frontend-models.interface';
+import {
+  SecurityTableRowDTO,
+  SecurityDTO
+} from 'FEModels/frontend-models.interface';
 import {
   TradeActions,
   TradeLiveUpdateStartEvent,
@@ -12,25 +15,32 @@ import {
   TradeLiveUpdatePassRawDataEvent,
   TradeLiveUpdatePassTableContentEvent
 } from 'Trade/actions/trade.actions';
+import { RouterLinkWithHref } from '@angular/router';
 
 export interface TradeState {
   presetSelected: boolean;
+  initialDataLoaded: boolean;
   liveUpdateSecondCount: number;
   liveUpdateTick: number;
   liveUpdateInProgress: boolean;
   liveUpdateProcessingRawData: boolean;
-  positionsServerReturn: object;
   tableRowUpdateList: Array<SecurityTableRowDTO>;
+  selectedSecurityForAnalysis: SecurityDTO;
+  securityIDListFromAnalysis: Array<string>;
+  securityTableRowDTOListForAnalysis: Array<SecurityTableRowDTO>;
 }
 
 const initialState: TradeState = {
   presetSelected: false,
+  initialDataLoaded: false,
   liveUpdateSecondCount: 0,
   liveUpdateTick: 0,
   liveUpdateInProgress: false,
   liveUpdateProcessingRawData: false,
-  positionsServerReturn: null,
-  tableRowUpdateList: []
+  tableRowUpdateList: [],
+  selectedSecurityForAnalysis: null,
+  securityIDListFromAnalysis: [],
+  securityTableRowDTOListForAnalysis: []
 };
 
 export function tradeReducer(
@@ -40,16 +50,24 @@ export function tradeReducer(
   switch (action.type) {
     case TradeActions.TogglePresetEvent:
       const oldFlag = state.presetSelected;
-      return {
-        ...state,
-        presetSelected: !oldFlag
-      };
+      if (!oldFlag) {
+        return {
+          ...state,
+          presetSelected: !oldFlag
+        };
+      } else {
+        return {
+          ...state,
+          presetSelected: !oldFlag,
+          initialDataLoaded: false
+        };
+      }
     case TradeActions.LiveUpdateCount:
       const oldCount = state.liveUpdateSecondCount;
       return {
         ...state,
         liveUpdateSecondCount: oldCount + 1
-      }
+      };
     case TradeActions.LiveUpdateStartEvent:
       let oldTick = state.liveUpdateTick;
       return {
@@ -62,8 +80,7 @@ export function tradeReducer(
       return {
         ...state,
         liveUpdateInProgress: false,
-        liveUpdateProcessingRawData: true,
-        positionsServerReturn: action.serverReturn
+        liveUpdateProcessingRawData: true
       };
     case TradeActions.LiveUpdatePassTableContentEvent:
       return {
@@ -71,10 +88,38 @@ export function tradeReducer(
         tableRowUpdateList: action.rowList
       };
     case TradeActions.LiveUpdateProcessingDataCompleteEvent:
+      if (state.initialDataLoaded) {
+        return {
+          ...state,
+          liveUpdateProcessingRawData: false
+        };
+      } else {
+        return {
+          ...state,
+          liveUpdateProcessingRawData: false,
+          initialDataLoaded: true
+        }
+      }
+    case TradeActions.ToggleMetricEvent:
       return {
         ...state,
-        liveUpdateProcessingRawData: false
-      };
+        initialDataLoaded: false
+      }
+    case TradeActions.SelectSecurityForAnalysisEvent:
+      return {
+        ...state,
+        selectedSecurityForAnalysis: action.targetSecurity
+      }
+    case TradeActions.SecurityIDListFromAnalysisEvent:
+      return {
+        ...state,
+        securityIDListFromAnalysis: action.securityIDList
+      }
+      case TradeActions.SecurityTableRowDTOListForAnalysisEvent:
+        return {
+          ...state,
+          securityTableRowDTOListForAnalysis: action.securityTableRowDTOList
+        }
     default:
       return state;
   }

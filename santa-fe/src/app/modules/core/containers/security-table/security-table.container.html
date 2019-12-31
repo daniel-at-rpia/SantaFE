@@ -44,7 +44,8 @@
           [rowIsEven]="tableData.data.rows.indexOf(eachRow)%2 === 1"
           (clickedCollapseExpandView)="onClickCollapseExpandView($event)"
           (clickedRowTableCanvas)="onClickRowTableCanvas($event)"
-          (clickedSortQuotesByMetric)="onClickSortQuotesByMetric($event)">
+          (clickedSortQuotesByMetric)="onClickSortQuotesByMetric($event)"
+          (clickedSelectForAnalysis)="onClickSelectForAnalysis($event)">
         </security-table-row>
       </div>
       <button (click)="onClickShowAddColumnDropdown()" class="sat-securityTable__main-table-addColumnCTA santaBtn--labelled santaBtn--inverseLabelled">

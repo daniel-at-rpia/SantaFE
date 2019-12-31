@@ -1,0 +1,40 @@
+<article
+  [ngClass]="{
+    'sat-tradeMarketAnalysisPanel': true,
+    'sat-tradeMarketAnalysisPanel--hasSecurityState': state.receivedSecurity
+  }">
+  <section class="sat-tradeMarketAnalysisPanel__overview">
+    <div class="sat-tradeMarketAnalysisPanel__overview-ctas">
+      <button
+        *ngFor="let eachOption of state.quantVisualizer.groupByOptions"
+        (click)="onClickGroupByOption(eachOption)"
+        [ngClass]="{
+          'sat-tradeMarketAnalysisPanel__overview-ctas-btn': true,
+          'sat-tradeMarketAnalysisPanel__overview-ctas-btn--selected': eachOption.state.groupByActive
+        }">
+        {{eachOption.data.name}}
+      </button>
+    </div>
+    <div class="sat-tradeMarketAnalysisPanel__overview-main">
+      <div class="sat-tradeMarketAnalysisPanel__overview-main-label">
+        <div class="sat-tradeMarketAnalysisPanel__overview-main-label-entry">
+          <div class="sat-tradeMarketAnalysisPanel__overview-main-label-entry-node sat-tradeMarketAnalysisPanel__overview-main-label-entry-node--target">
+            <span class="sat-tradeMarketAnalysisPanel__overview-main-label-entry-node-pinText">S</span>
+          </div>
+          <span class="sat-tradeMarketAnalysisPanel__overview-main-label-entry-text">Security</span>
+        </div>
+        <div class="sat-tradeMarketAnalysisPanel__overview-main-label-entry">
+          <div class="sat-tradeMarketAnalysisPanel__overview-main-label-entry-node sat-tradeMarketAnalysisPanel__overview-main-label-entry-node--group">
+            <span class="sat-tradeMarketAnalysisPanel__overview-main-label-entry-node-pinText">G</span>
+          </div>
+          <span class="sat-tradeMarketAnalysisPanel__overview-main-label-entry-text">Group</span>
+        </div>
+      </div>
+      <div class="sat-tradeMarketAnalysisPanel__overview-main-visualizer">
+        <quantitative-visualizer [visualizerData]="state.quantVisualizer.dto"></quantitative-visualizer>
+      </div>
+    </div>
+  </section>
+  <section class="sat-tradeMarketAnalysisPanel__table">
+  </section>
+</article>

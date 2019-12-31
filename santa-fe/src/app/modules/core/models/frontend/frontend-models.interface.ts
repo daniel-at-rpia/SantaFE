@@ -5,23 +5,32 @@ import {
   SecurityDefinitionFilterBlock,
   QuoteMetricBlock,
   SecurityPortfolioBlock,
-  SecurityMarkBlock
+  SecurityMarkBlock,
+  QuantitativeEntryBlock,
+  QuantitativeEntryStyleBlock,
+  AgGridColumnDefinition,
+  AgGridRow
 } from 'FEModels/frontend-blocks.interface';
+import * as agGrid from 'ag-grid-community';
+
+import * as am4charts from "@amcharts/amcharts4/charts";
 
 interface BasicDTOStructure {
   [property: string]: object; 
   data: object;
   state: object;
   style?: object;
+  api?: object;
 }
 
 export interface SecurityDTO extends BasicDTOStructure {
   data: {
-    securityID: number;
+    securityID: string;
     name: string;
     country: string;
     ratingLevel: number;
     ratingValue: string;
+    ratingBucket: string;
     seniorityLevel: number;
     currency: string;
     sector: string;
@@ -33,6 +42,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     primaryPmName: string;
     backupPmName: string;
     researchName: string;
+    owner: Array<string>;
     mark: SecurityMarkBlock;
     portfolios: Array<SecurityPortfolioBlock>;
     strategyCurrent: string;
@@ -189,6 +199,7 @@ export interface QuantComparerDTO extends BasicDTOStructure {
     totalSkewEnabled: boolean;
     noAxeSkew: boolean;
     noTotalSkew: boolean;
+    longEdgeState: boolean;
   }
 }
 
@@ -196,17 +207,27 @@ export interface SecurityTableDTO extends BasicDTOStructure {
   data: {
     headers: Array<SecurityTableHeaderDTO>;
     rows: Array<SecurityTableRowDTO>;
+    agGridColumnDefs: Array<AgGridColumnDefinition>;
+    agGridRowData: Array<AgGridRow>;
+    agGridFrameworkComponents: object;
   },
   state: {
     loadedContentStage: number;
     isAddingColumn: boolean;
     selectedHeader: SecurityTableHeaderDTO;
     sortedByHeader: SecurityTableHeaderDTO;
+    isLiveVariant: boolean;
+    isAgGridReady: boolean;
+  },
+  api: {
+    gridApi: agGrid.GridApi,
+    columnApi: agGrid.ColumnApi
   }
 }
 
 export interface SecurityTableHeaderDTO extends BasicDTOStructure {
   data: {
+    key: string;
     displayLabel: string;
     attrName: string;
     underlineAttrName: string;
@@ -215,6 +236,7 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     metricPackDeltaScope: string;
     frontendMetric: boolean;
     inversedSortingForText: boolean;
+    targetQuantLocationFromRow: string;
   },
   state: {
     isPureTextVariant: boolean;
@@ -230,6 +252,11 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
     cells: Array<SecurityTableCellDTO>;
     quotes: Array<SecurityQuoteDTO>;
     quoteHeaders: Array<QuoteMetricBlock>;
+    bestQuotes: {
+      bestSpreadQuote: QuantComparerDTO;
+      bestYieldQuote: QuantComparerDTO;
+      bestPriceQuote: QuantComparerDTO;
+    }
   },
   state: {
     expandViewSortByQuoteMetric: string;
@@ -256,6 +283,7 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
     unixTimestamp: number;
     dataSource: string;
     consolidatedBenchmark: string;
+    currentMetric: string;
     bid: {
       isAxe: boolean;
       size: string;
@@ -278,5 +306,45 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
     hasBid: boolean;
     hasAsk: boolean;
     diffBenchmark: boolean;
+    isBestBid: boolean;
+    isBestOffer: boolean;
+    filteredBySpread: boolean;
+    filteredByYield: boolean;
+    filteredByPrice: boolean;
   }
+}
+
+export interface QuantitativeVisualizerDTO extends BasicDTOStructure {
+  data: {
+    rawEntry: QuantitativeEntryBlock;
+    wow: QuantitativeEntryBlock;
+    mom: QuantitativeEntryBlock;
+    ytd: QuantitativeEntryBlock;
+    min: number;
+    max: number;
+    minDelta: number;
+    maxDelta: number;
+  }
+  style: {
+    raw: QuantitativeEntryStyleBlock;
+    wow: QuantitativeEntryStyleBlock;
+    mom: QuantitativeEntryStyleBlock;
+    ytd: QuantitativeEntryStyleBlock;
+  }
+  state: {
+    isWowValid: boolean;
+    isMomValid: boolean;
+    isYtdValid: boolean;
+    isStencil: boolean;
+  }
+
+}
+
+export interface ObligorChartBlock {
+  name: string;
+  chart: am4charts.XYChart;
+  rawData: any[];
+  colorScheme: string;
+  displayMark: boolean;
+  displayChart: boolean;
 }

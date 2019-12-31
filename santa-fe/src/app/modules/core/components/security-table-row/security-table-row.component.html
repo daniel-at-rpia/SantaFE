@@ -64,7 +64,13 @@
           [messageData]="eachMessage">
         </security-quote>
       </ul>
-      <button (click)="onClickCollapseExpandView()" class="sat-securityTableRow__expandCanvas-content-collapseBtn santaBtn--iconOnly fal fa-times"></button>
+      <div class="sat-securityTableRow__expandCanvas-content-ctas">
+        <button (click)="onClickSelectForAnalysis()" class="sat-securityTableRow__expandCanvas-content-ctas-selectBtn santaBtn--labelled">
+          <i class="fal fa-chart-line"></i>
+          <span>Send to Analysis</span>
+        </button>
+        <button (click)="onClickCollapseExpandView()" class="sat-securityTableRow__expandCanvas-content-ctas-collapseBtn santaBtn--iconOnly fal fa-times"></button>
+      </div>
     </div>
   </section>
 </article>

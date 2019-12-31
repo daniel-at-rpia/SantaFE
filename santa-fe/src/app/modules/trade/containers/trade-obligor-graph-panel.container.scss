@@ -1,0 +1,52 @@
+@import "global.scss";
+
+.sat-tradeObligorGraphPanel {
+  $tradeObligorGraphPanelBlockName: &;
+  @include mix_border_generator;
+  @include mix_border_radius(10px);
+  flex: 1 1 50%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  &__visualizer {
+    display: flex;
+    flex-direction: column;
+    margin: $spacing_small;
+    &_Options {
+      display: flex;
+      height: 2.5rem;
+      align-content: center;
+      justify-content: right;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      &_SecurityValue {
+        display: flex;
+        &_btnQuantity{
+          margin-left: 1rem;
+          &--selected {
+            margin-left: 1rem;
+            @include material('none');
+            background-color: $color_active;
+            color: $font_color_inverse;
+          }
+        }
+        &_btnCS01{
+          margin-left: 1rem;
+          &--selected {
+            margin-left: 1rem;
+            @include material('none');
+            background-color: $color_active;
+            color: $font_color_inverse;
+          }
+        }
+      }
+    }
+  }
+  &_Title{
+    display: flex;
+    text-align:center;
+    align-content: center;
+    justify-content: center;
+  }
+}
+

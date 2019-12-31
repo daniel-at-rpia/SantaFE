@@ -18,3 +18,20 @@ export interface DefinitionConfiguratorEmitterParamsItem {
   targetAttribute: string;
   filterBy: Array<string>;
 }
+
+export interface LiveDataDiffingResult {
+  newRowList: Array<SecurityTableRowDTO>;
+  markDiffCount: number;
+  quantDiffCount: number;
+}
+
+export interface QuantVisualizerParams {
+  tRaw: number;
+  gRaw: number;
+  tWow: number;
+  gWow: number;
+  tMom: number;
+  gMom: number;
+  tYtd: number;
+  gYtd: number;
+}

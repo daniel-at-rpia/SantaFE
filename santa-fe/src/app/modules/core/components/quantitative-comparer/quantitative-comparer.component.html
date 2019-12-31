@@ -9,7 +9,8 @@
     'sat-quantComparer--crossedStateTier2': quantData.state.isCrossedTier2,
     'sat-quantComparer--stencilState': quantData.state.isStencil,
     'sat-quantComparer--noBidState': !quantData.state.hasBid,
-    'sat-quantComparer--noOfferState': !quantData.state.hasOffer
+    'sat-quantComparer--noOfferState': !quantData.state.hasOffer,
+    'sat-quantComparer--longEdgeState': quantData.state.longEdgeState
   }">
   <section class="sat-quantComparer__base">
     <div class="sat-quantComparer__base-line"></div>
@@ -50,6 +51,11 @@
   <section class="sat-quantComparer__crossing">
     <div class="sat-quantComparer__crossing-content">
       <span class="sat-quantComparer__crossing-content-value">{{-quantData.data.delta}}</span>
+    </div>
+  </section>
+  <section class="sat-quantComparer__mid">
+    <div class="sat-quantComparer__mid-content">
+      <span class="sat-quantComparer__mid-content-value">{{quantData.data.mid}}</span>
     </div>
   </section>
   <section class="sat-quantComparer__skew sat-quantComparer__skew--total">

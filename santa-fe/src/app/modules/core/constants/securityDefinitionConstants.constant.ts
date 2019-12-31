@@ -6,6 +6,8 @@ import {
   SearchShortcutStub
 } from 'FEModels/frontend-stub-models.interface';
 
+import { APIUrlMap } from 'Core/constants/coreConstants.constant';
+
 // internal constants
   const FilterOptionsBoolean = [
     'Y',
@@ -222,14 +224,30 @@ import {
     'TW'
   ];
 
+  export const FullOwnerList = [
+    'AG',
+    'BT',
+    'DA',
+    'DJ',
+    'DM',
+    'LC',
+    'LP',
+    'IL',
+    'PD',
+    'PM',
+    'RS',
+    'SP',
+    'ST',
+    'TW'
+  ];
+
 export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
   'SECURITY_TYPE': {
     key: 'SECURITY_TYPE',
     displayName: 'Security Type',
     icon: 'fal fa-slash',
     optionList: FilterOptionsSecurityType,
-    locked: true,
-    securityDTOAttr: 'securityType'
+    locked: true
   },
   'BACKEND_TENOR': {
     key: 'BACKEND_TENOR',
@@ -248,8 +266,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     key: 'COUPON_TYPE',
     displayName: 'Coupon Type',
     icon: 'fas fa-ticket-alt',
-    optionList: FilterOptionsCouponType,
-    securityDTOAttr: 'couponType'
+    optionList: FilterOptionsCouponType
   },
   'CURRENCY': {
     key: 'CURRENCY',
@@ -270,7 +287,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     displayName: 'Issuer',
     icon: 'fas fa-user-tie',
     optionList: [],
-    urlForGetLongOptionListFromServer: 'santaObligor/get-santa-issuers'
+    urlForGetLongOptionListFromServer: APIUrlMap.getIssuers
   },
   'MATURITY': {
     key: 'MATURITY',
@@ -302,7 +319,8 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     displayName: 'Rating Bucket',
     icon: 'fas fa-trash',
     optionList: FilterOptionsRatingBucket,
-    secondaryIcon: 'fas fa-award'
+    secondaryIcon: 'fas fa-award',
+    securityDTOAttr: 'ratingBucket'
   },
   'SECTOR': {
     key: 'SECTOR',
@@ -323,7 +341,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     displayName: 'Sub-Industry',
     icon: 'fal fa-building',
     optionList: [],
-    urlForGetLongOptionListFromServer: 'santaObligor/get-santa-subindustries'
+    urlForGetLongOptionListFromServer: APIUrlMap.getSubIndustries
   },
   'TENOR': {
     key: 'TENOR',
@@ -358,6 +376,13 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-user-chart',
     optionList: FilterOptionsPortfolioResearchList,
     securityDTOAttr: 'researchName'
+  },
+  'OWNER': {
+    key: 'OWNER',
+    displayName: 'Owner',
+    icon: 'fad fa-users',
+    optionList: FullOwnerList,
+    securityDTOAttr: 'owner'
   }
 };
 
@@ -375,6 +400,7 @@ export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> =
   },{
     label: 'Owner',
     list: [
+      SecurityDefinitionMap.OWNER,
       SecurityDefinitionMap.PRIMARY_PORTFOLIO_MANAGER,
       SecurityDefinitionMap.BACKUP_PORTFOLIO_MANAGER,
       SecurityDefinitionMap.RESEARCH

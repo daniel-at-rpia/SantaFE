@@ -12,8 +12,11 @@ import { TradePage } from 'Trade/trade.page';
 import { TradeCenterPanel } from 'Trade/containers/trade-center-panel.container';
 import { TradeAlertPanel } from 'Trade/containers/trade-alert-panel.container';
 import { TradeUtilityPanel } from 'Trade/containers/trade-utility-panel.container';
-import { TradeLiveGraphPanel } from 'Trade/containers/trade-live-graph-panel.container';
-import { TradeOverviewGraphPanel } from 'Trade/containers/trade-overview-graph-panel.container';
+import { TradeMarketAnalysisPanel } from 'Trade/containers/trade-market-analysis-panel.container';
+import { TradeObligorGraphPanel } from 'Trade/containers/trade-obligor-graph-panel.container';
+import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
+import { QuantitativeVisualizer } from 'Trade/components/quantitative-visualizer/quantitative-visualizer.component';
+import { ObligorGraph } from './components/obligor-graph/obligor-graph';
 
 @NgModule({
   declarations: [
@@ -21,10 +24,13 @@ import { TradeOverviewGraphPanel } from 'Trade/containers/trade-overview-graph-p
     TradeCenterPanel,
     TradeAlertPanel,
     TradeUtilityPanel,
-    TradeLiveGraphPanel,
-    TradeOverviewGraphPanel
+    TradeMarketAnalysisPanel,
+    TradeObligorGraphPanel,
+    QuantitativeVisualizer,
+    ObligorGraph
   ],
   imports: [
+    // Angular framework modules
     CommonModule,
     RouterModule.forChild([
       {
@@ -34,9 +40,11 @@ import { TradeOverviewGraphPanel } from 'Trade/containers/trade-overview-graph-p
     StoreModule.forFeature('trade', reducer),
     EffectsModule.forFeature([TradeEffect]),
 
+    // Native modules
     CoreModule
   ],
   providers: [
+    LiveDataProcessingService
   ]
 })
 export class TradeModule { }

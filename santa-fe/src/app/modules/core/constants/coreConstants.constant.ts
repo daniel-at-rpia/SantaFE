@@ -4,14 +4,26 @@ import {
   TriCoreMetricConfigStub
 } from 'FEModels/frontend-stub-models.interface';
 
+export const APIUrlMap = {
+  getUserInitials: `user/get-user-initials`,
+  getPortfolios: `portfolio/get-credit-positions`,
+  getBestQuotes: `liveQuote/get-best-quotes`,
+  getAllQuotes: `liveQuote/get-all-quotes`,
+  getObligorCurves: `curve/get-obligor-curves-per-ccy`,
+  getGroups: `group/get-group`,
+  getGroupFromSecurity: `group/get-group-from-security`,
+  getIssuers: `obligor/get-issuers`,
+  getSubIndustries: `obligor/get-subindustries`
+};
+
 export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
   {
     label: 'Default Spread',
     backendDtoAttrName: 'defaultSpread',
     deltaOptions: [
-      'DoD',
-      'WoW',
-      'MoM',
+      'Dod',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   },
@@ -19,9 +31,9 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     label: 'Price',
     backendDtoAttrName: 'price',
     deltaOptions: [
-      'DoD',
-      'WoW',
-      'MoM',
+      'Dod',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   },
@@ -29,9 +41,9 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     label: 'Rating',
     backendDtoAttrName: 'ratingDouble',
     deltaOptions: [
-      'DoD',
-      'WoW',
-      'MoM',
+      'Dod',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   },
@@ -39,9 +51,9 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     label: 'G Spread',
     backendDtoAttrName: 'gSpread',
     deltaOptions: [
-      'DoD',
-      'WoW',
-      'MoM',
+      'Dod',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   },
@@ -49,9 +61,9 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     label: 'OAS Spread',
     backendDtoAttrName: 'oasSpread',
     deltaOptions: [
-      'DoD',
-      'WoW',
-      'MoM',
+      'Dod',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   },
@@ -59,9 +71,9 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     label: 'Z-Spread',
     backendDtoAttrName: 'zSpread',
     deltaOptions: [
-      'DoD',
-      'WoW',
-      'MoM',
+      'Dod',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   },
@@ -69,9 +81,9 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     label: 'YieldWorst',
     backendDtoAttrName: 'yieldWorst',
     deltaOptions: [
-      'DoD',
-      'WoW',
-      'MoM',
+      'Dod',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   },
@@ -79,9 +91,9 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     label: 'Asset Swap Spread (into USD)',
     backendDtoAttrName: 'aswUsd',
     deltaOptions: [
-      'DoD',
-      'WoW',
-      'MoM',
+      'Dod',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   }
@@ -93,21 +105,24 @@ export const TriCoreMetricConfig: TriCoreMetricConfigStub = {
     tier2Threshold: 20,
     inversed: false,
     rounding: 0,
-    metricLabel: SecurityMetricOptions[0].label
+    metricLabel: SecurityMetricOptions[0].label,
+    backendTargetQuoteAttr: 'bestSpreadQuote'
   },
   Yield: {
     label: 'Yield',
     tier2Threshold: 1,
     inversed: false,
     rounding: 3,
-    metricLabel: SecurityMetricOptions[6].label
+    metricLabel: SecurityMetricOptions[6].label,
+    backendTargetQuoteAttr: 'bestYieldQuote'
   },
   Price: {
     label: 'Price',
     tier2Threshold: 3,
     inversed: true,
     rounding: 3,
-    metricLabel: SecurityMetricOptions[1].label
+    metricLabel: SecurityMetricOptions[1].label,
+    backendTargetQuoteAttr: 'bestPriceQuote'
   }
 }
 

@@ -7,7 +7,8 @@ import {
   SecurityDefinitionConfiguratorDTO,
   SecurityGroupAverageVisualizerDTO,
   SearchShortcutDTO,
-  QuantComparerDTO
+  QuantComparerDTO,
+  QuantitativeVisualizerDTO
 } from 'FEModels/frontend-models.interface';
 import {
   SecurityDefinitionStub,
@@ -58,6 +59,7 @@ export interface MarketGroupPanelState {
 
 export interface TradeState {
   graphsCollapsed: boolean;
+  ownerInitial: string;
 }
 
 export interface TradeCenterPanelState {
@@ -78,12 +80,14 @@ export interface TradeCenterPanelState {
     fetchTableDataFailedError: string;
     rowList: Array<SecurityTableRowDTO>;
     prinstineRowList: Array<SecurityTableRowDTO>;
+    liveUpdatedRowList: Array<SecurityTableRowDTO>;
   }
   filters: {
     quickFilters: {
       metricType: string;
       portfolios: Array<string>;
       keyword: string;
+      owner: Array<string>;
     }
     securityFilters: Array<DefinitionConfiguratorEmitterParamsItem>
   }
@@ -96,4 +100,22 @@ export interface TradeUtilityPanelState {
   isCallingAPI: boolean;
   isProcessingData: boolean;
   isPresetSelected: boolean;
+  isInitialDataLoaded: boolean;
+  validWindowConfig: {
+    valueRaw: number;
+    valueDisplay: string;
+    isEditing: boolean;
+  }
+}
+
+export interface TradeMarketAnalysisPanelState {
+  receivedSecurity: boolean;
+  quantVisualizer: {
+    groupByOptions: Array<SecurityDefinitionDTO>;
+    dto: QuantitativeVisualizerDTO;
+    targetSecurity: SecurityDTO;
+  }
+  table: {
+    securityList: Array<SecurityDTO>;
+  }
 }

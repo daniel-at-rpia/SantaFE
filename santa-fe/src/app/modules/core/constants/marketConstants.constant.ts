@@ -191,9 +191,9 @@ export const GroupMetricOptions:Array<SecurityMetricOptionStub> = [
     label: 'Default Spread',
     backendDtoAttrName: 'defaultSpread',
     deltaOptions: [
-      'DoD',
-      'WoW',
-      'MoM',
+      'Dod',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   },
@@ -201,9 +201,9 @@ export const GroupMetricOptions:Array<SecurityMetricOptionStub> = [
     label: 'Price',
     backendDtoAttrName: 'price',
     deltaOptions: [
-      'DoD',
-      'WoW',
-      'MoM',
+      'Dod',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   },
@@ -211,9 +211,9 @@ export const GroupMetricOptions:Array<SecurityMetricOptionStub> = [
     label: 'Rating',
     backendDtoAttrName: 'ratingDouble',
     deltaOptions: [
-      'DoD',
-      'WoW',
-      'MoM',
+      'Dod',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   },
@@ -221,9 +221,9 @@ export const GroupMetricOptions:Array<SecurityMetricOptionStub> = [
     label: 'G Spread',
     backendDtoAttrName: 'gSpread',
     deltaOptions: [
-      'DoD',
-      'WoW',
-      'MoM',
+      'Dod',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   },
@@ -231,9 +231,9 @@ export const GroupMetricOptions:Array<SecurityMetricOptionStub> = [
     label: 'OAS Spread',
     backendDtoAttrName: 'oasSpread',
     deltaOptions: [
-      'DoD',
-      'WoW',
-      'MoM',
+      'Dod',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   },
@@ -241,9 +241,9 @@ export const GroupMetricOptions:Array<SecurityMetricOptionStub> = [
     label: 'Z-Spread',
     backendDtoAttrName: 'zSpread',
     deltaOptions: [
-      'DoD',
-      'WoW',
-      'MoM',
+      'Dod',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   },
@@ -251,9 +251,9 @@ export const GroupMetricOptions:Array<SecurityMetricOptionStub> = [
     label: 'YieldWorst',
     backendDtoAttrName: 'yieldWorst',
     deltaOptions: [
-      'DoD',
-      'WoW',
-      'MoM',
+      'Dod',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   },
@@ -261,9 +261,9 @@ export const GroupMetricOptions:Array<SecurityMetricOptionStub> = [
     label: 'Asset Swap Spread (into USD)',
     backendDtoAttrName: 'aswUsd',
     deltaOptions: [
-      'DoD',
-      'WoW',
-      'MoM',
+      'Dod',
+      'Wow',
+      'Mom',
       'Ytd'
     ]
   }

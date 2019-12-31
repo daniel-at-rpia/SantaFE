@@ -47,6 +47,7 @@ export interface SecurityDefinitionMapStub {
   PRIMARY_PORTFOLIO_MANAGER: SecurityDefinitionStub;
   BACKUP_PORTFOLIO_MANAGER: SecurityDefinitionStub;
   RESEARCH: SecurityDefinitionStub;
+  OWNER: SecurityDefinitionStub;
 }
 
 export interface SecurityMetricOptionStub {
@@ -63,6 +64,7 @@ export interface SecurityTableQuoteMetric {
 }
 
 export interface SecurityTableMetricStub {
+  key: string;
   label: string;
   attrName: string;
   underlineAttrName: string;
@@ -73,6 +75,7 @@ export interface SecurityTableMetricStub {
   metricPackDeltaScope?: string;
   isFrontEndMetric?: boolean;
   isForQuantComparer?: boolean;
+  targetQuantLocationFromRow?: string;
   pureText?: boolean;
   disabled?: boolean;
   inversedSortingForText?: boolean;
@@ -90,6 +93,7 @@ interface TriCoreMetricIndividualConfigStub {
   inversed: boolean;
   rounding: number;
   metricLabel: string;
+  backendTargetQuoteAttr: string;
 }
 
 export interface TradeFilterConstantStub {

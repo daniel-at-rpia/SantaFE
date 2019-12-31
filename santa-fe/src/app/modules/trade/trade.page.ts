@@ -24,13 +24,8 @@
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { TradeState } from 'FEModels/frontend-page-states.interface';
-    import { TradeLiveUpdatePassRawDataEvent } from 'Trade/actions/trade.actions';
-    import {
-      selectLiveUpdateTick
-    } from 'Trade/selectors/trade.selectors';
-    import {
-      PayloadGetPositions
-    } from 'BEModels/backend-payloads.interface';
+    import { FullOwnerList } from 'Core/constants/securityDefinitionConstants.constant';
+    import { selectSelectedSecurityForAnalysis } from 'Trade/selectors/trade.selectors';
   //
 
 @Component({
@@ -42,12 +37,16 @@
 export class TradePage implements OnInit, OnDestroy {
   state: TradeState;
   subscriptions = {
-    startNewUpdateSub: null
-  }
+    receiveSelectedSecuritySub: null
+  };
+  constants = {
+    fullOwnerList: FullOwnerList
+  };
 
   private initializePageState() {
     this.state = {
-      graphsCollapsed: true
+      graphsCollapsed: true,
+      ownerInitial: ''
     }
   }
 
@@ -61,13 +60,20 @@ export class TradePage implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.subscriptions.startNewUpdateSub = this.store$.pipe(
-      select(selectLiveUpdateTick)
-    ).subscribe(tick => {
-      console.log('at Trade Page, got tick', tick);
-      if (tick > 0) {  // skip first beat
-        this.fetchUpdate();
-      }
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getUserInitials, {req: 'GET'}).pipe(
+      first(),
+      tap((serverReturn) => {
+        this.loadOwnerInitial(serverReturn);
+      }),
+      catchError(err => {
+        this.loadOwnerInitial('n/a');
+        return of('error');
+      })
+    ).subscribe();
+    this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
+      select(selectSelectedSecurityForAnalysis)
+    ).subscribe((targetSecurity) => {
+      this.state.graphsCollapsed = !targetSecurity;
     });
   }
 
@@ -82,20 +88,11 @@ export class TradePage implements OnInit, OnDestroy {
     this.state.graphsCollapsed = !this.state.graphsCollapsed;
   }
 
-  private fetchUpdate() {
-    const payload : PayloadGetPositions = {
-      partitionOptions: ['Portfolio', 'Strategy']
-    };
-    this.restfulCommService.callAPI('santaPortfolio/get-santa-credit-positions', {req: 'POST'}, payload, false, false).pipe(
-      first(),
-      tap((serverReturn) => {
-        this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent(serverReturn));
-      }),
-      catchError(err => {
-        console.error('error', err);
-        return of('error');
-      })
-    ).subscribe();
+  private loadOwnerInitial(serverReturn: string) {
+    const matchedInitial = this.constants.fullOwnerList.find((eachInitial) => {
+      eachInitial === serverReturn;
+    })
+    this.state.ownerInitial = matchedInitial || 'DM';
   }
 
 }
