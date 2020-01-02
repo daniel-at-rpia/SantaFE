@@ -1,3 +1,5 @@
+import { Label } from '@amcharts/amcharts4/core';
+
 export interface SearchShortcutStub {
   displayTitle: string;
   includedDefinitions: Array<SearchShortcutIncludedDefinitionStub>
@@ -99,4 +101,8 @@ interface TriCoreMetricIndividualConfigStub {
 export interface TradeFilterConstantStub {
   displayLabel: string;
   value: string;
+}
+
+export interface ObligorChartCategoryColorSchemeStub {
+  categoryScheme: Array<{label: string, value: string}>;
 }

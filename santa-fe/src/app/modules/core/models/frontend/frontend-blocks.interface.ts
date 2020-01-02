@@ -148,11 +148,6 @@ export interface AgGridColumn {
   sort: string;
 }
 
-export interface ObligorChartCategoryColorSchemeBlock {
-  categoryScheme: Array<any>;
-}
-
-
 export interface ObligorChartCategoryBlock {
   data: { 
     name: string;

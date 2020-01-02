@@ -13,8 +13,6 @@ import {
 } from 'FEModels/frontend-blocks.interface';
 import * as agGrid from 'ag-grid-community';
 
-import * as am4charts from "@amcharts/amcharts4/charts";
-import { ObligorGraph } from 'App/modules/trade/components/obligor-graph/obligor-graph';
 
 interface BasicDTOStructure {
   [property: string]: object; 

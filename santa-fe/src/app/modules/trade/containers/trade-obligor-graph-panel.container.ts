@@ -150,7 +150,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
 
   private addBestYieldMidQuoteToChartCategory(securityID: string, bEBestQuoteDTO: any): any[] {
     let bestQuoteData: any[] = [];
-    let spreadRounding = TriCoreMetricConfig['Yield']['rounding'];
+    let yieldRounding = TriCoreMetricConfig.Yield.rounding
 
     let yieldMid = null;
 
@@ -161,7 +161,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
 
   private addBestSpreadMidToChartCategory(bEBestQuoteDTO: any): any {
     let mid: number = null;
-    let spreadRounding = TriCoreMetricConfig['Spread']['rounding'];
+    let spreadRounding = TriCoreMetricConfig.Spread.rounding;
 
     // TODO: If anything is 0, do not add.
 
