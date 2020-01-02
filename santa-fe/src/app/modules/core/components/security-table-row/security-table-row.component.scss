@@ -107,7 +107,7 @@ $securityTableRow_expandCanvas_height: 40rem + $spacing_medium * 2;
 
 .sat-securityTableRowExpandViewLabel {
   $securityTableRowExpandViewLabelBlockName: &;
-  flex: 1 1 5%;
+  flex: 0 0 $securityQuote_main_size_1;
   display: flex;
   justify-content: center;
   margin-left: $securityQuote_spacing_height;
@@ -146,11 +146,11 @@ $securityTableRow_expandCanvas_height: 40rem + $spacing_medium * 2;
       margin-left: $spacing_x_small;
     }
   }
-  &--doubleWidth {
-    flex: 1 1 10%;
+  &--sizeTwo {
+    flex: 0 0 $securityQuote_main_size_2;
   }
-  &--tripleWidth {
-    flex: 1 1 15%;
+  &--sizeThree {
+    flex: 0 0 $securityQuote_main_size_3;
   }
   &--textOnly {
     #{$securityTableRowExpandViewLabelBlockName} {

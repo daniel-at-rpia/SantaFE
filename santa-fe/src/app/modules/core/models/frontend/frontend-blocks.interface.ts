@@ -13,7 +13,8 @@ import {
 } from 'ag-grid-community';
 import {
   SecurityDTO,
-  QuantComparerDTO
+  QuantComparerDTO,
+  SecurityTableRowDTO
 } from 'FEModels/frontend-models.interface';
 
 export interface SecurityPortfolioBlock {
@@ -89,8 +90,8 @@ export interface SecurityDefinitionFilterBlock {
 
 export interface QuoteMetricBlock {
   displayLabelList: Array<string>;
-  isDoubleWidthColumn: boolean;
-  isTripleWidthColumn: boolean;
+  isSizeTwo: boolean;
+  isSizeThree: boolean;
   sortable: boolean;
 }
 
@@ -118,8 +119,13 @@ export interface AgGridColumnDefinition {
   sortable?: boolean;
   filter?: boolean;
   hide: boolean;
-  enableRowGroup: boolean,
-  enablePivot: boolean,
+  enableRowGroup: boolean;
+  enablePivot: boolean;
+  floatingFilterComponent?: string;
+  floatingFilterComponentParams?: {
+    maxValue: number;
+    suppressFilterButton: boolean
+  }
 }
 
 export interface AgGridRowNode {
@@ -138,7 +144,7 @@ export interface AgGridRow {
   id: string;
   securityCard: SecurityDTO;    // this needs to identical to SecurityTableMetrics' key for Security column
   bestQuote: QuantComparerDTO;  // this needs to identical to SecurityTableMetrics' key for Best Quote column
-  rowDTO: any;
+  rowDTO: SecurityTableRowDTO;
 }
 
 export interface AgGridColumn {
