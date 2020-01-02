@@ -82,8 +82,7 @@
       <button (click)="openLinkForCertificate()">Link</button>
     </div>
     <div class="sat-tradeCenterPanel__result-table">
-      <security-table
-        *ngIf="!state.table.showNativeTable"
+      <santa-table
         [tableData]="state.table.dto"
         [newRows]="state.fetchResult.rowList"
         [receivedContentStage]="state.currentContentStage"
@@ -91,7 +90,7 @@
         [liveUpdatedRows]="state.fetchResult.liveUpdatedRowList"
         [activeTriCoreMetric]="state.filters.quickFilters.metricType"
         (selectedSecurityForAnalysis)="onSelectSecurityForAnalysis($event)"
-      ></security-table>
+      ></santa-table>
     </div>
   </section>
 </article>
