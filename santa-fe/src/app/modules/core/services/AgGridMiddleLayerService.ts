@@ -54,6 +54,7 @@ export class AgGridMiddleLayerService {
       headerClass: `${AGGRID_HEADER_CLASS} ${AGGRID_HEADER_CLASS}--detail ag-numeric-header`,
       cellClass: `${AGGRID_CELL_CLASS} ${AGGRID_CELL_CLASS}--detailCTA`,
       cellRenderer: 'agGroupCellRenderer',
+      enableValue: false,
       sortable: false,
       filter: false,
       enablePivot: false,
@@ -71,6 +72,7 @@ export class AgGridMiddleLayerService {
         field: eachHeader.data.key,
         headerClass: `${AGGRID_HEADER_CLASS} ag-numeric-header`,
         cellClass: `${AGGRID_CELL_CLASS}`,
+        enableValue: false,
         sortable: true,
         filter: true,
         enablePivot: false,
@@ -146,6 +148,10 @@ export class AgGridMiddleLayerService {
       newAgColumn.resizable = true;
       newAgColumn.enableRowGroup = true;
       newAgColumn.enablePivot = true;
+      if (!targetHeader.data.isDataTypeText) {
+        newAgColumn.enableValue = true;
+        newAgColumn.allowedAggFuncs = ['sum', 'avg'];
+      }
     }
   }
 
@@ -270,9 +276,9 @@ export class AgGridMiddleLayerService {
     } else if (valueA != null && valueB == null) {
       return 4;
     } else if (valueA < valueB) {
-      return targetHeader.data.inversedSortingForText ? 1 : -1;
+      return targetHeader.data.isDataTypeText ? 1 : -1;
     } else if (valueA > valueB) {
-      return targetHeader.data.inversedSortingForText ? -1 : 1;
+      return targetHeader.data.isDataTypeText ? -1 : 1;
     } else {
       return 0;
     }
