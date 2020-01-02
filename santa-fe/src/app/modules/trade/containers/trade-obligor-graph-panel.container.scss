@@ -8,32 +8,34 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  &__visualizer {
+  &__markValue {
     display: flex;
     flex-direction: column;
     margin: $spacing_small;
-    &_Options {
+    align-content: center;
+    &-options {
       display: flex;
-      height: 2.5rem;
-      align-content: center;
-      justify-content: right;
-      font-weight: bold;
-      margin-bottom: 1rem;
-      &_SecurityValue {
+      &-text {
+        padding-top: $spacing_x_small;
+        text-align: center;
+        align-content: center;
+        font-weight: bold;
+      }
+      &-securityValue {
         display: flex;
-        &_btnQuantity{
-          margin-left: 1rem;
+        &-btnQuantity{
+          margin-left: $spacing_small;
           &--selected {
-            margin-left: 1rem;
+            margin-left: $spacing_small;
             @include material('none');
             background-color: $color_active;
             color: $font_color_inverse;
           }
         }
-        &_btnCS01{
-          margin-left: 1rem;
+        &-btnCS01{
+          margin-left: $spacing_small;
           &--selected {
-            margin-left: 1rem;
+            margin-left: $spacing_small;
             @include material('none');
             background-color: $color_active;
             color: $font_color_inverse;
@@ -42,9 +44,13 @@
       }
     }
   }
-  &_Title{
+  &__title {
     display: flex;
     text-align:center;
+    align-content: center;
+    justify-content: center;
+  }
+  &__obligorGraph {
     align-content: center;
     justify-content: center;
   }

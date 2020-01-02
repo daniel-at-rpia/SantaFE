@@ -147,3 +147,28 @@ export interface AgGridColumn {
   userProvidedColDef: AgGridColumnDefinition;
   sort: string;
 }
+
+export interface ObligorChartCategoryBlock {
+  data: { 
+    name: string;
+    color: string;
+    obligorCategoryDataItemDTO: Array<ObligorCategoryDataItemBlock>;
+  };
+
+  state: {
+    isHidden: boolean;
+    isMarkHidden: boolean;
+  }
+}
+
+export interface ObligorCategoryDataItemBlock {
+  data: {
+    name: string,
+    securityID: string;
+    mark: string;
+    mid: number;
+    workoutTerm: number;
+    positionCurrent: number;
+  }
+  state: {}
+}
