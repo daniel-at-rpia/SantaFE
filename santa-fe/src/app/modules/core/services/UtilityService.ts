@@ -90,9 +90,13 @@ export class UtilityService {
           return 2;
         case "Unsecured":
           return 2;
+        case "SR":  // this is for CDS
+          return 2;
         case "Sr Subordinated":
           return 3;
         case "Subordinated":
+          return 3;
+        case "SUB":  // this is for SUB
           return 3;
         case "Jr Subordinated":
           return 3;

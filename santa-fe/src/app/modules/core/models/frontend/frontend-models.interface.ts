@@ -219,6 +219,7 @@ export interface SecurityTableDTO extends BasicDTOStructure {
     selectedHeader: SecurityTableHeaderDTO;
     sortedByHeader: SecurityTableHeaderDTO;
     isLiveVariant: boolean;
+    isNativeEnabled: boolean;
     isAgGridReady: boolean;
   },
   api: {

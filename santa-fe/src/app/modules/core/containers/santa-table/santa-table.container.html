@@ -1,10 +1,11 @@
 <article
   [ngClass]="{
-    'santaTable': true
+    'santaTable': true,
+    'santaTable--nativeEnabledState': tableData.state.isNativeEnabled
   }">
-  <section class="santaTable__main">
+  <section class="santaTable__agGridTable">
     <ag-grid-angular
-      class="ag-theme-balham santaTable__main-agGrid"
+      class="ag-theme-balham santaTable__agGridTable-agGrid"
       [columnDefs]="tableData.data.agGridColumnDefs"
       [defaultColDef]="agGridConfig.defaultColDef"
       [autoGroupColumnDef]="agGridConfig.autoGroupColumnDef"
@@ -20,5 +21,34 @@
       (gridReady)="onGridReady($event)"
       (rowClicked)="onRowClicked($event)">
     </ag-grid-angular>
+  </section>
+  <section class="santaTable__nativeSecurityTable">
+    <security-table
+      *ngIf="tableData.state.isNativeEnabled"
+      [tableData]="tableData"
+      [securityTableMetrics]="securityTableMetrics"
+      [activeTriCoreMetric]="activeTriCoreMetric"
+      (selectedSecurityForAnalysis)="onSelectSecurityForAnalysis($event)"
+      (nativeTableFetchQuotes)="onNativeTableFetchSecurityQuotes($event)"
+      (nativeLoadTableHeader)="onNativeLoadTableHeader($event)"
+      (nativePerformSort)="onNativePerformSort($event)"
+      (nativePerformDefaultSort)="onNativePerformDefaultSort($event)"
+    ></security-table>
+  </section>
+  <section class="santaTable__floatingCTA">
+    <div class="santaTable__floatingCTA-tableSwitch santaBtnGroup">
+      <button
+        (click)="onToggleNativeTable(true)"
+        [ngClass]="{
+          'santaTable__floatingCTA-tableSwitch-btn': true,
+          'santaTable__floatingCTA-tableSwitch-btn--active': tableData.state.isNativeEnabled
+        }">Basic</button>
+      <button
+        (click)="onToggleNativeTable(false)"
+        [ngClass]="{
+          'santaTable__floatingCTA-tableSwitch-btn': true,
+          'santaTable__floatingCTA-tableSwitch-btn--active': !tableData.state.isNativeEnabled
+        }">AgGrid</button>
+    </div>
   </section>
 </article>

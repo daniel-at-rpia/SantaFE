@@ -9,6 +9,7 @@
     import { UtilityService } from './UtilityService';
     import { DTOService }from './DTOService';
     import {
+      SecurityDTO,
       SecurityTableDTO,
       SecurityTableRowDTO,
       SecurityTableHeaderDTO,
@@ -156,7 +157,8 @@ export class AgGridMiddleLayerService {
     const newAgRow: AgGridRow = {
       id: !eachSecurity.state.isStencil ? eachSecurity.data.securityID : this.utilityService.generateUUID(),
       securityCard: eachSecurity,
-      bestQuote: targetRow.data.cells[0].data.quantComparerDTO
+      bestQuote: targetRow.data.cells[0].data.quantComparerDTO,
+      rowDTO: targetRow
     };
     newAgRow[AGGRID_DETAIL_COLUMN_KEY] = '';
     targetHeaders.forEach((eachHeader, index) => {
@@ -182,7 +184,7 @@ export class AgGridMiddleLayerService {
       const columns = nodeA.columnController.allDisplayedColumns;
       if (!!columns) {
         const targetColumn = columns.find((eachColumn) => {
-          return eachColumn.sort;
+          return !!eachColumn.sort;
         })
         const targetStub = SecurityTableMetrics.find((eachMetric) => {
           return eachMetric.key === targetColumn.colId;
@@ -193,7 +195,7 @@ export class AgGridMiddleLayerService {
           const targetHeader = this.dtoService.formSecurityTableHeaderObject(targetStub);
           const underlineValueA = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityA, true);
           const underlineValueB = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityB, true);
-          return this.returnSortValue(underlineValueA, underlineValueB, securityA, securityB);
+          return this.returnSortValue(targetHeader, underlineValueA, underlineValueB, securityA, securityB);
         } else {
           console.error('Error at Custom AgGrid sorting, couldnt find header for column', targetColumn);
           return 0;
@@ -224,23 +226,23 @@ export class AgGridMiddleLayerService {
         if (valueA == null && valueB == null) {
           return 0;
         } else if (valueA == null && valueB != null) {
-          return 16;
-        } else if (valueA != null && valueB == null) {
           return -16;
+        } else if (valueA != null && valueB == null) {
+          return 16;
         } else if (qA.state.hasBid && qA.state.hasOffer && (!qB.state.hasBid || !qB.state.hasOffer)) {
           // A has both bid & offer vs B has only bid or only offer
-          return -9;
-        } else if ((!qA.state.hasBid || !qA.state.hasOffer) && qB.state.hasBid && qB.state.hasOffer) {
           return 9;
+        } else if ((!qA.state.hasBid || !qA.state.hasOffer) && qB.state.hasBid && qB.state.hasOffer) {
+          return -9;
         } else if ((qA.state.hasBid || qA.state.hasOffer) && (!qB.state.hasBid && !qB.state.hasOffer)) {
           // A has only bid or only offer vs B has no bid or offer
-          return -4;
-        } else if ((!qA.state.hasBid && !qA.state.hasOffer) && (qB.state.hasBid || qB.state.hasOffer)) {
           return 4;
+        } else if ((!qA.state.hasBid && !qA.state.hasOffer) && (qB.state.hasBid || qB.state.hasOffer)) {
+          return -4;
         } else if (valueA > valueB) {
-          return 1;
-        } else if (valueA < valueB) {
           return -1;
+        } else if (valueA < valueB) {
+          return 1;
         } else {
           return 0;
         }
@@ -252,19 +254,25 @@ export class AgGridMiddleLayerService {
     }
   }
 
-  private returnSortValue(valueA, valueB, securityA, securityB): number {
+  private returnSortValue(
+    targetHeader: SecurityTableHeaderDTO,
+    valueA: string | number,
+    valueB: string | number,
+    securityA: SecurityDTO,
+    securityB: SecurityDTO
+  ): number {
     if (securityA == null && securityB != null) {
-      return 16;
-    } else if (securityA != null && securityB == null) {
       return -16;
+    } else if (securityA != null && securityB == null) {
+      return 16;
     } else if (valueA == null && valueB != null) {
-      return 4;
-    } else if (valueA != null && valueB == null) {
       return -4;
+    } else if (valueA != null && valueB == null) {
+      return 4;
     } else if (valueA < valueB) {
-      return 1;
+      return targetHeader.data.inversedSortingForText ? 1 : -1;
     } else if (valueA > valueB) {
-      return -1;
+      return targetHeader.data.inversedSortingForText ? -1 : 1;
     } else {
       return 0;
     }

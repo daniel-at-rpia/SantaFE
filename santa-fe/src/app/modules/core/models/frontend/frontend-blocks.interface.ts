@@ -130,22 +130,22 @@ export interface AgGridRowNode {
   parent: AgGridRowNode;
   gridApi: GridApi;
   columnApi: ColumnApi;
+  expanded?: boolean;
   setExpanded: Function;
-  [property: string]: any;
 }
 
 export interface AgGridRow {
   id: string;
   securityCard: SecurityDTO;    // this needs to identical to SecurityTableMetrics' key for Security column
   bestQuote: QuantComparerDTO;  // this needs to identical to SecurityTableMetrics' key for Best Quote column
-  [property: string]: any;
+  rowDTO: any;
 }
 
 export interface AgGridColumn {
   colId: string;
   colDef: AgGridColumnDefinition;
   userProvidedColDef: AgGridColumnDefinition;
-  [property: string]: any;
+  sort: string;
 }
 
 export interface ObligorChartCategoryColorSchemeBlock {

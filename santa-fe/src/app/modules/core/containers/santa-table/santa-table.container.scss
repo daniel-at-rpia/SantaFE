@@ -49,22 +49,25 @@ $alt-background: $color_white;
 
 .santaTable {
   $santaTableBlockName: &;
+  @include mix_fixed_div(relative, $z_index_standard_base_item);
   flex: 1 1 auto;
   display: flex;
   overflow: hidden;
-  font-weight: 300;
-  font-family:"SantaOpenSans"; 
-  button {
-    @include material('none');
-    border-radius: inherit;
-    margin: inherit;
-    padding: inherit;
-  }
-  &__main {
-    @include mix_enable_scrollbar('both');
+  &__agGridTable {
     flex: 1 1 auto;
+    display: flex;
+    font-weight: 300;
+    font-family:"SantaOpenSans"; 
+    overflow: hidden;
+    button {
+      @include material('none');
+      border-radius: inherit;
+      margin: inherit;
+      padding: inherit;
+    }
     &-agGrid {
       height: 100%;
+      width: 100%;
       &-header {
         justify-content: center;
         .ag-header-cell-label {
@@ -111,6 +114,40 @@ $alt-background: $color_white;
         santa-table-quote-cell {
           flex: 1 1 auto;
         }
+      }
+    }
+  }
+  &__nativeSecurityTable {
+    flex: 1 1 auto;
+    display: none;
+    security-table {
+      flex: 1 1 auto;
+      display: flex;
+      overflow: hidden;
+    }
+  }
+  &__floatingCTA {
+    @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+    right: 0;
+    bottom: 0;
+    &-tableSwitch {
+      margin: $spacing_medium;
+      &-btn {
+        &--active {
+          @include material('none');
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--nativeEnabledState {
+    #{$santaTableBlockName} {
+      &__agGridTable {
+        display: none;
+      }
+      &__nativeSecurityTable {
+        display: flex;
       }
     }
   }

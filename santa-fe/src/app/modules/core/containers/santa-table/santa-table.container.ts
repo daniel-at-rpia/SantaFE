@@ -41,11 +41,11 @@
       AgGridColumnDefinition
     } from 'FEModels/frontend-blocks.interface';
     import { PayloadGetAllQuotes } from 'BEModels/backend-payloads.interface';
-    import { ClickedSortQuotesByMetricEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
+    import { ClickedSortQuotesByMetricEmitterParams, AgGridRowParams } from 'FEModels/frontend-adhoc-packages.interface';
     import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
     import { SantaTableSecurityCell } from 'Core/components/santa-table-security-cell/santa-table-security-cell.component';
     import { SantaTableQuoteCell } from 'Core/components/santa-table-quote-cell/santa-table-quote-cell.component';
-    import { SantaTableDetailAllQuotes } from 'Core/components/santa-table-detail-all-quotes/santa-table-detail-all-quotes.component';
+    import { SantaTableDetailAllQuotes } from 'Core/containers/santa-table-detail-all-quotes/santa-table-detail-all-quotes.container';
     import { BEQuoteDTO } from 'BEModels/backend-models.interface';
     import {
       SECURITY_TABLE_FINAL_STAGE,
@@ -77,7 +77,7 @@ export class SantaTable implements OnInit, OnChanges {
 
   agGridConfig = {
     defaultColDef: {
-
+      sortingOrder: ["desc", "asc", null]
     },
     autoGroupColumnDef: {
       sort:'desc'
@@ -128,8 +128,7 @@ export class SantaTable implements OnInit, OnChanges {
       if (this.liveUpdateRowsCache.length > 0) {
         this.liveUpdateRows(this.liveUpdateRowsCache);
       }
-      // TODO: enable this
-      // this.liveUpdateAllQuotesForExpandedRows();
+      this.liveUpdateAllQuotesForExpandedRows();
     }
   }
 
@@ -143,12 +142,49 @@ export class SantaTable implements OnInit, OnChanges {
     this.loadTableHeaders();
   }
 
-  public onRowClicked(params) {
-    params.node.setExpanded(!params.node.expanded);
+  public onRowClicked(params: AgGridRowParams) {
+    const expanded = !params.node.expanded;
+    params.node.setExpanded(expanded);
+    const targetRow = this.tableData.data.rows.find((eachRow) => {
+      return !!eachRow.data.security && eachRow.data.security.data.securityID == params.node.data.id;
+    });
+    if (!!targetRow) {
+      targetRow.state.isExpanded = expanded;
+      if (targetRow.data.security) {
+        targetRow.data.security.state.isTableExpanded = expanded;
+        targetRow.state.isExpanded && this.fetchSecurityQuotes(targetRow);
+      }
+    } else {
+      console.error(`Could't find targetRow`, params);
+    }
   }
 
   public getRowNodeId(row) {
     return row.id;
+  }
+
+  public onToggleNativeTable(toggleValue) {
+    this.tableData.state.isNativeEnabled = !!toggleValue;
+  }
+
+  public onSelectSecurityForAnalysis(targetSecurity: SecurityDTO) {
+    this.selectedSecurityForAnalysis.emit(targetSecurity);
+  }
+
+  public onNativeTableFetchSecurityQuotes(targetRow: SecurityTableRowDTO){
+    this.fetchSecurityQuotes(targetRow);
+  }
+
+  public onNativeLoadTableHeader() {
+    this.loadTableHeaders(true);
+  }
+
+  public onNativePerformSort(targetHeader: SecurityTableHeaderDTO) {
+    this.performSort(targetHeader);
+  }
+
+  public onNativePerformDefaultSort() {
+    this.performDefaultSort();
   }
 
   private loadTableHeaders(skipAgGrid = false) {
@@ -199,6 +235,43 @@ export class SantaTable implements OnInit, OnChanges {
         });
       }
     });
+  }
+
+  private fetchSecurityQuotes(targetRow: SecurityTableRowDTO){ 
+    if (!!targetRow && !!targetRow.data.cells[0] && !!targetRow.data.cells[0].data.quantComparerDTO) {
+      var bestBid: number; 
+      var bestOffer: number;
+      var metricType: string;
+
+      bestBid = targetRow.data.cells[0].data.quantComparerDTO.data.bid.number;
+      bestOffer = targetRow.data.cells[0].data.quantComparerDTO.data.offer.number;
+      metricType = targetRow.data.cells[0].data.quantComparerDTO.data.metricType;
+
+      const payload: PayloadGetAllQuotes = {
+        "identifier": targetRow.data.security.data.securityID
+      };
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAllQuotes, {req: 'POST'}, payload).pipe(
+        first(),
+        delay(200),
+        tap((serverReturn) => {
+          targetRow.data.quotes = [];
+          for (const eachKey in serverReturn) {
+            const rawQuote: BEQuoteDTO = serverReturn[eachKey];
+
+            const newQuote = this.dtoService.formSecurityQuoteObject(false, rawQuote, bestBid, bestOffer, metricType);
+            if (newQuote.state.hasAsk || newQuote.state.hasBid) {
+              targetRow.data.quotes.push(newQuote);
+            }
+          }
+          this.performChronologicalSortOnQuotes(targetRow);
+          this.agGridMiddleLayerService.updateAgGridRows(this.tableData, [targetRow]);
+        }),
+        catchError(err => {
+          console.error('liveQuote/get-all-quotes failed', err);
+          return of('error')
+        })
+      ).subscribe();
+    }
   }
 
   private performSort(targetHeader: SecurityTableHeaderDTO) {
@@ -285,6 +358,18 @@ export class SantaTable implements OnInit, OnChanges {
     })
   }
 
+  private performChronologicalSortOnQuotes(targetRow: SecurityTableRowDTO) {
+    targetRow.data.quotes.sort((quoteA, quoteB) => {
+      if (quoteA.data.unixTimestamp < quoteB.data.unixTimestamp) {
+        return 1;
+      } else if (quoteA.data.unixTimestamp > quoteB.data.unixTimestamp) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+  }
+
   private liveUpdateRows(targetRows: Array<SecurityTableRowDTO>) {
     targetRows.forEach((eachNewRow) => {
       const matchedOldRow = this.tableData.data.rows.find((eachOldRow) => {
@@ -297,5 +382,13 @@ export class SantaTable implements OnInit, OnChanges {
       }
     });
     this.agGridMiddleLayerService.updateAgGridRows(this.tableData, targetRows);
+  }
+
+  private liveUpdateAllQuotesForExpandedRows() {
+    this.tableData.data.rows.forEach((eachRow) => {
+      if (eachRow.state.isExpanded) {
+        this.fetchSecurityQuotes(eachRow);
+      }
+    })
   }
 }

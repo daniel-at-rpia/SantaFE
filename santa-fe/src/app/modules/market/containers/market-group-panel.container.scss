@@ -305,7 +305,6 @@ $marketGroupPanel_configurator_width: $securityDefinitionConfigurator_width + $s
       padding: 0 $marketGroupPanel_groups_list_padding $spacing_large $marketGroupPanel_groups_list_padding;
       &-item {
         @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
-        margin-top: $spacing_x_small;
         &:first-of-type {
           margin-top: $spacing_medium;
         }

@@ -285,24 +285,24 @@ export class MarketGroupPanel implements OnDestroy {
   private formSearchPayload(definitionList: Array<SecurityDefinitionDTO>): PayloadGetSantaGroups{
     const payload: PayloadGetSantaGroups = {
       source: "Default",
-      santaGroupDefinition: {},
-      santaGroupFilters: {},
+      groupDefinition: {},
+      groupFilters: {},
       tenorOptions: ["2Y", "3Y", "5Y", "7Y", "10Y", "30Y"]
     };
     definitionList.forEach((eachDefinition) => {
       if (eachDefinition.state.groupByActive || eachDefinition.state.isLocked) {
         const attributeName = this.utilityService.convertFEKey(eachDefinition.data.key);
         if (attributeName !== 'n/a') {
-          payload.santaGroupDefinition[attributeName] = [];
+          payload.groupDefinition[attributeName] = [];
         }
       }
       if (eachDefinition.state.filterActive) {
         const attributeName = this.utilityService.convertFEKey(eachDefinition.data.key);
         if (attributeName !== 'n/a') {
-          payload.santaGroupFilters[attributeName] = [];
+          payload.groupFilters[attributeName] = [];
           eachDefinition.data.filterOptionList.forEach((eachOption) => {
             if (eachOption.isSelected) {
-              payload.santaGroupFilters[attributeName].push(eachOption.displayLabel);
+              payload.groupFilters[attributeName].push(eachOption.displayLabel);
             }
           });
         }

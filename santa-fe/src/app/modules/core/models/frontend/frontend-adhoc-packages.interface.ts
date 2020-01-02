@@ -1,7 +1,15 @@
 import { Subscription } from 'rxjs';
+import {
+  GridApi,
+  ColumnApi
+} from 'ag-grid-community';
 
 import { SecurityTableRowDTO } from 'FEModels/frontend-models.interface';
-import { QuoteMetricBlock } from 'FEModels/frontend-blocks.interface';
+import {
+  QuoteMetricBlock,
+  AgGridRow,
+  AgGridRowNode
+} from 'FEModels/frontend-blocks.interface';
 
 
 export interface ClickedSortQuotesByMetricEmitterParams {
@@ -34,4 +42,11 @@ export interface QuantVisualizerParams {
   gMom: number;
   tYtd: number;
   gYtd: number;
+}
+
+export interface AgGridRowParams {
+  data: AgGridRow;
+  node: AgGridRowNode;
+  gridApi: GridApi;
+  columnApi: ColumnApi;
 }
