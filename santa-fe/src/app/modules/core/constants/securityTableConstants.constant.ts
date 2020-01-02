@@ -279,23 +279,23 @@ export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
     textOnly: false
   },{
     labelList: ['B Px', 'A Px'],
-    isSizeTwo: true,
+    size: 3,
     textOnly: false
   },{
     labelList: ['B YTW', 'A YTW'],
-    isSizeTwo: true,
+    size: 2,
     textOnly: false
   },{
     labelList: ['B Sprd', 'A Sprd'],
-    isSizeTwo: true,
+    size: 2,
     textOnly: false
   },{
     labelList: ['B Size (MM)', 'A Size (MM)'],
-    isSizeTwo: true,
+    size: 3,
     textOnly: false
   },{
     labelList: ['Benchmarks'],
-    isSizeThree: true,
+    size: 4,
     textOnly: true
   }
 ];

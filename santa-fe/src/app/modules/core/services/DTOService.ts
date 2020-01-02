@@ -516,8 +516,9 @@ export class DTOService {
         quoteHeaders: QuoteMetricList.map((eachQuoteMetricStub) => {
           const metricBlock: QuoteMetricBlock = {
             displayLabelList: eachQuoteMetricStub.labelList,
-            isSizeTwo: eachQuoteMetricStub.isSizeTwo,
-            isSizeThree: eachQuoteMetricStub.isSizeThree,
+            isSizeTwo: eachQuoteMetricStub.size === 2,
+            isSizeThree: eachQuoteMetricStub.size === 3,
+            isSizeFour: eachQuoteMetricStub.size === 4,
             sortable: !eachQuoteMetricStub.textOnly
           };
           return metricBlock;

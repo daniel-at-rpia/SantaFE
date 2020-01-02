@@ -92,6 +92,7 @@ export interface QuoteMetricBlock {
   displayLabelList: Array<string>;
   isSizeTwo: boolean;
   isSizeThree: boolean;
+  isSizeFour: boolean;
   sortable: boolean;
 }
 
