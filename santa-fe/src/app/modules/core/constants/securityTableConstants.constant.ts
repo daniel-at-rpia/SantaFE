@@ -273,38 +273,29 @@ export const THIRTY_DAY_DELTA_METRIC_INDEX = SecurityTableMetrics.findIndex((eac
 export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
   {
     labelList: ['Source'],
-    isDoubleWidthColumn: false,
-    isTripleWidthColumn: false,
     textOnly: false
   },{
     labelList: ['Dealer'],
-    isDoubleWidthColumn: false,
-    isTripleWidthColumn: false,
     textOnly: false
   },{
     labelList: ['B Px', 'A Px'],
-    isDoubleWidthColumn: true,
-    isTripleWidthColumn: false,
+    size: 3,
     textOnly: false
   },{
     labelList: ['B YTW', 'A YTW'],
-    isDoubleWidthColumn: true,
-    isTripleWidthColumn: false,
+    size: 2,
     textOnly: false
   },{
     labelList: ['B Sprd', 'A Sprd'],
-    isDoubleWidthColumn: true,
-    isTripleWidthColumn: false,
+    size: 2,
     textOnly: false
   },{
     labelList: ['B Size (MM)', 'A Size (MM)'],
-    isDoubleWidthColumn: false,
-    isTripleWidthColumn: true,
+    size: 3,
     textOnly: false
   },{
     labelList: ['Benchmarks'],
-    isDoubleWidthColumn: false,
-    isTripleWidthColumn: true,
+    size: 4,
     textOnly: true
   }
 ];

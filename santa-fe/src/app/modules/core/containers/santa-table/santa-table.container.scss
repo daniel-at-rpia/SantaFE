@@ -120,6 +120,7 @@ $alt-background: $color_white;
   &__nativeSecurityTable {
     flex: 1 1 auto;
     display: none;
+    overflow: hidden;
     security-table {
       flex: 1 1 auto;
       display: flex;

@@ -59,8 +59,7 @@ export interface SecurityMetricOptionStub {
 }
 
 export interface SecurityTableQuoteMetric {
-  isDoubleWidthColumn: boolean;
-  isTripleWidthColumn: boolean;
+  size?: number;
   labelList: Array<string>;
   textOnly: boolean;
 }
