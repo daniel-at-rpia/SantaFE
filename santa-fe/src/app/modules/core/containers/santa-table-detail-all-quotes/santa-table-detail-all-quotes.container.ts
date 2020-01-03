@@ -42,5 +42,6 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
 
   public onClickClose() {
     this.parentNode.setExpanded(false);
+    this.rowData.state.isExpanded = false;
   }
 }
