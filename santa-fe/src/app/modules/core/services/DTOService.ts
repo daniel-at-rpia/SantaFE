@@ -823,7 +823,8 @@ export class DTOService {
           name,
           securityID: null,
           mark: null,
-          mid: null, 
+          spreadMid: null, 
+          yieldMid: null,
           workoutTerm: null,
           positionCurrent: null
         },

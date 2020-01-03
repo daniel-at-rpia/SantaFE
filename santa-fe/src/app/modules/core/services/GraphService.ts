@@ -9,6 +9,7 @@ import {
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import * as am4plugins_regression from "@amcharts/amcharts4/plugins/regression";
+import { TradeObligorGraphPanelState } from 'FEModels/frontend-page-states.interface';
 
 
 @Injectable()
@@ -125,19 +126,25 @@ export class GraphService {
     }
   }
 
-  public addCategoryToObligorGraph(chart: am4charts.XYChart, category: ObligorChartCategoryBlock) {
+  public addCategoryToObligorGraph(chart: am4charts.XYChart, category: ObligorChartCategoryBlock, state: TradeObligorGraphPanelState) {
     // Create data array that can be handled by amCharts from out category DataItems.
     let amChartsData: any[] = [];
+    let mid: number;
+
     for (let dataItem in category.data.obligorCategoryDataItemDTO) {
+
+      if(state.metric.spread) mid =  category.data.obligorCategoryDataItemDTO[dataItem].data.spreadMid;
+      else if(state.metric.yield) mid =  category.data.obligorCategoryDataItemDTO[dataItem].data.yieldMid;
+
       // The dumbbell chart will not work if the mark is null. If it is, we will set it to the value of mid to be "hidden" behind it.
       if (category.data.obligorCategoryDataItemDTO[dataItem].data.mark === null) {
-        category.data.obligorCategoryDataItemDTO[dataItem].data.mark = category.data.obligorCategoryDataItemDTO[dataItem].data.mid.toLocaleString();
+        category.data.obligorCategoryDataItemDTO[dataItem].data.mark = mid.toLocaleString();
       }
 
       // TODO: Create adhoc interface.
       amChartsData.push({
         name: category.data.obligorCategoryDataItemDTO[dataItem].data.name,
-        mid: category.data.obligorCategoryDataItemDTO[dataItem].data.mid,
+        mid: mid,
         mark: category.data.obligorCategoryDataItemDTO[dataItem].data.mark,
         workoutTerm: category.data.obligorCategoryDataItemDTO[dataItem].data.workoutTerm,
         positionCurrent: category.data.obligorCategoryDataItemDTO[dataItem].data.positionCurrent
@@ -232,6 +239,13 @@ export class GraphService {
   }
 
   public initializeObligorChartAxes(xAxisData: any[], yAxesData: any[], chart: am4charts.XYChart) {
+
+    let xAxisamChartsData: any[] = [];
+    xAxisData.forEach((eachItem) =>
+    {
+      xAxisamChartsData.push({workoutTerm: eachItem})
+    });
+
     this.initializeObligorChartXAxis(xAxisData, chart);
     this.initializeObligorChartYAxis(yAxesData, chart);
   }

@@ -139,7 +139,7 @@ export interface TradeObligorGraphPanelState {
     cS01:boolean;
     quantity:boolean;
   }
-  xAxisData: [{workoutTerm: number}];
+  xAxisData: number[];
   yAxisData: number[];
   activeCharts: {
     srBond: boolean;

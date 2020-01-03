@@ -94,9 +94,10 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
 
             if (security !== null) {
 
-              let bestMid = this.addBestSpreadMidToChartCategory(serverReturn[curve].bestQuotes[security].bestSpreadQuote);
+              let spreadMid = this.addBestMidToChartCategory(serverReturn[curve].bestQuotes[security].bestSpreadQuote);
+              let yieldMid = this.addBestMidToChartCategory(serverReturn[curve].bestQuotes[security].bestYieldQuote);
 
-              if (bestMid !== 0) {
+              if (yieldMid !== 0  || spreadMid !== 0 ) {
 
                 if (this.state.obligorSecurityID === security) chartCategory.state.isHidden = false;
 
@@ -106,7 +107,8 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
                   data: {
                     name: serverReturn[curve].securities[security].name,
                     securityID: security,
-                    mid: bestMid,
+                    spreadMid: spreadMid,
+                    yieldMid: yieldMid,
                     mark: null,
                     workoutTerm: serverReturn[curve].securities[security].metrics.workoutTerm,
                     positionCurrent: null
@@ -120,10 +122,11 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
                 securityIDsFromAnalysis.push(security);
 
                 // Populate the YAxis with the mid.
-                this.state.yAxisData.push(categoryDataItem.data.mid);
+                if(this.state.metric.spread) this.state.yAxisData.push(categoryDataItem.data.spreadMid);
+                else if(this.state.metric.yield) this.state.yAxisData.push(categoryDataItem.data.yieldMid);
 
                 // Pupulate the XAxis with the workout Term.
-                this.state.xAxisData.push({ workoutTerm: categoryDataItem.data.workoutTerm });
+                this.state.xAxisData.push(categoryDataItem.data.workoutTerm);
               }
             }
           }
@@ -131,7 +134,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
           this.state.chartCategories.push(chartCategory);
         }
         // Dispatch a the list of security IDs from the related Obligor in serverReturn. This will call to trade-center-panel, which will return marks for those we own.
-        if(securityIDsFromAnalysis) 0 && this.store$.dispatch(new TradeSecurityIDsFromAnalysisEvent(securityIDsFromAnalysis));
+        if(securityIDsFromAnalysis) this.store$.dispatch(new TradeSecurityIDsFromAnalysisEvent(securityIDsFromAnalysis));
       }),
     ).subscribe();
 
@@ -148,28 +151,18 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     return color;
   }
 
-  private addBestYieldMidQuoteToChartCategory(securityID: string, bEBestQuoteDTO: any): any[] {
-    let bestQuoteData: any[] = [];
-    let yieldRounding = TriCoreMetricConfig.Yield.rounding
-
-    let yieldMid = null;
-
-    // TODO: I have not added Yield logic yet.
-
-    return bestQuoteData;
-  }
-
-  private addBestSpreadMidToChartCategory(bEBestQuoteDTO: any): any {
+  private addBestMidToChartCategory(bEBestQuoteDTO: any): any {
     let mid: number = null;
-    let spreadRounding = TriCoreMetricConfig.Spread.rounding;
-
-    // TODO: If anything is 0, do not add.
+    let rounding: number;
+    
+    if(this.state.metric.spread) rounding = TriCoreMetricConfig.Spread.rounding;
+    else if (this.state.metric.yield) rounding = TriCoreMetricConfig.Spread.rounding;
 
     if (bEBestQuoteDTO.bidQuoteValue !== null && bEBestQuoteDTO.askQuoteValue !== null) mid = (bEBestQuoteDTO.bidQuoteValue + bEBestQuoteDTO.askQuoteValue) / 2;
     else if (bEBestQuoteDTO.bidQuoteValue === null && bEBestQuoteDTO.askQuoteValue > 0) mid = bEBestQuoteDTO.askQuoteValue;
     else if (bEBestQuoteDTO.bidQuoteValue > 0 && bEBestQuoteDTO.askQuoteValue === null) mid = bEBestQuoteDTO.bidQuoteValue;
 
-    mid = this.utility.round(mid, spreadRounding);
+    mid = this.utility.round(mid, rounding);
 
     return mid;
   }
@@ -217,7 +210,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
       // Draw each chart category.
       this.state.chartCategories.forEach((eachCategory) =>
       {
-        if (eachCategory.data.obligorCategoryDataItemDTO) this.graphService.addCategoryToObligorGraph(this.state.obligorChart, eachCategory);
+        if (eachCategory.data.obligorCategoryDataItemDTO) this.graphService.addCategoryToObligorGraph(this.state.obligorChart, eachCategory, this.state);
       });
 
       // Add legend for each chart type.
@@ -237,7 +230,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
   }
 
   public btnCS01Click() {
-    this.state.markValue.cS01 = false;
+    this.state.markValue.quantity = false;
     if (this.state.markValue.cS01) this.state.markValue.cS01 = false;
     else if (this.state.markValue.cS01 === false) this.state.markValue.cS01 = true;
 
@@ -261,8 +254,22 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
 
     // Generate a graph for each data type, sending in the raw data,  the color scheme and the name.
     for (let category in this.state.chartCategories) {
-      if (this.state.chartCategories[category].data.obligorCategoryDataItemDTO.length > 0) this.graphService.addCategoryToObligorGraph(this.state.obligorChart, this.state.chartCategories[category]);
+      if (this.state.chartCategories[category].data.obligorCategoryDataItemDTO.length > 0) this.graphService.addCategoryToObligorGraph(this.state.obligorChart, this.state.chartCategories[category], this.state);
     }
+  }
+
+  public btnSpreadClick() {
+    this.state.metric.yield = false;
+    if (this.state.metric.spread === false) this.state.metric.spread = true;
+
+    this.fetchSecurityIDs()
+  }
+
+  public btnYieldClick() {
+    this.state.metric.spread = false;
+    if (this.state.metric.yield === false) this.state.metric.yield = true;
+
+    this.fetchSecurityIDs();
   }
 
   private initializeState() {
@@ -280,7 +287,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
         cS01: false,
         quantity: true
       },
-      xAxisData: null,
+      xAxisData: [],
       yAxisData: [],
       activeCharts: {
         srBond: false,
