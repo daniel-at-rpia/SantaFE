@@ -158,7 +158,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: 'ratingValue',
     readyStage: 2,
     active: false,
-    inversedSortingForText: true
+    isDataTypeText: true
   },{
     key: 'currency',
     label: 'Currency',
@@ -166,7 +166,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: 'currency',
     readyStage: 2,
     active: false,
-    inversedSortingForText: true
+    isDataTypeText: true
   },{
     key: 'sector',
     label: 'Sector',
@@ -174,7 +174,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: 'sector',
     readyStage: 2,
     active: true,
-    inversedSortingForText: true
+    isDataTypeText: true
   },{
     key: 'industry',
     label: 'Industry',
@@ -182,7 +182,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: 'industry',
     readyStage: 2,
     active: false,
-    inversedSortingForText: true
+    isDataTypeText: true
   },{
     key: 'couponType',
     label: 'CouponType',
@@ -190,7 +190,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: 'couponType',
     readyStage: 2,
     active: false,
-    inversedSortingForText: true
+    isDataTypeText: true
   },{
     key: 'securityType',
     label: 'Security Type',
@@ -198,7 +198,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: 'securityType',
     readyStage: 2,
     active: false,
-    inversedSortingForText: true
+    isDataTypeText: true
   },{
     key: 'seniority',
     label: 'Seniority',
@@ -206,7 +206,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: 'seniorityLevel',
     readyStage: 2,
     active: false,
-    inversedSortingForText: false
+    isDataTypeText: false
   },{
     key: 'country',
     label: 'Country',
@@ -214,7 +214,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: 'country',
     readyStage: 2,
     active: false,
-    inversedSortingForText: true
+    isDataTypeText: true
   },{
     key: 'maturityType',
     label: 'Maturity Type',
@@ -222,7 +222,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: 'maturityType',
     readyStage: 2,
     active: false,
-    inversedSortingForText: true
+    isDataTypeText: true
   },{
     key: 'primaryPM',
     label: 'Primary PM',
@@ -230,7 +230,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: 'primaryPmName',
     readyStage: 2,
     active: true,
-    inversedSortingForText: true
+    isDataTypeText: true
   },{
     key: 'backupPM',
     label: 'Backup PM',
@@ -238,7 +238,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: 'backupPmName',
     readyStage: 2,
     active: false,
-    inversedSortingForText: true
+    isDataTypeText: true
   },{
     key: 'research',
     label: 'Research',
@@ -246,7 +246,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: 'researchName',
     readyStage: 2,
     active: false,
-    inversedSortingForText: true
+    isDataTypeText: true
   },{
     key: 'firmStrategy',
     label: 'Firm Strategy',
@@ -254,7 +254,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: 'strategyFirm',
     readyStage: 1,
     active: false,
-    inversedSortingForText: true
+    isDataTypeText: true
   },{
     key: 'strategy',
     label: 'Strategy',
@@ -262,7 +262,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: 'strategyCurrent',
     readyStage: 1,
     active: false,
-    inversedSortingForText: true
+    isDataTypeText: true
   }
 ];
 
@@ -273,38 +273,29 @@ export const THIRTY_DAY_DELTA_METRIC_INDEX = SecurityTableMetrics.findIndex((eac
 export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
   {
     labelList: ['Source'],
-    isDoubleWidthColumn: false,
-    isTripleWidthColumn: false,
     textOnly: false
   },{
     labelList: ['Dealer'],
-    isDoubleWidthColumn: false,
-    isTripleWidthColumn: false,
     textOnly: false
   },{
     labelList: ['B Px', 'A Px'],
-    isDoubleWidthColumn: true,
-    isTripleWidthColumn: false,
+    size: 3,
     textOnly: false
   },{
     labelList: ['B YTW', 'A YTW'],
-    isDoubleWidthColumn: true,
-    isTripleWidthColumn: false,
+    size: 2,
     textOnly: false
   },{
     labelList: ['B Sprd', 'A Sprd'],
-    isDoubleWidthColumn: true,
-    isTripleWidthColumn: false,
+    size: 2,
     textOnly: false
   },{
     labelList: ['B Size (MM)', 'A Size (MM)'],
-    isDoubleWidthColumn: false,
-    isTripleWidthColumn: true,
+    size: 3,
     textOnly: false
   },{
     labelList: ['Benchmarks'],
-    isDoubleWidthColumn: false,
-    isTripleWidthColumn: true,
+    size: 4,
     textOnly: true
   }
 ];

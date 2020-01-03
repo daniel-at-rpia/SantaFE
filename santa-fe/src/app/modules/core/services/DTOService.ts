@@ -469,7 +469,8 @@ export class DTOService {
         rows: [],
         agGridColumnDefs: [],
         agGridRowData: [],
-        agGridFrameworkComponents: {}
+        agGridFrameworkComponents: {},
+        agGridAggregationMap: {}
       },
       state: {
         loadedContentStage: null,
@@ -501,7 +502,7 @@ export class DTOService {
         readyStage: stub.readyStage,
         metricPackDeltaScope: stub.metricPackDeltaScope || null,
         frontendMetric: !!stub.isFrontEndMetric,
-        inversedSortingForText: !!stub.inversedSortingForText,
+        isDataTypeText: !!stub.isDataTypeText,
         targetQuantLocationFromRow: !!stub.isForQuantComparer ? stub.targetQuantLocationFromRow : 'n/a'
       },
       state: {
@@ -525,8 +526,9 @@ export class DTOService {
         quoteHeaders: QuoteMetricList.map((eachQuoteMetricStub) => {
           const metricBlock: QuoteMetricBlock = {
             displayLabelList: eachQuoteMetricStub.labelList,
-            isDoubleWidthColumn: eachQuoteMetricStub.isDoubleWidthColumn,
-            isTripleWidthColumn: eachQuoteMetricStub.isTripleWidthColumn,
+            isSizeTwo: eachQuoteMetricStub.size === 2,
+            isSizeThree: eachQuoteMetricStub.size === 3,
+            isSizeFour: eachQuoteMetricStub.size === 4,
             sortable: !eachQuoteMetricStub.textOnly
           };
           return metricBlock;

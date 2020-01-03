@@ -59,8 +59,7 @@ export interface SecurityMetricOptionStub {
 }
 
 export interface SecurityTableQuoteMetric {
-  isDoubleWidthColumn: boolean;
-  isTripleWidthColumn: boolean;
+  size?: number;
   labelList: Array<string>;
   textOnly: boolean;
 }
@@ -80,7 +79,7 @@ export interface SecurityTableMetricStub {
   targetQuantLocationFromRow?: string;
   pureText?: boolean;
   disabled?: boolean;
-  inversedSortingForText?: boolean;
+  isDataTypeText?: boolean;
 }
 
 export interface TriCoreMetricConfigStub {
