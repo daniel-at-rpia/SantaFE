@@ -19,7 +19,6 @@
         padding-top: $spacing_x_small;
         text-align: center;
         align-content: center;
-        font-weight: bold;
       }
       &-btnQuantity{
         margin-left: $spacing_small;
@@ -72,6 +71,7 @@
     justify-content: center;
   }
   &__obligorGraph {
+    flex: 1 1 auto;
     align-content: center;
     justify-content: center;
   }

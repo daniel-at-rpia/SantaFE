@@ -134,11 +134,10 @@ export class GraphService {
 
     for (let dataItem in category.data.obligorCategoryDataItemDTO) {
 
-      if(state.metric.spread) mid =  category.data.obligorCategoryDataItemDTO[dataItem].data.spreadMid;
-      else if(state.metric.yield) mid =  category.data.obligorCategoryDataItemDTO[dataItem].data.yieldMid;
+      if (state.metric.spread) mid = category.data.obligorCategoryDataItemDTO[dataItem].data.spreadMid;
+      else if (state.metric.yield) mid = category.data.obligorCategoryDataItemDTO[dataItem].data.yieldMid;
 
-      if(mid !== 0)
-      {
+      if (mid !== 0) {
         // The dumbbell chart will not work if the mark is null. If it is, we will set it to the value of mid to be "hidden" behind it.
         if (category.data.obligorCategoryDataItemDTO[dataItem].data.mark === null) {
           category.data.obligorCategoryDataItemDTO[dataItem].data.mark = mid.toLocaleString();
@@ -152,7 +151,7 @@ export class GraphService {
           workoutTerm: category.data.obligorCategoryDataItemDTO[dataItem].data.workoutTerm,
           positionCurrent: category.data.obligorCategoryDataItemDTO[dataItem].data.positionCurrent
         })
-     }
+      }
     }
 
     this.generateObligorChartDumbells(state, category, amChartsData);
@@ -166,10 +165,10 @@ export class GraphService {
     dumbBellseries.dataFields.valueX = "workoutTerm";
     dumbBellseries.dataFields.openValueY = "mid";
 
-    if( state.metric.spread || state.markValue.cS01 || state.markValue.quantity ){
+    if (state.metric.spread || state.markValue.cS01 || state.markValue.quantity) {
       dumbBellseries.dataFields.valueY = "mark";
-    } 
-    else if(state.metric.yield || (state.markValue.quantity === false && state.markValue.cS01 === false )) dumbBellseries.dataFields.valueY = "mid";
+    }
+    else if (state.metric.yield || (state.markValue.quantity === false && state.markValue.cS01 === false)) dumbBellseries.dataFields.valueY = "mid";
 
     dumbBellseries.fill = am4core.color(category.data.color);
     dumbBellseries.stroke = am4core.color(category.data.color);
@@ -252,22 +251,32 @@ export class GraphService {
   public initializeObligorChartAxes(xAxisData: any[], yAxesData: any[], chart: am4charts.XYChart) {
 
     let xAxisamChartsData: any[] = [];
-    xAxisData.forEach((eachItem) =>
-    {
-      xAxisamChartsData.push({workoutTerm: eachItem})
+    xAxisData.forEach((eachItem) => {
+      xAxisamChartsData.push({ workoutTerm: eachItem })
     });
 
     this.initializeObligorChartXAxis(xAxisData, chart);
     this.initializeObligorChartYAxis(yAxesData, chart);
   }
 
-  private initializeObligorChartXAxis(data: any[], chart: am4charts.XYChart) {
+  private getMaxAxis(data: Array<number>): number {
     // Find the highest x axis value.
-    let max: number;
-    for(let i = 0; i < data.length -1; i++)
-    {
-      if(data[i] > data[i - 1]) max = data[i];
+    if (data.length > 0) {
+      const sortedData = data.sort((a, b) => {
+        if (a > b) {
+          return -1;
+        } else if (b > a) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+
+      return sortedData[0];
     }
+  }
+
+  private initializeObligorChartXAxis(data: Array<number>, chart: am4charts.XYChart) {
 
     let xAxis = chart.xAxes.push(new am4charts.ValueAxis());
     xAxis.renderer.grid.template.location = 0.5;
@@ -276,7 +285,7 @@ export class GraphService {
     xAxis.renderer.labels.template.location = 0.5;
     xAxis.title.text = "Tenor";
     xAxis.min = 0;
-    xAxis.max = max + 10;
+    xAxis.max = this.getMaxAxis(data);
     xAxis.data = data;
     xAxis.cursorTooltipEnabled = false;
 
@@ -286,19 +295,13 @@ export class GraphService {
   }
 
   private initializeObligorChartYAxis(data: any[], chart: am4charts.XYChart) {
-    // Find the highest x axis value.
-    let max: number;
-    for(let i = 0; i < data.length -1; i++)
-    {
-      if(data[i] > data[i - 1]) max = data[i];
-    }
 
     let yAxis = chart.yAxes.push(new am4charts.ValueAxis());
     yAxis.tooltip.disabled = true;
     yAxis.renderer.axisFills.template.disabled = true;
     yAxis.title.text = "Spread";
     yAxis.min = 0;
-    yAxis.max = max + 10;
+    yAxis.max = this.getMaxAxis(data);
     yAxis.data = data;
     yAxis.renderer.minGridDistance = 30;
     yAxis.cursorTooltipEnabled = true;
@@ -317,8 +320,7 @@ export class GraphService {
     axisTooltip.filters.push(dropShadow);
   }
 
-  public clearGraphSeries(chart: am4charts.XYChart)
-  {
+  public clearGraphSeries(chart: am4charts.XYChart) {
     chart.series.clear();
     return chart;
   }

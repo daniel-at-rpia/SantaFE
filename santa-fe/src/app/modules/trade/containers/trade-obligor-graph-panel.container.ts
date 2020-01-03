@@ -15,6 +15,7 @@ import { TriCoreMetricConfig } from 'Core/constants/coreConstants.constant';
 import { TradeObligorGraphPanelState } from 'FEModels/frontend-page-states.interface';
 import { ObligorCategoryDataItemBlock } from 'FEModels/frontend-blocks.interface';
 import { ObligorChartCategoryColorScheme } from 'App/modules/core/constants/colorSchemes.constant';
+import { BESingleBestQuoteDTO } from 'App/modules/core/models/backend/backend-models.interface';
 
 @Component({
   selector: 'trade-obligor-graph-panel',
@@ -157,7 +158,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     return color;
   }
 
-  private addBestMidToChartCategory(bEBestQuoteDTO: any): any {
+  private addBestMidToChartCategory(bEBestQuoteDTO: BESingleBestQuoteDTO): number {
     let mid: number = null;
     let rounding: number;
     
