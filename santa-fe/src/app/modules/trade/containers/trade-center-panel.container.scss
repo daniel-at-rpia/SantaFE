@@ -124,6 +124,9 @@
         color: $font_color_major;
         margin-bottom: $spacing_medium;
       }
+      &-btn {
+        margin-top: $spacing_medium;
+      }
     }
     &-table {
       flex: 1 1 auto;

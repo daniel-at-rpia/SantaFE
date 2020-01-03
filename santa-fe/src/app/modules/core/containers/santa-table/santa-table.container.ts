@@ -410,7 +410,7 @@ export class SantaTable implements OnInit, OnChanges {
         }
       })
       if (validCount > 0) {
-        return aggregatedValue;
+        return this.utilityService.round(aggregatedValue, 2);
       } else {
         return null;
       }

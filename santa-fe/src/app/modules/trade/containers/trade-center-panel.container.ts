@@ -262,6 +262,10 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     window.open('https://rpiadev01:1225/portfolio/get-credit-positions');
   }
 
+  public refreshAfterOpenLink() {
+    window.location.reload(false);
+  }
+
   private populateSearchShortcuts() {
     this.state.presets.shortcutList = [];
     this.constants.searchShortcuts.forEach((eachShortcutStub) => {
