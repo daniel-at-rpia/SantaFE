@@ -20,6 +20,25 @@
           CS01
         </button>
         </div>
+        <span class="sat-tradeObligorGraphPanel__graphSettings-metricValue-text">Metric: </span>
+        <div class="santaBtnGroup">
+          <button
+          (click)="this.btnSpreadClick()"
+          [ngClass]="{
+            'sat-tradeObligorGraphPanel__graphSettings-metricValue-btnSpread': this.state.metric.spread === false,
+            'sat-tradeObligorGraphPanel__graphSettings-metricValue-btnSpread--selected': this.state.metric.spread === true
+          }">
+          Spread
+        </button>
+        <button
+          (click)="this.btnYieldClick()"
+          [ngClass]="{
+            'sat-tradeObligorGraphPanel__graphSettings-metricValue-btnYield': this.state.metric.yield === false,
+            'sat-tradeObligorGraphPanel__graphSettings-metricValue-btnYield--selected': this.state.metric.yield === true
+          }">
+          Yield
+        </button>
+        </div>
       </div>
   </section>
   <section class="sat-tradeObligorGraphPanel__title">

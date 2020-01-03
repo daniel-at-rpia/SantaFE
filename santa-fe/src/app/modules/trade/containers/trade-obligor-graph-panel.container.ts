@@ -169,7 +169,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     else if (bEBestQuoteDTO.bidQuoteValue === null && bEBestQuoteDTO.askQuoteValue > 0) mid = bEBestQuoteDTO.askQuoteValue;
     else if (bEBestQuoteDTO.bidQuoteValue > 0 && bEBestQuoteDTO.askQuoteValue === null) mid = bEBestQuoteDTO.bidQuoteValue;
 
-    mid = this.utility.round(mid, rounding);
+    if(this.state.metric.spread) mid = this.utility.round(mid, rounding);
 
     return mid;
   }
@@ -273,6 +273,8 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     if (this.state.markValue.quantity) isMarkHidden = false
 
     this.state.obligorChart.dispose();
+    this.state.yAxisData = [];
+    this.state.xAxisData = [];
     this.fetchSecurityIDs();
   }
 
@@ -285,6 +287,8 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     this.state.markValue.quantity = false;
 
     this.state.obligorChart.dispose();
+    this.state.yAxisData = [];
+    this.state.xAxisData = [];
     this.fetchSecurityIDs();
   }
 

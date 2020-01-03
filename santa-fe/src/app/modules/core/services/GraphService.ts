@@ -285,7 +285,7 @@ export class GraphService {
     xAxis.renderer.labels.template.location = 0.5;
     xAxis.title.text = "Tenor";
     xAxis.min = 0;
-    xAxis.max = this.getMaxAxis(data);
+    xAxis.max = this.getMaxAxis(data) + 1;
     xAxis.data = data;
     xAxis.cursorTooltipEnabled = false;
 
@@ -301,7 +301,7 @@ export class GraphService {
     yAxis.renderer.axisFills.template.disabled = true;
     yAxis.title.text = "Spread";
     yAxis.min = 0;
-    yAxis.max = this.getMaxAxis(data);
+    yAxis.max = this.getMaxAxis(data) + 1;
     yAxis.data = data;
     yAxis.renderer.minGridDistance = 30;
     yAxis.cursorTooltipEnabled = true;
