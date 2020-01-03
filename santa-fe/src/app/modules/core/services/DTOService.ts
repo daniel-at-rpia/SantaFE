@@ -21,13 +21,15 @@
       SecurityTableHeaderDTO,
       SecurityTableCellDTO,
       SecurityQuoteDTO,
-      QuantitativeVisualizerDTO
+      QuantitativeVisualizerDTO,
     } from 'FEModels/frontend-models.interface';
     import {
       SecurityGroupMetricBlock,
       SecurityDefinitionFilterBlock,
       QuoteMetricBlock,
-      SecurityPortfolioBlock
+      SecurityPortfolioBlock,
+      ObligorChartCategoryBlock,
+      ObligorCategoryDataItemBlock
     } from 'FEModels/frontend-blocks.interface';
     import { QuantVisualizerParams } from 'FEModels/frontend-adhoc-packages.interface';
     import {
@@ -57,6 +59,7 @@
     import {
       QuoteMetricList
     } from 'Core/constants/securityTableConstants.constant';
+import { any } from '@amcharts/amcharts4/.internal/core/utils/Array';
   // 
 
 @Injectable()
@@ -406,9 +409,15 @@ export class DTOService {
       delta = this.utility.round(delta, rounding);
       mid = (rawData.bidQuoteValue + rawData.askQuoteValue)/2;
       mid = this.utility.round(mid, rounding);
+    } else if( hasBid && hasOffer == false) {
+      delta = 0;
+      mid = rawData.bidQuoteValue;
+    } else if( hasOffer && hasBid == false) {
+      delta = 0;
+      mid = rawData.askQuoteValue;
     } else {
       delta = 0;
-      mid = null;
+      mid = 0;
     }
     const object: QuantComparerDTO = {
       data: {
@@ -456,10 +465,12 @@ export class DTOService {
     const object: SecurityTableDTO = {
       data: {
         headers: [],
+        allHeaders: [],
         rows: [],
         agGridColumnDefs: [],
         agGridRowData: [],
-        agGridFrameworkComponents: {}
+        agGridFrameworkComponents: {},
+        agGridAggregationMap: {}
       },
       state: {
         loadedContentStage: null,
@@ -467,7 +478,8 @@ export class DTOService {
         selectedHeader: null,
         sortedByHeader: null,
         isLiveVariant: isLiveVariant,
-        isAgGridReady: false
+        isAgGridReady: false,
+        isNativeEnabled: false
       },
       api: {
         gridApi: null,
@@ -490,7 +502,7 @@ export class DTOService {
         readyStage: stub.readyStage,
         metricPackDeltaScope: stub.metricPackDeltaScope || null,
         frontendMetric: !!stub.isFrontEndMetric,
-        inversedSortingForText: !!stub.inversedSortingForText,
+        isDataTypeText: !!stub.isDataTypeText,
         targetQuantLocationFromRow: !!stub.isForQuantComparer ? stub.targetQuantLocationFromRow : 'n/a'
       },
       state: {
@@ -514,8 +526,9 @@ export class DTOService {
         quoteHeaders: QuoteMetricList.map((eachQuoteMetricStub) => {
           const metricBlock: QuoteMetricBlock = {
             displayLabelList: eachQuoteMetricStub.labelList,
-            isDoubleWidthColumn: eachQuoteMetricStub.isDoubleWidthColumn,
-            isTripleWidthColumn: eachQuoteMetricStub.isTripleWidthColumn,
+            isSizeTwo: eachQuoteMetricStub.size === 2,
+            isSizeThree: eachQuoteMetricStub.size === 3,
+            isSizeFour: eachQuoteMetricStub.size === 4,
             sortable: !eachQuoteMetricStub.textOnly
           };
           return metricBlock;
@@ -563,8 +576,8 @@ export class DTOService {
   ): SecurityQuoteDTO {
     const hasBid = !isStencil ? (!!rawData.isActive && !!rawData.bidVenue) : true;
     const hasAsk = !isStencil ? (!!rawData.isActive && !!rawData.askVenue) : true;
-    const bidBenchmark = !isStencil ? rawData.bidQualifier : 'T 0.5 01/01/2020';
-    const askBenchmark = !isStencil ? rawData.askQualifier : 'T 0.5 01/01/2020';
+    const bidBenchmark = !isStencil ? rawData.benchmarkName : 'T 0.5 01/01/2020';
+    const askBenchmark = !isStencil ? rawData.benchmarkName : 'T 0.5 01/01/2020';
     const dataSource = !isStencil ? (hasBid ? rawData.bidVenue : rawData.askVenue) : 'PLACEHOLDER';
     const consolidatedBenchmark = bidBenchmark === askBenchmark ? bidBenchmark : null;
     let convertedDate: Date = null;
@@ -774,4 +787,53 @@ export class DTOService {
     }
   }
 
+  public formObligorChartCategoryDTO(
+    isStencil: boolean,
+    name: string,
+    colorScheme: string,
+    obligorCategoryDataItemDTO: ObligorCategoryDataItemBlock[],
+    isHidden
+    ): ObligorChartCategoryBlock
+  {
+    if(isStencil)
+    {
+      let obligorChartCategoryDTOStencil: ObligorChartCategoryBlock = {
+        data: {
+          name: null,
+          color: null,
+          obligorCategoryDataItemDTO: [],
+        },
+        state: {
+          isHidden: true,
+          isMarkHidden: false
+        }
+      }
+      return obligorChartCategoryDTOStencil;
+    }
+    else{
+      return null;
+    }
+  }
+
+  public formObligorCategoryDataItemDTO(isStencil: boolean): ObligorCategoryDataItemBlock
+  {
+    if(isStencil) {
+      let obligorCategoryDataDTO: ObligorCategoryDataItemBlock = {
+        data: {
+          name,
+          securityID: null,
+          mark: null,
+          spreadMid: null, 
+          yieldMid: null,
+          workoutTerm: null,
+          positionCurrent: null
+        },
+        state: {}
+      }
+      return obligorCategoryDataDTO;
+    }
+    else {
+      return null;
+    }
+  }
 }

@@ -23,6 +23,8 @@ import { SecurityDefinitionConfigurator } from 'Core/containers/security-definit
 import { SecurityTable } from 'Core/containers/security-table/security-table.container';
 import { SantaTable } from 'Core/containers/santa-table/santa-table.container';
 import { SantaTableSecurityCell } from 'Core/components/santa-table-security-cell/santa-table-security-cell.component';
+import { SantaTableQuoteCell } from 'Core/components/santa-table-quote-cell/santa-table-quote-cell.component';
+import { SantaTableDetailAllQuotes } from 'Core/containers/santa-table-detail-all-quotes/santa-table-detail-all-quotes.container';
 
 @NgModule({
   declarations: [
@@ -35,13 +37,19 @@ import { SantaTableSecurityCell } from 'Core/components/santa-table-security-cel
     SecurityDefinitionConfigurator,
     SearchShortcut,
     SantaTable,
-    SantaTableSecurityCell
+    SantaTableSecurityCell,
+    SantaTableQuoteCell,
+    SantaTableDetailAllQuotes
   ],
   imports: [
     CommonModule,
     FormModule,
 
-    AgGridModule.withComponents([SantaTableSecurityCell])
+    AgGridModule.withComponents([
+      SantaTableSecurityCell,
+      SantaTableQuoteCell,
+      SantaTableDetailAllQuotes
+    ])
 
   ],
   providers: [

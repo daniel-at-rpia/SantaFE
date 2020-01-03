@@ -13,7 +13,6 @@ import {
 } from 'FEModels/frontend-blocks.interface';
 import * as agGrid from 'ag-grid-community';
 
-import * as am4charts from "@amcharts/amcharts4/charts";
 
 interface BasicDTOStructure {
   [property: string]: object; 
@@ -206,10 +205,12 @@ export interface QuantComparerDTO extends BasicDTOStructure {
 export interface SecurityTableDTO extends BasicDTOStructure {
   data: {
     headers: Array<SecurityTableHeaderDTO>;
+    allHeaders: Array<SecurityTableHeaderDTO>;
     rows: Array<SecurityTableRowDTO>;
     agGridColumnDefs: Array<AgGridColumnDefinition>;
     agGridRowData: Array<AgGridRow>;
     agGridFrameworkComponents: object;
+    agGridAggregationMap: object;
   },
   state: {
     loadedContentStage: number;
@@ -217,6 +218,7 @@ export interface SecurityTableDTO extends BasicDTOStructure {
     selectedHeader: SecurityTableHeaderDTO;
     sortedByHeader: SecurityTableHeaderDTO;
     isLiveVariant: boolean;
+    isNativeEnabled: boolean;
     isAgGridReady: boolean;
   },
   api: {
@@ -235,7 +237,7 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     readyStage: number;
     metricPackDeltaScope: string;
     frontendMetric: boolean;
-    inversedSortingForText: boolean;
+    isDataTypeText: boolean;
     targetQuantLocationFromRow: string;
   },
   state: {
@@ -338,13 +340,4 @@ export interface QuantitativeVisualizerDTO extends BasicDTOStructure {
     isStencil: boolean;
   }
 
-}
-
-export interface ObligorChartBlock {
-  name: string;
-  chart: am4charts.XYChart;
-  rawData: any[];
-  colorScheme: string;
-  displayMark: boolean;
-  displayChart: boolean;
 }

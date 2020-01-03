@@ -1,3 +1,5 @@
+import { Label } from '@amcharts/amcharts4/core';
+
 export interface SearchShortcutStub {
   displayTitle: string;
   includedDefinitions: Array<SearchShortcutIncludedDefinitionStub>
@@ -57,8 +59,7 @@ export interface SecurityMetricOptionStub {
 }
 
 export interface SecurityTableQuoteMetric {
-  isDoubleWidthColumn: boolean;
-  isTripleWidthColumn: boolean;
+  size?: number;
   labelList: Array<string>;
   textOnly: boolean;
 }
@@ -78,7 +79,7 @@ export interface SecurityTableMetricStub {
   targetQuantLocationFromRow?: string;
   pureText?: boolean;
   disabled?: boolean;
-  inversedSortingForText?: boolean;
+  isDataTypeText?: boolean;
 }
 
 export interface TriCoreMetricConfigStub {
@@ -99,4 +100,8 @@ interface TriCoreMetricIndividualConfigStub {
 export interface TradeFilterConstantStub {
   displayLabel: string;
   value: string;
+}
+
+export interface ObligorChartCategoryColorSchemeStub {
+  categoryScheme: Array<{label: string, value: string}>;
 }

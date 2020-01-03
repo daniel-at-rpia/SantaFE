@@ -8,8 +8,13 @@ Because of this, while component models need to follow "BasicDTOStructure", bloc
 
 import * as am4charts from "@amcharts/amcharts4/charts";
 import {
+  GridApi,
+  ColumnApi
+} from 'ag-grid-community';
+import {
   SecurityDTO,
-  QuantComparerDTO
+  QuantComparerDTO,
+  SecurityTableRowDTO
 } from 'FEModels/frontend-models.interface';
 
 export interface SecurityPortfolioBlock {
@@ -85,8 +90,9 @@ export interface SecurityDefinitionFilterBlock {
 
 export interface QuoteMetricBlock {
   displayLabelList: Array<string>;
-  isDoubleWidthColumn: boolean;
-  isTripleWidthColumn: boolean;
+  isSizeTwo: boolean;
+  isSizeThree: boolean;
+  isSizeFour: boolean;
   sortable: boolean;
 }
 
@@ -104,13 +110,76 @@ export interface QuantitativeEntryStyleBlock {
 export interface AgGridColumnDefinition {
   headerName: string;
   field: string;
+  headerClass: string;
   cellClass: string;
+  width?: number;
+  autoHeight?: boolean;
   comparator?: Function;
+  enableValue: boolean;  // enable aggregation
+  allowedAggFuncs?: Array<string>;  // specify aggregation functions, by default it allows the five built-in ones
+  cellRenderer?: string;
+  resizable?: boolean;
+  sortable?: boolean;
+  filter?: boolean;
+  hide: boolean;
+  enableRowGroup: boolean;
+  enablePivot: boolean;
+  floatingFilterComponent?: string;
+  floatingFilterComponentParams?: {
+    maxValue: number;
+    suppressFilterButton: boolean
+  }
+}
+
+export interface AgGridRowNode {
+  columnController: {
+    allDisplayedColumns: Array<AgGridColumn>
+  }
+  data: AgGridRow;
+  group: boolean;
+  parent: AgGridRowNode;
+  gridApi: GridApi;
+  columnApi: ColumnApi;
+  expanded?: boolean;
+  setExpanded: Function;
 }
 
 export interface AgGridRow {
   id: string;
-  securityDTO: SecurityDTO;
-  quantComparerDTO: QuantComparerDTO;
-  [property: string]: any;
+  securityCard: SecurityDTO;    // this needs to identical to SecurityTableMetrics' key for Security column
+  bestQuote: QuantComparerDTO;  // this needs to identical to SecurityTableMetrics' key for Best Quote column
+  rowDTO: SecurityTableRowDTO;
+}
+
+export interface AgGridColumn {
+  colId: string;
+  colDef: AgGridColumnDefinition;
+  userProvidedColDef: AgGridColumnDefinition;
+  sort: string;
+}
+
+export interface ObligorChartCategoryBlock {
+  data: { 
+    name: string;
+    color: string;
+    obligorCategoryDataItemDTO: Array<ObligorCategoryDataItemBlock>;
+  };
+
+  state: {
+    isHidden: boolean;
+    isMarkHidden: boolean;
+  }
+}
+
+export interface ObligorCategoryDataItemBlock {
+  data: {
+    name: string,
+    securityID: string;
+    mark: string;
+    spreadMid: number;
+    yieldMid: number;
+    workoutTerm: number;
+    positionCurrent: number;
+  }
+  state: {}
 }

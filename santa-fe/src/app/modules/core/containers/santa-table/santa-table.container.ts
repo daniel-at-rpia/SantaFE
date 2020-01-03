@@ -35,15 +35,24 @@
       SecurityTableRowDTO,
       SecurityTableHeaderDTO
     } from 'FEModels/frontend-models.interface';
-    import { QuoteMetricBlock, AgGridRow, AgGridColumnDefinition } from 'FEModels/frontend-blocks.interface';
+    import {
+      QuoteMetricBlock,
+      AgGridRow,
+      AgGridColumnDefinition
+    } from 'FEModels/frontend-blocks.interface';
     import { PayloadGetAllQuotes } from 'BEModels/backend-payloads.interface';
-    import { ClickedSortQuotesByMetricEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
+    import { ClickedSortQuotesByMetricEmitterParams, AgGridRowParams } from 'FEModels/frontend-adhoc-packages.interface';
     import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
-    import { SantaTableSecurityCell} from 'Core/components/santa-table-security-cell/santa-table-security-cell.component';
+    import { SantaTableSecurityCell } from 'Core/components/santa-table-security-cell/santa-table-security-cell.component';
+    import { SantaTableQuoteCell } from 'Core/components/santa-table-quote-cell/santa-table-quote-cell.component';
+    import { SantaTableDetailAllQuotes } from 'Core/containers/santa-table-detail-all-quotes/santa-table-detail-all-quotes.container';
     import { BEQuoteDTO } from 'BEModels/backend-models.interface';
     import {
       SECURITY_TABLE_FINAL_STAGE,
-      THIRTY_DAY_DELTA_METRIC_INDEX
+      THIRTY_DAY_DELTA_METRIC_INDEX,
+      AGGRID_ROW_HEIGHT,
+      AGGRID_ROW_CLASS,
+      AGGRID_DETAIL_COLUMN_KEY
     } from 'Core/constants/securityTableConstants.constant';
   //
 
@@ -51,7 +60,7 @@
   selector: 'santa-table',
   templateUrl: './santa-table.container.html',
   styleUrls: ['./santa-table.container.scss'],
-  encapsulation: ViewEncapsulation.ShadowDom
+  encapsulation: ViewEncapsulation.None
 })
 
 export class SantaTable implements OnInit, OnChanges {
@@ -66,18 +75,21 @@ export class SantaTable implements OnInit, OnChanges {
   @Output() selectedSecurityForAnalysis = new EventEmitter<SecurityDTO>();
   liveUpdateRowsCache: Array<SecurityTableRowDTO>;
 
+  agGridConfig = {
+    defaultColDef: {
+      sortingOrder: ["desc", "asc", null]
+    },
+    autoGroupColumnDef: {
+      sort:'desc'
+    }
+  };
+
   constants = {
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
-    thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX
+    thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX,
+    agGridRowHeight: AGGRID_ROW_HEIGHT,
+    agGridRowClassRules: AGGRID_ROW_CLASS
   }
-
-  agGridRowClassRules = "santaTable__main-agGrid-row";
-  defaultColDef = {
-    sortable: true,
-    filter: true,
-    autoWidth: true,
-    autoHeight: true
-  };
 
   constructor(
     private dtoService: DTOService,
@@ -87,6 +99,15 @@ export class SantaTable implements OnInit, OnChanges {
   ) { }
 
   public ngOnInit() {
+    this.tableData.data.agGridFrameworkComponents = {
+      securityCard: SantaTableSecurityCell,
+      bestQuote: SantaTableQuoteCell,
+      detailAllQuotes: SantaTableDetailAllQuotes
+    };
+    this.tableData.data.agGridAggregationMap = {
+      sum: this.agAggregationSum.bind(this),
+      avg: this.agAggregationAverage.bind(this)
+    };
   }
 
   public ngOnChanges() {
@@ -97,9 +118,10 @@ export class SantaTable implements OnInit, OnChanges {
       this.tableData.state.loadedContentStage = this.receivedContentStage;
       this.loadTableRows(this.newRows);
     } else if (this.securityTableMetricsCache !== this.receivedSecurityTableMetricsUpdate && this.receivedContentStage === this.constants.securityTableFinalStage) {
+      console.log("metrics update", this.receivedSecurityTableMetricsUpdate);
       this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate;
       this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
-      this.loadTableHeaders();
+      this.loadTableHeaders(true);  // skip reloading the agGrid columns since that won't be necessary and reloading them creates a problem for identifying the columns in later use, such as sorting
       this.loadTableRows(this.newRows);
     } else if (!!this.newRows && this.newRows != this.tableData.data.rows && this.tableData.state.loadedContentStage === this.receivedContentStage) {
       console.log('rows updated for change within same stage, triggered when filters are applied', this.tableData.state.loadedContentStage);
@@ -110,8 +132,7 @@ export class SantaTable implements OnInit, OnChanges {
       if (this.liveUpdateRowsCache.length > 0) {
         this.liveUpdateRows(this.liveUpdateRowsCache);
       }
-      // TODO: enable this
-      // this.liveUpdateAllQuotesForExpandedRows();
+      this.liveUpdateAllQuotesForExpandedRows();
     }
   }
 
@@ -121,21 +142,67 @@ export class SantaTable implements OnInit, OnChanges {
     this.tableData.api.gridApi = params.api;
     this.tableData.api.columnApi = params.columnApi;
     this.tableData.state.isAgGridReady = true;
+    this.agGridMiddleLayerService.onGridReady(this.tableData);
     this.loadTableHeaders();
+  }
+
+  public onRowClicked(params: AgGridRowParams) {
+    const expanded = !params.node.expanded;
+    params.node.setExpanded(expanded);
+    if (!params.node.group) {
+      const targetRow = this.tableData.data.rows.find((eachRow) => {
+        return !!eachRow.data.security && eachRow.data.security.data.securityID == params.node.data.id;
+      });
+      if (!!targetRow) {
+        targetRow.state.isExpanded = expanded;
+        if (targetRow.data.security) {
+          targetRow.data.security.state.isTableExpanded = expanded;
+          targetRow.state.isExpanded && this.fetchSecurityQuotes(targetRow);
+        }
+      } else {
+        console.error(`Could't find targetRow`, params);
+      }
+    }
   }
 
   public getRowNodeId(row) {
     return row.id;
   }
 
-  private loadTableHeaders() {
+  public onToggleNativeTable(toggleValue) {
+    this.tableData.state.isNativeEnabled = !!toggleValue;
+  }
+
+  public onSelectSecurityForAnalysis(targetSecurity: SecurityDTO) {
+    this.selectedSecurityForAnalysis.emit(targetSecurity);
+  }
+
+  public onNativeTableFetchSecurityQuotes(targetRow: SecurityTableRowDTO){
+    this.fetchSecurityQuotes(targetRow);
+  }
+
+  public onNativeLoadTableHeader() {
+    this.loadTableHeaders(true);
+  }
+
+  public onNativePerformSort(targetHeader: SecurityTableHeaderDTO) {
+    this.performSort(targetHeader);
+  }
+
+  public onNativePerformDefaultSort() {
+    this.performDefaultSort();
+  }
+
+  private loadTableHeaders(skipAgGrid = false) {
     this.tableData.data.headers = [];
+    this.tableData.data.allHeaders = [];
     this.securityTableMetrics.forEach((eachStub) => {
       if (eachStub.label === 'Security' || eachStub.active) {
         this.tableData.data.headers.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
       }
+      this.tableData.data.allHeaders.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
     });
-    if (this.tableData.state.isAgGridReady) {
+    if (this.tableData.state.isAgGridReady && !skipAgGrid) {
       this.tableData.data.agGridColumnDefs = this.agGridMiddleLayerService.loadAgGridHeaders(this.tableData);
     }
   }
@@ -174,6 +241,43 @@ export class SantaTable implements OnInit, OnChanges {
         });
       }
     });
+  }
+
+  private fetchSecurityQuotes(targetRow: SecurityTableRowDTO){ 
+    if (!!targetRow && !!targetRow.data.cells[0] && !!targetRow.data.cells[0].data.quantComparerDTO) {
+      var bestBid: number; 
+      var bestOffer: number;
+      var metricType: string;
+
+      bestBid = targetRow.data.cells[0].data.quantComparerDTO.data.bid.number;
+      bestOffer = targetRow.data.cells[0].data.quantComparerDTO.data.offer.number;
+      metricType = targetRow.data.cells[0].data.quantComparerDTO.data.metricType;
+
+      const payload: PayloadGetAllQuotes = {
+        "identifier": targetRow.data.security.data.securityID
+      };
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAllQuotes, {req: 'POST'}, payload).pipe(
+        first(),
+        delay(200),
+        tap((serverReturn) => {
+          targetRow.data.quotes = [];
+          for (const eachKey in serverReturn) {
+            const rawQuote: BEQuoteDTO = serverReturn[eachKey];
+
+            const newQuote = this.dtoService.formSecurityQuoteObject(false, rawQuote, bestBid, bestOffer, metricType);
+            if (newQuote.state.hasAsk || newQuote.state.hasBid) {
+              targetRow.data.quotes.push(newQuote);
+            }
+          }
+          this.performChronologicalSortOnQuotes(targetRow);
+          this.agGridMiddleLayerService.updateAgGridRows(this.tableData, [targetRow]);
+        }),
+        catchError(err => {
+          console.error('liveQuote/get-all-quotes failed', err);
+          return of('error')
+        })
+      ).subscribe();
+    }
   }
 
   private performSort(targetHeader: SecurityTableHeaderDTO) {
@@ -223,13 +327,13 @@ export class SantaTable implements OnInit, OnChanges {
           } else if (valueA != null && valueB == null) {
             return -4;
           } else if (valueA < valueB) {
-            if (targetHeader.data.inversedSortingForText) {
+            if (targetHeader.data.isDataTypeText) {
               return -1;
             } else {
               return 1;
             }
           } else if (valueA > valueB) {
-            if (targetHeader.data.inversedSortingForText) {
+            if (targetHeader.data.isDataTypeText) {
               return 1;
             } else {
               return -1;
@@ -260,6 +364,18 @@ export class SantaTable implements OnInit, OnChanges {
     })
   }
 
+  private performChronologicalSortOnQuotes(targetRow: SecurityTableRowDTO) {
+    targetRow.data.quotes.sort((quoteA, quoteB) => {
+      if (quoteA.data.unixTimestamp < quoteB.data.unixTimestamp) {
+        return 1;
+      } else if (quoteA.data.unixTimestamp > quoteB.data.unixTimestamp) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+  }
+
   private liveUpdateRows(targetRows: Array<SecurityTableRowDTO>) {
     targetRows.forEach((eachNewRow) => {
       const matchedOldRow = this.tableData.data.rows.find((eachOldRow) => {
@@ -272,5 +388,56 @@ export class SantaTable implements OnInit, OnChanges {
       }
     });
     this.agGridMiddleLayerService.updateAgGridRows(this.tableData, targetRows);
+  }
+
+  private liveUpdateAllQuotesForExpandedRows() {
+    this.tableData.data.rows.forEach((eachRow) => {
+      if (eachRow.state.isExpanded) {
+        this.fetchSecurityQuotes(eachRow);
+      }
+    })
+  }
+
+  private agAggregationSum(valueList: Array<number|string>): number {
+    if (valueList.length > 0) {
+      let aggregatedValue = 0;
+      let validCount = 0;
+      valueList.forEach((eachValue) => {
+        if (!!eachValue) {
+          validCount++;
+          const numericalValue = parseFloat(eachValue as string);
+          aggregatedValue = aggregatedValue + numericalValue;
+        }
+      })
+      if (validCount > 0) {
+        return this.utilityService.round(aggregatedValue, 2);
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  private agAggregationAverage(valueList: Array<number|string>): number {
+    if (valueList.length > 0) {
+      let aggregatedValue = 0;
+      let validCount = 0;
+      valueList.forEach((eachValue) => {
+        if (!!eachValue) {
+          validCount++;
+          const numericalValue = parseFloat(eachValue as string);
+          aggregatedValue = aggregatedValue + numericalValue;
+        }
+      })
+      if (validCount > 0) {
+        aggregatedValue = aggregatedValue / valueList.length;
+        return this.utilityService.round(aggregatedValue, 2);
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
   }
 }

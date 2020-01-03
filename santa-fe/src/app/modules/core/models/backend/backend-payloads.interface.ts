@@ -31,6 +31,7 @@ export interface PayloadGetPositions {
 }
 
 export interface PayloadGetBestQuotes {
+  lookbackHrs?: number,
   quoteMetric: string,
   identifiers: Array<string>
 }

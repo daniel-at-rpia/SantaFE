@@ -175,7 +175,7 @@ export interface BEBestQuoteDTO {
   bestYieldQuote: BESingleBestQuoteDTO;
 }
 
-interface BESingleBestQuoteDTO {
+export interface BESingleBestQuoteDTO {
   isValid: boolean;
   quoteMetric: number
   bidType: number;
@@ -199,6 +199,7 @@ export interface BEQuoteDTO {
   dealer: string; // JEFF,
   time: string; // 2019-11-22T13:32:40,
   isActive: boolean; // true,
+  benchmarkName: string;
   bidVenue: string; // MSG1,
   askVenue: string; // null,
   bidIsNatural: boolean; // false,

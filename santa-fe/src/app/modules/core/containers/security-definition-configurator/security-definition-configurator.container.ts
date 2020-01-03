@@ -43,6 +43,8 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   @Output() clickedSearch = new EventEmitter();
   @Output() clickedApplyFilter = new EventEmitter<DefinitionConfiguratorEmitterParams>();
   lastExecutedConfiguration: SecurityDefinitionConfiguratorDTO;
+  @Output() buryConfigurator = new EventEmitter();
+  @Output() boostConfigurator = new EventEmitter();
 
   constructor(
     private dtoService: DTOService,
@@ -117,6 +119,9 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       this.configuratorData.state.showFiltersFromDefinition = this.configuratorData.state.showFiltersFromDefinition === targetDefinition ? null : targetDefinition;
       if (this.configuratorData.state.showFiltersFromDefinition) {
         this.configuratorData.state.showLongFilterOptions = this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.length > 5 || !!this.configuratorData.state.showFiltersFromDefinition.data.urlForGetLongOptionListFromServer;  // any list with more than five options or need to be loaded from server is considered a long list, will need extra room on the UI
+        this.boostConfigurator.emit();
+      } else {
+        this.buryConfigurator.emit();
       }
     }
   }

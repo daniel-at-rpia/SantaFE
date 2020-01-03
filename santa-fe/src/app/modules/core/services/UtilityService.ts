@@ -90,9 +90,13 @@ export class UtilityService {
           return 2;
         case "Unsecured":
           return 2;
+        case "SR":  // this is for CDS
+          return 2;
         case "Sr Subordinated":
           return 3;
         case "Subordinated":
+          return 3;
+        case "SUB":  // this is for SUB
           return 3;
         case "Jr Subordinated":
           return 3;
@@ -568,14 +572,18 @@ export class UtilityService {
       securityCard: SecurityDTO,
       isRetrievingUnderlineValue: boolean
     ): any {
-      if (!!targetHeader.data.blockAttrName) {
-        if (targetHeader.data.blockAttrName === 'metricPack') {
-          return this.retrieveSecurityMetricFromMetricPack(securityCard, targetHeader);
+      if (!!targetHeader && !!securityCard) {
+        if (!!targetHeader.data.blockAttrName) {
+          if (targetHeader.data.blockAttrName === 'metricPack') {
+            return this.retrieveSecurityMetricFromMetricPack(securityCard, targetHeader);
+          } else {
+            return isRetrievingUnderlineValue ? securityCard.data[targetHeader.data.blockAttrName][targetHeader.data.underlineAttrName] : securityCard.data[targetHeader.data.blockAttrName][targetHeader.data.attrName];
+          }
         } else {
-          return isRetrievingUnderlineValue ? securityCard.data[targetHeader.data.blockAttrName][targetHeader.data.underlineAttrName] : securityCard.data[targetHeader.data.blockAttrName][targetHeader.data.attrName];
+          return isRetrievingUnderlineValue ? securityCard.data[targetHeader.data.underlineAttrName] : securityCard.data[targetHeader.data.attrName];
         }
       } else {
-        return isRetrievingUnderlineValue ? securityCard.data[targetHeader.data.underlineAttrName] : securityCard.data[targetHeader.data.attrName];
+        return null;
       }
     }
 
