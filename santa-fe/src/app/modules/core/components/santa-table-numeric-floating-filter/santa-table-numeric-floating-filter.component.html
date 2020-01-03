@@ -1,0 +1,8 @@
+<input
+  type="range"
+  min="0"
+  [max]="maxValue"
+  data-show-value="true"
+  data-popup-enabled="true"
+  [(ngModel)]="currentValue"
+  (ngModelChange)="valueChanged()"/>

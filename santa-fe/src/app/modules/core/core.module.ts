@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 import { FormModule } from 'App/modules/form/form.module';
 
@@ -25,6 +26,8 @@ import { SantaTable } from 'Core/containers/santa-table/santa-table.container';
 import { SantaTableSecurityCell } from 'Core/components/santa-table-security-cell/santa-table-security-cell.component';
 import { SantaTableQuoteCell } from 'Core/components/santa-table-quote-cell/santa-table-quote-cell.component';
 import { SantaTableDetailAllQuotes } from 'Core/containers/santa-table-detail-all-quotes/santa-table-detail-all-quotes.container';
+import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
+import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-filter/santa-table-numeric-filter.component';
 
 @NgModule({
   declarations: [
@@ -39,18 +42,23 @@ import { SantaTableDetailAllQuotes } from 'Core/containers/santa-table-detail-al
     SantaTable,
     SantaTableSecurityCell,
     SantaTableQuoteCell,
-    SantaTableDetailAllQuotes
+    SantaTableDetailAllQuotes,
+    SantaTableNumericFilter,
+    SantaTableNumericFloatingFilter
   ],
   imports: [
     CommonModule,
-    FormModule,
+    FormsModule,
 
     AgGridModule.withComponents([
       SantaTableSecurityCell,
       SantaTableQuoteCell,
-      SantaTableDetailAllQuotes
-    ])
+      SantaTableDetailAllQuotes,
+      SantaTableNumericFilter,
+      SantaTableNumericFloatingFilter
+    ]),
 
+    FormModule
   ],
   providers: [
     DTOService,

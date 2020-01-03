@@ -120,10 +120,11 @@ export interface AgGridColumnDefinition {
   cellRenderer?: string;
   resizable?: boolean;
   sortable?: boolean;
-  filter?: boolean;
+  filter?: string;
   hide: boolean;
   enableRowGroup: boolean;
   enablePivot: boolean;
+  suppressMenu?: boolean;
   floatingFilterComponent?: string;
   floatingFilterComponentParams?: {
     maxValue: number;

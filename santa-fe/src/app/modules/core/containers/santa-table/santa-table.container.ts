@@ -54,6 +54,8 @@
       AGGRID_ROW_CLASS,
       AGGRID_DETAIL_COLUMN_KEY
     } from 'Core/constants/securityTableConstants.constant';
+    import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
+    import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-filter/santa-table-numeric-filter.component';
   //
 
 @Component({
@@ -102,7 +104,9 @@ export class SantaTable implements OnInit, OnChanges {
     this.tableData.data.agGridFrameworkComponents = {
       securityCard: SantaTableSecurityCell,
       bestQuote: SantaTableQuoteCell,
-      detailAllQuotes: SantaTableDetailAllQuotes
+      detailAllQuotes: SantaTableDetailAllQuotes,
+      numericFloatingFilter: SantaTableNumericFloatingFilter,
+      numericFilter: SantaTableNumericFilter
     };
     this.tableData.data.agGridAggregationMap = {
       sum: this.agAggregationSum.bind(this),

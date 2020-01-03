@@ -57,8 +57,8 @@ $alt-background: $color_white;
     button {
       @include material('none');
       border-radius: inherit;
-      margin: inherit;
-      padding: inherit;
+      margin: unset;
+      padding: unset;
     }
     &-agGrid {
       height: 100%;
