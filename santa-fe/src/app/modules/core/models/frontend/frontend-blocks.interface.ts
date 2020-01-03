@@ -176,7 +176,8 @@ export interface ObligorCategoryDataItemBlock {
     name: string,
     securityID: string;
     mark: string;
-    mid: number;
+    spreadMid: number;
+    yieldMid: number;
     workoutTerm: number;
     positionCurrent: number;
   }

@@ -8,38 +8,58 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  &__markValue {
+  &__graphSettings {
     display: flex;
     flex-direction: column;
     margin: $spacing_small;
     align-content: center;
-    &-options {
+    &-markValue {
       display: flex;
       &-text {
         padding-top: $spacing_x_small;
         text-align: center;
         align-content: center;
+      }
+      &-btnQuantity{
+        margin-left: $spacing_small;
+        &--selected {
+          margin-left: $spacing_small;
+          @include material('none');
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+      }
+      &-btnCS01{
+        &--selected {
+          @include material('none');
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+      }
+    }
+    &-metricValue {
+      display: flex;
+      &-text {
+        padding-left: $spacing_small;
+        padding-top: $spacing_x_small;
+        text-align: center;
+        align-content: center;
         font-weight: bold;
       }
-      &-securityValue {
-        display: flex;
-        &-btnQuantity{
+      &-btnSpread{
+        margin-left: $spacing_small;
+        &--selected {
           margin-left: $spacing_small;
-          &--selected {
-            margin-left: $spacing_small;
-            @include material('none');
-            background-color: $color_active;
-            color: $font_color_inverse;
-          }
+          @include material('none');
+          background-color: $color_active;
+          color: $font_color_inverse;
         }
-        &-btnCS01{
-          margin-left: $spacing_small;
-          &--selected {
-            margin-left: $spacing_small;
-            @include material('none');
-            background-color: $color_active;
-            color: $font_color_inverse;
-          }
+      }
+      &-btnYield{
+        &--selected {
+          @include material('none');
+          background-color: $color_active;
+          color: $font_color_inverse;
         }
       }
     }
@@ -51,6 +71,7 @@
     justify-content: center;
   }
   &__obligorGraph {
+    flex: 1 1 auto;
     align-content: center;
     justify-content: center;
   }

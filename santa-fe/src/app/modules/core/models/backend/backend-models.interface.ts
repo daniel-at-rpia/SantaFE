@@ -175,7 +175,7 @@ export interface BEBestQuoteDTO {
   bestYieldQuote: BESingleBestQuoteDTO;
 }
 
-interface BESingleBestQuoteDTO {
+export interface BESingleBestQuoteDTO {
   isValid: boolean;
   quoteMetric: number
   bidType: number;
