@@ -9,7 +9,7 @@
             'sat-securityTableRowExpandViewLabel--sizeTwo': eachQuoteMetric.isSizeTwo,
             'sat-securityTableRowExpandViewLabel--sizeThree': eachQuoteMetric.isSizeThree,
             'sat-securityTableRowExpandViewLabel--sizeFour': eachQuoteMetric.isSizeFour,
-            'sat-securityTableRowExpandViewLabel--textOnly': !eachQuoteMetric.sortable,
+            'sat-securityTableRowExpandViewLabel--textOnly': true,
             'sat-securityTableRowExpandViewLabel--first': metricIndex === 0,
             'sat-securityTableRowExpandViewLabel--last': metricIndex === rowData.data.quoteHeaders.length - 1
           }">
@@ -38,10 +38,6 @@
     </div>
   </section>
   <section class="santaTableDetailAllQuotes__ctas">
-    <button (click)="onClickSelectForAnalysis()" class="santaTableDetailAllQuotes__ctas-selectBtn santaBtn--labelled">
-      <i class="fal fa-chart-line"></i>
-      <span>Analyze</span>
-    </button>
     <button (click)="onClickClose()" class="santaTableDetailAllQuotes__ctas-collapseBtn santaBtn--labelled">
       <i class="fal fa-times"></i>
       <span>Close</span>
