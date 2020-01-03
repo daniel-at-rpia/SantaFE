@@ -1,4 +1,5 @@
 import { SecurityGroupPieChartColorSchemeBlock } from 'FEModels/frontend-blocks.interface';
+import { ObligorChartCategoryColorSchemeStub } from 'FEModels/frontend-stub-models.interface';
 
 export const SecurityGroupRatingColorScheme: SecurityGroupPieChartColorSchemeBlock = {
   type: 'Rating',
@@ -49,5 +50,30 @@ export const SecurityGroupSeniorityColorScheme: SecurityGroupPieChartColorScheme
   },{
     label: 'Unmapped',
     value: '#ffffff'
+  }]
+};
+
+export const ObligorChartCategoryColorScheme: ObligorChartCategoryColorSchemeStub = {
+  categoryScheme: [{
+    label: 'SR Fixed Bond',
+    value: '#e600ac'
+  },{
+    label: 'SR Float Bond',
+    value: '#8c1aff'
+  },{
+    label: 'SUB Fixed Bond',
+    value: '#3333cc'
+  },{
+    label: 'SUB Fixed Cds',
+    value: '#00cc99'
+  },{
+    label: 'SUB Fixed Cds',
+    value: '#00cc44'
+  },{
+    label: 'SECURED Fixed Bond',
+    value: '#bf4080'
+  },{
+    label: 'SECURED Float Bond',
+    value: '#7575a3'
   }]
 };

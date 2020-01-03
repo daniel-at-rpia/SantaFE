@@ -8,13 +8,16 @@ import {
   SecurityGroupAverageVisualizerDTO,
   SearchShortcutDTO,
   QuantComparerDTO,
-  QuantitativeVisualizerDTO
+  QuantitativeVisualizerDTO,
 } from 'FEModels/frontend-models.interface';
+import {  ObligorChartCategoryBlock } from 'FEModels/frontend-blocks.interface';
 import {
   SecurityDefinitionStub,
   SecurityTableMetricStub
 } from 'FEModels/frontend-stub-models.interface';
 import { DefinitionConfiguratorEmitterParamsItem } from 'FEModels/frontend-adhoc-packages.interface';
+import * as am4core from "@amcharts/amcharts4/core";
+import * as am4charts from "@amcharts/amcharts4/charts";
 
 export interface MarketState {
 }
@@ -120,4 +123,29 @@ export interface TradeMarketAnalysisPanelState {
   table: {
     securityList: Array<SecurityDTO>;
   }
+}
+
+export interface TradeObligorGraphPanelState {
+  obligorChart: am4charts.XYChart;
+  obligorSecurityID: string;
+  obligorName: string;
+  obligorCurrency: string;
+  securityTableRowDTOList: SecurityTableRowDTO[];
+  metric: {
+    spread:boolean;
+    yield:boolean;
+  }
+  markValue: {
+    cS01:boolean;
+    quantity:boolean;
+  }
+  xAxisData: [{workoutTerm: number}];
+  yAxisData: number[];
+  activeCharts: {
+    srBond: boolean;
+    subBond: boolean;
+    srCDS: boolean;
+    subCDS: boolean;
+  }
+  chartCategories: ObligorChartCategoryBlock[];
 }

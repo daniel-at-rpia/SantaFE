@@ -21,13 +21,15 @@
       SecurityTableHeaderDTO,
       SecurityTableCellDTO,
       SecurityQuoteDTO,
-      QuantitativeVisualizerDTO
+      QuantitativeVisualizerDTO,
     } from 'FEModels/frontend-models.interface';
     import {
       SecurityGroupMetricBlock,
       SecurityDefinitionFilterBlock,
       QuoteMetricBlock,
-      SecurityPortfolioBlock
+      SecurityPortfolioBlock,
+      ObligorChartCategoryBlock,
+      ObligorCategoryDataItemBlock
     } from 'FEModels/frontend-blocks.interface';
     import { QuantVisualizerParams } from 'FEModels/frontend-adhoc-packages.interface';
     import {
@@ -57,6 +59,7 @@
     import {
       QuoteMetricList
     } from 'Core/constants/securityTableConstants.constant';
+import { any } from '@amcharts/amcharts4/.internal/core/utils/Array';
   // 
 
 @Injectable()
@@ -406,9 +409,15 @@ export class DTOService {
       delta = this.utility.round(delta, rounding);
       mid = (rawData.bidQuoteValue + rawData.askQuoteValue)/2;
       mid = this.utility.round(mid, rounding);
+    } else if( hasBid && hasOffer == false) {
+      delta = 0;
+      mid = rawData.bidQuoteValue;
+    } else if( hasOffer && hasBid == false) {
+      delta = 0;
+      mid = rawData.askQuoteValue;
     } else {
       delta = 0;
-      mid = null;
+      mid = 0;
     }
     const object: QuantComparerDTO = {
       data: {
@@ -778,4 +787,52 @@ export class DTOService {
     }
   }
 
+  public formObligorChartCategoryDTO(
+    isStencil: boolean,
+    name: string,
+    colorScheme: string,
+    obligorCategoryDataItemDTO: ObligorCategoryDataItemBlock[],
+    isHidden
+    ): ObligorChartCategoryBlock
+  {
+    if(isStencil)
+    {
+      let obligorChartCategoryDTOStencil: ObligorChartCategoryBlock = {
+        data: {
+          name: null,
+          color: null,
+          obligorCategoryDataItemDTO: [],
+        },
+        state: {
+          isHidden: true,
+          isMarkHidden: false
+        }
+      }
+      return obligorChartCategoryDTOStencil;
+    }
+    else{
+      return null;
+    }
+  }
+
+  public formObligorCategoryDataItemDTO(isStencil: boolean): ObligorCategoryDataItemBlock
+  {
+    if(isStencil) {
+      let obligorCategoryDataDTO: ObligorCategoryDataItemBlock = {
+        data: {
+          name,
+          securityID: null,
+          mark: null,
+          mid: null, 
+          workoutTerm: null,
+          positionCurrent: null
+        },
+        state: {}
+      }
+      return obligorCategoryDataDTO;
+    }
+    else {
+      return null;
+    }
+  }
 }

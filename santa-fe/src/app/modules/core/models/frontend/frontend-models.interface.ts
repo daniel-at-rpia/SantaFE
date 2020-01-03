@@ -13,7 +13,6 @@ import {
 } from 'FEModels/frontend-blocks.interface';
 import * as agGrid from 'ag-grid-community';
 
-import * as am4charts from "@amcharts/amcharts4/charts";
 
 interface BasicDTOStructure {
   [property: string]: object; 
@@ -341,13 +340,4 @@ export interface QuantitativeVisualizerDTO extends BasicDTOStructure {
     isStencil: boolean;
   }
 
-}
-
-export interface ObligorChartBlock {
-  name: string;
-  chart: am4charts.XYChart;
-  rawData: any[];
-  colorScheme: string;
-  displayMark: boolean;
-  displayChart: boolean;
 }
