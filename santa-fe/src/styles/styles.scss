@@ -29,17 +29,19 @@ html {
 ***********/
   ::-webkit-scrollbar-thumb {
     @include mix_border_radius(3px);
-    @include mix_border_generator(0.1875rem,  $theme_color_1);
+    @include mix_border_generator($spacing_xx_small,  $theme_color_1);
     background-color: $color_white;
   }
   ::-webkit-scrollbar-thumb:horizontal {
-    //border-width: $scroll_bar_width/8*7 0 $scroll_bar_width/8*7 0;
+    @include mix_border_radius(5px);
+    @include mix_border_generator($spacing_x_small,  $theme_color_1);
+    background-color: $color_white;
   }
   ::-webkit-scrollbar {
     width: $scroll_bar_width;
   }
   ::-webkit-scrollbar:horizontal {
-    height: $scroll_bar_width;
+    height: $scroll_bar_width * 1.5;
   }
   ::-webkit-scrollbar-track {
     //background-color: $color_theme_darkgray;

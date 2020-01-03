@@ -25,26 +25,21 @@ $alt-background: $color_white;
 @import '~ag-grid-community/src/styles/ag-theme-balham/sass/ag-theme-balham';
 // @import '~ag-grid-community/src/styles/ag-theme-balham-dark/sass/ag-theme-balham-dark';
 
-// porting over some basic stylings
-  ::-webkit-scrollbar-thumb {
-    @include mix_border_radius(3px);
-    @include mix_border_generator(0.1875rem,  $theme_color_1);
-    background-color: $color_white;
-  }
-  ::-webkit-scrollbar-thumb:horizontal {
-    //border-width: $scroll_bar_width/8*7 0 $scroll_bar_width/8*7 0;
-  }
-  ::-webkit-scrollbar {
-    width: $scroll_bar_width;
-  }
-  ::-webkit-scrollbar:horizontal {
-    height: $scroll_bar_width;
-  }
-  ::-webkit-scrollbar-track {
-    //background-color: $color_theme_darkgray;
-  }
-  ::-webkit-scrollbar-corner {
-    background-color: transparent;
+
+  .ag-body-horizontal-scroll {
+    height: $scroll_bar_width * 1.5!important;
+    min-height: $scroll_bar_width * 1.5!important;
+    max-height: $scroll_bar_width * 1.5!important;
+    .ag-body-horizontal-scroll-viewport {
+      height: $scroll_bar_width * 1.5!important;
+      min-height: $scroll_bar_width * 1.5!important;
+      max-height: $scroll_bar_width * 1.5!important;
+      .ag-body-horizontal-scroll-container {
+        height: $scroll_bar_width * 1.5!important;
+        min-height: $scroll_bar_width * 1.5!important;
+        max-height: $scroll_bar_width * 1.5!important;
+      }
+    }
   }
 
 .santaTable {
