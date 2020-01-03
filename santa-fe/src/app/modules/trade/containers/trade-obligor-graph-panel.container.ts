@@ -86,7 +86,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
 
           // Set the name of the chart category to SENIORITY / COUPON / TYPE
           // We might want to change this to use the groupIdentifier object in serverReturn.
-          chartCategory.data.name = serverReturn[curve].seniority + " " + serverReturn[curve].couponType + " " + serverReturn[curve].curveType;
+          chartCategory.data.name = serverReturn[curve].seniority + " " + serverReturn[curve].couponType + " " + serverReturn[curve].securityType;
           chartCategory.data.color = this.getObligorChartCategoryColorFromScheme(chartCategory.data.name);
 
           // Set the MID data for the category.
@@ -97,7 +97,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
               let spreadMid = this.addBestMidToChartCategory(serverReturn[curve].bestQuotes[security].bestSpreadQuote);
               let yieldMid = this.addBestMidToChartCategory(serverReturn[curve].bestQuotes[security].bestYieldQuote);
 
-              if (yieldMid !== 0  || spreadMid !== 0 ) {
+              if (yieldMid||spreadMid) {
 
                 if (this.state.obligorSecurityID === security) chartCategory.state.isHidden = false;
 
@@ -133,8 +133,14 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
 
           this.state.chartCategories.push(chartCategory);
         }
-        // Dispatch a the list of security IDs from the related Obligor in serverReturn. This will call to trade-center-panel, which will return marks for those we own.
-        if(securityIDsFromAnalysis) this.store$.dispatch(new TradeSecurityIDsFromAnalysisEvent(securityIDsFromAnalysis));
+        if(this.state.metric.spread)
+        {
+          // Dispatch a the list of security IDs from the related Obligor in serverReturn. This will call to trade-center-panel, which will return marks for those we own.
+          if(securityIDsFromAnalysis) this.store$.dispatch(new TradeSecurityIDsFromAnalysisEvent(securityIDsFromAnalysis));
+        } else
+        {
+          this.buildChart();
+        }
       }),
     ).subscribe();
 
@@ -179,7 +185,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
             // Insert the mark in our XAxis data fields.
             this.state.yAxisData.push(Number(eachCategoryItem.data.mark));
           } else {
-            console.error('this row does not have security', eachRow);
+            //console.error('this row does not have security', eachRow);
           }
         })
       })
@@ -210,7 +216,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
       // Draw each chart category.
       this.state.chartCategories.forEach((eachCategory) =>
       {
-        if (eachCategory.data.obligorCategoryDataItemDTO) this.graphService.addCategoryToObligorGraph(this.state.obligorChart, eachCategory, this.state);
+        if (eachCategory.data.obligorCategoryDataItemDTO.length > 0) this.graphService.addCategoryToObligorGraph(eachCategory, this.state);
       });
 
       // Add legend for each chart type.
@@ -254,7 +260,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
 
     // Generate a graph for each data type, sending in the raw data,  the color scheme and the name.
     for (let category in this.state.chartCategories) {
-      if (this.state.chartCategories[category].data.obligorCategoryDataItemDTO.length > 0) this.graphService.addCategoryToObligorGraph(this.state.obligorChart, this.state.chartCategories[category], this.state);
+      if (this.state.chartCategories[category].data.obligorCategoryDataItemDTO.length > 0) this.graphService.addCategoryToObligorGraph(this.state.chartCategories[category], this.state);
     }
   }
 
@@ -262,13 +268,22 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     this.state.metric.yield = false;
     if (this.state.metric.spread === false) this.state.metric.spread = true;
 
-    this.fetchSecurityIDs()
+    let isMarkHidden: boolean = true;
+    if (this.state.markValue.quantity) isMarkHidden = false
+
+    this.state.obligorChart.dispose();
+    this.fetchSecurityIDs();
   }
 
   public btnYieldClick() {
     this.state.metric.spread = false;
     if (this.state.metric.yield === false) this.state.metric.yield = true;
 
+    // Yield has no mark.
+    this.state.markValue.cS01 = false;
+    this.state.markValue.quantity = false;
+
+    this.state.obligorChart.dispose();
     this.fetchSecurityIDs();
   }
 

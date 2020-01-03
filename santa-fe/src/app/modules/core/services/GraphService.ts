@@ -10,6 +10,7 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import * as am4plugins_regression from "@amcharts/amcharts4/plugins/regression";
 import { TradeObligorGraphPanelState } from 'FEModels/frontend-page-states.interface';
+import { first } from '@amcharts/amcharts4/.internal/core/utils/Array';
 
 
 @Injectable()
@@ -126,7 +127,7 @@ export class GraphService {
     }
   }
 
-  public addCategoryToObligorGraph(chart: am4charts.XYChart, category: ObligorChartCategoryBlock, state: TradeObligorGraphPanelState) {
+  public addCategoryToObligorGraph(category: ObligorChartCategoryBlock, state: TradeObligorGraphPanelState) {
     // Create data array that can be handled by amCharts from out category DataItems.
     let amChartsData: any[] = [];
     let mid: number;
@@ -136,32 +137,40 @@ export class GraphService {
       if(state.metric.spread) mid =  category.data.obligorCategoryDataItemDTO[dataItem].data.spreadMid;
       else if(state.metric.yield) mid =  category.data.obligorCategoryDataItemDTO[dataItem].data.yieldMid;
 
-      // The dumbbell chart will not work if the mark is null. If it is, we will set it to the value of mid to be "hidden" behind it.
-      if (category.data.obligorCategoryDataItemDTO[dataItem].data.mark === null) {
-        category.data.obligorCategoryDataItemDTO[dataItem].data.mark = mid.toLocaleString();
-      }
+      if(mid !== 0)
+      {
+        // The dumbbell chart will not work if the mark is null. If it is, we will set it to the value of mid to be "hidden" behind it.
+        if (category.data.obligorCategoryDataItemDTO[dataItem].data.mark === null) {
+          category.data.obligorCategoryDataItemDTO[dataItem].data.mark = mid.toLocaleString();
+        }
 
-      // TODO: Create adhoc interface.
-      amChartsData.push({
-        name: category.data.obligorCategoryDataItemDTO[dataItem].data.name,
-        mid: mid,
-        mark: category.data.obligorCategoryDataItemDTO[dataItem].data.mark,
-        workoutTerm: category.data.obligorCategoryDataItemDTO[dataItem].data.workoutTerm,
-        positionCurrent: category.data.obligorCategoryDataItemDTO[dataItem].data.positionCurrent
-      })
+        // TODO: Create adhoc interface.
+        amChartsData.push({
+          name: category.data.obligorCategoryDataItemDTO[dataItem].data.name,
+          mid: mid,
+          mark: category.data.obligorCategoryDataItemDTO[dataItem].data.mark,
+          workoutTerm: category.data.obligorCategoryDataItemDTO[dataItem].data.workoutTerm,
+          positionCurrent: category.data.obligorCategoryDataItemDTO[dataItem].data.positionCurrent
+        })
+     }
     }
 
-    this.generateObligorChartDumbells(chart, category, amChartsData);
+    this.generateObligorChartDumbells(state, category, amChartsData);
   }
 
-  private generateObligorChartDumbells(chart: am4charts.XYChart, category: ObligorChartCategoryBlock, amChartsData: any[]): am4charts.ColumnSeries {
+  private generateObligorChartDumbells(state: TradeObligorGraphPanelState, category: ObligorChartCategoryBlock, amChartsData: any[]): am4charts.ColumnSeries {
 
     // Create the column representing the mark discrepency.
-    let dumbBellseries = chart.series.push(new am4charts.ColumnSeries());
+    let dumbBellseries = state.obligorChart.series.push(new am4charts.ColumnSeries());
     dumbBellseries.data = amChartsData;
     dumbBellseries.dataFields.valueX = "workoutTerm";
     dumbBellseries.dataFields.openValueY = "mid";
-    dumbBellseries.dataFields.valueY = "mark";
+
+    if( state.metric.spread || state.markValue.cS01 || state.markValue.quantity ){
+      dumbBellseries.dataFields.valueY = "mark";
+    } 
+    else if(state.metric.yield || (state.markValue.quantity === false && state.markValue.cS01 === false )) dumbBellseries.dataFields.valueY = "mid";
+
     dumbBellseries.fill = am4core.color(category.data.color);
     dumbBellseries.stroke = am4core.color(category.data.color);
     dumbBellseries.name = category.data.name;
@@ -183,10 +192,9 @@ export class GraphService {
     if (category.state.isMarkHidden === false) {
       //Add a circle bullet to represent the mark.
       var markBullet = dumbBellseries.bullets.push(new am4charts.CircleBullet());
-      markBullet.circle.fillOpacity = 0.5;
+      markBullet.circle.fillOpacity = 0.3;
       markBullet.circle.strokeOpacity = 1;
-      markBullet.strokeOpacity = 5;
-      markBullet.fillOpacity = 10;
+      markBullet.strokeOpacity = 1;
       markBullet.nonScalingStroke = true;
       markBullet.tooltipHTML = `<center><b>{name}</b> </br>
                               Mark: {mark}</br>
@@ -201,6 +209,9 @@ export class GraphService {
 
     // Add a circle bullet to represent the mid.
     let midBullet = dumbBellseries.bullets.push(new am4charts.CircleBullet());
+    midBullet.circle.strokeOpacity = 1;
+    midBullet.strokeOpacity = 1;
+    midBullet.stroke = am4core.color(category.data.color).lighten(-0.3);
     midBullet.fill = am4core.color(category.data.color);
     midBullet.locationY = 1;
     midBullet.tooltipHTML = `<center><b>{name}</b> </br>
@@ -251,14 +262,21 @@ export class GraphService {
   }
 
   private initializeObligorChartXAxis(data: any[], chart: am4charts.XYChart) {
+    // Find the highest x axis value.
+    let max: number;
+    for(let i = 0; i < data.length -1; i++)
+    {
+      if(data[i] > data[i - 1]) max = data[i];
+    }
+
     let xAxis = chart.xAxes.push(new am4charts.ValueAxis());
-    xAxis.renderer.grid.template.location = 0;
     xAxis.renderer.grid.template.location = 0.5;
     xAxis.renderer.grid.template.strokeDasharray = "1,3";
     xAxis.renderer.labels.template.horizontalCenter = "left";
     xAxis.renderer.labels.template.location = 0.5;
     xAxis.title.text = "Tenor";
     xAxis.min = 0;
+    xAxis.max = max + 10;
     xAxis.data = data;
     xAxis.cursorTooltipEnabled = false;
 
@@ -268,11 +286,19 @@ export class GraphService {
   }
 
   private initializeObligorChartYAxis(data: any[], chart: am4charts.XYChart) {
+    // Find the highest x axis value.
+    let max: number;
+    for(let i = 0; i < data.length -1; i++)
+    {
+      if(data[i] > data[i - 1]) max = data[i];
+    }
+
     let yAxis = chart.yAxes.push(new am4charts.ValueAxis());
     yAxis.tooltip.disabled = true;
     yAxis.renderer.axisFills.template.disabled = true;
     yAxis.title.text = "Spread";
     yAxis.min = 0;
+    yAxis.max = max + 10;
     yAxis.data = data;
     yAxis.renderer.minGridDistance = 30;
     yAxis.cursorTooltipEnabled = true;
