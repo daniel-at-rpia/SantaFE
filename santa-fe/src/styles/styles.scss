@@ -3,9 +3,9 @@
 
 html {
   font-size: 14px;
-  @include mq-x-large-min {
-    font-size: 16px;
-  }
+  // @include mq-x-large-min {
+  //   font-size: 16px;
+  // }
 }
 
 #santa-body{
