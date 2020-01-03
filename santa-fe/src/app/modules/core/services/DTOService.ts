@@ -469,7 +469,8 @@ export class DTOService {
         rows: [],
         agGridColumnDefs: [],
         agGridRowData: [],
-        agGridFrameworkComponents: {}
+        agGridFrameworkComponents: {},
+        agGridAggregationMap: {}
       },
       state: {
         loadedContentStage: null,
@@ -501,7 +502,7 @@ export class DTOService {
         readyStage: stub.readyStage,
         metricPackDeltaScope: stub.metricPackDeltaScope || null,
         frontendMetric: !!stub.isFrontEndMetric,
-        inversedSortingForText: !!stub.inversedSortingForText,
+        isDataTypeText: !!stub.isDataTypeText,
         targetQuantLocationFromRow: !!stub.isForQuantComparer ? stub.targetQuantLocationFromRow : 'n/a'
       },
       state: {

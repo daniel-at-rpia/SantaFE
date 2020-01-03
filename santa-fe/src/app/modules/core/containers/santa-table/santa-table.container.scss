@@ -100,7 +100,7 @@ $alt-background: $color_white;
         text-align: right;
         height: 40px;
         line-height: $line_height_x_small!important;
-        //width: 3rem;
+        border-width: 0!important;
         &--securityCard {
           justify-content: flex-end;
         }

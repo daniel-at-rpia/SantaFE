@@ -115,6 +115,8 @@ export interface AgGridColumnDefinition {
   width?: number;
   autoHeight?: boolean;
   comparator?: Function;
+  enableValue: boolean;  // enable aggregation
+  allowedAggFuncs?: Array<string>;  // specify aggregation functions, by default it allows the five built-in ones
   cellRenderer?: string;
   resizable?: boolean;
   sortable?: boolean;
@@ -134,6 +136,7 @@ export interface AgGridRowNode {
     allDisplayedColumns: Array<AgGridColumn>
   }
   data: AgGridRow;
+  group: boolean;
   parent: AgGridRowNode;
   gridApi: GridApi;
   columnApi: ColumnApi;

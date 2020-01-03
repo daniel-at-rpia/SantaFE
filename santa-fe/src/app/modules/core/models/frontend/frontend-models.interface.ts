@@ -210,6 +210,7 @@ export interface SecurityTableDTO extends BasicDTOStructure {
     agGridColumnDefs: Array<AgGridColumnDefinition>;
     agGridRowData: Array<AgGridRow>;
     agGridFrameworkComponents: object;
+    agGridAggregationMap: object;
   },
   state: {
     loadedContentStage: number;
@@ -236,7 +237,7 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     readyStage: number;
     metricPackDeltaScope: string;
     frontendMetric: boolean;
-    inversedSortingForText: boolean;
+    isDataTypeText: boolean;
     targetQuantLocationFromRow: string;
   },
   state: {

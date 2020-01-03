@@ -104,6 +104,10 @@ export class SantaTable implements OnInit, OnChanges {
       bestQuote: SantaTableQuoteCell,
       detailAllQuotes: SantaTableDetailAllQuotes
     };
+    this.tableData.data.agGridAggregationMap = {
+      sum: this.agAggregationSum.bind(this),
+      avg: this.agAggregationAverage.bind(this)
+    };
   }
 
   public ngOnChanges() {
@@ -145,17 +149,19 @@ export class SantaTable implements OnInit, OnChanges {
   public onRowClicked(params: AgGridRowParams) {
     const expanded = !params.node.expanded;
     params.node.setExpanded(expanded);
-    const targetRow = this.tableData.data.rows.find((eachRow) => {
-      return !!eachRow.data.security && eachRow.data.security.data.securityID == params.node.data.id;
-    });
-    if (!!targetRow) {
-      targetRow.state.isExpanded = expanded;
-      if (targetRow.data.security) {
-        targetRow.data.security.state.isTableExpanded = expanded;
-        targetRow.state.isExpanded && this.fetchSecurityQuotes(targetRow);
+    if (!params.node.group) {
+      const targetRow = this.tableData.data.rows.find((eachRow) => {
+        return !!eachRow.data.security && eachRow.data.security.data.securityID == params.node.data.id;
+      });
+      if (!!targetRow) {
+        targetRow.state.isExpanded = expanded;
+        if (targetRow.data.security) {
+          targetRow.data.security.state.isTableExpanded = expanded;
+          targetRow.state.isExpanded && this.fetchSecurityQuotes(targetRow);
+        }
+      } else {
+        console.error(`Could't find targetRow`, params);
       }
-    } else {
-      console.error(`Could't find targetRow`, params);
     }
   }
 
@@ -321,13 +327,13 @@ export class SantaTable implements OnInit, OnChanges {
           } else if (valueA != null && valueB == null) {
             return -4;
           } else if (valueA < valueB) {
-            if (targetHeader.data.inversedSortingForText) {
+            if (targetHeader.data.isDataTypeText) {
               return -1;
             } else {
               return 1;
             }
           } else if (valueA > valueB) {
-            if (targetHeader.data.inversedSortingForText) {
+            if (targetHeader.data.isDataTypeText) {
               return 1;
             } else {
               return -1;
@@ -390,5 +396,48 @@ export class SantaTable implements OnInit, OnChanges {
         this.fetchSecurityQuotes(eachRow);
       }
     })
+  }
+
+  private agAggregationSum(valueList: Array<number|string>): number {
+    if (valueList.length > 0) {
+      let aggregatedValue = 0;
+      let validCount = 0;
+      valueList.forEach((eachValue) => {
+        if (!!eachValue) {
+          validCount++;
+          const numericalValue = parseFloat(eachValue as string);
+          aggregatedValue = aggregatedValue + numericalValue;
+        }
+      })
+      if (validCount > 0) {
+        return aggregatedValue;
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  private agAggregationAverage(valueList: Array<number|string>): number {
+    if (valueList.length > 0) {
+      let aggregatedValue = 0;
+      let validCount = 0;
+      valueList.forEach((eachValue) => {
+        if (!!eachValue) {
+          validCount++;
+          const numericalValue = parseFloat(eachValue as string);
+          aggregatedValue = aggregatedValue + numericalValue;
+        }
+      })
+      if (validCount > 0) {
+        aggregatedValue = aggregatedValue / valueList.length;
+        return this.utilityService.round(aggregatedValue, 2);
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
   }
 }

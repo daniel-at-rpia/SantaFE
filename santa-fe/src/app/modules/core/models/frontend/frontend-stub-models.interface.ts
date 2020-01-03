@@ -79,7 +79,7 @@ export interface SecurityTableMetricStub {
   targetQuantLocationFromRow?: string;
   pureText?: boolean;
   disabled?: boolean;
-  inversedSortingForText?: boolean;
+  isDataTypeText?: boolean;
 }
 
 export interface TriCoreMetricConfigStub {
