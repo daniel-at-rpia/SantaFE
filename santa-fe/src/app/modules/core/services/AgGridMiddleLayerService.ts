@@ -29,7 +29,8 @@
       AGGRID_HEADER_CLASS,
       AGGRID_CELL_CLASS,
       AGGRID_DETAIL_COLUMN_KEY,
-      AGGRID_DETAIL_COLUMN_WIDTH
+      AGGRID_DETAIL_COLUMN_WIDTH,
+      AGGRID_SIMPLE_TEXT_COLUMN_WIDTH
     } from 'Core/constants/securityTableConstants.constant';
   //
 
@@ -141,23 +142,26 @@ export class AgGridMiddleLayerService {
     } else if (targetHeader.data.key === 'bestQuote') {
       newAgColumn.cellRenderer = targetHeader.data.key;
       newAgColumn.width = AGGRID_QUOTE_COLUMN_WIDTH;
+    } else if (!targetHeader.data.isDataTypeText) {
+      newAgColumn.cellClass = AGGRID_CELL_CLASS;
+      newAgColumn.headerClass = `${AGGRID_HEADER_CLASS} ${AGGRID_HEADER_CLASS}--numeric ag-numeric-header`;
+      newAgColumn.width = AGGRID_SIMPLE_NUM_COLUMN_WIDTH;
+      newAgColumn.resizable = true;
+      newAgColumn.suppressMenu = true;
+      newAgColumn.enableValue = true;
+      newAgColumn.allowedAggFuncs = ['sum', 'avg'];
+      newAgColumn.filter = "numericFilter";
+      newAgColumn.floatingFilterComponent = "numericFloatingFilter";
+      newAgColumn.floatingFilterComponentParams = {
+        maxValue: 100,
+        suppressFilterButton: true
+      };
     } else {
       newAgColumn.cellClass = AGGRID_CELL_CLASS;
-      newAgColumn.width = AGGRID_SIMPLE_NUM_COLUMN_WIDTH;
+      newAgColumn.width = AGGRID_SIMPLE_TEXT_COLUMN_WIDTH;
       newAgColumn.resizable = true;
       newAgColumn.enableRowGroup = true;
       newAgColumn.enablePivot = true;
-      if (!targetHeader.data.isDataTypeText) {
-        newAgColumn.suppressMenu = true;
-        newAgColumn.enableValue = true;
-        newAgColumn.allowedAggFuncs = ['sum', 'avg'];
-        newAgColumn.filter = "numericFilter";
-        newAgColumn.floatingFilterComponent = "numericFloatingFilter";
-        newAgColumn.floatingFilterComponentParams = {
-          maxValue: 100,
-          suppressFilterButton: true
-        };
-      }
     }
   }
 

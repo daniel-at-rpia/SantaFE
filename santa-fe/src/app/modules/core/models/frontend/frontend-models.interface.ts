@@ -339,5 +339,18 @@ export interface QuantitativeVisualizerDTO extends BasicDTOStructure {
     isYtdValid: boolean;
     isStencil: boolean;
   }
+}
 
+export interface NumericFilterDTO extends BasicDTOStructure {
+  data: {
+    minNumber: number|string;
+    maxNumber: number|string;
+  },
+  api: {
+    params: agGrid.IFilterParams;
+    valueGetter: (rowNode: agGrid.RowNode) => any;
+  }
+  state: {
+
+  }
 }

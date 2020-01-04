@@ -6,7 +6,6 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-
 import {
   IAfterGuiAttachedParams,
   IDoesFilterPassParams,
@@ -14,6 +13,8 @@ import {
   RowNode
 } from 'ag-grid-community';
 import { IFilterAngularComp } from 'ag-grid-angular';
+
+import { NumericFilterDTO } from 'FEModels/frontend-models.interface';
 
 
 @Component({
@@ -23,47 +24,67 @@ import { IFilterAngularComp } from 'ag-grid-angular';
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class SantaTableNumericFilter implements IFilterAngularComp {
-  private params: IFilterParams;
-  private valueGetter: (rowNode: RowNode) => any;
-  private filterVal: string = '';
+export class SantaTableNumericFilter implements  IFilterAngularComp {
+  public filterData: NumericFilterDTO;
 
-  @ViewChild('input', {static: false}) private input;
-
-  agInit(params: IFilterParams): void {
-    this.params = params;
-    this.valueGetter = params.valueGetter;
+  public agInit(params: IFilterParams): void {
+    this.filterData = this.initDTO(params);
   }
 
-  isFilterActive(): boolean {
-    return this.filterVal !== null && this.filterVal !== undefined && this.filterVal !== '';
+  public isFilterActive(): boolean {
+    return (this.filterData.data.minNumber != null && this.filterData.data.minNumber !== "") || (this.filterData.data.maxNumber != null && this.filterData.data.maxNumber !== "");
   }
 
-  doesFilterPass(params: IDoesFilterPassParams): boolean {
-    return this.valueGetter(params.node) >= this.filterVal
+  public doesFilterPass(params: IDoesFilterPassParams): boolean {
+    const value = this.filterData.api.valueGetter(params.node);
+    const parsedValue = parseFloat(value);
+    const min = this.filterData.data.minNumber === "" ? null : this.filterData.data.minNumber;
+    const max = this.filterData.data.maxNumber === "" ? null : this.filterData.data.maxNumber;
+    if (min != null && max != null) {
+      this.filterData.data.minNumber = parseFloat(min as string);
+      this.filterData.data.maxNumber = parseFloat(max as string);
+      return value >= min && value <= max;
+    } else if (min != null) {
+      this.filterData.data.minNumber = parseFloat(min as string);
+      return value >= min;
+    } else if (max != null) {
+      this.filterData.data.maxNumber = parseFloat(max as string);
+      return value <= max;
+    } else {
+      return true;
+    }
   }
 
-  getModel(): any {
-    return this.filterVal;
+  public getModel(): NumericFilterDTO {
+    return this.filterData;
   }
 
-  setModel(model: any): void {
-    this.filterVal = model ? model : null;
+  public setModel(model: NumericFilterDTO): void {
+    this.filterData = model || this.initDTO(this.filterData.api.params);
   }
 
-  onChange(newValue): void {
-    this.filterVal = newValue !== null ? newValue : 0;
-    this.params.filterChangedCallback();
+  private initDTO(params: IFilterParams) {
+    return {
+      data: {
+        minNumber: '',
+        maxNumber: ''
+      },
+      api: {
+        params: params,
+        valueGetter: params.valueGetter
+      },
+      state: {
+      }
+    };
   }
 
-  onFloatingFilterChanged(change) {
-    this.onChange(change);
-    this.input.element.nativeElement.value = change;
+  private onChangeMin(newValue): void {
+    this.filterData.data.minNumber = newValue === "" ? newValue : parseFloat(newValue);
+    this.filterData.api.params.filterChangedCallback();
   }
 
-  // noinspection JSMethodCanBeStatic
-  componentMethod(message: string): void {
-    alert(`Alert from MoreThanOrEqualToFilter
-       ${message}`);
+  private onChangeMax(newValue): void {
+    this.filterData.data.maxNumber = newValue === "" ? newValue : parseFloat(newValue);
+    this.filterData.api.params.filterChangedCallback();
   }
 }

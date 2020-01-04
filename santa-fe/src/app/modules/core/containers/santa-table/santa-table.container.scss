@@ -68,6 +68,21 @@ $alt-background: $color_white;
         .ag-header-cell-label {
           padding-left: $spacing_x_small;
         }
+        &--numeric {
+          .ag-header-cell-label {
+            width: 100%;
+            padding: 0;
+          }
+          &.ag-header-cell-filtered {
+            background-color: $color_filter;
+            .ag-header-cell-text {
+              color: $font_color_inverse;
+            }
+            .ag-icon-filter {
+              color: $font_color_inverse;
+            }
+          }
+        }
         &--detail {
           padding: 0!important;
           .ag-header-cell-menu-button {
@@ -93,7 +108,6 @@ $alt-background: $color_white;
         white-space: normal;
         word-break: break-word;
         text-align: right;
-        height: 40px;
         line-height: $line_height_x_small!important;
         border-width: 0!important;
         &--securityCard {
