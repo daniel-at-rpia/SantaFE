@@ -139,7 +139,7 @@ export class GraphService {
 
       if (mid !== 0) {
         // The dumbbell chart will not work if the mark is null. If it is, we will set it to the value of mid to be "hidden" behind it.
-        if (category.data.obligorCategoryDataItemDTO[dataItem].data.mark === null) {
+        if (category.data.obligorCategoryDataItemDTO[dataItem].data.mark === null && mid !== null) {
           category.data.obligorCategoryDataItemDTO[dataItem].data.mark = mid.toLocaleString();
         }
 
