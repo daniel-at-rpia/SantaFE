@@ -21,6 +21,7 @@
       [detailCellRenderer]="'detailAllQuotes'"
       [animateRows]="true"
       [suppressContextMenu]="true"
+      [context]="agGridConfig.context"
       (gridReady)="onGridReady($event)"
       (rowClicked)="onRowClicked($event)">
     </ag-grid-angular>

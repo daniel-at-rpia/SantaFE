@@ -24,6 +24,8 @@ import { QuoteMetricList } from 'Core/constants/securityTableConstants.constant'
 export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   @Input() rowData: SecurityTableRowDTO;
   private parentNode: AgGridRowNode;
+  private parent: any; // a hacky way to talk to "santa-table.container.ts"
+
   constructor(
     private dtoService: DTOService
   ) { }
@@ -34,6 +36,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     console.log('params are', typeSafeParams);
     this.parentNode = typeSafeParams.node.parent;
     this.rowData = typeSafeParams.node.data.rowDTO;
+    this.parent = typeSafeParams.context.componentParent;
   }
 
   public refresh(): boolean {
@@ -43,5 +46,11 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   public onClickClose() {
     this.parentNode.setExpanded(false);
     this.rowData.state.isExpanded = false;
+  }
+
+  public onClickSelectForAnalysis() {
+    if (!!this.parent && this.rowData && this.rowData.data.security) {
+      this.parent.onSelectSecurityForAnalysis(this.rowData.data.security);
+    }
   }
 }
