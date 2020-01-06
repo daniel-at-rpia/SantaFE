@@ -1,14 +1,16 @@
 @import "global.scss";
 
-.santaTableNumericFilter {
-  $santaTableNumericFilter: &;
+.sat-numericFilter {
+  $numericFilter: &;
+  flex: 1 1 auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: $spacing_small;
   &__minInput, &__maxInput {
+    flex: 1 1 auto;
     &>input {
-      width: 4rem;
+      width: 100%;
+      min-width: 3rem;
     }
   }
   &__midSymbol {

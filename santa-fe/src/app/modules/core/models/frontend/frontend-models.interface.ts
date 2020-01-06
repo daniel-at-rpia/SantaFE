@@ -11,6 +11,7 @@ import {
   AgGridColumnDefinition,
   AgGridRow
 } from 'FEModels/frontend-blocks.interface';
+import { SantaTableNumericFloatingFilterParams } from 'FEModels/frontend-adhoc-packages.interface';
 import * as agGrid from 'ag-grid-community';
 
 
@@ -349,6 +350,7 @@ export interface NumericFilterDTO extends BasicDTOStructure {
   api: {
     params: agGrid.IFilterParams;
     valueGetter: (rowNode: agGrid.RowNode) => any;
+    floatingParams: SantaTableNumericFloatingFilterParams;
   }
   state: {
 

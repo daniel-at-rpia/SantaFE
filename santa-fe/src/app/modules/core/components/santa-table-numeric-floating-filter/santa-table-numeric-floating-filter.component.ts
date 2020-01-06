@@ -5,7 +5,6 @@ import {
   Input,
   Output
 } from '@angular/core';
-
 import {
   IFloatingFilter,
   IFloatingFilterParams,
@@ -13,15 +12,12 @@ import {
 } from 'ag-grid-community';
 import { AgFrameworkComponent } from 'ag-grid-angular';
 
+import { NumericFilterDTO } from 'FEModels/frontend-models.interface';
+import {
+  SantaTableNumericFloatingFilterChange,
+  SantaTableNumericFloatingFilterParams
+} from 'FEModels/frontend-adhoc-packages.interface';
 
-interface SantaTableNumericFloatingFilterChange {
-  model: SerializedNumberFilter
-}
-
-interface SantaTableNumericFloatingFilterParams extends IFloatingFilterParams<SerializedNumberFilter, SantaTableNumericFloatingFilterChange> {
-  value: number;
-  maxValue: number;
-}
 
 @Component({
   selector: 'santa-table-numeric-floating-filter',
@@ -32,29 +28,52 @@ interface SantaTableNumericFloatingFilterParams extends IFloatingFilterParams<Se
 
 export class SantaTableNumericFloatingFilter implements 
   IFloatingFilter<
-    SerializedNumberFilter,
+    NumericFilterDTO,
     SantaTableNumericFloatingFilterChange,
     SantaTableNumericFloatingFilterParams>,
   AgFrameworkComponent<SantaTableNumericFloatingFilterParams>
 {
-  private params: SantaTableNumericFloatingFilterParams;
-  public maxValue: number;
-  public currentValue: number | SerializedNumberFilter;
+  public filterData: NumericFilterDTO;
 
   constructor() { }
 
   public agInit(params: SantaTableNumericFloatingFilterParams) {
-    this.params = params;
-    this.maxValue = this.params.maxValue;
-    this.currentValue = 0;
+    this.filterData = this.initDTO(params);
   }
 
-  public valueChanged() {
-    this.params.onFloatingFilterChanged(this.currentValue as SerializedNumberFilter);
+  public onParentModelChanged(parentModel: NumericFilterDTO) {
+    // When DTO is passed between floatingFilter and parentFilter, the numerical data is automatically converted to string, this is an agGrid defect we have to workaround
+    console.log('test, parent change deteced in floating', parentModel);
+    this.filterData.data = {
+      minNumber: parentModel.data.minNumber === "" ? parentModel.data.minNumber : parseFloat(parentModel.data.minNumber as string),
+      maxNumber: parentModel.data.maxNumber === "" ? parentModel.data.maxNumber : parseFloat(parentModel.data.maxNumber as string)
+    };
   }
 
-  public onParentModelChanged(parentModel: SerializedNumberFilter) {
-    this.currentValue = parentModel || 0;
+  public onChangeMin(newValue): void {
+    this.filterData.data.minNumber = newValue === "" ? newValue : parseFloat(newValue);
+    this.filterData.api.floatingParams.onFloatingFilterChanged(this.filterData);
+  }
+
+  public onChangeMax(newValue): void {
+    this.filterData.data.maxNumber = newValue === "" ? newValue : parseFloat(newValue);
+    this.filterData.api.floatingParams.onFloatingFilterChanged(this.filterData);
+  }
+
+  private initDTO(params: SantaTableNumericFloatingFilterParams) {
+    return {
+      data: {
+        minNumber: '',
+        maxNumber: ''
+      },
+      api: {
+        params: null,
+        valueGetter: null,
+        floatingParams: params
+      },
+      state: {
+      }
+    };
   }
 
 }

@@ -1,17 +1,7 @@
-<article class="santaTableNumericFilter">
-  <section class="santaTableNumericFilter__minInput">
-    <input
-      (ngModelChange)="onChangeMin($event)"
-      [(ngModel)]="minNumber"
-      type="text">
-  </section>
-  <section class="santaTableNumericFilter__midSymbol">
-    <i class="santaTableNumericFilter__midSymbol-content fal fa-wave-square"></i>
-  </section>
-  <section class="santaTableNumericFilter__maxInput">
-    <input
-      (ngModelChange)="onChangeMax($event)"
-      [(ngModel)]="maxNumber"
-      type="text">
-  </section>
+<article class="santaTableNumericFloatingFilter">
+  <numeric-filter
+    [filterData]="filterData"
+    (detectedMinChange)="onChangeMin($event)"
+    (detectedMaxChange)="onChangeMax($event)"
+  ></numeric-filter>
 </article>

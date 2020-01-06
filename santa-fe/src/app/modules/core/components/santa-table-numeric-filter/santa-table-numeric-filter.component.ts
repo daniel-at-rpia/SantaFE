@@ -63,10 +63,24 @@ export class SantaTableNumericFilter implements  IFilterAngularComp {
     this.filterData = model || this.initDTO(this.filterData.api.params);
   }
 
-  public onFloatingFilterChanged(change) {
-    console.log('test, change is', change);
-    // this.onChange(change);
-    // this.input.element.nativeElement.value = change;
+  public onFloatingFilterChanged(floatingModel: NumericFilterDTO) {
+    // When DTO is passed between floatingFilter and parentFilter, the numerical data is automatically converted to string, this is an agGrid defect we have to workaround
+    console.log('test, floatingModel is', floatingModel);
+    this.filterData.data = {
+      minNumber: floatingModel.data.minNumber === "" ? floatingModel.data.minNumber : parseFloat(floatingModel.data.minNumber as string),
+      maxNumber: floatingModel.data.maxNumber === "" ? floatingModel.data.maxNumber : parseFloat(floatingModel.data.maxNumber as string)
+    };
+    this.filterData.api.params.filterChangedCallback();
+  }
+
+  public onChangeMin(newValue): void {
+    this.filterData.data.minNumber = newValue === "" ? newValue : parseFloat(newValue);
+    this.filterData.api.params.filterChangedCallback();
+  }
+
+  public onChangeMax(newValue): void {
+    this.filterData.data.maxNumber = newValue === "" ? newValue : parseFloat(newValue);
+    this.filterData.api.params.filterChangedCallback();
   }
 
   private initDTO(params: IFilterParams) {
@@ -77,21 +91,11 @@ export class SantaTableNumericFilter implements  IFilterAngularComp {
       },
       api: {
         params: params,
-        valueGetter: params.valueGetter
+        valueGetter: params.valueGetter,
+        floatingParams: null
       },
       state: {
       }
     };
-  }
-
-  public onChangeMin(newValue): void {
-    console.log('test, receive', newValue);
-    this.filterData.data.minNumber = newValue === "" ? newValue : parseFloat(newValue);
-    this.filterData.api.params.filterChangedCallback();
-  }
-
-  public onChangeMax(newValue): void {
-    this.filterData.data.maxNumber = newValue === "" ? newValue : parseFloat(newValue);
-    this.filterData.api.params.filterChangedCallback();
   }
 }
