@@ -164,6 +164,8 @@ export class GraphService {
     dumbBellseries.data = amChartsData;
     dumbBellseries.dataFields.valueX = "workoutTerm";
     dumbBellseries.dataFields.openValueY = "mid";
+    dumbBellseries.maxY = 10;
+    dumbBellseries.minY = 0;
 
     if (state.metric.spread || state.markValue.cS01 || state.markValue.quantity) {
       dumbBellseries.dataFields.valueY = "mark";
@@ -248,78 +250,59 @@ export class GraphService {
     return null;
   }
 
-  public initializeObligorChartAxes(xAxisData: any[], yAxesData: any[], chart: am4charts.XYChart) {
+  public initializeObligorChartAxes(state: TradeObligorGraphPanelState) {
 
-    let xAxisamChartsData: any[] = [];
-    xAxisData.forEach((eachItem) => {
-      xAxisamChartsData.push({ workoutTerm: eachItem })
+    let xAxis = this.initializeObligorChartXAxis(state.obligorChart);
+    let yAxis = this.initializeObligorChartYAxis(state.obligorChart);
+
+    let yStart = yAxis.minY;
+    let yEnd = yAxis.maxY;
+
+    let xStart = xAxis.minX;
+    let xEnd = xAxis.maxX;
+
+    yAxis.events.on("startchanged", function(ev) {
+
+      var yStart = ev.target.min;
+      var yEnd = ev.target.max;
     });
 
-    this.initializeObligorChartXAxis(xAxisData, chart);
-    this.initializeObligorChartYAxis(yAxesData, chart);
+    //yAxis.events.on("endchanged", dateAxisChanged);
+
+    let buttonContainer = state.obligorChart.plotContainer.createChild(am4core.Container);
+    buttonContainer.shouldClone = false;
+    buttonContainer.align = "right";
+    buttonContainer.valign = "top";
+    buttonContainer.zIndex = Number.MAX_SAFE_INTEGER;
+    buttonContainer.marginTop = 5;
+    buttonContainer.marginRight = 5;
+    buttonContainer.layout = "horizontal";
+
+    var zoomInButton = buttonContainer.createChild(am4core.Button);
+    zoomInButton.label.text = "-";
+    zoomInButton.events.on("hit", function(ev) {
+      console.log(state.obligorChart.series.values)
+      xAxis.zoomToValues(xStart, xEnd);
+      yAxis.zoomToValues(yStart, yEnd);
+    });
+
   }
 
-  private getMaxAxis(data: Array<number>): number {
-    // Find the highest x axis value.
-    if (data.length > 0) {
-      const sortedData = data.sort((a, b) => {
-        if (a > b) {
-          return -1;
-        } else if (b > a) {
-          return 1;
-        } else {
-          return 0;
-        }
-      });
-
-      return sortedData[0];
-    }
-  }
-
-  private initializeObligorChartXAxis(data: Array<number>, chart: am4charts.XYChart) {
+  private initializeObligorChartXAxis(chart: am4charts.XYChart): am4charts.ValueAxis {
 
     let xAxis = chart.xAxes.push(new am4charts.ValueAxis());
-    xAxis.renderer.grid.template.location = 0.5;
     xAxis.renderer.grid.template.strokeDasharray = "1,3";
-    xAxis.renderer.labels.template.horizontalCenter = "left";
-    xAxis.renderer.labels.template.location = 0.5;
     xAxis.title.text = "Tenor";
     xAxis.min = 0;
-    xAxis.max = this.getMaxAxis(data) + 1;
-    xAxis.data = data;
-    xAxis.cursorTooltipEnabled = false;
-
-    xAxis.renderer.labels.template.adapter.add("dx", function (dx, target) {
-      return -target.maxRight / 2;
-    })
+    return xAxis;
   }
 
-  private initializeObligorChartYAxis(data: any[], chart: am4charts.XYChart) {
-
+  private initializeObligorChartYAxis(chart: am4charts.XYChart): am4charts.ValueAxis {
     let yAxis = chart.yAxes.push(new am4charts.ValueAxis());
-    yAxis.tooltip.disabled = true;
-    yAxis.renderer.axisFills.template.disabled = true;
     yAxis.title.text = "Spread";
     yAxis.min = 0;
-    yAxis.max = this.getMaxAxis(data) + 1;
-    yAxis.data = data;
-    yAxis.renderer.minGridDistance = 30;
-    yAxis.cursorTooltipEnabled = true;
-
-    let axisTooltip = yAxis.tooltip;
-    axisTooltip.background.fill = am4core.color("#07BEB8");
-    axisTooltip.background.strokeWidth = 0;
-    axisTooltip.background.cornerRadius = 3;
-    axisTooltip.background.pointerLength = 0;
-    axisTooltip.dy = 5;
-
-    let dropShadow = new am4core.DropShadowFilter();
-    dropShadow.dy = 1;
-    dropShadow.dx = 1;
-    dropShadow.opacity = 0.5;
-    axisTooltip.filters.push(dropShadow);
+    return yAxis;
   }
-
   public clearGraphSeries(chart: am4charts.XYChart) {
     chart.series.clear();
     return chart;

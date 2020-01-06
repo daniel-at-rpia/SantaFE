@@ -121,13 +121,6 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
 
                 //Populate list of securityIDs to be sent to trade-center-panel.
                 securityIDsFromAnalysis.push(security);
-
-                // Populate the YAxis with the mid.
-                if(this.state.metric.spread) this.state.yAxisData.push(categoryDataItem.data.spreadMid);
-                else if(this.state.metric.yield) this.state.yAxisData.push(categoryDataItem.data.yieldMid);
-
-                // Pupulate the XAxis with the workout Term.
-                this.state.xAxisData.push(categoryDataItem.data.workoutTerm);
               }
             }
           }
@@ -185,8 +178,6 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
             eachCategoryItem.data.positionCurrent = eachSecurity.data.positionCurrent;
             // Insert the mark in our XAxis data fields.
             this.state.yAxisData.push(Number(eachCategoryItem.data.mark));
-          } else {
-            //console.error('this row does not have security', eachRow);
           }
         })
       })
@@ -205,7 +196,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
       this.state.obligorChart = am4core.create("chartdiv", am4charts.XYChart);
 
       // Initialize axes for the chart.
-      this.graphService.initializeObligorChartAxes(this.state.xAxisData, this.state.yAxisData, this.state.obligorChart);
+      this.graphService.initializeObligorChartAxes(this.state);
 
       // TODO: This part is incomplete. Right now this chart only handles quantity.
       // Each chart category DTO has its own "isMarkHidden" field which should be used.
@@ -226,13 +217,6 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
       // Add a cursor to the chart, with zoom behaviour. 
       this.state.obligorChart.cursor = new am4charts.XYCursor();
       this.state.obligorChart.cursor.behavior = "zoomXY";
-      this.state.obligorChart.cursor.lineX.disabled = true;
-      this.state.obligorChart.cursor.lineY.disabled = true;
-
-      // Zoom out button
-      this.state.obligorChart.zoomOutButton.align = "left";
-      this.state.obligorChart.zoomOutButton.valign = "top";
-
     });
   }
 
