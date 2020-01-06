@@ -63,6 +63,12 @@ export class SantaTableNumericFilter implements  IFilterAngularComp {
     this.filterData = model || this.initDTO(this.filterData.api.params);
   }
 
+  public onFloatingFilterChanged(change) {
+    console.log('test, change is', change);
+    // this.onChange(change);
+    // this.input.element.nativeElement.value = change;
+  }
+
   private initDTO(params: IFilterParams) {
     return {
       data: {
@@ -78,12 +84,13 @@ export class SantaTableNumericFilter implements  IFilterAngularComp {
     };
   }
 
-  private onChangeMin(newValue): void {
+  public onChangeMin(newValue): void {
+    console.log('test, receive', newValue);
     this.filterData.data.minNumber = newValue === "" ? newValue : parseFloat(newValue);
     this.filterData.api.params.filterChangedCallback();
   }
 
-  private onChangeMax(newValue): void {
+  public onChangeMax(newValue): void {
     this.filterData.data.maxNumber = newValue === "" ? newValue : parseFloat(newValue);
     this.filterData.api.params.filterChangedCallback();
   }

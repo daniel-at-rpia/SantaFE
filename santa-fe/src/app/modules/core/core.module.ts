@@ -28,6 +28,7 @@ import { SantaTableQuoteCell } from 'Core/components/santa-table-quote-cell/sant
 import { SantaTableDetailAllQuotes } from 'Core/containers/santa-table-detail-all-quotes/santa-table-detail-all-quotes.container';
 import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
 import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-filter/santa-table-numeric-filter.component';
+import { NumericFilter } from 'Core/components/numeric-filter/numeric-filter.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-fil
     SantaTableQuoteCell,
     SantaTableDetailAllQuotes,
     SantaTableNumericFilter,
-    SantaTableNumericFloatingFilter
+    SantaTableNumericFloatingFilter,
+    NumericFilter
   ],
   imports: [
     CommonModule,
