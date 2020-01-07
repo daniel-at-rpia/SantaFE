@@ -154,21 +154,29 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   public onRowClicked(params: AgGridRowParams) {
-    const expanded = !params.node.expanded;
-    params.node.setExpanded(expanded);
-    if (!params.node.group) {
-      const targetRow = this.tableData.data.rows.find((eachRow) => {
-        return !!eachRow.data.security && eachRow.data.security.data.securityID == params.node.data.id;
-      });
-      if (!!targetRow) {
-        targetRow.state.isExpanded = expanded;
-        if (targetRow.data.security) {
-          targetRow.data.security.state.isTableExpanded = expanded;
-          targetRow.state.isExpanded && this.fetchSecurityQuotes(targetRow);
+    if (!params.node.expanded) {
+      params.node.setExpanded(true);
+      if (!params.node.group) {
+        const targetRow = this.tableData.data.rows.find((eachRow) => {
+          return !!eachRow.data.security && eachRow.data.security.data.securityID == params.node.data.id;
+        });
+        if (!!targetRow) {
+          targetRow.state.isExpanded = true;
+          if (targetRow.data.security) {
+            targetRow.data.security.state.isTableExpanded = true;
+            this.fetchSecurityQuotes(targetRow);
+          }
+        } else {
+          console.error(`Could't find targetRow`, params);
         }
-      } else {
-        console.error(`Could't find targetRow`, params);
       }
+    }
+  }
+
+  public onRowClickedToCollapse(targetRow: SecurityTableRowDTO) {
+    targetRow.state.isExpanded = false;
+    if (targetRow.data.security) {
+      targetRow.data.security.state.isTableExpanded = false;
     }
   }
 
@@ -198,6 +206,10 @@ export class SantaTable implements OnInit, OnChanges {
 
   public onNativePerformDefaultSort() {
     this.performDefaultSort();
+  }
+
+  public onClickSortQuotesByMetric(payload: ClickedSortQuotesByMetricEmitterParams) {
+    payload.targetRow.state.expandViewSortByQuoteMetric = payload.targetRow.state.expandViewSortByQuoteMetric === payload.targetMetricLabel ? null : payload.targetMetricLabel;
   }
 
   private loadTableHeaders(skipAgGrid = false) {

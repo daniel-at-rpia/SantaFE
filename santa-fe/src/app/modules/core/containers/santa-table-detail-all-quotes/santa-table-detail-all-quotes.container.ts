@@ -11,7 +11,10 @@ import { AgGridRowNode } from 'FEModels/frontend-blocks.interface';
 
 import { SecurityTableRowDTO } from 'FEModels/frontend-models.interface';
 import { QuoteMetricBlock } from 'FEModels/frontend-blocks.interface';
-import { AgGridRowParams } from 'FEModels/frontend-adhoc-packages.interface';
+import {
+  AgGridRowParams,
+  ClickedSortQuotesByMetricEmitterParams
+} from 'FEModels/frontend-adhoc-packages.interface';
 import { DTOService } from 'Core/services/DTOService';
 import { QuoteMetricList } from 'Core/constants/securityTableConstants.constant';
 
@@ -45,12 +48,21 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
 
   public onClickClose() {
     this.parentNode.setExpanded(false);
-    this.rowData.state.isExpanded = false;
+    this.parent.onRowClickedToCollapse(this.rowData);
   }
 
   public onClickSelectForAnalysis() {
     if (!!this.parent && this.rowData && this.rowData.data.security) {
       this.parent.onSelectSecurityForAnalysis(this.rowData.data.security);
     }
+  }
+
+  public onClickSortQuotesByMetric(targetBlock: QuoteMetricBlock, targetLabel: string) {
+    const payload: ClickedSortQuotesByMetricEmitterParams = {
+      targetRow: this.rowData,
+      targetBlock: targetBlock,
+      targetMetricLabel: targetLabel
+    };
+    this.parent.onClickSortQuotesByMetric(payload);
   }
 }
