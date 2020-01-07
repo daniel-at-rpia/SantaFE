@@ -65,7 +65,6 @@ export class SantaTableNumericFilter implements  IFilterAngularComp {
 
   public onFloatingFilterChanged(floatingModel: NumericFilterDTO) {
     // When DTO is passed between floatingFilter and parentFilter, the numerical data is automatically converted to string, this is an agGrid defect we have to workaround
-    console.log('test, floatingModel is', floatingModel);
     this.filterData.data = {
       minNumber: floatingModel.data.minNumber === "" ? floatingModel.data.minNumber : parseFloat(floatingModel.data.minNumber as string),
       maxNumber: floatingModel.data.maxNumber === "" ? floatingModel.data.maxNumber : parseFloat(floatingModel.data.maxNumber as string)

@@ -52,6 +52,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: 'markDriver',
     underlineAttrName: 'markDriver',
     blockAttrName: 'mark',
+    isDataTypeText: true,
     readyStage: 2,
     active: false
   },{
@@ -60,6 +61,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: 'markChangedBy',
     underlineAttrName: 'markChangedBy',
     blockAttrName: 'mark',
+    isDataTypeText: true,
     readyStage: 2,
     active: false
   },{
@@ -68,6 +70,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: 'markChangedTime',
     underlineAttrName: 'markChangedTime',
     blockAttrName: 'mark',
+    isDataTypeText: true,
     readyStage: 2,
     active: false
   },{
@@ -206,7 +209,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: 'seniorityLevel',
     readyStage: 2,
     active: false,
-    isDataTypeText: false
+    isDataTypeText: true
   },{
     key: 'country',
     label: 'Country',

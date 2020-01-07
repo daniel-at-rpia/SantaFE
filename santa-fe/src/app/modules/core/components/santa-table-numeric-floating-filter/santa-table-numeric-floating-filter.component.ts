@@ -43,7 +43,6 @@ export class SantaTableNumericFloatingFilter implements
 
   public onParentModelChanged(parentModel: NumericFilterDTO) {
     // When DTO is passed between floatingFilter and parentFilter, the numerical data is automatically converted to string, this is an agGrid defect we have to workaround
-    console.log('test, parent change deteced in floating', parentModel);
     this.filterData.data = {
       minNumber: parentModel.data.minNumber === "" ? parentModel.data.minNumber : parseFloat(parentModel.data.minNumber as string),
       maxNumber: parentModel.data.maxNumber === "" ? parentModel.data.maxNumber : parseFloat(parentModel.data.maxNumber as string)
