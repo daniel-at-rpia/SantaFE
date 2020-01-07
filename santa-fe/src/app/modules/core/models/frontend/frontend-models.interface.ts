@@ -56,6 +56,10 @@ export interface SecurityDTO extends BasicDTOStructure {
     positionNLF: number;
     positionNLFInMM: string;
     metricPack: SecurityGroupMetricPackBlock;
+    bestQuote: {
+      bid: number;
+      ask: number;
+    }
   }
   state: {
     isStencil: boolean;
