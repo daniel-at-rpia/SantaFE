@@ -1,10 +1,13 @@
 import { Subscription } from 'rxjs';
 import {
   GridApi,
-  ColumnApi
+  ColumnApi,
+  IFloatingFilter,
+  IFloatingFilterParams,
+  SerializedNumberFilter
 } from 'ag-grid-community';
 
-import { SecurityTableRowDTO } from 'FEModels/frontend-models.interface';
+import { SecurityTableRowDTO, NumericFilterDTO } from 'FEModels/frontend-models.interface';
 import {
   QuoteMetricBlock,
   AgGridRow,
@@ -49,4 +52,16 @@ export interface AgGridRowParams {
   node: AgGridRowNode;
   gridApi: GridApi;
   columnApi: ColumnApi;
+  context: {
+    componentParent: any;  // entire "this" of a container component
+  }
+}
+
+export interface SantaTableNumericFloatingFilterChange {
+  model: NumericFilterDTO
+}
+
+export interface SantaTableNumericFloatingFilterParams extends IFloatingFilterParams<NumericFilterDTO, SantaTableNumericFloatingFilterChange> {
+  minValue: number;
+  maxValue: number;
 }

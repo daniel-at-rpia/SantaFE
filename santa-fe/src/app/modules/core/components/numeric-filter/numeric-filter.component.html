@@ -1,0 +1,22 @@
+<article
+  [ngClass]="{
+    'sat-numericFilter': true,
+    'sat-numericFilter--filled': filterData.state.isFilled
+  }">
+  <button (click)="onClickedClear()" class="sat-numericFilter__clearCTA santaBtn fal fa-eraser"></button>
+  <section class="sat-numericFilter__minInput">
+    <input
+      (ngModelChange)="onChangeMin($event)"
+      [(ngModel)]="filterData.data.minNumber"
+      type="text">
+  </section>
+  <section class="sat-numericFilter__midSymbol">
+    <i class="sat-numericFilter__midSymbol-content fal fa-wave-square"></i>
+  </section>
+  <section class="sat-numericFilter__maxInput">
+    <input
+      (ngModelChange)="onChangeMax($event)"
+      [(ngModel)]="filterData.data.maxNumber"
+      type="text">
+  </section>
+</article>
