@@ -7,8 +7,7 @@
           (click)="this.btnQuantityClick()"
           [ngClass]="{
             'sat-tradeObligorGraphPanel__graphSettings-markValue-btnQuantity': this.state.markValue.quantity === false,
-            'sat-tradeObligorGraphPanel__graphSettings-markValue-btnQuantity--selected': this.state.markValue.quantity === true,
-            'sat-tradeObligorGraphPanel__graphSettings-markValue-btnQuantity--disabled': this.state.metric.yield === true
+            'sat-tradeObligorGraphPanel__graphSettings-markValue-btnQuantity--selected': this.state.markValue.quantity === true
           }">
           Quantity
         </button>
@@ -16,8 +15,7 @@
           (click)="this.btnCS01Click()"
           [ngClass]="{
             'sat-tradeObligorGraphPanel__graphSettings-markValue-btnCS01': this.state.markValue.cS01 === false,
-            'sat-tradeObligorGraphPanel__graphSettings-markValue-btnCS01--selected': this.state.markValue.cS01 === true,
-            'sat-tradeObligorGraphPanel__graphSettings-markValue-btnCS01--disabled': this.state.metric.yield === true
+            'sat-tradeObligorGraphPanel__graphSettings-markValue-btnCS01--selected': this.state.markValue.cS01 === true
           }">
           CS01
         </button>

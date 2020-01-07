@@ -28,22 +28,12 @@
           background-color: $color_active;
           color: $font_color_inverse;
         }
-        &--disabled {
-          @include material('none');
-          background-color: $color_gray_4;
-          color: $color_gray_5;
-        }
       }
       &-btnCS01{
         &--selected {
           @include material('none');
           background-color: $color_active;
           color: $font_color_inverse;
-        }
-        &--disabled {
-          @include material('none');
-          background-color: $color_gray_4;
-          color: $color_gray_5;
         }
       }
     }

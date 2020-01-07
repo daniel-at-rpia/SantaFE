@@ -128,12 +128,8 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
 
           this.state.chartCategories.push(chartCategory);
         }
-        if (this.state.metric.spread) {
-          // Dispatch a the list of security IDs from the related Obligor in serverReturn. This will call to trade-center-panel, which will return marks for those we own.
-          if (securityIDsFromAnalysis) this.store$.dispatch(new TradeSecurityIDsFromAnalysisEvent(securityIDsFromAnalysis));
-        } else {
-          this.buildChart();
-        }
+        // Dispatch a the list of security IDs from the related Obligor in serverReturn. This will call to trade-center-panel, which will return marks for those we own.
+        if (securityIDsFromAnalysis) this.store$.dispatch(new TradeSecurityIDsFromAnalysisEvent(securityIDsFromAnalysis));
       }),
     ).subscribe();
 

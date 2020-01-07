@@ -142,19 +142,29 @@ export class GraphService {
         if (category.data.obligorCategoryDataItemDTO[dataItem].data.mark === null && mid !== null) {
           category.data.obligorCategoryDataItemDTO[dataItem].data.mark = mid.toLocaleString();
         }
-
-        // TODO: Create adhoc interface.
-        amChartsData.push({
-          name: category.data.obligorCategoryDataItemDTO[dataItem].data.name,
-          mid: mid,
-          mark: category.data.obligorCategoryDataItemDTO[dataItem].data.mark,
-          workoutTerm: category.data.obligorCategoryDataItemDTO[dataItem].data.workoutTerm,
-          positionCurrent: category.data.obligorCategoryDataItemDTO[dataItem].data.positionCurrent
-        })
+        if (mid !== null) {
+          // TODO: Create adhoc interface.
+          amChartsData.push({
+            name: category.data.obligorCategoryDataItemDTO[dataItem].data.name,
+            mid: mid,
+            mark: category.data.obligorCategoryDataItemDTO[dataItem].data.mark,
+            workoutTerm: category.data.obligorCategoryDataItemDTO[dataItem].data.workoutTerm,
+            positionCurrent: category.data.obligorCategoryDataItemDTO[dataItem].data.positionCurrent
+          })
+        }
       }
     }
 
-    this.generateObligorChartDumbells(state, category, amChartsData);
+    let dumbBellSeries: am4charts.ColumnSeries = this.generateObligorChartDumbells(state, category, amChartsData);
+    let curveSeries: am4charts.LineSeries = this.generateObligorChartTrendCurve(state, category, amChartsData);
+
+    dumbBellSeries.events.on("hidden", function() {
+      curveSeries.hide();
+    });
+    
+    dumbBellSeries.events.on("shown", function() {
+      curveSeries.show();
+    });
   }
 
   private generateObligorChartDumbells(state: TradeObligorGraphPanelState, category: ObligorChartCategoryBlock, amChartsData: any[]): am4charts.ColumnSeries {
@@ -164,8 +174,6 @@ export class GraphService {
     dumbBellseries.data = amChartsData;
     dumbBellseries.dataFields.valueX = "workoutTerm";
     dumbBellseries.dataFields.openValueY = "mid";
-    dumbBellseries.maxY = 10;
-    dumbBellseries.minY = 0;
 
     if (state.metric.spread || state.markValue.cS01 || state.markValue.quantity) {
       dumbBellseries.dataFields.valueY = "mark";
@@ -202,8 +210,8 @@ export class GraphService {
                               Current Position: {positionCurrent}</center>`;
       dumbBellseries.heatRules.push({
         target: markBullet.circle,
-        min: 5,
-        max: 20,
+        min: 20,
+        max: 30,
         property: "radius",
       });
     }
@@ -215,6 +223,7 @@ export class GraphService {
     midBullet.stroke = am4core.color(category.data.color).lighten(-0.3);
     midBullet.fill = am4core.color(category.data.color);
     midBullet.locationY = 1;
+    midBullet.circle.radius = 5;
     midBullet.tooltipHTML = `<center><b>{name}</b> </br>
                                 Mid: {mid}</br>`;
 
@@ -225,29 +234,25 @@ export class GraphService {
     return dumbBellseries;
   }
 
-  private generateObligorChartTrendCurve(category: ObligorChartCategoryBlock): am4charts.LineSeries {
+  public generateObligorChartTrendCurve(state: TradeObligorGraphPanelState, category: ObligorChartCategoryBlock, amChartsData: any[]): am4charts.LineSeries {
 
-    //TODO: This whole thing.
+    let curveSeries = state.obligorChart.series.push(new am4charts.LineSeries());
+    curveSeries.data = amChartsData;
+    curveSeries.dataFields.valueX = "workoutTerm";
+    curveSeries.dataFields.valueY = "mid";
+    curveSeries.strokeWidth = 2;
+    curveSeries.name = "Polynomial Regression";
+    curveSeries.tensionX = 0.8;
+    curveSeries.tensionY = 0.8;
+    curveSeries.stroke = am4core.color(category.data.color);
+    curveSeries.hiddenInLegend = true;
+    curveSeries.name = "CurveSeries";
 
-    //let curveData = [];
-    //for (var i = 0; i < obligorChartDTO.rawData.length; i++) {
-    //  curveData.push({ x: i, y: obligorChartDTO.rawData[i].spreadMid });
-    // }
+    var reg2 = curveSeries.plugins.push(new am4plugins_regression.Regression());
+    reg2.method = "polynomial";
+    reg2.reorder = true;
 
-    //let curveSeries = obligorChartDTO.chart.series.push(new am4charts.LineSeries());
-    //curveSeries.dataFields.categoryX = "x";
-    //curveSeries.dataFields.valueY = "y";
-    //curveSeries.strokeWidth = 2
-    //curveSeries.stroke = am4core.color(obligorChartDTO.colorScheme);
-    // curveSeries.hiddenInLegend = true;
-    //curveSeries.data = curveData;
-    //curveSeries.name = "CurveSeries";
-
-
-    //var reg2 = curveSeries.plugins.push(new am4plugins_regression.Regression());
-    //reg2.method = "polynomial";
-
-    return null;
+    return curveSeries;
   }
 
   public initializeObligorChartXAxis(state: TradeObligorGraphPanelState): am4charts.ValueAxis {
@@ -259,14 +264,14 @@ export class GraphService {
     xAxis.renderer.minGridDistance = 60;
 
     xAxis.extraMax = 0.05;
-    
+
     return xAxis;
   }
 
   public initializeObligorChartYAxis(state: TradeObligorGraphPanelState): am4charts.ValueAxis {
     let yAxis = state.obligorChart.yAxes.push(new am4charts.ValueAxis());
-    if(state.metric.spread) yAxis.title.text = "Spread";
-    if(state.metric.yield) yAxis.title.text = "Yield";
+    if (state.metric.spread) yAxis.title.text = "Spread";
+    if (state.metric.yield) yAxis.title.text = "Yield";
     yAxis.renderer.grid.template.strokeDasharray = "1,3";
     yAxis.min = 0;
     yAxis.extraMax = 0.1;
