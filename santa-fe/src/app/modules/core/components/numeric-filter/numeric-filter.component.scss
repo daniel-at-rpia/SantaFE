@@ -19,6 +19,7 @@
   &__minInput, &__maxInput {
     flex: 1 1 auto;
     &>input {
+      font-size: $font_size_small;
       width: 100%;
       min-width: 3rem;
     }
