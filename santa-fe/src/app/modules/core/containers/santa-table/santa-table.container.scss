@@ -57,16 +57,34 @@ $alt-background: $color_white;
     button {
       @include material('none');
       border-radius: inherit;
-      margin: inherit;
-      padding: inherit;
+      margin: unset;
+      padding: unset;
     }
     &-agGrid {
       height: 100%;
       width: 100%;
       &-header {
         justify-content: center;
-        .ag-header-cell-label {
-          padding-left: $spacing_x_small;
+        .ag-header-cell {
+          overflow: hidden;
+          &-label {
+            padding-left: $spacing_x_small;
+          }
+        }
+        &--numeric {
+          // .ag-header-cell-label {
+          //   width: 100%;
+          //   padding: 0;
+          // }
+          &.ag-header-cell-filtered {
+            background-color: $color_filter;
+            .ag-header-cell-text {
+              color: $font_color_inverse;
+            }
+            .ag-icon-filter {
+              color: $font_color_inverse;
+            }
+          }
         }
         &--detail {
           padding: 0!important;
@@ -93,7 +111,6 @@ $alt-background: $color_white;
         white-space: normal;
         word-break: break-word;
         text-align: right;
-        height: 40px;
         line-height: $line_height_x_small!important;
         border-width: 0!important;
         &--securityCard {

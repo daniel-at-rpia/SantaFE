@@ -39,6 +39,24 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: true,
     targetQuantLocationFromRow: 'bestSpreadQuote'
   },{
+    key: 'bestBid',
+    label: 'Best Bid',
+    attrName: 'bid',
+    blockAttrName: 'bestQuote',
+    underlineAttrName: 'bid',
+    readyStage: 3,
+    isFrontEndMetric: true,
+    active: true
+  },{
+    key: 'bestAsk',
+    label: 'Best Ask',
+    attrName: 'ask',
+    blockAttrName: 'bestQuote',
+    underlineAttrName: 'ask',
+    readyStage: 3,
+    isFrontEndMetric: true,
+    active: true
+  },{
     key: 'mark',
     label: 'Mark',
     attrName: 'mark',
@@ -52,6 +70,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: 'markDriver',
     underlineAttrName: 'markDriver',
     blockAttrName: 'mark',
+    isDataTypeText: true,
     readyStage: 2,
     active: false
   },{
@@ -60,6 +79,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: 'markChangedBy',
     underlineAttrName: 'markChangedBy',
     blockAttrName: 'mark',
+    isDataTypeText: true,
     readyStage: 2,
     active: false
   },{
@@ -68,6 +88,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: 'markChangedTime',
     underlineAttrName: 'markChangedTime',
     blockAttrName: 'mark',
+    isDataTypeText: true,
     readyStage: 2,
     active: false
   },{
@@ -206,7 +227,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: 'seniorityLevel',
     readyStage: 2,
     active: false,
-    isDataTypeText: false
+    isDataTypeText: true
   },{
     key: 'country',
     label: 'Country',
@@ -303,7 +324,8 @@ export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
 export const AGGRID_DETAIL_COLUMN_WIDTH = 50;
 export const AGGRID_SECURITY_CARD_COLUMN_WIDTH = 270;
 export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_quant + $spacing_small * 2 
-export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 100;
+export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 150;
+export const AGGRID_SIMPLE_TEXT_COLUMN_WIDTH = 150;
 export const AGGRID_ROW_HEIGHT = 40;
 export const AGGRID_HEADER_CLASS = 'santaTable__agGridTable-agGrid-header';
 export const AGGRID_ROW_CLASS = 'santaTable__agGridTable-agGrid-row';

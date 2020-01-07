@@ -1,0 +1,40 @@
+@import "global.scss";
+
+.sat-numericFilter {
+  $numericFilterBlockName: &;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &__clearCTA {
+    @include mix_alive('light');
+    flex: 0 0 auto;
+    transform: scale(0.01);
+    background-color: $color_kill;
+    color: $font_color_inverse;
+    margin-right: $spacing_small;
+    font-size: $font_size_small;
+    padding: $spacing_x_small;
+  }
+  &__minInput, &__maxInput {
+    flex: 1 1 auto;
+    &>input {
+      font-size: $font_size_small;
+      width: 100%;
+      min-width: 2rem;
+    }
+  }
+  &__midSymbol {
+    margin: 0 $spacing_small;
+    &-content {
+      color: $font_color_minor;
+    }
+  }
+  &--filled {
+    #{$numericFilterBlockName} {
+      &__clearCTA {
+        transform: scale(1);
+      }
+    }
+  }
+}

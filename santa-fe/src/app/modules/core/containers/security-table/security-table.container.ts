@@ -53,7 +53,7 @@ export class SecurityTable implements OnInit, OnChanges {
   @Input() securityTableMetrics: Array<SecurityTableMetricStub>;
   @Input() activeTriCoreMetric: string;
   @Output() selectedSecurityForAnalysis = new EventEmitter<SecurityDTO>();
-
+  @Output() clickedSortQuotesByMetric = new EventEmitter<ClickedSortQuotesByMetricEmitterParams>();
   @Output() nativeTableFetchQuotes = new EventEmitter<SecurityTableRowDTO>();
   @Output() nativeLoadTableHeader = new EventEmitter();
   @Output() nativePerformSort = new EventEmitter<SecurityTableHeaderDTO>();
@@ -182,7 +182,7 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   public onClickSortQuotesByMetric(payload: ClickedSortQuotesByMetricEmitterParams) {
-    payload.targetRow.state.expandViewSortByQuoteMetric = payload.targetRow.state.expandViewSortByQuoteMetric === payload.targetMetricLabel ? null : payload.targetMetricLabel;
+    this.clickedSortQuotesByMetric.emit(payload);
   }
 
   public onClickSelectForAnalysis(targetRow: SecurityTableRowDTO) {

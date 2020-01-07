@@ -556,6 +556,18 @@ export class UtilityService {
           targetRow.data.security,
           newCellDTO.data.quantComparerDTO,
         );
+        if (!!newCellDTO.data.quantComparerDTO) {
+          if (newCellDTO.data.quantComparerDTO.state.hasBid) {
+            targetSecurity.data.bestQuote.bid = newCellDTO.data.quantComparerDTO.data.bid.number;
+          } else {
+            targetSecurity.data.bestQuote.bid = null;
+          }
+          if (newCellDTO.data.quantComparerDTO.state.hasOffer) {
+            targetSecurity.data.bestQuote.ask = newCellDTO.data.quantComparerDTO.data.offer.number;
+          } else {
+            targetSecurity.data.bestQuote.ask = null;
+          }
+        }
         return newCellDTO;
       } else {
         let value;
