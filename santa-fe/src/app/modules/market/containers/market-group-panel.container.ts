@@ -367,7 +367,7 @@ export class MarketGroupPanel implements OnDestroy {
     //         let rawData;
     //         if (this.state.utility.visualizer.data.stats[0].sortHierarchy > 0 || this.state.utility.visualizer.data.stats[1].sortHierarchy > 0 || this.state.utility.visualizer.data.stats[2].sortHierarchy > 0) {
     //           rawData = serverReturn.find((eachRawGroup) => {
-    //             return eachRawGroup.groupName === eachGroup.data.name;
+    //             return eachRawGroup.name === eachGroup.data.name;
     //           });
     //         } else {
     //           rawData = serverReturn[fullyLoadedCount];

@@ -22,7 +22,7 @@ export const SecurityGroupList: Array<BESecurityGroupDTO> = [
       "weightField": "AmtOutstanding"
     },
     "numSecurities": 2,
-    "groupName": "CdsIndex|EUR|3Y",
+    "name": "CdsIndex|EUR|3Y",
     "metrics": {
       "tenor": "3Y",
       "propertyToNumSecurities": {
@@ -264,7 +264,7 @@ export const SecurityGroupList: Array<BESecurityGroupDTO> = [
       "weightField": "AmtOutstanding"
     },
     "numSecurities": 5,
-    "groupName": "CdsIndex|EUR|5Y",
+    "name": "CdsIndex|EUR|5Y",
     "metrics": {
       "tenor": "5Y",
       "propertyToNumSecurities": {
@@ -509,7 +509,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "weightField": ""
     },
     "numSecurities":12,
-    "groupName":"Bond|CAD|7Y",
+    "name":"Bond|CAD|7Y",
     "metrics":{
       "tenor":"7Y",
       "propertyToNumSecurities":{
@@ -1477,7 +1477,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "weightField": ""
     },
     "numSecurities":47,
-    "groupName":"Bond|CAD|2Y",
+    "name":"Bond|CAD|2Y",
     "metrics":{
       "tenor":"2Y",
       "propertyToNumSecurities":{
@@ -3721,7 +3721,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "weightField": ""
     },
     "numSecurities":153,
-    "groupName":"Bond|USD|2Y",
+    "name":"Bond|USD|2Y",
     "metrics":{
       "tenor":"2Y",
       "propertyToNumSecurities":{
@@ -8471,7 +8471,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "weightField": ""
     },
     "numSecurities":66,
-    "groupName":"Bond|USD|3Y",
+    "name":"Bond|USD|3Y",
     "metrics":{
       "tenor":"3Y",
       "propertyToNumSecurities":{
@@ -11539,7 +11539,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "weightField": ""
     },
     "numSecurities":38,
-    "groupName":"Bond|USD|10Y",
+    "name":"Bond|USD|10Y",
     "metrics":{
       "tenor":"10Y",
       "propertyToNumSecurities":{
@@ -13727,7 +13727,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "weightField": ""
     },
     "numSecurities":61,
-    "groupName":"Bond|USD|5Y",
+    "name":"Bond|USD|5Y",
     "metrics":{
       "tenor":"5Y",
       "propertyToNumSecurities":{
@@ -16955,7 +16955,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "weightField": ""
     },
     "numSecurities":18,
-    "groupName":"Bond|CAD|5Y",
+    "name":"Bond|CAD|5Y",
     "metrics":{
       "tenor":"5Y",
       "propertyToNumSecurities":{
@@ -18283,7 +18283,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "weightField": ""
     },
     "numSecurities":16,
-    "groupName":"Bond|USD|30Y",
+    "name":"Bond|USD|30Y",
     "metrics":{
       "tenor":"30Y",
       "propertyToNumSecurities":{
@@ -19651,7 +19651,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "weightField": ""
     },
     "numSecurities":20,
-    "groupName":"Bond|CAD|30Y",
+    "name":"Bond|CAD|30Y",
     "metrics":{
       "tenor":"30Y",
       "propertyToNumSecurities":{
@@ -20619,7 +20619,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "weightField": ""
     },
     "numSecurities":15,
-    "groupName":"Bond|CAD|3Y",
+    "name":"Bond|CAD|3Y",
     "metrics":{
       "tenor":"3Y",
       "propertyToNumSecurities":{
@@ -21827,7 +21827,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "weightField": ""
     },
     "numSecurities":12,
-    "groupName":"Bond|EUR|2Y",
+    "name":"Bond|EUR|2Y",
     "metrics":{
       "tenor":"2Y",
       "propertyToNumSecurities":{
@@ -22953,7 +22953,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "weightField": ""
     },
     "numSecurities":8,
-    "groupName":"Preferred|CAD|2Y",
+    "name":"Preferred|CAD|2Y",
     "metrics":{
       "tenor":"2Y",
       "propertyToNumSecurities":{
@@ -23493,7 +23493,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "weightField": ""
     },
     "numSecurities":10,
-    "groupName":"Bond|EUR|7Y",
+    "name":"Bond|EUR|7Y",
     "metrics":{
       "tenor":"7Y",
       "propertyToNumSecurities":{
@@ -24501,7 +24501,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "weightField": ""
     },
     "numSecurities":34,
-    "groupName":"Bond|USD|7Y",
+    "name":"Bond|USD|7Y",
     "metrics":{
       "tenor":"7Y",
       "propertyToNumSecurities":{
@@ -26854,7 +26854,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "weightField": ""
     },
     "numSecurities":12,
-    "groupName":"Bond|EUR|3Y",
+    "name":"Bond|EUR|3Y",
     "metrics":{
       "tenor":"3Y",
       "propertyToNumSecurities":{
@@ -28079,7 +28079,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "weightField": ""
     },
     "numSecurities":1,
-    "groupName":"Preferred|USD|3Y",
+    "name":"Preferred|USD|3Y",
     "metrics":{
       "tenor":"3Y",
       "propertyToNumSecurities":{
@@ -28407,7 +28407,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "weightField": ""
     },
     "numSecurities":14,
-    "groupName":"Bond|CAD|10Y",
+    "name":"Bond|CAD|10Y",
     "metrics":{
       "tenor":"10Y",
       "propertyToNumSecurities":{
@@ -29375,7 +29375,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "weightField": ""
     },
     "numSecurities":2,
-    "groupName":"Bond|GBP|5Y",
+    "name":"Bond|GBP|5Y",
     "metrics":{
       "tenor":"5Y",
       "propertyToNumSecurities":{
@@ -29823,7 +29823,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "weightField": ""
     },
     "numSecurities":7,
-    "groupName":"Loan|USD|7Y",
+    "name":"Loan|USD|7Y",
     "metrics":{
       "tenor":"7Y",
       "propertyToNumSecurities":{
@@ -30465,7 +30465,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "weightField": ""
     },
     "numSecurities":1,
-    "groupName":"Loan|USD|3Y",
+    "name":"Loan|USD|3Y",
     "metrics":{
       "tenor":"3Y",
       "propertyToNumSecurities":{
@@ -30761,7 +30761,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "weightField": ""
     },
     "numSecurities":3,
-    "groupName":"Preferred|CAD|5Y",
+    "name":"Preferred|CAD|5Y",
     "metrics":{
       "tenor":"5Y",
       "propertyToNumSecurities":{
@@ -31169,7 +31169,7 @@ export const SecurityGroupList2: Array<BESecurityGroupDTO> = [
       "weightField": ""
     },
     "numSecurities":9,
-    "groupName":"Bond|EUR|5Y",
+    "name":"Bond|EUR|5Y",
     "metrics":{
       "tenor":"5Y",
       "propertyToNumSecurities":{

@@ -191,7 +191,7 @@ export class UtilityService {
           return dtoInput.data.name.indexOf('Cds') >= 0;
         } else {
           const rawDataInput = input as BESecurityGroupDTO;
-          return rawDataInput.groupName.indexOf('Cds') >= 0;
+          return rawDataInput.name.indexOf('Cds') >= 0;
         }
       } else {
         if (input['data']) {
@@ -291,7 +291,7 @@ export class UtilityService {
         }
       };
       if (!!rawData) {
-        const isGroup = !!rawData['groupName'];
+        const isGroup = !!rawData['name'];
         const metricList = isGroup ? this.groupGroupMetricOptions : this.securityMetricOptions;
         metricList.forEach((eachMetric) => {
           let keyToRetrieveMetric = eachMetric.backendDtoAttrName;
