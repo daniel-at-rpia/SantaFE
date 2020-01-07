@@ -147,7 +147,7 @@ export class AgGridMiddleLayerService {
       newAgColumn.headerClass = `${AGGRID_HEADER_CLASS} ${AGGRID_HEADER_CLASS}--numeric ag-numeric-header`;
       newAgColumn.width = AGGRID_SIMPLE_NUM_COLUMN_WIDTH;
       newAgColumn.resizable = true;
-      newAgColumn.suppressMenu = true;
+      // newAgColumn.suppressMenu = true;
       newAgColumn.enableValue = true;
       newAgColumn.allowedAggFuncs = ['sum', 'avg'];
       newAgColumn.filter = "numericFilter";

@@ -353,6 +353,6 @@ export interface NumericFilterDTO extends BasicDTOStructure {
     floatingParams: SantaTableNumericFloatingFilterParams;
   }
   state: {
-
+    isFilled: boolean;
   }
 }

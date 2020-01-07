@@ -70,16 +70,28 @@ export class SantaTableNumericFilter implements  IFilterAngularComp {
       minNumber: floatingModel.data.minNumber === "" ? floatingModel.data.minNumber : parseFloat(floatingModel.data.minNumber as string),
       maxNumber: floatingModel.data.maxNumber === "" ? floatingModel.data.maxNumber : parseFloat(floatingModel.data.maxNumber as string)
     };
+    this.checkIsFilled();
     this.filterData.api.params.filterChangedCallback();
   }
 
   public onChangeMin(newValue): void {
     this.filterData.data.minNumber = newValue === "" ? newValue : parseFloat(newValue);
+    this.checkIsFilled();
     this.filterData.api.params.filterChangedCallback();
   }
 
   public onChangeMax(newValue): void {
     this.filterData.data.maxNumber = newValue === "" ? newValue : parseFloat(newValue);
+    this.checkIsFilled();
+    this.filterData.api.params.filterChangedCallback();
+  }
+
+  public onClickedClear() {
+    this.filterData.data = {
+      minNumber: "",
+      maxNumber: ""
+    };
+    this.checkIsFilled();
     this.filterData.api.params.filterChangedCallback();
   }
 
@@ -95,7 +107,16 @@ export class SantaTableNumericFilter implements  IFilterAngularComp {
         floatingParams: null
       },
       state: {
+        isFilled: false
       }
     };
+  }
+
+  private checkIsFilled() {
+    if (this.filterData.data.minNumber !== "" || this.filterData.data.maxNumber !== "") {
+      this.filterData.state.isFilled = true;
+    } else {
+      this.filterData.state.isFilled = false;
+    }
   }
 }

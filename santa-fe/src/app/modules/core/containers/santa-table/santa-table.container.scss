@@ -69,10 +69,10 @@ $alt-background: $color_white;
           padding-left: $spacing_x_small;
         }
         &--numeric {
-          .ag-header-cell-label {
-            width: 100%;
-            padding: 0;
-          }
+          // .ag-header-cell-label {
+          //   width: 100%;
+          //   padding: 0;
+          // }
           &.ag-header-cell-filtered {
             background-color: $color_filter;
             .ag-header-cell-text {

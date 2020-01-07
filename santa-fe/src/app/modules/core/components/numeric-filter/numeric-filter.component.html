@@ -1,4 +1,9 @@
-<article class="sat-numericFilter">
+<article
+  [ngClass]="{
+    'sat-numericFilter': true,
+    'sat-numericFilter--filled': filterData.state.isFilled
+  }">
+  <button (click)="onClickedClear()" class="sat-numericFilter__clearCTA santaBtn fal fa-eraser"></button>
   <section class="sat-numericFilter__minInput">
     <input
       (ngModelChange)="onChangeMin($event)"

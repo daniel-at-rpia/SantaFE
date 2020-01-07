@@ -21,14 +21,18 @@ export class NumericFilter {
   @Input() filterData: NumericFilterDTO;
   @Output() detectedMinChange = new EventEmitter<Number>();
   @Output() detectedMaxChange = new EventEmitter<Number>();
+  @Output() detectedClickedClear = new EventEmitter;
   constructor() { }
 
-  private onChangeMin(newValue): void {
-    console.log('test, send', newValue);
+  public onChangeMin(newValue): void {
     this.detectedMinChange.emit(newValue);
   }
 
-  private onChangeMax(newValue): void {
+  public onChangeMax(newValue): void {
     this.detectedMaxChange.emit(newValue);
+  }
+
+  public onClickedClear() {
+    !!this.filterData.state.isFilled && this.detectedClickedClear.emit();
   }
 }
