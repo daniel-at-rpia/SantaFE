@@ -122,17 +122,17 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
       const payload : PayloadGetSecurityGroupBasedOnSecurity = {
         source: "Default",
         identifier: this.state.quantVisualizer.targetSecurity.data.securityID,
-        santaGroupIdentifier: {},
+        groupIdentifier: {},
         tenorOptions: ["2Y", "3Y", "5Y", "7Y", "10Y", "30Y"]
       }
       this.state.quantVisualizer.groupByOptions.forEach((eachOption) => {
         if (eachOption.state.groupByActive) {
           const backendKey = this.utilityService.convertFEKey(eachOption.data.key);
-          payload.santaGroupIdentifier[backendKey] = [];
+          payload.groupIdentifier[backendKey] = [];
         }
       });
-      payload.santaGroupIdentifier['SecurityType'] = [];
-      payload.santaGroupIdentifier['CouponType'] = [];
+      payload.groupIdentifier['SecurityType'] = [];
+      payload.groupIdentifier['CouponType'] = [];
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getGroupFromSecurity, {req: 'POST'}, payload).pipe(
         first(),
         tap((serverReturn) => {
