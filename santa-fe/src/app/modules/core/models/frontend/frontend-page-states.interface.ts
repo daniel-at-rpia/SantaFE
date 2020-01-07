@@ -18,6 +18,7 @@ import {
 import { DefinitionConfiguratorEmitterParamsItem } from 'FEModels/frontend-adhoc-packages.interface';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
+import { NumberFloatingFilterComp } from 'ag-grid-community/dist/lib/filter/floatingFilter';
 
 export interface MarketState {
 }
@@ -131,6 +132,15 @@ export interface TradeObligorGraphPanelState {
   obligorName: string;
   obligorCurrency: string;
   securityTableRowDTOList: SecurityTableRowDTO[];
+  lookBackHours: number;
+  yAxis: {
+    start:number;
+    end:number;
+  }
+  xAxis: {
+    start:number;
+    end:number;
+  }
   metric: {
     spread:boolean;
     yield:boolean;
@@ -139,8 +149,6 @@ export interface TradeObligorGraphPanelState {
     cS01:boolean;
     quantity:boolean;
   }
-  xAxisData: number[];
-  yAxisData: number[];
   activeCharts: {
     srBond: boolean;
     subBond: boolean;
