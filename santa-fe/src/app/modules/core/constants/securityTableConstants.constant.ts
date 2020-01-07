@@ -39,6 +39,24 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: true,
     targetQuantLocationFromRow: 'bestSpreadQuote'
   },{
+    key: 'bestBid',
+    label: 'Best Bid',
+    attrName: 'bid',
+    blockAttrName: 'bestQuote',
+    underlineAttrName: 'bid',
+    readyStage: 3,
+    isFrontEndMetric: true,
+    active: true
+  },{
+    key: 'bestAsk',
+    label: 'Best Ask',
+    attrName: 'ask',
+    blockAttrName: 'bestQuote',
+    underlineAttrName: 'ask',
+    readyStage: 3,
+    isFrontEndMetric: true,
+    active: true
+  },{
     key: 'mark',
     label: 'Mark',
     attrName: 'mark',
@@ -306,7 +324,7 @@ export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
 export const AGGRID_DETAIL_COLUMN_WIDTH = 50;
 export const AGGRID_SECURITY_CARD_COLUMN_WIDTH = 270;
 export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_quant + $spacing_small * 2 
-export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 175;
+export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 150;
 export const AGGRID_SIMPLE_TEXT_COLUMN_WIDTH = 150;
 export const AGGRID_ROW_HEIGHT = 40;
 export const AGGRID_HEADER_CLASS = 'santaTable__agGridTable-agGrid-header';

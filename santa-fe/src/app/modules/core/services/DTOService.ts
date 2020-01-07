@@ -121,7 +121,11 @@ export class DTOService {
         positionHFInMM: 'n/a',
         positionNLF: 0,
         positionNLFInMM: 'n/a',
-        metricPack: this.utility.packMetricData(rawData)
+        metricPack: this.utility.packMetricData(rawData),
+        bestQuote: {
+          bid: null,
+          ask: null
+        }
       },
       state: {
         isSelected: false,
