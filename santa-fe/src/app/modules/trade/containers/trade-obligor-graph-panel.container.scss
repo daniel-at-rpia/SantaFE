@@ -17,16 +17,21 @@
       display: flex;
       &-text {
         padding-top: $spacing_x_small;
+        padding-right: $spacing_small;
         text-align: center;
         align-content: center;
       }
       &-btnQuantity{
-        margin-left: $spacing_small;
+        padding-left: $spacing_small;
         &--selected {
-          margin-left: $spacing_small;
           @include material('none');
           background-color: $color_active;
           color: $font_color_inverse;
+        }
+        &--disabled {
+          @include material('none');
+          background-color: $color_gray_4;
+          color: $color_gray_5;
         }
       }
       &-btnCS01{
@@ -35,20 +40,24 @@
           background-color: $color_active;
           color: $font_color_inverse;
         }
+        &--disabled {
+          @include material('none');
+          background-color: $color_gray_4;
+          color: $color_gray_5;
+        }
       }
     }
     &-metricValue {
       display: flex;
       &-text {
         padding-left: $spacing_small;
+        padding-right: $spacing_small;
         padding-top: $spacing_x_small;
         text-align: center;
         align-content: center;
       }
       &-btnSpread{
-        margin-left: $spacing_small;
         &--selected {
-          margin-left: $spacing_small;
           @include material('none');
           background-color: $color_active;
           color: $font_color_inverse;

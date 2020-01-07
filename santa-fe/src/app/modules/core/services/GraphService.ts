@@ -250,57 +250,27 @@ export class GraphService {
     return null;
   }
 
-  public initializeObligorChartAxes(state: TradeObligorGraphPanelState) {
+  public initializeObligorChartXAxis(state: TradeObligorGraphPanelState): am4charts.ValueAxis {
 
-    let xAxis = this.initializeObligorChartXAxis(state.obligorChart);
-    let yAxis = this.initializeObligorChartYAxis(state.obligorChart);
-
-    let yStart = yAxis.minY;
-    let yEnd = yAxis.maxY;
-
-    let xStart = xAxis.minX;
-    let xEnd = xAxis.maxX;
-
-    yAxis.events.on("startchanged", function(ev) {
-
-      var yStart = ev.target.min;
-      var yEnd = ev.target.max;
-    });
-
-    //yAxis.events.on("endchanged", dateAxisChanged);
-
-    let buttonContainer = state.obligorChart.plotContainer.createChild(am4core.Container);
-    buttonContainer.shouldClone = false;
-    buttonContainer.align = "right";
-    buttonContainer.valign = "top";
-    buttonContainer.zIndex = Number.MAX_SAFE_INTEGER;
-    buttonContainer.marginTop = 5;
-    buttonContainer.marginRight = 5;
-    buttonContainer.layout = "horizontal";
-
-    var zoomInButton = buttonContainer.createChild(am4core.Button);
-    zoomInButton.label.text = "-";
-    zoomInButton.events.on("hit", function(ev) {
-      console.log(state.obligorChart.series.values)
-      xAxis.zoomToValues(xStart, xEnd);
-      yAxis.zoomToValues(yStart, yEnd);
-    });
-
-  }
-
-  private initializeObligorChartXAxis(chart: am4charts.XYChart): am4charts.ValueAxis {
-
-    let xAxis = chart.xAxes.push(new am4charts.ValueAxis());
+    let xAxis = state.obligorChart.xAxes.push(new am4charts.ValueAxis());
     xAxis.renderer.grid.template.strokeDasharray = "1,3";
     xAxis.title.text = "Tenor";
     xAxis.min = 0;
+    xAxis.renderer.minGridDistance = 60;
+
+    xAxis.extraMax = 0.05;
+    
     return xAxis;
   }
 
-  private initializeObligorChartYAxis(chart: am4charts.XYChart): am4charts.ValueAxis {
-    let yAxis = chart.yAxes.push(new am4charts.ValueAxis());
-    yAxis.title.text = "Spread";
+  public initializeObligorChartYAxis(state: TradeObligorGraphPanelState): am4charts.ValueAxis {
+    let yAxis = state.obligorChart.yAxes.push(new am4charts.ValueAxis());
+    if(state.metric.spread) yAxis.title.text = "Spread";
+    if(state.metric.yield) yAxis.title.text = "Yield";
+    yAxis.renderer.grid.template.strokeDasharray = "1,3";
     yAxis.min = 0;
+    yAxis.extraMax = 0.1;
+
     return yAxis;
   }
   public clearGraphSeries(chart: am4charts.XYChart) {

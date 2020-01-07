@@ -16,6 +16,7 @@ import { TradeObligorGraphPanelState } from 'FEModels/frontend-page-states.inter
 import { ObligorCategoryDataItemBlock } from 'FEModels/frontend-blocks.interface';
 import { ObligorChartCategoryColorScheme } from 'App/modules/core/constants/colorSchemes.constant';
 import { BESingleBestQuoteDTO } from 'App/modules/core/models/backend/backend-models.interface';
+import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 
 @Component({
   selector: 'trade-obligor-graph-panel',
@@ -58,12 +59,12 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
   }
 
   private setObligorSecurityID(data: SecurityDTO) {
-    if(data) this.state.obligorSecurityID = data.data.securityID;
+    if (data) this.state.obligorSecurityID = data.data.securityID;
     if (this.state.obligorSecurityID) this.fetchSecurityIDs();
   }
 
   public ngOnDestroy() {
-    if(this.state.obligorChart) this.state.obligorChart.dispose();
+    if (this.state.obligorChart) this.state.obligorChart.dispose();
     this.initializeState();
   }
 
@@ -98,7 +99,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
               let spreadMid = this.addBestMidToChartCategory(serverReturn[curve].bestQuotes[security].bestSpreadQuote);
               let yieldMid = this.addBestMidToChartCategory(serverReturn[curve].bestQuotes[security].bestYieldQuote);
 
-              if (yieldMid||spreadMid) {
+              if (yieldMid || spreadMid) {
 
                 if (this.state.obligorSecurityID === security) chartCategory.state.isHidden = false;
 
@@ -127,12 +128,10 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
 
           this.state.chartCategories.push(chartCategory);
         }
-        if(this.state.metric.spread)
-        {
+        if (this.state.metric.spread) {
           // Dispatch a the list of security IDs from the related Obligor in serverReturn. This will call to trade-center-panel, which will return marks for those we own.
-          if(securityIDsFromAnalysis) this.store$.dispatch(new TradeSecurityIDsFromAnalysisEvent(securityIDsFromAnalysis));
-        } else
-        {
+          if (securityIDsFromAnalysis) this.store$.dispatch(new TradeSecurityIDsFromAnalysisEvent(securityIDsFromAnalysis));
+        } else {
           this.buildChart();
         }
       }),
@@ -154,15 +153,15 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
   private addBestMidToChartCategory(bEBestQuoteDTO: BESingleBestQuoteDTO): number {
     let mid: number = null;
     let rounding: number;
-    
-    if(this.state.metric.spread) rounding = TriCoreMetricConfig.Spread.rounding;
+
+    if (this.state.metric.spread) rounding = TriCoreMetricConfig.Spread.rounding;
     else if (this.state.metric.yield) rounding = TriCoreMetricConfig.Spread.rounding;
 
     if (bEBestQuoteDTO.bidQuoteValue !== null && bEBestQuoteDTO.askQuoteValue !== null) mid = (bEBestQuoteDTO.bidQuoteValue + bEBestQuoteDTO.askQuoteValue) / 2;
     else if (bEBestQuoteDTO.bidQuoteValue === null && bEBestQuoteDTO.askQuoteValue > 0) mid = bEBestQuoteDTO.askQuoteValue;
     else if (bEBestQuoteDTO.bidQuoteValue > 0 && bEBestQuoteDTO.askQuoteValue === null) mid = bEBestQuoteDTO.bidQuoteValue;
 
-    if(this.state.metric.spread) mid = this.utility.round(mid, rounding);
+    if (this.state.metric.spread) mid = this.utility.round(mid, rounding);
 
     return mid;
   }
@@ -195,8 +194,63 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
       // Initialize the chart as XY.
       this.state.obligorChart = am4core.create("chartdiv", am4charts.XYChart);
 
-      // Initialize axes for the chart.
-      this.graphService.initializeObligorChartAxes(this.state);
+      let yStart: number = null;
+      let yEnd: number = null;
+      let xStart: number = null;
+      let xEnd: number = null;
+
+      let xAxis = this.graphService.initializeObligorChartXAxis(this.state);
+      let yAxis = this.graphService.initializeObligorChartYAxis(this.state);
+
+      yAxis.events.on("startchanged", function (ev) {
+        if (yStart === null && yEnd === null) {
+          yStart = ev.target.minZoomed;
+          yEnd = ev.target.maxZoomed;
+        }
+      });
+
+      yAxis.events.on("endchanged", function (ev) {
+        if (yStart === null && yEnd === null) {
+          yStart = ev.target.minZoomed;
+          yEnd = ev.target.maxZoomed;
+        }
+      });
+
+      xAxis.events.on("startchanged", function (ev) {
+        if (xStart === null && xEnd === null) {
+          xStart = ev.target.minZoomed;
+          xEnd = ev.target.maxZoomed;
+        }
+      });
+
+      xAxis.events.on("endchanged", function (ev) {
+        if (xStart === null && xEnd === null) {
+          xStart = ev.target.minZoomed;
+          xEnd = ev.target.maxZoomed;
+        }
+      });
+
+
+      let buttonContainer = this.state.obligorChart.plotContainer.createChild(am4core.Container);
+      buttonContainer.shouldClone = false;
+      buttonContainer.align = "left";
+
+      var zoomInButton = buttonContainer.createChild(am4core.Button);
+      zoomInButton.label.text = "-";
+      zoomInButton.events.on("hit", function (ev) {
+        if (xStart !== null && xEnd !== null ) {
+          xAxis.zoomToValues(xStart, xEnd);
+          xStart = null;
+          xEnd = null;
+        }
+
+        if(yStart !== null && yEnd !== null)
+        {
+          yAxis.zoomToValues(yStart, yEnd);
+          yStart = null;
+          yEnd = null;
+        }
+      });
 
       // TODO: This part is incomplete. Right now this chart only handles quantity.
       // Each chart category DTO has its own "isMarkHidden" field which should be used.
@@ -206,17 +260,31 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
       }
 
       // Draw each chart category.
-      this.state.chartCategories.forEach((eachCategory) =>
-      {
+      this.state.chartCategories.forEach((eachCategory) => {
         if (eachCategory.data.obligorCategoryDataItemDTO.length > 0) this.graphService.addCategoryToObligorGraph(eachCategory, this.state);
       });
 
       // Add legend for each chart type.
       this.state.obligorChart.legend = new am4charts.Legend();
+      this.state.obligorChart.legend.useDefaultMarker = true;
+      var marker = this.state.obligorChart.legend.markers.template.children.getIndex(0);
+      marker.strokeWidth = 2;
+      marker.strokeOpacity = 1;
+      marker.stroke = am4core.color("#ccc");
+
+      this.state.obligorChart.legend.events.on("hit", function (ev) {
+        xStart = null;
+        xEnd = null;
+        yStart = null;
+        yEnd = null;
+      });
 
       // Add a cursor to the chart, with zoom behaviour. 
       this.state.obligorChart.cursor = new am4charts.XYCursor();
       this.state.obligorChart.cursor.behavior = "zoomXY";
+      this.state.obligorChart.cursor.lineX.disabled = true;
+      this.state.obligorChart.cursor.lineY.disabled = true;
+      this.state.obligorChart.zoomOutButton.disabled = true;
     });
   }
 
@@ -253,9 +321,6 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     this.state.metric.yield = false;
     if (this.state.metric.spread === false) this.state.metric.spread = true;
 
-    let isMarkHidden: boolean = true;
-    if (this.state.markValue.quantity) isMarkHidden = false
-
     this.state.obligorChart.dispose();
     this.state.yAxisData = [];
     this.state.xAxisData = [];
@@ -265,10 +330,6 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
   public btnYieldClick() {
     this.state.metric.spread = false;
     if (this.state.metric.yield === false) this.state.metric.yield = true;
-
-    // Yield has no mark.
-    this.state.markValue.cS01 = false;
-    this.state.markValue.quantity = false;
 
     this.state.obligorChart.dispose();
     this.state.yAxisData = [];
