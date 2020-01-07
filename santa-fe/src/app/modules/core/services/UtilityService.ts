@@ -291,7 +291,7 @@ export class UtilityService {
         }
       };
       if (!!rawData) {
-        const isGroup = !!rawData['name'];
+        const isGroup = !!rawData['groupIdentifier'];
         const metricList = isGroup ? this.groupGroupMetricOptions : this.securityMetricOptions;
         metricList.forEach((eachMetric) => {
           let keyToRetrieveMetric = eachMetric.backendDtoAttrName;
