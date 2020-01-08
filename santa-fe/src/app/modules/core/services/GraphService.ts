@@ -240,10 +240,10 @@ export class GraphService {
     let amChartsData: any[] = this.buildObligorChartData(category, state);
 
     // Create a dumbbell series.
-    let dumbBellSeries: am4charts.ColumnSeries = this.createObligorChartDumbells(state, category, amChartsData);
+    let dumbBellSeries: am4charts.ColumnSeries = this.buildObligorChartDumbells(state, category, amChartsData);
 
     // Create a trend curve. Work in Progress.
-    let curveSeries: am4charts.LineSeries = this.createObligorChartTrendCurve(state, category, amChartsData);
+    let curveSeries: am4charts.LineSeries = this.buildObligorChartTrendCurve(state, category, amChartsData);
 
     // Hide the curve line when the coresponding dumbbell series is hidden.
     dumbBellSeries.events.on("hidden", function () {
@@ -403,7 +403,7 @@ export class GraphService {
     curveSeries.dataFields.valueX = "workoutTerm";
     curveSeries.dataFields.valueY = "mid";
     curveSeries.strokeWidth = 2;
-    curveSeries.name = "Polynomial Regression";
+    curveSeries.name = "Regression";
     curveSeries.tensionX = 0.8;
     curveSeries.tensionY = 0.8;
     curveSeries.stroke = am4core.color(category.data.color);
