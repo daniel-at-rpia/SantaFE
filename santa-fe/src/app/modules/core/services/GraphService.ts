@@ -11,7 +11,6 @@ import * as am4charts from "@amcharts/amcharts4/charts";
 import * as am4plugins_regression from "@amcharts/amcharts4/plugins/regression";
 import { TradeObligorGraphPanelState } from 'FEModels/frontend-page-states.interface';
 import { first } from '@amcharts/amcharts4/.internal/core/utils/Array';
-import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 
 
 @Injectable()
@@ -166,7 +165,7 @@ export class GraphService {
     this.createObligorChartResetButton(state, yAxis, xAxis);
 
     // Initialize trigger events for chart legeng
-    this.initializeObligorChartLengengTriggerEvents(state);
+    this.initializeObligorChartLengendTriggerEvents(state);
 
     // Add a cursor to the chart, with zoom behaviour. 
     state.obligorChart.cursor = new am4charts.XYCursor();
@@ -440,7 +439,7 @@ export class GraphService {
     return yAxis;
   }
 
-  private initializeObligorChartLengengTriggerEvents(state: TradeObligorGraphPanelState)
+  private initializeObligorChartLengendTriggerEvents(state: TradeObligorGraphPanelState)
   {
     // When the legend is clicked, reset the axis zoom scope.
     state.obligorChart.legend.events.on("hit", function (ev) {
