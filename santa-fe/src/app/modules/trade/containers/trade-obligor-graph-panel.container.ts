@@ -121,7 +121,8 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
                     yieldMid: yieldMid,
                     mark: null,
                     workoutTerm: serverReturn[curve].securities[security].metrics.workoutTerm,
-                    positionCurrent: null
+                    positionCurrentQuantity: null,
+                    positionCurrentCS01: null
                   },
                   state: {}
                 }
@@ -159,13 +160,14 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     let rounding: number;
 
     if (this.state.metric.spread) rounding = TriCoreMetricConfig.Spread.rounding;
-    else if (this.state.metric.yield) rounding = TriCoreMetricConfig.Spread.rounding;
 
     if (bEBestQuoteDTO.bidQuoteValue !== null && bEBestQuoteDTO.askQuoteValue !== null) mid = (bEBestQuoteDTO.bidQuoteValue + bEBestQuoteDTO.askQuoteValue) / 2;
     else if (bEBestQuoteDTO.bidQuoteValue === null && bEBestQuoteDTO.askQuoteValue > 0) mid = bEBestQuoteDTO.askQuoteValue;
     else if (bEBestQuoteDTO.bidQuoteValue > 0 && bEBestQuoteDTO.askQuoteValue === null) mid = bEBestQuoteDTO.bidQuoteValue;
 
-    if (this.state.metric.spread) mid = this.utility.round(mid, rounding);
+    if(bEBestQuoteDTO.quoteMetric.toString() === "Spread"){
+      mid = this.utility.round(mid, rounding);
+    } 
 
     return mid;
   }
@@ -180,7 +182,8 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
             if (this.state.metric.spread) {
               eachCategoryItem.data.mark = eachSecurity.data.mark.mark;
             }
-            eachCategoryItem.data.positionCurrent = eachSecurity.data.positionCurrent;
+            eachCategoryItem.data.positionCurrentQuantity = eachSecurity.data.positionCurrent;
+            eachCategoryItem.data.positionCurrentCS01 = eachSecurity.data.cs01Local;
           }
         })
       })
@@ -195,7 +198,27 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     if (this.state.markValue.cS01) this.state.markValue.cS01 = false;
     else if (this.state.markValue.cS01 === false) this.state.markValue.cS01 = true;
 
-    // TODO: CS01 is not yet supported.
+    let isMarkHidden: boolean = true;
+    if (this.state.markValue.cS01) isMarkHidden = false
+    for (let seriesIndex in this.state.obligorChart.series.values) {
+      for(let chartCategory in this.state.chartCategories)
+      {
+        if(this.state.obligorChart.series.values[seriesIndex].name == this.state.chartCategories[chartCategory].data.name)
+        {
+          this.state.chartCategories[chartCategory].state.isHidden = this.state.obligorChart.series.values[seriesIndex].isHidden;
+          this.state.chartCategories[chartCategory].state.isMarkHidden = isMarkHidden;
+        }
+      }
+    }
+
+    this.state.obligorChart = this.graphService.clearGraphSeries(this.state.obligorChart);
+
+    // Generate a graph for each data type, sending in the raw data,  the color scheme and the name.
+    for (let category in this.state.chartCategories) {
+      if (this.state.chartCategories[category].data.obligorCategoryDataItemDTO.length > 0) this.graphService.addCategoryToObligorGraph(this.state.chartCategories[category], this.state);
+    }
+
+    this.graphService.zoomAxesToCurrentState(this.state);
   }
 
   public btnQuantityClick() {
@@ -205,10 +228,15 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
 
     let isMarkHidden: boolean = true;
     if (this.state.markValue.quantity) isMarkHidden = false
-
-    for (let categoryIndex in this.state.obligorChart.series.values) {
-      this.state.chartCategories[categoryIndex].state.isHidden = this.state.obligorChart.series.values[categoryIndex].isHidden;
-      this.state.chartCategories[categoryIndex].state.isMarkHidden = isMarkHidden;
+    for (let seriesIndex in this.state.obligorChart.series.values) {
+      for(let chartCategory in this.state.chartCategories)
+      {
+        if(this.state.obligorChart.series.values[seriesIndex].name == this.state.chartCategories[chartCategory].data.name)
+        {
+          this.state.chartCategories[chartCategory].state.isHidden = this.state.obligorChart.series.values[seriesIndex].isHidden;
+          this.state.chartCategories[chartCategory].state.isMarkHidden = isMarkHidden;
+        }
+      }
     }
 
     this.state.obligorChart = this.graphService.clearGraphSeries(this.state.obligorChart);
@@ -217,6 +245,8 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     for (let category in this.state.chartCategories) {
       if (this.state.chartCategories[category].data.obligorCategoryDataItemDTO.length > 0) this.graphService.addCategoryToObligorGraph(this.state.chartCategories[category], this.state);
     }
+    
+    this.graphService.zoomAxesToCurrentState(this.state);
   }
 
   public btnSpreadClick() {
@@ -224,7 +254,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     if (this.state.metric.spread === false) this.state.metric.spread = true;
 
     let isMarkHidden: boolean = true;
-    if (this.state.markValue.quantity) isMarkHidden = false
+    if (this.state.markValue.cS01) isMarkHidden = false
     for (let seriesIndex in this.state.obligorChart.series.values) {
       for(let chartCategory in this.state.chartCategories)
       {

@@ -93,6 +93,7 @@ export class DTOService {
         primaryPmName: null,
         backupPmName: null,
         researchName: null,
+        cs01Local: null,
         owner: [],
         mark: {
           mark: null,
@@ -150,6 +151,7 @@ export class DTOService {
     dto.data.mark.markDriver = targetPortfolio.mark.driver;
     dto.data.mark.markChangedBy = targetPortfolio.mark.user;
     dto.data.mark.markChangedTime = targetPortfolio.mark.enteredTime;
+    dto.data.cs01Local = targetPortfolio.cs01Local;
     dto.data.owner = [];
     !!targetPortfolio.primaryPmName && dto.data.owner.push(targetPortfolio.primaryPmName);
     !!targetPortfolio.backupPmName && dto.data.owner.push(targetPortfolio.backupPmName);
@@ -830,7 +832,8 @@ export class DTOService {
           spreadMid: null, 
           yieldMid: null,
           workoutTerm: null,
-          positionCurrent: null
+          positionCurrentQuantity: null,
+          positionCurrentCS01: null
         },
         state: {}
       }

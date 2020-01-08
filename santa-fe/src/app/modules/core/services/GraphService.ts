@@ -130,9 +130,7 @@ export class GraphService {
 
   public buildObligorChart(state: TradeObligorGraphPanelState) {
 
-
     am4core.options.autoSetClassName = true;
-    am4core.useTheme(am4themes_animated);
 
     // Initialize the chart as XY.
     state.obligorChart = am4core.create("chartdiv", am4charts.XYChart);
@@ -245,7 +243,6 @@ export class GraphService {
       var delta = diff * 0.2;
       xAxis.zoomToValues(xAxis.minZoomed - delta, xAxis.maxZoomed + delta);
     });
-
     // Add a cursor to the chart, with zoom behaviour. 
     state.obligorChart.cursor = new am4charts.XYCursor();
     state.obligorChart.cursor.behavior = "panXY";
@@ -257,6 +254,19 @@ export class GraphService {
 
   }
 
+  public zoomAxesToCurrentState(state: TradeObligorGraphPanelState)
+  {
+    
+    if(state.xAxis.start !== null && state.xAxis.end !== null )
+    {
+      state.obligorChart.xAxes.values[0].zoomToIndexes(state.xAxis.start, state.xAxis.end);
+    }
+    if(state.yAxis.start !== null && state.yAxis.end !== null )
+    {
+      state.obligorChart.yAxes.values[0].zoomToIndexes(state.yAxis.start, state.yAxis.end);
+    }
+
+  }
   public addCategoryToObligorGraph(category: ObligorChartCategoryBlock, state: TradeObligorGraphPanelState) {
     // Create data array that can be handled by amCharts from out category DataItems.
     let amChartsData: any[] = this.buildObligorChartData(category, state);
@@ -306,7 +316,8 @@ export class GraphService {
               mid: mid,
               mark: mark,
               workoutTerm: category.data.obligorCategoryDataItemDTO[dataItem].data.workoutTerm,
-              positionCurrent: category.data.obligorCategoryDataItemDTO[dataItem].data.positionCurrent,
+              positionCurrentQuantity: category.data.obligorCategoryDataItemDTO[dataItem].data.positionCurrentQuantity,
+              positionCurrentCS01: category.data.obligorCategoryDataItemDTO[dataItem].data.positionCurrentCS01,
               tooltipMark: category.data.obligorCategoryDataItemDTO[dataItem].data.mark
             })
           }
@@ -317,7 +328,8 @@ export class GraphService {
             mid: mid,
             mark: mid,
             workoutTerm: category.data.obligorCategoryDataItemDTO[dataItem].data.workoutTerm,
-            positionCurrent: category.data.obligorCategoryDataItemDTO[dataItem].data.positionCurrent,
+            positionCurrentQuantity: category.data.obligorCategoryDataItemDTO[dataItem].data.positionCurrentQuantity,
+            positionCurrentCS01: category.data.obligorCategoryDataItemDTO[dataItem].data.positionCurrentCS01,
             tooltipMark: category.data.obligorCategoryDataItemDTO[dataItem].data.mark
           })
         }
@@ -326,12 +338,20 @@ export class GraphService {
     return amChartsData;
   }
 
-  private buildToolObligorChartToolTip():string{
+  private buildToolObligorChartToolTipCS01():string{
     return `<center><b>{name}</b> </br>
     Mid: {mid} </br>
     Mark: {tooltipMark}</br>
-    Current Position: {positionCurrent}</center>`;
+    Current Position: {positionCurrentCS01}</center>`;
   }
+
+  private buildToolObligorChartToolTipQuantity():string{
+    return `<center><b>{name}</b> </br>
+    Mid: {mid} </br>
+    Mark: {tooltipMark}</br>
+    Current Position: {positionCurrentQuantity}</center>`;
+  }
+
   private generateObligorChartDumbells(state: TradeObligorGraphPanelState, category: ObligorChartCategoryBlock, amChartsData: any[]): am4charts.ColumnSeries {
 
     // Create the column representing the mark discrepency.
@@ -346,7 +366,8 @@ export class GraphService {
     dumbBellseries.hidden = category.state.isHidden;
     dumbBellseries.sequencedInterpolation = true;
     dumbBellseries.columns.template.width = 3;
-    dumbBellseries.dataFields.value = "positionCurrent";
+    if(state.markValue.cS01)dumbBellseries.dataFields.value = "positionCurrentCS01";
+    else if(state.markValue.quantity)dumbBellseries.dataFields.value = "positionCurrentQuantity";
     dumbBellseries.hiddenState.transitionDuration = 0;
     dumbBellseries.defaultState.transitionDuration = 0;
     if (state.metric.spread || state.markValue.cS01 || state.markValue.quantity) {
@@ -362,7 +383,8 @@ export class GraphService {
     columnTemplate.strokeWidth = 1;
     columnTemplate.strokeOpacity = 1;
     columnTemplate.stroke = am4core.color(category.data.color);
-    columnTemplate.tooltipHTML = this.buildToolObligorChartToolTip();
+    if(state.markValue.cS01) columnTemplate.tooltipHTML = this.buildToolObligorChartToolTipCS01();
+    else if(state.markValue.quantity) columnTemplate.tooltipHTML = this.buildToolObligorChartToolTipQuantity();
     columnTemplate.hiddenState.transitionDuration = 0;
     columnTemplate.defaultState.transitionDuration = 0;
     let markDot = dumbBellseries.bullets.push(new am4charts.CircleBullet());
@@ -375,7 +397,8 @@ export class GraphService {
       markBullet.circle.strokeOpacity = 1;
       markBullet.strokeOpacity = 1;
       markBullet.nonScalingStroke = true;
-      markBullet.tooltipHTML = this.buildToolObligorChartToolTip();
+      if(state.markValue.cS01) markBullet.tooltipHTML = this.buildToolObligorChartToolTipCS01();
+      else if(state.markValue.quantity) markBullet.tooltipHTML = this.buildToolObligorChartToolTipQuantity();
       markBullet.hiddenState.transitionDuration = 0;
       markBullet.defaultState.transitionDuration = 0;
       dumbBellseries.heatRules.push({
@@ -394,7 +417,8 @@ export class GraphService {
     midBullet.fill = am4core.color(category.data.color);
     midBullet.locationY = 1;
     midBullet.circle.radius = 5;
-    midBullet.tooltipHTML = this.buildToolObligorChartToolTip();
+    if(state.markValue.cS01) midBullet.tooltipHTML = this.buildToolObligorChartToolTipCS01();
+    else if(state.markValue.quantity) midBullet.tooltipHTML = this.buildToolObligorChartToolTipQuantity();
     midBullet.hiddenState.transitionDuration = 0;
     midBullet.defaultState.transitionDuration = 0;
     dumbBellseries.events.on("hidden", function () {
@@ -416,7 +440,6 @@ export class GraphService {
     curveSeries.tensionY = 0.8;
     curveSeries.stroke = am4core.color(category.data.color);
     curveSeries.hiddenInLegend = true;
-    curveSeries.hidden = true;
     curveSeries.name = "CurveSeries";
     curveSeries.hiddenState.transitionDuration = 0;
     curveSeries.defaultState.transitionDuration = 0;
