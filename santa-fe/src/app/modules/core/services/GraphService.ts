@@ -11,6 +11,7 @@ import * as am4charts from "@amcharts/amcharts4/charts";
 import * as am4plugins_regression from "@amcharts/amcharts4/plugins/regression";
 import { TradeObligorGraphPanelState } from 'FEModels/frontend-page-states.interface';
 import { first } from '@amcharts/amcharts4/.internal/core/utils/Array';
+import { is } from '@amcharts/amcharts4/.internal/themes/ITheme';
 
 
 @Injectable()
@@ -222,15 +223,12 @@ export class GraphService {
 
   }
 
-  public zoomObligorChartAxesToCurrentState(state: TradeObligorGraphPanelState)
-  {
-    
-    if(state.xAxis.start !== null && state.xAxis.end !== null )
-    {
+  public zoomObligorChartAxesToCurrentState(state: TradeObligorGraphPanelState) {
+
+    if (state.xAxis.start !== null && state.xAxis.end !== null) {
       state.obligorChart.xAxes.values[0].zoomToIndexes(state.xAxis.start, state.xAxis.end);
     }
-    if(state.yAxis.start !== null && state.yAxis.end !== null )
-    {
+    if (state.yAxis.start !== null && state.yAxis.end !== null) {
       state.obligorChart.yAxes.values[0].zoomToIndexes(state.yAxis.start, state.yAxis.end);
     }
 
@@ -256,8 +254,7 @@ export class GraphService {
     });
   }
 
-  private buildObligorChartData(category: ObligorChartCategoryBlock, state: TradeObligorGraphPanelState): any[]
-  {
+  private buildObligorChartData(category: ObligorChartCategoryBlock, state: TradeObligorGraphPanelState): any[] {
     let amChartsData: any[] = [];
     let mid: number;
     let mark: string;
@@ -267,59 +264,46 @@ export class GraphService {
       if (state.metric.spread) mid = category.data.obligorCategoryDataItemDTO[dataItem].data.spreadMid;
       else if (state.metric.yield) mid = category.data.obligorCategoryDataItemDTO[dataItem].data.yieldMid;
 
+
       if (mid !== 0) {
         // The dumbbell chart will not work if the mark is null. If it is, we will set it to the value of mid to be "hidden" behind it.
         if (category.data.obligorCategoryDataItemDTO[dataItem].data.mark === null && mid !== null) {
           mark = mid.toString();
         }
-        else
-        {
+        else {
           mark = category.data.obligorCategoryDataItemDTO[dataItem].data.mark;
         }
+        
         if (mid !== null)
-          if (state.metric.spread) {
-            // TODO: Create adhoc interface.
-            amChartsData.push({
-              name: category.data.obligorCategoryDataItemDTO[dataItem].data.name,
-              mid: mid,
-              mark: mark,
-              workoutTerm: category.data.obligorCategoryDataItemDTO[dataItem].data.workoutTerm,
-              positionCurrentQuantity: category.data.obligorCategoryDataItemDTO[dataItem].data.positionCurrentQuantity,
-              positionCurrentCS01: category.data.obligorCategoryDataItemDTO[dataItem].data.positionCurrentCS01,
-              tooltipMark: category.data.obligorCategoryDataItemDTO[dataItem].data.mark
-            })
-          }
-        //This is temporary. Need to figure out how to handle marks with Yield.
-        if (state.metric.yield) {
+          // TODO: Create adhoc interface.
           amChartsData.push({
             name: category.data.obligorCategoryDataItemDTO[dataItem].data.name,
             mid: mid,
-            mark: mid,
+            mark: mark,
             workoutTerm: category.data.obligorCategoryDataItemDTO[dataItem].data.workoutTerm,
             positionCurrentQuantity: category.data.obligorCategoryDataItemDTO[dataItem].data.positionCurrentQuantity,
             positionCurrentCS01: category.data.obligorCategoryDataItemDTO[dataItem].data.positionCurrentCS01,
             tooltipMark: category.data.obligorCategoryDataItemDTO[dataItem].data.mark
           })
-        }
       }
     }
     return amChartsData;
   }
 
-  private buildToolObligorChartToolTipCS01():string{
+  private buildToolObligorChartToolTipCS01(): string {
     return `<center><b>{name}</b> </br>
     Mid: {mid} </br>
     Mark: {tooltipMark}</br>
-    Current Position: {positionCurrentCS01}</center>`;
+    CS01: {positionCurrentCS01}</center>`;
   }
 
-  private buildToolObligorChartToolTipQuantity():string{
+  private buildToolObligorChartToolTipQuantity(): string {
     return `<center><b>{name}</b> </br>
     Mid: {mid} </br>
     Mark: {tooltipMark}</br>
     Current Position: {positionCurrentQuantity}</center>`;
   }
-  
+
   private buildObligorChartDumbells(state: TradeObligorGraphPanelState, category: ObligorChartCategoryBlock, amChartsData: any[]): am4charts.ColumnSeries {
 
     // Create the column representing the mark discrepency.
@@ -334,16 +318,12 @@ export class GraphService {
     dumbBellseries.hidden = category.state.isHidden;
     dumbBellseries.sequencedInterpolation = true;
     dumbBellseries.columns.template.width = 3;
-    if(state.markValue.cS01)dumbBellseries.dataFields.value = "positionCurrentCS01";
-    else if(state.markValue.quantity)dumbBellseries.dataFields.value = "positionCurrentQuantity";
+    if (state.markValue.cS01) dumbBellseries.dataFields.value = "positionCurrentCS01";
+    else if (state.markValue.quantity) dumbBellseries.dataFields.value = "positionCurrentQuantity";
     dumbBellseries.hiddenState.transitionDuration = 0;
     dumbBellseries.defaultState.transitionDuration = 0;
-    if (state.metric.spread || state.markValue.cS01 || state.markValue.quantity) {
-      dumbBellseries.dataFields.valueY = "mark";
-    }
-    else if (state.metric.yield || (state.markValue.quantity === false && state.markValue.cS01 === false)) {
-      dumbBellseries.dataFields.valueY = "mid";
-    }
+    if (category.state.isMarkHidden) dumbBellseries.dataFields.valueY = "mid";
+    else dumbBellseries.dataFields.valueY = "mark";
 
 
     // Modify the column color based on mark discrepency.
@@ -351,8 +331,8 @@ export class GraphService {
     columnTemplate.strokeWidth = 1;
     columnTemplate.strokeOpacity = 1;
     columnTemplate.stroke = am4core.color(category.data.color);
-    if(state.markValue.cS01) columnTemplate.tooltipHTML = this.buildToolObligorChartToolTipCS01();
-    else if(state.markValue.quantity) columnTemplate.tooltipHTML = this.buildToolObligorChartToolTipQuantity();
+    if (state.markValue.cS01) columnTemplate.tooltipHTML = this.buildToolObligorChartToolTipCS01();
+    else if (state.markValue.quantity) columnTemplate.tooltipHTML = this.buildToolObligorChartToolTipQuantity();
     columnTemplate.hiddenState.transitionDuration = 0;
     columnTemplate.defaultState.transitionDuration = 0;
     let markDot = dumbBellseries.bullets.push(new am4charts.CircleBullet());
@@ -365,8 +345,8 @@ export class GraphService {
       markBullet.circle.strokeOpacity = 1;
       markBullet.strokeOpacity = 1;
       markBullet.nonScalingStroke = true;
-      if(state.markValue.cS01) markBullet.tooltipHTML = this.buildToolObligorChartToolTipCS01();
-      else if(state.markValue.quantity) markBullet.tooltipHTML = this.buildToolObligorChartToolTipQuantity();
+      if (state.markValue.cS01) markBullet.tooltipHTML = this.buildToolObligorChartToolTipCS01();
+      else if (state.markValue.quantity) markBullet.tooltipHTML = this.buildToolObligorChartToolTipQuantity();
       markBullet.hiddenState.transitionDuration = 0;
       markBullet.defaultState.transitionDuration = 0;
       dumbBellseries.heatRules.push({
@@ -385,10 +365,30 @@ export class GraphService {
     midBullet.fill = am4core.color(category.data.color);
     midBullet.locationY = 1;
     midBullet.circle.radius = 5;
-    if(state.markValue.cS01) midBullet.tooltipHTML = this.buildToolObligorChartToolTipCS01();
-    else if(state.markValue.quantity) midBullet.tooltipHTML = this.buildToolObligorChartToolTipQuantity();
+    midBullet.tooltipHTML = this.buildToolObligorChartToolTipCS01();
     midBullet.hiddenState.transitionDuration = 0;
     midBullet.defaultState.transitionDuration = 0;
+    midBullet.adapter.add('tooltipHTML', function (text, target) {
+      let data: any = target.tooltipDataItem.dataContext
+
+      if (state.metric.yield || data.positionCurrentCS01 === null || data.positionCurrentQuantity === null) {
+        return `<center><b>{name}</b> </br>
+        Mid: {mid}</center>`;
+      }
+      else if (state.markValue.cS01) {
+        return `<center><b>{name}</b> </br>
+              Mid: {mid} </br>
+              Mark: {tooltipMark}</br>
+              CS01: {positionCurrentCS01}</center>`;
+      }
+      else if (state.markValue.quantity) {
+        return `<center><b>{name}</b> </br>
+        Mid: {mid} </br>
+        Mark: {tooltipMark}</br>
+        Current Position: {positionCurrentQuantity}</center>`;
+      }
+    });
+
     dumbBellseries.events.on("hidden", function () {
       dumbBellseries.hide();
     });
@@ -396,14 +396,49 @@ export class GraphService {
     return dumbBellseries;
   }
 
+
   private buildObligorChartTrendCurve(state: TradeObligorGraphPanelState, category: ObligorChartCategoryBlock, amChartsData: any[]): am4charts.LineSeries {
 
+
+    var sortedArray: any[] = amChartsData.sort((obj1, obj2) => {
+      if (obj1.mid > obj2.mid) {
+        return 1;
+      }
+
+      if (obj1.mid < obj2.mid) {
+        return -1;
+      }
+
+      return 0;
+    });
+
+    // Build the data needed for the curve.
+    let curveData: any[] = [];
+    let isValid: boolean = true;
+    for (let chartDataItem in amChartsData) {
+      if (curveData.length === 0) {
+        curveData.push({ mid: amChartsData[chartDataItem].mid, workoutTerm: amChartsData[chartDataItem].workoutTerm })
+      }
+      else {
+        if (state.metric.spread) {
+          for (let curveItem in curveData) {
+            let ydifference = Math.abs(amChartsData[chartDataItem].mid - curveData[curveItem].mid);
+            let xdifference = Math.abs(amChartsData[chartDataItem].workoutTerm - curveData[curveItem].workoutTerm);
+
+            if (ydifference <= 1 || xdifference <= 1) isValid = false
+          }
+        }
+
+        if (isValid) curveData.push({ mid: amChartsData[chartDataItem].mid, workoutTerm: amChartsData[chartDataItem].workoutTerm });
+        isValid = true;
+      }
+    }
+
     let curveSeries = state.obligorChart.series.push(new am4charts.LineSeries());
-    curveSeries.data = amChartsData;
+    curveSeries.data = curveData;
     curveSeries.dataFields.valueX = "workoutTerm";
     curveSeries.dataFields.valueY = "mid";
     curveSeries.strokeWidth = 2;
-    curveSeries.name = "Regression";
     curveSeries.tensionX = 0.8;
     curveSeries.tensionY = 0.8;
     curveSeries.stroke = am4core.color(category.data.color);
@@ -415,10 +450,19 @@ export class GraphService {
     var reg2 = curveSeries.plugins.push(new am4plugins_regression.Regression());
     reg2.method = "polynomial";
     reg2.reorder = true;
+    reg2.options = {
+      order: 2,
+      precision: 10
+    }
 
+    reg2.events.on("processed", function (ev) {
+      console.log(ev.target.result);
+    });
+
+    reg2.dispose();
     return curveSeries;
   }
-  
+
   private initializeObligorChartXAxis(state: TradeObligorGraphPanelState): am4charts.ValueAxis {
     let xAxis = state.obligorChart.xAxes.push(new am4charts.ValueAxis());
     xAxis.renderer.grid.template.strokeDasharray = "1,3";
@@ -441,8 +485,7 @@ export class GraphService {
     return yAxis;
   }
 
-  private initializeObligorChartLengendTriggerEvents(state: TradeObligorGraphPanelState)
-  {
+  private initializeObligorChartLengendTriggerEvents(state: TradeObligorGraphPanelState) {
     // When the legend is clicked, reset the axis zoom scope.
     state.obligorChart.legend.events.on("hit", function (ev) {
       state.xAxis.start = null;

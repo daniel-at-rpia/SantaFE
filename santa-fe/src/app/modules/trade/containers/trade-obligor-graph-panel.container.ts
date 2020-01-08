@@ -273,6 +273,12 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
       for (let chartCategory in this.state.chartCategories) {
         if (this.state.obligorChart.series.values[seriesIndex].name == this.state.chartCategories[chartCategory].data.name) {
           this.state.chartCategories[chartCategory].state.isHidden = this.state.obligorChart.series.values[seriesIndex].isHidden;
+
+          if(this.state.metric.yield) this.state.chartCategories[chartCategory].state.isMarkHidden = true;
+          else if(this.state.metric.spread)
+          {
+            if(this.state.markValue.cS01 || this.state.markValue.quantity) this.state.chartCategories[chartCategory].state.isMarkHidden = false;
+          }
         }
       }
     }
