@@ -14,7 +14,7 @@ export interface BESecurityGroupDTO {
     weightField: string;
   }
   numSecurities: number;
-  groupName: string;
+  name: string;
   metrics: BEGroupMetricDTO,
   deltaMetrics: {
     Dod: BEGroupMetricDTO,

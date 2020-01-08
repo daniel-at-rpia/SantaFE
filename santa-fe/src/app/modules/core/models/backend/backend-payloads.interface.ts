@@ -9,15 +9,15 @@ export interface PayloadGetSantaGroups {
 export interface PayloadGetTargetSecurityGroup {
   source: string;
   yyyyMMdd?: number;
-  santaGroupIdentifier: object;
-  santaGroupFilters: object;
+  groupIdentifier: object;
+  groupFilters: object;
   tenorOptions: Array<string>;
 }
 
 export interface PayloadGetSecurityGroupBasedOnSecurity {
   source: string;
   identifier: string;
-  santaGroupIdentifier: {
+  groupIdentifier: {
     [property: string]: Array<string>;
   };
   tenorOptions: Array<string>;
