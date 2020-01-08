@@ -128,6 +128,12 @@ export class GraphService {
     }
   }
 
+  public clearGraphSeries(chart: am4charts.XYChart) {
+    chart.series.clear();
+
+    return chart;
+  }
+
   public buildObligorChart(state: TradeObligorGraphPanelState) {
 
     am4core.options.autoSetClassName = true;
@@ -144,40 +150,8 @@ export class GraphService {
     state.yAxis.start = null;
     state.yAxis.end = null;
 
-    yAxis.events.on("startchanged", function (ev) {
-      if (state.yAxis.start === null && state.yAxis.end === null) {
-        state.yAxis.start = ev.target.minZoomed;
-        state.yAxis.end = ev.target.maxZoomed;
-      }
-    });
-
-    yAxis.events.on("endchanged", function (ev) {
-      if (state.yAxis.start === null && state.yAxis.end === null) {
-        state.yAxis.start = ev.target.minZoomed;
-        state.yAxis.end = ev.target.maxZoomed;
-      }
-    });
-
-    xAxis.events.on("startchanged", function (ev) {
-      if (state.xAxis.start === null && state.xAxis.end === null) {
-        state.xAxis.start = ev.target.minZoomed;
-        state.xAxis.end = ev.target.maxZoomed;
-      }
-    });
-
-    xAxis.events.on("endchanged", function (ev) {
-      if (state.xAxis.start === null && state.xAxis.end === null) {
-        state.xAxis.start = ev.target.minZoomed;
-        state.xAxis.end = ev.target.maxZoomed;
-      }
-    });
-
-    // TODO: This part is incomplete. Right now this chart only handles quantity.
-    // Each chart category DTO has its own "isMarkHidden" field which should be used.
-    let displayMark: boolean = false;
-    if (state.markValue.cS01 || state.markValue.quantity) {
-      displayMark = true;
-    }
+    // Set trigger events for the axes.
+    this.initializeObligorChartAxesTriggerEvents(state, xAxis, yAxis);
 
     // Draw each chart category.
     state.chartCategories.forEach((eachCategory) => {
@@ -188,61 +162,12 @@ export class GraphService {
     state.obligorChart.legend = new am4charts.Legend();
     state.obligorChart.legend.useDefaultMarker = true;
 
-    // When the legend is clicked, reset the axis zoom scope.
-    state.obligorChart.legend.events.on("hit", function (ev) {
-      state.xAxis.start = null;
-      state.xAxis.end = null;
-      state.yAxis.start = null;
-      state.yAxis.end = null;
-    });
+    // Build the reset ( zoomOutButton )
+    this.createObligorChartResetButton(state, yAxis, xAxis);
 
-    let resetButtonContainer = state.obligorChart.plotContainer.createChild(am4core.Container);
-    resetButtonContainer.shouldClone = false;
-    resetButtonContainer.align = "left";
-    resetButtonContainer.valign = "top";
-    resetButtonContainer.marginTop = 0;
-    resetButtonContainer.zIndex = Number.MAX_SAFE_INTEGER;
-    resetButtonContainer.draggable = true;
+    // Initialize trigger events for chart legeng
+    this.initializeObligorChartLengengTriggerEvents(state);
 
-    let resetButton = resetButtonContainer.createChild(am4core.Button);
-    resetButton.label.text = "Reset";
-    resetButton.background.fill = am4core.color('#bdbdbd');
-    resetButton.stroke = am4core.color('#000000');
-    resetButton.events.on("hit", function (ev) {
-      if (state.xAxis.start !== null && state.xAxis.end !== null) {
-        xAxis.zoomToValues(state.xAxis.start, state.xAxis.end);
-      }
-
-      if (state.yAxis.start !== null && state.yAxis.end !== null) {
-        yAxis.zoomToValues(state.yAxis.start, state.yAxis.end);
-      }
-    });
-    
-    let zoomButtonContainer = state.obligorChart.plotContainer.createChild(am4core.Container);
-    zoomButtonContainer.shouldClone = false;
-    zoomButtonContainer.align = "left";
-    zoomButtonContainer.valign = "top";
-    zoomButtonContainer.zIndex = Number.MAX_SAFE_INTEGER;
-    zoomButtonContainer.marginTop = 0;
-    zoomButtonContainer.marginLeft = 70;
-    zoomButtonContainer.layout = "horizontal";
-    zoomButtonContainer.draggable = true;
-
-    let zoomInButton = zoomButtonContainer.createChild(am4core.Button);
-    zoomInButton.label.text = "+";
-    zoomInButton.events.on("hit", function(ev) {
-      let diff = xAxis.maxZoomed - xAxis.minZoomed;
-      let delta = diff * 0.2;
-      xAxis.zoomToValues(xAxis.minZoomed + delta, xAxis.maxZoomed - delta);
-    });
-
-    let zoomOutButton = zoomButtonContainer.createChild(am4core.Button);
-    zoomOutButton.label.text = "-";
-    zoomOutButton.events.on("hit", function(ev) {
-      let diff = xAxis.maxZoomed - xAxis.minZoomed;
-      var delta = diff * 0.2;
-      xAxis.zoomToValues(xAxis.minZoomed - delta, xAxis.maxZoomed + delta);
-    });
     // Add a cursor to the chart, with zoom behaviour. 
     state.obligorChart.cursor = new am4charts.XYCursor();
     state.obligorChart.cursor.behavior = "panXY";
@@ -254,7 +179,7 @@ export class GraphService {
 
   }
 
-  public zoomAxesToCurrentState(state: TradeObligorGraphPanelState)
+  public zoomObligorChartAxesToCurrentState(state: TradeObligorGraphPanelState)
   {
     
     if(state.xAxis.start !== null && state.xAxis.end !== null )
@@ -272,10 +197,10 @@ export class GraphService {
     let amChartsData: any[] = this.buildObligorChartData(category, state);
 
     // Create a dumbbell series.
-    let dumbBellSeries: am4charts.ColumnSeries = this.generateObligorChartDumbells(state, category, amChartsData);
+    let dumbBellSeries: am4charts.ColumnSeries = this.createObligorChartDumbells(state, category, amChartsData);
 
     // Create a trend curve. Work in Progress.
-    let curveSeries: am4charts.LineSeries = this.generateObligorChartTrendCurve(state, category, amChartsData);
+    let curveSeries: am4charts.LineSeries = this.createObligorChartTrendCurve(state, category, amChartsData);
 
     // Hide the curve line when the coresponding dumbbell series is hidden.
     dumbBellSeries.events.on("hidden", function () {
@@ -321,7 +246,7 @@ export class GraphService {
               tooltipMark: category.data.obligorCategoryDataItemDTO[dataItem].data.mark
             })
           }
-        //This is temporary until I find out why we are not getting yield marks in trade center panel.
+        //This is temporary. Need to figure out how to handle marks with Yield.
         if (state.metric.yield) {
           amChartsData.push({
             name: category.data.obligorCategoryDataItemDTO[dataItem].data.name,
@@ -351,8 +276,8 @@ export class GraphService {
     Mark: {tooltipMark}</br>
     Current Position: {positionCurrentQuantity}</center>`;
   }
-
-  private generateObligorChartDumbells(state: TradeObligorGraphPanelState, category: ObligorChartCategoryBlock, amChartsData: any[]): am4charts.ColumnSeries {
+  
+  private createObligorChartDumbells(state: TradeObligorGraphPanelState, category: ObligorChartCategoryBlock, amChartsData: any[]): am4charts.ColumnSeries {
 
     // Create the column representing the mark discrepency.
     let dumbBellseries = state.obligorChart.series.push(new am4charts.ColumnSeries());
@@ -428,7 +353,7 @@ export class GraphService {
     return dumbBellseries;
   }
 
-  private generateObligorChartTrendCurve(state: TradeObligorGraphPanelState, category: ObligorChartCategoryBlock, amChartsData: any[]): am4charts.LineSeries {
+  private createObligorChartTrendCurve(state: TradeObligorGraphPanelState, category: ObligorChartCategoryBlock, amChartsData: any[]): am4charts.LineSeries {
 
     let curveSeries = state.obligorChart.series.push(new am4charts.LineSeries());
     curveSeries.data = amChartsData;
@@ -451,6 +376,48 @@ export class GraphService {
     return curveSeries;
   }
 
+  private createObligorChartResetButton(state: TradeObligorGraphPanelState, xAxis: am4charts.ValueAxis, yAxis: am4charts.ValueAxis)
+  {
+    let resetButtonContainer = state.obligorChart.plotContainer.createChild(am4core.Container);
+    resetButtonContainer.shouldClone = false;
+    resetButtonContainer.align = "left";
+    resetButtonContainer.valign = "top";
+    resetButtonContainer.marginTop = 0;
+    resetButtonContainer.zIndex = Number.MAX_SAFE_INTEGER;
+    resetButtonContainer.draggable = true;
+
+    let resetButton = resetButtonContainer.createChild(am4core.Button);
+    resetButton.label.text = "-";
+    resetButton.background.fill = am4core.color('#bdbdbd');
+    resetButton.stroke = am4core.color('#000000');
+    resetButton.events.on("hit", function (ev) {
+      if (state.xAxis.start !== null && state.xAxis.end !== null) {
+        xAxis.zoomToValues(state.xAxis.start, state.xAxis.end);
+      }
+
+      if (state.yAxis.start !== null && state.yAxis.end !== null) {
+        yAxis.zoomToValues(state.yAxis.start, state.yAxis.end);
+      }
+    });
+  }
+
+  private initializeObligorChartAxesTriggerEvents(state: TradeObligorGraphPanelState, xAxis: am4charts.ValueAxis, yAxis: am4charts.ValueAxis)
+  {
+    // Capture the original zoom values of axes before a change is made.
+    yAxis.events.on("startchanged", function (ev) {
+      if (state.yAxis.start === null && state.yAxis.end === null) {
+        state.yAxis.start = ev.target.minZoomed;
+        state.yAxis.end = ev.target.maxZoomed;
+      }
+    });
+    xAxis.events.on("startchanged", function (ev) {
+      if (state.xAxis.start === null && state.xAxis.end === null) {
+        state.xAxis.start = ev.target.minZoomed;
+        state.xAxis.end = ev.target.maxZoomed;
+      }
+    });
+  }
+  
   private initializeObligorChartXAxis(state: TradeObligorGraphPanelState): am4charts.ValueAxis {
     let xAxis = state.obligorChart.xAxes.push(new am4charts.ValueAxis());
     xAxis.renderer.grid.template.strokeDasharray = "1,3";
@@ -472,9 +439,15 @@ export class GraphService {
 
     return yAxis;
   }
-  public clearGraphSeries(chart: am4charts.XYChart) {
-    chart.series.clear();
 
-    return chart;
+  private initializeObligorChartLengengTriggerEvents(state: TradeObligorGraphPanelState)
+  {
+    // When the legend is clicked, reset the axis zoom scope.
+    state.obligorChart.legend.events.on("hit", function (ev) {
+      state.xAxis.start = null;
+      state.xAxis.end = null;
+      state.yAxis.start = null;
+      state.yAxis.end = null;
+    });
   }
 }

@@ -144,17 +144,6 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
 
   }
 
-  private getObligorChartCategoryColorFromScheme(obligorCategoryType: string): string {
-    let color: string = null;
-    let colorSchemes = ObligorChartCategoryColorScheme;
-    for (let scheme in colorSchemes.categoryScheme) {
-      if (colorSchemes.categoryScheme[scheme].label === obligorCategoryType) color = colorSchemes.categoryScheme[scheme].value;
-    }
-
-    if (color === null) color = '#000000';
-    return color;
-  }
-
   private addBestMidToChartCategory(bEBestQuoteDTO: BESingleBestQuoteDTO): number {
     let mid: number = null;
     let rounding: number;
@@ -165,9 +154,11 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     else if (bEBestQuoteDTO.bidQuoteValue === null && bEBestQuoteDTO.askQuoteValue > 0) mid = bEBestQuoteDTO.askQuoteValue;
     else if (bEBestQuoteDTO.bidQuoteValue > 0 && bEBestQuoteDTO.askQuoteValue === null) mid = bEBestQuoteDTO.bidQuoteValue;
 
-    if(bEBestQuoteDTO.quoteMetric.toString() === "Spread"){
-      mid = this.utility.round(mid, rounding);
-    } 
+    if (bEBestQuoteDTO.quoteMetric) {
+      if (bEBestQuoteDTO.quoteMetric.toString() === "Spread") {
+        mid = this.utility.round(mid, rounding);
+      }
+    }
 
     return mid;
   }
@@ -198,27 +189,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     if (this.state.markValue.cS01) this.state.markValue.cS01 = false;
     else if (this.state.markValue.cS01 === false) this.state.markValue.cS01 = true;
 
-    let isMarkHidden: boolean = true;
-    if (this.state.markValue.cS01) isMarkHidden = false
-    for (let seriesIndex in this.state.obligorChart.series.values) {
-      for(let chartCategory in this.state.chartCategories)
-      {
-        if(this.state.obligorChart.series.values[seriesIndex].name == this.state.chartCategories[chartCategory].data.name)
-        {
-          this.state.chartCategories[chartCategory].state.isHidden = this.state.obligorChart.series.values[seriesIndex].isHidden;
-          this.state.chartCategories[chartCategory].state.isMarkHidden = isMarkHidden;
-        }
-      }
-    }
-
-    this.state.obligorChart = this.graphService.clearGraphSeries(this.state.obligorChart);
-
-    // Generate a graph for each data type, sending in the raw data,  the color scheme and the name.
-    for (let category in this.state.chartCategories) {
-      if (this.state.chartCategories[category].data.obligorCategoryDataItemDTO.length > 0) this.graphService.addCategoryToObligorGraph(this.state.chartCategories[category], this.state);
-    }
-
-    this.graphService.zoomAxesToCurrentState(this.state);
+    this.updateObligorChartCategories();
   }
 
   public btnQuantityClick() {
@@ -226,69 +197,21 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     if (this.state.markValue.quantity) this.state.markValue.quantity = false;
     else if (this.state.markValue.quantity === false) this.state.markValue.quantity = true;
 
-    let isMarkHidden: boolean = true;
-    if (this.state.markValue.quantity) isMarkHidden = false
-    for (let seriesIndex in this.state.obligorChart.series.values) {
-      for(let chartCategory in this.state.chartCategories)
-      {
-        if(this.state.obligorChart.series.values[seriesIndex].name == this.state.chartCategories[chartCategory].data.name)
-        {
-          this.state.chartCategories[chartCategory].state.isHidden = this.state.obligorChart.series.values[seriesIndex].isHidden;
-          this.state.chartCategories[chartCategory].state.isMarkHidden = isMarkHidden;
-        }
-      }
-    }
-
-    this.state.obligorChart = this.graphService.clearGraphSeries(this.state.obligorChart);
-
-    // Generate a graph for each data type, sending in the raw data,  the color scheme and the name.
-    for (let category in this.state.chartCategories) {
-      if (this.state.chartCategories[category].data.obligorCategoryDataItemDTO.length > 0) this.graphService.addCategoryToObligorGraph(this.state.chartCategories[category], this.state);
-    }
-    
-    this.graphService.zoomAxesToCurrentState(this.state);
+    this.updateObligorChartCategories();
   }
 
   public btnSpreadClick() {
     this.state.metric.yield = false;
     if (this.state.metric.spread === false) this.state.metric.spread = true;
 
-    let isMarkHidden: boolean = true;
-    if (this.state.markValue.cS01) isMarkHidden = false
-    for (let seriesIndex in this.state.obligorChart.series.values) {
-      for(let chartCategory in this.state.chartCategories)
-      {
-        if(this.state.obligorChart.series.values[seriesIndex].name == this.state.chartCategories[chartCategory].data.name)
-        {
-          this.state.chartCategories[chartCategory].state.isHidden = this.state.obligorChart.series.values[seriesIndex].isHidden;
-          this.state.chartCategories[chartCategory].state.isMarkHidden = isMarkHidden;
-        }
-      }
-    }
-
-    this.state.obligorChart.dispose();
-    this.graphService.buildObligorChart(this.state);
+    this.redrawObligorChart();
   }
 
   public btnYieldClick() {
     this.state.metric.spread = false;
     if (this.state.metric.yield === false) this.state.metric.yield = true;
 
-    let isMarkHidden: boolean = true;
-    if (this.state.markValue.quantity) isMarkHidden = false
-    for (let seriesIndex in this.state.obligorChart.series.values) {
-      for(let chartCategory in this.state.chartCategories)
-      {
-        if(this.state.obligorChart.series.values[seriesIndex].name == this.state.chartCategories[chartCategory].data.name)
-        {
-          this.state.chartCategories[chartCategory].state.isHidden = this.state.obligorChart.series.values[seriesIndex].isHidden;
-          this.state.chartCategories[chartCategory].state.isMarkHidden = isMarkHidden;
-        }
-      }
-    }
-
-    this.state.obligorChart.dispose();
-    this.graphService.buildObligorChart(this.state);
+    this.redrawObligorChart();
   }
 
   private initializeState() {
@@ -302,7 +225,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
       yAxis: {
         start: null,
         end: null,
-      },      
+      },
       xAxis: {
         start: null,
         end: null,
@@ -325,4 +248,47 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     }
   }
 
+  private updateObligorChartCategories()
+  {
+    for (let seriesIndex in this.state.obligorChart.series.values) {
+      for (let chartCategory in this.state.chartCategories) {
+        if (this.state.obligorChart.series.values[seriesIndex].name == this.state.chartCategories[chartCategory].data.name) {
+          this.state.chartCategories[chartCategory].state.isHidden = this.state.obligorChart.series.values[seriesIndex].isHidden;
+        }
+      }
+    }
+
+    this.state.obligorChart = this.graphService.clearGraphSeries(this.state.obligorChart);
+
+    for (let category in this.state.chartCategories) {
+      if (this.state.chartCategories[category].data.obligorCategoryDataItemDTO.length > 0) this.graphService.addCategoryToObligorGraph(this.state.chartCategories[category], this.state);
+    }
+
+    this.graphService.zoomObligorChartAxesToCurrentState(this.state);
+  } 
+
+  private redrawObligorChart()
+  {
+    for (let seriesIndex in this.state.obligorChart.series.values) {
+      for (let chartCategory in this.state.chartCategories) {
+        if (this.state.obligorChart.series.values[seriesIndex].name == this.state.chartCategories[chartCategory].data.name) {
+          this.state.chartCategories[chartCategory].state.isHidden = this.state.obligorChart.series.values[seriesIndex].isHidden;
+        }
+      }
+    }
+
+    this.state.obligorChart.dispose();
+    this.graphService.buildObligorChart(this.state);
+  }
+  
+  private getObligorChartCategoryColorFromScheme(obligorCategoryType: string): string {
+    let color: string = null;
+    let colorSchemes = ObligorChartCategoryColorScheme;
+    for (let scheme in colorSchemes.categoryScheme) {
+      if (colorSchemes.categoryScheme[scheme].label === obligorCategoryType) color = colorSchemes.categoryScheme[scheme].value;
+    }
+
+    if (color === null) color = '#000000';
+    return color;
+  }
 }
