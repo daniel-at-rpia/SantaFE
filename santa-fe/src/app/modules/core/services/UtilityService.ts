@@ -92,18 +92,20 @@ export class UtilityService {
           return 2;
         case "SR":  // this is for CDS
           return 2;
+        case "SLA":
+          return 3;
         case "Sr Subordinated":
-          return 3;
+          return 4;
         case "Subordinated":
-          return 3;
+          return 4;
         case "SUB":  // this is for SUB
-          return 3;
+          return 4;
         case "Jr Subordinated":
-          return 3;
+          return 4;
         case "Subordinated Unsecured":
-          return 3;
+          return 4;
         case "Jr Subordinated Unsecured":
-          return 3;
+          return 4;
         case "Preferred":
           return 4;
         default:
@@ -142,7 +144,7 @@ export class UtilityService {
         case "Unsecured":
           return 'U';
         default:
-          return 'n/a';
+          return input;
       }
     }
 
