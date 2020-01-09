@@ -36,17 +36,6 @@ export interface LiveDataDiffingResult {
   quantDiffCount: number;
 }
 
-export interface QuantVisualizerParams {
-  tRaw: number;
-  gRaw: number;
-  tWow: number;
-  gWow: number;
-  tMom: number;
-  gMom: number;
-  tYtd: number;
-  gYtd: number;
-}
-
 export interface AgGridRowParams {
   data: AgGridRow;
   node: AgGridRowNode;

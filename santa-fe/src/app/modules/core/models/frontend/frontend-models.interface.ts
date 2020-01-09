@@ -323,26 +323,10 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
 
 export interface MoveVisualizerDTO extends BasicDTOStructure {
   data: {
-    rawEntry: QuantitativeEntryBlock;
-    wow: QuantitativeEntryBlock;
-    mom: QuantitativeEntryBlock;
-    ytd: QuantitativeEntryBlock;
-    min: number;
-    max: number;
-    minDelta: number;
-    maxDelta: number;
   }
   style: {
-    raw: QuantitativeEntryStyleBlock;
-    wow: QuantitativeEntryStyleBlock;
-    mom: QuantitativeEntryStyleBlock;
-    ytd: QuantitativeEntryStyleBlock;
   }
   state: {
-    isWowValid: boolean;
-    isMomValid: boolean;
-    isYtdValid: boolean;
-    isStencil: boolean;
   }
 }
 

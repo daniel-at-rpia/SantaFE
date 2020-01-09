@@ -9,66 +9,6 @@
   flex-direction: column;
   overflow: hidden;
   &__overview {
-    flex: 0 0 auto;
-    display: flex;
-    padding: $spacing_medium $spacing_medium 0 $spacing_medium;
-    &-ctas {
-      flex: 0 0 auto;
-      display: flex;
-      justify-content: flex-end;
-      flex-direction: column;
-      margin-right: $spacing_medium;
-      &-btn {
-        margin-bottom: $spacing_small;
-        &--selected {
-          @include material('none');
-          background-color: $color_active;
-          color: $font_color_inverse;
-        }
-      }
-    }
-    &-main {
-      flex: 1 1 auto;
-      display: flex;
-      flex-direction: column;
-      &-label {
-        display: flex;
-        justify-content: flex-end;
-        margin-bottom: $spacing_medium;
-        &-entry {
-          display: flex;
-          align-items: center;
-          margin-left: $spacing_medium;
-          &-node {
-            @include material();
-            @include mix_border_radius(50%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: $font_color_inverse;
-            width: 1.5rem;
-            height: 1.5rem;
-            margin-right: $spacing_small;
-            font-size: $font_size_small;
-            &--target {
-              background-color: $color_blue_5;
-            }
-            &--group {
-              background-color: $color_indigo_5;
-            }
-          }
-          &-text {
-            color: $font_color_minor;
-          }
-        }
-      }
-      &-visualizer {
-        display: none;
-        move-visualizer {
-          flex: 1 1 auto;
-        }
-      }
-    }
   }
   &__table {
     @include mix_fixed_div(relative, $z_index_standard_base_item);
@@ -76,18 +16,9 @@
     flex: 1 1 auto;
     margin: $spacing_medium;
     padding-top: $spacing_medium;
-    santa-table {
-      @include mix_fixed_div(absolute, $z_index_standard_base_item);
-      width: 100%;
-    }
   }
   &--hasSecurityState {
     #{$tradeMarketAnalysisPanelBlockName} {
-      &__overview {
-        &-main-visualizer {
-          display: flex;
-        }
-      }
     }
   }
 }

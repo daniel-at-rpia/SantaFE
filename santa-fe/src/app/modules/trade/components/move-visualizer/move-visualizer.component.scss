@@ -1,8 +1,8 @@
 @import "global.scss";
 @import "modules/trade/trade.scss";
 
-.sat-quantVisualizer {
-  $quantVisualizerBlockName: &;
+.sat-moveVisualizer {
+  $moveVisualizerBlockName: &;
   flex: 1 1 auto;
   display: flex;
   &__entryList {
@@ -21,14 +21,14 @@
       &-content {
         flex: 1 1 auto;
         display: flex;
-        .sat-quantVisualizerEntry {
+        .sat-moveVisualizerEntry {
           flex: 1 1 auto;
         }
       }
     }
   }
   &--stencilState {
-    #{$quantVisualizerBlockName} {
+    #{$moveVisualizerBlockName} {
       &__entryList {
         &-item {
           &-label {
@@ -43,13 +43,13 @@
   }
 }
 
-$quantVisualizerEntry_height: 2.25rem;
-$quantVisualizerEntry_node_size: 1.5rem;
-.sat-quantVisualizerEntry {
-  $quantVisualizerEntryBlockName: &;
+$moveVisualizerEntry_height: 2.25rem;
+$moveVisualizerEntry_node_size: 1.5rem;
+.sat-moveVisualizerEntry {
+  $moveVisualizerEntryBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
   display: flex;
-  height: $quantVisualizerEntry_height;
+  height: $moveVisualizerEntry_height;
   &__baseLine {
     @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
     height: 100%;
@@ -94,8 +94,8 @@ $quantVisualizerEntry_node_size: 1.5rem;
           display: flex;
           align-items: center;
           justify-content: center;
-          height: $quantVisualizerEntry_node_size;
-          width: $quantVisualizerEntry_node_size;
+          height: $moveVisualizerEntry_node_size;
+          width: $moveVisualizerEntry_node_size;
           color: $font_color_inverse;
           font-size: $font_size_small;
         }
@@ -106,7 +106,7 @@ $quantVisualizerEntry_node_size: 1.5rem;
         }
         &--target {
           left: 0;
-          #{$quantVisualizerEntryBlockName} {
+          #{$moveVisualizerEntryBlockName} {
             &__main-content-node-pinText {
               background-color: $color_blue_5;
             }
@@ -114,7 +114,7 @@ $quantVisualizerEntry_node_size: 1.5rem;
         }
         &--group {
           right: 0;
-          #{$quantVisualizerEntryBlockName} {
+          #{$moveVisualizerEntryBlockName} {
             &__main-content-node-pinText {
               background-color: $color_indigo_5;
             }
@@ -127,7 +127,7 @@ $quantVisualizerEntry_node_size: 1.5rem;
     }
   }
   &--inversedState {
-    #{$quantVisualizerEntryBlockName} {
+    #{$moveVisualizerEntryBlockName} {
       &__main {
         &-content {
           &-line {
@@ -148,7 +148,7 @@ $quantVisualizerEntry_node_size: 1.5rem;
     }
   }
   &--invalidState {
-    #{$quantVisualizerEntryBlockName} {
+    #{$moveVisualizerEntryBlockName} {
       &__main {
         &-content {
           &-line {

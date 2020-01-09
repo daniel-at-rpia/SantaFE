@@ -115,7 +115,7 @@ export interface TradeUtilityPanelState {
 
 export interface TradeMarketAnalysisPanelState {
   receivedSecurity: boolean;
-  quantVisualizer: {
+  moveVisualizer: {
     groupByOptions: Array<SecurityDefinitionDTO>;
     dto: MoveVisualizerDTO;
     targetSecurity: SecurityDTO;
