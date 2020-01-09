@@ -11,6 +11,9 @@
         "dev2": [
           "dev2-santa-rpia"
         ],
+        "dev3": [
+          "dev3-santa-rpia"
+        ],
         "prod": [
           "santa-rpia"
         ]

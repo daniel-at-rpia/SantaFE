@@ -1,6 +1,22 @@
 {
   "hosting": [
     {
+      "target": "dev3",
+      "site": "dev3-santa-rpia",
+      "public": "dist/santa-fe",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
       "target": "dev2",
       "site": "dev2-santa-rpia",
       "public": "dist/santa-fe",
