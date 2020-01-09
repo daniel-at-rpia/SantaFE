@@ -191,7 +191,7 @@ export class UtilityService {
           return dtoInput.data.name.indexOf('Cds') >= 0;
         } else {
           const rawDataInput = input as BESecurityGroupDTO;
-          return rawDataInput.groupName.indexOf('Cds') >= 0;
+          return rawDataInput.name.indexOf('Cds') >= 0;
         }
       } else {
         if (input['data']) {
@@ -291,7 +291,7 @@ export class UtilityService {
         }
       };
       if (!!rawData) {
-        const isGroup = !!rawData['groupName'];
+        const isGroup = !!rawData['groupIdentifier'];
         const metricList = isGroup ? this.groupGroupMetricOptions : this.securityMetricOptions;
         metricList.forEach((eachMetric) => {
           let keyToRetrieveMetric = eachMetric.backendDtoAttrName;
@@ -556,6 +556,18 @@ export class UtilityService {
           targetRow.data.security,
           newCellDTO.data.quantComparerDTO,
         );
+        if (!!newCellDTO.data.quantComparerDTO) {
+          if (newCellDTO.data.quantComparerDTO.state.hasBid) {
+            targetSecurity.data.bestQuote.bid = newCellDTO.data.quantComparerDTO.data.bid.number;
+          } else {
+            targetSecurity.data.bestQuote.bid = null;
+          }
+          if (newCellDTO.data.quantComparerDTO.state.hasOffer) {
+            targetSecurity.data.bestQuote.ask = newCellDTO.data.quantComparerDTO.data.offer.number;
+          } else {
+            targetSecurity.data.bestQuote.ask = null;
+          }
+        }
         return newCellDTO;
       } else {
         let value;

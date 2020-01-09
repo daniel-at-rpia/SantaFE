@@ -52,8 +52,11 @@
       THIRTY_DAY_DELTA_METRIC_INDEX,
       AGGRID_ROW_HEIGHT,
       AGGRID_ROW_CLASS,
-      AGGRID_DETAIL_COLUMN_KEY
+      AGGRID_DETAIL_COLUMN_KEY,
+      AGGRID_DETAIL_ROW_HEIGHT
     } from 'Core/constants/securityTableConstants.constant';
+    import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
+    import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-filter/santa-table-numeric-filter.component';
   //
 
 @Component({
@@ -81,6 +84,9 @@ export class SantaTable implements OnInit, OnChanges {
     },
     autoGroupColumnDef: {
       sort:'desc'
+    },
+    context: {
+      componentParent: this
     }
   };
 
@@ -88,7 +94,8 @@ export class SantaTable implements OnInit, OnChanges {
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
     thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX,
     agGridRowHeight: AGGRID_ROW_HEIGHT,
-    agGridRowClassRules: AGGRID_ROW_CLASS
+    agGridRowClassRules: AGGRID_ROW_CLASS,
+    agGridDetailRowHeight: AGGRID_DETAIL_ROW_HEIGHT
   }
 
   constructor(
@@ -102,7 +109,9 @@ export class SantaTable implements OnInit, OnChanges {
     this.tableData.data.agGridFrameworkComponents = {
       securityCard: SantaTableSecurityCell,
       bestQuote: SantaTableQuoteCell,
-      detailAllQuotes: SantaTableDetailAllQuotes
+      detailAllQuotes: SantaTableDetailAllQuotes,
+      numericFloatingFilter: SantaTableNumericFloatingFilter,
+      numericFilter: SantaTableNumericFilter
     };
     this.tableData.data.agGridAggregationMap = {
       sum: this.agAggregationSum.bind(this),
@@ -147,21 +156,29 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   public onRowClicked(params: AgGridRowParams) {
-    const expanded = !params.node.expanded;
-    params.node.setExpanded(expanded);
-    if (!params.node.group) {
-      const targetRow = this.tableData.data.rows.find((eachRow) => {
-        return !!eachRow.data.security && eachRow.data.security.data.securityID == params.node.data.id;
-      });
-      if (!!targetRow) {
-        targetRow.state.isExpanded = expanded;
-        if (targetRow.data.security) {
-          targetRow.data.security.state.isTableExpanded = expanded;
-          targetRow.state.isExpanded && this.fetchSecurityQuotes(targetRow);
+    if (!params.node.expanded) {
+      params.node.setExpanded(true);
+      if (!params.node.group) {
+        const targetRow = this.tableData.data.rows.find((eachRow) => {
+          return !!eachRow.data.security && eachRow.data.security.data.securityID == params.node.data.id;
+        });
+        if (!!targetRow) {
+          targetRow.state.isExpanded = true;
+          if (targetRow.data.security) {
+            targetRow.data.security.state.isTableExpanded = true;
+            this.fetchSecurityQuotes(targetRow);
+          }
+        } else {
+          console.error(`Could't find targetRow`, params);
         }
-      } else {
-        console.error(`Could't find targetRow`, params);
       }
+    }
+  }
+
+  public onRowClickedToCollapse(targetRow: SecurityTableRowDTO) {
+    targetRow.state.isExpanded = false;
+    if (targetRow.data.security) {
+      targetRow.data.security.state.isTableExpanded = false;
     }
   }
 
@@ -191,6 +208,10 @@ export class SantaTable implements OnInit, OnChanges {
 
   public onNativePerformDefaultSort() {
     this.performDefaultSort();
+  }
+
+  public onClickSortQuotesByMetric(payload: ClickedSortQuotesByMetricEmitterParams) {
+    payload.targetRow.state.expandViewSortByQuoteMetric = payload.targetRow.state.expandViewSortByQuoteMetric === payload.targetMetricLabel ? null : payload.targetMetricLabel;
   }
 
   private loadTableHeaders(skipAgGrid = false) {

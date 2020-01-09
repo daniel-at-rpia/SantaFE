@@ -13,13 +13,21 @@ $santaTableDetailAllQuotes_width: $securityQuote_main_size_1 * 2 + $securityQuot
 
 .santaTableDetailAllQuotes {
   $santaTableDetailAllQuotesBlockName: &;
+  @include mix_fixed_div(relative, $z_index_standard_base_item);
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  height: 300px;  // has to be in px because of AgGrid restriction
+  height: 480px;  // has to be in px because of AgGrid restriction
   background-color: $color_active;
   padding: $spacing_small 0;
+  &__backgroundCTA {
+    @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
+    width: 100%;
+    height: 100%;
+    top: 0;
+  }
   &__main {
+    @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
     @include mix_enable_scrollbar('horizontal');
     flex: 1 1 auto;
     display: flex;
@@ -48,11 +56,13 @@ $santaTableDetailAllQuotes_width: $securityQuote_main_size_1 * 2 + $securityQuot
     display: flex;
     justify-content: center;
     &-selectBtn {
+          @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
       flex-direction: row;
       margin: $spacing_medium;
       background-color: $color_white;
     }
     &-collapseBtn {
+          @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
       flex-direction: row;
       margin: $spacing_medium;
       background-color: $color_kill;

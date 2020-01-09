@@ -121,7 +121,11 @@ export class DTOService {
         positionHFInMM: 'n/a',
         positionNLF: 0,
         positionNLFInMM: 'n/a',
-        metricPack: this.utility.packMetricData(rawData)
+        metricPack: this.utility.packMetricData(rawData),
+        bestQuote: {
+          bid: null,
+          ask: null
+        }
       },
       state: {
         isSelected: false,
@@ -191,7 +195,7 @@ export class DTOService {
   ): SecurityGroupDTO {
     const object:SecurityGroupDTO = {
       data: {
-        name: !!rawData ?  rawData.groupName.replace(/\|/g, ' | ') : 'PLACEHOLDER',
+        name: !!rawData ?  rawData.name.replace(/\|/g, ' | ') : 'PLACEHOLDER',
         ratingLevel: !!rawData && rawData.metrics ? this.utility.mapRatings(rawData.metrics.ratingNoNotch) : 0,
         ratingValue: !!rawData && rawData.metrics ? rawData.metrics.ratingNoNotch : null,
         numOfSecurities: !!rawData ? rawData.numSecurities : 32,
