@@ -187,6 +187,9 @@ export class UtilityService {
       isGroup: boolean,
       input: SecurityGroupDTO | BESecurityGroupDTO | SecurityDTO | BESecurityDTO
     ): boolean {
+      if (!input) {
+        return false;
+      }
       if (isGroup) {
         if (input['data']) {
           const dtoInput = input as SecurityGroupDTO;
