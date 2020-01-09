@@ -52,7 +52,8 @@
       THIRTY_DAY_DELTA_METRIC_INDEX,
       AGGRID_ROW_HEIGHT,
       AGGRID_ROW_CLASS,
-      AGGRID_DETAIL_COLUMN_KEY
+      AGGRID_DETAIL_COLUMN_KEY,
+      AGGRID_DETAIL_ROW_HEIGHT
     } from 'Core/constants/securityTableConstants.constant';
     import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
     import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-filter/santa-table-numeric-filter.component';
@@ -93,7 +94,8 @@ export class SantaTable implements OnInit, OnChanges {
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
     thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX,
     agGridRowHeight: AGGRID_ROW_HEIGHT,
-    agGridRowClassRules: AGGRID_ROW_CLASS
+    agGridRowClassRules: AGGRID_ROW_CLASS,
+    agGridDetailRowHeight: AGGRID_DETAIL_ROW_HEIGHT
   }
 
   constructor(
