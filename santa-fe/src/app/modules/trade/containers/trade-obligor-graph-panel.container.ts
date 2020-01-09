@@ -33,7 +33,6 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
 
   constructor(
     private store$: Store<any>,
-    private zone: NgZone,
     private graphService: GraphService,
     private restfulCommService: RestfulCommService,
     private utility: UtilityService,

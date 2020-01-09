@@ -8,6 +8,13 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  &__helpText {
+    visibility: hidden;
+    padding-top: $spacing_x_small;
+    padding-right: $spacing_small;
+    text-align: right;
+    align-content: right;
+  }
   &__graphSettings {
     display: flex;
     flex-direction: column;
