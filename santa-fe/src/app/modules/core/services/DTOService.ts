@@ -21,7 +21,7 @@
       SecurityTableHeaderDTO,
       SecurityTableCellDTO,
       SecurityQuoteDTO,
-      QuantitativeVisualizerDTO,
+      MoveVisualizerDTO,
     } from 'FEModels/frontend-models.interface';
     import {
       SecurityGroupMetricBlock,
@@ -658,9 +658,9 @@ export class DTOService {
   public formQuantVisualizerObject(
     isStencil: boolean,
     params: QuantVisualizerParams
-  ): QuantitativeVisualizerDTO {
+  ): MoveVisualizerDTO {
     if (isStencil) {
-      const stencilObject: QuantitativeVisualizerDTO = {
+      const stencilObject: MoveVisualizerDTO = {
         data: {
           rawEntry: { target: 10, group: 10 },
           wow: { target: 10, group: 10},
@@ -717,7 +717,7 @@ export class DTOService {
       let maxDelta = Math.max(...validDeltaParamsList);
       minDelta = minDelta - (maxDelta - minDelta) * 0.15;
       maxDelta = maxDelta + (maxDelta - minDelta) * 0.15;
-      const object: QuantitativeVisualizerDTO = {
+      const object: MoveVisualizerDTO = {
         data: {
           rawEntry: {
             target: params.tRaw,

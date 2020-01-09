@@ -21,7 +21,7 @@
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import {
       SecurityDTO,
-      QuantitativeVisualizerDTO,
+      MoveVisualizerDTO,
       SecurityDefinitionDTO
     } from 'FEModels/frontend-models.interface';
     import { TradeMarketAnalysisPanelState } from 'FEModels/frontend-page-states.interface';

@@ -8,7 +8,7 @@ import {
   SecurityGroupAverageVisualizerDTO,
   SearchShortcutDTO,
   QuantComparerDTO,
-  QuantitativeVisualizerDTO,
+  MoveVisualizerDTO,
 } from 'FEModels/frontend-models.interface';
 import {  ObligorChartCategoryBlock } from 'FEModels/frontend-blocks.interface';
 import {
@@ -117,7 +117,7 @@ export interface TradeMarketAnalysisPanelState {
   receivedSecurity: boolean;
   quantVisualizer: {
     groupByOptions: Array<SecurityDefinitionDTO>;
-    dto: QuantitativeVisualizerDTO;
+    dto: MoveVisualizerDTO;
     targetSecurity: SecurityDTO;
   }
   table: {

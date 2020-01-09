@@ -321,7 +321,7 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
   }
 }
 
-export interface QuantitativeVisualizerDTO extends BasicDTOStructure {
+export interface MoveVisualizerDTO extends BasicDTOStructure {
   data: {
     rawEntry: QuantitativeEntryBlock;
     wow: QuantitativeEntryBlock;
