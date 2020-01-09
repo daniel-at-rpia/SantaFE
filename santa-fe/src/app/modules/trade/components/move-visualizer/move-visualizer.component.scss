@@ -1,164 +1,69 @@
 @import "global.scss";
 @import "modules/trade/trade.scss";
 
+$moveVisualizer_line_thickness: 0.75rem;
+$moveVisualizer_pin_currentLevel_width: 3rem;
 .sat-moveVisualizer {
   $moveVisualizerBlockName: &;
+  @include mix_fixed_div(relative, $z_index_standard_base_item);
   flex: 1 1 auto;
   display: flex;
-  &__entryList {
-    flex: 1 1 auto;
+  &__secOne {
+    @include mix_fixed_div(absolute, $z_index_standard_base_item);
+    width: 100%;
+    bottom: 0;
     display: flex;
-    flex-direction: column;
-    &-item {
+    &-leftSpace {
+      flex: 0 0 10%;
+    }
+    &-leftEdge {
+      @include mix_border_radius(3px, 'left');
+      flex: 0 0 10%;
+      height: $moveVisualizer_line_thickness;
+      background-color: $color_active;
+    }
+    &-moveRange {
+      flex: 0 0 50%;
+      height: $moveVisualizer_line_thickness;
+      background-color: $color_red_5;
+    }
+    &-rightEdge {
+      @include mix_border_radius(3px, 'right');
+      flex: 0 0 25%;
+      height: $moveVisualizer_line_thickness;
+      background-color: $color_active;
+    }
+    &-rightSpace {
+      flex: 0 0 5%;
+    }
+  }
+  &__secTwo {
+    @include mix_fixed_div(relative, $z_index_standard_base_item);
+    margin-bottom: $moveVisualizer_line_thickness + $spacing_minimum;
+    width: 100%;
+    display: flex;
+    &-currentLevel {
+      @include mix_fixed_div(relative, $z_index_standard_base_item);
       display: flex;
+      flex-direction: column;
       align-items: center;
-      margin-bottom: $spacing_large;
-      &-label {
-        flex: 0 0 4rem;
-        margin-right: $spacing_small;
-        text-align: right;
+      left: 10% + 10%;
+      color: $color_red_5;
+      width: $moveVisualizer_pin_currentLevel_width;
+      margin-left: -$moveVisualizer_pin_currentLevel_width/2;
+      &-value {
+        @include mix_border_generator($typical_border_width, $color_red_5);
+        @include mix_border_radius(3px);
+        padding: $spacing_minimum $spacing_xx_small;
+        margin-bottom: $spacing_xx_small;
+        line-height: $line_height_minimum;
       }
-      &-content {
-        flex: 1 1 auto;
-        display: flex;
-        .sat-moveVisualizerEntry {
-          flex: 1 1 auto;
-        }
+      &-pin {
       }
     }
   }
   &--stencilState {
     #{$moveVisualizerBlockName} {
-      &__entryList {
-        &-item {
-          &-label {
-            @include mix_stencil_animation();
-          }
-          &-content {
-            visibility: hidden;
-          }
-        }
-      }
-    }
-  }
-}
-
-$moveVisualizerEntry_height: 2.25rem;
-$moveVisualizerEntry_node_size: 1.5rem;
-.sat-moveVisualizerEntry {
-  $moveVisualizerEntryBlockName: &;
-  @include mix_fixed_div(relative, $z_index_standard_base_item);
-  display: flex;
-  height: $moveVisualizerEntry_height;
-  &__baseLine {
-    @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    padding: $spacing_small;
-    &-content {
-      @include mix_border_radius(10px);
-      flex: 1 1 auto;
-      height: $typical_border_width*4;
-      background-color: $color_gray_4;
-    }
-  }
-  &__main {
-    @include mix_fixed_div(absolute, $z_index_standard_base_item_lift);
-    display: flex;
-    height: 100%;
-    width: 100%;
-    &-leftSpacing {
-      flex: 0 0 auto;
-    }
-    &-content {
-      @include mix_fixed_div(relative, $z_index_standard_base_item);
-      flex: 1 1 auto;
-      display: flex;
-      align-items: center;
-      &-line {
-        @include mix_border_radius(10px);
-        flex: 1 1 auto;
-        height: $typical_border_width*8;
-        background-color: $color_active;
-      }
-      &-node {
-        @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
-        display: flex;
-        justify-content: center;
-        &-pinText {
-          @include mix_border_radius(50%);
-          @include material();
-          @include mix_alive('material');
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          height: $moveVisualizerEntry_node_size;
-          width: $moveVisualizerEntry_node_size;
-          color: $font_color_inverse;
-          font-size: $font_size_small;
-        }
-        &-value {
-          @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
-          top: 100%;
-          color: $font_color_major;
-        }
-        &--target {
-          left: 0;
-          #{$moveVisualizerEntryBlockName} {
-            &__main-content-node-pinText {
-              background-color: $color_blue_5;
-            }
-          }
-        }
-        &--group {
-          right: 0;
-          #{$moveVisualizerEntryBlockName} {
-            &__main-content-node-pinText {
-              background-color: $color_indigo_5;
-            }
-          }
-        }
-      }
-    }
-    &-rightSpacing {
-      flex: 0 0 auto;
-    }
-  }
-  &--inversedState {
-    #{$moveVisualizerEntryBlockName} {
-      &__main {
-        &-content {
-          &-line {
-            background-color: $color_negative;
-          }
-          &-node {
-            &--target {
-              left: inherit;
-              right: 0;
-            }
-            &--group {
-              right: inherit;
-              left: 0;
-            }
-          }
-        }
-      }
-    }
-  }
-  &--invalidState {
-    #{$moveVisualizerEntryBlockName} {
-      &__main {
-        &-content {
-          &-line {
-            display: none;
-          }
-          &-node {
-            display: none;
-          }
-        }
-      }
     }
   }
 }
