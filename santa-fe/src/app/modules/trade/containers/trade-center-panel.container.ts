@@ -307,7 +307,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       stencilHeaderBuffer.forEach((eachHeader) => {
         if (eachHeader.data.displayLabel !== 'Security') {
           if (eachHeader.state.isQuantVariant) {
-            const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, this.state.filters.quickFilters.metricType, null);
+            const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, this.state.filters.quickFilters.metricType, null, null);
             newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, true, bestQuoteStencil));
           } else {
             newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, false));

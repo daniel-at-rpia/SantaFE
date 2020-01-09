@@ -50,7 +50,7 @@ export interface QuantVisualizerParams {
 export interface AgGridRowParams {
   data: AgGridRow;
   node: AgGridRowNode;
-  gridApi: GridApi;
+  api: GridApi;
   columnApi: ColumnApi;
   context: {
     componentParent: any;  // entire "this" of a container component

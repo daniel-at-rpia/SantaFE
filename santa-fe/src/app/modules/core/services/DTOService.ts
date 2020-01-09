@@ -393,7 +393,8 @@ export class DTOService {
   public formQuantComparerObject(
     isStencil: boolean,
     quantMetricType: string,
-    BEdto: BEBestQuoteDTO
+    BEdto: BEBestQuoteDTO,
+    securityCard: SecurityDTO
   ): QuantComparerDTO {
     const metricType = !isStencil ? quantMetricType : 'Spread';
     const backendTargetQuoteAttr = TriCoreMetricConfig[metricType]['backendTargetQuoteAttr'];
@@ -401,7 +402,7 @@ export class DTOService {
     const bidSize = !isStencil ? this.utility.round(rawData.bidQuantity/1000000, 1) : null;
     const offerSize = !isStencil ? this.utility.round(rawData.askQuantity/1000000, 1) : null;
     const tier2Shreshold = TriCoreMetricConfig[metricType]['tier2Threshold'];
-    const inversed = TriCoreMetricConfig[metricType]['inversed'];
+    const inversed = this.utility.isCDS(false, securityCard) ? !TriCoreMetricConfig[metricType]['inversed'] : TriCoreMetricConfig[metricType]['inversed'];
     const hasBid = !isStencil ? (!!rawData.bidQuoteValue && !!rawData.bidDealer) : true;
     const hasOffer = !isStencil ? (!!rawData.askQuoteValue && !!rawData.askDealer) : true;
     const rounding = TriCoreMetricConfig[metricType]['rounding'];
