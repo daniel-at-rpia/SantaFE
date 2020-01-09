@@ -36,7 +36,6 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   public agInit(params: any){
     // don't forget this is triggered when the row is updated in live too
     const typeSafeParams = params as AgGridRowParams;
-    console.log('params are', typeSafeParams);
     this.parentNode = typeSafeParams.node.parent;
     this.rowData = typeSafeParams.node.data.rowDTO;
     this.parent = typeSafeParams.context.componentParent;
