@@ -17,6 +17,7 @@ import { TradeObligorGraphPanel } from 'Trade/containers/trade-obligor-graph-pan
 import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
 import { MoveVisualizer } from 'Trade/components/move-visualizer/move-visualizer.component';
 import { ObligorGraph } from './components/obligor-graph/obligor-graph';
+import { HistoricalSummary } from 'Trade/containers/historical-summary.container';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ObligorGraph } from './components/obligor-graph/obligor-graph';
     TradeMarketAnalysisPanel,
     TradeObligorGraphPanel,
     MoveVisualizer,
-    ObligorGraph
+    ObligorGraph,
+    HistoricalSummary
   ],
   imports: [
     // Angular framework modules

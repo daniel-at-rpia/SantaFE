@@ -19,8 +19,4 @@ import {
 export class MoveVisualizer {
   @Input() visualizerData: MoveVisualizerDTO;
   constructor() { }
-
-  public onTest(event) {
-    console.log('mouse move', event);
-  }
 }

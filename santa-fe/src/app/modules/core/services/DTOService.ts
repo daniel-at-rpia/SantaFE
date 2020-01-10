@@ -634,51 +634,6 @@ export class DTOService {
     return object;
   }
 
-  public formMoveVisualizerObject(
-    isStencil: boolean,
-    rawData?: BEHistoricalQuantBlock
-  ): MoveVisualizerDTO {
-    if (isStencil || !rawData) {
-      const stencilObject: MoveVisualizerDTO = {
-        data: {
-          start: 0,
-          end: 123,
-          min: 0,
-          max: 0
-        },
-        style: {
-          leftGap: 10,
-          leftEdge: 10,
-          moveRange: 60,
-          rightEdge: 10,
-          rightGap: 10
-        },
-        state: {
-        }
-      };
-      return stencilObject;
-    } else {
-      const object: MoveVisualizerDTO = {
-        data: {
-          start: this.utility.round(rawData.startMetric),
-          end: this.utility.round(rawData.endMetric),
-          min: this.utility.round(rawData.minMetric),
-          max: this.utility.round(rawData.maxMetric)
-        },
-        style: {
-          leftGap: 10,
-          leftEdge: 10,
-          moveRange: 60,
-          rightEdge: 10,
-          rightGap: 10
-        },
-        state: {
-        }
-      }
-      return object;
-    }
-  }
-
   public formObligorChartCategoryDTO(
     isStencil: boolean,
     name: string,
@@ -727,5 +682,63 @@ export class DTOService {
     else {
       return null;
     }
+  }
+
+  public formMoveVisualizerObject(
+    isStencil: boolean,
+    rawData?: BEHistoricalQuantBlock
+  ): DTOs.MoveVisualizerDTO {
+    if (isStencil || !rawData) {
+      const stencilObject: DTOs.MoveVisualizerDTO = {
+        data: {
+          start: 0,
+          end: 123,
+          min: 0,
+          max: 0
+        },
+        style: {
+          leftGap: 10,
+          leftEdge: 10,
+          moveRange: 60,
+          rightEdge: 10,
+          rightGap: 10
+        },
+        state: {
+        }
+      };
+      return stencilObject;
+    } else {
+      const object: DTOs.MoveVisualizerDTO = {
+        data: {
+          start: this.utility.round(rawData.startMetric),
+          end: this.utility.round(rawData.endMetric),
+          min: this.utility.round(rawData.minMetric),
+          max: this.utility.round(rawData.maxMetric)
+        },
+        style: {
+          leftGap: 10,
+          leftEdge: 10,
+          moveRange: 60,
+          rightEdge: 10,
+          rightGap: 10
+        },
+        state: {
+        }
+      }
+      return object;
+    }
+  }
+
+  public formHistoricalSummaryObject(
+  ): DTOs.HistoricalSummaryDTO {
+    const object: DTOs.HistoricalSummaryDTO = {
+      data: {
+        list: []
+      },
+      state: {
+
+      }
+    };
+    return object;
   }
 }

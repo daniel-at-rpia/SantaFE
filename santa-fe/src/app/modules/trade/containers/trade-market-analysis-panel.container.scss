@@ -17,25 +17,25 @@
     display: flex;
     margin: $spacing_medium;
     padding-top: $spacing_medium;
-    &-partone {
+    &-securityList {
       flex: 0 1 33.33%;
     }
-    &-parttwo {
+    &-levelColumn {
       flex: 0 0 33.33%;
-      move-visualizer {
-        display: flex;
-      }
+      // move-visualizer {
+        // display: flex;
+      // }
     }
     &-separator {
       @include mix_border_generator(0 0 0 $typical_border_width);
       margin-left: $spacing_medium;
       padding-left: $spacing_medium;
     }
-    &-partthree {
+    &-basisColumn {
       flex: 0 0 33.33%;
-      move-visualizer {
-        display: flex;
-      }
+      // move-visualizer {
+      //   display: flex;
+      // }
     }
   }
   &--hasSecurityState {

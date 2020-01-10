@@ -1,0 +1,7 @@
+@import "global.scss";
+@import "modules/trade/trade.scss";
+
+.sat-historicalSummary {
+  $historicalSummaryBlockName: &;
+  display: flex;
+}

@@ -4,14 +4,14 @@
     'sat-tradeMarketAnalysisPanel--hasSecurityState': state.receivedSecurity
   }">
   <section class="sat-tradeMarketAnalysisPanel__table">
-    <div class="sat-tradeMarketAnalysisPanel__table-partone"></div>
+    <ul class="sat-tradeMarketAnalysisPanel__table-securityList"></ul>
     <div class="sat-tradeMarketAnalysisPanel__table-separator"></div>
-    <div class="sat-tradeMarketAnalysisPanel__table-parttwo">
-      <move-visualizer [visualizerData]="test1"></move-visualizer>
+    <div class="sat-tradeMarketAnalysisPanel__table-levelColumn">
+      <historical-summary></historical-summary>
     </div>
     <div class="sat-tradeMarketAnalysisPanel__table-separator"></div>
-    <div class="sat-tradeMarketAnalysisPanel__table-partthree">
-      <move-visualizer [visualizerData]="test2"></move-visualizer>
+    <div class="sat-tradeMarketAnalysisPanel__table-basisColumn">
+      <historical-summary></historical-summary>
     </div>
   </section>
 </article>

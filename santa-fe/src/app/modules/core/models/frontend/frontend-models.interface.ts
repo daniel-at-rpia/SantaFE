@@ -321,6 +321,21 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
   }
 }
 
+export interface NumericFilterDTO extends BasicDTOStructure {
+  data: {
+    minNumber: number|string;
+    maxNumber: number|string;
+  },
+  api: {
+    params: agGrid.IFilterParams;
+    valueGetter: (rowNode: agGrid.RowNode) => any;
+    floatingParams: SantaTableNumericFloatingFilterParams;
+  }
+  state: {
+    isFilled: boolean;
+  }
+}
+
 export interface MoveVisualizerDTO extends BasicDTOStructure {
   data: {
     start: number;
@@ -339,17 +354,11 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
   }
 }
 
-export interface NumericFilterDTO extends BasicDTOStructure {
+export interface HistoricalSummaryDTO extends BasicDTOStructure {
   data: {
-    minNumber: number|string;
-    maxNumber: number|string;
-  },
-  api: {
-    params: agGrid.IFilterParams;
-    valueGetter: (rowNode: agGrid.RowNode) => any;
-    floatingParams: SantaTableNumericFloatingFilterParams;
+    list: Array<MoveVisualizerDTO>;
   }
   state: {
-    isFilled: boolean;
+    
   }
 }

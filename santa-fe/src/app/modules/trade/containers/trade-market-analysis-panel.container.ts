@@ -82,6 +82,10 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     this.test2 = this.dtoService.formMoveVisualizerObject(false, HistoricalSummarySampleReturn.Mom.Group.historicalLevel);
   }
 
+  public onTest(event) {
+    console.log('mouse move', event);
+  }
+
   public ngOnInit() {
     this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
       select(selectSelectedSecurityForAnalysis)
