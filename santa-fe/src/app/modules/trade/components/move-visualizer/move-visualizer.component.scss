@@ -9,7 +9,7 @@ $moveVisualizer_pin_start_width: 1.2rem;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
   flex: 1 1 auto;
   display: flex;
-  &__secOne {
+  &__bar {
     @include mix_fixed_div(absolute, $z_index_standard_base_item);
     width: 100%;
     bottom: 0;
@@ -38,7 +38,7 @@ $moveVisualizer_pin_start_width: 1.2rem;
       flex: 0 0 5%;
     }
   }
-  &__secTwo {
+  &__pins {
     @include mix_fixed_div(relative, $z_index_standard_base_item);
     display: flex;
     align-items: flex-end;
