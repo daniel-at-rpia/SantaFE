@@ -80,9 +80,19 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     let chartCategory = null;
     this.state.chartCategories = [];
 
+    let lookbackHrs;
+    if(this.state.lookBackHours)
+    {
+      lookbackHrs = this.state.lookBackHours
+    }
+    else
+    {
+      lookbackHrs = 2;
+    }
+
     const payload: PayloadObligorSecurityIDs = {
       identifier: this.state.obligorSecurityID,
-      lookbackHrs: this.state.lookBackHours
+      lookbackHrs: lookbackHrs
     };
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getObligorCurves, { req: 'POST' }, payload).pipe(
       first(),
@@ -171,6 +181,10 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
           if (!!eachSecurity && eachCategoryItem.data.securityID === eachSecurity.data.securityID) {
             if (this.state.metric.spread) {
               eachCategoryItem.data.mark = eachSecurity.data.mark.mark;
+            }
+            else if( this.state.metric.yield )
+            {
+              eachCategory.state.isMarkHidden = true;
             }
             eachCategoryItem.data.positionCurrentQuantity = eachSecurity.data.positionCurrent;
             eachCategoryItem.data.positionCurrentCS01 = eachSecurity.data.cs01Local;

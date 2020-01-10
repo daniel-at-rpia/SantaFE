@@ -376,7 +376,7 @@ export class GraphService {
           return `<center><b>{name}</b> </br>
               Mid: {mid} </br>
               Mark: {tooltipMark}</br>
-              CS01: {positionCurrentCS01}</center>`;
+              Current Position: {positionCurrentQuantity}</center>`;
         }
       });
 
