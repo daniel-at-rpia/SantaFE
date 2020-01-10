@@ -14,28 +14,33 @@ $moveVisualizer_pin_start_width: 1.2rem;
     width: 100%;
     bottom: 0;
     display: flex;
-    &-leftSpace {
-      flex: 0 0 10%;
+    &-leftGap {
+      flex-grow: 0;
+      flex-shrink: 0;
     }
     &-leftEdge {
       @include mix_border_radius(3px, 'left');
-      flex: 0 0 10%;
+      flex-grow: 0;
+      flex-shrink: 0;
       height: $moveVisualizer_line_thickness;
       background-color: $color_active;
     }
     &-moveRange {
-      flex: 0 0 50%;
+      flex-grow: 0;
+      flex-shrink: 0;
       height: $moveVisualizer_line_thickness;
       background-color: $color_red_5;
     }
     &-rightEdge {
       @include mix_border_radius(3px, 'right');
-      flex: 0 0 25%;
+      flex-grow: 0;
+      flex-shrink: 0;
       height: $moveVisualizer_line_thickness;
       background-color: $color_active;
     }
-    &-rightSpace {
-      flex: 0 0 5%;
+    &-rightGap {
+      flex-grow: 0;
+      flex-shrink: 0;
     }
   }
   &__pins {
@@ -45,11 +50,10 @@ $moveVisualizer_pin_start_width: 1.2rem;
     margin-bottom: $moveVisualizer_line_thickness + $spacing_minimum;
     width: 100%;
     &-end {
-      @include mix_fixed_div(relative, $z_index_standard_base_item);
+      @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
       display: flex;
       flex-direction: column;
       align-items: center;
-      left: 10% + 10% + 50%;
       color: $color_red_5;
       width: $moveVisualizer_pin_end_width;
       margin-left: -$moveVisualizer_pin_end_width/2;
@@ -59,13 +63,13 @@ $moveVisualizer_pin_start_width: 1.2rem;
         padding: $spacing_minimum $spacing_xx_small;
         margin-bottom: $spacing_xx_small;
         line-height: $line_height_minimum;
+        background-color: $color_white;
       }
     }
     &-start {
       @include mix_fixed_div(absolute, $z_index_standard_base_item);  // start pin and all other pins have to be absolute, because having them as relative means their positions will be constrainted by the previous element, which is the end pin, so left:0 won't be the real 0;
       display: flex;
       color: $color_red_5;
-      left: 10% + 10%;
       width: $moveVisualizer_pin_start_width;
       margin-left: -$moveVisualizer_pin_start_width/2;
       &-icon {

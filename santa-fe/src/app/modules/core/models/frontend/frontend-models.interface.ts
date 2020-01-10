@@ -325,6 +325,11 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
   data: {
   }
   style: {
+    leftGap: number;
+    leftEdge: number;
+    moveRange: number;
+    rightEdge: number;
+    rightGap: number;
   }
   state: {
   }

@@ -5,19 +5,47 @@
   }">
   <section class="sat-moveVisualizer__bar">
     <!--line-->
-    <div class="sat-moveVisualizer__bar-leftSpace"></div>
-    <div class="sat-moveVisualizer__bar-leftEdge"></div>
-    <div class="sat-moveVisualizer__bar-moveRange"></div>
-    <div class="sat-moveVisualizer__bar-rightEdge"></div>
-    <div class="sat-moveVisualizer__bar-rightSpace"></div>
+    <div
+      class="sat-moveVisualizer__bar-leftGap"
+      [ngStyle]="{
+        'flex-basis': visualizerData.style.leftGap + '%'
+      }"></div>
+    <div
+      class="sat-moveVisualizer__bar-leftEdge"
+      [ngStyle]="{
+        'flex-basis': visualizerData.style.leftEdge + '%'
+      }"></div>
+    <div
+      class="sat-moveVisualizer__bar-moveRange"
+      [ngStyle]="{
+        'flex-basis': visualizerData.style.moveRange + '%'
+      }"></div>
+    <div
+      class="sat-moveVisualizer__bar-rightEdge"
+      [ngStyle]="{
+        'flex-basis': visualizerData.style.rightEdge + '%'
+      }"></div>
+    <div
+      class="sat-moveVisualizer__bar-rightGap"
+      [ngStyle]="{
+        'flex-basis': visualizerData.style.rightGap + '%'
+      }"></div>
   </section>
   <section class="sat-moveVisualizer__pins">
     <!--pin-->
-    <div class="sat-moveVisualizer__pins-end">
+    <div
+      class="sat-moveVisualizer__pins-end"
+      [ngStyle]="{
+        'left': visualizerData.style.leftGap + visualizerData.style.leftEdge + '%'
+      }">
       <span class="sat-moveVisualizer__pins-end-value">467.6</span>
       <i class="sat-moveVisualizer__pins-end-icon fas fa-map-marker"></i>
     </div>
-    <div class="sat-moveVisualizer__pins-start">
+    <div
+      class="sat-moveVisualizer__pins-start"
+      [ngStyle]="{
+        'left': visualizerData.style.leftGap + visualizerData.style.leftEdge + visualizerData.style.moveRange + '%'
+      }">
       <i class="sat-moveVisualizer__pins-start-icon fa fa-map-marker-alt"></i>
     </div>
   </section>

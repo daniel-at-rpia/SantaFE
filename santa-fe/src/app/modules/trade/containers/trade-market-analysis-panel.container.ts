@@ -53,6 +53,9 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     yieldMetricKey: MARKET_ANALYSIS_YIELD_METRIC_KEY
   };
 
+  test1: MoveVisualizerDTO;
+  test2: MoveVisualizerDTO;
+
   constructor(
     private store$: Store<any>,
     private dtoService: DTOService,
@@ -72,6 +75,8 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     }
     this.populateDefinitionOptions();
     this.state.moveVisualizer.groupByOptions[0].state.groupByActive = true;
+    this.test1 = this.dtoService.formMoveVisualizerObject(false);
+    this.test2 = this.dtoService.formMoveVisualizerObject(false);
   }
 
   public ngOnInit() {

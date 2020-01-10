@@ -662,6 +662,11 @@ export class DTOService {
         data: {
         },
         style: {
+          leftGap: 10,
+          leftEdge: 10,
+          moveRange: 60,
+          rightEdge: 10,
+          rightGap: 10
         },
         state: {
         }
@@ -672,6 +677,11 @@ export class DTOService {
         data: {
         },
         style: {
+          leftGap: 10,
+          leftEdge: 10,
+          moveRange: 60,
+          rightEdge: 10,
+          rightGap: 10
         },
         state: {
         }
