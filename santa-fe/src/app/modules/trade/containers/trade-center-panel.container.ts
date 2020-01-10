@@ -358,7 +358,6 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
   private fetchStageThreeContent() {
     const payload: PayloadGetBestQuotes = {
-      quoteMetric: this.state.filters.quickFilters.metricType,
       identifiers: []
     };
     if (!!this.state.bestQuoteValidWindow) {
