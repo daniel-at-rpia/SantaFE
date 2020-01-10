@@ -446,7 +446,11 @@ export class SantaTable implements OnInit, OnChanges {
   private liveUpdateAllQuotesForExpandedRows() {
     this.tableData.data.rows.forEach((eachRow) => {
       if (eachRow.state.isExpanded) {
-        this.fetchSecurityQuotes(eachRow);
+        try {
+          this.fetchSecurityQuotes(eachRow);
+        } catch {
+          // ignore, seems AgGrid causes some weird read only error
+        }
       }
     })
   }
