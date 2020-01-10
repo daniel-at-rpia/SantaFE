@@ -323,6 +323,10 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
 
 export interface MoveVisualizerDTO extends BasicDTOStructure {
   data: {
+    start: number;
+    end: number;
+    min: number;
+    max: number;
   }
   style: {
     leftGap: number;

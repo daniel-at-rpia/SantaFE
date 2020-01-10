@@ -54,7 +54,7 @@ export class UtilityService {
       }
     }
 
-    public round(input, precision): any {
+    public round(input, precision = 0): any {
       return _.round(input, precision);
     }
 

@@ -5,7 +5,8 @@
       BESecurityGroupDTO,
       BEBestQuoteDTO,
       BEQuoteDTO,
-      BEPortfolioDTO
+      BEPortfolioDTO,
+      BEHistoricalQuantBlock
     } from 'BEModels/backend-models.interface';
     import {
       SecurityDTO,
@@ -656,11 +657,16 @@ export class DTOService {
   }
 
   public formMoveVisualizerObject(
-    isStencil: boolean
+    isStencil: boolean,
+    rawData?: BEHistoricalQuantBlock
   ): MoveVisualizerDTO {
-    if (isStencil) {
+    if (isStencil || !rawData) {
       const stencilObject: MoveVisualizerDTO = {
         data: {
+          start: 0,
+          end: 123,
+          min: 0,
+          max: 0
         },
         style: {
           leftGap: 10,
@@ -676,6 +682,10 @@ export class DTOService {
     } else {
       const object: MoveVisualizerDTO = {
         data: {
+          start: this.utility.round(rawData.startMetric),
+          end: this.utility.round(rawData.endMetric),
+          min: this.utility.round(rawData.minMetric),
+          max: this.utility.round(rawData.maxMetric)
         },
         style: {
           leftGap: 10,

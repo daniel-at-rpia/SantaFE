@@ -1,4 +1,6 @@
-const HistoricalSummarySampleReturn = {
+import { BEHistoricalSummaryOverviewDTO } from 'BEModels/backend-models.interface';
+
+export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
   "Yoy": {
     "BaseSecurity": {
       "source": "Default",
