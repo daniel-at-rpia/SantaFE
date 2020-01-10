@@ -20,6 +20,21 @@ export const SECURITY_TABLE_QUOTE_TYPE_AXE = 'Axe';
 
 export const SECURITY_TABLE_FINAL_STAGE = 3;
 
+export const AGGRID_DETAIL_COLUMN_WIDTH = 50;
+export const AGGRID_SECURITY_CARD_COLUMN_WIDTH = 270;
+export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_quant + $spacing_small * 2 
+export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 150;
+export const AGGRID_SIMPLE_TEXT_COLUMN_WIDTH = 150;
+export const AGGRID_ROW_HEIGHT = 40;
+export const AGGRID_DETAIL_ROW_HEIGHT_MAX = 480;
+export const AGGRID_DETAIL_ROW_HEIGHT_PER_ROW = 37;
+export const AGGRID_DETAIL_ROW_HEIGHT_OFFSET = 120;
+export const AGGRID_DETAIL_ROW_HEIGHT_DEFAULT = 200;
+export const AGGRID_HEADER_CLASS = 'santaTable__agGridTable-agGrid-header';
+export const AGGRID_ROW_CLASS = 'santaTable__agGridTable-agGrid-row';
+export const AGGRID_CELL_CLASS = 'santaTable__agGridTable-agGrid-cell';
+export const AGGRID_DETAIL_COLUMN_KEY = 'Quotes';
+
 export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
   {
     key: 'securityCard',
@@ -320,14 +335,3 @@ export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
     textOnly: true
   }
 ];
-
-export const AGGRID_DETAIL_COLUMN_WIDTH = 50;
-export const AGGRID_SECURITY_CARD_COLUMN_WIDTH = 270;
-export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_quant + $spacing_small * 2 
-export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 150;
-export const AGGRID_SIMPLE_TEXT_COLUMN_WIDTH = 150;
-export const AGGRID_ROW_HEIGHT = 40;
-export const AGGRID_HEADER_CLASS = 'santaTable__agGridTable-agGrid-header';
-export const AGGRID_ROW_CLASS = 'santaTable__agGridTable-agGrid-row';
-export const AGGRID_CELL_CLASS = 'santaTable__agGridTable-agGrid-cell';
-export const AGGRID_DETAIL_COLUMN_KEY = 'Quotes';

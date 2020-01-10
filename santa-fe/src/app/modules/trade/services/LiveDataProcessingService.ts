@@ -54,7 +54,7 @@ export class LiveDataProcessingService {
         const newBESecurity:BESecurityDTO = serverReturn[eachKey][0].security;
         const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false);
         serverReturn[eachKey].forEach((eachPortfolio: BEPortfolioDTO) => {
-          if (eachPortfolio.quantity !== 0 && !eachPortfolio.security.isGovt && eachPortfolio.security.metrics) {
+          if (eachPortfolio.quantity !== 0 && !eachPortfolio.security.isGovt) {
             this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio, activeMetricType);
           } else {
             isValidFlag = false;
@@ -115,17 +115,20 @@ export class LiveDataProcessingService {
     const newPriceQuant = this.dtoService.formQuantComparerObject(
       false,
       TriCoreMetricConfig.Price.label,
-      quote
+      quote,
+      targetRow.data.security
     );
     const newSpreadQuant = this.dtoService.formQuantComparerObject(
       false,
       TriCoreMetricConfig.Spread.label,
-      quote
+      quote,
+      targetRow.data.security
     );
     const newYieldQuant = this.dtoService.formQuantComparerObject(
       false,
       TriCoreMetricConfig.Yield.label,
-      quote
+      quote,
+      targetRow.data.security
     );
     targetRow.data.bestQuotes = {
       bestPriceQuote: newPriceQuant,
