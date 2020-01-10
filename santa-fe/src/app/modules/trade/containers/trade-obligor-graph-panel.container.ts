@@ -121,8 +121,8 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
                     yieldMid: yieldMid,
                     mark: null,
                     workoutTerm: serverReturn[curve].securities[security].metrics.workoutTerm,
-                    positionCurrentQuantity: null,
-                    positionCurrentCS01: null
+                    CurrentPosition: null,
+                    CS01Local: null
                   },
                   state: {}
                 }
@@ -173,8 +173,8 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
             if (this.state.metric.spread) {
               eachCategoryItem.data.mark = eachSecurity.data.mark.mark;
             }
-            eachCategoryItem.data.positionCurrentQuantity = eachSecurity.data.positionCurrent;
-            eachCategoryItem.data.positionCurrentCS01 = eachSecurity.data.cs01Local;
+            eachCategoryItem.data.CurrentPosition = eachSecurity.data.positionCurrent;
+            eachCategoryItem.data.CS01Local = eachSecurity.data.cs01Local;
           }
         })
       })

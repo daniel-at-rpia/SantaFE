@@ -284,8 +284,8 @@ export class GraphService {
               mid: mid,
               mark: mark,
               workoutTerm: category.data.obligorCategoryDataItemDTO[dataItem].data.workoutTerm,
-              positionCurrentQuantity: category.data.obligorCategoryDataItemDTO[dataItem].data.positionCurrentQuantity,
-              positionCurrentCS01: category.data.obligorCategoryDataItemDTO[dataItem].data.positionCurrentCS01,
+              positionCurrentQuantity: category.data.obligorCategoryDataItemDTO[dataItem].data.CurrentPosition,
+              positionCurrentCS01: category.data.obligorCategoryDataItemDTO[dataItem].data.CS01Local,
               tooltipMark: category.data.obligorCategoryDataItemDTO[dataItem].data.mark
             })
           }
@@ -296,8 +296,8 @@ export class GraphService {
             mid: mid,
             mark: mid,
             workoutTerm: category.data.obligorCategoryDataItemDTO[dataItem].data.workoutTerm,
-            positionCurrentQuantity: category.data.obligorCategoryDataItemDTO[dataItem].data.positionCurrentQuantity,
-            positionCurrentCS01: category.data.obligorCategoryDataItemDTO[dataItem].data.positionCurrentCS01,
+            positionCurrentQuantity: category.data.obligorCategoryDataItemDTO[dataItem].data.CurrentPosition,
+            positionCurrentCS01: category.data.obligorCategoryDataItemDTO[dataItem].data.CS01Local,
             tooltipMark: category.data.obligorCategoryDataItemDTO[dataItem].data.mark
           })
         }
