@@ -1,4 +1,5 @@
 <article
+  (mousemove)="onTest($event)"
   [ngClass]="{
     'sat-moveVisualizer': true
   }">
@@ -12,9 +13,12 @@
   </section>
   <section class="sat-moveVisualizer__secTwo">
     <!--pin-->
-    <div class="sat-moveVisualizer__secTwo-currentLevel">
-      <span class="sat-moveVisualizer__secTwo-currentLevel-value">467.6</span>
-      <i class="sat-moveVisualizer__secTwo-currentLevel-pin fas fa-map-marker"></i>
+    <div class="sat-moveVisualizer__secTwo-end">
+      <span class="sat-moveVisualizer__secTwo-end-value">467.6</span>
+      <i class="sat-moveVisualizer__secTwo-end-icon fas fa-map-marker"></i>
+    </div>
+    <div class="sat-moveVisualizer__secTwo-start">
+      <i class="sat-moveVisualizer__secTwo-start-icon fa fa-map-marker-alt"></i>
     </div>
   </section>
 </article>

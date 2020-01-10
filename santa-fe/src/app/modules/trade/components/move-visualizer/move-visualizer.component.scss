@@ -2,7 +2,8 @@
 @import "modules/trade/trade.scss";
 
 $moveVisualizer_line_thickness: 0.75rem;
-$moveVisualizer_pin_currentLevel_width: 3rem;
+$moveVisualizer_pin_end_width: 3rem;
+$moveVisualizer_pin_start_width: 1.2rem;
 .sat-moveVisualizer {
   $moveVisualizerBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
@@ -39,18 +40,19 @@ $moveVisualizer_pin_currentLevel_width: 3rem;
   }
   &__secTwo {
     @include mix_fixed_div(relative, $z_index_standard_base_item);
+    display: flex;
+    align-items: flex-end;
     margin-bottom: $moveVisualizer_line_thickness + $spacing_minimum;
     width: 100%;
-    display: flex;
-    &-currentLevel {
+    &-end {
       @include mix_fixed_div(relative, $z_index_standard_base_item);
       display: flex;
       flex-direction: column;
       align-items: center;
-      left: 10% + 10%;
+      left: 10% + 10% + 50%;
       color: $color_red_5;
-      width: $moveVisualizer_pin_currentLevel_width;
-      margin-left: -$moveVisualizer_pin_currentLevel_width/2;
+      width: $moveVisualizer_pin_end_width;
+      margin-left: -$moveVisualizer_pin_end_width/2;
       &-value {
         @include mix_border_generator($typical_border_width, $color_red_5);
         @include mix_border_radius(3px);
@@ -58,7 +60,16 @@ $moveVisualizer_pin_currentLevel_width: 3rem;
         margin-bottom: $spacing_xx_small;
         line-height: $line_height_minimum;
       }
-      &-pin {
+    }
+    &-start {
+      @include mix_fixed_div(absolute, $z_index_standard_base_item);  // start pin and all other pins have to be absolute, because having them as relative means their positions will be constrainted by the previous element, which is the end pin, so left:0 won't be the real 0;
+      display: flex;
+      color: $color_red_5;
+      left: 10% + 10%;
+      width: $moveVisualizer_pin_start_width;
+      margin-left: -$moveVisualizer_pin_start_width/2;
+      &-icon {
+        font-size: $font_size_x_large;
       }
     }
   }
