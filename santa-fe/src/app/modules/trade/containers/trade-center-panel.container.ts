@@ -205,6 +205,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.state.presets.selectedPreset = null;
     this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true);
     this.state.filters.quickFilters = this.initializePageState().filters.quickFilters;
+    this.state.fetchResult = this.initializePageState().fetchResult;
     this.store$.dispatch(new TradeTogglePresetEvent);
   }
 
@@ -376,8 +377,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         console.log('liveQuote/get-best-quotes failed', err);
         this.state.fetchResult.fetchTableDataFailed = true;
         this.state.fetchResult.fetchTableDataFailedError = err.message;
-        this.state.fetchResult.prinstineRowList = [];
-        this.state.fetchResult.rowList = this.filterPrinstineRowList();
+        this.loadStageThreeContent({})
         return of('error');
       })
     ).subscribe();
