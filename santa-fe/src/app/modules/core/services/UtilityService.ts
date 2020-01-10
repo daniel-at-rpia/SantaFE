@@ -295,7 +295,7 @@ export class UtilityService {
           Ytd: {}
         }
       };
-      if (!!rawData) {
+      if (!!rawData && !!rawData.deltaMetrics && !!rawData.metrics) {
         const isGroup = !!rawData['groupIdentifier'];
         const metricList = isGroup ? this.groupGroupMetricOptions : this.securityMetricOptions;
         metricList.forEach((eachMetric) => {
