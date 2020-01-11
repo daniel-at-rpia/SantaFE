@@ -229,7 +229,7 @@ export interface BEHistoricalSummaryOverviewDTO {
   Mom?: BEHistoricalSummaryDTO;
 }
 
-interface BEHistoricalSummaryDTO {
+export interface BEHistoricalSummaryDTO {
   BaseSecurity: BEHistoricalInfoDTO;
   Group: BEHistoricalInfoDTO;
   Top: {

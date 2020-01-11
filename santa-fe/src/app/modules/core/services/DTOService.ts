@@ -6,7 +6,8 @@
       BEBestQuoteDTO,
       BEQuoteDTO,
       BEPortfolioDTO,
-      BEHistoricalQuantBlock
+      BEHistoricalQuantBlock,
+      BEHistoricalSummaryDTO
     } from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
     import * as Blocks from 'FEModels/frontend-blocks.interface';
@@ -730,6 +731,8 @@ export class DTOService {
   }
 
   public formHistoricalSummaryObject(
+    rawData: BEHistoricalSummaryDTO,
+    isLevel: boolean
   ): DTOs.HistoricalSummaryDTO {
     const object: DTOs.HistoricalSummaryDTO = {
       data: {
@@ -739,6 +742,20 @@ export class DTOService {
 
       }
     };
+    if (rawData.BaseSecurity) {
+      const baseDTO = this.formMoveVisualizerObject(false, rawData.BaseSecurity.historicalLevel);
+      object.data.list.push(baseDTO);
+    }
+    if (rawData.Group) {
+      const groupDTO = this.formMoveVisualizerObject(false, rawData.Group.historicalLevel);
+      object.data.list.push(groupDTO);
+    }
+    if (rawData.Top) {
+      for (const eachSecurityIdentifier in rawData.Top) {
+        const eachDTO = isLevel ? this.formMoveVisualizerObject(false, rawData.Top[eachSecurityIdentifier].historicalLevel) : this.formMoveVisualizerObject(false, rawData.Top[eachSecurityIdentifier].historicalBasis);
+        object.data.list.push(eachDTO);
+      }
+    }
     return object;
   }
 }

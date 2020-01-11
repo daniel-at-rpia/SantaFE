@@ -3,5 +3,12 @@
 
 .sat-historicalSummary {
   $historicalSummaryBlockName: &;
+  flex: 1 1 auto;
   display: flex;
+  &__list {
+    @include mix_enable_scrollbar('vertical');
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+  }
 }

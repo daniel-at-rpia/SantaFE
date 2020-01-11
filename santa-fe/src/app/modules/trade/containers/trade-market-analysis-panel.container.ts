@@ -56,9 +56,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     yieldMetricKey: MARKET_ANALYSIS_YIELD_METRIC_KEY
   };
 
-  test1: MoveVisualizerDTO;
-  test2: MoveVisualizerDTO;
-
   constructor(
     private store$: Store<any>,
     private dtoService: DTOService,
@@ -69,21 +66,16 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
       receivedSecurity: false,
       moveVisualizer: {
         groupByOptions: [],
-        dto: this.dtoService.formMoveVisualizerObject(true),
         targetSecurity: null
       },
       table: {
-        securityList: []
+        securityList: [],
+        levelSummary: this.dtoService.formHistoricalSummaryObject(HistoricalSummarySampleReturn.Mom, true),
+        basisSummary: this.dtoService.formHistoricalSummaryObject(HistoricalSummarySampleReturn.Yoy, true)
       }
     }
     this.populateDefinitionOptions();
     this.state.moveVisualizer.groupByOptions[0].state.groupByActive = true;
-    this.test1 = this.dtoService.formMoveVisualizerObject(false, HistoricalSummarySampleReturn.Mom.BaseSecurity.historicalLevel);
-    this.test2 = this.dtoService.formMoveVisualizerObject(false, HistoricalSummarySampleReturn.Mom.Group.historicalLevel);
-  }
-
-  public onTest(event) {
-    console.log('mouse move', event);
   }
 
   public ngOnInit() {
@@ -114,7 +106,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
   private onSecuritySelected(targetSecurity: SecurityDTO) {
     this.state.receivedSecurity = true;
     this.state.moveVisualizer.targetSecurity = this.utilityService.deepCopy(targetSecurity);
-    this.state.moveVisualizer.dto = this.dtoService.formMoveVisualizerObject(true);
     this.fetchGroupData();
   }
 

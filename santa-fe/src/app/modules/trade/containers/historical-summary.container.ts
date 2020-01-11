@@ -1,7 +1,8 @@
   // dependencies
     import {
       Component,
-      ViewEncapsulation
+      ViewEncapsulation,
+      Input
     } from '@angular/core';
 
     import { DTOService } from 'Core/services/DTOService';
@@ -10,7 +11,7 @@
     import {
       SecurityDTO,
       MoveVisualizerDTO,
-      SecurityDefinitionDTO
+      HistoricalSummaryDTO
     } from 'FEModels/frontend-models.interface';
   //
 
@@ -22,6 +23,7 @@
 })
 
 export class HistoricalSummary {
+  @Input() summaryData: HistoricalSummaryDTO;
   subscriptions = {
   }
   constants = {
@@ -36,7 +38,7 @@ export class HistoricalSummary {
   }
 
   public onTest(event) {
-    console.log('mouse move', event);
+    console.log('mouse move', event.offsetX);
   }
 
 }

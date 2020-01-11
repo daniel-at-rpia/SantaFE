@@ -7,11 +7,13 @@
     <ul class="sat-tradeMarketAnalysisPanel__table-securityList"></ul>
     <div class="sat-tradeMarketAnalysisPanel__table-separator"></div>
     <div class="sat-tradeMarketAnalysisPanel__table-levelColumn">
-      <historical-summary></historical-summary>
+      <historical-summary [summaryData]="state.table.levelSummary"></historical-summary>
     </div>
     <div class="sat-tradeMarketAnalysisPanel__table-separator"></div>
     <div class="sat-tradeMarketAnalysisPanel__table-basisColumn">
-      <historical-summary></historical-summary>
+      <!--
+        <historical-summary></historical-summary>
+      -->
     </div>
   </section>
 </article>

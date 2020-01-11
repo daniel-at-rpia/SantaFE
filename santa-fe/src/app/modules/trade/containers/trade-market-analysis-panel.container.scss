@@ -12,30 +12,25 @@
   }
   &__table {
     @include mix_fixed_div(relative, $z_index_standard_base_item);
-    @include mix_border_generator($typical_border_width 0 0 0);
     flex: 1 1 auto;
     display: flex;
-    margin: $spacing_medium;
-    padding-top: $spacing_medium;
+    overflow: hidden;
+    padding: $spacing_medium;
     &-securityList {
       flex: 0 1 33.33%;
     }
-    &-levelColumn {
+    &-levelColumn, &-basisColumn {
       flex: 0 0 33.33%;
-      // move-visualizer {
-        // display: flex;
-      // }
+      display: flex;
+      historical-summary {
+        flex: 1 1 auto;
+        display: flex;
+      }
     }
     &-separator {
       @include mix_border_generator(0 0 0 $typical_border_width);
       margin-left: $spacing_medium;
       padding-left: $spacing_medium;
-    }
-    &-basisColumn {
-      flex: 0 0 33.33%;
-      // move-visualizer {
-      //   display: flex;
-      // }
     }
   }
   &--hasSecurityState {

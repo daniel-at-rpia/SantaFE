@@ -1,6 +1,11 @@
 <article
-  (mousemove)="onTest($event)"
   [ngClass]="{
     'sat-historicalSummary': true
   }">
+  <ul 
+  (mousemove)="onTest($event)" class="sat-historicalSummary__list">
+    <li *ngFor="let eachVisualizer of summaryData.data.list" class="sat-historicalSummary__list-item">
+      <move-visualizer [visualizerData]="eachVisualizer"></move-visualizer>
+    </li>
+  </ul>
 </article>
