@@ -40,12 +40,10 @@
       <span class="sat-moveVisualizer__pins-end-value">{{visualizerData.data.end}}</span>
       <i class="sat-moveVisualizer__pins-end-icon fas fa-map-marker"></i>
     </div>
-    <div
-      class="sat-moveVisualizer__pins-start"
-      [ngStyle]="{
-        'left': visualizerData.style.leftGap + visualizerData.style.leftEdge + visualizerData.style.moveRange + '%'
-      }">
-      <i class="sat-moveVisualizer__pins-start-icon fa fa-map-marker-alt"></i>
-    </div>
+  </section>
+  <section class="sat-moveVisualizer__positionDetection">
+    <!--
+      overlaying the entire component, for returning a consistent offsetX from mouseOver detection
+    -->
   </section>
 </article>

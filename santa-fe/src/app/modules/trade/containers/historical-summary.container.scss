@@ -1,14 +1,40 @@
 @import "global.scss";
 @import "modules/trade/trade.scss";
 
+$historicalSummary_overlayCanvas_ruler_line_width: 0.2rem;
 .sat-historicalSummary {
   $historicalSummaryBlockName: &;
+  @include mix_fixed_div(relative, $z_index_standard_base_item);
   flex: 1 1 auto;
   display: flex;
+  &__overlayCanvas {
+    @include mix_fixed_div(absolute, $z_index_standard_tooltip);
+    top: 0;
+    left: 0;
+    height: 100%;
+    display: none;
+    &-ruler {
+      display: flex;
+      flex-direction: column;
+      &-line {
+        flex: 1 1 auto;
+        @include mix_border_generator(0 0 0 $historicalSummary_overlayCanvas_ruler_line_width, $color_blue_5);
+        padding-left: $spacing_small;
+        border-style: dotted;
+      }
+    }
+  }
   &__list {
     @include mix_enable_scrollbar('vertical');
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
+  }
+  &:hover {
+    #{$historicalSummaryBlockName} {
+      &__overlayCanvas {
+        display: flex;
+      }
+    }
   }
 }

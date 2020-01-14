@@ -738,6 +738,9 @@ export class DTOService {
       data: {
         list: []
       },
+      style: {
+        rulerPosition: 0
+      },
       state: {
 
       }

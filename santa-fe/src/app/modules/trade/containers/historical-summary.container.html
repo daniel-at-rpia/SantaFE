@@ -2,8 +2,16 @@
   [ngClass]="{
     'sat-historicalSummary': true
   }">
-  <ul 
-  (mousemove)="onTest($event)" class="sat-historicalSummary__list">
+  <section
+    class="sat-historicalSummary__overlayCanvas"
+    [ngStyle]="{
+      'left': summaryData.style.rulerPosition + 'px'
+    }">
+    <div class="sat-historicalSummary__overlayCanvas-ruler">
+      <div class="sat-historicalSummary__overlayCanvas-ruler-line"></div>
+    </div>
+  </section>
+  <ul class="sat-historicalSummary__list" (mousemove)="hoveringSummary($event)" >
     <li *ngFor="let eachVisualizer of summaryData.data.list" class="sat-historicalSummary__list-item">
       <move-visualizer [visualizerData]="eachVisualizer"></move-visualizer>
     </li>

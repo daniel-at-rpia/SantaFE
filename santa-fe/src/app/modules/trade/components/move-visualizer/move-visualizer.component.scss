@@ -66,16 +66,11 @@ $moveVisualizer_pin_start_width: 1.2rem;
         background-color: $color_white;
       }
     }
-    &-start {
-      @include mix_fixed_div(absolute, $z_index_standard_base_item);  // start pin and all other pins have to be absolute, because having them as relative means their positions will be constrainted by the previous element, which is the end pin, so left:0 won't be the real 0;
-      display: flex;
-      color: $color_red_5;
-      width: $moveVisualizer_pin_start_width;
-      margin-left: -$moveVisualizer_pin_start_width/2;
-      &-icon {
-        font-size: $font_size_x_large;
-      }
-    }
+  }
+  &__positionDetection {
+    @include mix_fixed_div(absolute, $z_index_standard_tooltip);
+    height: 100%;
+    width: 100%;
   }
   &--stencilState {
     #{$moveVisualizerBlockName} {

@@ -13,6 +13,7 @@
       MoveVisualizerDTO,
       HistoricalSummaryDTO
     } from 'FEModels/frontend-models.interface';
+    import { HISTORICAL_SUMMARY_CURSOR_OFFSET } from 'Core/constants/tradeConstants.constant';
   //
 
 @Component({
@@ -37,8 +38,10 @@ export class HistoricalSummary {
 
   }
 
-  public onTest(event) {
-    console.log('mouse move', event.offsetX);
+  public hoveringSummary(event) {
+    // console.log('mouse move', event.offsetX, event);
+    this.summaryData.style.rulerPosition = event.offsetX - HISTORICAL_SUMMARY_CURSOR_OFFSET;
+
   }
 
 }

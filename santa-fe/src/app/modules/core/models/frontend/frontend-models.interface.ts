@@ -357,6 +357,9 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
 export interface HistoricalSummaryDTO extends BasicDTOStructure {
   data: {
     list: Array<MoveVisualizerDTO>;
+  };
+  style: {
+    rulerPosition: number;
   }
   state: {
     
