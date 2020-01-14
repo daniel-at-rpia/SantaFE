@@ -131,6 +131,15 @@ export interface TradeObligorGraphPanelState {
   obligorName: string;
   obligorCurrency: string;
   securityTableRowDTOList: SecurityTableRowDTO[];
+  lookBackHours: number;
+  yAxis: {
+    start:number;
+    end:number;
+  }
+  xAxis: {
+    start:number;
+    end:number;
+  }
   metric: {
     spread:boolean;
     yield:boolean;
@@ -139,8 +148,6 @@ export interface TradeObligorGraphPanelState {
     cS01:boolean;
     quantity:boolean;
   }
-  xAxisData: number[];
-  yAxisData: number[];
   activeCharts: {
     srBond: boolean;
     subBond: boolean;
