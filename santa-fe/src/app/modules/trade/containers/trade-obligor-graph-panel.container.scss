@@ -22,14 +22,13 @@
     align-content: center;
     &-markValue {
       display: flex;
+      align-items: center;
       &-text {
-        padding-top: $spacing_x_small;
-        padding-right: $spacing_small;
+        margin-right: $spacing_small;
         text-align: center;
         align-content: center;
       }
       &-btnQuantity{
-        padding-left: $spacing_small;
         &--selected {
           @include material('none');
           background-color: $color_active;

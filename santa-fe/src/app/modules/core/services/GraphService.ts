@@ -9,10 +9,8 @@ import {
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import * as am4plugins_regression from "@amcharts/amcharts4/plugins/regression";
-import { TradeObligorGraphPanelState } from 'FEModels/frontend-page-states.interface';
-import { first } from '@amcharts/amcharts4/.internal/core/utils/Array';
-import { is } from '@amcharts/amcharts4/.internal/themes/ITheme';
-import { each } from '@amcharts/amcharts4/.internal/core/utils/Iterator';
+import { TradeObligorGraphPanelState, TradeObligorGraphAxesZoomState } from 'FEModels/frontend-page-states.interface';
+import { ObligorGraphCategoryData } from 'src/app/modules/core/models/frontend/frontend-adhoc-packages.interface';
 
 
 @Injectable()
@@ -136,7 +134,15 @@ export class GraphService {
   }
 
   public buildObligorChart(state: TradeObligorGraphPanelState) {
-
+    // Reset the scope for the axes.
+    state.axesZoomState.xAxis.start = null;
+    state.axesZoomState.xAxis.end = null;
+    state.axesZoomState.yAxis.start = null;
+    state.axesZoomState.yAxis.end = null;
+    state.axesZoomState.xAxis.fullZoomStart = null;
+    state.axesZoomState.xAxis.fullZoomEnd = null;
+    state.axesZoomState.yAxis.fullZoomStart = null;
+    state.axesZoomState.yAxis.fullZoomEnd = null;
     am4core.options.autoSetClassName = true;
 
     // Initialize the chart as XY.
@@ -145,36 +151,31 @@ export class GraphService {
     let xAxis = this.initializeObligorChartXAxis(state);
     let yAxis = this.initializeObligorChartYAxis(state);
 
-    // Reset the scope for the axes.
-    state.xAxis.start = null;
-    state.xAxis.end = null;
-    state.yAxis.start = null;
-    state.yAxis.end = null;
-
-
     // Capture the original zoom values of axes before a change is made.
+    // TODO: Move this into their own method. ( I've attempted this a couple times, but passing / modifying the axes in a seperate method doesnt seem to work. )
     yAxis.events.on("startchanged", function (ev) {
-      if (state.yAxis.start === null && state.yAxis.end === null) {
-        state.yAxis.start = ev.target.minZoomed;
-        state.yAxis.end = ev.target.maxZoomed;
+      if (state.axesZoomState.yAxis.fullZoomStart === null && state.axesZoomState.yAxis.fullZoomEnd === null) {
+        state.axesZoomState.yAxis.fullZoomStart = ev.target.minZoomed;
+        state.axesZoomState.yAxis.fullZoomEnd = ev.target.maxZoomed;
       }
+
     });
     xAxis.events.on("startchanged", function (ev) {
-      if (state.xAxis.start === null && state.xAxis.end === null) {
-        state.xAxis.start = ev.target.minZoomed;
-        state.xAxis.end = ev.target.maxZoomed;
+      if (state.axesZoomState.xAxis.fullZoomStart === null && state.axesZoomState.xAxis.fullZoomEnd === null) {
+        state.axesZoomState.xAxis.fullZoomStart = ev.target.minZoomed;
+        state.axesZoomState.xAxis.fullZoomEnd = ev.target.maxZoomed;
       }
     });
     yAxis.events.on("endchanged", function (ev) {
-      if (state.yAxis.start === null && state.yAxis.end === null) {
-        state.yAxis.start = ev.target.minZoomed;
-        state.yAxis.end = ev.target.maxZoomed;
+      if (state.axesZoomState.yAxis.fullZoomStart === null && state.axesZoomState.yAxis.fullZoomEnd === null) {
+        state.axesZoomState.yAxis.fullZoomStart = ev.target.minZoomed;
+        state.axesZoomState.yAxis.fullZoomEnd = ev.target.maxZoomed;
       }
     });
     xAxis.events.on("endchanged", function (ev) {
-      if (state.xAxis.start === null && state.xAxis.end === null) {
-        state.xAxis.start = ev.target.minZoomed;
-        state.xAxis.end = ev.target.maxZoomed;
+      if (state.axesZoomState.xAxis.fullZoomStart === null && state.axesZoomState.xAxis.fullZoomEnd === null) {
+        state.axesZoomState.xAxis.fullZoomStart = ev.target.minZoomed;
+        state.axesZoomState.xAxis.fullZoomEnd = ev.target.maxZoomed;
       }
     });
 
@@ -200,17 +201,18 @@ export class GraphService {
     resetButton.label.text = "-";
     resetButton.background.fill = am4core.color('#bdbdbd');
     resetButton.stroke = am4core.color('#000000');
-    resetButton.events.on("hit", function (ev) {
-      if (state.xAxis.start !== null && state.xAxis.end !== null) {
-        xAxis.zoomToValues(state.xAxis.start, state.xAxis.end);
-      }
 
-      if (state.yAxis.start !== null && state.yAxis.end !== null) {
-        yAxis.zoomToValues(state.yAxis.start, state.yAxis.end);
+    // Reset button click event.
+    resetButton.events.on("hit", function (ev) {
+      if (state.axesZoomState.xAxis.fullZoomStart !== null && state.axesZoomState.xAxis.fullZoomEnd !== null) {
+        xAxis.zoomToValues(state.axesZoomState.xAxis.fullZoomStart, state.axesZoomState.xAxis.fullZoomEnd);
+      }
+      if (state.axesZoomState.yAxis.fullZoomStart !== null && state.axesZoomState.yAxis.fullZoomEnd !== null) {
+        yAxis.zoomToValues(state.axesZoomState.yAxis.fullZoomStart, state.axesZoomState.yAxis.fullZoomEnd);
       }
     });
 
-    // Initialize trigger events for chart legeng
+    // Initialize trigger events for chart legend
     this.initializeObligorChartLengendTriggerEvents(state);
 
     // Add a cursor to the chart, with zoom behaviour. 
@@ -221,19 +223,8 @@ export class GraphService {
     state.obligorChart.cursor.lineX.disabled = true;
     state.obligorChart.cursor.lineY.disabled = true;
     state.obligorChart.zoomOutButton.disabled = true;
-
   }
 
-  public zoomObligorChartAxesToCurrentState(state: TradeObligorGraphPanelState) {
-
-    if (state.xAxis.start !== null && state.xAxis.end !== null) {
-      state.obligorChart.xAxes.values[0].zoomToIndexes(state.xAxis.start, state.xAxis.end);
-    }
-    if (state.yAxis.start !== null && state.yAxis.end !== null) {
-      state.obligorChart.yAxes.values[0].zoomToIndexes(state.yAxis.start, state.yAxis.end);
-    }
-
-  }
   public addCategoryToObligorGraph(category: ObligorChartCategoryBlock, state: TradeObligorGraphPanelState) {
     // Create data array that can be handled by amCharts from out category DataItems.
     let amChartsData: any[] = this.buildObligorChartData(category, state);
@@ -241,58 +232,70 @@ export class GraphService {
     if (amChartsData.length > 0) {
       // Create a dumbbell series.
       let dumbBellSeries: am4charts.ColumnSeries = this.buildObligorChartDumbells(state, category, amChartsData);
-      // Create a trend curve. Work in Progress.
-      let curveSeries: am4charts.LineSeries = this.buildObligorChartTrendCurve(state, category, amChartsData, dumbBellSeries);
+
+      if (amChartsData.length > 2) {
+        // Create a trend curve.
+        let curveSeries: am4charts.LineSeries = this.buildObligorChartTrendCurve(state, category, amChartsData, dumbBellSeries);
+      }
     }
   }
 
-  private buildObligorChartData(category: ObligorChartCategoryBlock, state: TradeObligorGraphPanelState): any[] {
-    let amChartsData: any[] = [];
-    let mid: number;
-    let mark: string;
+  public captureXYChartCurrentZoomState(chart: any, state: TradeObligorGraphPanelState): TradeObligorGraphAxesZoomState {
+    // Capture the current axes zoom state in out Zoom State object.
+    // This is not used, but here when we need it.
+    let currentState: TradeObligorGraphAxesZoomState;
+    currentState = {
+      xAxis: {
+        start: chart.xAxes.values[0].minZoomed,
+        end: chart.xAxes.values[0].maxZoomed,
+        fullZoomStart: state.axesZoomState.xAxis.fullZoomStart,
+        fullZoomEnd: state.axesZoomState.xAxis.fullZoomEnd,
+      },
+      yAxis: {
+        start: chart.yAxes.values[0].minZoomed,
+        end: chart.yAxes.values[0].maxZoomed,
+        fullZoomStart: state.axesZoomState.yAxis.fullZoomStart,
+        fullZoomEnd: state.axesZoomState.yAxis.fullZoomEnd,
+      }
+    }
+    return currentState;
+  }
+
+  public buildObligorChartData(category: ObligorChartCategoryBlock, state: TradeObligorGraphPanelState): any[] {
+    let amChartsData: ObligorGraphCategoryData[] = [];
 
     for (let dataItem in category.data.obligorCategoryDataItemDTO) {
 
+      let mid: number;
       if (state.metric.spread) mid = category.data.obligorCategoryDataItemDTO[dataItem].data.spreadMid;
       else if (state.metric.yield) mid = category.data.obligorCategoryDataItemDTO[dataItem].data.yieldMid;
 
-
       if (mid !== 0) {
+
         // The dumbbell chart will not work if the mark is null. If it is, we will set it to the value of mid to be "hidden" behind it.
-        if (category.data.obligorCategoryDataItemDTO[dataItem].data.mark === null && mid !== null) {
-          mark = mid.toString();
-        }
-        else {
-          mark = category.data.obligorCategoryDataItemDTO[dataItem].data.mark;
-        }
+        let mark: number;
+        if (category.data.obligorCategoryDataItemDTO[dataItem].data.mark === null && mid !== null) mark = mid;
+        else mark = Number(category.data.obligorCategoryDataItemDTO[dataItem].data.mark);
+
+        // Set the value of of the markQuantity. Can be either CS01 or Quantity
+        let markQuantity: number;
+        if (state.markValue.cS01) markQuantity = category.data.obligorCategoryDataItemDTO[dataItem].data.cS01
+        else if (state.markValue.quantity) markQuantity = category.data.obligorCategoryDataItemDTO[dataItem].data.currentPosition
+
+        //TODO: After being more familiar with amcharts, I don't think we need a seperate object for this.
+        // We can probably find a way to send in ObligorChartCategoryBlock to create the series. I'm not entirely sure if it will work. But worth looking into.
+        // This whole method would be removed, and it would get rid of some duplication.
         if (mid !== null)
-          // TODO: Create adhoc interface.
           amChartsData.push({
             name: category.data.obligorCategoryDataItemDTO[dataItem].data.name,
             mid: mid,
             mark: mark,
             workoutTerm: category.data.obligorCategoryDataItemDTO[dataItem].data.workoutTerm,
-            positionCurrentQuantity: category.data.obligorCategoryDataItemDTO[dataItem].data.positionCurrentQuantity,
-            positionCurrentCS01: category.data.obligorCategoryDataItemDTO[dataItem].data.positionCurrentCS01,
-            tooltipMark: category.data.obligorCategoryDataItemDTO[dataItem].data.mark
+            markQuantity: markQuantity
           })
       }
     }
     return amChartsData;
-  }
-
-  private buildToolObligorChartToolTipCS01(): string {
-    return `<center><b>{name}</b> </br>
-    Mid: {mid} </br>
-    Mark: {tooltipMark}</br>
-    CS01: {positionCurrentCS01}</center>`;
-  }
-
-  private buildToolObligorChartToolTipQuantity(): string {
-    return `<center><b>{name}</b> </br>
-    Mid: {mid} </br>
-    Mark: {tooltipMark}</br>
-    Current Position: {positionCurrentQuantity}</center>`;
   }
 
   private buildObligorChartDumbells(state: TradeObligorGraphPanelState, category: ObligorChartCategoryBlock, amChartsData: any[]): am4charts.ColumnSeries {
@@ -310,34 +313,49 @@ export class GraphService {
       dumbBellseries.hidden = category.state.isHidden;
       dumbBellseries.sequencedInterpolation = true;
       dumbBellseries.columns.template.width = 3;
-      if (state.markValue.cS01) dumbBellseries.dataFields.value = "positionCurrentCS01";
-      else if (state.markValue.quantity) dumbBellseries.dataFields.value = "positionCurrentQuantity";
+      dumbBellseries.dataFields.value = "markQuantity";
       dumbBellseries.hiddenState.transitionDuration = 0;
       dumbBellseries.defaultState.transitionDuration = 0;
-      if (category.state.isMarkHidden) dumbBellseries.dataFields.valueY = "mid";
+      if (category.state.isMarkHidden) {
+        dumbBellseries.dataFields.value = null;
+        dumbBellseries.dataFields.valueY = "mid";
+      }
       else dumbBellseries.dataFields.valueY = "mark";
 
-      // Modify the column color based on mark discrepency.
-      let columnTemplate = dumbBellseries.columns.template;
-      columnTemplate.strokeWidth = 1;
-      columnTemplate.strokeOpacity = 1;
-      columnTemplate.stroke = am4core.color(category.data.color);
-      if (state.markValue.cS01) columnTemplate.tooltipHTML = this.buildToolObligorChartToolTipCS01();
-      else if (state.markValue.quantity) columnTemplate.tooltipHTML = this.buildToolObligorChartToolTipQuantity();
-      columnTemplate.hiddenState.transitionDuration = 0;
-      columnTemplate.defaultState.transitionDuration = 0;
-      let markDot = dumbBellseries.bullets.push(new am4charts.CircleBullet());
-      markDot.circle.radius = 3;
-
       if (category.state.isMarkHidden === false) {
+        // Modify the column color based on mark discrepency.
+        let columnTemplate = dumbBellseries.columns.template;
+        columnTemplate.strokeWidth = 1;
+        columnTemplate.strokeOpacity = 1;
+        columnTemplate.stroke = am4core.color(category.data.color);
+        columnTemplate.hiddenState.transitionDuration = 0;
+        columnTemplate.defaultState.transitionDuration = 0;
+        let markDot = dumbBellseries.bullets.push(new am4charts.CircleBullet());
+        markDot.circle.radius = 3;
+
         //Add a circle bullet to represent the mark.
         let markBullet = dumbBellseries.bullets.push(new am4charts.CircleBullet());
         markBullet.circle.fillOpacity = 0.3;
         markBullet.circle.strokeOpacity = 1;
         markBullet.strokeOpacity = 1;
         markBullet.nonScalingStroke = true;
-        if (state.markValue.cS01) markBullet.tooltipHTML = this.buildToolObligorChartToolTipCS01();
-        else if (state.markValue.quantity) markBullet.tooltipHTML = this.buildToolObligorChartToolTipQuantity();
+        // In order to build the correct toolip we will need to dig into the data to find if the markValue is null.
+        markBullet.tooltipHTML = '';
+        markBullet.adapter.add('tooltipHTML', function (text, target) {
+          let data: any = target.tooltipDataItem.dataContext
+          if (state.markValue.cS01) {
+            return `<center><b>{name}</b> </br>
+                  Mid: {mid} </br>
+                  Mark: {mark}</br>
+                  CS01: {markQuantity}</center>`;
+          }
+          else if (state.markValue.quantity) {
+            return `<center><b>{name}</b> </br>
+                  Mid: {mid} </br>
+                  Mark: {mark}</br>
+                  Current Position: {markQuantity}</center>`;
+          }
+        });
         markBullet.hiddenState.transitionDuration = 0;
         markBullet.defaultState.transitionDuration = 0;
         dumbBellseries.heatRules.push({
@@ -356,27 +374,29 @@ export class GraphService {
       midBullet.fill = am4core.color(category.data.color);
       midBullet.locationY = 1;
       midBullet.circle.radius = 5;
-      midBullet.tooltipHTML = this.buildToolObligorChartToolTipCS01();
+      midBullet.tooltipHTML = '';
       midBullet.hiddenState.transitionDuration = 0;
       midBullet.defaultState.transitionDuration = 0;
-      midBullet.adapter.add('tooltipHTML', function (text, target) {
-        let data: any = target.tooltipDataItem.dataContext
 
-        if (state.metric.yield || data.positionCurrentCS01 === null || data.positionCurrentQuantity === null) {
+      // In order to build the correct toolip we will need to dig into the data to find if the markValue is null.
+      midBullet.adapter.add('tooltipHTML', function (text, target) {
+        let data: any = target.tooltipDataItem.dataContext;
+
+        if (state.metric.yield || data.markQuantity === null) {
           return `<center><b>{name}</b> </br>
-        Mid: {mid}</center>`;
+                  Mid: {mid}</center>`;
         }
         else if (state.markValue.cS01) {
           return `<center><b>{name}</b> </br>
-              Mid: {mid} </br>
-              Mark: {tooltipMark}</br>
-              CS01: {positionCurrentCS01}</center>`;
+                  Mid: {mid} </br>
+                  Mark: {mark}</br>
+                  CS01: {markQuantity}</center>`;
         }
         else if (state.markValue.quantity) {
           return `<center><b>{name}</b> </br>
-              Mid: {mid} </br>
-              Mark: {tooltipMark}</br>
-              Current Position: {positionCurrentQuantity}</center>`;
+                  Mid: {mid} </br>
+                  Mark: {mark}</br>
+                  Current Position: {markQuantity}</center>`;
         }
       });
 
@@ -424,50 +444,63 @@ export class GraphService {
 
       let equation = ev.target.result.equation;
 
-      let range: number;
-      range = (amChartsData[amChartsData.length - 1].workoutTerm - amChartsData[0].workoutTerm) / 100;
+      if (this.validateCurveEquation(equation)) {
 
-      let curve: any[] = [];
-      for (let i = amChartsData[0].workoutTerm; i < amChartsData[amChartsData.length - 1].workoutTerm; i += range) {
-        curve.push({ x: i, y: (ev.target.result.equation[0] * (i * i) + (ev.target.result.equation[1] * i) + ev.target.result.equation[2]) });
+        let range: number;
+        range = (amChartsData[amChartsData.length - 1].workoutTerm - amChartsData[0].workoutTerm) / 1000;
+
+        let curve: any[] = [];
+        for (let i = amChartsData[0].workoutTerm; i < amChartsData[amChartsData.length - 1].workoutTerm; i += range) {
+          curve.push({ x: i, y: (equation[0] * (i * i) + (equation[1] * i) + equation[2]) });
+        }
+
+        curveSeries = state.obligorChart.series.push(new am4charts.LineSeries());
+        curveSeries.data = curve;
+        curveSeries.dataFields.valueX = "x";
+        curveSeries.dataFields.valueY = "y";
+        curveSeries.strokeWidth = 2;
+        curveSeries.tensionY = 1;
+        curveSeries.tensionX = 0.95;
+        curveSeries.stroke = am4core.color(category.data.color);
+        curveSeries.name = "CurveSeries";
+        curveSeries.hiddenState.transitionDuration = 0;
+        curveSeries.defaultState.transitionDuration = 0;
+        curveSeries.hiddenInLegend = true;
+
+        let regression = curveSeries.plugins.push(new am4plugins_regression.Regression());
+        regression.method = "polynomial";
+        regression.reorder = true;
+        regression.options = {
+          order: 2,
+          precision: 10
+        }
+
+        // Hide the curve line when the coresponding dumbbell series is hidden.
+        dumbBellSeries.events.on("hidden", function () {
+          curveSeries.hide();
+        });
+
+        // Display the curve line when the coresponding dumbbell series is displayed.
+        dumbBellSeries.events.on("shown", function () {
+          curveSeries.show();
+        });
       }
-
-      curveSeries = state.obligorChart.series.push(new am4charts.LineSeries());
-      curveSeries.data = curve;
-      curveSeries.dataFields.valueX = "x";
-      curveSeries.dataFields.valueY = "y";
-      curveSeries.strokeWidth = 2;
-      curveSeries.tensionY = 1;
-      curveSeries.tensionX = 0.95;
-      curveSeries.stroke = am4core.color(category.data.color);
-      curveSeries.name = "CurveSeries";
-      curveSeries.hiddenState.transitionDuration = 0;
-      curveSeries.defaultState.transitionDuration = 0;
-      curveSeries.hiddenInLegend = true;
-
-      let regression = curveSeries.plugins.push(new am4plugins_regression.Regression());
-      regression.method = "polynomial";
-      regression.reorder = true;
-      regression.options = {
-        order: 2,
-        precision: 10
-      }
-
-      // Hide the curve line when the coresponding dumbbell series is hidden.
-      dumbBellSeries.events.on("hidden", function () {
-        curveSeries.hide();
-      });
-
-      // Display the curve line when the coresponding dumbbell series is displayed.
-      dumbBellSeries.events.on("shown", function () {
-        curveSeries.show();
-      });
-
     });
 
     regression.dispose();
 
     return curveSeries;
+  }
+
+  private validateCurveEquation(curveResult: any[]) {
+    let isValid: boolean;
+
+    // Regression plugin can sometimes throw back "Infinity" if we only send two values.
+    if (curveResult[0] === Number.POSITIVE_INFINITY || curveResult[1] === Number.POSITIVE_INFINITY || curveResult[2] === Number.POSITIVE_INFINITY ||
+      curveResult[0] === Number.NEGATIVE_INFINITY || curveResult[1] === Number.NEGATIVE_INFINITY || curveResult[2] === Number.NEGATIVE_INFINITY) isValid = false;
+    else isValid = true;
+
+    return isValid;
   }
 
   private initializeObligorChartXAxis(state: TradeObligorGraphPanelState): am4charts.ValueAxis {
@@ -495,10 +528,16 @@ export class GraphService {
   private initializeObligorChartLengendTriggerEvents(state: TradeObligorGraphPanelState) {
     // When the legend is clicked, reset the axis zoom scope.
     state.obligorChart.legend.events.on("hit", function (ev) {
-      state.xAxis.start = null;
-      state.xAxis.end = null;
-      state.yAxis.start = null;
-      state.yAxis.end = null;
+      state.axesZoomState.xAxis.start = null;
+      state.axesZoomState.xAxis.end = null;
+      state.axesZoomState.yAxis.start = null;
+      state.axesZoomState.yAxis.end = null;
+
+      state.axesZoomState.xAxis.fullZoomStart = null;
+      state.axesZoomState.xAxis.fullZoomEnd = null;
+      state.axesZoomState.yAxis.fullZoomStart = null;
+      state.axesZoomState.yAxis.fullZoomEnd = null;
+
     });
   }
 }

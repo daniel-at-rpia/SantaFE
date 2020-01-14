@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation, NgZone, AfterViewInit, OnDestroy } from "@angular/core";
 import { GraphService } from 'Core/services/GraphService';
 import { UtilityService } from 'Core/services/UtilityService';
-import { selectSelectedSecurityForAnalysis, selectSecurityTableRowDTOListForAnalysis, selectBestQuoteValidWindow } from 'Trade/selectors/trade.selectors';
+import { selectLiveUpdateTick, selectSelectedSecurityForAnalysis, selectSecurityTableRowDTOListForAnalysis, selectBestQuoteValidWindow } from 'Trade/selectors/trade.selectors';
 import { Store, select } from '@ngrx/store';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { PayloadObligorSecurityIDs } from 'BEModels/backend-payloads.interface';
@@ -15,7 +15,6 @@ import { ObligorCategoryDataItemBlock } from 'FEModels/frontend-blocks.interface
 import { ObligorChartCategoryColorScheme } from 'App/modules/core/constants/colorSchemes.constant';
 import { BESingleBestQuoteDTO } from 'App/modules/core/models/backend/backend-models.interface';
 
-
 @Component({
   selector: 'trade-obligor-graph-panel',
   templateUrl: './trade-obligor-graph-panel.container.html',
@@ -28,7 +27,8 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
   subscriptions = {
     selectSecurityUpdateForAnalysis: null,
     selectSecurityTableRowDTOListForAnalysis: null,
-    selectBestQuoteValidWindow: null
+    selectBestQuoteValidWindow: null,
+    selectLiveUpdateTick: null
   }
 
   constructor(
@@ -43,6 +43,12 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
 
   public ngAfterViewInit() {
 
+    this.subscriptions.selectLiveUpdateTick = this.store$.pipe(
+      select(selectLiveUpdateTick)
+    ).subscribe(flag => {
+      this.fetchSecurityIDs();
+    });
+    
     this.subscriptions.selectBestQuoteValidWindow = this.store$.pipe(
       select(selectBestQuoteValidWindow)
     ).subscribe((data) => {
@@ -81,12 +87,10 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     this.state.chartCategories = [];
 
     let lookbackHrs;
-    if(this.state.lookBackHours)
-    {
+    if (this.state.lookBackHours) {
       lookbackHrs = this.state.lookBackHours
     }
-    else
-    {
+    else {
       lookbackHrs = 2;
     }
 
@@ -130,8 +134,8 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
                     yieldMid: yieldMid,
                     mark: null,
                     workoutTerm: serverReturn[curve].securities[security].metrics.workoutTerm,
-                    positionCurrentQuantity: null,
-                    positionCurrentCS01: null
+                    currentPosition: null,
+                    cS01: null
                   },
                   state: {}
                 }
@@ -145,7 +149,23 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
           }
 
           this.state.chartCategories.push(chartCategory);
+
+          for (let seriesIndex in this.state.obligorChart.series.values) {
+            for (let chartCategory in this.state.chartCategories) {
+              if (this.state.obligorChart.series.values[seriesIndex].name == this.state.chartCategories[chartCategory].data.name) {
+                this.state.chartCategories[chartCategory].state.isHidden = this.state.obligorChart.series.values[seriesIndex].isHidden;
+      
+                if(this.state.metric.yield) this.state.chartCategories[chartCategory].state.isMarkHidden = true;
+                else if(this.state.metric.spread)
+                {
+                  if(this.state.markValue.cS01 || this.state.markValue.quantity) this.state.chartCategories[chartCategory].state.isMarkHidden = false;
+                }
+              }
+            }
+          }
         }
+
+        this.graphService.clearGraphSeries(this.state.obligorChart);
         // Dispatch a the list of security IDs from the related Obligor in serverReturn. This will call to trade-center-panel, which will return marks for those we own.
         if (securityIDsFromAnalysis) this.store$.dispatch(new TradeSecurityIDsFromAnalysisEvent(securityIDsFromAnalysis));
       }),
@@ -182,12 +202,11 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
             if (this.state.metric.spread) {
               eachCategoryItem.data.mark = eachSecurity.data.mark.mark;
             }
-            else if( this.state.metric.yield )
-            {
+            else if (this.state.metric.yield) {
               eachCategory.state.isMarkHidden = true;
             }
-            eachCategoryItem.data.positionCurrentQuantity = eachSecurity.data.positionCurrent;
-            eachCategoryItem.data.positionCurrentCS01 = eachSecurity.data.cs01Local;
+            eachCategoryItem.data.currentPosition = eachSecurity.data.positionCurrent;
+            eachCategoryItem.data.cS01 = Math.round(eachSecurity.data.cs01Local * 100) / 100;
           }
         })
       })
@@ -197,12 +216,14 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     this.graphService.buildObligorChart(this.state);
   }
 
-  public btnCS01Click() {
+  async btnCS01Click() {
     this.state.markValue.quantity = false;
     if (this.state.markValue.cS01) this.state.markValue.cS01 = false;
     else if (this.state.markValue.cS01 === false) this.state.markValue.cS01 = true;
 
-    this.updateObligorChartCategories();
+    this.state.axesZoomState = this.graphService.captureXYChartCurrentZoomState(this.state.obligorChart, this.state);
+    this.updateObligorChartCategoryData();
+
   }
 
   public btnQuantityClick() {
@@ -210,21 +231,22 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     if (this.state.markValue.quantity) this.state.markValue.quantity = false;
     else if (this.state.markValue.quantity === false) this.state.markValue.quantity = true;
 
-    this.updateObligorChartCategories();
+    this.state.axesZoomState = this.graphService.captureXYChartCurrentZoomState(this.state.obligorChart, this.state);
+    this.updateObligorChartCategoryData();
   }
 
   public btnSpreadClick() {
     this.state.metric.yield = false;
-    if (this.state.metric.spread === false) this.state.metric.spread = true;
+    this.state.metric.spread = true;
 
-    this.redrawObligorChart();
+    this.redrawObligorChartCategories();
   }
 
   public btnYieldClick() {
     this.state.metric.spread = false;
-    if (this.state.metric.yield === false) this.state.metric.yield = true;
+    this.state.metric.yield = true;
 
-    this.redrawObligorChart();
+    this.redrawObligorChartCategories();
   }
 
   private initializeState() {
@@ -235,13 +257,19 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
       obligorCurrency: null,
       securityTableRowDTOList: [],
       lookBackHours: 2,
-      yAxis: {
-        start: null,
-        end: null,
-      },
-      xAxis: {
-        start: null,
-        end: null,
+      axesZoomState: {
+        xAxis: {
+          start: null,
+          end: null,
+          fullZoomStart: null,
+          fullZoomEnd: null
+        },
+        yAxis: {
+          start: null,
+          end: null,
+          fullZoomStart: null,
+          fullZoomEnd: null
+        }
       },
       metric: {
         spread: true,
@@ -261,27 +289,18 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     }
   }
 
-  private updateObligorChartCategories()
-  {
-    for (let seriesIndex in this.state.obligorChart.series.values) {
-      for (let chartCategory in this.state.chartCategories) {
-        if (this.state.obligorChart.series.values[seriesIndex].name == this.state.chartCategories[chartCategory].data.name) {
-          this.state.chartCategories[chartCategory].state.isHidden = this.state.obligorChart.series.values[seriesIndex].isHidden;
-        }
+  async updateObligorChartCategoryData() {
+    for (let category in this.state.chartCategories) {
+      if (this.state.chartCategories[category].data.obligorCategoryDataItemDTO.length > 0) {
+        let data: any[] = this.graphService.buildObligorChartData(this.state.chartCategories[category], this.state);
+        this.state.obligorChart.series.values[category].data = data;
+        this.state.obligorChart.series.values[category].validateData();
       }
     }
+    this.state.obligorChart.validateData();
+  }
 
-    this.state.obligorChart = this.graphService.clearGraphSeries(this.state.obligorChart);
-
-    for (let category in this.state.chartCategories) {
-      if (this.state.chartCategories[category].data.obligorCategoryDataItemDTO.length > 0) this.graphService.addCategoryToObligorGraph(this.state.chartCategories[category], this.state);
-    }
-
-    this.graphService.zoomObligorChartAxesToCurrentState(this.state);
-  } 
-
-  private redrawObligorChart()
-  {
+  private redrawObligorChartCategories() {
     for (let seriesIndex in this.state.obligorChart.series.values) {
       for (let chartCategory in this.state.chartCategories) {
         if (this.state.obligorChart.series.values[seriesIndex].name == this.state.chartCategories[chartCategory].data.name) {
@@ -296,10 +315,15 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
       }
     }
 
-    this.state.obligorChart.dispose();
-    this.graphService.buildObligorChart(this.state);
+    this.state.obligorChart.series.clear();
+    for (let category in this.state.chartCategories) {
+      this.graphService.addCategoryToObligorGraph(this.state.chartCategories[category], this.state);
+      this.state.obligorChart.series.values[category].validateData();
+    }
+
+    this.state.obligorChart.validateData();
   }
-  
+
   private getObligorChartCategoryColorFromScheme(obligorCategoryType: string): string {
     let color: string = null;
     let colorSchemes = ObligorChartCategoryColorScheme;

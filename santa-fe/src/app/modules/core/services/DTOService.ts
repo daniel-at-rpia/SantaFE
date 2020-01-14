@@ -833,8 +833,8 @@ export class DTOService {
           spreadMid: null, 
           yieldMid: null,
           workoutTerm: null,
-          positionCurrentQuantity: null,
-          positionCurrentCS01: null
+          currentPosition: null,
+          cS01: null
         },
         state: {}
       }

@@ -182,8 +182,8 @@ export interface ObligorCategoryDataItemBlock {
     spreadMid: number;
     yieldMid: number;
     workoutTerm: number;
-    positionCurrentCS01: number;
-    positionCurrentQuantity: number;
+    cS01: number;
+    currentPosition: number;
   }
   state: {}
 }

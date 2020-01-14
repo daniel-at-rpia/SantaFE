@@ -65,3 +65,11 @@ export interface SantaTableNumericFloatingFilterParams extends IFloatingFilterPa
   minValue: number;
   maxValue: number;
 }
+
+export interface ObligorGraphCategoryData {
+  name: string,
+  mid: number,
+  mark: number,
+  workoutTerm: number,
+  markQuantity: number
+}
