@@ -219,7 +219,7 @@ export class GraphService {
     state.obligorChart.cursor = new am4charts.XYCursor();
     state.obligorChart.cursor.behavior = "panXY";
     state.obligorChart.mouseWheelBehavior = "zoomXY";
-    state.obligorChart.mouseOptions.sensitivity = 10;
+    state.obligorChart.mouseOptions.sensitivity = 1;
     state.obligorChart.cursor.lineX.disabled = true;
     state.obligorChart.cursor.lineY.disabled = true;
     state.obligorChart.zoomOutButton.disabled = true;
