@@ -12,12 +12,13 @@
   }
   &__table {
     @include mix_fixed_div(relative, $z_index_standard_base_item);
+    @include mix_enable_scrollbar('vertical');
     flex: 1 1 auto;
     display: flex;
-    overflow: hidden;
+    flex-wrap: wrap;
     padding: $spacing_medium;
     &-securityList {
-      flex: 0 1 33.33%;
+      flex: 1 1 auto;
     }
     &-levelColumn, &-basisColumn {
       flex: 0 0 33.33%;
@@ -29,8 +30,8 @@
     }
     &-separator {
       @include mix_border_generator(0 0 0 $typical_border_width);
-      margin-left: $spacing_medium;
-      padding-left: $spacing_medium;
+      margin-left: $spacing_small;
+      padding-left: $spacing_small;
     }
   }
   &--hasSecurityState {

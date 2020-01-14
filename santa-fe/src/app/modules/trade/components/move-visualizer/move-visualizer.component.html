@@ -1,6 +1,8 @@
 <article
   [ngClass]="{
-    'sat-moveVisualizer': true
+    'sat-moveVisualizer': true,
+    'sat-moveVisualizer--noLeftEdge': visualizerData.style.leftEdge === 0,
+    'sat-moveVisualizer--noRightEdge': visualizerData.style.rightEdge === 0
   }">
   <section class="sat-moveVisualizer__bar">
     <!--line-->
@@ -15,9 +17,9 @@
         'flex-basis': visualizerData.style.leftEdge + '%'
       }"></div>
     <div
-      class="sat-moveVisualizer__bar-moveRange"
+      class="sat-moveVisualizer__bar-moveDistance"
       [ngStyle]="{
-        'flex-basis': visualizerData.style.moveRange + '%'
+        'flex-basis': visualizerData.style.moveDistance + '%'
       }"></div>
     <div
       class="sat-moveVisualizer__bar-rightEdge"

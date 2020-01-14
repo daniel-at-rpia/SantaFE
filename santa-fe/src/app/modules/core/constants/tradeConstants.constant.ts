@@ -98,7 +98,7 @@ export const LIVE_UPDATE_PROCESSING_PROMPT = 'Processing ...';
 export const MARKET_ANALYSIS_SPREAD_METRIC_KEY = SecurityMetricOptions[0].label;
 export const MARKET_ANALYSIS_YIELD_METRIC_KEY = SecurityMetricOptions[6].label;
 
-export const HISTORICAL_SUMMARY_CURSOR_OFFSET = 3;
+export const HISTORICAL_SUMMARY_ROUNDING = 2;
 
 export const UTILITY_VALID_WINDOW_OPTIONS = [
   {

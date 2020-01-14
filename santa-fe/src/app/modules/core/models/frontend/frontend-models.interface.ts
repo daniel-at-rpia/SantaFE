@@ -346,7 +346,7 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
   style: {
     leftGap: number;
     leftEdge: number;
-    moveRange: number;
+    moveDistance: number;
     rightEdge: number;
     rightGap: number;
   }
@@ -357,11 +357,16 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
 export interface HistoricalSummaryDTO extends BasicDTOStructure {
   data: {
     list: Array<MoveVisualizerDTO>;
+    globalMin: number;
+    globalMax: number;
+    globalDistance: number;
+    centerPoint: number;
+    rulerValue: number;
   };
   style: {
     rulerPosition: number;
   }
   state: {
-    
+    isStencil: boolean;
   }
 }

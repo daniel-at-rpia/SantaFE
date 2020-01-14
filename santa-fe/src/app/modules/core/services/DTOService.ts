@@ -700,7 +700,7 @@ export class DTOService {
         style: {
           leftGap: 10,
           leftEdge: 10,
-          moveRange: 60,
+          moveDistance: 60,
           rightEdge: 10,
           rightGap: 10
         },
@@ -719,7 +719,7 @@ export class DTOService {
         style: {
           leftGap: 10,
           leftEdge: 10,
-          moveRange: 60,
+          moveDistance: 60,
           rightEdge: 10,
           rightGap: 10
         },
@@ -736,13 +736,18 @@ export class DTOService {
   ): DTOs.HistoricalSummaryDTO {
     const object: DTOs.HistoricalSummaryDTO = {
       data: {
-        list: []
+        list: [],
+        globalMin: null,
+        globalMax: null,
+        globalDistance: null,
+        centerPoint: null,
+        rulerValue: null
       },
       style: {
         rulerPosition: 0
       },
       state: {
-
+        isStencil: false
       }
     };
     if (rawData.BaseSecurity) {
@@ -752,6 +757,8 @@ export class DTOService {
     if (rawData.Group) {
       const groupDTO = this.formMoveVisualizerObject(false, rawData.Group.historicalLevel);
       object.data.list.push(groupDTO);
+      object.data.centerPoint = (groupDTO.data.max + groupDTO.data.min)/2;
+      object.data.globalDistance = (groupDTO.data.max - groupDTO.data.min) * 10;
     }
     if (rawData.Top) {
       for (const eachSecurityIdentifier in rawData.Top) {

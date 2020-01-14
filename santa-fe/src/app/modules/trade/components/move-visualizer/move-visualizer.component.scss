@@ -4,6 +4,7 @@
 $moveVisualizer_line_thickness: 0.75rem;
 $moveVisualizer_pin_end_width: 3rem;
 $moveVisualizer_pin_start_width: 1.2rem;
+$moveVisualizer_padding_right: $spacing_xx_small;
 .sat-moveVisualizer {
   $moveVisualizerBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
@@ -14,6 +15,7 @@ $moveVisualizer_pin_start_width: 1.2rem;
     width: 100%;
     bottom: 0;
     display: flex;
+    padding-right: $moveVisualizer_padding_right;
     &-leftGap {
       flex-grow: 0;
       flex-shrink: 0;
@@ -25,7 +27,7 @@ $moveVisualizer_pin_start_width: 1.2rem;
       height: $moveVisualizer_line_thickness;
       background-color: $color_active;
     }
-    &-moveRange {
+    &-moveDistance {
       flex-grow: 0;
       flex-shrink: 0;
       height: $moveVisualizer_line_thickness;
@@ -48,6 +50,7 @@ $moveVisualizer_pin_start_width: 1.2rem;
     display: flex;
     align-items: flex-end;
     margin-bottom: $moveVisualizer_line_thickness + $spacing_minimum;
+    padding-right: $moveVisualizer_padding_right;
     width: 100%;
     &-end {
       @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
@@ -74,6 +77,26 @@ $moveVisualizer_pin_start_width: 1.2rem;
   }
   &--stencilState {
     #{$moveVisualizerBlockName} {
+    }
+  }
+  &--noLeftEdge {
+    #{$moveVisualizerBlockName} {
+      &__bar {
+        &-moveDistance {
+          border-top-left-radius: 3px;
+          border-bottom-left-radius: 3px;
+        }
+      }
+    }
+  }
+  &--noRightEdge {
+    #{$moveVisualizerBlockName} {
+      &__bar {
+        &-moveDistance {
+          border-top-right-radius: 3px;
+          border-bottom-right-radius: 3px;
+        }
+      }
     }
   }
 }
