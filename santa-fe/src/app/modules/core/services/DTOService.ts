@@ -7,30 +7,8 @@
       BEQuoteDTO,
       BEPortfolioDTO
     } from 'BEModels/backend-models.interface';
-    import {
-      SecurityDTO,
-      SecurityGroupDTO,
-      SecurityDefinitionDTO,
-      SecurityDefinitionBundleDTO,
-      SecurityDefinitionConfiguratorDTO,
-      SecurityGroupAverageVisualizerDTO,
-      QuantComparerDTO,
-      SearchShortcutDTO,
-      SecurityTableDTO,
-      SecurityTableRowDTO,
-      SecurityTableHeaderDTO,
-      SecurityTableCellDTO,
-      SecurityQuoteDTO,
-      QuantitativeVisualizerDTO,
-    } from 'FEModels/frontend-models.interface';
-    import {
-      SecurityGroupMetricBlock,
-      SecurityDefinitionFilterBlock,
-      QuoteMetricBlock,
-      SecurityPortfolioBlock,
-      ObligorChartCategoryBlock,
-      ObligorCategoryDataItemBlock
-    } from 'FEModels/frontend-blocks.interface';
+    import * as DTOs from 'FEModels/frontend-models.interface';
+    import * as Blocks from 'FEModels/frontend-blocks.interface';
     import { QuantVisualizerParams } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       SecurityDefinitionStub,
@@ -72,9 +50,9 @@ export class DTOService {
     securityIdFull: string,
     rawData: BESecurityDTO,
     isStencil: boolean
-  ): SecurityDTO {
+  ): DTOs.SecurityDTO {
     // !isStencil && console.log('rawData', rawData.name, rawData);
-    const object:SecurityDTO = {
+    const object:DTOs.SecurityDTO = {
       data: {
         securityID: !isStencil ? securityIdFull : null,
         name: !isStencil ? rawData.name : 'PLACEHOLDER',
@@ -139,7 +117,7 @@ export class DTOService {
   }
 
   public appendPortfolioInfoToSecurityDTO(
-    dto: SecurityDTO,
+    dto: DTOs.SecurityDTO,
     targetPortfolio: BEPortfolioDTO,
     currentSelectedMetric: string,
   ) {
@@ -164,7 +142,7 @@ export class DTOService {
       dto.data.mark.mark = null;
       dto.data.mark.markRaw = null;
     }
-    const newBlock: SecurityPortfolioBlock = {
+    const newBlock: Blocks.SecurityPortfolioBlock = {
       portfolioName: targetPortfolio.portfolioShortName,
       quantity: targetPortfolio.quantity,
       marketValueCad: targetPortfolio.marketValueCad,
@@ -174,7 +152,7 @@ export class DTOService {
   }
 
   public appendPortfolioOverviewInfoForSecurityDTO(
-    dto: SecurityDTO
+    dto: DTOs.SecurityDTO
   ) {
     dto.data.portfolios.forEach((eachPortfolioBlock) => {
       dto.data.positionFirm = dto.data.positionFirm + eachPortfolioBlock.quantity;
@@ -194,8 +172,8 @@ export class DTOService {
 
   public formSecurityGroupObject(
     rawData: BESecurityGroupDTO
-  ): SecurityGroupDTO {
-    const object:SecurityGroupDTO = {
+  ): DTOs.SecurityGroupDTO {
+    const object:DTOs.SecurityGroupDTO = {
       data: {
         name: !!rawData ?  rawData.name.replace(/\|/g, ' | ') : 'PLACEHOLDER',
         ratingLevel: !!rawData && rawData.metrics ? this.utility.mapRatings(rawData.metrics.ratingNoNotch) : 0,
@@ -241,10 +219,10 @@ export class DTOService {
   public generateSecurityDefinitionFilterOptionList(
     name,
     options
-  ): Array<SecurityDefinitionFilterBlock> {
+  ): Array<Blocks.SecurityDefinitionFilterBlock> {
     return options.map((eachOption) => {
       const normalizedOption = this.utility.normalizeDefinitionFilterOption(eachOption);
-      const newFilterDTO:SecurityDefinitionFilterBlock = {
+      const newFilterDTO: Blocks.SecurityDefinitionFilterBlock = {
         isSelected: false,
         isFilteredOut: false,
         displayLabel: eachOption,
@@ -257,8 +235,8 @@ export class DTOService {
 
   public formSecurityDefinitionObject(
     rawData: SecurityDefinitionStub
-  ): SecurityDefinitionDTO {
-    const object:SecurityDefinitionDTO = {
+  ): DTOs.SecurityDefinitionDTO {
+    const object: DTOs.SecurityDefinitionDTO = {
       data: {
         name: rawData.displayName,
         key: rawData.key,
@@ -283,8 +261,8 @@ export class DTOService {
 
   public formSecurityDefinitionBundleObject(
     stubData: SecurityDefinitionBundleStub
-  ): SecurityDefinitionBundleDTO {
-    const object: SecurityDefinitionBundleDTO = {
+  ): DTOs.SecurityDefinitionBundleDTO {
+    const object: DTOs.SecurityDefinitionBundleDTO = {
       data: {
         label: stubData.label,
         list: stubData.list.map((eachStubDefinition) => {
@@ -300,8 +278,8 @@ export class DTOService {
 
   public createSecurityDefinitionConfigurator(
     groupByDisabled: boolean
-  ): SecurityDefinitionConfiguratorDTO {
-    const object:SecurityDefinitionConfiguratorDTO = {
+  ): DTOs.SecurityDefinitionConfiguratorDTO {
+    const object: DTOs.SecurityDefinitionConfiguratorDTO = {
       data: {
         filterSearchInputValue: '',
         definitionList: ConfiguratorDefinitionLayout.map((eachBundle) => {
@@ -320,8 +298,8 @@ export class DTOService {
     return object;
   }
 
-  public formAverageVisualizerObject(): SecurityGroupAverageVisualizerDTO {
-    const object:SecurityGroupAverageVisualizerDTO = {
+  public formAverageVisualizerObject(): DTOs.SecurityGroupAverageVisualizerDTO {
+    const object: DTOs.SecurityGroupAverageVisualizerDTO = {
       data: {
         stats: [
           this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'Dod'),
@@ -345,7 +323,7 @@ export class DTOService {
   public formSecurityGroupMetricObject(
     label?: string,
     deltaScope?: string
-  ): SecurityGroupMetricBlock {
+  ): Blocks.SecurityGroupMetricBlock {
     const object = {
       isEmpty: !label,
       sortHierarchy: null,
@@ -359,11 +337,11 @@ export class DTOService {
   }
 
   public formSearchShortcutObject(
-    definitionList: Array<SecurityDefinitionDTO>,
+    definitionList: Array<DTOs.SecurityDefinitionDTO>,
     title: string,
     skipFirstForDefaultGroupBy: boolean
-  ): SearchShortcutDTO {
-    const object: SearchShortcutDTO = {
+  ): DTOs.SearchShortcutDTO {
+    const object: DTOs.SearchShortcutDTO = {
       data: {
         displayTitle: title,
         configuration: definitionList
@@ -394,8 +372,8 @@ export class DTOService {
     isStencil: boolean,
     quantMetricType: string,
     BEdto: BEBestQuoteDTO,
-    securityCard: SecurityDTO
-  ): QuantComparerDTO {
+    securityCard: DTOs.SecurityDTO
+  ): DTOs.QuantComparerDTO {
     const metricType = !isStencil ? quantMetricType : 'Spread';
     const backendTargetQuoteAttr = TriCoreMetricConfig[metricType]['backendTargetQuoteAttr'];
     const rawData = !!BEdto && !!BEdto[backendTargetQuoteAttr] ? BEdto[backendTargetQuoteAttr] : {};
@@ -426,7 +404,7 @@ export class DTOService {
       delta = 0;
       mid = 0;
     }
-    const object: QuantComparerDTO = {
+    const object: DTOs.QuantComparerDTO = {
       data: {
         metricType: metricType,
         delta: delta,
@@ -468,8 +446,8 @@ export class DTOService {
 
   public formSecurityTableObject(
     isLiveVariant: boolean
-  ): SecurityTableDTO {
-    const object: SecurityTableDTO = {
+  ): DTOs.SecurityTableDTO {
+    const object: DTOs.SecurityTableDTO = {
       data: {
         headers: [],
         allHeaders: [],
@@ -498,8 +476,8 @@ export class DTOService {
 
   public formSecurityTableHeaderObject(
     stub: SecurityTableMetricStub
-  ): SecurityTableHeaderDTO {
-    const object: SecurityTableHeaderDTO = {
+  ): DTOs.SecurityTableHeaderDTO {
+    const object: DTOs.SecurityTableHeaderDTO = {
       data: {
         key: stub.key,
         displayLabel: stub.label,
@@ -523,15 +501,15 @@ export class DTOService {
   }
 
   public formSecurityTableRowObject(
-    securityDTO: SecurityDTO
-  ): SecurityTableRowDTO {
-    const object: SecurityTableRowDTO = {
+    securityDTO: DTOs.SecurityDTO
+  ): DTOs.SecurityTableRowDTO {
+    const object: DTOs.SecurityTableRowDTO = {
       data: {
         security: securityDTO,
         cells: [],
         quotes: [],
         quoteHeaders: QuoteMetricList.map((eachQuoteMetricStub) => {
-          const metricBlock: QuoteMetricBlock = {
+          const metricBlock: Blocks.QuoteMetricBlock = {
             displayLabelList: eachQuoteMetricStub.labelList,
             isSizeTwo: eachQuoteMetricStub.size === 2,
             isSizeThree: eachQuoteMetricStub.size === 3,
@@ -558,9 +536,9 @@ export class DTOService {
     isStencil: boolean,
     textData: string,
     isQuantVariant: boolean,
-    quantComparerDTO?: QuantComparerDTO
-  ): SecurityTableCellDTO {
-    const object: SecurityTableCellDTO = {
+    quantComparerDTO?: DTOs.QuantComparerDTO
+  ): DTOs.SecurityTableCellDTO {
+    const object: DTOs.SecurityTableCellDTO = {
       data: {
         textData: !!isStencil ? 'PLACE' : textData,
         quantComparerDTO: quantComparerDTO
@@ -580,7 +558,7 @@ export class DTOService {
     bestBidNum: number,
     bestAskNum: number,
     filteredMetricType: string
-  ): SecurityQuoteDTO {
+  ): DTOs.SecurityQuoteDTO {
     const hasBid = !isStencil ? (!!rawData.isActive && !!rawData.bidVenue) : true;
     const hasAsk = !isStencil ? (!!rawData.isActive && !!rawData.askVenue) : true;
     const bidBenchmark = !isStencil ? rawData.benchmarkName : 'T 0.5 01/01/2020';
@@ -595,7 +573,7 @@ export class DTOService {
       // convertedDate = new Date(Date.UTC(convertBuffer.getFullYear(), convertBuffer.getMonth(), convertBuffer.getDate(), convertBuffer.getHours(), convertBuffer.getMinutes(), convertBuffer.getSeconds()));
     }
     // const quoteDate: Date = !isStencil ? (hasBid ? new Date(rawData.bidTime) : new Date(rawData.askTime)) : null;
-    const object: SecurityQuoteDTO = {
+    const object: DTOs.SecurityQuoteDTO = {
       data: {
         broker: !isStencil ? rawData.dealer : 'RBC',
         time: !isStencil ? `${convertedDate.toTimeString().slice(0, 5)}` : '12:01 pm',
@@ -661,9 +639,9 @@ export class DTOService {
   public formQuantVisualizerObject(
     isStencil: boolean,
     params: QuantVisualizerParams
-  ): QuantitativeVisualizerDTO {
+  ): DTOs.QuantitativeVisualizerDTO {
     if (isStencil) {
-      const stencilObject: QuantitativeVisualizerDTO = {
+      const stencilObject: DTOs.QuantitativeVisualizerDTO = {
         data: {
           rawEntry: { target: 10, group: 10 },
           wow: { target: 10, group: 10},
@@ -720,7 +698,7 @@ export class DTOService {
       let maxDelta = Math.max(...validDeltaParamsList);
       minDelta = minDelta - (maxDelta - minDelta) * 0.15;
       maxDelta = maxDelta + (maxDelta - minDelta) * 0.15;
-      const object: QuantitativeVisualizerDTO = {
+      const object: DTOs.QuantitativeVisualizerDTO = {
         data: {
           rawEntry: {
             target: params.tRaw,
@@ -798,13 +776,13 @@ export class DTOService {
     isStencil: boolean,
     name: string,
     colorScheme: string,
-    obligorCategoryDataItemDTO: ObligorCategoryDataItemBlock[],
+    obligorCategoryDataItemDTO: Blocks.ObligorCategoryDataItemBlock[],
     isHidden
-    ): ObligorChartCategoryBlock
+    ): Blocks.ObligorChartCategoryBlock
   {
     if(isStencil)
     {
-      let obligorChartCategoryDTOStencil: ObligorChartCategoryBlock = {
+      let obligorChartCategoryDTOStencil: Blocks.ObligorChartCategoryBlock = {
         data: {
           name: null,
           color: null,
@@ -822,10 +800,10 @@ export class DTOService {
     }
   }
 
-  public formObligorCategoryDataItemDTO(isStencil: boolean): ObligorCategoryDataItemBlock
+  public formObligorCategoryDataItemDTO(isStencil: boolean): Blocks.ObligorCategoryDataItemBlock
   {
     if(isStencil) {
-      let obligorCategoryDataDTO: ObligorCategoryDataItemBlock = {
+      let obligorCategoryDataDTO: Blocks.ObligorCategoryDataItemBlock = {
         data: {
           name,
           securityID: null,

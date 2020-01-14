@@ -169,10 +169,14 @@ export class SantaTable implements OnInit, OnChanges {
           return !!eachRow.data.security && eachRow.data.security.data.securityID == params.node.data.id;
         });
         if (!!targetRow) {
-          targetRow.state.isExpanded = true;
-          if (targetRow.data.security) {
-            targetRow.data.security.state.isTableExpanded = true;
-            this.fetchSecurityQuotes(targetRow, params);
+          try {
+            targetRow.state.isExpanded = true;
+            if (targetRow.data.security) {
+              targetRow.data.security.state.isTableExpanded = true;
+              this.fetchSecurityQuotes(targetRow, params);
+            }
+          } catch {
+            // ignore, seems AgGrid causes some weird read only error
           }
         } else {
           console.error(`Could't find targetRow`, params);
@@ -182,9 +186,13 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   public onRowClickedToCollapse(targetRow: SecurityTableRowDTO) {
-    targetRow.state.isExpanded = false;
-    if (targetRow.data.security) {
-      targetRow.data.security.state.isTableExpanded = false;
+    try {
+      targetRow.state.isExpanded = false;
+      if (targetRow.data.security) {
+        targetRow.data.security.state.isTableExpanded = false;
+      }
+    } catch {
+      // ignore, seems AgGrid causes some weird read only error
     }
   }
 
@@ -438,7 +446,11 @@ export class SantaTable implements OnInit, OnChanges {
   private liveUpdateAllQuotesForExpandedRows() {
     this.tableData.data.rows.forEach((eachRow) => {
       if (eachRow.state.isExpanded) {
-        this.fetchSecurityQuotes(eachRow);
+        try {
+          this.fetchSecurityQuotes(eachRow);
+        } catch {
+          // ignore, seems AgGrid causes some weird read only error
+        }
       }
     })
   }
