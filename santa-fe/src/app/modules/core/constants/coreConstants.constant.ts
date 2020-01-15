@@ -11,7 +11,7 @@ export const APIUrlMap = {
   getAllQuotes: `liveQuote/get-all-quotes`,
   getObligorCurves: `curve/get-obligor-curves-per-ccy`,
   getGroups: `group/get-groups`,
-  getGroupFromSecurity: `group/get-group-from-security`,
+  getGroupHistoricalSummary: `group/get-group-historical-summary-from-security`,
   getIssuers: `obligor/get-issuers`,
   getSubIndustries: `obligor/get-subindustries`
 };

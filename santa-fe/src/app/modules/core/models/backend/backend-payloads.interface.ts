@@ -14,14 +14,16 @@ export interface PayloadGetTargetSecurityGroup {
   tenorOptions: Array<string>;
 }
 
-export interface PayloadGetSecurityGroupBasedOnSecurity {
+export interface PayloadGetGroupHistoricalSummary {
   source: string;
   identifier: string;
   groupIdentifier: {
     [property: string]: Array<string>;
   };
   tenorOptions: Array<string>;
-  yyyyMMdd?: number;
+  deltaTypes: Array<string>;
+  metricName: string;
+  count: number;
 }
 
 export interface PayloadGetPositions {
