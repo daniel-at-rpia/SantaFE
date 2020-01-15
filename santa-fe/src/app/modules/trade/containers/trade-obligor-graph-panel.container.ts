@@ -178,15 +178,17 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     let mid: number = null;
     let rounding: number;
 
-    if (this.state.metric.spread) rounding = TriCoreMetricConfig.Spread.rounding;
-
     if (bEBestQuoteDTO.bidQuoteValue !== null && bEBestQuoteDTO.askQuoteValue !== null) mid = (bEBestQuoteDTO.bidQuoteValue + bEBestQuoteDTO.askQuoteValue) / 2;
     else if (bEBestQuoteDTO.bidQuoteValue === null && bEBestQuoteDTO.askQuoteValue > 0) mid = bEBestQuoteDTO.askQuoteValue;
     else if (bEBestQuoteDTO.bidQuoteValue > 0 && bEBestQuoteDTO.askQuoteValue === null) mid = bEBestQuoteDTO.bidQuoteValue;
 
     if (bEBestQuoteDTO.quoteMetric) {
       if (bEBestQuoteDTO.quoteMetric.toString() === "Spread") {
+        TriCoreMetricConfig.Spread.rounding;
         mid = this.utility.round(mid, rounding);
+      }
+      else if (bEBestQuoteDTO.quoteMetric.toString() === "Yield") {
+        mid = Math.round(mid * 1000 ) / 1000
       }
     }
 
