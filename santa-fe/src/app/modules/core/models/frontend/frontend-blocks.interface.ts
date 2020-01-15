@@ -140,6 +140,8 @@ export interface AgGridRowNode {
   group: boolean;
   parent?: AgGridRowNode;  // detail nodes will have a "parent" attribute
   detailNode?: AgGridRowNode;  // parent nodes will have a "detail" attribute
+  master: boolean;  // parent nodes will have this as true
+  detail: boolean;  // child nodes will have this as true
   rowHeight: number;
   gridApi: GridApi;
   columnApi: ColumnApi;

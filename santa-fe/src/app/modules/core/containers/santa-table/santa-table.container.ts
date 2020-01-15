@@ -162,8 +162,9 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   public onRowClicked(params: AgGridRowParams) {
-    if (!params.node.expanded) {
-      params.node.setExpanded(true);
+    // this function gets triggered both when parent and child are being clicked, so this if condition is to make sure only execute the logic when it is the parent that is clicked
+    if (!!params.node.master) {
+      params.node.setExpanded(!params.node.expanded);
       if (!params.node.group) {
         const targetRow = this.tableData.data.rows.find((eachRow) => {
           return !!eachRow.data.security && eachRow.data.security.data.securityID == params.node.data.id;
