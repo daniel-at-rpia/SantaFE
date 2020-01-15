@@ -92,7 +92,7 @@
           flex-wrap: wrap;
           align-content: flex-start;
           background-color: $color_active;
-          padding: $spacing_medium;
+          padding: $spacing_medium 0 $spacing_medium $spacing_x_large;
           margin-top: 0;
           margin-left: -$spacing_large;
           margin-right: $spacing_large;
@@ -103,7 +103,7 @@
             @include mix_alive('light');
             flex: 0 1 33.33%;
             display: flex;
-            padding: $spacing_x_small $spacing_medium $spacing_medium $spacing_medium;
+            padding: $spacing_x_small $spacing_medium $spacing_medium 0;
             overflow: hidden;
             search-shortcut {
               display: flex;

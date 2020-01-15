@@ -135,7 +135,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
           metricType: TriCoreMetricConfig.Spread.label,
           portfolios: [],
           keyword: '',
-          owner: []
+          owner: [],
+          strategy: []
         },
         securityFilters: []
       }
@@ -262,16 +263,19 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.state.filters.securityFilters = params.filterList;
     this.state.filters.quickFilters.portfolios = [];
     this.state.filters.quickFilters.owner = [];
+    this.state.filters.quickFilters.strategy = [];
     params.filterList.forEach((eachFilter) => {
       if (eachFilter.targetAttribute === 'portfolios') {
         this.state.filters.quickFilters.portfolios = eachFilter.filterBy;
       } else if (eachFilter.targetAttribute === 'owner') {
         this.state.filters.quickFilters.owner = eachFilter.filterBy;
+      } else if (eachFilter.targetAttribute === 'strategyList') {
+        this.state.filters.quickFilters.strategy = eachFilter.filterBy;
       };
     });
-    if (this.state.currentContentStage === this.constants.securityTableFinalStage) {
+    // if (this.state.currentContentStage === this.constants.securityTableFinalStage) {
       this.state.fetchResult.rowList = this.filterPrinstineRowList();
-    }
+    // }
   }
 
   public onSelectSecurityForAnalysis(targetSecurity: SecurityDTO) {
@@ -448,6 +452,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       if (this.state.filters.quickFilters.keyword.length < 3 || eachRow.data.security.data.name.indexOf(this.state.filters.quickFilters.keyword) >= 0) {
         let portfolioIncludeFlag = this.filterByPortfolio(eachRow);
         let ownerFlag = this.filterByOwner(eachRow);
+        let strategyFlag = this.filterByStrategy(eachRow);
         let securityLevelFilterResultCombined = true;
         if (this.state.filters.securityFilters.length > 0) {
           const securityLevelFilterResult = this.state.filters.securityFilters.map((eachFilter) => {
@@ -458,7 +463,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
             return eachResult;
           }).length === securityLevelFilterResult.length;
         }
-        ownerFlag && securityLevelFilterResultCombined && portfolioIncludeFlag && filteredList.push(eachRow);
+        strategyFlag && ownerFlag && securityLevelFilterResultCombined && portfolioIncludeFlag && filteredList.push(eachRow);
       }
     });
     return filteredList;
@@ -466,8 +471,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
   private filterBySecurityAttribute(targetRow: SecurityTableRowDTO, targetAttribute: string, filterBy: Array<string>): boolean {
     let includeFlag = false;
-    if (targetAttribute === 'portfolios' || targetAttribute === 'owner') {
-      // bypass portfolio filter since it is handled via this.filterByPortfolio() and this.filterByOwner()
+    if (targetAttribute === 'portfolios' || targetAttribute === 'owner' || 'strategyList') {
+      // bypass portfolio filter since it is handled via this.filterByPortfolio() and this.filterByOwner() and this.filterByStrategy()
       return true;
     } else {
       filterBy.forEach((eachValue) => {
@@ -507,6 +512,21 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       this.state.filters.quickFilters.owner.forEach((eachOwner) => {
         const ownerExist = targetRow.data.security.data.owner.indexOf(eachOwner) > -1;
         if (!!ownerExist) {
+          includeFlag = true;
+        }
+      });
+    } else {
+      includeFlag = true;
+    }
+    return includeFlag;
+  }
+
+  private filterByStrategy(targetRow: SecurityTableRowDTO): boolean {
+    let includeFlag = false;
+    if (this.state.filters.quickFilters.strategy.length > 0) {
+      this.state.filters.quickFilters.strategy.forEach((eachStrategy) => {
+        const strategyExist = targetRow.data.security.data.strategyList.indexOf(eachStrategy) > -1;
+        if (!!strategyExist) {
           includeFlag = true;
         }
       });

@@ -279,30 +279,103 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
 
 export const StrategyShortcuts: Array<SearchShortcutStub> = [
   {
-    displayTitle: 'All Securties I Own',
-    includedDefinitions: [
-      {
-        definitionKey: 'OWNER',
-        groupByActive: false,
-        selectedOptions: ['PLACEHOLDER']
-      }
-    ]
-  },{
-    displayTitle: 'DOF + SOF',
+    displayTitle: 'Short Carry in DOF',
     includedDefinitions: [
       {
         definitionKey: 'PORTFOLIO',
         groupByActive: false,
-        selectedOptions: ['DOF', 'SOF']
+        selectedOptions: ['DOF']
+      },{
+        definitionKey: 'STRATEGY',
+        groupByActive: false,
+        selectedOptions: ['Short Carry']
       }
-    ]
+    ],
+    isMajor: true
   },{
-    displayTitle: 'STIP + FIP + CIP + AGB',
+    displayTitle: 'Non-Short Carry in DOF',
     includedDefinitions: [
       {
         definitionKey: 'PORTFOLIO',
         groupByActive: false,
-        selectedOptions: ['STIP', 'FIP', 'CIP', 'AGB']
+        selectedOptions: ['DOF']
+      },{
+        definitionKey: 'STRATEGY',
+        groupByActive: false,
+        selectedOptions: ['STOV', 'Relative Value', 'Portfolio Shorts', 'LTOV - Yield', 'LTOV - Spread', 'LTOV - Special Situations', 'HEDGE', 'Basis']
+      }
+    ],
+    isMajor: true
+  },{
+    displayTitle: 'Short Carry',
+    includedDefinitions: [{
+        definitionKey: 'STRATEGY',
+        groupByActive: false,
+        selectedOptions: ['Short Carry']
+      }
+    ]
+  },{
+    displayTitle: 'STOV',
+    includedDefinitions: [{
+        definitionKey: 'STRATEGY',
+        groupByActive: false,
+        selectedOptions: ['STOV']
+      }
+    ]
+  },{
+    displayTitle: 'Relative Value',
+    includedDefinitions: [{
+        definitionKey: 'STRATEGY',
+        groupByActive: false,
+        selectedOptions: ['Relative Value']
+      }
+    ]
+  },{
+    displayTitle: 'Portfolio Shorts',
+    includedDefinitions: [{
+        definitionKey: 'STRATEGY',
+        groupByActive: false,
+        selectedOptions: ['Portfolio Shorts']
+      }
+    ]
+  },{
+    displayTitle: 'LTOV - Yield',
+    includedDefinitions: [{
+        definitionKey: 'STRATEGY',
+        groupByActive: false,
+        selectedOptions: ['LTOV - Yield']
+      }
+    ]
+  },{
+    displayTitle: 'LTOV - Spread',
+    includedDefinitions: [{
+        definitionKey: 'STRATEGY',
+        groupByActive: false,
+        selectedOptions: ['LTOV - Spread']
+      }
+    ]
+  },{
+    displayTitle: 'LTOV - Special Situations',
+    includedDefinitions: [{
+        definitionKey: 'STRATEGY',
+        groupByActive: false,
+        selectedOptions: ['LTOV - Special Situations']
+      }
+    ]
+  },{
+    displayTitle: 'HEDGE',
+    includedDefinitions: [{
+        definitionKey: 'STRATEGY',
+        groupByActive: false,
+        selectedOptions: ['HEDGE']
+      }
+    ]
+  },{
+    displayTitle: 'Basis',
+    includedDefinitions: [{
+        definitionKey: 'STRATEGY',
+        groupByActive: false,
+        selectedOptions: ['Basis']
       }
     ]
   }

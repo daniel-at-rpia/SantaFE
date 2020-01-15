@@ -98,6 +98,7 @@ export interface TradeCenterPanelState {
       portfolios: Array<string>;
       keyword: string;
       owner: Array<string>;
+      strategy: Array<string>;
     }
     securityFilters: Array<DefinitionConfiguratorEmitterParamsItem>
   }
