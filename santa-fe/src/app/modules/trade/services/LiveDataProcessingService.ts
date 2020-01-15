@@ -115,17 +115,20 @@ export class LiveDataProcessingService {
     const newPriceQuant = this.dtoService.formQuantComparerObject(
       false,
       TriCoreMetricConfig.Price.label,
-      quote
+      quote,
+      targetRow.data.security
     );
     const newSpreadQuant = this.dtoService.formQuantComparerObject(
       false,
       TriCoreMetricConfig.Spread.label,
-      quote
+      quote,
+      targetRow.data.security
     );
     const newYieldQuant = this.dtoService.formQuantComparerObject(
       false,
       TriCoreMetricConfig.Yield.label,
-      quote
+      quote,
+      targetRow.data.security
     );
     targetRow.data.bestQuotes = {
       bestPriceQuote: newPriceQuant,
