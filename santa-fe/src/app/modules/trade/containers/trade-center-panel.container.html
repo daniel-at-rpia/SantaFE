@@ -1,6 +1,7 @@
 <article
   [ngClass]="{
     'sat-tradeCenterPanel': true,
+    'sat-tradeCenterPanel--presetCategorySelectedState': state.presets.selectedList,
     'sat-tradeCenterPanel--presetSelectedState': state.presets.selectedPreset,
     'sat-tradeCenterPanel--fetchDataFailedState': state.fetchResult.fetchTableDataFailed,
     'sat-tradeCenterPanel--boostConfiguratorState': state.configurator.boosted
@@ -11,6 +12,7 @@
         <div class="sat-tradeCenterPanel__presetsAndFilters-presets-categoryCanvas-ribbon"></div>
         <ul class="sat-tradeCenterPanel__presetsAndFilters-presets-categoryCanvas-list">
           <button
+            (click)="onSelectPresetCategory(state.presets.recentShortcutList)"
             [ngClass]="{
               'sat-tradeCenterPanel__presetsAndFilters-presets-categoryCanvas-list-btn': true,
               'sat-tradeCenterPanel__presetsAndFilters-presets-categoryCanvas-list-btn--recent': true,
@@ -22,6 +24,7 @@
             <span>Recent</span>
           </button>
           <button
+            (click)="onSelectPresetCategory(state.presets.portfolioShortcutList)"
             [ngClass]="{
               'sat-tradeCenterPanel__presetsAndFilters-presets-categoryCanvas-list-btn': true,
               'sat-tradeCenterPanel__presetsAndFilters-presets-categoryCanvas-list-btn--portfolio': true,
@@ -33,6 +36,7 @@
             <span>Portfolio</span>
           </button>
           <button
+            (click)="onSelectPresetCategory(state.presets.ownershipShortcutList)"
             [ngClass]="{
               'sat-tradeCenterPanel__presetsAndFilters-presets-categoryCanvas-list-btn': true,
               'sat-tradeCenterPanel__presetsAndFilters-presets-categoryCanvas-list-btn--ownership': true,
@@ -44,6 +48,7 @@
             <span>Ownership</span>
           </button>
           <button
+            (click)="onSelectPresetCategory(state.presets.strategyShortcutList)"
             [ngClass]="{
               'sat-tradeCenterPanel__presetsAndFilters-presets-categoryCanvas-list-btn': true,
               'sat-tradeCenterPanel__presetsAndFilters-presets-categoryCanvas-list-btn--strategy': true,
@@ -55,6 +60,7 @@
             <span>Strategy</span>
           </button>
           <button
+            (click)="onSelectPresetCategory(state.presets.individualShortcutList)"
             [ngClass]="{
               'sat-tradeCenterPanel__presetsAndFilters-presets-categoryCanvas-list-btn': true,
               'sat-tradeCenterPanel__presetsAndFilters-presets-categoryCanvas-list-btn--individual': true,
@@ -69,7 +75,15 @@
       </aside>
       <div class="sat-tradeCenterPanel__presetsAndFilters-presets-shortcutCanvas">
         <span class="sat-tradeCenterPanel__presetsAndFilters-presets-shortcutCanvas-title">Select Preset</span>
-        <ul class="sat-tradeCenterPanel__presetsAndFilters-presets-shortcutCanvas-list">
+        <ul
+          [ngClass]="{
+            'sat-tradeCenterPanel__presetsAndFilters-presets-shortcutCanvas-list': true,
+            'sat-tradeCenterPanel__presetsAndFilters-presets-shortcutCanvas-list--showingFirst': state.presets.selectedList === state.presets.recentShortcutList,
+            'sat-tradeCenterPanel__presetsAndFilters-presets-shortcutCanvas-list--showingSecond': state.presets.selectedList === state.presets.portfolioShortcutList,
+            'sat-tradeCenterPanel__presetsAndFilters-presets-shortcutCanvas-list--showingThird': state.presets.selectedList === state.presets.ownershipShortcutList,
+            'sat-tradeCenterPanel__presetsAndFilters-presets-shortcutCanvas-list--showingFourth': state.presets.selectedList === state.presets.strategyShortcutList,
+            'sat-tradeCenterPanel__presetsAndFilters-presets-shortcutCanvas-list--showingFifth': state.presets.selectedList === state.presets.individualShortcutList
+          }">
           <li
             *ngFor="let eachShortcut of state.presets.shortcutList"
             [ngClass]="{

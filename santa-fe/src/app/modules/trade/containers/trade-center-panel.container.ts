@@ -190,6 +190,14 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  public onSelectPresetCategory(targetCategory: Array<SearchShortcutDTO>) {
+    if (this.state.presets.selectedList === targetCategory) {
+      this.state.presets.selectedList = null;
+    } else {
+      this.state.presets.selectedList = targetCategory;
+    }
+  }
+
   public onSelectPreset(targetPreset: SearchShortcutDTO) {
     if (this.state.presets.selectedPreset === targetPreset) {
       targetPreset.state.isSelected = false;

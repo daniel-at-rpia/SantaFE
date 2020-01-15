@@ -23,15 +23,15 @@
       overflow: hidden;
       &-categoryCanvas {
         @include mix_fixed_div(relative, $z_index_standard_base_item);
-        flex: 0 0 15rem;
+        flex: 0 0 auto;
         display: flex;
         &-ribbon {
           @include mix_fixed_div(absolute, $z_index_standard_base_item);
+          @include mix_gradient($color_gray_85, $color_gray_7, 60%, 65deg);
           top: 0;
           left: $spacing_x_large;
           width: 10rem;
           height: 100%;
-          background-color: $color_active;
         }
         &-list {
           @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
@@ -65,6 +65,10 @@
             &--individual {
               background-color: $color_pink_3;
             }
+            &--selected {
+              @include material('none');
+              background-color: $color_active;
+            }
           }
         }
       }
@@ -79,14 +83,19 @@
           color: $font_color_minor;
         }
         &-list {
+          @include mix_alive('light');
           @include mix_enable_scrollbar('vertical');
           @include mix_border_radius(15px);
           flex: 0 0 70%;
           display: flex;
-          display: none;
+          visibility: hidden;
           flex-wrap: wrap;
+          margin-left: -$spacing_large;
           margin-right: $spacing_large;
           background-color: $color_active;
+          opacity: 0;
+          transform: translate(-25%, 0);
+          margin-top: 0;
           &-item {
             @include mix_alive('light');
             flex: 0 0 auto;
@@ -97,6 +106,21 @@
               display: flex;
               flex: 1 1 auto;
             }
+          }
+          &--showingFirst {
+            margin-top: 0;
+          }
+          &--showingSecond {
+            margin-top: 5%;
+          }
+          &--showingThird {
+            margin-top: 10%;
+          }
+          &--showingFourth {
+            margin-top: 15%;
+          }
+          &--showingFifth {
+            margin-top: 20%;
           }
         }
       }
@@ -208,6 +232,17 @@
       &__result {
         &-errorPrompt {
           display: flex;
+        }
+      }
+    }
+  }
+  &--presetCategorySelectedState {
+    #{$tradeCenterPanelBlockName} {
+      &__presetsAndFilters {
+        &-presets-shortcutCanvas-list {
+          opacity: 1;
+          visibility: visible;
+          transform: translate(0, 0);
         }
       }
     }
