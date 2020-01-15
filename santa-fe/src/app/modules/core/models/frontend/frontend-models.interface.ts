@@ -158,7 +158,8 @@ export interface SecurityGroupAverageVisualizerDTO extends BasicDTOStructure {
 export interface SearchShortcutDTO extends BasicDTOStructure {
   data: {
     displayTitle: string;
-    configuration: Array<SecurityDefinitionDTO>
+    configuration: Array<SecurityDefinitionDTO>;
+    isMajorShortcut: boolean;
   },
   style: {
     slotList: Array<SecurityDefinitionDTO>

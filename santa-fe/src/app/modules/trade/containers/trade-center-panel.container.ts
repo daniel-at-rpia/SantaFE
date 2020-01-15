@@ -54,7 +54,9 @@
     import {
       PortfolioList,
       QUANT_COMPARER_PERCENTILE,
-      SearchShortcuts
+      PortfolioShortcuts,
+      OwnershipShortcuts,
+      StrategyShortcuts
     } from 'Core/constants/tradeConstants.constant';
     import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
     import {
@@ -71,7 +73,7 @@
       TradeSelectedSecurityForAnalysisEvent,
       TradeSecurityTableRowDTOListForAnalysisEvent
     } from 'Trade/actions/trade.actions';
-    import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
+    import { SecurityTableMetricStub, SearchShortcutStub } from 'FEModels/frontend-stub-models.interface';
   //
 
 @Component({
@@ -91,7 +93,9 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   }
   constants = {
     portfolioList: PortfolioList,
-    searchShortcuts: SearchShortcuts,
+    portfolioShortcuts: PortfolioShortcuts,
+    ownershipShortcuts: OwnershipShortcuts,
+    strategyShortcuts: StrategyShortcuts,
     securityGroupDefinitionMap: SecurityDefinitionMap,
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
     thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX
@@ -178,7 +182,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     if (!!this.ownerInitial) {
       const filter = [];
       filter.push(this.ownerInitial);
-      this.constants.searchShortcuts[0].includedDefinitions[0].selectedOptions = filter;
+      this.constants.ownershipShortcuts[0].includedDefinitions[0].selectedOptions = filter;
       this.populateSearchShortcuts();
     }
   }
@@ -284,7 +288,16 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
   private populateSearchShortcuts() {
     this.state.presets = this.initializePageState().presets;
-    this.constants.searchShortcuts.forEach((eachShortcutStub) => {
+    this.state.presets.portfolioShortcutList = this.populateSingleShortcutList(this.constants.portfolioShortcuts);
+    this.state.presets.ownershipShortcutList = this.populateSingleShortcutList(this.constants.ownershipShortcuts);
+    this.state.presets.strategyShortcutList = this.populateSingleShortcutList(this.constants.strategyShortcuts);
+  }
+
+  private populateSingleShortcutList(
+    stubList: Array<SearchShortcutStub>
+  ): Array<SearchShortcutDTO> {
+    const list: Array<SearchShortcutDTO> = [];
+    stubList.forEach((eachShortcutStub) => {
       const definitionList = eachShortcutStub.includedDefinitions.map((eachIncludedDef) => {
         const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityGroupDefinitionMap[eachIncludedDef.definitionKey]);
         definitionDTO.state.groupByActive = !!eachIncludedDef.groupByActive;
@@ -298,8 +311,9 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         }
         return definitionDTO;
       });
-      // this.state.presets.shortcutList.push(this.dtoService.formSearchShortcutObject(definitionList, eachShortcutStub.displayTitle, false));
+      list.push(this.dtoService.formSearchShortcutObject(definitionList, eachShortcutStub.displayTitle, false, !!eachShortcutStub.isMajor));
     });
+    return list;
   }
 
   private loadFreshData() {

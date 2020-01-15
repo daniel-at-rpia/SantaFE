@@ -85,9 +85,10 @@
             'sat-tradeCenterPanel__presetsAndFilters-presets-shortcutCanvas-list--showingFifth': state.presets.selectedList === state.presets.individualShortcutList
           }">
           <li
-            *ngFor="let eachShortcut of state.presets.shortcutList"
+            *ngFor="let eachShortcut of state.presets.selectedList"
             [ngClass]="{
               'sat-tradeCenterPanel__presetsAndFilters-presets-shortcutCanvas-list-item': true,
+              'sat-tradeCenterPanel__presetsAndFilters-presets-shortcutCanvas-list-item--major': eachShortcut.data.isMajorShortcut,
               'sat-tradeCenterPanel__presetsAndFilters-presets-shortcutCanvas-list-item--selected': state.presets.selectedPreset === eachShortcut
             }">
             <search-shortcut

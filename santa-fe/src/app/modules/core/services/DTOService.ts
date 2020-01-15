@@ -337,12 +337,14 @@ export class DTOService {
   public formSearchShortcutObject(
     definitionList: Array<DTOs.SecurityDefinitionDTO>,
     title: string,
-    skipFirstForDefaultGroupBy: boolean
+    skipFirstForDefaultGroupBy: boolean,
+    isMajor: boolean
   ): DTOs.SearchShortcutDTO {
     const object: DTOs.SearchShortcutDTO = {
       data: {
         displayTitle: title,
-        configuration: definitionList
+        configuration: definitionList,
+        isMajorShortcut: !!isMajor
       },
       style: {
         slotList: [null, null, null, null, null]

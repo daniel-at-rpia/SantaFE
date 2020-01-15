@@ -2,7 +2,8 @@ import { Label } from '@amcharts/amcharts4/core';
 
 export interface SearchShortcutStub {
   displayTitle: string;
-  includedDefinitions: Array<SearchShortcutIncludedDefinitionStub>
+  includedDefinitions: Array<SearchShortcutIncludedDefinitionStub>;
+  isMajor?: boolean;
 }
 
 interface SearchShortcutIncludedDefinitionStub {

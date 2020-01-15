@@ -90,21 +90,27 @@
           display: flex;
           visibility: hidden;
           flex-wrap: wrap;
+          align-content: flex-start;
+          background-color: $color_active;
+          padding: $spacing_medium;
+          margin-top: 0;
           margin-left: -$spacing_large;
           margin-right: $spacing_large;
-          background-color: $color_active;
           opacity: 0;
-          transform: translate(-25%, 0);
-          margin-top: 0;
+          transform: translate(-15%, 0);
+          max-width: 72rem;
           &-item {
             @include mix_alive('light');
-            flex: 0 0 auto;
+            flex: 0 1 33.33%;
             display: flex;
             padding: $spacing_x_small $spacing_medium $spacing_medium $spacing_medium;
             overflow: hidden;
             search-shortcut {
               display: flex;
               flex: 1 1 auto;
+            }
+            &--major {
+              flex: 0 1 100%;
             }
           }
           &--showingFirst {
