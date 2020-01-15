@@ -15,6 +15,7 @@ import { ObligorCategoryDataItemBlock } from 'FEModels/frontend-blocks.interface
 import { ObligorChartCategoryColorScheme } from 'App/modules/core/constants/colorSchemes.constant';
 import { BESingleBestQuoteDTO } from 'App/modules/core/models/backend/backend-models.interface';
 
+
 @Component({
   selector: 'trade-obligor-graph-panel',
   templateUrl: './trade-obligor-graph-panel.container.html',
@@ -45,8 +46,8 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
 
     this.subscriptions.selectLiveUpdateTick = this.store$.pipe(
       select(selectLiveUpdateTick)
-    ).subscribe(flag => {
-      this.fetchSecurityIDs();
+    ).subscribe(tickNumber => {
+      if(tickNumber > 0) this.fetchSecurityIDs();
     });
     
     this.subscriptions.selectBestQuoteValidWindow = this.store$.pipe(
@@ -85,19 +86,19 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     let securityIDsFromAnalysis: string[] = [];
     let chartCategory = null;
     this.state.chartCategories = [];
+    let payload: PayloadObligorSecurityIDs;
 
-    let lookbackHrs;
-    if (this.state.lookBackHours) {
-      lookbackHrs = this.state.lookBackHours
-    }
-    else {
-      lookbackHrs = 2;
-    }
-
-    const payload: PayloadObligorSecurityIDs = {
-      identifier: this.state.obligorSecurityID,
-      lookbackHrs: lookbackHrs
-    };
+    if (this.state.lookBackHours){
+      payload = {
+        identifier: this.state.obligorSecurityID,
+        lookbackHrs: this.state.lookBackHours
+      };
+    } else {
+      payload = {
+        identifier: this.state.obligorSecurityID,
+      };
+    } 
+  
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getObligorCurves, { req: 'POST' }, payload).pipe(
       first(),
       tap((serverReturn) => {
@@ -212,11 +213,13 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
       })
     })
 
+    // Reset the zoom state before drawing a new graph.
+    this.resetZoomState();
     // Once we assign the marks, we have all the information we need to build the chart.
     this.graphService.buildObligorChart(this.state);
   }
 
-  async btnCS01Click() {
+  public btnCS01Click() {
     this.state.markValue.quantity = false;
     if (this.state.markValue.cS01) this.state.markValue.cS01 = false;
     else if (this.state.markValue.cS01 === false) this.state.markValue.cS01 = true;
@@ -289,7 +292,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     }
   }
 
-  async updateObligorChartCategoryData() {
+  public updateObligorChartCategoryData() {
     for (let category in this.state.chartCategories) {
       if (this.state.chartCategories[category].data.obligorCategoryDataItemDTO.length > 0) {
         let data: any[] = this.graphService.buildObligorChartData(this.state.chartCategories[category], this.state);
@@ -301,6 +304,8 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
   }
 
   private redrawObligorChartCategories() {
+    this.resetZoomState();
+
     for (let seriesIndex in this.state.obligorChart.series.values) {
       for (let chartCategory in this.state.chartCategories) {
         if (this.state.obligorChart.series.values[seriesIndex].name == this.state.chartCategories[chartCategory].data.name) {
@@ -333,5 +338,16 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
 
     if (color === null) color = '#000000';
     return color;
+  }
+
+  private resetZoomState(){
+    this.state.axesZoomState.xAxis.start = null;
+    this.state.axesZoomState.xAxis.end = null;
+    this.state.axesZoomState.yAxis.start = null;
+    this.state.axesZoomState.yAxis.end = null;
+    this.state.axesZoomState.xAxis.fullZoomStart = null;
+    this.state.axesZoomState.xAxis.fullZoomEnd = null;
+    this.state.axesZoomState.yAxis.fullZoomStart = null;
+    this.state.axesZoomState.yAxis.fullZoomEnd = null;
   }
 }

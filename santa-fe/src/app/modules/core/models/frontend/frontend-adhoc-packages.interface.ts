@@ -73,3 +73,18 @@ export interface ObligorGraphCategoryData {
   workoutTerm: number,
   markQuantity: number
 }
+
+export interface ObligorGraphAxesZoomState {
+  yAxis: {
+    start: number;
+    end: number;
+    fullZoomStart: number;
+    fullZoomEnd: number;
+  }
+  xAxis: {
+    start: number;
+    end: number;
+    fullZoomStart: number;
+    fullZoomEnd: number;
+  }
+}

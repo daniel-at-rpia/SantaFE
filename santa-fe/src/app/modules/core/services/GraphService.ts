@@ -9,8 +9,9 @@ import {
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import * as am4plugins_regression from "@amcharts/amcharts4/plugins/regression";
-import { TradeObligorGraphPanelState, TradeObligorGraphAxesZoomState } from 'FEModels/frontend-page-states.interface';
-import { ObligorGraphCategoryData } from 'src/app/modules/core/models/frontend/frontend-adhoc-packages.interface';
+import { TradeObligorGraphPanelState } from 'FEModels/frontend-page-states.interface';
+import { ObligorGraphCategoryData, ObligorGraphAxesZoomState } from 'src/app/modules/core/models/frontend/frontend-adhoc-packages.interface';
+import { MIN_OBLIGOR_CURVE_VALUES } from 'src/app/modules/core/constants/coreConstants.constant'
 
 
 @Injectable()
@@ -134,50 +135,11 @@ export class GraphService {
   }
 
   public buildObligorChart(state: TradeObligorGraphPanelState) {
-    // Reset the scope for the axes.
-    state.axesZoomState.xAxis.start = null;
-    state.axesZoomState.xAxis.end = null;
-    state.axesZoomState.yAxis.start = null;
-    state.axesZoomState.yAxis.end = null;
-    state.axesZoomState.xAxis.fullZoomStart = null;
-    state.axesZoomState.xAxis.fullZoomEnd = null;
-    state.axesZoomState.yAxis.fullZoomStart = null;
-    state.axesZoomState.yAxis.fullZoomEnd = null;
-    am4core.options.autoSetClassName = true;
-
     // Initialize the chart as XY.
     state.obligorChart = am4core.create("chartdiv", am4charts.XYChart);
 
     let xAxis = this.initializeObligorChartXAxis(state);
     let yAxis = this.initializeObligorChartYAxis(state);
-
-    // Capture the original zoom values of axes before a change is made.
-    // TODO: Move this into their own method. ( I've attempted this a couple times, but passing / modifying the axes in a seperate method doesnt seem to work. )
-    yAxis.events.on("startchanged", function (ev) {
-      if (state.axesZoomState.yAxis.fullZoomStart === null && state.axesZoomState.yAxis.fullZoomEnd === null) {
-        state.axesZoomState.yAxis.fullZoomStart = ev.target.minZoomed;
-        state.axesZoomState.yAxis.fullZoomEnd = ev.target.maxZoomed;
-      }
-
-    });
-    xAxis.events.on("startchanged", function (ev) {
-      if (state.axesZoomState.xAxis.fullZoomStart === null && state.axesZoomState.xAxis.fullZoomEnd === null) {
-        state.axesZoomState.xAxis.fullZoomStart = ev.target.minZoomed;
-        state.axesZoomState.xAxis.fullZoomEnd = ev.target.maxZoomed;
-      }
-    });
-    yAxis.events.on("endchanged", function (ev) {
-      if (state.axesZoomState.yAxis.fullZoomStart === null && state.axesZoomState.yAxis.fullZoomEnd === null) {
-        state.axesZoomState.yAxis.fullZoomStart = ev.target.minZoomed;
-        state.axesZoomState.yAxis.fullZoomEnd = ev.target.maxZoomed;
-      }
-    });
-    xAxis.events.on("endchanged", function (ev) {
-      if (state.axesZoomState.xAxis.fullZoomStart === null && state.axesZoomState.xAxis.fullZoomEnd === null) {
-        state.axesZoomState.xAxis.fullZoomStart = ev.target.minZoomed;
-        state.axesZoomState.xAxis.fullZoomEnd = ev.target.maxZoomed;
-      }
-    });
 
     // Draw each chart category.
     state.chartCategories.forEach((eachCategory) => {
@@ -186,9 +148,9 @@ export class GraphService {
 
     // Add legend for each chart type.
     state.obligorChart.legend = new am4charts.Legend();
-    state.obligorChart.legend.useDefaultMarker = true;
 
     // Build the reset ( zoomOutButton )
+    // TODO: Move this to another method.
     let resetButtonContainer = state.obligorChart.plotContainer.createChild(am4core.Container);
     resetButtonContainer.shouldClone = false;
     resetButtonContainer.align = "left";
@@ -213,7 +175,7 @@ export class GraphService {
     });
 
     // Initialize trigger events for chart legend
-    this.initializeObligorChartLengendTriggerEvents(state);
+    this.initializeObligorChartTriggerEvents(state, xAxis, yAxis);
 
     // Add a cursor to the chart, with zoom behaviour. 
     state.obligorChart.cursor = new am4charts.XYCursor();
@@ -233,17 +195,17 @@ export class GraphService {
       // Create a dumbbell series.
       let dumbBellSeries: am4charts.ColumnSeries = this.buildObligorChartDumbells(state, category, amChartsData);
 
-      if (amChartsData.length > 2) {
+      if (amChartsData.length > MIN_OBLIGOR_CURVE_VALUES) {
         // Create a trend curve.
         let curveSeries: am4charts.LineSeries = this.buildObligorChartTrendCurve(state, category, amChartsData, dumbBellSeries);
       }
     }
   }
 
-  public captureXYChartCurrentZoomState(chart: any, state: TradeObligorGraphPanelState): TradeObligorGraphAxesZoomState {
+  public captureXYChartCurrentZoomState(chart: any, state: TradeObligorGraphPanelState): ObligorGraphAxesZoomState {
     // Capture the current axes zoom state in out Zoom State object.
     // This is not used, but here when we need it.
-    let currentState: TradeObligorGraphAxesZoomState;
+    let currentState: ObligorGraphAxesZoomState;
     currentState = {
       xAxis: {
         start: chart.xAxes.values[0].minZoomed,
@@ -431,7 +393,7 @@ export class GraphService {
     series.hidden = true;
     series.hiddenInLegend = true;
 
-    var regression = series.plugins.push(new am4plugins_regression.Regression());
+    let regression = series.plugins.push(new am4plugins_regression.Regression());
     regression.method = "polynomial";
     regression.reorder = true;
     regression.options = {
@@ -525,7 +487,7 @@ export class GraphService {
     return yAxis;
   }
 
-  private initializeObligorChartLengendTriggerEvents(state: TradeObligorGraphPanelState) {
+  private initializeObligorChartTriggerEvents(state: TradeObligorGraphPanelState, xAxis: am4charts.ValueAxis, yAxis: am4charts.ValueAxis) {
     // When the legend is clicked, reset the axis zoom scope.
     state.obligorChart.legend.events.on("hit", function (ev) {
       state.axesZoomState.xAxis.start = null;
@@ -539,5 +501,38 @@ export class GraphService {
       state.axesZoomState.yAxis.fullZoomEnd = null;
 
     });
+
+    // Capture the original zoom values of axes before a change is made.
+    // TODO: Move this into their own method. ( I've attempted this a couple times, but passing / modifying the axes in a seperate method doesnt seem to work. )
+    yAxis.events.on("startchanged", function (ev) {
+      if (state.axesZoomState.yAxis.fullZoomStart === null && state.axesZoomState.yAxis.fullZoomEnd === null) {
+        state.axesZoomState.yAxis.fullZoomStart = ev.target.minZoomed;
+        state.axesZoomState.yAxis.fullZoomEnd = ev.target.maxZoomed;
+      }
+
+    });
+    xAxis.events.on("startchanged", function (ev) {
+      if (state.axesZoomState.xAxis.fullZoomStart === null && state.axesZoomState.xAxis.fullZoomEnd === null) {
+        state.axesZoomState.xAxis.fullZoomStart = ev.target.minZoomed;
+        state.axesZoomState.xAxis.fullZoomEnd = ev.target.maxZoomed;
+      }
+    });
+    yAxis.events.on("endchanged", function (ev) {
+      if (state.axesZoomState.yAxis.fullZoomStart === null && state.axesZoomState.yAxis.fullZoomEnd === null) {
+        state.axesZoomState.yAxis.fullZoomStart = ev.target.minZoomed;
+        state.axesZoomState.yAxis.fullZoomEnd = ev.target.maxZoomed;
+      }
+    });
+    xAxis.events.on("endchanged", function (ev) {
+      if (state.axesZoomState.xAxis.fullZoomStart === null && state.axesZoomState.xAxis.fullZoomEnd === null) {
+        state.axesZoomState.xAxis.fullZoomStart = ev.target.minZoomed;
+        state.axesZoomState.xAxis.fullZoomEnd = ev.target.maxZoomed;
+      }
+    });
+  }
+
+  private resetAxesZoomScope(state: TradeObligorGraphPanelState)
+  {
+
   }
 }

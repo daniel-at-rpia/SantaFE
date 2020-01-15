@@ -41,5 +41,5 @@ export interface PayloadGetAllQuotes {
 
 export interface PayloadObligorSecurityIDs {
   identifier: string,
-  lookbackHrs: number
+  lookbackHrs?: number
 }
