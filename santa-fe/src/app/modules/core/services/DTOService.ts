@@ -8,14 +8,7 @@
       BEPortfolioDTO
     } from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
-    import {
-      SecurityGroupMetricBlock,
-      SecurityDefinitionFilterBlock,
-      QuoteMetricBlock,
-      SecurityPortfolioBlock,
-      ObligorChartCategoryBlock,
-      ObligorCategoryDataItemBlock
-    } from 'FEModels/frontend-blocks.interface';
+    import * as Blocks from 'FEModels/frontend-blocks.interface';
     import { QuantVisualizerParams } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       SecurityDefinitionStub,
@@ -147,7 +140,7 @@ export class DTOService {
       dto.data.mark.mark = null;
       dto.data.mark.markRaw = null;
     }
-    const newBlock: SecurityPortfolioBlock = {
+    const newBlock: Blocks.SecurityPortfolioBlock = {
       portfolioName: targetPortfolio.portfolioShortName,
       quantity: targetPortfolio.quantity,
       marketValueCad: targetPortfolio.marketValueCad,
@@ -224,10 +217,10 @@ export class DTOService {
   public generateSecurityDefinitionFilterOptionList(
     name,
     options
-  ): Array<SecurityDefinitionFilterBlock> {
+  ): Array<Blocks.SecurityDefinitionFilterBlock> {
     return options.map((eachOption) => {
       const normalizedOption = this.utility.normalizeDefinitionFilterOption(eachOption);
-      const newFilterDTO:SecurityDefinitionFilterBlock = {
+      const newFilterDTO: Blocks.SecurityDefinitionFilterBlock = {
         isSelected: false,
         isFilteredOut: false,
         displayLabel: eachOption,
@@ -328,7 +321,7 @@ export class DTOService {
   public formSecurityGroupMetricObject(
     label?: string,
     deltaScope?: string
-  ): SecurityGroupMetricBlock {
+  ): Blocks.SecurityGroupMetricBlock {
     const object = {
       isEmpty: !label,
       sortHierarchy: null,
@@ -514,7 +507,7 @@ export class DTOService {
         cells: [],
         quotes: [],
         quoteHeaders: QuoteMetricList.map((eachQuoteMetricStub) => {
-          const metricBlock: QuoteMetricBlock = {
+          const metricBlock: Blocks.QuoteMetricBlock = {
             displayLabelList: eachQuoteMetricStub.labelList,
             isSizeTwo: eachQuoteMetricStub.size === 2,
             isSizeThree: eachQuoteMetricStub.size === 3,
@@ -644,9 +637,9 @@ export class DTOService {
   public formQuantVisualizerObject(
     isStencil: boolean,
     params: QuantVisualizerParams
-  ): QuantitativeVisualizerDTO {
+  ): DTOs.QuantitativeVisualizerDTO {
     if (isStencil) {
-      const stencilObject: QuantitativeVisualizerDTO = {
+      const stencilObject: DTOs.QuantitativeVisualizerDTO = {
         data: {
           rawEntry: { target: 10, group: 10 },
           wow: { target: 10, group: 10},
@@ -703,7 +696,7 @@ export class DTOService {
       let maxDelta = Math.max(...validDeltaParamsList);
       minDelta = minDelta - (maxDelta - minDelta) * 0.15;
       maxDelta = maxDelta + (maxDelta - minDelta) * 0.15;
-      const object: QuantitativeVisualizerDTO = {
+      const object: DTOs.QuantitativeVisualizerDTO = {
         data: {
           rawEntry: {
             target: params.tRaw,
@@ -781,13 +774,13 @@ export class DTOService {
     isStencil: boolean,
     name: string,
     colorScheme: string,
-    obligorCategoryDataItemDTO: ObligorCategoryDataItemBlock[],
+    obligorCategoryDataItemDTO: Blocks.ObligorCategoryDataItemBlock[],
     isHidden
-    ): ObligorChartCategoryBlock
+    ): Blocks.ObligorChartCategoryBlock
   {
     if(isStencil)
     {
-      let obligorChartCategoryDTOStencil: ObligorChartCategoryBlock = {
+      let obligorChartCategoryDTOStencil: Blocks.ObligorChartCategoryBlock = {
         data: {
           name: null,
           color: null,
@@ -805,10 +798,10 @@ export class DTOService {
     }
   }
 
-  public formObligorCategoryDataItemDTO(isStencil: boolean): ObligorCategoryDataItemBlock
+  public formObligorCategoryDataItemDTO(isStencil: boolean): Blocks.ObligorCategoryDataItemBlock
   {
     if(isStencil) {
-      let obligorCategoryDataDTO: ObligorCategoryDataItemBlock = {
+      let obligorCategoryDataDTO: Blocks.ObligorCategoryDataItemBlock = {
         data: {
           name,
           securityID: null,
