@@ -123,7 +123,9 @@ export class AgGridMiddleLayerService {
     targetHeader: SecurityTableHeaderDTO,
     newAgColumn: AgGridColumnDefinition
   ) {
-    if (targetHeader.state.isQuantVariant) {
+    if (targetHeader.data.key === 'securityCard') {
+      newAgColumn.comparator = this.agCompareSecurities.bind(this);
+    } else if (targetHeader.state.isQuantVariant) {
       newAgColumn.comparator = this.agCompareQuantComparer.bind(this);
     } else if (targetHeader.data.underlineAttrName && targetHeader.data.attrName != targetHeader.data.underlineAttrName) {
       newAgColumn.comparator = this.agCompareUnderlineValue.bind(this)
@@ -137,7 +139,6 @@ export class AgGridMiddleLayerService {
     if (targetHeader.data.key === 'securityCard') {
       newAgColumn.cellClass = `${AGGRID_CELL_CLASS} ${AGGRID_CELL_CLASS}--securityCard`;
       newAgColumn.cellRenderer = targetHeader.data.key;
-      newAgColumn.sortable = false;
       newAgColumn.width = AGGRID_SECURITY_CARD_COLUMN_WIDTH;
     } else if (targetHeader.data.key === 'bestQuote') {
       newAgColumn.cellRenderer = targetHeader.data.key;
@@ -264,6 +265,24 @@ export class AgGridMiddleLayerService {
         }
       } else {
         return 0;
+      }
+    } else {
+      return 0;
+    }
+  }
+
+  private agCompareSecurities(
+    securityA: SecurityDTO,
+    securityB: SecurityDTO,
+    nodeA: AgGridRowNode,
+    nodeB: AgGridRowNode,
+    inverted: boolean
+  ) {
+    if (!!securityA && !!securityB && !securityA.state.isStencil && !securityB.state.isStencil) {
+      if (securityA.data.name < securityB.data.name) {
+        return 1;
+      } else if (securityA.data.name > securityB.data.name) {
+        return -1;
       }
     } else {
       return 0;
