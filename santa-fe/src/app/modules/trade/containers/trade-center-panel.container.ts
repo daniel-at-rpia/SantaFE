@@ -103,7 +103,13 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       bestQuoteValidWindow: null,
       presets: {
         selectedPreset: null,
-        shortcutList: []
+        selectedList: null,
+        recentShortcutList: [],
+        portfolioShortcutList: [],
+        ownershipShortcutList: [],
+        strategyShortcutList: [],
+        individualShortcutList: [],
+        shortcutList: [],
       },
       configurator: {
         dto: this.dtoService.createSecurityDefinitionConfigurator(true),
@@ -269,7 +275,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private populateSearchShortcuts() {
-    this.state.presets.shortcutList = [];
+    this.state.presets = this.initializePageState().presets;
     this.constants.searchShortcuts.forEach((eachShortcutStub) => {
       const definitionList = eachShortcutStub.includedDefinitions.map((eachIncludedDef) => {
         const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityGroupDefinitionMap[eachIncludedDef.definitionKey]);
@@ -284,7 +290,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         }
         return definitionDTO;
       });
-      this.state.presets.shortcutList.push(this.dtoService.formSearchShortcutObject(definitionList, eachShortcutStub.displayTitle, false));
+      // this.state.presets.shortcutList.push(this.dtoService.formSearchShortcutObject(definitionList, eachShortcutStub.displayTitle, false));
     });
   }
 

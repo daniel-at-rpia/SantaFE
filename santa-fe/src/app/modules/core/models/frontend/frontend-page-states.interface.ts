@@ -69,8 +69,13 @@ export interface TradeCenterPanelState {
   currentContentStage: number;
   bestQuoteValidWindow: number;
   presets : {
-    selectedPreset: any;
-    shortcutList: Array<SearchShortcutDTO>;
+    selectedPreset: SearchShortcutDTO;
+    selectedList: Array<SearchShortcutDTO>;
+    recentShortcutList: Array<SearchShortcutDTO>;
+    portfolioShortcutList: Array<SearchShortcutDTO>;
+    ownershipShortcutList: Array<SearchShortcutDTO>;
+    strategyShortcutList: Array<SearchShortcutDTO>;
+    individualShortcutList: Array<SearchShortcutDTO>;
   }
   configurator: {
     dto: SecurityDefinitionConfiguratorDTO;

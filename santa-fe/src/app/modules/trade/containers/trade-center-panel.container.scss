@@ -9,7 +9,7 @@
   overflow: hidden;
   &__presetsAndFilters {
     @include mix_fixed_div(relative, $z_index_standard_base_item);
-    flex: 0 0 $securityDefinitionConfigurator_width + $spacing_medium;
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -17,30 +17,86 @@
       @include mix_fixed_div(absolute, $z_index_standard_base_item);
       @include mix_alive('custom', transform $animation_duration_light);
       display: flex;
-      flex-direction: column;
       height: 100%;
       width: 100%;
       transform: translate(0, 0);
       overflow: hidden;
-      &-title {
-        padding: $spacing_small;
-        text-align: center;
-        font-size: $font_size_large;
-        color: $font_color_minor;
+      &-categoryCanvas {
+        @include mix_fixed_div(relative, $z_index_standard_base_item);
+        flex: 0 0 15rem;
+        display: flex;
+        &-ribbon {
+          @include mix_fixed_div(absolute, $z_index_standard_base_item);
+          top: 0;
+          left: $spacing_x_large;
+          width: 10rem;
+          height: 100%;
+          background-color: $color_active;
+        }
+        &-list {
+          @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          padding-top: $spacing_x_large;
+          margin: $spacing_x_large 0 $spacing_x_large $spacing_x_large + 10rem - 4rem;
+          &-btn {
+            @include mix_border_radius(15px);
+            padding: $spacing_medium;
+            margin-bottom: $spacing_x_large;
+            &>i {
+              font-size: $font_size_xx_large;
+            }
+            &>span {
+              font-size: $font_size_x_large;
+            }
+            &--recent {
+              background-color: $color_teal_7_A;
+            }
+            &--portfolio {
+              background-color: $color_blue_5;
+            }
+            &--ownership {
+              background-color: $color_yellow_7;
+            }
+            &--strategy {
+              background-color: $color_deeppurple_1_A;
+            }
+            &--individual {
+              background-color: $color_pink_3;
+            }
+          }
+        }
       }
-      &-list {
-        @include mix_enable_scrollbar('vertical');
+      &-shortcutCanvas {
+        flex: 1 1 auto;
         display: flex;
         flex-direction: column;
-        &-item {
-          @include mix_alive('light');
-          flex: 0 0 auto;
+        &-title {
+          padding: $spacing_small;
+          text-align: center;
+          font-size: $font_size_large;
+          color: $font_color_minor;
+        }
+        &-list {
+          @include mix_enable_scrollbar('vertical');
+          @include mix_border_radius(15px);
+          flex: 0 0 70%;
           display: flex;
-          padding: $spacing_x_small $spacing_medium $spacing_medium $spacing_medium;
-          overflow: hidden;
-          search-shortcut {
+          display: none;
+          flex-wrap: wrap;
+          margin-right: $spacing_large;
+          background-color: $color_active;
+          &-item {
+            @include mix_alive('light');
+            flex: 0 0 auto;
             display: flex;
-            flex: 1 1 auto;
+            padding: $spacing_x_small $spacing_medium $spacing_medium $spacing_medium;
+            overflow: hidden;
+            search-shortcut {
+              display: flex;
+              flex: 1 1 auto;
+            }
           }
         }
       }
