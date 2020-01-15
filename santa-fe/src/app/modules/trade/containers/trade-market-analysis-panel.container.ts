@@ -1,3 +1,4 @@
+  // dependencies
     import {
       Component,
       ViewEncapsulation,
@@ -21,20 +22,21 @@
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import {
       SecurityDTO,
-      QuantitativeVisualizerDTO,
+      MoveVisualizerDTO,
       SecurityDefinitionDTO
     } from 'FEModels/frontend-models.interface';
     import { TradeMarketAnalysisPanelState } from 'FEModels/frontend-page-states.interface';
-    import { PayloadGetSecurityGroupBasedOnSecurity } from 'BEModels/backend-payloads.interface';
+    import { PayloadGetGroupHistoricalSummary } from 'BEModels/backend-payloads.interface';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       MARKET_ANALYSIS_SPREAD_METRIC_KEY,
       MARKET_ANALYSIS_YIELD_METRIC_KEY
     } from 'Core/constants/tradeConstants.constant';
-    import { QuantVisualizerParams } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       selectSelectedSecurityForAnalysis
     } from 'Trade/selectors/trade.selectors';
+    import { HistoricalSummarySampleReturn } from 'Trade/stubs/lilMarket.stub';
+  //
 
 @Component({
   selector: 'trade-market-analysis-panel',
@@ -62,17 +64,17 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
   ){
     this.state = {
       receivedSecurity: false,
-      quantVisualizer: {
+      targetSecurity: null,
+      config: {
         groupByOptions: [],
-        dto: this.dtoService.formQuantVisualizerObject(true, null),
-        targetSecurity: null
       },
       table: {
-        securityList: []
+        securityList: [],
+        levelSummary: null,
+        basisSummary: null
       }
     }
     this.populateDefinitionOptions();
-    this.state.quantVisualizer.groupByOptions[0].state.groupByActive = true;
   }
 
   public ngOnInit() {
@@ -92,7 +94,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
 
   public onClickGroupByOption(targetOption: SecurityDefinitionDTO){
     targetOption.state.groupByActive = !targetOption.state.groupByActive;
-    const activeOptions = this.state.quantVisualizer.groupByOptions.filter((eachOption) => {
+    const activeOptions = this.state.config.groupByOptions.filter((eachOption) => {
       return eachOption.state.groupByActive;
     })
     if (activeOptions.length > 0) {
@@ -102,8 +104,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
 
   private onSecuritySelected(targetSecurity: SecurityDTO) {
     this.state.receivedSecurity = true;
-    this.state.quantVisualizer.targetSecurity = this.utilityService.deepCopy(targetSecurity);
-    this.state.quantVisualizer.dto = this.dtoService.formQuantVisualizerObject(true, null);
+    this.state.targetSecurity = this.utilityService.deepCopy(targetSecurity);
     this.fetchGroupData();
   }
 
@@ -114,30 +115,38 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     options.push(this.dtoService.formSecurityDefinitionObject(this.constants.securityDefinitionMap.SECTOR));
     options.push(this.dtoService.formSecurityDefinitionObject(this.constants.securityDefinitionMap.SENIORITY));
     options.push(this.dtoService.formSecurityDefinitionObject(this.constants.securityDefinitionMap.TENOR));
-    this.state.quantVisualizer.groupByOptions = options;
+    this.state.config.groupByOptions = options;
   }
 
   private fetchGroupData() {
     if (this.state.receivedSecurity) {
-      const payload : PayloadGetSecurityGroupBasedOnSecurity = {
+      const payload : PayloadGetGroupHistoricalSummary = {
         source: "Default",
-        identifier: this.state.quantVisualizer.targetSecurity.data.securityID,
-        groupIdentifier: {},
-        tenorOptions: ["2Y", "3Y", "5Y", "7Y", "10Y", "30Y"]
+        identifier: this.state.targetSecurity.data.securityID,
+        groupIdentifier: {
+          'Ccy': [],
+          'Seniority': [],
+          'RatingNoNotch': [],
+          'Sector': [],
+          'Tenor': []
+        },
+        tenorOptions: ["2Y", "3Y", "5Y", "7Y", "10Y", "30Y"],
+        deltaTypes: ["Yoy"],
+        metricName: 'GSpread',
+        count: 10
       }
-      this.state.quantVisualizer.groupByOptions.forEach((eachOption) => {
-        if (eachOption.state.groupByActive) {
-          const backendKey = this.utilityService.convertFEKey(eachOption.data.key);
-          payload.groupIdentifier[backendKey] = [];
-        }
-      });
+      // this.state.moveVisualizer.groupByOptions.forEach((eachOption) => {
+      //   if (eachOption.state.groupByActive) {
+      //     const backendKey = this.utilityService.convertFEKey(eachOption.data.key);
+      //     payload.groupIdentifier[backendKey] = [];
+      //   }
+      // });
       payload.groupIdentifier['SecurityType'] = [];
       payload.groupIdentifier['CouponType'] = [];
-      this.restfulCommService.callAPI(this.restfulCommService.apiMap.getGroupFromSecurity, {req: 'POST'}, payload).pipe(
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.getGroupHistoricalSummary, {req: 'POST'}, payload).pipe(
         first(),
         tap((serverReturn) => {
-          this.populateVisualizer(serverReturn);
-          this.testPopulateTableWithSamples();
+          this.state.table.levelSummary = this.dtoService.formHistoricalSummaryObject(serverReturn['Yoy'], true);
         }),
         catchError(err => {
           console.error('error', err);
@@ -147,27 +156,4 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     }
   }
 
-  private populateVisualizer(serverReturn) {
-    const groupDTO = this.dtoService.formSecurityGroupObject(serverReturn);
-    const securityMetricPack = this.state.quantVisualizer.targetSecurity.data.metricPack;
-    const params: QuantVisualizerParams = {
-      tRaw: securityMetricPack.raw[this.constants.spreadMetricKey],
-      gRaw: groupDTO.data.metricPack.raw[this.constants.spreadMetricKey],
-      tWow: securityMetricPack.delta.Wow[this.constants.spreadMetricKey],
-      gWow: groupDTO.data.metricPack.delta.Wow[this.constants.spreadMetricKey],
-      tMom: securityMetricPack.delta.Mom[this.constants.spreadMetricKey],
-      gMom: groupDTO.data.metricPack.delta.Mom[this.constants.spreadMetricKey],
-      tYtd: securityMetricPack.delta.Ytd[this.constants.spreadMetricKey],
-      gYtd: groupDTO.data.metricPack.delta.Ytd[this.constants.spreadMetricKey]
-    }
-    this.state.quantVisualizer.dto = this.dtoService.formQuantVisualizerObject(false, params);
-  }
-
-  private testPopulateTableWithSamples() {
-    this.state.quantVisualizer.targetSecurity.state.isTableExpanded = false;
-    const newSecurity1 = this.utilityService.deepCopy(this.state.quantVisualizer.targetSecurity);
-    const newSecurity2 = this.utilityService.deepCopy(this.state.quantVisualizer.targetSecurity);
-    const newSecurity3 = this.utilityService.deepCopy(this.state.quantVisualizer.targetSecurity);
-    this.state.table.securityList = [newSecurity1, newSecurity2, newSecurity3];
-  }
 }

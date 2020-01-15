@@ -322,31 +322,6 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
   }
 }
 
-export interface QuantitativeVisualizerDTO extends BasicDTOStructure {
-  data: {
-    rawEntry: QuantitativeEntryBlock;
-    wow: QuantitativeEntryBlock;
-    mom: QuantitativeEntryBlock;
-    ytd: QuantitativeEntryBlock;
-    min: number;
-    max: number;
-    minDelta: number;
-    maxDelta: number;
-  }
-  style: {
-    raw: QuantitativeEntryStyleBlock;
-    wow: QuantitativeEntryStyleBlock;
-    mom: QuantitativeEntryStyleBlock;
-    ytd: QuantitativeEntryStyleBlock;
-  }
-  state: {
-    isWowValid: boolean;
-    isMomValid: boolean;
-    isYtdValid: boolean;
-    isStencil: boolean;
-  }
-}
-
 export interface NumericFilterDTO extends BasicDTOStructure {
   data: {
     minNumber: number|string;
@@ -359,5 +334,40 @@ export interface NumericFilterDTO extends BasicDTOStructure {
   }
   state: {
     isFilled: boolean;
+  }
+}
+
+export interface MoveVisualizerDTO extends BasicDTOStructure {
+  data: {
+    start: number;
+    end: number;
+    min: number;
+    max: number;
+  }
+  style: {
+    leftGap: number;
+    leftEdge: number;
+    moveDistance: number;
+    rightEdge: number;
+    rightGap: number;
+  }
+  state: {
+  }
+}
+
+export interface HistoricalSummaryDTO extends BasicDTOStructure {
+  data: {
+    list: Array<MoveVisualizerDTO>;
+    globalMin: number;
+    globalMax: number;
+    globalDistance: number;
+    centerPoint: number;
+    rulerValue: number;
+  };
+  style: {
+    rulerPosition: number;
+  }
+  state: {
+    isStencil: boolean;
   }
 }
