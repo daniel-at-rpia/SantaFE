@@ -26,6 +26,7 @@
       SecurityDefinitionDTO
     } from 'FEModels/frontend-models.interface';
     import { TradeMarketAnalysisPanelState } from 'FEModels/frontend-page-states.interface';
+    import { BEHistoricalSummaryDTO } from 'BEModels/backend-models.interface';
     import { PayloadGetGroupHistoricalSummary } from 'BEModels/backend-payloads.interface';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
     import {
@@ -69,7 +70,9 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
         groupByOptions: [],
       },
       table: {
-        securityList: [],
+        presentList: [],
+        prinstineTopSecurityList: [],
+        prinstineBottomSecurityList: [],
         levelSummary: null,
         basisSummary: null
       }
@@ -120,6 +123,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
 
   private fetchGroupData() {
     if (this.state.receivedSecurity) {
+      const targetScope = 'Yoy'
       const payload : PayloadGetGroupHistoricalSummary = {
         source: "Default",
         identifier: this.state.targetSecurity.data.securityID,
@@ -131,7 +135,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
           'Tenor': []
         },
         tenorOptions: ["2Y", "3Y", "5Y", "7Y", "10Y", "30Y"],
-        deltaTypes: ["Yoy"],
+        deltaTypes: [targetScope],
         metricName: 'GSpread',
         count: 10
       }
@@ -146,13 +150,50 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getGroupHistoricalSummary, {req: 'POST'}, payload).pipe(
         first(),
         tap((serverReturn) => {
-          this.state.table.levelSummary = this.dtoService.formHistoricalSummaryObject(serverReturn['Yoy'], true);
+          this.loadSecurityList(serverReturn[targetScope]);
+          this.state.table.levelSummary = this.dtoService.formHistoricalSummaryObject(serverReturn[targetScope], true);
         }),
         catchError(err => {
           console.error('error', err);
           return of('error');
         })
       ).subscribe();
+    }
+  }
+
+  private loadSecurityList(rawData: BEHistoricalSummaryDTO) {
+    this.state.table.presentList = [];
+    this.state.table.prinstineBottomSecurityList = [];
+    this.state.table.prinstineTopSecurityList = [];
+    if (!!rawData.BaseSecurity && !!rawData.Group) {
+      const baseSecurityDTO = this.dtoService.formSecurityCardObject('', rawData.BaseSecurity.security, false);
+      baseSecurityDTO.state.isMultiLineVariant = true;
+      baseSecurityDTO.state.isTable = true;
+      this.state.table.presentList.push(baseSecurityDTO);
+      const groupDTO = this.dtoService.formSecurityCardObject('', null, true);
+      groupDTO.data.name = 'Group';
+      groupDTO.state.isMultiLineVariant = true;
+      groupDTO.state.isTable = true;
+      groupDTO.state.isStencil = false;
+      this.state.table.presentList.push(groupDTO);
+    }
+    if (!!rawData.Top) {
+      for (const eachSecurityIdentifier in rawData.Top) {
+        const eachTopSecurityDTO = this.dtoService.formSecurityCardObject(eachSecurityIdentifier, rawData.Top[eachSecurityIdentifier].security, false);
+        eachTopSecurityDTO.state.isTable = true;
+        eachTopSecurityDTO.state.isMultiLineVariant = true;
+        this.state.table.presentList.push(eachTopSecurityDTO);
+        this.state.table.prinstineTopSecurityList.push(eachTopSecurityDTO);
+      }
+    }
+    if (!!rawData.Bottom) {
+      for (const eachSecurityIdentifier in rawData.Bottom) {
+        const eachBottomSecurityDTO = this.dtoService.formSecurityCardObject(eachSecurityIdentifier, rawData.Bottom[eachSecurityIdentifier].security, false);
+        eachBottomSecurityDTO.state.isTable = true;
+        eachBottomSecurityDTO.state.isMultiLineVariant = true;
+        this.state.table.presentList.push(eachBottomSecurityDTO);
+        this.state.table.prinstineBottomSecurityList.push(eachBottomSecurityDTO);
+      }
     }
   }
 

@@ -66,7 +66,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     isStencil: boolean;
     isTable: boolean;
     isSelected: boolean;
-    isTableExpanded: boolean;
+    isMultiLineVariant: boolean;
   }
 }
 
@@ -353,6 +353,7 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
     rightGap: number;
   }
   state: {
+    isInversed: boolean;
   }
 }
 

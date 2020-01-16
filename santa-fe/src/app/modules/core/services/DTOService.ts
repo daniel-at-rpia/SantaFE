@@ -111,7 +111,7 @@ export class DTOService {
         isSelected: false,
         isStencil: isStencil,
         isTable: false,
-        isTableExpanded: false
+        isMultiLineVariant: false
       }
     };
     return object;
@@ -716,6 +716,7 @@ export class DTOService {
           rightGap: 10
         },
         state: {
+          isInversed: false
         }
       };
       return stencilObject;
@@ -735,6 +736,7 @@ export class DTOService {
           rightGap: 10
         },
         state: {
+          isInversed: rawData.startMetric > rawData.endMetric
         }
       }
       return object;
@@ -774,6 +776,12 @@ export class DTOService {
     if (rawData.Top) {
       for (const eachSecurityIdentifier in rawData.Top) {
         const eachDTO = isLevel ? this.formMoveVisualizerObject(false, rawData.Top[eachSecurityIdentifier].historicalLevel) : this.formMoveVisualizerObject(false, rawData.Top[eachSecurityIdentifier].historicalBasis);
+        object.data.list.push(eachDTO);
+      }
+    }
+    if (rawData.Bottom) {
+      for (const eachSecurityIdentifier in rawData.Bottom) {
+        const eachDTO = isLevel ? this.formMoveVisualizerObject(false, rawData.Bottom[eachSecurityIdentifier].historicalLevel) : this.formMoveVisualizerObject(false, rawData.Bottom[eachSecurityIdentifier].historicalBasis);
         object.data.list.push(eachDTO);
       }
     }

@@ -1,4 +1,5 @@
 @import "global.scss";
+@import "modules/trade/trade.scss";
 
 .sat-tradeMarketAnalysisPanel {
   $tradeMarketAnalysisPanelBlockName: &;
@@ -15,23 +16,32 @@
     @include mix_enable_scrollbar('vertical');
     flex: 1 1 auto;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     padding: $spacing_medium;
-    &-securityList {
+    &-content {
       flex: 1 1 auto;
-    }
-    &-levelColumn, &-basisColumn {
-      flex: 0 0 33.33%;
       display: flex;
-      historical-summary {
+      &-securityList {
+        flex: 0 1 auto;
+        &-item {
+          display: flex;
+          align-items: center;
+          height: $tradeMarketAnalysis_row_height;
+        }
+      }
+      &-levelColumn, &-basisColumn {
         flex: 1 1 auto;
         display: flex;
+        historical-summary {
+          flex: 1 1 auto;
+          display: flex;
+        }
       }
-    }
-    &-separator {
-      @include mix_border_generator(0 0 0 $typical_border_width);
-      margin-left: $spacing_small;
-      padding-left: $spacing_small;
+      &-separator {
+        @include mix_border_generator(0 0 0 $typical_border_width);
+        margin-left: $spacing_small;
+        padding-left: $spacing_small;
+      }
     }
   }
   &--hasSecurityState {

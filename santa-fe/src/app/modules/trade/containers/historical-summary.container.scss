@@ -34,7 +34,12 @@ $historicalSummary_overlayCanvas_ruler_line_width: 0.2rem;
     display: flex;
     flex-direction: column;
     &-item {
-      padding: 0 $spacing_x_small;
+      display: flex;
+      align-items: center;
+      height: $tradeMarketAnalysis_row_height;
+      move-visualizer {
+        flex: 1 1 auto;
+      }
     }
   }
   &:hover {
