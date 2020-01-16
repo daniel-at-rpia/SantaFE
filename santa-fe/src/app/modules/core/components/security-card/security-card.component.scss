@@ -23,13 +23,14 @@ $securityCard_name_rightGap: 3rem;
     align-items: center;
     overflow: hidden;
     &-text {
-      @include mix_text_overflow();
-      @include mix_break_word;
+      @include mix_text_overflow_multi_line(1);
+      word-break: break-all;
       color: $font_color_inverse;
       margin-left: $spacing_small;
       font-size: $font_size_small;
       user-select: none;
       line-height: $line_height_minimum;
+      text-align: left;
     }
   }
   &__rating {
@@ -98,7 +99,7 @@ $securityCard_name_rightGap: 3rem;
     @include material('none');
     @include mix_border_generator($typical_border_width, $color_gray_85);
   }
-  &--tableExpandedState {
+  &--multiLineVariant {
     height: $securityCard_labelVariant_expanded_height;
     #{$securityCardBlockName} {
       &__name {
@@ -108,6 +109,9 @@ $securityCard_name_rightGap: 3rem;
         }
       }
     }
+  }
+  &--flexibleWidthVariant {
+    width: inherit;
   }
   &--detailState {
     @include material('none');

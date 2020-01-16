@@ -127,7 +127,9 @@ export interface TradeMarketAnalysisPanelState {
     groupByOptions: Array<SecurityDefinitionDTO>;
   }
   table: {
-    securityList: Array<SecurityDTO>;
+    presentList: Array<SecurityDTO>;
+    prinstineTopSecurityList: Array<SecurityDTO>;
+    prinstineBottomSecurityList: Array<SecurityDTO>;
     levelSummary: HistoricalSummaryDTO;
     basisSummary: HistoricalSummaryDTO;
   }
