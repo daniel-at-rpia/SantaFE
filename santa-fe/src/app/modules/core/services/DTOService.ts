@@ -91,8 +91,8 @@ export class DTOService {
           markDisLiquidationRaw: null
         },
         portfolios: [],
-        strategyCurrent: '',
         strategyFirm: '',
+        strategyList: [],
         positionCurrent: 0,
         positionCurrentInMM: 'n/a',
         positionFirm: 0,
@@ -162,8 +162,14 @@ export class DTOService {
       } else if (eachPortfolioBlock.portfolioName === 'STIP' || eachPortfolioBlock.portfolioName === 'FIP' || eachPortfolioBlock.portfolioName === 'CIP') {
         dto.data.positionNLF = dto.data.positionNLF + eachPortfolioBlock.quantity;
       }
-      if (eachPortfolioBlock.strategy.length > 0 && dto.data.strategyFirm.indexOf(eachPortfolioBlock.strategy) < 0) {
-        dto.data.strategyFirm = dto.data.strategyFirm.length === 0 ? `${eachPortfolioBlock.strategy}` : `${dto.data.strategyFirm} & ${eachPortfolioBlock.strategy}`;
+      if (eachPortfolioBlock.strategy.length > 0 && dto.data.strategyList.indexOf(eachPortfolioBlock.strategy) < 0) {
+        dto.data.strategyList.push(eachPortfolioBlock.strategy);
+        if (dto.data.strategyList.length === 1) {
+          dto.data.strategyFirm = `${eachPortfolioBlock.strategy}`;
+        } else {
+          dto.data.strategyFirm = `${dto.data.strategyFirm} & ${eachPortfolioBlock.strategy}`;
+          console.warn('detected security with multiple strategies: ', dto.data.name, ' has strategy = ', dto.data.strategyList);
+        }
       }
     });
     dto.data.positionFirmInMM = this.utility.parsePositionToMM(dto.data.positionFirm, false);
@@ -340,12 +346,14 @@ export class DTOService {
   public formSearchShortcutObject(
     definitionList: Array<DTOs.SecurityDefinitionDTO>,
     title: string,
-    skipFirstForDefaultGroupBy: boolean
+    skipFirstForDefaultGroupBy: boolean,
+    isMajor: boolean
   ): DTOs.SearchShortcutDTO {
     const object: DTOs.SearchShortcutDTO = {
       data: {
         displayTitle: title,
-        configuration: definitionList
+        configuration: definitionList,
+        isMajorShortcut: !!isMajor
       },
       style: {
         slotList: [null, null, null, null, null]

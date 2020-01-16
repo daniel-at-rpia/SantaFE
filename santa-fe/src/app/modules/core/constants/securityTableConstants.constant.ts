@@ -284,18 +284,10 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false,
     isDataTypeText: true
   },{
-    key: 'firmStrategy',
-    label: 'Firm Strategy',
-    attrName: 'strategyFirm',
-    underlineAttrName: 'strategyFirm',
-    readyStage: 1,
-    active: false,
-    isDataTypeText: true
-  },{
     key: 'strategy',
     label: 'Strategy',
-    attrName: 'strategyCurrent',
-    underlineAttrName: 'strategyCurrent',
+    attrName: 'strategyFirm',
+    underlineAttrName: 'strategyFirm',
     readyStage: 1,
     active: false,
     isDataTypeText: true
