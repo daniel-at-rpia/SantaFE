@@ -2,7 +2,8 @@ import { Label } from '@amcharts/amcharts4/core';
 
 export interface SearchShortcutStub {
   displayTitle: string;
-  includedDefinitions: Array<SearchShortcutIncludedDefinitionStub>
+  includedDefinitions: Array<SearchShortcutIncludedDefinitionStub>;
+  isMajor?: boolean;
 }
 
 interface SearchShortcutIncludedDefinitionStub {
@@ -50,6 +51,7 @@ export interface SecurityDefinitionMapStub {
   BACKUP_PORTFOLIO_MANAGER: SecurityDefinitionStub;
   RESEARCH: SecurityDefinitionStub;
   OWNER: SecurityDefinitionStub;
+  STRATEGY: SecurityDefinitionStub;
 }
 
 export interface SecurityMetricOptionStub {

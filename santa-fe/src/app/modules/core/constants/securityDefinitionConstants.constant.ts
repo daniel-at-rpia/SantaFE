@@ -241,6 +241,18 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'TW'
   ];
 
+  const FullStrategyList = [
+    'Short Carry',
+    'STOV',
+    'Relative Value',
+    'Portfolio Shorts',
+    'LTOV - Yield',
+    'LTOV - Spread',
+    'LTOV - Special Situations',
+    'HEDGE',
+    'Basis'
+  ];
+
 export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
   'SECURITY_TYPE': {
     key: 'SECURITY_TYPE',
@@ -266,14 +278,16 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     key: 'COUPON_TYPE',
     displayName: 'Coupon Type',
     icon: 'fas fa-ticket-alt',
-    optionList: FilterOptionsCouponType
+    optionList: FilterOptionsCouponType,
+    locked: true
   },
   'CURRENCY': {
     key: 'CURRENCY',
     displayName: 'Currency',
     icon: 'fal fa-dollar-sign',
     optionList: FilterOptionsCurrency,
-    securityDTOAttr: 'currency'
+    securityDTOAttr: 'currency',
+    locked: true
   },
   'INDUSTRY': {
     key: 'INDUSTRY',
@@ -383,6 +397,13 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fad fa-users',
     optionList: FullOwnerList,
     securityDTOAttr: 'owner'
+  },
+  'STRATEGY': {
+    key: 'STRATEGY',
+    displayName: 'Strategy',
+    icon: 'fal fa-chess',
+    optionList: FullStrategyList,
+    securityDTOAttr: 'strategyList'
   }
 };
 
@@ -395,7 +416,8 @@ export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> =
       SecurityDefinitionMap.CURRENCY,
       SecurityDefinitionMap.RATING,
       SecurityDefinitionMap.SECTOR,
-      SecurityDefinitionMap.TENOR
+      SecurityDefinitionMap.TENOR,
+      SecurityDefinitionMap.STRATEGY
     ]
   },{
     label: 'Owner',

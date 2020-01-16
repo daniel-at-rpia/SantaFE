@@ -69,8 +69,14 @@ export interface TradeCenterPanelState {
   currentContentStage: number;
   bestQuoteValidWindow: number;
   presets : {
-    selectedPreset: any;
-    shortcutList: Array<SearchShortcutDTO>;
+    presetsReady: boolean;
+    selectedPreset: SearchShortcutDTO;
+    selectedList: Array<SearchShortcutDTO>;
+    recentShortcutList: Array<SearchShortcutDTO>;
+    portfolioShortcutList: Array<SearchShortcutDTO>;
+    ownershipShortcutList: Array<SearchShortcutDTO>;
+    strategyShortcutList: Array<SearchShortcutDTO>;
+    individualShortcutList: Array<SearchShortcutDTO>;
   }
   configurator: {
     dto: SecurityDefinitionConfiguratorDTO;
@@ -93,6 +99,7 @@ export interface TradeCenterPanelState {
       portfolios: Array<string>;
       keyword: string;
       owner: Array<string>;
+      strategy: Array<string>;
     }
     securityFilters: Array<DefinitionConfiguratorEmitterParamsItem>
   }
@@ -132,6 +139,15 @@ export interface TradeObligorGraphPanelState {
   obligorName: string;
   obligorCurrency: string;
   securityTableRowDTOList: SecurityTableRowDTO[];
+  lookBackHours: number;
+  yAxis: {
+    start:number;
+    end:number;
+  }
+  xAxis: {
+    start:number;
+    end:number;
+  }
   metric: {
     spread:boolean;
     yield:boolean;
@@ -140,8 +156,6 @@ export interface TradeObligorGraphPanelState {
     cS01:boolean;
     quantity:boolean;
   }
-  xAxisData: number[];
-  yAxisData: number[];
   activeCharts: {
     srBond: boolean;
     subBond: boolean;

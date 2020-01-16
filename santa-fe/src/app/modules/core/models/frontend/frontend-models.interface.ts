@@ -45,8 +45,8 @@ export interface SecurityDTO extends BasicDTOStructure {
     owner: Array<string>;
     mark: SecurityMarkBlock;
     portfolios: Array<SecurityPortfolioBlock>;
-    strategyCurrent: string;
     strategyFirm: string;
+    strategyList: Array<string>;
     positionCurrent: number;
     positionCurrentInMM: string;
     positionFirm: number;
@@ -60,6 +60,7 @@ export interface SecurityDTO extends BasicDTOStructure {
       bid: number;
       ask: number;
     }
+    cs01Local: number;
   }
   state: {
     isStencil: boolean;
@@ -158,7 +159,8 @@ export interface SecurityGroupAverageVisualizerDTO extends BasicDTOStructure {
 export interface SearchShortcutDTO extends BasicDTOStructure {
   data: {
     displayTitle: string;
-    configuration: Array<SecurityDefinitionDTO>
+    configuration: Array<SecurityDefinitionDTO>;
+    isMajorShortcut: boolean;
   },
   style: {
     slotList: Array<SecurityDefinitionDTO>
