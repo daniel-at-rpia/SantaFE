@@ -55,6 +55,8 @@ export class HistoricalSummary implements OnChanges {
       this.summaryData.data.rulerValue = this.utilityService.round(currentPosition * this.summaryData.data.globalDistance / totalWidth + this.summaryData.data.globalMin, 0);
 
       this.summaryData.style.rulerPosition = currentPosition;
+    } else {
+      console.warn('invalid hover', event);
     }
 
   }

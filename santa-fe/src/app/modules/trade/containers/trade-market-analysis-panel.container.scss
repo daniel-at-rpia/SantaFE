@@ -22,11 +22,15 @@
       flex: 1 1 auto;
       display: flex;
       &-securityList {
-        flex: 0 1 auto;
+        flex: 0 0 12rem;
+        padding-top: $tradeMarketAnalysis_topGutterForRulerLabel;
         &-item {
           display: flex;
           align-items: center;
           height: $tradeMarketAnalysis_row_height;
+          security-card {
+            flex: 1 1 auto;
+          }
         }
       }
       &-levelColumn, &-basisColumn {

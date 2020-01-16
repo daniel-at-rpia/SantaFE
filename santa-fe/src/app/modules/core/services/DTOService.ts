@@ -110,8 +110,9 @@ export class DTOService {
       state: {
         isSelected: false,
         isStencil: isStencil,
-        isTable: false,
-        isMultiLineVariant: false
+        isInteractionDisabled: false,
+        isMultiLineVariant: false,
+        isWidthFlexible: false
       }
     };
     return object;

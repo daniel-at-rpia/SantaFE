@@ -337,7 +337,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     });
     for (let i = 0; i < 10; ++i) {
       const stencilSecurity = this.dtoService.formSecurityCardObject(null, null, true);
-      stencilSecurity.state.isTable = true;
+      stencilSecurity.state.isInteractionDisabled = true;
       const newRow = this.dtoService.formSecurityTableRowObject(stencilSecurity);
       stencilHeaderBuffer.forEach((eachHeader) => {
         if (eachHeader.data.displayLabel !== 'Security') {

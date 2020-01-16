@@ -33,12 +33,13 @@ $historicalSummary_overlayCanvas_ruler_line_width: 0.2rem;
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
+    margin-top: $tradeMarketAnalysis_topGutterForRulerLabel;
     &-item {
       display: flex;
-      align-items: center;
       height: $tradeMarketAnalysis_row_height;
       move-visualizer {
         flex: 1 1 auto;
+        display: flex;
       }
     }
   }

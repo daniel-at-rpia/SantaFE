@@ -70,6 +70,9 @@ $moveVisualizer_color_inversed: $color_green_5;
         line-height: $line_height_minimum;
         background-color: $color_white;
       }
+      &-icon {
+        font-size: $font_size_xx_small;
+      }
     }
   }
   &__positionDetection {
