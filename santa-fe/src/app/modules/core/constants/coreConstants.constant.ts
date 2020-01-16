@@ -152,3 +152,5 @@ export const BackendKeyDictionary = {
   'YIELD': 'yieldWorst',
   'SIZE': 'marketValue'
 };
+
+export const MIN_OBLIGOR_CURVE_VALUES = 2;

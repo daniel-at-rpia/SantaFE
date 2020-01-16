@@ -54,3 +54,26 @@ export interface SantaTableNumericFloatingFilterParams extends IFloatingFilterPa
   minValue: number;
   maxValue: number;
 }
+
+export interface ObligorGraphCategoryData {
+  name: string,
+  mid: number,
+  mark: number,
+  workoutTerm: number,
+  markQuantity: number
+}
+
+export interface ObligorGraphAxesZoomState {
+  yAxis: {
+    start: number;
+    end: number;
+    fullZoomStart: number;
+    fullZoomEnd: number;
+  }
+  xAxis: {
+    start: number;
+    end: number;
+    fullZoomStart: number;
+    fullZoomEnd: number;
+  }
+}

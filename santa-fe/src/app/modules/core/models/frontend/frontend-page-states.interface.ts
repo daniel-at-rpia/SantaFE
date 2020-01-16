@@ -15,7 +15,7 @@ import {
   SecurityDefinitionStub,
   SecurityTableMetricStub
 } from 'FEModels/frontend-stub-models.interface';
-import { DefinitionConfiguratorEmitterParamsItem } from 'FEModels/frontend-adhoc-packages.interface';
+import { DefinitionConfiguratorEmitterParamsItem, ObligorGraphAxesZoomState } from 'FEModels/frontend-adhoc-packages.interface';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 
@@ -142,21 +142,14 @@ export interface TradeObligorGraphPanelState {
   obligorCurrency: string;
   securityTableRowDTOList: SecurityTableRowDTO[];
   lookBackHours: number;
-  yAxis: {
-    start:number;
-    end:number;
-  }
-  xAxis: {
-    start:number;
-    end:number;
-  }
+  axesZoomState: ObligorGraphAxesZoomState;
   metric: {
-    spread:boolean;
-    yield:boolean;
+    spread: boolean;
+    yield: boolean;
   }
   markValue: {
-    cS01:boolean;
-    quantity:boolean;
+    cS01: boolean;
+    quantity: boolean;
   }
   activeCharts: {
     srBond: boolean;

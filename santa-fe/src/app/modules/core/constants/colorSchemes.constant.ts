@@ -55,25 +55,40 @@ export const SecurityGroupSeniorityColorScheme: SecurityGroupPieChartColorScheme
 
 export const ObligorChartCategoryColorScheme: ObligorChartCategoryColorSchemeStub = {
   categoryScheme: [{
-    label: 'SR Fixed Bond',
-    value: '#e600ac'
+    label: 'SR Fixed Bond', // Blue
+    value: '#2980B9'
   },{
-    label: 'SR Float Bond',
-    value: '#8c1aff'
+    label: 'SR Float Bond', // Blue
+    value: '#16A085'
+  },{
+    label: 'SUB Float Bond', // Blue
+    value: '#C15260'
   },{
     label: 'SUB Fixed Bond',
-    value: '#3333cc'
+    value: '#F39C12' // Green
   },{
     label: 'SUB Fixed Cds',
-    value: '#00cc99'
+    value: '#DC7633' // Green
   },{
     label: 'SUB Fixed Cds',
-    value: '#00cc44'
+    value: '#DC7633'
   },{
-    label: 'SECURED Fixed Bond',
-    value: '#bf4080'
+    label: 'SR Fixed Cds',
+    value: '#ED6FB7'
   },{
-    label: 'SECURED Float Bond',
-    value: '#7575a3'
+    label: 'SECURED Fixed Bond', // Red
+    value: '#CB4335'
+  },{
+    label: 'SECURED Float Bond', // Red
+    value: '#FF782D'
+  },{
+    label: 'SLA Float Bond', // Brown
+    value: '#BE8B69'
+  },{
+    label: 'SLA Float Bond', // Brown
+    value: '#886CE4'
+  },{
+    label: 'SLA Fixed Bond', // Brown
+    value: '#FF1D47'
   }]
 };
