@@ -2,8 +2,8 @@
 
 $tradeCenterPanel_presetsAndFilters_presets_title_height: 6rem;
 $tradeCenterPanel_presetsAndFilters_presets_categoryCanvas_ribbon_width: 10rem;
-$tradeCenterPanel_presetsAndFilters_presets_categoryCanvas_list_margin_left: $spacing_x_large + $tradeCenterPanel_presetsAndFilters_presets_categoryCanvas_ribbon_width - 5rem;
-$tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -2.5rem;
+$tradeCenterPanel_presetsAndFilters_presets_categoryCanvas_list_margin_left: $spacing_x_large + $tradeCenterPanel_presetsAndFilters_presets_categoryCanvas_ribbon_width - 6rem;
+$tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
 .sat-tradeCenterPanel {
   $tradeCenterPanelBlockName: &;
   @include mix_border_generator;
@@ -68,7 +68,7 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -2.5rem;
             &-item {
               @include mix_alive('light');
               display: flex;
-              padding: $spacing_medium;
+              padding: $spacing_medium $spacing_x_large $spacing_medium $spacing_medium;
               transform: translate(-100%, 0);
               transition-delay: $animation_duration_normal;
               &-btn {
@@ -81,6 +81,9 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -2.5rem;
                 }
                 &>span {
                   font-size: $font_size_x_large;
+                }
+                &:hover {
+                  transform: translate($spacing_medium, 0);
                 }
                 &--recent {
                   background-color: $color_teal_7_A;
