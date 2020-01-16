@@ -171,19 +171,13 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
       width: 100%;
       transform: translate(100%, 0);
       &-backBtn {
-        margin: $spacing_medium $spacing_medium 0 $spacing_medium;
+        margin: $spacing_medium $spacing_medium $spacing_large $spacing_medium;
         &>i {
           margin-bottom: $spacing_x_small;
         }
       }
-      &-title {
-        padding: $spacing_large 0 $spacing_x_small $spacing_medium;
-        text-align: center;
-        font-size: $font_size_large;
-        color: $font_color_minor;
-      }
       security-definition-configurator {
-        @include mix_calculate(height, 100%, 11rem, '-'); // 11rem is the sum of the height of title and backBtn
+        @include mix_calculate(height, 100%, 5rem, '-'); // 5rem is the height of backBtn
         display: flex;
       }
     }

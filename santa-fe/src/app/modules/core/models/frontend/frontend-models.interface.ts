@@ -117,6 +117,7 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     isUnactivated: boolean;
     groupByActive: boolean;
     filterActive: boolean;
+    isConfiguratorVariant: boolean;
   }
 }
 
