@@ -54,7 +54,9 @@
     import {
       PortfolioList,
       QUANT_COMPARER_PERCENTILE,
-      SearchShortcuts
+      PortfolioShortcuts,
+      OwnershipShortcuts,
+      StrategyShortcuts
     } from 'Core/constants/tradeConstants.constant';
     import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
     import {
@@ -71,7 +73,7 @@
       TradeSelectedSecurityForAnalysisEvent,
       TradeSecurityTableRowDTOListForAnalysisEvent
     } from 'Trade/actions/trade.actions';
-    import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
+    import { SecurityTableMetricStub, SearchShortcutStub } from 'FEModels/frontend-stub-models.interface';
   //
 
 @Component({
@@ -91,19 +93,27 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   }
   constants = {
     portfolioList: PortfolioList,
-    searchShortcuts: SearchShortcuts,
+    portfolioShortcuts: PortfolioShortcuts,
+    ownershipShortcuts: OwnershipShortcuts,
+    strategyShortcuts: StrategyShortcuts,
     securityGroupDefinitionMap: SecurityDefinitionMap,
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
     thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX
   }
 
   private initializePageState(): TradeCenterPanelState {
-    const state = {
+    const state: TradeCenterPanelState = {
       currentContentStage: 0,
       bestQuoteValidWindow: null,
       presets: {
+        presetsReady: false,
         selectedPreset: null,
-        shortcutList: []
+        selectedList: null,
+        recentShortcutList: [],
+        portfolioShortcutList: [],
+        ownershipShortcutList: [],
+        strategyShortcutList: [],
+        individualShortcutList: []
       },
       configurator: {
         dto: this.dtoService.createSecurityDefinitionConfigurator(true),
@@ -125,7 +135,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
           metricType: TriCoreMetricConfig.Spread.label,
           portfolios: [],
           keyword: '',
-          owner: []
+          owner: [],
+          strategy: []
         },
         securityFilters: []
       }
@@ -172,7 +183,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     if (!!this.ownerInitial) {
       const filter = [];
       filter.push(this.ownerInitial);
-      this.constants.searchShortcuts[0].includedDefinitions[0].selectedOptions = filter;
+      this.constants.ownershipShortcuts[0].includedDefinitions[0].selectedOptions = filter;
       this.populateSearchShortcuts();
     }
   }
@@ -181,6 +192,14 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     for (const eachItem in this.subscriptions) {
       const eachSub = this.subscriptions[eachItem] as Subscription;
       eachSub.unsubscribe();
+    }
+  }
+
+  public onSelectPresetCategory(targetCategory: Array<SearchShortcutDTO>) {
+    if (this.state.presets.selectedList === targetCategory) {
+      this.state.presets.selectedList = null;
+    } else {
+      this.state.presets.selectedList = targetCategory;
     }
   }
 
@@ -244,16 +263,19 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.state.filters.securityFilters = params.filterList;
     this.state.filters.quickFilters.portfolios = [];
     this.state.filters.quickFilters.owner = [];
+    this.state.filters.quickFilters.strategy = [];
     params.filterList.forEach((eachFilter) => {
       if (eachFilter.targetAttribute === 'portfolios') {
         this.state.filters.quickFilters.portfolios = eachFilter.filterBy;
       } else if (eachFilter.targetAttribute === 'owner') {
         this.state.filters.quickFilters.owner = eachFilter.filterBy;
+      } else if (eachFilter.targetAttribute === 'strategyList') {
+        this.state.filters.quickFilters.strategy = eachFilter.filterBy;
       };
     });
-    if (this.state.currentContentStage === this.constants.securityTableFinalStage) {
+    // if (this.state.currentContentStage === this.constants.securityTableFinalStage) {
       this.state.fetchResult.rowList = this.filterPrinstineRowList();
-    }
+    // }
   }
 
   public onSelectSecurityForAnalysis(targetSecurity: SecurityDTO) {
@@ -269,8 +291,18 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private populateSearchShortcuts() {
-    this.state.presets.shortcutList = [];
-    this.constants.searchShortcuts.forEach((eachShortcutStub) => {
+    this.state.presets = this.initializePageState().presets;
+    this.state.presets.portfolioShortcutList = this.populateSingleShortcutList(this.constants.portfolioShortcuts);
+    this.state.presets.ownershipShortcutList = this.populateSingleShortcutList(this.constants.ownershipShortcuts);
+    this.state.presets.strategyShortcutList = this.populateSingleShortcutList(this.constants.strategyShortcuts);
+    this.state.presets.presetsReady = true;
+  }
+
+  private populateSingleShortcutList(
+    stubList: Array<SearchShortcutStub>
+  ): Array<SearchShortcutDTO> {
+    const list: Array<SearchShortcutDTO> = [];
+    stubList.forEach((eachShortcutStub) => {
       const definitionList = eachShortcutStub.includedDefinitions.map((eachIncludedDef) => {
         const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityGroupDefinitionMap[eachIncludedDef.definitionKey]);
         definitionDTO.state.groupByActive = !!eachIncludedDef.groupByActive;
@@ -284,8 +316,9 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         }
         return definitionDTO;
       });
-      this.state.presets.shortcutList.push(this.dtoService.formSearchShortcutObject(definitionList, eachShortcutStub.displayTitle, false));
+      list.push(this.dtoService.formSearchShortcutObject(definitionList, eachShortcutStub.displayTitle, false, !!eachShortcutStub.isMajor));
     });
+    return list;
   }
 
   private loadFreshData() {
@@ -420,6 +453,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       if (this.state.filters.quickFilters.keyword.length < 3 || eachRow.data.security.data.name.indexOf(this.state.filters.quickFilters.keyword) >= 0) {
         let portfolioIncludeFlag = this.filterByPortfolio(eachRow);
         let ownerFlag = this.filterByOwner(eachRow);
+        let strategyFlag = this.filterByStrategy(eachRow);
         let securityLevelFilterResultCombined = true;
         if (this.state.filters.securityFilters.length > 0) {
           const securityLevelFilterResult = this.state.filters.securityFilters.map((eachFilter) => {
@@ -430,7 +464,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
             return eachResult;
           }).length === securityLevelFilterResult.length;
         }
-        ownerFlag && securityLevelFilterResultCombined && portfolioIncludeFlag && filteredList.push(eachRow);
+        strategyFlag && ownerFlag && securityLevelFilterResultCombined && portfolioIncludeFlag && filteredList.push(eachRow);
       }
     });
     return filteredList;
@@ -438,8 +472,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
   private filterBySecurityAttribute(targetRow: SecurityTableRowDTO, targetAttribute: string, filterBy: Array<string>): boolean {
     let includeFlag = false;
-    if (targetAttribute === 'portfolios' || targetAttribute === 'owner') {
-      // bypass portfolio filter since it is handled via this.filterByPortfolio() and this.filterByOwner()
+    if (targetAttribute === 'portfolios' || targetAttribute === 'owner' || 'strategyList') {
+      // bypass portfolio filter since it is handled via this.filterByPortfolio() and this.filterByOwner() and this.filterByStrategy()
       return true;
     } else {
       filterBy.forEach((eachValue) => {
@@ -479,6 +513,21 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       this.state.filters.quickFilters.owner.forEach((eachOwner) => {
         const ownerExist = targetRow.data.security.data.owner.indexOf(eachOwner) > -1;
         if (!!ownerExist) {
+          includeFlag = true;
+        }
+      });
+    } else {
+      includeFlag = true;
+    }
+    return includeFlag;
+  }
+
+  private filterByStrategy(targetRow: SecurityTableRowDTO): boolean {
+    let includeFlag = false;
+    if (this.state.filters.quickFilters.strategy.length > 0) {
+      this.state.filters.quickFilters.strategy.forEach((eachStrategy) => {
+        const strategyExist = targetRow.data.security.data.strategyList.indexOf(eachStrategy) > -1;
+        if (!!strategyExist) {
           includeFlag = true;
         }
       });
