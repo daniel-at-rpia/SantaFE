@@ -102,18 +102,18 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private initializePageState(): TradeCenterPanelState {
-    const state = {
+    const state: TradeCenterPanelState = {
       currentContentStage: 0,
       bestQuoteValidWindow: null,
       presets: {
+        presetsReady: false,
         selectedPreset: null,
         selectedList: null,
         recentShortcutList: [],
         portfolioShortcutList: [],
         ownershipShortcutList: [],
         strategyShortcutList: [],
-        individualShortcutList: [],
-        shortcutList: [],
+        individualShortcutList: []
       },
       configurator: {
         dto: this.dtoService.createSecurityDefinitionConfigurator(true),
@@ -295,6 +295,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.state.presets.portfolioShortcutList = this.populateSingleShortcutList(this.constants.portfolioShortcuts);
     this.state.presets.ownershipShortcutList = this.populateSingleShortcutList(this.constants.ownershipShortcuts);
     this.state.presets.strategyShortcutList = this.populateSingleShortcutList(this.constants.strategyShortcuts);
+    this.state.presets.presetsReady = true;
   }
 
   private populateSingleShortcutList(
