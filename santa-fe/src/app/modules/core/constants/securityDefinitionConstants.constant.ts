@@ -278,14 +278,16 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     key: 'COUPON_TYPE',
     displayName: 'Coupon Type',
     icon: 'fas fa-ticket-alt',
-    optionList: FilterOptionsCouponType
+    optionList: FilterOptionsCouponType,
+    locked: true
   },
   'CURRENCY': {
     key: 'CURRENCY',
     displayName: 'Currency',
     icon: 'fal fa-dollar-sign',
     optionList: FilterOptionsCurrency,
-    securityDTOAttr: 'currency'
+    securityDTOAttr: 'currency',
+    locked: true
   },
   'INDUSTRY': {
     key: 'INDUSTRY',
