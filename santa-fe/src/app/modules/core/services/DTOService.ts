@@ -257,7 +257,8 @@ export class DTOService {
         isUnactivated: false,
         // isUnactivated: true,
         groupByActive: false,
-        filterActive: false
+        filterActive: false,
+        isConfiguratorVariant: false
       }
     }
     return object;
@@ -287,7 +288,11 @@ export class DTOService {
       data: {
         filterSearchInputValue: '',
         definitionList: ConfiguratorDefinitionLayout.map((eachBundle) => {
-          return this.formSecurityDefinitionBundleObject(eachBundle);
+          const newList = this.formSecurityDefinitionBundleObject(eachBundle);
+          newList.data.list.forEach((eachDefinition) => {
+            eachDefinition.state.isConfiguratorVariant = true;
+          });
+          return newList;
         })
       },
       state: {

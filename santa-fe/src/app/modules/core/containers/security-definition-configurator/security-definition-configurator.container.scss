@@ -26,7 +26,6 @@ $securityDefinitionConfigurator_ctas_height: 7rem;
         &-label {
           @include mix_fixed_div(relative, $z_index_standard_base_item);
           display: flex;
-          margin-top: $spacing_large;
           &-text {
             @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
             color: $font_color_major;
@@ -46,11 +45,11 @@ $securityDefinitionConfigurator_ctas_height: 7rem;
         &-item {
           display: flex;
           flex-direction: column;
-          margin-top: $spacing_large;
+          margin-top: $spacing_small;
           &-selectBtn {
             @include mix_border_radius(5px, 'top');
-            margin-left: $securityDefinition_width/4;
-            width: $securityDefinition_width/2 !important;
+            margin-left: $securityDefinition_configuratorVariant_width/4;
+            width: $securityDefinition_configuratorVariant_width/2 !important;
             font-size: $font_size_x_large;
             align-self: flex-start;
             &--selected {
@@ -68,7 +67,7 @@ $securityDefinitionConfigurator_ctas_height: 7rem;
             align-self: flex-start;
           }
           &:last-of-type {
-            margin-bottom: $spacing_large;
+            margin-bottom: $spacing_medium;
           }
         }
       }
@@ -79,7 +78,7 @@ $securityDefinitionConfigurator_ctas_height: 7rem;
     @include mix_calculate(height, 100%, $securityDefinitionConfigurator_ctas_height, '-');
     display: flex;
     top: 0;
-    left: $securityDefinition_width + $securityDefinitionConfigurator_gapBetweenDefAndFilter;
+    left: $securityDefinition_configuratorVariant_width + $securityDefinitionConfigurator_gapBetweenDefAndFilter;
     width: $securityDefinitionConfigurator_filters_width;
     padding-left: $securityDefinitionConfigurator_gapBetweenDefAndFilter - $spacing_xx_small;  // $spacing_xx_small for covering the undesirable border radius look on the left upper corner when not aligned perfectly with the definition
     overflow: hidden;

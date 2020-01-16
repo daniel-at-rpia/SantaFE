@@ -1,9 +1,14 @@
 @import "global.scss";
 
+$securityDefinition_width: 5.5rem;
 $securityDefinition_height: 4.5rem;
 $securityDefinition_filter_size: 2rem;
 $securityDefinition_backgroundVariant_img_size: 5rem;
 $securityDefinition_backgroundVariant_img_size_secondary: 3rem;
+$securityDefinition_configuratorVariant_height: 2.25rem;
+$securityDefinition_configuratorVariant_img_size: 1rem;
+$securityDefinition_configuratorVariant_img_size_secondary: 0.5rem;
+$securityDefinition_configuratorVariant_filter_size: 1.5rem;
 .sat-securityDefinition {
   $securityDefinitionBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item);
@@ -307,6 +312,61 @@ $securityDefinition_backgroundVariant_img_size_secondary: 3rem;
       }
       &__label, &__filter, &__filterMask, &__selectedGap {
         display: none;
+      }
+    }
+  }
+  &--configuratorVariant {
+    flex-direction: row;
+    align-items: center;
+    height: $securityDefinition_configuratorVariant_height;
+    width: $securityDefinition_configuratorVariant_width;
+    #{$securityDefinitionBlockName} {
+      &__icon {
+        flex: 0 0 $securityDefinition_configuratorVariant_height;
+        &-regularImg, &-ratingBucket, &-ratingBucket-primaryImg, &-backendTenor, &-backendTenor-primaryImg {
+          font-size: $securityDefinition_configuratorVariant_img_size;
+          line-height: $securityDefinition_configuratorVariant_height;
+        }
+        &-ratingBucket, &-backendTenor {
+          width: $securityDefinition_configuratorVariant_height;
+        }
+        &-backendTenor-secondaryImg {
+          margin-top: $spacing_xx_small - $spacing_minimum;
+          font-size: $securityDefinition_configuratorVariant_img_size_secondary;
+        }
+        &-ratingBucket-secondaryImg {
+          margin-top: $spacing_xx_small - $spacing_minimum;
+          font-size: $securityDefinition_configuratorVariant_img_size_secondary;
+        }
+        &-securityType-box {
+          background-color: $color_gray_2;
+          flex-direction: column;
+          &-text {
+            margin: 0;
+            padding: $spacing_x_small $spacing_medium;
+            text-align: center;
+            font-size: $font_size_xx_small;
+          }
+        }
+      }
+      &__label {
+        margin-bottom: 0;
+        padding-right: $spacing_small;
+        &-text {
+          line-height: $line_height_minimum;
+        }
+      }
+      &__filter {
+        top: -$spacing_x_small;
+        right: -$spacing_x_small;
+        width: $securityDefinition_configuratorVariant_filter_size;
+        height: $securityDefinition_configuratorVariant_filter_size;
+      }
+      &__filterMask {
+        top: -$spacing_x_small;
+        right: -$spacing_x_small;
+        width: $securityDefinition_configuratorVariant_filter_size;
+        height: $securityDefinition_configuratorVariant_filter_size;
       }
     }
   }

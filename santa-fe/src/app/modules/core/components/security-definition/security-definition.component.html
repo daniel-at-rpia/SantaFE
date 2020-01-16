@@ -10,7 +10,8 @@
     'sat-securityDefinition--filterActiveState': definitionData?.state.filterActive,
     'sat-securityDefinition--unactivated': definitionData?.state.isUnactivated,
     'sat-securityDefinition--backgroundVariant': !!backgroundVariant,
-    'sat-securityDefinition--heroVariant': !!heroVariant
+    'sat-securityDefinition--heroVariant': !!heroVariant,
+    'sat-securityDefinition--configuratorVariant': definitionData?.state.isConfiguratorVariant && !heroVariant
   }">
   <section class="sat-securityDefinition__icon" title="{{definitionData?.data.name}}">
     <i [ngClass]="
