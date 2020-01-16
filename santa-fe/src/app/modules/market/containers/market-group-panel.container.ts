@@ -332,11 +332,15 @@ export class MarketGroupPanel implements OnDestroy {
   }
 
   private loadSimpleSearchResults(serverReturn){
-    this.state.searchResult.securityGroupList = serverReturn.map((eachRawGroup) => {
-      const newGroupDTO = this.dtoService.formSecurityGroupObject(eachRawGroup);
-      newGroupDTO.state.isLandscapeView = this.state.landscapeViewActivated;
-      return newGroupDTO;
-    });
+    if (!!serverReturn) {
+      this.state.searchResult.securityGroupList = serverReturn.map((eachRawGroup) => {
+        const newGroupDTO = this.dtoService.formSecurityGroupObject(eachRawGroup);
+        newGroupDTO.state.isLandscapeView = this.state.landscapeViewActivated;
+        return newGroupDTO;
+      });
+    } else {
+      this.state.searchResult.securityGroupList = [];
+    }
     this.state.searchResult.renderProgress = 100;
     this.initializeGroupStats();
     this.updateSort();
