@@ -22,14 +22,18 @@
       flex: 1 1 auto;
       display: flex;
       &-securityList {
-        flex: 0 0 12rem;
+        flex: 0 0 14rem;
         padding-top: $tradeMarketAnalysis_topGutterForRulerLabel;
         &-item {
           display: flex;
           align-items: center;
           height: $tradeMarketAnalysis_row_height;
+          padding-right: $spacing_medium;
           security-card {
             flex: 1 1 auto;
+          }
+          &--even {
+            background-color: $color_blue_gray_1;
           }
         }
       }
@@ -43,8 +47,6 @@
       }
       &-separator {
         @include mix_border_generator(0 0 0 $typical_border_width);
-        margin-left: $spacing_small;
-        padding-left: $spacing_small;
       }
     }
   }

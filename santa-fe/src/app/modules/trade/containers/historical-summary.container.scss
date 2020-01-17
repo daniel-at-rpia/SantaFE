@@ -22,6 +22,7 @@ $historicalSummary_overlayCanvas_ruler_line_width: 0.2rem;
         padding: $spacing_x_small;
         background-color: $color_blue_5;
         color: $font_color_inverse;
+        left: -$spacing_medium;
       }
       &-line {
         flex: 1 1 auto;
@@ -42,6 +43,9 @@ $historicalSummary_overlayCanvas_ruler_line_width: 0.2rem;
       move-visualizer {
         flex: 1 1 auto;
         display: flex;
+      }
+      &--even {
+        background-color: $color_blue_gray_1;
       }
     }
   }
