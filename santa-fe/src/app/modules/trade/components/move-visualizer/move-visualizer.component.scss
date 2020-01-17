@@ -1,8 +1,8 @@
 @import "global.scss";
 @import "modules/trade/trade.scss";
 
-$moveVisualizer_line_thickness: 0.75rem;
-$moveVisualizer_line_padding_bottom: $spacing_small;
+$moveVisualizer_line_thickness: 1rem;
+$moveVisualizer_line_padding_bottom: $spacing_x_small;
 $moveVisualizer_pin_end_width: 3rem;
 $moveVisualizer_pin_start_width: 1.2rem;
 $moveVisualizer_padding_right: $spacing_xx_small;
@@ -19,7 +19,7 @@ $moveVisualizer_color_inversed: $color_green_5;
     bottom: 0;
     display: flex;
     padding-right: $moveVisualizer_padding_right;
-    padding-bottom: $moveVisualizer_line_padding_bottom;
+    margin-bottom: $moveVisualizer_line_padding_bottom;
     &-leftGap {
       flex-grow: 0;
       flex-shrink: 0;
@@ -34,8 +34,18 @@ $moveVisualizer_color_inversed: $color_green_5;
     &-moveDistance {
       flex-grow: 0;
       flex-shrink: 0;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
       height: $moveVisualizer_line_thickness;
       background-color: $moveVisualizer_color_default;
+      overflow: hidden;
+      &-arrow {
+        display: flex;
+        align-items: center;
+        font-size: $font_size_xx_small;
+        margin-left: $spacing_x_small;
+      }
     }
     &-rightEdge {
       @include mix_border_radius(3px, 'right');
