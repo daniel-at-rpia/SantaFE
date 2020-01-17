@@ -13,7 +13,12 @@
     </div>
   </section>
   <ul class="sat-historicalSummary__list" (mousemove)="hoveringSummary($event)" >
-    <li *ngFor="let eachVisualizer of summaryData.data.list" class="sat-historicalSummary__list-item">
+    <li
+      *ngFor="let eachVisualizer of summaryData.data.list; let rowIndex = index;"
+      [ngClass]="{
+        'sat-historicalSummary__list-item': true,
+        'sat-historicalSummary__list-item--even': rowIndex%2 === 0
+      }">
       <move-visualizer [visualizerData]="eachVisualizer"></move-visualizer>
     </li>
   </ul>

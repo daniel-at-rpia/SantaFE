@@ -353,9 +353,12 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
     moveDistance: number;
     rightEdge: number;
     rightGap: number;
+    endPinLocation: number;
   }
   state: {
     isInversed: boolean;
+    isInvalid: boolean;
+    isPlaceholder: boolean;
   }
 }
 

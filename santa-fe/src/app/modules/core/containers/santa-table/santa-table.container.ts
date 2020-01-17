@@ -436,7 +436,12 @@ export class SantaTable implements OnInit, OnChanges {
         return eachOldRow.data.security.data.securityID === eachNewRow.data.security.data.securityID;
       });
       if (!!matchedOldRow) {
-        matchedOldRow.data = eachNewRow.data;
+        try {
+          matchedOldRow.data = eachNewRow.data;
+        }
+        catch {
+          console.warn('setting row update failure in AGGrid', matchedOldRow.data, eachNewRow.data);
+        }
       } else {
         this.tableData.data.rows.push(eachNewRow);
       }

@@ -3,7 +3,8 @@
     'sat-moveVisualizer': true,
     'sat-moveVisualizer--noLeftEdge': visualizerData.style.leftEdge === 0,
     'sat-moveVisualizer--noRightEdge': visualizerData.style.rightEdge === 0,
-    'sat-moveVisualizer--inversedState': visualizerData.state.isInversed
+    'sat-moveVisualizer--inversedState': visualizerData.state.isInversed,
+    'sat-moveVisualizer--placeholderState': visualizerData.state.isPlaceholder
   }">
   <section class="sat-moveVisualizer__bar">
     <!--line-->
@@ -21,7 +22,24 @@
       class="sat-moveVisualizer__bar-moveDistance"
       [ngStyle]="{
         'flex-basis': visualizerData.style.moveDistance + '%'
-      }"></div>
+      }">
+        <i
+          *ngIf="visualizerData.style.moveDistance > 5"
+          [ngClass]="{
+            'sat-moveVisualizer__bar-moveDistance-arrow': true,
+            'fas': true,
+            'fa-chevron-left': visualizerData.state.isInversed,
+            'fa-chevron-right': !visualizerData.state.isInversed
+          }"></i>
+        <i
+          *ngIf="visualizerData.style.moveDistance > 20"
+          [ngClass]="{
+            'sat-moveVisualizer__bar-moveDistance-arrow': true,
+            'fas': true,
+            'fa-chevron-left': visualizerData.state.isInversed,
+            'fa-chevron-right': !visualizerData.state.isInversed
+          }"></i>
+      </div>
     <div
       class="sat-moveVisualizer__bar-rightEdge"
       [ngStyle]="{
@@ -38,7 +56,7 @@
     <div
       class="sat-moveVisualizer__pins-end"
       [ngStyle]="{
-        'left': visualizerData.style.leftGap + visualizerData.style.leftEdge + '%'
+        'left': visualizerData.style.endPinLocation + '%'
       }">
       <span class="sat-moveVisualizer__pins-end-value">{{visualizerData.data.end}}</span>
       <i class="sat-moveVisualizer__pins-end-icon fas fa-map-marker"></i>

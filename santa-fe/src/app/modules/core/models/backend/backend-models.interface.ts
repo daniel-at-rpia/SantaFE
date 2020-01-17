@@ -138,6 +138,7 @@ interface BESecurityMetricDTO {
   rating: string,
   ratingNoNotch: string,
   ratingBucket: string
+  isRated: boolean;
 }
 
 export interface BESecurityDeltaMetricDTO {
@@ -250,7 +251,7 @@ interface BEHistoricalInfoDTO {
   historicalLevel: BEHistoricalQuantBlock;
   historicalBasis?: BEHistoricalQuantBlock;
   security?: BESecurityDTO;
-  groupIdentifier?: any;
+  group?: any;
   rank: number;
   name: string;
   isSecurityHistoricalSummary: boolean;
@@ -267,4 +268,5 @@ export interface BEHistoricalQuantBlock {
   maxDateTime: string;
   isLevelRange: boolean;
   isBasisRange: boolean;
+  isValid: boolean;
 }

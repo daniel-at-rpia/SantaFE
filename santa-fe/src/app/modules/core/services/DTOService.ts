@@ -706,47 +706,35 @@ export class DTOService {
     isStencil: boolean,
     rawData?: BEHistoricalQuantBlock
   ): DTOs.MoveVisualizerDTO {
-    if (isStencil || !rawData) {
-      const stencilObject: DTOs.MoveVisualizerDTO = {
-        data: {
-          start: 0,
-          end: 123,
-          min: 0,
-          max: 0
-        },
-        style: {
-          leftGap: 10,
-          leftEdge: 10,
-          moveDistance: 60,
-          rightEdge: 10,
-          rightGap: 10
-        },
-        state: {
-          isInversed: false
-        }
-      };
-      return stencilObject;
-    } else {
-      const object: DTOs.MoveVisualizerDTO = {
-        data: {
-          start: this.utility.round(rawData.startMetric),
-          end: this.utility.round(rawData.endMetric),
-          min: this.utility.round(rawData.minMetric),
-          max: this.utility.round(rawData.maxMetric)
-        },
-        style: {
-          leftGap: 10,
-          leftEdge: 10,
-          moveDistance: 60,
-          rightEdge: 10,
-          rightGap: 10
-        },
-        state: {
-          isInversed: rawData.startMetric > rawData.endMetric
-        }
+    const object: DTOs.MoveVisualizerDTO = {
+      data: {
+        start: 0,
+        end: 123,
+        min: 0,
+        max: 0
+      },
+      style: {
+        leftGap: 10,
+        leftEdge: 10,
+        moveDistance: 60,
+        rightEdge: 10,
+        rightGap: 10,
+        endPinLocation: 20
+      },
+      state: {
+        isInversed: false,
+        isInvalid: false,
+        isPlaceholder: false
       }
-      return object;
+    };
+    if (!isStencil && !!rawData) {
+      object.data.start = this.utility.round(rawData.startMetric);
+      object.data.end = this.utility.round(rawData.endMetric);
+      object.data.min = this.utility.round(rawData.minMetric);
+      object.data.max = this.utility.round(rawData.maxMetric);
+      object.state.isInversed = rawData.startMetric > rawData.endMetric;
     }
+    return object;
   }
 
   public formHistoricalSummaryObject(
@@ -771,6 +759,7 @@ export class DTOService {
     };
     if (rawData.BaseSecurity) {
       const baseDTO = this.formMoveVisualizerObject(false, rawData.BaseSecurity.historicalLevel);
+      baseDTO.state.isPlaceholder = !isLevel;
       object.data.list.push(baseDTO);
     }
     if (rawData.Group) {
@@ -778,6 +767,7 @@ export class DTOService {
       object.data.list.push(groupDTO);
       object.data.centerPoint = (groupDTO.data.max + groupDTO.data.min)/2;
       object.data.globalDistance = (groupDTO.data.max - groupDTO.data.min) * 10;
+      groupDTO.state.isPlaceholder = !isLevel;
     }
     if (rawData.Top) {
       for (const eachSecurityIdentifier in rawData.Top) {
