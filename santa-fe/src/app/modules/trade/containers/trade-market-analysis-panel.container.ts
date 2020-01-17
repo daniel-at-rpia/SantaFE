@@ -63,20 +63,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService
   ){
-    this.state = {
-      receivedSecurity: false,
-      targetSecurity: null,
-      config: {
-        groupByOptions: [],
-      },
-      table: {
-        presentList: [],
-        prinstineTopSecurityList: [],
-        prinstineBottomSecurityList: [],
-        levelSummary: null,
-        basisSummary: null
-      }
-    }
+    this.state = this.initializePageState();
     this.populateDefinitionOptions();
   }
 
@@ -103,6 +90,26 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     if (activeOptions.length > 0) {
       this.fetchGroupData();
     }
+  }
+
+  private initializePageState(): TradeMarketAnalysisPanelState {
+    const state: TradeMarketAnalysisPanelState = {
+      receivedSecurity: false,
+      targetSecurity: null,
+      config: {
+        groupByOptions: [],
+      },
+      table: {
+        presentList: [],
+        prinstineTopSecurityList: [],
+        prinstineBottomSecurityList: [],
+        levelSummary: null,
+        basisSummary: null,
+        rankingList: [],
+        moveDistanceList: []
+      }
+    };
+    return state;
   }
 
   private onSecuritySelected(targetSecurity: SecurityDTO) {
@@ -163,32 +170,38 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
   }
 
   private loadSecurityList(rawData: BEHistoricalSummaryDTO) {
-    this.state.table.presentList = [];
-    this.state.table.prinstineBottomSecurityList = [];
-    this.state.table.prinstineTopSecurityList = [];
+    this.state.table = this.initializePageState().table;
     if (!!rawData.BaseSecurity && !!rawData.Group) {
       const baseSecurityDTO = this.dtoService.formSecurityCardObject('', rawData.BaseSecurity.security, false);
       this.applyStatesToSecurityCards(baseSecurityDTO);
       this.state.table.presentList.push(baseSecurityDTO);
+      this.state.table.rankingList.push('Base');
       const groupDTO = this.dtoService.formSecurityCardObject('', null, true);
       groupDTO.data.name = 'Group';
       this.applyStatesToSecurityCards(groupDTO);
       this.state.table.presentList.push(groupDTO);
+      this.state.table.rankingList.push('Group');
     }
     if (!!rawData.Top) {
+      let index = 1;
       for (const eachSecurityIdentifier in rawData.Top) {
         const eachTopSecurityDTO = this.dtoService.formSecurityCardObject(eachSecurityIdentifier, rawData.Top[eachSecurityIdentifier].security, false);
         this.applyStatesToSecurityCards(eachTopSecurityDTO);
         this.state.table.presentList.push(eachTopSecurityDTO);
         this.state.table.prinstineTopSecurityList.push(eachTopSecurityDTO);
+        this.state.table.rankingList.push(`Top ${index}`);
+        index++;
       }
     }
     if (!!rawData.Bottom) {
+      let index = 1;
       for (const eachSecurityIdentifier in rawData.Bottom) {
         const eachBottomSecurityDTO = this.dtoService.formSecurityCardObject(eachSecurityIdentifier, rawData.Bottom[eachSecurityIdentifier].security, false);
         this.applyStatesToSecurityCards(eachBottomSecurityDTO);
         this.state.table.presentList.push(eachBottomSecurityDTO);
         this.state.table.prinstineBottomSecurityList.push(eachBottomSecurityDTO);
+        this.state.table.rankingList.push(`Bottom ${index}`);
+        index++;
       }
     }
   }

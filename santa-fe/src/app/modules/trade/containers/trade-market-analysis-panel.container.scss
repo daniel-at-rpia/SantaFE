@@ -28,9 +28,25 @@
           display: flex;
           align-items: center;
           height: $tradeMarketAnalysis_row_height;
-          padding-right: $spacing_medium;
           security-card {
             flex: 1 1 auto;
+          }
+          &--even {
+            background-color: $color_blue_gray_1;
+          }
+        }
+      }
+      &-rankingList {
+        flex: 0 1 5rem;
+        padding-top: $tradeMarketAnalysis_topGutterForRulerLabel;
+        overflow: hidden;
+        &-item {
+          display: flex;
+          align-items: center;
+          height: $tradeMarketAnalysis_row_height;
+          padding: 0 $spacing_small;
+          &-text {
+            font-size: $font_size_x_small;
           }
           &--even {
             background-color: $color_blue_gray_1;
