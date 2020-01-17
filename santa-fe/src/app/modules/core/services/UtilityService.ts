@@ -624,8 +624,8 @@ export class UtilityService {
           markBlock.markDisAskRaw = markBlock.markRaw - targetQuant.data.offer.number;
           markBlock.markDisAsk = this.round(markBlock.markDisAskRaw, rounding).toFixed(rounding);
           if (targetSecurity.data.positionFirm < 0) {
-            markBlock.markDisLiquidationRaw = markBlock.markDisAskRaw;
-            markBlock.markDisLiquidation = markBlock.markDisAsk;
+            markBlock.markDisLiquidationRaw = -markBlock.markDisAskRaw;
+            markBlock.markDisLiquidation = `${-parseInt(markBlock.markDisAsk)}`;
           }
         }
         if (targetQuant.state.hasBid && targetQuant.state.hasOffer) {
