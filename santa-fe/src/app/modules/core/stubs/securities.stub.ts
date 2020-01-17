@@ -47,7 +47,8 @@ const PortfolioList: Array<BEPortfolioDTO> = [{
       "rating":"BBB+",
       "ratingNoNotch":"BBB",
       "ratingBucket":"IG",
-      "price":101.486201
+      "price":101.486201,
+      "isRated":true
     },
     "deltaMetrics":{
       "Dod":{

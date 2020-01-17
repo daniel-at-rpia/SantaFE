@@ -357,6 +357,8 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
   }
   state: {
     isInversed: boolean;
+    isInvalid: boolean;
+    isPlaceholder: boolean;
   }
 }
 

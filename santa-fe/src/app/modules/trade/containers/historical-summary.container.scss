@@ -17,6 +17,7 @@ $historicalSummary_overlayCanvas_ruler_line_width: 0.2rem;
       display: flex;
       flex-direction: column;
       &-value {
+        @include mix_fixed_div(absolute, $z_index_standard_base_item);
         @include mix_border_radius(3px);
         padding: $spacing_x_small;
         background-color: $color_blue_5;
@@ -26,6 +27,7 @@ $historicalSummary_overlayCanvas_ruler_line_width: 0.2rem;
         flex: 1 1 auto;
         @include mix_border_generator(0 0 0 $historicalSummary_overlayCanvas_ruler_line_width, $color_blue_5);
         border-style: dotted;
+        margin-left: -$spacing_xx_small;
       }
     }
   }

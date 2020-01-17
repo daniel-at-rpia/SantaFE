@@ -152,6 +152,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
         tap((serverReturn) => {
           this.loadSecurityList(serverReturn[targetScope]);
           this.state.table.levelSummary = this.dtoService.formHistoricalSummaryObject(serverReturn[targetScope], true);
+          this.state.table.basisSummary = this.dtoService.formHistoricalSummaryObject(serverReturn[targetScope], false);
         }),
         catchError(err => {
           console.error('error', err);

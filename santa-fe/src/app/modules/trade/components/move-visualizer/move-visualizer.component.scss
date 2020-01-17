@@ -127,4 +127,14 @@ $moveVisualizer_color_inversed: $color_green_5;
       }
     }
   }
+  &--placeholderState {
+    #{$moveVisualizerBlockName} {
+      &__bar {
+        visibility: hidden;
+      }
+      &__pins {
+        visibility: hidden;
+      }
+    }
+  }
 }

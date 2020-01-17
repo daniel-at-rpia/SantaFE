@@ -78,11 +78,13 @@ export class HistoricalSummary implements OnChanges {
     let globalMin = null;
     let globalMax = null;
     this.summaryData.data.list.forEach((eachMoveVisualizer) => {
-      if (globalMin === null || eachMoveVisualizer.data.min < globalMin) {
-        globalMin = eachMoveVisualizer.data.min;
-      }
-      if (globalMax === null || eachMoveVisualizer.data.max > globalMax) {
-        globalMax = eachMoveVisualizer.data.max;
+      if (!eachMoveVisualizer.state.isPlaceholder) {
+        if (globalMin === null || eachMoveVisualizer.data.min < globalMin) {
+          globalMin = eachMoveVisualizer.data.min;
+        }
+        if (globalMax === null || eachMoveVisualizer.data.max > globalMax) {
+          globalMax = eachMoveVisualizer.data.max;
+        }
       }
     });
     const globalDistance = Math.abs(globalMax - globalMin);
@@ -91,19 +93,21 @@ export class HistoricalSummary implements OnChanges {
     this.summaryData.data.globalDistance = globalDistance;
     console.log('test, min and max are', globalMin, globalMax);
     this.summaryData.data.list.forEach((eachMoveVisualizer) => {
-      const leftNode = eachMoveVisualizer.data.start <= eachMoveVisualizer.data.end ? eachMoveVisualizer.data.start : eachMoveVisualizer.data.end;
-      const rightNode = eachMoveVisualizer.data.start >eachMoveVisualizer.data.end ? eachMoveVisualizer.data.start : eachMoveVisualizer.data.end;
+      if (!eachMoveVisualizer.state.isPlaceholder) {
+        const leftNode = eachMoveVisualizer.data.start <= eachMoveVisualizer.data.end ? eachMoveVisualizer.data.start : eachMoveVisualizer.data.end;
+        const rightNode = eachMoveVisualizer.data.start >eachMoveVisualizer.data.end ? eachMoveVisualizer.data.start : eachMoveVisualizer.data.end;
 
-      const leftSpace = globalMin < eachMoveVisualizer.data.min ? globalMin - eachMoveVisualizer.data.min : 0;
-      const distance = eachMoveVisualizer.data.end - eachMoveVisualizer.data.start;
-      const rightSpace = globalMax > eachMoveVisualizer.data.max ? globalMax - eachMoveVisualizer.data.max : 0;
-      eachMoveVisualizer.style.leftGap = this.utilityService.round(Math.abs(leftSpace) / globalDistance * 100, HISTORICAL_SUMMARY_ROUNDING);
-      eachMoveVisualizer.style.leftEdge = this.utilityService.round(Math.abs(eachMoveVisualizer.data.min - leftNode) / globalDistance * 100, HISTORICAL_SUMMARY_ROUNDING);
-      eachMoveVisualizer.style.moveDistance = this.utilityService.round(Math.abs(distance) / globalDistance * 100, HISTORICAL_SUMMARY_ROUNDING);
-      eachMoveVisualizer.style.rightEdge = this.utilityService.round(Math.abs(eachMoveVisualizer.data.max - rightNode) / globalDistance * 100, HISTORICAL_SUMMARY_ROUNDING);
-      eachMoveVisualizer.style.rightGap = this.utilityService.round(Math.abs(rightSpace) / globalDistance * 100, HISTORICAL_SUMMARY_ROUNDING);
-      eachMoveVisualizer.style.endPinLocation = eachMoveVisualizer.state.isInversed ? eachMoveVisualizer.style.leftEdge + eachMoveVisualizer.style.leftGap : eachMoveVisualizer.style.leftEdge + eachMoveVisualizer.style.leftGap + eachMoveVisualizer.style.moveDistance;
-      console.log('test, ', leftNode, rightNode, leftSpace, distance, rightSpace, eachMoveVisualizer);
+        const leftSpace = globalMin < eachMoveVisualizer.data.min ? globalMin - eachMoveVisualizer.data.min : 0;
+        const distance = eachMoveVisualizer.data.end - eachMoveVisualizer.data.start;
+        const rightSpace = globalMax > eachMoveVisualizer.data.max ? globalMax - eachMoveVisualizer.data.max : 0;
+        eachMoveVisualizer.style.leftGap = this.utilityService.round(Math.abs(leftSpace) / globalDistance * 100, HISTORICAL_SUMMARY_ROUNDING);
+        eachMoveVisualizer.style.leftEdge = this.utilityService.round(Math.abs(eachMoveVisualizer.data.min - leftNode) / globalDistance * 100, HISTORICAL_SUMMARY_ROUNDING);
+        eachMoveVisualizer.style.moveDistance = this.utilityService.round(Math.abs(distance) / globalDistance * 100, HISTORICAL_SUMMARY_ROUNDING);
+        eachMoveVisualizer.style.rightEdge = this.utilityService.round(Math.abs(eachMoveVisualizer.data.max - rightNode) / globalDistance * 100, HISTORICAL_SUMMARY_ROUNDING);
+        eachMoveVisualizer.style.rightGap = this.utilityService.round(Math.abs(rightSpace) / globalDistance * 100, HISTORICAL_SUMMARY_ROUNDING);
+        eachMoveVisualizer.style.endPinLocation = eachMoveVisualizer.state.isInversed ? eachMoveVisualizer.style.leftEdge + eachMoveVisualizer.style.leftGap : eachMoveVisualizer.style.leftEdge + eachMoveVisualizer.style.leftGap + eachMoveVisualizer.style.moveDistance;
+        console.log('test, ', leftNode, rightNode, leftSpace, distance, rightSpace, eachMoveVisualizer);
+      }
     });
   }
 
