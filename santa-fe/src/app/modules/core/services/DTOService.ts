@@ -719,7 +719,8 @@ export class DTOService {
           leftEdge: 10,
           moveDistance: 60,
           rightEdge: 10,
-          rightGap: 10
+          rightGap: 10,
+          endPinLocation: 20
         },
         state: {
           isInversed: false
@@ -739,7 +740,8 @@ export class DTOService {
           leftEdge: 10,
           moveDistance: 60,
           rightEdge: 10,
-          rightGap: 10
+          rightGap: 10,
+          endPinLocation: 20
         },
         state: {
           isInversed: rawData.startMetric > rawData.endMetric

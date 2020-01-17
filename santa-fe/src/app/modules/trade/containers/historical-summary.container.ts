@@ -102,6 +102,7 @@ export class HistoricalSummary implements OnChanges {
       eachMoveVisualizer.style.moveDistance = this.utilityService.round(Math.abs(distance) / globalDistance * 100, HISTORICAL_SUMMARY_ROUNDING);
       eachMoveVisualizer.style.rightEdge = this.utilityService.round(Math.abs(eachMoveVisualizer.data.max - rightNode) / globalDistance * 100, HISTORICAL_SUMMARY_ROUNDING);
       eachMoveVisualizer.style.rightGap = this.utilityService.round(Math.abs(rightSpace) / globalDistance * 100, HISTORICAL_SUMMARY_ROUNDING);
+      eachMoveVisualizer.style.endPinLocation = eachMoveVisualizer.state.isInversed ? eachMoveVisualizer.style.leftEdge + eachMoveVisualizer.style.leftGap : eachMoveVisualizer.style.leftEdge + eachMoveVisualizer.style.leftGap + eachMoveVisualizer.style.moveDistance;
       console.log('test, ', leftNode, rightNode, leftSpace, distance, rightSpace, eachMoveVisualizer);
     });
   }
