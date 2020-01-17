@@ -472,7 +472,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
   private filterBySecurityAttribute(targetRow: SecurityTableRowDTO, targetAttribute: string, filterBy: Array<string>): boolean {
     let includeFlag = false;
-    if (targetAttribute === 'portfolios' || targetAttribute === 'owner' || 'strategyList') {
+    if (targetAttribute === 'portfolios' || targetAttribute === 'owner' || targetAttribute === 'strategyList') {
       // bypass portfolio filter since it is handled via this.filterByPortfolio() and this.filterByOwner() and this.filterByStrategy()
       return true;
     } else {

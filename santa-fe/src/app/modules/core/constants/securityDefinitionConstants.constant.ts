@@ -91,7 +91,8 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'Health Care',
     'Industrial',
     'Real Estate',
-    'Technology'
+    'Technology',
+    'Consumer Discretionary'
   ];
 
   const FilterOptionsMaturityType = [
