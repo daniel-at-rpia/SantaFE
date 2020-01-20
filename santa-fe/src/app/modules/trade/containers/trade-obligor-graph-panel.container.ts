@@ -47,7 +47,9 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     this.subscriptions.selectLiveUpdateTick = this.store$.pipe(
       select(selectLiveUpdateTick)
     ).subscribe(tickNumber => {
-      if(tickNumber > 0) this.fetchSecurityIDs();
+      if (tickNumber > 0 && !!this.state.obligorSecurityID) {
+        this.fetchSecurityIDs();
+      }
     });
     
     this.subscriptions.selectBestQuoteValidWindow = this.store$.pipe(
