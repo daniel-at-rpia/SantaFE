@@ -19,7 +19,7 @@
       BESecurityDTO,
       BEBestQuoteDTO
     } from 'BEModels/backend-models.interface';
-    import { TriCoreMetricConfig } from 'Core/constants/coreConstants.constant';
+    import { TriCoreMetricConfig, DEFAULT_METRIC_IDENTIFIER } from 'Core/constants/coreConstants.constant';
   // dependencies
 
 @Injectable()
@@ -112,31 +112,35 @@ export class LiveDataProcessingService {
       return eachHeader.state.isQuantVariant;
     });
     const bestQuoteCell = targetRow.data.cells[bestQuoteHeaderIndex - 1];
-    const newPriceQuant = this.dtoService.formQuantComparerObject(
-      false,
-      TriCoreMetricConfig.Price.label,
-      quote,
-      targetRow.data.security
-    );
-    const newSpreadQuant = this.dtoService.formQuantComparerObject(
-      false,
-      TriCoreMetricConfig.Spread.label,
-      quote,
-      targetRow.data.security
-    );
-    const newYieldQuant = this.dtoService.formQuantComparerObject(
-      false,
-      TriCoreMetricConfig.Yield.label,
-      quote,
-      targetRow.data.security
-    );
+    const newPriceQuant = !!quote 
+      ? this.dtoService.formQuantComparerObject(
+          false,
+          TriCoreMetricConfig.Price.label,
+          quote,
+          targetRow.data.security
+        ) 
+      : null;
+    const newSpreadQuant = !!quote 
+      ? this.dtoService.formQuantComparerObject(
+          false,
+          TriCoreMetricConfig.Spread.label,
+          quote,
+          targetRow.data.security
+        )
+      : null;
+    const newYieldQuant = !!quote 
+    ? this.dtoService.formQuantComparerObject(
+        false,
+        TriCoreMetricConfig.Yield.label,
+        quote,
+        targetRow.data.security
+      )
+    : null;
     targetRow.data.bestQuotes = {
       bestPriceQuote: newPriceQuant,
       bestYieldQuote: newYieldQuant,
       bestSpreadQuote: newSpreadQuant
     }
-    const targetQuantLocationFromRow = tableHeaderList[bestQuoteHeaderIndex].data.targetQuantLocationFromRow;
-    bestQuoteCell.data.quantComparerDTO = targetRow.data.bestQuotes[targetQuantLocationFromRow];
     tableHeaderList.forEach((eachHeader, index) => {
       if (eachHeader.data.readyStage === 3) {
         targetRow.data.cells[index-1] = this.utilityService.populateSecurityTableCellFromSecurityCard(
@@ -212,7 +216,7 @@ export class LiveDataProcessingService {
     if (oldSecurity.data.positionFirm !== newSecurity.data.positionFirm) {
       return 1;
     }
-    if (oldSecurity.data.mark.markRaw !== newSecurity.data.mark.markRaw) {
+    if (oldSecurity.data.mark.markBackend !== newSecurity.data.mark.markBackend) {
       return 2;
     }
     return 0;

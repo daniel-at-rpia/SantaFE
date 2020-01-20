@@ -30,7 +30,8 @@
     import {
       SecurityMetricOptions,
       BackendKeyDictionary,
-      TriCoreMetricConfig
+      TriCoreMetricConfig,
+      DEFAULT_METRIC_IDENTIFIER
     } from 'Core/constants/coreConstants.constant';
     import uuid from 'uuidv4';
   // dependencies
@@ -517,7 +518,15 @@ export class UtilityService {
 
     public retrieveSecurityMetricFromMetricPack(dto: SecurityDTO, header: SecurityTableHeaderDTO): number {
       if (!!dto && !!header) {
-        const metricLabel = header.data.attrName;
+        let attrName = header.data.attrName;
+        let underlineAttrName = header.data.underlineAttrName;
+        if (header.data.key === 'thirtyDayDelta' && attrName === DEFAULT_METRIC_IDENTIFIER ) {
+          // when the metric is set to default, the actual metric to be used for each row depends on the driver of the mark of that particular row
+          const targetMetric = this.findSecurityTargetDefaultTriCoreMetric(dto);
+          attrName = TriCoreMetricConfig[targetMetric].metricLabel;
+          underlineAttrName = TriCoreMetricConfig[targetMetric].metricLabel;
+        }
+        const metricLabel = attrName;
         let value, deltaSubPack;
         if (!!header.data.metricPackDeltaScope) {
           deltaSubPack = dto.data.metricPack.delta[header.data.metricPackDeltaScope];
@@ -545,13 +554,22 @@ export class UtilityService {
       triCoreMetric: string
     ): SecurityTableCellDTO {
       if (targetHeader.state.isQuantVariant) {
-        const targetQuantAttr = targetHeader.data.targetQuantLocationFromRow;
+        let targetMetric = triCoreMetric;
+        if (triCoreMetric === DEFAULT_METRIC_IDENTIFIER) {
+          targetMetric = this.findSecurityTargetDefaultTriCoreMetric(targetRow.data.security);
+        }
+        if (!!targetMetric) {
+          const targetQuantLocationFromRow = TriCoreMetricConfig[targetMetric].backendTargetQuoteAttr;
+          newCellDTO.data.quantComparerDTO = targetRow.data.bestQuotes[targetQuantLocationFromRow];
+        } else {
+          newCellDTO.data.quantComparerDTO = null;
+        }
         const targetSecurity = targetRow.data.security;
-        newCellDTO.data.quantComparerDTO = targetRow.data.bestQuotes[targetQuantAttr];
         // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
-        if ( targetSecurity.data.mark.markDriver === triCoreMetric || triCoreMetric === 'Default') {
+        if ( targetSecurity.data.mark.markDriver === triCoreMetric || triCoreMetric === DEFAULT_METRIC_IDENTIFIER) {
           targetSecurity.data.mark.markRaw = targetRow.data.security.data.mark.markBackend;
-          const rounding = TriCoreMetricConfig[triCoreMetric].rounding;
+          const validMetricFromDriver = this.findSecurityTargetDefaultTriCoreMetric(targetSecurity);
+          const rounding = validMetricFromDriver ? TriCoreMetricConfig[validMetricFromDriver].rounding : 0;
           targetSecurity.data.mark.mark = targetSecurity.data.mark.markRaw > 0 ? this.round(targetSecurity.data.mark.markRaw, rounding).toFixed(rounding) : null;
         } else {
           targetSecurity.data.mark.markRaw = null;
@@ -641,6 +659,16 @@ export class UtilityService {
         markBlock.markDisAskRaw = null;
         markBlock.markDisLiquidation = null;
         markBlock.markDisLiquidationRaw = null;
+      }
+    }
+
+    public findSecurityTargetDefaultTriCoreMetric(targetSecurity: SecurityDTO): string {
+      const BEDriver = targetSecurity.data.mark.markDriver;
+      switch (BEDriver) {
+        case null:
+          return 'Spread';
+        default:
+          return BEDriver;
       }
     }
 
