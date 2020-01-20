@@ -253,11 +253,6 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       } else {
         console.error('Code Maintainence flag: this is not the 30 day delta');
       }
-      if (newMetrics[1].isForQuantComparer) {
-        newMetrics[1].targetQuantLocationFromRow = 'bestSpreadQuote';
-      } else {
-        console.error('Code Maintainence flag: this is not the Quant Comparer column');
-      }
       this.state.table.metrics = newMetrics;
       // this.calculateQuantComparerWidthAndHeight();
       // TODO: remove this event and all associated logic from ngrx

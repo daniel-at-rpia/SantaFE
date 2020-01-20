@@ -554,9 +554,17 @@ export class UtilityService {
       triCoreMetric: string
     ): SecurityTableCellDTO {
       if (targetHeader.state.isQuantVariant) {
-        const targetQuantAttr = targetHeader.data.targetQuantLocationFromRow;
+        let targetMetric = triCoreMetric;
+        if (triCoreMetric === DEFAULT_METRIC_IDENTIFIER) {
+          targetMetric = this.findSecurityTargetDefaultTriCoreMetric(targetRow.data.security);
+        }
+        if (!!targetMetric) {
+          const targetQuantLocationFromRow = TriCoreMetricConfig[targetMetric].backendTargetQuoteAttr;
+          newCellDTO.data.quantComparerDTO = targetRow.data.bestQuotes[targetQuantLocationFromRow];
+        } else {
+          newCellDTO.data.quantComparerDTO = null;
+        }
         const targetSecurity = targetRow.data.security;
-        newCellDTO.data.quantComparerDTO = targetRow.data.bestQuotes[targetQuantAttr];
         // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
         if ( targetSecurity.data.mark.markDriver === triCoreMetric || triCoreMetric === DEFAULT_METRIC_IDENTIFIER) {
           targetSecurity.data.mark.markRaw = targetRow.data.security.data.mark.markBackend;

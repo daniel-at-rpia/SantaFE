@@ -247,7 +247,6 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     metricPackDeltaScope: string;
     frontendMetric: boolean;
     isDataTypeText: boolean;
-    targetQuantLocationFromRow: string;
   },
   state: {
     isPureTextVariant: boolean;
