@@ -44,7 +44,7 @@
       BEBestQuoteDTO
     } from 'BEModels/backend-models.interface';
 
-    import { TriCoreMetricConfig } from 'Core/constants/coreConstants.constant';
+    import { TriCoreMetricConfig, DEFAULT_METRIC_IDENTIFIER } from 'Core/constants/coreConstants.constant';
     import {
       SecurityTableMetrics,
       SECURITY_TABLE_FINAL_STAGE,
@@ -92,6 +92,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     validWindowSub: null
   }
   constants = {
+    defaultMetricIdentifier: DEFAULT_METRIC_IDENTIFIER,
     portfolioList: PortfolioList,
     portfolioShortcuts: PortfolioShortcuts,
     ownershipShortcuts: OwnershipShortcuts,
@@ -132,7 +133,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       },
       filters: {
         quickFilters: {
-          metricType: TriCoreMetricConfig.Spread.label,
+          metricType: this.constants.defaultMetricIdentifier,
           portfolios: [],
           keyword: '',
           owner: [],
@@ -242,13 +243,18 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       const newMetrics: Array<SecurityTableMetricStub> = this.utilityService.deepCopy(this.state.table.metrics);
       const thrityDayDeltaMetric = newMetrics[this.constants.thirtyDayDeltaIndex];
       if (thrityDayDeltaMetric.label === '30 Day Delta') {
-        thrityDayDeltaMetric.attrName = TriCoreMetricConfig[targetMetric].metricLabel;
-        thrityDayDeltaMetric.underlineAttrName = TriCoreMetricConfig[targetMetric].metricLabel;
+        if (targetMetric === this.constants.defaultMetricIdentifier) {
+          thrityDayDeltaMetric.attrName = targetMetric;
+          thrityDayDeltaMetric.underlineAttrName = targetMetric;
+        } else {
+          thrityDayDeltaMetric.attrName = TriCoreMetricConfig[targetMetric].metricLabel;
+          thrityDayDeltaMetric.underlineAttrName = TriCoreMetricConfig[targetMetric].metricLabel;
+        }
       } else {
         console.error('Code Maintainence flag: this is not the 30 day delta');
       }
       if (newMetrics[1].isForQuantComparer) {
-        newMetrics[1].targetQuantLocationFromRow = TriCoreMetricConfig[targetMetric].backendTargetQuoteAttr;
+        newMetrics[1].targetQuantLocationFromRow = 'bestSpreadQuote';
       } else {
         console.error('Code Maintainence flag: this is not the Quant Comparer column');
       }

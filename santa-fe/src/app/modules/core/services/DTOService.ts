@@ -23,7 +23,8 @@
       SecurityGroupSeniorityColorScheme
     } from 'Core/constants/colorSchemes.constant';
     import {
-      TriCoreMetricConfig
+      TriCoreMetricConfig,
+      DEFAULT_METRIC_IDENTIFIER
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
@@ -75,6 +76,8 @@ export class DTOService {
         cs01Local: null,
         owner: [],
         mark: {
+          combinedDefaultMark: null,
+          combinedDefaultMarkRaw: null,
           mark: null,
           markRaw: null,
           markBackend: null,
@@ -137,8 +140,12 @@ export class DTOService {
     !!targetPortfolio.backupPmName && dto.data.owner.push(targetPortfolio.backupPmName);
     !!targetPortfolio.researchName && dto.data.owner.push(targetPortfolio.researchName);
     // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
-    if (!!TriCoreMetricConfig[targetPortfolio.mark.driver] && (targetPortfolio.mark.driver === currentSelectedMetric || currentSelectedMetric === 'Default')){
-      const rounding = TriCoreMetricConfig[targetPortfolio.mark.driver].rounding;
+    if ((!!TriCoreMetricConfig[targetPortfolio.mark.driver] && targetPortfolio.mark.driver === currentSelectedMetric) || currentSelectedMetric === DEFAULT_METRIC_IDENTIFIER){
+      let targetMetric = targetPortfolio.mark.driver;
+      if (currentSelectedMetric === DEFAULT_METRIC_IDENTIFIER) {
+        targetMetric = this.utility.findSecurityTargetDefaultTriCoreMetric(dto);
+      }
+      const rounding = targetMetric ? TriCoreMetricConfig[targetMetric].rounding : 0;
       dto.data.mark.mark = this.utility.round(dto.data.mark.markRaw, rounding).toFixed(rounding);
     } else {
       dto.data.mark.mark = null;

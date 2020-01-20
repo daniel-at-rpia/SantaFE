@@ -25,10 +25,12 @@ export interface SecurityPortfolioBlock {
 }
 
 export interface SecurityMarkBlock {
+  combinedDefaultMark: string;
   mark: string;
   markDriver: string;
   markChangedBy: string;
   markChangedTime: string;
+  combinedDefaultMarkRaw: number;
   markRaw: number;
   markBackend: number;
   markDisBid: string;
