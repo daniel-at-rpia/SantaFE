@@ -130,8 +130,17 @@
   <section class="sat-tradeCenterPanel__result">
     <div class="sat-tradeCenterPanel__result-quickFilters">
       <div class="sat-tradeCenterPanel__result-quickFilters-row">
-        <span class="sat-tradeCenterPanel__result-quickFilters-row-label">Metric :</span>
+        <span class="sat-tradeCenterPanel__result-quickFilters-row-label">Driver :</span>
         <div class="santaBtnGroup">
+          <button
+            (click)="onSwitchMetric(constants.defaultMetricIdentifier)"
+            [ngClass]="{
+              'sat-tradeCenterPanel__result-quickFilters-row-btn': true,
+              'santaBtn--labelled': true,
+              'sat-tradeCenterPanel__result-quickFilters-row-btn--active': state.filters.quickFilters.metricType === constants.defaultMetricIdentifier
+            }">
+            <span>Default</span>
+          </button>
           <button
             (click)="onSwitchMetric('Spread')"
             [ngClass]="{

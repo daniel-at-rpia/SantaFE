@@ -99,6 +99,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
   }
 ];
 
+export const DEFAULT_METRIC_IDENTIFIER = 'DEFAULT';
 export const TriCoreMetricConfig: TriCoreMetricConfigStub = {
   Spread: {
     label: 'Spread',
