@@ -12,7 +12,7 @@ export const APIUrlMap = {
   getObligorCurves: `curve/get-obligor-curves-per-ccy`,
   getGroups: `group/get-groups`,
   getGroupHistoricalSummary: `group/get-group-historical-summary-from-security`,
-  getTickers: `obligor/get-issuers`,
+  getTickers: `Obligor/get-tickers`,
   getSubIndustries: `obligor/get-subindustries`
 };
 
