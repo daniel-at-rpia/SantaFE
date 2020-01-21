@@ -113,6 +113,7 @@ export interface TradeMarketAnalysisPanelState {
   receivedSecurity: boolean;
   targetSecurity: DTOs.SecurityDTO;
   config: {
+    timeScope: string;
     groupByOptions: Array<DTOs.SecurityDefinitionDTO>;
     activeOptions: Array<DTOs.SecurityDefinitionDTO>;
   }

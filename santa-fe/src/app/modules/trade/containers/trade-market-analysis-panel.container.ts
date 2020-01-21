@@ -64,6 +64,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
       receivedSecurity: false,
       targetSecurity: null,
       config: {
+        timeScope: 'Yoy',
         groupByOptions: [],
         activeOptions: []
       },
@@ -119,6 +120,13 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     }
   }
 
+  public onClickTimeScope(targetScope: string) {
+    if (this.state.config.timeScope !== targetScope) {
+      this.state.config.timeScope = targetScope;
+      this.fetchGroupData();
+    }
+  }
+
   private onSecuritySelected(targetSecurity: SecurityDTO) {
     this.state.receivedSecurity = true;
     this.state.targetSecurity = this.utilityService.deepCopy(targetSecurity);
@@ -152,7 +160,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
 
   private fetchGroupData() {
     if (this.state.receivedSecurity) {
-      const targetScope = 'Yoy'
+      const targetScope = this.state.config.timeScope;
       const payload : PayloadGetGroupHistoricalSummary = {
         source: "Default",
         identifier: this.state.targetSecurity.data.securityID,

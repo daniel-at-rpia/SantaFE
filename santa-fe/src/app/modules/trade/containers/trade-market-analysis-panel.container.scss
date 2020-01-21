@@ -9,6 +9,31 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  &__timeScope {
+    display: flex;
+    padding-top: $spacing_medium;
+    &-label {
+      flex: 0 0 auto;
+      font-size: $font_size_normal;
+      color: $font_color_minor;
+      padding: $spacing_x_small $spacing_medium;
+    }
+    &-list {
+      flex: 1 1 auto;
+      display: flex;
+      flex-wrap: wrap;
+      &-item {
+        flex: 0 0 auto;
+        margin-right: $spacing_small;
+        margin-bottom: $spacing_small;
+        &--selected {
+          @include material('none');
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
   &__group {
     // display: none;
     display: flex;
@@ -24,7 +49,7 @@
       display: flex;
       flex-wrap: wrap;
       &-item {
-        flex: 1 1 auto;
+        flex: 0 0 auto;
         margin-right: $spacing_small;
         margin-bottom: $spacing_small;
       }

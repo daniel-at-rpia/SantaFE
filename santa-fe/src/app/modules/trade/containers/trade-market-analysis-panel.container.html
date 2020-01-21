@@ -3,6 +3,43 @@
     'sat-tradeMarketAnalysisPanel': true,
     'sat-tradeMarketAnalysisPanel--hasSecurityState': state.receivedSecurity
   }">
+  <section class="sat-tradeMarketAnalysisPanel__timeScope">
+    <span class="sat-tradeMarketAnalysisPanel__timeScope-label">Time Scope :</span>
+    <ul class="sat-tradeMarketAnalysisPanel__timeScope-list">
+      <button
+        (click)="onClickTimeScope('Yoy')"
+        [ngClass]="{
+          'sat-tradeMarketAnalysisPanel__timeScope-list-item': true,
+          'sat-tradeMarketAnalysisPanel__timeScope-list-item--selected': state.config.timeScope === 'Yoy'
+        }">
+        YoY
+      </button>
+      <button
+        (click)="onClickTimeScope('Ytd')"
+        [ngClass]="{
+          'sat-tradeMarketAnalysisPanel__timeScope-list-item': true,
+          'sat-tradeMarketAnalysisPanel__timeScope-list-item--selected': state.config.timeScope === 'Ytd'
+        }">
+        YtD
+      </button>
+      <button
+        (click)="onClickTimeScope('Mom')"
+        [ngClass]="{
+          'sat-tradeMarketAnalysisPanel__timeScope-list-item': true,
+          'sat-tradeMarketAnalysisPanel__timeScope-list-item--selected': state.config.timeScope === 'Mom'
+        }">
+        MoM
+      </button>
+      <button
+        (click)="onClickTimeScope('Wow')"
+        [ngClass]="{
+          'sat-tradeMarketAnalysisPanel__timeScope-list-item': true,
+          'sat-tradeMarketAnalysisPanel__timeScope-list-item--selected': state.config.timeScope === 'Wow'
+        }">
+        WoW
+      </button>
+    </ul>
+  </section>
   <section class="sat-tradeMarketAnalysisPanel__group">
     <span class="sat-tradeMarketAnalysisPanel__group-label">Filter By :</span>
     <ul class="sat-tradeMarketAnalysisPanel__group-optionList">
