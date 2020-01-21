@@ -799,6 +799,7 @@ export class DTOService {
       object.data.min = this.utility.round(rawData.minMetric);
       object.data.max = this.utility.round(rawData.maxMetric);
       object.state.isInversed = rawData.startMetric > rawData.endMetric;
+      object.state.isInvalid = !rawData.isValid;
     }
     return object;
   }

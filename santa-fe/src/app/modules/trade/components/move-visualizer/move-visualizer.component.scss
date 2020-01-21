@@ -61,7 +61,7 @@ $moveVisualizer_color_inversed: $color_green_5;
     }
   }
   &__pins {
-    @include mix_fixed_div(relative, $z_index_standard_base_item);
+    @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
     display: flex;
     align-items: flex-end;
     margin-bottom: $moveVisualizer_line_thickness + $moveVisualizer_line_padding_bottom;
@@ -88,6 +88,27 @@ $moveVisualizer_color_inversed: $color_green_5;
         font-size: $font_size_xx_small;
         color: $moveVisualizer_color_default;
       }
+    }
+  }
+  &__invalidHighlight {
+    @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
+    @include mix_border_radius(5px);
+    @include mix_border_generator($typical_border_width*2, $color_gray_5);
+    @include mix_calculate(height, 100%, $spacing_x_small*2, '-');
+    @include mix_calculate(width, 100%, $spacing_x_small*2, '-');
+    display: none;
+    justify-content: center;
+    align-items: flex-end;
+    top: $spacing_x_small;
+    left: $spacing_x_small;
+    &-label {
+      @include mix_fixed_div(relative, $z_index_standard_base_item);
+      @include mix_border_radius(3px, 'top');
+      margin-bottom: -$spacing_minimum;  // sometimes it's not pixel-perfect and there is a small gap
+      background-color: $color_gray_5;
+      padding: 0 $spacing_xx_small;
+      font-size: $font_size_xx_small;
+      color: $font_color_inverse;
     }
   }
   &__positionDetection {
@@ -140,6 +161,16 @@ $moveVisualizer_color_inversed: $color_green_5;
           border-top-right-radius: 3px;
           border-bottom-right-radius: 3px;
         }
+      }
+    }
+  }
+  &--invalidState {
+    #{$moveVisualizerBlockName} {
+      &__bar {
+        display: none;
+      }
+      &__invalidHighlight {
+        display: flex;
       }
     }
   }

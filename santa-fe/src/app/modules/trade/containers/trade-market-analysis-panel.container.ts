@@ -64,7 +64,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
       receivedSecurity: false,
       targetSecurity: null,
       config: {
-        timeScope: 'Yoy',
+        timeScope: 'Mom',
         groupByOptions: [],
         activeOptions: []
       },
