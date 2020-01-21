@@ -114,8 +114,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
         this.state.config.activeOptions.push(targetOption);
       }
       if (this.state.config.activeOptions.length > 0) {
-        console.log('test, fetch data', this.state.config.activeOptions);
-        // this.fetchGroupData();
+        this.fetchGroupData();
       }
     }
   }
@@ -124,11 +123,13 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     this.state.receivedSecurity = true;
     this.state.targetSecurity = this.utilityService.deepCopy(targetSecurity);
     this.applyStatesToSecurityCards(this.state.targetSecurity);
+    this.loadStencilList();
     this.fetchGroupData();
   }
 
   private populateDefinitionOptions() {
     const options = [];
+    const activeOptions = [];
     this.constants.marketAnalysisGroupByOptions.forEach((eachDefinitionStub) => {
       const definitionDTO = this.dtoService.formSecurityDefinitionObject(eachDefinitionStub);
       definitionDTO.state.isMiniPillVariant = true;
@@ -138,37 +139,34 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
         definitionDTO.data.key === this.constants.securityDefinitionMap.COUPON_TYPE.key ||
         definitionDTO.data.key === this.constants.securityDefinitionMap.SECURITY_TYPE.key) {
         definitionDTO.state.isLocked = true;
+      } else {
+        if (definitionDTO.data.key !== this.constants.securityDefinitionMap.TICKER.key) {
+          activeOptions.push(definitionDTO);
+        }
       }
       options.push(definitionDTO);
     });
     this.state.config.groupByOptions = options;
+    this.state.config.activeOptions = activeOptions;
   }
 
   private fetchGroupData() {
     if (this.state.receivedSecurity) {
-      this.loadStencilList();
       const targetScope = 'Yoy'
       const payload : PayloadGetGroupHistoricalSummary = {
         source: "Default",
         identifier: this.state.targetSecurity.data.securityID,
-        groupIdentifier: {
-          'Ccy': [],
-          'Seniority': [],
-          'RatingNoNotch': [],
-          'Sector': [],
-          'Tenor': []
-        },
+        groupIdentifier: {},
         tenorOptions: ["2Y", "3Y", "5Y", "7Y", "10Y", "30Y"],
         deltaTypes: [targetScope],
         metricName: this.utilityService.isCDS(false, this.state.targetSecurity) ? 'Spread' : 'GSpread',
         count: 5
       }
-      // this.state.moveVisualizer.groupByOptions.forEach((eachOption) => {
-      //   if (eachOption.state.groupByActive) {
-      //     const backendKey = this.utilityService.convertFEKey(eachOption.data.key);
-      //     payload.groupIdentifier[backendKey] = [];
-      //   }
-      // });
+      this.state.config.activeOptions.forEach((eachOption) => {
+        const backendKey = this.utilityService.convertFEKey(eachOption.data.key);
+        payload.groupIdentifier[backendKey] = [];
+      });
+      payload.groupIdentifier['Ccy'] = [];
       payload.groupIdentifier['SecurityType'] = [];
       payload.groupIdentifier['CouponType'] = [];
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getGroupHistoricalSummary, {req: 'POST'}, payload).pipe(
@@ -249,7 +247,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
       this.state.table.rankingList.push('Base');
       const groupDTO = this.dtoService.formSecurityCardObject('', null, true);
       groupDTO.state.isStencil = false;
-      groupDTO.data.name = 'Group';
+      groupDTO.data.name = rawData.Group.group.name;
       this.applyStatesToSecurityCards(groupDTO);
       this.state.table.presentList.push(groupDTO);
       this.state.table.rankingList.push('Group');

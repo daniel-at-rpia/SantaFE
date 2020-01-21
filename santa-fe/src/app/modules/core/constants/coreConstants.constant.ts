@@ -12,7 +12,7 @@ export const APIUrlMap = {
   getObligorCurves: `curve/get-obligor-curves-per-ccy`,
   getGroups: `group/get-groups`,
   getGroupHistoricalSummary: `group/get-group-historical-summary-from-security`,
-  getIssuers: `obligor/get-issuers`,
+  getTickers: `obligor/get-issuers`,
   getSubIndustries: `obligor/get-subindustries`
 };
 
@@ -145,6 +145,7 @@ export const BackendKeyDictionary = {
   'SENIORITY': 'Seniority',
   'SUB_INDUSTRY': 'SubIndustry',
   'BACKEND_TENOR': 'BackendTenor',
+  'TICKER': 'Ticker',
 
 
   // metrics

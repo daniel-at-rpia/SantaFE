@@ -335,7 +335,7 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
           width: $securityDefinition_configuratorVariant_height;
         }
         &-backendTenor-secondaryImg {
-          margin-top: $spacing_xx_small - $spacing_minimum;
+          margin-top: -0.1rem;
           font-size: $securityDefinition_configuratorVariant_img_size_secondary;
         }
         &-ratingBucket-secondaryImg {

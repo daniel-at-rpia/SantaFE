@@ -297,12 +297,12 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     optionList: FilterOptionsIndustryType,
     securityDTOAttr: 'industry'
   },
-  'ISSUER': {
-    key: 'ISSUER',
-    displayName: 'Issuer',
+  'TICKER': {
+    key: 'TICKER',
+    displayName: 'Ticker',
     icon: 'fas fa-user-tie',
     optionList: [],
-    urlForGetLongOptionListFromServer: APIUrlMap.getIssuers
+    urlForGetLongOptionListFromServer: APIUrlMap.getTickers
   },
   'MATURITY': {
     key: 'MATURITY',
@@ -439,7 +439,7 @@ export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> =
     list: [
       SecurityDefinitionMap.INDUSTRY,
       SecurityDefinitionMap.SUB_INDUSTRY,
-      SecurityDefinitionMap.ISSUER
+      SecurityDefinitionMap.TICKER
     ]
   },{
     label: 'Bond',
