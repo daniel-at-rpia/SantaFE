@@ -169,8 +169,22 @@ $moveVisualizer_color_inversed: $color_green_5;
       &__bar {
         display: none;
       }
+      &__pins {
+        &-end-icon {
+          visibility: hidden;
+        }
+      }
       &__invalidHighlight {
         display: flex;
+      }
+    }
+  }
+  &--invalidState#{$moveVisualizerBlockName}--visualizingBasisState {
+    #{$moveVisualizerBlockName} {
+      &__pins {
+        &-end {
+          left: 50%;
+        }
       }
     }
   }

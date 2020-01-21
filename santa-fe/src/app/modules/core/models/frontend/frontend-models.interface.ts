@@ -27,6 +27,7 @@ export interface SecurityDTO extends BasicDTOStructure {
   data: {
     securityID: string;
     name: string;
+    ticker: string;
     country: string;
     ratingLevel: number;
     ratingValue: string;
@@ -345,6 +346,7 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
     end: number;
     min: number;
     max: number;
+    isBasis: boolean;
   }
   style: {
     leftGap: number;

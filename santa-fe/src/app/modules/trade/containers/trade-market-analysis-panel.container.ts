@@ -26,7 +26,7 @@
       SecurityDefinitionDTO
     } from 'FEModels/frontend-models.interface';
     import { TradeMarketAnalysisPanelState } from 'FEModels/frontend-page-states.interface';
-    import { BEHistoricalSummaryDTO } from 'BEModels/backend-models.interface';
+    import { BEHistoricalSummaryDTO, BEHistoricalSummaryOverviewDTO } from 'BEModels/backend-models.interface';
     import { PayloadGetGroupHistoricalSummary } from 'BEModels/backend-payloads.interface';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
     import {
@@ -63,6 +63,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     const state: TradeMarketAnalysisPanelState = {
       receivedSecurity: false,
       targetSecurity: null,
+      populateGroupOptionText: false,
       config: {
         timeScope: 'Mom',
         groupByOptions: [],
@@ -129,6 +130,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
 
   private onSecuritySelected(targetSecurity: SecurityDTO) {
     this.state.receivedSecurity = true;
+    this.state.populateGroupOptionText = false;
     this.state.targetSecurity = this.utilityService.deepCopy(targetSecurity);
     this.applyStatesToSecurityCards(this.state.targetSecurity);
     this.loadStencilList();
@@ -172,14 +174,17 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
       }
       this.state.config.activeOptions.forEach((eachOption) => {
         const backendKey = this.utilityService.convertFEKey(eachOption.data.key);
-        payload.groupIdentifier[backendKey] = [];
+        if (backendKey !== 'n/a') {
+          payload.groupIdentifier[backendKey] = [];
+        }
       });
       payload.groupIdentifier['Ccy'] = [];
       payload.groupIdentifier['SecurityType'] = [];
       payload.groupIdentifier['CouponType'] = [];
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getGroupHistoricalSummary, {req: 'POST'}, payload).pipe(
         first(),
-        tap((serverReturn) => {
+        tap((serverReturn: BEHistoricalSummaryOverviewDTO) => {
+          !this.state.populateGroupOptionText && this.populateGroupOptionText(serverReturn[targetScope]);
           this.loadSecurityList(serverReturn[targetScope]);
           this.state.table.levelSummary = this.dtoService.formHistoricalSummaryObject(false, serverReturn[targetScope], true);
           this.state.table.basisSummary = this.dtoService.formHistoricalSummaryObject(false, serverReturn[targetScope], false);
@@ -288,6 +293,23 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     targetSecurity.state.isMultiLineVariant = false;
     targetSecurity.state.isInteractionDisabled = true;
     targetSecurity.state.isWidthFlexible = true;
+  }
+
+  private populateGroupOptionText(rawData: BEHistoricalSummaryDTO) {
+    if (!!rawData && !!rawData.Group && !!rawData.Group.group && !!rawData.Group.group.groupIdentifier) {
+      this.state.config.groupByOptions.forEach((eachOption) => {
+        if (this.state.config.activeOptions.indexOf(eachOption) >= 0 || eachOption.state.isLocked) {
+          const backendKey = this.utilityService.convertFEKey(eachOption.data.key);
+          if (backendKey !== 'n/a') {
+            const value = !!rawData.Group.group.groupIdentifier.groupOptionValues[backendKey] ? rawData.Group.group.groupIdentifier.groupOptionValues[backendKey][0] : 'n/a';
+            eachOption.data.name = value;
+          }
+        } else if (!!eachOption.data.securityDTOAttr) {
+          eachOption.data.name = this.state.targetSecurity.data[eachOption.data.securityDTOAttr];
+        }
+      })
+    }
+    this.state.populateGroupOptionText = true;
   }
 
 }

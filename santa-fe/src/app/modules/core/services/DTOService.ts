@@ -59,6 +59,7 @@ export class DTOService {
       data: {
         securityID: !isStencil ? securityIdFull : null,
         name: !isStencil ? rawData.name : 'PLACEHOLDER',
+        ticker: !isStencil ? rawData.ticker : null,
         ratingLevel: !isStencil && rawData.metrics ? this.utility.mapRatings(rawData.metrics.ratingNoNotch) : 0,
         ratingValue: !isStencil && rawData.metrics ? rawData.metrics.ratingNoNotch : null,
         ratingBucket: !isStencil && rawData.metrics ? rawData.metrics.ratingBucket : null,
@@ -776,7 +777,8 @@ export class DTOService {
         start: 0,
         end: 123,
         min: 0,
-        max: 0
+        max: 0,
+        isBasis: false
       },
       style: {
         leftGap: 10,
@@ -800,6 +802,7 @@ export class DTOService {
       object.data.max = this.utility.round(rawData.maxMetric);
       object.state.isInversed = rawData.startMetric > rawData.endMetric;
       object.state.isInvalid = !rawData.isValid;
+      object.data.isBasis = !!rawData.isBasisRange;
     }
     return object;
   }

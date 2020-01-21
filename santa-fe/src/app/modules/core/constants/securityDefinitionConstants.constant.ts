@@ -302,7 +302,8 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     displayName: 'Ticker',
     icon: 'fas fa-user-tie',
     optionList: [],
-    urlForGetLongOptionListFromServer: APIUrlMap.getTickers
+    urlForGetLongOptionListFromServer: APIUrlMap.getTickers,
+    securityDTOAttr: 'ticker'
   },
   'MATURITY': {
     key: 'MATURITY',

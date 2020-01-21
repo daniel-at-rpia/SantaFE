@@ -85,7 +85,7 @@
   &__collapseGraphsCTA {
     @include mix_border_radius(50%);
     @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
-    @include mix_calculate(top, 60%, $iconButton_size_regular/2, '-');
+    @include mix_calculate(top, 66%, $iconButton_size_regular/2, '-');
     right: $spacing_x_small;
     background-color: $color_kill;
     color: $font_color_inverse;
