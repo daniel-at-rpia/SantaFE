@@ -1,24 +1,8 @@
 {
   "hosting": [
     {
-      "target": "mark",
-      "site": "mark-santa-rpia",
-      "public": "dist/santa-fe",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
-      "rewrites": [
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ]
-    },
-    {
-      "target": "ray",
-      "site": "ray-santa-rpia",
+      "target": "local",
+      "site": "local-santa-rpia",
       "public": "dist/santa-fe",
       "ignore": [
         "firebase.json",
