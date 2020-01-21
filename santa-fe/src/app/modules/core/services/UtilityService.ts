@@ -453,29 +453,29 @@ export class UtilityService {
     }
 
     public retrieveRawSupportingDataForLeftPie(rawData: BESecurityGroupDTO): object {
-      if (!!rawData && !!rawData.descriptiveMetrics) {
-        const object = rawData.descriptiveMetrics[this.keyDictionary.RATING];
-        if (!!object) {
-          return object;
-        } else {
-          return {};
-        }
-      } else {
+      // if (!!rawData && !!rawData.descriptiveMetrics) {
+      //   const object = rawData.descriptiveMetrics[this.keyDictionary.RATING];
+      //   if (!!object) {
+      //     return object;
+      //   } else {
+      //     return {};
+      //   }
+      // } else {
         return {}
-      }
+      // }
     }
 
     public retrieveRawSupportingDataForRightPie(rawData: BESecurityGroupDTO): object {
-      if (!!rawData && !!rawData.descriptiveMetrics) {
-        const object = rawData.descriptiveMetrics[this.keyDictionary.SENIORITY];
-        if (!!object) {
-          return object;
-        } else {
-          return {};
-        }
-      } else {
+      // if (!!rawData && !!rawData.descriptiveMetrics) {
+      //   const object = rawData.descriptiveMetrics[this.keyDictionary.SENIORITY];
+      //   if (!!object) {
+      //     return object;
+      //   } else {
+      //     return {};
+      //   }
+      // } else {
         return {}
-      }
+      // }
     }
 
     public retrieveValueForGroupPieChartFromSupportingData(supportingDataChunk): number {

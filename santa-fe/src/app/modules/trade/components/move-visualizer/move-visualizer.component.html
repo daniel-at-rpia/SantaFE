@@ -3,8 +3,10 @@
     'sat-moveVisualizer': true,
     'sat-moveVisualizer--noLeftEdge': visualizerData.style.leftEdge === 0,
     'sat-moveVisualizer--noRightEdge': visualizerData.style.rightEdge === 0,
+    'sat-moveVisualizer--visualizingBasisState': visualizerData.data.isBasis,
     'sat-moveVisualizer--inversedState': visualizerData.state.isInversed,
     'sat-moveVisualizer--placeholderState': visualizerData.state.isPlaceholder,
+    'sat-moveVisualizer--invalidState': visualizerData.state.isInvalid,
     'sat-moveVisualizer--stencilState': visualizerData.state.isStencil
   }">
   <section class="sat-moveVisualizer__bar">
@@ -62,6 +64,9 @@
       <span class="sat-moveVisualizer__pins-end-value">{{visualizerData.data.end}}</span>
       <i class="sat-moveVisualizer__pins-end-icon fas fa-map-marker"></i>
     </div>
+  </section>
+  <section class="sat-moveVisualizer__invalidHighlight">
+    <span class="sat-moveVisualizer__invalidHighlight-label">Invalid Range</span>
   </section>
   <section class="sat-moveVisualizer__positionDetection">
     <!--

@@ -36,7 +36,7 @@ export interface SecurityDefinitionMapStub {
   COUPON_TYPE: SecurityDefinitionStub;
   CURRENCY: SecurityDefinitionStub;
   INDUSTRY: SecurityDefinitionStub;
-  ISSUER: SecurityDefinitionStub;
+  TICKER: SecurityDefinitionStub;
   MATURITY: SecurityDefinitionStub;
   IS_NEWISSUE: SecurityDefinitionStub;
   IS_ONTHERUN: SecurityDefinitionStub;
