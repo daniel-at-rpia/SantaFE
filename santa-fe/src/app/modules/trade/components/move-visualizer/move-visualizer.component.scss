@@ -1,0 +1,175 @@
+@import "global.scss";
+@import "modules/trade/trade.scss";
+
+$moveVisualizer_line_thickness: 1rem;
+$moveVisualizer_line_padding_bottom: $spacing_x_small;
+$moveVisualizer_pin_end_width: 3rem;
+$moveVisualizer_pin_start_width: 1.2rem;
+$moveVisualizer_padding_right: $spacing_xx_small;
+$moveVisualizer_color_default: $color_red_5;
+$moveVisualizer_color_inversed: $color_green_5;
+.sat-moveVisualizer {
+  $moveVisualizerBlockName: &;
+  @include mix_fixed_div(relative, $z_index_standard_base_item);
+  flex: 1 1 auto;
+  display: flex;
+  &__bar {
+    @include mix_fixed_div(absolute, $z_index_standard_base_item);
+    width: 100%;
+    bottom: 0;
+    display: flex;
+    padding-right: $moveVisualizer_padding_right;
+    margin-bottom: $moveVisualizer_line_padding_bottom;
+    &-leftGap {
+      flex-grow: 0;
+      flex-shrink: 0;
+    }
+    &-leftEdge {
+      @include mix_border_radius(3px, 'left');
+      flex-grow: 0;
+      flex-shrink: 0;
+      height: $moveVisualizer_line_thickness;
+      background-color: $color_active;
+    }
+    &-moveDistance {
+      flex-grow: 0;
+      flex-shrink: 0;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: $moveVisualizer_line_thickness;
+      background-color: $moveVisualizer_color_default;
+      overflow: hidden;
+      &-arrow {
+        display: flex;
+        align-items: center;
+        font-size: $font_size_xx_small;
+        margin-left: $spacing_x_small;
+        margin-top: 0.5px;  // the arrows were a bit mis-aligned, a hacky way to make the arrows a bit more pixel-perfect
+      }
+    }
+    &-rightEdge {
+      @include mix_border_radius(3px, 'right');
+      flex-grow: 0;
+      flex-shrink: 0;
+      height: $moveVisualizer_line_thickness;
+      background-color: $color_active;
+    }
+    &-rightGap {
+      flex-grow: 0;
+      flex-shrink: 0;
+    }
+  }
+  &__pins {
+    @include mix_fixed_div(relative, $z_index_standard_base_item);
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: $moveVisualizer_line_thickness + $moveVisualizer_line_padding_bottom;
+    padding-right: $moveVisualizer_padding_right;
+    width: 100%;
+    &-end {
+      @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: $moveVisualizer_pin_end_width;
+      margin-left: -$moveVisualizer_pin_end_width/2;
+      &-value {
+        @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
+        @include mix_border_radius(3px);
+        padding: $spacing_minimum $spacing_xx_small;
+        margin-bottom: -$spacing_xx_small;
+        line-height: $line_height_minimum;
+        color: $font_color_inverse;
+        background-color: $moveVisualizer_color_default;
+      }
+      &-icon {
+        @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
+        font-size: $font_size_xx_small;
+        color: $moveVisualizer_color_default;
+      }
+    }
+  }
+  &__positionDetection {
+    @include mix_fixed_div(absolute, $z_index_standard_tooltip);
+    height: 100%;
+    width: 100%;
+  }
+  &--stencilState {
+    #{$moveVisualizerBlockName} {
+      &__bar {
+        &-leftEdge {
+          @include mix_stencil_animation(true);
+          background-color: $color_active!important;
+        }
+        &-moveDistance {
+          @include mix_stencil_animation(true);
+        }
+        &-rightEdge {
+          @include mix_stencil_animation(true);
+          background-color: $color_active!important;
+        }
+      }
+      &__pins {
+        &-end {
+          &-value {
+            @include mix_stencil_animation;
+          }
+          &-icon {
+            @include mix_stencil_animation;
+            background: none!important;
+          }
+        }
+      }
+    }
+  }
+  &--noLeftEdge {
+    #{$moveVisualizerBlockName} {
+      &__bar {
+        &-moveDistance {
+          border-top-left-radius: 3px;
+          border-bottom-left-radius: 3px;
+        }
+      }
+    }
+  }
+  &--noRightEdge {
+    #{$moveVisualizerBlockName} {
+      &__bar {
+        &-moveDistance {
+          border-top-right-radius: 3px;
+          border-bottom-right-radius: 3px;
+        }
+      }
+    }
+  }
+  &--inversedState {
+    #{$moveVisualizerBlockName} {
+      &__bar {
+        &-moveDistance {
+          background-color: $moveVisualizer_color_inversed;
+        }
+      }
+      &__pins {
+        &-end {
+          &-value {
+            background-color: $moveVisualizer_color_inversed;
+          }
+          &-icon {
+            color: $moveVisualizer_color_inversed;
+          }
+        }
+      }
+    }
+  }
+  &--placeholderState {
+    #{$moveVisualizerBlockName} {
+      &__bar {
+        visibility: hidden;
+      }
+      &__pins {
+        visibility: hidden;
+      }
+    }
+  }
+}

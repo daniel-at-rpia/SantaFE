@@ -25,10 +25,12 @@ export interface SecurityPortfolioBlock {
 }
 
 export interface SecurityMarkBlock {
+  combinedDefaultMark: string;
   mark: string;
   markDriver: string;
   markChangedBy: string;
   markChangedTime: string;
+  combinedDefaultMarkRaw: number;
   markRaw: number;
   markBackend: number;
   markDisBid: string;
@@ -184,7 +186,8 @@ export interface ObligorCategoryDataItemBlock {
     spreadMid: number;
     yieldMid: number;
     workoutTerm: number;
-    positionCurrent: number;
+    cS01: number;
+    currentPosition: number;
   }
   state: {}
 }

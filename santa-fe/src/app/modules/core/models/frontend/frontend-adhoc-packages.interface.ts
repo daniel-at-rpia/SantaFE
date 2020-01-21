@@ -36,17 +36,6 @@ export interface LiveDataDiffingResult {
   quantDiffCount: number;
 }
 
-export interface QuantVisualizerParams {
-  tRaw: number;
-  gRaw: number;
-  tWow: number;
-  gWow: number;
-  tMom: number;
-  gMom: number;
-  tYtd: number;
-  gYtd: number;
-}
-
 export interface AgGridRowParams {
   data: AgGridRow;
   node: AgGridRowNode;
@@ -64,4 +53,27 @@ export interface SantaTableNumericFloatingFilterChange {
 export interface SantaTableNumericFloatingFilterParams extends IFloatingFilterParams<NumericFilterDTO, SantaTableNumericFloatingFilterChange> {
   minValue: number;
   maxValue: number;
+}
+
+export interface ObligorGraphCategoryData {
+  name: string,
+  mid: number,
+  mark: number,
+  workoutTerm: number,
+  markQuantity: number
+}
+
+export interface ObligorGraphAxesZoomState {
+  yAxis: {
+    start: number;
+    end: number;
+    fullZoomStart: number;
+    fullZoomEnd: number;
+  }
+  xAxis: {
+    start: number;
+    end: number;
+    fullZoomStart: number;
+    fullZoomEnd: number;
+  }
 }

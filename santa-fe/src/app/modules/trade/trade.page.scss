@@ -61,6 +61,7 @@
     &-marketAnalysisPanel {
       flex: 1 1 60%;
       display: flex;
+      overflow: hidden;
       margin-bottom: $spacing_medium/2;
       trade-market-analysis-panel {
         flex: 1 1 auto;

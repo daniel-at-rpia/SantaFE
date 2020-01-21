@@ -11,7 +11,7 @@ export const APIUrlMap = {
   getAllQuotes: `liveQuote/get-all-quotes`,
   getObligorCurves: `curve/get-obligor-curves-per-ccy`,
   getGroups: `group/get-groups`,
-  getGroupFromSecurity: `group/get-group-from-security`,
+  getGroupHistoricalSummary: `group/get-group-historical-summary-from-security`,
   getIssuers: `obligor/get-issuers`,
   getSubIndustries: `obligor/get-subindustries`
 };
@@ -99,6 +99,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
   }
 ];
 
+export const DEFAULT_METRIC_IDENTIFIER = 'DEFAULT';
 export const TriCoreMetricConfig: TriCoreMetricConfigStub = {
   Spread: {
     label: 'Spread',
@@ -152,3 +153,5 @@ export const BackendKeyDictionary = {
   'YIELD': 'yieldWorst',
   'SIZE': 'marketValue'
 };
+
+export const MIN_OBLIGOR_CURVE_VALUES = 2;

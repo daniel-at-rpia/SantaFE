@@ -173,7 +173,7 @@ export class SantaTable implements OnInit, OnChanges {
           try {
             targetRow.state.isExpanded = true;
             if (targetRow.data.security) {
-              targetRow.data.security.state.isTableExpanded = true;
+              targetRow.data.security.state.isMultiLineVariant = true;
               this.fetchSecurityQuotes(targetRow, params);
             }
           } catch {
@@ -190,7 +190,7 @@ export class SantaTable implements OnInit, OnChanges {
     try {
       targetRow.state.isExpanded = false;
       if (targetRow.data.security) {
-        targetRow.data.security.state.isTableExpanded = false;
+        targetRow.data.security.state.isMultiLineVariant = false;
       }
     } catch {
       // ignore, seems AgGrid causes some weird read only error
@@ -436,7 +436,12 @@ export class SantaTable implements OnInit, OnChanges {
         return eachOldRow.data.security.data.securityID === eachNewRow.data.security.data.securityID;
       });
       if (!!matchedOldRow) {
-        matchedOldRow.data = eachNewRow.data;
+        try {
+          matchedOldRow.data = eachNewRow.data;
+        }
+        catch {
+          console.warn('setting row update failure in AGGrid', matchedOldRow.data, eachNewRow.data);
+        }
       } else {
         this.tableData.data.rows.push(eachNewRow);
       }

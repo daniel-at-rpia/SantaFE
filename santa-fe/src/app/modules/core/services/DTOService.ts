@@ -5,11 +5,13 @@
       BESecurityGroupDTO,
       BEBestQuoteDTO,
       BEQuoteDTO,
-      BEPortfolioDTO
+      BEPortfolioDTO,
+      BEHistoricalQuantBlock,
+      BEHistoricalSummaryDTO,
+      BESingleBestQuoteDTO
     } from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
     import * as Blocks from 'FEModels/frontend-blocks.interface';
-    import { QuantVisualizerParams } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       SecurityDefinitionStub,
       SecurityDefinitionBundleStub,
@@ -22,7 +24,8 @@
       SecurityGroupSeniorityColorScheme
     } from 'Core/constants/colorSchemes.constant';
     import {
-      TriCoreMetricConfig
+      TriCoreMetricConfig,
+      DEFAULT_METRIC_IDENTIFIER
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
@@ -71,8 +74,11 @@ export class DTOService {
         primaryPmName: null,
         backupPmName: null,
         researchName: null,
+        cs01Local: null,
         owner: [],
         mark: {
+          combinedDefaultMark: null,
+          combinedDefaultMarkRaw: null,
           mark: null,
           markRaw: null,
           markBackend: null,
@@ -108,8 +114,9 @@ export class DTOService {
       state: {
         isSelected: false,
         isStencil: isStencil,
-        isTable: false,
-        isTableExpanded: false
+        isInteractionDisabled: false,
+        isMultiLineVariant: false,
+        isWidthFlexible: false
       }
     };
     return object;
@@ -128,13 +135,18 @@ export class DTOService {
     dto.data.mark.markDriver = targetPortfolio.mark.driver;
     dto.data.mark.markChangedBy = targetPortfolio.mark.user;
     dto.data.mark.markChangedTime = targetPortfolio.mark.enteredTime;
+    dto.data.cs01Local = targetPortfolio.cs01Local;
     dto.data.owner = [];
     !!targetPortfolio.primaryPmName && dto.data.owner.push(targetPortfolio.primaryPmName);
     !!targetPortfolio.backupPmName && dto.data.owner.push(targetPortfolio.backupPmName);
     !!targetPortfolio.researchName && dto.data.owner.push(targetPortfolio.researchName);
     // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
-    if (!!TriCoreMetricConfig[targetPortfolio.mark.driver] && (targetPortfolio.mark.driver === currentSelectedMetric || currentSelectedMetric === 'Default')){
-      const rounding = TriCoreMetricConfig[targetPortfolio.mark.driver].rounding;
+    if ((!!TriCoreMetricConfig[targetPortfolio.mark.driver] && targetPortfolio.mark.driver === currentSelectedMetric) || currentSelectedMetric === DEFAULT_METRIC_IDENTIFIER){
+      let targetMetric = targetPortfolio.mark.driver;
+      if (currentSelectedMetric === DEFAULT_METRIC_IDENTIFIER) {
+        targetMetric = this.utility.findSecurityTargetDefaultTriCoreMetric(dto);
+      }
+      const rounding = targetMetric ? TriCoreMetricConfig[targetMetric].rounding : 0;
       dto.data.mark.mark = this.utility.round(dto.data.mark.markRaw, rounding).toFixed(rounding);
     } else {
       dto.data.mark.mark = null;
@@ -385,74 +397,132 @@ export class DTOService {
     BEdto: BEBestQuoteDTO,
     securityCard: DTOs.SecurityDTO
   ): DTOs.QuantComparerDTO {
-    const metricType = !isStencil ? quantMetricType : 'Spread';
-    const backendTargetQuoteAttr = TriCoreMetricConfig[metricType]['backendTargetQuoteAttr'];
-    const rawData = !!BEdto && !!BEdto[backendTargetQuoteAttr] ? BEdto[backendTargetQuoteAttr] : {};
-    const bidSize = !isStencil ? this.utility.round(rawData.bidQuantity/1000000, 1) : null;
-    const offerSize = !isStencil ? this.utility.round(rawData.askQuantity/1000000, 1) : null;
+    if (isStencil) {
+      const stencilObject: DTOs.QuantComparerDTO = {
+        data: {
+          metricType: 'Spread',
+          delta: 0,
+          mid: 0,
+          bid: {
+            number: 33,
+            broker: 'GS',
+            size: null
+          },
+          offer: {
+            number: 33,
+            broker: 'JPM',
+            size: null
+          }
+        },
+        style: {
+          lineWidth: 80,
+          bidLineHeight: 30,
+          offerLineHeight: 30,
+          axeSkew: 50,
+          totalSkew: 50
+        },
+        state: {
+          hasBid: true,
+          hasOffer: true,
+          isStencil: isStencil,
+          isCalculated: false,
+          isCrossed: false,
+          isCrossedTier2: false,
+          axeSkewEnabled: false,
+          totalSkewEnabled: false,
+          noAxeSkew: true,
+          noTotalSkew: true,
+          longEdgeState: false
+        }
+      };
+      return stencilObject;
+    } else {
+      const metricType = quantMetricType;
+      const backendTargetQuoteAttr = TriCoreMetricConfig[metricType]['backendTargetQuoteAttr'];
+      if (!!BEdto && !!BEdto[backendTargetQuoteAttr]) {
+        const rawData = BEdto[backendTargetQuoteAttr];
+        return this.populateQuantCompareObject(rawData, metricType, securityCard);
+      } else {
+        return null;
+      }
+    }
+  }
+
+  private populateQuantCompareObject(
+    rawData: BESingleBestQuoteDTO,
+    metricType: string,
+    securityCard: DTOs.SecurityDTO
+  ): DTOs.QuantComparerDTO {
+    const bidSize = this.utility.round(rawData.bidQuantity/1000000, 1);
+    const offerSize = this.utility.round(rawData.askQuantity/1000000, 1);
     const tier2Shreshold = TriCoreMetricConfig[metricType]['tier2Threshold'];
     const inversed = this.utility.isCDS(false, securityCard) ? !TriCoreMetricConfig[metricType]['inversed'] : TriCoreMetricConfig[metricType]['inversed'];
-    const hasBid = !isStencil ? (!!rawData.bidQuoteValue && !!rawData.bidDealer) : true;
-    const hasOffer = !isStencil ? (!!rawData.askQuoteValue && !!rawData.askDealer) : true;
+    const hasBid = !!rawData.bidQuoteValue && !!rawData.bidDealer;
+    const hasOffer = !!rawData.askQuoteValue && !!rawData.askDealer;
     const rounding = TriCoreMetricConfig[metricType]['rounding'];
-    const bidNumber = !isStencil ? this.utility.round(rawData.bidQuoteValue, rounding).toFixed(rounding) : 33;
-    const offerNumber = !isStencil ? this.utility.round(rawData.askQuoteValue, rounding).toFixed(rounding) : 33;
-    const bidSkew =  !isStencil ? rawData.axeSkew * 100 : 50;
-    let delta;
-    let mid;
-    if (hasBid && hasOffer && !isStencil) {
-      delta = inversed ? offerNumber - bidNumber : bidNumber - offerNumber;
-      delta = this.utility.round(delta, rounding);
-      mid = (rawData.bidQuoteValue + rawData.askQuoteValue)/2;
-      mid = this.utility.round(mid, rounding);
-    } else if( hasBid && hasOffer == false) {
-      delta = 0;
-      mid = rawData.bidQuoteValue;
-    } else if( hasOffer && hasBid == false) {
-      delta = 0;
-      mid = rawData.askQuoteValue;
+    const bidNumber = this.utility.round(rawData.bidQuoteValue, rounding).toFixed(rounding);
+    const offerNumber = this.utility.round(rawData.askQuoteValue, rounding).toFixed(rounding);
+    const bidSkew = rawData.axeSkew * 100;
+    if (bidNumber === 'NaN' || offerNumber === 'NaN') {
+      console.warn('Caught BE data issue while creating best quote component, ', securityCard, rawData, bidNumber, offerNumber);
+      return null;
     } else {
-      delta = 0;
-      mid = 0;
-    }
-    const object: DTOs.QuantComparerDTO = {
-      data: {
-        metricType: metricType,
-        delta: delta,
-        mid: mid,
-        bid: {
-          number: bidNumber,
-          broker: !isStencil ? rawData.bidDealer : 'GS',
-          size: bidSize
-        },
-        offer: {
-          number: offerNumber,
-          broker: !isStencil ? rawData.askDealer: 'JPM',
-          size: offerSize
-        }
-      },
-      style: {
-        lineWidth: 80,
-        bidLineHeight: 30,
-        offerLineHeight: 30,
-        axeSkew: !isStencil ? rawData.axeSkew * 100 : 50,
-        totalSkew: !isStencil ? rawData.totalSkew * 100 : 50
-      },
-      state: {
-        hasBid: hasBid,
-        hasOffer: hasOffer,
-        isStencil: isStencil,
-        isCalculated: false,
-        isCrossed: !isStencil && delta < 0,
-        isCrossedTier2: delta <= -tier2Shreshold,
-        axeSkewEnabled: false,
-        totalSkewEnabled: false,
-        noAxeSkew: !isStencil ? rawData.axeSkew === null : true,
-        noTotalSkew: !isStencil ? rawData.totalSkew === null : true,
-        longEdgeState: !isStencil ? bidNumber.toString().length > 4 || offerNumber.toString().length > 4 : false
+      let delta;
+      let mid;
+      if (hasBid && hasOffer) {
+        delta = inversed ? offerNumber - bidNumber : bidNumber - offerNumber;
+        delta = this.utility.round(delta, rounding);
+        mid = (rawData.bidQuoteValue + rawData.askQuoteValue)/2;
+        mid = this.utility.round(mid, rounding);
+      } else if( hasBid && hasOffer == false) {
+        delta = 0;
+        mid = rawData.bidQuoteValue;
+      } else if( hasOffer && hasBid == false) {
+        delta = 0;
+        mid = rawData.askQuoteValue;
+      } else {
+        delta = 0;
+        mid = 0;
       }
-    };
-    return object;
+      const object: DTOs.QuantComparerDTO = {
+        data: {
+          metricType: metricType,
+          delta: delta,
+          mid: mid,
+          bid: {
+            number: bidNumber,
+            broker: rawData.bidDealer,
+            size: bidSize
+          },
+          offer: {
+            number: offerNumber,
+            broker: rawData.askDealer,
+            size: offerSize
+          }
+        },
+        style: {
+          lineWidth: 80,
+          bidLineHeight: 30,
+          offerLineHeight: 30,
+          axeSkew: rawData.axeSkew * 100,
+          totalSkew: rawData.totalSkew * 100
+        },
+        state: {
+          hasBid: hasBid,
+          hasOffer: hasOffer,
+          isStencil: false,
+          isCalculated: false,
+          isCrossed: delta < 0,
+          isCrossedTier2: delta <= -tier2Shreshold,
+          axeSkewEnabled: false,
+          totalSkewEnabled: false,
+          noAxeSkew: rawData.axeSkew === null,
+          noTotalSkew: rawData.totalSkew === null,
+          longEdgeState: bidNumber.toString().length > 4 || offerNumber.toString().length > 4
+        }
+      };
+      return object;
+    }
   }
 
   public formSecurityTableObject(
@@ -498,8 +568,7 @@ export class DTOService {
         readyStage: stub.readyStage,
         metricPackDeltaScope: stub.metricPackDeltaScope || null,
         frontendMetric: !!stub.isFrontEndMetric,
-        isDataTypeText: !!stub.isDataTypeText,
-        targetQuantLocationFromRow: !!stub.isForQuantComparer ? stub.targetQuantLocationFromRow : 'n/a'
+        isDataTypeText: !!stub.isDataTypeText
       },
       state: {
         isQuantVariant: !!stub.isForQuantComparer,
@@ -647,142 +716,6 @@ export class DTOService {
     return object;
   }
 
-  public formQuantVisualizerObject(
-    isStencil: boolean,
-    params: QuantVisualizerParams
-  ): DTOs.QuantitativeVisualizerDTO {
-    if (isStencil) {
-      const stencilObject: DTOs.QuantitativeVisualizerDTO = {
-        data: {
-          rawEntry: { target: 10, group: 10 },
-          wow: { target: 10, group: 10},
-          mom: { target: 10, group: 10},
-          ytd: { target: 10, group: 10},
-          min: 15,
-          max: 15,
-          minDelta: 15,
-          maxDelta: 15
-        },
-        style: {
-          raw: {
-            inversed: false,
-            leftSpaceWidth: 10,
-            rightSpaceWidth: 10
-          },
-          wow: {
-            inversed: false,
-            leftSpaceWidth: 10,
-            rightSpaceWidth: 10
-          },
-          mom: {
-            inversed: false,
-            leftSpaceWidth: 10,
-            rightSpaceWidth: 10
-          },
-          ytd: {
-            inversed: false,
-            leftSpaceWidth: 10,
-            rightSpaceWidth: 10
-          }
-        },
-        state: {
-          isWowValid: true,
-          isMomValid: true,
-          isYtdValid: true,
-          isStencil: true
-        }
-      };
-      return stencilObject;
-    } else {
-      let min = Math.min(params.tRaw, params.gRaw);
-      let max = Math.max(params.tRaw, params.gRaw);
-      min = min - (max - min) * 0.15;
-      max = max + (max - min) * 0.15;
-      const validDeltaParamsList: Array<number> = [0];
-      params.tWow !== null && validDeltaParamsList.push(params.tWow);
-      params !== null && validDeltaParamsList.push(params.tMom);
-      params !== null && validDeltaParamsList.push(params.tYtd);
-      params !== null && validDeltaParamsList.push(params.gWow);
-      params !== null && validDeltaParamsList.push(params.gMom);
-      params !== null && validDeltaParamsList.push(params.gYtd);
-      let minDelta = Math.min(...validDeltaParamsList);
-      let maxDelta = Math.max(...validDeltaParamsList);
-      minDelta = minDelta - (maxDelta - minDelta) * 0.15;
-      maxDelta = maxDelta + (maxDelta - minDelta) * 0.15;
-      const object: DTOs.QuantitativeVisualizerDTO = {
-        data: {
-          rawEntry: {
-            target: params.tRaw,
-            group: params.gRaw
-          },
-          wow: {
-            target: params.tWow,
-            group: params.gWow
-          },
-          mom: {
-            target: params.tMom,
-            group: params.gMom
-          },
-          ytd: {
-            target: params.tYtd,
-            group: params.gYtd
-          },
-          min: min,
-          max: max,
-          minDelta: minDelta,
-          maxDelta: maxDelta
-        },
-        style: {
-          raw: {
-            inversed: params.gRaw < params.tRaw,
-            leftSpaceWidth: 10,
-            rightSpaceWidth: 10
-          },
-          wow: {
-            inversed: params.gWow < params.tWow,
-            leftSpaceWidth: 10,
-            rightSpaceWidth: 10
-          },
-          mom: {
-            inversed: params.gMom < params.tMom,
-            leftSpaceWidth: 10,
-            rightSpaceWidth: 10
-          },
-          ytd: {
-            inversed: params.gYtd < params.tYtd,
-            leftSpaceWidth: 10,
-            rightSpaceWidth: 10
-          }
-        },
-        state: {
-          isWowValid: params.tWow !== null && params.gWow !== null,
-          isMomValid: params.tMom !== null && params.gMom !== null,
-          isYtdValid: params.tYtd !== null && params.gYtd !== null,
-          isStencil: false
-        }
-      }
-      const fullWidth = max - min;
-      const rawLeft = object.style.raw.inversed ? params.gRaw : params.tRaw;
-      const rawRight = object.style.raw.inversed ? params.tRaw : params.gRaw;
-      object.style.raw.leftSpaceWidth = Math.round((min - rawLeft) / fullWidth * 100);
-      object.style.raw.rightSpaceWidth = Math.round((max - rawRight) / fullWidth * 100);
-      const fullWidthDelta = maxDelta - minDelta;
-      const wowLeft = object.style.wow.inversed ? params.gWow : params.tWow;
-      const wowRight = object.style.wow.inversed ? params.tWow : params.gWow;
-      const momLeft = object.style.mom.inversed ? params.gMom : params.tMom;
-      const momRight = object.style.mom.inversed ? params.tMom : params.gMom;
-      const ytdLeft = object.style.ytd.inversed ? params.gYtd : params.tYtd;
-      const ytdRight = object.style.ytd.inversed ? params.tYtd : params.gYtd;
-      object.style.wow.leftSpaceWidth = Math.round(this.utility.skewedNumber(Math.abs(minDelta - wowLeft) / fullWidthDelta) * 100);
-      object.style.wow.rightSpaceWidth = Math.round(this.utility.skewedNumber(Math.abs(maxDelta - wowRight) / fullWidthDelta) * 100);
-      object.style.mom.leftSpaceWidth = Math.round(this.utility.skewedNumber(Math.abs(minDelta - momLeft) / fullWidthDelta) * 100);
-      object.style.mom.rightSpaceWidth = Math.round(this.utility.skewedNumber(Math.abs(maxDelta - momRight) / fullWidthDelta) * 100);
-      object.style.ytd.leftSpaceWidth = Math.round(this.utility.skewedNumber(Math.abs(minDelta - ytdLeft) / fullWidthDelta) * 100);
-      object.style.ytd.rightSpaceWidth = Math.round(this.utility.skewedNumber(Math.abs(maxDelta - ytdRight) / fullWidthDelta) * 100);
-      return object;
-    }
-  }
-
   public formObligorChartCategoryDTO(
     isStencil: boolean,
     name: string,
@@ -822,7 +755,8 @@ export class DTOService {
           spreadMid: null, 
           yieldMid: null,
           workoutTerm: null,
-          positionCurrent: null
+          currentPosition: null,
+          cS01: null
         },
         state: {}
       }
@@ -831,5 +765,91 @@ export class DTOService {
     else {
       return null;
     }
+  }
+
+  public formMoveVisualizerObject(
+    isStencil: boolean,
+    rawData?: BEHistoricalQuantBlock
+  ): DTOs.MoveVisualizerDTO {
+    const object: DTOs.MoveVisualizerDTO = {
+      data: {
+        start: 0,
+        end: 123,
+        min: 0,
+        max: 0
+      },
+      style: {
+        leftGap: 10,
+        leftEdge: 20,
+        moveDistance: 40,
+        rightEdge: 20,
+        rightGap: 10,
+        endPinLocation: 70
+      },
+      state: {
+        isInversed: false,
+        isInvalid: false,
+        isPlaceholder: false,
+        isStencil: !!isStencil
+      }
+    };
+    if (!isStencil && !!rawData) {
+      object.data.start = this.utility.round(rawData.startMetric);
+      object.data.end = this.utility.round(rawData.endMetric);
+      object.data.min = this.utility.round(rawData.minMetric);
+      object.data.max = this.utility.round(rawData.maxMetric);
+      object.state.isInversed = rawData.startMetric > rawData.endMetric;
+    }
+    return object;
+  }
+
+  public formHistoricalSummaryObject(
+    isStencil: boolean,
+    rawData: BEHistoricalSummaryDTO,
+    isLevel: boolean
+  ): DTOs.HistoricalSummaryDTO {
+    const object: DTOs.HistoricalSummaryDTO = {
+      data: {
+        list: [],
+        globalMin: null,
+        globalMax: null,
+        globalDistance: null,
+        centerPoint: null,
+        rulerValue: null
+      },
+      style: {
+        rulerPosition: 0
+      },
+      state: {
+        isStencil: !!isStencil
+      }
+    };
+    if (!isStencil && !!rawData) {
+      if (!!rawData.BaseSecurity) {
+        const baseDTO = this.formMoveVisualizerObject(false, rawData.BaseSecurity.historicalLevel);
+        baseDTO.state.isPlaceholder = !isLevel;
+        object.data.list.push(baseDTO);
+      }
+      if (!!rawData.Group) {
+        const groupDTO = this.formMoveVisualizerObject(false, rawData.Group.historicalLevel);
+        object.data.list.push(groupDTO);
+        object.data.centerPoint = (groupDTO.data.max + groupDTO.data.min)/2;
+        object.data.globalDistance = (groupDTO.data.max - groupDTO.data.min) * 10;
+        groupDTO.state.isPlaceholder = !isLevel;
+      }
+      if (!!rawData.Top) {
+        for (const eachSecurityIdentifier in rawData.Top) {
+          const eachDTO = isLevel ? this.formMoveVisualizerObject(false, rawData.Top[eachSecurityIdentifier].historicalLevel) : this.formMoveVisualizerObject(false, rawData.Top[eachSecurityIdentifier].historicalBasis);
+          object.data.list.push(eachDTO);
+        }
+      }
+      if (!!rawData.Bottom) {
+        for (const eachSecurityIdentifier in rawData.Bottom) {
+          const eachDTO = isLevel ? this.formMoveVisualizerObject(false, rawData.Bottom[eachSecurityIdentifier].historicalLevel) : this.formMoveVisualizerObject(false, rawData.Bottom[eachSecurityIdentifier].historicalBasis);
+          object.data.list.push(eachDTO);
+        }
+      }
+    }
+    return object;
   }
 }

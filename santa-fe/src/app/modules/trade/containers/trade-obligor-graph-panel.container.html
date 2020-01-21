@@ -6,7 +6,7 @@
         <button
           (click)="this.btnQuantityClick()"
           [ngClass]="{
-            'sat-tradeObligorGraphPanel__graphSettings-markValue-btnQuantity': this.state.markValue.quantity === false,
+            'sat-tradeObligorGraphPanel__graphSettings-markValue-btnQuantity': true,
             'sat-tradeObligorGraphPanel__graphSettings-markValue-btnQuantity--selected': this.state.markValue.quantity === true
           }">
           Quantity
@@ -14,10 +14,29 @@
         <button
           (click)="this.btnCS01Click()"
           [ngClass]="{
-            'sat-tradeObligorGraphPanel__graphSettings-markValue-btnCS01': this.state.markValue.cS01 === false,
+            'sat-tradeObligorGraphPanel__graphSettings-markValue-btnCS01': true,
             'sat-tradeObligorGraphPanel__graphSettings-markValue-btnCS01--selected': this.state.markValue.cS01 === true
           }">
           CS01
+        </button>
+        </div>
+        <span class="sat-tradeObligorGraphPanel__graphSettings-metricValue-text">Metric: </span>
+        <div class="santaBtnGroup">
+          <button
+          (click)="this.btnSpreadClick()"
+          [ngClass]="{
+            'sat-tradeObligorGraphPanel__graphSettings-metricValue-btnSpread': true,
+            'sat-tradeObligorGraphPanel__graphSettings-metricValue-btnSpread--selected': this.state.metric.spread === true
+          }">
+          Spread
+        </button>
+        <button
+          (click)="this.btnYieldClick()"
+          [ngClass]="{
+            'sat-tradeObligorGraphPanel__graphSettings-metricValue-btnYield': true,
+            'sat-tradeObligorGraphPanel__graphSettings-metricValue-btnYield--selected': this.state.metric.yield === true
+          }">
+          Yield
         </button>
         </div>
       </div>

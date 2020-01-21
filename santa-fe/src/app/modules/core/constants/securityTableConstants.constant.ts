@@ -51,8 +51,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: null,
     readyStage: 3,
     isForQuantComparer: true,
-    active: true,
-    targetQuantLocationFromRow: 'bestSpreadQuote'
+    active: true
   },{
     key: 'bestBid',
     label: 'Best Bid',

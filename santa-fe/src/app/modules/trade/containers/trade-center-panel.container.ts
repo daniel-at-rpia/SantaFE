@@ -44,7 +44,7 @@
       BEBestQuoteDTO
     } from 'BEModels/backend-models.interface';
 
-    import { TriCoreMetricConfig } from 'Core/constants/coreConstants.constant';
+    import { TriCoreMetricConfig, DEFAULT_METRIC_IDENTIFIER } from 'Core/constants/coreConstants.constant';
     import {
       SecurityTableMetrics,
       SECURITY_TABLE_FINAL_STAGE,
@@ -92,6 +92,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     validWindowSub: null
   }
   constants = {
+    defaultMetricIdentifier: DEFAULT_METRIC_IDENTIFIER,
     portfolioList: PortfolioList,
     portfolioShortcuts: PortfolioShortcuts,
     ownershipShortcuts: OwnershipShortcuts,
@@ -132,7 +133,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       },
       filters: {
         quickFilters: {
-          metricType: TriCoreMetricConfig.Spread.label,
+          metricType: this.constants.defaultMetricIdentifier,
           portfolios: [],
           keyword: '',
           owner: [],
@@ -242,15 +243,15 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       const newMetrics: Array<SecurityTableMetricStub> = this.utilityService.deepCopy(this.state.table.metrics);
       const thrityDayDeltaMetric = newMetrics[this.constants.thirtyDayDeltaIndex];
       if (thrityDayDeltaMetric.label === '30 Day Delta') {
-        thrityDayDeltaMetric.attrName = TriCoreMetricConfig[targetMetric].metricLabel;
-        thrityDayDeltaMetric.underlineAttrName = TriCoreMetricConfig[targetMetric].metricLabel;
+        if (targetMetric === this.constants.defaultMetricIdentifier) {
+          thrityDayDeltaMetric.attrName = targetMetric;
+          thrityDayDeltaMetric.underlineAttrName = targetMetric;
+        } else {
+          thrityDayDeltaMetric.attrName = TriCoreMetricConfig[targetMetric].metricLabel;
+          thrityDayDeltaMetric.underlineAttrName = TriCoreMetricConfig[targetMetric].metricLabel;
+        }
       } else {
         console.error('Code Maintainence flag: this is not the 30 day delta');
-      }
-      if (newMetrics[1].isForQuantComparer) {
-        newMetrics[1].targetQuantLocationFromRow = TriCoreMetricConfig[targetMetric].backendTargetQuoteAttr;
-      } else {
-        console.error('Code Maintainence flag: this is not the Quant Comparer column');
       }
       this.state.table.metrics = newMetrics;
       // this.calculateQuantComparerWidthAndHeight();
@@ -337,7 +338,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     });
     for (let i = 0; i < 10; ++i) {
       const stencilSecurity = this.dtoService.formSecurityCardObject(null, null, true);
-      stencilSecurity.state.isTable = true;
+      stencilSecurity.state.isInteractionDisabled = true;
       const newRow = this.dtoService.formSecurityTableRowObject(stencilSecurity);
       stencilHeaderBuffer.forEach((eachHeader) => {
         if (eachHeader.data.displayLabel !== 'Security') {
@@ -450,21 +451,26 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   private filterPrinstineRowList(): Array<SecurityTableRowDTO> {
     const filteredList: Array<SecurityTableRowDTO> = [];
     this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
-      if (this.state.filters.quickFilters.keyword.length < 3 || eachRow.data.security.data.name.indexOf(this.state.filters.quickFilters.keyword) >= 0) {
-        let portfolioIncludeFlag = this.filterByPortfolio(eachRow);
-        let ownerFlag = this.filterByOwner(eachRow);
-        let strategyFlag = this.filterByStrategy(eachRow);
-        let securityLevelFilterResultCombined = true;
-        if (this.state.filters.securityFilters.length > 0) {
-          const securityLevelFilterResult = this.state.filters.securityFilters.map((eachFilter) => {
-            return this.filterBySecurityAttribute(eachRow, eachFilter.targetAttribute, eachFilter.filterBy);
-          });
-          // as long as one of the filters failed, this security will not show
-          securityLevelFilterResultCombined = securityLevelFilterResult.filter((eachResult) => {
-            return eachResult;
-          }).length === securityLevelFilterResult.length;
+      try {
+        if (this.state.filters.quickFilters.keyword.length < 3 || eachRow.data.security.data.name.indexOf(this.state.filters.quickFilters.keyword) >= 0) {
+          let portfolioIncludeFlag = this.filterByPortfolio(eachRow);
+          let ownerFlag = this.filterByOwner(eachRow);
+          let strategyFlag = this.filterByStrategy(eachRow);
+          let securityLevelFilterResultCombined = true;
+          if (this.state.filters.securityFilters.length > 0) {
+            const securityLevelFilterResult = this.state.filters.securityFilters.map((eachFilter) => {
+              return this.filterBySecurityAttribute(eachRow, eachFilter.targetAttribute, eachFilter.filterBy);
+            });
+            // as long as one of the filters failed, this security will not show
+            securityLevelFilterResultCombined = securityLevelFilterResult.filter((eachResult) => {
+              return eachResult;
+            }).length === securityLevelFilterResult.length;
+          }
+          strategyFlag && ownerFlag && securityLevelFilterResultCombined && portfolioIncludeFlag && filteredList.push(eachRow);
         }
-        strategyFlag && ownerFlag && securityLevelFilterResultCombined && portfolioIncludeFlag && filteredList.push(eachRow);
+      } catch {
+        // ignore, seems AgGrid causes some weird read only error
+        console.warn('caught read only issue', eachRow);
       }
     });
     return filteredList;
@@ -599,7 +605,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
           }
         }
 
-        this.store$.dispatch(new TradeSecurityTableRowDTOListForAnalysisEvent(securityTableRowDTOList));
+        this.store$.dispatch(new TradeSecurityTableRowDTOListForAnalysisEvent(this.utilityService.deepCopy(securityTableRowDTOList)));
       }
     }
   }

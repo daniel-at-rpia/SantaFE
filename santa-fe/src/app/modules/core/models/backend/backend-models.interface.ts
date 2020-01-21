@@ -107,6 +107,12 @@ export interface BESecurityDTO {
   issueDate: string;
   isValidForCreditGrouping: boolean;
   paymentRank: string;
+  isSingleSecurity?: boolean;
+  isCurveSecurity?: boolean;
+  isBond?: boolean;
+  isLoan?: boolean;
+  isPreferred?: boolean;
+  isCds?: boolean;
 }
 
 interface BESecurityMetricDTO {
@@ -132,6 +138,7 @@ interface BESecurityMetricDTO {
   rating: string,
   ratingNoNotch: string,
   ratingBucket: string
+  isRated: boolean;
 }
 
 export interface BESecurityDeltaMetricDTO {
@@ -159,6 +166,7 @@ export interface BEPortfolioDTO {
   primaryPmName: string;
   backupPmName: string;
   researchName: string;
+  cs01Local: number;
   mark: {
     driver: string;
     enteredTime: string;
@@ -216,4 +224,49 @@ export interface BEQuoteDTO {
   askQuantity: number; // null,
   bidQualifier: string; // null,
   askQualifier: string; // null
+}
+
+export interface BEHistoricalSummaryOverviewDTO {
+  Yoy?: BEHistoricalSummaryDTO;
+  Mom?: BEHistoricalSummaryDTO;
+}
+
+export interface BEHistoricalSummaryDTO {
+  BaseSecurity: BEHistoricalInfoDTO;
+  Group: BEHistoricalInfoDTO;
+  Top: {
+    [property: string]: BEHistoricalInfoDTO;
+  };
+  Bottom: {
+    [property: string]: BEHistoricalInfoDTO;
+  }
+}
+
+interface BEHistoricalInfoDTO {
+  source: string;
+  deltaType: string;
+  startDate: string;
+  endDate: string;
+  metricName: string;
+  historicalLevel: BEHistoricalQuantBlock;
+  historicalBasis?: BEHistoricalQuantBlock;
+  security?: BESecurityDTO;
+  group?: any;
+  rank: number;
+  name: string;
+  isSecurityHistoricalSummary: boolean;
+  isGroupHistoricalSummary: boolean;
+}
+
+export interface BEHistoricalQuantBlock {
+  targetSecurityIdentifier: string;
+  startMetric: number;
+  endMetric: number;
+  minMetric: number;
+  minDateTime: string;
+  maxMetric: number;
+  maxDateTime: string;
+  isLevelRange: boolean;
+  isBasisRange: boolean;
+  isValid: boolean;
 }
