@@ -270,7 +270,7 @@ export class DTOService {
         // isUnactivated: true,
         groupByActive: false,
         filterActive: false,
-        isConfiguratorVariant: false
+        isMiniPillVariant: false
       }
     }
     return object;
@@ -302,7 +302,7 @@ export class DTOService {
         definitionList: ConfiguratorDefinitionLayout.map((eachBundle) => {
           const newList = this.formSecurityDefinitionBundleObject(eachBundle);
           newList.data.list.forEach((eachDefinition) => {
-            eachDefinition.state.isConfiguratorVariant = true;
+            eachDefinition.state.isMiniPillVariant = true;
           });
           return newList;
         })

@@ -80,7 +80,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: true
   },{
     key: 'markDriver',
-    label: 'Mark Driver',
+    label: 'Driver',
     attrName: 'markDriver',
     underlineAttrName: 'markDriver',
     blockAttrName: 'mark',

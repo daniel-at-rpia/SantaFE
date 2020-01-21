@@ -31,7 +31,8 @@
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       MARKET_ANALYSIS_SPREAD_METRIC_KEY,
-      MARKET_ANALYSIS_YIELD_METRIC_KEY
+      MARKET_ANALYSIS_YIELD_METRIC_KEY,
+      MarketAnalysisGroupByOptions
     } from 'Core/constants/tradeConstants.constant';
     import {
       selectSelectedSecurityForAnalysis
@@ -52,10 +53,32 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     receiveSelectedSecuritySub: null
   }
   constants = {
+    marketAnalysisGroupByOptions: MarketAnalysisGroupByOptions,
     securityDefinitionMap: SecurityDefinitionMap,
     spreadMetricKey: MARKET_ANALYSIS_SPREAD_METRIC_KEY,
     yieldMetricKey: MARKET_ANALYSIS_YIELD_METRIC_KEY
   };
+
+  private initializePageState(): TradeMarketAnalysisPanelState {
+    const state: TradeMarketAnalysisPanelState = {
+      receivedSecurity: false,
+      targetSecurity: null,
+      config: {
+        groupByOptions: [],
+        activeOptions: []
+      },
+      table: {
+        presentList: [],
+        prinstineTopSecurityList: [],
+        prinstineBottomSecurityList: [],
+        levelSummary: null,
+        basisSummary: null,
+        rankingList: [],
+        moveDistanceList: []
+      }
+    };
+    return state;
+  }
 
   constructor(
     private store$: Store<any>,
@@ -83,33 +106,18 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
   }
 
   public onClickGroupByOption(targetOption: SecurityDefinitionDTO){
-    targetOption.state.groupByActive = !targetOption.state.groupByActive;
-    const activeOptions = this.state.config.groupByOptions.filter((eachOption) => {
-      return eachOption.state.groupByActive;
-    })
-    if (activeOptions.length > 0) {
-      this.fetchGroupData();
-    }
-  }
-
-  private initializePageState(): TradeMarketAnalysisPanelState {
-    const state: TradeMarketAnalysisPanelState = {
-      receivedSecurity: false,
-      targetSecurity: null,
-      config: {
-        groupByOptions: [],
-      },
-      table: {
-        presentList: [],
-        prinstineTopSecurityList: [],
-        prinstineBottomSecurityList: [],
-        levelSummary: null,
-        basisSummary: null,
-        rankingList: [],
-        moveDistanceList: []
+    if (!targetOption.state.isLocked) {
+      const indexOfTargetOption = this.state.config.activeOptions.indexOf(targetOption);
+      if (indexOfTargetOption >= 0) {
+        this.state.config.activeOptions.splice(indexOfTargetOption, 1);
+      } else {
+        this.state.config.activeOptions.push(targetOption);
       }
-    };
-    return state;
+      if (this.state.config.activeOptions.length > 0) {
+        console.log('test, fetch data', this.state.config.activeOptions);
+        // this.fetchGroupData();
+      }
+    }
   }
 
   private onSecuritySelected(targetSecurity: SecurityDTO) {
@@ -121,11 +129,18 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
 
   private populateDefinitionOptions() {
     const options = [];
-    options.push(this.dtoService.formSecurityDefinitionObject(this.constants.securityDefinitionMap.CURRENCY));
-    options.push(this.dtoService.formSecurityDefinitionObject(this.constants.securityDefinitionMap.RATING_BUCKET));
-    options.push(this.dtoService.formSecurityDefinitionObject(this.constants.securityDefinitionMap.SECTOR));
-    options.push(this.dtoService.formSecurityDefinitionObject(this.constants.securityDefinitionMap.SENIORITY));
-    options.push(this.dtoService.formSecurityDefinitionObject(this.constants.securityDefinitionMap.TENOR));
+    this.constants.marketAnalysisGroupByOptions.forEach((eachDefinitionStub) => {
+      const definitionDTO = this.dtoService.formSecurityDefinitionObject(eachDefinitionStub);
+      definitionDTO.state.isMiniPillVariant = true;
+      definitionDTO.state.groupByActive = true;
+      if (
+        definitionDTO.data.key === this.constants.securityDefinitionMap.CURRENCY.key || 
+        definitionDTO.data.key === this.constants.securityDefinitionMap.COUPON_TYPE.key ||
+        definitionDTO.data.key === this.constants.securityDefinitionMap.SECURITY_TYPE.key) {
+        definitionDTO.state.isLocked = true;
+      }
+      options.push(definitionDTO);
+    });
     this.state.config.groupByOptions = options;
   }
 
@@ -264,7 +279,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
   }
 
   private applyStatesToSecurityCards(targetSecurity: SecurityDTO) {
-    // targetSecurity.state.isMultiLineVariant = true;
+    targetSecurity.state.isMultiLineVariant = false;
     targetSecurity.state.isInteractionDisabled = true;
     targetSecurity.state.isWidthFlexible = true;
   }

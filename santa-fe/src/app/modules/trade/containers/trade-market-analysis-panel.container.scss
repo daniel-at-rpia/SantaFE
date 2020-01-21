@@ -9,13 +9,32 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  &__overview {
+  &__group {
+    // display: none;
+    display: flex;
+    padding-top: $spacing_medium;
+    &-label {
+      flex: 0 0 auto;
+      font-size: $font_size_normal;
+      color: $font_color_minor;
+      padding: $spacing_x_small $spacing_medium;
+    }
+    &-optionList {
+      flex: 1 1 auto;
+      display: flex;
+      flex-wrap: wrap;
+      &-item {
+        flex: 1 1 auto;
+        margin-right: $spacing_small;
+        margin-bottom: $spacing_small;
+      }
+    }
   }
   &__table {
     @include mix_fixed_div(relative, $z_index_standard_base_item);
     @include mix_enable_scrollbar('vertical');
     flex: 1 1 auto;
-    display: flex;
+    display: none;
     flex-direction: column;
     padding: $spacing_medium;
     &-content {
@@ -68,6 +87,12 @@
   }
   &--hasSecurityState {
     #{$tradeMarketAnalysisPanelBlockName} {
+      &__group {
+        display: flex;
+      }
+      &__table {
+        display: flex;
+      }
     }
   }
 }

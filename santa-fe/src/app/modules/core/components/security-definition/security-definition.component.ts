@@ -18,6 +18,7 @@ import { SecurityDefinitionDTO } from 'FEModels/frontend-models.interface';
 
 export class SecurityDefinition implements OnInit {
   @Input() definitionData: SecurityDefinitionDTO;
+  @Input() isPartOfConfiguratorList: boolean;
   @Input() selected: boolean;
   @Input() backgroundVariant: boolean;
   @Input() heroVariant: boolean;

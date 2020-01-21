@@ -1,15 +1,4 @@
-import {
-  SecurityDTO,
-  SecurityTableDTO,
-  SecurityTableRowDTO,
-  SecurityGroupDTO,
-  SecurityDefinitionDTO,
-  SecurityDefinitionConfiguratorDTO,
-  SecurityGroupAverageVisualizerDTO,
-  SearchShortcutDTO,
-  QuantComparerDTO,
-  HistoricalSummaryDTO
-} from 'FEModels/frontend-models.interface';
+import * as DTOs from 'FEModels/frontend-models.interface';
 import {  ObligorChartCategoryBlock } from 'FEModels/frontend-blocks.interface';
 import {
   SecurityDefinitionStub,
@@ -28,21 +17,21 @@ export interface MarketGroupPanelState {
   isConfiguratorCollapsed: boolean;
   isGroupDataLoaded: boolean;
   configurator: {
-    dto: SecurityDefinitionConfiguratorDTO;
+    dto: DTOs.SecurityDefinitionConfiguratorDTO;
     showSelectedGroupConfig: boolean;
-    cachedOriginalConfig: SecurityDefinitionConfiguratorDTO;
-    shortcutList: Array<SearchShortcutDTO>;
-    selectedShortcut: SearchShortcutDTO;
+    cachedOriginalConfig: DTOs.SecurityDefinitionConfiguratorDTO;
+    shortcutList: Array<DTOs.SearchShortcutDTO>;
+    selectedShortcut: DTOs.SearchShortcutDTO;
   }
   searchResult: {
-    securityGroupList: Array<SecurityGroupDTO>;
+    securityGroupList: Array<DTOs.SecurityGroupDTO>;
     renderProgress: number;
     searchFailed: boolean;
     searchFailedError: string;
   }
   utility: {
     selectedWidget: string;
-    visualizer: SecurityGroupAverageVisualizerDTO;
+    visualizer: DTOs.SecurityGroupAverageVisualizerDTO;
     pieConfigurator: {
       left: {
         selected: boolean;
@@ -70,28 +59,28 @@ export interface TradeCenterPanelState {
   bestQuoteValidWindow: number;
   presets : {
     presetsReady: boolean;
-    selectedPreset: SearchShortcutDTO;
-    selectedList: Array<SearchShortcutDTO>;
-    recentShortcutList: Array<SearchShortcutDTO>;
-    portfolioShortcutList: Array<SearchShortcutDTO>;
-    ownershipShortcutList: Array<SearchShortcutDTO>;
-    strategyShortcutList: Array<SearchShortcutDTO>;
-    individualShortcutList: Array<SearchShortcutDTO>;
+    selectedPreset: DTOs.SearchShortcutDTO;
+    selectedList: Array<DTOs.SearchShortcutDTO>;
+    recentShortcutList: Array<DTOs.SearchShortcutDTO>;
+    portfolioShortcutList: Array<DTOs.SearchShortcutDTO>;
+    ownershipShortcutList: Array<DTOs.SearchShortcutDTO>;
+    strategyShortcutList: Array<DTOs.SearchShortcutDTO>;
+    individualShortcutList: Array<DTOs.SearchShortcutDTO>;
   }
   configurator: {
-    dto: SecurityDefinitionConfiguratorDTO;
+    dto: DTOs.SecurityDefinitionConfiguratorDTO;
     boosted: boolean;
   }
   table: {
     metrics: Array<SecurityTableMetricStub>;
-    dto: SecurityTableDTO;
+    dto: DTOs.SecurityTableDTO;
   }
   fetchResult: {
     fetchTableDataFailed: boolean;
     fetchTableDataFailedError: string;
-    rowList: Array<SecurityTableRowDTO>;
-    prinstineRowList: Array<SecurityTableRowDTO>;
-    liveUpdatedRowList: Array<SecurityTableRowDTO>;
+    rowList: Array<DTOs.SecurityTableRowDTO>;
+    prinstineRowList: Array<DTOs.SecurityTableRowDTO>;
+    liveUpdatedRowList: Array<DTOs.SecurityTableRowDTO>;
   }
   filters: {
     quickFilters: {
@@ -122,16 +111,17 @@ export interface TradeUtilityPanelState {
 
 export interface TradeMarketAnalysisPanelState {
   receivedSecurity: boolean;
-  targetSecurity: SecurityDTO;
+  targetSecurity: DTOs.SecurityDTO;
   config: {
-    groupByOptions: Array<SecurityDefinitionDTO>;
+    groupByOptions: Array<DTOs.SecurityDefinitionDTO>;
+    activeOptions: Array<DTOs.SecurityDefinitionDTO>;
   }
   table: {
-    presentList: Array<SecurityDTO>;
-    prinstineTopSecurityList: Array<SecurityDTO>;
-    prinstineBottomSecurityList: Array<SecurityDTO>;
-    levelSummary: HistoricalSummaryDTO;
-    basisSummary: HistoricalSummaryDTO;
+    presentList: Array<DTOs.SecurityDTO>;
+    prinstineTopSecurityList: Array<DTOs.SecurityDTO>;
+    prinstineBottomSecurityList: Array<DTOs.SecurityDTO>;
+    levelSummary: DTOs.HistoricalSummaryDTO;
+    basisSummary: DTOs.HistoricalSummaryDTO;
     rankingList: Array<string>;
     moveDistanceList: Array<string>;
   }
@@ -142,7 +132,7 @@ export interface TradeObligorGraphPanelState {
   obligorSecurityID: string;
   obligorName: string;
   obligorCurrency: string;
-  securityTableRowDTOList: SecurityTableRowDTO[];
+  securityTableRowDTOList: DTOs.SecurityTableRowDTO[];
   lookBackHours: number;
   axesZoomState: ObligorGraphAxesZoomState;
   metric: {

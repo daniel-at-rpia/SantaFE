@@ -3,6 +3,18 @@
     'sat-tradeMarketAnalysisPanel': true,
     'sat-tradeMarketAnalysisPanel--hasSecurityState': state.receivedSecurity
   }">
+  <section class="sat-tradeMarketAnalysisPanel__group">
+    <span class="sat-tradeMarketAnalysisPanel__group-label">Filter By :</span>
+    <ul class="sat-tradeMarketAnalysisPanel__group-optionList">
+      <li class="sat-tradeMarketAnalysisPanel__group-optionList-item" *ngFor="let eachDefinition of state.config.groupByOptions">
+        <security-definition
+          [definitionData]="eachDefinition"
+          [selected]="state.config.activeOptions.indexOf(eachDefinition) >= 0"
+          (onClick)="onClickGroupByOption($event)">
+        </security-definition>
+      </li>
+    </ul>
+  </section>
   <section class="sat-tradeMarketAnalysisPanel__table">
     <div class="sat-tradeMarketAnalysisPanel__table-content">
       <ul class="sat-tradeMarketAnalysisPanel__table-content-securityList">
