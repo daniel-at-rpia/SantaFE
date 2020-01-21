@@ -1,6 +1,7 @@
 @import "global.scss";
 @import "modules/trade/trade.scss";
 
+$tradeMarketAnalysisPanel_config_label_width: 7.75rem;
 .sat-tradeMarketAnalysisPanel {
   $tradeMarketAnalysisPanelBlockName: &;
   @include mix_border_generator;
@@ -13,10 +14,11 @@
     display: flex;
     padding-top: $spacing_medium;
     &-label {
-      flex: 0 0 auto;
+      flex: 0 0 $tradeMarketAnalysisPanel_config_label_width;
       font-size: $font_size_normal;
       color: $font_color_minor;
       padding: $spacing_x_small $spacing_medium;
+      text-align: right;
     }
     &-list {
       flex: 1 1 auto;
@@ -35,14 +37,14 @@
     }
   }
   &__group {
-    // display: none;
-    display: flex;
+    display: none;
     padding-top: $spacing_medium;
     &-label {
-      flex: 0 0 auto;
+      flex: 0 0 $tradeMarketAnalysisPanel_config_label_width;
       font-size: $font_size_normal;
       color: $font_color_minor;
       padding: $spacing_x_small $spacing_medium;
+      text-align: right;
     }
     &-optionList {
       flex: 1 1 auto;
@@ -61,6 +63,7 @@
     flex: 1 1 auto;
     display: none;
     flex-direction: column;
+    padding-right: $spacing_small;  // this is to avoid the pins from being clipped
     &-content {
       flex: 1 1 auto;
       display: flex;
