@@ -96,6 +96,30 @@ $moveVisualizer_color_inversed: $color_green_5;
   }
   &--stencilState {
     #{$moveVisualizerBlockName} {
+      &__bar {
+        &-leftEdge {
+          @include mix_stencil_animation(true);
+          background-color: $color_active!important;
+        }
+        &-moveDistance {
+          @include mix_stencil_animation(true);
+        }
+        &-rightEdge {
+          @include mix_stencil_animation(true);
+          background-color: $color_active!important;
+        }
+      }
+      &__pins {
+        &-end {
+          &-value {
+            @include mix_stencil_animation;
+          }
+          &-icon {
+            @include mix_stencil_animation;
+            background: none!important;
+          }
+        }
+      }
     }
   }
   &--noLeftEdge {
