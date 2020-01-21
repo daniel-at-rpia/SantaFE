@@ -182,8 +182,10 @@
     }
   }
 
-  @mixin mix_stencil_animation(){
-    @include mix_border_radius(5px);
+  @mixin mix_stencil_animation($noBorderRadius: false){
+    @if $noBorderRadius == false {
+      @include mix_border_radius(5px);
+    }
     animation: stencilPulse $animation_duration_loading infinite ease-in-out;
     color: $color_stencil!important;
     background: $color_stencil!important;

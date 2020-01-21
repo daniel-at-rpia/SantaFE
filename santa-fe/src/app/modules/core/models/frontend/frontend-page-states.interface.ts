@@ -132,6 +132,8 @@ export interface TradeMarketAnalysisPanelState {
     prinstineBottomSecurityList: Array<SecurityDTO>;
     levelSummary: HistoricalSummaryDTO;
     basisSummary: HistoricalSummaryDTO;
+    rankingList: Array<string>;
+    moveDistanceList: Array<string>;
   }
 }
 

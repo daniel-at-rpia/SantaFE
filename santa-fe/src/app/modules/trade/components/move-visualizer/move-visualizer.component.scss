@@ -45,6 +45,7 @@ $moveVisualizer_color_inversed: $color_green_5;
         align-items: center;
         font-size: $font_size_xx_small;
         margin-left: $spacing_x_small;
+        margin-top: 0.5px;  // the arrows were a bit mis-aligned, a hacky way to make the arrows a bit more pixel-perfect
       }
     }
     &-rightEdge {
@@ -96,6 +97,30 @@ $moveVisualizer_color_inversed: $color_green_5;
   }
   &--stencilState {
     #{$moveVisualizerBlockName} {
+      &__bar {
+        &-leftEdge {
+          @include mix_stencil_animation(true);
+          background-color: $color_active!important;
+        }
+        &-moveDistance {
+          @include mix_stencil_animation(true);
+        }
+        &-rightEdge {
+          @include mix_stencil_animation(true);
+          background-color: $color_active!important;
+        }
+      }
+      &__pins {
+        &-end {
+          &-value {
+            @include mix_stencil_animation;
+          }
+          &-icon {
+            @include mix_stencil_animation;
+            background: none!important;
+          }
+        }
+      }
     }
   }
   &--noLeftEdge {

@@ -780,16 +780,17 @@ export class DTOService {
       },
       style: {
         leftGap: 10,
-        leftEdge: 10,
-        moveDistance: 60,
-        rightEdge: 10,
+        leftEdge: 20,
+        moveDistance: 40,
+        rightEdge: 20,
         rightGap: 10,
-        endPinLocation: 20
+        endPinLocation: 70
       },
       state: {
         isInversed: false,
         isInvalid: false,
-        isPlaceholder: false
+        isPlaceholder: false,
+        isStencil: !!isStencil
       }
     };
     if (!isStencil && !!rawData) {
@@ -803,6 +804,7 @@ export class DTOService {
   }
 
   public formHistoricalSummaryObject(
+    isStencil: boolean,
     rawData: BEHistoricalSummaryDTO,
     isLevel: boolean
   ): DTOs.HistoricalSummaryDTO {
@@ -819,31 +821,33 @@ export class DTOService {
         rulerPosition: 0
       },
       state: {
-        isStencil: false
+        isStencil: !!isStencil
       }
     };
-    if (rawData.BaseSecurity) {
-      const baseDTO = this.formMoveVisualizerObject(false, rawData.BaseSecurity.historicalLevel);
-      baseDTO.state.isPlaceholder = !isLevel;
-      object.data.list.push(baseDTO);
-    }
-    if (rawData.Group) {
-      const groupDTO = this.formMoveVisualizerObject(false, rawData.Group.historicalLevel);
-      object.data.list.push(groupDTO);
-      object.data.centerPoint = (groupDTO.data.max + groupDTO.data.min)/2;
-      object.data.globalDistance = (groupDTO.data.max - groupDTO.data.min) * 10;
-      groupDTO.state.isPlaceholder = !isLevel;
-    }
-    if (rawData.Top) {
-      for (const eachSecurityIdentifier in rawData.Top) {
-        const eachDTO = isLevel ? this.formMoveVisualizerObject(false, rawData.Top[eachSecurityIdentifier].historicalLevel) : this.formMoveVisualizerObject(false, rawData.Top[eachSecurityIdentifier].historicalBasis);
-        object.data.list.push(eachDTO);
+    if (!isStencil && !!rawData) {
+      if (!!rawData.BaseSecurity) {
+        const baseDTO = this.formMoveVisualizerObject(false, rawData.BaseSecurity.historicalLevel);
+        baseDTO.state.isPlaceholder = !isLevel;
+        object.data.list.push(baseDTO);
       }
-    }
-    if (rawData.Bottom) {
-      for (const eachSecurityIdentifier in rawData.Bottom) {
-        const eachDTO = isLevel ? this.formMoveVisualizerObject(false, rawData.Bottom[eachSecurityIdentifier].historicalLevel) : this.formMoveVisualizerObject(false, rawData.Bottom[eachSecurityIdentifier].historicalBasis);
-        object.data.list.push(eachDTO);
+      if (!!rawData.Group) {
+        const groupDTO = this.formMoveVisualizerObject(false, rawData.Group.historicalLevel);
+        object.data.list.push(groupDTO);
+        object.data.centerPoint = (groupDTO.data.max + groupDTO.data.min)/2;
+        object.data.globalDistance = (groupDTO.data.max - groupDTO.data.min) * 10;
+        groupDTO.state.isPlaceholder = !isLevel;
+      }
+      if (!!rawData.Top) {
+        for (const eachSecurityIdentifier in rawData.Top) {
+          const eachDTO = isLevel ? this.formMoveVisualizerObject(false, rawData.Top[eachSecurityIdentifier].historicalLevel) : this.formMoveVisualizerObject(false, rawData.Top[eachSecurityIdentifier].historicalBasis);
+          object.data.list.push(eachDTO);
+        }
+      }
+      if (!!rawData.Bottom) {
+        for (const eachSecurityIdentifier in rawData.Bottom) {
+          const eachDTO = isLevel ? this.formMoveVisualizerObject(false, rawData.Bottom[eachSecurityIdentifier].historicalLevel) : this.formMoveVisualizerObject(false, rawData.Bottom[eachSecurityIdentifier].historicalBasis);
+          object.data.list.push(eachDTO);
+        }
       }
     }
     return object;
