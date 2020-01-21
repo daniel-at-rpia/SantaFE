@@ -64,6 +64,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
       receivedSecurity: false,
       targetSecurity: null,
       populateGroupOptionText: false,
+      apiErrorState: false,
       config: {
         timeScope: 'Mom',
         groupByOptions: [],
@@ -184,6 +185,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getGroupHistoricalSummary, {req: 'POST'}, payload).pipe(
         first(),
         tap((serverReturn: BEHistoricalSummaryOverviewDTO) => {
+          this.state.apiErrorState = false;
           !this.state.populateGroupOptionText && this.populateGroupOptionText(serverReturn[targetScope]);
           this.loadSecurityList(serverReturn[targetScope]);
           this.state.table.levelSummary = this.dtoService.formHistoricalSummaryObject(false, serverReturn[targetScope], true);
@@ -191,6 +193,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
         }),
         catchError(err => {
           console.error('error', err);
+          this.state.apiErrorState = true;
           return of('error');
         })
       ).subscribe();

@@ -112,6 +112,7 @@ export interface TradeUtilityPanelState {
 export interface TradeMarketAnalysisPanelState {
   receivedSecurity: boolean;
   populateGroupOptionText: boolean;
+  apiErrorState: boolean;
   targetSecurity: DTOs.SecurityDTO;
   config: {
     timeScope: string;
