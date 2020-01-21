@@ -605,7 +605,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
           }
         }
 
-        this.store$.dispatch(new TradeSecurityTableRowDTOListForAnalysisEvent(securityTableRowDTOList));
+        this.store$.dispatch(new TradeSecurityTableRowDTOListForAnalysisEvent(this.utilityService.deepCopy(securityTableRowDTOList)));
       }
     }
   }

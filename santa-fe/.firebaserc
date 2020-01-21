@@ -14,11 +14,8 @@
         "dev3": [
           "dev3-santa-rpia"
         ],
-        "mark": [
-          "mark-santa-rpia"
-        ],
-        "ray": [
-          "ray-santa-rpia"
+        "local": [
+          "local-santa-rpia"
         ],
         "prod": [
           "santa-rpia"
