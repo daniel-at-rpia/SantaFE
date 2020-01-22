@@ -1,7 +1,9 @@
 import {
   TradeFilterConstantStub,
-  SearchShortcutStub
+  SearchShortcutStub,
+  SecurityDefinitionStub
 } from 'FEModels/frontend-stub-models.interface';
+import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
 import { SecurityMetricOptions } from 'Core/constants/coreConstants.constant';
 
 export const PortfolioList: Array<TradeFilterConstantStub> = [
@@ -387,11 +389,6 @@ export const LIVE_UPDATE_COUNTDOWN = 30;
 export const LIVE_UPDATE_INPROG_PROMPT = 'Fetching Update ...';
 export const LIVE_UPDATE_PROCESSING_PROMPT = 'Processing ...';
 
-export const MARKET_ANALYSIS_SPREAD_METRIC_KEY = SecurityMetricOptions[0].label;
-export const MARKET_ANALYSIS_YIELD_METRIC_KEY = SecurityMetricOptions[6].label;
-
-export const HISTORICAL_SUMMARY_ROUNDING = 2;
-
 export const UTILITY_VALID_WINDOW_OPTIONS = [
   {
     value: 0.5,
@@ -405,4 +402,21 @@ export const UTILITY_VALID_WINDOW_OPTIONS = [
   },{
     value: 99,
     label: 'Entire Day'
-  }];
+  }
+];
+
+export const MARKET_ANALYSIS_SPREAD_METRIC_KEY = SecurityMetricOptions[0].label;
+export const MARKET_ANALYSIS_YIELD_METRIC_KEY = SecurityMetricOptions[6].label;
+
+export const HISTORICAL_SUMMARY_ROUNDING = 2;
+
+export const MarketAnalysisGroupByOptions: Array<SecurityDefinitionStub> = [
+  SecurityDefinitionMap.CURRENCY,
+  SecurityDefinitionMap.SECURITY_TYPE,
+  SecurityDefinitionMap.COUPON_TYPE,
+  SecurityDefinitionMap.SENIORITY,
+  SecurityDefinitionMap.RATING,
+  SecurityDefinitionMap.SECTOR,
+  SecurityDefinitionMap.TENOR,
+  SecurityDefinitionMap.TICKER
+];

@@ -5,47 +5,44 @@ export interface BESecurityGroupDTO {
   date: string;
   metricsType: string;
   groupIdentifier: {
+    source: string;
+    date: string;
     groupOptionValues: {
-      SecurityType: string;
-      Ccy: string;
-      Tenor: string;
+      [property: string]: Array<string>;
     };
-    tenorOptions: Array<string>;
+    filters: any;
+    singleSecurityTenorOptions: Array<string>;
     weightField: string;
   }
   numSecurities: number;
   name: string;
+  ccy: string;
+  securityType: string;
+  couponType: string;
+  type: string;
   metrics: BEGroupMetricDTO,
   deltaMetrics: {
     Dod: BEGroupMetricDTO,
     Wow?: BEGroupMetricDTO,
     Mtd?: BEGroupMetricDTO,
     Mom?: BEGroupMetricDTO,
-    Ytd?: BEGroupMetricDTO
-  },
-  descriptiveMetrics: {
-    SecurityType: any;
-    BailInStatus: any;
-    Ccy: any;
-    CouponType: any;
-    Industry: any;
-    Issuer: any;
-    RatingNoNotch: any;
-    RatingBucket: any;
-    Sector: any;
-    Seniority: any;
-    SubIndustry: any;
-    Tenor: any;
+    Ytd?: BEGroupMetricDTO,
+    Yoy?: BEGroupMetricDTO
   }
 }
 
 interface BEGroupMetricDTO {
   tenor: string;
+  backendTenor: string;
   propertyToNumSecurities: {
     WorkoutTerm: number;
+    BackendWorkoutTerm: number;
     AmtOutstanding?: number;
     RatingDouble?: number;
     Spread?: number;
+    ZSpread?: number;
+    AswUsd: number;
+    GSpread?: number;
     CitiSpread?: number;
     ModelSpread?: number;
     OasSpread?: number;
@@ -56,10 +53,14 @@ interface BEGroupMetricDTO {
     MarketValue?: number;
   }
   isDelta?: boolean;
-  workoutTerm: number;
+  workoutTerm?: number;
+  backendWorkoutTerm?: number;
   marketValue?: number;
   amtOutstanding?: number;
   spread?: number;
+  zSpread?: number;
+  aswUsd?: number;
+  gSpread?: number;
   citiSpread?: number;
   modelSpread?: number;
   oasSpread?: number;
@@ -67,9 +68,11 @@ interface BEGroupMetricDTO {
   modelPrice?: number;
   yieldMaturity?: number;
   yieldWorst?: number;
+  isRated?: boolean;
   rating?: string;
   ratingNoNotch?: string;
   ratingDouble?: number;
+  ratingBucket?: string;
 }
 
 export interface BESecurityDTO {
@@ -228,7 +231,9 @@ export interface BEQuoteDTO {
 
 export interface BEHistoricalSummaryOverviewDTO {
   Yoy?: BEHistoricalSummaryDTO;
+  Ytd?: BEHistoricalSummaryDTO;
   Mom?: BEHistoricalSummaryDTO;
+  Mtd?: BEHistoricalSummaryDTO;
 }
 
 export interface BEHistoricalSummaryDTO {
@@ -251,7 +256,7 @@ interface BEHistoricalInfoDTO {
   historicalLevel: BEHistoricalQuantBlock;
   historicalBasis?: BEHistoricalQuantBlock;
   security?: BESecurityDTO;
-  group?: any;
+  group?: BESecurityGroupDTO;
   rank: number;
   name: string;
   isSecurityHistoricalSummary: boolean;

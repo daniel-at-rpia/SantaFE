@@ -1,8 +1,58 @@
 <article
   [ngClass]="{
     'sat-tradeMarketAnalysisPanel': true,
-    'sat-tradeMarketAnalysisPanel--hasSecurityState': state.receivedSecurity
+    'sat-tradeMarketAnalysisPanel--hasSecurityState': state.receivedSecurity,
+    'sat-tradeMarketAnalysisPanel--apiErrorState': state.apiErrorState
   }">
+  <section class="sat-tradeMarketAnalysisPanel__timeScope">
+    <span class="sat-tradeMarketAnalysisPanel__timeScope-label">Time Scope :</span>
+    <ul class="sat-tradeMarketAnalysisPanel__timeScope-list">
+      <button
+        (click)="onClickTimeScope('Yoy')"
+        [ngClass]="{
+          'sat-tradeMarketAnalysisPanel__timeScope-list-item': true,
+          'sat-tradeMarketAnalysisPanel__timeScope-list-item--selected': state.config.timeScope === 'Yoy'
+        }">
+        YoY
+      </button>
+      <button
+        (click)="onClickTimeScope('Ytd')"
+        [ngClass]="{
+          'sat-tradeMarketAnalysisPanel__timeScope-list-item': true,
+          'sat-tradeMarketAnalysisPanel__timeScope-list-item--selected': state.config.timeScope === 'Ytd'
+        }">
+        YtD
+      </button>
+      <button
+        (click)="onClickTimeScope('Mom')"
+        [ngClass]="{
+          'sat-tradeMarketAnalysisPanel__timeScope-list-item': true,
+          'sat-tradeMarketAnalysisPanel__timeScope-list-item--selected': state.config.timeScope === 'Mom'
+        }">
+        MoM
+      </button>
+      <button
+        (click)="onClickTimeScope('Wow')"
+        [ngClass]="{
+          'sat-tradeMarketAnalysisPanel__timeScope-list-item': true,
+          'sat-tradeMarketAnalysisPanel__timeScope-list-item--selected': state.config.timeScope === 'Wow'
+        }">
+        WoW
+      </button>
+    </ul>
+  </section>
+  <section class="sat-tradeMarketAnalysisPanel__group">
+    <span class="sat-tradeMarketAnalysisPanel__group-label">Filter By :</span>
+    <ul class="sat-tradeMarketAnalysisPanel__group-optionList">
+      <li class="sat-tradeMarketAnalysisPanel__group-optionList-item" *ngFor="let eachDefinition of state.config.groupByOptions">
+        <security-definition
+          [definitionData]="eachDefinition"
+          [selected]="state.config.activeOptions.indexOf(eachDefinition) >= 0"
+          (onClick)="onClickGroupByOption($event)">
+        </security-definition>
+      </li>
+    </ul>
+  </section>
   <section class="sat-tradeMarketAnalysisPanel__table">
     <div class="sat-tradeMarketAnalysisPanel__table-content">
       <ul class="sat-tradeMarketAnalysisPanel__table-content-securityList">
@@ -34,5 +84,9 @@
         <historical-summary *ngIf="state.table.basisSummary" [summaryData]="state.table.basisSummary"></historical-summary>
       </div>
     </div>
+  </section>
+  <section class="sat-tradeMarketAnalysisPanel__errorPrompt">
+    <i class="sat-tradeMarketAnalysisPanel__errorPrompt-icon fal fa-sad-tear"></i>
+    <span class="sat-tradeMarketAnalysisPanel__errorPrompt-title">Failed to retrieve data</span>
   </section>
 </article>

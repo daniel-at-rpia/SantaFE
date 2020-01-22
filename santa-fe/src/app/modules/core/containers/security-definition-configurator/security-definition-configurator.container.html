@@ -34,7 +34,8 @@
             (onClick)="onClickDefinition($event)"
             [selected]="configuratorData.state.showFiltersFromDefinition === eachDefinition"
             [interactionDisabled]="configuratorData.state.isLoadingLongOptionListFromServer"
-            [groupByDisabled]="configuratorData.state.groupByDisabled">
+            [groupByDisabled]="configuratorData.state.groupByDisabled"
+            [isPartOfConfiguratorList]="true">
           </security-definition>
         </div>
       </li>

@@ -194,7 +194,6 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
   }
   &--selectedState {
     @include material('none');
-    @include mix_border_radius(5px, 'left');
     background-color: $color_active;
     #{$securityDefinitionBlockName} {
       &__icon {
@@ -223,6 +222,11 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
       &__filterMask {
         @include material('none');
       }
+    }
+  }
+  &--selectedState#{$securityDefinitionBlockName}--configuratorListVariant {
+    @include mix_border_radius(5px, 'left');
+    #{$securityDefinitionBlockName} {
       &__selectedGap {
         display: flex;
       }
@@ -315,7 +319,7 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
       }
     }
   }
-  &--configuratorVariant {
+  &--miniPillVariant {
     flex-direction: row;
     align-items: center;
     height: $securityDefinition_configuratorVariant_height;
@@ -331,7 +335,7 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
           width: $securityDefinition_configuratorVariant_height;
         }
         &-backendTenor-secondaryImg {
-          margin-top: $spacing_xx_small - $spacing_minimum;
+          margin-top: -0.1rem;
           font-size: $securityDefinition_configuratorVariant_img_size_secondary;
         }
         &-ratingBucket-secondaryImg {
@@ -339,13 +343,13 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
           font-size: $securityDefinition_configuratorVariant_img_size_secondary;
         }
         &-securityType-box {
-          background-color: $color_gray_2;
           flex-direction: column;
+          padding: $spacing_minimum*2 $spacing_xx_small;
           &-text {
             margin: 0;
-            padding: $spacing_x_small $spacing_medium;
+            padding: 0;
             text-align: center;
-            font-size: $font_size_xx_small;
+            font-size: $font_size_minimum;
           }
         }
       }
@@ -369,5 +373,10 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
         height: $securityDefinition_configuratorVariant_filter_size;
       }
     }
+  }
+  &--lockedState {
+    @include material('none');
+    @include mix_border_generator($typical_border_width, $font_color_major);
+    background: none;
   }
 }

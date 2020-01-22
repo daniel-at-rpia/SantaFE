@@ -37,7 +37,7 @@
     import { BESecurityGroupDTO } from 'BEModels/backend-models.interface';
     import { PayloadGetSantaGroups } from 'BEModels/backend-payloads.interface';
 
-    import { SecurityGroupList, SecurityGroupList2 } from 'Core/stubs/securityGroups.stub';
+    import { SecurityGroupList } from 'Core/stubs/securityGroups.stub';
     import { SecurityDefinitionStub } from 'FEModels/frontend-stub-models.interface';
     import {
       PieChartConfiguratorOptions,

@@ -78,7 +78,7 @@ export class HistoricalSummary implements OnChanges {
     let globalMin = null;
     let globalMax = null;
     this.summaryData.data.list.forEach((eachMoveVisualizer) => {
-      if (!eachMoveVisualizer.state.isPlaceholder) {
+      if (!eachMoveVisualizer.state.isPlaceholder && !eachMoveVisualizer.state.isInvalid) {
         if (globalMin === null || eachMoveVisualizer.data.min < globalMin) {
           globalMin = eachMoveVisualizer.data.min;
         }
