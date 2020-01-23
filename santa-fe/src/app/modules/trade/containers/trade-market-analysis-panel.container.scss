@@ -3,6 +3,7 @@
 
 $tradeMarketAnalysisPanel_table_security_width: 14rem;
 $tradeMarketAnalysisPanel_table_ranking_width: 5rem;
+$tradeMarketAnalysisPanel_table_distance_width: 4.25rem;
 $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
 .sat-tradeMarketAnalysisPanel {
   $tradeMarketAnalysisPanelBlockName: &;
@@ -62,6 +63,7 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
   &__tableHeader {
     flex: 0 0 auto;
     display: none;
+    align-items: center;
     padding-right: $spacing_small;
     margin-bottom: -$tradeMarketAnalysis_topGutterForRulerLabel + $spacing_x_small;
     &-securityList {
@@ -76,6 +78,11 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
     }
     &-levelColumn, &-basisColumn {
       flex: 1 1 auto;
+      text-align: center;
+      color: $font_color_major;
+    }
+    &-levelDistance, &-basisDistance {
+      flex: 0 0 $tradeMarketAnalysisPanel_table_distance_width;
       text-align: center;
       color: $font_color_major;
     }
@@ -132,6 +139,31 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
       }
       &-separator {
         @include mix_border_generator(0 0 0 $typical_border_width);
+      }
+      &-levelDistance, &-basisDistance {
+        flex: 0 0 $tradeMarketAnalysisPanel_table_distance_width;
+        padding-top: $tradeMarketAnalysis_topGutterForRulerLabel;
+        overflow: hidden;
+        &-item {
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          height: $tradeMarketAnalysis_row_height;
+          padding: 0 $spacing_small;
+          &-text {
+            @include mix_border_radius(3px);
+            background-color: $color_positive;
+            padding: 0 $spacing_x_small;
+            font-size: $font_size_x_small;
+            color: $font_color_inverse;
+          }
+          &--even {
+            background-color: $color_blue_gray_1;
+          }
+          &--positive &-text {
+            background-color: $color_negative;
+          }
+        }
       }
     }
   }

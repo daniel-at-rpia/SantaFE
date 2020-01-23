@@ -126,7 +126,8 @@ export interface TradeMarketAnalysisPanelState {
     levelSummary: DTOs.HistoricalSummaryDTO;
     basisSummary: DTOs.HistoricalSummaryDTO;
     rankingList: Array<string>;
-    moveDistanceList: Array<string>;
+    moveDistanceLevelList: Array<string>;
+    moveDistanceBasisList: Array<string>;
   }
 }
 
