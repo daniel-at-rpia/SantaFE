@@ -101,11 +101,25 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
         flex: 0 0 $tradeMarketAnalysisPanel_table_security_width;
         padding-top: $tradeMarketAnalysis_topGutterForRulerLabel;
         &-item {
+          @include mix_fixed_div(relative, $z_index_standard_base_item);
           display: flex;
           align-items: center;
           height: $tradeMarketAnalysis_row_height;
           security-card {
             flex: 1 1 auto;
+          }
+          &-numberOfSecurityTag {
+            @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+            @include mix_border_radius(3px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 1.25rem;
+            padding: 0 $spacing_x_small;
+            right: $spacing_x_small;
+            background-color: $color_active;
+            color: $font_color_inverse;
+            user-select: none;
           }
           &--even {
             background-color: $color_blue_gray_1;

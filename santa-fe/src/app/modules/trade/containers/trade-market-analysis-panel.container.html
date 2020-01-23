@@ -70,6 +70,7 @@
             'sat-tradeMarketAnalysisPanel__table-content-securityList-item': true,
             'sat-tradeMarketAnalysisPanel__table-content-securityList-item--even': rowIndex%2 === 0
           }">
+          <span title="number of securities in this group" class="sat-tradeMarketAnalysisPanel__table-content-securityList-item-numberOfSecurityTag" *ngIf="rowIndex === 1">{{state.table.numOfSecurities}}</span>
           <security-card [cardData]="eachCard"></security-card>
         </li>
       </ul>

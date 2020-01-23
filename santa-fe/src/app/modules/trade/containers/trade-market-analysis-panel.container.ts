@@ -75,6 +75,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
         activeOptions: []
       },
       table: {
+        numOfSecurities: 0,
         presentList: [],
         prinstineTopSecurityList: [],
         prinstineBottomSecurityList: [],
@@ -276,6 +277,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
       this.state.table.rankingList.push('Group');
       this.state.table.moveDistanceLevelList.push('');
       this.state.table.moveDistanceBasisList.push('');
+      this.state.table.numOfSecurities = rawData.Group.group.metrics.propertyToNumSecurities.GSpread;
     }
     if (!!rawData.Top) {
       let index = 1;

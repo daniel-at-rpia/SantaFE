@@ -120,6 +120,7 @@ export interface TradeMarketAnalysisPanelState {
     activeOptions: Array<DTOs.SecurityDefinitionDTO>;
   }
   table: {
+    numOfSecurities: number;
     presentList: Array<DTOs.SecurityDTO>;
     prinstineTopSecurityList: Array<DTOs.SecurityDTO>;
     prinstineBottomSecurityList: Array<DTOs.SecurityDTO>;
