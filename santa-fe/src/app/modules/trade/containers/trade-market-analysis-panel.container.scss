@@ -61,30 +61,29 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
     }
   }
   &__tableHeader {
+    @include mix_fixed_div(relative, $z_index_standard_hovering_item_lift);
     flex: 0 0 auto;
     display: none;
     align-items: center;
-    padding-right: $spacing_small;
-    margin-bottom: -$tradeMarketAnalysis_topGutterForRulerLabel + $spacing_x_small;
+    padding: $spacing_x_small $spacing_small $spacing_x_small 0;
+    margin-bottom: -$tradeMarketAnalysis_topGutterForRulerLabel;
+    background-color: $color_blue_gray_5;
+    color: $font_color_inverse;
     &-securityList {
       flex: 0 0 $tradeMarketAnalysisPanel_table_security_width;
       text-align: center;
-      color: $font_color_major;
     }
     &-rankingList {
       flex: 0 0 $tradeMarketAnalysisPanel_table_ranking_width;
       text-align: center;
-      color: $font_color_major;
     }
     &-levelColumn, &-basisColumn {
       flex: 1 1 auto;
       text-align: center;
-      color: $font_color_major;
     }
     &-levelDistance, &-basisDistance {
       flex: 0 0 $tradeMarketAnalysisPanel_table_distance_width;
       text-align: center;
-      color: $font_color_major;
     }
   }
   &__table {
