@@ -26,7 +26,11 @@
       SecurityDefinitionDTO
     } from 'FEModels/frontend-models.interface';
     import { TradeMarketAnalysisPanelState } from 'FEModels/frontend-page-states.interface';
-    import { BEHistoricalSummaryDTO, BEHistoricalSummaryOverviewDTO } from 'BEModels/backend-models.interface';
+    import {
+      BEHistoricalSummaryDTO,
+      BEHistoricalSummaryOverviewDTO,
+      BEHistoricalQuantBlock
+    } from 'BEModels/backend-models.interface';
     import { PayloadGetGroupHistoricalSummary } from 'BEModels/backend-payloads.interface';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
     import {
@@ -71,13 +75,15 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
         activeOptions: []
       },
       table: {
+        numOfSecurities: 0,
         presentList: [],
         prinstineTopSecurityList: [],
         prinstineBottomSecurityList: [],
         levelSummary: null,
         basisSummary: null,
         rankingList: [],
-        moveDistanceList: []
+        moveDistanceLevelList: [],
+        moveDistanceBasisList: []
       }
     };
     return state;
@@ -261,12 +267,17 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
       this.applyStatesToSecurityCards(baseSecurityDTO);
       this.state.table.presentList.push(baseSecurityDTO);
       this.state.table.rankingList.push('Base');
+      this.state.table.moveDistanceLevelList.push('');
+      this.state.table.moveDistanceBasisList.push('');
       const groupDTO = this.dtoService.formSecurityCardObject('', null, true);
       groupDTO.state.isStencil = false;
       groupDTO.data.name = rawData.Group.group.name;
       this.applyStatesToSecurityCards(groupDTO);
       this.state.table.presentList.push(groupDTO);
       this.state.table.rankingList.push('Group');
+      this.state.table.moveDistanceLevelList.push('');
+      this.state.table.moveDistanceBasisList.push('');
+      this.state.table.numOfSecurities = rawData.Group.group.metrics.propertyToNumSecurities.GSpread;
     }
     if (!!rawData.Top) {
       let index = 1;
@@ -276,6 +287,10 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
         this.state.table.presentList.push(eachTopSecurityDTO);
         this.state.table.prinstineTopSecurityList.push(eachTopSecurityDTO);
         this.state.table.rankingList.push(`Top ${index}`);
+        const levelDistance = this.retrieveMoveDistance(rawData.Top[eachSecurityIdentifier].historicalLevel);
+        this.state.table.moveDistanceLevelList.push(levelDistance);
+        const basisDistance = this.retrieveMoveDistance(rawData.Top[eachSecurityIdentifier].historicalBasis);
+        this.state.table.moveDistanceBasisList.push(basisDistance);
         index++;
       }
     }
@@ -287,6 +302,10 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
         this.state.table.presentList.push(eachBottomSecurityDTO);
         this.state.table.prinstineBottomSecurityList.push(eachBottomSecurityDTO);
         this.state.table.rankingList.push(`Bottom ${index}`);
+        const levelDistance = this.retrieveMoveDistance(rawData.Bottom[eachSecurityIdentifier].historicalLevel);
+        this.state.table.moveDistanceLevelList.push(levelDistance);
+        const basisDistance = this.retrieveMoveDistance(rawData.Bottom[eachSecurityIdentifier].historicalBasis);
+        this.state.table.moveDistanceBasisList.push(basisDistance);
         index++;
       }
     }
@@ -313,6 +332,12 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
       })
     }
     this.state.populateGroupOptionText = true;
+  }
+
+  private retrieveMoveDistance(rawQuantBlock: BEHistoricalQuantBlock): string {
+    const number = rawQuantBlock.endMetric - rawQuantBlock.startMetric;
+    const text = this.utilityService.round(number);
+    return text;
   }
 
 }

@@ -275,7 +275,7 @@ export const PieChartConfiguratorOptions = {
     'CURRENCY',
     'COUPON_TYPE',
     'INDUSTRY',
-    'ISSUER',
+    'TICKER',
     'RATING'
   ],
   right: [

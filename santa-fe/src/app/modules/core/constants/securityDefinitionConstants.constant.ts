@@ -202,7 +202,8 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'STIP',
     'FIP',
     'CIP',
-    'AGB'
+    'AGB',
+    'BBB'
   ];
 
   const FilterOptionsPortfolioManagerList = [

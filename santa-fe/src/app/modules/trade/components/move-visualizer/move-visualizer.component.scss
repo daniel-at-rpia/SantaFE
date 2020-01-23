@@ -6,8 +6,8 @@ $moveVisualizer_line_padding_bottom: $spacing_x_small;
 $moveVisualizer_pin_end_width: 3rem;
 $moveVisualizer_pin_start_width: 1.2rem;
 $moveVisualizer_padding_right: $spacing_xx_small;
-$moveVisualizer_color_default: $color_red_5;
-$moveVisualizer_color_inversed: $color_green_5;
+$moveVisualizer_color_default: $color_negative;
+$moveVisualizer_color_inversed: $color_positive;
 .sat-moveVisualizer {
   $moveVisualizerBlockName: &;
   @include mix_fixed_div(relative, $z_index_standard_base_item);

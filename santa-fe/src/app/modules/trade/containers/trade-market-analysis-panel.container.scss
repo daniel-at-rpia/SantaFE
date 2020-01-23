@@ -1,6 +1,9 @@
 @import "global.scss";
 @import "modules/trade/trade.scss";
 
+$tradeMarketAnalysisPanel_table_security_width: 14rem;
+$tradeMarketAnalysisPanel_table_ranking_width: 5rem;
+$tradeMarketAnalysisPanel_table_distance_width: 4.25rem;
 $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
 .sat-tradeMarketAnalysisPanel {
   $tradeMarketAnalysisPanelBlockName: &;
@@ -57,6 +60,32 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
       }
     }
   }
+  &__tableHeader {
+    @include mix_fixed_div(relative, $z_index_standard_hovering_item_lift);
+    flex: 0 0 auto;
+    display: none;
+    align-items: center;
+    padding: $spacing_x_small $spacing_small $spacing_x_small 0;
+    margin-bottom: -$tradeMarketAnalysis_topGutterForRulerLabel;
+    background-color: $color_blue_gray_5;
+    color: $font_color_inverse;
+    &-securityList {
+      flex: 0 0 $tradeMarketAnalysisPanel_table_security_width;
+      text-align: center;
+    }
+    &-rankingList {
+      flex: 0 0 $tradeMarketAnalysisPanel_table_ranking_width;
+      text-align: center;
+    }
+    &-levelColumn, &-basisColumn {
+      flex: 1 1 auto;
+      text-align: center;
+    }
+    &-levelDistance, &-basisDistance {
+      flex: 0 0 $tradeMarketAnalysisPanel_table_distance_width;
+      text-align: center;
+    }
+  }
   &__table {
     @include mix_fixed_div(relative, $z_index_standard_base_item);
     @include mix_enable_scrollbar('vertical');
@@ -68,14 +97,28 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
       flex: 1 1 auto;
       display: flex;
       &-securityList {
-        flex: 0 0 14rem;
+        flex: 0 0 $tradeMarketAnalysisPanel_table_security_width;
         padding-top: $tradeMarketAnalysis_topGutterForRulerLabel;
         &-item {
+          @include mix_fixed_div(relative, $z_index_standard_base_item);
           display: flex;
           align-items: center;
           height: $tradeMarketAnalysis_row_height;
           security-card {
             flex: 1 1 auto;
+          }
+          &-numberOfSecurityTag {
+            @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+            @include mix_border_radius(3px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 1.25rem;
+            padding: 0 $spacing_x_small;
+            right: $spacing_x_small;
+            background-color: $color_active;
+            color: $font_color_inverse;
+            user-select: none;
           }
           &--even {
             background-color: $color_blue_gray_1;
@@ -83,7 +126,7 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
         }
       }
       &-rankingList {
-        flex: 0 1 5rem;
+        flex: 0 0 $tradeMarketAnalysisPanel_table_ranking_width;
         padding-top: $tradeMarketAnalysis_topGutterForRulerLabel;
         overflow: hidden;
         &-item {
@@ -109,6 +152,31 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
       }
       &-separator {
         @include mix_border_generator(0 0 0 $typical_border_width);
+      }
+      &-levelDistance, &-basisDistance {
+        flex: 0 0 $tradeMarketAnalysisPanel_table_distance_width;
+        padding-top: $tradeMarketAnalysis_topGutterForRulerLabel;
+        overflow: hidden;
+        &-item {
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          height: $tradeMarketAnalysis_row_height;
+          padding: 0 $spacing_small;
+          &-text {
+            @include mix_border_radius(3px);
+            background-color: $color_positive;
+            padding: 0 $spacing_x_small;
+            font-size: $font_size_x_small;
+            color: $font_color_inverse;
+          }
+          &--even {
+            background-color: $color_blue_gray_1;
+          }
+          &--positive &-text {
+            background-color: $color_negative;
+          }
+        }
       }
     }
   }
@@ -137,6 +205,9 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
       &__group {
         display: flex;
       }
+      &__tableHeader {
+        display: flex;
+      }
       &__table {
         display: flex;
       }
@@ -145,6 +216,9 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
   &--apiErrorState {
     #{$tradeMarketAnalysisPanelBlockName} {
       &__group {
+        display: none;
+      }
+      &__tableHeader {
         display: none;
       }
       &__table {
