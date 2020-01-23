@@ -136,6 +136,15 @@ export const PortfolioShortcuts: Array<SearchShortcutStub> = [
         selectedOptions: ['AGB']
       }
     ]
+  },{
+    displayTitle: 'BBB',
+    includedDefinitions: [
+      {
+        definitionKey: 'PORTFOLIO',
+        groupByActive: false,
+        selectedOptions: ['BBB']
+      }
+    ]
   }
 ];
 
