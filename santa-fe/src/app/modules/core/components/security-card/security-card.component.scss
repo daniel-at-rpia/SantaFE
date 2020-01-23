@@ -1,6 +1,8 @@
 @import "global.scss";
 @import "./security-card-mixin.scss";
 
+$securityCard_labelVariant_height: 2rem;
+$securityCard_labelVariant_expanded_height: 2.75rem;
 $securityCard_name_rightGap: 3rem;
 
 .sat-securityCard {
@@ -47,39 +49,6 @@ $securityCard_name_rightGap: 3rem;
       color: $color_black;
     }
   }
-  &__keyValue {
-    display: none;
-    flex: 1 1 50%;
-    justify-content: center;
-    align-items: flex-end;
-    &-text {
-      @include mix_border_radius(5px);
-      background-color: $color_white;
-      user-select: none;
-      margin-bottom: $spacing_small;
-      padding: $spacing_x_small $spacing_medium;
-    }
-  }
-  &__seniority {
-    @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
-    @include mix_alive('custom', $animation_duration_light transform);
-    transform: scale(0.01);
-    display: flex;
-    top: -0.75rem;
-    right: -0.75rem;
-    width: 2rem;
-    height: 2rem;
-    overflow: hidden;
-    &-text {
-      @include mix_border_radius(50%);
-      flex: 1 1 auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: $color_active;
-      color: $font_color_inverse;
-    }
-  }
   &--stencilState {
     background: $color_white;
     #{$securityCardBlockName} {
@@ -93,6 +62,26 @@ $securityCard_name_rightGap: 3rem;
           font-size: $font_size_large;
         }
       }
+    }
+  }
+  &__actionMenu {
+    @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+    @include mix_alive('custom', transform $animation_duration_light);
+    display: flex;
+    justify-content: center;
+    transform: scale(0.01) translate(0, -200%);
+    width: 100%;
+    top: 80%;
+    &-thumbDownBtn {
+      @include mix_border_radius(50%);
+      margin: 0 $spacing_small;
+      background-color: $color_kill;
+      color: $font_color_inverse;
+    }
+    &-graphBtn {
+      @include mix_border_radius(50%);
+      margin: 0 $spacing_small;
+      color: $font_color_major;
     }
   }
   &--tableState {
@@ -113,41 +102,17 @@ $securityCard_name_rightGap: 3rem;
   &--flexibleWidthVariant {
     width: inherit;
   }
-  &--detailState {
+  &--selectedState {
     @include material('none');
     background: $color_active;
-    height: $securityCard_previewVariant_height;
-    flex-direction: column;
     #{$securityCardBlockName} {
-      &__name {
-        flex: 1 1 50%;
-        justify-content: center;
-        align-items: flex-start;
-        &-text {
-          white-space: normal;
-          margin: $spacing_small $spacing_small 0 $spacing_small;
-          text-align: center;
-          font-size: $font_size_large;
-          line-height: $line_height_normal;
-        }
-      }
       &__rating {
-        //@include mix_calculate(top, 50%, $font_size_xx_large*$line_height_minimum/2 , '-');
-        top: 50%;
-        left: 0;
-        width: 100%;
-        height: $font_size_xx_large * $line_height_minimum;
-        justify-content: center;
         &-text {
           color: $font_color_inverse;
-          font-size: $font_size_xx_large;
         }
       }
-      &__keyValue {
-        display: flex;
-      }
-      &__seniority {
-        transform: scale(1);
+      &__actionMenu {
+        transform: scale(1) translate(0, 0);
       }
     }
   }

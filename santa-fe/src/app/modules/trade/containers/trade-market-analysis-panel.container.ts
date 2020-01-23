@@ -135,6 +135,16 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     }
   }
 
+  public onClickSecurityCardThumbDown(targetSecurity: SecurityDTO) {
+  }
+
+  public onClickSecurityCardSendToGraph(targetSecurity: SecurityDTO) {
+  }
+
+  public onMouseLeaveSecurityCard(targetSecurity: SecurityDTO) {
+    targetSecurity.state.isSelected = false;
+  }
+
   private onSecuritySelected(targetSecurity: SecurityDTO) {
     this.state.receivedSecurity = true;
     this.state.populateGroupOptionText = false;
@@ -264,6 +274,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     this.state.table = this.initializePageState().table;
     if (!!rawData.BaseSecurity && !!rawData.Group) {
       const baseSecurityDTO = this.dtoService.formSecurityCardObject('', rawData.BaseSecurity.security, false);
+      baseSecurityDTO.state.isInteractionDisabled = true;
       this.applyStatesToSecurityCards(baseSecurityDTO);
       this.state.table.presentList.push(baseSecurityDTO);
       this.state.table.rankingList.push('Base');
@@ -271,6 +282,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
       this.state.table.moveDistanceBasisList.push('');
       const groupDTO = this.dtoService.formSecurityCardObject('', null, true);
       groupDTO.state.isStencil = false;
+      groupDTO.state.isInteractionDisabled = true;
       groupDTO.data.name = rawData.Group.group.name;
       this.applyStatesToSecurityCards(groupDTO);
       this.state.table.presentList.push(groupDTO);
@@ -313,7 +325,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
 
   private applyStatesToSecurityCards(targetSecurity: SecurityDTO) {
     targetSecurity.state.isMultiLineVariant = false;
-    targetSecurity.state.isInteractionDisabled = true;
     targetSecurity.state.isWidthFlexible = true;
   }
 

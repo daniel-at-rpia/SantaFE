@@ -6,7 +6,7 @@
     'sat-securityCard': true,
     'sat-securityCard--tableState': cardData.state.isInteractionDisabled,
     'sat-securityCard--stencilState': cardData.state.isStencil,
-    'sat-securityCard--detailState': cardData.state.isSelected,
+    'sat-securityCard--selectedState': cardData.state.isSelected,
     'sat-securityCard--multiLineVariant': cardData.state.isMultiLineVariant,
     'sat-securityCard--flexibleWidthVariant': cardData.state.isWidthFlexible
   }">
@@ -16,10 +16,8 @@
   <section class="sat-securityCard__rating">
     <span class="sat-securityCard__rating-text">{{cardData.data.ratingValue}}</span>
   </section>
-  <section class="sat-securityCard__keyValue">
-    <span class="sat-securityCard__keyValue-text">300</span>
-  </section>
-  <section class="sat-securityCard__seniority">
-    <span class="sat-securityCard__seniority-text">SS</span>
+  <section class="sat-securityCard__actionMenu">
+    <button (click)="onClickSendToGraph()" class="sat-securityCard__actionMenu-graphBtn santaBtn--iconOnly fal fa-chart-line"></button>
+    <button (click)="onClickThumbDown()" class="sat-securityCard__actionMenu-thumbDownBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
   </section>
 </article>
