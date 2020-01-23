@@ -2,7 +2,8 @@
   [ngClass]="{
     'sat-tradeMarketAnalysisPanel': true,
     'sat-tradeMarketAnalysisPanel--hasSecurityState': state.receivedSecurity,
-    'sat-tradeMarketAnalysisPanel--apiErrorState': state.apiErrorState
+    'sat-tradeMarketAnalysisPanel--apiErrorState': state.apiErrorState,
+    'sat-tradeMarketAnalysisPanel--displayGraphState': state.displayGraph
   }">
   <section class="sat-tradeMarketAnalysisPanel__timeScope">
     <span class="sat-tradeMarketAnalysisPanel__timeScope-label">Time Scope :</span>
@@ -126,5 +127,8 @@
   <section class="sat-tradeMarketAnalysisPanel__errorPrompt">
     <i class="sat-tradeMarketAnalysisPanel__errorPrompt-icon fal fa-sad-tear"></i>
     <span class="sat-tradeMarketAnalysisPanel__errorPrompt-title">Failed to retrieve data</span>
+  </section>
+  <section class="sat-tradeMarketAnalysisPanel__graph">
+    <div class="sat-tradeMarketAnalysisPanel__graph-content" id="LilMarketGraph"></div>
   </section>
 </article>

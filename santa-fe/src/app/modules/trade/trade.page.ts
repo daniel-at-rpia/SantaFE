@@ -45,7 +45,8 @@ export class TradePage implements OnInit, OnDestroy {
 
   private initializePageState() {
     this.state = {
-      graphsCollapsed: true,
+      sidePanelsCollapsed: true,
+      lilMarketMaximized: false,
       ownerInitial: ''
     }
   }
@@ -73,7 +74,7 @@ export class TradePage implements OnInit, OnDestroy {
     this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
       select(selectSelectedSecurityForAnalysis)
     ).subscribe((targetSecurity) => {
-      this.state.graphsCollapsed = !targetSecurity;
+      this.state.sidePanelsCollapsed = !targetSecurity;
     });
   }
 
@@ -85,7 +86,15 @@ export class TradePage implements OnInit, OnDestroy {
   }
 
   public onToggleCollapseGraphs() {
-    this.state.graphsCollapsed = !this.state.graphsCollapsed;
+    this.state.sidePanelsCollapsed = !this.state.sidePanelsCollapsed;
+  }
+
+  public maximizeLilMarket() {
+    this.state.lilMarketMaximized = true;
+  }
+
+  public unMaximizeLilMarket() {
+    this.state.lilMarketMaximized = false;
   }
 
   private loadOwnerInitial(serverReturn: string) {

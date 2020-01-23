@@ -206,6 +206,13 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
       margin: $spacing_large 0;
     }
   }
+  &__graph {
+    display: none;
+    &-content {
+      flex: 1 1 auto;
+      height: 30rem;
+    }
+  }
   &--hasSecurityState {
     #{$tradeMarketAnalysisPanelBlockName} {
       &__group {
@@ -231,6 +238,13 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
         display: none;
       }
       &__errorPrompt {
+        display: flex;
+      }
+    }
+  }
+  &--displayGraphState {
+    #{$tradeMarketAnalysisPanelBlockName} {
+      &__graph {
         display: flex;
       }
     }

@@ -3,7 +3,11 @@
       Component,
       ViewEncapsulation,
       OnInit,
-      OnDestroy
+      OnDestroy,
+      OnChanges,
+      Input,
+      Output,
+      EventEmitter
     } from '@angular/core';
     import {
       Observable,
@@ -13,12 +17,14 @@
     import {
       tap,
       first,
-      catchError
+      catchError,
+      delay
     } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
 
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
+    import { GraphService } from 'Core/services/GraphService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import {
       SecurityDTO,
@@ -51,7 +57,9 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
+export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
+  @Output() populateGraph = new EventEmitter();
+  @Input() collapseGraph: boolean;
   state: TradeMarketAnalysisPanelState;
   subscriptions = {
     receiveSelectedSecuritySub: null
@@ -68,6 +76,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
       receivedSecurity: false,
       targetSecurity: null,
       populateGroupOptionText: false,
+      displayGraph: false,
       apiErrorState: false,
       config: {
         timeScope: 'Mom',
@@ -93,7 +102,8 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     private store$: Store<any>,
     private dtoService: DTOService,
     private utilityService: UtilityService,
-    private restfulCommService: RestfulCommService
+    private restfulCommService: RestfulCommService,
+    private graphService: GraphService
   ){
     this.state = this.initializePageState();
     this.populateDefinitionOptions();
@@ -101,10 +111,17 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
-      select(selectSelectedSecurityForAnalysis)
+      select(selectSelectedSecurityForAnalysis),
+      delay(500)
     ).subscribe((targetSecurity) => {
       !!targetSecurity && this.onSecuritySelected(targetSecurity);
     });
+  }
+
+  public ngOnChanges() {
+    if (!!this.collapseGraph) {
+      this.state.displayGraph = false;
+    }
   }
 
   public ngOnDestroy() {
@@ -139,6 +156,11 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
   }
 
   public onClickSecurityCardSendToGraph(targetSecurity: SecurityDTO) {
+    if (!this.state.displayGraph) {
+      this.state.displayGraph = true;
+      this.populateGraph.emit();
+    }
+    setTimeout(this.graphService.buildLilMarketTimeSeriesGraph.bind(this), 200);
   }
 
   public onMouseLeaveSecurityCard(targetSecurity: SecurityDTO) {
@@ -350,5 +372,4 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     const text = this.utilityService.round(number);
     return text;
   }
-
 }
