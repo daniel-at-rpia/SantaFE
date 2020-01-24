@@ -77,3 +77,13 @@ export interface ObligorGraphAxesZoomState {
     fullZoomEnd: number;
   }
 }
+
+export interface LilMarketGraphSeriesDataPack {
+  name: string;
+  data: Array<LilMarketGraphSeriesDataPackEntryBlock>;
+}
+
+export interface LilMarketGraphSeriesDataPackEntryBlock {
+  date: string;
+  value: number;
+}

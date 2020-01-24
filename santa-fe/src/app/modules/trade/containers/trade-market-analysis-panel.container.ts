@@ -32,6 +32,7 @@
       SecurityDefinitionDTO
     } from 'FEModels/frontend-models.interface';
     import { TradeMarketAnalysisPanelState } from 'FEModels/frontend-page-states.interface';
+    import { LilMarketGraphSeriesDataPack } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       BEHistoricalSummaryDTO,
       BEHistoricalSummaryOverviewDTO,
@@ -166,7 +167,16 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
       this.state.graphDataEmptyState = false;
       const buildGraph = () => {
         this.state.displayGraph = true;
-        this.graphService.buildLilMarketTimeSeriesGraph(targetData);
+        const baseSecurity = this.state.table.levelSummary.data.list[0];
+        const basePack: LilMarketGraphSeriesDataPack = {
+          name: 'base',
+          data: baseSecurity.data.timeSeries
+        };
+        const targetPack: LilMarketGraphSeriesDataPack = {
+          name: 'target',
+          data: targetData
+        }
+        this.graphService.buildLilMarketTimeSeriesGraph(basePack, targetPack);
       }
       setTimeout(buildGraph.bind(this), 200);
     } else {
