@@ -93,7 +93,7 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
     display: none;
     align-items: flex-start;
     padding-right: $spacing_small;  // this is to avoid the pins from being clipped
-    padding-bottom: $spacing_small; // this is to avoid scrollbar from be triggered in unnecessary conditions
+    padding-bottom: 2.5rem; // this is to avoid scrollbar from be triggered in unnecessary conditions, also avoid action menu from being clipped
     &-content {
       flex: 1 1 auto;
       display: flex;
