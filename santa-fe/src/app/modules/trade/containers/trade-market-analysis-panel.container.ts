@@ -157,12 +157,12 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
 
   public onClickSecurityCardSendToGraph(targetSecurity: SecurityDTO) {
     if (!this.state.displayGraph) {
-      this.state.displayGraph = true;
       this.populateGraph.emit();
     }
     const targetIndex = this.state.table.presentList.indexOf(targetSecurity);
     const targetData = this.state.table.levelSummary.data.list[targetIndex].data.timeSeries;
     const buildGraph = () => {
+      this.state.displayGraph = true;
       this.graphService.buildLilMarketTimeSeriesGraph(targetData);
     }
     setTimeout(buildGraph.bind(this), 200);
@@ -175,6 +175,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   private onSecuritySelected(targetSecurity: SecurityDTO) {
     this.state.receivedSecurity = true;
     this.state.populateGroupOptionText = false;
+    this.state.displayGraph = false;
     this.state.targetSecurity = this.utilityService.deepCopy(targetSecurity);
     this.applyStatesToSecurityCards(this.state.targetSecurity);
     this.loadStencilList();
@@ -326,10 +327,18 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
         this.state.table.presentList.push(eachTopSecurityDTO);
         this.state.table.prinstineTopSecurityList.push(eachTopSecurityDTO);
         this.state.table.rankingList.push(`Top ${index}`);
-        const levelDistance = this.retrieveMoveDistance(rawData.Top[eachSecurityIdentifier].historicalLevel);
-        this.state.table.moveDistanceLevelList.push(levelDistance);
-        const basisDistance = this.retrieveMoveDistance(rawData.Top[eachSecurityIdentifier].historicalBasis);
-        this.state.table.moveDistanceBasisList.push(basisDistance);
+        if (rawData.Top[eachSecurityIdentifier].historicalLevel.isValid) {
+          const levelDistance = this.retrieveMoveDistance(rawData.Top[eachSecurityIdentifier].historicalLevel);
+          this.state.table.moveDistanceLevelList.push(levelDistance);
+        } else {
+          this.state.table.moveDistanceLevelList.push('');
+        }
+        if (rawData.Top[eachSecurityIdentifier].historicalBasis.isValid) {
+          const basisDistance = this.retrieveMoveDistance(rawData.Top[eachSecurityIdentifier].historicalBasis);
+          this.state.table.moveDistanceBasisList.push(basisDistance);
+        } else {
+          this.state.table.moveDistanceBasisList.push('');
+        }
         index++;
       }
     }
@@ -341,10 +350,18 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
         this.state.table.presentList.push(eachBottomSecurityDTO);
         this.state.table.prinstineBottomSecurityList.push(eachBottomSecurityDTO);
         this.state.table.rankingList.push(`Bottom ${index}`);
-        const levelDistance = this.retrieveMoveDistance(rawData.Bottom[eachSecurityIdentifier].historicalLevel);
-        this.state.table.moveDistanceLevelList.push(levelDistance);
-        const basisDistance = this.retrieveMoveDistance(rawData.Bottom[eachSecurityIdentifier].historicalBasis);
-        this.state.table.moveDistanceBasisList.push(basisDistance);
+        if (rawData.Bottom[eachSecurityIdentifier].historicalLevel.isValid) {
+          const levelDistance = this.retrieveMoveDistance(rawData.Bottom[eachSecurityIdentifier].historicalLevel);
+          this.state.table.moveDistanceLevelList.push(levelDistance);
+        } else {
+          this.state.table.moveDistanceLevelList.push('');
+        }
+        if (rawData.Bottom[eachSecurityIdentifier].historicalBasis) {
+          const basisDistance = this.retrieveMoveDistance(rawData.Bottom[eachSecurityIdentifier].historicalBasis);
+          this.state.table.moveDistanceBasisList.push(basisDistance);
+        } else {
+          this.state.table.moveDistanceBasisList.push('');
+        }
         index++;
       }
     }

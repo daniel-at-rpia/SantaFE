@@ -170,8 +170,8 @@ $moveVisualizer_color_inversed: $color_positive;
         display: none;
       }
       &__pins {
-        &-end-icon {
-          visibility: hidden;
+        &-end {
+          left: 50%;
         }
       }
       &__invalidHighlight {
@@ -181,10 +181,8 @@ $moveVisualizer_color_inversed: $color_positive;
   }
   &--invalidState#{$moveVisualizerBlockName}--visualizingBasisState {
     #{$moveVisualizerBlockName} {
-      &__pins {
-        &-end {
-          left: 50%;
-        }
+      &__invalidHighlight {
+        display: none;
       }
     }
   }
