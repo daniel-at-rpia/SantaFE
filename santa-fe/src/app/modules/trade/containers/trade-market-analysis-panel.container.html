@@ -3,7 +3,8 @@
     'sat-tradeMarketAnalysisPanel': true,
     'sat-tradeMarketAnalysisPanel--hasSecurityState': state.receivedSecurity,
     'sat-tradeMarketAnalysisPanel--apiErrorState': state.apiErrorState,
-    'sat-tradeMarketAnalysisPanel--displayGraphState': state.displayGraph
+    'sat-tradeMarketAnalysisPanel--displayGraphState': state.displayGraph,
+    'sat-tradeMarketAnalysisPanel--emptyGraphState': state.graphDataEmptyState
   }">
   <section class="sat-tradeMarketAnalysisPanel__timeScope">
     <span class="sat-tradeMarketAnalysisPanel__timeScope-label">Time Scope :</span>
@@ -130,5 +131,9 @@
   </section>
   <section class="sat-tradeMarketAnalysisPanel__graph">
     <div class="sat-tradeMarketAnalysisPanel__graph-content" id="LilMarketGraph"></div>
+  </section>
+  <section class="sat-tradeMarketAnalysisPanel__graphEmptyPrompt">
+    <i class="sat-tradeMarketAnalysisPanel__graphEmptyPrompt-icon fal fa-sad-tear"></i>
+    <span class="sat-tradeMarketAnalysisPanel__graphEmptyPrompt-title">No Time Series Data for This Security</span>
   </section>
 </article>

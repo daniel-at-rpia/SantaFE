@@ -770,10 +770,12 @@ export class DTOService {
 
   public formMoveVisualizerObject(
     isStencil: boolean,
-    rawData?: BEHistoricalQuantBlock
+    rawData?: BEHistoricalQuantBlock,
+    identifier?: string
   ): DTOs.MoveVisualizerDTO {
     const object: DTOs.MoveVisualizerDTO = {
       data: {
+        identifier: '',
         start: 0,
         end: 123,
         min: 0,
@@ -797,10 +799,10 @@ export class DTOService {
       }
     };
     if (!isStencil && !!rawData) {
-      object.data.start = this.utility.round(rawData.startMetric);
-      object.data.end = this.utility.round(rawData.endMetric);
-      object.data.min = this.utility.round(rawData.minMetric);
-      object.data.max = this.utility.round(rawData.maxMetric);
+      object.data.start = rawData.startMetric != null ? this.utility.round(rawData.startMetric) : null;
+      object.data.end = rawData.endMetric != null ? this.utility.round(rawData.endMetric) : null;
+      object.data.min = rawData.minMetric != null ? this.utility.round(rawData.minMetric) : null;
+      object.data.max = rawData.maxMetric != null ? this.utility.round(rawData.maxMetric) : null;
       object.state.isInversed = rawData.startMetric > rawData.endMetric;
       object.state.isInvalid = !rawData.isValid;
       object.data.isBasis = !!rawData.isBasisRange;
@@ -809,6 +811,9 @@ export class DTOService {
           date: dateStamp,
           value: rawData.timeSeries[dateStamp]
         });
+      }
+      if (!!identifier) {
+        object.data.identifier = identifier;
       }
     }
     return object;
@@ -837,28 +842,28 @@ export class DTOService {
     };
     if (!isStencil && !!rawData) {
       if (!!rawData.BaseSecurity) {
-        const baseDTO = this.formMoveVisualizerObject(false, rawData.BaseSecurity.historicalLevel);
+        const baseDTO = this.formMoveVisualizerObject(false, rawData.BaseSecurity.historicalLevel, rawData.BaseSecurity.security.name);
         baseDTO.state.isPlaceholder = !isLevel;
         object.data.list.push(baseDTO);
       }
       if (!!rawData.Group) {
-        const groupDTO = this.formMoveVisualizerObject(false, rawData.Group.historicalLevel);
+        const name = rawData.Group.group ? rawData.Group.group.name : 'n/a';
+        const groupDTO = isLevel ? this.formMoveVisualizerObject(false, rawData.Group.historicalLevel, name) : this.formMoveVisualizerObject(false, rawData.Group.historicalBasis);
         object.data.list.push(groupDTO);
         object.data.centerPoint = (groupDTO.data.max + groupDTO.data.min)/2;
         object.data.globalDistance = (groupDTO.data.max - groupDTO.data.min) * 10;
-        groupDTO.state.isPlaceholder = !isLevel;
       }
       if (!!rawData.Top) {
-        for (const eachSecurityIdentifier in rawData.Top) {
-          const eachDTO = isLevel ? this.formMoveVisualizerObject(false, rawData.Top[eachSecurityIdentifier].historicalLevel) : this.formMoveVisualizerObject(false, rawData.Top[eachSecurityIdentifier].historicalBasis);
+        rawData.Top.forEach((eachQuantBlock) => {
+          const eachDTO = isLevel ? this.formMoveVisualizerObject(false, eachQuantBlock.historicalLevel, eachQuantBlock.security.name) : this.formMoveVisualizerObject(false, eachQuantBlock.historicalBasis, eachQuantBlock.security.name);
           object.data.list.push(eachDTO);
-        }
+        })
       }
       if (!!rawData.Bottom) {
-        for (const eachSecurityIdentifier in rawData.Bottom) {
-          const eachDTO = isLevel ? this.formMoveVisualizerObject(false, rawData.Bottom[eachSecurityIdentifier].historicalLevel) : this.formMoveVisualizerObject(false, rawData.Bottom[eachSecurityIdentifier].historicalBasis);
+        rawData.Bottom.forEach((eachQuantBlock) => {
+          const eachDTO = isLevel ? this.formMoveVisualizerObject(false, eachQuantBlock.historicalLevel, eachQuantBlock.security.name) : this.formMoveVisualizerObject(false, eachQuantBlock.historicalBasis, eachQuantBlock.security.name);
           object.data.list.push(eachDTO);
-        }
+        })
       }
     }
     return object;

@@ -215,6 +215,26 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
       min-height: 11rem
     }
   }
+  &__graphEmptyPrompt {
+    @include mix_border_radius(10px);
+    flex: 0 1 auto;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    background-color: $color_orange_1;
+    padding: $spacing_large;
+    margin: $spacing_small;
+    &-icon {
+      font-size: $font_size_xxxx_large;
+      color: $color_warning;
+    }
+    &-title {
+      text-align: center;
+      font-size: $font_size_xx_large;
+      color: $color_warning;
+      margin: $spacing_large 0;
+    }
+  }
   &--hasSecurityState {
     #{$tradeMarketAnalysisPanelBlockName} {
       &__group {
@@ -230,9 +250,6 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
   }
   &--apiErrorState {
     #{$tradeMarketAnalysisPanelBlockName} {
-      &__group {
-        display: none;
-      }
       &__tableHeader {
         display: none;
       }
@@ -247,6 +264,13 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
   &--displayGraphState {
     #{$tradeMarketAnalysisPanelBlockName} {
       &__graph {
+        display: flex;
+      }
+    }
+  }
+  &--emptyGraphState {
+    #{$tradeMarketAnalysisPanelBlockName} {
+      &__graphEmptyPrompt {
         display: flex;
       }
     }
