@@ -50,7 +50,8 @@ export interface MarketGroupPanelState {
 }
 
 export interface TradeState {
-  graphsCollapsed: boolean;
+  sidePanelsCollapsed: boolean;
+  lilMarketMaximized: boolean;
   ownerInitial: string;
 }
 
@@ -113,6 +114,7 @@ export interface TradeMarketAnalysisPanelState {
   receivedSecurity: boolean;
   populateGroupOptionText: boolean;
   apiErrorState: boolean;
+  displayGraph: boolean;
   targetSecurity: DTOs.SecurityDTO;
   config: {
     timeScope: string;
@@ -120,13 +122,15 @@ export interface TradeMarketAnalysisPanelState {
     activeOptions: Array<DTOs.SecurityDefinitionDTO>;
   }
   table: {
+    numOfSecurities: number;
     presentList: Array<DTOs.SecurityDTO>;
     prinstineTopSecurityList: Array<DTOs.SecurityDTO>;
     prinstineBottomSecurityList: Array<DTOs.SecurityDTO>;
     levelSummary: DTOs.HistoricalSummaryDTO;
     basisSummary: DTOs.HistoricalSummaryDTO;
     rankingList: Array<string>;
-    moveDistanceList: Array<string>;
+    moveDistanceLevelList: Array<string>;
+    moveDistanceBasisList: Array<string>;
   }
 }
 

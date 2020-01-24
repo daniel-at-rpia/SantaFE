@@ -778,7 +778,8 @@ export class DTOService {
         end: 123,
         min: 0,
         max: 0,
-        isBasis: false
+        isBasis: false,
+        timeSeries: []
       },
       style: {
         leftGap: 10,
@@ -803,6 +804,12 @@ export class DTOService {
       object.state.isInversed = rawData.startMetric > rawData.endMetric;
       object.state.isInvalid = !rawData.isValid;
       object.data.isBasis = !!rawData.isBasisRange;
+      for (const dateStamp in rawData.timeSeries) {
+        object.data.timeSeries.push({
+          date: dateStamp,
+          value: rawData.timeSeries[dateStamp]
+        });
+      }
     }
     return object;
   }

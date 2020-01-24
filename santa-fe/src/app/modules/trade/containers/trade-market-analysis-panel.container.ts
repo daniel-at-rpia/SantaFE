@@ -3,7 +3,11 @@
       Component,
       ViewEncapsulation,
       OnInit,
-      OnDestroy
+      OnDestroy,
+      OnChanges,
+      Input,
+      Output,
+      EventEmitter
     } from '@angular/core';
     import {
       Observable,
@@ -13,12 +17,14 @@
     import {
       tap,
       first,
-      catchError
+      catchError,
+      delay
     } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
 
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
+    import { GraphService } from 'Core/services/GraphService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import {
       SecurityDTO,
@@ -26,7 +32,11 @@
       SecurityDefinitionDTO
     } from 'FEModels/frontend-models.interface';
     import { TradeMarketAnalysisPanelState } from 'FEModels/frontend-page-states.interface';
-    import { BEHistoricalSummaryDTO, BEHistoricalSummaryOverviewDTO } from 'BEModels/backend-models.interface';
+    import {
+      BEHistoricalSummaryDTO,
+      BEHistoricalSummaryOverviewDTO,
+      BEHistoricalQuantBlock
+    } from 'BEModels/backend-models.interface';
     import { PayloadGetGroupHistoricalSummary } from 'BEModels/backend-payloads.interface';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
     import {
@@ -47,7 +57,9 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
+export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
+  @Output() populateGraph = new EventEmitter();
+  @Input() collapseGraph: boolean;
   state: TradeMarketAnalysisPanelState;
   subscriptions = {
     receiveSelectedSecuritySub: null
@@ -64,6 +76,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
       receivedSecurity: false,
       targetSecurity: null,
       populateGroupOptionText: false,
+      displayGraph: false,
       apiErrorState: false,
       config: {
         timeScope: 'Mom',
@@ -71,13 +84,15 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
         activeOptions: []
       },
       table: {
+        numOfSecurities: 0,
         presentList: [],
         prinstineTopSecurityList: [],
         prinstineBottomSecurityList: [],
         levelSummary: null,
         basisSummary: null,
         rankingList: [],
-        moveDistanceList: []
+        moveDistanceLevelList: [],
+        moveDistanceBasisList: []
       }
     };
     return state;
@@ -87,7 +102,8 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     private store$: Store<any>,
     private dtoService: DTOService,
     private utilityService: UtilityService,
-    private restfulCommService: RestfulCommService
+    private restfulCommService: RestfulCommService,
+    private graphService: GraphService
   ){
     this.state = this.initializePageState();
     this.populateDefinitionOptions();
@@ -95,10 +111,17 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
-      select(selectSelectedSecurityForAnalysis)
+      select(selectSelectedSecurityForAnalysis),
+      delay(500)
     ).subscribe((targetSecurity) => {
       !!targetSecurity && this.onSecuritySelected(targetSecurity);
     });
+  }
+
+  public ngOnChanges() {
+    if (!!this.collapseGraph) {
+      this.state.displayGraph = false;
+    }
   }
 
   public ngOnDestroy() {
@@ -127,6 +150,26 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
       this.state.config.timeScope = targetScope;
       this.fetchGroupData();
     }
+  }
+
+  public onClickSecurityCardThumbDown(targetSecurity: SecurityDTO) {
+  }
+
+  public onClickSecurityCardSendToGraph(targetSecurity: SecurityDTO) {
+    if (!this.state.displayGraph) {
+      this.state.displayGraph = true;
+      this.populateGraph.emit();
+    }
+    const targetIndex = this.state.table.presentList.indexOf(targetSecurity);
+    const targetData = this.state.table.levelSummary.data.list[targetIndex].data.timeSeries;
+    const buildGraph = () => {
+      this.graphService.buildLilMarketTimeSeriesGraph(targetData);
+    }
+    setTimeout(buildGraph.bind(this), 200);
+  }
+
+  public onMouseLeaveSecurityCard(targetSecurity: SecurityDTO) {
+    targetSecurity.state.isSelected = false;
   }
 
   private onSecuritySelected(targetSecurity: SecurityDTO) {
@@ -258,15 +301,22 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     this.state.table = this.initializePageState().table;
     if (!!rawData.BaseSecurity && !!rawData.Group) {
       const baseSecurityDTO = this.dtoService.formSecurityCardObject('', rawData.BaseSecurity.security, false);
+      baseSecurityDTO.state.isInteractionDisabled = true;
       this.applyStatesToSecurityCards(baseSecurityDTO);
       this.state.table.presentList.push(baseSecurityDTO);
       this.state.table.rankingList.push('Base');
+      this.state.table.moveDistanceLevelList.push('');
+      this.state.table.moveDistanceBasisList.push('');
       const groupDTO = this.dtoService.formSecurityCardObject('', null, true);
       groupDTO.state.isStencil = false;
+      groupDTO.state.isInteractionDisabled = true;
       groupDTO.data.name = rawData.Group.group.name;
       this.applyStatesToSecurityCards(groupDTO);
       this.state.table.presentList.push(groupDTO);
       this.state.table.rankingList.push('Group');
+      this.state.table.moveDistanceLevelList.push('');
+      this.state.table.moveDistanceBasisList.push('');
+      this.state.table.numOfSecurities = rawData.Group.group.metrics.propertyToNumSecurities.GSpread;
     }
     if (!!rawData.Top) {
       let index = 1;
@@ -276,6 +326,10 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
         this.state.table.presentList.push(eachTopSecurityDTO);
         this.state.table.prinstineTopSecurityList.push(eachTopSecurityDTO);
         this.state.table.rankingList.push(`Top ${index}`);
+        const levelDistance = this.retrieveMoveDistance(rawData.Top[eachSecurityIdentifier].historicalLevel);
+        this.state.table.moveDistanceLevelList.push(levelDistance);
+        const basisDistance = this.retrieveMoveDistance(rawData.Top[eachSecurityIdentifier].historicalBasis);
+        this.state.table.moveDistanceBasisList.push(basisDistance);
         index++;
       }
     }
@@ -287,6 +341,10 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
         this.state.table.presentList.push(eachBottomSecurityDTO);
         this.state.table.prinstineBottomSecurityList.push(eachBottomSecurityDTO);
         this.state.table.rankingList.push(`Bottom ${index}`);
+        const levelDistance = this.retrieveMoveDistance(rawData.Bottom[eachSecurityIdentifier].historicalLevel);
+        this.state.table.moveDistanceLevelList.push(levelDistance);
+        const basisDistance = this.retrieveMoveDistance(rawData.Bottom[eachSecurityIdentifier].historicalBasis);
+        this.state.table.moveDistanceBasisList.push(basisDistance);
         index++;
       }
     }
@@ -294,7 +352,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
 
   private applyStatesToSecurityCards(targetSecurity: SecurityDTO) {
     targetSecurity.state.isMultiLineVariant = false;
-    targetSecurity.state.isInteractionDisabled = true;
     targetSecurity.state.isWidthFlexible = true;
   }
 
@@ -315,4 +372,9 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     this.state.populateGroupOptionText = true;
   }
 
+  private retrieveMoveDistance(rawQuantBlock: BEHistoricalQuantBlock): string {
+    const number = rawQuantBlock.endMetric - rawQuantBlock.startMetric;
+    const text = this.utilityService.round(number);
+    return text;
+  }
 }

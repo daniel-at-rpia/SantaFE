@@ -347,6 +347,7 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
     min: number;
     max: number;
     isBasis: boolean;
+    timeSeries: Array<any>;
   }
   style: {
     leftGap: number;

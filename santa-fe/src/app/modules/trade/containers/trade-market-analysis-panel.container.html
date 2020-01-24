@@ -2,7 +2,8 @@
   [ngClass]="{
     'sat-tradeMarketAnalysisPanel': true,
     'sat-tradeMarketAnalysisPanel--hasSecurityState': state.receivedSecurity,
-    'sat-tradeMarketAnalysisPanel--apiErrorState': state.apiErrorState
+    'sat-tradeMarketAnalysisPanel--apiErrorState': state.apiErrorState,
+    'sat-tradeMarketAnalysisPanel--displayGraphState': state.displayGraph
   }">
   <section class="sat-tradeMarketAnalysisPanel__timeScope">
     <span class="sat-tradeMarketAnalysisPanel__timeScope-label">Time Scope :</span>
@@ -53,16 +54,30 @@
       </li>
     </ul>
   </section>
+  <section class="sat-tradeMarketAnalysisPanel__tableHeader">
+    <span class="sat-tradeMarketAnalysisPanel__tableHeader-securityList">Security</span>
+    <span class="sat-tradeMarketAnalysisPanel__tableHeader-rankingList">Ranking</span>
+    <span class="sat-tradeMarketAnalysisPanel__tableHeader-levelDistance">Δ GSpread</span>
+    <span class="sat-tradeMarketAnalysisPanel__tableHeader-levelColumn">Level</span>
+    <span class="sat-tradeMarketAnalysisPanel__tableHeader-levelDistance">Δ Basis</span>
+    <span class="sat-tradeMarketAnalysisPanel__tableHeader-basisColumn">Basis</span>
+  </section>
   <section class="sat-tradeMarketAnalysisPanel__table">
     <div class="sat-tradeMarketAnalysisPanel__table-content">
       <ul class="sat-tradeMarketAnalysisPanel__table-content-securityList">
         <li
+          (mouseleave)="onMouseLeaveSecurityCard(eachCard)"
           *ngFor="let eachCard of state.table.presentList; let rowIndex = index;"
           [ngClass]="{
             'sat-tradeMarketAnalysisPanel__table-content-securityList-item': true,
             'sat-tradeMarketAnalysisPanel__table-content-securityList-item--even': rowIndex%2 === 0
           }">
-          <security-card [cardData]="eachCard"></security-card>
+          <span title="number of securities in this group" class="sat-tradeMarketAnalysisPanel__table-content-securityList-item-numberOfSecurityTag" *ngIf="rowIndex === 1">{{state.table.numOfSecurities}}</span>
+          <security-card
+            [cardData]="eachCard"
+            (clickedThumbDown)="onClickSecurityCardThumbDown($event)"
+            (clickedSendToGraph)="onClickSecurityCardSendToGraph($event)">
+          </security-card>
         </li>
       </ul>
       <ul class="sat-tradeMarketAnalysisPanel__table-content-rankingList">
@@ -76,9 +91,33 @@
         </li>
       </ul>
       <div class="sat-tradeMarketAnalysisPanel__table-content-separator"></div>
+      <ul class="sat-tradeMarketAnalysisPanel__table-content-levelDistance">
+        <li
+          *ngFor="let eachDistance of state.table.moveDistanceLevelList; let rowIndex = index;"
+          [ngClass]="{
+            'sat-tradeMarketAnalysisPanel__table-content-levelDistance-item': true,
+            'sat-tradeMarketAnalysisPanel__table-content-levelDistance-item--even': rowIndex%2 === 0,
+            'sat-tradeMarketAnalysisPanel__table-content-levelDistance-item--positive': eachDistance > 0
+          }">
+          <span class="sat-tradeMarketAnalysisPanel__table-content-levelDistance-item-text">{{eachDistance}}</span>
+        </li>
+      </ul>
+      <div class="sat-tradeMarketAnalysisPanel__table-content-separator"></div>
       <div class="sat-tradeMarketAnalysisPanel__table-content-levelColumn">
         <historical-summary *ngIf="state.table.levelSummary" [summaryData]="state.table.levelSummary"></historical-summary>
       </div>
+      <div class="sat-tradeMarketAnalysisPanel__table-content-separator"></div>
+      <ul class="sat-tradeMarketAnalysisPanel__table-content-basisDistance">
+        <li
+          *ngFor="let eachDistance of state.table.moveDistanceBasisList; let rowIndex = index;"
+          [ngClass]="{
+            'sat-tradeMarketAnalysisPanel__table-content-basisDistance-item': true,
+            'sat-tradeMarketAnalysisPanel__table-content-basisDistance-item--even': rowIndex%2 === 0,
+            'sat-tradeMarketAnalysisPanel__table-content-basisDistance-item--positive': eachDistance > 0
+          }">
+          <span class="sat-tradeMarketAnalysisPanel__table-content-basisDistance-item-text">{{eachDistance}}</span>
+        </li>
+      </ul>
       <div class="sat-tradeMarketAnalysisPanel__table-content-separator"></div>
       <div class="sat-tradeMarketAnalysisPanel__table-content-basisColumn">
         <historical-summary *ngIf="state.table.basisSummary" [summaryData]="state.table.basisSummary"></historical-summary>
@@ -88,5 +127,8 @@
   <section class="sat-tradeMarketAnalysisPanel__errorPrompt">
     <i class="sat-tradeMarketAnalysisPanel__errorPrompt-icon fal fa-sad-tear"></i>
     <span class="sat-tradeMarketAnalysisPanel__errorPrompt-title">Failed to retrieve data</span>
+  </section>
+  <section class="sat-tradeMarketAnalysisPanel__graph">
+    <div class="sat-tradeMarketAnalysisPanel__graph-content" id="LilMarketGraph"></div>
   </section>
 </article>

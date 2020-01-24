@@ -171,9 +171,9 @@ export class SantaTable implements OnInit, OnChanges {
         });
         if (!!targetRow) {
           try {
-            targetRow.state.isExpanded = true;
+            targetRow.state.isExpanded = !params.node.expanded;
             if (targetRow.data.security) {
-              targetRow.data.security.state.isMultiLineVariant = true;
+              targetRow.data.security.state.isMultiLineVariant = params.node.expanded;
               this.fetchSecurityQuotes(targetRow, params);
             }
           } catch {

@@ -59,7 +59,9 @@
     padding: $spacing_medium $spacing_medium $spacing_medium 0;
     overflow: hidden;
     &-marketAnalysisPanel {
-      flex: 1 1 66.67%;
+      @include mix_alive('light');
+      flex-shrink: 1;
+      flex-basis: 66.67%;
       display: flex;
       overflow: hidden;
       margin-bottom: $spacing_medium/2;
@@ -69,7 +71,9 @@
       }
     }
     &-obligorGraphPanel {
-      flex: 1 1 33.33%;
+      @include mix_alive('light');
+      flex-shrink: 1;
+      flex-basis: 33.33%;
       display: flex;
       margin-top: $spacing_medium/2;
       overflow: hidden;
@@ -90,7 +94,16 @@
     background-color: $color_kill;
     color: $font_color_inverse;
   }
-  &--graphsCollapsed {
+  &__unMaximizeLilMarketCTA {
+    @include mix_border_radius(50%);
+    @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+    @include mix_calculate(right, 20%, $iconButton_size_regular/2, '-');
+    display: none;
+    bottom: 0;
+    background-color: $color_kill;
+    color: $font_color_inverse;
+  }
+  &--sidePanelsCollapsed {
     #{$tradeBlockName} {
       &__left {
         @include mix_calculate(width, 100%, $iconButton_size_regular, '-');
@@ -103,6 +116,23 @@
       &__collapseGraphsCTA {
         background-color: $color_white;
         color: $font_color_major;
+      }
+    }
+  }
+  &--lilMarketMaximized {
+    #{$tradeBlockName} {
+      &__right {
+        &-marketAnalysisPanel {
+          flex-basis: 100%;
+          margin-bottom: 0;
+        }
+        &-obligorGraphPanel {
+          flex-basis: 0;
+          margin-top: 0;
+        }
+      }
+      &__unMaximizeLilMarketCTA {
+        display: flex;
       }
     }
   }
