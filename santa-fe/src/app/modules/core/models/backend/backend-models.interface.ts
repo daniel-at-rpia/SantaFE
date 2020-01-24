@@ -13,6 +13,7 @@ export interface BESecurityGroupDTO {
     filters: any;
     singleSecurityTenorOptions: Array<string>;
     weightField: string;
+    metricContextFieldMinMax?: any;
   }
   numSecurities: number;
   name: string;
@@ -234,22 +235,18 @@ export interface BEHistoricalSummaryOverviewDTO {
   Ytd?: BEHistoricalSummaryDTO;
   Mom?: BEHistoricalSummaryDTO;
   Mtd?: BEHistoricalSummaryDTO;
+  GroupIdentifierWithInclusiveOptions: any;
 }
 
 export interface BEHistoricalSummaryDTO {
   BaseSecurity: BEHistoricalInfoDTO;
   Group: BEHistoricalInfoDTO;
-  Top: {
-    [property: string]: BEHistoricalInfoDTO;
-  };
-  Bottom: {
-    [property: string]: BEHistoricalInfoDTO;
-  }
+  Top: Array<BEHistoricalInfoDTO>;
+  Bottom: Array<BEHistoricalInfoDTO>;
 }
 
 interface BEHistoricalInfoDTO {
   source: string;
-  deltaType: string;
   startDate: string;
   endDate: string;
   metricName: string;
@@ -268,9 +265,7 @@ export interface BEHistoricalQuantBlock {
   startMetric: number;
   endMetric: number;
   minMetric: number;
-  minDateTime: string;
   maxMetric: number;
-  maxDateTime: string;
   isLevelRange: boolean;
   isBasisRange: boolean;
   isValid: boolean;
