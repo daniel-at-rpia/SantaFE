@@ -91,7 +91,7 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
     @include mix_enable_scrollbar('vertical');
     flex: 1 1 auto;
     display: none;
-    flex-direction: column;
+    align-items: flex-start;
     padding-right: $spacing_small;  // this is to avoid the pins from being clipped
     &-content {
       flex: 1 1 auto;
@@ -210,7 +210,7 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
     display: none;
     &-content {
       flex: 1 1 auto;
-      height: 30rem;
+      height: 28rem;
     }
   }
   &--hasSecurityState {

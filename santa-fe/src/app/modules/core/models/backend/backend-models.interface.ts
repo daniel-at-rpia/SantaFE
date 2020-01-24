@@ -274,4 +274,5 @@ export interface BEHistoricalQuantBlock {
   isLevelRange: boolean;
   isBasisRange: boolean;
   isValid: boolean;
+  timeSeries?: object;
 }

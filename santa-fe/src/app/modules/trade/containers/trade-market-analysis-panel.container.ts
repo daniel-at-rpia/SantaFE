@@ -160,7 +160,12 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
       this.state.displayGraph = true;
       this.populateGraph.emit();
     }
-    setTimeout(this.graphService.buildLilMarketTimeSeriesGraph.bind(this), 200);
+    const targetIndex = this.state.table.presentList.indexOf(targetSecurity);
+    const targetData = this.state.table.levelSummary.data.list[targetIndex].data.timeSeries;
+    const buildGraph = () => {
+      this.graphService.buildLilMarketTimeSeriesGraph(targetData);
+    }
+    setTimeout(buildGraph.bind(this), 200);
   }
 
   public onMouseLeaveSecurityCard(targetSecurity: SecurityDTO) {
