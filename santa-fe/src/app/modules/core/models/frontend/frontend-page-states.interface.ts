@@ -114,6 +114,7 @@ export interface TradeMarketAnalysisPanelState {
   receivedSecurity: boolean;
   populateGroupOptionText: boolean;
   apiErrorState: boolean;
+  graphDataEmptyState: boolean;
   displayGraph: boolean;
   targetSecurity: DTOs.SecurityDTO;
   config: {
