@@ -89,10 +89,11 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
   &__table {
     @include mix_fixed_div(relative, $z_index_standard_base_item);
     @include mix_enable_scrollbar('vertical');
-    flex: 1 1 auto;
+    flex: 0 1 auto;
     display: none;
     align-items: flex-start;
     padding-right: $spacing_small;  // this is to avoid the pins from being clipped
+    margin-bottom: $spacing_small;
     &-content {
       flex: 1 1 auto;
       display: flex;
@@ -207,10 +208,11 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
     }
   }
   &__graph {
+    flex: 1 1 auto;
     display: none;
     &-content {
       flex: 1 1 auto;
-      height: 28rem;
+      min-height: 11rem
     }
   }
   &--hasSecurityState {
