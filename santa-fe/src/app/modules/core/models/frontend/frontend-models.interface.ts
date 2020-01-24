@@ -342,6 +342,7 @@ export interface NumericFilterDTO extends BasicDTOStructure {
 
 export interface MoveVisualizerDTO extends BasicDTOStructure {
   data: {
+    identifier: string;
     start: number;
     end: number;
     min: number;

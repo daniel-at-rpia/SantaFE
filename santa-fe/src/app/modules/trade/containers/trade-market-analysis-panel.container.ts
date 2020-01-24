@@ -169,11 +169,11 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
         this.state.displayGraph = true;
         const baseSecurity = this.state.table.levelSummary.data.list[0];
         const basePack: LilMarketGraphSeriesDataPack = {
-          name: 'base',
+          name: baseSecurity.data.identifier,
           data: baseSecurity.data.timeSeries
         };
         const targetPack: LilMarketGraphSeriesDataPack = {
-          name: 'target',
+          name: this.state.table.levelSummary.data.list[targetIndex].data.identifier,
           data: targetData
         }
         this.graphService.buildLilMarketTimeSeriesGraph(basePack, targetPack);
