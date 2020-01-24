@@ -3,7 +3,11 @@
       Component,
       ViewEncapsulation,
       OnInit,
-      OnDestroy
+      OnDestroy,
+      OnChanges,
+      Input,
+      Output,
+      EventEmitter
     } from '@angular/core';
     import {
       Observable,
@@ -13,12 +17,14 @@
     import {
       tap,
       first,
-      catchError
+      catchError,
+      delay
     } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
 
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
+    import { GraphService } from 'Core/services/GraphService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import {
       SecurityDTO,
@@ -51,7 +57,9 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
+export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
+  @Output() populateGraph = new EventEmitter();
+  @Input() collapseGraph: boolean;
   state: TradeMarketAnalysisPanelState;
   subscriptions = {
     receiveSelectedSecuritySub: null
@@ -68,6 +76,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
       receivedSecurity: false,
       targetSecurity: null,
       populateGroupOptionText: false,
+      displayGraph: false,
       apiErrorState: false,
       config: {
         timeScope: 'Mom',
@@ -93,7 +102,8 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     private store$: Store<any>,
     private dtoService: DTOService,
     private utilityService: UtilityService,
-    private restfulCommService: RestfulCommService
+    private restfulCommService: RestfulCommService,
+    private graphService: GraphService
   ){
     this.state = this.initializePageState();
     this.populateDefinitionOptions();
@@ -101,10 +111,17 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
-      select(selectSelectedSecurityForAnalysis)
+      select(selectSelectedSecurityForAnalysis),
+      delay(500)
     ).subscribe((targetSecurity) => {
       !!targetSecurity && this.onSecuritySelected(targetSecurity);
     });
+  }
+
+  public ngOnChanges() {
+    if (!!this.collapseGraph) {
+      this.state.displayGraph = false;
+    }
   }
 
   public ngOnDestroy() {
@@ -133,6 +150,26 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
       this.state.config.timeScope = targetScope;
       this.fetchGroupData();
     }
+  }
+
+  public onClickSecurityCardThumbDown(targetSecurity: SecurityDTO) {
+  }
+
+  public onClickSecurityCardSendToGraph(targetSecurity: SecurityDTO) {
+    if (!this.state.displayGraph) {
+      this.state.displayGraph = true;
+      this.populateGraph.emit();
+    }
+    const targetIndex = this.state.table.presentList.indexOf(targetSecurity);
+    const targetData = this.state.table.levelSummary.data.list[targetIndex].data.timeSeries;
+    const buildGraph = () => {
+      this.graphService.buildLilMarketTimeSeriesGraph(targetData);
+    }
+    setTimeout(buildGraph.bind(this), 200);
+  }
+
+  public onMouseLeaveSecurityCard(targetSecurity: SecurityDTO) {
+    targetSecurity.state.isSelected = false;
   }
 
   private onSecuritySelected(targetSecurity: SecurityDTO) {
@@ -264,6 +301,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     this.state.table = this.initializePageState().table;
     if (!!rawData.BaseSecurity && !!rawData.Group) {
       const baseSecurityDTO = this.dtoService.formSecurityCardObject('', rawData.BaseSecurity.security, false);
+      baseSecurityDTO.state.isInteractionDisabled = true;
       this.applyStatesToSecurityCards(baseSecurityDTO);
       this.state.table.presentList.push(baseSecurityDTO);
       this.state.table.rankingList.push('Base');
@@ -271,6 +309,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
       this.state.table.moveDistanceBasisList.push('');
       const groupDTO = this.dtoService.formSecurityCardObject('', null, true);
       groupDTO.state.isStencil = false;
+      groupDTO.state.isInteractionDisabled = true;
       groupDTO.data.name = rawData.Group.group.name;
       this.applyStatesToSecurityCards(groupDTO);
       this.state.table.presentList.push(groupDTO);
@@ -313,7 +352,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
 
   private applyStatesToSecurityCards(targetSecurity: SecurityDTO) {
     targetSecurity.state.isMultiLineVariant = false;
-    targetSecurity.state.isInteractionDisabled = true;
     targetSecurity.state.isWidthFlexible = true;
   }
 
@@ -339,5 +377,4 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy {
     const text = this.utilityService.round(number);
     return text;
   }
-
 }

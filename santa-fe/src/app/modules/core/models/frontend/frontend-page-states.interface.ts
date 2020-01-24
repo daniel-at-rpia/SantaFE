@@ -50,7 +50,8 @@ export interface MarketGroupPanelState {
 }
 
 export interface TradeState {
-  graphsCollapsed: boolean;
+  sidePanelsCollapsed: boolean;
+  lilMarketMaximized: boolean;
   ownerInitial: string;
 }
 
@@ -113,6 +114,7 @@ export interface TradeMarketAnalysisPanelState {
   receivedSecurity: boolean;
   populateGroupOptionText: boolean;
   apiErrorState: boolean;
+  displayGraph: boolean;
   targetSecurity: DTOs.SecurityDTO;
   config: {
     timeScope: string;

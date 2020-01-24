@@ -2,7 +2,8 @@
   [ngClass]="{
     'sat-tradeMarketAnalysisPanel': true,
     'sat-tradeMarketAnalysisPanel--hasSecurityState': state.receivedSecurity,
-    'sat-tradeMarketAnalysisPanel--apiErrorState': state.apiErrorState
+    'sat-tradeMarketAnalysisPanel--apiErrorState': state.apiErrorState,
+    'sat-tradeMarketAnalysisPanel--displayGraphState': state.displayGraph
   }">
   <section class="sat-tradeMarketAnalysisPanel__timeScope">
     <span class="sat-tradeMarketAnalysisPanel__timeScope-label">Time Scope :</span>
@@ -65,13 +66,18 @@
     <div class="sat-tradeMarketAnalysisPanel__table-content">
       <ul class="sat-tradeMarketAnalysisPanel__table-content-securityList">
         <li
+          (mouseleave)="onMouseLeaveSecurityCard(eachCard)"
           *ngFor="let eachCard of state.table.presentList; let rowIndex = index;"
           [ngClass]="{
             'sat-tradeMarketAnalysisPanel__table-content-securityList-item': true,
             'sat-tradeMarketAnalysisPanel__table-content-securityList-item--even': rowIndex%2 === 0
           }">
           <span title="number of securities in this group" class="sat-tradeMarketAnalysisPanel__table-content-securityList-item-numberOfSecurityTag" *ngIf="rowIndex === 1">{{state.table.numOfSecurities}}</span>
-          <security-card [cardData]="eachCard"></security-card>
+          <security-card
+            [cardData]="eachCard"
+            (clickedThumbDown)="onClickSecurityCardThumbDown($event)"
+            (clickedSendToGraph)="onClickSecurityCardSendToGraph($event)">
+          </security-card>
         </li>
       </ul>
       <ul class="sat-tradeMarketAnalysisPanel__table-content-rankingList">
@@ -121,5 +127,8 @@
   <section class="sat-tradeMarketAnalysisPanel__errorPrompt">
     <i class="sat-tradeMarketAnalysisPanel__errorPrompt-icon fal fa-sad-tear"></i>
     <span class="sat-tradeMarketAnalysisPanel__errorPrompt-title">Failed to retrieve data</span>
+  </section>
+  <section class="sat-tradeMarketAnalysisPanel__graph">
+    <div class="sat-tradeMarketAnalysisPanel__graph-content" id="LilMarketGraph"></div>
   </section>
 </article>

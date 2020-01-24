@@ -7,7 +7,7 @@ import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { PayloadObligorSecurityIDs } from 'BEModels/backend-payloads.interface';
 import { SecurityDTO } from 'App/modules/core/models/frontend/frontend-models.interface';
 import { DTOService } from 'Core/services/DTOService';
-import { tap, first } from 'rxjs/operators';
+import { tap, first, delay } from 'rxjs/operators';
 import { TradeSecurityIDsFromAnalysisEvent } from 'Trade/actions/trade.actions';
 import { TriCoreMetricConfig } from 'Core/constants/coreConstants.constant';
 import { TradeObligorGraphPanelState } from 'FEModels/frontend-page-states.interface';
@@ -65,7 +65,8 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     });
 
     this.subscriptions.selectSecurityTableRowDTOListForAnalysis = this.store$.pipe(
-      select(selectSecurityTableRowDTOListForAnalysis)
+      select(selectSecurityTableRowDTOListForAnalysis),
+      delay(500)
     ).subscribe((data) => {
       this.state.securityTableRowDTOList = data;
       this.addMarksTochartCategory()

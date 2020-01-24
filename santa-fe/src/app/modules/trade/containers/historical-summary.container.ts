@@ -91,7 +91,6 @@ export class HistoricalSummary implements OnChanges {
     this.summaryData.data.globalMin = globalMin;
     this.summaryData.data.globalMax = globalMax;
     this.summaryData.data.globalDistance = globalDistance;
-    console.log('test, min and max are', globalMin, globalMax);
     this.summaryData.data.list.forEach((eachMoveVisualizer) => {
       if (!eachMoveVisualizer.state.isPlaceholder) {
         const leftNode = eachMoveVisualizer.data.start <= eachMoveVisualizer.data.end ? eachMoveVisualizer.data.start : eachMoveVisualizer.data.end;
@@ -106,7 +105,6 @@ export class HistoricalSummary implements OnChanges {
         eachMoveVisualizer.style.rightEdge = this.utilityService.round(Math.abs(eachMoveVisualizer.data.max - rightNode) / globalDistance * 100, HISTORICAL_SUMMARY_ROUNDING);
         eachMoveVisualizer.style.rightGap = this.utilityService.round(Math.abs(rightSpace) / globalDistance * 100, HISTORICAL_SUMMARY_ROUNDING);
         eachMoveVisualizer.style.endPinLocation = eachMoveVisualizer.state.isInversed ? eachMoveVisualizer.style.leftEdge + eachMoveVisualizer.style.leftGap : eachMoveVisualizer.style.leftEdge + eachMoveVisualizer.style.leftGap + eachMoveVisualizer.style.moveDistance;
-        console.log('test, ', leftNode, rightNode, leftSpace, distance, rightSpace, eachMoveVisualizer);
       }
     });
   }

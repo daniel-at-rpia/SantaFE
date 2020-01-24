@@ -89,10 +89,11 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
   &__table {
     @include mix_fixed_div(relative, $z_index_standard_base_item);
     @include mix_enable_scrollbar('vertical');
-    flex: 1 1 auto;
+    flex: 0 1 auto;
     display: none;
-    flex-direction: column;
+    align-items: flex-start;
     padding-right: $spacing_small;  // this is to avoid the pins from being clipped
+    padding-bottom: $spacing_small; // this is to avoid scrollbar from be triggered in unnecessary conditions
     &-content {
       flex: 1 1 auto;
       display: flex;
@@ -104,11 +105,12 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
           display: flex;
           align-items: center;
           height: $tradeMarketAnalysis_row_height;
+          padding-left: $spacing_x_small;
           security-card {
             flex: 1 1 auto;
           }
           &-numberOfSecurityTag {
-            @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+            @include mix_fixed_div(absolute, $z_index_standard_tooltip);
             @include mix_border_radius(3px);
             display: flex;
             align-items: center;
@@ -122,6 +124,11 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
           }
           &--even {
             background-color: $color_blue_gray_1;
+          }
+          &:hover {
+            security-card {
+              @include mix_fixed_div(relative, $z_index_standard_hovering_item);
+            }
           }
         }
       }
@@ -200,6 +207,14 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
       margin: $spacing_large 0;
     }
   }
+  &__graph {
+    flex: 1 1 auto;
+    display: none;
+    &-content {
+      flex: 1 1 auto;
+      min-height: 11rem
+    }
+  }
   &--hasSecurityState {
     #{$tradeMarketAnalysisPanelBlockName} {
       &__group {
@@ -225,6 +240,13 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
         display: none;
       }
       &__errorPrompt {
+        display: flex;
+      }
+    }
+  }
+  &--displayGraphState {
+    #{$tradeMarketAnalysisPanelBlockName} {
+      &__graph {
         display: flex;
       }
     }
