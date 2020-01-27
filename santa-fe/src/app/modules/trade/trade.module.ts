@@ -6,6 +6,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
 import { CoreModule } from 'Core/core.module';
+import { FormModule } from 'App/modules/form/form.module';
 import { reducer } from 'Trade/reducers/trade.reducer';
 import { TradeEffect } from 'Trade/effects/trade.effects';
 import { TradePage } from 'Trade/trade.page';
@@ -43,7 +44,8 @@ import { HistoricalSummary } from 'Trade/containers/historical-summary.container
     EffectsModule.forFeature([TradeEffect]),
 
     // Native modules
-    CoreModule
+    CoreModule,
+    FormModule
   ],
   providers: [
     LiveDataProcessingService

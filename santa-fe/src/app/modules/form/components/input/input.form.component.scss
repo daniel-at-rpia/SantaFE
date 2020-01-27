@@ -1,0 +1,9 @@
+@import "global.scss";
+
+.santaInput {
+  $santaInputBlockName: &;
+  display: flex;
+  &__inputElement {
+    flex: 1 1 auto;
+  }
+}
