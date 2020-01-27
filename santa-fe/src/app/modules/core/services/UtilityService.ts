@@ -406,7 +406,17 @@ export class UtilityService {
 
     public skewedNumber(input: number): number {
       return input * input;
-    } 
+    }
+
+    public caseInsensitiveKeywordMatch(targetText: string, keyword: string): boolean {
+      if (!!targetText && !!keyword && keyword.length >= 3) {
+        const targetTextUpperCase = targetText.toUpperCase();
+        const keywordUpperCase = keyword.toUpperCase();
+        return targetTextUpperCase.indexOf(keywordUpperCase) >= 0;
+      } else {
+        return true;
+      }
+    }
   // shared end
 
   // market specific 

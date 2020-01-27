@@ -1,6 +1,7 @@
 <article
   [ngClass]="{
     'sat-tradeCenterPanel': true,
+    'sat-tradeCenterPanel--keywordSearchActiveState': !!state.filters.quickFilters.keyword && state.filters.quickFilters.keyword.length >= 3,
     'sat-tradeCenterPanel--presetReadyState': state.presets.presetsReady,
     'sat-tradeCenterPanel--presetCategorySelectedState': state.presets.selectedList,
     'sat-tradeCenterPanel--presetSelectedState': state.presets.selectedPreset,
@@ -172,6 +173,15 @@
             <span>Price</span>
           </button>
         </div>
+      </div>
+      <div class="sat-tradeCenterPanel__result-quickFilters-keywordSearch">
+        <i class="sat-tradeCenterPanel__result-quickFilters-keywordSearch-activeIcon fal fa-filter"></i>
+        <span class="sat-tradeCenterPanel__result-quickFilters-keywordSearch-label">Keyword Search :</span>
+        <santa-input
+          [inputValue]="state.filters.quickFilters.keyword"
+          [placeholder]="'search for securities'"
+          (onInputChange)="onSearchKeywordChange($event)">
+        </santa-input>
       </div>
     </div>
     <div class="sat-tradeCenterPanel__result-errorPrompt">

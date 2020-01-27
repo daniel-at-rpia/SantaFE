@@ -291,6 +291,16 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     window.location.reload(false);
   }
 
+  public onSearchKeywordChange(newKeyword: string) {
+    if (!!newKeyword && newKeyword.length >= 3 && newKeyword != this.state.filters.quickFilters.keyword) {
+      this.state.filters.quickFilters.keyword = newKeyword;
+      this.state.fetchResult.rowList = this.filterPrinstineRowList();
+    } else if ((!newKeyword || newKeyword.length < 3) && !!this.state.filters.quickFilters.keyword && this.state.filters.quickFilters.keyword.length >= 3) {
+      this.state.filters.quickFilters.keyword = '';
+      this.state.fetchResult.rowList = this.filterPrinstineRowList();
+    }
+  }
+
   private populateSearchShortcuts() {
     this.state.presets = this.initializePageState().presets;
     this.state.presets.portfolioShortcutList = this.populateSingleShortcutList(this.constants.portfolioShortcuts);
@@ -449,10 +459,11 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private filterPrinstineRowList(): Array<SecurityTableRowDTO> {
+    console.log('applying filter');
     const filteredList: Array<SecurityTableRowDTO> = [];
     this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
       try {
-        if (this.state.filters.quickFilters.keyword.length < 3 || eachRow.data.security.data.name.indexOf(this.state.filters.quickFilters.keyword) >= 0) {
+        if (this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.name, this.state.filters.quickFilters.keyword)) {
           let portfolioIncludeFlag = this.filterByPortfolio(eachRow);
           let ownerFlag = this.filterByOwner(eachRow);
           let strategyFlag = this.filterByStrategy(eachRow);
