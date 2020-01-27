@@ -105,6 +105,7 @@ export interface SecurityGroupDTO extends BasicDTOStructure {
 export interface SecurityDefinitionDTO extends BasicDTOStructure {
   data: {
     name: string;
+    displayName: string;
     key: string;
     urlForGetLongOptionListFromServer: string;
     filterOptionList: Array<SecurityDefinitionFilterBlock>;

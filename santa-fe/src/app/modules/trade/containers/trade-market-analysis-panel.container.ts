@@ -43,7 +43,8 @@
     import {
       MARKET_ANALYSIS_SPREAD_METRIC_KEY,
       MARKET_ANALYSIS_YIELD_METRIC_KEY,
-      MarketAnalysisGroupByOptions
+      MarketAnalysisGroupByOptions,
+      MarketAnalysisGroupByOpionsDefaultActiveList
     } from 'Core/constants/tradeConstants.constant';
     import {
       selectSelectedSecurityForAnalysis
@@ -67,6 +68,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   }
   constants = {
     marketAnalysisGroupByOptions: MarketAnalysisGroupByOptions,
+    optionDefaultActiveList: MarketAnalysisGroupByOpionsDefaultActiveList,
     securityDefinitionMap: SecurityDefinitionMap,
     spreadMetricKey: MARKET_ANALYSIS_SPREAD_METRIC_KEY,
     yieldMetricKey: MARKET_ANALYSIS_YIELD_METRIC_KEY
@@ -231,7 +233,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
         definitionDTO.data.key === this.constants.securityDefinitionMap.SECURITY_TYPE.key) {
         // do nothing
       } else {
-        if (definitionDTO.data.key !== this.constants.securityDefinitionMap.TICKER.key) {
+        if (this.constants.optionDefaultActiveList.indexOf(definitionDTO.data.key) >= 0) {
           activeOptions.push(definitionDTO);
         }
       }
@@ -444,9 +446,9 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
         if (!!valueObject[beKey] && valueObject[beKey].length > 0) {
           const value = valueObject[beKey][0];
           if (value == null) {
-            eachOption.data.name = 'None';
+            eachOption.data.displayName = 'None';
           } else {
-            eachOption.data.name = value;
+            eachOption.data.displayName = value;
           }
         }
         if (

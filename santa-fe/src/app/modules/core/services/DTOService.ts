@@ -257,6 +257,7 @@ export class DTOService {
     const object: DTOs.SecurityDefinitionDTO = {
       data: {
         name: rawData.displayName,
+        displayName: rawData.displayName,
         key: rawData.key,
         urlForGetLongOptionListFromServer: rawData.urlForGetLongOptionListFromServer || null,
         filterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),

@@ -255,35 +255,38 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'Basis'
   ];
 
+  const FilterOptionsCountry = [
+  ];
+
 export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
-  'SECURITY_TYPE': {
+  SECURITY_TYPE: {
     key: 'SECURITY_TYPE',
     displayName: 'Security Type',
     icon: 'fal fa-slash',
     optionList: FilterOptionsSecurityType,
     locked: true
   },
-  'BACKEND_TENOR': {
+  BACKEND_TENOR: {
     key: 'BACKEND_TENOR',
     displayName: 'Backend Tenor',
     icon: 'fal fa-desktop',
     secondaryIcon: 'fas fa-history',
     optionList: FilterOptionsTenor
   },
-  'BAIL_IN_STATUS': {
+  BAIL_IN_STATUS: {
     key: 'BAIL_IN_STATUS',
     displayName: 'Bail-in Status',
     icon: 'fas fa-shield-alt',
     optionList: FilterOptionsBailInStatus
   },
-  'COUPON_TYPE': {
+  COUPON_TYPE: {
     key: 'COUPON_TYPE',
     displayName: 'Coupon Type',
     icon: 'fas fa-ticket-alt',
     optionList: FilterOptionsCouponType,
     locked: true
   },
-  'CURRENCY': {
+  CURRENCY: {
     key: 'CURRENCY',
     displayName: 'Currency',
     icon: 'fal fa-dollar-sign',
@@ -291,14 +294,14 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     securityDTOAttr: 'currency',
     locked: true
   },
-  'INDUSTRY': {
+  INDUSTRY: {
     key: 'INDUSTRY',
     displayName: 'Industry',
     icon: 'fal fa-city',
     optionList: FilterOptionsIndustryType,
     securityDTOAttr: 'industry'
   },
-  'TICKER': {
+  TICKER: {
     key: 'TICKER',
     displayName: 'Ticker',
     icon: 'fas fa-user-tie',
@@ -306,32 +309,32 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     urlForGetLongOptionListFromServer: APIUrlMap.getTickers,
     securityDTOAttr: 'ticker'
   },
-  'MATURITY': {
+  MATURITY: {
     key: 'MATURITY',
     displayName: 'Maturity Type',
     icon: 'fal fa-seedling',
     optionList: FilterOptionsMaturityType
   },
-  'IS_NEWISSUE': {
+  IS_NEWISSUE: {
     key: 'IS_NEWISSUE',
     displayName: 'New Issue',
     icon: 'far fa-sparkles',
     optionList: FilterOptionsBoolean
   },
-  'IS_ONTHERUN': {
+  IS_ONTHERUN: {
     key: 'IS_ONTHERUN',
     displayName: 'On-the-Run',
     icon: 'fal fa-handshake',
     optionList: FilterOptionsBoolean
   },
-  'RATING': {
+  RATING: {
     key: 'RATING',
     displayName: 'Rating',
     icon: 'fas fa-award',
     optionList: FilterOptionsRating,
     securityDTOAttr: 'ratingValue'
   },
-  'RATING_BUCKET': {
+  RATING_BUCKET: {
     key: 'RATING_BUCKET',
     displayName: 'Rating Bucket',
     icon: 'fas fa-trash',
@@ -339,74 +342,88 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     secondaryIcon: 'fas fa-award',
     securityDTOAttr: 'ratingBucket'
   },
-  'SECTOR': {
+  SECTOR: {
     key: 'SECTOR',
     displayName: 'Sector',
     icon: 'fal fa-chart-pie',
     optionList: FilterOptionsSectorType,
     securityDTOAttr: 'sector'
   },
-  'SENIORITY': {
+  SENIORITY: {
     key: 'SENIORITY',
     displayName: 'Seniority',
     icon: 'fal fa-gavel',
     optionList: FilterOptionsSeniorityType,
     securityDTOAttr: 'seniority'
   },
-  'SUB_INDUSTRY': {
+  SUB_INDUSTRY: {
     key: 'SUB_INDUSTRY',
     displayName: 'Sub-Industry',
     icon: 'fal fa-building',
     optionList: [],
     urlForGetLongOptionListFromServer: APIUrlMap.getSubIndustries
   },
-  'TENOR': {
+  TENOR: {
     key: 'TENOR',
     displayName: 'Tenor',
     icon: 'fal fa-history',
     optionList: FilterOptionsTenor
   },
-  'PORTFOLIO': {
+  PORTFOLIO: {
     key: 'PORTFOLIO',
     displayName: 'Portfolio',
     icon: 'fal fa-file-invoice-dollar',
     optionList: FilterOptionsPortfolioList,
     securityDTOAttr: 'portfolios'
   },
-  'PRIMARY_PORTFOLIO_MANAGER': {
+  PRIMARY_PORTFOLIO_MANAGER: {
     key: 'PRIMARY_PORTFOLIO_MANAGER',
     displayName: 'Primary PM',
     icon: 'fas fa-user-tie',
     optionList: FilterOptionsPortfolioManagerList,
     securityDTOAttr: 'primaryPmName'
   },
-  'BACKUP_PORTFOLIO_MANAGER': {
+  BACKUP_PORTFOLIO_MANAGER: {
     key: 'BACKUP_PORTFOLIO_MANAGER',
     displayName: 'Backup PM',
     icon: 'fal fa-user-tie',
     optionList: FilterOptionsPortfolioManagerList,
     securityDTOAttr: 'backupPmName'
   },
-  'RESEARCH': {
+  RESEARCH: {
     key: 'RESEARCH',
     displayName: 'Research',
     icon: 'fal fa-user-chart',
     optionList: FilterOptionsPortfolioResearchList,
     securityDTOAttr: 'researchName'
   },
-  'OWNER': {
+  OWNER: {
     key: 'OWNER',
     displayName: 'Owner',
     icon: 'fad fa-users',
     optionList: FullOwnerList,
     securityDTOAttr: 'owner'
   },
-  'STRATEGY': {
+  STRATEGY: {
     key: 'STRATEGY',
     displayName: 'Strategy',
     icon: 'fal fa-chess',
     optionList: FullStrategyList,
     securityDTOAttr: 'strategyList'
+  },
+  COUNTRY: {
+    key: 'COUNTRY',
+    displayName: 'Country',
+    icon: 'fal fa-globe-americas',
+    optionList: [],
+    urlForGetLongOptionListFromServer: APIUrlMap.getCountries,
+    securityDTOAttr: 'country'
+  },
+  QUOTED_TODAY: {
+    key: 'QUOTED_TODAY',
+    displayName: 'Quoted Today',
+    icon: 'far fa-calendar-day',
+    optionList: FilterOptionsBoolean
   }
 };
 
@@ -441,7 +458,8 @@ export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> =
     list: [
       SecurityDefinitionMap.INDUSTRY,
       SecurityDefinitionMap.SUB_INDUSTRY,
-      SecurityDefinitionMap.TICKER
+      SecurityDefinitionMap.TICKER,
+      SecurityDefinitionMap.COUNTRY
     ]
   },{
     label: 'Bond',
