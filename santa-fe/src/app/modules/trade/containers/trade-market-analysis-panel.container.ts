@@ -83,7 +83,8 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
       config: {
         timeScope: 'Mom',
         groupByOptions: [],
-        activeOptions: []
+        activeOptions: [],
+        driver: 'GSpread'
       },
       table: {
         numOfSecurities: 0,
@@ -153,6 +154,13 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
         this.state.config.timeScope = targetScope;
         this.fetchGroupData();
       }
+    }
+  }
+
+  public onClickDriver(targetDriver: string) {
+    if (this.state.config.driver !== targetDriver) {
+      this.state.config.driver = targetDriver;
+      this.fetchGroupData();
     }
   }
 
@@ -236,7 +244,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
         groupIdentifier: {},
         tenorOptions: ["2Y", "3Y", "5Y", "7Y", "10Y", "30Y"],
         deltaTypes: [targetScope],
-        metricName: this.utilityService.isCDS(false, this.state.targetSecurity) ? 'Spread' : 'GSpread',
+        metricName: this.utilityService.isCDS(false, this.state.targetSecurity) ? 'Spread' : this.state.config.driver,
         count: 5
       }
       this.state.config.activeOptions.forEach((eachOption) => {
@@ -260,6 +268,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
         }),
         catchError(err => {
           console.error('error', err);
+          this.state.apiReturnedState = true;
           this.state.apiErrorState = true;
           return of('error');
         })
@@ -355,7 +364,8 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
       } else {
         this.state.table.moveDistanceBasisList.push('');
       }
-      this.state.table.numOfSecurities = rawData.Group.group.metrics.propertyToNumSecurities.GSpread;
+      const targetFieldForCount = this.utilityService.isCDS(false, this.state.targetSecurity) ? 'Spread' : this.state.config.driver;
+      this.state.table.numOfSecurities = rawData.Group.group.metrics.propertyToNumSecurities[targetFieldForCount];
     }
     if (!!rawData.Top) {
       let index = 1;

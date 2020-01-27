@@ -121,6 +121,7 @@ export interface TradeMarketAnalysisPanelState {
     timeScope: string;
     groupByOptions: Array<DTOs.SecurityDefinitionDTO>;
     activeOptions: Array<DTOs.SecurityDefinitionDTO>;
+    driver: string;
   }
   table: {
     numOfSecurities: number;

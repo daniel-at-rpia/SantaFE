@@ -2,47 +2,79 @@
   [ngClass]="{
     'sat-tradeMarketAnalysisPanel': true,
     'sat-tradeMarketAnalysisPanel--hasSecurityState': state.receivedSecurity,
+    'sat-tradeMarketAnalysisPanel--securityIsCDSState': state.receivedSecurity && this.utilityService.isCDS(false, this.state.targetSecurity),
     'sat-tradeMarketAnalysisPanel--apiErrorState': state.apiErrorState,
     'sat-tradeMarketAnalysisPanel--displayGraphState': state.displayGraph,
     'sat-tradeMarketAnalysisPanel--emptyGraphState': state.graphDataEmptyState,
     'sat-tradeMarketAnalysisPanel--apiReturnedState': state.apiReturnedState
   }">
-  <section class="sat-tradeMarketAnalysisPanel__timeScope">
-    <span class="sat-tradeMarketAnalysisPanel__timeScope-label">Time Scope :</span>
-    <ul class="sat-tradeMarketAnalysisPanel__timeScope-list">
-      <button
-        (click)="onClickTimeScope('Yoy')"
-        [ngClass]="{
-          'sat-tradeMarketAnalysisPanel__timeScope-list-item': true,
-          'sat-tradeMarketAnalysisPanel__timeScope-list-item--selected': state.config.timeScope === 'Yoy'
-        }">
-        YoY
-      </button>
-      <button
-        (click)="onClickTimeScope('Ytd')"
-        [ngClass]="{
-          'sat-tradeMarketAnalysisPanel__timeScope-list-item': true,
-          'sat-tradeMarketAnalysisPanel__timeScope-list-item--selected': state.config.timeScope === 'Ytd'
-        }">
-        YtD
-      </button>
-      <button
-        (click)="onClickTimeScope('Mom')"
-        [ngClass]="{
-          'sat-tradeMarketAnalysisPanel__timeScope-list-item': true,
-          'sat-tradeMarketAnalysisPanel__timeScope-list-item--selected': state.config.timeScope === 'Mom'
-        }">
-        MoM
-      </button>
-      <button
-        (click)="onClickTimeScope('Wow')"
-        [ngClass]="{
-          'sat-tradeMarketAnalysisPanel__timeScope-list-item': true,
-          'sat-tradeMarketAnalysisPanel__timeScope-list-item--selected': state.config.timeScope === 'Wow'
-        }">
-        WoW
-      </button>
-    </ul>
+  <section class="sat-tradeMarketAnalysisPanel__timeScopeAndDriver">
+    <div class="sat-tradeMarketAnalysisPanel__timeScopeAndDriver-timeScope">
+      <span class="sat-tradeMarketAnalysisPanel__timeScopeAndDriver-timeScope-label">Scope :</span>
+      <ul class="sat-tradeMarketAnalysisPanel__timeScopeAndDriver-timeScope-list">
+        <button
+          (click)="onClickTimeScope('Yoy')"
+          [ngClass]="{
+            'sat-tradeMarketAnalysisPanel__timeScopeAndDriver-timeScope-list-item': true,
+            'sat-tradeMarketAnalysisPanel__timeScopeAndDriver-timeScope-list-item--selected': state.config.timeScope === 'Yoy'
+          }">
+          YoY
+        </button>
+        <button
+          (click)="onClickTimeScope('Ytd')"
+          [ngClass]="{
+            'sat-tradeMarketAnalysisPanel__timeScopeAndDriver-timeScope-list-item': true,
+            'sat-tradeMarketAnalysisPanel__timeScopeAndDriver-timeScope-list-item--selected': state.config.timeScope === 'Ytd'
+          }">
+          YtD
+        </button>
+        <button
+          (click)="onClickTimeScope('Mom')"
+          [ngClass]="{
+            'sat-tradeMarketAnalysisPanel__timeScopeAndDriver-timeScope-list-item': true,
+            'sat-tradeMarketAnalysisPanel__timeScopeAndDriver-timeScope-list-item--selected': state.config.timeScope === 'Mom'
+          }">
+          MoM
+        </button>
+        <button
+          (click)="onClickTimeScope('Wow')"
+          [ngClass]="{
+            'sat-tradeMarketAnalysisPanel__timeScopeAndDriver-timeScope-list-item': true,
+            'sat-tradeMarketAnalysisPanel__timeScopeAndDriver-timeScope-list-item--selected': state.config.timeScope === 'Wow'
+          }">
+          WoW
+        </button>
+      </ul>
+    </div>
+    <div class="sat-tradeMarketAnalysisPanel__timeScopeAndDriver-driver">
+      <span class="sat-tradeMarketAnalysisPanel__timeScopeAndDriver-driver-label">Driver :</span>
+      <ul class="sat-tradeMarketAnalysisPanel__timeScopeAndDriver-driver-list">
+        <button
+          (click)="onClickDriver('ZSpread')"
+          [ngClass]="{
+            'sat-tradeMarketAnalysisPanel__timeScopeAndDriver-driver-list-item': true,
+            'sat-tradeMarketAnalysisPanel__timeScopeAndDriver-driver-list-item--selected': state.config.driver === 'ZSpread'
+          }">
+          Z Spread
+        </button>
+        <button
+          (click)="onClickDriver('GSpread')"
+          [ngClass]="{
+            'sat-tradeMarketAnalysisPanel__timeScopeAndDriver-driver-list-item': true,
+            'sat-tradeMarketAnalysisPanel__timeScopeAndDriver-driver-list-item--selected': state.config.driver === 'GSpread'
+          }">
+          G Spread
+        </button>
+        <button
+          (click)="onClickDriver('Price')"
+          [ngClass]="{
+            'sat-tradeMarketAnalysisPanel__timeScopeAndDriver-driver-list-item': true,
+            'sat-tradeMarketAnalysisPanel__timeScopeAndDriver-driver-list-item--selected': state.config.driver === 'Price'
+          }">
+          Price
+        </button>
+      </ul>
+    </div>
   </section>
   <section class="sat-tradeMarketAnalysisPanel__group">
     <span class="sat-tradeMarketAnalysisPanel__group-label">Filter By :</span>
