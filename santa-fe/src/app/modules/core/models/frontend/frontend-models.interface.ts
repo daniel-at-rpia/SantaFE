@@ -66,6 +66,7 @@ export interface SecurityDTO extends BasicDTOStructure {
   state: {
     isStencil: boolean;
     isInteractionDisabled: boolean;
+    isInteractionThumbDownDisabled: boolean;
     isSelected: boolean;
     isMultiLineVariant: boolean;
     isWidthFlexible: boolean; 

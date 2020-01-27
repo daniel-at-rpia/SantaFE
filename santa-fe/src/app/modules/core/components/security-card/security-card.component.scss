@@ -88,6 +88,15 @@ $securityCard_name_rightGap: 3rem;
     @include material('none');
     @include mix_border_generator($typical_border_width, $color_gray_85);
   }
+  &--thumbDownDisabled {
+    #{$securityCardBlockName} {
+      &__actionMenu {
+        &-thumbDownBtn {
+          display: none;
+        }
+      }
+    }
+  }
   &--multiLineVariant {
     height: $securityCard_labelVariant_expanded_height;
     #{$securityCardBlockName} {

@@ -116,6 +116,7 @@ export class DTOService {
         isSelected: false,
         isStencil: isStencil,
         isInteractionDisabled: false,
+        isInteractionThumbDownDisabled: false,
         isMultiLineVariant: false,
         isWidthFlexible: false
       }
