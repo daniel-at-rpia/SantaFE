@@ -1,7 +1,11 @@
 import { Component, ViewEncapsulation, NgZone, AfterViewInit, OnDestroy } from "@angular/core";
 import { GraphService } from 'Core/services/GraphService';
 import { UtilityService } from 'Core/services/UtilityService';
-import { selectLiveUpdateTick, selectSelectedSecurityForAnalysis, selectSecurityTableRowDTOListForAnalysis, selectBestQuoteValidWindow } from 'Trade/selectors/trade.selectors';
+import { 
+  selectSelectedSecurityForAnalysis,
+  selectSecurityTableRowDTOListForAnalysis,
+  selectBestQuoteValidWindow
+} from 'Trade/selectors/trade.selectors';
 import { Store, select } from '@ngrx/store';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { PayloadObligorSecurityIDs } from 'BEModels/backend-payloads.interface';
@@ -28,8 +32,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
   subscriptions = {
     selectSecurityUpdateForAnalysis: null,
     selectSecurityTableRowDTOListForAnalysis: null,
-    selectBestQuoteValidWindow: null,
-    selectLiveUpdateTick: null
+    selectBestQuoteValidWindow: null
   }
 
   constructor(
@@ -43,14 +46,6 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
   }
 
   public ngAfterViewInit() {
-
-    this.subscriptions.selectLiveUpdateTick = this.store$.pipe(
-      select(selectLiveUpdateTick)
-    ).subscribe(tickNumber => {
-      if (tickNumber > 0 && !!this.state.obligorSecurityID) {
-        this.fetchSecurityIDs();
-      }
-    });
     
     this.subscriptions.selectBestQuoteValidWindow = this.store$.pipe(
       select(selectBestQuoteValidWindow)
