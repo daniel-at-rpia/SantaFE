@@ -2,11 +2,12 @@
   [ngClass]="{
     'sat-tradeMarketAnalysisPanel': true,
     'sat-tradeMarketAnalysisPanel--hasSecurityState': state.receivedSecurity,
-    'sat-tradeMarketAnalysisPanel--securityIsCDSState': state.receivedSecurity && this.utilityService.isCDS(false, this.state.targetSecurity),
+    'sat-tradeMarketAnalysisPanel--securityIsCDSState': state.receivedSecurity && this.utilityService.isCDS(false, state.targetSecurity),
     'sat-tradeMarketAnalysisPanel--apiErrorState': state.apiErrorState,
     'sat-tradeMarketAnalysisPanel--displayGraphState': state.displayGraph,
     'sat-tradeMarketAnalysisPanel--emptyGraphState': state.graphDataEmptyState,
-    'sat-tradeMarketAnalysisPanel--apiReturnedState': state.apiReturnedState
+    'sat-tradeMarketAnalysisPanel--apiReturnedState': state.apiReturnedState,
+    'sat-tradeMarketAnalysisPanel--colorCodeInversedState': state.config.driver === 'Price'
   }">
   <section class="sat-tradeMarketAnalysisPanel__timeScopeAndDriver">
     <div class="sat-tradeMarketAnalysisPanel__timeScopeAndDriver-timeScope">
@@ -91,7 +92,7 @@
   <section class="sat-tradeMarketAnalysisPanel__tableHeader">
     <span class="sat-tradeMarketAnalysisPanel__tableHeader-securityList">Security</span>
     <span class="sat-tradeMarketAnalysisPanel__tableHeader-rankingList">Ranking</span>
-    <span class="sat-tradeMarketAnalysisPanel__tableHeader-levelDistance">Δ GSpread</span>
+    <span class="sat-tradeMarketAnalysisPanel__tableHeader-levelDistance">Δ {{state.config.driver}}</span>
     <span class="sat-tradeMarketAnalysisPanel__tableHeader-levelColumn">Level</span>
     <span class="sat-tradeMarketAnalysisPanel__tableHeader-levelDistance">Δ Basis</span>
     <span class="sat-tradeMarketAnalysisPanel__tableHeader-basisColumn">Basis</span>

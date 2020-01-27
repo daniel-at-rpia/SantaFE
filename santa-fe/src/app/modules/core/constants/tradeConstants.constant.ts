@@ -73,12 +73,12 @@ export const PortfolioShortcuts: Array<SearchShortcutStub> = [
     ],
     isMajor: true
   },{
-    displayTitle: 'STIP + FIP + CIP + AGB',
+    displayTitle: 'STIP + FIP + CIP + AGB + BBB',
     includedDefinitions: [
       {
         definitionKey: 'PORTFOLIO',
         groupByActive: false,
-        selectedOptions: ['STIP', 'FIP', 'CIP', 'AGB']
+        selectedOptions: ['STIP', 'FIP', 'CIP', 'AGB', 'BBB']
       }
     ],
     isMajor: true
@@ -427,5 +427,15 @@ export const MarketAnalysisGroupByOptions: Array<SecurityDefinitionStub> = [
   SecurityDefinitionMap.RATING,
   SecurityDefinitionMap.SECTOR,
   SecurityDefinitionMap.TENOR,
-  SecurityDefinitionMap.TICKER
+  SecurityDefinitionMap.TICKER,
+  SecurityDefinitionMap.COUNTRY,
+  SecurityDefinitionMap.QUOTED_TODAY
+];
+
+export const MarketAnalysisGroupByOpionsDefaultActiveList: Array<string> = [
+  SecurityDefinitionMap.SENIORITY.key,
+  SecurityDefinitionMap.RATING.key,
+  SecurityDefinitionMap.SECTOR.key,
+  SecurityDefinitionMap.TENOR.key,
+  SecurityDefinitionMap.COUNTRY.key
 ];

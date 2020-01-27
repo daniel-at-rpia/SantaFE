@@ -80,7 +80,8 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
     margin-bottom: $spacing_x_small;
     overflow: hidden;
     &-text {
-      @include mix_text_overflow_multi_line(3);
+      @include mix_text_overflow_multi_line(2);
+      padding: $spacing_xx_small 0;
       color: $font_color_major;
       user-select: none;
       font-size: $font_size_x_small;

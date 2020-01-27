@@ -43,7 +43,8 @@
     import {
       MARKET_ANALYSIS_SPREAD_METRIC_KEY,
       MARKET_ANALYSIS_YIELD_METRIC_KEY,
-      MarketAnalysisGroupByOptions
+      MarketAnalysisGroupByOptions,
+      MarketAnalysisGroupByOpionsDefaultActiveList
     } from 'Core/constants/tradeConstants.constant';
     import {
       selectSelectedSecurityForAnalysis
@@ -67,12 +68,19 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   }
   constants = {
     marketAnalysisGroupByOptions: MarketAnalysisGroupByOptions,
+    optionDefaultActiveList: MarketAnalysisGroupByOpionsDefaultActiveList,
     securityDefinitionMap: SecurityDefinitionMap,
     spreadMetricKey: MARKET_ANALYSIS_SPREAD_METRIC_KEY,
     yieldMetricKey: MARKET_ANALYSIS_YIELD_METRIC_KEY
   };
 
   private initializePageState(): TradeMarketAnalysisPanelState {
+    if (!!this.state) {
+      // there is an old state exists
+      if (!!this.state.chart) {
+        this.state.chart.dispose();
+      }
+    }
     const state: TradeMarketAnalysisPanelState = {
       receivedSecurity: false,
       targetSecurity: null,
@@ -96,7 +104,8 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
         rankingList: [],
         moveDistanceLevelList: [],
         moveDistanceBasisList: []
-      }
+      },
+      chart: null
     };
     this.populateDefinitionOptions(state);
     return state;
@@ -175,6 +184,9 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     const targetData = this.state.table.levelSummary.data.list[targetIndex].data.timeSeries;
     if (!!targetData && targetData.length > 0) {
       this.state.graphDataEmptyState = false;
+      if (!!this.state.chart) {
+        this.state.chart.dispose();
+      }
       const buildGraph = () => {
         this.state.displayGraph = true;
         const baseSecurity = this.state.table.levelSummary.data.list[0];
@@ -186,7 +198,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
           name: this.state.table.levelSummary.data.list[targetIndex].data.identifier,
           data: targetData
         }
-        this.graphService.buildLilMarketTimeSeriesGraph(basePack, targetPack);
+        this.state.chart = this.graphService.buildLilMarketTimeSeriesGraph(basePack, targetPack);
       }
       setTimeout(buildGraph.bind(this), 200);
     } else {
@@ -221,7 +233,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
         definitionDTO.data.key === this.constants.securityDefinitionMap.SECURITY_TYPE.key) {
         // do nothing
       } else {
-        if (definitionDTO.data.key !== this.constants.securityDefinitionMap.TICKER.key) {
+        if (this.constants.optionDefaultActiveList.indexOf(definitionDTO.data.key) >= 0) {
           activeOptions.push(definitionDTO);
         }
       }
@@ -261,10 +273,11 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
         tap((serverReturn: BEHistoricalSummaryOverviewDTO) => {
           this.state.apiReturnedState = true;
           this.state.apiErrorState = false;
+          const inverseColorCode = !this.utilityService.isCDS(false, this.state.targetSecurity) && this.state.config.driver === 'Price';
           this.populateGroupOptionText(serverReturn);
           this.loadSecurityList(serverReturn[targetScope]);
-          this.state.table.levelSummary = this.dtoService.formHistoricalSummaryObject(false, serverReturn[targetScope], true);
-          this.state.table.basisSummary = this.dtoService.formHistoricalSummaryObject(false, serverReturn[targetScope], false);
+          this.state.table.levelSummary = this.dtoService.formHistoricalSummaryObject(false, serverReturn[targetScope], true, inverseColorCode);
+          this.state.table.basisSummary = this.dtoService.formHistoricalSummaryObject(false, serverReturn[targetScope], false, inverseColorCode);
         }),
         catchError(err => {
           console.error('error', err);
@@ -297,36 +310,38 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
       stencilCard,
       stencilCard
     ];
+    this.state.table.moveDistanceLevelList = ['', '', '','', '', '','', '', '','','',''];
+    this.state.table.moveDistanceBasisList = ['', '', '','', '', '','', '', '','','',''];
     this.state.table.rankingList = ['', '', '','', '', '','', '', '','','',''];
-    this.state.table.levelSummary = this.dtoService.formHistoricalSummaryObject(true, null, true);
+    this.state.table.levelSummary = this.dtoService.formHistoricalSummaryObject(true, null, true, false);
     this.state.table.levelSummary.data.list = [
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true)
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false)
     ];
-    this.state.table.basisSummary = this.dtoService.formHistoricalSummaryObject(true, null, false);
+    this.state.table.basisSummary = this.dtoService.formHistoricalSummaryObject(true, null, false, false);
     this.state.table.basisSummary.data.list = [
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true)
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false)
     ];
   }
 
@@ -347,7 +362,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
       this.state.table.moveDistanceBasisList.push('');
       const groupDTO = this.dtoService.formSecurityCardObject('', null, true);
       groupDTO.state.isStencil = false;
-      groupDTO.state.isInteractionDisabled = true;
+      groupDTO.state.isInteractionThumbDownDisabled = true;
       groupDTO.data.name = rawData.Group.group.name;
       this.applyStatesToSecurityCards(groupDTO);
       this.state.table.presentList.push(groupDTO);
@@ -365,7 +380,11 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
         this.state.table.moveDistanceBasisList.push('');
       }
       const targetFieldForCount = this.utilityService.isCDS(false, this.state.targetSecurity) ? 'Spread' : this.state.config.driver;
-      this.state.table.numOfSecurities = rawData.Group.group.metrics.propertyToNumSecurities[targetFieldForCount];
+      try {
+        this.state.table.numOfSecurities = rawData.Group.group.deltaMetrics[this.state.config.timeScope].propertyToNumSecurities[targetFieldForCount];
+      } catch {
+        console.error('something is null in there', rawData.Group.group);
+      }
     }
     if (!!rawData.Top) {
       let index = 1;
@@ -428,9 +447,9 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
         if (!!valueObject[beKey] && valueObject[beKey].length > 0) {
           const value = valueObject[beKey][0];
           if (value == null) {
-            eachOption.data.name = 'None';
+            eachOption.data.displayName = 'None';
           } else {
-            eachOption.data.name = value;
+            eachOption.data.displayName = value;
           }
         }
         if (

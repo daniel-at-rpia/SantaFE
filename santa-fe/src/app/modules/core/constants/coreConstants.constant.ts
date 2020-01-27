@@ -13,7 +13,8 @@ export const APIUrlMap = {
   getGroups: `group/get-groups`,
   getGroupHistoricalSummary: `group/get-group-historical-summary-from-security`,
   getTickers: `Obligor/get-tickers`,
-  getSubIndustries: `obligor/get-subindustries`
+  getSubIndustries: `obligor/get-subindustries`,
+  getCountries: 'obligor/get-countries'
 };
 
 export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
@@ -146,7 +147,8 @@ export const BackendKeyDictionary = {
   'SUB_INDUSTRY': 'SubIndustry',
   'BACKEND_TENOR': 'BackendTenor',
   'TICKER': 'Ticker',
-
+  'COUNTRY': 'Country',
+  'QUOTED_TODAY': 'QuotedToday',
 
   // metrics
   'SPREAD': 'oasSpread',

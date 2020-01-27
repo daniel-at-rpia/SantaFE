@@ -116,6 +116,7 @@ export class DTOService {
         isSelected: false,
         isStencil: isStencil,
         isInteractionDisabled: false,
+        isInteractionThumbDownDisabled: false,
         isMultiLineVariant: false,
         isWidthFlexible: false
       }
@@ -256,6 +257,7 @@ export class DTOService {
     const object: DTOs.SecurityDefinitionDTO = {
       data: {
         name: rawData.displayName,
+        displayName: rawData.displayName,
         key: rawData.key,
         urlForGetLongOptionListFromServer: rawData.urlForGetLongOptionListFromServer || null,
         filterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
@@ -770,7 +772,8 @@ export class DTOService {
 
   public formMoveVisualizerObject(
     isStencil: boolean,
-    rawData?: BEHistoricalQuantBlock,
+    rawData: BEHistoricalQuantBlock,
+    colorCodeInversed: boolean,
     identifier?: string
   ): DTOs.MoveVisualizerDTO {
     const object: DTOs.MoveVisualizerDTO = {
@@ -795,25 +798,33 @@ export class DTOService {
         isInversed: false,
         isInvalid: false,
         isPlaceholder: false,
-        isStencil: !!isStencil
+        isStencil: !!isStencil,
+        isColorCodeInversed: false
       }
     };
-    if (!isStencil && !!rawData) {
-      object.data.start = rawData.startMetric != null ? this.utility.round(rawData.startMetric) : null;
-      object.data.end = rawData.endMetric != null ? this.utility.round(rawData.endMetric) : null;
-      object.data.min = rawData.minMetric != null ? this.utility.round(rawData.minMetric) : null;
-      object.data.max = rawData.maxMetric != null ? this.utility.round(rawData.maxMetric) : null;
-      object.state.isInversed = rawData.startMetric > rawData.endMetric;
-      object.state.isInvalid = !rawData.isValid;
-      object.data.isBasis = !!rawData.isBasisRange;
-      for (const dateStamp in rawData.timeSeries) {
-        object.data.timeSeries.push({
-          date: dateStamp,
-          value: rawData.timeSeries[dateStamp]
-        });
-      }
-      if (!!identifier) {
-        object.data.identifier = identifier;
+    if (!isStencil) {
+      if (rawData != null) {
+        object.data.start = rawData.startMetric != null ? this.utility.round(rawData.startMetric) : null;
+        object.data.end = rawData.endMetric != null ? this.utility.round(rawData.endMetric) : null;
+        object.data.min = rawData.minMetric != null ? this.utility.round(rawData.minMetric) : null;
+        object.data.max = rawData.maxMetric != null ? this.utility.round(rawData.maxMetric) : null;
+        object.state.isInversed = rawData.startMetric > rawData.endMetric;
+        object.state.isInvalid = !rawData.isValid;
+        object.data.isBasis = !!rawData.isBasisRange;
+        for (const dateStamp in rawData.timeSeries) {
+          object.data.timeSeries.push({
+            date: dateStamp,
+            value: rawData.timeSeries[dateStamp]
+          });
+        }
+        if (!!identifier) {
+          object.data.identifier = identifier;
+        }
+        object.state.isColorCodeInversed = !!colorCodeInversed;
+      } else {
+        object.data.start = null;
+        object.data.end = null;
+        object.state.isInvalid = true;
       }
     }
     return object;
@@ -822,7 +833,8 @@ export class DTOService {
   public formHistoricalSummaryObject(
     isStencil: boolean,
     rawData: BEHistoricalSummaryDTO,
-    isLevel: boolean
+    isLevel: boolean,
+    isColorCodeInversed: boolean
   ): DTOs.HistoricalSummaryDTO {
     const object: DTOs.HistoricalSummaryDTO = {
       data: {
@@ -842,26 +854,26 @@ export class DTOService {
     };
     if (!isStencil && !!rawData) {
       if (!!rawData.BaseSecurity) {
-        const baseDTO = this.formMoveVisualizerObject(false, rawData.BaseSecurity.historicalLevel, rawData.BaseSecurity.security.name);
+        const baseDTO = this.formMoveVisualizerObject(false, rawData.BaseSecurity.historicalLevel, isColorCodeInversed, rawData.BaseSecurity.security.name);
         baseDTO.state.isPlaceholder = !isLevel;
         object.data.list.push(baseDTO);
       }
       if (!!rawData.Group) {
         const name = rawData.Group.group ? rawData.Group.group.name : 'n/a';
-        const groupDTO = isLevel ? this.formMoveVisualizerObject(false, rawData.Group.historicalLevel, name) : this.formMoveVisualizerObject(false, rawData.Group.historicalBasis);
+        const groupDTO = isLevel ? this.formMoveVisualizerObject(false, rawData.Group.historicalLevel, isColorCodeInversed, name) : this.formMoveVisualizerObject(false, rawData.Group.historicalBasis, isColorCodeInversed);
         object.data.list.push(groupDTO);
         object.data.centerPoint = (groupDTO.data.max + groupDTO.data.min)/2;
         object.data.globalDistance = (groupDTO.data.max - groupDTO.data.min) * 10;
       }
       if (!!rawData.Top) {
         rawData.Top.forEach((eachQuantBlock) => {
-          const eachDTO = isLevel ? this.formMoveVisualizerObject(false, eachQuantBlock.historicalLevel, eachQuantBlock.security.name) : this.formMoveVisualizerObject(false, eachQuantBlock.historicalBasis, eachQuantBlock.security.name);
+          const eachDTO = isLevel ? this.formMoveVisualizerObject(false, eachQuantBlock.historicalLevel, isColorCodeInversed, eachQuantBlock.security.name) : this.formMoveVisualizerObject(false, eachQuantBlock.historicalBasis, isColorCodeInversed, eachQuantBlock.security.name);
           object.data.list.push(eachDTO);
         })
       }
       if (!!rawData.Bottom) {
         rawData.Bottom.forEach((eachQuantBlock) => {
-          const eachDTO = isLevel ? this.formMoveVisualizerObject(false, eachQuantBlock.historicalLevel, eachQuantBlock.security.name) : this.formMoveVisualizerObject(false, eachQuantBlock.historicalBasis, eachQuantBlock.security.name);
+          const eachDTO = isLevel ? this.formMoveVisualizerObject(false, eachQuantBlock.historicalLevel, isColorCodeInversed, eachQuantBlock.security.name) : this.formMoveVisualizerObject(false, eachQuantBlock.historicalBasis, isColorCodeInversed, eachQuantBlock.security.name);
           object.data.list.push(eachDTO);
         })
       }

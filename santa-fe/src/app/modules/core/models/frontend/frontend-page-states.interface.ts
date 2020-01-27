@@ -134,6 +134,7 @@ export interface TradeMarketAnalysisPanelState {
     moveDistanceLevelList: Array<string>;
     moveDistanceBasisList: Array<string>;
   }
+  chart: am4charts.XYChart;
 }
 
 export interface TradeObligorGraphPanelState {

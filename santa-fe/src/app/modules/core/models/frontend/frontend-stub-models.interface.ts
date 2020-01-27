@@ -52,6 +52,8 @@ export interface SecurityDefinitionMapStub {
   RESEARCH: SecurityDefinitionStub;
   OWNER: SecurityDefinitionStub;
   STRATEGY: SecurityDefinitionStub;
+  COUNTRY: SecurityDefinitionStub;
+  QUOTED_TODAY: SecurityDefinitionStub;
 }
 
 export interface SecurityMetricOptionStub {

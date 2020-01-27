@@ -93,7 +93,7 @@ $tradeMarketAnalysisPanel_config_label_width: 6rem;
     }
   }
   &__tableHeader {
-    @include mix_fixed_div(relative, $z_index_standard_hovering_item_lift);
+    @include mix_fixed_div(relative, $z_index_standard_tooltip_lift);
     flex: 0 0 auto;
     display: none;
     align-items: center;
@@ -265,6 +265,32 @@ $tradeMarketAnalysisPanel_config_label_width: 6rem;
       font-size: $font_size_xx_large;
       color: $color_warning;
       margin: $spacing_large 0;
+    }
+  }
+  &--colorCodeInversedState {
+    #{$tradeMarketAnalysisPanelBlockName} {
+      &__table {
+        &-content {
+          &-levelDistance, &-basisDistance {
+            &-item {
+              &-text {
+                background-color: $color_negative;
+              }
+              &--positive {
+                #{$tradeMarketAnalysisPanelBlockName} {
+                  &__table-content {
+                    &-levelDistance, &-basisDistance {
+                      &-item-text {
+                        background-color: $color_positive;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
   &--hasSecurityState {

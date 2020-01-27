@@ -66,6 +66,7 @@ export interface SecurityDTO extends BasicDTOStructure {
   state: {
     isStencil: boolean;
     isInteractionDisabled: boolean;
+    isInteractionThumbDownDisabled: boolean;
     isSelected: boolean;
     isMultiLineVariant: boolean;
     isWidthFlexible: boolean; 
@@ -104,6 +105,7 @@ export interface SecurityGroupDTO extends BasicDTOStructure {
 export interface SecurityDefinitionDTO extends BasicDTOStructure {
   data: {
     name: string;
+    displayName: string;
     key: string;
     urlForGetLongOptionListFromServer: string;
     filterOptionList: Array<SecurityDefinitionFilterBlock>;
@@ -363,6 +365,7 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
     isInvalid: boolean;
     isPlaceholder: boolean;
     isStencil: boolean;
+    isColorCodeInversed: boolean;
   }
 }
 
