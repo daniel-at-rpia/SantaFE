@@ -112,7 +112,7 @@ export interface TradeUtilityPanelState {
 
 export interface TradeMarketAnalysisPanelState {
   receivedSecurity: boolean;
-  populateGroupOptionText: boolean;
+  apiReturnedState: boolean;
   apiErrorState: boolean;
   graphDataEmptyState: boolean;
   displayGraph: boolean;

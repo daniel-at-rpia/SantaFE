@@ -235,7 +235,10 @@ export interface BEHistoricalSummaryOverviewDTO {
   Ytd?: BEHistoricalSummaryDTO;
   Mom?: BEHistoricalSummaryDTO;
   Mtd?: BEHistoricalSummaryDTO;
-  GroupIdentifierWithInclusiveOptions: any;
+  GroupIdentifierWithInclusiveOptions: {
+    groupOptionValues: object;
+    [property: string]: any;
+  };
 }
 
 export interface BEHistoricalSummaryDTO {

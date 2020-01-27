@@ -76,8 +76,8 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     const state: TradeMarketAnalysisPanelState = {
       receivedSecurity: false,
       targetSecurity: null,
-      populateGroupOptionText: false,
       displayGraph: false,
+      apiReturnedState: false,
       apiErrorState: false,
       graphDataEmptyState: false,
       config: {
@@ -244,8 +244,9 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getGroupHistoricalSummary, {req: 'POST'}, payload).pipe(
         first(),
         tap((serverReturn: BEHistoricalSummaryOverviewDTO) => {
+          this.state.apiReturnedState = true;
           this.state.apiErrorState = false;
-          !this.state.populateGroupOptionText && this.populateGroupOptionText(serverReturn[targetScope]);
+          this.populateGroupOptionText(serverReturn);
           this.loadSecurityList(serverReturn[targetScope]);
           this.state.table.levelSummary = this.dtoService.formHistoricalSummaryObject(false, serverReturn[targetScope], true);
           this.state.table.basisSummary = this.dtoService.formHistoricalSummaryObject(false, serverReturn[targetScope], false);
@@ -402,21 +403,21 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     targetSecurity.state.isWidthFlexible = true;
   }
 
-  private populateGroupOptionText(rawData: BEHistoricalSummaryDTO) {
-    if (!!rawData && !!rawData.Group && !!rawData.Group.group && !!rawData.Group.group.groupIdentifier) {
+  private populateGroupOptionText(rawData: BEHistoricalSummaryOverviewDTO) {
+    if (!!rawData && !!rawData.GroupIdentifierWithInclusiveOptions && !!rawData.GroupIdentifierWithInclusiveOptions.groupOptionValues) {
+      const valueObject = rawData.GroupIdentifierWithInclusiveOptions.groupOptionValues;
       this.state.config.groupByOptions.forEach((eachOption) => {
-        if (this.state.config.activeOptions.indexOf(eachOption) >= 0 || eachOption.state.isLocked) {
-          const backendKey = this.utilityService.convertFEKey(eachOption.data.key);
-          if (backendKey !== 'n/a') {
-            const value = !!rawData.Group.group.groupIdentifier.groupOptionValues[backendKey] ? rawData.Group.group.groupIdentifier.groupOptionValues[backendKey][0] : 'n/a';
+        const beKey = this.utilityService.convertFEKey(eachOption.data.key);
+        if (!!valueObject[beKey] && valueObject[beKey].length > 0) {
+          const value = valueObject[beKey][0];
+          if (value == null) {
+            eachOption.data.name = 'None';
+          } else {
             eachOption.data.name = value;
           }
-        } else if (!!eachOption.data.securityDTOAttr) {
-          eachOption.data.name = this.state.targetSecurity.data[eachOption.data.securityDTOAttr];
         }
       })
     }
-    this.state.populateGroupOptionText = true;
   }
 
   private retrieveMoveDistance(rawQuantBlock: BEHistoricalQuantBlock): string {
