@@ -192,12 +192,33 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      &-row {
+      &-keywordSearch {
+        @include mix_border_radius(5px);
+        flex: 0 1 25rem;
+        display: flex;
+        align-items: center;
+        padding: $spacing_x_small $spacing_small;
+        margin-right: $spacing_medium;
+        &-activeIcon {
+          font-size: $font_size_x_large;
+          color: $font_color_major;
+          margin-right: $spacing_small;
+        }
+        &-label {
+          color: $font_color_minor;
+          font-size: $font_size_large;
+          margin-right: $spacing_small;
+        }
+        santa-input {
+          flex: 1 1 auto;
+        }
+      }
+      &-driver {
         display: flex;
         align-items: center;
         margin-bottom: $spacing_medium;
-        margin-right: $spacing_medium;
         &-label {
+          flex: 0 0 auto;
           color: $font_color_minor;
           font-size: $font_size_large;
           margin-right: $spacing_medium;
@@ -209,28 +230,6 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
             @extend .santaBtn--inverseLabelled;
             background-color: $color_active;
           }
-        }
-      }
-      &-keywordSearch {
-        @include mix_border_radius(5px);
-        flex: 0 1 25rem;
-        display: flex;
-        align-items: center;
-        padding: $spacing_x_small $spacing_small;
-        margin-right: $spacing_medium;
-        &-activeIcon {
-          visibility: hidden;
-          font-size: $font_size_x_large;
-          color: $font_color_inverse;
-          margin-right: $spacing_small;
-        }
-        &-label {
-          color: $font_color_minor;
-          font-size: $font_size_large;
-          margin-right: $spacing_medium;
-        }
-        santa-input {
-          flex: 1 1 auto;
         }
       }
     }
@@ -281,7 +280,7 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
         &-quickFilters-keywordSearch {
           background-color: $color_filter;
           &-activeIcon {
-            visibility: visible;
+            color: $font_color_inverse;
           }
           &-label {
             color: $font_color_inverse;

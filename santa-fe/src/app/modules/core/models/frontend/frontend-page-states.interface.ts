@@ -112,7 +112,7 @@ export interface TradeUtilityPanelState {
 
 export interface TradeMarketAnalysisPanelState {
   receivedSecurity: boolean;
-  populateGroupOptionText: boolean;
+  apiReturnedState: boolean;
   apiErrorState: boolean;
   graphDataEmptyState: boolean;
   displayGraph: boolean;
@@ -121,6 +121,7 @@ export interface TradeMarketAnalysisPanelState {
     timeScope: string;
     groupByOptions: Array<DTOs.SecurityDefinitionDTO>;
     activeOptions: Array<DTOs.SecurityDefinitionDTO>;
+    driver: string;
   }
   table: {
     numOfSecurities: number;

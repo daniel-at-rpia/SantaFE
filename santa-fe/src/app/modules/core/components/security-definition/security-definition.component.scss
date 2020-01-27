@@ -78,7 +78,9 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
     display: flex;
     justify-content: center;
     margin-bottom: $spacing_x_small;
+    overflow: hidden;
     &-text {
+      @include mix_text_overflow_multi_line(3);
       color: $font_color_major;
       user-select: none;
       font-size: $font_size_x_small;
@@ -378,5 +380,44 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
     @include material('none');
     @include mix_border_generator($typical_border_width, $font_color_major);
     background: none;
+    #{$securityDefinitionBlockName} {
+      &__icon {
+        &-regularImg {
+          color: $font_color_minor;
+        }
+        &-ratingBucket {
+          &-primaryImg {
+            color: $font_color_minor;
+          }
+          &-secondaryImg {
+            color: $font_color_inverse;
+          }
+        }
+        &-backendTenor {
+          &-primaryImg {
+            color: $font_color_minor;
+          }
+          &-secondaryImg {
+            color: $font_color_minor;
+          }
+        }
+        &-securityType {
+          &-box {
+            background-color: $color_active;
+            &-text {
+              color: $font_color_inverse;
+              &:first-of-type {
+                color: $font_color_major;
+              }
+            }
+          }
+        }
+      }
+      &__label {
+        &-text {
+          color: $font_color_major;
+        }
+      }
+    }
   }
 }

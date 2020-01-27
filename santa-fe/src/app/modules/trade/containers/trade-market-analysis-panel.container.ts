@@ -76,14 +76,15 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     const state: TradeMarketAnalysisPanelState = {
       receivedSecurity: false,
       targetSecurity: null,
-      populateGroupOptionText: false,
       displayGraph: false,
+      apiReturnedState: false,
       apiErrorState: false,
       graphDataEmptyState: false,
       config: {
         timeScope: 'Mom',
         groupByOptions: [],
-        activeOptions: []
+        activeOptions: [],
+        driver: 'GSpread'
       },
       table: {
         numOfSecurities: 0,
@@ -134,22 +135,31 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   }
 
   public onClickGroupByOption(targetOption: SecurityDefinitionDTO){
-    if (!targetOption.state.isLocked) {
-      const indexOfTargetOption = this.state.config.activeOptions.indexOf(targetOption);
-      if (indexOfTargetOption >= 0) {
-        this.state.config.activeOptions.splice(indexOfTargetOption, 1);
-      } else {
-        this.state.config.activeOptions.push(targetOption);
-      }
-      if (this.state.config.activeOptions.length > 0) {
+    if (!!this.state.apiReturnedState) {
+      if (!targetOption.state.isLocked) {
+        const indexOfTargetOption = this.state.config.activeOptions.indexOf(targetOption);
+        if (indexOfTargetOption >= 0) {
+          this.state.config.activeOptions.splice(indexOfTargetOption, 1);
+        } else {
+          this.state.config.activeOptions.push(targetOption);
+        }
         this.fetchGroupData();
       }
     }
   }
 
   public onClickTimeScope(targetScope: string) {
-    if (this.state.config.timeScope !== targetScope) {
-      this.state.config.timeScope = targetScope;
+    if (!!this.state.apiReturnedState) {
+      if (this.state.config.timeScope !== targetScope) {
+        this.state.config.timeScope = targetScope;
+        this.fetchGroupData();
+      }
+    }
+  }
+
+  public onClickDriver(targetDriver: string) {
+    if (this.state.config.driver !== targetDriver) {
+      this.state.config.driver = targetDriver;
       this.fetchGroupData();
     }
   }
@@ -204,11 +214,12 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
       const definitionDTO = this.dtoService.formSecurityDefinitionObject(eachDefinitionStub);
       definitionDTO.state.isMiniPillVariant = true;
       definitionDTO.state.groupByActive = true;
+      definitionDTO.state.isLocked = true;
       if (
         definitionDTO.data.key === this.constants.securityDefinitionMap.CURRENCY.key || 
         definitionDTO.data.key === this.constants.securityDefinitionMap.COUPON_TYPE.key ||
         definitionDTO.data.key === this.constants.securityDefinitionMap.SECURITY_TYPE.key) {
-        definitionDTO.state.isLocked = true;
+        // do nothing
       } else {
         if (definitionDTO.data.key !== this.constants.securityDefinitionMap.TICKER.key) {
           activeOptions.push(definitionDTO);
@@ -222,6 +233,10 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
 
   private fetchGroupData() {
     if (this.state.receivedSecurity) {
+      this.state.apiReturnedState = false;
+      this.state.config.groupByOptions.forEach((eachOption) => {
+        eachOption.state.isLocked = true;
+      });
       const targetScope = this.state.config.timeScope;
       const payload : PayloadGetGroupHistoricalSummary = {
         source: "Default",
@@ -229,7 +244,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
         groupIdentifier: {},
         tenorOptions: ["2Y", "3Y", "5Y", "7Y", "10Y", "30Y"],
         deltaTypes: [targetScope],
-        metricName: this.utilityService.isCDS(false, this.state.targetSecurity) ? 'Spread' : 'GSpread',
+        metricName: this.utilityService.isCDS(false, this.state.targetSecurity) ? 'Spread' : this.state.config.driver,
         count: 5
       }
       this.state.config.activeOptions.forEach((eachOption) => {
@@ -244,14 +259,16 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getGroupHistoricalSummary, {req: 'POST'}, payload).pipe(
         first(),
         tap((serverReturn: BEHistoricalSummaryOverviewDTO) => {
+          this.state.apiReturnedState = true;
           this.state.apiErrorState = false;
-          !this.state.populateGroupOptionText && this.populateGroupOptionText(serverReturn[targetScope]);
+          this.populateGroupOptionText(serverReturn);
           this.loadSecurityList(serverReturn[targetScope]);
           this.state.table.levelSummary = this.dtoService.formHistoricalSummaryObject(false, serverReturn[targetScope], true);
           this.state.table.basisSummary = this.dtoService.formHistoricalSummaryObject(false, serverReturn[targetScope], false);
         }),
         catchError(err => {
           console.error('error', err);
+          this.state.apiReturnedState = true;
           this.state.apiErrorState = true;
           return of('error');
         })
@@ -347,7 +364,8 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
       } else {
         this.state.table.moveDistanceBasisList.push('');
       }
-      this.state.table.numOfSecurities = rawData.Group.group.metrics.propertyToNumSecurities.GSpread;
+      const targetFieldForCount = this.utilityService.isCDS(false, this.state.targetSecurity) ? 'Spread' : this.state.config.driver;
+      this.state.table.numOfSecurities = rawData.Group.group.metrics.propertyToNumSecurities[targetFieldForCount];
     }
     if (!!rawData.Top) {
       let index = 1;
@@ -402,21 +420,29 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     targetSecurity.state.isWidthFlexible = true;
   }
 
-  private populateGroupOptionText(rawData: BEHistoricalSummaryDTO) {
-    if (!!rawData && !!rawData.Group && !!rawData.Group.group && !!rawData.Group.group.groupIdentifier) {
+  private populateGroupOptionText(rawData: BEHistoricalSummaryOverviewDTO) {
+    if (!!rawData && !!rawData.GroupIdentifierWithInclusiveOptions && !!rawData.GroupIdentifierWithInclusiveOptions.groupOptionValues) {
+      const valueObject = rawData.GroupIdentifierWithInclusiveOptions.groupOptionValues;
       this.state.config.groupByOptions.forEach((eachOption) => {
-        if (this.state.config.activeOptions.indexOf(eachOption) >= 0 || eachOption.state.isLocked) {
-          const backendKey = this.utilityService.convertFEKey(eachOption.data.key);
-          if (backendKey !== 'n/a') {
-            const value = !!rawData.Group.group.groupIdentifier.groupOptionValues[backendKey] ? rawData.Group.group.groupIdentifier.groupOptionValues[backendKey][0] : 'n/a';
+        const beKey = this.utilityService.convertFEKey(eachOption.data.key);
+        if (!!valueObject[beKey] && valueObject[beKey].length > 0) {
+          const value = valueObject[beKey][0];
+          if (value == null) {
+            eachOption.data.name = 'None';
+          } else {
             eachOption.data.name = value;
           }
-        } else if (!!eachOption.data.securityDTOAttr) {
-          eachOption.data.name = this.state.targetSecurity.data[eachOption.data.securityDTOAttr];
+        }
+        if (
+          eachOption.data.key === this.constants.securityDefinitionMap.CURRENCY.key || 
+          eachOption.data.key === this.constants.securityDefinitionMap.COUPON_TYPE.key ||
+          eachOption.data.key === this.constants.securityDefinitionMap.SECURITY_TYPE.key) {
+          // do nothing
+        } else {
+          eachOption.state.isLocked = false;
         }
       })
     }
-    this.state.populateGroupOptionText = true;
   }
 
   private retrieveMoveDistance(rawQuantBlock: BEHistoricalQuantBlock): string {
