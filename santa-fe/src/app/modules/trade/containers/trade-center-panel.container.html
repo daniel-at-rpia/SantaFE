@@ -130,50 +130,6 @@
   </section>
   <section class="sat-tradeCenterPanel__result">
     <div class="sat-tradeCenterPanel__result-quickFilters">
-      <div class="sat-tradeCenterPanel__result-quickFilters-row">
-        <span class="sat-tradeCenterPanel__result-quickFilters-row-label">Driver :</span>
-        <div class="santaBtnGroup">
-          <button
-            (click)="onSwitchMetric(constants.defaultMetricIdentifier)"
-            [ngClass]="{
-              'sat-tradeCenterPanel__result-quickFilters-row-btn': true,
-              'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-quickFilters-row-btn--active': state.filters.quickFilters.metricType === constants.defaultMetricIdentifier
-            }">
-            <span>Combined</span>
-          </button>
-          <button
-            (click)="onSwitchMetric('Spread')"
-            [ngClass]="{
-              'sat-tradeCenterPanel__result-quickFilters-row-btn': true,
-              'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-quickFilters-row-btn--active': state.filters.quickFilters.metricType === 'Spread'
-            }">
-            <i class="fal fa-ruler"></i>
-            <span>Spread</span>
-          </button>
-          <button
-            (click)="onSwitchMetric('Yield')"
-            [ngClass]="{
-              'sat-tradeCenterPanel__result-quickFilters-row-btn': true,
-              'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-quickFilters-row-btn--active': state.filters.quickFilters.metricType === 'Yield'
-            }">
-            <i class="fal fa-ruler"></i>
-            <span>Yield</span>
-          </button>
-          <button
-            (click)="onSwitchMetric('Price')"
-            [ngClass]="{
-              'sat-tradeCenterPanel__result-quickFilters-row-btn': true,
-              'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-quickFilters-row-btn--active': state.filters.quickFilters.metricType === 'Price'
-            }">
-            <i class="fal fa-ruler"></i>
-            <span>Price</span>
-          </button>
-        </div>
-      </div>
       <div class="sat-tradeCenterPanel__result-quickFilters-keywordSearch">
         <i class="sat-tradeCenterPanel__result-quickFilters-keywordSearch-activeIcon fal fa-search"></i>
         <span class="sat-tradeCenterPanel__result-quickFilters-keywordSearch-label">:</span>
@@ -182,6 +138,47 @@
           [placeholder]="'filter security name by keyword'"
           (onInputChange)="onSearchKeywordChange($event)">
         </santa-input>
+      </div>
+      <div class="sat-tradeCenterPanel__result-quickFilters-driver">
+        <span class="sat-tradeCenterPanel__result-quickFilters-driver-label">Driver :</span>
+        <div class="santaBtnGroup">
+          <button
+            (click)="onSwitchMetric(constants.defaultMetricIdentifier)"
+            [ngClass]="{
+              'sat-tradeCenterPanel__result-quickFilters-driver-btn': true,
+              'santaBtn--labelled': true,
+              'sat-tradeCenterPanel__result-quickFilters-driver-btn--active': state.filters.quickFilters.metricType === constants.defaultMetricIdentifier
+            }">
+            <span>Combined</span>
+          </button>
+          <button
+            (click)="onSwitchMetric('Spread')"
+            [ngClass]="{
+              'sat-tradeCenterPanel__result-quickFilters-driver-btn': true,
+              'santaBtn--labelled': true,
+              'sat-tradeCenterPanel__result-quickFilters-driver-btn--active': state.filters.quickFilters.metricType === 'Spread'
+            }">
+            <span>Spread</span>
+          </button>
+          <button
+            (click)="onSwitchMetric('Yield')"
+            [ngClass]="{
+              'sat-tradeCenterPanel__result-quickFilters-driver-btn': true,
+              'santaBtn--labelled': true,
+              'sat-tradeCenterPanel__result-quickFilters-driver-btn--active': state.filters.quickFilters.metricType === 'Yield'
+            }">
+            <span>Yield</span>
+          </button>
+          <button
+            (click)="onSwitchMetric('Price')"
+            [ngClass]="{
+              'sat-tradeCenterPanel__result-quickFilters-driver-btn': true,
+              'santaBtn--labelled': true,
+              'sat-tradeCenterPanel__result-quickFilters-driver-btn--active': state.filters.quickFilters.metricType === 'Price'
+            }">
+            <span>Price</span>
+          </button>
+        </div>
       </div>
     </div>
     <div class="sat-tradeCenterPanel__result-errorPrompt">
