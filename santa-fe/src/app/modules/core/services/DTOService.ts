@@ -772,7 +772,8 @@ export class DTOService {
 
   public formMoveVisualizerObject(
     isStencil: boolean,
-    rawData?: BEHistoricalQuantBlock,
+    rawData: BEHistoricalQuantBlock,
+    colorCodeInversed: boolean,
     identifier?: string
   ): DTOs.MoveVisualizerDTO {
     const object: DTOs.MoveVisualizerDTO = {
@@ -797,7 +798,8 @@ export class DTOService {
         isInversed: false,
         isInvalid: false,
         isPlaceholder: false,
-        isStencil: !!isStencil
+        isStencil: !!isStencil,
+        isColorCodeInversed: false
       }
     };
     if (!isStencil) {
@@ -818,6 +820,7 @@ export class DTOService {
         if (!!identifier) {
           object.data.identifier = identifier;
         }
+        object.state.isColorCodeInversed = !!colorCodeInversed;
       } else {
         object.data.start = null;
         object.data.end = null;
@@ -830,7 +833,8 @@ export class DTOService {
   public formHistoricalSummaryObject(
     isStencil: boolean,
     rawData: BEHistoricalSummaryDTO,
-    isLevel: boolean
+    isLevel: boolean,
+    isColorCodeInversed: boolean
   ): DTOs.HistoricalSummaryDTO {
     const object: DTOs.HistoricalSummaryDTO = {
       data: {
@@ -850,26 +854,26 @@ export class DTOService {
     };
     if (!isStencil && !!rawData) {
       if (!!rawData.BaseSecurity) {
-        const baseDTO = this.formMoveVisualizerObject(false, rawData.BaseSecurity.historicalLevel, rawData.BaseSecurity.security.name);
+        const baseDTO = this.formMoveVisualizerObject(false, rawData.BaseSecurity.historicalLevel, isColorCodeInversed, rawData.BaseSecurity.security.name);
         baseDTO.state.isPlaceholder = !isLevel;
         object.data.list.push(baseDTO);
       }
       if (!!rawData.Group) {
         const name = rawData.Group.group ? rawData.Group.group.name : 'n/a';
-        const groupDTO = isLevel ? this.formMoveVisualizerObject(false, rawData.Group.historicalLevel, name) : this.formMoveVisualizerObject(false, rawData.Group.historicalBasis);
+        const groupDTO = isLevel ? this.formMoveVisualizerObject(false, rawData.Group.historicalLevel, isColorCodeInversed, name) : this.formMoveVisualizerObject(false, rawData.Group.historicalBasis, isColorCodeInversed);
         object.data.list.push(groupDTO);
         object.data.centerPoint = (groupDTO.data.max + groupDTO.data.min)/2;
         object.data.globalDistance = (groupDTO.data.max - groupDTO.data.min) * 10;
       }
       if (!!rawData.Top) {
         rawData.Top.forEach((eachQuantBlock) => {
-          const eachDTO = isLevel ? this.formMoveVisualizerObject(false, eachQuantBlock.historicalLevel, eachQuantBlock.security.name) : this.formMoveVisualizerObject(false, eachQuantBlock.historicalBasis, eachQuantBlock.security.name);
+          const eachDTO = isLevel ? this.formMoveVisualizerObject(false, eachQuantBlock.historicalLevel, isColorCodeInversed, eachQuantBlock.security.name) : this.formMoveVisualizerObject(false, eachQuantBlock.historicalBasis, isColorCodeInversed, eachQuantBlock.security.name);
           object.data.list.push(eachDTO);
         })
       }
       if (!!rawData.Bottom) {
         rawData.Bottom.forEach((eachQuantBlock) => {
-          const eachDTO = isLevel ? this.formMoveVisualizerObject(false, eachQuantBlock.historicalLevel, eachQuantBlock.security.name) : this.formMoveVisualizerObject(false, eachQuantBlock.historicalBasis, eachQuantBlock.security.name);
+          const eachDTO = isLevel ? this.formMoveVisualizerObject(false, eachQuantBlock.historicalLevel, isColorCodeInversed, eachQuantBlock.security.name) : this.formMoveVisualizerObject(false, eachQuantBlock.historicalBasis, isColorCodeInversed, eachQuantBlock.security.name);
           object.data.list.push(eachDTO);
         })
       }

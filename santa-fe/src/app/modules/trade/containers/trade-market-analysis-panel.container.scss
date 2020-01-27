@@ -267,6 +267,32 @@ $tradeMarketAnalysisPanel_config_label_width: 6rem;
       margin: $spacing_large 0;
     }
   }
+  &--colorCodeInversedState {
+    #{$tradeMarketAnalysisPanelBlockName} {
+      &__table {
+        &-content {
+          &-levelDistance, &-basisDistance {
+            &-item {
+              &-text {
+                background-color: $color_negative;
+              }
+              &--positive {
+                #{$tradeMarketAnalysisPanelBlockName} {
+                  &__table-content {
+                    &-levelDistance, &-basisDistance {
+                      &-item-text {
+                        background-color: $color_positive;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
   &--hasSecurityState {
     #{$tradeMarketAnalysisPanelBlockName} {
       &__tableHeader {

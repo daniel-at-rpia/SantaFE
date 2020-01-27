@@ -365,6 +365,7 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
     isInvalid: boolean;
     isPlaceholder: boolean;
     isStencil: boolean;
+    isColorCodeInversed: boolean;
   }
 }
 

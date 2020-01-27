@@ -273,10 +273,11 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
         tap((serverReturn: BEHistoricalSummaryOverviewDTO) => {
           this.state.apiReturnedState = true;
           this.state.apiErrorState = false;
+          const inverseColorCode = !this.utilityService.isCDS(false, this.state.targetSecurity) && this.state.config.driver === 'Price';
           this.populateGroupOptionText(serverReturn);
           this.loadSecurityList(serverReturn[targetScope]);
-          this.state.table.levelSummary = this.dtoService.formHistoricalSummaryObject(false, serverReturn[targetScope], true);
-          this.state.table.basisSummary = this.dtoService.formHistoricalSummaryObject(false, serverReturn[targetScope], false);
+          this.state.table.levelSummary = this.dtoService.formHistoricalSummaryObject(false, serverReturn[targetScope], true, inverseColorCode);
+          this.state.table.basisSummary = this.dtoService.formHistoricalSummaryObject(false, serverReturn[targetScope], false, inverseColorCode);
         }),
         catchError(err => {
           console.error('error', err);
@@ -312,35 +313,35 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     this.state.table.moveDistanceLevelList = ['', '', '','', '', '','', '', '','','',''];
     this.state.table.moveDistanceBasisList = ['', '', '','', '', '','', '', '','','',''];
     this.state.table.rankingList = ['', '', '','', '', '','', '', '','','',''];
-    this.state.table.levelSummary = this.dtoService.formHistoricalSummaryObject(true, null, true);
+    this.state.table.levelSummary = this.dtoService.formHistoricalSummaryObject(true, null, true, false);
     this.state.table.levelSummary.data.list = [
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true)
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false)
     ];
-    this.state.table.basisSummary = this.dtoService.formHistoricalSummaryObject(true, null, false);
+    this.state.table.basisSummary = this.dtoService.formHistoricalSummaryObject(true, null, false, false);
     this.state.table.basisSummary.data.list = [
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true),
-      this.dtoService.formMoveVisualizerObject(true)
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false),
+      this.dtoService.formMoveVisualizerObject(true, null, false)
     ];
   }
 

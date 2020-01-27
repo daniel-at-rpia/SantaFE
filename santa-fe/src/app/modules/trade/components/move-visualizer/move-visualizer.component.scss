@@ -207,6 +207,44 @@ $moveVisualizer_color_inversed: $color_positive;
       }
     }
   }
+  &--colorCodeInversedState {
+    #{$moveVisualizerBlockName} {
+      &__bar {
+        &-moveDistance {
+          background-color: $moveVisualizer_color_inversed;
+        }
+      }
+      &__pins {
+        &-end {
+          &-value {
+            background-color: $moveVisualizer_color_inversed;
+          }
+          &-icon {
+            color: $moveVisualizer_color_inversed;
+          }
+        }
+      }
+    }
+  }
+  &--colorCodeInversedState#{$moveVisualizerBlockName}--inversedState {
+    #{$moveVisualizerBlockName} {
+      &__bar {
+        &-moveDistance {
+          background-color: $moveVisualizer_color_default;
+        }
+      }
+      &__pins {
+        &-end {
+          &-value {
+            background-color: $moveVisualizer_color_default;
+          }
+          &-icon {
+            color: $moveVisualizer_color_default;
+          }
+        }
+      }
+    }
+  }
   &--pinIsNullState {
     #{$moveVisualizerBlockName} {
       &__pins {
