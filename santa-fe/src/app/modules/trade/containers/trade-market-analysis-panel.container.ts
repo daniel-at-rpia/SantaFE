@@ -134,23 +134,25 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   }
 
   public onClickGroupByOption(targetOption: SecurityDefinitionDTO){
-    if (!targetOption.state.isLocked) {
-      const indexOfTargetOption = this.state.config.activeOptions.indexOf(targetOption);
-      if (indexOfTargetOption >= 0) {
-        this.state.config.activeOptions.splice(indexOfTargetOption, 1);
-      } else {
-        this.state.config.activeOptions.push(targetOption);
-      }
-      if (this.state.config.activeOptions.length > 0) {
+    if (!!this.state.apiReturnedState) {
+      if (!targetOption.state.isLocked) {
+        const indexOfTargetOption = this.state.config.activeOptions.indexOf(targetOption);
+        if (indexOfTargetOption >= 0) {
+          this.state.config.activeOptions.splice(indexOfTargetOption, 1);
+        } else {
+          this.state.config.activeOptions.push(targetOption);
+        }
         this.fetchGroupData();
       }
     }
   }
 
   public onClickTimeScope(targetScope: string) {
-    if (this.state.config.timeScope !== targetScope) {
-      this.state.config.timeScope = targetScope;
-      this.fetchGroupData();
+    if (!!this.state.apiReturnedState) {
+      if (this.state.config.timeScope !== targetScope) {
+        this.state.config.timeScope = targetScope;
+        this.fetchGroupData();
+      }
     }
   }
 
@@ -204,11 +206,12 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
       const definitionDTO = this.dtoService.formSecurityDefinitionObject(eachDefinitionStub);
       definitionDTO.state.isMiniPillVariant = true;
       definitionDTO.state.groupByActive = true;
+      definitionDTO.state.isLocked = true;
       if (
         definitionDTO.data.key === this.constants.securityDefinitionMap.CURRENCY.key || 
         definitionDTO.data.key === this.constants.securityDefinitionMap.COUPON_TYPE.key ||
         definitionDTO.data.key === this.constants.securityDefinitionMap.SECURITY_TYPE.key) {
-        definitionDTO.state.isLocked = true;
+        // do nothing
       } else {
         if (definitionDTO.data.key !== this.constants.securityDefinitionMap.TICKER.key) {
           activeOptions.push(definitionDTO);
@@ -222,6 +225,10 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
 
   private fetchGroupData() {
     if (this.state.receivedSecurity) {
+      this.state.apiReturnedState = false;
+      this.state.config.groupByOptions.forEach((eachOption) => {
+        eachOption.state.isLocked = true;
+      });
       const targetScope = this.state.config.timeScope;
       const payload : PayloadGetGroupHistoricalSummary = {
         source: "Default",
@@ -415,6 +422,14 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
           } else {
             eachOption.data.name = value;
           }
+        }
+        if (
+          eachOption.data.key === this.constants.securityDefinitionMap.CURRENCY.key || 
+          eachOption.data.key === this.constants.securityDefinitionMap.COUPON_TYPE.key ||
+          eachOption.data.key === this.constants.securityDefinitionMap.SECURITY_TYPE.key) {
+          // do nothing
+        } else {
+          eachOption.state.isLocked = false;
         }
       })
     }

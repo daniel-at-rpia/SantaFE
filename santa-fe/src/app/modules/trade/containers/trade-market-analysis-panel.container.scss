@@ -28,11 +28,13 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
       display: flex;
       flex-wrap: wrap;
       &-item {
+        @include material('none');
+        @include mix_border_generator;
         flex: 0 0 auto;
         margin-right: $spacing_small;
         margin-bottom: $spacing_small;
+        background-color: transparent;
         &--selected {
-          @include material('none');
           background-color: $color_active;
           color: $font_color_inverse;
         }
@@ -245,6 +247,22 @@ $tradeMarketAnalysisPanel_config_label_width: 7.75rem;
       }
       &__table {
         display: flex;
+      }
+    }
+  }
+  &--apiReturnedState {
+    #{$tradeMarketAnalysisPanelBlockName} {
+      &__timeScope {
+        &-list-item {
+          @include material();
+          background-color: $color_white;
+          &--selected {
+            @include material('none');
+            border-color: $color_active;
+            background-color: $color_active;
+            color: $font_color_inverse;
+          }
+        }
       }
     }
   }
