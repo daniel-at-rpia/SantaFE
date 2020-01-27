@@ -76,7 +76,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     if (!!this.state) {
       // there is an old state exists
       if (!!this.state.chart) {
-        console.log('test, dispose chart');
         this.state.chart.dispose();
       }
     }
@@ -184,7 +183,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     if (!!targetData && targetData.length > 0) {
       this.state.graphDataEmptyState = false;
       if (!!this.state.chart) {
-        console.log('test, dispose chart');
         this.state.chart.dispose();
       }
       const buildGraph = () => {
@@ -379,7 +377,11 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
         this.state.table.moveDistanceBasisList.push('');
       }
       const targetFieldForCount = this.utilityService.isCDS(false, this.state.targetSecurity) ? 'Spread' : this.state.config.driver;
-      this.state.table.numOfSecurities = rawData.Group.group.metrics.propertyToNumSecurities[targetFieldForCount];
+      try {
+        this.state.table.numOfSecurities = rawData.Group.group.deltaMetrics[this.state.config.timeScope].propertyToNumSecurities[targetFieldForCount];
+      } catch {
+        console.error('something is null in there', rawData.Group.group);
+      }
     }
     if (!!rawData.Top) {
       let index = 1;
