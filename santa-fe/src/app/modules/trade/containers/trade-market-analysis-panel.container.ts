@@ -297,6 +297,8 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
       stencilCard,
       stencilCard
     ];
+    this.state.table.moveDistanceLevelList = ['', '', '','', '', '','', '', '','','',''];
+    this.state.table.moveDistanceBasisList = ['', '', '','', '', '','', '', '','','',''];
     this.state.table.rankingList = ['', '', '','', '', '','', '', '','','',''];
     this.state.table.levelSummary = this.dtoService.formHistoricalSummaryObject(true, null, true);
     this.state.table.levelSummary.data.list = [
@@ -347,7 +349,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
       this.state.table.moveDistanceBasisList.push('');
       const groupDTO = this.dtoService.formSecurityCardObject('', null, true);
       groupDTO.state.isStencil = false;
-      groupDTO.state.isInteractionDisabled = true;
+      groupDTO.state.isInteractionThumbDownDisabled = true;
       groupDTO.data.name = rawData.Group.group.name;
       this.applyStatesToSecurityCards(groupDTO);
       this.state.table.presentList.push(groupDTO);

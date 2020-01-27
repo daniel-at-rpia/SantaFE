@@ -93,7 +93,7 @@ $tradeMarketAnalysisPanel_config_label_width: 6rem;
     }
   }
   &__tableHeader {
-    @include mix_fixed_div(relative, $z_index_standard_hovering_item_lift);
+    @include mix_fixed_div(relative, $z_index_standard_tooltip_lift);
     flex: 0 0 auto;
     display: none;
     align-items: center;

@@ -73,12 +73,12 @@ export const PortfolioShortcuts: Array<SearchShortcutStub> = [
     ],
     isMajor: true
   },{
-    displayTitle: 'STIP + FIP + CIP + AGB',
+    displayTitle: 'STIP + FIP + CIP + AGB + BBB',
     includedDefinitions: [
       {
         definitionKey: 'PORTFOLIO',
         groupByActive: false,
-        selectedOptions: ['STIP', 'FIP', 'CIP', 'AGB']
+        selectedOptions: ['STIP', 'FIP', 'CIP', 'AGB', 'BBB']
       }
     ],
     isMajor: true

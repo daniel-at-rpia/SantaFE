@@ -798,22 +798,28 @@ export class DTOService {
         isStencil: !!isStencil
       }
     };
-    if (!isStencil && !!rawData) {
-      object.data.start = rawData.startMetric != null ? this.utility.round(rawData.startMetric) : null;
-      object.data.end = rawData.endMetric != null ? this.utility.round(rawData.endMetric) : null;
-      object.data.min = rawData.minMetric != null ? this.utility.round(rawData.minMetric) : null;
-      object.data.max = rawData.maxMetric != null ? this.utility.round(rawData.maxMetric) : null;
-      object.state.isInversed = rawData.startMetric > rawData.endMetric;
-      object.state.isInvalid = !rawData.isValid;
-      object.data.isBasis = !!rawData.isBasisRange;
-      for (const dateStamp in rawData.timeSeries) {
-        object.data.timeSeries.push({
-          date: dateStamp,
-          value: rawData.timeSeries[dateStamp]
-        });
-      }
-      if (!!identifier) {
-        object.data.identifier = identifier;
+    if (!isStencil) {
+      if (rawData != null) {
+        object.data.start = rawData.startMetric != null ? this.utility.round(rawData.startMetric) : null;
+        object.data.end = rawData.endMetric != null ? this.utility.round(rawData.endMetric) : null;
+        object.data.min = rawData.minMetric != null ? this.utility.round(rawData.minMetric) : null;
+        object.data.max = rawData.maxMetric != null ? this.utility.round(rawData.maxMetric) : null;
+        object.state.isInversed = rawData.startMetric > rawData.endMetric;
+        object.state.isInvalid = !rawData.isValid;
+        object.data.isBasis = !!rawData.isBasisRange;
+        for (const dateStamp in rawData.timeSeries) {
+          object.data.timeSeries.push({
+            date: dateStamp,
+            value: rawData.timeSeries[dateStamp]
+          });
+        }
+        if (!!identifier) {
+          object.data.identifier = identifier;
+        }
+      } else {
+        object.data.start = null;
+        object.data.end = null;
+        object.state.isInvalid = true;
       }
     }
     return object;
