@@ -75,6 +75,7 @@ export class TradePage implements OnInit, OnDestroy {
       select(selectSelectedSecurityForAnalysis)
     ).subscribe((targetSecurity) => {
       this.state.sidePanelsCollapsed = !targetSecurity;
+      this.state.lilMarketMaximized = false;
     });
   }
 

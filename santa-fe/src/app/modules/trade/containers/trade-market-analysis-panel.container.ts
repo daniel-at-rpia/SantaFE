@@ -73,6 +73,13 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   };
 
   private initializePageState(): TradeMarketAnalysisPanelState {
+    if (!!this.state) {
+      // there is an old state exists
+      if (!!this.state.chart) {
+        console.log('test, dispose chart');
+        this.state.chart.dispose();
+      }
+    }
     const state: TradeMarketAnalysisPanelState = {
       receivedSecurity: false,
       targetSecurity: null,
@@ -96,7 +103,8 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
         rankingList: [],
         moveDistanceLevelList: [],
         moveDistanceBasisList: []
-      }
+      },
+      chart: null
     };
     this.populateDefinitionOptions(state);
     return state;
@@ -175,6 +183,10 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     const targetData = this.state.table.levelSummary.data.list[targetIndex].data.timeSeries;
     if (!!targetData && targetData.length > 0) {
       this.state.graphDataEmptyState = false;
+      if (!!this.state.chart) {
+        console.log('test, dispose chart');
+        this.state.chart.dispose();
+      }
       const buildGraph = () => {
         this.state.displayGraph = true;
         const baseSecurity = this.state.table.levelSummary.data.list[0];
@@ -186,7 +198,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
           name: this.state.table.levelSummary.data.list[targetIndex].data.identifier,
           data: targetData
         }
-        this.graphService.buildLilMarketTimeSeriesGraph(basePack, targetPack);
+        this.state.chart = this.graphService.buildLilMarketTimeSeriesGraph(basePack, targetPack);
       }
       setTimeout(buildGraph.bind(this), 200);
     } else {

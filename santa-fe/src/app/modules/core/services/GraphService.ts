@@ -547,7 +547,7 @@ export class GraphService {
   public buildLilMarketTimeSeriesGraph(
     baseDataPack: LilMarketGraphSeriesDataPack,
     targetDataPack: LilMarketGraphSeriesDataPack
-  ) {
+  ): am4charts.XYChart {
     
     const chart = am4core.create('LilMarketGraph', am4charts.XYChart);
 
@@ -568,6 +568,7 @@ export class GraphService {
     chart.cursor.behavior = "panXY";
     chart.cursor.xAxis = dateAxis;
     // chart.cursor.snapToSeries = series;
+    return chart;
   }
 
   private buildLilMarketSeries(chart: am4charts.XYChart, dataPack: LilMarketGraphSeriesDataPack){
