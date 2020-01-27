@@ -140,7 +140,7 @@
               'santaBtn--labelled': true,
               'sat-tradeCenterPanel__result-quickFilters-row-btn--active': state.filters.quickFilters.metricType === constants.defaultMetricIdentifier
             }">
-            <span>All Combined</span>
+            <span>Combined</span>
           </button>
           <button
             (click)="onSwitchMetric('Spread')"
@@ -175,11 +175,11 @@
         </div>
       </div>
       <div class="sat-tradeCenterPanel__result-quickFilters-keywordSearch">
-        <i class="sat-tradeCenterPanel__result-quickFilters-keywordSearch-activeIcon fal fa-filter"></i>
-        <span class="sat-tradeCenterPanel__result-quickFilters-keywordSearch-label">Keyword Search :</span>
+        <i class="sat-tradeCenterPanel__result-quickFilters-keywordSearch-activeIcon fal fa-search"></i>
+        <span class="sat-tradeCenterPanel__result-quickFilters-keywordSearch-label">:</span>
         <santa-input
           [inputValue]="state.filters.quickFilters.keyword"
-          [placeholder]="'search for securities'"
+          [placeholder]="'filter security name by keyword'"
           (onInputChange)="onSearchKeywordChange($event)">
         </santa-input>
       </div>
