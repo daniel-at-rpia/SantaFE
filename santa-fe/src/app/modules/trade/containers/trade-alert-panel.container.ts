@@ -12,4 +12,8 @@ import {
 
 export class TradeAlertPanel {
 
+  public onClickSendMail() {
+    location.href = "mailto:santa@rpia.ca?subject=Santa%20Feedback";
+  }
+
 }
