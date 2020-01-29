@@ -57,8 +57,7 @@ $quantComparer_min_height: 2.5rem;
         padding: $spacing_xx_small;
         direction: ltr;
         &-number {
-          color: $font_color_major;
-          font-size: $font_size_normal;
+          @include mix_quantative_text;
           line-height: $line_height_minimum;
           user-select: none;
         }

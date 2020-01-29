@@ -144,7 +144,7 @@ export class AgGridMiddleLayerService {
       newAgColumn.cellRenderer = targetHeader.data.key;
       newAgColumn.width = AGGRID_QUOTE_COLUMN_WIDTH;
     } else if (!targetHeader.data.isDataTypeText) {
-      newAgColumn.cellClass = AGGRID_CELL_CLASS;
+      newAgColumn.cellClass = `${AGGRID_CELL_CLASS} ${AGGRID_CELL_CLASS}--numeric`;
       newAgColumn.headerClass = `${AGGRID_HEADER_CLASS} ${AGGRID_HEADER_CLASS}--numeric ag-numeric-header`;
       newAgColumn.width = AGGRID_SIMPLE_NUM_COLUMN_WIDTH;
       newAgColumn.resizable = true;
