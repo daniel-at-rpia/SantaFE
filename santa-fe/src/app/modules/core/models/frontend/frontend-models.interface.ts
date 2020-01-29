@@ -61,7 +61,10 @@ export interface SecurityDTO extends BasicDTOStructure {
       bid: number;
       ask: number;
     }
-    cs01Local: number;
+    cs01FirmLocal: number;
+    cs01FirmLocalInK: string;
+    cs01FirmCad: number;
+    cs01FirmCadInK: string;
   }
   state: {
     isStencil: boolean;

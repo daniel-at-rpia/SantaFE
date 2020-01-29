@@ -171,6 +171,7 @@ export interface BEPortfolioDTO {
   backupPmName: string;
   researchName: string;
   cs01Local: number;
+  cs01Cad: number;
   mark: {
     driver: string;
     enteredTime: string;

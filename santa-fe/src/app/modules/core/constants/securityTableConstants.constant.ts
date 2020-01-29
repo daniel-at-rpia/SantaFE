@@ -290,6 +290,20 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     readyStage: 1,
     active: false,
     isDataTypeText: true
+  },{
+    key: 'cs01cadFirm',
+    label: 'CS01 CAD Firm (k)',
+    attrName: 'cs01FirmCadInK',
+    underlineAttrName: 'cs01FirmCad',
+    readyStage: 1,
+    active: false
+  },{
+    key: 'cs01localFirm',
+    label: 'CS01 Local Firm (k)',
+    attrName: 'cs01FirmLocalInK',
+    underlineAttrName: 'cs01FirmLocal',
+    readyStage: 1,
+    active: false
   }
 ];
 

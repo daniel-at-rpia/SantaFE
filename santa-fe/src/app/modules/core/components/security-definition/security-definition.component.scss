@@ -377,7 +377,7 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
       }
     }
   }
-  &--lockedState {
+  &--miniPillVariant#{$securityDefinitionBlockName}--lockedState {
     @include material('none');
     @include mix_border_generator($typical_border_width, $font_color_major);
     background: none;

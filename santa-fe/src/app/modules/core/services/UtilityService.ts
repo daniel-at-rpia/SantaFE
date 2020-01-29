@@ -409,7 +409,7 @@ export class UtilityService {
     }
 
     public caseInsensitiveKeywordMatch(targetText: string, keyword: string): boolean {
-      if (!!targetText && !!keyword && keyword.length >= 3) {
+      if (!!targetText && !!keyword && keyword.length >= 2) {
         const targetTextUpperCase = targetText.toUpperCase();
         const keywordUpperCase = keyword.toUpperCase();
         return targetTextUpperCase.indexOf(keywordUpperCase) >= 0;
@@ -523,6 +523,15 @@ export class UtilityService {
         return null;
       } else {
         return !!hasUnitSuffix ? `${value}MM` : `${value}`;
+      }
+    }
+
+    public parseNumberToThousands(number: number, hasUnitSuffix: boolean): string {
+      const value = this.round(number/1000, 0);
+      if (value === 0) {
+        return null;
+      } else {
+        return !!hasUnitSuffix ? `${value}K` : `${value}`;
       }
     }
 

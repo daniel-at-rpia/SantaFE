@@ -107,7 +107,7 @@ $alt-background: $color_white;
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        color: $color_blue_gray_8;
+        color: $font_color_major;
         white-space: normal;
         word-break: break-word;
         text-align: right;
@@ -122,6 +122,9 @@ $alt-background: $color_white;
           .ag-group-checkbox {
             display: none;
           }
+        }
+        &--numeric {
+          @include mix_quantative_text;
         }
         santa-table-quote-cell {
           flex: 1 1 auto;

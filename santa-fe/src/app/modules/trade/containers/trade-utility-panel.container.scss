@@ -80,6 +80,7 @@ $tradeUtilityPanel_spacing: $spacing_medium;
       color: $font_color_inverse;
     }
     &-label {
+      @include mix_text_overflow_multi_line(1);
       margin-top: $spacing_small;
       color: $font_color_minor;
       font-size: $font_size_small;

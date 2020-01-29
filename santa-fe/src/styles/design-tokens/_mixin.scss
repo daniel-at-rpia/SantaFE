@@ -151,6 +151,11 @@
     width: min-content;
   }
 
+  @mixin mix_quantative_text(){
+    font-size: $font_size_normal;
+    color: $color_black;
+  }
+
   //Media Queries
   @mixin mq-small-min {
     @media (min-width: $mediaQuery_size_small) {

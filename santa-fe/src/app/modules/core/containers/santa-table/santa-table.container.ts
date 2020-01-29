@@ -90,6 +90,25 @@ export class SantaTable implements OnInit, OnChanges {
     },
     context: {
       componentParent: this
+    },
+    sideBar: {
+      toolPanels: [
+        {
+          id: 'columns',
+          labelDefault: 'Columns',
+          labelKey: 'columns',
+          iconKey: 'columns',
+          toolPanel: 'agColumnsToolPanel',
+        },
+        {
+          id: 'filters',
+          labelDefault: 'Filters',
+          labelKey: 'filters',
+          iconKey: 'filter',
+          toolPanel: 'agFiltersToolPanel',
+        }
+      ],
+      hiddenByDefault: true
     }
   };
 
@@ -171,7 +190,7 @@ export class SantaTable implements OnInit, OnChanges {
         });
         if (!!targetRow) {
           try {
-            targetRow.state.isExpanded = !params.node.expanded;
+            targetRow.state.isExpanded = !targetRow.state.isExpanded;
             if (targetRow.data.security) {
               targetRow.data.security.state.isMultiLineVariant = params.node.expanded;
               this.fetchSecurityQuotes(targetRow, params);
@@ -193,6 +212,7 @@ export class SantaTable implements OnInit, OnChanges {
         targetRow.data.security.state.isMultiLineVariant = false;
       }
     } catch {
+      console.warn('read only issue', targetRow);
       // ignore, seems AgGrid causes some weird read only error
     }
   }
@@ -455,6 +475,7 @@ export class SantaTable implements OnInit, OnChanges {
         try {
           this.fetchSecurityQuotes(eachRow);
         } catch {
+          console.warn('read only issue at live updating all quotes', eachRow);
           // ignore, seems AgGrid causes some weird read only error
         }
       }
