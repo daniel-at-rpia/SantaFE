@@ -3,7 +3,8 @@ import {
   OnInit,
   ViewEncapsulation,
   Input,
-  Output
+  Output,
+  EventEmitter
 } from '@angular/core';
 
 import {
@@ -18,6 +19,10 @@ import {
 })
 export class SecurityQuote {
   @Input() messageData: SecurityQuoteDTO;
+  @Output() clickedThumbdown = new EventEmitter<SecurityQuoteDTO>();
   constructor() { }
 
+  public onClickThumbdown() {
+    !!this.clickedThumbdown && this.clickedThumbdown.emit(this.messageData);
+  }
 }

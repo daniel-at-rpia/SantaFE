@@ -9,7 +9,7 @@ import {
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { AgGridRowNode } from 'FEModels/frontend-blocks.interface';
 
-import { SecurityTableRowDTO } from 'FEModels/frontend-models.interface';
+import { SecurityTableRowDTO, SecurityQuoteDTO } from 'FEModels/frontend-models.interface';
 import { QuoteMetricBlock } from 'FEModels/frontend-blocks.interface';
 import {
   AgGridRowParams,
@@ -65,7 +65,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     this.parent.onClickSortQuotesByMetric(payload);
   }
 
-  public onClickThumbDown() {
-    
+  public onClickThumbdown(targetQuote: SecurityQuoteDTO) {
+    console.log('test, got', targetQuote);
   }
 }

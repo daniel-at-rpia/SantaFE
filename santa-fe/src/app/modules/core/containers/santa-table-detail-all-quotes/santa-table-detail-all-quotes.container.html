@@ -33,7 +33,8 @@
       <ul class="santaTableDetailAllQuotes__main-content-messageList">
         <security-quote
           *ngFor="let eachMessage of rowData.data.quotes"
-          [messageData]="eachMessage">
+          [messageData]="eachMessage"
+          (clickedThumbdown)="onClickThumbdown($event)">
         </security-quote>
       </ul>
     </div>
