@@ -22,6 +22,8 @@ export interface SecurityPortfolioBlock {
   quantity: number;
   marketValueCad: number;
   strategy: string;
+  cs01Cad: number;
+  cs01Local: number;
 }
 
 export interface SecurityMarkBlock {

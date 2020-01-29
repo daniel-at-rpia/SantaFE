@@ -526,6 +526,15 @@ export class UtilityService {
       }
     }
 
+    public parseNumberToThousands(number: number, hasUnitSuffix: boolean): string {
+      const value = this.round(number/1000, 0);
+      if (value === 0) {
+        return null;
+      } else {
+        return !!hasUnitSuffix ? `${value}K` : `${value}`;
+      }
+    }
+
     public retrieveSecurityMetricFromMetricPack(dto: SecurityDTO, header: SecurityTableHeaderDTO): number {
       if (!!dto && !!header) {
         let attrName = header.data.attrName;

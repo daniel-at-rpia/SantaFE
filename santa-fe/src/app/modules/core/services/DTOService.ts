@@ -75,8 +75,10 @@ export class DTOService {
         primaryPmName: null,
         backupPmName: null,
         researchName: null,
-        cs01Local: null,
-        cs01Cad: null,
+        cs01FirmLocal: null,
+        cs01FirmLocalInK: null,
+        cs01FirmCad: null,
+        cs01FirmCadInK: null,
         owner: [],
         mark: {
           combinedDefaultMark: null,
@@ -138,8 +140,6 @@ export class DTOService {
     dto.data.mark.markDriver = targetPortfolio.mark.driver;
     dto.data.mark.markChangedBy = targetPortfolio.mark.user;
     dto.data.mark.markChangedTime = targetPortfolio.mark.enteredTime;
-    dto.data.cs01Local = this.utility.round(targetPortfolio.cs01Local, 0);
-    dto.data.cs01Cad = this.utility.round(targetPortfolio.cs01Cad, 0);
     dto.data.owner = [];
     !!targetPortfolio.primaryPmName && dto.data.owner.push(targetPortfolio.primaryPmName);
     !!targetPortfolio.backupPmName && dto.data.owner.push(targetPortfolio.backupPmName);
@@ -160,7 +160,9 @@ export class DTOService {
       portfolioName: targetPortfolio.portfolioShortName,
       quantity: targetPortfolio.quantity,
       marketValueCad: targetPortfolio.marketValueCad,
-      strategy: targetPortfolio.strategyName
+      strategy: targetPortfolio.strategyName,
+      cs01Cad: targetPortfolio.cs01Cad,
+      cs01Local: targetPortfolio.cs01Local
     };
     dto.data.portfolios.push(newBlock);
   }
@@ -184,10 +186,14 @@ export class DTOService {
           console.warn('detected security with multiple strategies: ', dto.data.name, ' has strategy = ', dto.data.strategyList);
         }
       }
+      dto.data.cs01FirmCad = dto.data.cs01FirmCad + eachPortfolioBlock.cs01Cad;
+      dto.data.cs01FirmLocal = dto.data.cs01FirmLocal + eachPortfolioBlock.cs01Local;
     });
     dto.data.positionFirmInMM = this.utility.parsePositionToMM(dto.data.positionFirm, false);
     dto.data.positionHFInMM = this.utility.parsePositionToMM(dto.data.positionHF, false);
     dto.data.positionNLFInMM = this.utility.parsePositionToMM(dto.data.positionNLF, false);
+    dto.data.cs01FirmCadInK = this.utility.parseNumberToThousands(dto.data.cs01FirmCad, false);
+    dto.data.cs01FirmLocalInK = this.utility.parseNumberToThousands(dto.data.cs01FirmLocal, false);
   }
 
   public formSecurityGroupObject(
