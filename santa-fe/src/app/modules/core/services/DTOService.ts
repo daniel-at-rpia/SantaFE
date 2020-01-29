@@ -76,6 +76,7 @@ export class DTOService {
         backupPmName: null,
         researchName: null,
         cs01Local: null,
+        cs01Cad: null,
         owner: [],
         mark: {
           combinedDefaultMark: null,
@@ -137,7 +138,8 @@ export class DTOService {
     dto.data.mark.markDriver = targetPortfolio.mark.driver;
     dto.data.mark.markChangedBy = targetPortfolio.mark.user;
     dto.data.mark.markChangedTime = targetPortfolio.mark.enteredTime;
-    dto.data.cs01Local = targetPortfolio.cs01Local;
+    dto.data.cs01Local = this.utility.round(targetPortfolio.cs01Local, 0);
+    dto.data.cs01Cad = this.utility.round(targetPortfolio.cs01Cad, 0);
     dto.data.owner = [];
     !!targetPortfolio.primaryPmName && dto.data.owner.push(targetPortfolio.primaryPmName);
     !!targetPortfolio.backupPmName && dto.data.owner.push(targetPortfolio.backupPmName);
