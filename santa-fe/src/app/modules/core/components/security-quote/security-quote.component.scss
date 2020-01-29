@@ -3,8 +3,6 @@
 $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
 .sat-SecurityQuote {
   $securityQuoteBlockName: &;
-  @include mix_border_radius(5px);
-  @include mix_border_generator($typical_border_width * 2, $color_active);
   flex: 1 1 auto;
   display: flex;
   margin-top: $spacing_x_small;
@@ -150,7 +148,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
     &-benchmarkEntry {
-      flex: 1 0 $securityQuote_main_size_4;
+      flex: 0 0 $securityQuote_main_size_4;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -189,20 +187,14 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
     flex: 0 0 $securityQuote_ctas_width;
     display: flex;
     align-items: center;
-    &-downvote {
+    &-upvote {
       @include mix_border_radius(50%);
       margin-left: $spacing_small;
       margin-right: $spacing_small;
-      transform: scale(0.01);
-      opacity: 0;
     }
-    &-garbage {
+    &-downvote {
       @include mix_border_radius(50%);
-      color: $font_color_inverse;
-      background-color: $color_kill;
       margin-right: $spacing_small;
-      transform: scale(0.01);
-      opacity: 0;
     }
   }
   &--bestBidState#{$securityQuoteBlockName}--filteredBySpreadState {
@@ -225,6 +217,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
+
   &--bestOfferState#{$securityQuoteBlockName}--filteredBySpreadState {
     #{$securityQuoteBlockName} {
       &__bestQuote{
@@ -245,6 +238,8 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
+
+
   &--bestBidState#{$securityQuoteBlockName}--filteredByPriceState {
     #{$securityQuoteBlockName} {
       &__bestQuote{
@@ -265,6 +260,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
+
   &--bestOfferState#{$securityQuoteBlockName}--filteredByPriceState {
     #{$securityQuoteBlockName} {
       &__bestQuote{
@@ -285,6 +281,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
+
   &--bestBidState#{$securityQuoteBlockName}--filteredByYieldState {
     #{$securityQuoteBlockName} {
       &__bestQuote{
@@ -305,6 +302,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
+
   &--bestOfferState#{$securityQuoteBlockName}--filteredByYieldState {
     #{$securityQuoteBlockName} {
       &__bestQuote{
@@ -325,21 +323,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
-  &:hover {
-    border-color: $color_yellow_5;
-    #{$securityQuoteBlockName} {
-      &__ctas {
-        &-downvote {
-          transform: scale(1);
-          opacity: 1;
-        }
-        &-garbage {
-          transform: scale(1);
-          opacity: 1;
-        }
-      }
-    }
-  }
+
   &--noBid {
     #{$securityQuoteBlockName} {
       &__main {
