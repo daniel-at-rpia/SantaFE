@@ -8,7 +8,7 @@ $historicalSummary_overlayCanvas_ruler_line_width: 0.2rem;
   flex: 1 1 auto;
   display: flex;
   &__overlayCanvas {
-    @include mix_fixed_div(absolute, $z_index_standard_tooltip);
+    @include mix_fixed_div(absolute, $z_index_standard_tooltip_lift);
     top: 0;
     left: 0;
     height: 100%;
