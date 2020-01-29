@@ -17,10 +17,11 @@
       color: $font_color_trivial;
     }
     &-text {
+      @include mix_text_overflow_multi_line(3);
       text-align: center;
       color: $font_color_minor;
       margin: 0 $spacing_medium;
-      font-size: $font_size_large;
+      font-size: $font_size_normal;
     }
     &-cta {
       flex: 0 0 auto;
