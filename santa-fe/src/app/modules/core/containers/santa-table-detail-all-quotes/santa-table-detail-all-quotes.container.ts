@@ -64,4 +64,8 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     };
     this.parent.onClickSortQuotesByMetric(payload);
   }
+
+  public onClickThumbDown() {
+    
+  }
 }
