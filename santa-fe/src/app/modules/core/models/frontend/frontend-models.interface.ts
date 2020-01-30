@@ -292,6 +292,7 @@ export interface SecurityTableCellDTO extends BasicDTOStructure {
 
 export interface SecurityQuoteDTO extends BasicDTOStructure {
   data: {
+    uuid: string;
     broker: string;
     time: string;
     unixTimestamp: number;
@@ -325,6 +326,8 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
     filteredBySpread: boolean;
     filteredByYield: boolean;
     filteredByPrice: boolean;
+    menuActiveSide: string;
+    menuActiveMetric: string;
   }
 }
 

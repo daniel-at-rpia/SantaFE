@@ -13,7 +13,8 @@ import { SecurityTableRowDTO, SecurityQuoteDTO } from 'FEModels/frontend-models.
 import { QuoteMetricBlock } from 'FEModels/frontend-blocks.interface';
 import {
   AgGridRowParams,
-  ClickedSortQuotesByMetricEmitterParams
+  ClickedSortQuotesByMetricEmitterParams,
+  ClickedSpecificQuoteEmitterParams
 } from 'FEModels/frontend-adhoc-packages.interface';
 import { DTOService } from 'Core/services/DTOService';
 import { QuoteMetricList } from 'Core/constants/securityTableConstants.constant';
@@ -63,6 +64,26 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
       targetMetricLabel: targetLabel
     };
     this.parent.onClickSortQuotesByMetric(payload);
+  }
+
+  public onClickedSpecificQuote(params: ClickedSpecificQuoteEmitterParams) {
+    if (!!params) {
+      this.rowData.data.quotes.forEach((eachQuote) => {
+        if (eachQuote.data.uuid === params.targetQuote.data.uuid) {
+          const targetSide = params.isOnBidSide ? 'bid' : 'ask';
+          if (eachQuote.state.menuActiveMetric === params.targetMetric && eachQuote.state.menuActiveSide === targetSide) {
+            eachQuote.state.menuActiveSide = null;
+            eachQuote.state.menuActiveMetric = null;
+          } else {
+            eachQuote.state.menuActiveSide = targetSide;
+            eachQuote.state.menuActiveMetric = params.targetMetric;
+          }
+        } else {
+          eachQuote.state.menuActiveMetric = null;
+          eachQuote.state.menuActiveSide = null;
+        }
+      });
+    }
   }
 
   public onClickThumbdown(targetQuote: SecurityQuoteDTO) {

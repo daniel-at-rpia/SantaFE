@@ -34,6 +34,7 @@
         <security-quote
           *ngFor="let eachMessage of rowData.data.quotes"
           [messageData]="eachMessage"
+          (clickedSpecificQuote)="onClickedSpecificQuote($event)"
           (clickedThumbdown)="onClickThumbdown($event)">
         </security-quote>
       </ul>

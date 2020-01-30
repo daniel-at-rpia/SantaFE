@@ -108,19 +108,41 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
         }
       }
       &-cta {
+        @include mix_fixed_div(relative, $z_index_standard_base_item);
         flex: 1 1 50%;
         display: flex;
         &-btn {
           @extend .santaBtn;
           @include mix_quantative_text;
           flex: 1 1 auto;
-          padding: $spacing_xx_small;
+          padding: $spacing_x_small $spacing_xx_small;
+        }
+        &-actionMenu {
+          @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+          @include mix_alive('custom', transform $animation_duration_light);
+          top: 100%;
+          left: -$spacing_small;
+          display: flex;
+          transform: scale(0.001) translate(0, -100%);
+          &-downvote {
+            @include mix_border_radius(50%);
+            margin: 0 $spacing_x_small;
+          }
+          &-garbage {
+            @include mix_border_radius(50%);
+            color: $font_color_inverse;
+            background-color: $color_kill;
+            margin: 0 $spacing_x_small;
+          }
         }
         &--bid {
           margin-right: $spacing_xx_small;
         }
         &--ask {
           margin-left: $spacing_xx_small;
+        }
+        &--empty {
+          visibility: hidden;
         }
       }
       &--sizeThree {
@@ -136,8 +158,9 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       overflow: hidden;
       color: $font_color_inverse;
       &-consolidated {
-        font-size: $font_size_small;
         display: flex;
+        align-self: flex-start;
+        font-size: $font_size_small;
       }
       &-bid {
         display: none;
@@ -161,25 +184,8 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
-  &__ctas {
-    flex: 0 0 $securityQuote_ctas_width;
-    display: flex;
-    align-items: center;
-    &-downvote {
-      @include mix_border_radius(50%);
-      margin-left: $spacing_small;
-      margin-right: $spacing_small;
-      transform: scale(0.01);
-      opacity: 0;
-    }
-    &-garbage {
-      @include mix_border_radius(50%);
-      color: $font_color_inverse;
-      background-color: $color_kill;
-      margin-right: $spacing_small;
-      transform: scale(0.01);
-      opacity: 0;
-    }
+  &:hover {
+    border-color: $color_yellow_5;
   }
   &--bestBidState#{$securityQuoteBlockName}--filteredBySpreadState {
     #{$securityQuoteBlockName} {
@@ -301,41 +307,102 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
-  &:hover {
-    border-color: $color_yellow_5;
+  &--menuActiveOnBidState#{$securityQuoteBlockName}--menuActiveOnTSpreadState {
     #{$securityQuoteBlockName} {
-      &__ctas {
-        &-downvote {
-          transform: scale(1);
-          opacity: 1;
-        }
-        &-garbage {
-          transform: scale(1);
-          opacity: 1;
-        }
-      }
-    }
-  }
-  &--noBid {
-    #{$securityQuoteBlockName} {
-      &__main {
-        &-twoSideEntry {
-          &-cta {
-            &--bid {
-              visibility: hidden;
+      &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--tspread {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta {
+            &-btn {
+              @include material('none');
+              background-color: $color_yellow_5;
+            }
+            &-actionMenu {
+              transform: scale(1) translate(0,0);
             }
           }
         }
       }
     }
   }
-  &--noAsk {
+  &--menuActiveOnBidState#{$securityQuoteBlockName}--menuActiveOnYieldState {
     #{$securityQuoteBlockName} {
-      &__main {
-        &-twoSideEntry {
-          &-cta {
-            &--ask {
-              visibility: hidden;
+      &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--yield {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta {
+            &-btn {
+              @include material('none');
+              background-color: $color_yellow_5;
+            }
+            &-actionMenu {
+              transform: scale(1) translate(0,0);
+            }
+          }
+        }
+      }
+    }
+  }
+  &--menuActiveOnBidState#{$securityQuoteBlockName}--menuActiveOnPriceState {
+    #{$securityQuoteBlockName} {
+      &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--price {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta {
+            &-btn {
+              @include material('none');
+              background-color: $color_yellow_5;
+            }
+            &-actionMenu {
+              transform: scale(1) translate(0,0);
+            }
+          }
+        }
+      }
+    }
+  }
+  &--menuActiveOnAskState#{$securityQuoteBlockName}--menuActiveOnTSpreadState {
+    #{$securityQuoteBlockName} {
+      &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--tspread {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta {
+            &-btn {
+              @include material('none');
+              background-color: $color_yellow_5;
+            }
+            &-actionMenu {
+              transform: scale(1) translate(0,0);
+            }
+          }
+        }
+      }
+    }
+  }
+  &--menuActiveOnAskState#{$securityQuoteBlockName}--menuActiveOnYieldState {
+    #{$securityQuoteBlockName} {
+      &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--yield {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta {
+            &-btn {
+              @include material('none');
+              background-color: $color_yellow_5;
+            }
+            &-actionMenu {
+              transform: scale(1) translate(0,0);
+            }
+          }
+        }
+      }
+    }
+  }
+  &--menuActiveOnAskState#{$securityQuoteBlockName}--menuActiveOnPriceState {
+    #{$securityQuoteBlockName} {
+      &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--price {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta {
+            &-btn {
+              @include material('none');
+              background-color: $color_yellow_5;
+            }
+            &-actionMenu {
+              transform: scale(1) translate(0,0);
             }
           }
         }
@@ -376,6 +443,32 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
           }
           &-bid, &-ask, &-mid {
             display: flex;
+          }
+        }
+      }
+    }
+  }
+  &--noBid {
+    #{$securityQuoteBlockName} {
+      &__main {
+        &-twoSideEntry {
+          &-cta {
+            &--bid {
+              visibility: hidden;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--noAsk {
+    #{$securityQuoteBlockName} {
+      &__main {
+        &-twoSideEntry {
+          &-cta {
+            &--ask {
+              visibility: hidden;
+            }
           }
         }
       }

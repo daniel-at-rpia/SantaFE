@@ -660,6 +660,7 @@ export class DTOService {
     // const quoteDate: Date = !isStencil ? (hasBid ? new Date(rawData.bidTime) : new Date(rawData.askTime)) : null;
     const object: DTOs.SecurityQuoteDTO = {
       data: {
+        uuid: this.utility.generateUUID(),
         broker: !isStencil ? rawData.dealer : 'RBC',
         time: !isStencil ? `${convertedDate.toTimeString().slice(0, 5)}` : '12:01 pm',
         unixTimestamp: !isStencil ? convertedDate.getTime() : 0,
@@ -692,7 +693,9 @@ export class DTOService {
         isBestBid: false,
         filteredByPrice:  filteredMetricType === TriCoreMetricConfig.Price.label,
         filteredBySpread:  filteredMetricType === TriCoreMetricConfig.Spread.label,
-        filteredByYield: filteredMetricType === TriCoreMetricConfig.Yield.label
+        filteredByYield: filteredMetricType === TriCoreMetricConfig.Yield.label,
+        menuActiveSide: null,
+        menuActiveMetric: null
       }
     };
     if (!isStencil) {

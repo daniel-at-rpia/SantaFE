@@ -12,7 +12,12 @@
     'sat-securityQuote--bestOfferState': messageData.state.isBestOffer,
     'sat-securityQuote--filteredByPriceState': messageData.state.filteredByPrice,
     'sat-securityQuote--filteredBySpreadState': messageData.state.filteredBySpread,
-    'sat-securityQuote--filteredByYieldState': messageData.state.filteredByYield
+    'sat-securityQuote--filteredByYieldState': messageData.state.filteredByYield,
+    'sat-securityQuote--menuActiveOnBidState': messageData.state.menuActiveSide === 'bid',
+    'sat-securityQuote--menuActiveOnAskState': messageData.state.menuActiveSide === 'ask',
+    'sat-securityQuote--menuActiveOnTSpreadState': messageData.state.menuActiveMetric === 'tspread',
+    'sat-securityQuote--menuActiveOnPriceState': messageData.state.menuActiveMetric === 'price',
+    'sat-securityQuote--menuActiveOnYieldState': messageData.state.menuActiveMetric === 'yield'
   }">
   <section class="sat-securityQuote__bestQuote">
     <div class="sat-securityQuote__bestQuote-bestBidText">Best Bid</div>
@@ -31,22 +36,32 @@
         [ngClass]="{
           'sat-securityQuote__main-twoSideEntry-cta': true,
           'sat-securityQuote__main-twoSideEntry-cta--price': true,
-          'sat-securityQuote__main-twoSideEntry-cta--bid': true
+          'sat-securityQuote__main-twoSideEntry-cta--bid': true,
+          'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.bid.price == null
         }">
-        <button class="sat-securityQuote__main-twoSideEntry-cta-btn">
+        <button (click)="onClickSpecificQuote(true, 'price')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
           {{messageData.data.bid.price}}
         </button>
+        <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
+          <button (click)="onClickThumbdown()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
+          <button class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-garbage santaBtn santaBtn--iconOnly fal fa-trash-alt"></button>
+        </div>
       </div>
       <i class="sat-securityQuote__main-twoSideEntry-mid fal fa-arrows-h"></i>
       <div
         [ngClass]="{
           'sat-securityQuote__main-twoSideEntry-cta': true,
           'sat-securityQuote__main-twoSideEntry-cta--price': true,
-          'sat-securityQuote__main-twoSideEntry-cta--ask': true
+          'sat-securityQuote__main-twoSideEntry-cta--ask': true,
+          'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.ask.price == null
         }">
-        <button class="sat-securityQuote__main-twoSideEntry-cta-btn">
+        <button (click)="onClickSpecificQuote(false, 'price')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
           {{messageData.data.ask.price}}
         </button>
+        <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
+          <button (click)="onClickThumbdown()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
+          <button class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-garbage santaBtn santaBtn--iconOnly fal fa-trash-alt"></button>
+        </div>
       </div>
     </div>
     <div class="sat-securityQuote__main-spacing"></div>
@@ -55,22 +70,32 @@
         [ngClass]="{
           'sat-securityQuote__main-twoSideEntry-cta': true,
           'sat-securityQuote__main-twoSideEntry-cta--yield': true,
-          'sat-securityQuote__main-twoSideEntry-cta--bid': true
+          'sat-securityQuote__main-twoSideEntry-cta--bid': true,
+          'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.bid.yield == null
         }">
-        <button class="sat-securityQuote__main-twoSideEntry-cta-btn">
+        <button (click)="onClickSpecificQuote(true, 'yield')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
           {{messageData.data.bid.yield}}
         </button>
+        <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
+          <button (click)="onClickThumbdown()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
+          <button class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-garbage santaBtn santaBtn--iconOnly fal fa-trash-alt"></button>
+        </div>
       </div>
       <i class="sat-securityQuote__main-twoSideEntry-mid fal fa-arrows-h"></i>
       <div
         [ngClass]="{
           'sat-securityQuote__main-twoSideEntry-cta': true,
           'sat-securityQuote__main-twoSideEntry-cta--yield': true,
-          'sat-securityQuote__main-twoSideEntry-cta--ask': true
+          'sat-securityQuote__main-twoSideEntry-cta--ask': true,
+          'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.ask.yield == null
         }">
-        <button class="sat-securityQuote__main-twoSideEntry-cta-btn">
+        <button (click)="onClickSpecificQuote(false, 'yield')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
           {{messageData.data.ask.yield}}
         </button>
+        <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
+          <button (click)="onClickThumbdown()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
+          <button class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-garbage santaBtn santaBtn--iconOnly fal fa-trash-alt"></button>
+        </div>
       </div>
     </div>
     <div class="sat-securityQuote__main-spacing"></div>
@@ -78,23 +103,33 @@
       <div
         [ngClass]="{
           'sat-securityQuote__main-twoSideEntry-cta': true,
-          'sat-securityQuote__main-twoSideEntry-cta--spread': true,
-          'sat-securityQuote__main-twoSideEntry-cta--bid': true
+          'sat-securityQuote__main-twoSideEntry-cta--tspread': true,
+          'sat-securityQuote__main-twoSideEntry-cta--bid': true,
+          'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.bid.tspread == null
         }">
-        <button class="sat-securityQuote__main-twoSideEntry-cta-btn">
+        <button (click)="onClickSpecificQuote(true, 'tspread')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
           {{messageData.data.bid.tspread}}
         </button>
+        <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
+          <button (click)="onClickThumbdown()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
+          <button class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-garbage santaBtn santaBtn--iconOnly fal fa-trash-alt"></button>
+        </div>
       </div>
       <i class="sat-securityQuote__main-twoSideEntry-mid fal fa-arrows-h"></i>
       <div
         [ngClass]="{
           'sat-securityQuote__main-twoSideEntry-cta': true,
-          'sat-securityQuote__main-twoSideEntry-cta--spread': true,
-          'sat-securityQuote__main-twoSideEntry-cta--ask': true
+          'sat-securityQuote__main-twoSideEntry-cta--tspread': true,
+          'sat-securityQuote__main-twoSideEntry-cta--ask': true,
+          'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.ask.tspread == null
         }">
-        <button class="sat-securityQuote__main-twoSideEntry-cta-btn">
+        <button (click)="onClickSpecificQuote(false, 'tspread')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
           {{messageData.data.ask.tspread}}
         </button>
+        <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
+          <button (click)="onClickThumbdown()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
+          <button class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-garbage santaBtn santaBtn--iconOnly fal fa-trash-alt"></button>
+        </div>
       </div>
     </div>
     <div class="sat-securityQuote__main-spacing"></div>
@@ -122,9 +157,5 @@
         {{messageData.data.ask.benchmark}}
       </span>
     </div>
-  </section>
-  <section class="sat-securityQuote__ctas">
-    <button (click)="onClickThumbdown()" class="sat-securityQuote__ctas-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
-    <button class="sat-securityQuote__ctas-garbage santaBtn santaBtn--iconOnly fal fa-trash-alt"></button>
   </section>
 </article>
