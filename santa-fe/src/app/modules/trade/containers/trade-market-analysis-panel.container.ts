@@ -177,6 +177,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   }
 
   public onClickSecurityCardSendToGraph(targetSecurity: SecurityDTO) {
+    targetSecurity.state.isSelected = false;
     if (!this.state.displayGraph) {
       this.populateGraph.emit();
     }
@@ -204,10 +205,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     } else {
       this.state.graphDataEmptyState = true;
     }
-  }
-
-  public onMouseLeaveSecurityCard(targetSecurity: SecurityDTO) {
-    targetSecurity.state.isSelected = false;
   }
 
   private onSecuritySelected(targetSecurity: SecurityDTO) {

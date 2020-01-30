@@ -101,7 +101,6 @@
     <div class="sat-tradeMarketAnalysisPanel__table-content">
       <ul class="sat-tradeMarketAnalysisPanel__table-content-securityList">
         <li
-          (mouseleave)="onMouseLeaveSecurityCard(eachCard)"
           *ngFor="let eachCard of state.table.presentList; let rowIndex = index;"
           [ngClass]="{
             'sat-tradeMarketAnalysisPanel__table-content-securityList-item': true,
