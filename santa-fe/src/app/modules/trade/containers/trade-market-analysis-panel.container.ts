@@ -173,6 +173,14 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     }
   }
 
+  public onSelectSecurityCardInPresentList(targetSecurity: SecurityDTO) {
+    this.state.table.presentList.forEach((eachCard) => {
+      if (eachCard.data.securityID !== targetSecurity.data.securityID) {
+        eachCard.state.isSelected = false;
+      }
+    })
+  }
+
   public onClickSecurityCardThumbDown(targetSecurity: SecurityDTO) {
   }
 

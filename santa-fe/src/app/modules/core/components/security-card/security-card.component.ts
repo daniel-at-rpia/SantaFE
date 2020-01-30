@@ -17,6 +17,7 @@ import { SecurityDTO } from 'FEModels/frontend-models.interface';
 })
 export class SecurityCard implements OnInit {
   @Input() cardData: SecurityDTO;
+  @Output() selectedCard = new EventEmitter<SecurityDTO>();
   @Output() clickedThumbDown = new EventEmitter<SecurityDTO>();
   @Output() clickedSendToGraph = new EventEmitter<SecurityDTO>();
   constructor() { }
@@ -27,6 +28,7 @@ export class SecurityCard implements OnInit {
   public onClickCard() {
     if (!this.cardData.state.isInteractionDisabled && !this.cardData.state.isStencil) {
       this.cardData.state.isSelected = !this.cardData.state.isSelected;
+      !!this.selectedCard && this.selectedCard.emit(this.cardData);
     }
   }
 
