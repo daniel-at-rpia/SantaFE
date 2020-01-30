@@ -19,10 +19,6 @@
     'sat-securityQuote--menuActiveOnPriceState': messageData.state.menuActiveMetric === 'price',
     'sat-securityQuote--menuActiveOnYieldState': messageData.state.menuActiveMetric === 'yield'
   }">
-  <section class="sat-securityQuote__bestQuote">
-    <div class="sat-securityQuote__bestQuote-bestBidText">Best Bid</div>
-    <div class="sat-securityQuote__bestQuote-bestOfferText"> Best Ask</div>
-  </section>
   <section class="sat-securityQuote__time">
     <span class="sat-securityQuote__time-text">{{messageData.data.time}}</span>
   </section>
@@ -40,7 +36,8 @@
           'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.bid.price == null
         }">
         <button (click)="onClickSpecificQuote(true, 'price')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
-          {{messageData.data.bid.price}}
+          <i class="sat-securityQuote__main-twoSideEntry-cta-btn-bestIcon fal fa-tag"></i>
+          <span>{{messageData.data.bid.price}}</span>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
           <button (click)="onClickThumbdown()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
@@ -56,7 +53,8 @@
           'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.ask.price == null
         }">
         <button (click)="onClickSpecificQuote(false, 'price')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
-          {{messageData.data.ask.price}}
+          <span>{{messageData.data.ask.price}}</span>
+          <i class="sat-securityQuote__main-twoSideEntry-cta-btn-bestIcon fal fa-tag"></i>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
           <button (click)="onClickThumbdown()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
@@ -74,7 +72,8 @@
           'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.bid.yield == null
         }">
         <button (click)="onClickSpecificQuote(true, 'yield')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
-          {{messageData.data.bid.yield}}
+          <i class="sat-securityQuote__main-twoSideEntry-cta-btn-bestIcon fal fa-tag"></i>
+          <span>{{messageData.data.bid.yield}}</span>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
           <button (click)="onClickThumbdown()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
@@ -90,7 +89,8 @@
           'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.ask.yield == null
         }">
         <button (click)="onClickSpecificQuote(false, 'yield')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
-          {{messageData.data.ask.yield}}
+          <span>{{messageData.data.ask.yield}}</span>
+          <i class="sat-securityQuote__main-twoSideEntry-cta-btn-bestIcon fal fa-tag"></i>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
           <button (click)="onClickThumbdown()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
@@ -108,6 +108,7 @@
           'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.bid.tspread == null
         }">
         <button (click)="onClickSpecificQuote(true, 'tspread')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
+          <i class="sat-securityQuote__main-twoSideEntry-cta-btn-bestIcon fal fa-tag"></i>
           {{messageData.data.bid.tspread}}
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
@@ -124,7 +125,8 @@
           'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.ask.tspread == null
         }">
         <button (click)="onClickSpecificQuote(false, 'tspread')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
-          {{messageData.data.ask.tspread}}
+          <span>{{messageData.data.ask.tspread}}</span>
+          <i class="sat-securityQuote__main-twoSideEntry-cta-btn-bestIcon fal fa-tag"></i>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
           <button (click)="onClickThumbdown()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>

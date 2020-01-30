@@ -8,30 +8,6 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
   flex: 1 1 auto;
   display: flex;
   margin-top: $spacing_x_small;
-  &__bestQuote{
-    display: flex;   
-    justify-content: center; 
-    align-items: center; 
-    visibility: hidden;
-    padding: $spacing_x_small;
-    &-bestBidText {
-      @include mix_border_radius(3px);
-      color: $font_color_inverse;
-      line-height: $line_height_small;
-      font-size: $font_size_small;
-      background-color: $color_quant_left;
-      padding: $spacing_x_small;
-    }
-    &-bestOfferText {
-      @include mix_border_radius(3px);
-      margin-left: $spacing_x_small;
-      color: $font_color_inverse;
-      line-height: $line_height_small;
-      font-size: $font_size_small;
-      background-color: $color_quant_right;
-      padding: $spacing_x_small;
-    }
-  }
   &__time {
     flex: 0 0 $securityQuote_time_width;
     display: flex;
@@ -113,15 +89,26 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
         display: flex;
         &-btn {
           @extend .santaBtn;
-          @include mix_quantative_text;
           flex: 1 1 auto;
-          padding: $spacing_x_small $spacing_xx_small;
+          flex-direction: row;
+          justify-content: space-between;
+          padding: $spacing_x_small;
+          &-bestIcon {
+            @include mix_border_radius(3px);
+            visibility: hidden;
+            opacity: 0;
+            color: $font_color_inverse;
+            padding: $spacing_x_small;
+            font-size: $font_size_x_small;
+          }
+          &>span {
+            @include mix_quantative_text;
+          }
         }
         &-actionMenu {
           @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
           @include mix_alive('custom', transform $animation_duration_light);
           top: 100%;
-          left: -$spacing_small;
           display: flex;
           transform: scale(0.001) translate(0, -100%);
           &-downvote {
@@ -138,8 +125,14 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
         &--bid {
           margin-right: $spacing_xx_small;
         }
+        &--bid &-btn-bestIcon {
+          background-color: $color_quant_left;
+        }
         &--ask {
           margin-left: $spacing_xx_small;
+        }
+        &--ask &-btn-bestIcon {
+          background-color: $color_quant_right;
         }
         &--empty {
           visibility: hidden;
@@ -187,121 +180,66 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
   &:hover {
     border-color: $color_yellow_5;
   }
-  &--bestBidState#{$securityQuoteBlockName}--filteredBySpreadState {
+  &--bestBidState {
     #{$securityQuoteBlockName} {
-      &__bestQuote{
-        &-bestBidText {
-          visibility: visible;
-        }
-      }
-      &__main { 
-        &-twoSideEntry{
-          &-bid--spread{
-            background-color: $color_quant_left;
-            @include mix_border_radius(3px);
-            padding: $spacing_x_small;
-            width: $spacing_x_small;
-            color: white;
+      &__main {
+        &-twoSideEntry-cta--ask {
+          #{$securityQuoteBlockName} {
+            &__main-twoSideEntry-cta-btn-bestIcon-btn-bestIcon {
+              visibility: visible;
+            }
           }
         }
       }
     }
   }
-  &--bestOfferState#{$securityQuoteBlockName}--filteredBySpreadState {
+  &--bestOfferState {
     #{$securityQuoteBlockName} {
-      &__bestQuote{
-        &-bestOfferText {
-          visibility: visible;
-        }
-      }
       &__main {
-        &-twoSideEntry{
-          &-ask--spread{
-            background-color: $color_quant_right;
-            @include mix_border_radius(3px);
-            padding: $spacing_x_small;
-            width: $spacing_x_small;
-            color: white;
+        &-twoSideEntry-cta--ask {
+          #{$securityQuoteBlockName} {
+            &__main-twoSideEntry-cta-btn-bestIcon {
+              visibility: visible;
+            }
           }
         }
       }
     }
   }
-  &--bestBidState#{$securityQuoteBlockName}--filteredByPriceState {
+  &--filteredBySpreadState {
     #{$securityQuoteBlockName} {
-      &__bestQuote{
-        &-bestBidText {
-          visibility: visible;
-        }
-      }
       &__main {
-        &-twoSideEntry{
-          &-bid--price{
-            background-color: $color_quant_left;
-            @include mix_border_radius(3px);
-            padding: $spacing_x_small;
-            width: $spacing_x_small;
-            color: white;
+        &-twoSideEntry-cta--tspread {
+          #{$securityQuoteBlockName} {
+            &__main-twoSideEntry-cta-btn-bestIcon {
+              opacity: 1;
+            }
           }
         }
       }
     }
   }
-  &--bestOfferState#{$securityQuoteBlockName}--filteredByPriceState {
+  &--filteredByPriceState {
     #{$securityQuoteBlockName} {
-      &__bestQuote{
-        &-bestOfferText {
-          visibility: visible;
-        }
-      }
       &__main {
-        &-twoSideEntry{
-          &-ask--price{
-            background-color: $color_quant_right;
-            @include mix_border_radius(3px);
-            padding: $spacing_x_small;
-            width: $spacing_x_small;
-            color: white;
+        &-twoSideEntry-cta--price {
+          #{$securityQuoteBlockName} {
+            &__main-twoSideEntry-cta-btn-bestIcon {
+              opacity: 1;
+            }
           }
         }
       }
     }
   }
-  &--bestBidState#{$securityQuoteBlockName}--filteredByYieldState {
+  &--filteredByYieldState {
     #{$securityQuoteBlockName} {
-      &__bestQuote{
-        &-bestBidText {
-          visibility: visible;
-        }
-      }
       &__main {
-        &-twoSideEntry{
-          &-bid--yield{
-            background-color: $color_quant_left;
-            @include mix_border_radius(3px);
-            padding: $spacing_x_small;
-            width: $spacing_x_small;
-            color: white;
-          }
-        }
-      }
-    }
-  }
-  &--bestOfferState#{$securityQuoteBlockName}--filteredByYieldState {
-    #{$securityQuoteBlockName} {
-      &__bestQuote{
-        &-bestOfferText {
-          visibility: visible;
-        }
-      }
-      &__main {
-        &-twoSideEntry{
-          &-ask--yield{
-            background-color: $color_quant_right;
-            @include mix_border_radius(3px);
-            padding: $spacing_x_small;
-            width: $spacing_x_small;
-            color: white;
+        &-twoSideEntry-cta--yield {
+          #{$securityQuoteBlockName} {
+            &__main-twoSideEntry-cta-btn-bestIcon {
+              opacity: 1;
+            }
           }
         }
       }
