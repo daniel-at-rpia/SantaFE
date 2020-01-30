@@ -1,88 +1,130 @@
 <article
   [ngClass]="{
-    'sat-SecurityQuote': true,
-    'sat-SecurityQuote--noBid': !messageData.state.hasBid,
-    'sat-SecurityQuote--noAsk': !messageData.state.hasAsk,
-    'sat-SecurityQuote--bidIsAxe': messageData.state.hasBid && messageData.data.bid.isAxe,
-    'sat-SecurityQuote--askIsAxe':
+    'sat-securityQuote': true,
+    'sat-securityQuote--noBid': !messageData.state.hasBid,
+    'sat-securityQuote--noAsk': !messageData.state.hasAsk,
+    'sat-securityQuote--bidIsAxe': messageData.state.hasBid && messageData.data.bid.isAxe,
+    'sat-securityQuote--askIsAxe':
     messageData.state.hasAsk && messageData.data.ask.isAxe,
-    'sat-SecurityQuote--diffBenchmark': messageData.state.diffBenchmark,
-    'sat-SecurityQuote--stencilState': messageData.state.isStencil,
-    'sat-SecurityQuote--bestBidState': messageData.state.isBestBid,
-    'sat-SecurityQuote--bestOfferState': messageData.state.isBestOffer,
-    'sat-SecurityQuote--filteredByPriceState': messageData.state.filteredByPrice,
-    'sat-SecurityQuote--filteredBySpreadState': messageData.state.filteredBySpread,
-    'sat-SecurityQuote--filteredByYieldState': messageData.state.filteredByYield
+    'sat-securityQuote--diffBenchmark': messageData.state.diffBenchmark,
+    'sat-securityQuote--stencilState': messageData.state.isStencil,
+    'sat-securityQuote--bestBidState': messageData.state.isBestBid,
+    'sat-securityQuote--bestOfferState': messageData.state.isBestOffer,
+    'sat-securityQuote--filteredByPriceState': messageData.state.filteredByPrice,
+    'sat-securityQuote--filteredBySpreadState': messageData.state.filteredBySpread,
+    'sat-securityQuote--filteredByYieldState': messageData.state.filteredByYield
   }">
-  <section class="sat-SecurityQuote__bestQuote">
-    <div class="sat-SecurityQuote__bestQuote-bestBidText">Best Bid</div>
-    <div class="sat-SecurityQuote__bestQuote-bestOfferText"> Best Ask</div>
+  <section class="sat-securityQuote__bestQuote">
+    <div class="sat-securityQuote__bestQuote-bestBidText">Best Bid</div>
+    <div class="sat-securityQuote__bestQuote-bestOfferText"> Best Ask</div>
   </section>
-  <section class="sat-SecurityQuote__time">
-    <span class="sat-SecurityQuote__time-text">{{messageData.data.time}}</span>
+  <section class="sat-securityQuote__time">
+    <span class="sat-securityQuote__time-text">{{messageData.data.time}}</span>
   </section>
-  <section class="sat-SecurityQuote__main">
-    <div class="sat-SecurityQuote__main-entry">{{messageData.data.dataSource}}</div>
-    <div class="sat-SecurityQuote__main-spacing"></div>
-    <div class="sat-SecurityQuote__main-entry">{{messageData.data.broker}}</div>
-    <div class="sat-SecurityQuote__main-spacing"></div>
-    <div class="sat-SecurityQuote__main-twoSideEntry sat-SecurityQuote__main-twoSideEntry--sizeThree">
-      <span class="sat-SecurityQuote__main-twoSideEntry-bid sat-SecurityQuote__main-twoSideEntry-bid--price">
-        {{messageData.data.bid.price}}
-      </span>
-      <i class="sat-SecurityQuote__main-twoSideEntry-mid fal fa-arrows-h"></i>
-      <span class="sat-SecurityQuote__main-twoSideEntry-ask sat-SecurityQuote__main-twoSideEntry-ask--price">
-        {{messageData.data.ask.price}}
-      </span>
+  <section class="sat-securityQuote__main">
+    <div class="sat-securityQuote__main-entry">{{messageData.data.dataSource}}</div>
+    <div class="sat-securityQuote__main-spacing"></div>
+    <div class="sat-securityQuote__main-entry">{{messageData.data.broker}}</div>
+    <div class="sat-securityQuote__main-spacing"></div>
+    <div class="sat-securityQuote__main-twoSideEntry sat-securityQuote__main-twoSideEntry--sizeThree">
+      <div
+        [ngClass]="{
+          'sat-securityQuote__main-twoSideEntry-cta': true,
+          'sat-securityQuote__main-twoSideEntry-cta--price': true,
+          'sat-securityQuote__main-twoSideEntry-cta--bid': true
+        }">
+        <button class="sat-securityQuote__main-twoSideEntry-cta-btn">
+          {{messageData.data.bid.price}}
+        </button>
+      </div>
+      <i class="sat-securityQuote__main-twoSideEntry-mid fal fa-arrows-h"></i>
+      <div
+        [ngClass]="{
+          'sat-securityQuote__main-twoSideEntry-cta': true,
+          'sat-securityQuote__main-twoSideEntry-cta--price': true,
+          'sat-securityQuote__main-twoSideEntry-cta--ask': true
+        }">
+        <button class="sat-securityQuote__main-twoSideEntry-cta-btn">
+          {{messageData.data.ask.price}}
+        </button>
+      </div>
     </div>
-    <div class="sat-SecurityQuote__main-spacing"></div>
-    <div class="sat-SecurityQuote__main-twoSideEntry">
-      <span class="sat-SecurityQuote__main-twoSideEntry-bid sat-SecurityQuote__main-twoSideEntry-bid--yield">
-        {{messageData.data.bid.yield}}
-      </span>
-      <i class="sat-SecurityQuote__main-twoSideEntry-mid fal fa-arrows-h"></i>
-      <span class="sat-SecurityQuote__main-twoSideEntry-ask sat-SecurityQuote__main-twoSideEntry-ask--yield">
-        {{messageData.data.ask.yield}}
-      </span>
+    <div class="sat-securityQuote__main-spacing"></div>
+    <div class="sat-securityQuote__main-twoSideEntry">
+      <div
+        [ngClass]="{
+          'sat-securityQuote__main-twoSideEntry-cta': true,
+          'sat-securityQuote__main-twoSideEntry-cta--yield': true,
+          'sat-securityQuote__main-twoSideEntry-cta--bid': true
+        }">
+        <button class="sat-securityQuote__main-twoSideEntry-cta-btn">
+          {{messageData.data.bid.yield}}
+        </button>
+      </div>
+      <i class="sat-securityQuote__main-twoSideEntry-mid fal fa-arrows-h"></i>
+      <div
+        [ngClass]="{
+          'sat-securityQuote__main-twoSideEntry-cta': true,
+          'sat-securityQuote__main-twoSideEntry-cta--yield': true,
+          'sat-securityQuote__main-twoSideEntry-cta--ask': true
+        }">
+        <button class="sat-securityQuote__main-twoSideEntry-cta-btn">
+          {{messageData.data.ask.yield}}
+        </button>
+      </div>
     </div>
-    <div class="sat-SecurityQuote__main-spacing"></div>
-    <div class="sat-SecurityQuote__main-twoSideEntry">
-      <span class="sat-SecurityQuote__main-twoSideEntry-bid sat-SecurityQuote__main-twoSideEntry-bid--spread">
-        {{messageData.data.bid.tspread}}
-      </span>
-      <i class="sat-SecurityQuote__main-twoSideEntry-mid fal fa-arrows-h"></i>
-      <span class="sat-SecurityQuote__main-twoSideEntry-ask sat-SecurityQuote__main-twoSideEntry-ask--spread">
-        {{messageData.data.ask.tspread}}
-      </span>
+    <div class="sat-securityQuote__main-spacing"></div>
+    <div class="sat-securityQuote__main-twoSideEntry">
+      <div
+        [ngClass]="{
+          'sat-securityQuote__main-twoSideEntry-cta': true,
+          'sat-securityQuote__main-twoSideEntry-cta--spread': true,
+          'sat-securityQuote__main-twoSideEntry-cta--bid': true
+        }">
+        <button class="sat-securityQuote__main-twoSideEntry-cta-btn">
+          {{messageData.data.bid.tspread}}
+        </button>
+      </div>
+      <i class="sat-securityQuote__main-twoSideEntry-mid fal fa-arrows-h"></i>
+      <div
+        [ngClass]="{
+          'sat-securityQuote__main-twoSideEntry-cta': true,
+          'sat-securityQuote__main-twoSideEntry-cta--spread': true,
+          'sat-securityQuote__main-twoSideEntry-cta--ask': true
+        }">
+        <button class="sat-securityQuote__main-twoSideEntry-cta-btn">
+          {{messageData.data.ask.tspread}}
+        </button>
+      </div>
     </div>
-    <div class="sat-SecurityQuote__main-spacing"></div>
-    <div class="sat-SecurityQuote__main-twoSideEntry sat-SecurityQuote__main-twoSideEntry--sizeThree">
-      <i class="sat-SecurityQuote__main-twoSideEntry-bidAxeIcon fas fa-axe"></i>
-      <span class="sat-SecurityQuote__main-twoSideEntry-bid">
+    <div class="sat-securityQuote__main-spacing"></div>
+    <div class="sat-securityQuote__main-twoSideEntry sat-securityQuote__main-twoSideEntry--sizeThree">
+      <i class="sat-securityQuote__main-twoSideEntry-axeIcon sat-securityQuote__main-twoSideEntry-axeIcon--bid fas fa-axe"></i>
+      <span class="sat-securityQuote__main-twoSideEntry-text sat-securityQuote__main-twoSideEntry-text--bid">
         {{messageData.data.bid.size}}
       </span>
-      <i class="sat-SecurityQuote__main-twoSideEntry-mid fal fa-arrows-h"></i>
-      <span class="sat-SecurityQuote__main-twoSideEntry-ask">
+      <i class="sat-securityQuote__main-twoSideEntry-mid fal fa-arrows-h"></i>
+      <span class="sat-securityQuote__main-twoSideEntry-text sat-securityQuote__main-twoSideEntry-text--ask">
         {{messageData.data.ask.size}}
       </span>
-      <i class="sat-SecurityQuote__main-twoSideEntry-askAxeIcon fas fa-axe"></i>
+      <i class="sat-securityQuote__main-twoSideEntry-axeIcon sat-securityQuote__main-twoSideEntry-axeIcon--ask fas fa-axe"></i>
     </div>
-    <div class="sat-SecurityQuote__main-spacing"></div>
-    <div class="sat-SecurityQuote__main-benchmarkEntry">
-      <span class="sat-SecurityQuote__main-benchmarkEntry-consolidated">
+    <div class="sat-securityQuote__main-spacing"></div>
+    <div class="sat-securityQuote__main-benchmarkEntry">
+      <span class="sat-securityQuote__main-benchmarkEntry-consolidated">
         {{messageData.data.consolidatedBenchmark}}
       </span>
-      <span class="sat-SecurityQuote__main-benchmarkEntry-bid">
+      <span class="sat-securityQuote__main-benchmarkEntry-bid">
         {{messageData.data.bid.benchmark}}
       </span>
-      <i class="sat-SecurityQuote__main-benchmarkEntry-mid fal fa-arrows-v"></i>
-      <span class="sat-SecurityQuote__main-benchmarkEntry-ask">
+      <i class="sat-securityQuote__main-benchmarkEntry-mid fal fa-arrows-v"></i>
+      <span class="sat-securityQuote__main-benchmarkEntry-ask">
         {{messageData.data.ask.benchmark}}
       </span>
     </div>
   </section>
-  <section class="sat-SecurityQuote__ctas">
-    <button (click)="onClickThumbdown()" class="sat-SecurityQuote__ctas-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
-    <button class="sat-SecurityQuote__ctas-garbage santaBtn santaBtn--iconOnly fal fa-trash-alt"></button>
+  <section class="sat-securityQuote__ctas">
+    <button (click)="onClickThumbdown()" class="sat-securityQuote__ctas-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
+    <button class="sat-securityQuote__ctas-garbage santaBtn santaBtn--iconOnly fal fa-trash-alt"></button>
   </section>
 </article>
