@@ -177,7 +177,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   }
 
   public onClickSecurityCardSendToGraph(targetSecurity: SecurityDTO) {
-    targetSecurity.state.isSelected = false;
     if (!this.state.displayGraph) {
       this.populateGraph.emit();
     }
