@@ -1,4 +1,8 @@
-<article class="santaTableDetailAllQuotes">
+<article
+  [ngClass]="{
+    'santaTableDetailAllQuotes': true,
+    'santaTableDetailAllQuotes--showMoreQuoteCta': rowData.data.quotes.length > 0 && rowData.data.quotes.length !== rowData.data.presentQuotes.length && !rowData.state.presentingAllQuotes
+  }">
   <section (click)="onClickClose()" class="santaTableDetailAllQuotes__backgroundCTA"></section>
   <section class="santaTableDetailAllQuotes__main">
     <div class="santaTableDetailAllQuotes__main-content">
@@ -32,7 +36,7 @@
       </section>
       <ul class="santaTableDetailAllQuotes__main-content-messageList">
         <security-quote
-          *ngFor="let eachMessage of rowData.data.quotes"
+          *ngFor="let eachMessage of rowData.data.presentQuotes"
           [messageData]="eachMessage"
           (clickedSpecificQuote)="onClickedSpecificQuote($event)"
           (clickedThumbdown)="onClickThumbdown($event)">
@@ -48,6 +52,10 @@
     <button (click)="onClickClose()" class="santaTableDetailAllQuotes__ctas-collapseBtn santaBtn--labelled">
       <i class="fal fa-times"></i>
       <span>Close</span>
+    </button>
+    <button (click)="onClickShowMoreQuotes()" class="santaTableDetailAllQuotes__ctas-moreQuoteCta santaBtn--labelled">
+      <i class="fal fa-cloud-download"></i>
+      <span>Show {{rowData.data.quotes.length - rowData.data.presentQuotes.length}} More Quote</span>
     </button>
   </section>
 </article>

@@ -17,6 +17,7 @@ import {
   ClickedSpecificQuoteEmitterParams
 } from 'FEModels/frontend-adhoc-packages.interface';
 import { DTOService } from 'Core/services/DTOService';
+import { UtilityService } from 'Core/services/UtilityService';
 import { QuoteMetricList } from 'Core/constants/securityTableConstants.constant';
 
 @Component({
@@ -31,7 +32,8 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   private parent: any; // a hacky way to talk to "santa-table.container.ts"
 
   constructor(
-    private dtoService: DTOService
+    private dtoService: DTOService,
+    private utilityService: UtilityService
   ) { }
 
   public agInit(params: any){
@@ -68,7 +70,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
 
   public onClickedSpecificQuote(params: ClickedSpecificQuoteEmitterParams) {
     if (!!params) {
-      this.rowData.data.quotes.forEach((eachQuote) => {
+      this.rowData.data.presentQuotes.forEach((eachQuote) => {
         if (eachQuote.data.uuid === params.targetQuote.data.uuid) {
           const targetSide = params.isOnBidSide ? 'bid' : 'ask';
           if (eachQuote.state.menuActiveMetric === params.targetMetric && eachQuote.state.menuActiveSide === targetSide) {
@@ -88,5 +90,9 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
 
   public onClickThumbdown(targetQuote: SecurityQuoteDTO) {
     console.log('test, got', targetQuote);
+  }
+
+  public onClickShowMoreQuotes() {
+    this.rowData.data.presentQuotes = this.utilityService.deepCopy(this.rowData.data.quotes);
   }
 }

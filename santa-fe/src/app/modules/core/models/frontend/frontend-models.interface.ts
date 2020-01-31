@@ -264,6 +264,7 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
   data: {
     security: SecurityDTO;
     cells: Array<SecurityTableCellDTO>;
+    presentQuotes: Array<SecurityQuoteDTO>;
     quotes: Array<SecurityQuoteDTO>;
     quoteHeaders: Array<QuoteMetricBlock>;
     bestQuotes: {
@@ -275,6 +276,7 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
   state: {
     expandViewSortByQuoteMetric: string;
     isExpanded: boolean;
+    presentingAllQuotes: boolean;
   }
 }
 

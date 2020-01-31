@@ -56,14 +56,21 @@ $santaTableDetailAllQuotes_width: $securityQuote_main_size_1 * 2 + $securityQuot
   &__ctas {
     display: flex;
     justify-content: center;
+    &-moreQuoteCta {
+      @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
+      display: none;
+      flex-direction: row;
+      margin: 0 $spacing_medium;
+      background-color: $color_white;
+    }
     &-selectBtn {
-          @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
+      @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
       flex-direction: row;
       margin: 0 $spacing_medium;
       background-color: $color_white;
     }
     &-collapseBtn {
-          @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
+      @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
       flex-direction: row;
       margin: 0 $spacing_medium;
       background-color: $color_kill;
@@ -72,6 +79,15 @@ $santaTableDetailAllQuotes_width: $securityQuote_main_size_1 * 2 + $securityQuot
       }
       &>span {
         color: $font_color_inverse;
+      }
+    }
+  }
+  &--showMoreQuoteCta {
+    #{$santaTableDetailAllQuotesBlockName} {
+      &__ctas {
+        &-moreQuoteCta {
+          display: flex;
+        }
       }
     }
   }

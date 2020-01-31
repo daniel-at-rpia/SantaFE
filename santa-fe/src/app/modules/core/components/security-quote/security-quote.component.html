@@ -109,7 +109,7 @@
         }">
         <button (click)="onClickSpecificQuote(true, 'tspread')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
           <i class="sat-securityQuote__main-twoSideEntry-cta-btn-bestIcon fal fa-tag"></i>
-          {{messageData.data.bid.tspread}}
+          <span>{{messageData.data.bid.tspread}}</span>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
           <button (click)="onClickThumbdown()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>

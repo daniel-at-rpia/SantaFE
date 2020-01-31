@@ -592,6 +592,7 @@ export class DTOService {
       data: {
         security: securityDTO,
         cells: [],
+        presentQuotes: [],
         quotes: [],
         quoteHeaders: QuoteMetricList.map((eachQuoteMetricStub) => {
           const metricBlock: Blocks.QuoteMetricBlock = {
@@ -611,7 +612,8 @@ export class DTOService {
       },
       state: {
         expandViewSortByQuoteMetric: null,
-        isExpanded: false
+        isExpanded: false,
+        presentingAllQuotes: false
       }
     };
     return object;
