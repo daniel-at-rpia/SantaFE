@@ -36,7 +36,6 @@
           'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.bid.price == null
         }">
         <button (click)="onClickSpecificQuote(true, 'price')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
-          <i class="sat-securityQuote__main-twoSideEntry-cta-btn-bestIcon fal fa-tag"></i>
           <span>{{messageData.data.bid.price}}</span>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
@@ -54,7 +53,6 @@
         }">
         <button (click)="onClickSpecificQuote(false, 'price')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
           <span>{{messageData.data.ask.price}}</span>
-          <i class="sat-securityQuote__main-twoSideEntry-cta-btn-bestIcon fal fa-tag"></i>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
           <button (click)="onClickThumbdown()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
@@ -72,7 +70,6 @@
           'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.bid.yield == null
         }">
         <button (click)="onClickSpecificQuote(true, 'yield')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
-          <i class="sat-securityQuote__main-twoSideEntry-cta-btn-bestIcon fal fa-tag"></i>
           <span>{{messageData.data.bid.yield}}</span>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
@@ -90,7 +87,6 @@
         }">
         <button (click)="onClickSpecificQuote(false, 'yield')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
           <span>{{messageData.data.ask.yield}}</span>
-          <i class="sat-securityQuote__main-twoSideEntry-cta-btn-bestIcon fal fa-tag"></i>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
           <button (click)="onClickThumbdown()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
@@ -108,7 +104,6 @@
           'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.bid.tspread == null
         }">
         <button (click)="onClickSpecificQuote(true, 'tspread')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
-          <i class="sat-securityQuote__main-twoSideEntry-cta-btn-bestIcon fal fa-tag"></i>
           <span>{{messageData.data.bid.tspread}}</span>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
@@ -126,7 +121,6 @@
         }">
         <button (click)="onClickSpecificQuote(false, 'tspread')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
           <span>{{messageData.data.ask.tspread}}</span>
-          <i class="sat-securityQuote__main-twoSideEntry-cta-btn-bestIcon fal fa-tag"></i>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
           <button (click)="onClickThumbdown()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
@@ -135,7 +129,7 @@
       </div>
     </div>
     <div class="sat-securityQuote__main-spacing"></div>
-    <div class="sat-securityQuote__main-twoSideEntry">
+    <div class="sat-securityQuote__main-twoSideEntry sat-securityQuote__main-twoSideEntry--sizeThree">
       <i class="sat-securityQuote__main-twoSideEntry-axeIcon sat-securityQuote__main-twoSideEntry-axeIcon--bid fas fa-axe"></i>
       <span class="sat-securityQuote__main-twoSideEntry-text sat-securityQuote__main-twoSideEntry-text--bid sat-securityQuote__main-twoSideEntry-text--quant">
         {{messageData.data.bid.size}}

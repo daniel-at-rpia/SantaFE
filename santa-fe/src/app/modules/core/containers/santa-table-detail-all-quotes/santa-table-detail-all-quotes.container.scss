@@ -18,7 +18,7 @@ $santaTableDetailAllQuotes_width: $securityQuote_main_size_1 * 2 + $securityQuot
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: $color_active;
+  background-color: $color_detailTableBackground;
   padding: $spacing_small 0;
   &__backgroundCTA {
     @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);

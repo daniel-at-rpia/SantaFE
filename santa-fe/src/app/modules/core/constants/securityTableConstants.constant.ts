@@ -26,7 +26,7 @@ export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_qu
 export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 150;
 export const AGGRID_SIMPLE_TEXT_COLUMN_WIDTH = 150;
 export const AGGRID_ROW_HEIGHT = 40;
-export const AGGRID_DETAIL_ROW_HEIGHT_PER_ROW = 36;
+export const AGGRID_DETAIL_ROW_HEIGHT_PER_ROW = 34;
 export const AGGRID_DETAIL_ROW_HEIGHT_OFFSET = 120;
 export const AGGRID_DETAIL_ROW_DEFAULT_COUNT = 10;
 export const AGGRID_DETAIL_ROW_HEIGHT_MAX = AGGRID_DETAIL_ROW_HEIGHT_OFFSET + AGGRID_DETAIL_ROW_HEIGHT_PER_ROW * AGGRID_DETAIL_ROW_DEFAULT_COUNT;
@@ -333,7 +333,7 @@ export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
     textOnly: true
   },{
     labelList: ['B Size', 'A Size'],
-    size: 2,
+    size: 3,
     textOnly: true
   },{
     labelList: ['Benchmarks'],

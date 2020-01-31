@@ -4,7 +4,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
 .sat-securityQuote {
   $securityQuoteBlockName: &;
   @include mix_border_radius(5px);
-  @include mix_border_generator($typical_border_width * 2, $color_active);
+  @include mix_border_generator($typical_border_width * 2, $color_detailTableBackground);
   flex: 1 1 auto;
   display: flex;
   margin-top: $spacing_x_small;
@@ -98,17 +98,12 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
           flex: 1 1 auto;
           flex-direction: row;
           justify-content: space-between;
-          padding: $spacing_x_small;
-          &-bestIcon {
-            @include mix_border_radius(3px);
-            visibility: hidden;
-            opacity: 0;
-            color: $font_color_inverse;
-            padding: $spacing_x_small;
-            font-size: $font_size_x_small;
-          }
+          padding: $spacing_xx_small;
           &>span {
+            @include mix_border_radius(3px);
             @include mix_quantative_text;
+            flex: 1 1 auto;
+            padding: $spacing_xx_small $spacing_x_small;
           }
         }
         &-actionMenu {
@@ -131,14 +126,14 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
         &--bid {
           margin-right: $spacing_xx_small;
         }
-        &--bid &-btn-bestIcon {
-          background-color: $color_quant_left;
+        &--bid &-btn span {
+          text-align: right;
         }
         &--ask {
           margin-left: $spacing_xx_small;
         }
-        &--ask &-btn-bestIcon {
-          background-color: $color_quant_right;
+        &--ask &-btn span {
+          text-align: left;
         }
         &--empty {
           visibility: hidden;
@@ -186,65 +181,90 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
   &:hover {
     border-color: $color_yellow_5;
   }
-  &--bestBidState {
+  &--bestBidState#{$securityQuoteBlockName}--filteredBySpreadState {
     #{$securityQuoteBlockName} {
-      &__main {
-        &-twoSideEntry-cta--ask {
-          #{$securityQuoteBlockName} {
-            &__main-twoSideEntry-cta-btn-bestIcon-btn-bestIcon {
-              visibility: visible;
+      &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--tspread {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta-btn {
+            &>span {
+              background-color: $color_quant_left;
+              color: $font_color_inverse;
+              font-weight: 600;
             }
           }
         }
       }
     }
   }
-  &--bestOfferState {
+  &--bestBidState#{$securityQuoteBlockName}--filteredByPriceState {
     #{$securityQuoteBlockName} {
-      &__main {
-        &-twoSideEntry-cta--ask {
-          #{$securityQuoteBlockName} {
-            &__main-twoSideEntry-cta-btn-bestIcon {
-              visibility: visible;
+      &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--price {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta-btn {
+            &>span {
+              background-color: $color_quant_left;
+              color: $font_color_inverse;
+              font-weight: 600;
             }
           }
         }
       }
     }
   }
-  &--filteredBySpreadState {
+  &--bestBidState#{$securityQuoteBlockName}--filteredByYieldState {
     #{$securityQuoteBlockName} {
-      &__main {
-        &-twoSideEntry-cta--tspread {
-          #{$securityQuoteBlockName} {
-            &__main-twoSideEntry-cta-btn-bestIcon {
-              opacity: 1;
+      &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--yield {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta-btn {
+            &>span {
+              background-color: $color_quant_left;
+              color: $font_color_inverse;
+              font-weight: 600;
             }
           }
         }
       }
     }
   }
-  &--filteredByPriceState {
+  &--bestOfferState#{$securityQuoteBlockName}--filteredBySpreadState {
     #{$securityQuoteBlockName} {
-      &__main {
-        &-twoSideEntry-cta--price {
-          #{$securityQuoteBlockName} {
-            &__main-twoSideEntry-cta-btn-bestIcon {
-              opacity: 1;
+      &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--tspread {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta-btn {
+            &>span {
+              background-color: $color_quant_right;
+              color: $font_color_inverse;
+              font-weight: 600;
             }
           }
         }
       }
     }
   }
-  &--filteredByYieldState {
+  &--bestOfferState#{$securityQuoteBlockName}--filteredByPriceState {
     #{$securityQuoteBlockName} {
-      &__main {
-        &-twoSideEntry-cta--yield {
-          #{$securityQuoteBlockName} {
-            &__main-twoSideEntry-cta-btn-bestIcon {
-              opacity: 1;
+      &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--price {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta-btn {
+            &>span {
+              background-color: $color_quant_right;
+              color: $font_color_inverse;
+              font-weight: 600;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--bestOfferState#{$securityQuoteBlockName}--filteredByYieldState {
+    #{$securityQuoteBlockName} {
+      &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--yield {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta-btn {
+            &>span {
+              background-color: $color_quant_right;
+              color: $font_color_inverse;
+              font-weight: 600;
             }
           }
         }
@@ -258,7 +278,11 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
           &__main-twoSideEntry-cta {
             &-btn {
               @include material('none');
-              background-color: $color_yellow_5;
+              background-color: $color_active;
+              &>span {
+                background-color: $color_active;
+                color: $font_color_inverse;
+              }
             }
             &-actionMenu {
               transform: scale(1) translate(0,0);
@@ -275,7 +299,11 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
           &__main-twoSideEntry-cta {
             &-btn {
               @include material('none');
-              background-color: $color_yellow_5;
+              background-color: $color_active;
+              &>span {
+                background-color: $color_active;
+                color: $font_color_inverse;
+              }
             }
             &-actionMenu {
               transform: scale(1) translate(0,0);
@@ -292,7 +320,11 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
           &__main-twoSideEntry-cta {
             &-btn {
               @include material('none');
-              background-color: $color_yellow_5;
+              background-color: $color_active;
+              &>span {
+                background-color: $color_active;
+                color: $font_color_inverse;
+              }
             }
             &-actionMenu {
               transform: scale(1) translate(0,0);
@@ -309,7 +341,11 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
           &__main-twoSideEntry-cta {
             &-btn {
               @include material('none');
-              background-color: $color_yellow_5;
+              background-color: $color_active;
+              &>span {
+                background-color: $color_active;
+                color: $font_color_inverse;
+              }
             }
             &-actionMenu {
               transform: scale(1) translate(0,0);
@@ -326,7 +362,11 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
           &__main-twoSideEntry-cta {
             &-btn {
               @include material('none');
-              background-color: $color_yellow_5;
+              background-color: $color_active;
+              &>span {
+                background-color: $color_active;
+                color: $font_color_inverse;
+              }
             }
             &-actionMenu {
               transform: scale(1) translate(0,0);
@@ -343,7 +383,11 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
           &__main-twoSideEntry-cta {
             &-btn {
               @include material('none');
-              background-color: $color_yellow_5;
+              background-color: $color_active;
+              &>span {
+                background-color: $color_active;
+                color: $font_color_inverse;
+              }
             }
             &-actionMenu {
               transform: scale(1) translate(0,0);
