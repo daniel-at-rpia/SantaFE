@@ -7,7 +7,12 @@ import {
   SerializedNumberFilter
 } from 'ag-grid-community';
 
-import { SecurityTableRowDTO, NumericFilterDTO } from 'FEModels/frontend-models.interface';
+import {
+  SecurityTableRowDTO,
+  NumericFilterDTO,
+  SecurityQuoteDTO
+} from 'FEModels/frontend-models.interface';
+
 import {
   QuoteMetricBlock,
   AgGridRow,
@@ -86,4 +91,10 @@ export interface LilMarketGraphSeriesDataPack {
 export interface LilMarketGraphSeriesDataPackEntryBlock {
   date: string;
   value: number;
+}
+
+export interface ClickedSpecificQuoteEmitterParams {
+  targetQuote: SecurityQuoteDTO;
+  isOnBidSide: boolean;
+  targetMetric: string;
 }

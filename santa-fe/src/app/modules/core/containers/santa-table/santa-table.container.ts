@@ -56,7 +56,8 @@
       AGGRID_DETAIL_ROW_HEIGHT_MAX,
       AGGRID_DETAIL_ROW_HEIGHT_PER_ROW,
       AGGRID_DETAIL_ROW_HEIGHT_OFFSET,
-      AGGRID_DETAIL_ROW_HEIGHT_DEFAULT
+      AGGRID_DETAIL_ROW_HEIGHT_DEFAULT,
+      AGGRID_DETAIL_ROW_DEFAULT_COUNT
     } from 'Core/constants/securityTableConstants.constant';
     import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
     import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-filter/santa-table-numeric-filter.component';
@@ -120,7 +121,8 @@ export class SantaTable implements OnInit, OnChanges {
     agGridDetailRowHeightMax: AGGRID_DETAIL_ROW_HEIGHT_MAX,
     agGridDetailRowHeightPerRow: AGGRID_DETAIL_ROW_HEIGHT_PER_ROW,
     agGridDetailRowHeightOffset: AGGRID_DETAIL_ROW_HEIGHT_OFFSET,
-    agGridDetailRowHeightDefault: AGGRID_DETAIL_ROW_HEIGHT_DEFAULT
+    agGridDetailRowHeightDefault: AGGRID_DETAIL_ROW_HEIGHT_DEFAULT,
+    agGridDetailRowDefaultCount: AGGRID_DETAIL_ROW_DEFAULT_COUNT
   }
 
   constructor(
@@ -332,10 +334,14 @@ export class SantaTable implements OnInit, OnChanges {
               targetRow.data.quotes.push(newQuote);
             }
           }
+          targetRow.data.presentQuotes = this.utilityService.deepCopy(targetRow.data.quotes);
+          if (!targetRow.state.presentingAllQuotes) {
+            targetRow.data.presentQuotes = targetRow.data.presentQuotes.slice(0, this.constants.agGridDetailRowDefaultCount);
+          }
           this.performChronologicalSortOnQuotes(targetRow);
           this.agGridMiddleLayerService.updateAgGridRows(this.tableData, [targetRow]);
           if (!!params && !!params.node && !!params.node.detailNode) {
-            let dynamicHeight = this.constants.agGridDetailRowHeightOffset + targetRow.data.quotes.length * this.constants.agGridDetailRowHeightPerRow;
+            let dynamicHeight = this.constants.agGridDetailRowHeightOffset + targetRow.data.presentQuotes.length * this.constants.agGridDetailRowHeightPerRow;
             if (dynamicHeight > this.constants.agGridDetailRowHeightMax) {
               dynamicHeight = this.constants.agGridDetailRowHeightMax;
             }

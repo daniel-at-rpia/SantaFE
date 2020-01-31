@@ -48,29 +48,46 @@ $santaTableDetailAllQuotes_width: $securityQuote_main_size_1 * 2 + $securityQuot
         flex: 1 1 auto;
         display: flex;
         flex-direction: column;
-        margin-right: $spacing_small;
+        margin: 0 $spacing_x_small;
+        padding-bottom: $spacing_medium;
       }
     }
   }
   &__ctas {
     display: flex;
     justify-content: center;
-    &-selectBtn {
-          @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
+    &-moreQuoteCta {
+      @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
+      display: none;
       flex-direction: row;
-      margin: $spacing_medium;
+      margin: 0 $spacing_medium;
+      background-color: $color_white;
+    }
+    &-selectBtn {
+      @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
+      flex-direction: row;
+      margin: 0 $spacing_medium;
       background-color: $color_white;
     }
     &-collapseBtn {
-          @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
+      @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
       flex-direction: row;
-      margin: $spacing_medium;
+      margin: 0 $spacing_medium;
       background-color: $color_kill;
       &>i {
         color: $font_color_inverse;
       }
       &>span {
         color: $font_color_inverse;
+      }
+    }
+  }
+  &--showMoreQuoteCta {
+    #{$santaTableDetailAllQuotesBlockName} {
+      &__ctas {
+        &-moreQuoteCta {
+          display: flex;
+        }
       }
     }
   }

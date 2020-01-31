@@ -9,13 +9,15 @@ import {
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { AgGridRowNode } from 'FEModels/frontend-blocks.interface';
 
-import { SecurityTableRowDTO } from 'FEModels/frontend-models.interface';
+import { SecurityTableRowDTO, SecurityQuoteDTO } from 'FEModels/frontend-models.interface';
 import { QuoteMetricBlock } from 'FEModels/frontend-blocks.interface';
 import {
   AgGridRowParams,
-  ClickedSortQuotesByMetricEmitterParams
+  ClickedSortQuotesByMetricEmitterParams,
+  ClickedSpecificQuoteEmitterParams
 } from 'FEModels/frontend-adhoc-packages.interface';
 import { DTOService } from 'Core/services/DTOService';
+import { UtilityService } from 'Core/services/UtilityService';
 import { QuoteMetricList } from 'Core/constants/securityTableConstants.constant';
 
 @Component({
@@ -30,7 +32,8 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   private parent: any; // a hacky way to talk to "santa-table.container.ts"
 
   constructor(
-    private dtoService: DTOService
+    private dtoService: DTOService,
+    private utilityService: UtilityService
   ) { }
 
   public agInit(params: any){
@@ -63,5 +66,33 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
       targetMetricLabel: targetLabel
     };
     this.parent.onClickSortQuotesByMetric(payload);
+  }
+
+  public onClickedSpecificQuote(params: ClickedSpecificQuoteEmitterParams) {
+    if (!!params) {
+      this.rowData.data.presentQuotes.forEach((eachQuote) => {
+        if (eachQuote.data.uuid === params.targetQuote.data.uuid) {
+          const targetSide = params.isOnBidSide ? 'bid' : 'ask';
+          if (eachQuote.state.menuActiveMetric === params.targetMetric && eachQuote.state.menuActiveSide === targetSide) {
+            eachQuote.state.menuActiveSide = null;
+            eachQuote.state.menuActiveMetric = null;
+          } else {
+            eachQuote.state.menuActiveSide = targetSide;
+            eachQuote.state.menuActiveMetric = params.targetMetric;
+          }
+        } else {
+          eachQuote.state.menuActiveMetric = null;
+          eachQuote.state.menuActiveSide = null;
+        }
+      });
+    }
+  }
+
+  public onClickThumbdown(targetQuote: SecurityQuoteDTO) {
+    console.log('test, got', targetQuote);
+  }
+
+  public onClickShowMoreQuotes() {
+    this.rowData.data.presentQuotes = this.utilityService.deepCopy(this.rowData.data.quotes);
   }
 }

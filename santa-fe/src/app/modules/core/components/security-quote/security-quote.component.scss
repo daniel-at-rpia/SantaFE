@@ -1,35 +1,13 @@
 @import "global.scss";
 
 $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
-.sat-SecurityQuote {
+.sat-securityQuote {
   $securityQuoteBlockName: &;
+  @include mix_border_radius(5px);
+  @include mix_border_generator($typical_border_width * 2, $color_active);
   flex: 1 1 auto;
   display: flex;
   margin-top: $spacing_x_small;
-  &__bestQuote{
-    display: flex;   
-    justify-content: center; 
-    align-items: center; 
-    visibility: hidden;
-    padding: $spacing_x_small;
-    &-bestBidText {
-      @include mix_border_radius(3px);
-      color: $font_color_inverse;
-      line-height: $line_height_small;
-      font-size: $font_size_small;
-      background-color: $color_quant_left;
-      padding: $spacing_x_small;
-    }
-    &-bestOfferText {
-      @include mix_border_radius(3px);
-      margin-left: $spacing_x_small;
-      color: $font_color_inverse;
-      line-height: $line_height_small;
-      font-size: $font_size_small;
-      background-color: $color_quant_right;
-      padding: $spacing_x_small;
-    }
-  }
   &__time {
     flex: 0 0 $securityQuote_time_width;
     display: flex;
@@ -44,18 +22,15 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
     }
   }
   &__main {
-    @include mix_border_radius(5px);
     flex: 1 1 auto;
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
-    background-color: $color_white;
-    padding: $spacing_x_small;
     &-entry {
       flex: 0 0 $securityQuote_main_size_1;
       text-align: center;
       font-size: $font_size_small;
-      color: $font_color_minor;
+      color: $font_color_inverse;
     }
     &-spacing {
       @include mix_border_generator(0 $typical_border_width 0 0);
@@ -64,41 +39,12 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       height: 100%;
       margin-right: $securityQuote_spacing_height;
     }
-    &-thumbnail {
-      flex: 0 1 100%;
-      display: flex;
-      justify-content: center;
-      margin: $spacing_small;
-      &-bid, &-ask {
-        @include mix_border_radius(5px);
-        @include mix_border_generator();
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: $iconButton_size_regular;
-        height: $iconButton_size_regular;
-        &-icon {
-          font-size: $font_size_xx_large;
-        }
-        &-axeIcon {
-          display: none;
-          font-size: $font_size_x_large;
-          color: $font_color_inverse;
-        }
-      }
-      &-bid {
-        margin-right: $spacing_x_small;
-      }
-      &-ask {
-        margin-left: $spacing_x_small;
-      }
-    }
     &-twoSideEntry {
       flex: 0 0 $securityQuote_main_size_2;
       display: flex;
       justify-content: center;
       align-items: center;
-      &-bidAxeIcon, &-askAxeIcon {
+      &-axeIcon {
         @include mix_border_radius(3px);
         flex: 0 0 $securityQuote_twoSideEntry_axeIconSize;
         display: flex;
@@ -109,61 +55,110 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
         color: $color_white;
         background-color: $color_axe;
         font-size: $font_size_small;
-      }
-      &-bidAxeIcon {
-        margin-right: $spacing_x_small;
-      }
-      &-askAxeIcon {
-        margin-left: $spacing_x_small;
-      }
-      &-bid {
-        flex: 1 1 50%;
-        display: flex;
-        justify-content: flex-end;
-        color: $font_color_major;
-        font-size: $font_size_small;
-        margin-right: $spacing_xx_small;
-        font-weight: bold;
-        text-align: center;
-        white-space: nowrap;
+        &--bid {
+          margin-right: $spacing_x_small;
+        } 
+        &--ask {  
+          margin-left: $spacing_x_small;
+        }
       }
       &-mid {
         margin-top: $spacing_minimum;
         color: $font_color_trivial;
         font-size: $font_size_x_small;
       }
-      &-ask {
+      &-text {
         flex: 1 1 50%;
         display: flex;
-        justify-content: flex-start;
-        color: $font_color_major;
-        margin-left: $spacing_xx_small;
+        color: $font_color_inverse;
         font-size: $font_size_small;
-        font-weight: bold;
         text-align: center;
         white-space: nowrap;
+        &--bid {
+          margin-right: $spacing_xx_small;
+          justify-content: flex-end;
+        }
+        &--ask {
+          margin-left: $spacing_xx_small;
+          justify-content: flex-start;
+        }
+      }
+      &-cta {
+        @include mix_fixed_div(relative, $z_index_standard_base_item);
+        flex: 1 1 50%;
+        display: flex;
+        &-btn {
+          @extend .santaBtn;
+          flex: 1 1 auto;
+          flex-direction: row;
+          justify-content: space-between;
+          padding: $spacing_x_small;
+          &-bestIcon {
+            @include mix_border_radius(3px);
+            visibility: hidden;
+            opacity: 0;
+            color: $font_color_inverse;
+            padding: $spacing_x_small;
+            font-size: $font_size_x_small;
+          }
+          &>span {
+            @include mix_quantative_text;
+          }
+        }
+        &-actionMenu {
+          @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+          @include mix_alive('custom', transform $animation_duration_light);
+          top: 100%;
+          display: flex;
+          transform: scale(0.001) translate(0, -100%);
+          &-downvote {
+            @include mix_border_radius(50%);
+            margin: 0 $spacing_x_small;
+          }
+          &-garbage {
+            @include mix_border_radius(50%);
+            color: $font_color_inverse;
+            background-color: $color_kill;
+            margin: 0 $spacing_x_small;
+          }
+        }
+        &--bid {
+          margin-right: $spacing_xx_small;
+        }
+        &--bid &-btn-bestIcon {
+          background-color: $color_quant_left;
+        }
+        &--ask {
+          margin-left: $spacing_xx_small;
+        }
+        &--ask &-btn-bestIcon {
+          background-color: $color_quant_right;
+        }
+        &--empty {
+          visibility: hidden;
+        }
       }
       &--sizeThree {
         flex: 0 0 $securityQuote_main_size_3;
       }
     }
     &-benchmarkEntry {
-      flex: 0 0 $securityQuote_main_size_4;
+      flex: 1 0 $securityQuote_main_size_4;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       overflow: hidden;
+      color: $font_color_inverse;
       &-consolidated {
-        color: $font_color_minor;
-        font-size: $font_size_small;
         display: flex;
+        align-self: flex-start;
+        font-size: $font_size_small;
       }
       &-bid {
         display: none;
         flex: 1 1 50%;
         justify-content: flex-end;
-        color: $font_color_minor;
         font-size: $font_size_small;
         margin-bottom: $spacing_x_small;
         text-align: center;
@@ -176,177 +171,177 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
         display: none;
         flex: 1 1 50%;
         justify-content: flex-start;
-        color: $font_color_minor;
         margin-top: $spacing_x_small;
         font-size: $font_size_small;
         text-align: center;
       }
     }
   }
-  &__ctas {
-    flex: 0 0 $securityQuote_ctas_width;
-    display: flex;
-    align-items: center;
-    &-upvote {
-      @include mix_border_radius(50%);
-      margin-left: $spacing_small;
-      margin-right: $spacing_small;
-    }
-    &-downvote {
-      @include mix_border_radius(50%);
-      margin-right: $spacing_small;
-    }
+  &:hover {
+    border-color: $color_yellow_5;
   }
-  &--bestBidState#{$securityQuoteBlockName}--filteredBySpreadState {
+  &--bestBidState {
     #{$securityQuoteBlockName} {
-      &__bestQuote{
-        &-bestBidText {
-          visibility: visible;
-        }
-      }
-      &__main { 
-        &-twoSideEntry{
-          &-bid--spread{
-            background-color: $color_quant_left;
-            @include mix_border_radius(3px);
-            padding: $spacing_x_small;
-            width: $spacing_x_small;
-            color: white;
+      &__main {
+        &-twoSideEntry-cta--ask {
+          #{$securityQuoteBlockName} {
+            &__main-twoSideEntry-cta-btn-bestIcon-btn-bestIcon {
+              visibility: visible;
+            }
           }
         }
       }
     }
   }
-
-  &--bestOfferState#{$securityQuoteBlockName}--filteredBySpreadState {
+  &--bestOfferState {
     #{$securityQuoteBlockName} {
-      &__bestQuote{
-        &-bestOfferText {
-          visibility: visible;
-        }
-      }
       &__main {
-        &-twoSideEntry{
-          &-ask--spread{
-            background-color: $color_quant_right;
-            @include mix_border_radius(3px);
-            padding: $spacing_x_small;
-            width: $spacing_x_small;
-            color: white;
+        &-twoSideEntry-cta--ask {
+          #{$securityQuoteBlockName} {
+            &__main-twoSideEntry-cta-btn-bestIcon {
+              visibility: visible;
+            }
           }
         }
       }
     }
   }
-
-
-  &--bestBidState#{$securityQuoteBlockName}--filteredByPriceState {
+  &--filteredBySpreadState {
     #{$securityQuoteBlockName} {
-      &__bestQuote{
-        &-bestBidText {
-          visibility: visible;
-        }
-      }
       &__main {
-        &-twoSideEntry{
-          &-bid--price{
-            background-color: $color_quant_left;
-            @include mix_border_radius(3px);
-            padding: $spacing_x_small;
-            width: $spacing_x_small;
-            color: white;
+        &-twoSideEntry-cta--tspread {
+          #{$securityQuoteBlockName} {
+            &__main-twoSideEntry-cta-btn-bestIcon {
+              opacity: 1;
+            }
           }
         }
       }
     }
   }
-
-  &--bestOfferState#{$securityQuoteBlockName}--filteredByPriceState {
+  &--filteredByPriceState {
     #{$securityQuoteBlockName} {
-      &__bestQuote{
-        &-bestOfferText {
-          visibility: visible;
-        }
-      }
       &__main {
-        &-twoSideEntry{
-          &-ask--price{
-            background-color: $color_quant_right;
-            @include mix_border_radius(3px);
-            padding: $spacing_x_small;
-            width: $spacing_x_small;
-            color: white;
+        &-twoSideEntry-cta--price {
+          #{$securityQuoteBlockName} {
+            &__main-twoSideEntry-cta-btn-bestIcon {
+              opacity: 1;
+            }
           }
         }
       }
     }
   }
-
-  &--bestBidState#{$securityQuoteBlockName}--filteredByYieldState {
+  &--filteredByYieldState {
     #{$securityQuoteBlockName} {
-      &__bestQuote{
-        &-bestBidText {
-          visibility: visible;
-        }
-      }
       &__main {
-        &-twoSideEntry{
-          &-bid--yield{
-            background-color: $color_quant_left;
-            @include mix_border_radius(3px);
-            padding: $spacing_x_small;
-            width: $spacing_x_small;
-            color: white;
+        &-twoSideEntry-cta--yield {
+          #{$securityQuoteBlockName} {
+            &__main-twoSideEntry-cta-btn-bestIcon {
+              opacity: 1;
+            }
           }
         }
       }
     }
   }
-
-  &--bestOfferState#{$securityQuoteBlockName}--filteredByYieldState {
+  &--menuActiveOnBidState#{$securityQuoteBlockName}--menuActiveOnTSpreadState {
     #{$securityQuoteBlockName} {
-      &__bestQuote{
-        &-bestOfferText {
-          visibility: visible;
-        }
-      }
-      &__main {
-        &-twoSideEntry{
-          &-ask--yield{
-            background-color: $color_quant_right;
-            @include mix_border_radius(3px);
-            padding: $spacing_x_small;
-            width: $spacing_x_small;
-            color: white;
+      &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--tspread {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta {
+            &-btn {
+              @include material('none');
+              background-color: $color_yellow_5;
+            }
+            &-actionMenu {
+              transform: scale(1) translate(0,0);
+            }
           }
         }
       }
     }
   }
-
-  &--noBid {
+  &--menuActiveOnBidState#{$securityQuoteBlockName}--menuActiveOnYieldState {
     #{$securityQuoteBlockName} {
-      &__main {
-        &-thumbnail-bid {
-          visibility: hidden;
-        }
-        &-twoSideEntry {
-          &-bid{
-            visibility: hidden;
+      &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--yield {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta {
+            &-btn {
+              @include material('none');
+              background-color: $color_yellow_5;
+            }
+            &-actionMenu {
+              transform: scale(1) translate(0,0);
+            }
           }
         }
       }
     }
   }
-  &--noAsk {
+  &--menuActiveOnBidState#{$securityQuoteBlockName}--menuActiveOnPriceState {
     #{$securityQuoteBlockName} {
-      &__main {
-        &-thumbnail-ask {
-          visibility: hidden;
+      &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--price {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta {
+            &-btn {
+              @include material('none');
+              background-color: $color_yellow_5;
+            }
+            &-actionMenu {
+              transform: scale(1) translate(0,0);
+            }
+          }
         }
-        &-twoSideEntry {
-          &-ask {
-            visibility: hidden;
+      }
+    }
+  }
+  &--menuActiveOnAskState#{$securityQuoteBlockName}--menuActiveOnTSpreadState {
+    #{$securityQuoteBlockName} {
+      &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--tspread {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta {
+            &-btn {
+              @include material('none');
+              background-color: $color_yellow_5;
+            }
+            &-actionMenu {
+              transform: scale(1) translate(0,0);
+            }
+          }
+        }
+      }
+    }
+  }
+  &--menuActiveOnAskState#{$securityQuoteBlockName}--menuActiveOnYieldState {
+    #{$securityQuoteBlockName} {
+      &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--yield {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta {
+            &-btn {
+              @include material('none');
+              background-color: $color_yellow_5;
+            }
+            &-actionMenu {
+              transform: scale(1) translate(0,0);
+            }
+          }
+        }
+      }
+    }
+  }
+  &--menuActiveOnAskState#{$securityQuoteBlockName}--menuActiveOnPriceState {
+    #{$securityQuoteBlockName} {
+      &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--price {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta {
+            &-btn {
+              @include material('none');
+              background-color: $color_yellow_5;
+            }
+            &-actionMenu {
+              transform: scale(1) translate(0,0);
+            }
           }
         }
       }
@@ -355,8 +350,10 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
   &--bidIsAxe {
     #{$securityQuoteBlockName} {
       &__main {
-        &-twoSideEntry-bidAxeIcon {
-          visibility: visible;
+        &-twoSideEntry-axeIcon {
+          &--bid {
+            visibility: visible;
+          }
         }
       }
     }
@@ -364,8 +361,10 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
   &--askIsAxe {
     #{$securityQuoteBlockName} {
       &__main {
-        &-twoSideEntry-askAxeIcon {
-          visibility: visible;
+        &-twoSideEntry-axeIcon {
+          &--ask {
+            visibility: visible;
+          }
         }
       }
     }
@@ -382,6 +381,32 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
           }
           &-bid, &-ask, &-mid {
             display: flex;
+          }
+        }
+      }
+    }
+  }
+  &--noBid {
+    #{$securityQuoteBlockName} {
+      &__main {
+        &-twoSideEntry {
+          &-cta {
+            &--bid {
+              visibility: hidden;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--noAsk {
+    #{$securityQuoteBlockName} {
+      &__main {
+        &-twoSideEntry {
+          &-cta {
+            &--ask {
+              visibility: hidden;
+            }
           }
         }
       }

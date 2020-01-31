@@ -266,6 +266,7 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
   data: {
     security: SecurityDTO;
     cells: Array<SecurityTableCellDTO>;
+    presentQuotes: Array<SecurityQuoteDTO>;
     quotes: Array<SecurityQuoteDTO>;
     quoteHeaders: Array<QuoteMetricBlock>;
     bestQuotes: {
@@ -277,6 +278,7 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
   state: {
     expandViewSortByQuoteMetric: string;
     isExpanded: boolean;
+    presentingAllQuotes: boolean;
   }
 }
 
@@ -294,6 +296,7 @@ export interface SecurityTableCellDTO extends BasicDTOStructure {
 
 export interface SecurityQuoteDTO extends BasicDTOStructure {
   data: {
+    uuid: string;
     broker: string;
     time: string;
     unixTimestamp: number;
@@ -327,6 +330,8 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
     filteredBySpread: boolean;
     filteredByYield: boolean;
     filteredByPrice: boolean;
+    menuActiveSide: string;
+    menuActiveMetric: string;
   }
 }
 
