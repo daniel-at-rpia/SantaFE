@@ -74,13 +74,19 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
         font-size: $font_size_small;
         text-align: center;
         white-space: nowrap;
+        &--quant {
+          @include mix_quantative_text;
+          color: $font_color_inverse;
+        }
         &--bid {
           margin-right: $spacing_xx_small;
           justify-content: flex-end;
+          color: $font_color_inverse;
         }
         &--ask {
           margin-left: $spacing_xx_small;
           justify-content: flex-start;
+          color: $font_color_inverse;
         }
       }
       &-cta {

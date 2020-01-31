@@ -333,7 +333,7 @@ export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
     textOnly: true
   },{
     labelList: ['B Size', 'A Size'],
-    size: 3,
+    size: 2,
     textOnly: true
   },{
     labelList: ['Benchmarks'],
