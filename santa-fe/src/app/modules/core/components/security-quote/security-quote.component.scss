@@ -179,7 +179,8 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
     }
   }
   &:hover {
-    border-color: $color_yellow_5;
+    border-color: $color_active;
+    background-color: $color_active;
   }
   &--bestBidState#{$securityQuoteBlockName}--filteredBySpreadState {
     #{$securityQuoteBlockName} {

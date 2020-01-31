@@ -158,7 +158,7 @@ export class SantaTable implements OnInit, OnChanges {
       this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate;
       this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
       this.loadTableHeaders(true);  // skip reloading the agGrid columns since that won't be necessary and reloading them creates a problem for identifying the columns in later use, such as sorting
-      this.loadTableRows(this.newRows);
+      this.loadTableRows(this.newRows, true);
     } else if (!!this.newRows && this.newRows != this.tableData.data.rows && this.tableData.state.loadedContentStage === this.receivedContentStage) {
       console.log('rows updated for change within same stage, triggered when filters are applied', this.tableData.state.loadedContentStage);
       this.loadTableRows(this.newRows);
@@ -265,7 +265,10 @@ export class SantaTable implements OnInit, OnChanges {
     }
   }
 
-  private loadTableRows(rowList: Array<SecurityTableRowDTO>) {
+  private loadTableRows(
+    rowList: Array<SecurityTableRowDTO>,
+    isUpdate: boolean = false
+  ) {
     this.tableData.data.rows = rowList;
     // doesn't need to update dynamic columns if the entire data is not loaded
     this.receivedContentStage === this.constants.securityTableFinalStage && this.updateDynamicColumns();
@@ -275,7 +278,12 @@ export class SantaTable implements OnInit, OnChanges {
       this.performDefaultSort();
     }
     if (this.tableData.state.isAgGridReady) {
-      this.tableData.data.agGridRowData = this.agGridMiddleLayerService.loadAgGridRows(this.tableData);
+      if (isUpdate) {
+        this.agGridMiddleLayerService.updateAgGridRows(this.tableData, this.tableData.data.rows);
+        this.liveUpdateAllQuotesForExpandedRows();
+      } else {
+        this.tableData.data.agGridRowData = this.agGridMiddleLayerService.loadAgGridRows(this.tableData);
+      }
     }
   }
 
