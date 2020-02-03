@@ -332,6 +332,8 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
     filteredByPrice: boolean;
     menuActiveSide: string;
     menuActiveMetric: string;
+    isBidDownVoted: boolean;
+    isAskDownVoted: boolean;
   }
 }
 

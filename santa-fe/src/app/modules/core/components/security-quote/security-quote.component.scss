@@ -99,41 +99,56 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
           flex-direction: row;
           justify-content: space-between;
           padding: $spacing_xx_small;
-          &>span {
+          &-text {
             @include mix_border_radius(3px);
             @include mix_quantative_text;
             flex: 1 1 auto;
             padding: $spacing_xx_small $spacing_x_small;
+          }
+          &-downVoteIcon {
+            @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+            @include mix_border_radius(50%);
+            display: none;
+            font-size: $font_size_small;
+            color: $color_warning;
+            padding: $spacing_xx_small;
           }
         }
         &-actionMenu {
           @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
           @include mix_alive('custom', transform $animation_duration_light);
           top: 100%;
+          left: -$spacing_small;
           display: flex;
           transform: scale(0.001) translate(0, -100%);
-          &-downvote {
+          &-upVote {
             @include mix_border_radius(50%);
             margin: 0 $spacing_x_small;
           }
-          &-garbage {
+          &-downVote {
             @include mix_border_radius(50%);
             color: $font_color_inverse;
-            background-color: $color_kill;
+            background-color: $color_warning;
             margin: 0 $spacing_x_small;
           }
         }
         &--bid {
           margin-right: $spacing_xx_small;
         }
-        &--bid &-btn span {
+        &--bid &-btn &-btn-text {
           text-align: right;
+        }
+        &--bid &-btn &-btn-downVoteIcon {
+          left: 0;
         }
         &--ask {
           margin-left: $spacing_xx_small;
         }
-        &--ask &-btn span {
+        &--ask &-btn &-btn-text {
           text-align: left;
+        }
+        &--ask &-btn &-btn-downVoteIcon {
+          right: 0;
         }
         &--empty {
           visibility: hidden;
@@ -187,7 +202,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--tspread {
         #{$securityQuoteBlockName} {
           &__main-twoSideEntry-cta-btn {
-            &>span {
+            &-text {
               background-color: $color_quant_left;
               color: $font_color_inverse;
               font-weight: 600;
@@ -202,7 +217,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--price {
         #{$securityQuoteBlockName} {
           &__main-twoSideEntry-cta-btn {
-            &>span {
+            &-text {
               background-color: $color_quant_left;
               color: $font_color_inverse;
               font-weight: 600;
@@ -217,7 +232,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--yield {
         #{$securityQuoteBlockName} {
           &__main-twoSideEntry-cta-btn {
-            &>span {
+            &-text {
               background-color: $color_quant_left;
               color: $font_color_inverse;
               font-weight: 600;
@@ -232,7 +247,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--tspread {
         #{$securityQuoteBlockName} {
           &__main-twoSideEntry-cta-btn {
-            &>span {
+            &-text {
               background-color: $color_quant_right;
               color: $font_color_inverse;
               font-weight: 600;
@@ -247,7 +262,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--price {
         #{$securityQuoteBlockName} {
           &__main-twoSideEntry-cta-btn {
-            &>span {
+            &-text {
               background-color: $color_quant_right;
               color: $font_color_inverse;
               font-weight: 600;
@@ -262,7 +277,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--yield {
         #{$securityQuoteBlockName} {
           &__main-twoSideEntry-cta-btn {
-            &>span {
+            &-text {
               background-color: $color_quant_right;
               color: $font_color_inverse;
               font-weight: 600;
@@ -280,7 +295,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
             &-btn {
               @include material('none');
               background-color: $color_active;
-              &>span {
+              &-text {
                 background-color: $color_active;
                 color: $font_color_inverse;
               }
@@ -301,7 +316,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
             &-btn {
               @include material('none');
               background-color: $color_active;
-              &>span {
+              &-text {
                 background-color: $color_active;
                 color: $font_color_inverse;
               }
@@ -322,7 +337,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
             &-btn {
               @include material('none');
               background-color: $color_active;
-              &>span {
+              &-text {
                 background-color: $color_active;
                 color: $font_color_inverse;
               }
@@ -343,7 +358,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
             &-btn {
               @include material('none');
               background-color: $color_active;
-              &>span {
+              &-text {
                 background-color: $color_active;
                 color: $font_color_inverse;
               }
@@ -364,7 +379,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
             &-btn {
               @include material('none');
               background-color: $color_active;
-              &>span {
+              &-text {
                 background-color: $color_active;
                 color: $font_color_inverse;
               }
@@ -385,7 +400,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
             &-btn {
               @include material('none');
               background-color: $color_active;
-              &>span {
+              &-text {
                 background-color: $color_active;
                 color: $font_color_inverse;
               }
@@ -432,6 +447,40 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
           }
           &-bid, &-ask, &-mid {
             display: flex;
+          }
+        }
+      }
+    }
+  }
+  &--bidDownVotedState {
+    #{$securityQuoteBlockName} {
+      &__main-twoSideEntry-cta--bid {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta-btn {
+            background-color: $color_detailTableBackground;
+            &-text {
+              color: $font_color_inverse;
+            }
+            &-downVoteIcon {
+              display: inline-block;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--askDownVotedState {
+    #{$securityQuoteBlockName} {
+      &__main-twoSideEntry-cta--ask {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta-btn {
+            background-color: $color_detailTableBackground;
+            &-text {
+              color: $font_color_inverse;
+            }
+            &-downVoteIcon {
+              display: inline-block;
+            }
           }
         }
       }

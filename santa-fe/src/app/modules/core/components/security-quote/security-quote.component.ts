@@ -19,11 +19,16 @@ import { ClickedSpecificQuoteEmitterParams } from 'FEModels/frontend-adhoc-packa
 export class SecurityQuote {
   @Input() messageData: SecurityQuoteDTO;
   @Output() clickedSpecificQuote = new EventEmitter<ClickedSpecificQuoteEmitterParams>();
-  @Output() clickedThumbdown = new EventEmitter<SecurityQuoteDTO>();
+  @Output() clickedUpVote = new EventEmitter<SecurityQuoteDTO>();
+  @Output() clickedDownVote = new EventEmitter<SecurityQuoteDTO>();
   constructor() { }
 
-  public onClickThumbdown() {
-    !!this.clickedThumbdown && this.clickedThumbdown.emit(this.messageData);
+  public onClickDownVote() {
+    !!this.clickedDownVote && this.clickedDownVote.emit(this.messageData);
+  }
+
+  public onClickUpVote() {
+    !!this.clickedUpVote && this.clickedUpVote.emit(this.messageData);
   }
 
   public onClickSpecificQuote(isOnBidSide: boolean, targetMetric: string) {

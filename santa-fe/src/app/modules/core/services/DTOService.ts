@@ -703,7 +703,9 @@ export class DTOService {
         filteredBySpread:  filteredMetricType === TriCoreMetricConfig.Spread.label,
         filteredByYield: filteredMetricType === TriCoreMetricConfig.Yield.label,
         menuActiveSide: null,
-        menuActiveMetric: null
+        menuActiveMetric: null,
+        isBidDownVoted: false,
+        isAskDownVoted: false
       }
     };
     if (!isStencil) {
@@ -723,11 +725,10 @@ export class DTOService {
         tspread: !!rawData.askSpread ? this.utility.round(rawData.askSpread, TriCoreMetricConfig.Spread.rounding) : null,
         benchmark: askBenchmark
       };
-
       object.state.isBestBid = object.data.bid.tspread == bestBidNum || object.data.bid.price == bestBidNum || object.data.bid.yield == bestBidNum;
-
       object.state.isBestOffer =object.data.ask.tspread == bestAskNum || object.data.ask.price == bestAskNum || object.data.ask.yield == bestAskNum;
-      
+      object.state.isBidDownVoted = rawData.bidQuoteStatus < 0;
+      object.state.isAskDownVoted = rawData.askQuoteStatus < 0;
     }
     return object;
   }

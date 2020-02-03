@@ -208,26 +208,35 @@ export interface BESingleBestQuoteDTO {
 }
 
 export interface BEQuoteDTO {
-  quoteType: string; //Run,
   dealer: string; // JEFF,
-  time: string; // 2019-11-22T13:32:40,
+  quoteType: string; //Run,
   isActive: boolean; // true,
+  identifier: string;  // 28643
+  name: string;  // AAL 5 06/01/22
   benchmarkName: string;
+  time: string; // 2019-11-22T13:32:40,
+  globalIdentifier: string;  // US02376RAC60
+  bidQuoteId: string; // "77d78117-5f89-41ab-a697-8f1475eb8006"
+  bidQuoteStatus: number; // 0, -1, -2
+  bidTime: string; // "2020-02-03T10:12:17-05:00"
   bidVenue: string; // MSG1,
-  askVenue: string; // null,
-  bidIsNatural: boolean; // false,
-  askIsNatural: boolean; // null,
   bidYieldType: number; // null,
-  askYieldType: number; // null,
   bidYield: number; // null,
-  askYield: number; // null,
   bidSpread: number; // null,
-  askSpread: number; // null,
   bidPrice: number; // 97.2099990844726,
-  askPrice: number; // null,
   bidQuantity: number; // null,
-  askQuantity: number; // null,
+  bidIsNatural: boolean; // false,
   bidQualifier: string; // null,
+  askQuoteId: string;
+  askQuoteStatus: number;  // 0, -1, -2
+  askTime: string;
+  askVenue: string; // null,
+  askYieldType: number; // null,
+  askYield: number; // null,
+  askSpread: number; // null,
+  askPrice: number; // null,
+  askQuantity: number; // null,
+  askIsNatural: boolean; // null,
   askQualifier: string; // null
 }
 

@@ -39,7 +39,8 @@
           *ngFor="let eachMessage of rowData.data.presentQuotes"
           [messageData]="eachMessage"
           (clickedSpecificQuote)="onClickedSpecificQuote($event)"
-          (clickedThumbdown)="onClickThumbdown($event)">
+          (clickedDownVote)="onClickDownVote($event)"
+          (clickedUpVote)="onClickUpVote($event)">
         </security-quote>
       </ul>
     </div>

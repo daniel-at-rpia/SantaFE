@@ -1,24 +1,32 @@
-import {
-  Component,
-  OnInit,
-  ViewEncapsulation,
-  Input,
-  Output,
-  EventEmitter
-} from '@angular/core';
-import { ICellRendererAngularComp } from 'ag-grid-angular';
-import { AgGridRowNode } from 'FEModels/frontend-blocks.interface';
+  // dependencies
+    import {
+      Component,
+      OnInit,
+      ViewEncapsulation,
+      Input,
+      Output,
+      EventEmitter
+    } from '@angular/core';
+    import {
+      tap,
+      first
+    } from 'rxjs/operators';
+    import { ICellRendererAngularComp } from 'ag-grid-angular';
 
-import { SecurityTableRowDTO, SecurityQuoteDTO } from 'FEModels/frontend-models.interface';
-import { QuoteMetricBlock } from 'FEModels/frontend-blocks.interface';
-import {
-  AgGridRowParams,
-  ClickedSortQuotesByMetricEmitterParams,
-  ClickedSpecificQuoteEmitterParams
-} from 'FEModels/frontend-adhoc-packages.interface';
-import { DTOService } from 'Core/services/DTOService';
-import { UtilityService } from 'Core/services/UtilityService';
-import { QuoteMetricList } from 'Core/constants/securityTableConstants.constant';
+    import { AgGridRowNode } from 'FEModels/frontend-blocks.interface';
+    import { SecurityTableRowDTO, SecurityQuoteDTO } from 'FEModels/frontend-models.interface';
+    import { QuoteMetricBlock } from 'FEModels/frontend-blocks.interface';
+    import {
+      AgGridRowParams,
+      ClickedSortQuotesByMetricEmitterParams,
+      ClickedSpecificQuoteEmitterParams
+    } from 'FEModels/frontend-adhoc-packages.interface';
+    import { PayloadSetQuoteStatus } from 'BEModels/backend-payloads.interface';
+    import { DTOService } from 'Core/services/DTOService';
+    import { UtilityService } from 'Core/services/UtilityService';
+    import { RestfulCommService } from 'Core/services/RestfulCommService';
+    import { QuoteMetricList } from 'Core/constants/securityTableConstants.constant';
+  //
 
 @Component({
   selector: 'santa-table-detail-all-quotes',
@@ -33,7 +41,8 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
 
   constructor(
     private dtoService: DTOService,
-    private utilityService: UtilityService
+    private utilityService: UtilityService,
+    private restfulCommService: RestfulCommService
   ) { }
 
   public agInit(params: any){
@@ -88,8 +97,50 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     }
   }
 
-  public onClickThumbdown(targetQuote: SecurityQuoteDTO) {
-    console.log('test, got', targetQuote);
+  public onClickUpVote(targetQuote: SecurityQuoteDTO) {
+    const targetSide = targetQuote.state.menuActiveSide === 'bid' ? targetQuote.data.bid : targetQuote.data.ask;
+    const payload: PayloadSetQuoteStatus = {
+      identifier: this.rowData.data.security.data.securityID,
+      quoteType: targetSide.isAxe ? 'Axe' : 'Run',
+      dealer: targetQuote.data.broker,
+      side: targetQuote.state.menuActiveSide === 'bid' ? 'Bid' : 'Ask',
+      quoteStatus: 'Good'
+    };
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.setQuoteStatus, {req: 'POST'}, payload).pipe(
+      first(),
+      tap((serverReturn) => {
+        if (targetQuote.state.menuActiveSide === 'bid') {
+          targetQuote.state.isBidDownVoted = false;
+        } else {
+          targetQuote.state.isAskDownVoted = false;
+        }
+        targetQuote.state.menuActiveMetric = null;
+        targetQuote.state.menuActiveSide = null;
+      })
+    ).subscribe();
+  }
+
+  public onClickDownVote(targetQuote: SecurityQuoteDTO) {
+    const targetSide = targetQuote.state.menuActiveSide === 'bid' ? targetQuote.data.bid : targetQuote.data.ask;
+    const payload: PayloadSetQuoteStatus = {
+      identifier: this.rowData.data.security.data.securityID,
+      quoteType: targetSide.isAxe ? 'Axe' : 'Run',
+      dealer: targetQuote.data.broker,
+      side: targetQuote.state.menuActiveSide === 'bid' ? 'Bid' : 'Ask',
+      quoteStatus: 'Bad'
+    };
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.setQuoteStatus, {req: 'POST'}, payload).pipe(
+      first(),
+      tap((serverReturn) => {
+        if (targetQuote.state.menuActiveSide === 'bid') {
+          targetQuote.state.isBidDownVoted = true;
+        } else {
+          targetQuote.state.isAskDownVoted = true;
+        }
+        targetQuote.state.menuActiveMetric = null;
+        targetQuote.state.menuActiveSide = null;
+      })
+    ).subscribe();
   }
 
   public onClickShowMoreQuotes() {

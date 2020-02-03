@@ -3,6 +3,8 @@
     'sat-securityQuote': true,
     'sat-securityQuote--noBid': !messageData.state.hasBid,
     'sat-securityQuote--noAsk': !messageData.state.hasAsk,
+    'sat-securityQuote--bidDownVotedState': messageData.state.isBidDownVoted,
+    'sat-securityQuote--askDownVotedState': messageData.state.isAskDownVoted,
     'sat-securityQuote--bidIsAxe': messageData.state.hasBid && messageData.data.bid.isAxe,
     'sat-securityQuote--askIsAxe':
     messageData.state.hasAsk && messageData.data.ask.isAxe,
@@ -36,11 +38,12 @@
           'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.bid.price == null
         }">
         <button (click)="onClickSpecificQuote(true, 'price')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
-          <span>{{messageData.data.bid.price}}</span>
+          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-text">{{messageData.data.bid.price}}</span>
+          <i class="sat-securityQuote__main-twoSideEntry-cta-btn-downVoteIcon fas fa-thumbs-down"></i>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
-          <button (click)="onClickThumbdown()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
-          <button class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-garbage santaBtn santaBtn--iconOnly fal fa-trash-alt"></button>
+          <button (click)="onClickUpVote()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-upVote santaBtn santaBtn--iconOnly fal fa-thumbs-up"></button>
+          <button (click)="onClickDownVote()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downVote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
         </div>
       </div>
       <i class="sat-securityQuote__main-twoSideEntry-mid fal fa-arrows-h"></i>
@@ -52,11 +55,12 @@
           'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.ask.price == null
         }">
         <button (click)="onClickSpecificQuote(false, 'price')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
-          <span>{{messageData.data.ask.price}}</span>
+          <i class="sat-securityQuote__main-twoSideEntry-cta-btn-downVoteIcon fas fa-thumbs-down"></i>
+          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-text">{{messageData.data.ask.price}}</span>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
-          <button (click)="onClickThumbdown()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
-          <button class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-garbage santaBtn santaBtn--iconOnly fal fa-trash-alt"></button>
+          <button (click)="onClickUpVote()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-upVote santaBtn santaBtn--iconOnly fal fa-thumbs-up"></button>
+          <button (click)="onClickDownVote()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downVote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
         </div>
       </div>
     </div>
@@ -70,11 +74,12 @@
           'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.bid.yield == null
         }">
         <button (click)="onClickSpecificQuote(true, 'yield')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
-          <span>{{messageData.data.bid.yield}}</span>
+          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-text">{{messageData.data.bid.yield}}</span>
+          <i class="sat-securityQuote__main-twoSideEntry-cta-btn-downVoteIcon fas fa-thumbs-down"></i>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
-          <button (click)="onClickThumbdown()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
-          <button class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-garbage santaBtn santaBtn--iconOnly fal fa-trash-alt"></button>
+          <button (click)="onClickUpVote()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-upVote santaBtn santaBtn--iconOnly fal fa-thumbs-up"></button>
+          <button (click)="onClickDownVote()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downVote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
         </div>
       </div>
       <i class="sat-securityQuote__main-twoSideEntry-mid fal fa-arrows-h"></i>
@@ -86,11 +91,12 @@
           'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.ask.yield == null
         }">
         <button (click)="onClickSpecificQuote(false, 'yield')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
-          <span>{{messageData.data.ask.yield}}</span>
+          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-text">{{messageData.data.ask.yield}}</span>
+          <i class="sat-securityQuote__main-twoSideEntry-cta-btn-downVoteIcon fas fa-thumbs-down"></i>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
-          <button (click)="onClickThumbdown()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
-          <button class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-garbage santaBtn santaBtn--iconOnly fal fa-trash-alt"></button>
+          <button (click)="onClickUpVote()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-upVote santaBtn santaBtn--iconOnly fal fa-thumbs-up"></button>
+          <button (click)="onClickDownVote()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downVote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
         </div>
       </div>
     </div>
@@ -104,11 +110,12 @@
           'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.bid.tspread == null
         }">
         <button (click)="onClickSpecificQuote(true, 'tspread')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
-          <span>{{messageData.data.bid.tspread}}</span>
+          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-text">{{messageData.data.bid.tspread}}</span>
+          <i class="sat-securityQuote__main-twoSideEntry-cta-btn-downVoteIcon fas fa-thumbs-down"></i>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
-          <button (click)="onClickThumbdown()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
-          <button class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-garbage santaBtn santaBtn--iconOnly fal fa-trash-alt"></button>
+          <button (click)="onClickUpVote()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-upVote santaBtn santaBtn--iconOnly fal fa-thumbs-up"></button>
+          <button (click)="onClickDownVote()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downVote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
         </div>
       </div>
       <i class="sat-securityQuote__main-twoSideEntry-mid fal fa-arrows-h"></i>
@@ -120,11 +127,12 @@
           'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.ask.tspread == null
         }">
         <button (click)="onClickSpecificQuote(false, 'tspread')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
-          <span>{{messageData.data.ask.tspread}}</span>
+          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-text">{{messageData.data.ask.tspread}}</span>
+          <i class="sat-securityQuote__main-twoSideEntry-cta-btn-downVoteIcon fas fa-thumbs-down"></i>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
-          <button (click)="onClickThumbdown()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downvote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
-          <button class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-garbage santaBtn santaBtn--iconOnly fal fa-trash-alt"></button>
+          <button (click)="onClickUpVote()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-upVote santaBtn santaBtn--iconOnly fal fa-thumbs-up"></button>
+          <button (click)="onClickDownVote()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-downVote santaBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
         </div>
       </div>
     </div>
