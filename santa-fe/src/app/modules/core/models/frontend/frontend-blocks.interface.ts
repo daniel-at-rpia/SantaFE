@@ -151,6 +151,7 @@ export interface AgGridRowNode {
   columnApi: ColumnApi;
   expanded?: boolean;
   setExpanded: Function;
+  setData: Function;
 }
 
 export interface AgGridRow {

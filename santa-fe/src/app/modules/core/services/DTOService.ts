@@ -556,7 +556,8 @@ export class DTOService {
         sortedByHeader: null,
         isLiveVariant: isLiveVariant,
         isAgGridReady: false,
-        isNativeEnabled: false
+        isNativeEnabled: false,
+        selectedSecurityCard: null
       },
       api: {
         gridApi: null,

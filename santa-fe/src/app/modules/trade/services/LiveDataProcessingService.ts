@@ -189,7 +189,6 @@ export class LiveDataProcessingService {
     newSecurity: SecurityDTO
   ) {
     const newRow = this.dtoService.formSecurityTableRowObject(newSecurity);
-    newSecurity.state.isInteractionDisabled = true;
     headerList.forEach((eachHeader, index) => {
       if (!eachHeader.state.isPureTextVariant) {
         if (eachHeader.data.readyStage === 1 || eachHeader.data.readyStage === 2) {

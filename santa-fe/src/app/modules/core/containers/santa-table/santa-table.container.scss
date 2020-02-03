@@ -100,7 +100,13 @@ $alt-background: $color_white;
       }
       &-row {
         &:hover {
-          // @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
+          z-index: $z_index_standard_hovering_item;  // override AgGrid's style
+        }
+        &--cardSelected {
+          z-index: $z_index_standard_hovering_item_lift;  // override AgGrid's style
+          &:hover {
+            z-index: $z_index_standard_hovering_item_lift;  // override default state's hover
+          }
         }
       }
       &-cell {
@@ -115,6 +121,7 @@ $alt-background: $color_white;
         border-width: 0!important;
         &--securityCard {
           justify-content: flex-end;
+          overflow: visible;  // override AgGrid's style
         }
         &--detailCTA {
           justify-content: center;

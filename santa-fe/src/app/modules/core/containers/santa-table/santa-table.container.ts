@@ -117,7 +117,12 @@ export class SantaTable implements OnInit, OnChanges {
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
     thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX,
     agGridRowHeight: AGGRID_ROW_HEIGHT,
-    agGridRowClassRules: AGGRID_ROW_CLASS,
+    agGridRowClassRules: {
+      'santaTable__agGridTable-agGrid-row': "true",
+      'santaTable__agGridTable-agGrid-row--cardSelected': function (params: AgGridRowParams) {
+        return params.data.securityCard && params.data.securityCard.state.isSelected;
+      }
+    },
     agGridDetailRowHeightMax: AGGRID_DETAIL_ROW_HEIGHT_MAX,
     agGridDetailRowHeightPerRow: AGGRID_DETAIL_ROW_HEIGHT_PER_ROW,
     agGridDetailRowHeightOffset: AGGRID_DETAIL_ROW_HEIGHT_OFFSET,
@@ -183,27 +188,60 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   public onRowClicked(params: AgGridRowParams) {
-    // this function gets triggered both when parent and child are being clicked, so this if condition is to make sure only execute the logic when it is the parent that is clicked
-    if (!!params.node.master) {
-      params.node.setExpanded(!params.node.expanded);
-      if (!params.node.group) {
-        const targetRow = this.tableData.data.rows.find((eachRow) => {
-          return !!eachRow.data.security && eachRow.data.security.data.securityID == params.node.data.id;
-        });
-        if (!!targetRow) {
-          try {
-            targetRow.state.isExpanded = !targetRow.state.isExpanded;
-            if (targetRow.data.security) {
-              targetRow.data.security.state.isMultiLineVariant = params.node.expanded;
-              this.fetchSecurityQuotes(targetRow, params);
-            }
-          } catch {
-            // ignore, seems AgGrid causes some weird read only error
-          }
-        } else {
-          console.error(`Could't find targetRow`, params);
+    if (!!params && !!params.data.securityCard) {
+      // this if checks whether the user is clicking on the entire row, or clicking on the security card
+      const targetCard = params.data.securityCard;
+      const storedSelectedCard = this.tableData.state.selectedSecurityCard;
+      // console.log('test, clicked on row', targetCard.state.isSelected, storedSelectedCard, storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID);
+      // IMPORTANT: If this logic ever needs to be modified, please test all scenarios on Daniel's notebook's page 10
+      if (
+        (!targetCard.state.isSelected && !storedSelectedCard) || 
+        (targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID) ||
+        (!targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID !== targetCard.data.securityID)
+      ) {
+        // this function gets triggered both when parent and child are being clicked, so this if condition is to make sure only execute the logic when it is the parent that is clicked
+        targetCard.state.isSelected = false;
+        if (!!this.tableData.state.selectedSecurityCard) {
+          this.tableData.state.selectedSecurityCard.state.isSelected = false;
+          this.tableData.state.selectedSecurityCard = null;
         }
+        if (!!params.node.master) {
+          params.node.setExpanded(!params.node.expanded);
+          if (!params.node.group) {
+            const targetRow = this.tableData.data.rows.find((eachRow) => {
+              return !!eachRow.data.security && eachRow.data.security.data.securityID == params.node.data.id;
+            });
+            if (!!targetRow) {
+              try {
+                targetRow.state.isExpanded = !targetRow.state.isExpanded;
+                if (targetRow.data.security) {
+                  targetRow.data.security.state.isMultiLineVariant = params.node.expanded;
+                  this.fetchSecurityQuotes(targetRow, params);
+                }
+              } catch {
+                // ignore, seems AgGrid causes some weird read only error
+              }
+            } else {
+              console.error(`Could't find targetRow`, params);
+            }
+          }
+        }
+      } else {
+        // gets to here if the user clicked on the security card
+        if (storedSelectedCard === null) {
+          this.tableData.state.selectedSecurityCard = targetCard;
+        } else if (!!storedSelectedCard && storedSelectedCard.data.securityID !== targetCard.data.securityID) {
+          // scenario: there is already a card selected, and the user is selecting a diff card
+          this.tableData.state.selectedSecurityCard.state.isSelected = false;
+          this.tableData.state.selectedSecurityCard = targetCard;
+        } else if (!!storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID) {
+          // scenario: there is already a card selected, and it is the same card user is selecting again
+          this.tableData.state.selectedSecurityCard = null;
+        }
+        params.node.setData(params.data);  // need this to trigger a refresh so the row can adopt new classname from the agGridRowClassRules
       }
+    } else {
+      console.warn('AgGrid data issue, if you see this call Daniel');
     }
   }
 
