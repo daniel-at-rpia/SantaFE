@@ -18,7 +18,17 @@
     <span class="sat-securityCard__rating-text">{{cardData.data.ratingValue}}</span>
   </section>
   <section class="sat-securityCard__actionMenu">
-    <button (click)="onClickSendToGraph()" class="sat-securityCard__actionMenu-graphBtn santaBtn--iconOnly fal fa-chart-line"></button>
-    <button (click)="onClickThumbDown()" class="sat-securityCard__actionMenu-thumbDownBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
+    <ul class="sat-securityCard__actionMenu-minorList sat-securityCard__actionMenu-minorList--top">
+      <button class="sat-securityCard__actionMenu-minorList-btn">DES</button>
+      <button class="sat-securityCard__actionMenu-minorList-btn">QMGR</button>
+    </ul>
+    <ul class="sat-securityCard__actionMenu-mainList">
+      <button (click)="onClickSendToGraph()" class="sat-securityCard__actionMenu-mainList-graphBtn santaBtn--iconOnly fal fa-chart-line"></button>
+      <button (click)="onClickThumbDown()" class="sat-securityCard__actionMenu-mainList-thumbDownBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
+    </ul>
+    <ul class="sat-securityCard__actionMenu-minorList sat-securityCard__actionMenu-minorList--bottom">
+      <button class="sat-securityCard__actionMenu-minorList-btn">YAS</button>
+      <button class="sat-securityCard__actionMenu-minorList-btn">QR</button>
+    </ul>
   </section>
 </article>

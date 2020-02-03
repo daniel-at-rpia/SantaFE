@@ -53,6 +53,7 @@ export class LiveDataProcessingService {
         let isValidFlag = true;
         const newBESecurity:BESecurityDTO = serverReturn[eachKey][0].security;
         const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false);
+        newSecurity.state.isInteractionThumbDownDisabled = true;
         serverReturn[eachKey].forEach((eachPortfolio: BEPortfolioDTO) => {
           if (!eachPortfolio.security.isGovt) {
             this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio, activeMetricType);

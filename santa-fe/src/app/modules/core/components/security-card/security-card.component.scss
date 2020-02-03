@@ -4,6 +4,7 @@
 $securityCard_labelVariant_height: 2rem;
 $securityCard_labelVariant_expanded_height: 2.75rem;
 $securityCard_name_rightGap: 3rem;
+$securityCard_actionMenu_majorCTA_size: 3rem;
 
 .sat-securityCard {
   $securityCardBlockName: &;
@@ -49,6 +50,61 @@ $securityCard_name_rightGap: 3rem;
       color: $color_black;
     }
   }
+  &__actionMenu {
+    @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+    @include mix_alive('custom', transform $animation_duration_light);
+    @include mix_calculate(left, 50%, 3rem, '-');
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.01);
+    top: -2.5rem; // since the height of the action menu is static, it's okay to keep this as a magic number for now
+    &-minorList {
+      display: flex;
+      justify-content: center;
+      &-btn {
+        @extend .santaBtn;
+        @extend .santaBtn--iconOnly;  // this is necessary for usage within AgGrid
+        @include mix_border_radius(50%);
+        margin: 0 $spacing_small;
+        background-color: $color_bloomberg_1;
+        color: $color_bloomberg_2;
+        padding: $spacing_xx_small;
+        word-break: break-all;  // so "QMGR" would clip into 2 lines
+      }
+    }
+    &-mainList {
+      display: flex;
+      justify-content: center;
+      margin: -$spacing_x_small;  // achieve a closer distance between the three lists
+      &-thumbDownBtn {
+        @extend .santaBtn;
+        @extend .santaBtn--iconOnly;  // this is necessary for usage within AgGrid
+        @include mix_border_radius(50%);
+        margin: 0 $spacing_small;
+        background-color: $color_kill;
+        color: $font_color_inverse;
+        height: $securityCard_actionMenu_majorCTA_size;
+        width: $securityCard_actionMenu_majorCTA_size;
+        font-size: $font_size_large;
+      }
+      &-graphBtn {
+        @extend .santaBtn;
+        @extend .santaBtn--iconOnly;
+        @include mix_border_radius(50%);
+        margin: 0 $spacing_small;
+        color: $font_color_major;
+        height: $securityCard_actionMenu_majorCTA_size;
+        width: $securityCard_actionMenu_majorCTA_size;
+        font-size: $font_size_large;
+      }
+    }
+    &-bottomList {
+
+    }
+    &-topList {
+
+    }
+  }
   &--stencilState {
     background: $color_white;
     #{$securityCardBlockName} {
@@ -64,26 +120,6 @@ $securityCard_name_rightGap: 3rem;
       }
     }
   }
-  &__actionMenu {
-    @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
-    @include mix_alive('custom', transform $animation_duration_light);
-    display: flex;
-    justify-content: center;
-    transform: scale(0.01) translate(0, -200%);
-    width: 100%;
-    top: 80%;
-    &-thumbDownBtn {
-      @include mix_border_radius(50%);
-      margin: 0 $spacing_small;
-      background-color: $color_kill;
-      color: $font_color_inverse;
-    }
-    &-graphBtn {
-      @include mix_border_radius(50%);
-      margin: 0 $spacing_small;
-      color: $font_color_major;
-    }
-  }
   &--tableState {
     @include material('none');
     @include mix_border_generator($typical_border_width, $color_gray_85);
@@ -91,7 +127,7 @@ $securityCard_name_rightGap: 3rem;
   &--thumbDownDisabled {
     #{$securityCardBlockName} {
       &__actionMenu {
-        &-thumbDownBtn {
+        &-mainList-thumbDownBtn {
           display: none;
         }
       }
@@ -121,7 +157,7 @@ $securityCard_name_rightGap: 3rem;
         }
       }
       &__actionMenu {
-        transform: scale(1) translate(0, 0);
+        transform: scale(1);
       }
     }
   }
