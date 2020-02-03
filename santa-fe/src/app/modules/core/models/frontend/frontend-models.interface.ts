@@ -26,6 +26,7 @@ interface BasicDTOStructure {
 export interface SecurityDTO extends BasicDTOStructure {
   data: {
     securityID: string;
+    globalIdentifier: string;  // CUSIP
     name: string;
     ticker: string;
     country: string;
@@ -65,6 +66,11 @@ export interface SecurityDTO extends BasicDTOStructure {
     cs01FirmLocalInK: string;
     cs01FirmCad: number;
     cs01FirmCadInK: string;
+  }
+  api: {
+    onClickCard: Function;
+    onClickSendToGraph: Function;
+    onClickThumbDown: Function;
   }
   state: {
     isStencil: boolean;

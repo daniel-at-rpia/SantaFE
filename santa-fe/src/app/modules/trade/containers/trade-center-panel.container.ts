@@ -395,7 +395,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.state.fetchResult.prinstineRowList = this.processingService.loadStageOneContent(
       this.state.table.dto.data.headers,
       this.state.filters.quickFilters.metricType,
-      serverReturn
+      serverReturn,
+      this.onSelectSecurityForAnalysis.bind(this)
     );
     // right now stage 1 and stage 2 are combined
     // this.updateStage(2); // disabling this now for a smoothier transition on the UI

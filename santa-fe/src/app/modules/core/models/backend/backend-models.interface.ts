@@ -37,7 +37,7 @@ interface BEGroupMetricDTO {
   backendTenor: string;
   propertyToNumSecurities: {
     WorkoutTerm: number;
-    BackendWorkoutTerm: number;
+    BackendWorkoutTerm?: number;
     AmtOutstanding?: number;
     RatingDouble?: number;
     Spread?: number;
@@ -77,6 +77,7 @@ interface BEGroupMetricDTO {
 }
 
 export interface BESecurityDTO {
+  globalIdentifier: string;  // CUSIP, i.e US02376RAC60
   securityIdentifier: string;
   name: string;
   baseType: string;
@@ -131,7 +132,7 @@ interface BESecurityMetricDTO {
   workoutTerm: number,
   ratingDouble: number,
   price: number,
-  backendWorkoutTerm: number,
+  backendWorkoutTerm?: number,
   oasSpread: number,
   zSpread: number,
   aswUsd: number,
@@ -215,7 +216,7 @@ export interface BEQuoteDTO {
   name: string;  // AAL 5 06/01/22
   benchmarkName: string;
   time: string; // 2019-11-22T13:32:40,
-  globalIdentifier: string;  // US02376RAC60
+  globalIdentifier: string;  // CUSIP, i.e US02376RAC60
   bidQuoteId: string; // "77d78117-5f89-41ab-a697-8f1475eb8006"
   bidQuoteStatus: number; // 0, -1, -2
   bidTime: string; // "2020-02-03T10:12:17-05:00"
@@ -259,7 +260,7 @@ export interface BEHistoricalSummaryDTO {
 }
 
 interface BEHistoricalInfoDTO {
-  source: string;
+  databaseSource: string;
   startDate: string;
   endDate: string;
   metricName: string;

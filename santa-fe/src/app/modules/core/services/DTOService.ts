@@ -58,6 +58,7 @@ export class DTOService {
     const object:DTOs.SecurityDTO = {
       data: {
         securityID: !isStencil ? securityIdFull : null,
+        globalIdentifier: !isStencil ? rawData.globalIdentifier : null,
         name: !isStencil ? rawData.name : 'PLACEHOLDER',
         ticker: !isStencil ? rawData.ticker : null,
         ratingLevel: !isStencil && rawData.metrics ? this.utility.mapRatings(rawData.metrics.ratingNoNotch) : 0,
@@ -114,6 +115,11 @@ export class DTOService {
           bid: null,
           ask: null
         }
+      },
+      api: {
+        onClickCard: null,
+        onClickSendToGraph: null,
+        onClickThumbDown: null
       },
       state: {
         isSelected: false,

@@ -108,10 +108,7 @@
           }">
           <span title="number of securities in this group" class="sat-tradeMarketAnalysisPanel__table-content-securityList-item-numberOfSecurityTag" *ngIf="rowIndex === 1">{{state.table.numOfSecurities}}</span>
           <security-card
-            [cardData]="eachCard"
-            (selectedCard)="onSelectSecurityCardInPresentList($event)"
-            (clickedThumbDown)="onClickSecurityCardThumbDown($event)"
-            (clickedSendToGraph)="onClickSecurityCardSendToGraph($event)">
+            [cardData]="eachCard">
           </security-card>
         </li>
       </ul>

@@ -218,6 +218,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     this.state = this.initializePageState();
     this.state.receivedSecurity = true;
     this.state.targetSecurity = this.utilityService.deepCopy(targetSecurity);
+    this.state.targetSecurity.state.isSelected = false;
     this.applyStatesToSecurityCards(this.state.targetSecurity);
     this.loadStencilList();
     this.fetchGroupData();
@@ -441,6 +442,9 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   private applyStatesToSecurityCards(targetSecurity: SecurityDTO) {
     targetSecurity.state.isMultiLineVariant = false;
     targetSecurity.state.isWidthFlexible = true;
+    targetSecurity.api.onClickCard = this.onSelectSecurityCardInPresentList.bind(this);
+    targetSecurity.api.onClickThumbDown = this.onClickSecurityCardThumbDown.bind(this);
+    targetSecurity.api.onClickSendToGraph = this.onClickSecurityCardSendToGraph.bind(this);
   }
 
   private populateGroupOptionText(rawData: BEHistoricalSummaryOverviewDTO) {

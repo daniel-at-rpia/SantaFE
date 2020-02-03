@@ -17,9 +17,6 @@ import { SecurityDTO } from 'FEModels/frontend-models.interface';
 })
 export class SecurityCard implements OnInit {
   @Input() cardData: SecurityDTO;
-  @Output() selectedCard = new EventEmitter<SecurityDTO>();
-  @Output() clickedThumbDown = new EventEmitter<SecurityDTO>();
-  @Output() clickedSendToGraph = new EventEmitter<SecurityDTO>();
   constructor() { }
 
   public ngOnInit() {
@@ -28,15 +25,26 @@ export class SecurityCard implements OnInit {
   public onClickCard() {
     if (!this.cardData.state.isInteractionDisabled && !this.cardData.state.isStencil) {
       this.cardData.state.isSelected = !this.cardData.state.isSelected;
-      !!this.selectedCard && this.selectedCard.emit(this.cardData);
+      if (!!this.cardData.api.onClickCard) {
+        this.cardData.api.onClickCard(this.cardData);
+      }
     }
   }
 
   public onClickThumbDown() {
-    !!this.clickedThumbDown && this.clickedThumbDown.emit(this.cardData);
+    if (!!this.cardData.api.onClickThumbDown) {
+      this.cardData.api.onClickThumbDown(this.cardData);
+    }
   }
 
   public onClickSendToGraph() {
-    !!this.clickedSendToGraph && this.clickedSendToGraph.emit(this.cardData);
+    if (!!this.cardData.api.onClickSendToGraph) {
+      this.cardData.api.onClickSendToGraph(this.cardData);
+    }
+  }
+
+  public onClickOpenSecurityInBloomberg(targetModule: string) {
+    const url = `bbg://securities/${this.cardData.data.globalIdentifier}%20Corp/${targetModule}`;
+    window.open(url);
   }
 }

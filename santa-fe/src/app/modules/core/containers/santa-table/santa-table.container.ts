@@ -120,7 +120,6 @@ export class SantaTable implements OnInit, OnChanges {
     agGridRowClassRules: {
       'santaTable__agGridTable-agGrid-row': "true",
       'santaTable__agGridTable-agGrid-row--cardSelected': function (params: AgGridRowParams) {
-        console.log('test, params', params);
         return params.data.securityCard && params.data.securityCard.state.isSelected;
       }
     },
