@@ -120,6 +120,7 @@ export class SantaTable implements OnInit, OnChanges {
     agGridRowClassRules: {
       'santaTable__agGridTable-agGrid-row': "true",
       'santaTable__agGridTable-agGrid-row--cardSelected': function (params: AgGridRowParams) {
+        console.log('test, params', params);
         return params.data.securityCard && params.data.securityCard.state.isSelected;
       }
     },
@@ -201,8 +202,12 @@ export class SantaTable implements OnInit, OnChanges {
       ) {
         // this function gets triggered both when parent and child are being clicked, so this if condition is to make sure only execute the logic when it is the parent that is clicked
         targetCard.state.isSelected = false;
-        if (!!this.tableData.state.selectedSecurityCard) {
-          this.tableData.state.selectedSecurityCard.state.isSelected = false;
+        if (!!storedSelectedCard) {
+          if (storedSelectedCard.data.securityID !== targetCard.data.securityID) {
+            // if the card selected is in a diff row, that row also needs to be updated through AgGrid's life cycle
+            storedSelectedCard.state.isSelected = false;
+            this.updateRowSecurityCardInAgGrid(storedSelectedCard);
+          }
           this.tableData.state.selectedSecurityCard = null;
         }
         if (!!params.node.master) {
@@ -233,6 +238,7 @@ export class SantaTable implements OnInit, OnChanges {
         } else if (!!storedSelectedCard && storedSelectedCard.data.securityID !== targetCard.data.securityID) {
           // scenario: there is already a card selected, and the user is selecting a diff card
           this.tableData.state.selectedSecurityCard.state.isSelected = false;
+          this.updateRowSecurityCardInAgGrid(this.tableData.state.selectedSecurityCard);
           this.tableData.state.selectedSecurityCard = targetCard;
         } else if (!!storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID) {
           // scenario: there is already a card selected, and it is the same card user is selecting again
@@ -575,5 +581,12 @@ export class SantaTable implements OnInit, OnChanges {
     } else {
       return null;
     }
+  }
+
+  private updateRowSecurityCardInAgGrid(targetCard: SecurityDTO) {
+    const targetRow = this.tableData.data.rows.find((eachRow) => {
+      return eachRow.data.security && eachRow.data.security.data.securityID === targetCard.data.securityID;
+    })
+    this.agGridMiddleLayerService.updateAgGridRows(this.tableData, [targetRow]);
   }
 }
