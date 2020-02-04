@@ -80,6 +80,8 @@ export interface SecurityDTO extends BasicDTOStructure {
     isMultiLineVariant: boolean;
     isWidthFlexible: boolean;
     isAtListCeiling: boolean;
+    isActionMenuPrimaryActionsDisabled: boolean;
+    isActionMenuMinorActionsDisabled: boolean;
   }
 }
 

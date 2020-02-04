@@ -354,7 +354,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     this.state.table = this.initializePageState().table;
     if (!!rawData.BaseSecurity && !!rawData.Group) {
       const baseSecurityDTO = this.dtoService.formSecurityCardObject('', rawData.BaseSecurity.security, false);
-      baseSecurityDTO.state.isInteractionDisabled = true;
+      baseSecurityDTO.state.isActionMenuPrimaryActionsDisabled = true;
       this.applyStatesToSecurityCards(baseSecurityDTO);
       this.state.table.presentList.push(baseSecurityDTO);
       this.state.table.rankingList.push('Base');
@@ -368,6 +368,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
       const groupDTO = this.dtoService.formSecurityCardObject('', null, true);
       groupDTO.state.isStencil = false;
       groupDTO.state.isInteractionThumbDownDisabled = true;
+      groupDTO.state.isActionMenuMinorActionsDisabled = true;
       groupDTO.data.name = rawData.Group.group.name;
       this.applyStatesToSecurityCards(groupDTO);
       this.state.table.presentList.push(groupDTO);

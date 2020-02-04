@@ -203,6 +203,45 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
       }
     }
   }
+  &--primaryActionDisabledState {
+    #{$securityCardBlockName} {
+      &__actionMenu {
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+        left: unset;
+        top: $spacing_medium;
+        &-mainList {
+          display: none;
+        }
+        &-minorList {
+          flex: 0 1 auto;
+          display: flex;
+          top: unset;
+          left: unset;
+          right: unset;
+          bottom: unset;
+          &-btn {
+            @include mix_fixed_div(relative, $z_index_standard_base_item);
+            top: unset;
+            left: unset;
+            right: unset;
+            bottom: unset;
+            margin: 0 $spacing_x_small;
+          }
+        }
+      }
+    }
+  }
+  &--minorActionDisabledState {
+    #{$securityCardBlockName} {
+      &__actionMenu {
+        &-minorList {
+          display: none;
+        }
+      }
+    }
+  }
   &--tableState {
     @include material('none');
     @include mix_border_generator($typical_border_width, $color_gray_85);
