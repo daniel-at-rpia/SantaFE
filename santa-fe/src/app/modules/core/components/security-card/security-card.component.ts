@@ -7,6 +7,7 @@ import {
   EventEmitter
 } from '@angular/core';
 
+import { UtilityService } from 'Core/services/UtilityService';
 import { SecurityDTO } from 'FEModels/frontend-models.interface';
 
 @Component({
@@ -17,10 +18,7 @@ import { SecurityDTO } from 'FEModels/frontend-models.interface';
 })
 export class SecurityCard implements OnInit {
   @Input() cardData: SecurityDTO;
-  @Output() selectedCard = new EventEmitter<SecurityDTO>();
-  @Output() clickedThumbDown = new EventEmitter<SecurityDTO>();
-  @Output() clickedSendToGraph = new EventEmitter<SecurityDTO>();
-  constructor() { }
+  constructor(private utilityService: UtilityService) { }
 
   public ngOnInit() {
   }
@@ -28,15 +26,27 @@ export class SecurityCard implements OnInit {
   public onClickCard() {
     if (!this.cardData.state.isInteractionDisabled && !this.cardData.state.isStencil) {
       this.cardData.state.isSelected = !this.cardData.state.isSelected;
-      !!this.selectedCard && this.selectedCard.emit(this.cardData);
+      if (!!this.cardData.api.onClickCard) {
+        this.cardData.api.onClickCard(this.cardData);
+      }
     }
   }
 
   public onClickThumbDown() {
-    !!this.clickedThumbDown && this.clickedThumbDown.emit(this.cardData);
+    if (!!this.cardData.api.onClickThumbDown) {
+      this.cardData.api.onClickThumbDown(this.cardData);
+    }
   }
 
   public onClickSendToGraph() {
-    !!this.clickedSendToGraph && this.clickedSendToGraph.emit(this.cardData);
+    if (!!this.cardData.api.onClickSendToGraph) {
+      this.cardData.api.onClickSendToGraph(this.cardData);
+    }
+  }
+
+  public onClickOpenSecurityInBloomberg(targetModule: string) {
+    const yelloCard = this.utilityService.isCDS(false, this.cardData) ? `Corp` : 'Govt';
+    const url = `bbg://securities/${this.cardData.data.globalIdentifier}%20${yelloCard}/${targetModule}`;
+    window.open(url);
   }
 }

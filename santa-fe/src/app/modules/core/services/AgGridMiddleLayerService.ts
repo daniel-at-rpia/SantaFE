@@ -94,7 +94,12 @@ export class AgGridMiddleLayerService {
     const targetRows = table.data.rows;
     const targetHeaders = table.data.allHeaders;
     const list = [];
-    targetRows.forEach((eachRow) => {
+    targetRows.forEach((eachRow, index) => {
+      if (index === 0) {
+        eachRow.data.security.state.isAtListCeiling = true;
+      } else {
+        eachRow.data.security.state.isAtListCeiling = false;
+      }
       const newAgRow = this.formAgGridRow(eachRow, targetHeaders);
       !!newAgRow.id && list.push(newAgRow);
     });
