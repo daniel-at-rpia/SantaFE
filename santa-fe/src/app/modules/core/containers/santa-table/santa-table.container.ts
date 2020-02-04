@@ -586,6 +586,8 @@ export class SantaTable implements OnInit, OnChanges {
     const targetRow = this.tableData.data.rows.find((eachRow) => {
       return eachRow.data.security && eachRow.data.security.data.securityID === targetCard.data.securityID;
     })
-    this.agGridMiddleLayerService.updateAgGridRows(this.tableData, [targetRow]);
+    if (!!targetRow) {
+      this.agGridMiddleLayerService.updateAgGridRows(this.tableData, [targetRow]);
+    }
   }
 }

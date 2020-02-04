@@ -5,6 +5,7 @@ $securityCard_labelVariant_height: 2rem;
 $securityCard_labelVariant_expanded_height: 2.75rem;
 $securityCard_name_rightGap: 3rem;
 $securityCard_actionMenu_majorCTA_size: 3rem;
+$securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
 
 .sat-securityCard {
   $securityCardBlockName: &;
@@ -51,58 +52,76 @@ $securityCard_actionMenu_majorCTA_size: 3rem;
     }
   }
   &__actionMenu {
-    @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+    @include mix_fixed_div(absolute, $z_index_standard_tooltip);  // needs to be no less than the z-index of "sat-tradeMarketAnalysisPanel__table-content-securityList-item-numberOfSecurityTag"
     @include mix_alive('custom', transform $animation_duration_light);
-    @include mix_calculate(left, 50%, 3rem, '-');
+    @include mix_calculate(left, 50%, $securityCard_actionMenu_majorCTA_size + $spacing_x_small * 2, '-');
     display: flex;
     flex-direction: column;
     transform: scale(0.01);
-    top: -2.5rem; // since the height of the action menu is static, it's okay to keep this as a magic number for now
+    top: 0;
     &-minorList {
+      @include mix_fixed_div(relative, $z_index_standard_base_item);
       display: flex;
       justify-content: center;
       &-btn {
         @extend .santaBtn;
         @extend .santaBtn--iconOnly;  // this is necessary for usage within AgGrid
+        @include mix_fixed_div(absolute, $z_index_standard_base_item);
         @include mix_border_radius(50%);
-        margin: 0 $spacing_small;
         background-color: $color_bloomberg_1;
         color: $color_bloomberg_2;
         padding: $spacing_xx_small;
         word-break: break-all;  // so "QMGR" would clip into 2 lines
+        &:first-of-type {
+          left: -$securityCard_actionMenu_majorCTA_size/2 + $spacing_xx_small;
+        }
+        &:nth-of-type(2) {
+          right: -$securityCard_actionMenu_majorCTA_size/2 + $spacing_xx_small;
+        }
+        &:hover {
+          transform: scale(1.25);
+        }
+      }
+      &--top {
+        top: -$securityCard_actionMenu_majorCTA_size + $spacing_small;
+      }
+      &--bottom {
+        top: $spacing_x_small;
       }
     }
     &-mainList {
       display: flex;
       justify-content: center;
-      margin: -$spacing_x_small;  // achieve a closer distance between the three lists
+      margin: -$spacing_small 0;  // achieve a closer distance between the three lists
       &-thumbDownBtn {
         @extend .santaBtn;
         @extend .santaBtn--iconOnly;  // this is necessary for usage within AgGrid
+        @include mix_fixed_div(relative, $z_index_standard_hovering_item);
         @include mix_border_radius(50%);
-        margin: 0 $spacing_small;
+        margin: 0 $spacing_x_small;
         background-color: $color_kill;
         color: $font_color_inverse;
         height: $securityCard_actionMenu_majorCTA_size;
         width: $securityCard_actionMenu_majorCTA_size;
         font-size: $font_size_large;
+        &:hover {
+          transform: scale(1.25);
+        }
       }
       &-graphBtn {
         @extend .santaBtn;
         @extend .santaBtn--iconOnly;
+        @include mix_fixed_div(relative, $z_index_standard_hovering_item);
         @include mix_border_radius(50%);
-        margin: 0 $spacing_small;
+        margin: 0 $spacing_x_small;
         color: $font_color_major;
         height: $securityCard_actionMenu_majorCTA_size;
         width: $securityCard_actionMenu_majorCTA_size;
         font-size: $font_size_large;
+        &:hover {
+          transform: scale(1.25);
+        }
       }
-    }
-    &-bottomList {
-
-    }
-    &-topList {
-
     }
   }
   &--stencilState {
@@ -127,8 +146,20 @@ $securityCard_actionMenu_majorCTA_size: 3rem;
   &--thumbDownDisabled {
     #{$securityCardBlockName} {
       &__actionMenu {
-        &-mainList-thumbDownBtn {
-          display: none;
+        @include mix_calculate(left, 50%, $securityCard_actionMenu_majorCTA_size/2 + $spacing_x_small, '-');
+        &-mainList {
+          margin: -$spacing_x_small 0;
+          &-thumbDownBtn {
+            display: none;
+          }
+        }
+        &-minorList-btn {
+          &:first-of-type {
+            left: -$securityCard_actionMenu_majorCTA_size/2 + $spacing_x_small;
+          }
+          &:nth-of-type(2) {
+            right: -$securityCard_actionMenu_majorCTA_size/2 + $spacing_x_small;
+          }
         }
       }
     }
