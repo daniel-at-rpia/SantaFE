@@ -145,5 +145,6 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
 
   public onClickShowMoreQuotes() {
     this.rowData.data.presentQuotes = this.utilityService.deepCopy(this.rowData.data.quotes);
+    this.rowData.state.presentingAllQuotes = true;
   }
 }

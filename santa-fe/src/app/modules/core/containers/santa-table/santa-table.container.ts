@@ -220,7 +220,11 @@ export class SantaTable implements OnInit, OnChanges {
                 targetRow.state.isExpanded = !targetRow.state.isExpanded;
                 if (targetRow.data.security) {
                   targetRow.data.security.state.isMultiLineVariant = params.node.expanded;
-                  this.fetchSecurityQuotes(targetRow, params);
+                  if (targetRow.state.isExpanded) {
+                    this.fetchSecurityQuotes(targetRow, params);
+                  } else {
+                    targetRow.state.presentingAllQuotes = false;
+                  }
                 }
               } catch {
                 // ignore, seems AgGrid causes some weird read only error
