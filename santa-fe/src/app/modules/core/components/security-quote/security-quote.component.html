@@ -21,10 +21,17 @@
     'sat-securityQuote--menuActiveOnPriceState': messageData.state.menuActiveMetric === 'price',
     'sat-securityQuote--menuActiveOnYieldState': messageData.state.menuActiveMetric === 'yield'
   }">
-  <section class="sat-securityQuote__time">
-    <span class="sat-securityQuote__time-text">{{messageData.data.time}}</span>
-  </section>
   <section class="sat-securityQuote__main">
+    <div class="sat-securityQuote__main-twoSideEntry">
+      <span class="sat-securityQuote__main-twoSideEntry-text sat-securityQuote__main-twoSideEntry-text--bid">
+        {{messageData.data.bid.time}}
+      </span>
+      <i class="sat-securityQuote__main-twoSideEntry-mid fal fa-arrows-h"></i>
+      <span class="sat-securityQuote__main-twoSideEntry-text sat-securityQuote__main-twoSideEntry-text--ask">
+        {{messageData.data.ask.time}}
+      </span>
+    </div>
+    <div class="sat-securityQuote__main-spacing"></div>
     <div class="sat-securityQuote__main-entry">{{messageData.data.dataSource}}</div>
     <div class="sat-securityQuote__main-spacing"></div>
     <div class="sat-securityQuote__main-entry">{{messageData.data.broker}}</div>

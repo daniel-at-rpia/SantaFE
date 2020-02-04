@@ -691,5 +691,18 @@ export class UtilityService {
       }
     }
 
+    public isQuoteTimeValid(timeString: string): boolean {
+      if (!!timeString) {
+        const newDate = new Date(timeString);
+        if (newDate.getSeconds() === 0 && newDate.getMinutes() === 0 && newDate.getHours() === 0) {
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        return false;
+      }
+    }
+
   // trade specific end
 }

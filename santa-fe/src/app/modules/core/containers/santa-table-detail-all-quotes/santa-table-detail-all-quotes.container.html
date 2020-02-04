@@ -11,6 +11,7 @@
           *ngFor="let eachQuoteMetric of rowData.data.quoteHeaders; let metricIndex = index;"
           [ngClass]="{
             'sat-securityTableRowExpandViewLabel': true,
+            'sat-securityTableRowExpandViewLabel--doubleSided': eachQuoteMetric.displayLabelList.length > 1,
             'sat-securityTableRowExpandViewLabel--sizeTwo': eachQuoteMetric.isSizeTwo,
             'sat-securityTableRowExpandViewLabel--sizeThree': eachQuoteMetric.isSizeThree,
             'sat-securityTableRowExpandViewLabel--sizeFour': eachQuoteMetric.isSizeFour,

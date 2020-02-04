@@ -314,6 +314,11 @@ export const THIRTY_DAY_DELTA_METRIC_INDEX = SecurityTableMetrics.findIndex((eac
 
 export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
   {
+    labelList: ['B Time', 'A Time'],
+    textOnly: true,
+    size: 2
+  },
+  {
     labelList: ['Source'],
     textOnly: true
   },{

@@ -690,7 +690,8 @@ export class DTOService {
           price: 100,
           yield: 5,
           tspread: 300,
-          benchmark: bidBenchmark
+          benchmark: bidBenchmark,
+          time: '12:01pm'
         },
         ask: {
           isAxe: false,
@@ -698,7 +699,8 @@ export class DTOService {
           price: 100,
           yield: 5,
           tspread: 300,
-          benchmark: bidBenchmark
+          benchmark: bidBenchmark,
+          time: '12:01pm'
         },
         currentMetric: filteredMetricType
       },
@@ -725,7 +727,8 @@ export class DTOService {
         price: !!rawData.bidPrice ? this.utility.round(rawData.bidPrice , TriCoreMetricConfig.Price.rounding) : null,
         yield: !!rawData.bidYield ? this.utility.round(rawData.bidYield, TriCoreMetricConfig.Yield.rounding) : null,
         tspread: !!rawData.bidSpread ? this.utility.round(rawData.bidSpread, TriCoreMetricConfig.Spread.rounding) : null,
-        benchmark: bidBenchmark
+        benchmark: bidBenchmark,
+        time: this.utility.isQuoteTimeValid(rawData.bidTime) && hasBid ? new Date(rawData.bidTime).toTimeString().slice(0, 5) : ''
       };
       object.data.ask = {
         isAxe: rawData.quoteType === SECURITY_TABLE_QUOTE_TYPE_AXE,
@@ -733,7 +736,8 @@ export class DTOService {
         price: !!rawData.askPrice ? this.utility.round(rawData.askPrice , TriCoreMetricConfig.Price.rounding) : null,
         yield: !!rawData.askYield ? this.utility.round(rawData.askYield, TriCoreMetricConfig.Yield.rounding) : null,
         tspread: !!rawData.askSpread ? this.utility.round(rawData.askSpread, TriCoreMetricConfig.Spread.rounding) : null,
-        benchmark: askBenchmark
+        benchmark: askBenchmark,
+        time: this.utility.isQuoteTimeValid(rawData.askTime) && hasAsk ? new Date(rawData.askTime).toTimeString().slice(0, 5) : ''
       };
       object.state.isBestBid = object.data.bid.tspread == bestBidNum || object.data.bid.price == bestBidNum || object.data.bid.yield == bestBidNum;
       object.state.isBestOffer =object.data.ask.tspread == bestAskNum || object.data.ask.price == bestAskNum || object.data.ask.yield == bestAskNum;

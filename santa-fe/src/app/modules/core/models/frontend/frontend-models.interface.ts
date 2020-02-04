@@ -320,6 +320,7 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
       tspread: number;
       yield: number;
       benchmark: string;
+      time: string;
     };
     ask: {
       isAxe: boolean;
@@ -328,6 +329,7 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
       tspread: number;
       yield: number;
       benchmark: string;
+      time: string;
     }
   },
   state: {

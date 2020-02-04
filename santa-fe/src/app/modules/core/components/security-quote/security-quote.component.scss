@@ -4,28 +4,15 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
 .sat-securityQuote {
   $securityQuoteBlockName: &;
   @include mix_border_radius(5px);
-  @include mix_border_generator($typical_border_width * 2, $color_detailTableBackground);
   flex: 1 1 auto;
   display: flex;
   margin-top: $spacing_x_small;
-  &__time {
-    flex: 0 0 $securityQuote_time_width;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding-right: $spacing_small;
-    &-text {
-      color: $font_color_inverse;
-      text-align: center;
-      line-height: $line_height_small;
-      font-size: $font_size_small;
-    }
-  }
   &__main {
     flex: 1 1 auto;
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
+    padding: $spacing_xx_small 0;
     &-entry {
       flex: 0 0 $securityQuote_main_size_1;
       text-align: center;
@@ -508,11 +495,6 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
   }
   &--stencilState {
     #{$securityQuoteBlockName} {
-      &__time {
-        &-text {
-          @include mix_stencil_animation;
-        }
-      }
       &__main {
         &-entry {
           @include mix_stencil_animation;
