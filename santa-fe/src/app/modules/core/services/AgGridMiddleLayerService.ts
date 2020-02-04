@@ -91,6 +91,7 @@ export class AgGridMiddleLayerService {
   public loadAgGridRows(
     table: SecurityTableDTO
   ): Array<AgGridRow> {
+    // TODO: apply 1st variant for securityCard
     const targetRows = table.data.rows;
     const targetHeaders = table.data.allHeaders;
     const list = [];
