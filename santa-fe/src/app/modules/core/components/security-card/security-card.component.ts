@@ -7,6 +7,7 @@ import {
   EventEmitter
 } from '@angular/core';
 
+import { UtilityService } from 'Core/services/UtilityService';
 import { SecurityDTO } from 'FEModels/frontend-models.interface';
 
 @Component({
@@ -17,7 +18,7 @@ import { SecurityDTO } from 'FEModels/frontend-models.interface';
 })
 export class SecurityCard implements OnInit {
   @Input() cardData: SecurityDTO;
-  constructor() { }
+  constructor(private utilityService: UtilityService) { }
 
   public ngOnInit() {
   }
@@ -44,7 +45,8 @@ export class SecurityCard implements OnInit {
   }
 
   public onClickOpenSecurityInBloomberg(targetModule: string) {
-    const url = `bbg://securities/${this.cardData.data.globalIdentifier}%20Corp/${targetModule}`;
+    const yelloCard = this.utilityService.isCDS(false, this.cardData) ? `Corp` : 'Govt';
+    const url = `bbg://securities/${this.cardData.data.globalIdentifier}%20${yelloCard}/${targetModule}`;
     window.open(url);
   }
 }

@@ -69,7 +69,6 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
         @include mix_fixed_div(absolute, $z_index_standard_base_item);
         @include mix_border_radius(50%);
         transform: scale(0.01);
-        transition: transform $animation_duration_light linear $animation_duration_light, background-color $animation_duration_light, box-shadow $animation_duration_light, color $animation_duration_light;
         background-color: $color_bloomberg_1;
         color: $color_bloomberg_2;
         padding: $spacing_xx_small;
@@ -127,46 +126,6 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
       }
     }
   }
-  &--stencilState {
-    background: $color_white;
-    #{$securityCardBlockName} {
-      &__name-text {
-        @include mix_stencil_animation;
-      }
-      &__rating {
-        align-items: center;
-        &-text {
-          @include mix_stencil_animation;
-          font-size: $font_size_large;
-        }
-      }
-    }
-  }
-  &--tableState {
-    @include material('none');
-    @include mix_border_generator($typical_border_width, $color_gray_85);
-  }
-  &--thumbDownDisabled {
-    #{$securityCardBlockName} {
-      &__actionMenu {
-        @include mix_calculate(left, 50%, $securityCard_actionMenu_majorCTA_size/2 + $spacing_x_small, '-');
-        &-mainList {
-          margin: -$spacing_x_small 0;
-          &-thumbDownBtn {
-            display: none;
-          }
-        }
-        &-minorList-btn {
-          &:first-of-type {
-            left: -$securityCard_actionMenu_majorCTA_size/2 + $spacing_x_small;
-          }
-          &:nth-of-type(2) {
-            right: -$securityCard_actionMenu_majorCTA_size/2 + $spacing_x_small;
-          }
-        }
-      }
-    }
-  }
   &--multiLineVariant {
     height: $securityCard_labelVariant_expanded_height;
     #{$securityCardBlockName} {
@@ -195,9 +154,70 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
         &-minorList-btn {
           transform: scale(1);
           &:hover {
+            transform: scale(1.25);
             background-color: $color_active;
             color: $font_color_inverse;
           }
+        }
+      }
+    }
+  }
+  &--thumbDownDisabled {
+    #{$securityCardBlockName} {
+      &__actionMenu {
+        @include mix_calculate(left, 50%, $securityCard_actionMenu_majorCTA_size/2 + $spacing_x_small, '-');
+        &-mainList {
+          margin: -$spacing_x_small 0;
+          &-thumbDownBtn {
+            display: none;
+          }
+        }
+        &-minorList-btn {
+          &:first-of-type {
+            left: -$securityCard_actionMenu_majorCTA_size/2 + $spacing_x_small;
+          }
+          &:nth-of-type(2) {
+            right: -$securityCard_actionMenu_majorCTA_size/2 + $spacing_x_small;
+          }
+        }
+      }
+    }
+  }
+  &--atListCeilingVariant {
+    #{$securityCardBlockName} {
+      &__actionMenu {
+        top: $spacing_small;
+        &-minorList--top {
+          #{$securityCardBlockName} {
+            &__actionMenu-minorList-btn {
+              top: 2.5rem;
+              &:first-of-type {
+                left: -2.5rem;
+              }
+              &:nth-of-type(2) {
+                right: -2.5rem
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--tableState {
+    @include material('none');
+    @include mix_border_generator($typical_border_width, $color_gray_85);
+  }
+  &--stencilState {
+    background: $color_white;
+    #{$securityCardBlockName} {
+      &__name-text {
+        @include mix_stencil_animation;
+      }
+      &__rating {
+        align-items: center;
+        &-text {
+          @include mix_stencil_animation;
+          font-size: $font_size_large;
         }
       }
     }

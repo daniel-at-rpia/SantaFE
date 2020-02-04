@@ -78,7 +78,8 @@ export interface SecurityDTO extends BasicDTOStructure {
     isInteractionThumbDownDisabled: boolean;
     isSelected: boolean;
     isMultiLineVariant: boolean;
-    isWidthFlexible: boolean; 
+    isWidthFlexible: boolean;
+    isAtListCeiling: boolean;
   }
 }
 

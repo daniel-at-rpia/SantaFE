@@ -127,7 +127,8 @@ export class DTOService {
         isInteractionDisabled: false,
         isInteractionThumbDownDisabled: false,
         isMultiLineVariant: false,
-        isWidthFlexible: false
+        isWidthFlexible: false,
+        isAtListCeiling: false
       }
     };
     return object;
