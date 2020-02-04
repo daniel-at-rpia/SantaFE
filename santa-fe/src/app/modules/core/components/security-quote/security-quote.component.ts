@@ -3,12 +3,12 @@ import {
   OnInit,
   ViewEncapsulation,
   Input,
-  Output
+  Output,
+  EventEmitter
 } from '@angular/core';
 
-import {
-  SecurityQuoteDTO
-} from 'FEModels/frontend-models.interface';
+import { SecurityQuoteDTO } from 'FEModels/frontend-models.interface';
+import { ClickedSpecificQuoteEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
 
 @Component({
   selector: 'security-quote',
@@ -18,6 +18,25 @@ import {
 })
 export class SecurityQuote {
   @Input() messageData: SecurityQuoteDTO;
+  @Output() clickedSpecificQuote = new EventEmitter<ClickedSpecificQuoteEmitterParams>();
+  @Output() clickedUpVote = new EventEmitter<SecurityQuoteDTO>();
+  @Output() clickedDownVote = new EventEmitter<SecurityQuoteDTO>();
   constructor() { }
 
+  public onClickDownVote() {
+    !!this.clickedDownVote && this.clickedDownVote.emit(this.messageData);
+  }
+
+  public onClickUpVote() {
+    !!this.clickedUpVote && this.clickedUpVote.emit(this.messageData);
+  }
+
+  public onClickSpecificQuote(isOnBidSide: boolean, targetMetric: string) {
+    const payload: ClickedSpecificQuoteEmitterParams = {
+      targetQuote: this.messageData,
+      isOnBidSide: isOnBidSide,
+      targetMetric: targetMetric
+    };
+    !!this.clickedSpecificQuote && this.clickedSpecificQuote.emit(payload);
+  }
 }

@@ -218,6 +218,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     this.state = this.initializePageState();
     this.state.receivedSecurity = true;
     this.state.targetSecurity = this.utilityService.deepCopy(targetSecurity);
+    this.state.targetSecurity.state.isSelected = false;
     this.applyStatesToSecurityCards(this.state.targetSecurity);
     this.loadStencilList();
     this.fetchGroupData();
@@ -353,7 +354,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     this.state.table = this.initializePageState().table;
     if (!!rawData.BaseSecurity && !!rawData.Group) {
       const baseSecurityDTO = this.dtoService.formSecurityCardObject('', rawData.BaseSecurity.security, false);
-      baseSecurityDTO.state.isInteractionDisabled = true;
+      baseSecurityDTO.state.isActionMenuPrimaryActionsDisabled = true;
       this.applyStatesToSecurityCards(baseSecurityDTO);
       this.state.table.presentList.push(baseSecurityDTO);
       this.state.table.rankingList.push('Base');
@@ -367,6 +368,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
       const groupDTO = this.dtoService.formSecurityCardObject('', null, true);
       groupDTO.state.isStencil = false;
       groupDTO.state.isInteractionThumbDownDisabled = true;
+      groupDTO.state.isActionMenuMinorActionsDisabled = true;
       groupDTO.data.name = rawData.Group.group.name;
       this.applyStatesToSecurityCards(groupDTO);
       this.state.table.presentList.push(groupDTO);
@@ -441,6 +443,9 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   private applyStatesToSecurityCards(targetSecurity: SecurityDTO) {
     targetSecurity.state.isMultiLineVariant = false;
     targetSecurity.state.isWidthFlexible = true;
+    targetSecurity.api.onClickCard = this.onSelectSecurityCardInPresentList.bind(this);
+    targetSecurity.api.onClickThumbDown = this.onClickSecurityCardThumbDown.bind(this);
+    targetSecurity.api.onClickSendToGraph = this.onClickSecurityCardSendToGraph.bind(this);
   }
 
   private populateGroupOptionText(rawData: BEHistoricalSummaryOverviewDTO) {

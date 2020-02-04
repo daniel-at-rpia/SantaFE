@@ -45,3 +45,11 @@ export interface PayloadObligorSecurityIDs {
   identifier: string,
   lookbackHrs?: number
 }
+
+export interface PayloadSetQuoteStatus {
+  identifier: string;
+  quoteType: string;  // 'Axe', 'Run'
+  dealer: string;  // 'JPM'
+  side: string;  // 'Bid', 'Ask'
+  quoteStatus: string;  // 'Good', 'Bad', 'Garbage'
+}

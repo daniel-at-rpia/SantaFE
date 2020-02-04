@@ -14,7 +14,8 @@ export const APIUrlMap = {
   getGroupHistoricalSummary: `group/get-group-historical-summary-from-security`,
   getTickers: `Obligor/get-tickers`,
   getSubIndustries: `obligor/get-subindustries`,
-  getCountries: 'obligor/get-countries'
+  getCountries: 'obligor/get-countries',
+  setQuoteStatus: 'liveQuote/set-quote-status'
 };
 
 export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [

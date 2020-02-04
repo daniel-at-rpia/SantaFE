@@ -56,7 +56,8 @@
       AGGRID_DETAIL_ROW_HEIGHT_MAX,
       AGGRID_DETAIL_ROW_HEIGHT_PER_ROW,
       AGGRID_DETAIL_ROW_HEIGHT_OFFSET,
-      AGGRID_DETAIL_ROW_HEIGHT_DEFAULT
+      AGGRID_DETAIL_ROW_HEIGHT_DEFAULT,
+      AGGRID_DETAIL_ROW_DEFAULT_COUNT
     } from 'Core/constants/securityTableConstants.constant';
     import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
     import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-filter/santa-table-numeric-filter.component';
@@ -116,11 +117,17 @@ export class SantaTable implements OnInit, OnChanges {
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
     thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX,
     agGridRowHeight: AGGRID_ROW_HEIGHT,
-    agGridRowClassRules: AGGRID_ROW_CLASS,
+    agGridRowClassRules: {
+      'santaTable__agGridTable-agGrid-row': "true",
+      'santaTable__agGridTable-agGrid-row--cardSelected': function (params: AgGridRowParams) {
+        return params.data.securityCard && params.data.securityCard.state.isSelected;
+      }
+    },
     agGridDetailRowHeightMax: AGGRID_DETAIL_ROW_HEIGHT_MAX,
     agGridDetailRowHeightPerRow: AGGRID_DETAIL_ROW_HEIGHT_PER_ROW,
     agGridDetailRowHeightOffset: AGGRID_DETAIL_ROW_HEIGHT_OFFSET,
-    agGridDetailRowHeightDefault: AGGRID_DETAIL_ROW_HEIGHT_DEFAULT
+    agGridDetailRowHeightDefault: AGGRID_DETAIL_ROW_HEIGHT_DEFAULT,
+    agGridDetailRowDefaultCount: AGGRID_DETAIL_ROW_DEFAULT_COUNT
   }
 
   constructor(
@@ -156,7 +163,7 @@ export class SantaTable implements OnInit, OnChanges {
       this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate;
       this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
       this.loadTableHeaders(true);  // skip reloading the agGrid columns since that won't be necessary and reloading them creates a problem for identifying the columns in later use, such as sorting
-      this.loadTableRows(this.newRows);
+      this.loadTableRows(this.newRows, true);
     } else if (!!this.newRows && this.newRows != this.tableData.data.rows && this.tableData.state.loadedContentStage === this.receivedContentStage) {
       console.log('rows updated for change within same stage, triggered when filters are applied', this.tableData.state.loadedContentStage);
       this.loadTableRows(this.newRows);
@@ -181,27 +188,69 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   public onRowClicked(params: AgGridRowParams) {
-    // this function gets triggered both when parent and child are being clicked, so this if condition is to make sure only execute the logic when it is the parent that is clicked
-    if (!!params.node.master) {
-      params.node.setExpanded(!params.node.expanded);
-      if (!params.node.group) {
-        const targetRow = this.tableData.data.rows.find((eachRow) => {
-          return !!eachRow.data.security && eachRow.data.security.data.securityID == params.node.data.id;
-        });
-        if (!!targetRow) {
-          try {
-            targetRow.state.isExpanded = !targetRow.state.isExpanded;
-            if (targetRow.data.security) {
-              targetRow.data.security.state.isMultiLineVariant = params.node.expanded;
-              this.fetchSecurityQuotes(targetRow, params);
-            }
-          } catch {
-            // ignore, seems AgGrid causes some weird read only error
+    if (!!params && !!params.data.securityCard) {
+      // this if checks whether the user is clicking on the entire row, or clicking on the security card
+      const targetCard = params.data.securityCard;
+      const storedSelectedCard = this.tableData.state.selectedSecurityCard;
+      // console.log('test, clicked on row', targetCard.state.isSelected, storedSelectedCard, storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID);
+      // IMPORTANT: If this logic ever needs to be modified, please test all scenarios on Daniel's notebook's page 10
+      if (
+        (!targetCard.state.isSelected && !storedSelectedCard) || 
+        (targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID) ||
+        (!targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID !== targetCard.data.securityID)
+      ) {
+        // this function gets triggered both when parent and child are being clicked, so this if condition is to make sure only execute the logic when it is the parent that is clicked
+        targetCard.state.isSelected = false;
+        if (!!storedSelectedCard) {
+          if (storedSelectedCard.data.securityID !== targetCard.data.securityID) {
+            // if the card selected is in a diff row, that row also needs to be updated through AgGrid's life cycle
+            storedSelectedCard.state.isSelected = false;
+            this.updateRowSecurityCardInAgGrid(storedSelectedCard);
           }
-        } else {
-          console.error(`Could't find targetRow`, params);
+          this.tableData.state.selectedSecurityCard = null;
         }
+        if (!!params.node.master) {
+          params.node.setExpanded(!params.node.expanded);
+          if (!params.node.group) {
+            const targetRow = this.tableData.data.rows.find((eachRow) => {
+              return !!eachRow.data.security && eachRow.data.security.data.securityID == params.node.data.id;
+            });
+            if (!!targetRow) {
+              try {
+                targetRow.state.isExpanded = !targetRow.state.isExpanded;
+                if (targetRow.data.security) {
+                  targetRow.data.security.state.isMultiLineVariant = params.node.expanded;
+                  if (targetRow.state.isExpanded) {
+                    this.fetchSecurityQuotes(targetRow, params);
+                  } else {
+                    targetRow.state.presentingAllQuotes = false;
+                  }
+                }
+              } catch {
+                // ignore, seems AgGrid causes some weird read only error
+              }
+            } else {
+              console.error(`Could't find targetRow`, params);
+            }
+          }
+        }
+      } else {
+        // gets to here if the user clicked on the security card
+        if (storedSelectedCard === null) {
+          this.tableData.state.selectedSecurityCard = targetCard;
+        } else if (!!storedSelectedCard && storedSelectedCard.data.securityID !== targetCard.data.securityID) {
+          // scenario: there is already a card selected, and the user is selecting a diff card
+          this.tableData.state.selectedSecurityCard.state.isSelected = false;
+          this.updateRowSecurityCardInAgGrid(this.tableData.state.selectedSecurityCard);
+          this.tableData.state.selectedSecurityCard = targetCard;
+        } else if (!!storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID) {
+          // scenario: there is already a card selected, and it is the same card user is selecting again
+          this.tableData.state.selectedSecurityCard = null;
+        }
+        params.node.setData(params.data);  // need this to trigger a refresh so the row can adopt new classname from the agGridRowClassRules
       }
+    } else {
+      console.warn('AgGrid data issue, if you see this call Daniel');
     }
   }
 
@@ -263,7 +312,10 @@ export class SantaTable implements OnInit, OnChanges {
     }
   }
 
-  private loadTableRows(rowList: Array<SecurityTableRowDTO>) {
+  private loadTableRows(
+    rowList: Array<SecurityTableRowDTO>,
+    isUpdate: boolean = false
+  ) {
     this.tableData.data.rows = rowList;
     // doesn't need to update dynamic columns if the entire data is not loaded
     this.receivedContentStage === this.constants.securityTableFinalStage && this.updateDynamicColumns();
@@ -273,7 +325,12 @@ export class SantaTable implements OnInit, OnChanges {
       this.performDefaultSort();
     }
     if (this.tableData.state.isAgGridReady) {
-      this.tableData.data.agGridRowData = this.agGridMiddleLayerService.loadAgGridRows(this.tableData);
+      if (isUpdate) {
+        this.agGridMiddleLayerService.updateAgGridRows(this.tableData, this.tableData.data.rows);
+        this.liveUpdateAllQuotesForExpandedRows();
+      } else {
+        this.tableData.data.agGridRowData = this.agGridMiddleLayerService.loadAgGridRows(this.tableData);
+      }
     }
   }
 
@@ -332,10 +389,14 @@ export class SantaTable implements OnInit, OnChanges {
               targetRow.data.quotes.push(newQuote);
             }
           }
+          targetRow.data.presentQuotes = this.utilityService.deepCopy(targetRow.data.quotes);
+          if (!targetRow.state.presentingAllQuotes) {
+            targetRow.data.presentQuotes = targetRow.data.presentQuotes.slice(0, this.constants.agGridDetailRowDefaultCount);
+          }
           this.performChronologicalSortOnQuotes(targetRow);
           this.agGridMiddleLayerService.updateAgGridRows(this.tableData, [targetRow]);
           if (!!params && !!params.node && !!params.node.detailNode) {
-            let dynamicHeight = this.constants.agGridDetailRowHeightOffset + targetRow.data.quotes.length * this.constants.agGridDetailRowHeightPerRow;
+            let dynamicHeight = this.constants.agGridDetailRowHeightOffset + targetRow.data.presentQuotes.length * this.constants.agGridDetailRowHeightPerRow;
             if (dynamicHeight > this.constants.agGridDetailRowHeightMax) {
               dynamicHeight = this.constants.agGridDetailRowHeightMax;
             }
@@ -522,6 +583,15 @@ export class SantaTable implements OnInit, OnChanges {
       }
     } else {
       return null;
+    }
+  }
+
+  private updateRowSecurityCardInAgGrid(targetCard: SecurityDTO) {
+    const targetRow = this.tableData.data.rows.find((eachRow) => {
+      return eachRow.data.security && eachRow.data.security.data.securityID === targetCard.data.securityID;
+    })
+    if (!!targetRow) {
+      this.agGridMiddleLayerService.updateAgGridRows(this.tableData, [targetRow]);
     }
   }
 }

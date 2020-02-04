@@ -4,6 +4,7 @@ const PortfolioList: Array<BEPortfolioDTO> = [{
   "date":"2019-12-23T00:00:00-05:00",
   "securityIdentifier":"129",
   "security":{
+    "globalIdentifier": "US02376RAC60",
     "isGovt":false,
     "securityIdentifier":"129",
     "ccy":"CAD",

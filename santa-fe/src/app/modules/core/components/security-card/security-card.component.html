@@ -9,7 +9,10 @@
     'sat-securityCard--stencilState': cardData.state.isStencil,
     'sat-securityCard--selectedState': cardData.state.isSelected,
     'sat-securityCard--multiLineVariant': cardData.state.isMultiLineVariant,
-    'sat-securityCard--flexibleWidthVariant': cardData.state.isWidthFlexible
+    'sat-securityCard--flexibleWidthVariant': cardData.state.isWidthFlexible,
+    'sat-securityCard--atListCeilingVariant': cardData.state.isAtListCeiling,
+    'sat-securityCard--primaryActionDisabledState': cardData.state.isActionMenuPrimaryActionsDisabled,
+    'sat-securityCard--minorActionDisabledState': cardData.state.isActionMenuMinorActionsDisabled
   }">
   <section class="sat-securityCard__name">
     <span class="sat-securityCard__name-text">{{cardData.data.name}}</span>
@@ -18,7 +21,17 @@
     <span class="sat-securityCard__rating-text">{{cardData.data.ratingValue}}</span>
   </section>
   <section class="sat-securityCard__actionMenu">
-    <button (click)="onClickSendToGraph()" class="sat-securityCard__actionMenu-graphBtn santaBtn--iconOnly fal fa-chart-line"></button>
-    <button (click)="onClickThumbDown()" class="sat-securityCard__actionMenu-thumbDownBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
+    <ul class="sat-securityCard__actionMenu-minorList sat-securityCard__actionMenu-minorList--top">
+      <button title="Open In Bloomberg DES" (click)="onClickOpenSecurityInBloomberg('DES')" class="sat-securityCard__actionMenu-minorList-btn">DES</button>
+      <button title="Open In Bloomberg QMGR" (click)="onClickOpenSecurityInBloomberg('QMGR')" class="sat-securityCard__actionMenu-minorList-btn">QMGR</button>
+    </ul>
+    <ul class="sat-securityCard__actionMenu-mainList">
+      <button (click)="onClickSendToGraph()" class="sat-securityCard__actionMenu-mainList-graphBtn santaBtn--iconOnly fal fa-chart-line"></button>
+      <button (click)="onClickThumbDown()" class="sat-securityCard__actionMenu-mainList-thumbDownBtn santaBtn--iconOnly fal fa-thumbs-down"></button>
+    </ul>
+    <ul class="sat-securityCard__actionMenu-minorList sat-securityCard__actionMenu-minorList--bottom">
+      <button title="Open In Bloomberg YAS" (click)="onClickOpenSecurityInBloomberg('YAS')" class="sat-securityCard__actionMenu-minorList-btn">YAS</button>
+      <button title="Open In Bloomberg QR" (click)="onClickOpenSecurityInBloomberg('QR')" class="sat-securityCard__actionMenu-minorList-btn">QR</button>
+    </ul>
   </section>
 </article>

@@ -25,6 +25,8 @@ $color_quant_crossed: $color_gray_85;
 $color_quant_axe_skew: $color_pink_4_A;
 $color_quant_run_skew: $color_teal_4_A;
 
+$color_detailTableBackground: #656565;  // Granite Gray
+
 $color_axe: $color_blue_5;
 
 $color_filter: $color_deeporange_5;
@@ -44,6 +46,9 @@ $color_stencil: $color_gray_4;
 
 $color_modal_background_hide: rgba(black, 0);
 $color_modal_background_show: rgba(black, 0.5);
+
+$color_bloomberg_1: #2800d7;
+$color_bloomberg_2: #ffffff;
 
 $spacing_xx_large: 6.25rem;   // 100px
 $spacing_x_large: 3.125rem;   // 50px
@@ -127,11 +132,9 @@ $securityTable_cell_width_quant: 19rem;
 
 $securityQuote_time_width: 5.5rem;
 $securityQuote_spacing_height: $spacing_small;
-$securityQuote_ctas_width: 0rem;
 $securityQuote_time_width: 3rem;
-$securityQuote_bestQuote_width:8.7rem;
 $securityQuote_main_size_1: 4rem;
-$securityQuote_main_size_2: 8rem;
+$securityQuote_main_size_2: 8.5rem;
 $securityQuote_main_size_3: 11rem;
 $securityQuote_main_size_4: 10rem;
 

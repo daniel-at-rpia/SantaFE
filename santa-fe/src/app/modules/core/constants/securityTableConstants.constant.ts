@@ -26,9 +26,10 @@ export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_qu
 export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 150;
 export const AGGRID_SIMPLE_TEXT_COLUMN_WIDTH = 150;
 export const AGGRID_ROW_HEIGHT = 40;
-export const AGGRID_DETAIL_ROW_HEIGHT_MAX = 480;
-export const AGGRID_DETAIL_ROW_HEIGHT_PER_ROW = 37;
+export const AGGRID_DETAIL_ROW_HEIGHT_PER_ROW = 34;
 export const AGGRID_DETAIL_ROW_HEIGHT_OFFSET = 120;
+export const AGGRID_DETAIL_ROW_DEFAULT_COUNT = 10;
+export const AGGRID_DETAIL_ROW_HEIGHT_MAX = AGGRID_DETAIL_ROW_HEIGHT_OFFSET + AGGRID_DETAIL_ROW_HEIGHT_PER_ROW * AGGRID_DETAIL_ROW_DEFAULT_COUNT;
 export const AGGRID_DETAIL_ROW_HEIGHT_DEFAULT = 200;
 export const AGGRID_HEADER_CLASS = 'santaTable__agGridTable-agGrid-header';
 export const AGGRID_ROW_CLASS = 'santaTable__agGridTable-agGrid-row';
@@ -314,26 +315,26 @@ export const THIRTY_DAY_DELTA_METRIC_INDEX = SecurityTableMetrics.findIndex((eac
 export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
   {
     labelList: ['Source'],
-    textOnly: false
+    textOnly: true
   },{
     labelList: ['Dealer'],
-    textOnly: false
+    textOnly: true
   },{
     labelList: ['B Px', 'A Px'],
     size: 3,
-    textOnly: false
+    textOnly: true
   },{
     labelList: ['B YTW', 'A YTW'],
     size: 2,
-    textOnly: false
+    textOnly: true
   },{
     labelList: ['B Sprd', 'A Sprd'],
     size: 2,
-    textOnly: false
+    textOnly: true
   },{
-    labelList: ['B Size (MM)', 'A Size (MM)'],
+    labelList: ['B Size', 'A Size'],
     size: 3,
-    textOnly: false
+    textOnly: true
   },{
     labelList: ['Benchmarks'],
     size: 4,

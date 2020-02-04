@@ -26,6 +26,7 @@ interface BasicDTOStructure {
 export interface SecurityDTO extends BasicDTOStructure {
   data: {
     securityID: string;
+    globalIdentifier: string;  // CUSIP
     name: string;
     ticker: string;
     country: string;
@@ -66,13 +67,21 @@ export interface SecurityDTO extends BasicDTOStructure {
     cs01FirmCad: number;
     cs01FirmCadInK: string;
   }
+  api: {
+    onClickCard: Function;
+    onClickSendToGraph: Function;
+    onClickThumbDown: Function;
+  }
   state: {
     isStencil: boolean;
     isInteractionDisabled: boolean;
     isInteractionThumbDownDisabled: boolean;
     isSelected: boolean;
     isMultiLineVariant: boolean;
-    isWidthFlexible: boolean; 
+    isWidthFlexible: boolean;
+    isAtListCeiling: boolean;
+    isActionMenuPrimaryActionsDisabled: boolean;
+    isActionMenuMinorActionsDisabled: boolean;
   }
 }
 
@@ -235,6 +244,7 @@ export interface SecurityTableDTO extends BasicDTOStructure {
     isLiveVariant: boolean;
     isNativeEnabled: boolean;
     isAgGridReady: boolean;
+    selectedSecurityCard: SecurityDTO;
   },
   api: {
     gridApi: agGrid.GridApi,
@@ -266,6 +276,7 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
   data: {
     security: SecurityDTO;
     cells: Array<SecurityTableCellDTO>;
+    presentQuotes: Array<SecurityQuoteDTO>;
     quotes: Array<SecurityQuoteDTO>;
     quoteHeaders: Array<QuoteMetricBlock>;
     bestQuotes: {
@@ -277,6 +288,7 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
   state: {
     expandViewSortByQuoteMetric: string;
     isExpanded: boolean;
+    presentingAllQuotes: boolean;
   }
 }
 
@@ -294,6 +306,7 @@ export interface SecurityTableCellDTO extends BasicDTOStructure {
 
 export interface SecurityQuoteDTO extends BasicDTOStructure {
   data: {
+    uuid: string;
     broker: string;
     time: string;
     unixTimestamp: number;
@@ -327,6 +340,10 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
     filteredBySpread: boolean;
     filteredByYield: boolean;
     filteredByPrice: boolean;
+    menuActiveSide: string;
+    menuActiveMetric: string;
+    isBidDownVoted: boolean;
+    isAskDownVoted: boolean;
   }
 }
 

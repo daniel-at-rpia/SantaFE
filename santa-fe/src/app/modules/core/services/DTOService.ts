@@ -58,6 +58,7 @@ export class DTOService {
     const object:DTOs.SecurityDTO = {
       data: {
         securityID: !isStencil ? securityIdFull : null,
+        globalIdentifier: !isStencil ? rawData.globalIdentifier : null,
         name: !isStencil ? rawData.name : 'PLACEHOLDER',
         ticker: !isStencil ? rawData.ticker : null,
         ratingLevel: !isStencil && rawData.metrics ? this.utility.mapRatings(rawData.metrics.ratingNoNotch) : 0,
@@ -115,13 +116,21 @@ export class DTOService {
           ask: null
         }
       },
+      api: {
+        onClickCard: null,
+        onClickSendToGraph: null,
+        onClickThumbDown: null
+      },
       state: {
         isSelected: false,
         isStencil: isStencil,
         isInteractionDisabled: false,
         isInteractionThumbDownDisabled: false,
         isMultiLineVariant: false,
-        isWidthFlexible: false
+        isWidthFlexible: false,
+        isAtListCeiling: false,
+        isActionMenuPrimaryActionsDisabled: false,
+        isActionMenuMinorActionsDisabled: false
       }
     };
     return object;
@@ -556,7 +565,8 @@ export class DTOService {
         sortedByHeader: null,
         isLiveVariant: isLiveVariant,
         isAgGridReady: false,
-        isNativeEnabled: false
+        isNativeEnabled: false,
+        selectedSecurityCard: null
       },
       api: {
         gridApi: null,
@@ -598,6 +608,7 @@ export class DTOService {
       data: {
         security: securityDTO,
         cells: [],
+        presentQuotes: [],
         quotes: [],
         quoteHeaders: QuoteMetricList.map((eachQuoteMetricStub) => {
           const metricBlock: Blocks.QuoteMetricBlock = {
@@ -617,7 +628,8 @@ export class DTOService {
       },
       state: {
         expandViewSortByQuoteMetric: null,
-        isExpanded: false
+        isExpanded: false,
+        presentingAllQuotes: false
       }
     };
     return object;
@@ -666,6 +678,7 @@ export class DTOService {
     // const quoteDate: Date = !isStencil ? (hasBid ? new Date(rawData.bidTime) : new Date(rawData.askTime)) : null;
     const object: DTOs.SecurityQuoteDTO = {
       data: {
+        uuid: this.utility.generateUUID(),
         broker: !isStencil ? rawData.dealer : 'RBC',
         time: !isStencil ? `${convertedDate.toTimeString().slice(0, 5)}` : '12:01 pm',
         unixTimestamp: !isStencil ? convertedDate.getTime() : 0,
@@ -698,7 +711,11 @@ export class DTOService {
         isBestBid: false,
         filteredByPrice:  filteredMetricType === TriCoreMetricConfig.Price.label,
         filteredBySpread:  filteredMetricType === TriCoreMetricConfig.Spread.label,
-        filteredByYield: filteredMetricType === TriCoreMetricConfig.Yield.label
+        filteredByYield: filteredMetricType === TriCoreMetricConfig.Yield.label,
+        menuActiveSide: null,
+        menuActiveMetric: null,
+        isBidDownVoted: false,
+        isAskDownVoted: false
       }
     };
     if (!isStencil) {
@@ -718,11 +735,10 @@ export class DTOService {
         tspread: !!rawData.askSpread ? this.utility.round(rawData.askSpread, TriCoreMetricConfig.Spread.rounding) : null,
         benchmark: askBenchmark
       };
-
       object.state.isBestBid = object.data.bid.tspread == bestBidNum || object.data.bid.price == bestBidNum || object.data.bid.yield == bestBidNum;
-
       object.state.isBestOffer =object.data.ask.tspread == bestAskNum || object.data.ask.price == bestAskNum || object.data.ask.yield == bestAskNum;
-      
+      object.state.isBidDownVoted = rawData.bidQuoteStatus < 0;
+      object.state.isAskDownVoted = rawData.askQuoteStatus < 0;
     }
     return object;
   }

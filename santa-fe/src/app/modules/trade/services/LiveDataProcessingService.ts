@@ -38,7 +38,8 @@ export class LiveDataProcessingService {
   public loadStageOneContent(
     tableHeaderList: Array<SecurityTableHeaderDTO>,
     activeMetricType: string,
-    serverReturn: Object
+    serverReturn: Object,
+    sendToGraphCallback: Function
   ): Array<SecurityTableRowDTO> {
     const prinstineRowList: Array<SecurityTableRowDTO> = [];  // flush out the stencils
     const securityList = [];
@@ -53,6 +54,8 @@ export class LiveDataProcessingService {
         let isValidFlag = true;
         const newBESecurity:BESecurityDTO = serverReturn[eachKey][0].security;
         const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false);
+        newSecurity.state.isInteractionThumbDownDisabled = true;
+        newSecurity.api.onClickSendToGraph = sendToGraphCallback;
         serverReturn[eachKey].forEach((eachPortfolio: BEPortfolioDTO) => {
           if (!eachPortfolio.security.isGovt) {
             this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio, activeMetricType);
@@ -189,7 +192,6 @@ export class LiveDataProcessingService {
     newSecurity: SecurityDTO
   ) {
     const newRow = this.dtoService.formSecurityTableRowObject(newSecurity);
-    newSecurity.state.isInteractionDisabled = true;
     headerList.forEach((eachHeader, index) => {
       if (!eachHeader.state.isPureTextVariant) {
         if (eachHeader.data.readyStage === 1 || eachHeader.data.readyStage === 2) {
@@ -246,5 +248,9 @@ export class LiveDataProcessingService {
       }
     }
     return 0;
+  }
+
+  private testAPI(targetSecurity: SecurityDTO) {
+    console.log('test, at test API', targetSecurity);
   }
 }
