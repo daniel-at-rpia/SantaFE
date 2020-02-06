@@ -62,10 +62,14 @@ export interface SecurityDTO extends BasicDTOStructure {
       bid: number;
       ask: number;
     }
-    cs01FirmLocal: number;
-    cs01FirmLocalInK: string;
-    cs01FirmCad: number;
-    cs01FirmCadInK: string;
+    cs01LocalFirm: number;
+    cs01LocalFirmInK: string;
+    cs01LocalCurrent: number;
+    cs01LocalCurrentInK: string;
+    cs01CadFirm: number;
+    cs01CadFirmInK: string;
+    cs01CadCurrent: number;
+    cs01CadCurrentInK: string;
   }
   api: {
     onClickCard: Function;

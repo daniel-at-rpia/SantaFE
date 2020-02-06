@@ -208,7 +208,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
               eachCategory.state.isMarkHidden = true;
             }
             eachCategoryItem.data.currentPosition = eachSecurity.data.positionCurrent;
-            eachCategoryItem.data.cS01 = Math.round(eachSecurity.data.cs01FirmCad);
+            eachCategoryItem.data.cS01 = Math.round(eachSecurity.data.cs01CadFirm);
           }
         })
       })

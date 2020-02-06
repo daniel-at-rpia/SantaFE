@@ -320,7 +320,7 @@ export class SantaTable implements OnInit, OnChanges {
   ) {
     this.tableData.data.rows = rowList;
     // doesn't need to update dynamic columns if the entire data is not loaded
-    this.receivedContentStage === this.constants.securityTableFinalStage && this.updateDynamicColumns();
+    this.receivedContentStage === this.constants.securityTableFinalStage && this.updateMetricDependentColumns();
     if (this.tableData.state.sortedByHeader) {
       this.performSort(this.tableData.state.sortedByHeader);
     } else {
@@ -336,8 +336,8 @@ export class SantaTable implements OnInit, OnChanges {
     }
   }
 
-  private updateDynamicColumns() {
-    /* the dynamic columns are:
+  private updateMetricDependentColumns() {
+    /* the metric dependent columns are the ones affected by driver/metric change:
       1. QuantComparer
       2. Mark
       3. three mark delta columns

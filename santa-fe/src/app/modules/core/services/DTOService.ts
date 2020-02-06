@@ -76,10 +76,14 @@ export class DTOService {
         primaryPmName: null,
         backupPmName: null,
         researchName: null,
-        cs01FirmLocal: null,
-        cs01FirmLocalInK: null,
-        cs01FirmCad: null,
-        cs01FirmCadInK: null,
+        cs01LocalFirm: null,
+        cs01LocalFirmInK: null,
+        cs01LocalCurrent: null,
+        cs01LocalCurrentInK: null,
+        cs01CadFirm: null,
+        cs01CadFirmInK: null,
+        cs01CadCurrent: null,
+        cs01CadCurrentInK: null,
         owner: [],
         mark: {
           combinedDefaultMark: null,
@@ -195,14 +199,14 @@ export class DTOService {
           console.warn('detected security with multiple strategies: ', dto.data.name, ' has strategy = ', dto.data.strategyList);
         }
       }
-      dto.data.cs01FirmCad = dto.data.cs01FirmCad + eachPortfolioBlock.cs01Cad;
-      dto.data.cs01FirmLocal = dto.data.cs01FirmLocal + eachPortfolioBlock.cs01Local;
+      dto.data.cs01CadFirm = dto.data.cs01CadFirm + eachPortfolioBlock.cs01Cad;
+      dto.data.cs01LocalFirm = dto.data.cs01LocalFirm + eachPortfolioBlock.cs01Local;
     });
     dto.data.positionFirmInMM = this.utility.parsePositionToMM(dto.data.positionFirm, false);
     dto.data.positionHFInMM = this.utility.parsePositionToMM(dto.data.positionHF, false);
     dto.data.positionNLFInMM = this.utility.parsePositionToMM(dto.data.positionNLF, false);
-    dto.data.cs01FirmCadInK = this.utility.parseNumberToThousands(dto.data.cs01FirmCad, false);
-    dto.data.cs01FirmLocalInK = this.utility.parseNumberToThousands(dto.data.cs01FirmLocal, false);
+    dto.data.cs01CadFirmInK = this.utility.parseNumberToThousands(dto.data.cs01CadFirm, false);
+    dto.data.cs01LocalFirmInK = this.utility.parseNumberToThousands(dto.data.cs01LocalFirm, false);
   }
 
   public formSecurityGroupObject(
