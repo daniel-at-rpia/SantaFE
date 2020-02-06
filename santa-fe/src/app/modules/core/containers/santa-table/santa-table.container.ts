@@ -46,7 +46,7 @@
     import { SantaTableSecurityCell } from 'Core/components/santa-table-security-cell/santa-table-security-cell.component';
     import { SantaTableQuoteCell } from 'Core/components/santa-table-quote-cell/santa-table-quote-cell.component';
     import { SantaTableDetailAllQuotes } from 'Core/containers/santa-table-detail-all-quotes/santa-table-detail-all-quotes.container';
-    import { BEQuoteDTO } from 'BEModels/backend-models.interface';
+    import { BEAllQuoteDTO, BEQuoteDTO } from 'BEModels/backend-models.interface';
     import {
       SECURITY_TABLE_FINAL_STAGE,
       THIRTY_DAY_DELTA_METRIC_INDEX,
@@ -382,11 +382,15 @@ export class SantaTable implements OnInit, OnChanges {
       };
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAllQuotes, {req: 'POST'}, payload).pipe(
         first(),
-        tap((serverReturn) => {
+        tap((serverReturn: BEAllQuoteDTO) => {
+          // serverReturn.list.forEach((eachList) => {
+
+          // });
           for (const eachKey in serverReturn) {
             const rawQuote: BEQuoteDTO = serverReturn[eachKey];
 
             const newQuote = this.dtoService.formSecurityQuoteObject(false, rawQuote, bestBid, bestOffer, metricType);
+            newQuote.state.isCDSVariant = targetRow.state.isCDSVariant;
             if (newQuote.state.hasAsk || newQuote.state.hasBid) {
               targetRow.data.quotes.push(newQuote);
             }

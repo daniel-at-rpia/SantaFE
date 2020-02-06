@@ -178,6 +178,9 @@ $securityTableRow_expandCanvas_label_rightPadding: $spacing_small + $scroll_bar_
   &--last {
     margin-right: 0;
   }
+  &--isNonCDS {
+    display: none;
+  }
 }
 
 .sat-securityTableCell {

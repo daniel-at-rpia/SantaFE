@@ -98,6 +98,7 @@ export interface QuoteMetricBlock {
   isSizeThree: boolean;
   isSizeFour: boolean;
   sortable: boolean;
+  isNonCDS: boolean;
 }
 
 export interface QuantitativeEntryBlock {

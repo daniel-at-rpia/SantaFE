@@ -493,6 +493,18 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
+  &--cdsVariant {
+    #{$securityQuoteBlockName} {
+      &__main {
+        &-spacing--nonCDS {
+          display: none;
+        }
+        &-twoSideEntry--nonCDS {
+          display: none;
+        }
+      }
+    }
+  }
   &--stencilState {
     #{$securityQuoteBlockName} {
       &__main {

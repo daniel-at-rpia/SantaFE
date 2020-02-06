@@ -616,7 +616,8 @@ export class DTOService {
             isSizeTwo: eachQuoteMetricStub.size === 2,
             isSizeThree: eachQuoteMetricStub.size === 3,
             isSizeFour: eachQuoteMetricStub.size === 4,
-            sortable: !eachQuoteMetricStub.textOnly
+            sortable: !eachQuoteMetricStub.textOnly,
+            isNonCDS: !!eachQuoteMetricStub.isNonCDS
           };
           return metricBlock;
         }),
@@ -629,7 +630,9 @@ export class DTOService {
       state: {
         expandViewSortByQuoteMetric: null,
         isExpanded: false,
-        presentingAllQuotes: false
+        presentingAllQuotes: false,
+        isCDSVariant: this.utility.isCDS(false, securityDTO),
+        isCDSOffTheRun: false
       }
     };
     return object;
@@ -717,7 +720,8 @@ export class DTOService {
         menuActiveSide: null,
         menuActiveMetric: null,
         isBidDownVoted: false,
-        isAskDownVoted: false
+        isAskDownVoted: false,
+        isCDSVariant: false
       }
     };
     if (!isStencil) {

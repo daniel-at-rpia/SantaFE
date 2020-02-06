@@ -66,6 +66,7 @@ export interface SecurityTableQuoteMetric {
   size?: number;
   labelList: Array<string>;
   textOnly: boolean;
+  isNonCDS: boolean;
 }
 
 export interface SecurityTableMetricStub {

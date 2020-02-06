@@ -316,33 +316,41 @@ export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
   {
     labelList: ['B Time', 'A Time'],
     textOnly: true,
-    size: 2
+    size: 2,
+    isNonCDS: false
   },
   {
     labelList: ['Source'],
-    textOnly: true
+    textOnly: true,
+    isNonCDS: false
   },{
     labelList: ['Dealer'],
-    textOnly: true
+    textOnly: true,
+    isNonCDS: false
   },{
     labelList: ['B Px', 'A Px'],
     size: 3,
-    textOnly: true
+    textOnly: true,
+    isNonCDS: true
   },{
     labelList: ['B YTW', 'A YTW'],
     size: 2,
-    textOnly: true
+    textOnly: true,
+    isNonCDS: true
   },{
     labelList: ['B Sprd', 'A Sprd'],
     size: 2,
-    textOnly: true
+    textOnly: true,
+    isNonCDS: false
   },{
     labelList: ['B Size', 'A Size'],
     size: 3,
-    textOnly: true
+    textOnly: true,
+    isNonCDS: false
   },{
     labelList: ['Benchmarks'],
     size: 4,
-    textOnly: true
+    textOnly: true,
+    isNonCDS: false
   }
 ];

@@ -289,6 +289,8 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
     expandViewSortByQuoteMetric: string;
     isExpanded: boolean;
     presentingAllQuotes: boolean;
+    isCDSVariant: boolean;
+    isCDSOffTheRun: boolean;
   }
 }
 
@@ -346,6 +348,7 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
     menuActiveMetric: string;
     isBidDownVoted: boolean;
     isAskDownVoted: boolean;
+    isCDSVariant: boolean;
   }
 }
 

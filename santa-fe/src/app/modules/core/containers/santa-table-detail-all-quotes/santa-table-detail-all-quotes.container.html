@@ -17,7 +17,8 @@
             'sat-securityTableRowExpandViewLabel--sizeFour': eachQuoteMetric.isSizeFour,
             'sat-securityTableRowExpandViewLabel--textOnly': !eachQuoteMetric.sortable,
             'sat-securityTableRowExpandViewLabel--first': metricIndex === 0,
-            'sat-securityTableRowExpandViewLabel--last': metricIndex === rowData.data.quoteHeaders.length - 1
+            'sat-securityTableRowExpandViewLabel--last': metricIndex === rowData.data.quoteHeaders.length - 1,
+            'sat-securityTableRowExpandViewLabel--isNonCDS': eachQuoteMetric.isNonCDS
           }">
           <section *ngFor="let eachLabel of eachQuoteMetric.displayLabelList" class="sat-securityTableRowExpandViewLabel__content">
             <button
