@@ -160,127 +160,127 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
     ],
     isMajor: true
   },{
-    displayTitle: 'Owned by Arnav',
+    displayTitle: 'Primary = Brian',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
-        groupByActive: false,
-        selectedOptions: ['AG']
-      }
-    ]
-  },{
-    displayTitle: 'Owned by Brian',
-    includedDefinitions: [
-      {
-        definitionKey: 'OWNER',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['BT']
       }
     ]
   },{
-    displayTitle: 'Owned by Daanish',
+    displayTitle: 'Primary = Daanish',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['DA']
       }
     ]
   },{
-    displayTitle: 'Owned by Derrick',
+    displayTitle: 'Primary = Derrick',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['DJ']
       }
     ]
   },{
-    displayTitle: 'Owned by David',
+    displayTitle: 'Primary = David',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['DM']
       }
     ]
   },{
-    displayTitle: 'Owned by Lorne',
+    displayTitle: 'Primary = Ilias',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
-        groupByActive: false,
-        selectedOptions: ['LC']
-      }
-    ]
-  },{
-    displayTitle: 'Owned by Louise',
-    includedDefinitions: [
-      {
-        definitionKey: 'OWNER',
-        groupByActive: false,
-        selectedOptions: ['LP']
-      }
-    ]
-  },{
-    displayTitle: 'Owned by Ilias',
-    includedDefinitions: [
-      {
-        definitionKey: 'OWNER',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['IL']
       }
     ]
   },{
-    displayTitle: 'Owned by Phillip',
+    displayTitle: 'Primary = Peter',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
-        groupByActive: false,
-        selectedOptions: ['PD']
-      }
-    ]
-  },{
-    displayTitle: 'Owned by Peter',
-    includedDefinitions: [
-      {
-        definitionKey: 'OWNER',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['PM']
       }
     ]
   },{
-    displayTitle: 'Owned by Rory',
+    displayTitle: 'Primary = Rory',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['RS']
       }
     ]
   },{
-    displayTitle: 'Owned by Sarah',
+    displayTitle: 'Primary = Sarah',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['SP']
       }
     ]
   },{
-    displayTitle: 'Owned by Stephen',
+    displayTitle: 'Primary = Stephen',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['ST']
       }
     ]
   },{
-    displayTitle: 'Owned by Tony',
+    displayTitle: 'Covered by Arnav',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
+        definitionKey: 'RESEARCH',
+        groupByActive: false,
+        selectedOptions: ['AG']
+      }
+    ]
+  },{
+    displayTitle: 'Covered by Lorne',
+    includedDefinitions: [
+      {
+        definitionKey: 'RESEARCH',
+        groupByActive: false,
+        selectedOptions: ['LC']
+      }
+    ]
+  },{
+    displayTitle: 'Covered by Louise',
+    includedDefinitions: [
+      {
+        definitionKey: 'RESEARCH',
+        groupByActive: false,
+        selectedOptions: ['LP']
+      }
+    ]
+  },{
+    displayTitle: 'Covered by Phillip',
+    includedDefinitions: [
+      {
+        definitionKey: 'RESEARCH',
+        groupByActive: false,
+        selectedOptions: ['PD']
+      }
+    ]
+  },{
+    displayTitle: 'Covered by Tony',
+    includedDefinitions: [
+      {
+        definitionKey: 'RESEARCH',
         groupByActive: false,
         selectedOptions: ['TW']
       }
