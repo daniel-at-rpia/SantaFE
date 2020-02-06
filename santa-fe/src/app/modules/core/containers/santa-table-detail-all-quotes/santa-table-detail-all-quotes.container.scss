@@ -37,6 +37,18 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
       display: flex;
       flex-direction: column;
       width: fit-content;
+      &-targetSecurity {
+        display: none;
+        justify-content: flex-start;
+        margin-left: $spacing_small;
+        margin-bottom: $spacing_small;
+        &-text {
+          @include mix_border_radius(5px);
+          @include mix_border_generator;
+          padding: $spacing_x_small $spacing_small;
+          color: $font_color_inverse;
+        }
+      }
       &-label {
         display: flex;
         width: $santaTableDetailAllQuotes_width;
@@ -110,6 +122,9 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
   &--securityIsOffTheRunCDSState {
     #{$santaTableDetailAllQuotesBlockName} {
       &__main-content {
+        &-targetSecurity {
+          display: flex;
+        }
         &--secondary {
           display: flex;
         }

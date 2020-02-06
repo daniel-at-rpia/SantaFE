@@ -79,13 +79,13 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
 
   public onClickedSpecificPrimaryQuote(params: ClickedSpecificQuoteEmitterParams) {
     if (!!params) {
-      this.updateQuoteUponClick(params, this.rowData.data.primaryPresentQuotes);
+      this.updateQuoteUponClick(params, this.rowData.data.quotes.primaryPresentQuotes);
     }
   }
 
   public onClickedSpecificSecondaryQuote(params: ClickedSpecificQuoteEmitterParams) {
     if (!!params) {
-      this.updateQuoteUponClick(params, this.rowData.data.secondaryPresentQuotes);
+      this.updateQuoteUponClick(params, this.rowData.data.quotes.secondaryPresentQuotes);
     }
   }
 
@@ -136,8 +136,8 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   }
 
   public onClickShowMoreQuotes() {
-    this.rowData.data.primaryPresentQuotes = this.utilityService.deepCopy(this.rowData.data.primaryQuotes);
-    this.rowData.data.secondaryPresentQuotes = this.utilityService.deepCopy(this.rowData.data.secondaryPresentQuotes);
+    this.rowData.data.quotes.primaryPresentQuotes = this.utilityService.deepCopy(this.rowData.data.quotes.primaryQuotes);
+    this.rowData.data.quotes.secondaryPresentQuotes = this.utilityService.deepCopy(this.rowData.data.quotes.secondaryPresentQuotes);
     this.rowData.state.presentingAllQuotes = true;
   }
 

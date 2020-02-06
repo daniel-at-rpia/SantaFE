@@ -1,13 +1,16 @@
 <article
   [ngClass]="{
     'santaTableDetailAllQuotes': true,
-    'santaTableDetailAllQuotes--showMoreQuoteCta': ((rowData.data.primaryQuotes.length > 0 && rowData.data.primaryQuotes.length < rowData.data.primaryPresentQuotes.length) || (rowData.data.secondaryQuotes.length > 0 && rowData.data.secondaryPresentQuotes.length < rowData.data.secondaryQuotes.length)) && !rowData.state.presentingAllQuotes,
+    'santaTableDetailAllQuotes--showMoreQuoteCta': ((rowData.data.quotes.primaryQuotes.length > 0 && rowData.data.quotes.primaryQuotes.length < rowData.data.quotes.primaryPresentQuotes.length) || (rowData.data.quotes.secondaryQuotes.length > 0 && rowData.data.quotes.secondaryPresentQuotes.length < rowData.data.quotes.secondaryQuotes.length)) && !rowData.state.presentingAllQuotes,
     'santaTableDetailAllQuotes--securityIsCDSState': rowData.state.isCDSVariant,
     'santaTableDetailAllQuotes--securityIsOffTheRunCDSState': rowData.state.isCDSVariant && rowData.state.isCDSOffTheRun
   }">
   <section (click)="onClickClose()" class="santaTableDetailAllQuotes__backgroundCTA"></section>
   <section class="santaTableDetailAllQuotes__main">
     <div class="santaTableDetailAllQuotes__main-content">
+      <section class="santaTableDetailAllQuotes__main-content-targetSecurity">
+        <span class="santaTableDetailAllQuotes__main-content-targetSecurity-text">{{rowData.data.quotes.primarySecurityName}}</span>
+      </section>
       <section class="santaTableDetailAllQuotes__main-content-label">
         <article
           *ngFor="let eachQuoteMetric of rowData.data.quoteHeaders; let metricIndex = index;"
@@ -40,7 +43,7 @@
       </section>
       <ul class="santaTableDetailAllQuotes__main-content-messageList">
         <security-quote
-          *ngFor="let eachMessage of rowData.data.primaryPresentQuotes"
+          *ngFor="let eachMessage of rowData.data.quotes.primaryPresentQuotes"
           [messageData]="eachMessage"
           (clickedSpecificQuote)="onClickedSpecificPrimaryQuote($event)"
           (clickedDownVote)="onClickDownVote($event)"
@@ -49,6 +52,9 @@
       </ul>
     </div>
     <div class="santaTableDetailAllQuotes__main-content santaTableDetailAllQuotes__main-content--secondary">
+      <section class="santaTableDetailAllQuotes__main-content-targetSecurity">
+        <span class="santaTableDetailAllQuotes__main-content-targetSecurity-text">{{rowData.data.quotes.secondarySecurityName}}</span>
+      </section>
       <section class="santaTableDetailAllQuotes__main-content-label">
         <article
           *ngFor="let eachQuoteMetric of rowData.data.quoteHeaders; let metricIndex = index;"
@@ -81,7 +87,7 @@
       </section>
       <ul class="santaTableDetailAllQuotes__main-content-messageList">
         <security-quote
-          *ngFor="let eachMessage of rowData.data.secondaryPresentQuotes"
+          *ngFor="let eachMessage of rowData.data.quotes.secondaryPresentQuotes"
           [messageData]="eachMessage"
           (clickedSpecificQuote)="onClickedSpecificSecondaryQuote($event)"
           (clickedDownVote)="onClickDownVote($event)"
@@ -101,7 +107,7 @@
     </button>
     <button (click)="onClickShowMoreQuotes()" class="santaTableDetailAllQuotes__ctas-moreQuoteCta santaBtn--labelled">
       <i class="fal fa-cloud-download"></i>
-      <span>Show All Quotes ({{rowData.data.primaryQuotes.length - rowData.data.primaryPresentQuotes.length + rowData.data.secondaryQuotes.length - rowData.data.secondaryPresentQuotes.length}} More)</span>
+      <span>Show All Quotes ({{rowData.data.quotes.primaryQuotes.length - rowData.data.quotes.primaryPresentQuotes.length + rowData.data.quotes.secondaryQuotes.length - rowData.data.quotes.secondaryPresentQuotes.length}} More)</span>
     </button>
   </section>
 </article>

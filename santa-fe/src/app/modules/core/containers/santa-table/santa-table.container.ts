@@ -58,7 +58,8 @@
       AGGRID_DETAIL_ROW_HEIGHT_PER_ROW,
       AGGRID_DETAIL_ROW_HEIGHT_OFFSET,
       AGGRID_DETAIL_ROW_HEIGHT_DEFAULT,
-      AGGRID_DETAIL_ROW_DEFAULT_COUNT
+      AGGRID_DETAIL_ROW_DEFAULT_COUNT,
+      AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS
     } from 'Core/constants/securityTableConstants.constant';
     import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
     import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-filter/santa-table-numeric-filter.component';
@@ -128,7 +129,8 @@ export class SantaTable implements OnInit, OnChanges {
     agGridDetailRowHeightPerRow: AGGRID_DETAIL_ROW_HEIGHT_PER_ROW,
     agGridDetailRowHeightOffset: AGGRID_DETAIL_ROW_HEIGHT_OFFSET,
     agGridDetailRowHeightDefault: AGGRID_DETAIL_ROW_HEIGHT_DEFAULT,
-    agGridDetailRowDefaultCount: AGGRID_DETAIL_ROW_DEFAULT_COUNT
+    agGridDetailRowDefaultCount: AGGRID_DETAIL_ROW_DEFAULT_COUNT,
+    agGridDetailRowHeightOffsetOffTheRunCDS: AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS
   }
 
   constructor(
@@ -377,8 +379,7 @@ export class SantaTable implements OnInit, OnChanges {
         metricType = '';
       }
       
-      targetRow.data.primaryQuotes = [];
-      targetRow.data.secondaryQuotes = [];
+      targetRow.data.quotes = this.dtoService.formSecurityTableRowObject(targetRow.data.security).data.quotes;
       const payload: PayloadGetAllQuotes = {
         "identifier": targetRow.data.security.data.securityID
       };
@@ -593,26 +594,43 @@ export class SantaTable implements OnInit, OnChanges {
     params: any  // this is a AgGridRowParams, can't enforce type checking here because agGrid's native function redrawRows() would throw an compliation error
   ) {
     const primaryList = serverReturn[0];
-    const secondaryList = serverReturn[1];
     targetRow.state.isCDSOffTheRun = serverReturn.length > 1;
     primaryList.forEach((eachRawQuote) => {
       const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, bestBid, bestOffer, metricType);
       newQuote.state.isCDSVariant = targetRow.state.isCDSVariant;
       if (newQuote.state.hasAsk || newQuote.state.hasBid) {
-        targetRow.data.primaryQuotes.push(newQuote);
+        targetRow.data.quotes.primaryQuotes.push(newQuote);
       }
     });
-    this.performChronologicalSortOnQuotes(targetRow.data.primaryQuotes);
-    this.performChronologicalSortOnQuotes(targetRow.data.secondaryQuotes);
-    targetRow.data.primaryPresentQuotes = this.utilityService.deepCopy(targetRow.data.primaryQuotes);
-    targetRow.data.secondaryPresentQuotes = this.utilityService.deepCopy(targetRow.data.secondaryQuotes);
+    if (targetRow.state.isCDSOffTheRun) {
+      const secondaryList = serverReturn[1];
+      secondaryList.forEach((eachRawQuote) => {
+        const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, bestBid, bestOffer, metricType);
+        newQuote.state.isCDSVariant = targetRow.state.isCDSVariant;
+        if (newQuote.state.hasAsk || newQuote.state.hasBid) {
+          targetRow.data.quotes.secondaryQuotes.push(newQuote);
+        }
+      });
+      targetRow.data.quotes.primarySecurityName = primaryList.length > 0 ? primaryList[0].name : '';
+      targetRow.data.quotes.secondarySecurityName = secondaryList.length > 0 ? secondaryList[0].name : '';
+    }
+    this.performChronologicalSortOnQuotes(targetRow.data.quotes.primaryQuotes);
+    this.performChronologicalSortOnQuotes(targetRow.data.quotes.secondaryQuotes);
+    targetRow.data.quotes.primaryPresentQuotes = this.utilityService.deepCopy(targetRow.data.quotes.primaryQuotes);
+    targetRow.data.quotes.secondaryPresentQuotes = this.utilityService.deepCopy(targetRow.data.quotes.secondaryQuotes);
     if (!targetRow.state.presentingAllQuotes) {
-      targetRow.data.primaryPresentQuotes = targetRow.data.primaryPresentQuotes.slice(0, this.constants.agGridDetailRowDefaultCount);
-      targetRow.data.secondaryPresentQuotes = targetRow.data.secondaryPresentQuotes.slice(0, this.constants.agGridDetailRowDefaultCount);
+      targetRow.data.quotes.primaryPresentQuotes = targetRow.data.quotes.primaryPresentQuotes.slice(0, this.constants.agGridDetailRowDefaultCount);
+      targetRow.data.quotes.secondaryPresentQuotes = targetRow.data.quotes.secondaryPresentQuotes.slice(0, this.constants.agGridDetailRowDefaultCount);
     }
     this.agGridMiddleLayerService.updateAgGridRows(this.tableData, [targetRow]);
     if (!!params && !!params.node && !!params.node.detailNode) {
-      let dynamicHeight = this.constants.agGridDetailRowHeightOffset + targetRow.data.primaryPresentQuotes.length * this.constants.agGridDetailRowHeightPerRow;
+      const longestList = targetRow.data.quotes.primaryQuotes.length < targetRow.data.quotes.secondaryQuotes.length ? targetRow.data.quotes.secondaryQuotes : targetRow.data.quotes.primaryQuotes;
+      let dynamicHeight = longestList.length * this.constants.agGridDetailRowHeightPerRow;
+      if (targetRow.state.isCDSOffTheRun) {
+        dynamicHeight = dynamicHeight + this.constants.agGridDetailRowHeightOffsetOffTheRunCDS;
+      } else {
+        dynamicHeight = dynamicHeight + this.constants.agGridDetailRowHeightOffset;
+      }
       if (dynamicHeight > this.constants.agGridDetailRowHeightMax) {
         dynamicHeight = this.constants.agGridDetailRowHeightMax;
       }

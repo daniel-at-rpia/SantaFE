@@ -9,7 +9,8 @@ import {
   QuantitativeEntryBlock,
   QuantitativeEntryStyleBlock,
   AgGridColumnDefinition,
-  AgGridRow
+  AgGridRow,
+  SecurityTableRowQuoteBlock
 } from 'FEModels/frontend-blocks.interface';
 import { SantaTableNumericFloatingFilterParams } from 'FEModels/frontend-adhoc-packages.interface';
 import * as agGrid from 'ag-grid-community';
@@ -280,10 +281,7 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
   data: {
     security: SecurityDTO;
     cells: Array<SecurityTableCellDTO>;
-    primaryPresentQuotes: Array<SecurityQuoteDTO>;
-    primaryQuotes: Array<SecurityQuoteDTO>;
-    secondaryPresentQuotes: Array<SecurityQuoteDTO>;
-    secondaryQuotes: Array<SecurityQuoteDTO>;
+    quotes: SecurityTableRowQuoteBlock;
     quoteHeaders: Array<QuoteMetricBlock>;
     bestQuotes: {
       bestSpreadQuote: QuantComparerDTO;
