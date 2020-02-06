@@ -185,8 +185,10 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       const filter = [];
       filter.push(this.ownerInitial);
       this.constants.ownershipShortcuts[0].includedDefinitions[0].selectedOptions = filter;
-      this.populateSearchShortcuts();
+    } else {
+      this.constants.ownershipShortcuts.splice(0, 1);
     }
+    this.populateSearchShortcuts();
   }
 
   public ngOnDestroy() {
