@@ -280,8 +280,10 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
   data: {
     security: SecurityDTO;
     cells: Array<SecurityTableCellDTO>;
-    presentQuotes: Array<SecurityQuoteDTO>;
-    quotes: Array<SecurityQuoteDTO>;
+    primaryPresentQuotes: Array<SecurityQuoteDTO>;
+    primaryQuotes: Array<SecurityQuoteDTO>;
+    secondaryPresentQuotes: Array<SecurityQuoteDTO>;
+    secondaryQuotes: Array<SecurityQuoteDTO>;
     quoteHeaders: Array<QuoteMetricBlock>;
     bestQuotes: {
       bestSpreadQuote: QuantComparerDTO;

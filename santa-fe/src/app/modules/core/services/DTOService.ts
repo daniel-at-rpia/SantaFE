@@ -612,8 +612,10 @@ export class DTOService {
       data: {
         security: securityDTO,
         cells: [],
-        presentQuotes: [],
-        quotes: [],
+        primaryPresentQuotes: [],
+        primaryQuotes: [],
+        secondaryPresentQuotes: [],
+        secondaryQuotes: [],
         quoteHeaders: QuoteMetricList.map((eachQuoteMetricStub) => {
           const metricBlock: Blocks.QuoteMetricBlock = {
             displayLabelList: eachQuoteMetricStub.labelList,

@@ -365,6 +365,6 @@ export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
     labelList: ['Benchmarks'],
     size: 4,
     textOnly: true,
-    isNonCDS: false
+    isNonCDS: true
   }
 ];

@@ -208,14 +208,6 @@ export interface BESingleBestQuoteDTO {
   totalSkew: number;
 }
 
-export interface BEAllQuoteDTO {
-  list: Array<BEAllQuoteListBlock>;
-}
-
-interface BEAllQuoteListBlock {
-  list: Array<BEQuoteDTO>;
-}
-
 export interface BEQuoteDTO {
   dealer: string; // JEFF,
   quoteType: string; //Run,

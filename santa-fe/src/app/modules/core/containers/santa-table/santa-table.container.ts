@@ -33,7 +33,8 @@
       SecurityDTO,
       SecurityTableDTO,
       SecurityTableRowDTO,
-      SecurityTableHeaderDTO
+      SecurityTableHeaderDTO,
+      SecurityQuoteDTO
     } from 'FEModels/frontend-models.interface';
     import {
       QuoteMetricBlock,
@@ -46,7 +47,7 @@
     import { SantaTableSecurityCell } from 'Core/components/santa-table-security-cell/santa-table-security-cell.component';
     import { SantaTableQuoteCell } from 'Core/components/santa-table-quote-cell/santa-table-quote-cell.component';
     import { SantaTableDetailAllQuotes } from 'Core/containers/santa-table-detail-all-quotes/santa-table-detail-all-quotes.container';
-    import { BEAllQuoteDTO, BEQuoteDTO } from 'BEModels/backend-models.interface';
+    import { BEQuoteDTO } from 'BEModels/backend-models.interface';
     import {
       SECURITY_TABLE_FINAL_STAGE,
       THIRTY_DAY_DELTA_METRIC_INDEX,
@@ -376,41 +377,23 @@ export class SantaTable implements OnInit, OnChanges {
         metricType = '';
       }
       
-      targetRow.data.quotes = [];
+      targetRow.data.primaryQuotes = [];
+      targetRow.data.secondaryQuotes = [];
       const payload: PayloadGetAllQuotes = {
         "identifier": targetRow.data.security.data.securityID
       };
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAllQuotes, {req: 'POST'}, payload).pipe(
         first(),
-        tap((serverReturn: BEAllQuoteDTO) => {
-          // serverReturn.list.forEach((eachList) => {
-
-          // });
-          for (const eachKey in serverReturn) {
-            const rawQuote: BEQuoteDTO = serverReturn[eachKey];
-
-            const newQuote = this.dtoService.formSecurityQuoteObject(false, rawQuote, bestBid, bestOffer, metricType);
-            newQuote.state.isCDSVariant = targetRow.state.isCDSVariant;
-            if (newQuote.state.hasAsk || newQuote.state.hasBid) {
-              targetRow.data.quotes.push(newQuote);
-            }
-          }
-          targetRow.data.presentQuotes = this.utilityService.deepCopy(targetRow.data.quotes);
-          if (!targetRow.state.presentingAllQuotes) {
-            targetRow.data.presentQuotes = targetRow.data.presentQuotes.slice(0, this.constants.agGridDetailRowDefaultCount);
-          }
-          this.performChronologicalSortOnQuotes(targetRow);
-          this.agGridMiddleLayerService.updateAgGridRows(this.tableData, [targetRow]);
-          if (!!params && !!params.node && !!params.node.detailNode) {
-            let dynamicHeight = this.constants.agGridDetailRowHeightOffset + targetRow.data.presentQuotes.length * this.constants.agGridDetailRowHeightPerRow;
-            if (dynamicHeight > this.constants.agGridDetailRowHeightMax) {
-              dynamicHeight = this.constants.agGridDetailRowHeightMax;
-            }
-            params.node.detailNode.rowHeight = dynamicHeight;
-            params.api.resetRowHeights();
-            params.api.redrawRows({
-              rowNodes: [params.node, params.node['detailNode']]
-            });
+        tap((serverReturn: Array<Array<BEQuoteDTO>>) => {
+          if (!!serverReturn) {
+            this.loadQuotes(
+              targetRow,
+              serverReturn,
+              bestBid,
+              bestOffer,
+              metricType,
+              params
+            );
           }
         }),
         catchError(err => {
@@ -505,8 +488,8 @@ export class SantaTable implements OnInit, OnChanges {
     })
   }
 
-  private performChronologicalSortOnQuotes(targetRow: SecurityTableRowDTO) {
-    targetRow.data.quotes.sort((quoteA, quoteB) => {
+  private performChronologicalSortOnQuotes(targetQuoteList: Array<SecurityQuoteDTO>) {
+    targetQuoteList.sort((quoteA, quoteB) => {
       if (quoteA.data.unixTimestamp < quoteB.data.unixTimestamp) {
         return 1;
       } else if (quoteA.data.unixTimestamp > quoteB.data.unixTimestamp) {
@@ -598,6 +581,46 @@ export class SantaTable implements OnInit, OnChanges {
     })
     if (!!targetRow) {
       this.agGridMiddleLayerService.updateAgGridRows(this.tableData, [targetRow]);
+    }
+  }
+
+  private loadQuotes(
+    targetRow: SecurityTableRowDTO,
+    serverReturn: Array<Array<BEQuoteDTO>>,
+    bestBid: number,
+    bestOffer: number,
+    metricType: string,
+    params: any  // this is a AgGridRowParams, can't enforce type checking here because agGrid's native function redrawRows() would throw an compliation error
+  ) {
+    const primaryList = serverReturn[0];
+    const secondaryList = serverReturn[1];
+    targetRow.state.isCDSOffTheRun = serverReturn.length > 1;
+    primaryList.forEach((eachRawQuote) => {
+      const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, bestBid, bestOffer, metricType);
+      newQuote.state.isCDSVariant = targetRow.state.isCDSVariant;
+      if (newQuote.state.hasAsk || newQuote.state.hasBid) {
+        targetRow.data.primaryQuotes.push(newQuote);
+      }
+    });
+    this.performChronologicalSortOnQuotes(targetRow.data.primaryQuotes);
+    this.performChronologicalSortOnQuotes(targetRow.data.secondaryQuotes);
+    targetRow.data.primaryPresentQuotes = this.utilityService.deepCopy(targetRow.data.primaryQuotes);
+    targetRow.data.secondaryPresentQuotes = this.utilityService.deepCopy(targetRow.data.secondaryQuotes);
+    if (!targetRow.state.presentingAllQuotes) {
+      targetRow.data.primaryPresentQuotes = targetRow.data.primaryPresentQuotes.slice(0, this.constants.agGridDetailRowDefaultCount);
+      targetRow.data.secondaryPresentQuotes = targetRow.data.secondaryPresentQuotes.slice(0, this.constants.agGridDetailRowDefaultCount);
+    }
+    this.agGridMiddleLayerService.updateAgGridRows(this.tableData, [targetRow]);
+    if (!!params && !!params.node && !!params.node.detailNode) {
+      let dynamicHeight = this.constants.agGridDetailRowHeightOffset + targetRow.data.primaryPresentQuotes.length * this.constants.agGridDetailRowHeightPerRow;
+      if (dynamicHeight > this.constants.agGridDetailRowHeightMax) {
+        dynamicHeight = this.constants.agGridDetailRowHeightMax;
+      }
+      params.node.detailNode.rowHeight = dynamicHeight;
+      params.api.resetRowHeights();
+      params.api.redrawRows({
+        rowNodes: [params.node, params.node['detailNode']]
+      });
     }
   }
 }

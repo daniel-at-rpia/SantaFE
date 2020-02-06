@@ -179,7 +179,7 @@ $securityTableRow_expandCanvas_label_rightPadding: $spacing_small + $scroll_bar_
     margin-right: 0;
   }
   &--isNonCDS {
-    display: none;
+    // conditional styling is done in santa-table-detail-all-quotes.container.scss
   }
 }
 
