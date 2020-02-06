@@ -160,6 +160,15 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
     ],
     isMajor: true
   },{
+    displayTitle: 'Covered by Arnav',
+    includedDefinitions: [
+      {
+        definitionKey: 'RESEARCH',
+        groupByActive: false,
+        selectedOptions: ['AG']
+      }
+    ]
+  },{
     displayTitle: 'Primary = Brian',
     includedDefinitions: [
       {
@@ -196,12 +205,39 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
       }
     ]
   },{
+    displayTitle: 'Covered by Lorne',
+    includedDefinitions: [
+      {
+        definitionKey: 'RESEARCH',
+        groupByActive: false,
+        selectedOptions: ['LC']
+      }
+    ]
+  },{
+    displayTitle: 'Covered by Louise',
+    includedDefinitions: [
+      {
+        definitionKey: 'RESEARCH',
+        groupByActive: false,
+        selectedOptions: ['LP']
+      }
+    ]
+  },{
     displayTitle: 'Primary = Ilias',
     includedDefinitions: [
       {
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['IL']
+      }
+    ]
+  },{
+    displayTitle: 'Covered by Phillip',
+    includedDefinitions: [
+      {
+        definitionKey: 'RESEARCH',
+        groupByActive: false,
+        selectedOptions: ['PD']
       }
     ]
   },{
@@ -238,42 +274,6 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['ST']
-      }
-    ]
-  },{
-    displayTitle: 'Covered by Arnav',
-    includedDefinitions: [
-      {
-        definitionKey: 'RESEARCH',
-        groupByActive: false,
-        selectedOptions: ['AG']
-      }
-    ]
-  },{
-    displayTitle: 'Covered by Lorne',
-    includedDefinitions: [
-      {
-        definitionKey: 'RESEARCH',
-        groupByActive: false,
-        selectedOptions: ['LC']
-      }
-    ]
-  },{
-    displayTitle: 'Covered by Louise',
-    includedDefinitions: [
-      {
-        definitionKey: 'RESEARCH',
-        groupByActive: false,
-        selectedOptions: ['LP']
-      }
-    ]
-  },{
-    displayTitle: 'Covered by Phillip',
-    includedDefinitions: [
-      {
-        definitionKey: 'RESEARCH',
-        groupByActive: false,
-        selectedOptions: ['PD']
       }
     ]
   },{
