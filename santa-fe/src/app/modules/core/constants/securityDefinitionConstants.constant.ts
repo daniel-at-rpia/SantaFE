@@ -378,14 +378,14 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
   },
   PRIMARY_PORTFOLIO_MANAGER: {
     key: 'PRIMARY_PORTFOLIO_MANAGER',
-    displayName: 'Primary PM',
+    displayName: 'Primary',
     icon: 'fas fa-user-tie',
     optionList: FilterOptionsPortfolioManagerList,
     securityDTOAttr: 'primaryPmName'
   },
   BACKUP_PORTFOLIO_MANAGER: {
     key: 'BACKUP_PORTFOLIO_MANAGER',
-    displayName: 'Backup PM',
+    displayName: 'Backup',
     icon: 'fal fa-user-tie',
     optionList: FilterOptionsPortfolioManagerList,
     securityDTOAttr: 'backupPmName'
@@ -393,7 +393,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
   RESEARCH: {
     key: 'RESEARCH',
     displayName: 'Research',
-    icon: 'fal fa-user-chart',
+    icon: 'fas fa-user-chart',
     optionList: FilterOptionsPortfolioResearchList,
     securityDTOAttr: 'researchName'
   },

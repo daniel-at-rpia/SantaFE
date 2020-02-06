@@ -7,8 +7,8 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
 @Injectable()
 export class RestfulCommService {
 
-  // private endpoint = 'https://rpiadev01.rpia.ca:1225';
-  private endpoint = 'https://rpia-quant-dt.ad.rpia:51225';
+  private endpoint = 'https://rpiadev01.rpia.ca:1225';
+  // private endpoint = 'https://rpia-quant-dt:51225';
   // private endpoint = 'https://localhost:51225';
   //private endpoint = 'https://rpia-solutions:51225';
   //private endpoint = 'https://rpia-msmith-dt:51225';

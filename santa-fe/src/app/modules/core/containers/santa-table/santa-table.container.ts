@@ -120,7 +120,7 @@ export class SantaTable implements OnInit, OnChanges {
     agGridRowClassRules: {
       'santaTable__agGridTable-agGrid-row': "true",
       'santaTable__agGridTable-agGrid-row--cardSelected': function (params: AgGridRowParams) {
-        return params.data.securityCard && params.data.securityCard.state.isSelected;
+        return !!params && !!params.data && params.data.securityCard && params.data.securityCard.state.isSelected;
       }
     },
     agGridDetailRowHeightMax: AGGRID_DETAIL_ROW_HEIGHT_MAX,
@@ -188,7 +188,7 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   public onRowClicked(params: AgGridRowParams) {
-    if (!!params && !!params.data.securityCard) {
+    if (!!params && !!params.data && !!params.data.securityCard) {
       // this if checks whether the user is clicking on the entire row, or clicking on the security card
       const targetCard = params.data.securityCard;
       const storedSelectedCard = this.tableData.state.selectedSecurityCard;
@@ -249,6 +249,8 @@ export class SantaTable implements OnInit, OnChanges {
         }
         params.node.setData(params.data);  // need this to trigger a refresh so the row can adopt new classname from the agGridRowClassRules
       }
+    } else if (!!params && !!params.node && !!params.node.group){
+      params.node.setExpanded(!params.node.expanded);
     } else {
       console.warn('AgGrid data issue, if you see this call Daniel');
     }

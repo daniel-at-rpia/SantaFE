@@ -160,127 +160,127 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
     ],
     isMajor: true
   },{
-    displayTitle: 'Owned by Arnav',
+    displayTitle: 'Arnav',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
+        definitionKey: 'RESEARCH',
         groupByActive: false,
         selectedOptions: ['AG']
       }
     ]
   },{
-    displayTitle: 'Owned by Brian',
+    displayTitle: 'Brian',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['BT']
       }
     ]
   },{
-    displayTitle: 'Owned by Daanish',
+    displayTitle: 'Daanish',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['DA']
       }
     ]
   },{
-    displayTitle: 'Owned by Derrick',
+    displayTitle: 'Derrick',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['DJ']
       }
     ]
   },{
-    displayTitle: 'Owned by David',
+    displayTitle: 'David',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['DM']
       }
     ]
   },{
-    displayTitle: 'Owned by Lorne',
+    displayTitle: 'Lorne',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
+        definitionKey: 'RESEARCH',
         groupByActive: false,
         selectedOptions: ['LC']
       }
     ]
   },{
-    displayTitle: 'Owned by Louise',
+    displayTitle: 'Louise',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
+        definitionKey: 'RESEARCH',
         groupByActive: false,
         selectedOptions: ['LP']
       }
     ]
   },{
-    displayTitle: 'Owned by Ilias',
+    displayTitle: 'Ilias',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['IL']
       }
     ]
   },{
-    displayTitle: 'Owned by Phillip',
+    displayTitle: 'Phillip',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
+        definitionKey: 'RESEARCH',
         groupByActive: false,
         selectedOptions: ['PD']
       }
     ]
   },{
-    displayTitle: 'Owned by Peter',
+    displayTitle: 'Peter',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['PM']
       }
     ]
   },{
-    displayTitle: 'Owned by Rory',
+    displayTitle: 'Rory',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['RS']
       }
     ]
   },{
-    displayTitle: 'Owned by Sarah',
+    displayTitle: 'Sarah',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['SP']
       }
     ]
   },{
-    displayTitle: 'Owned by Stephen',
+    displayTitle: 'Stephen',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['ST']
       }
     ]
   },{
-    displayTitle: 'Owned by Tony',
+    displayTitle: 'Tony',
     includedDefinitions: [
       {
-        definitionKey: 'OWNER',
+        definitionKey: 'RESEARCH',
         groupByActive: false,
         selectedOptions: ['TW']
       }
