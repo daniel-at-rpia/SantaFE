@@ -160,7 +160,7 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
     ],
     isMajor: true
   },{
-    displayTitle: 'Covered by Arnav',
+    displayTitle: 'Arnav',
     includedDefinitions: [
       {
         definitionKey: 'RESEARCH',
@@ -169,7 +169,7 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
       }
     ]
   },{
-    displayTitle: 'Primary = Brian',
+    displayTitle: 'Brian',
     includedDefinitions: [
       {
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
@@ -178,7 +178,7 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
       }
     ]
   },{
-    displayTitle: 'Primary = Daanish',
+    displayTitle: 'Daanish',
     includedDefinitions: [
       {
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
@@ -187,7 +187,7 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
       }
     ]
   },{
-    displayTitle: 'Primary = Derrick',
+    displayTitle: 'Derrick',
     includedDefinitions: [
       {
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
@@ -196,7 +196,7 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
       }
     ]
   },{
-    displayTitle: 'Primary = David',
+    displayTitle: 'David',
     includedDefinitions: [
       {
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
@@ -205,7 +205,7 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
       }
     ]
   },{
-    displayTitle: 'Covered by Lorne',
+    displayTitle: 'Lorne',
     includedDefinitions: [
       {
         definitionKey: 'RESEARCH',
@@ -214,7 +214,7 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
       }
     ]
   },{
-    displayTitle: 'Covered by Louise',
+    displayTitle: 'Louise',
     includedDefinitions: [
       {
         definitionKey: 'RESEARCH',
@@ -223,7 +223,7 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
       }
     ]
   },{
-    displayTitle: 'Primary = Ilias',
+    displayTitle: 'Ilias',
     includedDefinitions: [
       {
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
@@ -232,7 +232,7 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
       }
     ]
   },{
-    displayTitle: 'Covered by Phillip',
+    displayTitle: 'Phillip',
     includedDefinitions: [
       {
         definitionKey: 'RESEARCH',
@@ -241,7 +241,7 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
       }
     ]
   },{
-    displayTitle: 'Primary = Peter',
+    displayTitle: 'Peter',
     includedDefinitions: [
       {
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
@@ -250,7 +250,7 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
       }
     ]
   },{
-    displayTitle: 'Primary = Rory',
+    displayTitle: 'Rory',
     includedDefinitions: [
       {
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
@@ -259,7 +259,7 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
       }
     ]
   },{
-    displayTitle: 'Primary = Sarah',
+    displayTitle: 'Sarah',
     includedDefinitions: [
       {
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
@@ -268,7 +268,7 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
       }
     ]
   },{
-    displayTitle: 'Primary = Stephen',
+    displayTitle: 'Stephen',
     includedDefinitions: [
       {
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
@@ -277,7 +277,7 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
       }
     ]
   },{
-    displayTitle: 'Covered by Tony',
+    displayTitle: 'Tony',
     includedDefinitions: [
       {
         definitionKey: 'RESEARCH',

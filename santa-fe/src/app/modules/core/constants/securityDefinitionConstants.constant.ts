@@ -378,14 +378,14 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
   },
   PRIMARY_PORTFOLIO_MANAGER: {
     key: 'PRIMARY_PORTFOLIO_MANAGER',
-    displayName: 'Primary PM',
+    displayName: 'Primary',
     icon: 'fas fa-user-tie',
     optionList: FilterOptionsPortfolioManagerList,
     securityDTOAttr: 'primaryPmName'
   },
   BACKUP_PORTFOLIO_MANAGER: {
     key: 'BACKUP_PORTFOLIO_MANAGER',
-    displayName: 'Backup PM',
+    displayName: 'Backup',
     icon: 'fal fa-user-tie',
     optionList: FilterOptionsPortfolioManagerList,
     securityDTOAttr: 'backupPmName'
