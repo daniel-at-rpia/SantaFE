@@ -261,7 +261,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     isDataTypeText: true
   },{
     key: 'primaryPM',
-    label: 'Primary PM',
+    label: 'Primary',
     attrName: 'primaryPmName',
     underlineAttrName: 'primaryPmName',
     readyStage: 2,
@@ -269,7 +269,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     isDataTypeText: true
   },{
     key: 'backupPM',
-    label: 'Backup PM',
+    label: 'Backup',
     attrName: 'backupPmName',
     underlineAttrName: 'backupPmName',
     readyStage: 2,

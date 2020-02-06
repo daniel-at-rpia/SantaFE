@@ -393,7 +393,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
   RESEARCH: {
     key: 'RESEARCH',
     displayName: 'Research',
-    icon: 'fal fa-user-chart',
+    icon: 'fas fa-user-chart',
     optionList: FilterOptionsPortfolioResearchList,
     securityDTOAttr: 'researchName'
   },
