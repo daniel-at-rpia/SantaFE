@@ -96,7 +96,9 @@ export interface BESecurityDTO {
   ticker: string;
   maturityType: string;
   maturityDate: string;
+  isSovereign: boolean;
   isGovt: boolean;
+  isEm: boolean;
   isBailIn: boolean;
   isCallable: boolean;
   isPerpetual: boolean;
