@@ -3,15 +3,7 @@ export interface PayloadGetSantaGroups {
   yyyyMMdd?: number;
   groupDefinition: object;
   groupFilters: object;
-  tenorOptions: Array<string>;
-}
-
-export interface PayloadGetTargetSecurityGroup {
-  source: string;
-  yyyyMMdd?: number;
-  groupIdentifier: object;
-  groupFilters: object;
-  tenorOptions: Array<string>;
+  tenorOptions?: Array<string>;  // don't provide this means BE can use it's default
 }
 
 export interface PayloadGetGroupHistoricalSummary {
@@ -20,7 +12,7 @@ export interface PayloadGetGroupHistoricalSummary {
   groupIdentifier: {
     [property: string]: Array<string>;
   };
-  tenorOptions: Array<string>;
+  tenorOptions?: Array<string>;  // don't provide this means BE can use it's default
   deltaTypes: Array<string>;
   metricName: string;
   count: number;
