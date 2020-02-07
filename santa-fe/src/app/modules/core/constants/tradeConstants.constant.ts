@@ -373,6 +373,7 @@ export const MarketAnalysisGroupByOptions: Array<SecurityDefinitionStub> = [
   SecurityDefinitionMap.SENIORITY,
   SecurityDefinitionMap.RATING,
   SecurityDefinitionMap.SECTOR,
+  SecurityDefinitionMap.INDUSTRY,
   SecurityDefinitionMap.TENOR,
   SecurityDefinitionMap.TICKER,
   SecurityDefinitionMap.COUNTRY,
@@ -383,6 +384,7 @@ export const MarketAnalysisGroupByOpionsDefaultActiveList: Array<string> = [
   SecurityDefinitionMap.SENIORITY.key,
   SecurityDefinitionMap.RATING.key,
   SecurityDefinitionMap.SECTOR.key,
+  SecurityDefinitionMap.INDUSTRY.key,
   SecurityDefinitionMap.TENOR.key,
   SecurityDefinitionMap.COUNTRY.key
 ];
