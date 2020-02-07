@@ -31,6 +31,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     name: string;
     ticker: string;
     country: string;
+    isGovt: boolean;
     ratingLevel: number;
     ratingValue: string;
     ratingBucket: string;
@@ -61,7 +62,9 @@ export interface SecurityDTO extends BasicDTOStructure {
     metricPack: SecurityGroupMetricPackBlock;
     bestQuote: {
       bid: number;
+      displayBid: string;
       ask: number;
+      displayAsk: string;
     }
     cs01LocalFirm: number;
     cs01LocalFirmInK: string;
@@ -200,11 +203,13 @@ export interface QuantComparerDTO extends BasicDTOStructure {
     mid: number;
     bid: {
       number: number;
+      displayNumber: string;
       broker: string;
       size: number;
     },
     offer: {
       number: number;
+      displayNumber: string;
       broker: string;
       size: number;
     }

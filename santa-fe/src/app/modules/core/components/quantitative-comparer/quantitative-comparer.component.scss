@@ -253,6 +253,11 @@ $quantComparer_min_height: 2.5rem;
       &__crossing {
         display: flex;
       }
+      &__mid {
+        &-content {
+          display: none;
+        }
+      }
     }
   }
   &--crossedStateTier2 {

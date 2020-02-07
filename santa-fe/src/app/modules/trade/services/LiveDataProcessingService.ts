@@ -57,7 +57,9 @@ export class LiveDataProcessingService {
         newSecurity.state.isInteractionThumbDownDisabled = true;
         newSecurity.api.onClickSendToGraph = sendToGraphCallback;
         serverReturn[eachKey].forEach((eachPortfolio: BEPortfolioDTO) => {
-          if (!eachPortfolio.security.isGovt) {
+          // if (!eachPortfolio.security.isGovt) {
+          // disabling the check for isGovt for now
+          if(true){
             this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio, activeMetricType);
           } else {
             isValidFlag = false;
