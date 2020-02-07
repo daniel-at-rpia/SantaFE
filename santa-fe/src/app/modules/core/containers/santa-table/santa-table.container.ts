@@ -33,7 +33,8 @@
       SecurityDTO,
       SecurityTableDTO,
       SecurityTableRowDTO,
-      SecurityTableHeaderDTO
+      SecurityTableHeaderDTO,
+      SecurityQuoteDTO
     } from 'FEModels/frontend-models.interface';
     import {
       QuoteMetricBlock,
@@ -57,7 +58,8 @@
       AGGRID_DETAIL_ROW_HEIGHT_PER_ROW,
       AGGRID_DETAIL_ROW_HEIGHT_OFFSET,
       AGGRID_DETAIL_ROW_HEIGHT_DEFAULT,
-      AGGRID_DETAIL_ROW_DEFAULT_COUNT
+      AGGRID_DETAIL_ROW_DEFAULT_COUNT,
+      AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS
     } from 'Core/constants/securityTableConstants.constant';
     import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
     import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-filter/santa-table-numeric-filter.component';
@@ -127,7 +129,8 @@ export class SantaTable implements OnInit, OnChanges {
     agGridDetailRowHeightPerRow: AGGRID_DETAIL_ROW_HEIGHT_PER_ROW,
     agGridDetailRowHeightOffset: AGGRID_DETAIL_ROW_HEIGHT_OFFSET,
     agGridDetailRowHeightDefault: AGGRID_DETAIL_ROW_HEIGHT_DEFAULT,
-    agGridDetailRowDefaultCount: AGGRID_DETAIL_ROW_DEFAULT_COUNT
+    agGridDetailRowDefaultCount: AGGRID_DETAIL_ROW_DEFAULT_COUNT,
+    agGridDetailRowHeightOffsetOffTheRunCDS: AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS
   }
 
   constructor(
@@ -320,7 +323,7 @@ export class SantaTable implements OnInit, OnChanges {
   ) {
     this.tableData.data.rows = rowList;
     // doesn't need to update dynamic columns if the entire data is not loaded
-    this.receivedContentStage === this.constants.securityTableFinalStage && this.updateDynamicColumns();
+    this.receivedContentStage === this.constants.securityTableFinalStage && this.updateMetricDependentColumns();
     if (this.tableData.state.sortedByHeader) {
       this.performSort(this.tableData.state.sortedByHeader);
     } else {
@@ -336,8 +339,8 @@ export class SantaTable implements OnInit, OnChanges {
     }
   }
 
-  private updateDynamicColumns() {
-    /* the dynamic columns are:
+  private updateMetricDependentColumns() {
+    /* the metric dependent columns are the ones affected by driver/metric change:
       1. QuantComparer
       2. Mark
       3. three mark delta columns
@@ -376,37 +379,22 @@ export class SantaTable implements OnInit, OnChanges {
         metricType = '';
       }
       
-      targetRow.data.quotes = [];
+      targetRow.data.quotes = this.dtoService.formSecurityTableRowObject(targetRow.data.security).data.quotes;
       const payload: PayloadGetAllQuotes = {
         "identifier": targetRow.data.security.data.securityID
       };
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAllQuotes, {req: 'POST'}, payload).pipe(
         first(),
-        tap((serverReturn) => {
-          for (const eachKey in serverReturn) {
-            const rawQuote: BEQuoteDTO = serverReturn[eachKey];
-
-            const newQuote = this.dtoService.formSecurityQuoteObject(false, rawQuote, bestBid, bestOffer, metricType);
-            if (newQuote.state.hasAsk || newQuote.state.hasBid) {
-              targetRow.data.quotes.push(newQuote);
-            }
-          }
-          targetRow.data.presentQuotes = this.utilityService.deepCopy(targetRow.data.quotes);
-          if (!targetRow.state.presentingAllQuotes) {
-            targetRow.data.presentQuotes = targetRow.data.presentQuotes.slice(0, this.constants.agGridDetailRowDefaultCount);
-          }
-          this.performChronologicalSortOnQuotes(targetRow);
-          this.agGridMiddleLayerService.updateAgGridRows(this.tableData, [targetRow]);
-          if (!!params && !!params.node && !!params.node.detailNode) {
-            let dynamicHeight = this.constants.agGridDetailRowHeightOffset + targetRow.data.presentQuotes.length * this.constants.agGridDetailRowHeightPerRow;
-            if (dynamicHeight > this.constants.agGridDetailRowHeightMax) {
-              dynamicHeight = this.constants.agGridDetailRowHeightMax;
-            }
-            params.node.detailNode.rowHeight = dynamicHeight;
-            params.api.resetRowHeights();
-            params.api.redrawRows({
-              rowNodes: [params.node, params.node['detailNode']]
-            });
+        tap((serverReturn: Array<Array<BEQuoteDTO>>) => {
+          if (!!serverReturn && serverReturn.length > 0) {
+            this.loadQuotes(
+              targetRow,
+              serverReturn,
+              bestBid,
+              bestOffer,
+              metricType,
+              params
+            );
           }
         }),
         catchError(err => {
@@ -501,8 +489,8 @@ export class SantaTable implements OnInit, OnChanges {
     })
   }
 
-  private performChronologicalSortOnQuotes(targetRow: SecurityTableRowDTO) {
-    targetRow.data.quotes.sort((quoteA, quoteB) => {
+  private performChronologicalSortOnQuotes(targetQuoteList: Array<SecurityQuoteDTO>) {
+    targetQuoteList.sort((quoteA, quoteB) => {
       if (quoteA.data.unixTimestamp < quoteB.data.unixTimestamp) {
         return 1;
       } else if (quoteA.data.unixTimestamp > quoteB.data.unixTimestamp) {
@@ -594,6 +582,63 @@ export class SantaTable implements OnInit, OnChanges {
     })
     if (!!targetRow) {
       this.agGridMiddleLayerService.updateAgGridRows(this.tableData, [targetRow]);
+    }
+  }
+
+  private loadQuotes(
+    targetRow: SecurityTableRowDTO,
+    serverReturn: Array<Array<BEQuoteDTO>>,
+    bestBid: number,
+    bestOffer: number,
+    metricType: string,
+    params: any  // this is a AgGridRowParams, can't enforce type checking here because agGrid's native function redrawRows() would throw an compliation error
+  ) {
+    const primaryList = serverReturn[0];
+    targetRow.state.isCDSOffTheRun = serverReturn.length > 1;
+    primaryList.forEach((eachRawQuote) => {
+      const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, bestBid, bestOffer, metricType, targetRow.data.security);
+      newQuote.state.isCDSVariant = targetRow.state.isCDSVariant;
+      if (newQuote.state.hasAsk || newQuote.state.hasBid) {
+        targetRow.data.quotes.primaryQuotes.push(newQuote);
+      }
+    });
+    if (targetRow.state.isCDSOffTheRun) {
+      const secondaryList = serverReturn[1];
+      secondaryList.forEach((eachRawQuote) => {
+        const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, bestBid, bestOffer, metricType, targetRow.data.security);
+        newQuote.state.isCDSVariant = targetRow.state.isCDSVariant;
+        if (newQuote.state.hasAsk || newQuote.state.hasBid) {
+          targetRow.data.quotes.secondaryQuotes.push(newQuote);
+        }
+      });
+      targetRow.data.quotes.primarySecurityName = primaryList.length > 0 ? primaryList[0].name : '';
+      targetRow.data.quotes.secondarySecurityName = secondaryList.length > 0 ? secondaryList[0].name : '';
+    }
+    this.performChronologicalSortOnQuotes(targetRow.data.quotes.primaryQuotes);
+    this.performChronologicalSortOnQuotes(targetRow.data.quotes.secondaryQuotes);
+    targetRow.data.quotes.primaryPresentQuotes = this.utilityService.deepCopy(targetRow.data.quotes.primaryQuotes);
+    targetRow.data.quotes.secondaryPresentQuotes = this.utilityService.deepCopy(targetRow.data.quotes.secondaryQuotes);
+    if (!targetRow.state.presentingAllQuotes) {
+      targetRow.data.quotes.primaryPresentQuotes = targetRow.data.quotes.primaryPresentQuotes.slice(0, this.constants.agGridDetailRowDefaultCount);
+      targetRow.data.quotes.secondaryPresentQuotes = targetRow.data.quotes.secondaryPresentQuotes.slice(0, this.constants.agGridDetailRowDefaultCount);
+    }
+    this.agGridMiddleLayerService.updateAgGridRows(this.tableData, [targetRow]);
+    if (!!params && !!params.node && !!params.node.detailNode) {
+      const longestList = targetRow.data.quotes.primaryQuotes.length < targetRow.data.quotes.secondaryQuotes.length ? targetRow.data.quotes.secondaryQuotes : targetRow.data.quotes.primaryQuotes;
+      let dynamicHeight = longestList.length * this.constants.agGridDetailRowHeightPerRow;
+      if (targetRow.state.isCDSOffTheRun) {
+        dynamicHeight = dynamicHeight + this.constants.agGridDetailRowHeightOffsetOffTheRunCDS;
+      } else {
+        dynamicHeight = dynamicHeight + this.constants.agGridDetailRowHeightOffset;
+      }
+      if (dynamicHeight > this.constants.agGridDetailRowHeightMax) {
+        dynamicHeight = this.constants.agGridDetailRowHeightMax;
+      }
+      params.node.detailNode.rowHeight = dynamicHeight;
+      params.api.resetRowHeights();
+      params.api.redrawRows({
+        rowNodes: [params.node, params.node['detailNode']]
+      });
     }
   }
 }

@@ -9,7 +9,8 @@ button {
 
 
 // had to go with a hard-coded approached because AgGrid has a stupid global width setting that messes up flex grid's auto layout. This hard code needs to be maintained, this is really frustrating
-$santaTableDetailAllQuotes_width: $securityQuote_main_size_1 * 2 + $securityQuote_main_size_2 * 2 + $securityQuote_main_size_3 * 2 + $securityQuote_main_size_4 + $spacing_small * 6 * 2 + $typical_border_width * 6 + $securityTableRow_expandCanvas_label_leftPadding + $securityTableRow_expandCanvas_label_rightPadding;
+$santaTableDetailAllQuotes_width: $securityQuote_main_size_1 * 2 + $securityQuote_main_size_2 * 3 + $securityQuote_main_size_3 * 2 + $securityQuote_main_size_4 + $spacing_small * 6 * 2 + $securityTableRow_expandCanvas_label_leftPadding + $securityTableRow_expandCanvas_label_rightPadding;
+$santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $securityQuote_main_size_2 * 2 + $securityQuote_main_size_3 + $spacing_small * 9 + $securityTableRow_expandCanvas_label_leftPadding + $securityTableRow_expandCanvas_label_rightPadding;
 
 .santaTableDetailAllQuotes {
   $santaTableDetailAllQuotesBlockName: &;
@@ -36,6 +37,18 @@ $santaTableDetailAllQuotes_width: $securityQuote_main_size_1 * 2 + $securityQuot
       display: flex;
       flex-direction: column;
       width: fit-content;
+      &-targetSecurity {
+        display: none;
+        justify-content: flex-start;
+        margin-left: $spacing_small;
+        margin-bottom: $spacing_small;
+        &-text {
+          @include mix_border_radius(5px);
+          @include mix_border_generator;
+          padding: $spacing_x_small $spacing_small;
+          color: $font_color_inverse;
+        }
+      }
       &-label {
         display: flex;
         width: $santaTableDetailAllQuotes_width;
@@ -50,6 +63,9 @@ $santaTableDetailAllQuotes_width: $securityQuote_main_size_1 * 2 + $securityQuot
         flex-direction: column;
         margin: 0 $spacing_x_small;
         padding-bottom: $spacing_medium;
+      }
+      &--secondary {
+        display: none;
       }
     }
   }
@@ -86,6 +102,30 @@ $santaTableDetailAllQuotes_width: $securityQuote_main_size_1 * 2 + $securityQuot
     #{$santaTableDetailAllQuotesBlockName} {
       &__ctas {
         &-moreQuoteCta {
+          display: flex;
+        }
+      }
+    }
+  }
+  &--securityIsCDSState {
+    #{$santaTableDetailAllQuotesBlockName} {
+      &__main-content {
+        &-label {
+          width: $santaTableDetailAllQuotes_width_CDS;
+        }
+        .sat-securityTableRowExpandViewLabel--isNonCDS {
+          display: none;
+        }
+      }
+    }
+  }
+  &--securityIsOffTheRunCDSState {
+    #{$santaTableDetailAllQuotesBlockName} {
+      &__main-content {
+        &-targetSecurity {
+          display: flex;
+        }
+        &--secondary {
           display: flex;
         }
       }

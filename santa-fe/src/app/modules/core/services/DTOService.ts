@@ -61,6 +61,7 @@ export class DTOService {
         globalIdentifier: !isStencil ? rawData.globalIdentifier : null,
         name: !isStencil ? rawData.name : 'PLACEHOLDER',
         ticker: !isStencil ? rawData.ticker : null,
+        isGovt: !isStencil ? rawData.isGovt : false,
         ratingLevel: !isStencil && rawData.metrics ? this.utility.mapRatings(rawData.metrics.ratingNoNotch) : 0,
         ratingValue: !isStencil && rawData.metrics ? rawData.metrics.ratingNoNotch : null,
         ratingBucket: !isStencil && rawData.metrics ? rawData.metrics.ratingBucket : null,
@@ -76,10 +77,14 @@ export class DTOService {
         primaryPmName: null,
         backupPmName: null,
         researchName: null,
-        cs01FirmLocal: null,
-        cs01FirmLocalInK: null,
-        cs01FirmCad: null,
-        cs01FirmCadInK: null,
+        cs01LocalFirm: null,
+        cs01LocalFirmInK: null,
+        cs01LocalCurrent: null,
+        cs01LocalCurrentInK: null,
+        cs01CadFirm: null,
+        cs01CadFirmInK: null,
+        cs01CadCurrent: null,
+        cs01CadCurrentInK: null,
         owner: [],
         mark: {
           combinedDefaultMark: null,
@@ -113,7 +118,9 @@ export class DTOService {
         metricPack: this.utility.packMetricData(rawData),
         bestQuote: {
           bid: null,
-          ask: null
+          displayBid: null,
+          ask: null,
+          displayAsk: null
         }
       },
       api: {
@@ -159,8 +166,7 @@ export class DTOService {
       if (currentSelectedMetric === DEFAULT_METRIC_IDENTIFIER) {
         targetMetric = this.utility.findSecurityTargetDefaultTriCoreMetric(dto);
       }
-      const rounding = targetMetric ? TriCoreMetricConfig[targetMetric].rounding : 0;
-      dto.data.mark.mark = this.utility.round(dto.data.mark.markRaw, rounding).toFixed(rounding);
+      dto.data.mark.mark = this.utility.parseTriCoreMetricNumber(dto.data.mark.markRaw, targetMetric, dto, true) as string;
     } else {
       dto.data.mark.mark = null;
       dto.data.mark.markRaw = null;
@@ -195,14 +201,14 @@ export class DTOService {
           console.warn('detected security with multiple strategies: ', dto.data.name, ' has strategy = ', dto.data.strategyList);
         }
       }
-      dto.data.cs01FirmCad = dto.data.cs01FirmCad + eachPortfolioBlock.cs01Cad;
-      dto.data.cs01FirmLocal = dto.data.cs01FirmLocal + eachPortfolioBlock.cs01Local;
+      dto.data.cs01CadFirm = dto.data.cs01CadFirm + eachPortfolioBlock.cs01Cad;
+      dto.data.cs01LocalFirm = dto.data.cs01LocalFirm + eachPortfolioBlock.cs01Local;
     });
     dto.data.positionFirmInMM = this.utility.parsePositionToMM(dto.data.positionFirm, false);
     dto.data.positionHFInMM = this.utility.parsePositionToMM(dto.data.positionHF, false);
     dto.data.positionNLFInMM = this.utility.parsePositionToMM(dto.data.positionNLF, false);
-    dto.data.cs01FirmCadInK = this.utility.parseNumberToThousands(dto.data.cs01FirmCad, false);
-    dto.data.cs01FirmLocalInK = this.utility.parseNumberToThousands(dto.data.cs01FirmLocal, false);
+    dto.data.cs01CadFirmInK = this.utility.parseNumberToThousands(dto.data.cs01CadFirm, false);
+    dto.data.cs01LocalFirmInK = this.utility.parseNumberToThousands(dto.data.cs01LocalFirm, false);
   }
 
   public formSecurityGroupObject(
@@ -425,11 +431,13 @@ export class DTOService {
           mid: 0,
           bid: {
             number: 33,
+            displayNumber: '33',
             broker: 'GS',
             size: null
           },
           offer: {
             number: 33,
+            displayNumber: '33',
             broker: 'JPM',
             size: null
           }
@@ -480,8 +488,8 @@ export class DTOService {
     const hasBid = !!rawData.bidQuoteValue && !!rawData.bidDealer;
     const hasOffer = !!rawData.askQuoteValue && !!rawData.askDealer;
     const rounding = TriCoreMetricConfig[metricType]['rounding'];
-    const bidNumber = this.utility.round(rawData.bidQuoteValue, rounding).toFixed(rounding);
-    const offerNumber = this.utility.round(rawData.askQuoteValue, rounding).toFixed(rounding);
+    const bidNumber = this.utility.parseTriCoreMetricNumber(rawData.bidQuoteValue, metricType, securityCard, true) as string;
+    const offerNumber = this.utility.parseTriCoreMetricNumber(rawData.askQuoteValue, metricType, securityCard, true) as string;
     const bidSkew = rawData.axeSkew * 100;
     if (bidNumber === 'NaN' || offerNumber === 'NaN') {
       console.warn('Caught BE data issue while creating best quote component, ', securityCard, rawData, bidNumber, offerNumber);
@@ -490,7 +498,7 @@ export class DTOService {
       let delta;
       let mid;
       if (hasBid && hasOffer) {
-        delta = inversed ? offerNumber - bidNumber : bidNumber - offerNumber;
+        delta = inversed ? parseFloat(offerNumber) - parseFloat(bidNumber) : parseFloat(bidNumber) - parseFloat(offerNumber);
         delta = this.utility.round(delta, rounding);
         mid = (rawData.bidQuoteValue + rawData.askQuoteValue)/2;
         mid = this.utility.round(mid, rounding);
@@ -510,12 +518,14 @@ export class DTOService {
           delta: delta,
           mid: mid,
           bid: {
-            number: bidNumber,
+            number: parseFloat(bidNumber),
+            displayNumber: bidNumber,  // not been used right now but could come in handy
             broker: rawData.bidDealer,
             size: bidSize
           },
           offer: {
-            number: offerNumber,
+            number: parseFloat(offerNumber),
+            displayNumber: offerNumber,  // not been used right now but could come in handy
             broker: rawData.askDealer,
             size: offerSize
           }
@@ -538,7 +548,7 @@ export class DTOService {
           totalSkewEnabled: false,
           noAxeSkew: rawData.axeSkew === null,
           noTotalSkew: rawData.totalSkew === null,
-          longEdgeState: bidNumber.toString().length > 4 || offerNumber.toString().length > 4
+          longEdgeState: (bidNumber && parseFloat(bidNumber).toString().length > 4) || (offerNumber && parseFloat(offerNumber).toString().length > 4)
         }
       };
       return object;
@@ -608,15 +618,22 @@ export class DTOService {
       data: {
         security: securityDTO,
         cells: [],
-        presentQuotes: [],
-        quotes: [],
+        quotes: {
+          primaryPresentQuotes: [],
+          primaryQuotes: [],
+          primarySecurityName: '',
+          secondaryPresentQuotes: [],
+          secondaryQuotes: [],
+          secondarySecurityName: ''
+        },
         quoteHeaders: QuoteMetricList.map((eachQuoteMetricStub) => {
           const metricBlock: Blocks.QuoteMetricBlock = {
             displayLabelList: eachQuoteMetricStub.labelList,
             isSizeTwo: eachQuoteMetricStub.size === 2,
             isSizeThree: eachQuoteMetricStub.size === 3,
             isSizeFour: eachQuoteMetricStub.size === 4,
-            sortable: !eachQuoteMetricStub.textOnly
+            sortable: !eachQuoteMetricStub.textOnly,
+            isNonCDS: !!eachQuoteMetricStub.isNonCDS
           };
           return metricBlock;
         }),
@@ -629,7 +646,9 @@ export class DTOService {
       state: {
         expandViewSortByQuoteMetric: null,
         isExpanded: false,
-        presentingAllQuotes: false
+        presentingAllQuotes: false,
+        isCDSVariant: this.utility.isCDS(false, securityDTO),
+        isCDSOffTheRun: false
       }
     };
     return object;
@@ -660,7 +679,8 @@ export class DTOService {
     rawData: BEQuoteDTO,
     bestBidNum: number,
     bestAskNum: number,
-    filteredMetricType: string
+    filteredMetricType: string,
+    targetSecurity: DTOs.SecurityDTO
   ): DTOs.SecurityQuoteDTO {
     const hasBid = !isStencil ? (!!rawData.isActive && !!rawData.bidVenue) : true;
     const hasAsk = !isStencil ? (!!rawData.isActive && !!rawData.askVenue) : true;
@@ -690,7 +710,8 @@ export class DTOService {
           price: 100,
           yield: 5,
           tspread: 300,
-          benchmark: bidBenchmark
+          benchmark: bidBenchmark,
+          time: '12:01pm'
         },
         ask: {
           isAxe: false,
@@ -698,7 +719,8 @@ export class DTOService {
           price: 100,
           yield: 5,
           tspread: 300,
-          benchmark: bidBenchmark
+          benchmark: bidBenchmark,
+          time: '12:01pm'
         },
         currentMetric: filteredMetricType
       },
@@ -715,25 +737,28 @@ export class DTOService {
         menuActiveSide: null,
         menuActiveMetric: null,
         isBidDownVoted: false,
-        isAskDownVoted: false
+        isAskDownVoted: false,
+        isCDSVariant: false
       }
     };
     if (!isStencil) {
       object.data.bid = {
         isAxe: rawData.quoteType === SECURITY_TABLE_QUOTE_TYPE_AXE,
         size: !!rawData.bidQuantity ? this.utility.parsePositionToMM(rawData.bidQuantity, false) : null,
-        price: !!rawData.bidPrice ? this.utility.round(rawData.bidPrice , TriCoreMetricConfig.Price.rounding) : null,
-        yield: !!rawData.bidYield ? this.utility.round(rawData.bidYield, TriCoreMetricConfig.Yield.rounding) : null,
-        tspread: !!rawData.bidSpread ? this.utility.round(rawData.bidSpread, TriCoreMetricConfig.Spread.rounding) : null,
-        benchmark: bidBenchmark
+        price: !!rawData.bidPrice ? this.utility.parseTriCoreMetricNumber(rawData.bidPrice, TriCoreMetricConfig.Price.label, targetSecurity, false) as number : null,
+        yield: !!rawData.bidYield ? this.utility.parseTriCoreMetricNumber(rawData.bidYield, TriCoreMetricConfig.Yield.label, targetSecurity, false) as number : null,
+        tspread: !!rawData.bidSpread ? this.utility.parseTriCoreMetricNumber(rawData.bidSpread, TriCoreMetricConfig.Spread.label, targetSecurity, false) as number : null,
+        benchmark: bidBenchmark,
+        time: this.utility.isQuoteTimeValid(rawData.bidTime) && hasBid ? new Date(rawData.bidTime).toTimeString().slice(0, 5) : ''
       };
       object.data.ask = {
         isAxe: rawData.quoteType === SECURITY_TABLE_QUOTE_TYPE_AXE,
         size: !!rawData.askQuantity ? this.utility.parsePositionToMM(rawData.askQuantity, false) : null,
-        price: !!rawData.askPrice ? this.utility.round(rawData.askPrice , TriCoreMetricConfig.Price.rounding) : null,
-        yield: !!rawData.askYield ? this.utility.round(rawData.askYield, TriCoreMetricConfig.Yield.rounding) : null,
-        tspread: !!rawData.askSpread ? this.utility.round(rawData.askSpread, TriCoreMetricConfig.Spread.rounding) : null,
-        benchmark: askBenchmark
+        price: !!rawData.askPrice ? this.utility.parseTriCoreMetricNumber(rawData.askPrice, TriCoreMetricConfig.Price.label, targetSecurity, false) as number : null,
+        yield: !!rawData.askYield ? this.utility.parseTriCoreMetricNumber(rawData.askYield, TriCoreMetricConfig.Yield.label, targetSecurity, false) as number : null,
+        tspread: !!rawData.askSpread ? this.utility.parseTriCoreMetricNumber(rawData.askSpread, TriCoreMetricConfig.Spread.label, targetSecurity, false) as number : null,
+        benchmark: askBenchmark,
+        time: this.utility.isQuoteTimeValid(rawData.askTime) && hasAsk ? new Date(rawData.askTime).toTimeString().slice(0, 5) : ''
       };
       object.state.isBestBid = object.data.bid.tspread == bestBidNum || object.data.bid.price == bestBidNum || object.data.bid.yield == bestBidNum;
       object.state.isBestOffer =object.data.ask.tspread == bestAskNum || object.data.ask.price == bestAskNum || object.data.ask.yield == bestAskNum;

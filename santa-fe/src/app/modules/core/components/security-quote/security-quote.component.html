@@ -19,17 +19,25 @@
     'sat-securityQuote--menuActiveOnAskState': messageData.state.menuActiveSide === 'ask',
     'sat-securityQuote--menuActiveOnTSpreadState': messageData.state.menuActiveMetric === 'tspread',
     'sat-securityQuote--menuActiveOnPriceState': messageData.state.menuActiveMetric === 'price',
-    'sat-securityQuote--menuActiveOnYieldState': messageData.state.menuActiveMetric === 'yield'
+    'sat-securityQuote--menuActiveOnYieldState': messageData.state.menuActiveMetric === 'yield',
+    'sat-securityQuote--cdsVariant': messageData.state.isCDSVariant
   }">
-  <section class="sat-securityQuote__time">
-    <span class="sat-securityQuote__time-text">{{messageData.data.time}}</span>
-  </section>
   <section class="sat-securityQuote__main">
+    <div class="sat-securityQuote__main-twoSideEntry">
+      <span class="sat-securityQuote__main-twoSideEntry-text sat-securityQuote__main-twoSideEntry-text--bid">
+        {{messageData.data.bid.time}}
+      </span>
+      <i class="sat-securityQuote__main-twoSideEntry-mid fal fa-arrows-h"></i>
+      <span class="sat-securityQuote__main-twoSideEntry-text sat-securityQuote__main-twoSideEntry-text--ask">
+        {{messageData.data.ask.time}}
+      </span>
+    </div>
+    <div class="sat-securityQuote__main-spacing"></div>
     <div class="sat-securityQuote__main-entry">{{messageData.data.dataSource}}</div>
     <div class="sat-securityQuote__main-spacing"></div>
     <div class="sat-securityQuote__main-entry">{{messageData.data.broker}}</div>
     <div class="sat-securityQuote__main-spacing"></div>
-    <div class="sat-securityQuote__main-twoSideEntry sat-securityQuote__main-twoSideEntry--sizeThree">
+    <div class="sat-securityQuote__main-twoSideEntry sat-securityQuote__main-twoSideEntry--sizeThree sat-securityQuote__main-twoSideEntry--nonCDS">
       <div
         [ngClass]="{
           'sat-securityQuote__main-twoSideEntry-cta': true,
@@ -64,8 +72,8 @@
         </div>
       </div>
     </div>
-    <div class="sat-securityQuote__main-spacing"></div>
-    <div class="sat-securityQuote__main-twoSideEntry">
+    <div class="sat-securityQuote__main-spacing sat-securityQuote__main-spacing--nonCDS"></div>
+    <div class="sat-securityQuote__main-twoSideEntry sat-securityQuote__main-twoSideEntry--nonCDS">
       <div
         [ngClass]="{
           'sat-securityQuote__main-twoSideEntry-cta': true,
@@ -100,7 +108,7 @@
         </div>
       </div>
     </div>
-    <div class="sat-securityQuote__main-spacing"></div>
+    <div class="sat-securityQuote__main-spacing sat-securityQuote__main-spacing--nonCDS"></div>
     <div class="sat-securityQuote__main-twoSideEntry">
       <div
         [ngClass]="{
@@ -148,7 +156,7 @@
       </span>
       <i class="sat-securityQuote__main-twoSideEntry-axeIcon sat-securityQuote__main-twoSideEntry-axeIcon--ask fas fa-axe"></i>
     </div>
-    <div class="sat-securityQuote__main-spacing"></div>
+    <div class="sat-securityQuote__main-spacing sat-securityQuote__main-spacing--nonCDS"></div>
     <div class="sat-securityQuote__main-benchmarkEntry">
       <span class="sat-securityQuote__main-benchmarkEntry-consolidated">
         {{messageData.data.consolidatedBenchmark}}

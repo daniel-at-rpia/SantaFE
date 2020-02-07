@@ -28,6 +28,7 @@ export const AGGRID_SIMPLE_TEXT_COLUMN_WIDTH = 150;
 export const AGGRID_ROW_HEIGHT = 40;
 export const AGGRID_DETAIL_ROW_HEIGHT_PER_ROW = 34;
 export const AGGRID_DETAIL_ROW_HEIGHT_OFFSET = 120;
+export const AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS = 155;
 export const AGGRID_DETAIL_ROW_DEFAULT_COUNT = 10;
 export const AGGRID_DETAIL_ROW_HEIGHT_MAX = AGGRID_DETAIL_ROW_HEIGHT_OFFSET + AGGRID_DETAIL_ROW_HEIGHT_PER_ROW * AGGRID_DETAIL_ROW_DEFAULT_COUNT;
 export const AGGRID_DETAIL_ROW_HEIGHT_DEFAULT = 200;
@@ -292,17 +293,31 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false,
     isDataTypeText: true
   },{
-    key: 'cs01cadFirm',
-    label: 'CS01 CAD Firm (k)',
-    attrName: 'cs01FirmCadInK',
-    underlineAttrName: 'cs01FirmCad',
+    key: 'cs01CadCurrent',
+    label: 'CS01 Cad (k)',
+    attrName: 'cs01CadCurrentInK',
+    underlineAttrName: 'cs01CadCurrent',
     readyStage: 1,
     active: false
   },{
-    key: 'cs01localFirm',
-    label: 'CS01 Local Firm (k)',
-    attrName: 'cs01FirmLocalInK',
-    underlineAttrName: 'cs01FirmLocal',
+    key: 'cs01LocalCurrent',
+    label: 'CS01 Local (k)',
+    attrName: 'cs01LocalCurrentInK',
+    underlineAttrName: 'cs01LocalCurrent',
+    readyStage: 1,
+    active: false
+  },{
+    key: 'cs01CadFirm',
+    label: 'Firm CS01 CAD (k)',
+    attrName: 'cs01CadFirmInK',
+    underlineAttrName: 'cs01CadFirm',
+    readyStage: 1,
+    active: false
+  },{
+    key: 'cs01LocalFirm',
+    label: 'Firm CS01 Local (k)',
+    attrName: 'cs01LocalFirmInK',
+    underlineAttrName: 'cs01LocalFirm',
     readyStage: 1,
     active: false
   }
@@ -314,30 +329,43 @@ export const THIRTY_DAY_DELTA_METRIC_INDEX = SecurityTableMetrics.findIndex((eac
 
 export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
   {
+    labelList: ['B Time', 'A Time'],
+    textOnly: true,
+    size: 2,
+    isNonCDS: false
+  },
+  {
     labelList: ['Source'],
-    textOnly: true
+    textOnly: true,
+    isNonCDS: false
   },{
     labelList: ['Dealer'],
-    textOnly: true
+    textOnly: true,
+    isNonCDS: false
   },{
     labelList: ['B Px', 'A Px'],
     size: 3,
-    textOnly: true
+    textOnly: true,
+    isNonCDS: true
   },{
     labelList: ['B YTW', 'A YTW'],
     size: 2,
-    textOnly: true
+    textOnly: true,
+    isNonCDS: true
   },{
     labelList: ['B Sprd', 'A Sprd'],
     size: 2,
-    textOnly: true
+    textOnly: true,
+    isNonCDS: false
   },{
     labelList: ['B Size', 'A Size'],
     size: 3,
-    textOnly: true
+    textOnly: true,
+    isNonCDS: false
   },{
     labelList: ['Benchmarks'],
     size: 4,
-    textOnly: true
+    textOnly: true,
+    isNonCDS: true
   }
 ];

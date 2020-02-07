@@ -286,8 +286,7 @@ export class MarketGroupPanel implements OnDestroy {
     const payload: PayloadGetSantaGroups = {
       source: "Default",
       groupDefinition: {},
-      groupFilters: {},
-      tenorOptions: ["2Y", "3Y", "5Y", "7Y", "10Y", "30Y"]
+      groupFilters: {}
     };
     definitionList.forEach((eachDefinition) => {
       if (eachDefinition.state.groupByActive || eachDefinition.state.isLocked) {

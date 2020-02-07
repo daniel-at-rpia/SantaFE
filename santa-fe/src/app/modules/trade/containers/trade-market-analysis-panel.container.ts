@@ -259,7 +259,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
         source: "Default",
         identifier: this.state.targetSecurity.data.securityID,
         groupIdentifier: {},
-        tenorOptions: ["2Y", "3Y", "5Y", "7Y", "10Y", "30Y"],
         deltaTypes: [targetScope],
         metricName: this.utilityService.isCDS(false, this.state.targetSecurity) ? 'Spread' : this.state.config.driver,
         count: 5

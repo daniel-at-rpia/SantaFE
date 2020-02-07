@@ -9,7 +9,8 @@ import {
   QuantitativeEntryBlock,
   QuantitativeEntryStyleBlock,
   AgGridColumnDefinition,
-  AgGridRow
+  AgGridRow,
+  SecurityTableRowQuoteBlock
 } from 'FEModels/frontend-blocks.interface';
 import { SantaTableNumericFloatingFilterParams } from 'FEModels/frontend-adhoc-packages.interface';
 import * as agGrid from 'ag-grid-community';
@@ -30,6 +31,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     name: string;
     ticker: string;
     country: string;
+    isGovt: boolean;
     ratingLevel: number;
     ratingValue: string;
     ratingBucket: string;
@@ -60,12 +62,18 @@ export interface SecurityDTO extends BasicDTOStructure {
     metricPack: SecurityGroupMetricPackBlock;
     bestQuote: {
       bid: number;
+      displayBid: string;
       ask: number;
+      displayAsk: string;
     }
-    cs01FirmLocal: number;
-    cs01FirmLocalInK: string;
-    cs01FirmCad: number;
-    cs01FirmCadInK: string;
+    cs01LocalFirm: number;
+    cs01LocalFirmInK: string;
+    cs01LocalCurrent: number;
+    cs01LocalCurrentInK: string;
+    cs01CadFirm: number;
+    cs01CadFirmInK: string;
+    cs01CadCurrent: number;
+    cs01CadCurrentInK: string;
   }
   api: {
     onClickCard: Function;
@@ -195,11 +203,13 @@ export interface QuantComparerDTO extends BasicDTOStructure {
     mid: number;
     bid: {
       number: number;
+      displayNumber: string;
       broker: string;
       size: number;
     },
     offer: {
       number: number;
+      displayNumber: string;
       broker: string;
       size: number;
     }
@@ -276,8 +286,7 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
   data: {
     security: SecurityDTO;
     cells: Array<SecurityTableCellDTO>;
-    presentQuotes: Array<SecurityQuoteDTO>;
-    quotes: Array<SecurityQuoteDTO>;
+    quotes: SecurityTableRowQuoteBlock;
     quoteHeaders: Array<QuoteMetricBlock>;
     bestQuotes: {
       bestSpreadQuote: QuantComparerDTO;
@@ -289,6 +298,8 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
     expandViewSortByQuoteMetric: string;
     isExpanded: boolean;
     presentingAllQuotes: boolean;
+    isCDSVariant: boolean;
+    isCDSOffTheRun: boolean;
   }
 }
 
@@ -320,6 +331,7 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
       tspread: number;
       yield: number;
       benchmark: string;
+      time: string;
     };
     ask: {
       isAxe: boolean;
@@ -328,6 +340,7 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
       tspread: number;
       yield: number;
       benchmark: string;
+      time: string;
     }
   },
   state: {
@@ -344,6 +357,7 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
     menuActiveMetric: string;
     isBidDownVoted: boolean;
     isAskDownVoted: boolean;
+    isCDSVariant: boolean;
   }
 }
 

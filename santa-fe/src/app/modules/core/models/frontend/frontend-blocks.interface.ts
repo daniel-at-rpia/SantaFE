@@ -14,7 +14,8 @@ import {
 import {
   SecurityDTO,
   QuantComparerDTO,
-  SecurityTableRowDTO
+  SecurityTableRowDTO,
+  SecurityQuoteDTO
 } from 'FEModels/frontend-models.interface';
 
 export interface SecurityPortfolioBlock {
@@ -98,6 +99,7 @@ export interface QuoteMetricBlock {
   isSizeThree: boolean;
   isSizeFour: boolean;
   sortable: boolean;
+  isNonCDS: boolean;
 }
 
 export interface QuantitativeEntryBlock {
@@ -193,4 +195,13 @@ export interface ObligorCategoryDataItemBlock {
     currentPosition: number;
   }
   state: {}
+}
+
+export interface SecurityTableRowQuoteBlock {
+  primaryPresentQuotes: Array<SecurityQuoteDTO>;
+  primaryQuotes: Array<SecurityQuoteDTO>;
+  primarySecurityName: string;
+  secondaryPresentQuotes: Array<SecurityQuoteDTO>;
+  secondaryQuotes: Array<SecurityQuoteDTO>;
+  secondarySecurityName: string;
 }

@@ -368,7 +368,8 @@ export class UtilityService {
       targetConfigurator: SecurityDefinitionConfiguratorDTO
     ): SecurityDefinitionConfiguratorDTO {
       const newConfig = this.deepCopy(targetConfigurator);
-      targetShortcut.data.configuration.forEach((eachShortcutDef) => {
+      const shortcutCopy = this.deepCopy(targetShortcut);
+      shortcutCopy.data.configuration.forEach((eachShortcutDef) => {
         newConfig.data.definitionList.forEach((eachBundle) => {
           eachBundle.data.list.forEach((eachDefinition) => {
             if (eachDefinition.data.key === eachShortcutDef.data.key) {
@@ -415,6 +416,32 @@ export class UtilityService {
         return targetTextUpperCase.indexOf(keywordUpperCase) >= 0;
       } else {
         return true;
+      }
+    }
+
+    public parseTriCoreMetricNumber(
+      targetNumber,
+      targetMetric: string,
+      targetSecurity: SecurityDTO,
+      isToFixed: boolean
+    ): number|string {
+      if (!!targetNumber && !!targetMetric) {
+        const rounding = TriCoreMetricConfig[targetMetric] ? TriCoreMetricConfig[targetMetric].rounding : 0;
+        if (isToFixed) {
+          if (targetSecurity.data.isGovt && targetMetric === TriCoreMetricConfig.Spread.label) {
+            return this.round(targetNumber, rounding + 1).toFixed(rounding + 1);
+          } else {
+            return this.round(targetNumber, rounding).toFixed(rounding);
+          }
+        } else {
+          if (targetSecurity.data.isGovt && targetMetric === TriCoreMetricConfig.Spread.label) {
+            return this.round(targetNumber, rounding + 1);
+          } else {
+            return this.round(targetNumber, rounding);
+          }
+        }
+      } else {
+        return null;
       }
     }
   // shared end
@@ -587,9 +614,9 @@ export class UtilityService {
         // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
         if ( targetSecurity.data.mark.markDriver === triCoreMetric || triCoreMetric === DEFAULT_METRIC_IDENTIFIER) {
           targetSecurity.data.mark.markRaw = targetRow.data.security.data.mark.markBackend;
-          const validMetricFromDriver = this.findSecurityTargetDefaultTriCoreMetric(targetSecurity);
-          const rounding = validMetricFromDriver ? TriCoreMetricConfig[validMetricFromDriver].rounding : 0;
-          targetSecurity.data.mark.mark = targetSecurity.data.mark.markRaw > 0 ? this.round(targetSecurity.data.mark.markRaw, rounding).toFixed(rounding) : null;
+        const validMetricFromDriver = this.findSecurityTargetDefaultTriCoreMetric(targetSecurity);
+          const number = this.parseTriCoreMetricNumber(targetSecurity.data.mark.markRaw, validMetricFromDriver, targetSecurity, true) as string;
+          targetSecurity.data.mark.mark = targetSecurity.data.mark.markRaw > 0 ? number : null;
         } else {
           targetSecurity.data.mark.markRaw = null;
           targetSecurity.data.mark.mark = null;
@@ -601,13 +628,17 @@ export class UtilityService {
         if (!!newCellDTO.data.quantComparerDTO) {
           if (newCellDTO.data.quantComparerDTO.state.hasBid) {
             targetSecurity.data.bestQuote.bid = newCellDTO.data.quantComparerDTO.data.bid.number;
+            targetSecurity.data.bestQuote.displayBid = newCellDTO.data.quantComparerDTO.data.bid.displayNumber;
           } else {
             targetSecurity.data.bestQuote.bid = null;
+            targetSecurity.data.bestQuote.displayBid = null;
           }
           if (newCellDTO.data.quantComparerDTO.state.hasOffer) {
             targetSecurity.data.bestQuote.ask = newCellDTO.data.quantComparerDTO.data.offer.number;
+            targetSecurity.data.bestQuote.displayAsk = newCellDTO.data.quantComparerDTO.data.offer.displayNumber;
           } else {
             targetSecurity.data.bestQuote.ask = null;
+            targetSecurity.data.bestQuote.displayAsk = null;
           }
         }
         return newCellDTO;
@@ -688,6 +719,19 @@ export class UtilityService {
           return 'Spread';
         default:
           return BEDriver;
+      }
+    }
+
+    public isQuoteTimeValid(timeString: string): boolean {
+      if (!!timeString) {
+        const newDate = new Date(timeString);
+        if (newDate.getSeconds() === 0 && newDate.getMinutes() === 0 && newDate.getHours() === 0) {
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        return false;
       }
     }
 

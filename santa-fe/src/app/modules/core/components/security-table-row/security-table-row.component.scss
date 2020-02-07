@@ -2,7 +2,7 @@
 
 
 $securityTableRow_expandCanvas_height: 40rem + $spacing_medium * 2;
-$securityTableRow_expandCanvas_label_leftPadding: $securityQuote_time_width + $spacing_x_small;
+$securityTableRow_expandCanvas_label_leftPadding: $spacing_x_small;
 $securityTableRow_expandCanvas_label_rightPadding: $spacing_small + $scroll_bar_width + $spacing_x_small;
 
 .sat-securityTableRow {
@@ -113,7 +113,7 @@ $securityTableRow_expandCanvas_label_rightPadding: $spacing_small + $scroll_bar_
   display: flex;
   justify-content: center;
   margin-left: $securityQuote_spacing_height;
-  margin-right: $securityQuote_spacing_height + $typical_border_width;
+  margin-right: $securityQuote_spacing_height;
   &__content {
     display: flex;
     justify-content: center;
@@ -141,11 +141,17 @@ $securityTableRow_expandCanvas_label_rightPadding: $spacing_small + $scroll_bar_
       color: $font_color_inverse;
       font-size: $font_size_small;
     }
-    &:first-of-type {
-      margin-right: $spacing_x_small;
-    }
-    &:nth-of-type(2) {
-      margin-left: $spacing_x_small;
+  }
+  &--doubleSided {
+    #{$securityTableRowExpandViewLabelBlockName} {
+      &__content {
+        &:first-of-type {
+          margin-right: 0.5625rem;  // half of sat-securityTableRowExpandViewLabel__content-cta-text's margin and sat-securityTableRowExpandViewLabel__content-cta-icon's width
+        }
+        &:nth-of-type(2) {
+          margin-left: 0.5625rem;
+        }
+      }
     }
   }
   &--sizeTwo {
@@ -171,6 +177,9 @@ $securityTableRow_expandCanvas_label_rightPadding: $spacing_small + $scroll_bar_
   }
   &--last {
     margin-right: 0;
+  }
+  &--isNonCDS {
+    // conditional styling is done in santa-table-detail-all-quotes.container.scss
   }
 }
 

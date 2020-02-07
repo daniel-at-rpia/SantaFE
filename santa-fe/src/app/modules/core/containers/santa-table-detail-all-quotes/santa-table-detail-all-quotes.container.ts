@@ -77,23 +77,15 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     this.parent.onClickSortQuotesByMetric(payload);
   }
 
-  public onClickedSpecificQuote(params: ClickedSpecificQuoteEmitterParams) {
+  public onClickedSpecificPrimaryQuote(params: ClickedSpecificQuoteEmitterParams) {
     if (!!params) {
-      this.rowData.data.presentQuotes.forEach((eachQuote) => {
-        if (eachQuote.data.uuid === params.targetQuote.data.uuid) {
-          const targetSide = params.isOnBidSide ? 'bid' : 'ask';
-          if (eachQuote.state.menuActiveMetric === params.targetMetric && eachQuote.state.menuActiveSide === targetSide) {
-            eachQuote.state.menuActiveSide = null;
-            eachQuote.state.menuActiveMetric = null;
-          } else {
-            eachQuote.state.menuActiveSide = targetSide;
-            eachQuote.state.menuActiveMetric = params.targetMetric;
-          }
-        } else {
-          eachQuote.state.menuActiveMetric = null;
-          eachQuote.state.menuActiveSide = null;
-        }
-      });
+      this.updateQuoteUponClick(params, this.rowData.data.quotes.primaryPresentQuotes);
+    }
+  }
+
+  public onClickedSpecificSecondaryQuote(params: ClickedSpecificQuoteEmitterParams) {
+    if (!!params) {
+      this.updateQuoteUponClick(params, this.rowData.data.quotes.secondaryPresentQuotes);
     }
   }
 
@@ -144,7 +136,26 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   }
 
   public onClickShowMoreQuotes() {
-    this.rowData.data.presentQuotes = this.utilityService.deepCopy(this.rowData.data.quotes);
+    this.rowData.data.quotes.primaryPresentQuotes = this.utilityService.deepCopy(this.rowData.data.quotes.primaryQuotes);
+    this.rowData.data.quotes.secondaryPresentQuotes = this.utilityService.deepCopy(this.rowData.data.quotes.secondaryPresentQuotes);
     this.rowData.state.presentingAllQuotes = true;
+  }
+
+  private updateQuoteUponClick(params: ClickedSpecificQuoteEmitterParams, targetQuoteList: Array<SecurityQuoteDTO>){
+    targetQuoteList.forEach((eachQuote) => {
+      if (eachQuote.data.uuid === params.targetQuote.data.uuid) {
+        const targetSide = params.isOnBidSide ? 'bid' : 'ask';
+        if (eachQuote.state.menuActiveMetric === params.targetMetric && eachQuote.state.menuActiveSide === targetSide) {
+          eachQuote.state.menuActiveSide = null;
+          eachQuote.state.menuActiveMetric = null;
+        } else {
+          eachQuote.state.menuActiveSide = targetSide;
+          eachQuote.state.menuActiveMetric = params.targetMetric;
+        }
+      } else {
+        eachQuote.state.menuActiveMetric = null;
+        eachQuote.state.menuActiveSide = null;
+      }
+    });
   }
 }
