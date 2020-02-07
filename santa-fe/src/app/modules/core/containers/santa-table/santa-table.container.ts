@@ -386,7 +386,7 @@ export class SantaTable implements OnInit, OnChanges {
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAllQuotes, {req: 'POST'}, payload).pipe(
         first(),
         tap((serverReturn: Array<Array<BEQuoteDTO>>) => {
-          if (!!serverReturn) {
+          if (!!serverReturn && serverReturn.length > 0) {
             this.loadQuotes(
               targetRow,
               serverReturn,
