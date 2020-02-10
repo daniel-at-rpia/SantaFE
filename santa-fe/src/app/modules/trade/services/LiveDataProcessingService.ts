@@ -253,8 +253,4 @@ export class LiveDataProcessingService {
     }
     return 0;
   }
-
-  private testAPI(targetSecurity: SecurityDTO) {
-    console.log('test, at test API', targetSecurity);
-  }
 }

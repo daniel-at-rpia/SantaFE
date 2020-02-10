@@ -87,4 +87,19 @@ export class RestfulCommService {
       })
     ).subscribe();
   }
+
+  public logError(
+    message: string,
+    user: string
+  ) {
+    const payload = {
+      message: `Error: ${message} - From ${user}`
+    };
+    this.callAPI(this.apiMap.logError, {req: 'POST'}, payload).pipe(
+      first(),
+      catchError(err => {
+        return of('error');
+      })
+    ).subscribe();
+  }
 }

@@ -69,6 +69,7 @@ export class TradePage implements OnInit, OnDestroy {
           this.loadOwnerInitial(err.error.text);
         } else {
           this.loadOwnerInitial('n/a');
+          this.restfulCommService.logError(`Can not find user, error is`, err.error);
         }
         return of('error');
       })
