@@ -105,7 +105,7 @@ export class TradePage implements OnInit, OnDestroy {
 
   private loadOwnerInitial(serverReturn: string) {
     const matchedInitial = this.constants.fullOwnerList.find((eachInitial) => {
-      eachInitial === serverReturn;
+      return eachInitial === serverReturn;
     })
     if (!!matchedInitial) {
       this.state.ownerInitial = matchedInitial;
