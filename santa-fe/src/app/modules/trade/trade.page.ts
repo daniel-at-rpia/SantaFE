@@ -25,6 +25,7 @@
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { TradeState } from 'FEModels/frontend-page-states.interface';
     import { FullOwnerList } from 'Core/constants/securityDefinitionConstants.constant';
+    import { NON_PM_INITIALS } from 'Core/constants/tradeConstants.constant';
     import { selectSelectedSecurityForAnalysis } from 'Trade/selectors/trade.selectors';
   //
 
@@ -47,7 +48,7 @@ export class TradePage implements OnInit, OnDestroy {
     this.state = {
       sidePanelsCollapsed: true,
       lilMarketMaximized: false,
-      ownerInitial: ''
+      ownerInitial: null
     }
   }
 
@@ -102,7 +103,11 @@ export class TradePage implements OnInit, OnDestroy {
     const matchedInitial = this.constants.fullOwnerList.find((eachInitial) => {
       eachInitial === serverReturn;
     })
-    this.state.ownerInitial = matchedInitial;
+    if (!!matchedInitial) {
+      this.state.ownerInitial = matchedInitial;
+    } else {
+      this.state.ownerInitial = NON_PM_INITIALS;
+    }
   }
 
 }

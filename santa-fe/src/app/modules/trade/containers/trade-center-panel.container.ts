@@ -52,6 +52,7 @@
     } from 'Core/constants/securityTableConstants.constant';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
     import {
+      NON_PM_INITIALS,
       QUANT_COMPARER_PERCENTILE,
       PortfolioShortcuts,
       OwnershipShortcuts,
@@ -180,13 +181,15 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
   public ngOnChanges() {
     if (!!this.ownerInitial) {
-      const filter = [];
-      filter.push(this.ownerInitial);
-      this.constants.ownershipShortcuts[0].includedDefinitions[0].selectedOptions = filter;
-    } else {
-      this.constants.ownershipShortcuts.splice(0, 1);
+      if (this.ownerInitial !== NON_PM_INITIALS) {
+        const filter = [];
+        filter.push(this.ownerInitial);
+        this.constants.ownershipShortcuts[0].includedDefinitions[0].selectedOptions = filter;
+      } else {
+        this.constants.ownershipShortcuts.splice(0, 1);
+      }
+      this.populateSearchShortcuts();
     }
-    this.populateSearchShortcuts();
   }
 
   public ngOnDestroy() {
