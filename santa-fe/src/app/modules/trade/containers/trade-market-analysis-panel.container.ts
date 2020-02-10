@@ -32,13 +32,14 @@
       SecurityDefinitionDTO
     } from 'FEModels/frontend-models.interface';
     import { TradeMarketAnalysisPanelState } from 'FEModels/frontend-page-states.interface';
-    import { LilMarketGraphSeriesDataPack } from 'FEModels/frontend-adhoc-packages.interface';
+    import { LilMarketGraphSeriesDataPack, ClickedOpenSecurityInBloombergEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       BEHistoricalSummaryDTO,
       BEHistoricalSummaryOverviewDTO,
       BEHistoricalQuantBlock
     } from 'BEModels/backend-models.interface';
     import { PayloadGetGroupHistoricalSummary } from 'BEModels/backend-payloads.interface';
+    import { EngagementActionList } from 'Core/constants/coreConstants.constant';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       MARKET_ANALYSIS_SPREAD_METRIC_KEY,
@@ -62,6 +63,7 @@
 export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   @Output() populateGraph = new EventEmitter();
   @Input() collapseGraph: boolean;
+  @Input() ownerInitial: string;
   state: TradeMarketAnalysisPanelState;
   subscriptions = {
     receiveSelectedSecuritySub: null
@@ -146,6 +148,13 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   public onClickGroupByOption(targetOption: SecurityDefinitionDTO){
     if (!!this.state.apiReturnedState) {
       if (!targetOption.state.isLocked) {
+        this.restfulCommService.logEngagement(
+          EngagementActionList.clickGroupByOption,
+          this.state.targetSecurity.data.securityID,
+          targetOption.data.key,
+          this.ownerInitial,
+          'Trade - Lil Market Panel'
+        );
         const indexOfTargetOption = this.state.config.activeOptions.indexOf(targetOption);
         if (indexOfTargetOption >= 0) {
           this.state.config.activeOptions.splice(indexOfTargetOption, 1);
@@ -160,6 +169,13 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   public onClickTimeScope(targetScope: string) {
     if (!!this.state.apiReturnedState) {
       if (this.state.config.timeScope !== targetScope) {
+        this.restfulCommService.logEngagement(
+          EngagementActionList.changeTimeScope,
+          this.state.targetSecurity.data.securityID,
+          targetScope,
+          this.ownerInitial,
+          'Trade - Lil Market Panel'
+        );
         this.state.config.timeScope = targetScope;
         this.fetchGroupData();
       }
@@ -168,6 +184,13 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
 
   public onClickDriver(targetDriver: string) {
     if (this.state.config.driver !== targetDriver) {
+      this.restfulCommService.logEngagement(
+        EngagementActionList.changeDriver,
+        this.state.targetSecurity.data.securityID,
+        targetDriver,
+        this.ownerInitial,
+        'Trade - Lil Market Panel'
+      );
       this.state.config.driver = targetDriver;
       this.fetchGroupData();
     }
@@ -182,6 +205,13 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   }
 
   public onClickSecurityCardThumbDown(targetSecurity: SecurityDTO) {
+    this.restfulCommService.logEngagement(
+      EngagementActionList.thumbdownSecurity,
+      targetSecurity.data.securityID,
+      'Thumbdown',
+      this.ownerInitial,
+      'Trade - Lil Market Panel'
+    );
   }
 
   public onClickSecurityCardSendToGraph(targetSecurity: SecurityDTO) {
@@ -191,6 +221,13 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     const targetIndex = this.state.table.presentList.indexOf(targetSecurity);
     const targetData = this.state.table.levelSummary.data.list[targetIndex].data.timeSeries;
     if (!!targetData && targetData.length > 0) {
+      this.restfulCommService.logEngagement(
+        EngagementActionList.populateGraph,
+        targetSecurity.data.name || this.state.table.presentList[1].data.name || 'Something is Wrong',
+        'Main Graph',
+        this.ownerInitial,
+        'Trade - Lil Market Panel'
+      );
       this.state.graphDataEmptyState = false;
       if (!!this.state.chart) {
         this.state.chart.dispose();
@@ -212,6 +249,18 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     } else {
       this.state.graphDataEmptyState = true;
     }
+  }
+
+  public onClickOpenSecurityInBloomberg(pack: ClickedOpenSecurityInBloombergEmitterParams) {
+    this.restfulCommService.logEngagement(
+      EngagementActionList.bloombergRedict,
+      pack.targetSecurity.data.securityID,
+      `BBG - ${pack.targetBBGModule}`,
+      this.ownerInitial,
+      'Trade - Lil Market Panel'
+    );
+    const url = `bbg://securities/${pack.targetSecurity.data.globalIdentifier}%20${pack.yellowCard}/${pack.targetBBGModule}`;
+    window.open(url);
   }
 
   private onSecuritySelected(targetSecurity: SecurityDTO) {
@@ -445,6 +494,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     targetSecurity.api.onClickCard = this.onSelectSecurityCardInPresentList.bind(this);
     targetSecurity.api.onClickThumbDown = this.onClickSecurityCardThumbDown.bind(this);
     targetSecurity.api.onClickSendToGraph = this.onClickSecurityCardSendToGraph.bind(this);
+    targetSecurity.api.onClickOpenSecurityInBloomberg = this.onClickOpenSecurityInBloomberg.bind(this);
   }
 
   private populateGroupOptionText(rawData: BEHistoricalSummaryOverviewDTO) {

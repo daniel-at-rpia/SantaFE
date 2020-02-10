@@ -126,7 +126,8 @@ export class DTOService {
       api: {
         onClickCard: null,
         onClickSendToGraph: null,
-        onClickThumbDown: null
+        onClickThumbDown: null,
+        onClickOpenSecurityInBloomberg: null
       },
       state: {
         isSelected: false,

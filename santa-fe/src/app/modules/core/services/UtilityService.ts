@@ -734,6 +734,5 @@ export class UtilityService {
         return false;
       }
     }
-
   // trade specific end
 }

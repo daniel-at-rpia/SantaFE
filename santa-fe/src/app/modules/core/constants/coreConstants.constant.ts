@@ -15,7 +15,9 @@ export const APIUrlMap = {
   getTickers: `Obligor/get-tickers`,
   getSubIndustries: `obligor/get-subindustries`,
   getCountries: 'obligor/get-countries',
-  setQuoteStatus: 'liveQuote/set-quote-status'
+  setQuoteStatus: 'liveQuote/set-quote-status',
+  logEngagement: 'genericLogger/log',
+  logError: 'genericLogger/log-error'
 };
 
 export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
@@ -159,3 +161,17 @@ export const BackendKeyDictionary = {
 };
 
 export const MIN_OBLIGOR_CURVE_VALUES = 2;
+
+export const EngagementActionList = {
+  sendEmail: 'Send Email',
+  selectPreset: 'Select Preset',
+  switchMetric: 'Switch Metric',
+  applyFilter: 'Apply Filter',
+  selectSecurityForAnalysis: 'Select Security For Analysis',
+  bloombergRedict: 'Bloomberg Redirect',
+  clickGroupByOption: 'Click Group By Option',
+  changeTimeScope: 'Change Time Scope',
+  changeDriver: 'Change Driver',
+  thumbdownSecurity: 'Thumbdown Security',
+  populateGraph: 'Populate Graph'
+}

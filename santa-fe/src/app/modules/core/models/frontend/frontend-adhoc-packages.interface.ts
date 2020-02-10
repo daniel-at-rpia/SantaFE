@@ -10,7 +10,8 @@ import {
 import {
   SecurityTableRowDTO,
   NumericFilterDTO,
-  SecurityQuoteDTO
+  SecurityQuoteDTO,
+  SecurityDTO
 } from 'FEModels/frontend-models.interface';
 
 import {
@@ -97,4 +98,10 @@ export interface ClickedSpecificQuoteEmitterParams {
   targetQuote: SecurityQuoteDTO;
   isOnBidSide: boolean;
   targetMetric: string;
+}
+
+export interface ClickedOpenSecurityInBloombergEmitterParams {
+  targetBBGModule: string;
+  yellowCard: string;
+  targetSecurity: SecurityDTO;
 }

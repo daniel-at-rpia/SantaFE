@@ -39,7 +39,8 @@ export class LiveDataProcessingService {
     tableHeaderList: Array<SecurityTableHeaderDTO>,
     activeMetricType: string,
     serverReturn: Object,
-    sendToGraphCallback: Function
+    sendToGraphCallback: Function,
+    openSecurityInBloombergCallback: Function
   ): Array<SecurityTableRowDTO> {
     const prinstineRowList: Array<SecurityTableRowDTO> = [];  // flush out the stencils
     const securityList = [];
@@ -56,6 +57,7 @@ export class LiveDataProcessingService {
         const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false);
         newSecurity.state.isInteractionThumbDownDisabled = true;
         newSecurity.api.onClickSendToGraph = sendToGraphCallback;
+        newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
         serverReturn[eachKey].forEach((eachPortfolio: BEPortfolioDTO) => {
           // if (!eachPortfolio.security.isGovt) {
           // disabling the check for isGovt for now
