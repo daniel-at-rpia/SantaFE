@@ -433,6 +433,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         this.loadStageOneContent(serverReturn);
       }),
       catchError(err => {
+        this.restfulCommService.logError(`Get portfolios failed`, this.ownerInitial);
         console.error('error', err);
         this.state.fetchResult.fetchTableDataFailed = true;
         this.state.fetchResult.fetchTableDataFailedError = err.message;
@@ -474,6 +475,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         this.loadStageThreeContent(serverReturn);
       }),
       catchError(err => {
+        this.restfulCommService.logError(`Get best quotes failed`, this.ownerInitial);
         console.log('liveQuote/get-best-quotes failed', err);
         this.state.fetchResult.fetchTableDataFailed = true;
         this.state.fetchResult.fetchTableDataFailedError = err.message;
