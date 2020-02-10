@@ -164,13 +164,13 @@ export class UtilityService {
         case 'B':
           return 6;
         case 'CCC':
-          return 5;
+          return 7;
         case 'CC':
-          return 5;
+          return 7;
         case 'C':
-          return 5;
+          return 7;
         case 'D':
-          return 5;
+          return 7;
         default:
           return 0;
       }
