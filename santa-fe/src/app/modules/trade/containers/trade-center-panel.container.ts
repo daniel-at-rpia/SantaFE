@@ -299,7 +299,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       this.state.filters.quickFilters.keyword = newKeyword;
       this.state.fetchResult.rowList = this.filterPrinstineRowList();
     } else if ((!newKeyword || newKeyword.length < 2) && !!this.state.filters.quickFilters.keyword && this.state.filters.quickFilters.keyword.length >= 2) {
-      this.state.filters.quickFilters.keyword = '';
+      this.state.filters.quickFilters.keyword = newKeyword;
       this.state.fetchResult.rowList = this.filterPrinstineRowList();
     }
   }
