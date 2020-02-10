@@ -68,7 +68,11 @@ export class TradePage implements OnInit, OnDestroy {
         this.loadOwnerInitial(serverReturn);
       }),
       catchError(err => {
-        this.loadOwnerInitial('n/a');
+        if (!!err && !!err.error && !!err.error.text) {
+          this.loadOwnerInitial(err.error.text);
+        } else {
+          this.loadOwnerInitial('n/a');
+        }
         return of('error');
       })
     ).subscribe();
