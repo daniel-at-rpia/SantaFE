@@ -1,4 +1,4 @@
-@import "global";
+  @import "global";
 // @import "ag-grid/ag-grid-basic.scss";
 // @import "ag-grid/ag-theme-balham.scss";
 
@@ -44,7 +44,7 @@ $alt-background: $color_white;
 
 .santaTable {
   $santaTableBlockName: &;
-  @include mix_fixed_div(relative, $z_index_standard_base_item);
+  @include mix_fixed_div(relative, $z_index_base_item);
   flex: 1 1 auto;
   display: flex;
   overflow: hidden;
@@ -100,12 +100,12 @@ $alt-background: $color_white;
       }
       &-row {
         &:hover {
-          z-index: $z_index_standard_hovering_item;  // override AgGrid's style
+          z-index: $z_index_hovering_item;  // override AgGrid's style
         }
         &--cardSelected {
-          z-index: $z_index_standard_hovering_item_lift;  // override AgGrid's style
+          z-index: $z_index_hovering_item_lift;  // override AgGrid's style
           &:hover {
-            z-index: $z_index_standard_hovering_item_lift;  // override default state's hover
+            z-index: $z_index_hovering_item_lift;  // override default state's hover
           }
         }
       }
@@ -150,7 +150,7 @@ $alt-background: $color_white;
     }
   }
   &__floatingCTA {
-    @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+    @include mix_fixed_div(absolute, $z_index_hovering_item);
     right: 0;
     bottom: 0;
     &-tableSwitch {

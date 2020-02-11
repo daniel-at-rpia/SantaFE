@@ -67,12 +67,12 @@ $marketGroupPanel_configurator_width: $securityDefinitionConfigurator_width + $s
       }
     }
     &-mainCanvas {
-      @include mix_fixed_div(relative, $z_index_standard_base_item);
+      @include mix_fixed_div(relative, $z_index_base_item);
       flex: 1 1 auto;
       display: flex;
       overflow: hidden;
       &-shortcutList {
-        @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
+        @include mix_fixed_div(absolute, $z_index_base_item_solid);
         @include mix_alive('custom', transform $animation_duration_light);
         @include mix_enable_scrollbar('vertical');
         display: flex;
@@ -85,7 +85,7 @@ $marketGroupPanel_configurator_width: $securityDefinitionConfigurator_width + $s
         }
       }
       &-configurator {
-        @include mix_fixed_div(absolute, $z_index_standard_base_item_lift);
+        @include mix_fixed_div(absolute, $z_index_base_item_lift);
         @include mix_alive('custom', transform $animation_duration_light);
         height: 100%;
         width: 100%;
@@ -122,20 +122,20 @@ $marketGroupPanel_configurator_width: $securityDefinitionConfigurator_width + $s
     }
   }
   &__configuratorCollapseCTA {
-    @include mix_fixed_div(relative, $z_index_standard_base_item);
+    @include mix_fixed_div(relative, $z_index_base_item);
     flex: 0 0 auto;
     display: flex;
     align-items: center;
     margin: $spacing_medium 0;
     &-btn {
-      @include mix_fixed_div(relative, $z_index_standard_hovering_item);
+      @include mix_fixed_div(relative, $z_index_hovering_item);
       @include mix_border_radius(50%);
       width: $iconButton_size_regular;
       height: $iconButton_size_regular;
       transform: scale(0.01);
     }
     &-line {
-      @include mix_fixed_div(absolute, $z_index_standard_base_item);
+      @include mix_fixed_div(absolute, $z_index_base_item);
       @include mix_border_generator(0 0 0 $typical_border_width);
       @include mix_calculate(margin-left, 50%, $typical_border_width, '-');
       height: 100%;
@@ -210,7 +210,7 @@ $marketGroupPanel_configurator_width: $securityDefinitionConfigurator_width + $s
         padding: 0 $marketGroupPanel_groups_list_padding;
         &-leftPie {
           @include mix_border_radius(50%);
-          @include mix_fixed_div(relative, $z_index_standard_base_item);
+          @include mix_fixed_div(relative, $z_index_base_item);
           @include mix_alive('light');
           @include material;
           width: $securityGroup_base_wheel_size;
@@ -220,7 +220,7 @@ $marketGroupPanel_configurator_width: $securityDefinitionConfigurator_width + $s
           align-items: center;
           background-color: $color_white;
           &-btn {
-            @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+            @include mix_fixed_div(absolute, $z_index_hovering_item);
             @include mix_border_radius(50%);
             @include mix_pie_configurator_positioning;
             transform: scale(0.01);
@@ -250,7 +250,7 @@ $marketGroupPanel_configurator_width: $securityDefinitionConfigurator_width + $s
         }
         &-rightPie {
           @include mix_border_radius(50%);
-          @include mix_fixed_div(relative, $z_index_standard_base_item);
+          @include mix_fixed_div(relative, $z_index_base_item);
           @include mix_alive('light');
           @include material;
           width: $securityGroup_base_wheel_size;
@@ -260,7 +260,7 @@ $marketGroupPanel_configurator_width: $securityDefinitionConfigurator_width + $s
           align-items: center;
           background-color: $color_white;
           &-btn {
-            @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+            @include mix_fixed_div(absolute, $z_index_hovering_item);
             @include mix_border_radius(50%);
             @include mix_pie_configurator_positioning;
             transform: scale(0.01);
@@ -304,12 +304,12 @@ $marketGroupPanel_configurator_width: $securityDefinitionConfigurator_width + $s
       flex-direction: column;
       padding: 0 $marketGroupPanel_groups_list_padding $spacing_large $marketGroupPanel_groups_list_padding;
       &-item {
-        @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
+        @include mix_fixed_div(relative, $z_index_base_item_solid);
         &:first-of-type {
           margin-top: $spacing_medium;
         }
         &:hover {
-          @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
+          @include mix_fixed_div(relative, $z_index_base_item_lift);
         }
       }
     }

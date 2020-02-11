@@ -7,7 +7,7 @@ $securityTableRow_expandCanvas_label_rightPadding: $spacing_small + $scroll_bar_
 
 .sat-securityTableRow {
   $securityTableRowBlockName: &;
-  @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
+  @include mix_fixed_div(relative, $z_index_base_item_solid);
   direction: ltr;
   display: flex;
   flex-direction: column;
@@ -65,7 +65,7 @@ $securityTableRow_expandCanvas_label_rightPadding: $spacing_small + $scroll_bar_
     }
   }
   &:hover {
-    @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
+    @include mix_fixed_div(relative, $z_index_base_item_lift);
     #{$securityTableRowBlockName} {
       &__tableCanvas {
         @include material();

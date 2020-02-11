@@ -1,8 +1,8 @@
-@import "global.scss";
+  @import "global.scss";
 
 .sat-market {
   $marketBlockName: &;
-  @include mix_fixed_div(absolute, $z_index_standard_base_item);
+  @include mix_fixed_div(absolute, $z_index_base_item);
   display: flex;
   justify-content: center;
   height: 100%;

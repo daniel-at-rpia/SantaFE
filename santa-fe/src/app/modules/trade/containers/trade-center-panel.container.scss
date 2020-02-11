@@ -12,13 +12,13 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
   display: flex;
   overflow: hidden;
   &__presetsAndFilters {
-    @include mix_fixed_div(relative, $z_index_standard_base_item);
+    @include mix_fixed_div(relative, $z_index_base_item);
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     &-presets {
-      @include mix_fixed_div(absolute, $z_index_standard_base_item);
+      @include mix_fixed_div(absolute, $z_index_base_item);
       @include mix_alive('custom', transform $animation_duration_light);
       display: flex;
       flex-direction: column;
@@ -43,13 +43,13 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
         display: flex;
         overflow: hidden;
         &-categoryCanvas {
-          @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
+          @include mix_fixed_div(relative, $z_index_base_item_solid);
           @include mix_alive('custom', transform $animation_duration_normal);
           flex: 0 0 auto;
           display: flex;
           transform: translate(0, 100%);
           &-ribbon {
-            @include mix_fixed_div(absolute, $z_index_standard_base_item);
+            @include mix_fixed_div(absolute, $z_index_base_item);
             @include mix_border_radius(25px, 'top');
             // @include mix_gradient($color_gray_85, $color_gray_7, 60%, 65deg);
             top: 0;
@@ -59,7 +59,7 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
             background-color: $color_gray_85;
           }
           &-list {
-            @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
+            @include mix_fixed_div(relative, $z_index_base_item_solid);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -113,7 +113,7 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
           display: flex;
           flex-direction: column;
           &-list {
-            @include mix_fixed_div(relative, $z_index_standard_base_item);
+            @include mix_fixed_div(relative, $z_index_base_item);
             @include mix_alive('light');
             @include mix_enable_scrollbar('both');
             @include mix_border_radius(15px);
@@ -163,7 +163,7 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
       }
     }
     &-configurator {
-      @include mix_fixed_div(absolute, $z_index_standard_base_item);
+      @include mix_fixed_div(absolute, $z_index_base_item);
       @include mix_alive('custom', opacity $animation_duration_light, transform $animation_duration_light);
       display: flex;
       flex-direction: column;
@@ -292,7 +292,7 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
   &--boostConfiguratorState {
     #{$tradeCenterPanelBlockName} {
       &__presetsAndFilters {
-        @include mix_fixed_div(relative, $z_index_standard_tooltip);
+        @include mix_fixed_div(relative, $z_index_tooltip);
       }
     }
   }

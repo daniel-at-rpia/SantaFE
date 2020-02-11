@@ -9,7 +9,7 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
 
 .sat-securityCard {
   $securityCardBlockName: &;
-  @include mix_fixed_div(relative, $z_index_standard_base_item);
+  @include mix_fixed_div(relative, $z_index_base_item);
   @include mix_securityCard();
   @include mix_border_radius(5px);
   @include mix_alive('custom', height $animation_duration_light, box-shadow $animation_duration_light);
@@ -19,7 +19,7 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
   height: $securityCard_labelVariant_height;
   width: $securityCard_width;
   &__name {
-    @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
+    @include mix_fixed_div(relative, $z_index_base_item_lift);
     @include mix_calculate(flex-basis, 100%, $securityCard_name_rightGap, '-');
     flex-grow: 0;
     flex-shrink: 1;
@@ -38,7 +38,7 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
     }
   }
   &__rating {
-    @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
+    @include mix_fixed_div(absolute, $z_index_base_item_solid);
     right: 0;
     height: 100%;
     display: flex;
@@ -52,7 +52,7 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
     }
   }
   &__actionMenu {
-    @include mix_fixed_div(absolute, $z_index_standard_tooltip);  // needs to be no less than the z-index of "sat-tradeMarketAnalysisPanel__table-content-securityList-item-numberOfSecurityTag"
+    @include mix_fixed_div(absolute, $z_index_tooltip);  // needs to be no less than the z-index of "sat-tradeMarketAnalysisPanel__table-content-securityList-item-numberOfSecurityTag"
     @include mix_alive('custom', transform $animation_duration_light);
     @include mix_calculate(left, 50%, $securityCard_actionMenu_majorCTA_size + $spacing_x_small * 2, '-');
     display: flex;
@@ -60,13 +60,13 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
     transform: scale(0.01);
     top: 0;
     &-minorList {
-      @include mix_fixed_div(relative, $z_index_standard_base_item);
+      @include mix_fixed_div(relative, $z_index_base_item);
       display: flex;
       justify-content: center;
       &-btn {
         @extend .santaBtn;
         @extend .santaBtn--iconOnly;  // this is necessary for usage within AgGrid
-        @include mix_fixed_div(absolute, $z_index_standard_base_item);
+        @include mix_fixed_div(absolute, $z_index_base_item);
         @include mix_border_radius(50%);
         transform: scale(0.01);
         background-color: $color_bloomberg_1;
@@ -94,7 +94,7 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
       &-thumbDownBtn {
         @extend .santaBtn;
         @extend .santaBtn--iconOnly;  // this is necessary for usage within AgGrid
-        @include mix_fixed_div(relative, $z_index_standard_hovering_item);
+        @include mix_fixed_div(relative, $z_index_hovering_item);
         @include mix_border_radius(50%);
         margin: 0 $spacing_x_small;
         background-color: $color_kill;
@@ -111,7 +111,7 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
       &-graphBtn {
         @extend .santaBtn;
         @extend .santaBtn--iconOnly;
-        @include mix_fixed_div(relative, $z_index_standard_hovering_item);
+        @include mix_fixed_div(relative, $z_index_hovering_item);
         @include mix_border_radius(50%);
         margin: 0 $spacing_x_small;
         color: $font_color_major;
@@ -222,7 +222,7 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
           right: unset;
           bottom: unset;
           &-btn {
-            @include mix_fixed_div(relative, $z_index_standard_base_item);
+            @include mix_fixed_div(relative, $z_index_base_item);
             top: unset;
             left: unset;
             right: unset;
