@@ -32,7 +32,7 @@
       flex-wrap: nowrap;
       margin: 0 0 $spacing_small $spacing_small;
       &-item {
-        @include mix_fixed_div(relative, $z_index_standard_base_item);
+        @include mix_fixed_div(relative, $z_index_base_item);
         @include mix_border_radius(10px);
         flex: 0 1 20%;
         display: flex;
@@ -42,7 +42,7 @@
         padding: $spacing_x_small 0;
         background-color: $color_gray_5;
         &-filterActive {
-          @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+          @include mix_fixed_div(absolute, $z_index_hovering_item);
           @include mix_border_radius(50%);
           right: -$spacing_x_small;
           top: -$spacing_x_small;

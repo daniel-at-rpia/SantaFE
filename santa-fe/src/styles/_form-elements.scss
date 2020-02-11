@@ -87,9 +87,9 @@
     display: flex;
     &>*{
       position: relative;
-      z-index: $z_index_standard_base_item_solid;
+      z-index: $z_index_base_item_solid;
       &:hover{
-        z-index: $z_index_standard_base_item_lift;
+        z-index: $z_index_base_item_lift;
       }
     }
     &>*:first-child:not(:last-child){

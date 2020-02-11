@@ -2,13 +2,13 @@
 
 .sat-metricSelectionDropdown {
   $metricSelectionDropdownBlockName: &;
-  @include mix_fixed_div(relative, $z_index_standard_base_item);
+  @include mix_fixed_div(relative, $z_index_base_item);
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   padding: $spacing_medium;
   &__closeBtn {
-    @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+    @include mix_fixed_div(absolute, $z_index_hovering_item);
     top: $spacing_small;
     right: $spacing_small;
     background-color: $color_kill;

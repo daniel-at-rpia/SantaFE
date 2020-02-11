@@ -1,4 +1,4 @@
-@import "global.scss";
+  @import "global.scss";
 @import "modules/trade/trade.scss";
 
 $moveVisualizer_line_thickness: 1rem;
@@ -10,11 +10,11 @@ $moveVisualizer_color_default: $color_negative;
 $moveVisualizer_color_inversed: $color_positive;
 .sat-moveVisualizer {
   $moveVisualizerBlockName: &;
-  @include mix_fixed_div(relative, $z_index_standard_base_item);
+  @include mix_fixed_div(relative, $z_index_base_item);
   flex: 1 1 auto;
   display: flex;
   &__bar {
-    @include mix_fixed_div(absolute, $z_index_standard_base_item);
+    @include mix_fixed_div(absolute, $z_index_base_item);
     width: 100%;
     bottom: 0;
     display: flex;
@@ -61,21 +61,21 @@ $moveVisualizer_color_inversed: $color_positive;
     }
   }
   &__pins {
-    @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
+    @include mix_fixed_div(relative, $z_index_base_item_lift);
     display: flex;
     align-items: flex-end;
     margin-bottom: $moveVisualizer_line_thickness + $moveVisualizer_line_padding_bottom;
     padding-right: $moveVisualizer_padding_right;
     width: 100%;
     &-end {
-      @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
+      @include mix_fixed_div(relative, $z_index_base_item_lift);
       display: flex;
       flex-direction: column;
       align-items: center;
       width: $moveVisualizer_pin_end_width;
       margin-left: -$moveVisualizer_pin_end_width/2;
       &-value {
-        @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
+        @include mix_fixed_div(relative, $z_index_base_item_lift);
         @include mix_border_radius(3px);
         padding: $spacing_minimum $spacing_xx_small;
         margin-bottom: -$spacing_xx_small;
@@ -84,14 +84,14 @@ $moveVisualizer_color_inversed: $color_positive;
         background-color: $moveVisualizer_color_default;
       }
       &-icon {
-        @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
+        @include mix_fixed_div(relative, $z_index_base_item_solid);
         font-size: $font_size_xx_small;
         color: $moveVisualizer_color_default;
       }
     }
   }
   &__invalidHighlight {
-    @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
+    @include mix_fixed_div(absolute, $z_index_base_item_solid);
     @include mix_border_radius(5px);
     @include mix_border_generator($typical_border_width*2, $color_gray_5);
     @include mix_calculate(height, 100%, $spacing_x_small*2, '-');
@@ -102,7 +102,7 @@ $moveVisualizer_color_inversed: $color_positive;
     top: $spacing_x_small;
     left: $spacing_x_small;
     &-label {
-      @include mix_fixed_div(relative, $z_index_standard_base_item);
+      @include mix_fixed_div(relative, $z_index_base_item);
       @include mix_border_radius(3px, 'top');
       margin-bottom: -$spacing_minimum;  // sometimes it's not pixel-perfect and there is a small gap
       background-color: $color_gray_5;
@@ -114,7 +114,7 @@ $moveVisualizer_color_inversed: $color_positive;
     }
   }
   &__positionDetection {
-    @include mix_fixed_div(absolute, $z_index_standard_tooltip);
+    @include mix_fixed_div(absolute, $z_index_tooltip);
     height: 100%;
     width: 100%;
   }

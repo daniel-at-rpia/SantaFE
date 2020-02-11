@@ -6,19 +6,19 @@ $quantComparer_edge_width_long: 4.15rem;
 $quantComparer_min_height: 2.5rem;
 .sat-quantComparer {
   $quantComparerBlockName: &;
-  @include mix_fixed_div(relative, $z_index_standard_base_item);
+  @include mix_fixed_div(relative, $z_index_base_item);
   flex: 1 1 auto;
   display: flex;
   justify-content: center;
   min-height: 2.5rem;
   &__base {
-    @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
+    @include mix_fixed_div(absolute, $z_index_base_item_solid);
     display: flex;
     flex-direction: column;
     height: 100%;
     width: 100%;
     &-line {
-      @include mix_fixed_div(absolute, $z_index_standard_base_item_lift);
+      @include mix_fixed_div(absolute, $z_index_base_item_lift);
       @include mix_border_generator(0 0 $typical_border_width 0);
       @include mix_calculate(width, 100%, $quantComparer_edge_width * 2, '-');
       display: none;  // changed the design to not show the line for now
@@ -27,7 +27,7 @@ $quantComparer_min_height: 2.5rem;
       margin-right: $quantComparer_edge_width;
     }
     &-background {
-      @include mix_fixed_div(absolute, $z_index_standard_base_item);
+      @include mix_fixed_div(absolute, $z_index_base_item);
       @include mix_border_radius(5px);
       display: none;
       height: 100%;
@@ -36,7 +36,7 @@ $quantComparer_min_height: 2.5rem;
     }
   }
   &__content {
-    @include mix_fixed_div(absolute, $z_index_standard_base_item_lift);
+    @include mix_fixed_div(absolute, $z_index_base_item_lift);
     display: flex;
     height: 100%;
     width: 100%;
@@ -46,7 +46,7 @@ $quantComparer_min_height: 2.5rem;
       display: flex;
       align-items: center;
       &-edge {
-        @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
+        @include mix_fixed_div(relative, $z_index_base_item_lift);
         @include mix_border_radius(5px);
         flex: 0 0 auto;
         display: flex;
@@ -125,7 +125,7 @@ $quantComparer_min_height: 2.5rem;
     }
   }
   &__crossing {
-    @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+    @include mix_fixed_div(absolute, $z_index_hovering_item);
     @include mix_border_radius(5px);
     @include mix_calculate(height, 100%, $spacing_x_small * 2, '-');
     display: none;
@@ -145,7 +145,7 @@ $quantComparer_min_height: 2.5rem;
     }
   }
   &__skew {
-    @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+    @include mix_fixed_div(absolute, $z_index_hovering_item);
     display: none;
     height: 100%;
     width: 100%;
@@ -200,7 +200,7 @@ $quantComparer_min_height: 2.5rem;
     }
   }
   &__mid {
-    @include mix_fixed_div(absolute, $z_index_standard_base_item_lift);
+    @include mix_fixed_div(absolute, $z_index_base_item_lift);
     @include mix_calculate(height, 100%, $spacing_x_small * 2, '-');
     display: flex;
     align-items: center;

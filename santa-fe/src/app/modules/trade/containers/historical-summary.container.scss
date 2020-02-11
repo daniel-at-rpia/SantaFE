@@ -1,14 +1,14 @@
-@import "global.scss";
+  @import "global.scss";
 @import "modules/trade/trade.scss";
 
 $historicalSummary_overlayCanvas_ruler_line_width: 0.2rem;
 .sat-historicalSummary {
   $historicalSummaryBlockName: &;
-  @include mix_fixed_div(relative, $z_index_standard_base_item);
+  @include mix_fixed_div(relative, $z_index_base_item);
   flex: 1 1 auto;
   display: flex;
   &__overlayCanvas {
-    @include mix_fixed_div(absolute, $z_index_standard_tooltip_lift);
+    @include mix_fixed_div(absolute, $z_index_tooltip_lift);
     top: 0;
     left: 0;
     height: 100%;
@@ -17,7 +17,7 @@ $historicalSummary_overlayCanvas_ruler_line_width: 0.2rem;
       display: flex;
       flex-direction: column;
       &-value {
-        @include mix_fixed_div(absolute, $z_index_standard_base_item);
+        @include mix_fixed_div(absolute, $z_index_base_item);
         @include mix_border_radius(3px);
         padding: $spacing_x_small;
         background-color: $color_blue_5;
