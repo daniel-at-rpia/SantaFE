@@ -161,3 +161,7 @@ export interface TradeObligorGraphPanelState {
   }
   chartCategories: ObligorChartCategoryBlock[];
 }
+
+export interface GlobalAlertState {
+  activated: boolean;
+}

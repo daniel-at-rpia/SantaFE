@@ -1,0 +1,7 @@
+@import "global.scss";
+
+.sat-globalAlert {
+  $globalAlertBlockName: &;
+  // @include mix_fixed_div(fixed)
+  display: flex;
+}

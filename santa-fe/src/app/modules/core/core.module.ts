@@ -29,6 +29,7 @@ import { SantaTableDetailAllQuotes } from 'Core/containers/santa-table-detail-al
 import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
 import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-filter/santa-table-numeric-filter.component';
 import { NumericFilter } from 'Core/components/numeric-filter/numeric-filter.component';
+import { GlobalAlert } from 'Core/containers/global-alert/global-alert.container';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { NumericFilter } from 'Core/components/numeric-filter/numeric-filter.com
     SantaTableDetailAllQuotes,
     SantaTableNumericFilter,
     SantaTableNumericFloatingFilter,
-    NumericFilter
+    NumericFilter,
+    GlobalAlert
   ],
   imports: [
     CommonModule,
@@ -75,7 +77,8 @@ import { NumericFilter } from 'Core/components/numeric-filter/numeric-filter.com
     SecurityTable,
     SecurityDefinition,
     SecurityDefinitionConfigurator,
-    SearchShortcut
+    SearchShortcut,
+    GlobalAlert
   ]
 })
 export class CoreModule { }
