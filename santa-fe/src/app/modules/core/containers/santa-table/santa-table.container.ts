@@ -73,6 +73,7 @@
 })
 
 export class SantaTable implements OnInit, OnChanges {
+  @Input() ownerInitial: string;
   @Input() tableData: SecurityTableDTO;
   @Input() newRows: Array<SecurityTableRowDTO>;
   @Input() receivedContentStage: number;
@@ -186,7 +187,7 @@ export class SantaTable implements OnInit, OnChanges {
     this.tableData.api.gridApi = params.api;
     this.tableData.api.columnApi = params.columnApi;
     this.tableData.state.isAgGridReady = true;
-    this.agGridMiddleLayerService.onGridReady(this.tableData);
+    this.agGridMiddleLayerService.onGridReady(this.tableData, this.ownerInitial);
     this.loadTableHeaders();
   }
 
@@ -233,6 +234,7 @@ export class SantaTable implements OnInit, OnChanges {
                 // ignore, seems AgGrid causes some weird read only error
               }
             } else {
+              this.restfulCommService.logError(`[Santa Table] Could't find targetRow - ${params}`, this.ownerInitial);
               console.error(`Could't find targetRow`, params);
             }
           }
@@ -331,7 +333,7 @@ export class SantaTable implements OnInit, OnChanges {
     }
     if (this.tableData.state.isAgGridReady) {
       if (isUpdate) {
-        this.agGridMiddleLayerService.updateAgGridRows(this.tableData, this.tableData.data.rows);
+        this.agGridMiddleLayerService.updateAgGridRows(this.tableData, this.tableData.data.rows, 1);
         this.liveUpdateAllQuotesForExpandedRows();
       } else {
         this.tableData.data.agGridRowData = this.agGridMiddleLayerService.loadAgGridRows(this.tableData);
@@ -517,7 +519,7 @@ export class SantaTable implements OnInit, OnChanges {
         this.tableData.data.rows.push(eachNewRow);
       }
     });
-    this.agGridMiddleLayerService.updateAgGridRows(this.tableData, targetRows);
+    this.agGridMiddleLayerService.updateAgGridRows(this.tableData, targetRows, 2);
   }
 
   private liveUpdateAllQuotesForExpandedRows() {
@@ -581,7 +583,7 @@ export class SantaTable implements OnInit, OnChanges {
       return eachRow.data.security && eachRow.data.security.data.securityID === targetCard.data.securityID;
     })
     if (!!targetRow) {
-      this.agGridMiddleLayerService.updateAgGridRows(this.tableData, [targetRow]);
+      this.agGridMiddleLayerService.updateAgGridRows(this.tableData, [targetRow], 3);
     }
   }
 
@@ -622,7 +624,7 @@ export class SantaTable implements OnInit, OnChanges {
       targetRow.data.quotes.primaryPresentQuotes = targetRow.data.quotes.primaryPresentQuotes.slice(0, this.constants.agGridDetailRowDefaultCount);
       targetRow.data.quotes.secondaryPresentQuotes = targetRow.data.quotes.secondaryPresentQuotes.slice(0, this.constants.agGridDetailRowDefaultCount);
     }
-    this.agGridMiddleLayerService.updateAgGridRows(this.tableData, [targetRow]);
+    this.agGridMiddleLayerService.updateAgGridRows(this.tableData, [targetRow], 4);
     if (!!params && !!params.node && !!params.node.detailNode) {
       const longestList = targetRow.data.quotes.primaryQuotes.length < targetRow.data.quotes.secondaryQuotes.length ? targetRow.data.quotes.secondaryQuotes : targetRow.data.quotes.primaryQuotes;
       let dynamicHeight = longestList.length * this.constants.agGridDetailRowHeightPerRow;

@@ -192,6 +192,7 @@
     </div>
     <div class="sat-tradeCenterPanel__result-table">
       <santa-table
+        [ownerInitial]="ownerInitial"
         [tableData]="state.table.dto"
         [newRows]="state.fetchResult.rowList"
         [receivedContentStage]="state.currentContentStage"
