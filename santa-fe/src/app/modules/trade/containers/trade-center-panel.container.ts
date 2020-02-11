@@ -43,22 +43,28 @@
       BESecurityDTO,
       BEBestQuoteDTO
     } from 'BEModels/backend-models.interface';
+    import {
+      DefinitionConfiguratorEmitterParams,
+      ClickedOpenSecurityInBloombergEmitterParams
+    } from 'FEModels/frontend-adhoc-packages.interface';
 
-    import { TriCoreMetricConfig, DEFAULT_METRIC_IDENTIFIER } from 'Core/constants/coreConstants.constant';
+    import {
+      TriCoreMetricConfig,
+      DEFAULT_METRIC_IDENTIFIER,
+      EngagementActionList
+    } from 'Core/constants/coreConstants.constant';
     import {
       SecurityTableMetrics,
       SECURITY_TABLE_FINAL_STAGE,
       THIRTY_DAY_DELTA_METRIC_INDEX
     } from 'Core/constants/securityTableConstants.constant';
-    import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
+    import { SecurityDefinitionMap, FullOwnerList } from 'Core/constants/securityDefinitionConstants.constant';
     import {
-      NON_PM_INITIALS,
       QUANT_COMPARER_PERCENTILE,
       PortfolioShortcuts,
       OwnershipShortcuts,
       StrategyShortcuts
     } from 'Core/constants/tradeConstants.constant';
-    import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       selectLiveUpdateTick,
       selectInitialDataLoaded,
@@ -98,7 +104,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     strategyShortcuts: StrategyShortcuts,
     securityGroupDefinitionMap: SecurityDefinitionMap,
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
-    thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX
+    thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX,
+    fullOwnerList: FullOwnerList
   }
 
   private initializePageState(): TradeCenterPanelState {
@@ -162,7 +169,11 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       )
     ).subscribe(([tick, isInitialDataLoaded]) => {
       if (tick > 0 && isInitialDataLoaded) {  // skip first beat
-        this.fetchStageOneContent(false);
+        if (this.state.fetchResult.fetchTableDataFailed) {
+          window.location.reload(true);
+        } else {
+          this.fetchStageOneContent(false);
+        }
       }
     });
 
@@ -181,7 +192,10 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
   public ngOnChanges() {
     if (!!this.ownerInitial) {
-      if (this.ownerInitial !== NON_PM_INITIALS) {
+      const matchedInitial = this.constants.fullOwnerList.find((eachInitial) => {
+        return eachInitial === this.ownerInitial;
+      });
+      if (!!matchedInitial) {
         const filter = [];
         filter.push(this.ownerInitial);
         this.constants.ownershipShortcuts[0].includedDefinitions[0].selectedOptions = filter;
@@ -213,6 +227,13 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       this.state.presets.selectedPreset = null;
       this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true);
     } else {
+      this.restfulCommService.logEngagement(
+        EngagementActionList.selectPreset,
+        'n/a',
+        targetPreset.data.displayTitle,
+        this.ownerInitial,
+        'Trade - Center Panel'
+      );
       targetPreset.state.isSelected = true;
       this.state.presets.selectedPreset = targetPreset;
       this.state.configurator.dto = this.utilityService.applyShortcutToConfigurator(targetPreset, this.state.configurator.dto);
@@ -242,6 +263,13 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
   public onSwitchMetric(targetMetric) {
     if (this.state.filters.quickFilters.metricType !== targetMetric) {
+      this.restfulCommService.logEngagement(
+        EngagementActionList.switchMetric,
+        'n/a',
+        targetMetric,
+        this.ownerInitial,
+        'Trade - Center Panel'
+      );
       this.state.filters.quickFilters.metricType = targetMetric;
       const newMetrics: Array<SecurityTableMetricStub> = this.utilityService.deepCopy(this.state.table.metrics);
       const thrityDayDeltaMetric = newMetrics[this.constants.thirtyDayDeltaIndex];
@@ -280,10 +308,36 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     // if (this.state.currentContentStage === this.constants.securityTableFinalStage) {
       this.state.fetchResult.rowList = this.filterPrinstineRowList();
     // }
+    this.restfulCommService.logEngagement(
+      EngagementActionList.applyFilter,
+      'n/a',
+      'n/a',
+      this.ownerInitial,
+      'Trade - Center Panel'
+    );
   }
 
   public onSelectSecurityForAnalysis(targetSecurity: SecurityDTO) {
     this.store$.dispatch(new TradeSelectedSecurityForAnalysisEvent(this.utilityService.deepCopy(targetSecurity)));
+    this.restfulCommService.logEngagement(
+      EngagementActionList.selectSecurityForAnalysis,
+      targetSecurity.data.securityID,
+      'n/a',
+      this.ownerInitial,
+      'Trade - Center Panel'
+    );
+  }
+
+  public onClickOpenSecurityInBloomberg(pack: ClickedOpenSecurityInBloombergEmitterParams) {
+    const url = `bbg://securities/${pack.targetSecurity.data.globalIdentifier}%20${pack.yellowCard}/${pack.targetBBGModule}`;
+    window.open(url);
+    this.restfulCommService.logEngagement(
+      EngagementActionList.bloombergRedict,
+      pack.targetSecurity.data.securityID,
+      `BBG - ${pack.targetBBGModule}`,
+      this.ownerInitial,
+      'Trade - Center Panel'
+    );
   }
 
   public openLinkForCertificate() {
@@ -299,7 +353,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       this.state.filters.quickFilters.keyword = newKeyword;
       this.state.fetchResult.rowList = this.filterPrinstineRowList();
     } else if ((!newKeyword || newKeyword.length < 2) && !!this.state.filters.quickFilters.keyword && this.state.filters.quickFilters.keyword.length >= 2) {
-      this.state.filters.quickFilters.keyword = '';
+      this.state.filters.quickFilters.keyword = newKeyword;
       this.state.fetchResult.rowList = this.filterPrinstineRowList();
     }
   }
@@ -383,6 +437,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         this.loadStageOneContent(serverReturn);
       }),
       catchError(err => {
+        this.restfulCommService.logError(`Get portfolios failed`, this.ownerInitial);
+        this.updateStage(3);
         console.error('error', err);
         this.state.fetchResult.fetchTableDataFailed = true;
         this.state.fetchResult.fetchTableDataFailedError = err.message;
@@ -399,7 +455,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       this.state.table.dto.data.headers,
       this.state.filters.quickFilters.metricType,
       serverReturn,
-      this.onSelectSecurityForAnalysis.bind(this)
+      this.onSelectSecurityForAnalysis.bind(this),
+      this.onClickOpenSecurityInBloomberg.bind(this)
     );
     // right now stage 1 and stage 2 are combined
     // this.updateStage(2); // disabling this now for a smoothier transition on the UI
@@ -423,6 +480,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         this.loadStageThreeContent(serverReturn);
       }),
       catchError(err => {
+        this.restfulCommService.logError(`Get best quotes failed`, this.ownerInitial);
+        this.updateStage(3);
         console.log('liveQuote/get-best-quotes failed', err);
         this.state.fetchResult.fetchTableDataFailed = true;
         this.state.fetchResult.fetchTableDataFailedError = err.message;

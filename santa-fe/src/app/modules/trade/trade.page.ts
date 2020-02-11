@@ -24,8 +24,6 @@
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { TradeState } from 'FEModels/frontend-page-states.interface';
-    import { FullOwnerList } from 'Core/constants/securityDefinitionConstants.constant';
-    import { NON_PM_INITIALS } from 'Core/constants/tradeConstants.constant';
     import { selectSelectedSecurityForAnalysis } from 'Trade/selectors/trade.selectors';
   //
 
@@ -41,7 +39,6 @@ export class TradePage implements OnInit, OnDestroy {
     receiveSelectedSecuritySub: null
   };
   constants = {
-    fullOwnerList: FullOwnerList
   };
 
   private initializePageState() {
@@ -72,6 +69,7 @@ export class TradePage implements OnInit, OnDestroy {
           this.loadOwnerInitial(err.error.text);
         } else {
           this.loadOwnerInitial('n/a');
+          this.restfulCommService.logError(`Can not find user, error is`, err.error);
         }
         return of('error');
       })
@@ -104,14 +102,7 @@ export class TradePage implements OnInit, OnDestroy {
   }
 
   private loadOwnerInitial(serverReturn: string) {
-    const matchedInitial = this.constants.fullOwnerList.find((eachInitial) => {
-      return eachInitial === serverReturn;
-    })
-    if (!!matchedInitial) {
-      this.state.ownerInitial = matchedInitial;
-    } else {
-      this.state.ownerInitial = NON_PM_INITIALS;
-    }
+    this.state.ownerInitial = serverReturn;
   }
 
 }

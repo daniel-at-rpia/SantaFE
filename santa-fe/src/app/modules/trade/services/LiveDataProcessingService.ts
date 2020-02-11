@@ -39,7 +39,8 @@ export class LiveDataProcessingService {
     tableHeaderList: Array<SecurityTableHeaderDTO>,
     activeMetricType: string,
     serverReturn: Object,
-    sendToGraphCallback: Function
+    sendToGraphCallback: Function,
+    openSecurityInBloombergCallback: Function
   ): Array<SecurityTableRowDTO> {
     const prinstineRowList: Array<SecurityTableRowDTO> = [];  // flush out the stencils
     const securityList = [];
@@ -56,6 +57,7 @@ export class LiveDataProcessingService {
         const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false);
         newSecurity.state.isInteractionThumbDownDisabled = true;
         newSecurity.api.onClickSendToGraph = sendToGraphCallback;
+        newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
         serverReturn[eachKey].forEach((eachPortfolio: BEPortfolioDTO) => {
           // if (!eachPortfolio.security.isGovt) {
           // disabling the check for isGovt for now
@@ -166,6 +168,14 @@ export class LiveDataProcessingService {
     const oldRowList: Array<SecurityTableRowDTO> = this.utilityService.deepCopy(table.data.rows);
     let markDiffCount = 0;
     let quantDiffCount = 0;
+
+    // those lists are only used for logging purposes
+    const positionUpdateList: Array<SecurityTableRowDTO> = [];
+    const markUpdateList: Array<SecurityTableRowDTO> = [];
+    const newQuantUpdateList: Array<SecurityTableRowDTO> = [];
+    const betterBidUpdateList: Array<SecurityTableRowDTO> = [];
+    const betterAskUpdateList: Array<SecurityTableRowDTO> = [];
+
     newList.forEach((eachNewRow) => {
       const oldRow = oldRowList.find((eachOldRow) => {
         return eachOldRow.data.security.data.securityID === eachNewRow.data.security.data.securityID;
@@ -174,13 +184,27 @@ export class LiveDataProcessingService {
         const isSecurityDiff = this.isThereDiffInSecurity(oldRow.data.security, eachNewRow.data.security);
         const isQuantDiff = this.isThereDiffInQuantComparer(oldRow.data.cells[0].data.quantComparerDTO, eachNewRow.data.cells[0].data.quantComparerDTO);
         if ( isSecurityDiff > 0 || isQuantDiff > 0) {
-          console.log('Diffing Logic test, there is an update', oldRow, eachNewRow, isSecurityDiff, isQuantDiff);
           updateList.push(eachNewRow);
         }
+        isSecurityDiff === 1 && positionUpdateList.push(eachNewRow);
+        isSecurityDiff === 2 && markUpdateList.push(eachNewRow);
+        if (isQuantDiff === 1 || isQuantDiff === 2) {
+          newQuantUpdateList.push(eachNewRow);
+        }
+        isQuantDiff === 3 && betterBidUpdateList.push(eachNewRow);
+        isQuantDiff === 4 && betterAskUpdateList.push(eachNewRow);
       } else {
         updateList.push(eachNewRow);
       }
-    })
+    });
+    if (updateList.length > 0) {
+      console.log('=== new update ===');
+      console.log('Position change: ', positionUpdateList);
+      console.log('Mark change: ', markUpdateList);
+      console.log('Best Quote overwrite: ', newQuantUpdateList);
+      console.log('Best Bid change: ', betterBidUpdateList);
+      console.log('Best Ask change: ', betterAskUpdateList);
+    }
     return {
       newRowList: updateList,
       markDiffCount: markDiffCount,
@@ -250,9 +274,5 @@ export class LiveDataProcessingService {
       }
     }
     return 0;
-  }
-
-  private testAPI(targetSecurity: SecurityDTO) {
-    console.log('test, at test API', targetSecurity);
   }
 }

@@ -1,15 +1,15 @@
-@import "global.scss";
+  @import "global.scss";
 @import "modules/market/market.scss";
 
 $securityDefinitionConfigurator_ctas_height: 7rem;
 .sat-securityDefinitionConfigurator {
   $securityDefinitionConfiguratorBlockName: &;
-  @include mix_fixed_div(relative, $z_index_standard_base_item);
+  @include mix_fixed_div(relative, $z_index_base_item);
   display: flex;
   flex-direction: column;
   width: $securityDefinitionConfigurator_width;
   &__definitions {
-    @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
+    @include mix_fixed_div(relative, $z_index_base_item_lift);
     @include mix_enable_scrollbar('vertical');
     flex: 1 1 auto;
     display: flex;
@@ -24,10 +24,10 @@ $securityDefinitionConfigurator_ctas_height: 7rem;
         display: flex;
         flex-direction: column;
         &-label {
-          @include mix_fixed_div(relative, $z_index_standard_base_item);
+          @include mix_fixed_div(relative, $z_index_base_item);
           display: flex;
           &-text {
-            @include mix_fixed_div(relative, $z_index_standard_base_item_lift);
+            @include mix_fixed_div(relative, $z_index_base_item_lift);
             color: $font_color_major;
             background-color: $color_gray_2;
             padding: $spacing_x_small;
@@ -35,7 +35,7 @@ $securityDefinitionConfigurator_ctas_height: 7rem;
             margin-left: $spacing_small;
           }
           &-line {
-            @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
+            @include mix_fixed_div(absolute, $z_index_base_item_solid);
             @include mix_border_generator($typical_border_width 0 0 0);
             margin-top: $spacing_large - $spacing_xx_small;
             width: 100%;
@@ -74,7 +74,7 @@ $securityDefinitionConfigurator_ctas_height: 7rem;
     }
   }
   &__filters {
-    @include mix_fixed_div(absolute, $z_index_standard_base_item_solid);
+    @include mix_fixed_div(absolute, $z_index_base_item_solid);
     @include mix_calculate(height, 100%, $securityDefinitionConfigurator_ctas_height, '-');
     display: flex;
     top: 0;
@@ -91,7 +91,7 @@ $securityDefinitionConfigurator_ctas_height: 7rem;
       align-items: center;
       transform: translate(-125%, 0) scale(0.01, 1);
       &-closeBtn {
-        @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+        @include mix_fixed_div(absolute, $z_index_hovering_item);
         top: $spacing_small;
         right: $spacing_small;
         background-color: $color_kill;
@@ -142,7 +142,7 @@ $securityDefinitionConfigurator_ctas_height: 7rem;
     }
   }
   &__ctas {
-    @include mix_fixed_div(relative, $z_index_standard_hovering_item);
+    @include mix_fixed_div(relative, $z_index_hovering_item);
     flex: 0 0 $securityDefinitionConfigurator_ctas_height;
     display: flex;
     overflow: hidden;
@@ -155,7 +155,7 @@ $securityDefinitionConfigurator_ctas_height: 7rem;
       padding-top: $spacing_medium;
       &-regularSearch {
         @include mix_alive('custom', $animation_duration_light transform);
-        @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+        @include mix_fixed_div(absolute, $z_index_hovering_item);
         transform: translate(0, 0);
         .sat-loadableButton__btn {
           padding: $spacing_small $spacing_large;
@@ -209,7 +209,7 @@ $securityDefinitionConfigurator_ctas_height: 7rem;
   &--filterActiveState {
     #{$securityDefinitionConfiguratorBlockName} {
       &__filters {
-        @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+        @include mix_fixed_div(absolute, $z_index_hovering_item);
         &-content {
           @include mix_border_generator(3px, $color_active);
           transform: translate(0, 0) scale(1, 1);

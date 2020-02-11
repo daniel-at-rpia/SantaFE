@@ -77,7 +77,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
         }
       }
       &-cta {
-        @include mix_fixed_div(relative, $z_index_standard_base_item);
+        @include mix_fixed_div(relative, $z_index_base_item);
         flex: 1 1 50%;
         display: flex;
         &-btn {
@@ -93,7 +93,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
             padding: $spacing_xx_small $spacing_x_small;
           }
           &-downVoteIcon {
-            @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+            @include mix_fixed_div(absolute, $z_index_hovering_item);
             @include mix_border_radius(50%);
             display: none;
             font-size: $font_size_small;
@@ -102,7 +102,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
           }
         }
         &-actionMenu {
-          @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+          @include mix_fixed_div(absolute, $z_index_hovering_item);
           @include mix_alive('custom', transform $animation_duration_light);
           top: 100%;
           left: -$spacing_small;

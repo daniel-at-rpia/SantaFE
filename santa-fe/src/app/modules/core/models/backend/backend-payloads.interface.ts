@@ -45,3 +45,10 @@ export interface PayloadSetQuoteStatus {
   side: string;  // 'Bid', 'Ask'
   quoteStatus: string;  // 'Good', 'Bad', 'Garbage'
 }
+
+export interface PayloadLogEngagement {
+  type: string;
+  security: string;
+  elementId: string;
+  user: string;
+}

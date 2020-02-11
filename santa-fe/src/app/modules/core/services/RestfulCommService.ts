@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { first, tap, catchError } from 'rxjs/operators';
 
 import { APIUrlMap } from 'Core/constants/coreConstants.constant';
 
 @Injectable()
 export class RestfulCommService {
 
-  private endpoint = 'https://rpiadev01.rpia.ca:1225';
-  // private endpoint = 'https://rpia-quant-dt.ad.rpia:51225';
+  // private endpoint = 'https://rpiadev01.rpia.ca:1225';
+  private endpoint = 'https://rpia-quant-dt.ad.rpia:51225';
   // private endpoint = 'https://localhost:51225';
   //private endpoint = 'https://rpia-solutions:51225';
   //private endpoint = 'https://rpia-msmith-dt:51225';
@@ -40,7 +41,10 @@ export class RestfulCommService {
     }
   }
 
-  public generateCurrentTimeForPayload(payload: Object, dateStampForPrevDay: boolean) {
+  public generateCurrentTimeForPayload(
+    payload: Object,
+    dateStampForPrevDay: boolean
+  ) {
     const currentTime = new Date();
     if (dateStampForPrevDay) {
       if (currentTime.getDay() === 1) {
@@ -60,5 +64,42 @@ export class RestfulCommService {
     const parsedMonth = ('0' + (currentTime.getMonth()+1)).slice(-2);
     const parsedDate = ('0' + currentTime.getDate()).slice(-2);
     payload['yyyyMMdd'] = parseInt(`${currentTime.getFullYear()}${parsedMonth}${parsedDate}`);
+  }
+
+  public logEngagement(
+    type: string,
+    security: string,
+    value: string,
+    user: string,
+    container: string
+  ) {
+    const payload = {
+      type: type,
+      security: security,
+      value: value,
+      user: user,
+      container: container
+    };
+    this.callAPI(this.apiMap.logEngagement, {req: 'POST'}, payload).pipe(
+      first(),
+      catchError(err => {
+        return of('error');
+      })
+    ).subscribe();
+  }
+
+  public logError(
+    message: string,
+    user: string
+  ) {
+    const payload = {
+      message: `Error: ${message} - From ${user}`
+    };
+    this.callAPI(this.apiMap.logError, {req: 'POST'}, payload).pipe(
+      first(),
+      catchError(err => {
+        return of('error');
+      })
+    ).subscribe();
   }
 }

@@ -7,7 +7,8 @@
     } from 'ag-grid-community';
 
     import { UtilityService } from './UtilityService';
-    import { DTOService }from './DTOService';
+    import { DTOService } from './DTOService';
+    import { RestfulCommService } from './RestfulCommService';
     import {
       SecurityDTO,
       SecurityTableDTO,
@@ -36,13 +37,16 @@
 
 @Injectable()
 export class AgGridMiddleLayerService {
+  ownerInitial: string;
+
   constructor(
     private utilityService: UtilityService,
-    private dtoService: DTOService
+    private dtoService: DTOService,
+    private restfulCommService: RestfulCommService
   ){}
 
-  public onGridReady(table: SecurityTableDTO) {
-    // do nothing at the moment
+  public onGridReady(table: SecurityTableDTO, ownerInitial: string) {
+    this.ownerInitial = ownerInitial;
   }
 
   public loadAgGridHeaders(
@@ -110,7 +114,8 @@ export class AgGridMiddleLayerService {
 
   public updateAgGridRows(
     table: SecurityTableDTO,
-    targetRows: Array<SecurityTableRowDTO>
+    targetRows: Array<SecurityTableRowDTO>,
+    location: number  // this is needed only for logging purpose
   ) {
     targetRows.forEach((eachRow) => {
       const id = eachRow.data.security.data.securityID;
@@ -119,6 +124,7 @@ export class AgGridMiddleLayerService {
         const newAgRow = this.formAgGridRow(eachRow, table.data.allHeaders);
         targetNode.setData(newAgRow);
       } else {
+        this.restfulCommService.logError(`[AgGrid] Couldn't fine AgGrid Row for ${eachRow.data.security.data.securityID} (location - ${location})`, this.ownerInitial);
         console.error(`Couldn't fine AgGrid Row for ${eachRow.data.security.data.securityID}`, eachRow);
       }
     });
@@ -219,10 +225,12 @@ export class AgGridMiddleLayerService {
           const underlineValueB = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityB, true);
           return this.returnSortValue(targetHeader, underlineValueA, underlineValueB, securityA, securityB);
         } else {
+          this.restfulCommService.logError(`[AgGrid] Error at Custom AgGrid sorting, couldnt find header for column ${targetColumn}`, this.ownerInitial);
           console.error('Error at Custom AgGrid sorting, couldnt find header for column', targetColumn);
           return 0;
         }
       } else {
+        this.restfulCommService.logError(`[AgGrid] 'Error at Custom AgGrid sorting, column does not exist`, this.ownerInitial);
         console.error('Error at Custom AgGrid sorting, column does not exist');
         return 0;
       }

@@ -9,6 +9,7 @@ import {
 
 import { UtilityService } from 'Core/services/UtilityService';
 import { SecurityDTO } from 'FEModels/frontend-models.interface';
+import { ClickedOpenSecurityInBloombergEmitterParams } from 'Core/models/frontend/frontend-adhoc-packages.interface';
 
 @Component({
   selector: 'security-card',
@@ -45,8 +46,13 @@ export class SecurityCard implements OnInit {
   }
 
   public onClickOpenSecurityInBloomberg(targetModule: string) {
-    const yelloCard = this.utilityService.isCDS(false, this.cardData) ? `Corp` : 'Govt';
-    const url = `bbg://securities/${this.cardData.data.globalIdentifier}%20${yelloCard}/${targetModule}`;
-    window.open(url);
+    if (!!this.cardData.api.onClickOpenSecurityInBloomberg) {
+      const payload: ClickedOpenSecurityInBloombergEmitterParams = {
+        targetBBGModule: targetModule,
+        yellowCard: this.utilityService.isCDS(false, this.cardData) ? `Corp` : 'Govt',
+        targetSecurity: this.cardData
+      }
+      this.cardData.api.onClickOpenSecurityInBloomberg(payload);
+    }
   }
 }

@@ -126,7 +126,8 @@ export class DTOService {
       api: {
         onClickCard: null,
         onClickSendToGraph: null,
-        onClickThumbDown: null
+        onClickThumbDown: null,
+        onClickOpenSecurityInBloomberg: null
       },
       state: {
         isSelected: false,
@@ -518,13 +519,13 @@ export class DTOService {
           delta: delta,
           mid: mid,
           bid: {
-            number: parseFloat(bidNumber),
+            number: !!bidNumber ? parseFloat(bidNumber) : null,
             displayNumber: bidNumber,  // not been used right now but could come in handy
             broker: rawData.bidDealer,
             size: bidSize
           },
           offer: {
-            number: parseFloat(offerNumber),
+            number: !!offerNumber ? parseFloat(offerNumber) : null,
             displayNumber: offerNumber,  // not been used right now but could come in handy
             broker: rawData.askDealer,
             size: offerSize

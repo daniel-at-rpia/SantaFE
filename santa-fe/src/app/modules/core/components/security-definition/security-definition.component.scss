@@ -11,7 +11,7 @@ $securityDefinition_configuratorVariant_img_size_secondary: 0.5rem;
 $securityDefinition_configuratorVariant_filter_size: 1.5rem;
 .sat-securityDefinition {
   $securityDefinitionBlockName: &;
-  @include mix_fixed_div(relative, $z_index_standard_base_item);
+  @include mix_fixed_div(relative, $z_index_base_item);
   @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
   @include mix_alive('custom', $animation_duration_light box-shadow, $animation_duration_light background-color);
   @include mix_border_radius(5px);
@@ -52,7 +52,7 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
       }
     }
     &-securityType {
-      @include mix_fixed_div(relative, $z_index_standard_base_item_solid);
+      @include mix_fixed_div(relative, $z_index_base_item_solid);
       display: none;
       &-box {
         @include mix_border_radius(5px);
@@ -88,14 +88,14 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
     }
   }
   &__filter {
-    @include mix_fixed_div(absolute, $z_index_standard_hovering_item);
+    @include mix_fixed_div(absolute, $z_index_hovering_item);
     display: none;
     top: -$spacing_small;
     right: -$spacing_small;
     width: $securityDefinition_filter_size;
     height: $securityDefinition_filter_size;
     &-icon {
-      @include mix_fixed_div(relative, $z_index_standard_base_item);
+      @include mix_fixed_div(relative, $z_index_base_item);
       @include mix_border_radius(50%);
       flex: 1 1 auto;
       display: flex;
@@ -108,7 +108,7 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
     }
   }
   &__filterMask {
-    @include mix_fixed_div(absolute, $z_index_standard_bury_item);
+    @include mix_fixed_div(absolute, $z_index_buried_item);
     @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
     @include mix_alive('custom', $animation_duration_light box-shadow);
     @include mix_border_radius(50%);
@@ -119,7 +119,7 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
     height: $securityDefinition_filter_size;
   }
   &__selectedGap {
-    @include mix_fixed_div(absolute, $z-index_standard_bury_item);
+    @include mix_fixed_div(absolute, $z_index_buried_item);
     display: none;
     left: 100%;
     height: 100%;
