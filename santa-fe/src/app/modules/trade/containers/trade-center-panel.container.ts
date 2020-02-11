@@ -169,7 +169,11 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       )
     ).subscribe(([tick, isInitialDataLoaded]) => {
       if (tick > 0 && isInitialDataLoaded) {  // skip first beat
-        this.fetchStageOneContent(false);
+        if (this.state.fetchResult.fetchTableDataFailed) {
+          window.location.reload(true);
+        } else {
+          this.fetchStageOneContent(false);
+        }
       }
     });
 
@@ -434,6 +438,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       }),
       catchError(err => {
         this.restfulCommService.logError(`Get portfolios failed`, this.ownerInitial);
+        this.updateStage(3);
         console.error('error', err);
         this.state.fetchResult.fetchTableDataFailed = true;
         this.state.fetchResult.fetchTableDataFailedError = err.message;
@@ -476,6 +481,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       }),
       catchError(err => {
         this.restfulCommService.logError(`Get best quotes failed`, this.ownerInitial);
+        this.updateStage(3);
         console.log('liveQuote/get-best-quotes failed', err);
         this.state.fetchResult.fetchTableDataFailed = true;
         this.state.fetchResult.fetchTableDataFailedError = err.message;
