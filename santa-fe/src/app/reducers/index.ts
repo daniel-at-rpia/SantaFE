@@ -10,12 +10,18 @@ import {
   TradeState,
   tradeReducer
 } from 'Trade/reducers/trade.reducer';
+import {
+  CoreState,
+  coreReducer
+} from 'Core/reducers/core.reducer';
 
 export interface AppState {
-  trade: TradeState
+  core: CoreState;
+  trade: TradeState;
 }
 
 export const appReducers: ActionReducerMap<AppState> = {
+  core: coreReducer,
   trade: tradeReducer
 };
 

@@ -420,3 +420,7 @@ export interface HistoricalSummaryDTO extends BasicDTOStructure {
     isStencil: boolean;
   }
 }
+
+export interface AlertDTO extends BasicDTOStructure {
+  
+}

@@ -15,7 +15,6 @@ import {
   TradeLiveUpdatePassRawDataEvent,
   TradeLiveUpdatePassTableContentEvent
 } from 'Trade/actions/trade.actions';
-import { RouterLinkWithHref } from '@angular/router';
 
 export interface TradeState {
   presetSelected: boolean;
@@ -132,6 +131,6 @@ export function tradeReducer(
   }
 }
 
-export function reducer(state: TradeState | undefined, action: Action) {
+export function reducer(state: TradeState, action: Action) {
   return tradeReducer(state, action);
 }

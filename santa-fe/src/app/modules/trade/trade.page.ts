@@ -25,6 +25,7 @@
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { TradeState } from 'FEModels/frontend-page-states.interface';
     import { selectSelectedSecurityForAnalysis } from 'Trade/selectors/trade.selectors';
+    import { CoreUserLoggedIn } from 'Core/actions/core.actions';
   //
 
 @Component({
@@ -103,6 +104,7 @@ export class TradePage implements OnInit, OnDestroy {
 
   private loadOwnerInitial(serverReturn: string) {
     this.state.ownerInitial = serverReturn;
+    this.store$.dispatch(new CoreUserLoggedIn(serverReturn));
   }
 
 }
