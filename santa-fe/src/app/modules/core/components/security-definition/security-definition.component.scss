@@ -119,7 +119,7 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
     height: $securityDefinition_filter_size;
   }
   &__selectedGap {
-    @include mix_fixed_div(absolute, $z-index_standard_bury_item);
+    @include mix_fixed_div(absolute, $z_index_buried_item);
     display: none;
     left: 100%;
     height: 100%;
