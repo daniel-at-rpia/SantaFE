@@ -71,6 +71,8 @@ export class UtilityService {
       switch (input) {
         case "Secured":
           return 1;
+        case "SECURED":
+          return 1;
         case "1st Lien Secured":
           return 1;
         case "1st lien":

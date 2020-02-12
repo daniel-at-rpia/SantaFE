@@ -87,7 +87,7 @@ export interface BESecurityDTO {
   ccy: string;
   country: string;
   sector: string;
-  seniority: string;
+  genericSeniority: string;
   industry: string;
   subIndustry: string;
   issuer: string;
@@ -137,6 +137,7 @@ interface BESecurityMetricDTO {
   backendWorkoutTerm?: number,
   oasSpread: number,
   zSpread: number,
+  spread?: number,
   aswUsd: number,
   gSpread: number,
   yieldWorst: number,
