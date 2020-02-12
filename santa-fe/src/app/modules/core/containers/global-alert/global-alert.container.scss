@@ -2,6 +2,12 @@
 
 .sat-globalAlert {
   $globalAlertBlockName: &;
+  &__alertList {
+    @include mix_fixed_div(fixed, $z_index_globalAlertList);
+    top: 0;
+    right: 0;
+    padding: $spacing_medium 0;
+  }
   &__trigger {
     @include mix_fixed_div(fixed, $z_index_globalAlertTrigger);
     bottom: 0;

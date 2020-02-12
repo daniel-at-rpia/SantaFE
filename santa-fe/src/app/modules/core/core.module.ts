@@ -30,6 +30,7 @@ import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-num
 import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-filter/santa-table-numeric-filter.component';
 import { NumericFilter } from 'Core/components/numeric-filter/numeric-filter.component';
 import { GlobalAlert } from 'Core/containers/global-alert/global-alert.container';
+import { Alert } from 'Core/components/alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { GlobalAlert } from 'Core/containers/global-alert/global-alert.container
     SantaTableNumericFilter,
     SantaTableNumericFloatingFilter,
     NumericFilter,
-    GlobalAlert
+    GlobalAlert,
+    Alert
   ],
   imports: [
     CommonModule,
