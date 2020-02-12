@@ -5,7 +5,7 @@
   &__alertList {
     @include mix_fixed_div(fixed, $z_index_globalAlertList);
     top: 0;
-    right: 0;
+    right: -$alert_width;
     padding: $spacing_medium 0;
   }
   &__trigger {

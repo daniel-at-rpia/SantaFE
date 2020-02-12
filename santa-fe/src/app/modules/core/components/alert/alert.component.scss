@@ -1,5 +1,100 @@
 @import "global.scss";
 
+$alert_height: 4rem;
+$alert_overview_padding_right: $spacing_small;
+$alert_margin_right: $spacing_large;
+$alert_countdown_duration: 5s;
 .sat-alert {
   $alertBlockName: &;
+  @include mix_alive('custom', transform $animation_duration_light);
+  @include mix_fixed_div(relative, $z_index_base_item);
+  @include mix_border_radius(10px);
+  @include mix_border_generator();
+  display: flex;
+  left: -$alert_height;
+  width: $alert_width;
+  height: $alert_height;
+  padding: $spacing_small;
+  margin: $spacing_small $spacing_small 0;
+  background-color: $color_white;
+  transform: translate(0, 0);
+  &__overview {
+    @include mix_border_generator(0 $typical_border_width 0 0);
+    flex: 0 0 auto;
+    display: flex;
+    width: $alert_height;
+    padding-right: $alert_overview_padding_right;
+    margin-right: $spacing_small;
+    &-main {
+      flex: 1 1 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      &-icon {
+        font-size: $font_size_xx_large;
+        color: $font_color_minor;
+      }
+    }
+  }
+  &__detail {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    &-message {
+      @include mix_text_overflow_multi_line(3);
+      line-height: $line_height_small;
+      overflow: hidden;
+    }
+  }
+  &__close {
+    @include mix_fixed_div(absolute, $z_index_hovering_item);
+    top: ($alert_height - $iconButton_size_regular)/2;
+    right: -$iconButton_size_regular/2;
+    display: flex;
+    &-btn {
+      @include mix_border_radius(50%);
+      display: flex;
+      width: $iconButton_size_regular;
+      height: $iconButton_size_regular;
+      font-size: $font_size_normal;
+      background-color: $color_white;
+    }
+  }
+  &__countdown {
+    @include mix_border_radius(10px);
+    @include mix_fixed_div(absolute, $z_index_base_item);
+    display: flex;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    &-line {
+      @include mix_fixed_div(absolute, $z_index_hovering_item);
+      display: flex;
+      width: 100%;
+      bottom: 0;
+      height: $alert_countdown_width;
+      &-content {
+        @include mix_alive('custom', margin-left $alert_countdown_duration linear);
+        margin-left: 0;
+        flex: 1 1 auto;
+        &--finish {
+          margin-left: 100%;
+        }
+      }
+    }
+  }
+  &--info {
+    #{$alertBlockName} {
+      &__overview-main {
+        &--info {
+          display: flex;
+        }
+      }
+      &__countdown-line-content {
+        background-color: $font_color_minor;
+      }
+    }
+  }
 }

@@ -1,6 +1,24 @@
 <article
   [ngClass]="{
-    'sat-alert': true
+    'sat-alert': true,
+    'sat-alert--info': true
   }">
-  Alert
+  <section class="sat-alert__overview">
+    <div class="sat-alert__overview-main">
+      <i class="sat-alert__overview-main-icon fal fa-meh"></i>
+    </div>
+  </section>
+  <section class="sat-alert__detail">
+    <div class="sat-alert__detail-message">
+      <span class="sat-alert__detail-message-text">Some detail for this alert</span>
+    </div>
+  </section>
+  <section class="sat-alert__close">
+    <button class="sat-alert__close-btn santaBtn--iconOnly fal fa-times"></button>
+  </section>
+  <section class="sat-alert__countdown">
+    <div class="sat-alert__countdown-line">
+      <div class="sat-alert__countdown-line-content"></div>
+    </div>
+  </section>
 </article>
