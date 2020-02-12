@@ -94,8 +94,8 @@ $z_index_feedback_toast: 39999;
 $z_index_loadingSpinner: 35000;
 $z_index_modal: 29999;
 $z_index_navTrigger: 20100;
+$z_index_globalAlertTrigger: 20050;
 $z_index_mainNavMenu: 20000;
-$z_index_topNavMenu: 19999;
 $z_index_dropdown: 3000;
 $z_index_tooltip_lift: 2000;
 $z_index_tooltip: 1000;
@@ -118,6 +118,7 @@ $mediaQuery_size_medium: 48rem;
 $mediaQuery_size_large: 64rem;
 $mediaQuery_size_xLarge: 140rem;
 // Store variables that are used globally, in order to avoid hierarchy problem
+$iconButton_size_large: 3rem;
 $iconButton_size_regular: 2.25rem;
 $iconButton_size_small: 1.75rem;
 $typical_border_width: 0.0625rem;

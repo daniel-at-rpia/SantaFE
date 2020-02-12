@@ -46,7 +46,8 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
 
   private initializePageState(): GlobalAlertState {
     const state: GlobalAlertState = {
-      activated: true
+      activated: true,
+      displayAlerts: false
     };
     return state;
   }
@@ -71,6 +72,10 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       const eachSub = this.subscriptions[eachItem] as Subscription;
       eachSub.unsubscribe();
     }
+  }
+
+  public onClickAlertTrigger() {
+    this.state.displayAlerts = !this.state.displayAlerts;
   }
 
 }

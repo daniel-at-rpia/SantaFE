@@ -1,6 +1,17 @@
 <article
   [ngClass]="{
-    'sat-globalAlert': true
+    'sat-globalAlert': true,
+    'sat-globalAlert--displayAlertsState': state.displayAlerts
   }">
-  
+  <section class="sat-globalAlert__trigger">
+    <button
+      (click)="onClickAlertTrigger()"
+      [ngClass]="{
+        'sat-globalAlert__trigger-btn santaBtn--iconOnly': true,
+        'fal': true,
+        'fa-bell': !state.displayAlerts,
+        'fa-bell-on': state.displayAlerts
+      }">
+    </button>
+  </section>
 </article>
