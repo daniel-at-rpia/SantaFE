@@ -438,6 +438,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       }),
       catchError(err => {
         this.restfulCommService.logError(`Get portfolios failed`, this.ownerInitial);
+        this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
         this.updateStage(3);
         console.error('error', err);
         this.state.fetchResult.fetchTableDataFailed = true;
