@@ -78,7 +78,8 @@ export class RestfulCommService {
       security: security,
       value: value,
       user: user,
-      container: container
+      container: container,
+      timestamp: new Date().getTime()
     };
     this.callAPI(this.apiMap.logEngagement, {req: 'POST'}, payload).pipe(
       first(),
