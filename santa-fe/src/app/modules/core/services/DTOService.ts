@@ -72,7 +72,7 @@ export class DTOService {
         couponType: !isStencil ? rawData.couponType : null,
         industry: !isStencil ? rawData.industry : null,
         securityType: !isStencil ? rawData.securityType : null,
-        seniority: !isStencil ? rawData.paymentRank : null,
+        seniority: null,
         maturityType: !isStencil ? rawData.maturityType : null,
         primaryPmName: null,
         backupPmName: null,
@@ -141,6 +141,9 @@ export class DTOService {
         isActionMenuMinorActionsDisabled: false
       }
     };
+    if (!isStencil && object.data.seniorityLevel < 5 && object.data.seniorityLevel > 0 && rawData.paymentRank) {
+      object.data.seniority = `${object.data.seniorityLevel} - ${rawData.paymentRank}`;
+    }
     return object;
   }
 
