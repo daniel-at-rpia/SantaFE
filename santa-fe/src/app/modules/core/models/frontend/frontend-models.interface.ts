@@ -186,7 +186,6 @@ export interface SearchShortcutDTO extends BasicDTOStructure {
   data: {
     displayTitle: string;
     configuration: Array<SecurityDefinitionDTO>;
-    isMajorShortcut: boolean;
   },
   style: {
     slotList: Array<SecurityDefinitionDTO>
@@ -194,6 +193,8 @@ export interface SearchShortcutDTO extends BasicDTOStructure {
   state: {
     isSelected: boolean;
     isUserInputBlocked: boolean;
+    isMajorShortcut: boolean;
+    isHeroShortcut: boolean;
   }
 }
 

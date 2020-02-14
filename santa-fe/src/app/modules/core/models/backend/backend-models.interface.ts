@@ -21,13 +21,13 @@ export interface BESecurityGroupDTO {
   securityType: string;
   couponType: string;
   type: string;
-  metrics: BEGroupMetricDTO,
+  metrics: BEGroupMetricDTO;
   deltaMetrics: {
-    Dod: BEGroupMetricDTO,
-    Wow?: BEGroupMetricDTO,
-    Mtd?: BEGroupMetricDTO,
-    Mom?: BEGroupMetricDTO,
-    Ytd?: BEGroupMetricDTO,
+    Dod: BEGroupMetricDTO;
+    Wow?: BEGroupMetricDTO;
+    Mtd?: BEGroupMetricDTO;
+    Mom?: BEGroupMetricDTO;
+    Ytd?: BEGroupMetricDTO;
     Yoy?: BEGroupMetricDTO
   }
 }
@@ -74,10 +74,11 @@ interface BEGroupMetricDTO {
   ratingNoNotch?: string;
   ratingDouble?: number;
   ratingBucket?: string;
+  isIndex?: false;
 }
 
 export interface BESecurityDTO {
-  globalIdentifier: string;  // CUSIP, i.e US02376RAC60
+  globalIdentifier: string;  // CUSIP; i.e US02376RAC60
   securityIdentifier: string;
   name: string;
   baseType: string;
@@ -87,7 +88,7 @@ export interface BESecurityDTO {
   ccy: string;
   country: string;
   sector: string;
-  seniority: string;
+  genericSeniority: string;
   industry: string;
   subIndustry: string;
   issuer: string;
@@ -126,41 +127,49 @@ interface BESecurityMetricDTO {
   isFixedForLife: boolean;
   isFixedToFloatInFixed: boolean;
   isFloat: boolean;
-  isNewIssue: boolean,
-  isOnTheRun: boolean,
-  benchmarkId: number,
-  benchmarkName: string,
-  underlyingSecurityId: number,
-  workoutTerm: number,
-  ratingDouble: number,
-  price: number,
-  backendWorkoutTerm?: number,
-  oasSpread: number,
-  zSpread: number,
-  aswUsd: number,
-  gSpread: number,
-  yieldWorst: number,
-  amtOutstanding: number,
-  marketValue: number,
-  rating: string,
-  ratingNoNotch: string,
-  ratingBucket: string
-  isRated: boolean;
-}
-
-export interface BESecurityDeltaMetricDTO {
-  workoutTerm?: number;
+  isNewIssue: boolean;
+  isOnTheRun: boolean;
+  benchmarkId?: number;
+  benchmarkSecurityIdentifier: string;
+  benchmarkName: string;
+  underlyingSecurityId: number;
+  workoutTerm: number;
   ratingDouble: number;
   price: number;
   backendWorkoutTerm?: number;
-  oasSpread: number;
+  oasSpread?: number;
   zSpread: number;
-  aswUsd: number;
+  spread?: number;
+  aswUsd?: number;
   gSpread: number;
   yieldWorst: number;
+  amtOutstanding: number;
+  marketValue: number;
+  rating: string;
+  ratingNoNotch: string;
+  ratingBucket: string
+  isRated: boolean;
+  isIndex: boolean;
+}
+
+export interface BESecurityDeltaMetricDTO {
+  ratingDouble: number;
+  price: number;
+  zSpread: number;
+  gSpread: number;
+  spread: number;
+  yieldWorst: number;
+  workoutTerm?: number;
+  backendWorkoutTerm?: number;
+  oasSpread?: number;
+  aswUsd?: number;
   amtOutstanding?: number;
   marketValue?: number;
   rating?: number;
+}
+
+export interface BETradeStepOneReturn {
+  [property: string]: Array<BEPortfolioDTO>;
 }
 
 export interface BEPortfolioDTO {
@@ -211,35 +220,35 @@ export interface BESingleBestQuoteDTO {
 }
 
 export interface BEQuoteDTO {
-  dealer: string; // JEFF,
-  quoteType: string; //Run,
-  isActive: boolean; // true,
+  dealer: string; // JEFF;
+  quoteType: string; //Run;
+  isActive: boolean; // true;
   identifier: string;  // 28643
   name: string;  // AAL 5 06/01/22
   benchmarkName: string;
-  time: string; // 2019-11-22T13:32:40,
-  globalIdentifier: string;  // CUSIP, i.e US02376RAC60
+  time: string; // 2019-11-22T13:32:40;
+  globalIdentifier: string;  // CUSIP; i.e US02376RAC60
   bidQuoteId: string; // "77d78117-5f89-41ab-a697-8f1475eb8006"
-  bidQuoteStatus: number; // 0, -1, -2
+  bidQuoteStatus: number; // 0; -1; -2
   bidTime: string; // "2020-02-03T10:12:17-05:00"
-  bidVenue: string; // MSG1,
-  bidYieldType: number; // null,
-  bidYield: number; // null,
-  bidSpread: number; // null,
-  bidPrice: number; // 97.2099990844726,
-  bidQuantity: number; // null,
-  bidIsNatural: boolean; // false,
-  bidQualifier: string; // null,
+  bidVenue: string; // MSG1;
+  bidYieldType: number; // null;
+  bidYield: number; // null;
+  bidSpread: number; // null;
+  bidPrice: number; // 97.2099990844726;
+  bidQuantity: number; // null;
+  bidIsNatural: boolean; // false;
+  bidQualifier: string; // null;
   askQuoteId: string;
-  askQuoteStatus: number;  // 0, -1, -2
+  askQuoteStatus: number;  // 0; -1; -2
   askTime: string;
-  askVenue: string; // null,
-  askYieldType: number; // null,
-  askYield: number; // null,
-  askSpread: number; // null,
-  askPrice: number; // null,
-  askQuantity: number; // null,
-  askIsNatural: boolean; // null,
+  askVenue: string; // null;
+  askYieldType: number; // null;
+  askYield: number; // null;
+  askSpread: number; // null;
+  askPrice: number; // null;
+  askQuantity: number; // null;
+  askIsNatural: boolean; // null;
   askQualifier: string; // null
 }
 

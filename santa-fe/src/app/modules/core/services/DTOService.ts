@@ -65,14 +65,14 @@ export class DTOService {
         ratingLevel: !isStencil && rawData.metrics ? this.utility.mapRatings(rawData.metrics.ratingNoNotch) : 0,
         ratingValue: !isStencil && rawData.metrics ? rawData.metrics.ratingNoNotch : null,
         ratingBucket: !isStencil && rawData.metrics ? rawData.metrics.ratingBucket : null,
-        seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.seniority) : 5,
+        seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.genericSeniority) : 5,
         currency: !isStencil ? rawData.ccy : null,
         country: !isStencil ? rawData.country : null,
         sector: !isStencil ? rawData.sector : null,
         couponType: !isStencil ? rawData.couponType : null,
         industry: !isStencil ? rawData.industry : null,
         securityType: !isStencil ? rawData.securityType : null,
-        seniority: !isStencil ? rawData.seniority : null,
+        seniority: null,
         maturityType: !isStencil ? rawData.maturityType : null,
         primaryPmName: null,
         backupPmName: null,
@@ -141,6 +141,9 @@ export class DTOService {
         isActionMenuMinorActionsDisabled: false
       }
     };
+    if (!isStencil && object.data.seniorityLevel < 5 && object.data.seniorityLevel > 0 && rawData.paymentRank) {
+      object.data.seniority = `${object.data.seniorityLevel} - ${rawData.paymentRank}`;
+    }
     return object;
   }
 
@@ -388,20 +391,22 @@ export class DTOService {
     definitionList: Array<DTOs.SecurityDefinitionDTO>,
     title: string,
     skipFirstForDefaultGroupBy: boolean,
-    isMajor: boolean
+    isMajor: boolean,
+    isHero: boolean
   ): DTOs.SearchShortcutDTO {
     const object: DTOs.SearchShortcutDTO = {
       data: {
         displayTitle: title,
-        configuration: definitionList,
-        isMajorShortcut: !!isMajor
+        configuration: definitionList
       },
       style: {
         slotList: [null, null, null, null, null]
       },
       state: {
         isSelected: false,
-        isUserInputBlocked: false
+        isUserInputBlocked: false,
+        isMajorShortcut: !!isMajor,
+        isHeroShortcut: !!isHero
       }
     };
     definitionList.forEach((eachDefinition, index) => {

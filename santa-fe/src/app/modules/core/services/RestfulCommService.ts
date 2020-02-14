@@ -94,7 +94,8 @@ export class RestfulCommService {
     user: string
   ) {
     const payload = {
-      message: `Error: ${message} - From ${user}`
+      message: `Error: ${message} - From ${user}`,
+      level: 'Error'
     };
     this.callAPI(this.apiMap.logError, {req: 'POST'}, payload).pipe(
       first(),

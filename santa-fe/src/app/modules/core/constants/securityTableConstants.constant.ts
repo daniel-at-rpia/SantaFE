@@ -240,7 +240,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     key: 'seniority',
     label: 'Seniority',
     attrName: 'seniority',
-    underlineAttrName: 'seniorityLevel',
+    underlineAttrName: 'seniority',
     readyStage: 2,
     active: false,
     isDataTypeText: true
