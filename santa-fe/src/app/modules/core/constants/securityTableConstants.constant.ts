@@ -172,6 +172,16 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     readyStage: 1,
     active: false
   },{
+    key: 'wowDelta',
+    label: 'WoW Delta',
+    attrName: TriCoreMetricConfig.Spread.metricLabel,
+    underlineAttrName: TriCoreMetricConfig.Spread.metricLabel,
+    blockAttrName: 'metricPack',
+    readyStage: 2,
+    metricPackDeltaScope: 'Wow',
+    isDriverDependent: true,
+    active: true
+  },{
     key: 'thirtyDayDelta',
     label: '30 Day Delta',
     attrName: TriCoreMetricConfig.Spread.metricLabel,
@@ -179,6 +189,27 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     blockAttrName: 'metricPack',
     readyStage: 2,
     metricPackDeltaScope: 'Mom',
+    isDriverDependent: true,
+    active: true
+  },{
+    key: 'yoyDelta',
+    label: 'YoY Delta',
+    attrName: TriCoreMetricConfig.Spread.metricLabel,
+    underlineAttrName: TriCoreMetricConfig.Spread.metricLabel,
+    blockAttrName: 'metricPack',
+    readyStage: 2,
+    metricPackDeltaScope: 'Yoy',
+    isDriverDependent: true,
+    active: true
+  },{
+    key: 'ytdDelta',
+    label: 'YtD Delta',
+    attrName: TriCoreMetricConfig.Spread.metricLabel,
+    underlineAttrName: TriCoreMetricConfig.Spread.metricLabel,
+    blockAttrName: 'metricPack',
+    readyStage: 2,
+    metricPackDeltaScope: 'Ytd',
+    isDriverDependent: true,
     active: true
   },{
     key: 'quoteCount',

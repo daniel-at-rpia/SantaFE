@@ -295,7 +295,8 @@ export class UtilityService {
           Dod: {},
           Wow: {},
           Mom: {},
-          Ytd: {}
+          Ytd: {},
+          Yoy: {}
         }
       };
       if (!!rawData && !!rawData.deltaMetrics && !!rawData.metrics) {
@@ -564,36 +565,6 @@ export class UtilityService {
       }
     }
 
-    public retrieveSecurityMetricFromMetricPack(dto: SecurityDTO, header: SecurityTableHeaderDTO): number {
-      if (!!dto && !!header) {
-        let attrName = header.data.attrName;
-        let underlineAttrName = header.data.underlineAttrName;
-        if (header.data.key === 'thirtyDayDelta' && attrName === DEFAULT_METRIC_IDENTIFIER ) {
-          // when the metric is set to default, the actual metric to be used for each row depends on the driver of the mark of that particular row
-          const targetMetric = this.findSecurityTargetDefaultTriCoreMetric(dto);
-          attrName = TriCoreMetricConfig[targetMetric].metricLabel;
-          underlineAttrName = TriCoreMetricConfig[targetMetric].metricLabel;
-        }
-        const metricLabel = attrName;
-        let value, deltaSubPack;
-        if (!!header.data.metricPackDeltaScope) {
-          deltaSubPack = dto.data.metricPack.delta[header.data.metricPackDeltaScope];
-          value = !!deltaSubPack ? deltaSubPack[metricLabel] : null;
-          if (!!value) {
-            value = Math.round(value*10)/10;
-          }
-        } else {
-          value = dto.data.metricPack.raw[metricLabel];
-          if (!!value) {
-            value = Math.round(value);
-          }
-        }
-        return value;
-      } else {
-        return null;
-      }
-    }
-
     // TODO: move this into a SecurityTableHelper service 
     public populateSecurityTableCellFromSecurityCard(
       targetHeader: SecurityTableHeaderDTO,
@@ -669,6 +640,37 @@ export class UtilityService {
         } else {
           return isRetrievingUnderlineValue ? securityCard.data[targetHeader.data.underlineAttrName] : securityCard.data[targetHeader.data.attrName];
         }
+      } else {
+        return null;
+      }
+    }
+
+    // TODO: move this into a SecurityTableHelper service 
+    private retrieveSecurityMetricFromMetricPack(dto: SecurityDTO, header: SecurityTableHeaderDTO): number {
+      if (!!dto && !!header) {
+        let attrName = header.data.attrName;
+        let underlineAttrName = header.data.underlineAttrName;
+        if (header.data.isDriverDependent && attrName === DEFAULT_METRIC_IDENTIFIER ) {
+          // when the metric is set to default, the actual metric to be used for each row depends on the driver of the mark of that particular row
+          const targetMetric = this.findSecurityTargetDefaultTriCoreMetric(dto);
+          attrName = TriCoreMetricConfig[targetMetric].metricLabel;
+          underlineAttrName = TriCoreMetricConfig[targetMetric].metricLabel;
+        }
+        const metricLabel = attrName;
+        let value, deltaSubPack;
+        if (!!header.data.metricPackDeltaScope) {
+          deltaSubPack = dto.data.metricPack.delta[header.data.metricPackDeltaScope];
+          value = !!deltaSubPack ? deltaSubPack[metricLabel] : null;
+          if (!!value) {
+            value = Math.round(value*10)/10;
+          }
+        } else {
+          value = dto.data.metricPack.raw[metricLabel];
+          if (!!value) {
+            value = Math.round(value);
+          }
+        }
+        return value;
       } else {
         return null;
       }

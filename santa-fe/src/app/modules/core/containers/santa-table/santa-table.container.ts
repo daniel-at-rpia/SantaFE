@@ -50,7 +50,6 @@
     import { BEQuoteDTO } from 'BEModels/backend-models.interface';
     import {
       SECURITY_TABLE_FINAL_STAGE,
-      THIRTY_DAY_DELTA_METRIC_INDEX,
       AGGRID_ROW_HEIGHT,
       AGGRID_ROW_CLASS,
       AGGRID_DETAIL_COLUMN_KEY,
@@ -118,7 +117,6 @@ export class SantaTable implements OnInit, OnChanges {
 
   constants = {
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
-    thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX,
     agGridRowHeight: AGGRID_ROW_HEIGHT,
     agGridRowClassRules: {
       'santaTable__agGridTable-agGrid-row': "true",
