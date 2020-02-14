@@ -272,7 +272,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       this.state.filters.quickFilters.metricType = targetMetric;
       const newMetrics: Array<SecurityTableMetricStub> = this.utilityService.deepCopy(this.state.table.metrics);
       newMetrics.forEach((eachMetricStub) => {
-        if (eachMetricStub.isDriverDependent) {
+        if (eachMetricStub.isDriverDependent && eachMetricStub.isAttrChangable) {
           if (targetMetric === this.constants.defaultMetricIdentifier) {
             eachMetricStub.attrName = targetMetric;
             eachMetricStub.underlineAttrName = targetMetric;

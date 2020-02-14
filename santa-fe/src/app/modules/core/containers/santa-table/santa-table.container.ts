@@ -323,7 +323,7 @@ export class SantaTable implements OnInit, OnChanges {
   ) {
     this.tableData.data.rows = rowList;
     // doesn't need to update dynamic columns if the entire data is not loaded
-    this.receivedContentStage === this.constants.securityTableFinalStage && this.updateMetricDependentColumns();
+    this.receivedContentStage === this.constants.securityTableFinalStage && this.updateDriverDependentColumns();
     if (this.tableData.state.sortedByHeader) {
       this.performSort(this.tableData.state.sortedByHeader);
     } else {
@@ -339,15 +339,10 @@ export class SantaTable implements OnInit, OnChanges {
     }
   }
 
-  private updateMetricDependentColumns() {
-    /* the metric dependent columns are the ones affected by driver/metric change:
-      1. QuantComparer
-      2. Mark
-      3. three mark delta columns
-      4. 30 day delta
-    */
+  private updateDriverDependentColumns() {
+    // the metric dependent columns are the ones affected by driver/metric change:
     this.tableData.data.headers.forEach((eachHeader, index) => {
-      if (!eachHeader.state.isPureTextVariant) {
+      if (!!eachHeader.data.isDriverDependent) {
         const cellIndex = index - 1;
         this.tableData.data.rows.forEach((eachRow) => {
           eachRow.data.cells[cellIndex] = this.utilityService.populateSecurityTableCellFromSecurityCard(

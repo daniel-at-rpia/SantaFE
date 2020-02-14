@@ -122,7 +122,7 @@ export class DTOService {
           ask: null,
           displayAsk: null
         },
-        hasIndex: false
+        hasIndex: !isStencil && rawData.metrics ? !!rawData.metrics.isIndex : false
       },
       api: {
         onClickCard: null,
@@ -603,6 +603,7 @@ export class DTOService {
         attrName: stub.attrName,
         underlineAttrName: stub.underlineAttrName,
         blockAttrName: stub.blockAttrName || null,
+        isAttrChangable: !!stub.isAttrChangable,
         readyStage: stub.readyStage,
         metricPackDeltaScope: stub.metricPackDeltaScope || null,
         frontendMetric: !!stub.isFrontEndMetric,

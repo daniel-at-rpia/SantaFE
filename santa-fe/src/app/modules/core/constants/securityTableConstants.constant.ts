@@ -5,7 +5,8 @@ import {
 
 import {
   TriCoreMetricConfig,
-  SecurityMetricOptions
+  SecurityMetricOptions,
+  DEFAULT_METRIC_IDENTIFIER
 } from 'Core/constants/coreConstants.constant';
 
 
@@ -53,6 +54,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: null,
     readyStage: 3,
     isForQuantComparer: true,
+    isDriverDependent: true,
     active: true
   },{
     key: 'bestBid',
@@ -62,6 +64,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: 'bid',
     readyStage: 3,
     isFrontEndMetric: true,
+    isDriverDependent: true,
     active: true
   },{
     key: 'bestAsk',
@@ -71,6 +74,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: 'ask',
     readyStage: 3,
     isFrontEndMetric: true,
+    isDriverDependent: true,
     active: true
   },{
     key: 'mark',
@@ -79,6 +83,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: 'markRaw',
     blockAttrName: 'mark',
     readyStage: 2,
+    isDriverDependent: true,
     active: true
   },{
     key: 'markDriver',
@@ -88,7 +93,18 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     blockAttrName: 'mark',
     isDataTypeText: true,
     readyStage: 2,
+    isDriverDependent: true,
     active: false
+  },{
+    key: 'indexMark',
+    label: 'Index Mark',
+    attrName: DEFAULT_METRIC_IDENTIFIER,
+    underlineAttrName: DEFAULT_METRIC_IDENTIFIER,
+    blockAttrName: 'metricPack',
+    isAttrChangable: true,
+    readyStage: 2,
+    isDriverDependent: true,
+    active: true
   },{
     key: 'markLastUpdatedBy',
     label: 'Mark Last Updated By',
@@ -115,6 +131,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     blockAttrName: 'mark',
     readyStage: 3,
     isFrontEndMetric: true,
+    isDriverDependent: true,
     active: false
   },{
     key: 'markDeltaToAsk',
@@ -124,6 +141,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     blockAttrName: 'mark',
     readyStage: 3,
     isFrontEndMetric: true,
+    isDriverDependent: true,
     active: false
   },{
     key: 'markDeltaToMid',
@@ -133,6 +151,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     blockAttrName: 'mark',
     readyStage: 3,
     isFrontEndMetric: true,
+    isDriverDependent: true,
     active: false
   },{
     key: 'markDeltaToLiquidation',
@@ -142,6 +161,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     blockAttrName: 'mark',
     readyStage: 3,
     isFrontEndMetric: true,
+    isDriverDependent: true,
     active: true
   },{
     key: 'currentPosition',
@@ -174,19 +194,21 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
   },{
     key: 'wowDelta',
     label: 'WoW Delta',
-    attrName: TriCoreMetricConfig.Spread.metricLabel,
-    underlineAttrName: TriCoreMetricConfig.Spread.metricLabel,
+    attrName: DEFAULT_METRIC_IDENTIFIER,
+    underlineAttrName: DEFAULT_METRIC_IDENTIFIER,
     blockAttrName: 'metricPack',
+    isAttrChangable: true,
     readyStage: 2,
     metricPackDeltaScope: 'Wow',
     isDriverDependent: true,
-    active: true
+    active: false
   },{
     key: 'thirtyDayDelta',
-    label: '30 Day Delta',
-    attrName: TriCoreMetricConfig.Spread.metricLabel,
-    underlineAttrName: TriCoreMetricConfig.Spread.metricLabel,
+    label: 'MoM Delta',
+    attrName: DEFAULT_METRIC_IDENTIFIER,
+    underlineAttrName: DEFAULT_METRIC_IDENTIFIER,
     blockAttrName: 'metricPack',
+    isAttrChangable: true,
     readyStage: 2,
     metricPackDeltaScope: 'Mom',
     isDriverDependent: true,
@@ -194,23 +216,25 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
   },{
     key: 'yoyDelta',
     label: 'YoY Delta',
-    attrName: TriCoreMetricConfig.Spread.metricLabel,
-    underlineAttrName: TriCoreMetricConfig.Spread.metricLabel,
+    attrName: DEFAULT_METRIC_IDENTIFIER,
+    underlineAttrName: DEFAULT_METRIC_IDENTIFIER,
     blockAttrName: 'metricPack',
+    isAttrChangable: true,
     readyStage: 2,
     metricPackDeltaScope: 'Yoy',
     isDriverDependent: true,
-    active: true
+    active: false
   },{
     key: 'ytdDelta',
     label: 'YtD Delta',
-    attrName: TriCoreMetricConfig.Spread.metricLabel,
-    underlineAttrName: TriCoreMetricConfig.Spread.metricLabel,
+    attrName: DEFAULT_METRIC_IDENTIFIER,
+    underlineAttrName: DEFAULT_METRIC_IDENTIFIER,
     blockAttrName: 'metricPack',
+    isAttrChangable: true,
     readyStage: 2,
     metricPackDeltaScope: 'Ytd',
     isDriverDependent: true,
-    active: true
+    active: false
   },{
     key: 'quoteCount',
     label: 'Quote Count',
@@ -353,10 +377,6 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false
   }
 ];
-
-export const THIRTY_DAY_DELTA_METRIC_INDEX = SecurityTableMetrics.findIndex((eachMetric) => {
-  return eachMetric.label === '30 Day Delta';
-});
 
 export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
   {

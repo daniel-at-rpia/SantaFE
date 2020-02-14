@@ -75,6 +75,7 @@ export interface SecurityTableMetricStub {
   label: string;
   attrName: string;
   underlineAttrName: string;
+  isAttrChangable?: boolean;
   readyStage: number;
   active: boolean;
   blockAttrName?: string;

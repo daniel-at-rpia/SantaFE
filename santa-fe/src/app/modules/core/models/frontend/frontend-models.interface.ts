@@ -272,6 +272,7 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     attrName: string;
     underlineAttrName: string;
     blockAttrName: string;
+    isAttrChangable: boolean;
     readyStage: number;
     metricPackDeltaScope: string;
     frontendMetric: boolean;

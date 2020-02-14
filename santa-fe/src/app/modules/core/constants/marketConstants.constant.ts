@@ -5,6 +5,8 @@ import {
   SearchShortcutStub
 } from 'FEModels/frontend-stub-models.interface';
 
+import { SecurityMetricOptions } from './coreConstants.constant';
+
 export const MetricRenderDelay = 300;
 
 export const SearchShortcuts: Array<SearchShortcutStub> = [
@@ -186,88 +188,7 @@ export const SearchShortcuts: Array<SearchShortcutStub> = [
   },
 ];
 
-export const GroupMetricOptions:Array<SecurityMetricOptionStub> = [
-  {
-    label: 'Default Spread',
-    backendDtoAttrName: 'defaultSpread',
-    deltaOptions: [
-      'Dod',
-      'Wow',
-      'Mom',
-      'Ytd'
-    ]
-  },
-  {
-    label: 'Price',
-    backendDtoAttrName: 'price',
-    deltaOptions: [
-      'Dod',
-      'Wow',
-      'Mom',
-      'Ytd'
-    ]
-  },
-  {
-    label: 'Rating',
-    backendDtoAttrName: 'ratingDouble',
-    deltaOptions: [
-      'Dod',
-      'Wow',
-      'Mom',
-      'Ytd'
-    ]
-  },
-  {
-    label: 'G Spread',
-    backendDtoAttrName: 'gSpread',
-    deltaOptions: [
-      'Dod',
-      'Wow',
-      'Mom',
-      'Ytd'
-    ]
-  },
-  {
-    label: 'OAS Spread',
-    backendDtoAttrName: 'oasSpread',
-    deltaOptions: [
-      'Dod',
-      'Wow',
-      'Mom',
-      'Ytd'
-    ]
-  },
-  {
-    label: 'Z-Spread',
-    backendDtoAttrName: 'zSpread',
-    deltaOptions: [
-      'Dod',
-      'Wow',
-      'Mom',
-      'Ytd'
-    ]
-  },
-  {
-    label: 'YieldWorst',
-    backendDtoAttrName: 'yieldWorst',
-    deltaOptions: [
-      'Dod',
-      'Wow',
-      'Mom',
-      'Ytd'
-    ]
-  },
-  {
-    label: 'Asset Swap Spread (into USD)',
-    backendDtoAttrName: 'aswUsd',
-    deltaOptions: [
-      'Dod',
-      'Wow',
-      'Mom',
-      'Ytd'
-    ]
-  }
-]
+export const GroupMetricOptions:Array<SecurityMetricOptionStub> = SecurityMetricOptions;
 
 export const PieChartConfiguratorOptions = {
   left: [
