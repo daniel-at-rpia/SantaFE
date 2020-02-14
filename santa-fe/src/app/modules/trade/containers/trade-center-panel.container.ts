@@ -56,8 +56,7 @@
     } from 'Core/constants/coreConstants.constant';
     import {
       SecurityTableMetrics,
-      SECURITY_TABLE_FINAL_STAGE,
-      THIRTY_DAY_DELTA_METRIC_INDEX
+      SECURITY_TABLE_FINAL_STAGE
     } from 'Core/constants/securityTableConstants.constant';
     import { SecurityDefinitionMap, FullOwnerList } from 'Core/constants/securityDefinitionConstants.constant';
     import {
@@ -105,7 +104,6 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     strategyShortcuts: StrategyShortcuts,
     securityGroupDefinitionMap: SecurityDefinitionMap,
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
-    thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX,
     fullOwnerList: FullOwnerList
   }
 
@@ -273,18 +271,17 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       );
       this.state.filters.quickFilters.metricType = targetMetric;
       const newMetrics: Array<SecurityTableMetricStub> = this.utilityService.deepCopy(this.state.table.metrics);
-      const thrityDayDeltaMetric = newMetrics[this.constants.thirtyDayDeltaIndex];
-      if (thrityDayDeltaMetric.label === '30 Day Delta') {
-        if (targetMetric === this.constants.defaultMetricIdentifier) {
-          thrityDayDeltaMetric.attrName = targetMetric;
-          thrityDayDeltaMetric.underlineAttrName = targetMetric;
-        } else {
-          thrityDayDeltaMetric.attrName = TriCoreMetricConfig[targetMetric].metricLabel;
-          thrityDayDeltaMetric.underlineAttrName = TriCoreMetricConfig[targetMetric].metricLabel;
+      newMetrics.forEach((eachMetricStub) => {
+        if (eachMetricStub.isDriverDependent && eachMetricStub.isAttrChangable) {
+          if (targetMetric === this.constants.defaultMetricIdentifier) {
+            eachMetricStub.attrName = targetMetric;
+            eachMetricStub.underlineAttrName = targetMetric;
+          } else {
+            eachMetricStub.attrName = TriCoreMetricConfig[targetMetric].metricLabel;
+            eachMetricStub.underlineAttrName = TriCoreMetricConfig[targetMetric].metricLabel;
+          }
         }
-      } else {
-        console.error('Code Maintainence flag: this is not the 30 day delta');
-      }
+      });
       this.state.table.metrics = newMetrics;
       // this.calculateQuantComparerWidthAndHeight();
       // TODO: remove this event and all associated logic from ngrx

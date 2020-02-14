@@ -28,7 +28,8 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Dod',
       'Wow',
       'Mom',
-      'Ytd'
+      'Ytd',
+      'Yoy'
     ]
   },
   {
@@ -38,7 +39,8 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Dod',
       'Wow',
       'Mom',
-      'Ytd'
+      'Ytd',
+      'Yoy'
     ]
   },
   {
@@ -48,7 +50,8 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Dod',
       'Wow',
       'Mom',
-      'Ytd'
+      'Ytd',
+      'Yoy'
     ]
   },
   {
@@ -58,7 +61,8 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Dod',
       'Wow',
       'Mom',
-      'Ytd'
+      'Ytd',
+      'Yoy'
     ]
   },
   {
@@ -68,7 +72,8 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Dod',
       'Wow',
       'Mom',
-      'Ytd'
+      'Ytd',
+      'Yoy'
     ]
   },
   {
@@ -78,7 +83,8 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Dod',
       'Wow',
       'Mom',
-      'Ytd'
+      'Ytd',
+      'Yoy'
     ]
   },
   {
@@ -88,7 +94,8 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Dod',
       'Wow',
       'Mom',
-      'Ytd'
+      'Ytd',
+      'Yoy'
     ]
   },
   {
@@ -98,7 +105,8 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Dod',
       'Wow',
       'Mom',
-      'Ytd'
+      'Ytd',
+      'Yoy'
     ]
   }
 ];

@@ -75,16 +75,17 @@ export interface SecurityTableMetricStub {
   label: string;
   attrName: string;
   underlineAttrName: string;
+  isAttrChangable?: boolean;
   readyStage: number;
   active: boolean;
   blockAttrName?: string;
-  isPartOfMarkBlock?: boolean;
-  metricPackDeltaScope?: string;
   isFrontEndMetric?: boolean;
   isForQuantComparer?: boolean;
   pureText?: boolean;
   disabled?: boolean;
   isDataTypeText?: boolean;
+  isDriverDependent?: boolean;
+  metricPackDeltaScope?: string;
 }
 
 export interface TriCoreMetricConfigStub {

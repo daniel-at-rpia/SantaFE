@@ -121,7 +121,8 @@ export class DTOService {
           displayBid: null,
           ask: null,
           displayAsk: null
-        }
+        },
+        hasIndex: !isStencil && rawData.metrics ? !!rawData.metrics.isIndex : false
       },
       api: {
         onClickCard: null,
@@ -202,7 +203,7 @@ export class DTOService {
           dto.data.strategyFirm = `${eachPortfolioBlock.strategy}`;
         } else {
           dto.data.strategyFirm = `${dto.data.strategyFirm} & ${eachPortfolioBlock.strategy}`;
-          console.warn('detected security with multiple strategies: ', dto.data.name, ' has strategy = ', dto.data.strategyList);
+          // console.warn('detected security with multiple strategies: ', dto.data.name, ' has strategy = ', dto.data.strategyList);
         }
       }
       dto.data.cs01CadFirm = dto.data.cs01CadFirm + eachPortfolioBlock.cs01Cad;
@@ -602,10 +603,12 @@ export class DTOService {
         attrName: stub.attrName,
         underlineAttrName: stub.underlineAttrName,
         blockAttrName: stub.blockAttrName || null,
+        isAttrChangable: !!stub.isAttrChangable,
         readyStage: stub.readyStage,
         metricPackDeltaScope: stub.metricPackDeltaScope || null,
         frontendMetric: !!stub.isFrontEndMetric,
-        isDataTypeText: !!stub.isDataTypeText
+        isDataTypeText: !!stub.isDataTypeText,
+        isDriverDependent: !!stub.isDriverDependent
       },
       state: {
         isQuantVariant: !!stub.isForQuantComparer,

@@ -74,6 +74,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     cs01CadFirmInK: string;
     cs01CadCurrent: number;
     cs01CadCurrentInK: string;
+    hasIndex: boolean;
   }
   api: {
     onClickCard: Function;
@@ -271,10 +272,12 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     attrName: string;
     underlineAttrName: string;
     blockAttrName: string;
+    isAttrChangable: boolean;
     readyStage: number;
     metricPackDeltaScope: string;
     frontendMetric: boolean;
     isDataTypeText: boolean;
+    isDriverDependent: boolean;
   },
   state: {
     isPureTextVariant: boolean;

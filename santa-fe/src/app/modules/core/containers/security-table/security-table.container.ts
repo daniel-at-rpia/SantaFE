@@ -36,10 +36,7 @@
     import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
     import { BEQuoteDTO } from 'BEModels/backend-models.interface';
 
-    import {
-      SECURITY_TABLE_FINAL_STAGE,
-      THIRTY_DAY_DELTA_METRIC_INDEX
-    } from 'Core/constants/securityTableConstants.constant';
+    import { SECURITY_TABLE_FINAL_STAGE } from 'Core/constants/securityTableConstants.constant';
   //
 
 @Component({
@@ -60,8 +57,7 @@ export class SecurityTable implements OnInit, OnChanges {
   @Output() nativePerformDefaultSort = new EventEmitter();
 
   constants = {
-    securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
-    thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX
+    securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE
   }
 
   constructor(
