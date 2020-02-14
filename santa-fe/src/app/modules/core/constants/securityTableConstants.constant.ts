@@ -24,7 +24,7 @@ export const SECURITY_TABLE_FINAL_STAGE = 3;
 export const AGGRID_DETAIL_COLUMN_WIDTH = 50;
 export const AGGRID_SECURITY_CARD_COLUMN_WIDTH = 270;
 export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_quant + $spacing_small * 2 
-export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 150;
+export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 105;
 export const AGGRID_SIMPLE_TEXT_COLUMN_WIDTH = 150;
 export const AGGRID_ROW_HEIGHT = 40;
 export const AGGRID_DETAIL_ROW_HEIGHT_PER_ROW = 34;
@@ -125,7 +125,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false
   },{
     key: 'markDeltaToBid',
-    label: 'Mark Delta to Bid',
+    label: 'Δ Mark to Bid',
     attrName: 'markDisBid',
     underlineAttrName: 'markDisBidRaw',
     blockAttrName: 'mark',
@@ -135,7 +135,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false
   },{
     key: 'markDeltaToAsk',
-    label: 'Mark Delta to Ask',
+    label: 'Δ Mark to Ask',
     attrName: 'markDisAsk',
     underlineAttrName: 'markDisAskRaw',
     blockAttrName: 'mark',
@@ -145,7 +145,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false
   },{
     key: 'markDeltaToMid',
-    label: 'Mark Delta to Mid',
+    label: 'Δ Mark to Mid',
     attrName: 'markDisMid',
     underlineAttrName: 'markDisMidRaw',
     blockAttrName: 'mark',
@@ -155,7 +155,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false
   },{
     key: 'markDeltaToLiquidation',
-    label: 'Mark Delta to Liquidation',
+    label: 'Δ Mark to Liquidation',
     attrName: 'markDisLiquidation',
     underlineAttrName: 'markDisLiquidationRaw',
     blockAttrName: 'mark',
