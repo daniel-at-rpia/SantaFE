@@ -103,7 +103,8 @@
               *ngFor="let eachShortcut of state.presets.selectedList"
               [ngClass]="{
                 'sat-tradeCenterPanel__presetsAndFilters-presets-content-shortcutCanvas-list-item': true,
-                'sat-tradeCenterPanel__presetsAndFilters-presets-content-shortcutCanvas-list-item--major': eachShortcut.data.isMajorShortcut,
+                'sat-tradeCenterPanel__presetsAndFilters-presets-content-shortcutCanvas-list-item--major': eachShortcut.state.isMajorShortcut,
+                'sat-tradeCenterPanel__presetsAndFilters-presets-content-shortcutCanvas-list-item--hero': eachShortcut.state.isHeroShortcut,
                 'sat-tradeCenterPanel__presetsAndFilters-presets-content-shortcutCanvas-list-item--selected': state.presets.selectedPreset === eachShortcut
               }">
               <search-shortcut

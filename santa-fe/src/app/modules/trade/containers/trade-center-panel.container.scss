@@ -140,6 +140,9 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
                 flex: 1 1 auto;
               }
               &--major {
+                flex: 0 1 50%;
+              }
+              &--hero {
                 flex: 0 1 100%;
               }
             }

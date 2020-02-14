@@ -391,20 +391,22 @@ export class DTOService {
     definitionList: Array<DTOs.SecurityDefinitionDTO>,
     title: string,
     skipFirstForDefaultGroupBy: boolean,
-    isMajor: boolean
+    isMajor: boolean,
+    isHero: boolean
   ): DTOs.SearchShortcutDTO {
     const object: DTOs.SearchShortcutDTO = {
       data: {
         displayTitle: title,
-        configuration: definitionList,
-        isMajorShortcut: !!isMajor
+        configuration: definitionList
       },
       style: {
         slotList: [null, null, null, null, null]
       },
       state: {
         isSelected: false,
-        isUserInputBlocked: false
+        isUserInputBlocked: false,
+        isMajorShortcut: !!isMajor,
+        isHeroShortcut: !!isHero
       }
     };
     definitionList.forEach((eachDefinition, index) => {

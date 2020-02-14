@@ -4,6 +4,7 @@ export interface SearchShortcutStub {
   displayTitle: string;
   includedDefinitions: Array<SearchShortcutIncludedDefinitionStub>;
   isMajor?: boolean;
+  isHero?: boolean;
 }
 
 interface SearchShortcutIncludedDefinitionStub {

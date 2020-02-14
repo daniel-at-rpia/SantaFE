@@ -8,7 +8,17 @@ import { SecurityMetricOptions } from 'Core/constants/coreConstants.constant';
 
 export const QUANT_COMPARER_PERCENTILE = 90;
 
-export const PortfolioShortcuts: Array<SearchShortcutStub> = [
+export const PortfolioShortcuts: Array<SearchShortcutStub> = [{
+    displayTitle: 'All Portfolios',
+    includedDefinitions: [
+      {
+        definitionKey: 'PORTFOLIO',
+        groupByActive: false,
+        selectedOptions: []
+      }
+    ],
+    isHero: true
+  },
   {
     displayTitle: 'DOF + SOF',
     includedDefinitions: [
@@ -105,7 +115,7 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         selectedOptions: ['PLACEHOLDER']
       }
     ],
-    isMajor: true
+    isHero: true
   },{
     displayTitle: 'Arnav',
     includedDefinitions: [

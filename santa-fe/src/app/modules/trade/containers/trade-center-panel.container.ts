@@ -384,7 +384,13 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         }
         return definitionDTO;
       });
-      list.push(this.dtoService.formSearchShortcutObject(definitionList, eachShortcutStub.displayTitle, false, !!eachShortcutStub.isMajor));
+      list.push(this.dtoService.formSearchShortcutObject(
+        definitionList,
+        eachShortcutStub.displayTitle,
+        false,
+        !!eachShortcutStub.isMajor,
+        !!eachShortcutStub.isHero
+      ));
     });
     return list;
   }
