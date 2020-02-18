@@ -42,7 +42,7 @@
       BEPortfolioDTO,
       BESecurityDTO,
       BEBestQuoteDTO,
-      BETradeStepOneReturn
+      BEFetchAllTradeDataReturn
     } from 'BEModels/backend-models.interface';
     import {
       DefinitionConfiguratorEmitterParams,
@@ -454,7 +454,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     ).subscribe();
   }
 
-  private loadStageOneContent(serverReturn: BETradeStepOneReturn) {
+  private loadStageOneContent(serverReturn: BEFetchAllTradeDataReturn) {
     this.state.fetchResult.prinstineRowList = [];  // flush out the stencils
     this.state.fetchResult.prinstineRowList = this.processingService.loadStageOneContent(
       this.state.table.dto.data.headers,

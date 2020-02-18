@@ -18,7 +18,7 @@
       BEPortfolioDTO,
       BESecurityDTO,
       BEBestQuoteDTO,
-      BETradeStepOneReturn
+      BEFetchAllTradeDataReturn
     } from 'BEModels/backend-models.interface';
     import { TriCoreMetricConfig, DEFAULT_METRIC_IDENTIFIER } from 'Core/constants/coreConstants.constant';
   // dependencies
@@ -39,7 +39,7 @@ export class LiveDataProcessingService {
   public loadStageOneContent(
     tableHeaderList: Array<SecurityTableHeaderDTO>,
     activeMetricType: string,
-    serverReturn: BETradeStepOneReturn,
+    serverReturn: BEFetchAllTradeDataReturn,
     sendToGraphCallback: Function,
     openSecurityInBloombergCallback: Function
   ): Array<SecurityTableRowDTO> {

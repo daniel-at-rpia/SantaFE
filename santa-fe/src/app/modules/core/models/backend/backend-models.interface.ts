@@ -81,7 +81,6 @@ export interface BESecurityDTO {
   globalIdentifier: string;  // CUSIP; i.e US02376RAC60
   securityIdentifier: string;
   name: string;
-  baseType: string;
   securityType: string;
   securitySubType: string;
   couponType?: string;
@@ -91,18 +90,12 @@ export interface BESecurityDTO {
   genericSeniority: string;
   industry: string;
   subIndustry: string;
-  issuer: string;
   obligorName: string;
   obligorId: number;
   ticker: string;
-  maturityType: string;
-  maturityDate: string;
-  isSovereign: boolean;
-  isGovt: boolean;
-  isEm: boolean;
-  isBailIn: boolean;
-  isCallable: boolean;
-  isPerpetual: boolean;
+  isSovereign?: boolean;
+  isGovt?: boolean;
+  isEm?: boolean;
   metrics: BESecurityMetricDTO;
   deltaMetrics: {
     Dod: BESecurityDeltaMetricDTO;
@@ -112,8 +105,6 @@ export interface BESecurityDTO {
     Ytd: BESecurityDeltaMetricDTO;
     Yoy: BESecurityDeltaMetricDTO;
   };
-  issueDate: string;
-  isValidForCreditGrouping: boolean;
   paymentRank: string;
   isSingleSecurity?: boolean;
   isCurveSecurity?: boolean;
@@ -121,44 +112,65 @@ export interface BESecurityDTO {
   isLoan?: boolean;
   isPreferred?: boolean;
   isCds?: boolean;
+  firmPosition?: {
+    mark: {
+      driver: string;
+      enteredTime: string;
+      user: string;
+      value: number;
+    },
+    primaryPmName: string;
+    backupPmName: string;
+    researchName: string;
+    owners: Array<string>;
+    partitionOptionValues: any;
+    date: string;
+    securityIdentifier: string;
+    quantity: number;
+    cs01Local: number;
+    cs01Cad: number;
+  }
+  curveSubType?: string;  // CDS only
 }
 
 interface BESecurityMetricDTO {
-  isFixedForLife: boolean;
-  isFixedToFloatInFixed: boolean;
-  isFloat: boolean;
-  isNewIssue: boolean;
+  // CDSs don't have a lot of those attributes
   isOnTheRun: boolean;
-  benchmarkId?: number;
-  benchmarkSecurityIdentifier: string;
-  benchmarkName: string;
-  underlyingSecurityId: number;
   workoutTerm: number;
   ratingDouble: number;
-  price: number;
-  backendWorkoutTerm?: number;
-  oasSpread?: number;
-  zSpread: number;
-  spread?: number;
-  aswUsd?: number;
-  gSpread: number;
-  yieldWorst: number;
-  amtOutstanding: number;
-  marketValue: number;
+  isRated: boolean;
   rating: string;
   ratingNoNotch: string;
   ratingBucket: string
-  isRated: boolean;
+  price: number;
   isIndex: boolean;
+  isFixedForLife?: boolean;
+  isFixedToFloatInFixed?: boolean;
+  isFloat?: boolean;
+  isNewIssue?: boolean;
+  benchmarkId?: number;
+  benchmarkSecurityIdentifier?: string;
+  benchmarkName?: string;
+  underlyingSecurityId?: number;
+  backendWorkoutTerm?: number;
+  oasSpread?: number;
+  zSpread?: number;
+  aswUsd?: number;
+  gSpread?: number;
+  spread?: number;
+  yieldWorst?: number;
+  amtOutstanding?: number;
+  marketValue?: number;
 }
 
 export interface BESecurityDeltaMetricDTO {
+  // CDSs don't have a lot of those attributes
   ratingDouble: number;
   price: number;
-  zSpread: number;
-  gSpread: number;
-  spread: number;
-  yieldWorst: number;
+  zSpread?: number;
+  gSpread?: number;
+  spread?: number;
+  yieldWorst?: number;
   workoutTerm?: number;
   backendWorkoutTerm?: number;
   oasSpread?: number;
@@ -168,8 +180,15 @@ export interface BESecurityDeltaMetricDTO {
   rating?: number;
 }
 
-export interface BETradeStepOneReturn {
-  [property: string]: Array<BEPortfolioDTO>;
+export interface BEFetchAllTradeDataReturn {
+  [property: string]: BEFetchAllTradaDataDTO;
+}
+
+interface BEFetchAllTradaDataDTO {
+  securityIdentifier: string;
+  security: BESecurityDTO;
+  bestQuotes: BEBestQuoteDTO;
+  positions: Array<any>;
 }
 
 export interface BEPortfolioDTO {
@@ -194,7 +213,6 @@ export interface BEPortfolioDTO {
 }
 
 export interface BEBestQuoteDTO {
-  bestDiscountQuote: BESingleBestQuoteDTO;
   bestSpreadQuote: BESingleBestQuoteDTO;
   bestPriceQuote: BESingleBestQuoteDTO;
   bestYieldQuote: BESingleBestQuoteDTO;
@@ -202,21 +220,29 @@ export interface BEBestQuoteDTO {
 
 export interface BESingleBestQuoteDTO {
   isValid: boolean;
-  quoteMetric: number
-  bidType: number;
-  askType: number;
+  quoteMetric: string;
+  bidQuoteType: string;
+  askQuoteType: string;
   bidDealer: string;
   askDealer: string;
   bidQuantity: number;
   askQuantity: number;
+  totalAxeBidQuantity: number;
+  totalAxeAskQuantity: number;
+  totalRunBidQuantity: number;
+  totalRunAskQuantity: number;
   bidQuoteValue: number;
   askQuoteValue: number;
-  bidTime: number;
+  bidTime: string;
   askTime: string;
   bidVenue: string;
   askVenue: string;
   axeSkew: number;
   totalSkew: number;
+  bidIsOld: boolean;
+  askIsOld: boolean;
+  isOffTheRunCds: boolean;
+  globalIdentifier: string;
 }
 
 export interface BEQuoteDTO {
