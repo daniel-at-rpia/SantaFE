@@ -21,7 +21,6 @@ import {
 export interface SecurityPortfolioBlock {
   portfolioName: string;
   quantity: number;
-  marketValueCad: number;
   strategy: string;
   cs01Cad: number;
   cs01Local: number;

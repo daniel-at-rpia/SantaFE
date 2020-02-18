@@ -35,7 +35,7 @@
       SearchShortcutDTO
     } from 'FEModels/frontend-models.interface';
     import {
-      PayloadGetPositions,
+      PayloadGetTradeFullData,
       PayloadGetBestQuotes
     } from 'BEModels/backend-payloads.interface';
     import {
@@ -427,9 +427,12 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private fetchStageOneContent(isInitialFetch: boolean) {
-    const payload: PayloadGetPositions = {
+    const payload: PayloadGetTradeFullData = {
       partitionOptions: ['Portfolio', 'Strategy']
     };
+    if (!!this.state.bestQuoteValidWindow) {
+      payload.lookbackHrs = this.state.bestQuoteValidWindow;
+    }
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolios, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn) => {
@@ -472,9 +475,6 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     const payload: PayloadGetBestQuotes = {
       identifiers: []
     };
-    if (!!this.state.bestQuoteValidWindow) {
-      payload.lookbackHrs = this.state.bestQuoteValidWindow;
-    }
     this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
       const newSecurityId = eachRow.data.security.data.securityID;
       payload.identifiers.push(newSecurityId);

@@ -52,7 +52,8 @@ export class DTOService {
   public formSecurityCardObject(
     securityIdFull: string,
     rawData: BESecurityDTO,
-    isStencil: boolean
+    isStencil: boolean,
+    currentSelectedMetric?: string
   ): DTOs.SecurityDTO {
     // !isStencil && console.log('rawData', rawData.name, rawData);
     const object:DTOs.SecurityDTO = {
@@ -74,9 +75,9 @@ export class DTOService {
         securityType: !isStencil ? rawData.securityType : null,
         seniority: null,
         maturityType: !isStencil ? rawData.maturityType : null,
-        primaryPmName: null,
-        backupPmName: null,
-        researchName: null,
+        primaryPmName: !isStencil && !!rawData.firmPosition ? rawData.firmPosition.primaryPmName : null,
+        backupPmName: !isStencil && !!rawData.firmPosition ? rawData.firmPosition.backupPmName : null,
+        researchName: !isStencil && !!rawData.firmPosition ? rawData.firmPosition.researchName : null,
         cs01LocalFirm: null,
         cs01LocalFirmInK: null,
         cs01LocalCurrent: null,
@@ -85,16 +86,16 @@ export class DTOService {
         cs01CadFirmInK: null,
         cs01CadCurrent: null,
         cs01CadCurrentInK: null,
-        owner: [],
+        owner: !isStencil && !!rawData.firmPosition && rawData.firmPosition.owners.length > 0 ? rawData.firmPosition.owners : [],
         mark: {
           combinedDefaultMark: null,
           combinedDefaultMarkRaw: null,
           mark: null,
-          markRaw: null,
-          markBackend: null,
-          markDriver: null,
-          markChangedBy: null,
-          markChangedTime: null,
+          markRaw: !isStencil && !!rawData.firmPosition && !!rawData.firmPosition.mark ? rawData.firmPosition.mark.value : null,
+          markBackend: !isStencil && !!rawData.firmPosition && !!rawData.firmPosition.mark ? rawData.firmPosition.mark.value : null,
+          markDriver: !isStencil && !!rawData.firmPosition && !!rawData.firmPosition.mark ? rawData.firmPosition.mark.driver : null,
+          markChangedBy: !isStencil && !!rawData.firmPosition && !!rawData.firmPosition.mark ? rawData.firmPosition.mark.user : null,
+          markChangedTime: !isStencil && !!rawData.firmPosition && !!rawData.firmPosition.mark ? rawData.firmPosition.mark.enteredTime : null,
           markDisBid: null,
           markDisBidRaw: null,
           markDisAsk: null,
@@ -142,45 +143,33 @@ export class DTOService {
         isActionMenuMinorActionsDisabled: false
       }
     };
-    if (!isStencil && object.data.seniorityLevel < 5 && object.data.seniorityLevel > 0 && rawData.paymentRank) {
-      object.data.seniority = `${object.data.seniorityLevel} - ${rawData.paymentRank}`;
+    if (!isStencil) {
+      // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
+      if ((!!currentSelectedMetric && !!TriCoreMetricConfig[object.data.mark.markDriver] && object.data.mark.markDriver === currentSelectedMetric) || currentSelectedMetric === DEFAULT_METRIC_IDENTIFIER){
+        let targetMetric = object.data.mark.markDriver;
+        if (currentSelectedMetric === DEFAULT_METRIC_IDENTIFIER) {
+          targetMetric = this.utility.findSecurityTargetDefaultTriCoreMetric(object);
+        }
+        object.data.mark.mark = this.utility.parseTriCoreMetricNumber(object.data.mark.markRaw, targetMetric, object, true) as string;
+      } else {
+        object.data.mark.mark = null;
+        object.data.mark.markRaw = null;
+      }
+      if (object.data.seniorityLevel < 5 && object.data.seniorityLevel > 0 && rawData.paymentRank) {
+        object.data.seniority = `${object.data.seniorityLevel} - ${rawData.paymentRank}`;
+      }
     }
     return object;
   }
 
   public appendPortfolioInfoToSecurityDTO(
     dto: DTOs.SecurityDTO,
-    targetPortfolio: BEPortfolioDTO,
-    currentSelectedMetric: string,
+    targetPortfolio: BEPortfolioDTO
   ) {
-    dto.data.primaryPmName = targetPortfolio.primaryPmName;
-    dto.data.backupPmName = targetPortfolio.backupPmName;
-    dto.data.researchName = targetPortfolio.researchName;
-    dto.data.mark.markRaw = targetPortfolio.mark.value;
-    dto.data.mark.markBackend = targetPortfolio.mark.value;
-    dto.data.mark.markDriver = targetPortfolio.mark.driver;
-    dto.data.mark.markChangedBy = targetPortfolio.mark.user;
-    dto.data.mark.markChangedTime = targetPortfolio.mark.enteredTime;
-    dto.data.owner = [];
-    !!targetPortfolio.primaryPmName && dto.data.owner.push(targetPortfolio.primaryPmName);
-    !!targetPortfolio.backupPmName && dto.data.owner.push(targetPortfolio.backupPmName);
-    !!targetPortfolio.researchName && dto.data.owner.push(targetPortfolio.researchName);
-    // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
-    if ((!!TriCoreMetricConfig[targetPortfolio.mark.driver] && targetPortfolio.mark.driver === currentSelectedMetric) || currentSelectedMetric === DEFAULT_METRIC_IDENTIFIER){
-      let targetMetric = targetPortfolio.mark.driver;
-      if (currentSelectedMetric === DEFAULT_METRIC_IDENTIFIER) {
-        targetMetric = this.utility.findSecurityTargetDefaultTriCoreMetric(dto);
-      }
-      dto.data.mark.mark = this.utility.parseTriCoreMetricNumber(dto.data.mark.markRaw, targetMetric, dto, true) as string;
-    } else {
-      dto.data.mark.mark = null;
-      dto.data.mark.markRaw = null;
-    }
     const newBlock: Blocks.SecurityPortfolioBlock = {
-      portfolioName: targetPortfolio.portfolioShortName,
+      portfolioName: targetPortfolio.partitionOptionValue.PortfolioShortName,
       quantity: targetPortfolio.quantity,
-      marketValueCad: targetPortfolio.marketValueCad,
-      strategy: targetPortfolio.strategyName,
+      strategy: targetPortfolio.partitionOptionValue.StrategyName,
       cs01Cad: targetPortfolio.cs01Cad,
       cs01Local: targetPortfolio.cs01Local
     };

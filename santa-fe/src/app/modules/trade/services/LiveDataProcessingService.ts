@@ -50,33 +50,31 @@ export class LiveDataProcessingService {
     let validCount = 0;
     for (const eachKey in serverReturn){
       count++;
-      if (serverReturn[eachKey].length > 0) {
-        nonEmptyCount++;
-        let sumSize = 0;
-        let isValidFlag = true;
-        const newBESecurity:BESecurityDTO = serverReturn[eachKey][0].security;
-        const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false);
-        newSecurity.state.isInteractionThumbDownDisabled = true;
-        newSecurity.api.onClickSendToGraph = sendToGraphCallback;
-        newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
-        serverReturn[eachKey].forEach((eachPortfolio: BEPortfolioDTO) => {
-          // if (!eachPortfolio.security.isGovt) {
-          // disabling the check for isGovt for now
-          if(true){
-            this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio, activeMetricType);
-          } else {
-            isValidFlag = false;
-          }
-        });
-        if (isValidFlag) {
-          this.dtoService.appendPortfolioOverviewInfoForSecurityDTO(newSecurity);
-          this.populateEachRowWithStageOneContent(
-            tableHeaderList,
-            prinstineRowList,
-            newSecurity
-          );
-          validCount++;
+      nonEmptyCount++;
+      let sumSize = 0;
+      let isValidFlag = true;
+      const newBESecurity:BESecurityDTO = serverReturn[eachKey].security;
+      const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false, activeMetricType);
+      newSecurity.state.isInteractionThumbDownDisabled = true;
+      newSecurity.api.onClickSendToGraph = sendToGraphCallback;
+      newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
+      serverReturn[eachKey].positions.forEach((eachPortfolio: BEPortfolioDTO) => {
+        // if (!eachPortfolio.security.isGovt) {
+        // disabling the check for isGovt for now
+        if(true){
+          this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio);
+        } else {
+          isValidFlag = false;
         }
+      });
+      if (isValidFlag) {
+        this.dtoService.appendPortfolioOverviewInfoForSecurityDTO(newSecurity);
+        this.populateEachRowWithStageOneContent(
+          tableHeaderList,
+          prinstineRowList,
+          newSecurity
+        );
+        validCount++;
       }
     }
     console.log('count is', count, nonEmptyCount, validCount);

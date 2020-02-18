@@ -88,6 +88,7 @@ export interface BESecurityDTO {
   country: string;
   sector: string;
   genericSeniority: string;
+  maturityType?: string;
   industry: string;
   subIndustry: string;
   obligorName: string;
@@ -188,28 +189,21 @@ interface BEFetchAllTradaDataDTO {
   securityIdentifier: string;
   security: BESecurityDTO;
   bestQuotes: BEBestQuoteDTO;
-  positions: Array<any>;
+  positions: Array<BEPortfolioDTO>;
 }
 
 export interface BEPortfolioDTO {
-  marketValueCad: number;
-  marketValueLocal: number;
-  portfolioShortName: string;
+  date: string;
+  securityIdentifier: string;
+  partitionOptionValue: {
+    AccountName: string;
+    AttributionOwner: string;
+    PortfolioShortName: string;
+    StrategyName: string;
+  }
   quantity: number;
-  security: BESecurityDTO;
-  strategyName: string;
-  primaryPmName: string;
-  backupPmName: string;
-  researchName: string;
   cs01Local: number;
   cs01Cad: number;
-  mark: {
-    driver: string;
-    enteredTime: string;
-    user: string;
-    value: number;
-  }
-  [property: string]: any;
 }
 
 export interface BEBestQuoteDTO {
