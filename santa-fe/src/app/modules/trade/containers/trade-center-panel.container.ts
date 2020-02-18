@@ -468,41 +468,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     );
     // right now stage 1 and stage 2 are combined
     // this.updateStage(2); // disabling this now for a smoothier transition on the UI
-    this.fetchStageThreeContent();
-  }
 
-  private fetchStageThreeContent() {
-    const payload: PayloadGetBestQuotes = {
-      identifiers: []
-    };
-    this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
-      const newSecurityId = eachRow.data.security.data.securityID;
-      payload.identifiers.push(newSecurityId);
-    });
-    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getBestQuotes, { req: 'POST' }, payload).pipe(
-      first(),
-      tap((serverReturn) => {
-        this.loadStageThreeContent(serverReturn);
-      }),
-      catchError(err => {
-        this.restfulCommService.logError(`Get best quotes failed`, this.ownerInitial);
-        this.updateStage(3);
-        console.log('liveQuote/get-best-quotes failed', err);
-        this.state.fetchResult.fetchTableDataFailed = true;
-        this.state.fetchResult.fetchTableDataFailedError = err.message;
-        this.loadStageThreeContent({})
-        return of('error');
-      })
-    ).subscribe();
-  }
-
-  private loadStageThreeContent(serverReturn) {
-    this.processingService.loadStageThreeContent(
-      this.state.table.dto.data.headers,
-      this.state.fetchResult.prinstineRowList,
-      this.state.filters.quickFilters.metricType,
-      serverReturn
-    );
     this.calculateQuantComparerWidthAndHeight();
     this.updateStage(3);
   }

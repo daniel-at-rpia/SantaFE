@@ -72,40 +72,15 @@ export class LiveDataProcessingService {
         this.populateEachRowWithStageOneContent(
           tableHeaderList,
           prinstineRowList,
-          newSecurity
+          newSecurity,
+          activeMetricType,
+          serverReturn[eachKey].bestQuotes
         );
         validCount++;
       }
     }
     console.log('count is', count, nonEmptyCount, validCount);
     return prinstineRowList;
-  }
-
-  public loadStageThreeContent(
-    tableHeaderList: Array<SecurityTableHeaderDTO>,
-    rowList: Array<SecurityTableRowDTO>,
-    metricType: string,
-    serverReturn
-  ) {
-    if (!!serverReturn) {
-      const trackRowsWithoutReturn = [];
-      rowList.forEach((eachPrinstineRow) => {
-        const securityIdFull = eachPrinstineRow.data.security.data.securityID;
-        if (!!serverReturn[securityIdFull]) {
-          this.populateEachRowWithStageThreeContent(
-            tableHeaderList,
-            eachPrinstineRow,
-            metricType,
-            serverReturn[securityIdFull]
-          );
-        } else {
-          trackRowsWithoutReturn.push(securityIdFull);
-        }
-      })
-      if (trackRowsWithoutReturn.length > 0) {
-        console.warn("best quote did not return data for ", trackRowsWithoutReturn);
-      }
-    }
   }
 
   private populateEachRowWithStageThreeContent(
@@ -214,7 +189,9 @@ export class LiveDataProcessingService {
   private populateEachRowWithStageOneContent(
     headerList: Array<SecurityTableHeaderDTO>,
     prinstineRowList: Array<SecurityTableRowDTO>,
-    newSecurity: SecurityDTO
+    newSecurity: SecurityDTO,
+    metricType: string,
+    bestQuoteServerReturn: BEBestQuoteDTO
   ) {
     const newRow = this.dtoService.formSecurityTableRowObject(newSecurity);
     headerList.forEach((eachHeader, index) => {
@@ -233,6 +210,12 @@ export class LiveDataProcessingService {
         }
       }
     });
+    this.populateEachRowWithStageThreeContent(
+      headerList,
+      newRow,
+      metricType,
+      bestQuoteServerReturn
+    );
     prinstineRowList.push(newRow);
   }
 
