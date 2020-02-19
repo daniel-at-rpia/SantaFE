@@ -19,8 +19,8 @@ export const SECURITY_TABLE_FINAL_STAGE = 1;
 export const AGGRID_DETAIL_COLUMN_WIDTH = 50;
 export const AGGRID_SECURITY_CARD_COLUMN_WIDTH = 270;
 export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_quant + $spacing_small * 2 
-export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 105;
-export const AGGRID_SIMPLE_TEXT_COLUMN_WIDTH = 150;
+export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 117;
+export const AGGRID_SIMPLE_TEXT_COLUMN_WIDTH = 135;
 export const AGGRID_ROW_HEIGHT = 40;
 export const AGGRID_DETAIL_ROW_HEIGHT_PER_ROW = 34;
 export const AGGRID_DETAIL_ROW_HEIGHT_OFFSET = 120;
@@ -92,14 +92,24 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false
   },{
     key: 'indexMark',
-    label: 'Index Mark',
+    label: 'Index Mark (t-1)',
     attrName: DEFAULT_METRIC_IDENTIFIER,
     underlineAttrName: DEFAULT_METRIC_IDENTIFIER,
     blockAttrName: 'metricPack',
     isAttrChangable: true,
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isDriverDependent: true,
-    active: true
+    active: false
+  },{
+    key: 'markDeltaToIndex',
+    label: 'Δ to Index Mark (t-1)',
+    attrName: 'markDisIndex',
+    underlineAttrName: 'markDisIndexRaw',
+    blockAttrName: 'mark',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isFrontEndMetric: true,
+    isDriverDependent: true,
+    active: false
   },{
     key: 'markLastUpdatedBy',
     label: 'Mark Last Updated By',
@@ -120,7 +130,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false
   },{
     key: 'markDeltaToBid',
-    label: 'Δ Mark to Bid',
+    label: 'Δ to Bid',
     attrName: 'markDisBid',
     underlineAttrName: 'markDisBidRaw',
     blockAttrName: 'mark',
@@ -130,7 +140,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false
   },{
     key: 'markDeltaToAsk',
-    label: 'Δ Mark to Ask',
+    label: 'Δ to Ask',
     attrName: 'markDisAsk',
     underlineAttrName: 'markDisAskRaw',
     blockAttrName: 'mark',
@@ -140,7 +150,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false
   },{
     key: 'markDeltaToMid',
-    label: 'Δ Mark to Mid',
+    label: 'Δ to Mid',
     attrName: 'markDisMid',
     underlineAttrName: 'markDisMidRaw',
     blockAttrName: 'mark',
@@ -150,7 +160,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false
   },{
     key: 'markDeltaToLiquidation',
-    label: 'Δ Mark to Liquidation',
+    label: 'Δ to Liquidation',
     attrName: 'markDisLiquidation',
     underlineAttrName: 'markDisLiquidationRaw',
     blockAttrName: 'mark',
@@ -188,7 +198,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false
   },{
     key: 'wowDelta',
-    label: 'WoW Delta',
+    label: 'WoW Δ',
     attrName: DEFAULT_METRIC_IDENTIFIER,
     underlineAttrName: DEFAULT_METRIC_IDENTIFIER,
     blockAttrName: 'metricPack',
@@ -199,7 +209,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false
   },{
     key: 'thirtyDayDelta',
-    label: 'MoM Delta',
+    label: 'MoM Δ',
     attrName: DEFAULT_METRIC_IDENTIFIER,
     underlineAttrName: DEFAULT_METRIC_IDENTIFIER,
     blockAttrName: 'metricPack',
@@ -210,7 +220,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: true
   },{
     key: 'yoyDelta',
-    label: 'YoY Delta',
+    label: 'YoY Δ',
     attrName: DEFAULT_METRIC_IDENTIFIER,
     underlineAttrName: DEFAULT_METRIC_IDENTIFIER,
     blockAttrName: 'metricPack',
@@ -221,7 +231,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false
   },{
     key: 'ytdDelta',
-    label: 'YtD Delta',
+    label: 'YtD Δ',
     attrName: DEFAULT_METRIC_IDENTIFIER,
     underlineAttrName: DEFAULT_METRIC_IDENTIFIER,
     blockAttrName: 'metricPack',
@@ -362,7 +372,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: 'cs01CadFirmInK',
     underlineAttrName: 'cs01CadFirm',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: false
+    active: true
   },{
     key: 'cs01LocalFirm',
     label: 'Firm CS01 Local (k)',
