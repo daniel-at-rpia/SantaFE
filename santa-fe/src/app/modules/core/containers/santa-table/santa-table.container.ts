@@ -193,6 +193,9 @@ export class SantaTable implements OnInit, OnChanges {
     if (!!params && !!params.data && !!params.data.securityCard) {
       // this if checks whether the user is clicking on the entire row, or clicking on the security card
       const targetCard = params.data.securityCard;
+      if (!!params.node) {
+        params.data.securityCard.state.isAtListCeiling = !!params.node.firstChild;
+      }
       const storedSelectedCard = this.tableData.state.selectedSecurityCard;
       // console.log('test, clicked on row', targetCard.state.isSelected, storedSelectedCard, storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID);
       // IMPORTANT: If this logic ever needs to be modified, please test all scenarios on Daniel's notebook's page 10
