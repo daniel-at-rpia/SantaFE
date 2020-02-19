@@ -17,9 +17,9 @@
     'sat-securityQuote--filteredByYieldState': messageData.state.filteredByYield,
     'sat-securityQuote--menuActiveOnBidState': messageData.state.menuActiveSide === 'bid',
     'sat-securityQuote--menuActiveOnAskState': messageData.state.menuActiveSide === 'ask',
-    'sat-securityQuote--menuActiveOnTSpreadState': messageData.state.menuActiveMetric === 'tspread',
-    'sat-securityQuote--menuActiveOnPriceState': messageData.state.menuActiveMetric === 'price',
-    'sat-securityQuote--menuActiveOnYieldState': messageData.state.menuActiveMetric === 'yield',
+    'sat-securityQuote--menuActiveOnTSpreadState': messageData.state.menuActiveDriver === 'tspread',
+    'sat-securityQuote--menuActiveOnPriceState': messageData.state.menuActiveDriver === 'price',
+    'sat-securityQuote--menuActiveOnYieldState': messageData.state.menuActiveDriver === 'yield',
     'sat-securityQuote--cdsVariant': messageData.state.isCDSVariant
   }">
   <section class="sat-securityQuote__main">

@@ -88,18 +88,18 @@ export interface SecurityTableMetricStub {
   metricPackDeltaScope?: string;
 }
 
-export interface TriCoreMetricConfigStub {
-  Spread: TriCoreMetricIndividualConfigStub;
-  Yield: TriCoreMetricIndividualConfigStub;
-  Price: TriCoreMetricIndividualConfigStub;
+export interface TriCoreDriverConfigStub {
+  Spread: TriCoreDriverIndividualConfigStub;
+  Yield: TriCoreDriverIndividualConfigStub;
+  Price: TriCoreDriverIndividualConfigStub;
 }
 
-interface TriCoreMetricIndividualConfigStub {
+interface TriCoreDriverIndividualConfigStub {
   label: string;
   tier2Threshold: number;
   inversed: boolean;
   rounding: number;
-  metricLabel: string;
+  driverLabel: string;
   backendTargetQuoteAttr: string;
 }
 

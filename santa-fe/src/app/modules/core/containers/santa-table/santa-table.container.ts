@@ -80,7 +80,7 @@ export class SantaTable implements OnInit, OnChanges {
   @Input() receivedSecurityTableMetricsUpdate: Array<SecurityTableMetricStub>;
   securityTableMetricsCache: Array<SecurityTableMetricStub>;// use this only for detecting diff
   @Input() liveUpdatedRows: Array<SecurityTableRowDTO>;
-  @Input() activeTriCoreMetric: string;
+  @Input() activeTriCoreDriver: string;
   @Output() selectedSecurityForAnalysis = new EventEmitter<SecurityDTO>();
   liveUpdateRowsCache: Array<SecurityTableRowDTO>;
 
@@ -349,7 +349,7 @@ export class SantaTable implements OnInit, OnChanges {
             eachHeader,
             eachRow,
             eachRow.data.cells[cellIndex],
-            this.activeTriCoreMetric
+            this.activeTriCoreDriver
           );
         });
       }
@@ -363,15 +363,15 @@ export class SantaTable implements OnInit, OnChanges {
     if (!!targetRow) {
       let bestBid: number; 
       let bestOffer: number;
-      let metricType: string;
+      let driverType: string;
       if (!!targetRow.data.cells[0] && !!targetRow.data.cells[0].data.quantComparerDTO) {
         bestBid = targetRow.data.cells[0].data.quantComparerDTO.data.bid.number;
         bestOffer = targetRow.data.cells[0].data.quantComparerDTO.data.offer.number;
-        metricType = targetRow.data.cells[0].data.quantComparerDTO.data.metricType;
+        driverType = targetRow.data.cells[0].data.quantComparerDTO.data.driverType;
       } else {
         bestBid = 0;
         bestOffer = 0;
-        metricType = '';
+        driverType = '';
       }
       
       targetRow.data.quotes = this.dtoService.formSecurityTableRowObject(targetRow.data.security).data.quotes;
@@ -387,7 +387,7 @@ export class SantaTable implements OnInit, OnChanges {
               serverReturn,
               bestBid,
               bestOffer,
-              metricType,
+              driverType,
               params
             );
           }
@@ -585,13 +585,13 @@ export class SantaTable implements OnInit, OnChanges {
     serverReturn: Array<Array<BEQuoteDTO>>,
     bestBid: number,
     bestOffer: number,
-    metricType: string,
+    driverType: string,
     params: any  // this is a AgGridRowParams, can't enforce type checking here because agGrid's native function redrawRows() would throw an compliation error
   ) {
     const primaryList = serverReturn[0];
     targetRow.state.isCDSOffTheRun = serverReturn.length > 1;
     primaryList.forEach((eachRawQuote) => {
-      const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, bestBid, bestOffer, metricType, targetRow.data.security);
+      const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, bestBid, bestOffer, driverType, targetRow.data.security);
       newQuote.state.isCDSVariant = targetRow.state.isCDSVariant;
       if (newQuote.state.hasAsk || newQuote.state.hasBid) {
         targetRow.data.quotes.primaryQuotes.push(newQuote);
@@ -600,7 +600,7 @@ export class SantaTable implements OnInit, OnChanges {
     if (targetRow.state.isCDSOffTheRun) {
       const secondaryList = serverReturn[1];
       secondaryList.forEach((eachRawQuote) => {
-        const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, bestBid, bestOffer, metricType, targetRow.data.security);
+        const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, bestBid, bestOffer, driverType, targetRow.data.security);
         newQuote.state.isCDSVariant = targetRow.state.isCDSVariant;
         if (newQuote.state.hasAsk || newQuote.state.hasBid) {
           targetRow.data.quotes.secondaryQuotes.push(newQuote);

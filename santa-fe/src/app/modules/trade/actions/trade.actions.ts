@@ -14,7 +14,7 @@ export enum TradeActions {
   LiveUpdateCount = '[Trade] Live Update Count',
   LiveUpdateProcessingDataCompleteEvent = '[Trade] Live Update Processing Data Complete Event',
   TogglePresetEvent = '[Trade] Toggle Preset Event',
-  ToggleMetricEvent = '[Trade] Toggle Metric Event',
+  SwitchDriverEvent = '[Trade] Toggle Driver Event',
   SelectSecurityForAnalysisEvent = '[Trade] Select Security For Analysis Event',
   SecurityIDListFromAnalysisEvent = '[Trade] Security ID List From Analysis Event',
   SecurityTableRowDTOListForAnalysisEvent = '[Trade] SecurityTableRowDTO List For Analysis Event',
@@ -66,8 +66,8 @@ export class TradeTogglePresetEvent implements Action {
   constructor(){}
 }
 
-export class TradeToggleMetricEvent implements Action {
-  readonly type = TradeActions.ToggleMetricEvent;
+export class TradeSwitchDriverEvent implements Action {
+  readonly type = TradeActions.SwitchDriverEvent;
   constructor(){}
 }
 

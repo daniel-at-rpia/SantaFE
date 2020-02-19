@@ -4,9 +4,9 @@ import {
 } from 'FEModels/frontend-stub-models.interface';
 
 import {
-  TriCoreMetricConfig,
+  TriCoreDriverConfig,
   SecurityMetricOptions,
-  DEFAULT_METRIC_IDENTIFIER
+  DEFAULT_DRIVER_IDENTIFIER
 } from 'Core/constants/coreConstants.constant';
 
 
@@ -93,8 +93,8 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
   },{
     key: 'indexMark',
     label: 'Index Mark (t-1)',
-    attrName: DEFAULT_METRIC_IDENTIFIER,
-    underlineAttrName: DEFAULT_METRIC_IDENTIFIER,
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
     blockAttrName: 'metricPack',
     isAttrChangable: true,
     readyStage: SECURITY_TABLE_FINAL_STAGE,
@@ -199,8 +199,8 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
   },{
     key: 'wowDelta',
     label: 'WoW Δ',
-    attrName: DEFAULT_METRIC_IDENTIFIER,
-    underlineAttrName: DEFAULT_METRIC_IDENTIFIER,
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
     blockAttrName: 'metricPack',
     isAttrChangable: true,
     readyStage: SECURITY_TABLE_FINAL_STAGE,
@@ -210,8 +210,8 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
   },{
     key: 'thirtyDayDelta',
     label: 'MoM Δ',
-    attrName: DEFAULT_METRIC_IDENTIFIER,
-    underlineAttrName: DEFAULT_METRIC_IDENTIFIER,
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
     blockAttrName: 'metricPack',
     isAttrChangable: true,
     readyStage: SECURITY_TABLE_FINAL_STAGE,
@@ -221,8 +221,8 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
   },{
     key: 'yoyDelta',
     label: 'YoY Δ',
-    attrName: DEFAULT_METRIC_IDENTIFIER,
-    underlineAttrName: DEFAULT_METRIC_IDENTIFIER,
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
     blockAttrName: 'metricPack',
     isAttrChangable: true,
     readyStage: SECURITY_TABLE_FINAL_STAGE,
@@ -232,8 +232,8 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
   },{
     key: 'ytdDelta',
     label: 'YtD Δ',
-    attrName: DEFAULT_METRIC_IDENTIFIER,
-    underlineAttrName: DEFAULT_METRIC_IDENTIFIER,
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
     blockAttrName: 'metricPack',
     isAttrChangable: true,
     readyStage: SECURITY_TABLE_FINAL_STAGE,

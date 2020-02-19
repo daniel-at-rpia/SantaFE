@@ -50,8 +50,8 @@
     } from 'FEModels/frontend-adhoc-packages.interface';
 
     import {
-      TriCoreMetricConfig,
-      DEFAULT_METRIC_IDENTIFIER,
+      TriCoreDriverConfig,
+      DEFAULT_DRIVER_IDENTIFIER,
       EngagementActionList
     } from 'Core/constants/coreConstants.constant';
     import {
@@ -75,7 +75,7 @@
       TradeLiveUpdateProcessDataCompleteEvent,
       TradeTogglePresetEvent,
       TradeLiveUpdatePassRawDataEvent,
-      TradeToggleMetricEvent,
+      TradeSwitchDriverEvent,
       TradeSelectedSecurityForAnalysisEvent,
       TradeSecurityTableRowDTOListForAnalysisEvent
     } from 'Trade/actions/trade.actions';
@@ -98,7 +98,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     validWindowSub: null
   }
   constants = {
-    defaultMetricIdentifier: DEFAULT_METRIC_IDENTIFIER,
+    defaultMetricIdentifier: DEFAULT_DRIVER_IDENTIFIER,
     portfolioShortcuts: PortfolioShortcuts,
     ownershipShortcuts: OwnershipShortcuts,
     strategyShortcuts: StrategyShortcuts,
@@ -138,7 +138,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       },
       filters: {
         quickFilters: {
-          metricType: this.constants.defaultMetricIdentifier,
+          driverType: this.constants.defaultMetricIdentifier,
           portfolios: [],
           keyword: '',
           owner: [],
@@ -260,32 +260,32 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.state.configurator.boosted = true;
   }
 
-  public onSwitchMetric(targetMetric) {
-    if (this.state.filters.quickFilters.metricType !== targetMetric) {
+  public onswitchDriver(targetDriver) {
+    if (this.state.filters.quickFilters.driverType !== targetDriver) {
       this.restfulCommService.logEngagement(
-        EngagementActionList.switchMetric,
+        EngagementActionList.switchDriver,
         'n/a',
-        targetMetric,
+        targetDriver,
         this.ownerInitial,
         'Trade - Center Panel'
       );
-      this.state.filters.quickFilters.metricType = targetMetric;
+      this.state.filters.quickFilters.driverType = targetDriver;
       const newMetrics: Array<SecurityTableMetricStub> = this.utilityService.deepCopy(this.state.table.metrics);
       newMetrics.forEach((eachMetricStub) => {
         if (eachMetricStub.isDriverDependent && eachMetricStub.isAttrChangable) {
-          if (targetMetric === this.constants.defaultMetricIdentifier) {
-            eachMetricStub.attrName = targetMetric;
-            eachMetricStub.underlineAttrName = targetMetric;
+          if (targetDriver === this.constants.defaultMetricIdentifier) {
+            eachMetricStub.attrName = targetDriver;
+            eachMetricStub.underlineAttrName = targetDriver;
           } else {
-            eachMetricStub.attrName = TriCoreMetricConfig[targetMetric].metricLabel;
-            eachMetricStub.underlineAttrName = TriCoreMetricConfig[targetMetric].metricLabel;
+            eachMetricStub.attrName = TriCoreDriverConfig[targetDriver].driverLabel;
+            eachMetricStub.underlineAttrName = TriCoreDriverConfig[targetDriver].driverLabel;
           }
         }
       });
       this.state.table.metrics = newMetrics;
       // this.calculateQuantComparerWidthAndHeight();
       // TODO: remove this event and all associated logic from ngrx
-      // this.store$.dispatch(new TradeToggleMetricEvent());
+      // this.store$.dispatch(new TradeSwitchDriverEvent());
     }
   }
 
@@ -414,7 +414,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       stencilHeaderBuffer.forEach((eachHeader) => {
         if (eachHeader.data.displayLabel !== 'Security') {
           if (eachHeader.state.isQuantVariant) {
-            const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, this.state.filters.quickFilters.metricType, null, null);
+            const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, this.state.filters.quickFilters.driverType, null, null);
             newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, true, bestQuoteStencil));
           } else {
             newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, false));
@@ -461,7 +461,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.state.fetchResult.prinstineRowList = [];  // flush out the stencils
     this.state.fetchResult.prinstineRowList = this.processingService.loadFinalStageData(
       this.state.table.dto.data.headers,
-      this.state.filters.quickFilters.metricType,
+      this.state.filters.quickFilters.driverType,
       serverReturn,
       this.onSelectSecurityForAnalysis.bind(this),
       this.onClickOpenSecurityInBloomberg.bind(this)

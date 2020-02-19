@@ -20,7 +20,7 @@
       BEBestQuoteDTO,
       BEFetchAllTradeDataReturn
     } from 'BEModels/backend-models.interface';
-    import { TriCoreMetricConfig, DEFAULT_METRIC_IDENTIFIER } from 'Core/constants/coreConstants.constant';
+    import { TriCoreDriverConfig, DEFAULT_DRIVER_IDENTIFIER } from 'Core/constants/coreConstants.constant';
   // dependencies
 
 @Injectable()
@@ -38,7 +38,7 @@ export class LiveDataProcessingService {
 
   public loadFinalStageData(
     tableHeaderList: Array<SecurityTableHeaderDTO>,
-    activeMetricType: string,
+    selectedDriver: string,
     serverReturn: BEFetchAllTradeDataReturn,
     sendToGraphCallback: Function,
     openSecurityInBloombergCallback: Function
@@ -54,7 +54,7 @@ export class LiveDataProcessingService {
       let sumSize = 0;
       let isValidFlag = true;
       const newBESecurity:BESecurityDTO = serverReturn[eachKey].security;
-      const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false, activeMetricType);
+      const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false, selectedDriver);
       newSecurity.state.isInteractionThumbDownDisabled = true;
       newSecurity.api.onClickSendToGraph = sendToGraphCallback;
       newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
@@ -73,7 +73,7 @@ export class LiveDataProcessingService {
           tableHeaderList,
           prinstineRowList,
           newSecurity,
-          activeMetricType,
+          selectedDriver,
           serverReturn[eachKey].bestQuotes
         );
         validCount++;
@@ -87,39 +87,40 @@ export class LiveDataProcessingService {
     headerList: Array<SecurityTableHeaderDTO>,
     prinstineRowList: Array<SecurityTableRowDTO>,
     newSecurity: SecurityDTO,
-    metricType: string,
+    driverType: string,
     bestQuoteServerReturn: BEBestQuoteDTO
   ) {
     const newRow = this.dtoService.formSecurityTableRowObject(newSecurity);
+    this.populateEachRowWithBestQuoteData(
+      headerList,
+      newRow,
+      driverType,
+      bestQuoteServerReturn
+    );
     headerList.forEach((eachHeader, index) => {
       if (!eachHeader.state.isPureTextVariant) {
-        if (eachHeader.data.readyStage === 1 || eachHeader.data.readyStage === 2) {
+        // data only comes in final stage right now, no need for this logic at the moment
+        // if (eachHeader.data.readyStage === 1 || eachHeader.data.readyStage === 2) {
           const newCell = this.utilityService.populateSecurityTableCellFromSecurityCard(
             eachHeader,
             newRow,
             this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant),
-            null
+            driverType
           );
           newRow.data.cells.push(newCell);
-        } else {
-          const emptyCell = this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant);
-          newRow.data.cells.push(emptyCell);
-        }
+        // } else {
+        //   const emptyCell = this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant);
+        //   newRow.data.cells.push(emptyCell);
+        // }
       }
     });
-    this.populateEachRowWithBestQuoteData(
-      headerList,
-      newRow,
-      metricType,
-      bestQuoteServerReturn
-    );
     prinstineRowList.push(newRow);
   }
 
   private populateEachRowWithBestQuoteData(
     tableHeaderList: Array<SecurityTableHeaderDTO>,
     targetRow: SecurityTableRowDTO,
-    metricType: string,
+    driverType: string,
     quote: BEBestQuoteDTO
   ){
     const bestQuoteHeaderIndex = tableHeaderList.findIndex((eachHeader) => {
@@ -129,7 +130,7 @@ export class LiveDataProcessingService {
     const newPriceQuant = !!quote 
       ? this.dtoService.formQuantComparerObject(
           false,
-          TriCoreMetricConfig.Price.label,
+          TriCoreDriverConfig.Price.label,
           quote,
           targetRow.data.security
         ) 
@@ -137,7 +138,7 @@ export class LiveDataProcessingService {
     const newSpreadQuant = !!quote 
       ? this.dtoService.formQuantComparerObject(
           false,
-          TriCoreMetricConfig.Spread.label,
+          TriCoreDriverConfig.Spread.label,
           quote,
           targetRow.data.security
         )
@@ -145,7 +146,7 @@ export class LiveDataProcessingService {
     const newYieldQuant = !!quote 
     ? this.dtoService.formQuantComparerObject(
         false,
-        TriCoreMetricConfig.Yield.label,
+        TriCoreDriverConfig.Yield.label,
         quote,
         targetRow.data.security
       )
@@ -155,16 +156,6 @@ export class LiveDataProcessingService {
       bestYieldQuote: newYieldQuant,
       bestSpreadQuote: newSpreadQuant
     }
-    tableHeaderList.forEach((eachHeader, index) => {
-      if (eachHeader.data.readyStage === 3) {
-        targetRow.data.cells[index-1] = this.utilityService.populateSecurityTableCellFromSecurityCard(
-          eachHeader,
-          targetRow,
-          targetRow.data.cells[index-1],
-          metricType
-        );
-      }
-    });
   }
 
   public returnDiff(

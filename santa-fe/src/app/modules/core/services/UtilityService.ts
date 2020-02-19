@@ -30,8 +30,8 @@
     import {
       SecurityMetricOptions,
       BackendKeyDictionary,
-      TriCoreMetricConfig,
-      DEFAULT_METRIC_IDENTIFIER
+      TriCoreDriverConfig,
+      DEFAULT_DRIVER_IDENTIFIER
     } from 'Core/constants/coreConstants.constant';
     import uuid from 'uuidv4';
   // dependencies
@@ -42,7 +42,7 @@ export class UtilityService {
   groupGroupMetricOptions = GroupMetricOptions;
   securityMetricOptions = SecurityMetricOptions;
   keyDictionary = BackendKeyDictionary;
-  triCoreMetricConfig = TriCoreMetricConfig;
+  triCoreDriverConfig = TriCoreDriverConfig;
 
   constructor(){}
 
@@ -422,25 +422,27 @@ export class UtilityService {
       }
     }
 
-    public parseTriCoreMetricNumber(
+    public parseTriCoreDriverNumber(
       targetNumber,
-      targetMetric: string,
+      targetDriver: string,
       targetSecurity: SecurityDTO,
       isToFixed: boolean
     ): number|string {
-      if (!!targetNumber && !!targetMetric) {
-        if (targetMetric === 'YieldWorst') {
-          targetMetric = 'Yield';
+      if (!!targetNumber && !!targetDriver) {
+        if (targetDriver === 'YieldWorst') {
+          targetDriver = TriCoreDriverConfig.Yield.label;
+        } else if (targetDriver === TriCoreDriverConfig.Spread.driverLabel) {
+          targetDriver = TriCoreDriverConfig.Spread.label;
         }
-        const rounding = TriCoreMetricConfig[targetMetric] ? TriCoreMetricConfig[targetMetric].rounding : 0;
+        const rounding = TriCoreDriverConfig[targetDriver] ? TriCoreDriverConfig[targetDriver].rounding : 0;
         if (isToFixed) {
-          if (targetSecurity.data.isGovt && targetMetric === TriCoreMetricConfig.Spread.label) {
+          if (targetSecurity.data.isGovt && targetDriver === TriCoreDriverConfig.Spread.label) {
             return this.round(targetNumber, rounding + 1).toFixed(rounding + 1);
           } else {
             return this.round(targetNumber, rounding).toFixed(rounding);
           }
         } else {
-          if (targetSecurity.data.isGovt && targetMetric === TriCoreMetricConfig.Spread.label) {
+          if (targetSecurity.data.isGovt && targetDriver === TriCoreDriverConfig.Spread.label) {
             return this.round(targetNumber, rounding + 1);
           } else {
             return this.round(targetNumber, rounding);
@@ -463,14 +465,14 @@ export class UtilityService {
 
     public retrieveGroupMetricValue(metricDTO: SecurityGroupMetricBlock, groupDTO: SecurityGroupDTO): number {
       if (!!groupDTO && !!metricDTO) {
-        const metricLabel = metricDTO.label;
+        const driverLabel = metricDTO.label;
         let value, deltaSubPack;
         if (!!metricDTO.deltaScope) {
           deltaSubPack = groupDTO.data.metricPack.delta[metricDTO.deltaScope];
-          value = !!deltaSubPack ? deltaSubPack[metricLabel] : null;
+          value = !!deltaSubPack ? deltaSubPack[driverLabel] : null;
           value = Math.round(value*10)/10;
         } else {
-          value = groupDTO.data.metricPack.raw[metricLabel];
+          value = groupDTO.data.metricPack.raw[driverLabel];
           value = Math.round(value);
         }
         return value;
@@ -576,22 +578,22 @@ export class UtilityService {
       triCoreMetric: string
     ): SecurityTableCellDTO {
       if (targetHeader.state.isQuantVariant) {
-        let targetMetric = triCoreMetric;
-        if (triCoreMetric === DEFAULT_METRIC_IDENTIFIER) {
-          targetMetric = this.findSecurityTargetDefaultTriCoreMetric(targetRow.data.security);
+        let targetDriver = triCoreMetric;
+        if (triCoreMetric === DEFAULT_DRIVER_IDENTIFIER) {
+          targetDriver = this.findSecurityTargetDefaultTriCoreDriver(targetRow.data.security);
         }
-        if (!!targetMetric) {
-          const targetQuantLocationFromRow = TriCoreMetricConfig[targetMetric].backendTargetQuoteAttr;
+        if (!!targetDriver) {
+          const targetQuantLocationFromRow = TriCoreDriverConfig[targetDriver].backendTargetQuoteAttr;
           newCellDTO.data.quantComparerDTO = targetRow.data.bestQuotes[targetQuantLocationFromRow];
         } else {
           newCellDTO.data.quantComparerDTO = null;
         }
         const targetSecurity = targetRow.data.security;
         // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
-        if ( targetSecurity.data.mark.markDriver === triCoreMetric || triCoreMetric === DEFAULT_METRIC_IDENTIFIER) {
+        if ( targetSecurity.data.mark.markDriver === triCoreMetric || triCoreMetric === DEFAULT_DRIVER_IDENTIFIER) {
           targetSecurity.data.mark.markRaw = targetRow.data.security.data.mark.markBackend;
-        const validMetricFromDriver = this.findSecurityTargetDefaultTriCoreMetric(targetSecurity);
-          const number = this.parseTriCoreMetricNumber(targetSecurity.data.mark.markRaw, validMetricFromDriver, targetSecurity, true) as string;
+        const validMetricFromDriver = this.findSecurityTargetDefaultTriCoreDriver(targetSecurity);
+          const number = this.parseTriCoreDriverNumber(targetSecurity.data.mark.markRaw, validMetricFromDriver, targetSecurity, true) as string;
           targetSecurity.data.mark.mark = targetSecurity.data.mark.markRaw > 0 ? number : null;
         } else {
           targetSecurity.data.mark.markRaw = null;
@@ -600,6 +602,7 @@ export class UtilityService {
         this.calculateMarkDiscrepancies(
           targetRow.data.security,
           newCellDTO.data.quantComparerDTO,
+          targetDriver
         );
         if (!!newCellDTO.data.quantComparerDTO) {
           if (newCellDTO.data.quantComparerDTO.state.hasBid) {
@@ -657,22 +660,22 @@ export class UtilityService {
         }
         let attrName = header.data.attrName;
         let underlineAttrName = header.data.underlineAttrName;
-        if ( header.data.isDriverDependent && header.data.isAttrChangable && attrName === DEFAULT_METRIC_IDENTIFIER ) {
+        if ( header.data.isDriverDependent && header.data.isAttrChangable && attrName === DEFAULT_DRIVER_IDENTIFIER ) {
           // when the metric is set to default, the actual metric to be used for each row depends on the driver of the mark of that particular row
-          const targetMetric = this.findSecurityTargetDefaultTriCoreMetric(dto);
-          attrName = TriCoreMetricConfig[targetMetric].metricLabel;
-          underlineAttrName = TriCoreMetricConfig[targetMetric].metricLabel;
+          const targetDriver = this.findSecurityTargetDefaultTriCoreDriver(dto);
+          attrName = TriCoreDriverConfig[targetDriver].driverLabel;
+          underlineAttrName = TriCoreDriverConfig[targetDriver].driverLabel;
         }
-        const metricLabel = attrName;
+        const driverLabel = attrName;
         let value, deltaSubPack;
         if (!!header.data.metricPackDeltaScope) {
           deltaSubPack = dto.data.metricPack.delta[header.data.metricPackDeltaScope];
-          value = !!deltaSubPack ? deltaSubPack[metricLabel] : null;
+          value = !!deltaSubPack ? deltaSubPack[driverLabel] : null;
         } else {
-          value = dto.data.metricPack.raw[metricLabel];
+          value = dto.data.metricPack.raw[driverLabel];
         }
         if (header.data.isDriverDependent && header.data.isAttrChangable) {
-          value = this.parseTriCoreMetricNumber(value, attrName, dto, false);
+          value = this.parseTriCoreDriverNumber(value, attrName, dto, false);
         }
         return value;
       } else {
@@ -683,11 +686,12 @@ export class UtilityService {
     // TODO: move this into a SecurityTableHelper service 
     public calculateMarkDiscrepancies(
       targetSecurity: SecurityDTO,
-      targetQuant: QuantComparerDTO
+      targetQuant: QuantComparerDTO,
+      activeDriver: string
     ) {
       const markBlock = targetSecurity.data.mark;
       if (!!targetQuant && targetSecurity.data.mark.markRaw) {
-        const rounding = this.triCoreMetricConfig[targetSecurity.data.mark.markDriver].rounding;
+        const rounding = this.triCoreDriverConfig[targetSecurity.data.mark.markDriver].rounding;
         if (targetQuant.state.hasBid) {
           markBlock.markDisBidRaw = markBlock.markRaw - targetQuant.data.bid.number;
           markBlock.markDisBid = this.round(markBlock.markDisBidRaw, rounding).toFixed(rounding);
@@ -708,6 +712,11 @@ export class UtilityService {
           markBlock.markDisMidRaw = markBlock.markRaw - targetQuant.data.mid;
           markBlock.markDisMid = this.round(markBlock.markDisMidRaw, rounding).toFixed(rounding);
         }
+        if (targetSecurity.data.hasIndex) {
+          const driverLabel = TriCoreDriverConfig[activeDriver].driverLabel;
+          markBlock.markDisIndexRaw = markBlock.markRaw - targetSecurity.data.metricPack.raw[driverLabel];
+          markBlock.markDisIndex = this.parseTriCoreDriverNumber(markBlock.markDisIndexRaw, driverLabel, targetSecurity, true) as string;
+        }
       } else {
         markBlock.markDisBid = null;
         markBlock.markDisBidRaw = null;
@@ -717,10 +726,12 @@ export class UtilityService {
         markBlock.markDisAskRaw = null;
         markBlock.markDisLiquidation = null;
         markBlock.markDisLiquidationRaw = null;
+        markBlock.markDisIndex = null;
+        markBlock.markDisIndexRaw = null;
       }
     }
 
-    public findSecurityTargetDefaultTriCoreMetric(targetSecurity: SecurityDTO): string {
+    public findSecurityTargetDefaultTriCoreDriver(targetSecurity: SecurityDTO): string {
       const BEDriver = targetSecurity.data.mark.markDriver;
       switch (BEDriver) {
         case null:

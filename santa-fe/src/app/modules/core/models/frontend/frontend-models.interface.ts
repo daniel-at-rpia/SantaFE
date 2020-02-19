@@ -201,7 +201,7 @@ export interface SearchShortcutDTO extends BasicDTOStructure {
 
 export interface QuantComparerDTO extends BasicDTOStructure {
   data: {
-    metricType: string;
+    driverType: string;
     delta: number;
     mid: number;
     bid: {
@@ -359,7 +359,7 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
     filteredByYield: boolean;
     filteredByPrice: boolean;
     menuActiveSide: string;
-    menuActiveMetric: string;
+    menuActiveDriver: string;
     isBidDownVoted: boolean;
     isAskDownVoted: boolean;
     isCDSVariant: boolean;

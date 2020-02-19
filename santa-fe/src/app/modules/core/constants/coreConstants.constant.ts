@@ -1,7 +1,7 @@
 import {
   SecurityTableMetricStub,
   SecurityMetricOptionStub,
-  TriCoreMetricConfigStub
+  TriCoreDriverConfigStub
 } from 'FEModels/frontend-stub-models.interface';
 
 export const APIUrlMap = {
@@ -110,14 +110,14 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
   }
 ];
 
-export const DEFAULT_METRIC_IDENTIFIER = 'DEFAULT';
-export const TriCoreMetricConfig: TriCoreMetricConfigStub = {
+export const DEFAULT_DRIVER_IDENTIFIER = 'DEFAULT';
+export const TriCoreDriverConfig: TriCoreDriverConfigStub = {
   Spread: {
     label: 'Spread',
     tier2Threshold: 20,
     inversed: false,
     rounding: 0,
-    metricLabel: SecurityMetricOptions[0].label,
+    driverLabel: SecurityMetricOptions[0].label,
     backendTargetQuoteAttr: 'bestSpreadQuote'
   },
   Yield: {
@@ -125,7 +125,7 @@ export const TriCoreMetricConfig: TriCoreMetricConfigStub = {
     tier2Threshold: 1,
     inversed: false,
     rounding: 3,
-    metricLabel: SecurityMetricOptions[6].label,
+    driverLabel: SecurityMetricOptions[6].label,
     backendTargetQuoteAttr: 'bestYieldQuote'
   },
   Price: {
@@ -133,7 +133,7 @@ export const TriCoreMetricConfig: TriCoreMetricConfigStub = {
     tier2Threshold: 3,
     inversed: true,
     rounding: 3,
-    metricLabel: SecurityMetricOptions[1].label,
+    driverLabel: SecurityMetricOptions[1].label,
     backendTargetQuoteAttr: 'bestPriceQuote'
   }
 }
@@ -172,7 +172,7 @@ export const MIN_OBLIGOR_CURVE_VALUES = 2;
 export const EngagementActionList = {
   sendEmail: 'Send Email',
   selectPreset: 'Select Preset',
-  switchMetric: 'Switch Metric',
+  switchDriver: 'Switch Driver',
   applyFilter: 'Apply Filter',
   selectSecurityForAnalysis: 'Select Security For Analysis',
   bloombergRedict: 'Bloomberg Redirect',

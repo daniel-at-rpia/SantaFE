@@ -13,7 +13,7 @@ import { SecurityDTO } from 'App/modules/core/models/frontend/frontend-models.in
 import { DTOService } from 'Core/services/DTOService';
 import { tap, first, delay } from 'rxjs/operators';
 import { TradeSecurityIDsFromAnalysisEvent } from 'Trade/actions/trade.actions';
-import { TriCoreMetricConfig } from 'Core/constants/coreConstants.constant';
+import { TriCoreDriverConfig } from 'Core/constants/coreConstants.constant';
 import { TradeObligorGraphPanelState } from 'FEModels/frontend-page-states.interface';
 import { ObligorCategoryDataItemBlock } from 'FEModels/frontend-blocks.interface';
 import { ObligorChartCategoryColorScheme } from 'App/modules/core/constants/colorSchemes.constant';
@@ -181,7 +181,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
       else if (bEBestQuoteDTO.bidQuoteValue > 0 && bEBestQuoteDTO.askQuoteValue === null) mid = bEBestQuoteDTO.bidQuoteValue;
       if (bEBestQuoteDTO.quoteMetric) {
         if (bEBestQuoteDTO.quoteMetric === "Spread") {
-          TriCoreMetricConfig.Spread.rounding;
+          TriCoreDriverConfig.Spread.rounding;
           mid = this.utility.round(mid, rounding);
         }
         else if (bEBestQuoteDTO.quoteMetric === "Yield") {
