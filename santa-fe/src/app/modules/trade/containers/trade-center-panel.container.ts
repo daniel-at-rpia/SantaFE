@@ -171,7 +171,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         if (this.state.fetchResult.fetchTableDataFailed) {
           window.location.reload(true);
         } else {
-          this.fetchStageOneContent(false);
+          this.fetchAllData(false);
         }
       }
     });
@@ -397,7 +397,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.state.fetchResult.prinstineRowList = [];
     this.loadInitialStencilTable();
     this.updateStage(0);
-    this.fetchStageOneContent(true);
+    this.fetchAllData(true);
   }
 
   private loadInitialStencilTable() {
@@ -426,7 +426,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.state.fetchResult.rowList = this.utilityService.deepCopy(this.state.fetchResult.prinstineRowList);
   }
 
-  private fetchStageOneContent(isInitialFetch: boolean) {
+  private fetchAllData(isInitialFetch: boolean) {
     const payload: PayloadGetTradeFullData = {
       partitionOptions: ['Portfolio', 'Strategy']
     };
@@ -441,7 +441,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         } else {
           this.updateStage(0);
         }
-        this.loadStageOneContent(serverReturn);
+        this.loadAllData(serverReturn);
       }),
       catchError(err => {
         this.restfulCommService.logError(`Get portfolios failed`, this.ownerInitial);
@@ -457,20 +457,17 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     ).subscribe();
   }
 
-  private loadStageOneContent(serverReturn: BEFetchAllTradeDataReturn) {
+  private loadAllData(serverReturn: BEFetchAllTradeDataReturn) {
     this.state.fetchResult.prinstineRowList = [];  // flush out the stencils
-    this.state.fetchResult.prinstineRowList = this.processingService.loadStageOneContent(
+    this.state.fetchResult.prinstineRowList = this.processingService.loadFinalStageData(
       this.state.table.dto.data.headers,
       this.state.filters.quickFilters.metricType,
       serverReturn,
       this.onSelectSecurityForAnalysis.bind(this),
       this.onClickOpenSecurityInBloomberg.bind(this)
     );
-    // right now stage 1 and stage 2 are combined
-    // this.updateStage(2); // disabling this now for a smoothier transition on the UI
-
     this.calculateQuantComparerWidthAndHeight();
-    this.updateStage(3);
+    this.updateStage(this.constants.securityTableFinalStage);
   }
 
   private updateStage(stageNumber: number) {

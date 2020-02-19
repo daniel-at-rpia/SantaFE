@@ -36,7 +36,7 @@ export class LiveDataProcessingService {
     worker.postMessage('hello');
   }
 
-  public loadStageOneContent(
+  public loadFinalStageData(
     tableHeaderList: Array<SecurityTableHeaderDTO>,
     activeMetricType: string,
     serverReturn: BEFetchAllTradeDataReturn,
@@ -69,7 +69,7 @@ export class LiveDataProcessingService {
       });
       if (isValidFlag) {
         this.dtoService.appendPortfolioOverviewInfoForSecurityDTO(newSecurity);
-        this.populateEachRowWithStageOneContent(
+        this.populateEachRowWithData(
           tableHeaderList,
           prinstineRowList,
           newSecurity,
@@ -83,7 +83,40 @@ export class LiveDataProcessingService {
     return prinstineRowList;
   }
 
-  private populateEachRowWithStageThreeContent(
+  private populateEachRowWithData(
+    headerList: Array<SecurityTableHeaderDTO>,
+    prinstineRowList: Array<SecurityTableRowDTO>,
+    newSecurity: SecurityDTO,
+    metricType: string,
+    bestQuoteServerReturn: BEBestQuoteDTO
+  ) {
+    const newRow = this.dtoService.formSecurityTableRowObject(newSecurity);
+    headerList.forEach((eachHeader, index) => {
+      if (!eachHeader.state.isPureTextVariant) {
+        if (eachHeader.data.readyStage === 1 || eachHeader.data.readyStage === 2) {
+          const newCell = this.utilityService.populateSecurityTableCellFromSecurityCard(
+            eachHeader,
+            newRow,
+            this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant),
+            null
+          );
+          newRow.data.cells.push(newCell);
+        } else {
+          const emptyCell = this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant);
+          newRow.data.cells.push(emptyCell);
+        }
+      }
+    });
+    this.populateEachRowWithBestQuoteData(
+      headerList,
+      newRow,
+      metricType,
+      bestQuoteServerReturn
+    );
+    prinstineRowList.push(newRow);
+  }
+
+  private populateEachRowWithBestQuoteData(
     tableHeaderList: Array<SecurityTableHeaderDTO>,
     targetRow: SecurityTableRowDTO,
     metricType: string,
@@ -184,39 +217,6 @@ export class LiveDataProcessingService {
       markDiffCount: markDiffCount,
       quantDiffCount: quantDiffCount
     };
-  }
-
-  private populateEachRowWithStageOneContent(
-    headerList: Array<SecurityTableHeaderDTO>,
-    prinstineRowList: Array<SecurityTableRowDTO>,
-    newSecurity: SecurityDTO,
-    metricType: string,
-    bestQuoteServerReturn: BEBestQuoteDTO
-  ) {
-    const newRow = this.dtoService.formSecurityTableRowObject(newSecurity);
-    headerList.forEach((eachHeader, index) => {
-      if (!eachHeader.state.isPureTextVariant) {
-        if (eachHeader.data.readyStage === 1 || eachHeader.data.readyStage === 2) {
-          const newCell = this.utilityService.populateSecurityTableCellFromSecurityCard(
-            eachHeader,
-            newRow,
-            this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant),
-            null
-          );
-          newRow.data.cells.push(newCell);
-        } else {
-          const emptyCell = this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant);
-          newRow.data.cells.push(emptyCell);
-        }
-      }
-    });
-    this.populateEachRowWithStageThreeContent(
-      headerList,
-      newRow,
-      metricType,
-      bestQuoteServerReturn
-    );
-    prinstineRowList.push(newRow);
   }
 
   private isThereDiffInSecurity(
