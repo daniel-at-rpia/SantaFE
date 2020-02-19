@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "ng serve --extra-webpack-config webpack.partial.js -o",
+    "build": "ng build --extra-webpack-config webpack.partial.js -o",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -31,6 +31,7 @@
     "ag-grid-enterprise": "20.1.0",
     "lodash": "^4.17.15",
     "lodash.clonedeep": "^4.5.0",
+    "ngx-build-plus": "^9.0.4",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "uuidv4": "^5.0.1",

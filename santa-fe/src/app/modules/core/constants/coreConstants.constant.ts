@@ -180,5 +180,6 @@ export const EngagementActionList = {
   changeTimeScope: 'Change Time Scope',
   changeDriver: 'Change Driver',
   thumbdownSecurity: 'Thumbdown Security',
-  populateGraph: 'Populate Graph'
+  populateGraph: 'Populate Graph',
+  midnightReload: 'Midnight Reload'
 }
