@@ -1,7 +1,10 @@
 <article
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()"
   [ngClass]="{
     'sat-alert': true,
-    'sat-alert--info': true
+    'sat-alert--info': true,
+    'sat-alert--isHoveredState': alertData.state.isHovered
   }">
   <section class="sat-alert__overview">
     <div class="sat-alert__overview-main">
@@ -9,12 +12,15 @@
     </div>
   </section>
   <section class="sat-alert__detail">
+    <div class="sat-alert__detail-card">
+      <security-card [cardData]="alertData.data.security"></security-card>
+    </div>
     <div class="sat-alert__detail-message">
-      <span class="sat-alert__detail-message-text">Some detail for this alert</span>
+      <span class="sat-alert__detail-message-text">{{alertData.data.message}}</span>
     </div>
   </section>
   <section class="sat-alert__close">
-    <button class="sat-alert__close-btn santaBtn--iconOnly fal fa-times"></button>
+    <button class="sat-alert__close-btn santaBtn--iconOnly fal fa-eraser"></button>
   </section>
   <section class="sat-alert__countdown">
     <div class="sat-alert__countdown-line">

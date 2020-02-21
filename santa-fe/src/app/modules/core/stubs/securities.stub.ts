@@ -1,6 +1,6 @@
 import { BEFetchAllTradeDataReturn } from 'BEModels/backend-models.interface';
 
-const PortfolioList: BEFetchAllTradeDataReturn = {
+export const PortfolioList: BEFetchAllTradeDataReturn = {
   "128": {
     "securityIdentifier": "128",
     "security": {

@@ -166,4 +166,5 @@ export interface GlobalAlertState {
   activated: boolean;
   displayAlerts: boolean;
   triggerActionMenuOpen: boolean;
+  presentList: Array<DTOs.AlertDTO>;
 }

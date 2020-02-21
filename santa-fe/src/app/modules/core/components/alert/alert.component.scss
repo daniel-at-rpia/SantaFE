@@ -1,6 +1,6 @@
 @import "global.scss";
 
-$alert_height: 4rem;
+$alert_height: 5rem;
 $alert_overview_padding_right: $spacing_small;
 $alert_margin_right: $spacing_large;
 $alert_countdown_duration: 5s;
@@ -11,13 +11,12 @@ $alert_countdown_duration: 5s;
   @include mix_border_radius(10px);
   @include mix_border_generator();
   display: flex;
-  left: -$alert_height;
   width: $alert_width;
   height: $alert_height;
   padding: $spacing_small;
   margin: $spacing_small $spacing_small 0;
   background-color: $color_white;
-  transform: translate(0, 0);
+  transform: translate(-$alert_height, 0);
   &__overview {
     @include mix_border_generator(0 $typical_border_width 0 0);
     flex: 0 0 auto;
@@ -39,25 +38,31 @@ $alert_countdown_duration: 5s;
   &__detail {
     flex: 1 1 auto;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    &-card {
+      flex: 0 0 auto;
+    }
     &-message {
-      @include mix_text_overflow_multi_line(3);
+      @include mix_text_overflow_multi_line(2);
+      flex: 1 1 auto;
+      margin-top: $spacing_small;
       line-height: $line_height_small;
       overflow: hidden;
     }
   }
   &__close {
     @include mix_fixed_div(absolute, $z_index_hovering_item);
-    top: ($alert_height - $iconButton_size_regular)/2;
-    right: -$iconButton_size_regular/2;
     display: flex;
+    align-self: center;
+    right: -$iconButton_size_regular/2;
     &-btn {
       @include mix_border_radius(50%);
       display: flex;
       width: $iconButton_size_regular;
       height: $iconButton_size_regular;
       font-size: $font_size_normal;
-      background-color: $color_white;
+      background-color: $color_kill;
+      color: $font_color_inverse;
     }
   }
   &__countdown {
@@ -96,5 +101,8 @@ $alert_countdown_duration: 5s;
         background-color: $font_color_minor;
       }
     }
+  }
+  &--isHoveredState {
+    transform: translate(-$alert_width - $spacing_large, 0);
   }
 }

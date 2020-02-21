@@ -19,5 +19,16 @@ import {
 })
 export class Alert {
   @Input() alertData: AlertDTO;
+  @Output() mouseEntered = new EventEmitter<AlertDTO>();
+  @Output() mouseLeft = new EventEmitter<AlertDTO>();
+
   constructor() { }
+
+  public onMouseEnter() {
+    !!this.mouseEntered && this.mouseEntered.emit(this.alertData);
+  }
+
+  public onMouseLeave() {
+    !!this.mouseLeft && this.mouseLeft.emit(this.alertData);
+  }
 }

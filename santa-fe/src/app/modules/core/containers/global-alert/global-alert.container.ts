@@ -27,6 +27,7 @@
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { GlobalAlertState } from 'FEModels/frontend-page-states.interface';
     import { AlertDTO } from 'FEModels/frontend-models.interface';
+    import { PortfolioList } from 'Core/stubs/securities.stub';
   //
 
 @Component({
@@ -48,8 +49,13 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     const state: GlobalAlertState = {
       activated: true,
       displayAlerts: false,
-      triggerActionMenuOpen: false
+      triggerActionMenuOpen: false,
+      presentList: []
     };
+    const newAlert1 = this.dtoService.formAlertObject(PortfolioList['128'].security);
+    const newAlert2 = this.dtoService.formAlertObject(PortfolioList['135'].security);
+    state.presentList.push(newAlert1);
+    state.presentList.push(newAlert2);
     return state;
   }
 
@@ -86,6 +92,14 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
 
   public onClickClearAlerts() {
     this.state.triggerActionMenuOpen = false;
+  }
+
+  public onMouseEnterAlert(targetAlert: AlertDTO) {
+    targetAlert.state.isHovered = true;
+  }
+
+  public onMouseLeaveAlert(targetAlert: AlertDTO) {
+    targetAlert.state.isHovered = false;
   }
 
 }

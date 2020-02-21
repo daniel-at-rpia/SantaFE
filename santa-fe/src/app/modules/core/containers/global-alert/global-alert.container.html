@@ -5,8 +5,12 @@
     'sat-globalAlert--displayAlertsState': state.displayAlerts
   }">
   <section class="sat-globalAlert__alertList">
-    <alert></alert>
-    <alert></alert>
+    <alert
+      *ngFor="let eachAlert of state.presentList"
+      [alertData]="eachAlert"
+      (mouseEntered)="onMouseEnterAlert($event)"
+      (mouseLeft)="onMouseLeaveAlert($event)">
+    </alert>
   </section>
   <section class="sat-globalAlert__trigger">
     <div class="sat-globalAlert__trigger-actionMenu">

@@ -12,7 +12,7 @@ import {
   AgGridRow,
   SecurityTableRowQuoteBlock
 } from 'FEModels/frontend-blocks.interface';
-import { SantaTableNumericFloatingFilterParams } from 'FEModels/frontend-adhoc-packages.interface';
+import { SantaTableNumericFloatingFilterParams, ClickedOpenSecurityInBloombergEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
 import * as agGrid from 'ag-grid-community';
 
 
@@ -77,10 +77,10 @@ export interface SecurityDTO extends BasicDTOStructure {
     hasIndex: boolean;
   }
   api: {
-    onClickCard: Function;
-    onClickSendToGraph: Function;
-    onClickThumbDown: Function;
-    onClickOpenSecurityInBloomberg: Function;
+    onClickCard: (card: SecurityDTO) => void;
+    onClickSendToGraph: (card: SecurityDTO) => void;
+    onClickThumbDown: (card: SecurityDTO) => void;
+    onClickOpenSecurityInBloomberg: (params: ClickedOpenSecurityInBloombergEmitterParams) => void;
   }
   state: {
     isStencil: boolean;
@@ -426,5 +426,14 @@ export interface HistoricalSummaryDTO extends BasicDTOStructure {
 }
 
 export interface AlertDTO extends BasicDTOStructure {
-  
+  data: {
+    security: SecurityDTO;
+    message: string;
+    quantValue: number;
+  }
+  state: {
+    isRead: boolean;
+    isNew: boolean;
+    isHovered: boolean;
+  }
 }

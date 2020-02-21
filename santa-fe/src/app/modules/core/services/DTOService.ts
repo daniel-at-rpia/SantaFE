@@ -929,4 +929,27 @@ export class DTOService {
     }
     return object;
   }
+
+  public formAlertObject(
+    securityRawData: BESecurityDTO
+  ): DTOs.AlertDTO {
+    const targetSecurity = this.formSecurityCardObject('', securityRawData, false);
+    const object: DTOs.AlertDTO = {
+      data: {
+        security: targetSecurity,
+        message: 'Some detail for this alert',
+        quantValue: 12
+      },
+      api: {
+        onMouseEnterAlert: null,
+        onMouseLeaveAlert: null
+      },
+      state: {
+        isNew: false,
+        isHovered: false,
+        isRead: false
+      }
+    }
+    return object;
+  }
 }

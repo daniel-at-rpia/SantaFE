@@ -12,7 +12,8 @@
       SearchShortcutDTO
     } from 'FEModels/frontend-models.interface';
     import {
-      LiveDataDiffingResult
+      LiveDataDiffingResult,
+      ClickedOpenSecurityInBloombergEmitterParams
     } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       BEPortfolioDTO,
@@ -40,8 +41,8 @@ export class LiveDataProcessingService {
     tableHeaderList: Array<SecurityTableHeaderDTO>,
     selectedDriver: string,
     serverReturn: BEFetchAllTradeDataReturn,
-    sendToGraphCallback: Function,
-    openSecurityInBloombergCallback: Function
+    sendToGraphCallback: (card: SecurityDTO) => void,
+    openSecurityInBloombergCallback: (params: ClickedOpenSecurityInBloombergEmitterParams) => void
   ): Array<SecurityTableRowDTO> {
     const prinstineRowList: Array<SecurityTableRowDTO> = [];  // flush out the stencils
     const securityList = [];
