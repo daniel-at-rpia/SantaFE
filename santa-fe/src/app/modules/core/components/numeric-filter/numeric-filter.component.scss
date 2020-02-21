@@ -6,7 +6,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: -$spacing_x_small;  // to overcome agGrid's padding
+  margin-right: -$spacing_x_small;  // to overcome agGrid's padding
   &__clearCTA {
+    @include mix_fixed_div(absolute, $z_index_hovering_item);
     @include mix_alive('light');
     flex: 0 0 auto;
     transform: scale(0.01);
@@ -25,7 +28,7 @@
     }
   }
   &__midSymbol {
-    margin: 0 $spacing_small;
+    margin: 0 $spacing_x_small;
     &-content {
       color: $font_color_minor;
     }

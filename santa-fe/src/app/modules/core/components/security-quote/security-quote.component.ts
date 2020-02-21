@@ -31,11 +31,11 @@ export class SecurityQuote {
     !!this.clickedUpVote && this.clickedUpVote.emit(this.messageData);
   }
 
-  public onClickSpecificQuote(isOnBidSide: boolean, targetMetric: string) {
+  public onClickSpecificQuote(isOnBidSide: boolean, targetDriver: string) {
     const payload: ClickedSpecificQuoteEmitterParams = {
       targetQuote: this.messageData,
       isOnBidSide: isOnBidSide,
-      targetMetric: targetMetric
+      targetDriver: targetDriver
     };
     !!this.clickedSpecificQuote && this.clickedSpecificQuote.emit(payload);
   }

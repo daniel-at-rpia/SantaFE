@@ -101,7 +101,7 @@ export function tradeReducer(
           initialDataLoaded: true
         }
       }
-    case TradeActions.ToggleMetricEvent:
+    case TradeActions.SwitchDriverEvent:
       return {
         ...state,
         initialDataLoaded: false

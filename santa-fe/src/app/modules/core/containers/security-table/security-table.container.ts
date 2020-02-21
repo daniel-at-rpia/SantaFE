@@ -36,10 +36,7 @@
     import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
     import { BEQuoteDTO } from 'BEModels/backend-models.interface';
 
-    import {
-      SECURITY_TABLE_FINAL_STAGE,
-      THIRTY_DAY_DELTA_METRIC_INDEX
-    } from 'Core/constants/securityTableConstants.constant';
+    import { SECURITY_TABLE_FINAL_STAGE } from 'Core/constants/securityTableConstants.constant';
   //
 
 @Component({
@@ -51,7 +48,7 @@
 export class SecurityTable implements OnInit, OnChanges {
   @Input() tableData: SecurityTableDTO;
   @Input() securityTableMetrics: Array<SecurityTableMetricStub>;
-  @Input() activeTriCoreMetric: string;
+  @Input() activeTriCoreDriver: string;
   @Output() selectedSecurityForAnalysis = new EventEmitter<SecurityDTO>();
   @Output() clickedSortQuotesByMetric = new EventEmitter<ClickedSortQuotesByMetricEmitterParams>();
   @Output() nativeTableFetchQuotes = new EventEmitter<SecurityTableRowDTO>();
@@ -60,8 +57,7 @@ export class SecurityTable implements OnInit, OnChanges {
   @Output() nativePerformDefaultSort = new EventEmitter();
 
   constants = {
-    securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
-    thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX
+    securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE
   }
 
   constructor(
@@ -199,14 +195,14 @@ export class SecurityTable implements OnInit, OnChanges {
               eachHeader,
               eachRow,
               targetCell,
-              this.activeTriCoreMetric
+              this.activeTriCoreDriver
             );
           } else {
             const newCell = this.utilityService.populateSecurityTableCellFromSecurityCard(
               eachHeader,
               eachRow,
               this.dtoService.formSecurityTableCellObject(false, null, false),
-              this.activeTriCoreMetric
+              this.activeTriCoreDriver
             );
             eachRow.data.cells[index-1] = newCell;
           }

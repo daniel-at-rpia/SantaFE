@@ -17,9 +17,10 @@
     import {
       BEPortfolioDTO,
       BESecurityDTO,
-      BEBestQuoteDTO
+      BEBestQuoteDTO,
+      BEFetchAllTradeDataReturn
     } from 'BEModels/backend-models.interface';
-    import { TriCoreMetricConfig, DEFAULT_METRIC_IDENTIFIER } from 'Core/constants/coreConstants.constant';
+    import { TriCoreDriverConfig, DEFAULT_DRIVER_IDENTIFIER } from 'Core/constants/coreConstants.constant';
   // dependencies
 
 @Injectable()
@@ -35,10 +36,10 @@ export class LiveDataProcessingService {
     worker.postMessage('hello');
   }
 
-  public loadStageOneContent(
+  public loadFinalStageData(
     tableHeaderList: Array<SecurityTableHeaderDTO>,
-    activeMetricType: string,
-    serverReturn: Object,
+    selectedDriver: string,
+    serverReturn: BEFetchAllTradeDataReturn,
     sendToGraphCallback: Function,
     openSecurityInBloombergCallback: Function
   ): Array<SecurityTableRowDTO> {
@@ -49,70 +50,77 @@ export class LiveDataProcessingService {
     let validCount = 0;
     for (const eachKey in serverReturn){
       count++;
-      if (serverReturn[eachKey].length > 0) {
-        nonEmptyCount++;
-        let sumSize = 0;
-        let isValidFlag = true;
-        const newBESecurity:BESecurityDTO = serverReturn[eachKey][0].security;
-        const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false);
-        newSecurity.state.isInteractionThumbDownDisabled = true;
-        newSecurity.api.onClickSendToGraph = sendToGraphCallback;
-        newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
-        serverReturn[eachKey].forEach((eachPortfolio: BEPortfolioDTO) => {
-          // if (!eachPortfolio.security.isGovt) {
-          // disabling the check for isGovt for now
-          if(true){
-            this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio, activeMetricType);
-          } else {
-            isValidFlag = false;
-          }
-        });
-        if (isValidFlag) {
-          this.dtoService.appendPortfolioOverviewInfoForSecurityDTO(newSecurity);
-          this.populateEachRowWithStageOneContent(
-            tableHeaderList,
-            prinstineRowList,
-            newSecurity
-          );
-          validCount++;
+      nonEmptyCount++;
+      let sumSize = 0;
+      let isValidFlag = true;
+      const newBESecurity:BESecurityDTO = serverReturn[eachKey].security;
+      const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false, selectedDriver);
+      newSecurity.state.isInteractionThumbDownDisabled = true;
+      newSecurity.api.onClickSendToGraph = sendToGraphCallback;
+      newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
+      serverReturn[eachKey].positions.forEach((eachPortfolio: BEPortfolioDTO) => {
+        // if (!eachPortfolio.security.isGovt) {
+        // disabling the check for isGovt for now
+        if(true){
+          this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio);
+        } else {
+          isValidFlag = false;
         }
+      });
+      if (isValidFlag) {
+        this.dtoService.appendPortfolioOverviewInfoForSecurityDTO(newSecurity);
+        this.populateEachRowWithData(
+          tableHeaderList,
+          prinstineRowList,
+          newSecurity,
+          selectedDriver,
+          serverReturn[eachKey].bestQuotes
+        );
+        validCount++;
       }
     }
     console.log('count is', count, nonEmptyCount, validCount);
     return prinstineRowList;
   }
 
-  public loadStageThreeContent(
-    tableHeaderList: Array<SecurityTableHeaderDTO>,
-    rowList: Array<SecurityTableRowDTO>,
-    metricType: string,
-    serverReturn
+  private populateEachRowWithData(
+    headerList: Array<SecurityTableHeaderDTO>,
+    prinstineRowList: Array<SecurityTableRowDTO>,
+    newSecurity: SecurityDTO,
+    driverType: string,
+    bestQuoteServerReturn: BEBestQuoteDTO
   ) {
-    if (!!serverReturn) {
-      const trackRowsWithoutReturn = [];
-      rowList.forEach((eachPrinstineRow) => {
-        const securityIdFull = eachPrinstineRow.data.security.data.securityID;
-        if (!!serverReturn[securityIdFull]) {
-          this.populateEachRowWithStageThreeContent(
-            tableHeaderList,
-            eachPrinstineRow,
-            metricType,
-            serverReturn[securityIdFull]
+    const newRow = this.dtoService.formSecurityTableRowObject(newSecurity);
+    this.populateEachRowWithBestQuoteData(
+      headerList,
+      newRow,
+      driverType,
+      bestQuoteServerReturn
+    );
+    headerList.forEach((eachHeader, index) => {
+      if (!eachHeader.state.isPureTextVariant) {
+        // data only comes in final stage right now, no need for this logic at the moment
+        // if (eachHeader.data.readyStage === 1 || eachHeader.data.readyStage === 2) {
+          const newCell = this.utilityService.populateSecurityTableCellFromSecurityCard(
+            eachHeader,
+            newRow,
+            this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant),
+            driverType
           );
-        } else {
-          trackRowsWithoutReturn.push(securityIdFull);
-        }
-      })
-      if (trackRowsWithoutReturn.length > 0) {
-        console.warn("best quote did not return data for ", trackRowsWithoutReturn);
+          newRow.data.cells.push(newCell);
+        // } else {
+        //   const emptyCell = this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant);
+        //   newRow.data.cells.push(emptyCell);
+        // }
       }
-    }
+    });
+    prinstineRowList.push(newRow);
   }
 
-  private populateEachRowWithStageThreeContent(
+  private populateEachRowWithBestQuoteData(
     tableHeaderList: Array<SecurityTableHeaderDTO>,
     targetRow: SecurityTableRowDTO,
-    metricType: string,
+    driverType: string,
     quote: BEBestQuoteDTO
   ){
     const bestQuoteHeaderIndex = tableHeaderList.findIndex((eachHeader) => {
@@ -122,7 +130,7 @@ export class LiveDataProcessingService {
     const newPriceQuant = !!quote 
       ? this.dtoService.formQuantComparerObject(
           false,
-          TriCoreMetricConfig.Price.label,
+          TriCoreDriverConfig.Price.label,
           quote,
           targetRow.data.security
         ) 
@@ -130,7 +138,7 @@ export class LiveDataProcessingService {
     const newSpreadQuant = !!quote 
       ? this.dtoService.formQuantComparerObject(
           false,
-          TriCoreMetricConfig.Spread.label,
+          TriCoreDriverConfig.Spread.label,
           quote,
           targetRow.data.security
         )
@@ -138,7 +146,7 @@ export class LiveDataProcessingService {
     const newYieldQuant = !!quote 
     ? this.dtoService.formQuantComparerObject(
         false,
-        TriCoreMetricConfig.Yield.label,
+        TriCoreDriverConfig.Yield.label,
         quote,
         targetRow.data.security
       )
@@ -148,16 +156,6 @@ export class LiveDataProcessingService {
       bestYieldQuote: newYieldQuant,
       bestSpreadQuote: newSpreadQuant
     }
-    tableHeaderList.forEach((eachHeader, index) => {
-      if (eachHeader.data.readyStage === 3) {
-        targetRow.data.cells[index-1] = this.utilityService.populateSecurityTableCellFromSecurityCard(
-          eachHeader,
-          targetRow,
-          targetRow.data.cells[index-1],
-          metricType
-        );
-      }
-    });
   }
 
   public returnDiff(
@@ -210,31 +208,6 @@ export class LiveDataProcessingService {
       markDiffCount: markDiffCount,
       quantDiffCount: quantDiffCount
     };
-  }
-
-  private populateEachRowWithStageOneContent(
-    headerList: Array<SecurityTableHeaderDTO>,
-    prinstineRowList: Array<SecurityTableRowDTO>,
-    newSecurity: SecurityDTO
-  ) {
-    const newRow = this.dtoService.formSecurityTableRowObject(newSecurity);
-    headerList.forEach((eachHeader, index) => {
-      if (!eachHeader.state.isPureTextVariant) {
-        if (eachHeader.data.readyStage === 1 || eachHeader.data.readyStage === 2) {
-          const newCell = this.utilityService.populateSecurityTableCellFromSecurityCard(
-            eachHeader,
-            newRow,
-            this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant),
-            null
-          );
-          newRow.data.cells.push(newCell);
-        } else {
-          const emptyCell = this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant);
-          newRow.data.cells.push(emptyCell);
-        }
-      }
-    });
-    prinstineRowList.push(newRow);
   }
 
   private isThereDiffInSecurity(

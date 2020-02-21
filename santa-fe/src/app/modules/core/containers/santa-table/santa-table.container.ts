@@ -50,7 +50,6 @@
     import { BEQuoteDTO } from 'BEModels/backend-models.interface';
     import {
       SECURITY_TABLE_FINAL_STAGE,
-      THIRTY_DAY_DELTA_METRIC_INDEX,
       AGGRID_ROW_HEIGHT,
       AGGRID_ROW_CLASS,
       AGGRID_DETAIL_COLUMN_KEY,
@@ -81,7 +80,7 @@ export class SantaTable implements OnInit, OnChanges {
   @Input() receivedSecurityTableMetricsUpdate: Array<SecurityTableMetricStub>;
   securityTableMetricsCache: Array<SecurityTableMetricStub>;// use this only for detecting diff
   @Input() liveUpdatedRows: Array<SecurityTableRowDTO>;
-  @Input() activeTriCoreMetric: string;
+  @Input() activeTriCoreDriver: string;
   @Output() selectedSecurityForAnalysis = new EventEmitter<SecurityDTO>();
   liveUpdateRowsCache: Array<SecurityTableRowDTO>;
 
@@ -118,7 +117,6 @@ export class SantaTable implements OnInit, OnChanges {
 
   constants = {
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
-    thirtyDayDeltaIndex: THIRTY_DAY_DELTA_METRIC_INDEX,
     agGridRowHeight: AGGRID_ROW_HEIGHT,
     agGridRowClassRules: {
       'santaTable__agGridTable-agGrid-row': "true",
@@ -195,6 +193,9 @@ export class SantaTable implements OnInit, OnChanges {
     if (!!params && !!params.data && !!params.data.securityCard) {
       // this if checks whether the user is clicking on the entire row, or clicking on the security card
       const targetCard = params.data.securityCard;
+      if (!!params.node) {
+        params.data.securityCard.state.isAtListCeiling = !!params.node.firstChild;
+      }
       const storedSelectedCard = this.tableData.state.selectedSecurityCard;
       // console.log('test, clicked on row', targetCard.state.isSelected, storedSelectedCard, storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID);
       // IMPORTANT: If this logic ever needs to be modified, please test all scenarios on Daniel's notebook's page 10
@@ -325,7 +326,7 @@ export class SantaTable implements OnInit, OnChanges {
   ) {
     this.tableData.data.rows = rowList;
     // doesn't need to update dynamic columns if the entire data is not loaded
-    this.receivedContentStage === this.constants.securityTableFinalStage && this.updateMetricDependentColumns();
+    this.receivedContentStage === this.constants.securityTableFinalStage && this.updateDriverDependentColumns();
     if (this.tableData.state.sortedByHeader) {
       this.performSort(this.tableData.state.sortedByHeader);
     } else {
@@ -341,22 +342,17 @@ export class SantaTable implements OnInit, OnChanges {
     }
   }
 
-  private updateMetricDependentColumns() {
-    /* the metric dependent columns are the ones affected by driver/metric change:
-      1. QuantComparer
-      2. Mark
-      3. three mark delta columns
-      4. 30 day delta
-    */
+  private updateDriverDependentColumns() {
+    // the metric dependent columns are the ones affected by driver/metric change:
     this.tableData.data.headers.forEach((eachHeader, index) => {
-      if (!eachHeader.state.isPureTextVariant) {
+      if (!!eachHeader.data.isDriverDependent) {
         const cellIndex = index - 1;
         this.tableData.data.rows.forEach((eachRow) => {
           eachRow.data.cells[cellIndex] = this.utilityService.populateSecurityTableCellFromSecurityCard(
             eachHeader,
             eachRow,
             eachRow.data.cells[cellIndex],
-            this.activeTriCoreMetric
+            this.activeTriCoreDriver
           );
         });
       }
@@ -370,15 +366,15 @@ export class SantaTable implements OnInit, OnChanges {
     if (!!targetRow) {
       let bestBid: number; 
       let bestOffer: number;
-      let metricType: string;
+      let driverType: string;
       if (!!targetRow.data.cells[0] && !!targetRow.data.cells[0].data.quantComparerDTO) {
         bestBid = targetRow.data.cells[0].data.quantComparerDTO.data.bid.number;
         bestOffer = targetRow.data.cells[0].data.quantComparerDTO.data.offer.number;
-        metricType = targetRow.data.cells[0].data.quantComparerDTO.data.metricType;
+        driverType = targetRow.data.cells[0].data.quantComparerDTO.data.driverType;
       } else {
         bestBid = 0;
         bestOffer = 0;
-        metricType = '';
+        driverType = '';
       }
       
       targetRow.data.quotes = this.dtoService.formSecurityTableRowObject(targetRow.data.security).data.quotes;
@@ -394,7 +390,7 @@ export class SantaTable implements OnInit, OnChanges {
               serverReturn,
               bestBid,
               bestOffer,
-              metricType,
+              driverType,
               params
             );
           }
@@ -592,13 +588,13 @@ export class SantaTable implements OnInit, OnChanges {
     serverReturn: Array<Array<BEQuoteDTO>>,
     bestBid: number,
     bestOffer: number,
-    metricType: string,
+    driverType: string,
     params: any  // this is a AgGridRowParams, can't enforce type checking here because agGrid's native function redrawRows() would throw an compliation error
   ) {
     const primaryList = serverReturn[0];
     targetRow.state.isCDSOffTheRun = serverReturn.length > 1;
     primaryList.forEach((eachRawQuote) => {
-      const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, bestBid, bestOffer, metricType, targetRow.data.security);
+      const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, bestBid, bestOffer, driverType, targetRow.data.security);
       newQuote.state.isCDSVariant = targetRow.state.isCDSVariant;
       if (newQuote.state.hasAsk || newQuote.state.hasBid) {
         targetRow.data.quotes.primaryQuotes.push(newQuote);
@@ -607,7 +603,7 @@ export class SantaTable implements OnInit, OnChanges {
     if (targetRow.state.isCDSOffTheRun) {
       const secondaryList = serverReturn[1];
       secondaryList.forEach((eachRawQuote) => {
-        const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, bestBid, bestOffer, metricType, targetRow.data.security);
+        const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, bestBid, bestOffer, driverType, targetRow.data.security);
         newQuote.state.isCDSVariant = targetRow.state.isCDSVariant;
         if (newQuote.state.hasAsk || newQuote.state.hasBid) {
           targetRow.data.quotes.secondaryQuotes.push(newQuote);

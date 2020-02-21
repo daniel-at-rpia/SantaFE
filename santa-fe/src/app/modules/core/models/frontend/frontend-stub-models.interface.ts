@@ -4,6 +4,7 @@ export interface SearchShortcutStub {
   displayTitle: string;
   includedDefinitions: Array<SearchShortcutIncludedDefinitionStub>;
   isMajor?: boolean;
+  isHero?: boolean;
 }
 
 interface SearchShortcutIncludedDefinitionStub {
@@ -74,30 +75,31 @@ export interface SecurityTableMetricStub {
   label: string;
   attrName: string;
   underlineAttrName: string;
+  isAttrChangable?: boolean;
   readyStage: number;
   active: boolean;
   blockAttrName?: string;
-  isPartOfMarkBlock?: boolean;
-  metricPackDeltaScope?: string;
   isFrontEndMetric?: boolean;
   isForQuantComparer?: boolean;
   pureText?: boolean;
   disabled?: boolean;
   isDataTypeText?: boolean;
+  isDriverDependent?: boolean;
+  metricPackDeltaScope?: string;
 }
 
-export interface TriCoreMetricConfigStub {
-  Spread: TriCoreMetricIndividualConfigStub;
-  Yield: TriCoreMetricIndividualConfigStub;
-  Price: TriCoreMetricIndividualConfigStub;
+export interface TriCoreDriverConfigStub {
+  Spread: TriCoreDriverIndividualConfigStub;
+  Yield: TriCoreDriverIndividualConfigStub;
+  Price: TriCoreDriverIndividualConfigStub;
 }
 
-interface TriCoreMetricIndividualConfigStub {
+interface TriCoreDriverIndividualConfigStub {
   label: string;
   tier2Threshold: number;
   inversed: boolean;
   rounding: number;
-  metricLabel: string;
+  driverLabel: string;
   backendTargetQuoteAttr: string;
 }
 

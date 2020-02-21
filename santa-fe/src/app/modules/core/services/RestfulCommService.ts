@@ -78,7 +78,8 @@ export class RestfulCommService {
       security: security,
       value: value,
       user: user,
-      container: container
+      container: container,
+      timestamp: new Date().getTime()
     };
     this.callAPI(this.apiMap.logEngagement, {req: 'POST'}, payload).pipe(
       first(),
@@ -93,7 +94,8 @@ export class RestfulCommService {
     user: string
   ) {
     const payload = {
-      message: `Error: ${message} - From ${user}`
+      message: `Error: ${message} - From ${user}`,
+      level: 'Error'
     };
     this.callAPI(this.apiMap.logError, {req: 'POST'}, payload).pipe(
       first(),

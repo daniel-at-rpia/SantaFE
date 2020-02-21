@@ -65,6 +65,8 @@ $alt-background: $color_white;
       width: 100%;
       &-header {
         justify-content: center;
+        padding-left: $spacing_x_small!important;
+        padding-right: $spacing_x_small!important;
         .ag-header-cell {
           overflow: hidden;
           &-label {

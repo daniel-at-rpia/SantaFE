@@ -4,27 +4,23 @@ import {
 } from 'FEModels/frontend-stub-models.interface';
 
 import {
-  TriCoreMetricConfig,
-  SecurityMetricOptions
+  TriCoreDriverConfig,
+  SecurityMetricOptions,
+  DEFAULT_DRIVER_IDENTIFIER
 } from 'Core/constants/coreConstants.constant';
 
 
 export const SECURITY_TABLE_QUOTE_TYPE_RUN = 'Run';
 export const SECURITY_TABLE_QUOTE_TYPE_AXE = 'Axe';
 
-/* Stages:
-1: ready after the get-position call
-2. ready after the get-securities call
-3. ready after the get-best-quotes call
-*/
-
-export const SECURITY_TABLE_FINAL_STAGE = 3;
+// Currently all data comes in a single bulk return, so there is no need for additional stages, but the logic should remain in case it is needed in the future
+export const SECURITY_TABLE_FINAL_STAGE = 1;
 
 export const AGGRID_DETAIL_COLUMN_WIDTH = 50;
 export const AGGRID_SECURITY_CARD_COLUMN_WIDTH = 270;
 export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_quant + $spacing_small * 2 
-export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 150;
-export const AGGRID_SIMPLE_TEXT_COLUMN_WIDTH = 150;
+export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 117;
+export const AGGRID_SIMPLE_TEXT_COLUMN_WIDTH = 135;
 export const AGGRID_ROW_HEIGHT = 40;
 export const AGGRID_DETAIL_ROW_HEIGHT_PER_ROW = 34;
 export const AGGRID_DETAIL_ROW_HEIGHT_OFFSET = 120;
@@ -43,7 +39,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     label: 'Security',
     attrName: null,
     underlineAttrName: null,
-    readyStage: 1,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     pureText: true,
     active: true
   },{
@@ -51,8 +47,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     label: 'Best Quote (Bid vs Ask)',
     attrName: null,
     underlineAttrName: null,
-    readyStage: 3,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     isForQuantComparer: true,
+    isDriverDependent: true,
     active: true
   },{
     key: 'bestBid',
@@ -60,8 +57,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: 'bid',
     blockAttrName: 'bestQuote',
     underlineAttrName: 'bid',
-    readyStage: 3,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     isFrontEndMetric: true,
+    isDriverDependent: true,
     active: true
   },{
     key: 'bestAsk',
@@ -69,8 +67,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: 'ask',
     blockAttrName: 'bestQuote',
     underlineAttrName: 'ask',
-    readyStage: 3,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     isFrontEndMetric: true,
+    isDriverDependent: true,
     active: true
   },{
     key: 'mark',
@@ -78,7 +77,8 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: 'mark',
     underlineAttrName: 'markRaw',
     blockAttrName: 'mark',
-    readyStage: 2,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isDriverDependent: true,
     active: true
   },{
     key: 'markDriver',
@@ -87,7 +87,28 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: 'markDriver',
     blockAttrName: 'mark',
     isDataTypeText: true,
-    readyStage: 2,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isDriverDependent: true,
+    active: false
+  },{
+    key: 'indexMark',
+    label: 'Index Mark (t-1)',
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+    blockAttrName: 'metricPack',
+    isAttrChangable: true,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isDriverDependent: true,
+    active: false
+  },{
+    key: 'markDeltaToIndex',
+    label: 'Δ to Index Mark (t-1)',
+    attrName: 'markDisIndex',
+    underlineAttrName: 'markDisIndexRaw',
+    blockAttrName: 'mark',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isFrontEndMetric: true,
+    isDriverDependent: true,
     active: false
   },{
     key: 'markLastUpdatedBy',
@@ -96,7 +117,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: 'markChangedBy',
     blockAttrName: 'mark',
     isDataTypeText: true,
-    readyStage: 2,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: false
   },{
     key: 'markLastUpdateTime',
@@ -105,87 +126,126 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: 'markChangedTime',
     blockAttrName: 'mark',
     isDataTypeText: true,
-    readyStage: 2,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: false
   },{
     key: 'markDeltaToBid',
-    label: 'Mark Delta to Bid',
+    label: 'Δ to Bid',
     attrName: 'markDisBid',
     underlineAttrName: 'markDisBidRaw',
     blockAttrName: 'mark',
-    readyStage: 3,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     isFrontEndMetric: true,
+    isDriverDependent: true,
     active: false
   },{
     key: 'markDeltaToAsk',
-    label: 'Mark Delta to Ask',
+    label: 'Δ to Ask',
     attrName: 'markDisAsk',
     underlineAttrName: 'markDisAskRaw',
     blockAttrName: 'mark',
-    readyStage: 3,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     isFrontEndMetric: true,
+    isDriverDependent: true,
     active: false
   },{
     key: 'markDeltaToMid',
-    label: 'Mark Delta to Mid',
+    label: 'Δ to Mid',
     attrName: 'markDisMid',
     underlineAttrName: 'markDisMidRaw',
     blockAttrName: 'mark',
-    readyStage: 3,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     isFrontEndMetric: true,
+    isDriverDependent: true,
     active: false
   },{
     key: 'markDeltaToLiquidation',
-    label: 'Mark Delta to Liquidation',
+    label: 'Δ to Liquidation',
     attrName: 'markDisLiquidation',
     underlineAttrName: 'markDisLiquidationRaw',
     blockAttrName: 'mark',
-    readyStage: 3,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     isFrontEndMetric: true,
+    isDriverDependent: true,
     active: true
   },{
     key: 'currentPosition',
     label: 'Position (MM)',
     attrName: 'positionCurrentInMM',
     underlineAttrName: 'positionCurrent',
-    readyStage: 1,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: true
   },{
     key: 'firmPosition',
     label: 'Firm Position (MM)',
     attrName: 'positionFirmInMM',
     underlineAttrName: 'positionFirm',
-    readyStage: 1,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: false
   },{
     key: 'hfPosition',
     label: 'HF Position (MM)',
     attrName: 'positionHFInMM',
     underlineAttrName: 'positionHF',
-    readyStage: 1,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: false
   },{
     key: 'nlfPosition',
     label: 'NLF Position (MM)',
     attrName: 'positionNLFInMM',
     underlineAttrName: 'positionNLF',
-    readyStage: 1,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    active: false
+  },{
+    key: 'wowDelta',
+    label: 'WoW Δ',
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+    blockAttrName: 'metricPack',
+    isAttrChangable: true,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    metricPackDeltaScope: 'Wow',
+    isDriverDependent: true,
     active: false
   },{
     key: 'thirtyDayDelta',
-    label: '30 Day Delta',
-    attrName: TriCoreMetricConfig.Spread.metricLabel,
-    underlineAttrName: TriCoreMetricConfig.Spread.metricLabel,
+    label: 'MoM Δ',
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
     blockAttrName: 'metricPack',
-    readyStage: 2,
+    isAttrChangable: true,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     metricPackDeltaScope: 'Mom',
+    isDriverDependent: true,
     active: true
+  },{
+    key: 'yoyDelta',
+    label: 'YoY Δ',
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+    blockAttrName: 'metricPack',
+    isAttrChangable: true,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    metricPackDeltaScope: 'Yoy',
+    isDriverDependent: true,
+    active: false
+  },{
+    key: 'ytdDelta',
+    label: 'YtD Δ',
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+    blockAttrName: 'metricPack',
+    isAttrChangable: true,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    metricPackDeltaScope: 'Ytd',
+    isDriverDependent: true,
+    active: false
   },{
     key: 'quoteCount',
     label: 'Quote Count',
     attrName: null,
     underlineAttrName: null,
-    readyStage: 3,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: false,
     disabled: true
   },{
@@ -193,7 +253,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     label: 'Rating',
     attrName: 'ratingValue',
     underlineAttrName: 'ratingValue',
-    readyStage: 2,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: false,
     isDataTypeText: true
   },{
@@ -201,7 +261,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     label: 'Currency',
     attrName: 'currency',
     underlineAttrName: 'currency',
-    readyStage: 2,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: false,
     isDataTypeText: true
   },{
@@ -209,7 +269,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     label: 'Sector',
     attrName: 'sector',
     underlineAttrName: 'sector',
-    readyStage: 2,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: true,
     isDataTypeText: true
   },{
@@ -217,7 +277,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     label: 'Industry',
     attrName: 'industry',
     underlineAttrName: 'industry',
-    readyStage: 2,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: false,
     isDataTypeText: true
   },{
@@ -225,7 +285,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     label: 'CouponType',
     attrName: 'couponType',
     underlineAttrName: 'couponType',
-    readyStage: 2,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: false,
     isDataTypeText: true
   },{
@@ -233,15 +293,15 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     label: 'Security Type',
     attrName: 'securityType',
     underlineAttrName: 'securityType',
-    readyStage: 2,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: false,
     isDataTypeText: true
   },{
     key: 'seniority',
     label: 'Seniority',
     attrName: 'seniority',
-    underlineAttrName: 'seniorityLevel',
-    readyStage: 2,
+    underlineAttrName: 'seniority',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: false,
     isDataTypeText: true
   },{
@@ -249,7 +309,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     label: 'Country',
     attrName: 'country',
     underlineAttrName: 'country',
-    readyStage: 2,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: false,
     isDataTypeText: true
   },{
@@ -257,7 +317,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     label: 'Maturity Type',
     attrName: 'maturityType',
     underlineAttrName: 'maturityType',
-    readyStage: 2,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: false,
     isDataTypeText: true
   },{
@@ -265,7 +325,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     label: 'Primary',
     attrName: 'primaryPmName',
     underlineAttrName: 'primaryPmName',
-    readyStage: 2,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: true,
     isDataTypeText: true
   },{
@@ -273,7 +333,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     label: 'Backup',
     attrName: 'backupPmName',
     underlineAttrName: 'backupPmName',
-    readyStage: 2,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: false,
     isDataTypeText: true
   },{
@@ -281,7 +341,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     label: 'Research',
     attrName: 'researchName',
     underlineAttrName: 'researchName',
-    readyStage: 2,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: false,
     isDataTypeText: true
   },{
@@ -289,7 +349,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     label: 'Strategy',
     attrName: 'strategyFirm',
     underlineAttrName: 'strategyFirm',
-    readyStage: 1,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: false,
     isDataTypeText: true
   },{
@@ -297,35 +357,31 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     label: 'CS01 Cad (k)',
     attrName: 'cs01CadCurrentInK',
     underlineAttrName: 'cs01CadCurrent',
-    readyStage: 1,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: false
   },{
     key: 'cs01LocalCurrent',
     label: 'CS01 Local (k)',
     attrName: 'cs01LocalCurrentInK',
     underlineAttrName: 'cs01LocalCurrent',
-    readyStage: 1,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: false
   },{
     key: 'cs01CadFirm',
     label: 'Firm CS01 CAD (k)',
     attrName: 'cs01CadFirmInK',
     underlineAttrName: 'cs01CadFirm',
-    readyStage: 1,
-    active: false
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    active: true
   },{
     key: 'cs01LocalFirm',
     label: 'Firm CS01 Local (k)',
     attrName: 'cs01LocalFirmInK',
     underlineAttrName: 'cs01LocalFirm',
-    readyStage: 1,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: false
   }
 ];
-
-export const THIRTY_DAY_DELTA_METRIC_INDEX = SecurityTableMetrics.findIndex((eachMetric) => {
-  return eachMetric.label === '30 Day Delta';
-});
 
 export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
   {

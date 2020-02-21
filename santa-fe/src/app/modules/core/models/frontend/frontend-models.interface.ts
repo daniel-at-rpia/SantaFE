@@ -74,6 +74,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     cs01CadFirmInK: string;
     cs01CadCurrent: number;
     cs01CadCurrentInK: string;
+    hasIndex: boolean;
   }
   api: {
     onClickCard: Function;
@@ -186,7 +187,6 @@ export interface SearchShortcutDTO extends BasicDTOStructure {
   data: {
     displayTitle: string;
     configuration: Array<SecurityDefinitionDTO>;
-    isMajorShortcut: boolean;
   },
   style: {
     slotList: Array<SecurityDefinitionDTO>
@@ -194,12 +194,14 @@ export interface SearchShortcutDTO extends BasicDTOStructure {
   state: {
     isSelected: boolean;
     isUserInputBlocked: boolean;
+    isMajorShortcut: boolean;
+    isHeroShortcut: boolean;
   }
 }
 
 export interface QuantComparerDTO extends BasicDTOStructure {
   data: {
-    metricType: string;
+    driverType: string;
     delta: number;
     mid: number;
     bid: {
@@ -270,10 +272,12 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     attrName: string;
     underlineAttrName: string;
     blockAttrName: string;
+    isAttrChangable: boolean;
     readyStage: number;
     metricPackDeltaScope: string;
     frontendMetric: boolean;
     isDataTypeText: boolean;
+    isDriverDependent: boolean;
   },
   state: {
     isPureTextVariant: boolean;
@@ -355,7 +359,7 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
     filteredByYield: boolean;
     filteredByPrice: boolean;
     menuActiveSide: string;
-    menuActiveMetric: string;
+    menuActiveDriver: string;
     isBidDownVoted: boolean;
     isAskDownVoted: boolean;
     isCDSVariant: boolean;

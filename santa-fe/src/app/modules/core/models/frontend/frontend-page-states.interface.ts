@@ -85,7 +85,7 @@ export interface TradeCenterPanelState {
   }
   filters: {
     quickFilters: {
-      metricType: string;
+      driverType: string;
       portfolios: Array<string>;
       keyword: string;
       owner: Array<string>;

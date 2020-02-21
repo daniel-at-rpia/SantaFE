@@ -97,7 +97,7 @@ export interface LilMarketGraphSeriesDataPackEntryBlock {
 export interface ClickedSpecificQuoteEmitterParams {
   targetQuote: SecurityQuoteDTO;
   isOnBidSide: boolean;
-  targetMetric: string;
+  targetDriver: string;
 }
 
 export interface ClickedOpenSecurityInBloombergEmitterParams {

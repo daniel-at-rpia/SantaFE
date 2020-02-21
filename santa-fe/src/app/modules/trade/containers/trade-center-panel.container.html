@@ -103,7 +103,8 @@
               *ngFor="let eachShortcut of state.presets.selectedList"
               [ngClass]="{
                 'sat-tradeCenterPanel__presetsAndFilters-presets-content-shortcutCanvas-list-item': true,
-                'sat-tradeCenterPanel__presetsAndFilters-presets-content-shortcutCanvas-list-item--major': eachShortcut.data.isMajorShortcut,
+                'sat-tradeCenterPanel__presetsAndFilters-presets-content-shortcutCanvas-list-item--major': eachShortcut.state.isMajorShortcut,
+                'sat-tradeCenterPanel__presetsAndFilters-presets-content-shortcutCanvas-list-item--hero': eachShortcut.state.isHeroShortcut,
                 'sat-tradeCenterPanel__presetsAndFilters-presets-content-shortcutCanvas-list-item--selected': state.presets.selectedPreset === eachShortcut
               }">
               <search-shortcut
@@ -142,38 +143,38 @@
         <span class="sat-tradeCenterPanel__result-quickFilters-driver-label">Driver :</span>
         <div class="santaBtnGroup">
           <button
-            (click)="onSwitchMetric(constants.defaultMetricIdentifier)"
+            (click)="onswitchDriver(constants.defaultMetricIdentifier)"
             [ngClass]="{
               'sat-tradeCenterPanel__result-quickFilters-driver-btn': true,
               'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-quickFilters-driver-btn--active': state.filters.quickFilters.metricType === constants.defaultMetricIdentifier
+              'sat-tradeCenterPanel__result-quickFilters-driver-btn--active': state.filters.quickFilters.driverType === constants.defaultMetricIdentifier
             }">
             <span>Combined</span>
           </button>
           <button
-            (click)="onSwitchMetric('Spread')"
+            (click)="onswitchDriver('Spread')"
             [ngClass]="{
               'sat-tradeCenterPanel__result-quickFilters-driver-btn': true,
               'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-quickFilters-driver-btn--active': state.filters.quickFilters.metricType === 'Spread'
+              'sat-tradeCenterPanel__result-quickFilters-driver-btn--active': state.filters.quickFilters.driverType === 'Spread'
             }">
             <span>Spread</span>
           </button>
           <button
-            (click)="onSwitchMetric('Yield')"
+            (click)="onswitchDriver('Yield')"
             [ngClass]="{
               'sat-tradeCenterPanel__result-quickFilters-driver-btn': true,
               'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-quickFilters-driver-btn--active': state.filters.quickFilters.metricType === 'Yield'
+              'sat-tradeCenterPanel__result-quickFilters-driver-btn--active': state.filters.quickFilters.driverType === 'Yield'
             }">
             <span>Yield</span>
           </button>
           <button
-            (click)="onSwitchMetric('Price')"
+            (click)="onswitchDriver('Price')"
             [ngClass]="{
               'sat-tradeCenterPanel__result-quickFilters-driver-btn': true,
               'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-quickFilters-driver-btn--active': state.filters.quickFilters.metricType === 'Price'
+              'sat-tradeCenterPanel__result-quickFilters-driver-btn--active': state.filters.quickFilters.driverType === 'Price'
             }">
             <span>Price</span>
           </button>
@@ -198,7 +199,7 @@
         [receivedContentStage]="state.currentContentStage"
         [receivedSecurityTableMetricsUpdate]="state.table.metrics"
         [liveUpdatedRows]="state.fetchResult.liveUpdatedRowList"
-        [activeTriCoreMetric]="state.filters.quickFilters.metricType"
+        [activeTriCoreDriver]="state.filters.quickFilters.driverType"
         (selectedSecurityForAnalysis)="onSelectSecurityForAnalysis($event)"
       ></santa-table>
     </div>

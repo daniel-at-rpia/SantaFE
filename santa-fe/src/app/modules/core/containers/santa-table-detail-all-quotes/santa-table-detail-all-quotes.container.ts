@@ -106,7 +106,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
         } else {
           targetQuote.state.isAskDownVoted = false;
         }
-        targetQuote.state.menuActiveMetric = null;
+        targetQuote.state.menuActiveDriver = null;
         targetQuote.state.menuActiveSide = null;
       })
     ).subscribe();
@@ -129,7 +129,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
         } else {
           targetQuote.state.isAskDownVoted = true;
         }
-        targetQuote.state.menuActiveMetric = null;
+        targetQuote.state.menuActiveDriver = null;
         targetQuote.state.menuActiveSide = null;
       })
     ).subscribe();
@@ -145,15 +145,15 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     targetQuoteList.forEach((eachQuote) => {
       if (eachQuote.data.uuid === params.targetQuote.data.uuid) {
         const targetSide = params.isOnBidSide ? 'bid' : 'ask';
-        if (eachQuote.state.menuActiveMetric === params.targetMetric && eachQuote.state.menuActiveSide === targetSide) {
+        if (eachQuote.state.menuActiveDriver === params.targetDriver && eachQuote.state.menuActiveSide === targetSide) {
           eachQuote.state.menuActiveSide = null;
-          eachQuote.state.menuActiveMetric = null;
+          eachQuote.state.menuActiveDriver = null;
         } else {
           eachQuote.state.menuActiveSide = targetSide;
-          eachQuote.state.menuActiveMetric = params.targetMetric;
+          eachQuote.state.menuActiveDriver = params.targetDriver;
         }
       } else {
-        eachQuote.state.menuActiveMetric = null;
+        eachQuote.state.menuActiveDriver = null;
         eachQuote.state.menuActiveSide = null;
       }
     });
