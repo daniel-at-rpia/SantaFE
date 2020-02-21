@@ -18,9 +18,10 @@ export interface PayloadGetGroupHistoricalSummary {
   count: number;
 }
 
-export interface PayloadGetPositions {
+export interface PayloadGetTradeFullData {
   source?: string;
   yyyyMMdd?: number;
+  lookbackHrs?: number,
   partitionOptions: Array<string>
 }
 

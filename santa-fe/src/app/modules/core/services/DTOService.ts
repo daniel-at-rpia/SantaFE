@@ -24,8 +24,8 @@
       SecurityGroupSeniorityColorScheme
     } from 'Core/constants/colorSchemes.constant';
     import {
-      TriCoreMetricConfig,
-      DEFAULT_METRIC_IDENTIFIER
+      TriCoreDriverConfig,
+      DEFAULT_DRIVER_IDENTIFIER
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
@@ -52,7 +52,8 @@ export class DTOService {
   public formSecurityCardObject(
     securityIdFull: string,
     rawData: BESecurityDTO,
-    isStencil: boolean
+    isStencil: boolean,
+    currentSelectedMetric?: string
   ): DTOs.SecurityDTO {
     // !isStencil && console.log('rawData', rawData.name, rawData);
     const object:DTOs.SecurityDTO = {
@@ -74,9 +75,9 @@ export class DTOService {
         securityType: !isStencil ? rawData.securityType : null,
         seniority: null,
         maturityType: !isStencil ? rawData.maturityType : null,
-        primaryPmName: null,
-        backupPmName: null,
-        researchName: null,
+        primaryPmName: !isStencil && !!rawData.firmPosition ? rawData.firmPosition.primaryPmName : null,
+        backupPmName: !isStencil && !!rawData.firmPosition ? rawData.firmPosition.backupPmName : null,
+        researchName: !isStencil && !!rawData.firmPosition ? rawData.firmPosition.researchName : null,
         cs01LocalFirm: null,
         cs01LocalFirmInK: null,
         cs01LocalCurrent: null,
@@ -85,16 +86,16 @@ export class DTOService {
         cs01CadFirmInK: null,
         cs01CadCurrent: null,
         cs01CadCurrentInK: null,
-        owner: [],
+        owner: !isStencil && !!rawData.firmPosition && rawData.firmPosition.owners.length > 0 ? rawData.firmPosition.owners : [],
         mark: {
           combinedDefaultMark: null,
           combinedDefaultMarkRaw: null,
           mark: null,
-          markRaw: null,
-          markBackend: null,
-          markDriver: null,
-          markChangedBy: null,
-          markChangedTime: null,
+          markRaw: !isStencil && !!rawData.firmPosition && !!rawData.firmPosition.mark ? rawData.firmPosition.mark.value : null,
+          markBackend: !isStencil && !!rawData.firmPosition && !!rawData.firmPosition.mark ? rawData.firmPosition.mark.value : null,
+          markDriver: !isStencil && !!rawData.firmPosition && !!rawData.firmPosition.mark ? rawData.firmPosition.mark.driver : null,
+          markChangedBy: !isStencil && !!rawData.firmPosition && !!rawData.firmPosition.mark ? rawData.firmPosition.mark.user : null,
+          markChangedTime: !isStencil && !!rawData.firmPosition && !!rawData.firmPosition.mark ? rawData.firmPosition.mark.enteredTime : null,
           markDisBid: null,
           markDisBidRaw: null,
           markDisAsk: null,
@@ -102,7 +103,9 @@ export class DTOService {
           markDisMid: null,
           markDisMidRaw: null,
           markDisLiquidation: null,
-          markDisLiquidationRaw: null
+          markDisLiquidationRaw: null,
+          markDisIndex: null,
+          markDisIndexRaw: null
         },
         portfolios: [],
         strategyFirm: '',
@@ -142,45 +145,33 @@ export class DTOService {
         isActionMenuMinorActionsDisabled: false
       }
     };
-    if (!isStencil && object.data.seniorityLevel < 5 && object.data.seniorityLevel > 0 && rawData.paymentRank) {
-      object.data.seniority = `${object.data.seniorityLevel} - ${rawData.paymentRank}`;
+    if (!isStencil) {
+      // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
+      if ((!!currentSelectedMetric && !!TriCoreDriverConfig[object.data.mark.markDriver] && object.data.mark.markDriver === currentSelectedMetric) || currentSelectedMetric === DEFAULT_DRIVER_IDENTIFIER){
+        let targetDriver = object.data.mark.markDriver;
+        if (currentSelectedMetric === DEFAULT_DRIVER_IDENTIFIER) {
+          targetDriver = this.utility.findSecurityTargetDefaultTriCoreDriver(object);
+        }
+        object.data.mark.mark = this.utility.parseTriCoreDriverNumber(object.data.mark.markRaw, targetDriver, object, true) as string;
+      } else {
+        object.data.mark.mark = null;
+        object.data.mark.markRaw = null;
+      }
+      if (object.data.seniorityLevel < 5 && object.data.seniorityLevel > 0 && rawData.paymentRank) {
+        object.data.seniority = `${object.data.seniorityLevel} - ${rawData.paymentRank}`;
+      }
     }
     return object;
   }
 
   public appendPortfolioInfoToSecurityDTO(
     dto: DTOs.SecurityDTO,
-    targetPortfolio: BEPortfolioDTO,
-    currentSelectedMetric: string,
+    targetPortfolio: BEPortfolioDTO
   ) {
-    dto.data.primaryPmName = targetPortfolio.primaryPmName;
-    dto.data.backupPmName = targetPortfolio.backupPmName;
-    dto.data.researchName = targetPortfolio.researchName;
-    dto.data.mark.markRaw = targetPortfolio.mark.value;
-    dto.data.mark.markBackend = targetPortfolio.mark.value;
-    dto.data.mark.markDriver = targetPortfolio.mark.driver;
-    dto.data.mark.markChangedBy = targetPortfolio.mark.user;
-    dto.data.mark.markChangedTime = targetPortfolio.mark.enteredTime;
-    dto.data.owner = [];
-    !!targetPortfolio.primaryPmName && dto.data.owner.push(targetPortfolio.primaryPmName);
-    !!targetPortfolio.backupPmName && dto.data.owner.push(targetPortfolio.backupPmName);
-    !!targetPortfolio.researchName && dto.data.owner.push(targetPortfolio.researchName);
-    // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
-    if ((!!TriCoreMetricConfig[targetPortfolio.mark.driver] && targetPortfolio.mark.driver === currentSelectedMetric) || currentSelectedMetric === DEFAULT_METRIC_IDENTIFIER){
-      let targetMetric = targetPortfolio.mark.driver;
-      if (currentSelectedMetric === DEFAULT_METRIC_IDENTIFIER) {
-        targetMetric = this.utility.findSecurityTargetDefaultTriCoreMetric(dto);
-      }
-      dto.data.mark.mark = this.utility.parseTriCoreMetricNumber(dto.data.mark.markRaw, targetMetric, dto, true) as string;
-    } else {
-      dto.data.mark.mark = null;
-      dto.data.mark.markRaw = null;
-    }
     const newBlock: Blocks.SecurityPortfolioBlock = {
-      portfolioName: targetPortfolio.portfolioShortName,
+      portfolioName: targetPortfolio.partitionOptionValue.PortfolioShortName,
       quantity: targetPortfolio.quantity,
-      marketValueCad: targetPortfolio.marketValueCad,
-      strategy: targetPortfolio.strategyName,
+      strategy: targetPortfolio.partitionOptionValue.StrategyName,
       cs01Cad: targetPortfolio.cs01Cad,
       cs01Local: targetPortfolio.cs01Local
     };
@@ -433,7 +424,7 @@ export class DTOService {
     if (isStencil) {
       const stencilObject: DTOs.QuantComparerDTO = {
         data: {
-          metricType: 'Spread',
+          driverType: 'Spread',
           delta: 0,
           mid: 0,
           bid: {
@@ -472,11 +463,11 @@ export class DTOService {
       };
       return stencilObject;
     } else {
-      const metricType = quantMetricType;
-      const backendTargetQuoteAttr = TriCoreMetricConfig[metricType]['backendTargetQuoteAttr'];
+      const driverType = quantMetricType;
+      const backendTargetQuoteAttr = TriCoreDriverConfig[driverType]['backendTargetQuoteAttr'];
       if (!!BEdto && !!BEdto[backendTargetQuoteAttr]) {
         const rawData = BEdto[backendTargetQuoteAttr];
-        return this.populateQuantCompareObject(rawData, metricType, securityCard);
+        return this.populateQuantCompareObject(rawData, driverType, securityCard);
       } else {
         return null;
       }
@@ -485,18 +476,18 @@ export class DTOService {
 
   private populateQuantCompareObject(
     rawData: BESingleBestQuoteDTO,
-    metricType: string,
+    driverType: string,
     securityCard: DTOs.SecurityDTO
   ): DTOs.QuantComparerDTO {
     const bidSize = this.utility.round(rawData.bidQuantity/1000000, 1);
     const offerSize = this.utility.round(rawData.askQuantity/1000000, 1);
-    const tier2Shreshold = TriCoreMetricConfig[metricType]['tier2Threshold'];
-    const inversed = this.utility.isCDS(false, securityCard) ? !TriCoreMetricConfig[metricType]['inversed'] : TriCoreMetricConfig[metricType]['inversed'];
+    const tier2Shreshold = TriCoreDriverConfig[driverType]['tier2Threshold'];
+    const inversed = this.utility.isCDS(false, securityCard) ? !TriCoreDriverConfig[driverType]['inversed'] : TriCoreDriverConfig[driverType]['inversed'];
     const hasBid = !!rawData.bidQuoteValue && !!rawData.bidDealer;
     const hasOffer = !!rawData.askQuoteValue && !!rawData.askDealer;
-    const rounding = TriCoreMetricConfig[metricType]['rounding'];
-    const bidNumber = this.utility.parseTriCoreMetricNumber(rawData.bidQuoteValue, metricType, securityCard, true) as string;
-    const offerNumber = this.utility.parseTriCoreMetricNumber(rawData.askQuoteValue, metricType, securityCard, true) as string;
+    const rounding = TriCoreDriverConfig[driverType]['rounding'];
+    const bidNumber = this.utility.parseTriCoreDriverNumber(rawData.bidQuoteValue, driverType, securityCard, true) as string;
+    const offerNumber = this.utility.parseTriCoreDriverNumber(rawData.askQuoteValue, driverType, securityCard, true) as string;
     const bidSkew = rawData.axeSkew * 100;
     if (bidNumber === 'NaN' || offerNumber === 'NaN') {
       console.warn('Caught BE data issue while creating best quote component, ', securityCard, rawData, bidNumber, offerNumber);
@@ -521,7 +512,7 @@ export class DTOService {
       }
       const object: DTOs.QuantComparerDTO = {
         data: {
-          metricType: metricType,
+          driverType: driverType,
           delta: delta,
           mid: mid,
           bid: {
@@ -740,11 +731,11 @@ export class DTOService {
         diffBenchmark: bidBenchmark !== askBenchmark && hasBid && hasAsk,
         isBestOffer: false,
         isBestBid: false,
-        filteredByPrice:  filteredMetricType === TriCoreMetricConfig.Price.label,
-        filteredBySpread:  filteredMetricType === TriCoreMetricConfig.Spread.label,
-        filteredByYield: filteredMetricType === TriCoreMetricConfig.Yield.label,
+        filteredByPrice:  filteredMetricType === TriCoreDriverConfig.Price.label,
+        filteredBySpread:  filteredMetricType === TriCoreDriverConfig.Spread.label,
+        filteredByYield: filteredMetricType === TriCoreDriverConfig.Yield.label,
         menuActiveSide: null,
-        menuActiveMetric: null,
+        menuActiveDriver: null,
         isBidDownVoted: false,
         isAskDownVoted: false,
         isCDSVariant: false
@@ -754,18 +745,18 @@ export class DTOService {
       object.data.bid = {
         isAxe: rawData.quoteType === SECURITY_TABLE_QUOTE_TYPE_AXE,
         size: !!rawData.bidQuantity ? this.utility.parsePositionToMM(rawData.bidQuantity, false) : null,
-        price: !!rawData.bidPrice ? this.utility.parseTriCoreMetricNumber(rawData.bidPrice, TriCoreMetricConfig.Price.label, targetSecurity, false) as number : null,
-        yield: !!rawData.bidYield ? this.utility.parseTriCoreMetricNumber(rawData.bidYield, TriCoreMetricConfig.Yield.label, targetSecurity, false) as number : null,
-        tspread: !!rawData.bidSpread ? this.utility.parseTriCoreMetricNumber(rawData.bidSpread, TriCoreMetricConfig.Spread.label, targetSecurity, false) as number : null,
+        price: !!rawData.bidPrice ? this.utility.parseTriCoreDriverNumber(rawData.bidPrice, TriCoreDriverConfig.Price.label, targetSecurity, false) as number : null,
+        yield: !!rawData.bidYield ? this.utility.parseTriCoreDriverNumber(rawData.bidYield, TriCoreDriverConfig.Yield.label, targetSecurity, false) as number : null,
+        tspread: !!rawData.bidSpread ? this.utility.parseTriCoreDriverNumber(rawData.bidSpread, TriCoreDriverConfig.Spread.label, targetSecurity, false) as number : null,
         benchmark: bidBenchmark,
         time: this.utility.isQuoteTimeValid(rawData.bidTime) && hasBid ? new Date(rawData.bidTime).toTimeString().slice(0, 5) : ''
       };
       object.data.ask = {
         isAxe: rawData.quoteType === SECURITY_TABLE_QUOTE_TYPE_AXE,
         size: !!rawData.askQuantity ? this.utility.parsePositionToMM(rawData.askQuantity, false) : null,
-        price: !!rawData.askPrice ? this.utility.parseTriCoreMetricNumber(rawData.askPrice, TriCoreMetricConfig.Price.label, targetSecurity, false) as number : null,
-        yield: !!rawData.askYield ? this.utility.parseTriCoreMetricNumber(rawData.askYield, TriCoreMetricConfig.Yield.label, targetSecurity, false) as number : null,
-        tspread: !!rawData.askSpread ? this.utility.parseTriCoreMetricNumber(rawData.askSpread, TriCoreMetricConfig.Spread.label, targetSecurity, false) as number : null,
+        price: !!rawData.askPrice ? this.utility.parseTriCoreDriverNumber(rawData.askPrice, TriCoreDriverConfig.Price.label, targetSecurity, false) as number : null,
+        yield: !!rawData.askYield ? this.utility.parseTriCoreDriverNumber(rawData.askYield, TriCoreDriverConfig.Yield.label, targetSecurity, false) as number : null,
+        tspread: !!rawData.askSpread ? this.utility.parseTriCoreDriverNumber(rawData.askSpread, TriCoreDriverConfig.Spread.label, targetSecurity, false) as number : null,
         benchmark: askBenchmark,
         time: this.utility.isQuoteTimeValid(rawData.askTime) && hasAsk ? new Date(rawData.askTime).toTimeString().slice(0, 5) : ''
       };

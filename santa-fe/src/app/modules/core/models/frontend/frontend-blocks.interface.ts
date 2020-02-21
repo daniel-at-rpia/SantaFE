@@ -21,7 +21,6 @@ import {
 export interface SecurityPortfolioBlock {
   portfolioName: string;
   quantity: number;
-  marketValueCad: number;
   strategy: string;
   cs01Cad: number;
   cs01Local: number;
@@ -44,6 +43,8 @@ export interface SecurityMarkBlock {
   markDisMidRaw: number;
   markDisLiquidation: string;
   markDisLiquidationRaw: number;
+  markDisIndex: string;
+  markDisIndexRaw: number;
 }
 
 export interface SecurityGroupMetricBlock {
@@ -155,12 +156,14 @@ export interface AgGridRowNode {
   expanded?: boolean;
   setExpanded: Function;
   setData: Function;
+  firstChild: boolean;
+  lastChild: boolean;
 }
 
 export interface AgGridRow {
   id: string;
-  securityCard: SecurityDTO;    // this needs to identical to SecurityTableMetrics' key for Security column
-  bestQuote: QuantComparerDTO;  // this needs to identical to SecurityTableMetrics' key for Best Quote column
+  securityCard: SecurityDTO;    // this needs to be identical to SecurityTableMetrics' key for Security column
+  bestQuote: QuantComparerDTO;  // this needs to be identical to SecurityTableMetrics' key for Best Quote column
   rowDTO: SecurityTableRowDTO;
 }
 
