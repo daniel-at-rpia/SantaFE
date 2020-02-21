@@ -1,6 +1,7 @@
 <article
   [ngClass]="{
     'sat-globalAlert': true,
+    'sat-globalAlert--triggerActionMenuOpenState': state.triggerActionMenuOpen,
     'sat-globalAlert--displayAlertsState': state.displayAlerts
   }">
   <section class="sat-globalAlert__alertList">
@@ -8,6 +9,19 @@
     <alert></alert>
   </section>
   <section class="sat-globalAlert__trigger">
+    <div class="sat-globalAlert__trigger-actionMenu">
+      <button (click)="onClickClearAlerts()" title="delete all alerts" class="santaBtn--iconOnly fal fa-eraser sat-globalAlert__trigger-actionMenu-btn sat-globalAlert__trigger-actionMenu-btn--kill"></button>
+      <button
+        (click)="onToggleDisplayAlerts()"
+        title="show/hide all alerts"
+        [ngClass]="{
+          'santaBtn--iconOnly': true,
+          'sat-globalAlert__trigger-actionMenu-btn': true,
+          'fal': true,
+          'fa-bell': state.displayAlerts,
+          'fa-bell-on': !state.displayAlerts
+        }"></button>
+    </div>
     <button
       (click)="onClickAlertTrigger()"
       [ngClass]="{

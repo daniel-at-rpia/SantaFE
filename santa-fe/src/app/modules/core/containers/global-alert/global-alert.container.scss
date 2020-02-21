@@ -12,7 +12,31 @@
     @include mix_fixed_div(fixed, $z_index_globalAlertTrigger);
     bottom: 0;
     right: 0;
+    &-actionMenu {
+      @include mix_fixed_div(absolute, $z_index_hovering_item);
+      @include mix_alive('light');
+      transform: scale(0.01);
+      display: flex;
+      width: 100%;
+      &-btn {
+        @include mix_fixed_div(relative, $z_index_base_item);
+        @include mix_border_radius(50%);
+        &:first-of-type {
+          left: -$spacing_small * 3;
+          top: $spacing_small;
+        }
+        &:nth-of-type(2) {
+          left: -$spacing_small * 2;
+          top: -$spacing_small * 3;
+        }
+        &--kill {
+          background-color: $color_kill;
+          color: $font_color_inverse;
+        }
+      }
+    }
     &-btn {
+      @include mix_fixed_div(relative, $z_index_hovering_item_lift);
       @include mix_border_radius(50%);
       width: $iconButton_size_large;
       height: $iconButton_size_large;
@@ -20,15 +44,22 @@
       margin: $spacing_medium;
     }
   }
-  &--displayAlertsState {
+  &--triggerActionMenuOpenState {
     #{$globalAlertBlockName} {
       &__trigger {
+        &-actionMenu {
+          transform: scale(1);
+        }
         &-btn {
           @include material('none');
           background-color: $color_active;
           color: $font_color_inverse;
         }
       }
+    }
+  }
+  &--displayAlertsState {
+    #{$globalAlertBlockName} {
     }
   }
 }

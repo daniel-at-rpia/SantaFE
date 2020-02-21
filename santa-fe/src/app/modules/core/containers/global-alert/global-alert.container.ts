@@ -47,7 +47,8 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   private initializePageState(): GlobalAlertState {
     const state: GlobalAlertState = {
       activated: true,
-      displayAlerts: false
+      displayAlerts: false,
+      triggerActionMenuOpen: false
     };
     return state;
   }
@@ -75,7 +76,16 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   }
 
   public onClickAlertTrigger() {
+    this.state.triggerActionMenuOpen = !this.state.triggerActionMenuOpen;
+  }
+
+  public onToggleDisplayAlerts() {
     this.state.displayAlerts = !this.state.displayAlerts;
+    this.state.triggerActionMenuOpen = false;
+  }
+
+  public onClickClearAlerts() {
+    this.state.triggerActionMenuOpen = false;
   }
 
 }

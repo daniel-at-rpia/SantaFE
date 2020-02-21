@@ -165,4 +165,5 @@ export interface TradeObligorGraphPanelState {
 export interface GlobalAlertState {
   activated: boolean;
   displayAlerts: boolean;
+  triggerActionMenuOpen: boolean;
 }
