@@ -690,27 +690,29 @@ export class UtilityService {
       activeDriver: string
     ) {
       const markBlock = targetSecurity.data.mark;
-      if (!!targetQuant && targetSecurity.data.mark.markRaw) {
-        const rounding = this.triCoreDriverConfig[targetSecurity.data.mark.markDriver].rounding;
-        if (targetQuant.state.hasBid) {
-          markBlock.markDisBidRaw = markBlock.markRaw - targetQuant.data.bid.number;
-          markBlock.markDisBid = this.round(markBlock.markDisBidRaw, rounding).toFixed(rounding);
-          if (targetSecurity.data.positionFirm > 0) {
-            markBlock.markDisLiquidationRaw = markBlock.markDisBidRaw;
-            markBlock.markDisLiquidation = markBlock.markDisBid;
+      if (targetSecurity.data.mark.markRaw) {
+        if (!!targetQuant) {
+          const targetDriver = targetSecurity.data.mark.markDriver;
+          if (targetQuant.state.hasBid) {
+            markBlock.markDisBidRaw = markBlock.markRaw - targetQuant.data.bid.number;
+            markBlock.markDisBid = this.parseTriCoreDriverNumber(markBlock.markDisBidRaw, targetDriver, targetSecurity, true) as string;
+            if (targetSecurity.data.positionFirm > 0) {
+              markBlock.markDisLiquidationRaw = markBlock.markDisBidRaw;
+              markBlock.markDisLiquidation = markBlock.markDisBid;
+            }
           }
-        }
-        if (targetQuant.state.hasOffer) {
-          markBlock.markDisAskRaw = markBlock.markRaw - targetQuant.data.offer.number;
-          markBlock.markDisAsk = this.round(markBlock.markDisAskRaw, rounding).toFixed(rounding);
-          if (targetSecurity.data.positionFirm < 0) {
-            markBlock.markDisLiquidationRaw = -markBlock.markDisAskRaw;
-            markBlock.markDisLiquidation = `${-parseInt(markBlock.markDisAsk)}`;
+          if (targetQuant.state.hasOffer) {
+            markBlock.markDisAskRaw = markBlock.markRaw - targetQuant.data.offer.number;
+            markBlock.markDisAsk = this.parseTriCoreDriverNumber(markBlock.markDisAskRaw, targetDriver, targetSecurity, true) as string;
+            if (targetSecurity.data.positionFirm < 0) {
+              markBlock.markDisLiquidationRaw = -markBlock.markDisAskRaw;
+              markBlock.markDisLiquidation = `${-parseInt(markBlock.markDisAsk)}`;
+            }
           }
-        }
-        if (targetQuant.state.hasBid && targetQuant.state.hasOffer) {
-          markBlock.markDisMidRaw = markBlock.markRaw - targetQuant.data.mid;
-          markBlock.markDisMid = this.round(markBlock.markDisMidRaw, rounding).toFixed(rounding);
+          if (targetQuant.state.hasBid && targetQuant.state.hasOffer) {
+            markBlock.markDisMidRaw = markBlock.markRaw - targetQuant.data.mid;
+            markBlock.markDisMid = this.parseTriCoreDriverNumber(markBlock.markDisMidRaw, targetDriver, targetSecurity, true) as string;
+          }
         }
         if (targetSecurity.data.hasIndex) {
           const driverLabel = TriCoreDriverConfig[activeDriver].driverLabel;
