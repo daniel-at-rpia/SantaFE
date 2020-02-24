@@ -6,7 +6,7 @@ import {
 
 export const APIUrlMap = {
   getUserInitials: `user/get-user-initials`,
-  getPortfolios: `security/get-security-dtos`,
+  getPortfolios: `group/get-security-dtos-from-group-identifier`,
   getAllQuotes: `liveQuote/get-all-quotes`,
   getObligorCurves: `curve/get-obligor-curves-per-ccy`,
   getGroups: `group/get-groups`,
