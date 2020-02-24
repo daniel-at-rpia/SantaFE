@@ -428,7 +428,7 @@ export class UtilityService {
       targetSecurity: SecurityDTO,
       isToFixed: boolean
     ): number|string {
-      if (!!targetNumber && !!targetDriver) {
+      if (targetNumber != null && !!targetDriver) {
         if (targetDriver === 'YieldWorst') {
           targetDriver = TriCoreDriverConfig.Yield.label;
         } else if (targetDriver === TriCoreDriverConfig.Spread.driverLabel) {
@@ -706,7 +706,7 @@ export class UtilityService {
             markBlock.markDisAsk = this.parseTriCoreDriverNumber(markBlock.markDisAskRaw, targetDriver, targetSecurity, true) as string;
             if (targetSecurity.data.positionFirm < 0) {
               markBlock.markDisLiquidationRaw = -markBlock.markDisAskRaw;
-              markBlock.markDisLiquidation = `${-parseInt(markBlock.markDisAsk)}`;
+              markBlock.markDisLiquidation = `${-markBlock.markDisAsk}`;
             }
           }
           if (targetQuant.state.hasBid && targetQuant.state.hasOffer) {
