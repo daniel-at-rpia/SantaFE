@@ -945,9 +945,10 @@ export class DTOService {
         onMouseLeaveAlert: null
       },
       state: {
-        isNew: false,
+        isNew: true,
         isHovered: false,
-        isRead: false
+        isRead: false,
+        isCountdownFinished: true
       }
     }
     return object;

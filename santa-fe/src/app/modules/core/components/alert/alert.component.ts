@@ -19,6 +19,8 @@ import {
 })
 export class Alert {
   @Input() alertData: AlertDTO;
+  @Input() slideOutAllAlerts: boolean;
+  @Input() hideAllAlerts: boolean;
   @Output() mouseEntered = new EventEmitter<AlertDTO>();
   @Output() mouseLeft = new EventEmitter<AlertDTO>();
 

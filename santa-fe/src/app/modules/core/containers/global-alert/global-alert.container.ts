@@ -48,14 +48,10 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   private initializePageState(): GlobalAlertState {
     const state: GlobalAlertState = {
       activated: true,
-      displayAlerts: false,
+      displayAlerts: true,
       triggerActionMenuOpen: false,
       presentList: []
     };
-    const newAlert1 = this.dtoService.formAlertObject(PortfolioList['128'].security);
-    const newAlert2 = this.dtoService.formAlertObject(PortfolioList['135'].security);
-    state.presentList.push(newAlert1);
-    state.presentList.push(newAlert2);
     return state;
   }
 
@@ -83,6 +79,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
 
   public onClickAlertTrigger() {
     this.state.triggerActionMenuOpen = !this.state.triggerActionMenuOpen;
+
   }
 
   public onToggleDisplayAlerts() {
@@ -91,6 +88,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   }
 
   public onClickClearAlerts() {
+    this.generateNewAlert();
     this.state.triggerActionMenuOpen = false;
   }
 
@@ -100,6 +98,18 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
 
   public onMouseLeaveAlert(targetAlert: AlertDTO) {
     targetAlert.state.isHovered = false;
+  }
+
+  private generateNewAlert() {
+    const newAlert = this.dtoService.formAlertObject(PortfolioList['128'].security);
+    this.state.presentList.unshift(newAlert);
+    setTimeout(function(){
+      newAlert.state.isNew = false;
+      newAlert.state.isCountdownFinished = false;
+      setTimeout(function(){
+        newAlert.state.isCountdownFinished = true;
+      }, 5000);
+    }, 10);
   }
 
 }

@@ -84,7 +84,7 @@ $alert_countdown_duration: 5s;
         @include mix_alive('custom', margin-left $alert_countdown_duration linear);
         margin-left: 0;
         flex: 1 1 auto;
-        &--finish {
+        &--started {
           margin-left: 100%;
         }
       }
@@ -102,7 +102,10 @@ $alert_countdown_duration: 5s;
       }
     }
   }
-  &--isHoveredState {
+  &--slideOutState {
     transform: translate(-$alert_width - $spacing_large, 0);
+  }
+  &--hiddenState {
+    transform: translate(0, 0);
   }
 }

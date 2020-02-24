@@ -435,5 +435,6 @@ export interface AlertDTO extends BasicDTOStructure {
     isRead: boolean;
     isNew: boolean;
     isHovered: boolean;
+    isCountdownFinished: boolean;
   }
 }

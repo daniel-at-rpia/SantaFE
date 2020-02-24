@@ -2,12 +2,14 @@
   [ngClass]="{
     'sat-globalAlert': true,
     'sat-globalAlert--triggerActionMenuOpenState': state.triggerActionMenuOpen,
-    'sat-globalAlert--displayAlertsState': state.displayAlerts
+    'sat-globalAlert--hideAlertsState': !state.displayAlerts && !state.triggerActionMenuOpen
   }">
   <section class="sat-globalAlert__alertList">
     <alert
       *ngFor="let eachAlert of state.presentList"
       [alertData]="eachAlert"
+      [slideOutAllAlerts]="state.triggerActionMenuOpen"
+      [hideAllAlerts]="!state.displayAlerts && !state.triggerActionMenuOpen"
       (mouseEntered)="onMouseEnterAlert($event)"
       (mouseLeft)="onMouseLeaveAlert($event)">
     </alert>

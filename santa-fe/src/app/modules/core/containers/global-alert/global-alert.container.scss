@@ -58,8 +58,10 @@
       }
     }
   }
-  &--displayAlertsState {
+  &--hideAlertsState {
     #{$globalAlertBlockName} {
+      &__alertList {
+      }
     }
   }
 }

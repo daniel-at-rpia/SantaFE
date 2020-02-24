@@ -4,7 +4,8 @@
   [ngClass]="{
     'sat-alert': true,
     'sat-alert--info': true,
-    'sat-alert--isHoveredState': alertData.state.isHovered
+    'sat-alert--slideOutState': alertData.state.isHovered || !alertData.state.isCountdownFinished || slideOutAllAlerts,
+    'sat-alert--hiddenState': hideAllAlerts && alertData.state.isCountdownFinished
   }">
   <section class="sat-alert__overview">
     <div class="sat-alert__overview-main">
@@ -24,7 +25,11 @@
   </section>
   <section class="sat-alert__countdown">
     <div class="sat-alert__countdown-line">
-      <div class="sat-alert__countdown-line-content"></div>
+      <div
+        [ngClass]="{
+          'sat-alert__countdown-line-content': true,
+          'sat-alert__countdown-line-content--started': ! alertData.state.isNew
+        }"></div>
     </div>
   </section>
 </article>
