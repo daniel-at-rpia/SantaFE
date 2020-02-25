@@ -197,6 +197,34 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: false
   },{
+    key: 'cs01CadCurrent',
+    label: 'CS01 Cad (k)',
+    attrName: 'cs01CadCurrentInK',
+    underlineAttrName: 'cs01CadCurrent',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    active: false
+  },{
+    key: 'cs01LocalCurrent',
+    label: 'CS01 Local (k)',
+    attrName: 'cs01LocalCurrentInK',
+    underlineAttrName: 'cs01LocalCurrent',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    active: false
+  },{
+    key: 'cs01CadFirm',
+    label: 'Firm CS01 CAD (k)',
+    attrName: 'cs01CadFirmInK',
+    underlineAttrName: 'cs01CadFirm',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    active: true
+  },{
+    key: 'cs01LocalFirm',
+    label: 'Firm CS01 Local (k)',
+    attrName: 'cs01LocalFirmInK',
+    underlineAttrName: 'cs01LocalFirm',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    active: false
+  },{
     key: 'wowDelta',
     label: 'WoW Δ',
     attrName: DEFAULT_DRIVER_IDENTIFIER,
@@ -344,34 +372,6 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: false,
     isDataTypeText: true
-  },{
-    key: 'cs01CadCurrent',
-    label: 'CS01 Cad (k)',
-    attrName: 'cs01CadCurrentInK',
-    underlineAttrName: 'cs01CadCurrent',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: false
-  },{
-    key: 'cs01LocalCurrent',
-    label: 'CS01 Local (k)',
-    attrName: 'cs01LocalCurrentInK',
-    underlineAttrName: 'cs01LocalCurrent',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: false
-  },{
-    key: 'cs01CadFirm',
-    label: 'Firm CS01 CAD (k)',
-    attrName: 'cs01CadFirmInK',
-    underlineAttrName: 'cs01CadFirm',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true
-  },{
-    key: 'cs01LocalFirm',
-    label: 'Firm CS01 Local (k)',
-    attrName: 'cs01LocalFirmInK',
-    underlineAttrName: 'cs01LocalFirm',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: false
   }
 ];
 
