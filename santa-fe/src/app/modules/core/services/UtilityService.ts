@@ -696,7 +696,7 @@ export class UtilityService {
           if (targetQuant.state.hasBid) {
             markBlock.markDisBidRaw = markBlock.markRaw - targetQuant.data.bid.number;
             markBlock.markDisBid = this.parseTriCoreDriverNumber(markBlock.markDisBidRaw, targetDriver, targetSecurity, true) as string;
-            if (targetSecurity.data.positionFirm > 0) {
+            if ((!this.isCDS(false, targetSecurity) && targetSecurity.data.positionFirm > 0) || (this.isCDS(false, targetSecurity) && targetSecurity.data.positionFirm < 0)) {
               markBlock.markDisLiquidationRaw = markBlock.markDisBidRaw;
               markBlock.markDisLiquidation = markBlock.markDisBid;
             }
@@ -704,7 +704,7 @@ export class UtilityService {
           if (targetQuant.state.hasOffer) {
             markBlock.markDisAskRaw = markBlock.markRaw - targetQuant.data.offer.number;
             markBlock.markDisAsk = this.parseTriCoreDriverNumber(markBlock.markDisAskRaw, targetDriver, targetSecurity, true) as string;
-            if (targetSecurity.data.positionFirm < 0) {
+            if ((!this.isCDS(false, targetSecurity) && targetSecurity.data.positionFirm < 0) || (this.isCDS(false, targetSecurity) && targetSecurity.data.positionFirm > 0)) {
               markBlock.markDisLiquidationRaw = -markBlock.markDisAskRaw;
               markBlock.markDisLiquidation = `${-markBlock.markDisAsk}`;
             }
