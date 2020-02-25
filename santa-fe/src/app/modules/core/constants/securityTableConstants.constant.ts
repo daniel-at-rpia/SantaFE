@@ -60,7 +60,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isFrontEndMetric: true,
     isDriverDependent: true,
-    active: true
+    active: false
   },{
     key: 'bestAsk',
     label: 'Best Ask',
@@ -70,7 +70,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isFrontEndMetric: true,
     isDriverDependent: true,
-    active: true
+    active: false
   },{
     key: 'mark',
     label: 'Mark',

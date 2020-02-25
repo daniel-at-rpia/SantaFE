@@ -694,7 +694,7 @@ export class UtilityService {
         if (!!targetQuant) {
           const targetDriver = targetSecurity.data.mark.markDriver;
           if (targetQuant.state.hasBid) {
-            markBlock.markDisBidRaw = markBlock.markRaw - targetQuant.data.bid.number;
+            markBlock.markDisBidRaw = !this.isCDS(false, targetSecurity) ? markBlock.markRaw - targetQuant.data.bid.number : -(markBlock.markRaw - targetQuant.data.bid.number);
             markBlock.markDisBid = this.parseTriCoreDriverNumber(markBlock.markDisBidRaw, targetDriver, targetSecurity, true) as string;
             if ((!this.isCDS(false, targetSecurity) && targetSecurity.data.positionFirm > 0) || (this.isCDS(false, targetSecurity) && targetSecurity.data.positionFirm < 0)) {
               markBlock.markDisLiquidationRaw = markBlock.markDisBidRaw;
@@ -702,7 +702,7 @@ export class UtilityService {
             }
           }
           if (targetQuant.state.hasOffer) {
-            markBlock.markDisAskRaw = markBlock.markRaw - targetQuant.data.offer.number;
+            markBlock.markDisAskRaw = !this.isCDS(false, targetSecurity) ? markBlock.markRaw - targetQuant.data.offer.number : -(markBlock.markRaw - targetQuant.data.offer.number);
             markBlock.markDisAsk = this.parseTriCoreDriverNumber(markBlock.markDisAskRaw, targetDriver, targetSecurity, true) as string;
             if ((!this.isCDS(false, targetSecurity) && targetSecurity.data.positionFirm < 0) || (this.isCDS(false, targetSecurity) && targetSecurity.data.positionFirm > 0)) {
               markBlock.markDisLiquidationRaw = -markBlock.markDisAskRaw;
@@ -710,7 +710,7 @@ export class UtilityService {
             }
           }
           if (targetQuant.state.hasBid && targetQuant.state.hasOffer) {
-            markBlock.markDisMidRaw = markBlock.markRaw - targetQuant.data.mid;
+            markBlock.markDisMidRaw = !this.isCDS(false, targetSecurity) ? markBlock.markRaw - targetQuant.data.mid : -(markBlock.markRaw - targetQuant.data.mid);
             markBlock.markDisMid = this.parseTriCoreDriverNumber(markBlock.markDisMidRaw, targetDriver, targetSecurity, true) as string;
           }
         }
