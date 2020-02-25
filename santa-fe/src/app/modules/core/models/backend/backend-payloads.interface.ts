@@ -19,10 +19,10 @@ export interface PayloadGetGroupHistoricalSummary {
 }
 
 export interface PayloadGetTradeFullData {
-  source?: string;
-  yyyyMMdd?: number;
-  lookbackHrs?: number,
-  partitionOptions: Array<string>
+  maxNumberOfSecurities: number,
+  groupIdentifier: object;
+  groupFilters: object;
+  lookbackHrs?: number
 }
 
 export interface PayloadGetBestQuotes {
@@ -36,6 +36,8 @@ export interface PayloadGetAllQuotes {
 
 export interface PayloadObligorSecurityIDs {
   identifier: string,
+  groupDefinition: any;
+  groupFilters: any;
   lookbackHrs?: number
 }
 

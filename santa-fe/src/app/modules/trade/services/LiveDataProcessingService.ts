@@ -43,22 +43,23 @@ export class LiveDataProcessingService {
     sendToGraphCallback: Function,
     openSecurityInBloombergCallback: Function
   ): Array<SecurityTableRowDTO> {
+    const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
     const prinstineRowList: Array<SecurityTableRowDTO> = [];  // flush out the stencils
     const securityList = [];
     let count = 0;
     let nonEmptyCount = 0;
     let validCount = 0;
-    for (const eachKey in serverReturn){
+    for (const eachKey in rawSecurityDTOMap){
       count++;
       nonEmptyCount++;
       let sumSize = 0;
       let isValidFlag = true;
-      const newBESecurity:BESecurityDTO = serverReturn[eachKey].security;
+      const newBESecurity:BESecurityDTO = rawSecurityDTOMap[eachKey].security;
       const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false, selectedDriver);
       newSecurity.state.isInteractionThumbDownDisabled = true;
       newSecurity.api.onClickSendToGraph = sendToGraphCallback;
       newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
-      serverReturn[eachKey].positions.forEach((eachPortfolio: BEPortfolioDTO) => {
+      rawSecurityDTOMap[eachKey].positions.forEach((eachPortfolio: BEPortfolioDTO) => {
         // if (!eachPortfolio.security.isGovt) {
         // disabling the check for isGovt for now
         if(true){
@@ -74,7 +75,7 @@ export class LiveDataProcessingService {
           prinstineRowList,
           newSecurity,
           selectedDriver,
-          serverReturn[eachKey].bestQuotes
+          rawSecurityDTOMap[eachKey].bestQuotes
         );
         validCount++;
       }

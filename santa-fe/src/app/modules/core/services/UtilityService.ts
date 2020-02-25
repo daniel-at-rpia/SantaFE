@@ -562,7 +562,7 @@ export class UtilityService {
     }
 
     public parseNumberToThousands(number: number, hasUnitSuffix: boolean): string {
-      const value = this.round(number/1000, 0);
+      const value = this.round(number/1000, 1).toFixed(1);
       if (value === 0) {
         return null;
       } else {
@@ -753,6 +753,19 @@ export class UtilityService {
         }
       } else {
         return false;
+      }
+    }
+
+    public findObligorCouponType(obligorCurveName: string): string {
+      if (!!obligorCurveName) {
+        const copy: Array<string> = obligorCurveName.split("|");
+        if (copy.length >= 3) {
+          return copy[2];
+        } else {
+          return null;
+        }
+      } else {
+        return null;
       }
     }
   // trade specific end
