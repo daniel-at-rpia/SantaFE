@@ -281,14 +281,6 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false,
     isDataTypeText: true
   },{
-    key: 'couponType',
-    label: 'CouponType',
-    attrName: 'couponType',
-    underlineAttrName: 'couponType',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: false,
-    isDataTypeText: true
-  },{
     key: 'securityType',
     label: 'Security Type',
     attrName: 'securityType',
