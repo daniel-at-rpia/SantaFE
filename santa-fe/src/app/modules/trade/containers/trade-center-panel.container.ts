@@ -428,7 +428,11 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
   private fetchAllData(isInitialFetch: boolean) {
     const payload: PayloadGetTradeFullData = {
-      partitionOptions: ['Portfolio', 'Strategy']
+      maxNumberOfSecurities: 2000,
+      groupIdentifier: {},
+      groupFilters: {
+        PortfolioShortName: ["DOF","SOF","STIP","FIP","CIP","AGB","BBB"]
+      }
     };
     if (!!this.state.bestQuoteValidWindow) {
       payload.lookbackHrs = this.state.bestQuoteValidWindow;

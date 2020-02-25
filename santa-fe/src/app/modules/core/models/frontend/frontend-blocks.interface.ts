@@ -198,7 +198,6 @@ export interface ObligorCategoryDataItemBlock {
     cS01: number;
     currentPosition: number;
   }
-  state: {}
 }
 
 export interface SecurityTableRowQuoteBlock {

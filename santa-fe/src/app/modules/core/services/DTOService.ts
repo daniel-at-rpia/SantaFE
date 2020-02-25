@@ -62,6 +62,7 @@ export class DTOService {
         globalIdentifier: !isStencil ? rawData.globalIdentifier : null,
         name: !isStencil ? rawData.name : 'PLACEHOLDER',
         ticker: !isStencil ? rawData.ticker : null,
+        obligorName: !isStencil ? rawData.obligorName : null,
         isGovt: !isStencil ? rawData.isGovt : false,
         ratingLevel: !isStencil && rawData.metrics ? this.utility.mapRatings(rawData.metrics.ratingNoNotch) : 0,
         ratingValue: !isStencil && rawData.metrics ? rawData.metrics.ratingNoNotch : null,
@@ -70,10 +71,10 @@ export class DTOService {
         currency: !isStencil ? rawData.ccy : null,
         country: !isStencil ? rawData.country : null,
         sector: !isStencil ? rawData.sector : null,
-        couponType: !isStencil ? rawData.couponType : null,
         industry: !isStencil ? rawData.industry : null,
         securityType: !isStencil ? rawData.securityType : null,
         seniority: null,
+        genericSeniority: !isStencil ? rawData.genericSeniority : null,
         maturityType: !isStencil ? rawData.maturityType : null,
         primaryPmName: !isStencil && !!rawData.firmPosition ? rawData.firmPosition.primaryPmName : null,
         backupPmName: !isStencil && !!rawData.firmPosition ? rawData.firmPosition.backupPmName : null,
@@ -792,29 +793,6 @@ export class DTOService {
       return obligorChartCategoryDTOStencil;
     }
     else{
-      return null;
-    }
-  }
-
-  public formObligorCategoryDataItemDTO(isStencil: boolean): Blocks.ObligorCategoryDataItemBlock
-  {
-    if(isStencil) {
-      let obligorCategoryDataDTO: Blocks.ObligorCategoryDataItemBlock = {
-        data: {
-          name,
-          securityID: null,
-          mark: null,
-          spreadMid: null, 
-          yieldMid: null,
-          workoutTerm: null,
-          currentPosition: null,
-          cS01: null
-        },
-        state: {}
-      }
-      return obligorCategoryDataDTO;
-    }
-    else {
       return null;
     }
   }

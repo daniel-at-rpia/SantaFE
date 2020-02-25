@@ -1,4 +1,113 @@
 
+export interface BEFetchAllTradeDataReturn {
+  numberOfSecurities: number;
+  securityDtos: BEFullSecurityCollection;
+}
+
+export interface BEFullSecurityCollection {
+  groupIdentifier: {
+    source: string;
+    date: string;
+    groupOptionValues: {
+      "SecurityType"?: Array<string>;
+      "CouponType"?: Array<string>;
+      "Ccy"?: Array<string>;
+      "Seniority"?: Array<string>;
+      [property: string]: Array<string>;
+    };
+    filters: {
+      [property: string]: Array<string>;
+    };
+    singleSecurityTenorOptions: Array<string>;
+    groupParameter: object;
+  };
+  securityDtos: {
+    [property: string]: BEFullSecurityDTO;
+  }
+}
+
+export interface BEFullSecurityDTO {
+  securityIdentifier: string;
+  security: BESecurityDTO;
+  bestQuotes: BEBestQuoteDTO;
+  positions: Array<BEPortfolioDTO>;
+}
+
+export interface BEPortfolioDTO {
+  date: string;
+  securityIdentifier: string;
+  partitionOptionValue: {
+    AccountName: string;
+    AttributionOwner: string;
+    PortfolioShortName: string;
+    StrategyName: string;
+  }
+  quantity: number;
+  cs01Local: number;
+  cs01Cad: number;
+}
+
+export interface BESecurityDTO {
+  globalIdentifier: string;  // CUSIP; i.e US02376RAC60
+  securityIdentifier: string;
+  name: string;
+  securityType: string;
+  securitySubType: string;
+  ccy: string;
+  country: string;
+  sector: string;
+  genericSeniority: string;
+  maturityType?: string;
+  industry: string;
+  subIndustry: string;
+  obligorName: string;
+  obligorId: number;
+  ticker: string;
+  isSovereign?: boolean;
+  isGovt?: boolean;
+  isEm?: boolean;
+  metrics: BESecurityMetricDTO;
+  deltaMetrics: {
+    Dod: BESecurityDeltaMetricDTO;
+    Wow: BESecurityDeltaMetricDTO;
+    Mom: BESecurityDeltaMetricDTO;
+    Mtd: BESecurityDeltaMetricDTO;
+    Ytd: BESecurityDeltaMetricDTO;
+    Yoy: BESecurityDeltaMetricDTO;
+  };
+  paymentRank: string;
+  isSingleSecurity?: boolean;
+  isCurveSecurity?: boolean;
+  isBond?: boolean;
+  isLoan?: boolean;
+  isPreferred?: boolean;
+  isCds?: boolean;
+  firmPosition?: {
+    mark: {
+      driver: string;
+      enteredTime: string;
+      user: string;
+      value: number;
+    },
+    primaryPmName: string;
+    backupPmName: string;
+    researchName: string;
+    owners: Array<string>;
+    partitionOptionValues: any;
+    date: string;
+    securityIdentifier: string;
+    quantity: number;
+    cs01Local: number;
+    cs01Cad: number;
+  }
+  curveSubType?: string;  // CDS only
+}
+
+export interface BEBestQuoteDTO {
+  bestSpreadQuote: BESingleBestQuoteDTO;
+  bestPriceQuote: BESingleBestQuoteDTO;
+  bestYieldQuote: BESingleBestQuoteDTO;
+}
 
 export interface BESecurityGroupDTO {
   source: string;
@@ -77,63 +186,6 @@ interface BEGroupMetricDTO {
   isIndex?: false;
 }
 
-export interface BESecurityDTO {
-  globalIdentifier: string;  // CUSIP; i.e US02376RAC60
-  securityIdentifier: string;
-  name: string;
-  securityType: string;
-  securitySubType: string;
-  couponType?: string;
-  ccy: string;
-  country: string;
-  sector: string;
-  genericSeniority: string;
-  maturityType?: string;
-  industry: string;
-  subIndustry: string;
-  obligorName: string;
-  obligorId: number;
-  ticker: string;
-  isSovereign?: boolean;
-  isGovt?: boolean;
-  isEm?: boolean;
-  metrics: BESecurityMetricDTO;
-  deltaMetrics: {
-    Dod: BESecurityDeltaMetricDTO;
-    Wow: BESecurityDeltaMetricDTO;
-    Mom: BESecurityDeltaMetricDTO;
-    Mtd: BESecurityDeltaMetricDTO;
-    Ytd: BESecurityDeltaMetricDTO;
-    Yoy: BESecurityDeltaMetricDTO;
-  };
-  paymentRank: string;
-  isSingleSecurity?: boolean;
-  isCurveSecurity?: boolean;
-  isBond?: boolean;
-  isLoan?: boolean;
-  isPreferred?: boolean;
-  isCds?: boolean;
-  firmPosition?: {
-    mark: {
-      driver: string;
-      enteredTime: string;
-      user: string;
-      value: number;
-    },
-    primaryPmName: string;
-    backupPmName: string;
-    researchName: string;
-    owners: Array<string>;
-    partitionOptionValues: any;
-    date: string;
-    securityIdentifier: string;
-    quantity: number;
-    cs01Local: number;
-    cs01Cad: number;
-  }
-  curveSubType?: string;  // CDS only
-}
-
 interface BESecurityMetricDTO {
   // CDSs don't have a lot of those attributes
   isOnTheRun: boolean;
@@ -179,37 +231,6 @@ export interface BESecurityDeltaMetricDTO {
   amtOutstanding?: number;
   marketValue?: number;
   rating?: number;
-}
-
-export interface BEFetchAllTradeDataReturn {
-  [property: string]: BEFetchAllTradaDataDTO;
-}
-
-interface BEFetchAllTradaDataDTO {
-  securityIdentifier: string;
-  security: BESecurityDTO;
-  bestQuotes: BEBestQuoteDTO;
-  positions: Array<BEPortfolioDTO>;
-}
-
-export interface BEPortfolioDTO {
-  date: string;
-  securityIdentifier: string;
-  partitionOptionValue: {
-    AccountName: string;
-    AttributionOwner: string;
-    PortfolioShortName: string;
-    StrategyName: string;
-  }
-  quantity: number;
-  cs01Local: number;
-  cs01Cad: number;
-}
-
-export interface BEBestQuoteDTO {
-  bestSpreadQuote: BESingleBestQuoteDTO;
-  bestPriceQuote: BESingleBestQuoteDTO;
-  bestYieldQuote: BESingleBestQuoteDTO;
 }
 
 export interface BESingleBestQuoteDTO {

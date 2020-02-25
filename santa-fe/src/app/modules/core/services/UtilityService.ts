@@ -562,7 +562,7 @@ export class UtilityService {
     }
 
     public parseNumberToThousands(number: number, hasUnitSuffix: boolean): string {
-      const value = this.round(number/1000, 0);
+      const value = this.round(number/1000, 1).toFixed(1);
       if (value === 0) {
         return null;
       } else {
@@ -694,23 +694,23 @@ export class UtilityService {
         if (!!targetQuant) {
           const targetDriver = targetSecurity.data.mark.markDriver;
           if (targetQuant.state.hasBid) {
-            markBlock.markDisBidRaw = markBlock.markRaw - targetQuant.data.bid.number;
+            markBlock.markDisBidRaw = !this.isCDS(false, targetSecurity) ? markBlock.markRaw - targetQuant.data.bid.number : -(markBlock.markRaw - targetQuant.data.bid.number);
             markBlock.markDisBid = this.parseTriCoreDriverNumber(markBlock.markDisBidRaw, targetDriver, targetSecurity, true) as string;
-            if (targetSecurity.data.positionFirm > 0) {
+            if ((!this.isCDS(false, targetSecurity) && targetSecurity.data.positionFirm > 0) || (this.isCDS(false, targetSecurity) && targetSecurity.data.positionFirm < 0)) {
               markBlock.markDisLiquidationRaw = markBlock.markDisBidRaw;
               markBlock.markDisLiquidation = markBlock.markDisBid;
             }
           }
           if (targetQuant.state.hasOffer) {
-            markBlock.markDisAskRaw = markBlock.markRaw - targetQuant.data.offer.number;
+            markBlock.markDisAskRaw = !this.isCDS(false, targetSecurity) ? markBlock.markRaw - targetQuant.data.offer.number : -(markBlock.markRaw - targetQuant.data.offer.number);
             markBlock.markDisAsk = this.parseTriCoreDriverNumber(markBlock.markDisAskRaw, targetDriver, targetSecurity, true) as string;
-            if (targetSecurity.data.positionFirm < 0) {
+            if ((!this.isCDS(false, targetSecurity) && targetSecurity.data.positionFirm < 0) || (this.isCDS(false, targetSecurity) && targetSecurity.data.positionFirm > 0)) {
               markBlock.markDisLiquidationRaw = -markBlock.markDisAskRaw;
               markBlock.markDisLiquidation = `${-markBlock.markDisAsk}`;
             }
           }
           if (targetQuant.state.hasBid && targetQuant.state.hasOffer) {
-            markBlock.markDisMidRaw = markBlock.markRaw - targetQuant.data.mid;
+            markBlock.markDisMidRaw = !this.isCDS(false, targetSecurity) ? markBlock.markRaw - targetQuant.data.mid : -(markBlock.markRaw - targetQuant.data.mid);
             markBlock.markDisMid = this.parseTriCoreDriverNumber(markBlock.markDisMidRaw, targetDriver, targetSecurity, true) as string;
           }
         }
@@ -753,6 +753,19 @@ export class UtilityService {
         }
       } else {
         return false;
+      }
+    }
+
+    public findObligorCouponType(obligorCurveName: string): string {
+      if (!!obligorCurveName) {
+        const copy: Array<string> = obligorCurveName.split("|");
+        if (copy.length >= 3) {
+          return copy[2];
+        } else {
+          return null;
+        }
+      } else {
+        return null;
       }
     }
   // trade specific end
