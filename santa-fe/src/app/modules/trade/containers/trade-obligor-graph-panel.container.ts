@@ -19,7 +19,7 @@ import { ObligorCategoryDataItemBlock } from 'FEModels/frontend-blocks.interface
 import { ObligorChartCategoryColorScheme } from 'App/modules/core/constants/colorSchemes.constant';
 import {
   BESingleBestQuoteDTO,
-  BEObligorCurveDTO,
+  BEFullSecurityCollection,
   BEFullSecurityDTO
 } from 'BEModels/backend-models.interface';
 
@@ -107,14 +107,13 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
   
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getObligorCurves, { req: 'POST' }, payload).pipe(
       first(),
-      tap((serverReturn: BEObligorCurveDTO) => {
-        for (const curve in serverReturn) {
+      tap((serverReturn: Array<BEFullSecurityCollection>) => {
+        serverReturn.forEach((eachFullSecurityCollection) => {
           // Initialize a null chart category.
-          const rawCurveData = serverReturn[curve];
+          const rawCurveData = eachFullSecurityCollection.securityDtos;
           const chartCategory = this.dtoService.formObligorChartCategoryDTO(true, null, null, null, true);
-
           // Set the name of the chart category to SENIORITY / COUPON / TYPE of the first security
-          const couponType = this.utility.findObligorCouponType(curve);
+          const couponType = eachFullSecurityCollection.groupIdentifier.groupOptionValues.CouponType;
           let sampleSecurityRawData: BEFullSecurityDTO = null;
           for (const eachSecurity in rawCurveData) {
             sampleSecurityRawData = rawCurveData[eachSecurity];
@@ -123,7 +122,6 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
           const sampleSecurity = this.dtoService.formSecurityCardObject(sampleSecurityRawData.securityIdentifier, sampleSecurityRawData.security, false);
           chartCategory.data.name = sampleSecurity.data.genericSeniority + " " + couponType + " " + sampleSecurity.data.securityType;
           chartCategory.data.color = this.getObligorChartCategoryColorFromScheme(chartCategory.data.name);
-
           for (const eachSecurityId in rawCurveData) {
             if (!!rawCurveData[eachSecurityId].security) {
               const securityDTO = this.dtoService.formSecurityCardObject(eachSecurityId, rawCurveData[eachSecurityId].security, false);
@@ -154,9 +152,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
             }
             securityIDsFromAnalysis.push(eachSecurityId);
           }
-
           this.state.chartCategories.push(chartCategory);
-
           for (let seriesIndex in this.state.obligorChart.series.values) {
             for (let chartCategory in this.state.chartCategories) {
               if (this.state.obligorChart.series.values[seriesIndex].name == this.state.chartCategories[chartCategory].data.name) {
@@ -170,7 +166,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
               }
             }
           }
-        }
+        })
 
         this.graphService.clearGraphSeries(this.state.obligorChart);
         // Dispatch a the list of security IDs from the related Obligor in serverReturn. This will call to trade-center-panel, which will return marks for those we own.

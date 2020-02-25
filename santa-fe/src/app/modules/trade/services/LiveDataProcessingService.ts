@@ -43,7 +43,7 @@ export class LiveDataProcessingService {
     sendToGraphCallback: Function,
     openSecurityInBloombergCallback: Function
   ): Array<SecurityTableRowDTO> {
-    const rawSecurityDTOMap = serverReturn.securityDtos;
+    const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
     const prinstineRowList: Array<SecurityTableRowDTO> = [];  // flush out the stencils
     const securityList = [];
     let count = 0;

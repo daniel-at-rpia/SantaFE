@@ -1,6 +1,26 @@
 
 export interface BEFetchAllTradeDataReturn {
   numberOfSecurities: number;
+  securityDtos: BEFullSecurityCollection;
+}
+
+export interface BEFullSecurityCollection {
+  groupIdentifier: {
+    source: string;
+    date: string;
+    groupOptionValues: {
+      "SecurityType"?: Array<string>;
+      "CouponType"?: Array<string>;
+      "Ccy"?: Array<string>;
+      "Seniority"?: Array<string>;
+      [property: string]: Array<string>;
+    };
+    filters: {
+      [property: string]: Array<string>;
+    };
+    singleSecurityTenorOptions: Array<string>;
+    groupParameter: object;
+  };
   securityDtos: {
     [property: string]: BEFullSecurityDTO;
   }
@@ -316,12 +336,4 @@ export interface BEHistoricalQuantBlock {
   isBasisRange: boolean;
   isValid: boolean;
   timeSeries?: object;
-}
-
-export interface BEObligorCurveDTO {
-  [property: string]: BEObligorCurveSecurityMapBlock;
-}
-
-interface BEObligorCurveSecurityMapBlock {
-  [property: string]: BEFullSecurityDTO;
 }
