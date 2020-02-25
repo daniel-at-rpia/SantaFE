@@ -1,20 +1,22 @@
 import { BEFetchAllTradeDataReturn } from 'BEModels/backend-models.interface';
 
-export const PortfolioList: BEFetchAllTradeDataReturn = {
-  numberOfSecurities: 594,
-  securityDtos: {
-    groupIdentifier: {
-      "source": "Default",
-      "date": "2020-02-24T00:00:00-05:00",
-      "groupOptionValues": {},
-      "filters": {
-        "PortfolioShortName": [
+const PortfolioList: BEFetchAllTradeDataReturn = {
+  "numberOfSecurities":584,
+  "securityDtos":{
+    "groupIdentifier":{
+      "source":"Default",
+      "date":"2020-02-24T00:00:00-05:00",
+      "groupOptionValues":{
+
+      },
+      "filters":{
+        "PortfolioShortName":[
           "DOF",
           "SOF",
           "AGB"
         ]
       },
-      "singleSecurityTenorOptions": [
+      "singleSecurityTenorOptions":[
         "2Y",
         "3Y",
         "5Y",
@@ -23,5412 +25,8686 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
         "20Y",
         "30Y"
       ],
-      "groupParameter": {
-        "weightField": "AmtOutstanding",
-        "metricContextField": null,
-        "metricContextMin": null,
-        "metricContextMax": null
+      "groupParameter":{
+        "weightField":"AmtOutstanding",
+        "metricContextField":null,
+        "metricContextMin":null,
+        "metricContextMax":null
       }
     },
-    securityDtos: {
-      "128": {
-        "securityIdentifier": "128",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": false,
-          "securityIdentifier": "128",
-          "ccy": "CAD",
-          "country": "CA",
-          "industry": "Integrated Oils",
-          "name": "HSECN 3.6 03/10/2027 Callable CAD SENIOR_UNSECURED",
-          "genericSeniority": "SR",
-          "globalIdentifier": "CA448055AN34",
-          "obligorName": "HUSKY ENERGY INC",
-          "obligorId": 393,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Energy",
-          "securitySubType": "Bond",
-          "subIndustry": "Oil Comp-Integrated",
-          "ticker": "HSECN",
-          "metrics": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isOnTheRun": false,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "47",
-            "benchmarkName": "CAN 1.0 06/01/2027 CAD",
-            "underlyingSecurityId": -1,
-            "zSpread": 0,
-            "gSpread": 152.31,
-            "yieldWorst": 2.897155,
-            "amtOutstanding": 750000000,
-            "marketValue": 795079200,
-            "workoutTerm": 7.0712,
-            "ratingDouble": 15.67,
-            "isRated": true,
-            "rating": "BBB+",
-            "ratingNoNotch": "BBB",
-            "ratingBucket": "IG",
-            "price": 104.462067,
-            "spread": 152.1424,
-            "isIndex": true
+    "securityDtos":{
+      "128":{
+        "securityIdentifier":"128",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"128",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Integrated Oils",
+          "name":"HSECN 3.6 03/10/2027 Callable CAD SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA448055AN34",
+          "obligorName":"HUSKY ENERGY INC",
+          "obligorId":393,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Energy",
+          "securitySubType":"Bond",
+          "subIndustry":"Oil Comp-Integrated",
+          "ticker":"HSECN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"47",
+            "benchmarkName":"CAN 1.0 06/01/2027 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":155.09,
+            "yieldWorst":2.761915,
+            "amtOutstanding":750000000.0,
+            "marketValue":802319130.0,
+            "workoutTerm":7.0438,
+            "ratingDouble":15.67,
+            "isRated":true,
+            "rating":"BBB+",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":105.328761,
+            "spread":154.98,
+            "isIndex":true
           },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": 0,
-              "gSpread": 0.28,
-              "yieldWorst": -0.021239,
-              "ratingDouble": 0,
-              "price": 0.136747,
-              "spread": 0.3481
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":3.19,
+              "yieldWorst":-0.051531,
+              "ratingDouble":0.0,
+              "price":0.331879,
+              "spread":3.1406
             },
-            "Wow": {
-              "zSpread": 0,
-              "gSpread": -0.48,
-              "yieldWorst": 0.029035,
-              "ratingDouble": 0,
-              "price": -0.200366,
-              "spread": -0.5839
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":2.78,
+              "yieldWorst":-0.13524,
+              "ratingDouble":0.0,
+              "price":0.866694,
+              "spread":2.8376
             },
-            "Mtd": {
-              "zSpread": 0,
-              "gSpread": 0.13,
-              "yieldWorst": 0.089577,
-              "ratingDouble": 0,
-              "price": -0.609445,
-              "spread": 0.2409
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":2.91,
+              "yieldWorst":-0.045663,
+              "ratingDouble":0.0,
+              "price":0.257249,
+              "spread":3.0785
             },
-            "Mom": {
-              "zSpread": 0,
-              "gSpread": 0.85,
-              "yieldWorst": -0.212865,
-              "ratingDouble": 0,
-              "price": 1.343777,
-              "spread": 0.5993
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":20.41,
+              "yieldWorst":-0.103441,
+              "ratingDouble":0.0,
+              "price":0.625883,
+              "spread":6.4656
             },
-            "Ytd": {
-              "zSpread": 0,
-              "gSpread": -1.04,
-              "yieldWorst": -0.348322,
-              "ratingDouble": 0,
-              "price": 2.207435,
-              "spread": -0.6365
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":1.74,
+              "yieldWorst":-0.483562,
+              "ratingDouble":0.0,
+              "price":3.074129,
+              "spread":2.2011
             },
-            "Yoy": {
-              "zSpread": 0,
-              "gSpread": -17.68,
-              "yieldWorst": -0.657537,
-              "ratingDouble": 0,
-              "price": 4.148165,
-              "spread": -19.1033
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":-13.7,
+              "yieldWorst":-0.791108,
+              "ratingDouble":0.0,
+              "price":5.003455,
+              "spread":-15.1126
             }
           },
-          "firmPosition": {
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": null,
-              "user": null,
-              "value": 155
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF"
+              ],
+              "StrategyName":[
+                "Portfolio Shorts"
+              ]
             },
-            "primaryPmName": "ST",
-            "backupPmName": "IL",
-            "researchName": "TW",
-            "owners": [
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":"2020-02-25T19:11:13.864",
+              "user":"ST",
+              "value":170.0
+            },
+            "primaryPmName":"ST",
+            "backupPmName":"IL",
+            "researchName":"TW",
+            "owners":[
               "ST",
               "IL",
               "TW"
             ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "TD DOF PB"
-              ],
-              "AttributionOwner": [
-                "CAD Term Risk"
-              ],
-              "PortfolioShortName": [
-                "DOF"
-              ],
-              "StrategyName": [
-                "Portfolio Shorts"
-              ]
-            },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "128",
-            "quantity": -9000000,
-            "cs01Cad": -5737.463658,
-            "cs01Local": -5737.463658
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"128",
+            "quantity":-9000000.0,
+            "cs01Cad":-5716.307529,
+            "cs01Local":-5716.307529
           },
-          "securityType": "Bond"
+          "securityType":"Bond",
+          "maturityType":"Callable"
         },
-        "bestQuotes": {
-          "bestPriceQuote": {
-            "isValid": true,
-            "quoteMetric": "Price",
-            "bidQuoteType": "Run",
-            "bidDealer": "BMO",
-            "bidTime": "2020-02-18T12:06:18",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Axe",
-            "askDealer": "RBC",
-            "askTime": "2020-02-18T13:30:20",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 5000000,
-            "totalRunBidQuantity": 2000,
-            "totalRunAskQuantity": 2000,
-            "axeSkew": 1,
-            "totalSkew": 0.9996003197442046,
-            "bidQuantity": 2000,
-            "bidQuoteValue": 104.20899963378906,
-            "askQuantity": 5000000,
-            "askQuoteValue": 104.70099639892578,
-            "globalIdentifier": "CA448055AN34"
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"RBC",
+            "bidTime":"2020-02-25T07:54:17",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T08:30:12",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":105.00900268554688,
+            "askQuantity":0,
+            "askQuoteValue":104.79100036621094,
+            "globalIdentifier":"CA448055AN34"
           },
-          "bestSpreadQuote": {
-            "isValid": true,
-            "quoteMetric": "Spread",
-            "bidQuoteType": "Run",
-            "bidDealer": "BMO",
-            "bidTime": "2020-02-18T12:06:18",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Axe",
-            "askDealer": "MULT",
-            "askTime": "2020-02-18T13:30:20",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 5000000,
-            "totalRunBidQuantity": 2000,
-            "totalRunAskQuantity": 2000,
-            "axeSkew": 1,
-            "totalSkew": 0.9996003197442046,
-            "bidQuantity": 2000,
-            "bidQuoteValue": 155,
-            "askQuantity": 5002000,
-            "askQuoteValue": 150,
-            "globalIdentifier": "CA448055AN34"
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"RBC",
+            "bidTime":"2020-02-25T07:54:17",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"NBF",
+            "askTime":"2020-02-25T08:48:39",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":157.0,
+            "askQuantity":0,
+            "askQuoteValue":157.0,
+            "globalIdentifier":"CA448055AN34"
           },
-          "bestYieldQuote": {
-            "isValid": true,
-            "quoteMetric": "Yield",
-            "bidQuoteType": "Run",
-            "bidDealer": "BMO",
-            "bidTime": "2020-02-18T12:06:18",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Axe",
-            "askDealer": "RBC",
-            "askTime": "2020-02-18T13:30:20",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 5000000,
-            "totalRunBidQuantity": 2000,
-            "totalRunAskQuantity": 2000,
-            "axeSkew": 1,
-            "totalSkew": 0.9996003197442046,
-            "bidQuantity": 2000,
-            "bidQuoteValue": 2.91375994682312,
-            "askQuantity": 5000000,
-            "askQuoteValue": 2.8356099128723145,
-            "globalIdentifier": "CA448055AN34"
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"RBC",
+            "bidTime":"2020-02-25T07:54:17",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T08:30:12",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.7850000858306885,
+            "askQuantity":0,
+            "askQuoteValue":2.819999933242798,
+            "globalIdentifier":"CA448055AN34"
           }
         },
-        "positions": [
+        "positions":[
           {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "128",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "DOF",
-              "StrategyName": ""
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
             },
-            "quantity": -9000000,
-            "cs01Cad": -5737.463658,
-            "cs01Local": -5737.463658
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"128",
+            "quantity":-9000000.0,
+            "cs01Cad":-5716.307529,
+            "cs01Local":-5716.307529
           }
         ]
       },
-      "135": {
-        "securityIdentifier": "135",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": false,
-          "securityIdentifier": "135",
-          "ccy": "USD",
-          "country": "US",
-          "industry": "Banks",
-          "name": "CIT 5.0 08/15/2022 Bullet USD SENIOR_UNSECURED",
-          "genericSeniority": "SR",
-          "globalIdentifier": "US125581GQ55",
-          "obligorName": "CIT GROUP INC",
-          "obligorId": 180,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Financials",
-          "securitySubType": "Bond",
-          "subIndustry": "Commer Banks-Eastern US",
-          "ticker": "CIT",
-          "metrics": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isOnTheRun": true,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "65014",
-            "benchmarkName": "T 1.375 01/31/2022 USD",
-            "underlyingSecurityId": -1,
-            "zSpread": 83.2299,
-            "gSpread": 83.442,
-            "yieldWorst": 2.25425,
-            "amtOutstanding": 1147000000,
-            "marketValue": 1222805230,
-            "workoutTerm": 2.5014,
-            "ratingDouble": 13,
-            "isRated": true,
-            "rating": "BB+",
-            "ratingNoNotch": "BB",
-            "ratingBucket": "HY",
-            "price": 106.609,
-            "spread": 81.21689999999998,
-            "isIndex": true
+      "135":{
+        "securityIdentifier":"135",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"135",
+          "ccy":"USD",
+          "country":"US",
+          "industry":"Banks",
+          "name":"CIT 5.0 08/15/2022 Bullet USD SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"US125581GQ55",
+          "obligorName":"CIT GROUP INC",
+          "obligorId":180,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Financials",
+          "securitySubType":"Bond",
+          "subIndustry":"Commer Banks-Eastern US",
+          "ticker":"CIT",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":true,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"65014",
+            "benchmarkName":"T 1.375 01/31/2022 USD",
+            "underlyingSecurityId":-1,
+            "zSpread":103.727,
+            "gSpread":104.8844,
+            "yieldWorst":2.27781,
+            "amtOutstanding":1147000000.0,
+            "marketValue":1221555000.0,
+            "workoutTerm":2.474,
+            "ratingDouble":13.0,
+            "isRated":true,
+            "rating":"BB+",
+            "ratingNoNotch":"BB",
+            "ratingBucket":"HY",
+            "price":106.5,
+            "spread":102.4316,
+            "isIndex":true
           },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": 0.1225,
-              "gSpread": -1.3882,
-              "yieldWorst": -0.02596,
-              "ratingDouble": 0,
-              "price": 0.058,
-              "spread": -1.0165
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":16.4871,
+              "gSpread":18.6278,
+              "yieldWorst":0.07665,
+              "ratingDouble":0.0,
+              "price":-0.198,
+              "spread":18.3159
             },
-            "Wow": {
-              "zSpread": -6.3872,
-              "gSpread": -8.2302,
-              "yieldWorst": -0.06515,
-              "ratingDouble": 0,
-              "price": 0.107,
-              "spread": -9.4906
+            "Wow":{
+              "zSpread":20.4971,
+              "gSpread":21.4424,
+              "yieldWorst":0.02356,
+              "ratingDouble":0.0,
+              "price":-0.109,
+              "spread":21.2147
             },
-            "Mtd": {
-              "zSpread": -25.6141,
-              "gSpread": -30.2532,
-              "yieldWorst": -0.18923,
-              "ratingDouble": 0,
-              "price": 0.373,
-              "spread": -29.7696
+            "Mtd":{
+              "zSpread":-5.117,
+              "gSpread":-8.8108,
+              "yieldWorst":-0.16567,
+              "ratingDouble":0.0,
+              "price":0.264,
+              "spread":-8.5549
             },
-            "Mom": {
-              "zSpread": 2.7333,
-              "gSpread": -0.3246,
-              "yieldWorst": -0.16701,
-              "ratingDouble": 0,
-              "price": 0.198,
-              "spread": -3.3877
+            "Mom":{
+              "zSpread":21.6895,
+              "gSpread":20.4587,
+              "yieldWorst":-0.05802,
+              "ratingDouble":0.0,
+              "price":-0.05,
+              "spread":19.4245
             },
-            "Ytd": {
-              "zSpread": -1.059,
-              "gSpread": -8.4763,
-              "yieldWorst": -0.25864,
-              "ratingDouble": 0,
-              "price": 0.351,
-              "spread": -8.7108
+            "Ytd":{
+              "zSpread":19.4381,
+              "gSpread":12.9661,
+              "yieldWorst":-0.23508,
+              "ratingDouble":0.0,
+              "price":0.242,
+              "spread":12.5039
             },
-            "Yoy": {
-              "zSpread": -59.3241,
-              "gSpread": -68.948,
-              "yieldWorst": -1.73649,
-              "ratingDouble": 0,
-              "price": 3.353,
-              "spread": -70.5751
+            "Yoy":{
+              "zSpread":-34.206,
+              "gSpread":-40.8256,
+              "yieldWorst":-1.63051,
+              "ratingDouble":0.0,
+              "price":2.991,
+              "spread":-42.2529
             }
           },
-          "firmPosition": {
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": null,
-              "user": null,
-              "value": 85
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF",
+                "SOF"
+              ],
+              "StrategyName":[
+                "Short Carry"
+              ]
             },
-            "primaryPmName": "PM",
-            "backupPmName": "DJ",
-            "researchName": "LP",
-            "owners": [
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":null,
+              "user":null,
+              "value":95.0
+            },
+            "primaryPmName":"PM",
+            "backupPmName":"DJ",
+            "researchName":"LP",
+            "owners":[
               "PM",
               "DJ",
               "LP"
             ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "TD DOF PB",
-                "TD SOF PB"
-              ],
-              "AttributionOwner": [
-                "Short Carry"
-              ],
-              "PortfolioShortName": [
-                "DOF",
-                "SOF"
-              ],
-              "StrategyName": [
-                "Short Carry"
-              ]
-            },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "135",
-            "quantity": 6667000,
-            "cs01Cad": 2214.603631312,
-            "cs01Local": 2214.603631312
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"135",
+            "quantity":6667000.0,
+            "cs01Cad":2207.868734584,
+            "cs01Local":2207.868734584
           },
-          "securityType": "Bond"
+          "securityType":"Bond",
+          "maturityType":"Bullet"
         },
-        "bestQuotes": {
-          "bestPriceQuote": {
-            "isValid": true,
-            "quoteMetric": "Price",
-            "bidQuoteType": "Run",
-            "bidDealer": "CG",
-            "bidTime": "2020-02-18T13:36:22",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "MULT",
-            "askTime": "2020-02-18T13:14:02",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 8465000,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": 0,
-            "totalSkew": 0,
-            "bidQuantity": 5000000,
-            "bidQuoteValue": 106.625,
-            "askQuantity": 0,
-            "askQuoteValue": 106.875,
-            "globalIdentifier": "US125581GQ55"
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Axe",
+            "bidDealer":"MULT",
+            "bidTime":"2020-02-25T08:25:19",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"SNC",
+            "askTime":"2020-02-25T07:28:32",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":106.5,
+            "askQuantity":0,
+            "askQuoteValue":106.75,
+            "globalIdentifier":"US125581GQ55"
           },
-          "bestSpreadQuote": {
-            "isValid": true,
-            "quoteMetric": "Spread",
-            "bidQuoteType": "Run",
-            "bidDealer": "CG",
-            "bidTime": "2020-02-18T13:36:22",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "MULT",
-            "askTime": "2020-02-18T13:14:02",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 8465000,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": 0,
-            "totalSkew": 0,
-            "bidQuantity": 5000000,
-            "bidQuoteValue": 83.95709991455078,
-            "askQuantity": 0,
-            "askQuoteValue": 74.1843032836914,
-            "globalIdentifier": "US125581GQ55"
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Axe",
+            "bidDealer":"BAML",
+            "bidTime":"2020-02-25T08:09:46",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"SNC",
+            "askTime":"2020-02-25T07:28:32",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":101.52200317382812,
+            "askQuantity":0,
+            "askQuoteValue":91.66380310058594,
+            "globalIdentifier":"US125581GQ55"
           },
-          "bestYieldQuote": {
-            "isValid": true,
-            "quoteMetric": "Yield",
-            "bidQuoteType": "Run",
-            "bidDealer": "CG",
-            "bidTime": "2020-02-18T13:36:22",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "BARC",
-            "askTime": "2020-02-18T13:14:02",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 8465000,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": 0,
-            "totalSkew": 0,
-            "bidQuantity": null,
-            "bidQuoteValue": 2.244999885559082,
-            "askQuantity": null,
-            "askQuoteValue": 2.1500000953674316,
-            "globalIdentifier": "US125581GQ55"
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"RWPC",
+            "bidTime":"2020-02-25T08:04:18",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"SNC",
+            "askTime":"2020-02-25T07:28:32",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.2249999046325684,
+            "askQuantity":0,
+            "askQuoteValue":2.1740000247955322,
+            "globalIdentifier":"US125581GQ55"
           }
         },
-        "positions": [
+        "positions":[
           {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "135",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "DOF",
-              "StrategyName": ""
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
             },
-            "quantity": 2403000,
-            "cs01Cad": 798.213968208,
-            "cs01Local": 798.213968208
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"135",
+            "quantity":2403000.0,
+            "cs01Cad":795.786496056,
+            "cs01Local":795.786496056
           },
           {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "135",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "SOF",
-              "StrategyName": ""
+            "partitionOptionValue":{
+              "PortfolioShortName":"SOF",
+              "StrategyName":""
             },
-            "quantity": 4264000,
-            "cs01Cad": 1416.389663104,
-            "cs01Local": 1416.389663104
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"135",
+            "quantity":4264000.0,
+            "cs01Cad":1412.082238528,
+            "cs01Local":1412.082238528
           }
         ]
       },
-      "1870": {
-        "securityIdentifier": "1870",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": false,
-          "securityIdentifier": "1870",
-          "ccy": "USD",
-          "country": "US",
-          "industry": "Banks",
-          "name": "FHN 3.5 12/15/2020 Callable USD SENIOR_UNSECURED",
-          "genericSeniority": "SR",
-          "globalIdentifier": "US320517AB13",
-          "obligorName": "FIRST HORIZON NATIONAL CORP",
-          "obligorId": 1251,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Financials",
-          "securitySubType": "Bond",
-          "subIndustry": "Commer Banks-Southern US",
-          "ticker": "FHN",
-          "metrics": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isOnTheRun": false,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "65014",
-            "benchmarkName": "T 1.375 01/31/2022 USD",
-            "underlyingSecurityId": -1,
-            "zSpread": 28.8218,
-            "gSpread": 37.0197,
-            "yieldWorst": 1.90641,
-            "amtOutstanding": 500000000,
-            "marketValue": 505815000,
-            "workoutTerm": 0.7534,
-            "ratingDouble": 14,
-            "isRated": true,
-            "rating": "BBB-",
-            "ratingNoNotch": "BBB",
-            "ratingBucket": "IG",
-            "price": 101.163,
-            "spread": 45.17309999999998,
-            "isIndex": true
+      "146":{
+        "securityIdentifier":"146",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"146",
+          "ccy":"USD",
+          "country":"US",
+          "industry":"Pipeline",
+          "name":"NGPLCO 7.768 12/15/2037 Bullet USD 144A SENIOR_SECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"US62912XAC83",
+          "obligorName":"NGPL PIPECO LLC",
+          "obligorId":949,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Energy",
+          "securitySubType":"Bond",
+          "subIndustry":"Pipelines",
+          "ticker":"NGPLCO",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"63089",
+            "benchmarkName":"T 2.375 11/15/2049 USD",
+            "underlyingSecurityId":-1,
+            "zSpread":338.418,
+            "gSpread":324.5739,
+            "yieldWorst":4.78564,
+            "amtOutstanding":500000000.0,
+            "marketValue":677285000.0,
+            "workoutTerm":17.8192,
+            "ratingDouble":14.0,
+            "isRated":true,
+            "rating":"BBB-",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":135.457,
+            "spread":295.27509999999995,
+            "isIndex":true
           },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": -0.0015,
-              "gSpread": -4.4874,
-              "yieldWorst": -0.01395,
-              "ratingDouble": 0,
-              "price": 0.006,
-              "spread": 0.1622
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":4.444,
+              "gSpread":4.7265,
+              "yieldWorst":-0.03815,
+              "ratingDouble":0.0,
+              "price":0.554,
+              "spread":4.2219
             },
-            "Wow": {
-              "zSpread": -0.682,
-              "gSpread": 0.0975,
-              "yieldWorst": -0.02322,
-              "ratingDouble": 0,
-              "price": -0.017,
-              "spread": -5.5473
+            "Wow":{
+              "zSpread":10.61,
+              "gSpread":8.0972,
+              "yieldWorst":-0.13029,
+              "ratingDouble":0.0,
+              "price":1.866,
+              "spread":7.7158
             },
-            "Mtd": {
-              "zSpread": -0.8714,
-              "gSpread": -2.5962,
-              "yieldWorst": 0.00216,
-              "ratingDouble": 0,
-              "price": -0.067,
-              "spread": -11.1055
+            "Mtd":{
+              "zSpread":3.079,
+              "gSpread":0.307,
+              "yieldWorst":-0.15431,
+              "ratingDouble":0.0,
+              "price":2.16,
+              "spread":1.4538
             },
-            "Mom": {
-              "zSpread": -11.4635,
-              "gSpread": -26.4249,
-              "yieldWorst": -0.25605,
-              "ratingDouble": 0,
-              "price": 0.068,
-              "spread": -13.1975
+            "Mom":{
+              "zSpread":17.929,
+              "gSpread":16.3375,
+              "yieldWorst":-0.15847,
+              "ratingDouble":0.0,
+              "price":2.2,
+              "spread":14.2226
             },
-            "Ytd": {
-              "zSpread": -10.0926,
-              "gSpread": -25.3688,
-              "yieldWorst": -0.27388,
-              "ratingDouble": 0,
-              "price": 0.036,
-              "spread": -15.1069
+            "Ytd":{
+              "zSpread":6.615,
+              "gSpread":0.773,
+              "yieldWorst":-0.53034,
+              "ratingDouble":0.0,
+              "price":7.322,
+              "spread":2.6061
             },
-            "Yoy": {
-              "zSpread": -40.5029,
-              "gSpread": -48.3203,
-              "yieldWorst": -1.44435,
-              "ratingDouble": -0.33,
-              "price": 0.914,
-              "spread": -40.5507
+            "Yoy":{
+              "zSpread":13.153,
+              "gSpread":6.7718,
+              "yieldWorst":-1.24474,
+              "ratingDouble":0.0,
+              "price":16.085,
+              "spread":-6.8801
             }
           },
-          "firmPosition": {
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": null,
-              "user": null,
-              "value": 60
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "AGB",
+                "CIP",
+                "DOF",
+                "SOF",
+                "STIP"
+              ],
+              "StrategyName":[
+                "LTOV - Spread"
+              ]
             },
-            "primaryPmName": "SP",
-            "backupPmName": "DA",
-            "researchName": "LP",
-            "owners": [
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":"2020-02-25T16:07:12.149",
+              "user":"IL",
+              "value":295.0
+            },
+            "primaryPmName":"IL",
+            "backupPmName":"DM",
+            "researchName":"AG",
+            "owners":[
+              "IL",
+              "DM",
+              "AG"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"146",
+            "quantity":29491000.0,
+            "cs01Cad":57987.057325967,
+            "cs01Local":57987.057325967
+          },
+          "securityType":"Bond",
+          "maturityType":"Bullet"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"RWPC",
+            "bidTime":"2020-02-25T08:07:31",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"JPM",
+            "askTime":"2020-02-25T08:05:15",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":135.875,
+            "askQuantity":0,
+            "askQuoteValue":135.74099731445312,
+            "globalIdentifier":"US62912XAC83"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"RWPC",
+            "bidTime":"2020-02-25T08:07:31",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"JPM",
+            "askTime":"2020-02-25T08:05:15",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":291.94000244140625,
+            "askQuantity":0,
+            "askQuoteValue":293.0,
+            "globalIdentifier":"US62912XAC83"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"RWPC",
+            "bidTime":"2020-02-25T08:07:31",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"JPM",
+            "askTime":"2020-02-25T08:05:15",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":4.734000205993652,
+            "askQuantity":0,
+            "askQuoteValue":4.765999794006348,
+            "globalIdentifier":"US62912XAC83"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"AGB",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"146",
+            "quantity":310000.0,
+            "cs01Cad":609.54147947,
+            "cs01Local":609.54147947
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"CIP",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"146",
+            "quantity":1762000.0,
+            "cs01Cad":3464.555118794,
+            "cs01Local":3464.555118794
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"146",
+            "quantity":11071000.0,
+            "cs01Cad":21768.495868427,
+            "cs01Local":21768.495868427
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"SOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"146",
+            "quantity":10442000.0,
+            "cs01Cad":20531.716543954,
+            "cs01Local":20531.716543954
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"STIP",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"146",
+            "quantity":5906000.0,
+            "cs01Cad":11612.748315322,
+            "cs01Local":11612.748315322
+          }
+        ]
+      },
+      "148":{
+        "securityIdentifier":"148",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"148",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Real Estate",
+          "name":"HRUCN 2.923 05/06/2022 Bullet CAD L SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA403925AW02",
+          "obligorName":"H&R REAL ESTATE INVESTMENT TRUST",
+          "obligorId":951,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Real Estate",
+          "securitySubType":"Bond",
+          "subIndustry":"REITS-Diversified",
+          "ticker":"HRUCN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":true,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"1840",
+            "benchmarkName":"CAN 1.0 09/01/2022 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":79.8,
+            "yieldWorst":2.108124,
+            "amtOutstanding":325000000.0,
+            "marketValue":333515744.0,
+            "workoutTerm":2.1973,
+            "ratingDouble":16.0,
+            "isRated":true,
+            "rating":"BBB+",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":101.739325,
+            "spread":79.2312,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":-2.82,
+              "yieldWorst":-0.107685,
+              "ratingDouble":0.0,
+              "price":0.226842,
+              "spread":-3.4129
+            },
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":-3.22,
+              "yieldWorst":-0.187558,
+              "ratingDouble":0.0,
+              "price":0.38802,
+              "spread":-4.2171
+            },
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":-7.5,
+              "yieldWorst":-0.171969,
+              "ratingDouble":0.0,
+              "price":0.330733,
+              "spread":-8.8477
+            },
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":12.41,
+              "yieldWorst":-0.169591,
+              "ratingDouble":0.0,
+              "price":0.313717,
+              "spread":-2.3363
+            },
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":-9.01,
+              "yieldWorst":-0.463054,
+              "ratingDouble":0.0,
+              "price":0.944287,
+              "spread":-9.5627
+            },
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":-63.44,
+              "yieldWorst":-1.112382,
+              "ratingDouble":0.0,
+              "price":2.640204,
+              "spread":-65.1584
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF"
+              ],
+              "StrategyName":[
+                "Short Carry"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":null,
+              "user":null,
+              "value":74.0
+            },
+            "primaryPmName":"IL",
+            "backupPmName":"ST",
+            "researchName":"PD",
+            "owners":[
+              "IL",
+              "ST",
+              "PD"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"148",
+            "quantity":10185000.0,
+            "cs01Cad":2196.43071417,
+            "cs01Local":2196.43071417
+          },
+          "securityType":"Bond",
+          "maturityType":"Bullet"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"TD",
+            "bidTime":"2020-02-25T07:50:47",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"BMO",
+            "askTime":"2020-02-25T08:48:48",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":101.75700378417969,
+            "askQuantity":0,
+            "askQuoteValue":101.83899688720703,
+            "globalIdentifier":"CA403925AW02"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"TD",
+            "bidTime":"2020-02-25T07:50:47",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"BMO",
+            "askTime":"2020-02-25T08:48:48",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":75.0,
+            "askQuantity":0,
+            "askQuoteValue":73.0,
+            "globalIdentifier":"CA403925AW02"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"TD",
+            "bidTime":"2020-02-25T07:50:47",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"BMO",
+            "askTime":"2020-02-25T08:48:48",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.0969998836517334,
+            "askQuantity":0,
+            "askQuoteValue":2.0589599609375,
+            "globalIdentifier":"CA403925AW02"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"148",
+            "quantity":10185000.0,
+            "cs01Cad":2196.43071417,
+            "cs01Local":2196.43071417
+          }
+        ]
+      },
+      "160":{
+        "securityIdentifier":"160",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"160",
+          "ccy":"USD",
+          "country":"GB",
+          "industry":"Banks",
+          "name":"SANUK 5.0 11/07/2023 Bullet USD SUBORDINATED UNSECURED",
+          "genericSeniority":"SUB",
+          "globalIdentifier":"US80283LAA17",
+          "obligorName":"SANTANDER UK PLC",
+          "obligorId":34,
+          "paymentRank":"SUBORDINATED",
+          "sector":"Financials",
+          "securitySubType":"Bond",
+          "subIndustry":"Commer Banks Non-US",
+          "ticker":"SANUK",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"66303",
+            "benchmarkName":"T 1.375 02/15/2023 USD",
+            "underlyingSecurityId":-1,
+            "zSpread":117.199,
+            "gSpread":119.0573,
+            "yieldWorst":2.37781,
+            "amtOutstanding":1500000000.0,
+            "marketValue":1638375000.0,
+            "workoutTerm":3.7041,
+            "ratingDouble":14.0,
+            "isRated":true,
+            "rating":"BBB-",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":109.225,
+            "spread":117.0649,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":4.376,
+              "gSpread":5.6596,
+              "yieldWorst":-0.04831,
+              "ratingDouble":0.0,
+              "price":0.173,
+              "spread":6.2135
+            },
+            "Wow":{
+              "zSpread":7.715,
+              "gSpread":7.885,
+              "yieldWorst":-0.11786,
+              "ratingDouble":0.0,
+              "price":0.392,
+              "spread":8.1685
+            },
+            "Mtd":{
+              "zSpread":-3.222,
+              "gSpread":-5.1704,
+              "yieldWorst":-0.15013,
+              "ratingDouble":0.0,
+              "price":0.419,
+              "spread":-5.8137
+            },
+            "Mom":{
+              "zSpread":-1.354,
+              "gSpread":-2.287,
+              "yieldWorst":-0.30426,
+              "ratingDouble":0.0,
+              "price":0.96,
+              "spread":-2.9406
+            },
+            "Ytd":{
+              "zSpread":-4.357,
+              "gSpread":-6.8812,
+              "yieldWorst":-0.52317,
+              "ratingDouble":0.0,
+              "price":1.645,
+              "spread":-3.6447
+            },
+            "Yoy":{
+              "zSpread":-120.33,
+              "gSpread":-124.6827,
+              "yieldWorst":-2.52379,
+              "ratingDouble":-1.67,
+              "price":8.824,
+              "spread":-125.9923
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "AGB",
+                "BBB",
+                "CIP",
+                "DOF",
+                "STIP"
+              ],
+              "StrategyName":[
+                "LTOV - Spread"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":null,
+              "user":null,
+              "value":90.0
+            },
+            "primaryPmName":"DM",
+            "backupPmName":"RS",
+            "researchName":"LP",
+            "owners":[
+              "DM",
+              "RS",
+              "LP"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"160",
+            "quantity":89559000.0,
+            "cs01Cad":44726.317626824995,
+            "cs01Local":44726.317626824995
+          },
+          "securityType":"Bond",
+          "maturityType":"Bullet"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"JEFF",
+            "bidTime":"2020-02-25T08:17:32",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"HSBC",
+            "askTime":"2020-02-25T08:43:21",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":109.83999633789062,
+            "askQuantity":0,
+            "askQuoteValue":109.52999877929688,
+            "globalIdentifier":"US80283LAA17"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"JEFF",
+            "bidTime":"2020-02-25T08:17:32",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"HSBC",
+            "askTime":"2020-02-25T08:43:21",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":100.0,
+            "askQuantity":0,
+            "askQuoteValue":110.0,
+            "globalIdentifier":"US80283LAA17"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"JEFF",
+            "bidTime":"2020-02-25T08:17:32",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"HSBC",
+            "askTime":"2020-02-25T08:43:21",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.2106800079345703,
+            "askQuantity":0,
+            "askQuoteValue":2.298640012741089,
+            "globalIdentifier":"US80283LAA17"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"AGB",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"160",
+            "quantity":4000000.0,
+            "cs01Cad":1997.6247,
+            "cs01Local":1997.6247
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"BBB",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"160",
+            "quantity":3000000.0,
+            "cs01Cad":1498.218525,
+            "cs01Local":1498.218525
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"CIP",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"160",
+            "quantity":5220000.0,
+            "cs01Cad":2606.9002335,
+            "cs01Local":2606.9002335
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"160",
+            "quantity":37640000.0,
+            "cs01Cad":18797.648427,
+            "cs01Local":18797.648427
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"STIP",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"160",
+            "quantity":39699000.0,
+            "cs01Cad":19825.925741324998,
+            "cs01Local":19825.925741324998
+          }
+        ]
+      },
+      "174":{
+        "securityIdentifier":"174",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":true,
+          "securityIdentifier":"174",
+          "ccy":"USD",
+          "country":"ES",
+          "industry":"Diversified Banks",
+          "name":"SANTAN 3.5 04/11/2022 Bullet USD SENIOR_UNSECURED",
+          "genericSeniority":"SLA",
+          "globalIdentifier":"US05964HAC97",
+          "obligorName":"BANCO SANTANDER SA",
+          "obligorId":686,
+          "paymentRank":"SR NON PREFERRED",
+          "sector":"Financials",
+          "securitySubType":"Bond",
+          "subIndustry":"Diversified Banking Inst",
+          "ticker":"SANTAN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"65014",
+            "benchmarkName":"T 1.375 01/31/2022 USD",
+            "underlyingSecurityId":-1,
+            "zSpread":74.8254,
+            "gSpread":76.716,
+            "yieldWorst":2.01088,
+            "amtOutstanding":1000000000.0,
+            "marketValue":1030810000.0,
+            "workoutTerm":2.1288,
+            "ratingDouble":17.0,
+            "isRated":true,
+            "rating":"A-",
+            "ratingNoNotch":"A",
+            "ratingBucket":"IG",
+            "price":103.081,
+            "spread":75.92059999999995,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":4.5856,
+              "gSpread":6.6084,
+              "yieldWorst":-0.04001,
+              "ratingDouble":0.0,
+              "price":0.081,
+              "spread":6.4184
+            },
+            "Wow":{
+              "zSpread":12.0619,
+              "gSpread":13.1022,
+              "yieldWorst":-0.0545,
+              "ratingDouble":0.0,
+              "price":0.089,
+              "spread":13.0742
+            },
+            "Mtd":{
+              "zSpread":6.8081,
+              "gSpread":2.442,
+              "yieldWorst":-0.0452,
+              "ratingDouble":0.0,
+              "price":0.012,
+              "spread":3.3516
+            },
+            "Mom":{
+              "zSpread":9.4534,
+              "gSpread":8.2451,
+              "yieldWorst":-0.17351,
+              "ratingDouble":0.0,
+              "price":0.269,
+              "spread":7.5866
+            },
+            "Ytd":{
+              "zSpread":12.9912,
+              "gSpread":5.4221,
+              "yieldWorst":-0.28086,
+              "ratingDouble":0.0,
+              "price":0.423,
+              "spread":7.8872
+            },
+            "Yoy":{
+              "zSpread":-33.2436,
+              "gSpread":-39.084,
+              "yieldWorst":-1.60432,
+              "ratingDouble":0.0,
+              "price":3.4215,
+              "spread":0.0
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF"
+              ],
+              "StrategyName":[
+                "Short Carry"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":"2020-02-25T15:49:54.335",
+              "user":"DM",
+              "value":73.0
+            },
+            "primaryPmName":"DM",
+            "backupPmName":"RS",
+            "researchName":"LP",
+            "owners":[
+              "DM",
+              "RS",
+              "LP"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"174",
+            "quantity":42800000.0,
+            "cs01Cad":12038.2517392,
+            "cs01Local":12038.2517392
+          },
+          "securityType":"Bond",
+          "maturityType":"Bullet"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"GS",
+            "bidTime":"2020-02-25T06:43:41",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"BAML",
+            "askTime":"2020-02-25T07:35:40",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":103.0979995727539,
+            "askQuantity":0,
+            "askQuoteValue":103.11299896240234,
+            "globalIdentifier":"US05964HAC97"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"RBSM",
+            "bidTime":"2020-02-25T03:02:58",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"BAML",
+            "askTime":"2020-02-25T07:35:40",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":72.0,
+            "askQuantity":0,
+            "askQuoteValue":74.0,
+            "globalIdentifier":"US05964HAC97"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"GS",
+            "bidTime":"2020-02-25T06:43:41",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"BAML",
+            "askTime":"2020-02-25T07:35:40",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.000999927520752,
+            "askQuantity":0,
+            "askQuoteValue":1.9900000095367432,
+            "globalIdentifier":"US05964HAC97"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"174",
+            "quantity":42800000.0,
+            "cs01Cad":12038.2517392,
+            "cs01Local":12038.2517392
+          }
+        ]
+      },
+      "181":{
+        "securityIdentifier":"181",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"181",
+          "ccy":"USD",
+          "country":"US",
+          "industry":"Pharmaceuticals",
+          "name":"PRGO 4.9 12/15/2044 Callable USD SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"US714295AA08",
+          "obligorName":"PERRIGO CO PLC",
+          "obligorId":940,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Health Care",
+          "securitySubType":"Bond",
+          "subIndustry":"Medical-Generic Drugs",
+          "ticker":"PRGO",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"63089",
+            "benchmarkName":"T 2.375 11/15/2049 USD",
+            "underlyingSecurityId":-1,
+            "zSpread":324.016,
+            "gSpread":297.621,
+            "yieldWorst":4.68352,
+            "amtOutstanding":303873000.0,
+            "marketValue":313338644.0,
+            "workoutTerm":24.8247,
+            "ratingDouble":14.0,
+            "isRated":true,
+            "rating":"BBB-",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":103.115,
+            "spread":285.10929999999996,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":5.256,
+              "gSpread":5.2645,
+              "yieldWorst":-0.0284,
+              "ratingDouble":0.0,
+              "price":0.417,
+              "spread":5.1495
+            },
+            "Wow":{
+              "zSpread":12.923,
+              "gSpread":9.0935,
+              "yieldWorst":-0.11635,
+              "ratingDouble":0.0,
+              "price":1.694,
+              "spread":9.0413
+            },
+            "Mtd":{
+              "zSpread":-4.02,
+              "gSpread":-7.7565,
+              "yieldWorst":-0.24421,
+              "ratingDouble":0.0,
+              "price":3.5158,
+              "spread":-7.5594
+            },
+            "Mom":{
+              "zSpread":5.821,
+              "gSpread":2.3346,
+              "yieldWorst":-0.29052,
+              "ratingDouble":0.0,
+              "price":4.1707,
+              "spread":0.9702
+            },
+            "Ytd":{
+              "zSpread":-21.468,
+              "gSpread":-27.3956,
+              "yieldWorst":-0.82274,
+              "ratingDouble":0.0,
+              "price":11.2889,
+              "spread":-26.6335
+            },
+            "Yoy":{
+              "zSpread":-48.202,
+              "gSpread":-59.189,
+              "yieldWorst":-1.84598,
+              "ratingDouble":0.0,
+              "price":23.3252,
+              "spread":-66.9556
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "AGB",
+                "BBB",
+                "CIP",
+                "SOF",
+                "STIP"
+              ],
+              "StrategyName":[
+                "LTOV - Spread"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":"2020-02-25T16:47:50.494",
+              "user":"DM",
+              "value":285.0
+            },
+            "primaryPmName":"DM",
+            "backupPmName":"SP",
+            "researchName":"AG",
+            "owners":[
+              "DM",
               "SP",
+              "AG"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"181",
+            "quantity":25659000.0,
+            "cs01Cad":51467.551711028995,
+            "cs01Local":51467.551711028995
+          },
+          "securityType":"Bond",
+          "maturityType":"Callable"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":null,
+            "bidDealer":null,
+            "bidTime":null,
+            "bidVenue":null,
+            "bidIsOld":false,
+            "askQuoteType":"Axe",
+            "askDealer":"CS",
+            "askTime":"2020-02-25T08:33:37",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":null,
+            "bidQuoteValue":null,
+            "askQuantity":0,
+            "askQuoteValue":110.0199966430664,
+            "globalIdentifier":"US714295AA08"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":null,
+            "bidDealer":null,
+            "bidTime":null,
+            "bidVenue":null,
+            "bidIsOld":false,
+            "askQuoteType":"Axe",
+            "askDealer":"CS",
+            "askTime":"2020-02-25T08:33:37",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":null,
+            "bidQuoteValue":null,
+            "askQuantity":0,
+            "askQuoteValue":240.0,
+            "globalIdentifier":"US714295AA08"
+          },
+          "bestYieldQuote":null
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"AGB",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"181",
+            "quantity":1429000.0,
+            "cs01Cad":2866.328827899,
+            "cs01Local":2866.328827899
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"BBB",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"181",
+            "quantity":1553000.0,
+            "cs01Cad":3115.0515533430003,
+            "cs01Local":3115.0515533430003
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"CIP",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"181",
+            "quantity":3821000.0,
+            "cs01Cad":7664.270434851,
+            "cs01Local":7664.270434851
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"SOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"181",
+            "quantity":3354000.0,
+            "cs01Cad":6727.5485575739995,
+            "cs01Local":6727.5485575739995
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"STIP",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"181",
+            "quantity":15502000.0,
+            "cs01Cad":31094.352337362,
+            "cs01Local":31094.352337362
+          }
+        ]
+      },
+      "184":{
+        "securityIdentifier":"184",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"184",
+          "ccy":"USD",
+          "country":"US",
+          "industry":"Banks",
+          "name":"BKU 4.875 11/17/2025 Callable USD SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"US06652KAA16",
+          "obligorName":"BANKUNITED INC",
+          "obligorId":963,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Financials",
+          "securitySubType":"Bond",
+          "subIndustry":"Commer Banks-Southern US",
+          "ticker":"BKU",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":true,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"65015",
+            "benchmarkName":"T 1.375 01/31/2025 USD",
+            "underlyingSecurityId":-1,
+            "zSpread":118.986,
+            "gSpread":116.9539,
+            "yieldWorst":2.39992,
+            "amtOutstanding":400000000.0,
+            "marketValue":450508000.0,
+            "workoutTerm":5.4822,
+            "ratingDouble":14.5,
+            "isRated":true,
+            "rating":"BBB-",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":112.627,
+            "spread":118.80439999999999,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.103,
+              "gSpread":1.3079,
+              "yieldWorst":-0.09372,
+              "ratingDouble":0.0,
+              "price":0.505,
+              "spread":1.458
+            },
+            "Wow":{
+              "zSpread":3.909,
+              "gSpread":4.2188,
+              "yieldWorst":-0.16738,
+              "ratingDouble":0.0,
+              "price":0.872,
+              "spread":4.1773
+            },
+            "Mtd":{
+              "zSpread":-7.728,
+              "gSpread":-9.4258,
+              "yieldWorst":-0.20311,
+              "ratingDouble":0.0,
+              "price":0.984,
+              "spread":-9.9051
+            },
+            "Mom":{
+              "zSpread":0.41,
+              "gSpread":0.0625,
+              "yieldWorst":-0.30336,
+              "ratingDouble":0.0,
+              "price":1.499,
+              "spread":-0.7594
+            },
+            "Ytd":{
+              "zSpread":-14.963,
+              "gSpread":-17.7139,
+              "yieldWorst":-0.67935,
+              "ratingDouble":0.0,
+              "price":3.421,
+              "spread":-19.8583
+            },
+            "Yoy":{
+              "zSpread":-69.005,
+              "gSpread":-73.8061,
+              "yieldWorst":-2.03919,
+              "ratingDouble":0.0,
+              "price":10.199,
+              "spread":-78.0038
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF",
+                "SOF",
+                "STIP"
+              ],
+              "StrategyName":[
+                "LTOV - Spread"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":null,
+              "user":null,
+              "value":113.0
+            },
+            "primaryPmName":"DM",
+            "backupPmName":"DA",
+            "researchName":"LP",
+            "owners":[
+              "DM",
               "DA",
               "LP"
             ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "TD DOF PB",
-                "CIBC DOF PB"
-              ],
-              "AttributionOwner": [
-                "Short Carry"
-              ],
-              "PortfolioShortName": [
-                "DOF"
-              ],
-              "StrategyName": [
-                "Short Carry"
-              ]
-            },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "1870",
-            "quantity": 27634000,
-            "cs01Cad": 2742.762293218,
-            "cs01Local": 2742.762293218
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"184",
+            "quantity":45525000.0,
+            "cs01Cad":33563.612178,
+            "cs01Local":33563.612178
           },
-          "securityType": "Bond"
+          "securityType":"Bond",
+          "maturityType":"Callable"
         },
-        "bestQuotes": {
-          "bestPriceQuote": {
-            "isValid": true,
-            "quoteMetric": "Price",
-            "bidQuoteType": "Axe",
-            "bidDealer": "UBS",
-            "bidTime": "2020-02-18T07:41:51",
-            "bidVenue": "MSG1",
-            "bidIsOld": true,
-            "askQuoteType": "Run",
-            "askDealer": "GS",
-            "askTime": "2020-02-18T08:19:28",
-            "askVenue": "MSG1",
-            "askIsOld": true,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": null,
-            "totalSkew": null,
-            "bidQuantity": null,
-            "bidQuoteValue": 101.16999816894531,
-            "askQuantity": null,
-            "askQuoteValue": 101.13999938964844,
-            "globalIdentifier": "US320517AB13"
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Axe",
+            "bidDealer":"SEAP",
+            "bidTime":"2020-02-25T08:25:02",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"FTNF",
+            "askTime":"2020-02-25T08:34:18",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":112.32099914550781,
+            "askQuantity":0,
+            "askQuoteValue":112.97699737548828,
+            "globalIdentifier":"US06652KAA16"
           },
-          "bestSpreadQuote": {
-            "isValid": true,
-            "quoteMetric": "Spread",
-            "bidQuoteType": "Axe",
-            "bidDealer": "JPM",
-            "bidTime": "2020-02-18T08:05:29",
-            "bidVenue": "MSG1",
-            "bidIsOld": true,
-            "askQuoteType": "Run",
-            "askDealer": "GS",
-            "askTime": "2020-02-18T08:19:28",
-            "askVenue": "MSG1",
-            "askIsOld": true,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": null,
-            "totalSkew": null,
-            "bidQuantity": 2000000,
-            "bidQuoteValue": 42,
-            "askQuantity": null,
-            "askQuoteValue": 47.31890106201172,
-            "globalIdentifier": "US320517AB13"
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Axe",
+            "bidDealer":"SEAP",
+            "bidTime":"2020-02-25T08:25:02",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"FTNF",
+            "askTime":"2020-02-25T08:34:18",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":125.0,
+            "askQuantity":0,
+            "askQuoteValue":113.0,
+            "globalIdentifier":"US06652KAA16"
           },
-          "bestYieldQuote": {
-            "isValid": true,
-            "quoteMetric": "Yield",
-            "bidQuoteType": "Axe",
-            "bidDealer": "UBS",
-            "bidTime": "2020-02-18T07:41:51",
-            "bidVenue": "MSG1",
-            "bidIsOld": true,
-            "askQuoteType": "Run",
-            "askDealer": "GS",
-            "askTime": "2020-02-18T08:19:28",
-            "askVenue": "MSG1",
-            "askIsOld": true,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": null,
-            "totalSkew": null,
-            "bidQuantity": null,
-            "bidQuoteValue": 1.897320032119751,
-            "askQuantity": null,
-            "askQuoteValue": 1.9375499486923218,
-            "globalIdentifier": "US320517AB13"
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Axe",
+            "bidDealer":"SEAP",
+            "bidTime":"2020-02-25T08:25:02",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"FTNF",
+            "askTime":"2020-02-25T08:34:18",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.4571399688720703,
+            "askQuantity":0,
+            "askQuoteValue":2.3361198902130127,
+            "globalIdentifier":"US06652KAA16"
           }
         },
-        "positions": [
+        "positions":[
           {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "1870",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "DOF",
-              "StrategyName": ""
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
             },
-            "quantity": 27634000,
-            "cs01Cad": 2742.762293218,
-            "cs01Local": 2742.762293218
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"184",
+            "quantity":16800000.0,
+            "cs01Cad":12385.912896,
+            "cs01Local":12385.912896
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"SOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"184",
+            "quantity":18045000.0,
+            "cs01Cad":13303.7975124,
+            "cs01Local":13303.7975124
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"STIP",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"184",
+            "quantity":10680000.0,
+            "cs01Cad":7873.9017696,
+            "cs01Local":7873.9017696
           }
         ]
       },
-      "5179": {
-        "securityIdentifier": "5179",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": false,
-          "securityIdentifier": "5179",
-          "ccy": "USD",
-          "country": "US",
-          "industry": "Life Insurance",
-          "name": "VOYA 5.65 05/15/2023 Callable USD SUBORDINATE",
-          "genericSeniority": "SUB",
-          "globalIdentifier": "US45685EAG17",
-          "obligorName": "VOYA FINANCIAL INC",
-          "obligorId": 1283,
-          "paymentRank": "JR SUBORDINATED",
-          "sector": "Financials",
-          "securitySubType": "Bond",
-          "subIndustry": "Multi-line Insurance",
-          "ticker": "VOYA",
-          "metrics": {
-            "isFixedForLife": false,
-            "isFixedToFloatInFixed": true,
-            "isFloat": false,
-            "isOnTheRun": true,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "64723",
-            "benchmarkName": "T 1.5 01/15/2023 USD",
-            "underlyingSecurityId": -1,
-            "zSpread": 180.799,
-            "gSpread": 182.2812,
-            "yieldWorst": 3.21149,
-            "amtOutstanding": 749250000,
-            "marketValue": 804986708,
-            "workoutTerm": 3.2493,
-            "ratingDouble": 14,
-            "isRated": true,
-            "rating": "BBB-",
-            "ratingNoNotch": "BBB",
-            "ratingBucket": "IG",
-            "price": 107.439,
-            "spread": 180.37290000000002,
-            "isIndex": true
+      "205":{
+        "securityIdentifier":"205",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"205",
+          "ccy":"CAD",
+          "country":"US",
+          "industry":"Automobiles Manufacturing",
+          "name":"F 2.71 02/23/2022 Bullet CAD SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA34527ABT66",
+          "obligorName":"FORD MOTOR CREDIT CO LLC",
+          "obligorId":938,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Auto",
+          "securitySubType":"Bond",
+          "subIndustry":"Auto-Cars/Light Trucks",
+          "ticker":"F",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"1840",
+            "benchmarkName":"CAN 1.0 09/01/2022 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":157.39,
+            "yieldWorst":2.906777,
+            "amtOutstanding":750000000.0,
+            "marketValue":747211785.0,
+            "workoutTerm":2.0,
+            "ratingDouble":14.25,
+            "isRated":true,
+            "rating":"BBB-",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"Xover",
+            "price":99.620813,
+            "spread":159.0965,
+            "isIndex":true
           },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": 4.121,
-              "gSpread": 3.7008,
-              "yieldWorst": 0.01186,
-              "ratingDouble": 0,
-              "price": -0.044,
-              "spread": 3.4089
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":9.96,
+              "yieldWorst":0.023837,
+              "ratingDouble":0.0,
+              "price":-0.044455,
+              "spread":9.7393
             },
-            "Wow": {
-              "zSpread": -21.103,
-              "gSpread": -22.0089,
-              "yieldWorst": -0.21139,
-              "ratingDouble": 0,
-              "price": 0.628,
-              "spread": 0
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":10.21,
+              "yieldWorst":-0.048443,
+              "ratingDouble":0.0,
+              "price":0.099713,
+              "spread":9.6944
             },
-            "Mtd": {
-              "zSpread": -35.11,
-              "gSpread": -37.7991,
-              "yieldWorst": -0.27749,
-              "ratingDouble": 0,
-              "price": 0.801,
-              "spread": 0
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":19.38,
+              "yieldWorst":0.101694,
+              "ratingDouble":0.0,
+              "price":-0.188916,
+              "spread":18.5186
             },
-            "Mom": {
-              "zSpread": -6.459,
-              "gSpread": -8.1193,
-              "yieldWorst": -0.26834,
-              "ratingDouble": 0,
-              "price": 0.675,
-              "spread": 0
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":33.53,
+              "yieldWorst":0.059476,
+              "ratingDouble":0.0,
+              "price":-0.102307,
+              "spread":20.5704
             },
-            "Ytd": {
-              "zSpread": -19.19,
-              "gSpread": -22.5743,
-              "yieldWorst": -0.46179,
-              "ratingDouble": 0,
-              "price": 1.237,
-              "spread": 0
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":2.12,
+              "yieldWorst":-0.330387,
+              "ratingDouble":0.0,
+              "price":0.707847,
+              "spread":3.704
             },
-            "Yoy": {
-              "zSpread": -197.321,
-              "gSpread": -205.6788,
-              "yieldWorst": -3.13216,
-              "ratingDouble": 0,
-              "price": 10.0411,
-              "spread": 0
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":-115.77,
+              "yieldWorst":-1.610484,
+              "ratingDouble":-0.5,
+              "price":4.642802,
+              "spread":-114.0434
             }
           },
-          "firmPosition": {
-            "mark": {
-              "driver": "Price",
-              "enteredTime": null,
-              "user": null,
-              "value": 107.63
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "AGB",
+                "BBB",
+                "CIP"
+              ],
+              "StrategyName":[
+                "LTOV - Spread"
+              ]
             },
-            "primaryPmName": "IL",
-            "backupPmName": "PM",
-            "researchName": null,
-            "owners": [
-              "IL",
-              "PM"
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":null,
+              "user":null,
+              "value":150.0
+            },
+            "primaryPmName":"PM",
+            "backupPmName":"DJ",
+            "researchName":"LP",
+            "owners":[
+              "PM",
+              "DJ",
+              "LP"
             ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "NT AGB CUSTODY",
-                "TD BBB PB",
-                "TD DOF PB",
-                "TD SOF PB",
-                "NT STIP CUSTODY"
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"205",
+            "quantity":10000000.0,
+            "cs01Cad":1925.63132,
+            "cs01Local":1925.63132
+          },
+          "securityType":"Bond",
+          "maturityType":"Bullet"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"CIBC",
+            "bidTime":"2020-02-25T08:14:35",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"RBC",
+            "askTime":"2020-02-25T07:51:55",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":99.61219787597656,
+            "askQuantity":0,
+            "askQuoteValue":99.65619659423828,
+            "globalIdentifier":"CA34527ABT66"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"CIBC",
+            "bidTime":"2020-02-25T08:14:35",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"RBC",
+            "askTime":"2020-02-25T07:51:55",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":157.0,
+            "askQuantity":0,
+            "askQuoteValue":154.0,
+            "globalIdentifier":"CA34527ABT66"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"CIBC",
+            "bidTime":"2020-02-25T08:14:35",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"RBC",
+            "askTime":"2020-02-25T07:51:55",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.9119999408721924,
+            "askQuantity":0,
+            "askQuoteValue":2.8889999389648438,
+            "globalIdentifier":"CA34527ABT66"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"AGB",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"205",
+            "quantity":3000000.0,
+            "cs01Cad":577.689396,
+            "cs01Local":577.689396
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"BBB",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"205",
+            "quantity":3000000.0,
+            "cs01Cad":577.689396,
+            "cs01Local":577.689396
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"CIP",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"205",
+            "quantity":4000000.0,
+            "cs01Cad":770.2525280000001,
+            "cs01Local":770.2525280000001
+          }
+        ]
+      },
+      "207":{
+        "securityIdentifier":"207",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"207",
+          "ccy":"USD",
+          "country":"US",
+          "industry":"Banks",
+          "name":"SNV 5.75 12/15/2020 12/15/2025 USD @100 SUBORDINATE",
+          "genericSeniority":"SUB",
+          "globalIdentifier":"US87161CAK18",
+          "obligorName":"SYNOVUS FINANCIAL CORP",
+          "obligorId":968,
+          "paymentRank":"SUBORDINATED",
+          "sector":"Financials",
+          "securitySubType":"Bond",
+          "subIndustry":"Commer Banks-Southern US",
+          "ticker":"SNV",
+          "metrics":{
+            "isFixedForLife":false,
+            "isFixedToFloatInFixed":true,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"65014",
+            "benchmarkName":"T 1.375 01/31/2022 USD",
+            "underlyingSecurityId":-1,
+            "zSpread":92.8934,
+            "gSpread":101.912,
+            "yieldWorst":2.40326,
+            "amtOutstanding":250000000.0,
+            "marketValue":256602500.0,
+            "workoutTerm":0.8082,
+            "ratingDouble":13.0,
+            "isRated":true,
+            "rating":"BB+",
+            "ratingNoNotch":"BB",
+            "ratingBucket":"HY",
+            "price":102.641,
+            "spread":113.2697,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":-7.8616,
+              "gSpread":-5.4923,
+              "yieldWorst":-0.14297,
+              "ratingDouble":0.0,
+              "price":0.107,
+              "spread":-2.1119
+            },
+            "Wow":{
+              "zSpread":3.2954,
+              "gSpread":4.0512,
+              "yieldWorst":-0.08743,
+              "ratingDouble":0.0,
+              "price":0.009,
+              "spread":12.2653
+            },
+            "Mtd":{
+              "zSpread":-28.6866,
+              "gSpread":-30.0842,
+              "yieldWorst":-0.39118,
+              "ratingDouble":0.0,
+              "price":0.139,
+              "spread":-30.5393
+            },
+            "Mom":{
+              "zSpread":-14.2596,
+              "gSpread":-20.6356,
+              "yieldWorst":-0.35483,
+              "ratingDouble":0.0,
+              "price":0.059,
+              "spread":-9.1854
+            },
+            "Ytd":{
+              "zSpread":-26.8306,
+              "gSpread":-39.3518,
+              "yieldWorst":-0.56596,
+              "ratingDouble":0.0,
+              "price":0.057,
+              "spread":-24.9981
+            },
+            "Yoy":{
+              "zSpread":-143.2286,
+              "gSpread":-145.448,
+              "yieldWorst":-2.56318,
+              "ratingDouble":0.0,
+              "price":1.314,
+              "spread":-134.0489
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "CIP",
+                "DOF",
+                "SOF",
+                "STIP"
               ],
-              "AttributionOwner": [
-                "USD Term Risk"
+              "StrategyName":[
+                "Short Carry"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":null,
+              "user":null,
+              "value":105.0
+            },
+            "primaryPmName":"PM",
+            "backupPmName":"DJ",
+            "researchName":"LP",
+            "owners":[
+              "PM",
+              "DJ",
+              "LP"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"207",
+            "quantity":36509000.0,
+            "cs01Cad":3953.445190794,
+            "cs01Local":3953.445190794
+          },
+          "securityType":"Bond",
+          "maturityType":"Callable"
+        },
+        "bestQuotes":null,
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"CIP",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"207",
+            "quantity":5358000.0,
+            "cs01Cad":580.201028028,
+            "cs01Local":580.201028028
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"207",
+            "quantity":6371000.0,
+            "cs01Cad":689.8956232859999,
+            "cs01Local":689.8956232859999
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"SOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"207",
+            "quantity":14383000.0,
+            "cs01Cad":1557.489993678,
+            "cs01Local":1557.489993678
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"STIP",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"207",
+            "quantity":10397000.0,
+            "cs01Cad":1125.858545802,
+            "cs01Local":1125.858545802
+          }
+        ]
+      },
+      "218":{
+        "securityIdentifier":"218",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"218",
+          "ccy":"CAD",
+          "country":"US",
+          "industry":"Food & Beverage",
+          "name":"TAP 2.84 07/15/2023 Callable CAD MPLE SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CAU60901AF97",
+          "obligorName":"MOLSON COORS BREWING CO",
+          "obligorId":752,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Consumers",
+          "securitySubType":"Bond",
+          "subIndustry":"Brewery",
+          "ticker":"TAP",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":true,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"12",
+            "benchmarkName":"CAN 1.5 06/01/2023 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":94.85,
+            "yieldWorst":2.23914,
+            "amtOutstanding":500000000.0,
+            "marketValue":511080155.0,
+            "workoutTerm":3.3068,
+            "ratingDouble":14.0,
+            "isRated":true,
+            "rating":"BBB-",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":101.904798,
+            "spread":95.0,
+            "isIndex":false
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":0.09,
+              "yieldWorst":-0.074125,
+              "ratingDouble":0.0,
+              "price":0.233268,
+              "spread":0.0
+            },
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":-1.8,
+              "yieldWorst":-0.162945,
+              "ratingDouble":0.0,
+              "price":0.50955,
+              "spread":-2.0
+            },
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":-4.13,
+              "yieldWorst":-0.109569,
+              "ratingDouble":0.0,
+              "price":0.320061,
+              "spread":-4.0
+            },
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":-4.39,
+              "yieldWorst":-0.180686,
+              "ratingDouble":0.0,
+              "price":0.543528,
+              "spread":-4.0
+            },
+            "Ytd":null,
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":-1.154439,
+              "ratingDouble":0.0,
+              "price":4.144347,
+              "spread":-65.0
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "AGB",
+                "BBB",
+                "STIP"
               ],
-              "PortfolioShortName": [
+              "StrategyName":[
+                "LTOV - Spread"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":null,
+              "user":null,
+              "value":95.0
+            },
+            "primaryPmName":"IL",
+            "backupPmName":"ST",
+            "researchName":"PD",
+            "owners":[
+              "IL",
+              "ST",
+              "PD"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"218",
+            "quantity":26337000.0,
+            "cs01Cad":8503.499142684,
+            "cs01Local":8503.499142684
+          },
+          "securityType":"Bond",
+          "maturityType":"Callable"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"BNS",
+            "bidTime":"2020-02-25T07:13:40",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"BNS",
+            "askTime":"2020-02-25T07:13:40",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":101.67500305175781,
+            "askQuantity":0,
+            "askQuoteValue":101.83300018310547,
+            "globalIdentifier":"CAU60901AF97"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"TD",
+            "bidTime":"2020-02-25T07:41:06",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"BNS",
+            "askTime":"2020-02-25T07:13:40",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":100.0,
+            "askQuantity":0,
+            "askQuoteValue":98.0,
+            "globalIdentifier":"CAU60901AF97"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"BNS",
+            "bidTime":"2020-02-25T07:13:40",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"BNS",
+            "askTime":"2020-02-25T07:13:40",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.309570074081421,
+            "askQuantity":0,
+            "askQuoteValue":2.259999990463257,
+            "globalIdentifier":"CAU60901AF97"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"AGB",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"218",
+            "quantity":5440000.0,
+            "cs01Cad":1756.4276620800001,
+            "cs01Local":1756.4276620800001
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"BBB",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"218",
+            "quantity":7301000.0,
+            "cs01Cad":2357.293816332,
+            "cs01Local":2357.293816332
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"STIP",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"218",
+            "quantity":13596000.0,
+            "cs01Cad":4389.777664272,
+            "cs01Local":4389.777664272
+          }
+        ]
+      },
+      "267":{
+        "securityIdentifier":"267",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":true,
+          "securityIdentifier":"267",
+          "ccy":"USD",
+          "country":"CH",
+          "industry":"Financial Services",
+          "name":"CS 3.8 06/09/2023 Bullet USD SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"US225433AT80",
+          "obligorName":"CREDIT SUISSE GROUP AG",
+          "obligorId":219,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Financials",
+          "securitySubType":"Bond",
+          "subIndustry":"Diversified Banking Inst",
+          "ticker":"CS",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"66303",
+            "benchmarkName":"T 1.375 02/15/2023 USD",
+            "underlyingSecurityId":-1,
+            "zSpread":75.27,
+            "gSpread":76.9639,
+            "yieldWorst":1.96259,
+            "amtOutstanding":1995737000.0,
+            "marketValue":2111848979.0,
+            "workoutTerm":3.2904,
+            "ratingDouble":16.0,
+            "isRated":true,
+            "rating":"BBB+",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":105.818,
+            "spread":75.63480000000001,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":4.0717,
+              "gSpread":5.5581,
+              "yieldWorst":-0.05019,
+              "ratingDouble":0.0,
+              "price":0.16,
+              "spread":5.9879
+            },
+            "Wow":{
+              "zSpread":10.0832,
+              "gSpread":10.3126,
+              "yieldWorst":-0.09112,
+              "ratingDouble":0.0,
+              "price":0.267,
+              "spread":10.7547
+            },
+            "Mtd":{
+              "zSpread":2.1676,
+              "gSpread":-0.1199,
+              "yieldWorst":-0.09558,
+              "ratingDouble":0.0,
+              "price":0.214,
+              "spread":-0.3671
+            },
+            "Mom":{
+              "zSpread":4.1686,
+              "gSpread":3.0507,
+              "yieldWorst":-0.24436,
+              "ratingDouble":0.0,
+              "price":0.682,
+              "spread":3.0066
+            },
+            "Ytd":{
+              "zSpread":2.2036,
+              "gSpread":-0.8626,
+              "yieldWorst":-0.44286,
+              "ratingDouble":0.0,
+              "price":1.25,
+              "spread":0.0
+            },
+            "Yoy":{
+              "zSpread":-59.84,
+              "gSpread":-64.8161,
+              "yieldWorst":-1.91018,
+              "ratingDouble":0.0,
+              "price":6.1072,
+              "spread":0.0
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "AGB",
+                "DOF"
+              ],
+              "StrategyName":[
+                "Short Carry"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":"2020-02-25T20:45:57.522",
+              "user":"DM",
+              "value":75.0
+            },
+            "primaryPmName":"DM",
+            "backupPmName":"DA",
+            "researchName":"LP",
+            "owners":[
+              "DM",
+              "DA",
+              "LP"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"267",
+            "quantity":41545000.0,
+            "cs01Cad":18156.475287754998,
+            "cs01Local":18156.475287754998
+          },
+          "securityType":"Bond",
+          "maturityType":"Bullet"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"BSNT",
+            "bidTime":"2020-02-25T07:43:21",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"RBSM",
+            "askTime":"2020-02-25T03:02:58",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":105.9800033569336,
+            "askQuantity":0,
+            "askQuoteValue":105.80000305175781,
+            "globalIdentifier":"US225433AT80"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"BSNT",
+            "bidTime":"2020-02-25T07:43:21",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"GS",
+            "askTime":"2020-02-25T06:42:47",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":70.0,
+            "askQuantity":0,
+            "askQuoteValue":75.0,
+            "globalIdentifier":"US225433AT80"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"BSNT",
+            "bidTime":"2020-02-25T07:43:21",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"RBSM",
+            "askTime":"2020-02-25T03:02:58",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":1.9110000133514404,
+            "askQuantity":0,
+            "askQuoteValue":1.9664900302886963,
+            "globalIdentifier":"US225433AT80"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"AGB",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"267",
+            "quantity":2000000.0,
+            "cs01Cad":874.063078,
+            "cs01Local":874.063078
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"267",
+            "quantity":39545000.0,
+            "cs01Cad":17282.412209755,
+            "cs01Local":17282.412209755
+          }
+        ]
+      },
+      "268":{
+        "securityIdentifier":"268",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"268",
+          "ccy":"USD",
+          "country":"US",
+          "industry":"Consumer Finance",
+          "name":"NAVI 7.25 09/25/2023 Bullet USD SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"US63938CAE84",
+          "obligorName":"NAVIENT CORP",
+          "obligorId":551,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Financials",
+          "securitySubType":"Bond",
+          "subIndustry":"Finance-Consumer Loans",
+          "ticker":"NAVI",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"66303",
+            "benchmarkName":"T 1.375 02/15/2023 USD",
+            "underlyingSecurityId":-1,
+            "zSpread":276.738,
+            "gSpread":278.8364,
+            "yieldWorst":3.97637,
+            "amtOutstanding":500000000.0,
+            "marketValue":554105000.0,
+            "workoutTerm":3.5863,
+            "ratingDouble":10.0,
+            "isRated":true,
+            "rating":"B+",
+            "ratingNoNotch":"B",
+            "ratingBucket":"HY",
+            "price":110.821,
+            "spread":276.8409,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":22.27,
+              "gSpread":23.6268,
+              "yieldWorst":0.13123,
+              "ratingDouble":0.0,
+              "price":-0.471,
+              "spread":24.3341
+            },
+            "Wow":{
+              "zSpread":29.935,
+              "gSpread":30.1831,
+              "yieldWorst":0.1059,
+              "ratingDouble":0.0,
+              "price":-0.429,
+              "spread":30.7748
+            },
+            "Mtd":{
+              "zSpread":8.71,
+              "gSpread":6.683,
+              "yieldWorst":-0.03071,
+              "ratingDouble":0.0,
+              "price":-0.059,
+              "spread":6.1912
+            },
+            "Mom":{
+              "zSpread":42.035,
+              "gSpread":41.1135,
+              "yieldWorst":0.13158,
+              "ratingDouble":0.0,
+              "price":-0.69,
+              "spread":40.8621
+            },
+            "Ytd":{
+              "zSpread":93.277,
+              "gSpread":90.8725,
+              "yieldWorst":0.45922,
+              "ratingDouble":0.0,
+              "price":-2.107,
+              "spread":0.0
+            },
+            "Yoy":{
+              "zSpread":-108.534,
+              "gSpread":-112.9036,
+              "yieldWorst":-2.40225,
+              "ratingDouble":0.0,
+              "price":7.414,
+              "spread":0.0
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF",
+                "SOF"
+              ],
+              "StrategyName":[
+                "Short Carry"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":"2020-02-25T15:57:08.727",
+              "user":"PM",
+              "value":260.0
+            },
+            "primaryPmName":"PM",
+            "backupPmName":"DJ",
+            "researchName":"LP",
+            "owners":[
+              "PM",
+              "DJ",
+              "LP"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"268",
+            "quantity":47450000.0,
+            "cs01Cad":22374.42424425,
+            "cs01Local":22374.42424425
+          },
+          "securityType":"Bond",
+          "maturityType":"Bullet"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"MULT",
+            "bidTime":"2020-02-25T08:36:06",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"BARC",
+            "askTime":"2020-02-25T07:03:39",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":111.0,
+            "askQuantity":0,
+            "askQuoteValue":111.25,
+            "globalIdentifier":"US63938CAE84"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"CG",
+            "bidTime":"2020-02-25T07:34:04",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"BARC",
+            "askTime":"2020-02-25T07:03:39",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":270.94500732421875,
+            "askQuantity":0,
+            "askQuoteValue":264.9339904785156,
+            "globalIdentifier":"US63938CAE84"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"CG",
+            "bidTime":"2020-02-25T07:34:04",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"BARC",
+            "askTime":"2020-02-25T07:03:39",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":3.9230000972747803,
+            "askQuantity":0,
+            "askQuoteValue":3.8499999046325684,
+            "globalIdentifier":"US63938CAE84"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"268",
+            "quantity":4123000.0,
+            "cs01Cad":1944.1464943949998,
+            "cs01Local":1944.1464943949998
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"SOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"268",
+            "quantity":43327000.0,
+            "cs01Cad":20430.277749855,
+            "cs01Local":20430.277749855
+          }
+        ]
+      },
+      "286":{
+        "securityIdentifier":"286",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"286",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Real Estate",
+          "name":"FCRCN 4.323 07/31/2025 Bullet CAD SR UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA31943BBW96",
+          "obligorName":"FIRST CAPITAL REALTY INC",
+          "obligorId":980,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Real Estate",
+          "securitySubType":"Bond",
+          "subIndustry":"REITS-Shopping Centers",
+          "ticker":"FCRCN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":true,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"14",
+            "benchmarkName":"CAN 2.25 06/01/2025 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":144.65,
+            "yieldWorst":2.650234,
+            "amtOutstanding":300000000.0,
+            "marketValue":326090064.0,
+            "workoutTerm":5.4356,
+            "ratingDouble":14.33,
+            "isRated":true,
+            "rating":"BBB-",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":108.412436,
+            "spread":144.4465,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":2.08,
+              "yieldWorst":-0.063701,
+              "ratingDouble":0.0,
+              "price":0.323645,
+              "spread":2.0181
+            },
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":1.26,
+              "yieldWorst":-0.148843,
+              "ratingDouble":0.0,
+              "price":0.744965,
+              "spread":1.1163
+            },
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":-1.19,
+              "yieldWorst":-0.084425,
+              "ratingDouble":0.0,
+              "price":0.352627,
+              "spread":-1.4812
+            },
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":16.44,
+              "yieldWorst":-0.171944,
+              "ratingDouble":0.0,
+              "price":0.792184,
+              "spread":0.207
+            },
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":-11.66,
+              "yieldWorst":-0.593027,
+              "ratingDouble":0.0,
+              "price":2.940117,
+              "spread":-11.872
+            },
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":-32.75,
+              "yieldWorst":-0.960236,
+              "ratingDouble":-1.17,
+              "price":4.352794,
+              "spread":-33.2988
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "AGB",
+                "BBB",
+                "FIP"
+              ],
+              "StrategyName":[
+                "LTOV - Spread"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":null,
+              "user":null,
+              "value":138.0
+            },
+            "primaryPmName":"IL",
+            "backupPmName":"ST",
+            "researchName":"PD",
+            "owners":[
+              "IL",
+              "ST",
+              "PD"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"286",
+            "quantity":12946000.0,
+            "cs01Cad":6842.8885550079995,
+            "cs01Local":6842.8885550079995
+          },
+          "securityType":"Bond",
+          "maturityType":"Bullet"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"TD",
+            "bidTime":"2020-02-25T07:50:47",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T07:58:35",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":108.53700256347656,
+            "askQuantity":0,
+            "askQuoteValue":108.53900146484375,
+            "globalIdentifier":"CA31943BBW96"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"TD",
+            "bidTime":"2020-02-25T07:50:47",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T07:58:35",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":141.0,
+            "askQuantity":0,
+            "askQuoteValue":141.0,
+            "globalIdentifier":"CA31943BBW96"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"TD",
+            "bidTime":"2020-02-25T07:50:47",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T07:58:35",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.624229907989502,
+            "askQuantity":0,
+            "askQuoteValue":2.624769926071167,
+            "globalIdentifier":"CA31943BBW96"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"AGB",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"286",
+            "quantity":3000000.0,
+            "cs01Cad":1585.7149439999998,
+            "cs01Local":1585.7149439999998
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"BBB",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"286",
+            "quantity":4000000.0,
+            "cs01Cad":2114.286592,
+            "cs01Local":2114.286592
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"FIP",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"286",
+            "quantity":5946000.0,
+            "cs01Cad":3142.887019008,
+            "cs01Local":3142.887019008
+          }
+        ]
+      },
+      "328":{
+        "securityIdentifier":"328",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"328",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Supermarkets & Pharmacies",
+          "name":"MRUCN FRN 02/27/2020 Bullet CAD MTN SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA59162NAC35",
+          "obligorName":"METRO INC/CN",
+          "obligorId":987,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Consumers",
+          "securitySubType":"FRN",
+          "subIndustry":"Food-Retail",
+          "ticker":"MRUCN",
+          "metrics":{
+            "isFixedForLife":false,
+            "isFixedToFloatInFixed":false,
+            "isFloat":true,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":null,
+            "benchmarkName":null,
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":0.0,
+            "yieldWorst":2.388427,
+            "amtOutstanding":400000000.0,
+            "marketValue":402481864.0,
+            "workoutTerm":0.0082,
+            "ratingDouble":15.0,
+            "isRated":true,
+            "rating":"BBB",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":100.001124,
+            "spread":19.5,
+            "isIndex":false
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":-0.002828,
+              "ratingDouble":0.0,
+              "price":-0.001085,
+              "spread":0.0
+            },
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.133557,
+              "ratingDouble":0.0,
+              "price":-0.008582,
+              "spread":0.0
+            },
+            "Mtd":null,
+            "Mom":null,
+            "Ytd":null,
+            "Yoy":null
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF"
+              ],
+              "StrategyName":[
+                "Short Carry"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":null,
+              "user":null,
+              "value":19.5
+            },
+            "primaryPmName":"IL",
+            "backupPmName":"ST",
+            "researchName":"PD",
+            "owners":[
+              "IL",
+              "ST",
+              "PD"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"328",
+            "quantity":37500000.0,
+            "cs01Cad":30.646125,
+            "cs01Local":30.646125
+          },
+          "securityType":"Bond",
+          "maturityType":"Bullet"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"BMO",
+            "bidTime":"2020-02-25T08:49:45",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":null,
+            "askDealer":null,
+            "askTime":null,
+            "askVenue":null,
+            "askIsOld":false,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":100.0,
+            "askQuantity":null,
+            "askQuoteValue":null,
+            "globalIdentifier":"CA59162NAC35"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"MULT",
+            "bidTime":"2020-02-25T08:15:20",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T08:15:20",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":16.0,
+            "askQuantity":0,
+            "askQuoteValue":11.0,
+            "globalIdentifier":"CA59162NAC35"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"BMO",
+            "bidTime":"2020-02-25T08:49:45",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":null,
+            "askDealer":null,
+            "askTime":null,
+            "askVenue":null,
+            "askIsOld":false,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.524019956588745,
+            "askQuantity":null,
+            "askQuoteValue":null,
+            "globalIdentifier":"CA59162NAC35"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"328",
+            "quantity":37500000.0,
+            "cs01Cad":30.646125,
+            "cs01Local":30.646125
+          }
+        ]
+      },
+      "399":{
+        "securityIdentifier":"399",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"399",
+          "ccy":"CAD",
+          "country":"US",
+          "industry":"Automobiles Manufacturing",
+          "name":"F 2.45 05/07/2020 Bullet CAD SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA34527ABL31",
+          "obligorName":"FORD MOTOR CREDIT CO LLC",
+          "obligorId":938,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Auto",
+          "securitySubType":"Bond",
+          "subIndustry":"Auto-Cars/Light Trucks",
+          "ticker":"F",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"22055",
+            "benchmarkName":"CAN 1.75 08/01/2020 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":0.0,
+            "yieldWorst":0.0,
+            "amtOutstanding":700000000.0,
+            "marketValue":705432294.0,
+            "workoutTerm":0.2,
+            "ratingDouble":14.25,
+            "isRated":true,
+            "rating":"BBB-",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"Xover",
+            "price":0.0,
+            "spread":0.0,
+            "isIndex":false
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            },
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            },
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            },
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            },
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            },
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":-0.5,
+              "price":0.0,
+              "spread":0.0
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF"
+              ],
+              "StrategyName":[
+                "Short Carry"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":"2020-02-25T19:07:43.409",
+              "user":"ST",
+              "value":70.0
+            },
+            "primaryPmName":"PM",
+            "backupPmName":"DJ",
+            "researchName":"LP",
+            "owners":[
+              "PM",
+              "DJ",
+              "LP"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"399",
+            "quantity":85298000.0,
+            "cs01Cad":1675.707528936,
+            "cs01Local":1675.707528936
+          },
+          "securityType":"Bond",
+          "maturityType":"Bullet"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Axe",
+            "bidDealer":"BNS",
+            "bidTime":"2020-02-25T07:06:24",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"NBF",
+            "askTime":"2020-02-25T08:43:49",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":100.00199890136719,
+            "askQuantity":0,
+            "askQuoteValue":100.0199966430664,
+            "globalIdentifier":"CA34527ABL31"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"NBF",
+            "bidTime":"2020-02-25T08:43:49",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T08:14:35",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":69.0,
+            "askQuantity":0,
+            "askQuoteValue":78.0,
+            "globalIdentifier":"CA34527ABL31"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Axe",
+            "bidDealer":"BNS",
+            "bidTime":"2020-02-25T07:06:24",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"NBF",
+            "askTime":"2020-02-25T08:43:49",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.440000057220459,
+            "askQuantity":0,
+            "askQuoteValue":2.3427700996398926,
+            "globalIdentifier":"CA34527ABL31"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"399",
+            "quantity":85298000.0,
+            "cs01Cad":1675.707528936,
+            "cs01Local":1675.707528936
+          }
+        ]
+      },
+      "468":{
+        "securityIdentifier":"468",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"468",
+          "ccy":"USD",
+          "country":"US",
+          "industry":"Pharmaceuticals",
+          "name":"ENDP 6.0 07/15/2023 Callable USD 144A SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"US29273EAC21",
+          "obligorName":"ENDO DAC",
+          "obligorId":1005,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Health Care",
+          "securitySubType":"Bond",
+          "subIndustry":"Medical-Drugs",
+          "ticker":"ENDP",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":true,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"66303",
+            "benchmarkName":"T 1.375 02/15/2023 USD",
+            "underlyingSecurityId":-1,
+            "zSpread":1100.32,
+            "gSpread":1102.4201,
+            "yieldWorst":12.215,
+            "amtOutstanding":1439840000.0,
+            "marketValue":1197372384.0,
+            "workoutTerm":3.389,
+            "ratingDouble":7.0,
+            "isRated":true,
+            "rating":"CCC+",
+            "ratingNoNotch":"CCC",
+            "ratingBucket":"HY",
+            "price":83.1601,
+            "spread":1102.0587,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":-41.96,
+              "gSpread":-40.5142,
+              "yieldWorst":-0.5106,
+              "ratingDouble":0.0,
+              "price":1.2352,
+              "spread":-41.3974
+            },
+            "Wow":{
+              "zSpread":-63.69,
+              "gSpread":-63.454,
+              "yieldWorst":-0.8293,
+              "ratingDouble":0.0,
+              "price":2.0601,
+              "spread":-65.1153
+            },
+            "Mtd":{
+              "zSpread":-269.63,
+              "gSpread":-271.8097,
+              "yieldWorst":-2.8137,
+              "ratingDouble":0.0,
+              "price":6.7913,
+              "spread":-273.2686
+            },
+            "Mom":{
+              "zSpread":-126.02,
+              "gSpread":-127.0559,
+              "yieldWorst":-1.547,
+              "ratingDouble":0.0,
+              "price":3.9991,
+              "spread":-128.6516
+            },
+            "Ytd":{
+              "zSpread":-393.81,
+              "gSpread":-396.5933,
+              "yieldWorst":-4.4058,
+              "ratingDouble":0.0,
+              "price":10.7184,
+              "spread":-392.4839
+            },
+            "Yoy":{
+              "zSpread":204.29,
+              "gSpread":199.5001,
+              "yieldWorst":0.729,
+              "ratingDouble":0.0,
+              "price":1.6725,
+              "spread":0.0
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "SOF"
+              ],
+              "StrategyName":[
+                "LTOV - Yield"
+              ]
+            },
+            "mark":{
+              "driver":"Price",
+              "enteredTime":"2020-02-25T15:20:27.667",
+              "user":"PM",
+              "value":87.75
+            },
+            "primaryPmName":"DJ",
+            "backupPmName":"PM",
+            "researchName":"AG",
+            "owners":[
+              "DJ",
+              "PM",
+              "AG"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"468",
+            "quantity":3300000.0,
+            "cs01Cad":1124.1579459,
+            "cs01Local":1124.1579459
+          },
+          "securityType":"Bond",
+          "maturityType":"Callable"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Axe",
+            "bidDealer":"MULT",
+            "bidTime":"2020-02-25T08:50:58",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"BTIG",
+            "askTime":"2020-02-25T08:23:33",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":88.0,
+            "askQuantity":0,
+            "askQuoteValue":82.5,
+            "globalIdentifier":"US29273EAC21"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Axe",
+            "bidDealer":"CS",
+            "bidTime":"2020-02-25T08:16:39",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"BTIG",
+            "askTime":"2020-02-25T08:23:33",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":907.5910034179688,
+            "askQuantity":0,
+            "askQuoteValue":1129.0999755859375,
+            "globalIdentifier":"US29273EAC21"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Axe",
+            "bidDealer":"OPCO",
+            "bidTime":"2020-02-25T08:42:10",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"MZUH",
+            "askTime":"2020-02-25T07:54:09",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":10.279999732971191,
+            "askQuantity":0,
+            "askQuoteValue":11.470000267028809,
+            "globalIdentifier":"US29273EAC21"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"SOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"468",
+            "quantity":3300000.0,
+            "cs01Cad":1124.1579459,
+            "cs01Local":1124.1579459
+          }
+        ]
+      },
+      "643":{
+        "securityIdentifier":"643",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"643",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Power Generation",
+          "name":"TACN 7.3 10/22/2029 Bullet CAD MTN SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA89347ZAC10",
+          "obligorName":"TRANSALTA CORP",
+          "obligorId":755,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Energy",
+          "securitySubType":"Bond",
+          "subIndustry":"Electric-Generation",
+          "ticker":"TACN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":true,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"2",
+            "benchmarkName":"CAN 1.5 06/01/2026 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":0.0,
+            "yieldWorst":0.0,
+            "amtOutstanding":110000000.0,
+            "marketValue":129143958.0,
+            "workoutTerm":9.6658,
+            "ratingDouble":13.33,
+            "isRated":true,
+            "rating":"BB+",
+            "ratingNoNotch":"BB",
+            "ratingBucket":"Xover",
+            "price":0.0,
+            "spread":0.0,
+            "isIndex":false
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            },
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            },
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            },
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            },
+            "Ytd":null,
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":-0.42,
+              "price":0.0,
+              "spread":0.0
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF",
+                "SOF"
+              ],
+              "StrategyName":[
+                "LTOV - Spread"
+              ]
+            },
+            "mark":{
+              "driver":"Price",
+              "enteredTime":"2020-02-25T17:00:45.387",
+              "user":"PM",
+              "value":115.850997
+            },
+            "primaryPmName":"PM",
+            "backupPmName":"DJ",
+            "researchName":"PD",
+            "owners":[
+              "PM",
+              "DJ",
+              "PD"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"643",
+            "quantity":6500000.0,
+            "cs01Cad":5356.3226535,
+            "cs01Local":5356.3226535
+          },
+          "securityType":"Bond",
+          "maturityType":"Bullet"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"NBF",
+            "bidTime":"2020-02-25T08:48:33",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"NBF",
+            "askTime":"2020-02-25T08:48:33",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":113.84400177001953,
+            "askQuantity":0,
+            "askQuoteValue":115.47100067138672,
+            "globalIdentifier":"CA89347ZAC10"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"NBF",
+            "bidTime":"2020-02-25T08:48:33",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"NBF",
+            "askTime":"2020-02-25T08:48:33",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":420.0,
+            "askQuantity":0,
+            "askQuoteValue":400.0,
+            "globalIdentifier":"CA89347ZAC10"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"NBF",
+            "bidTime":"2020-02-25T08:48:33",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"NBF",
+            "askTime":"2020-02-25T08:48:33",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":5.437769889831543,
+            "askQuantity":0,
+            "askQuoteValue":5.236000061035156,
+            "globalIdentifier":"CA89347ZAC10"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"643",
+            "quantity":3250000.0,
+            "cs01Cad":2678.16132675,
+            "cs01Local":2678.16132675
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"SOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"643",
+            "quantity":3250000.0,
+            "cs01Cad":2678.16132675,
+            "cs01Local":2678.16132675
+          }
+        ]
+      },
+      "1030":{
+        "securityIdentifier":"1030",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"1030",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Software & Services",
+          "name":"TERANE 4.807 12/16/2020 Bullet CAD SENIOR_SECURED",
+          "genericSeniority":"SECURED",
+          "globalIdentifier":"CA880789AB84",
+          "obligorName":"TERANET HOLDINGS LP",
+          "obligorId":1139,
+          "paymentRank":"SECURED",
+          "sector":"Technology",
+          "securitySubType":"Bond",
+          "subIndustry":"Commercial Services",
+          "ticker":"TERANE",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"28",
+            "benchmarkName":"CAN 3.5 06/01/2020 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":0.0,
+            "yieldWorst":0.0,
+            "amtOutstanding":700000000.0,
+            "marketValue":721617211.0,
+            "workoutTerm":0.811,
+            "ratingDouble":15.0,
+            "isRated":true,
+            "rating":"BBB",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":0.0,
+            "spread":0.0,
+            "isIndex":false
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            },
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            },
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            },
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            },
+            "Ytd":null,
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF"
+              ],
+              "StrategyName":[
+                "Short Carry"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":null,
+              "user":null,
+              "value":48.0
+            },
+            "primaryPmName":"IL",
+            "backupPmName":"ST",
+            "researchName":"LC",
+            "owners":[
+              "IL",
+              "ST",
+              "LC"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1030",
+            "quantity":20000000.0,
+            "cs01Cad":1629.76904,
+            "cs01Local":1629.76904
+          },
+          "securityType":"Bond",
+          "maturityType":"Bullet"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Axe",
+            "bidDealer":"BNS",
+            "bidTime":"2020-02-25T07:06:24",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T08:44:50",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":102.15799713134766,
+            "askQuantity":0,
+            "askQuoteValue":102.1520004272461,
+            "globalIdentifier":"CA880789AB84"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Axe",
+            "bidDealer":"BMO",
+            "bidTime":"2020-02-25T08:10:01",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T08:44:50",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":51.0,
+            "askQuantity":0,
+            "askQuoteValue":52.0,
+            "globalIdentifier":"CA880789AB84"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Axe",
+            "bidDealer":"BNS",
+            "bidTime":"2020-02-25T07:06:24",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T08:44:50",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.0799999237060547,
+            "askQuantity":0,
+            "askQuoteValue":2.0970299243927,
+            "globalIdentifier":"CA880789AB84"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1030",
+            "quantity":20000000.0,
+            "cs01Cad":1629.76904,
+            "cs01Local":1629.76904
+          }
+        ]
+      },
+      "1119":{
+        "securityIdentifier":"1119",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"1119",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Real Estate",
+          "name":"FCRCN 4.5 03/01/2021 Bullet CAD SR UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA31943BBN97",
+          "obligorName":"FIRST CAPITAL REALTY INC",
+          "obligorId":980,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Real Estate",
+          "securitySubType":"Bond",
+          "subIndustry":"REITS-Shopping Centers",
+          "ticker":"FCRCN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"28454",
+            "benchmarkName":"CAN 1.5 08/01/2021 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":52.43,
+            "yieldWorst":2.103229,
+            "amtOutstanding":175000000.0,
+            "marketValue":182993064.0,
+            "workoutTerm":1.0164,
+            "ratingDouble":14.33,
+            "isRated":true,
+            "rating":"BBB-",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":102.397602,
+            "spread":69.4132,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":-3.94,
+              "yieldWorst":-0.057958,
+              "ratingDouble":0.0,
+              "price":0.04044,
+              "spread":0.9674
+            },
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":-8.99,
+              "yieldWorst":-0.138753,
+              "ratingDouble":0.0,
+              "price":0.081511,
+              "spread":0.3753
+            },
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":-8.5,
+              "yieldWorst":-0.07977,
+              "ratingDouble":0.0,
+              "price":-0.066018,
+              "spread":0.3918
+            },
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":-6.81,
+              "yieldWorst":-0.124073,
+              "ratingDouble":0.0,
+              "price":-0.060132,
+              "spread":0.4949
+            },
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":-18.41,
+              "yieldWorst":-0.328478,
+              "ratingDouble":0.0,
+              "price":0.033835,
+              "spread":-2.6163
+            },
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":-49.79,
+              "yieldWorst":-0.699771,
+              "ratingDouble":-1.17,
+              "price":-0.911015,
+              "spread":-34.0228
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF"
+              ],
+              "StrategyName":[
+                "Short Carry"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":null,
+              "user":null,
+              "value":60.0
+            },
+            "primaryPmName":"IL",
+            "backupPmName":"ST",
+            "researchName":"PD",
+            "owners":[
+              "IL",
+              "ST",
+              "PD"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1119",
+            "quantity":14200000.0,
+            "cs01Cad":1446.5106332,
+            "cs01Local":1446.5106332
+          },
+          "securityType":"Bond",
+          "maturityType":"Bullet"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"CIBC",
+            "bidTime":"2020-02-25T07:58:35",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"BNS",
+            "askTime":"2020-02-25T07:24:31",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":102.38800048828125,
+            "askQuantity":0,
+            "askQuoteValue":102.41100311279297,
+            "globalIdentifier":"CA31943BBN97"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"TD",
+            "bidTime":"2020-02-25T07:50:47",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T07:58:35",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":62.0,
+            "askQuantity":0,
+            "askQuoteValue":61.0,
+            "globalIdentifier":"CA31943BBN97"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"CIBC",
+            "bidTime":"2020-02-25T07:58:35",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"BNS",
+            "askTime":"2020-02-25T07:24:31",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.106260061264038,
+            "askQuantity":0,
+            "askQuoteValue":2.0836799144744873,
+            "globalIdentifier":"CA31943BBN97"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1119",
+            "quantity":14200000.0,
+            "cs01Cad":1446.5106332,
+            "cs01Local":1446.5106332
+          }
+        ]
+      },
+      "1161":{
+        "securityIdentifier":"1161",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"1161",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Real Estate",
+          "name":"BAMACN 4.54 03/31/2023 Bullet CAD MTN SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA11257ZAC38",
+          "obligorName":"BROOKFIELD ASSET MANAGEMENT INC",
+          "obligorId":135,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Real Estate",
+          "securitySubType":"Bond",
+          "subIndustry":"Real Estate Oper/Develop",
+          "ticker":"BAMACN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":true,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"22034",
+            "benchmarkName":"CAN 2.0 09/01/2023 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":75.96,
+            "yieldWorst":2.05595,
+            "amtOutstanding":543308370.0,
+            "marketValue":593543982.0,
+            "workoutTerm":3.0986,
+            "ratingDouble":16.67,
+            "isRated":true,
+            "rating":"A-",
+            "ratingNoNotch":"A",
+            "ratingBucket":"IG",
+            "price":107.417805,
+            "spread":78.3026,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":0.97,
+              "yieldWorst":-0.064216,
+              "ratingDouble":0.0,
+              "price":0.181683,
+              "spread":1.577
+            },
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":0.62,
+              "yieldWorst":-0.139084,
+              "ratingDouble":0.0,
+              "price":0.37355,
+              "spread":1.4754
+            },
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":-4.15,
+              "yieldWorst":-0.113746,
+              "ratingDouble":0.0,
+              "price":0.210307,
+              "spread":-4.5979
+            },
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":12.66,
+              "yieldWorst":-0.160142,
+              "ratingDouble":0.0,
+              "price":0.31631,
+              "spread":-0.9752
+            },
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":-7.88,
+              "yieldWorst":-0.468405,
+              "ratingDouble":0.0,
+              "price":1.172289,
+              "spread":-5.4564
+            },
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":-74.06,
+              "yieldWorst":-1.236425,
+              "ratingDouble":0.34,
+              "price":2.670266,
+              "spread":-71.7186
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF"
+              ],
+              "StrategyName":[
+                "Short Carry"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":null,
+              "user":null,
+              "value":70.0
+            },
+            "primaryPmName":"IL",
+            "backupPmName":"ST",
+            "researchName":"PD",
+            "owners":[
+              "IL",
+              "ST",
+              "PD"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1161",
+            "quantity":4000000.0,
+            "cs01Cad":1248.595212,
+            "cs01Local":1248.595212
+          },
+          "securityType":"Bond",
+          "maturityType":"Bullet"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"BMO",
+            "bidTime":"2020-02-25T08:48:48",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":null,
+            "askDealer":null,
+            "askTime":null,
+            "askVenue":null,
+            "askIsOld":false,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":107.34600067138672,
+            "askQuantity":null,
+            "askQuoteValue":null,
+            "globalIdentifier":"CA11257ZAC38"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"BMO",
+            "bidTime":"2020-02-25T08:48:48",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":null,
+            "askDealer":null,
+            "askTime":null,
+            "askVenue":null,
+            "askIsOld":false,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":78.0,
+            "askQuantity":null,
+            "askQuoteValue":null,
+            "globalIdentifier":"CA11257ZAC38"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"BMO",
+            "bidTime":"2020-02-25T08:48:48",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":null,
+            "askDealer":null,
+            "askTime":null,
+            "askVenue":null,
+            "askIsOld":false,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.075010061264038,
+            "askQuantity":null,
+            "askQuoteValue":null,
+            "globalIdentifier":"CA11257ZAC38"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1161",
+            "quantity":4000000.0,
+            "cs01Cad":1248.595212,
+            "cs01Local":1248.595212
+          }
+        ]
+      },
+      "1168":{
+        "securityIdentifier":"1168",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"1168",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Property & Casualty Insurance",
+          "name":"FFHCN 5.84 10/14/2022 Bullet CAD SR UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA303901AV45",
+          "obligorName":"FAIRFAX FINANCIAL HOLDINGS LTD",
+          "obligorId":977,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Financials",
+          "securitySubType":"Bond",
+          "subIndustry":"Reinsurance",
+          "ticker":"FFHCN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"1840",
+            "benchmarkName":"CAN 1.0 09/01/2022 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":94.67,
+            "yieldWorst":2.243112,
+            "amtOutstanding":367050000.0,
+            "marketValue":408466645.0,
+            "workoutTerm":2.6384,
+            "ratingDouble":14.67,
+            "isRated":true,
+            "rating":"BBB",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":109.155652,
+            "spread":92.73,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":1.78,
+              "yieldWorst":-0.059731,
+              "ratingDouble":0.0,
+              "price":0.133435,
+              "spread":1.3825
+            },
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":1.52,
+              "yieldWorst":-0.136361,
+              "ratingDouble":0.0,
+              "price":0.277969,
+              "spread":0.9026
+            },
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":1.2,
+              "yieldWorst":-0.075791,
+              "ratingDouble":0.0,
+              "price":-0.011609,
+              "spread":0.7701
+            },
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":18.66,
+              "yieldWorst":-0.110399,
+              "ratingDouble":0.0,
+              "price":0.021407,
+              "spread":3.5829
+            },
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":-2.1,
+              "yieldWorst":-0.408262,
+              "ratingDouble":0.0,
+              "price":0.648592,
+              "spread":-4.0835
+            },
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":-50.85,
+              "yieldWorst":-1.004045,
+              "ratingDouble":0.0,
+              "price":0.325933,
+              "spread":-52.7694
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF",
+                "FIP"
+              ],
+              "StrategyName":[
+                "Short Carry"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":"2020-02-25T18:26:26.825",
+              "user":"IL",
+              "value":92.0
+            },
+            "primaryPmName":"IL",
+            "backupPmName":"ST",
+            "researchName":"LP",
+            "owners":[
+              "IL",
+              "ST",
+              "LP"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1168",
+            "quantity":20263000.0,
+            "cs01Cad":5445.556288079,
+            "cs01Local":5445.556288079
+          },
+          "securityType":"Bond",
+          "maturityType":"Bullet"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"BNS",
+            "bidTime":"2020-02-25T08:16:42",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"BMO",
+            "askTime":"2020-02-25T08:10:48",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":109.02899932861328,
+            "askQuantity":0,
+            "askQuoteValue":108.95099639892578,
+            "globalIdentifier":"CA303901AV45"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"BNS",
+            "bidTime":"2020-02-25T08:16:42",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"NBF",
+            "askTime":"2020-02-25T08:00:00",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":95.0,
+            "askQuantity":0,
+            "askQuoteValue":92.0,
+            "globalIdentifier":"CA303901AV45"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"BNS",
+            "bidTime":"2020-02-25T08:16:42",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"BMO",
+            "askTime":"2020-02-25T08:10:48",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.286760091781616,
+            "askQuantity":0,
+            "askQuoteValue":2.312649965286255,
+            "globalIdentifier":"CA303901AV45"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1168",
+            "quantity":17875000.0,
+            "cs01Cad":4803.796014875,
+            "cs01Local":4803.796014875
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"FIP",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1168",
+            "quantity":2388000.0,
+            "cs01Cad":641.760273204,
+            "cs01Local":641.760273204
+          }
+        ]
+      },
+      "1173":{
+        "securityIdentifier":"1173",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"1173",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Supermarkets & Pharmacies",
+          "name":"ATDBCN 3.899 11/01/2022 Bullet CAD 3 SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA01626PAC01",
+          "obligorName":"ALIMENTATION COUCHE-TARD INC",
+          "obligorId":999,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Consumers",
+          "securitySubType":"Bond",
+          "subIndustry":"Retail-Convenience Store",
+          "ticker":"ATDBCN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":true,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"1840",
+            "benchmarkName":"CAN 1.0 09/01/2022 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":64.55,
+            "yieldWorst":1.942142,
+            "amtOutstanding":242000000.0,
+            "marketValue":257294431.0,
+            "workoutTerm":2.6877,
+            "ratingDouble":15.0,
+            "isRated":true,
+            "rating":"BBB",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":105.091561,
+            "spread":62.633,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":0.1,
+              "yieldWorst":-0.075911,
+              "ratingDouble":0.0,
+              "price":0.188924,
+              "spread":-0.2355
+            },
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":0.4,
+              "yieldWorst":-0.146442,
+              "ratingDouble":0.0,
+              "price":0.345476,
+              "spread":-0.1055
+            },
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":-0.75,
+              "yieldWorst":-0.093404,
+              "ratingDouble":0.0,
+              "price":0.134793,
+              "spread":-0.9912
+            },
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":14.42,
+              "yieldWorst":-0.151384,
+              "ratingDouble":0.0,
+              "price":0.260983,
+              "spread":-0.5156
+            },
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":-5.16,
+              "yieldWorst":-0.438906,
+              "ratingDouble":0.0,
+              "price":0.956253,
+              "spread":-7.1479
+            },
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":-54.63,
+              "yieldWorst":-1.041921,
+              "ratingDouble":0.0,
+              "price":1.92209,
+              "spread":-56.557
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF"
+              ],
+              "StrategyName":[
+                "Short Carry"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":"2020-02-25T18:29:10.042",
+              "user":"IL",
+              "value":63.0
+            },
+            "primaryPmName":"IL",
+            "backupPmName":"ST",
+            "researchName":"PD",
+            "owners":[
+              "IL",
+              "ST",
+              "PD"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1173",
+            "quantity":10000000.0,
+            "cs01Cad":2682.9601700000003,
+            "cs01Local":2682.9601700000003
+          },
+          "securityType":"Bond",
+          "maturityType":"Bullet"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"CIBC",
+            "bidTime":"2020-02-25T08:15:20",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T08:15:20",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":105.02899932861328,
+            "askQuantity":0,
+            "askQuoteValue":105.16200256347656,
+            "globalIdentifier":"CA01626PAC01"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"CIBC",
+            "bidTime":"2020-02-25T08:15:20",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T08:15:20",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":63.0,
+            "askQuantity":0,
+            "askQuoteValue":58.0,
+            "globalIdentifier":"CA01626PAC01"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"CIBC",
+            "bidTime":"2020-02-25T08:15:20",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T08:15:20",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":1.9637399911880493,
+            "askQuantity":0,
+            "askQuoteValue":1.9139200448989868,
+            "globalIdentifier":"CA01626PAC01"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1173",
+            "quantity":10000000.0,
+            "cs01Cad":2682.9601700000003,
+            "cs01Local":2682.9601700000003
+          }
+        ]
+      },
+      "1177":{
+        "securityIdentifier":"1177",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"1177",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Metals & Mining",
+          "name":"CCOCN 3.75 11/14/2022 Bullet CAD E SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA13321LAH11",
+          "obligorName":"CAMECO CORP",
+          "obligorId":1160,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Materials",
+          "securitySubType":"Bond",
+          "subIndustry":"Non-Ferrous Metals",
+          "ticker":"CCOCN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":true,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"1840",
+            "benchmarkName":"CAN 1.0 09/01/2022 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":115.42,
+            "yieldWorst":2.450994,
+            "amtOutstanding":400000000.0,
+            "marketValue":417772404.0,
+            "workoutTerm":2.7233,
+            "ratingDouble":14.5,
+            "isRated":true,
+            "rating":"BBB-",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":103.395156,
+            "spread":113.5182,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":1.27,
+              "yieldWorst":-0.063827,
+              "ratingDouble":0.0,
+              "price":0.16084,
+              "spread":0.9729
+            },
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":-4.55,
+              "yieldWorst":-0.195378,
+              "ratingDouble":0.0,
+              "price":0.492141,
+              "spread":-4.9991
+            },
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":-7.62,
+              "yieldWorst":-0.160714,
+              "ratingDouble":0.0,
+              "price":0.358676,
+              "spread":-7.7222
+            },
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":10.76,
+              "yieldWorst":-0.187016,
+              "ratingDouble":0.0,
+              "price":0.410356,
+              "spread":-4.0788
+            },
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":-11.45,
+              "yieldWorst":-0.501778,
+              "ratingDouble":0.0,
+              "price":1.218539,
+              "spread":-13.4351
+            },
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":-62.12,
+              "yieldWorst":-1.116849,
+              "ratingDouble":-1.0,
+              "price":2.769032,
+              "spread":-64.0498
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "AGB",
+                "BBB",
+                "DOF"
+              ],
+              "StrategyName":[
+                "Short Carry"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":null,
+              "user":null,
+              "value":110.0
+            },
+            "primaryPmName":"ST",
+            "backupPmName":"IL",
+            "researchName":"TW",
+            "owners":[
+              "ST",
+              "IL",
+              "TW"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1177",
+            "quantity":5295000.0,
+            "cs01Cad":1414.837708755,
+            "cs01Local":1414.837708755
+          },
+          "securityType":"Bond",
+          "maturityType":"Bullet"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"RBC",
+            "bidTime":"2020-02-25T07:54:17",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"NBF",
+            "askTime":"2020-02-25T08:48:39",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":103.26300048828125,
+            "askQuantity":0,
+            "askQuoteValue":103.36599731445312,
+            "globalIdentifier":"CA13321LAH11"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"RBC",
+            "bidTime":"2020-02-25T07:54:17",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T08:30:12",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":116.0,
+            "askQuantity":0,
+            "askQuoteValue":128.0,
+            "globalIdentifier":"CA13321LAH11"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"RBC",
+            "bidTime":"2020-02-25T07:54:17",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"NBF",
+            "askTime":"2020-02-25T08:48:39",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.496999979019165,
+            "askQuantity":0,
+            "askQuoteValue":2.459239959716797,
+            "globalIdentifier":"CA13321LAH11"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"AGB",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1177",
+            "quantity":1000000.0,
+            "cs01Cad":267.202589,
+            "cs01Local":267.202589
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"BBB",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1177",
+            "quantity":1295000.0,
+            "cs01Cad":346.027352755,
+            "cs01Local":346.027352755
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1177",
+            "quantity":3000000.0,
+            "cs01Cad":801.607767,
+            "cs01Local":801.607767
+          }
+        ]
+      },
+      "1185":{
+        "securityIdentifier":"1185",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"1185",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Power Generation",
+          "name":"AQNCN 4.82 02/15/2021 Bullet CAD REGS SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA01585PAC91",
+          "obligorName":"ALGONQUIN POWER CO",
+          "obligorId":1163,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Utilities",
+          "securitySubType":"Bond",
+          "subIndustry":"Diversified Operations",
+          "ticker":"AQNCN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"1",
+            "benchmarkName":"CAN 0.75 03/01/2021 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":0.0,
+            "yieldWorst":0.0,
+            "amtOutstanding":150000000.0,
+            "marketValue":154237233.0,
+            "workoutTerm":0.9781,
+            "ratingDouble":15.0,
+            "isRated":true,
+            "rating":"BBB",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":0.0,
+            "spread":0.0,
+            "isIndex":false
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            },
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            },
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            },
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            },
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            },
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF"
+              ],
+              "StrategyName":[
+                "Short Carry"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":null,
+              "user":null,
+              "value":50.0
+            },
+            "primaryPmName":"ST",
+            "backupPmName":"IL",
+            "researchName":"PD",
+            "owners":[
+              "ST",
+              "IL",
+              "PD"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1185",
+            "quantity":5000000.0,
+            "cs01Cad":490.185915,
+            "cs01Local":490.185915
+          },
+          "securityType":"Bond",
+          "maturityType":"Bullet"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"BMO",
+            "bidTime":"2020-02-25T08:33:22",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":null,
+            "askDealer":null,
+            "askTime":null,
+            "askVenue":null,
+            "askIsOld":false,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":102.65699768066406,
+            "askQuantity":null,
+            "askQuoteValue":null,
+            "globalIdentifier":"CA01585PAC91"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"MULT",
+            "bidTime":"2020-02-25T08:43:56",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":null,
+            "askDealer":null,
+            "askTime":null,
+            "askVenue":null,
+            "askIsOld":false,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":56.0,
+            "askQuantity":null,
+            "askQuoteValue":null,
+            "globalIdentifier":"CA01585PAC91"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"CIBC",
+            "bidTime":"2020-02-25T08:43:56",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":null,
+            "askDealer":null,
+            "askTime":null,
+            "askVenue":null,
+            "askIsOld":false,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.0399999618530273,
+            "askQuantity":null,
+            "askQuoteValue":null,
+            "globalIdentifier":"CA01585PAC91"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1185",
+            "quantity":5000000.0,
+            "cs01Cad":490.185915,
+            "cs01Local":490.185915
+          }
+        ]
+      },
+      "1192":{
+        "securityIdentifier":"1192",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"1192",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Pipeline",
+          "name":"ENBCN 3.19 12/05/2022 Bullet CAD SR UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA29251ZBC01",
+          "obligorName":"ENBRIDGE INC",
+          "obligorId":290,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Energy",
+          "securitySubType":"Bond",
+          "subIndustry":"Pipelines",
+          "ticker":"ENBCN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":true,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"1840",
+            "benchmarkName":"CAN 1.0 09/01/2022 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":67.23,
+            "yieldWorst":1.969514,
+            "amtOutstanding":800000000.0,
+            "marketValue":831924320.0,
+            "workoutTerm":2.7808,
+            "ratingDouble":15.75,
+            "isRated":true,
+            "rating":"BBB+",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":103.282622,
+            "spread":65.3702,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":0.9,
+              "yieldWorst":-0.066749,
+              "ratingDouble":0.0,
+              "price":0.174122,
+              "spread":0.6807
+            },
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":0.49,
+              "yieldWorst":-0.143768,
+              "ratingDouble":0.0,
+              "price":0.366069,
+              "spread":0.1619
+            },
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":-1.61,
+              "yieldWorst":-0.098401,
+              "ratingDouble":0.0,
+              "price":0.200335,
+              "spread":-1.4909
+            },
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":14.18,
+              "yieldWorst":-0.151113,
+              "ratingDouble":0.0,
+              "price":0.328507,
+              "spread":-0.4885
+            },
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":-3.93,
+              "yieldWorst":-0.426494,
+              "ratingDouble":0.0,
+              "price":1.050778,
+              "spread":-5.9067
+            },
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":-49.95,
+              "yieldWorst":-0.994911,
+              "ratingDouble":0.0,
+              "price":2.483789,
+              "spread":-51.856
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF",
+                "FIP"
+              ],
+              "StrategyName":[
+                "Short Carry"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":"2020-02-25T18:27:19.236",
+              "user":"IL",
+              "value":64.0
+            },
+            "primaryPmName":"IL",
+            "backupPmName":"ST",
+            "researchName":"AG",
+            "owners":[
+              "IL",
+              "ST",
+              "AG"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1192",
+            "quantity":47878000.0,
+            "cs01Cad":13146.325775406,
+            "cs01Local":13146.325775406
+          },
+          "securityType":"Bond",
+          "maturityType":"Bullet"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"RBC",
+            "bidTime":"2020-02-25T07:48:29",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"BNS",
+            "askTime":"2020-02-25T07:47:46",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":103.22000122070312,
+            "askQuantity":0,
+            "askQuoteValue":103.19000244140625,
+            "globalIdentifier":"CA29251ZBC01"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"RBC",
+            "bidTime":"2020-02-25T07:48:29",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"BNS",
+            "askTime":"2020-02-25T07:47:46",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":67.0,
+            "askQuantity":0,
+            "askQuoteValue":68.0,
+            "globalIdentifier":"CA29251ZBC01"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"RBC",
+            "bidTime":"2020-02-25T07:48:29",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"BNS",
+            "askTime":"2020-02-25T07:47:46",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":1.9888700246810913,
+            "askQuantity":0,
+            "askQuoteValue":2.002239942550659,
+            "globalIdentifier":"CA29251ZBC01"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1192",
+            "quantity":37878000.0,
+            "cs01Cad":10400.529005406,
+            "cs01Local":10400.529005406
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"FIP",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1192",
+            "quantity":10000000.0,
+            "cs01Cad":2745.79677,
+            "cs01Local":2745.79677
+          }
+        ]
+      },
+      "1236":{
+        "securityIdentifier":"1236",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"1236",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Exploration & Production",
+          "name":"CNQCN 2.89 08/14/2020 Bullet CAD SR UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA13638ZCE30",
+          "obligorName":"CANADIAN NATURAL RESOURCES LTD",
+          "obligorId":193,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Energy",
+          "securitySubType":"Bond",
+          "subIndustry":"Oil Comp-Explor&Prodtn",
+          "ticker":"CNQCN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"28",
+            "benchmarkName":"CAN 3.5 06/01/2020 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":0.0,
+            "yieldWorst":0.0,
+            "amtOutstanding":1000000000.0,
+            "marketValue":1005207270.0,
+            "workoutTerm":0.4712,
+            "ratingDouble":15.67,
+            "isRated":true,
+            "rating":"BBB+",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":0.0,
+            "spread":0.0,
+            "isIndex":false
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            },
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            },
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            },
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            },
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            },
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF"
+              ],
+              "StrategyName":[
+                "Short Carry"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":null,
+              "user":null,
+              "value":35.0
+            },
+            "primaryPmName":"ST",
+            "backupPmName":"IL",
+            "researchName":"TW",
+            "owners":[
+              "ST",
+              "IL",
+              "TW"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1236",
+            "quantity":65000000.0,
+            "cs01Cad":3047.1361699999998,
+            "cs01Local":3047.1361699999998
+          },
+          "securityType":"Bond",
+          "maturityType":"Bullet"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Axe",
+            "bidDealer":"BNS",
+            "bidTime":"2020-02-25T07:06:24",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"HSBC",
+            "askTime":"2020-02-25T08:45:01",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":100.4020004272461,
+            "askQuantity":0,
+            "askQuoteValue":100.41100311279297,
+            "globalIdentifier":"CA13638ZCE30"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"CIBC",
+            "bidTime":"2020-02-25T08:30:12",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"TD",
+            "askTime":"2020-02-25T07:11:57",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":45.0,
+            "askQuantity":0,
+            "askQuoteValue":41.0,
+            "globalIdentifier":"CA13638ZCE30"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Axe",
+            "bidDealer":"BNS",
+            "bidTime":"2020-02-25T07:06:24",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"HSBC",
+            "askTime":"2020-02-25T08:45:01",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.0299999713897705,
+            "askQuantity":0,
+            "askQuoteValue":2.009000062942505,
+            "globalIdentifier":"CA13638ZCE30"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1236",
+            "quantity":65000000.0,
+            "cs01Cad":3047.1361699999998,
+            "cs01Local":3047.1361699999998
+          }
+        ]
+      },
+      "1245":{
+        "securityIdentifier":"1245",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"1245",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Pipeline",
+          "name":"ALACN 3.57 06/12/2023 Callable CAD SR UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA02138ZAG87",
+          "obligorName":"ALTAGAS LTD",
+          "obligorId":1000,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Energy",
+          "securitySubType":"Bond",
+          "subIndustry":"Pipelines",
+          "ticker":"ALACN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"22034",
+            "benchmarkName":"CAN 2.0 09/01/2023 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":98.24,
+            "yieldWorst":2.27283,
+            "amtOutstanding":300000000.0,
+            "marketValue":314461299.0,
+            "workoutTerm":3.2986,
+            "ratingDouble":14.33,
+            "isRated":true,
+            "rating":"BBB-",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":104.096652,
+            "spread":99.9906,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":3.93,
+              "yieldWorst":-0.035807,
+              "ratingDouble":0.0,
+              "price":0.106276,
+              "spread":4.4179
+            },
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":3.95,
+              "yieldWorst":-0.107273,
+              "ratingDouble":0.0,
+              "price":0.316554,
+              "spread":4.6565
+            },
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":-1.58,
+              "yieldWorst":-0.085281,
+              "ratingDouble":0.0,
+              "price":0.202125,
+              "spread":-1.7514
+            },
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":14.95,
+              "yieldWorst":-0.138878,
+              "ratingDouble":0.0,
+              "price":0.357756,
+              "spread":1.1512
+            },
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":-2.21,
+              "yieldWorst":-0.418233,
+              "ratingDouble":0.0,
+              "price":1.221857,
+              "spread":-0.4392
+            },
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":-71.12,
+              "yieldWorst":-1.211643,
+              "ratingDouble":0.0,
+              "price":3.761271,
+              "spread":-69.2404
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
                 "AGB",
                 "BBB",
                 "DOF",
-                "SOF",
-                "STIP"
+                "FIP"
               ],
-              "StrategyName": [
-                "LTOV - Yield"
-              ]
-            },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "5179",
-            "quantity": 10000000,
-            "cs01Cad": 4236.79576,
-            "cs01Local": 4236.79576
-          },
-          "securityType": "Bond"
-        },
-        "bestQuotes": {
-          "bestPriceQuote": {
-            "isValid": true,
-            "quoteMetric": "Price",
-            "bidQuoteType": "Run",
-            "bidDealer": "MULT",
-            "bidTime": "2020-02-18T13:09:23",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "GS",
-            "askTime": "2020-02-18T13:09:23",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 3000000,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": 0,
-            "totalSkew": 0,
-            "bidQuantity": 3000000,
-            "bidQuoteValue": 107.25,
-            "askQuantity": null,
-            "askQuoteValue": 108,
-            "globalIdentifier": "US45685EAG17"
-          },
-          "bestSpreadQuote": {
-            "isValid": true,
-            "quoteMetric": "Spread",
-            "bidQuoteType": "Run",
-            "bidDealer": "GS",
-            "bidTime": "2020-02-18T13:09:23",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "GS",
-            "askTime": "2020-02-18T13:09:23",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 3000000,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": 0,
-            "totalSkew": 0,
-            "bidQuantity": null,
-            "bidQuoteValue": 189.6649932861328,
-            "askQuantity": null,
-            "askQuoteValue": 166.44900512695312,
-            "globalIdentifier": "US45685EAG17"
-          },
-          "bestYieldQuote": {
-            "isValid": true,
-            "quoteMetric": "Yield",
-            "bidQuoteType": "Run",
-            "bidDealer": "MULT",
-            "bidTime": "2020-02-18T13:09:23",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "GS",
-            "askTime": "2020-02-18T13:09:23",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 3000000,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": 0,
-            "totalSkew": 0,
-            "bidQuantity": 3000000,
-            "bidQuoteValue": 3.2689499855041504,
-            "askQuantity": null,
-            "askQuoteValue": 3.0361599922180176,
-            "globalIdentifier": "US45685EAG17"
-          }
-        },
-        "positions": [
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "5179",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "AGB",
-              "StrategyName": ""
-            },
-            "quantity": 1000000,
-            "cs01Cad": 423.679576,
-            "cs01Local": 423.679576
-          },
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "5179",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "BBB",
-              "StrategyName": ""
-            },
-            "quantity": 1000000,
-            "cs01Cad": 423.679576,
-            "cs01Local": 423.679576
-          },
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "5179",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "DOF",
-              "StrategyName": ""
-            },
-            "quantity": 3500000,
-            "cs01Cad": 1482.878516,
-            "cs01Local": 1482.878516
-          },
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "5179",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "SOF",
-              "StrategyName": ""
-            },
-            "quantity": 2000000,
-            "cs01Cad": 847.359152,
-            "cs01Local": 847.359152
-          },
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "5179",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "STIP",
-              "StrategyName": ""
-            },
-            "quantity": 2500000,
-            "cs01Cad": 1059.19894,
-            "cs01Local": 1059.19894
-          }
-        ]
-      },
-      "7329": {
-        "securityIdentifier": "7329",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": true,
-          "securityIdentifier": "7329",
-          "ccy": "USD",
-          "country": "CH",
-          "industry": "Financial Services",
-          "name": "CS 3.8 09/15/2022 Bullet USD SENIOR_UNSECURED",
-          "genericSeniority": "SR",
-          "globalIdentifier": "US225433AH43",
-          "obligorName": "CREDIT SUISSE GROUP AG",
-          "obligorId": 219,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Financials",
-          "securitySubType": "Bond",
-          "subIndustry": "Diversified Banking Inst",
-          "ticker": "CS",
-          "metrics": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isOnTheRun": false,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "65014",
-            "benchmarkName": "T 1.375 01/31/2022 USD",
-            "underlyingSecurityId": -1,
-            "zSpread": 58,
-            "gSpread": 58.2381,
-            "yieldWorst": 1.99842,
-            "amtOutstanding": 1988525000,
-            "marketValue": 2077889314,
-            "workoutTerm": 2.5863,
-            "ratingDouble": 16,
-            "isRated": true,
-            "rating": "BBB+",
-            "ratingNoNotch": "BBB",
-            "ratingBucket": "IG",
-            "price": 104.494,
-            "spread": 56.13370000000003,
-            "isIndex": true
-          },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": 0.2921,
-              "gSpread": -1.1297,
-              "yieldWorst": -0.0246,
-              "ratingDouble": 0,
-              "price": 0.058,
-              "spread": -0.8889
-            },
-            "Wow": {
-              "zSpread": -0.4426,
-              "gSpread": -2.1144,
-              "yieldWorst": -0.00516,
-              "ratingDouble": 0,
-              "price": -0.024,
-              "spread": -3.381
-            },
-            "Mtd": {
-              "zSpread": -3.2639,
-              "gSpread": -7.5946,
-              "yieldWorst": 0.03597,
-              "ratingDouble": 0,
-              "price": -0.164,
-              "spread": -7.0462
-            },
-            "Mom": {
-              "zSpread": -4.9018,
-              "gSpread": -7.8107,
-              "yieldWorst": -0.24467,
-              "ratingDouble": 0,
-              "price": 0.492,
-              "spread": -10.8607
-            },
-            "Ytd": {
-              "zSpread": -1.8473,
-              "gSpread": -8.7947,
-              "yieldWorst": -0.26947,
-              "ratingDouble": 0,
-              "price": 0.506,
-              "spread": -9.4937
-            },
-            "Yoy": {
-              "zSpread": -63.425,
-              "gSpread": -72.8919,
-              "yieldWorst": -1.77895,
-              "ratingDouble": 0,
-              "price": 4.421,
-              "spread": 0
-            }
-          },
-          "firmPosition": {
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": null,
-              "user": null,
-              "value": 55
-            },
-            "primaryPmName": "DM",
-            "backupPmName": "DA",
-            "researchName": "LP",
-            "owners": [
-              "DM",
-              "DA",
-              "LP"
-            ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "BMO DOF PB",
-                "TD DOF PB"
-              ],
-              "AttributionOwner": [
-                "Short Carry"
-              ],
-              "PortfolioShortName": [
-                "DOF"
-              ],
-              "StrategyName": [
+              "StrategyName":[
                 "Short Carry"
               ]
             },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "7329",
-            "quantity": 41177000,
-            "cs01Cad": 14027.554510777001,
-            "cs01Local": 14027.554510777001
-          },
-          "securityType": "Bond"
-        },
-        "bestQuotes": {
-          "bestPriceQuote": {
-            "isValid": true,
-            "quoteMetric": "Price",
-            "bidQuoteType": "Run",
-            "bidDealer": "BSNT",
-            "bidTime": "2020-02-18T12:27:38",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "BSNT",
-            "askTime": "2020-02-18T12:27:38",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": null,
-            "totalSkew": null,
-            "bidQuantity": null,
-            "bidQuoteValue": 104.55999755859375,
-            "askQuantity": null,
-            "askQuoteValue": 104.69000244140625,
-            "globalIdentifier": "US225433AH43"
-          },
-          "bestSpreadQuote": {
-            "isValid": true,
-            "quoteMetric": "Spread",
-            "bidQuoteType": "Run",
-            "bidDealer": "BSNT",
-            "bidTime": "2020-02-18T12:27:38",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "BSNT",
-            "askTime": "2020-02-18T12:27:38",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": null,
-            "totalSkew": null,
-            "bidQuantity": null,
-            "bidQuoteValue": 57,
-            "askQuantity": null,
-            "askQuoteValue": 52,
-            "globalIdentifier": "US225433AH43"
-          },
-          "bestYieldQuote": {
-            "isValid": true,
-            "quoteMetric": "Yield",
-            "bidQuoteType": "Run",
-            "bidDealer": "BSNT",
-            "bidTime": "2020-02-18T12:27:38",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "BSNT",
-            "askTime": "2020-02-18T12:27:38",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": null,
-            "totalSkew": null,
-            "bidQuantity": null,
-            "bidQuoteValue": 1.968999981880188,
-            "askQuantity": null,
-            "askQuoteValue": 1.9190000295639038,
-            "globalIdentifier": "US225433AH43"
-          }
-        },
-        "positions": [
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "7329",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "DOF",
-              "StrategyName": ""
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":"2020-02-25T20:54:00.144",
+              "user":"IL",
+              "value":87.0
             },
-            "quantity": 41177000,
-            "cs01Cad": 14027.554510777001,
-            "cs01Local": 14027.554510777001
-          }
-        ]
-      },
-      "13456": {
-        "securityIdentifier": "13456",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": false,
-          "securityIdentifier": "13456",
-          "ccy": "USD",
-          "country": "US",
-          "industry": "Hardware",
-          "name": "PBI 5.2 04/01/2023 Callable USD SENIOR_UNSECURED",
-          "genericSeniority": "SR",
-          "globalIdentifier": "US724479AN00",
-          "obligorName": "PITNEY BOWES INC",
-          "obligorId": 609,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Technology",
-          "securitySubType": "Bond",
-          "subIndustry": "Office Automation&Equip",
-          "ticker": "PBI",
-          "metrics": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isOnTheRun": true,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "64723",
-            "benchmarkName": "T 1.5 01/15/2023 USD",
-            "underlyingSecurityId": -1,
-            "zSpread": 363.374,
-            "gSpread": 364.5576,
-            "yieldWorst": 5.04049,
-            "amtOutstanding": 400000000,
-            "marketValue": 407100000,
-            "workoutTerm": 3.0438,
-            "ratingDouble": 12,
-            "isRated": true,
-            "rating": "BB",
-            "ratingNoNotch": "BB",
-            "ratingBucket": "HY",
-            "price": 101.775,
-            "spread": 364.146,
-            "isIndex": true
-          },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": 3.777,
-              "gSpread": 3.1021,
-              "yieldWorst": 0.00892,
-              "ratingDouble": 0,
-              "price": -0.025,
-              "spread": 3.1121
-            },
-            "Wow": {
-              "zSpread": -26.063,
-              "gSpread": -27.3463,
-              "yieldWorst": -0.26098,
-              "ratingDouble": 0,
-              "price": 0.735,
-              "spread": -27.2451
-            },
-            "Mtd": {
-              "zSpread": -71.574,
-              "gSpread": -74.8987,
-              "yieldWorst": -0.64414,
-              "ratingDouble": 0,
-              "price": 1.8167,
-              "spread": -74.9946
-            },
-            "Mom": {
-              "zSpread": -88.902,
-              "gSpread": -91.2101,
-              "yieldWorst": -1.09317,
-              "ratingDouble": 0,
-              "price": 3.1323,
-              "spread": -91.6086
-            },
-            "Ytd": {
-              "zSpread": -89.824,
-              "gSpread": -94.117,
-              "yieldWorst": -1.16654,
-              "ratingDouble": 0,
-              "price": 3.3739,
-              "spread": -87.6241
-            },
-            "Yoy": {
-              "zSpread": -73.541,
-              "gSpread": -81.9124,
-              "yieldWorst": -1.88804,
-              "ratingDouble": 0,
-              "price": 8.765,
-              "spread": 0
-            }
-          },
-          "firmPosition": {
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": "2020-02-18T15:31:22.118",
-              "user": "PM",
-              "value": 350
-            },
-            "primaryPmName": "PM",
-            "backupPmName": "DJ",
-            "researchName": "LC",
-            "owners": [
-              "PM",
-              "DJ",
-              "LC"
-            ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "TD DOF PB",
-                "TD SOF PB"
-              ],
-              "AttributionOwner": [
-                "Basis"
-              ],
-              "PortfolioShortName": [
-                "DOF",
-                "SOF"
-              ],
-              "StrategyName": [
-                "Basis"
-              ]
-            },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "13456",
-            "quantity": 27250000,
-            "cs01Cad": 10315.255875,
-            "cs01Local": 10315.255875
-          },
-          "securityType": "Bond"
-        },
-        "bestQuotes": {
-          "bestPriceQuote": {
-            "isValid": true,
-            "quoteMetric": "Price",
-            "bidQuoteType": "Run",
-            "bidDealer": "CG",
-            "bidTime": "2020-02-18T13:36:29",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Axe",
-            "askDealer": "FLTR",
-            "askTime": "2020-02-18T13:06:57",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 500000,
-            "totalRunBidQuantity": 2000000,
-            "totalRunAskQuantity": 2000000,
-            "axeSkew": 1,
-            "totalSkew": 0.5555555555555556,
-            "bidQuantity": null,
-            "bidQuoteValue": 101.75,
-            "askQuantity": 500000,
-            "askQuoteValue": 102.18000030517578,
-            "globalIdentifier": "US724479AN00"
-          },
-          "bestSpreadQuote": {
-            "isValid": true,
-            "quoteMetric": "Spread",
-            "bidQuoteType": "Run",
-            "bidDealer": "CG",
-            "bidTime": "2020-02-18T13:36:29",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Axe",
-            "askDealer": "FLTR",
-            "askTime": "2020-02-18T13:06:57",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 500000,
-            "totalRunBidQuantity": 2000000,
-            "totalRunAskQuantity": 2000000,
-            "axeSkew": 1,
-            "totalSkew": 0.5555555555555556,
-            "bidQuantity": null,
-            "bidQuoteValue": 367.697998046875,
-            "askQuantity": 500000,
-            "askQuoteValue": 352.6940002441406,
-            "globalIdentifier": "US724479AN00"
-          },
-          "bestYieldQuote": {
-            "isValid": true,
-            "quoteMetric": "Yield",
-            "bidQuoteType": "Run",
-            "bidDealer": "CG",
-            "bidTime": "2020-02-18T13:36:29",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Axe",
-            "askDealer": "FLTR",
-            "askTime": "2020-02-18T13:06:57",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 500000,
-            "totalRunBidQuantity": 2000000,
-            "totalRunAskQuantity": 2000000,
-            "axeSkew": 1,
-            "totalSkew": 0.5555555555555556,
-            "bidQuantity": null,
-            "bidQuoteValue": 5.050000190734863,
-            "askQuantity": 500000,
-            "askQuoteValue": 4.895999908447266,
-            "globalIdentifier": "US724479AN00"
-          }
-        },
-        "positions": [
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "13456",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "DOF",
-              "StrategyName": ""
-            },
-            "quantity": 9859000,
-            "cs01Cad": 3732.0406485,
-            "cs01Local": 3732.0406485
-          },
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "13456",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "SOF",
-              "StrategyName": ""
-            },
-            "quantity": 17391000,
-            "cs01Cad": 6583.2152265,
-            "cs01Local": 6583.2152265
-          }
-        ]
-      },
-      "13545": {
-        "securityIdentifier": "13545",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": false,
-          "securityIdentifier": "13545",
-          "ccy": "USD",
-          "country": "US",
-          "industry": "Property & Casualty Insurance",
-          "name": "RDN 4.5 10/01/2024 Callable USD SENIOR_UNSECURED",
-          "genericSeniority": "SR",
-          "globalIdentifier": "US750236AU59",
-          "obligorName": "RADIAN GROUP INC",
-          "obligorId": 657,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Financials",
-          "securitySubType": "Bond",
-          "subIndustry": "Financial Guarantee Ins",
-          "ticker": "RDN",
-          "metrics": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isOnTheRun": false,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "65015",
-            "benchmarkName": "T 1.375 01/31/2025 USD",
-            "underlyingSecurityId": -1,
-            "zSpread": 151.257,
-            "gSpread": 151.8717,
-            "yieldWorst": 2.91358,
-            "amtOutstanding": 450000000,
-            "marketValue": 479074500,
-            "workoutTerm": 4.3808,
-            "ratingDouble": 13,
-            "isRated": true,
-            "rating": "BB+",
-            "ratingNoNotch": "BB",
-            "ratingBucket": "HY",
-            "price": 106.461,
-            "spread": 148.42680000000001,
-            "isIndex": true
-          },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": 2.498,
-              "gSpread": 2.5532,
-              "yieldWorst": -0.0036,
-              "ratingDouble": 0,
-              "price": 0.011,
-              "spread": 2.3956
-            },
-            "Wow": {
-              "zSpread": -4.584,
-              "gSpread": -5.6958,
-              "yieldWorst": -0.04722,
-              "ratingDouble": 0,
-              "price": 0.169,
-              "spread": -5.8763
-            },
-            "Mtd": {
-              "zSpread": -13.553,
-              "gSpread": -15.6597,
-              "yieldWorst": -0.05615,
-              "ratingDouble": 0,
-              "price": 0.181,
-              "spread": -17.0533
-            },
-            "Mom": {
-              "zSpread": 1.949,
-              "gSpread": 0.6183,
-              "yieldWorst": -0.19757,
-              "ratingDouble": 0,
-              "price": 0.721,
-              "spread": -0.5933
-            },
-            "Ytd": {
-              "zSpread": 8.406,
-              "gSpread": 5.4121,
-              "yieldWorst": -0.21726,
-              "ratingDouble": 0,
-              "price": 0.763,
-              "spread": 4.5415
-            },
-            "Yoy": {
-              "zSpread": -81.162,
-              "gSpread": -88.0183,
-              "yieldWorst": -1.97929,
-              "ratingDouble": 0,
-              "price": 8.3751,
-              "spread": 0
-            }
-          },
-          "firmPosition": {
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": null,
-              "user": null,
-              "value": 140
-            },
-            "primaryPmName": "PM",
-            "backupPmName": "DJ",
-            "researchName": "LP",
-            "owners": [
-              "PM",
-              "DJ",
-              "LP"
-            ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "TD SOF PB"
-              ],
-              "AttributionOwner": [
-                "Basis"
-              ],
-              "PortfolioShortName": [
-                "SOF"
-              ],
-              "StrategyName": [
-                "Basis"
-              ]
-            },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "13545",
-            "quantity": 2395000,
-            "cs01Cad": 1367.6936049600001,
-            "cs01Local": 1367.6936049600001
-          },
-          "securityType": "Bond"
-        },
-        "bestQuotes": {
-          "bestPriceQuote": {
-            "isValid": true,
-            "quoteMetric": "Price",
-            "bidQuoteType": "Axe",
-            "bidDealer": "CG",
-            "bidTime": "2020-02-18T13:30:22",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "MULT",
-            "askTime": "2020-02-18T12:41:53",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 2000000,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 2000000,
-            "totalRunAskQuantity": 2000000,
-            "axeSkew": 0,
-            "totalSkew": 0.3333333333333333,
-            "bidQuantity": 2000000,
-            "bidQuoteValue": 106.625,
-            "askQuantity": 0,
-            "askQuoteValue": 107.125,
-            "globalIdentifier": "US750236AU59"
-          },
-          "bestSpreadQuote": {
-            "isValid": true,
-            "quoteMetric": "Spread",
-            "bidQuoteType": "Axe",
-            "bidDealer": "CG",
-            "bidTime": "2020-02-18T13:30:22",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "GS",
-            "askTime": "2020-02-18T12:27:24",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 2000000,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 2000000,
-            "totalRunAskQuantity": 2000000,
-            "axeSkew": 0,
-            "totalSkew": 0.3333333333333333,
-            "bidQuantity": 2000000,
-            "bidQuoteValue": 148.7550048828125,
-            "askQuantity": null,
-            "askQuoteValue": 137.45799255371094,
-            "globalIdentifier": "US750236AU59"
-          },
-          "bestYieldQuote": {
-            "isValid": true,
-            "quoteMetric": "Yield",
-            "bidQuoteType": "Run",
-            "bidDealer": "CG",
-            "bidTime": "2020-02-18T12:41:53",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "CG",
-            "askTime": "2020-02-18T12:41:53",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 2000000,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 2000000,
-            "totalRunAskQuantity": 2000000,
-            "axeSkew": 0,
-            "totalSkew": 0.3333333333333333,
-            "bidQuantity": null,
-            "bidQuoteValue": 2.869999885559082,
-            "askQuantity": null,
-            "askQuoteValue": 2.759999990463257,
-            "globalIdentifier": "US750236AU59"
-          }
-        },
-        "positions": [
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "13545",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "SOF",
-              "StrategyName": ""
-            },
-            "quantity": 2395000,
-            "cs01Cad": 1367.6936049600001,
-            "cs01Local": 1367.6936049600001
-          }
-        ]
-      },
-      "18249": {
-        "securityIdentifier": "18249",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": false,
-          "securityIdentifier": "18249",
-          "ccy": "CAD",
-          "country": "CA",
-          "industry": "Transportation & Logistics",
-          "name": "PENSKE 2.85 12/07/2022 Callable CAD SENIOR_UNSECURED",
-          "genericSeniority": "SR",
-          "globalIdentifier": "CA70960AAC23",
-          "obligorName": "PENSKE TRUCK LEASING CO LP",
-          "obligorId": 1220,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Industrials",
-          "securitySubType": "Bond",
-          "subIndustry": "Rental Auto/Equipment",
-          "ticker": "PENSKE",
-          "metrics": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isOnTheRun": false,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "1840",
-            "benchmarkName": "CAN 1.0 09/01/2022 CAD",
-            "underlyingSecurityId": -1,
-            "zSpread": 0,
-            "gSpread": 85.42,
-            "yieldWorst": 2.300014,
-            "amtOutstanding": 375000000,
-            "marketValue": 382597301,
-            "workoutTerm": 2.8137,
-            "ratingDouble": 15.33,
-            "isRated": true,
-            "rating": "BBB",
-            "ratingNoNotch": "BBB",
-            "ratingBucket": "IG",
-            "price": 101.48718,
-            "spread": 83.8815,
-            "isIndex": true
-          },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": 0,
-              "gSpread": 0.54,
-              "yieldWorst": -0.022213,
-              "ratingDouble": 0,
-              "price": 0.059318,
-              "spread": 0.0982
-            },
-            "Wow": {
-              "zSpread": 0,
-              "gSpread": -1.08,
-              "yieldWorst": 0.009815,
-              "ratingDouble": 0,
-              "price": -0.036896,
-              "spread": -0.8607
-            },
-            "Mtd": {
-              "zSpread": 0,
-              "gSpread": -1.08,
-              "yieldWorst": 0.055715,
-              "ratingDouble": 0,
-              "price": -0.174201,
-              "spread": -0.618
-            },
-            "Mom": {
-              "zSpread": 0,
-              "gSpread": -2.68,
-              "yieldWorst": -0.224535,
-              "ratingDouble": 0,
-              "price": 0.585175,
-              "spread": -3.5869
-            },
-            "Ytd": {
-              "zSpread": 0,
-              "gSpread": -6.72,
-              "yieldWorst": -0.305822,
-              "ratingDouble": 0,
-              "price": 0.802715,
-              "spread": -8.3782
-            },
-            "Yoy": {
-              "zSpread": 0,
-              "gSpread": -49.31,
-              "yieldWorst": -0.82842,
-              "ratingDouble": 0,
-              "price": 2.482548,
-              "spread": -51.155
-            }
-          },
-          "firmPosition": {
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": null,
-              "user": null,
-              "value": 67
-            },
-            "primaryPmName": "IL",
-            "backupPmName": "ST",
-            "researchName": "TW",
-            "owners": [
+            "primaryPmName":"IL",
+            "backupPmName":"ST",
+            "researchName":"AG",
+            "owners":[
               "IL",
               "ST",
-              "TW"
+              "AG"
             ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "TD DOF PB"
-              ],
-              "AttributionOwner": [
-                "Short Carry"
-              ],
-              "PortfolioShortName": [
-                "DOF"
-              ],
-              "StrategyName": [
-                "Short Carry"
-              ]
-            },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "18249",
-            "quantity": 18198000,
-            "cs01Cad": 4890.723036642,
-            "cs01Local": 4890.723036642
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1245",
+            "quantity":21300000.0,
+            "cs01Cad":6509.5778379,
+            "cs01Local":6509.5778379
           },
-          "securityType": "Bond"
+          "securityType":"Bond",
+          "maturityType":"Callable"
         },
-        "bestQuotes": {
-          "bestPriceQuote": {
-            "isValid": true,
-            "quoteMetric": "Price",
-            "bidQuoteType": "Run",
-            "bidDealer": "RBC",
-            "bidTime": "2020-02-18T08:52:06",
-            "bidVenue": "MSG1",
-            "bidIsOld": true,
-            "askQuoteType": "Run",
-            "askDealer": "CIBC",
-            "askTime": "2020-02-18T08:33:04",
-            "askVenue": "MSG1",
-            "askIsOld": true,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": null,
-            "totalSkew": null,
-            "bidQuantity": 5000,
-            "bidQuoteValue": 101.86599731445312,
-            "askQuantity": 1000,
-            "askQuoteValue": 101.8499984741211,
-            "globalIdentifier": "CA70960AAC23"
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Axe",
+            "bidDealer":"NBF",
+            "bidTime":"2020-02-25T08:48:33",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"NBF",
+            "askTime":"2020-02-25T08:48:33",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":104.15299987792969,
+            "askQuantity":0,
+            "askQuoteValue":104.36299896240234,
+            "globalIdentifier":"CA02138ZAG87"
           },
-          "bestSpreadQuote": {
-            "isValid": true,
-            "quoteMetric": "Spread",
-            "bidQuoteType": "Run",
-            "bidDealer": "RBC",
-            "bidTime": "2020-02-18T08:52:06",
-            "bidVenue": "MSG1",
-            "bidIsOld": true,
-            "askQuoteType": "Run",
-            "askDealer": "CIBC",
-            "askTime": "2020-02-18T08:33:04",
-            "askVenue": "MSG1",
-            "askIsOld": true,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": null,
-            "totalSkew": null,
-            "bidQuantity": 5000,
-            "bidQuoteValue": 71,
-            "askQuantity": 1000,
-            "askQuoteValue": 72,
-            "globalIdentifier": "CA70960AAC23"
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Axe",
+            "bidDealer":"NBF",
+            "bidTime":"2020-02-25T08:48:33",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"NBF",
+            "askTime":"2020-02-25T08:48:33",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":87.0,
+            "askQuantity":0,
+            "askQuoteValue":80.0,
+            "globalIdentifier":"CA02138ZAG87"
           },
-          "bestYieldQuote": {
-            "isValid": true,
-            "quoteMetric": "Yield",
-            "bidQuoteType": "Run",
-            "bidDealer": "RBC",
-            "bidTime": "2020-02-18T08:52:06",
-            "bidVenue": "MSG1",
-            "bidIsOld": true,
-            "askQuoteType": "Run",
-            "askDealer": "CIBC",
-            "askTime": "2020-02-18T08:33:04",
-            "askVenue": "MSG1",
-            "askIsOld": true,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": null,
-            "totalSkew": null,
-            "bidQuantity": 5000,
-            "bidQuoteValue": 2.138000011444092,
-            "askQuantity": 1000,
-            "askQuoteValue": 2.1440000534057617,
-            "globalIdentifier": "CA70960AAC23"
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Axe",
+            "bidDealer":"NBF",
+            "bidTime":"2020-02-25T08:48:33",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"NBF",
+            "askTime":"2020-02-25T08:48:33",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.1473100185394287,
+            "askQuantity":0,
+            "askQuoteValue":2.0812699794769287,
+            "globalIdentifier":"CA02138ZAG87"
           }
         },
-        "positions": [
+        "positions":[
           {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "18249",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "DOF",
-              "StrategyName": ""
+            "partitionOptionValue":{
+              "PortfolioShortName":"AGB",
+              "StrategyName":""
             },
-            "quantity": 18198000,
-            "cs01Cad": 4890.723036642,
-            "cs01Local": 4890.723036642
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1245",
+            "quantity":1500000.0,
+            "cs01Cad":458.4209745,
+            "cs01Local":458.4209745
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"BBB",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1245",
+            "quantity":1606000.0,
+            "cs01Cad":490.816056698,
+            "cs01Local":490.816056698
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1245",
+            "quantity":14983000.0,
+            "cs01Cad":4579.0143072890005,
+            "cs01Local":4579.0143072890005
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"FIP",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1245",
+            "quantity":3211000.0,
+            "cs01Cad":981.326499413,
+            "cs01Local":981.326499413
           }
         ]
       },
-      "20299": {
-        "securityIdentifier": "20299",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": false,
-          "securityIdentifier": "20299",
-          "ccy": "USD",
-          "country": "US",
-          "industry": "Property & Casualty Insurance",
-          "name": "LIBMUT 4.95 05/01/2022 Bullet USD 144A SENIOR_UNSECURED",
-          "genericSeniority": "SR",
-          "globalIdentifier": "US53079EAW49",
-          "obligorName": "LIBERTY MUTUAL HOLDING CO INC",
-          "obligorId": 2006,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Financials",
-          "securitySubType": "Bond",
-          "subIndustry": "Mutual Insurance",
-          "ticker": "LIBMUT",
-          "metrics": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isOnTheRun": true,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "65014",
-            "benchmarkName": "T 1.375 01/31/2022 USD",
-            "underlyingSecurityId": -1,
-            "zSpread": 60.9343,
-            "gSpread": 61.7237,
-            "yieldWorst": 2.04588,
-            "amtOutstanding": 473309000,
-            "marketValue": 502715688,
-            "workoutTerm": 2.211,
-            "ratingDouble": 15,
-            "isRated": true,
-            "rating": "BBB",
-            "ratingNoNotch": "BBB",
-            "ratingBucket": "IG",
-            "price": 106.213,
-            "spread": 60.07899999999998,
-            "isIndex": true
+      "1272":{
+        "securityIdentifier":"1272",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"1272",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Real Estate",
+          "name":"BAMACN 5.04 03/08/2024 Callable CAD MTN SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA11257ZAD11",
+          "obligorName":"BROOKFIELD ASSET MANAGEMENT INC",
+          "obligorId":135,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Real Estate",
+          "securitySubType":"Bond",
+          "subIndustry":"Real Estate Oper/Develop",
+          "ticker":"BAMACN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"28171",
+            "benchmarkName":"CAN 1.5 09/01/2024 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":113.34,
+            "yieldWorst":2.383204,
+            "amtOutstanding":486000000.0,
+            "marketValue":546738666.0,
+            "workoutTerm":4.0384,
+            "ratingDouble":16.67,
+            "isRated":true,
+            "rating":"A-",
+            "ratingNoNotch":"A",
+            "ratingBucket":"IG",
+            "price":110.164079,
+            "spread":115.2469,
+            "isIndex":true
           },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": -0.6063,
-              "gSpread": -2.1118,
-              "yieldWorst": -0.0322,
-              "ratingDouble": 0,
-              "price": 0.064,
-              "spread": -1.636
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":1.7,
+              "yieldWorst":-0.067488,
+              "ratingDouble":0.0,
+              "price":0.253989,
+              "spread":1.5433
             },
-            "Wow": {
-              "zSpread": -4.5064,
-              "gSpread": -6.8985,
-              "yieldWorst": -0.04727,
-              "ratingDouble": 0,
-              "price": 0.045,
-              "spread": -7.7449
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":2.22,
+              "yieldWorst":-0.136903,
+              "ratingDouble":0.0,
+              "price":0.49149,
+              "spread":2.0971
             },
-            "Mtd": {
-              "zSpread": -4.7662,
-              "gSpread": -10.1106,
-              "yieldWorst": 0.01481,
-              "ratingDouble": 0,
-              "price": -0.149,
-              "spread": -9.4719
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":-0.09,
+              "yieldWorst":-0.068695,
+              "ratingDouble":0.0,
+              "price":0.125745,
+              "spread":-0.4591
             },
-            "Mom": {
-              "zSpread": -2.0955,
-              "gSpread": -5.5356,
-              "yieldWorst": -0.20992,
-              "ratingDouble": 0,
-              "price": 0.232,
-              "spread": -7.8923
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":19.07,
+              "yieldWorst":-0.123519,
+              "ratingDouble":0.0,
+              "price":0.307185,
+              "spread":3.2642
             },
-            "Ytd": {
-              "zSpread": -0.2809,
-              "gSpread": -8.8072,
-              "yieldWorst": -0.24044,
-              "ratingDouble": 0,
-              "price": 0.211,
-              "spread": -7.1036
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":-4.5,
+              "yieldWorst":-0.479628,
+              "ratingDouble":0.0,
+              "price":1.635262,
+              "spread":-2.8982
             },
-            "Yoy": {
-              "zSpread": -41.0967,
-              "gSpread": -50.5963,
-              "yieldWorst": -1.54734,
-              "ratingDouble": 0,
-              "price": 2.151,
-              "spread": 0
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":-57.4,
+              "yieldWorst":-1.120536,
+              "ratingDouble":0.34,
+              "price":3.125767,
+              "spread":-55.8143
             }
           },
-          "firmPosition": {
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": null,
-              "user": null,
-              "value": 60
-            },
-            "primaryPmName": "DA",
-            "backupPmName": "DM",
-            "researchName": "LP",
-            "owners": [
-              "DA",
-              "DM",
-              "LP"
-            ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "TD DOF PB"
-              ],
-              "AttributionOwner": [
-                "Short Carry"
-              ],
-              "PortfolioShortName": [
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
                 "DOF"
               ],
-              "StrategyName": [
-                "Short Carry"
-              ]
-            },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "20299",
-            "quantity": 1480000,
-            "cs01Cad": 436.98437227999995,
-            "cs01Local": 436.98437227999995
-          },
-          "securityType": "Bond"
-        },
-        "bestQuotes": {
-          "bestPriceQuote": {
-            "isValid": true,
-            "quoteMetric": "Price",
-            "bidQuoteType": "Axe",
-            "bidDealer": "CG",
-            "bidTime": "2020-02-18T13:30:18",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": null,
-            "askDealer": null,
-            "askTime": null,
-            "askVenue": null,
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 15000000,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": 0,
-            "totalSkew": 0,
-            "bidQuantity": 15000000,
-            "bidQuoteValue": 106.20899963378906,
-            "askQuantity": null,
-            "askQuoteValue": null,
-            "globalIdentifier": "US53079EAW49"
-          },
-          "bestSpreadQuote": {
-            "isValid": true,
-            "quoteMetric": "Spread",
-            "bidQuoteType": "Axe",
-            "bidDealer": "CG",
-            "bidTime": "2020-02-18T13:30:18",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": null,
-            "askDealer": null,
-            "askTime": null,
-            "askVenue": null,
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 15000000,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": 0,
-            "totalSkew": 0,
-            "bidQuantity": 15000000,
-            "bidQuoteValue": 64,
-            "askQuantity": null,
-            "askQuoteValue": null,
-            "globalIdentifier": "US53079EAW49"
-          },
-          "bestYieldQuote": {
-            "isValid": true,
-            "quoteMetric": "Yield",
-            "bidQuoteType": "Axe",
-            "bidDealer": "CG",
-            "bidTime": "2020-02-18T13:30:18",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": null,
-            "askDealer": null,
-            "askTime": null,
-            "askVenue": null,
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 15000000,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": 0,
-            "totalSkew": 0,
-            "bidQuantity": 15000000,
-            "bidQuoteValue": 2.0444600582122803,
-            "askQuantity": null,
-            "askQuoteValue": null,
-            "globalIdentifier": "US53079EAW49"
-          }
-        },
-        "positions": [
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "20299",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "DOF",
-              "StrategyName": ""
-            },
-            "quantity": 1480000,
-            "cs01Cad": 436.98437227999995,
-            "cs01Local": 436.98437227999995
-          }
-        ]
-      },
-      "28481": {
-        "securityIdentifier": "28481",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": false,
-          "securityIdentifier": "28481",
-          "ccy": "USD",
-          "country": "US",
-          "industry": "Airlines",
-          "name": "UAL 4.875 01/15/2025 Bullet USD SENIOR_UNSECURED",
-          "genericSeniority": "SR",
-          "globalIdentifier": "US910047AK50",
-          "obligorName": "UNITED AIRLINES HOLDINGS INC",
-          "obligorId": 803,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Consumers",
-          "securitySubType": "Bond",
-          "subIndustry": "Airlines",
-          "ticker": "UAL",
-          "metrics": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isOnTheRun": true,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "65015",
-            "benchmarkName": "T 1.375 01/31/2025 USD",
-            "underlyingSecurityId": -1,
-            "zSpread": 201.404,
-            "gSpread": 200.7195,
-            "yieldWorst": 3.42126,
-            "amtOutstanding": 350000000,
-            "marketValue": 372788500,
-            "workoutTerm": 4.9233,
-            "ratingDouble": 12,
-            "isRated": true,
-            "rating": "BB",
-            "ratingNoNotch": "BB",
-            "ratingBucket": "HY",
-            "price": 106.511,
-            "spread": 200.15450000000007,
-            "isIndex": true
-          },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": 2.949,
-              "gSpread": 2.8932,
-              "yieldWorst": 0.00103,
-              "ratingDouble": 0,
-              "price": -0.008,
-              "spread": 2.8784
-            },
-            "Wow": {
-              "zSpread": 1.337,
-              "gSpread": -0.0001,
-              "yieldWorst": 0.0115,
-              "ratingDouble": 0,
-              "price": -0.081,
-              "spread": -0.0838
-            },
-            "Mtd": {
-              "zSpread": -28.575,
-              "gSpread": -30.8177,
-              "yieldWorst": -0.2058,
-              "ratingDouble": 0,
-              "price": 0.908,
-              "spread": 0
-            },
-            "Mom": {
-              "zSpread": 18.638,
-              "gSpread": 17.2716,
-              "yieldWorst": -0.03519,
-              "ratingDouble": 0,
-              "price": 0.052,
-              "spread": 0
-            },
-            "Ytd": {
-              "zSpread": 17.844,
-              "gSpread": 14.4989,
-              "yieldWorst": -0.13443,
-              "ratingDouble": 0,
-              "price": 0.482,
-              "spread": 0
-            },
-            "Yoy": null
-          },
-          "firmPosition": {
-            "mark": {
-              "driver": "Price",
-              "enteredTime": null,
-              "user": null,
-              "value": 106.625
-            },
-            "primaryPmName": "DJ",
-            "backupPmName": "PM",
-            "researchName": "TW",
-            "owners": [
-              "DJ",
-              "PM",
-              "TW"
-            ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "TD DOF PB",
-                "TD SOF PB"
-              ],
-              "AttributionOwner": [
-                "USD Term Risk"
-              ],
-              "PortfolioShortName": [
-                "DOF",
-                "SOF"
-              ],
-              "StrategyName": [
+              "StrategyName":[
                 "LTOV - Spread"
               ]
             },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "28481",
-            "quantity": 2000000,
-            "cs01Cad": 1235.767894,
-            "cs01Local": 1235.767894
-          },
-          "securityType": "Bond"
-        },
-        "bestQuotes": {
-          "bestPriceQuote": {
-            "isValid": true,
-            "quoteMetric": "Price",
-            "bidQuoteType": "Run",
-            "bidDealer": "MS",
-            "bidTime": "2020-02-18T13:19:01",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "GS",
-            "askTime": "2020-02-18T12:52:08",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 5000000,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": 0,
-            "totalSkew": 0,
-            "bidQuantity": null,
-            "bidQuoteValue": 106.75,
-            "askQuantity": null,
-            "askQuoteValue": 107.125,
-            "globalIdentifier": "US910047AK50"
-          },
-          "bestSpreadQuote": {
-            "isValid": true,
-            "quoteMetric": "Spread",
-            "bidQuoteType": "Run",
-            "bidDealer": "MS",
-            "bidTime": "2020-02-18T13:19:01",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "GS",
-            "askTime": "2020-02-18T12:52:08",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 5000000,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": 0,
-            "totalSkew": 0,
-            "bidQuantity": null,
-            "bidQuoteValue": 198.27200317382812,
-            "askQuantity": null,
-            "askQuoteValue": 190.73399353027344,
-            "globalIdentifier": "US910047AK50"
-          },
-          "bestYieldQuote": {
-            "isValid": true,
-            "quoteMetric": "Yield",
-            "bidQuoteType": "Run",
-            "bidDealer": "MS",
-            "bidTime": "2020-02-18T13:19:01",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "GS",
-            "askTime": "2020-02-18T12:52:08",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 5000000,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": 0,
-            "totalSkew": 0,
-            "bidQuantity": null,
-            "bidQuoteValue": 3.3691000938415527,
-            "askQuantity": null,
-            "askQuoteValue": 3.2888500690460205,
-            "globalIdentifier": "US910047AK50"
-          }
-        },
-        "positions": [
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "28481",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "DOF",
-              "StrategyName": ""
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":"2020-02-25T16:13:44.881",
+              "user":"ST",
+              "value":90.0
             },
-            "quantity": 1000000,
-            "cs01Cad": 617.883947,
-            "cs01Local": 617.883947
-          },
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "28481",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "SOF",
-              "StrategyName": ""
-            },
-            "quantity": 1000000,
-            "cs01Cad": 617.883947,
-            "cs01Local": 617.883947
-          }
-        ]
-      },
-      "28544": {
-        "securityIdentifier": "28544",
-        "security": {
-          "securityIdentifier": "28544",
-          "ccy": "CAD",
-          "country": "US",
-          "industry": "Real Estate",
-          "name": "BPOCN 6 PFD 06/30/2021 CAD CC",
-          "genericSeniority": "SUB",
-          "globalIdentifier": "CA1129006674",
-          "obligorName": "BROOKFIELD OFFICE PROPERTIES INC",
-          "obligorId": 2351,
-          "paymentRank": "PREFERRED",
-          "sector": "Financials",
-          "securitySubType": "Preferred",
-          "subIndustry": "Real Estate Oper/Develop",
-          "ticker": "BPOCN",
-          "metrics": {
-            "isFixedForLife": false,
-            "isFixedToFloatInFixed": true,
-            "isFloat": false,
-            "isOnTheRun": false,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": null,
-            "benchmarkName": null,
-            "underlyingSecurityId": -1,
-            "zSpread": 0,
-            "gSpread": 0,
-            "yieldWorst": 8.679148,
-            "amtOutstanding": 8000000,
-            "marketValue": 209600000,
-            "workoutTerm": 1.3753,
-            "ratingDouble": 14.5,
-            "isRated": true,
-            "rating": "BBB-",
-            "ratingNoNotch": "BBB",
-            "ratingBucket": "Xover",
-            "price": 26.2,
-            "spread": 0,
-            "isIndex": false
-          },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": 0,
-              "gSpread": 0,
-              "yieldWorst": 0.02015,
-              "ratingDouble": 0,
-              "price": 0,
-              "spread": 0
-            },
-            "Wow": {
-              "zSpread": 0,
-              "gSpread": 0,
-              "yieldWorst": 0.012042,
-              "ratingDouble": 0,
-              "price": -0.04,
-              "spread": 0
-            },
-            "Mtd": {
-              "zSpread": 0,
-              "gSpread": 0,
-              "yieldWorst": -0.11945,
-              "ratingDouble": 0,
-              "price": 0.11,
-              "spread": 0
-            },
-            "Mom": {
-              "zSpread": 0,
-              "gSpread": 0,
-              "yieldWorst": 0.132774,
-              "ratingDouble": 0,
-              "price": 0.06,
-              "spread": 0
-            },
-            "Ytd": {
-              "zSpread": 0,
-              "gSpread": 0,
-              "yieldWorst": 0.17952,
-              "ratingDouble": 0,
-              "price": 0.1,
-              "spread": 0
-            },
-            "Yoy": null
-          },
-          "firmPosition": {
-            "mark": {
-              "driver": "Price",
-              "enteredTime": null,
-              "user": null,
-              "value": 26.18
-            },
-            "primaryPmName": "DJ",
-            "backupPmName": "PM",
-            "researchName": "PD",
-            "owners": [
-              "DJ",
-              "PM",
-              "PD"
-            ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "NT STIP CUSTODY"
-              ],
-              "AttributionOwner": [
-                "CAD Term Risk"
-              ],
-              "PortfolioShortName": [
-                "STIP"
-              ],
-              "StrategyName": [
-                "LTOV - Yield"
-              ]
-            },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "28544",
-            "quantity": 990000,
-            "cs01Cad": 134.0566021872,
-            "cs01Local": 134.0566021872
-          },
-          "securityType": "Preferred"
-        },
-        "bestQuotes": null,
-        "positions": [
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "28544",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "STIP",
-              "StrategyName": ""
-            },
-            "quantity": 990000,
-            "cs01Cad": 134.0566021872,
-            "cs01Local": 134.0566021872
-          }
-        ]
-      },
-      "28551": {
-        "securityIdentifier": "28551",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": false,
-          "securityIdentifier": "28551",
-          "ccy": "USD",
-          "country": "US",
-          "industry": "Exploration & Production",
-          "name": "EGN 7.35 07/28/2027 Bullet USD MTNA SENIOR_UNSECURED",
-          "genericSeniority": "SR",
-          "globalIdentifier": "US29265AAR77",
-          "obligorName": "ENERGEN CORP",
-          "obligorId": 2189,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Energy",
-          "securitySubType": "Bond",
-          "subIndustry": "Oil Comp-Explor&Prodtn",
-          "ticker": "EGN",
-          "metrics": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isOnTheRun": false,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "63070",
-            "benchmarkName": "T 1.75 11/15/2029 USD",
-            "underlyingSecurityId": -1,
-            "zSpread": 0,
-            "gSpread": 282.07,
-            "yieldWorst": 4.345918,
-            "amtOutstanding": 10000000,
-            "marketValue": 12167125,
-            "workoutTerm": 7.4548,
-            "ratingDouble": 15,
-            "isRated": true,
-            "rating": "BBB",
-            "ratingNoNotch": "BBB",
-            "ratingBucket": "IG",
-            "price": 118.955834,
-            "spread": 275,
-            "isIndex": false
-          },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": 0,
-              "gSpread": 0.21,
-              "yieldWorst": -0.029453,
-              "ratingDouble": 0,
-              "price": 0.200502,
-              "spread": 0
-            },
-            "Wow": {
-              "zSpread": 0,
-              "gSpread": 0.87,
-              "yieldWorst": 0.009105,
-              "ratingDouble": 0,
-              "price": -0.105273,
-              "spread": 0
-            },
-            "Mtd": {
-              "zSpread": 0,
-              "gSpread": 0.32,
-              "yieldWorst": 0.086529,
-              "ratingDouble": 0,
-              "price": -0.68813,
-              "spread": 0
-            },
-            "Mom": {
-              "zSpread": 0,
-              "gSpread": 1.08,
-              "yieldWorst": -0.216506,
-              "ratingDouble": 0,
-              "price": 1.344863,
-              "spread": 0
-            },
-            "Ytd": {
-              "zSpread": 0,
-              "gSpread": 1.26,
-              "yieldWorst": -0.323047,
-              "ratingDouble": 0,
-              "price": 2.017913,
-              "spread": 0
-            },
-            "Yoy": null
-          },
-          "firmPosition": {
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": null,
-              "user": null,
-              "value": 275
-            },
-            "primaryPmName": "DJ",
-            "backupPmName": "DM",
-            "researchName": "TW",
-            "owners": [
-              "DJ",
-              "DM",
-              "TW"
-            ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "BARC DOF PB",
-                "BMO DOF PB",
-                "TD DOF PB",
-                "CIBC DOF PB",
-                "BNS SOF PB",
-                "TD SOF PB"
-              ],
-              "AttributionOwner": [
-                "USD Term Risk"
-              ],
-              "PortfolioShortName": [
-                "DOF",
-                "SOF"
-              ],
-              "StrategyName": [
-                "LTOV - Yield"
-              ]
-            },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "28551",
-            "quantity": 10000000,
-            "cs01Cad": 9324.022799999999,
-            "cs01Local": 9324.022799999999
-          },
-          "securityType": "Bond"
-        },
-        "bestQuotes": null,
-        "positions": [
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "28551",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "DOF",
-              "StrategyName": ""
-            },
-            "quantity": 5000000,
-            "cs01Cad": 4662.011399999999,
-            "cs01Local": 4662.011399999999
-          },
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "28551",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "SOF",
-              "StrategyName": ""
-            },
-            "quantity": 5000000,
-            "cs01Cad": 4662.0114,
-            "cs01Local": 4662.0114
-          }
-        ]
-      },
-      "33693": {
-        "securityIdentifier": "33693",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": false,
-          "securityIdentifier": "33693",
-          "ccy": "USD",
-          "country": "US",
-          "industry": "Financial Services",
-          "name": "STT FRN 06/15/2047 Callable USD SUBORDINATE",
-          "genericSeniority": "SUB",
-          "globalIdentifier": "US857477AY98",
-          "obligorName": "STATE STREET CORP",
-          "obligorId": 1906,
-          "paymentRank": "JR SUBORDINATED",
-          "sector": "Financials",
-          "securitySubType": "FRN",
-          "subIndustry": "Fiduciary Banks",
-          "ticker": "STT",
-          "metrics": {
-            "isFixedForLife": false,
-            "isFixedToFloatInFixed": false,
-            "isFloat": true,
-            "isOnTheRun": false,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": null,
-            "benchmarkName": null,
-            "underlyingSecurityId": -1,
-            "zSpread": 151.196,
-            "gSpread": 123.9283,
-            "yieldWorst": 3.21416,
-            "amtOutstanding": 502584000,
-            "marketValue": 456462871,
-            "workoutTerm": 27.3507,
-            "ratingDouble": 15,
-            "isRated": true,
-            "rating": "BBB",
-            "ratingNoNotch": "BBB",
-            "ratingBucket": "IG",
-            "price": 90.8232,
-            "spread": 151.196,
-            "isIndex": true
-          },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": 0.569,
-              "gSpread": 0.8766,
-              "yieldWorst": -0.02765,
-              "ratingDouble": 0,
-              "price": -0.1299,
-              "spread": 0.569
-            },
-            "Wow": {
-              "zSpread": -2.017,
-              "gSpread": -1.8088,
-              "yieldWorst": -0.03031,
-              "ratingDouble": 0,
-              "price": 0.3576,
-              "spread": -2.017
-            },
-            "Mtd": {
-              "zSpread": -11.949,
-              "gSpread": -11.7698,
-              "yieldWorst": -0.08118,
-              "ratingDouble": 0,
-              "price": 2.1337,
-              "spread": -11.949
-            },
-            "Mom": {
-              "zSpread": -33.915,
-              "gSpread": -34.95,
-              "yieldWorst": -0.58567,
-              "ratingDouble": 0,
-              "price": 5.2721,
-              "spread": -33.915
-            },
-            "Ytd": {
-              "zSpread": -23.108,
-              "gSpread": -24.062,
-              "yieldWorst": -0.58995,
-              "ratingDouble": 0,
-              "price": 3.4482,
-              "spread": -23.108
-            },
-            "Yoy": {
-              "zSpread": -98.684,
-              "gSpread": -109.1817,
-              "yieldWorst": -2.09481,
-              "ratingDouble": 0,
-              "price": 12.7359,
-              "spread": -98.684
-            }
-          },
-          "firmPosition": {
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": null,
-              "user": null,
-              "value": 146.1767
-            },
-            "primaryPmName": "IL",
-            "backupPmName": "PM",
-            "researchName": null,
-            "owners": [
+            "primaryPmName":"IL",
+            "backupPmName":"ST",
+            "researchName":"PD",
+            "owners":[
               "IL",
-              "PM"
-            ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "NT AGB CUSTODY",
-                "TD DOF PB",
-                "NT STIP CUSTODY"
-              ],
-              "AttributionOwner": [
-                "USD Term Risk"
-              ],
-              "PortfolioShortName": [
-                "AGB",
-                "DOF",
-                "STIP"
-              ],
-              "StrategyName": [
-                "LTOV - Yield"
-              ]
-            },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "33693",
-            "quantity": 23000000,
-            "cs01Cad": 52918.142951999995,
-            "cs01Local": 52918.142951999995
-          },
-          "securityType": "Bond"
-        },
-        "bestQuotes": {
-          "bestPriceQuote": {
-            "isValid": true,
-            "quoteMetric": "Price",
-            "bidQuoteType": "Run",
-            "bidDealer": "MS",
-            "bidTime": "2020-02-18T12:42:51",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Axe",
-            "askDealer": "MS",
-            "askTime": "2020-02-18T12:43:21",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 3500000,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": 1,
-            "totalSkew": 1,
-            "bidQuantity": null,
-            "bidQuoteValue": 90.5,
-            "askQuantity": 3500000,
-            "askQuoteValue": 92,
-            "globalIdentifier": "US857477AY98"
-          },
-          "bestSpreadQuote": {
-            "isValid": true,
-            "quoteMetric": "Spread",
-            "bidQuoteType": "Axe",
-            "bidDealer": "MS",
-            "bidTime": "2020-02-18T09:59:06",
-            "bidVenue": "MSG1",
-            "bidIsOld": true,
-            "askQuoteType": null,
-            "askDealer": null,
-            "askTime": null,
-            "askVenue": null,
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": null,
-            "totalSkew": null,
-            "bidQuantity": 5000000,
-            "bidQuoteValue": 90,
-            "askQuantity": null,
-            "askQuoteValue": null,
-            "globalIdentifier": "US857477AY98"
-          },
-          "bestYieldQuote": {
-            "isValid": true,
-            "quoteMetric": "Yield",
-            "bidQuoteType": "Run",
-            "bidDealer": "MS",
-            "bidTime": "2020-02-18T12:42:51",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Axe",
-            "askDealer": "MS",
-            "askTime": "2020-02-18T12:43:21",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 3500000,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": 1,
-            "totalSkew": 1,
-            "bidQuantity": null,
-            "bidQuoteValue": 3.2128000259399414,
-            "askQuantity": 3500000,
-            "askQuoteValue": 3.12637996673584,
-            "globalIdentifier": "US857477AY98"
-          }
-        },
-        "positions": [
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "33693",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "AGB",
-              "StrategyName": ""
-            },
-            "quantity": 2800000,
-            "cs01Cad": 6442.2087071999995,
-            "cs01Local": 6442.2087071999995
-          },
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "33693",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "DOF",
-              "StrategyName": ""
-            },
-            "quantity": 9335000,
-            "cs01Cad": 21477.86367204,
-            "cs01Local": 21477.86367204
-          },
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "33693",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "STIP",
-              "StrategyName": ""
-            },
-            "quantity": 10865000,
-            "cs01Cad": 24998.07057276,
-            "cs01Local": 24998.07057276
-          }
-        ]
-      },
-      "34321": {
-        "securityIdentifier": "34321",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": false,
-          "securityIdentifier": "34321",
-          "ccy": "USD",
-          "country": "US",
-          "industry": "Homebuilders",
-          "name": "TOL 5.875 02/15/2022 Callable USD SENIOR_UNSECURED",
-          "genericSeniority": "SR",
-          "globalIdentifier": "US88947EAK64",
-          "obligorName": "TOLL BROTHERS INC",
-          "obligorId": 784,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Consumer Discretionary",
-          "securitySubType": "Bond",
-          "subIndustry": "Bldg-Residential/Commer",
-          "ticker": "TOL",
-          "metrics": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isOnTheRun": true,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "65014",
-            "benchmarkName": "T 1.375 01/31/2022 USD",
-            "underlyingSecurityId": -1,
-            "zSpread": 71.8581,
-            "gSpread": 77.1334,
-            "yieldWorst": 2.19074,
-            "amtOutstanding": 419876000,
-            "marketValue": 446143443,
-            "workoutTerm": 1.7534,
-            "ratingDouble": 13,
-            "isRated": true,
-            "rating": "BB+",
-            "ratingNoNotch": "BB",
-            "ratingBucket": "HY",
-            "price": 106.256,
-            "spread": 73.5078,
-            "isIndex": true
-          },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": -0.8298,
-              "gSpread": -0.6665,
-              "yieldWorst": -0.03193,
-              "ratingDouble": 0,
-              "price": 0.047,
-              "spread": -1.6236
-            },
-            "Wow": {
-              "zSpread": -13.6847,
-              "gSpread": -17.1992,
-              "yieldWorst": -0.14088,
-              "ratingDouble": 0,
-              "price": 0.173,
-              "spread": -17.4474
-            },
-            "Mtd": {
-              "zSpread": -30.8689,
-              "gSpread": -36.2847,
-              "yieldWorst": -0.25422,
-              "ratingDouble": 0,
-              "price": 0.312,
-              "spread": -36.8951
-            },
-            "Mom": {
-              "zSpread": -10.5692,
-              "gSpread": -14.1078,
-              "yieldWorst": -0.28186,
-              "ratingDouble": 0,
-              "price": 0.201,
-              "spread": 0
-            },
-            "Ytd": {
-              "zSpread": -14.2747,
-              "gSpread": -21.4708,
-              "yieldWorst": -0.36131,
-              "ratingDouble": 0,
-              "price": 0.235,
-              "spread": 0
-            },
-            "Yoy": {
-              "zSpread": -90.7669,
-              "gSpread": -96.9766,
-              "yieldWorst": -2.02696,
-              "ratingDouble": 0,
-              "price": 2.005,
-              "spread": 0
-            }
-          },
-          "firmPosition": {
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": null,
-              "user": null,
-              "value": 75
-            },
-            "primaryPmName": "DJ",
-            "backupPmName": "PM",
-            "researchName": "PD",
-            "owners": [
-              "DJ",
-              "PM",
+              "ST",
               "PD"
             ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "TD SOF PB"
-              ],
-              "AttributionOwner": [
-                "Short Carry"
-              ],
-              "PortfolioShortName": [
-                "SOF"
-              ],
-              "StrategyName": [
-                "Short Carry"
-              ]
-            },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "34321",
-            "quantity": 7946000,
-            "cs01Cad": 1867.627037454,
-            "cs01Local": 1867.627037454
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1272",
+            "quantity":20000000.0,
+            "cs01Cad":7697.5472,
+            "cs01Local":7697.5472
           },
-          "securityType": "Bond"
+          "securityType":"Bond",
+          "maturityType":"Callable"
         },
-        "bestQuotes": {
-          "bestPriceQuote": {
-            "isValid": true,
-            "quoteMetric": "Price",
-            "bidQuoteType": "Run",
-            "bidDealer": "CG",
-            "bidTime": "2020-02-18T12:53:57",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Axe",
-            "askDealer": "CITZ",
-            "askTime": "2020-02-18T13:17:47",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 3575000,
-            "totalRunBidQuantity": 3000000,
-            "totalRunAskQuantity": 3000000,
-            "axeSkew": 1,
-            "totalSkew": 0.6866840731070496,
-            "bidQuantity": null,
-            "bidQuoteValue": 106.25,
-            "askQuantity": 1000000,
-            "askQuoteValue": 106.375,
-            "globalIdentifier": "US88947EAK64"
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Axe",
+            "bidDealer":"NBF",
+            "bidTime":"2020-02-25T08:48:33",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"BMO",
+            "askTime":"2020-02-25T08:48:48",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":110.20899963378906,
+            "askQuantity":0,
+            "askQuoteValue":110.02799987792969,
+            "globalIdentifier":"CA11257ZAD11"
           },
-          "bestSpreadQuote": {
-            "isValid": true,
-            "quoteMetric": "Spread",
-            "bidQuoteType": "Run",
-            "bidDealer": "CG",
-            "bidTime": "2020-02-18T12:53:57",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Axe",
-            "askDealer": "CITZ",
-            "askTime": "2020-02-18T13:17:47",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 3575000,
-            "totalRunBidQuantity": 3000000,
-            "totalRunAskQuantity": 3000000,
-            "axeSkew": 1,
-            "totalSkew": 0.6866840731070496,
-            "bidQuantity": null,
-            "bidQuoteValue": 78.50900268554688,
-            "askQuantity": 1000000,
-            "askQuoteValue": 71.62329864501953,
-            "globalIdentifier": "US88947EAK64"
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Axe",
+            "bidDealer":"BMO",
+            "bidTime":"2020-02-25T08:48:48",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"BMO",
+            "askTime":"2020-02-25T08:48:48",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":95.0,
+            "askQuantity":0,
+            "askQuoteValue":90.0,
+            "globalIdentifier":"CA11257ZAD11"
           },
-          "bestYieldQuote": {
-            "isValid": true,
-            "quoteMetric": "Yield",
-            "bidQuoteType": "Run",
-            "bidDealer": "CG",
-            "bidTime": "2020-02-18T12:53:57",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Axe",
-            "askDealer": "CG",
-            "askTime": "2020-02-18T12:02:05",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 3575000,
-            "totalRunBidQuantity": 3000000,
-            "totalRunAskQuantity": 3000000,
-            "axeSkew": 1,
-            "totalSkew": 0.6866840731070496,
-            "bidQuantity": null,
-            "bidQuoteValue": 2.190000057220459,
-            "askQuantity": 2575000,
-            "askQuoteValue": 2.0526599884033203,
-            "globalIdentifier": "US88947EAK64"
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Axe",
+            "bidDealer":"NBF",
+            "bidTime":"2020-02-25T08:48:33",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"BMO",
+            "askTime":"2020-02-25T08:48:48",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.2046799659729004,
+            "askQuantity":0,
+            "askQuoteValue":2.2581899166107178,
+            "globalIdentifier":"CA11257ZAD11"
           }
         },
-        "positions": [
+        "positions":[
           {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "34321",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "SOF",
-              "StrategyName": ""
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
             },
-            "quantity": 7946000,
-            "cs01Cad": 1867.627037454,
-            "cs01Local": 1867.627037454
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1272",
+            "quantity":20000000.0,
+            "cs01Cad":7697.5472,
+            "cs01Local":7697.5472
           }
         ]
       },
-      "34323": {
-        "securityIdentifier": "34323",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": false,
-          "securityIdentifier": "34323",
-          "ccy": "USD",
-          "country": "US",
-          "industry": "Homebuilders",
-          "name": "TOL 4.375 04/15/2023 Callable USD SENIOR_UNSECURED",
-          "genericSeniority": "SR",
-          "globalIdentifier": "US88947EAN04",
-          "obligorName": "TOLL BROTHERS INC",
-          "obligorId": 784,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Consumer Discretionary",
-          "securitySubType": "Bond",
-          "subIndustry": "Bldg-Residential/Commer",
-          "ticker": "TOL",
-          "metrics": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isOnTheRun": true,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "64723",
-            "benchmarkName": "T 1.5 01/15/2023 USD",
-            "underlyingSecurityId": -1,
-            "zSpread": 106.86,
-            "gSpread": 108.1247,
-            "yieldWorst": 2.48124,
-            "amtOutstanding": 400000000,
-            "marketValue": 421112000,
-            "workoutTerm": 2.9205,
-            "ratingDouble": 13,
-            "isRated": true,
-            "rating": "BB+",
-            "ratingNoNotch": "BB",
-            "ratingBucket": "HY",
-            "price": 105.278,
-            "spread": 107.42410000000001,
-            "isIndex": true
+      "1317":{
+        "securityIdentifier":"1317",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"1317",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Power Generation",
+          "name":"TACN 5.0 11/25/2020 Bullet CAD MTN SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA89347ZAL19",
+          "obligorName":"TRANSALTA CORP",
+          "obligorId":755,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Energy",
+          "securitySubType":"Bond",
+          "subIndustry":"Electric-Generation",
+          "ticker":"TACN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"23",
+            "benchmarkName":"CAN 0.75 09/01/2020 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":0.0,
+            "yieldWorst":0.0,
+            "amtOutstanding":400000000.0,
+            "marketValue":413005112.0,
+            "workoutTerm":0.7534,
+            "ratingDouble":13.33,
+            "isRated":true,
+            "rating":"BB+",
+            "ratingNoNotch":"BB",
+            "ratingBucket":"Xover",
+            "price":0.0,
+            "spread":0.0,
+            "isIndex":false
           },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": 12.5762,
-              "gSpread": 11.6998,
-              "yieldWorst": 0.09721,
-              "ratingDouble": 0,
-              "price": -0.285,
-              "spread": 11.9397
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
             },
-            "Wow": {
-              "zSpread": -4.975,
-              "gSpread": -6.1737,
-              "yieldWorst": -0.04996,
-              "ratingDouble": 0,
-              "price": 0.106,
-              "spread": -6.2421
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
             },
-            "Mtd": {
-              "zSpread": -20.165,
-              "gSpread": -23.4897,
-              "yieldWorst": -0.12946,
-              "ratingDouble": 0,
-              "price": 0.304,
-              "spread": -23.7272
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
             },
-            "Mom": {
-              "zSpread": -0.683,
-              "gSpread": -2.9933,
-              "yieldWorst": -0.20756,
-              "ratingDouble": 0,
-              "price": 0.454,
-              "spread": 0
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
             },
-            "Ytd": {
-              "zSpread": 1.201,
-              "gSpread": -3.7007,
-              "yieldWorst": -0.24916,
-              "ratingDouble": 0,
-              "price": 0.522,
-              "spread": 0
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":0.0,
+              "price":0.0,
+              "spread":0.0
             },
-            "Yoy": {
-              "zSpread": -94.893,
-              "gSpread": -103.0853,
-              "yieldWorst": -2.09466,
-              "ratingDouble": 0,
-              "price": 6.0358,
-              "spread": 0
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":0.0,
+              "yieldWorst":0.0,
+              "ratingDouble":-0.42,
+              "price":0.0,
+              "spread":0.0
             }
           },
-          "firmPosition": {
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": null,
-              "user": null,
-              "value": 95.0274
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF"
+              ],
+              "StrategyName":[
+                "Short Carry"
+              ]
             },
-            "primaryPmName": "DJ",
-            "backupPmName": "PM",
-            "researchName": "PD",
-            "owners": [
-              "DJ",
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":null,
+              "user":null,
+              "value":70.0
+            },
+            "primaryPmName":"PM",
+            "backupPmName":"DJ",
+            "researchName":"PD",
+            "owners":[
               "PM",
+              "DJ",
               "PD"
             ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "TD SOF PB"
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1317",
+            "quantity":5000000.0,
+            "cs01Cad":378.08409500000005,
+            "cs01Local":378.08409500000005
+          },
+          "securityType":"Bond",
+          "maturityType":"Bullet"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"CIBC",
+            "bidTime":"2020-02-25T08:43:56",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T08:43:56",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":101.89099884033203,
+            "askQuantity":0,
+            "askQuoteValue":101.96499633789062,
+            "globalIdentifier":"CA89347ZAL19"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"CIBC",
+            "bidTime":"2020-02-25T08:43:56",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T08:43:56",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":83.0,
+            "askQuantity":0,
+            "askQuoteValue":73.0,
+            "globalIdentifier":"CA89347ZAL19"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"CIBC",
+            "bidTime":"2020-02-25T08:43:56",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T08:43:56",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.4079999923706055,
+            "askQuantity":0,
+            "askQuoteValue":2.308000087738037,
+            "globalIdentifier":"CA89347ZAL19"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1317",
+            "quantity":5000000.0,
+            "cs01Cad":378.08409500000005,
+            "cs01Local":378.08409500000005
+          }
+        ]
+      },
+      "1340":{
+        "securityIdentifier":"1340",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"1340",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Pipeline",
+          "name":"ALACN 4.4 03/15/2024 Callable CAD SR UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA02138ZAH60",
+          "obligorName":"ALTAGAS LTD",
+          "obligorId":1000,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Energy",
+          "securitySubType":"Bond",
+          "subIndustry":"Pipelines",
+          "ticker":"ALACN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"28171",
+            "benchmarkName":"CAN 1.5 09/01/2024 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":112.2,
+            "yieldWorst":2.370753,
+            "amtOutstanding":200000000.0,
+            "marketValue":219506068.0,
+            "workoutTerm":4.0575,
+            "ratingDouble":14.33,
+            "isRated":true,
+            "rating":"BBB-",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":107.800157,
+            "spread":114.0018,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":3.59,
+              "yieldWorst":-0.048655,
+              "ratingDouble":0.0,
+              "price":0.180744,
+              "spread":3.4266
+            },
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":3.47,
+              "yieldWorst":-0.124538,
+              "ratingDouble":0.0,
+              "price":0.452579,
+              "spread":3.3336
+            },
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":1.81,
+              "yieldWorst":-0.049485,
+              "ratingDouble":0.0,
+              "price":0.082158,
+              "spread":1.4619
+            },
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":18.74,
+              "yieldWorst":-0.127501,
+              "ratingDouble":0.0,
+              "price":0.366917,
+              "spread":2.866
+            },
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":-3.47,
+              "yieldWorst":-0.470251,
+              "ratingDouble":0.0,
+              "price":1.664245,
+              "spread":-1.9605
+            },
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":-74.88,
+              "yieldWorst":-1.297002,
+              "ratingDouble":0.0,
+              "price":4.449527,
+              "spread":-73.4609
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF",
+                "FIP"
               ],
-              "AttributionOwner": [
+              "StrategyName":[
+                "LTOV - Spread"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":"2020-02-25T20:53:35.345",
+              "user":"IL",
+              "value":101.0
+            },
+            "primaryPmName":"IL",
+            "backupPmName":"ST",
+            "researchName":"AG",
+            "owners":[
+              "IL",
+              "ST",
+              "AG"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1340",
+            "quantity":20000000.0,
+            "cs01Cad":7650.3272799999995,
+            "cs01Local":7650.3272799999995
+          },
+          "securityType":"Bond",
+          "maturityType":"Callable"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"NBF",
+            "bidTime":"2020-02-25T08:48:33",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"NBF",
+            "askTime":"2020-02-25T08:48:33",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":107.9010009765625,
+            "askQuantity":0,
+            "askQuoteValue":108.16699981689453,
+            "globalIdentifier":"CA02138ZAH60"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"NBF",
+            "bidTime":"2020-02-25T08:48:33",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"NBF",
+            "askTime":"2020-02-25T08:48:33",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":99.0,
+            "askQuantity":0,
+            "askQuoteValue":92.0,
+            "globalIdentifier":"CA02138ZAH60"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"NBF",
+            "bidTime":"2020-02-25T08:48:33",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"NBF",
+            "askTime":"2020-02-25T08:48:33",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.214829921722412,
+            "askQuantity":0,
+            "askQuoteValue":2.150480031967163,
+            "globalIdentifier":"CA02138ZAH60"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1340",
+            "quantity":9000000.0,
+            "cs01Cad":3442.647276,
+            "cs01Local":3442.647276
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"FIP",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1340",
+            "quantity":11000000.0,
+            "cs01Cad":4207.680004,
+            "cs01Local":4207.680004
+          }
+        ]
+      },
+      "1344":{
+        "securityIdentifier":"1344",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"1344",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Power Generation",
+          "name":"AQNCN 4.65 02/15/2022 Bullet CAD SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA01585PAE57",
+          "obligorName":"ALGONQUIN POWER CO",
+          "obligorId":1163,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Utilities",
+          "securitySubType":"Bond",
+          "subIndustry":"Diversified Operations",
+          "ticker":"AQNCN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":true,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"1840",
+            "benchmarkName":"CAN 1.0 09/01/2022 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":69.6,
+            "yieldWorst":2.032375,
+            "amtOutstanding":200000000.0,
+            "marketValue":210314428.0,
+            "workoutTerm":1.9781,
+            "ratingDouble":15.0,
+            "isRated":true,
+            "rating":"BBB",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":105.042556,
+            "spread":71.6563,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":1.47,
+              "yieldWorst":-0.060345,
+              "ratingDouble":0.0,
+              "price":0.099595,
+              "spread":1.3211
+            },
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":2.43,
+              "yieldWorst":-0.12527,
+              "ratingDouble":0.0,
+              "price":0.182993,
+              "spread":2.0117
+            },
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":1.73,
+              "yieldWorst":-0.07369,
+              "ratingDouble":0.0,
+              "price":-0.012168,
+              "spread":0.9802
+            },
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":15.99,
+              "yieldWorst":-0.112972,
+              "ratingDouble":0.0,
+              "price":0.023374,
+              "spread":3.3256
+            },
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":-0.62,
+              "yieldWorst":-0.354621,
+              "ratingDouble":0.0,
+              "price":0.383185,
+              "spread":1.2806
+            },
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":-57.22,
+              "yieldWorst":-1.021225,
+              "ratingDouble":0.0,
+              "price":0.527677,
+              "spread":-56.0427
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF",
+                "FIP"
+              ],
+              "StrategyName":[
                 "Short Carry"
-              ],
-              "PortfolioShortName": [
-                "SOF"
-              ],
-              "StrategyName": [
-                "Short Carry"
               ]
             },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "34323",
-            "quantity": 0,
-            "cs01Cad": 0,
-            "cs01Local": 0
-          },
-          "securityType": "Bond"
-        },
-        "bestQuotes": {
-          "bestPriceQuote": {
-            "isValid": true,
-            "quoteMetric": "Price",
-            "bidQuoteType": "Run",
-            "bidDealer": "DB",
-            "bidTime": "2020-02-18T12:17:23",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "WFS",
-            "askTime": "2020-02-18T12:38:26",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 3000000,
-            "totalRunAskQuantity": 2000000,
-            "axeSkew": null,
-            "totalSkew": 0.4,
-            "bidQuantity": 1000000,
-            "bidQuoteValue": 105.375,
-            "askQuantity": 1000000,
-            "askQuoteValue": 105.875,
-            "globalIdentifier": "US88947EAN04"
-          },
-          "bestSpreadQuote": {
-            "isValid": true,
-            "quoteMetric": "Spread",
-            "bidQuoteType": "Run",
-            "bidDealer": "DB",
-            "bidTime": "2020-02-18T12:17:23",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "WFS",
-            "askTime": "2020-02-18T12:38:26",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 3000000,
-            "totalRunAskQuantity": 2000000,
-            "axeSkew": null,
-            "totalSkew": 0.4,
-            "bidQuantity": 1000000,
-            "bidQuoteValue": 107.5999984741211,
-            "askQuantity": 1000000,
-            "askQuoteValue": 90.52680206298828,
-            "globalIdentifier": "US88947EAN04"
-          },
-          "bestYieldQuote": {
-            "isValid": true,
-            "quoteMetric": "Yield",
-            "bidQuoteType": "Run",
-            "bidDealer": "DB",
-            "bidTime": "2020-02-18T12:17:23",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "WFS",
-            "askTime": "2020-02-18T12:38:26",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 3000000,
-            "totalRunAskQuantity": 2000000,
-            "axeSkew": null,
-            "totalSkew": 0.4,
-            "bidQuantity": 1000000,
-            "bidQuoteValue": 2.450000047683716,
-            "askQuantity": 1000000,
-            "askQuoteValue": 2.2699999809265137,
-            "globalIdentifier": "US88947EAN04"
-          }
-        },
-        "positions": [
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "34323",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "SOF",
-              "StrategyName": ""
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":null,
+              "user":null,
+              "value":65.0
             },
-            "quantity": 0,
-            "cs01Cad": 0,
-            "cs01Local": 0
-          }
-        ]
-      },
-      "34329": {
-        "securityIdentifier": "34329",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": false,
-          "securityIdentifier": "34329",
-          "ccy": "USD",
-          "country": "US",
-          "industry": "Homebuilders",
-          "name": "TOL 4.35 02/15/2028 Callable USD SENIOR_UNSECURED",
-          "genericSeniority": "SR",
-          "globalIdentifier": "US88947EAT73",
-          "obligorName": "TOLL BROTHERS INC",
-          "obligorId": 784,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Consumer Discretionary",
-          "securitySubType": "Bond",
-          "subIndustry": "Bldg-Residential/Commer",
-          "ticker": "TOL",
-          "metrics": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isOnTheRun": false,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "63070",
-            "benchmarkName": "T 1.75 11/15/2029 USD",
-            "underlyingSecurityId": -1,
-            "zSpread": 182.939,
-            "gSpread": 175.8722,
-            "yieldWorst": 3.29367,
-            "amtOutstanding": 400000000,
-            "marketValue": 428672000,
-            "workoutTerm": 7.7562,
-            "ratingDouble": 13,
-            "isRated": true,
-            "rating": "BB+",
-            "ratingNoNotch": "BB",
-            "ratingBucket": "HY",
-            "price": 107.168,
-            "spread": 170.02660000000003,
-            "isIndex": true
-          },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": 0.62,
-              "gSpread": 0.6167,
-              "yieldWorst": -0.02568,
-              "ratingDouble": 0,
-              "price": 0.179,
-              "spread": 0.3774
-            },
-            "Wow": {
-              "zSpread": -13.295,
-              "gSpread": -13.1342,
-              "yieldWorst": -0.13179,
-              "ratingDouble": 0,
-              "price": 0.911,
-              "spread": -14.0577
-            },
-            "Mtd": {
-              "zSpread": -35.814,
-              "gSpread": -36.355,
-              "yieldWorst": -0.28205,
-              "ratingDouble": 0,
-              "price": 1.947,
-              "spread": -36.7936
-            },
-            "Mom": {
-              "zSpread": -13.135,
-              "gSpread": -14.0237,
-              "yieldWorst": -0.36839,
-              "ratingDouble": 0,
-              "price": 2.52,
-              "spread": 0
-            },
-            "Ytd": {
-              "zSpread": -6.897,
-              "gSpread": -7.5074,
-              "yieldWorst": -0.41302,
-              "ratingDouble": 0,
-              "price": 2.813,
-              "spread": 0
-            },
-            "Yoy": {
-              "zSpread": -93.451,
-              "gSpread": -103.2678,
-              "yieldWorst": -2.12377,
-              "ratingDouble": 0,
-              "price": 14.686,
-              "spread": 0
-            }
-          },
-          "firmPosition": {
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": "2020-02-18T15:31:22.118",
-              "user": "PM",
-              "value": 170
-            },
-            "primaryPmName": "DJ",
-            "backupPmName": "PM",
-            "researchName": "PD",
-            "owners": [
-              "DJ",
-              "PM",
-              "PD"
-            ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "TD SOF PB"
-              ],
-              "AttributionOwner": [
-                "USD Term Risk"
-              ],
-              "PortfolioShortName": [
-                "SOF"
-              ],
-              "StrategyName": [
-                "LTOV - Spread"
-              ]
-            },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "34329",
-            "quantity": 13470000,
-            "cs01Cad": 12830.03303967,
-            "cs01Local": 12830.03303967
-          },
-          "securityType": "Bond"
-        },
-        "bestQuotes": {
-          "bestPriceQuote": {
-            "isValid": true,
-            "quoteMetric": "Price",
-            "bidQuoteType": "Axe",
-            "bidDealer": "MULT",
-            "bidTime": "2020-02-18T13:17:47",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "GS",
-            "askTime": "2020-02-18T12:05:37",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 2050000,
-            "totalAxeAskQuantity": 1000000,
-            "totalRunBidQuantity": 1000000,
-            "totalRunAskQuantity": 1000000,
-            "axeSkew": 0.32786885245901637,
-            "totalSkew": 0.39603960396039606,
-            "bidQuantity": 2000000,
-            "bidQuoteValue": 107.25,
-            "askQuantity": null,
-            "askQuoteValue": 107.625,
-            "globalIdentifier": "US88947EAT73"
-          },
-          "bestSpreadQuote": {
-            "isValid": true,
-            "quoteMetric": "Spread",
-            "bidQuoteType": "Axe",
-            "bidDealer": "CITZ",
-            "bidTime": "2020-02-18T13:17:47",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "GS",
-            "askTime": "2020-02-18T12:05:37",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 2050000,
-            "totalAxeAskQuantity": 1000000,
-            "totalRunBidQuantity": 1000000,
-            "totalRunAskQuantity": 1000000,
-            "axeSkew": 0.32786885245901637,
-            "totalSkew": 0.39603960396039606,
-            "bidQuantity": 2000000,
-            "bidQuoteValue": 172.91299438476562,
-            "askQuantity": null,
-            "askQuoteValue": 168.46499633789062,
-            "globalIdentifier": "US88947EAT73"
-          },
-          "bestYieldQuote": {
-            "isValid": true,
-            "quoteMetric": "Yield",
-            "bidQuoteType": "Run",
-            "bidDealer": "CG",
-            "bidTime": "2020-02-18T12:53:57",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "GS",
-            "askTime": "2020-02-18T12:05:37",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 2050000,
-            "totalAxeAskQuantity": 1000000,
-            "totalRunBidQuantity": 1000000,
-            "totalRunAskQuantity": 1000000,
-            "axeSkew": 0.32786885245901637,
-            "totalSkew": 0.39603960396039606,
-            "bidQuantity": null,
-            "bidQuoteValue": 3.2799999713897705,
-            "askQuantity": null,
-            "askQuoteValue": 3.2286899089813232,
-            "globalIdentifier": "US88947EAT73"
-          }
-        },
-        "positions": [
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "34329",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "SOF",
-              "StrategyName": ""
-            },
-            "quantity": 13470000,
-            "cs01Cad": 12830.03303967,
-            "cs01Local": 12830.03303967
-          }
-        ]
-      },
-      "44632": {
-        "securityIdentifier": "44632",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": false,
-          "securityIdentifier": "44632",
-          "ccy": "USD",
-          "country": "CA",
-          "industry": "Aerospace & Defense",
-          "name": "BBDBCN 6.0 10/15/2022 Callable USD 144A SENIOR_UNSECURED",
-          "genericSeniority": "SR",
-          "globalIdentifier": "US097751BJ96",
-          "obligorName": "BOMBARDIER INC",
-          "obligorId": 126,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Industrials",
-          "securitySubType": "Bond",
-          "subIndustry": "Aerospace/Defense",
-          "ticker": "BBDBCN",
-          "metrics": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isOnTheRun": false,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "65014",
-            "benchmarkName": "T 1.375 01/31/2022 USD",
-            "underlyingSecurityId": -1,
-            "zSpread": 459.966,
-            "gSpread": 460.6897,
-            "yieldWorst": 6.01901,
-            "amtOutstanding": 1200000000,
-            "marketValue": 1199332800,
-            "workoutTerm": 2.6685,
-            "ratingDouble": 8,
-            "isRated": true,
-            "rating": "B-",
-            "ratingNoNotch": "B",
-            "ratingBucket": "HY",
-            "price": 99.9444,
-            "spread": 458.6295999999999,
-            "isIndex": true
-          },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": -0.813,
-              "gSpread": -2.1043,
-              "yieldWorst": -0.03578,
-              "ratingDouble": 0,
-              "price": 0.0868,
-              "spread": -1.9818
-            },
-            "Wow": {
-              "zSpread": -3.023,
-              "gSpread": -4.5774,
-              "yieldWorst": -0.03087,
-              "ratingDouble": 0,
-              "price": 0.0763,
-              "spread": -5.8486
-            },
-            "Mtd": {
-              "zSpread": -84.203,
-              "gSpread": -88.3195,
-              "yieldWorst": -0.77278,
-              "ratingDouble": 0,
-              "price": 1.8782,
-              "spread": -88.2096
-            },
-            "Mom": {
-              "zSpread": 128.342,
-              "gSpread": 97.2305,
-              "yieldWorst": 0.83373,
-              "ratingDouble": 0,
-              "price": -0.2436,
-              "spread": 0
-            },
-            "Ytd": {
-              "zSpread": 132.263,
-              "gSpread": 97.5642,
-              "yieldWorst": 0.82772,
-              "ratingDouble": 0,
-              "price": -0.2706,
-              "spread": 0
-            },
-            "Yoy": {
-              "zSpread": 48.492,
-              "gSpread": 39.1497,
-              "yieldWorst": -0.66176,
-              "ratingDouble": 0,
-              "price": 2.1311,
-              "spread": 0
-            }
-          },
-          "firmPosition": {
-            "mark": {
-              "driver": "Price",
-              "enteredTime": "2020-02-18T13:09:20.694",
-              "user": "DJ",
-              "value": 100.625
-            },
-            "primaryPmName": "DJ",
-            "backupPmName": "PM",
-            "researchName": "TW",
-            "owners": [
-              "DJ",
-              "PM",
-              "TW"
-            ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "TD SOF PB"
-              ],
-              "AttributionOwner": [
-                "Basis"
-              ],
-              "PortfolioShortName": [
-                "SOF"
-              ],
-              "StrategyName": [
-                "Basis"
-              ]
-            },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "44632",
-            "quantity": 5000000,
-            "cs01Cad": 380.72829,
-            "cs01Local": 380.72829
-          },
-          "securityType": "Bond"
-        },
-        "bestQuotes": {
-          "bestPriceQuote": {
-            "isValid": true,
-            "quoteMetric": "Price",
-            "bidQuoteType": "Axe",
-            "bidDealer": "MULT",
-            "bidTime": "2020-02-18T13:26:20",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "MULT",
-            "askTime": "2020-02-18T13:19:04",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 7000000,
-            "totalAxeAskQuantity": 2000000,
-            "totalRunBidQuantity": 12000000,
-            "totalRunAskQuantity": 12000000,
-            "axeSkew": 0.2222222222222222,
-            "totalSkew": 0.42424242424242425,
-            "bidQuantity": 5000000,
-            "bidQuoteValue": 100.5,
-            "askQuantity": 7000000,
-            "askQuoteValue": 100.75,
-            "globalIdentifier": "US097751BJ96"
-          },
-          "bestSpreadQuote": {
-            "isValid": true,
-            "quoteMetric": "Spread",
-            "bidQuoteType": "Axe",
-            "bidDealer": "MULT",
-            "bidTime": "2020-02-18T13:26:20",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "RBC",
-            "askTime": "2020-02-18T13:19:04",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 7000000,
-            "totalAxeAskQuantity": 2000000,
-            "totalRunBidQuantity": 12000000,
-            "totalRunAskQuantity": 12000000,
-            "axeSkew": 0.2222222222222222,
-            "totalSkew": 0.42424242424242425,
-            "bidQuantity": 5000000,
-            "bidQuoteValue": 110.94300079345703,
-            "askQuantity": 5000000,
-            "askQuoteValue": -47.799400329589844,
-            "globalIdentifier": "US097751BJ96"
-          },
-          "bestYieldQuote": {
-            "isValid": true,
-            "quoteMetric": "Yield",
-            "bidQuoteType": "Axe",
-            "bidDealer": "CS",
-            "bidTime": "2020-02-18T13:26:20",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "GS",
-            "askTime": "2020-02-18T12:42:18",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 7000000,
-            "totalAxeAskQuantity": 2000000,
-            "totalRunBidQuantity": 12000000,
-            "totalRunAskQuantity": 12000000,
-            "axeSkew": 0.2222222222222222,
-            "totalSkew": 0.42424242424242425,
-            "bidQuantity": 5000000,
-            "bidQuoteValue": 2.6600000858306885,
-            "askQuantity": null,
-            "askQuoteValue": 1.0608500242233276,
-            "globalIdentifier": "US097751BJ96"
-          }
-        },
-        "positions": [
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "44632",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "SOF",
-              "StrategyName": ""
-            },
-            "quantity": 5000000,
-            "cs01Cad": 380.72829,
-            "cs01Local": 380.72829
-          }
-        ]
-      },
-      "45119": {
-        "securityIdentifier": "45119",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": true,
-          "securityIdentifier": "45119",
-          "ccy": "EUR",
-          "country": "ES",
-          "industry": "Industrial Other",
-          "name": "ABESM 1.375 05/20/2026 Bullet EUR SENIOR_UNSECURED",
-          "genericSeniority": "SR",
-          "globalIdentifier": "ES0211845302",
-          "obligorName": "ABERTIS INFRAESTRUCTURAS SA",
-          "obligorId": 5,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Industrials",
-          "securitySubType": "Bond",
-          "subIndustry": "Public Thoroughfares",
-          "ticker": "ABESM",
-          "metrics": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isOnTheRun": false,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "1975",
-            "benchmarkName": "DBR 0.5 02/15/2026 EUR",
-            "underlyingSecurityId": -1,
-            "zSpread": 120.542,
-            "gSpread": 154.8437,
-            "yieldWorst": 0.952105,
-            "amtOutstanding": 1150000000,
-            "marketValue": 1179348000,
-            "workoutTerm": 6.2575,
-            "ratingDouble": 14,
-            "isRated": true,
-            "rating": "BBB-",
-            "ratingNoNotch": "BBB",
-            "ratingBucket": "IG",
-            "price": 102.552,
-            "spread": 155.6064,
-            "isIndex": true
-          },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": -2.586,
-              "gSpread": -3.0835,
-              "yieldWorst": -0.029991,
-              "ratingDouble": 0,
-              "price": 0.182,
-              "spread": -3.1185
-            },
-            "Wow": {
-              "zSpread": -3.668,
-              "gSpread": -5.5506,
-              "yieldWorst": -0.052485,
-              "ratingDouble": 0,
-              "price": 0.314,
-              "spread": 0
-            },
-            "Mtd": {
-              "zSpread": -4.256,
-              "gSpread": -6.7778,
-              "yieldWorst": -0.041674,
-              "ratingDouble": 0,
-              "price": 0.24,
-              "spread": 0
-            },
-            "Mom": {
-              "zSpread": -25.247,
-              "gSpread": -27.1504,
-              "yieldWorst": -0.421605,
-              "ratingDouble": 0,
-              "price": 2.546,
-              "spread": 0
-            },
-            "Ytd": {
-              "zSpread": 0,
-              "gSpread": 0,
-              "yieldWorst": 0,
-              "ratingDouble": -1,
-              "price": 0.365,
-              "spread": 0
-            },
-            "Yoy": {
-              "zSpread": -55.643,
-              "gSpread": -76.4463,
-              "yieldWorst": -1.173255,
-              "ratingDouble": 0,
-              "price": 7.5453,
-              "spread": 0
-            }
-          },
-          "firmPosition": {
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": null,
-              "user": null,
-              "value": 151
-            },
-            "primaryPmName": "RS",
-            "backupPmName": "DA",
-            "researchName": "TW",
-            "owners": [
-              "RS",
-              "DA",
-              "TW"
-            ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "BARC DOF PB",
-                "BARC SOF PB"
-              ],
-              "AttributionOwner": [
-                "European Term Risk"
-              ],
-              "PortfolioShortName": [
-                "DOF",
-                "SOF"
-              ],
-              "StrategyName": [
-                "LTOV - Spread"
-              ]
-            },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "45119",
-            "quantity": 3500000,
-            "cs01Cad": 3107.8086585,
-            "cs01Local": 3107.8086585
-          },
-          "securityType": "Bond"
-        },
-        "bestQuotes": {
-          "bestPriceQuote": {
-            "isValid": true,
-            "quoteMetric": "Price",
-            "bidQuoteType": "Run",
-            "bidDealer": "NATX",
-            "bidTime": "2020-02-18T12:32:45",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Axe",
-            "askDealer": "BAML",
-            "askTime": "2020-02-18T11:44:07",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 3700000,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": 1,
-            "totalSkew": 1,
-            "bidQuantity": null,
-            "bidQuoteValue": 102.44999694824219,
-            "askQuantity": 3700000,
-            "askQuoteValue": 102.94999694824219,
-            "globalIdentifier": "ES0211845302"
-          },
-          "bestSpreadQuote": {
-            "isValid": true,
-            "quoteMetric": "Spread",
-            "bidQuoteType": "Run",
-            "bidDealer": "NATX",
-            "bidTime": "2020-02-18T12:32:45",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Axe",
-            "askDealer": "BAML",
-            "askTime": "2020-02-18T11:44:07",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 3700000,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": 1,
-            "totalSkew": 1,
-            "bidQuantity": null,
-            "bidQuoteValue": 158,
-            "askQuantity": 3700000,
-            "askQuoteValue": 150,
-            "globalIdentifier": "ES0211845302"
-          },
-          "bestYieldQuote": {
-            "isValid": true,
-            "quoteMetric": "Yield",
-            "bidQuoteType": "Run",
-            "bidDealer": "NATX",
-            "bidTime": "2020-02-18T12:32:45",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Axe",
-            "askDealer": "BAML",
-            "askTime": "2020-02-18T11:44:07",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 3700000,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": 1,
-            "totalSkew": 1,
-            "bidQuantity": null,
-            "bidQuoteValue": 0.9700000286102295,
-            "askQuantity": 3700000,
-            "askQuoteValue": 0.8899999856948853,
-            "globalIdentifier": "ES0211845302"
-          }
-        },
-        "positions": [
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "45119",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "DOF",
-              "StrategyName": ""
-            },
-            "quantity": 2000000,
-            "cs01Cad": 1775.890662,
-            "cs01Local": 1775.890662
-          },
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "45119",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "SOF",
-              "StrategyName": ""
-            },
-            "quantity": 1500000,
-            "cs01Cad": 1331.9179965,
-            "cs01Local": 1331.9179965
-          }
-        ]
-      },
-      "59595": {
-        "securityIdentifier": "59595",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": false,
-          "securityIdentifier": "59595",
-          "ccy": "USD",
-          "country": "US",
-          "industry": "Financial Services",
-          "name": "CITADL 4.875 01/15/2027 Callable USD REGS SENIOR_UNSECURED",
-          "genericSeniority": "SR",
-          "globalIdentifier": "USU1569XAB11",
-          "obligorName": "CITADEL LP",
-          "obligorId": 1807,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Financials",
-          "securitySubType": "Bond",
-          "subIndustry": "Invest Mgmnt/Advis Serv",
-          "ticker": "CITADL",
-          "metrics": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isOnTheRun": false,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "65247",
-            "benchmarkName": "T 1.5 01/31/2027 USD",
-            "underlyingSecurityId": -1,
-            "zSpread": 209.008,
-            "gSpread": 203.3234,
-            "yieldWorst": 3.53148,
-            "amtOutstanding": 500000000,
-            "marketValue": 540110000,
-            "workoutTerm": 6.7562,
-            "ratingDouble": 15,
-            "isRated": true,
-            "rating": "BBB",
-            "ratingNoNotch": "BBB",
-            "ratingBucket": "IG",
-            "price": 108.022,
-            "spread": 202.15000000000003,
-            "isIndex": true
-          },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": -0.484,
-              "gSpread": -0.5313,
-              "yieldWorst": -0.03573,
-              "ratingDouble": 0,
-              "price": 0.219,
-              "spread": -0.4952
-            },
-            "Wow": {
-              "zSpread": -15.825,
-              "gSpread": -16.0541,
-              "yieldWorst": -0.157,
-              "ratingDouble": 0,
-              "price": 0.951,
-              "spread": -15.9947
-            },
-            "Mtd": {
-              "zSpread": -12.081,
-              "gSpread": -13.0623,
-              "yieldWorst": -0.04154,
-              "ratingDouble": 0,
-              "price": 0.214,
-              "spread": -13.5548
-            },
-            "Mom": {
-              "zSpread": -14.344,
-              "gSpread": -15.2024,
-              "yieldWorst": -0.37608,
-              "ratingDouble": 0,
-              "price": 2.267,
-              "spread": -15.6526
-            },
-            "Ytd": {
-              "zSpread": -14.498,
-              "gSpread": -15.6795,
-              "yieldWorst": -0.48191,
-              "ratingDouble": 0,
-              "price": 2.892,
-              "spread": -15.9228
-            },
-            "Yoy": null
-          },
-          "firmPosition": {
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": null,
-              "user": null,
-              "value": 201
-            },
-            "primaryPmName": "DM",
-            "backupPmName": "DA",
-            "researchName": "LP",
-            "owners": [
-              "DM",
-              "DA",
-              "LP"
-            ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "NT AGB CUSTODY",
-                "TD DOF PB",
-                "TD SOF PB",
-                "NT STIP CUSTODY"
-              ],
-              "AttributionOwner": [
-                "USD Term Risk"
-              ],
-              "PortfolioShortName": [
-                "AGB",
-                "DOF",
-                "SOF",
-                "STIP"
-              ],
-              "StrategyName": [
-                "LTOV - Spread"
-              ]
-            },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "59595",
-            "quantity": 16081000,
-            "cs01Cad": 13448.910870564,
-            "cs01Local": 13448.910870564
-          },
-          "securityType": "Bond"
-        },
-        "bestQuotes": null,
-        "positions": [
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "59595",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "AGB",
-              "StrategyName": ""
-            },
-            "quantity": 480000,
-            "cs01Cad": 401.43506112,
-            "cs01Local": 401.43506112
-          },
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "59595",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "DOF",
-              "StrategyName": ""
-            },
-            "quantity": 8396000,
-            "cs01Cad": 7021.768277423999,
-            "cs01Local": 7021.768277423999
-          },
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "59595",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "SOF",
-              "StrategyName": ""
-            },
-            "quantity": 3865000,
-            "cs01Cad": 3232.38856506,
-            "cs01Local": 3232.38856506
-          },
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "59595",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "STIP",
-              "StrategyName": ""
-            },
-            "quantity": 3340000,
-            "cs01Cad": 2793.31896696,
-            "cs01Local": 2793.31896696
-          }
-        ]
-      },
-      "59596": {
-        "securityIdentifier": "59596",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": false,
-          "securityIdentifier": "59596",
-          "ccy": "USD",
-          "country": "US",
-          "industry": "Financial Services",
-          "name": "CITADL 4.875 01/15/2027 Callable USD 144A SENIOR_UNSECURED",
-          "genericSeniority": "SR",
-          "globalIdentifier": "US17288XAB01",
-          "obligorName": "CITADEL LP",
-          "obligorId": 1807,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Financials",
-          "securitySubType": "Bond",
-          "subIndustry": "Invest Mgmnt/Advis Serv",
-          "ticker": "CITADL",
-          "metrics": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isOnTheRun": false,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "65247",
-            "benchmarkName": "T 1.5 01/31/2027 USD",
-            "underlyingSecurityId": -1,
-            "zSpread": 211.898,
-            "gSpread": 206.2134,
-            "yieldWorst": 3.56038,
-            "amtOutstanding": 500000000,
-            "marketValue": 539215000,
-            "workoutTerm": 6.7562,
-            "ratingDouble": 15,
-            "isRated": true,
-            "rating": "BBB",
-            "ratingNoNotch": "BBB",
-            "ratingBucket": "IG",
-            "price": 107.843,
-            "spread": 205.04000000000002,
-            "isIndex": true
-          },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": 1.013,
-              "gSpread": 0.9647,
-              "yieldWorst": -0.02077,
-              "ratingDouble": 0,
-              "price": 0.126,
-              "spread": 1.0008
-            },
-            "Wow": {
-              "zSpread": -12.435,
-              "gSpread": -12.6631,
-              "yieldWorst": -0.12309,
-              "ratingDouble": 0,
-              "price": 0.741,
-              "spread": -12.6102
-            },
-            "Mtd": {
-              "zSpread": -10.938,
-              "gSpread": -11.9183,
-              "yieldWorst": -0.0301,
-              "ratingDouble": 0,
-              "price": 0.144,
-              "spread": -12.4174
-            },
-            "Mom": {
-              "zSpread": -15.116,
-              "gSpread": -15.9744,
-              "yieldWorst": -0.3838,
-              "ratingDouble": 0,
-              "price": 2.313,
-              "spread": -16.4246
-            },
-            "Ytd": {
-              "zSpread": -15.931,
-              "gSpread": -17.1125,
-              "yieldWorst": -0.49624,
-              "ratingDouble": 0,
-              "price": 2.977,
-              "spread": -17.3558
-            },
-            "Yoy": null
-          },
-          "firmPosition": {
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": null,
-              "user": null,
-              "value": 201
-            },
-            "primaryPmName": "DM",
-            "backupPmName": "DA",
-            "researchName": "LP",
-            "owners": [
-              "DM",
-              "DA",
-              "LP"
-            ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "TD DOF PB",
-                "TD SOF PB",
-                "NT STIP CUSTODY"
-              ],
-              "AttributionOwner": [
-                "USD Term Risk"
-              ],
-              "PortfolioShortName": [
-                "DOF",
-                "SOF",
-                "STIP"
-              ],
-              "StrategyName": [
-                "LTOV - Spread"
-              ]
-            },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "59596",
-            "quantity": 5426000,
-            "cs01Cad": 4538.048437108,
-            "cs01Local": 4538.048437108
-          },
-          "securityType": "Bond"
-        },
-        "bestQuotes": {
-          "bestPriceQuote": {
-            "isValid": true,
-            "quoteMetric": "Price",
-            "bidQuoteType": "Run",
-            "bidDealer": "GS",
-            "bidTime": "2020-02-18T13:02:10",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "GS",
-            "askTime": "2020-02-18T13:02:10",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": null,
-            "totalSkew": null,
-            "bidQuantity": null,
-            "bidQuoteValue": 107.40599822998047,
-            "askQuantity": null,
-            "askQuoteValue": 107.83699798583984,
-            "globalIdentifier": "US17288XAB01"
-          },
-          "bestSpreadQuote": {
-            "isValid": true,
-            "quoteMetric": "Spread",
-            "bidQuoteType": "Run",
-            "bidDealer": "GS",
-            "bidTime": "2020-02-18T13:02:10",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "GS",
-            "askTime": "2020-02-18T13:02:10",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": null,
-            "totalSkew": null,
-            "bidQuantity": null,
-            "bidQuoteValue": 215,
-            "askQuantity": null,
-            "askQuoteValue": 205,
-            "globalIdentifier": "US17288XAB01"
-          },
-          "bestYieldQuote": {
-            "isValid": true,
-            "quoteMetric": "Yield",
-            "bidQuoteType": "Run",
-            "bidDealer": "GS",
-            "bidTime": "2020-02-18T13:02:10",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "GS",
-            "askTime": "2020-02-18T13:02:10",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": null,
-            "totalSkew": null,
-            "bidQuantity": null,
-            "bidQuoteValue": 3.6264500617980957,
-            "askQuantity": null,
-            "askQuoteValue": 3.556529998779297,
-            "globalIdentifier": "US17288XAB01"
-          }
-        },
-        "positions": [
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "59596",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "DOF",
-              "StrategyName": ""
-            },
-            "quantity": 2501000,
-            "cs01Cad": 2091.7174974580003,
-            "cs01Local": 2091.7174974580003
-          },
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "59596",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "SOF",
-              "StrategyName": ""
-            },
-            "quantity": 2025000,
-            "cs01Cad": 1693.61372745,
-            "cs01Local": 1693.61372745
-          },
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "59596",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "STIP",
-              "StrategyName": ""
-            },
-            "quantity": 900000,
-            "cs01Cad": 752.7172122000001,
-            "cs01Local": 752.7172122000001
-          }
-        ]
-      },
-      "60069": {
-        "securityIdentifier": "60069",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": false,
-          "securityIdentifier": "60069",
-          "ccy": "USD",
-          "country": "US",
-          "industry": "Real Estate",
-          "name": "HST 3.375 12/15/2029 Callable USD H SENIOR_UNSECURED",
-          "genericSeniority": "SR",
-          "globalIdentifier": "US44107TAY29",
-          "obligorName": "HOST HOTELS & RESORTS LP",
-          "obligorId": 386,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Financials",
-          "securitySubType": "Bond",
-          "subIndustry": "REITS-Hotels",
-          "ticker": "HST",
-          "metrics": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isOnTheRun": true,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "63070",
-            "benchmarkName": "T 1.75 11/15/2029 USD",
-            "underlyingSecurityId": -1,
-            "zSpread": 145.395,
-            "gSpread": 138.5072,
-            "yieldWorst": 2.96835,
-            "amtOutstanding": 650000000,
-            "marketValue": 671879000,
-            "workoutTerm": 9.8411,
-            "ratingDouble": 14,
-            "isRated": true,
-            "rating": "BBB-",
-            "ratingNoNotch": "BBB",
-            "ratingBucket": "IG",
-            "price": 103.366,
-            "spread": 137.4853,
-            "isIndex": true
-          },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": -0.77,
-              "gSpread": -1.0012,
-              "yieldWorst": -0.0409,
-              "ratingDouble": 0,
-              "price": 0.343,
-              "spread": -1.1806
-            },
-            "Wow": {
-              "zSpread": -2.955,
-              "gSpread": -2.7428,
-              "yieldWorst": -0.02936,
-              "ratingDouble": 0,
-              "price": 0.241,
-              "spread": -3.7774
-            },
-            "Mtd": {
-              "zSpread": -3.704,
-              "gSpread": -4.2114,
-              "yieldWorst": 0.03235,
-              "ratingDouble": 0,
-              "price": -0.288,
-              "spread": -5.2848
-            },
-            "Mom": {
-              "zSpread": 4.1,
-              "gSpread": 2.6462,
-              "yieldWorst": -0.20273,
-              "ratingDouble": 0,
-              "price": 1.679,
-              "spread": 1.5468
-            },
-            "Ytd": {
-              "zSpread": 5.147,
-              "gSpread": 3.4273,
-              "yieldWorst": -0.30113,
-              "ratingDouble": 0,
-              "price": 2.494,
-              "spread": 2.3271
-            },
-            "Yoy": null
-          },
-          "firmPosition": {
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": null,
-              "user": null,
-              "value": 139
-            },
-            "primaryPmName": "DA",
-            "backupPmName": "IL",
-            "researchName": "PD",
-            "owners": [
-              "DA",
+            "primaryPmName":"ST",
+            "backupPmName":"IL",
+            "researchName":"PD",
+            "owners":[
+              "ST",
               "IL",
               "PD"
             ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "TD DOF PB",
-                "TD SOF PB"
-              ],
-              "AttributionOwner": [
-                "Basis"
-              ],
-              "PortfolioShortName": [
-                "DOF",
-                "SOF"
-              ],
-              "StrategyName": [
-                "Basis"
-              ]
-            },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "60069",
-            "quantity": 13393000,
-            "cs01Cad": 15247.93746436,
-            "cs01Local": 15247.93746436
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1344",
+            "quantity":11325000.0,
+            "cs01Cad":2251.64517495,
+            "cs01Local":2251.64517495
           },
-          "securityType": "Bond"
+          "securityType":"Bond",
+          "maturityType":"Bullet"
         },
-        "bestQuotes": {
-          "bestPriceQuote": {
-            "isValid": true,
-            "quoteMetric": "Price",
-            "bidQuoteType": "Run",
-            "bidDealer": "SUMR",
-            "bidTime": "2020-02-18T13:30:41",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "CG",
-            "askTime": "2020-02-18T13:23:32",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 6000000,
-            "totalRunAskQuantity": 2000000,
-            "axeSkew": null,
-            "totalSkew": 0.25,
-            "bidQuantity": 2000000,
-            "bidQuoteValue": 103.73999786376953,
-            "askQuantity": null,
-            "askQuoteValue": 103.69999694824219,
-            "globalIdentifier": "US44107TAY29"
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"MULT",
+            "bidTime":"2020-02-25T08:44:09",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"BMO",
+            "askTime":"2020-02-25T08:33:22",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":104.97799682617188,
+            "askQuantity":0,
+            "askQuoteValue":104.92900085449219,
+            "globalIdentifier":"CA01585PAE57"
           },
-          "bestSpreadQuote": {
-            "isValid": true,
-            "quoteMetric": "Spread",
-            "bidQuoteType": "Run",
-            "bidDealer": "SUMR",
-            "bidTime": "2020-02-18T13:30:41",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "CG",
-            "askTime": "2020-02-18T13:23:32",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 6000000,
-            "totalRunAskQuantity": 2000000,
-            "axeSkew": null,
-            "totalSkew": 0.25,
-            "bidQuantity": 2000000,
-            "bidQuoteValue": 137,
-            "askQuantity": null,
-            "askQuoteValue": 138,
-            "globalIdentifier": "US44107TAY29"
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"MULT",
+            "bidTime":"2020-02-25T08:44:09",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"NBF",
+            "askTime":"2020-02-25T08:48:33",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":68.0,
+            "askQuantity":0,
+            "askQuoteValue":68.0,
+            "globalIdentifier":"CA01585PAE57"
           },
-          "bestYieldQuote": {
-            "isValid": true,
-            "quoteMetric": "Yield",
-            "bidQuoteType": "Run",
-            "bidDealer": "SUMR",
-            "bidTime": "2020-02-18T13:30:41",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "CG",
-            "askTime": "2020-02-18T13:23:32",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 6000000,
-            "totalRunAskQuantity": 2000000,
-            "axeSkew": null,
-            "totalSkew": 0.25,
-            "bidQuantity": 2000000,
-            "bidQuoteValue": 2.9240000247955322,
-            "askQuantity": null,
-            "askQuoteValue": 2.9287800788879395,
-            "globalIdentifier": "US44107TAY29"
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"TD",
+            "bidTime":"2020-02-25T08:44:09",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"BMO",
+            "askTime":"2020-02-25T08:33:22",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.054529905319214,
+            "askQuantity":0,
+            "askQuoteValue":2.0791399478912354,
+            "globalIdentifier":"CA01585PAE57"
           }
         },
-        "positions": [
+        "positions":[
           {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "60069",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "DOF",
-              "StrategyName": ""
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
             },
-            "quantity": 11965000,
-            "cs01Cad": 13622.1587218,
-            "cs01Local": 13622.1587218
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1344",
+            "quantity":8810000.0,
+            "cs01Cad":1751.6109484600001,
+            "cs01Local":1751.6109484600001
           },
           {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "60069",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "SOF",
-              "StrategyName": ""
+            "partitionOptionValue":{
+              "PortfolioShortName":"FIP",
+              "StrategyName":""
             },
-            "quantity": 1428000,
-            "cs01Cad": 1625.77874256,
-            "cs01Local": 1625.77874256
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1344",
+            "quantity":2515000.0,
+            "cs01Cad":500.03422649000004,
+            "cs01Local":500.03422649000004
           }
         ]
       },
-      "60101": {
-        "securityIdentifier": "60101",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": true,
-          "securityIdentifier": "60101",
-          "ccy": "USD",
-          "country": "IT",
-          "industry": "Banks",
-          "name": "ISPIM 4.0 09/23/2029 Bullet USD SENIOR_UNSECURED",
-          "genericSeniority": "SR",
-          "globalIdentifier": "US46115HBL06",
-          "obligorName": "INTESA SANPAOLO SPA",
-          "obligorId": 685,
-          "paymentRank": "SR PREFERRED",
-          "sector": "Financials",
-          "securitySubType": "Bond",
-          "subIndustry": "Commer Banks Non-US",
-          "ticker": "ISPIM",
-          "metrics": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isOnTheRun": true,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "63070",
-            "benchmarkName": "T 1.75 11/15/2029 USD",
-            "underlyingSecurityId": -1,
-            "zSpread": 156.184,
-            "gSpread": 149.5905,
-            "yieldWorst": 3.07478,
-            "amtOutstanding": 750000000,
-            "marketValue": 807262500,
-            "workoutTerm": 9.6137,
-            "ratingDouble": 15,
-            "isRated": true,
-            "rating": "BBB",
-            "ratingNoNotch": "BBB",
-            "ratingBucket": "IG",
-            "price": 107.635,
-            "spread": 148.08370000000002,
-            "isIndex": true
+      "1368":{
+        "securityIdentifier":"1368",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"1368",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Pipeline",
+          "name":"ENBCN 3.16 03/11/2021 Callable CAD SR UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA29251ZBF32",
+          "obligorName":"ENBRIDGE INC",
+          "obligorId":290,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Energy",
+          "securitySubType":"Bond",
+          "subIndustry":"Pipelines",
+          "ticker":"ENBCN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"28454",
+            "benchmarkName":"CAN 1.5 08/01/2021 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":49.49,
+            "yieldWorst":2.068085,
+            "amtOutstanding":400000000.0,
+            "marketValue":410233880.0,
+            "workoutTerm":1.0438,
+            "ratingDouble":15.75,
+            "isRated":true,
+            "rating":"BBB+",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":101.121319,
+            "spread":65.8988,
+            "isIndex":true
           },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": -5.32,
-              "gSpread": -5.523,
-              "yieldWorst": -0.08633,
-              "ratingDouble": 0,
-              "price": 0.74,
-              "spread": -5.7432
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":-0.92,
+              "yieldWorst":-0.029033,
+              "ratingDouble":0.0,
+              "price":0.021667,
+              "spread":3.8599
             },
-            "Wow": {
-              "zSpread": -8.885,
-              "gSpread": -8.688,
-              "yieldWorst": -0.08869,
-              "ratingDouble": 0,
-              "price": 0.748,
-              "spread": -9.7801
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":-2.06,
+              "yieldWorst":-0.072986,
+              "ratingDouble":0.0,
+              "price":0.048732,
+              "spread":6.952
             },
-            "Mtd": {
-              "zSpread": -33.533,
-              "gSpread": -34.1042,
-              "yieldWorst": -0.26592,
-              "ratingDouble": 0,
-              "price": 2.244,
-              "spread": -35.211
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":-3.26,
+              "yieldWorst":-0.029473,
+              "ratingDouble":0.0,
+              "price":-0.036846,
+              "spread":5.4215
             },
-            "Mom": {
-              "zSpread": -43.37,
-              "gSpread": -44.7866,
-              "yieldWorst": -0.677,
-              "ratingDouble": 0,
-              "price": 5.639,
-              "spread": -45.9574
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":-0.94,
+              "yieldWorst":-0.070263,
+              "ratingDouble":0.0,
+              "price":-0.010854,
+              "spread":5.8759
             },
-            "Ytd": {
-              "zSpread": -38.387,
-              "gSpread": -39.9469,
-              "yieldWorst": -0.73572,
-              "ratingDouble": 0,
-              "price": 6.112,
-              "spread": 0
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":-10.85,
+              "yieldWorst":-0.257001,
+              "ratingDouble":0.0,
+              "price":0.145049,
+              "spread":4.5314
             },
-            "Yoy": null
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":-46.61,
+              "yieldWorst":-0.673405,
+              "ratingDouble":0.0,
+              "price":0.294631,
+              "spread":-31.3862
+            }
           },
-          "firmPosition": {
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": null,
-              "user": null,
-              "value": 145
-            },
-            "primaryPmName": "DM",
-            "backupPmName": "RS",
-            "researchName": "LP",
-            "owners": [
-              "DM",
-              "RS",
-              "LP"
-            ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "TD DOF PB"
-              ],
-              "AttributionOwner": [
-                "USD Term Risk"
-              ],
-              "PortfolioShortName": [
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
                 "DOF"
               ],
-              "StrategyName": [
+              "StrategyName":[
+                "Short Carry"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":"2020-02-25T18:27:03.312",
+              "user":"IL",
+              "value":49.0
+            },
+            "primaryPmName":"IL",
+            "backupPmName":"ST",
+            "researchName":"AG",
+            "owners":[
+              "IL",
+              "ST",
+              "AG"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1368",
+            "quantity":20969000.0,
+            "cs01Cad":2036.9830745550003,
+            "cs01Local":2036.9830745550003
+          },
+          "securityType":"Bond",
+          "maturityType":"Callable"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Axe",
+            "bidDealer":"BNS",
+            "bidTime":"2020-02-25T07:47:46",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"BMO",
+            "askTime":"2020-02-25T08:00:05",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":101.10399627685547,
+            "askQuantity":0,
+            "askQuoteValue":101.03099822998047,
+            "globalIdentifier":"CA29251ZBF32"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Axe",
+            "bidDealer":"BNS",
+            "bidTime":"2020-02-25T07:47:46",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"BMO",
+            "askTime":"2020-02-25T08:00:05",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":51.0,
+            "askQuantity":0,
+            "askQuoteValue":47.0,
+            "globalIdentifier":"CA29251ZBF32"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Axe",
+            "bidDealer":"BNS",
+            "bidTime":"2020-02-25T07:47:46",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"BMO",
+            "askTime":"2020-02-25T08:00:05",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":1.9930000305175781,
+            "askQuantity":0,
+            "askQuoteValue":2.066999912261963,
+            "globalIdentifier":"CA29251ZBF32"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1368",
+            "quantity":20969000.0,
+            "cs01Cad":2036.9830745550003,
+            "cs01Local":2036.9830745550003
+          }
+        ]
+      },
+      "1377":{
+        "securityIdentifier":"1377",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"1377",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Property & Casualty Insurance",
+          "name":"MICCN 4.242 04/01/2024 Bullet CAD SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA37252BAC69",
+          "obligorName":"GENWORTH MI CANADA INC",
+          "obligorId":1130,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Financials",
+          "securitySubType":"Bond",
+          "subIndustry":"Financial Guarantee Ins",
+          "ticker":"MICCN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"28171",
+            "benchmarkName":"CAN 1.5 09/01/2024 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":114.77,
+            "yieldWorst":2.393931,
+            "amtOutstanding":248500000.0,
+            "marketValue":270549348.0,
+            "workoutTerm":4.1041,
+            "ratingDouble":17.5,
+            "isRated":true,
+            "rating":"A",
+            "ratingNoNotch":"A",
+            "ratingBucket":"IG",
+            "price":107.176177,
+            "spread":116.3196,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":-2.5,
+              "yieldWorst":-0.109857,
+              "ratingDouble":0.0,
+              "price":0.430723,
+              "spread":-2.6936
+            },
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":-2.88,
+              "yieldWorst":-0.188263,
+              "ratingDouble":0.0,
+              "price":0.718284,
+              "spread":-3.0389
+            },
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":-7.44,
+              "yieldWorst":-0.141521,
+              "ratingDouble":0.0,
+              "price":0.471302,
+              "spread":-7.7417
+            },
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":8.62,
+              "yieldWorst":-0.230353,
+              "ratingDouble":0.0,
+              "price":0.805947,
+              "spread":-7.4192
+            },
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":-15.11,
+              "yieldWorst":-0.588889,
+              "ratingDouble":0.0,
+              "price":2.187055,
+              "spread":-13.8243
+            },
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":-84.08,
+              "yieldWorst":-1.393267,
+              "ratingDouble":0.0,
+              "price":5.085252,
+              "spread":-83.0874
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "BBB",
+                "CIP",
+                "DOF",
+                "FIP"
+              ],
+              "StrategyName":[
                 "LTOV - Spread"
               ]
             },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "60101",
-            "quantity": 10000000,
-            "cs01Cad": 11543.39826,
-            "cs01Local": 11543.39826
-          },
-          "securityType": "Bond"
-        },
-        "bestQuotes": {
-          "bestPriceQuote": {
-            "isValid": true,
-            "quoteMetric": "Price",
-            "bidQuoteType": "Run",
-            "bidDealer": "CG",
-            "bidTime": "2020-02-18T13:01:44",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "CS",
-            "askTime": "2020-02-18T13:34:41",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 4890000,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": 0,
-            "totalSkew": 0,
-            "bidQuantity": null,
-            "bidQuoteValue": 108.11000061035156,
-            "askQuantity": null,
-            "askQuoteValue": 107.9000015258789,
-            "globalIdentifier": "US46115HBL06"
-          },
-          "bestSpreadQuote": {
-            "isValid": true,
-            "quoteMetric": "Spread",
-            "bidQuoteType": "Run",
-            "bidDealer": "CG",
-            "bidTime": "2020-02-18T13:01:44",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "CS",
-            "askTime": "2020-02-18T13:34:41",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 4890000,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": 0,
-            "totalSkew": 0,
-            "bidQuantity": null,
-            "bidQuoteValue": 147,
-            "askQuantity": null,
-            "askQuoteValue": 149,
-            "globalIdentifier": "US46115HBL06"
-          },
-          "bestYieldQuote": {
-            "isValid": true,
-            "quoteMetric": "Yield",
-            "bidQuoteType": "Run",
-            "bidDealer": "CG",
-            "bidTime": "2020-02-18T13:01:44",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "CS",
-            "askTime": "2020-02-18T13:34:41",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 4890000,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": 0,
-            "totalSkew": 0,
-            "bidQuantity": null,
-            "bidQuoteValue": 3.0195400714874268,
-            "askQuantity": null,
-            "askQuoteValue": 3.04082989692688,
-            "globalIdentifier": "US46115HBL06"
-          }
-        },
-        "positions": [
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "60101",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "DOF",
-              "StrategyName": ""
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":null,
+              "user":null,
+              "value":110.0
             },
-            "quantity": 10000000,
-            "cs01Cad": 11543.39826,
-            "cs01Local": 11543.39826
-          }
-        ]
-      },
-      "773|5Y": {
-        "securityIdentifier": "773|5Y",
-        "security": {
-          "curveSubType": "XR14",
-          "securityIdentifier": "773|5Y",
-          "ccy": "USD",
-          "country": "US",
-          "industry": "Homebuilders",
-          "name": "MDC CDS USD SR 5Y",
-          "genericSeniority": "SR",
-          "globalIdentifier": "MDC CDS USD SR 5Y",
-          "obligorName": "MDC HOLDINGS INC",
-          "obligorId": 511,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Consumer Discretionary",
-          "securitySubType": null,
-          "subIndustry": "Bldg-Residential/Commer",
-          "ticker": "MDC",
-          "metrics": {
-            "isOnTheRun": true,
-            "workoutTerm": 4.8411,
-            "ratingDouble": 13,
-            "isRated": true,
-            "rating": "BB+",
-            "ratingNoNotch": "BB",
-            "ratingBucket": "HY",
-            "price": 0,
-            "spread": 52,
-            "isIndex": true
-          },
-          "deltaMetrics": {
-            "Dod": {
-              "ratingDouble": 0,
-              "price": 0,
-              "spread": -2
-            },
-            "Wow": {
-              "ratingDouble": 0,
-              "price": 0,
-              "spread": -1
-            },
-            "Mtd": {
-              "ratingDouble": 0,
-              "price": 0,
-              "spread": -3
-            },
-            "Mom": {
-              "ratingDouble": 0,
-              "price": 0,
-              "spread": -8
-            },
-            "Ytd": {
-              "ratingDouble": 0,
-              "price": 0,
-              "spread": -18
-            },
-            "Yoy": {
-              "ratingDouble": 0,
-              "price": 0,
-              "spread": -109.5
-            }
-          },
-          "firmPosition": {
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": null,
-              "user": null,
-              "value": 55
-            },
-            "primaryPmName": "DA",
-            "backupPmName": "IL",
-            "researchName": "PD",
-            "owners": [
-              "DA",
+            "primaryPmName":"ST",
+            "backupPmName":"IL",
+            "researchName":"LP",
+            "owners":[
+              "ST",
               "IL",
-              "PD"
-            ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "TD DOF PB",
-                "TD SOF PB"
-              ],
-              "AttributionOwner": [
-                "Basis"
-              ],
-              "PortfolioShortName": [
-                "DOF",
-                "SOF"
-              ],
-              "StrategyName": [
-                "Basis"
-              ]
-            },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "773|5Y",
-            "quantity": -39000000,
-            "cs01Cad": -24351.238335000002,
-            "cs01Local": -24351.238335000002
-          },
-          "securityType": "Cds"
-        },
-        "bestQuotes": {
-          "bestPriceQuote": null,
-          "bestSpreadQuote": {
-            "isValid": true,
-            "quoteMetric": "Spread",
-            "bidQuoteType": "Run",
-            "bidDealer": "BNP",
-            "bidTime": "2020-02-18T13:29:24",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "BNP",
-            "askTime": "2020-02-18T13:29:24",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": null,
-            "totalSkew": null,
-            "bidQuantity": null,
-            "bidQuoteValue": 49,
-            "askQuantity": null,
-            "askQuoteValue": 56,
-            "globalIdentifier": "MDC CDS USD SR 5Y D14"
-          },
-          "bestYieldQuote": null
-        },
-        "positions": [
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "773|5Y",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "DOF",
-              "StrategyName": ""
-            },
-            "quantity": -15500000,
-            "cs01Cad": -9678.113335,
-            "cs01Local": -9678.113335
-          },
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "773|5Y",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "SOF",
-              "StrategyName": ""
-            },
-            "quantity": -23500000,
-            "cs01Cad": -14673.124999999996,
-            "cs01Local": -14673.124999999996
-          }
-        ]
-      },
-      "784|4.3Y": {
-        "securityIdentifier": "784|4.3Y",
-        "security": {
-          "curveSubType": "XR14",
-          "securityIdentifier": "784|4.3Y",
-          "ccy": "USD",
-          "country": "US",
-          "industry": "Consumer Finance",
-          "name": "MGIC CDS USD SR 06/20/2024",
-          "genericSeniority": "SR",
-          "globalIdentifier": "MGIC CDS USD SR 4Y",
-          "obligorName": "MGIC INVESTMENT CORP",
-          "obligorId": 522,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Financials",
-          "securitySubType": null,
-          "subIndustry": "Financial Guarantee Ins",
-          "ticker": "MGIC",
-          "metrics": {
-            "isOnTheRun": false,
-            "workoutTerm": 4.3507,
-            "ratingDouble": 13,
-            "isRated": true,
-            "rating": "BB+",
-            "ratingNoNotch": "BB",
-            "ratingBucket": "HY",
-            "price": 119.161,
-            "spread": 43.84,
-            "isIndex": false
-          },
-          "deltaMetrics": {
-            "Dod": {
-              "ratingDouble": 0,
-              "price": -0.011,
-              "spread": 0
-            },
-            "Wow": {
-              "ratingDouble": 0,
-              "price": -0.09,
-              "spread": 0
-            },
-            "Mtd": {
-              "ratingDouble": 0,
-              "price": -0.106,
-              "spread": -2.02
-            },
-            "Mom": {
-              "ratingDouble": 0,
-              "price": -0.375,
-              "spread": 2.01
-            },
-            "Ytd": {
-              "ratingDouble": 0,
-              "price": -0.506,
-              "spread": 2.01
-            },
-            "Yoy": null
-          },
-          "firmPosition": {
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": null,
-              "user": null,
-              "value": 43.84
-            },
-            "primaryPmName": "PM",
-            "backupPmName": "DJ",
-            "researchName": "LP",
-            "owners": [
-              "PM",
-              "DJ",
               "LP"
             ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "TD DOF PB",
-                "TD SOF PB"
-              ],
-              "AttributionOwner": [
-                "USD Term Risk",
-                "Basis"
-              ],
-              "PortfolioShortName": [
-                "DOF",
-                "SOF"
-              ],
-              "StrategyName": [
-                "Portfolio Shorts",
-                "Basis"
-              ]
-            },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "784|4.3Y",
-            "quantity": -28000000,
-            "cs01Cad": -18100.17,
-            "cs01Local": -18100.17
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1377",
+            "quantity":11525000.0,
+            "cs01Cad":4672.950587249999,
+            "cs01Local":4672.950587249999
           },
-          "securityType": "Cds"
+          "securityType":"Bond",
+          "maturityType":"Bullet"
         },
-        "bestQuotes": null,
-        "positions": [
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"TD",
+            "bidTime":"2020-02-25T08:07:01",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"TD",
+            "askTime":"2020-02-25T08:07:01",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":107.16200256347656,
+            "askQuantity":0,
+            "askQuoteValue":107.36900329589844,
+            "globalIdentifier":"CA37252BAC69"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"TD",
+            "bidTime":"2020-02-25T08:07:01",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"TD",
+            "askTime":"2020-02-25T08:07:01",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":116.0,
+            "askQuantity":0,
+            "askQuoteValue":111.0,
+            "globalIdentifier":"CA37252BAC69"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"TD",
+            "bidTime":"2020-02-25T08:07:01",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"TD",
+            "askTime":"2020-02-25T08:07:01",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.3951199054718018,
+            "askQuantity":0,
+            "askQuoteValue":2.3428499698638916,
+            "globalIdentifier":"CA37252BAC69"
+          }
+        },
+        "positions":[
           {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "784|4.3Y",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "DOF",
-              "StrategyName": ""
+            "partitionOptionValue":{
+              "PortfolioShortName":"BBB",
+              "StrategyName":""
             },
-            "quantity": -12500000,
-            "cs01Cad": -8080.38,
-            "cs01Local": -8080.38
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1377",
+            "quantity":1525000.0,
+            "cs01Cad":618.32968725,
+            "cs01Local":618.32968725
           },
           {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "784|4.3Y",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "SOF",
-              "StrategyName": ""
+            "partitionOptionValue":{
+              "PortfolioShortName":"CIP",
+              "StrategyName":""
             },
-            "quantity": -15500000,
-            "cs01Cad": -10019.79,
-            "cs01Local": -10019.79
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1377",
+            "quantity":1000000.0,
+            "cs01Cad":405.46209,
+            "cs01Local":405.46209
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1377",
+            "quantity":7000000.0,
+            "cs01Cad":2838.23463,
+            "cs01Local":2838.23463
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"FIP",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1377",
+            "quantity":2000000.0,
+            "cs01Cad":810.92418,
+            "cs01Local":810.92418
           }
         ]
       },
-      "1228|5Y": {
-        "securityIdentifier": "1228|5Y",
-        "security": {
-          "curveSubType": "XR14",
-          "securityIdentifier": "1228|5Y",
-          "ccy": "USD",
-          "country": "US",
-          "industry": "Wireless Telecommunications Services",
-          "name": "TMUS A CDS USD SR 5Y",
-          "genericSeniority": "SR",
-          "globalIdentifier": "TMUS A CDS USD SR 5Y",
-          "obligorName": "T-MOBILE US INC",
-          "obligorId": 1924,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Communications",
-          "securitySubType": null,
-          "subIndustry": "Cellular Telecom",
-          "ticker": "TMUS A",
-          "metrics": {
-            "isOnTheRun": true,
-            "workoutTerm": 4.8521,
-            "ratingDouble": 12.67,
-            "isRated": true,
-            "rating": "BB+",
-            "ratingNoNotch": "BB",
-            "ratingBucket": "HY",
-            "price": 119.478,
-            "spread": 76.5,
-            "isIndex": false
+      "1382":{
+        "securityIdentifier":"1382",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"1382",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Wireless Telecommunications Services",
+          "name":"TCN 3.2 04/05/2021 Callable CAD SR UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA87971MAV50",
+          "obligorName":"TELUS CORP",
+          "obligorId":756,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Communications",
+          "securitySubType":"Bond",
+          "subIndustry":"Telecom Services",
+          "ticker":"TCN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"28454",
+            "benchmarkName":"CAN 1.5 08/01/2021 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":44.52,
+            "yieldWorst":2.002783,
+            "amtOutstanding":500000000.0,
+            "marketValue":512768435.0,
+            "workoutTerm":1.1123,
+            "ratingDouble":16.0,
+            "isRated":true,
+            "rating":"BBB+",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":101.308755,
+            "spread":59.3686,
+            "isIndex":true
           },
-          "deltaMetrics": {
-            "Dod": {
-              "ratingDouble": 0,
-              "price": -0.01,
-              "spread": 0
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":-2.92,
+              "yieldWorst":-0.052429,
+              "ratingDouble":0.0,
+              "price":0.04888,
+              "spread":1.5203
             },
-            "Wow": {
-              "ratingDouble": 0,
-              "price": -0.245,
-              "spread": 3
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":-4.91,
+              "yieldWorst":-0.110526,
+              "ratingDouble":0.0,
+              "price":0.093457,
+              "spread":3.198
             },
-            "Mtd": {
-              "ratingDouble": 0,
-              "price": -0.142,
-              "spread": -1
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":-6.87,
+              "yieldWorst":-0.071419,
+              "ratingDouble":0.0,
+              "price":0.007631,
+              "spread":1.2269
             },
-            "Mom": null,
-            "Ytd": null,
-            "Yoy": null
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":-2.45,
+              "yieldWorst":-0.099105,
+              "ratingDouble":0.0,
+              "price":0.019692,
+              "spread":2.9917
+            },
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":-9.65,
+              "yieldWorst":-0.256733,
+              "ratingDouble":0.0,
+              "price":0.147065,
+              "spread":4.5582
+            },
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":-44.79,
+              "yieldWorst":-0.670186,
+              "ratingDouble":0.0,
+              "price":0.233667,
+              "spread":-31.0643
+            }
           },
-          "firmPosition": {
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": "2020-02-18T18:05:29",
-              "user": "PM",
-              "value": 74.50000000000001
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF"
+              ],
+              "StrategyName":[
+                "Short Carry"
+              ]
             },
-            "primaryPmName": "PM",
-            "backupPmName": "DJ",
-            "researchName": "LC",
-            "owners": [
-              "PM",
-              "DJ",
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":"2020-02-25T18:28:54.26",
+              "user":"IL",
+              "value":42.0
+            },
+            "primaryPmName":"IL",
+            "backupPmName":"ST",
+            "researchName":"LC",
+            "owners":[
+              "IL",
+              "ST",
               "LC"
             ],
-            "partitionOptionValues": {
-              "AccountName": [
-                "TD DOF PB",
-                "TD SOF PB"
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1382",
+            "quantity":17700000.0,
+            "cs01Cad":1827.2919441000001,
+            "cs01Local":1827.2919441000001
+          },
+          "securityType":"Bond",
+          "maturityType":"Callable"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"BNS",
+            "bidTime":"2020-02-25T07:09:36",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"BMO",
+            "askTime":"2020-02-25T08:11:06",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":101.28500366210938,
+            "askQuantity":0,
+            "askQuoteValue":101.3030014038086,
+            "globalIdentifier":"CA87971MAV50"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"MULT",
+            "bidTime":"2020-02-25T08:17:17",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"BMO",
+            "askTime":"2020-02-25T08:11:06",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":44.0,
+            "askQuantity":0,
+            "askQuoteValue":42.0,
+            "globalIdentifier":"CA87971MAV50"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"BNS",
+            "bidTime":"2020-02-25T07:09:36",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"BMO",
+            "askTime":"2020-02-25T08:11:06",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":1.9233299493789673,
+            "askQuantity":0,
+            "askQuoteValue":1.9019999504089355,
+            "globalIdentifier":"CA87971MAV50"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1382",
+            "quantity":17700000.0,
+            "cs01Cad":1827.2919441000001,
+            "cs01Local":1827.2919441000001
+          }
+        ]
+      },
+      "1394":{
+        "securityIdentifier":"1394",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"1394",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Real Estate",
+          "name":"CHPUCN 3.6 09/20/2022 Callable CAD 10 SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA17039BAF19",
+          "obligorName":"CHOICE PROPERTIES LP",
+          "obligorId":975,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Real Estate",
+          "securitySubType":"Bond",
+          "subIndustry":"REITS-Regional Malls",
+          "ticker":"CHPUCN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":true,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"1840",
+            "benchmarkName":"CAN 1.0 09/01/2022 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":87.97,
+            "yieldWorst":2.176236,
+            "amtOutstanding":300000000.0,
+            "marketValue":315256605.0,
+            "workoutTerm":2.5726,
+            "ratingDouble":15.0,
+            "isRated":true,
+            "rating":"BBB",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":103.537042,
+            "spread":86.0424,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":2.01,
+              "yieldWorst":-0.058162,
+              "ratingDouble":0.0,
+              "price":0.137087,
+              "spread":1.5394
+            },
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":1.95,
+              "yieldWorst":-0.133182,
+              "ratingDouble":0.0,
+              "price":0.304622,
+              "spread":1.2205
+            },
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":0.81,
+              "yieldWorst":-0.082014,
+              "ratingDouble":0.0,
+              "price":0.125781,
+              "spread":0.1478
+            },
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":17.12,
+              "yieldWorst":-0.127174,
+              "ratingDouble":0.0,
+              "price":0.219824,
+              "spread":1.9054
+            },
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":-1.69,
+              "yieldWorst":-0.403756,
+              "ratingDouble":0.0,
+              "price":0.877298,
+              "spread":-3.6329
+            },
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":-41.2,
+              "yieldWorst":-0.907047,
+              "ratingDouble":0.0,
+              "price":1.803655,
+              "spread":-43.0696
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "AGB"
               ],
-              "AttributionOwner": [
-                "USD Term Risk"
-              ],
-              "PortfolioShortName": [
-                "DOF",
-                "SOF"
-              ],
-              "StrategyName": [
-                "Portfolio Shorts"
+              "StrategyName":[
+                "STOV"
               ]
             },
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "1228|5Y",
-            "quantity": -24000000,
-            "cs01Cad": -17062.665289,
-            "cs01Local": -17062.665289
-          },
-          "securityType": "Cds"
-        },
-        "bestQuotes": {
-          "bestPriceQuote": null,
-          "bestSpreadQuote": {
-            "isValid": true,
-            "quoteMetric": "Spread",
-            "bidQuoteType": "Run",
-            "bidDealer": "CG",
-            "bidTime": "2020-02-18T12:50:07",
-            "bidVenue": "MSG1",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "CG",
-            "askTime": "2020-02-18T12:50:07",
-            "askVenue": "MSG1",
-            "askIsOld": false,
-            "isOffTheRunCds": false,
-            "totalAxeBidQuantity": 0,
-            "totalAxeAskQuantity": 0,
-            "totalRunBidQuantity": 0,
-            "totalRunAskQuantity": 0,
-            "axeSkew": null,
-            "totalSkew": null,
-            "bidQuantity": null,
-            "bidQuoteValue": 65,
-            "askQuantity": null,
-            "askQuoteValue": 75,
-            "globalIdentifier": "TMUS A CDS USD SR 5Y D14"
-          },
-          "bestYieldQuote": null
-        },
-        "positions": [
-          {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "1228|5Y",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "DOF",
-              "StrategyName": ""
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":null,
+              "user":null,
+              "value":70.0
             },
-            "quantity": -11430000,
-            "cs01Cad": -8126.108995070001,
-            "cs01Local": -8126.108995070001
+            "primaryPmName":"IL",
+            "backupPmName":"ST",
+            "researchName":"PD",
+            "owners":[
+              "IL",
+              "ST",
+              "PD"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1394",
+            "quantity":2500000.0,
+            "cs01Cad":586.607565,
+            "cs01Local":586.607565
           },
+          "securityType":"Bond",
+          "maturityType":"Callable"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"TD",
+            "bidTime":"2020-02-25T07:50:47",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T07:58:35",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":103.46499633789062,
+            "askQuantity":0,
+            "askQuoteValue":103.53199768066406,
+            "globalIdentifier":"CA17039BAF19"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"TD",
+            "bidTime":"2020-02-25T07:50:47",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Axe",
+            "askDealer":"MULT",
+            "askTime":"2020-02-25T08:48:48",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":72.0,
+            "askQuantity":0,
+            "askQuoteValue":69.0,
+            "globalIdentifier":"CA17039BAF19"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"TD",
+            "bidTime":"2020-02-25T07:50:47",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T07:58:35",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":2.0604701042175293,
+            "askQuantity":0,
+            "askQuoteValue":2.0297698974609375,
+            "globalIdentifier":"CA17039BAF19"
+          }
+        },
+        "positions":[
           {
-            "date": "2020-02-18T00:00:00-05:00",
-            "securityIdentifier": "1228|5Y",
-            "partitionOptionValue": {
-              "AccountName": "",
-              "AttributionOwner": "",
-              "PortfolioShortName": "SOF",
-              "StrategyName": ""
+            "partitionOptionValue":{
+              "PortfolioShortName":"AGB",
+              "StrategyName":""
             },
-            "quantity": -12570000,
-            "cs01Cad": -8936.55629393,
-            "cs01Local": -8936.55629393
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1394",
+            "quantity":2500000.0,
+            "cs01Cad":586.607565,
+            "cs01Local":586.607565
+          }
+        ]
+      },
+      "1410":{
+        "securityIdentifier":"1410",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"1410",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Real Estate",
+          "name":"REIUCN 3.746 05/30/2022 Bullet CAD SR UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA766910AY98",
+          "obligorName":"RIOCAN REAL ESTATE INVESTMENT TRUST",
+          "obligorId":944,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Real Estate",
+          "securitySubType":"Bond",
+          "subIndustry":"REITS-Shopping Centers",
+          "ticker":"REIUCN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":true,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"1840",
+            "benchmarkName":"CAN 1.0 09/01/2022 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":65.7,
+            "yieldWorst":1.962408,
+            "amtOutstanding":250000000.0,
+            "marketValue":262020810.0,
+            "workoutTerm":2.263,
+            "ratingDouble":15.5,
+            "isRated":true,
+            "rating":"BBB+",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":103.925705,
+            "spread":64.6596,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":0.76,
+              "yieldWorst":-0.07237,
+              "ratingDouble":0.0,
+              "price":0.149822,
+              "spread":0.1186
+            },
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":0.48,
+              "yieldWorst":-0.151015,
+              "ratingDouble":0.0,
+              "price":0.297753,
+              "spread":-0.5628
+            },
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":-2.03,
+              "yieldWorst":-0.117304,
+              "ratingDouble":0.0,
+              "price":0.160405,
+              "spread":-3.3812
+            },
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":14.69,
+              "yieldWorst":-0.149894,
+              "ratingDouble":0.0,
+              "price":0.206069,
+              "spread":-0.3666
+            },
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":-4.37,
+              "yieldWorst":-0.421176,
+              "ratingDouble":0.0,
+              "price":0.751353,
+              "spread":-5.3749
+            },
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":-50.26,
+              "yieldWorst":-0.985984,
+              "ratingDouble":0.0,
+              "price":1.462383,
+              "spread":-52.5186
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF"
+              ],
+              "StrategyName":[
+                "Short Carry"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":null,
+              "user":null,
+              "value":62.0
+            },
+            "primaryPmName":"IL",
+            "backupPmName":"ST",
+            "researchName":"PD",
+            "owners":[
+              "IL",
+              "ST",
+              "PD"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1410",
+            "quantity":11089000.0,
+            "cs01Cad":2500.824114529,
+            "cs01Local":2500.824114529
+          },
+          "securityType":"Bond",
+          "maturityType":"Bullet"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"MULT",
+            "bidTime":"2020-02-25T07:50:47",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T07:58:35",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":103.85900115966797,
+            "askQuantity":0,
+            "askQuoteValue":103.92400360107422,
+            "globalIdentifier":"CA766910AY98"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"TD",
+            "bidTime":"2020-02-25T07:50:47",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T07:58:35",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":65.0,
+            "askQuantity":0,
+            "askQuoteValue":62.0,
+            "globalIdentifier":"CA766910AY98"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"BNS",
+            "bidTime":"2020-02-25T07:10:08",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T07:58:35",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":1.9890400171279907,
+            "askQuantity":0,
+            "askQuoteValue":1.9600800275802612,
+            "globalIdentifier":"CA766910AY98"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1410",
+            "quantity":11089000.0,
+            "cs01Cad":2500.824114529,
+            "cs01Local":2500.824114529
+          }
+        ]
+      },
+      "1440":{
+        "securityIdentifier":"1440",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"1440",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Refining & Marketing",
+          "name":"NWRWPT 3.2 07/22/2024 Callable CAD A SENIOR_SECURED",
+          "genericSeniority":"SECURED",
+          "globalIdentifier":"CA663307AA47",
+          "obligorName":"NORTH WEST REDWATER PARTNERSHIP",
+          "obligorId":1200,
+          "paymentRank":"1ST LIEN",
+          "sector":"Energy",
+          "securitySubType":"Bond",
+          "subIndustry":"Oil Refining&Marketing",
+          "ticker":"NWRWPT",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"28171",
+            "benchmarkName":"CAN 1.5 09/01/2024 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":0.0,
+            "gSpread":81.52,
+            "yieldWorst":2.046746,
+            "amtOutstanding":500000000.0,
+            "marketValue":525634525.0,
+            "workoutTerm":4.411,
+            "ratingDouble":16.33,
+            "isRated":true,
+            "rating":"BBB+",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":104.83759,
+            "spread":81.6011,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":0.0,
+              "gSpread":3.48,
+              "yieldWorst":-0.050047,
+              "ratingDouble":0.0,
+              "price":0.207223,
+              "spread":3.2874
+            },
+            "Wow":{
+              "zSpread":0.0,
+              "gSpread":3.89,
+              "yieldWorst":-0.12022,
+              "ratingDouble":0.0,
+              "price":0.490959,
+              "spread":3.7654
+            },
+            "Mtd":{
+              "zSpread":0.0,
+              "gSpread":2.84,
+              "yieldWorst":-0.034359,
+              "ratingDouble":0.0,
+              "price":0.080265,
+              "spread":2.9745
+            },
+            "Mom":{
+              "zSpread":0.0,
+              "gSpread":22.48,
+              "yieldWorst":-0.100843,
+              "ratingDouble":0.0,
+              "price":0.351588,
+              "spread":5.5318
+            },
+            "Ytd":{
+              "zSpread":0.0,
+              "gSpread":0.8,
+              "yieldWorst":-0.442391,
+              "ratingDouble":0.0,
+              "price":1.792238,
+              "spread":0.8255
+            },
+            "Yoy":{
+              "zSpread":0.0,
+              "gSpread":-30.21,
+              "yieldWorst":-0.880897,
+              "ratingDouble":0.0,
+              "price":3.484545,
+              "spread":-30.6404
+            }
+          },
+          "firmPosition":{
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF"
+              ],
+              "StrategyName":[
+                "LTOV - Spread"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":null,
+              "user":null,
+              "value":73.0
+            },
+            "primaryPmName":"ST",
+            "backupPmName":"IL",
+            "researchName":"TW",
+            "owners":[
+              "ST",
+              "IL",
+              "TW"
+            ],
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1440",
+            "quantity":9500000.0,
+            "cs01Cad":3941.0142095,
+            "cs01Local":3941.0142095
+          },
+          "securityType":"Bond",
+          "maturityType":"Callable"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isValid":true,
+            "quoteMetric":"Price",
+            "bidQuoteType":"Run",
+            "bidDealer":"BNS",
+            "bidTime":"2020-02-25T07:10:37",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T08:44:50",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":104.85099792480469,
+            "askQuantity":0,
+            "askQuoteValue":104.7229995727539,
+            "globalIdentifier":"CA663307AA47"
+          },
+          "bestSpreadQuote":{
+            "isValid":true,
+            "quoteMetric":"Spread",
+            "bidQuoteType":"Run",
+            "bidDealer":"BNS",
+            "bidTime":"2020-02-25T07:10:37",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T08:44:50",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":75.0,
+            "askQuantity":0,
+            "askQuoteValue":78.0,
+            "globalIdentifier":"CA663307AA47"
+          },
+          "bestYieldQuote":{
+            "isValid":true,
+            "quoteMetric":"Yield",
+            "bidQuoteType":"Run",
+            "bidDealer":"BNS",
+            "bidTime":"2020-02-25T07:10:37",
+            "bidVenue":"MSG1",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CIBC",
+            "askTime":"2020-02-25T08:44:50",
+            "askVenue":"MSG1",
+            "askIsOld":true,
+            "isOffTheRunCds":false,
+            "totalAxeBidQuantity":0,
+            "totalAxeAskQuantity":0,
+            "totalRunBidQuantity":0,
+            "totalRunAskQuantity":0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuantity":0,
+            "bidQuoteValue":1.9780000448226929,
+            "askQuantity":0,
+            "askQuoteValue":2.009999990463257,
+            "globalIdentifier":"CA663307AA47"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "date":"2020-02-25T00:00:00",
+            "securityIdentifier":"1440",
+            "quantity":9500000.0,
+            "cs01Cad":3941.0142095,
+            "cs01Local":3941.0142095
           }
         ]
       }

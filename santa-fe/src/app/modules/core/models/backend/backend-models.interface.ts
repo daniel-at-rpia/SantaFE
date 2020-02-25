@@ -37,8 +37,6 @@ export interface BEPortfolioDTO {
   date: string;
   securityIdentifier: string;
   partitionOptionValue: {
-    AccountName: string;
-    AttributionOwner: string;
     PortfolioShortName: string;
     StrategyName: string;
   }
@@ -93,7 +91,10 @@ export interface BESecurityDTO {
     backupPmName: string;
     researchName: string;
     owners: Array<string>;
-    partitionOptionValues: any;
+    partitionOptionValues: {
+      PortfolioShortName: Array<string>;
+      StrategyName: Array<string>;
+    };
     date: string;
     securityIdentifier: string;
     quantity: number;
@@ -112,7 +113,7 @@ export interface BEBestQuoteDTO {
 export interface BESecurityGroupDTO {
   source: string;
   date: string;
-  metricsType: string;
+  isValid: boolean;
   groupIdentifier: {
     source: string;
     date: string;
@@ -121,8 +122,8 @@ export interface BESecurityGroupDTO {
     };
     filters: any;
     singleSecurityTenorOptions: Array<string>;
-    weightField: string;
     metricContextFieldMinMax?: any;
+    groupParameter: any;
   }
   numSecurities: number;
   name: string;
@@ -299,8 +300,12 @@ export interface BEHistoricalSummaryOverviewDTO {
   Mom?: BEHistoricalSummaryDTO;
   Mtd?: BEHistoricalSummaryDTO;
   GroupIdentifierWithInclusiveOptions: {
+    source: string;
+    date: string;
     groupOptionValues: object;
-    [property: string]: any;
+    filters: object;
+    singleSecurityTenorOptions: Array<string>;
+    groupParameter: object;
   };
 }
 
