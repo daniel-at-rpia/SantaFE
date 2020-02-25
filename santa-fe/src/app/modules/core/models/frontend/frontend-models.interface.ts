@@ -39,10 +39,10 @@ export interface SecurityDTO extends BasicDTOStructure {
     seniorityLevel: number;
     currency: string;
     sector: string;
-    couponType: string;
     industry: string;
     securityType: string;
     seniority: string;
+    genericSeniority: string;
     maturityType: string;
     primaryPmName: string;
     backupPmName: string;

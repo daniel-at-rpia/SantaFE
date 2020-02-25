@@ -755,5 +755,18 @@ export class UtilityService {
         return false;
       }
     }
+
+    public findObligorCouponType(obligorCurveName: string): string {
+      if (!!obligorCurveName) {
+        const copy: Array<string> = obligorCurveName.split("|");
+        if (copy.length >= 3) {
+          return copy[2];
+        } else {
+          return null;
+        }
+      } else {
+        return null;
+      }
+    }
   // trade specific end
 }

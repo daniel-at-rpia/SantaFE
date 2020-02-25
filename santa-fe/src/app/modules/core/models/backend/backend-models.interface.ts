@@ -33,7 +33,6 @@ export interface BESecurityDTO {
   name: string;
   securityType: string;
   securitySubType: string;
-  couponType?: string;
   ccy: string;
   country: string;
   sector: string;
