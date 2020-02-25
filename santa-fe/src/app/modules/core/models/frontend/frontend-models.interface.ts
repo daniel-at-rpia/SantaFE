@@ -30,6 +30,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     globalIdentifier: string;  // CUSIP
     name: string;
     ticker: string;
+    obligorName: string;
     country: string;
     isGovt: boolean;
     ratingLevel: number;

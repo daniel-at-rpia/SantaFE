@@ -8,7 +8,7 @@ export const APIUrlMap = {
   getUserInitials: `user/get-user-initials`,
   getPortfolios: `group/get-security-dtos-from-group-identifier`,
   getAllQuotes: `liveQuote/get-all-quotes`,
-  getObligorCurves: `curve/get-obligor-curves-per-ccy`,
+  getObligorCurves: `group/get-security-dtos-from-security-and-group-definition`,
   getGroups: `group/get-groups`,
   getGroupHistoricalSummary: `group/get-group-historical-summary-from-security`,
   getTickers: `Obligor/get-tickers`,

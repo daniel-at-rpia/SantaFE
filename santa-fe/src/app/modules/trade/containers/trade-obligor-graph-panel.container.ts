@@ -17,7 +17,11 @@ import { TriCoreDriverConfig } from 'Core/constants/coreConstants.constant';
 import { TradeObligorGraphPanelState } from 'FEModels/frontend-page-states.interface';
 import { ObligorCategoryDataItemBlock } from 'FEModels/frontend-blocks.interface';
 import { ObligorChartCategoryColorScheme } from 'App/modules/core/constants/colorSchemes.constant';
-import { BESingleBestQuoteDTO } from 'App/modules/core/models/backend/backend-models.interface';
+import {
+  BESingleBestQuoteDTO,
+  BEObligorCurveDTO,
+  BEFullSecurityDTO
+} from 'BEModels/backend-models.interface';
 
 
 @Component({
@@ -82,69 +86,72 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
   private fetchSecurityIDs() {
 
     let securityIDsFromAnalysis: string[] = [];
-    let chartCategory = null;
     this.state.chartCategories = [];
-    let payload: PayloadObligorSecurityIDs;
+    const payload: PayloadObligorSecurityIDs = {
+      identifier: this.state.obligorSecurityID,
+      groupDefinition: {
+        "SecurityType": [],
+        "CouponType": [],
+        "Ccy": [],
+        "Seniority": []
+      },
+      groupFilters: {
+        "ObligorId": [],
+        "Ccy": []
+      }
+    };
 
     if (this.state.lookBackHours){
-      payload = {
-        identifier: this.state.obligorSecurityID,
-        lookbackHrs: this.state.lookBackHours
-      };
-    } else {
-      payload = {
-        identifier: this.state.obligorSecurityID,
-      };
-    } 
+      payload.lookbackHrs = this.state.lookBackHours;
+    }
   
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getObligorCurves, { req: 'POST' }, payload).pipe(
       first(),
-      tap((serverReturn) => {
-
-        // TODO: Create a backend-model.interface for payload. This would get rid of this first loop.
-        for (let curve in serverReturn) {
+      tap((serverReturn: BEObligorCurveDTO) => {
+        for (const curve in serverReturn) {
           // Initialize a null chart category.
-          chartCategory = this.dtoService.formObligorChartCategoryDTO(true, null, null, null, true);
+          const rawCurveData = serverReturn[curve];
+          const chartCategory = this.dtoService.formObligorChartCategoryDTO(true, null, null, null, true);
 
-          // Set the name of the chart category to SENIORITY / COUPON / TYPE
-          // We might want to change this to use the groupIdentifier object in serverReturn.
-          chartCategory.data.name = serverReturn[curve].seniority + " " + serverReturn[curve].couponType + " " + serverReturn[curve].securityType;
+          // Set the name of the chart category to SENIORITY / COUPON / TYPE of the first security
+          let sampleSecurityRawData: BEFullSecurityDTO = null;
+          for (const eachSecurity in rawCurveData) {
+            sampleSecurityRawData = rawCurveData[eachSecurity];
+            break;
+          }
+          const sampleSecurity = this.dtoService.formSecurityCardObject(sampleSecurityRawData.securityIdentifier, sampleSecurityRawData.security, false);
+          chartCategory.data.name = sampleSecurity.data.seniority + " " + sampleSecurity.data.couponType + " " + sampleSecurity.data.securityType;
           chartCategory.data.color = this.getObligorChartCategoryColorFromScheme(chartCategory.data.name);
 
-          // Set the MID data for the category.
-          for (let security in serverReturn[curve].bestQuotes) {
-
-            if (security !== null) {
-
-              let spreadMid = this.addBestMidToChartCategory(serverReturn[curve].bestQuotes[security].bestSpreadQuote);
-              let yieldMid = this.addBestMidToChartCategory(serverReturn[curve].bestQuotes[security].bestYieldQuote);
-
-              if (yieldMid || spreadMid) {
-
-                if (this.state.obligorSecurityID === security) chartCategory.state.isHidden = false;
-
-                this.state.obligorName = serverReturn[curve].securities[security].issuer + " " + serverReturn[curve].securities[security].ccy;
-
-                let categoryDataItem: ObligorCategoryDataItemBlock = {
-                  data: {
-                    name: serverReturn[curve].securities[security].name,
-                    securityID: security,
-                    spreadMid: spreadMid,
-                    yieldMid: yieldMid,
-                    mark: null,
-                    workoutTerm: serverReturn[curve].securities[security].metrics.workoutTerm,
-                    currentPosition: null,
-                    cS01: null
-                  },
-                  state: {}
-                }
-
-                chartCategory.data.obligorCategoryDataItemDTO.push(categoryDataItem);
-
-                //Populate list of securityIDs to be sent to trade-center-panel.
-                securityIDsFromAnalysis.push(security);
+          for (const eachSecurityId in rawCurveData) {
+            if (!!rawCurveData[eachSecurityId].security) {
+              const securityDTO = this.dtoService.formSecurityCardObject(eachSecurityId, rawCurveData[eachSecurityId].security, false);
+              if (this.state.obligorSecurityID === eachSecurityId) {
+                chartCategory.state.isHidden = false;
               }
+              this.state.obligorName = securityDTO.data.obligorName;
+              let spreadMid = null;
+              let yieldMid = null;
+              if (!!rawCurveData[eachSecurityId].bestQuotes) {
+                spreadMid = this.addBestMidToChartCategory(rawCurveData[eachSecurityId].bestQuotes.bestSpreadQuote);
+                yieldMid = this.addBestMidToChartCategory(rawCurveData[eachSecurityId].bestQuotes.bestYieldQuote);
+              }
+              let categoryDataItem: ObligorCategoryDataItemBlock = {
+                data: {
+                  name: securityDTO.data.name,
+                  securityID: eachSecurityId,
+                  spreadMid: spreadMid,
+                  yieldMid: yieldMid,
+                  mark: securityDTO.data.mark.mark,
+                  workoutTerm: rawCurveData[eachSecurityId].security.metrics.workoutTerm,
+                  currentPosition: null,
+                  cS01: null
+                }
+              }
+
+              chartCategory.data.obligorCategoryDataItemDTO.push(categoryDataItem);
             }
+            securityIDsFromAnalysis.push(eachSecurityId);
           }
 
           this.state.chartCategories.push(chartCategory);

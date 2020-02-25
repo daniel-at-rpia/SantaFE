@@ -6,7 +6,7 @@ export interface BEFetchAllTradeDataReturn {
   }
 }
 
-interface BEFullSecurityDTO {
+export interface BEFullSecurityDTO {
   securityIdentifier: string;
   security: BESecurityDTO;
   bestQuotes: BEBestQuoteDTO;
@@ -317,4 +317,12 @@ export interface BEHistoricalQuantBlock {
   isBasisRange: boolean;
   isValid: boolean;
   timeSeries?: object;
+}
+
+export interface BEObligorCurveDTO {
+  [property: string]: BEObligorCurveSecurityMapBlock;
+}
+
+interface BEObligorCurveSecurityMapBlock {
+  [property: string]: BEFullSecurityDTO;
 }
