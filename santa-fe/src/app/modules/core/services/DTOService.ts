@@ -912,6 +912,7 @@ export class DTOService {
     securityRawData: BESecurityDTO
   ): DTOs.AlertDTO {
     const targetSecurity = this.formSecurityCardObject('', securityRawData, false);
+    targetSecurity.state.isInteractionDisabled = true;
     const object: DTOs.AlertDTO = {
       data: {
         security: targetSecurity,
@@ -926,7 +927,9 @@ export class DTOService {
         isNew: true,
         isHovered: false,
         isRead: false,
-        isCountdownFinished: true
+        isCountdownFinished: true,
+        isSelected: false,
+        willBeRemoved: false
       }
     }
     return object;

@@ -79,7 +79,6 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
 
   public onClickAlertTrigger() {
     this.state.triggerActionMenuOpen = !this.state.triggerActionMenuOpen;
-
   }
 
   public onToggleDisplayAlerts() {
@@ -93,15 +92,44 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   }
 
   public onMouseEnterAlert(targetAlert: AlertDTO) {
-    targetAlert.state.isHovered = true;
+    if (targetAlert) {
+      targetAlert.state.isHovered = true;
+    }
   }
 
   public onMouseLeaveAlert(targetAlert: AlertDTO) {
-    targetAlert.state.isHovered = false;
+    if (targetAlert && !targetAlert.state.isSelected) {
+      targetAlert.state.isHovered = false;
+    }
+  }
+
+  public onClickAlert(targetAlert: AlertDTO) {
+    if (targetAlert) {
+      targetAlert.state.isSelected = !targetAlert.state.isSelected;
+      if (targetAlert.state.isSelected) {
+        this.state.presentList.forEach((eachAlert) => {
+          if (eachAlert !== targetAlert) {
+            eachAlert.state.isSelected = false;
+            eachAlert.state.isHovered = false;
+          }
+        })
+      }
+    }
+  }
+
+  public onClickAlertRemove(targetAlert: AlertDTO) {
+    if (targetAlert) {
+      targetAlert.state.willBeRemoved = true;
+      const removeTarget = () => {
+        this.removeTargetFromPresentList(targetAlert);
+      }
+      setTimeout(removeTarget.bind(this), 300);
+    }
   }
 
   private generateNewAlert() {
-    const newAlert = this.dtoService.formAlertObject(PortfolioList['128'].security);
+    const newAlert = this.dtoService.formAlertObject(PortfolioList.securityDtos.securityDtos['128'].security);
+    newAlert.data.message = `${newAlert.data.message} - ${this.state.presentList.length}`
     this.state.presentList.unshift(newAlert);
     setTimeout(function(){
       newAlert.state.isNew = false;
@@ -110,6 +138,13 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         newAlert.state.isCountdownFinished = true;
       }, 5000);
     }, 10);
+  }
+
+  private removeTargetFromPresentList(targetAlert: AlertDTO) {
+    const indexOfTarget = this.state.presentList.indexOf(targetAlert);
+    if (indexOfTarget >= 0) {
+      this.state.presentList.splice(indexOfTarget, 1);
+    }
   }
 
 }

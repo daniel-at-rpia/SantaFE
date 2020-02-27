@@ -6,15 +6,14 @@ $alert_margin_right: $spacing_large;
 $alert_countdown_duration: 5s;
 .sat-alert {
   $alertBlockName: &;
-  @include mix_alive('custom', transform $animation_duration_light);
   @include mix_fixed_div(relative, $z_index_base_item);
+  @include mix_alive('light');
+  @include material();
   @include mix_border_radius(10px);
-  @include mix_border_generator();
   display: flex;
   width: $alert_width;
   height: $alert_height;
-  padding: $spacing_small;
-  margin: $spacing_small $spacing_small 0;
+  margin: $spacing_small 0;
   background-color: $color_white;
   transform: translate(-$alert_height, 0);
   &__overview {
@@ -23,7 +22,7 @@ $alert_countdown_duration: 5s;
     display: flex;
     width: $alert_height;
     padding-right: $alert_overview_padding_right;
-    margin-right: $spacing_small;
+    margin: $spacing_small $spacing_small $spacing_small 0;
     &-main {
       flex: 1 1 auto;
       display: flex;
@@ -39,6 +38,7 @@ $alert_countdown_duration: 5s;
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
+    margin: $spacing_small 0;
     &-card {
       flex: 0 0 auto;
     }
@@ -48,19 +48,20 @@ $alert_countdown_duration: 5s;
       margin-top: $spacing_small;
       line-height: $line_height_small;
       overflow: hidden;
+      user-select: none;
     }
   }
   &__close {
     @include mix_fixed_div(absolute, $z_index_hovering_item);
     display: flex;
     align-self: center;
-    right: -$iconButton_size_regular/2;
+    right: -$iconButton_size_large/2;
     &-btn {
       @include mix_border_radius(50%);
       display: flex;
-      width: $iconButton_size_regular;
-      height: $iconButton_size_regular;
-      font-size: $font_size_normal;
+      width: $iconButton_size_large;
+      height: $iconButton_size_large;
+      font-size: $font_size_large;
       background-color: $color_kill;
       color: $font_color_inverse;
     }
@@ -90,6 +91,21 @@ $alert_countdown_duration: 5s;
       }
     }
   }
+  &__actionMenu {
+    @include mix_fixed_div(absolute, $z_index_hovering_item);
+    @include mix_alive('custom', transform $animation_duration_light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: scale(0.01);
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: $alert_width - $spacing_x_large;
+    &-btn {
+      margin: 0 $spacing_small;
+    }
+  }
   &--info {
     #{$alertBlockName} {
       &__overview-main {
@@ -102,8 +118,32 @@ $alert_countdown_duration: 5s;
       }
     }
   }
+  &--selectedState {
+    @include material('none');
+    background-color: $color_active;
+    #{$alertBlockName} {
+      &__overview {
+        &-main-icon {
+          color: $font_color_inverse;
+        }
+      }
+      &__detail {
+        &-message {
+          color: $font_color_inverse;
+        }
+      }
+      &__actionMenu {
+        transform: scale(1);
+      }
+    }
+  }
   &--slideOutState {
     transform: translate(-$alert_width - $spacing_large, 0);
+  }
+  &--willBeRemovedState {
+    @include material('none');
+    height: 0;
+    overflow: hidden;
   }
   &--hiddenState {
     transform: translate(0, 0);

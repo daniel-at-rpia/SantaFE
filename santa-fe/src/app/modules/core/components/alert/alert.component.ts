@@ -23,6 +23,8 @@ export class Alert {
   @Input() hideAllAlerts: boolean;
   @Output() mouseEntered = new EventEmitter<AlertDTO>();
   @Output() mouseLeft = new EventEmitter<AlertDTO>();
+  @Output() clickedAlert = new EventEmitter<AlertDTO>();
+  @Output() clickedRemove = new EventEmitter<AlertDTO>();
 
   constructor() { }
 
@@ -32,5 +34,13 @@ export class Alert {
 
   public onMouseLeave() {
     !!this.mouseLeft && this.mouseLeft.emit(this.alertData);
+  }
+
+  public onClickAlert() {
+    !!this.clickedAlert && this.clickedAlert.emit(this.alertData);
+  }
+
+  public onClickRemove() {
+    !!this.clickedRemove && this.clickedRemove.emit(this.alertData);
   }
 }

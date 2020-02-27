@@ -11,7 +11,9 @@
       [slideOutAllAlerts]="state.triggerActionMenuOpen"
       [hideAllAlerts]="!state.displayAlerts && !state.triggerActionMenuOpen"
       (mouseEntered)="onMouseEnterAlert($event)"
-      (mouseLeft)="onMouseLeaveAlert($event)">
+      (mouseLeft)="onMouseLeaveAlert($event)"
+      (clickedAlert)="onClickAlert($event)"
+      (clickedRemove)="onClickAlertRemove($event)">
     </alert>
   </section>
   <section class="sat-globalAlert__trigger">
