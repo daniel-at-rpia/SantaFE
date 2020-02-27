@@ -1,6 +1,7 @@
 <article
   (mouseenter)="onMouseEnter()"
   (mouseleave)="onMouseLeave()"
+  (click)="onClickAlert()"
   [ngClass]="{
     'sat-alert': true,
     'sat-alert--info': true,
@@ -9,12 +10,12 @@
     'sat-alert--selectedState': alertData.state.isSelected,
     'sat-alert--willBeRemovedState': alertData.state.willBeRemoved
   }">
-  <section (click)="onClickAlert()" class="sat-alert__overview">
+  <section class="sat-alert__overview">
     <div class="sat-alert__overview-main">
       <i class="sat-alert__overview-main-icon fal fa-meh"></i>
     </div>
   </section>
-  <section (click)="onClickAlert()" class="sat-alert__detail">
+  <section class="sat-alert__detail">
     <div class="sat-alert__detail-card">
       <security-card [cardData]="alertData.data.security"></security-card>
     </div>
@@ -34,7 +35,7 @@
         }"></div>
     </div>
   </section>
-  <section (click)="onClickAlert()" class="sat-alert__actionMenu">
+  <section class="sat-alert__actionMenu">
     <button class="sat-alert__actionMenu-btn santaBtn--labelled">
       <i class="fal fa-reply"></i>
       <span>See in Table</span>

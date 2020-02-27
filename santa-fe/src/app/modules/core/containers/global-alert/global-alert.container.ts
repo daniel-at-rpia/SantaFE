@@ -104,7 +104,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   }
 
   public onClickAlert(targetAlert: AlertDTO) {
-    if (targetAlert) {
+    if (targetAlert && !targetAlert.state.willBeRemoved) {
       targetAlert.state.isSelected = !targetAlert.state.isSelected;
       if (targetAlert.state.isSelected) {
         this.state.presentList.forEach((eachAlert) => {
