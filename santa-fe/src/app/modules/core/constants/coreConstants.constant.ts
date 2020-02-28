@@ -183,3 +183,10 @@ export const EngagementActionList = {
   populateGraph: 'Populate Graph',
   midnightReload: 'Midnight Reload'
 }
+
+export enum AlertTypes {
+  bwic = 'BWIC',
+  owic = 'OWIC'
+}
+
+export const ALERT_COUNTDOWN = 5000;

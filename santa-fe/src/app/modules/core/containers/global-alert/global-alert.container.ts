@@ -28,6 +28,10 @@
     import { GlobalAlertState } from 'FEModels/frontend-page-states.interface';
     import { AlertDTO } from 'FEModels/frontend-models.interface';
     import { PortfolioList } from 'Core/stubs/securities.stub';
+    import {
+      ALERT_COUNTDOWN,
+      AlertTypes
+    } from 'Core/constants/coreConstants.constant';
   //
 
 @Component({
@@ -130,13 +134,16 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   private generateNewAlert() {
     const newAlert = this.dtoService.formAlertObject(PortfolioList.securityDtos.securityDtos['128'].security);
     newAlert.data.message = `${newAlert.data.message} - ${this.state.presentList.length}`
+    if ((this.state.presentList.length%2) !== 0) {
+      newAlert.data.type = AlertTypes.owic;
+    }
     this.state.presentList.unshift(newAlert);
     setTimeout(function(){
       newAlert.state.isNew = false;
       newAlert.state.isCountdownFinished = false;
       setTimeout(function(){
         newAlert.state.isCountdownFinished = true;
-      }, 5000);
+      }, ALERT_COUNTDOWN);
     }, 10);
   }
 

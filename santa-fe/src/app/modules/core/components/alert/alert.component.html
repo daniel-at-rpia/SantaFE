@@ -4,7 +4,8 @@
   (click)="onClickAlert()"
   [ngClass]="{
     'sat-alert': true,
-    'sat-alert--info': true,
+    'sat-alert--bwicVariant': alertData.data.type === 'BWIC',
+    'sat-alert--owicVariant': alertData.data.type === 'OWIC',
     'sat-alert--slideOutState': alertData.state.isHovered || !alertData.state.isCountdownFinished || slideOutAllAlerts,
     'sat-alert--hiddenState': hideAllAlerts && alertData.state.isCountdownFinished,
     'sat-alert--selectedState': alertData.state.isSelected,
@@ -12,7 +13,12 @@
   }">
   <section class="sat-alert__overview">
     <div class="sat-alert__overview-main">
-      <i class="sat-alert__overview-main-icon fal fa-meh"></i>
+      <div class="sat-alert__overview-main-type">
+        <span class="sat-alert__overview-main-type-text">{{alertData.data.type}}</span>
+      </div>
+      <div class="sat-alert__overview-main-quant">
+        <span class="sat-alert__overview-main-quant-text">{{alertData.data.quantValue}}</span>
+      </div>
     </div>
   </section>
   <section class="sat-alert__detail">

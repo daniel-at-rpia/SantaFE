@@ -62,7 +62,6 @@ $quantComparer_min_height: 2.5rem;
           user-select: none;
         }
         &-broker {
-          // color: $color_quant_left;
           color: #000;  // a temporary hack
           font-size: $font_size_minimum;
           line-height: $line_height_minimum;
@@ -94,7 +93,7 @@ $quantComparer_min_height: 2.5rem;
           &-line {
             &-content {
               @include mix_border_radius(3px, 'right');
-              background-color: $color_quant_left;
+              background-color: $color_bid;
             }
           }
         }
@@ -110,14 +109,14 @@ $quantComparer_min_height: 2.5rem;
             }
             &-broker {
               text-align: right;
-              // color: $color_quant_right;
+              // color: $color_ask;
               color: #000;  // a temporary hack
             }
           }
           &-line {
             &-content {
               @include mix_border_radius(3px, 'left');
-              background-color: $color_quant_right;
+              background-color: $color_ask;
             }
           }
         }

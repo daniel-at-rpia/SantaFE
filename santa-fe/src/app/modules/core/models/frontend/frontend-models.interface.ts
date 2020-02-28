@@ -12,6 +12,9 @@ import {
   AgGridRow,
   SecurityTableRowQuoteBlock
 } from 'FEModels/frontend-blocks.interface';
+import {
+  AlertTypes
+} from 'Core/constants/coreConstants.constant';
 import { SantaTableNumericFloatingFilterParams, ClickedOpenSecurityInBloombergEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
 import * as agGrid from 'ag-grid-community';
 
@@ -428,6 +431,7 @@ export interface HistoricalSummaryDTO extends BasicDTOStructure {
 
 export interface AlertDTO extends BasicDTOStructure {
   data: {
+    type: AlertTypes;
     security: SecurityDTO;
     message: string;
     quantValue: number;

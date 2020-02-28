@@ -1,9 +1,10 @@
 @import "global.scss";
 
 $alert_height: 5rem;
-$alert_overview_padding_right: $spacing_small;
 $alert_margin_right: $spacing_large;
 $alert_countdown_duration: 5s;
+$alert_color_bwic: $color_bid;
+$alert_color_owic: $color_ask;
 .sat-alert {
   $alertBlockName: &;
   @include mix_fixed_div(relative, $z_index_base_item);
@@ -21,16 +22,36 @@ $alert_countdown_duration: 5s;
     flex: 0 0 auto;
     display: flex;
     width: $alert_height;
-    padding-right: $alert_overview_padding_right;
     margin: $spacing_small $spacing_small $spacing_small 0;
     &-main {
+      @include mix_border_radius(5px);
       flex: 1 1 auto;
       display: flex;
-      justify-content: center;
-      align-items: center;
-      &-icon {
-        font-size: $font_size_xx_large;
-        color: $font_color_minor;
+      flex-direction: column;
+      margin: 0 $spacing_small;
+      background-color: $color_gray_6;
+      &-type {
+        flex: 0 0 auto;
+        display: flex;
+        justify-content: center;
+        padding: $spacing_xx_small;
+        &-text {
+          color: $font_color_inverse;
+        }
+      }
+      &-quant {
+        @include mix_border_radius(3px, 'bottom');
+        flex: 1 1 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 $spacing_x_small $spacing_x_small $spacing_x_small;
+        background-color: $color_white;
+        &-text {
+          font-size: $font_size_x_large;
+          line-height: $line_height_x_small;
+          color: $color_gray_6;
+        }
       }
     }
   }
@@ -106,15 +127,29 @@ $alert_countdown_duration: 5s;
       margin: 0 $spacing_small;
     }
   }
-  &--info {
+  &--bwicVariant {
     #{$alertBlockName} {
       &__overview-main {
-        &--info {
-          display: flex;
+        background-color: $alert_color_bwic;
+        &-quant-text {
+          color: $alert_color_bwic;
         }
       }
       &__countdown-line-content {
-        background-color: $font_color_minor;
+        background-color: $alert_color_bwic;
+      }
+    }
+  }
+  &--owicVariant {
+    #{$alertBlockName} {
+      &__overview-main {
+        background-color: $alert_color_owic;
+        &-quant-text {
+          color: $alert_color_owic;
+        }
+      }
+      &__countdown-line-content {
+        background-color: $alert_color_owic;
       }
     }
   }

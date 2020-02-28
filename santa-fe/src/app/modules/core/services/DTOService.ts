@@ -25,7 +25,8 @@
     } from 'Core/constants/colorSchemes.constant';
     import {
       TriCoreDriverConfig,
-      DEFAULT_DRIVER_IDENTIFIER
+      DEFAULT_DRIVER_IDENTIFIER,
+      AlertTypes
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
@@ -40,7 +41,7 @@
     import {
       QuoteMetricList
     } from 'Core/constants/securityTableConstants.constant';
-import { any } from '@amcharts/amcharts4/.internal/core/utils/Array';
+    import { any } from '@amcharts/amcharts4/.internal/core/utils/Array';
   // 
 
 @Injectable()
@@ -915,6 +916,7 @@ export class DTOService {
     targetSecurity.state.isInteractionDisabled = true;
     const object: DTOs.AlertDTO = {
       data: {
+        type: AlertTypes.bwic,
         security: targetSecurity,
         message: 'Some detail for this alert',
         quantValue: 12
