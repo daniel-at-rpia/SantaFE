@@ -178,6 +178,8 @@ $alert_color_owic: $color_ask;
   &--willBeRemovedState {
     @include material('none');
     height: 0;
+    margin-top: 0;
+    margin-bottom: 0;
     overflow: hidden;
   }
   &--hiddenState {

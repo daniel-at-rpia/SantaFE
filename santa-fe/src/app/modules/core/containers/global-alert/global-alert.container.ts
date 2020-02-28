@@ -92,7 +92,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
 
   public onClickClearAlerts() {
     this.generateNewAlert();
-    this.state.triggerActionMenuOpen = false;
+    // this.state.triggerActionMenuOpen = false;
   }
 
   public onMouseEnterAlert(targetAlert: AlertDTO) {

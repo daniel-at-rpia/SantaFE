@@ -6,7 +6,7 @@
     'sat-alert': true,
     'sat-alert--bwicVariant': alertData.data.type === 'BWIC',
     'sat-alert--owicVariant': alertData.data.type === 'OWIC',
-    'sat-alert--slideOutState': alertData.state.isHovered || !alertData.state.isCountdownFinished || slideOutAllAlerts,
+    'sat-alert--slideOutState': alertData.state.isHovered || !alertData.state.isCountdownFinished || (slideOutAllAlerts && !alertData.state.isNew),
     'sat-alert--hiddenState': hideAllAlerts && alertData.state.isCountdownFinished,
     'sat-alert--selectedState': alertData.state.isSelected,
     'sat-alert--willBeRemovedState': alertData.state.willBeRemoved
