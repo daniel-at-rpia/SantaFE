@@ -53,6 +53,7 @@ export interface TradeState {
   sidePanelsCollapsed: boolean;
   lilMarketMaximized: boolean;
   ownerInitial: string;
+  displayAlertThumbnail: boolean;
 }
 
 export interface TradeCenterPanelState {

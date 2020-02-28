@@ -3,6 +3,7 @@
 .sat-trade {
   $tradeBlockName: &;
   @include mix_fixed_div(absolute, $z_index_base_item);
+  @include mix_alive('custom', width $animation_duration_light);
   display: flex;
   height: 100%;
   width: 100%;
@@ -135,5 +136,8 @@
         display: flex;
       }
     }
+  }
+  &--displayAlertThumbnail {
+    @include mix_calculate(width, 100%, $page_gutter_width_for_alerts, '-');
   }
 }

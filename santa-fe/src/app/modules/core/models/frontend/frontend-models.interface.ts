@@ -439,7 +439,7 @@ export interface AlertDTO extends BasicDTOStructure {
   state: {
     isRead: boolean;
     isNew: boolean;
-    isHovered: boolean;
+    isSlidedOut: boolean;
     isCountdownFinished: boolean;
     willBeRemoved: boolean;
   }

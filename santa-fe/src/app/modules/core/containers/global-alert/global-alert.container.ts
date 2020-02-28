@@ -32,6 +32,7 @@
       ALERT_COUNTDOWN,
       AlertTypes
     } from 'Core/constants/coreConstants.constant';
+    import { CoreToggleAlertThumbnailDisplay } from 'Core/actions/core.actions';
   //
 
 @Component({
@@ -82,15 +83,13 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   }
 
   public onClickAlertTrigger() {
-    this.state.triggerActionMenuOpen = !this.state.triggerActionMenuOpen;
-    this.state.presentList.forEach((eachAlert) => {
-      eachAlert.state.isHovered = this.state.triggerActionMenuOpen;
-    })
+    this.updateAlertTrigger(!this.state.triggerActionMenuOpen);
   }
 
   public onToggleDisplayAlerts() {
     this.state.displayAlerts = !this.state.displayAlerts;
-    this.state.triggerActionMenuOpen = false;
+    this.store$.dispatch(new CoreToggleAlertThumbnailDisplay(this.state.displayAlerts));
+    this.updateAlertTrigger(false);
   }
 
   public onClickClearAlerts() {
@@ -100,8 +99,8 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
 
   public onClickAlertThumbnail(targetAlert: AlertDTO) {
     if (targetAlert) {
-      targetAlert.state.isHovered = !targetAlert.state.isHovered;
-      if (!targetAlert.state.isHovered && !targetAlert.state.isCountdownFinished) {
+      targetAlert.state.isSlidedOut = !targetAlert.state.isSlidedOut;
+      if (!targetAlert.state.isSlidedOut && !targetAlert.state.isCountdownFinished) {
         targetAlert.state.isCountdownFinished = true;
       }
     }
@@ -143,6 +142,13 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     if (indexOfTarget >= 0) {
       this.state.presentList.splice(indexOfTarget, 1);
     }
+  }
+
+  private updateAlertTrigger(newState: boolean) {
+    this.state.triggerActionMenuOpen = newState;
+    this.state.presentList.forEach((eachAlert) => {
+      eachAlert.state.isSlidedOut = this.state.triggerActionMenuOpen;
+    })
   }
 
 }

@@ -933,7 +933,7 @@ export class DTOService {
       },
       state: {
         isNew: true,
-        isHovered: false,
+        isSlidedOut: false,
         isRead: false,
         isCountdownFinished: true,
         willBeRemoved: false

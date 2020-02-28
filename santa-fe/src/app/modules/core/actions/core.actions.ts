@@ -1,7 +1,8 @@
 import { Action } from '@ngrx/store';
 
 export enum CoreActions {
-  UserLoggedIn = '[Core] User Logged In'
+  UserLoggedIn = '[Core] User Logged In',
+  ToggleAlertThumbnailDisplay = '[Core] Toggle Thumbnail Display'
 }
 
 export class CoreUserLoggedIn implements Action {
@@ -11,5 +12,15 @@ export class CoreUserLoggedIn implements Action {
     userInitials: string
   ){
     this.initials = userInitials;
+  }
+}
+
+export class CoreToggleAlertThumbnailDisplay implements Action {
+  readonly type = CoreActions.ToggleAlertThumbnailDisplay;
+  readonly value: boolean;
+  constructor(
+    value: boolean
+  ){
+    this.value = value;
   }
 }

@@ -26,6 +26,7 @@
     import { TradeState } from 'FEModels/frontend-page-states.interface';
     import { selectSelectedSecurityForAnalysis } from 'Trade/selectors/trade.selectors';
     import { CoreUserLoggedIn } from 'Core/actions/core.actions';
+    import { selectDislayAlertThumbnail } from 'Core/selectors/core.selectors';
   //
 
 @Component({
@@ -37,7 +38,8 @@
 export class TradePage implements OnInit, OnDestroy {
   state: TradeState;
   subscriptions = {
-    receiveSelectedSecuritySub: null
+    receiveSelectedSecuritySub: null,
+    displayAlertThumbnailSub: null
   };
   constants = {
   };
@@ -46,7 +48,8 @@ export class TradePage implements OnInit, OnDestroy {
     this.state = {
       sidePanelsCollapsed: true,
       lilMarketMaximized: false,
-      ownerInitial: null
+      ownerInitial: null,
+      displayAlertThumbnail: true
     }
   }
 
@@ -81,6 +84,11 @@ export class TradePage implements OnInit, OnDestroy {
       this.state.sidePanelsCollapsed = !targetSecurity;
       this.state.lilMarketMaximized = false;
     });
+    this.subscriptions.displayAlertThumbnailSub = this.store$.pipe(
+      select(selectDislayAlertThumbnail)
+    ).subscribe((value) => {
+      this.state.displayAlertThumbnail = !!value;
+    })
   }
 
   public ngOnDestroy() {

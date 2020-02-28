@@ -13,6 +13,7 @@ export interface CoreState {
   }
   alert: {
     newAlerts: Array<AlertDTO>;
+    displayThumbnail: boolean;
   }
 }
 
@@ -21,7 +22,8 @@ const initialState: CoreState = {
     initials: null
   },
   alert: {
-    newAlerts: []
+    newAlerts: [],
+    displayThumbnail: true
   }
 }
 
@@ -37,6 +39,14 @@ export function coreReducer (
           initials: action.initials
         }
       };
+    case CoreActions.ToggleAlertThumbnailDisplay:
+       return {
+         ...state,
+         alert: {
+           ...state.alert,
+           displayThumbnail: action.value
+         }
+       }
     default:
       return {
         ...state

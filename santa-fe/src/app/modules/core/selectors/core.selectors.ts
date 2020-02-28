@@ -12,3 +12,8 @@ export const selectUserInitials = createSelector(
   getCoreState,
   (state: CoreState) => state.user.initials
 );
+
+export const selectDislayAlertThumbnail = createSelector(
+  getCoreState,
+  (state: CoreState) => state.alert.displayThumbnail
+);
