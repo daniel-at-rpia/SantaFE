@@ -186,7 +186,13 @@ export class DTOService {
       dto.data.positionFirm = dto.data.positionFirm + eachPortfolioBlock.quantity;
       if (eachPortfolioBlock.portfolioName === 'DOF' || eachPortfolioBlock.portfolioName === 'SOF') {
         dto.data.positionHF = dto.data.positionHF + eachPortfolioBlock.quantity;
-      } else if (eachPortfolioBlock.portfolioName === 'STIP' || eachPortfolioBlock.portfolioName === 'FIP' || eachPortfolioBlock.portfolioName === 'CIP') {
+      } else if (
+        eachPortfolioBlock.portfolioName === 'STIP' || 
+        eachPortfolioBlock.portfolioName === 'FIP' || 
+        eachPortfolioBlock.portfolioName === 'CIP' || 
+        eachPortfolioBlock.portfolioName === 'AGB' || 
+        eachPortfolioBlock.portfolioName === 'BBB'
+      ) {
         dto.data.positionNLF = dto.data.positionNLF + eachPortfolioBlock.quantity;
       }
       if (eachPortfolioBlock.strategy.length > 0 && dto.data.strategyList.indexOf(eachPortfolioBlock.strategy) < 0) {
