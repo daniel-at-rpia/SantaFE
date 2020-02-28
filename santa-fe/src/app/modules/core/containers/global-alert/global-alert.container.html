@@ -10,9 +10,8 @@
       [alertData]="eachAlert"
       [slideOutAllAlerts]="state.triggerActionMenuOpen"
       [hideAllAlerts]="!state.displayAlerts && !state.triggerActionMenuOpen"
-      (mouseEntered)="onMouseEnterAlert($event)"
-      (mouseLeft)="onMouseLeaveAlert($event)"
-      (clickedAlert)="onClickAlert($event)"
+      (clickedAlertOverview)="onClickAlertThumbnail($event)"
+      (clickedAlertDetail)="loadAlertToTable($event)"
       (clickedRemove)="onClickAlertRemove($event)">
     </alert>
   </section>

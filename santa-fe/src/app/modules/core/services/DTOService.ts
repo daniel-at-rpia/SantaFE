@@ -936,7 +936,6 @@ export class DTOService {
         isHovered: false,
         isRead: false,
         isCountdownFinished: true,
-        isSelected: false,
         willBeRemoved: false
       }
     }

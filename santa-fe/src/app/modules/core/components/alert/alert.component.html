@@ -1,45 +1,41 @@
 <article
-  (mouseenter)="onMouseEnter()"
-  (mouseleave)="onMouseLeave()"
-  (click)="onClickAlert()"
   [ngClass]="{
     'sat-alert': true,
     'sat-alert--bwicVariant': alertData.data.type === 'BWIC',
     'sat-alert--owicVariant': alertData.data.type === 'OWIC',
     'sat-alert--slideOutState': alertData.state.isHovered || !alertData.state.isCountdownFinished || (slideOutAllAlerts && !alertData.state.isNew),
     'sat-alert--hiddenState': hideAllAlerts && alertData.state.isCountdownFinished,
-    'sat-alert--selectedState': alertData.state.isSelected,
     'sat-alert--willBeRemovedState': alertData.state.willBeRemoved
   }">
-  <section class="sat-alert__overview">
-    <div class="sat-alert__overview-main">
-      <div class="sat-alert__overview-main-type">
-        <span class="sat-alert__overview-main-type-text">{{alertData.data.type}}</span>
+  <section (click)="onClickAlertThumbnail()" class="sat-alert__thumbnail">
+    <div class="sat-alert__thumbnail-main">
+      <div class="sat-alert__thumbnail-main-type">
+        <span class="sat-alert__thumbnail-main-type-text">{{alertData.data.type}}</span>
       </div>
-      <div class="sat-alert__overview-main-quant">
-        <span class="sat-alert__overview-main-quant-text">{{alertData.data.quantValue}}</span>
+      <div class="sat-alert__thumbnail-main-quant">
+        <span class="sat-alert__thumbnail-main-quant-text">{{alertData.data.quantValue}}</span>
       </div>
     </div>
   </section>
-  <section class="sat-alert__detail">
+  <section (click)="onClickAlertDetail()" class="sat-alert__detail">
     <div class="sat-alert__detail-card">
       <security-card [cardData]="alertData.data.security"></security-card>
     </div>
     <div class="sat-alert__detail-message">
       <span class="sat-alert__detail-message-text">{{alertData.data.message}}</span>
     </div>
+    <div class="sat-alert__detail-countdown">
+      <div class="sat-alert__detail-countdown-line">
+        <div
+          [ngClass]="{
+            'sat-alert__detail-countdown-line-content': true,
+            'sat-alert__detail-countdown-line-content--started': ! alertData.state.isNew
+          }"></div>
+      </div>
+    </div>
   </section>
   <section class="sat-alert__close">
     <button (click)="onClickRemove()" class="sat-alert__close-btn santaBtn--iconOnly fal fa-eraser"></button>
-  </section>
-  <section class="sat-alert__countdown">
-    <div class="sat-alert__countdown-line">
-      <div
-        [ngClass]="{
-          'sat-alert__countdown-line-content': true,
-          'sat-alert__countdown-line-content--started': ! alertData.state.isNew
-        }"></div>
-    </div>
   </section>
   <section class="sat-alert__actionMenu">
     <button class="sat-alert__actionMenu-btn santaBtn--labelled">

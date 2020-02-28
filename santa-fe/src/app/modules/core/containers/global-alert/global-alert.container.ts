@@ -95,29 +95,14 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     // this.state.triggerActionMenuOpen = false;
   }
 
-  public onMouseEnterAlert(targetAlert: AlertDTO) {
+  public onClickAlertThumbnail(targetAlert: AlertDTO) {
     if (targetAlert) {
-      targetAlert.state.isHovered = true;
+      targetAlert.state.isHovered = !targetAlert.state.isHovered;
     }
   }
 
-  public onMouseLeaveAlert(targetAlert: AlertDTO) {
-    if (targetAlert && !targetAlert.state.isSelected) {
-      targetAlert.state.isHovered = false;
-    }
-  }
-
-  public onClickAlert(targetAlert: AlertDTO) {
-    if (targetAlert && !targetAlert.state.willBeRemoved) {
-      targetAlert.state.isSelected = !targetAlert.state.isSelected;
-      if (targetAlert.state.isSelected) {
-        this.state.presentList.forEach((eachAlert) => {
-          if (eachAlert !== targetAlert) {
-            eachAlert.state.isSelected = false;
-            eachAlert.state.isHovered = false;
-          }
-        })
-      }
+  public loadAlertToTable(targetAlert: AlertDTO) {
+    if (targetAlert) {
     }
   }
 
