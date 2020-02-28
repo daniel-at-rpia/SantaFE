@@ -13,9 +13,8 @@ $alert_color_owic: $color_ask;
   width: $alert_width;
   height: $alert_height;
   margin: $spacing_small 0;
-  transform: translate(-$alert_height, 0);
   &__thumbnail {
-    @include mix_fixed_div(relative, $z_index_base_item);
+    @include mix_fixed_div(relative, $z_index_hovering_item_lift);
     @include mix_border_radius(10px, 'left');
     @include mix_alive('light');
     @include material();
@@ -24,6 +23,7 @@ $alert_color_owic: $color_ask;
     width: $alert_height;
     padding: $spacing_small;
     background-color: $color_white;
+    transform: translate(-$alert_height, 0);
     &-main {
       @include mix_border_radius(5px);
       flex: 1 1 auto;
@@ -37,6 +37,7 @@ $alert_color_owic: $color_ask;
         padding: $spacing_xx_small;
         &-text {
           color: $font_color_inverse;
+          user-select: none;
         }
       }
       &-quant {
@@ -51,6 +52,7 @@ $alert_color_owic: $color_ask;
           font-size: $font_size_x_large;
           line-height: $line_height_x_small;
           color: $color_gray_6;
+          user-select: none;
         }
       }
     }
@@ -63,15 +65,20 @@ $alert_color_owic: $color_ask;
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
-    margin-left: $spacing_small;
+    margin-right: $spacing_small;
     padding: $spacing_small;
     background-color: $color_white;
+    transform: translate(0, 0);
     &-card {
       flex: 0 0 auto;
+      display: flex;
+      justify-content: flex-end;
     }
     &-message {
       @include mix_text_overflow_multi_line(2);
       flex: 1 1 auto;
+      display: flex;
+      justify-content: flex-end;
       margin-top: $spacing_small;
       line-height: $line_height_small;
       overflow: hidden;
@@ -105,9 +112,11 @@ $alert_color_owic: $color_ask;
   }
   &__close {
     @include mix_fixed_div(absolute, $z_index_hovering_item);
+    @include mix_alive('light');
     display: flex;
     align-self: center;
-    right: -$iconButton_size_large/2;
+    left: -$iconButton_size_large/2;
+    transform: translate($iconButton_size_large/2, 0);
     &-btn {
       @include mix_border_radius(50%);
       display: flex;
@@ -116,21 +125,6 @@ $alert_color_owic: $color_ask;
       font-size: $font_size_large;
       background-color: $color_kill;
       color: $font_color_inverse;
-    }
-  }
-  &__actionMenu {
-    @include mix_fixed_div(absolute, $z_index_hovering_item);
-    @include mix_alive('custom', transform $animation_duration_light);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transform: scale(0.01);
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: $alert_width - $spacing_x_large;
-    &-btn {
-      margin: 0 $spacing_small;
     }
   }
   &--bwicVariant {
@@ -160,12 +154,16 @@ $alert_color_owic: $color_ask;
     }
   }
   &--slideOutState {
-    transform: translate(-$alert_width - $spacing_large, 0);
     #{$alertBlockName} {
       &__thumbnail {
         @include material('none');
-        @include mix_border_radius(10px);
         background-color: $color_active;
+      }
+      &__detail {
+        transform: translate(-$alert_width - $alert_height, 0);
+      }
+      &__close {
+        transform: translate(-$alert_width, 0);
       }
     }
   }
@@ -177,6 +175,10 @@ $alert_color_owic: $color_ask;
     overflow: hidden;
   }
   &--hiddenState {
-    transform: translate(0, 0);
+    #{$alertBlockName} {
+      &__thumbnail {
+        transform: translate(0, 0);
+      }
+    }
   }
 }

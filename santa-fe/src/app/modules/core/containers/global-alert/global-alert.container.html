@@ -8,9 +8,8 @@
     <alert
       *ngFor="let eachAlert of state.presentList"
       [alertData]="eachAlert"
-      [slideOutAllAlerts]="state.triggerActionMenuOpen"
       [hideAllAlerts]="!state.displayAlerts && !state.triggerActionMenuOpen"
-      (clickedAlertOverview)="onClickAlertThumbnail($event)"
+      (clickedAlertThumbnail)="onClickAlertThumbnail($event)"
       (clickedAlertDetail)="loadAlertToTable($event)"
       (clickedRemove)="onClickAlertRemove($event)">
     </alert>

@@ -83,6 +83,9 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
 
   public onClickAlertTrigger() {
     this.state.triggerActionMenuOpen = !this.state.triggerActionMenuOpen;
+    this.state.presentList.forEach((eachAlert) => {
+      eachAlert.state.isHovered = this.state.triggerActionMenuOpen;
+    })
   }
 
   public onToggleDisplayAlerts() {
@@ -98,6 +101,9 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   public onClickAlertThumbnail(targetAlert: AlertDTO) {
     if (targetAlert) {
       targetAlert.state.isHovered = !targetAlert.state.isHovered;
+      if (!targetAlert.state.isHovered && !targetAlert.state.isCountdownFinished) {
+        targetAlert.state.isCountdownFinished = true;
+      }
     }
   }
 

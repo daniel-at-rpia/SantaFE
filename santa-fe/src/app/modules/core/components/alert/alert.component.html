@@ -3,7 +3,7 @@
     'sat-alert': true,
     'sat-alert--bwicVariant': alertData.data.type === 'BWIC',
     'sat-alert--owicVariant': alertData.data.type === 'OWIC',
-    'sat-alert--slideOutState': alertData.state.isHovered || !alertData.state.isCountdownFinished || (slideOutAllAlerts && !alertData.state.isNew),
+    'sat-alert--slideOutState': alertData.state.isHovered || !alertData.state.isCountdownFinished,
     'sat-alert--hiddenState': hideAllAlerts && alertData.state.isCountdownFinished,
     'sat-alert--willBeRemovedState': alertData.state.willBeRemoved
   }">
@@ -36,11 +36,5 @@
   </section>
   <section class="sat-alert__close">
     <button (click)="onClickRemove()" class="sat-alert__close-btn santaBtn--iconOnly fal fa-eraser"></button>
-  </section>
-  <section class="sat-alert__actionMenu">
-    <button class="sat-alert__actionMenu-btn santaBtn--labelled">
-      <i class="fal fa-reply"></i>
-      <span>See in Table</span>
-    </button>
   </section>
 </article>

@@ -19,7 +19,6 @@ import {
 })
 export class Alert {
   @Input() alertData: AlertDTO;
-  @Input() slideOutAllAlerts: boolean;
   @Input() hideAllAlerts: boolean;
   @Output() clickedAlertThumbnail = new EventEmitter<AlertDTO>();
   @Output() clickedAlertDetail = new EventEmitter<AlertDTO>();
