@@ -1,5 +1,7 @@
-  @import "global.scss";
+@import "global.scss";
 
+$trade_right_cta_hover_gutter_spacing: $spacing_medium;
+$trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta_hover_gutter_spacing;
 .sat-trade {
   $tradeBlockName: &;
   @include mix_fixed_div(absolute, $z_index_base_item);
@@ -91,7 +93,8 @@
     @include mix_border_radius(50%);
     @include mix_fixed_div(absolute, $z_index_hovering_item);
     @include mix_calculate(top, 66%, $iconButton_size_regular/2, '-');
-    right: $spacing_x_small;
+    @include mix_calculate(right, 40%, $iconButton_size_regular/2, '-');
+    @include mix_alive('custom', right $animation_duration_normal);
     background-color: $color_kill;
     color: $font_color_inverse;
   }
@@ -107,16 +110,17 @@
   &--sidePanelsCollapsed {
     #{$tradeBlockName} {
       &__left {
-        @include mix_calculate(width, 100%, $iconButton_size_regular, '-');
-        margin-right: $iconButton_size_regular/2;
+        width: 100%;
+        padding-right: $spacing_medium + $trade_right_cta_hover_gutter_spacing;
       }
       &__right {
-        transform: translate(100%, 0);
+        transform: translate(101%, 0);  // extra 1% for minor aesthetics
         padding: 0;
       }
       &__collapseGraphsCTA {
         background-color: $color_white;
         color: $font_color_major;
+        right: 0.875rem;
       }
     }
   }
@@ -138,6 +142,6 @@
     }
   }
   &--displayAlertThumbnail {
-    @include mix_calculate(width, 100%, $page_gutter_width_for_alerts, '-');
+    @include mix_calculate(width, 100%, $trade_gutter_width_for_alerts, '-');
   }
 }

@@ -2,8 +2,8 @@
 
 $alert_margin_right: $spacing_large;
 $alert_countdown_duration: 5s;
-$alert_color_bwic: $color_bid;
-$alert_color_owic: $color_ask;
+$alert_color_bwic: $color_ask;
+$alert_color_owic: $color_bid;
 .sat-alert {
   $alertBlockName: &;
   @include mix_alive('light');
@@ -48,7 +48,7 @@ $alert_color_owic: $color_ask;
         margin: 0 $spacing_x_small $spacing_x_small $spacing_x_small;
         background-color: $color_white;
         &-text {
-          font-size: $font_size_x_large;
+          font-weight: bold;
           line-height: $line_height_x_small;
           color: $color_gray_6;
           user-select: none;
