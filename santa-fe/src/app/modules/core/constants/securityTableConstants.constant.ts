@@ -277,6 +277,14 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: false,
     disabled: true
   },{
+    key: 'ticker',
+    label: 'Ticker',
+    attrName: 'ticker',
+    underlineAttrName: 'ticker',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    active: false,
+    isDataTypeText: true
+  },{
     key: 'rating',
     label: 'Rating',
     attrName: 'ratingValue',
