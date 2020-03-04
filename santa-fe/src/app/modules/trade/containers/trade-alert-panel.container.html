@@ -1,10 +1,17 @@
 <article class="sat-tradeAlertPanel">
-  <section class="sat-tradeAlertPanel__feedbackPrompt">
-    <i class="sat-tradeAlertPanel__feedbackPrompt-icon fas fa-comment-alt-smile"></i>
-    <span class="sat-tradeAlertPanel__feedbackPrompt-text">We just launched Santa and would love to hear what you think!</span>
-    <button (click)="onClickSendMail()" class="sat-tradeAlertPanel__feedbackPrompt-cta santaBtn--labelled">
-      <i class="fal fa-envelope"></i>
-      <span>Send us an email</span>
+  <section class="sat-tradeAlertPanel__thumbnail">
+    <i class="sat-tradeAlertPanel__thumbnail-icon fas fa-bell"></i>
+  </section>
+  <section class="sat-tradeAlertPanel__configure">
+    <button class="santaBtn--labelled">
+      <i class="fal fa-pencil"></i>
+      <span>Configure Alert</span>
+    </button>
+  </section>
+  <section class="sat-tradeAlertPanel__pause">
+    <button class="santaBtn--labelled">
+      <i class="fal fa-bell-slash"></i>
+      <span>Pause Alert</span>
     </button>
   </section>
 </article>

@@ -172,6 +172,13 @@ $alert_color_owic: $color_bid;
     margin-top: 0;
     margin-bottom: 0;
     overflow: hidden;
+    #{$alertBlockName} {
+      &__close {
+        &-btn {
+          transform: scale(0.01);
+        }
+      }
+    }
   }
   &--hiddenState {
     #{$alertBlockName} {

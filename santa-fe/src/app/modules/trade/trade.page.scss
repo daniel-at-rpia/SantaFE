@@ -1,5 +1,7 @@
 @import "global.scss";
 
+$trade_left_size: 60%;
+$trade_left_utilityPanel_size: 75%;
 $trade_right_cta_hover_gutter_spacing: $spacing_medium;
 $trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta_hover_gutter_spacing;
 .sat-trade {
@@ -12,7 +14,7 @@ $trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta
   overflow: hidden;
   &__left {
     @include mix_fixed_div(absolute, $z_index_base_item);
-    width: 60%;
+    width: $trade_left_size;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -22,19 +24,19 @@ $trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta
       flex: 0 1 auto;
       display: flex;
       margin-bottom: $spacing_medium;
-      &-alertPanel {
-        flex: 0 1 50%;
+      &-utilityPanel {
+        flex: 0 1 $trade_left_utilityPanel_size;
         display: flex;
         margin-right: $spacing_medium;
-        trade-alert-panel {
+        trade-utility-panel {
           flex: 1 1 auto;
           display: flex;
         }
       }
-      &-utilityPanel {
-        flex: 0 1 50%;
+      &-alertPanel {
+        flex: 0 1 100%-$trade_left_utilityPanel_size;
         display: flex;
-        trade-utility-panel {
+        trade-alert-panel {
           flex: 1 1 auto;
           display: flex;
         }
@@ -55,7 +57,7 @@ $trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta
     @include mix_fixed_div(absolute, $z_index_base_item_lift);
     @include mix_alive('custom', transform $animation_duration_normal);
     right: 0;
-    width: 40%;
+    width: 100%-$trade_left_size;
     height: 100%;
     display: flex;
     flex-direction: column;
