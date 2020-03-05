@@ -2,6 +2,7 @@
 
 $trade_left_size: 60%;
 $trade_left_utilityPanel_size: 75%;
+$trade_left_alertPanelMaximized_size: 40%;
 $trade_right_cta_hover_gutter_spacing: $spacing_medium;
 $trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta_hover_gutter_spacing;
 .sat-trade {
@@ -109,6 +110,16 @@ $trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta
     background-color: $color_kill;
     color: $font_color_inverse;
   }
+  &__unMaximizeAlertPanelCTA {
+    @include mix_border_radius(50%);
+    @include mix_fixed_div(absolute, $z_index_hovering_item);
+    @include mix_calculate(top, $trade_left_alertPanelMaximized_size, $iconButton_size_regular/2, '-');
+    display: none;
+    left: 0;
+    transform: rotate(45deg);
+    background-color: $color_kill;
+    color: $font_color_inverse;
+  }
   &--sidePanelsCollapsed {
     #{$tradeBlockName} {
       &__left {
@@ -139,6 +150,27 @@ $trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta
         }
       }
       &__unMaximizeLilMarketCTA {
+        display: flex;
+      }
+    }
+  }
+  &--alertPanelMixmized {
+    #{$tradeBlockName} {
+      &__left {
+        &-top {
+          flex: 0 1 $trade_left_alertPanelMaximized_size;
+          &-utilityPanel {
+            display: none;
+          }
+          &-alertPanel {
+            flex: 1 1 100%;
+          }
+        }
+        &-centerPanel {
+          flex: 0 1 100%-$trade_left_alertPanelMaximized_size;
+        }
+      }
+      &__unMaximizeAlertPanelCTA {
         display: flex;
       }
     }

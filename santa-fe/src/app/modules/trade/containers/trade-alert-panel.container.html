@@ -1,7 +1,8 @@
 <article
   [ngClass]="{
     'sat-tradeAlertPanel': true,
-    'sat-tradeAlertPanel--sidePanelsDisplayedState': sidePanelsDisplayed
+    'sat-tradeAlertPanel--sidePanelsDisplayedState': sidePanelsDisplayed,
+    'sat-tradeAlertPanel--configureAlertState': state.configureAlert
   }">
   <section class="sat-tradeAlertPanel__pause">
     <button class="santaBtn--labelled">
@@ -9,8 +10,8 @@
       <span>Pause Alert</span>
     </button>
   </section>
-  <section class="sat-tradeAlertPanel__configure">
-    <button class="santaBtn--labelled">
+  <section class="sat-tradeAlertPanel__configureCTA">
+    <button (click)="onClickConfigureAlert()" class="santaBtn--labelled">
       <i class="fal fa-pencil"></i>
       <span>Configure Alert</span>
     </button>

@@ -3,6 +3,7 @@
     'sat-trade': true,
     'sat-trade--sidePanelsCollapsed': state.sidePanelsCollapsed,
     'sat-trade--lilMarketMaximized': state.lilMarketMaximized,
+    'sat-trade--alertPanelMixmized': state.alertPanelMaximized,
     'sat-trade--displayAlertThumbnail': state.displayAlertThumbnail
   }">
   <section class="sat-trade__left">
@@ -14,8 +15,10 @@
       </div>
       <div class="sat-trade__left-top-alertPanel">
         <trade-alert-panel
-          [sidePanelsDisplayed]="!state.sidePanelsCollapsed"
           [ownerInitial]="state.ownerInitial"
+          [sidePanelsDisplayed]="!state.sidePanelsCollapsed"
+          [collapseConfiguration]="!state.alertPanelMaximized"
+          (configureAlert)="maximizeAlertPanel($event)"
         ></trade-alert-panel>
       </div>
     </div>
@@ -50,6 +53,10 @@
   <button
     (click)="unMaximizeLilMarket()"
     class="sat-trade__unMaximizeLilMarketCTA santaBtn--iconOnly fal fa-chevron-up">
+  </button>
+  <button
+    (click)="unMaximizeAlertPanel()"
+    class="sat-trade__unMaximizeAlertPanelCTA santaBtn--iconOnly fal fa-chevron-up">
   </button>
   <section class="sat-trade__preload">
     <i class="fas fa-chevron-right"></i>

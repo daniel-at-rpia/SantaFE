@@ -83,6 +83,7 @@ $tradeUtilityPanel_spacing: $spacing_medium;
     flex-direction: column;
     align-items: center;
     margin: $tradeUtilityPanel_spacing;
+    overflow: hidden;
     &-clock {
       @include mix_border_radius(5px);
       padding: $spacing_xx_small $spacing_x_small;

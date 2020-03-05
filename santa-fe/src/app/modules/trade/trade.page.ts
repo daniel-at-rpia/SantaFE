@@ -49,7 +49,8 @@ export class TradePage implements OnInit, OnDestroy {
       sidePanelsCollapsed: true,
       lilMarketMaximized: false,
       ownerInitial: null,
-      displayAlertThumbnail: true
+      displayAlertThumbnail: true,
+      alertPanelMaximized: false
     }
   }
 
@@ -108,6 +109,14 @@ export class TradePage implements OnInit, OnDestroy {
 
   public unMaximizeLilMarket() {
     this.state.lilMarketMaximized = false;
+  }
+
+  public maximizeAlertPanel() {
+    this.state.alertPanelMaximized = true;
+  }
+
+  public unMaximizeAlertPanel() {
+    this.state.alertPanelMaximized = false;
   }
 
   private loadOwnerInitial(serverReturn: string) {

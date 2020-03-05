@@ -54,6 +54,7 @@ export interface TradeState {
   lilMarketMaximized: boolean;
   ownerInitial: string;
   displayAlertThumbnail: boolean;
+  alertPanelMaximized: boolean;
 }
 
 export interface TradeCenterPanelState {
@@ -168,4 +169,8 @@ export interface GlobalAlertState {
   displayAlerts: boolean;
   triggerActionMenuOpen: boolean;
   presentList: Array<DTOs.AlertDTO>;
+}
+
+export interface TradeAlertPanelState {
+  configureAlert: boolean;
 }
