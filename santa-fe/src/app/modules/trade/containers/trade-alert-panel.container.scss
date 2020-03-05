@@ -8,12 +8,20 @@
   display: flex;
   padding: $spacing_medium;
   &__thumbnail {
+    @include mix_border_generator(0 0 0 $typical_border_width);
     flex: 0 0 auto;
     display: flex;
+    margin-left: $spacing_medium;
+    padding-left: $spacing_medium;
     &-icon {
       color: $font_color_trivial;
       font-size: $font_size_hero;
     }
+  }
+  &__pause {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
   }
   &__configure {
     @include mix_border_generator(0 0 0 $typical_border_width);
@@ -23,12 +31,11 @@
     margin-left: $spacing_medium;
     padding-left: $spacing_medium;
   }
-  &__pause {
-    @include mix_border_generator(0 0 0 $typical_border_width);
-    flex: 1 1 auto;
-    display: flex;
-    justify-content: center;
-    margin-left: $spacing_medium;
-    padding-left: $spacing_medium;
+  &--sidePanelsDisplayedState {
+    #{$tradeAlertPanelBlockName} {
+      &__thumbnail {
+        display: none;
+      }
+    }
   }
 }

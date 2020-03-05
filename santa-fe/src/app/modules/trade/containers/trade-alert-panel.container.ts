@@ -15,6 +15,7 @@ import { EngagementActionList } from 'Core/constants/coreConstants.constant';
 })
 
 export class TradeAlertPanel {
+  @Input() sidePanelsDisplayed: boolean;
   @Input() ownerInitial: string;
 
   constructor(

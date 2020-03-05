@@ -1,6 +1,13 @@
-<article class="sat-tradeAlertPanel">
-  <section class="sat-tradeAlertPanel__thumbnail">
-    <i class="sat-tradeAlertPanel__thumbnail-icon fas fa-bell"></i>
+<article
+  [ngClass]="{
+    'sat-tradeAlertPanel': true,
+    'sat-tradeAlertPanel--sidePanelsDisplayedState': sidePanelsDisplayed
+  }">
+  <section class="sat-tradeAlertPanel__pause">
+    <button class="santaBtn--labelled">
+      <i class="fal fa-bell-slash"></i>
+      <span>Pause Alert</span>
+    </button>
   </section>
   <section class="sat-tradeAlertPanel__configure">
     <button class="santaBtn--labelled">
@@ -8,10 +15,7 @@
       <span>Configure Alert</span>
     </button>
   </section>
-  <section class="sat-tradeAlertPanel__pause">
-    <button class="santaBtn--labelled">
-      <i class="fal fa-bell-slash"></i>
-      <span>Pause Alert</span>
-    </button>
+  <section class="sat-tradeAlertPanel__thumbnail">
+    <i class="sat-tradeAlertPanel__thumbnail-icon fas fa-bell"></i>
   </section>
 </article>

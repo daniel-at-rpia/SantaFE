@@ -3,7 +3,8 @@
       Component,
       ViewEncapsulation,
       OnInit,
-      OnDestroy
+      OnDestroy,
+      Input
     } from '@angular/core';
     import {
       Observable,
@@ -52,6 +53,7 @@
 })
 
 export class TradeUtilityPanel implements OnInit, OnDestroy {
+  @Input() sidePanelsDisplayed: boolean;
   state: TradeUtilityPanelState;
   constants = {
     liveUpdateCountdown: LIVE_UPDATE_COUNTDOWN,

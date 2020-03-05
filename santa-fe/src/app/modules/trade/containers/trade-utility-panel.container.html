@@ -1,10 +1,14 @@
 <article
   [ngClass]="{
     'sat-tradeUtilityPanel': true,
+    'sat-tradeUtilityPanel--sidePanelsDisplayedState': sidePanelsDisplayed,
     'sat-tradeUtilityPanel--pausedState': state.isPaused,
     'sat-tradeUtilityPanel--loadingState': state.isCallingAPI || state.isProcessingData,
     'sat-tradeUtilityPanel--editingValidWindowState': state.validWindowConfig.isEditing
   }">
+  <section class="sat-tradeUtilityPanel__thumbnail">
+    <i class="sat-tradeUtilityPanel__thumbnail-icon fas fa-cog"></i>
+  </section>
   <section class="sat-tradeUtilityPanel__validWindowConfig">
     <div class="sat-tradeUtilityPanel__validWindowConfig-current">
       <span class="sat-tradeUtilityPanel__validWindowConfig-current-label">Quotes are valid for</span>

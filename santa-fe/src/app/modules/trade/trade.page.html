@@ -8,14 +8,21 @@
   <section class="sat-trade__left">
     <div class="sat-trade__left-top">
       <div class="sat-trade__left-top-utilityPanel">
-        <trade-utility-panel></trade-utility-panel>
+        <trade-utility-panel
+          [sidePanelsDisplayed]="!state.sidePanelsCollapsed"
+        ></trade-utility-panel>
       </div>
       <div class="sat-trade__left-top-alertPanel">
-        <trade-alert-panel [ownerInitial]="state.ownerInitial"></trade-alert-panel>
+        <trade-alert-panel
+          [sidePanelsDisplayed]="!state.sidePanelsCollapsed"
+          [ownerInitial]="state.ownerInitial"
+        ></trade-alert-panel>
       </div>
     </div>
     <div class="sat-trade__left-centerPanel">
-      <trade-center-panel [ownerInitial]="state.ownerInitial"></trade-center-panel>
+      <trade-center-panel
+        [ownerInitial]="state.ownerInitial"
+      ></trade-center-panel>
     </div>
   </section>
   <section class="sat-trade__right">
