@@ -690,11 +690,11 @@ export class DTOService {
     filteredMetricType: string,
     targetSecurity: DTOs.SecurityDTO
   ): DTOs.SecurityQuoteDTO {
-    const hasBid = !isStencil ? (!!rawData.isActive && !!rawData.bidVenue) : true;
-    const hasAsk = !isStencil ? (!!rawData.isActive && !!rawData.askVenue) : true;
+    const hasBid = !isStencil ? (!!rawData.isActive && !!rawData.bidVenues) : true;
+    const hasAsk = !isStencil ? (!!rawData.isActive && !!rawData.askVenues) : true;
     const bidBenchmark = !isStencil ? rawData.benchmarkName : 'T 0.5 01/01/2020';
     const askBenchmark = !isStencil ? rawData.benchmarkName : 'T 0.5 01/01/2020';
-    const dataSource = !isStencil ? (hasBid ? rawData.bidVenue : rawData.askVenue) : 'PLACEHOLDER';
+    const dataSource = !isStencil ? (hasBid ? rawData.bidVenues[0] : rawData.askVenues[0]) : 'PLACEHOLDER';
     const consolidatedBenchmark = bidBenchmark === askBenchmark ? bidBenchmark : null;
     let convertedDate: Date = null;
     if (!isStencil) {

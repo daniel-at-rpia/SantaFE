@@ -270,7 +270,7 @@ export interface BEQuoteDTO {
   bidQuoteId: string; // "77d78117-5f89-41ab-a697-8f1475eb8006"
   bidQuoteStatus: number; // 0; -1; -2
   bidTime: string; // "2020-02-03T10:12:17-05:00"
-  bidVenue: string; // MSG1;
+  bidVenues: Array<string>; // MSG1;
   bidYieldType: number; // null;
   bidYield: number; // null;
   bidSpread: number; // null;
@@ -281,7 +281,7 @@ export interface BEQuoteDTO {
   askQuoteId: string;
   askQuoteStatus: number;  // 0; -1; -2
   askTime: string;
-  askVenue: string; // null;
+  askVenues: Array<string>; // null;
   askYieldType: number; // null;
   askYield: number; // null;
   askSpread: number; // null;
