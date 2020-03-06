@@ -1,4 +1,5 @@
 @import "global.scss";
+@import "modules/trade/trade.scss";
 
 .sat-tradeAlertPanel {
   $tradeAlertPanelBlockName: &;
@@ -42,6 +43,16 @@
     #{$tradeAlertPanelBlockName} {
       &__thumbnail, &__pause, &__configureCTA {
         display: none;
+      }
+    }
+  }
+  &--alertPausedState {
+    #{$tradeAlertPanelBlockName} {
+      &__pause {
+        &-btn {
+          @include material('none');
+          background-color: $color_active;
+        }
       }
     }
   }

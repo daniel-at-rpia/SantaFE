@@ -173,4 +173,5 @@ export interface GlobalAlertState {
 
 export interface TradeAlertPanelState {
   configureAlert: boolean;
+  isAlertPaused: boolean;
 }

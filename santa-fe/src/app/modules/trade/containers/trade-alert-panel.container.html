@@ -2,10 +2,17 @@
   [ngClass]="{
     'sat-tradeAlertPanel': true,
     'sat-tradeAlertPanel--sidePanelsDisplayedState': sidePanelsDisplayed,
-    'sat-tradeAlertPanel--configureAlertState': state.configureAlert
+    'sat-tradeAlertPanel--configureAlertState': state.configureAlert,
+    'sat-tradeAlertPanel--alertPausedState': state.isAlertPaused
   }">
   <section class="sat-tradeAlertPanel__pause">
-    <button class="santaBtn--labelled">
+    <button
+      (click)="onTogglePauseAlert()"
+      [ngClass]="{
+        'santaBtn--labelled': true,
+        'sat-tradeAlertPanel__pause-btn': true,
+        'santaBtn--inverseLabelled': state.isAlertPaused
+      }">
       <i class="fal fa-bell-slash"></i>
       <span>Pause Alert</span>
     </button>

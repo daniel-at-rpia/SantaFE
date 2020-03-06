@@ -33,7 +33,8 @@ export class TradeAlertPanel implements OnChanges {
 
   private initializePageState(): TradeAlertPanelState {
     const state: TradeAlertPanelState = {
-      configureAlert: false
+      configureAlert: false,
+      isAlertPaused: false
     };
     return state;
   }
@@ -47,7 +48,11 @@ export class TradeAlertPanel implements OnChanges {
   public onClickConfigureAlert() {
     this.configureAlert.emit();
     this.state.configureAlert = true;
-  }  
+  }
+
+  public onTogglePauseAlert() {
+    this.state.isAlertPaused = !this.state.isAlertPaused;
+  }
 
   // public onClickSendMail() {
   //   this.restfulCommService.logEngagement(
