@@ -5,25 +5,27 @@
     'sat-tradeAlertPanel--configureAlertState': state.configureAlert,
     'sat-tradeAlertPanel--alertPausedState': state.isAlertPaused
   }">
-  <section class="sat-tradeAlertPanel__pause">
-    <button
-      (click)="onTogglePauseAlert()"
-      [ngClass]="{
-        'santaBtn--labelled': true,
-        'sat-tradeAlertPanel__pause-btn': true,
-        'santaBtn--inverseLabelled': state.isAlertPaused
-      }">
-      <i class="fal fa-bell-slash"></i>
-      <span>Pause Alert</span>
-    </button>
-  </section>
-  <section class="sat-tradeAlertPanel__configureCTA">
-    <button (click)="onClickConfigureAlert()" class="santaBtn--labelled">
-      <i class="fal fa-pencil"></i>
-      <span>Configure Alert</span>
-    </button>
-  </section>
-  <section class="sat-tradeAlertPanel__thumbnail">
-    <i class="sat-tradeAlertPanel__thumbnail-icon fas fa-bell"></i>
+  <section class="sat-tradeAlertPanel__utilities">
+    <div class="sat-tradeAlertPanel__utilities-pause">
+      <button
+        (click)="onTogglePauseAlert()"
+        [ngClass]="{
+          'santaBtn--labelled': true,
+          'sat-tradeAlertPanel__utilities-pause-btn': true,
+          'santaBtn--inverseLabelled': state.isAlertPaused
+        }">
+        <i class="fal fa-bell-slash"></i>
+        <span>Pause Alert</span>
+      </button>
+    </div>
+    <div class="sat-tradeAlertPanel__utilities-configureCTA">
+      <button (click)="onClickConfigureAlert()" class="santaBtn--labelled">
+        <i class="fal fa-pencil"></i>
+        <span>Configure Alert</span>
+      </button>
+    </div>
+    <div class="sat-tradeAlertPanel__utilities-thumbnail">
+      <i class="sat-tradeAlertPanel__utilities-thumbnail-icon fas fa-bell"></i>
+    </div>
   </section>
 </article>

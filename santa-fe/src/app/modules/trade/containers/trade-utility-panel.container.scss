@@ -9,7 +9,7 @@ $tradeUtilityPanel_spacing: $spacing_medium;
   flex: 1 1 auto;
   display: flex;
   overflow: hidden;
-  height: $tradeUtility_height;
+  height: $trade_topPanels_baseState_height;
   &__thumbnail {
     @include mix_border_generator(0 $typical_border_width 0 0);
     flex: 0 0 auto;

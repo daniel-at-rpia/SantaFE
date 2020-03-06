@@ -7,51 +7,63 @@
   @include mix_border_radius(10px);
   flex: 1 1 auto;
   display: flex;
+  flex-direction: column;
   padding: $spacing_medium;
-  &__thumbnail {
-    @include mix_border_generator(0 0 0 $typical_border_width);
-    flex: 0 0 auto;
+  &__utilities {
+    flex: 0 1 ($trade_topPanels_baseState_height - $spacing_medium*2);
     display: flex;
-    margin-left: $spacing_medium;
-    padding-left: $spacing_medium;
-    &-icon {
-      color: $font_color_trivial;
-      font-size: $font_size_hero;
+    &-thumbnail {
+      @include mix_border_generator(0 0 0 $typical_border_width);
+      flex: 0 0 auto;
+      display: flex;
+      margin-left: $spacing_medium;
+      padding-left: $spacing_medium;
+      &-icon {
+        color: $font_color_trivial;
+        font-size: $font_size_hero;
+      }
+    }
+    &-pause {
+      flex: 1 1 auto;
+      display: flex;
+      justify-content: center;
+    }
+    &-configureCTA {
+      @include mix_border_generator(0 0 0 $typical_border_width);
+      flex: 1 1 auto;
+      display: flex;
+      justify-content: center;
+      margin-left: $spacing_medium;
+      padding-left: $spacing_medium;
     }
   }
-  &__pause {
-    flex: 1 1 auto;
-    display: flex;
-    justify-content: center;
-  }
-  &__configureCTA {
-    @include mix_border_generator(0 0 0 $typical_border_width);
-    flex: 1 1 auto;
-    display: flex;
-    justify-content: center;
-    margin-left: $spacing_medium;
-    padding-left: $spacing_medium;
+  &__configuration {
+
   }
   &--sidePanelsDisplayedState {
     #{$tradeAlertPanelBlockName} {
-      &__thumbnail {
-        display: none;
+      &__utilities {
+        &-thumbnail {
+          display: none;
+        }
       }
     }
   }
   &--configureAlertState {
     #{$tradeAlertPanelBlockName} {
-      &__thumbnail, &__pause, &__configureCTA {
+      &__utilities {
         display: none;
       }
     }
   }
   &--alertPausedState {
     #{$tradeAlertPanelBlockName} {
-      &__pause {
-        &-btn {
-          @include material('none');
-          background-color: $color_active;
+      &__utilities {
+        &-pause {
+          &-btn {
+            @include material('none');
+            background-color: $color_active;
+          }
         }
       }
     }
