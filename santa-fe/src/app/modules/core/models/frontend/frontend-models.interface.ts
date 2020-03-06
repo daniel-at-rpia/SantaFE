@@ -76,6 +76,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     cs01CadCurrent: number;
     cs01CadCurrentInK: string;
     hasIndex: boolean;
+    hedgeFactor: number;
   }
   api: {
     onClickCard: Function;

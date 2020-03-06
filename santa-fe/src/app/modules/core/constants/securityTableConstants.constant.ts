@@ -380,6 +380,13 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: false,
     isDataTypeText: true
+  },{
+    key: 'hedgeFactor',
+    label: 'Hedge Factor',
+    attrName: 'hedgeFactor',
+    underlineAttrName: 'hedgeFactor',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    active: false
   }
 ];
 

@@ -126,7 +126,8 @@ export class DTOService {
           ask: null,
           displayAsk: null
         },
-        hasIndex: !isStencil && rawData.metrics ? !!rawData.metrics.isIndex : false
+        hasIndex: !isStencil && rawData.metrics ? !!rawData.metrics.isIndex : false,
+        hedgeFactor: !isStencil && !!rawData.firmPosition ? rawData.firmPosition.hedgeFactor : null
       },
       api: {
         onClickCard: null,
