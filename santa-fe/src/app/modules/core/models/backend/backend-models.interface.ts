@@ -261,7 +261,6 @@ export interface BESingleBestQuoteDTO {
 export interface BEQuoteDTO {
   dealer: string; // JEFF;
   quoteType: string; //Run;
-  isActive: boolean; // true;
   identifier: string;  // 28643
   name: string;  // AAL 5 06/01/22
   benchmarkName: string;

@@ -690,8 +690,8 @@ export class DTOService {
     filteredMetricType: string,
     targetSecurity: DTOs.SecurityDTO
   ): DTOs.SecurityQuoteDTO {
-    const hasBid = !isStencil ? (!!rawData.isActive && !!rawData.bidVenues) : true;
-    const hasAsk = !isStencil ? (!!rawData.isActive && !!rawData.askVenues) : true;
+    const hasBid = !isStencil ? (!!rawData.bidVenues && rawData.bidVenues.length > 0) : true;
+    const hasAsk = !isStencil ? (!!rawData.askVenues && rawData.askVenues.length > 0) : true;
     const bidBenchmark = !isStencil ? rawData.benchmarkName : 'T 0.5 01/01/2020';
     const askBenchmark = !isStencil ? rawData.benchmarkName : 'T 0.5 01/01/2020';
     const dataSource = !isStencil ? (hasBid ? rawData.bidVenues[0] : rawData.askVenues[0]) : 'PLACEHOLDER';

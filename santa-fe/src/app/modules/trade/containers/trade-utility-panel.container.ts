@@ -115,9 +115,7 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
       )
     ).subscribe(([count, isPresetSelected, isUpdateInProgress, isProcessingRawData, isInitialDataLoaded]) => {
       if (isPresetSelected && !isUpdateInProgress && !isProcessingRawData && isInitialDataLoaded && count >= this.constants.liveUpdateCountdown) {
-        this.state.updateCountdown = this.constants.liveUpdateCountdown.toString();
-        this.state.isCallingAPI = true;
-        this.store$.dispatch(new TradeLiveUpdateStartEvent());
+        this.startUpdate();
       }
     });
 
@@ -156,10 +154,15 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
     }
   }
 
-  public onClickPause() {
-    if (!this.state.isCallingAPI && !this.state.isProcessingData && this.state.isPresetSelected) {
-      this.state.isPaused = !this.state.isPaused;
-    }
+  // disabled temporarily
+  // public onClickPause() {
+  //   if (!this.state.isCallingAPI && !this.state.isProcessingData && this.state.isPresetSelected) {
+  //     this.state.isPaused = !this.state.isPaused;
+  //   }
+  // }
+
+  public onClickUpdateNow() {
+    this.startUpdate();
   }
 
   public onClickEditValidWindow() {
@@ -176,6 +179,14 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
       this.state.validWindowConfig.valueDisplay = eachOption['label'];
       this.state.validWindowConfig.isEditing = false;
       this.store$.dispatch(new TradeChangeBestQuoteValidWindowEvent(this.state.validWindowConfig.valueRaw));
+    }
+  }
+
+  private startUpdate() {
+    if (!this.state.isPaused && !this.state.isCallingAPI && !this.state.isProcessingData && this.state.isPresetSelected) {
+      this.state.updateCountdown = this.constants.liveUpdateCountdown.toString();
+      this.state.isCallingAPI = true;
+      this.store$.dispatch(new TradeLiveUpdateStartEvent());
     }
   }
 }

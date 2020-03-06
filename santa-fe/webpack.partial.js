@@ -3,7 +3,7 @@ const webpack = require('webpack');
 module.exports = {
   plugins: [
     new webpack.DefinePlugin({
-      "VERSION": JSON.stringify("1.1.8")
+      "VERSION": JSON.stringify("1.1.9")
     })
   ]
 }

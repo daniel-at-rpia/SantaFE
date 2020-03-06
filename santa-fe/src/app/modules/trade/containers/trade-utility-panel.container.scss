@@ -108,19 +108,15 @@ $tradeUtilityPanel_spacing: $spacing_medium;
     flex: 0 0 auto;
     display: flex;
     padding: $tradeUtilityPanel_spacing $tradeUtilityPanel_spacing $tradeUtilityPanel_spacing 0;
+    &-updateNow {
+      @include mix_border_radius(5px);
+      @include mix_border_generator($typical_border_width, $color_white);
+      flex: 1 1 auto;
+    }
     &-pause {
       @include mix_border_radius(5px);
       @include mix_border_generator($typical_border_width, $color_white);
-      flex: 0 1 50%;
-    }
-    &-refresh {
-      @include mix_border_radius(5px);
-      @include mix_border_generator($typical_border_width, $color_white);
-      flex: 0 1 50%;
-      @include material('none');
-      border-color: $color_disabled;
-      background-color: inherit;
-      color: $color_disabled;
+      flex: 1 1 auto;
     }
   }
   &--editingValidWindowState {
@@ -142,17 +138,17 @@ $tradeUtilityPanel_spacing: $spacing_medium;
   &--pausedState {
     #{$tradeUtilityPanelBlockName} {
       &__cta {
+        &-updateNow {
+          @include material('none');
+          border-color: $color_disabled;
+          background-color: inherit;
+          color: $color_disabled;
+        }
         &-pause {
           @include material('none');
           @extend .santaBtn--inverseLabelled;
           border-color: $color_active;
           background-color: $color_active;
-        }
-        &-refresh {
-          @include material('none');
-          border-color: $color_disabled;
-          background-color: inherit;
-          color: $color_disabled;
         }
       }
     }
@@ -168,13 +164,12 @@ $tradeUtilityPanel_spacing: $spacing_medium;
         }
       }
       &__cta {
-        &-pause {
+        &-updateNow {
           @include material('none');
-          border-color: $color_disabled;
-          background-color: inherit;
-          color: $color_disabled;
+          @extend .santaBtn--inverseLabelled;
+          background-color: $color_active;
         }
-        &-refresh {
+        &-pause {
           @include material('none');
           border-color: $color_disabled;
           background-color: inherit;
