@@ -1,15 +1,18 @@
-import {
-  Component,
-  ViewEncapsulation,
-  Input,
-  Output,
-  EventEmitter,
-  OnChanges
-} from '@angular/core';
-
-import { RestfulCommService } from 'Core/services/RestfulCommService';
-import { TradeAlertPanelState } from 'FEModels/frontend-page-states.interface';
-import { EngagementActionList } from 'Core/constants/coreConstants.constant';
+// dependencies
+    import {
+      Component,
+      ViewEncapsulation,
+      Input,
+      Output,
+      EventEmitter,
+      OnChanges
+    } from '@angular/core';
+    import { DTOService } from 'Core/services/DTOService';
+    import { UtilityService } from 'Core/services/UtilityService';
+    import { RestfulCommService } from 'Core/services/RestfulCommService';
+    import { TradeAlertPanelState } from 'FEModels/frontend-page-states.interface';
+    import { EngagementActionList } from 'Core/constants/coreConstants.constant';
+  //
 
 @Component({
   selector: 'trade-alert-panel',
@@ -26,6 +29,8 @@ export class TradeAlertPanel implements OnChanges {
   state: TradeAlertPanelState;
 
   constructor(
+    private dtoService: DTOService,
+    private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
   ){
     this.state = this.initializePageState();
@@ -34,7 +39,8 @@ export class TradeAlertPanel implements OnChanges {
   private initializePageState(): TradeAlertPanelState {
     const state: TradeAlertPanelState = {
       configureAlert: false,
-      isAlertPaused: false
+      isAlertPaused: false,
+      testDto: this.dtoService.createSecurityDefinitionConfigurator(true, true)
     };
     return state;
   }

@@ -1,14 +1,13 @@
 <article
-  (mouseleave)="onMouseLeaveFilter(configuratorData.state.showFiltersFromDefinition)"
   [ngClass]="{
     'sat-securityDefinitionConfigurator': true,
-    'sat-securityDefinitionConfigurator--longFilterOptionsState': configuratorData.state.showLongFilterOptions,
     'sat-securityDefinitionConfigurator--filterActiveState': configuratorData.state.showFiltersFromDefinition,
     'sat-securityDefinitionConfigurator--highlightedVariant': highlightedVariant,
     'sat-securityDefinitionConfigurator--filterShowingLongDefinitionState': configuratorData.state.showFiltersFromDefinition?.data.urlForGetLongOptionListFromServer && configuratorData.state.showFiltersFromDefinition?.data.filterOptionList.length === 0,
     'sat-securityDefinitionConfigurator--filterLoadingLongOptionListState': configuratorData.state.isLoadingLongOptionListFromServer,
     'sat-securityDefinitionConfigurator--groupByDisabledState': configuratorData.state.groupByDisabled,
-    'sat-securityDefinitionConfigurator--canApplyFilterState': configuratorData.state.canApplyFilter
+    'sat-securityDefinitionConfigurator--canApplyFilterState': configuratorData.state.canApplyFilter,
+    'sat-securityDefinitionConfigurator--noMainCTAState': configuratorData.state.noMainCTA
   }">
   <section class="sat-securityDefinitionConfigurator__definitions">
     <ul class="sat-securityDefinitionConfigurator__definitions-list">

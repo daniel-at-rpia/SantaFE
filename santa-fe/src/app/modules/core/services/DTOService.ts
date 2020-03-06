@@ -324,7 +324,8 @@ export class DTOService {
   }
 
   public createSecurityDefinitionConfigurator(
-    groupByDisabled: boolean
+    groupByDisabled: boolean,
+    noMainCTA?: boolean
   ): DTOs.SecurityDefinitionConfiguratorDTO {
     const object: DTOs.SecurityDefinitionConfiguratorDTO = {
       data: {
@@ -343,7 +344,8 @@ export class DTOService {
         showFiltersFromDefinition: null,
         showLongFilterOptions: false,
         isLoading: false,
-        isLoadingLongOptionListFromServer: false
+        isLoadingLongOptionListFromServer: false,
+        noMainCTA: !!noMainCTA
       }
     };
     return object;

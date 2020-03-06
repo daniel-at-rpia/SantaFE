@@ -169,6 +169,7 @@ export interface SecurityDefinitionConfiguratorDTO extends BasicDTOStructure {
     isLoading: boolean;
     isLoadingLongOptionListFromServer: boolean;
     showFiltersFromDefinition: SecurityDefinitionDTO;
+    noMainCTA: boolean;
   }
 }
 

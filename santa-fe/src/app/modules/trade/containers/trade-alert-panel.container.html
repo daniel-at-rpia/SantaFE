@@ -28,4 +28,25 @@
       <i class="sat-tradeAlertPanel__utilities-thumbnail-icon fas fa-bell"></i>
     </div>
   </section>
+  <section class="sat-tradeAlertPanel__configuration">
+    <ul class="sat-tradeAlertPanel__configuration-alertTypeList">
+      <li class="sat-tradeAlertPanel__configuration-alertTypeList-item sat-tradeAlertPanel__configuration-alertTypeList-item--axe">
+        <button class="sat-tradeAlertPanel__configuration-alertTypeList-item-btn">Axe Alert</button>
+      </li>
+      <li class="sat-tradeAlertPanel__configuration-alertTypeList-item sat-tradeAlertPanel__configuration-alertTypeList-item--liquidation">
+        <button class="sat-tradeAlertPanel__configuration-alertTypeList-item-btn">Liquidation Alert</button>
+      </li>
+    </ul>
+    <ul class="sat-tradeAlertPanel__configuration-groupList">
+      <security-definition-configurator
+        [configuratorData]="state.testDto"
+      ></security-definition-configurator>
+    </ul>
+    <div class="sat-tradeAlertPanel__configuration-ctas">
+      <button class="sat-tradeAlertPanel__configuration-ctas-save santaBtn--labelled santaBtn--inverseLabelled">
+        <i class="fal fa-cloud-upload"></i>
+        <span>Save</span>
+      </button>
+    </div>
+  </section>
 </article>
