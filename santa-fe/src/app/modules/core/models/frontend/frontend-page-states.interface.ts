@@ -4,10 +4,21 @@ import {
   SecurityDefinitionStub,
   SecurityTableMetricStub
 } from 'FEModels/frontend-stub-models.interface';
-import { DefinitionConfiguratorEmitterParamsItem, ObligorGraphAxesZoomState } from 'FEModels/frontend-adhoc-packages.interface';
+import {
+  DefinitionConfiguratorEmitterParamsItem,
+  ObligorGraphAxesZoomState,
+  SecurityMapEntry
+} from 'FEModels/frontend-adhoc-packages.interface';
 import { AlertTypes } from 'Core/constants/coreConstants.constant';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
+
+export interface GlobalAlertState {
+  activated: boolean;
+  displayAlerts: boolean;
+  triggerActionMenuOpen: boolean;
+  presentList: Array<DTOs.AlertDTO>;
+}
 
 export interface MarketState {
 }
@@ -165,17 +176,11 @@ export interface TradeObligorGraphPanelState {
   chartCategories: ObligorChartCategoryBlock[];
 }
 
-export interface GlobalAlertState {
-  activated: boolean;
-  displayAlerts: boolean;
-  triggerActionMenuOpen: boolean;
-  presentList: Array<DTOs.AlertDTO>;
-}
-
 export interface TradeAlertPanelState {
   configureAlert: boolean;
   isAlertPaused: boolean;
   testDto: any;
+  securityMap: Array<SecurityMapEntry>;
   configuration: {
     selectedAlert: AlertTypes,
     axe: {

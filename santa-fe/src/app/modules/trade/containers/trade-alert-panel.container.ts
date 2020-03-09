@@ -5,8 +5,26 @@
       Input,
       Output,
       EventEmitter,
-      OnChanges
+      OnInit,
+      OnChanges,
+      OnDestroy
     } from '@angular/core';
+    import { Store, select } from '@ngrx/store';
+    import {
+      Observable,
+      Subscription,
+      interval,
+      of
+    } from 'rxjs';
+    import {
+      tap,
+      first,
+      delay,
+      catchError,
+      withLatestFrom,
+      filter
+    } from 'rxjs/operators';
+
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
@@ -15,6 +33,10 @@
       EngagementActionList,
       AlertTypes
     } from 'Core/constants/coreConstants.constant';
+    import {
+      selectSecurityMapContent,
+      selectSecurityMapValidStatus
+    } from 'Core/selectors/core.selectors';
   //
 
 @Component({
@@ -24,14 +46,18 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class TradeAlertPanel implements OnChanges {
+export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   @Input() ownerInitial: string;
   @Input() sidePanelsDisplayed: boolean;
   @Input() collapseConfiguration: boolean;
   @Output() configureAlert = new EventEmitter();
   state: TradeAlertPanelState;
+  subscriptions = {
+    securityMapSub: null
+  }
 
   constructor(
+    private store$: Store<any>,
     private dtoService: DTOService,
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
@@ -44,6 +70,7 @@ export class TradeAlertPanel implements OnChanges {
       configureAlert: false,
       isAlertPaused: false,
       testDto: this.dtoService.createSecurityDefinitionConfigurator(true, true),
+      securityMap: [],
       configuration: {
         selectedAlert: null,
         axe: {
@@ -58,9 +85,29 @@ export class TradeAlertPanel implements OnChanges {
     return state;
   }
 
+  public ngOnInit() {
+    this.subscriptions.securityMapSub = this.store$.pipe(
+      select(selectSecurityMapContent),
+      withLatestFrom(
+        this.store$.pipe(select(selectSecurityMapValidStatus))
+      )
+    ).subscribe(([mapContent, isValid]) => {
+      if (!!isValid) {
+        this.state.securityMap = mapContent;
+      }
+    });
+  }
+
   public ngOnChanges() {
     if (!!this.collapseConfiguration) {
       this.state.configureAlert = false;
+    }
+  }
+
+  public ngOnDestroy() {
+    for (const eachItem in this.subscriptions) {
+      const eachSub = this.subscriptions[eachItem] as Subscription;
+      eachSub.unsubscribe();
     }
   }
 

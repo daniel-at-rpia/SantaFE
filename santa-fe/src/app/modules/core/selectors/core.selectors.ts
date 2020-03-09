@@ -17,3 +17,13 @@ export const selectDislayAlertThumbnail = createSelector(
   getCoreState,
   (state: CoreState) => state.alert.displayThumbnail
 );
+
+export const selectSecurityMapContent = createSelector(
+  getCoreState,
+  (state:CoreState) => state.securityMap.mapContent
+);
+
+export const selectSecurityMapValidStatus = createSelector(
+  getCoreState,
+  (state:CoreState) => state.securityMap.valid
+);

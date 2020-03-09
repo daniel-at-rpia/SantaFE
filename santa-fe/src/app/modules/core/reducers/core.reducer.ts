@@ -6,6 +6,7 @@ import {
 
 import { AlertDTO } from 'FEModels/frontend-models.interface';
 import { CoreActions } from 'Core/actions/core.actions';
+import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
 
 export interface CoreState {
   user: {
@@ -14,6 +15,10 @@ export interface CoreState {
   alert: {
     newAlerts: Array<AlertDTO>;
     displayThumbnail: boolean;
+  }
+  securityMap: {
+    valid: boolean;
+    mapContent: Array<SecurityMapEntry>
   }
 }
 
@@ -24,6 +29,10 @@ const initialState: CoreState = {
   alert: {
     newAlerts: [],
     displayThumbnail: true
+  },
+  securityMap: {
+    valid: false,
+    mapContent: []
   }
 }
 
@@ -46,7 +55,15 @@ export function coreReducer (
            ...state.alert,
            displayThumbnail: action.value
          }
-       }
+       };
+    case CoreActions.LoadSecurityMap:
+      return {
+        ...state,
+        securityMap: {
+          valid: true,
+          mapContent: action.map
+        }
+      };
     default:
       return {
         ...state
