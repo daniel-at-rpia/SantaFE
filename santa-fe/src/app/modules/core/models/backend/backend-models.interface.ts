@@ -15,11 +15,9 @@ export interface BEFullSecurityCollection {
       "Seniority"?: Array<string>;
       [property: string]: Array<string>;
     };
-    filters: {
+    groupFilters: {
       [property: string]: Array<string>;
     };
-    singleSecurityTenorOptions: Array<string>;
-    groupParameter: object;
   };
   securityDtos: {
     [property: string]: BEFullSecurityDTO;
@@ -100,6 +98,7 @@ export interface BESecurityDTO {
     quantity: number;
     cs01Local: number;
     cs01Cad: number;
+    hedgeFactor: number;
   }
   curveSubType?: string;  // CDS only
 }
@@ -120,10 +119,8 @@ export interface BESecurityGroupDTO {
     groupOptionValues: {
       [property: string]: Array<string>;
     };
-    filters: any;
-    singleSecurityTenorOptions: Array<string>;
+    groupFilters: any;
     metricContextFieldMinMax?: any;
-    groupParameter: any;
   }
   numSecurities: number;
   name: string;
@@ -133,7 +130,7 @@ export interface BESecurityGroupDTO {
   type: string;
   metrics: BEGroupMetricDTO;
   deltaMetrics: {
-    Dod: BEGroupMetricDTO;
+    Dod?: BEGroupMetricDTO;
     Wow?: BEGroupMetricDTO;
     Mtd?: BEGroupMetricDTO;
     Mom?: BEGroupMetricDTO;
@@ -144,7 +141,7 @@ export interface BESecurityGroupDTO {
 
 interface BEGroupMetricDTO {
   tenor: string;
-  backendTenor: string;
+  backendTenor?: string;
   propertyToNumSecurities: {
     WorkoutTerm: number;
     BackendWorkoutTerm?: number;
@@ -152,7 +149,7 @@ interface BEGroupMetricDTO {
     RatingDouble?: number;
     Spread?: number;
     ZSpread?: number;
-    AswUsd: number;
+    AswUsd?: number;
     GSpread?: number;
     CitiSpread?: number;
     ModelSpread?: number;
@@ -264,7 +261,6 @@ export interface BESingleBestQuoteDTO {
 export interface BEQuoteDTO {
   dealer: string; // JEFF;
   quoteType: string; //Run;
-  isActive: boolean; // true;
   identifier: string;  // 28643
   name: string;  // AAL 5 06/01/22
   benchmarkName: string;
@@ -273,7 +269,7 @@ export interface BEQuoteDTO {
   bidQuoteId: string; // "77d78117-5f89-41ab-a697-8f1475eb8006"
   bidQuoteStatus: number; // 0; -1; -2
   bidTime: string; // "2020-02-03T10:12:17-05:00"
-  bidVenue: string; // MSG1;
+  bidVenues: Array<string>; // MSG1;
   bidYieldType: number; // null;
   bidYield: number; // null;
   bidSpread: number; // null;
@@ -284,7 +280,7 @@ export interface BEQuoteDTO {
   askQuoteId: string;
   askQuoteStatus: number;  // 0; -1; -2
   askTime: string;
-  askVenue: string; // null;
+  askVenues: Array<string>; // null;
   askYieldType: number; // null;
   askYield: number; // null;
   askSpread: number; // null;
@@ -303,9 +299,7 @@ export interface BEHistoricalSummaryOverviewDTO {
     source: string;
     date: string;
     groupOptionValues: object;
-    filters: object;
-    singleSecurityTenorOptions: Array<string>;
-    groupParameter: object;
+    groupFilters: object;
   };
 }
 

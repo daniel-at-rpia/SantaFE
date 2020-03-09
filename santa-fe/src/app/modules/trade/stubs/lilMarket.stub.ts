@@ -3,7 +3,7 @@ import { BEHistoricalSummaryOverviewDTO } from 'BEModels/backend-models.interfac
 export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
   "GroupIdentifierWithInclusiveOptions":{
     "source":"Default",
-    "date":"2020-02-24T00:00:00-05:00",
+    "date":"2020-03-03T00:00:00-05:00",
     "groupOptionValues":{
       "SecurityType":[
         "Bond"
@@ -45,7 +45,7 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
         "BBB"
       ],
       "RatingBucket":[
-        "IG"
+        "Xover"
       ],
       "Sector":[
         "Health Care"
@@ -87,43 +87,28 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
         "None"
       ]
     },
-    "filters":{
+    "groupFilters":{
 
-    },
-    "singleSecurityTenorOptions":[
-      "2Y",
-      "3Y",
-      "5Y",
-      "7Y",
-      "10Y",
-      "20Y",
-      "30Y"
-    ],
-    "groupParameter":{
-      "weightField":"AmtOutstanding",
-      "metricContextField":null,
-      "metricContextMin":null,
-      "metricContextMax":null
     }
   },
   "Mom":{
     "BaseSecurity":{
       "databaseSource":"Citi",
-      "startDate":"2020-01-24T00:00:00-05:00",
-      "endDate":"2020-02-24T00:00:00-05:00",
+      "startDate":"2020-02-03T00:00:00-05:00",
+      "endDate":"2020-03-03T00:00:00-05:00",
       "metricName":"Spread",
       "historicalLevel":{
         "targetSecurityIdentifier":null,
-        "startMetric":69.644,
-        "endMetric":56.6283,
-        "maxMetric":69.644,
-        "minMetric":56.6283,
+        "startMetric":75.0092,
+        "endMetric":null,
+        "maxMetric":null,
+        "minMetric":null,
         "timeSeries":{
 
         },
         "isLevelRange":true,
         "isBasisRange":false,
-        "isValid":true
+        "isValid":false
       },
       "historicalBasis":null,
       "security":{
@@ -148,74 +133,74 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
           "isFixedForLife":false,
           "isFixedToFloatInFixed":false,
           "isFloat":true,
-          "isNewIssue":false,
           "isOnTheRun":false,
-          "ratingNoNotch":"BBB",
-          "ratingBucket":"IG",
-          "workoutTerm":2.2822,
-          "spread":56.6283,
+          "isNewIssue":false,
           "benchmarkSecurityIdentifier":null,
           "benchmarkName":null,
           "underlyingSecurityId":-1,
-          "zSpread":56.6283,
-          "gSpread":57.7529,
-          "yieldWorst":1.81558,
-          "amtOutstanding":500000000.0,
-          "marketValue":505340000.0,
-          "ratingDouble":15.0,
+          "zSpread":0,
+          "gSpread":0,
+          "yieldWorst":0,
+          "amtOutstanding":500000000,
+          "marketValue":508136980,
+          "workoutTerm":2.2603,
+          "ratingDouble":14,
           "isRated":true,
-          "rating":"BBB",
-          "price":101.068,
-          "isIndex":true
+          "rating":"BBB-",
+          "ratingNoNotch":"BBB",
+          "ratingBucket":"Xover",
+          "price":0,
+          "spread":0,
+          "isIndex":false
         },
         "deltaMetrics":{
           "Dod":{
-            "zSpread":-0.1854,
-            "gSpread":1.9388,
-            "yieldWorst":-0.08913,
-            "ratingDouble":0.0,
-            "price":0.005,
-            "spread":-0.1854
+            "zSpread":0,
+            "gSpread":0,
+            "yieldWorst":0,
+            "ratingDouble":-1,
+            "price":0,
+            "spread":0
           },
           "Wow":{
-            "zSpread":0.6374,
-            "gSpread":1.6511,
-            "yieldWorst":-0.17203,
-            "ratingDouble":0.0,
-            "price":-0.025,
-            "spread":0.6374
+            "zSpread":0,
+            "gSpread":0,
+            "yieldWorst":0,
+            "ratingDouble":-1,
+            "price":0,
+            "spread":0
           },
           "Mtd":{
-            "zSpread":-20.7537,
-            "gSpread":-24.8216,
-            "yieldWorst":-0.32127,
-            "ratingDouble":0.0,
-            "price":0.452,
-            "spread":-20.7537
+            "zSpread":0,
+            "gSpread":0,
+            "yieldWorst":0,
+            "ratingDouble":-1,
+            "price":0,
+            "spread":0
           },
           "Mom":{
-            "zSpread":-13.0157,
-            "gSpread":-14.0309,
-            "yieldWorst":-0.39966,
-            "ratingDouble":0.0,
-            "price":0.272,
-            "spread":-13.0157
+            "zSpread":0,
+            "gSpread":0,
+            "yieldWorst":0,
+            "ratingDouble":-1,
+            "price":0,
+            "spread":0
           },
           "Ytd":{
-            "zSpread":-20.3188,
-            "gSpread":-27.3527,
-            "yieldWorst":-0.62065,
-            "ratingDouble":0.0,
-            "price":0.438,
-            "spread":-20.3188
+            "zSpread":0,
+            "gSpread":0,
+            "yieldWorst":0,
+            "ratingDouble":-1,
+            "price":0,
+            "spread":0
           },
           "Yoy":{
-            "zSpread":-75.0177,
-            "gSpread":-81.2971,
-            "yieldWorst":-2.0288,
-            "ratingDouble":1.0,
-            "price":1.8953,
-            "spread":-75.0177
+            "zSpread":0,
+            "gSpread":0,
+            "yieldWorst":0,
+            "ratingDouble":0,
+            "price":0,
+            "spread":0
           }
         },
         "firmPosition":{
@@ -232,7 +217,7 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
             "driver":"Spread",
             "enteredTime":null,
             "user":null,
-            "value":54.0
+            "value":62
           },
           "primaryPmName":"DJ",
           "backupPmName":"PM",
@@ -242,11 +227,12 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
             "PM",
             "AG"
           ],
-          "date":"2020-02-25T00:00:00-05:00",
+          "date":"2020-03-04T00:00:00-05:00",
           "securityIdentifier":"2508",
-          "quantity":3354000.0,
-          "cs01Cad":994.856698212,
-          "cs01Local":994.856698212
+          "quantity":3354000,
+          "hedgeFactor":1,
+          "cs01Cad":1001.3637936120001,
+          "cs01Local":1001.3637936120001
         },
         "securityType":"Bond",
         "maturityType":"Bullet"
@@ -258,8 +244,8 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
     },
     "Group":{
       "databaseSource":"Citi",
-      "startDate":"2020-01-24T00:00:00-05:00",
-      "endDate":"2020-02-24T00:00:00-05:00",
+      "startDate":"2020-02-03T00:00:00-05:00",
+      "endDate":"2020-03-03T00:00:00-05:00",
       "metricName":"Spread",
       "historicalLevel":{
         "targetSecurityIdentifier":null,
@@ -292,164 +278,122 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
         "securityType":"Bond",
         "couponType":"Float",
         "metrics":{
-          "workoutTerm":2.2822,
-          "ratingDouble":15.0,
-          "price":101.068,
-          "zSpread":56.6283,
-          "gSpread":57.7529,
-          "yieldWorst":1.81558,
-          "amtOutstanding":500000000.0,
-          "marketValue":505340000.0,
-          "spread":0.0,
+          "workoutTerm":2.2603,
+          "ratingDouble":14,
+          "price":0,
+          "zSpread":0,
+          "gSpread":0,
+          "yieldWorst":0,
+          "amtOutstanding":500000000,
+          "marketValue":508136980,
+          "spread":0,
           "tenor":"2Y",
           "backendTenor":"2Y",
           "propertyToNumSecurities":{
             "WorkoutTerm":1,
             "RatingDouble":1,
-            "Price":1,
-            "OasSpread":1,
-            "ZSpread":1,
-            "AswUsd":1,
-            "GSpread":1,
-            "YieldWorst":1,
             "AmtOutstanding":1,
             "MarketValue":1
           },
           "isRated":true,
-          "rating":"BBB",
+          "rating":"BBB-",
           "ratingNoNotch":"BBB",
           "ratingBucket":"NR",
           "isIndex":false
         },
         "deltaMetrics":{
           "Dod":{
-            "ratingDouble":0.0,
-            "price":0.0049999999999954525,
-            "zSpread":-0.18539999999999424,
-            "gSpread":1.9387999999999934,
-            "yieldWorst":-0.08912999999999993,
-            "spread":0.0,
+            "ratingDouble":-1,
+            "price":0,
+            "zSpread":0,
+            "gSpread":0,
+            "yieldWorst":0,
+            "spread":0,
             "tenor":null,
             "backendTenor":null,
             "propertyToNumSecurities":{
               "WorkoutTerm":1,
               "RatingDouble":1,
-              "Price":1,
-              "OasSpread":1,
-              "ZSpread":1,
-              "AswUsd":1,
-              "GSpread":1,
-              "YieldWorst":1,
               "AmtOutstanding":1,
               "MarketValue":1
             }
           },
           "Wow":{
-            "ratingDouble":0.0,
-            "price":-0.025000000000005684,
-            "zSpread":0.6373999999999995,
-            "gSpread":1.6510999999999996,
-            "yieldWorst":-0.17203000000000013,
-            "spread":0.0,
+            "ratingDouble":-1,
+            "price":0,
+            "zSpread":0,
+            "gSpread":0,
+            "yieldWorst":0,
+            "spread":0,
             "tenor":null,
             "backendTenor":null,
             "propertyToNumSecurities":{
               "WorkoutTerm":1,
               "RatingDouble":1,
-              "Price":1,
-              "OasSpread":1,
-              "ZSpread":1,
-              "AswUsd":1,
-              "GSpread":1,
-              "YieldWorst":1,
               "AmtOutstanding":1,
               "MarketValue":1
             }
           },
           "Mtd":{
-            "ratingDouble":0.0,
-            "price":0.4519999999999981,
-            "zSpread":-20.753700000000006,
-            "gSpread":-24.821600000000004,
-            "yieldWorst":-0.32126999999999994,
-            "spread":0.0,
+            "ratingDouble":-1,
+            "price":0,
+            "zSpread":0,
+            "gSpread":0,
+            "yieldWorst":0,
+            "spread":0,
             "tenor":null,
             "backendTenor":null,
             "propertyToNumSecurities":{
               "WorkoutTerm":1,
               "RatingDouble":1,
-              "Price":1,
-              "OasSpread":1,
-              "ZSpread":1,
-              "AswUsd":1,
-              "GSpread":1,
-              "YieldWorst":1,
               "AmtOutstanding":1,
               "MarketValue":1
             }
           },
           "Mom":{
-            "ratingDouble":0.0,
-            "price":0.27199999999999136,
-            "zSpread":-13.015700000000002,
-            "gSpread":-14.030900000000003,
-            "yieldWorst":-0.3996600000000001,
-            "spread":0.0,
+            "ratingDouble":-1,
+            "price":0,
+            "zSpread":0,
+            "gSpread":0,
+            "yieldWorst":0,
+            "spread":0,
             "tenor":null,
             "backendTenor":null,
             "propertyToNumSecurities":{
               "WorkoutTerm":1,
               "RatingDouble":1,
-              "Price":1,
-              "OasSpread":1,
-              "ZSpread":1,
-              "AswUsd":1,
-              "GSpread":1,
-              "YieldWorst":1,
               "AmtOutstanding":1,
               "MarketValue":1
             }
           },
           "Ytd":{
-            "ratingDouble":0.0,
-            "price":0.4380000000000024,
-            "zSpread":-20.318800000000003,
-            "gSpread":-27.3527,
-            "yieldWorst":-0.6206500000000001,
-            "spread":0.0,
+            "ratingDouble":-1,
+            "price":0,
+            "zSpread":0,
+            "gSpread":0,
+            "yieldWorst":0,
+            "spread":0,
             "tenor":null,
             "backendTenor":null,
             "propertyToNumSecurities":{
               "WorkoutTerm":1,
               "RatingDouble":1,
-              "Price":1,
-              "OasSpread":1,
-              "ZSpread":1,
-              "AswUsd":1,
-              "GSpread":1,
-              "YieldWorst":1,
               "AmtOutstanding":1,
               "MarketValue":1
             }
           },
           "Yoy":{
-            "ratingDouble":1.0,
-            "price":1.8952999999999915,
-            "zSpread":-75.01769999999999,
-            "gSpread":-81.29710000000001,
-            "yieldWorst":-2.0288000000000004,
-            "spread":0.0,
+            "ratingDouble":0,
+            "price":0,
+            "zSpread":0,
+            "gSpread":0,
+            "yieldWorst":0,
+            "spread":0,
             "tenor":null,
             "backendTenor":null,
             "propertyToNumSecurities":{
               "WorkoutTerm":1,
               "RatingDouble":1,
-              "Price":1,
-              "OasSpread":1,
-              "ZSpread":1,
-              "AswUsd":1,
-              "GSpread":1,
-              "YieldWorst":1,
               "AmtOutstanding":1,
               "MarketValue":1
             }
@@ -458,7 +402,7 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
         "isValid":true,
         "groupIdentifier":{
           "source":"Default",
-          "date":"2020-02-24T00:00:00-05:00",
+          "date":"2020-03-03T00:00:00-05:00",
           "groupOptionValues":{
             "Seniority":[
               "SR"
@@ -488,27 +432,12 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
               "Float"
             ]
           },
-          "filters":{
+          "groupFilters":{
 
-          },
-          "singleSecurityTenorOptions":[
-            "2Y",
-            "3Y",
-            "5Y",
-            "7Y",
-            "10Y",
-            "20Y",
-            "30Y"
-          ],
-          "groupParameter":{
-            "weightField":"AmtOutstanding",
-            "metricContextField":null,
-            "metricContextMin":null,
-            "metricContextMax":null
           }
         },
         "source":"Default",
-        "date":"2020-02-24T00:00:00-05:00",
+        "date":"2020-03-03T00:00:00-05:00",
         "numSecurities":1,
         "name":"Bond|USD|Float|SR|2Y|BBB|Health Car|Medical Eq|US",
         "type":"SingleSecurityGroup"
@@ -519,155 +448,7 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
       "isGroupHistoricalSummary":true
     },
     "Top":[
-      {
-        "databaseSource":"Citi",
-        "startDate":"2020-01-24T00:00:00-05:00",
-        "endDate":"2020-02-24T00:00:00-05:00",
-        "metricName":"Spread",
-        "historicalLevel":{
-          "targetSecurityIdentifier":null,
-          "startMetric":69.644,
-          "endMetric":56.6283,
-          "maxMetric":69.644,
-          "minMetric":56.6283,
-          "timeSeries":{
 
-          },
-          "isLevelRange":true,
-          "isBasisRange":false,
-          "isValid":true
-        },
-        "historicalBasis":null,
-        "security":{
-          "isSovereign":false,
-          "isGovt":false,
-          "isEm":false,
-          "securityIdentifier":"2508",
-          "ccy":"USD",
-          "country":"US",
-          "industry":"Medical Equipment & Devices Manufacturing",
-          "name":"BDX FRN 06/06/2022 Bullet USD SENIOR_UNSECURED",
-          "genericSeniority":"SR",
-          "globalIdentifier":"US075887BU29",
-          "obligorName":"BECTON DICKINSON AND CO",
-          "obligorId":1278,
-          "paymentRank":"SR UNSECURED",
-          "sector":"Health Care",
-          "securitySubType":"FRN",
-          "subIndustry":"Drug Delivery Systems",
-          "ticker":"BDX",
-          "metrics":{
-            "isFixedForLife":false,
-            "isFixedToFloatInFixed":false,
-            "isFloat":true,
-            "isNewIssue":false,
-            "isOnTheRun":false,
-            "ratingNoNotch":"BBB",
-            "ratingBucket":"IG",
-            "workoutTerm":2.2822,
-            "spread":56.6283,
-            "benchmarkSecurityIdentifier":null,
-            "benchmarkName":null,
-            "underlyingSecurityId":-1,
-            "zSpread":56.6283,
-            "gSpread":57.7529,
-            "yieldWorst":1.81558,
-            "amtOutstanding":500000000.0,
-            "marketValue":505340000.0,
-            "ratingDouble":15.0,
-            "isRated":true,
-            "rating":"BBB",
-            "price":101.068,
-            "isIndex":true
-          },
-          "deltaMetrics":{
-            "Dod":{
-              "zSpread":-0.1854,
-              "gSpread":1.9388,
-              "yieldWorst":-0.08913,
-              "ratingDouble":0.0,
-              "price":0.005,
-              "spread":-0.1854
-            },
-            "Wow":{
-              "zSpread":0.6374,
-              "gSpread":1.6511,
-              "yieldWorst":-0.17203,
-              "ratingDouble":0.0,
-              "price":-0.025,
-              "spread":0.6374
-            },
-            "Mtd":{
-              "zSpread":-20.7537,
-              "gSpread":-24.8216,
-              "yieldWorst":-0.32127,
-              "ratingDouble":0.0,
-              "price":0.452,
-              "spread":-20.7537
-            },
-            "Mom":{
-              "zSpread":-13.0157,
-              "gSpread":-14.0309,
-              "yieldWorst":-0.39966,
-              "ratingDouble":0.0,
-              "price":0.272,
-              "spread":-13.0157
-            },
-            "Ytd":{
-              "zSpread":-20.3188,
-              "gSpread":-27.3527,
-              "yieldWorst":-0.62065,
-              "ratingDouble":0.0,
-              "price":0.438,
-              "spread":-20.3188
-            },
-            "Yoy":{
-              "zSpread":-75.0177,
-              "gSpread":-81.2971,
-              "yieldWorst":-2.0288,
-              "ratingDouble":1.0,
-              "price":1.8953,
-              "spread":-75.0177
-            }
-          },
-          "firmPosition":{
-            "partitionOptionValues":{
-              "PortfolioShortName":[
-                "AGB",
-                "DOF"
-              ],
-              "StrategyName":[
-                "Short Carry"
-              ]
-            },
-            "mark":{
-              "driver":"Spread",
-              "enteredTime":null,
-              "user":null,
-              "value":54.0
-            },
-            "primaryPmName":"DJ",
-            "backupPmName":"PM",
-            "researchName":"AG",
-            "owners":[
-              "DJ",
-              "PM",
-              "AG"
-            ],
-            "date":"2020-02-25T00:00:00-05:00",
-            "securityIdentifier":"2508",
-            "quantity":3354000.0,
-            "cs01Cad":994.856698212,
-            "cs01Local":994.856698212
-          },
-          "securityType":"Bond",
-          "maturityType":"Bullet"
-        },
-        "rank":1,
-        "name":"BDX FRN 06/06/2022 Bullet USD SENIOR_UNSECURED",
-        "isSecurityHistoricalSummary":true,
-        "isGroupHistoricalSummary":false
-      }
     ],
     "Bottom":[
 

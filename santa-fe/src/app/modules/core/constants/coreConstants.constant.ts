@@ -15,8 +15,8 @@ export const APIUrlMap = {
   getSubIndustries: `obligor/get-subindustries`,
   getCountries: 'obligor/get-countries',
   setQuoteStatus: 'liveQuote/set-quote-status',
-  logEngagement: 'genericLogger/track',
-  logError: 'genericLogger/log'
+  logEngagement: 'feLogger/track',
+  logError: 'feLogger/log'
 };
 
 export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
