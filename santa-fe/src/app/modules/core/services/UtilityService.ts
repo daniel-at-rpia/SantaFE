@@ -692,9 +692,21 @@ export class UtilityService {
       const markBlock = targetSecurity.data.mark;
       if (targetSecurity.data.mark.markRaw) {
         if (!!targetQuant) {
+          if (targetSecurity.data.name === 'ACI 4.625 01/15/2027 Callable USD 144A SENIOR_UNSECURED') {
+            console.log('test');
+          }
+          if (targetSecurity.data.name === 'ACI 4.875 02/15/2030 Callable USD 144A SENIOR_UNSECURED') {
+            console.log('test');
+          }
           const targetDriver = targetSecurity.data.mark.markDriver;
           if (targetQuant.state.hasBid) {
-            markBlock.markDisBidRaw = !this.isCDS(false, targetSecurity) ? markBlock.markRaw - targetQuant.data.bid.number : -(markBlock.markRaw - targetQuant.data.bid.number);
+            markBlock.markDisBidRaw = markBlock.markRaw - targetQuant.data.bid.number;
+            if (this.isCDS(false, targetSecurity)) {
+              markBlock.markDisBidRaw = -markBlock.markDisBidRaw;
+            }
+            if (targetDriver === this.triCoreDriverConfig.Price.driverLabel) {
+              markBlock.markDisBidRaw = -markBlock.markDisBidRaw;
+            }
             markBlock.markDisBid = this.parseTriCoreDriverNumber(markBlock.markDisBidRaw, targetDriver, targetSecurity, true) as string;
             if ((!this.isCDS(false, targetSecurity) && targetSecurity.data.positionFirm > 0) || (this.isCDS(false, targetSecurity) && targetSecurity.data.positionFirm < 0)) {
               markBlock.markDisLiquidationRaw = markBlock.markDisBidRaw;
@@ -702,11 +714,17 @@ export class UtilityService {
             }
           }
           if (targetQuant.state.hasOffer) {
-            markBlock.markDisAskRaw = !this.isCDS(false, targetSecurity) ? markBlock.markRaw - targetQuant.data.offer.number : -(markBlock.markRaw - targetQuant.data.offer.number);
+            markBlock.markDisAskRaw = targetQuant.data.offer.number - markBlock.markRaw;
+            if (this.isCDS(false, targetSecurity)) {
+              markBlock.markDisAskRaw = -markBlock.markDisAskRaw;
+            }
+            if (targetDriver === this.triCoreDriverConfig.Price.driverLabel) {
+              markBlock.markDisAskRaw = -markBlock.markDisAskRaw;
+            }
             markBlock.markDisAsk = this.parseTriCoreDriverNumber(markBlock.markDisAskRaw, targetDriver, targetSecurity, true) as string;
             if ((!this.isCDS(false, targetSecurity) && targetSecurity.data.positionFirm < 0) || (this.isCDS(false, targetSecurity) && targetSecurity.data.positionFirm > 0)) {
-              markBlock.markDisLiquidationRaw = -markBlock.markDisAskRaw;
-              markBlock.markDisLiquidation = `${-markBlock.markDisAsk}`;
+              markBlock.markDisLiquidationRaw = markBlock.markDisAskRaw;
+              markBlock.markDisLiquidation = markBlock.markDisAsk;
             }
           }
           if (targetQuant.state.hasBid && targetQuant.state.hasOffer) {
