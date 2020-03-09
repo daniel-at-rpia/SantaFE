@@ -1,8 +1,7 @@
 <article
   [ngClass]="{
     'sat-alert': true,
-    'sat-alert--bwicVariant': alertData.data.type === 'BWIC',
-    'sat-alert--owicVariant': alertData.data.type === 'OWIC',
+    'sat-alert--typeAxeVariant': alertData.data.type === 'axe',
     'sat-alert--slideOutState': alertData.state.isSlidedOut || !alertData.state.isCountdownFinished,
     'sat-alert--hiddenState': hideAllAlerts && alertData.state.isCountdownFinished,
     'sat-alert--willBeRemovedState': alertData.state.willBeRemoved

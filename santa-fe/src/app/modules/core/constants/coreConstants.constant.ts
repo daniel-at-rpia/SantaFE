@@ -185,8 +185,8 @@ export const EngagementActionList = {
 }
 
 export enum AlertTypes {
-  bwic = 'BWIC',
-  owic = 'OWIC'
+  axeAlert = 'axe',
+  markAlert = 'mark'
 }
 
 export const ALERT_COUNTDOWN = 5000;

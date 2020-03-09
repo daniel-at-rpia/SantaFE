@@ -924,7 +924,7 @@ export class DTOService {
     targetSecurity.state.isInteractionDisabled = true;
     const object: DTOs.AlertDTO = {
       data: {
-        type: AlertTypes.bwic,
+        type: AlertTypes.axeAlert,
         security: targetSecurity,
         message: 'Some detail for this alert',
         quantValue: 12

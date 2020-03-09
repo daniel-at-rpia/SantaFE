@@ -5,6 +5,7 @@ import {
   SecurityTableMetricStub
 } from 'FEModels/frontend-stub-models.interface';
 import { DefinitionConfiguratorEmitterParamsItem, ObligorGraphAxesZoomState } from 'FEModels/frontend-adhoc-packages.interface';
+import { AlertTypes } from 'Core/constants/coreConstants.constant';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 
@@ -175,4 +176,14 @@ export interface TradeAlertPanelState {
   configureAlert: boolean;
   isAlertPaused: boolean;
   testDto: any;
+  configuration: {
+    selectedAlert: AlertTypes,
+    axe: {
+      securitySearchKeyword: string;
+      securityList: Array<DTOs.SecurityDTO>
+    },
+    mark: {
+
+    }
+  }
 }

@@ -16,6 +16,7 @@ import {
 export class SantaInput {
   @Input() inputValue: string;
   @Input() placeholder: string;
+  @Input() isHero: boolean;
   @Output() onInputChange = new EventEmitter<String>();
   constructor(
   ) {

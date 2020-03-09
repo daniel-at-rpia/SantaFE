@@ -6,4 +6,12 @@
   &__inputElement {
     flex: 1 1 auto;
   }
+  &--heroVariant {
+    #{$santaInputBlockName} {
+      &__inputElement {
+        font-size: $font_size_normal;
+        padding: $spacing_x_small $spacing_small;
+      }
+    }
+  }
 }

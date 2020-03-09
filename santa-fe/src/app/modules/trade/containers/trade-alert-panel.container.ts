@@ -11,7 +11,10 @@
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { TradeAlertPanelState } from 'FEModels/frontend-page-states.interface';
-    import { EngagementActionList } from 'Core/constants/coreConstants.constant';
+    import {
+      EngagementActionList,
+      AlertTypes
+    } from 'Core/constants/coreConstants.constant';
   //
 
 @Component({
@@ -40,7 +43,17 @@ export class TradeAlertPanel implements OnChanges {
     const state: TradeAlertPanelState = {
       configureAlert: false,
       isAlertPaused: false,
-      testDto: this.dtoService.createSecurityDefinitionConfigurator(true, true)
+      testDto: this.dtoService.createSecurityDefinitionConfigurator(true, true),
+      configuration: {
+        selectedAlert: null,
+        axe: {
+          securitySearchKeyword: '',
+          securityList: []
+        },
+        mark: {
+
+        }
+      }
     };
     return state;
   }
@@ -58,6 +71,10 @@ export class TradeAlertPanel implements OnChanges {
 
   public onTogglePauseAlert() {
     this.state.isAlertPaused = !this.state.isAlertPaused;
+  }
+
+  public selectAlertForConfigure(targetType: AlertTypes) {
+    this.state.configuration.selectedAlert = targetType;
   }
 
   // public onClickSendMail() {

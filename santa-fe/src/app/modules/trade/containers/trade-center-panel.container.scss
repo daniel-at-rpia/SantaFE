@@ -194,7 +194,7 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
     padding: $spacing_medium;
     &-quickFilters {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       justify-content: space-between;
       &-keywordSearch {
         @include mix_border_radius(5px);
@@ -215,12 +215,12 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
         }
         santa-input {
           flex: 1 1 auto;
+          margin-bottom: $spacing_x_small;
         }
       }
       &-driver {
         display: flex;
         align-items: center;
-        margin-bottom: $spacing_medium;
         &-label {
           flex: 0 0 auto;
           color: $font_color_minor;

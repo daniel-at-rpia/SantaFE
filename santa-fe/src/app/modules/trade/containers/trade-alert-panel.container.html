@@ -3,7 +3,9 @@
     'sat-tradeAlertPanel': true,
     'sat-tradeAlertPanel--sidePanelsDisplayedState': sidePanelsDisplayed,
     'sat-tradeAlertPanel--configureAlertState': state.configureAlert,
-    'sat-tradeAlertPanel--alertPausedState': state.isAlertPaused
+    'sat-tradeAlertPanel--alertPausedState': state.isAlertPaused,
+    'sat-tradeAlertPanel--configureAxeAlertState': state.configuration.selectedAlert === 'axe',
+    'sat-tradeAlertPanel--configureMarkAlertState': state.configuration.selectedAlert === 'mark'
   }">
   <section class="sat-tradeAlertPanel__utilities">
     <div class="sat-tradeAlertPanel__utilities-pause">
@@ -31,16 +33,51 @@
   <section class="sat-tradeAlertPanel__configuration">
     <ul class="sat-tradeAlertPanel__configuration-alertTypeList">
       <li class="sat-tradeAlertPanel__configuration-alertTypeList-item sat-tradeAlertPanel__configuration-alertTypeList-item--axe">
-        <button class="sat-tradeAlertPanel__configuration-alertTypeList-item-btn">Axe Alert</button>
+        <button (click)="selectAlertForConfigure('axe')" class="sat-tradeAlertPanel__configuration-alertTypeList-item-btn santaBtn--labelled santaBtn--inverseLabelled">
+          <i class="fas fa-axe"></i>
+          <span>Axe Alert</span>
+        </button>
       </li>
+      <!--
       <li class="sat-tradeAlertPanel__configuration-alertTypeList-item sat-tradeAlertPanel__configuration-alertTypeList-item--liquidation">
-        <button class="sat-tradeAlertPanel__configuration-alertTypeList-item-btn">Liquidation Alert</button>
+        <button (click)="selectAlertForConfigure('mark')" class="sat-tradeAlertPanel__configuration-alertTypeList-item-btn santaBtn--labelled santaBtn--inverseLabelled">
+          <i class="fal fa-bell"></i>
+          <span>Mark Alert</span>
+        </button>
       </li>
+      -->
     </ul>
     <ul class="sat-tradeAlertPanel__configuration-groupList">
+      <article
+        [ngClass]="{
+          'sat-tradeAlertPanel__configuration-groupList-axeConfig': true,
+          'sat-tradeAlertAxeAlertConfiguration': true
+        }">
+        <section class="sat-tradeAlertAxeAlertConfiguration__watchList">
+          <span class="sat-tradeAlertAxeAlertConfiguration__watchList-title">
+            Watch For Axe From:
+          </span>
+          <ul class="sat-tradeAlertAxeAlertConfiguration__watchList-securityList">
+            <li *ngFor="let eachCard of state.configuration.axe.securityList" class="sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item"></li>
+          </ul>
+        </section>
+        <section class="sat-tradeAlertAxeAlertConfiguration__search">
+          <div class="sat-tradeAlertAxeAlertConfiguration__search-utility">
+            <span class="sat-tradeAlertAxeAlertConfiguration__search-utility-label">Search For Securities :</span>
+            <santa-input
+              [inputValue]="state.configuration.axe.securitySearchKeyword"
+              [placeholder]="'find security by name / CUSIP / ISIN'"
+              [isHero]="true"
+              (onInputChange)="onSearchKeywordChange($event)">
+            </santa-input>
+          </div>
+        </section>
+      </article>
+      <!--
       <security-definition-configurator
         [configuratorData]="state.testDto"
       ></security-definition-configurator>
+      -->
     </ul>
     <div class="sat-tradeAlertPanel__configuration-ctas">
       <button class="sat-tradeAlertPanel__configuration-ctas-save santaBtn--labelled santaBtn--inverseLabelled">

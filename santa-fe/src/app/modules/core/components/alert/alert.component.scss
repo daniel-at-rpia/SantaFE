@@ -2,8 +2,6 @@
 
 $alert_margin_right: $spacing_large;
 $alert_countdown_duration: 5s;
-$alert_color_bwic: $color_ask;
-$alert_color_owic: $color_bid;
 .sat-alert {
   $alertBlockName: &;
   @include mix_alive('light');
@@ -126,29 +124,16 @@ $alert_color_owic: $color_bid;
       color: $font_color_inverse;
     }
   }
-  &--bwicVariant {
+  &--typeAxeVariant {
     #{$alertBlockName} {
       &__thumbnail-main {
-        background-color: $alert_color_bwic;
+        background-color: $color_axe;
         &-quant-text {
-          color: $alert_color_bwic;
+          color: $color_axe;
         }
       }
       &__detail-countdown-line-content {
-        background-color: $alert_color_bwic;
-      }
-    }
-  }
-  &--owicVariant {
-    #{$alertBlockName} {
-      &__thumbnail-main {
-        background-color: $alert_color_owic;
-        &-quant-text {
-          color: $alert_color_owic;
-        }
-      }
-      &__detail-countdown-line-content {
-        background-color: $alert_color_owic;
+        background-color: $color_axe;
       }
     }
   }
