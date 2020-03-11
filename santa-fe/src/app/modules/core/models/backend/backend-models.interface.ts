@@ -1,3 +1,4 @@
+import { AlertTypes } from 'Core/constants/coreConstants.constant';
 
 export interface BEFetchAllTradeDataReturn {
   numberOfSecurities: number;
@@ -335,4 +336,24 @@ export interface BEHistoricalQuantBlock {
   isBasisRange: boolean;
   isValid: boolean;
   timeSeries?: object;
+}
+
+export interface BEAlertConfigurationReturn {
+  Axe: {
+    [property: string]: BEAlertConfigurationDTO;
+  }
+}
+
+export interface BEAlertConfigurationDTO {
+  groupFilters: {
+    SecurityIdentifier: Array<string>;
+    [property: string]: any;
+  };
+  alertConfigID: string;
+  title: string;
+  userName: string;
+  type: string;
+  subType: string;
+  parameters: any;
+  isEnabled: boolean;
 }

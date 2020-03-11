@@ -122,7 +122,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   }
 
   private generateNewAlert() {
-    const newAlert = this.dtoService.formAlertObject(PortfolioList.securityDtos.securityDtos['128'].security);
+    const newAlert = this.dtoService.formAlertObject(PortfolioList.securityDtos.securityDtos['146'].security);
     newAlert.data.message = `${newAlert.data.message} - ${this.state.presentList.length}`
     this.state.presentList.unshift(newAlert);
     setTimeout(function(){

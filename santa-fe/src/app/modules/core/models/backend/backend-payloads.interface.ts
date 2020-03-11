@@ -55,3 +55,7 @@ export interface PayloadLogEngagement {
   elementId: string;
   user: string;
 }
+
+export interface PayloadGetSecurities {
+  identifiers: Array<string>
+}

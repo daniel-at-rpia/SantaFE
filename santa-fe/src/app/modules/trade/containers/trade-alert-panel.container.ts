@@ -32,7 +32,12 @@
     import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
     import { SecurityDTO } from 'FEModels/frontend-models.interface';
     import { TradeAlertConfigurationAxeSecurityBlock } from 'FEModels/frontend-blocks.interface';
-    import { BESecurityDTO } from 'BEModels/backend-models.interface';
+    import {
+      BESecurityDTO,
+      BEAlertConfigurationReturn,
+      BEAlertConfigurationDTO
+    } from 'BEModels/backend-models.interface';
+    import { PayloadGetSecurities } from 'BEModels/backend-payloads.interface';
     import {
       EngagementActionList,
       AlertTypes
@@ -110,6 +115,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         this.state.securityMap = mapContent;
       }
     });
+    this.loadAllConfigurations();
   }
 
   public ngOnChanges() {
@@ -166,7 +172,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public onSelectSide(targetScope: AxeAlertScope, targetBlock: TradeAlertConfigurationAxeSecurityBlock) {
+  public onSelectAxeWatchlistSide(targetScope: AxeAlertScope, targetBlock: TradeAlertConfigurationAxeSecurityBlock) {
     if (!!targetScope && !!targetBlock) {
       const existIndex = targetBlock.scopes.indexOf(targetScope);
       if (existIndex >= 0) {
@@ -215,10 +221,99 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       const copy:SecurityDTO = this.utilityService.deepCopy(targetSecurity);
       copy.state.isSelected = false;
       copy.state.isInteractionDisabled = true;
-      config.securityList.unshift({
-        card: copy,
-        scopes: [this.constants.axeAlertScope.bid]
-      });
+      this.loadSecurityToAxeWatchlist(copy, this.constants.axeAlertScope.bid);
+    }
+  }
+
+  private loadAllConfigurations() {
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlertConfigurations, {req: 'GET'}).pipe(
+      first(),
+      tap((serverReturn: BEAlertConfigurationReturn) => {
+        if (!!serverReturn) {
+          for (const eachGroupId in serverReturn.Axe) {
+            const eachConfiguration = serverReturn.Axe[eachGroupId];
+            if (eachConfiguration.subType === 'Both') {
+              this.populateConfigurationFromEachGroup(eachConfiguration, this.constants.axeAlertScope.bid);
+              this.populateConfigurationFromEachGroup(eachConfiguration, this.constants.axeAlertScope.ask);
+            } else {
+              if (eachConfiguration.subType == this.constants.axeAlertScope.bid) {
+                this.populateConfigurationFromEachGroup(eachConfiguration, this.constants.axeAlertScope.bid);
+              } else if (eachConfiguration.subType == this.constants.axeAlertScope.ask) {
+                this.populateConfigurationFromEachGroup(eachConfiguration, this.constants.axeAlertScope.bid);
+              } else if (eachConfiguration.subType == this.constants.axeAlertScope.liquidation) {
+                this.populateConfigurationFromEachGroup(eachConfiguration, this.constants.axeAlertScope.liquidation);
+              }
+            }
+          }
+        } else {
+          this.restfulCommService.logError(`'Alert/get-alert-configs' API returned an empty result`, null);
+        }
+      })
+    ).subscribe();
+  }
+
+  private populateConfigurationFromEachGroup(
+    rawGroupConfig: BEAlertConfigurationDTO,
+    targetScope: AxeAlertScope
+  ) {
+    if (!!rawGroupConfig && !!rawGroupConfig.groupFilters && rawGroupConfig.groupFilters.SecurityIdentifier && rawGroupConfig.groupFilters.SecurityIdentifier.length > 0) {
+      const payload: PayloadGetSecurities = {
+        identifiers: rawGroupConfig.groupFilters.SecurityIdentifier
+      };
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSecurityDTOs, {req: 'POST'}, payload).pipe(
+        first(),
+        tap((serverReturn: Array<BESecurityDTO>) => {
+          if (!!serverReturn) {
+            serverReturn.forEach((eachRawData) => {
+              const eachCard = this.dtoService.formSecurityCardObject(eachRawData.securityIdentifier, eachRawData, false);
+              eachCard.state.isInteractionDisabled = true;
+              this.loadSecurityToAxeWatchlist(eachCard, targetScope);
+            });
+          } else {
+            this.restfulCommService.logError(`'security/get-securities' API returned an empty result with this payload: ${payload.identifiers.toString()}`, null);
+          }
+        })
+      ).subscribe();
+    }
+  }
+
+  private loadSecurityToAxeWatchlist(
+    targetSecurity: SecurityDTO,
+    targetScope: AxeAlertScope
+  ) {
+    // when entering this function from onClickSearchResult(), the existMatchIndex in here will always be -1, because it was pre-handled differerntly in onClickSearchResult()
+    const config = this.state.configuration.axe;
+    const existMatchIndex = config.securityList.findIndex((eachEntry) => {
+      return eachEntry.card.data.securityID === targetSecurity.data.securityID;
+    });
+    if (existMatchIndex < 0) {
+      const newEntry: TradeAlertConfigurationAxeSecurityBlock = {
+        card: targetSecurity,
+        scopes: [targetScope]
+      };
+      config.securityList.unshift(newEntry);
+    } else {
+      const existEntry = config.securityList[existMatchIndex];
+      this.addScopeToAxeWatchlistEntry(existEntry, targetScope);
+    }
+  }
+
+  private addScopeToAxeWatchlistEntry(targetEntry: TradeAlertConfigurationAxeSecurityBlock, targetScope: AxeAlertScope) {
+    if (targetScope === this.constants.axeAlertScope.liquidation) {
+      if (targetEntry.scopes.indexOf(targetScope) >= 0) {
+        targetEntry.scopes = [];
+      } else {
+        targetEntry.scopes = [targetScope];
+      }
+    } else if ((targetScope === this.constants.axeAlertScope.bid || this.constants.axeAlertScope.ask) && targetEntry.scopes.indexOf(this.constants.axeAlertScope.liquidation) >= 0){
+      targetEntry.scopes.splice(targetEntry.scopes.indexOf(this.constants.axeAlertScope.liquidation), 1);
+      targetEntry.scopes.push(targetScope);
+    } else {
+      if (targetEntry.scopes.indexOf(targetScope) >= 0) {
+        targetEntry.scopes.splice(targetEntry.scopes.indexOf(targetScope), 1);
+      } else {
+        targetEntry.scopes.push(targetScope);
+      }
     }
   }
 

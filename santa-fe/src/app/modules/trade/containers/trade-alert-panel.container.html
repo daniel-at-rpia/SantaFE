@@ -72,7 +72,7 @@
                   <span>Bid</span>
                 </button>
                 <button
-                  (click)="onSelectSide(constants.axeAlertScope.liquidation, eachSecurityBlock)"
+                  (click)="onSelectAxeWatchlistSide(constants.axeAlertScope.liquidation, eachSecurityBlock)"
                   [ngClass]="{
                     'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn': true,
                     'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.scopes.indexOf(constants.axeAlertScope.liquidation) >= 0
@@ -80,7 +80,7 @@
                   <span>Liquidation</span>
                 </button>
                 <button
-                  (click)="onSelectSide(constants.axeAlertScope.ask, eachSecurityBlock)"
+                  (click)="onSelectAxeWatchlistSide(constants.axeAlertScope.ask, eachSecurityBlock)"
                   [ngClass]="{
                     'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn': true,
                     'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn--ask': true,

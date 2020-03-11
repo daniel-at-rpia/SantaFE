@@ -402,7 +402,7 @@ export const MarketAnalysisGroupByOpionsDefaultActiveList: Array<string> = [
 export const ALERT_MAX_SECURITY_SEARCH_COUNT = 100;
 
 export enum AxeAlertScope {
-  bid = "bid",
-  ask = 'ask',
-  liquidation = "liquidation"
+  bid = "Bid",
+  ask = 'Ask',
+  liquidation = "Liquidation"
 }

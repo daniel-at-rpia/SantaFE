@@ -17,6 +17,7 @@ export const APIUrlMap = {
   getSubIndustries: `obligor/get-subindustries`,
   getCountries: 'obligor/get-countries',
   setQuoteStatus: 'liveQuote/set-quote-status',
+  getAlertConfigurations: 'Alert/get-alert-configs',
   logEngagement: 'feLogger/track',
   logError: 'feLogger/log'
 };
@@ -187,8 +188,8 @@ export const EngagementActionList = {
 }
 
 export enum AlertTypes {
-  axeAlert = 'axe',
-  markAlert = 'mark'
+  axeAlert = 'Axe',
+  markAlert = 'Mark'
 }
 
 export const ALERT_COUNTDOWN = 5000;
