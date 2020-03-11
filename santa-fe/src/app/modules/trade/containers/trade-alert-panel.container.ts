@@ -29,6 +29,8 @@
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { TradeAlertPanelState } from 'FEModels/frontend-page-states.interface';
+    import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
+    import { BESecurityDTO } from 'BEModels/backend-models.interface';
     import {
       EngagementActionList,
       AlertTypes
@@ -37,6 +39,7 @@
       selectSecurityMapContent,
       selectSecurityMapValidStatus
     } from 'Core/selectors/core.selectors';
+    import { ALERT_MAX_SECURITY_SEARCH_COUNT } from 'Core/constants/tradeConstants.constant';
   //
 
 @Component({
@@ -75,7 +78,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         selectedAlert: null,
         axe: {
           securitySearchKeyword: '',
-          securityList: []
+          securityList: [],
+          searchList: [],
+          matchedResultCount: null,
+          searchIsValid: false
         },
         mark: {
 
@@ -122,6 +128,58 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
   public selectAlertForConfigure(targetType: AlertTypes) {
     this.state.configuration.selectedAlert = targetType;
+  }
+
+  public onSearchKeywordChange(keyword: string) {
+    const config = this.state.configuration.axe;
+    if (keyword.length >= 2) {
+      const result = [];
+      for (let i = 0; i < this.state.securityMap.length; ++i) {
+        const eachEntry = this.state.securityMap[i];
+        for (let keywordIndex = 0; keywordIndex < eachEntry.keywords.length; ++keywordIndex) {
+          if (this.utilityService.caseInsensitiveKeywordMatch(eachEntry.keywords[keywordIndex], keyword)) {
+            result.push(this.state.securityMap[i]);
+            break;
+          }
+        }
+      }
+      console.log('test, found match', result);
+      config.matchedResultCount = result.length;
+      config.searchIsValid = true;
+      if ( config.matchedResultCount > 0 && config.matchedResultCount < ALERT_MAX_SECURITY_SEARCH_COUNT ) {
+        config.searchIsValid = true;
+        this.fetchSecurities(result);
+      } else {
+        config.searchIsValid = false;
+      }
+    } else {
+      config.searchIsValid = false;
+      config.matchedResultCount = 0;
+      config.searchList = [];
+    }
+  }
+
+  private fetchSecurities(matchList: Array<SecurityMapEntry>) {
+    const list = matchList.map((eachEntry) => {
+      return eachEntry.secruityId;
+    });
+    const payload = {
+      identifiers: list
+    };
+    this.state.configuration.axe.searchList = [];
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSecurityDTOs, {req: 'POST'}, payload).pipe(
+      first(),
+      tap((serverReturn: Array<BESecurityDTO>) => {
+        if (!!serverReturn) {
+          serverReturn.forEach((eachRawData) => {
+            const eachCard = this.dtoService.formSecurityCardObject(null, eachRawData, false);
+            this.state.configuration.axe.searchList.push(eachCard);
+          });
+        } else {
+          this.restfulCommService.logError(`'security/get-securities' API returned an empty result with this payload: ${list.toString()}`, null);
+        }
+      })
+    ).subscribe();
   }
 
   // public onClickSendMail() {

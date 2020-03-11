@@ -185,7 +185,10 @@ export interface TradeAlertPanelState {
     selectedAlert: AlertTypes,
     axe: {
       securitySearchKeyword: string;
-      securityList: Array<DTOs.SecurityDTO>
+      securityList: Array<DTOs.SecurityDTO>;
+      searchList: Array<DTOs.SecurityDTO>;
+      matchedResultCount: number;
+      searchIsValid: boolean;
     },
     mark: {
 

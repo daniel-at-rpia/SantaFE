@@ -398,3 +398,5 @@ export const MarketAnalysisGroupByOpionsDefaultActiveList: Array<string> = [
   SecurityDefinitionMap.TENOR.key,
   SecurityDefinitionMap.COUNTRY.key
 ];
+
+export const ALERT_MAX_SECURITY_SEARCH_COUNT = 100;

@@ -51,7 +51,8 @@
       <article
         [ngClass]="{
           'sat-tradeAlertPanel__configuration-groupList-axeConfig': true,
-          'sat-tradeAlertAxeAlertConfiguration': true
+          'sat-tradeAlertAxeAlertConfiguration': true,
+          'sat-tradeAlertAxeAlertConfiguration--showSearchResult': state.configuration.axe.searchIsValid
         }">
         <section class="sat-tradeAlertAxeAlertConfiguration__watchList">
           <span class="sat-tradeAlertAxeAlertConfiguration__watchList-title">
@@ -70,6 +71,22 @@
               [isHero]="true"
               (onInputChange)="onSearchKeywordChange($event)">
             </santa-input>
+          </div>
+          <ul class="sat-tradeAlertAxeAlertConfiguration__search-result">
+            <li *ngFor="let eachCard of state.configuration.axe.searchList" class="sat-tradeAlertAxeAlertConfiguration__search-result-item">
+              <security-card [cardData]="eachCard"></security-card>
+            </li>
+          </ul>
+          <div class="sat-tradeAlertAxeAlertConfiguration__search-prompt">
+            <div class="sat-tradeAlertAxeAlertConfiguration__search-prompt-line">
+              <span class="sat-tradeAlertAxeAlertConfiguration__search-prompt-line-text">There are</span>
+              <span class="sat-tradeAlertAxeAlertConfiguration__search-prompt-line-highlightText">{{state.configuration.axe.matchedResultCount}}</span>
+              <span class="sat-tradeAlertAxeAlertConfiguration__search-prompt-line-text">securities match the keyword</span>
+            </div>
+            <div class="sat-tradeAlertAxeAlertConfiguration__search-prompt-more">
+              <span class="sat-tradeAlertAxeAlertConfiguration__search-prompt-more-text">Result will be shown if there are less than 100 matches.</span>
+              <span class="sat-tradeAlertAxeAlertConfiguration__search-prompt-more-text">Type more to keep filtering.</span>
+            </div>
           </div>
         </section>
       </article>
