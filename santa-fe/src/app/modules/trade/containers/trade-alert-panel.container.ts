@@ -30,6 +30,8 @@
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { TradeAlertPanelState } from 'FEModels/frontend-page-states.interface';
     import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
+    import { SecurityDTO } from 'FEModels/frontend-models.interface';
+    import { TradeAlertConfigurationAxeSecurityBlock } from 'FEModels/frontend-blocks.interface';
     import { BESecurityDTO } from 'BEModels/backend-models.interface';
     import {
       EngagementActionList,
@@ -159,6 +161,16 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  public onSelectSide(targetSide: string, targetBlock: TradeAlertConfigurationAxeSecurityBlock) {
+    if (!!targetSide && !!targetBlock) {
+      if (targetSide === 'bid') {
+        targetBlock.bidSelected = !targetBlock.bidSelected;
+      } else if (targetSide === 'ask') {
+        targetBlock.askSelected = !targetBlock.askSelected;
+      }
+    }
+  }
+
   private fetchSecurities(matchList: Array<SecurityMapEntry>) {
     const list = matchList.map((eachEntry) => {
       return eachEntry.secruityId;
@@ -172,7 +184,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       tap((serverReturn: Array<BESecurityDTO>) => {
         if (!!serverReturn) {
           serverReturn.forEach((eachRawData) => {
-            const eachCard = this.dtoService.formSecurityCardObject(null, eachRawData, false);
+            const eachCard = this.dtoService.formSecurityCardObject(eachRawData.securityIdentifier, eachRawData, false);
+            eachCard.state.isActionMenuPrimaryActionsDisabled = true;
+            eachCard.state.isActionMenuMinorActionsDisabled = true;
+            eachCard.state.isWidthFlexible = true;
+            eachCard.api.onClickCard = this.onClickSearchResult.bind(this);
             this.state.configuration.axe.searchList.push(eachCard);
           });
         } else {
@@ -180,6 +196,25 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         }
       })
     ).subscribe();
+  }
+
+  private onClickSearchResult(targetSecurity:SecurityDTO) {
+    const config = this.state.configuration.axe;
+    const existMatchIndex = config.securityList.findIndex((eachEntry) => {
+      return eachEntry.card.data.securityID === targetSecurity.data.securityID;
+    });
+    if (existMatchIndex >= 0) {
+      config.securityList.splice(existMatchIndex, 1);
+    } else {
+      const copy:SecurityDTO = this.utilityService.deepCopy(targetSecurity);
+      copy.state.isSelected = false;
+      copy.state.isInteractionDisabled = true;
+      config.securityList.unshift({
+        card: copy,
+        bidSelected: true,
+        askSelected: true
+      });
+    }
   }
 
   // public onClickSendMail() {

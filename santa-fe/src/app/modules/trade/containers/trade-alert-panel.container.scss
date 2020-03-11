@@ -185,7 +185,36 @@
       margin-right: $spacing_medium;
     }
     &-securityList {
+      @include mix_enable_scrollbar('vertical');
       flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      padding: $spacing_medium;
+      &-item {
+        flex: 0 1 auto;
+        display: flex;
+        margin-top: $spacing_small;
+        security-card {
+          flex: 1 1 auto;
+        }
+        &-btnGroup {
+          margin-left: $spacing_medium;
+          &-btn {
+            &--bid {
+              background-color: $color_bid;
+              color: $font_color_inverse;
+            }
+            &--ask {
+              background-color: $color_ask;
+              color: $font_color_inverse;
+            }
+            &--selected {
+              @include material('none');
+              background-color: $color_active;
+            }
+          }
+        }
+      }
     }
   }
   &__search {
@@ -212,8 +241,9 @@
       display: none;
       flex-wrap: wrap;
       padding-left: $spacing_small;
+      padding-bottom: $spacing_large;
       &-item {
-        flex: 1 1 auto;
+        flex: 1 1 45%;
         margin-top: $spacing_small;
         margin-right: $spacing_small;
       }

@@ -1,5 +1,8 @@
 import * as DTOs from 'FEModels/frontend-models.interface';
-import {  ObligorChartCategoryBlock } from 'FEModels/frontend-blocks.interface';
+import {
+  ObligorChartCategoryBlock,
+  TradeAlertConfigurationAxeSecurityBlock
+} from 'FEModels/frontend-blocks.interface';
 import {
   SecurityDefinitionStub,
   SecurityTableMetricStub
@@ -185,7 +188,7 @@ export interface TradeAlertPanelState {
     selectedAlert: AlertTypes,
     axe: {
       securitySearchKeyword: string;
-      securityList: Array<DTOs.SecurityDTO>;
+      securityList: Array<TradeAlertConfigurationAxeSecurityBlock>;
       searchList: Array<DTOs.SecurityDTO>;
       matchedResultCount: number;
       searchIsValid: boolean;

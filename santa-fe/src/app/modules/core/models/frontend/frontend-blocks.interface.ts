@@ -208,3 +208,9 @@ export interface SecurityTableRowQuoteBlock {
   secondaryQuotes: Array<SecurityQuoteDTO>;
   secondarySecurityName: string;
 }
+
+export interface TradeAlertConfigurationAxeSecurityBlock {
+  card: SecurityDTO;
+  bidSelected: boolean;
+  askSelected: boolean;
+}

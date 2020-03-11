@@ -59,7 +59,29 @@
             Watch For Axe From:
           </span>
           <ul class="sat-tradeAlertAxeAlertConfiguration__watchList-securityList">
-            <li *ngFor="let eachCard of state.configuration.axe.securityList" class="sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item"></li>
+            <li *ngFor="let eachSecurityBlock of state.configuration.axe.securityList" class="sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item">
+              <security-card [cardData]="eachSecurityBlock.card"></security-card>
+              <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup">
+                <button
+                  (click)="onSelectSide('bid', eachSecurityBlock)"
+                  [ngClass]="{
+                    'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn': true,
+                    'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn--bid': true,
+                    'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.bidSelected
+                  }">
+                  <span>Bid</span>
+                </button>
+                <button
+                  (click)="onSelectSide('ask', eachSecurityBlock)"
+                  [ngClass]="{
+                    'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn': true,
+                    'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn--ask': true,
+                    'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.askSelected
+                  }">
+                  <span>Ask</span>
+                </button>
+              </div>
+            </li>
           </ul>
         </section>
         <section class="sat-tradeAlertAxeAlertConfiguration__search">
