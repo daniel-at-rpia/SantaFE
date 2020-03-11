@@ -17,6 +17,9 @@ import {
   SecurityTableRowDTO,
   SecurityQuoteDTO
 } from 'FEModels/frontend-models.interface';
+import {
+  AxeAlertScope
+} from 'Core/constants/tradeConstants.constant';
 
 export interface SecurityPortfolioBlock {
   portfolioName: string;
@@ -211,6 +214,5 @@ export interface SecurityTableRowQuoteBlock {
 
 export interface TradeAlertConfigurationAxeSecurityBlock {
   card: SecurityDTO;
-  bidSelected: boolean;
-  askSelected: boolean;
+  scopes: Array<AxeAlertScope>;
 }

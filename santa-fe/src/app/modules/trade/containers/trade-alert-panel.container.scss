@@ -73,8 +73,8 @@
       flex: 1 1 auto;
       display: flex;
       overflow: hidden;
-      padding: $spacing_medium;
-      margin: 0 $spacing_large;
+      padding-top: $spacing_medium;
+      margin: 0 $spacing_medium;
       security-definition-configurator {
         height: 100%;
         display: flex;
@@ -189,7 +189,7 @@
       flex: 1 1 auto;
       display: flex;
       flex-direction: column;
-      padding: $spacing_medium;
+      padding-right: $spacing_medium;
       &-item {
         flex: 0 1 auto;
         display: flex;
@@ -198,6 +198,7 @@
           flex: 1 1 auto;
         }
         &-btnGroup {
+          flex: 0 0 auto;
           margin-left: $spacing_medium;
           &-btn {
             &--bid {
@@ -213,6 +214,12 @@
               background-color: $color_active;
             }
           }
+        }
+        &-removeBtn {
+          flex: 0 0 auto;
+          margin-left: $spacing_medium;
+          background-color: $color_kill;
+          color: $font_color_inverse;
         }
       }
     }
@@ -240,6 +247,8 @@
       flex: 1 1 auto;
       display: none;
       flex-wrap: wrap;
+      align-items: flex-start;
+      align-content: flex-start;
       padding-left: $spacing_small;
       padding-bottom: $spacing_large;
       &-item {

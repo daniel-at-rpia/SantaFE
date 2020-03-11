@@ -63,24 +63,33 @@
               <security-card [cardData]="eachSecurityBlock.card"></security-card>
               <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup">
                 <button
-                  (click)="onSelectSide('bid', eachSecurityBlock)"
+                  (click)="onSelectAxeWatchlistSide(constants.axeAlertScope.bid, eachSecurityBlock)"
                   [ngClass]="{
                     'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn': true,
                     'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn--bid': true,
-                    'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.bidSelected
+                    'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.scopes.indexOf(constants.axeAlertScope.bid) >= 0
                   }">
                   <span>Bid</span>
                 </button>
                 <button
-                  (click)="onSelectSide('ask', eachSecurityBlock)"
+                  (click)="onSelectSide(constants.axeAlertScope.liquidation, eachSecurityBlock)"
+                  [ngClass]="{
+                    'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn': true,
+                    'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.scopes.indexOf(constants.axeAlertScope.liquidation) >= 0
+                  }">
+                  <span>Liquidation</span>
+                </button>
+                <button
+                  (click)="onSelectSide(constants.axeAlertScope.ask, eachSecurityBlock)"
                   [ngClass]="{
                     'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn': true,
                     'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn--ask': true,
-                    'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.askSelected
+                    'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.scopes.indexOf(constants.axeAlertScope.ask) >= 0
                   }">
                   <span>Ask</span>
                 </button>
               </div>
+              <button (click)="removeSecurityFromAxeWatchList(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-removeBtn santaBtn--iconOnly fal fa-eraser"></button>
             </li>
           </ul>
         </section>

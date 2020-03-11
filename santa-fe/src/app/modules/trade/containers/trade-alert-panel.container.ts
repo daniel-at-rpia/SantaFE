@@ -41,7 +41,10 @@
       selectSecurityMapContent,
       selectSecurityMapValidStatus
     } from 'Core/selectors/core.selectors';
-    import { ALERT_MAX_SECURITY_SEARCH_COUNT } from 'Core/constants/tradeConstants.constant';
+    import {
+      ALERT_MAX_SECURITY_SEARCH_COUNT,
+      AxeAlertScope
+    } from 'Core/constants/tradeConstants.constant';
   //
 
 @Component({
@@ -59,6 +62,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   state: TradeAlertPanelState;
   subscriptions = {
     securityMapSub: null
+  }
+  constants = {
+    axeAlertScope: AxeAlertScope
   }
 
   constructor(
@@ -82,7 +88,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           securitySearchKeyword: '',
           securityList: [],
           searchList: [],
-          matchedResultCount: null,
+          matchedResultCount: 0,
           searchIsValid: false
         },
         mark: {
@@ -145,7 +151,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           }
         }
       }
-      console.log('test, found match', result);
       config.matchedResultCount = result.length;
       config.searchIsValid = true;
       if ( config.matchedResultCount > 0 && config.matchedResultCount < ALERT_MAX_SECURITY_SEARCH_COUNT ) {
@@ -161,12 +166,13 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public onSelectSide(targetSide: string, targetBlock: TradeAlertConfigurationAxeSecurityBlock) {
-    if (!!targetSide && !!targetBlock) {
-      if (targetSide === 'bid') {
-        targetBlock.bidSelected = !targetBlock.bidSelected;
-      } else if (targetSide === 'ask') {
-        targetBlock.askSelected = !targetBlock.askSelected;
+  public onSelectSide(targetScope: AxeAlertScope, targetBlock: TradeAlertConfigurationAxeSecurityBlock) {
+    if (!!targetScope && !!targetBlock) {
+      const existIndex = targetBlock.scopes.indexOf(targetScope);
+      if (existIndex >= 0) {
+        targetBlock.scopes.splice(existIndex, 1);
+      } else {
+        targetBlock.scopes.push(targetScope);
       }
     }
   }
@@ -211,8 +217,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       copy.state.isInteractionDisabled = true;
       config.securityList.unshift({
         card: copy,
-        bidSelected: true,
-        askSelected: true
+        scopes: [this.constants.axeAlertScope.bid]
       });
     }
   }
