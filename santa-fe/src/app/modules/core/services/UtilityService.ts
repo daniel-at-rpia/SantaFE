@@ -31,7 +31,9 @@
       SecurityMetricOptions,
       BackendKeyDictionary,
       TriCoreDriverConfig,
-      DEFAULT_DRIVER_IDENTIFIER
+      DEFAULT_DRIVER_IDENTIFIER,
+      AlertTypes,
+      AlertSubTypes
     } from 'Core/constants/coreConstants.constant';
     import uuid from 'uuidv4';
   // dependencies
@@ -448,6 +450,38 @@ export class UtilityService {
             return this.round(targetNumber, rounding);
           }
         }
+      } else {
+        return null;
+      }
+    }
+
+    public mapAlertType(targetType: string): AlertTypes {
+      if (targetType == AlertTypes.axeAlert) {
+        return AlertTypes.axeAlert;
+      } else if (targetType == AlertTypes.markAlert) {
+        return AlertTypes.markAlert;
+      } else {
+        return null;
+      }
+    }
+
+    public mapAlertSubType(targetType: string): AlertSubTypes {
+      if (targetType == AlertSubTypes.ask) {
+        return AlertSubTypes.ask;
+      } else if (targetType == AlertSubTypes.bid) {
+        return AlertSubTypes.bid;
+      } else if (targetType == AlertSubTypes.both) {
+        return null;  // both is not a valid type in FE
+      } else if (targetType == AlertSubTypes.liquidation) {
+        return null;  // liquidation is not a valid type in FE
+      } else if (targetType == AlertSubTypes.bwic) {
+        return AlertSubTypes.bwic;
+      } else if (targetType == AlertSubTypes.owic) {
+        return AlertSubTypes.owic;
+      } else if (targetType == AlertSubTypes.quantityChange) {
+        return AlertSubTypes.quantityChange;
+      } else if (targetType == AlertSubTypes.ratingChange) {
+        return AlertSubTypes.ratingChange;
       } else {
         return null;
       }

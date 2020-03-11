@@ -8,7 +8,8 @@
       BEPortfolioDTO,
       BEHistoricalQuantBlock,
       BEHistoricalSummaryDTO,
-      BESingleBestQuoteDTO
+      BESingleBestQuoteDTO,
+      BEAlertDTO
     } from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
     import * as Blocks from 'FEModels/frontend-blocks.interface';
@@ -919,15 +920,24 @@ export class DTOService {
   }
 
   public formAlertObject(
-    securityRawData: BESecurityDTO
+    rawData: BEAlertDTO
   ): DTOs.AlertDTO {
-    const targetSecurity = this.formSecurityCardObject('', securityRawData, false);
+    const targetSecurity = this.formSecurityCardObject(
+      rawData.security.securityIdentifier || null,
+      rawData.security,
+      false
+    );
     targetSecurity.state.isInteractionDisabled = true;
+    targetSecurity.state.isMultiLineVariant = true;
+    targetSecurity.state.isWidthFlexible = true;
+    const parsedTitleList = rawData.keyWord.split('|');
     const object: DTOs.AlertDTO = {
       data: {
-        type: AlertTypes.axeAlert,
+        type: this.utility.mapAlertSubType(rawData.subType),
         security: targetSecurity,
-        message: 'Some detail for this alert',
+        titleTop: parsedTitleList[0] || '',
+        titleBottom: parsedTitleList[1] || '',
+        message: rawData.message,
         quantValue: 12
       },
       api: {

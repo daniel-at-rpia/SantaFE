@@ -64,6 +64,22 @@ export function coreReducer (
           mapContent: action.map
         }
       };
+    case CoreActions.SendNewAlerts:
+      return {
+        ...state,
+        alert: {
+          ...state.alert,
+          newAlerts: state.alert.newAlerts.concat(action.list)
+        }
+      };
+    case CoreActions.ReceivedNewAlerts:
+      return {
+        ...state,
+        alert: {
+          ...state.alert,
+          newAlerts: []
+        }
+      };
     default:
       return {
         ...state

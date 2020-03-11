@@ -1,4 +1,4 @@
-// dependencies
+  // dependencies
     import {
       Component,
       ViewEncapsulation,
@@ -50,6 +50,8 @@
       ALERT_MAX_SECURITY_SEARCH_COUNT,
       AxeAlertScope
     } from 'Core/constants/tradeConstants.constant';
+    import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
+    import { CoreSendNewAlerts } from 'Core/actions/core.actions';
   //
 
 @Component({
@@ -192,7 +194,12 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   public onClickUpdateAlert() {
-    
+    const updateList = [];
+    AlertSample.forEach((eachRawAlert) => {
+      const newAlert = this.dtoService.formAlertObject(eachRawAlert);
+      updateList.push(newAlert);
+    });
+    this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
   }
 
   private fetchSecurities(matchList: Array<SecurityMapEntry>) {

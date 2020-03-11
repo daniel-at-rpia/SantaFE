@@ -192,4 +192,15 @@ export enum AlertTypes {
   markAlert = 'Mark'
 }
 
+export enum AlertSubTypes {
+  bid = 'Bid',
+  ask = 'Ask',
+  both = 'Both',
+  liquidation = 'Liquidation',
+  bwic = 'Bwic',
+  owic = 'Owic',
+  quantityChange = 'QuantityChange',
+  ratingChange = 'RatingChange'
+}
+
 export const ALERT_COUNTDOWN = 5000;

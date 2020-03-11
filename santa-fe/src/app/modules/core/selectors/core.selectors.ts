@@ -27,3 +27,8 @@ export const selectSecurityMapValidStatus = createSelector(
   getCoreState,
   (state:CoreState) => state.securityMap.valid
 );
+
+export const selectNewAlerts = createSelector(
+  getCoreState,
+  (state: CoreState) => state.alert.newAlerts
+);

@@ -27,12 +27,14 @@
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { GlobalAlertState } from 'FEModels/frontend-page-states.interface';
     import { AlertDTO } from 'FEModels/frontend-models.interface';
-    import { PortfolioList } from 'Core/stubs/securities.stub';
+    import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
     import {
       ALERT_COUNTDOWN,
       AlertTypes
     } from 'Core/constants/coreConstants.constant';
     import { CoreToggleAlertThumbnailDisplay } from 'Core/actions/core.actions';
+    import { selectNewAlerts } from 'Core/selectors/core.selectors';
+    import { CoreReceivedNewAlerts } from 'Core/actions/core.actions';
   //
 
 @Component({
@@ -46,6 +48,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   @Input() ownerInitial: string;
   state: GlobalAlertState;
   subscriptions = {
+    newAlertSubscription: null
   }
   constants = {
   }
@@ -70,6 +73,17 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
+    this.subscriptions.newAlertSubscription = this.store$.pipe(
+      select(selectNewAlerts),
+      filter((alertList) => {
+        return alertList.length > 0;
+      })
+    ).subscribe((alertList) => {
+      this.store$.dispatch(new CoreReceivedNewAlerts());
+      alertList.forEach((eachAlert) => {
+        this.generateNewAlert(this.utilityService.deepCopy(eachAlert));
+      });
+    });
   }
 
   public ngOnChanges() {
@@ -93,8 +107,8 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   }
 
   public onClickClearAlerts() {
-    this.generateNewAlert();
-    // this.state.triggerActionMenuOpen = false;
+    // this.generateNewAlert();
+    this.state.triggerActionMenuOpen = false;
   }
 
   public onClickAlertThumbnail(targetAlert: AlertDTO) {
@@ -121,9 +135,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  private generateNewAlert() {
-    const newAlert = this.dtoService.formAlertObject(PortfolioList.securityDtos.securityDtos['146'].security);
-    newAlert.data.message = `${newAlert.data.message} - ${this.state.presentList.length}`
+  private generateNewAlert(newAlert: AlertDTO) {
     this.state.presentList.unshift(newAlert);
     setTimeout(function(){
       newAlert.state.isNew = false;

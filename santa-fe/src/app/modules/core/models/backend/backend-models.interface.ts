@@ -346,7 +346,7 @@ export interface BEAlertConfigurationReturn {
 
 export interface BEAlertConfigurationDTO {
   groupFilters: {
-    SecurityIdentifier: Array<string>;
+    SecurityIdentifier?: Array<string>;
     [property: string]: any;
   };
   alertConfigID: string;
@@ -356,4 +356,17 @@ export interface BEAlertConfigurationDTO {
   subType: string;
   parameters: any;
   isEnabled: boolean;
+}
+
+export interface BEAlertDTO {
+  alertId: string;
+  alertConfigId: string;
+  timeStamp: string;
+  type: string;
+  subType: string;
+  keyWord: string;
+  message: string;
+  security: BESecurityDTO;
+  urgentLevel: number;
+  isActive: boolean;
 }
