@@ -156,5 +156,5 @@ $securityDefinitionConfigurator_width:
   $securityDefinitionConfigurator_filters_width;
 
 $alert_width: 28rem;
-$alert_height: 5rem;  // also the width of the thumbnail
-$page_gutter_width_for_alerts: $alert_height + $spacing_medium;
+$alert_thumbnail_width: 7rem;
+$page_gutter_width_for_alerts: $alert_thumbnail_width + $spacing_medium;

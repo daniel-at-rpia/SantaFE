@@ -94,7 +94,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           securityList: [],
           searchList: [],
           matchedResultCount: 0,
-          searchIsValid: false
+          searchIsValid: false,
+          bidGroupId: null,
+          askGroupId: null,
+          bothGroupId: null,
+          liquidationGroupId: null
         },
         mark: {
 
@@ -183,6 +187,14 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  public onClickSaveConfiguration() {
+    this.saveAxeConfiguration();
+  }
+
+  public onClickUpdateAlert() {
+    
+  }
+
   private fetchSecurities(matchList: Array<SecurityMapEntry>) {
     const list = matchList.map((eachEntry) => {
       return eachEntry.secruityId;
@@ -226,6 +238,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private loadAllConfigurations() {
+    const config = this.state.configuration.axe;
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlertConfigurations, {req: 'GET'}).pipe(
       first(),
       tap((serverReturn: BEAlertConfigurationReturn) => {
@@ -233,14 +246,18 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           for (const eachGroupId in serverReturn.Axe) {
             const eachConfiguration = serverReturn.Axe[eachGroupId];
             if (eachConfiguration.subType === 'Both') {
+              config.bothGroupId = eachConfiguration.alertConfigID;
               this.populateConfigurationFromEachGroup(eachConfiguration, this.constants.axeAlertScope.bid);
               this.populateConfigurationFromEachGroup(eachConfiguration, this.constants.axeAlertScope.ask);
             } else {
               if (eachConfiguration.subType == this.constants.axeAlertScope.bid) {
+                config.bidGroupId = eachConfiguration.alertConfigID;
                 this.populateConfigurationFromEachGroup(eachConfiguration, this.constants.axeAlertScope.bid);
               } else if (eachConfiguration.subType == this.constants.axeAlertScope.ask) {
+                config.askGroupId = eachConfiguration.alertConfigID;
                 this.populateConfigurationFromEachGroup(eachConfiguration, this.constants.axeAlertScope.bid);
               } else if (eachConfiguration.subType == this.constants.axeAlertScope.liquidation) {
+                config.liquidationGroupId = eachConfiguration.alertConfigID;
                 this.populateConfigurationFromEachGroup(eachConfiguration, this.constants.axeAlertScope.liquidation);
               }
             }
@@ -267,6 +284,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             serverReturn.forEach((eachRawData) => {
               const eachCard = this.dtoService.formSecurityCardObject(eachRawData.securityIdentifier, eachRawData, false);
               eachCard.state.isInteractionDisabled = true;
+              eachCard.state.isWidthFlexible = true;
               this.loadSecurityToAxeWatchlist(eachCard, targetScope);
             });
           } else {
@@ -317,15 +335,19 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  // public onClickSendMail() {
-  //   this.restfulCommService.logEngagement(
-  //     EngagementActionList.sendEmail,
-  //     'n/a',
-  //     'n/a',
-  //     this.ownerInitial,
-  //     'Trade - Alert Panel'
-  //   );
-  //   location.href = "mailto:santa@rpia.ca?subject=Santa%20Feedback";
-  // }
+  private saveAxeConfiguration() {
+
+  }
+
+    // public onClickSendMail() {
+    //   this.restfulCommService.logEngagement(
+    //     EngagementActionList.sendEmail,
+    //     'n/a',
+    //     'n/a',
+    //     this.ownerInitial,
+    //     'Trade - Alert Panel'
+    //   );
+    //   location.href = "mailto:santa@rpia.ca?subject=Santa%20Feedback";
+    // }
 
 }

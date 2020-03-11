@@ -72,14 +72,6 @@
                   <span>Bid</span>
                 </button>
                 <button
-                  (click)="onSelectAxeWatchlistSide(constants.axeAlertScope.liquidation, eachSecurityBlock)"
-                  [ngClass]="{
-                    'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn': true,
-                    'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.scopes.indexOf(constants.axeAlertScope.liquidation) >= 0
-                  }">
-                  <span>Liquidation</span>
-                </button>
-                <button
                   (click)="onSelectAxeWatchlistSide(constants.axeAlertScope.ask, eachSecurityBlock)"
                   [ngClass]="{
                     'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn': true,
@@ -87,6 +79,14 @@
                     'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.scopes.indexOf(constants.axeAlertScope.ask) >= 0
                   }">
                   <span>Ask</span>
+                </button>
+                <button
+                  (click)="onSelectAxeWatchlistSide(constants.axeAlertScope.liquidation, eachSecurityBlock)"
+                  [ngClass]="{
+                    'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn': true,
+                    'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.scopes.indexOf(constants.axeAlertScope.liquidation) >= 0
+                  }">
+                  <span>Liquidation</span>
                 </button>
               </div>
               <button (click)="removeSecurityFromAxeWatchList(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-removeBtn santaBtn--iconOnly fal fa-eraser"></button>
@@ -128,7 +128,7 @@
       -->
     </ul>
     <div class="sat-tradeAlertPanel__configuration-ctas">
-      <button class="sat-tradeAlertPanel__configuration-ctas-save santaBtn--labelled santaBtn--inverseLabelled">
+      <button (click)="onClickSaveConfiguration()" class="sat-tradeAlertPanel__configuration-ctas-save santaBtn--labelled santaBtn--inverseLabelled">
         <i class="fal fa-cloud-upload"></i>
         <span>Save</span>
       </button>

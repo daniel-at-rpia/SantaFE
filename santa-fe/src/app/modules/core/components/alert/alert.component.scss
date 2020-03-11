@@ -1,5 +1,6 @@
 @import "global.scss";
 
+$alert_height: 5rem;
 $alert_margin_right: $spacing_large;
 $alert_countdown_duration: 5s;
 .sat-alert {
@@ -17,12 +18,12 @@ $alert_countdown_duration: 5s;
     @include material();
     flex: 0 0 auto;
     display: flex;
-    width: $alert_height;
-    padding: $spacing_small;
+    width: $alert_thumbnail_width;
+    padding: $spacing_small 0 $spacing_small $spacing_small;
     background-color: $color_white;
-    transform: translate(-$alert_height, 0);
+    transform: translate(-$alert_thumbnail_width, 0);
     &-main {
-      @include mix_border_radius(5px);
+      @include mix_border_radius(5px, 'left');
       flex: 1 1 auto;
       display: flex;
       flex-direction: column;
@@ -144,7 +145,7 @@ $alert_countdown_duration: 5s;
         background-color: $color_active;
       }
       &__detail {
-        transform: translate(-$alert_width - $alert_height, 0);
+        transform: translate(-$alert_width - $alert_thumbnail_width, 0);
       }
       &__close {
         transform: translate(-$alert_width, 0);
