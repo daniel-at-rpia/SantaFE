@@ -933,6 +933,7 @@ export class DTOService {
     const parsedTitleList = rawData.keyWord.split('|');
     const object: DTOs.AlertDTO = {
       data: {
+        id: rawData.alertId,
         type: this.utility.mapAlertSubType(rawData.subType),
         security: targetSecurity,
         titleTop: parsedTitleList[0] || '',

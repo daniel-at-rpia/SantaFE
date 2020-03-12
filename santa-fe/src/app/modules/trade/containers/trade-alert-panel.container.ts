@@ -24,6 +24,7 @@
       withLatestFrom,
       filter
     } from 'rxjs/operators';
+    import * as moment from 'moment';
 
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
@@ -35,7 +36,8 @@
     import {
       BESecurityDTO,
       BEAlertConfigurationReturn,
-      BEAlertConfigurationDTO
+      BEAlertConfigurationDTO,
+      BEAlertDTO
     } from 'BEModels/backend-models.interface';
     import { PayloadGetSecurities } from 'BEModels/backend-payloads.interface';
     import {
@@ -89,6 +91,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       isAlertPaused: false,
       testDto: this.dtoService.createSecurityDefinitionConfigurator(true, true),
       securityMap: [],
+      alertUpdateTimestamp: null,
       configuration: {
         selectedAlert: null,
         axe: {
@@ -194,12 +197,27 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   public onClickUpdateAlert() {
-    const updateList = [];
-    AlertSample.forEach((eachRawAlert) => {
-      const newAlert = this.dtoService.formAlertObject(eachRawAlert);
-      updateList.push(newAlert);
-    });
-    this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
+    const payload = {
+      "timeStamp": this.state.alertUpdateTimestamp ||  moment().hour(0).minute(0).second(0).format("YYYY-MM-DDTHH:mm:ss.SSS")
+    };
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlerts, {req: 'POST'}, payload).pipe(
+      first(),
+      tap((serverReturn: Array<BEAlertDTO>) => {
+        if (!!serverReturn && serverReturn.length > 0) {
+          const updateList = [];
+          serverReturn.forEach((eachRawAlert) => {
+            const newAlert = this.dtoService.formAlertObject(eachRawAlert);
+            updateList.push(newAlert);
+          });
+          this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
+        }
+      }),
+      catchError(err => {
+        console.error(`${this.restfulCommService.apiMap.getAlerts} failed`, err);
+        return of('error')
+      })
+    ).subscribe();
+    this.state.alertUpdateTimestamp = moment().format("YYYY-MM-DDTHH:mm:ss.SSS");
   }
 
   private fetchSecurities(matchList: Array<SecurityMapEntry>) {
@@ -272,6 +290,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         } else {
           this.restfulCommService.logError(`'Alert/get-alert-configs' API returned an empty result`, null);
         }
+      }),
+      catchError(err => {
+        console.error(`${this.restfulCommService.apiMap.getAlertConfigurations} failed`, err);
+        return of('error')
       })
     ).subscribe();
   }

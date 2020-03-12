@@ -147,9 +147,22 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   }
 
   private removeTargetFromPresentList(targetAlert: AlertDTO) {
-    const indexOfTarget = this.state.presentList.indexOf(targetAlert);
-    if (indexOfTarget >= 0) {
-      this.state.presentList.splice(indexOfTarget, 1);
+    if (!!targetAlert) {
+      const payload = {
+        alertId: targetAlert.data.id
+      };
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.deleteAlert, {req: 'POST'}, payload).pipe(
+        first(),
+        tap((serverReturn) => {}),
+        catchError(err => {
+          console.error(`${this.restfulCommService.apiMap.deleteAlert} failed`, err);
+          return of('error')
+        })
+      ).subscribe();
+      const indexOfTarget = this.state.presentList.indexOf(targetAlert);
+      if (indexOfTarget >= 0) {
+        this.state.presentList.splice(indexOfTarget, 1);
+      }
     }
   }
 

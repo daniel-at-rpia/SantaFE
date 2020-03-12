@@ -184,6 +184,7 @@ export interface TradeAlertPanelState {
   isAlertPaused: boolean;
   testDto: any;
   securityMap: Array<SecurityMapEntry>;
+  alertUpdateTimestamp: string;
   configuration: {
     selectedAlert: AlertTypes,
     axe: {
