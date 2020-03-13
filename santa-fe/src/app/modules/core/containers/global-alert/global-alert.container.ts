@@ -27,6 +27,7 @@
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { GlobalAlertState } from 'FEModels/frontend-page-states.interface';
     import { AlertDTO } from 'FEModels/frontend-models.interface';
+    import { PayloadSetAlertsToInactive } from 'BEModels/backend-payloads.interface';
     import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
     import {
       ALERT_COUNTDOWN,
@@ -107,7 +108,20 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   }
 
   public onClickClearAlerts() {
-    // this.generateNewAlert();
+    const payload: PayloadSetAlertsToInactive = {
+      alertIds: this.state.presentList.map((eachAlert) => {
+        return eachAlert.data.id;
+      })
+    };
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.readAlert, {req: 'POST'}, payload).pipe(
+      first(),
+      tap((serverReturn) => {}),
+      catchError(err => {
+        console.error(`${this.restfulCommService.apiMap.readAlert} failed`, err);
+        return of('error')
+      })
+    ).subscribe();
+    this.state.presentList = [];
     this.state.triggerActionMenuOpen = false;
   }
 
@@ -148,8 +162,8 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
 
   private removeTargetFromPresentList(targetAlert: AlertDTO) {
     if (!!targetAlert) {
-      const payload = {
-        alertId: targetAlert.data.id
+      const payload: PayloadSetAlertsToInactive = {
+        alertIds: [targetAlert.data.id]
       };
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.readAlert, {req: 'POST'}, payload).pipe(
         first(),

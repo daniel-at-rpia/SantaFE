@@ -20,8 +20,8 @@ export const APIUrlMap = {
   getAlertConfigurations: 'Alert/get-alert-configs',
   updateAlertConfiguration: 'Alert/update-alert-config',
   getAlerts: 'Alert/get-alerts',
-  readAlert: 'Alert/set-alert-to-inactive',
-  deleteAlert: 'Alert/delete-alert',
+  readAlert: 'Alert/set-alerts-to-inactive',
+  deleteAlert: 'Alert/delete-alerts',
   logEngagement: 'feLogger/track',
   logError: 'feLogger/log'
 };

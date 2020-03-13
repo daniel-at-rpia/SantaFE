@@ -72,3 +72,7 @@ export interface PayloadUpdateAlertConfig {
     }
   }
 }
+
+export interface PayloadSetAlertsToInactive {
+  alertIds: Array<string>;
+}

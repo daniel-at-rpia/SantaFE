@@ -377,8 +377,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         if (!!serverReturn && serverReturn.length > 0) {
           const updateList = [];
           serverReturn.forEach((eachRawAlert) => {
-            const newAlert = this.dtoService.formAlertObject(eachRawAlert);
-            updateList.push(newAlert);
+            if (eachRawAlert.isActive) {
+              const newAlert = this.dtoService.formAlertObject(eachRawAlert);
+              updateList.push(newAlert);
+            }
           });
           this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
         }
