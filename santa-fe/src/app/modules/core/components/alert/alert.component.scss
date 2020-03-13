@@ -50,7 +50,7 @@ $alert_countdown_duration: 5s;
         padding: $spacing_x_small $spacing_small;
         &-text {
           font-weight: bold;
-          line-height: $line_height_x_small;
+          line-height: $line_height_minimum;
           color: $color_gray_6;
           user-select: none;
         }
@@ -61,7 +61,8 @@ $alert_countdown_duration: 5s;
     @include mix_fixed_div(relative, $z_index_base_item);
     @include mix_border_radius(10px);
     @include mix_alive('light');
-    @include material();
+    // @include material();
+    @include mix_border_generator($typical_border_width, $color_active);
     flex: 1 1 auto;
     display: flex;
     align-items: center;

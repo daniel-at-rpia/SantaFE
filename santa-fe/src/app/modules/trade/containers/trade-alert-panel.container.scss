@@ -96,13 +96,19 @@
       justify-content: center;
       padding: $spacing_medium;
       &-save {
-        background-color: $color_create;
+        @include material('none');
+        @include mix_border_generator($typical_border_width, $color_disabled);
+        cursor: not-allowed;
+        background-color: transparent;
+        // background-color: $color_create;
         padding: $spacing_small $spacing_x_large;
         i {
           font-size: $font_size_x_large;
+          color: $color_disabled;
         }
         span {
           font-size: $font_size_large;
+          color: $color_disabled;
         }
       }
     }
