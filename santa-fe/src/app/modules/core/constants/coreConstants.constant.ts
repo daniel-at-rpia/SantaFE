@@ -18,6 +18,7 @@ export const APIUrlMap = {
   getCountries: 'obligor/get-countries',
   setQuoteStatus: 'liveQuote/set-quote-status',
   getAlertConfigurations: 'Alert/get-alert-configs',
+  updateAlertConfiguration: 'Alert/update-alert-config',
   getAlerts: 'Alert/get-alerts',
   deleteAlert: 'Alert/delete-alert',
   logEngagement: 'feLogger/track',

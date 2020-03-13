@@ -50,7 +50,8 @@
     } from 'Core/selectors/core.selectors';
     import {
       ALERT_MAX_SECURITY_SEARCH_COUNT,
-      AxeAlertScope
+      AxeAlertScope,
+      ALERT_UPDATE_COUNTDOWN
     } from 'Core/constants/tradeConstants.constant';
     import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
     import { CoreSendNewAlerts } from 'Core/actions/core.actions';
@@ -70,10 +71,13 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   @Output() configureAlert = new EventEmitter();
   state: TradeAlertPanelState;
   subscriptions = {
-    securityMapSub: null
+    securityMapSub: null,
+    autoUpdateCountSub: null
   }
+  autoUpdateCount$: Observable<any>;
   constants = {
-    axeAlertScope: AxeAlertScope
+    axeAlertScope: AxeAlertScope,
+    countdown: ALERT_UPDATE_COUNTDOWN
   }
 
   constructor(
@@ -108,7 +112,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         mark: {
 
         }
-      }
+      },
+      autoUpdateCountdown: 0,
+      alertUpdateInProgress: false
     };
     return state;
   }
@@ -125,6 +131,17 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       }
     });
     this.loadAllConfigurations();
+
+    this.autoUpdateCount$ = interval(1000);
+    this.subscriptions.autoUpdateCountSub = this.autoUpdateCount$.subscribe(count => {
+      if (!this.state.isAlertPaused && !this.state.alertUpdateInProgress) {
+        this.state.autoUpdateCountdown = this.state.autoUpdateCountdown + 1;
+        if (this.state.autoUpdateCountdown >= this.constants.countdown) {
+          this.updateAlert();
+          this.state.autoUpdateCountdown = 0;
+        }
+      }
+    });
   }
 
   public ngOnChanges() {
@@ -197,27 +214,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   public onClickUpdateAlert() {
-    const payload = {
-      "timeStamp": this.state.alertUpdateTimestamp ||  moment().hour(0).minute(0).second(0).format("YYYY-MM-DDTHH:mm:ss.SSS")
-    };
-    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlerts, {req: 'POST'}, payload).pipe(
-      first(),
-      tap((serverReturn: Array<BEAlertDTO>) => {
-        if (!!serverReturn && serverReturn.length > 0) {
-          const updateList = [];
-          serverReturn.forEach((eachRawAlert) => {
-            const newAlert = this.dtoService.formAlertObject(eachRawAlert);
-            updateList.push(newAlert);
-          });
-          this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
-        }
-      }),
-      catchError(err => {
-        console.error(`${this.restfulCommService.apiMap.getAlerts} failed`, err);
-        return of('error')
-      })
-    ).subscribe();
-    this.state.alertUpdateTimestamp = moment().format("YYYY-MM-DDTHH:mm:ss.SSS");
+    this.updateAlert();
   }
 
   private fetchSecurities(matchList: Array<SecurityMapEntry>) {
@@ -366,6 +363,34 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
   private saveAxeConfiguration() {
 
+  }
+
+  private updateAlert() {
+    this.state.alertUpdateInProgress = true;
+    const payload = {
+      "timeStamp": this.state.alertUpdateTimestamp ||  moment().hour(0).minute(0).second(0).format("YYYY-MM-DDTHH:mm:ss.SSS")
+    };
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlerts, {req: 'POST'}, payload).pipe(
+      first(),
+      tap((serverReturn: Array<BEAlertDTO>) => {
+        if (!!serverReturn && serverReturn.length > 0) {
+          const updateList = [];
+          serverReturn.forEach((eachRawAlert) => {
+            const newAlert = this.dtoService.formAlertObject(eachRawAlert);
+            updateList.push(newAlert);
+          });
+          this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
+        }
+        this.state.alertUpdateInProgress = false;
+      }),
+      catchError(err => {
+        this.state.alertUpdateInProgress = false;
+        console.error(`${this.restfulCommService.apiMap.getAlerts} failed`, err);
+        return of('error')
+      })
+    ).subscribe();
+    // timeStamp needs to be updated right after the API call initiates, NOT when it returns
+    this.state.alertUpdateTimestamp = moment().format("YYYY-MM-DDTHH:mm:ss.SSS");
   }
 
     // public onClickSendMail() {

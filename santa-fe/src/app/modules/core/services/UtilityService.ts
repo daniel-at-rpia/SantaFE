@@ -726,12 +726,6 @@ export class UtilityService {
       const markBlock = targetSecurity.data.mark;
       if (targetSecurity.data.mark.markRaw) {
         if (!!targetQuant) {
-          if (targetSecurity.data.name === 'ACI 4.625 01/15/2027 Callable USD 144A SENIOR_UNSECURED') {
-            console.log('test');
-          }
-          if (targetSecurity.data.name === 'ACI 4.875 02/15/2030 Callable USD 144A SENIOR_UNSECURED') {
-            console.log('test');
-          }
           const targetDriver = targetSecurity.data.mark.markDriver;
           if (targetQuant.state.hasBid) {
             markBlock.markDisBidRaw = markBlock.markRaw - targetQuant.data.bid.number;
