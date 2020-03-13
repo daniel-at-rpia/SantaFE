@@ -69,19 +69,28 @@ $alert_countdown_duration: 5s;
     padding: $spacing_small;
     background-color: $color_white;
     transform: translate(0, 0);
+    &-timestamp {
+      @include mix_border_generator(0 $typical_border_width 0 0);
+      flex: 0 0 3rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      align-self: stretch;
+      margin-left: $spacing_large;
+      padding-right: $spacing_small;
+      margin-right: $spacing_small;
+    }
     &-message {
       @include mix_text_overflow_multi_line(2);
-      flex: 0 1 auto;
+      flex: 1 1 auto;
       text-align: right;
-      margin-left: $spacing_small;
-      margin-right: $spacing_x_small;
+      margin-right: $spacing_small;
       line-height: $line_height_small;
       overflow: hidden;
       user-select: none;
     }
     &-card {
-      flex: 1 1 auto;
-      max-width: 24rem;
+      flex: 0 0 12rem;
       display: flex;
       justify-content: flex-end;
       security-card {

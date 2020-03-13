@@ -440,6 +440,7 @@ export interface AlertDTO extends BasicDTOStructure {
     titleBottom: string;
     message: string;
     quantValue: number;
+    time: string;
   }
   state: {
     isRead: boolean;

@@ -151,11 +151,11 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       const payload = {
         alertId: targetAlert.data.id
       };
-      this.restfulCommService.callAPI(this.restfulCommService.apiMap.deleteAlert, {req: 'POST'}, payload).pipe(
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.readAlert, {req: 'POST'}, payload).pipe(
         first(),
         tap((serverReturn) => {}),
         catchError(err => {
-          console.error(`${this.restfulCommService.apiMap.deleteAlert} failed`, err);
+          console.error(`${this.restfulCommService.apiMap.readAlert} failed`, err);
           return of('error')
         })
       ).subscribe();

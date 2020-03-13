@@ -1,5 +1,8 @@
   // dependencies
     import { Injectable } from '@angular/core';
+    import { any } from '@amcharts/amcharts4/.internal/core/utils/Array';
+    import * as moment from 'moment';
+
     import {
       BESecurityDTO,
       BESecurityGroupDTO,
@@ -42,7 +45,6 @@
     import {
       QuoteMetricList
     } from 'Core/constants/securityTableConstants.constant';
-    import { any } from '@amcharts/amcharts4/.internal/core/utils/Array';
   // 
 
 @Injectable()
@@ -939,7 +941,8 @@ export class DTOService {
         titleTop: parsedTitleList[0] || '',
         titleBottom: parsedTitleList[1] || '',
         message: rawData.message,
-        quantValue: 12
+        quantValue: 12,
+        time: moment(rawData.timeStamp).format(`HH:mm`)
       },
       api: {
         onMouseEnterAlert: null,

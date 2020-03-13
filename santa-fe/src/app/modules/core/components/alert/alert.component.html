@@ -17,8 +17,15 @@
     </div>
   </section>
   <section (click)="onClickAlertDetail()" class="sat-alert__detail">
+    <div class="sat-alert__detail-timestamp">
+      <span class="sat-alert__detail-timestamp-text">
+        {{alertData.data.time}}
+      </span>
+    </div>
     <div class="sat-alert__detail-message">
-      <span class="sat-alert__detail-message-text">{{alertData.data.message}}</span>
+      <span class="sat-alert__detail-message-text">
+        {{alertData.data.message}}
+      </span>
     </div>
     <div class="sat-alert__detail-card">
       <security-card [cardData]="alertData.data.security"></security-card>
