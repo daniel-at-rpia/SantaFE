@@ -92,7 +92,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   private initializePageState(): TradeAlertPanelState {
     const state: TradeAlertPanelState = {
       configureAlert: false,
-      isAlertPaused: false,
+      isAlertPaused: true,
       testDto: this.dtoService.createSecurityDefinitionConfigurator(true, true),
       securityMap: [],
       alertUpdateTimestamp: null,
@@ -265,6 +265,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       first(),
       tap((serverReturn: BEAlertConfigurationReturn) => {
         if (!!serverReturn) {
+          this.state.isAlertPaused = false;
           for (const eachGroupId in serverReturn.Axe) {
             const eachConfiguration = serverReturn.Axe[eachGroupId];
             if (eachConfiguration.subType === 'Both') {
