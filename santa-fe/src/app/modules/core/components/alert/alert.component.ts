@@ -7,9 +7,8 @@ import {
   EventEmitter
 } from '@angular/core';
 
-import {
-  AlertDTO
-} from 'FEModels/frontend-models.interface';
+import { AlertDTO } from 'FEModels/frontend-models.interface';
+import { AlertSubTypes } from 'Core/constants/coreConstants.constant';
 
 @Component({
   selector: 'alert',
@@ -23,6 +22,8 @@ export class Alert {
   @Output() clickedAlertThumbnail = new EventEmitter<AlertDTO>();
   @Output() clickedAlertDetail = new EventEmitter<AlertDTO>();
   @Output() clickedRemove = new EventEmitter<AlertDTO>();
+
+  alertSubTypes = AlertSubTypes;
 
   constructor() { }
 

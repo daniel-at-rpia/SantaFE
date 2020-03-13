@@ -141,16 +141,29 @@ $alert_countdown_duration: 5s;
       color: $font_color_inverse;
     }
   }
-  &--typeAxeVariant {
+  &--typeBidVariant {
     #{$alertBlockName} {
       &__thumbnail-main {
-        background-color: $color_axe;
+        background-color: $color_bid;
         &-quant-text {
-          color: $color_axe;
+          color: $color_bid;
         }
       }
       &__detail-countdown-line-content {
-        background-color: $color_axe;
+        background-color: $color_bid;
+      }
+    }
+  }
+  &--typeAskVariant {
+    #{$alertBlockName} {
+      &__thumbnail-main {
+        background-color: $color_ask;
+        &-quant-text {
+          color: $color_ask;
+        }
+      }
+      &__detail-countdown-line-content {
+        background-color: $color_ask;
       }
     }
   }
