@@ -242,6 +242,8 @@ export interface QuantComparerDTO extends BasicDTOStructure {
     noAxeSkew: boolean;
     noTotalSkew: boolean;
     longEdgeState: boolean;
+    bidIsStale: boolean;
+    askIsStale: boolean;
   }
 }
 

@@ -247,6 +247,15 @@ $quantComparer_min_height: 2.5rem;
       }
     }
   }
+  &--longEdgeState {
+    #{$quantComparerBlockName} {
+      &__content {
+        &-driver-edge {
+          width: $quantComparer_edge_width_long;
+        }
+      }
+    }
+  }
   &--crossedState {
     #{$quantComparerBlockName} {
       &__crossing {
@@ -292,30 +301,79 @@ $quantComparer_min_height: 2.5rem;
       }
     }
   }
-  &--stencilState {
+  &--bidIsStaleState {
     #{$quantComparerBlockName} {
+      &__base {
+        &-background {
+          background-color: inherit;
+        }
+      }
       &__content {
-        &-driver {
-          &-edge {
-            &-number {
-              @include mix_stencil_animation();
-              line-height: $line_height_stencil_slim;
+        &-driver--left {
+          #{$quantComparerBlockName} {
+            &__content-driver {
+              &-edge {
+                background-color: $color_gray_5;
+                &-number {
+                  color: $font_color_inverse;
+                }
+                &-broker {
+                  color: $font_color_inverse;
+                }
+              }
+              &-line-content {
+                background-color: $color_gray_5;
+              }
             }
-            &-broker {
-              @include mix_stencil_animation();
-              line-height: $line_height_stencil_slim;
-            }
-          }
-          &-line-content {
-            @include mix_stencil_animation();
           }
         }
       }
-      &__mid {
-        display: none;
+      &__crossing {
+        background-color: inherit;
+        &-content {
+          height: inherit;
+          &-value {
+            color: $font_color_inverse;
+          }
+        }
       }
-      &__skew {
-        display: none;
+    }
+  }
+  &--askIsStaleState {
+    #{$quantComparerBlockName} {
+      &__base {
+        &-background {
+          background-color: inherit;
+        }
+      }
+      &__content {
+        &-driver--right {
+          #{$quantComparerBlockName} {
+            &__content-driver {
+              &-edge {
+                background-color: $color_gray_5;
+                &-number {
+                  color: $font_color_inverse;
+                }
+                &-broker {
+                  color: $font_color_inverse;
+                }
+              }
+              &-line-content {
+                background-color: $color_gray_5;
+              }
+            }
+          }
+        }
+      }
+      &__crossing {
+        background-color: inherit;
+        &-content {
+          height: inherit;
+          &-value {
+            color: $font_color_inverse;
+          }
+        }
       }
     }
   }
@@ -349,12 +407,30 @@ $quantComparer_min_height: 2.5rem;
       }
     }
   }
-  &--longEdgeState {
+  &--stencilState {
     #{$quantComparerBlockName} {
       &__content {
-        &-driver-edge {
-          width: $quantComparer_edge_width_long;
+        &-driver {
+          &-edge {
+            &-number {
+              @include mix_stencil_animation();
+              line-height: $line_height_stencil_slim;
+            }
+            &-broker {
+              @include mix_stencil_animation();
+              line-height: $line_height_stencil_slim;
+            }
+          }
+          &-line-content {
+            @include mix_stencil_animation();
+          }
         }
+      }
+      &__mid {
+        display: none;
+      }
+      &__skew {
+        display: none;
       }
     }
   }

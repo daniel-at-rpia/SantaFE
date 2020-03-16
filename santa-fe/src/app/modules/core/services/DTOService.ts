@@ -473,7 +473,9 @@ export class DTOService {
           totalSkewEnabled: false,
           noAxeSkew: true,
           noTotalSkew: true,
-          longEdgeState: false
+          longEdgeState: false,
+          bidIsStale: false,
+          askIsStale: false
         }
       };
       return stencilObject;
@@ -506,6 +508,8 @@ export class DTOService {
     const askValue = axeOnly ? rawData.askAxeQuoteValue : rawData.askQuoteValue;
     const bidDealer = axeOnly ? rawData.bidAxeDealer : rawData.bidDealer;
     const askDealer = axeOnly ? rawData.askAxeDealer : rawData.askDealer;
+    const bidIsStale = axeOnly ? rawData.bidAxeIsOld : rawData.bidIsOld;
+    const askIsStale = axeOnly ? rawData.askAxeIsOld : rawData.askIsOld;
 
     const bidSize = this.utility.round(bidQuantity/1000000, 1);
     const offerSize = this.utility.round(askQuantity/1000000, 1);
@@ -574,7 +578,9 @@ export class DTOService {
           totalSkewEnabled: false,
           noAxeSkew: rawData.axeSkew === null,
           noTotalSkew: rawData.totalSkew === null,
-          longEdgeState: (bidNumber && parseFloat(bidNumber).toString().length > 4) || (offerNumber && parseFloat(offerNumber).toString().length > 4)
+          longEdgeState: (bidNumber && parseFloat(bidNumber).toString().length > 4) || (offerNumber && parseFloat(offerNumber).toString().length > 4),
+          bidIsStale: bidIsStale,
+          askIsStale: askIsStale
         }
       };
       return object;
