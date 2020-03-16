@@ -234,27 +234,36 @@ export interface BESecurityDeltaMetricDTO {
 
 export interface BESingleBestQuoteDTO {
   isValid: boolean;
+  isAxeValid: boolean;
   quoteMetric: string;
   bidQuoteType: string;
   askQuoteType: string;
   bidDealer: string;
+  bidAxeDealer: string;
   askDealer: string;
+  askAxeDealer: string;
   bidQuantity: number;
+  bidAxeQuantity: number;
   askQuantity: number;
+  askAxeQuantity: number;
   totalAxeBidQuantity: number;
   totalAxeAskQuantity: number;
-  totalRunBidQuantity: number;
-  totalRunAskQuantity: number;
+  totalBidQuantity: number;
+  totalAskQuantity: number;
   bidQuoteValue: number;
+  bidAxeQuoteValue: number;
   askQuoteValue: number;
+  askAxeQuoteValue: number;
   bidTime: string;
+  bidAxeTime: string;
   askTime: string;
-  bidVenue: string;
-  askVenue: string;
+  askAxeTime: string;
   axeSkew: number;
   totalSkew: number;
   bidIsOld: boolean;
+  bidAxeIsOld: boolean;
   askIsOld: boolean;
+  askAxeIsOld: boolean;
   isOffTheRunCds: boolean;
   globalIdentifier: string;
 }

@@ -167,6 +167,7 @@ export interface AgGridRow {
   id: string;
   securityCard: SecurityDTO;    // this needs to be identical to SecurityTableMetrics' key for Security column
   bestQuote: QuantComparerDTO;  // this needs to be identical to SecurityTableMetrics' key for Best Quote column
+  bestAxeQuote: QuantComparerDTO;  // this needs to be identical to SecurityTableMetrics' key for Best Axe Quote column
   rowDTO: SecurityTableRowDTO;
 }
 

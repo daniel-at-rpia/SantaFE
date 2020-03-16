@@ -125,24 +125,22 @@ export class LiveDataProcessingService {
     driverType: string,
     quote: BEBestQuoteDTO
   ){
-    const bestQuoteHeaderIndex = tableHeaderList.findIndex((eachHeader) => {
-      return eachHeader.state.isQuantVariant;
-    });
-    const bestQuoteCell = targetRow.data.cells[bestQuoteHeaderIndex - 1];
     const newPriceQuant = !!quote 
       ? this.dtoService.formQuantComparerObject(
           false,
           TriCoreDriverConfig.Price.label,
           quote,
-          targetRow.data.security
-        ) 
+          targetRow.data.security,
+          false
+        )
       : null;
     const newSpreadQuant = !!quote 
       ? this.dtoService.formQuantComparerObject(
           false,
           TriCoreDriverConfig.Spread.label,
           quote,
-          targetRow.data.security
+          targetRow.data.security,
+          false
         )
       : null;
     const newYieldQuant = !!quote 
@@ -150,13 +148,48 @@ export class LiveDataProcessingService {
         false,
         TriCoreDriverConfig.Yield.label,
         quote,
-        targetRow.data.security
+        targetRow.data.security,
+        false
       )
     : null;
+    const newAxePriceQuant = !!quote 
+      ? this.dtoService.formQuantComparerObject(
+          false,
+          TriCoreDriverConfig.Price.label,
+          quote,
+          targetRow.data.security,
+          true
+        )
+      : null;
+    const newAxeSpreadQuant = !!quote
+      ? this.dtoService.formQuantComparerObject(
+        false,
+        TriCoreDriverConfig.Spread.label,
+        quote,
+        targetRow.data.security,
+        true
+      )
+      : null;
+    const newAxeYieldQuant = !!quote
+      ? this.dtoService.formQuantComparerObject(
+        false,
+        TriCoreDriverConfig.Yield.label,
+        quote,
+        targetRow.data.security,
+        true
+      )
+      : null;
     targetRow.data.bestQuotes = {
-      bestPriceQuote: newPriceQuant,
-      bestYieldQuote: newYieldQuant,
-      bestSpreadQuote: newSpreadQuant
+      combined: {
+        bestPriceQuote: newPriceQuant,
+        bestYieldQuote: newYieldQuant,
+        bestSpreadQuote: newSpreadQuant
+      },
+      axe: {
+        bestPriceQuote: newAxePriceQuant,
+        bestYieldQuote: newAxeYieldQuant,
+        bestSpreadQuote: newAxeSpreadQuant
+      }
     }
   }
 

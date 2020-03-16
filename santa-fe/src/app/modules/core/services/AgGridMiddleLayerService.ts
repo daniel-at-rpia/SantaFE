@@ -151,7 +151,7 @@ export class AgGridMiddleLayerService {
       newAgColumn.cellClass = `${AGGRID_CELL_CLASS} ${AGGRID_CELL_CLASS}--securityCard`;
       newAgColumn.cellRenderer = targetHeader.data.key;
       newAgColumn.width = AGGRID_SECURITY_CARD_COLUMN_WIDTH;
-    } else if (targetHeader.data.key === 'bestQuote') {
+    } else if (!!targetHeader.state.isQuantVariant) {
       newAgColumn.cellRenderer = targetHeader.data.key;
       newAgColumn.width = AGGRID_QUOTE_COLUMN_WIDTH;
     } else if (!targetHeader.data.isDataTypeText) {
@@ -186,12 +186,13 @@ export class AgGridMiddleLayerService {
       id: !eachSecurity.state.isStencil ? eachSecurity.data.securityID : this.utilityService.generateUUID(),
       securityCard: eachSecurity,
       bestQuote: targetRow.data.cells[0].data.quantComparerDTO,
+      bestAxeQuote: targetRow.data.cells[1].data.quantComparerDTO,
       rowDTO: targetRow
     };
     newAgRow[AGGRID_DETAIL_COLUMN_KEY] = '';
     targetHeaders.forEach((eachHeader, index) => {
-      if (eachHeader.data.key === 'securityCard' || eachHeader.data.key === 'bestQuote') {
-        // skip those two as they are already instantiated above
+      if (eachHeader.data.key === 'securityCard' || eachHeader.state.isQuantVariant) {
+        // skip those columns as they are already instantiated above
       } else {
         // can't directly use the cells from the target row to retrieve the data because we need to populate data for ALL columns, not just the active ones
         const textData = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(eachHeader, eachSecurity, false);

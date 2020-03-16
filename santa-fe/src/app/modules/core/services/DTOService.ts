@@ -433,7 +433,8 @@ export class DTOService {
     isStencil: boolean,
     quantMetricType: string,
     BEdto: BEBestQuoteDTO,
-    securityCard: DTOs.SecurityDTO
+    securityCard: DTOs.SecurityDTO,
+    axeOnly: boolean
   ): DTOs.QuantComparerDTO {
     if (isStencil) {
       const stencilObject: DTOs.QuantComparerDTO = {
@@ -481,7 +482,12 @@ export class DTOService {
       const backendTargetQuoteAttr = TriCoreDriverConfig[driverType]['backendTargetQuoteAttr'];
       if (!!BEdto && !!BEdto[backendTargetQuoteAttr]) {
         const rawData = BEdto[backendTargetQuoteAttr];
-        return this.populateQuantCompareObject(rawData, driverType, securityCard);
+        return this.populateQuantCompareObject(
+          rawData,
+          driverType,
+          securityCard,
+          axeOnly
+        );
       } else {
         return null;
       }
@@ -491,17 +497,25 @@ export class DTOService {
   private populateQuantCompareObject(
     rawData: BESingleBestQuoteDTO,
     driverType: string,
-    securityCard: DTOs.SecurityDTO
+    securityCard: DTOs.SecurityDTO,
+    axeOnly: boolean
   ): DTOs.QuantComparerDTO {
-    const bidSize = this.utility.round(rawData.bidQuantity/1000000, 1);
-    const offerSize = this.utility.round(rawData.askQuantity/1000000, 1);
+    const bidQuantity = axeOnly ? rawData.bidAxeQuantity : rawData.bidQuantity;
+    const askQuantity = axeOnly ? rawData.askAxeQuantity : rawData.askQuantity;
+    const bidValue = axeOnly ? rawData.bidAxeQuoteValue : rawData.bidQuoteValue;
+    const askValue = axeOnly ? rawData.askAxeQuoteValue : rawData.askQuoteValue;
+    const bidDealer = axeOnly ? rawData.bidAxeDealer : rawData.bidDealer;
+    const askDealer = axeOnly ? rawData.askAxeDealer : rawData.askDealer;
+
+    const bidSize = this.utility.round(bidQuantity/1000000, 1);
+    const offerSize = this.utility.round(askQuantity/1000000, 1);
     const tier2Shreshold = TriCoreDriverConfig[driverType]['tier2Threshold'];
     const inversed = this.utility.isCDS(false, securityCard) ? !TriCoreDriverConfig[driverType]['inversed'] : TriCoreDriverConfig[driverType]['inversed'];
-    const hasBid = !!rawData.bidQuoteValue && !!rawData.bidDealer;
-    const hasOffer = !!rawData.askQuoteValue && !!rawData.askDealer;
+    const hasBid = !!bidValue && !!bidDealer;
+    const hasOffer = !!askValue && !!askDealer;
     const rounding = TriCoreDriverConfig[driverType]['rounding'];
-    const bidNumber = this.utility.parseTriCoreDriverNumber(rawData.bidQuoteValue, driverType, securityCard, true) as string;
-    const offerNumber = this.utility.parseTriCoreDriverNumber(rawData.askQuoteValue, driverType, securityCard, true) as string;
+    const bidNumber = this.utility.parseTriCoreDriverNumber(bidValue, driverType, securityCard, true) as string;
+    const offerNumber = this.utility.parseTriCoreDriverNumber(askValue, driverType, securityCard, true) as string;
     const bidSkew = rawData.axeSkew * 100;
     if (bidNumber === 'NaN' || offerNumber === 'NaN') {
       console.warn('Caught BE data issue while creating best quote component, ', securityCard, rawData, bidNumber, offerNumber);
@@ -512,14 +526,14 @@ export class DTOService {
       if (hasBid && hasOffer) {
         delta = inversed ? parseFloat(offerNumber) - parseFloat(bidNumber) : parseFloat(bidNumber) - parseFloat(offerNumber);
         delta = this.utility.round(delta, rounding);
-        mid = (rawData.bidQuoteValue + rawData.askQuoteValue)/2;
+        mid = (bidValue + askValue)/2;
         mid = this.utility.round(mid, rounding);
       } else if( hasBid && hasOffer == false) {
         delta = 0;
-        mid = rawData.bidQuoteValue;
+        mid = bidValue;
       } else if( hasOffer && hasBid == false) {
         delta = 0;
-        mid = rawData.askQuoteValue;
+        mid = askValue;
       } else {
         delta = 0;
         mid = 0;
@@ -532,13 +546,13 @@ export class DTOService {
           bid: {
             number: !!bidNumber ? parseFloat(bidNumber) : null,
             displayNumber: bidNumber,  // not been used right now but could come in handy
-            broker: rawData.bidDealer,
+            broker: bidDealer,
             size: bidSize
           },
           offer: {
             number: !!offerNumber ? parseFloat(offerNumber) : null,
             displayNumber: offerNumber,  // not been used right now but could come in handy
-            broker: rawData.askDealer,
+            broker: askDealer,
             size: offerSize
           }
         },
@@ -652,9 +666,16 @@ export class DTOService {
           return metricBlock;
         }),
         bestQuotes: {
-          bestPriceQuote: null,
-          bestSpreadQuote: null,
-          bestYieldQuote: null
+          combined: {
+            bestPriceQuote: null,
+            bestSpreadQuote: null,
+            bestYieldQuote: null
+          },
+          axe: {
+            bestSpreadQuote: null,
+            bestPriceQuote: null,
+            bestYieldQuote: null
+          }
         }
       },
       state: {

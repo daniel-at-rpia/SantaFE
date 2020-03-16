@@ -300,9 +300,16 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
     quotes: SecurityTableRowQuoteBlock;
     quoteHeaders: Array<QuoteMetricBlock>;
     bestQuotes: {
-      bestSpreadQuote: QuantComparerDTO;
-      bestYieldQuote: QuantComparerDTO;
-      bestPriceQuote: QuantComparerDTO;
+      combined: {
+        bestSpreadQuote: QuantComparerDTO;
+        bestYieldQuote: QuantComparerDTO;
+        bestPriceQuote: QuantComparerDTO;
+      }
+      axe: {
+        bestSpreadQuote: QuantComparerDTO;
+        bestYieldQuote: QuantComparerDTO;
+        bestPriceQuote: QuantComparerDTO;
+      }
     }
   },
   state: {

@@ -618,7 +618,7 @@ export class UtilityService {
         }
         if (!!targetDriver) {
           const targetQuantLocationFromRow = TriCoreDriverConfig[targetDriver].backendTargetQuoteAttr;
-          newCellDTO.data.quantComparerDTO = targetRow.data.bestQuotes[targetQuantLocationFromRow];
+          newCellDTO.data.quantComparerDTO = targetRow.data.bestQuotes[targetHeader.data.blockAttrName][targetQuantLocationFromRow];
         } else {
           newCellDTO.data.quantComparerDTO = null;
         }
@@ -626,7 +626,7 @@ export class UtilityService {
         // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
         if ( targetSecurity.data.mark.markDriver === triCoreMetric || triCoreMetric === DEFAULT_DRIVER_IDENTIFIER) {
           targetSecurity.data.mark.markRaw = targetRow.data.security.data.mark.markBackend;
-        const validMetricFromDriver = this.findSecurityTargetDefaultTriCoreDriver(targetSecurity);
+          const validMetricFromDriver = this.findSecurityTargetDefaultTriCoreDriver(targetSecurity);
           const number = this.parseTriCoreDriverNumber(targetSecurity.data.mark.markRaw, validMetricFromDriver, targetSecurity, true) as string;
           targetSecurity.data.mark.mark = targetSecurity.data.mark.markRaw > 0 ? number : null;
         } else {
