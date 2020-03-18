@@ -313,7 +313,7 @@ $quantComparer_min_height: 2.5rem;
           #{$quantComparerBlockName} {
             &__content-driver {
               &-edge {
-                background-color: $color_gray_5;
+                background-color: $color_gray_4;
                 &-number {
                   color: $font_color_inverse;
                 }
@@ -322,10 +322,15 @@ $quantComparer_min_height: 2.5rem;
                 }
               }
               &-line-content {
-                background-color: $color_gray_5;
+                background-color: $color_gray_4;
               }
             }
           }
+        }
+      }
+      &__mid {
+        &-content {
+          background-color: $color_gray_4;
         }
       }
       &__crossing {
@@ -351,7 +356,7 @@ $quantComparer_min_height: 2.5rem;
           #{$quantComparerBlockName} {
             &__content-driver {
               &-edge {
-                background-color: $color_gray_5;
+                background-color: $color_gray_4;
                 &-number {
                   color: $font_color_inverse;
                 }
@@ -360,16 +365,16 @@ $quantComparer_min_height: 2.5rem;
                 }
               }
               &-line-content {
-                background-color: $color_gray_5;
+                background-color: $color_gray_4;
               }
             }
           }
         }
       }
       &__crossing {
-        background-color: inherit;
+        background-color: $color_gray_4;
         &-content {
-          height: inherit;
+          background-color: $color_gray_6;
           &-value {
             color: $font_color_inverse;
           }
