@@ -88,9 +88,16 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       })
     ).subscribe((alertList) => {
       this.store$.dispatch(new CoreReceivedNewAlerts());
-      alertList.forEach((eachAlert) => {
-        this.generateNewAlert(this.utilityService.deepCopy(eachAlert));
-      });
+      try {
+        // the BE returns the array in a sequential order with the latest one on top, because the Alert present list is in a first-in-last-out order, we need to sort it reversely so it is presented in a sequential order
+        const alertListSorted = this.utilityService.deepCopy(alertList).reverse();
+        alertListSorted.forEach((eachAlert) => {
+          this.generateNewAlert(eachAlert);
+        });
+      } catch {
+        this.restfulCommService.logError('received new alerts but failed to generate', null);
+        console.error('received new alerts but failed to generate');
+      }
     });
   }
 
@@ -155,31 +162,56 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     if (targetAlert) {
       targetAlert.state.willBeRemoved = true;
       const removeTarget = () => {
-        this.removeTargetFromPresentList(targetAlert, true);
+        this.removeSingleAlert(targetAlert, true);
       }
       setTimeout(removeTarget.bind(this), 300);
     }
   }
 
   private generateNewAlert(newAlert: AlertDTO) {
-    if (this.state.presentList.length >= this.constants.sizeCap) {
-      this.state.storeList.push(newAlert);
-      newAlert.state.isNew = false;
-      newAlert.state.isCountdownFinished = true;
-    } else {
-      this.state.presentList.unshift(newAlert);
-      this.initiateStateProgressionForNewAlert(newAlert);
+    const existIndexInPresent = this.state.presentList.findIndex((eachAlert) => {
+      return eachAlert.data.id === newAlert.data.id;
+    });
+    const existIndexInStore = this.state.storeList.findIndex((eachAlert) => {
+      return eachAlert.data.id === newAlert.data.id;
+    });
+    if (existIndexInPresent >= 0) {
+      const targetAlert = this.state.presentList[existIndexInPresent];
+      targetAlert.state.willBeRemoved = true;
+      const removeTarget = () => {
+        const indexOfTarget = this.state.presentList.indexOf(targetAlert);
+        if (indexOfTarget >= 0) {
+          this.state.presentList.splice(indexOfTarget, 1);
+        } else {
+          this.restfulCommService.logError('can not find alert to replace in present list', null);
+          console.error('can not find alert to replace in present list');
+        }
+      }
+      setTimeout(removeTarget.bind(this), 300);
+    } else if (existIndexInStore >= 0) {
+      this.state.storeList.splice(existIndexInStore, 1);
     }
+    if (this.state.presentList.length >= this.constants.sizeCap) {
+      const lastAlert = this.state.presentList[this.state.presentList.length-1];
+      this.state.storeList.unshift(lastAlert);
+      this.state.presentList.splice(this.state.presentList.length-1, 1);
+    }
+    this.state.presentList.unshift(newAlert);
+    this.initiateStateProgressionForNewAlert(newAlert);
     this.updateTotalSize();
   }
 
   private initiateStateProgressionForNewAlert(newAlert: AlertDTO) {
     setTimeout(function(){
-      newAlert.state.isNew = false;
-      newAlert.state.isCountdownFinished = false;
-      setTimeout(function(){
-        newAlert.state.isCountdownFinished = true;
-      }, ALERT_COUNTDOWN);
+      if (!!newAlert) {
+        newAlert.state.isNew = false;
+        newAlert.state.isCountdownFinished = false;
+        setTimeout(function(){
+          if (!!newAlert) {
+            newAlert.state.isCountdownFinished = true;
+          }
+        }, ALERT_COUNTDOWN);
+      }
     }, 10);
   }
 
@@ -192,7 +224,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  private removeTargetFromPresentList(
+  private removeSingleAlert(
     targetAlert: AlertDTO,
     isFromPresent: boolean
   ) {
