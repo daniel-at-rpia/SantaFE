@@ -208,3 +208,5 @@ export enum AlertSubTypes {
 }
 
 export const ALERT_COUNTDOWN = 5000;
+export const ALERT_PRESENT_LIST_SIZE_CAP = 15;
+export const ALERT_TOTALSIZE_MAX_DISPLAY_THRESHOLD = 99;

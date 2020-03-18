@@ -31,7 +31,9 @@
     import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
     import {
       ALERT_COUNTDOWN,
-      AlertTypes
+      AlertTypes,
+      ALERT_PRESENT_LIST_SIZE_CAP,
+      ALERT_TOTALSIZE_MAX_DISPLAY_THRESHOLD
     } from 'Core/constants/coreConstants.constant';
     import { CoreToggleAlertThumbnailDisplay } from 'Core/actions/core.actions';
     import { selectNewAlerts } from 'Core/selectors/core.selectors';
@@ -52,6 +54,8 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     newAlertSubscription: null
   }
   constants = {
+    sizeCap: ALERT_PRESENT_LIST_SIZE_CAP,
+    totalSizeMaxDisplay: ALERT_TOTALSIZE_MAX_DISPLAY_THRESHOLD
   }
 
   private initializePageState(): GlobalAlertState {
@@ -59,7 +63,10 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       activated: true,
       displayAlerts: true,
       triggerActionMenuOpen: false,
-      presentList: []
+      presentList: [],
+      storeList: [],
+      totalSize: 0,
+      displayTotalSize: ''
     };
     return state;
   }
@@ -113,6 +120,9 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         return eachAlert.data.id;
       })
     };
+    this.state.storeList.forEach((eachAlert) => {
+      payload.alertIds.push(eachAlert.data.id);
+    });
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.readAlert, {req: 'POST'}, payload).pipe(
       first(),
       tap((serverReturn) => {}),
@@ -122,6 +132,8 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       })
     ).subscribe();
     this.state.presentList = [];
+    this.state.storeList = [];
+    this.updateTotalSize();
     this.state.triggerActionMenuOpen = false;
   }
 
@@ -143,14 +155,25 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     if (targetAlert) {
       targetAlert.state.willBeRemoved = true;
       const removeTarget = () => {
-        this.removeTargetFromPresentList(targetAlert);
+        this.removeTargetFromPresentList(targetAlert, true);
       }
       setTimeout(removeTarget.bind(this), 300);
     }
   }
 
   private generateNewAlert(newAlert: AlertDTO) {
-    this.state.presentList.unshift(newAlert);
+    if (this.state.presentList.length >= this.constants.sizeCap) {
+      this.state.storeList.push(newAlert);
+      newAlert.state.isNew = false;
+      newAlert.state.isCountdownFinished = true;
+    } else {
+      this.state.presentList.unshift(newAlert);
+      this.initiateStateProgressionForNewAlert(newAlert);
+    }
+    this.updateTotalSize();
+  }
+
+  private initiateStateProgressionForNewAlert(newAlert: AlertDTO) {
     setTimeout(function(){
       newAlert.state.isNew = false;
       newAlert.state.isCountdownFinished = false;
@@ -160,7 +183,19 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     }, 10);
   }
 
-  private removeTargetFromPresentList(targetAlert: AlertDTO) {
+  private updateTotalSize() {
+    this.state.totalSize = this.state.presentList.length + this.state.storeList.length;
+    if (this.state.totalSize > this.constants.totalSizeMaxDisplay) {
+      this.state.displayTotalSize = '99+';
+    } else {
+      this.state.displayTotalSize = `${this.state.totalSize}`;
+    }
+  }
+
+  private removeTargetFromPresentList(
+    targetAlert: AlertDTO,
+    isFromPresent: boolean
+  ) {
     if (!!targetAlert) {
       const payload: PayloadSetAlertsToInactive = {
         alertIds: [targetAlert.data.id]
@@ -173,9 +208,27 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
           return of('error')
         })
       ).subscribe();
-      const indexOfTarget = this.state.presentList.indexOf(targetAlert);
-      if (indexOfTarget >= 0) {
-        this.state.presentList.splice(indexOfTarget, 1);
+      if (isFromPresent) {
+        const indexOfTarget = this.state.presentList.indexOf(targetAlert);
+        if (indexOfTarget >= 0) {
+          this.state.presentList.splice(indexOfTarget, 1);
+          if (this.state.storeList.length > 0) {
+            const poppedAlertFromStoreList = this.state.storeList.shift();
+            this.state.presentList.push(poppedAlertFromStoreList);
+          }
+        } else {
+          this.restfulCommService.logError('can not find alert to delete in present list', null);
+          console.error('can not find alert to delete in present list');
+        }
+        this.updateTotalSize();
+      } else {
+        const indexOfTarget = this.state.storeList.indexOf(targetAlert);
+        if (indexOfTarget >= 0) {
+          this.state.storeList.splice(indexOfTarget, 1);
+        } else {
+          this.restfulCommService.logError('can not find alert to delete in store list', null);
+          console.error('can not find alert to delete in store list');
+        }
       }
     }
   }
@@ -183,6 +236,9 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   private updateAlertTrigger(newState: boolean) {
     this.state.triggerActionMenuOpen = newState;
     this.state.presentList.forEach((eachAlert) => {
+      eachAlert.state.isSlidedOut = this.state.triggerActionMenuOpen;
+    })
+    this.state.storeList.forEach((eachAlert) => {
       eachAlert.state.isSlidedOut = this.state.triggerActionMenuOpen;
     })
   }

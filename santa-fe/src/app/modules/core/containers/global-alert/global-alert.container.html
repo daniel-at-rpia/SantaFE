@@ -2,7 +2,8 @@
   [ngClass]="{
     'sat-globalAlert': true,
     'sat-globalAlert--triggerActionMenuOpenState': state.triggerActionMenuOpen,
-    'sat-globalAlert--hideAlertsState': !state.displayAlerts && !state.triggerActionMenuOpen
+    'sat-globalAlert--hideAlertsState': !state.displayAlerts && !state.triggerActionMenuOpen,
+    'sat-globalAlert--emptyState': state.totalSize === 0
   }">
   <section class="sat-globalAlert__alertList">
     <alert
@@ -28,14 +29,18 @@
           'fa-bell-on': !state.displayAlerts
         }"></button>
     </div>
-    <button
-      (click)="onClickAlertTrigger()"
-      [ngClass]="{
-        'sat-globalAlert__trigger-btn santaBtn--iconOnly': true,
-        'fal': true,
-        'fa-bell': !state.displayAlerts,
-        'fa-bell-on': state.displayAlerts
-      }">
-    </button>
+    <div (click)="onClickAlertTrigger()" class="sat-globalAlert__trigger-mainBtn">
+      <i
+        [ngClass]="{
+          'sat-globalAlert__trigger-mainBtn-icon': true,
+          'fal': true,
+          'fa-bell': !state.displayAlerts,
+          'fa-bell-on': state.displayAlerts
+        }">
+      </i>
+      <div class="sat-globalAlert__trigger-mainBtn-count">
+        <span class="sat-globalAlert__trigger-mainBtn-count-text">{{state.displayTotalSize}}</span>
+      </div>
+    </div>
   </section>
 </article>

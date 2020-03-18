@@ -382,7 +382,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
               updateList.push(newAlert);
             }
           });
-          this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
+          updateList.length > 0 && this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
         }
         this.state.alertUpdateInProgress = false;
       }),

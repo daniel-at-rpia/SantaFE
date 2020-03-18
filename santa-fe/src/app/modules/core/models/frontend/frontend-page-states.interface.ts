@@ -21,6 +21,9 @@ export interface GlobalAlertState {
   displayAlerts: boolean;
   triggerActionMenuOpen: boolean;
   presentList: Array<DTOs.AlertDTO>;
+  storeList: Array<DTOs.AlertDTO>;
+  totalSize: number;
+  displayTotalSize: string;
 }
 
 export interface MarketState {
