@@ -32,7 +32,7 @@
     import { TradeAlertPanelState } from 'FEModels/frontend-page-states.interface';
     import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
     import { SecurityDTO } from 'FEModels/frontend-models.interface';
-    import { TradeAlertConfigurationAxeSecurityBlock } from 'FEModels/frontend-blocks.interface';
+    import { TradeAlertConfigurationAxeGroupBlock } from 'FEModels/frontend-blocks.interface';
     import {
       BESecurityDTO,
       BEAlertConfigurationReturn,
@@ -103,6 +103,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       configuration: {
         selectedAlert: null,
         axe: {
+          myGroup: {
+            card: null,
+            groupId: null,
+            scopes: []
+          },
           securitySearchKeyword: '',
           securityList: [],
           searchList: [],
@@ -130,7 +135,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         this.state.securityMap = mapContent;
       }
     });
-    this.loadAllConfigurations();
 
     this.autoUpdateCount$ = interval(1000);
     this.subscriptions.autoUpdateCountSub = this.autoUpdateCount$.subscribe(count => {
@@ -160,6 +164,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   public onClickConfigureAlert() {
     this.configureAlert.emit();
     this.state.configureAlert = true;
+    this.loadAllConfigurations();
   }
 
   public onTogglePauseAlert() {
@@ -198,7 +203,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public onSelectAxeWatchlistSide(targetScope: AxeAlertScope, targetBlock: TradeAlertConfigurationAxeSecurityBlock) {
+  public onSelectAxeWatchlistSide(targetScope: AxeAlertScope, targetBlock: TradeAlertConfigurationAxeGroupBlock) {
     if (!!targetScope && !!targetBlock) {
       this.addScopeToAxeWatchlistEntry(targetBlock, targetScope);
     }
@@ -232,6 +237,12 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             eachCard.state.isActionMenuMinorActionsDisabled = true;
             eachCard.state.isWidthFlexible = true;
             eachCard.api.onClickCard = this.onClickSearchResult.bind(this);
+            const existInWatchlist = this.state.configuration.axe.securityList.find((eachEntry) => {
+              return eachEntry.card.data.securityID === eachCard.data.securityID;
+            })
+            if (!!existInWatchlist) {
+              eachCard.state.isSelected = true;
+            }
             this.state.configuration.axe.searchList.push(eachCard);
           });
         } else {
@@ -281,44 +292,53 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   private populateConfigurationFromEachGroup(
     rawGroupConfig: BEAlertConfigurationDTO
   ) {
-    if (!!rawGroupConfig && !!rawGroupConfig.groupFilters && rawGroupConfig.groupFilters.SecurityIdentifier && rawGroupConfig.groupFilters.SecurityIdentifier.length > 0) {
-      const eachGroupId = rawGroupConfig.alertConfigID;
-      const targetScope = rawGroupConfig.subType as AxeAlertScope;
-      const payload: PayloadGetSecurities = {
-        identifiers: rawGroupConfig.groupFilters.SecurityIdentifier
-      };
-      this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSecurityDTOs, {req: 'POST'}, payload).pipe(
-        first(),
-        tap((serverReturn: Array<BESecurityDTO>) => {
-          if (!!serverReturn) {
-            serverReturn.forEach((eachRawData) => {
-              const eachCard = this.dtoService.formSecurityCardObject(eachRawData.securityIdentifier, eachRawData, false);
-              eachCard.state.isInteractionDisabled = true;
-              eachCard.state.isWidthFlexible = true;
-              this.loadSecurityToAxeWatchlist(eachCard, targetScope, eachGroupId);
-            });
-          } else {
-            this.restfulCommService.logError(`'security/get-securities' API returned an empty result with this payload: ${payload.identifiers.toString()}`, null);
-          }
-        })
-      ).subscribe();
+    if (!!rawGroupConfig && !!rawGroupConfig.groupFilters) {
+      if (rawGroupConfig.groupFilters.SecurityIdentifier && rawGroupConfig.groupFilters.SecurityIdentifier.length > 0) {
+        this.populateConfigurationFromSecurityGroup(rawGroupConfig);
+      } else if (rawGroupConfig.groupFilters.Owner && rawGroupConfig.groupFilters.Owner.length > 0) {
+        this.populateConfigurationFromMyGroup(rawGroupConfig);
+      }
     }
   }
 
-  private loadSecurityToAxeWatchlist(
-    targetSecurity: SecurityDTO,
-    targetScope: AxeAlertScope,
-    groupId: string
-  ) {
-    const newEntry: TradeAlertConfigurationAxeSecurityBlock = {
-      card: targetSecurity,
-      groupId: groupId,
+  private populateConfigurationFromSecurityGroup(rawGroupConfig: BEAlertConfigurationDTO) {
+    const targetScope = rawGroupConfig.subType as AxeAlertScope;
+    const payload: PayloadGetSecurities = {
+      identifiers: rawGroupConfig.groupFilters.SecurityIdentifier
+    };
+    const newEntry: TradeAlertConfigurationAxeGroupBlock = {
+      card: null,
+      groupId: rawGroupConfig.alertConfigID,
       scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope]
     };
     this.state.configuration.axe.securityList.unshift(newEntry);
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSecurityDTOs, {req: 'POST'}, payload).pipe(
+      first(),
+      tap((serverReturn: Array<BESecurityDTO>) => {
+        if (!!serverReturn) {
+          serverReturn.forEach((eachRawData) => {
+            const eachCard = this.dtoService.formSecurityCardObject(eachRawData.securityIdentifier, eachRawData, false);
+            eachCard.state.isInteractionDisabled = true;
+            eachCard.state.isWidthFlexible = true;
+            newEntry.card = eachCard;
+          });
+        } else {
+          this.restfulCommService.logError(`'security/get-securities' API returned an empty result with this payload: ${payload.identifiers.toString()}`, null);
+        }
+      })
+    ).subscribe();
   }
 
-  private addScopeToAxeWatchlistEntry(targetEntry: TradeAlertConfigurationAxeSecurityBlock, targetScope: AxeAlertScope) {
+  private populateConfigurationFromMyGroup(rawGroupConfig: BEAlertConfigurationDTO) {
+    const targetScope = rawGroupConfig.subType as AxeAlertScope;
+    this.state.configuration.axe.myGroup = {
+      card: null,
+      groupId: rawGroupConfig.alertConfigID,
+      scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope]
+    }
+  }
+
+  private addScopeToAxeWatchlistEntry(targetEntry: TradeAlertConfigurationAxeGroupBlock, targetScope: AxeAlertScope) {
     if (targetScope === this.constants.axeAlertScope.liquidation) {
       if (targetEntry.scopes.indexOf(targetScope) >= 0) {
         targetEntry.scopes = [];
@@ -338,6 +358,16 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private saveAxeConfiguration() {
+    const groupPayload: PayloadUpdateAlertConfig = {
+      alertConfig: {
+        type: this.constants.alertTypes.axeAlert,
+        subType: this.mapAxeScopesToAlertSubtypes(this.state.configuration.axe.myGroup.scopes),
+        groupFilters: {
+          Owner: [this.ownerInitial]
+        }
+      }
+    };
+    this.saveSingleAxeConfiguration(groupPayload, this.state.configuration.axe.myGroup);
     this.state.configuration.axe.securityList.forEach((eachEntry) => {
       const payload: PayloadUpdateAlertConfig = {
         alertConfig: {
@@ -346,23 +376,29 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           groupFilters: {}
         }
       }
-      if (!!eachEntry.groupId) {
-        payload.alertConfig.alertConfigID = eachEntry.groupId;
-      }
-      if (eachEntry.scopes.length > 0) {
-        payload.alertConfig.groupFilters.SecurityIdentifier = [eachEntry.card.data.securityID];
-      } else {
-        payload.alertConfig.isEnabled = false;
-      }
-      this.restfulCommService.callAPI(this.restfulCommService.apiMap.updateAlertConfiguration, {req: 'POST'}, payload).pipe(
-        first(),
-        catchError(err => {
-          console.error(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`, payload);
-          this.restfulCommService.logError(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`, null);
-          return of('error');
-        })
-      ).subscribe();
+      payload.alertConfig.groupFilters.SecurityIdentifier = [eachEntry.card.data.securityID];
+      this.saveSingleAxeConfiguration(payload, eachEntry);
     });
+  }
+
+  private saveSingleAxeConfiguration(
+    payload: PayloadUpdateAlertConfig,
+    targetEntry: TradeAlertConfigurationAxeGroupBlock
+  ) {
+    if (!!targetEntry.groupId) {
+      payload.alertConfig.alertConfigID = targetEntry.groupId;
+    }
+    if (targetEntry.scopes.length === 0) {
+      payload.alertConfig.isEnabled = false;
+    }
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.updateAlertConfiguration, {req: 'POST'}, payload).pipe(
+      first(),
+      catchError(err => {
+        console.error(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`, payload);
+        this.restfulCommService.logError(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`, null);
+        return of('error');
+      })
+    ).subscribe();
   }
 
   private updateAlert() {
@@ -393,16 +429,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     ).subscribe();
     // timeStamp needs to be updated right after the API call initiates, NOT when it returns
     this.state.alertUpdateTimestamp = moment().format("YYYY-MM-DDTHH:mm:ss.SSS");
-  }
-
-  private saveSingleAxeConfiguration(
-    securityList: Array<string>,
-    scope: AxeAlertScope,
-    groupId: string
-  ) {
-    if (securityList.length > 0) {
-
-    }
   }
 
   private mapAxeScopesToAlertSubtypes(targetScopes: Array<string>): AlertSubTypes {

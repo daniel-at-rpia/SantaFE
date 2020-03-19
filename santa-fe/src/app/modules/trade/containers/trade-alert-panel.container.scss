@@ -191,6 +191,39 @@
       color: $font_color_minor;
       margin-right: $spacing_medium;
     }
+    &-myGroup {
+      @include mix_border_radius(10px);
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      padding: $spacing_medium;
+      background-color: $color_gray_3;
+      margin-top: $spacing_x_small;
+      &-text {
+        flex: 1 1 auto;
+        color: $font_color_major;
+        font-size: $font_size_normal;
+        text-align: right;
+      }
+      &-btnGroup {
+        flex: 1 1 auto;
+        margin-left: $spacing_medium;
+        &-btn {
+          &--selected {
+            @include material('none');
+            background-color: $color_active;
+            color: $font_color_inverse;
+          }
+        }
+      }
+    }
+    &-textSeparator {
+      flex: 0 0 auto;
+      margin: $spacing_small;
+      color: $font_color_minor;
+      font-size: $font_size_normal;
+      text-align: center;
+    }
     &-securityList {
       @include mix_enable_scrollbar('vertical');
       flex: 1 1 auto;
@@ -216,6 +249,7 @@
           }
         }
         &-removeBtn {
+          display: none;  // temporarily hide them since it is not implemented in BE
           flex: 0 0 auto;
           margin-left: $spacing_medium;
           background-color: $color_kill;

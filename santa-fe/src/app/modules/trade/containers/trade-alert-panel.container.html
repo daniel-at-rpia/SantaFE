@@ -58,9 +58,39 @@
           <span class="sat-tradeAlertAxeAlertConfiguration__watchList-title">
             Watch For Axe From:
           </span>
+          <div class="sat-tradeAlertAxeAlertConfiguration__watchList-myGroup">
+            <span class="sat-tradeAlertAxeAlertConfiguration__watchList-myGroup-text">Securities I Own</span>
+            <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__watchList-myGroup-btnGroup">
+              <button
+                (click)="onSelectAxeWatchlistSide(constants.axeAlertScope.bid, state.configuration.axe.myGroup)"
+                [ngClass]="{
+                  'sat-tradeAlertAxeAlertConfiguration__watchList-myGroup-btnGroup-btn': true,
+                  'sat-tradeAlertAxeAlertConfiguration__watchList-myGroup-btnGroup-btn--selected': state.configuration.axe.myGroup.scopes.indexOf(constants.axeAlertScope.bid) >= 0
+                }">
+                <span>Bid</span>
+              </button>
+              <button
+                (click)="onSelectAxeWatchlistSide(constants.axeAlertScope.ask, state.configuration.axe.myGroup)"
+                [ngClass]="{
+                  'sat-tradeAlertAxeAlertConfiguration__watchList-myGroup-btnGroup-btn': true,
+                  'sat-tradeAlertAxeAlertConfiguration__watchList-myGroup-btnGroup-btn--selected': state.configuration.axe.myGroup.scopes.indexOf(constants.axeAlertScope.ask) >= 0
+                }">
+                <span>Ask</span>
+              </button>
+              <button
+                (click)="onSelectAxeWatchlistSide(constants.axeAlertScope.liquidation, state.configuration.axe.myGroup)"
+                [ngClass]="{
+                  'sat-tradeAlertAxeAlertConfiguration__watchList-myGroup-btnGroup-btn': true,
+                  'sat-tradeAlertAxeAlertConfiguration__watchList-myGroup-btnGroup-btn--selected': state.configuration.axe.myGroup.scopes.indexOf(constants.axeAlertScope.liquidation) >= 0
+                }">
+                <span>Liquidation</span>
+              </button>
+            </div>
+          </div>
+          <span class="sat-tradeAlertAxeAlertConfiguration__watchList-textSeparator">And</span>
           <ul class="sat-tradeAlertAxeAlertConfiguration__watchList-securityList">
             <li *ngFor="let eachSecurityBlock of state.configuration.axe.securityList" class="sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item">
-              <security-card [cardData]="eachSecurityBlock.card"></security-card>
+              <security-card *ngIf="eachSecurityBlock.card" [cardData]="eachSecurityBlock.card"></security-card>
               <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup">
                 <button
                   (click)="onSelectAxeWatchlistSide(constants.axeAlertScope.bid, eachSecurityBlock)"

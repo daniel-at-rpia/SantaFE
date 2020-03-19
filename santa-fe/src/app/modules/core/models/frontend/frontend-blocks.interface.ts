@@ -213,7 +213,7 @@ export interface SecurityTableRowQuoteBlock {
   secondarySecurityName: string;
 }
 
-export interface TradeAlertConfigurationAxeSecurityBlock {
+export interface TradeAlertConfigurationAxeGroupBlock {
   card: SecurityDTO;
   groupId: string;
   scopes: Array<AxeAlertScope>;

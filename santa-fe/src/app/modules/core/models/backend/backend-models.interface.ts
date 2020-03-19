@@ -356,6 +356,7 @@ export interface BEAlertConfigurationReturn {
 export interface BEAlertConfigurationDTO {
   groupFilters: {
     SecurityIdentifier?: Array<string>;
+    Owner?: Array<string>;
     [property: string]: any;
   };
   alertConfigID: string;
