@@ -215,5 +215,6 @@ export interface SecurityTableRowQuoteBlock {
 
 export interface TradeAlertConfigurationAxeSecurityBlock {
   card: SecurityDTO;
+  groupId: string;
   scopes: Array<AxeAlertScope>;
 }

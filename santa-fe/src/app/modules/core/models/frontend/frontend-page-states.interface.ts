@@ -196,10 +196,6 @@ export interface TradeAlertPanelState {
       searchList: Array<DTOs.SecurityDTO>;
       matchedResultCount: number;
       searchIsValid: boolean;
-      bidGroupId: string;
-      askGroupId: string;
-      bothGroupId: string;
-      liquidationGroupId: string;
     },
     mark: {
 

@@ -96,19 +96,15 @@
       justify-content: center;
       padding: $spacing_medium;
       &-save {
-        @include material('none');
-        @include mix_border_generator($typical_border_width, $color_disabled);
-        cursor: not-allowed;
-        background-color: transparent;
-        // background-color: $color_create;
+        background-color: $color_create;
         padding: $spacing_small $spacing_x_large;
         i {
           font-size: $font_size_x_large;
-          color: $color_disabled;
+          color: $font_color_inverse;
         }
         span {
           font-size: $font_size_large;
-          color: $color_disabled;
+          color: $font_color_inverse;
         }
       }
     }
@@ -212,17 +208,10 @@
           flex: 0 0 auto;
           margin-left: $spacing_medium;
           &-btn {
-            &--bid {
-              background-color: $color_bid;
-              color: $font_color_inverse;
-            }
-            &--ask {
-              background-color: $color_ask;
-              color: $font_color_inverse;
-            }
             &--selected {
               @include material('none');
               background-color: $color_active;
+              color: $font_color_inverse;
             }
           }
         }

@@ -65,11 +65,13 @@ export interface PayloadGetSecurities {
 export interface PayloadUpdateAlertConfig {
   alertConfig: {
     alertConfigID?: string;
-    type: AlertTypes,
-    subType: AlertSubTypes,
+    type: AlertTypes;
+    subType: AlertSubTypes;
     groupFilters: {
-      SecurityIdentifier: Array<string>
+      Owner?: Array<string>;
+      SecurityIdentifier?: Array<string>;
     }
+    isEnabled?: boolean;
   }
 }
 

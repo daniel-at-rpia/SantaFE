@@ -405,5 +405,6 @@ export const ALERT_MAX_SECURITY_SEARCH_COUNT = 100;
 export enum AxeAlertScope {
   bid = "Bid",
   ask = 'Ask',
-  liquidation = "Liquidation"
+  liquidation = "Liquidation",
+  both = 'Both'
 }

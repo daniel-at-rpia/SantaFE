@@ -39,10 +39,11 @@
       BEAlertConfigurationDTO,
       BEAlertDTO
     } from 'BEModels/backend-models.interface';
-    import { PayloadGetSecurities } from 'BEModels/backend-payloads.interface';
+    import { PayloadGetSecurities, PayloadUpdateAlertConfig } from 'BEModels/backend-payloads.interface';
     import {
       EngagementActionList,
-      AlertTypes
+      AlertTypes,
+      AlertSubTypes
     } from 'Core/constants/coreConstants.constant';
     import {
       selectSecurityMapContent,
@@ -69,6 +70,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   @Input() sidePanelsDisplayed: boolean;
   @Input() collapseConfiguration: boolean;
   @Output() configureAlert = new EventEmitter();
+  @Output() saveConfig = new EventEmitter();
   state: TradeAlertPanelState;
   subscriptions = {
     securityMapSub: null,
@@ -76,6 +78,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
   autoUpdateCount$: Observable<any>;
   constants = {
+    alertTypes: AlertTypes,
+    alertSubTypes: AlertSubTypes,
     axeAlertScope: AxeAlertScope,
     countdown: ALERT_UPDATE_COUNTDOWN
   }
@@ -103,11 +107,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           securityList: [],
           searchList: [],
           matchedResultCount: 0,
-          searchIsValid: false,
-          bidGroupId: null,
-          askGroupId: null,
-          bothGroupId: null,
-          liquidationGroupId: null
+          searchIsValid: false
         },
         mark: {
 
@@ -200,17 +200,14 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
   public onSelectAxeWatchlistSide(targetScope: AxeAlertScope, targetBlock: TradeAlertConfigurationAxeSecurityBlock) {
     if (!!targetScope && !!targetBlock) {
-      const existIndex = targetBlock.scopes.indexOf(targetScope);
-      if (existIndex >= 0) {
-        targetBlock.scopes.splice(existIndex, 1);
-      } else {
-        targetBlock.scopes.push(targetScope);
-      }
+      this.addScopeToAxeWatchlistEntry(targetBlock, targetScope);
     }
   }
 
   public onClickSaveConfiguration() {
     this.saveAxeConfiguration();
+    this.saveConfig.emit();
+    this.state.configureAlert = false;
   }
 
   public onClickUpdateAlert() {
@@ -255,7 +252,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       const copy:SecurityDTO = this.utilityService.deepCopy(targetSecurity);
       copy.state.isSelected = false;
       copy.state.isInteractionDisabled = true;
-      this.loadSecurityToAxeWatchlist(copy, this.constants.axeAlertScope.bid);
+      this.loadSecurityToAxeWatchlist(copy, this.constants.axeAlertScope.liquidation, null);
     }
   }
 
@@ -268,22 +265,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           this.state.isAlertPaused = false;
           for (const eachGroupId in serverReturn.Axe) {
             const eachConfiguration = serverReturn.Axe[eachGroupId];
-            if (eachConfiguration.subType === 'Both') {
-              config.bothGroupId = eachConfiguration.alertConfigID;
-              this.populateConfigurationFromEachGroup(eachConfiguration, this.constants.axeAlertScope.bid);
-              this.populateConfigurationFromEachGroup(eachConfiguration, this.constants.axeAlertScope.ask);
-            } else {
-              if (eachConfiguration.subType == this.constants.axeAlertScope.bid) {
-                config.bidGroupId = eachConfiguration.alertConfigID;
-                this.populateConfigurationFromEachGroup(eachConfiguration, this.constants.axeAlertScope.bid);
-              } else if (eachConfiguration.subType == this.constants.axeAlertScope.ask) {
-                config.askGroupId = eachConfiguration.alertConfigID;
-                this.populateConfigurationFromEachGroup(eachConfiguration, this.constants.axeAlertScope.bid);
-              } else if (eachConfiguration.subType == this.constants.axeAlertScope.liquidation) {
-                config.liquidationGroupId = eachConfiguration.alertConfigID;
-                this.populateConfigurationFromEachGroup(eachConfiguration, this.constants.axeAlertScope.liquidation);
-              }
-            }
+            this.populateConfigurationFromEachGroup(eachConfiguration);
           }
         } else {
           this.restfulCommService.logError(`'Alert/get-alert-configs' API returned an empty result`, null);
@@ -297,10 +279,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private populateConfigurationFromEachGroup(
-    rawGroupConfig: BEAlertConfigurationDTO,
-    targetScope: AxeAlertScope
+    rawGroupConfig: BEAlertConfigurationDTO
   ) {
     if (!!rawGroupConfig && !!rawGroupConfig.groupFilters && rawGroupConfig.groupFilters.SecurityIdentifier && rawGroupConfig.groupFilters.SecurityIdentifier.length > 0) {
+      const eachGroupId = rawGroupConfig.alertConfigID;
+      const targetScope = rawGroupConfig.subType as AxeAlertScope;
       const payload: PayloadGetSecurities = {
         identifiers: rawGroupConfig.groupFilters.SecurityIdentifier
       };
@@ -312,7 +295,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
               const eachCard = this.dtoService.formSecurityCardObject(eachRawData.securityIdentifier, eachRawData, false);
               eachCard.state.isInteractionDisabled = true;
               eachCard.state.isWidthFlexible = true;
-              this.loadSecurityToAxeWatchlist(eachCard, targetScope);
+              this.loadSecurityToAxeWatchlist(eachCard, targetScope, eachGroupId);
             });
           } else {
             this.restfulCommService.logError(`'security/get-securities' API returned an empty result with this payload: ${payload.identifiers.toString()}`, null);
@@ -324,23 +307,15 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
   private loadSecurityToAxeWatchlist(
     targetSecurity: SecurityDTO,
-    targetScope: AxeAlertScope
+    targetScope: AxeAlertScope,
+    groupId: string
   ) {
-    // when entering this function from onClickSearchResult(), the existMatchIndex in here will always be -1, because it was pre-handled differerntly in onClickSearchResult()
-    const config = this.state.configuration.axe;
-    const existMatchIndex = config.securityList.findIndex((eachEntry) => {
-      return eachEntry.card.data.securityID === targetSecurity.data.securityID;
-    });
-    if (existMatchIndex < 0) {
-      const newEntry: TradeAlertConfigurationAxeSecurityBlock = {
-        card: targetSecurity,
-        scopes: [targetScope]
-      };
-      config.securityList.unshift(newEntry);
-    } else {
-      const existEntry = config.securityList[existMatchIndex];
-      this.addScopeToAxeWatchlistEntry(existEntry, targetScope);
-    }
+    const newEntry: TradeAlertConfigurationAxeSecurityBlock = {
+      card: targetSecurity,
+      groupId: groupId,
+      scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope]
+    };
+    this.state.configuration.axe.securityList.unshift(newEntry);
   }
 
   private addScopeToAxeWatchlistEntry(targetEntry: TradeAlertConfigurationAxeSecurityBlock, targetScope: AxeAlertScope) {
@@ -363,7 +338,31 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private saveAxeConfiguration() {
-
+    this.state.configuration.axe.securityList.forEach((eachEntry) => {
+      const payload: PayloadUpdateAlertConfig = {
+        alertConfig: {
+          type: this.constants.alertTypes.axeAlert,
+          subType: this.mapAxeScopesToAlertSubtypes(eachEntry.scopes),
+          groupFilters: {}
+        }
+      }
+      if (!!eachEntry.groupId) {
+        payload.alertConfig.alertConfigID = eachEntry.groupId;
+      }
+      if (eachEntry.scopes.length > 0) {
+        payload.alertConfig.groupFilters.SecurityIdentifier = [eachEntry.card.data.securityID];
+      } else {
+        payload.alertConfig.isEnabled = false;
+      }
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.updateAlertConfiguration, {req: 'POST'}, payload).pipe(
+        first(),
+        catchError(err => {
+          console.error(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`, payload);
+          this.restfulCommService.logError(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`, null);
+          return of('error');
+        })
+      ).subscribe();
+    });
   }
 
   private updateAlert() {
@@ -394,6 +393,30 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     ).subscribe();
     // timeStamp needs to be updated right after the API call initiates, NOT when it returns
     this.state.alertUpdateTimestamp = moment().format("YYYY-MM-DDTHH:mm:ss.SSS");
+  }
+
+  private saveSingleAxeConfiguration(
+    securityList: Array<string>,
+    scope: AxeAlertScope,
+    groupId: string
+  ) {
+    if (securityList.length > 0) {
+
+    }
+  }
+
+  private mapAxeScopesToAlertSubtypes(targetScopes: Array<string>): AlertSubTypes {
+    if (targetScopes.includes(this.constants.axeAlertScope.ask) && targetScopes.includes(this.constants.axeAlertScope.bid)) {
+      return this.constants.alertSubTypes.both;
+    } else if (targetScopes.includes(this.constants.axeAlertScope.ask)) {
+      return this.constants.alertSubTypes.ask;
+    } else if (targetScopes.includes(this.constants.axeAlertScope.bid)) {
+      return this.constants.alertSubTypes.bid;
+    } else if (targetScopes.includes(this.constants.axeAlertScope.liquidation)) {
+      return this.constants.alertSubTypes.liquidation;
+    } else {
+      return null;
+    }
   }
 
     // public onClickSendMail() {

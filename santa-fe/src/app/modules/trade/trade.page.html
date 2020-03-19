@@ -19,6 +19,7 @@
           [sidePanelsDisplayed]="!state.sidePanelsCollapsed"
           [collapseConfiguration]="!state.alertPanelMaximized"
           (configureAlert)="maximizeAlertPanel($event)"
+          (saveConfig)="unMaximizeAlertPanel($event)"
         ></trade-alert-panel>
       </div>
     </div>
