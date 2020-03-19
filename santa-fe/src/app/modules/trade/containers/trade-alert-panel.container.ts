@@ -254,6 +254,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
   private onClickSearchResult(targetSecurity:SecurityDTO) {
     const config = this.state.configuration.axe;
+    const targetScope = this.constants.axeAlertScope.liquidation;
     const existMatchIndex = config.securityList.findIndex((eachEntry) => {
       return eachEntry.card.data.securityID === targetSecurity.data.securityID;
     });
@@ -263,7 +264,14 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       const copy:SecurityDTO = this.utilityService.deepCopy(targetSecurity);
       copy.state.isSelected = false;
       copy.state.isInteractionDisabled = true;
-      this.loadSecurityToAxeWatchlist(copy, this.constants.axeAlertScope.liquidation, null);
+      const newEntry: TradeAlertConfigurationAxeGroupBlock = {
+        card: targetSecurity,
+        groupId: null,
+        // if you ever need to change it:
+        // scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope]
+        scopes: [targetScope]
+      };
+      this.state.configuration.axe.securityList.unshift(newEntry);
     }
   }
 
