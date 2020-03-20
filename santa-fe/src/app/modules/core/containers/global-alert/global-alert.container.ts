@@ -208,13 +208,14 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       if (!!newAlert) {
         newAlert.state.isNew = false;
         newAlert.state.isCountdownFinished = false;
+        newAlert.state.isSlidedOut = this.state.triggerActionMenuOpen;
         setTimeout(function(){
           if (!!newAlert) {
             newAlert.state.isCountdownFinished = true;
           }
         }, ALERT_COUNTDOWN);
       }
-    }, 10);
+    }.bind(this), 10);
   }
 
   private updateTotalSize() {
