@@ -185,7 +185,6 @@ export interface TradeObligorGraphPanelState {
 export interface TradeAlertPanelState {
   configureAlert: boolean;
   isAlertPaused: boolean;
-  testDto: any;
   securityMap: Array<SecurityMapEntry>;
   alertUpdateTimestamp: string;
   configuration: {

@@ -3,7 +3,8 @@ import {
   ViewEncapsulation,
   Input,
   Output,
-  EventEmitter
+  EventEmitter,
+  OnChanges
 } from '@angular/core';
 
 @Component({
@@ -13,13 +14,17 @@ import {
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class SantaInput {
+export class SantaInput implements OnChanges{
   @Input() inputValue: string;
   @Input() placeholder: string;
   @Input() isHero: boolean;
   @Output() onInputChange = new EventEmitter<String>();
   constructor(
   ) {
+  }
+
+  public ngOnChanges() {
+    // nothing to do atm
   }
 
   onKey() {

@@ -99,7 +99,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     const state: TradeAlertPanelState = {
       configureAlert: false,
       isAlertPaused: true,
-      testDto: this.dtoService.createSecurityDefinitionConfigurator(true, true),
       securityMap: [],
       alertUpdateTimestamp: null,
       configuration: {
@@ -135,6 +134,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     ).subscribe(([mapContent, isValid]) => {
       if (!!isValid) {
         this.state.securityMap = mapContent;
+        this.state.isAlertPaused = false;
         this.store$.dispatch(new CoreFlushSecurityMap());
       }
     });
@@ -182,7 +182,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   public onClickConfigureAlert() {
     this.configureAlert.emit();
     this.state.configureAlert = true;
+    // const lastKeyword = this.state.configuration.axe.securitySearchKeyword;
+    this.state.configuration.axe = this.initializePageState().configuration.axe;
     this.loadAllConfigurations();
+    // this.onSearchKeywordChange(lastKeyword);
   }
 
   public onTogglePauseAlert() {
@@ -195,6 +198,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
   public onSearchKeywordChange(keyword: string) {
     const config = this.state.configuration.axe;
+    config.securitySearchKeyword = keyword;
     if (keyword.length >= 2) {
       const result = [];
       for (let i = 0; i < this.state.securityMap.length; ++i) {
