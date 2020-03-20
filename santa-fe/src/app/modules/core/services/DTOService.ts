@@ -62,7 +62,7 @@ export class DTOService {
     // !isStencil && console.log('rawData', rawData.name, rawData);
     const object:DTOs.SecurityDTO = {
       data: {
-        securityID: !isStencil ? securityIdFull : null,
+        securityID: !isStencil ? rawData.securityIdentifier : null,
         globalIdentifier: !isStencil ? rawData.globalIdentifier : null,
         name: !isStencil ? rawData.name : 'PLACEHOLDER',
         ticker: !isStencil ? rawData.ticker : null,
@@ -983,7 +983,6 @@ export class DTOService {
         titleTop: parsedTitleList[0] || '',
         titleBottom: parsedTitleList[1] || '',
         message: rawData.message,
-        quantValue: 12,
         time: moment(rawData.timeStamp).format(`HH:mm`)
       },
       api: {

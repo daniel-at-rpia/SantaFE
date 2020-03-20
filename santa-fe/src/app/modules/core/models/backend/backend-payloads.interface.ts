@@ -72,6 +72,7 @@ export interface PayloadUpdateAlertConfig {
       SecurityIdentifier?: Array<string>;
     }
     isEnabled?: boolean;
+    isDeleted?: boolean;
   }
 }
 

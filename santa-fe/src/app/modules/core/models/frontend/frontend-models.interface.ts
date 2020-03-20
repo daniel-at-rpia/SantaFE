@@ -449,7 +449,6 @@ export interface AlertDTO extends BasicDTOStructure {
     titleTop: string;
     titleBottom: string;
     message: string;
-    quantValue: number;
     time: string;
   }
   state: {

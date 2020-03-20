@@ -217,4 +217,6 @@ export interface TradeAlertConfigurationAxeGroupBlock {
   card: SecurityDTO;
   groupId: string;
   scopes: Array<AxeAlertScope>;
+  isDeleted: boolean;
+  isDisabled: boolean;
 }

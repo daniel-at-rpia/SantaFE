@@ -107,7 +107,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           myGroup: {
             card: null,
             groupId: null,
-            scopes: []
+            scopes: [],
+            isDeleted: false,
+            isDisabled: false
           },
           securitySearchKeyword: '',
           securityList: [],
@@ -161,6 +163,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         });
         if (existMatchIndex < 0) {
           this.addSecurityToWatchList(targetSecurity);
+        } else if (this.state.configuration.axe.securityList[existMatchIndex].isDeleted) {
+          this.state.configuration.axe.securityList[existMatchIndex].isDeleted = false;
+          this.state.configuration.axe.securityList[existMatchIndex].isDisabled = false;
         }
       }
     });
@@ -226,7 +231,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   public onSelectAxeWatchlistSide(targetScope: AxeAlertScope, targetBlock: TradeAlertConfigurationAxeGroupBlock) {
-    if (!!targetScope && !!targetBlock) {
+    if (!!targetScope && !!targetBlock && !targetBlock.isDisabled) {
       this.addScopeToAxeWatchlistEntry(targetBlock, targetScope);
     }
   }
@@ -239,6 +244,14 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
   public onClickUpdateAlert() {
     this.updateAlert();
+  }
+
+  public onToggleDisableSecurityFromAxeWatchList(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
+    targetBlock.isDisabled = !targetBlock.isDisabled;
+  }
+
+  public onClickRemoveSecurityFromAxeWatchList(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
+    targetBlock.isDeleted = true;
   }
 
   private fetchSecurities(matchList: Array<SecurityMapEntry>) {
@@ -280,7 +293,13 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       return eachEntry.card.data.securityID === targetSecurity.data.securityID;
     });
     if (existMatchIndex >= 0) {
-      config.securityList.splice(existMatchIndex, 1);
+      if (config.securityList[existMatchIndex].isDeleted) {
+        config.securityList[existMatchIndex].isDeleted = false;
+        config.securityList[existMatchIndex].isDisabled = false;
+        config.securityList[existMatchIndex].scopes = [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid];
+      } else {
+        config.securityList.splice(existMatchIndex, 1);
+      }
     } else {
       this.addSecurityToWatchList(targetSecurity);
     }
@@ -296,7 +315,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     const newEntry: TradeAlertConfigurationAxeGroupBlock = {
       card: copy,
       groupId: null,
-      scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope]
+      scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],
+      isDeleted: false,
+      isDisabled: false
     };
     this.state.configuration.axe.securityList.unshift(newEntry);
   }
@@ -343,7 +364,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     const newEntry: TradeAlertConfigurationAxeGroupBlock = {
       card: null,
       groupId: rawGroupConfig.alertConfigID,
-      scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope]
+      scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],
+      isDeleted: false,
+      isDisabled: !rawGroupConfig.isEnabled
     };
     this.state.configuration.axe.securityList.unshift(newEntry);
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSecurityDTOs, {req: 'POST'}, payload).pipe(
@@ -368,7 +391,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     this.state.configuration.axe.myGroup = {
       card: null,
       groupId: rawGroupConfig.alertConfigID,
-      scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope]
+      scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],
+      isDeleted: false,
+      isDisabled: !rawGroupConfig.isEnabled
     }
   }
 
@@ -403,15 +428,18 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     };
     this.saveSingleAxeConfiguration(groupPayload, this.state.configuration.axe.myGroup);
     this.state.configuration.axe.securityList.forEach((eachEntry) => {
-      const payload: PayloadUpdateAlertConfig = {
-        alertConfig: {
-          type: this.constants.alertTypes.axeAlert,
-          subType: this.mapAxeScopesToAlertSubtypes(eachEntry.scopes),
-          groupFilters: {}
+      // check is valid
+      if (eachEntry.scopes.length > 0) {
+        const payload: PayloadUpdateAlertConfig = {
+          alertConfig: {
+            type: this.constants.alertTypes.axeAlert,
+            subType: this.mapAxeScopesToAlertSubtypes(eachEntry.scopes),
+            groupFilters: {}
+          }
         }
+        payload.alertConfig.groupFilters.SecurityIdentifier = [eachEntry.card.data.securityID];
+        this.saveSingleAxeConfiguration(payload, eachEntry);
       }
-      payload.alertConfig.groupFilters.SecurityIdentifier = [eachEntry.card.data.securityID];
-      this.saveSingleAxeConfiguration(payload, eachEntry);
     });
   }
 
@@ -422,8 +450,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     if (!!targetEntry.groupId) {
       payload.alertConfig.alertConfigID = targetEntry.groupId;
     }
-    if (targetEntry.scopes.length === 0) {
+    if (targetEntry.isDisabled) {
       payload.alertConfig.isEnabled = false;
+    }
+    if (targetEntry.isDeleted) {
+      payload.alertConfig.isDeleted = true;
     }
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.updateAlertConfiguration, {req: 'POST'}, payload).pipe(
       first(),
