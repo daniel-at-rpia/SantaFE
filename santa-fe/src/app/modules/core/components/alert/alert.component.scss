@@ -82,7 +82,7 @@ $alert_countdown_duration: 5s;
       margin-right: $spacing_small;
     }
     &-message {
-      @include mix_text_overflow_multi_line(2);
+      @include mix_text_overflow_multi_line(3);
       flex: 1 1 auto;
       text-align: right;
       margin-right: $spacing_small;
