@@ -728,7 +728,21 @@ export class DTOService {
     const hasAsk = !isStencil ? (!!rawData.askVenues && rawData.askVenues.length > 0) : true;
     const bidBenchmark = !isStencil ? rawData.benchmarkName : 'T 0.5 01/01/2020';
     const askBenchmark = !isStencil ? rawData.benchmarkName : 'T 0.5 01/01/2020';
-    const dataSource = !isStencil ? (hasBid ? rawData.bidVenues[0] : rawData.askVenues[0]) : 'PLACEHOLDER';
+    let dataSource = 'PLACEHOLDER';
+    const dataSources = [];
+    if (!isStencil) {
+      rawData.bidVenues.forEach((eachSource) => {
+        !dataSources.includes(eachSource) && dataSources.push(eachSource);
+      });
+      rawData.askVenues.forEach((eachSource) => {
+        !dataSources.includes(eachSource) && dataSources.push(eachSource);
+      });
+      if (dataSources.length > 0) {
+        dataSource = dataSources.length > 1 ? 'MULT' : dataSources[0];
+      } else {
+        dataSource = 'n/a';
+      }
+    }
     const consolidatedBenchmark = bidBenchmark === askBenchmark ? bidBenchmark : null;
     let convertedDate: Date = null;
     if (!isStencil) {
