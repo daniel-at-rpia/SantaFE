@@ -42,7 +42,8 @@ export class LiveDataProcessingService {
     selectedDriver: string,
     serverReturn: BEFetchAllTradeDataReturn,
     sendToGraphCallback: (card: SecurityDTO) => void,
-    openSecurityInBloombergCallback: (params: ClickedOpenSecurityInBloombergEmitterParams) => void
+    openSecurityInBloombergCallback: (params: ClickedOpenSecurityInBloombergEmitterParams) => void,
+    sendToAlertConfigCallback: (card: SecurityDTO) => void
   ): Array<SecurityTableRowDTO> {
     const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
     const prinstineRowList: Array<SecurityTableRowDTO> = [];  // flush out the stencils
@@ -60,6 +61,7 @@ export class LiveDataProcessingService {
       newSecurity.state.isInteractionThumbDownDisabled = true;
       newSecurity.api.onClickSendToGraph = sendToGraphCallback;
       newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
+      newSecurity.api.onClickSendToAlertConfig = sendToAlertConfigCallback;
       rawSecurityDTOMap[eachKey].positions.forEach((eachPortfolio: BEPortfolioDTO) => {
         // if (!eachPortfolio.security.isGovt) {
         // disabling the check for isGovt for now

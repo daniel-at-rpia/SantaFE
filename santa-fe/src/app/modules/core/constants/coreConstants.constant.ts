@@ -188,7 +188,8 @@ export const EngagementActionList = {
   changeDriver: 'Change Driver',
   thumbdownSecurity: 'Thumbdown Security',
   populateGraph: 'Populate Graph',
-  midnightReload: 'Midnight Reload'
+  midnightReload: 'Midnight Reload',
+  sendToAlertConfig: 'Send To Alert Config'
 }
 
 export enum AlertTypes {

@@ -28,6 +28,7 @@ export interface TradeState {
   securityIDListFromAnalysis: Array<string>;
   securityTableRowDTOListForAnalysis: Array<SecurityTableRowDTO>;
   bestQuoteValidWindow: number;
+  selectedSecurityForAlertConfig: SecurityDTO;
 }
 
 const initialState: TradeState = {
@@ -41,7 +42,8 @@ const initialState: TradeState = {
   selectedSecurityForAnalysis: null,
   securityIDListFromAnalysis: [],
   securityTableRowDTOListForAnalysis: [],
-  bestQuoteValidWindow: null
+  bestQuoteValidWindow: null,
+  selectedSecurityForAlertConfig: null
 };
 
 export function tradeReducer(
@@ -125,6 +127,11 @@ export function tradeReducer(
       return {
         ...state,
         bestQuoteValidWindow: action.window
+      }
+    case TradeActions.SelectSecurityForAlertConfigEvent:
+      return {
+        ...state,
+        selectedSecurityForAlertConfig: action.targetSecurity
       }
     default:
       return state;

@@ -56,6 +56,7 @@
     } from 'Core/constants/tradeConstants.constant';
     import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
     import { CoreFlushSecurityMap, CoreSendNewAlerts } from 'Core/actions/core.actions';
+    import { selectSelectedSecurityForAlertConfig } from 'Trade/selectors/trade.selectors';
   //
 
 @Component({
@@ -74,7 +75,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   state: TradeAlertPanelState;
   subscriptions = {
     securityMapSub: null,
-    autoUpdateCountSub: null
+    autoUpdateCountSub: null,
+    selectedSecurityForAlertConfigSub: null
   }
   autoUpdateCount$: Observable<any>;
   constants = {
@@ -144,6 +146,21 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         if (this.state.autoUpdateCountdown >= this.constants.countdown) {
           this.updateAlert();
           this.state.autoUpdateCountdown = 0;
+        }
+      }
+    });
+    this.subscriptions.selectedSecurityForAlertConfigSub = this.store$.pipe(
+      select(selectSelectedSecurityForAlertConfig)
+    ).subscribe((targetSecurity) => {
+      if (!!targetSecurity) {
+        if (!this.state.configureAlert) {
+          this.onClickConfigureAlert();
+        }
+        const existMatchIndex = this.state.configuration.axe.securityList.findIndex((eachEntry) => {
+          return eachEntry.card.data.securityID === targetSecurity.data.securityID;
+        });
+        if (existMatchIndex < 0) {
+          this.addSecurityToWatchList(targetSecurity);
         }
       }
     });
@@ -255,25 +272,29 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
   private onClickSearchResult(targetSecurity:SecurityDTO) {
     const config = this.state.configuration.axe;
-    const targetScope = this.constants.axeAlertScope.liquidation;
     const existMatchIndex = config.securityList.findIndex((eachEntry) => {
       return eachEntry.card.data.securityID === targetSecurity.data.securityID;
     });
     if (existMatchIndex >= 0) {
       config.securityList.splice(existMatchIndex, 1);
     } else {
-      const copy:SecurityDTO = this.utilityService.deepCopy(targetSecurity);
-      copy.state.isSelected = false;
-      copy.state.isInteractionDisabled = true;
-      const newEntry: TradeAlertConfigurationAxeGroupBlock = {
-        card: targetSecurity,
-        groupId: null,
-        // if you ever need to change it:
-        // scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope]
-        scopes: [targetScope]
-      };
-      this.state.configuration.axe.securityList.unshift(newEntry);
+      this.addSecurityToWatchList(targetSecurity);
     }
+  }
+
+  private addSecurityToWatchList(targetSecurity) {
+    const targetScope = this.constants.axeAlertScope.both;
+    const copy:SecurityDTO = this.utilityService.deepCopy(targetSecurity);
+    copy.state.isSelected = false;
+    copy.state.isInteractionDisabled = true;
+    copy.state.isMultiLineVariant = false;
+    copy.state.isWidthFlexible = true;
+    const newEntry: TradeAlertConfigurationAxeGroupBlock = {
+      card: copy,
+      groupId: null,
+      scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope]
+    };
+    this.state.configuration.axe.securityList.unshift(newEntry);
   }
 
   private loadAllConfigurations() {

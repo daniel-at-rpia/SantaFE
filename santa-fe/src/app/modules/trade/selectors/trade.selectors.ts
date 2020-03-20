@@ -52,3 +52,8 @@ export const selectBestQuoteValidWindow = createSelector(
   getTradeState,
   (state: TradeState) => state.bestQuoteValidWindow
 );
+
+export const selectSelectedSecurityForAlertConfig = createSelector(
+  getTradeState,
+  (state: TradeState) => state.selectedSecurityForAlertConfig
+);

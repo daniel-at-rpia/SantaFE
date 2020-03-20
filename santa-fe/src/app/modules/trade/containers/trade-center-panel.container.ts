@@ -77,7 +77,8 @@
       TradeLiveUpdatePassRawDataEvent,
       TradeSwitchDriverEvent,
       TradeSelectedSecurityForAnalysisEvent,
-      TradeSecurityTableRowDTOListForAnalysisEvent
+      TradeSecurityTableRowDTOListForAnalysisEvent,
+      TradeSelectedSecurityForAlertConfigEvent
     } from 'Trade/actions/trade.actions';
     import { SecurityTableMetricStub, SearchShortcutStub } from 'FEModels/frontend-stub-models.interface';
   //
@@ -326,6 +327,17 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     );
   }
 
+  public onSelectSecurityForAlertConfig(targetSecurity: SecurityDTO) {
+    this.store$.dispatch(new TradeSelectedSecurityForAlertConfigEvent(this.utilityService.deepCopy(targetSecurity)));
+    this.restfulCommService.logEngagement(
+      EngagementActionList.sendToAlertConfig,
+      targetSecurity.data.securityID,
+      'n/a',
+      this.ownerInitial,
+      'Trade - Center Panel'
+    );
+  }
+
   public onClickOpenSecurityInBloomberg(pack: ClickedOpenSecurityInBloombergEmitterParams) {
     const url = `bbg://securities/${pack.targetSecurity.data.globalIdentifier}%20${pack.yellowCard}/${pack.targetBBGModule}`;
     window.open(url);
@@ -469,7 +481,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       this.state.filters.quickFilters.driverType,
       serverReturn,
       this.onSelectSecurityForAnalysis.bind(this),
-      this.onClickOpenSecurityInBloomberg.bind(this)
+      this.onClickOpenSecurityInBloomberg.bind(this),
+      this.onSelectSecurityForAlertConfig.bind(this)
     );
     this.calculateQuantComparerWidthAndHeight();
     this.updateStage(this.constants.securityTableFinalStage);

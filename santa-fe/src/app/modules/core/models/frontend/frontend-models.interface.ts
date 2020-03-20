@@ -86,6 +86,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     onClickSendToGraph: (card: SecurityDTO) => void;
     onClickThumbDown: (card: SecurityDTO) => void;
     onClickOpenSecurityInBloomberg: (params: ClickedOpenSecurityInBloombergEmitterParams) => void;
+    onClickSendToAlertConfig: (card: SecurityDTO) => void;
   }
   state: {
     isStencil: boolean;
