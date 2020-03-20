@@ -511,8 +511,8 @@ export class DTOService {
     const bidIsStale = axeOnly ? rawData.bidAxeIsOld : rawData.bidIsOld;
     const askIsStale = axeOnly ? rawData.askAxeIsOld : rawData.askIsOld;
 
-    const bidSize = this.utility.round(bidQuantity/1000000, 1);
-    const offerSize = this.utility.round(askQuantity/1000000, 1);
+    const bidSize = bidQuantity != null ? this.utility.round(bidQuantity/1000000, 1) : 0;
+    const offerSize = askQuantity != null ? this.utility.round(askQuantity/1000000, 1) : 0;
     const tier2Shreshold = TriCoreDriverConfig[driverType]['tier2Threshold'];
     const inversed = this.utility.isCDS(false, securityCard) ? !TriCoreDriverConfig[driverType]['inversed'] : TriCoreDriverConfig[driverType]['inversed'];
     const hasBid = !!bidValue && !!bidDealer;
