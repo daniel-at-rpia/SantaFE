@@ -55,7 +55,7 @@
       ALERT_UPDATE_COUNTDOWN
     } from 'Core/constants/tradeConstants.constant';
     import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
-    import { CoreSendNewAlerts } from 'Core/actions/core.actions';
+    import { CoreFlushSecurityMap, CoreSendNewAlerts } from 'Core/actions/core.actions';
   //
 
 @Component({
@@ -133,6 +133,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     ).subscribe(([mapContent, isValid]) => {
       if (!!isValid) {
         this.state.securityMap = mapContent;
+        this.store$.dispatch(new CoreFlushSecurityMap());
       }
     });
 

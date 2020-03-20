@@ -64,6 +64,14 @@ export function coreReducer (
           mapContent: action.map
         }
       };
+    case CoreActions.FlushSecurityMap:
+      return {
+        ...state,
+        securityMap: {
+          valid: false,
+          mapContent: []
+        }
+      };
     case CoreActions.SendNewAlerts:
       return {
         ...state,

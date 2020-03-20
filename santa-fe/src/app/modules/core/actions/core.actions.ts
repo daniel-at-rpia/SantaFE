@@ -6,6 +6,7 @@ export enum CoreActions {
   UserLoggedIn = '[Core] User Logged In',
   ToggleAlertThumbnailDisplay = '[Core] Toggle Thumbnail Display',
   LoadSecurityMap = '[Core] Load Security Map',
+  FlushSecurityMap = '[Core] Fluahs Security Map',
   SendNewAlerts = '[Core] Send New Alerts',
   ReceivedNewAlerts = '[Core] Received New Alerts'
 }
@@ -38,6 +39,11 @@ export class CoreLoadSecurityMap implements Action {
   ){
     this.map = map;
   }
+}
+
+export class CoreFlushSecurityMap implements Action {
+  readonly type = CoreActions.FlushSecurityMap;
+  constructor(){}
 }
 
 export class CoreSendNewAlerts implements Action {
