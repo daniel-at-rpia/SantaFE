@@ -503,8 +503,8 @@ export class DTOService {
     securityCard: DTOs.SecurityDTO,
     axeOnly: boolean
   ): DTOs.QuantComparerDTO {
-    const bidQuantity = axeOnly ? rawData.bidAxeQuantity : rawData.bidQuantity;
-    const askQuantity = axeOnly ? rawData.askAxeQuantity : rawData.askQuantity;
+    const bidQuantity = axeOnly ? rawData.totalActiveAxeBidQuantity : rawData.totalActiveBidQuantity;
+    const askQuantity = axeOnly ? rawData.totalActiveAxeAskQuantity : rawData.totalActiveAskQuantity;
     const bidValue = axeOnly ? rawData.bidAxeQuoteValue : rawData.bidQuoteValue;
     const askValue = axeOnly ? rawData.askAxeQuoteValue : rawData.askQuoteValue;
     const bidDealer = axeOnly ? rawData.bidAxeDealer : rawData.bidDealer;
