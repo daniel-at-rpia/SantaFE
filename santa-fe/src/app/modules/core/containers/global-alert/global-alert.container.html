@@ -1,0 +1,46 @@
+<article
+  [ngClass]="{
+    'sat-globalAlert': true,
+    'sat-globalAlert--triggerActionMenuOpenState': state.triggerActionMenuOpen,
+    'sat-globalAlert--hideAlertsState': !state.displayAlerts && !state.triggerActionMenuOpen,
+    'sat-globalAlert--emptyState': state.totalSize === 0
+  }">
+  <section class="sat-globalAlert__alertList">
+    <alert
+      *ngFor="let eachAlert of state.presentList"
+      [alertData]="eachAlert"
+      [hideAllAlerts]="!state.displayAlerts && !state.triggerActionMenuOpen"
+      (clickedAlertThumbnail)="onClickAlertThumbnail($event)"
+      (clickedAlertDetail)="loadAlertToTable($event)"
+      (clickedRemove)="onClickAlertRemove($event)">
+    </alert>
+  </section>
+  <section class="sat-globalAlert__trigger">
+    <div class="sat-globalAlert__trigger-actionMenu">
+      <button (click)="onClickClearAlerts()" title="delete all alerts" class="santaBtn--iconOnly fal fa-eraser sat-globalAlert__trigger-actionMenu-btn sat-globalAlert__trigger-actionMenu-btn--kill"></button>
+      <button
+        (click)="onToggleDisplayAlerts()"
+        title="show/hide all alerts"
+        [ngClass]="{
+          'santaBtn--iconOnly': true,
+          'sat-globalAlert__trigger-actionMenu-btn': true,
+          'fal': true,
+          'fa-bell': state.displayAlerts,
+          'fa-bell-on': !state.displayAlerts
+        }"></button>
+    </div>
+    <div (click)="onClickAlertTrigger()" class="sat-globalAlert__trigger-mainBtn">
+      <i
+        [ngClass]="{
+          'sat-globalAlert__trigger-mainBtn-icon': true,
+          'fal': true,
+          'fa-bell': !state.displayAlerts,
+          'fa-bell-on': state.displayAlerts
+        }">
+      </i>
+      <div class="sat-globalAlert__trigger-mainBtn-count">
+        <span class="sat-globalAlert__trigger-mainBtn-count-text">{{state.displayTotalSize}}</span>
+      </div>
+    </div>
+  </section>
+</article>

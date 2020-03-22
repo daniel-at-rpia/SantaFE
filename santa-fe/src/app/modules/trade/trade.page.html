@@ -2,19 +2,31 @@
   [ngClass]="{
     'sat-trade': true,
     'sat-trade--sidePanelsCollapsed': state.sidePanelsCollapsed,
-    'sat-trade--lilMarketMaximized': state.lilMarketMaximized
+    'sat-trade--lilMarketMaximized': state.lilMarketMaximized,
+    'sat-trade--alertPanelMixmized': state.alertPanelMaximized,
+    'sat-trade--displayAlertThumbnail': state.displayAlertThumbnail
   }">
   <section class="sat-trade__left">
     <div class="sat-trade__left-top">
-      <div class="sat-trade__left-top-alertPanel">
-        <trade-alert-panel [ownerInitial]="state.ownerInitial"></trade-alert-panel>
-      </div>
       <div class="sat-trade__left-top-utilityPanel">
-        <trade-utility-panel></trade-utility-panel>
+        <trade-utility-panel
+          [sidePanelsDisplayed]="!state.sidePanelsCollapsed"
+        ></trade-utility-panel>
+      </div>
+      <div class="sat-trade__left-top-alertPanel">
+        <trade-alert-panel
+          [ownerInitial]="state.ownerInitial"
+          [sidePanelsDisplayed]="!state.sidePanelsCollapsed"
+          [collapseConfiguration]="!state.alertPanelMaximized"
+          (configureAlert)="maximizeAlertPanel($event)"
+          (saveConfig)="unMaximizeAlertPanel($event)"
+        ></trade-alert-panel>
       </div>
     </div>
     <div class="sat-trade__left-centerPanel">
-      <trade-center-panel [ownerInitial]="state.ownerInitial"></trade-center-panel>
+      <trade-center-panel
+        [ownerInitial]="state.ownerInitial"
+      ></trade-center-panel>
     </div>
   </section>
   <section class="sat-trade__right">
@@ -43,8 +55,13 @@
     (click)="unMaximizeLilMarket()"
     class="sat-trade__unMaximizeLilMarketCTA santaBtn--iconOnly fal fa-chevron-up">
   </button>
+  <button
+    (click)="unMaximizeAlertPanel()"
+    class="sat-trade__unMaximizeAlertPanelCTA santaBtn--iconOnly fal fa-chevron-up">
+  </button>
   <section class="sat-trade__preload">
     <i class="fas fa-chevron-right"></i>
     <span style="font-family: 'SantaBlackOps'"></span>
   </section>
+  <global-alert></global-alert>
 </article>

@@ -12,7 +12,8 @@
       SearchShortcutDTO
     } from 'FEModels/frontend-models.interface';
     import {
-      LiveDataDiffingResult
+      LiveDataDiffingResult,
+      ClickedOpenSecurityInBloombergEmitterParams
     } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       BEPortfolioDTO,
@@ -40,8 +41,9 @@ export class LiveDataProcessingService {
     tableHeaderList: Array<SecurityTableHeaderDTO>,
     selectedDriver: string,
     serverReturn: BEFetchAllTradeDataReturn,
-    sendToGraphCallback: Function,
-    openSecurityInBloombergCallback: Function
+    sendToGraphCallback: (card: SecurityDTO) => void,
+    openSecurityInBloombergCallback: (params: ClickedOpenSecurityInBloombergEmitterParams) => void,
+    sendToAlertConfigCallback: (card: SecurityDTO) => void
   ): Array<SecurityTableRowDTO> {
     const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
     const prinstineRowList: Array<SecurityTableRowDTO> = [];  // flush out the stencils
@@ -59,6 +61,7 @@ export class LiveDataProcessingService {
       newSecurity.state.isInteractionThumbDownDisabled = true;
       newSecurity.api.onClickSendToGraph = sendToGraphCallback;
       newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
+      newSecurity.api.onClickSendToAlertConfig = sendToAlertConfigCallback;
       rawSecurityDTOMap[eachKey].positions.forEach((eachPortfolio: BEPortfolioDTO) => {
         // if (!eachPortfolio.security.isGovt) {
         // disabling the check for isGovt for now
@@ -124,24 +127,22 @@ export class LiveDataProcessingService {
     driverType: string,
     quote: BEBestQuoteDTO
   ){
-    const bestQuoteHeaderIndex = tableHeaderList.findIndex((eachHeader) => {
-      return eachHeader.state.isQuantVariant;
-    });
-    const bestQuoteCell = targetRow.data.cells[bestQuoteHeaderIndex - 1];
     const newPriceQuant = !!quote 
       ? this.dtoService.formQuantComparerObject(
           false,
           TriCoreDriverConfig.Price.label,
           quote,
-          targetRow.data.security
-        ) 
+          targetRow.data.security,
+          false
+        )
       : null;
     const newSpreadQuant = !!quote 
       ? this.dtoService.formQuantComparerObject(
           false,
           TriCoreDriverConfig.Spread.label,
           quote,
-          targetRow.data.security
+          targetRow.data.security,
+          false
         )
       : null;
     const newYieldQuant = !!quote 
@@ -149,13 +150,48 @@ export class LiveDataProcessingService {
         false,
         TriCoreDriverConfig.Yield.label,
         quote,
-        targetRow.data.security
+        targetRow.data.security,
+        false
       )
     : null;
+    const newAxePriceQuant = !!quote 
+      ? this.dtoService.formQuantComparerObject(
+          false,
+          TriCoreDriverConfig.Price.label,
+          quote,
+          targetRow.data.security,
+          true
+        )
+      : null;
+    const newAxeSpreadQuant = !!quote
+      ? this.dtoService.formQuantComparerObject(
+        false,
+        TriCoreDriverConfig.Spread.label,
+        quote,
+        targetRow.data.security,
+        true
+      )
+      : null;
+    const newAxeYieldQuant = !!quote
+      ? this.dtoService.formQuantComparerObject(
+        false,
+        TriCoreDriverConfig.Yield.label,
+        quote,
+        targetRow.data.security,
+        true
+      )
+      : null;
     targetRow.data.bestQuotes = {
-      bestPriceQuote: newPriceQuant,
-      bestYieldQuote: newYieldQuant,
-      bestSpreadQuote: newSpreadQuant
+      combined: {
+        bestPriceQuote: newPriceQuant,
+        bestYieldQuote: newYieldQuant,
+        bestSpreadQuote: newSpreadQuant
+      },
+      axe: {
+        bestPriceQuote: newAxePriceQuant,
+        bestYieldQuote: newAxeYieldQuant,
+        bestSpreadQuote: newAxeSpreadQuant
+      }
     }
   }
 

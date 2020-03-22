@@ -20,6 +20,10 @@ import {
   AgGridRowNode
 } from 'FEModels/frontend-blocks.interface';
 
+export interface SecurityMapEntry {
+  keywords: Array<string>;
+  secruityId: string;
+}
 
 export interface ClickedSortQuotesByMetricEmitterParams {
   targetRow: SecurityTableRowDTO;

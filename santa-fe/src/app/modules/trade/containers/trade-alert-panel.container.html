@@ -1,10 +1,181 @@
-<article class="sat-tradeAlertPanel">
-  <section class="sat-tradeAlertPanel__feedbackPrompt">
-    <i class="sat-tradeAlertPanel__feedbackPrompt-icon fas fa-comment-alt-smile"></i>
-    <span class="sat-tradeAlertPanel__feedbackPrompt-text">We just launched Santa and would love to hear what you think!</span>
-    <button (click)="onClickSendMail()" class="sat-tradeAlertPanel__feedbackPrompt-cta santaBtn--labelled">
-      <i class="fal fa-envelope"></i>
-      <span>Send us an email</span>
-    </button>
+<article
+  [ngClass]="{
+    'sat-tradeAlertPanel': true,
+    'sat-tradeAlertPanel--sidePanelsDisplayedState': sidePanelsDisplayed,
+    'sat-tradeAlertPanel--configureAlertState': state.configureAlert,
+    'sat-tradeAlertPanel--alertPausedState': state.isAlertPaused,
+    'sat-tradeAlertPanel--configureAxeAlertState': state.configuration.selectedAlert === 'axe',
+    'sat-tradeAlertPanel--configureMarkAlertState': state.configuration.selectedAlert === 'mark'
+  }">
+  <section class="sat-tradeAlertPanel__utilities">
+    <div class="sat-tradeAlertPanel__utilities-pause">
+      <button
+        (click)="onTogglePauseAlert()"
+        [ngClass]="{
+          'santaBtn--labelled': true,
+          'sat-tradeAlertPanel__utilities-pause-btn': true,
+          'santaBtn--inverseLabelled': state.isAlertPaused
+        }">
+        <i class="fal fa-pause"></i>
+        <span>Pause Alert</span>
+      </button>
+    </div>
+    <div class="sat-tradeAlertPanel__utilities-configureCTA">
+      <button (click)="onClickConfigureAlert()" class="santaBtn--labelled">
+        <i class="fal fa-pencil"></i>
+        <span>Configure Alert</span>
+      </button>
+    </div>
+    <div class="sat-tradeAlertPanel__utilities-thumbnail">
+      <i class="sat-tradeAlertPanel__utilities-thumbnail-icon fas fa-bell"></i>
+    </div>
+  </section>
+  <section class="sat-tradeAlertPanel__configuration">
+    <ul class="sat-tradeAlertPanel__configuration-alertTypeList">
+      <li class="sat-tradeAlertPanel__configuration-alertTypeList-item sat-tradeAlertPanel__configuration-alertTypeList-item--axe">
+        <button (click)="selectAlertForConfigure('axe')" class="sat-tradeAlertPanel__configuration-alertTypeList-item-btn santaBtn--labelled santaBtn--inverseLabelled">
+          <i class="fas fa-axe"></i>
+          <span>Axe Alert</span>
+        </button>
+      </li>
+      <!--
+      <li class="sat-tradeAlertPanel__configuration-alertTypeList-item sat-tradeAlertPanel__configuration-alertTypeList-item--liquidation">
+        <button (click)="selectAlertForConfigure('mark')" class="sat-tradeAlertPanel__configuration-alertTypeList-item-btn santaBtn--labelled santaBtn--inverseLabelled">
+          <i class="fal fa-bell"></i>
+          <span>Mark Alert</span>
+        </button>
+      </li>
+      -->
+    </ul>
+    <ul class="sat-tradeAlertPanel__configuration-groupList">
+      <article
+        [ngClass]="{
+          'sat-tradeAlertPanel__configuration-groupList-axeConfig': true,
+          'sat-tradeAlertAxeAlertConfiguration': true,
+          'sat-tradeAlertAxeAlertConfiguration--showSearchResult': state.configuration.axe.searchIsValid
+        }">
+        <section class="sat-tradeAlertAxeAlertConfiguration__watchList">
+          <span class="sat-tradeAlertAxeAlertConfiguration__watchList-title">
+            Watch For Axe From:
+          </span>
+          <div class="sat-tradeAlertAxeAlertConfiguration__watchList-myGroup">
+            <span class="sat-tradeAlertAxeAlertConfiguration__watchList-myGroup-text">Securities I Own</span>
+            <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__watchList-myGroup-btnGroup">
+              <button
+                (click)="onSelectAxeWatchlistSide(constants.axeAlertScope.bid, state.configuration.axe.myGroup)"
+                [ngClass]="{
+                  'sat-tradeAlertAxeAlertConfiguration__watchList-myGroup-btnGroup-btn': true,
+                  'sat-tradeAlertAxeAlertConfiguration__watchList-myGroup-btnGroup-btn--selected': state.configuration.axe.myGroup.scopes.indexOf(constants.axeAlertScope.bid) >= 0
+                }">
+                <span>Bid</span>
+              </button>
+              <button
+                (click)="onSelectAxeWatchlistSide(constants.axeAlertScope.ask, state.configuration.axe.myGroup)"
+                [ngClass]="{
+                  'sat-tradeAlertAxeAlertConfiguration__watchList-myGroup-btnGroup-btn': true,
+                  'sat-tradeAlertAxeAlertConfiguration__watchList-myGroup-btnGroup-btn--selected': state.configuration.axe.myGroup.scopes.indexOf(constants.axeAlertScope.ask) >= 0
+                }">
+                <span>Ask</span>
+              </button>
+              <button
+                (click)="onSelectAxeWatchlistSide(constants.axeAlertScope.liquidation, state.configuration.axe.myGroup)"
+                [ngClass]="{
+                  'sat-tradeAlertAxeAlertConfiguration__watchList-myGroup-btnGroup-btn': true,
+                  'sat-tradeAlertAxeAlertConfiguration__watchList-myGroup-btnGroup-btn--selected': state.configuration.axe.myGroup.scopes.indexOf(constants.axeAlertScope.liquidation) >= 0
+                }">
+                <span>Liquidation</span>
+              </button>
+            </div>
+          </div>
+          <span class="sat-tradeAlertAxeAlertConfiguration__watchList-textSeparator">And</span>
+          <ul class="sat-tradeAlertAxeAlertConfiguration__watchList-securityList">
+            <li
+              *ngFor="let eachSecurityBlock of state.configuration.axe.securityList"
+              [ngClass]="{
+                'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item': true,
+                'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item--disabled': eachSecurityBlock.isDisabled,
+                'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item--deleted': eachSecurityBlock.isDeleted,
+                'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item--new': eachSecurityBlock.groupId == null
+              }">
+              <div class="sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-newTag">
+                <i class="fal fa-sparkles"></i>
+                <span>New</span>
+              </div>
+              <div class="sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-disableTag">
+                <i class="fal fa-bell-slash"></i>
+                <span>Disabled</span>
+              </div>
+              <security-card *ngIf="eachSecurityBlock.card" [cardData]="eachSecurityBlock.card"></security-card>
+              <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup">
+                <button
+                  (click)="onSelectAxeWatchlistSide(constants.axeAlertScope.bid, eachSecurityBlock)"
+                  [ngClass]="{
+                    'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn': true,
+                    'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.scopes.indexOf(constants.axeAlertScope.bid) >= 0
+                  }">
+                  <span>Bid</span>
+                </button>
+                <button
+                  (click)="onSelectAxeWatchlistSide(constants.axeAlertScope.ask, eachSecurityBlock)"
+                  [ngClass]="{
+                    'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn': true,
+                    'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.scopes.indexOf(constants.axeAlertScope.ask) >= 0
+                  }">
+                  <span>Ask</span>
+                </button>
+                <button
+                  (click)="onSelectAxeWatchlistSide(constants.axeAlertScope.liquidation, eachSecurityBlock)"
+                  [ngClass]="{
+                    'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn': true,
+                    'sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.scopes.indexOf(constants.axeAlertScope.liquidation) >= 0
+                  }">
+                  <span>Liquidation</span>
+                </button>
+              </div>
+              <button (click)="onToggleDisableSecurityFromAxeWatchList(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-disableBtn santaBtn--iconOnly fal fa-bell-slash"></button>
+              <button (click)="onClickRemoveSecurityFromAxeWatchList(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__watchList-securityList-item-removeBtn santaBtn--iconOnly fal fa-eraser"></button>
+            </li>
+          </ul>
+        </section>
+        <section class="sat-tradeAlertAxeAlertConfiguration__search">
+          <div class="sat-tradeAlertAxeAlertConfiguration__search-utility">
+            <span class="sat-tradeAlertAxeAlertConfiguration__search-utility-label">Search For Securities :</span>
+            <santa-input
+              [inputValue]="state.configuration.axe.securitySearchKeyword"
+              [placeholder]="'find security by name / CUSIP / ISIN'"
+              [isHero]="true"
+              (onInputChange)="onSearchKeywordChange($event)">
+            </santa-input>
+          </div>
+          <ul class="sat-tradeAlertAxeAlertConfiguration__search-result">
+            <li *ngFor="let eachCard of state.configuration.axe.searchList" class="sat-tradeAlertAxeAlertConfiguration__search-result-item">
+              <security-card [cardData]="eachCard"></security-card>
+            </li>
+          </ul>
+          <div class="sat-tradeAlertAxeAlertConfiguration__search-prompt">
+            <div class="sat-tradeAlertAxeAlertConfiguration__search-prompt-line">
+              <span class="sat-tradeAlertAxeAlertConfiguration__search-prompt-line-text">There are</span>
+              <span class="sat-tradeAlertAxeAlertConfiguration__search-prompt-line-highlightText">{{state.configuration.axe.matchedResultCount}}</span>
+              <span class="sat-tradeAlertAxeAlertConfiguration__search-prompt-line-text">securities match the keyword</span>
+            </div>
+            <div class="sat-tradeAlertAxeAlertConfiguration__search-prompt-more">
+              <span class="sat-tradeAlertAxeAlertConfiguration__search-prompt-more-text">Result will be shown if there are less than 100 matches.</span>
+              <span class="sat-tradeAlertAxeAlertConfiguration__search-prompt-more-text">Type more to keep filtering.</span>
+            </div>
+          </div>
+        </section>
+      </article>
+      <!--
+      <security-definition-configurator
+        [configuratorData]="state.testDto"
+      ></security-definition-configurator>
+      -->
+    </ul>
+    <div class="sat-tradeAlertPanel__configuration-ctas">
+      <button (click)="onClickSaveConfiguration()" class="sat-tradeAlertPanel__configuration-ctas-save santaBtn--labelled santaBtn--inverseLabelled">
+        <i class="fal fa-cloud-upload"></i>
+        <span>Save</span>
+      </button>
+    </div>
   </section>
 </article>

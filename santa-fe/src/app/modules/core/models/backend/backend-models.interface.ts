@@ -1,3 +1,4 @@
+import { AlertTypes } from 'Core/constants/coreConstants.constant';
 
 export interface BEFetchAllTradeDataReturn {
   numberOfSecurities: number;
@@ -232,28 +233,31 @@ export interface BESecurityDeltaMetricDTO {
 }
 
 export interface BESingleBestQuoteDTO {
-  isValid: boolean;
   quoteMetric: string;
   bidQuoteType: string;
   askQuoteType: string;
   bidDealer: string;
+  bidAxeDealer: string;
   askDealer: string;
-  bidQuantity: number;
-  askQuantity: number;
-  totalAxeBidQuantity: number;
-  totalAxeAskQuantity: number;
-  totalRunBidQuantity: number;
-  totalRunAskQuantity: number;
+  askAxeDealer: string;
+  totalActiveAxeBidQuantity: number;
+  totalActiveAxeAskQuantity: number;
+  totalActiveBidQuantity: number;
+  totalActiveAskQuantity: number;
   bidQuoteValue: number;
+  bidAxeQuoteValue: number;
   askQuoteValue: number;
+  askAxeQuoteValue: number;
   bidTime: string;
+  bidAxeTime: string;
   askTime: string;
-  bidVenue: string;
-  askVenue: string;
+  askAxeTime: string;
   axeSkew: number;
   totalSkew: number;
   bidIsOld: boolean;
+  bidAxeIsOld: boolean;
   askIsOld: boolean;
+  askAxeIsOld: boolean;
   isOffTheRunCds: boolean;
   globalIdentifier: string;
 }
@@ -335,4 +339,38 @@ export interface BEHistoricalQuantBlock {
   isBasisRange: boolean;
   isValid: boolean;
   timeSeries?: object;
+}
+
+export interface BEAlertConfigurationReturn {
+  Axe: {
+    [property: string]: BEAlertConfigurationDTO;
+  }
+}
+
+export interface BEAlertConfigurationDTO {
+  groupFilters: {
+    SecurityIdentifier?: Array<string>;
+    Owner?: Array<string>;
+    [property: string]: any;
+  };
+  alertConfigID: string;
+  title: string;
+  userName: string;
+  type: string;
+  subType: string;
+  parameters: any;
+  isEnabled: boolean;
+}
+
+export interface BEAlertDTO {
+  alertId: string;
+  alertConfigId: string;
+  timeStamp: string;
+  type: string;
+  subType: string;
+  keyWord: string;
+  message: string;
+  security: BESecurityDTO;
+  urgentLevel: number;
+  isActive: boolean;
 }

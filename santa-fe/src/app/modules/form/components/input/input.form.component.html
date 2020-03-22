@@ -1,4 +1,8 @@
-<article class="santaInput">
+<article
+  [ngClass]="{
+    'santaInput': true,
+    'santaInput--heroVariant': !!isHero
+  }">
   <input
     class="santaInput__inputElement"
     [(ngModel)]="inputValue"

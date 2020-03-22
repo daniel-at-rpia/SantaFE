@@ -1,3 +1,5 @@
+import { AlertTypes, AlertSubTypes } from 'Core/constants/coreConstants.constant';
+
 export interface PayloadGetSantaGroups {
   source: string;
   yyyyMMdd?: number;
@@ -54,4 +56,26 @@ export interface PayloadLogEngagement {
   security: string;
   elementId: string;
   user: string;
+}
+
+export interface PayloadGetSecurities {
+  identifiers: Array<string>
+}
+
+export interface PayloadUpdateAlertConfig {
+  alertConfig: {
+    alertConfigID?: string;
+    type: AlertTypes;
+    subType: AlertSubTypes;
+    groupFilters: {
+      Owner?: Array<string>;
+      SecurityIdentifier?: Array<string>;
+    }
+    isEnabled?: boolean;
+    isDeleted?: boolean;
+  }
+}
+
+export interface PayloadSetAlertsToInactive {
+  alertIds: Array<string>;
 }
