@@ -1,12 +1,30 @@
 import * as DTOs from 'FEModels/frontend-models.interface';
-import {  ObligorChartCategoryBlock } from 'FEModels/frontend-blocks.interface';
+import {
+  ObligorChartCategoryBlock,
+  TradeAlertConfigurationAxeGroupBlock
+} from 'FEModels/frontend-blocks.interface';
 import {
   SecurityDefinitionStub,
   SecurityTableMetricStub
 } from 'FEModels/frontend-stub-models.interface';
-import { DefinitionConfiguratorEmitterParamsItem, ObligorGraphAxesZoomState } from 'FEModels/frontend-adhoc-packages.interface';
+import {
+  DefinitionConfiguratorEmitterParamsItem,
+  ObligorGraphAxesZoomState,
+  SecurityMapEntry
+} from 'FEModels/frontend-adhoc-packages.interface';
+import { AlertTypes } from 'Core/constants/coreConstants.constant';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
+
+export interface GlobalAlertState {
+  activated: boolean;
+  displayAlerts: boolean;
+  triggerActionMenuOpen: boolean;
+  presentList: Array<DTOs.AlertDTO>;
+  storeList: Array<DTOs.AlertDTO>;
+  totalSize: number;
+  displayTotalSize: string;
+}
 
 export interface MarketState {
 }
@@ -53,6 +71,8 @@ export interface TradeState {
   sidePanelsCollapsed: boolean;
   lilMarketMaximized: boolean;
   ownerInitial: string;
+  displayAlertThumbnail: boolean;
+  alertPanelMaximized: boolean;
 }
 
 export interface TradeCenterPanelState {
@@ -160,4 +180,27 @@ export interface TradeObligorGraphPanelState {
     subCDS: boolean;
   }
   chartCategories: ObligorChartCategoryBlock[];
+}
+
+export interface TradeAlertPanelState {
+  configureAlert: boolean;
+  isAlertPaused: boolean;
+  securityMap: Array<SecurityMapEntry>;
+  alertUpdateTimestamp: string;
+  configuration: {
+    selectedAlert: AlertTypes,
+    axe: {
+      myGroup: TradeAlertConfigurationAxeGroupBlock;
+      securitySearchKeyword: string;
+      securityList: Array<TradeAlertConfigurationAxeGroupBlock>;
+      searchList: Array<DTOs.SecurityDTO>;
+      matchedResultCount: number;
+      searchIsValid: boolean;
+    },
+    mark: {
+
+    }
+  }
+  autoUpdateCountdown: number;
+  alertUpdateInProgress: boolean;
 }

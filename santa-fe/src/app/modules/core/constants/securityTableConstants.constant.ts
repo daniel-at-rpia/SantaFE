@@ -46,6 +46,17 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     key: 'bestQuote',
     label: 'Best Quote (Bid vs Ask)',
     attrName: null,
+    blockAttrName: 'combined',
+    underlineAttrName: null,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isForQuantComparer: true,
+    isDriverDependent: true,
+    active: true
+  },{
+    key: 'bestAxeQuote',
+    label: 'Best Axe Quote (Bid vs Ask)',
+    attrName: null,
+    blockAttrName: 'axe',
     underlineAttrName: null,
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isForQuantComparer: true,

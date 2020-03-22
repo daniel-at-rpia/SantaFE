@@ -89,6 +89,7 @@ $securityDefinitionConfigurator_ctas_height: 7rem;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       transform: translate(-125%, 0) scale(0.01, 1);
       &-closeBtn {
         @include mix_fixed_div(absolute, $z_index_hovering_item);
@@ -101,7 +102,6 @@ $securityDefinitionConfigurator_ctas_height: 7rem;
         display: flex;
         flex-direction: column;
         padding: $spacing_large 0;
-        margin-top: 100%;
         &>security-definition {
           display: flex;
         }
@@ -199,13 +199,6 @@ $securityDefinitionConfigurator_ctas_height: 7rem;
       }
     }
   }
-  &--longFilterOptionsState {
-    #{$securityDefinitionConfiguratorBlockName} {
-      &__filters-content-title {
-        margin-top: 0;
-      }
-    }
-  }
   &--filterActiveState {
     #{$securityDefinitionConfiguratorBlockName} {
       &__filters {
@@ -256,6 +249,16 @@ $securityDefinitionConfigurator_ctas_height: 7rem;
     #{$securityDefinitionConfiguratorBlockName} {
       &__definitions {
 
+      }
+    }
+  }
+  &--noMainCTAState {
+    #{$securityDefinitionConfiguratorBlockName} {
+      &__filters {
+        height: 100%;
+      }
+      &__ctas {
+        display: none;
       }
     }
   }

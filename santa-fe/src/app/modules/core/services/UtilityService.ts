@@ -31,7 +31,9 @@
       SecurityMetricOptions,
       BackendKeyDictionary,
       TriCoreDriverConfig,
-      DEFAULT_DRIVER_IDENTIFIER
+      DEFAULT_DRIVER_IDENTIFIER,
+      AlertTypes,
+      AlertSubTypes
     } from 'Core/constants/coreConstants.constant';
     import uuid from 'uuidv4';
   // dependencies
@@ -452,6 +454,38 @@ export class UtilityService {
         return null;
       }
     }
+
+    public mapAlertType(targetType: string): AlertTypes {
+      if (targetType == AlertTypes.axeAlert) {
+        return AlertTypes.axeAlert;
+      } else if (targetType == AlertTypes.markAlert) {
+        return AlertTypes.markAlert;
+      } else {
+        return null;
+      }
+    }
+
+    public mapAlertSubType(targetType: string): AlertSubTypes {
+      if (targetType == AlertSubTypes.ask) {
+        return AlertSubTypes.ask;
+      } else if (targetType == AlertSubTypes.bid) {
+        return AlertSubTypes.bid;
+      } else if (targetType == AlertSubTypes.both) {
+        return null;  // both is not a valid type in FE
+      } else if (targetType == AlertSubTypes.liquidation) {
+        return null;  // liquidation is not a valid type in FE
+      } else if (targetType == AlertSubTypes.bwic) {
+        return AlertSubTypes.bwic;
+      } else if (targetType == AlertSubTypes.owic) {
+        return AlertSubTypes.owic;
+      } else if (targetType == AlertSubTypes.quantityChange) {
+        return AlertSubTypes.quantityChange;
+      } else if (targetType == AlertSubTypes.ratingChange) {
+        return AlertSubTypes.ratingChange;
+      } else {
+        return null;
+      }
+    }
   // shared end
 
   // market specific 
@@ -584,7 +618,7 @@ export class UtilityService {
         }
         if (!!targetDriver) {
           const targetQuantLocationFromRow = TriCoreDriverConfig[targetDriver].backendTargetQuoteAttr;
-          newCellDTO.data.quantComparerDTO = targetRow.data.bestQuotes[targetQuantLocationFromRow];
+          newCellDTO.data.quantComparerDTO = targetRow.data.bestQuotes[targetHeader.data.blockAttrName][targetQuantLocationFromRow];
         } else {
           newCellDTO.data.quantComparerDTO = null;
         }
@@ -592,7 +626,7 @@ export class UtilityService {
         // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
         if ( targetSecurity.data.mark.markDriver === triCoreMetric || triCoreMetric === DEFAULT_DRIVER_IDENTIFIER) {
           targetSecurity.data.mark.markRaw = targetRow.data.security.data.mark.markBackend;
-        const validMetricFromDriver = this.findSecurityTargetDefaultTriCoreDriver(targetSecurity);
+          const validMetricFromDriver = this.findSecurityTargetDefaultTriCoreDriver(targetSecurity);
           const number = this.parseTriCoreDriverNumber(targetSecurity.data.mark.markRaw, validMetricFromDriver, targetSecurity, true) as string;
           targetSecurity.data.mark.mark = targetSecurity.data.mark.markRaw > 0 ? number : null;
         } else {
@@ -692,12 +726,6 @@ export class UtilityService {
       const markBlock = targetSecurity.data.mark;
       if (targetSecurity.data.mark.markRaw) {
         if (!!targetQuant) {
-          if (targetSecurity.data.name === 'ACI 4.625 01/15/2027 Callable USD 144A SENIOR_UNSECURED') {
-            console.log('test');
-          }
-          if (targetSecurity.data.name === 'ACI 4.875 02/15/2030 Callable USD 144A SENIOR_UNSECURED') {
-            console.log('test');
-          }
           const targetDriver = targetSecurity.data.mark.markDriver;
           if (targetQuant.state.hasBid) {
             markBlock.markDisBidRaw = markBlock.markRaw - targetQuant.data.bid.number;

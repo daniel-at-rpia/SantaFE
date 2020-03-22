@@ -77,7 +77,8 @@
       TradeLiveUpdatePassRawDataEvent,
       TradeSwitchDriverEvent,
       TradeSelectedSecurityForAnalysisEvent,
-      TradeSecurityTableRowDTOListForAnalysisEvent
+      TradeSecurityTableRowDTOListForAnalysisEvent,
+      TradeSelectedSecurityForAlertConfigEvent
     } from 'Trade/actions/trade.actions';
     import { SecurityTableMetricStub, SearchShortcutStub } from 'FEModels/frontend-stub-models.interface';
   //
@@ -326,6 +327,17 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     );
   }
 
+  public onSelectSecurityForAlertConfig(targetSecurity: SecurityDTO) {
+    this.store$.dispatch(new TradeSelectedSecurityForAlertConfigEvent(this.utilityService.deepCopy(targetSecurity)));
+    this.restfulCommService.logEngagement(
+      EngagementActionList.sendToAlertConfig,
+      targetSecurity.data.securityID,
+      'n/a',
+      this.ownerInitial,
+      'Trade - Center Panel'
+    );
+  }
+
   public onClickOpenSecurityInBloomberg(pack: ClickedOpenSecurityInBloombergEmitterParams) {
     const url = `bbg://securities/${pack.targetSecurity.data.globalIdentifier}%20${pack.yellowCard}/${pack.targetBBGModule}`;
     window.open(url);
@@ -414,7 +426,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       stencilHeaderBuffer.forEach((eachHeader) => {
         if (eachHeader.data.displayLabel !== 'Security') {
           if (eachHeader.state.isQuantVariant) {
-            const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, this.state.filters.quickFilters.driverType, null, null);
+            const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, this.state.filters.quickFilters.driverType, null, null, false);
             newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, true, bestQuoteStencil));
           } else {
             newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, false));
@@ -469,7 +481,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       this.state.filters.quickFilters.driverType,
       serverReturn,
       this.onSelectSecurityForAnalysis.bind(this),
-      this.onClickOpenSecurityInBloomberg.bind(this)
+      this.onClickOpenSecurityInBloomberg.bind(this),
+      this.onSelectSecurityForAlertConfig.bind(this)
     );
     this.calculateQuantComparerWidthAndHeight();
     this.updateStage(this.constants.securityTableFinalStage);
@@ -603,12 +616,18 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     const bestPriceList = [];
     const bestYieldList = [];
     this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
-      const bestSpreadQuote = eachRow.data.bestQuotes.bestSpreadQuote;
-      const bestPriceQuote = eachRow.data.bestQuotes.bestPriceQuote;
-      const bestYieldQuote = eachRow.data.bestQuotes.bestYieldQuote;
+      const bestSpreadQuote = eachRow.data.bestQuotes.combined.bestSpreadQuote;
+      const bestPriceQuote = eachRow.data.bestQuotes.combined.bestPriceQuote;
+      const bestYieldQuote = eachRow.data.bestQuotes.combined.bestYieldQuote;
+      const bestAxeSpreadQuote = eachRow.data.bestQuotes.axe.bestSpreadQuote;
+      const bestAxePriceQuote = eachRow.data.bestQuotes.axe.bestPriceQuote;
+      const bestAxeYieldQuote = eachRow.data.bestQuotes.axe.bestYieldQuote;
       !!bestSpreadQuote && bestSpreadList.push(bestSpreadQuote);
+      !!bestAxeSpreadQuote && bestSpreadList.push(bestAxeSpreadQuote);
       !!bestPriceQuote && bestPriceList.push(bestPriceQuote);
+      !!bestAxePriceQuote && bestPriceList.push(bestAxePriceQuote);
       !!bestYieldQuote && bestYieldList.push(bestYieldQuote);
+      !!bestYieldQuote && bestYieldList.push(bestAxeYieldQuote);
     });
     this.calculateQuantComparerWidthAndHeightPerSet(bestSpreadList);
     this.calculateQuantComparerWidthAndHeightPerSet(bestYieldList);

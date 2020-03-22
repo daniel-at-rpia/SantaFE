@@ -1,0 +1,110 @@
+@import "global.scss";
+
+.sat-globalAlert {
+  $globalAlertBlockName: &;
+  &__alertList {
+    @include mix_fixed_div(fixed, $z_index_globalAlertList);
+    top: 0;
+    right: -$alert_width;
+    padding: $spacing_medium 0;
+  }
+  &__trigger {
+    @include mix_fixed_div(fixed, $z_index_globalAlertTrigger);
+    bottom: 0;
+    right: 0;
+    &-actionMenu {
+      @include mix_fixed_div(absolute, $z_index_hovering_item);
+      @include mix_alive('light');
+      transform: scale(0.01);
+      display: flex;
+      width: 100%;
+      &-btn {
+        @include mix_fixed_div(relative, $z_index_base_item);
+        @include mix_border_radius(50%);
+        &:first-of-type {
+          left: -$spacing_small * 3;
+          top: $spacing_small;
+        }
+        &:nth-of-type(2) {
+          left: -$spacing_small * 2;
+          top: -$spacing_small * 3;
+        }
+        &--kill {
+          background-color: $color_kill;
+          color: $font_color_inverse;
+        }
+      }
+    }
+    &-mainBtn {
+      @include mix_fixed_div(relative, $z_index_hovering_item_lift);
+      @include mix_border_radius(50%);
+      @include material();
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: $iconButton_size_large;
+      height: $iconButton_size_large;
+      margin: $spacing_medium;
+      background-color: $color_white;
+      &-icon {
+        color: $font_color_major;
+        font-size: $font_size_small;
+      }
+      &-count {
+        // @include mix_fixed_div(absolute, $z_index_hovering_item);
+        // @include mix_border_radius(50%);
+        @include mix_border_radius(3px);
+        display: flex;
+        justify-content: center;
+        padding: 0 $spacing_x_small;
+        // top: 0;
+        // right: $spacing_x_small;
+        // width: 1.25rem;
+        // height: 1.25rem;
+        background-color: $color_highlight;
+        margin-top: $spacing_xx_small;
+        &-text {
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--triggerActionMenuOpenState {
+    #{$globalAlertBlockName} {
+      &__trigger {
+        &-actionMenu {
+          transform: scale(1);
+        }
+        &-mainBtn {
+          @include material('none');
+          background-color: $color_active;
+          &-icon {
+            color: $font_color_inverse;
+            font-size: $font_size_x_small;
+          }
+        }
+      }
+    }
+  }
+  &--hideAlertsState {
+    #{$globalAlertBlockName} {
+      &__alertList {
+      }
+    }
+  }
+  &--emptyState {
+    #{$globalAlertBlockName} {
+      &__trigger {
+        &-mainBtn {
+          &-icon {
+            font-size: $font_size_large;
+          }
+          &-count {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}

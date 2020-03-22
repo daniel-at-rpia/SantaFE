@@ -12,7 +12,10 @@ import {
   AgGridRow,
   SecurityTableRowQuoteBlock
 } from 'FEModels/frontend-blocks.interface';
-import { SantaTableNumericFloatingFilterParams } from 'FEModels/frontend-adhoc-packages.interface';
+import {
+  AlertSubTypes
+} from 'Core/constants/coreConstants.constant';
+import { SantaTableNumericFloatingFilterParams, ClickedOpenSecurityInBloombergEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
 import * as agGrid from 'ag-grid-community';
 
 
@@ -79,10 +82,11 @@ export interface SecurityDTO extends BasicDTOStructure {
     hedgeFactor: number;
   }
   api: {
-    onClickCard: Function;
-    onClickSendToGraph: Function;
-    onClickThumbDown: Function;
-    onClickOpenSecurityInBloomberg: Function;
+    onClickCard: (card: SecurityDTO) => void;
+    onClickSendToGraph: (card: SecurityDTO) => void;
+    onClickThumbDown: (card: SecurityDTO) => void;
+    onClickOpenSecurityInBloomberg: (params: ClickedOpenSecurityInBloombergEmitterParams) => void;
+    onClickSendToAlertConfig: (card: SecurityDTO) => void;
   }
   state: {
     isStencil: boolean;
@@ -167,6 +171,7 @@ export interface SecurityDefinitionConfiguratorDTO extends BasicDTOStructure {
     isLoading: boolean;
     isLoadingLongOptionListFromServer: boolean;
     showFiltersFromDefinition: SecurityDefinitionDTO;
+    noMainCTA: boolean;
   }
 }
 
@@ -238,6 +243,8 @@ export interface QuantComparerDTO extends BasicDTOStructure {
     noAxeSkew: boolean;
     noTotalSkew: boolean;
     longEdgeState: boolean;
+    bidIsStale: boolean;
+    askIsStale: boolean;
   }
 }
 
@@ -296,9 +303,16 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
     quotes: SecurityTableRowQuoteBlock;
     quoteHeaders: Array<QuoteMetricBlock>;
     bestQuotes: {
-      bestSpreadQuote: QuantComparerDTO;
-      bestYieldQuote: QuantComparerDTO;
-      bestPriceQuote: QuantComparerDTO;
+      combined: {
+        bestSpreadQuote: QuantComparerDTO;
+        bestYieldQuote: QuantComparerDTO;
+        bestPriceQuote: QuantComparerDTO;
+      }
+      axe: {
+        bestSpreadQuote: QuantComparerDTO;
+        bestYieldQuote: QuantComparerDTO;
+        bestPriceQuote: QuantComparerDTO;
+      }
     }
   },
   state: {
@@ -424,5 +438,24 @@ export interface HistoricalSummaryDTO extends BasicDTOStructure {
   }
   state: {
     isStencil: boolean;
+  }
+}
+
+export interface AlertDTO extends BasicDTOStructure {
+  data: {
+    id: string;
+    type: AlertSubTypes;
+    security: SecurityDTO;
+    titleTop: string;
+    titleBottom: string;
+    message: string;
+    time: string;
+  }
+  state: {
+    isRead: boolean;
+    isNew: boolean;
+    isSlidedOut: boolean;
+    isCountdownFinished: boolean;
+    willBeRemoved: boolean;
   }
 }

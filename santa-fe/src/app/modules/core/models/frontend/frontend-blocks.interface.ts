@@ -17,6 +17,9 @@ import {
   SecurityTableRowDTO,
   SecurityQuoteDTO
 } from 'FEModels/frontend-models.interface';
+import {
+  AxeAlertScope
+} from 'Core/constants/tradeConstants.constant';
 
 export interface SecurityPortfolioBlock {
   portfolioName: string;
@@ -164,6 +167,7 @@ export interface AgGridRow {
   id: string;
   securityCard: SecurityDTO;    // this needs to be identical to SecurityTableMetrics' key for Security column
   bestQuote: QuantComparerDTO;  // this needs to be identical to SecurityTableMetrics' key for Best Quote column
+  bestAxeQuote: QuantComparerDTO;  // this needs to be identical to SecurityTableMetrics' key for Best Axe Quote column
   rowDTO: SecurityTableRowDTO;
 }
 
@@ -207,4 +211,12 @@ export interface SecurityTableRowQuoteBlock {
   secondaryPresentQuotes: Array<SecurityQuoteDTO>;
   secondaryQuotes: Array<SecurityQuoteDTO>;
   secondarySecurityName: string;
+}
+
+export interface TradeAlertConfigurationAxeGroupBlock {
+  card: SecurityDTO;
+  groupId: string;
+  scopes: Array<AxeAlertScope>;
+  isDeleted: boolean;
+  isDisabled: boolean;
 }

@@ -6,6 +6,8 @@ import {
 
 export const APIUrlMap = {
   getUserInitials: `user/get-user-initials`,
+  getSecurityIdMap: `security/get-security-identifiers`,
+  getSecurityDTOs: `security/get-securities`,
   getPortfolios: `group/get-security-dtos-from-group-identifier`,
   getAllQuotes: `liveQuote/get-all-quotes`,
   getObligorCurves: `group/get-security-dtos-from-security-and-group-definition`,
@@ -15,6 +17,11 @@ export const APIUrlMap = {
   getSubIndustries: `obligor/get-subindustries`,
   getCountries: 'obligor/get-countries',
   setQuoteStatus: 'liveQuote/set-quote-status',
+  getAlertConfigurations: 'Alert/get-alert-configs',
+  updateAlertConfiguration: 'Alert/update-alert-config',
+  getAlerts: 'Alert/get-alerts',
+  readAlert: 'Alert/set-alerts-to-inactive',
+  deleteAlert: 'Alert/delete-alerts',
   logEngagement: 'feLogger/track',
   logError: 'feLogger/log'
 };
@@ -181,5 +188,26 @@ export const EngagementActionList = {
   changeDriver: 'Change Driver',
   thumbdownSecurity: 'Thumbdown Security',
   populateGraph: 'Populate Graph',
-  midnightReload: 'Midnight Reload'
+  midnightReload: 'Midnight Reload',
+  sendToAlertConfig: 'Send To Alert Config'
 }
+
+export enum AlertTypes {
+  axeAlert = 'Axe',
+  markAlert = 'Mark'
+}
+
+export enum AlertSubTypes {
+  bid = 'Bid',
+  ask = 'Ask',
+  both = 'Both',
+  liquidation = 'Liquidation',
+  bwic = 'Bwic',
+  owic = 'Owic',
+  quantityChange = 'QuantityChange',
+  ratingChange = 'RatingChange'
+}
+
+export const ALERT_COUNTDOWN = 5000;
+export const ALERT_PRESENT_LIST_SIZE_CAP = 15;
+export const ALERT_TOTALSIZE_MAX_DISPLAY_THRESHOLD = 99;

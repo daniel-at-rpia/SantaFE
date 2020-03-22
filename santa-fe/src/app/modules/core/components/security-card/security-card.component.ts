@@ -55,4 +55,10 @@ export class SecurityCard implements OnInit {
       this.cardData.api.onClickOpenSecurityInBloomberg(payload);
     }
   }
+
+  public onClickSendToAlertConfig() {
+    if (!!this.cardData.api.onClickSendToAlertConfig) {
+      this.cardData.api.onClickSendToAlertConfig(this.cardData);
+    }
+  }
 }

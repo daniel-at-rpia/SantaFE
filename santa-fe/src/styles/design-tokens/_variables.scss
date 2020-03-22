@@ -1,6 +1,15 @@
 $santaCard_primary_percentage: 70%;
 $santaCard_gradient_degree: 45deg;
 
+$distinguish_type_color_1: $color_blue_5;
+$distinguish_type_color_2: $color_deeppurple_1_A;
+$distinguish_type_color_3: $color_pink_3;
+$distinguish_type_color_4: $color_teal_7_A;
+$distinguish_type_color_5: $color_yellow_7;
+$distinguish_type_color_6: $color_deeporange_4;
+$distinguish_type_color_7: $color_brown_5;
+$distinguish_type_color_8: $color_gray_6;
+
 $color_rating_aaa: #602866;
 $color_rating_aa: #602866;
 $color_rating_a: #293881;
@@ -16,10 +25,10 @@ $color_seniority_3: #f1e94b;
 $color_seniority_4: #ff167b;
 $color_seniority_5: #ffffff;
 
-$color_quant_left: #3F6184;
-$color_quant_left_background: #c5cfda;
-$color_quant_right: #2D7174;
-$color_quant_right_background: #c0d4d5;
+$color_bid: #26A77B;
+$color_quant_left_background: #95E7CB;
+$color_ask: #BC2B5D;
+$color_quant_right_background: #E690AD;
 $color_quant_crossed_background: #fafc83;
 $color_quant_crossed: $color_gray_85;
 $color_quant_axe_skew: $color_pink_4_A;
@@ -41,7 +50,7 @@ $color_disabled: $color_gray_5;
 $color_kill: $color_red_5;
 $color_negative: $color_red_5;
 $color_positive: $color_green_5;
-$color_create: $color_green_4;
+$color_create: $color_green_5;
 $color_stencil: $color_gray_4;
 
 $color_modal_background_hide: rgba(black, 0);
@@ -90,12 +99,12 @@ $font_color_inverse: $color_white;
 $base-size: 16;
 
 
-$z_index_feedback_toast: 39999;
+$z_index_globalAlertTrigger: 40050;
+$z_index_globalAlertList: 39999;
 $z_index_loadingSpinner: 35000;
 $z_index_modal: 29999;
 $z_index_navTrigger: 20100;
 $z_index_mainNavMenu: 20000;
-$z_index_topNavMenu: 19999;
 $z_index_dropdown: 3000;
 $z_index_tooltip_lift: 2000;
 $z_index_tooltip: 1000;
@@ -118,8 +127,10 @@ $mediaQuery_size_medium: 48rem;
 $mediaQuery_size_large: 64rem;
 $mediaQuery_size_xLarge: 140rem;
 // Store variables that are used globally, in order to avoid hierarchy problem
+$iconButton_size_large: 3rem;
 $iconButton_size_regular: 2.25rem;
 $iconButton_size_small: 1.75rem;
+$alert_countdown_width: 0.1875rem;
 $typical_border_width: 0.0625rem;
 $scroll_bar_width: 0.5rem;
 $textarea_minimum_height: 2.125rem;   // Smallest height that doesn't trigger scroll bar with normal font size
@@ -143,3 +154,7 @@ $securityDefinitionConfigurator_width:
   $securityDefinition_configuratorVariant_width + 
   $securityDefinitionConfigurator_gapBetweenDefAndFilter + 
   $securityDefinitionConfigurator_filters_width;
+
+$alert_width: 32rem;
+$alert_thumbnail_width: 7rem;
+$page_gutter_width_for_alerts: $alert_thumbnail_width + $spacing_medium;

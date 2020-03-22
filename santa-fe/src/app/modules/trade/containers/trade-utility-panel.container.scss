@@ -9,7 +9,18 @@ $tradeUtilityPanel_spacing: $spacing_medium;
   flex: 1 1 auto;
   display: flex;
   overflow: hidden;
-  height: $tradeUtility_height;
+  height: $trade_topPanels_baseState_height;
+  &__thumbnail {
+    @include mix_border_generator(0 $typical_border_width 0 0);
+    flex: 0 0 auto;
+    display: flex;
+    margin: $spacing_medium;
+    padding-right: $spacing_medium;
+    &-icon {
+      color: $font_color_trivial;
+      font-size: $font_size_hero;
+    }
+  }
   &__validWindowConfig {
     @include mix_alive('light');
     flex: 0 0 13rem;
@@ -72,6 +83,7 @@ $tradeUtilityPanel_spacing: $spacing_medium;
     flex-direction: column;
     align-items: center;
     margin: $tradeUtilityPanel_spacing;
+    overflow: hidden;
     &-clock {
       @include mix_border_radius(5px);
       padding: $spacing_xx_small $spacing_x_small;
@@ -119,10 +131,17 @@ $tradeUtilityPanel_spacing: $spacing_medium;
       flex: 1 1 auto;
     }
   }
+  &--sidePanelsDisplayedState {
+    #{$tradeUtilityPanelBlockName} {
+      &__thumbnail {
+        display: none;
+      }
+    }
+  }
   &--editingValidWindowState {
     #{$tradeUtilityPanelBlockName} {
       &__validWindowConfig {
-        flex: 0 0 100%;
+        flex: 0 0 35rem;
         &-editBtn {
           display: none;
         }

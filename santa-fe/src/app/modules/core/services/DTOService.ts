@@ -1,5 +1,8 @@
   // dependencies
     import { Injectable } from '@angular/core';
+    import { any } from '@amcharts/amcharts4/.internal/core/utils/Array';
+    import * as moment from 'moment';
+
     import {
       BESecurityDTO,
       BESecurityGroupDTO,
@@ -8,7 +11,8 @@
       BEPortfolioDTO,
       BEHistoricalQuantBlock,
       BEHistoricalSummaryDTO,
-      BESingleBestQuoteDTO
+      BESingleBestQuoteDTO,
+      BEAlertDTO
     } from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
     import * as Blocks from 'FEModels/frontend-blocks.interface';
@@ -25,7 +29,8 @@
     } from 'Core/constants/colorSchemes.constant';
     import {
       TriCoreDriverConfig,
-      DEFAULT_DRIVER_IDENTIFIER
+      DEFAULT_DRIVER_IDENTIFIER,
+      AlertTypes
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
@@ -40,7 +45,6 @@
     import {
       QuoteMetricList
     } from 'Core/constants/securityTableConstants.constant';
-import { any } from '@amcharts/amcharts4/.internal/core/utils/Array';
   // 
 
 @Injectable()
@@ -58,7 +62,7 @@ export class DTOService {
     // !isStencil && console.log('rawData', rawData.name, rawData);
     const object:DTOs.SecurityDTO = {
       data: {
-        securityID: !isStencil ? securityIdFull : null,
+        securityID: !isStencil ? rawData.securityIdentifier : null,
         globalIdentifier: !isStencil ? rawData.globalIdentifier : null,
         name: !isStencil ? rawData.name : 'PLACEHOLDER',
         ticker: !isStencil ? rawData.ticker : null,
@@ -133,7 +137,8 @@ export class DTOService {
         onClickCard: null,
         onClickSendToGraph: null,
         onClickThumbDown: null,
-        onClickOpenSecurityInBloomberg: null
+        onClickOpenSecurityInBloomberg: null,
+        onClickSendToAlertConfig: null
       },
       state: {
         isSelected: false,
@@ -324,7 +329,8 @@ export class DTOService {
   }
 
   public createSecurityDefinitionConfigurator(
-    groupByDisabled: boolean
+    groupByDisabled: boolean,
+    noMainCTA?: boolean
   ): DTOs.SecurityDefinitionConfiguratorDTO {
     const object: DTOs.SecurityDefinitionConfiguratorDTO = {
       data: {
@@ -343,7 +349,8 @@ export class DTOService {
         showFiltersFromDefinition: null,
         showLongFilterOptions: false,
         isLoading: false,
-        isLoadingLongOptionListFromServer: false
+        isLoadingLongOptionListFromServer: false,
+        noMainCTA: !!noMainCTA
       }
     };
     return object;
@@ -427,7 +434,8 @@ export class DTOService {
     isStencil: boolean,
     quantMetricType: string,
     BEdto: BEBestQuoteDTO,
-    securityCard: DTOs.SecurityDTO
+    securityCard: DTOs.SecurityDTO,
+    axeOnly: boolean
   ): DTOs.QuantComparerDTO {
     if (isStencil) {
       const stencilObject: DTOs.QuantComparerDTO = {
@@ -466,7 +474,9 @@ export class DTOService {
           totalSkewEnabled: false,
           noAxeSkew: true,
           noTotalSkew: true,
-          longEdgeState: false
+          longEdgeState: false,
+          bidIsStale: false,
+          askIsStale: false
         }
       };
       return stencilObject;
@@ -475,7 +485,12 @@ export class DTOService {
       const backendTargetQuoteAttr = TriCoreDriverConfig[driverType]['backendTargetQuoteAttr'];
       if (!!BEdto && !!BEdto[backendTargetQuoteAttr]) {
         const rawData = BEdto[backendTargetQuoteAttr];
-        return this.populateQuantCompareObject(rawData, driverType, securityCard);
+        return this.populateQuantCompareObject(
+          rawData,
+          driverType,
+          securityCard,
+          axeOnly
+        );
       } else {
         return null;
       }
@@ -485,17 +500,27 @@ export class DTOService {
   private populateQuantCompareObject(
     rawData: BESingleBestQuoteDTO,
     driverType: string,
-    securityCard: DTOs.SecurityDTO
+    securityCard: DTOs.SecurityDTO,
+    axeOnly: boolean
   ): DTOs.QuantComparerDTO {
-    const bidSize = this.utility.round(rawData.bidQuantity/1000000, 1);
-    const offerSize = this.utility.round(rawData.askQuantity/1000000, 1);
+    const bidQuantity = axeOnly ? rawData.totalActiveAxeBidQuantity : rawData.totalActiveBidQuantity;
+    const askQuantity = axeOnly ? rawData.totalActiveAxeAskQuantity : rawData.totalActiveAskQuantity;
+    const bidValue = axeOnly ? rawData.bidAxeQuoteValue : rawData.bidQuoteValue;
+    const askValue = axeOnly ? rawData.askAxeQuoteValue : rawData.askQuoteValue;
+    const bidDealer = axeOnly ? rawData.bidAxeDealer : rawData.bidDealer;
+    const askDealer = axeOnly ? rawData.askAxeDealer : rawData.askDealer;
+    const bidIsStale = axeOnly ? rawData.bidAxeIsOld : rawData.bidIsOld;
+    const askIsStale = axeOnly ? rawData.askAxeIsOld : rawData.askIsOld;
+
+    const bidSize = bidQuantity != null ? this.utility.round(bidQuantity/1000000, 1) : 0;
+    const offerSize = askQuantity != null ? this.utility.round(askQuantity/1000000, 1) : 0;
     const tier2Shreshold = TriCoreDriverConfig[driverType]['tier2Threshold'];
     const inversed = this.utility.isCDS(false, securityCard) ? !TriCoreDriverConfig[driverType]['inversed'] : TriCoreDriverConfig[driverType]['inversed'];
-    const hasBid = !!rawData.bidQuoteValue && !!rawData.bidDealer;
-    const hasOffer = !!rawData.askQuoteValue && !!rawData.askDealer;
+    const hasBid = !!bidValue && !!bidDealer;
+    const hasOffer = !!askValue && !!askDealer;
     const rounding = TriCoreDriverConfig[driverType]['rounding'];
-    const bidNumber = this.utility.parseTriCoreDriverNumber(rawData.bidQuoteValue, driverType, securityCard, true) as string;
-    const offerNumber = this.utility.parseTriCoreDriverNumber(rawData.askQuoteValue, driverType, securityCard, true) as string;
+    const bidNumber = this.utility.parseTriCoreDriverNumber(bidValue, driverType, securityCard, true) as string;
+    const offerNumber = this.utility.parseTriCoreDriverNumber(askValue, driverType, securityCard, true) as string;
     const bidSkew = rawData.axeSkew * 100;
     if (bidNumber === 'NaN' || offerNumber === 'NaN') {
       console.warn('Caught BE data issue while creating best quote component, ', securityCard, rawData, bidNumber, offerNumber);
@@ -506,14 +531,14 @@ export class DTOService {
       if (hasBid && hasOffer) {
         delta = inversed ? parseFloat(offerNumber) - parseFloat(bidNumber) : parseFloat(bidNumber) - parseFloat(offerNumber);
         delta = this.utility.round(delta, rounding);
-        mid = (rawData.bidQuoteValue + rawData.askQuoteValue)/2;
+        mid = (bidValue + askValue)/2;
         mid = this.utility.round(mid, rounding);
       } else if( hasBid && hasOffer == false) {
         delta = 0;
-        mid = rawData.bidQuoteValue;
+        mid = bidValue;
       } else if( hasOffer && hasBid == false) {
         delta = 0;
-        mid = rawData.askQuoteValue;
+        mid = askValue;
       } else {
         delta = 0;
         mid = 0;
@@ -526,13 +551,13 @@ export class DTOService {
           bid: {
             number: !!bidNumber ? parseFloat(bidNumber) : null,
             displayNumber: bidNumber,  // not been used right now but could come in handy
-            broker: rawData.bidDealer,
+            broker: bidDealer,
             size: bidSize
           },
           offer: {
             number: !!offerNumber ? parseFloat(offerNumber) : null,
             displayNumber: offerNumber,  // not been used right now but could come in handy
-            broker: rawData.askDealer,
+            broker: askDealer,
             size: offerSize
           }
         },
@@ -554,7 +579,9 @@ export class DTOService {
           totalSkewEnabled: false,
           noAxeSkew: rawData.axeSkew === null,
           noTotalSkew: rawData.totalSkew === null,
-          longEdgeState: (bidNumber && parseFloat(bidNumber).toString().length > 4) || (offerNumber && parseFloat(offerNumber).toString().length > 4)
+          longEdgeState: (bidNumber && parseFloat(bidNumber).toString().length > 4) || (offerNumber && parseFloat(offerNumber).toString().length > 4),
+          bidIsStale: bidIsStale,
+          askIsStale: askIsStale
         }
       };
       return object;
@@ -646,9 +673,16 @@ export class DTOService {
           return metricBlock;
         }),
         bestQuotes: {
-          bestPriceQuote: null,
-          bestSpreadQuote: null,
-          bestYieldQuote: null
+          combined: {
+            bestPriceQuote: null,
+            bestSpreadQuote: null,
+            bestYieldQuote: null
+          },
+          axe: {
+            bestSpreadQuote: null,
+            bestPriceQuote: null,
+            bestYieldQuote: null
+          }
         }
       },
       state: {
@@ -694,7 +728,21 @@ export class DTOService {
     const hasAsk = !isStencil ? (!!rawData.askVenues && rawData.askVenues.length > 0) : true;
     const bidBenchmark = !isStencil ? rawData.benchmarkName : 'T 0.5 01/01/2020';
     const askBenchmark = !isStencil ? rawData.benchmarkName : 'T 0.5 01/01/2020';
-    const dataSource = !isStencil ? (hasBid ? rawData.bidVenues[0] : rawData.askVenues[0]) : 'PLACEHOLDER';
+    let dataSource = 'PLACEHOLDER';
+    const dataSources = [];
+    if (!isStencil) {
+      rawData.bidVenues.forEach((eachSource) => {
+        !dataSources.includes(eachSource) && dataSources.push(eachSource);
+      });
+      rawData.askVenues.forEach((eachSource) => {
+        !dataSources.includes(eachSource) && dataSources.push(eachSource);
+      });
+      if (dataSources.length > 0) {
+        dataSource = dataSources.length > 1 ? 'MULT' : dataSources[0];
+      } else {
+        dataSource = 'n/a';
+      }
+    }
     const consolidatedBenchmark = bidBenchmark === askBenchmark ? bidBenchmark : null;
     let convertedDate: Date = null;
     if (!isStencil) {
@@ -910,6 +958,43 @@ export class DTOService {
           const eachDTO = isLevel ? this.formMoveVisualizerObject(false, eachQuantBlock.historicalLevel, isColorCodeInversed, eachQuantBlock.security.name) : this.formMoveVisualizerObject(false, eachQuantBlock.historicalBasis, isColorCodeInversed, eachQuantBlock.security.name);
           object.data.list.push(eachDTO);
         })
+      }
+    }
+    return object;
+  }
+
+  public formAlertObject(
+    rawData: BEAlertDTO
+  ): DTOs.AlertDTO {
+    const targetSecurity = this.formSecurityCardObject(
+      rawData.security.securityIdentifier || null,
+      rawData.security,
+      false
+    );
+    targetSecurity.state.isInteractionDisabled = true;
+    targetSecurity.state.isMultiLineVariant = true;
+    targetSecurity.state.isWidthFlexible = true;
+    const parsedTitleList = rawData.keyWord.split('|');
+    const object: DTOs.AlertDTO = {
+      data: {
+        id: rawData.alertId,
+        type: this.utility.mapAlertSubType(rawData.subType),
+        security: targetSecurity,
+        titleTop: parsedTitleList[0] || '',
+        titleBottom: parsedTitleList[1] || '',
+        message: rawData.message,
+        time: moment(rawData.timeStamp).format(`HH:mm`)
+      },
+      api: {
+        onMouseEnterAlert: null,
+        onMouseLeaveAlert: null
+      },
+      state: {
+        isNew: true,
+        isSlidedOut: false,
+        isRead: false,
+        isCountdownFinished: true,
+        willBeRemoved: false
       }
     }
     return object;

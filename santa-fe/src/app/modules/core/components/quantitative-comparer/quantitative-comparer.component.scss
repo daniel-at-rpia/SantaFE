@@ -1,7 +1,7 @@
 @import "global.scss";
 @import "modules/trade/trade.scss";
 
-$quantComparer_edge_width: 2.5rem;
+$quantComparer_edge_width: 2.7rem;
 $quantComparer_edge_width_long: 4.15rem;
 $quantComparer_min_height: 2.5rem;
 .sat-quantComparer {
@@ -62,7 +62,6 @@ $quantComparer_min_height: 2.5rem;
           user-select: none;
         }
         &-broker {
-          // color: $color_quant_left;
           color: #000;  // a temporary hack
           font-size: $font_size_minimum;
           line-height: $line_height_minimum;
@@ -94,7 +93,7 @@ $quantComparer_min_height: 2.5rem;
           &-line {
             &-content {
               @include mix_border_radius(3px, 'right');
-              background-color: $color_quant_left;
+              background-color: $color_bid;
             }
           }
         }
@@ -110,14 +109,14 @@ $quantComparer_min_height: 2.5rem;
             }
             &-broker {
               text-align: right;
-              // color: $color_quant_right;
+              // color: $color_ask;
               color: #000;  // a temporary hack
             }
           }
           &-line {
             &-content {
               @include mix_border_radius(3px, 'left');
-              background-color: $color_quant_right;
+              background-color: $color_ask;
             }
           }
         }
@@ -248,6 +247,15 @@ $quantComparer_min_height: 2.5rem;
       }
     }
   }
+  &--longEdgeState {
+    #{$quantComparerBlockName} {
+      &__content {
+        &-driver-edge {
+          width: $quantComparer_edge_width_long;
+        }
+      }
+    }
+  }
   &--crossedState {
     #{$quantComparerBlockName} {
       &__crossing {
@@ -293,30 +301,84 @@ $quantComparer_min_height: 2.5rem;
       }
     }
   }
-  &--stencilState {
+  &--bidIsStaleState {
     #{$quantComparerBlockName} {
+      &__base {
+        &-background {
+          background-color: inherit;
+        }
+      }
       &__content {
-        &-driver {
-          &-edge {
-            &-number {
-              @include mix_stencil_animation();
-              line-height: $line_height_stencil_slim;
+        &-driver--left {
+          #{$quantComparerBlockName} {
+            &__content-driver {
+              &-edge {
+                background-color: $color_gray_4;
+                &-number {
+                  color: $font_color_inverse;
+                }
+                &-broker {
+                  color: $font_color_inverse;
+                }
+              }
+              &-line-content {
+                background-color: $color_gray_4;
+              }
             }
-            &-broker {
-              @include mix_stencil_animation();
-              line-height: $line_height_stencil_slim;
-            }
-          }
-          &-line-content {
-            @include mix_stencil_animation();
           }
         }
       }
       &__mid {
-        display: none;
+        &-content {
+          background-color: $color_gray_4;
+        }
       }
-      &__skew {
-        display: none;
+      &__crossing {
+        background-color: inherit;
+        &-content {
+          height: inherit;
+          &-value {
+            color: $font_color_inverse;
+          }
+        }
+      }
+    }
+  }
+  &--askIsStaleState {
+    #{$quantComparerBlockName} {
+      &__base {
+        &-background {
+          background-color: inherit;
+        }
+      }
+      &__content {
+        &-driver--right {
+          #{$quantComparerBlockName} {
+            &__content-driver {
+              &-edge {
+                background-color: $color_gray_4;
+                &-number {
+                  color: $font_color_inverse;
+                }
+                &-broker {
+                  color: $font_color_inverse;
+                }
+              }
+              &-line-content {
+                background-color: $color_gray_4;
+              }
+            }
+          }
+        }
+      }
+      &__crossing {
+        background-color: $color_gray_4;
+        &-content {
+          background-color: $color_gray_6;
+          &-value {
+            color: $font_color_inverse;
+          }
+        }
       }
     }
   }
@@ -350,12 +412,30 @@ $quantComparer_min_height: 2.5rem;
       }
     }
   }
-  &--longEdgeState {
+  &--stencilState {
     #{$quantComparerBlockName} {
       &__content {
-        &-driver-edge {
-          width: $quantComparer_edge_width_long;
+        &-driver {
+          &-edge {
+            &-number {
+              @include mix_stencil_animation();
+              line-height: $line_height_stencil_slim;
+            }
+            &-broker {
+              @include mix_stencil_animation();
+              line-height: $line_height_stencil_slim;
+            }
+          }
+          &-line-content {
+            @include mix_stencil_animation();
+          }
         }
+      }
+      &__mid {
+        display: none;
+      }
+      &__skew {
+        display: none;
       }
     }
   }

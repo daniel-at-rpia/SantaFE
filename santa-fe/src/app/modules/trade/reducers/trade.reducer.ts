@@ -15,7 +15,6 @@ import {
   TradeLiveUpdatePassRawDataEvent,
   TradeLiveUpdatePassTableContentEvent
 } from 'Trade/actions/trade.actions';
-import { RouterLinkWithHref } from '@angular/router';
 
 export interface TradeState {
   presetSelected: boolean;
@@ -29,6 +28,7 @@ export interface TradeState {
   securityIDListFromAnalysis: Array<string>;
   securityTableRowDTOListForAnalysis: Array<SecurityTableRowDTO>;
   bestQuoteValidWindow: number;
+  selectedSecurityForAlertConfig: SecurityDTO;
 }
 
 const initialState: TradeState = {
@@ -42,7 +42,8 @@ const initialState: TradeState = {
   selectedSecurityForAnalysis: null,
   securityIDListFromAnalysis: [],
   securityTableRowDTOListForAnalysis: [],
-  bestQuoteValidWindow: null
+  bestQuoteValidWindow: null,
+  selectedSecurityForAlertConfig: null
 };
 
 export function tradeReducer(
@@ -127,11 +128,16 @@ export function tradeReducer(
         ...state,
         bestQuoteValidWindow: action.window
       }
+    case TradeActions.SelectSecurityForAlertConfigEvent:
+      return {
+        ...state,
+        selectedSecurityForAlertConfig: action.targetSecurity
+      }
     default:
       return state;
   }
 }
 
-export function reducer(state: TradeState | undefined, action: Action) {
+export function reducer(state: TradeState, action: Action) {
   return tradeReducer(state, action);
 }

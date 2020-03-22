@@ -143,6 +143,7 @@ export class SantaTable implements OnInit, OnChanges {
     this.tableData.data.agGridFrameworkComponents = {
       securityCard: SantaTableSecurityCell,
       bestQuote: SantaTableQuoteCell,
+      bestAxeQuote: SantaTableQuoteCell,
       detailAllQuotes: SantaTableDetailAllQuotes,
       numericFloatingFilter: SantaTableNumericFloatingFilter,
       numericFilter: SantaTableNumericFilter

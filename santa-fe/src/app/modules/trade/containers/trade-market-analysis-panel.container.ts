@@ -47,9 +47,8 @@
       MarketAnalysisGroupByOptions,
       MarketAnalysisGroupByOpionsDefaultActiveList
     } from 'Core/constants/tradeConstants.constant';
-    import {
-      selectSelectedSecurityForAnalysis
-    } from 'Trade/selectors/trade.selectors';
+    import { selectSelectedSecurityForAnalysis } from 'Trade/selectors/trade.selectors';
+    import { TradeSelectedSecurityForAlertConfigEvent } from 'Trade/actions/trade.actions';
     import { HistoricalSummarySampleReturn } from 'Trade/stubs/lilMarket.stub';
   //
 
@@ -249,6 +248,17 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     } else {
       this.state.graphDataEmptyState = true;
     }
+  }
+
+  public onClickSecurityCardSentToAlertConfig(targetSecurity: SecurityDTO) {
+    this.store$.dispatch(new TradeSelectedSecurityForAlertConfigEvent(this.utilityService.deepCopy(targetSecurity)));
+    this.restfulCommService.logEngagement(
+      EngagementActionList.sendToAlertConfig,
+      targetSecurity.data.securityID,
+      'n/a',
+      this.ownerInitial,
+      'Trade - Lil Market Panel'
+    );
   }
 
   public onClickOpenSecurityInBloomberg(pack: ClickedOpenSecurityInBloombergEmitterParams) {
@@ -495,6 +505,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     targetSecurity.api.onClickThumbDown = this.onClickSecurityCardThumbDown.bind(this);
     targetSecurity.api.onClickSendToGraph = this.onClickSecurityCardSendToGraph.bind(this);
     targetSecurity.api.onClickOpenSecurityInBloomberg = this.onClickOpenSecurityInBloomberg.bind(this);
+    targetSecurity.api.onClickSendToAlertConfig = this.onClickSecurityCardSentToAlertConfig.bind(this);
   }
 
   private populateGroupOptionText(rawData: BEHistoricalSummaryOverviewDTO) {
