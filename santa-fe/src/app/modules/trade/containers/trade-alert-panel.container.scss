@@ -182,6 +182,7 @@
   &__myGroup {
     flex: 0 0 auto;
     display: flex;
+    align-items: center;
     &-title {
       flex: 0 0 auto;
       font-size: $font_size_normal;
@@ -193,9 +194,25 @@
       flex: 0 0 auto;
       display: flex;
       align-items: center;
-      padding: $spacing_medium;
-      background-color: $color_gray_3;
+      // background-color: $color_gray_3;
       margin-top: $spacing_x_small;
+      &-disableTag {
+        @include mix_border_radius(3px);
+        flex: 0 0 auto;
+        visibility: hidden;
+        display: flex;
+        align-items: center;
+        margin-right: $spacing_small;
+        padding: $spacing_xx_small $spacing_x_small;
+        background-color: $color_disabled;
+        &>i {
+          color: $font_color_inverse;
+          margin-right: $spacing_x_small;
+        }
+        &>span {
+          color: $font_color_inverse;
+        }
+      }
       &-text {
         flex: 1 1 auto;
         color: $font_color_major;
@@ -213,13 +230,20 @@
           }
         }
       }
+      &-disableBtn {
+        margin-left: $spacing_x_large;
+      }
     }
-    &-textSeparator {
-      flex: 0 0 auto;
-      margin: $spacing_small;
+  }
+  &__textSeparator {
+    flex: 0 0 auto;
+    display: flex;
+    margin-top: $spacing_large;
+    margin-bottom: $spacing_medium;
+    &-content {
       color: $font_color_minor;
       font-size: $font_size_normal;
-      text-align: center;
+      margin-left: 15rem;
     }
   }
   &__singleSecurities {
@@ -305,7 +329,7 @@
           }
           &--disabled {
             #{$axeAlertConfigurationBlockName} {
-              &__watchList-securityList-item {
+              &__singleSecurities-watchList-securityList-item {
                 &-disableTag {
                   display: flex;
                 }
@@ -408,12 +432,39 @@
   }
   &--showSearchResult {
     #{$axeAlertConfigurationBlockName} {
-      &__search {
-        &-result {
-          display: flex;
+      &__singleSecurities {
+        &-search {
+          &-result {
+            display: flex;
+          }
+          &-prompt {
+            display: none;
+          }
         }
-        &-prompt {
-          display: none;
+      }
+    }
+  }
+  &--myGroupDisabled {
+    #{$axeAlertConfigurationBlockName} {
+      &__myGroup {
+        &-content {
+          &-disableTag {
+            visibility: visible;
+          }
+          &-btnGroup {
+            &-btn {
+              @include material('none');
+              background-color: $color_disabled;
+              &--selected {
+                background-color: $color_active;
+              }
+            }
+          }
+          &-disableBtn {
+            @include material('none');
+            @extend .santaBtn--inverseLabelled;
+            background-color: $color_active;
+          }
         }
       }
     }

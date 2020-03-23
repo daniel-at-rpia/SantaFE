@@ -93,8 +93,14 @@
                 <span>Liquidation</span>
               </button>
             </div>
-            <button (click)="onToggleDisableTargetGroupFromAxeWatchList(state.configuration.axe.myGroup)"></button>
+            <button (click)="onToggleDisableTargetGroupFromAxeWatchList(state.configuration.axe.myGroup)" class="sat-tradeAlertAxeAlertConfiguration__myGroup-content-disableBtn santaBtn--labelled">
+              <i class="fal fa-bell-slash"></i>
+              <span>Disable</span>
+            </button>
           </div>
+        </section>
+        <section class="sat-tradeAlertAxeAlertConfiguration__textSeparator">
+          <span class="sat-tradeAlertAxeAlertConfiguration__textSeparator-content">And Individual Securities :</span>
         </section>
         <section class="sat-tradeAlertAxeAlertConfiguration__singleSecurities">
           <div class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList">
