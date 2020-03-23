@@ -622,37 +622,12 @@ export class UtilityService {
         } else {
           newCellDTO.data.quantComparerDTO = null;
         }
-        const targetSecurity = targetRow.data.security;
-        // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
-        if ( targetSecurity.data.mark.markDriver === triCoreMetric || triCoreMetric === DEFAULT_DRIVER_IDENTIFIER) {
-          targetSecurity.data.mark.markRaw = targetRow.data.security.data.mark.markBackend;
-          const validMetricFromDriver = this.findSecurityTargetDefaultTriCoreDriver(targetSecurity);
-          const number = this.parseTriCoreDriverNumber(targetSecurity.data.mark.markRaw, validMetricFromDriver, targetSecurity, true) as string;
-          targetSecurity.data.mark.mark = targetSecurity.data.mark.markRaw > 0 ? number : null;
-        } else {
-          targetSecurity.data.mark.markRaw = null;
-          targetSecurity.data.mark.mark = null;
-        }
-        this.calculateMarkDiscrepancies(
-          targetRow.data.security,
-          newCellDTO.data.quantComparerDTO,
-          targetDriver
-        );
-        if (!!newCellDTO.data.quantComparerDTO) {
-          if (newCellDTO.data.quantComparerDTO.state.hasBid) {
-            targetSecurity.data.bestQuote.bid = newCellDTO.data.quantComparerDTO.data.bid.number;
-            targetSecurity.data.bestQuote.displayBid = newCellDTO.data.quantComparerDTO.data.bid.displayNumber;
-          } else {
-            targetSecurity.data.bestQuote.bid = null;
-            targetSecurity.data.bestQuote.displayBid = null;
-          }
-          if (newCellDTO.data.quantComparerDTO.state.hasOffer) {
-            targetSecurity.data.bestQuote.ask = newCellDTO.data.quantComparerDTO.data.offer.number;
-            targetSecurity.data.bestQuote.displayAsk = newCellDTO.data.quantComparerDTO.data.offer.displayNumber;
-          } else {
-            targetSecurity.data.bestQuote.ask = null;
-            targetSecurity.data.bestQuote.displayAsk = null;
-          }
+        if (targetHeader.data.key === 'bestQuote') {
+          this.populateMarkDataInSecurityCardWithBestQuoteData(
+            targetRow.data.security,
+            newCellDTO,
+            targetDriver
+          );
         }
         return newCellDTO;
       } else {
@@ -660,6 +635,44 @@ export class UtilityService {
         value = this.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, targetRow.data.security, false);
         newCellDTO.data.textData = value;
         return newCellDTO;
+      }
+    }
+
+    private populateMarkDataInSecurityCardWithBestQuoteData(
+      targetSecurity: SecurityDTO,
+      newCellDTO: SecurityTableCellDTO,
+      targetDriver: string
+    ) {
+      // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
+      if ( targetSecurity.data.mark.markDriver === targetDriver ) {
+        targetSecurity.data.mark.markRaw = targetSecurity.data.mark.markBackend;
+        const validMetricFromDriver = this.findSecurityTargetDefaultTriCoreDriver(targetSecurity);
+        const number = this.parseTriCoreDriverNumber(targetSecurity.data.mark.markRaw, validMetricFromDriver, targetSecurity, true) as string;
+        targetSecurity.data.mark.mark = targetSecurity.data.mark.markRaw > 0 ? number : null;
+      } else {
+        targetSecurity.data.mark.markRaw = null;
+        targetSecurity.data.mark.mark = null;
+      }
+      this.calculateMarkDiscrepancies(
+        targetSecurity,
+        newCellDTO.data.quantComparerDTO,
+        targetDriver
+      );
+      if (!!newCellDTO.data.quantComparerDTO) {
+        if (newCellDTO.data.quantComparerDTO.state.hasBid) {
+          targetSecurity.data.bestQuote.bid = newCellDTO.data.quantComparerDTO.data.bid.number;
+          targetSecurity.data.bestQuote.displayBid = newCellDTO.data.quantComparerDTO.data.bid.displayNumber;
+        } else {
+          targetSecurity.data.bestQuote.bid = null;
+          targetSecurity.data.bestQuote.displayBid = null;
+        }
+        if (newCellDTO.data.quantComparerDTO.state.hasOffer) {
+          targetSecurity.data.bestQuote.ask = newCellDTO.data.quantComparerDTO.data.offer.number;
+          targetSecurity.data.bestQuote.displayAsk = newCellDTO.data.quantComparerDTO.data.offer.displayNumber;
+        } else {
+          targetSecurity.data.bestQuote.ask = null;
+          targetSecurity.data.bestQuote.displayAsk = null;
+        }
       }
     }
 
