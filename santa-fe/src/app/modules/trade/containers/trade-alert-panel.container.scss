@@ -178,20 +178,17 @@
 .sat-tradeAlertAxeAlertConfiguration {
   $axeAlertConfigurationBlockName: &;
   display: flex;
-  &__watchList {
-    @include mix_border_generator(0 $typical_border_width 0 0);
-    flex: 0 1 50%;
+  flex-direction: column;
+  &__myGroup {
+    flex: 0 0 auto;
     display: flex;
-    flex-direction: column;
-    margin-right: $spacing_medium;
-    padding-right: $spacing_medium;
     &-title {
       flex: 0 0 auto;
       font-size: $font_size_normal;
       color: $font_color_minor;
       margin-right: $spacing_medium;
     }
-    &-myGroup {
+    &-content {
       @include mix_border_radius(10px);
       flex: 0 0 auto;
       display: flex;
@@ -224,175 +221,187 @@
       font-size: $font_size_normal;
       text-align: center;
     }
-    &-securityList {
-      @include mix_enable_scrollbar('vertical');
-      flex: 1 1 auto;
+  }
+  &__singleSecurities {
+    flex: 1 1 auto;
+    display: flex;
+    &-watchList {
+      @include mix_border_generator(0 $typical_border_width 0 0);
+      flex: 0 1 50%;
       display: flex;
       flex-direction: column;
+      margin-right: $spacing_medium;
       padding-right: $spacing_medium;
-      &-item {
-        flex: 0 1 auto;
+      &-securityList {
+        @include mix_enable_scrollbar('vertical');
+        flex: 1 1 auto;
         display: flex;
-        align-items: center;
-        margin-top: $spacing_small;
-        &-newTag {
-          @include mix_border_radius(3px);
-          flex: 0 0 auto;
-          display: none;
+        flex-direction: column;
+        padding-right: $spacing_medium;
+        &-item {
+          flex: 0 1 auto;
+          display: flex;
           align-items: center;
-          margin-right: $spacing_small;
-          padding: $spacing_xx_small $spacing_x_small;
-          background-color: $color_highlight;
-          &>i {
-            color: $font_color_inverse;
-            margin-right: $spacing_x_small;
-          }
-          &>span {
-            color: $font_color_inverse;
-          }
-        }
-        &-disableTag {
-          @include mix_border_radius(3px);
-          flex: 0 0 auto;
-          display: none;
-          align-items: center;
-          margin-right: $spacing_small;
-          padding: $spacing_xx_small $spacing_x_small;
-          background-color: $color_disabled;
-          &>i {
-            color: $font_color_inverse;
-            margin-right: $spacing_x_small;
-          }
-          &>span {
-            color: $font_color_inverse;
-          }
-        }
-        security-card {
-          flex: 1 1 auto;
-        }
-        &-btnGroup {
-          flex: 0 0 auto;
-          margin-left: $spacing_medium;
-          &-btn {
-            &--selected {
-              @include material('none');
-              background-color: $color_active;
+          margin-top: $spacing_small;
+          &-newTag {
+            @include mix_border_radius(3px);
+            flex: 0 0 auto;
+            display: none;
+            align-items: center;
+            margin-right: $spacing_small;
+            padding: $spacing_xx_small $spacing_x_small;
+            background-color: $color_highlight;
+            &>i {
+              color: $font_color_inverse;
+              margin-right: $spacing_x_small;
+            }
+            &>span {
               color: $font_color_inverse;
             }
           }
-        }
-        &-disableBtn {
-          flex: 0 0 auto;
-          margin-left: $spacing_medium;
-          color: $font_color_major;
-        }
-        &-removeBtn {
-          flex: 0 0 auto;
-          margin-left: $spacing_medium;
-          background-color: $color_kill;
-          color: $font_color_inverse;
-        }
-        &--deleted {
-          display: none;
-        }
-        &--disabled {
-          #{$axeAlertConfigurationBlockName} {
-            &__watchList-securityList-item {
-              &-disableTag {
-                display: flex;
-              }
-              &-btnGroup {
-                &-btn {
-                  @include material('none');
-                  background-color: $color_disabled;
-                  &--selected {
-                    background-color: $color_active;
-                  }
-                }
-              }
-              &-disableBtn {
+          &-disableTag {
+            @include mix_border_radius(3px);
+            flex: 0 0 auto;
+            display: none;
+            align-items: center;
+            margin-right: $spacing_small;
+            padding: $spacing_xx_small $spacing_x_small;
+            background-color: $color_disabled;
+            &>i {
+              color: $font_color_inverse;
+              margin-right: $spacing_x_small;
+            }
+            &>span {
+              color: $font_color_inverse;
+            }
+          }
+          security-card {
+            flex: 1 1 auto;
+          }
+          &-btnGroup {
+            flex: 0 0 auto;
+            margin-left: $spacing_medium;
+            &-btn {
+              &--selected {
                 @include material('none');
                 background-color: $color_active;
                 color: $font_color_inverse;
               }
             }
           }
-        }
-        &--new {
-          #{$axeAlertConfigurationBlockName} {
-            &__watchList-securityList-item {
-              &-newTag {
-                display: flex;
+          &-disableBtn {
+            flex: 0 0 auto;
+            margin-left: $spacing_medium;
+            color: $font_color_major;
+          }
+          &-removeBtn {
+            flex: 0 0 auto;
+            margin-left: $spacing_medium;
+            background-color: $color_kill;
+            color: $font_color_inverse;
+          }
+          &--deleted {
+            display: none;
+          }
+          &--disabled {
+            #{$axeAlertConfigurationBlockName} {
+              &__watchList-securityList-item {
+                &-disableTag {
+                  display: flex;
+                }
+                &-btnGroup {
+                  &-btn {
+                    @include material('none');
+                    background-color: $color_disabled;
+                    &--selected {
+                      background-color: $color_active;
+                    }
+                  }
+                }
+                &-disableBtn {
+                  @include material('none');
+                  background-color: $color_active;
+                  color: $font_color_inverse;
+                }
+              }
+            }
+          }
+          &--new {
+            #{$axeAlertConfigurationBlockName} {
+              &__watchList-securityList-item {
+                &-newTag {
+                  display: flex;
+                }
               }
             }
           }
         }
       }
     }
-  }
-  &__search {
-    flex: 0 1 50%;
-    display: flex;
-    flex-direction: column;
-    &-utility {
-      flex: 0 0 auto;
-      display: flex;
-      align-items: center;
-      &-label {
-        flex: 0 0 auto;
-        font-size: $font_size_normal;
-        color: $font_color_minor;
-        margin-right: $spacing_medium;
-      }
-      santa-input {
-        flex: 1 1 auto;
-      }
-    }
-    &-result {
-      @include mix_enable_scrollbar('vertical');
-      flex: 1 1 auto;
-      display: none;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      align-content: flex-start;
-      padding-left: $spacing_small;
-      padding-bottom: $spacing_large;
-      &-item {
-        flex: 1 1 45%;
-        margin-top: $spacing_small;
-        margin-right: $spacing_small;
-      }
-    }
-    &-prompt {
-      @include mix_border_radius(10px);
-      flex: 0 0 auto;
+    &-search {
+      flex: 0 1 50%;
       display: flex;
       flex-direction: column;
-      padding: $spacing_medium;
-      background-color: $color_gray_3;
-      margin-top: $spacing_medium;
-      &-line {
+      &-utility {
+        flex: 0 0 auto;
         display: flex;
-        &-text {
-          color: $font_color_major;
+        align-items: center;
+        &-label {
+          flex: 0 0 auto;
           font-size: $font_size_normal;
+          color: $font_color_minor;
+          margin-right: $spacing_medium;
         }
-        &-highlightText {
-          @include mix_border_radius(3px);
-          margin: 0 $spacing_small;
-          background-color: $color_active;
-          color: $font_color_inverse;
-          padding: 0 $spacing_x_small;
-          font-size: $font_size_normal;
+        santa-input {
+          flex: 1 1 auto;
         }
       }
-      &-more {
+      &-result {
+        @include mix_enable_scrollbar('vertical');
+        flex: 1 1 auto;
+        display: none;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        align-content: flex-start;
+        padding-left: $spacing_small;
+        padding-bottom: $spacing_large;
+        &-item {
+          flex: 1 1 45%;
+          margin-top: $spacing_small;
+          margin-right: $spacing_small;
+        }
+      }
+      &-prompt {
+        @include mix_border_radius(10px);
+        flex: 0 0 auto;
         display: flex;
         flex-direction: column;
-        margin-top: $spacing_small;
-        &-text {
-          font-size: $font_size_normal;
-          color: $font_color_major;
+        padding: $spacing_medium;
+        background-color: $color_gray_3;
+        margin-top: $spacing_medium;
+        &-line {
+          display: flex;
+          &-text {
+            color: $font_color_major;
+            font-size: $font_size_normal;
+          }
+          &-highlightText {
+            @include mix_border_radius(3px);
+            margin: 0 $spacing_small;
+            background-color: $color_active;
+            color: $font_color_inverse;
+            padding: 0 $spacing_x_small;
+            font-size: $font_size_normal;
+          }
+        }
+        &-more {
+          display: flex;
+          flex-direction: column;
+          margin-top: $spacing_small;
+          &-text {
+            font-size: $font_size_normal;
+            color: $font_color_major;
+          }
         }
       }
     }

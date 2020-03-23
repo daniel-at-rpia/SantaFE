@@ -253,7 +253,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     this.updateAlert();
   }
 
-  public onToggleDisableSecurityFromAxeWatchList(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
+  public onToggleDisableTargetGroupFromAxeWatchList(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
     targetBlock.isDisabled = !targetBlock.isDisabled;
   }
 
