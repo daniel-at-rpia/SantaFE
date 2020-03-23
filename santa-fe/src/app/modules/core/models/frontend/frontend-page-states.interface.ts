@@ -203,4 +203,5 @@ export interface TradeAlertPanelState {
   }
   autoUpdateCountdown: number;
   alertUpdateInProgress: boolean;
+  isCenterPanelPresetSelected: boolean;
 }

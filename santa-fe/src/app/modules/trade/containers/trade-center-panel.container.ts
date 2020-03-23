@@ -644,7 +644,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       }
     });
     const maxDelta = this.utilityService.findPercentile(deltaList, QUANT_COMPARER_PERCENTILE);
-    const maxSize = this.utilityService.findPercentile(sizeList, QUANT_COMPARER_PERCENTILE);
+    // const maxSize = this.utilityService.findPercentile(sizeList, QUANT_COMPARER_PERCENTILE);
+    const maxSize = 50;
 
     list.forEach((eachComparer) => {
       if (eachComparer.state.hasBid && eachComparer.state.hasOffer) {

@@ -56,7 +56,7 @@
     } from 'Core/constants/tradeConstants.constant';
     import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
     import { CoreFlushSecurityMap, CoreSendNewAlerts } from 'Core/actions/core.actions';
-    import { selectSelectedSecurityForAlertConfig } from 'Trade/selectors/trade.selectors';
+    import { selectSelectedSecurityForAlertConfig, selectPresetSelected } from 'Trade/selectors/trade.selectors';
   //
 
 @Component({
@@ -76,7 +76,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   subscriptions = {
     securityMapSub: null,
     autoUpdateCountSub: null,
-    selectedSecurityForAlertConfigSub: null
+    selectedSecurityForAlertConfigSub: null,
+    centerPanelPresetSelectedSub: null
   }
   autoUpdateCount$: Observable<any>;
   constants = {
@@ -122,7 +123,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         }
       },
       autoUpdateCountdown: 0,
-      alertUpdateInProgress: false
+      alertUpdateInProgress: false,
+      isCenterPanelPresetSelected: false
     };
     return state;
   }
@@ -143,7 +145,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
     this.autoUpdateCount$ = interval(1000);
     this.subscriptions.autoUpdateCountSub = this.autoUpdateCount$.subscribe(count => {
-      if (!this.state.isAlertPaused && !this.state.alertUpdateInProgress) {
+      if (this.state.isCenterPanelPresetSelected && !this.state.isAlertPaused && !this.state.alertUpdateInProgress) {
         this.state.autoUpdateCountdown = this.state.autoUpdateCountdown + 1;
         if (this.state.autoUpdateCountdown >= this.constants.countdown) {
           this.updateAlert();
@@ -168,6 +170,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           this.state.configuration.axe.securityList[existMatchIndex].isDisabled = false;
         }
       }
+    });
+    this.subscriptions.centerPanelPresetSelectedSub = this.store$.pipe(
+      select(selectPresetSelected)
+    ).subscribe(flag => {
+      this.state.isCenterPanelPresetSelected = flag;
     });
   }
 
