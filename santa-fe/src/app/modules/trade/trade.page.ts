@@ -74,7 +74,7 @@ export class TradePage implements OnInit, OnDestroy {
           this.loadOwnerInitial(err.error.text);
         } else {
           this.loadOwnerInitial('n/a');
-          this.restfulCommService.logError(`Can not find user, error is`, err.error);
+          this.restfulCommService.logError(`Can not find user, error`);
         }
         return of('error');
       })
@@ -125,6 +125,7 @@ export class TradePage implements OnInit, OnDestroy {
     } else {
       this.state.ownerInitial = serverReturn;
     }
+    this.restfulCommService.updateUser(this.state.ownerInitial);
     this.store$.dispatch(new CoreUserLoggedIn(serverReturn));
   }
 

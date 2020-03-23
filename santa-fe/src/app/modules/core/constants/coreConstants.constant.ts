@@ -189,7 +189,14 @@ export const EngagementActionList = {
   thumbdownSecurity: 'Thumbdown Security',
   populateGraph: 'Populate Graph',
   midnightReload: 'Midnight Reload',
-  sendToAlertConfig: 'Send To Alert Config'
+  sendToAlertConfig: 'Send To Alert Config',
+  globalAlertToggledHide: 'Global Alert Toggled Hide',
+  globalAlertClearedAll: 'Global Alert Clear All',
+  globalAlertInteractedAlert: 'Global Alert Interacted Alert',
+  tradeAlertOpenConfiguration: 'Trade Alert Open/Close Configuration',
+  tradeAlertConfigure: 'Trade Alert Configure',
+  tradeAlertPause: 'Trade Alert Pause',
+  tradeAlertAddSingleSecurity: 'Trade Alert Add Single Security'
 }
 
 export enum AlertTypes {

@@ -198,14 +198,24 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   public onClickConfigureAlert() {
     this.configureAlert.emit();
     this.state.configureAlert = true;
-    // const lastKeyword = this.state.configuration.axe.securitySearchKeyword;
     this.state.configuration.axe = this.initializePageState().configuration.axe;
     this.loadAllConfigurations();
-    // this.onSearchKeywordChange(lastKeyword);
+    this.restfulCommService.logEngagement(
+      this.restfulCommService.engagementMap.tradeAlertOpenConfiguration,
+      null,
+      null,
+      'Trade Alert Panel'
+    );
   }
 
   public onTogglePauseAlert() {
     this.state.isAlertPaused = !this.state.isAlertPaused;
+    this.restfulCommService.logEngagement(
+      this.restfulCommService.engagementMap.tradeAlertPause,
+      null,
+      `${this.state.isAlertPaused}`,
+      'Trade Alert Panel'
+    );
   }
 
   public selectAlertForConfigure(targetType: AlertTypes) {
@@ -244,6 +254,12 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   public onSelectAxeWatchlistSide(targetScope: AxeAlertScope, targetBlock: TradeAlertConfigurationAxeGroupBlock) {
     if (!!targetScope && !!targetBlock && !targetBlock.isDisabled) {
       this.addScopeToAxeWatchlistEntry(targetBlock, targetScope);
+      this.restfulCommService.logEngagement(
+        this.restfulCommService.engagementMap.tradeAlertConfigure,
+        null,
+        `Change Scope to ${targetBlock.scopes.toString()}`,
+        'Trade Alert Panel'
+      );
     }
   }
 
@@ -259,10 +275,22 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
   public onToggleDisableTargetGroupFromAxeWatchList(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
     targetBlock.isDisabled = !targetBlock.isDisabled;
+    this.restfulCommService.logEngagement(
+      this.restfulCommService.engagementMap.tradeAlertConfigure,
+      null,
+      'Toggle Disable',
+      'Trade Alert Panel'
+    );
   }
 
   public onClickRemoveSecurityFromAxeWatchList(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
     targetBlock.isDeleted = true;
+    this.restfulCommService.logEngagement(
+      this.restfulCommService.engagementMap.tradeAlertConfigure,
+      null,
+      'Remove',
+      'Trade Alert Panel'
+    );
   }
 
   private fetchSecurities(matchList: Array<SecurityMapEntry>) {
@@ -292,7 +320,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             this.state.configuration.axe.searchList.push(eachCard);
           });
         } else {
-          this.restfulCommService.logError(`'security/get-securities' API returned an empty result with this payload: ${list.toString()}`, null);
+          this.restfulCommService.logError(`'security/get-securities' API returned an empty result with this payload: ${list.toString()}`);
         }
       })
     ).subscribe();
@@ -331,6 +359,12 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       isDisabled: false
     };
     this.state.configuration.axe.securityList.unshift(newEntry);
+    this.restfulCommService.logEngagement(
+      this.restfulCommService.engagementMap.tradeAlertAddSingleSecurity,
+      copy.data.securityID,
+      null,
+      'Trade Alert Panel'
+    );
   }
 
   private loadAllConfigurations() {
@@ -345,7 +379,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             this.populateConfigurationFromEachGroup(eachConfiguration);
           }
         } else {
-          this.restfulCommService.logError(`'Alert/get-alert-configs' API returned an empty result`, null);
+          this.restfulCommService.logError(`'Alert/get-alert-configs' API returned an empty result`);
         }
       }),
       catchError(err => {
@@ -391,7 +425,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             newEntry.card = eachCard;
           });
         } else {
-          this.restfulCommService.logError(`'security/get-securities' API returned an empty result with this payload: ${payload.identifiers.toString()}`, null);
+          this.restfulCommService.logError(`'security/get-securities' API returned an empty result with this payload: ${payload.identifiers.toString()}`);
         }
       })
     ).subscribe();
@@ -467,7 +501,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       first(),
       catchError(err => {
         console.error(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`, entirePayload);
-        this.restfulCommService.logError(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`, null);
+        this.restfulCommService.logError(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`);
         return of('error');
       })
     ).subscribe();

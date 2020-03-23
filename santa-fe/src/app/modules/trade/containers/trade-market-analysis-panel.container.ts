@@ -151,7 +151,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
           EngagementActionList.clickGroupByOption,
           this.state.targetSecurity.data.securityID,
           targetOption.data.key,
-          this.ownerInitial,
           'Trade - Lil Market Panel'
         );
         const indexOfTargetOption = this.state.config.activeOptions.indexOf(targetOption);
@@ -172,7 +171,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
           EngagementActionList.changeTimeScope,
           this.state.targetSecurity.data.securityID,
           targetScope,
-          this.ownerInitial,
           'Trade - Lil Market Panel'
         );
         this.state.config.timeScope = targetScope;
@@ -187,7 +185,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
         EngagementActionList.changeDriver,
         this.state.targetSecurity.data.securityID,
         targetDriver,
-        this.ownerInitial,
         'Trade - Lil Market Panel'
       );
       this.state.config.driver = targetDriver;
@@ -208,7 +205,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
       EngagementActionList.thumbdownSecurity,
       targetSecurity.data.securityID,
       'Thumbdown',
-      this.ownerInitial,
       'Trade - Lil Market Panel'
     );
   }
@@ -224,7 +220,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
         EngagementActionList.populateGraph,
         targetSecurity.data.name || this.state.table.presentList[1].data.name || 'Something is Wrong',
         'Main Graph',
-        this.ownerInitial,
         'Trade - Lil Market Panel'
       );
       this.state.graphDataEmptyState = false;
@@ -256,7 +251,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
       EngagementActionList.sendToAlertConfig,
       targetSecurity.data.securityID,
       'n/a',
-      this.ownerInitial,
       'Trade - Lil Market Panel'
     );
   }
@@ -266,7 +260,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
       EngagementActionList.bloombergRedict,
       pack.targetSecurity.data.securityID,
       `BBG - ${pack.targetBBGModule}`,
-      this.ownerInitial,
       'Trade - Lil Market Panel'
     );
     const url = `bbg://securities/${pack.targetSecurity.data.globalIdentifier}%20${pack.yellowCard}/${pack.targetBBGModule}`;

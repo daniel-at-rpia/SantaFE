@@ -231,7 +231,6 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         EngagementActionList.selectPreset,
         'n/a',
         targetPreset.data.displayTitle,
-        this.ownerInitial,
         'Trade - Center Panel'
       );
       targetPreset.state.isSelected = true;
@@ -267,7 +266,6 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         EngagementActionList.switchDriver,
         'n/a',
         targetDriver,
-        this.ownerInitial,
         'Trade - Center Panel'
       );
       this.state.filters.quickFilters.driverType = targetDriver;
@@ -311,7 +309,6 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       EngagementActionList.applyFilter,
       'n/a',
       'n/a',
-      this.ownerInitial,
       'Trade - Center Panel'
     );
   }
@@ -322,7 +319,6 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       EngagementActionList.selectSecurityForAnalysis,
       targetSecurity.data.securityID,
       'n/a',
-      this.ownerInitial,
       'Trade - Center Panel'
     );
   }
@@ -333,7 +329,6 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       EngagementActionList.sendToAlertConfig,
       targetSecurity.data.securityID,
       'n/a',
-      this.ownerInitial,
       'Trade - Center Panel'
     );
   }
@@ -345,7 +340,6 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       EngagementActionList.bloombergRedict,
       pack.targetSecurity.data.securityID,
       `BBG - ${pack.targetBBGModule}`,
-      this.ownerInitial,
       'Trade - Center Panel'
     );
   }
@@ -460,7 +454,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         this.loadAllData(serverReturn);
       }),
       catchError(err => {
-        this.restfulCommService.logError(`Get portfolios failed`, this.ownerInitial);
+        this.restfulCommService.logError(`Get portfolios failed`);
         this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
         this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
         this.updateStage(3);

@@ -95,7 +95,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
           this.generateNewAlert(eachAlert);
         });
       } catch {
-        this.restfulCommService.logError('received new alerts but failed to generate', null);
+        this.restfulCommService.logError('received new alerts but failed to generate');
         console.error('received new alerts but failed to generate');
       }
     });
@@ -119,6 +119,12 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     this.state.displayAlerts = !this.state.displayAlerts;
     this.store$.dispatch(new CoreToggleAlertThumbnailDisplay(this.state.displayAlerts));
     this.updateAlertTrigger(false);
+    this.restfulCommService.logEngagement(
+      this.restfulCommService.engagementMap.globalAlertToggledHide,
+      null,
+      `display = ${this.state.displayAlerts}`,
+      'Global Alert Container'
+    );
   }
 
   public onClickClearAlerts() {
@@ -142,6 +148,12 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     this.state.storeList = [];
     this.updateTotalSize();
     this.state.triggerActionMenuOpen = false;
+    this.restfulCommService.logEngagement(
+      this.restfulCommService.engagementMap.globalAlertClearedAll,
+      null,
+      `cleared ${payload.alertIds.length} alerts`,
+      'Global Alert Container'
+    );
   }
 
   public onClickAlertThumbnail(targetAlert: AlertDTO) {
@@ -150,6 +162,12 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       if (!targetAlert.state.isSlidedOut && !targetAlert.state.isCountdownFinished) {
         targetAlert.state.isCountdownFinished = true;
       }
+      this.restfulCommService.logEngagement(
+        this.restfulCommService.engagementMap.globalAlertInteractedAlert,
+        null,
+        `Target Alert ${targetAlert.data.titleTop}, ${targetAlert.data.message}`,
+        'Global Alert Container'
+      );
     }
   }
 
@@ -184,7 +202,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         if (indexOfTarget >= 0) {
           this.state.presentList.splice(indexOfTarget, 1);
         } else {
-          this.restfulCommService.logError('can not find alert to replace in present list', null);
+          this.restfulCommService.logError('can not find alert to replace in present list');
           console.error('can not find alert to replace in present list');
         }
       }
@@ -252,7 +270,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
             this.state.presentList.push(poppedAlertFromStoreList);
           }
         } else {
-          this.restfulCommService.logError('can not find alert to delete in present list', null);
+          this.restfulCommService.logError('can not find alert to delete in present list');
           console.error('can not find alert to delete in present list');
         }
         this.updateTotalSize();
@@ -261,7 +279,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         if (indexOfTarget >= 0) {
           this.state.storeList.splice(indexOfTarget, 1);
         } else {
-          this.restfulCommService.logError('can not find alert to delete in store list', null);
+          this.restfulCommService.logError('can not find alert to delete in store list');
           console.error('can not find alert to delete in store list');
         }
       }

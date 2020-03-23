@@ -236,7 +236,7 @@ export class SantaTable implements OnInit, OnChanges {
                 // ignore, seems AgGrid causes some weird read only error
               }
             } else {
-              this.restfulCommService.logError(`[Santa Table] Could't find targetRow - ${params}`, this.ownerInitial);
+              this.restfulCommService.logError(`[Santa Table] Could't find targetRow - ${params}`);
               console.error(`Could't find targetRow`, params);
             }
           }

@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { first, tap, catchError } from 'rxjs/operators';
 
-import { APIUrlMap } from 'Core/constants/coreConstants.constant';
+import { APIUrlMap, EngagementActionList } from 'Core/constants/coreConstants.constant';
 
 @Injectable()
 export class RestfulCommService {
@@ -13,11 +13,19 @@ export class RestfulCommService {
   // private endpoint = 'https://localhost:51225';
   //private endpoint = 'https://rpia-solutions:51225';
   //private endpoint = 'https://rpia-msmith-dt:51225';
+  private user = 'anonymous';
   public apiMap = {
     ...APIUrlMap
   };
+  public engagementMap = {
+    ...EngagementActionList
+  }
 
   constructor(private http: HttpClient){}
+
+  public updateUser(user: string) {
+    this.user = user;
+  }
 
   public callAPI(
     url: string,
@@ -70,14 +78,13 @@ export class RestfulCommService {
     type: string,
     security: string,
     value: string,
-    user: string,
     container: string
   ) {
     const payload = {
       type: type,
       security: security,
       value: value,
-      user: user,
+      user: this.user,
       container: container,
       timestamp: new Date().getTime()
     };
@@ -90,11 +97,10 @@ export class RestfulCommService {
   }
 
   public logError(
-    message: string,
-    user: string
+    message: string
   ) {
     const payload = {
-      message: `Error: ${message} - From ${user}`,
+      message: `Error: ${message} - From ${this.user}`,
       level: 'Error'
     };
     this.callAPI(this.apiMap.logError, {req: 'POST'}, payload).pipe(
