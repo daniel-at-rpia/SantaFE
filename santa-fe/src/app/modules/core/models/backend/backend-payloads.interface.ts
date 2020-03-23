@@ -63,17 +63,19 @@ export interface PayloadGetSecurities {
 }
 
 export interface PayloadUpdateAlertConfig {
-  alertConfig: {
-    alertConfigID?: string;
-    type: AlertTypes;
-    subType: AlertSubTypes;
-    groupFilters: {
-      Owner?: Array<string>;
-      SecurityIdentifier?: Array<string>;
-    }
-    isEnabled?: boolean;
-    isDeleted?: boolean;
+  alertConfigs: Array<PayloadUpdateSingleAlertConfig>;
+}
+
+export interface PayloadUpdateSingleAlertConfig {
+  alertConfigID?: string;
+  type: AlertTypes;
+  subType: AlertSubTypes;
+  groupFilters: {
+    Owner?: Array<string>;
+    SecurityIdentifier?: Array<string>;
   }
+  isEnabled?: boolean;
+  isDeleted?: boolean;
 }
 
 export interface PayloadSetAlertsToInactive {

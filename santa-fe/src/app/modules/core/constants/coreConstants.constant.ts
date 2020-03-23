@@ -18,7 +18,7 @@ export const APIUrlMap = {
   getCountries: 'obligor/get-countries',
   setQuoteStatus: 'liveQuote/set-quote-status',
   getAlertConfigurations: 'Alert/get-alert-configs',
-  updateAlertConfiguration: 'Alert/update-alert-config',
+  updateAlertConfiguration: 'Alert/update-alert-configs',
   getAlerts: 'Alert/get-alerts',
   readAlert: 'Alert/set-alerts-to-inactive',
   deleteAlert: 'Alert/delete-alerts',

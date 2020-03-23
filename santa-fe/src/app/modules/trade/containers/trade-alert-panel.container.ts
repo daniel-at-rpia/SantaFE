@@ -39,7 +39,11 @@
       BEAlertConfigurationDTO,
       BEAlertDTO
     } from 'BEModels/backend-models.interface';
-    import { PayloadGetSecurities, PayloadUpdateAlertConfig } from 'BEModels/backend-payloads.interface';
+    import {
+      PayloadGetSecurities,
+      PayloadUpdateAlertConfig,
+      PayloadUpdateSingleAlertConfig
+    } from 'BEModels/backend-payloads.interface';
     import {
       EngagementActionList,
       AlertTypes,
@@ -331,7 +335,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
   private loadAllConfigurations() {
     const config = this.state.configuration.axe;
-    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlertConfigurations, {req: 'GET'}).pipe(
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlertConfigurations, {req: 'POST'}, {}).pipe(
       first(),
       tap((serverReturn: BEAlertConfigurationReturn) => {
         if (!!serverReturn) {
@@ -424,49 +428,45 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private saveAxeConfiguration() {
-    const groupPayload: PayloadUpdateAlertConfig = {
-      alertConfig: {
-        type: this.constants.alertTypes.axeAlert,
-        subType: this.mapAxeScopesToAlertSubtypes(this.state.configuration.axe.myGroup.scopes),
-        groupFilters: {
-          Owner: [this.ownerInitial]
-        }
+    const entirePayload: PayloadUpdateAlertConfig = {
+      alertConfigs: []
+    };
+    const groupPayload: PayloadUpdateSingleAlertConfig = {
+      type: this.constants.alertTypes.axeAlert,
+      subType: this.mapAxeScopesToAlertSubtypes(this.state.configuration.axe.myGroup.scopes),
+      groupFilters: {
+        Owner: [this.ownerInitial]
       }
     };
-    this.saveSingleAxeConfiguration(groupPayload, this.state.configuration.axe.myGroup);
+    if (this.state.configuration.axe.myGroup.isDisabled) {
+      groupPayload.isEnabled = false;
+    }
+    if (this.state.configuration.axe.myGroup.groupId) {
+      groupPayload.alertConfigID = this.state.configuration.axe.myGroup.groupId;
+    }
+    entirePayload.alertConfigs.push(groupPayload);
     this.state.configuration.axe.securityList.forEach((eachEntry) => {
-      // check is valid
-      if (eachEntry.scopes.length > 0) {
-        const payload: PayloadUpdateAlertConfig = {
-          alertConfig: {
-            type: this.constants.alertTypes.axeAlert,
-            subType: this.mapAxeScopesToAlertSubtypes(eachEntry.scopes),
-            groupFilters: {}
-          }
-        }
-        payload.alertConfig.groupFilters.SecurityIdentifier = [eachEntry.card.data.securityID];
-        this.saveSingleAxeConfiguration(payload, eachEntry);
+      const payload: PayloadUpdateSingleAlertConfig = {
+        type: this.constants.alertTypes.axeAlert,
+        subType: this.mapAxeScopesToAlertSubtypes(eachEntry.scopes),
+        groupFilters: {}
       }
+      payload.groupFilters.SecurityIdentifier = [eachEntry.card.data.securityID];
+      if (!!eachEntry.groupId) {
+        payload.alertConfigID = eachEntry.groupId;
+      }
+      if (eachEntry.isDisabled) {
+        payload.isEnabled = false;
+      }
+      if (eachEntry.isDeleted) {
+        payload.isDeleted = true;
+      }
+      entirePayload.alertConfigs.push(payload);
     });
-  }
-
-  private saveSingleAxeConfiguration(
-    payload: PayloadUpdateAlertConfig,
-    targetEntry: TradeAlertConfigurationAxeGroupBlock
-  ) {
-    if (!!targetEntry.groupId) {
-      payload.alertConfig.alertConfigID = targetEntry.groupId;
-    }
-    if (targetEntry.isDisabled) {
-      payload.alertConfig.isEnabled = false;
-    }
-    if (targetEntry.isDeleted) {
-      payload.alertConfig.isDeleted = true;
-    }
-    this.restfulCommService.callAPI(this.restfulCommService.apiMap.updateAlertConfiguration, {req: 'POST'}, payload).pipe(
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.updateAlertConfiguration, {req: 'POST'}, entirePayload).pipe(
       first(),
       catchError(err => {
-        console.error(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`, payload);
+        console.error(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`, entirePayload);
         this.restfulCommService.logError(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`, null);
         return of('error');
       })
@@ -513,7 +513,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     } else if (targetScopes.includes(this.constants.axeAlertScope.liquidation)) {
       return this.constants.alertSubTypes.liquidation;
     } else {
-      return null;
+      return this.constants.alertSubTypes.bid;
     }
   }
 
