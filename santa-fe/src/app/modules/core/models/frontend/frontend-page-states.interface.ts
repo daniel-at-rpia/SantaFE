@@ -132,6 +132,7 @@ export interface TradeUtilityPanelState {
 
 export interface TradeMarketAnalysisPanelState {
   receivedSecurity: boolean;
+  receivedSecurityIsCDS: boolean;
   apiReturnedState: boolean;
   apiErrorState: boolean;
   graphDataEmptyState: boolean;

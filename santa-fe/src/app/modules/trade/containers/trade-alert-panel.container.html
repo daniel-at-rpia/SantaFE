@@ -4,8 +4,8 @@
     'sat-tradeAlertPanel--sidePanelsDisplayedState': sidePanelsDisplayed,
     'sat-tradeAlertPanel--configureAlertState': state.configureAlert,
     'sat-tradeAlertPanel--alertPausedState': state.isAlertPaused,
-    'sat-tradeAlertPanel--configureAxeAlertState': state.configuration.selectedAlert === 'axe',
-    'sat-tradeAlertPanel--configureMarkAlertState': state.configuration.selectedAlert === 'mark'
+    'sat-tradeAlertPanel--configureAxeAlertState': state.configuration.selectedAlert === constants.alertTypes.axeAlert,
+    'sat-tradeAlertPanel--configureMarkAlertState': state.configuration.selectedAlert === constants.alertTypes.markAlert
   }">
   <section class="sat-tradeAlertPanel__utilities">
     <div class="sat-tradeAlertPanel__utilities-pause">
@@ -33,7 +33,7 @@
   <section class="sat-tradeAlertPanel__configuration">
     <ul class="sat-tradeAlertPanel__configuration-alertTypeList">
       <li class="sat-tradeAlertPanel__configuration-alertTypeList-item sat-tradeAlertPanel__configuration-alertTypeList-item--axe">
-        <button (click)="selectAlertForConfigure('axe')" class="sat-tradeAlertPanel__configuration-alertTypeList-item-btn santaBtn--labelled santaBtn--inverseLabelled">
+        <button (click)="selectAlertForConfigure(constants.alertTypes.axeAlert)" class="sat-tradeAlertPanel__configuration-alertTypeList-item-btn santaBtn--labelled santaBtn--inverseLabelled">
           <i class="fas fa-axe"></i>
           <span>Axe Alert</span>
         </button>

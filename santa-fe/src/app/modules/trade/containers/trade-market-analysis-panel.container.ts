@@ -84,6 +84,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     }
     const state: TradeMarketAnalysisPanelState = {
       receivedSecurity: false,
+      receivedSecurityIsCDS: false,
       targetSecurity: null,
       displayGraph: false,
       apiReturnedState: false,
@@ -269,6 +270,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   private onSecuritySelected(targetSecurity: SecurityDTO) {
     this.state = this.initializePageState();
     this.state.receivedSecurity = true;
+    this.state.receivedSecurityIsCDS = this.utilityService.isCDS(false, this.state.targetSecurity);
     this.state.targetSecurity = this.utilityService.deepCopy(targetSecurity);
     this.state.targetSecurity.state.isSelected = false;
     this.applyStatesToSecurityCards(this.state.targetSecurity);

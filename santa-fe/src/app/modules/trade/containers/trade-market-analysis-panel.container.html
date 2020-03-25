@@ -2,7 +2,7 @@
   [ngClass]="{
     'sat-tradeMarketAnalysisPanel': true,
     'sat-tradeMarketAnalysisPanel--hasSecurityState': state.receivedSecurity,
-    'sat-tradeMarketAnalysisPanel--securityIsCDSState': state.receivedSecurity && this.utilityService.isCDS(false, state.targetSecurity),
+    'sat-tradeMarketAnalysisPanel--securityIsCDSState': state.receivedSecurity && state.receivedSecurityIsCDS,
     'sat-tradeMarketAnalysisPanel--apiErrorState': state.apiErrorState,
     'sat-tradeMarketAnalysisPanel--displayGraphState': state.displayGraph,
     'sat-tradeMarketAnalysisPanel--emptyGraphState': state.graphDataEmptyState,
