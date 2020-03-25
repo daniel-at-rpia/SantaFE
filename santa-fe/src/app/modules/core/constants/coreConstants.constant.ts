@@ -192,6 +192,7 @@ export const EngagementActionList = {
   sendToAlertConfig: 'Send To Alert Config',
   globalAlertToggledHide: 'Global Alert Toggled Hide',
   globalAlertClearedAll: 'Global Alert Clear All',
+  globalAlertClearedSingle: 'Global Alert Cleared Single',
   globalAlertInteractedAlert: 'Global Alert Interacted Alert',
   tradeAlertOpenConfiguration: 'Trade Alert Open/Close Configuration',
   tradeAlertConfigure: 'Trade Alert Configure',

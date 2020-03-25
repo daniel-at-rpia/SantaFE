@@ -183,6 +183,12 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         this.removeSingleAlert(targetAlert, true);
       }
       setTimeout(removeTarget.bind(this), 300);
+      this.restfulCommService.logEngagement(
+        this.restfulCommService.engagementMap.globalAlertClearedSingle,
+        null,
+        `Still has ${this.state.totalSize - 1} alerts`,
+        'Global Alert Container'
+      );
     }
   }
 
