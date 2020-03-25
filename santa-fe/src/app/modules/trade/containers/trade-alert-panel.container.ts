@@ -123,7 +123,12 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           searchIsValid: false
         },
         mark: {
-
+          myGroup: {
+            makeMoneySpread: null,
+            makeMoneyYield: null,
+            lossMoneySpread: null,
+            lossMoneyYield: null
+          }
         }
       },
       autoUpdateCountdown: 0,

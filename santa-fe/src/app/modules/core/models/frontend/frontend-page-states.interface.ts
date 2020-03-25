@@ -199,7 +199,12 @@ export interface TradeAlertPanelState {
       searchIsValid: boolean;
     },
     mark: {
-
+      myGroup: {
+        makeMoneySpread: number;
+        makeMoneyYield: number;
+        lossMoneySpread: number;
+        lossMoneyYield: number;
+      }
     }
   }
   autoUpdateCountdown: number;

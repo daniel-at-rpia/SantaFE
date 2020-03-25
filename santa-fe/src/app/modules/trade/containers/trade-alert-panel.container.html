@@ -200,14 +200,41 @@
               Securities I Own
             </span>
             <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold">
-              <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-title">Define Revenue Threshold</span>
+              <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-title">Make-Money Threshold</span>
               <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry">
                 <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-label">Spread</span>
-                <santa-input></santa-input>
-              </div>
-              <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry">
+                <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-input">
+                  <santa-input
+                    [inputValue]="state.configuration.mark.myGroup.makeMoneySpread"
+                    [placeholder]="''">
+                  </santa-input>
+                </div>
                 <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-label">Yield</span>
-                <santa-input></santa-input>
+                <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-input">
+                  <santa-input
+                    [inputValue]="state.configuration.mark.myGroup.makeMoneyYield"
+                    [placeholder]="''">
+                  </santa-input>
+                </div>
+              </div>
+            </div>
+            <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold">
+              <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-title">Lose-Money Threshold</span>
+              <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry">
+                <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-label">Spread</span>
+                <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-input">
+                  <santa-input
+                    [inputValue]="state.configuration.mark.myGroup.loseMoneySpread"
+                    [placeholder]="''">
+                  </santa-input>
+                </div>
+                <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-label">Yield</span>
+                <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-input">
+                  <santa-input
+                    [inputValue]="state.configuration.mark.myGroup.loseMoneyYield"
+                    [placeholder]="''">
+                  </santa-input>
+                </div>
               </div>
             </div>
           </div>
