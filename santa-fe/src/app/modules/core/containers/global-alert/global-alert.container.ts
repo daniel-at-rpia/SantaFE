@@ -92,7 +92,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         // the BE returns the array in a sequential order with the latest one on top, because the Alert present list is in a first-in-last-out order, we need to sort it reversely so it is presented in a sequential order
         const alertListSorted = this.utilityService.deepCopy(alertList).reverse();
         alertListSorted.forEach((eachAlert) => {
-          this.generateNewAlert(eachAlert);
+          this.generateNewAlert(eachAlert, alertListSorted);
         });
       } catch {
         this.restfulCommService.logError('received new alerts but failed to generate');
@@ -192,7 +192,10 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  private generateNewAlert(newAlert: AlertDTO) {
+  private generateNewAlert(
+    newAlert: AlertDTO,
+    entireListForDebugging: Array<AlertDTO>
+  ) {
     const existIndexInPresent = this.state.presentList.findIndex((eachAlert) => {
       return eachAlert.data.id === newAlert.data.id;
     });
@@ -208,7 +211,9 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         if (indexOfTarget >= 0) {
           this.state.presentList.splice(indexOfTarget, 1);
         } else {
-          this.restfulCommService.logError('can not find alert to replace in present list');
+          const entireList = entireListForDebugging.map((each) => {return each.data.id});
+          const oldList = this.state.presentList.map((each) => {return each.data.id});
+          this.restfulCommService.logError(`can not find alert to replace in present list, alert = ${targetAlert.data.id}, entire list = ${entireList.toString()}, oldList = ${oldList.toString()}`);
           console.error('can not find alert to replace in present list');
         }
       }
