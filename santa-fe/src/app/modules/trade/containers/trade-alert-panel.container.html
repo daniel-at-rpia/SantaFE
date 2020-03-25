@@ -38,19 +38,17 @@
           <span>Axe Alert</span>
         </button>
       </li>
-      <!--
-      <li class="sat-tradeAlertPanel__configuration-alertTypeList-item sat-tradeAlertPanel__configuration-alertTypeList-item--liquidation">
-        <button (click)="selectAlertForConfigure('mark')" class="sat-tradeAlertPanel__configuration-alertTypeList-item-btn santaBtn--labelled santaBtn--inverseLabelled">
-          <i class="fal fa-bell"></i>
+      <li class="sat-tradeAlertPanel__configuration-alertTypeList-item sat-tradeAlertPanel__configuration-alertTypeList-item--mark">
+        <button (click)="selectAlertForConfigure(constants.alertTypes.markAlert)" class="sat-tradeAlertPanel__configuration-alertTypeList-item-btn santaBtn--labelled santaBtn--inverseLabelled">
+          <i class="far fa-bullseye-arrow"></i>
           <span>Mark Alert</span>
         </button>
       </li>
-      -->
     </ul>
-    <ul class="sat-tradeAlertPanel__configuration-groupList">
+    <ul class="sat-tradeAlertPanel__configuration-main">
       <article
         [ngClass]="{
-          'sat-tradeAlertPanel__configuration-groupList-axeConfig': true,
+          'sat-tradeAlertPanel__configuration-main-axeConfig': true,
           'sat-tradeAlertAxeAlertConfiguration': true,
           'sat-tradeAlertAxeAlertConfiguration--showSearchResult': state.configuration.axe.searchIsValid,
           'sat-tradeAlertAxeAlertConfiguration--myGroupDisabled': state.configuration.axe.myGroup.isDisabled
@@ -182,11 +180,11 @@
           </div>
         </section>
       </article>
-      <!--
-      <security-definition-configurator
-        [configuratorData]="state.testDto"
-      ></security-definition-configurator>
-      -->
+      <article
+        [ngClass]="{
+          'sat-tradeAlertPanel__configuration-main-markConfig': true
+        }">
+      </article>
     </ul>
     <div class="sat-tradeAlertPanel__configuration-ctas">
       <button (click)="onClickSaveConfiguration()" class="sat-tradeAlertPanel__configuration-ctas-save santaBtn--labelled santaBtn--inverseLabelled">

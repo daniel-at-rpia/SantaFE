@@ -1,180 +1,6 @@
 @import "global.scss";
 @import "modules/trade/trade.scss";
 
-.sat-tradeAlertPanel {
-  $tradeAlertPanelBlockName: &;
-  @include mix_border_generator;
-  @include mix_border_radius(10px);
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  &__utilities {
-    flex: 0 1 $trade_topPanels_baseState_height;
-    display: flex;
-    padding: $spacing_medium;
-    &-thumbnail {
-      @include mix_border_generator(0 0 0 $typical_border_width);
-      flex: 0 0 auto;
-      display: flex;
-      margin-left: $spacing_medium;
-      padding-left: $spacing_medium;
-      &-icon {
-        color: $font_color_trivial;
-        font-size: $font_size_hero;
-      }
-    }
-    &-pause {
-      flex: 1 1 auto;
-      display: flex;
-      justify-content: center;
-      button {
-        &:last-of-type {
-          margin-left: $spacing_small;
-        }
-      }
-    }
-    &-configureCTA {
-      @include mix_border_generator(0 0 0 $typical_border_width);
-      flex: 1 1 auto;
-      display: flex;
-      justify-content: center;
-      margin-left: $spacing_medium;
-      padding-left: $spacing_medium;
-    }
-  }
-  &__configuration {
-    flex: 1 1 auto;
-    display: none;
-    flex-direction: column;
-    overflow: hidden;
-    &-alertTypeList {
-      flex: 0 0 auto;
-      display: flex;
-      // flex-direction: column;
-      padding: $spacing_medium $spacing_medium 0 $spacing_medium;
-      &-item {
-        display: flex;
-        // padding: $spacing_medium;
-        &-btn {
-          flex: 1 1 auto;
-          color: $font_color_inverse;
-          i {
-            font-size: $font_size_x_large;
-          }
-          span {
-            font-size: $font_size_large;
-          }
-        }
-        &--axe &-btn {
-          @include material('none');  // this is temporary
-          background-color: $distinguish_type_color_1;
-        }
-        &--liquidation &-btn {
-          background-color: $distinguish_type_color_2;
-        }
-      }
-    }
-    &-groupList {
-      flex: 1 1 auto;
-      display: flex;
-      overflow: hidden;
-      padding-top: $spacing_medium;
-      margin: 0 $spacing_medium;
-      security-definition-configurator {
-        height: 100%;
-        display: flex;
-      }
-      &-axeConfig {
-        flex: 1 1 auto;
-        max-width: 82rem;
-        display: none;
-      }
-    }
-    &-ctas {
-      flex: 0 0 auto;
-      display: flex;
-      justify-content: center;
-      padding: $spacing_medium;
-      &-save {
-        background-color: $color_create;
-        padding: $spacing_small $spacing_x_large;
-        i {
-          font-size: $font_size_x_large;
-          color: $font_color_inverse;
-        }
-        span {
-          font-size: $font_size_large;
-          color: $font_color_inverse;
-        }
-      }
-    }
-  }
-  &--sidePanelsDisplayedState {
-    #{$tradeAlertPanelBlockName} {
-      &__utilities {
-        &-thumbnail {
-          display: none;
-        }
-      }
-    }
-  }
-  &--configureAlertState {
-    #{$tradeAlertPanelBlockName} {
-      &__utilities {
-        display: none;
-      }
-      &__configuration {
-        display: flex;
-      }
-    }
-  }
-  &--alertPausedState {
-    #{$tradeAlertPanelBlockName} {
-      &__utilities {
-        &-pause {
-          &-btn {
-            @include material('none');
-            background-color: $color_active;
-          }
-        }
-      }
-    }
-  }
-  &--configureAxeAlertState {
-    #{$tradeAlertPanelBlockName} {
-      &__configuration {
-        &-alertTypeList-item {
-          &--axe {
-            background-color: $color_blue_1;
-          }
-          // &--axe>&-btn {
-          //   @include material('none');
-          //   background-color: $color_active;
-          // }
-        }
-        &-groupList-axeConfig {
-          display: flex;
-        }
-      }
-    }
-  }
-  &--configureMarkAlertState {
-    #{$tradeAlertPanelBlockName} {
-      &__configuration {
-        &-alertTypeList-item {
-          &--mark {
-            background-color: $color_deeppurple_1;
-          }
-          // &--mark &-btn {
-          //   @include material('none');
-          //   background-color: $color_active;
-          // }
-        }
-      }
-    }
-  }
-}
-
 .sat-tradeAlertAxeAlertConfiguration {
   $axeAlertConfigurationBlockName: &;
   display: flex;
@@ -186,7 +12,7 @@
     &-title {
       flex: 0 0 auto;
       font-size: $font_size_normal;
-      color: $font_color_minor;
+      color: $font_color_major;
       margin-right: $spacing_medium;
     }
     &-content {
@@ -241,7 +67,7 @@
     margin-top: $spacing_large;
     margin-bottom: $spacing_medium;
     &-content {
-      color: $font_color_minor;
+      color: $font_color_major;
       font-size: $font_size_normal;
       margin-left: 15rem;
     }
@@ -250,7 +76,7 @@
     flex: 1 1 auto;
     display: flex;
     &-watchList {
-      @include mix_border_generator(0 $typical_border_width 0 0);
+      @include mix_border_generator(0 $typical_border_width 0 0, $color_white);
       flex: 0 1 50%;
       display: flex;
       flex-direction: column;
@@ -373,7 +199,7 @@
         &-label {
           flex: 0 0 auto;
           font-size: $font_size_normal;
-          color: $font_color_minor;
+          color: $font_color_major;
           margin-right: $spacing_medium;
         }
         santa-input {
@@ -401,7 +227,6 @@
         display: flex;
         flex-direction: column;
         padding: $spacing_medium;
-        background-color: $color_gray_3;
         margin-top: $spacing_medium;
         &-line {
           display: flex;
@@ -465,6 +290,192 @@
             @extend .santaBtn--inverseLabelled;
             background-color: $color_active;
           }
+        }
+      }
+    }
+  }
+}
+
+.sat-tradeAlertPanel {
+  $tradeAlertPanelBlockName: &;
+  @include mix_border_generator;
+  @include mix_border_radius(10px);
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  &__utilities {
+    flex: 0 1 $trade_topPanels_baseState_height;
+    display: flex;
+    padding: $spacing_medium;
+    &-thumbnail {
+      @include mix_border_generator(0 0 0 $typical_border_width);
+      flex: 0 0 auto;
+      display: flex;
+      margin-left: $spacing_medium;
+      padding-left: $spacing_medium;
+      &-icon {
+        color: $font_color_trivial;
+        font-size: $font_size_hero;
+      }
+    }
+    &-pause {
+      flex: 1 1 auto;
+      display: flex;
+      justify-content: center;
+      button {
+        &:last-of-type {
+          margin-left: $spacing_small;
+        }
+      }
+    }
+    &-configureCTA {
+      @include mix_border_generator(0 0 0 $typical_border_width);
+      flex: 1 1 auto;
+      display: flex;
+      justify-content: center;
+      margin-left: $spacing_medium;
+      padding-left: $spacing_medium;
+    }
+  }
+  &__configuration {
+    flex: 1 1 auto;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    &-alertTypeList {
+      flex: 0 0 auto;
+      display: flex;
+      padding: $spacing_medium $spacing_medium 0 $spacing_medium;
+      &-item {
+        @include mix_border_radius(5px, 'top');
+        display: flex;
+        padding: $spacing_small;
+        margin-right: $spacing_medium;
+        &-btn {
+          flex: 1 1 auto;
+          color: $font_color_inverse;
+          i {
+            font-size: $font_size_x_large;
+          }
+          span {
+            font-size: $font_size_large;
+          }
+        }
+        &--axe &-btn {
+          background-color: $tradeAxeAlertColor;
+        }
+        &--mark &-btn {
+          background-color: $tradeMarkAlertColor;
+        }
+      }
+    }
+    &-main {
+      flex: 1 1 auto;
+      display: flex;
+      overflow: hidden;
+      margin: 0 $spacing_medium;
+      &-axeConfig {
+        @include mix_border_radius(5px, 'all-but-top-left');
+        flex: 1 1 auto;
+        max-width: 82rem;
+        display: none;
+        padding: $spacing_small;
+      }
+      &-markConfig {
+        @include mix_border_radius(5px);
+        flex: 1 1 auto;
+        display: none;
+        padding: $spacing_small;
+      }
+    }
+    &-ctas {
+      flex: 0 0 auto;
+      display: flex;
+      justify-content: center;
+      padding: $spacing_medium;
+      &-save {
+        background-color: $color_create;
+        padding: $spacing_small $spacing_x_large;
+        i {
+          font-size: $font_size_x_large;
+          color: $font_color_inverse;
+        }
+        span {
+          font-size: $font_size_large;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--sidePanelsDisplayedState {
+    #{$tradeAlertPanelBlockName} {
+      &__utilities {
+        &-thumbnail {
+          display: none;
+        }
+      }
+    }
+  }
+  &--configureAlertState {
+    #{$tradeAlertPanelBlockName} {
+      &__utilities {
+        display: none;
+      }
+      &__configuration {
+        display: flex;
+      }
+    }
+  }
+  &--alertPausedState {
+    #{$tradeAlertPanelBlockName} {
+      &__utilities {
+        &-pause {
+          &-btn {
+            @include material('none');
+            background-color: $color_active;
+          }
+        }
+      }
+    }
+  }
+  &--configureAxeAlertState {
+    #{$tradeAlertPanelBlockName} {
+      &__configuration {
+        &-alertTypeList-item {
+          &--axe {
+            background-color: $tradeAxeAlertBackgroundColor;
+            #{$tradeAlertPanelBlockName} {
+              &__configuration-alertTypeList-item-btn {
+                @include material('none');
+                background-color: $color_active;
+              }
+            }
+          }
+        }
+        &-main-axeConfig {
+          display: flex;
+          background-color: $tradeAxeAlertBackgroundColor;
+        }
+      }
+    }
+  }
+  &--configureMarkAlertState {
+    #{$tradeAlertPanelBlockName} {
+      &__configuration {
+        &-alertTypeList-item {
+          &--mark {
+            background-color: $tradeMarkAlertBackgroundColor;
+            #{$tradeAlertPanelBlockName} {
+              &__configuration-alertTypeList-item-btn {
+                @include material('none');
+                background-color: $color_active;
+              }
+            }
+          }
+        }
+        &-main-markConfig {
+          display: flex;
+          background-color: $tradeMarkAlertBackgroundColor;
         }
       }
     }

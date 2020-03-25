@@ -163,6 +163,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       if (!!targetSecurity) {
         if (!this.state.configureAlert) {
           this.onClickConfigureAlert();
+          this.state.configuration.selectedAlert = this.constants.alertTypes.axeAlert;
         }
         const existMatchIndex = this.state.configuration.axe.securityList.findIndex((eachEntry) => {
           return eachEntry.card.data.securityID === targetSecurity.data.securityID;
@@ -219,7 +220,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   public selectAlertForConfigure(targetType: AlertTypes) {
-    this.state.configuration.selectedAlert = targetType;
+    if (this.state.configuration.selectedAlert === targetType) {
+      this.state.configuration.selectedAlert = null;
+    } else {
+      this.state.configuration.selectedAlert = targetType;
+    }
   }
 
   public onSearchKeywordChange(keyword: string) {

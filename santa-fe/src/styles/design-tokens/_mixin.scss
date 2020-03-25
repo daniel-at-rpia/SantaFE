@@ -52,6 +52,12 @@
       }@else{
         border-radius: 0px;
       }
+    }@else if $partial == 'all-but-top-left'{
+      @if $radius == 3px or $radius == 5px or $radius == 10px or $radius == 15px or $radius == 25px or $radius == 50%{
+        border-radius: 0 $radius $radius $radius;
+      }@else{
+        border-radius: 0px;
+      }
     }@else{
       border-radius: 0px;
     }
