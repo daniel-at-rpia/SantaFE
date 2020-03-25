@@ -182,8 +182,36 @@
       </article>
       <article
         [ngClass]="{
-          'sat-tradeAlertPanel__configuration-main-markConfig': true
+          'sat-tradeAlertPanel__configuration-main-markConfig': true,
+          'sat-tradeAlertMarkAlertConfiguration': true
         }">
+        <section class="sat-tradeAlertMarkAlertConfiguration__title">
+          <span class="sat-tradeAlertMarkAlertConfiguration__title-text">
+            Watch For Mark Discrepancies From :
+          </span>
+        </section>
+        <section class="sat-tradeAlertMarkAlertConfiguration__groupList">
+          <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group">
+            <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-disableTag">
+              <i class="fal fa-bell-slash"></i>
+              <span>Disabled</span>
+            </div>
+            <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-text">
+              Securities I Own
+            </span>
+            <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold">
+              <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-title">Define Revenue Threshold</span>
+              <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry">
+                <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-label">Spread</span>
+                <santa-input></santa-input>
+              </div>
+              <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry">
+                <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-label">Yield</span>
+                <santa-input></santa-input>
+              </div>
+            </div>
+          </div>
+        </section>
       </article>
     </ul>
     <div class="sat-tradeAlertPanel__configuration-ctas">
