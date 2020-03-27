@@ -203,8 +203,8 @@ export interface TradeAlertPanelState {
         disabled: boolean;
         makeMoneySpread: number;
         makeMoneyYield: number;
-        lossMoneySpread: number;
-        lossMoneyYield: number;
+        loseMoneySpread: number;
+        loseMoneyYield: number;
       }
     }
   }

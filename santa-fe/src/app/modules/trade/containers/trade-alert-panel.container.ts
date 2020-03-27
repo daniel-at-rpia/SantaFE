@@ -127,8 +127,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             disabled: false,
             makeMoneySpread: null,
             makeMoneyYield: null,
-            lossMoneySpread: null,
-            lossMoneyYield: null
+            loseMoneySpread: null,
+            loseMoneyYield: null
           }
         }
       },

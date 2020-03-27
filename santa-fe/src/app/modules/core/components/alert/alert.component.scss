@@ -271,7 +271,7 @@ $alert_type_size: $iconButton_size_regular;
   &--hiddenState {
     #{$alertBlockName} {
       &__thumbnail {
-        transform: translate(0, 0);
+        transform: translate($spacing_large, 0);
       }
     }
   }
