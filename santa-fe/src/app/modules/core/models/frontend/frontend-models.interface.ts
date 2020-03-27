@@ -444,7 +444,7 @@ export interface HistoricalSummaryDTO extends BasicDTOStructure {
 export interface AlertDTO extends BasicDTOStructure {
   data: {
     id: string;
-    type: AlertSubTypes;
+    subType: AlertSubTypes;
     security: SecurityDTO;
     titleTop: string;
     titleBottom: string;
