@@ -183,7 +183,8 @@
       <article
         [ngClass]="{
           'sat-tradeAlertPanel__configuration-main-markConfig': true,
-          'sat-tradeAlertMarkAlertConfiguration': true
+          'sat-tradeAlertMarkAlertConfiguration': true,
+          'sat-tradeAlertMarkAlertConfiguration--disabledState': state.configuration.mark.myGroup.disabled
         }">
         <section class="sat-tradeAlertMarkAlertConfiguration__title">
           <span class="sat-tradeAlertMarkAlertConfiguration__title-text">
@@ -236,6 +237,12 @@
                   </santa-input>
                 </div>
               </div>
+            </div>
+            <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas">
+              <button (click)="onToggleDisableMarkAlert()" class="sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas-disableBtn santaBtn--labelled">
+                <i class="fal fa-bell-slash"></i>
+                <span>Disable</span>
+              </button>
             </div>
           </div>
         </section>

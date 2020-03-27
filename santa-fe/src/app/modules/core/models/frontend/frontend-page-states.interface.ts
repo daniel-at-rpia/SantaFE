@@ -200,6 +200,7 @@ export interface TradeAlertPanelState {
     },
     mark: {
       myGroup: {
+        disabled: boolean;
         makeMoneySpread: number;
         makeMoneyYield: number;
         lossMoneySpread: number;

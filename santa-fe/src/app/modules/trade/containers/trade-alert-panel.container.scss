@@ -311,8 +311,9 @@
   &__groupList {
     flex: 1 1 auto;
     display: flex;
-    margin-top: $spacing_medium;
+    margin-top: $spacing_large;
     &-group {
+      @include mix_fixed_div(relative, $z_index_base_item);
       @include mix_border_radius(5px);
       @include mix_border_generator($typical_border_width);
       display: flex;
@@ -320,11 +321,13 @@
       padding: $spacing_small;
       background-color: $color_white;
       &-disableTag {
+        @include mix_fixed_div(absolute, $z_index_hovering_item);
         @include mix_border_radius(3px);
+        @include mix_calculate(left, 50%, 2.75rem, '-');
         flex: 0 0 auto;
         display: none;
         align-items: center;
-        margin-right: $spacing_small;
+        top: -$spacing_medium;
         padding: $spacing_xx_small $spacing_x_small;
         background-color: $color_disabled;
         &>i {
@@ -344,6 +347,7 @@
         text-align: center;
       }
       &-threshold {
+        flex: 1 1 auto;
         display: flex;
         flex-direction: column;
         margin-bottom: $spacing_small;
@@ -365,7 +369,28 @@
             text-align: right;
           }
           &-input {
-            flex: 0 0 4rem;
+            flex: 0 0 auto;
+          }
+        }
+      }
+      &-ctas {
+        flex: 0 0 auto;
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+  &--disabledState {
+    #{$tradeAlertMarkAlertConfigurationBlockName} {
+      &__groupList {
+        &-group {
+          &-disableTag {
+            display: flex;
+          }
+          &-ctas-disableBtn {
+            @include material('none');
+            @extend .santaBtn--inverseLabelled;
+            background-color: $color_active;
           }
         }
       }
@@ -426,7 +451,7 @@
       &-item {
         @include mix_border_radius(5px, 'top');
         display: flex;
-        padding: $spacing_small;
+        padding: $spacing_small $spacing_small $spacing_medium $spacing_small;
         margin-right: $spacing_medium;
         &-btn {
           flex: 1 1 auto;

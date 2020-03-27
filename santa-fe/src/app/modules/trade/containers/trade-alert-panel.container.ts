@@ -124,6 +124,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         },
         mark: {
           myGroup: {
+            disabled: false,
             makeMoneySpread: null,
             makeMoneyYield: null,
             lossMoneySpread: null,
@@ -301,6 +302,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       'Remove',
       'Trade Alert Panel'
     );
+  }
+
+  public onToggleDisableMarkAlert() {
+    this.state.configuration.mark.myGroup.disabled = !this.state.configuration.mark.myGroup.disabled;
   }
 
   private fetchSecurities(matchList: Array<SecurityMapEntry>) {
