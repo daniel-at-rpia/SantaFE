@@ -62,19 +62,21 @@
     }
   }
   &__textSeparator {
+    @include mix_border_generator($typical_border_width 0 0 0, $color_white);
     flex: 0 0 auto;
     display: flex;
-    margin-top: $spacing_large;
-    margin-bottom: $spacing_medium;
+    margin: $spacing_medium 0;
+    padding-top: $spacing_medium;
     &-content {
       color: $font_color_major;
       font-size: $font_size_normal;
-      margin-left: 15rem;
+      margin-left: 12rem;
     }
   }
   &__singleSecurities {
     flex: 1 1 auto;
     display: flex;
+    overflow: hidden;
     &-watchList {
       @include mix_border_generator(0 $typical_border_width 0 0, $color_white);
       flex: 0 1 50%;

@@ -98,11 +98,14 @@ $alert_type_size: $iconButton_size_regular;
         align-items: center;
         background-color: $color_white;
         padding: $spacing_x_small $spacing_small;
+        margin: 0 $spacing_x_small;
         &-text {
+          @include mix_text_overflow_multi_line(1);
           font-weight: bold;
           line-height: $line_height_minimum;
           color: $color_gray_6;
           user-select: none;
+          word-break: break-all;
         }
       }
     }
