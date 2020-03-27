@@ -58,6 +58,7 @@
       AxeAlertScope,
       ALERT_UPDATE_COUNTDOWN
     } from 'Core/constants/tradeConstants.constant';
+    import { FullOwnerList } from 'Core/constants/securityDefinitionConstants.constant';
     import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
     import { CoreFlushSecurityMap, CoreSendNewAlerts } from 'Core/actions/core.actions';
     import { selectSelectedSecurityForAlertConfig, selectPresetSelected } from 'Trade/selectors/trade.selectors';
@@ -88,7 +89,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     alertTypes: AlertTypes,
     alertSubTypes: AlertSubTypes,
     axeAlertScope: AxeAlertScope,
-    countdown: ALERT_UPDATE_COUNTDOWN
+    countdown: ALERT_UPDATE_COUNTDOWN,
+    fullOwnerList: FullOwnerList
   }
 
   constructor(
@@ -125,10 +127,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         mark: {
           myGroup: {
             disabled: false,
+            groupId: null,
             makeMoneySpread: null,
-            makeMoneyYield: null,
+            makeMoneyPrice: null,
             loseMoneySpread: null,
-            loseMoneyYield: null
+            loseMoneyPrice: null
           }
         }
       },
@@ -276,6 +279,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
   public onClickSaveConfiguration() {
     this.saveAxeConfiguration();
+    this.saveMarkConfiguration();
     this.saveConfig.emit();
     this.state.configureAlert = false;
   }
@@ -302,6 +306,20 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       'Remove',
       'Trade Alert Panel'
     );
+  }
+
+  public onEnterMarkAlertThreshold(isMakeMoney: boolean, isSpread: boolean, value: number) {
+    const targetGroup = this.state.configuration.mark.myGroup;
+    if (isMakeMoney && isSpread) {
+      targetGroup.makeMoneySpread = value;
+    } else if (isMakeMoney && !isSpread) {
+      targetGroup.makeMoneyPrice = value;
+    } else if (!isMakeMoney && isSpread) {
+      targetGroup.loseMoneySpread = value;
+    } else if (!isMakeMoney && !isSpread) {
+      targetGroup.loseMoneyPrice = value;
+    }
+    console.log('test, value is', value, this.state.configuration.mark);
   }
 
   public onToggleDisableMarkAlert() {
@@ -392,6 +410,16 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           for (const eachGroupId in serverReturn.Axe) {
             const eachConfiguration = serverReturn.Axe[eachGroupId];
             this.populateConfigurationFromEachGroup(eachConfiguration);
+          }
+          for (const eachGroupId in serverReturn.Mark) {
+            const eachConfiguration = serverReturn.Mark[eachGroupId];
+            const myGroup = this.state.configuration.mark.myGroup;
+            myGroup.groupId = eachGroupId;
+            myGroup.disabled = !eachConfiguration.isEnabled;
+            myGroup.loseMoneyPrice = eachConfiguration.parameters.LoseMoneyPriceThreshold == undefined ? null : eachConfiguration.parameters.LoseMoneyPriceThreshold;
+            myGroup.loseMoneySpread = eachConfiguration.parameters.LoseMoneySpreadThreshold == undefined ? null : eachConfiguration.parameters.LoseMoneySpreadThreshold;
+            myGroup.makeMoneyPrice = eachConfiguration.parameters.MakeMoneyPriceThreshold == undefined ? null : eachConfiguration.parameters.MakeMoneyPriceThreshold;
+            myGroup.makeMoneySpread = eachConfiguration.parameters.MakeMoneySpreadThreshold == undefined ? null : eachConfiguration.parameters.MakeMoneySpreadThreshold; 
           }
         } else {
           this.restfulCommService.logError(`'Alert/get-alert-configs' API returned an empty result`);
@@ -520,6 +548,63 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         return of('error');
       })
     ).subscribe();
+  }
+
+  private saveMarkConfiguration() {
+    if (this.constants.fullOwnerList.indexOf(this.ownerInitial) >= 0 && this.markGroupConfigurationIsValid()) {
+      const entirePayload: PayloadUpdateAlertConfig = {
+        alertConfigs: []
+      };
+      const payload: PayloadUpdateSingleAlertConfig = {
+        type: this.constants.alertTypes.markAlert,
+        subType: this.constants.alertSubTypes.liquidation,
+        groupFilters: {
+          Owner: [this.ownerInitial]
+        },
+        parameters: {}
+      }
+      const myGroup = this.state.configuration.mark.myGroup;
+      if (myGroup.disabled) {
+        payload.isEnabled = false;
+      }
+      if (myGroup.groupId) {
+        payload.alertConfigID = this.state.configuration.mark.myGroup.groupId;
+      }
+      if (myGroup.loseMoneySpread != null) {
+        payload.parameters.LoseMoneySpreadThreshold = myGroup.loseMoneySpread;
+      }
+      if (myGroup.loseMoneyPrice != null) {
+        payload.parameters.LoseMoneyPriceThreshold = myGroup.loseMoneyPrice;
+      }
+      if (myGroup.makeMoneySpread != null) {
+        payload.parameters.MakeMoneySpreadThreshold = myGroup.makeMoneySpread;
+      }
+      if (myGroup.makeMoneyPrice != null) {
+        payload.parameters.MakeMoneyPriceThreshold = myGroup.makeMoneyPrice;
+      }
+      entirePayload.alertConfigs.push(payload);
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.updateAlertConfiguration, {req: 'POST'}, entirePayload).pipe(
+        first(),
+        catchError(err => {
+          console.error(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`, entirePayload);
+          this.restfulCommService.logError(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`);
+          return of('error');
+        })
+      ).subscribe();
+    }
+  }
+
+  private markGroupConfigurationIsValid(): boolean {
+    const targetGroup = this.state.configuration.mark.myGroup;
+    targetGroup.loseMoneySpread = isNaN(parseFloat(`${targetGroup.loseMoneySpread}`)) ? null : parseFloat(`${targetGroup.loseMoneySpread}`);
+    targetGroup.loseMoneyPrice = isNaN(parseFloat(`${targetGroup.loseMoneyPrice}`)) ? null : parseFloat(`${targetGroup.loseMoneyPrice}`);
+    targetGroup.makeMoneySpread = isNaN(parseFloat(`${targetGroup.makeMoneySpread}`)) ? null : parseFloat(`${targetGroup.makeMoneySpread}`);
+    targetGroup.makeMoneyPrice = isNaN(parseFloat(`${targetGroup.makeMoneyPrice}`)) ? null : parseFloat(`${targetGroup.makeMoneyPrice}`);
+    if (targetGroup.loseMoneySpread != null || targetGroup.loseMoneyPrice != null || targetGroup.makeMoneySpread != null || targetGroup.makeMoneyPrice != null) {
+      return true
+    } else {
+      return false;
+    }
   }
 
   private updateAlert() {

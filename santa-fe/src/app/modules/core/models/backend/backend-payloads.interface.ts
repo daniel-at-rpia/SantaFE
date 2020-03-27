@@ -74,6 +74,12 @@ export interface PayloadUpdateSingleAlertConfig {
     Owner?: Array<string>;
     SecurityIdentifier?: Array<string>;
   }
+  parameters?: {
+    LoseMoneyPriceThreshold?: number,
+    MakeMoneyPriceThreshold?: number,
+    LoseMoneySpreadThreshold?: number,
+    MakeMoneySpreadThreshold?: number
+  }
   isEnabled?: boolean;
   isDeleted?: boolean;
 }

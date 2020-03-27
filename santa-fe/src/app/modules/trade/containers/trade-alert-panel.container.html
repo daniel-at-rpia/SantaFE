@@ -207,16 +207,20 @@
                 <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-input">
                   <santa-input
                     [inputValue]="state.configuration.mark.myGroup.makeMoneySpread"
-                    [placeholder]="''">
+                    [placeholder]="''"
+                    (onInputChange)="onEnterMarkAlertThreshold(true, true, $event)">
                   </santa-input>
                 </div>
-                <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-label">Yield</span>
+                <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-unit">bps</span>
+                <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-label">Price</span>
                 <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-input">
                   <santa-input
-                    [inputValue]="state.configuration.mark.myGroup.makeMoneyYield"
-                    [placeholder]="''">
+                    [inputValue]="state.configuration.mark.myGroup.makeMoneyPrice"
+                    [placeholder]="''"
+                    (onInputChange)="onEnterMarkAlertThreshold(true, false, $event)">
                   </santa-input>
                 </div>
+                <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-unit">pts</div>
               </div>
             </div>
             <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold">
@@ -226,16 +230,20 @@
                 <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-input">
                   <santa-input
                     [inputValue]="state.configuration.mark.myGroup.loseMoneySpread"
-                    [placeholder]="''">
+                    [placeholder]="''"
+                    (onInputChange)="onEnterMarkAlertThreshold(false, true, $event)">
                   </santa-input>
                 </div>
-                <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-label">Yield</span>
+                <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-unit">bps</span>
+                <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-label">Price</span>
                 <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-input">
                   <santa-input
-                    [inputValue]="state.configuration.mark.myGroup.loseMoneyYield"
-                    [placeholder]="''">
+                    [inputValue]="state.configuration.mark.myGroup.loseMoneyPrice"
+                    [placeholder]="''"
+                    (onInputChange)="onEnterMarkAlertThreshold(false, false, $event)">
                   </santa-input>
                 </div>
+                <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-unit">pts</span>
               </div>
             </div>
             <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas">

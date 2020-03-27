@@ -342,7 +342,10 @@ export interface BEHistoricalQuantBlock {
 }
 
 export interface BEAlertConfigurationReturn {
-  Axe: {
+  Axe?: {
+    [property: string]: BEAlertConfigurationDTO;
+  }
+  Mark?: {
     [property: string]: BEAlertConfigurationDTO;
   }
 }
@@ -358,7 +361,12 @@ export interface BEAlertConfigurationDTO {
   userName: string;
   type: string;
   subType: string;
-  parameters: any;
+  parameters?: {
+    LoseMoneyPriceThreshold?: number,
+    MakeMoneyPriceThreshold?: number,
+    LoseMoneySpreadThreshold?: number,
+    MakeMoneySpreadThreshold?: number
+  };
   isEnabled: boolean;
 }
 

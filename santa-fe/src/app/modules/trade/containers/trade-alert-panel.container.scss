@@ -365,11 +365,16 @@
           &-label {
             flex: 0 0 auto;
             margin-right: $spacing_x_small;
-            margin-left: $spacing_medium;
+            margin-left: $spacing_large;
             text-align: right;
           }
           &-input {
             flex: 0 0 auto;
+          }
+          &-unit {
+            flex: 0 0 auto;
+            margin-left: $spacing_x_small;
+            color: $font_color_minor;
           }
         }
       }
