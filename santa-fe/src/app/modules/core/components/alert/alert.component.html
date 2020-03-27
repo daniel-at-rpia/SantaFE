@@ -1,6 +1,8 @@
 <article
   [ngClass]="{
     'sat-alert': true,
+    'sat-alert--typeMarkVariant': alertData.data.type === alertTypes.markAlert,
+    'sat-alert--typeAxeVariant': alertData.data.type === alertTypes.axeAlert,
     'sat-alert--typeAskVariant': alertData.data.subType === alertSubTypes.ask,
     'sat-alert--typeBidVariant': alertData.data.subType === alertSubTypes.bid,
     'sat-alert--slideOutState': alertData.state.isSlidedOut || !alertData.state.isCountdownFinished,
@@ -10,8 +12,11 @@
   <section (click)="onClickAlertThumbnail()" class="sat-alert__thumbnail">
     <div class="sat-alert__thumbnail-type">
       <div class="sat-alert__thumbnail-type-circle">
-        <div class="sat-alert__thumbnail-type-circle-inner">
+        <div class="sat-alert__thumbnail-type-circle-inner sat-alert__thumbnail-type-circle-inner--axe">
           <i class="sat-alert__thumbnail-type-circle-inner-icon fas fa-axe"></i>
+        </div>
+        <div class="sat-alert__thumbnail-type-circle-inner sat-alert__thumbnail-type-circle-inner--mark">
+          <i class="sat-alert__thumbnail-type-circle-inner-icon far fa-bullseye-arrow"></i>
         </div>
       </div>
       <div class="sat-alert__thumbnail-type-mask"></div>

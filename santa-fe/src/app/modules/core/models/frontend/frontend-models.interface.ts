@@ -13,6 +13,7 @@ import {
   SecurityTableRowQuoteBlock
 } from 'FEModels/frontend-blocks.interface';
 import {
+  AlertTypes,
   AlertSubTypes
 } from 'Core/constants/coreConstants.constant';
 import { SantaTableNumericFloatingFilterParams, ClickedOpenSecurityInBloombergEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
@@ -444,6 +445,7 @@ export interface HistoricalSummaryDTO extends BasicDTOStructure {
 export interface AlertDTO extends BasicDTOStructure {
   data: {
     id: string;
+    type: AlertTypes;
     subType: AlertSubTypes;
     security: SecurityDTO;
     titleTop: string;

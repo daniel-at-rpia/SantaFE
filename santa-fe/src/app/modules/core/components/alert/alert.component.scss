@@ -46,13 +46,18 @@ $alert_type_size: $iconButton_size_regular;
           @include mix_fixed_div(relative, $z_index_hovering_item);
           @include mix_border_radius(50%);
           flex: 1 1 auto;
-          display: flex;
+          display: none;
           align-items: center;
           justify-content: center;
-          background-color: $color_axe;
           &-icon {
             font-size: $font_size_x_small;
             color: $font_color_inverse;
+          }
+          &--axe {
+            background-color: $tradeAxeAlertColor;
+          }
+          &--mark {
+            background-color: $tradeMarkAlertColor;
           }
         }
       }
@@ -192,6 +197,24 @@ $alert_type_size: $iconButton_size_regular;
       &__thumbnail {
         &-type {
           @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
+        }
+      }
+    }
+  }
+  &--typeAxeVariant {
+    #{$alertBlockName} {
+      &__thumbnail {
+        &-type-circle-inner--axe {
+          display: flex;
+        }
+      }
+    }
+  }
+  &--typeMarkVariant {
+    #{$alertBlockName} {
+      &__thumbnail {
+        &-type-circle-inner--mark {
+          display: flex;
         }
       }
     }

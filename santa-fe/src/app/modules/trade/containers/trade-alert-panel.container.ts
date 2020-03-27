@@ -319,7 +319,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     } else if (!isMakeMoney && !isSpread) {
       targetGroup.loseMoneyPrice = value;
     }
-    console.log('test, value is', value, this.state.configuration.mark);
   }
 
   public onToggleDisableMarkAlert() {

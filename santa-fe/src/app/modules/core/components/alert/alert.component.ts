@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 
 import { AlertDTO } from 'FEModels/frontend-models.interface';
-import { AlertSubTypes } from 'Core/constants/coreConstants.constant';
+import { AlertTypes, AlertSubTypes } from 'Core/constants/coreConstants.constant';
 
 @Component({
   selector: 'alert',
@@ -24,6 +24,7 @@ export class Alert {
   @Output() clickedRemove = new EventEmitter<AlertDTO>();
 
   alertSubTypes = AlertSubTypes;
+  alertTypes = AlertTypes;
 
   constructor() { }
 
