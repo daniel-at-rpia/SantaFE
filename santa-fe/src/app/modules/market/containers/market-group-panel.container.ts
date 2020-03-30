@@ -40,6 +40,7 @@
 
     import { SecurityGroupList } from 'Core/stubs/securityGroups.stub';
     import { SecurityDefinitionStub } from 'FEModels/frontend-stub-models.interface';
+    import { SecurityMetricOptions } from 'Core/constants/coreConstants.constant';
     import {
       PieChartConfiguratorOptions,
       MetricRenderDelay,
@@ -65,7 +66,8 @@ export class MarketGroupPanel implements OnDestroy {
   PieChartConfigurationOptions = PieChartConfiguratorOptions;
   constants = {
     securityGroupDefinitionMap: SecurityDefinitionMap,
-    searchShortcuts: SearchShortcuts
+    searchShortcuts: SearchShortcuts,
+    securityMetricOptions: SecurityMetricOptions
   }
 
   private initiateComponentState(){
@@ -252,14 +254,11 @@ export class MarketGroupPanel implements OnDestroy {
     this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(false);
   }
 
-  public testExport(){
-    console.log('test export', this.state.searchResult.securityGroupList);
+  public onClickExport(){
     let csvContent = "data:text/csv;charset=utf-8,";
-    csvContent += `Group Name, Number of Securities` + "\r\n";
+    csvContent += `Group Name, Number of Securities, Default Spread, Delta Dod, Delta Wow, Delta Mom, Delta Ytd, Delta Yoy` + "\r\n";
     this.state.searchResult.securityGroupList.forEach((eachGroup) => {
-      const parsedGroupName = eachGroup.data.name.replace(",", "/");
-      console.log('test, parsed Group name is', parsedGroupName);
-      csvContent += `${parsedGroupName},${eachGroup.data.numOfSecurities}` + "\r\n";
+      csvContent = this.populateExportDataForEachGroup(eachGroup, csvContent);
     });
     const encodedUri = encodeURI(csvContent);
     const downloadLink = document.createElement("a");
@@ -268,7 +267,6 @@ export class MarketGroupPanel implements OnDestroy {
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
-    // window.open(encodedUri, 'test.csv');
   }
 
   private populateSearchShortcuts(){
@@ -586,5 +584,34 @@ export class MarketGroupPanel implements OnDestroy {
         })
       }
     }
+  }
+
+  private populateExportDataForEachGroup(
+    targetGroup: SecurityGroupDTO,
+    csvContent: string
+  ): string {
+    const parsedGroupName = targetGroup.data.name.replace(",", "/");
+    csvContent += `${parsedGroupName},${targetGroup.data.numOfSecurities}`;
+    const defaultSpreadLabel = this.constants.securityMetricOptions[0].label;
+    const defaultSpreadRaw = targetGroup.data.metricPack.raw[defaultSpreadLabel] != null ? this.utilityService.round(targetGroup.data.metricPack.raw[this.constants.securityMetricOptions[0].label], 2) : null;
+    csvContent = this.populateExportDataForEachGroupEntry(defaultSpreadRaw, csvContent);
+    this.constants.securityMetricOptions[0].deltaOptions.forEach((eachDeltaOption) => {
+      const eachDeltaValue = targetGroup.data.metricPack.delta[eachDeltaOption][defaultSpreadLabel] != null ? this.utilityService.round(targetGroup.data.metricPack.delta[eachDeltaOption][defaultSpreadLabel], 2) : null;
+      csvContent = this.populateExportDataForEachGroupEntry(eachDeltaValue, csvContent);
+    });
+    csvContent += "\r\n";
+    return csvContent;
+  }
+
+  private populateExportDataForEachGroupEntry(
+    entry: string,
+    csvContent
+  ): string {
+    if (entry != null) {
+      csvContent += `,${entry}`;
+    } else {
+      csvContent += `,`;
+    }
+    return csvContent;
   }
 }
