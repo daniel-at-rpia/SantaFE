@@ -978,7 +978,8 @@ export class DTOService {
     const object: DTOs.AlertDTO = {
       data: {
         id: rawData.alertId,
-        type: this.utility.mapAlertSubType(rawData.subType),
+        type: this.utility.mapAlertType(rawData.type),
+        subType: this.utility.mapAlertSubType(rawData.subType),
         security: targetSecurity,
         titleTop: parsedTitleList[0] || '',
         titleBottom: parsedTitleList[1] || '',

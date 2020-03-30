@@ -39,7 +39,11 @@
       BEAlertConfigurationDTO,
       BEAlertDTO
     } from 'BEModels/backend-models.interface';
-    import { PayloadGetSecurities, PayloadUpdateAlertConfig } from 'BEModels/backend-payloads.interface';
+    import {
+      PayloadGetSecurities,
+      PayloadUpdateAlertConfig,
+      PayloadUpdateSingleAlertConfig
+    } from 'BEModels/backend-payloads.interface';
     import {
       EngagementActionList,
       AlertTypes,
@@ -54,9 +58,10 @@
       AxeAlertScope,
       ALERT_UPDATE_COUNTDOWN
     } from 'Core/constants/tradeConstants.constant';
+    import { FullOwnerList } from 'Core/constants/securityDefinitionConstants.constant';
     import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
     import { CoreFlushSecurityMap, CoreSendNewAlerts } from 'Core/actions/core.actions';
-    import { selectSelectedSecurityForAlertConfig } from 'Trade/selectors/trade.selectors';
+    import { selectSelectedSecurityForAlertConfig, selectPresetSelected } from 'Trade/selectors/trade.selectors';
   //
 
 @Component({
@@ -76,14 +81,16 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   subscriptions = {
     securityMapSub: null,
     autoUpdateCountSub: null,
-    selectedSecurityForAlertConfigSub: null
+    selectedSecurityForAlertConfigSub: null,
+    centerPanelPresetSelectedSub: null
   }
   autoUpdateCount$: Observable<any>;
   constants = {
     alertTypes: AlertTypes,
     alertSubTypes: AlertSubTypes,
     axeAlertScope: AxeAlertScope,
-    countdown: ALERT_UPDATE_COUNTDOWN
+    countdown: ALERT_UPDATE_COUNTDOWN,
+    fullOwnerList: FullOwnerList
   }
 
   constructor(
@@ -118,11 +125,19 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           searchIsValid: false
         },
         mark: {
-
+          myGroup: {
+            disabled: false,
+            groupId: null,
+            makeMoneySpread: null,
+            makeMoneyPrice: null,
+            loseMoneySpread: null,
+            loseMoneyPrice: null
+          }
         }
       },
       autoUpdateCountdown: 0,
-      alertUpdateInProgress: false
+      alertUpdateInProgress: false,
+      isCenterPanelPresetSelected: false
     };
     return state;
   }
@@ -143,7 +158,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
     this.autoUpdateCount$ = interval(1000);
     this.subscriptions.autoUpdateCountSub = this.autoUpdateCount$.subscribe(count => {
-      if (!this.state.isAlertPaused && !this.state.alertUpdateInProgress) {
+      if (this.state.isCenterPanelPresetSelected && !this.state.isAlertPaused && !this.state.alertUpdateInProgress) {
         this.state.autoUpdateCountdown = this.state.autoUpdateCountdown + 1;
         if (this.state.autoUpdateCountdown >= this.constants.countdown) {
           this.updateAlert();
@@ -157,6 +172,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       if (!!targetSecurity) {
         if (!this.state.configureAlert) {
           this.onClickConfigureAlert();
+          this.state.configuration.selectedAlert = this.constants.alertTypes.axeAlert;
         }
         const existMatchIndex = this.state.configuration.axe.securityList.findIndex((eachEntry) => {
           return eachEntry.card.data.securityID === targetSecurity.data.securityID;
@@ -168,6 +184,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           this.state.configuration.axe.securityList[existMatchIndex].isDisabled = false;
         }
       }
+    });
+    this.subscriptions.centerPanelPresetSelectedSub = this.store$.pipe(
+      select(selectPresetSelected)
+    ).subscribe(flag => {
+      this.state.isCenterPanelPresetSelected = flag;
     });
   }
 
@@ -187,18 +208,32 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   public onClickConfigureAlert() {
     this.configureAlert.emit();
     this.state.configureAlert = true;
-    // const lastKeyword = this.state.configuration.axe.securitySearchKeyword;
     this.state.configuration.axe = this.initializePageState().configuration.axe;
     this.loadAllConfigurations();
-    // this.onSearchKeywordChange(lastKeyword);
+    this.restfulCommService.logEngagement(
+      this.restfulCommService.engagementMap.tradeAlertOpenConfiguration,
+      null,
+      null,
+      'Trade Alert Panel'
+    );
   }
 
   public onTogglePauseAlert() {
     this.state.isAlertPaused = !this.state.isAlertPaused;
+    this.restfulCommService.logEngagement(
+      this.restfulCommService.engagementMap.tradeAlertPause,
+      null,
+      `${this.state.isAlertPaused}`,
+      'Trade Alert Panel'
+    );
   }
 
   public selectAlertForConfigure(targetType: AlertTypes) {
-    this.state.configuration.selectedAlert = targetType;
+    if (this.state.configuration.selectedAlert === targetType) {
+      this.state.configuration.selectedAlert = null;
+    } else {
+      this.state.configuration.selectedAlert = targetType;
+    }
   }
 
   public onSearchKeywordChange(keyword: string) {
@@ -233,11 +268,18 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   public onSelectAxeWatchlistSide(targetScope: AxeAlertScope, targetBlock: TradeAlertConfigurationAxeGroupBlock) {
     if (!!targetScope && !!targetBlock && !targetBlock.isDisabled) {
       this.addScopeToAxeWatchlistEntry(targetBlock, targetScope);
+      this.restfulCommService.logEngagement(
+        this.restfulCommService.engagementMap.tradeAlertConfigure,
+        null,
+        `Change Scope to ${targetBlock.scopes.toString()}`,
+        'Trade Alert Panel'
+      );
     }
   }
 
   public onClickSaveConfiguration() {
     this.saveAxeConfiguration();
+    this.saveMarkConfiguration();
     this.saveConfig.emit();
     this.state.configureAlert = false;
   }
@@ -246,12 +288,41 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     this.updateAlert();
   }
 
-  public onToggleDisableSecurityFromAxeWatchList(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
+  public onToggleDisableTargetGroupFromAxeWatchList(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
     targetBlock.isDisabled = !targetBlock.isDisabled;
+    this.restfulCommService.logEngagement(
+      this.restfulCommService.engagementMap.tradeAlertConfigure,
+      null,
+      'Toggle Disable',
+      'Trade Alert Panel'
+    );
   }
 
   public onClickRemoveSecurityFromAxeWatchList(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
     targetBlock.isDeleted = true;
+    this.restfulCommService.logEngagement(
+      this.restfulCommService.engagementMap.tradeAlertConfigure,
+      null,
+      'Remove',
+      'Trade Alert Panel'
+    );
+  }
+
+  public onEnterMarkAlertThreshold(isMakeMoney: boolean, isSpread: boolean, value: number) {
+    const targetGroup = this.state.configuration.mark.myGroup;
+    if (isMakeMoney && isSpread) {
+      targetGroup.makeMoneySpread = value;
+    } else if (isMakeMoney && !isSpread) {
+      targetGroup.makeMoneyPrice = value;
+    } else if (!isMakeMoney && isSpread) {
+      targetGroup.loseMoneySpread = value;
+    } else if (!isMakeMoney && !isSpread) {
+      targetGroup.loseMoneyPrice = value;
+    }
+  }
+
+  public onToggleDisableMarkAlert() {
+    this.state.configuration.mark.myGroup.disabled = !this.state.configuration.mark.myGroup.disabled;
   }
 
   private fetchSecurities(matchList: Array<SecurityMapEntry>) {
@@ -281,7 +352,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             this.state.configuration.axe.searchList.push(eachCard);
           });
         } else {
-          this.restfulCommService.logError(`'security/get-securities' API returned an empty result with this payload: ${list.toString()}`, null);
+          this.restfulCommService.logError(`'security/get-securities' API returned an empty result with this payload: ${list.toString()}`);
         }
       })
     ).subscribe();
@@ -320,11 +391,17 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       isDisabled: false
     };
     this.state.configuration.axe.securityList.unshift(newEntry);
+    this.restfulCommService.logEngagement(
+      this.restfulCommService.engagementMap.tradeAlertAddSingleSecurity,
+      copy.data.securityID,
+      null,
+      'Trade Alert Panel'
+    );
   }
 
   private loadAllConfigurations() {
     const config = this.state.configuration.axe;
-    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlertConfigurations, {req: 'GET'}).pipe(
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlertConfigurations, {req: 'POST'}, {}).pipe(
       first(),
       tap((serverReturn: BEAlertConfigurationReturn) => {
         if (!!serverReturn) {
@@ -333,8 +410,18 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             const eachConfiguration = serverReturn.Axe[eachGroupId];
             this.populateConfigurationFromEachGroup(eachConfiguration);
           }
+          for (const eachGroupId in serverReturn.Mark) {
+            const eachConfiguration = serverReturn.Mark[eachGroupId];
+            const myGroup = this.state.configuration.mark.myGroup;
+            myGroup.groupId = eachGroupId;
+            myGroup.disabled = !eachConfiguration.isEnabled;
+            myGroup.loseMoneyPrice = eachConfiguration.parameters.LoseMoneyPriceThreshold == undefined ? null : eachConfiguration.parameters.LoseMoneyPriceThreshold;
+            myGroup.loseMoneySpread = eachConfiguration.parameters.LoseMoneySpreadThreshold == undefined ? null : eachConfiguration.parameters.LoseMoneySpreadThreshold;
+            myGroup.makeMoneyPrice = eachConfiguration.parameters.MakeMoneyPriceThreshold == undefined ? null : eachConfiguration.parameters.MakeMoneyPriceThreshold;
+            myGroup.makeMoneySpread = eachConfiguration.parameters.MakeMoneySpreadThreshold == undefined ? null : eachConfiguration.parameters.MakeMoneySpreadThreshold; 
+          }
         } else {
-          this.restfulCommService.logError(`'Alert/get-alert-configs' API returned an empty result`, null);
+          this.restfulCommService.logError(`'Alert/get-alert-configs' API returned an empty result`);
         }
       }),
       catchError(err => {
@@ -380,7 +467,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             newEntry.card = eachCard;
           });
         } else {
-          this.restfulCommService.logError(`'security/get-securities' API returned an empty result with this payload: ${payload.identifiers.toString()}`, null);
+          this.restfulCommService.logError(`'security/get-securities' API returned an empty result with this payload: ${payload.identifiers.toString()}`);
         }
       })
     ).subscribe();
@@ -417,53 +504,106 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private saveAxeConfiguration() {
-    const groupPayload: PayloadUpdateAlertConfig = {
-      alertConfig: {
-        type: this.constants.alertTypes.axeAlert,
-        subType: this.mapAxeScopesToAlertSubtypes(this.state.configuration.axe.myGroup.scopes),
-        groupFilters: {
-          Owner: [this.ownerInitial]
-        }
+    const entirePayload: PayloadUpdateAlertConfig = {
+      alertConfigs: []
+    };
+    const groupPayload: PayloadUpdateSingleAlertConfig = {
+      type: this.constants.alertTypes.axeAlert,
+      subType: this.mapAxeScopesToAlertSubtypes(this.state.configuration.axe.myGroup.scopes),
+      groupFilters: {
+        Owner: [this.ownerInitial]
       }
     };
-    this.saveSingleAxeConfiguration(groupPayload, this.state.configuration.axe.myGroup);
+    if (this.state.configuration.axe.myGroup.isDisabled) {
+      groupPayload.isEnabled = false;
+    }
+    if (this.state.configuration.axe.myGroup.groupId) {
+      groupPayload.alertConfigID = this.state.configuration.axe.myGroup.groupId;
+    }
+    entirePayload.alertConfigs.push(groupPayload);
     this.state.configuration.axe.securityList.forEach((eachEntry) => {
-      // check is valid
-      if (eachEntry.scopes.length > 0) {
-        const payload: PayloadUpdateAlertConfig = {
-          alertConfig: {
-            type: this.constants.alertTypes.axeAlert,
-            subType: this.mapAxeScopesToAlertSubtypes(eachEntry.scopes),
-            groupFilters: {}
-          }
-        }
-        payload.alertConfig.groupFilters.SecurityIdentifier = [eachEntry.card.data.securityID];
-        this.saveSingleAxeConfiguration(payload, eachEntry);
+      const payload: PayloadUpdateSingleAlertConfig = {
+        type: this.constants.alertTypes.axeAlert,
+        subType: this.mapAxeScopesToAlertSubtypes(eachEntry.scopes),
+        groupFilters: {}
       }
+      payload.groupFilters.SecurityIdentifier = [eachEntry.card.data.securityID];
+      if (!!eachEntry.groupId) {
+        payload.alertConfigID = eachEntry.groupId;
+      }
+      if (eachEntry.isDisabled) {
+        payload.isEnabled = false;
+      }
+      if (eachEntry.isDeleted) {
+        payload.isDeleted = true;
+      }
+      entirePayload.alertConfigs.push(payload);
     });
-  }
-
-  private saveSingleAxeConfiguration(
-    payload: PayloadUpdateAlertConfig,
-    targetEntry: TradeAlertConfigurationAxeGroupBlock
-  ) {
-    if (!!targetEntry.groupId) {
-      payload.alertConfig.alertConfigID = targetEntry.groupId;
-    }
-    if (targetEntry.isDisabled) {
-      payload.alertConfig.isEnabled = false;
-    }
-    if (targetEntry.isDeleted) {
-      payload.alertConfig.isDeleted = true;
-    }
-    this.restfulCommService.callAPI(this.restfulCommService.apiMap.updateAlertConfiguration, {req: 'POST'}, payload).pipe(
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.updateAlertConfiguration, {req: 'POST'}, entirePayload).pipe(
       first(),
       catchError(err => {
-        console.error(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`, payload);
-        this.restfulCommService.logError(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`, null);
+        console.error(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`, entirePayload);
+        this.restfulCommService.logError(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`);
         return of('error');
       })
     ).subscribe();
+  }
+
+  private saveMarkConfiguration() {
+    if (this.constants.fullOwnerList.indexOf(this.ownerInitial) >= 0 && this.markGroupConfigurationIsValid()) {
+      const entirePayload: PayloadUpdateAlertConfig = {
+        alertConfigs: []
+      };
+      const payload: PayloadUpdateSingleAlertConfig = {
+        type: this.constants.alertTypes.markAlert,
+        subType: this.constants.alertSubTypes.liquidation,
+        groupFilters: {
+          Owner: [this.ownerInitial]
+        },
+        parameters: {}
+      }
+      const myGroup = this.state.configuration.mark.myGroup;
+      if (myGroup.disabled) {
+        payload.isEnabled = false;
+      }
+      if (myGroup.groupId) {
+        payload.alertConfigID = this.state.configuration.mark.myGroup.groupId;
+      }
+      if (myGroup.loseMoneySpread != null) {
+        payload.parameters.LoseMoneySpreadThreshold = myGroup.loseMoneySpread;
+      }
+      if (myGroup.loseMoneyPrice != null) {
+        payload.parameters.LoseMoneyPriceThreshold = myGroup.loseMoneyPrice;
+      }
+      if (myGroup.makeMoneySpread != null) {
+        payload.parameters.MakeMoneySpreadThreshold = myGroup.makeMoneySpread;
+      }
+      if (myGroup.makeMoneyPrice != null) {
+        payload.parameters.MakeMoneyPriceThreshold = myGroup.makeMoneyPrice;
+      }
+      entirePayload.alertConfigs.push(payload);
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.updateAlertConfiguration, {req: 'POST'}, entirePayload).pipe(
+        first(),
+        catchError(err => {
+          console.error(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`, entirePayload);
+          this.restfulCommService.logError(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`);
+          return of('error');
+        })
+      ).subscribe();
+    }
+  }
+
+  private markGroupConfigurationIsValid(): boolean {
+    const targetGroup = this.state.configuration.mark.myGroup;
+    targetGroup.loseMoneySpread = isNaN(parseFloat(`${targetGroup.loseMoneySpread}`)) ? null : parseFloat(`${targetGroup.loseMoneySpread}`);
+    targetGroup.loseMoneyPrice = isNaN(parseFloat(`${targetGroup.loseMoneyPrice}`)) ? null : parseFloat(`${targetGroup.loseMoneyPrice}`);
+    targetGroup.makeMoneySpread = isNaN(parseFloat(`${targetGroup.makeMoneySpread}`)) ? null : parseFloat(`${targetGroup.makeMoneySpread}`);
+    targetGroup.makeMoneyPrice = isNaN(parseFloat(`${targetGroup.makeMoneyPrice}`)) ? null : parseFloat(`${targetGroup.makeMoneyPrice}`);
+    if (targetGroup.loseMoneySpread != null || targetGroup.loseMoneyPrice != null || targetGroup.makeMoneySpread != null || targetGroup.makeMoneyPrice != null) {
+      return true
+    } else {
+      return false;
+    }
   }
 
   private updateAlert() {
@@ -506,7 +646,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     } else if (targetScopes.includes(this.constants.axeAlertScope.liquidation)) {
       return this.constants.alertSubTypes.liquidation;
     } else {
-      return null;
+      return this.constants.alertSubTypes.bid;
     }
   }
 

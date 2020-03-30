@@ -1,19 +1,32 @@
 <article
   [ngClass]="{
     'sat-alert': true,
-    'sat-alert--typeAskVariant': alertData.data.type === alertSubTypes.ask,
-    'sat-alert--typeBidVariant': alertData.data.type === alertSubTypes.bid,
+    'sat-alert--typeMarkVariant': alertData.data.type === alertTypes.markAlert,
+    'sat-alert--typeAxeVariant': alertData.data.type === alertTypes.axeAlert,
+    'sat-alert--typeAskVariant': alertData.data.subType === alertSubTypes.ask,
+    'sat-alert--typeBidVariant': alertData.data.subType === alertSubTypes.bid,
     'sat-alert--slideOutState': alertData.state.isSlidedOut || !alertData.state.isCountdownFinished,
     'sat-alert--hiddenState': hideAllAlerts && alertData.state.isCountdownFinished,
     'sat-alert--willBeRemovedState': alertData.state.willBeRemoved
   }">
   <section (click)="onClickAlertThumbnail()" class="sat-alert__thumbnail">
-    <div class="sat-alert__thumbnail-main">
-      <div class="sat-alert__thumbnail-main-type">
-        <span class="sat-alert__thumbnail-main-type-text">{{alertData.data.titleTop}}</span>
+    <div class="sat-alert__thumbnail-type">
+      <div class="sat-alert__thumbnail-type-circle">
+        <div class="sat-alert__thumbnail-type-circle-inner sat-alert__thumbnail-type-circle-inner--axe">
+          <i class="sat-alert__thumbnail-type-circle-inner-icon fas fa-axe"></i>
+        </div>
+        <div class="sat-alert__thumbnail-type-circle-inner sat-alert__thumbnail-type-circle-inner--mark">
+          <i class="sat-alert__thumbnail-type-circle-inner-icon far fa-bullseye-arrow"></i>
+        </div>
       </div>
-      <div class="sat-alert__thumbnail-main-quant">
-        <span class="sat-alert__thumbnail-main-quant-text">{{alertData.data.titleBottom}}</span>
+      <div class="sat-alert__thumbnail-type-mask"></div>
+    </div>
+    <div class="sat-alert__thumbnail-main">
+      <div class="sat-alert__thumbnail-main-upper">
+        <span class="sat-alert__thumbnail-main-upper-text">{{alertData.data.titleTop}}</span>
+      </div>
+      <div class="sat-alert__thumbnail-main-lower">
+        <span class="sat-alert__thumbnail-main-lower-text">{{alertData.data.titleBottom}}</span>
       </div>
     </div>
   </section>

@@ -124,7 +124,7 @@ export class AgGridMiddleLayerService {
         const newAgRow = this.formAgGridRow(eachRow, table.data.allHeaders);
         targetNode.setData(newAgRow);
       } else {
-        this.restfulCommService.logError(`[AgGrid] Couldn't fine AgGrid Row for ${eachRow.data.security.data.securityID} (location - ${location})`, this.ownerInitial);
+        this.restfulCommService.logError(`[AgGrid] Couldn't fine AgGrid Row for ${eachRow.data.security.data.securityID} (location - ${location})`);
         console.error(`Couldn't fine AgGrid Row for ${eachRow.data.security.data.securityID}`, eachRow);
       }
     });
@@ -226,12 +226,12 @@ export class AgGridMiddleLayerService {
           const underlineValueB = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityB, true);
           return this.returnSortValue(targetHeader, underlineValueA, underlineValueB, securityA, securityB);
         } else {
-          this.restfulCommService.logError(`[AgGrid] Error at Custom AgGrid sorting, couldnt find header for column ${targetColumn}`, this.ownerInitial);
+          this.restfulCommService.logError(`[AgGrid] Error at Custom AgGrid sorting, couldnt find header for column ${targetColumn}`);
           console.error('Error at Custom AgGrid sorting, couldnt find header for column', targetColumn);
           return 0;
         }
       } else {
-        this.restfulCommService.logError(`[AgGrid] 'Error at Custom AgGrid sorting, column does not exist`, this.ownerInitial);
+        this.restfulCommService.logError(`[AgGrid] 'Error at Custom AgGrid sorting, column does not exist`);
         console.error('Error at Custom AgGrid sorting, column does not exist');
         return 0;
       }

@@ -18,7 +18,7 @@ export const APIUrlMap = {
   getCountries: 'obligor/get-countries',
   setQuoteStatus: 'liveQuote/set-quote-status',
   getAlertConfigurations: 'Alert/get-alert-configs',
-  updateAlertConfiguration: 'Alert/update-alert-config',
+  updateAlertConfiguration: 'Alert/update-alert-configs',
   getAlerts: 'Alert/get-alerts',
   readAlert: 'Alert/set-alerts-to-inactive',
   deleteAlert: 'Alert/delete-alerts',
@@ -189,7 +189,15 @@ export const EngagementActionList = {
   thumbdownSecurity: 'Thumbdown Security',
   populateGraph: 'Populate Graph',
   midnightReload: 'Midnight Reload',
-  sendToAlertConfig: 'Send To Alert Config'
+  sendToAlertConfig: 'Send To Alert Config',
+  globalAlertToggledHide: 'Global Alert Toggled Hide',
+  globalAlertClearedAll: 'Global Alert Clear All',
+  globalAlertClearedSingle: 'Global Alert Cleared Single',
+  globalAlertInteractedAlert: 'Global Alert Interacted Alert',
+  tradeAlertOpenConfiguration: 'Trade Alert Open/Close Configuration',
+  tradeAlertConfigure: 'Trade Alert Configure',
+  tradeAlertPause: 'Trade Alert Pause',
+  tradeAlertAddSingleSecurity: 'Trade Alert Add Single Security'
 }
 
 export enum AlertTypes {

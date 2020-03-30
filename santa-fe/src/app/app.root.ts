@@ -61,7 +61,6 @@ export class AppRoot implements OnInit, OnDestroy {
           EngagementActionList.midnightReload,
           null,
           `${currentTime.getHours()} : ${currentTime.getMinutes()} under version: ${VERSION}`,
-          null,
           `App Root`
         );
         window.location.reload(true);
@@ -87,7 +86,7 @@ export class AppRoot implements OnInit, OnDestroy {
           }
           this.store$.dispatch(new CoreLoadSecurityMap(map));
         } else {
-          this.restfulCommService.logError('Failed to load SecurityId map, can not populate alert configuration', null);
+          this.restfulCommService.logError('Failed to load SecurityId map, can not populate alert configuration');
         }
       })
     ).subscribe();

@@ -3,6 +3,7 @@
 $alert_height: 4rem;
 $alert_margin_right: $spacing_large;
 $alert_countdown_duration: 5s;
+$alert_type_size: $iconButton_size_regular;
 .sat-alert {
   $alertBlockName: &;
   @include mix_alive('light');
@@ -10,7 +11,7 @@ $alert_countdown_duration: 5s;
   display: flex;
   width: $alert_width;
   height: $alert_height;
-  margin: $spacing_small 0;
+  margin: $spacing_medium 0;
   &__thumbnail {
     @include mix_fixed_div(relative, $z_index_hovering_item_lift);
     @include mix_border_radius(10px, 'left');
@@ -22,14 +23,63 @@ $alert_countdown_duration: 5s;
     padding: $spacing_x_small 0 $spacing_x_small $spacing_x_small;
     background-color: $color_white;
     transform: translate(-$alert_thumbnail_width, 0);
+    &-type {
+      @include mix_fixed_div(absolute, $z_index_base_item);
+      @include mix_border_radius(50%);
+      @include mix_alive('light');
+      @include material('static');
+      display: flex;
+      width: $alert_type_size;
+      height: $alert_type_size;
+      top: -$alert_type_size/3;
+      left: -$alert_type_size/3;
+      &-circle {
+        @include mix_alive('light');
+        @include mix_fixed_div(relative, $z_index_hovering_item);
+        @include mix_border_radius(50%);
+        flex: 1 1 auto;
+        display: flex;
+        background-color: $color_white;
+        padding: $spacing_x_small;
+        &-inner {
+          @include mix_alive('light');
+          @include mix_fixed_div(relative, $z_index_hovering_item);
+          @include mix_border_radius(50%);
+          flex: 1 1 auto;
+          display: none;
+          align-items: center;
+          justify-content: center;
+          &-icon {
+            font-size: $font_size_x_small;
+            color: $font_color_inverse;
+          }
+          &--axe {
+            background-color: $tradeAxeAlertColor;
+          }
+          &--mark {
+            background-color: $tradeMarkAlertColor;
+          }
+        }
+      }
+      &-mask {
+        @include mix_alive('light');
+        @include mix_fixed_div(absolute, $z_index_base_item_solid);
+        background-color: $color_white;
+        width: $alert_type_size;
+        height: $alert_type_size;
+        left: $alert_type_size/3;
+        top: $alert_type_size/3;
+      }
+    }
     &-main {
+      @include mix_fixed_div(relative, $z_index_base_item_lift);
       @include mix_border_radius(5px, 'left');
       flex: 1 1 auto;
       display: flex;
       flex-direction: column;
       align-items: center;
       background-color: $color_gray_6;
-      &-type {
+      &-upper {
         flex: 0 0 auto;
         display: flex;
         justify-content: center;
@@ -41,18 +91,21 @@ $alert_countdown_duration: 5s;
           line-height: $line_height_small;
         }
       }
-      &-quant {
+      &-lower {
         @include mix_border_radius(3px);
         display: flex;
         justify-content: center;
         align-items: center;
         background-color: $color_white;
         padding: $spacing_x_small $spacing_small;
+        margin: 0 $spacing_x_small;
         &-text {
+          @include mix_text_overflow_multi_line(1);
           font-weight: bold;
           line-height: $line_height_minimum;
           color: $color_gray_6;
           user-select: none;
+          word-break: break-all;
         }
       }
     }
@@ -66,7 +119,7 @@ $alert_countdown_duration: 5s;
     flex: 1 1 auto;
     display: flex;
     align-items: center;
-    margin-right: $spacing_small;
+    margin-right: $spacing_medium;
     padding: $spacing_small;
     background-color: $color_white;
     transform: translate(0, 0);
@@ -142,11 +195,38 @@ $alert_countdown_duration: 5s;
       color: $font_color_inverse;
     }
   }
+  &:hover {
+    #{$alertBlockName} {
+      &__thumbnail {
+        &-type {
+          @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
+        }
+      }
+    }
+  }
+  &--typeAxeVariant {
+    #{$alertBlockName} {
+      &__thumbnail {
+        &-type-circle-inner--axe {
+          display: flex;
+        }
+      }
+    }
+  }
+  &--typeMarkVariant {
+    #{$alertBlockName} {
+      &__thumbnail {
+        &-type-circle-inner--mark {
+          display: flex;
+        }
+      }
+    }
+  }
   &--typeBidVariant {
     #{$alertBlockName} {
       &__thumbnail-main {
         background-color: $color_bid;
-        &-quant-text {
+        &-lower-text {
           color: $color_bid;
         }
       }
@@ -159,7 +239,7 @@ $alert_countdown_duration: 5s;
     #{$alertBlockName} {
       &__thumbnail-main {
         background-color: $color_ask;
-        &-quant-text {
+        &-lower-text {
           color: $color_ask;
         }
       }
@@ -173,12 +253,30 @@ $alert_countdown_duration: 5s;
       &__thumbnail {
         @include material('none');
         background-color: $color_active;
+        &-type {
+          @include material('none');
+          &-circle {
+            background-color: $color_active;
+          }
+          &-mask {
+            background-color: $color_active;
+          }
+        }
       }
       &__detail {
         transform: translate(-$alert_width - $alert_thumbnail_width, 0);
       }
       &__close {
         transform: translate(-$alert_width, 0);
+      }
+    }
+  }
+  &--slideOutState:hover {
+    #{$alertBlockName} {
+      &__thumbnail {
+        &-type {
+          @include material('none');
+        }
       }
     }
   }
@@ -199,7 +297,7 @@ $alert_countdown_duration: 5s;
   &--hiddenState {
     #{$alertBlockName} {
       &__thumbnail {
-        transform: translate(0, 0);
+        transform: translate($spacing_large, 0);
       }
     }
   }

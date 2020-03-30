@@ -132,6 +132,7 @@ export interface TradeUtilityPanelState {
 
 export interface TradeMarketAnalysisPanelState {
   receivedSecurity: boolean;
+  receivedSecurityIsCDS: boolean;
   apiReturnedState: boolean;
   apiErrorState: boolean;
   graphDataEmptyState: boolean;
@@ -198,9 +199,17 @@ export interface TradeAlertPanelState {
       searchIsValid: boolean;
     },
     mark: {
-
+      myGroup: {
+        disabled: boolean;
+        groupId: string;
+        makeMoneySpread: number;
+        makeMoneyPrice: number;
+        loseMoneySpread: number;
+        loseMoneyPrice: number;
+      }
     }
   }
   autoUpdateCountdown: number;
   alertUpdateInProgress: boolean;
+  isCenterPanelPresetSelected: boolean;
 }
