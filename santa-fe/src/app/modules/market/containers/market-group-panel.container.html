@@ -145,6 +145,12 @@
         </div>
       </div>
       <div class="sat-marketGroupPanel__groups-utility-groupAverage">
+        <div class="sat-marketGroupPanel__groups-utility-groupAverage-export">
+          <button (click)="testExport()" class="sat-marketGroupPanel__groups-utility-groupAverage-export-cta santaBtn--labelled">
+            <i class="fal fa-cloud-download"></i>
+            <span>Export To CSV</span>
+          </button>
+        </div>
         <security-group-average-visualizer
           [visualizerData]="state.utility.visualizer"
           [expandedState]="state.isConfiguratorCollapsed"

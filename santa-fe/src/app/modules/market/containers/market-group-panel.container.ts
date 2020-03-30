@@ -21,6 +21,7 @@
       concatMap,
       catchError
     } from 'rxjs/operators';
+    import * as moment from 'moment';
 
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
@@ -249,6 +250,25 @@ export class MarketGroupPanel implements OnDestroy {
 
   public onClearConfig(){
     this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(false);
+  }
+
+  public testExport(){
+    console.log('test export', this.state.searchResult.securityGroupList);
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += `Group Name, Number of Securities` + "\r\n";
+    this.state.searchResult.securityGroupList.forEach((eachGroup) => {
+      const parsedGroupName = eachGroup.data.name.replace(",", "/");
+      console.log('test, parsed Group name is', parsedGroupName);
+      csvContent += `${parsedGroupName},${eachGroup.data.numOfSecurities}` + "\r\n";
+    });
+    const encodedUri = encodeURI(csvContent);
+    const downloadLink = document.createElement("a");
+    downloadLink.href = encodedUri;
+    downloadLink.download = `[Santa] Market Export - ${moment().format(`MMM Do hA`)}.csv`;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+    // window.open(encodedUri, 'test.csv');
   }
 
   private populateSearchShortcuts(){
