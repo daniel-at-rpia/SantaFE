@@ -82,6 +82,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
         display: flex;
         &-btn {
           @extend .santaBtn;
+          flex: 1 1 auto;
           flex-direction: row;
           justify-content: space-between;
           padding: $spacing_xx_small $spacing_x_small;
