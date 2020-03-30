@@ -44,8 +44,8 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
         font-size: $font_size_small;
         &--bid {
           margin-right: $spacing_x_small;
-        } 
-        &--ask {  
+        }
+        &--ask {
           margin-left: $spacing_x_small;
         }
       }
@@ -82,10 +82,9 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
         display: flex;
         &-btn {
           @extend .santaBtn;
-          flex: 1 1 auto;
           flex-direction: row;
           justify-content: space-between;
-          padding: $spacing_xx_small;
+          padding: $spacing_xx_small $spacing_x_small;
           &-text {
             @include mix_border_radius(3px);
             @include mix_quantative_text;
@@ -121,6 +120,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
         }
         &--bid {
           margin-right: $spacing_xx_small;
+          justify-content: flex-end;
         }
         &--bid &-btn &-btn-text {
           text-align: right;
