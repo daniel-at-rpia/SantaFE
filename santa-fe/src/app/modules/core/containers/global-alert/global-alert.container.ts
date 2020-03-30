@@ -51,8 +51,10 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   @Input() ownerInitial: string;
   state: GlobalAlertState;
   subscriptions = {
-    newAlertSubscription: null
+    newAlertSubscription: null,
+    browserTabNotificationSub: null
   }
+  browserTabNotification$: Observable<any>;
   constants = {
     sizeCap: ALERT_PRESENT_LIST_SIZE_CAP,
     totalSizeMaxDisplay: ALERT_TOTALSIZE_MAX_DISPLAY_THRESHOLD
@@ -99,6 +101,8 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         console.error('received new alerts but failed to generate');
       }
     });
+
+    this.browserTabNotification$ = interval(500);
   }
 
   public ngOnChanges() {
