@@ -256,10 +256,17 @@ export class MarketGroupPanel implements OnDestroy {
 
   public onClickExport(){
     let csvContent = "data:text/csv;charset=utf-8,";
-    csvContent += `Group Name, Number of Securities, Default Spread, Delta Dod, Delta Wow, Delta Mom, Delta Ytd, Delta Yoy` + "\r\n";
-    this.state.searchResult.securityGroupList.forEach((eachGroup) => {
-      csvContent = this.populateExportDataForEachGroup(eachGroup, csvContent);
-    });
+    if (this.state.searchResult.securityGroupList.length > 0 && this.state.searchResult.securityGroupList[0] && this.state.searchResult.securityGroupList[0].data.definitionConfig) {
+      csvContent += `Group Name, Number of Securities, Default Spread, Delta Dod, Delta Wow, Delta Mom, Delta Ytd, Delta Yoy`;
+      for (const eachDefinition in this.state.searchResult.securityGroupList[0].data.definitionConfig) {
+        csvContent += `,${eachDefinition}`;
+      }
+      this.state.searchResult.securityGroupList[0].data.definitionConfig
+      csvContent += "\r\n";
+      this.state.searchResult.securityGroupList.forEach((eachGroup) => {
+        csvContent = this.populateExportDataForEachGroup(eachGroup, csvContent);
+      });
+    }
     const encodedUri = encodeURI(csvContent);
     const downloadLink = document.createElement("a");
     downloadLink.href = encodedUri;
@@ -599,6 +606,9 @@ export class MarketGroupPanel implements OnDestroy {
       const eachDeltaValue = targetGroup.data.metricPack.delta[eachDeltaOption][defaultSpreadLabel] != null ? this.utilityService.round(targetGroup.data.metricPack.delta[eachDeltaOption][defaultSpreadLabel], 2) : null;
       csvContent = this.populateExportDataForEachGroupEntry(eachDeltaValue, csvContent);
     });
+    for (const eachDefinition in targetGroup.data.definitionConfig) {
+      csvContent += `,${targetGroup.data.definitionConfig[eachDefinition][0]}`;
+    }
     csvContent += "\r\n";
     return csvContent;
   }
