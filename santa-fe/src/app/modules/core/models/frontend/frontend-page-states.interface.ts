@@ -25,6 +25,7 @@ export interface GlobalAlertState {
   totalSize: number;
   displayTotalSize: string;
   originalDocumentTitle: string;
+  favicon: HTMLLinkElement;
 }
 
 export interface MarketState {

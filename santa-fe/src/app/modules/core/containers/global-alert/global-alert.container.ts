@@ -69,7 +69,8 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       storeList: [],
       totalSize: 0,
       displayTotalSize: '',
-      originalDocumentTitle: document.title
+      originalDocumentTitle: document.title,
+      favicon: null
     };
     return state;
   }
@@ -103,28 +104,21 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       }
     });
 
-    const alertIcon = document.querySelector("link[rel*='icon']") as HTMLLinkElement || document.createElement('link');
-    alertIcon.type = 'image/x-icon';
-    alertIcon.rel = 'shortcut icon';
-    alertIcon.href = 'assets/alert.ico';
-    const regularIcon = document.querySelector("link[rel*='icon']") as HTMLLinkElement || document.createElement('link');
-    regularIcon.type = 'image/x-icon';
-    regularIcon.rel = 'shortcut icon';
-    regularIcon.href = 'favicon.ico';
     this.browserTabNotificationCount$ = interval(500);
+    this.state.favicon = document.querySelector("link[rel*='icon']") as HTMLLinkElement;
     this.subscriptions.browserTabNotificationSub = this.browserTabNotificationCount$.subscribe(count => {
       if (this.state.presentList.length > 0) {
         if (document.title === this.state.originalDocumentTitle) {
           document.title = '[New Alerts] ' + this.state.originalDocumentTitle;
         }
         if (count%2 === 0) {
-          document.getElementsByTagName('head')[0].appendChild(alertIcon);
+          this.state.favicon.href = 'assets/alert.ico';
         } else {
-          document.getElementsByTagName('head')[0].appendChild(regularIcon);
+          this.state.favicon.href = 'favicon.ico';
         }
       } else {
         document.title = this.state.originalDocumentTitle;
-        document.getElementsByTagName('head')[0].appendChild(regularIcon);
+        this.state.favicon.href = 'favicon.ico';
       }
     });
   }
