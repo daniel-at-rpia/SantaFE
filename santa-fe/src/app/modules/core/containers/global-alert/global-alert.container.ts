@@ -54,7 +54,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     newAlertSubscription: null,
     browserTabNotificationSub: null
   }
-  browserTabNotification$: Observable<any>;
+  browserTabNotificationCount$: Observable<any>;
   constants = {
     sizeCap: ALERT_PRESENT_LIST_SIZE_CAP,
     totalSizeMaxDisplay: ALERT_TOTALSIZE_MAX_DISPLAY_THRESHOLD
@@ -68,7 +68,8 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       presentList: [],
       storeList: [],
       totalSize: 0,
-      displayTotalSize: ''
+      displayTotalSize: '',
+      originalDocumentTitle: document.title
     };
     return state;
   }
@@ -102,7 +103,30 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       }
     });
 
-    this.browserTabNotification$ = interval(500);
+    const alertIcon = document.querySelector("link[rel*='icon']") as HTMLLinkElement || document.createElement('link');
+    alertIcon.type = 'image/x-icon';
+    alertIcon.rel = 'shortcut icon';
+    alertIcon.href = 'assets/alert.ico';
+    const regularIcon = document.querySelector("link[rel*='icon']") as HTMLLinkElement || document.createElement('link');
+    regularIcon.type = 'image/x-icon';
+    regularIcon.rel = 'shortcut icon';
+    regularIcon.href = 'favicon.ico';
+    this.browserTabNotificationCount$ = interval(500);
+    this.subscriptions.browserTabNotificationSub = this.browserTabNotificationCount$.subscribe(count => {
+      if (this.state.presentList.length > 0) {
+        if (document.title === this.state.originalDocumentTitle) {
+          document.title = '[New Alerts] ' + this.state.originalDocumentTitle;
+        }
+        if (count%2 === 0) {
+          document.getElementsByTagName('head')[0].appendChild(alertIcon);
+        } else {
+          document.getElementsByTagName('head')[0].appendChild(regularIcon);
+        }
+      } else {
+        document.title = this.state.originalDocumentTitle;
+        document.getElementsByTagName('head')[0].appendChild(regularIcon);
+      }
+    });
   }
 
   public ngOnChanges() {
