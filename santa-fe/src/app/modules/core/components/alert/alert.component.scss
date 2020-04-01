@@ -198,7 +198,7 @@ $alert_type_size: $iconButton_size_regular;
   &__hoverClose {
     @include mix_fixed_div(absolute, $z_index_hovering_item_lift);
     @include mix_alive('light');
-    right: $alert_thumbnail_width + $spacing_medium;
+    right: $alert_thumbnail_width - $iconButton_size_large/2;
     display: flex;
     align-self: center;
     transform: translate(-$alert_width, 0);
