@@ -80,6 +80,7 @@ export interface TradeState {
 export interface TradeCenterPanelState {
   currentContentStage: number;
   bestQuoteValidWindow: number;
+  displayAlertTable: boolean;
   presets : {
     presetsReady: boolean;
     selectedPreset: DTOs.SearchShortcutDTO;

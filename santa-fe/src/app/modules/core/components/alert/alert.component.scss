@@ -199,16 +199,16 @@ $alert_type_size: $iconButton_size_regular;
   &__hoverClose {
     @include mix_fixed_div(absolute, $z_index_hovering_item_lift);
     @include mix_alive('light');
-    right: $alert_thumbnail_width/2 - $iconButton_size_large/2;
-    top: -$iconButton_size_large/2;
+    right: $alert_thumbnail_width/2 - $iconButton_size_regular/2;
+    top: -$iconButton_size_regular/2;
     display: flex;
     align-self: center;
     transform: translate(-$alert_width, 0);
     &-btn {
       @include mix_border_radius(50%);
       display: flex;
-      width: $iconButton_size_large;
-      height: $iconButton_size_large;
+      width: $iconButton_size_regular;
+      height: $iconButton_size_regular;
       font-size: $font_size_large;
       background-color: $color_kill;
       color: $font_color_inverse;

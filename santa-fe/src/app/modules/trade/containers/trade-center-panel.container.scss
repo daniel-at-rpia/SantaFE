@@ -192,16 +192,16 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
     flex-direction: column;
     overflow: hidden;
     padding: $spacing_medium;
-    &-quickFilters {
+    &-utilities {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      margin-bottom: $spacing_small;
       &-keywordSearch {
         @include mix_border_radius(5px);
         flex: 0 1 25rem;
         display: flex;
         align-items: center;
-        padding: $spacing_x_small $spacing_small;
         margin-right: $spacing_medium;
         &-activeIcon {
           font-size: $font_size_x_large;
@@ -216,6 +216,20 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
         santa-input {
           flex: 1 1 auto;
           margin-bottom: $spacing_x_small;
+        }
+      }
+      &-tableSwitch {
+        &-btnGroup {
+          &-mainBtn {
+            @include material('none');
+            background-color: $color_active;
+            color: $font_color_inverse;
+          }
+          &-alertBtn {
+            @include material();
+            background-color: $color_white;
+            color: $font_color_major;
+          }
         }
       }
       &-driver {
@@ -277,11 +291,22 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
         overflow: hidden;
       }
     }
+    &-alertTable {
+      flex: 1 1 auto;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      santa-table {
+        flex: 1 1 auto;
+        display: flex;
+        overflow: hidden;
+      }
+    }
   }
   &--keywordSearchActiveState {
     #{$tradeCenterPanelBlockName} {
       &__result {
-        &-quickFilters-keywordSearch {
+        &-utilities-keywordSearch {
           background-color: $color_filter;
           &-activeIcon {
             color: $font_color_inverse;
@@ -297,6 +322,30 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
     #{$tradeCenterPanelBlockName} {
       &__presetsAndFilters {
         @include mix_fixed_div(relative, $z_index_tooltip);
+      }
+    }
+  }
+  &--displayAlertTableState {
+    #{$tradeCenterPanelBlockName} {
+      &__result {
+        &-utilities-tableSwitch-btnGroup {
+          &-mainBtn {
+            @include material();
+            background-color: $color_white;
+            color: $font_color_major;
+          }
+          &-alertBtn {
+            @include material('none');
+            background-color: $color_active;
+            color: $font_color_inverse;
+          }
+        }
+        &-table {
+          display: none;
+        }
+        &-alertTable {
+          display: flex;
+        }
       }
     }
   }

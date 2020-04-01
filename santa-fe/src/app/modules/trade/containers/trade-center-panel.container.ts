@@ -112,6 +112,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     const state: TradeCenterPanelState = {
       currentContentStage: 0,
       bestQuoteValidWindow: null,
+      displayAlertTable: false,
       presets: {
         presetsReady: false,
         selectedPreset: null,
@@ -260,7 +261,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.state.configurator.boosted = true;
   }
 
-  public onswitchDriver(targetDriver) {
+  public onSwitchDriver(targetDriver) {
     if (this.state.filters.quickFilters.driverType !== targetDriver) {
       this.restfulCommService.logEngagement(
         EngagementActionList.switchDriver,
@@ -360,6 +361,10 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       this.state.filters.quickFilters.keyword = newKeyword;
       this.state.fetchResult.rowList = this.filterPrinstineRowList();
     }
+  }
+
+  public onSwitchTable() {
+    this.state.displayAlertTable = !this.state.displayAlertTable;
   }
 
   private populateSearchShortcuts() {
