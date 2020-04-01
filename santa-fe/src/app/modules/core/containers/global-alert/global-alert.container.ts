@@ -51,8 +51,10 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   @Input() ownerInitial: string;
   state: GlobalAlertState;
   subscriptions = {
-    newAlertSubscription: null
+    newAlertSubscription: null,
+    browserTabNotificationSub: null
   }
+  browserTabNotificationCount$: Observable<any>;
   constants = {
     sizeCap: ALERT_PRESENT_LIST_SIZE_CAP,
     totalSizeMaxDisplay: ALERT_TOTALSIZE_MAX_DISPLAY_THRESHOLD
@@ -66,7 +68,9 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       presentList: [],
       storeList: [],
       totalSize: 0,
-      displayTotalSize: ''
+      displayTotalSize: '',
+      originalDocumentTitle: document.title,
+      favicon: null
     };
     return state;
   }
@@ -97,6 +101,24 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       } catch {
         this.restfulCommService.logError('received new alerts but failed to generate');
         console.error('received new alerts but failed to generate');
+      }
+    });
+
+    this.browserTabNotificationCount$ = interval(500);
+    this.state.favicon = document.querySelector("link[rel*='icon']") as HTMLLinkElement;
+    this.subscriptions.browserTabNotificationSub = this.browserTabNotificationCount$.subscribe(count => {
+      if (this.state.presentList.length > 0) {
+        if (document.title === this.state.originalDocumentTitle) {
+          document.title = '[New Alerts] ' + this.state.originalDocumentTitle;
+        }
+        if (count%2 === 0) {
+          this.state.favicon.href = 'assets/alert.ico';
+        } else {
+          this.state.favicon.href = 'favicon.ico';
+        }
+      } else {
+        document.title = this.state.originalDocumentTitle;
+        this.state.favicon.href = 'favicon.ico';
       }
     });
   }

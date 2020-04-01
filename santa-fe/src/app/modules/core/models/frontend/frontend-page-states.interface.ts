@@ -24,6 +24,8 @@ export interface GlobalAlertState {
   storeList: Array<DTOs.AlertDTO>;
   totalSize: number;
   displayTotalSize: string;
+  originalDocumentTitle: string;
+  favicon: HTMLLinkElement;
 }
 
 export interface MarketState {
