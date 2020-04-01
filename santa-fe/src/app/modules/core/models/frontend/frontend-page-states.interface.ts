@@ -186,6 +186,7 @@ export interface TradeObligorGraphPanelState {
 }
 
 export interface TradeAlertPanelState {
+  isUserPM: boolean;
   configureAlert: boolean;
   isAlertPaused: boolean;
   securityMap: Array<SecurityMapEntry>;

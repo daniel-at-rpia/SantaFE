@@ -51,7 +51,8 @@
           'sat-tradeAlertPanel__configuration-main-axeConfig': true,
           'sat-tradeAlertAxeAlertConfiguration': true,
           'sat-tradeAlertAxeAlertConfiguration--showSearchResult': state.configuration.axe.searchIsValid,
-          'sat-tradeAlertAxeAlertConfiguration--myGroupDisabled': state.configuration.axe.myGroup.isDisabled
+          'sat-tradeAlertAxeAlertConfiguration--myGroupDisabled': state.configuration.axe.myGroup.isDisabled,
+          'sat-tradeAlertAxeAlertConfiguration--userIsNotPMState': !state.isUserPM
         }">
         <section class="sat-tradeAlertAxeAlertConfiguration__myGroup">
           <span class="sat-tradeAlertAxeAlertConfiguration__myGroup-title">
@@ -184,7 +185,8 @@
         [ngClass]="{
           'sat-tradeAlertPanel__configuration-main-markConfig': true,
           'sat-tradeAlertMarkAlertConfiguration': true,
-          'sat-tradeAlertMarkAlertConfiguration--disabledState': state.configuration.mark.myGroup.disabled
+          'sat-tradeAlertMarkAlertConfiguration--disabledState': state.configuration.mark.myGroup.disabled,
+          'sat-tradeAlertMarkAlertConfiguration--userIsNotPMState': !state.isUserPM
         }">
         <section class="sat-tradeAlertMarkAlertConfiguration__title">
           <span class="sat-tradeAlertMarkAlertConfiguration__title-text">

@@ -104,6 +104,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
   private initializePageState(): TradeAlertPanelState {
     const state: TradeAlertPanelState = {
+      isUserPM: false,
       configureAlert: false,
       isAlertPaused: true,
       securityMap: [],
@@ -190,6 +191,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     ).subscribe(flag => {
       this.state.isCenterPanelPresetSelected = flag;
     });
+    this.state.isUserPM = this.constants.fullOwnerList.indexOf(this.ownerInitial) >= 0;
   }
 
   public ngOnChanges() {
@@ -504,53 +506,55 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private saveAxeConfiguration() {
-    const entirePayload: PayloadUpdateAlertConfig = {
-      alertConfigs: []
-    };
-    const groupPayload: PayloadUpdateSingleAlertConfig = {
-      type: this.constants.alertTypes.axeAlert,
-      subType: this.mapAxeScopesToAlertSubtypes(this.state.configuration.axe.myGroup.scopes),
-      groupFilters: {
-        Owner: [this.ownerInitial]
-      }
-    };
-    if (this.state.configuration.axe.myGroup.isDisabled) {
-      groupPayload.isEnabled = false;
-    }
-    if (this.state.configuration.axe.myGroup.groupId) {
-      groupPayload.alertConfigID = this.state.configuration.axe.myGroup.groupId;
-    }
-    entirePayload.alertConfigs.push(groupPayload);
-    this.state.configuration.axe.securityList.forEach((eachEntry) => {
-      const payload: PayloadUpdateSingleAlertConfig = {
+    if (this.state.isUserPM) {
+      const entirePayload: PayloadUpdateAlertConfig = {
+        alertConfigs: []
+      };
+      const groupPayload: PayloadUpdateSingleAlertConfig = {
         type: this.constants.alertTypes.axeAlert,
-        subType: this.mapAxeScopesToAlertSubtypes(eachEntry.scopes),
-        groupFilters: {}
+        subType: this.mapAxeScopesToAlertSubtypes(this.state.configuration.axe.myGroup.scopes),
+        groupFilters: {
+          Owner: [this.ownerInitial]
+        }
+      };
+      if (this.state.configuration.axe.myGroup.isDisabled) {
+        groupPayload.isEnabled = false;
       }
-      payload.groupFilters.SecurityIdentifier = [eachEntry.card.data.securityID];
-      if (!!eachEntry.groupId) {
-        payload.alertConfigID = eachEntry.groupId;
+      if (this.state.configuration.axe.myGroup.groupId) {
+        groupPayload.alertConfigID = this.state.configuration.axe.myGroup.groupId;
       }
-      if (eachEntry.isDisabled) {
-        payload.isEnabled = false;
-      }
-      if (eachEntry.isDeleted) {
-        payload.isDeleted = true;
-      }
-      entirePayload.alertConfigs.push(payload);
-    });
-    this.restfulCommService.callAPI(this.restfulCommService.apiMap.updateAlertConfiguration, {req: 'POST'}, entirePayload).pipe(
-      first(),
-      catchError(err => {
-        console.error(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`, entirePayload);
-        this.restfulCommService.logError(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`);
-        return of('error');
-      })
-    ).subscribe();
+      entirePayload.alertConfigs.push(groupPayload);
+      this.state.configuration.axe.securityList.forEach((eachEntry) => {
+        const payload: PayloadUpdateSingleAlertConfig = {
+          type: this.constants.alertTypes.axeAlert,
+          subType: this.mapAxeScopesToAlertSubtypes(eachEntry.scopes),
+          groupFilters: {}
+        }
+        payload.groupFilters.SecurityIdentifier = [eachEntry.card.data.securityID];
+        if (!!eachEntry.groupId) {
+          payload.alertConfigID = eachEntry.groupId;
+        }
+        if (eachEntry.isDisabled) {
+          payload.isEnabled = false;
+        }
+        if (eachEntry.isDeleted) {
+          payload.isDeleted = true;
+        }
+        entirePayload.alertConfigs.push(payload);
+      });
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.updateAlertConfiguration, {req: 'POST'}, entirePayload).pipe(
+        first(),
+        catchError(err => {
+          console.error(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`, entirePayload);
+          this.restfulCommService.logError(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`);
+          return of('error');
+        })
+      ).subscribe();
+    }
   }
 
   private saveMarkConfiguration() {
-    if (this.constants.fullOwnerList.indexOf(this.ownerInitial) >= 0 && this.markGroupConfigurationIsValid()) {
+    if (this.state.isUserPM && this.markGroupConfigurationIsValid()) {
       const entirePayload: PayloadUpdateAlertConfig = {
         alertConfigs: []
       };
