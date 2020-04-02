@@ -1,5 +1,19 @@
 @import "global.scss";
 
+
+@mixin axeIconVisible {
+  &-axeIcon{
+    visibility: visible;
+    font-size: $font_size_xx_small;
+    &-left{
+      padding-right: $spacing_xx_small;
+    }
+    &-right{
+      padding-left: $spacing_xx_small;
+    }
+  }
+}
+
 $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
 .sat-securityQuote {
   $securityQuoteBlockName: &;
@@ -91,6 +105,17 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
             @include mix_quantative_text;
             flex: 1 1 auto;
             padding: $spacing_xx_small $spacing_x_small;
+
+            &-axeIcon{
+              visibility: hidden;
+            }
+
+            &-withIcon{
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
+              align-items: center;
+            }
           }
           &-downVoteIcon {
             @include mix_fixed_div(absolute, $z_index_hovering_item);
@@ -185,6 +210,48 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
     border-color: $color_active;
     background-color: $color_active;
   }
+
+  &--bestAxeBidState#{$securityQuoteBlockName}--filteredBySpreadState,
+  {
+    #{$securityQuoteBlockName} {
+      &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--tspread {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta-btn {
+            &-text {
+              @include axeIconVisible;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--bestAxeBidState#{$securityQuoteBlockName}--filteredByPriceState {
+    #{$securityQuoteBlockName} {
+      &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--price {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta-btn {
+            &-text {
+              @include axeIconVisible;
+
+            }
+          }
+        }
+      }
+    }
+  }
+  &--bestAxeBidState#{$securityQuoteBlockName}--filteredByYieldState {
+    #{$securityQuoteBlockName} {
+      &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--yield {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta-btn {
+            &-text {
+              @include axeIconVisible;
+            }
+          }
+        }
+      }
+    }
+  }
   &--bestBidState#{$securityQuoteBlockName}--filteredBySpreadState {
     #{$securityQuoteBlockName} {
       &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--tspread {
@@ -199,6 +266,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
+
   &--bestBidState#{$securityQuoteBlockName}--filteredByPriceState {
     #{$securityQuoteBlockName} {
       &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--price {
@@ -221,6 +289,45 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
             &-text {
               background-color: $color_bid;
               color: $font_color_inverse;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--bestAxeOfferState#{$securityQuoteBlockName}--filteredBySpreadState {
+    #{$securityQuoteBlockName} {
+      &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--tspread {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta-btn {
+            &-text {
+              @include axeIconVisible;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--bestAxeOfferState#{$securityQuoteBlockName}--filteredByPriceState {
+    #{$securityQuoteBlockName} {
+      &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--price {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta-btn {
+            &-text {
+              @include axeIconVisible;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--bestAxeOfferState#{$securityQuoteBlockName}--filteredByYieldState {
+    #{$securityQuoteBlockName} {
+      &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--yield {
+        #{$securityQuoteBlockName} {
+          &__main-twoSideEntry-cta-btn {
+            &-text {
+              @include axeIconVisible;
             }
           }
         }
@@ -525,5 +632,5 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
- 
+
 }
