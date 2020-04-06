@@ -116,12 +116,6 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'Jr Subordinated'
   ];
 
-  const FilterOptionsTempPlaceholder = [
-    'Option 1',
-    'Option 2',
-    'Option 3'
-  ];
-
   const FilterOptionsIndustryType = [
     'Advertising & Marketing',
     'Aerospace & Defense',
@@ -218,7 +212,7 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'ST'
   ];
 
-  const FilterOptionsPortfolioResearchList = [
+  export const FilterOptionsPortfolioResearchList = [
     'AG',
     'LC',
     'LP',

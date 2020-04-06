@@ -58,7 +58,7 @@
       AxeAlertScope,
       ALERT_UPDATE_COUNTDOWN
     } from 'Core/constants/tradeConstants.constant';
-    import { FullOwnerList } from 'Core/constants/securityDefinitionConstants.constant';
+    import { FullOwnerList, FilterOptionsPortfolioResearchList } from 'Core/constants/securityDefinitionConstants.constant';
     import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
     import { CoreFlushSecurityMap, CoreSendNewAlerts } from 'Core/actions/core.actions';
     import { selectSelectedSecurityForAlertConfig, selectPresetSelected } from 'Trade/selectors/trade.selectors';
@@ -90,7 +90,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     alertSubTypes: AlertSubTypes,
     axeAlertScope: AxeAlertScope,
     countdown: ALERT_UPDATE_COUNTDOWN,
-    fullOwnerList: FullOwnerList
+    fullOwnerList: FullOwnerList,
+    researchList: FilterOptionsPortfolioResearchList
   }
 
   constructor(
@@ -191,12 +192,14 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     ).subscribe(flag => {
       this.state.isCenterPanelPresetSelected = flag;
     });
-    this.state.isUserPM = this.constants.fullOwnerList.indexOf(this.ownerInitial) >= 0;
   }
 
   public ngOnChanges() {
     if (!!this.collapseConfiguration) {
       this.state.configureAlert = false;
+    }
+    if (!!this.ownerInitial) {
+      this.state.isUserPM = this.constants.fullOwnerList.indexOf(this.ownerInitial) >= 0;
     }
   }
 
@@ -513,10 +516,13 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       const groupPayload: PayloadUpdateSingleAlertConfig = {
         type: this.constants.alertTypes.axeAlert,
         subType: this.mapAxeScopesToAlertSubtypes(this.state.configuration.axe.myGroup.scopes),
-        groupFilters: {
-          Owner: [this.ownerInitial]
-        }
+        groupFilters: {}
       };
+      if (this.constants.researchList.indexOf(this.ownerInitial) >= 0) {
+        groupPayload.groupFilters.ResearchName = [this.ownerInitial];
+      } else {
+        groupPayload.groupFilters.PrimaryPmName = [this.ownerInitial];
+      }
       if (this.state.configuration.axe.myGroup.isDisabled) {
         groupPayload.isEnabled = false;
       }
@@ -562,11 +568,15 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         type: this.constants.alertTypes.markAlert,
         subType: this.constants.alertSubTypes.liquidation,
         groupFilters: {
-          Owner: [this.ownerInitial]
         },
         parameters: {}
       }
       const myGroup = this.state.configuration.mark.myGroup;
+      if (this.constants.researchList.indexOf(this.ownerInitial) >= 0) {
+        payload.groupFilters.ResearchName = [this.ownerInitial];
+      } else {
+        payload.groupFilters.PrimaryPmName = [this.ownerInitial];
+      }
       if (myGroup.disabled) {
         payload.isEnabled = false;
       }
