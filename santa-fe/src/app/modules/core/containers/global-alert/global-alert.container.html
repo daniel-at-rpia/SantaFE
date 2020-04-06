@@ -6,14 +6,15 @@
     'sat-globalAlert--emptyState': state.totalSize === 0
   }">
   <section class="sat-globalAlert__alertList">
-    <alert
-      *ngFor="let eachAlert of state.presentList"
-      [alertData]="eachAlert"
-      [hideAllAlerts]="!state.displayAlerts && !state.triggerActionMenuOpen"
-      (clickedAlertThumbnail)="onClickAlertThumbnail($event)"
-      (clickedAlertDetail)="loadAlertToTable($event)"
-      (clickedRemove)="onClickAlertRemove($event)">
-    </alert>
+    <li class="sat-globalAlert__alertList-item" *ngFor="let eachAlert of state.presentList">
+      <alert
+        [alertData]="eachAlert"
+        [hideAllAlerts]="!state.displayAlerts && !state.triggerActionMenuOpen"
+        (clickedAlertThumbnail)="onClickAlertThumbnail($event)"
+        (clickedAlertDetail)="loadAlertToTable($event)"
+        (clickedRemove)="onClickAlertRemove($event)">
+      </alert>
+    </li>
   </section>
   <section class="sat-globalAlert__trigger">
     <div class="sat-globalAlert__trigger-actionMenu">
