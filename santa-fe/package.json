@@ -4,7 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --extra-webpack-config webpack.partial.js -o --extract-css",
-    "build": "ng build --prod --extra-webpack-config webpack.partial.js -o",
+    "buildDev": "ng build --extra-webpack-config webpack.partial.js -o",
+    "buildProd": "ng build --prod --extra-webpack-config webpack.partial.js -o",
+    "deployDev": "firebase deploy --only hosting:dev",
+    "deployProd": "firebase deploy --only hosting:prod",
+    "deployLocal": "firebase deploy --only hosting:local",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
