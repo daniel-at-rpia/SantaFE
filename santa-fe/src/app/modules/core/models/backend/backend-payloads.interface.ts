@@ -73,6 +73,8 @@ export interface PayloadUpdateSingleAlertConfig {
   groupFilters: {
     Owner?: Array<string>;
     SecurityIdentifier?: Array<string>;
+    PrimaryPmName?: Array<string>;
+    ResearchName?: Array<string>;
   }
   parameters?: {
     LoseMoneyPriceThreshold?: number,
