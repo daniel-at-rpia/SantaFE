@@ -21,6 +21,7 @@
       concatMap,
       catchError
     } from 'rxjs/operators';
+    import * as moment from 'moment';
 
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
@@ -39,6 +40,7 @@
 
     import { SecurityGroupList } from 'Core/stubs/securityGroups.stub';
     import { SecurityDefinitionStub } from 'FEModels/frontend-stub-models.interface';
+    import { SecurityMetricOptions } from 'Core/constants/coreConstants.constant';
     import {
       PieChartConfiguratorOptions,
       MetricRenderDelay,
@@ -64,7 +66,8 @@ export class MarketGroupPanel implements OnDestroy {
   PieChartConfigurationOptions = PieChartConfiguratorOptions;
   constants = {
     securityGroupDefinitionMap: SecurityDefinitionMap,
-    searchShortcuts: SearchShortcuts
+    searchShortcuts: SearchShortcuts,
+    securityMetricOptions: SecurityMetricOptions
   }
 
   private initiateComponentState(){
@@ -249,6 +252,28 @@ export class MarketGroupPanel implements OnDestroy {
 
   public onClearConfig(){
     this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(false);
+  }
+
+  public onClickExport(){
+    let csvContent = "data:text/csv;charset=utf-8,";
+    if (this.state.searchResult.securityGroupList.length > 0 && this.state.searchResult.securityGroupList[0] && this.state.searchResult.securityGroupList[0].data.definitionConfig) {
+      csvContent += `Group Name, Number of Securities, Default Spread, Delta Dod, Delta Wow, Delta Mom, Delta Ytd, Delta Yoy`;
+      for (const eachDefinition in this.state.searchResult.securityGroupList[0].data.definitionConfig) {
+        csvContent += `,${eachDefinition}`;
+      }
+      this.state.searchResult.securityGroupList[0].data.definitionConfig
+      csvContent += "\r\n";
+      this.state.searchResult.securityGroupList.forEach((eachGroup) => {
+        csvContent = this.populateExportDataForEachGroup(eachGroup, csvContent);
+      });
+    }
+    const encodedUri = encodeURI(csvContent);
+    const downloadLink = document.createElement("a");
+    downloadLink.href = encodedUri;
+    downloadLink.download = `[Santa] Market Export - ${moment().format(`MMM Do hA`)}.csv`;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
   }
 
   private populateSearchShortcuts(){
@@ -566,5 +591,37 @@ export class MarketGroupPanel implements OnDestroy {
         })
       }
     }
+  }
+
+  private populateExportDataForEachGroup(
+    targetGroup: SecurityGroupDTO,
+    csvContent: string
+  ): string {
+    const parsedGroupName = targetGroup.data.name.replace(",", "/");
+    csvContent += `${parsedGroupName},${targetGroup.data.numOfSecurities}`;
+    const defaultSpreadLabel = this.constants.securityMetricOptions[0].label;
+    const defaultSpreadRaw = targetGroup.data.metricPack.raw[defaultSpreadLabel] != null ? this.utilityService.round(targetGroup.data.metricPack.raw[this.constants.securityMetricOptions[0].label], 2) : null;
+    csvContent = this.populateExportDataForEachGroupEntry(defaultSpreadRaw, csvContent);
+    this.constants.securityMetricOptions[0].deltaOptions.forEach((eachDeltaOption) => {
+      const eachDeltaValue = targetGroup.data.metricPack.delta[eachDeltaOption][defaultSpreadLabel] != null ? this.utilityService.round(targetGroup.data.metricPack.delta[eachDeltaOption][defaultSpreadLabel], 2) : null;
+      csvContent = this.populateExportDataForEachGroupEntry(eachDeltaValue, csvContent);
+    });
+    for (const eachDefinition in targetGroup.data.definitionConfig) {
+      csvContent += `,${targetGroup.data.definitionConfig[eachDefinition][0]}`;
+    }
+    csvContent += "\r\n";
+    return csvContent;
+  }
+
+  private populateExportDataForEachGroupEntry(
+    entry: string,
+    csvContent
+  ): string {
+    if (entry != null) {
+      csvContent += `,${entry}`;
+    } else {
+      csvContent += `,`;
+    }
+    return csvContent;
   }
 }

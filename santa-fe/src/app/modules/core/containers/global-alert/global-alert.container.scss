@@ -7,6 +7,9 @@
     top: 0;
     right: -$alert_width;
     padding: $spacing_medium 0;
+    &-item {
+      margin-bottom: $spacing_small;
+    }
   }
   &__trigger {
     @include mix_fixed_div(fixed, $z_index_globalAlertTrigger);

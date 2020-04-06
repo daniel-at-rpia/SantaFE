@@ -18,7 +18,7 @@ export const SECURITY_TABLE_FINAL_STAGE = 1;
 
 export const AGGRID_DETAIL_COLUMN_WIDTH = 50;
 export const AGGRID_SECURITY_CARD_COLUMN_WIDTH = 270;
-export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_quant + $spacing_small * 2 
+export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_quant + $spacing_small * 2
 export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 117;
 export const AGGRID_SIMPLE_TEXT_COLUMN_WIDTH = 135;
 export const AGGRID_ROW_HEIGHT = 40;
@@ -234,6 +234,17 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     attrName: 'cs01LocalFirmInK',
     underlineAttrName: 'cs01LocalFirm',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
+    active: false
+  },{
+    key: 'dodDelta',
+    label: 'DoD Δ',
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+    blockAttrName: 'metricPack',
+    isAttrChangable: true,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    metricPackDeltaScope: 'Dod',
+    isDriverDependent: true,
     active: false
   },{
     key: 'wowDelta',

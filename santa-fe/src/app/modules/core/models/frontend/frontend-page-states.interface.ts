@@ -24,6 +24,8 @@ export interface GlobalAlertState {
   storeList: Array<DTOs.AlertDTO>;
   totalSize: number;
   displayTotalSize: string;
+  originalDocumentTitle: string;
+  favicon: HTMLLinkElement;
 }
 
 export interface MarketState {
@@ -184,6 +186,7 @@ export interface TradeObligorGraphPanelState {
 }
 
 export interface TradeAlertPanelState {
+  isUserPM: boolean;
   configureAlert: boolean;
   isAlertPaused: boolean;
   securityMap: Array<SecurityMapEntry>;

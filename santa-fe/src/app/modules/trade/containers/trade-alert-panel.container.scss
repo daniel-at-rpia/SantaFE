@@ -296,10 +296,22 @@
       }
     }
   }
+  &--userIsNotPMState {
+    #{$axeAlertConfigurationBlockName} {
+      &__myGroup {
+        &-content {
+          display: none;
+        }
+      }
+      &__textSeparator {
+        display: none;
+      }
+    }
+  }
 }
 
 .sat-tradeAlertMarkAlertConfiguration {
-  $tradeAlertMarkAlertConfigurationBlockName: &;
+  $markAlertConfigurationBlockName: &;
   display: flex;
   flex-direction: column;
   &__title {
@@ -388,7 +400,7 @@
     }
   }
   &--disabledState {
-    #{$tradeAlertMarkAlertConfigurationBlockName} {
+    #{$markAlertConfigurationBlockName} {
       &__groupList {
         &-group {
           &-disableTag {
@@ -399,6 +411,15 @@
             @extend .santaBtn--inverseLabelled;
             background-color: $color_active;
           }
+        }
+      }
+    }
+  }
+  &--userIsNotPMState {
+    #{$markAlertConfigurationBlockName} {
+      &__groupList {
+        &-group {
+          display: none;  // this is temporary since now the only group we have is the "Securities I Own" group
         }
       }
     }

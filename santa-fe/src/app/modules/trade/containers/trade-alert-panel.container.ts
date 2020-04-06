@@ -58,7 +58,7 @@
       AxeAlertScope,
       ALERT_UPDATE_COUNTDOWN
     } from 'Core/constants/tradeConstants.constant';
-    import { FullOwnerList } from 'Core/constants/securityDefinitionConstants.constant';
+    import { FullOwnerList, FilterOptionsPortfolioResearchList } from 'Core/constants/securityDefinitionConstants.constant';
     import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
     import { CoreFlushSecurityMap, CoreSendNewAlerts } from 'Core/actions/core.actions';
     import { selectSelectedSecurityForAlertConfig, selectPresetSelected } from 'Trade/selectors/trade.selectors';
@@ -90,7 +90,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     alertSubTypes: AlertSubTypes,
     axeAlertScope: AxeAlertScope,
     countdown: ALERT_UPDATE_COUNTDOWN,
-    fullOwnerList: FullOwnerList
+    fullOwnerList: FullOwnerList,
+    researchList: FilterOptionsPortfolioResearchList
   }
 
   constructor(
@@ -104,6 +105,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
   private initializePageState(): TradeAlertPanelState {
     const state: TradeAlertPanelState = {
+      isUserPM: false,
       configureAlert: false,
       isAlertPaused: true,
       securityMap: [],
@@ -195,6 +197,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   public ngOnChanges() {
     if (!!this.collapseConfiguration) {
       this.state.configureAlert = false;
+    }
+    if (!!this.ownerInitial) {
+      this.state.isUserPM = this.constants.fullOwnerList.indexOf(this.ownerInitial) >= 0;
     }
   }
 
@@ -504,53 +509,58 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private saveAxeConfiguration() {
-    const entirePayload: PayloadUpdateAlertConfig = {
-      alertConfigs: []
-    };
-    const groupPayload: PayloadUpdateSingleAlertConfig = {
-      type: this.constants.alertTypes.axeAlert,
-      subType: this.mapAxeScopesToAlertSubtypes(this.state.configuration.axe.myGroup.scopes),
-      groupFilters: {
-        Owner: [this.ownerInitial]
-      }
-    };
-    if (this.state.configuration.axe.myGroup.isDisabled) {
-      groupPayload.isEnabled = false;
-    }
-    if (this.state.configuration.axe.myGroup.groupId) {
-      groupPayload.alertConfigID = this.state.configuration.axe.myGroup.groupId;
-    }
-    entirePayload.alertConfigs.push(groupPayload);
-    this.state.configuration.axe.securityList.forEach((eachEntry) => {
-      const payload: PayloadUpdateSingleAlertConfig = {
+    if (this.state.isUserPM) {
+      const entirePayload: PayloadUpdateAlertConfig = {
+        alertConfigs: []
+      };
+      const groupPayload: PayloadUpdateSingleAlertConfig = {
         type: this.constants.alertTypes.axeAlert,
-        subType: this.mapAxeScopesToAlertSubtypes(eachEntry.scopes),
+        subType: this.mapAxeScopesToAlertSubtypes(this.state.configuration.axe.myGroup.scopes),
         groupFilters: {}
+      };
+      if (this.constants.researchList.indexOf(this.ownerInitial) >= 0) {
+        groupPayload.groupFilters.ResearchName = [this.ownerInitial];
+      } else {
+        groupPayload.groupFilters.PrimaryPmName = [this.ownerInitial];
       }
-      payload.groupFilters.SecurityIdentifier = [eachEntry.card.data.securityID];
-      if (!!eachEntry.groupId) {
-        payload.alertConfigID = eachEntry.groupId;
+      if (this.state.configuration.axe.myGroup.isDisabled) {
+        groupPayload.isEnabled = false;
       }
-      if (eachEntry.isDisabled) {
-        payload.isEnabled = false;
+      if (this.state.configuration.axe.myGroup.groupId) {
+        groupPayload.alertConfigID = this.state.configuration.axe.myGroup.groupId;
       }
-      if (eachEntry.isDeleted) {
-        payload.isDeleted = true;
-      }
-      entirePayload.alertConfigs.push(payload);
-    });
-    this.restfulCommService.callAPI(this.restfulCommService.apiMap.updateAlertConfiguration, {req: 'POST'}, entirePayload).pipe(
-      first(),
-      catchError(err => {
-        console.error(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`, entirePayload);
-        this.restfulCommService.logError(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`);
-        return of('error');
-      })
-    ).subscribe();
+      entirePayload.alertConfigs.push(groupPayload);
+      this.state.configuration.axe.securityList.forEach((eachEntry) => {
+        const payload: PayloadUpdateSingleAlertConfig = {
+          type: this.constants.alertTypes.axeAlert,
+          subType: this.mapAxeScopesToAlertSubtypes(eachEntry.scopes),
+          groupFilters: {}
+        }
+        payload.groupFilters.SecurityIdentifier = [eachEntry.card.data.securityID];
+        if (!!eachEntry.groupId) {
+          payload.alertConfigID = eachEntry.groupId;
+        }
+        if (eachEntry.isDisabled) {
+          payload.isEnabled = false;
+        }
+        if (eachEntry.isDeleted) {
+          payload.isDeleted = true;
+        }
+        entirePayload.alertConfigs.push(payload);
+      });
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.updateAlertConfiguration, {req: 'POST'}, entirePayload).pipe(
+        first(),
+        catchError(err => {
+          console.error(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`, entirePayload);
+          this.restfulCommService.logError(`${this.restfulCommService.apiMap.updateAlertConfiguration} failed`);
+          return of('error');
+        })
+      ).subscribe();
+    }
   }
 
   private saveMarkConfiguration() {
-    if (this.constants.fullOwnerList.indexOf(this.ownerInitial) >= 0 && this.markGroupConfigurationIsValid()) {
+    if (this.state.isUserPM && this.markGroupConfigurationIsValid()) {
       const entirePayload: PayloadUpdateAlertConfig = {
         alertConfigs: []
       };
@@ -558,11 +568,15 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         type: this.constants.alertTypes.markAlert,
         subType: this.constants.alertSubTypes.liquidation,
         groupFilters: {
-          Owner: [this.ownerInitial]
         },
         parameters: {}
       }
       const myGroup = this.state.configuration.mark.myGroup;
+      if (this.constants.researchList.indexOf(this.ownerInitial) >= 0) {
+        payload.groupFilters.ResearchName = [this.ownerInitial];
+      } else {
+        payload.groupFilters.PrimaryPmName = [this.ownerInitial];
+      }
       if (myGroup.disabled) {
         payload.isEnabled = false;
       }

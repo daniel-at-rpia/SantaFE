@@ -6,12 +6,12 @@ $alert_countdown_duration: 5s;
 $alert_type_size: $iconButton_size_regular;
 .sat-alert {
   $alertBlockName: &;
+  @include mix_fixed_div(relative, $z_index_base_item);
   @include mix_alive('light');
   @include mix_border_radius(10px);
   display: flex;
   width: $alert_width;
   height: $alert_height;
-  margin: $spacing_medium 0;
   &__thumbnail {
     @include mix_fixed_div(relative, $z_index_hovering_item_lift);
     @include mix_border_radius(10px, 'left');
@@ -195,11 +195,48 @@ $alert_type_size: $iconButton_size_regular;
       color: $font_color_inverse;
     }
   }
+  &__hoverClose {
+    @include mix_fixed_div(absolute, $z_index_hovering_item_lift);
+    @include mix_alive('light');
+    right: $alert_thumbnail_width - $alert_type_size*2/3;
+    bottom: 0 - $alert_type_size/3;
+    display: flex;
+    align-self: center;
+    transform: translate(-$alert_width, 0);
+    &-btn {
+      @include mix_border_radius(50%);
+      display: flex;
+      justify-content: stretch;
+      align-items: stretch;
+      width: $alert_type_size;
+      height: $alert_type_size;
+      background-color: $color_white;
+      padding: $spacing_x_small;
+      transform: scale(0.01);
+      &-content {
+        @include mix_border_radius(50%);
+        flex: 1 1 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: $color_kill;
+        &>i {
+          font-size: $font_size_normal;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
   &:hover {
     #{$alertBlockName} {
       &__thumbnail {
         &-type {
           @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
+        }
+      }
+      &__hoverClose {
+        &-btn {
+          transform: scale(1);
         }
       }
     }
@@ -276,6 +313,11 @@ $alert_type_size: $iconButton_size_regular;
       &__thumbnail {
         &-type {
           @include material('none');
+        }
+      }
+      &__hoverClose {
+        &-btn {
+          transform: scale(0.01);
         }
       }
     }

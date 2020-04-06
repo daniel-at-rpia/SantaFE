@@ -291,10 +291,18 @@ $marketGroupPanel_configurator_width: $securityDefinitionConfigurator_width + $s
       }
       &-groupAverage {
         display: none;
-        flex-direction: column;
         justify-content: center;
         height: $marketGroupPanel_utility_widgetHeight;
         padding: 0 $marketGroupPanel_groups_list_padding;
+        &-export {
+          flex: 0 0 $securityGroup_content_canvases_left_width;
+          &-cta {
+            display: none;
+          }
+        }
+        &>security-group-average-visualizer {
+          flex: 1 1 auto;
+        }
       }
     }
     &-list {
@@ -356,6 +364,11 @@ $marketGroupPanel_configurator_width: $securityDefinitionConfigurator_width + $s
       &__configurator {
         display: none;
       }
+      &__groups {
+        &-groupAverage-export {
+          flex: 0 0 $securityGroup_content_canvases_left_width_expanded;
+        }
+      }
     }
   }
   &--averageVisualizerEnabledState {
@@ -394,12 +407,17 @@ $marketGroupPanel_configurator_width: $securityDefinitionConfigurator_width + $s
       &__configuratorCollapseCTA-btn {
         transform: scale(1);
       }
-      &__groups-utility-prompt {
-        &-emptyText, &-inProgressText, &-inProgressHighlightText {
-          display: none;
+      &__groups-utility {
+        &-prompt {
+          &-emptyText, &-inProgressText, &-inProgressHighlightText {
+            display: none;
+          }
+          &-text, &-highlightText {
+            display: inline-block;
+          }
         }
-        &-text, &-highlightText {
-          display: inline-block;
+        &-groupAverage-export-cta {
+          display: flex;
         }
       }
     }
