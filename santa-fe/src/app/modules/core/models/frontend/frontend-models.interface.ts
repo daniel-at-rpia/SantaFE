@@ -452,6 +452,7 @@ export interface AlertDTO extends BasicDTOStructure {
     titleBottom: string;
     message: string;
     time: string;
+    titlePin: string;
   }
   state: {
     isRead: boolean;
@@ -459,5 +460,7 @@ export interface AlertDTO extends BasicDTOStructure {
     isSlidedOut: boolean;
     isCountdownFinished: boolean;
     willBeRemoved: boolean;
+    hasSecurity: boolean;
+    hasTitlePin: boolean;
   }
 }

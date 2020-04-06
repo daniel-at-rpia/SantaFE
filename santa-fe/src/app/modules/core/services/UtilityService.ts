@@ -460,6 +460,8 @@ export class UtilityService {
         return AlertTypes.axeAlert;
       } else if (targetType == AlertTypes.markAlert) {
         return AlertTypes.markAlert;
+      } else if (targetType == AlertTypes.marketListAlert) {
+        return AlertTypes.axeAlert;
       } else {
         return null;
       }

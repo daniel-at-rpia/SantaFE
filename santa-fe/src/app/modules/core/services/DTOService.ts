@@ -966,25 +966,18 @@ export class DTOService {
   public formAlertObject(
     rawData: BEAlertDTO
   ): DTOs.AlertDTO {
-    const targetSecurity = this.formSecurityCardObject(
-      rawData.security.securityIdentifier || null,
-      rawData.security,
-      false
-    );
-    targetSecurity.state.isInteractionDisabled = true;
-    targetSecurity.state.isMultiLineVariant = true;
-    targetSecurity.state.isWidthFlexible = true;
     const parsedTitleList = rawData.keyWord.split('|');
     const object: DTOs.AlertDTO = {
       data: {
         id: rawData.alertId,
         type: this.utility.mapAlertType(rawData.type),
         subType: this.utility.mapAlertSubType(rawData.subType),
-        security: targetSecurity,
+        security: null,
         titleTop: parsedTitleList[0] || '',
         titleBottom: parsedTitleList[1] || '',
         message: rawData.message,
-        time: moment(rawData.timeStamp).format(`HH:mm`)
+        time: moment(rawData.timeStamp).format(`HH:mm`),
+        titlePin: rawData.marketListType || null
       },
       api: {
         onMouseEnterAlert: null,
@@ -995,8 +988,21 @@ export class DTOService {
         isSlidedOut: false,
         isRead: false,
         isCountdownFinished: true,
-        willBeRemoved: false
+        willBeRemoved: false,
+        hasSecurity: false,
+        hasTitlePin: !!rawData.marketListType
       }
+    }
+    if (!!rawData.security) {
+      object.data.security = this.formSecurityCardObject(
+        rawData.security.securityIdentifier || null,
+        rawData.security,
+        false
+      );
+      object.data.security.state.isInteractionDisabled = true;
+      object.data.security.state.isMultiLineVariant = true;
+      object.data.security.state.isWidthFlexible = true;
+      object.state.hasSecurity = true;
     }
     return object;
   }

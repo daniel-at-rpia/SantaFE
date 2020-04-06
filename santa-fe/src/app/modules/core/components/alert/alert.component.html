@@ -7,7 +7,9 @@
     'sat-alert--typeBidVariant': alertData.data.subType === alertSubTypes.bid,
     'sat-alert--slideOutState': alertData.state.isSlidedOut || !alertData.state.isCountdownFinished,
     'sat-alert--hiddenState': hideAllAlerts && alertData.state.isCountdownFinished,
-    'sat-alert--willBeRemovedState': alertData.state.willBeRemoved
+    'sat-alert--willBeRemovedState': alertData.state.willBeRemoved,
+    'sat-alert--hasSecurityState': alertData.state.hasSecurity,
+    'sat-alert--hasTitlePinState': alertData.state.hasTitlePin
   }">
   <section (click)="onClickAlertThumbnail()" class="sat-alert__thumbnail">
     <div class="sat-alert__thumbnail-type">
@@ -20,6 +22,12 @@
         </div>
       </div>
       <div class="sat-alert__thumbnail-type-mask"></div>
+    </div>
+    <div class="sat-alert__thumbnail-pin">
+      <div class="sat-alert__thumbnail-pin-content">
+        <span class="sat-alert__thumbnail-pin-content-text">BWIC</span>
+      </div>
+      <div class="sat-alert__thumbnail-pin-mask"></div>
     </div>
     <div class="sat-alert__thumbnail-main">
       <div class="sat-alert__thumbnail-main-upper">
@@ -42,7 +50,7 @@
       </span>
     </div>
     <div class="sat-alert__detail-card">
-      <security-card [cardData]="alertData.data.security"></security-card>
+      <security-card *ngIf="alertData.state.hasSecurity" [cardData]="alertData.data.security"></security-card>
     </div>
     <div class="sat-alert__detail-countdown">
       <div class="sat-alert__detail-countdown-line">
