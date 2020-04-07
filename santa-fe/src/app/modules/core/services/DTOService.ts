@@ -726,8 +726,10 @@ export class DTOService {
     targetRow: DTOs.SecurityTableRowDTO
   ): DTOs.SecurityQuoteDTO {
     const {axe} = targetRow.data.bestQuotes;
+
     const bestAxeBidNum = axe[TriCoreDriverConfig[filteredMetricType].backendTargetQuoteAttr].data.bid.number;
     const bestAxeAskNum = axe[TriCoreDriverConfig[filteredMetricType].backendTargetQuoteAttr].data.offer.number;
+
     const hasBid = !isStencil ? (!!rawData.bidVenues && rawData.bidVenues.length > 0) : true;
     const hasAsk = !isStencil ? (!!rawData.askVenues && rawData.askVenues.length > 0) : true;
     const bidBenchmark = !isStencil ? rawData.benchmarkName : 'T 0.5 01/01/2020';
@@ -824,8 +826,8 @@ export class DTOService {
       };
       object.state.isBestBid = object.data.bid.tspread == bestBidNum || object.data.bid.price == bestBidNum || object.data.bid.yield == bestBidNum;
       object.state.isBestOffer = object.data.ask.tspread == bestAskNum || object.data.ask.price == bestAskNum || object.data.ask.yield == bestAskNum;
-      object.state.isBestAxeBid = object.data.bid.tspread == bestAxeBidNum || object.data.bid.price == bestAxeBidNum || object.data.bid.yield == bestAxeBidNum;
-      object.state.isBestAxeOffer = object.data.ask.tspread == bestAxeAskNum || object.data.ask.price == bestAxeAskNum || object.data.ask.yield == bestAxeAskNum;
+      object.state.isBestAxeBid = bestAxeBidNum && (object.data.bid.tspread == bestAxeBidNum || object.data.bid.price == bestAxeBidNum || object.data.bid.yield == bestAxeBidNum);
+      object.state.isBestAxeOffer = bestAxeAskNum && (object.data.ask.tspread == bestAxeAskNum || object.data.ask.price == bestAxeAskNum || object.data.ask.yield == bestAxeAskNum);
       object.state.isBidDownVoted = rawData.bidQuoteStatus < 0;
       object.state.isAskDownVoted = rawData.askQuoteStatus < 0;
     }
