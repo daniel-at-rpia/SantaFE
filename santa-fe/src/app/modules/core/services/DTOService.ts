@@ -726,8 +726,8 @@ export class DTOService {
     targetRow: DTOs.SecurityTableRowDTO
   ): DTOs.SecurityQuoteDTO {
     const {axe} = targetRow.data.bestQuotes;
-    const bestAxeBidNum = axe[`best${filteredMetricType}Quote`].data.bid.number;
-    const bestAxeAskNum = axe[`best${filteredMetricType}Quote`].data.offer.number;
+    const bestAxeBidNum = axe[TriCoreDriverConfig[filteredMetricType].backendTargetQuoteAttr].data.bid.number;
+    const bestAxeAskNum = axe[TriCoreDriverConfig[filteredMetricType].backendTargetQuoteAttr].data.offer.number;
     const hasBid = !isStencil ? (!!rawData.bidVenues && rawData.bidVenues.length > 0) : true;
     const hasAsk = !isStencil ? (!!rawData.askVenues && rawData.askVenues.length > 0) : true;
     const bidBenchmark = !isStencil ? rawData.benchmarkName : 'T 0.5 01/01/2020';
