@@ -193,10 +193,10 @@ export class DTOService {
       if (eachPortfolioBlock.portfolioName === 'DOF' || eachPortfolioBlock.portfolioName === 'SOF') {
         dto.data.positionHF = dto.data.positionHF + eachPortfolioBlock.quantity;
       } else if (
-        eachPortfolioBlock.portfolioName === 'STIP' ||
-        eachPortfolioBlock.portfolioName === 'FIP' ||
-        eachPortfolioBlock.portfolioName === 'CIP' ||
-        eachPortfolioBlock.portfolioName === 'AGB' ||
+        eachPortfolioBlock.portfolioName === 'STIP' || 
+        eachPortfolioBlock.portfolioName === 'FIP' || 
+        eachPortfolioBlock.portfolioName === 'CIP' || 
+        eachPortfolioBlock.portfolioName === 'AGB' || 
         eachPortfolioBlock.portfolioName === 'BBB'
       ) {
         dto.data.positionNLF = dto.data.positionNLF + eachPortfolioBlock.quantity;
@@ -258,7 +258,7 @@ export class DTOService {
           name: this.utility.generateUUID(),
           colorScheme: SecurityGroupSeniorityColorScheme,
           chart: null,
-          rawSupportingData: {}
+          rawSupportingData: {} 
           // rawSupportingData: this.utility.retrieveRawSupportingDataForRightPie(rawData)
         }
       }
@@ -634,8 +634,7 @@ export class DTOService {
         metricPackDeltaScope: stub.metricPackDeltaScope || null,
         frontendMetric: !!stub.isFrontEndMetric,
         isDataTypeText: !!stub.isDataTypeText,
-        isDriverDependent: !!stub.isDriverDependent,
-        pinned: stub.pinned
+        isDriverDependent: !!stub.isDriverDependent
       },
       state: {
         isQuantVariant: !!stub.isForQuantComparer,

@@ -288,7 +288,6 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     frontendMetric: boolean;
     isDataTypeText: boolean;
     isDriverDependent: boolean;
-    pinned?: boolean;
   },
   state: {
     isPureTextVariant: boolean;

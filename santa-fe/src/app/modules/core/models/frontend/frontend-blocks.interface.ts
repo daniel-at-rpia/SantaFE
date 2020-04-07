@@ -132,7 +132,6 @@ export interface AgGridColumnDefinition {
   resizable?: boolean;
   sortable?: boolean;
   filter?: string;
-  pinned?: boolean;
   hide: boolean;
   enableRowGroup: boolean;
   enablePivot: boolean;
