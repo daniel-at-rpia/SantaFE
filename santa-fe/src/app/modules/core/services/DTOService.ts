@@ -634,7 +634,8 @@ export class DTOService {
         metricPackDeltaScope: stub.metricPackDeltaScope || null,
         frontendMetric: !!stub.isFrontEndMetric,
         isDataTypeText: !!stub.isDataTypeText,
-        isDriverDependent: !!stub.isDriverDependent
+        isDriverDependent: !!stub.isDriverDependent,
+        pinned: stub.pinned
       },
       state: {
         isQuantVariant: !!stub.isForQuantComparer,

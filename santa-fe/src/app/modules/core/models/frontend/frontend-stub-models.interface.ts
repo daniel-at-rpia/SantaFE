@@ -78,6 +78,7 @@ export interface SecurityTableMetricStub {
   isAttrChangable?: boolean;
   readyStage: number;
   active: boolean;
+  pinned?: boolean;
   blockAttrName?: string;
   isFrontEndMetric?: boolean;
   isForQuantComparer?: boolean;
