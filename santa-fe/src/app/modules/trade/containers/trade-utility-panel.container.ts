@@ -188,7 +188,7 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
     if (!this.state.isPaused && !this.state.isCallingAPI && !this.state.isProcessingData && this.state.isPresetSelected) {
       this.state.updateCountdown = this.constants.liveUpdateCountdown.toString();
       this.state.isCallingAPI = true;
-      // this.store$.dispatch(new TradeLiveUpdateStartEvent());
+      this.store$.dispatch(new TradeLiveUpdateStartEvent());
     }
   }
 }

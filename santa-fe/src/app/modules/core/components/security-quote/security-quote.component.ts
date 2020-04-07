@@ -21,7 +21,7 @@ export class SecurityQuote {
   @Output() clickedSpecificQuote = new EventEmitter<ClickedSpecificQuoteEmitterParams>();
   @Output() clickedUpVote = new EventEmitter<SecurityQuoteDTO>();
   @Output() clickedDownVote = new EventEmitter<SecurityQuoteDTO>();
-  constructor() { console.log(this);}
+  constructor() { }
 
   public onClickDownVote() {
     !!this.clickedDownVote && this.clickedDownVote.emit(this.messageData);
