@@ -143,16 +143,16 @@ $securityTable_cell_width_quant: 19rem;
 
 $securityQuote_spacing_height: $spacing_small;
 $securityQuote_main_size_1: 4rem;
-$securityQuote_main_size_2: 10rem;
-$securityQuote_main_size_3: 11rem;
+$securityQuote_main_size_2: 8rem;
+$securityQuote_main_size_3: 12rem;
 $securityQuote_main_size_4: 10rem;
 
 $securityDefinition_configuratorVariant_width: 6.5rem;
 $securityDefinitionConfigurator_filters_width: 15rem;
 $securityDefinitionConfigurator_gapBetweenDefAndFilter: $spacing_large;
-$securityDefinitionConfigurator_width: 
-  $securityDefinition_configuratorVariant_width + 
-  $securityDefinitionConfigurator_gapBetweenDefAndFilter + 
+$securityDefinitionConfigurator_width:
+  $securityDefinition_configuratorVariant_width +
+  $securityDefinitionConfigurator_gapBetweenDefAndFilter +
   $securityDefinitionConfigurator_filters_width;
 
 $alert_width: 40rem;
@@ -163,3 +163,5 @@ $tradeAxeAlertColor: $color_axe;
 $tradeAxeAlertBackgroundColor: $color_blue_1;
 $tradeMarkAlertColor: $distinguish_type_color_2;
 $tradeMarkAlertBackgroundColor: #F8D8FE;
+
+

@@ -45,7 +45,7 @@
     import {
       QuoteMetricList
     } from 'Core/constants/securityTableConstants.constant';
-  // 
+  //
 
 @Injectable()
 export class DTOService {
@@ -193,10 +193,10 @@ export class DTOService {
       if (eachPortfolioBlock.portfolioName === 'DOF' || eachPortfolioBlock.portfolioName === 'SOF') {
         dto.data.positionHF = dto.data.positionHF + eachPortfolioBlock.quantity;
       } else if (
-        eachPortfolioBlock.portfolioName === 'STIP' || 
-        eachPortfolioBlock.portfolioName === 'FIP' || 
-        eachPortfolioBlock.portfolioName === 'CIP' || 
-        eachPortfolioBlock.portfolioName === 'AGB' || 
+        eachPortfolioBlock.portfolioName === 'STIP' ||
+        eachPortfolioBlock.portfolioName === 'FIP' ||
+        eachPortfolioBlock.portfolioName === 'CIP' ||
+        eachPortfolioBlock.portfolioName === 'AGB' ||
         eachPortfolioBlock.portfolioName === 'BBB'
       ) {
         dto.data.positionNLF = dto.data.positionNLF + eachPortfolioBlock.quantity;
@@ -258,7 +258,7 @@ export class DTOService {
           name: this.utility.generateUUID(),
           colorScheme: SecurityGroupSeniorityColorScheme,
           chart: null,
-          rawSupportingData: {} 
+          rawSupportingData: {}
           // rawSupportingData: this.utility.retrieveRawSupportingDataForRightPie(rawData)
         }
       }
@@ -722,8 +722,14 @@ export class DTOService {
     bestBidNum: number,
     bestAskNum: number,
     filteredMetricType: string,
-    targetSecurity: DTOs.SecurityDTO
+    targetSecurity: DTOs.SecurityDTO,
+    targetRow: DTOs.SecurityTableRowDTO
   ): DTOs.SecurityQuoteDTO {
+    const {axe} = targetRow.data.bestQuotes;
+
+    const bestAxeBidNum = axe[TriCoreDriverConfig[filteredMetricType].backendTargetQuoteAttr].data.bid.number;
+    const bestAxeAskNum = axe[TriCoreDriverConfig[filteredMetricType].backendTargetQuoteAttr].data.offer.number;
+
     const hasBid = !isStencil ? (!!rawData.bidVenues && rawData.bidVenues.length > 0) : true;
     const hasAsk = !isStencil ? (!!rawData.askVenues && rawData.askVenues.length > 0) : true;
     const bidBenchmark = !isStencil ? rawData.benchmarkName : 'T 0.5 01/01/2020';
@@ -787,6 +793,8 @@ export class DTOService {
         diffBenchmark: bidBenchmark !== askBenchmark && hasBid && hasAsk,
         isBestOffer: false,
         isBestBid: false,
+        isBestAxeOffer: false,
+        isBestAxeBid: false,
         filteredByPrice:  filteredMetricType === TriCoreDriverConfig.Price.label,
         filteredBySpread:  filteredMetricType === TriCoreDriverConfig.Spread.label,
         filteredByYield: filteredMetricType === TriCoreDriverConfig.Yield.label,
@@ -817,7 +825,9 @@ export class DTOService {
         time: this.utility.isQuoteTimeValid(rawData.askTime) && hasAsk ? new Date(rawData.askTime).toTimeString().slice(0, 5) : ''
       };
       object.state.isBestBid = object.data.bid.tspread == bestBidNum || object.data.bid.price == bestBidNum || object.data.bid.yield == bestBidNum;
-      object.state.isBestOffer =object.data.ask.tspread == bestAskNum || object.data.ask.price == bestAskNum || object.data.ask.yield == bestAskNum;
+      object.state.isBestOffer = object.data.ask.tspread == bestAskNum || object.data.ask.price == bestAskNum || object.data.ask.yield == bestAskNum;
+      object.state.isBestAxeBid = bestAxeBidNum && (object.data.bid.tspread == bestAxeBidNum || object.data.bid.price == bestAxeBidNum || object.data.bid.yield == bestAxeBidNum);
+      object.state.isBestAxeOffer = bestAxeAskNum && (object.data.ask.tspread == bestAxeAskNum || object.data.ask.price == bestAxeAskNum || object.data.ask.yield == bestAxeAskNum);
       object.state.isBidDownVoted = rawData.bidQuoteStatus < 0;
       object.state.isAskDownVoted = rawData.askQuoteStatus < 0;
     }

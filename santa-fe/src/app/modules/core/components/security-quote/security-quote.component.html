@@ -12,6 +12,8 @@
     'sat-securityQuote--stencilState': messageData.state.isStencil,
     'sat-securityQuote--bestBidState': messageData.state.isBestBid,
     'sat-securityQuote--bestOfferState': messageData.state.isBestOffer,
+    'sat-securityQuote--bestAxeBidState': messageData.state.isBestAxeBid,
+    'sat-securityQuote--bestAxeOfferState': messageData.state.isBestAxeOffer,
     'sat-securityQuote--filteredByPriceState': messageData.state.filteredByPrice,
     'sat-securityQuote--filteredBySpreadState': messageData.state.filteredBySpread,
     'sat-securityQuote--filteredByYieldState': messageData.state.filteredByYield,
@@ -37,7 +39,7 @@
     <div class="sat-securityQuote__main-spacing"></div>
     <div class="sat-securityQuote__main-entry">{{messageData.data.broker}}</div>
     <div class="sat-securityQuote__main-spacing"></div>
-    <div class="sat-securityQuote__main-twoSideEntry sat-securityQuote__main-twoSideEntry--sizeThree sat-securityQuote__main-twoSideEntry--nonCDS">
+    <div class="sat-securityQuote__main-twoSideEntry sat-securityQuote__main-twoSideEntry--nonCDS sat-securityQuote__main-twoSideEntry--sizeThree">
       <div
         [ngClass]="{
           'sat-securityQuote__main-twoSideEntry-cta': true,
@@ -46,7 +48,10 @@
           'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.bid.price == null
         }">
         <button (click)="onClickSpecificQuote(true, 'price')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
-          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-text">{{messageData.data.bid.price}}</span>
+          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-content">
+            <i class="sat-securityQuote__main-twoSideEntry-cta-btn-content-icon sat-securityQuote__main-twoSideEntry-cta-btn-content-icon--iconLeft fas fa-axe"></i>
+            <span class="sat-securityQuote__main-twoSideEntry-cta-btn-content-text">{{messageData.data.bid.price}}</span>
+          </span>
           <i class="sat-securityQuote__main-twoSideEntry-cta-btn-downVoteIcon fas fa-thumbs-down"></i>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
@@ -64,7 +69,10 @@
         }">
         <button (click)="onClickSpecificQuote(false, 'price')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
           <i class="sat-securityQuote__main-twoSideEntry-cta-btn-downVoteIcon fas fa-thumbs-down"></i>
-          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-text">{{messageData.data.ask.price}}</span>
+          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-content">
+            <span class="sat-securityQuote__main-twoSideEntry-cta-btn-content-text">{{messageData.data.ask.price}}</span>
+            <i class="sat-securityQuote__main-twoSideEntry-cta-btn-content-icon sat-securityQuote__main-twoSideEntry-cta-btn-content-icon--iconRight fas fa-axe"></i>
+          </span>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
           <button (click)="onClickUpVote()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-upVote santaBtn santaBtn--iconOnly fal fa-thumbs-up"></button>
@@ -73,7 +81,7 @@
       </div>
     </div>
     <div class="sat-securityQuote__main-spacing sat-securityQuote__main-spacing--nonCDS"></div>
-    <div class="sat-securityQuote__main-twoSideEntry sat-securityQuote__main-twoSideEntry--nonCDS">
+    <div class="sat-securityQuote__main-twoSideEntry sat-securityQuote__main-twoSideEntry--nonCDS sat-securityQuote__main-twoSideEntry--sizeThree">
       <div
         [ngClass]="{
           'sat-securityQuote__main-twoSideEntry-cta': true,
@@ -82,7 +90,10 @@
           'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.bid.yield == null
         }">
         <button (click)="onClickSpecificQuote(true, 'yield')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
-          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-text">{{messageData.data.bid.yield}}</span>
+          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-content">
+            <i class="sat-securityQuote__main-twoSideEntry-cta-btn-content-icon sat-securityQuote__main-twoSideEntry-cta-btn-content-icon--iconLeft fas fa-axe"></i>
+            <span class="sat-securityQuote__main-twoSideEntry-cta-btn-content-text">{{messageData.data.bid.yield}}</span>
+          </span>
           <i class="sat-securityQuote__main-twoSideEntry-cta-btn-downVoteIcon fas fa-thumbs-down"></i>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
@@ -99,7 +110,10 @@
           'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.ask.yield == null
         }">
         <button (click)="onClickSpecificQuote(false, 'yield')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
-          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-text">{{messageData.data.ask.yield}}</span>
+          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-content">
+            <span class="sat-securityQuote__main-twoSideEntry-cta-btn-content-text">{{messageData.data.ask.yield}}</span>
+            <i class="sat-securityQuote__main-twoSideEntry-cta-btn-content-icon sat-securityQuote__main-twoSideEntry-cta-btn-content-icon--iconRight fas fa-axe"></i>
+          </span>
           <i class="sat-securityQuote__main-twoSideEntry-cta-btn-downVoteIcon fas fa-thumbs-down"></i>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
@@ -109,7 +123,7 @@
       </div>
     </div>
     <div class="sat-securityQuote__main-spacing sat-securityQuote__main-spacing--nonCDS"></div>
-    <div class="sat-securityQuote__main-twoSideEntry">
+    <div class="sat-securityQuote__main-twoSideEntry sat-securityQuote__main-twoSideEntry--sizeThree">
       <div
         [ngClass]="{
           'sat-securityQuote__main-twoSideEntry-cta': true,
@@ -118,7 +132,10 @@
           'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.bid.tspread == null
         }">
         <button (click)="onClickSpecificQuote(true, 'tspread')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
-          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-text">{{messageData.data.bid.tspread}}</span>
+          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-content">
+            <i class="sat-securityQuote__main-twoSideEntry-cta-btn-content-icon sat-securityQuote__main-twoSideEntry-cta-btn-content-icon--iconLeft fas fa-axe"></i>
+            <span class="sat-securityQuote__main-twoSideEntry-cta-btn-content-text">{{messageData.data.bid.tspread}}</span>
+          </span>
           <i class="sat-securityQuote__main-twoSideEntry-cta-btn-downVoteIcon fas fa-thumbs-down"></i>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
@@ -135,7 +152,10 @@
           'sat-securityQuote__main-twoSideEntry-cta--empty': messageData.data.ask.tspread == null
         }">
         <button (click)="onClickSpecificQuote(false, 'tspread')" class="sat-securityQuote__main-twoSideEntry-cta-btn">
-          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-text">{{messageData.data.ask.tspread}}</span>
+          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-content">
+            <span class="sat-securityQuote__main-twoSideEntry-cta-btn-content-text">{{messageData.data.ask.tspread}}</span>
+            <i class="sat-securityQuote__main-twoSideEntry-cta-btn-content-icon sat-securityQuote__main-twoSideEntry-cta-btn-content-icon--iconRight fas fa-axe"></i>
+          </span>
           <i class="sat-securityQuote__main-twoSideEntry-cta-btn-downVoteIcon fas fa-thumbs-down"></i>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">

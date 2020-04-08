@@ -95,7 +95,7 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.internalCount$ = interval(1000);
-    
+
     this.subscriptions.internalCountSub = this.internalCount$.subscribe(internalCount => {
       if (internalCount > 0) {  // skip the first beat to sync both counts
         if (this.state.isPresetSelected && !this.state.isPaused && !this.state.isCallingAPI && !this.state.isProcessingData) {
