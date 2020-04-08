@@ -1,6 +1,7 @@
 @import "global.scss";
 
-$alert_height: 4rem;
+$alert_default_color: $color_gray_6;
+$alert_height: 4.25rem;
 $alert_margin_right: $spacing_large;
 $alert_countdown_duration: 5s;
 $alert_type_size: $iconButton_size_regular;
@@ -19,6 +20,7 @@ $alert_type_size: $iconButton_size_regular;
     @include material();
     flex: 0 0 auto;
     display: flex;
+    justify-content: center;
     width: $alert_thumbnail_width;
     padding: $spacing_x_small 0 $spacing_x_small $spacing_x_small;
     background-color: $color_white;
@@ -78,7 +80,7 @@ $alert_type_size: $iconButton_size_regular;
       display: flex;
       flex-direction: column;
       align-items: center;
-      background-color: $color_gray_6;
+      background-color: $alert_default_color;
       &-upper {
         flex: 0 0 auto;
         display: flex;
@@ -88,7 +90,6 @@ $alert_type_size: $iconButton_size_regular;
           font-size: $font_size_normal;
           color: $font_color_inverse;
           user-select: none;
-          line-height: $line_height_small;
         }
       }
       &-lower {
@@ -103,10 +104,37 @@ $alert_type_size: $iconButton_size_regular;
           @include mix_text_overflow_multi_line(1);
           font-weight: bold;
           line-height: $line_height_minimum;
-          color: $color_gray_6;
+          color: $alert_default_color;
           user-select: none;
           word-break: break-all;
         }
+      }
+    }
+    &-pin {
+      @include mix_fixed_div(absolute, $z_index_base_item);
+      @include mix_border_radius(3px);
+      @include mix_alive('light');
+      @include material('static');
+      display: none;
+      top: -$spacing_small;
+      &-content {
+        @include mix_fixed_div(relative, $z_index_hovering_item_lift);
+        @include mix_border_radius(3px);
+        @include mix_alive('light');
+        background-color: $color_white;
+        padding: $spacing_minimum $spacing_x_small;
+        &-text {
+          color: $alert_default_color;
+        }
+      }
+      &-mask {
+        @include mix_fixed_div(absolute, $z_index_base_item);
+        @include mix_alive('light');
+        top: 50%;
+        left: -25%;
+        width: 150%;
+        height: 100%;
+        background-color: $color_white;
       }
     }
   }
@@ -145,7 +173,7 @@ $alert_type_size: $iconButton_size_regular;
     }
     &-card {
       flex: 0 0 12rem;
-      display: flex;
+      display: none;
       justify-content: flex-end;
       security-card {
         flex: 1 1 auto;
@@ -170,7 +198,7 @@ $alert_type_size: $iconButton_size_regular;
           @include mix_alive('custom', margin-left $alert_countdown_duration linear);
           margin-left: 0;
           flex: 1 1 auto;
-          background-color: $color_gray_6;
+          background-color: $alert_default_color;
           &--started {
             margin-left: 100%;
           }
@@ -233,6 +261,9 @@ $alert_type_size: $iconButton_size_regular;
         &-type {
           @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
         }
+        &-pin {
+          @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
+        }
       }
       &__hoverClose {
         &-btn {
@@ -261,9 +292,14 @@ $alert_type_size: $iconButton_size_regular;
   }
   &--typeBidVariant {
     #{$alertBlockName} {
-      &__thumbnail-main {
-        background-color: $color_bid;
-        &-lower-text {
+      &__thumbnail {
+        &-main {
+          background-color: $color_bid;
+          &-lower-text {
+            color: $color_bid;
+          }
+        }
+        &-pin-content-text {
           color: $color_bid;
         }
       }
@@ -274,14 +310,37 @@ $alert_type_size: $iconButton_size_regular;
   }
   &--typeAskVariant {
     #{$alertBlockName} {
-      &__thumbnail-main {
-        background-color: $color_ask;
-        &-lower-text {
+      &__thumbnail {
+        &-main {
+          background-color: $color_ask;
+          &-lower-text {
+            color: $color_ask;
+          }
+        }
+        &-pin-content-text {
           color: $color_ask;
         }
       }
       &__detail-countdown-line-content {
         background-color: $color_ask;
+      }
+    }
+  }
+  &--hasSecurityState {
+    #{$alertBlockName} {
+      &__detail {
+        &-card {
+          display: flex;
+        }
+      }
+    }
+  }
+  &--hasTitlePinState {
+    #{$alertBlockName} {
+      &__thumbnail {
+        &-pin {
+          display: flex;
+        }
       }
     }
   }
@@ -294,6 +353,18 @@ $alert_type_size: $iconButton_size_regular;
           @include material('none');
           &-circle {
             background-color: $color_active;
+          }
+          &-mask {
+            background-color: $color_active;
+          }
+        }
+        &-pin {
+          @include material('none');
+          &-content {
+            background-color: $color_active;
+            &-text {
+              color: $font_color_inverse;
+            }
           }
           &-mask {
             background-color: $color_active;

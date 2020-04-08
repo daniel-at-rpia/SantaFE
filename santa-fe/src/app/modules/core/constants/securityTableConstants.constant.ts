@@ -434,12 +434,12 @@ export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
     isNonCDS: true
   },{
     labelList: ['B YTW', 'A YTW'],
-    size: 2,
+    size: 3,
     textOnly: true,
     isNonCDS: true
   },{
     labelList: ['B Sprd', 'A Sprd'],
-    size: 2,
+    size: 3,
     textOnly: true,
     isNonCDS: false
   },{

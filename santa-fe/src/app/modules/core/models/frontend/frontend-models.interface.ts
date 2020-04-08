@@ -21,7 +21,7 @@ import * as agGrid from 'ag-grid-community';
 
 
 interface BasicDTOStructure {
-  [property: string]: object; 
+  [property: string]: object;
   data: object;
   state: object;
   style?: object;
@@ -372,6 +372,8 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
     diffBenchmark: boolean;
     isBestBid: boolean;
     isBestOffer: boolean;
+    isBestAxeBid: boolean;
+    isBestAxeOffer: boolean;
     filteredBySpread: boolean;
     filteredByYield: boolean;
     filteredByPrice: boolean;
@@ -452,6 +454,7 @@ export interface AlertDTO extends BasicDTOStructure {
     titleBottom: string;
     message: string;
     time: string;
+    titlePin: string;
   }
   state: {
     isRead: boolean;
@@ -459,5 +462,7 @@ export interface AlertDTO extends BasicDTOStructure {
     isSlidedOut: boolean;
     isCountdownFinished: boolean;
     willBeRemoved: boolean;
+    hasSecurity: boolean;
+    hasTitlePin: boolean;
   }
 }
