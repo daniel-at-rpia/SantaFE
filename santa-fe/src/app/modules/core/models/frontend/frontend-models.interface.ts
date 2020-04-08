@@ -268,6 +268,7 @@ export interface SecurityTableDTO extends BasicDTOStructure {
     isNativeEnabled: boolean;
     isAgGridReady: boolean;
     selectedSecurityCard: SecurityDTO;
+    isActivated: boolean;
   },
   api: {
     gridApi: agGrid.GridApi,

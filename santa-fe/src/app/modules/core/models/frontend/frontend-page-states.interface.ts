@@ -98,6 +98,7 @@ export interface TradeCenterPanelState {
   table: {
     metrics: Array<SecurityTableMetricStub>;
     dto: DTOs.SecurityTableDTO;
+    alertDto: DTOs.SecurityTableDTO;
   }
   fetchResult: {
     fetchTableDataFailed: boolean;

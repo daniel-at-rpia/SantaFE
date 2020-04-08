@@ -157,36 +157,36 @@
           <button
             (click)="onSwitchDriver(constants.defaultMetricIdentifier)"
             [ngClass]="{
-              'sat-tradeCenterPanel__result-quickFilters-driver-btn': true,
+              'sat-tradeCenterPanel__result-utilities-driver-btn': true,
               'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-quickFilters-driver-btn--active': state.filters.quickFilters.driverType === constants.defaultMetricIdentifier
+              'sat-tradeCenterPanel__result-utilities-driver-btn--active': state.filters.quickFilters.driverType === constants.defaultMetricIdentifier
             }">
             <span>Combined</span>
           </button>
           <button
             (click)="onSwitchDriver('Spread')"
             [ngClass]="{
-              'sat-tradeCenterPanel__result-quickFilters-driver-btn': true,
+              'sat-tradeCenterPanel__result-utilities-driver-btn': true,
               'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-quickFilters-driver-btn--active': state.filters.quickFilters.driverType === 'Spread'
+              'sat-tradeCenterPanel__result-utilities-driver-btn--active': state.filters.quickFilters.driverType === 'Spread'
             }">
             <span>Spread</span>
           </button>
           <button
             (click)="onSwitchDriver('Yield')"
             [ngClass]="{
-              'sat-tradeCenterPanel__result-quickFilters-driver-btn': true,
+              'sat-tradeCenterPanel__result-utilities-driver-btn': true,
               'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-quickFilters-driver-btn--active': state.filters.quickFilters.driverType === 'Yield'
+              'sat-tradeCenterPanel__result-utilities-driver-btn--active': state.filters.quickFilters.driverType === 'Yield'
             }">
             <span>Yield</span>
           </button>
           <button
             (click)="onSwitchDriver('Price')"
             [ngClass]="{
-              'sat-tradeCenterPanel__result-quickFilters-driver-btn': true,
+              'sat-tradeCenterPanel__result-utilities-driver-btn': true,
               'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-quickFilters-driver-btn--active': state.filters.quickFilters.driverType === 'Price'
+              'sat-tradeCenterPanel__result-utilities-driver-btn--active': state.filters.quickFilters.driverType === 'Price'
             }">
             <span>Price</span>
           </button>
@@ -205,7 +205,7 @@
     </div>
     <div class="sat-tradeCenterPanel__result-table">
       <santa-table
-        *ngIf="!state.displayAlertTable"
+        [activated]="!state.displayAlertTable"
         [ownerInitial]="ownerInitial"
         [tableData]="state.table.dto"
         [newRows]="state.fetchResult.rowList"
@@ -218,9 +218,9 @@
     </div>
     <div class="sat-tradeCenterPanel__result-alertTable">
       <santa-table
-        *ngIf="state.displayAlertTable"
+        [activated]="!!state.displayAlertTable"
         [ownerInitial]="ownerInitial"
-        [tableData]="state.table.dto"
+        [tableData]="state.table.alertDto"
         [newRows]="[]"
         [receivedContentStage]="state.currentContentStage"
         [receivedSecurityTableMetricsUpdate]="state.table.metrics"

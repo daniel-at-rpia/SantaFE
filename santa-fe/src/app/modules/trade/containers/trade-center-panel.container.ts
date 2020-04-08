@@ -129,7 +129,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       },
       table: {
         metrics: SecurityTableMetrics,
-        dto: this.dtoService.formSecurityTableObject(true)
+        dto: this.dtoService.formSecurityTableObject(true),
+        alertDto: this.dtoService.formSecurityTableObject(false)
       },
       fetchResult: {
         fetchTableDataFailed: false,
