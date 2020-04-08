@@ -41,7 +41,8 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     underlineAttrName: null,
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     pureText: true,
-    active: true
+    active: true,
+    pinned: true
   },{
     key: 'bestQuote',
     label: 'Best Quote (Bid vs Ask)',

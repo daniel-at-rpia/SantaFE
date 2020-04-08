@@ -62,6 +62,7 @@ export class AgGridMiddleLayerService {
       enableValue: false,
       sortable: false,
       filter: null,
+      pinned: false,
       enablePivot: false,
       enableRowGroup: false,
       hide: true,
@@ -80,6 +81,7 @@ export class AgGridMiddleLayerService {
         enableValue: false,
         sortable: true,
         filter: null,
+        pinned: eachHeader.data.pinned || false,
         enablePivot: false,
         enableRowGroup: false,
         hide: !isActiveByDefault
