@@ -378,7 +378,14 @@ export interface BEAlertDTO {
   subType: string;
   keyWord: string;
   message: string;
-  security: BESecurityDTO;
-  urgentLevel: number;
   isActive: boolean;
+  urgency: number;
+  isDeleted: boolean;
+  quoteId?: string;
+  security?: BESecurityDTO;
+  marketListType?: string;
+  marketListDescription?: string;
+  securityIdentifierToQuoteId?: {
+    [property: string]: string;
+  }
 }

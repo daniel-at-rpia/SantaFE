@@ -202,7 +202,8 @@ export const EngagementActionList = {
 
 export enum AlertTypes {
   axeAlert = 'Axe',
-  markAlert = 'Mark'
+  markAlert = 'Mark',
+  marketListAlert = 'MarketList'
 }
 
 export enum AlertSubTypes {

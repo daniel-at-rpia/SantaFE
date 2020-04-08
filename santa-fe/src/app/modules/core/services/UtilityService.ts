@@ -456,34 +456,38 @@ export class UtilityService {
     }
 
     public mapAlertType(targetType: string): AlertTypes {
-      if (targetType == AlertTypes.axeAlert) {
-        return AlertTypes.axeAlert;
-      } else if (targetType == AlertTypes.markAlert) {
-        return AlertTypes.markAlert;
-      } else {
-        return null;
+      switch (targetType) {
+        case AlertTypes.axeAlert:
+          return AlertTypes.axeAlert;
+        case AlertTypes.markAlert:
+          return AlertTypes.markAlert;
+        case AlertTypes.marketListAlert:
+          return AlertTypes.axeAlert;  // needs to be treated as a special axe alert
+        default: 
+          return null;
       }
     }
 
     public mapAlertSubType(targetType: string): AlertSubTypes {
-      if (targetType == AlertSubTypes.ask) {
-        return AlertSubTypes.ask;
-      } else if (targetType == AlertSubTypes.bid) {
-        return AlertSubTypes.bid;
-      } else if (targetType == AlertSubTypes.both) {
-        return null;  // both is not a valid type in FE
-      } else if (targetType == AlertSubTypes.liquidation) {
-        return null;  // liquidation is not a valid type in FE
-      } else if (targetType == AlertSubTypes.bwic) {
-        return AlertSubTypes.bwic;
-      } else if (targetType == AlertSubTypes.owic) {
-        return AlertSubTypes.owic;
-      } else if (targetType == AlertSubTypes.quantityChange) {
-        return AlertSubTypes.quantityChange;
-      } else if (targetType == AlertSubTypes.ratingChange) {
-        return AlertSubTypes.ratingChange;
-      } else {
-        return null;
+      switch (targetType) {
+        case AlertSubTypes.ask:
+          return AlertSubTypes.ask;
+        case AlertSubTypes.bid:
+          return AlertSubTypes.bid;
+        case AlertSubTypes.both:
+          return null;  // both is not a valid type in FE
+        case AlertSubTypes.liquidation:
+          return null;  // liquidation is not a valid type in FE
+        case AlertSubTypes.bwic:
+          return AlertSubTypes.bwic;
+        case AlertSubTypes.owic:
+          return AlertSubTypes.owic;
+        case AlertSubTypes.quantityChange:
+          return AlertSubTypes.quantityChange;
+        case AlertSubTypes.ratingChange:
+          return AlertSubTypes.ratingChange;
+        default:
+          return null;
       }
     }
   // shared end
