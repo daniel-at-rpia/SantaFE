@@ -130,14 +130,22 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       table: {
         metrics: SecurityTableMetrics,
         dto: this.dtoService.formSecurityTableObject(true),
+        alertMetrics: SecurityTableMetrics,
         alertDto: this.dtoService.formSecurityTableObject(false)
       },
       fetchResult: {
         fetchTableDataFailed: false,
         fetchTableDataFailedError: '',
-        rowList: [],
-        prinstineRowList: [],
-        liveUpdatedRowList: []
+        mainTable: {
+          rowList: [],
+          prinstineRowList: [],
+          liveUpdatedRowList: []
+        },
+        alertTable: {
+          rowList: [],
+          prinstineRowList: [],
+          liveUpdatedRowList: []
+        }
       },
       filters: {
         quickFilters: {
@@ -250,7 +258,9 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.state.presets.selectedPreset = null;
     this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true);
     this.state.filters.quickFilters = this.initializePageState().filters.quickFilters;
+    const alertTableCopy = this.utilityService.deepCopy(this.state.fetchResult.alertTable);
     this.state.fetchResult = this.initializePageState().fetchResult;
+    this.state.fetchResult.alertTable = alertTableCopy;
     this.store$.dispatch(new TradeTogglePresetEvent);
   }
 
@@ -305,7 +315,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       };
     });
     // if (this.state.currentContentStage === this.constants.securityTableFinalStage) {
-      this.state.fetchResult.rowList = this.filterPrinstineRowList();
+      this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList();
     // }
     this.restfulCommService.logEngagement(
       EngagementActionList.applyFilter,
@@ -355,12 +365,13 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   public onSearchKeywordChange(newKeyword: string) {
+    const targetTable = this.state.displayAlertTable ? this.state.fetchResult.alertTable : this.state.fetchResult.mainTable;
     if (!!newKeyword && newKeyword.length >= 2 && newKeyword != this.state.filters.quickFilters.keyword) {
       this.state.filters.quickFilters.keyword = newKeyword;
-      this.state.fetchResult.rowList = this.filterPrinstineRowList();
+      targetTable.rowList = this.filterPrinstineRowList();
     } else if ((!newKeyword || newKeyword.length < 2) && !!this.state.filters.quickFilters.keyword && this.state.filters.quickFilters.keyword.length >= 2) {
       this.state.filters.quickFilters.keyword = newKeyword;
-      this.state.fetchResult.rowList = this.filterPrinstineRowList();
+      targetTable.rowList = this.filterPrinstineRowList();
     }
   }
 
@@ -406,7 +417,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private loadFreshData() {
-    this.state.fetchResult.prinstineRowList = [];
+    this.state.fetchResult.mainTable.prinstineRowList = [];
     this.loadInitialStencilTable();
     this.updateStage(0);
     this.fetchAllData(true);
@@ -433,9 +444,11 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
           }
         }
       });
-      this.state.fetchResult.prinstineRowList.push(newRow);
+      this.state.fetchResult.mainTable.prinstineRowList.push(this.utilityService.deepCopy(newRow));
+      this.state.fetchResult.alertTable.prinstineRowList.push(this.utilityService.deepCopy(newRow));
     };
-    this.state.fetchResult.rowList = this.utilityService.deepCopy(this.state.fetchResult.prinstineRowList);
+    this.state.fetchResult.mainTable.rowList = this.utilityService.deepCopy(this.state.fetchResult.mainTable.prinstineRowList);
+    this.state.fetchResult.alertTable.rowList = this.utilityService.deepCopy(this.state.fetchResult.alertTable.prinstineRowList);
   }
 
   private fetchAllData(isInitialFetch: boolean) {
@@ -467,16 +480,18 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         console.error('error', err);
         this.state.fetchResult.fetchTableDataFailed = true;
         this.state.fetchResult.fetchTableDataFailedError = err.message;
-        this.state.fetchResult.prinstineRowList = [];
-        this.state.fetchResult.rowList = this.filterPrinstineRowList();
+        this.state.fetchResult.mainTable.prinstineRowList = [];
+        this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList();
+        this.state.fetchResult.alertTable.prinstineRowList = [];
+        this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList();
         return of('error');
       })
     ).subscribe();
   }
 
   private loadAllData(serverReturn: BEFetchAllTradeDataReturn) {
-    this.state.fetchResult.prinstineRowList = [];  // flush out the stencils
-    this.state.fetchResult.prinstineRowList = this.processingService.loadFinalStageData(
+    this.state.fetchResult.mainTable.prinstineRowList = [];  // flush out the stencils
+    this.state.fetchResult.mainTable.prinstineRowList = this.processingService.loadFinalStageData(
       this.state.table.dto.data.headers,
       this.state.filters.quickFilters.driverType,
       serverReturn,
@@ -497,9 +512,9 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         tap(isInitialDataLoaded => {
           if (isInitialDataLoaded) {
             const newFilteredList = this.filterPrinstineRowList();
-            this.state.fetchResult.liveUpdatedRowList = this.processingService.returnDiff(this.state.table.dto, newFilteredList).newRowList;
+            this.state.fetchResult.mainTable.liveUpdatedRowList = this.processingService.returnDiff(this.state.table.dto, newFilteredList).newRowList;
           } else {
-            this.state.fetchResult.rowList = this.filterPrinstineRowList();
+            this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList();
           }
           this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
         })
@@ -508,9 +523,9 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private filterPrinstineRowList(): Array<SecurityTableRowDTO> {
-    console.log('applying filter');
+    const targetTable = this.state.displayAlertTable ? this.state.fetchResult.alertTable : this.state.fetchResult.mainTable;
     const filteredList: Array<SecurityTableRowDTO> = [];
-    this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
+    targetTable.prinstineRowList.forEach((eachRow) => {
       try {
         if (this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.name, this.state.filters.quickFilters.keyword)) {
           let portfolioIncludeFlag = this.filterByPortfolio(eachRow);
@@ -521,16 +536,18 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
             const securityLevelFilterResult = this.state.filters.securityFilters.map((eachFilter) => {
               return this.filterBySecurityAttribute(eachRow, eachFilter.targetAttribute, eachFilter.filterBy);
             });
-            // as long as one of the filters failed, this security will not show
-            securityLevelFilterResultCombined = securityLevelFilterResult.filter((eachResult) => {
-              return eachResult;
-            }).length === securityLevelFilterResult.length;
+            // only main table will apply security-level filters
+            if (!this.state.displayAlertTable) {
+              // as long as one of the filters failed, this security will not show
+              securityLevelFilterResultCombined = securityLevelFilterResult.filter((eachResult) => {
+                return eachResult;
+              }).length === securityLevelFilterResult.length;
+            }
           }
           strategyFlag && ownerFlag && securityLevelFilterResultCombined && portfolioIncludeFlag && filteredList.push(eachRow);
         }
-      } catch {
-        // ignore, seems AgGrid causes some weird read only error
-        console.warn('caught read only issue', eachRow);
+      } catch(err) {
+        console.error('filter issue', err ? err.message : '', eachRow);
       }
     });
     return filteredList;
@@ -615,7 +632,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     const bestSpreadList = [];
     const bestPriceList = [];
     const bestYieldList = [];
-    this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
+    const combinedRowList = this.state.fetchResult.mainTable.prinstineRowList.concat(this.state.fetchResult.alertTable.prinstineRowList);
+    combinedRowList.forEach((eachRow) => {
       const bestSpreadQuote = eachRow.data.bestQuotes.combined.bestSpreadQuote;
       const bestPriceQuote = eachRow.data.bestQuotes.combined.bestPriceQuote;
       const bestYieldQuote = eachRow.data.bestQuotes.combined.bestYieldQuote;
@@ -669,13 +687,14 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private processSecurityIDsFromAnalysis(securityIDList: any[]) {
+    const targetTable = this.state.displayAlertTable ? this.state.fetchResult.alertTable : this.state.fetchResult.mainTable;
     if (securityIDList) {
       if (securityIDList.length > 0) {
         let securityTableRowDTOList: SecurityTableRowDTO[] = [];
-        for (let securityTableRowDTO in this.state.fetchResult.prinstineRowList) {
+        for (let securityTableRowDTO in targetTable.prinstineRowList) {
           for (let securityID of securityIDList) {
-            if (this.state.fetchResult.prinstineRowList[securityTableRowDTO].data.security.data.securityID === securityID) {
-              securityTableRowDTOList.push(this.state.fetchResult.prinstineRowList[securityTableRowDTO])
+            if (targetTable.prinstineRowList[securityTableRowDTO].data.security.data.securityID === securityID) {
+              securityTableRowDTOList.push(targetTable.prinstineRowList[securityTableRowDTO])
             }
           }
         }

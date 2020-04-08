@@ -98,14 +98,22 @@ export interface TradeCenterPanelState {
   table: {
     metrics: Array<SecurityTableMetricStub>;
     dto: DTOs.SecurityTableDTO;
+    alertMetrics: Array<SecurityTableMetricStub>;
     alertDto: DTOs.SecurityTableDTO;
   }
   fetchResult: {
     fetchTableDataFailed: boolean;
     fetchTableDataFailedError: string;
-    rowList: Array<DTOs.SecurityTableRowDTO>;
-    prinstineRowList: Array<DTOs.SecurityTableRowDTO>;
-    liveUpdatedRowList: Array<DTOs.SecurityTableRowDTO>;
+    mainTable: {
+      rowList: Array<DTOs.SecurityTableRowDTO>;
+      prinstineRowList: Array<DTOs.SecurityTableRowDTO>;
+      liveUpdatedRowList: Array<DTOs.SecurityTableRowDTO>;
+    }
+    alertTable: {
+      rowList: Array<DTOs.SecurityTableRowDTO>;
+      prinstineRowList: Array<DTOs.SecurityTableRowDTO>;
+      liveUpdatedRowList: Array<DTOs.SecurityTableRowDTO>;
+    }
   }
   filters: {
     quickFilters: {

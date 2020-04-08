@@ -118,7 +118,7 @@
       </div>
     </div>
     <div class="sat-tradeCenterPanel__presetsAndFilters-configurator">
-      <button (click)="onUnselectPreset()" class="sat-tradeCenterPanel__presetsAndFilters-configurator-backBtn">
+      <button (click)="onUnselectPreset()" class="sat-tradeCenterPanel__presetsAndFilters-configurator-backBtn santaBtn--labelled">
         <i class="fal fa-chevron-left"></i>
         <span>Back to Presets</span>
       </button>
@@ -143,11 +143,13 @@
       </div>
       <div class="sat-tradeCenterPanel__result-utilities-tableSwitch">
         <div class="santaBtnGroup sat-tradeCenterPanel__result-utilities-tableSwitch-btnGroup">
-          <button (click)="onSwitchTable()" class="sat-tradeCenterPanel__result-utilities-tableSwitch-btnGroup-mainBtn">
-            Main Table
+          <button (click)="onSwitchTable()" class="sat-tradeCenterPanel__result-utilities-tableSwitch-btnGroup-mainBtn santaBtn--labelled">
+            <i class="fal fa-search"></i>
+            <span>From Preset</span>
           </button>
-          <button (click)="onSwitchTable()" class="sat-tradeCenterPanel__result-utilities-tableSwitch-btnGroup-alertBtn">
-            Alert Table
+          <button (click)="onSwitchTable()" class="sat-tradeCenterPanel__result-utilities-tableSwitch-btnGroup-alertBtn santaBtn--labelled">
+            <i class="fal fa-bell"></i>
+            <span>From Alerts</span>
           </button>
         </div>
       </div>
@@ -208,10 +210,10 @@
         [activated]="!state.displayAlertTable"
         [ownerInitial]="ownerInitial"
         [tableData]="state.table.dto"
-        [newRows]="state.fetchResult.rowList"
+        [newRows]="state.fetchResult.mainTable.rowList"
         [receivedContentStage]="state.currentContentStage"
         [receivedSecurityTableMetricsUpdate]="state.table.metrics"
-        [liveUpdatedRows]="state.fetchResult.liveUpdatedRowList"
+        [liveUpdatedRows]="state.fetchResult.alertTable.liveUpdatedRowList"
         [activeTriCoreDriver]="state.filters.quickFilters.driverType"
         (selectedSecurityForAnalysis)="onSelectSecurityForAnalysis($event)"
       ></santa-table>
@@ -221,10 +223,10 @@
         [activated]="!!state.displayAlertTable"
         [ownerInitial]="ownerInitial"
         [tableData]="state.table.alertDto"
-        [newRows]="[]"
+        [newRows]="state.fetchResult.alertTable.rowList"
         [receivedContentStage]="state.currentContentStage"
-        [receivedSecurityTableMetricsUpdate]="state.table.metrics"
-        [liveUpdatedRows]="[]"
+        [receivedSecurityTableMetricsUpdate]="state.table.alertMetrics"
+        [liveUpdatedRows]="state.fetchResult.alertTable.liveUpdatedRowList"
         [activeTriCoreDriver]="state.filters.quickFilters.driverType"
         (selectedSecurityForAnalysis)="onSelectSecurityForAnalysis($event)"
       ></santa-table>

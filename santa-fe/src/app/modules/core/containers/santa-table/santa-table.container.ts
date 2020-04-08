@@ -156,11 +156,22 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   public ngOnChanges() {
-    // if (!!this.activated && !this.tableData.state.isActivated) {
+    let activateStatusChanged = false;
+    if (!!this.activated && !this.tableData.state.isActivated) {
       this.tableData.state.isActivated = true;
-    // }
+      activateStatusChanged = true;
+    } else if (!this.activated && !!this.tableData.state.isActivated){
+      this.tableData.state.isActivated = false;
+      activateStatusChanged = true;
+    }
     if (!!this.tableData.state.isActivated) {
-      if (this.tableData.state.loadedContentStage !== this.receivedContentStage) {
+      if (!!activateStatusChanged) {
+        console.log('just become activated');
+        this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate; // saving initial cache
+        this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
+        // only load the rows if it is the first time ever this table is rendered
+        this.tableData.state.loadedContentStage == null && this.loadTableRows(this.newRows);
+      } else if (this.tableData.state.loadedContentStage !== this.receivedContentStage) {
         console.log('rows updated for inter-stage change', this.receivedContentStage);
         this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate; // saving initial cache
         this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
@@ -193,7 +204,7 @@ export class SantaTable implements OnInit, OnChanges {
     this.tableData.api.columnApi = params.columnApi;
     this.tableData.state.isAgGridReady = true;
     this.agGridMiddleLayerService.onGridReady(this.tableData, this.ownerInitial);
-    this.loadTableHeaders();
+    !!this.tableData.state.isActivated && this.loadTableHeaders();
   }
 
   public onRowClicked(params: AgGridRowParams) {
