@@ -87,6 +87,8 @@ export interface SecurityTableMetricStub {
   isDataTypeText?: boolean;
   isDriverDependent?: boolean;
   metricPackDeltaScope?: string;
+  groupBelongs: string;
+  groupShow?: boolean;
 }
 
 export interface TriCoreDriverConfigStub {

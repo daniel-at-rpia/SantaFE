@@ -289,6 +289,8 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     isDataTypeText: boolean;
     isDriverDependent: boolean;
     pinned?: boolean;
+    groupBelongs: string;
+    groupShow: boolean;
   },
   state: {
     isPureTextVariant: boolean;
