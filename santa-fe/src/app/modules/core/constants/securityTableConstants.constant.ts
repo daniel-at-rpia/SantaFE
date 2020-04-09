@@ -222,7 +222,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupShow: true
   },{
     key: 'currentPosition',
-    label: 'Current Preset',
+    label: 'Current Preset Position',
     attrName: 'positionCurrentInMM',
     underlineAttrName: 'positionCurrent',
     blockAttrName: 'position',
@@ -232,7 +232,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupShow: true
   },{
     key: 'firmPosition',
-    label: 'Firm',
+    label: 'Firm Position',
     attrName: 'positionFirmInMM',
     underlineAttrName: 'positionFirm',
     blockAttrName: 'position',
@@ -242,7 +242,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupShow: true
   },{
     key: 'hfPosition',
-    label: 'HF',
+    label: 'HF Position',
     attrName: 'positionHFInMM',
     underlineAttrName: 'positionHF',
     blockAttrName: 'position',
@@ -252,7 +252,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupShow: false
   },{
     key: 'nlfPosition',
-    label: 'NLF',
+    label: 'NLF Position',
     attrName: 'positionNLFInMM',
     underlineAttrName: 'positionNLF',
     blockAttrName: 'position',
@@ -262,7 +262,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupShow: false
   },{
     key: 'dofPosition',
-    label: 'DOF',
+    label: 'DOF Position',
     attrName: 'positionDOFInMM',
     underlineAttrName: 'positionDOF',
     blockAttrName: 'position',
@@ -272,7 +272,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupShow: false
   },{
     key: 'sofPosition',
-    label: 'SOF',
+    label: 'SOF Position',
     attrName: 'positionSOFInMM',
     underlineAttrName: 'positionSOF',
     blockAttrName: 'position',
@@ -282,7 +282,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupShow: false
   },{
     key: 'stipPosition',
-    label: 'STIP',
+    label: 'STIP Position',
     attrName: 'positionSTIPInMM',
     underlineAttrName: 'positionSTIP',
     blockAttrName: 'position',
@@ -292,7 +292,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupShow: false
   },{
     key: 'fipPosition',
-    label: 'FIP',
+    label: 'FIP Position',
     attrName: 'positionFIPInMM',
     underlineAttrName: 'positionFIP',
     blockAttrName: 'position',
@@ -302,7 +302,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupShow: false
   },{
     key: 'cipPosition',
-    label: 'CIP',
+    label: 'CIP Position',
     attrName: 'positionCIPInMM',
     underlineAttrName: 'positionCIP',
     blockAttrName: 'position',
@@ -312,7 +312,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupShow: false
   },{
     key: 'agbPosition',
-    label: 'AGB',
+    label: 'AGB Position',
     attrName: 'positionAGBInMM',
     underlineAttrName: 'positionAGB',
     blockAttrName: 'position',
@@ -322,7 +322,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupShow: false
   },{
     key: 'bbbPosition',
-    label: 'BBB',
+    label: 'BBB Position',
     attrName: 'positionBBBInMM',
     underlineAttrName: 'positionBBB',
     blockAttrName: 'position',
@@ -332,7 +332,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupShow: false
   },{
     key: 'cs01CadCurrent',
-    label: 'Cad',
+    label: 'CS01 Cad',
     attrName: 'cs01CadCurrentInK',
     underlineAttrName: 'cs01CadCurrent',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
@@ -341,7 +341,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupShow: false
   },{
     key: 'cs01LocalCurrent',
-    label: 'Local',
+    label: 'CS01 Local',
     attrName: 'cs01LocalCurrentInK',
     underlineAttrName: 'cs01LocalCurrent',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
@@ -350,7 +350,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupShow: false
   },{
     key: 'cs01CadFirm',
-    label: 'Firm CAD',
+    label: 'Firm CS01 CAD',
     attrName: 'cs01CadFirmInK',
     underlineAttrName: 'cs01CadFirm',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
@@ -359,7 +359,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupShow: true
   },{
     key: 'cs01LocalFirm',
-    label: 'Firm Local',
+    label: 'Firm CS01 Local',
     attrName: 'cs01LocalFirmInK',
     underlineAttrName: 'cs01LocalFirm',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
