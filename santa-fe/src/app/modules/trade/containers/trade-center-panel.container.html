@@ -213,7 +213,7 @@
         [newRows]="state.fetchResult.mainTable.rowList"
         [receivedContentStage]="state.currentContentStage"
         [receivedSecurityTableMetricsUpdate]="state.table.metrics"
-        [liveUpdatedRows]="state.fetchResult.alertTable.liveUpdatedRowList"
+        [liveUpdatedRows]="state.fetchResult.mainTable.liveUpdatedRowList"
         [activeTriCoreDriver]="state.filters.quickFilters.driverType"
         (selectedSecurityForAnalysis)="onSelectSecurityForAnalysis($event)"
       ></santa-table>

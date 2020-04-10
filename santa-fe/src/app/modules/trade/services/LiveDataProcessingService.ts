@@ -210,6 +210,7 @@ export class LiveDataProcessingService {
     const newQuantUpdateList: Array<SecurityTableRowDTO> = [];
     const betterBidUpdateList: Array<SecurityTableRowDTO> = [];
     const betterAskUpdateList: Array<SecurityTableRowDTO> = [];
+    const validityUpdateList: Array<SecurityTableRowDTO> = [];
 
     newList.forEach((eachNewRow) => {
       const oldRow = oldRowList.find((eachOldRow) => {
@@ -228,6 +229,7 @@ export class LiveDataProcessingService {
         }
         isQuantDiff === 3 && betterBidUpdateList.push(eachNewRow);
         isQuantDiff === 4 && betterAskUpdateList.push(eachNewRow);
+        isQuantDiff === 5 && validityUpdateList.push(eachNewRow);
       } else {
         updateList.push(eachNewRow);
       }
@@ -239,6 +241,7 @@ export class LiveDataProcessingService {
       console.log('Best Quote overwrite: ', newQuantUpdateList);
       console.log('Best Bid change: ', betterBidUpdateList);
       console.log('Best Ask change: ', betterAskUpdateList);
+      console.log('Validity change: ', validityUpdateList);
     }
     return {
       newRowList: updateList,
@@ -282,6 +285,9 @@ export class LiveDataProcessingService {
       if (oldQuant.data.offer[eachAttr] !== newQuant.data.offer[eachAttr]) {
         return 4;
       }
+    }
+    if (oldQuant.state.bidIsStale !== newQuant.state.bidIsStale || oldQuant.state.askIsStale !== newQuant.state.askIsStale) {
+      return 5;
     }
     return 0;
   }
