@@ -32,7 +32,8 @@
       SecurityTableHeaderDTO,
       SecurityTableRowDTO,
       QuantComparerDTO,
-      SearchShortcutDTO
+      SearchShortcutDTO,
+      AlertDTO
     } from 'FEModels/frontend-models.interface';
     import {
       PayloadGetTradeFullData,
@@ -69,7 +70,8 @@
       selectLiveUpdateTick,
       selectInitialDataLoaded,
       selectSecurityIDsFromAnalysis,
-      selectBestQuoteValidWindow
+      selectBestQuoteValidWindow,
+      selectNewAlertsForAlertTable
     } from 'Trade/selectors/trade.selectors';
     import {
       TradeLiveUpdateProcessDataCompleteEvent,
@@ -78,7 +80,8 @@
       TradeSwitchDriverEvent,
       TradeSelectedSecurityForAnalysisEvent,
       TradeSecurityTableRowDTOListForAnalysisEvent,
-      TradeSelectedSecurityForAlertConfigEvent
+      TradeSelectedSecurityForAlertConfigEvent,
+      TradeAlertTableReceiveNewAlertsEvent
     } from 'Trade/actions/trade.actions';
     import { SecurityTableMetricStub, SearchShortcutStub } from 'FEModels/frontend-stub-models.interface';
   //
@@ -96,7 +99,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   subscriptions = {
     startNewUpdateSub: null,
     securityIDListFromAnalysisSub: null,
-    validWindowSub: null
+    validWindowSub: null,
+    newAlertsForAlertTableSub: null
   }
   constants = {
     defaultMetricIdentifier: DEFAULT_DRIVER_IDENTIFIER,
@@ -156,7 +160,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
           strategy: []
         },
         securityFilters: []
-      }
+      },
+      alertTableAlertList: []
     };
     return state;
   }
@@ -197,6 +202,17 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       select(selectBestQuoteValidWindow)
     ).subscribe((window) => {
       this.state.bestQuoteValidWindow = window;
+    });
+
+    this.subscriptions.newAlertsForAlertTableSub = this.store$.pipe(
+      select(selectNewAlertsForAlertTable)
+    ).subscribe((list: Array<AlertDTO>) => {
+      if (list && list.length > 0) {
+        list.forEach((eachAlert) => {
+          this.state.alertTableAlertList.push(eachAlert);
+        });
+        this.store$.dispatch(new TradeAlertTableReceiveNewAlertsEvent());
+      }
     });
   }
 

@@ -57,3 +57,8 @@ export const selectSelectedSecurityForAlertConfig = createSelector(
   getTradeState,
   (state: TradeState) => state.selectedSecurityForAlertConfig
 );
+
+export const selectNewAlertsForAlertTable = createSelector(
+  getTradeState,
+  (state: TradeState) => state.newAlertsForAlertTable
+);

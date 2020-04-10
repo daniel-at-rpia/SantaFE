@@ -125,6 +125,7 @@ export interface TradeCenterPanelState {
     }
     securityFilters: Array<DefinitionConfiguratorEmitterParamsItem>
   }
+  alertTableAlertList: Array<DTOs.AlertDTO>;
 }
 
 export interface TradeUtilityPanelState {

@@ -31,7 +31,7 @@
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { TradeAlertPanelState } from 'FEModels/frontend-page-states.interface';
     import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
-    import { SecurityDTO } from 'FEModels/frontend-models.interface';
+    import { SecurityDTO, AlertDTO } from 'FEModels/frontend-models.interface';
     import { TradeAlertConfigurationAxeGroupBlock } from 'FEModels/frontend-blocks.interface';
     import {
       BESecurityDTO,
@@ -61,6 +61,7 @@
     import { FullOwnerList, FilterOptionsPortfolioResearchList } from 'Core/constants/securityDefinitionConstants.constant';
     import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
     import { CoreFlushSecurityMap, CoreSendNewAlerts } from 'Core/actions/core.actions';
+    import { TradeAlertTableSendNewAlertsEvent } from 'Trade/actions/trade.actions';
     import { selectSelectedSecurityForAlertConfig, selectPresetSelected } from 'Trade/selectors/trade.selectors';
   //
 
@@ -629,14 +630,21 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       first(),
       tap((serverReturn: Array<BEAlertDTO>) => {
         if (!!serverReturn && serverReturn.length > 0) {
-          const updateList = [];
+          const updateList: Array<AlertDTO> = [];
+          const securityList: Array<AlertDTO> = [];
           serverReturn.forEach((eachRawAlert) => {
             if (eachRawAlert.isActive) {
               const newAlert = this.dtoService.formAlertObject(eachRawAlert);
-              updateList.push(newAlert);
+              if (!!newAlert) {
+                updateList.push(newAlert);
+              }
+              if (!!newAlert && newAlert.data.security && newAlert.data.security.data.securityID) {
+                securityList.push(newAlert);
+              }
             }
           });
           updateList.length > 0 && this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
+          securityList.length > 0 && this.store$.dispatch(new TradeAlertTableSendNewAlertsEvent(this.utilityService.deepCopy(securityList)));
         }
         this.state.alertUpdateInProgress = false;
       }),
