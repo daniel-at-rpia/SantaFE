@@ -78,6 +78,7 @@ export interface SecurityTableMetricStub {
   isAttrChangable?: boolean;
   readyStage: number;
   active: boolean;
+  pinned?: boolean;
   blockAttrName?: string;
   isFrontEndMetric?: boolean;
   isForQuantComparer?: boolean;
@@ -86,6 +87,8 @@ export interface SecurityTableMetricStub {
   isDataTypeText?: boolean;
   isDriverDependent?: boolean;
   metricPackDeltaScope?: string;
+  groupBelongs: string;
+  groupShow?: boolean;
 }
 
 export interface TriCoreDriverConfigStub {
