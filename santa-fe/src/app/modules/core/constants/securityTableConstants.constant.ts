@@ -221,7 +221,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupShow: true
   },{
     key: 'currentPosition',
-    label: 'Current Preset Position',
+    label: 'Current Filtered Position',
     attrName: 'positionCurrentInMM',
     underlineAttrName: 'positionCurrent',
     blockAttrName: 'position',
