@@ -5,6 +5,7 @@ $tradeCenterPanel_presetsAndFilters_presets_title_height: 6rem;
 $tradeCenterPanel_presetsAndFilters_presets_categoryCanvas_ribbon_width: 10rem;
 $tradeCenterPanel_presetsAndFilters_presets_categoryCanvas_list_margin_left: $spacing_x_large + $tradeCenterPanel_presetsAndFilters_presets_categoryCanvas_ribbon_width - 6rem;
 $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
+$tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 5.5rem;
 .sat-tradeCenterPanel {
   $tradeCenterPanelBlockName: &;
   @include mix_border_generator;
@@ -182,8 +183,25 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
         }
       }
       security-definition-configurator {
-        @include mix_calculate(height, 100%, 5.5rem, '-'); // 5.5rem is the height of backBtn
+        @include mix_calculate(height, 100%, $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size, '-');
         display: flex;
+      }
+      &-alertConfigPrompt {
+        @include mix_calculate(height, 100%, $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size, '-');
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        &-icon {
+          font-size: $font_size_hero_large;
+          color: $font_color_trivial;
+        }
+        &-text {
+          margin: $spacing_large $spacing_small;
+          font-size: $font_size_normal;
+          color: $font_color_minor;
+          text-align: center;
+        }
       }
     }
   }
@@ -323,6 +341,16 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
   }
   &--displayAlertTableState {
     #{$tradeCenterPanelBlockName} {
+      &__presetsAndFilters {
+        &-configurator {
+          security-definition-configurator {
+            display: none;
+          }
+          &-alertConfigPrompt {
+            display: flex;
+          }
+        }
+      }
       &__result {
         &-utilities-tableSwitch-btnGroup {
           &-mainBtn {
