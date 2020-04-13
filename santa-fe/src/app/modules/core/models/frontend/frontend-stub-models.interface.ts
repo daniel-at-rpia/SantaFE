@@ -60,7 +60,7 @@ export interface SecurityDefinitionMapStub {
 export interface SecurityMetricOptionStub {
   label: string;
   backendDtoAttrName: string;
-  deltaOptions: Array<string>
+  deltaOptions: Array<string>;
 }
 
 export interface SecurityTableQuoteMetric {
