@@ -125,7 +125,9 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
               "driver": "Spread",
               "enteredTime": "2020-03-20T10:47:30.272-04:00",
               "user": "IL",
-              "value": 820
+              "value": 820,
+              "price": 72,
+              "spread": 73
             },
             "primaryPmName": "IL",
             "backupPmName": "DM",
@@ -400,7 +402,9 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
               "driver": "Spread",
               "enteredTime": "2020-03-20T00:00:00-04:00",
               "user": null,
-              "value": 650
+              "value": 650,
+              "price": 72,
+              "spread": 73
             },
             "primaryPmName": "SP",
             "backupPmName": "DA",
@@ -540,7 +544,9 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
               "driver": "Spread",
               "enteredTime": "2020-03-20T10:49:30.07-04:00",
               "user": "IL",
-              "value": 490
+              "value": 490,
+              "price": 72,
+              "spread": 73
             },
             "primaryPmName": "IL",
             "backupPmName": "DM",
@@ -730,7 +736,9 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
               "driver": "Spread",
               "enteredTime": "2020-03-20T00:00:00-04:00",
               "user": null,
-              "value": 1500
+              "value": 1500,
+              "price": 72,
+              "spread": 73
             },
             "primaryPmName": "DJ",
             "backupPmName": "PM",
