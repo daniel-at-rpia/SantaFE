@@ -9,6 +9,10 @@ import {
 
 import { AlertDTO } from 'FEModels/frontend-models.interface';
 import { AlertTypes, AlertSubTypes } from 'Core/constants/coreConstants.constant';
+import * as moment from 'moment';
+import {Moment} from 'moment';
+
+
 
 @Component({
   selector: 'alert',
@@ -16,7 +20,7 @@ import { AlertTypes, AlertSubTypes } from 'Core/constants/coreConstants.constant
   styleUrls: ['./alert.component.scss'],
   encapsulation: ViewEncapsulation.Emulated
 })
-export class Alert {
+export class Alert implements OnInit{
   @Input() alertData: AlertDTO;
   @Input() hideAllAlerts: boolean;
   @Output() clickedAlertThumbnail = new EventEmitter<AlertDTO>();
@@ -25,8 +29,25 @@ export class Alert {
 
   alertSubTypes = AlertSubTypes;
   alertTypes = AlertTypes;
+  validUntil = moment(Date.now());
 
   constructor() { }
+
+  ngOnInit(): void {
+    // console.log(this.alertData);
+    this.validUntil = moment(this.alertData.data.validUntilTime);
+    const interval = setInterval(() => {
+      if (this.hasExpired()) {
+        this.onClickRemove();
+        clearInterval(interval);
+      }
+      this.validUntil = moment(this.validUntil.toISOString());
+    }, 1000);
+  }
+
+  hasExpired() {
+    return moment().diff(this.validUntil) > 0;
+  }
 
   public onClickAlertThumbnail() {
     !!this.clickedAlertThumbnail && this.clickedAlertThumbnail.emit(this.alertData);

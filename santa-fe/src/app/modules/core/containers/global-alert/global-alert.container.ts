@@ -1,44 +1,46 @@
-  // dependencies
-    import {
-      Component,
-      ViewEncapsulation,
-      OnInit,
-      OnChanges,
-      OnDestroy,
-      Input
-    } from '@angular/core';
-    import { Observable, Subscription } from 'rxjs';
-    import {
-      interval,
-      of
-    } from 'rxjs';
-    import {
-      tap,
-      first,
-      delay,
-      catchError,
-      withLatestFrom,
-      filter
-    } from 'rxjs/operators';
-    import { Store, select } from '@ngrx/store';
+// dependencies
+import {
+  Component,
+  ViewEncapsulation,
+  OnInit,
+  OnChanges,
+  OnDestroy,
+  Input
+} from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
+import {
+  interval,
+  of
+} from 'rxjs';
+import {
+  tap,
+  first,
+  delay,
+  catchError,
+  withLatestFrom,
+  filter
+} from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
 
-    import { DTOService } from 'Core/services/DTOService';
-    import { UtilityService } from 'Core/services/UtilityService';
-    import { RestfulCommService } from 'Core/services/RestfulCommService';
-    import { GlobalAlertState } from 'FEModels/frontend-page-states.interface';
-    import { AlertDTO } from 'FEModels/frontend-models.interface';
-    import { PayloadSetAlertsToInactive } from 'BEModels/backend-payloads.interface';
-    import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
-    import {
-      ALERT_COUNTDOWN,
-      AlertTypes,
-      ALERT_PRESENT_LIST_SIZE_CAP,
-      ALERT_TOTALSIZE_MAX_DISPLAY_THRESHOLD
-    } from 'Core/constants/coreConstants.constant';
-    import { CoreToggleAlertThumbnailDisplay } from 'Core/actions/core.actions';
-    import { selectNewAlerts } from 'Core/selectors/core.selectors';
-    import { CoreReceivedNewAlerts } from 'Core/actions/core.actions';
-  //
+import { DTOService } from 'Core/services/DTOService';
+import { UtilityService } from 'Core/services/UtilityService';
+import { RestfulCommService } from 'Core/services/RestfulCommService';
+import { GlobalAlertState } from 'FEModels/frontend-page-states.interface';
+import { AlertDTO } from 'FEModels/frontend-models.interface';
+import { PayloadSetAlertsToInactive } from 'BEModels/backend-payloads.interface';
+import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
+import {
+  ALERT_COUNTDOWN,
+  AlertTypes,
+  ALERT_PRESENT_LIST_SIZE_CAP,
+  ALERT_TOTALSIZE_MAX_DISPLAY_THRESHOLD
+} from 'Core/constants/coreConstants.constant';
+import { CoreToggleAlertThumbnailDisplay } from 'Core/actions/core.actions';
+import { selectNewAlerts } from 'Core/selectors/core.selectors';
+import { CoreReceivedNewAlerts } from 'Core/actions/core.actions';
+import {alerts} from 'Core/components/alert/alert.mock';
+
+//
 
 @Component({
   selector: 'global-alert',

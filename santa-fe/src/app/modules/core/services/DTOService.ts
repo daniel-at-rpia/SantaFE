@@ -976,6 +976,7 @@ export class DTOService {
   public formAlertObject(
     rawData: BEAlertDTO
   ): DTOs.AlertDTO {
+    console.log(rawData);
     const parsedTitleList = rawData.keyWord.split('|');
     const object: DTOs.AlertDTO = {
       data: {
@@ -987,7 +988,8 @@ export class DTOService {
         titleBottom: parsedTitleList[1] || '',
         message: rawData.message,
         time: moment(rawData.timeStamp).format(`HH:mm`),
-        titlePin: rawData.marketListType || null
+        titlePin: rawData.marketListType || null,
+        validUntilTime: rawData.validUntilTime
       },
       api: {
         onMouseEnterAlert: null,

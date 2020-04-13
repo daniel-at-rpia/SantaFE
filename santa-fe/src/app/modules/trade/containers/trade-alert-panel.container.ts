@@ -1,14 +1,14 @@
   // dependencies
     import {
-      Component,
-      ViewEncapsulation,
-      Input,
-      Output,
-      EventEmitter,
-      OnInit,
-      OnChanges,
-      OnDestroy
-    } from '@angular/core';
+  Component,
+  ViewEncapsulation,
+  Input,
+  Output,
+  EventEmitter,
+  OnInit,
+  OnChanges,
+  OnDestroy, isDevMode
+} from '@angular/core';
     import { Store, select } from '@ngrx/store';
     import {
       Observable,
@@ -54,14 +54,17 @@
       selectSecurityMapValidStatus
     } from 'Core/selectors/core.selectors';
     import {
-      ALERT_MAX_SECURITY_SEARCH_COUNT,
-      AxeAlertScope,
-      ALERT_UPDATE_COUNTDOWN
-    } from 'Core/constants/tradeConstants.constant';
+  ALERT_MAX_SECURITY_SEARCH_COUNT,
+  AxeAlertScope,
+  ALERT_UPDATE_COUNTDOWN, AxeAlertType
+} from 'Core/constants/tradeConstants.constant';
     import { FullOwnerList, FilterOptionsPortfolioResearchList } from 'Core/constants/securityDefinitionConstants.constant';
     import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
     import { CoreFlushSecurityMap, CoreSendNewAlerts } from 'Core/actions/core.actions';
     import { selectSelectedSecurityForAlertConfig, selectPresetSelected } from 'Trade/selectors/trade.selectors';
+  import {is} from "@amcharts/amcharts4/core";
+  import {alerts} from "Core/components/alert/alert.mock";
+
   //
 
 @Component({
@@ -89,6 +92,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     alertTypes: AlertTypes,
     alertSubTypes: AlertSubTypes,
     axeAlertScope: AxeAlertScope,
+    axeAlertType: AxeAlertType,
     countdown: ALERT_UPDATE_COUNTDOWN,
     fullOwnerList: FullOwnerList,
     researchList: FilterOptionsPortfolioResearchList
@@ -100,6 +104,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
   ){
+    window['moment'] = moment;
     this.state = this.initializePageState();
   }
 
@@ -117,6 +122,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             card: null,
             groupId: null,
             scopes: [],
+            alertTypes: [],
             isDeleted: false,
             isDisabled: false
           },
@@ -282,6 +288,24 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  public onSelectAxeAlertType(targetType: AxeAlertType, targetBlock: TradeAlertConfigurationAxeGroupBlock) {
+    if (!!targetType && !!targetBlock && !targetBlock.isDisabled) {
+      // this.addScopeToAxeWatchlistEntry(targetBlock, targetType);
+      let {alertTypes} = this.state.configuration.axe.myGroup;
+      alertTypes.indexOf(targetType) === -1 ?
+      alertTypes.push(targetType) :
+      alertTypes = alertTypes.filter((a: AxeAlertType) => a !== targetType);
+      console.log(`alertTypes Selected: ${alertTypes}`);
+      this.state.configuration.axe.myGroup.alertTypes = alertTypes;
+      this.restfulCommService.logEngagement(
+        this.restfulCommService.engagementMap.tradeAlertConfigure,
+        null,
+        `Change Alert Type to ${targetBlock.alertTypes.toString()}`,
+        'Trade Alert Panel'
+      );
+    }
+  }
+
   public onClickSaveConfiguration() {
     this.saveAxeConfiguration();
     this.saveMarkConfiguration();
@@ -391,6 +415,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     const newEntry: TradeAlertConfigurationAxeGroupBlock = {
       card: copy,
       groupId: null,
+      alertTypes: this.state.configuration.axe.myGroup.alertTypes,
       scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],
       isDeleted: false,
       isDisabled: false
@@ -423,7 +448,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             myGroup.loseMoneyPrice = eachConfiguration.parameters.LoseMoneyPriceThreshold == undefined ? null : eachConfiguration.parameters.LoseMoneyPriceThreshold;
             myGroup.loseMoneySpread = eachConfiguration.parameters.LoseMoneySpreadThreshold == undefined ? null : eachConfiguration.parameters.LoseMoneySpreadThreshold;
             myGroup.makeMoneyPrice = eachConfiguration.parameters.MakeMoneyPriceThreshold == undefined ? null : eachConfiguration.parameters.MakeMoneyPriceThreshold;
-            myGroup.makeMoneySpread = eachConfiguration.parameters.MakeMoneySpreadThreshold == undefined ? null : eachConfiguration.parameters.MakeMoneySpreadThreshold; 
+            myGroup.makeMoneySpread = eachConfiguration.parameters.MakeMoneySpreadThreshold == undefined ? null : eachConfiguration.parameters.MakeMoneySpreadThreshold;
           }
         } else {
           this.restfulCommService.logError(`'Alert/get-alert-configs' API returned an empty result`);
@@ -456,6 +481,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     const newEntry: TradeAlertConfigurationAxeGroupBlock = {
       card: null,
       groupId: rawGroupConfig.alertConfigID,
+      alertTypes: this.state.configuration.axe.myGroup.alertTypes,
       scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],
       isDeleted: false,
       isDisabled: !rawGroupConfig.isEnabled
@@ -483,6 +509,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     this.state.configuration.axe.myGroup = {
       card: null,
       groupId: rawGroupConfig.alertConfigID,
+      alertTypes: this.state.configuration.axe.myGroup.alertTypes,
       scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],
       isDeleted: false,
       isDisabled: !rawGroupConfig.isEnabled
@@ -628,10 +655,19 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlerts, {req: 'POST'}, payload).pipe(
       first(),
       tap((serverReturn: Array<BEAlertDTO>) => {
+        // if (isDevMode()) {
+        //   console.log('mocking alerts',serverReturn);
+        //   serverReturn = alerts;
+        // }
+        console.log('updateAlert', serverReturn);
         if (!!serverReturn && serverReturn.length > 0) {
           const updateList = [];
           serverReturn.forEach((eachRawAlert) => {
-            if (eachRawAlert.isActive) {
+            // checking for cancelled and active alerts
+            const expired = moment().diff(moment(eachRawAlert.validUntilTime) ) > 0;
+            console.log(`expired? ${expired}, validUntilTime: ${eachRawAlert.validUntilTime}`);
+            if (eachRawAlert.isActive && !eachRawAlert.isCancelled && !expired) {
+              console.log(eachRawAlert);
               const newAlert = this.dtoService.formAlertObject(eachRawAlert);
               updateList.push(newAlert);
             }
@@ -643,7 +679,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       catchError(err => {
         this.state.alertUpdateInProgress = false;
         console.error(`${this.restfulCommService.apiMap.getAlerts} failed`, err);
-        return of('error')
+        return of('error');
       })
     ).subscribe();
     // timeStamp needs to be updated right after the API call initiates, NOT when it returns

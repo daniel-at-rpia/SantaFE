@@ -379,6 +379,7 @@ export interface BEAlertDTO {
   keyWord: string;
   message: string;
   isActive: boolean;
+  isCancelled?: boolean;
   urgency: number;
   isDeleted: boolean;
   quoteId?: string;
@@ -387,5 +388,6 @@ export interface BEAlertDTO {
   marketListDescription?: string;
   securityIdentifierToQuoteId?: {
     [property: string]: string;
-  }
+  };
+  validUntilTime: string;
 }

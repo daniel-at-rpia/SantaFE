@@ -121,6 +121,7 @@ $alert_type_size: $iconButton_size_regular;
         @include mix_fixed_div(relative, $z_index_hovering_item_lift);
         @include mix_border_radius(3px);
         @include mix_alive('light');
+        left: 4px;
         background-color: $color_white;
         padding: $spacing_minimum $spacing_x_small;
         &-text {

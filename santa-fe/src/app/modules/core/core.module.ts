@@ -31,9 +31,11 @@ import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-fil
 import { NumericFilter } from 'Core/components/numeric-filter/numeric-filter.component';
 import { GlobalAlert } from 'Core/containers/global-alert/global-alert.container';
 import { Alert } from 'Core/components/alert/alert.component';
+import {CountdownPipe} from 'App/pipes/Countdown.pipe';
 
 @NgModule({
   declarations: [
+    CountdownPipe,
     SecurityCard,
     QuantitativeComparer,
     SecurityQuote,
@@ -52,27 +54,27 @@ import { Alert } from 'Core/components/alert/alert.component';
     GlobalAlert,
     Alert
   ],
-  imports: [
-    CommonModule,
-    FormsModule,
+    imports: [
+        CommonModule,
+        FormsModule,
 
-    AgGridModule.withComponents([
-      SantaTableSecurityCell,
-      SantaTableQuoteCell,
-      SantaTableDetailAllQuotes,
-      SantaTableNumericFilter,
-      SantaTableNumericFloatingFilter
-    ]),
+        AgGridModule.withComponents([
+            SantaTableSecurityCell,
+            SantaTableQuoteCell,
+            SantaTableDetailAllQuotes,
+            SantaTableNumericFilter,
+            SantaTableNumericFloatingFilter
+        ]),
 
-    FormModule
-  ],
+        FormModule
+    ],
   providers: [
     DTOService,
     UtilityService,
     GraphService,
     RestfulCommService,
     AgGridMiddleLayerService
-  ], 
+  ],
   exports: [
     SantaTable,
     SecurityCard,

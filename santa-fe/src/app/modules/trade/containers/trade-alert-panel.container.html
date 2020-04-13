@@ -92,6 +92,27 @@
                 <span>Liquidation</span>
               </button>
             </div>
+            <span class="sat-tradeAlertAxeAlertConfiguration__myGroup-content-text santa-margin-left">
+              Alert Type
+            </span>
+            <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup">
+              <button
+                (click)="onSelectAxeAlertType(constants.axeAlertType.marketList, state.configuration.axe.myGroup)"
+                [ngClass]="{
+                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn': true,
+                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': state.configuration.axe.myGroup.alertTypes.indexOf(constants.axeAlertType.marketList) >= 0
+                }">
+                <span>Market List</span>
+              </button>
+              <button
+                (click)="onSelectAxeAlertType(constants.axeAlertType.normal, state.configuration.axe.myGroup)"
+                [ngClass]="{
+                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn': true,
+                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': state.configuration.axe.myGroup.alertTypes.indexOf(constants.axeAlertType.normal) >= 0
+                }">
+                <span>Normal</span>
+              </button>
+            </div>
             <button (click)="onToggleDisableTargetGroupFromAxeWatchList(state.configuration.axe.myGroup)" class="sat-tradeAlertAxeAlertConfiguration__myGroup-content-disableBtn santaBtn--labelled">
               <i class="fal fa-bell-slash"></i>
               <span>Disable</span>
