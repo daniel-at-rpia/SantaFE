@@ -399,7 +399,7 @@ export class SantaTable implements OnInit, OnChanges {
         driverType = '';
       }
 
-      targetRow.data.quotes = this.dtoService.formSecurityTableRowObject(targetRow.data.security).data.quotes;
+      targetRow.data.quotes = this.dtoService.formSecurityTableRowObject(targetRow.data.security, targetRow.data.rowId).data.quotes;
       const payload: PayloadGetAllQuotes = {
         "identifier": targetRow.data.security.data.securityID
       };

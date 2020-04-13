@@ -697,10 +697,12 @@ export class DTOService {
   }
 
   public formSecurityTableRowObject(
-    securityDTO: DTOs.SecurityDTO
+    securityDTO: DTOs.SecurityDTO,
+    id?: string
   ): DTOs.SecurityTableRowDTO {
     const object: DTOs.SecurityTableRowDTO = {
       data: {
+        rowId: !!id ? id : this.utility.generateUUID(),
         security: securityDTO,
         cells: [],
         quotes: {

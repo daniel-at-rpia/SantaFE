@@ -319,6 +319,7 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
 
 export interface SecurityTableRowDTO extends BasicDTOStructure {
   data: {
+    rowId: string;
     security: SecurityDTO;
     cells: Array<SecurityTableCellDTO>;
     quotes: SecurityTableRowQuoteBlock;

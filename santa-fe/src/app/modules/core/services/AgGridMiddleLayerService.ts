@@ -221,7 +221,7 @@ export class AgGridMiddleLayerService {
   ): AgGridRow {
     const eachSecurity = targetRow.data.security;
     const newAgRow: AgGridRow = {
-      id: !eachSecurity.state.isStencil ? eachSecurity.data.securityID : this.utilityService.generateUUID(),
+      id: targetRow.data.rowId,
       securityCard: eachSecurity,
       bestQuote: targetRow.data.cells[0].data.quantComparerDTO,
       bestAxeQuote: targetRow.data.cells[1].data.quantComparerDTO,

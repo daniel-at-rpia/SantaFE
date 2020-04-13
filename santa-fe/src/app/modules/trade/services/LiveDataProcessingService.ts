@@ -73,7 +73,8 @@ export class LiveDataProcessingService {
           prinstineRowList,
           newSecurity,
           selectedDriver,
-          rawSecurityDTOMap[eachKey].bestQuotes
+          rawSecurityDTOMap[eachKey].bestQuotes,
+          null
         );
       }
     }
@@ -111,7 +112,8 @@ export class LiveDataProcessingService {
             prinstineRowList,
             newSecurity,
             selectedDriver,
-            rawSecurityDTOMap[targetSecurityId].bestQuotes
+            rawSecurityDTOMap[targetSecurityId].bestQuotes,
+            eachAlertDTO
           );
         } else {
           console.error('security not found for alert', eachAlertDTO);
@@ -126,9 +128,10 @@ export class LiveDataProcessingService {
     prinstineRowList: Array<SecurityTableRowDTO>,
     newSecurity: SecurityDTO,
     driverType: string,
-    bestQuoteServerReturn: BEBestQuoteDTO
+    bestQuoteServerReturn: BEBestQuoteDTO,
+    targetAlert: AlertDTO
   ) {
-    const newRow = this.dtoService.formSecurityTableRowObject(newSecurity);
+    const newRow = !!targetAlert ? this.dtoService.formSecurityTableRowObject(newSecurity, targetAlert.data.id) : this.dtoService.formSecurityTableRowObject(newSecurity, newSecurity.data.securityID);
     this.populateEachRowWithBestQuoteData(
       headerList,
       newRow,
