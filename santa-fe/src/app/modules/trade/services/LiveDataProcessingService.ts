@@ -107,6 +107,7 @@ export class LiveDataProcessingService {
             this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio);
           });
           this.dtoService.appendPortfolioOverviewInfoForSecurityDTO(newSecurity);
+          this.dtoService.appendAlertInfoToSecurityDTO(newSecurity, eachAlertDTO);
           this.populateEachRowWithData(
             tableHeaderList,
             prinstineRowList,

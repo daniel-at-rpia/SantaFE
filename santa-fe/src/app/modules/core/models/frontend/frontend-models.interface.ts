@@ -97,6 +97,10 @@ export interface SecurityDTO extends BasicDTOStructure {
     cs01CadCurrentInK: string;
     hasIndex: boolean;
     hedgeFactor: number;
+    alert: {
+      alertTime: string;
+      alertTimeRaw: number;
+    }
   }
   api: {
     onClickCard: (card: SecurityDTO) => void;
@@ -308,6 +312,7 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     pinned?: boolean;
     groupBelongs: string;
     groupShow: boolean;
+    alertOnly: boolean;
   },
   state: {
     isPureTextVariant: boolean;
@@ -475,6 +480,7 @@ export interface AlertDTO extends BasicDTOStructure {
     titleBottom: string;
     message: string;
     time: string;
+    unixTimestamp: number;
     titlePin: string;
   }
   state: {

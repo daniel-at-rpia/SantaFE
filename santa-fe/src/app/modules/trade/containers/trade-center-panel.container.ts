@@ -113,6 +113,16 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private initializePageState(): TradeCenterPanelState {
+    const mainTableMetrics = SecurityTableMetrics.filter((eachStub) => {
+      return !eachStub.alertOnlyColumn;
+    });
+    const alertTableMetrics = SecurityTableMetrics.map((eachStub) => {
+      // hard-coding this logic, as any non-hardcoded solution won't be cost-effective at this point
+      if (eachStub.key === 'securityCard') {
+        eachStub.pinned = false;
+      };
+      return eachStub;
+    });
     const state: TradeCenterPanelState = {
       currentContentStage: 0,
       bestQuoteValidWindow: null,
@@ -132,9 +142,9 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         boosted: false
       },
       table: {
-        metrics: SecurityTableMetrics,
+        metrics: mainTableMetrics,
         dto: this.dtoService.formSecurityTableObject(true),
-        alertMetrics: SecurityTableMetrics,
+        alertMetrics: alertTableMetrics,
         alertDto: this.dtoService.formSecurityTableObject(false)
       },
       fetchResult: {
@@ -161,8 +171,11 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         },
         securityFilters: []
       },
-      alertTableAlertList: []
+      alertTableAlertList: [],
+      initialAlertListReceived: false,
+      delayedLoadingFreshDataForAlert: false
     };
+
     return state;
   }
 
@@ -212,6 +225,10 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
           this.state.alertTableAlertList.push(eachAlert);
         });
         this.store$.dispatch(new TradeAlertTableReceiveNewAlertsEvent());
+        if (this.state.delayedLoadingFreshDataForAlert) {
+          this.state.delayedLoadingFreshDataForAlert = false;
+          this.fetchAllData(true);
+        }
       }
     });
   }
@@ -331,7 +348,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       };
     });
     // if (this.state.currentContentStage === this.constants.securityTableFinalStage) {
-      this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList();
+      this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
     // }
     this.restfulCommService.logEngagement(
       EngagementActionList.applyFilter,
@@ -384,10 +401,10 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     const targetTable = this.state.displayAlertTable ? this.state.fetchResult.alertTable : this.state.fetchResult.mainTable;
     if (!!newKeyword && newKeyword.length >= 2 && newKeyword != this.state.filters.quickFilters.keyword) {
       this.state.filters.quickFilters.keyword = newKeyword;
-      targetTable.rowList = this.filterPrinstineRowList();
+      targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
     } else if ((!newKeyword || newKeyword.length < 2) && !!this.state.filters.quickFilters.keyword && this.state.filters.quickFilters.keyword.length >= 2) {
       this.state.filters.quickFilters.keyword = newKeyword;
-      targetTable.rowList = this.filterPrinstineRowList();
+      targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
     }
   }
 
@@ -436,7 +453,12 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.state.fetchResult.mainTable.prinstineRowList = [];
     this.loadInitialStencilTable();
     this.updateStage(0);
-    this.fetchAllData(true);
+    if (this.state.initialAlertListReceived) {
+      // only load fresh data once the initial alert list is received, this is in order to follow the rule that alert table and main table are always updated at the same time, this rule dramatically reduces the complexity in code to hanlde the two concurrent data fetching processes
+      this.fetchAllData(true);
+    } else {
+      this.state.delayedLoadingFreshDataForAlert = true;
+    }
   }
 
   private loadInitialStencilTable() {
@@ -469,8 +491,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
   private fetchAllData(isInitialFetch: boolean) {
     this.fetchDataForMainTable(isInitialFetch);
-    // because alert panel's initial fetch happens after center panel loads the main table, so alert table always comes from the 30 second update
-    this.fetchDataForAlertTable();
+    this.fetchDataForAlertTable(isInitialFetch);
   }
 
   private fetchDataForMainTable(isInitialFetch: boolean) {
@@ -487,10 +508,12 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolios, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn) => {
-        if (!isInitialFetch) {
-          this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
-        } else {
-          this.updateStage(0);
+        if (!this.state.displayAlertTable) {
+          if (!isInitialFetch) {
+            this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
+          } else {
+            this.updateStage(0);
+          }
         }
         this.loadDataForMainTable(serverReturn);
       }),
@@ -498,14 +521,14 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         this.restfulCommService.logError(`Get portfolios failed`);
         this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
         this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
-        this.updateStage(3);
+        this.updateStage(this.constants.securityTableFinalStage);
         console.error('error', err);
         this.state.fetchResult.fetchTableDataFailed = true;
         this.state.fetchResult.fetchTableDataFailedError = err.message;
         this.state.fetchResult.mainTable.prinstineRowList = [];
-        this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList();
+        this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
         this.state.fetchResult.alertTable.prinstineRowList = [];
-        this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList();
+        this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
         return of('error');
       })
     ).subscribe();
@@ -522,17 +545,15 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       this.onSelectSecurityForAlertConfig.bind(this)
     );
     this.calculateQuantComparerWidthAndHeight();
-    this.updateStage(this.constants.securityTableFinalStage);
+    !this.state.displayAlertTable && this.updateStage(this.constants.securityTableFinalStage);
   }
 
-  private fetchDataForAlertTable() {
+  private fetchDataForAlertTable(isInitialFetch: boolean) {
     const securityList = [];
     this.state.alertTableAlertList.forEach((eachAlert) => {
       const targetSecurityId = eachAlert.data.security.data.securityID;
       if (!securityList.includes(targetSecurityId)) {
         securityList.push(targetSecurityId);
-      } else {
-        console.log('test, this already exist', targetSecurityId, securityList);
       }
     });
     if (securityList.length > 0) {
@@ -546,6 +567,13 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolios, { req: 'POST' }, payload, false, false).pipe(
         first(),
         tap((serverReturn) => {
+          if (this.state.displayAlertTable) {
+            if (!isInitialFetch) {
+              this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
+            } else {
+              this.updateStage(0);
+            }
+          }
           this.loadDataForAlertTable(serverReturn);
         }),
         catchError(err => {
@@ -556,9 +584,9 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
           this.state.fetchResult.fetchTableDataFailed = true;
           this.state.fetchResult.fetchTableDataFailedError = err.message;
           this.state.fetchResult.mainTable.prinstineRowList = [];
-          this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList();
+          this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
           this.state.fetchResult.alertTable.prinstineRowList = [];
-          this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList();
+          this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
           return of('error');
         })
       ).subscribe();
@@ -579,9 +607,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       this.onSelectSecurityForAlertConfig.bind(this)
     );
     this.calculateQuantComparerWidthAndHeight();
-    // this.updateStage(this.constants.securityTableFinalStage);
-    // TODO: need to think of a better solution for this, should just call update stage
-    this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList();
+    this.state.displayAlertTable && this.updateStage(this.constants.securityTableFinalStage);
+    // this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
   }
 
   private updateStage(stageNumber: number) {
@@ -592,21 +619,24 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         first(),
         tap(isInitialDataLoaded => {
           if (isInitialDataLoaded) {
-            const newFilteredList = this.filterPrinstineRowList();
+            const newFilteredList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
             this.state.fetchResult.mainTable.liveUpdatedRowList = this.processingService.returnDiff(this.state.table.dto, newFilteredList).newRowList;
           } else {
-            this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList();
+            this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
           }
+          // currently alert table does not support live update
+          this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
           this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
         })
       ).subscribe();
     }
   }
 
-  private filterPrinstineRowList(): Array<SecurityTableRowDTO> {
-    const targetTable = this.state.displayAlertTable ? this.state.fetchResult.alertTable : this.state.fetchResult.mainTable;
+  private filterPrinstineRowList(
+    targetPrinstineList: Array<SecurityTableRowDTO>
+  ): Array<SecurityTableRowDTO> {
     const filteredList: Array<SecurityTableRowDTO> = [];
-    targetTable.prinstineRowList.forEach((eachRow) => {
+    targetPrinstineList.forEach((eachRow) => {
       try {
         if (this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.name, this.state.filters.quickFilters.keyword)) {
           let portfolioIncludeFlag = this.filterByPortfolio(eachRow);

@@ -99,15 +99,17 @@ export class RestfulCommService {
   public logError(
     message: string
   ) {
-    const payload = {
-      message: `Error: ${message} - From ${this.user}`,
-      level: 'Error'
-    };
-    this.callAPI(this.apiMap.logError, {req: 'POST'}, payload).pipe(
-      first(),
-      catchError(err => {
-        return of('error');
-      })
-    ).subscribe();
+    if (this.endpoint === 'https://rpiadev01.rpia.ca:1225') {
+      const payload = {
+        message: `Error: ${message} - From ${this.user}`,
+        level: 'Error'
+      };
+      this.callAPI(this.apiMap.logError, {req: 'POST'}, payload).pipe(
+        first(),
+        catchError(err => {
+          return of('error');
+        })
+      ).subscribe();
+    }
   }
 }

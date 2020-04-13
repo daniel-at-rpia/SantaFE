@@ -147,7 +147,11 @@ export class DTOService {
           displayAsk: null
         },
         hasIndex: !isStencil && rawData.metrics ? !!rawData.metrics.isIndex : false,
-        hedgeFactor: !isStencil && !!rawData.firmPosition ? rawData.firmPosition.hedgeFactor : null
+        hedgeFactor: !isStencil && !!rawData.firmPosition ? rawData.firmPosition.hedgeFactor : null,
+        alert: {
+          alertTime: null,
+          alertTimeRaw: null
+        }
       },
       api: {
         onClickCard: null,
@@ -264,6 +268,16 @@ export class DTOService {
     block.positionNLFInMM = this.utility.parsePositionToMM(block.positionNLF, false);
     dto.data.cs01CadFirmInK = this.utility.parseNumberToThousands(dto.data.cs01CadFirm, false);
     dto.data.cs01LocalFirmInK = this.utility.parseNumberToThousands(dto.data.cs01LocalFirm, false);
+  }
+
+  public appendAlertInfoToSecurityDTO(
+    dto: DTOs.SecurityDTO,
+    targetAlert: DTOs.AlertDTO
+  ) {
+    dto.data.alert = {
+      alertTime: targetAlert.data.time,
+      alertTimeRaw: targetAlert.data.unixTimestamp
+    };
   }
 
   public formSecurityGroupObject(
@@ -684,7 +698,8 @@ export class DTOService {
         isDriverDependent: !!stub.isDriverDependent,
         pinned: stub.pinned,
         groupBelongs: stub.groupBelongs,
-        groupShow: !!stub.groupShow
+        groupShow: !!stub.groupShow,
+        alertOnly: !!stub.alertOnlyColumn
       },
       state: {
         isQuantVariant: !!stub.isForQuantComparer,
@@ -1029,6 +1044,7 @@ export class DTOService {
     rawData: BEAlertDTO
   ): DTOs.AlertDTO {
     const parsedTitleList = rawData.keyWord.split('|');
+    const momentTime = moment(rawData.timeStamp);
     const object: DTOs.AlertDTO = {
       data: {
         id: rawData.alertId,
@@ -1038,7 +1054,8 @@ export class DTOService {
         titleTop: parsedTitleList[0] || '',
         titleBottom: parsedTitleList[1] || '',
         message: rawData.message,
-        time: moment(rawData.timeStamp).format(`HH:mm`),
+        time: momentTime.format(`HH:mm`),
+        unixTimestamp: momentTime.unix(),
         titlePin: rawData.marketListType || null
       },
       api: {

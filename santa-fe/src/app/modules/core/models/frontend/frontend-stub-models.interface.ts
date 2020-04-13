@@ -89,6 +89,7 @@ export interface SecurityTableMetricStub {
   metricPackDeltaScope?: string;
   groupBelongs: string;
   groupShow?: boolean;
+  alertOnlyColumn?: boolean;
 }
 
 export interface TriCoreDriverConfigStub {

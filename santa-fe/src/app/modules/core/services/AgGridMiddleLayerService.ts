@@ -105,6 +105,9 @@ export class AgGridMiddleLayerService {
         enableRowGroup: false,
         hide: !isActiveByDefault
       };
+      if (eachHeader.data.key === 'alertTime') {
+        newAgColumn['sort'] = 'asc';
+      }
       this.loadAgGridHeadersComparator(eachHeader, newAgColumn);
       this.loadAgGridHeadersUILogics(eachHeader, newAgColumn);
       if (eachHeader.data.groupBelongs !== SECURITY_TABLE_HEADER_NO_GROUP) {
@@ -156,14 +159,14 @@ export class AgGridMiddleLayerService {
     location: number  // this is needed only for logging purpose
   ) {
     targetRows.forEach((eachRow) => {
-      const id = eachRow.data.security.data.securityID;
+      const id = eachRow.data.rowId;
       const targetNode = table.api.gridApi.getRowNode(id);
       if (!!targetNode) {
         const newAgRow = this.formAgGridRow(eachRow, table.data.allHeaders);
         targetNode.setData(newAgRow);
       } else {
-        this.restfulCommService.logError(`[AgGrid] Couldn't fine AgGrid Row for ${eachRow.data.security.data.securityID} (location - ${location})`);
-        console.error(`Couldn't fine AgGrid Row for ${eachRow.data.security.data.securityID}`, eachRow);
+        this.restfulCommService.logError(`[AgGrid] Couldn't fine AgGrid Row for ${eachRow.data.rowId} (location - ${location})`);
+        console.error(`Couldn't fine AgGrid Row for ${eachRow.data.rowId}`, eachRow);
       }
     });
   }

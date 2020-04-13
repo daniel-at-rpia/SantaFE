@@ -240,7 +240,7 @@ export class SantaTable implements OnInit, OnChanges {
           params.node.setExpanded(!params.node.expanded);
           if (!params.node.group) {
             const targetRow = this.tableData.data.rows.find((eachRow) => {
-              return !!eachRow.data.security && eachRow.data.security.data.securityID == params.node.data.id;
+              return eachRow.data.rowId == params.node.data.id;
             });
             if (!!targetRow) {
               try {

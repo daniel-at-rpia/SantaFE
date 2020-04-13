@@ -36,6 +36,7 @@ export const AGGRID_DETAIL_COLUMN_KEY = 'Quotes';
 export const SECURITY_TABLE_HEADER_NO_GROUP = 'NoGroup';
 export const SecurityTableMetricGroups = {
   bestQuote: 'Best Quote',
+  alert: 'Alert-related',
   mark: 'Mark',
   markDiscrepancies: 'Mark Discrepancies',
   position: 'Position (MM)',
@@ -44,7 +45,20 @@ export const SecurityTableMetricGroups = {
   securityInfo: 'Security Info',
   ownership: 'Ownership'
 };
-export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
+export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
+    key: 'alertTime',
+    label: 'Alert Time',
+    attrName: 'alertTime',
+    underlineAttrName: 'alertTimeRaw',
+    blockAttrName: 'alert',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isDataTypeText: true,
+    active: true,
+    pinned: true,
+    groupBelongs: SecurityTableMetricGroups.alert,
+    groupShow: true,
+    alertOnlyColumn: true
+  },
   {
     key: 'securityCard',
     label: 'Security',
