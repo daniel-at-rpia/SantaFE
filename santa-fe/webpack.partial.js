@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const version = "1.3.3-all-porfolio-columns";
+const version = "1.3.3-config-read-bugfix";
 
 module.exports = {
   output: {
