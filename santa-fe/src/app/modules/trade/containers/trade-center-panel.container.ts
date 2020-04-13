@@ -535,6 +535,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     if (targetAttribute === 'portfolios' || targetAttribute === 'owner' || targetAttribute === 'strategyList') {
       // bypass portfolio filter since it is handled via this.filterByPortfolio() and this.filterByOwner() and this.filterByStrategy()
       return true;
+    } else if (targetAttribute === 'seniority'){
+      return this.filterBySeniority(targetRow);
     } else {
       filterBy.forEach((eachValue) => {
         if (targetRow.data.security.data[targetAttribute] === eachValue) {
@@ -586,6 +588,18 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       });
     } else {
       includeFlag = true;
+    }
+    return includeFlag;
+  }
+
+  private filterBySeniority(row: SecurityTableRowDTO): boolean {
+    let includeFlag = false;
+    const filterObj = this.state.filters.securityFilters.filter(f => f.targetAttribute === 'seniority')[0];
+    if (filterObj) {
+      const includes = filterObj.filterBy.map(v => v.toLowerCase());
+      const {seniority} = row.data.security.data;
+      const seniorityName = seniority.split(' - ')[1];
+      includeFlag = includes.indexOf(seniorityName.toLowerCase()) !== -1;
     }
     return includeFlag;
   }

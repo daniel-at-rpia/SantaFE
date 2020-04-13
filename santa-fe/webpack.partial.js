@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const version = "1.3.3-config-read-bugfix";
+const version = "1.3.6";
 
 module.exports = {
   output: {

@@ -86,7 +86,8 @@ export class SantaTable implements OnInit, OnChanges {
 
   agGridConfig = {
     defaultColDef: {
-      sortingOrder: ["desc", "asc", null]
+      sortingOrder: ["desc", "asc", null],
+      sortable: true
     },
     autoGroupColumnDef: {
       sort:'desc'
@@ -201,7 +202,7 @@ export class SantaTable implements OnInit, OnChanges {
       // console.log('test, clicked on row', targetCard.state.isSelected, storedSelectedCard, storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID);
       // IMPORTANT: If this logic ever needs to be modified, please test all scenarios on Daniel's notebook's page 10
       if (
-        (!targetCard.state.isSelected && !storedSelectedCard) || 
+        (!targetCard.state.isSelected && !storedSelectedCard) ||
         (targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID) ||
         (!targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID !== targetCard.data.securityID)
       ) {
@@ -365,7 +366,7 @@ export class SantaTable implements OnInit, OnChanges {
     params?: any  // this is a AgGridRowParams, can't enforce type checking here because agGrid's native function redrawRows() would throw an compliation error
   ){
     if (!!targetRow) {
-      let bestBid: number; 
+      let bestBid: number;
       let bestOffer: number;
       let driverType: string;
       if (!!targetRow.data.cells[0] && !!targetRow.data.cells[0].data.quantComparerDTO) {
@@ -377,7 +378,7 @@ export class SantaTable implements OnInit, OnChanges {
         bestOffer = 0;
         driverType = '';
       }
-      
+
       targetRow.data.quotes = this.dtoService.formSecurityTableRowObject(targetRow.data.security).data.quotes;
       const payload: PayloadGetAllQuotes = {
         "identifier": targetRow.data.security.data.securityID
@@ -595,7 +596,7 @@ export class SantaTable implements OnInit, OnChanges {
     const primaryList = serverReturn[0];
     targetRow.state.isCDSOffTheRun = serverReturn.length > 1;
     primaryList.forEach((eachRawQuote) => {
-      const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, bestBid, bestOffer, driverType, targetRow.data.security);
+      const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, bestBid, bestOffer, driverType, targetRow.data.security, targetRow);
       newQuote.state.isCDSVariant = targetRow.state.isCDSVariant;
       if (newQuote.state.hasAsk || newQuote.state.hasBid) {
         targetRow.data.quotes.primaryQuotes.push(newQuote);
@@ -604,7 +605,7 @@ export class SantaTable implements OnInit, OnChanges {
     if (targetRow.state.isCDSOffTheRun) {
       const secondaryList = serverReturn[1];
       secondaryList.forEach((eachRawQuote) => {
-        const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, bestBid, bestOffer, driverType, targetRow.data.security);
+        const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, bestBid, bestOffer, driverType, targetRow.data.security, targetRow);
         newQuote.state.isCDSVariant = targetRow.state.isCDSVariant;
         if (newQuote.state.hasAsk || newQuote.state.hasBid) {
           targetRow.data.quotes.secondaryQuotes.push(newQuote);

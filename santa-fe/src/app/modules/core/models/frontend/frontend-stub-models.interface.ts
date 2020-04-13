@@ -60,7 +60,7 @@ export interface SecurityDefinitionMapStub {
 export interface SecurityMetricOptionStub {
   label: string;
   backendDtoAttrName: string;
-  deltaOptions: Array<string>
+  deltaOptions: Array<string>;
 }
 
 export interface SecurityTableQuoteMetric {
@@ -78,6 +78,7 @@ export interface SecurityTableMetricStub {
   isAttrChangable?: boolean;
   readyStage: number;
   active: boolean;
+  pinned?: boolean;
   blockAttrName?: string;
   isFrontEndMetric?: boolean;
   isForQuantComparer?: boolean;

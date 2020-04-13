@@ -53,6 +53,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     pureText: true,
     active: true,
+    pinned: true,
     groupBelongs: SECURITY_TABLE_HEADER_NO_GROUP
   },{
     key: 'bestQuote',
@@ -113,6 +114,26 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: true,
     groupBelongs: SecurityTableMetricGroups.mark,
     groupShow: true
+  },{
+    key: 'price',
+    label: 'Price',
+    attrName: 'price',
+    underlineAttrName: 'priceRaw',
+    blockAttrName: 'mark',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isDriverDependent: true,
+    active: true,
+    groupBelongs: SecurityTableMetricGroups.mark
+  },{
+    key: 'spread',
+    label: 'Spread',
+    attrName: 'spread',
+    underlineAttrName: 'spreadRaw',
+    blockAttrName: 'mark',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isDriverDependent: true,
+    active: true,
+    groupBelongs: SecurityTableMetricGroups.mark
   },{
     key: 'markDriver',
     label: 'Driver',
@@ -601,12 +622,12 @@ export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
     isNonCDS: true
   },{
     labelList: ['B YTW', 'A YTW'],
-    size: 2,
+    size: 3,
     textOnly: true,
     isNonCDS: true
   },{
     labelList: ['B Sprd', 'A Sprd'],
-    size: 2,
+    size: 3,
     textOnly: true,
     isNonCDS: false
   },{

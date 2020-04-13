@@ -45,7 +45,7 @@
     import {
       QuoteMetricList
     } from 'Core/constants/securityTableConstants.constant';
-  // 
+  //
 
 @Injectable()
 export class DTOService {
@@ -110,7 +110,11 @@ export class DTOService {
           markDisLiquidation: null,
           markDisLiquidationRaw: null,
           markDisIndex: null,
-          markDisIndexRaw: null
+          markDisIndexRaw: null,
+          priceRaw: !isStencil && !!rawData.firmPosition && !!rawData.firmPosition.mark ? rawData.firmPosition.mark.price : null,
+          spreadRaw: !isStencil && !!rawData.firmPosition && !!rawData.firmPosition.mark ? rawData.firmPosition.mark.spread : null,
+          price: !isStencil && !!rawData.firmPosition && !!rawData.firmPosition.mark && rawData.firmPosition.mark.price ? rawData.firmPosition.mark.price.toFixed(2) : null,
+          spread: !isStencil && !!rawData.firmPosition && !!rawData.firmPosition.mark && rawData.firmPosition.mark.spread ? rawData.firmPosition.mark.spread.toFixed(0) : null,
         },
         portfolios: [],
         strategyFirm: '',
@@ -304,7 +308,7 @@ export class DTOService {
           name: this.utility.generateUUID(),
           colorScheme: SecurityGroupSeniorityColorScheme,
           chart: null,
-          rawSupportingData: {} 
+          rawSupportingData: {}
           // rawSupportingData: this.utility.retrieveRawSupportingDataForRightPie(rawData)
         }
       }
@@ -681,6 +685,7 @@ export class DTOService {
         frontendMetric: !!stub.isFrontEndMetric,
         isDataTypeText: !!stub.isDataTypeText,
         isDriverDependent: !!stub.isDriverDependent,
+        pinned: stub.pinned,
         groupBelongs: stub.groupBelongs,
         groupShow: !!stub.groupShow
       },
@@ -770,8 +775,14 @@ export class DTOService {
     bestBidNum: number,
     bestAskNum: number,
     filteredMetricType: string,
-    targetSecurity: DTOs.SecurityDTO
+    targetSecurity: DTOs.SecurityDTO,
+    targetRow: DTOs.SecurityTableRowDTO
   ): DTOs.SecurityQuoteDTO {
+    const {axe} = targetRow.data.bestQuotes;
+
+    const bestAxeBidNum = axe[TriCoreDriverConfig[filteredMetricType].backendTargetQuoteAttr].data.bid.number;
+    const bestAxeAskNum = axe[TriCoreDriverConfig[filteredMetricType].backendTargetQuoteAttr].data.offer.number;
+
     const hasBid = !isStencil ? (!!rawData.bidVenues && rawData.bidVenues.length > 0) : true;
     const hasAsk = !isStencil ? (!!rawData.askVenues && rawData.askVenues.length > 0) : true;
     const bidBenchmark = !isStencil ? rawData.benchmarkName : 'T 0.5 01/01/2020';
@@ -835,6 +846,8 @@ export class DTOService {
         diffBenchmark: bidBenchmark !== askBenchmark && hasBid && hasAsk,
         isBestOffer: false,
         isBestBid: false,
+        isBestAxeOffer: false,
+        isBestAxeBid: false,
         filteredByPrice:  filteredMetricType === TriCoreDriverConfig.Price.label,
         filteredBySpread:  filteredMetricType === TriCoreDriverConfig.Spread.label,
         filteredByYield: filteredMetricType === TriCoreDriverConfig.Yield.label,
@@ -865,7 +878,9 @@ export class DTOService {
         time: this.utility.isQuoteTimeValid(rawData.askTime) && hasAsk ? new Date(rawData.askTime).toTimeString().slice(0, 5) : ''
       };
       object.state.isBestBid = object.data.bid.tspread == bestBidNum || object.data.bid.price == bestBidNum || object.data.bid.yield == bestBidNum;
-      object.state.isBestOffer =object.data.ask.tspread == bestAskNum || object.data.ask.price == bestAskNum || object.data.ask.yield == bestAskNum;
+      object.state.isBestOffer = object.data.ask.tspread == bestAskNum || object.data.ask.price == bestAskNum || object.data.ask.yield == bestAskNum;
+      object.state.isBestAxeBid = bestAxeBidNum && (object.data.bid.tspread == bestAxeBidNum || object.data.bid.price == bestAxeBidNum || object.data.bid.yield == bestAxeBidNum);
+      object.state.isBestAxeOffer = bestAxeAskNum && (object.data.ask.tspread == bestAxeAskNum || object.data.ask.price == bestAxeAskNum || object.data.ask.yield == bestAxeAskNum);
       object.state.isBidDownVoted = rawData.bidQuoteStatus < 0;
       object.state.isAskDownVoted = rawData.askQuoteStatus < 0;
     }
@@ -1014,25 +1029,18 @@ export class DTOService {
   public formAlertObject(
     rawData: BEAlertDTO
   ): DTOs.AlertDTO {
-    const targetSecurity = this.formSecurityCardObject(
-      rawData.security.securityIdentifier || null,
-      rawData.security,
-      false
-    );
-    targetSecurity.state.isInteractionDisabled = true;
-    targetSecurity.state.isMultiLineVariant = true;
-    targetSecurity.state.isWidthFlexible = true;
     const parsedTitleList = rawData.keyWord.split('|');
     const object: DTOs.AlertDTO = {
       data: {
         id: rawData.alertId,
         type: this.utility.mapAlertType(rawData.type),
         subType: this.utility.mapAlertSubType(rawData.subType),
-        security: targetSecurity,
+        security: null,
         titleTop: parsedTitleList[0] || '',
         titleBottom: parsedTitleList[1] || '',
         message: rawData.message,
-        time: moment(rawData.timeStamp).format(`HH:mm`)
+        time: moment(rawData.timeStamp).format(`HH:mm`),
+        titlePin: rawData.marketListType || null
       },
       api: {
         onMouseEnterAlert: null,
@@ -1043,8 +1051,21 @@ export class DTOService {
         isSlidedOut: false,
         isRead: false,
         isCountdownFinished: true,
-        willBeRemoved: false
+        willBeRemoved: false,
+        hasSecurity: false,
+        hasTitlePin: !!rawData.marketListType
       }
+    }
+    if (!!rawData.security) {
+      object.data.security = this.formSecurityCardObject(
+        rawData.security.securityIdentifier || null,
+        rawData.security,
+        false
+      );
+      object.data.security.state.isInteractionDisabled = true;
+      object.data.security.state.isMultiLineVariant = true;
+      object.data.security.state.isWidthFlexible = true;
+      object.state.hasSecurity = true;
     }
     return object;
   }
