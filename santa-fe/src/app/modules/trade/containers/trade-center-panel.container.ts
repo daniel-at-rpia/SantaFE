@@ -468,6 +468,12 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private fetchAllData(isInitialFetch: boolean) {
+    this.fetchDataForMainTable(isInitialFetch);
+    // because alert panel's initial fetch happens after center panel loads the main table, so alert table always comes from the 30 second update
+    this.fetchDataForAlertTable();
+  }
+
+  private fetchDataForMainTable(isInitialFetch: boolean) {
     const payload: PayloadGetTradeFullData = {
       maxNumberOfSecurities: 2000,
       groupIdentifier: {},
@@ -486,7 +492,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         } else {
           this.updateStage(0);
         }
-        this.loadAllData(serverReturn);
+        this.loadDataForAlertTable(serverReturn);
       }),
       catchError(err => {
         this.restfulCommService.logError(`Get portfolios failed`);
@@ -505,7 +511,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     ).subscribe();
   }
 
-  private loadAllData(serverReturn: BEFetchAllTradeDataReturn) {
+  private loadDataForAlertTable(serverReturn: BEFetchAllTradeDataReturn) {
     this.state.fetchResult.mainTable.prinstineRowList = [];  // flush out the stencils
     this.state.fetchResult.mainTable.prinstineRowList = this.processingService.loadFinalStageData(
       this.state.table.dto.data.headers,
@@ -517,6 +523,29 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     );
     this.calculateQuantComparerWidthAndHeight();
     this.updateStage(this.constants.securityTableFinalStage);
+  }
+
+  private fetchDataForAlertTable() {
+    const securityList = [];
+    this.state.alertTableAlertList.forEach((eachAlert) => {
+      const targetSecurityId = eachAlert.data.security.data.securityID;
+      if (!securityList.includes(targetSecurityId)) {
+        securityList.push(targetSecurityId);
+      } else {
+        console.log('test, this already exist', targetSecurityId, securityList);
+      }
+    });
+    if (securityList.length > 0) {
+      const payload: PayloadGetTradeFullData = {
+        maxNumberOfSecurities: 2000,
+        groupIdentifier: {},
+        groupFilters: {
+          SecurityIdentifier: []
+        }
+      };
+    } else {
+      console.log('alert list is 0, skip loading alert table');
+    }
   }
 
   private updateStage(stageNumber: number) {
