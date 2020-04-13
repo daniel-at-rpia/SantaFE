@@ -111,6 +111,8 @@ export class DTOService {
           markDisLiquidationRaw: null,
           markDisIndex: null,
           markDisIndexRaw: null,
+          priceRaw: !isStencil && !!rawData.firmPosition && !!rawData.firmPosition.mark ? rawData.firmPosition.mark.price : null,
+          spreadRaw: !isStencil && !!rawData.firmPosition && !!rawData.firmPosition.mark ? rawData.firmPosition.mark.spread : null,
           price: !isStencil && !!rawData.firmPosition && !!rawData.firmPosition.mark ? rawData.firmPosition.mark.price.toFixed(2) : null,
           spread: !isStencil && !!rawData.firmPosition && !!rawData.firmPosition.mark ? rawData.firmPosition.mark.spread.toFixed(0) : null,
         },

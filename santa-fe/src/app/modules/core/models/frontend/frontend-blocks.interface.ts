@@ -49,7 +49,9 @@ export interface SecurityMarkBlock {
   markDisIndex: string;
   markDisIndexRaw: number;
   price: string;
+  priceRaw: number;
   spread: string;
+  spreadRaw: number;
 }
 
 export interface SecurityGroupMetricBlock {

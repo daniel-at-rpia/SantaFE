@@ -220,7 +220,6 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
             "value":62,
             "price": 72,
             "spread": 73
-
           },
           "primaryPmName":"DJ",
           "backupPmName":"PM",
