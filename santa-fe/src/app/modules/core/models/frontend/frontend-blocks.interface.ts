@@ -48,6 +48,8 @@ export interface SecurityMarkBlock {
   markDisLiquidationRaw: number;
   markDisIndex: string;
   markDisIndexRaw: number;
+  price: string;
+  spread: string;
 }
 
 export interface SecurityGroupMetricBlock {
@@ -180,7 +182,7 @@ export interface AgGridColumn {
 }
 
 export interface ObligorChartCategoryBlock {
-  data: { 
+  data: {
     name: string;
     color: string;
     obligorCategoryDataItemDTO: Array<ObligorCategoryDataItemBlock>;
