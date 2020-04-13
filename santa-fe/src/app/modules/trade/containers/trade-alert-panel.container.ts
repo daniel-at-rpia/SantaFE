@@ -442,7 +442,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     if (!!rawGroupConfig && !!rawGroupConfig.groupFilters) {
       if (rawGroupConfig.groupFilters.SecurityIdentifier && rawGroupConfig.groupFilters.SecurityIdentifier.length > 0) {
         this.populateConfigurationFromSecurityGroup(rawGroupConfig);
-      } else if (rawGroupConfig.groupFilters.Owner && rawGroupConfig.groupFilters.Owner.length > 0) {
+      } else if (rawGroupConfig.groupFilters.Owner || rawGroupConfig.groupFilters.PrimaryPmName || rawGroupConfig.groupFilters.ResearchName) {
         this.populateConfigurationFromMyGroup(rawGroupConfig);
       }
     }
