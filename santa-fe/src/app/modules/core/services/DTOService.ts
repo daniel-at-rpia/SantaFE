@@ -681,7 +681,6 @@ export class DTOService {
         frontendMetric: !!stub.isFrontEndMetric,
         isDataTypeText: !!stub.isDataTypeText,
         isDriverDependent: !!stub.isDriverDependent,
-        pinned: stub.pinned,
         groupBelongs: stub.groupBelongs,
         groupShow: !!stub.groupShow
       },
