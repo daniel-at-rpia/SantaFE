@@ -118,6 +118,11 @@ export interface QuantitativeEntryStyleBlock {
   rightSpaceWidth: number;
 }
 
+// export interface AGGridColumnDefinitionGroup {
+  // headerName: string;
+  // children: Array<>
+// }
+
 export interface AgGridColumnDefinition {
   headerName: string;
   field: string;
@@ -141,6 +146,8 @@ export interface AgGridColumnDefinition {
     maxValue: number;
     suppressFilterButton: boolean
   }
+  children?: Array<AgGridColumnDefinition>;
+  columnGroupShow?: string;
 }
 
 export interface AgGridRowNode {

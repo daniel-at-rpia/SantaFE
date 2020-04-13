@@ -31,7 +31,9 @@
       AGGRID_CELL_CLASS,
       AGGRID_DETAIL_COLUMN_KEY,
       AGGRID_DETAIL_COLUMN_WIDTH,
-      AGGRID_SIMPLE_TEXT_COLUMN_WIDTH
+      AGGRID_SIMPLE_TEXT_COLUMN_WIDTH,
+      SecurityTableMetricGroups,
+      SECURITY_TABLE_HEADER_NO_GROUP
     } from 'Core/constants/securityTableConstants.constant';
   //
 
@@ -53,6 +55,8 @@ export class AgGridMiddleLayerService {
     table: SecurityTableDTO
   ): Array<AgGridColumnDefinition> {
     const list = [];
+    const groupList = [];
+    // the detail column is for triggering the All Quotes table
     const detailColumn: AgGridColumnDefinition = {
       headerName: AGGRID_DETAIL_COLUMN_KEY,
       field: AGGRID_DETAIL_COLUMN_KEY,
@@ -68,6 +72,21 @@ export class AgGridMiddleLayerService {
       width: AGGRID_DETAIL_COLUMN_WIDTH
     };
     list.push(detailColumn);
+    for (const eachGroupKey in SecurityTableMetricGroups) {
+      // we are treating the groups as definitions as well for the sake of simplicity, since agGrid allows that
+      const eachGroup: AgGridColumnDefinition = {
+        headerName: SecurityTableMetricGroups[eachGroupKey],
+        field: eachGroupKey,
+        headerClass: `${AGGRID_HEADER_CLASS} ag-numeric-header`,
+        cellClass: `${AGGRID_CELL_CLASS}`,
+        enableValue: false,
+        hide: false,
+        enableRowGroup: false,
+        enablePivot: false,
+        children: []
+      };
+      groupList.push(eachGroup);
+    }
     table.data.allHeaders.forEach((eachHeader) => {
       const isActiveByDefault = table.data.headers.find((eachActiveHeader) => {
         return eachActiveHeader.data.key === eachHeader.data.key;
@@ -86,8 +105,25 @@ export class AgGridMiddleLayerService {
       };
       this.loadAgGridHeadersComparator(eachHeader, newAgColumn);
       this.loadAgGridHeadersUILogics(eachHeader, newAgColumn);
-      list.push(newAgColumn);
-    })
+      if (eachHeader.data.groupBelongs !== SECURITY_TABLE_HEADER_NO_GROUP) {
+        const targetGroup = groupList.find((eachGroup) => {
+          return eachGroup.headerName === eachHeader.data.groupBelongs;
+        });
+        if(!!targetGroup) {
+          // open means only show it when the group is opened, close means show it all the time, even when the group is closed
+          newAgColumn.columnGroupShow = eachHeader.data.groupShow ? 'closed' : 'open';
+          targetGroup.children.push(newAgColumn);
+          const alreadyInList = list.findIndex((eachDefinition) => {
+            return eachDefinition.field === targetGroup.field;
+          });
+          if (alreadyInList < 0) {
+            list.push(targetGroup);
+          }
+        }
+      } else {
+        list.push(newAgColumn);
+      }
+    });
     table.api.gridApi.setColumnDefs(list);
     return list;
   }
