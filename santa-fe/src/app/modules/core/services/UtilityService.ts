@@ -586,9 +586,9 @@ export class UtilityService {
 
   // trade specific
 
-    public parsePositionToMM(position: number, hasUnitSuffix: boolean): string {
+    public parsePositionToMM(position: number, hasUnitSuffix: boolean, enableNull?: boolean): string {
       const value = this.round(position/1000000, 2).toFixed(2);
-      if (value === 0) {
+      if (!!enableNull && position === 0) {
         return null;
       } else {
         return !!hasUnitSuffix ? `${value}MM` : `${value}`;
@@ -749,7 +749,7 @@ export class UtilityService {
               markBlock.markDisBidRaw = -markBlock.markDisBidRaw;
             }
             markBlock.markDisBid = this.parseTriCoreDriverNumber(markBlock.markDisBidRaw, targetDriver, targetSecurity, true) as string;
-            if ((!this.isCDS(false, targetSecurity) && targetSecurity.data.positionFirm > 0) || (this.isCDS(false, targetSecurity) && targetSecurity.data.positionFirm < 0)) {
+            if ((!this.isCDS(false, targetSecurity) && targetSecurity.data.position.positionFirm > 0) || (this.isCDS(false, targetSecurity) && targetSecurity.data.position.positionFirm < 0)) {
               markBlock.markDisLiquidationRaw = markBlock.markDisBidRaw;
               markBlock.markDisLiquidation = markBlock.markDisBid;
             }
@@ -763,7 +763,7 @@ export class UtilityService {
               markBlock.markDisAskRaw = -markBlock.markDisAskRaw;
             }
             markBlock.markDisAsk = this.parseTriCoreDriverNumber(markBlock.markDisAskRaw, targetDriver, targetSecurity, true) as string;
-            if ((!this.isCDS(false, targetSecurity) && targetSecurity.data.positionFirm < 0) || (this.isCDS(false, targetSecurity) && targetSecurity.data.positionFirm > 0)) {
+            if ((!this.isCDS(false, targetSecurity) && targetSecurity.data.position.positionFirm < 0) || (this.isCDS(false, targetSecurity) && targetSecurity.data.position.positionFirm > 0)) {
               markBlock.markDisLiquidationRaw = markBlock.markDisAskRaw;
               markBlock.markDisLiquidation = markBlock.markDisAsk;
             }

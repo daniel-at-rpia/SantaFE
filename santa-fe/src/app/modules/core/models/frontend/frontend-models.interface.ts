@@ -56,14 +56,30 @@ export interface SecurityDTO extends BasicDTOStructure {
     portfolios: Array<SecurityPortfolioBlock>;
     strategyFirm: string;
     strategyList: Array<string>;
-    positionCurrent: number;
-    positionCurrentInMM: string;
-    positionFirm: number;
-    positionFirmInMM: string;
-    positionHF: number;
-    positionHFInMM: string;
-    positionNLF: number;
-    positionNLFInMM: string;
+    position: {
+      positionCurrent: number;
+      positionCurrentInMM: string;
+      positionFirm: number;
+      positionFirmInMM: string;
+      positionHF: number;
+      positionHFInMM: string;
+      positionNLF: number;
+      positionNLFInMM: string;
+      positionDOF: number;
+      positionDOFInMM: string;
+      positionSOF: number;
+      positionSOFInMM: string;
+      positionSTIP: number;
+      positionSTIPInMM: string;
+      positionFIP: number;
+      positionFIPInMM: string;
+      positionCIP: number;
+      positionCIPInMM: string;
+      positionAGB: number;
+      positionAGBInMM: string;
+      positionBBB: number;
+      positionBBBInMM: string;
+    }
     metricPack: SecurityGroupMetricPackBlock;
     bestQuote: {
       bid: number;

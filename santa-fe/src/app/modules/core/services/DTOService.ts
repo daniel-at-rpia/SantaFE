@@ -115,14 +115,30 @@ export class DTOService {
         portfolios: [],
         strategyFirm: '',
         strategyList: [],
-        positionCurrent: 0,
-        positionCurrentInMM: 'n/a',
-        positionFirm: 0,
-        positionFirmInMM: 'n/a',
-        positionHF: 0,
-        positionHFInMM: 'n/a',
-        positionNLF: 0,
-        positionNLFInMM: 'n/a',
+        position: {
+          positionCurrent: 0,
+          positionCurrentInMM: 'n/a',
+          positionFirm: 0,
+          positionFirmInMM: 'n/a',
+          positionHF: 0,
+          positionHFInMM: 'n/a',
+          positionNLF: 0,
+          positionNLFInMM: 'n/a',
+          positionDOF: 0,
+          positionDOFInMM: null,
+          positionSOF: 0,
+          positionSOFInMM: null,
+          positionSTIP: 0,
+          positionSTIPInMM: null,
+          positionFIP: 0,
+          positionFIPInMM: null,
+          positionCIP: 0,
+          positionCIPInMM: null,
+          positionAGB: 0,
+          positionAGBInMM: null,
+          positionBBB: 0,
+          positionBBBInMM: null
+        },
         metricPack: this.utility.packMetricData(rawData),
         bestQuote: {
           bid: null,
@@ -188,19 +204,42 @@ export class DTOService {
   public appendPortfolioOverviewInfoForSecurityDTO(
     dto: DTOs.SecurityDTO
   ) {
+    const block = dto.data.position;
     dto.data.portfolios.forEach((eachPortfolioBlock) => {
-      dto.data.positionFirm = dto.data.positionFirm + eachPortfolioBlock.quantity;
-      if (eachPortfolioBlock.portfolioName === 'DOF' || eachPortfolioBlock.portfolioName === 'SOF') {
-        dto.data.positionHF = dto.data.positionHF + eachPortfolioBlock.quantity;
-      } else if (
-        eachPortfolioBlock.portfolioName === 'STIP' || 
-        eachPortfolioBlock.portfolioName === 'FIP' || 
-        eachPortfolioBlock.portfolioName === 'CIP' || 
-        eachPortfolioBlock.portfolioName === 'AGB' || 
-        eachPortfolioBlock.portfolioName === 'BBB'
-      ) {
-        dto.data.positionNLF = dto.data.positionNLF + eachPortfolioBlock.quantity;
+      switch (eachPortfolioBlock.portfolioName) {
+        case "DOF":
+          block.positionDOF = block.positionDOF + eachPortfolioBlock.quantity;
+          block.positionHF = block.positionHF + eachPortfolioBlock.quantity;
+          break;
+        case "SOF":
+          block.positionSOF = block.positionSOF + eachPortfolioBlock.quantity;
+          block.positionHF = block.positionHF + eachPortfolioBlock.quantity;
+          break;
+        case "STIP":
+          block.positionSTIP = block.positionSTIP + eachPortfolioBlock.quantity;
+          block.positionNLF = block.positionNLF + eachPortfolioBlock.quantity;
+          break;
+        case "FIP":
+          block.positionFIP = block.positionFIP + eachPortfolioBlock.quantity;
+          block.positionNLF = block.positionNLF + eachPortfolioBlock.quantity;
+          break;
+        case "CIP":
+          block.positionCIP = block.positionCIP + eachPortfolioBlock.quantity;
+          block.positionNLF = block.positionNLF + eachPortfolioBlock.quantity;
+          break;
+        case "AGB":
+          block.positionAGB = block.positionAGB + eachPortfolioBlock.quantity;
+          block.positionNLF = block.positionNLF + eachPortfolioBlock.quantity;
+          break;
+        case "BBB":
+          block.positionBBB = block.positionBBB + eachPortfolioBlock.quantity;
+          block.positionNLF = block.positionNLF + eachPortfolioBlock.quantity;
+          break;
+        default:
+          // code...
+          break;
       }
+      block.positionFirm = block.positionFirm + eachPortfolioBlock.quantity;
       if (eachPortfolioBlock.strategy.length > 0 && dto.data.strategyList.indexOf(eachPortfolioBlock.strategy) < 0) {
         dto.data.strategyList.push(eachPortfolioBlock.strategy);
         if (dto.data.strategyList.length === 1) {
@@ -213,9 +252,16 @@ export class DTOService {
       dto.data.cs01CadFirm = dto.data.cs01CadFirm + eachPortfolioBlock.cs01Cad;
       dto.data.cs01LocalFirm = dto.data.cs01LocalFirm + eachPortfolioBlock.cs01Local;
     });
-    dto.data.positionFirmInMM = this.utility.parsePositionToMM(dto.data.positionFirm, false);
-    dto.data.positionHFInMM = this.utility.parsePositionToMM(dto.data.positionHF, false);
-    dto.data.positionNLFInMM = this.utility.parsePositionToMM(dto.data.positionNLF, false);
+    block.positionDOFInMM = this.utility.parsePositionToMM(block.positionDOF, false, true);
+    block.positionSOFInMM = this.utility.parsePositionToMM(block.positionSOF, false, true);
+    block.positionSTIPInMM = this.utility.parsePositionToMM(block.positionSTIP, false, true);
+    block.positionFIPInMM = this.utility.parsePositionToMM(block.positionFIP, false, true);
+    block.positionCIPInMM = this.utility.parsePositionToMM(block.positionCIP, false, true);
+    block.positionAGBInMM = this.utility.parsePositionToMM(block.positionAGB, false, true);
+    block.positionBBBInMM = this.utility.parsePositionToMM(block.positionBBB, false, true);
+    block.positionFirmInMM = this.utility.parsePositionToMM(block.positionFirm, false);
+    block.positionHFInMM = this.utility.parsePositionToMM(block.positionHF, false);
+    block.positionNLFInMM = this.utility.parsePositionToMM(block.positionNLF, false);
     dto.data.cs01CadFirmInK = this.utility.parseNumberToThousands(dto.data.cs01CadFirm, false);
     dto.data.cs01LocalFirmInK = this.utility.parseNumberToThousands(dto.data.cs01LocalFirm, false);
   }
