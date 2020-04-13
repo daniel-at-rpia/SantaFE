@@ -492,7 +492,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         } else {
           this.updateStage(0);
         }
-        this.loadDataForAlertTable(serverReturn);
+        this.loadDataForMainTable(serverReturn);
       }),
       catchError(err => {
         this.restfulCommService.logError(`Get portfolios failed`);
@@ -511,7 +511,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     ).subscribe();
   }
 
-  private loadDataForAlertTable(serverReturn: BEFetchAllTradeDataReturn) {
+  private loadDataForMainTable(serverReturn: BEFetchAllTradeDataReturn) {
     this.state.fetchResult.mainTable.prinstineRowList = [];  // flush out the stencils
     this.state.fetchResult.mainTable.prinstineRowList = this.processingService.loadFinalStageData(
       this.state.table.dto.data.headers,
@@ -540,12 +540,48 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         maxNumberOfSecurities: 2000,
         groupIdentifier: {},
         groupFilters: {
-          SecurityIdentifier: []
+          SecurityIdentifier: securityList
         }
       };
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolios, { req: 'POST' }, payload, false, false).pipe(
+        first(),
+        tap((serverReturn) => {
+          this.loadDataForAlertTable(serverReturn);
+        }),
+        catchError(err => {
+          this.restfulCommService.logError(`Get alert table failed`);
+          this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
+          this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
+          console.error('error', err);
+          this.state.fetchResult.fetchTableDataFailed = true;
+          this.state.fetchResult.fetchTableDataFailedError = err.message;
+          this.state.fetchResult.mainTable.prinstineRowList = [];
+          this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList();
+          this.state.fetchResult.alertTable.prinstineRowList = [];
+          this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList();
+          return of('error');
+        })
+      ).subscribe();
     } else {
       console.log('alert list is 0, skip loading alert table');
     }
+  }
+
+  private loadDataForAlertTable(serverReturn: BEFetchAllTradeDataReturn){
+    this.state.fetchResult.alertTable.prinstineRowList = [];  // flush out the stencils
+    this.state.fetchResult.alertTable.prinstineRowList = this.processingService.loadFinalStageDataForAlertTable(
+      this.state.alertTableAlertList,
+      this.state.table.dto.data.headers,
+      this.state.filters.quickFilters.driverType,
+      serverReturn,
+      this.onSelectSecurityForAnalysis.bind(this),
+      this.onClickOpenSecurityInBloomberg.bind(this),
+      this.onSelectSecurityForAlertConfig.bind(this)
+    );
+    this.calculateQuantComparerWidthAndHeight();
+    // this.updateStage(this.constants.securityTableFinalStage);
+    // TODO: need to think of a better solution for this, should just call update stage
+    this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList();
   }
 
   private updateStage(stageNumber: number) {

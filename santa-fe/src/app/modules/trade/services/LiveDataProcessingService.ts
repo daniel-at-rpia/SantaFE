@@ -9,7 +9,8 @@
       SecurityTableHeaderDTO,
       SecurityTableRowDTO,
       QuantComparerDTO,
-      SearchShortcutDTO
+      SearchShortcutDTO,
+      AlertDTO
     } from 'FEModels/frontend-models.interface';
     import {
       LiveDataDiffingResult,
@@ -46,15 +47,9 @@ export class LiveDataProcessingService {
     sendToAlertConfigCallback: (card: SecurityDTO) => void
   ): Array<SecurityTableRowDTO> {
     const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
-    const prinstineRowList: Array<SecurityTableRowDTO> = [];  // flush out the stencils
+    const prinstineRowList: Array<SecurityTableRowDTO> = [];
     const securityList = [];
-    let count = 0;
-    let nonEmptyCount = 0;
-    let validCount = 0;
     for (const eachKey in rawSecurityDTOMap){
-      count++;
-      nonEmptyCount++;
-      let sumSize = 0;
       let isValidFlag = true;
       const newBESecurity:BESecurityDTO = rawSecurityDTOMap[eachKey].security;
       const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false, selectedDriver);
@@ -80,10 +75,49 @@ export class LiveDataProcessingService {
           selectedDriver,
           rawSecurityDTOMap[eachKey].bestQuotes
         );
-        validCount++;
       }
     }
-    console.log('count is', count, nonEmptyCount, validCount);
+    return prinstineRowList;
+  }
+
+  public loadFinalStageDataForAlertTable(
+    alertDTOList: Array<AlertDTO>,
+    tableHeaderList: Array<SecurityTableHeaderDTO>,
+    selectedDriver: string,
+    serverReturn: BEFetchAllTradeDataReturn,
+    sendToGraphCallback: (card: SecurityDTO) => void,
+    openSecurityInBloombergCallback: (params: ClickedOpenSecurityInBloombergEmitterParams) => void,
+    sendToAlertConfigCallback: (card: SecurityDTO) => void
+  ): Array<SecurityTableRowDTO> {
+    const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
+    const prinstineRowList: Array<SecurityTableRowDTO> = [];
+    const securityList = [];
+    alertDTOList.forEach((eachAlertDTO) => {
+      if (eachAlertDTO.data && eachAlertDTO.data.security && eachAlertDTO.data.security.data && eachAlertDTO.data.security.data.securityID) {
+        const targetSecurityId = eachAlertDTO.data.security.data.securityID;
+        if (rawSecurityDTOMap[targetSecurityId]) {
+          const newBESecurity:BESecurityDTO = rawSecurityDTOMap[targetSecurityId].security;
+          const newSecurity = this.dtoService.formSecurityCardObject(targetSecurityId, newBESecurity, false, selectedDriver);
+          newSecurity.state.isInteractionThumbDownDisabled = true;
+          newSecurity.api.onClickSendToGraph = sendToGraphCallback;
+          newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
+          newSecurity.api.onClickSendToAlertConfig = sendToAlertConfigCallback;
+          rawSecurityDTOMap[targetSecurityId].positions.forEach((eachPortfolio: BEPortfolioDTO) => {
+            this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio);
+          });
+          this.dtoService.appendPortfolioOverviewInfoForSecurityDTO(newSecurity);
+          this.populateEachRowWithData(
+            tableHeaderList,
+            prinstineRowList,
+            newSecurity,
+            selectedDriver,
+            rawSecurityDTOMap[targetSecurityId].bestQuotes
+          );
+        } else {
+          console.error('security not found for alert', eachAlertDTO);
+        }
+      }
+    });
     return prinstineRowList;
   }
 
