@@ -122,7 +122,8 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     blockAttrName: 'mark',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isDriverDependent: true,
-    active: true
+    active: true,
+    groupBelongs: SecurityTableMetricGroups.mark
   },{
     key: 'spread',
     label: 'Spread',
@@ -131,7 +132,8 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     blockAttrName: 'mark',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isDriverDependent: true,
-    active: true
+    active: true,
+    groupBelongs: SecurityTableMetricGroups.mark
   },{
     key: 'markDriver',
     label: 'Driver',
