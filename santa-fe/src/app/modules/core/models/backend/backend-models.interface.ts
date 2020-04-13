@@ -356,6 +356,8 @@ export interface BEAlertConfigurationDTO {
   groupFilters: {
     SecurityIdentifier?: Array<string>;
     Owner?: Array<string>;
+    PrimaryPmName?: Array<string>;
+    ResearchName?: Array<string>;
     [property: string]: any;
   };
   alertConfigID: string;
