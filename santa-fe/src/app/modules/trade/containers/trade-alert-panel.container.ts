@@ -138,7 +138,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           }
         }
       },
-      autoUpdateCountdown: 0,
+      autoUpdateCountdown: 4,
       alertUpdateInProgress: false,
       isCenterPanelPresetSelected: false
     };
