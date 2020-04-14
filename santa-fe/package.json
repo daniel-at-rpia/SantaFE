@@ -11,7 +11,10 @@
     "deployLocal": "firebase deploy --only hosting:local",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "sdk:fetch": "npm run sdk:schema:download && openapi-generator generate -i ./swagger.json -g typescript-fetch -o ./sdk-fetch/",
+    "sdk:axios": "npm run sdk:schema:download && openapi-generator generate -i ./swagger.json -g typescript-axios -o ./sdk-axios/",
+    "sdk:schema:download": "curl -k -o ./swagger.json https://rpia-trader17:51225/swagger/v1/swagger.json"
   },
   "private": true,
   "dependencies": {

@@ -976,7 +976,6 @@ export class DTOService {
   public formAlertObject(
     rawData: BEAlertDTO
   ): DTOs.AlertDTO {
-    console.log(rawData);
     const parsedTitleList = rawData.keyWord.split('|');
     const object: DTOs.AlertDTO = {
       data: {

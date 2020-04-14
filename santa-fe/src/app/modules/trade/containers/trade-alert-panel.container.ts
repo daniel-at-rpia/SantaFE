@@ -597,7 +597,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         groupFilters: {
         },
         parameters: {}
-      }
+      };
       const myGroup = this.state.configuration.mark.myGroup;
       if (this.constants.researchList.indexOf(this.ownerInitial) >= 0) {
         payload.groupFilters.ResearchName = [this.ownerInitial];
@@ -655,19 +655,19 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlerts, {req: 'POST'}, payload).pipe(
       first(),
       tap((serverReturn: Array<BEAlertDTO>) => {
-        // if (isDevMode()) {
-        //   console.log('mocking alerts',serverReturn);
-        //   serverReturn = alerts;
-        // }
+        if (isDevMode() && serverReturn.length === 0) {
+          // console.log('mocking alerts',serverReturn);
+          // serverReturn = alerts;
+        }
         console.log('updateAlert', serverReturn);
         if (!!serverReturn && serverReturn.length > 0) {
           const updateList = [];
           serverReturn.forEach((eachRawAlert) => {
             // checking for cancelled and active alerts
             const expired = moment().diff(moment(eachRawAlert.validUntilTime) ) > 0;
-            console.log(`expired? ${expired}, validUntilTime: ${eachRawAlert.validUntilTime}`);
+            // console.log(`expired? ${expired}, validUntilTime: ${eachRawAlert.validUntilTime}`);
             if (eachRawAlert.isActive && !eachRawAlert.isCancelled && !expired) {
-              console.log(eachRawAlert);
+              // console.log(eachRawAlert);
               const newAlert = this.dtoService.formAlertObject(eachRawAlert);
               updateList.push(newAlert);
             }
