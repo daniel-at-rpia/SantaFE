@@ -243,6 +243,7 @@ export class LiveDataProcessingService {
     let quantDiffCount = 0;
 
     // those lists are only used for logging purposes
+    const newRowList: Array<SecurityTableRowDTO> = [];
     const positionUpdateList: Array<SecurityTableRowDTO> = [];
     const markUpdateList: Array<SecurityTableRowDTO> = [];
     const newQuantUpdateList: Array<SecurityTableRowDTO> = [];
@@ -252,7 +253,7 @@ export class LiveDataProcessingService {
 
     newList.forEach((eachNewRow) => {
       const oldRow = oldRowList.find((eachOldRow) => {
-        return eachOldRow.data.security.data.securityID === eachNewRow.data.security.data.securityID;
+        return eachOldRow.data.rowId === eachNewRow.data.rowId;
       });
       if (!!oldRow) {
         const isSecurityDiff = this.isThereDiffInSecurity(oldRow.data.security, eachNewRow.data.security);
@@ -270,10 +271,12 @@ export class LiveDataProcessingService {
         isQuantDiff === 5 && validityUpdateList.push(eachNewRow);
       } else {
         updateList.push(eachNewRow);
+        newRowList.push(eachNewRow);
       }
     });
     if (updateList.length > 0) {
       console.log('=== new update ===');
+      console.log('new rows', newRowList);
       console.log('Position change: ', positionUpdateList);
       console.log('Mark change: ', markUpdateList);
       console.log('Best Quote overwrite: ', newQuantUpdateList);

@@ -145,7 +145,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         metrics: mainTableMetrics,
         dto: this.dtoService.formSecurityTableObject(true),
         alertMetrics: alertTableMetrics,
-        alertDto: this.dtoService.formSecurityTableObject(false)
+        alertDto: this.dtoService.formSecurityTableObject(true)
       },
       fetchResult: {
         fetchTableDataFailed: false,
@@ -624,11 +624,12 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
           if (isInitialDataLoaded) {
             const newFilteredList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
             this.state.fetchResult.mainTable.liveUpdatedRowList = this.processingService.returnDiff(this.state.table.dto, newFilteredList).newRowList;
+            const newFilteredAlertList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
+            this.state.fetchResult.alertTable.liveUpdatedRowList = this.processingService.returnDiff(this.state.table.alertDto, newFilteredAlertList).newRowList;
           } else {
             this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
+            this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
           }
-          // currently alert table does not support live update
-          this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
           this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
         })
       ).subscribe();
