@@ -410,6 +410,9 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
   public onSwitchTable() {
     this.state.displayAlertTable = !this.state.displayAlertTable;
+    const keywordCopy = this.state.filters.quickFilters.keyword;
+    this.state.filters.quickFilters.keyword = '';
+    this.onSearchKeywordChange(keywordCopy);
   }
 
   private populateSearchShortcuts() {
