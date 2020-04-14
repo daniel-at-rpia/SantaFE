@@ -217,7 +217,9 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
             "driver":"Spread",
             "enteredTime":null,
             "user":null,
-            "value":62
+            "value":62,
+            "price": 72,
+            "spread": 73
           },
           "primaryPmName":"DJ",
           "backupPmName":"PM",

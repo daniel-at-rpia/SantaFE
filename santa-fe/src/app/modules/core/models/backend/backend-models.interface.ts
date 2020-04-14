@@ -85,6 +85,8 @@ export interface BESecurityDTO {
       enteredTime: string;
       user: string;
       value: number;
+      price: number;
+      spread: number;
     },
     primaryPmName: string;
     backupPmName: string;
@@ -354,6 +356,8 @@ export interface BEAlertConfigurationDTO {
   groupFilters: {
     SecurityIdentifier?: Array<string>;
     Owner?: Array<string>;
+    PrimaryPmName?: Array<string>;
+    ResearchName?: Array<string>;
     [property: string]: any;
   };
   alertConfigID: string;

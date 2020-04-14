@@ -129,6 +129,26 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     groupBelongs: SecurityTableMetricGroups.mark,
     groupShow: true
   },{
+    key: 'price',
+    label: 'Price',
+    attrName: 'price',
+    underlineAttrName: 'priceRaw',
+    blockAttrName: 'mark',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isDriverDependent: true,
+    active: true,
+    groupBelongs: SecurityTableMetricGroups.mark
+  },{
+    key: 'spread',
+    label: 'Spread',
+    attrName: 'spread',
+    underlineAttrName: 'spreadRaw',
+    blockAttrName: 'mark',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isDriverDependent: true,
+    active: true,
+    groupBelongs: SecurityTableMetricGroups.mark
+  },{
     key: 'markDriver',
     label: 'Driver',
     attrName: 'markDriver',
