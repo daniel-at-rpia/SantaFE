@@ -250,6 +250,7 @@ export class AgGridMiddleLayerService {
     nodeB: AgGridRowNode,
     inverted: boolean
   ) {
+    // TODO: currently this logic causes a bit of delay on switching to alert table, this needs to be optimized
     if (!!nodeA && !!nodeB) {  // this check is for clicking on the "menu" icon on each header
       const columns = nodeA.columnController.allDisplayedColumns;
       if (!!columns) {
@@ -257,7 +258,7 @@ export class AgGridMiddleLayerService {
           return !!eachColumn.sort;
         })
         const targetStub = SecurityTableMetrics.find((eachMetric) => {
-          return eachMetric.key === targetColumn.colId;
+          return eachMetric.key === targetColumn.colDef.field;
         });
         if (targetStub) {
           const securityA = nodeA.data ? nodeA.data.securityCard : null;
