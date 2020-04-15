@@ -222,14 +222,8 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         this.state.storeList[existIndexInStore] = newAlert;
       }
       if (existIndexInStore < 0 && existIndexInPresent < 0) {
-        console.log('adding');
         this.state.presentList.unshift(newAlert);
-        console.log(this.state.presentList);
-        if (this.state.presentList.length >= this.constants.sizeCap) {
-          const lastAlert = this.state.presentList[this.state.presentList.length-1];
-          this.state.storeList.unshift(lastAlert);
-          this.state.presentList.splice(this.state.presentList.length-1, 1);
-        }
+
         this.state.presentList.unshift(newAlert);
         this.initiateStateProgressionForNewAlert(newAlert);
       }
@@ -256,15 +250,14 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         console.log('Global Alert - new alert is an update, the old one is not in the sidebar, buried in the queue', newAlert.data.id);
         this.state.storeList.splice(existIndexInStore, 1);
       }
-      if (this.state.presentList.length >= this.constants.sizeCap) {
-        const lastAlert = this.state.presentList[this.state.presentList.length-1];
-        this.state.storeList.unshift(lastAlert);
-        this.state.presentList.splice(this.state.presentList.length-1, 1);
-      }
       this.state.presentList.unshift(newAlert);
       this.initiateStateProgressionForNewAlert(newAlert);
     }
-
+    if (this.state.presentList.length >= this.constants.sizeCap) {
+      const lastAlert = this.state.presentList[this.state.presentList.length - 1];
+      this.state.storeList.unshift(lastAlert);
+      this.state.presentList.splice(this.state.presentList.length - 1, 1);
+    }
   }
 
   private initiateStateProgressionForNewAlert(newAlert: AlertDTO) {

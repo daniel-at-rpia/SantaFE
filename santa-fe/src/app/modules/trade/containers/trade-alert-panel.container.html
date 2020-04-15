@@ -97,20 +97,20 @@
             </span>
             <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup">
               <button
-                (click)="onSelectAxeAlertType(constants.axeAlertType.marketList, state.configuration.axe.myGroup)"
-                [ngClass]="{
-                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn': true,
-                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': state.configuration.axe.myGroup.alertTypes.indexOf(constants.axeAlertType.marketList) >= 0
-                }">
-                <span>Inquiry</span>
-              </button>
-              <button
-                (click)="onSelectAxeAlertType(constants.axeAlertType.normal, state.configuration.axe.myGroup)"
+                (click)="onSelectAxeAlertWatchType(constants.axeAlertType.normal, state.configuration.axe.myGroup)"
                 [ngClass]="{
                   'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn': true,
                   'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': state.configuration.axe.myGroup.alertTypes.indexOf(constants.axeAlertType.normal) >= 0
                 }">
                 <span>Axe</span>
+              </button>
+              <button
+                (click)="onSelectAxeAlertWatchType(constants.axeAlertType.marketList, state.configuration.axe.myGroup)"
+                [ngClass]="{
+                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn': true,
+                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': state.configuration.axe.myGroup.alertTypes.indexOf(constants.axeAlertType.marketList) >= 0
+                }">
+                <span>Inquiry</span>
               </button>
             </div>
             <button (click)="onToggleDisableTargetGroupFromAxeWatchList(state.configuration.axe.myGroup)" class="sat-tradeAlertAxeAlertConfiguration__myGroup-content-disableBtn santaBtn--labelled">
@@ -166,6 +166,24 @@
                       'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.scopes.indexOf(constants.axeAlertScope.liquidation) >= 0
                     }">
                     <span>Liquidation</span>
+                  </button>
+                </div>
+                <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup">
+                  <button
+                    (click)="onSelectAxeAlertWatchType(constants.axeAlertType.normal, eachSecurityBlock)"
+                    [ngClass]="{
+                      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn': true,
+                      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.alertTypes.indexOf(constants.axeAlertType.normal) >= 0
+                    }">
+                    <span>Axe</span>
+                  </button>
+                  <button
+                    (click)="onSelectAxeAlertWatchType(constants.axeAlertType.marketList, eachSecurityBlock)"
+                    [ngClass]="{
+                      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn': true,
+                      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.alertTypes.indexOf(constants.axeAlertType.marketList) >= 0
+                    }">
+                    <span>Inquiry</span>
                   </button>
                 </div>
                 <button (click)="onToggleDisableTargetGroupFromAxeWatchList(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-disableBtn santaBtn--iconOnly fal fa-bell-slash"></button>

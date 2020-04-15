@@ -1,4 +1,5 @@
 import { AlertTypes } from 'Core/constants/coreConstants.constant';
+import {AxeAlertType} from "Core/constants/tradeConstants.constant";
 
 export interface BEFetchAllTradeDataReturn {
   numberOfSecurities: number;
@@ -346,10 +347,10 @@ export interface BEHistoricalQuantBlock {
 export interface BEAlertConfigurationReturn {
   Axe?: {
     [property: string]: BEAlertConfigurationDTO;
-  }
+  };
   Mark?: {
     [property: string]: BEAlertConfigurationDTO;
-  }
+  };
 }
 
 export interface BEAlertConfigurationDTO {
@@ -367,7 +368,8 @@ export interface BEAlertConfigurationDTO {
     LoseMoneyPriceThreshold?: number,
     MakeMoneyPriceThreshold?: number,
     LoseMoneySpreadThreshold?: number,
-    MakeMoneySpreadThreshold?: number
+    MakeMoneySpreadThreshold?: number,
+    WatchType?: AxeAlertType
   };
   isEnabled: boolean;
 }

@@ -1,71 +1,51 @@
-  // dependencies
-    import {
+// dependencies
+import {
   Component,
-  ViewEncapsulation,
-  Input,
-  Output,
   EventEmitter,
-  OnInit,
+  Input,
+  isDevMode,
   OnChanges,
-  OnDestroy, isDevMode
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewEncapsulation
 } from '@angular/core';
-    import { Store, select } from '@ngrx/store';
-    import {
-      Observable,
-      Subscription,
-      interval,
-      of
-    } from 'rxjs';
-    import {
-      tap,
-      first,
-      delay,
-      catchError,
-      withLatestFrom,
-      filter
-    } from 'rxjs/operators';
-    import * as moment from 'moment';
+import {select, Store} from '@ngrx/store';
+import {interval, Observable, of, Subscription} from 'rxjs';
+import {catchError, first, tap, withLatestFrom} from 'rxjs/operators';
+import * as moment from 'moment';
 
-    import { DTOService } from 'Core/services/DTOService';
-    import { UtilityService } from 'Core/services/UtilityService';
-    import { RestfulCommService } from 'Core/services/RestfulCommService';
-    import { TradeAlertPanelState } from 'FEModels/frontend-page-states.interface';
-    import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
-    import { SecurityDTO } from 'FEModels/frontend-models.interface';
-    import { TradeAlertConfigurationAxeGroupBlock } from 'FEModels/frontend-blocks.interface';
-    import {
-      BESecurityDTO,
-      BEAlertConfigurationReturn,
-      BEAlertConfigurationDTO,
-      BEAlertDTO
-    } from 'BEModels/backend-models.interface';
-    import {
-      PayloadGetSecurities,
-      PayloadUpdateAlertConfig,
-      PayloadUpdateSingleAlertConfig
-    } from 'BEModels/backend-payloads.interface';
-    import {
-      EngagementActionList,
-      AlertTypes,
-      AlertSubTypes
-    } from 'Core/constants/coreConstants.constant';
-    import {
-      selectSecurityMapContent,
-      selectSecurityMapValidStatus
-    } from 'Core/selectors/core.selectors';
-    import {
+import {DTOService} from 'Core/services/DTOService';
+import {UtilityService} from 'Core/services/UtilityService';
+import {RestfulCommService} from 'Core/services/RestfulCommService';
+import {TradeAlertPanelState} from 'FEModels/frontend-page-states.interface';
+import {SecurityMapEntry} from 'FEModels/frontend-adhoc-packages.interface';
+import {SecurityDTO} from 'FEModels/frontend-models.interface';
+import {TradeAlertConfigurationAxeGroupBlock} from 'FEModels/frontend-blocks.interface';
+import {
+  BEAlertConfigurationDTO,
+  BEAlertConfigurationReturn,
+  BEAlertDTO,
+  BESecurityDTO
+} from 'BEModels/backend-models.interface';
+import {
+  PayloadGetSecurities,
+  PayloadUpdateAlertConfig,
+  PayloadUpdateSingleAlertConfig
+} from 'BEModels/backend-payloads.interface';
+import {AlertSubTypes, AlertTypes} from 'Core/constants/coreConstants.constant';
+import {selectSecurityMapContent, selectSecurityMapValidStatus} from 'Core/selectors/core.selectors';
+import {
   ALERT_MAX_SECURITY_SEARCH_COUNT,
+  ALERT_UPDATE_COUNTDOWN,
   AxeAlertScope,
-  ALERT_UPDATE_COUNTDOWN, AxeAlertType
+  AxeAlertType
 } from 'Core/constants/tradeConstants.constant';
-    import { FullOwnerList, FilterOptionsPortfolioResearchList } from 'Core/constants/securityDefinitionConstants.constant';
-    import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
-    import { CoreFlushSecurityMap, CoreSendNewAlerts } from 'Core/actions/core.actions';
-    import { selectSelectedSecurityForAlertConfig, selectPresetSelected } from 'Trade/selectors/trade.selectors';
-  import {is} from "@amcharts/amcharts4/core";
-  import {alerts} from "Core/components/alert/alert.mock";
+import {FilterOptionsPortfolioResearchList, FullOwnerList} from 'Core/constants/securityDefinitionConstants.constant';
+import {CoreFlushSecurityMap, CoreSendNewAlerts} from 'Core/actions/core.actions';
+import {selectPresetSelected, selectSelectedSecurityForAlertConfig} from 'Trade/selectors/trade.selectors';
 
-  //
+//
 
 @Component({
   selector: 'trade-alert-panel',
@@ -288,15 +268,34 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public onSelectAxeAlertType(targetType: AxeAlertType, targetBlock: TradeAlertConfigurationAxeGroupBlock) {
+  public onSelectAxeWatchlistSideType(targetType: AxeAlertType, targetBlock: TradeAlertConfigurationAxeGroupBlock) {
+    const currTypes: AxeAlertType[] = targetBlock.alertTypes.slice();
     if (!!targetType && !!targetBlock && !targetBlock.isDisabled) {
-      // this.addScopeToAxeWatchlistEntry(targetBlock, targetType);
-      let {alertTypes} = this.state.configuration.axe.myGroup;
-      alertTypes.indexOf(targetType) === -1 ?
-      alertTypes.push(targetType) :
-      alertTypes = alertTypes.filter((a: AxeAlertType) => a !== targetType);
-      console.log(`alertTypes Selected: ${alertTypes}`);
-      this.state.configuration.axe.myGroup.alertTypes = alertTypes;
+      if (targetBlock.alertTypes.indexOf(targetType) === -1) {
+        targetBlock.alertTypes = [targetType, ...currTypes];
+      } else {
+        targetBlock.alertTypes = currTypes.filter((a: AxeAlertType) => a !== targetType);
+      }
+      this.restfulCommService.logEngagement(
+        this.restfulCommService.engagementMap.tradeAlertConfigure,
+        null,
+        `Change AlertType to ${targetBlock.alertTypes.toString()}`,
+        'Trade Alert Panel'
+      );
+    }
+  }
+
+  public onSelectAxeAlertWatchType(targetType: AxeAlertType, targetBlock: TradeAlertConfigurationAxeGroupBlock) {
+    // console.log('onSelectAxeAlertWatchType', targetType);
+    if (!!targetType && !!targetBlock && !targetBlock.isDisabled) {
+      if (targetBlock.alertTypes.indexOf(targetType) === -1) {
+        targetBlock.alertTypes = [targetType, ...targetBlock.alertTypes];
+      } else {
+        if (targetBlock.alertTypes.length > 1) {
+          targetBlock.alertTypes =
+            targetBlock.alertTypes.filter((a: AxeAlertType) => a !== targetType);
+        }
+      }
       this.restfulCommService.logEngagement(
         this.restfulCommService.engagementMap.tradeAlertConfigure,
         null,
@@ -464,16 +463,19 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   private populateConfigurationFromEachGroup(
     rawGroupConfig: BEAlertConfigurationDTO
   ) {
+    // console.log('populateConfigurationFromEachGroup:', rawGroupConfig);
     if (!!rawGroupConfig && !!rawGroupConfig.groupFilters) {
       if (rawGroupConfig.groupFilters.SecurityIdentifier && rawGroupConfig.groupFilters.SecurityIdentifier.length > 0) {
         this.populateConfigurationFromSecurityGroup(rawGroupConfig);
-      } else if (rawGroupConfig.groupFilters.Owner && rawGroupConfig.groupFilters.Owner.length > 0) {
+      } else if (rawGroupConfig.groupFilters.Owner || rawGroupConfig.groupFilters.PrimaryPmName || rawGroupConfig.groupFilters.ResearchName) {
         this.populateConfigurationFromMyGroup(rawGroupConfig);
       }
     }
   }
 
   private populateConfigurationFromSecurityGroup(rawGroupConfig: BEAlertConfigurationDTO) {
+    // console.log('populateConfigurationFromSecurityGroup: ', rawGroupConfig);
+    const { WatchType } = rawGroupConfig.parameters;
     const targetScope = rawGroupConfig.subType as AxeAlertScope;
     const payload: PayloadGetSecurities = {
       identifiers: rawGroupConfig.groupFilters.SecurityIdentifier
@@ -481,7 +483,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     const newEntry: TradeAlertConfigurationAxeGroupBlock = {
       card: null,
       groupId: rawGroupConfig.alertConfigID,
-      alertTypes: this.state.configuration.axe.myGroup.alertTypes,
+      alertTypes: WatchType === AxeAlertType.both ? [AxeAlertType.normal, AxeAlertType.marketList] : [WatchType],
       scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],
       isDeleted: false,
       isDisabled: !rawGroupConfig.isEnabled
@@ -506,14 +508,15 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
   private populateConfigurationFromMyGroup(rawGroupConfig: BEAlertConfigurationDTO) {
     const targetScope = rawGroupConfig.subType as AxeAlertScope;
+    const { WatchType } = rawGroupConfig.parameters;
     this.state.configuration.axe.myGroup = {
       card: null,
       groupId: rawGroupConfig.alertConfigID,
-      alertTypes: this.state.configuration.axe.myGroup.alertTypes,
+      alertTypes: WatchType === AxeAlertType.both ? [AxeAlertType.normal, AxeAlertType.marketList] : [WatchType],
       scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],
       isDeleted: false,
       isDisabled: !rawGroupConfig.isEnabled
-    }
+    };
   }
 
   private addScopeToAxeWatchlistEntry(targetEntry: TradeAlertConfigurationAxeGroupBlock, targetScope: AxeAlertScope) {
@@ -543,7 +546,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       const groupPayload: PayloadUpdateSingleAlertConfig = {
         type: this.constants.alertTypes.axeAlert,
         subType: this.mapAxeScopesToAlertSubtypes(this.state.configuration.axe.myGroup.scopes),
-        groupFilters: {}
+        groupFilters: {},
+        parameters: {
+          WatchType: this.mapWatchTypesToWatchType(this.state.configuration.axe.myGroup.alertTypes)
+        }
       };
       if (this.constants.researchList.indexOf(this.ownerInitial) >= 0) {
         groupPayload.groupFilters.ResearchName = [this.ownerInitial];
@@ -561,7 +567,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         const payload: PayloadUpdateSingleAlertConfig = {
           type: this.constants.alertTypes.axeAlert,
           subType: this.mapAxeScopesToAlertSubtypes(eachEntry.scopes),
-          groupFilters: {}
+          groupFilters: {},
+          parameters: {
+            WatchType: this.mapWatchTypesToWatchType(eachEntry.alertTypes)
+          }
         }
         payload.groupFilters.SecurityIdentifier = [eachEntry.card.data.securityID];
         if (!!eachEntry.groupId) {
@@ -697,6 +706,17 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       return this.constants.alertSubTypes.liquidation;
     } else {
       return this.constants.alertSubTypes.bid;
+    }
+  }
+  private mapWatchTypesToWatchType(alertTypes: AxeAlertType[]): AxeAlertType {
+    if (alertTypes.includes(AxeAlertType.normal) && alertTypes.includes(AxeAlertType.marketList)) {
+      return AxeAlertType.both;
+    } else if (alertTypes.includes(AxeAlertType.normal)) {
+      return AxeAlertType.normal;
+    } else if (alertTypes.includes(AxeAlertType.marketList)) {
+      return AxeAlertType.marketList;
+    } else {
+      return AxeAlertType.both;
     }
   }
 

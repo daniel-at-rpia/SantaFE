@@ -410,7 +410,7 @@ export enum AxeAlertScope {
 }
 
 export enum AxeAlertType {
-  marketList = 'marketList',
-  normal = 'normal',
+  marketList = 'MarketList',
+  normal = 'Axe',
   both = 'Both'
 }
