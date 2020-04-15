@@ -100,6 +100,10 @@ export interface SecurityDTO extends BasicDTOStructure {
     alert: {
       alertTime: string;
       alertTimeRaw: number;
+      alertType: string;
+      alertMessage: string;
+      alertValue: string;
+      alertTarget: string;
     }
   }
   api: {

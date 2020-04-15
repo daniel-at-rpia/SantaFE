@@ -150,7 +150,11 @@ export class DTOService {
         hedgeFactor: !isStencil && !!rawData.firmPosition ? rawData.firmPosition.hedgeFactor : null,
         alert: {
           alertTime: null,
-          alertTimeRaw: null
+          alertTimeRaw: null,
+          alertType: null,
+          alertMessage: null,
+          alertValue: null,
+          alertTarget: null
         }
       },
       api: {
@@ -276,7 +280,11 @@ export class DTOService {
   ) {
     dto.data.alert = {
       alertTime: targetAlert.data.time,
-      alertTimeRaw: targetAlert.data.unixTimestamp
+      alertTimeRaw: targetAlert.data.unixTimestamp,
+      alertType: !!targetAlert.data.titlePin ? `${targetAlert.data.type} - ${targetAlert.data.titlePin}` : targetAlert.data.type,
+      alertMessage: targetAlert.data.message,
+      alertValue: targetAlert.data.titleBottom,
+      alertTarget: targetAlert.data.titleTop
     };
   }
 

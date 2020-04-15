@@ -58,6 +58,55 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     groupBelongs: SecurityTableMetricGroups.alert,
     groupShow: true,
     alertOnlyColumn: true
+  },{
+    key: 'alertType',
+    label: 'Alert Type',
+    attrName: 'alertType',
+    underlineAttrName: 'alertType',
+    blockAttrName: 'alert',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isDataTypeText: true,
+    active: true,
+    pinned: true,
+    groupBelongs: SecurityTableMetricGroups.alert,
+    groupShow: true,
+    alertOnlyColumn: true
+  },{
+    key: 'alertMessage',
+    label: 'Alert Message',
+    attrName: 'alertMessage',
+    underlineAttrName: 'alertMessage',
+    blockAttrName: 'alert',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isDataTypeText: true,
+    active: true,
+    pinned: true,
+    groupBelongs: SecurityTableMetricGroups.alert,
+    alertOnlyColumn: true
+  },{
+    key: 'alertValue',
+    label: 'Alert Value',
+    attrName: 'alertValue',
+    underlineAttrName: 'alertValue',
+    blockAttrName: 'alert',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isDataTypeText: true,
+    active: true,
+    pinned: true,
+    groupBelongs: SecurityTableMetricGroups.alert,
+    alertOnlyColumn: true
+  },{
+    key: 'alertTarget',
+    label: 'Alert Target',
+    attrName: 'alertTarget',
+    underlineAttrName: 'alertTarget',
+    blockAttrName: 'alert',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isDataTypeText: true,
+    active: true,
+    pinned: true,
+    groupBelongs: SecurityTableMetricGroups.alert,
+    alertOnlyColumn: true
   },
   {
     key: 'securityCard',
