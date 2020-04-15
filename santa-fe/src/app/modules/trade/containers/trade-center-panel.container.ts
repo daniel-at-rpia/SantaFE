@@ -535,6 +535,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     if (targetAttribute === 'portfolios' || targetAttribute === 'owner' || targetAttribute === 'strategyList') {
       // bypass portfolio filter since it is handled via this.filterByPortfolio() and this.filterByOwner() and this.filterByStrategy()
       return true;
+    } else if (targetAttribute === 'seniority'){
+      return this.filterBySeniority(targetRow);
     } else {
       filterBy.forEach((eachValue) => {
         if (targetRow.data.security.data[targetAttribute] === eachValue) {
@@ -549,7 +551,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     const targetSecurity = targetRow.data.security;
     let includeFlag = false;
     if (this.state.filters.quickFilters.portfolios.length > 0) {
-      targetRow.data.security.data.positionCurrent = 0;
+      targetRow.data.security.data.position.positionCurrent = 0;
       targetRow.data.security.data.cs01CadCurrent = 0;
       targetRow.data.security.data.cs01LocalCurrent = 0;
       this.state.filters.quickFilters.portfolios.forEach((eachPortfolio) => {
@@ -557,7 +559,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
           return eachPortfolioBlock.portfolioName === eachPortfolio;
         });
         if (!!portfolioExist) {
-          targetRow.data.security.data.positionCurrent = targetRow.data.security.data.positionCurrent + portfolioExist.quantity;
+          targetRow.data.security.data.position.positionCurrent = targetRow.data.security.data.position.positionCurrent + portfolioExist.quantity;
           targetRow.data.security.data.cs01CadCurrent = targetRow.data.security.data.cs01CadCurrent + portfolioExist.cs01Cad;
           targetRow.data.security.data.cs01LocalCurrent = targetRow.data.security.data.cs01LocalCurrent + portfolioExist.cs01Local;
           includeFlag = true;
@@ -565,11 +567,11 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       });
     } else {
       includeFlag = true;
-      targetRow.data.security.data.positionCurrent = targetRow.data.security.data.positionFirm;
+      targetRow.data.security.data.position.positionCurrent = targetRow.data.security.data.position.positionFirm;
       targetRow.data.security.data.cs01CadCurrent = targetRow.data.security.data.cs01CadFirm;
       targetRow.data.security.data.cs01LocalCurrent = targetRow.data.security.data.cs01LocalFirm;
     }
-    targetRow.data.security.data.positionCurrentInMM = this.utilityService.parsePositionToMM(targetRow.data.security.data.positionCurrent, false);
+    targetRow.data.security.data.position.positionCurrentInMM = this.utilityService.parsePositionToMM(targetRow.data.security.data.position.positionCurrent, false);
     targetRow.data.security.data.cs01CadCurrentInK = this.utilityService.parseNumberToThousands(targetRow.data.security.data.cs01CadCurrent, false);
     targetRow.data.security.data.cs01LocalCurrentInK = this.utilityService.parseNumberToThousands(targetRow.data.security.data.cs01LocalCurrent, false);
     return includeFlag;
@@ -586,6 +588,18 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       });
     } else {
       includeFlag = true;
+    }
+    return includeFlag;
+  }
+
+  private filterBySeniority(row: SecurityTableRowDTO): boolean {
+    let includeFlag = false;
+    const filterObj = this.state.filters.securityFilters.filter(f => f.targetAttribute === 'seniority')[0];
+    if (filterObj) {
+      const includes = filterObj.filterBy.map(v => v.toLowerCase());
+      const {seniority} = row.data.security.data;
+      const seniorityName = seniority.split(' - ')[1];
+      includeFlag = includes.indexOf(seniorityName.toLowerCase()) !== -1;
     }
     return includeFlag;
   }

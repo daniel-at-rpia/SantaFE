@@ -251,7 +251,9 @@ export const AlertSample: Array<BEAlertDTO> = [
           "driver":"Price",
           "enteredTime":"2020-04-06T15:20:24.559-04:00",
           "user":"IL",
-          "value":71
+          "value":71,
+          "price": 72,
+          "spread": 73
         },
         "primaryPmName":"IL",
         "backupPmName":"PM",

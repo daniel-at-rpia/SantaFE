@@ -85,6 +85,8 @@ export interface BESecurityDTO {
       enteredTime: string;
       user: string;
       value: number;
+      price: number;
+      spread: number;
     },
     primaryPmName: string;
     backupPmName: string;

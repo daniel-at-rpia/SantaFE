@@ -251,7 +251,7 @@ export class LiveDataProcessingService {
     oldSecurity: SecurityDTO,
     newSecurity: SecurityDTO
   ): number {
-    if (oldSecurity.data.positionFirm !== newSecurity.data.positionFirm) {
+    if (oldSecurity.data.position.positionFirm !== newSecurity.data.position.positionFirm) {
       return 1;
     }
     if (oldSecurity.data.mark.markBackend !== newSecurity.data.mark.markBackend) {
