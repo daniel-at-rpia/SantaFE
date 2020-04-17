@@ -19,6 +19,7 @@ import {
 import {CoreReceivedNewAlerts, CoreToggleAlertThumbnailDisplay} from 'Core/actions/core.actions';
 import {selectNewAlerts} from 'Core/selectors/core.selectors';
 import {Alert} from "Core/components/alert/alert.component";
+import {favAlertBase64, favLogoBase64} from "../../../../../assets/icons";
 
 //
 
@@ -97,14 +98,17 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         if (document.title === this.state.originalDocumentTitle) {
           document.title = '[New Alerts] ' + this.state.originalDocumentTitle;
         }
-        if (count%2 === 0) {
-          this.state.favicon.href = 'assets/alert.ico';
+        if (count % 2 === 0) {
+          this.state.favicon.rel = 'shortcut icon';
+          this.state.favicon.href = 'data:image/png;base64,' + favAlertBase64;
         } else {
-          this.state.favicon.href = 'favicon.ico';
+          this.state.favicon.rel = 'shortcut icon';
+          this.state.favicon.href = 'data:image/png;base64,' + favLogoBase64;
         }
       } else {
         document.title = this.state.originalDocumentTitle;
-        this.state.favicon.href = 'favicon.ico';
+        this.state.favicon.rel = 'shortcut icon';
+        this.state.favicon.href = 'data:image/png;base64,' + favLogoBase64;
       }
     });
   }
