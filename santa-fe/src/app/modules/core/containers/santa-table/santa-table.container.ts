@@ -522,11 +522,15 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   private liveUpdateRows(targetRows: Array<SecurityTableRowDTO>) {
+    // realUpdates contains the rows that already exist in the table, those needs to be updated via the agGridAPI, the others are simply pushed into the table
+    const realUpdates: Array<SecurityTableRowDTO> = [];
+    const insertions: Array<SecurityTableRowDTO> = [];
     targetRows.forEach((eachNewRow) => {
       const matchedOldRow = this.tableData.data.rows.find((eachOldRow) => {
-        return eachOldRow.data.security.data.securityID === eachNewRow.data.security.data.securityID;
+        return eachOldRow.data.rowId === eachNewRow.data.rowId;
       });
       if (!!matchedOldRow) {
+        realUpdates.push(eachNewRow);
         try {
           matchedOldRow.data = eachNewRow.data;
         }
@@ -534,10 +538,16 @@ export class SantaTable implements OnInit, OnChanges {
           console.warn('setting row update failure in AGGrid', matchedOldRow.data, eachNewRow.data);
         }
       } else {
+        insertions.push(eachNewRow);
         this.tableData.data.rows.push(eachNewRow);
       }
     });
-    this.agGridMiddleLayerService.updateAgGridRows(this.tableData, targetRows, 2);
+    if (insertions.length > 0) {
+      this.loadTableRows(this.tableData.data.rows, true);
+      setTimeout(function(){this.agGridMiddleLayerService.updateAgGridRows(this.tableData, realUpdates, 2)}.bind(this), 1000);
+    } else {
+      this.agGridMiddleLayerService.updateAgGridRows(this.tableData, realUpdates, 2);
+    }
   }
 
   private liveUpdateAllQuotesForExpandedRows() {
