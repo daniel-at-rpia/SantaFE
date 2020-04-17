@@ -9,7 +9,10 @@ export class CountdownPipe implements PipeTransform {
     const currentTime = moment(Date.now());
     const dur = moment.duration(eventTime.diff(currentTime));
     // console.log(`eventTime: ${eventTime.toISOString()}, currentTime: ${currentTime.toISOString()}`);
-    return `${this.addLeadingZeroIfNecessary(dur.hours())}:${this.addLeadingZeroIfNecessary(dur.minutes())}:${this.addLeadingZeroIfNecessary(dur.seconds())}`;
+    if (dur.hours() > 0) {
+      return '> 1hr';
+    }
+    return `${this.addLeadingZeroIfNecessary(dur.minutes())}:${this.addLeadingZeroIfNecessary(dur.seconds())}`;
   }
 
   addLeadingZeroIfNecessary(val: number) {

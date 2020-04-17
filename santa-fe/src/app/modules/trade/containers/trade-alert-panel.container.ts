@@ -104,7 +104,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             scopes: [],
             alertTypes: [],
             isDeleted: false,
-            isDisabled: false
+            isDisabled: false,
+            isUrgent: false
           },
           securitySearchKeyword: '',
           securityList: [],
@@ -316,6 +317,16 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     this.updateAlert();
   }
 
+  public onTogglePriority(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
+    targetBlock.isUrgent = !targetBlock.isUrgent;
+    this.restfulCommService.logEngagement(
+      this.restfulCommService.engagementMap.tradeAlertConfigure,
+      null,
+      'Priority Toggle',
+      'Trade Alert Panel'
+    );
+  }
+
   public onToggleDisableTargetGroupFromAxeWatchList(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
     targetBlock.isDisabled = !targetBlock.isDisabled;
     this.restfulCommService.logEngagement(
@@ -417,7 +428,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       alertTypes: this.state.configuration.axe.myGroup.alertTypes,
       scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],
       isDeleted: false,
-      isDisabled: false
+      isDisabled: false,
+      isUrgent: true
     };
     this.state.configuration.axe.securityList.unshift(newEntry);
     this.restfulCommService.logEngagement(
@@ -486,7 +498,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       alertTypes: WatchType === AxeAlertType.both ? [AxeAlertType.normal, AxeAlertType.marketList] : [WatchType],
       scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],
       isDeleted: false,
-      isDisabled: !rawGroupConfig.isEnabled
+      isDisabled: !rawGroupConfig.isEnabled,
+      isUrgent: rawGroupConfig.isUrgent
     };
     this.state.configuration.axe.securityList.unshift(newEntry);
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSecurityDTOs, {req: 'POST'}, payload).pipe(
@@ -515,7 +528,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       alertTypes: WatchType === AxeAlertType.both ? [AxeAlertType.normal, AxeAlertType.marketList] : [WatchType],
       scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],
       isDeleted: false,
-      isDisabled: !rawGroupConfig.isEnabled
+      isDisabled: !rawGroupConfig.isEnabled,
+      isUrgent: rawGroupConfig.isUrgent
     };
   }
 
@@ -570,8 +584,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           groupFilters: {},
           parameters: {
             WatchType: this.mapWatchTypesToWatchType(eachEntry.alertTypes)
-          }
-        }
+          },
+          isUrgent: eachEntry.isUrgent
+        };
         payload.groupFilters.SecurityIdentifier = [eachEntry.card.data.securityID];
         if (!!eachEntry.groupId) {
           payload.alertConfigID = eachEntry.groupId;
@@ -669,6 +684,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           // serverReturn = alerts;
         }
         console.log('updateAlert', serverReturn);
+        // const mock = {"type":"MarketList","subType":"Owic","keyWord":"Expires at|05:10:56 AM","message":"OWIC started @ 4:56:37 AM and ends @ 5:10:56 AM (1 security)","validUntilTime":"2020-04-16T20:10:56","marketListType":"OWIC","marketListDescription":"OWIC started @ 4:56:37 AM and ends @ 5:10:56 AM","securityIdentifierToQuoteId":{"9137":"ab8bb0d4-82ab-4a4c-8bb7-09132d2d25f5"},"alertConfigId":"OWIC started @ 4:56:37 AM and ends @ 5:10:56 AM","alertId":"7c0ca41d-7c7b-49b7-8beb-5d1facfca00b","timeStamp":"2020-04-16T13:51:41.1024995-04:00","isUrgent":false,"isActive":true,"isDeleted":false,"isCancelled":false};
+        // serverReturn.push(mock);
         if (!!serverReturn && serverReturn.length > 0) {
           const updateList = [];
           serverReturn.forEach((eachRawAlert) => {

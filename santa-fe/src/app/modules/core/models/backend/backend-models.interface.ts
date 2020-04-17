@@ -80,7 +80,7 @@ export interface BESecurityDTO {
   isLoan?: boolean;
   isPreferred?: boolean;
   isCds?: boolean;
-  firmPosition?: {
+  unitPosition?: {
     mark: {
       driver: string;
       enteredTime: string;
@@ -372,6 +372,7 @@ export interface BEAlertConfigurationDTO {
     WatchType?: AxeAlertType
   };
   isEnabled: boolean;
+  isUrgent: boolean;
 }
 
 export interface BEAlertDTO {

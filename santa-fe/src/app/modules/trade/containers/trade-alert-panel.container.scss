@@ -141,7 +141,7 @@
               }
             }
           }
-          &-disableBtn {
+          &-disableBtn, &-urgentBtn {
             flex: 0 0 auto;
             margin-left: $spacing_medium;
             color: $font_color_major;
@@ -171,6 +171,17 @@
                   }
                 }
                 &-disableBtn {
+                  @include material('none');
+                  background-color: $color_active;
+                  color: $font_color_inverse;
+                }
+              }
+            }
+          }
+          &--urgent {
+            #{$axeAlertConfigurationBlockName} {
+              &__singleSecurities-watchList-securityList-item {
+                &-urgentBtn {
                   @include material('none');
                   background-color: $color_active;
                   color: $font_color_inverse;

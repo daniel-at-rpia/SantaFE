@@ -14,7 +14,8 @@ const AlertConfigSample: BEAlertConfigurationReturn = {
       "type": "Axe",
       "subType": "Both",
       "parameters": {},
-      "isEnabled": true
+      "isEnabled": true,
+      "isUrgent": false
     }
   }
 }
@@ -117,7 +118,7 @@ export const AlertSample: Array<BEAlertDTO> = [
           "spread":null
         }
       },
-      "firmPosition":null,
+      "unitPosition":null,
       "securityType":"Bond",
       "maturityType":"Bullet"
     },
@@ -233,7 +234,7 @@ export const AlertSample: Array<BEAlertDTO> = [
         "Ytd":null,
         "Yoy":null
       },
-      "firmPosition":{
+      "unitPosition":{
         "partitionOptionValues":{
           "PortfolioShortName":[
             "AGB",

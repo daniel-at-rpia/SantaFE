@@ -232,4 +232,5 @@ export interface TradeAlertConfigurationAxeGroupBlock {
   alertTypes: Array<AxeAlertType>;
   isDeleted: boolean;
   isDisabled: boolean;
+  isUrgent: boolean;
 }

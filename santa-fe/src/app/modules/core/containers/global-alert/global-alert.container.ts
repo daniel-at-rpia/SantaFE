@@ -79,7 +79,6 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         // the BE returns the array in a sequential order with the latest one on top, because the Alert present list is in a first-in-last-out order, we need to sort it reversely so it is presented in a sequential order
         const alertListSorted = this.utilityService.deepCopy(alertList).reverse();
         this.state.presentList = this.filterMarketListAlerts(alertListSorted, this.state.presentList);
-        console.log(this.state.presentList);
         this.state.storeList = this.filterMarketListAlerts(alertListSorted, this.state.storeList);
         alertListSorted.forEach((eachAlert) => {
           this.generateNewAlert(eachAlert, alertListSorted);
@@ -190,7 +189,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       targetAlert.state.willBeRemoved = true;
       const removeTarget = () => {
         this.removeSingleAlert(targetAlert, true);
-      }
+      };
       setTimeout(removeTarget.bind(this), 300);
       this.restfulCommService.logEngagement(
         this.restfulCommService.engagementMap.globalAlertClearedSingle,
@@ -214,7 +213,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     });
     // special logic for marketList alert
     if (isMarketListAlert) {
-      console.log(`isMarketListAlert, existIndexInPresent: ${existIndexInPresent}, existIndexInStore: ${existIndexInStore}`);
+      // console.log(`isMarketListAlert, existIndexInPresent: ${existIndexInPresent}, existIndexInStore: ${existIndexInStore}`);
       if (existIndexInPresent > 0) {
         this.state.presentList[existIndexInStore] = newAlert;
       }
@@ -222,8 +221,6 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         this.state.storeList[existIndexInStore] = newAlert;
       }
       if (existIndexInStore < 0 && existIndexInPresent < 0) {
-        this.state.presentList.unshift(newAlert);
-
         this.state.presentList.unshift(newAlert);
         this.initiateStateProgressionForNewAlert(newAlert);
       }
@@ -342,7 +339,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         // Keep it if it is in the server response (alertListSorted)
         const persist = alertListSorted.findIndex((eachAlert) => {
           return eachAlert.data.id === alert.data.id;
-        }) > 0;
+        }) > -1;
         // remove it otherwise
         if (!persist) {
           return false;

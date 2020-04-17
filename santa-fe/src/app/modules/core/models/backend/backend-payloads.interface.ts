@@ -86,6 +86,7 @@ export interface PayloadUpdateSingleAlertConfig {
   };
   isEnabled?: boolean;
   isDeleted?: boolean;
+  isUrgent?: boolean;
 }
 
 export interface PayloadSetAlertsToInactive {

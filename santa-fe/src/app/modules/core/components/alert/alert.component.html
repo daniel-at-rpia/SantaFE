@@ -3,8 +3,9 @@
     'sat-alert': true,
     'sat-alert--typeMarkVariant': alertData.data.type === alertTypes.markAlert,
     'sat-alert--typeAxeVariant': alertData.data.type === alertTypes.axeAlert,
-    'sat-alert--typeAskVariant': alertData.data.subType === alertSubTypes.ask,
-    'sat-alert--typeBidVariant': alertData.data.subType === alertSubTypes.bid,
+    'sat-alert--typeAskVariant': alertData.data.subType === alertSubTypes.ask || alertData.data.subType === alertSubTypes.bwic,
+    'sat-alert--typeBidVariant': alertData.data.subType === alertSubTypes.bid || alertData.data.subType === alertSubTypes.owic,
+    'sat-alert--typeGroupVariant': alertData.data.subType === alertSubTypes.bwic|| alertData.data.subType === alertSubTypes.owic,
     'sat-alert--slideOutState': alertData.state.isSlidedOut || !alertData.state.isCountdownFinished,
     'sat-alert--hiddenState': hideAllAlerts && alertData.state.isCountdownFinished,
     'sat-alert--willBeRemovedState': alertData.state.willBeRemoved,
@@ -14,6 +15,7 @@
   <section (click)="onClickAlertThumbnail()" class="sat-alert__thumbnail">
     <div class="sat-alert__thumbnail-type">
       <div class="sat-alert__thumbnail-type-circle">
+        <span class="sat-alert__thumbnail-type-circle-inner sat-alert__thumbnail-type-circle-inner--text">{{alertData.data.subType.toString().toLocaleUpperCase()}}</span>
         <div class="sat-alert__thumbnail-type-circle-inner sat-alert__thumbnail-type-circle-inner--axe">
           <i class="sat-alert__thumbnail-type-circle-inner-icon fas fa-axe"></i>
         </div>

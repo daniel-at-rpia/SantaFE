@@ -131,6 +131,7 @@
                   'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item': true,
                   'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--disabled': eachSecurityBlock.isDisabled,
                   'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--deleted': eachSecurityBlock.isDeleted,
+                  'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--urgent':eachSecurityBlock.isUrgent,
                   'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--new': eachSecurityBlock.groupId == null
                 }">
                 <div class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-newTag">
@@ -186,6 +187,7 @@
                     <span>Inquiry</span>
                   </button>
                 </div>
+                <button (click)="onTogglePriority(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-urgentBtn santaBtn--iconOnly fal fa-exclamation"></button>
                 <button (click)="onToggleDisableTargetGroupFromAxeWatchList(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-disableBtn santaBtn--iconOnly fal fa-bell-slash"></button>
                 <button (click)="onClickRemoveSecurityFromAxeWatchList(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-removeBtn santaBtn--iconOnly fal fa-eraser"></button>
               </li>
