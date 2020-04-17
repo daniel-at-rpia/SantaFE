@@ -112,18 +112,8 @@
                 <span>Inquiry</span>
               </button>
             </div>
-<!--            <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup">-->
-<!--              <button-->
-<!--                (click)="onTogglePriority(state.configuration.axe.myGroup)"-->
-<!--                [ngClass]="{-->
-<!--                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn': true,-->
-<!--                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn&#45;&#45;selected': state.configuration.axe.myGroup.isUrgent-->
-<!--                }">-->
-<!--                <span>Important</span>-->
-<!--              </button>-->
-<!--            </div>-->
             <button
-              title="Urgent!"
+              title="Urgent"
               (click)="onTogglePriority(state.configuration.axe.myGroup)"
               [ngClass]="{
               'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btn santaBtn--iconOnly fal fa-exclamation': true,
@@ -311,10 +301,17 @@
               </div>
             </div>
             <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas">
-              <button (click)="onToggleDisableMarkAlert()" class="sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas-disableBtn santaBtn--labelled">
-                <i class="fal fa-bell-slash"></i>
-                <span>Disable</span>
-              </button>
+<!--              <button (click)="onToggleDisableMarkAlert()" class="sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas-disableBtn santaBtn&#45;&#45;labelled">-->
+<!--                <i class="fal fa-bell-slash"></i>-->
+<!--                <span>Disable</span>-->
+<!--              </button>-->
+            <button
+              title="Disable (mute)"
+              (click)="onToggleDisableMarkAlert()"
+              [ngClass]="{
+                'sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas-disableBtn santaBtn--iconOnly fal fa-bell-slash': true,
+                'sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas-disableBtn--selected': this.state.configuration.mark.myGroup.disabled
+              }"></button>
             </div>
           </div>
         </section>

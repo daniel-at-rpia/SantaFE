@@ -425,6 +425,11 @@
             @include material('none');
             @extend .santaBtn--inverseLabelled;
             background-color: $color_active;
+            &--selected{
+              @include material('none');
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
           }
         }
       }
