@@ -113,6 +113,16 @@
                 <span>Inquiry</span>
               </button>
             </div>
+            <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup">
+              <button
+                (click)="onTogglePriority(state.configuration.axe.myGroup)"
+                [ngClass]="{
+                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn': true,
+                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': state.configuration.axe.myGroup.isUrgent
+                }">
+                <span>Important</span>
+              </button>
+            </div>
             <button (click)="onToggleDisableTargetGroupFromAxeWatchList(state.configuration.axe.myGroup)" class="sat-tradeAlertAxeAlertConfiguration__myGroup-content-disableBtn santaBtn--labelled">
               <i class="fal fa-bell-slash"></i>
               <span>Disable</span>

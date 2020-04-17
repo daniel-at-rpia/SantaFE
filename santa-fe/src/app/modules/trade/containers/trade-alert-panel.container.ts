@@ -318,6 +318,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   public onTogglePriority(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
+    console.log('onTogglePriority', targetBlock);
     targetBlock.isUrgent = !targetBlock.isUrgent;
     this.restfulCommService.logEngagement(
       this.restfulCommService.engagementMap.tradeAlertConfigure,
@@ -563,7 +564,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         groupFilters: {},
         parameters: {
           WatchType: this.mapWatchTypesToWatchType(this.state.configuration.axe.myGroup.alertTypes)
-        }
+        },
+        isUrgent: this.state.configuration.axe.myGroup.isUrgent
       };
       if (this.constants.researchList.indexOf(this.ownerInitial) >= 0) {
         groupPayload.groupFilters.ResearchName = [this.ownerInitial];
