@@ -57,15 +57,17 @@ export class LiveDataProcessingService {
       newSecurity.api.onClickSendToGraph = sendToGraphCallback;
       newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
       newSecurity.api.onClickSendToAlertConfig = sendToAlertConfigCallback;
-      rawSecurityDTOMap[eachKey].positions.forEach((eachPortfolio: BEPortfolioDTO) => {
-        // if (!eachPortfolio.security.isGovt) {
-        // disabling the check for isGovt for now
-        if(true){
-          this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio);
-        } else {
-          isValidFlag = false;
-        }
-      });
+      if (!!rawSecurityDTOMap[eachKey].positions) {
+        rawSecurityDTOMap[eachKey].positions.forEach((eachPortfolio: BEPortfolioDTO) => {
+          // if (!eachPortfolio.security.isGovt) {
+          // disabling the check for isGovt for now
+          if(true){
+            this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio);
+          } else {
+            isValidFlag = false;
+          }
+        });
+      }
       if (isValidFlag) {
         this.dtoService.appendPortfolioOverviewInfoForSecurityDTO(newSecurity);
         this.populateEachRowWithData(
@@ -103,9 +105,11 @@ export class LiveDataProcessingService {
           newSecurity.api.onClickSendToGraph = sendToGraphCallback;
           newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
           newSecurity.api.onClickSendToAlertConfig = sendToAlertConfigCallback;
-          rawSecurityDTOMap[targetSecurityId].positions.forEach((eachPortfolio: BEPortfolioDTO) => {
-            this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio);
-          });
+          if (!!rawSecurityDTOMap[targetSecurityId].positions) {
+            rawSecurityDTOMap[targetSecurityId].positions.forEach((eachPortfolio: BEPortfolioDTO) => {
+              this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio);
+            });
+          }
           this.dtoService.appendPortfolioOverviewInfoForSecurityDTO(newSecurity);
           this.dtoService.appendAlertInfoToSecurityDTO(newSecurity, eachAlertDTO);
           this.populateEachRowWithData(
