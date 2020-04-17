@@ -92,11 +92,9 @@
                 <span>Liquidation</span>
               </button>
             </div>
-            <span class="sat-tradeAlertAxeAlertConfiguration__myGroup-content-text santa-margin-left">
-              Watching
-            </span>
             <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup">
               <button
+                title="Watching"
                 (click)="onSelectAxeAlertWatchType(constants.axeAlertType.normal, state.configuration.axe.myGroup)"
                 [ngClass]="{
                   'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn': true,
@@ -105,6 +103,7 @@
                 <span>Axe</span>
               </button>
               <button
+                title="Watching"
                 (click)="onSelectAxeAlertWatchType(constants.axeAlertType.marketList, state.configuration.axe.myGroup)"
                 [ngClass]="{
                   'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn': true,
@@ -113,20 +112,30 @@
                 <span>Inquiry</span>
               </button>
             </div>
-            <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup">
-              <button
-                (click)="onTogglePriority(state.configuration.axe.myGroup)"
-                [ngClass]="{
-                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn': true,
-                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': state.configuration.axe.myGroup.isUrgent
-                }">
-                <span>Important</span>
-              </button>
-            </div>
-            <button (click)="onToggleDisableTargetGroupFromAxeWatchList(state.configuration.axe.myGroup)" class="sat-tradeAlertAxeAlertConfiguration__myGroup-content-disableBtn santaBtn--labelled">
-              <i class="fal fa-bell-slash"></i>
-              <span>Disable</span>
-            </button>
+<!--            <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup">-->
+<!--              <button-->
+<!--                (click)="onTogglePriority(state.configuration.axe.myGroup)"-->
+<!--                [ngClass]="{-->
+<!--                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn': true,-->
+<!--                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn&#45;&#45;selected': state.configuration.axe.myGroup.isUrgent-->
+<!--                }">-->
+<!--                <span>Important</span>-->
+<!--              </button>-->
+<!--            </div>-->
+            <button
+              title="Urgent!"
+              (click)="onTogglePriority(state.configuration.axe.myGroup)"
+              [ngClass]="{
+              'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btn santaBtn--iconOnly fal fa-exclamation': true,
+              'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': state.configuration.axe.myGroup.isUrgent
+              }"></button>
+            <button
+              title="Disable (mute)"
+              (click)="onToggleDisableTargetGroupFromAxeWatchList(state.configuration.axe.myGroup)"
+              [ngClass]="{
+                'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btn santaBtn--iconOnly fal fa-bell-slash': true,
+                'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': state.configuration.axe.myGroup.isDisabled
+              }"></button>
           </div>
         </section>
         <section class="sat-tradeAlertAxeAlertConfiguration__textSeparator">
@@ -181,6 +190,7 @@
                 </div>
                 <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup">
                   <button
+                    title="Watching"
                     (click)="onSelectAxeAlertWatchType(constants.axeAlertType.normal, eachSecurityBlock)"
                     [ngClass]="{
                       'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn': true,
@@ -189,6 +199,7 @@
                     <span>Axe</span>
                   </button>
                   <button
+                    title="Watching"
                     (click)="onSelectAxeAlertWatchType(constants.axeAlertType.marketList, eachSecurityBlock)"
                     [ngClass]="{
                       'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn': true,
@@ -197,9 +208,9 @@
                     <span>Inquiry</span>
                   </button>
                 </div>
-                <button (click)="onTogglePriority(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-urgentBtn santaBtn--iconOnly fal fa-exclamation"></button>
-                <button (click)="onToggleDisableTargetGroupFromAxeWatchList(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-disableBtn santaBtn--iconOnly fal fa-bell-slash"></button>
-                <button (click)="onClickRemoveSecurityFromAxeWatchList(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-removeBtn santaBtn--iconOnly fal fa-eraser"></button>
+                <button title="Urgent" (click)="onTogglePriority(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-urgentBtn santaBtn--iconOnly fal fa-exclamation"></button>
+                <button title="Disable (mute)" (click)="onToggleDisableTargetGroupFromAxeWatchList(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-disableBtn santaBtn--iconOnly fal fa-bell-slash"></button>
+                <button title="Remove" (click)="onClickRemoveSecurityFromAxeWatchList(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-removeBtn santaBtn--iconOnly fal fa-eraser"></button>
               </li>
             </ul>
           </div>

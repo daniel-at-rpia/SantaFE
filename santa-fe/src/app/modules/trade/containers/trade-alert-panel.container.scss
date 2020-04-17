@@ -45,6 +45,10 @@
         font-size: $font_size_normal;
         text-align: right;
       }
+      &-btn{
+        margin-left: $spacing_medium;
+      }
+
       &-btnGroup {
         flex: 1 1 auto;
         margin-left: $spacing_medium;
