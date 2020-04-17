@@ -6,9 +6,9 @@
     "start": "ng serve --extra-webpack-config webpack.partial.js -o --extract-css",
     "buildDev": "ng build --extra-webpack-config webpack.partial.js -o",
     "buildProd": "ng build --prod --extra-webpack-config webpack.partial.js -o",
+    "deployDev": "firebase deploy --only hosting:dev",
     "deployProd": "firebase deploy --only hosting:prod",
-    "deployDev": "firebase deploy --only hosting:dev,hosting:local",
-    "deployDev3": "firebase deploy --only hosting:dev3,hosting:local3",
+    "deployLocal": "firebase deploy --only hosting:local",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
