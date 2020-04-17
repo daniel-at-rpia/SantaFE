@@ -20,6 +20,9 @@
         "local3": [
           "local3-santa-rpia"
         ],
+        "local4": [
+          "local4-santa-rpia"
+        ],
         "prod": [
           "santa-rpia"
         ]

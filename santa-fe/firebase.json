@@ -33,6 +33,22 @@
       ]
     },
     {
+      "target": "dev4",
+      "site": "dev4-santa-rpia",
+      "public": "dist/santa-fe",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
       "target": "dev3",
       "site": "dev3-santa-rpia",
       "public": "dist/santa-fe",
