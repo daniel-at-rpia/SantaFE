@@ -543,7 +543,7 @@ export class SantaTable implements OnInit, OnChanges {
       }
     });
     if (insertions.length > 0) {
-      this.loadTableRows(this.tableData.data.rows, true);
+      this.agGridMiddleLayerService.loadAgGridRows(this.tableData);
       setTimeout(function(){this.agGridMiddleLayerService.updateAgGridRows(this.tableData, realUpdates, 2)}.bind(this), 1000);
     } else {
       this.agGridMiddleLayerService.updateAgGridRows(this.tableData, realUpdates, 2);
