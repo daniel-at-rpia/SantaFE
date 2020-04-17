@@ -220,11 +220,13 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.newAlertsForAlertTableSub = this.store$.pipe(
       select(selectNewAlertsForAlertTable)
     ).subscribe((list: Array<AlertDTO>) => {
-      if (list && list.length > 0) {
-        list.forEach((eachAlert) => {
-          this.state.alertTableAlertList.push(eachAlert);
-        });
-        this.store$.dispatch(new TradeAlertTableReceiveNewAlertsEvent());
+      if (list) {
+        if (list.length > 0) {
+          list.forEach((eachAlert) => {
+            this.state.alertTableAlertList.push(eachAlert);
+          });
+          this.store$.dispatch(new TradeAlertTableReceiveNewAlertsEvent());
+        }
         if (this.state.delayedLoadingFreshDataForAlert) {
           this.state.delayedLoadingFreshDataForAlert = false;
           this.fetchAllData(true);
@@ -559,43 +561,39 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         securityList.push(targetSecurityId);
       }
     });
-    if (securityList.length > 0) {
-      const payload: PayloadGetTradeFullData = {
-        maxNumberOfSecurities: 2000,
-        groupIdentifier: {},
-        groupFilters: {
-          SecurityIdentifier: securityList
-        }
-      };
-      this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolios, { req: 'POST' }, payload, false, false).pipe(
-        first(),
-        tap((serverReturn) => {
-          if (this.state.displayAlertTable) {
-            if (!isInitialFetch) {
-              this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
-            } else {
-              this.updateStage(0);
-            }
+    const payload: PayloadGetTradeFullData = {
+      maxNumberOfSecurities: 2000,
+      groupIdentifier: {},
+      groupFilters: {
+        SecurityIdentifier: securityList
+      }
+    };
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolios, { req: 'POST' }, payload, false, false).pipe(
+      first(),
+      tap((serverReturn) => {
+        if (this.state.displayAlertTable) {
+          if (!isInitialFetch) {
+            this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
+          } else {
+            this.updateStage(0);
           }
-          this.loadDataForAlertTable(serverReturn);
-        }),
-        catchError(err => {
-          this.restfulCommService.logError(`Get alert table failed`);
-          this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
-          this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
-          console.error('error', err);
-          this.state.fetchResult.fetchTableDataFailed = true;
-          this.state.fetchResult.fetchTableDataFailedError = err.message;
-          this.state.fetchResult.mainTable.prinstineRowList = [];
-          this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
-          this.state.fetchResult.alertTable.prinstineRowList = [];
-          this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
-          return of('error');
-        })
-      ).subscribe();
-    } else {
-      console.log('alert list is 0, skip loading alert table');
-    }
+        }
+        this.loadDataForAlertTable(serverReturn);
+      }),
+      catchError(err => {
+        this.restfulCommService.logError(`Get alert table failed`);
+        this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
+        this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
+        console.error('error', err);
+        this.state.fetchResult.fetchTableDataFailed = true;
+        this.state.fetchResult.fetchTableDataFailedError = err.message;
+        this.state.fetchResult.mainTable.prinstineRowList = [];
+        this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
+        this.state.fetchResult.alertTable.prinstineRowList = [];
+        this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
+        return of('error');
+      })
+    ).subscribe();
   }
 
   private loadDataForAlertTable(serverReturn: BEFetchAllTradeDataReturn){
