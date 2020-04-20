@@ -69,7 +69,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
   autoUpdateCount$: Observable<any>;
   constants = {
-    alertTypes: AlertTypes,
+    axeAlertTypes: AlertTypes,
     alertSubTypes: AlertSubTypes,
     axeAlertScope: AxeAlertScope,
     axeAlertType: AxeAlertType,
@@ -102,7 +102,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             card: null,
             groupId: null,
             scopes: [],
-            alertTypes: [],
+            axeAlertTypes: [],
             isDeleted: false,
             isDisabled: false,
             isUrgent: false
@@ -161,7 +161,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       if (!!targetSecurity) {
         if (!this.state.configureAlert) {
           this.onClickConfigureAlert();
-          this.state.configuration.selectedAlert = this.constants.alertTypes.axeAlert;
+          this.state.configuration.selectedAlert = this.constants.axeAlertTypes.axeAlert;
         }
         const existMatchIndex = this.state.configuration.axe.securityList.findIndex((eachEntry) => {
           return eachEntry.card.data.securityID === targetSecurity.data.securityID;
@@ -270,17 +270,17 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   public onSelectAxeWatchlistSideType(targetType: AxeAlertType, targetBlock: TradeAlertConfigurationAxeGroupBlock) {
-    const currTypes: AxeAlertType[] = targetBlock.alertTypes.slice();
+    const currTypes: AxeAlertType[] = targetBlock.axeAlertTypes.slice();
     if (!!targetType && !!targetBlock && !targetBlock.isDisabled) {
-      if (targetBlock.alertTypes.indexOf(targetType) === -1) {
-        targetBlock.alertTypes = [targetType, ...currTypes];
+      if (targetBlock.axeAlertTypes.indexOf(targetType) === -1) {
+        targetBlock.axeAlertTypes = [targetType, ...currTypes];
       } else {
-        targetBlock.alertTypes = currTypes.filter((a: AxeAlertType) => a !== targetType);
+        targetBlock.axeAlertTypes = currTypes.filter((a: AxeAlertType) => a !== targetType);
       }
       this.restfulCommService.logEngagement(
         this.restfulCommService.engagementMap.tradeAlertConfigure,
         null,
-        `Change AlertType to ${targetBlock.alertTypes.toString()}`,
+        `Change AlertType to ${targetBlock.axeAlertTypes.toString()}`,
         'Trade Alert Panel'
       );
     }
@@ -288,18 +288,18 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
   public onSelectAxeAlertWatchType(targetType: AxeAlertType, targetBlock: TradeAlertConfigurationAxeGroupBlock) {
     if (!!targetType && !!targetBlock && !targetBlock.isDisabled) {
-      if (targetBlock.alertTypes.indexOf(targetType) === -1) {
-        targetBlock.alertTypes = [targetType, ...targetBlock.alertTypes];
+      if (targetBlock.axeAlertTypes.indexOf(targetType) === -1) {
+        targetBlock.axeAlertTypes = [targetType, ...targetBlock.axeAlertTypes];
       } else {
-        if (targetBlock.alertTypes.length > 1) {
-          targetBlock.alertTypes =
-            targetBlock.alertTypes.filter((a: AxeAlertType) => a !== targetType);
+        if (targetBlock.axeAlertTypes.length > 1) {
+          targetBlock.axeAlertTypes =
+            targetBlock.axeAlertTypes.filter((a: AxeAlertType) => a !== targetType);
         }
       }
       this.restfulCommService.logEngagement(
         this.restfulCommService.engagementMap.tradeAlertConfigure,
         null,
-        `Change Alert Type to ${targetBlock.alertTypes.toString()}`,
+        `Change Alert Type to ${targetBlock.axeAlertTypes.toString()}`,
         'Trade Alert Panel'
       );
     }
@@ -424,7 +424,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     const newEntry: TradeAlertConfigurationAxeGroupBlock = {
       card: copy,
       groupId: null,
-      alertTypes: this.state.configuration.axe.myGroup.alertTypes,
+      axeAlertTypes: this.state.configuration.axe.myGroup.axeAlertTypes,
       scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],
       isDeleted: false,
       isDisabled: false,
@@ -492,7 +492,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     const newEntry: TradeAlertConfigurationAxeGroupBlock = {
       card: null,
       groupId: rawGroupConfig.alertConfigID,
-      alertTypes: WatchType === AxeAlertType.both ? [AxeAlertType.normal, AxeAlertType.marketList] : [WatchType],
+      axeAlertTypes: WatchType === AxeAlertType.both ? [AxeAlertType.normal, AxeAlertType.marketList] : [WatchType],
       scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],
       isDeleted: false,
       isDisabled: !rawGroupConfig.isEnabled,
@@ -522,7 +522,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     this.state.configuration.axe.myGroup = {
       card: null,
       groupId: rawGroupConfig.alertConfigID,
-      alertTypes: WatchType === AxeAlertType.both ? [AxeAlertType.normal, AxeAlertType.marketList] : [WatchType],
+      axeAlertTypes: WatchType === AxeAlertType.both ? [AxeAlertType.normal, AxeAlertType.marketList] : [WatchType],
       scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],
       isDeleted: false,
       isDisabled: !rawGroupConfig.isEnabled,
@@ -555,11 +555,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         alertConfigs: []
       };
       const groupPayload: PayloadUpdateSingleAlertConfig = {
-        type: this.constants.alertTypes.axeAlert,
+        type: this.constants.axeAlertTypes.axeAlert,
         subType: this.mapAxeScopesToAlertSubtypes(this.state.configuration.axe.myGroup.scopes),
         groupFilters: {},
         parameters: {
-          WatchType: this.mapWatchTypesToWatchType(this.state.configuration.axe.myGroup.alertTypes)
+          WatchType: this.mapWatchTypesToWatchType(this.state.configuration.axe.myGroup.axeAlertTypes)
         },
         isUrgent: this.state.configuration.axe.myGroup.isUrgent
       };
@@ -577,11 +577,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       entirePayload.alertConfigs.push(groupPayload);
       this.state.configuration.axe.securityList.forEach((eachEntry) => {
         const payload: PayloadUpdateSingleAlertConfig = {
-          type: this.constants.alertTypes.axeAlert,
+          type: this.constants.axeAlertTypes.axeAlert,
           subType: this.mapAxeScopesToAlertSubtypes(eachEntry.scopes),
           groupFilters: {},
           parameters: {
-            WatchType: this.mapWatchTypesToWatchType(eachEntry.alertTypes)
+            WatchType: this.mapWatchTypesToWatchType(eachEntry.axeAlertTypes)
           },
           isUrgent: eachEntry.isUrgent
         };
@@ -614,7 +614,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         alertConfigs: []
       };
       const payload: PayloadUpdateSingleAlertConfig = {
-        type: this.constants.alertTypes.markAlert,
+        type: this.constants.axeAlertTypes.markAlert,
         subType: this.constants.alertSubTypes.liquidation,
         groupFilters: {
         },

@@ -527,7 +527,6 @@
       &-axeConfig {
         @include mix_border_radius(5px, 'all-but-top-left');
         flex: 1 1 auto;
-        max-width: 102rem;
         display: none;
         padding: $spacing_small;
       }

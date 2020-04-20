@@ -4,8 +4,8 @@
     'sat-tradeAlertPanel--sidePanelsDisplayedState': sidePanelsDisplayed,
     'sat-tradeAlertPanel--configureAlertState': state.configureAlert,
     'sat-tradeAlertPanel--alertPausedState': state.isAlertPaused,
-    'sat-tradeAlertPanel--configureAxeAlertState': state.configuration.selectedAlert === constants.alertTypes.axeAlert,
-    'sat-tradeAlertPanel--configureMarkAlertState': state.configuration.selectedAlert === constants.alertTypes.markAlert
+    'sat-tradeAlertPanel--configureAxeAlertState': state.configuration.selectedAlert === constants.axeAlertTypes.axeAlert,
+    'sat-tradeAlertPanel--configureMarkAlertState': state.configuration.selectedAlert === constants.axeAlertTypes.markAlert
   }">
   <section class="sat-tradeAlertPanel__utilities">
     <div class="sat-tradeAlertPanel__utilities-pause">
@@ -33,13 +33,13 @@
   <section class="sat-tradeAlertPanel__configuration">
     <ul class="sat-tradeAlertPanel__configuration-alertTypeList">
       <li class="sat-tradeAlertPanel__configuration-alertTypeList-item sat-tradeAlertPanel__configuration-alertTypeList-item--axe">
-        <button (click)="selectAlertForConfigure(constants.alertTypes.axeAlert)" class="sat-tradeAlertPanel__configuration-alertTypeList-item-btn santaBtn--labelled santaBtn--inverseLabelled">
+        <button (click)="selectAlertForConfigure(constants.axeAlertTypes.axeAlert)" class="sat-tradeAlertPanel__configuration-alertTypeList-item-btn santaBtn--labelled santaBtn--inverseLabelled">
           <i class="fas fa-axe"></i>
           <span>Axe Alert</span>
         </button>
       </li>
       <li class="sat-tradeAlertPanel__configuration-alertTypeList-item sat-tradeAlertPanel__configuration-alertTypeList-item--mark">
-        <button (click)="selectAlertForConfigure(constants.alertTypes.markAlert)" class="sat-tradeAlertPanel__configuration-alertTypeList-item-btn santaBtn--labelled santaBtn--inverseLabelled">
+        <button (click)="selectAlertForConfigure(constants.axeAlertTypes.markAlert)" class="sat-tradeAlertPanel__configuration-alertTypeList-item-btn santaBtn--labelled santaBtn--inverseLabelled">
           <i class="far fa-bullseye-arrow"></i>
           <span>Mark Alert</span>
         </button>
@@ -98,7 +98,7 @@
                 (click)="onSelectAxeAlertWatchType(constants.axeAlertType.normal, state.configuration.axe.myGroup)"
                 [ngClass]="{
                   'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn': true,
-                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': state.configuration.axe.myGroup.alertTypes.indexOf(constants.axeAlertType.normal) >= 0
+                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': state.configuration.axe.myGroup.axeAlertTypes.indexOf(constants.axeAlertType.normal) >= 0
                 }">
                 <span>Axe</span>
               </button>
@@ -107,7 +107,7 @@
                 (click)="onSelectAxeAlertWatchType(constants.axeAlertType.marketList, state.configuration.axe.myGroup)"
                 [ngClass]="{
                   'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn': true,
-                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': state.configuration.axe.myGroup.alertTypes.indexOf(constants.axeAlertType.marketList) >= 0
+                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': state.configuration.axe.myGroup.axeAlertTypes.indexOf(constants.axeAlertType.marketList) >= 0
                 }">
                 <span>Inquiry</span>
               </button>
@@ -184,7 +184,7 @@
                     (click)="onSelectAxeAlertWatchType(constants.axeAlertType.normal, eachSecurityBlock)"
                     [ngClass]="{
                       'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn': true,
-                      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.alertTypes.indexOf(constants.axeAlertType.normal) >= 0
+                      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.axeAlertTypes.indexOf(constants.axeAlertType.normal) >= 0
                     }">
                     <span>Axe</span>
                   </button>
@@ -193,7 +193,7 @@
                     (click)="onSelectAxeAlertWatchType(constants.axeAlertType.marketList, eachSecurityBlock)"
                     [ngClass]="{
                       'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn': true,
-                      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.alertTypes.indexOf(constants.axeAlertType.marketList) >= 0
+                      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.axeAlertTypes.indexOf(constants.axeAlertType.marketList) >= 0
                     }">
                     <span>Inquiry</span>
                   </button>
