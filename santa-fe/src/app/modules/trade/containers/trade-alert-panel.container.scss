@@ -460,7 +460,7 @@
     }
     &-configureCTA {
       @include mix_border_generator(0 0 0 $typical_border_width);
-      flex: 1 1 auto;
+      flex: 0 1 auto;
       display: flex;
       justify-content: center;
       margin-left: $spacing_medium;
