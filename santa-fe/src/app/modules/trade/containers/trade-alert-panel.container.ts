@@ -680,7 +680,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       tap((serverReturn: Array<BEAlertDTO>) => {
         if (!!serverReturn && serverReturn.length > 0) {
           const updateList = [];
-          serverReturn.push(mockAlert);
           serverReturn.forEach((eachRawAlert) => {
             // checking for cancelled and active alerts
             const expired = moment().diff(moment(eachRawAlert.validUntilTime) ) > 0;
