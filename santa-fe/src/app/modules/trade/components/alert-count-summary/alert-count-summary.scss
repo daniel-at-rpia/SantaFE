@@ -1,7 +1,8 @@
 @import "global.scss";
 
 .sat-alertCountSummary {
-  border: 1px solid red;
+  $BlockName: &;
+  //border: 1px solid red;
   border-radius: 4px !important;
   padding: 2px 4px;
   display: flex;
@@ -10,22 +11,49 @@
   justify-content: space-between;
 
   &-icon {
-    border: 1px solid red;
+    //border: 1px solid red;
     border-radius: 4px;
     padding: 2px 4px;
   }
 
 
   &-text {
-    border: 1px solid red;
+    //border: 1px solid red;
     border-radius: 4px;
     padding: 2px 4px;
+    font-weight: bold;
   }
 
   &-count {
-    border: 1px solid red;
-    border-radius: 4px;
-    padding: 2px 4px;
-
+    font-size: $font_size_x_small;
+    font-weight: 900;
+    //border: 1px solid red;
+    border-radius: 5px;
+    padding: 2px 2px;
   }
+
+  &--isAxe, &--isInquiry {
+    #{$BlockName} {
+      &-count {
+        background: white;
+        color: $color_axe;
+      }
+    }
+
+    background: $color_axe;
+    color: white
+  }
+
+  &--isMark {
+    #{$BlockName} {
+      &-count {
+        background: white;
+        color: $tradeMarkAlertColor;
+      }
+    }
+
+    background: $tradeMarkAlertColor;
+    color: white
+  }
+
 }

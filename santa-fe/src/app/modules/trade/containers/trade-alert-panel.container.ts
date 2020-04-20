@@ -50,9 +50,10 @@
       AlertSubTypes
     } from 'Core/constants/coreConstants.constant';
     import {
-      selectSecurityMapContent,
-      selectSecurityMapValidStatus
-    } from 'Core/selectors/core.selectors';
+      selectAlertCounts,
+  selectSecurityMapContent,
+  selectSecurityMapValidStatus
+} from 'Core/selectors/core.selectors';
     import {
       ALERT_MAX_SECURITY_SEARCH_COUNT,
       AxeAlertScope,
@@ -85,6 +86,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     centerPanelPresetSelectedSub: null
   }
   autoUpdateCount$: Observable<any>;
+  alertCounts$: Observable<any>;
   constants = {
     alertTypes: AlertTypes,
     alertSubTypes: AlertSubTypes,
@@ -101,6 +103,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     private restfulCommService: RestfulCommService,
   ){
     this.state = this.initializePageState();
+    this.alertCounts$ = this.store$.pipe(
+      select(selectAlertCounts)
+    );
   }
 
   private initializePageState(): TradeAlertPanelState {
@@ -423,7 +428,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             myGroup.loseMoneyPrice = eachConfiguration.parameters.LoseMoneyPriceThreshold == undefined ? null : eachConfiguration.parameters.LoseMoneyPriceThreshold;
             myGroup.loseMoneySpread = eachConfiguration.parameters.LoseMoneySpreadThreshold == undefined ? null : eachConfiguration.parameters.LoseMoneySpreadThreshold;
             myGroup.makeMoneyPrice = eachConfiguration.parameters.MakeMoneyPriceThreshold == undefined ? null : eachConfiguration.parameters.MakeMoneyPriceThreshold;
-            myGroup.makeMoneySpread = eachConfiguration.parameters.MakeMoneySpreadThreshold == undefined ? null : eachConfiguration.parameters.MakeMoneySpreadThreshold; 
+            myGroup.makeMoneySpread = eachConfiguration.parameters.MakeMoneySpreadThreshold == undefined ? null : eachConfiguration.parameters.MakeMoneySpreadThreshold;
           }
         } else {
           this.restfulCommService.logError(`'Alert/get-alert-configs' API returned an empty result`);

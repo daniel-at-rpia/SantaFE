@@ -120,7 +120,7 @@ export class TradePage implements OnInit, OnDestroy {
   }
 
   private loadOwnerInitial(serverReturn: string) {
-    if (serverReturn === 'DZ' || serverReturn === 'RC' || serverReturn === 'MS') {
+    if (serverReturn === 'DZ' || serverReturn === 'RC' || serverReturn === 'MS' || serverReturn === 'AR') {
       this.state.ownerInitial = 'DM';
     } else {
       this.state.ownerInitial = serverReturn;

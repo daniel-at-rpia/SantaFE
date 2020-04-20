@@ -11,15 +11,16 @@ import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
 export interface CoreState {
   user: {
     initials: string;
-  }
+  };
   alert: {
     newAlerts: Array<AlertDTO>;
+    countByTypeArr: Array<{type: string, count: number}>;
     displayThumbnail: boolean;
-  }
+  };
   securityMap: {
     valid: boolean;
     mapContent: Array<SecurityMapEntry>
-  }
+  };
 }
 
 const initialState: CoreState = {
@@ -28,15 +29,16 @@ const initialState: CoreState = {
   },
   alert: {
     newAlerts: [],
+    countByTypeArr: [],
     displayThumbnail: true
   },
   securityMap: {
     valid: false,
     mapContent: []
   }
-}
+};
 
-export function coreReducer (
+export function coreReducer(
   state: CoreState = initialState,
   action
 ): CoreState {
@@ -78,6 +80,14 @@ export function coreReducer (
         alert: {
           ...state.alert,
           newAlerts: state.alert.newAlerts.concat(action.list)
+        }
+      };
+    case CoreActions.SendAlertCountsByType:
+      return {
+        ...state,
+        alert: {
+          ...state.alert,
+          countByTypeArr: action.payload
         }
       };
     case CoreActions.ReceivedNewAlerts:

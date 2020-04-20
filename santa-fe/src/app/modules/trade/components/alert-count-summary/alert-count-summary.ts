@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {AlertTypes} from "Core/constants/coreConstants.constant";
 
 @Component({
   selector: 'alert-count-summary',
@@ -6,10 +7,29 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./alert-count-summary.scss']
 })
 export class AlertCountSummary implements OnInit {
+  @Input() type: AlertTypes = null;
+  @Input() count: number = 0;
+  constants = {
+    alertTypes: AlertTypes,
+  };
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
+  }
+
+  getAlertNameFromType(type: AlertTypes) {
+    switch (type) {
+      case AlertTypes.axeAlert:
+        return AlertTypes.axeAlert;
+      case AlertTypes.markAlert:
+        return AlertTypes.markAlert;
+      case AlertTypes.marketListAlert:
+        return 'Inquiry';
+      default:
+        return '';
+    }
   }
 
 }
