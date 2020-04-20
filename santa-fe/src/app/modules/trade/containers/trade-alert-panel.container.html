@@ -8,17 +8,18 @@
     'sat-tradeAlertPanel--configureMarkAlertState': state.configuration.selectedAlert === constants.alertTypes.markAlert
   }">
   <section class="sat-tradeAlertPanel__utilities">
-    <div class="sat-tradeAlertPanel__utilities-pause">
-<!--      <button-->
-<!--        (click)="onTogglePauseAlert()"-->
-<!--        [ngClass]="{-->
-<!--          'santaBtn&#45;&#45;labelled': true,-->
-<!--          'sat-tradeAlertPanel__utilities-pause-btn': true,-->
-<!--          'santaBtn&#45;&#45;inverseLabelled': state.isAlertPaused-->
-<!--        }">-->
-<!--        <i class="fal fa-pause"></i>-->
-<!--        <span>Pause Alert</span>-->
-<!--      </button>-->
+    <div class="sat-tradeAlertPanel__utilities-alertCountsGrid">
+      <alert-count-summary></alert-count-summary>
+      <alert-count-summary></alert-count-summary>
+      <alert-count-summary></alert-count-summary>
+      <alert-count-summary></alert-count-summary>
+      <alert-count-summary></alert-count-summary>
+      <alert-count-summary></alert-count-summary>
+      <alert-count-summary></alert-count-summary>
+      <alert-count-summary></alert-count-summary>
+      <alert-count-summary></alert-count-summary>
+      <alert-count-summary></alert-count-summary>
+      <alert-count-summary></alert-count-summary>
     </div>
     <div class="sat-tradeAlertPanel__utilities-configureCTA">
       <button (click)="onClickConfigureAlert()" class="santaBtn--labelled">

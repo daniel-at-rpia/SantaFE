@@ -33,7 +33,7 @@ $trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta
       &-utilityPanel {
         @include mix_alive('custom', flex-basis $trade_layout_animation_duration);
         flex: 0 1 auto;
-        width: 590px;
+        width: 42rem;
         display: flex;
         margin-right: $spacing_medium;
         background-color: $color_gray_2;

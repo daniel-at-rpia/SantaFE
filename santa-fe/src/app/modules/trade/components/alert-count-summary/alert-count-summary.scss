@@ -1,0 +1,31 @@
+@import "global.scss";
+
+.sat-alertCountSummary {
+  border: 1px solid red;
+  border-radius: 4px !important;
+  padding: 2px 4px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  &-icon {
+    border: 1px solid red;
+    border-radius: 4px;
+    padding: 2px 4px;
+  }
+
+
+  &-text {
+    border: 1px solid red;
+    border-radius: 4px;
+    padding: 2px 4px;
+  }
+
+  &-count {
+    border: 1px solid red;
+    border-radius: 4px;
+    padding: 2px 4px;
+
+  }
+}

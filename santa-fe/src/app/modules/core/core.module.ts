@@ -72,15 +72,16 @@ import { Alert } from 'Core/components/alert/alert.component';
     GraphService,
     RestfulCommService,
     AgGridMiddleLayerService
-  ], 
-  exports: [
-    SantaTable,
-    SecurityCard,
-    SecurityTable,
-    SecurityDefinition,
-    SecurityDefinitionConfigurator,
-    SearchShortcut,
-    GlobalAlert
-  ]
+  ],
+    exports: [
+        SantaTable,
+        SecurityCard,
+        SecurityTable,
+        SecurityDefinition,
+        SecurityDefinitionConfigurator,
+        SearchShortcut,
+        GlobalAlert,
+        Alert
+    ]
 })
 export class CoreModule { }
