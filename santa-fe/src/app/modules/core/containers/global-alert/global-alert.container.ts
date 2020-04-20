@@ -217,7 +217,6 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     });
     // special logic for marketList alert
     if (isMarketListAlert) {
-      // console.log(`isMarketListAlert, existIndexInPresent: ${existIndexInPresent}, existIndexInStore: ${existIndexInStore}`);
       if (existIndexInPresent > 0) {
         this.state.presentList[existIndexInStore] = newAlert;
       }
@@ -338,8 +337,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   // filtering market list alerts
   private filterMarketListAlerts(alertListSorted: AlertDTO[], currList: AlertDTO[]) {
     return currList.filter((alert) => {
-      const isMarketListAlert = alert.data.type === AlertTypes.marketListAlert;
-      if (isMarketListAlert) {
+      if (alert.data.type === AlertTypes.marketListAlert) {
         // Keep it if it is in the server response (alertListSorted)
         const persist = alertListSorted.findIndex((eachAlert) => {
           return eachAlert.data.id === alert.data.id;

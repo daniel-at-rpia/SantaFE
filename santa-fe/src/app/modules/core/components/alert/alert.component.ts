@@ -10,7 +10,6 @@ import {
 import { AlertDTO } from 'FEModels/frontend-models.interface';
 import { AlertTypes, AlertSubTypes } from 'Core/constants/coreConstants.constant';
 import * as moment from 'moment';
-import {Moment} from 'moment';
 
 
 
@@ -34,7 +33,11 @@ export class Alert implements OnInit{
   constructor() { }
 
   ngOnInit(): void {
-    // console.log(this.alertData);
+    if (!!this.alertData.data.validUntilTime) {
+     this.startCountdown();
+    }
+  }
+  startCountdown( ){
     this.validUntil = moment(this.alertData.data.validUntilTime);
     const interval = setInterval(() => {
       if (this.hasExpired()) {
