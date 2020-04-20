@@ -15,7 +15,7 @@
   <section (click)="onClickAlertThumbnail()" class="sat-alert__thumbnail">
     <div class="sat-alert__thumbnail-type">
       <div class="sat-alert__thumbnail-type-circle">
-        <span class="sat-alert__thumbnail-type-circle-inner sat-alert__thumbnail-type-circle-inner--text">{{alertData.data.subType.toString().toLocaleUpperCase()}}</span>
+        <span class="sat-alert__thumbnail-type-circle-inner sat-alert__thumbnail-type-circle-innerText">{{alertData.data.subType.toString().toLocaleUpperCase()}}</span>
         <div class="sat-alert__thumbnail-type-circle-inner sat-alert__thumbnail-type-circle-inner--axe">
           <i class="sat-alert__thumbnail-type-circle-inner-icon fas fa-axe"></i>
         </div>
@@ -27,7 +27,6 @@
     </div>
     <div class="sat-alert__thumbnail-pin">
       <div class="sat-alert__thumbnail-pin-content">
-<!--        <span class="sat-alert__thumbnail-pin-content-text">BWIC</span><br/>-->
         <span class="sat-alert__thumbnail-pin-content-text">{{validUntil | countdown}}</span>
       </div>
       <div class="sat-alert__thumbnail-pin-mask"></div>
