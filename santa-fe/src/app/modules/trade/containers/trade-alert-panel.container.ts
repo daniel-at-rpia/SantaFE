@@ -287,7 +287,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   public onSelectAxeAlertWatchType(targetType: AxeAlertType, targetBlock: TradeAlertConfigurationAxeGroupBlock) {
-    // console.log('onSelectAxeAlertWatchType', targetType);
     if (!!targetType && !!targetBlock && !targetBlock.isDisabled) {
       if (targetBlock.alertTypes.indexOf(targetType) === -1) {
         targetBlock.alertTypes = [targetType, ...targetBlock.alertTypes];
@@ -318,7 +317,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   public onTogglePriority(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
-    console.log('onTogglePriority', targetBlock);
     targetBlock.isUrgent = !targetBlock.isUrgent;
     this.restfulCommService.logEngagement(
       this.restfulCommService.engagementMap.tradeAlertConfigure,
@@ -476,7 +474,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   private populateConfigurationFromEachGroup(
     rawGroupConfig: BEAlertConfigurationDTO
   ) {
-    // console.log('populateConfigurationFromEachGroup:', rawGroupConfig);
     if (!!rawGroupConfig && !!rawGroupConfig.groupFilters) {
       if (rawGroupConfig.groupFilters.SecurityIdentifier && rawGroupConfig.groupFilters.SecurityIdentifier.length > 0) {
         this.populateConfigurationFromSecurityGroup(rawGroupConfig);
@@ -487,7 +484,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private populateConfigurationFromSecurityGroup(rawGroupConfig: BEAlertConfigurationDTO) {
-    // console.log('populateConfigurationFromSecurityGroup: ', rawGroupConfig);
     const { WatchType } = rawGroupConfig.parameters;
     const targetScope = rawGroupConfig.subType as AxeAlertScope;
     const payload: PayloadGetSecurities = {
@@ -681,21 +677,12 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlerts, {req: 'POST'}, payload).pipe(
       first(),
       tap((serverReturn: Array<BEAlertDTO>) => {
-        if (isDevMode() && serverReturn.length === 0) {
-          // console.log('mocking alerts',serverReturn);
-          // serverReturn = alerts;
-        }
-        console.log('updateAlert', serverReturn);
-        // const mock = {"type":"MarketList","subType":"Owic","keyWord":"Expires at|05:10:56 AM","message":"OWIC started @ 4:56:37 AM and ends @ 5:10:56 AM (1 security)","validUntilTime":"2020-04-16T20:10:56","marketListType":"OWIC","marketListDescription":"OWIC started @ 4:56:37 AM and ends @ 5:10:56 AM","securityIdentifierToQuoteId":{"9137":"ab8bb0d4-82ab-4a4c-8bb7-09132d2d25f5"},"alertConfigId":"OWIC started @ 4:56:37 AM and ends @ 5:10:56 AM","alertId":"7c0ca41d-7c7b-49b7-8beb-5d1facfca00b","timeStamp":"2020-04-16T13:51:41.1024995-04:00","isUrgent":false,"isActive":true,"isDeleted":false,"isCancelled":false};
-        // serverReturn.push(mock);
         if (!!serverReturn && serverReturn.length > 0) {
           const updateList = [];
           serverReturn.forEach((eachRawAlert) => {
             // checking for cancelled and active alerts
             const expired = moment().diff(moment(eachRawAlert.validUntilTime) ) > 0;
-            // console.log(`expired? ${expired}, validUntilTime: ${eachRawAlert.validUntilTime}`);
             if (eachRawAlert.isActive && !eachRawAlert.isCancelled && !expired) {
-              // console.log(eachRawAlert);
               const newAlert = this.dtoService.formAlertObject(eachRawAlert);
               updateList.push(newAlert);
             }

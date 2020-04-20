@@ -462,7 +462,7 @@ export class UtilityService {
         case AlertTypes.markAlert:
           return AlertTypes.markAlert;
         case AlertTypes.marketListAlert:
-          return AlertTypes.marketListAlert;  // needs to be treated as a special axe alert
+          return AlertTypes.marketListAlert;
         default:
           return null;
       }
