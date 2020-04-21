@@ -197,4 +197,24 @@ $trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta
   &--displayAlertThumbnail {
     @include mix_calculate(width, 100%, $trade_gutter_width_for_alerts, '-');
   }
+  &--focusMode {
+    #{$tradeBlockName} {
+     &__left {
+      &-top {
+        display: none;
+      }
+      &-centerPanel {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        bottom: unset;
+      }
+
+    }
+      &__collapseGraphsCTA {
+        //right:0;
+        display: none;
+      }
+    }
+  }
 }

@@ -24,7 +24,7 @@
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { TradeState } from 'FEModels/frontend-page-states.interface';
-    import { selectSelectedSecurityForAnalysis } from 'Trade/selectors/trade.selectors';
+    import {selectFocusMode, selectSelectedSecurityForAnalysis} from 'Trade/selectors/trade.selectors';
     import { CoreUserLoggedIn } from 'Core/actions/core.actions';
     import { selectDislayAlertThumbnail } from 'Core/selectors/core.selectors';
   //
@@ -50,8 +50,9 @@ export class TradePage implements OnInit, OnDestroy {
       lilMarketMaximized: false,
       ownerInitial: null,
       displayAlertThumbnail: true,
-      alertPanelMaximized: false
-    }
+      alertPanelMaximized: false,
+      focusMode: false
+    };
   }
 
   constructor(
@@ -90,6 +91,12 @@ export class TradePage implements OnInit, OnDestroy {
     ).subscribe((value) => {
       this.state.displayAlertThumbnail = !!value;
     })
+    this.store$.pipe(
+      select(selectFocusMode)
+    ).subscribe((value) => {
+      console.log('FocusMode Change:', value);
+      this.state.focusMode = !!value;
+    });
   }
 
   public ngOnDestroy() {

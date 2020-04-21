@@ -75,11 +75,13 @@ export interface TradeState {
   ownerInitial: string;
   displayAlertThumbnail: boolean;
   alertPanelMaximized: boolean;
+  focusMode: boolean;
 }
 
 export interface TradeCenterPanelState {
   currentContentStage: number;
   bestQuoteValidWindow: number;
+  isFocusMode: boolean;
   presets : {
     presetsReady: boolean;
     selectedPreset: DTOs.SearchShortcutDTO;
