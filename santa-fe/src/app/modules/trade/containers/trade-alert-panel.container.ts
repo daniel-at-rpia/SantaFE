@@ -678,8 +678,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlerts, {req: 'POST'}, payload).pipe(
       first(),
       tap((serverReturn: Array<BEAlertDTO>) => {
+        console.log('updateAlerts', serverReturn);
+        // serverReturn.push({...mockAlert, keyWord: `${1}|${Math.random().toFixed(2)}`});
         if (!!serverReturn && serverReturn.length > 0) {
-          console.log('updateAlerts', serverReturn);
           const updateList = [];
           serverReturn.forEach((eachRawAlert) => {
             // checking for cancelled and active alerts
@@ -694,6 +695,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             }
           });
           this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
+        } else {
+          this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy([])));
         }
         this.state.alertUpdateInProgress = false;
       }),

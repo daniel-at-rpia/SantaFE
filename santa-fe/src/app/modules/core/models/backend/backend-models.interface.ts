@@ -385,7 +385,7 @@ export interface BEAlertDTO {
   message: string;
   isActive: boolean;
   isCancelled?: boolean;
-  urgency: number;
+  urgency?: number;
   isDeleted: boolean;
   quoteId?: string;
   security?: BESecurityDTO;
