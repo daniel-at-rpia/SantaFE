@@ -679,16 +679,21 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       first(),
       tap((serverReturn: Array<BEAlertDTO>) => {
         if (!!serverReturn && serverReturn.length > 0) {
+          console.log('updateAlerts', serverReturn);
           const updateList = [];
           serverReturn.forEach((eachRawAlert) => {
             // checking for cancelled and active alerts
             const expired = moment().diff(moment(eachRawAlert.validUntilTime) ) > 0;
             if (eachRawAlert.isActive && !eachRawAlert.isCancelled && !expired) {
               const newAlert = this.dtoService.formAlertObject(eachRawAlert);
-              updateList.push(newAlert);
+              updateList.push(this.dtoService.formAlertObject(eachRawAlert));
+            }
+            // adding cancelled as well
+            if (eachRawAlert.isCancelled) {
+              updateList.push(this.dtoService.formAlertObject(eachRawAlert));
             }
           });
-          updateList.length > 0 && this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
+          this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
         }
         this.state.alertUpdateInProgress = false;
       }),

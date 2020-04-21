@@ -1048,6 +1048,7 @@ export class DTOService {
         onMouseLeaveAlert: null
       },
       state: {
+        isCancelled: !!rawData.isCancelled,
         isNew: true,
         isSlidedOut: false,
         isRead: false,

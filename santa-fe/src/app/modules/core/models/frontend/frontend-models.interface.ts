@@ -484,5 +484,6 @@ export interface AlertDTO extends BasicDTOStructure {
     willBeRemoved: boolean;
     hasSecurity: boolean;
     hasTitlePin: boolean;
-  }
+    isCancelled: boolean;
+  };
 }

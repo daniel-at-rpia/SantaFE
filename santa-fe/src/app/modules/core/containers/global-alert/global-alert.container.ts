@@ -74,15 +74,23 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       filter((alertList) => {
         return alertList.length > 0;
       })
-    ).subscribe((alertList) => {
+    ).subscribe((alertList: AlertDTO[]) => {
       this.store$.dispatch(new CoreReceivedNewAlerts());
+      console.log('recieved alerts', alertList);
       try {
         // the BE returns the array in a sequential order with the latest one on top, because the Alert present list is in a first-in-last-out order, we need to sort it reversely so it is presented in a sequential order
-        const alertListSorted = this.utilityService.deepCopy(alertList).reverse();
+        let alertListSorted: AlertDTO[] = this.utilityService.deepCopy(alertList).reverse();
         this.state.presentList = this.filterMarketListAlerts(alertListSorted, this.state.presentList);
         this.state.storeList = this.filterMarketListAlerts(alertListSorted, this.state.storeList);
+        this.state.presentList = this.filterCancelledAlerts(
+        alertListSorted.filter(alert => alert.state.isCancelled === true), this.state.presentList);
+        this.state.storeList = this.filterCancelledAlerts(
+        alertListSorted.filter(alert => alert.state.isCancelled === true), this.state.storeList);
+
+        alertListSorted = alertListSorted.filter(alert => alert.state.isCancelled === false);
+        console.log(alertListSorted);
         alertListSorted.forEach((eachAlert) => {
-          this.generateNewAlert(eachAlert, alertListSorted);
+            this.generateNewAlert(eachAlert, alertListSorted);
         });
         this.updateTotalSize();
       } catch {
@@ -215,12 +223,13 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     const existIndexInStore = this.state.storeList.findIndex((eachAlert) => {
       return eachAlert.data.id === newAlert.data.id;
     });
+
     // special logic for marketList alert
     if (isMarketListAlert) {
-      if (existIndexInPresent > 0) {
+      if (existIndexInPresent > -1) {
         this.state.presentList[existIndexInStore] = newAlert;
       }
-      if (existIndexInStore > 0) {
+      if (existIndexInStore > -1) {
         this.state.storeList[existIndexInStore] = newAlert;
       }
       if (existIndexInStore < 0 && existIndexInPresent < 0) {
@@ -228,7 +237,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         this.initiateStateProgressionForNewAlert(newAlert);
       }
     } else {
-      if (existIndexInPresent >= 0) {
+      if (existIndexInPresent > -1) {
         console.log('Global Alert - new alert is an update, the old one is in the sidebar', newAlert.data.id);
 
         const targetAlert = this.state.presentList[existIndexInPresent];
@@ -349,6 +358,25 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       }
       return true;
     });
+  }
+  private filterCancelledAlerts(alertListSorted: AlertDTO[], currList: AlertDTO[]) {
+    console.log('filterCancelledAlerts', alertListSorted);
+    const newAlerts = currList.slice();
+    alertListSorted.forEach(alert => {
+      if (alert.state.isCancelled) {
+       const index = newAlerts.findIndex((eachAlert) => {
+          return eachAlert.data.id === alert.data.id;
+        });
+       if (index > -1) {
+          newAlerts.splice(index, 1);
+        }
+      }
+    });
+    return newAlerts;
+  }
+
+  removeAlertByIndex(list: AlertDTO[], index: number) {
+    return list.slice().splice(index, 1);
   }
 
 }
