@@ -86,7 +86,6 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     private restfulCommService: RestfulCommService
   ) {
     this.state = this.initializePageState();
-    this.store$.dispatch(new CoreSendAlertCountsByType([{type: 'Axe', count: 300},{type: 'Mark', count: 300},{type: 'MarketList', count: 300}]));
   }
 
   public ngOnInit() {
@@ -288,16 +287,21 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
 }
 
   private updateTotalSize() {
-  console.log('updateTotalSize');
+    console.log('updateTotalSize');
     this.state.totalSize = this.state.presentList.length + this.state.storeList.length;
     if (this.state.totalSize > this.constants.totalSizeMaxDisplay) {
       this.state.displayTotalSize = '99+';
     } else {
       this.state.displayTotalSize = `${this.state.totalSize}`;
     }
+    // counting all types in buckets
     const allAlerts = [...this.state.presentList, ...this.state.storeList];
-    const grouped = this.groupBy(allAlerts, alert => alert.type);
-    this.store$.dispatch(new CoreSendAlertCountsByType([{type: 'Axe', count: 300}]));
+    const grouped = this.groupBy(allAlerts, alert => alert.data.type);
+    const payload = [];
+    grouped.forEach((value, key) => {
+      payload.push({type: key, count: value.length});
+    });
+    this.store$.dispatch(new CoreSendAlertCountsByType(payload));
 
 
   }

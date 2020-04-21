@@ -2,34 +2,36 @@
 
 .sat-alertCountSummary {
   $BlockName: &;
-  //border: 1px solid red;
+  min-width: 8rem;
   border-radius: 4px !important;
   padding: 2px 4px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-
+  user-select: none;
+  &:hover {
+    cursor: pointer
+  }
   &-icon {
-    //border: 1px solid red;
     border-radius: 4px;
     padding: 2px 4px;
   }
-
-
   &-text {
-    //border: 1px solid red;
+    flex: 1;
     border-radius: 4px;
     padding: 2px 4px;
     font-weight: bold;
   }
-
   &-count {
     font-size: $font_size_x_small;
     font-weight: 900;
-    //border: 1px solid red;
     border-radius: 5px;
     padding: 2px 2px;
+    min-width: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   &--isAxe, &--isInquiry {

@@ -450,6 +450,7 @@
       }
     }
     &-alertCountsGrid {
+      flex: 1 1 auto;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-gap: 10px;
