@@ -50,9 +50,10 @@
       AlertSubTypes
     } from 'Core/constants/coreConstants.constant';
     import {
-      selectSecurityMapContent,
-      selectSecurityMapValidStatus
-    } from 'Core/selectors/core.selectors';
+      selectAlertCounts,
+  selectSecurityMapContent,
+  selectSecurityMapValidStatus
+} from 'Core/selectors/core.selectors';
     import {
       ALERT_MAX_SECURITY_SEARCH_COUNT,
       AxeAlertScope,
@@ -89,6 +90,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     centerPanelPresetSelectedSub: null
   }
   autoUpdateCount$: Observable<any>;
+  alertCounts$: Observable<any>;
   constants = {
     alertTypes: AlertTypes,
     alertSubTypes: AlertSubTypes,
@@ -110,13 +112,15 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     ).subscribe((value) => {
       this.state.focusMode = !!value;
     });
+    this.alertCounts$ = this.store$.pipe(
+      select(selectAlertCounts)
+    );
   }
 
   private initializePageState(): TradeAlertPanelState {
     const state: TradeAlertPanelState = {
       isUserPM: false,
       configureAlert: false,
-      focusMode: false,
       isAlertPaused: true,
       securityMap: [],
       alertUpdateTimestamp: null,

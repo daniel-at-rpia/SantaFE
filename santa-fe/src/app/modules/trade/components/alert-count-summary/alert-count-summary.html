@@ -1,0 +1,24 @@
+<article
+  [title]="type"
+  [ngClass]="{
+    'sat-alertCountSummary': true,
+    'sat-alertCountSummary--isAxe': type === constants.alertTypes.axeAlert,
+    'sat-alertCountSummary--isMark': type === constants.alertTypes.markAlert,
+    'sat-alertCountSummary--isInquiry': type === constants.alertTypes.marketListAlert,
+    'sat-alertCountSummary--isGroup': false,
+    'sat-alertCountSummary--isOther': false
+  }">
+  <span class="sat-alertCountSummary-icon">
+    <i
+       [ngClass]="{
+    'fas': true,
+    'fa-axe': type === constants.alertTypes.axeAlert || type === constants.alertTypes.marketListAlert,
+    'fa-bullseye-arrow': type === constants.alertTypes.markAlert
+  }"></i>
+  </span>
+  <span class="sat-alertCountSummary-text">{{getAlertNameFromType(this.type)}}</span>
+  <span class="sat-alertCountSummary-count">
+    {{this.count}}
+  </span>
+</article>
+

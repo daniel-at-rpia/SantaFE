@@ -437,6 +437,7 @@
     flex: 0 1 $trade_topPanels_baseState_height;
     display: flex;
     padding: $spacing_medium;
+    max-height: 100%;
     &-thumbnail {
       @include mix_border_generator(0 0 0 $typical_border_width);
       flex: 0 0 auto;
@@ -447,6 +448,13 @@
         color: $font_color_trivial;
         font-size: $font_size_hero;
       }
+    }
+    &-alertCountsGrid {
+      flex: 1 1 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 10px;
+      overflow-y: scroll;
     }
     &-pause {
       flex: 1 1 auto;
@@ -460,7 +468,7 @@
     }
     &-configureCTA {
       @include mix_border_generator(0 0 0 $typical_border_width);
-      flex: 1 1 auto;
+      flex: 0 1 auto;
       display: flex;
       justify-content: center;
       margin-left: $spacing_medium;

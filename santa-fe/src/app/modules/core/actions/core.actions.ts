@@ -8,6 +8,7 @@ export enum CoreActions {
   LoadSecurityMap = '[Core] Load Security Map',
   FlushSecurityMap = '[Core] Fluahs Security Map',
   SendNewAlerts = '[Core] Send New Alerts',
+  SendAlertCountsByType = '[Core] Send Alert Counts',
   ReceivedNewAlerts = '[Core] Received New Alerts'
 }
 
@@ -53,6 +54,16 @@ export class CoreSendNewAlerts implements Action {
     list: Array<AlertDTO>
   ){
     this.list = list;
+  }
+}
+
+export class CoreSendAlertCountsByType implements Action {
+  readonly type = CoreActions.SendAlertCountsByType;
+  readonly payload: Array<{type: string, count: number}>;
+  constructor(
+    payload: Array<{type: string, count: number}> = []
+  ) {
+    this.payload = payload;
   }
 }
 

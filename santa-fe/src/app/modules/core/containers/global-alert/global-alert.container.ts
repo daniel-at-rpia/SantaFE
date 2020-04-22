@@ -35,8 +35,12 @@
       ALERT_PRESENT_LIST_SIZE_CAP,
       ALERT_TOTALSIZE_MAX_DISPLAY_THRESHOLD
     } from 'Core/constants/coreConstants.constant';
-    import { CoreToggleAlertThumbnailDisplay } from 'Core/actions/core.actions';
-    import { selectNewAlerts } from 'Core/selectors/core.selectors';
+    import {
+  CoreLoadSecurityMap,
+      CoreSendAlertCountsByType,
+  CoreToggleAlertThumbnailDisplay
+} from 'Core/actions/core.actions';
+    import {selectAlertCounts, selectNewAlerts} from 'Core/selectors/core.selectors';
     import { CoreReceivedNewAlerts } from 'Core/actions/core.actions';
   //
 
@@ -58,7 +62,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   constants = {
     sizeCap: ALERT_PRESENT_LIST_SIZE_CAP,
     totalSizeMaxDisplay: ALERT_TOTALSIZE_MAX_DISPLAY_THRESHOLD
-  }
+  };
 
   private initializePageState(): GlobalAlertState {
     const state: GlobalAlertState = {
@@ -268,14 +272,38 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       }
     }.bind(this), 10);
   }
+  groupBy(list, keyGetter) {
+    const map = new Map();
+    list.forEach((item) => {
+         const key = keyGetter(item);
+         const collection = map.get(key);
+         if (!collection) {
+             map.set(key, [item]);
+         } else {
+             collection.push(item);
+         }
+    });
+    return map;
+}
 
   private updateTotalSize() {
+    console.log('updateTotalSize');
     this.state.totalSize = this.state.presentList.length + this.state.storeList.length;
     if (this.state.totalSize > this.constants.totalSizeMaxDisplay) {
       this.state.displayTotalSize = '99+';
     } else {
       this.state.displayTotalSize = `${this.state.totalSize}`;
     }
+    // counting all types in buckets
+    const allAlerts = [...this.state.presentList, ...this.state.storeList];
+    const grouped = this.groupBy(allAlerts, alert => alert.data.type);
+    const payload = [];
+    grouped.forEach((value, key) => {
+      payload.push({type: key, count: value.length});
+    });
+    this.store$.dispatch(new CoreSendAlertCountsByType(payload));
+
+
   }
 
   private removeSingleAlert(
