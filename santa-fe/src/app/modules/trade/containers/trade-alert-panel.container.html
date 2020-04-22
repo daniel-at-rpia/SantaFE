@@ -8,20 +8,10 @@
     'sat-tradeAlertPanel--configureMarkAlertState': state.configuration.selectedAlert === constants.alertTypes.markAlert,
     'sat-tradeAlertPanel--focusMode': state.focusMode
   }">
+  <section class="sat-tradeAlertPanel__alertCountsGrid">
+    <alert-count-summary *ngFor="let alert of alertCounts$ | async" [count]="alert.count" [type]="alert.type"></alert-count-summary>
+  </section>
   <section class="sat-tradeAlertPanel__utilities">
-    <div class="sat-tradeAlertPanel__utilities-alertCountsGrid">
-      <alert-count-summary *ngFor="let alert of alertCounts$ | async" [count]="alert.count" [type]="alert.type"></alert-count-summary>
-<!--      <alert-count-summary></alert-count-summary>-->
-<!--      <alert-count-summary></alert-count-summary>-->
-<!--      <alert-count-summary></alert-count-summary>-->
-<!--      <alert-count-summary></alert-count-summary>-->
-<!--      <alert-count-summary></alert-count-summary>-->
-<!--      <alert-count-summary></alert-count-summary>-->
-<!--      <alert-count-summary></alert-count-summary>-->
-<!--      <alert-count-summary></alert-count-summary>-->
-<!--      <alert-count-summary></alert-count-summary>-->
-<!--      <alert-count-summary></alert-count-summary>-->
-    </div>
     <div class="sat-tradeAlertPanel__utilities-configureCTA">
       <button (click)="onClickConfigureAlert()" class="santaBtn--labelled">
         <i class="fal fa-pencil"></i>

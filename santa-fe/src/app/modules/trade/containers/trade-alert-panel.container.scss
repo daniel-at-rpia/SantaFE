@@ -432,7 +432,21 @@
   @include mix_border_radius(10px);
   flex: 1 1 auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  &__alertCountsGrid {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      min-width: 28rem;
+      flex: 1 1 auto;
+      padding: $spacing_x_small;
+      overflow-y: scroll;
+      // grid version
+      //justify-content: center;
+      //display: grid;
+      //grid-template-columns: repeat(3, 1fr);
+      //grid-gap: 10px;
+  }
   &__utilities {
     flex: 0 1 $trade_topPanels_baseState_height;
     display: flex;
@@ -448,13 +462,6 @@
         color: $font_color_trivial;
         font-size: $font_size_hero;
       }
-    }
-    &-alertCountsGrid {
-      flex: 1 1 auto;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-gap: 10px;
-      overflow-y: scroll;
     }
     &-pause {
       flex: 1 1 auto;
@@ -561,6 +568,9 @@
       }
       &__configuration {
         display: flex;
+      }
+      &__alertCountsGrid {
+        display: none;
       }
     }
   }

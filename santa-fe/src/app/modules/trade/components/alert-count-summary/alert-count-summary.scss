@@ -4,7 +4,8 @@
   $BlockName: &;
   min-width: 8rem;
   border-radius: 4px !important;
-  padding: 2px 4px;
+  padding: $spacing_xx_small $spacing_x_small;
+  margin: $spacing_x_small;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -15,18 +16,18 @@
   }
   &-icon {
     border-radius: 4px;
-    padding: 2px 4px;
+    padding: $spacing_xx_small $spacing_x_small;
   }
   &-text {
     flex: 1;
     border-radius: 4px;
-    padding: 2px 4px;
+    padding: $spacing_xx_small $spacing_x_small;
   }
   &-count {
     font-size: $font_size_x_small;
     font-weight: 900;
     border-radius: 5px;
-    padding: 2px 2px;
+    padding: $spacing_xx_small;
     min-width: 1rem;
     display: flex;
     justify-content: center;
