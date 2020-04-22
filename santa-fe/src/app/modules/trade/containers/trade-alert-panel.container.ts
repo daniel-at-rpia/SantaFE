@@ -124,6 +124,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       isAlertPaused: true,
       securityMap: [],
       alertUpdateTimestamp: null,
+      focusMode: false,
       configuration: {
         selectedAlert: null,
         axe: {

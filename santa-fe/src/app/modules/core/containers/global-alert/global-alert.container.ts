@@ -87,7 +87,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   ) {
     this.state = this.initializePageState();
     // debug
-    this.store$.dispatch(new CoreSendAlertCountsByType([{type: 'Axe', count: 200},{type: 'Mark', count: 400},{type: 'MarketList', count: 400},{type: 'Axe', count: 400},{type: 'Axe', count: 400},{type: 'Axe', count: 400}]));
+    // this.store$.dispatch(new CoreSendAlertCountsByType([{type: 'Axe', count: 200},{type: 'Mark', count: 400},{type: 'MarketList', count: 400},{type: 'Axe', count: 400},{type: 'Axe', count: 400},{type: 'Axe', count: 400}]));
   }
 
   public ngOnInit() {

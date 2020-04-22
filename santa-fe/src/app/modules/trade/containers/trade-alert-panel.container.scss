@@ -631,6 +631,7 @@
   &--focusMode {
     #{$tradeAlertPanelBlockName} {
       &__utilities {
+        display: none;
       }
     }
   }
