@@ -360,6 +360,8 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
   &--focusMode {
     #{$tradeCenterPanelBlockName} {
       &__presetsAndFilters {
+        //overflow: hidden;
+        //flex-basis: 0;
         display: none;
       }
       &__result {
