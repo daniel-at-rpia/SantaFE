@@ -501,6 +501,16 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupBelongs: SecurityTableMetricGroups.securityInfo,
     groupShow: true
   },{
+    key: 'issuer',
+    label: 'Issuer',
+    attrName: 'obligorName',
+    underlineAttrName: 'obligorName',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    active: true,
+    isDataTypeText: true,
+    groupBelongs: SecurityTableMetricGroups.securityInfo,
+    groupShow: true
+  },{
     key: 'industry',
     label: 'Industry',
     attrName: 'industry',
