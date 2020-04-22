@@ -190,6 +190,7 @@ export interface TradeObligorGraphPanelState {
 export interface TradeAlertPanelState {
   isUserPM: boolean;
   configureAlert: boolean;
+  focusMode: boolean;
   isAlertPaused: boolean;
   securityMap: Array<SecurityMapEntry>;
   alertUpdateTimestamp: string;

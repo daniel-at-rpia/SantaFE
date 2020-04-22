@@ -201,20 +201,26 @@ $trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta
     #{$tradeBlockName} {
      &__left {
       &-top {
-        display: none;
+        position: relative;
+        width: 100%;
+        margin-bottom: 0;
+        &--alertPanelMixmized {
+          height: inherit;
+        }
       }
       &-centerPanel {
         position: relative;
         width: 100%;
         height: 100%;
         bottom: unset;
+        padding-top: 4px;
       }
-
     }
-      &__collapseGraphsCTA {
-        //right:0;
+    &__collapseGraphsCTA {
+      &--collapsed {
         display: none;
       }
+    }
     }
   }
 }

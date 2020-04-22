@@ -610,4 +610,10 @@
       }
     }
   }
+  &--focusMode {
+    #{$tradeAlertPanelBlockName} {
+      &__utilities {
+      }
+    }
+  }
 }

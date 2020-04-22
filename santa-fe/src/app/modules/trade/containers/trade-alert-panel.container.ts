@@ -61,7 +61,11 @@
     import { FullOwnerList, FilterOptionsPortfolioResearchList } from 'Core/constants/securityDefinitionConstants.constant';
     import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
     import { CoreFlushSecurityMap, CoreSendNewAlerts } from 'Core/actions/core.actions';
-    import { selectSelectedSecurityForAlertConfig, selectPresetSelected } from 'Trade/selectors/trade.selectors';
+    import {
+  selectSelectedSecurityForAlertConfig,
+  selectPresetSelected,
+      selectFocusMode
+} from 'Trade/selectors/trade.selectors';
   //
 
 @Component({
@@ -101,12 +105,18 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     private restfulCommService: RestfulCommService,
   ){
     this.state = this.initializePageState();
+    this.store$.pipe(
+      select(selectFocusMode)
+    ).subscribe((value) => {
+      this.state.focusMode = !!value;
+    });
   }
 
   private initializePageState(): TradeAlertPanelState {
     const state: TradeAlertPanelState = {
       isUserPM: false,
       configureAlert: false,
+      focusMode: false,
       isAlertPaused: true,
       securityMap: [],
       alertUpdateTimestamp: null,
@@ -423,7 +433,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             myGroup.loseMoneyPrice = eachConfiguration.parameters.LoseMoneyPriceThreshold == undefined ? null : eachConfiguration.parameters.LoseMoneyPriceThreshold;
             myGroup.loseMoneySpread = eachConfiguration.parameters.LoseMoneySpreadThreshold == undefined ? null : eachConfiguration.parameters.LoseMoneySpreadThreshold;
             myGroup.makeMoneyPrice = eachConfiguration.parameters.MakeMoneyPriceThreshold == undefined ? null : eachConfiguration.parameters.MakeMoneyPriceThreshold;
-            myGroup.makeMoneySpread = eachConfiguration.parameters.MakeMoneySpreadThreshold == undefined ? null : eachConfiguration.parameters.MakeMoneySpreadThreshold; 
+            myGroup.makeMoneySpread = eachConfiguration.parameters.MakeMoneySpreadThreshold == undefined ? null : eachConfiguration.parameters.MakeMoneySpreadThreshold;
           }
         } else {
           this.restfulCommService.logError(`'Alert/get-alert-configs' API returned an empty result`);

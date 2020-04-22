@@ -90,11 +90,10 @@ export class TradePage implements OnInit, OnDestroy {
       select(selectDislayAlertThumbnail)
     ).subscribe((value) => {
       this.state.displayAlertThumbnail = !!value;
-    })
+    });
     this.store$.pipe(
       select(selectFocusMode)
     ).subscribe((value) => {
-      console.log('FocusMode Change:', value);
       this.state.focusMode = !!value;
     });
   }
