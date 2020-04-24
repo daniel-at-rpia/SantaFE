@@ -70,7 +70,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
   autoUpdateCount$: Observable<any>;
   constants = {
-    axeAlertTypes: AlertTypes,
+    alertTypes: AlertTypes,
     alertSubTypes: AlertSubTypes,
     axeAlertScope: AxeAlertScope,
     axeAlertType: AxeAlertType,
@@ -162,7 +162,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       if (!!targetSecurity) {
         if (!this.state.configureAlert) {
           this.onClickConfigureAlert();
-          this.state.configuration.selectedAlert = this.constants.axeAlertTypes.axeAlert;
+          this.state.configuration.selectedAlert = this.constants.alertTypes.axeAlert;
         }
         const existMatchIndex = this.state.configuration.axe.securityList.findIndex((eachEntry) => {
           return eachEntry.card.data.securityID === targetSecurity.data.securityID;
@@ -556,7 +556,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         alertConfigs: []
       };
       const groupPayload: PayloadUpdateSingleAlertConfig = {
-        type: this.constants.axeAlertTypes.axeAlert,
+        type: this.constants.alertTypes.axeAlert,
         subType: this.mapAxeScopesToAlertSubtypes(this.state.configuration.axe.myGroup.scopes),
         groupFilters: {},
         parameters: {
@@ -578,7 +578,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       entirePayload.alertConfigs.push(groupPayload);
       this.state.configuration.axe.securityList.forEach((eachEntry) => {
         const payload: PayloadUpdateSingleAlertConfig = {
-          type: this.constants.axeAlertTypes.axeAlert,
+          type: this.constants.alertTypes.axeAlert,
           subType: this.mapAxeScopesToAlertSubtypes(eachEntry.scopes),
           groupFilters: {},
           parameters: {
@@ -615,7 +615,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         alertConfigs: []
       };
       const payload: PayloadUpdateSingleAlertConfig = {
-        type: this.constants.axeAlertTypes.markAlert,
+        type: this.constants.alertTypes.markAlert,
         subType: this.constants.alertSubTypes.liquidation,
         groupFilters: {
         },
