@@ -65,3 +65,6 @@ santa-fe/src/styles/devStyles.scss
 santa-fe/src/styles/devStyles.css.map
 
 santa-fe/src/styles/devStyles.css
+
+# firebase
+santa-fe/.firebase
