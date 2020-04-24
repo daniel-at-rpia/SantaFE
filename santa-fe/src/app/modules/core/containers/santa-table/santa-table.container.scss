@@ -33,6 +33,12 @@ $alt-background: $color_white;
   justify-content: center;
 }
 
+@mixin flex-center-vertical {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 @mixin header-color($background, $color: white) {
   .ag-cell-label-container, .ag-header-group-cell-label {
       background: $background !important;
@@ -98,6 +104,7 @@ $alt-background: $color_white;
             padding: 0 $spacing_large;
           }
           .ag-header-icon {
+            @include flex-center-vertical;
             position: absolute;
             height: 100%;
             .ag-icon {
@@ -114,8 +121,9 @@ $alt-background: $color_white;
             padding: 0 $spacing_medium;
           }
           .ag-header-icon {
+            @include flex-center-vertical;
             position: absolute;
-            right: $spacing_xx_small;
+            right: $spacing_x_small;
             &:hover{
               cursor: pointer;
             }
