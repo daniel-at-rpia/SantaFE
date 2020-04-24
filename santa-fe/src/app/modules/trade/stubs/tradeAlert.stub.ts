@@ -14,7 +14,8 @@ const AlertConfigSample: BEAlertConfigurationReturn = {
       "type": "Axe",
       "subType": "Both",
       "parameters": {},
-      "isEnabled": true
+      "isEnabled": true,
+      "isUrgent": false
     }
   }
 }
@@ -117,7 +118,7 @@ export const AlertSample: Array<BEAlertDTO> = [
           "spread":null
         }
       },
-      "firmPosition":null,
+      "unitPosition":null,
       "securityType":"Bond",
       "maturityType":"Bullet"
     },
@@ -128,7 +129,9 @@ export const AlertSample: Array<BEAlertDTO> = [
     "timeStamp":"2020-04-06T17:51:24.7004356-04:00",
     "urgency":0,
     "isActive":true,
-    "isDeleted":false
+    "isDeleted":false,
+    validUntilTime: new Date().toISOString()
+
   },
   {
     "type":"MarketList",
@@ -145,7 +148,8 @@ export const AlertSample: Array<BEAlertDTO> = [
     "timeStamp":"2020-04-06T17:51:24.7003944-04:00",
     "urgency":0,
     "isActive":true,
-    "isDeleted":false
+    "isDeleted":false,
+    validUntilTime: new Date().toISOString()
   },
   {
     "type":"Mark",
@@ -230,7 +234,7 @@ export const AlertSample: Array<BEAlertDTO> = [
         "Ytd":null,
         "Yoy":null
       },
-      "firmPosition":{
+      "unitPosition":{
         "partitionOptionValues":{
           "PortfolioShortName":[
             "AGB",
@@ -276,6 +280,8 @@ export const AlertSample: Array<BEAlertDTO> = [
     "timeStamp":"2020-04-06T16:04:17.8217249-04:00",
     "urgency":0,
     "isActive":true,
-    "isDeleted":false
+    "isDeleted":false,
+    validUntilTime: new Date().toISOString()
+
   }
 ]

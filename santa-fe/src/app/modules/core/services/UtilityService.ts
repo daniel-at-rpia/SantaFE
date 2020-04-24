@@ -215,7 +215,7 @@ export class UtilityService {
     }
 
     public isFloat(
-      isGroup: boolean, 
+      isGroup: boolean,
       input: SecurityGroupDTO | BESecurityGroupDTO | SecurityDTO | BESecurityDTO
     ): boolean {
       if (isGroup) {
@@ -462,8 +462,8 @@ export class UtilityService {
         case AlertTypes.markAlert:
           return AlertTypes.markAlert;
         case AlertTypes.marketListAlert:
-          return AlertTypes.axeAlert;  // needs to be treated as a special axe alert
-        default: 
+          return AlertTypes.marketListAlert;
+        default:
           return null;
       }
     }
@@ -492,7 +492,7 @@ export class UtilityService {
     }
   // shared end
 
-  // market specific 
+  // market specific
     public normalizeDefinitionFilterOption(rawString): string {
       return rawString;//.replace(' ', '');
     }
@@ -564,7 +564,7 @@ export class UtilityService {
     public retrieveValueForGroupPieChartFromSupportingData(supportingDataChunk): number {
       //if (!!supportingDataChunk && !!supportingDataChunk["propertyToNumSecurities"]) {
         //const count = supportingDataChunk["propertyToNumSecurities"]["WorkoutTerm"];
-      if (!!supportingDataChunk) {  
+      if (!!supportingDataChunk) {
         const weight = supportingDataChunk[this.keyDictionary.SIZE];
         const value = Math.round(weight/1000000);
         if (!!value) {
@@ -608,7 +608,7 @@ export class UtilityService {
       }
     }
 
-    // TODO: move this into a SecurityTableHelper service 
+    // TODO: move this into a SecurityTableHelper service
     public populateSecurityTableCellFromSecurityCard(
       targetHeader: SecurityTableHeaderDTO,
       targetRow: SecurityTableRowDTO,
@@ -680,7 +680,7 @@ export class UtilityService {
       }
     }
 
-    // TODO: move this into a SecurityTableHelper service 
+    // TODO: move this into a SecurityTableHelper service
     public retrieveAttrFromSecurityBasedOnTableHeader(
       targetHeader: SecurityTableHeaderDTO,
       securityCard: SecurityDTO,
@@ -701,7 +701,7 @@ export class UtilityService {
       }
     }
 
-    // TODO: move this into a SecurityTableHelper service 
+    // TODO: move this into a SecurityTableHelper service
     private retrieveSecurityMetricFromMetricPack(dto: SecurityDTO, header: SecurityTableHeaderDTO): number {
       if (!!dto && !!header) {
         if (header.data.key === 'indexMark') {
@@ -734,7 +734,7 @@ export class UtilityService {
       }
     }
 
-    // TODO: move this into a SecurityTableHelper service 
+    // TODO: move this into a SecurityTableHelper service
     public calculateMarkDiscrepancies(
       targetSecurity: SecurityDTO,
       targetQuant: QuantComparerDTO,

@@ -1,4 +1,5 @@
 import { AlertTypes, AlertSubTypes } from 'Core/constants/coreConstants.constant';
+import {AxeAlertType} from "Core/constants/tradeConstants.constant";
 
 export interface PayloadGetSantaGroups {
   source: string;
@@ -75,15 +76,17 @@ export interface PayloadUpdateSingleAlertConfig {
     SecurityIdentifier?: Array<string>;
     PrimaryPmName?: Array<string>;
     ResearchName?: Array<string>;
-  }
+  };
   parameters?: {
     LoseMoneyPriceThreshold?: number,
     MakeMoneyPriceThreshold?: number,
     LoseMoneySpreadThreshold?: number,
-    MakeMoneySpreadThreshold?: number
-  }
+    MakeMoneySpreadThreshold?: number,
+    WatchType?: AxeAlertType
+  };
   isEnabled?: boolean;
   isDeleted?: boolean;
+  isUrgent?: boolean;
 }
 
 export interface PayloadSetAlertsToInactive {

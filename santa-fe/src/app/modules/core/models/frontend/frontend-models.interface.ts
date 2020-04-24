@@ -474,7 +474,8 @@ export interface AlertDTO extends BasicDTOStructure {
     message: string;
     time: string;
     titlePin: string;
-  }
+    validUntilTime: string;
+  },
   state: {
     isRead: boolean;
     isNew: boolean;
@@ -483,5 +484,6 @@ export interface AlertDTO extends BasicDTOStructure {
     willBeRemoved: boolean;
     hasSecurity: boolean;
     hasTitlePin: boolean;
-  }
+    isCancelled: boolean;
+  };
 }

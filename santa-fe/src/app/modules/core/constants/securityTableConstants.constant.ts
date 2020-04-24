@@ -251,7 +251,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupBelongs: SecurityTableMetricGroups.position,
     groupShow: true
   },{
-    key: 'firmPosition',
+    key: 'unitPosition',
     label: 'Firm Position',
     attrName: 'positionFirmInMM',
     underlineAttrName: 'positionFirm',

@@ -1,44 +1,27 @@
-  // dependencies
-    import {
-      Component,
-      ViewEncapsulation,
-      OnInit,
-      OnChanges,
-      OnDestroy,
-      Input
-    } from '@angular/core';
-    import { Observable, Subscription } from 'rxjs';
-    import {
-      interval,
-      of
-    } from 'rxjs';
-    import {
-      tap,
-      first,
-      delay,
-      catchError,
-      withLatestFrom,
-      filter
-    } from 'rxjs/operators';
-    import { Store, select } from '@ngrx/store';
+// dependencies
+import {Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {interval, Observable, of, Subscription} from 'rxjs';
+import {catchError, filter, first, tap} from 'rxjs/operators';
+import {select, Store} from '@ngrx/store';
 
-    import { DTOService } from 'Core/services/DTOService';
-    import { UtilityService } from 'Core/services/UtilityService';
-    import { RestfulCommService } from 'Core/services/RestfulCommService';
-    import { GlobalAlertState } from 'FEModels/frontend-page-states.interface';
-    import { AlertDTO } from 'FEModels/frontend-models.interface';
-    import { PayloadSetAlertsToInactive } from 'BEModels/backend-payloads.interface';
-    import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
-    import {
-      ALERT_COUNTDOWN,
-      AlertTypes,
-      ALERT_PRESENT_LIST_SIZE_CAP,
-      ALERT_TOTALSIZE_MAX_DISPLAY_THRESHOLD
-    } from 'Core/constants/coreConstants.constant';
-    import { CoreToggleAlertThumbnailDisplay } from 'Core/actions/core.actions';
-    import { selectNewAlerts } from 'Core/selectors/core.selectors';
-    import { CoreReceivedNewAlerts } from 'Core/actions/core.actions';
-  //
+import {DTOService} from 'Core/services/DTOService';
+import {UtilityService} from 'Core/services/UtilityService';
+import {RestfulCommService} from 'Core/services/RestfulCommService';
+import {GlobalAlertState} from 'FEModels/frontend-page-states.interface';
+import {AlertDTO} from 'FEModels/frontend-models.interface';
+import {PayloadSetAlertsToInactive} from 'BEModels/backend-payloads.interface';
+import {
+  ALERT_COUNTDOWN,
+  ALERT_PRESENT_LIST_SIZE_CAP,
+  ALERT_TOTALSIZE_MAX_DISPLAY_THRESHOLD,
+  AlertTypes
+} from 'Core/constants/coreConstants.constant';
+import {CoreReceivedNewAlerts, CoreToggleAlertThumbnailDisplay} from 'Core/actions/core.actions';
+import {selectNewAlerts} from 'Core/selectors/core.selectors';
+import {Alert} from "Core/components/alert/alert.component";
+import {favAlertBase64, favLogoBase64} from "../../../../../assets/icons";
+
+//
 
 @Component({
   selector: 'global-alert',
@@ -85,19 +68,31 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
+
     this.subscriptions.newAlertSubscription = this.store$.pipe(
       select(selectNewAlerts),
-      filter((alertList) => {
-        return alertList.length > 0;
-      })
-    ).subscribe((alertList) => {
-      this.store$.dispatch(new CoreReceivedNewAlerts());
+    ).subscribe((alertList: AlertDTO[]) => {
+      let alertListSorted: AlertDTO[] = this.utilityService.deepCopy(alertList).reverse();
+      let cancelledAlertList = alertListSorted.filter(alert => alert.state.isCancelled === true);
+      if (alertList.length === 0) {
+        this.state.presentList = this.filterMarketListAlerts(alertListSorted, this.state.presentList);
+        this.state.storeList = this.filterMarketListAlerts(alertListSorted, this.state.storeList);
+        return;
+      }
       try {
         // the BE returns the array in a sequential order with the latest one on top, because the Alert present list is in a first-in-last-out order, we need to sort it reversely so it is presented in a sequential order
-        const alertListSorted = this.utilityService.deepCopy(alertList).reverse();
+        this.state.presentList = this.filterMarketListAlerts(alertListSorted, this.state.presentList);
+        this.state.storeList = this.filterMarketListAlerts(alertListSorted, this.state.storeList);
+        this.state.presentList = this.filterCancelledAlerts(
+        cancelledAlertList, this.state.presentList);
+        this.state.storeList = this.filterCancelledAlerts(
+        cancelledAlertList, this.state.storeList);
+        // not canclled list
+        alertListSorted = alertListSorted.filter(alert => alert.state.isCancelled === false);
         alertListSorted.forEach((eachAlert) => {
-          this.generateNewAlert(eachAlert, alertListSorted);
+            this.generateNewAlert(eachAlert, alertListSorted);
         });
+        this.updateTotalSize();
       } catch {
         this.restfulCommService.logError('received new alerts but failed to generate');
         console.error('received new alerts but failed to generate');
@@ -111,14 +106,17 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         if (document.title === this.state.originalDocumentTitle) {
           document.title = '[New Alerts] ' + this.state.originalDocumentTitle;
         }
-        if (count%2 === 0) {
-          this.state.favicon.href = 'assets/alert.ico';
+        if (count % 2 === 0) {
+          this.state.favicon.rel = 'shortcut icon';
+          this.state.favicon.href = 'data:image/png;base64,' + favAlertBase64;
         } else {
-          this.state.favicon.href = 'favicon.ico';
+          this.state.favicon.rel = 'shortcut icon';
+          this.state.favicon.href = 'data:image/png;base64,' + favLogoBase64;
         }
       } else {
         document.title = this.state.originalDocumentTitle;
-        this.state.favicon.href = 'favicon.ico';
+        this.state.favicon.rel = 'shortcut icon';
+        this.state.favicon.href = 'data:image/png;base64,' + favLogoBase64;
       }
     });
   }
@@ -203,7 +201,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       targetAlert.state.willBeRemoved = true;
       const removeTarget = () => {
         this.removeSingleAlert(targetAlert, true);
-      }
+      };
       setTimeout(removeTarget.bind(this), 300);
       this.restfulCommService.logEngagement(
         this.restfulCommService.engagementMap.globalAlertClearedSingle,
@@ -218,40 +216,57 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     newAlert: AlertDTO,
     entireListForDebugging: Array<AlertDTO>
   ) {
+    const isMarketListAlert = newAlert.data.type === AlertTypes.marketListAlert;
     const existIndexInPresent = this.state.presentList.findIndex((eachAlert) => {
       return eachAlert.data.id === newAlert.data.id;
     });
     const existIndexInStore = this.state.storeList.findIndex((eachAlert) => {
       return eachAlert.data.id === newAlert.data.id;
     });
-    if (existIndexInPresent >= 0) {
-      console.log('Global Alert - new alert is an update, the old one is in the sidebar', newAlert.data.id);
-      const targetAlert = this.state.presentList[existIndexInPresent];
-      targetAlert.state.willBeRemoved = true;
-      const removeTarget = () => {
-        const indexOfTarget = this.state.presentList.indexOf(targetAlert);
-        if (indexOfTarget >= 0) {
-          this.state.presentList.splice(indexOfTarget, 1);
-        } else {
-          const entireList = entireListForDebugging.map((each) => {return each.data.id});
-          const oldList = this.state.presentList.map((each) => {return each.data.id});
-          this.restfulCommService.logError(`can not find alert to replace in present list, alert = ${targetAlert.data.id}, entire list = ${entireList.toString()}, oldList = ${oldList.toString()}`);
-          console.error('can not find alert to replace in present list');
-        }
+
+    // special logic for marketList alert
+    if (isMarketListAlert) {
+      if (existIndexInPresent > -1) {
+        this.state.presentList[existIndexInPresent] = newAlert;
       }
-      setTimeout(removeTarget.bind(this), 300);
-    } else if (existIndexInStore >= 0) {
-      console.log('Global Alert - new alert is an update, the old one is not in the sidebar, buried in the queue', newAlert.data.id);
-      this.state.storeList.splice(existIndexInStore, 1);
+      if (existIndexInStore > -1) {
+        this.state.storeList[existIndexInStore] = newAlert;
+      }
+      if (existIndexInStore < 0 && existIndexInPresent < 0) {
+        this.state.presentList.unshift(newAlert);
+        this.initiateStateProgressionForNewAlert(newAlert);
+      }
+    } else {
+      if (existIndexInPresent > -1) {
+        console.log('Global Alert - new alert is an update, the old one is in the sidebar', newAlert.data.id);
+
+        const targetAlert = this.state.presentList[existIndexInPresent];
+        this.state.presentList[existIndexInStore] = newAlert;
+        // targetAlert.state.willBeRemoved = true;
+        const removeTarget = () => {
+          const indexOfTarget = this.state.presentList.indexOf(targetAlert);
+          if (indexOfTarget >= 0) {
+            this.state.presentList.splice(indexOfTarget, 1);
+          } else {
+            const entireList = entireListForDebugging.map((each) => {return each.data.id});
+            const oldList = this.state.presentList.map((each) => {return each.data.id});
+            this.restfulCommService.logError(`can not find alert to replace in present list, alert = ${targetAlert.data.id}, entire list = ${entireList.toString()}, oldList = ${oldList.toString()}`);
+            console.error('can not find alert to replace in present list');
+          }
+        }
+        setTimeout(removeTarget.bind(this), 300);
+      } else if (existIndexInStore >= 0) {
+        console.log('Global Alert - new alert is an update, the old one is not in the sidebar, buried in the queue', newAlert.data.id);
+        this.state.storeList.splice(existIndexInStore, 1);
+      }
+      this.state.presentList.unshift(newAlert);
+      this.initiateStateProgressionForNewAlert(newAlert);
     }
     if (this.state.presentList.length >= this.constants.sizeCap) {
-      const lastAlert = this.state.presentList[this.state.presentList.length-1];
+      const lastAlert = this.state.presentList[this.state.presentList.length - 1];
       this.state.storeList.unshift(lastAlert);
-      this.state.presentList.splice(this.state.presentList.length-1, 1);
+      this.state.presentList.splice(this.state.presentList.length - 1, 1);
     }
-    this.state.presentList.unshift(newAlert);
-    this.initiateStateProgressionForNewAlert(newAlert);
-    this.updateTotalSize();
   }
 
   private initiateStateProgressionForNewAlert(newAlert: AlertDTO) {
@@ -323,10 +338,45 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     this.state.triggerActionMenuOpen = newState;
     this.state.presentList.forEach((eachAlert) => {
       eachAlert.state.isSlidedOut = this.state.triggerActionMenuOpen;
-    })
+    });
     this.state.storeList.forEach((eachAlert) => {
       eachAlert.state.isSlidedOut = this.state.triggerActionMenuOpen;
-    })
+    });
+  }
+  // filtering market list alerts
+  private filterMarketListAlerts(alertListSorted: AlertDTO[], currList: AlertDTO[]) {
+    return currList.filter((alert) => {
+      if (alert.data.type === AlertTypes.marketListAlert) {
+        // Keep it if it is in the server response (alertListSorted)
+        const persist = alertListSorted.findIndex((eachAlert) => {
+          return eachAlert.data.id === alert.data.id;
+        }) > -1;
+        // remove it otherwise
+        if (!persist) {
+          return false;
+        }
+      }
+      return true;
+    });
+  }
+  private filterCancelledAlerts(alertListSorted: AlertDTO[], currList: AlertDTO[]) {
+    // console.log('filterCancelledAlerts', alertListSorted);
+    const newAlerts = currList.slice();
+    alertListSorted.forEach(alert => {
+      if (alert.state.isCancelled) {
+       const index = newAlerts.findIndex((eachAlert) => {
+          return eachAlert.data.id === alert.data.id;
+        });
+       if (index > -1) {
+          newAlerts.splice(index, 1);
+        }
+      }
+    });
+    return newAlerts;
+  }
+
+  removeAlertByIndex(list: AlertDTO[], index: number) {
+    return list.slice().splice(index, 1);
   }
 
 }
