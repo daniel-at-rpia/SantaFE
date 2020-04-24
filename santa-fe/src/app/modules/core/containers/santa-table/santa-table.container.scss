@@ -123,7 +123,7 @@ $alt-background: $color_white;
           .ag-header-icon {
             @include flex-center-vertical;
             position: absolute;
-            right: $spacing_x_small;
+            right: 0.45rem;
             &:hover{
               cursor: pointer;
             }
