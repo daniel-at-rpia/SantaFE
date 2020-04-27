@@ -319,7 +319,7 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     alertOnly: boolean;
   },
   state: {
-    isPureTextVariant: boolean;
+    isSecurityCardVariant: boolean;
     isQuantVariant: boolean;
     isAxeSkewEnabled: boolean;
     istotalSkewEnabled: boolean;

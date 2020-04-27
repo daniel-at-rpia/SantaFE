@@ -187,7 +187,7 @@ export class SecurityTable implements OnInit, OnChanges {
 
   private loadTableRowsUponHeaderChange() {
     this.tableData.data.headers.forEach((eachHeader, index) => {
-      if (!eachHeader.state.isPureTextVariant && !eachHeader.state.isQuantVariant) {
+      if (!eachHeader.state.isSecurityCardVariant && !eachHeader.state.isQuantVariant) {
         this.tableData.data.rows.forEach((eachRow) => {
           const targetCell = eachRow.data.cells[index-1];
           if (!!targetCell) {

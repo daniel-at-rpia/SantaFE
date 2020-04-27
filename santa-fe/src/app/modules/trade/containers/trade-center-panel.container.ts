@@ -467,28 +467,45 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private loadInitialStencilTable() {
-    const stencilHeaderBuffer: Array<SecurityTableHeaderDTO> = [];
-    SecurityTableMetrics.forEach((eachStub) => {
-      if (eachStub.label === 'Security' || eachStub.active) {
-        stencilHeaderBuffer.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
+    const stencilMainTableHeaderBuffer: Array<SecurityTableHeaderDTO> = [];
+    const stencilAlertTableHeaderBuffer: Array<SecurityTableHeaderDTO> = [];
+    this.state.table.metrics.forEach((eachStub) => {
+      if (eachStub.isForSecurityCard || eachStub.active) {
+        stencilMainTableHeaderBuffer.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
+      }
+    });
+    this.state.table.alertMetrics.forEach((eachStub) => {
+      if (eachStub.isForSecurityCard || eachStub.active) {
+        stencilAlertTableHeaderBuffer.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
       }
     });
     for (let i = 0; i < 10; ++i) {
       const stencilSecurity = this.dtoService.formSecurityCardObject(null, null, true);
       stencilSecurity.state.isInteractionDisabled = true;
-      const newRow = this.dtoService.formSecurityTableRowObject(stencilSecurity);
-      stencilHeaderBuffer.forEach((eachHeader) => {
-        if (eachHeader.data.displayLabel !== 'Security') {
+      const newMainTableRow = this.dtoService.formSecurityTableRowObject(stencilSecurity);
+      stencilMainTableHeaderBuffer.forEach((eachHeader) => {
+        if (!eachHeader.state.isSecurityCardVariant) {
           if (eachHeader.state.isQuantVariant) {
             const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, this.state.filters.quickFilters.driverType, null, null, false);
-            newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, true, bestQuoteStencil));
+            newMainTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, true, bestQuoteStencil));
           } else {
-            newRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, false));
+            newMainTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, false));
           }
         }
       });
-      this.state.fetchResult.mainTable.prinstineRowList.push(this.utilityService.deepCopy(newRow));
-      this.state.fetchResult.alertTable.prinstineRowList.push(this.utilityService.deepCopy(newRow));
+      this.state.fetchResult.mainTable.prinstineRowList.push(this.utilityService.deepCopy(newMainTableRow));
+      const newAlertTableRow = this.dtoService.formSecurityTableRowObject(stencilSecurity);
+      stencilAlertTableHeaderBuffer.forEach((eachHeader) => {
+        if (!eachHeader.state.isSecurityCardVariant) {
+          if (eachHeader.state.isQuantVariant) {
+            const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, this.state.filters.quickFilters.driverType, null, null, false);
+            newAlertTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, true, bestQuoteStencil));
+          } else {
+            newAlertTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, false));
+          }
+        }
+      });
+      this.state.fetchResult.alertTable.prinstineRowList.push(this.utilityService.deepCopy(newAlertTableRow));
     };
     this.state.fetchResult.mainTable.rowList = this.utilityService.deepCopy(this.state.fetchResult.mainTable.prinstineRowList);
     this.state.fetchResult.alertTable.rowList = this.utilityService.deepCopy(this.state.fetchResult.alertTable.prinstineRowList);
@@ -520,7 +537,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
             this.updateStage(0);
           }
         }
-        this.loadDataForMainTable(serverReturn);
+        // this.loadDataForMainTable(serverReturn);
       }),
       catchError(err => {
         this.restfulCommService.logError(`Get portfolios failed`);

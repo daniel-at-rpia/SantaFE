@@ -94,7 +94,7 @@ $alt-background: $color_white;
 
         .ag-sort-descending-icon, .ag-sort-ascending-icon {
           position: absolute;
-          right: 0;
+          right: $spacing_x_small;
         }
 
         .ag-cell-label-container {

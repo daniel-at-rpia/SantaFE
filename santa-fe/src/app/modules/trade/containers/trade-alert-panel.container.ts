@@ -684,7 +684,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       first(),
       tap((serverReturn: Array<BEAlertDTO>) => {
         // serverReturn.push({...mockAlert, keyWord: `${1}|${Math.random().toFixed(2)}`});
-        if (!!serverReturn && serverReturn.length > 0) {
+        if (!!serverReturn) {
           const updateList: Array<AlertDTO> = [];
           const securityList: Array<AlertDTO> = [];
           serverReturn.forEach((eachRawAlert) => {

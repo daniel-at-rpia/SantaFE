@@ -82,7 +82,7 @@ export interface SecurityTableMetricStub {
   blockAttrName?: string;
   isFrontEndMetric?: boolean;
   isForQuantComparer?: boolean;
-  pureText?: boolean;
+  isForSecurityCard?: boolean;
   disabled?: boolean;
   isDataTypeText?: boolean;
   isDriverDependent?: boolean;

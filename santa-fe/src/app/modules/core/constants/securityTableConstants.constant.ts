@@ -123,7 +123,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     attrName: null,
     underlineAttrName: null,
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    pureText: true,
+    isForSecurityCard: true,
     active: true,
     pinned: true,
     groupBelongs: SECURITY_TABLE_HEADER_NO_GROUP

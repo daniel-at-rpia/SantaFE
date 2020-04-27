@@ -715,7 +715,7 @@ export class DTOService {
       },
       state: {
         isQuantVariant: !!stub.isForQuantComparer,
-        isPureTextVariant: !!stub.pureText,
+        isSecurityCardVariant: !!stub.isForSecurityCard,
         isAxeSkewEnabled: false,
         istotalSkewEnabled: false
       }

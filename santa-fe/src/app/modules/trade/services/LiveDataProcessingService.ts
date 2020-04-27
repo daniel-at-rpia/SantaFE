@@ -144,20 +144,14 @@ export class LiveDataProcessingService {
       bestQuoteServerReturn
     );
     headerList.forEach((eachHeader, index) => {
-      if (!eachHeader.state.isPureTextVariant) {
-        // data only comes in final stage right now, no need for this logic at the moment
-        // if (eachHeader.data.readyStage === 1 || eachHeader.data.readyStage === 2) {
-          const newCell = this.utilityService.populateSecurityTableCellFromSecurityCard(
-            eachHeader,
-            newRow,
-            this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant),
-            driverType
-          );
-          newRow.data.cells.push(newCell);
-        // } else {
-        //   const emptyCell = this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant);
-        //   newRow.data.cells.push(emptyCell);
-        // }
+      if (!eachHeader.state.isSecurityCardVariant) {
+        const newCell = this.utilityService.populateSecurityTableCellFromSecurityCard(
+          eachHeader,
+          newRow,
+          this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant),
+          driverType
+        );
+        newRow.data.cells.push(newCell);
       }
     });
     prinstineRowList.push(newRow);

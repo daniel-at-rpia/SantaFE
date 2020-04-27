@@ -306,7 +306,7 @@ export class SantaTable implements OnInit, OnChanges {
     this.tableData.data.headers = [];
     this.tableData.data.allHeaders = [];
     this.securityTableMetrics.forEach((eachStub) => {
-      if (eachStub.label === 'Security' || eachStub.active) {
+      if (eachStub.isForSecurityCard || eachStub.active) {
         this.tableData.data.headers.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
       }
       this.tableData.data.allHeaders.push(this.dtoService.formSecurityTableHeaderObject(eachStub));

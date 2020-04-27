@@ -144,6 +144,13 @@ export class AgGridMiddleLayerService {
   ): Array<AgGridRow> {
     const targetRows = table.data.rows;
     const targetHeaders = table.data.allHeaders;
+    // minus one because securityCard is not one of the cells ( TODO: this is a bad design, what if a table has more than one security card column? should not treat it different from other columns )
+    const bestQuoteCellIndex = targetHeaders.findIndex((eachHeader) => {
+      return eachHeader.data.key === 'bestQuote';
+    }) - 1;
+    const bestAxeQuoteCellIndex = targetHeaders.findIndex((eachHeader) =>{
+      return eachHeader.data.key === 'bestAxeQuote';
+    }) - 1;
     const list = [];
     targetRows.forEach((eachRow, index) => {
       if (index === 0) {
@@ -151,7 +158,12 @@ export class AgGridMiddleLayerService {
       } else {
         eachRow.data.security.state.isAtListCeiling = false;
       }
-      const newAgRow = this.formAgGridRow(eachRow, targetHeaders);
+      const newAgRow = this.formAgGridRow(
+        eachRow,
+        targetHeaders,
+        bestQuoteCellIndex,
+        bestAxeQuoteCellIndex
+      );
       !!newAgRow.id && list.push(newAgRow);
     });
     table.api.gridApi.setRowData(list);
@@ -164,11 +176,23 @@ export class AgGridMiddleLayerService {
     targetRows: Array<SecurityTableRowDTO>,
     location: number  // this is needed only for logging purpose
   ) {
+    // minus one because securityCard is not one of the cells ( TODO: this is a bad design, what if a table has more than one security card column? should not treat it different from other columns )
+    const bestQuoteCellIndex = table.data.allHeaders.findIndex((eachHeader) => {
+      return eachHeader.data.key === 'bestQuote';
+    }) - 1;
+    const bestAxeQuoteCellIndex = table.data.allHeaders.findIndex((eachHeader) =>{
+      return eachHeader.data.key === 'bestAxeQuote';
+    }) - 1;
     targetRows.forEach((eachRow) => {
       const id = eachRow.data.rowId;
       const targetNode = table.api.gridApi.getRowNode(id);
       if (!!targetNode) {
-        const newAgRow = this.formAgGridRow(eachRow, table.data.allHeaders);
+        const newAgRow = this.formAgGridRow(
+          eachRow,
+          table.data.allHeaders,
+          bestQuoteCellIndex,
+          bestAxeQuoteCellIndex
+        );
         targetNode.setData(newAgRow);
       } else {
         this.restfulCommService.logError(`[AgGrid] Couldn't fine AgGrid Row for ${eachRow.data.rowId} (location - ${location})`);
@@ -226,14 +250,16 @@ export class AgGridMiddleLayerService {
 
   private formAgGridRow(
     targetRow: SecurityTableRowDTO,
-    targetHeaders: Array<SecurityTableHeaderDTO>
+    targetHeaders: Array<SecurityTableHeaderDTO>,
+    bestQuoteCellIndex: number,
+    bestAxeQuoteCellIndex: number
   ): AgGridRow {
     const eachSecurity = targetRow.data.security;
     const newAgRow: AgGridRow = {
       id: targetRow.data.rowId,
       securityCard: eachSecurity,
-      bestQuote: targetRow.data.cells[0].data.quantComparerDTO,
-      bestAxeQuote: targetRow.data.cells[1].data.quantComparerDTO,
+      bestQuote: targetRow.data.cells[bestQuoteCellIndex].data.quantComparerDTO,
+      bestAxeQuote: targetRow.data.cells[bestAxeQuoteCellIndex].data.quantComparerDTO,
       rowDTO: targetRow
     };
     newAgRow[AGGRID_DETAIL_COLUMN_KEY] = '';
