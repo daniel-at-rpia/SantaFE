@@ -47,6 +47,7 @@ import {
 } from 'Core/constants/tradeConstants.constant';
 import {FilterOptionsPortfolioResearchList, FullOwnerList} from 'Core/constants/securityDefinitionConstants.constant';
 import {CoreFlushSecurityMap, CoreSendNewAlerts} from 'Core/actions/core.actions';
+import {TradeAlertTableSendNewAlertsEvent} from 'Trade/actions/trade.actions';
 import {selectPresetSelected, selectSelectedSecurityForAlertConfig} from 'Trade/selectors/trade.selectors';
 import {mockAlert} from 'Core/components/alert/alert.mock';
 
@@ -682,7 +683,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlerts, {req: 'POST'}, payload).pipe(
       first(),
       tap((serverReturn: Array<BEAlertDTO>) => {
-        console.log('updateAlerts', serverReturn);
         // serverReturn.push({...mockAlert, keyWord: `${1}|${Math.random().toFixed(2)}`});
         if (!!serverReturn && serverReturn.length > 0) {
           const updateList: Array<AlertDTO> = [];
@@ -693,6 +693,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             if (eachRawAlert.isActive && !eachRawAlert.isCancelled && !expired) {
               const newAlert = this.dtoService.formAlertObject(eachRawAlert);
               updateList.push(newAlert);
+              if (newAlert.data.security && newAlert.data.security.data.securityID) {
+                securityList.push(newAlert);
+              }
             }
             // adding cancelled as well
             if (eachRawAlert.isCancelled) {

@@ -1068,7 +1068,8 @@ export class DTOService {
         message: rawData.message,
         time: momentTime.format(`HH:mm`),
         titlePin: rawData.marketListType || null,
-        validUntilTime: rawData.validUntilTime
+        validUntilTime: rawData.validUntilTime,
+        unixTimestamp: momentTime.unix()
       },
       api: {
         onMouseEnterAlert: null,
