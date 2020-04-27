@@ -203,7 +203,7 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
             "spread":0
           }
         },
-        "firmPosition":{
+        "unitPosition":{
           "partitionOptionValues":{
             "PortfolioShortName":[
               "AGB",
