@@ -408,3 +408,9 @@ export enum AxeAlertScope {
   liquidation = "Liquidation",
   both = 'Both'
 }
+
+export enum AxeAlertType {
+  marketList = 'MarketList',
+  normal = 'Axe',
+  both = 'Both'
+}

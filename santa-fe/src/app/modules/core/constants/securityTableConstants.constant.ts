@@ -45,6 +45,13 @@ export const SecurityTableMetricGroups = {
   securityInfo: 'Security Info',
   ownership: 'Ownership'
 };
+
+export const SECURITY_TABLE_ICONS = {
+  columnGroupOpened: '<i class="far fa-plus-square"/>',
+  columnGroupClosed: '<i class="far fa-minus-square"/>',
+  menu: '<i class="fa fa-bars" style="width: 10px"/>'
+};
+
 export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     key: 'alertTime',
     label: 'Alert Time',
@@ -314,7 +321,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     groupBelongs: SecurityTableMetricGroups.position,
     groupShow: true
   },{
-    key: 'firmPosition',
+    key: 'unitPosition',
     label: 'Firm Position',
     attrName: 'positionFirmInMM',
     underlineAttrName: 'positionFirm',

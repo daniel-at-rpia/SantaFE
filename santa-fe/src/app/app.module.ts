@@ -50,8 +50,7 @@ import { AppRoot } from './app.root';
     MarketModule,
     TradeModule
   ],
-  providers: [
-  ],
+  providers: [],
   bootstrap: [AppRoot]
 })
 export class AppModule { }
