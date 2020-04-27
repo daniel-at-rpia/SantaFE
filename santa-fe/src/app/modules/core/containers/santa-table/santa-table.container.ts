@@ -133,12 +133,6 @@ export class SantaTable implements OnInit, OnChanges {
     agGridDetailRowHeightOffsetOffTheRunCDS: AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS
   }
 
-  icons = {
-    columnGroupOpened: '<i class="far fa-plus-square"/>',
-    columnGroupClosed: '<i class="far fa-minus-square"/>',
-    menu: '<i class="fa fa-bars" style="width: 10px"/>',
-  };
-
   constructor(
     private dtoService: DTOService,
     private utilityService: UtilityService,

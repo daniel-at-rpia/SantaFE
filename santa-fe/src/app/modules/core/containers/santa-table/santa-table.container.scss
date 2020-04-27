@@ -1,6 +1,7 @@
   @import "global";
 // @import "ag-grid/ag-grid-basic.scss";
 // @import "ag-grid/ag-theme-balham.scss";
+
 $icons-path: "~ag-grid-community/src/styles/ag-theme-base/icons/";
 $font-family: "SantaOpenSans";
 
@@ -23,33 +24,7 @@ $alt-background: $color_white;
 @import "~ag-grid-community/src/styles/ag-grid";
 @import '~ag-grid-community/src/styles/ag-theme-balham/sass/ag-theme-balham';
 // @import '~ag-grid-community/src/styles/ag-theme-balham-dark/sass/ag-theme-balham-dark';
-@mixin header-line-height {
-  line-height: 1.45rem;
-}
 
-@mixin flex-center-horizontal {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-
-@mixin flex-center-vertical {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-@mixin header-color($background, $color: white) {
-  .ag-cell-label-container, .ag-header-group-cell-label {
-      background: $background !important;
-      color: $color;
-  }
-}
-@mixin default-cell() {
-  background: $distinguish_type_color_8 !important;
-  border-radius: 4px;
-  padding: 0 $spacing_x_small;
-}
 
   .ag-body-horizontal-scroll {
     height: $scroll_bar_width * 1.5!important;
@@ -77,7 +52,7 @@ $alt-background: $color_white;
     flex: 1 1 auto;
     display: flex;
     font-weight: 300;
-    font-family:"SantaOpenSans", sans-serif;
+    font-family:"SantaOpenSans"; 
     overflow: hidden;
     button {
       @include material('none');
@@ -90,76 +65,8 @@ $alt-background: $color_white;
       width: 100%;
       &-header {
         justify-content: center;
-        padding: $spacing_x_small !important;
-        .ag-cell-label-container {
-          @include default-cell;
-          position: relative;
-          .ag-header-cell-label {
-            @include flex-center-horizontal;
-            width: 100%;
-            padding-left: 0;
-          }
-          .ag-header-cell-text {
-            @include header-line-height;
-            padding: 0 $spacing_large;
-          }
-          .ag-header-icon {
-            @include flex-center-vertical;
-            position: absolute;
-            height: 100%;
-            .ag-icon {
-              height: 100%
-            }
-          }
-        }
-        .ag-header-group-cell-label {
-          @include default-cell;
-          @include flex-center-horizontal;
-          position: relative;
-          .ag-header-group-text {
-            @include header-line-height;
-            padding: 0 $spacing_medium;
-          }
-          .ag-header-icon {
-            @include flex-center-vertical;
-            position: absolute;
-            right: 0.45rem;
-            &:hover{
-              cursor: pointer;
-            }
-            .ag-icon {
-              transform: none !important;
-            }
-          }
-        }
-
-        &--BestQuote {
-          @include header-color($distinguish_type_color_1);
-        }
-        &--Mark {
-          @include header-color($distinguish_type_color_2);
-        }
-        &--MarkDiscrepancies {
-          @include header-color($distinguish_type_color_3);
-        }
-        &--PositionMM {
-          @include header-color($distinguish_type_color_4);
-        }
-        &--CS01k {
-          @include header-color($distinguish_type_color_5);
-        }
-        &--SecurityDriverDeltas {
-          @include header-color($distinguish_type_color_6);
-        }
-        &--SecurityInfo {
-          @include header-color($distinguish_type_color_7);
-        }
-        &--Ownership {
-          @include header-color($distinguish_type_color_1);
-        }
-        &--NoGroup {
-          @include header-color(transparent, black);
-        }
+        padding-left: $spacing_x_small!important;
+        padding-right: $spacing_x_small!important;
         .ag-header-cell {
           overflow: hidden;
           &-label {
