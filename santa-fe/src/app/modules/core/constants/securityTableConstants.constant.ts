@@ -48,7 +48,9 @@ export const SecurityTableMetricGroups = {
 export const SECURITY_TABLE_ICONS = {
   columnGroupOpened: '<i class="far fa-plus-square"/>',
   columnGroupClosed: '<i class="far fa-minus-square"/>',
-  menu: '<i class="fa fa-bars" style="width: 10px"/>'
+  menu: '<i class="fa fa-bars" style="width: 10px"/>',
+  sortAscending: '<i class="fas fa-sort-amount-up"></i>',
+  sortDescending: '<i class="fas fa-sort-amount-down"></i>'
 };
 
 export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
