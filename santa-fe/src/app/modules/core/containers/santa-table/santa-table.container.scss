@@ -91,6 +91,12 @@ $alt-background: $color_white;
       &-header {
         justify-content: center;
         padding: $spacing_x_small !important;
+
+        .ag-sort-descending-icon, .ag-sort-ascending-icon {
+          position: absolute;
+          right: 0;
+        }
+
         .ag-cell-label-container {
           @include default-cell;
           position: relative;
