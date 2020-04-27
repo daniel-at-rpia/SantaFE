@@ -89,7 +89,6 @@ export class AgGridMiddleLayerService {
       groupList.push(eachGroup);
     }
     table.data.allHeaders.forEach((eachHeader) => {
-      console.log(`${eachHeader.data.displayLabel}:${eachHeader.data.groupBelongs}`);
       const isActiveByDefault = table.data.headers.find((eachActiveHeader) => {
         return eachActiveHeader.data.key === eachHeader.data.key;
       })

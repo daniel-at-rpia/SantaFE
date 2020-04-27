@@ -49,16 +49,16 @@
     import { SantaTableDetailAllQuotes } from 'Core/containers/santa-table-detail-all-quotes/santa-table-detail-all-quotes.container';
     import { BEQuoteDTO } from 'BEModels/backend-models.interface';
     import {
-      SECURITY_TABLE_FINAL_STAGE,
-      AGGRID_ROW_HEIGHT,
-      AGGRID_ROW_CLASS,
-      AGGRID_DETAIL_COLUMN_KEY,
-      AGGRID_DETAIL_ROW_HEIGHT_MAX,
-      AGGRID_DETAIL_ROW_HEIGHT_PER_ROW,
-      AGGRID_DETAIL_ROW_HEIGHT_OFFSET,
-      AGGRID_DETAIL_ROW_HEIGHT_DEFAULT,
-      AGGRID_DETAIL_ROW_DEFAULT_COUNT,
-      AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS
+  SECURITY_TABLE_FINAL_STAGE,
+  AGGRID_ROW_HEIGHT,
+  AGGRID_ROW_CLASS,
+  AGGRID_DETAIL_COLUMN_KEY,
+  AGGRID_DETAIL_ROW_HEIGHT_MAX,
+  AGGRID_DETAIL_ROW_HEIGHT_PER_ROW,
+  AGGRID_DETAIL_ROW_HEIGHT_OFFSET,
+  AGGRID_DETAIL_ROW_HEIGHT_DEFAULT,
+  AGGRID_DETAIL_ROW_DEFAULT_COUNT,
+  AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS, SECURITY_TABLE_ICONS
     } from 'Core/constants/securityTableConstants.constant';
     import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
     import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-filter/santa-table-numeric-filter.component';
@@ -131,13 +131,9 @@ export class SantaTable implements OnInit, OnChanges {
     agGridDetailRowHeightDefault: AGGRID_DETAIL_ROW_HEIGHT_DEFAULT,
     agGridDetailRowDefaultCount: AGGRID_DETAIL_ROW_DEFAULT_COUNT,
     agGridDetailRowHeightOffsetOffTheRunCDS: AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS
-  }
-
-  icons = {
-    columnGroupOpened: '<i class="far fa-plus-square"/>',
-    columnGroupClosed: '<i class="far fa-minus-square"/>',
-    menu: '<i class="fa fa-bars" style="width: 10px"/>',
   };
+
+  icons = SECURITY_TABLE_ICONS;
 
   constructor(
     private dtoService: DTOService,
