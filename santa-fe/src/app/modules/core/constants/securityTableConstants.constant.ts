@@ -33,7 +33,7 @@ export const AGGRID_ROW_CLASS = 'santaTable__agGridTable-agGrid-row';
 export const AGGRID_CELL_CLASS = 'santaTable__agGridTable-agGrid-cell';
 export const AGGRID_DETAIL_COLUMN_KEY = 'Quotes';
 
-export const SECURITY_TABLE_HEADER_NO_GROUP = 'NoGroup';
+export const SECURITY_TABLE_HEADER_NO_GROUP = 'noGroup';
 export const SecurityTableMetricGroups = {
   bestQuote: 'Best Quote',
   alert: 'Alert-related',

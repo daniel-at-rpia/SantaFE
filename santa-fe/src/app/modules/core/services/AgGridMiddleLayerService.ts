@@ -78,7 +78,7 @@ export class AgGridMiddleLayerService {
       const eachGroup: AgGridColumnDefinition = {
         headerName: SecurityTableMetricGroups[eachGroupKey],
         field: eachGroupKey,
-        headerClass: `${AGGRID_HEADER_CLASS} ag-numeric-header ${AGGRID_HEADER_CLASS}--${SecurityTableMetricGroups[eachGroupKey].replace(/(\s|\(|\))/g, '')}`,
+        headerClass: `${AGGRID_HEADER_CLASS} ${AGGRID_HEADER_CLASS}--${eachGroupKey}`,
         cellClass: `${AGGRID_CELL_CLASS}`,
         enableValue: false,
         hide: false,
@@ -92,10 +92,16 @@ export class AgGridMiddleLayerService {
       const isActiveByDefault = table.data.headers.find((eachActiveHeader) => {
         return eachActiveHeader.data.key === eachHeader.data.key;
       })
+      let groupName = SECURITY_TABLE_HEADER_NO_GROUP;
+      for (const eachGroupKey in SecurityTableMetricGroups) {
+        if (SecurityTableMetricGroups[eachGroupKey] === eachHeader.data.groupBelongs) {
+          groupName = eachGroupKey;
+        }
+      }
       const newAgColumn: AgGridColumnDefinition = {
         headerName: eachHeader.data.displayLabel,
         field: eachHeader.data.key,
-        headerClass: `${AGGRID_HEADER_CLASS} ag-numeric-header ${AGGRID_HEADER_CLASS}--${eachHeader.data.groupBelongs.replace(/(\s|\(|\))/g, '')}`,
+        headerClass: `${AGGRID_HEADER_CLASS} ${AGGRID_HEADER_CLASS}--${groupName}`,
         cellClass: `${AGGRID_CELL_CLASS}`,
         enableValue: false,
         sortable: true,
@@ -197,7 +203,7 @@ export class AgGridMiddleLayerService {
       newAgColumn.width = AGGRID_QUOTE_COLUMN_WIDTH;
     } else if (!targetHeader.data.isDataTypeText) {
       newAgColumn.cellClass = `${AGGRID_CELL_CLASS} ${AGGRID_CELL_CLASS}--numeric`;
-      newAgColumn.headerClass = `${AGGRID_HEADER_CLASS} ${AGGRID_HEADER_CLASS}--numeric ag-numeric-header ${AGGRID_HEADER_CLASS}--${targetHeader.data.groupBelongs.replace(/(\s|\(|\))/g, '')}`;
+      newAgColumn.headerClass = `${newAgColumn.headerClass} ${AGGRID_HEADER_CLASS}--numeric ag-numeric-header`;
       newAgColumn.width = AGGRID_SIMPLE_NUM_COLUMN_WIDTH;
       newAgColumn.resizable = true;
       // newAgColumn.suppressMenu = true;

@@ -133,31 +133,34 @@ $alt-background: $color_white;
           }
         }
 
-        &--BestQuote {
+        &--bestQuote {
           @include header-color($distinguish_type_color_1);
         }
-        &--Mark {
+        &--mark {
           @include header-color($distinguish_type_color_2);
         }
-        &--MarkDiscrepancies {
+        &--markDiscrepancies {
           @include header-color($distinguish_type_color_3);
         }
-        &--PositionMM {
+        &--position {
           @include header-color($distinguish_type_color_4);
         }
-        &--CS01k {
+        &--cs01 {
           @include header-color($distinguish_type_color_5);
         }
-        &--SecurityDriverDeltas {
+        &--delta {
           @include header-color($distinguish_type_color_6);
         }
-        &--SecurityInfo {
+        &--securityInfo {
           @include header-color($distinguish_type_color_7);
         }
-        &--Ownership {
+        &--ownership {
           @include header-color($distinguish_type_color_1);
         }
-        &--NoGroup {
+        &--alert {
+          @include header-color($distinguish_type_color_6);
+        }
+        &--noGroup {
           @include header-color(transparent, black);
         }
         .ag-header-cell {
