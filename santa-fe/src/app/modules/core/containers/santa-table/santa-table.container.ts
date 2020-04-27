@@ -1,68 +1,41 @@
-  // dependencies
-    import {
-      Component,
-      OnInit,
-      OnChanges,
-      ViewEncapsulation,
-      Input,
-      Output,
-      EventEmitter
-    } from '@angular/core';
-    import {
-      Observable,
-      Subscription,
-      of
-    } from 'rxjs';
-    import {
-      tap,
-      first,
-      delay,
-      catchError
-    } from 'rxjs/operators';
-    import {
-      GridApi,
-      ColumnApi,
-      Column
-    } from 'ag-grid-community';
+// dependencies
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewEncapsulation} from '@angular/core';
+import {of} from 'rxjs';
+import {catchError, first, tap} from 'rxjs/operators';
 
-    import { DTOService } from 'Core/services/DTOService';
-    import { UtilityService } from 'Core/services/UtilityService';
-    import { RestfulCommService } from 'Core/services/RestfulCommService';
-    import { AgGridMiddleLayerService } from 'Core/services/AgGridMiddleLayerService';
-    import {
-      SecurityDTO,
-      SecurityTableDTO,
-      SecurityTableRowDTO,
-      SecurityTableHeaderDTO,
-      SecurityQuoteDTO
-    } from 'FEModels/frontend-models.interface';
-    import {
-      QuoteMetricBlock,
-      AgGridRow,
-      AgGridColumnDefinition
-    } from 'FEModels/frontend-blocks.interface';
-    import { PayloadGetAllQuotes } from 'BEModels/backend-payloads.interface';
-    import { ClickedSortQuotesByMetricEmitterParams, AgGridRowParams } from 'FEModels/frontend-adhoc-packages.interface';
-    import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
-    import { SantaTableSecurityCell } from 'Core/components/santa-table-security-cell/santa-table-security-cell.component';
-    import { SantaTableQuoteCell } from 'Core/components/santa-table-quote-cell/santa-table-quote-cell.component';
-    import { SantaTableDetailAllQuotes } from 'Core/containers/santa-table-detail-all-quotes/santa-table-detail-all-quotes.container';
-    import { BEQuoteDTO } from 'BEModels/backend-models.interface';
-    import {
-  SECURITY_TABLE_FINAL_STAGE,
-  AGGRID_ROW_HEIGHT,
-  AGGRID_ROW_CLASS,
-  AGGRID_DETAIL_COLUMN_KEY,
-  AGGRID_DETAIL_ROW_HEIGHT_MAX,
-  AGGRID_DETAIL_ROW_HEIGHT_PER_ROW,
-  AGGRID_DETAIL_ROW_HEIGHT_OFFSET,
-  AGGRID_DETAIL_ROW_HEIGHT_DEFAULT,
+import {DTOService} from 'Core/services/DTOService';
+import {UtilityService} from 'Core/services/UtilityService';
+import {RestfulCommService} from 'Core/services/RestfulCommService';
+import {AgGridMiddleLayerService} from 'Core/services/AgGridMiddleLayerService';
+import {
+  SecurityDTO,
+  SecurityQuoteDTO,
+  SecurityTableDTO,
+  SecurityTableHeaderDTO,
+  SecurityTableRowDTO
+} from 'FEModels/frontend-models.interface';
+import {PayloadGetAllQuotes} from 'BEModels/backend-payloads.interface';
+import {AgGridRowParams, ClickedSortQuotesByMetricEmitterParams} from 'FEModels/frontend-adhoc-packages.interface';
+import {SecurityTableMetricStub} from 'FEModels/frontend-stub-models.interface';
+import {SantaTableSecurityCell} from 'Core/components/santa-table-security-cell/santa-table-security-cell.component';
+import {SantaTableQuoteCell} from 'Core/components/santa-table-quote-cell/santa-table-quote-cell.component';
+import {SantaTableDetailAllQuotes} from 'Core/containers/santa-table-detail-all-quotes/santa-table-detail-all-quotes.container';
+import {BEQuoteDTO} from 'BEModels/backend-models.interface';
+import {
   AGGRID_DETAIL_ROW_DEFAULT_COUNT,
-  AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS, SECURITY_TABLE_ICONS
-    } from 'Core/constants/securityTableConstants.constant';
-    import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
-    import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-filter/santa-table-numeric-filter.component';
-  //
+  AGGRID_DETAIL_ROW_HEIGHT_DEFAULT,
+  AGGRID_DETAIL_ROW_HEIGHT_MAX,
+  AGGRID_DETAIL_ROW_HEIGHT_OFFSET,
+  AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS,
+  AGGRID_DETAIL_ROW_HEIGHT_PER_ROW,
+  AGGRID_ROW_HEIGHT,
+  SECURITY_TABLE_FINAL_STAGE,
+  SECURITY_TABLE_ICONS
+} from 'Core/constants/securityTableConstants.constant';
+import {SantaTableNumericFloatingFilter} from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
+import {SantaTableNumericFilter} from 'Core/components/santa-table-numeric-filter/santa-table-numeric-filter.component';
+
+//
 
 @Component({
   selector: 'santa-table',
