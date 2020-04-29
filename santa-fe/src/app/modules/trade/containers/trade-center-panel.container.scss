@@ -367,6 +367,9 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
         padding-top: 0;
         &-quickFilters {
           padding: $spacing_xx_small;
+          &-keywordSearch {
+            padding-left: 0;
+          }
           &-expand {
             button {
               background: black;
