@@ -693,9 +693,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       }
     }
   }
-
   onToggleFocusMode() {
-    console.log('onToggleFocusMode');
     this.state.isFocusMode = !this.state.isFocusMode;
     this.store$.dispatch(new TradeSetFocusMode(this.state.isFocusMode));
   }

@@ -358,16 +358,24 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
     }
   }
   &--focusMode {
+    border: none;
     #{$tradeCenterPanelBlockName} {
       &__presetsAndFilters {
-        //overflow: hidden;
-        //flex-basis: 0;
         display: none;
       }
       &__result {
         padding-top: 0;
         &-quickFilters {
           padding: $spacing_xx_small;
+          &-expand {
+            button {
+              background: black;
+              box-shadow: none;
+              * {
+                color: white;
+              }
+            }
+          }
         }
       }
     }

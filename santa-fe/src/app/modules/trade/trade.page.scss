@@ -178,14 +178,15 @@ $trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta
   &--focusMode {
     #{$tradeBlockName} {
      &__left {
+      padding: 0;
       &-top {
         position: relative;
         width: 100%;
         margin-bottom: 0;
         height: 3.4rem;
+        transition: none;
         &-utilityPanel {
-        display: none;
-          //height: inherit;
+          display: none;
         }
       }
       &-centerPanel {

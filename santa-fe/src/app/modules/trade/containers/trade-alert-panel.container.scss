@@ -629,6 +629,7 @@
     }
   }
   &--focusMode {
+    border: none;
     #{$tradeAlertPanelBlockName} {
       &__utilities {
         display: none;
