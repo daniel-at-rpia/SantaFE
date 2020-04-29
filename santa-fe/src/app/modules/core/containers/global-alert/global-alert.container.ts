@@ -227,7 +227,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     // special logic for marketList alert
     if (isMarketListAlert) {
       if (existIndexInPresent > -1) {
-        this.state.presentList[existIndexInPresent] = newAlert;
+        this.state.presentList[existIndexInPresent].data = newAlert.data;
       }
       if (existIndexInStore > -1) {
         this.state.storeList[existIndexInStore] = newAlert;
