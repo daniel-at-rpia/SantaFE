@@ -1,7 +1,8 @@
 import * as DTOs from 'FEModels/frontend-models.interface';
 import {
   ObligorChartCategoryBlock,
-  TradeAlertConfigurationAxeGroupBlock
+  TradeAlertConfigurationAxeGroupBlock,
+  TradeCenterTableBlock
 } from 'FEModels/frontend-blocks.interface';
 import {
   SecurityDefinitionStub,
@@ -78,7 +79,6 @@ export interface TradeState {
 }
 
 export interface TradeCenterPanelState {
-  currentContentStage: number;
   bestQuoteValidWindow: number;
   displayAlertTable: boolean;
   presets : {
@@ -104,16 +104,8 @@ export interface TradeCenterPanelState {
   fetchResult: {
     fetchTableDataFailed: boolean;
     fetchTableDataFailedError: string;
-    mainTable: {
-      rowList: Array<DTOs.SecurityTableRowDTO>;
-      prinstineRowList: Array<DTOs.SecurityTableRowDTO>;
-      liveUpdatedRowList: Array<DTOs.SecurityTableRowDTO>;
-    }
-    alertTable: {
-      rowList: Array<DTOs.SecurityTableRowDTO>;
-      prinstineRowList: Array<DTOs.SecurityTableRowDTO>;
-      liveUpdatedRowList: Array<DTOs.SecurityTableRowDTO>;
-    }
+    mainTable: TradeCenterTableBlock;
+    alertTable: TradeCenterTableBlock;
   }
   filters: {
     quickFilters: {

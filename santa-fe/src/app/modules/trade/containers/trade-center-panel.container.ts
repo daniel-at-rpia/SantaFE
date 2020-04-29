@@ -33,8 +33,10 @@
       SecurityTableRowDTO,
       QuantComparerDTO,
       SearchShortcutDTO,
-      AlertDTO
+      AlertDTO,
+      SecurityTableDTO
     } from 'FEModels/frontend-models.interface';
+    import { TradeCenterTableBlock } from 'FEModels/frontend-blocks.interface';
     import {
       PayloadGetTradeFullData,
       PayloadGetBestQuotes
@@ -71,7 +73,8 @@
       selectInitialDataLoaded,
       selectSecurityIDsFromAnalysis,
       selectBestQuoteValidWindow,
-      selectNewAlertsForAlertTable
+      selectNewAlertsForAlertTable,
+      selectLiveUpdateProcessingRawData
     } from 'Trade/selectors/trade.selectors';
     import {
       TradeLiveUpdateProcessDataCompleteEvent,
@@ -124,7 +127,6 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       return eachStub;
     });
     const state: TradeCenterPanelState = {
-      currentContentStage: 0,
       bestQuoteValidWindow: null,
       displayAlertTable: false,
       presets: {
@@ -151,11 +153,15 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         fetchTableDataFailed: false,
         fetchTableDataFailedError: '',
         mainTable: {
+          currentContentStage: 0,
+          fetchComplete: false,
           rowList: [],
           prinstineRowList: [],
           liveUpdatedRowList: []
         },
         alertTable: {
+          currentContentStage: 0,
+          fetchComplete: false,
           rowList: [],
           prinstineRowList: [],
           liveUpdatedRowList: []
@@ -293,9 +299,9 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.state.presets.selectedPreset = null;
     this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true);
     this.state.filters.quickFilters = this.initializePageState().filters.quickFilters;
-    const alertTableCopy = this.utilityService.deepCopy(this.state.fetchResult.alertTable);
+    // const alertTableCopy = this.utilityService.deepCopy(this.state.fetchResult.alertTable);
     this.state.fetchResult = this.initializePageState().fetchResult;
-    this.state.fetchResult.alertTable = alertTableCopy;
+    // this.state.fetchResult.alertTable = alertTableCopy;
     this.store$.dispatch(new TradeTogglePresetEvent);
   }
 
@@ -412,6 +418,12 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
   public onSwitchTable() {
     this.state.displayAlertTable = !this.state.displayAlertTable;
+    // when table is switched, if the current stage is not finished but the new table is completed, update the current stage to complete. This is to cover the edge case where user is swtiching table while not both tables are loaded yet 
+    // if (this.state.displayAlertTable && this.state.currentContentStage !== this.constants.securityTableFinalStage && this.state.fetchResult.alertTable.fetchComplete) {
+    //   this.updateStage(this.constants.securityTableFinalStage);
+    // } else if (!this.state.displayAlertTable && this.state.currentContentStage !== this.constants.securityTableFinalStage && this.state.fetchResult.mainTable.fetchComplete) {
+    //   this.updateStage(this.constants.securityTableFinalStage);
+    // }
     const keywordCopy = this.state.filters.quickFilters.keyword;
     this.state.filters.quickFilters.keyword = '';
     this.onSearchKeywordChange(keywordCopy);
@@ -457,7 +469,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   private loadFreshData() {
     this.state.fetchResult.mainTable.prinstineRowList = [];
     this.loadInitialStencilTable();
-    this.updateStage(0);
+    this.updateStage(0, this.state.fetchResult.mainTable, this.state.table.dto);
+    this.updateStage(0, this.state.fetchResult.alertTable, this.state.table.alertDto);
     if (this.state.initialAlertListReceived) {
       // only load fresh data once the initial alert list is received, this is in order to follow the rule that alert table and main table are always updated at the same time, this rule dramatically reduces the complexity in code to hanlde the two concurrent data fetching processes
       this.fetchAllData(true);
@@ -527,23 +540,22 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     if (!!this.state.bestQuoteValidWindow) {
       payload.lookbackHrs = this.state.bestQuoteValidWindow;
     }
+    this.state.fetchResult.mainTable.fetchComplete = false;
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolios, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn) => {
-        if (!this.state.displayAlertTable) {
-          if (!isInitialFetch) {
-            this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
-          } else {
-            this.updateStage(0);
-          }
+        if (!isInitialFetch) {
+          !this.state.displayAlertTable && this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
+        } else {
+          this.updateStage(0, this.state.fetchResult.mainTable, this.state.table.dto);
         }
-        // this.loadDataForMainTable(serverReturn);
+        this.loadDataForMainTable(serverReturn);
       }),
       catchError(err => {
         this.restfulCommService.logError(`Get portfolios failed`);
         this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
         this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
-        this.updateStage(this.constants.securityTableFinalStage);
+        this.updateStage(this.constants.securityTableFinalStage, this.state.fetchResult.mainTable, this.state.table.dto);
         console.error('error', err);
         this.state.fetchResult.fetchTableDataFailed = true;
         this.state.fetchResult.fetchTableDataFailedError = err.message;
@@ -567,7 +579,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       this.onSelectSecurityForAlertConfig.bind(this)
     );
     this.calculateQuantComparerWidthAndHeight();
-    !this.state.displayAlertTable && this.updateStage(this.constants.securityTableFinalStage);
+    this.state.fetchResult.mainTable.fetchComplete = true;
+    this.updateStage(this.constants.securityTableFinalStage, this.state.fetchResult.mainTable, this.state.table.dto);
   }
 
   private fetchDataForAlertTable(isInitialFetch: boolean) {
@@ -585,15 +598,14 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         SecurityIdentifier: securityList
       }
     };
+    this.state.fetchResult.alertTable.fetchComplete = false;
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolios, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn) => {
-        if (this.state.displayAlertTable) {
-          if (!isInitialFetch) {
-            this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
-          } else {
-            this.updateStage(0);
-          }
+        if (!isInitialFetch) {
+          this.state.displayAlertTable && this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
+        } else {
+          this.updateStage(0, this.state.fetchResult.alertTable, this.state.table.alertDto);
         }
         this.loadDataForAlertTable(serverReturn);
       }),
@@ -625,27 +637,35 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       this.onSelectSecurityForAlertConfig.bind(this)
     );
     this.calculateQuantComparerWidthAndHeight();
-    this.state.displayAlertTable && this.updateStage(this.constants.securityTableFinalStage);
+    this.updateStage(this.constants.securityTableFinalStage, this.state.fetchResult.alertTable, this.state.table.alertDto);
+    this.state.fetchResult.alertTable.fetchComplete = true;
     // this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
   }
 
-  private updateStage(stageNumber: number) {
-    this.state.currentContentStage = stageNumber;
-    if (this.state.currentContentStage === this.constants.securityTableFinalStage) {
+  private updateStage(
+    stageNumber: number,
+    targetTableBlock: TradeCenterTableBlock,
+    targetTableDTO: SecurityTableDTO
+  ) {
+    targetTableBlock.currentContentStage = stageNumber;
+    if (targetTableBlock.currentContentStage === this.constants.securityTableFinalStage) {
       this.store$.pipe(
         select(selectInitialDataLoaded),
+        withLatestFrom(
+          this.store$.pipe(select(selectLiveUpdateProcessingRawData))
+        ),
         first(),
-        tap(isInitialDataLoaded => {
+        tap(([isInitialDataLoaded, processingRawData]) => {
           if (isInitialDataLoaded) {
-            const newFilteredList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
-            this.state.fetchResult.mainTable.liveUpdatedRowList = this.processingService.returnDiff(this.state.table.dto, newFilteredList).newRowList;
-            const newFilteredAlertList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
-            this.state.fetchResult.alertTable.liveUpdatedRowList = this.processingService.returnDiff(this.state.table.alertDto, newFilteredAlertList).newRowList;
+            const newFilteredList = this.filterPrinstineRowList(targetTableBlock.prinstineRowList);
+            targetTableBlock.liveUpdatedRowList = this.processingService.returnDiff(targetTableDTO, newFilteredList).newRowList;
           } else {
-            this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
-            this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
+            targetTableBlock.rowList = this.filterPrinstineRowList(targetTableBlock.prinstineRowList);
           }
-          this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
+          // only dispatch the action when both tables are done
+          if (!!this.state.fetchResult.alertTable.fetchComplete && !!this.state.fetchResult.mainTable.fetchComplete) {
+            this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
+          }
         })
       ).subscribe();
     }
