@@ -125,7 +125,7 @@ $alert_type_size: $iconButton_size_regular;
       @include mix_fixed_div(absolute, $z_index_base_item);
       @include mix_border_radius(3px);
       @include mix_alive('light');
-      //@include material('static');
+      @include material('static');
       display: none;
       top: -$spacing_small;
       &-content {

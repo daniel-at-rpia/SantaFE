@@ -24,7 +24,7 @@ $alt-background: $color_white;
 @import '~ag-grid-community/src/styles/ag-theme-balham/sass/ag-theme-balham';
 // @import '~ag-grid-community/src/styles/ag-theme-balham-dark/sass/ag-theme-balham-dark';
 @mixin header-line-height {
-  line-height: 1.45rem;
+  line-height: 1.5rem;
 }
 
 @mixin flex-center-horizontal {
