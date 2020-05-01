@@ -202,54 +202,6 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupBelongs: SecurityTableMetricGroups.mark,
     groupShow: false
   },{
-    key: 'markDeltaToBid',
-    label: 'Δ to Bid',
-    attrName: 'markDisBid',
-    underlineAttrName: 'markDisBidRaw',
-    blockAttrName: 'mark',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isFrontEndMetric: true,
-    isDriverDependent: true,
-    active: true,
-    groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
-    groupShow: false
-  },{
-    key: 'markDeltaToAsk',
-    label: 'Δ to Ask',
-    attrName: 'markDisAsk',
-    underlineAttrName: 'markDisAskRaw',
-    blockAttrName: 'mark',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isFrontEndMetric: true,
-    isDriverDependent: true,
-    active: true,
-    groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
-    groupShow: false
-  },{
-    key: 'markDeltaToMid',
-    label: 'Δ to Mid',
-    attrName: 'markDisMid',
-    underlineAttrName: 'markDisMidRaw',
-    blockAttrName: 'mark',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isFrontEndMetric: true,
-    isDriverDependent: true,
-    active: true,
-    groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
-    groupShow: false
-  },{
-    key: 'markDeltaToLiquidation',
-    label: 'Δ to Liquidation',
-    attrName: 'markDisLiquidation',
-    underlineAttrName: 'markDisLiquidationRaw',
-    blockAttrName: 'mark',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isFrontEndMetric: true,
-    isDriverDependent: true,
-    active: true,
-    groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
-    groupShow: true
-  },{
     key: 'currentPosition',
     label: 'Current Filtered Position',
     attrName: 'positionCurrentInMM',
@@ -359,6 +311,54 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: true,
     groupBelongs: SecurityTableMetricGroups.position,
     groupShow: false
+  },{
+    key: 'markDeltaToBid',
+    label: 'Δ to Bid',
+    attrName: 'markDisBid',
+    underlineAttrName: 'markDisBidRaw',
+    blockAttrName: 'mark',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isFrontEndMetric: true,
+    isDriverDependent: true,
+    active: true,
+    groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
+    groupShow: false
+  },{
+    key: 'markDeltaToAsk',
+    label: 'Δ to Ask',
+    attrName: 'markDisAsk',
+    underlineAttrName: 'markDisAskRaw',
+    blockAttrName: 'mark',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isFrontEndMetric: true,
+    isDriverDependent: true,
+    active: true,
+    groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
+    groupShow: false
+  },{
+    key: 'markDeltaToMid',
+    label: 'Δ to Mid',
+    attrName: 'markDisMid',
+    underlineAttrName: 'markDisMidRaw',
+    blockAttrName: 'mark',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isFrontEndMetric: true,
+    isDriverDependent: true,
+    active: true,
+    groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
+    groupShow: false
+  },{
+    key: 'markDeltaToLiquidation',
+    label: 'Δ to Liquidation',
+    attrName: 'markDisLiquidation',
+    underlineAttrName: 'markDisLiquidationRaw',
+    blockAttrName: 'mark',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isFrontEndMetric: true,
+    isDriverDependent: true,
+    active: true,
+    groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
+    groupShow: true
   },{
     key: 'cs01CadCurrent',
     label: 'CS01 Cad',
