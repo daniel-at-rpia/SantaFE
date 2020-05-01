@@ -361,19 +361,6 @@ export class SantaTable implements OnInit, OnChanges {
     params?: any  // this is a AgGridRowParams, can't enforce type checking here because agGrid's native function redrawRows() would throw an compliation error
   ){
     if (!!targetRow) {
-      let bestBid: number;
-      let bestOffer: number;
-      let driverType: string;
-      if (!!targetRow.data.cells[0] && !!targetRow.data.cells[0].data.quantComparerDTO) {
-        bestBid = targetRow.data.cells[0].data.quantComparerDTO.data.bid.number;
-        bestOffer = targetRow.data.cells[0].data.quantComparerDTO.data.offer.number;
-        driverType = targetRow.data.cells[0].data.quantComparerDTO.data.driverType;
-      } else {
-        bestBid = 0;
-        bestOffer = 0;
-        driverType = '';
-      }
-
       targetRow.data.quotes = this.dtoService.formSecurityTableRowObject(targetRow.data.security, targetRow.data.rowId).data.quotes;
       const payload: PayloadGetAllQuotes = {
         "identifier": targetRow.data.security.data.securityID
@@ -385,9 +372,6 @@ export class SantaTable implements OnInit, OnChanges {
             this.loadQuotes(
               targetRow,
               serverReturn,
-              bestBid,
-              bestOffer,
-              driverType,
               params
             );
           }
@@ -593,15 +577,12 @@ export class SantaTable implements OnInit, OnChanges {
   private loadQuotes(
     targetRow: SecurityTableRowDTO,
     serverReturn: Array<Array<BEQuoteDTO>>,
-    bestBid: number,
-    bestOffer: number,
-    driverType: string,
     params: any  // this is a AgGridRowParams, can't enforce type checking here because agGrid's native function redrawRows() would throw an compliation error
   ) {
     const primaryList = serverReturn[0];
     targetRow.state.isCDSOffTheRun = serverReturn.length > 1;
     primaryList.forEach((eachRawQuote) => {
-      const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, bestBid, bestOffer, driverType, targetRow.data.security, targetRow);
+      const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, targetRow.data.security, targetRow);
       newQuote.state.isCDSVariant = targetRow.state.isCDSVariant;
       if (newQuote.state.hasAsk || newQuote.state.hasBid) {
         targetRow.data.quotes.primaryQuotes.push(newQuote);
@@ -610,7 +591,7 @@ export class SantaTable implements OnInit, OnChanges {
     if (targetRow.state.isCDSOffTheRun) {
       const secondaryList = serverReturn[1];
       secondaryList.forEach((eachRawQuote) => {
-        const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, bestBid, bestOffer, driverType, targetRow.data.security, targetRow);
+        const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, targetRow.data.security, targetRow);
         newQuote.state.isCDSVariant = targetRow.state.isCDSVariant;
         if (newQuote.state.hasAsk || newQuote.state.hasBid) {
           targetRow.data.quotes.secondaryQuotes.push(newQuote);

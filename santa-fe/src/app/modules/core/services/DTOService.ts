@@ -798,17 +798,9 @@ export class DTOService {
   public formSecurityQuoteObject(
     isStencil: boolean,
     rawData: BEQuoteDTO,
-    bestBidNum: number,
-    bestAskNum: number,
-    filteredMetricType: string,
     targetSecurity: DTOs.SecurityDTO,
     targetRow: DTOs.SecurityTableRowDTO
   ): DTOs.SecurityQuoteDTO {
-    const {axe} = targetRow.data.bestQuotes;
-
-    const bestAxeBidNum = axe[TriCoreDriverConfig[filteredMetricType].backendTargetQuoteAttr].data.bid.number;
-    const bestAxeAskNum = axe[TriCoreDriverConfig[filteredMetricType].backendTargetQuoteAttr].data.offer.number;
-
     const hasBid = !isStencil ? (!!rawData.bidVenues && rawData.bidVenues.length > 0) : true;
     const hasAsk = !isStencil ? (!!rawData.askVenues && rawData.askVenues.length > 0) : true;
     const bidBenchmark = !isStencil ? rawData.benchmarkName : 'T 0.5 01/01/2020';
@@ -831,12 +823,8 @@ export class DTOService {
     const consolidatedBenchmark = bidBenchmark === askBenchmark ? bidBenchmark : null;
     let convertedDate: Date = null;
     if (!isStencil) {
-      // stopped converting since BE is in EST now
-      // TODO: clean up code
       convertedDate = new Date(rawData.time);
-      // convertedDate = new Date(Date.UTC(convertBuffer.getFullYear(), convertBuffer.getMonth(), convertBuffer.getDate(), convertBuffer.getHours(), convertBuffer.getMinutes(), convertBuffer.getSeconds()));
     }
-    // const quoteDate: Date = !isStencil ? (hasBid ? new Date(rawData.bidTime) : new Date(rawData.askTime)) : null;
     const object: DTOs.SecurityQuoteDTO = {
       data: {
         uuid: this.utility.generateUUID(),
@@ -863,7 +851,7 @@ export class DTOService {
           benchmark: bidBenchmark,
           time: '12:01pm'
         },
-        currentMetric: filteredMetricType
+        currentMetric: null
       },
       state: {
         isStencil: isStencil,
@@ -874,9 +862,9 @@ export class DTOService {
         isBestBid: false,
         isBestAxeOffer: false,
         isBestAxeBid: false,
-        filteredByPrice:  filteredMetricType === TriCoreDriverConfig.Price.label,
-        filteredBySpread:  filteredMetricType === TriCoreDriverConfig.Spread.label,
-        filteredByYield: filteredMetricType === TriCoreDriverConfig.Yield.label,
+        filteredByPrice: false,
+        filteredBySpread: false,
+        filteredByYield: false,
         menuActiveSide: null,
         menuActiveDriver: null,
         isBidDownVoted: false,
@@ -903,10 +891,7 @@ export class DTOService {
         benchmark: askBenchmark,
         time: this.utility.isQuoteTimeValid(rawData.askTime) && hasAsk ? new Date(rawData.askTime).toTimeString().slice(0, 5) : ''
       };
-      object.state.isBestBid = object.data.bid.tspread == bestBidNum || object.data.bid.price == bestBidNum || object.data.bid.yield == bestBidNum;
-      object.state.isBestOffer = object.data.ask.tspread == bestAskNum || object.data.ask.price == bestAskNum || object.data.ask.yield == bestAskNum;
-      object.state.isBestAxeBid = bestAxeBidNum && (object.data.bid.tspread == bestAxeBidNum || object.data.bid.price == bestAxeBidNum || object.data.bid.yield == bestAxeBidNum);
-      object.state.isBestAxeOffer = bestAxeAskNum && (object.data.ask.tspread == bestAxeAskNum || object.data.ask.price == bestAxeAskNum || object.data.ask.yield == bestAxeAskNum);
+      this.utility.highlightSecurityQutoe(object, targetRow);
       object.state.isBidDownVoted = rawData.bidQuoteStatus < 0;
       object.state.isAskDownVoted = rawData.askQuoteStatus < 0;
     }
