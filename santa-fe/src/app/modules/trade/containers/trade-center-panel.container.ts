@@ -322,7 +322,9 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         'Trade - Center Panel'
       );
       this.state.filters.quickFilters.driverType = targetDriver;
+      // driver update needs to be to both tables
       const newMetrics: Array<SecurityTableMetricStub> = this.utilityService.deepCopy(this.state.table.metrics);
+      const newAlertMetrics: Array<SecurityTableMetricStub> = this.utilityService.deepCopy(this.state.table.alertMetrics);
       newMetrics.forEach((eachMetricStub) => {
         if (eachMetricStub.isDriverDependent && eachMetricStub.isAttrChangable) {
           if (targetDriver === this.constants.defaultMetricIdentifier) {
@@ -334,10 +336,19 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
           }
         }
       });
+      newAlertMetrics.forEach((eachMetricStub) => {
+        if (eachMetricStub.isDriverDependent && eachMetricStub.isAttrChangable) {
+          if (targetDriver === this.constants.defaultMetricIdentifier) {
+            eachMetricStub.attrName = targetDriver;
+            eachMetricStub.underlineAttrName = targetDriver;
+          } else {
+            eachMetricStub.attrName = TriCoreDriverConfig[targetDriver].driverLabel;
+            eachMetricStub.underlineAttrName = TriCoreDriverConfig[targetDriver].driverLabel;
+          }
+        }
+      });
       this.state.table.metrics = newMetrics;
-      // this.calculateQuantComparerWidthAndHeight();
-      // TODO: remove this event and all associated logic from ngrx
-      // this.store$.dispatch(new TradeSwitchDriverEvent());
+      this.state.table.alertMetrics = newAlertMetrics;
     }
   }
 
@@ -629,7 +640,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.state.fetchResult.alertTable.prinstineRowList = [];  // flush out the stencils
     this.state.fetchResult.alertTable.prinstineRowList = this.processingService.loadFinalStageDataForAlertTable(
       this.state.alertTableAlertList,
-      this.state.table.dto.data.headers,
+      this.state.table.alertDto.data.headers,
       this.state.filters.quickFilters.driverType,
       serverReturn,
       this.onSelectSecurityForAnalysis.bind(this),
