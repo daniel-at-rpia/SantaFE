@@ -682,7 +682,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         // serverReturn.push({...mockAlert, keyWord: `${1}|${Math.random().toFixed(2)}`});
         if (!!serverReturn && serverReturn.length > 0) {
           const updateList = [];
-          serverReturn.forEach((eachRawAlert) => {
+          // temporarily filter out all the market listing alerts
+          const filteredServerReturn = serverReturn.filter((eachRawAlert) => {
+            return eachRawAlert.type !== 'Bwic' && eachRawAlert.type !== 'Owic';
+          });
+          filteredServerReturn.forEach((eachRawAlert) => {
             // checking for cancelled and active alerts
             const expired = moment().diff(moment(eachRawAlert.validUntilTime) ) > 0;
             if (eachRawAlert.isActive && !eachRawAlert.isCancelled && !expired) {
