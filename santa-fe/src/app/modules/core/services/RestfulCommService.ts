@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { first, tap, catchError } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {Observable, of} from 'rxjs';
+import {first, tap, catchError} from 'rxjs/operators';
 
-import { APIUrlMap, EngagementActionList } from 'Core/constants/coreConstants.constant';
+import {APIUrlMap, EngagementActionList} from 'Core/constants/coreConstants.constant';
 
 @Injectable()
 export class RestfulCommService {
@@ -21,7 +21,13 @@ export class RestfulCommService {
     ...EngagementActionList
   }
 
-  constructor(private http: HttpClient){}
+  constructor(private http: HttpClient) {
+    console.log(window.location.host);
+    if (window.location.host.indexOf('local-santa') !== -1) {
+      console.log('changing BE to localhost');
+      this.endpoint = 'https://localhost:51225';
+    }
+  }
 
   public updateUser(user: string) {
     this.user = user;
@@ -33,7 +39,7 @@ export class RestfulCommService {
     payload: Object = {},
     needDateStamp: boolean = false,
     dateStampForPrevDay: boolean = true
-  ) : Observable<any>{
+  ): Observable<any> {
     const fullUrl = `${this.endpoint}/${url}`;
     const queryOpts = {
       ...opts,
@@ -69,7 +75,7 @@ export class RestfulCommService {
         currentTime.setDate(currentTime.getDate() - 2);
       }
     }
-    const parsedMonth = ('0' + (currentTime.getMonth()+1)).slice(-2);
+    const parsedMonth = ('0' + (currentTime.getMonth() + 1)).slice(-2);
     const parsedDate = ('0' + currentTime.getDate()).slice(-2);
     payload['yyyyMMdd'] = parseInt(`${currentTime.getFullYear()}${parsedMonth}${parsedDate}`);
   }

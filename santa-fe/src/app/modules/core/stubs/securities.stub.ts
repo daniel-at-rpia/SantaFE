@@ -108,7 +108,7 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
               "spread": 400.5361
             }
           },
-          "firmPosition": {
+          "unitPosition": {
             "partitionOptionValues": {
               "PortfolioShortName": [
                 "AGB",
@@ -388,7 +388,7 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
               "spread": 426.5432
             }
           },
-          "firmPosition": {
+          "unitPosition": {
             "partitionOptionValues": {
               "PortfolioShortName": [
                 "AGB",
@@ -530,7 +530,7 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
             "Ytd": null,
             "Yoy": null
           },
-          "firmPosition": {
+          "unitPosition": {
             "partitionOptionValues": {
               "PortfolioShortName": [
                 "DOF",
@@ -722,7 +722,7 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
             "Ytd": null,
             "Yoy": null
           },
-          "firmPosition": {
+          "unitPosition": {
             "partitionOptionValues": {
               "PortfolioShortName": [
                 "DOF"

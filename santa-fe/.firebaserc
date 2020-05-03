@@ -8,14 +8,14 @@
         "dev": [
           "dev-santa-rpia"
         ],
-        "dev2": [
-          "dev2-santa-rpia"
-        ],
         "dev3": [
           "dev3-santa-rpia"
         ],
         "local": [
           "local-santa-rpia"
+        ],
+        "local3": [
+          "local3-santa-rpia"
         ],
         "prod": [
           "santa-rpia"

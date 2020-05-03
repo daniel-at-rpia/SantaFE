@@ -1,4 +1,5 @@
 import { AlertTypes } from 'Core/constants/coreConstants.constant';
+import {AxeAlertType} from "Core/constants/tradeConstants.constant";
 
 export interface BEFetchAllTradeDataReturn {
   numberOfSecurities: number;
@@ -79,7 +80,7 @@ export interface BESecurityDTO {
   isLoan?: boolean;
   isPreferred?: boolean;
   isCds?: boolean;
-  firmPosition?: {
+  unitPosition?: {
     mark: {
       driver: string;
       enteredTime: string;
@@ -346,10 +347,10 @@ export interface BEHistoricalQuantBlock {
 export interface BEAlertConfigurationReturn {
   Axe?: {
     [property: string]: BEAlertConfigurationDTO;
-  }
+  };
   Mark?: {
     [property: string]: BEAlertConfigurationDTO;
-  }
+  };
 }
 
 export interface BEAlertConfigurationDTO {
@@ -369,9 +370,11 @@ export interface BEAlertConfigurationDTO {
     LoseMoneyPriceThreshold?: number,
     MakeMoneyPriceThreshold?: number,
     LoseMoneySpreadThreshold?: number,
-    MakeMoneySpreadThreshold?: number
+    MakeMoneySpreadThreshold?: number,
+    WatchType?: AxeAlertType
   };
   isEnabled: boolean;
+  isUrgent: boolean;
 }
 
 export interface BEAlertDTO {
@@ -383,7 +386,8 @@ export interface BEAlertDTO {
   keyWord: string;
   message: string;
   isActive: boolean;
-  urgency: number;
+  isCancelled?: boolean;
+  urgency?: number;
   isDeleted: boolean;
   quoteId?: string;
   security?: BESecurityDTO;
@@ -391,5 +395,6 @@ export interface BEAlertDTO {
   marketListDescription?: string;
   securityIdentifierToQuoteId?: {
     [property: string]: string;
-  }
+  };
+  validUntilTime: string;
 }

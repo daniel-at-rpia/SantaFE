@@ -45,6 +45,10 @@
         font-size: $font_size_normal;
         text-align: right;
       }
+      &-btn{
+        margin-left: $spacing_medium;
+      }
+
       &-btnGroup {
         flex: 1 1 auto;
         margin-left: $spacing_medium;
@@ -141,7 +145,7 @@
               }
             }
           }
-          &-disableBtn {
+          &-disableBtn, &-urgentBtn {
             flex: 0 0 auto;
             margin-left: $spacing_medium;
             color: $font_color_major;
@@ -171,6 +175,17 @@
                   }
                 }
                 &-disableBtn {
+                  @include material('none');
+                  background-color: $color_active;
+                  color: $font_color_inverse;
+                }
+              }
+            }
+          }
+          &--urgent {
+            #{$axeAlertConfigurationBlockName} {
+              &__singleSecurities-watchList-securityList-item {
+                &-urgentBtn {
                   @include material('none');
                   background-color: $color_active;
                   color: $font_color_inverse;
@@ -410,6 +425,11 @@
             @include material('none');
             @extend .santaBtn--inverseLabelled;
             background-color: $color_active;
+            &--selected{
+              @include material('none');
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
           }
         }
       }
@@ -507,7 +527,6 @@
       &-axeConfig {
         @include mix_border_radius(5px, 'all-but-top-left');
         flex: 1 1 auto;
-        max-width: 82rem;
         display: none;
         padding: $spacing_small;
       }

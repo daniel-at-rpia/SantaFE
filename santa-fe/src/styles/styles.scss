@@ -10,7 +10,7 @@ html {
 
 #santa-body{
   background-color: $color_gray_2;
-  font-family:"SantaOpenSans"; 
+  font-family:"SantaOpenSans";
   font-weight: 300;
 }
 
@@ -23,6 +23,14 @@ html {
   font-family: SantaBlackOps;
   src: url(fonts/BlackOpsOne-Regular.ttf);
 }
+
+.santa-margin-right{
+  margin-right: 16px;
+}
+.santa-margin-left{
+  margin-left: 16px;
+}
+
 
 /***********
   Scrollbar
