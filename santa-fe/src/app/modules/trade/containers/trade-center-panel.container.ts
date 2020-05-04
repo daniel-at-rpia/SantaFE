@@ -1,87 +1,59 @@
-  // dependencies
-    import {
-      Component,
-      ViewEncapsulation,
-      OnInit,
-      OnChanges,
-      OnDestroy,
-      Input
-    } from '@angular/core';
-    import { Observable, Subscription } from 'rxjs';
-    import {
-      interval,
-      of
-    } from 'rxjs';
-    import {
-      tap,
-      first,
-      delay,
-      catchError,
-      withLatestFrom,
-      filter
-    } from 'rxjs/operators';
-    import { Store, select } from '@ngrx/store';
+// dependencies
+import {Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {of, Subscription} from 'rxjs';
+import {catchError, first, tap, withLatestFrom} from 'rxjs/operators';
+import {select, Store} from '@ngrx/store';
 
-    import { DTOService } from 'Core/services/DTOService';
-    import { UtilityService } from 'Core/services/UtilityService';
-    import { RestfulCommService } from 'Core/services/RestfulCommService';
-    import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
-    import { TradeCenterPanelState } from 'FEModels/frontend-page-states.interface';
-    import {
-      SecurityDTO,
-      SecurityTableHeaderDTO,
-      SecurityTableRowDTO,
-      QuantComparerDTO,
-      SearchShortcutDTO
-    } from 'FEModels/frontend-models.interface';
-    import {
-      PayloadGetTradeFullData,
-      PayloadGetBestQuotes
-    } from 'BEModels/backend-payloads.interface';
-    import {
-      BEPortfolioDTO,
-      BESecurityDTO,
-      BEBestQuoteDTO,
-      BEFetchAllTradeDataReturn
-    } from 'BEModels/backend-models.interface';
-    import {
-      DefinitionConfiguratorEmitterParams,
-      ClickedOpenSecurityInBloombergEmitterParams
-    } from 'FEModels/frontend-adhoc-packages.interface';
+import {DTOService} from 'Core/services/DTOService';
+import {UtilityService} from 'Core/services/UtilityService';
+import {RestfulCommService} from 'Core/services/RestfulCommService';
+import {LiveDataProcessingService} from 'Trade/services/LiveDataProcessingService';
+import {TradeCenterPanelState} from 'FEModels/frontend-page-states.interface';
+import {
+  QuantComparerDTO,
+  SearchShortcutDTO,
+  SecurityDTO,
+  SecurityTableHeaderDTO,
+  SecurityTableRowDTO
+} from 'FEModels/frontend-models.interface';
+import {PayloadGetTradeFullData} from 'BEModels/backend-payloads.interface';
+import {BEFetchAllTradeDataReturn} from 'BEModels/backend-models.interface';
+import {
+  ClickedOpenSecurityInBloombergEmitterParams,
+  DefinitionConfiguratorEmitterParams
+} from 'FEModels/frontend-adhoc-packages.interface';
 
-    import {
-      TriCoreDriverConfig,
-      DEFAULT_DRIVER_IDENTIFIER,
-      EngagementActionList
-    } from 'Core/constants/coreConstants.constant';
-    import {
-      SecurityTableMetrics,
-      SECURITY_TABLE_FINAL_STAGE
-    } from 'Core/constants/securityTableConstants.constant';
-    import { SecurityDefinitionMap, FullOwnerList } from 'Core/constants/securityDefinitionConstants.constant';
-    import {
-      QUANT_COMPARER_PERCENTILE,
-      PortfolioShortcuts,
-      OwnershipShortcuts,
-      StrategyShortcuts
-    } from 'Core/constants/tradeConstants.constant';
-    import {
-      selectLiveUpdateTick,
-      selectInitialDataLoaded,
-      selectSecurityIDsFromAnalysis,
-      selectBestQuoteValidWindow
-    } from 'Trade/selectors/trade.selectors';
-    import {
-  TradeLiveUpdateProcessDataCompleteEvent,
-  TradeTogglePresetEvent,
+import {
+  DEFAULT_DRIVER_IDENTIFIER,
+  EngagementActionList,
+  TriCoreDriverConfig
+} from 'Core/constants/coreConstants.constant';
+import {SECURITY_TABLE_FINAL_STAGE, SecurityTableMetrics} from 'Core/constants/securityTableConstants.constant';
+import {FullOwnerList, SecurityDefinitionMap} from 'Core/constants/securityDefinitionConstants.constant';
+import {
+  OwnershipShortcuts,
+  PortfolioShortcuts,
+  QUANT_COMPARER_PERCENTILE,
+  StrategyShortcuts
+} from 'Core/constants/tradeConstants.constant';
+import {
+  selectBestQuoteValidWindow,
+  selectInitialDataLoaded,
+  selectLiveUpdateTick,
+  selectSecurityIDsFromAnalysis
+} from 'Trade/selectors/trade.selectors';
+import {
   TradeLiveUpdatePassRawDataEvent,
-  TradeSwitchDriverEvent,
-  TradeSelectedSecurityForAnalysisEvent,
+  TradeLiveUpdateProcessDataCompleteEvent,
   TradeSecurityTableRowDTOListForAnalysisEvent,
-  TradeSelectedSecurityForAlertConfigEvent, TradeSetFocusMode
+  TradeSelectedSecurityForAlertConfigEvent,
+  TradeSelectedSecurityForAnalysisEvent,
+  TradeSetFocusMode,
+  TradeTogglePresetEvent
 } from 'Trade/actions/trade.actions';
-    import { SecurityTableMetricStub, SearchShortcutStub } from 'FEModels/frontend-stub-models.interface';
-  //
+import {SearchShortcutStub, SecurityTableMetricStub} from 'FEModels/frontend-stub-models.interface';
+
+//
 
 @Component({
   selector: 'trade-center-panel',
@@ -97,7 +69,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     startNewUpdateSub: null,
     securityIDListFromAnalysisSub: null,
     validWindowSub: null
-  }
+  };
   constants = {
     defaultMetricIdentifier: DEFAULT_DRIVER_IDENTIFIER,
     portfolioShortcuts: PortfolioShortcuts,

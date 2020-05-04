@@ -2,9 +2,9 @@
   [title]="getAlertNameFromType(type)"
   [ngClass]="{
     'sat-alertCountSummary': true,
-    'sat-alertCountSummary--isAxe': type === constants.alertTypes.axeAlert,
-    'sat-alertCountSummary--isMark': type === constants.alertTypes.markAlert,
-    'sat-alertCountSummary--isInquiry': type === constants.alertTypes.marketListAlert,
+    'sat-alertCountSummary--isAxe': state.alertType === constants.alertTypes.axeAlert,
+    'sat-alertCountSummary--isMark': state.alertType === constants.alertTypes.markAlert,
+    'sat-alertCountSummary--isInquiry': state.alertType === constants.alertTypes.marketListAlert,
     'sat-alertCountSummary--isGroup': false,
     'sat-alertCountSummary--isOther': false
   }">

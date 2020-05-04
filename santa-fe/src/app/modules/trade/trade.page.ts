@@ -39,7 +39,8 @@ export class TradePage implements OnInit, OnDestroy {
   state: TradeState;
   subscriptions = {
     receiveSelectedSecuritySub: null,
-    displayAlertThumbnailSub: null
+    displayAlertThumbnailSub: null,
+    focusMode: null
   };
   constants = {
   };
@@ -91,7 +92,7 @@ export class TradePage implements OnInit, OnDestroy {
     ).subscribe((value) => {
       this.state.displayAlertThumbnail = !!value;
     });
-    this.store$.pipe(
+    this.subscriptions.focusMode = this.store$.pipe(
       select(selectFocusMode)
     ).subscribe((value) => {
       this.state.focusMode = !!value;
@@ -100,8 +101,10 @@ export class TradePage implements OnInit, OnDestroy {
 
   public ngOnDestroy() {
     for (const eachItem in this.subscriptions) {
-      const eachSub = this.subscriptions[eachItem] as Subscription;
-      eachSub.unsubscribe();
+      if (this.subscriptions.hasOwnProperty(eachItem)) {
+        const eachSub = this.subscriptions[eachItem] as Subscription;
+        eachSub.unsubscribe();
+      }
     }
   }
 

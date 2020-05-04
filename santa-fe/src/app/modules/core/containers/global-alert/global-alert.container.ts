@@ -86,8 +86,6 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     private restfulCommService: RestfulCommService
   ) {
     this.state = this.initializePageState();
-    // debug
-    // this.store$.dispatch(new CoreSendAlertCountsByType([{type: 'Axe', count: 200},{type: 'Mark', count: 400},{type: 'MarketList', count: 400},{type: 'Axe', count: 400},{type: 'Axe', count: 400},{type: 'Axe', count: 400}]));
   }
 
   public ngOnInit() {
@@ -274,7 +272,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       }
     }.bind(this), 10);
   }
-  groupBy(list, keyGetter) {
+  groupBy(list: any[], keyGetter: (obj: any) => string) {
     const map = new Map();
     list.forEach((item) => {
          const key = keyGetter(item);

@@ -374,9 +374,7 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
             button {
               background: black;
               box-shadow: none;
-              * {
-                color: white;
-              }
+              @extend .santaBtn--inverseLabelled;
             }
           }
         }
