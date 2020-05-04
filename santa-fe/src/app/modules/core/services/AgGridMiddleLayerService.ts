@@ -33,7 +33,8 @@
       AGGRID_DETAIL_COLUMN_WIDTH,
       AGGRID_SIMPLE_TEXT_COLUMN_WIDTH,
       SecurityTableMetricGroups,
-      SECURITY_TABLE_HEADER_NO_GROUP
+      SECURITY_TABLE_HEADER_NO_GROUP,
+      AGGRID_ALERT_SIDE_COLUMN_WIDTH
     } from 'Core/constants/securityTableConstants.constant';
   //
 
@@ -151,6 +152,10 @@ export class AgGridMiddleLayerService {
     const bestAxeQuoteCellIndex = targetHeaders.findIndex((eachHeader) =>{
       return eachHeader.data.key === 'bestAxeQuote';
     }) - 1;
+    // don't need to minus one because alertSide is before securityCard, again, bad design, please rework this
+    const alertSideCellIndex = targetHeaders.findIndex((eachHeader) => {
+      return eachHeader.data.key === 'alertSide';
+    });
     const list = [];
     targetRows.forEach((eachRow, index) => {
       if (index === 0) {
@@ -162,7 +167,8 @@ export class AgGridMiddleLayerService {
         eachRow,
         targetHeaders,
         bestQuoteCellIndex,
-        bestAxeQuoteCellIndex
+        bestAxeQuoteCellIndex,
+        alertSideCellIndex
       );
       !!newAgRow.id && list.push(newAgRow);
     });
@@ -183,6 +189,9 @@ export class AgGridMiddleLayerService {
     const bestAxeQuoteCellIndex = table.data.allHeaders.findIndex((eachHeader) =>{
       return eachHeader.data.key === 'bestAxeQuote';
     }) - 1;
+    const alertSideCellIndex = table.data.allHeaders.findIndex((eachHeader) => {
+      return eachHeader.data.key === 'alertSide';
+    }) - 1;
     targetRows.forEach((eachRow) => {
       const id = eachRow.data.rowId;
       const targetNode = table.api.gridApi.getRowNode(id);
@@ -191,7 +200,8 @@ export class AgGridMiddleLayerService {
           eachRow,
           table.data.allHeaders,
           bestQuoteCellIndex,
-          bestAxeQuoteCellIndex
+          bestAxeQuoteCellIndex,
+          alertSideCellIndex
         );
         targetNode.setData(newAgRow);
       } else {
@@ -225,6 +235,9 @@ export class AgGridMiddleLayerService {
     } else if (!!targetHeader.state.isQuantVariant) {
       newAgColumn.cellRenderer = targetHeader.data.key;
       newAgColumn.width = AGGRID_QUOTE_COLUMN_WIDTH;
+    } else if (targetHeader.data.key === 'alertSide') {
+      newAgColumn.cellRenderer = targetHeader.data.key;
+      newAgColumn.width = AGGRID_ALERT_SIDE_COLUMN_WIDTH;
     } else if (!targetHeader.data.isDataTypeText) {
       newAgColumn.cellClass = `${AGGRID_CELL_CLASS} ${AGGRID_CELL_CLASS}--numeric`;
       newAgColumn.headerClass = `${newAgColumn.headerClass} ${AGGRID_HEADER_CLASS}--numeric ag-numeric-header`;
@@ -252,7 +265,8 @@ export class AgGridMiddleLayerService {
     targetRow: SecurityTableRowDTO,
     targetHeaders: Array<SecurityTableHeaderDTO>,
     bestQuoteCellIndex: number,
-    bestAxeQuoteCellIndex: number
+    bestAxeQuoteCellIndex: number,
+    alertSideCellIndex: number
   ): AgGridRow {
     const eachSecurity = targetRow.data.security;
     const newAgRow: AgGridRow = {
@@ -260,11 +274,12 @@ export class AgGridMiddleLayerService {
       securityCard: eachSecurity,
       bestQuote: targetRow.data.cells[bestQuoteCellIndex].data.quantComparerDTO,
       bestAxeQuote: targetRow.data.cells[bestAxeQuoteCellIndex].data.quantComparerDTO,
+      alertSide: alertSideCellIndex > -1 ? targetRow.data.cells[alertSideCellIndex].data.alertSideDTO : {data: {side: 'test2'}, state: {isStencil: false}},
       rowDTO: targetRow
     };
     newAgRow[AGGRID_DETAIL_COLUMN_KEY] = '';
     targetHeaders.forEach((eachHeader, index) => {
-      if (eachHeader.data.key === 'securityCard' || eachHeader.state.isQuantVariant) {
+      if (eachHeader.data.key === 'securityCard' || eachHeader.state.isQuantVariant || eachHeader.data.key === 'alertSide') {
         // skip those columns as they are already instantiated above
       } else {
         // can't directly use the cells from the target row to retrieve the data because we need to populate data for ALL columns, not just the active ones

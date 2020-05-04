@@ -158,7 +158,8 @@ export class DTOService {
           alertType: null,
           alertMessage: null,
           alertValue: null,
-          alertTarget: null
+          alertTarget: null,
+          alertSide: null
         }
       },
       api: {
@@ -288,7 +289,8 @@ export class DTOService {
       alertType: !!targetAlert.data.titlePin ? `${targetAlert.data.type} - ${targetAlert.data.titlePin}` : targetAlert.data.type,
       alertMessage: targetAlert.data.message,
       alertValue: targetAlert.data.titleBottom,
-      alertTarget: targetAlert.data.titleTop
+      alertTarget: targetAlert.data.titleTop,
+      alertSide: null
     };
   }
 
@@ -784,7 +786,15 @@ export class DTOService {
     const object: DTOs.SecurityTableCellDTO = {
       data: {
         textData: !!isStencil ? 'PLACE' : textData,
-        quantComparerDTO: quantComparerDTO
+        quantComparerDTO: quantComparerDTO,
+        alertSideDTO: {
+          data: {
+            side: 'test'
+          },
+          state: {
+            isStencil: false
+          }
+        }
       },
       state: {
         isQuantVariant: isQuantVariant,

@@ -19,6 +19,7 @@
     import {SecurityTableMetricStub} from 'FEModels/frontend-stub-models.interface';
     import {SantaTableSecurityCell} from 'Core/components/santa-table-security-cell/santa-table-security-cell.component';
     import {SantaTableQuoteCell} from 'Core/components/santa-table-quote-cell/santa-table-quote-cell.component';
+    import {SantaTableAlertSideCell} from 'Core/components/santa-table-alert-side-cell/santa-table-alert-side-cell.component';
     import {SantaTableDetailAllQuotes} from 'Core/containers/santa-table-detail-all-quotes/santa-table-detail-all-quotes.container';
     import {BEQuoteDTO} from 'BEModels/backend-models.interface';
     import {
@@ -120,6 +121,7 @@ export class SantaTable implements OnInit, OnChanges {
       securityCard: SantaTableSecurityCell,
       bestQuote: SantaTableQuoteCell,
       bestAxeQuote: SantaTableQuoteCell,
+      alertSide: SantaTableAlertSideCell,
       detailAllQuotes: SantaTableDetailAllQuotes,
       numericFloatingFilter: SantaTableNumericFloatingFilter,
       numericFilter: SantaTableNumericFilter

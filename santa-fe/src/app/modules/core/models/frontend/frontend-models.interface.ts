@@ -104,6 +104,7 @@ export interface SecurityDTO extends BasicDTOStructure {
       alertMessage: string;
       alertValue: string;
       alertTarget: string;
+      alertSide: string;
     }
   }
   api: {
@@ -359,6 +360,7 @@ export interface SecurityTableCellDTO extends BasicDTOStructure {
   data: {
     textData: string;
     quantComparerDTO: QuantComparerDTO;
+    alertSideDTO: SantaTableAlertSideCellDTO;
   },
   state: {
     isQuantVariant: boolean;
@@ -498,4 +500,13 @@ export interface AlertDTO extends BasicDTOStructure {
     hasTitlePin: boolean;
     isCancelled: boolean;
   };
+}
+
+export interface SantaTableAlertSideCellDTO extends BasicDTOStructure {
+  data: {
+    side: string;
+  },
+  state: {
+    isStencil: boolean;
+  }
 }

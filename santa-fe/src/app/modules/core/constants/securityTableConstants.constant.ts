@@ -19,6 +19,7 @@ export const SECURITY_TABLE_FINAL_STAGE = 1;
 export const AGGRID_DETAIL_COLUMN_WIDTH = 50;
 export const AGGRID_SECURITY_CARD_COLUMN_WIDTH = 270;
 export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_quant + $spacing_small * 2
+export const AGGRID_ALERT_SIDE_COLUMN_WIDTH = 115;
 export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 117;
 export const AGGRID_SIMPLE_TEXT_COLUMN_WIDTH = 135;
 export const AGGRID_ROW_HEIGHT = 40;
@@ -55,6 +56,18 @@ export const SECURITY_TABLE_ICONS = {
 };
 
 export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
+    key: 'alertSide',
+    label: 'Alert Side',
+    attrName: 'alertSide',
+    underlineAttrName: 'alertSide',
+    blockAttrName: 'alert',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    active: true,
+    pinned: true,
+    groupBelongs: SecurityTableMetricGroups.alert,
+    groupShow: true,
+    alertOnlyColumn: true
+  },{
     key: 'alertTime',
     label: 'Alert Time',
     attrName: 'alertTime',
