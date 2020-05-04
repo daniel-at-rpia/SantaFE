@@ -1,20 +1,13 @@
 import * as DTOs from 'FEModels/frontend-models.interface';
-import {
-  ObligorChartCategoryBlock,
-  TradeAlertConfigurationAxeGroupBlock
-} from 'FEModels/frontend-blocks.interface';
-import {
-  SecurityDefinitionStub,
-  SecurityTableMetricStub
-} from 'FEModels/frontend-stub-models.interface';
+import {ObligorChartCategoryBlock, TradeAlertConfigurationAxeGroupBlock} from 'FEModels/frontend-blocks.interface';
+import {SecurityDefinitionStub, SecurityTableMetricStub} from 'FEModels/frontend-stub-models.interface';
 import {
   DefinitionConfiguratorEmitterParamsItem,
   ObligorGraphAxesZoomState,
   SecurityMapEntry
 } from 'FEModels/frontend-adhoc-packages.interface';
-import { AlertTypes } from 'Core/constants/coreConstants.constant';
-import * as am4core from "@amcharts/amcharts4/core";
-import * as am4charts from "@amcharts/amcharts4/charts";
+import {AlertTypes} from 'Core/constants/coreConstants.constant';
+import * as am4charts from '@amcharts/amcharts4/charts';
 
 export interface GlobalAlertState {
   activated: boolean;
@@ -75,11 +68,13 @@ export interface TradeState {
   ownerInitial: string;
   displayAlertThumbnail: boolean;
   alertPanelMaximized: boolean;
+  focusMode: boolean;
 }
 
 export interface TradeCenterPanelState {
   currentContentStage: number;
   bestQuoteValidWindow: number;
+  isFocusMode: boolean;
   presets : {
     presetsReady: boolean;
     selectedPreset: DTOs.SearchShortcutDTO;
@@ -188,6 +183,7 @@ export interface TradeObligorGraphPanelState {
 export interface TradeAlertPanelState {
   isUserPM: boolean;
   configureAlert: boolean;
+  focusMode: boolean;
   isAlertPaused: boolean;
   securityMap: Array<SecurityMapEntry>;
   alertUpdateTimestamp: string;

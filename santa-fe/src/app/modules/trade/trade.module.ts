@@ -19,9 +19,11 @@ import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingServ
 import { MoveVisualizer } from 'Trade/components/move-visualizer/move-visualizer.component';
 import { ObligorGraph } from './components/obligor-graph/obligor-graph';
 import { HistoricalSummary } from 'Trade/containers/historical-summary.container';
+import {AlertCountSummary} from "Trade/components/alert-count-summary/alert-count-summary";
 
 @NgModule({
   declarations: [
+    AlertCountSummary,
     TradePage,
     TradeCenterPanel,
     TradeAlertPanel,

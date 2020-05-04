@@ -36,7 +36,7 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
         &-text {
           text-align: center;
           font-size: $font_size_x_large;
-          color: $font_color_minor; 
+          color: $font_color_minor;
         }
       }
       &-content {
@@ -191,8 +191,9 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
     display: none;
     flex-direction: column;
     overflow: hidden;
-    padding: $spacing_medium;
+    padding: 0 $spacing_medium $spacing_medium;
     &-quickFilters {
+      padding: $spacing_x_small 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -215,8 +216,14 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
         }
         santa-input {
           flex: 1 1 auto;
-          margin-bottom: $spacing_x_small;
         }
+      }
+      &-expand{
+      span{
+        white-space:nowrap;
+        overflow:hidden;
+      }
+
       }
       &-driver {
         display: flex;
@@ -345,6 +352,30 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
           transform: translate(0, 0);
           &-list-item {
             transform: translate(0, 0);
+          }
+        }
+      }
+    }
+  }
+  &--focusMode {
+    border: none;
+    #{$tradeCenterPanelBlockName} {
+      &__presetsAndFilters {
+        display: none;
+      }
+      &__result {
+        padding-top: 0;
+        &-quickFilters {
+          padding: $spacing_xx_small;
+          &-keywordSearch {
+            padding-left: 0;
+          }
+          &-expand {
+            button {
+              background: black;
+              box-shadow: none;
+              @extend .santaBtn--inverseLabelled;
+            }
           }
         }
       }
