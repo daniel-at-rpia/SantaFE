@@ -62,7 +62,18 @@ $alert_type_size: $iconButton_size_regular;
             background-color: $tradeMarkAlertColor;
           }
         }
+        &-innerText{
+          display: none;
+          align-items: center;
+          justify-content: center;
+          align-self: center;
+          justify-self: center;
+          margin: 0 auto;
+          font-weight: 900;
+          font-size: $font_size_xx_small;
+        }
       }
+
       &-mask {
         @include mix_alive('light');
         @include mix_fixed_div(absolute, $z_index_base_item_solid);
@@ -124,6 +135,7 @@ $alert_type_size: $iconButton_size_regular;
         background-color: $color_white;
         padding: $spacing_minimum $spacing_x_small;
         &-text {
+          font-weight: 900;
           color: $alert_default_color;
         }
       }
@@ -290,6 +302,16 @@ $alert_type_size: $iconButton_size_regular;
       }
     }
   }
+
+  &--typeGroupVariant {
+    #{$alertBlockName} {
+      &__thumbnail {
+        &-type-circle-innerText {
+          display: flex;
+        }
+      }
+    }
+  }
   &--typeBidVariant {
     #{$alertBlockName} {
       &__thumbnail {
@@ -353,6 +375,10 @@ $alert_type_size: $iconButton_size_regular;
           @include material('none');
           &-circle {
             background-color: $color_active;
+            &-innerText{
+                color: $font_color_inverse;
+                transition: none;
+            }
           }
           &-mask {
             background-color: $color_active;

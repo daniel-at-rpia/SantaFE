@@ -18,7 +18,7 @@ import {
   SecurityQuoteDTO
 } from 'FEModels/frontend-models.interface';
 import {
-  AxeAlertScope
+  AxeAlertScope, AxeAlertType
 } from 'Core/constants/tradeConstants.constant';
 
 export interface SecurityPortfolioBlock {
@@ -229,6 +229,8 @@ export interface TradeAlertConfigurationAxeGroupBlock {
   card: SecurityDTO;
   groupId: string;
   scopes: Array<AxeAlertScope>;
+  axeAlertTypes: Array<AxeAlertType>;
   isDeleted: boolean;
   isDisabled: boolean;
+  isUrgent: boolean;
 }

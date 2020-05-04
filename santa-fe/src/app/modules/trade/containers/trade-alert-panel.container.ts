@@ -1,30 +1,19 @@
-  // dependencies
-    import {
-      Component,
-      ViewEncapsulation,
-      Input,
-      Output,
-      EventEmitter,
-      OnInit,
-      OnChanges,
-      OnDestroy
-    } from '@angular/core';
-    import { Store, select } from '@ngrx/store';
-    import {
-      Observable,
-      Subscription,
-      interval,
-      of
-    } from 'rxjs';
-    import {
-      tap,
-      first,
-      delay,
-      catchError,
-      withLatestFrom,
-      filter
-    } from 'rxjs/operators';
-    import * as moment from 'moment';
+// dependencies
+import {
+  Component,
+  EventEmitter,
+  Input,
+  isDevMode,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewEncapsulation
+} from '@angular/core';
+import {select, Store} from '@ngrx/store';
+import {interval, Observable, of, Subscription} from 'rxjs';
+import {catchError, first, tap, withLatestFrom} from 'rxjs/operators';
+import * as moment from 'moment';
 
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
@@ -51,23 +40,24 @@
     } from 'Core/constants/coreConstants.constant';
     import {
       selectAlertCounts,
-  selectSecurityMapContent,
-  selectSecurityMapValidStatus
-} from 'Core/selectors/core.selectors';
+      selectSecurityMapContent,
+      selectSecurityMapValidStatus
+    } from 'Core/selectors/core.selectors';
     import {
       ALERT_MAX_SECURITY_SEARCH_COUNT,
       AxeAlertScope,
-      ALERT_UPDATE_COUNTDOWN
+      ALERT_UPDATE_COUNTDOWN,
+      AxeAlertType
     } from 'Core/constants/tradeConstants.constant';
     import { FullOwnerList, FilterOptionsPortfolioResearchList } from 'Core/constants/securityDefinitionConstants.constant';
-    import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
     import { CoreFlushSecurityMap, CoreSendNewAlerts } from 'Core/actions/core.actions';
     import {
-  selectSelectedSecurityForAlertConfig,
-  selectPresetSelected,
+      selectSelectedSecurityForAlertConfig,
+      selectPresetSelected,
       selectFocusMode
-} from 'Trade/selectors/trade.selectors';
-  //
+    } from 'Trade/selectors/trade.selectors';
+
+//
 
 @Component({
   selector: 'trade-alert-panel',
@@ -95,6 +85,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     alertTypes: AlertTypes,
     alertSubTypes: AlertSubTypes,
     axeAlertScope: AxeAlertScope,
+    axeAlertType: AxeAlertType,
     countdown: ALERT_UPDATE_COUNTDOWN,
     fullOwnerList: FullOwnerList,
     researchList: FilterOptionsPortfolioResearchList
@@ -106,6 +97,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
   ){
+    window['moment'] = moment;
     this.state = this.initializePageState();
     this.store$.pipe(
       select(selectFocusMode)
@@ -132,8 +124,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             card: null,
             groupId: null,
             scopes: [],
+            axeAlertTypes: [],
             isDeleted: false,
-            isDisabled: false
+            isDisabled: false,
+            isUrgent: false
           },
           securitySearchKeyword: '',
           securityList: [],
@@ -297,6 +291,42 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  public onSelectAxeWatchlistSideType(targetType: AxeAlertType, targetBlock: TradeAlertConfigurationAxeGroupBlock) {
+    const currTypes: AxeAlertType[] = targetBlock.axeAlertTypes.slice();
+    if (!!targetType && !!targetBlock && !targetBlock.isDisabled) {
+      if (targetBlock.axeAlertTypes.indexOf(targetType) === -1) {
+        targetBlock.axeAlertTypes = [targetType, ...currTypes];
+      } else {
+        targetBlock.axeAlertTypes = currTypes.filter((a: AxeAlertType) => a !== targetType);
+      }
+      this.restfulCommService.logEngagement(
+        this.restfulCommService.engagementMap.tradeAlertConfigure,
+        null,
+        `Change AlertType to ${targetBlock.axeAlertTypes.toString()}`,
+        'Trade Alert Panel'
+      );
+    }
+  }
+
+  public onSelectAxeAlertWatchType(targetType: AxeAlertType, targetBlock: TradeAlertConfigurationAxeGroupBlock) {
+    if (!!targetType && !!targetBlock && !targetBlock.isDisabled) {
+      if (targetBlock.axeAlertTypes.indexOf(targetType) === -1) {
+        targetBlock.axeAlertTypes = [targetType, ...targetBlock.axeAlertTypes];
+      } else {
+        if (targetBlock.axeAlertTypes.length > 1) {
+          targetBlock.axeAlertTypes =
+            targetBlock.axeAlertTypes.filter((a: AxeAlertType) => a !== targetType);
+        }
+      }
+      this.restfulCommService.logEngagement(
+        this.restfulCommService.engagementMap.tradeAlertConfigure,
+        null,
+        `Change Alert Type to ${targetBlock.axeAlertTypes.toString()}`,
+        'Trade Alert Panel'
+      );
+    }
+  }
+
   public onClickSaveConfiguration() {
     this.saveAxeConfiguration();
     this.saveMarkConfiguration();
@@ -306,6 +336,16 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
   public onClickUpdateAlert() {
     this.updateAlert();
+  }
+
+  public onTogglePriority(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
+    targetBlock.isUrgent = !targetBlock.isUrgent;
+    this.restfulCommService.logEngagement(
+      this.restfulCommService.engagementMap.tradeAlertConfigure,
+      null,
+      'Priority Toggle',
+      'Trade Alert Panel'
+    );
   }
 
   public onToggleDisableTargetGroupFromAxeWatchList(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
@@ -406,9 +446,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     const newEntry: TradeAlertConfigurationAxeGroupBlock = {
       card: copy,
       groupId: null,
+      axeAlertTypes: this.state.configuration.axe.myGroup.axeAlertTypes,
       scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],
       isDeleted: false,
-      isDisabled: false
+      isDisabled: false,
+      isUrgent: true
     };
     this.state.configuration.axe.securityList.unshift(newEntry);
     this.restfulCommService.logEngagement(
@@ -464,6 +506,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private populateConfigurationFromSecurityGroup(rawGroupConfig: BEAlertConfigurationDTO) {
+    const { WatchType } = rawGroupConfig.parameters;
     const targetScope = rawGroupConfig.subType as AxeAlertScope;
     const payload: PayloadGetSecurities = {
       identifiers: rawGroupConfig.groupFilters.SecurityIdentifier
@@ -471,9 +514,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     const newEntry: TradeAlertConfigurationAxeGroupBlock = {
       card: null,
       groupId: rawGroupConfig.alertConfigID,
+      axeAlertTypes: WatchType === AxeAlertType.both ? [AxeAlertType.normal, AxeAlertType.marketList] : [WatchType],
       scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],
       isDeleted: false,
-      isDisabled: !rawGroupConfig.isEnabled
+      isDisabled: !rawGroupConfig.isEnabled,
+      isUrgent: rawGroupConfig.isUrgent
     };
     this.state.configuration.axe.securityList.unshift(newEntry);
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSecurityDTOs, {req: 'POST'}, payload).pipe(
@@ -495,13 +540,16 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
   private populateConfigurationFromMyGroup(rawGroupConfig: BEAlertConfigurationDTO) {
     const targetScope = rawGroupConfig.subType as AxeAlertScope;
+    const { WatchType } = rawGroupConfig.parameters;
     this.state.configuration.axe.myGroup = {
       card: null,
       groupId: rawGroupConfig.alertConfigID,
+      axeAlertTypes: WatchType === AxeAlertType.both ? [AxeAlertType.normal, AxeAlertType.marketList] : [WatchType],
       scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],
       isDeleted: false,
-      isDisabled: !rawGroupConfig.isEnabled
-    }
+      isDisabled: !rawGroupConfig.isEnabled,
+      isUrgent: rawGroupConfig.isUrgent
+    };
   }
 
   private addScopeToAxeWatchlistEntry(targetEntry: TradeAlertConfigurationAxeGroupBlock, targetScope: AxeAlertScope) {
@@ -531,7 +579,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       const groupPayload: PayloadUpdateSingleAlertConfig = {
         type: this.constants.alertTypes.axeAlert,
         subType: this.mapAxeScopesToAlertSubtypes(this.state.configuration.axe.myGroup.scopes),
-        groupFilters: {}
+        groupFilters: {},
+        parameters: {
+          WatchType: this.mapWatchTypesToWatchType(this.state.configuration.axe.myGroup.axeAlertTypes)
+        },
+        isUrgent: this.state.configuration.axe.myGroup.isUrgent
       };
       if (this.constants.researchList.indexOf(this.ownerInitial) >= 0) {
         groupPayload.groupFilters.ResearchName = [this.ownerInitial];
@@ -549,8 +601,12 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         const payload: PayloadUpdateSingleAlertConfig = {
           type: this.constants.alertTypes.axeAlert,
           subType: this.mapAxeScopesToAlertSubtypes(eachEntry.scopes),
-          groupFilters: {}
-        }
+          groupFilters: {},
+          parameters: {
+            WatchType: this.mapWatchTypesToWatchType(eachEntry.axeAlertTypes)
+          },
+          isUrgent: eachEntry.isUrgent
+        };
         payload.groupFilters.SecurityIdentifier = [eachEntry.card.data.securityID];
         if (!!eachEntry.groupId) {
           payload.alertConfigID = eachEntry.groupId;
@@ -585,7 +641,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         groupFilters: {
         },
         parameters: {}
-      }
+      };
       const myGroup = this.state.configuration.mark.myGroup;
       if (this.constants.researchList.indexOf(this.ownerInitial) >= 0) {
         payload.groupFilters.ResearchName = [this.ownerInitial];
@@ -643,22 +699,36 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlerts, {req: 'POST'}, payload).pipe(
       first(),
       tap((serverReturn: Array<BEAlertDTO>) => {
+        console.log('updateAlerts', serverReturn);
+        // serverReturn.push({...mockAlert, keyWord: `${1}|${Math.random().toFixed(2)}`});
         if (!!serverReturn && serverReturn.length > 0) {
           const updateList = [];
-          serverReturn.forEach((eachRawAlert) => {
-            if (eachRawAlert.isActive) {
+          // temporarily filter out all the market listing alerts
+          const filteredServerReturn = serverReturn.filter((eachRawAlert) => {
+            return eachRawAlert.type !== this.constants.alertTypes.marketListAlert;
+          });
+          filteredServerReturn.forEach((eachRawAlert) => {
+            // checking for cancelled and active alerts
+            const expired = moment().diff(moment(eachRawAlert.validUntilTime) ) > 0;
+            if (eachRawAlert.isActive && !eachRawAlert.isCancelled && !expired) {
               const newAlert = this.dtoService.formAlertObject(eachRawAlert);
-              updateList.push(newAlert);
+              updateList.push(this.dtoService.formAlertObject(eachRawAlert));
+            }
+            // adding cancelled as well
+            if (eachRawAlert.isCancelled) {
+              updateList.push(this.dtoService.formAlertObject(eachRawAlert));
             }
           });
-          updateList.length > 0 && this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
+          this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
+        } else {
+          this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy([])));
         }
         this.state.alertUpdateInProgress = false;
       }),
       catchError(err => {
         this.state.alertUpdateInProgress = false;
         console.error(`${this.restfulCommService.apiMap.getAlerts} failed`, err);
-        return of('error')
+        return of('error');
       })
     ).subscribe();
     // timeStamp needs to be updated right after the API call initiates, NOT when it returns
@@ -676,6 +746,17 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       return this.constants.alertSubTypes.liquidation;
     } else {
       return this.constants.alertSubTypes.bid;
+    }
+  }
+  private mapWatchTypesToWatchType(alertTypes: AxeAlertType[]): AxeAlertType {
+    if (alertTypes.includes(AxeAlertType.normal) && alertTypes.includes(AxeAlertType.marketList)) {
+      return AxeAlertType.both;
+    } else if (alertTypes.includes(AxeAlertType.normal)) {
+      return AxeAlertType.normal;
+    } else if (alertTypes.includes(AxeAlertType.marketList)) {
+      return AxeAlertType.marketList;
+    } else {
+      return AxeAlertType.both;
     }
   }
 

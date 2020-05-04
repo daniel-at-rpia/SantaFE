@@ -481,7 +481,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     const filteredList: Array<SecurityTableRowDTO> = [];
     this.state.fetchResult.prinstineRowList.forEach((eachRow) => {
       try {
-        if (this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.name, this.state.filters.quickFilters.keyword)) {
+        if (this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.name, this.state.filters.quickFilters.keyword)
+        || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.obligorName, this.state.filters.quickFilters.keyword)) {
           let portfolioIncludeFlag = this.filterByPortfolio(eachRow);
           let ownerFlag = this.filterByOwner(eachRow);
           let strategyFlag = this.filterByStrategy(eachRow);

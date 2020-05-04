@@ -78,7 +78,7 @@ export class AgGridMiddleLayerService {
       const eachGroup: AgGridColumnDefinition = {
         headerName: SecurityTableMetricGroups[eachGroupKey],
         field: eachGroupKey,
-        headerClass: `${AGGRID_HEADER_CLASS} ag-numeric-header`,
+        headerClass: `${AGGRID_HEADER_CLASS} ag-numeric-header ${AGGRID_HEADER_CLASS}--${SecurityTableMetricGroups[eachGroupKey].replace(/(\s|\(|\))/g, '')}`,
         cellClass: `${AGGRID_CELL_CLASS}`,
         enableValue: false,
         hide: false,
@@ -95,7 +95,7 @@ export class AgGridMiddleLayerService {
       const newAgColumn: AgGridColumnDefinition = {
         headerName: eachHeader.data.displayLabel,
         field: eachHeader.data.key,
-        headerClass: `${AGGRID_HEADER_CLASS} ag-numeric-header`,
+        headerClass: `${AGGRID_HEADER_CLASS} ag-numeric-header ${AGGRID_HEADER_CLASS}--${eachHeader.data.groupBelongs.replace(/(\s|\(|\))/g, '')}`,
         cellClass: `${AGGRID_CELL_CLASS}`,
         enableValue: false,
         sortable: true,
@@ -194,7 +194,7 @@ export class AgGridMiddleLayerService {
       newAgColumn.width = AGGRID_QUOTE_COLUMN_WIDTH;
     } else if (!targetHeader.data.isDataTypeText) {
       newAgColumn.cellClass = `${AGGRID_CELL_CLASS} ${AGGRID_CELL_CLASS}--numeric`;
-      newAgColumn.headerClass = `${AGGRID_HEADER_CLASS} ${AGGRID_HEADER_CLASS}--numeric ag-numeric-header`;
+      newAgColumn.headerClass = `${AGGRID_HEADER_CLASS} ${AGGRID_HEADER_CLASS}--numeric ag-numeric-header ${AGGRID_HEADER_CLASS}--${targetHeader.data.groupBelongs.replace(/(\s|\(|\))/g, '')}`;
       newAgColumn.width = AGGRID_SIMPLE_NUM_COLUMN_WIDTH;
       newAgColumn.resizable = true;
       // newAgColumn.suppressMenu = true;

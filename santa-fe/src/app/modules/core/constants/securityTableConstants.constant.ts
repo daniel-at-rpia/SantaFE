@@ -44,6 +44,15 @@ export const SecurityTableMetricGroups = {
   securityInfo: 'Security Info',
   ownership: 'Ownership'
 };
+
+export const SECURITY_TABLE_ICONS = {
+  columnGroupOpened: '<i class="far fa-plus-square"/>',
+  columnGroupClosed: '<i class="far fa-minus-square"/>',
+  menu: '<i class="fa fa-bars" style="width: 10px"/>',
+  sortAscending: '<i class="fas fa-sort-amount-up"></i>',
+  sortDescending: '<i class="fas fa-sort-amount-down"></i>'
+};
+
 export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
   {
     key: 'securityCard',
@@ -193,54 +202,6 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupBelongs: SecurityTableMetricGroups.mark,
     groupShow: false
   },{
-    key: 'markDeltaToBid',
-    label: 'Δ to Bid',
-    attrName: 'markDisBid',
-    underlineAttrName: 'markDisBidRaw',
-    blockAttrName: 'mark',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isFrontEndMetric: true,
-    isDriverDependent: true,
-    active: true,
-    groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
-    groupShow: false
-  },{
-    key: 'markDeltaToAsk',
-    label: 'Δ to Ask',
-    attrName: 'markDisAsk',
-    underlineAttrName: 'markDisAskRaw',
-    blockAttrName: 'mark',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isFrontEndMetric: true,
-    isDriverDependent: true,
-    active: true,
-    groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
-    groupShow: false
-  },{
-    key: 'markDeltaToMid',
-    label: 'Δ to Mid',
-    attrName: 'markDisMid',
-    underlineAttrName: 'markDisMidRaw',
-    blockAttrName: 'mark',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isFrontEndMetric: true,
-    isDriverDependent: true,
-    active: true,
-    groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
-    groupShow: false
-  },{
-    key: 'markDeltaToLiquidation',
-    label: 'Δ to Liquidation',
-    attrName: 'markDisLiquidation',
-    underlineAttrName: 'markDisLiquidationRaw',
-    blockAttrName: 'mark',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isFrontEndMetric: true,
-    isDriverDependent: true,
-    active: true,
-    groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
-    groupShow: true
-  },{
     key: 'currentPosition',
     label: 'Current Filtered Position',
     attrName: 'positionCurrentInMM',
@@ -251,7 +212,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupBelongs: SecurityTableMetricGroups.position,
     groupShow: true
   },{
-    key: 'firmPosition',
+    key: 'unitPosition',
     label: 'Firm Position',
     attrName: 'positionFirmInMM',
     underlineAttrName: 'positionFirm',
@@ -350,6 +311,54 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     active: true,
     groupBelongs: SecurityTableMetricGroups.position,
     groupShow: false
+  },{
+    key: 'markDeltaToBid',
+    label: 'Δ to Bid',
+    attrName: 'markDisBid',
+    underlineAttrName: 'markDisBidRaw',
+    blockAttrName: 'mark',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isFrontEndMetric: true,
+    isDriverDependent: true,
+    active: true,
+    groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
+    groupShow: false
+  },{
+    key: 'markDeltaToAsk',
+    label: 'Δ to Ask',
+    attrName: 'markDisAsk',
+    underlineAttrName: 'markDisAskRaw',
+    blockAttrName: 'mark',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isFrontEndMetric: true,
+    isDriverDependent: true,
+    active: true,
+    groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
+    groupShow: false
+  },{
+    key: 'markDeltaToMid',
+    label: 'Δ to Mid',
+    attrName: 'markDisMid',
+    underlineAttrName: 'markDisMidRaw',
+    blockAttrName: 'mark',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isFrontEndMetric: true,
+    isDriverDependent: true,
+    active: true,
+    groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
+    groupShow: false
+  },{
+    key: 'markDeltaToLiquidation',
+    label: 'Δ to Liquidation',
+    attrName: 'markDisLiquidation',
+    underlineAttrName: 'markDisLiquidationRaw',
+    blockAttrName: 'mark',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isFrontEndMetric: true,
+    isDriverDependent: true,
+    active: true,
+    groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
+    groupShow: true
   },{
     key: 'cs01CadCurrent',
     label: 'CS01 Cad',
@@ -495,6 +504,16 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     label: 'Sector',
     attrName: 'sector',
     underlineAttrName: 'sector',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    active: true,
+    isDataTypeText: true,
+    groupBelongs: SecurityTableMetricGroups.securityInfo,
+    groupShow: true
+  },{
+    key: 'issuer',
+    label: 'Issuer',
+    attrName: 'obligorName',
+    underlineAttrName: 'obligorName',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     active: true,
     isDataTypeText: true,

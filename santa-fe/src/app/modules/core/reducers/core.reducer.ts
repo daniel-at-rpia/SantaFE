@@ -79,7 +79,7 @@ export function coreReducer(
         ...state,
         alert: {
           ...state.alert,
-          newAlerts: state.alert.newAlerts.concat(action.list)
+          newAlerts: action.list
         }
       };
     case CoreActions.SendAlertCountsByType:
