@@ -24,6 +24,7 @@ import {
 } from 'FEModels/frontend-adhoc-packages.interface';
 
 import {
+  AlertTypes,
   DEFAULT_DRIVER_IDENTIFIER,
   EngagementActionList,
   TriCoreDriverConfig
@@ -77,7 +78,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     strategyShortcuts: StrategyShortcuts,
     securityGroupDefinitionMap: SecurityDefinitionMap,
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
-    fullOwnerList: FullOwnerList
+    fullOwnerList: FullOwnerList,
+    alertTypes: AlertTypes
   }
 
   private initializePageState(): TradeCenterPanelState {

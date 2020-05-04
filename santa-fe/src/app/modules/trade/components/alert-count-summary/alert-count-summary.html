@@ -1,10 +1,10 @@
 <article
-  [title]="getAlertNameFromType(type)"
+  [title]="getAlertNameFromType(summary.data.alertType)"
   [ngClass]="{
     'sat-alertCountSummary': true,
-    'sat-alertCountSummary--isAxe': state.alertType === constants.alertTypes.axeAlert,
-    'sat-alertCountSummary--isMark': state.alertType === constants.alertTypes.markAlert,
-    'sat-alertCountSummary--isInquiry': state.alertType === constants.alertTypes.marketListAlert,
+    'sat-alertCountSummary--isAxe': summary.state.isAxe,
+    'sat-alertCountSummary--isMark': summary.state.isMark,
+    'sat-alertCountSummary--isInquiry': summary.state.isInquiry,
     'sat-alertCountSummary--isGroup': false,
     'sat-alertCountSummary--isOther': false
   }">
@@ -12,13 +12,14 @@
     <i
        [ngClass]="{
     'fas': true,
-    'fa-axe': type === constants.alertTypes.axeAlert || type === constants.alertTypes.marketListAlert,
-    'fa-bullseye-arrow': type === constants.alertTypes.markAlert
+    'fa-axe': summary.state.isAxe,
+    'fa-bullseye-arrow': summary.state.isMark,
+    'fa-clock': summary.state.isInquiry
   }"></i>
   </span>
-  <span class="sat-alertCountSummary-text">{{getAlertNameFromType(this.type)}}</span>
+  <span class="sat-alertCountSummary-text">{{getAlertNameFromType(summary.data.alertType)}}</span>
   <span class="sat-alertCountSummary-count">
-    {{this.count}}
+    {{summary.data.count}}
   </span>
 </article>
 

@@ -212,6 +212,3 @@ export interface TradeAlertPanelState {
   alertUpdateInProgress: boolean;
   isCenterPanelPresetSelected: boolean;
 }
-export interface AlertCountSummaryState {
-  alertType: AlertTypes;
-}
