@@ -696,7 +696,8 @@ export class DTOService {
   }
 
   public formSecurityTableHeaderObject(
-    stub: SecurityTableMetricStub
+    stub: SecurityTableMetricStub,
+    useSpecificsFrom: string
   ): DTOs.SecurityTableHeaderDTO {
     const object: DTOs.SecurityTableHeaderDTO = {
       data: {
@@ -711,10 +712,9 @@ export class DTOService {
         frontendMetric: !!stub.isFrontEndMetric,
         isDataTypeText: !!stub.isDataTypeText,
         isDriverDependent: !!stub.isDriverDependent,
-        pinned: stub.pinned,
         groupBelongs: stub.groupBelongs,
-        groupShow: !!stub.groupShow,
-        alertOnly: !!stub.alertOnlyColumn
+        pinned: (useSpecificsFrom && stub.tableSpecifics[useSpecificsFrom]) ? !!stub.tableSpecifics[useSpecificsFrom].pinned : !!stub.tableSpecifics.default.pinned,
+        groupShow: (useSpecificsFrom && stub.tableSpecifics[useSpecificsFrom]) ? !!stub.tableSpecifics[useSpecificsFrom].groupShow : !!stub.tableSpecifics.default.groupShow
       },
       state: {
         isQuantVariant: !!stub.isForQuantComparer,

@@ -17,7 +17,7 @@ export const SECURITY_TABLE_QUOTE_TYPE_AXE = 'Axe';
 export const SECURITY_TABLE_FINAL_STAGE = 1;
 
 export const AGGRID_DETAIL_COLUMN_WIDTH = 50;
-export const AGGRID_SECURITY_CARD_COLUMN_WIDTH = 270;
+export const AGGRID_SECURITY_CARD_COLUMN_WIDTH = 276;
 export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_quant + $spacing_small * 2
 export const AGGRID_ALERT_SIDE_COLUMN_WIDTH = 115;
 export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 117;
@@ -55,18 +55,27 @@ export const SECURITY_TABLE_ICONS = {
   sortDescending: '<i class="fas fa-sort-amount-down"></i>'
 };
 
-export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
+export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
+  {
     key: 'alertSide',
     label: 'Alert Side',
     attrName: 'alertSide',
     underlineAttrName: 'alertSide',
     blockAttrName: 'alert',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
-    pinned: true,
     groupBelongs: SecurityTableMetricGroups.alert,
-    groupShow: true,
-    alertOnlyColumn: true
+    tableSpecifics: {
+      default: {
+        active: false,
+        disabled: true
+      },
+      tradeAlert: {
+        active: true,
+        disabled: false,
+        pinned: true,
+        groupShow: true
+      }
+    }
   },{
     key: 'alertTime',
     label: 'Alert Time',
@@ -75,11 +84,19 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     blockAttrName: 'alert',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isDataTypeText: true,
-    active: true,
-    pinned: true,
     groupBelongs: SecurityTableMetricGroups.alert,
-    groupShow: true,
-    alertOnlyColumn: true
+    tableSpecifics: {
+      default: {
+        active: false,
+        disabled: true
+      },
+      tradeAlert: {
+        active: true,
+        disabled: false,
+        pinned: true,
+        groupShow: true
+      }
+    }
   },{
     key: 'alertType',
     label: 'Alert Type',
@@ -88,11 +105,19 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     blockAttrName: 'alert',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isDataTypeText: true,
-    active: true,
-    pinned: true,
     groupBelongs: SecurityTableMetricGroups.alert,
-    groupShow: true,
-    alertOnlyColumn: true
+    tableSpecifics: {
+      default: {
+        active: false,
+        disabled: true
+      },
+      tradeAlert: {
+        active: true,
+        disabled: false,
+        pinned: true,
+        groupShow: true
+      }
+    }
   },{
     key: 'alertMessage',
     label: 'Alert Message',
@@ -101,10 +126,18 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     blockAttrName: 'alert',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isDataTypeText: true,
-    active: true,
-    pinned: true,
     groupBelongs: SecurityTableMetricGroups.alert,
-    alertOnlyColumn: true
+    tableSpecifics: {
+      default: {
+        active: false,
+        disabled: true
+      },
+      tradeAlert: {
+        active: true,
+        disabled: false,
+        pinned: true
+      }
+    }
   },{
     key: 'alertValue',
     label: 'Alert Value',
@@ -113,10 +146,18 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     blockAttrName: 'alert',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isDataTypeText: true,
-    active: true,
-    pinned: true,
     groupBelongs: SecurityTableMetricGroups.alert,
-    alertOnlyColumn: true
+    tableSpecifics: {
+      default: {
+        active: false,
+        disabled: true
+      },
+      tradeAlert: {
+        active: true,
+        disabled: false,
+        pinned: true
+      }
+    }
   },{
     key: 'alertTarget',
     label: 'Alert Target',
@@ -125,10 +166,18 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     blockAttrName: 'alert',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isDataTypeText: true,
-    active: true,
-    pinned: true,
     groupBelongs: SecurityTableMetricGroups.alert,
-    alertOnlyColumn: true
+    tableSpecifics: {
+      default: {
+        active: false,
+        disabled: true
+      },
+      tradeAlert: {
+        active: true,
+        disabled: false,
+        pinned: true
+      }
+    }
   },
   {
     key: 'securityCard',
@@ -137,9 +186,13 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     underlineAttrName: null,
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isForSecurityCard: true,
-    active: true,
-    pinned: true,
-    groupBelongs: SECURITY_TABLE_HEADER_NO_GROUP
+    groupBelongs: SECURITY_TABLE_HEADER_NO_GROUP,
+    tableSpecifics: {
+      default: {
+        active: true,
+        pinned: true
+      }
+    }
   },{
     key: 'bestQuote',
     label: 'Best Quote (Bid vs Ask)',
@@ -149,9 +202,13 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isForQuantComparer: true,
     isDriverDependent: true,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.bestQuote,
-    groupShow: true
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: true
+      }
+    }
   },{
     key: 'bestAxeQuote',
     label: 'Best Axe Quote (Bid vs Ask)',
@@ -161,9 +218,13 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isForQuantComparer: true,
     isDriverDependent: true,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.bestQuote,
-    groupShow: true
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: true
+      }
+    }
   },{
     key: 'bestBid',
     label: 'Best Bid',
@@ -173,9 +234,12 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isFrontEndMetric: true,
     isDriverDependent: true,
-    active: false,
     groupBelongs: SecurityTableMetricGroups.bestQuote,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'bestAsk',
     label: 'Best Ask',
@@ -185,9 +249,12 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isFrontEndMetric: true,
     isDriverDependent: true,
-    active: false,
     groupBelongs: SecurityTableMetricGroups.bestQuote,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: false
+      }
+    }
   },{
     key: 'mark',
     label: 'Mark',
@@ -196,9 +263,13 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     blockAttrName: 'mark',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isDriverDependent: true,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.mark,
-    groupShow: true
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: true
+      }
+    }
   },{
     key: 'price',
     label: 'Price',
@@ -207,8 +278,12 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     blockAttrName: 'mark',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isDriverDependent: true,
-    active: true,
-    groupBelongs: SecurityTableMetricGroups.mark
+    groupBelongs: SecurityTableMetricGroups.mark,
+    tableSpecifics: {
+      default: {
+        active: false
+      }
+    }
   },{
     key: 'spread',
     label: 'Spread',
@@ -217,8 +292,12 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     blockAttrName: 'mark',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isDriverDependent: true,
-    active: true,
-    groupBelongs: SecurityTableMetricGroups.mark
+    groupBelongs: SecurityTableMetricGroups.mark,
+    tableSpecifics: {
+      default: {
+        active: false
+      }
+    }
   },{
     key: 'markDriver',
     label: 'Driver',
@@ -228,9 +307,12 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     isDataTypeText: true,
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isDriverDependent: true,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.mark,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: false
+      }
+    }
   },{
     key: 'indexMark',
     label: 'Index Mark (t-1)',
@@ -240,9 +322,12 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     isAttrChangable: true,
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isDriverDependent: true,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.mark,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: false
+      }
+    }
   },{
     key: 'markDeltaToIndex',
     label: 'Δ to Index Mark (t-1)',
@@ -252,9 +337,12 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isFrontEndMetric: true,
     isDriverDependent: true,
-    active: false,
     groupBelongs: SecurityTableMetricGroups.mark,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: false
+      }
+    }
   },{
     key: 'markLastUpdatedBy',
     label: 'Mark Last Updated By',
@@ -263,9 +351,12 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     blockAttrName: 'mark',
     isDataTypeText: true,
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: false,
     groupBelongs: SecurityTableMetricGroups.mark,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: false
+      }
+    }
   },{
     key: 'markLastUpdateTime',
     label: 'Mark Last Update Time',
@@ -274,9 +365,12 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     blockAttrName: 'mark',
     isDataTypeText: true,
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: false,
     groupBelongs: SecurityTableMetricGroups.mark,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: false
+      }
+    }
   },{
     key: 'markDeltaToBid',
     label: 'Δ to Bid',
@@ -286,9 +380,12 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isFrontEndMetric: true,
     isDriverDependent: true,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: false
+      }
+    }
   },{
     key: 'markDeltaToAsk',
     label: 'Δ to Ask',
@@ -298,9 +395,12 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isFrontEndMetric: true,
     isDriverDependent: true,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'markDeltaToMid',
     label: 'Δ to Mid',
@@ -310,9 +410,12 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isFrontEndMetric: true,
     isDriverDependent: true,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'markDeltaToLiquidation',
     label: 'Δ to Liquidation',
@@ -322,9 +425,13 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isFrontEndMetric: true,
     isDriverDependent: true,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
-    groupShow: true
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: true
+      }
+    }
   },{
     key: 'currentPosition',
     label: 'Current Filtered Position',
@@ -332,9 +439,13 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     underlineAttrName: 'positionCurrent',
     blockAttrName: 'position',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.position,
-    groupShow: true
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: true
+      }
+    }
   },{
     key: 'unitPosition',
     label: 'Firm Position',
@@ -342,9 +453,13 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     underlineAttrName: 'positionFirm',
     blockAttrName: 'position',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.position,
-    groupShow: true
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: true
+      }
+    }
   },{
     key: 'hfPosition',
     label: 'HF Position',
@@ -352,9 +467,12 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     underlineAttrName: 'positionHF',
     blockAttrName: 'position',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.position,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'nlfPosition',
     label: 'NLF Position',
@@ -362,9 +480,12 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     underlineAttrName: 'positionNLF',
     blockAttrName: 'position',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.position,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'dofPosition',
     label: 'DOF Position',
@@ -372,9 +493,12 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     underlineAttrName: 'positionDOF',
     blockAttrName: 'position',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.position,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'sofPosition',
     label: 'SOF Position',
@@ -382,9 +506,12 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     underlineAttrName: 'positionSOF',
     blockAttrName: 'position',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.position,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'stipPosition',
     label: 'STIP Position',
@@ -392,9 +519,12 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     underlineAttrName: 'positionSTIP',
     blockAttrName: 'position',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.position,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'fipPosition',
     label: 'FIP Position',
@@ -402,9 +532,12 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     underlineAttrName: 'positionFIP',
     blockAttrName: 'position',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.position,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'cipPosition',
     label: 'CIP Position',
@@ -412,9 +545,12 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     underlineAttrName: 'positionCIP',
     blockAttrName: 'position',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.position,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'agbPosition',
     label: 'AGB Position',
@@ -422,9 +558,12 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     underlineAttrName: 'positionAGB',
     blockAttrName: 'position',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.position,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'bbbPosition',
     label: 'BBB Position',
@@ -432,45 +571,61 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     underlineAttrName: 'positionBBB',
     blockAttrName: 'position',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.position,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'cs01CadCurrent',
     label: 'CS01 Cad',
     attrName: 'cs01CadCurrentInK',
     underlineAttrName: 'cs01CadCurrent',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.cs01,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'cs01LocalCurrent',
     label: 'CS01 Local',
     attrName: 'cs01LocalCurrentInK',
     underlineAttrName: 'cs01LocalCurrent',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.cs01,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'cs01CadFirm',
     label: 'Firm CS01 CAD',
     attrName: 'cs01CadFirmInK',
     underlineAttrName: 'cs01CadFirm',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.cs01,
-    groupShow: true
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: true
+      }
+    }
   },{
     key: 'cs01LocalFirm',
     label: 'Firm CS01 Local',
     attrName: 'cs01LocalFirmInK',
     underlineAttrName: 'cs01LocalFirm',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.cs01,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'dodDelta',
     label: 'DoD Δ',
@@ -481,9 +636,12 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     metricPackDeltaScope: 'Dod',
     isDriverDependent: true,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.delta,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'wowDelta',
     label: 'WoW Δ',
@@ -494,9 +652,13 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     metricPackDeltaScope: 'Wow',
     isDriverDependent: true,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.delta,
-    groupShow: true
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: true
+      }
+    }
   },{
     key: 'thirtyDayDelta',
     label: 'MoM Δ',
@@ -507,9 +669,12 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     metricPackDeltaScope: 'Mom',
     isDriverDependent: true,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.delta,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'yoyDelta',
     label: 'YoY Δ',
@@ -520,9 +685,12 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     metricPackDeltaScope: 'Yoy',
     isDriverDependent: true,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.delta,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'ytdDelta',
     label: 'YtD Δ',
@@ -533,165 +701,223 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [{
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     metricPackDeltaScope: 'Ytd',
     isDriverDependent: true,
-    active: true,
     groupBelongs: SecurityTableMetricGroups.delta,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'quoteCount',
     label: 'Quote Count',
     attrName: null,
     underlineAttrName: null,
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: false,
-    disabled: true,
-    groupBelongs: SECURITY_TABLE_HEADER_NO_GROUP
+    groupBelongs: SECURITY_TABLE_HEADER_NO_GROUP,
+    tableSpecifics: {
+      default: {
+        active: false,
+        disabled: true
+      }
+    }
   },{
     key: 'ticker',
     label: 'Ticker',
     attrName: 'ticker',
     underlineAttrName: 'ticker',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     isDataTypeText: true,
     groupBelongs: SecurityTableMetricGroups.securityInfo,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'rating',
     label: 'Rating',
     attrName: 'ratingValue',
     underlineAttrName: 'ratingValue',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     isDataTypeText: true,
     groupBelongs: SecurityTableMetricGroups.securityInfo,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'currency',
     label: 'Currency',
     attrName: 'currency',
     underlineAttrName: 'currency',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     isDataTypeText: true,
     groupBelongs: SecurityTableMetricGroups.securityInfo,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'sector',
     label: 'Sector',
     attrName: 'sector',
     underlineAttrName: 'sector',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     isDataTypeText: true,
     groupBelongs: SecurityTableMetricGroups.securityInfo,
-    groupShow: true
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: true
+      }
+    }
   },{
     key: 'issuer',
     label: 'Issuer',
     attrName: 'obligorName',
     underlineAttrName: 'obligorName',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     isDataTypeText: true,
     groupBelongs: SecurityTableMetricGroups.securityInfo,
-    groupShow: true
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: true
+      }
+    }
   },{
     key: 'industry',
     label: 'Industry',
     attrName: 'industry',
     underlineAttrName: 'industry',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     isDataTypeText: true,
     groupBelongs: SecurityTableMetricGroups.securityInfo,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'securityType',
     label: 'Security Type',
     attrName: 'securityType',
     underlineAttrName: 'securityType',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     isDataTypeText: true,
     groupBelongs: SecurityTableMetricGroups.securityInfo,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'seniority',
     label: 'Seniority',
     attrName: 'seniority',
     underlineAttrName: 'seniority',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     isDataTypeText: true,
     groupBelongs: SecurityTableMetricGroups.securityInfo,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'country',
     label: 'Country',
     attrName: 'country',
     underlineAttrName: 'country',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     isDataTypeText: true,
     groupBelongs: SecurityTableMetricGroups.securityInfo,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'maturityType',
     label: 'Maturity Type',
     attrName: 'maturityType',
     underlineAttrName: 'maturityType',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: false,
     isDataTypeText: true,
     groupBelongs: SecurityTableMetricGroups.securityInfo,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: false
+      }
+    }
   },{
     key: 'primaryPM',
     label: 'Primary',
     attrName: 'primaryPmName',
     underlineAttrName: 'primaryPmName',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     isDataTypeText: true,
     groupBelongs: SecurityTableMetricGroups.ownership,
-    groupShow: true
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: true
+      }
+    }
   },{
     key: 'backupPM',
     label: 'Backup',
     attrName: 'backupPmName',
     underlineAttrName: 'backupPmName',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     isDataTypeText: true,
     groupBelongs: SecurityTableMetricGroups.ownership,
-    groupShow: false
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   },{
     key: 'research',
     label: 'Research',
     attrName: 'researchName',
     underlineAttrName: 'researchName',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
     isDataTypeText: true,
     groupBelongs: SecurityTableMetricGroups.ownership,
-    groupShow: true
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: true
+      }
+    }
   },{
     key: 'strategy',
     label: 'Strategy',
     attrName: 'strategyFirm',
     underlineAttrName: 'strategyFirm',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: false,
     isDataTypeText: true,
-    groupBelongs: SECURITY_TABLE_HEADER_NO_GROUP
+    groupBelongs: SECURITY_TABLE_HEADER_NO_GROUP,
+    tableSpecifics: {
+      default: {
+        active: false
+      }
+    }
   },{
     key: 'hedgeFactor',
     label: 'Hedge Factor',
     attrName: 'hedgeFactor',
     underlineAttrName: 'hedgeFactor',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
-    active: true,
-    groupBelongs: SECURITY_TABLE_HEADER_NO_GROUP
+    groupBelongs: SECURITY_TABLE_HEADER_NO_GROUP,
+    tableSpecifics: {
+      default: {
+        active: true
+      }
+    }
   }
 ];
 

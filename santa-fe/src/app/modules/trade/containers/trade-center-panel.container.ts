@@ -117,14 +117,12 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
   private initializePageState(): TradeCenterPanelState {
     const mainTableMetrics = SecurityTableMetrics.filter((eachStub) => {
-      return !eachStub.alertOnlyColumn;
+      const targetSpecifics = eachStub.tableSpecifics.tradeMain || eachStub.tableSpecifics.default;
+      return !targetSpecifics.disabled;
     });
-    const alertTableMetrics = SecurityTableMetrics.map((eachStub) => {
-      // hard-coding this logic, as any non-hardcoded solution won't be cost-effective at this point
-      if (eachStub.key === 'securityCard') {
-        eachStub.pinned = false;
-      };
-      return eachStub;
+    const alertTableMetrics = SecurityTableMetrics.filter((eachStub) => {
+      const targetSpecifics = eachStub.tableSpecifics.tradeAlert || eachStub.tableSpecifics.default;
+      return !targetSpecifics.disabled;
     });
     const state: TradeCenterPanelState = {
       bestQuoteValidWindow: null,
@@ -494,13 +492,15 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     const stencilMainTableHeaderBuffer: Array<SecurityTableHeaderDTO> = [];
     const stencilAlertTableHeaderBuffer: Array<SecurityTableHeaderDTO> = [];
     this.state.table.metrics.forEach((eachStub) => {
-      if (eachStub.isForSecurityCard || eachStub.active) {
-        stencilMainTableHeaderBuffer.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
+      const targetSpecifics = eachStub.tableSpecifics.tradeMain || eachStub.tableSpecifics.default;
+      if (eachStub.isForSecurityCard || targetSpecifics.active) {
+        stencilMainTableHeaderBuffer.push(this.dtoService.formSecurityTableHeaderObject(eachStub, 'tradeMain'));
       }
     });
     this.state.table.alertMetrics.forEach((eachStub) => {
-      if (eachStub.isForSecurityCard || eachStub.active) {
-        stencilAlertTableHeaderBuffer.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
+      const targetSpecifics = eachStub.tableSpecifics.tradeAlert || eachStub.tableSpecifics.default;
+      if (eachStub.isForSecurityCard || targetSpecifics.active) {
+        stencilAlertTableHeaderBuffer.push(this.dtoService.formSecurityTableHeaderObject(eachStub, 'tradeAlert'));
       }
     });
     for (let i = 0; i < 10; ++i) {

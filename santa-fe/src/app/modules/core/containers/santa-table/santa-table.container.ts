@@ -46,6 +46,7 @@
 
 export class SantaTable implements OnInit, OnChanges {
   @Input() ownerInitial: string;
+  @Input() tableName: string;
   @Input() tableData: SecurityTableDTO;
   @Input() newRows: Array<SecurityTableRowDTO>;
   @Input() receivedContentStage: number;
@@ -305,10 +306,11 @@ export class SantaTable implements OnInit, OnChanges {
     this.tableData.data.headers = [];
     this.tableData.data.allHeaders = [];
     this.securityTableMetrics.forEach((eachStub) => {
-      if (eachStub.isForSecurityCard || eachStub.active) {
-        this.tableData.data.headers.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
+      const targetSpecifics = eachStub.tableSpecifics[this.tableName] || eachStub.tableSpecifics.default;
+      if (eachStub.isForSecurityCard || targetSpecifics.active) {
+        this.tableData.data.headers.push(this.dtoService.formSecurityTableHeaderObject(eachStub, this.tableName));
       }
-      this.tableData.data.allHeaders.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
+      this.tableData.data.allHeaders.push(this.dtoService.formSecurityTableHeaderObject(eachStub, this.tableName));
     });
     if (this.tableData.state.isAgGridReady && !skipAgGrid) {
       this.tableData.data.agGridColumnDefs = this.agGridMiddleLayerService.loadAgGridHeaders(this.tableData);

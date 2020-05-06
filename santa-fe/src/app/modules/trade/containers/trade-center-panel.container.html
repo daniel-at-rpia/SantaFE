@@ -211,6 +211,7 @@
     </div>
     <div class="sat-tradeCenterPanel__result-table">
       <santa-table
+        [tableName]="'tradeMain'"
         [activated]="!state.displayAlertTable"
         [ownerInitial]="ownerInitial"
         [tableData]="state.table.dto"
@@ -224,6 +225,7 @@
     </div>
     <div class="sat-tradeCenterPanel__result-alertTable">
       <santa-table
+        [tableName]="'tradeAlert'"
         [activated]="!!state.displayAlertTable"
         [ownerInitial]="ownerInitial"
         [tableData]="state.table.alertDto"

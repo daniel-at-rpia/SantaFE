@@ -86,7 +86,7 @@ export class SecurityTable implements OnInit, OnChanges {
     this.tableData.state.selectedHeader = null;
     this.securityTableMetrics.forEach((eachStub) => {
       if (eachStub.label === targetHeader.data.displayLabel) {
-        eachStub.active = false;
+        eachStub.tableSpecifics.default.active = false;
       }
     });
     if (targetIndex > 0) {
@@ -110,9 +110,9 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   public onClickAddHeader(targetStub: SecurityTableMetricStub) {
-    if (!targetStub.disabled) {
-      if (!targetStub.active) {
-        targetStub.active = true;
+    if (!targetStub.tableSpecifics.default.disabled) {
+      if (!targetStub.tableSpecifics.default.active) {
+        targetStub.tableSpecifics.default.active = true;
         this.nativeLoadTableHeader.emit();
         this.loadTableRowsUponHeaderChange();
         this.onCollapseAddColumnDropdown();

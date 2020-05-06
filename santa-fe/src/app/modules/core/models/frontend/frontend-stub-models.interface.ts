@@ -77,19 +77,26 @@ export interface SecurityTableMetricStub {
   underlineAttrName: string;
   isAttrChangable?: boolean;
   readyStage: number;
-  active: boolean;
-  pinned?: boolean;
+  tableSpecifics: {
+    default: SecurityTableMetricStubTableSpecificsBlock;
+    tradeMain?: SecurityTableMetricStubTableSpecificsBlock;
+    tradeAlert?: SecurityTableMetricStubTableSpecificsBlock;
+  };
   blockAttrName?: string;
   isFrontEndMetric?: boolean;
   isForQuantComparer?: boolean;
   isForSecurityCard?: boolean;
-  disabled?: boolean;
   isDataTypeText?: boolean;
   isDriverDependent?: boolean;
   metricPackDeltaScope?: string;
   groupBelongs: string;
+}
+
+interface SecurityTableMetricStubTableSpecificsBlock {
+  active: boolean;
+  pinned?: boolean;
+  disabled?: boolean;
   groupShow?: boolean;
-  alertOnlyColumn?: boolean;
 }
 
 export interface TriCoreDriverConfigStub {
