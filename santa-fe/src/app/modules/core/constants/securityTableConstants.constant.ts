@@ -57,6 +57,21 @@ export const SECURITY_TABLE_ICONS = {
 
 export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
   {
+    key: 'securityCard',
+    label: 'Security',
+    attrName: null,
+    underlineAttrName: null,
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isForSecurityCard: true,
+    groupBelongs: SECURITY_TABLE_HEADER_NO_GROUP,
+    tableSpecifics: {
+      default: {
+        active: true,
+        pinned: true
+      }
+    }
+  },
+  {
     key: 'alertSide',
     label: 'Alert Side',
     attrName: 'alertSide',
@@ -72,7 +87,6 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       tradeAlert: {
         active: true,
         disabled: false,
-        pinned: true,
         groupShow: true
       }
     }
@@ -93,7 +107,6 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       tradeAlert: {
         active: true,
         disabled: false,
-        pinned: true,
         groupShow: true
       }
     }
@@ -114,7 +127,6 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       tradeAlert: {
         active: true,
         disabled: false,
-        pinned: true,
         groupShow: true
       }
     }
@@ -135,7 +147,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       tradeAlert: {
         active: true,
         disabled: false,
-        pinned: true
+        groupShow: true
       }
     }
   },{
@@ -155,7 +167,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       tradeAlert: {
         active: true,
         disabled: false,
-        pinned: true
+        groupShow: true
       }
     }
   },{
@@ -175,22 +187,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       tradeAlert: {
         active: true,
         disabled: false,
-        pinned: true
-      }
-    }
-  },
-  {
-    key: 'securityCard',
-    label: 'Security',
-    attrName: null,
-    underlineAttrName: null,
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isForSecurityCard: true,
-    groupBelongs: SECURITY_TABLE_HEADER_NO_GROUP,
-    tableSpecifics: {
-      default: {
-        active: true,
-        pinned: true
+        groupShow: true
       }
     }
   },{
@@ -238,6 +235,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -252,6 +252,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupBelongs: SecurityTableMetricGroups.bestQuote,
     tableSpecifics: {
       default: {
+        active: false
+      },
+      tradeAlert: {
         active: false
       }
     }
@@ -268,6 +271,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       default: {
         active: true,
         groupShow: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -282,6 +288,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: false
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -295,6 +304,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupBelongs: SecurityTableMetricGroups.mark,
     tableSpecifics: {
       default: {
+        active: false
+      },
+      tradeAlert: {
         active: false
       }
     }
@@ -311,6 +323,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: false
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -325,6 +340,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupBelongs: SecurityTableMetricGroups.mark,
     tableSpecifics: {
       default: {
+        active: false
+      },
+      tradeAlert: {
         active: false
       }
     }
@@ -341,6 +359,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: false
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -355,6 +376,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: false
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -368,6 +392,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupBelongs: SecurityTableMetricGroups.mark,
     tableSpecifics: {
       default: {
+        active: false
+      },
+      tradeAlert: {
         active: false
       }
     }
@@ -384,6 +411,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: false
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -399,6 +429,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -414,6 +447,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -430,6 +466,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       default: {
         active: true,
         groupShow: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -444,6 +483,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       default: {
         active: true,
         groupShow: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -458,6 +500,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       default: {
         active: true,
         groupShow: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -471,6 +516,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -484,6 +532,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -497,6 +548,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -510,6 +564,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -523,6 +580,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -536,6 +596,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -549,6 +612,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -562,6 +628,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -575,6 +644,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -587,6 +659,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -599,6 +674,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -612,6 +690,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       default: {
         active: true,
         groupShow: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -624,6 +705,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -640,6 +724,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -657,6 +744,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       default: {
         active: true,
         groupShow: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -673,6 +763,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -689,6 +782,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -705,6 +801,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -731,6 +830,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -744,6 +846,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -757,6 +862,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -771,6 +879,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       default: {
         active: true,
         groupShow: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -785,6 +896,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       default: {
         active: true,
         groupShow: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -798,6 +912,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -811,6 +928,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -824,6 +944,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -837,6 +960,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -849,6 +975,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupBelongs: SecurityTableMetricGroups.securityInfo,
     tableSpecifics: {
       default: {
+        active: false
+      },
+      tradeAlert: {
         active: false
       }
     }
@@ -864,6 +993,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       default: {
         active: true,
         groupShow: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -877,6 +1009,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -891,6 +1026,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       default: {
         active: true,
         groupShow: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -904,6 +1042,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: false
+      },
+      tradeAlert: {
+        active: false
       }
     }
   },{
@@ -916,6 +1057,9 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true
+      },
+      tradeAlert: {
+        active: false
       }
     }
   }
