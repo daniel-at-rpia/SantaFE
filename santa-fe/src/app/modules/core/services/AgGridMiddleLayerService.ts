@@ -189,9 +189,10 @@ export class AgGridMiddleLayerService {
     const bestAxeQuoteCellIndex = table.data.allHeaders.findIndex((eachHeader) =>{
       return eachHeader.data.key === 'bestAxeQuote';
     }) - 1;
+    // don't need to minus one because alertSide is before securityCard, again, bad design, please rework this
     const alertSideCellIndex = table.data.allHeaders.findIndex((eachHeader) => {
       return eachHeader.data.key === 'alertSide';
-    }) - 1;
+    });
     targetRows.forEach((eachRow) => {
       const id = eachRow.data.rowId;
       const targetNode = table.api.gridApi.getRowNode(id);

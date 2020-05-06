@@ -145,6 +145,7 @@ export class SantaTable implements OnInit, OnChanges {
       if (!!activateStatusChanged) {
         console.log('just become activated');
         this.loadTableRows(this.newRows);
+        this.tableData.state.loadedContentStage = this.receivedContentStage;
       } else if (this.tableData.state.loadedContentStage !== this.receivedContentStage) {
         console.log('rows updated for inter-stage change', this.receivedContentStage);
         this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate; // saving initial cache
