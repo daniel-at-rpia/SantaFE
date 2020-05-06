@@ -144,12 +144,6 @@ export class SantaTable implements OnInit, OnChanges {
     if (!!this.tableData.state.isActivated) {
       if (!!activateStatusChanged) {
         console.log('just become activated');
-        // only load the rows and header if it is the first time ever this table is rendered
-        if (this.tableData.state.loadedContentStage == null && !this.securityTableMetrics) {
-          this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate; // saving initial cache
-          this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
-          this.loadTableHeaders();
-        }
         this.loadTableRows(this.newRows);
       } else if (this.tableData.state.loadedContentStage !== this.receivedContentStage) {
         console.log('rows updated for inter-stage change', this.receivedContentStage);
@@ -184,7 +178,9 @@ export class SantaTable implements OnInit, OnChanges {
     this.tableData.api.columnApi = params.columnApi;
     this.tableData.state.isAgGridReady = true;
     this.agGridMiddleLayerService.onGridReady(this.tableData, this.ownerInitial);
-    !!this.tableData.state.isActivated && this.loadTableHeaders();
+    this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate; // saving initial cache
+    this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
+    this.loadTableHeaders();
   }
 
   public onRowClicked(params: AgGridRowParams) {
