@@ -30,7 +30,8 @@
     import {
       TriCoreDriverConfig,
       DEFAULT_DRIVER_IDENTIFIER,
-      AlertTypes
+      AlertTypes,
+      AlertSubTypes
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
@@ -781,7 +782,8 @@ export class DTOService {
     isStencil: boolean,
     textData: string,
     isQuantVariant: boolean,
-    quantComparerDTO?: DTOs.QuantComparerDTO
+    quantComparerDTO: DTOs.QuantComparerDTO,
+    alertDTO: DTOs.AlertDTO
   ): DTOs.SecurityTableCellDTO {
     const object: DTOs.SecurityTableCellDTO = {
       data: {
@@ -789,7 +791,7 @@ export class DTOService {
         quantComparerDTO: quantComparerDTO,
         alertSideDTO: {
           data: {
-            side: 'test'
+            side: 'None'
           },
           state: {
             isStencil: false
@@ -800,6 +802,13 @@ export class DTOService {
         isQuantVariant: isQuantVariant,
         quantComparerUnavail: false,
         isStencil: isStencil
+      }
+    };
+    if (alertDTO) {
+      if (alertDTO.data.subType === AlertSubTypes.bid || alertDTO.data.subType === AlertSubTypes.owic) {
+        object.data.alertSideDTO.data.side = 'bid';
+      } else if (alertDTO.data.subType === AlertSubTypes.ask || alertDTO.data.subType === AlertSubTypes.bwic) {
+        object.data.alertSideDTO.data.side = 'ask';
       }
     }
     return object;

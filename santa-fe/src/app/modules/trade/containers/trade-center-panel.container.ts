@@ -511,9 +511,9 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         if (!eachHeader.state.isSecurityCardVariant) {
           if (eachHeader.state.isQuantVariant) {
             const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, this.state.filters.quickFilters.driverType, null, null, false);
-            newMainTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, true, bestQuoteStencil));
+            newMainTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, true, bestQuoteStencil, null));
           } else {
-            newMainTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, false));
+            newMainTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, false, null, null));
           }
         }
       });
@@ -523,9 +523,9 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         if (!eachHeader.state.isSecurityCardVariant) {
           if (eachHeader.state.isQuantVariant) {
             const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, this.state.filters.quickFilters.driverType, null, null, false);
-            newAlertTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, true, bestQuoteStencil));
+            newAlertTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, true, bestQuoteStencil, null));
           } else {
-            newAlertTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, false));
+            newAlertTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, false, null, null));
           }
         }
       });

@@ -1,4 +1,9 @@
-<article class="santaTableAlertSideCell">
+<article
+  [ngClass]="{
+    'santaTableAlertSideCell': true,
+    'santaTableAlertSideCell--sideBid': sideData.data.side === 'bid',
+    'santaTableAlertSideCell--sideAsk': sideData.data.side === 'ask'
+  }">
   <section class="santaTableAlertSideCell__main">
     <span class="santaTableAlertSideCell__main-text">{{sideData.data.side}}</span>
   </section>
