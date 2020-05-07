@@ -372,7 +372,7 @@ export class SantaTable implements OnInit, OnChanges {
           }
         }),
         catchError(err => {
-          console.error('liveQuote/get-all-quotes failed', err);
+          console.error('quote/get-all-quotes failed', err);
           return of('error')
         })
       ).subscribe();
