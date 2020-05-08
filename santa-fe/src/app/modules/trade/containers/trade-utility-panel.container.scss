@@ -140,6 +140,12 @@ $tradeUtilityPanel_spacing: $spacing_medium;
   }
   &--editingValidWindowState {
     #{$tradeUtilityPanelBlockName} {
+      &__countdown {
+        display: none;
+      }
+      &__cta {
+        display: none;
+      }
       &__validWindowConfig {
         flex: 0 0 35rem;
         &-editBtn {

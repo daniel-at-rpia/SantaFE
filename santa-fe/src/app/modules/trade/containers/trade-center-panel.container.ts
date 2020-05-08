@@ -1,26 +1,8 @@
-  // dependencies
-    import {
-      Component,
-      ViewEncapsulation,
-      OnInit,
-      OnChanges,
-      OnDestroy,
-      Input
-    } from '@angular/core';
-    import { Observable, Subscription } from 'rxjs';
-    import {
-      interval,
-      of
-    } from 'rxjs';
-    import {
-      tap,
-      first,
-      delay,
-      catchError,
-      withLatestFrom,
-      filter
-    } from 'rxjs/operators';
-    import { Store, select } from '@ngrx/store';
+// dependencies
+import {Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {of, Subscription} from 'rxjs';
+import {catchError, first, tap, withLatestFrom} from 'rxjs/operators';
+import {select, Store} from '@ngrx/store';
 
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
@@ -37,10 +19,7 @@
       SecurityTableDTO
     } from 'FEModels/frontend-models.interface';
     import { TradeCenterTableBlock } from 'FEModels/frontend-blocks.interface';
-    import {
-      PayloadGetTradeFullData,
-      PayloadGetBestQuotes
-    } from 'BEModels/backend-payloads.interface';
+import {PayloadGetTradeFullData} from 'BEModels/backend-payloads.interface';
     import {
       BEPortfolioDTO,
       BESecurityDTO,
@@ -77,17 +56,20 @@
       selectLiveUpdateProcessingRawData
     } from 'Trade/selectors/trade.selectors';
     import {
-      TradeLiveUpdateProcessDataCompleteEvent,
-      TradeTogglePresetEvent,
       TradeLiveUpdatePassRawDataEvent,
-      TradeSwitchDriverEvent,
+      TradeLiveUpdateProcessDataCompleteEvent,
       TradeSelectedSecurityForAnalysisEvent,
       TradeSecurityTableRowDTOListForAnalysisEvent,
       TradeSelectedSecurityForAlertConfigEvent,
+      TradeTogglePresetEvent,
+      TradeSwitchDriverEvent,
+  TradeSetFocusMode,
       TradeAlertTableReceiveNewAlertsEvent
     } from 'Trade/actions/trade.actions';
     import { SecurityTableMetricStub, SearchShortcutStub } from 'FEModels/frontend-stub-models.interface';
   //
+
+//
 
 @Component({
   selector: 'trade-center-panel',
@@ -104,7 +86,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     securityIDListFromAnalysisSub: null,
     validWindowSub: null,
     newAlertsForAlertTableSub: null
-  }
+  };
   constants = {
     defaultMetricIdentifier: DEFAULT_DRIVER_IDENTIFIER,
     portfolioShortcuts: PortfolioShortcuts,
@@ -112,7 +94,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     strategyShortcuts: StrategyShortcuts,
     securityGroupDefinitionMap: SecurityDefinitionMap,
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
-    fullOwnerList: FullOwnerList
+    fullOwnerList: FullOwnerList,
+    alertTypes: AlertTypes
   }
 
   private initializePageState(): TradeCenterPanelState {
@@ -126,6 +109,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     });
     const state: TradeCenterPanelState = {
       bestQuoteValidWindow: null,
+      isFocusMode: false,
       displayAlertTable: false,
       presets: {
         presetsReady: false,
@@ -879,5 +863,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       }
     }
   }
-
+  onToggleFocusMode() {
+    this.state.isFocusMode = !this.state.isFocusMode;
+    this.store$.dispatch(new TradeSetFocusMode(this.state.isFocusMode));
+  }
 }

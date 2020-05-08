@@ -30,6 +30,8 @@ export interface TradeState {
   securityTableRowDTOListForAnalysis: Array<SecurityTableRowDTO>;
   bestQuoteValidWindow: number;
   selectedSecurityForAlertConfig: SecurityDTO;
+  focusMode: boolean;
+  darkMode: boolean;
   newAlertsForAlertTable: Array<AlertDTO>;
 }
 
@@ -46,6 +48,8 @@ const initialState: TradeState = {
   securityTableRowDTOListForAnalysis: [],
   bestQuoteValidWindow: null,
   selectedSecurityForAlertConfig: null,
+  focusMode: false,
+  darkMode: false,
   newAlertsForAlertTable: []
 };
 
@@ -135,6 +139,11 @@ export function tradeReducer(
       return {
         ...state,
         selectedSecurityForAlertConfig: action.targetSecurity
+      }
+    case TradeActions.SetFocusMode:
+      return {
+        ...state,
+        focusMode: action.payload
       }
     case TradeActions.AlertTableSendNewAlerts:
       return {

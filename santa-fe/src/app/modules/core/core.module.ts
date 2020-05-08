@@ -78,14 +78,15 @@ import {CountdownPipe} from 'App/pipes/Countdown.pipe';
     RestfulCommService,
     AgGridMiddleLayerService
   ],
-  exports: [
-    SantaTable,
-    SecurityCard,
-    SecurityTable,
-    SecurityDefinition,
-    SecurityDefinitionConfigurator,
-    SearchShortcut,
-    GlobalAlert
-  ]
+    exports: [
+        SantaTable,
+        SecurityCard,
+        SecurityTable,
+        SecurityDefinition,
+        SecurityDefinitionConfigurator,
+        SearchShortcut,
+        GlobalAlert,
+        Alert
+    ]
 })
 export class CoreModule { }

@@ -15,41 +15,47 @@ import {interval, Observable, of, Subscription} from 'rxjs';
 import {catchError, first, tap, withLatestFrom} from 'rxjs/operators';
 import * as moment from 'moment';
 
-import {DTOService} from 'Core/services/DTOService';
-import {UtilityService} from 'Core/services/UtilityService';
-import {RestfulCommService} from 'Core/services/RestfulCommService';
-import {TradeAlertPanelState} from 'FEModels/frontend-page-states.interface';
-import {SecurityMapEntry} from 'FEModels/frontend-adhoc-packages.interface';
+    import { DTOService } from 'Core/services/DTOService';
+    import { UtilityService } from 'Core/services/UtilityService';
+    import { RestfulCommService } from 'Core/services/RestfulCommService';
+    import { TradeAlertPanelState } from 'FEModels/frontend-page-states.interface';
+    import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
     import {SecurityDTO, AlertDTO} from 'FEModels/frontend-models.interface';
-import {TradeAlertConfigurationAxeGroupBlock} from 'FEModels/frontend-blocks.interface';
-import {
-  BEAlertConfigurationDTO,
-  BEAlertConfigurationReturn,
-  BEAlertDTO,
-  BESecurityDTO
-} from 'BEModels/backend-models.interface';
-import {
-  PayloadGetSecurities,
-  PayloadUpdateAlertConfig,
-  PayloadUpdateSingleAlertConfig
-} from 'BEModels/backend-payloads.interface';
+    import { TradeAlertConfigurationAxeGroupBlock } from 'FEModels/frontend-blocks.interface';
+    import {
+      BESecurityDTO,
+      BEAlertConfigurationReturn,
+      BEAlertConfigurationDTO,
+      BEAlertDTO
+    } from 'BEModels/backend-models.interface';
+    import {
+      PayloadGetSecurities,
+      PayloadUpdateAlertConfig,
+      PayloadUpdateSingleAlertConfig
+    } from 'BEModels/backend-payloads.interface';
     import {
       EngagementActionList,
       AlertTypes,
       AlertSubTypes
     } from 'Core/constants/coreConstants.constant';
-import {selectSecurityMapContent, selectSecurityMapValidStatus} from 'Core/selectors/core.selectors';
-import {
-  ALERT_MAX_SECURITY_SEARCH_COUNT,
-  ALERT_UPDATE_COUNTDOWN,
-  AxeAlertScope,
-  AxeAlertType
-} from 'Core/constants/tradeConstants.constant';
-import {FilterOptionsPortfolioResearchList, FullOwnerList} from 'Core/constants/securityDefinitionConstants.constant';
-import {CoreFlushSecurityMap, CoreSendNewAlerts} from 'Core/actions/core.actions';
-import {TradeAlertTableSendNewAlertsEvent} from 'Trade/actions/trade.actions';
-import {selectPresetSelected, selectSelectedSecurityForAlertConfig} from 'Trade/selectors/trade.selectors';
-import {mockAlert} from 'Core/components/alert/alert.mock';
+    import {
+      selectAlertCounts,
+      selectSecurityMapContent,
+      selectSecurityMapValidStatus
+    } from 'Core/selectors/core.selectors';
+    import {
+      ALERT_MAX_SECURITY_SEARCH_COUNT,
+      AxeAlertScope,
+      ALERT_UPDATE_COUNTDOWN,
+      AxeAlertType
+    } from 'Core/constants/tradeConstants.constant';
+    import { FullOwnerList, FilterOptionsPortfolioResearchList } from 'Core/constants/securityDefinitionConstants.constant';
+    import { CoreFlushSecurityMap, CoreSendNewAlerts } from 'Core/actions/core.actions';
+    import {
+      selectSelectedSecurityForAlertConfig,
+      selectPresetSelected,
+      selectFocusMode
+    } from 'Trade/selectors/trade.selectors';
 
 //
 
@@ -74,6 +80,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     centerPanelPresetSelectedSub: null
   }
   autoUpdateCount$: Observable<any>;
+  alertCounts$: Observable<any>;
   constants = {
     alertTypes: AlertTypes,
     alertSubTypes: AlertSubTypes,
@@ -92,6 +99,14 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   ){
     window['moment'] = moment;
     this.state = this.initializePageState();
+    this.store$.pipe(
+      select(selectFocusMode)
+    ).subscribe((value) => {
+      this.state.focusMode = !!value;
+    });
+    this.alertCounts$ = this.store$.pipe(
+      select(selectAlertCounts)
+    );
   }
 
   private initializePageState(): TradeAlertPanelState {
@@ -101,6 +116,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       isAlertPaused: true,
       securityMap: [],
       alertUpdateTimestamp: null,
+      focusMode: false,
       configuration: {
         selectedAlert: null,
         axe: {
@@ -685,9 +701,13 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       tap((serverReturn: Array<BEAlertDTO>) => {
         // serverReturn.push({...mockAlert, keyWord: `${1}|${Math.random().toFixed(2)}`});
         if (!!serverReturn) {
+          // temporarily filter out all the market listing alerts
+          const filteredServerReturn = serverReturn.filter((eachRawAlert) => {
+            return eachRawAlert.type !== this.constants.alertTypes.marketListAlert;
+          });
           const updateList: Array<AlertDTO> = [];
           const securityList: Array<AlertDTO> = [];
-          serverReturn.forEach((eachRawAlert) => {
+          filteredServerReturn.forEach((eachRawAlert) => {
             // checking for cancelled and active alerts
             const expired = moment().diff(moment(eachRawAlert.validUntilTime) ) > 0;
             if (eachRawAlert.isActive && !eachRawAlert.isCancelled && !expired) {

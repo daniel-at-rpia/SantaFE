@@ -37,7 +37,7 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 5.5rem;
         &-text {
           text-align: center;
           font-size: $font_size_x_large;
-          color: $font_color_minor; 
+          color: $font_color_minor;
         }
       }
       &-content {
@@ -420,6 +420,30 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 5.5rem;
           transform: translate(0, 0);
           &-list-item {
             transform: translate(0, 0);
+          }
+        }
+      }
+    }
+  }
+  &--focusMode {
+    border: none;
+    #{$tradeCenterPanelBlockName} {
+      &__presetsAndFilters {
+        display: none;
+      }
+      &__result {
+        padding-top: 0;
+        &-quickFilters {
+          padding: $spacing_xx_small;
+          &-keywordSearch {
+            padding-left: 0;
+          }
+          &-expand {
+            button {
+              background: black;
+              box-shadow: none;
+              @extend .santaBtn--inverseLabelled;
+            }
           }
         }
       }

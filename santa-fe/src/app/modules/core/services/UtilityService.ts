@@ -405,7 +405,7 @@ export class UtilityService {
     }
 
     public caseInsensitiveKeywordMatch(targetText: string, keyword: string): boolean {
-      if (!!targetText && !!keyword && keyword.length >= 2) {
+      if ((!!targetText || targetText === '') && !!keyword && keyword.length >= 2) {
         const targetTextUpperCase = targetText.toUpperCase();
         const keywordUpperCase = keyword.toUpperCase();
         return targetTextUpperCase.indexOf(keywordUpperCase) >= 0;

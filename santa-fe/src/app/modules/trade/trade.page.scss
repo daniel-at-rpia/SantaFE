@@ -32,7 +32,8 @@ $trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta
       margin-bottom: $spacing_medium;
       &-utilityPanel {
         @include mix_alive('custom', flex-basis $trade_layout_animation_duration);
-        flex: 0 1 $trade_left_utilityPanel_size;
+        flex: 0 1 auto;
+        width: 58rem;
         display: flex;
         margin-right: $spacing_medium;
         background-color: $color_gray_2;
@@ -43,7 +44,7 @@ $trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta
       }
       &-alertPanel {
         @include mix_alive('custom', flex-basis $trade_layout_animation_duration);
-        flex: 0 1 100%-$trade_left_utilityPanel_size;
+        flex: 1 1 auto;
         display: flex;
         background-color: $color_gray_2;
         trade-alert-panel {
@@ -171,6 +172,38 @@ $trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta
       }
     }
   }
+  &--displayAlertThumbnail {
+    @include mix_calculate(width, 100%, $trade_gutter_width_for_alerts, '-');
+  }
+  &--focusMode {
+    #{$tradeBlockName} {
+     &__left {
+      padding: 0;
+      &-top {
+        position: relative;
+        width: 100%;
+        margin-bottom: 0;
+        height: 3.4rem;
+        transition: none;
+        &-utilityPanel {
+          display: none;
+        }
+      }
+      &-centerPanel {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        bottom: unset;
+        padding-top: 4px;
+      }
+    }
+    &__collapseGraphsCTA {
+      &--collapsed {
+        display: none;
+      }
+    }
+    }
+  }
   &--alertPanelMixmized {
     #{$tradeBlockName} {
       &__left {
@@ -193,8 +226,6 @@ $trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta
         display: flex;
       }
     }
-  }
-  &--displayAlertThumbnail {
-    @include mix_calculate(width, 100%, $trade_gutter_width_for_alerts, '-');
-  }
+}
+
 }

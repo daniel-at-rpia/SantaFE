@@ -1,23 +1,22 @@
 import {
+  AgGridColumnDefinition,
+  AgGridRow,
+  QuoteMetricBlock,
+  SecurityDefinitionFilterBlock,
   SecurityGroupMetricBlock,
   SecurityGroupMetricPackBlock,
   SecurityGroupPieChartBlock,
-  SecurityDefinitionFilterBlock,
-  QuoteMetricBlock,
-  SecurityPortfolioBlock,
   SecurityMarkBlock,
-  QuantitativeEntryBlock,
-  QuantitativeEntryStyleBlock,
-  AgGridColumnDefinition,
-  AgGridRow,
+  SecurityPortfolioBlock,
   SecurityTableRowQuoteBlock
 } from 'FEModels/frontend-blocks.interface';
+import {AlertSubTypes, AlertTypes} from 'Core/constants/coreConstants.constant';
 import {
-  AlertTypes,
-  AlertSubTypes
-} from 'Core/constants/coreConstants.constant';
-import { SantaTableNumericFloatingFilterParams, ClickedOpenSecurityInBloombergEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
+  ClickedOpenSecurityInBloombergEmitterParams,
+  SantaTableNumericFloatingFilterParams
+} from 'FEModels/frontend-adhoc-packages.interface';
 import * as agGrid from 'ag-grid-community';
+import {Alert} from "Core/components/alert/alert.component";
 
 
 interface BasicDTOStructure {
@@ -498,6 +497,18 @@ export interface AlertDTO extends BasicDTOStructure {
     hasSecurity: boolean;
     hasTitlePin: boolean;
     isCancelled: boolean;
+  };
+}
+
+export interface AlertCountSummaryDTO extends BasicDTOStructure {
+  data: {
+    count: number;
+    alertType: AlertTypes;
+  };
+  state: {
+    isAxe: boolean;
+    isMark: boolean;
+    isInquiry: boolean;
   };
 }
 

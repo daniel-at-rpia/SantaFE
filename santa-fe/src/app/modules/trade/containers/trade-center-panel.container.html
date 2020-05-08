@@ -7,6 +7,7 @@
     'sat-tradeCenterPanel--presetSelectedState': state.presets.selectedPreset,
     'sat-tradeCenterPanel--fetchDataFailedState': state.fetchResult.fetchTableDataFailed,
     'sat-tradeCenterPanel--boostConfiguratorState': state.configurator.boosted,
+    'sat-tradeCenterPanel--focusMode': state.isFocusMode,
     'sat-tradeCenterPanel--displayAlertTableState': state.displayAlertTable
   }">
   <section class="sat-tradeCenterPanel__presetsAndFilters">
@@ -144,6 +145,19 @@
           [isHero]="true"
           (onInputChange)="onSearchKeywordChange($event)">
         </santa-input>
+      </div>
+      <div class="sat-tradeCenterPanel__result-quickFilters-expand">
+        <button
+          (click)="onToggleFocusMode()"
+          class="santaBtn--labelled">
+          <i
+          [ngClass]="{
+            'fal': true,
+            'fa-expand-arrows': !state.isFocusMode,
+            'fa-compress-arrows-alt': !!state.isFocusMode
+          }"></i>
+          <span>Focused Mode</span>
+        </button>
       </div>
       <div class="sat-tradeCenterPanel__result-utilities-tableSwitch">
         <div class="santaBtnGroup sat-tradeCenterPanel__result-utilities-tableSwitch-btnGroup">

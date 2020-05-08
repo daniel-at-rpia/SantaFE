@@ -35,7 +35,7 @@
       <div class="sat-alert__thumbnail-main-upper">
         <span class="sat-alert__thumbnail-main-upper-text">{{alertData.data.titleTop}}</span>
       </div>
-      <div class="sat-alert__thumbnail-main-lower">
+      <div class="sat-alert__thumbnail-main-lower" *ngIf="alertData.data.titleBottom">
         <span class="sat-alert__thumbnail-main-lower-text">{{alertData.data.titleBottom}}</span>
       </div>
     </div>

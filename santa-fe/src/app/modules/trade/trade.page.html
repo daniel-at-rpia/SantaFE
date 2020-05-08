@@ -4,10 +4,14 @@
     'sat-trade--sidePanelsCollapsed': state.sidePanelsCollapsed,
     'sat-trade--lilMarketMaximized': state.lilMarketMaximized,
     'sat-trade--alertPanelMixmized': state.alertPanelMaximized,
-    'sat-trade--displayAlertThumbnail': state.displayAlertThumbnail
+    'sat-trade--displayAlertThumbnail': state.displayAlertThumbnail,
+    'sat-trade--focusMode': state.focusMode
   }">
   <section class="sat-trade__left">
-    <div class="sat-trade__left-top">
+    <div [ngClass]="{
+      'sat-trade__left-top': true,
+      'sat-trade__left-top--alertPanelMixmized': state.alertPanelMaximized
+    }">
       <div class="sat-trade__left-top-utilityPanel">
         <trade-utility-panel
           [sidePanelsDisplayed]="!state.sidePanelsCollapsed"
@@ -45,6 +49,7 @@
     (click)="onToggleCollapseGraphs()"
     [ngClass]="{
       'sat-trade__collapseGraphsCTA': true,
+      'sat-trade__collapseGraphsCTA--collapsed': state.sidePanelsCollapsed,
       'santaBtn--iconOnly': true,
       'fal': true,
       'fa-chart-line': state.sidePanelsCollapsed,
