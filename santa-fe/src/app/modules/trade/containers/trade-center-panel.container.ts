@@ -94,8 +94,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     strategyShortcuts: StrategyShortcuts,
     securityGroupDefinitionMap: SecurityDefinitionMap,
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
-    fullOwnerList: FullOwnerList,
-    alertTypes: AlertTypes
+    fullOwnerList: FullOwnerList
   }
 
   private initializePageState(): TradeCenterPanelState {

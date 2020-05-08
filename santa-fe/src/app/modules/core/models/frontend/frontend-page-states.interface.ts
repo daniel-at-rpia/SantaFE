@@ -1,6 +1,4 @@
 import * as DTOs from 'FEModels/frontend-models.interface';
-import {ObligorChartCategoryBlock, TradeAlertConfigurationAxeGroupBlock} from 'FEModels/frontend-blocks.interface';
-import {SecurityDefinitionStub, SecurityTableMetricStub} from 'FEModels/frontend-stub-models.interface';
 import {
   ObligorChartCategoryBlock,
   TradeAlertConfigurationAxeGroupBlock,

@@ -92,7 +92,7 @@ export class DTOService {
         cs01CadFirmInK: null,
         cs01CadCurrent: null,
         cs01CadCurrentInK: null,
-        owner: !isStencil && !!rawData.unitPosition && rawData.unitPosition.owners.length > 0 ? rawData.unitPosition.owners : [],
+        owner: !isStencil && !!rawData.unitPosition && !!rawData.unitPosition.owners && rawData.unitPosition.owners.length > 0 ? rawData.unitPosition.owners : [],
         mark: {
           combinedDefaultMark: null,
           combinedDefaultMarkRaw: null,

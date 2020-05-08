@@ -51,6 +51,7 @@ import * as moment from 'moment';
     } from 'Core/constants/tradeConstants.constant';
     import { FullOwnerList, FilterOptionsPortfolioResearchList } from 'Core/constants/securityDefinitionConstants.constant';
     import { CoreFlushSecurityMap, CoreSendNewAlerts } from 'Core/actions/core.actions';
+    import { TradeAlertTableSendNewAlertsEvent } from 'Trade/actions/trade.actions';
     import {
       selectSelectedSecurityForAlertConfig,
       selectPresetSelected,
