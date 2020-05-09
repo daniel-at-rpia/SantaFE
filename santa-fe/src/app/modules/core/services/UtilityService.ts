@@ -454,7 +454,7 @@ export class UtilityService {
         case AlertTypes.marketListAlert:
           return AlertTypes.marketListAlert;
         default:
-          return null;
+          return AlertTypes.default;
       }
     }
 
@@ -465,9 +465,9 @@ export class UtilityService {
         case AlertSubTypes.bid:
           return AlertSubTypes.bid;
         case AlertSubTypes.both:
-          return null;  // both is not a valid type in FE
+          return AlertSubTypes.default;  // both is not a valid type in FE
         case AlertSubTypes.liquidation:
-          return null;  // liquidation is not a valid type in FE
+          return AlertSubTypes.default;  // liquidation is not a valid type in FE
         case AlertSubTypes.bwic:
           return AlertSubTypes.bwic;
         case AlertSubTypes.owic:
@@ -477,7 +477,7 @@ export class UtilityService {
         case AlertSubTypes.ratingChange:
           return AlertSubTypes.ratingChange;
         default:
-          return null;
+          return AlertSubTypes.default;
       }
     }
   // shared end

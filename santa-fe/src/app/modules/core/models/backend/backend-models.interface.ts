@@ -81,6 +81,7 @@ export interface BESecurityDTO {
   isPreferred?: boolean;
   isCds?: boolean;
   unitPosition?: {
+    metricDate?: string;
     mark: {
       driver: string;
       enteredTime: string;
@@ -97,11 +98,11 @@ export interface BESecurityDTO {
       PortfolioShortName: Array<string>;
       StrategyName: Array<string>;
     };
-    date: string;
+    date?: string;
     securityIdentifier: string;
-    quantity: number;
-    cs01Local: number;
-    cs01Cad: number;
+    quantity?: number;
+    cs01Local?: number;
+    cs01Cad?: number;
     hedgeFactor: number;
   }
   curveSubType?: string;  // CDS only
@@ -387,7 +388,7 @@ export interface BEAlertDTO {
   message: string;
   isActive: boolean;
   isCancelled?: boolean;
-  urgency?: number;
+  isUrgent: boolean;
   isDeleted: boolean;
   quoteId?: string;
   security?: BESecurityDTO;
@@ -396,5 +397,25 @@ export interface BEAlertDTO {
   securityIdentifierToQuoteId?: {
     [property: string]: string;
   };
-  validUntilTime: string;
+  validUntilTime?: string;
+  trades?: Array<BETradeBlock>;
+  quote?: any;
+}
+
+export interface BETradeBlock {
+  partitionOptionValue: any;
+  tradeId: string;
+  parentTradeId: string;
+  quantity: number;
+  tradeDateTime: string;
+  price: number;
+  counterpartyName: string;
+  spread: number;
+  shouldCalculateSpread: boolean;
+  shouldCalculatePrice: boolean;
+  securityQuantityAfterTrade: number;
+  fifoAvgSpread: number;
+  wgtAvgSpread: number;
+  fifoAvgPrice: number;
+  wgtAvgPrice: number;
 }

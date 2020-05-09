@@ -287,7 +287,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       }
     }.bind(this), 10);
   }
-  groupBy(list: any[], keyGetter: (obj: any) => string) {
+    groupBy(list: any[], keyGetter: (obj: any) => string) {
     const map = new Map();
     list.forEach((item) => {
          const key = keyGetter(item);
@@ -299,10 +299,9 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
          }
     });
     return map;
-}
+  }
 
   private updateTotalSize() {
-    console.log('updateTotalSize');
     this.state.totalSize = this.state.presentList.length + this.state.storeList.length;
     if (this.state.totalSize > this.constants.totalSizeMaxDisplay) {
       this.state.displayTotalSize = '99+';
@@ -317,8 +316,6 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       payload.push({type: key, count: value.length});
     });
     this.store$.dispatch(new CoreSendAlertCountsByType(payload));
-
-
   }
 
   private removeSingleAlert(

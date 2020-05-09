@@ -63,7 +63,7 @@ import {PayloadGetTradeFullData} from 'BEModels/backend-payloads.interface';
       TradeSelectedSecurityForAlertConfigEvent,
       TradeTogglePresetEvent,
       TradeSwitchDriverEvent,
-  TradeSetFocusMode,
+      TradeSetFocusMode,
       TradeAlertTableReceiveNewAlertsEvent
     } from 'Trade/actions/trade.actions';
     import { SecurityTableMetricStub, SearchShortcutStub } from 'FEModels/frontend-stub-models.interface';

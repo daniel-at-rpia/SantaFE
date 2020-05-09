@@ -1101,6 +1101,9 @@ export class DTOService {
       object.data.security.state.isWidthFlexible = true;
       object.state.hasSecurity = true;
     }
+    if (!object.data.subType) {
+      console.log('test');
+    }
     return object;
   }
 }

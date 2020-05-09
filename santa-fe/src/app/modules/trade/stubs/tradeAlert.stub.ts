@@ -22,266 +22,502 @@ const AlertConfigSample: BEAlertConfigurationReturn = {
 
 export const AlertSample: Array<BEAlertDTO> = [
   {
-    "type":"Axe",
-    "subType":"Ask",
-    "keyWord":"ABT 37s|1MM ",
-    "message":"MKTX BWIC expires at 5:52:58 PM",
-    "security":{
-      "isSovereign":false,
-      "isGovt":false,
-      "isEm":false,
-      "securityIdentifier":"3104",
-      "ccy":"USD",
-      "country":"US",
-      "industry":"Medical Equipment & Devices Manufacturing",
-      "name":"ABT 6.15 11/30/37",
-      "genericSeniority":"SR",
-      "globalIdentifier":"US002819AC45",
-      "obligorName":"ABBOTT LABORATORIES",
-      "obligorId":7,
-      "paymentRank":"SR UNSECURED",
-      "sector":"Health Care",
-      "securitySubType":"Bond",
-      "subIndustry":"Medical Products",
-      "ticker":"ABT",
-      "metrics":{
-        "isFixedForLife":true,
-        "isFixedToFloatInFixed":false,
-        "isFloat":false,
-        "isOnTheRun":false,
-        "isNewIssue":false,
-        "benchmarkSecurityIdentifier":null,
-        "benchmarkName":null,
-        "underlyingSecurityId":-1,
-        "zSpread":229.215,
-        "gSpread":221.8343,
-        "yieldWorst":3.01709,
-        "amtOutstanding":546911000,
-        "marketValue":780004468,
-        "workoutTerm":17.6712,
-        "ratingDouble":17,
-        "isRated":true,
-        "rating":"A-",
-        "ratingNoNotch":"A",
-        "ratingBucket":"IG",
-        "price":142.62,
-        "spread":null,
-        "isIndex":true
+    "type": "Axe",
+    "subType": "Ask",
+    "keyWord": "AVGO 30s|2MM /345",
+    "message": "MUFG offers",
+    "security": {
+      "isSovereign": false,
+      "isGovt": false,
+      "isEm": false,
+      "securityIdentifier": "72963",
+      "ccy": "USD",
+      "country": "US",
+      "industry": "Semiconductors",
+      "name": "AVGO 4.15 11/15/2030 Callable USD 144A SENIOR_UNSECURED",
+      "genericSeniority": "SR",
+      "globalIdentifier": "US11135FAP62",
+      "obligorName": "BROADCOM INC",
+      "obligorId": 1539,
+      "paymentRank": "SR UNSECURED",
+      "sector": "Technology",
+      "securitySubType": "Bond",
+      "subIndustry": "Electronic Compo-Semicon",
+      "ticker": "AVGO",
+      "metrics": {
+        "isFixedForLife": true,
+        "isFixedToFloatInFixed": false,
+        "isFloat": false,
+        "isOnTheRun": false,
+        "isNewIssue": true,
+        "benchmarkSecurityIdentifier": "66248",
+        "benchmarkName": "T 1.5 02/15/2030 USD",
+        "underlyingSecurityId": -1,
+        "zSpread": 354.975,
+        "gSpread": 347.2579,
+        "yieldWorst": 4.13909,
+        "amtOutstanding": 2750000000,
+        "marketValue": 2752502500,
+        "workoutTerm": 10.5315,
+        "ratingDouble": 14,
+        "isRated": true,
+        "rating": "BBB-",
+        "ratingNoNotch": "BBB",
+        "ratingBucket": "IG",
+        "price": 100.091,
+        "spread": 349.8219,
+        "isIndex": true
       },
-      "deltaMetrics":{
-        "Dod":{
-          "zSpread":4.543,
-          "gSpread":-0.0346,
-          "yieldWorst":-0.00496,
-          "ratingDouble":0,
-          "price":0.08,
-          "spread":null
+      "deltaMetrics": {
+        "Dod": {
+          "zSpread": 2.968,
+          "gSpread": 1.2646,
+          "yieldWorst": -0.04774,
+          "ratingDouble": 0,
+          "price": 0.4027,
+          "spread": 1.4401
         },
-        "Wow":{
-          "zSpread":-16.363,
-          "gSpread":-12.7976,
-          "yieldWorst":-0.19409,
-          "ratingDouble":0,
-          "price":3.237,
-          "spread":null
-        },
-        "Mtd":{
-          "zSpread":-9.595,
-          "gSpread":-7.3806,
-          "yieldWorst":-0.19507,
-          "ratingDouble":0,
-          "price":3.262,
-          "spread":null
-        },
-        "Mom":{
-          "zSpread":84.844,
-          "gSpread":86.0523,
-          "yieldWorst":0.44034,
-          "ratingDouble":0,
-          "price":-7.988,
-          "spread":null
-        },
-        "Ytd":{
-          "zSpread":113.061,
-          "gSpread":112.8662,
-          "yieldWorst":-0.1496,
-          "ratingDouble":0,
-          "price":2.085,
-          "spread":null
-        },
-        "Yoy":{
-          "zSpread":59.898,
-          "gSpread":64.0843,
-          "yieldWorst":-1.30095,
-          "ratingDouble":null,
-          "price":19.324,
-          "spread":null
-        }
+        "Wow": null,
+        "Mtd": null,
+        "Mom": null,
+        "Ytd": null,
+        "Yoy": null
       },
-      "unitPosition":null,
-      "securityType":"Bond",
-      "maturityType":"Bullet"
-    },
-    "quoteId":"31a54120-abf1-4fba-83e7-83ead49566ff",
-    "marketListType":"BWIC",
-    "alertConfigId":"e1c3985a-834e-4d7b-979c-e36c12878f83",
-    "alertId":"ddf277ef-d7db-4967-ae3f-79930d7e5f89",
-    "timeStamp":"2020-04-06T17:51:24.7004356-04:00",
-    "urgency":0,
-    "isActive":true,
-    "isDeleted":false,
-    validUntilTime: new Date().toISOString()
-
-  },
-  {
-    "type":"MarketList",
-    "subType":"Bwic",
-    "keyWord":"BWIC|expires in 2 min(s)",
-    "message":"BWIC started @ 5:50:58 PM and ends @ 5:52:58 PM",
-    "marketListType":"BWIC",
-    "marketListDescription":"BWIC started @ 5:50:58 PM and ends @ 5:52:58 PM",
-    "securityIdentifierToQuoteId":{
-      "3104":"31a54120-abf1-4fba-83e7-83ead49566ff"
-    },
-    "alertConfigId":"BWIC started @ 5:50:58 PM and ends @ 5:52:58 PM",
-    "alertId":"02301f0e-c288-4597-bdc5-5d16acd125e3",
-    "timeStamp":"2020-04-06T17:51:24.7003944-04:00",
-    "urgency":0,
-    "isActive":true,
-    "isDeleted":false,
-    validUntilTime: new Date().toISOString()
-  },
-  {
-    "type":"Mark",
-    "subType":"Bid",
-    "keyWord":"WES 25s|5MM 70.5/",
-    "message":"SEAP bids 2.5 pts better than our mark (68 pts). Position: 40MM, CS01: 16K",
-    "security":{
-      "isSovereign":false,
-      "isGovt":false,
-      "isEm":false,
-      "securityIdentifier":"64806",
-      "ccy":"USD",
-      "country":"US",
-      "industry":"Pipeline",
-      "name":"WES 3.1 02/01/2025 Callable USD SENIOR_UNSECURED",
-      "genericSeniority":"SR",
-      "globalIdentifier":"US958667AB34",
-      "obligorName":"WESTERN MIDSTREAM OPERATING LP",
-      "obligorId":1773,
-      "paymentRank":"SR UNSECURED",
-      "sector":"Energy",
-      "securitySubType":"Bond",
-      "subIndustry":"Pipelines",
-      "ticker":"WES",
-      "metrics":{
-        "isFixedForLife":true,
-        "isFixedToFloatInFixed":false,
-        "isFloat":false,
-        "isOnTheRun":true,
-        "isNewIssue":false,
-        "benchmarkSecurityIdentifier":"69347",
-        "benchmarkName":"T 0.5 03/31/2025 USD",
-        "underlyingSecurityId":-1,
-        "zSpread":1225.92,
-        "gSpread":1239.9466,
-        "yieldWorst":12.7407,
-        "amtOutstanding":1000000000,
-        "marketValue":668582000,
-        "workoutTerm":4.8356,
-        "ratingDouble":13,
-        "isRated":true,
-        "rating":"BB+",
-        "ratingNoNotch":"BB",
-        "ratingBucket":"HY",
-        "price":66.8582,
-        "spread":1208.6881,
-        "isIndex":true
-      },
-      "deltaMetrics":{
-        "Dod":{
-          "zSpread":-403.65,
-          "gSpread":-405.2455,
-          "yieldWorst":-4.0526,
-          "ratingDouble":0,
-          "price":10.2061,
-          "spread":-404.0158
-        },
-        "Wow":{
-          "zSpread":-719.07,
-          "gSpread":-718.8756,
-          "yieldWorst":-7.2297,
-          "ratingDouble":0,
-          "price":17.0472,
-          "spread":-720.2084
-        },
-        "Mtd":{
-          "zSpread":-667.42,
-          "gSpread":-667.859,
-          "yieldWorst":-6.7064,
-          "ratingDouble":0,
-          "price":15.9622,
-          "spread":-665.4902
-        },
-        "Mom":{
-          "zSpread":1005.759,
-          "gSpread":1011.2976,
-          "yieldWorst":9.71478,
-          "ratingDouble":-1,
-          "price":-33.4698,
-          "spread":980.419
-        },
-        "Ytd":null,
-        "Yoy":null
-      },
-      "unitPosition":{
-        "partitionOptionValues":{
-          "PortfolioShortName":[
+      "unitPosition": {
+        "metricDate": "2020-05-08T00:00:00-04:00",
+        "securityIdentifier": "72963",
+        "partitionOptionValues": {
+          "PortfolioShortName": [
             "AGB",
             "BBB",
             "CIP",
-            "DOF",
-            "SOF",
-            "STIP"
+            "DOF"
           ],
-          "StrategyName":[
-            "LTOV - Yield"
+          "StrategyName": [
+            "STOV"
           ]
         },
-        "mark":{
-          "driver":"Price",
-          "enteredTime":"2020-04-06T15:20:24.559-04:00",
-          "user":"IL",
-          "value":71,
-          "price": 72,
-          "spread": 73
+        "mark": {
+          "driver": "Spread",
+          "enteredTime": "2020-05-08T00:00:00-04:00",
+          "user": null,
+          "value": 344,
+          "spread": 344,
+          "price": 100.57713385
         },
-        "primaryPmName":"IL",
-        "backupPmName":"PM",
-        "researchName":"AG",
-        "owners":[
+        "hedgeFactor": 1,
+        "primaryPmName": "DM",
+        "backupPmName": "IL",
+        "researchName": "LC",
+        "owners": [
+          "DM",
           "IL",
-          "PM",
-          "AG"
-        ],
-        "date":"2020-04-06T00:00:00-04:00",
-        "securityIdentifier":"64806",
-        "quantity":39531000,
-        "cs01Cad":15725.033248458,
-        "cs01Local":11121.743580492255,
-        "hedgeFactor":0
+          "LC"
+        ]
       },
-      "securityType":"Bond",
-      "maturityType":"Callable"
+      "securityType": "Bond",
+      "maturityType": "Callable"
     },
-    "quoteId":"460ec687-a561-4aef-9de2-178b4e4335a9",
-    "alertConfigId":"afac7751-86ce-4007-b023-f8abc8b130ce",
-    "alertId":"74111f78-1e95-4fcb-8fad-655015f30a1e",
-    "timeStamp":"2020-04-06T16:04:17.8217249-04:00",
-    "urgency":0,
-    "isActive":true,
-    "isDeleted":false,
-    validUntilTime: new Date().toISOString()
-
+    "quote": {
+      "benchmarkYellowkey": null,
+      "isSpreadDerived": false,
+      "isYieldDerived": false,
+      "isPriceDerived": false,
+      "coupon": 4.150000095367432,
+      "maturity": "2030-11-15T00:00:00",
+      "equityReferencePrice": null,
+      "isGreyMarket": false,
+      "class": "BOND_OFFER",
+      "msG1MessageID": "5EB539D40000ABED29250001",
+      "messageSequenceNumber": 183323259,
+      "messageSequenceTimestamp": 1588935132304,
+      "priceValidityIndicator": true,
+      "bloombergIdentifier": "BJ3037543",
+      "bloombergGlobalIdentifier": "BBG00TNR5WJ5",
+      "quoteID": "655f0ca1-66c9-4a26-b2d9-a59c7d0eef99",
+      "eventDate": "2020-05-08T00:00:00",
+      "creationTime": "2020-05-08T06:52:10",
+      "lastModifiedTime": "2020-05-08T06:52:19",
+      "discriminator": "Msg1BondQuote",
+      "quoteStatus": null,
+      "venue": "MSG1",
+      "eventTime": "2020-05-08T06:52:04",
+      "securityID": 72963,
+      "globalIdentifierType": "ISIN",
+      "globalIdentifier": "US11135FAP62",
+      "benchmarkSecurityID": null,
+      "globalBenchmarkIdentifierType": null,
+      "globalBenchmarkIdentifier": null,
+      "curveID": null,
+      "tenor": null,
+      "securityType": "Bond",
+      "securityName": "AVGO 4.15 11/15/30",
+      "ticker": "AVGO",
+      "issuer": "BROADCOM INC",
+      "industrySector": "Technology",
+      "currency": "USD",
+      "actionFlag": "N",
+      "isActive": true,
+      "dealer": "MUFG",
+      "side": "Ask",
+      "quantity": 2000000,
+      "price": 100.70999908447266,
+      "yieldType": "YTW",
+      "yield": 4.065000057220459,
+      "spread": 345,
+      "rate": null,
+      "type": "Axe",
+      "stringQuantity": "2MM"
+    },
+    "validUntilTime": null,
+    "marketListType": null,
+    "alertConfigId": "a17dfeed-99af-4d61-89a9-68e7e2bd5501",
+    "alertId": "4f95cf06-7713-437a-83b9-791233fe08b3",
+    "timeStamp": "2020-05-08T18:47:10.1789893-04:00",
+    "isUrgent": false,
+    "isActive": true,
+    "isDeleted": false,
+    "isCancelled": false
+  },
+  {
+    "type": "Mark",
+    "subType": "Bid",
+    "keyWord": "ABBV 29s|5MM 181/",
+    "message": "SEAP bids 10 bps better than our mark (191 bps). Position: 23MM, CS01: 28K",
+    "security": {
+      "isSovereign": false,
+      "isGovt": false,
+      "isEm": false,
+      "securityIdentifier": "63112",
+      "ccy": "USD",
+      "country": "US",
+      "industry": "Pharmaceuticals",
+      "name": "ABBV 3.2 11/21/2029 Callable USD 144A SENIOR_UNSECURED",
+      "genericSeniority": "SR",
+      "globalIdentifier": "US00287YBW84",
+      "obligorName": "ABBVIE INC",
+      "obligorId": 1762,
+      "paymentRank": "SR UNSECURED",
+      "sector": "Health Care",
+      "securitySubType": "Bond",
+      "subIndustry": "Medical-Drugs",
+      "ticker": "ABBV",
+      "metrics": {
+        "isFixedForLife": true,
+        "isFixedToFloatInFixed": false,
+        "isFloat": false,
+        "isOnTheRun": false,
+        "isNewIssue": false,
+        "benchmarkSecurityIdentifier": "66248",
+        "benchmarkName": "T 1.5 02/15/2030 USD",
+        "underlyingSecurityId": -1,
+        "zSpread": 198.327,
+        "gSpread": 190.7335,
+        "yieldWorst": 2.53163,
+        "amtOutstanding": 5500000000,
+        "marketValue": 5802335000,
+        "workoutTerm": 9.2959,
+        "ratingDouble": 17,
+        "isRated": true,
+        "rating": "A-",
+        "ratingNoNotch": "A",
+        "ratingBucket": "IG",
+        "price": 105.497,
+        "spread": 188.8842,
+        "isIndex": true
+      },
+      "deltaMetrics": {
+        "Dod": {
+          "zSpread": 4.363,
+          "gSpread": 3.0185,
+          "yieldWorst": -0.03318,
+          "ratingDouble": 0,
+          "price": 0.277,
+          "spread": 2.8467
+        },
+        "Wow": {
+          "zSpread": 16.582,
+          "gSpread": 12.355,
+          "yieldWorst": 0.11914,
+          "ratingDouble": 0,
+          "price": -1.028,
+          "spread": null
+        },
+        "Mtd": {
+          "zSpread": 16.582,
+          "gSpread": 12.355,
+          "yieldWorst": 0.11914,
+          "ratingDouble": 0,
+          "price": -1.028,
+          "spread": null
+        },
+        "Mom": {
+          "zSpread": -34.891,
+          "gSpread": -47.882,
+          "yieldWorst": -0.5627,
+          "ratingDouble": 0,
+          "price": 4.643,
+          "spread": null
+        },
+        "Ytd": {
+          "zSpread": 87.107,
+          "gSpread": 84.8593,
+          "yieldWorst": -0.44476,
+          "ratingDouble": 0,
+          "price": 3.636,
+          "spread": null
+        },
+        "Yoy": null
+      },
+      "unitPosition": {
+        "metricDate": "2020-05-08T00:00:00-04:00",
+        "securityIdentifier": "63112",
+        "partitionOptionValues": {
+          "PortfolioShortName": [
+            "CIP",
+            "STIP"
+          ],
+          "StrategyName": [
+            "STOV"
+          ]
+        },
+        "mark": {
+          "driver": "Spread",
+          "enteredTime": "2020-05-08T00:00:00-04:00",
+          "user": null,
+          "value": 191,
+          "spread": 191,
+          "price": 104.96773
+        },
+        "hedgeFactor": 1,
+        "primaryPmName": "DM",
+        "backupPmName": "SP",
+        "researchName": "AG",
+        "owners": [
+          "DM",
+          "SP",
+          "AG"
+        ]
+      },
+      "securityType": "Bond",
+      "maturityType": "Callable"
+    },
+    "quote": {
+      "benchmarkYellowkey": "Govt",
+      "isSpreadDerived": false,
+      "isYieldDerived": false,
+      "isPriceDerived": false,
+      "coupon": 3.200000047683716,
+      "maturity": "2029-11-21T00:00:00",
+      "equityReferencePrice": null,
+      "isGreyMarket": false,
+      "class": "BOND_OFFER",
+      "msG1MessageID": "5EB5352800029C6429210001",
+      "messageSequenceNumber": 183310583,
+      "messageSequenceTimestamp": 1588933946476,
+      "priceValidityIndicator": true,
+      "bloombergIdentifier": "ZQ5840868",
+      "bloombergGlobalIdentifier": "BBG00QTYHH55",
+      "quoteID": "ecb1903f-9692-4c0b-97aa-bb3489b6e918",
+      "eventDate": "2020-05-08T00:00:00",
+      "creationTime": "2020-05-08T06:32:24",
+      "lastModifiedTime": "2020-05-08T06:32:30",
+      "discriminator": "Msg1BondQuote",
+      "quoteStatus": null,
+      "venue": "MSG1",
+      "eventTime": "2020-05-08T06:32:15",
+      "securityID": 63112,
+      "globalIdentifierType": "ISIN",
+      "globalIdentifier": "US00287YBW84",
+      "benchmarkSecurityID": 66248,
+      "globalBenchmarkIdentifierType": "ID_BB",
+      "globalBenchmarkIdentifier": "912828Z94",
+      "curveID": null,
+      "tenor": null,
+      "securityType": "Bond",
+      "securityName": "ABBV 3.2 11/21/29",
+      "ticker": "ABBV",
+      "issuer": "ABBVIE INC",
+      "industrySector": "Consumer, Non-cyclical",
+      "currency": "USD",
+      "actionFlag": "N",
+      "isActive": true,
+      "dealer": "SEAP",
+      "side": "Bid",
+      "quantity": 5000000,
+      "price": 106.40399932861328,
+      "yieldType": "YTW",
+      "yield": 2.424999952316284,
+      "spread": 181,
+      "rate": null,
+      "type": "Axe",
+      "stringQuantity": "5MM"
+    },
+    "alertConfigId": "c6be6d47-26e9-41f4-9026-e5885a8a7fae",
+    "alertId": "df4fec13-c965-4fca-847d-22fa05816705",
+    "timeStamp": "2020-05-08T18:47:10.1640016-04:00",
+    "isUrgent": true,
+    "isActive": true,
+    "isDeleted": false,
+    "isCancelled": false
+  },
+  {
+    "type": "Trade",
+    "subType": "Buy",
+    "keyWord": "OVV 21s|447K",
+    "message": "447K in DOF",
+    "security": {
+      "isSovereign": false,
+      "isGovt": false,
+      "isEm": false,
+      "securityIdentifier": "11663",
+      "ccy": "USD",
+      "country": "CA",
+      "industry": "Exploration & Production",
+      "name": "OVV 3.9 11/15/2021 Callable USD SENIOR_UNSECURED",
+      "genericSeniority": "SR",
+      "globalIdentifier": "US292505AJ36",
+      "obligorName": "OVINTIV INC",
+      "obligorId": 7279,
+      "paymentRank": "SR UNSECURED",
+      "sector": "Energy",
+      "securitySubType": "Bond",
+      "subIndustry": "Oil Comp-Explor&Prodtn",
+      "ticker": "OVV",
+      "metrics": {
+        "isFixedForLife": true,
+        "isFixedToFloatInFixed": false,
+        "isFloat": false,
+        "isOnTheRun": false,
+        "isNewIssue": false,
+        "benchmarkSecurityIdentifier": "70900",
+        "benchmarkName": "T 0.125 04/30/2022 USD",
+        "underlyingSecurityId": -1,
+        "zSpread": 868.762,
+        "gSpread": 882.92,
+        "yieldWorst": 8.94981,
+        "amtOutstanding": 600000000,
+        "marketValue": 558040800,
+        "workoutTerm": 1.526,
+        "ratingDouble": 14,
+        "isRated": true,
+        "rating": "BBB-",
+        "ratingNoNotch": "BBB",
+        "ratingBucket": "IG",
+        "price": 93.0068,
+        "spread": 885.3485999999999,
+        "isIndex": true
+      },
+      "deltaMetrics": {
+        "Dod": {
+          "zSpread": -30.429,
+          "gSpread": -32.639,
+          "yieldWorst": -0.3554,
+          "ratingDouble": 0,
+          "price": 0.506,
+          "spread": -29.4426
+        },
+        "Wow": {
+          "zSpread": -152.508,
+          "gSpread": -154.9731,
+          "yieldWorst": -1.59269,
+          "ratingDouble": 0,
+          "price": 2.1778,
+          "spread": -154.0857
+        },
+        "Mtd": {
+          "zSpread": -152.508,
+          "gSpread": -154.9731,
+          "yieldWorst": -1.59269,
+          "ratingDouble": 0,
+          "price": 2.1778,
+          "spread": -154.0857
+        },
+        "Mom": {
+          "zSpread": -1697.198,
+          "gSpread": -1718.9391,
+          "yieldWorst": -17.27649,
+          "ratingDouble": 0,
+          "price": 20.7655,
+          "spread": -1718.2026
+        },
+        "Ytd": {
+          "zSpread": 794.1082,
+          "gSpread": 793.8118,
+          "yieldWorst": 6.49722,
+          "ratingDouble": -1,
+          "price": -9.2742,
+          "spread": null
+        },
+        "Yoy": {
+          "zSpread": 783.2281,
+          "gSpread": 788.4925,
+          "yieldWorst": 5.73712,
+          "ratingDouble": -1,
+          "price": -8.4872,
+          "spread": null
+        }
+      },
+      "unitPosition": {
+        "metricDate": "2020-05-08T00:00:00-04:00",
+        "securityIdentifier": "11663",
+        "partitionOptionValues": {
+          "PortfolioShortName": [
+            "DOF"
+          ],
+          "StrategyName": [
+            "Portfolio Shorts"
+          ]
+        },
+        "mark": {
+          "driver": "Price",
+          "enteredTime": "2020-05-08T11:23:32.501-04:00",
+          "user": "ST",
+          "value": 94,
+          "spread": 808.48,
+          "price": 94
+        },
+        "hedgeFactor": 0,
+        "primaryPmName": "DJ",
+        "backupPmName": "PM",
+        "researchName": "TW",
+        "owners": [
+          "DJ",
+          "PM",
+          "TW"
+        ]
+      },
+      "securityType": "Bond",
+      "maturityType": "Callable"
+    },
+    "trades": [
+      {
+        "partitionOptionValue": {
+          "PortfolioShortName": "DOF",
+          "StrategyName": "Portfolio Shorts"
+        },
+        "tradeId": "5120399",
+        "parentTradeId": "5120389",
+        "quantity": 447000,
+        "tradeDateTime": "2020-05-08T09:02:00-04:00",
+        "price": 93.5,
+        "counterpartyName": "NBF FI",
+        "spread": 846,
+        "shouldCalculateSpread": true,
+        "shouldCalculatePrice": true,
+        "securityQuantityAfterTrade": -3153000,
+        "fifoAvgSpread": null,
+        "wgtAvgSpread": null,
+        "fifoAvgPrice": 70.23739295908659,
+        "wgtAvgPrice": 88.61538461538461
+      }
+    ],
+    "alertConfigId": "a42fceb5-89b1-4fd5-9036-3ee988e4aecf",
+    "alertId": "5120389",
+    "timeStamp": "2020-05-08T09:02:00-04:00",
+    "isUrgent": false,
+    "isActive": true,
+    "isDeleted": false,
+    "isCancelled": false
   }
 ]
