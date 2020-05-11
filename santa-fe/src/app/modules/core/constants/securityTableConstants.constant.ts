@@ -511,49 +511,49 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
         active: false
       }
     }
-  },{
-    key: 'costCurrentFifo',
-    label: 'FIFO Cost',
-    attrName: DEFAULT_DRIVER_IDENTIFIER,
-    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
-    blockAttrName: 'cost',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.cost,
-    isDriverDependent: true,
-    isAttrChangable: true,
-    tableSpecifics: {
-      default: {
-        active: true,
-        groupShow: true
-      },
-      tradeAlert: {
-        active: true,
-        groupShow: true
-      }
-    }
-  },{
-    key: 'costCurrentWeightedAvg',
-    label: 'Wgt Avg Cost',
-    attrName: DEFAULT_DRIVER_IDENTIFIER,
-    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
-    blockAttrName: 'cost',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.cost,
-    isDriverDependent: true,
-    isAttrChangable: true,
-    tableSpecifics: {
-      default: {
-        active: true,
-        groupShow: true
-      },
-      tradeAlert: {
-        active: true,
-        groupShow: true
-      }
-    }
+  // },{
+  //   key: 'costCurrentFifo',
+  //   label: 'Fifo',
+  //   attrName: DEFAULT_DRIVER_IDENTIFIER,
+  //   underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+  //   blockAttrName: 'cost',
+  //   readyStage: SECURITY_TABLE_FINAL_STAGE,
+  //   groupBelongs: SecurityTableMetricGroups.cost,
+  //   isDriverDependent: true,
+  //   isAttrChangable: true,
+  //   tableSpecifics: {
+  //     default: {
+  //       active: true,
+  //       groupShow: true
+  //     },
+  //     tradeAlert: {
+  //       active: true,
+  //       groupShow: true
+  //     }
+  //   }
+  // },{
+  //   key: 'costCurrentWeightedAvg',
+  //   label: 'Wgt Avg',
+  //   attrName: DEFAULT_DRIVER_IDENTIFIER,
+  //   underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+  //   blockAttrName: 'cost',
+  //   readyStage: SECURITY_TABLE_FINAL_STAGE,
+  //   groupBelongs: SecurityTableMetricGroups.cost,
+  //   isDriverDependent: true,
+  //   isAttrChangable: true,
+  //   tableSpecifics: {
+  //     default: {
+  //       active: true,
+  //       groupShow: true
+  //     },
+  //     tradeAlert: {
+  //       active: true,
+  //       groupShow: true
+  //     }
+  //   }
   },{
     key: 'costDOFFifo',
-    label: 'DOF FIFO Cost',
+    label: 'DOF Fifo',
     attrName: DEFAULT_DRIVER_IDENTIFIER,
     underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
     blockAttrName: 'cost',
@@ -564,16 +564,16 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true,
-        groupShow: false
+        groupShow: true
       },
       tradeAlert: {
         active: true,
-        groupShow: false
+        groupShow: true
       }
     }
   },{
     key: 'costDOFWeightedAvg',
-    label: 'DOF Wgt Avg Cost',
+    label: 'DOF Wgt Avg',
     attrName: DEFAULT_DRIVER_IDENTIFIER,
     underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
     blockAttrName: 'cost',
@@ -584,16 +584,16 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true,
-        groupShow: false
+        groupShow: true
       },
       tradeAlert: {
         active: true,
-        groupShow: false
+        groupShow: true
       }
     }
   },{
     key: 'costSOFFifo',
-    label: 'SOF FIFO Cost',
+    label: 'SOF Fifo',
     attrName: DEFAULT_DRIVER_IDENTIFIER,
     underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
     blockAttrName: 'cost',
@@ -613,7 +613,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     }
   },{
     key: 'costSOFWeightedAvg',
-    label: 'SOF Wgt Avg Cost',
+    label: 'SOF Wgt Avg',
     attrName: DEFAULT_DRIVER_IDENTIFIER,
     underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
     blockAttrName: 'cost',
@@ -633,7 +633,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     }
   },{
     key: 'costSTIPFifo',
-    label: 'STIP FIFO Cost',
+    label: 'STIP Fifo',
     attrName: DEFAULT_DRIVER_IDENTIFIER,
     underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
     blockAttrName: 'cost',
@@ -653,7 +653,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     }
   },{
     key: 'costSTIPWeightedAvg',
-    label: 'STIP Wgt Avg Cost',
+    label: 'STIP Wgt Avg',
     attrName: DEFAULT_DRIVER_IDENTIFIER,
     underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
     blockAttrName: 'cost',
@@ -673,7 +673,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     }
   },{
     key: 'costFIPFifo',
-    label: 'FIP FIFO Cost',
+    label: 'FIP Fifo',
     attrName: DEFAULT_DRIVER_IDENTIFIER,
     underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
     blockAttrName: 'cost',
@@ -693,7 +693,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     }
   },{
     key: 'costFIPWeightedAvg',
-    label: 'FIP Wgt Avg Cost',
+    label: 'FIP Wgt Avg',
     attrName: DEFAULT_DRIVER_IDENTIFIER,
     underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
     blockAttrName: 'cost',
@@ -713,7 +713,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     }
   },{
     key: 'costCIPFifo',
-    label: 'CIP FIFO Cost',
+    label: 'CIP Fifo',
     attrName: DEFAULT_DRIVER_IDENTIFIER,
     underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
     blockAttrName: 'cost',
@@ -733,7 +733,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     }
   },{
     key: 'costCIPWeightedAvg',
-    label: 'CIP Wgt Avg Cost',
+    label: 'CIP Wgt Avg',
     attrName: DEFAULT_DRIVER_IDENTIFIER,
     underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
     blockAttrName: 'cost',
@@ -753,7 +753,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     }
   },{
     key: 'costAGBFifo',
-    label: 'AGB FIFO Cost',
+    label: 'AGB Fifo',
     attrName: DEFAULT_DRIVER_IDENTIFIER,
     underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
     blockAttrName: 'cost',
@@ -773,7 +773,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     }
   },{
     key: 'costAGBWeightedAvg',
-    label: 'AGB Wgt Avg Cost',
+    label: 'AGB Wgt Avg',
     attrName: DEFAULT_DRIVER_IDENTIFIER,
     underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
     blockAttrName: 'cost',
@@ -793,7 +793,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     }
   },{
     key: 'costBBBFifo',
-    label: 'BBB FIFO Cost',
+    label: 'BBB Fifo',
     attrName: DEFAULT_DRIVER_IDENTIFIER,
     underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
     blockAttrName: 'cost',
@@ -813,7 +813,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     }
   },{
     key: 'costBBBWeightedAvg',
-    label: 'BBB Wgt Avg Cost',
+    label: 'BBB Wgt Avg',
     attrName: DEFAULT_DRIVER_IDENTIFIER,
     underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
     blockAttrName: 'cost',
