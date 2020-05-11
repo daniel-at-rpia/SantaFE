@@ -6,20 +6,15 @@ The main difference between blocks and components is blocks does not carry any c
 Because of this, while component models need to follow "BasicDTOStructure", blocks don't.
 */
 
+import * as DTOs from 'FEModels/frontend-models.interface';
+import {
+  AxeAlertScope, AxeAlertType
+} from 'Core/constants/tradeConstants.constant';
 import * as am4charts from "@amcharts/amcharts4/charts";
 import {
   GridApi,
   ColumnApi
 } from 'ag-grid-community';
-import {
-  SecurityDTO,
-  QuantComparerDTO,
-  SecurityTableRowDTO,
-  SecurityQuoteDTO
-} from 'FEModels/frontend-models.interface';
-import {
-  AxeAlertScope, AxeAlertType
-} from 'Core/constants/tradeConstants.constant';
 
 export interface SecurityPortfolioBlock {
   portfolioName: string;
@@ -27,6 +22,21 @@ export interface SecurityPortfolioBlock {
   strategy: string;
   cs01Cad: number;
   cs01Local: number;
+  costFifoSpread: number;
+  costWeightedAvgSpread: number;
+  costFifoPrice: number;
+  costWeightedAvgPrice: number;
+}
+
+export interface SecurityCostPortfolioBlock {
+  fifo: {
+    'Default Spread': number;
+    'Price': number;
+  };
+  weightedAvg: {
+    'Default Spread': number;
+    'Price': number;
+  };
 }
 
 export interface SecurityMarkBlock {
@@ -177,10 +187,11 @@ export interface AgGridRowNode {
 
 export interface AgGridRow {
   id: string;
-  securityCard: SecurityDTO;    // this needs to be identical to SecurityTableMetrics' key for Security column
-  bestQuote: QuantComparerDTO;  // this needs to be identical to SecurityTableMetrics' key for Best Quote column
-  bestAxeQuote: QuantComparerDTO;  // this needs to be identical to SecurityTableMetrics' key for Best Axe Quote column
-  rowDTO: SecurityTableRowDTO;
+  securityCard: DTOs.SecurityDTO;    // this needs to be identical to SecurityTableMetrics' key for Security column
+  bestQuote: DTOs.QuantComparerDTO;  // this needs to be identical to SecurityTableMetrics' key for Best Quote column
+  bestAxeQuote: DTOs.QuantComparerDTO;  // this needs to be identical to SecurityTableMetrics' key for Best Axe Quote column
+  alertSide: DTOs.SantaTableAlertSideCellDTO,  // this needs to be identical to SecurityTableMetrics' key for Alert Side column
+  rowDTO: DTOs.SecurityTableRowDTO;
 }
 
 export interface AgGridColumn {
@@ -217,20 +228,28 @@ export interface ObligorCategoryDataItemBlock {
 }
 
 export interface SecurityTableRowQuoteBlock {
-  primaryPresentQuotes: Array<SecurityQuoteDTO>;
-  primaryQuotes: Array<SecurityQuoteDTO>;
+  primaryPresentQuotes: Array<DTOs.SecurityQuoteDTO>;
+  primaryQuotes: Array<DTOs.SecurityQuoteDTO>;
   primarySecurityName: string;
-  secondaryPresentQuotes: Array<SecurityQuoteDTO>;
-  secondaryQuotes: Array<SecurityQuoteDTO>;
+  secondaryPresentQuotes: Array<DTOs.SecurityQuoteDTO>;
+  secondaryQuotes: Array<DTOs.SecurityQuoteDTO>;
   secondarySecurityName: string;
 }
 
 export interface TradeAlertConfigurationAxeGroupBlock {
-  card: SecurityDTO;
+  card: DTOs.SecurityDTO;
   groupId: string;
   scopes: Array<AxeAlertScope>;
   axeAlertTypes: Array<AxeAlertType>;
   isDeleted: boolean;
   isDisabled: boolean;
   isUrgent: boolean;
+}
+
+export interface TradeCenterTableBlock {
+  currentContentStage: number;
+  fetchComplete: boolean;
+  rowList: Array<DTOs.SecurityTableRowDTO>;
+  prinstineRowList: Array<DTOs.SecurityTableRowDTO>;
+  liveUpdatedRowList: Array<DTOs.SecurityTableRowDTO>;
 }

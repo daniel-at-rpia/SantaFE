@@ -19,6 +19,7 @@
     import {SecurityTableMetricStub} from 'FEModels/frontend-stub-models.interface';
     import {SantaTableSecurityCell} from 'Core/components/santa-table-security-cell/santa-table-security-cell.component';
     import {SantaTableQuoteCell} from 'Core/components/santa-table-quote-cell/santa-table-quote-cell.component';
+    import {SantaTableAlertSideCell} from 'Core/components/santa-table-alert-side-cell/santa-table-alert-side-cell.component';
     import {SantaTableDetailAllQuotes} from 'Core/containers/santa-table-detail-all-quotes/santa-table-detail-all-quotes.container';
     import {BEQuoteDTO} from 'BEModels/backend-models.interface';
     import {
@@ -45,6 +46,8 @@
 
 export class SantaTable implements OnInit, OnChanges {
   @Input() ownerInitial: string;
+  @Input() activePortfolios: Array<string>;  // TODO: at the moment this variable is really just "filtered portfolios", so a value of empty string means include every portfolio, this will be changed once we start support entire security universe
+  @Input() tableName: string;
   @Input() tableData: SecurityTableDTO;
   @Input() newRows: Array<SecurityTableRowDTO>;
   @Input() receivedContentStage: number;
@@ -55,6 +58,7 @@ export class SantaTable implements OnInit, OnChanges {
   @Input() activeTriCoreDriver: string;
   @Output() selectedSecurityForAnalysis = new EventEmitter<SecurityDTO>();
   liveUpdateRowsCache: Array<SecurityTableRowDTO>;
+  @Input() activated: boolean;
 
   agGridConfig = {
     defaultColDef: {
@@ -119,6 +123,7 @@ export class SantaTable implements OnInit, OnChanges {
       securityCard: SantaTableSecurityCell,
       bestQuote: SantaTableQuoteCell,
       bestAxeQuote: SantaTableQuoteCell,
+      alertSide: SantaTableAlertSideCell,
       detailAllQuotes: SantaTableDetailAllQuotes,
       numericFloatingFilter: SantaTableNumericFloatingFilter,
       numericFilter: SantaTableNumericFilter
@@ -130,28 +135,42 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   public ngOnChanges() {
-    if (this.tableData.state.loadedContentStage !== this.receivedContentStage) {
-      console.log('rows updated for inter-stage change', this.receivedContentStage);
-      this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate; // saving initial cache
-      this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
-      this.tableData.state.loadedContentStage = this.receivedContentStage;
-      this.loadTableRows(this.newRows);
-    } else if (this.securityTableMetricsCache !== this.receivedSecurityTableMetricsUpdate && this.receivedContentStage === this.constants.securityTableFinalStage) {
-      console.log("metrics update", this.receivedSecurityTableMetricsUpdate);
-      this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate;
-      this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
-      this.loadTableHeaders(true);  // skip reloading the agGrid columns since that won't be necessary and reloading them creates a problem for identifying the columns in later use, such as sorting
-      this.loadTableRows(this.newRows, true);
-    } else if (!!this.newRows && this.newRows != this.tableData.data.rows && this.tableData.state.loadedContentStage === this.receivedContentStage) {
-      console.log('rows updated for change within same stage, triggered when filters are applied', this.tableData.state.loadedContentStage);
-      this.loadTableRows(this.newRows);
-    } else if (this.liveUpdateRowsCache !== this.liveUpdatedRows && this.tableData.state.loadedContentStage === this.constants.securityTableFinalStage) {
-      this.liveUpdateRowsCache = this.utilityService.deepCopy(this.liveUpdatedRows);
-      console.log('rows updated from live update', this.liveUpdatedRows);
-      if (this.liveUpdateRowsCache.length > 0) {
-        this.liveUpdateRows(this.liveUpdateRowsCache);
+    let activateStatusChanged = false;
+    if (!!this.activated && !this.tableData.state.isActivated) {
+      this.tableData.state.isActivated = true;
+      activateStatusChanged = true;
+    } else if (!this.activated && !!this.tableData.state.isActivated){
+      this.tableData.state.isActivated = false;
+      activateStatusChanged = true;
+    }
+    if (!!this.tableData.state.isActivated) {
+      if (!!activateStatusChanged) {
+        console.log('just become activated');
+        this.loadTableRows(this.newRows);
+        this.tableData.state.loadedContentStage = this.receivedContentStage;
+      } else if (this.tableData.state.loadedContentStage !== this.receivedContentStage) {
+        console.log('rows updated for inter-stage change', this.receivedContentStage);
+        this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate; // saving initial cache
+        this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
+        this.tableData.state.loadedContentStage = this.receivedContentStage;
+        this.loadTableRows(this.newRows);
+      } else if (this.securityTableMetricsCache !== this.receivedSecurityTableMetricsUpdate && this.receivedContentStage === this.constants.securityTableFinalStage) {
+        console.log("metrics update", this.receivedSecurityTableMetricsUpdate);
+        this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate;
+        this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
+        this.loadTableHeaders(true);  // skip reloading the agGrid columns since that won't be necessary and reloading them creates a problem for identifying the columns in later use, such as sorting
+        this.loadTableRows(this.newRows, true);
+      } else if (!!this.newRows && this.newRows != this.tableData.data.rows && this.tableData.state.loadedContentStage === this.receivedContentStage) {
+        console.log('rows updated for change within same stage, triggered when filters are applied', this.tableData.state.loadedContentStage);
+        this.loadTableRows(this.newRows);
+      } else if (this.liveUpdateRowsCache !== this.liveUpdatedRows && this.tableData.state.loadedContentStage === this.constants.securityTableFinalStage) {
+        this.liveUpdateRowsCache = this.utilityService.deepCopy(this.liveUpdatedRows);
+        console.log('rows updated from live update', this.liveUpdatedRows);
+        if (this.liveUpdateRowsCache.length > 0) {
+          this.liveUpdateRows(this.liveUpdateRowsCache);
+        }
+        this.liveUpdateAllQuotesForExpandedRows();
       }
-      this.liveUpdateAllQuotesForExpandedRows();
     }
   }
 
@@ -162,6 +181,8 @@ export class SantaTable implements OnInit, OnChanges {
     this.tableData.api.columnApi = params.columnApi;
     this.tableData.state.isAgGridReady = true;
     this.agGridMiddleLayerService.onGridReady(this.tableData, this.ownerInitial);
+    this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate; // saving initial cache
+    this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
     this.loadTableHeaders();
   }
 
@@ -194,7 +215,7 @@ export class SantaTable implements OnInit, OnChanges {
           params.node.setExpanded(!params.node.expanded);
           if (!params.node.group) {
             const targetRow = this.tableData.data.rows.find((eachRow) => {
-              return !!eachRow.data.security && eachRow.data.security.data.securityID == params.node.data.id;
+              return eachRow.data.rowId == params.node.data.id;
             });
             if (!!targetRow) {
               try {
@@ -286,10 +307,23 @@ export class SantaTable implements OnInit, OnChanges {
     this.tableData.data.headers = [];
     this.tableData.data.allHeaders = [];
     this.securityTableMetrics.forEach((eachStub) => {
-      if (eachStub.label === 'Security' || eachStub.active) {
-        this.tableData.data.headers.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
+      const targetSpecifics = eachStub.tableSpecifics[this.tableName] || eachStub.tableSpecifics.default;
+      if (eachStub.isForSecurityCard || targetSpecifics.active) {
+        this.tableData.data.headers.push(
+          this.dtoService.formSecurityTableHeaderObject(
+            eachStub,
+            this.tableName,
+            this.activePortfolios
+          )
+        );
       }
-      this.tableData.data.allHeaders.push(this.dtoService.formSecurityTableHeaderObject(eachStub));
+      this.tableData.data.allHeaders.push(
+        this.dtoService.formSecurityTableHeaderObject(
+          eachStub,
+          this.tableName,
+          this.activePortfolios
+        )
+      );
     });
     if (this.tableData.state.isAgGridReady && !skipAgGrid) {
       this.tableData.data.agGridColumnDefs = this.agGridMiddleLayerService.loadAgGridHeaders(this.tableData);
@@ -340,20 +374,7 @@ export class SantaTable implements OnInit, OnChanges {
     params?: any  // this is a AgGridRowParams, can't enforce type checking here because agGrid's native function redrawRows() would throw an compliation error
   ){
     if (!!targetRow) {
-      let bestBid: number;
-      let bestOffer: number;
-      let driverType: string;
-      if (!!targetRow.data.cells[0] && !!targetRow.data.cells[0].data.quantComparerDTO) {
-        bestBid = targetRow.data.cells[0].data.quantComparerDTO.data.bid.number;
-        bestOffer = targetRow.data.cells[0].data.quantComparerDTO.data.offer.number;
-        driverType = targetRow.data.cells[0].data.quantComparerDTO.data.driverType;
-      } else {
-        bestBid = 0;
-        bestOffer = 0;
-        driverType = '';
-      }
-
-      targetRow.data.quotes = this.dtoService.formSecurityTableRowObject(targetRow.data.security).data.quotes;
+      targetRow.data.quotes = this.dtoService.formSecurityTableRowObject(targetRow.data.security, targetRow.data.rowId).data.quotes;
       const payload: PayloadGetAllQuotes = {
         "identifier": targetRow.data.security.data.securityID
       };
@@ -364,9 +385,6 @@ export class SantaTable implements OnInit, OnChanges {
             this.loadQuotes(
               targetRow,
               serverReturn,
-              bestBid,
-              bestOffer,
-              driverType,
               params
             );
           }
@@ -476,11 +494,15 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   private liveUpdateRows(targetRows: Array<SecurityTableRowDTO>) {
+    // realUpdates contains the rows that already exist in the table, those needs to be updated via the agGridAPI, the others are simply pushed into the table
+    const realUpdates: Array<SecurityTableRowDTO> = [];
+    const insertions: Array<SecurityTableRowDTO> = [];
     targetRows.forEach((eachNewRow) => {
       const matchedOldRow = this.tableData.data.rows.find((eachOldRow) => {
-        return eachOldRow.data.security.data.securityID === eachNewRow.data.security.data.securityID;
+        return eachOldRow.data.rowId === eachNewRow.data.rowId;
       });
       if (!!matchedOldRow) {
+        realUpdates.push(eachNewRow);
         try {
           matchedOldRow.data = eachNewRow.data;
         }
@@ -488,10 +510,16 @@ export class SantaTable implements OnInit, OnChanges {
           console.warn('setting row update failure in AGGrid', matchedOldRow.data, eachNewRow.data);
         }
       } else {
+        insertions.push(eachNewRow);
         this.tableData.data.rows.push(eachNewRow);
       }
     });
-    this.agGridMiddleLayerService.updateAgGridRows(this.tableData, targetRows, 2);
+    if (insertions.length > 0) {
+      this.agGridMiddleLayerService.loadAgGridRows(this.tableData);
+      setTimeout(function(){this.agGridMiddleLayerService.updateAgGridRows(this.tableData, realUpdates, 2)}.bind(this), 1000);
+    } else {
+      this.agGridMiddleLayerService.updateAgGridRows(this.tableData, realUpdates, 2);
+    }
   }
 
   private liveUpdateAllQuotesForExpandedRows() {
@@ -562,15 +590,12 @@ export class SantaTable implements OnInit, OnChanges {
   private loadQuotes(
     targetRow: SecurityTableRowDTO,
     serverReturn: Array<Array<BEQuoteDTO>>,
-    bestBid: number,
-    bestOffer: number,
-    driverType: string,
     params: any  // this is a AgGridRowParams, can't enforce type checking here because agGrid's native function redrawRows() would throw an compliation error
   ) {
     const primaryList = serverReturn[0];
     targetRow.state.isCDSOffTheRun = serverReturn.length > 1;
     primaryList.forEach((eachRawQuote) => {
-      const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, bestBid, bestOffer, driverType, targetRow.data.security, targetRow);
+      const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, targetRow.data.security, targetRow);
       newQuote.state.isCDSVariant = targetRow.state.isCDSVariant;
       if (newQuote.state.hasAsk || newQuote.state.hasBid) {
         targetRow.data.quotes.primaryQuotes.push(newQuote);
@@ -579,7 +604,7 @@ export class SantaTable implements OnInit, OnChanges {
     if (targetRow.state.isCDSOffTheRun) {
       const secondaryList = serverReturn[1];
       secondaryList.forEach((eachRawQuote) => {
-        const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, bestBid, bestOffer, driverType, targetRow.data.security, targetRow);
+        const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, targetRow.data.security, targetRow);
         newQuote.state.isCDSVariant = targetRow.state.isCDSVariant;
         if (newQuote.state.hasAsk || newQuote.state.hasBid) {
           targetRow.data.quotes.secondaryQuotes.push(newQuote);

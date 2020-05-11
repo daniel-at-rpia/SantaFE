@@ -11,11 +11,17 @@
         "dev3": [
           "dev3-santa-rpia"
         ],
+        "dev4": [
+          "dev4-santa-rpia"
+        ],
         "local": [
           "local-santa-rpia"
         ],
         "local3": [
           "local3-santa-rpia"
+        ],
+        "local4": [
+          "local4-santa-rpia"
         ],
         "prod": [
           "santa-rpia"

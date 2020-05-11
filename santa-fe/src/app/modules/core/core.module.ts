@@ -25,6 +25,7 @@ import { SecurityTable } from 'Core/containers/security-table/security-table.con
 import { SantaTable } from 'Core/containers/santa-table/santa-table.container';
 import { SantaTableSecurityCell } from 'Core/components/santa-table-security-cell/santa-table-security-cell.component';
 import { SantaTableQuoteCell } from 'Core/components/santa-table-quote-cell/santa-table-quote-cell.component';
+import { SantaTableAlertSideCell } from 'Core/components/santa-table-alert-side-cell/santa-table-alert-side-cell.component';
 import { SantaTableDetailAllQuotes } from 'Core/containers/santa-table-detail-all-quotes/santa-table-detail-all-quotes.container';
 import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
 import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-filter/santa-table-numeric-filter.component';
@@ -47,6 +48,7 @@ import {CountdownPipe} from 'App/pipes/Countdown.pipe';
     SantaTable,
     SantaTableSecurityCell,
     SantaTableQuoteCell,
+    SantaTableAlertSideCell,
     SantaTableDetailAllQuotes,
     SantaTableNumericFilter,
     SantaTableNumericFloatingFilter,
@@ -61,6 +63,7 @@ import {CountdownPipe} from 'App/pipes/Countdown.pipe';
         AgGridModule.withComponents([
             SantaTableSecurityCell,
             SantaTableQuoteCell,
+            SantaTableAlertSideCell,
             SantaTableDetailAllQuotes,
             SantaTableNumericFilter,
             SantaTableNumericFloatingFilter

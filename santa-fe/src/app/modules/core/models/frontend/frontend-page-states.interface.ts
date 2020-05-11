@@ -1,6 +1,13 @@
 import * as DTOs from 'FEModels/frontend-models.interface';
-import {ObligorChartCategoryBlock, TradeAlertConfigurationAxeGroupBlock} from 'FEModels/frontend-blocks.interface';
-import {SecurityDefinitionStub, SecurityTableMetricStub} from 'FEModels/frontend-stub-models.interface';
+import {
+  ObligorChartCategoryBlock,
+  TradeAlertConfigurationAxeGroupBlock,
+  TradeCenterTableBlock
+} from 'FEModels/frontend-blocks.interface';
+import {
+  SecurityDefinitionStub,
+  SecurityTableMetricStub
+} from 'FEModels/frontend-stub-models.interface';
 import {
   DefinitionConfiguratorEmitterParamsItem,
   ObligorGraphAxesZoomState,
@@ -72,9 +79,9 @@ export interface TradeState {
 }
 
 export interface TradeCenterPanelState {
-  currentContentStage: number;
   bestQuoteValidWindow: number;
   isFocusMode: boolean;
+  displayAlertTable: boolean;
   presets : {
     presetsReady: boolean;
     selectedPreset: DTOs.SearchShortcutDTO;
@@ -92,13 +99,14 @@ export interface TradeCenterPanelState {
   table: {
     metrics: Array<SecurityTableMetricStub>;
     dto: DTOs.SecurityTableDTO;
+    alertMetrics: Array<SecurityTableMetricStub>;
+    alertDto: DTOs.SecurityTableDTO;
   }
   fetchResult: {
     fetchTableDataFailed: boolean;
     fetchTableDataFailedError: string;
-    rowList: Array<DTOs.SecurityTableRowDTO>;
-    prinstineRowList: Array<DTOs.SecurityTableRowDTO>;
-    liveUpdatedRowList: Array<DTOs.SecurityTableRowDTO>;
+    mainTable: TradeCenterTableBlock;
+    alertTable: TradeCenterTableBlock;
   }
   filters: {
     quickFilters: {
@@ -110,6 +118,9 @@ export interface TradeCenterPanelState {
     }
     securityFilters: Array<DefinitionConfiguratorEmitterParamsItem>
   }
+  alertTableAlertList: Array<DTOs.AlertDTO>;
+  initialAlertListReceived: boolean;
+  delayedLoadingFreshDataForAlert: boolean;
 }
 
 export interface TradeUtilityPanelState {

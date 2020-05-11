@@ -20,7 +20,7 @@ import * as moment from 'moment';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { TradeAlertPanelState } from 'FEModels/frontend-page-states.interface';
     import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
-    import { SecurityDTO } from 'FEModels/frontend-models.interface';
+    import {SecurityDTO, AlertDTO} from 'FEModels/frontend-models.interface';
     import { TradeAlertConfigurationAxeGroupBlock } from 'FEModels/frontend-blocks.interface';
     import {
       BESecurityDTO,
@@ -51,6 +51,7 @@ import * as moment from 'moment';
     } from 'Core/constants/tradeConstants.constant';
     import { FullOwnerList, FilterOptionsPortfolioResearchList } from 'Core/constants/securityDefinitionConstants.constant';
     import { CoreFlushSecurityMap, CoreSendNewAlerts } from 'Core/actions/core.actions';
+    import { TradeAlertTableSendNewAlertsEvent } from 'Trade/actions/trade.actions';
     import {
       selectSelectedSecurityForAlertConfig,
       selectPresetSelected,
@@ -146,7 +147,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           }
         }
       },
-      autoUpdateCountdown: 0,
+      autoUpdateCountdown: 4,
       alertUpdateInProgress: false,
       isCenterPanelPresetSelected: false
     };
@@ -699,29 +700,31 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlerts, {req: 'POST'}, payload).pipe(
       first(),
       tap((serverReturn: Array<BEAlertDTO>) => {
-        console.log('updateAlerts', serverReturn);
         // serverReturn.push({...mockAlert, keyWord: `${1}|${Math.random().toFixed(2)}`});
-        if (!!serverReturn && serverReturn.length > 0) {
-          const updateList = [];
+        if (!!serverReturn) {
           // temporarily filter out all the market listing alerts
           const filteredServerReturn = serverReturn.filter((eachRawAlert) => {
-            return eachRawAlert.type !== this.constants.alertTypes.marketListAlert;
+            return eachRawAlert.type !== this.constants.alertTypes.marketListAlert && eachRawAlert.type !== 'Trade';
           });
+          const updateList: Array<AlertDTO> = [];
+          const securityList: Array<AlertDTO> = [];
           filteredServerReturn.forEach((eachRawAlert) => {
             // checking for cancelled and active alerts
             const expired = moment().diff(moment(eachRawAlert.validUntilTime) ) > 0;
             if (eachRawAlert.isActive && !eachRawAlert.isCancelled && !expired) {
               const newAlert = this.dtoService.formAlertObject(eachRawAlert);
-              updateList.push(this.dtoService.formAlertObject(eachRawAlert));
+              updateList.push(newAlert);
+              if (newAlert.data.security && newAlert.data.security.data.securityID) {
+                securityList.push(newAlert);
+              }
             }
             // adding cancelled as well
             if (eachRawAlert.isCancelled) {
               updateList.push(this.dtoService.formAlertObject(eachRawAlert));
             }
           });
-          this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
-        } else {
-          this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy([])));
+          updateList.length > 0 && this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
+          this.store$.dispatch(new TradeAlertTableSendNewAlertsEvent(this.utilityService.deepCopy(securityList)));
         }
         this.state.alertUpdateInProgress = false;
       }),

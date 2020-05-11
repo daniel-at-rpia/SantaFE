@@ -86,7 +86,7 @@ export class SecurityTable implements OnInit, OnChanges {
     this.tableData.state.selectedHeader = null;
     this.securityTableMetrics.forEach((eachStub) => {
       if (eachStub.label === targetHeader.data.displayLabel) {
-        eachStub.active = false;
+        eachStub.tableSpecifics.default.active = false;
       }
     });
     if (targetIndex > 0) {
@@ -110,9 +110,9 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   public onClickAddHeader(targetStub: SecurityTableMetricStub) {
-    if (!targetStub.disabled) {
-      if (!targetStub.active) {
-        targetStub.active = true;
+    if (!targetStub.tableSpecifics.default.disabled) {
+      if (!targetStub.tableSpecifics.default.active) {
+        targetStub.tableSpecifics.default.active = true;
         this.nativeLoadTableHeader.emit();
         this.loadTableRowsUponHeaderChange();
         this.onCollapseAddColumnDropdown();
@@ -187,7 +187,7 @@ export class SecurityTable implements OnInit, OnChanges {
 
   private loadTableRowsUponHeaderChange() {
     this.tableData.data.headers.forEach((eachHeader, index) => {
-      if (!eachHeader.state.isPureTextVariant && !eachHeader.state.isQuantVariant) {
+      if (!eachHeader.state.isSecurityCardVariant && !eachHeader.state.isQuantVariant) {
         this.tableData.data.rows.forEach((eachRow) => {
           const targetCell = eachRow.data.cells[index-1];
           if (!!targetCell) {
@@ -201,7 +201,7 @@ export class SecurityTable implements OnInit, OnChanges {
             const newCell = this.utilityService.populateSecurityTableCellFromSecurityCard(
               eachHeader,
               eachRow,
-              this.dtoService.formSecurityTableCellObject(false, null, false),
+              this.dtoService.formSecurityTableCellObject(false, null, false, null, null),
               this.activeTriCoreDriver
             );
             eachRow.data.cells[index-1] = newCell;

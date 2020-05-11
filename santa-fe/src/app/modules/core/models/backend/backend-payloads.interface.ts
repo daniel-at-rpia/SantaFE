@@ -22,10 +22,13 @@ export interface PayloadGetGroupHistoricalSummary {
 }
 
 export interface PayloadGetTradeFullData {
-  maxNumberOfSecurities: number,
+  maxNumberOfSecurities: number;
   groupIdentifier: object;
-  groupFilters: object;
-  lookbackHrs?: number
+  groupFilters: {
+    PortfolioShortName?: Array<string>;
+    SecurityIdentifier?: Array<string>;
+  };
+  lookbackHrs?: number;
 }
 
 export interface PayloadGetBestQuotes {

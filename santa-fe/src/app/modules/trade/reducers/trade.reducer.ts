@@ -6,7 +6,8 @@ import {
 
 import {
   SecurityTableRowDTO,
-  SecurityDTO
+  SecurityDTO,
+  AlertDTO
 } from 'FEModels/frontend-models.interface';
 import {
   TradeActions,
@@ -31,6 +32,7 @@ export interface TradeState {
   selectedSecurityForAlertConfig: SecurityDTO;
   focusMode: boolean;
   darkMode: boolean;
+  newAlertsForAlertTable: Array<AlertDTO>;
 }
 
 const initialState: TradeState = {
@@ -47,7 +49,8 @@ const initialState: TradeState = {
   bestQuoteValidWindow: null,
   selectedSecurityForAlertConfig: null,
   focusMode: false,
-  darkMode: false
+  darkMode: false,
+  newAlertsForAlertTable: []
 };
 
 export function tradeReducer(
@@ -141,6 +144,16 @@ export function tradeReducer(
       return {
         ...state,
         focusMode: action.payload
+      }
+    case TradeActions.AlertTableSendNewAlerts:
+      return {
+        ...state,
+        newAlertsForAlertTable: state.newAlertsForAlertTable.concat(action.list)
+      }
+    case TradeActions.AlertTableReceiveNewAlerts:
+      return {
+        ...state,
+        newAlertsForAlertTable: []
       }
     default:
       return state;

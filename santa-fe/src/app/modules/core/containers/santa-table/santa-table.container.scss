@@ -94,7 +94,7 @@ $alt-background: $color_white;
 
         .ag-sort-descending-icon, .ag-sort-ascending-icon {
           position: absolute;
-          right: 0;
+          right: $spacing_x_small;
         }
 
         .ag-cell-label-container {
@@ -139,31 +139,37 @@ $alt-background: $color_white;
           }
         }
 
-        &--BestQuote {
+        &--bestQuote {
           @include header-color($distinguish_type_color_1);
         }
-        &--Mark {
+        &--mark {
           @include header-color($distinguish_type_color_2);
         }
-        &--MarkDiscrepancies {
+        &--markDiscrepancies {
           @include header-color($distinguish_type_color_3);
         }
-        &--PositionMM {
-          @include header-color($distinguish_type_color_4);
+        &--cost {
+          @include header-color($distinguish_type_color_4)
         }
-        &--CS01k {
+        &--position {
           @include header-color($distinguish_type_color_5);
         }
-        &--SecurityDriverDeltas {
+        &--cs01 {
           @include header-color($distinguish_type_color_6);
         }
-        &--SecurityInfo {
+        &--delta {
           @include header-color($distinguish_type_color_7);
         }
-        &--Ownership {
+        &--securityInfo {
           @include header-color($distinguish_type_color_1);
         }
-        &--NoGroup {
+        &--ownership {
+          @include header-color($distinguish_type_color_2);
+        }
+        &--alert {
+          @include header-color($distinguish_type_color_6);
+        }
+        &--noGroup {
           @include header-color(transparent, black);
         }
         .ag-header-cell {

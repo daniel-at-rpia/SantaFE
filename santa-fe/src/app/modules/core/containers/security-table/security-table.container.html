@@ -11,7 +11,7 @@
             *ngFor="let eachHead of tableData.data.headers; let headIndex = index"
             [ngClass]="{
               'sat-securityTableHead': true,
-              'sat-securityTableHead--securityCardVariant': eachHead.state.isPureTextVariant,
+              'sat-securityTableHead--securityCardVariant': eachHead.state.isSecurityCardVariant,
               'sat-securityTableHead--quantVariant': eachHead.state.isQuantVariant,
               'sat-securityTableHead--selectedState': tableData.state.selectedHeader?.data.displayLabel === eachHead.data.displayLabel,
               'sat-securityTableHead--sortedState': tableData.state.sortedByHeader?.data.displayLabel === eachHead.data.displayLabel

@@ -8,20 +8,11 @@
       BESecurityDeltaMetricDTO,
       BESecurityGroupDTO
     } from 'BEModels/backend-models.interface';
-    import {
-      SecurityDTO,
-      SecurityTableHeaderDTO,
-      SecurityTableRowDTO,
-      SecurityTableCellDTO,
-      SecurityGroupDTO,
-      SecurityDefinitionDTO,
-      SecurityDefinitionConfiguratorDTO,
-      QuantComparerDTO,
-      SearchShortcutDTO
-    } from 'FEModels/frontend-models.interface';
+    import * as DTOs from 'FEModels/frontend-models.interface';
     import {
       SecurityGroupMetricBlock,
-      SecurityGroupMetricPackBlock
+      SecurityGroupMetricPackBlock,
+      SecurityCostPortfolioBlock
     } from 'FEModels/frontend-blocks.interface';
     import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
     import {
@@ -190,14 +181,14 @@ export class UtilityService {
 
     public isCDS(
       isGroup: boolean,
-      input: SecurityGroupDTO | BESecurityGroupDTO | SecurityDTO | BESecurityDTO
+      input: DTOs.SecurityGroupDTO | BESecurityGroupDTO | DTOs.SecurityDTO | BESecurityDTO
     ): boolean {
       if (!input) {
         return false;
       }
       if (isGroup) {
         if (input['data']) {
-          const dtoInput = input as SecurityGroupDTO;
+          const dtoInput = input as DTOs.SecurityGroupDTO;
           return dtoInput.data.name.indexOf('Cds') >= 0;
         } else {
           const rawDataInput = input as BESecurityGroupDTO;
@@ -205,7 +196,7 @@ export class UtilityService {
         }
       } else {
         if (input['data']) {
-          const dtoInput = input as SecurityDTO;
+          const dtoInput = input as DTOs.SecurityDTO;
           return dtoInput.data.name.indexOf('CDS') >= 0;
         } else {
           const rawDataInput = input as BESecurityDTO;
@@ -216,11 +207,11 @@ export class UtilityService {
 
     public isFloat(
       isGroup: boolean,
-      input: SecurityGroupDTO | BESecurityGroupDTO | SecurityDTO | BESecurityDTO
+      input: DTOs.SecurityGroupDTO | BESecurityGroupDTO | DTOs.SecurityDTO | BESecurityDTO
     ): boolean {
       if (isGroup) {
         if (input['data']) {
-          const dtoInput = input as SecurityGroupDTO;
+          const dtoInput = input as DTOs.SecurityGroupDTO;
           return dtoInput.data.definitionConfig['CouponType'] && dtoInput.data.definitionConfig['CouponType'] === ['Float'];
         } else {
           const rawDataInput = input as BESecurityGroupDTO;
@@ -369,9 +360,9 @@ export class UtilityService {
     }
 
     public applyShortcutToConfigurator(
-      targetShortcut: SearchShortcutDTO,
-      targetConfigurator: SecurityDefinitionConfiguratorDTO
-    ): SecurityDefinitionConfiguratorDTO {
+      targetShortcut: DTOs.SearchShortcutDTO,
+      targetConfigurator: DTOs.SecurityDefinitionConfiguratorDTO
+    ): DTOs.SecurityDefinitionConfiguratorDTO {
       const newConfig = this.deepCopy(targetConfigurator);
       const shortcutCopy = this.deepCopy(targetShortcut);
       shortcutCopy.data.configuration.forEach((eachShortcutDef) => {
@@ -389,7 +380,7 @@ export class UtilityService {
     }
 
     public packDefinitionConfiguratorEmitterParams(
-      configuratorData: SecurityDefinitionConfiguratorDTO
+      configuratorData: DTOs.SecurityDefinitionConfiguratorDTO
     ): DefinitionConfiguratorEmitterParams {
       const params: DefinitionConfiguratorEmitterParams = {
         filterList: []
@@ -427,7 +418,7 @@ export class UtilityService {
     public parseTriCoreDriverNumber(
       targetNumber,
       targetDriver: string,
-      targetSecurity: SecurityDTO,
+      targetSecurity: DTOs.SecurityDTO,
       isToFixed: boolean
     ): number|string {
       if (targetNumber != null && !!targetDriver) {
@@ -464,7 +455,7 @@ export class UtilityService {
         case AlertTypes.marketListAlert:
           return AlertTypes.marketListAlert;
         default:
-          return null;
+          return AlertTypes.default;
       }
     }
 
@@ -475,9 +466,9 @@ export class UtilityService {
         case AlertSubTypes.bid:
           return AlertSubTypes.bid;
         case AlertSubTypes.both:
-          return null;  // both is not a valid type in FE
+          return AlertSubTypes.default;  // both is not a valid type in FE
         case AlertSubTypes.liquidation:
-          return null;  // liquidation is not a valid type in FE
+          return AlertSubTypes.default;  // liquidation is not a valid type in FE
         case AlertSubTypes.bwic:
           return AlertSubTypes.bwic;
         case AlertSubTypes.owic:
@@ -487,7 +478,7 @@ export class UtilityService {
         case AlertSubTypes.ratingChange:
           return AlertSubTypes.ratingChange;
         default:
-          return null;
+          return AlertSubTypes.default;
       }
     }
   // shared end
@@ -501,7 +492,7 @@ export class UtilityService {
       return `${name}/${normalizedOption}`;
     }
 
-    public retrieveGroupMetricValue(metricDTO: SecurityGroupMetricBlock, groupDTO: SecurityGroupDTO): number {
+    public retrieveGroupMetricValue(metricDTO: SecurityGroupMetricBlock, groupDTO: DTOs.SecurityGroupDTO): number {
       if (!!groupDTO && !!metricDTO) {
         const driverLabel = metricDTO.label;
         let value, deltaSubPack;
@@ -577,7 +568,7 @@ export class UtilityService {
       }
     }
 
-    public flattenDefinitionList(configurator: SecurityDefinitionConfiguratorDTO): Array<SecurityDefinitionDTO> {
+    public flattenDefinitionList(configurator: DTOs.SecurityDefinitionConfiguratorDTO): Array<DTOs.SecurityDefinitionDTO> {
       const flattenDefinitionList = [];
       configurator.data.definitionList.forEach((eachBundle) => {
         eachBundle.data.list.forEach((eachDefinition) => {
@@ -610,11 +601,11 @@ export class UtilityService {
 
     // TODO: move this into a SecurityTableHelper service
     public populateSecurityTableCellFromSecurityCard(
-      targetHeader: SecurityTableHeaderDTO,
-      targetRow: SecurityTableRowDTO,
-      newCellDTO: SecurityTableCellDTO,
+      targetHeader: DTOs.SecurityTableHeaderDTO,
+      targetRow: DTOs.SecurityTableRowDTO,
+      newCellDTO: DTOs.SecurityTableCellDTO,
       triCoreMetric: string
-    ): SecurityTableCellDTO {
+    ): DTOs.SecurityTableCellDTO {
       if (targetHeader.state.isQuantVariant) {
         let targetDriver = triCoreMetric;
         if (triCoreMetric === DEFAULT_DRIVER_IDENTIFIER) {
@@ -643,8 +634,8 @@ export class UtilityService {
     }
 
     private populateMarkDataInSecurityCardWithBestQuoteData(
-      targetSecurity: SecurityDTO,
-      newCellDTO: SecurityTableCellDTO,
+      targetSecurity: DTOs.SecurityDTO,
+      newCellDTO: DTOs.SecurityTableCellDTO,
       targetDriver: string
     ) {
       // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
@@ -682,14 +673,16 @@ export class UtilityService {
 
     // TODO: move this into a SecurityTableHelper service
     public retrieveAttrFromSecurityBasedOnTableHeader(
-      targetHeader: SecurityTableHeaderDTO,
-      securityCard: SecurityDTO,
+      targetHeader: DTOs.SecurityTableHeaderDTO,
+      securityCard: DTOs.SecurityDTO,
       isRetrievingUnderlineValue: boolean
     ): any {
       if (!!targetHeader && !!securityCard) {
         if (!!targetHeader.data.blockAttrName) {
           if (targetHeader.data.blockAttrName === 'metricPack') {
             return this.retrieveSecurityMetricFromMetricPack(securityCard, targetHeader);
+          } else if (targetHeader.data.blockAttrName === 'cost') {
+            return this.retrieveSecurityMetricFromCostPack(securityCard, targetHeader);
           } else {
             return isRetrievingUnderlineValue ? securityCard.data[targetHeader.data.blockAttrName][targetHeader.data.underlineAttrName] : securityCard.data[targetHeader.data.blockAttrName][targetHeader.data.attrName];
           }
@@ -702,7 +695,7 @@ export class UtilityService {
     }
 
     // TODO: move this into a SecurityTableHelper service
-    private retrieveSecurityMetricFromMetricPack(dto: SecurityDTO, header: SecurityTableHeaderDTO): number {
+    private retrieveSecurityMetricFromMetricPack(dto: DTOs.SecurityDTO, header: DTOs.SecurityTableHeaderDTO): number {
       if (!!dto && !!header) {
         if (header.data.key === 'indexMark') {
           if (!dto.data.hasIndex) {
@@ -735,9 +728,87 @@ export class UtilityService {
     }
 
     // TODO: move this into a SecurityTableHelper service
+    private retrieveSecurityMetricFromCostPack(
+      dto: DTOs.SecurityDTO,
+      header: DTOs.SecurityTableHeaderDTO
+    ): number {
+      if (!!dto && !!header) {
+        let targetBlock = null;
+        if (header.data.key === 'costCurrentFifo' || header.data.key === 'costCurrentWeightedAvg') {
+          // TODO: at the moment this variable is really just "filtered portfolios", so a value of empty string means include every portfolio, this will be changed once we start support entire security universe
+          if (header.data.activePortfolios.length > 0) {
+            targetBlock = dto.data.cost.current;
+            header.data.activePortfolios.forEach((eachPortfolio) => {
+              const portfolioExist = dto.data.portfolios.find((eachPortfolioBlock) => {
+                return eachPortfolioBlock.portfolioName === eachPortfolio;
+              });
+              if (!!portfolioExist) {
+                dto.data.cost.current.fifo['Default Spread'] = dto.data.cost.current.fifo['Default Spread'] + portfolioExist.costFifoSpread;
+                dto.data.cost.current.fifo.Price = dto.data.cost.current.fifo.Price + portfolioExist.costFifoPrice;
+                dto.data.cost.current.weightedAvg['Default Spread'] = dto.data.cost.current.weightedAvg['Default Spread'] + portfolioExist.costFifoSpread;
+                dto.data.cost.current.weightedAvg.Price = dto.data.cost.current.weightedAvg.Price + portfolioExist.costFifoPrice;
+              }
+            });
+          } else {
+            targetBlock = dto.data.cost.firm;
+          }
+        } else {
+          targetBlock = this.determineCostPortfolioForRetrieveSecurityMetricFromCostPack(dto, header);
+        }
+        if (!!targetBlock) {
+          const isFifo = header.data.key.indexOf('fifo') >= 0;
+          const targetInnerBlock = isFifo ? targetBlock.fifo : targetBlock.weightedAvg;
+          const targetAttr = 
+            header.data.underlineAttrName !== DEFAULT_DRIVER_IDENTIFIER 
+              ? header.data.underlineAttrName 
+              : dto.data.mark.markDriver === this.triCoreDriverConfig.Price.label
+                ? this.triCoreDriverConfig.Price.driverLabel 
+                : this.triCoreDriverConfig.Spread.driverLabel;
+          if (targetInnerBlock[targetAttr] !== undefined) {
+            return targetInnerBlock[targetAttr];
+          } else {
+            // yield is totally fine, means the user is switched to yield driver
+            if (targetAttr !== this.triCoreDriverConfig.Yield.driverLabel) {
+              console.warn('at retrieve security metric from cost pack, target block does not have targetAttr', dto, targetBlock, targetAttr);
+            }
+            return null;
+          }
+        } else {
+          return null;
+        }
+      } else {
+        return null;
+      }
+    }
+
+    private determineCostPortfolioForRetrieveSecurityMetricFromCostPack(
+      dto: DTOs.SecurityDTO,
+      header: DTOs.SecurityTableHeaderDTO
+    ): SecurityCostPortfolioBlock {
+      if (header.data.key.indexOf('DOF') >= 0) {
+        return dto.data.cost.DOF;
+      } else if (header.data.key.indexOf('SOF') >= 0) {
+        return dto.data.cost.SOF;
+      } else if (header.data.key.indexOf('STIP') >= 0) {
+        return dto.data.cost.STIP;
+      } else if (header.data.key.indexOf('FIP') >= 0) {
+        return dto.data.cost.FIP;
+      } else if (header.data.key.indexOf('CIP') >= 0) {
+        return dto.data.cost.CIP;
+      } else if (header.data.key.indexOf('AGB') >= 0) {
+        return dto.data.cost.AGB;
+      } else if (header.data.key.indexOf('BBB') >= 0) {
+        return dto.data.cost.BBB;
+      } else {
+        console.warn('At determine cost portfolio, looking for a portfolio that does not exist', header.data.key);
+        return null;
+      }
+    }
+
+    // TODO: move this into a SecurityTableHelper service
     public calculateMarkDiscrepancies(
-      targetSecurity: SecurityDTO,
-      targetQuant: QuantComparerDTO,
+      targetSecurity: DTOs.SecurityDTO,
+      targetQuant: DTOs.QuantComparerDTO,
       activeDriver: string
     ) {
       const markBlock = targetSecurity.data.mark;
@@ -796,7 +867,7 @@ export class UtilityService {
       }
     }
 
-    public findSecurityTargetDefaultTriCoreDriver(targetSecurity: SecurityDTO): string {
+    public findSecurityTargetDefaultTriCoreDriver(targetSecurity: DTOs.SecurityDTO): string {
       const BEDriver = targetSecurity.data.mark.markDriver;
       switch (BEDriver) {
         case null:
@@ -829,6 +900,31 @@ export class UtilityService {
         }
       } else {
         return null;
+      }
+    }
+
+    public highlightSecurityQutoe(
+      targetQuote: DTOs.SecurityQuoteDTO,
+      targetRow: DTOs.SecurityTableRowDTO
+    ) {
+      const quantCell = targetRow.data.cells.find((eachCell) => {
+        return eachCell.state.isQuantVariant && !eachCell.state.quantComparerUnavail
+      });
+      if (quantCell) {
+        const {axe, combined} = targetRow.data.bestQuotes;
+        const filteredMetricType = quantCell.data.quantComparerDTO.data.driverType;
+        const bestAxeBidNum = this.triCoreDriverConfig[filteredMetricType] ? axe[this.triCoreDriverConfig[filteredMetricType].backendTargetQuoteAttr].data.bid.number : null;
+        const bestAxeAskNum = this.triCoreDriverConfig[filteredMetricType] ? axe[this.triCoreDriverConfig[filteredMetricType].backendTargetQuoteAttr].data.offer.number : null;
+        const bestBidNum = this.triCoreDriverConfig[filteredMetricType] ? combined[this.triCoreDriverConfig[filteredMetricType].backendTargetQuoteAttr].data.bid.number : null;
+        const bestAskNum = this.triCoreDriverConfig[filteredMetricType] ? combined[this.triCoreDriverConfig[filteredMetricType].backendTargetQuoteAttr].data.offer.number : null;
+        targetQuote.data.currentMetric = filteredMetricType;
+        targetQuote.state.filteredByPrice = filteredMetricType === this.triCoreDriverConfig.Price.label;
+        targetQuote.state.filteredBySpread = filteredMetricType === TriCoreDriverConfig.Spread.label;
+        targetQuote.state.filteredByYield = filteredMetricType === TriCoreDriverConfig.Yield.label;
+        targetQuote.state.isBestBid = targetQuote.data.bid.tspread == bestBidNum || targetQuote.data.bid.price == bestBidNum || targetQuote.data.bid.yield == bestBidNum;
+        targetQuote.state.isBestOffer = targetQuote.data.ask.tspread == bestAskNum || targetQuote.data.ask.price == bestAskNum || targetQuote.data.ask.yield == bestAskNum;
+        targetQuote.state.isBestAxeBid = bestAxeBidNum && (targetQuote.data.bid.tspread == bestAxeBidNum || targetQuote.data.bid.price == bestAxeBidNum || targetQuote.data.bid.yield == bestAxeBidNum);
+        targetQuote.state.isBestAxeOffer = bestAxeAskNum && (targetQuote.data.ask.tspread == bestAxeAskNum || targetQuote.data.ask.price == bestAxeAskNum || targetQuote.data.ask.yield == bestAxeAskNum);
       }
     }
   // trade specific end

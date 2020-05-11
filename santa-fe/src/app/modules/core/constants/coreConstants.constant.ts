@@ -203,7 +203,8 @@ export const EngagementActionList = {
 export enum AlertTypes {
   axeAlert = 'Axe',
   markAlert = 'Mark',
-  marketListAlert = 'MarketList'
+  marketListAlert = 'MarketList',
+  default = ''
 }
 
 export enum AlertSubTypes {
@@ -214,7 +215,8 @@ export enum AlertSubTypes {
   bwic = 'Bwic',
   owic = 'Owic',
   quantityChange = 'QuantityChange',
-  ratingChange = 'RatingChange'
+  ratingChange = 'RatingChange',
+  default = ''
 }
 
 export const ALERT_COUNTDOWN = 5000;
