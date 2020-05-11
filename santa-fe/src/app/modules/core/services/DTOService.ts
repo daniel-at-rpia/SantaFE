@@ -155,6 +155,16 @@ export class DTOService {
               'Price': null
             }
           },
+          firm: {
+            fifo: {
+              'Default Spread': null,
+              'Price': null
+            },
+            weightedAvg: {
+              'Default Spread': null,
+              'Price': null
+            }
+          },
           DOF: null,
           SOF: null,
           STIP: null,
@@ -313,6 +323,10 @@ export class DTOService {
           break;
       }
       block.positionFirm = block.positionFirm + eachPortfolioBlock.quantity;
+      dto.data.cost.firm.fifo['Default Spread'] = dto.data.cost.firm.fifo['Default Spread'] + eachPortfolioBlock.costFifoSpread;
+      dto.data.cost.firm.fifo.Price = dto.data.cost.firm.fifo.Price + eachPortfolioBlock.costFifoPrice;
+      dto.data.cost.firm.weightedAvg['Default Spread'] = dto.data.cost.firm.weightedAvg['Default Spread'] + eachPortfolioBlock.costWeightedAvgSpread;
+      dto.data.cost.firm.weightedAvg.Price = dto.data.cost.firm.weightedAvg.Price + eachPortfolioBlock.costWeightedAvgPrice;
       if (eachPortfolioBlock.strategy.length > 0 && dto.data.strategyList.indexOf(eachPortfolioBlock.strategy) < 0) {
         dto.data.strategyList.push(eachPortfolioBlock.strategy);
         if (dto.data.strategyList.length === 1) {
@@ -756,7 +770,8 @@ export class DTOService {
 
   public formSecurityTableHeaderObject(
     stub: SecurityTableMetricStub,
-    useSpecificsFrom: string
+    useSpecificsFrom: string,
+    activePortfolios: Array<string>
   ): DTOs.SecurityTableHeaderDTO {
     const object: DTOs.SecurityTableHeaderDTO = {
       data: {
@@ -773,7 +788,8 @@ export class DTOService {
         isDriverDependent: !!stub.isDriverDependent,
         groupBelongs: stub.groupBelongs,
         pinned: (useSpecificsFrom && stub.tableSpecifics[useSpecificsFrom]) ? !!stub.tableSpecifics[useSpecificsFrom].pinned : !!stub.tableSpecifics.default.pinned,
-        groupShow: (useSpecificsFrom && stub.tableSpecifics[useSpecificsFrom]) ? !!stub.tableSpecifics[useSpecificsFrom].groupShow : !!stub.tableSpecifics.default.groupShow
+        groupShow: (useSpecificsFrom && stub.tableSpecifics[useSpecificsFrom]) ? !!stub.tableSpecifics[useSpecificsFrom].groupShow : !!stub.tableSpecifics.default.groupShow,
+        activePortfolios: activePortfolios || []
       },
       state: {
         isQuantVariant: !!stub.isForQuantComparer,

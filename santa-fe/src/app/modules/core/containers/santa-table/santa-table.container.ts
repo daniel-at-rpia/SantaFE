@@ -46,6 +46,7 @@
 
 export class SantaTable implements OnInit, OnChanges {
   @Input() ownerInitial: string;
+  @Input() activePortfolios: Array<string>;  // TODO: at the moment this variable is really just "filtered portfolios", so a value of empty string means include every portfolio, this will be changed once we start support entire security universe
   @Input() tableName: string;
   @Input() tableData: SecurityTableDTO;
   @Input() newRows: Array<SecurityTableRowDTO>;
@@ -308,9 +309,21 @@ export class SantaTable implements OnInit, OnChanges {
     this.securityTableMetrics.forEach((eachStub) => {
       const targetSpecifics = eachStub.tableSpecifics[this.tableName] || eachStub.tableSpecifics.default;
       if (eachStub.isForSecurityCard || targetSpecifics.active) {
-        this.tableData.data.headers.push(this.dtoService.formSecurityTableHeaderObject(eachStub, this.tableName));
+        this.tableData.data.headers.push(
+          this.dtoService.formSecurityTableHeaderObject(
+            eachStub,
+            this.tableName,
+            this.activePortfolios
+          )
+        );
       }
-      this.tableData.data.allHeaders.push(this.dtoService.formSecurityTableHeaderObject(eachStub, this.tableName));
+      this.tableData.data.allHeaders.push(
+        this.dtoService.formSecurityTableHeaderObject(
+          eachStub,
+          this.tableName,
+          this.activePortfolios
+        )
+      );
     });
     if (this.tableData.state.isAgGridReady && !skipAgGrid) {
       this.tableData.data.agGridColumnDefs = this.agGridMiddleLayerService.loadAgGridHeaders(this.tableData);

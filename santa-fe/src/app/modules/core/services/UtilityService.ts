@@ -735,7 +735,23 @@ export class UtilityService {
       if (!!dto && !!header) {
         let targetBlock = null;
         if (header.data.key === 'costCurrentFifo' || header.data.key === 'costCurrentWeightedAvg') {
-          targetBlock = dto.data.cost.current;
+          // TODO: at the moment this variable is really just "filtered portfolios", so a value of empty string means include every portfolio, this will be changed once we start support entire security universe
+          if (header.data.activePortfolios.length > 0) {
+            targetBlock = dto.data.cost.current;
+            header.data.activePortfolios.forEach((eachPortfolio) => {
+              const portfolioExist = dto.data.portfolios.find((eachPortfolioBlock) => {
+                return eachPortfolioBlock.portfolioName === eachPortfolio;
+              });
+              if (!!portfolioExist) {
+                dto.data.cost.current.fifo['Default Spread'] = dto.data.cost.current.fifo['Default Spread'] + portfolioExist.costFifoSpread;
+                dto.data.cost.current.fifo.Price = dto.data.cost.current.fifo.Price + portfolioExist.costFifoPrice;
+                dto.data.cost.current.weightedAvg['Default Spread'] = dto.data.cost.current.weightedAvg['Default Spread'] + portfolioExist.costFifoSpread;
+                dto.data.cost.current.weightedAvg.Price = dto.data.cost.current.weightedAvg.Price + portfolioExist.costFifoPrice;
+              }
+            });
+          } else {
+            targetBlock = dto.data.cost.firm;
+          }
         } else {
           targetBlock = this.determineCostPortfolioForRetrieveSecurityMetricFromCostPack(dto, header);
         }

@@ -82,6 +82,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     };
     cost: {
       current: SecurityCostPortfolioBlock;
+      firm: SecurityCostPortfolioBlock;
       DOF: SecurityCostPortfolioBlock;
       SOF: SecurityCostPortfolioBlock;
       STIP: SecurityCostPortfolioBlock;
@@ -327,6 +328,7 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     pinned: boolean;
     groupBelongs: string;
     groupShow: boolean;
+    activePortfolios: Array<string>;
   },
   state: {
     isSecurityCardVariant: boolean;

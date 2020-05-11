@@ -309,7 +309,7 @@ export class AgGridMiddleLayerService {
         if (targetStub) {
           const securityA = nodeA.data ? nodeA.data.securityCard : null;
           const securityB = nodeB.data ? nodeB.data.securityCard : null;
-          const targetHeader = this.dtoService.formSecurityTableHeaderObject(targetStub, 'default');
+          const targetHeader = this.dtoService.formSecurityTableHeaderObject(targetStub, 'default', []);
           const underlineValueA = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityA, true);
           const underlineValueB = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityB, true);
           return this.returnSortValue(targetHeader, underlineValueA, underlineValueB, securityA, securityB);
