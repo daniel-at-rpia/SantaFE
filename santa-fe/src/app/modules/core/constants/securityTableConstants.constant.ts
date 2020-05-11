@@ -72,6 +72,25 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       }
     }
   },{
+    key: 'alertSide',
+    label: 'Side',
+    attrName: 'alertSide',
+    underlineAttrName: 'alertSide',
+    blockAttrName: 'alert',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    groupBelongs: SecurityTableMetricGroups.alert,
+    tableSpecifics: {
+      default: {
+        active: false,
+        disabled: true
+      },
+      tradeAlert: {
+        active: true,
+        disabled: false,
+        groupShow: true
+      }
+    }
+  },{
     key: 'alertTime',
     label: 'Time',
     attrName: 'alertTime',

@@ -758,9 +758,6 @@ export class UtilityService {
         if (!!targetBlock) {
           const isFifo = header.data.key.indexOf('Fifo') >= 0;
           const targetInnerBlock = isFifo ? targetBlock.fifo : targetBlock.weightedAvg;
-          if (isFifo) {
-            console.log('test');
-          }
           const targetAttr = 
             header.data.underlineAttrName !== DEFAULT_DRIVER_IDENTIFIER 
               ? header.data.underlineAttrName 

@@ -1,4 +1,5 @@
 <article
+  *ngIf="sideData"
   [ngClass]="{
     'santaTableAlertSideCell': true,
     'santaTableAlertSideCell--sideBid': sideData.data.side === 'bid',
