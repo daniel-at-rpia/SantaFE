@@ -301,7 +301,7 @@ export class AgGridMiddleLayerService {
       const columns = nodeA.columnController.allDisplayedColumns;
       if (!!columns) {
         const targetColumn = columns.find((eachColumn) => {
-          return !!eachColumn.sort;
+          return !!eachColumn.sort && eachColumn.colId !== "ag-Grid-AutoColumn";
         })
         const targetStub = SecurityTableMetrics.find((eachMetric) => {
           return eachMetric.key === targetColumn.colDef.field;
@@ -336,7 +336,7 @@ export class AgGridMiddleLayerService {
     inverted: boolean
   ) {
     // as long as we only have one quantComparer in the table there is no need to find out the column
-    if (!!nodeA && !!nodeB) {
+    if (!!nodeA && !!nodeB && !nodeA.group && !nodeB.group) {
       const securityA = nodeA.data.securityCard;
       const securityB = nodeB.data.securityCard;
       const valueA = !!qA ? qA.data.delta : null;
