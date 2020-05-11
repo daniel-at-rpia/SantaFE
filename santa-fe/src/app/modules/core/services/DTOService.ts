@@ -226,6 +226,30 @@ export class DTOService {
       costWeightedAvgSpread: !!lastTrade ? lastTrade.wgtAvgSpread : null,
       costWeightedAvgPrice: !!lastTrade ? lastTrade.wgtAvgPrice : null
     };
+    newBlock.costFifoSpread = this.utility.parseTriCoreDriverNumber(
+      newBlock.costFifoSpread,
+      TriCoreDriverConfig.Spread.label,
+      dto,
+      false
+    ) as number;
+    newBlock.costFifoPrice = this.utility.parseTriCoreDriverNumber(
+      newBlock.costFifoPrice,
+      TriCoreDriverConfig.Price.label,
+      dto,
+      false
+    ) as number;
+    newBlock.costWeightedAvgSpread = this.utility.parseTriCoreDriverNumber(
+      newBlock.costWeightedAvgSpread,
+      TriCoreDriverConfig.Spread.label,
+      dto,
+      false
+    ) as number;
+    newBlock.costWeightedAvgPrice = this.utility.parseTriCoreDriverNumber(
+      newBlock.costWeightedAvgPrice,
+      TriCoreDriverConfig.Price.label,
+      dto,
+      false
+    ) as number;
     dto.data.portfolios.push(newBlock);
     const newCostPortfolioBlock: Blocks.SecurityCostPortfolioBlock = {
       fifo: {
