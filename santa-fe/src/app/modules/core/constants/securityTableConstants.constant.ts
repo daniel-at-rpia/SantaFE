@@ -20,7 +20,7 @@ export const AGGRID_DETAIL_COLUMN_WIDTH = 50;
 export const AGGRID_SECURITY_CARD_COLUMN_WIDTH = 276;
 export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_quant + $spacing_small * 2
 export const AGGRID_ALERT_SIDE_COLUMN_WIDTH = 115;
-export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 117;
+export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 135;
 export const AGGRID_SIMPLE_TEXT_COLUMN_WIDTH = 135;
 export const AGGRID_ROW_HEIGHT = 40;
 export const AGGRID_DETAIL_ROW_HEIGHT_PER_ROW = 34;
@@ -494,7 +494,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     }
   },{
     key: 'markDeltaToLiquidation',
-    label: 'Δ to Liquidation',
+    label: 'Δ to Liquid',
     attrName: 'markDisLiquidation',
     underlineAttrName: 'markDisLiquidationRaw',
     blockAttrName: 'mark',
@@ -833,7 +833,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     }
   },{
     key: 'currentPosition',
-    label: 'Current Filtered Position',
+    label: 'Position',
     attrName: 'positionCurrentInMM',
     underlineAttrName: 'positionCurrent',
     blockAttrName: 'position',
