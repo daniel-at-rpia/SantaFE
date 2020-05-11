@@ -370,7 +370,7 @@ export class DTOService {
       alertTarget: targetAlert.data.titleTop,
       alertSide: null,
       alertLevel: this.utility.parseTriCoreDriverNumber(targetAlert.data.level, dto.data.mark.markDriver, dto, true) as string,
-      alertQuantity: this.utility.parseNumberToThousands(targetAlert.data.quantity, true),
+      alertQuantity: this.utility.parsePositionToMM(targetAlert.data.quantity, false),
       alertLevelRaw: targetAlert.data.level,
       alertQuantityRaw: targetAlert.data.quantity
     };
@@ -1200,7 +1200,7 @@ export class DTOService {
           default:
             break;
         }
-        object.data.level = rawData.quote['quantity'];
+        object.data.quantity = rawData.quote['quantity'];
       }
     }
     return object;
