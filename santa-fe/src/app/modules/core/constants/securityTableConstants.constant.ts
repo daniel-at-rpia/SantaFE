@@ -71,8 +71,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
         pinned: true
       }
     }
-  },
-  {
+  },{
     key: 'alertSide',
     label: 'Alert Side',
     attrName: 'alertSide',
@@ -132,6 +131,46 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       }
     }
   },{
+    key: 'alertLevel',
+    label: 'Alert Level',
+    attrName: 'alertLevel',
+    underlineAttrName: 'alertLevelRaw',
+    blockAttrName: 'alert',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isDataTypeText: false,
+    groupBelongs: SecurityTableMetricGroups.alert,
+    tableSpecifics: {
+      default: {
+        active: false,
+        disabled: true
+      },
+      tradeAlert: {
+        active: true,
+        disabled: false,
+        groupShow: true
+      }
+    }
+  },{
+    key: 'alertQuantity',
+    label: 'Alert Quantity',
+    attrName: 'alertQuantity',
+    underlineAttrName: 'alertQuantityRaw',
+    blockAttrName: 'alert',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isDataTypeText: false,
+    groupBelongs: SecurityTableMetricGroups.alert,
+    tableSpecifics: {
+      default: {
+        active: false,
+        disabled: true
+      },
+      tradeAlert: {
+        active: true,
+        disabled: false,
+        groupShow: true
+      }
+    }
+  },{
     key: 'alertMessage',
     label: 'Alert Message',
     attrName: 'alertMessage',
@@ -148,7 +187,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       tradeAlert: {
         active: true,
         disabled: false,
-        groupShow: true
+        groupShow: false
       }
     }
   },{
@@ -168,7 +207,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       tradeAlert: {
         active: true,
         disabled: false,
-        groupShow: true
+        groupShow: false
       }
     }
   },{
@@ -188,7 +227,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       tradeAlert: {
         active: true,
         disabled: false,
-        groupShow: true
+        groupShow: false
       }
     }
   },{

@@ -189,7 +189,11 @@ export class DTOService {
           alertMessage: null,
           alertValue: null,
           alertTarget: null,
-          alertSide: null
+          alertSide: null,
+          alertLevel: null,
+          alertLevelRaw: null,
+          alertQuantity: null,
+          alertQuantityRaw: null
         }
       },
       api: {
@@ -364,7 +368,11 @@ export class DTOService {
       alertMessage: targetAlert.data.message,
       alertValue: targetAlert.data.titleBottom,
       alertTarget: targetAlert.data.titleTop,
-      alertSide: null
+      alertSide: null,
+      alertLevel: this.utility.parseTriCoreDriverNumber(targetAlert.data.level, dto.data.mark.markDriver, dto, true) as string,
+      alertQuantity: this.utility.parseNumberToThousands(targetAlert.data.quantity, true),
+      alertLevelRaw: targetAlert.data.level,
+      alertQuantityRaw: targetAlert.data.quantity
     };
   }
 
@@ -1148,7 +1156,9 @@ export class DTOService {
         time: momentTime.format(`HH:mm`),
         titlePin: rawData.marketListType || null,
         validUntilTime: rawData.validUntilTime,
-        unixTimestamp: momentTime.unix()
+        unixTimestamp: momentTime.unix(),
+        level: null,
+        quantity: null
       },
       api: {
         onMouseEnterAlert: null,
@@ -1175,9 +1185,23 @@ export class DTOService {
       object.data.security.state.isMultiLineVariant = true;
       object.data.security.state.isWidthFlexible = true;
       object.state.hasSecurity = true;
-    }
-    if (!object.data.subType) {
-      console.log('test');
+      if (!!rawData.quote && !!object.data.security) {
+        const targetDriver = object.data.security.data.mark.markDriver;
+        switch (targetDriver) {
+          case TriCoreDriverConfig.Spread.label:
+            object.data.level = rawData.quote['spread'];
+            break;
+          case TriCoreDriverConfig.Price.label:
+            object.data.level = rawData.quote['price'];
+            break;
+          case TriCoreDriverConfig.Yield.label:
+            object.data.level = rawData.quote['yield'];
+            break;
+          default:
+            break;
+        }
+        object.data.level = rawData.quote['quantity'];
+      }
     }
     return object;
   }

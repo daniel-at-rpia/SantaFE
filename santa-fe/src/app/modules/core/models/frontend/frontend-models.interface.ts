@@ -116,6 +116,10 @@ export interface SecurityDTO extends BasicDTOStructure {
       alertValue: string;
       alertTarget: string;
       alertSide: string;
+      alertLevel: string;
+      alertLevelRaw: number;
+      alertQuantity: string;
+      alertQuantityRaw: number;
     }
   }
   api: {
@@ -500,6 +504,8 @@ export interface AlertDTO extends BasicDTOStructure {
     unixTimestamp: number;
     titlePin: string;
     validUntilTime: string;
+    level: number;
+    quantity: number;
   },
   state: {
     isRead: boolean;
