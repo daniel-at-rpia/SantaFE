@@ -75,7 +75,6 @@ export interface SecurityTableMetricStub {
   label: string;
   attrName: string;
   underlineAttrName: string;
-  isAttrChangable?: boolean;
   readyStage: number;
   tableSpecifics: {
     default: SecurityTableMetricStubTableSpecificsBlock;
@@ -87,7 +86,8 @@ export interface SecurityTableMetricStub {
   isForQuantComparer?: boolean;
   isForSecurityCard?: boolean;
   isDataTypeText?: boolean;
-  isDriverDependent?: boolean;
+  isDriverDependent?: boolean;  // isDriverDependent means the cells will be re-processed when driver is changed
+  isAttrChangable?: boolean;  // isAttrChangable means the 'attrName' & 'underlineAttrName' will be overwritten with driver-specific attributes, commonly used for columns that are switching between spread/price/yield
   metricPackDeltaScope?: string;
   groupBelongs: string;
 }

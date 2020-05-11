@@ -144,6 +144,15 @@ export class DTOService {
           positionBBB: 0,
           positionBBBInMM: null
         },
+        cost: {
+          DOF: null,
+          SOF: null,
+          STIP: null,
+          FIP: null,
+          CIP: null,
+          AGB: null,
+          BBB: null
+        },
         metricPack: this.utility.packMetricData(rawData),
         bestQuote: {
           bid: null,
@@ -205,14 +214,30 @@ export class DTOService {
     dto: DTOs.SecurityDTO,
     targetPortfolio: BEPortfolioDTO
   ) {
+    const lastTrade = !!targetPortfolio.trades && targetPortfolio.trades.length > 0 ? targetPortfolio.trades[targetPortfolio.trades.length-1] : null;
     const newBlock: Blocks.SecurityPortfolioBlock = {
       portfolioName: targetPortfolio.partitionOptionValue.PortfolioShortName,
       quantity: targetPortfolio.quantity,
       strategy: targetPortfolio.partitionOptionValue.StrategyName,
       cs01Cad: targetPortfolio.cs01Cad,
-      cs01Local: targetPortfolio.cs01Local
+      cs01Local: targetPortfolio.cs01Local,
+      costFifoSpread: !!lastTrade ? lastTrade.fifoAvgSpread : null,
+      costFifoPrice: !!lastTrade ? lastTrade.fifoAvgPrice : null,
+      costWeightedAvgSpread: !!lastTrade ? lastTrade.wgtAvgSpread : null,
+      costWeightedAvgPrice: !!lastTrade ? lastTrade.wgtAvgPrice : null
     };
     dto.data.portfolios.push(newBlock);
+    const newCostPortfolioBlock: Blocks.SecurityCostPortfolioBlock = {
+      fifo: {
+        'Default Spread': newBlock.costFifoSpread,
+        'Price': newBlock.costFifoPrice
+      },
+      weightedAvg: {
+        'Default Spread': newBlock.costWeightedAvgSpread,
+        'Price': newBlock.costWeightedAvgPrice
+      }
+    };
+    dto.data.cost[newBlock.portfolioName] = newCostPortfolioBlock;
   }
 
   public appendPortfolioOverviewInfoForSecurityDTO(

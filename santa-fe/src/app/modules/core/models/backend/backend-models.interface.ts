@@ -34,8 +34,6 @@ export interface BEFullSecurityDTO {
 }
 
 export interface BEPortfolioDTO {
-  date: string;
-  securityIdentifier: string;
   partitionOptionValue: {
     PortfolioShortName: string;
     StrategyName: string;
@@ -43,6 +41,7 @@ export interface BEPortfolioDTO {
   quantity: number;
   cs01Local: number;
   cs01Cad: number;
+  trades: Array<BETradeBlock>;
 }
 
 export interface BESecurityDTO {

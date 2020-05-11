@@ -11,7 +11,8 @@
     import * as DTOs from 'FEModels/frontend-models.interface';
     import {
       SecurityGroupMetricBlock,
-      SecurityGroupMetricPackBlock
+      SecurityGroupMetricPackBlock,
+      SecurityCostPortfolioBlock
     } from 'FEModels/frontend-blocks.interface';
     import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
     import {
@@ -680,6 +681,8 @@ export class UtilityService {
         if (!!targetHeader.data.blockAttrName) {
           if (targetHeader.data.blockAttrName === 'metricPack') {
             return this.retrieveSecurityMetricFromMetricPack(securityCard, targetHeader);
+          } else if (targetHeader.data.blockAttrName === 'cost') {
+            return this.retrieveSecurityMetricFromCostPack(securityCard, targetHeader);
           } else {
             return isRetrievingUnderlineValue ? securityCard.data[targetHeader.data.blockAttrName][targetHeader.data.underlineAttrName] : securityCard.data[targetHeader.data.blockAttrName][targetHeader.data.attrName];
           }
@@ -720,6 +723,67 @@ export class UtilityService {
         }
         return value;
       } else {
+        return null;
+      }
+    }
+
+    // TODO: move this into a SecurityTableHelper service
+    private retrieveSecurityMetricFromCostPack(
+      dto: DTOs.SecurityDTO,
+      header: DTOs.SecurityTableHeaderDTO
+    ): number {
+      if (!!dto && !!header) {
+        if (header.data.key === 'costCurrentFifo' || header.data.key === 'costCurrentWeightedAvg') {
+          return -1;
+        } else {
+          const targetBlock = this.determineCostPortfolioForRetrieveSecurityMetricFromCostPack(dto, header);
+          if (!!targetBlock) {
+            const isFifo = header.data.key.indexOf('fifo') >= 0;
+            const targetInnerBlock = isFifo ? targetBlock.fifo : targetBlock.weightedAvg;
+            const targetAttr = 
+              header.data.underlineAttrName !== DEFAULT_DRIVER_IDENTIFIER 
+                ? header.data.underlineAttrName 
+                : dto.data.mark.markDriver === this.triCoreDriverConfig.Price.label
+                  ? this.triCoreDriverConfig.Price.driverLabel 
+                  : this.triCoreDriverConfig.Spread.driverLabel;
+            if (targetInnerBlock[targetAttr] !== undefined) {
+              return targetInnerBlock[targetAttr];
+            } else {
+              // yield is totally fine, means the user is switched to yield driver
+              if (targetAttr !== this.triCoreDriverConfig.Yield.driverLabel) {
+                console.warn('at retrieve security metric from cost pack, target block does not have targetAttr', dto, targetBlock, targetAttr);
+              }
+              return null;
+            }
+          } else {
+            return null;
+          }
+        }
+      } else {
+        return null;
+      }
+    }
+
+    private determineCostPortfolioForRetrieveSecurityMetricFromCostPack(
+      dto: DTOs.SecurityDTO,
+      header: DTOs.SecurityTableHeaderDTO
+    ): SecurityCostPortfolioBlock {
+      if (header.data.key.indexOf('DOF') >= 0) {
+        return dto.data.cost.DOF;
+      } else if (header.data.key.indexOf('SOF') >= 0) {
+        return dto.data.cost.SOF;
+      } else if (header.data.key.indexOf('STIP') >= 0) {
+        return dto.data.cost.STIP;
+      } else if (header.data.key.indexOf('FIP') >= 0) {
+        return dto.data.cost.FIP;
+      } else if (header.data.key.indexOf('CIP') >= 0) {
+        return dto.data.cost.CIP;
+      } else if (header.data.key.indexOf('AGB') >= 0) {
+        return dto.data.cost.AGB;
+      } else if (header.data.key.indexOf('BBB') >= 0) {
+        return dto.data.cost.BBB;
+      } else {
+        console.warn('At determine cost portfolio, looking for a portfolio that does not exist', header.data.key);
         return null;
       }
     }

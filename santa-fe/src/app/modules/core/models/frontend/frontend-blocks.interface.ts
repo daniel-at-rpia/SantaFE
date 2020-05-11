@@ -22,6 +22,21 @@ export interface SecurityPortfolioBlock {
   strategy: string;
   cs01Cad: number;
   cs01Local: number;
+  costFifoSpread: number;
+  costWeightedAvgSpread: number;
+  costFifoPrice: number;
+  costWeightedAvgPrice: number;
+}
+
+export interface SecurityCostPortfolioBlock {
+  fifo: {
+    'Default Spread': number;
+    'Price': number;
+  };
+  weightedAvg: {
+    'Default Spread': number;
+    'Price': number;
+  };
 }
 
 export interface SecurityMarkBlock {

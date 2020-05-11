@@ -40,6 +40,7 @@ export const SecurityTableMetricGroups = {
   alert: 'Alert-related',
   mark: 'Mark',
   markDiscrepancies: 'Mark Discrepancies',
+  cost: 'Position Cost',
   position: 'Position (MM)',
   cs01: 'CS01 (k)',
   delta: 'Security Driver Deltas',
@@ -469,6 +470,326 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       },
       tradeAlert: {
         active: false
+      }
+    }
+  },{
+    key: 'costCurrentFifo',
+    label: 'FIFO Cost',
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+    blockAttrName: 'cost',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    groupBelongs: SecurityTableMetricGroups.cost,
+    isDriverDependent: true,
+    isAttrChangable: true,
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: true
+      },
+      tradeAlert: {
+        active: true,
+        groupShow: true
+      }
+    }
+  },{
+    key: 'costCurrentWeightedAvg',
+    label: 'Wgt Avg Cost',
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+    blockAttrName: 'cost',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    groupBelongs: SecurityTableMetricGroups.cost,
+    isDriverDependent: true,
+    isAttrChangable: true,
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: true
+      },
+      tradeAlert: {
+        active: true,
+        groupShow: true
+      }
+    }
+  },{
+    key: 'costDOFFifo',
+    label: 'DOF FIFO Cost',
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+    blockAttrName: 'cost',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    groupBelongs: SecurityTableMetricGroups.cost,
+    isDriverDependent: true,
+    isAttrChangable: true,
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: false
+      },
+      tradeAlert: {
+        active: true,
+        groupShow: false
+      }
+    }
+  },{
+    key: 'costDOFWeightedAvg',
+    label: 'DOF Wgt Avg Cost',
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+    blockAttrName: 'cost',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    groupBelongs: SecurityTableMetricGroups.cost,
+    isDriverDependent: true,
+    isAttrChangable: true,
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: false
+      },
+      tradeAlert: {
+        active: true,
+        groupShow: false
+      }
+    }
+  },{
+    key: 'costSOFFifo',
+    label: 'SOF FIFO Cost',
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+    blockAttrName: 'cost',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    groupBelongs: SecurityTableMetricGroups.cost,
+    isDriverDependent: true,
+    isAttrChangable: true,
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: false
+      },
+      tradeAlert: {
+        active: true,
+        groupShow: false
+      }
+    }
+  },{
+    key: 'costSOFWeightedAvg',
+    label: 'SOF Wgt Avg Cost',
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+    blockAttrName: 'cost',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    groupBelongs: SecurityTableMetricGroups.cost,
+    isDriverDependent: true,
+    isAttrChangable: true,
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: false
+      },
+      tradeAlert: {
+        active: true,
+        groupShow: false
+      }
+    }
+  },{
+    key: 'costSTIPFifo',
+    label: 'STIP FIFO Cost',
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+    blockAttrName: 'cost',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    groupBelongs: SecurityTableMetricGroups.cost,
+    isDriverDependent: true,
+    isAttrChangable: true,
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: false
+      },
+      tradeAlert: {
+        active: true,
+        groupShow: false
+      }
+    }
+  },{
+    key: 'costSTIPWeightedAvg',
+    label: 'STIP Wgt Avg Cost',
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+    blockAttrName: 'cost',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    groupBelongs: SecurityTableMetricGroups.cost,
+    isDriverDependent: true,
+    isAttrChangable: true,
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: false
+      },
+      tradeAlert: {
+        active: true,
+        groupShow: false
+      }
+    }
+  },{
+    key: 'costFIPFifo',
+    label: 'FIP FIFO Cost',
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+    blockAttrName: 'cost',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    groupBelongs: SecurityTableMetricGroups.cost,
+    isDriverDependent: true,
+    isAttrChangable: true,
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: false
+      },
+      tradeAlert: {
+        active: true,
+        groupShow: false
+      }
+    }
+  },{
+    key: 'costFIPWeightedAvg',
+    label: 'FIP Wgt Avg Cost',
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+    blockAttrName: 'cost',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    groupBelongs: SecurityTableMetricGroups.cost,
+    isDriverDependent: true,
+    isAttrChangable: true,
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: false
+      },
+      tradeAlert: {
+        active: true,
+        groupShow: false
+      }
+    }
+  },{
+    key: 'costCIPFifo',
+    label: 'CIP FIFO Cost',
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+    blockAttrName: 'cost',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    groupBelongs: SecurityTableMetricGroups.cost,
+    isDriverDependent: true,
+    isAttrChangable: true,
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: false
+      },
+      tradeAlert: {
+        active: true,
+        groupShow: false
+      }
+    }
+  },{
+    key: 'costCIPWeightedAvg',
+    label: 'CIP Wgt Avg Cost',
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+    blockAttrName: 'cost',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    groupBelongs: SecurityTableMetricGroups.cost,
+    isDriverDependent: true,
+    isAttrChangable: true,
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: false
+      },
+      tradeAlert: {
+        active: true,
+        groupShow: false
+      }
+    }
+  },{
+    key: 'costAGBFifo',
+    label: 'AGB FIFO Cost',
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+    blockAttrName: 'cost',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    groupBelongs: SecurityTableMetricGroups.cost,
+    isDriverDependent: true,
+    isAttrChangable: true,
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: false
+      },
+      tradeAlert: {
+        active: true,
+        groupShow: false
+      }
+    }
+  },{
+    key: 'costAGBWeightedAvg',
+    label: 'AGB Wgt Avg Cost',
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+    blockAttrName: 'cost',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    groupBelongs: SecurityTableMetricGroups.cost,
+    isDriverDependent: true,
+    isAttrChangable: true,
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: false
+      },
+      tradeAlert: {
+        active: true,
+        groupShow: false
+      }
+    }
+  },{
+    key: 'costBBBFifo',
+    label: 'BBB FIFO Cost',
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+    blockAttrName: 'cost',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    groupBelongs: SecurityTableMetricGroups.cost,
+    isDriverDependent: true,
+    isAttrChangable: true,
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: false
+      },
+      tradeAlert: {
+        active: true,
+        groupShow: false
+      }
+    }
+  },{
+    key: 'costBBBWeightedAvg',
+    label: 'BBB Wgt Avg Cost',
+    attrName: DEFAULT_DRIVER_IDENTIFIER,
+    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+    blockAttrName: 'cost',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    groupBelongs: SecurityTableMetricGroups.cost,
+    isDriverDependent: true,
+    isAttrChangable: true,
+    tableSpecifics: {
+      default: {
+        active: true,
+        groupShow: false
+      },
+      tradeAlert: {
+        active: true,
+        groupShow: false
       }
     }
   },{

@@ -8,7 +8,8 @@ import {
   SecurityGroupPieChartBlock,
   SecurityMarkBlock,
   SecurityPortfolioBlock,
-  SecurityTableRowQuoteBlock
+  SecurityTableRowQuoteBlock,
+  SecurityCostPortfolioBlock
 } from 'FEModels/frontend-blocks.interface';
 import {AlertSubTypes, AlertTypes} from 'Core/constants/coreConstants.constant';
 import {
@@ -78,6 +79,15 @@ export interface SecurityDTO extends BasicDTOStructure {
       positionAGBInMM: string;
       positionBBB: number;
       positionBBBInMM: string;
+    };
+    cost: {
+      DOF: SecurityCostPortfolioBlock;
+      SOF: SecurityCostPortfolioBlock;
+      STIP: SecurityCostPortfolioBlock;
+      FIP: SecurityCostPortfolioBlock;
+      CIP: SecurityCostPortfolioBlock;
+      AGB: SecurityCostPortfolioBlock;
+      BBB: SecurityCostPortfolioBlock;
     }
     metricPack: SecurityGroupMetricPackBlock;
     bestQuote: {

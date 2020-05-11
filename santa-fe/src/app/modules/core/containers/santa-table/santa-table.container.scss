@@ -148,20 +148,23 @@ $alt-background: $color_white;
         &--markDiscrepancies {
           @include header-color($distinguish_type_color_3);
         }
-        &--position {
-          @include header-color($distinguish_type_color_4);
+        &--cost {
+          @include header-color($distinguish_type_color_4)
         }
-        &--cs01 {
+        &--position {
           @include header-color($distinguish_type_color_5);
         }
-        &--delta {
+        &--cs01 {
           @include header-color($distinguish_type_color_6);
         }
-        &--securityInfo {
+        &--delta {
           @include header-color($distinguish_type_color_7);
         }
-        &--ownership {
+        &--securityInfo {
           @include header-color($distinguish_type_color_1);
+        }
+        &--ownership {
+          @include header-color($distinguish_type_color_2);
         }
         &--alert {
           @include header-color($distinguish_type_color_6);
