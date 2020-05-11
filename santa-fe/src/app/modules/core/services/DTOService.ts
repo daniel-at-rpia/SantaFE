@@ -145,6 +145,16 @@ export class DTOService {
           positionBBBInMM: null
         },
         cost: {
+          current: {
+            fifo: {
+              'Default Spread': null,
+              'Price': null
+            },
+            weightedAvg: {
+              'Default Spread': null,
+              'Price': null
+            }
+          },
           DOF: null,
           SOF: null,
           STIP: null,

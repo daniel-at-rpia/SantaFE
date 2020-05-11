@@ -81,6 +81,7 @@ export interface SecurityDTO extends BasicDTOStructure {
       positionBBBInMM: string;
     };
     cost: {
+      current: SecurityCostPortfolioBlock;
       DOF: SecurityCostPortfolioBlock;
       SOF: SecurityCostPortfolioBlock;
       STIP: SecurityCostPortfolioBlock;

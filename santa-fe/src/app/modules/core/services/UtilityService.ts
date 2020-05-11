@@ -733,31 +733,32 @@ export class UtilityService {
       header: DTOs.SecurityTableHeaderDTO
     ): number {
       if (!!dto && !!header) {
+        let targetBlock = null;
         if (header.data.key === 'costCurrentFifo' || header.data.key === 'costCurrentWeightedAvg') {
-          return -1;
+          targetBlock = dto.data.cost.current;
         } else {
-          const targetBlock = this.determineCostPortfolioForRetrieveSecurityMetricFromCostPack(dto, header);
-          if (!!targetBlock) {
-            const isFifo = header.data.key.indexOf('fifo') >= 0;
-            const targetInnerBlock = isFifo ? targetBlock.fifo : targetBlock.weightedAvg;
-            const targetAttr = 
-              header.data.underlineAttrName !== DEFAULT_DRIVER_IDENTIFIER 
-                ? header.data.underlineAttrName 
-                : dto.data.mark.markDriver === this.triCoreDriverConfig.Price.label
-                  ? this.triCoreDriverConfig.Price.driverLabel 
-                  : this.triCoreDriverConfig.Spread.driverLabel;
-            if (targetInnerBlock[targetAttr] !== undefined) {
-              return targetInnerBlock[targetAttr];
-            } else {
-              // yield is totally fine, means the user is switched to yield driver
-              if (targetAttr !== this.triCoreDriverConfig.Yield.driverLabel) {
-                console.warn('at retrieve security metric from cost pack, target block does not have targetAttr', dto, targetBlock, targetAttr);
-              }
-              return null;
-            }
+          targetBlock = this.determineCostPortfolioForRetrieveSecurityMetricFromCostPack(dto, header);
+        }
+        if (!!targetBlock) {
+          const isFifo = header.data.key.indexOf('fifo') >= 0;
+          const targetInnerBlock = isFifo ? targetBlock.fifo : targetBlock.weightedAvg;
+          const targetAttr = 
+            header.data.underlineAttrName !== DEFAULT_DRIVER_IDENTIFIER 
+              ? header.data.underlineAttrName 
+              : dto.data.mark.markDriver === this.triCoreDriverConfig.Price.label
+                ? this.triCoreDriverConfig.Price.driverLabel 
+                : this.triCoreDriverConfig.Spread.driverLabel;
+          if (targetInnerBlock[targetAttr] !== undefined) {
+            return targetInnerBlock[targetAttr];
           } else {
+            // yield is totally fine, means the user is switched to yield driver
+            if (targetAttr !== this.triCoreDriverConfig.Yield.driverLabel) {
+              console.warn('at retrieve security metric from cost pack, target block does not have targetAttr', dto, targetBlock, targetAttr);
+            }
             return null;
           }
+        } else {
+          return null;
         }
       } else {
         return null;

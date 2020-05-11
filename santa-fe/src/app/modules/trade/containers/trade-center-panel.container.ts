@@ -730,6 +730,10 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
           targetRow.data.security.data.position.positionCurrent = targetRow.data.security.data.position.positionCurrent + portfolioExist.quantity;
           targetRow.data.security.data.cs01CadCurrent = targetRow.data.security.data.cs01CadCurrent + portfolioExist.cs01Cad;
           targetRow.data.security.data.cs01LocalCurrent = targetRow.data.security.data.cs01LocalCurrent + portfolioExist.cs01Local;
+          targetRow.data.security.data.cost.current.fifo['Default Spread'] = targetRow.data.security.data.cost.current.fifo['Default Spread'] + portfolioExist.costFifoSpread;
+          targetRow.data.security.data.cost.current.fifo.Price = targetRow.data.security.data.cost.current.fifo.Price + portfolioExist.costFifoPrice;
+          targetRow.data.security.data.cost.current.weightedAvg['Default Spread'] = targetRow.data.security.data.cost.current.weightedAvg['Default Spread'] + portfolioExist.costFifoSpread;
+          targetRow.data.security.data.cost.current.weightedAvg.Price = targetRow.data.security.data.cost.current.weightedAvg.Price + portfolioExist.costFifoPrice;
           includeFlag = true;
         }
       });
