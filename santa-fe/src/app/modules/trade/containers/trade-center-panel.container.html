@@ -146,16 +146,15 @@
           (onInputChange)="onSearchKeywordChange($event)">
         </santa-input>
       </div>
-      <div class="sat-tradeCenterPanel__result-quickFilters-expand">
-        <button
-          (click)="onToggleFocusMode()"
-          class="santaBtn--labelled">
+      <div class="sat-tradeCenterPanel__result-utilities-focusMode">
+        <button (click)="onToggleFocusMode()" class="sat-tradeCenterPanel__result-utilities-focusMode-cta santaBtn--labelled">
           <i
-          [ngClass]="{
-            'fal': true,
-            'fa-expand-arrows': !state.isFocusMode,
-            'fa-compress-arrows-alt': !!state.isFocusMode
-          }"></i>
+            [ngClass]="{
+              'fal': true,
+              'fa-expand-arrows': !state.isFocusMode,
+              'fa-compress-arrows-alt': !!state.isFocusMode
+            }">
+          </i>
           <span>Focused Mode</span>
         </button>
       </div>

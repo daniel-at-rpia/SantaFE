@@ -433,16 +433,16 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 5.5rem;
       }
       &__result {
         padding-top: 0;
-        &-quickFilters {
+        &-utilities {
           padding: $spacing_xx_small;
           &-keywordSearch {
             padding-left: 0;
           }
-          &-expand {
-            button {
-              background: black;
-              box-shadow: none;
+          &-focusMode {
+            &-cta {
               @extend .santaBtn--inverseLabelled;
+              @include material('none');
+              background-color: $color_active;
             }
           }
         }

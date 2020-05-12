@@ -245,17 +245,24 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         console.log('Global Alert - new alert is an update, the old one is in the sidebar', newAlert.data.id);
 
         const targetAlert = this.state.presentList[existIndexInPresent];
-        this.state.presentList[existIndexInStore] = newAlert;
-        // targetAlert.state.willBeRemoved = true;
+        targetAlert.state.willBeRemoved = true;
         const removeTarget = () => {
           const indexOfTarget = this.state.presentList.indexOf(targetAlert);
           if (indexOfTarget >= 0) {
             this.state.presentList.splice(indexOfTarget, 1);
           } else {
-            const entireList = entireListForDebugging.map((each) => {return each.data.id});
-            const oldList = this.state.presentList.map((each) => {return each.data.id});
-            this.restfulCommService.logError(`can not find alert to replace in present list, alert = ${targetAlert.data.id}, entire list = ${entireList.toString()}, oldList = ${oldList.toString()}`);
-            console.error('can not find alert to replace in present list');
+            // we want to check the storeList again because within the 300 milliseconds, the alert might have moved from the presentList to the storeList
+            const movedToStoreList = this.state.storeList.findIndex((eachAlert) => {
+              return eachAlert.data.id === targetAlert.data.id;
+            });
+            if (movedToStoreList >= 0) {
+              this.state.storeList.splice(movedToStoreList, 1);
+            } else {
+              const entireList = entireListForDebugging.map((each) => {return each.data.id});
+              const oldList = this.state.presentList.map((each) => {return each.data.id});
+              this.restfulCommService.logError(`can not find alert to replace in present list, alert = ${targetAlert.data.id}, entire list = ${entireList.toString()}, oldList = ${oldList.toString()}`);
+              console.error('can not find alert to replace in present list');
+            }
           }
         }
         setTimeout(removeTarget.bind(this), 300);
