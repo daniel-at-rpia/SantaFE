@@ -506,6 +506,7 @@ export interface AlertDTO extends BasicDTOStructure {
     validUntilTime: string;
     level: number;
     quantity: number;
+    isUrgent: boolean;
   },
   state: {
     isRead: boolean;

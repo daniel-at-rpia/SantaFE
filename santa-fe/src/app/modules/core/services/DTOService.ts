@@ -1158,7 +1158,8 @@ export class DTOService {
         validUntilTime: rawData.validUntilTime,
         unixTimestamp: momentTime.unix(),
         level: null,
-        quantity: null
+        quantity: null,
+        isUrgent: rawData.isUrgent
       },
       api: {
         onMouseEnterAlert: null,

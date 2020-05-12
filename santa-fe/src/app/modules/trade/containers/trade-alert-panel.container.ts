@@ -1,19 +1,19 @@
-// dependencies
-import {
-  Component,
-  EventEmitter,
-  Input,
-  isDevMode,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewEncapsulation
-} from '@angular/core';
-import {select, Store} from '@ngrx/store';
-import {interval, Observable, of, Subscription} from 'rxjs';
-import {catchError, first, tap, withLatestFrom} from 'rxjs/operators';
-import * as moment from 'moment';
+  // dependencies
+    import {
+      Component,
+      EventEmitter,
+      Input,
+      isDevMode,
+      OnChanges,
+      OnDestroy,
+      OnInit,
+      Output,
+      ViewEncapsulation
+    } from '@angular/core';
+    import {select, Store} from '@ngrx/store';
+    import {interval, Observable, of, Subscription} from 'rxjs';
+    import {catchError, first, tap, withLatestFrom} from 'rxjs/operators';
+    import * as moment from 'moment';
 
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
@@ -57,8 +57,7 @@ import * as moment from 'moment';
       selectPresetSelected,
       selectFocusMode
     } from 'Trade/selectors/trade.selectors';
-
-//
+  //
 
 @Component({
   selector: 'trade-alert-panel',
@@ -700,7 +699,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlerts, {req: 'POST'}, payload).pipe(
       first(),
       tap((serverReturn: Array<BEAlertDTO>) => {
-        // serverReturn.push({...mockAlert, keyWord: `${1}|${Math.random().toFixed(2)}`});
         if (!!serverReturn) {
           // temporarily filter out all the market listing alerts
           const filteredServerReturn = serverReturn.filter((eachRawAlert) => {
@@ -711,16 +709,14 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           filteredServerReturn.forEach((eachRawAlert) => {
             // checking for cancelled and active alerts
             const expired = moment().diff(moment(eachRawAlert.validUntilTime) ) > 0;
-            if (eachRawAlert.isActive && !eachRawAlert.isCancelled && !expired) {
+            if (eachRawAlert.isActive && !expired) {
               const newAlert = this.dtoService.formAlertObject(eachRawAlert);
-              updateList.push(newAlert);
+              if (newAlert.data.isUrgent) {
+                updateList.push(newAlert);
+              }
               if (newAlert.data.security && newAlert.data.security.data.securityID) {
                 securityList.push(newAlert);
               }
-            }
-            // adding cancelled as well
-            if (eachRawAlert.isCancelled) {
-              updateList.push(this.dtoService.formAlertObject(eachRawAlert));
             }
           });
           updateList.length > 0 && this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
