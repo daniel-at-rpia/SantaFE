@@ -167,6 +167,7 @@
           <button (click)="onSwitchTable()" class="sat-tradeCenterPanel__result-utilities-tableSwitch-btnGroup-alertBtn santaBtn--labelled">
             <i class="fal fa-bell"></i>
             <span>From Alerts</span>
+            <div *ngIf="state.alert.newAlertsCount > 0" class="sat-tradeCenterPanel__result-utilities-tableSwitch-btnGroup-alertBtn-newAlertsCount">{{state.alert.newAlertsCount}} new alerts</div>
           </button>
         </div>
       </div>

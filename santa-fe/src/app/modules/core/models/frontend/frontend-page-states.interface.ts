@@ -118,9 +118,12 @@ export interface TradeCenterPanelState {
     }
     securityFilters: Array<DefinitionConfiguratorEmitterParamsItem>
   }
-  alertTableAlertList: Array<DTOs.AlertDTO>;
-  initialAlertListReceived: boolean;
-  delayedLoadingFreshDataForAlert: boolean;
+  alert: {
+    alertTableAlertList: Array<DTOs.AlertDTO>;
+    initialAlertListReceived: boolean;
+    delayedLoadingFreshDataForAlert: boolean;
+    newAlertsCount: number;
+  }
 }
 
 export interface TradeUtilityPanelState {

@@ -1,8 +1,8 @@
-// dependencies
-import {Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {of, Subscription} from 'rxjs';
-import {catchError, first, tap, withLatestFrom} from 'rxjs/operators';
-import {select, Store} from '@ngrx/store';
+  // dependencies
+    import {Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+    import {of, Subscription} from 'rxjs';
+    import {catchError, first, tap, withLatestFrom} from 'rxjs/operators';
+    import {select, Store} from '@ngrx/store';
 
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
@@ -19,7 +19,7 @@ import {select, Store} from '@ngrx/store';
       SecurityTableDTO
     } from 'FEModels/frontend-models.interface';
     import { TradeCenterTableBlock } from 'FEModels/frontend-blocks.interface';
-import {PayloadGetTradeFullData} from 'BEModels/backend-payloads.interface';
+    import {PayloadGetTradeFullData} from 'BEModels/backend-payloads.interface';
     import {
       BEPortfolioDTO,
       BESecurityDTO,
@@ -68,8 +68,6 @@ import {PayloadGetTradeFullData} from 'BEModels/backend-payloads.interface';
     } from 'Trade/actions/trade.actions';
     import { SecurityTableMetricStub, SearchShortcutStub } from 'FEModels/frontend-stub-models.interface';
   //
-
-//
 
 @Component({
   selector: 'trade-center-panel',
@@ -158,9 +156,12 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         },
         securityFilters: []
       },
-      alertTableAlertList: [],
-      initialAlertListReceived: false,
-      delayedLoadingFreshDataForAlert: false
+      alert: {
+        alertTableAlertList: [],
+        initialAlertListReceived: false,
+        delayedLoadingFreshDataForAlert: false,
+        newAlertsCount: 0
+      }
     };
 
     return state;
@@ -210,12 +211,12 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       if (list) {
         if (list.length > 0) {
           list.forEach((eachAlert) => {
-            this.state.alertTableAlertList.push(eachAlert);
+            this.state.alert.alertTableAlertList.push(eachAlert);
           });
           this.store$.dispatch(new TradeAlertTableReceiveNewAlertsEvent());
         }
-        if (this.state.delayedLoadingFreshDataForAlert) {
-          this.state.delayedLoadingFreshDataForAlert = false;
+        if (this.state.alert.delayedLoadingFreshDataForAlert) {
+          this.state.alert.delayedLoadingFreshDataForAlert = false;
           this.fetchAllData(true);
         }
       }
@@ -410,12 +411,9 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
   public onSwitchTable() {
     this.state.displayAlertTable = !this.state.displayAlertTable;
-    // when table is switched, if the current stage is not finished but the new table is completed, update the current stage to complete. This is to cover the edge case where user is swtiching table while not both tables are loaded yet 
-    // if (this.state.displayAlertTable && this.state.currentContentStage !== this.constants.securityTableFinalStage && this.state.fetchResult.alertTable.fetchComplete) {
-    //   this.updateStage(this.constants.securityTableFinalStage);
-    // } else if (!this.state.displayAlertTable && this.state.currentContentStage !== this.constants.securityTableFinalStage && this.state.fetchResult.mainTable.fetchComplete) {
-    //   this.updateStage(this.constants.securityTableFinalStage);
-    // }
+    if (this.state.displayAlertTable) {
+      this.state.alert.newAlertsCount = 0;
+    }
     const keywordCopy = this.state.filters.quickFilters.keyword;
     this.state.filters.quickFilters.keyword = '';
     this.onSearchKeywordChange(keywordCopy);
@@ -463,11 +461,11 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.loadInitialStencilTable();
     this.updateStage(0, this.state.fetchResult.mainTable, this.state.table.dto);
     this.updateStage(0, this.state.fetchResult.alertTable, this.state.table.alertDto);
-    if (this.state.initialAlertListReceived) {
+    if (this.state.alert.initialAlertListReceived) {
       // only load fresh data once the initial alert list is received, this is in order to follow the rule that alert table and main table are always updated at the same time, this rule dramatically reduces the complexity in code to hanlde the two concurrent data fetching processes
       this.fetchAllData(true);
     } else {
-      this.state.delayedLoadingFreshDataForAlert = true;
+      this.state.alert.delayedLoadingFreshDataForAlert = true;
     }
   }
 
@@ -579,7 +577,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
   private fetchDataForAlertTable(isInitialFetch: boolean) {
     const securityList = [];
-    this.state.alertTableAlertList.forEach((eachAlert) => {
+    this.state.alert.alertTableAlertList.forEach((eachAlert) => {
       const targetSecurityId = eachAlert.data.security.data.securityID;
       if (!securityList.includes(targetSecurityId)) {
         securityList.push(targetSecurityId);
@@ -622,7 +620,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   private loadDataForAlertTable(serverReturn: BEFetchAllTradeDataReturn){
     this.state.fetchResult.alertTable.prinstineRowList = [];  // flush out the stencils
     this.state.fetchResult.alertTable.prinstineRowList = this.processingService.loadFinalStageDataForAlertTable(
-      this.state.alertTableAlertList,
+      this.state.alert.alertTableAlertList,
       this.state.table.alertDto.data.headers,
       this.state.filters.quickFilters.driverType,
       serverReturn,
@@ -653,8 +651,14 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
           if (isInitialDataLoaded) {
             const newFilteredList = this.filterPrinstineRowList(targetTableBlock.prinstineRowList);
             targetTableBlock.liveUpdatedRowList = this.processingService.returnDiff(targetTableDTO, newFilteredList).newRowList;
+            if (targetTableBlock === this.state.fetchResult.alertTable && !this.state.displayAlertTable) {
+              this.state.alert.newAlertsCount = targetTableBlock.liveUpdatedRowList.length;
+            }
           } else {
             targetTableBlock.rowList = this.filterPrinstineRowList(targetTableBlock.prinstineRowList);
+            if (targetTableBlock === this.state.fetchResult.alertTable && !this.state.displayAlertTable) {
+              this.state.alert.newAlertsCount = targetTableBlock.rowList.length;
+            }
           }
           // only dispatch the action when both tables are done
           if (!!this.state.fetchResult.alertTable.fetchComplete && !!this.state.fetchResult.mainTable.fetchComplete) {

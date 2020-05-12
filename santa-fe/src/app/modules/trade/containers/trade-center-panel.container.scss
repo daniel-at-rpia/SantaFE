@@ -245,6 +245,14 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 5.5rem;
             @include material();
             background-color: $color_white;
             color: $font_color_major;
+            &-newAlertsCount {
+              @include mix_border_radius(3px);
+              margin-left: $spacing_small;
+              padding: $spacing_xx_small;
+              font-size: $font_size_x_small;
+              color: $font_color_inverse;
+              background-color: $color_highlight;
+            }
           }
         }
       }
