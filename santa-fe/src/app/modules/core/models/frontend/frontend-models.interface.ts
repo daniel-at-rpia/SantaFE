@@ -529,6 +529,7 @@ export interface AlertCountSummaryDTO extends BasicDTOStructure {
     isAxe: boolean;
     isMark: boolean;
     isInquiry: boolean;
+    isTrade: boolean;
   };
 }
 

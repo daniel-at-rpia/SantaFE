@@ -1206,4 +1206,23 @@ export class DTOService {
     }
     return object;
   }
+
+  public formAlertCountSummaryObject(
+    type: AlertTypes,
+    count: number
+  ): DTOs.AlertCountSummaryDTO {
+    const object: DTOs.AlertCountSummaryDTO = {
+      data: {
+        count: count,
+        alertType: type
+      },
+      state: {
+        isAxe: type === AlertTypes.axeAlert,
+        isMark: type === AlertTypes.markAlert,
+        isInquiry: type === AlertTypes.marketListAlert,
+        isTrade: type === AlertTypes.tradeAlert
+      }
+    }
+    return object;
+  }
 }

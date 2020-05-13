@@ -2,60 +2,62 @@
 
 .sat-alertCountSummary {
   $BlockName: &;
-  min-width: 8rem;
-  border-radius: 4px !important;
-  padding: $spacing_xx_small $spacing_x_small;
-  margin: $spacing_x_small;
+  @include mix_border_radius(15px);
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  width: 8rem;
+  padding: $spacing_xx_small $spacing_x_small;
+  margin: $spacing_x_small;
   user-select: none;
-  &:hover {
-    cursor: pointer
-  }
-  &-icon {
-    @include mix_border_radius(4px);
+  &__icon {
     padding: $spacing_xx_small $spacing_x_small;
+    &-img {
+      color: $font_color_inverse;
+      font-size: $font_size_normal;
+    }
   }
-  &-text {
+  &__text {
     flex: 1;
     border-radius: 4px;
     padding: $spacing_xx_small $spacing_x_small;
+    color: $font_color_inverse;
   }
-  &-count {
-    font-size: $font_size_x_small;
-    font-weight: 900;
-    border-radius: 5px;
-    padding: $spacing_xx_small;
-    min-width: 1rem;
+  &__count {
+    @include mix_border_radius(25px);
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 1.5rem;
+    font-size: $font_size_x_small;
+    padding: $spacing_xx_small;
+    background-color: $color_white;
+    font-weight: 600;
   }
-
   &--isAxe, &--isInquiry {
+    background-color: $tradeAxeAlertColor;
     #{$BlockName} {
-      &-count {
-        background: white;
-        color: $color_axe;
+      &__count {
+        color: $tradeAxeAlertColor;
       }
     }
-
-    background: $color_axe;
-    color: white
   }
-
   &--isMark {
+    background-color: $tradeMarkAlertColor;
     #{$BlockName} {
-      &-count {
-        background: white;
+      &__count {
         color: $tradeMarkAlertColor;
       }
     }
-
-    background: $tradeMarkAlertColor;
-    color: white
+  }
+  &--isTrade {
+    background-color: $tradeTradeAlertColor;
+    #{$BlockName} {
+      &__count {
+        color: $tradeTradeAlertColor;
+      }
+    }
   }
 
 }

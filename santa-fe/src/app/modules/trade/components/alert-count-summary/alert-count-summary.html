@@ -1,25 +1,27 @@
 <article
-  [title]="getAlertNameFromType(summary.data.alertType)"
+  [title]="summary.data.alertType"
   [ngClass]="{
     'sat-alertCountSummary': true,
     'sat-alertCountSummary--isAxe': summary.state.isAxe,
     'sat-alertCountSummary--isMark': summary.state.isMark,
     'sat-alertCountSummary--isInquiry': summary.state.isInquiry,
+    'sat-alertCountSummary--isTrade': summary.state.isTrade,
     'sat-alertCountSummary--isGroup': false,
     'sat-alertCountSummary--isOther': false
   }">
-  <span class="sat-alertCountSummary-icon">
+  <section class="sat-alertCountSummary__icon">
     <i
-       [ngClass]="{
-    'fas': true,
-    'fa-axe': summary.state.isAxe,
-    'fa-bullseye-arrow': summary.state.isMark,
-    'fa-clock': summary.state.isInquiry
-  }"></i>
-  </span>
-  <span class="sat-alertCountSummary-text">{{getAlertNameFromType(summary.data.alertType)}}</span>
-  <span class="sat-alertCountSummary-count">
-    {{summary.data.count}}
-  </span>
+      [ngClass]="{
+        'sat-alertCountSummary__icon-img': true,
+        'far': summary.state.isMark || summary.state.isInquiry,
+        'fas fa-axe': summary.state.isAxe,
+        'fa-bullseye-arrow': summary.state.isMark,
+        'fa-clock': summary.state.isInquiry,
+        'fal fa-handshake': summary.state.isTrade
+      }">
+    </i>
+  </section>
+  <span class="sat-alertCountSummary__text">{{summary.data.alertType}}</span>
+  <span class="sat-alertCountSummary__count">{{summary.data.count}}</span>
 </article>
 

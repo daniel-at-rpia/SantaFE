@@ -204,6 +204,7 @@ export enum AlertTypes {
   axeAlert = 'Axe',
   markAlert = 'Mark',
   marketListAlert = 'MarketList',
+  tradeAlert = 'Trade',
   default = ''
 }
 
@@ -216,6 +217,8 @@ export enum AlertSubTypes {
   owic = 'Owic',
   quantityChange = 'QuantityChange',
   ratingChange = 'RatingChange',
+  buy = 'Buy',
+  sell = 'Sell',
   default = ''
 }
 

@@ -8,7 +8,7 @@
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { GlobalAlertState } from 'FEModels/frontend-page-states.interface';
-    import { AlertDTO } from 'FEModels/frontend-models.interface';
+    import { AlertDTO, AlertCountSummaryDTO } from 'FEModels/frontend-models.interface';
     import { PayloadSetAlertsToInactive } from 'BEModels/backend-payloads.interface';
     import {
       ALERT_COUNTDOWN,
@@ -293,8 +293,9 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         }, ALERT_COUNTDOWN);
       }
     }.bind(this), 10);
-  }
-    groupBy(list: any[], keyGetter: (obj: any) => string) {
+  };
+
+  private groupBy(list: any[], keyGetter: (obj: any) => string) {
     const map = new Map();
     list.forEach((item) => {
          const key = keyGetter(item);
@@ -318,11 +319,11 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     // counting all types in buckets
     const allAlerts = [...this.state.presentList, ...this.state.storeList];
     const grouped = this.groupBy(allAlerts, alert => alert.data.type);
-    const payload = [];
+    const payload: Array<AlertCountSummaryDTO> = [];
     grouped.forEach((value, key) => {
-      payload.push({type: key, count: value.length});
+      payload.push(this.dtoService.formAlertCountSummaryObject(key, value.length));
     });
-    this.store$.dispatch(new CoreSendAlertCountsByType(payload));
+    this.store$.dispatch(new CoreSendAlertCountsByType(this.utilityService.deepCopy(payload)));
   }
 
   private removeSingleAlert(

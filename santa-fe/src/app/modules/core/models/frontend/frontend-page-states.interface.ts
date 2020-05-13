@@ -225,4 +225,5 @@ export interface TradeAlertPanelState {
   autoUpdateCountdown: number;
   alertUpdateInProgress: boolean;
   isCenterPanelPresetSelected: boolean;
+  receivedTradeAlertsMap: object;  // currently BE passes the same trade alerts regardless of the timestamp FE provides, this is because BE can not find out the timestamp of trades. This map is to avoid duplicates being created over and over on each heartbeat
 }

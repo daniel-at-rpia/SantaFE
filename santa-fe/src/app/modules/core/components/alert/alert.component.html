@@ -3,8 +3,9 @@
     'sat-alert': true,
     'sat-alert--typeMarkVariant': alertData.data.type === alertTypes.markAlert,
     'sat-alert--typeAxeVariant': alertData.data.type === alertTypes.axeAlert,
-    'sat-alert--typeAskVariant': alertData.data.subType === alertSubTypes.ask || alertData.data.subType === alertSubTypes.bwic,
-    'sat-alert--typeBidVariant': alertData.data.subType === alertSubTypes.bid || alertData.data.subType === alertSubTypes.owic,
+    'sat-alert--typeTradeVariant': alertData.data.type === alertTypes.tradeAlert,
+    'sat-alert--askSidedVariant': alertData.data.subType === alertSubTypes.ask || alertData.data.subType === alertSubTypes.bwic || alertData.data.subType === alertSubTypes.buy,
+    'sat-alert--bidSidedVariant': alertData.data.subType === alertSubTypes.bid || alertData.data.subType === alertSubTypes.owic || alertData.data.subType === alertSubTypes.sell,
     'sat-alert--typeGroupVariant': alertData.data.subType === alertSubTypes.bwic|| alertData.data.subType === alertSubTypes.owic,
     'sat-alert--slideOutState': alertData.state.isSlidedOut || !alertData.state.isCountdownFinished,
     'sat-alert--hiddenState': hideAllAlerts && alertData.state.isCountdownFinished,
@@ -21,6 +22,9 @@
         </div>
         <div class="sat-alert__thumbnail-type-circle-inner sat-alert__thumbnail-type-circle-inner--mark">
           <i class="sat-alert__thumbnail-type-circle-inner-icon far fa-bullseye-arrow"></i>
+        </div>
+        <div class="sat-alert__thumbnail-type-circle-inner sat-alert__thumbnail-type-circle-inner--trade">
+          <i class="sat-alert__thumbnail-type-circle-inner-icon fal fa-handshake"></i>
         </div>
       </div>
       <div class="sat-alert__thumbnail-type-mask"></div>

@@ -454,6 +454,8 @@ export class UtilityService {
           return AlertTypes.markAlert;
         case AlertTypes.marketListAlert:
           return AlertTypes.marketListAlert;
+        case AlertTypes.tradeAlert:
+          return AlertTypes.tradeAlert;
         default:
           return AlertTypes.default;
       }
@@ -477,6 +479,10 @@ export class UtilityService {
           return AlertSubTypes.quantityChange;
         case AlertSubTypes.ratingChange:
           return AlertSubTypes.ratingChange;
+        case AlertSubTypes.buy:
+          return AlertSubTypes.buy;
+        case AlertSubTypes.sell:
+          return AlertSubTypes.sell;
         default:
           return AlertSubTypes.default;
       }

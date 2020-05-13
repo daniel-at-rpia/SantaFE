@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
-import { AlertDTO } from 'FEModels/frontend-models.interface';
+import { AlertDTO, AlertCountSummaryDTO } from 'FEModels/frontend-models.interface';
 
 export enum CoreActions {
   UserLoggedIn = '[Core] User Logged In',
@@ -59,9 +59,9 @@ export class CoreSendNewAlerts implements Action {
 
 export class CoreSendAlertCountsByType implements Action {
   readonly type = CoreActions.SendAlertCountsByType;
-  readonly payload: Array<{type: string, count: number}>;
+  readonly payload: Array<AlertCountSummaryDTO>;
   constructor(
-    payload: Array<{type: string, count: number}> = []
+    payload: Array<AlertCountSummaryDTO> = []
   ) {
     this.payload = payload;
   }
