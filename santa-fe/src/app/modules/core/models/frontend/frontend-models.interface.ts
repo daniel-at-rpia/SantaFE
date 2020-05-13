@@ -539,5 +539,7 @@ export interface SantaTableAlertSideCellDTO extends BasicDTOStructure {
   },
   state: {
     isStencil: boolean;
+    askSided: boolean;
+    bidSided: boolean;
   }
 }
