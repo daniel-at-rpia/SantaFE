@@ -4,7 +4,6 @@
     'sat-alertCountSummary': true,
     'sat-alertCountSummary--isAxe': summary.state.isAxe,
     'sat-alertCountSummary--isMark': summary.state.isMark,
-    'sat-alertCountSummary--isInquiry': summary.state.isInquiry,
     'sat-alertCountSummary--isTrade': summary.state.isTrade,
     'sat-alertCountSummary--isGroup': false,
     'sat-alertCountSummary--isOther': false
@@ -13,10 +12,9 @@
     <i
       [ngClass]="{
         'sat-alertCountSummary__icon-img': true,
-        'far': summary.state.isMark || summary.state.isInquiry,
+        'far': summary.state.isMark,
         'fas fa-axe': summary.state.isAxe,
         'fa-bullseye-arrow': summary.state.isMark,
-        'fa-clock': summary.state.isInquiry,
         'fal fa-handshake': summary.state.isTrade
       }">
     </i>

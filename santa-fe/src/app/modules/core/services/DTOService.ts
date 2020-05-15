@@ -1252,7 +1252,6 @@ export class DTOService {
       state: {
         isAxe: type === AlertTypes.axeAlert,
         isMark: type === AlertTypes.markAlert,
-        isInquiry: type === AlertTypes.marketListAlert,
         isTrade: type === AlertTypes.tradeAlert
       }
     }

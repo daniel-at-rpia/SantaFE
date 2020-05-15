@@ -317,15 +317,6 @@ $alert_type_size: $iconButton_size_regular;
       }
     }
   }
-  &--typeGroupVariant {
-    #{$alertBlockName} {
-      &__thumbnail {
-        &-type-circle-innerText {
-          display: flex;
-        }
-      }
-    }
-  }
   &--bidSidedVariant {
     #{$alertBlockName} {
       &__thumbnail {

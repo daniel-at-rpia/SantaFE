@@ -6,7 +6,6 @@
     'sat-alert--typeTradeVariant': alertData.data.type === alertTypes.tradeAlert,
     'sat-alert--askSidedVariant': alertData.data.subType === alertSubTypes.ask || alertData.data.subType === alertSubTypes.bwic || alertData.data.subType === alertSubTypes.buy,
     'sat-alert--bidSidedVariant': alertData.data.subType === alertSubTypes.bid || alertData.data.subType === alertSubTypes.owic || alertData.data.subType === alertSubTypes.sell,
-    'sat-alert--typeGroupVariant': alertData.data.subType === alertSubTypes.bwic|| alertData.data.subType === alertSubTypes.owic,
     'sat-alert--slideOutState': alertData.state.isSlidedOut || !alertData.state.isCountdownFinished,
     'sat-alert--hiddenState': hideAllAlerts && alertData.state.isCountdownFinished,
     'sat-alert--willBeRemovedState': alertData.state.willBeRemoved,

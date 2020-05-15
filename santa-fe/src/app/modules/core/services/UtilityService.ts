@@ -452,8 +452,6 @@ export class UtilityService {
           return AlertTypes.axeAlert;
         case AlertTypes.markAlert:
           return AlertTypes.markAlert;
-        case AlertTypes.marketListAlert:
-          return AlertTypes.marketListAlert;
         case AlertTypes.tradeAlert:
           return AlertTypes.tradeAlert;
         default:
