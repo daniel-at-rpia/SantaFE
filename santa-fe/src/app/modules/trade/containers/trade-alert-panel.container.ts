@@ -148,7 +148,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       },
       autoUpdateCountdown: 4,
       alertUpdateInProgress: false,
-      isCenterPanelPresetSelected: false
+      isCenterPanelPresetSelected: false,
+      receivedTradeAlertsMap: {}
     };
     return state;
   }
@@ -702,20 +703,36 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         if (!!serverReturn) {
           // temporarily filter out all the market listing alerts
           const filteredServerReturn = serverReturn.filter((eachRawAlert) => {
-            return eachRawAlert.type !== this.constants.alertTypes.marketListAlert && eachRawAlert.type !== 'Trade';
+            return eachRawAlert.type !== this.constants.alertTypes.marketListAlert;
           });
           const updateList: Array<AlertDTO> = [];
           const securityList: Array<AlertDTO> = [];
           filteredServerReturn.forEach((eachRawAlert) => {
-            // checking for cancelled and active alerts
-            const expired = moment().diff(moment(eachRawAlert.validUntilTime) ) > 0;
-            if (eachRawAlert.isActive && !expired) {
-              const newAlert = this.dtoService.formAlertObject(eachRawAlert);
-              if (newAlert.data.isUrgent) {
-                updateList.push(newAlert);
+            // Trade alerts are handled differently since BE passes the same trade alerts regardless of the timestamp FE provides
+            if (eachRawAlert.type === this.constants.alertTypes.tradeAlert) {
+              if (this.state.receivedTradeAlertsMap[eachRawAlert.alertId]) {
+                // ignore, already have it
+              } else {
+                this.state.receivedTradeAlertsMap[eachRawAlert.alertId] = eachRawAlert.keyWord;
+                const newAlert = this.dtoService.formAlertObject(eachRawAlert);
+                if (newAlert.data.isUrgent) {
+                  updateList.push(newAlert);
+                }
+                if (newAlert.data.security && newAlert.data.security.data.securityID) {
+                  securityList.push(newAlert);
+                }
               }
-              if (newAlert.data.security && newAlert.data.security.data.securityID) {
-                securityList.push(newAlert);
+            } else {
+              // checking for cancelled and active alerts
+              const expired = moment().diff(moment(eachRawAlert.validUntilTime) ) > 0;
+              if (eachRawAlert.isActive && !expired) {
+                const newAlert = this.dtoService.formAlertObject(eachRawAlert);
+                if (newAlert.data.isUrgent) {
+                  updateList.push(newAlert);
+                }
+                if (newAlert.data.security && newAlert.data.security.data.securityID) {
+                  securityList.push(newAlert);
+                }
               }
             }
           });

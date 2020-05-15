@@ -877,7 +877,9 @@ export class DTOService {
             side: 'None'
           },
           state: {
-            isStencil: false
+            isStencil: false,
+            askSided: false,
+            bidSided: false
           }
         }
       },
@@ -889,9 +891,17 @@ export class DTOService {
     };
     if (alertDTO) {
       if (alertDTO.data.subType === AlertSubTypes.bid || alertDTO.data.subType === AlertSubTypes.owic) {
-        object.data.alertSideDTO.data.side = 'bid';
+        object.data.alertSideDTO.data.side = 'Bid';
+        object.data.alertSideDTO.state.bidSided = true;
       } else if (alertDTO.data.subType === AlertSubTypes.ask || alertDTO.data.subType === AlertSubTypes.bwic) {
-        object.data.alertSideDTO.data.side = 'ask';
+        object.data.alertSideDTO.data.side = 'Ask';
+        object.data.alertSideDTO.state.askSided = true;
+      } else if (alertDTO.data.subType === AlertSubTypes.sell) {
+        object.data.alertSideDTO.data.side = 'Sell';
+        object.data.alertSideDTO.state.bidSided = true;
+      } else if (alertDTO.data.subType === AlertSubTypes.buy) {
+        object.data.alertSideDTO.data.side = 'Buy';
+        object.data.alertSideDTO.state.askSided = true;
       }
     }
     return object;
@@ -1186,8 +1196,8 @@ export class DTOService {
       object.data.security.state.isMultiLineVariant = true;
       object.data.security.state.isWidthFlexible = true;
       object.state.hasSecurity = true;
+      const targetDriver = object.data.security.data.mark.markDriver;
       if (!!rawData.quote && !!object.data.security) {
-        const targetDriver = object.data.security.data.mark.markDriver;
         switch (targetDriver) {
           case TriCoreDriverConfig.Spread.label:
             object.data.level = rawData.quote['spread'];
@@ -1202,6 +1212,48 @@ export class DTOService {
             break;
         }
         object.data.quantity = rawData.quote['quantity'];
+      }
+      if (!!rawData.trades && rawData.type === AlertTypes.tradeAlert) {
+        let quantity = 0;
+        rawData.trades.forEach((eachRawTrade) => {
+          quantity = quantity + eachRawTrade.quantity;
+        })
+        object.data.quantity = quantity;
+        if (rawData.trades.length > 0) {
+        const lastTrade = rawData.trades[rawData.trades.length-1];
+          switch (targetDriver) {
+            case TriCoreDriverConfig.Spread.label:
+              object.data.level = lastTrade.spread;
+              break;
+            case TriCoreDriverConfig.Price.label:
+              object.data.level = lastTrade.price;
+              break;
+            case TriCoreDriverConfig.Yield.label:
+              object.data.level = null;
+              break;
+            default:
+              break;
+          }
+        }
+      }
+    }
+    return object;
+  }
+
+  public formAlertCountSummaryObject(
+    type: AlertTypes,
+    count: number
+  ): DTOs.AlertCountSummaryDTO {
+    const object: DTOs.AlertCountSummaryDTO = {
+      data: {
+        count: count,
+        alertType: type
+      },
+      state: {
+        isAxe: type === AlertTypes.axeAlert,
+        isMark: type === AlertTypes.markAlert,
+        isInquiry: type === AlertTypes.marketListAlert,
+        isTrade: type === AlertTypes.tradeAlert
       }
     }
     return object;

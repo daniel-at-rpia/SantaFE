@@ -14,16 +14,4 @@ export class AlertCountSummary implements OnInit {
 
   ngOnInit() {
   }
-  getAlertNameFromType(type: AlertTypes) {
-    switch (type) {
-      case AlertTypes.axeAlert:
-        return AlertTypes.axeAlert;
-      case AlertTypes.markAlert:
-        return AlertTypes.markAlert;
-      case AlertTypes.marketListAlert:
-        return 'Inquiry';
-      default:
-        return '';
-    }
-  }
 }

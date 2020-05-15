@@ -101,11 +101,13 @@ export function tradeReducer(
       if (state.initialDataLoaded) {
         return {
           ...state,
+          liveUpdateInProgress: false,
           liveUpdateProcessingRawData: false
         };
       } else {
         return {
           ...state,
+          liveUpdateInProgress: false,
           liveUpdateProcessingRawData: false,
           initialDataLoaded: true
         }

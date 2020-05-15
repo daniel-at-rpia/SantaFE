@@ -276,7 +276,19 @@ export class AgGridMiddleLayerService {
       securityCard: eachSecurity,
       bestQuote: targetRow.data.cells[bestQuoteCellIndex].data.quantComparerDTO,
       bestAxeQuote: targetRow.data.cells[bestAxeQuoteCellIndex].data.quantComparerDTO,
-      alertSide: alertSideCellIndex > -1 ? targetRow.data.cells[alertSideCellIndex].data.alertSideDTO : {data: {side: 'n/a'}, state: {isStencil: false}},
+      alertSide: 
+        alertSideCellIndex > -1
+          ? targetRow.data.cells[alertSideCellIndex].data.alertSideDTO
+          : {
+            data: {
+              side: 'n/a'
+            },
+            state: {
+              isStencil: false,
+              bidSided: false,
+              askSided: false
+            }
+          },
       rowDTO: targetRow
     };
     newAgRow[AGGRID_DETAIL_COLUMN_KEY] = '';

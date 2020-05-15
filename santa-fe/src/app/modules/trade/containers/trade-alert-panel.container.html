@@ -9,16 +9,7 @@
     'sat-tradeAlertPanel--focusMode': state.focusMode
   }">
   <section class="sat-tradeAlertPanel__alertCountsGrid">
-    <alert-count-summary *ngFor="let alert of alertCounts$ | async" [summary]="{
-      data:{
-        count: alert.count,
-        alertType: alert.type
-      },
-      state: {
-        isAxe: alert.type === constants.alertTypes.axeAlert,
-        isMark: alert.type === constants.alertTypes.markAlert,
-        isInquiry: alert.type === constants.alertTypes.marketListAlert
-    }}"></alert-count-summary>
+    <alert-count-summary *ngFor="let alertCountSummaryDTO of alertCounts$ | async" [summary]="alertCountSummaryDTO"></alert-count-summary>
   </section>
   <section class="sat-tradeAlertPanel__utilities">
     <div class="sat-tradeAlertPanel__utilities-configureCTA">
