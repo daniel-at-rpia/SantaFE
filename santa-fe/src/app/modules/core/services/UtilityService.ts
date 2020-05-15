@@ -469,10 +469,6 @@ export class UtilityService {
           return AlertSubTypes.default;  // both is not a valid type in FE
         case AlertSubTypes.liquidation:
           return AlertSubTypes.default;  // liquidation is not a valid type in FE
-        case AlertSubTypes.bwic:
-          return AlertSubTypes.bwic;
-        case AlertSubTypes.owic:
-          return AlertSubTypes.owic;
         case AlertSubTypes.quantityChange:
           return AlertSubTypes.quantityChange;
         case AlertSubTypes.ratingChange:

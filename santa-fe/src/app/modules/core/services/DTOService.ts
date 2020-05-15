@@ -890,10 +890,10 @@ export class DTOService {
       }
     };
     if (alertDTO) {
-      if (alertDTO.data.subType === AlertSubTypes.bid || alertDTO.data.subType === AlertSubTypes.owic) {
+      if (alertDTO.data.subType === AlertSubTypes.bid) {
         object.data.alertSideDTO.data.side = 'Bid';
         object.data.alertSideDTO.state.bidSided = true;
-      } else if (alertDTO.data.subType === AlertSubTypes.ask || alertDTO.data.subType === AlertSubTypes.bwic) {
+      } else if (alertDTO.data.subType === AlertSubTypes.ask) {
         object.data.alertSideDTO.data.side = 'Ask';
         object.data.alertSideDTO.state.askSided = true;
       } else if (alertDTO.data.subType === AlertSubTypes.sell) {

@@ -212,8 +212,6 @@ export enum AlertSubTypes {
   ask = 'Ask',
   both = 'Both',
   liquidation = 'Liquidation',
-  bwic = 'Bwic',
-  owic = 'Owic',
   quantityChange = 'QuantityChange',
   ratingChange = 'RatingChange',
   buy = 'Buy',

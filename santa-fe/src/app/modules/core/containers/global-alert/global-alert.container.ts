@@ -370,8 +370,4 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     return newAlerts;
   }
 
-  removeAlertByIndex(list: AlertDTO[], index: number) {
-    return list.slice().splice(index, 1);
-  }
-
 }
