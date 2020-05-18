@@ -193,7 +193,9 @@ export class DTOService {
           alertLevel: null,
           alertLevelRaw: null,
           alertQuantity: null,
-          alertQuantityRaw: null
+          alertQuantityRaw: null,
+          alertQuoteDealer: null,
+          alertTradeTrader: null
         }
       },
       api: {
@@ -372,7 +374,9 @@ export class DTOService {
       alertLevel: this.utility.parseTriCoreDriverNumber(targetAlert.data.level, dto.data.mark.markDriver, dto, true) as string,
       alertQuantity: this.utility.parsePositionToMM(targetAlert.data.quantity, false),
       alertLevelRaw: targetAlert.data.level,
-      alertQuantityRaw: targetAlert.data.quantity
+      alertQuantityRaw: targetAlert.data.quantity,
+      alertQuoteDealer: targetAlert.data.dealer,
+      alertTradeTrader: targetAlert.data.trader
     };
   }
 
@@ -1169,7 +1173,9 @@ export class DTOService {
         unixTimestamp: momentTime.unix(),
         level: null,
         quantity: null,
-        isUrgent: rawData.isUrgent
+        isUrgent: rawData.isUrgent,
+        trader: null,
+        dealer: null
       },
       api: {
         onMouseEnterAlert: null,
@@ -1199,6 +1205,7 @@ export class DTOService {
       object.state.hasSecurity = true;
       const targetDriver = object.data.security.data.mark.markDriver;
       if (!!rawData.quote && !!object.data.security) {
+        object.data.dealer = rawData.quote.dealer;
         switch (targetDriver) {
           case TriCoreDriverConfig.Spread.label:
             object.data.level = rawData.quote['spread'];
@@ -1221,7 +1228,8 @@ export class DTOService {
         })
         object.data.quantity = quantity;
         if (rawData.trades.length > 0) {
-        const lastTrade = rawData.trades[rawData.trades.length-1];
+          const lastTrade = rawData.trades[rawData.trades.length-1];
+          object.data.trader = lastTrade.trader;
           switch (targetDriver) {
             case TriCoreDriverConfig.Spread.label:
               object.data.level = lastTrade.spread;
