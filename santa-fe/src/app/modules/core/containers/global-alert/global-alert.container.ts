@@ -209,6 +209,16 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  public onAlertExpired(targetAlert: AlertDTO) {
+    if (targetAlert) {
+      targetAlert.state.willBeRemoved = true;
+      const removeTarget = () => {
+        this.removeSingleAlert(targetAlert, true);
+      };
+      setTimeout(removeTarget.bind(this), 300);
+    }
+  }
+
   private generateNewAlert(
     newAlert: AlertDTO,
     entireListForDebugging: Array<AlertDTO>

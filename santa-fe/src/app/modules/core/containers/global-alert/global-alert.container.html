@@ -12,7 +12,8 @@
         [hideAllAlerts]="!state.displayAlerts && !state.triggerActionMenuOpen"
         (clickedAlertThumbnail)="onClickAlertThumbnail($event)"
         (clickedAlertDetail)="loadAlertToTable($event)"
-        (clickedRemove)="onClickAlertRemove($event)">
+        (clickedRemove)="onClickAlertRemove($event)"
+        (countdownExpired)="onAlertExpired($event)">
       </alert>
     </li>
   </section>

@@ -25,6 +25,7 @@ export class Alert implements OnInit{
   @Output() clickedAlertThumbnail = new EventEmitter<AlertDTO>();
   @Output() clickedAlertDetail = new EventEmitter<AlertDTO>();
   @Output() clickedRemove = new EventEmitter<AlertDTO>();
+  @Output() countdownExpired = new EventEmitter<AlertDTO>();
 
   alertSubTypes = AlertSubTypes;
   alertTypes = AlertTypes;
@@ -53,7 +54,16 @@ export class Alert implements OnInit{
   private startCountdown( ){
     this.validUntil = moment(this.alertData.data.validUntilTime);
     const interval = setInterval(() => {
+      if (this.hasExpired()) {
+        !!this.countdownExpired && this.countdownExpired.emit(this.alertData);
+        clearInterval(interval);
+      }
       this.validUntil = moment(this.validUntil.toISOString());
     }, 1000);
   }
+
+  private hasExpired() {
+    return moment().diff(this.validUntil) > 0;
+  }
+
 }

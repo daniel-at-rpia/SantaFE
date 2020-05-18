@@ -149,7 +149,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       autoUpdateCountdown: 4,
       alertUpdateInProgress: false,
       isCenterPanelPresetSelected: false,
-      receivedTradeAlertsMap: {}
+      receivedActiveAlertsMap: {}
     };
     return state;
   }
@@ -710,10 +710,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           filteredServerReturn.forEach((eachRawAlert) => {
             // Trade alerts are handled differently since BE passes the same trade alerts regardless of the timestamp FE provides
             if (!!eachRawAlert.marketListAlert) {
-              if (this.state.receivedTradeAlertsMap[eachRawAlert.alertId]) {
+              if (this.state.receivedActiveAlertsMap[eachRawAlert.alertId]) {
                 // ignore, already have it
               } else {
-                this.state.receivedTradeAlertsMap[eachRawAlert.alertId] = eachRawAlert.keyWord;
+                this.state.receivedActiveAlertsMap[eachRawAlert.alertId] = eachRawAlert.keyWord;
                 const newAlert = this.dtoService.formAlertObject(eachRawAlert);
                 if (newAlert.data.isUrgent) {
                   updateList.push(newAlert);
@@ -763,6 +763,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       return this.constants.alertSubTypes.bid;
     }
   }
+
   private mapWatchTypesToWatchType(alertTypes: AxeAlertType[]): AxeAlertType {
     if (alertTypes.includes(AxeAlertType.normal) && alertTypes.includes(AxeAlertType.marketList)) {
       return AxeAlertType.both;
@@ -775,7 +776,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-    // public onClickSendMail() {
+  // public onClickSendMail() {
     //   this.restfulCommService.logEngagement(
     //     EngagementActionList.sendEmail,
     //     'n/a',
@@ -784,6 +785,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     //     'Trade - Alert Panel'
     //   );
     //   location.href = "mailto:santa@rpia.ca?subject=Santa%20Feedback";
-    // }
+  // }
 
 }
