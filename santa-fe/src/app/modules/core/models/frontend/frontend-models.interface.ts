@@ -517,6 +517,7 @@ export interface AlertDTO extends BasicDTOStructure {
     hasSecurity: boolean;
     hasTitlePin: boolean;
     isCancelled: boolean;
+    isMarketListVariant: boolean;
   };
 }
 

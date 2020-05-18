@@ -391,12 +391,10 @@ export interface BEAlertDTO {
   isDeleted: boolean;
   quoteId?: string;
   security?: BESecurityDTO;
-  marketListType?: string;
   marketListDescription?: string;
   securityIdentifierToQuoteId?: {
     [property: string]: string;
   };
-  validUntilTime?: string;
   trades?: Array<BETradeBlock>;
   quote?: any;
   marketListAlert?: BEAlertMarketListBlock;
@@ -418,6 +416,8 @@ export interface BETradeBlock {
   wgtAvgSpread: number;
   fifoAvgPrice: number;
   wgtAvgPrice: number;
+  trader: string;
+  isCancelled: boolean;
 }
 
 interface BEAlertMarketListBlock {

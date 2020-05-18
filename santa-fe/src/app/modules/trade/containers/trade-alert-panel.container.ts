@@ -709,7 +709,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           const securityList: Array<AlertDTO> = [];
           filteredServerReturn.forEach((eachRawAlert) => {
             // Trade alerts are handled differently since BE passes the same trade alerts regardless of the timestamp FE provides
-            if (eachRawAlert.type === this.constants.alertTypes.tradeAlert) {
+            if (!!eachRawAlert.marketListAlert) {
               if (this.state.receivedTradeAlertsMap[eachRawAlert.alertId]) {
                 // ignore, already have it
               } else {
@@ -724,8 +724,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
               }
             } else {
               // checking for cancelled and active alerts
-              const expired = moment().diff(moment(eachRawAlert.validUntilTime) ) > 0;
-              if (eachRawAlert.isActive && !expired) {
+              if (eachRawAlert.isActive) {
                 const newAlert = this.dtoService.formAlertObject(eachRawAlert);
                 if (newAlert.data.isUrgent) {
                   updateList.push(newAlert);

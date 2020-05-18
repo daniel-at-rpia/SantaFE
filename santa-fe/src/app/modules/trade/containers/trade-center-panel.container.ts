@@ -527,6 +527,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       groupIdentifier: {},
       groupFilters: {
         PortfolioShortName: ["DOF","SOF","STIP","FIP","CIP","AGB","BBB"]
+        // SecurityIdentifier: ['79', '6113', '19454', '1233|4.6Y']
       }
     };
     if (!!this.state.bestQuoteValidWindow) {

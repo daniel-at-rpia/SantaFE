@@ -1164,8 +1164,8 @@ export class DTOService {
         titleBottom: parsedTitleList[1] || '',
         message: rawData.message,
         time: momentTime.format(`HH:mm`),
-        titlePin: rawData.marketListType || null,
-        validUntilTime: rawData.validUntilTime,
+        titlePin: null,
+        validUntilTime: !!rawData.marketListAlert ? rawData.marketListAlert.validUntilTime : null,
         unixTimestamp: momentTime.unix(),
         level: null,
         quantity: null,
@@ -1183,7 +1183,8 @@ export class DTOService {
         isCountdownFinished: true,
         willBeRemoved: false,
         hasSecurity: false,
-        hasTitlePin: !!rawData.marketListType
+        hasTitlePin: !!rawData.marketListAlert,
+        isMarketListVariant: !!rawData.marketListAlert
       }
     }
     if (!!rawData.security) {
