@@ -902,10 +902,10 @@ export class DTOService {
         object.data.alertSideDTO.state.askSided = true;
       } else if (alertDTO.data.subType === AlertSubTypes.sell) {
         object.data.alertSideDTO.data.side = 'Sell';
-        object.data.alertSideDTO.state.bidSided = true;
+        object.data.alertSideDTO.state.askSided = true;
       } else if (alertDTO.data.subType === AlertSubTypes.buy) {
         object.data.alertSideDTO.data.side = 'Buy';
-        object.data.alertSideDTO.state.askSided = true;
+        object.data.alertSideDTO.state.bidSided = true;
       }
     }
     return object;
