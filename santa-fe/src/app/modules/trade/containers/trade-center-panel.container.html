@@ -20,20 +20,6 @@
           <ul class="sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list">
             <li class="sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item">
               <button
-                (click)="onSelectPresetCategory(state.presets.recentShortcutList)"
-                [ngClass]="{
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn': true,
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn--recent': true,
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn--selected': state.presets.selectedList === state.presets.recentShortcutList,
-                  'santaBtn--labelled': true,
-                  'santaBtn--inverseLabelled': true
-                }">
-                <i class="fal fa-history"></i>
-                <span>Recent</span>
-              </button>
-            </li>
-            <li class="sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item">
-              <button
                 (click)="onSelectPresetCategory(state.presets.portfolioShortcutList)"
                 [ngClass]="{
                   'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn': true,
@@ -45,7 +31,7 @@
                 <i class="fal fa-file-invoice-dollar"></i>
                 <span>Portfolio</span>
               </button>
-              </li>
+            </li>
             <li class="sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item">
               <button
                 (click)="onSelectPresetCategory(state.presets.ownershipShortcutList)"
@@ -72,20 +58,6 @@
                 }">
                 <i class="fal fa-chess"></i>
                 <span>Strategy</span>
-              </button>
-            </li>
-            <li class="sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item">
-              <button
-                (click)="onSelectPresetCategory(state.presets.individualShortcutList)"
-                [ngClass]="{
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn': true,
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn--individual': true,
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn--selected': state.presets.selectedList === state.presets.individualShortcutList,
-                  'santaBtn--labelled': true,
-                  'santaBtn--inverseLabelled': true
-                }">
-                <i class="fal fa-heart"></i>
-                <span>Individual</span>
               </button>
             </li>
           </ul>
@@ -265,5 +237,21 @@
   <div class="sat-tradeAlertPanel__overview">
     <button (click)="onClickTest()">All Alerts</button>
   </div>
-  <div class="sat-tradeAlertPanel__main"></div>
+  <div class="sat-tradeAlertPanel__main">
+    <div class="sat-tradeAlertPanel__main-table">
+      <santa-table
+        [tableName]="'tradeAlert'"
+        [activated]="!!state.table.displayAlert"
+        [ownerInitial]="ownerInitial"
+        [activePortfolios]="state.filters.quickFilters.portfolios"
+        [tableData]="state.table.alertDto"
+        [newRows]="state.fetchResult.alertTable.rowList"
+        [receivedContentStage]="state.fetchResult.alertTable.currentContentStage"
+        [receivedSecurityTableMetricsUpdate]="state.table.alertMetrics"
+        [liveUpdatedRows]="state.fetchResult.alertTable.liveUpdatedRowList"
+        [activeTriCoreDriver]="state.filters.quickFilters.driverType"
+        (selectedSecurityForAnalysis)="onSelectSecurityForAnalysis($event)"
+      ></santa-table>
+    </div>
+  </div>
 </article>
