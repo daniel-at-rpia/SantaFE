@@ -7,8 +7,7 @@
     'sat-tradeCenterPanel--presetSelectedState': state.presets.selectedPreset,
     'sat-tradeCenterPanel--fetchDataFailedState': state.fetchResult.fetchTableDataFailed,
     'sat-tradeCenterPanel--boostConfiguratorState': state.configurator.boosted,
-    'sat-tradeCenterPanel--focusMode': state.isFocusMode,
-    'sat-tradeCenterPanel--displayAlertTableState': state.displayAlertTable
+    'sat-tradeCenterPanel--focusMode': state.isFocusMode
   }">
   <section class="sat-tradeCenterPanel__presetsAndFilters">
     <div class="sat-tradeCenterPanel__presetsAndFilters-presets">
@@ -256,4 +255,15 @@
       ></santa-table>
     </div>
   </section>
+</article>
+<article
+  [ngClass]="{
+    'sat-tradeAlertPanel': true,
+    'sat-tradeAlertPanel--displayAlertTableState': state.table.displayAlert,
+    'sat-tradeAlertPanel--focusMode': state.isFocusMode
+  }">
+  <div class="sat-tradeAlertPanel__overview">
+    <button (click)="onClickTest()">All Alerts</button>
+  </div>
+  <div class="sat-tradeAlertPanel__main"></div>
 </article>

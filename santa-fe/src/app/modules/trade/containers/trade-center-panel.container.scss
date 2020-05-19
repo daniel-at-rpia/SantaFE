@@ -458,3 +458,31 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 5.5rem;
     }
   }
 }
+
+.sat-tradeAlertPanel {
+  $tradeAlertPanelBlockName: &;
+  @include mix_border_generator;
+  @include mix_border_radius(10px);
+  display: flex;
+  flex-direction: column;
+  margin-top: $spacing_medium;
+  &__overview {
+    flex: 0 0 auto;
+    padding: $spacing_medium;
+  }
+  &__main {
+    @include mix_alive('normal');
+    flex: 0 0 0px;
+    background-color: $color_active;
+  }
+  &--displayAlertTableState {
+    #{$tradeAlertPanelBlockName} {
+      &__main {
+        flex: 0 0 400px;        
+      }
+    }
+  }
+  &--focusMode {
+    border: none;
+  }
+}

@@ -63,6 +63,7 @@ $trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta
       trade-center-panel {
         flex: 1 1 auto;
         display: flex;
+        flex-direction: column;
         overflow: hidden;
       }
     }
@@ -180,21 +181,13 @@ $trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta
      &__left {
       padding: 0;
       &-top {
-        position: relative;
-        width: 100%;
-        margin-bottom: 0;
-        height: 3.4rem;
-        transition: none;
-        &-utilityPanel {
-          display: none;
-        }
+        display: none;
       }
       &-centerPanel {
         position: relative;
         width: 100%;
         height: 100%;
         bottom: unset;
-        padding-top: 4px;
       }
     }
     &__collapseGraphsCTA {

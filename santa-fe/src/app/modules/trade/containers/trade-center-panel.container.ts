@@ -126,7 +126,9 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         metrics: mainTableMetrics,
         dto: this.dtoService.formSecurityTableObject(true),
         alertMetrics: alertTableMetrics,
-        alertDto: this.dtoService.formSecurityTableObject(true)
+        alertDto: this.dtoService.formSecurityTableObject(true),
+        displayMain: true,
+        displayAlert: false
       },
       fetchResult: {
         fetchTableDataFailed: false,
@@ -417,6 +419,10 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     const keywordCopy = this.state.filters.quickFilters.keyword;
     this.state.filters.quickFilters.keyword = '';
     this.onSearchKeywordChange(keywordCopy);
+  }
+
+  public onClickTest() {
+    this.state.table.displayAlert = !this.state.table.displayAlert;
   }
 
   private populateSearchShortcuts() {
