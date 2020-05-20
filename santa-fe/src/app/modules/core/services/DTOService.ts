@@ -30,7 +30,8 @@
     import {
       TriCoreDriverConfig,
       DEFAULT_DRIVER_IDENTIFIER,
-      AlertTypes
+      AlertTypes,
+      AlertSubTypes
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
@@ -91,7 +92,7 @@ export class DTOService {
         cs01CadFirmInK: null,
         cs01CadCurrent: null,
         cs01CadCurrentInK: null,
-        owner: !isStencil && !!rawData.unitPosition && rawData.unitPosition.owners.length > 0 ? rawData.unitPosition.owners : [],
+        owner: !isStencil && !!rawData.unitPosition && !!rawData.unitPosition.owners && rawData.unitPosition.owners.length > 0 ? rawData.unitPosition.owners : [],
         mark: {
           combinedDefaultMark: null,
           combinedDefaultMarkRaw: null,
@@ -143,6 +144,35 @@ export class DTOService {
           positionBBB: 0,
           positionBBBInMM: null
         },
+        cost: {
+          current: {
+            fifo: {
+              'Default Spread': null,
+              'Price': null
+            },
+            weightedAvg: {
+              'Default Spread': null,
+              'Price': null
+            }
+          },
+          firm: {
+            fifo: {
+              'Default Spread': null,
+              'Price': null
+            },
+            weightedAvg: {
+              'Default Spread': null,
+              'Price': null
+            }
+          },
+          DOF: null,
+          SOF: null,
+          STIP: null,
+          FIP: null,
+          CIP: null,
+          AGB: null,
+          BBB: null
+        },
         metricPack: this.utility.packMetricData(rawData),
         bestQuote: {
           bid: null,
@@ -151,7 +181,22 @@ export class DTOService {
           displayAsk: null
         },
         hasIndex: !isStencil && rawData.metrics ? !!rawData.metrics.isIndex : false,
-        hedgeFactor: !isStencil && !!rawData.unitPosition ? rawData.unitPosition.hedgeFactor : null
+        hedgeFactor: !isStencil && !!rawData.unitPosition ? rawData.unitPosition.hedgeFactor : null,
+        alert: {
+          alertTime: null,
+          alertTimeRaw: null,
+          alertType: null,
+          alertMessage: null,
+          alertValue: null,
+          alertTarget: null,
+          alertSide: null,
+          alertLevel: null,
+          alertLevelRaw: null,
+          alertQuantity: null,
+          alertQuantityRaw: null,
+          alertQuoteDealer: null,
+          alertTradeTrader: null
+        }
       },
       api: {
         onClickCard: null,
@@ -195,14 +240,54 @@ export class DTOService {
     dto: DTOs.SecurityDTO,
     targetPortfolio: BEPortfolioDTO
   ) {
+    const lastTrade = !!targetPortfolio.trades && targetPortfolio.trades.length > 0 ? targetPortfolio.trades[targetPortfolio.trades.length-1] : null;
     const newBlock: Blocks.SecurityPortfolioBlock = {
       portfolioName: targetPortfolio.partitionOptionValue.PortfolioShortName,
       quantity: targetPortfolio.quantity,
       strategy: targetPortfolio.partitionOptionValue.StrategyName,
       cs01Cad: targetPortfolio.cs01Cad,
-      cs01Local: targetPortfolio.cs01Local
+      cs01Local: targetPortfolio.cs01Local,
+      costFifoSpread: !!lastTrade ? lastTrade.fifoAvgSpread : null,
+      costFifoPrice: !!lastTrade ? lastTrade.fifoAvgPrice : null,
+      costWeightedAvgSpread: !!lastTrade ? lastTrade.wgtAvgSpread : null,
+      costWeightedAvgPrice: !!lastTrade ? lastTrade.wgtAvgPrice : null
     };
+    newBlock.costFifoSpread = this.utility.parseTriCoreDriverNumber(
+      newBlock.costFifoSpread,
+      TriCoreDriverConfig.Spread.label,
+      dto,
+      false
+    ) as number;
+    newBlock.costFifoPrice = this.utility.parseTriCoreDriverNumber(
+      newBlock.costFifoPrice,
+      TriCoreDriverConfig.Price.label,
+      dto,
+      false
+    ) as number;
+    newBlock.costWeightedAvgSpread = this.utility.parseTriCoreDriverNumber(
+      newBlock.costWeightedAvgSpread,
+      TriCoreDriverConfig.Spread.label,
+      dto,
+      false
+    ) as number;
+    newBlock.costWeightedAvgPrice = this.utility.parseTriCoreDriverNumber(
+      newBlock.costWeightedAvgPrice,
+      TriCoreDriverConfig.Price.label,
+      dto,
+      false
+    ) as number;
     dto.data.portfolios.push(newBlock);
+    const newCostPortfolioBlock: Blocks.SecurityCostPortfolioBlock = {
+      fifo: {
+        'Default Spread': newBlock.costFifoSpread,
+        'Price': newBlock.costFifoPrice
+      },
+      weightedAvg: {
+        'Default Spread': newBlock.costWeightedAvgSpread,
+        'Price': newBlock.costWeightedAvgPrice
+      }
+    };
+    dto.data.cost[newBlock.portfolioName] = newCostPortfolioBlock;
   }
 
   public appendPortfolioOverviewInfoForSecurityDTO(
@@ -244,6 +329,10 @@ export class DTOService {
           break;
       }
       block.positionFirm = block.positionFirm + eachPortfolioBlock.quantity;
+      dto.data.cost.firm.fifo['Default Spread'] = dto.data.cost.firm.fifo['Default Spread'] + eachPortfolioBlock.costFifoSpread;
+      dto.data.cost.firm.fifo.Price = dto.data.cost.firm.fifo.Price + eachPortfolioBlock.costFifoPrice;
+      dto.data.cost.firm.weightedAvg['Default Spread'] = dto.data.cost.firm.weightedAvg['Default Spread'] + eachPortfolioBlock.costWeightedAvgSpread;
+      dto.data.cost.firm.weightedAvg.Price = dto.data.cost.firm.weightedAvg.Price + eachPortfolioBlock.costWeightedAvgPrice;
       if (eachPortfolioBlock.strategy.length > 0 && dto.data.strategyList.indexOf(eachPortfolioBlock.strategy) < 0) {
         dto.data.strategyList.push(eachPortfolioBlock.strategy);
         if (dto.data.strategyList.length === 1) {
@@ -268,6 +357,27 @@ export class DTOService {
     block.positionNLFInMM = this.utility.parsePositionToMM(block.positionNLF, false);
     dto.data.cs01CadFirmInK = this.utility.parseNumberToThousands(dto.data.cs01CadFirm, false);
     dto.data.cs01LocalFirmInK = this.utility.parseNumberToThousands(dto.data.cs01LocalFirm, false);
+  }
+
+  public appendAlertInfoToSecurityDTO(
+    dto: DTOs.SecurityDTO,
+    targetAlert: DTOs.AlertDTO
+  ) {
+    dto.data.alert = {
+      alertTime: targetAlert.data.time,
+      alertTimeRaw: targetAlert.data.unixTimestamp,
+      alertType: !!targetAlert.data.titlePin ? `${targetAlert.data.type} - ${targetAlert.data.titlePin}` : targetAlert.data.type,
+      alertMessage: targetAlert.data.message,
+      alertValue: targetAlert.data.titleBottom,
+      alertTarget: targetAlert.data.titleTop,
+      alertSide: null,
+      alertLevel: this.utility.parseTriCoreDriverNumber(targetAlert.data.level, dto.data.mark.markDriver, dto, true) as string,
+      alertQuantity: this.utility.parsePositionToMM(targetAlert.data.quantity, false),
+      alertLevelRaw: targetAlert.data.level,
+      alertQuantityRaw: targetAlert.data.quantity,
+      alertQuoteDealer: targetAlert.data.dealer,
+      alertTradeTrader: targetAlert.data.trader
+    };
   }
 
   public formSecurityGroupObject(
@@ -659,7 +769,8 @@ export class DTOService {
         isLiveVariant: isLiveVariant,
         isAgGridReady: false,
         isNativeEnabled: false,
-        selectedSecurityCard: null
+        selectedSecurityCard: null,
+        isActivated: false
       },
       api: {
         gridApi: null,
@@ -670,7 +781,9 @@ export class DTOService {
   }
 
   public formSecurityTableHeaderObject(
-    stub: SecurityTableMetricStub
+    stub: SecurityTableMetricStub,
+    useSpecificsFrom: string,
+    activePortfolios: Array<string>
   ): DTOs.SecurityTableHeaderDTO {
     const object: DTOs.SecurityTableHeaderDTO = {
       data: {
@@ -685,13 +798,14 @@ export class DTOService {
         frontendMetric: !!stub.isFrontEndMetric,
         isDataTypeText: !!stub.isDataTypeText,
         isDriverDependent: !!stub.isDriverDependent,
-        pinned: stub.pinned,
         groupBelongs: stub.groupBelongs,
-        groupShow: !!stub.groupShow
+        pinned: (useSpecificsFrom && stub.tableSpecifics[useSpecificsFrom]) ? !!stub.tableSpecifics[useSpecificsFrom].pinned : !!stub.tableSpecifics.default.pinned,
+        groupShow: (useSpecificsFrom && stub.tableSpecifics[useSpecificsFrom]) ? !!stub.tableSpecifics[useSpecificsFrom].groupShow : !!stub.tableSpecifics.default.groupShow,
+        activePortfolios: activePortfolios || []
       },
       state: {
         isQuantVariant: !!stub.isForQuantComparer,
-        isPureTextVariant: !!stub.pureText,
+        isSecurityCardVariant: !!stub.isForSecurityCard,
         isAxeSkewEnabled: false,
         istotalSkewEnabled: false
       }
@@ -700,10 +814,12 @@ export class DTOService {
   }
 
   public formSecurityTableRowObject(
-    securityDTO: DTOs.SecurityDTO
+    securityDTO: DTOs.SecurityDTO,
+    id?: string
   ): DTOs.SecurityTableRowDTO {
     const object: DTOs.SecurityTableRowDTO = {
       data: {
+        rowId: !!id ? id : this.utility.generateUUID(),
         security: securityDTO,
         cells: [],
         quotes: {
@@ -753,17 +869,43 @@ export class DTOService {
     isStencil: boolean,
     textData: string,
     isQuantVariant: boolean,
-    quantComparerDTO?: DTOs.QuantComparerDTO
+    quantComparerDTO: DTOs.QuantComparerDTO,
+    alertDTO: DTOs.AlertDTO
   ): DTOs.SecurityTableCellDTO {
     const object: DTOs.SecurityTableCellDTO = {
       data: {
         textData: !!isStencil ? 'PLACE' : textData,
-        quantComparerDTO: quantComparerDTO
+        quantComparerDTO: quantComparerDTO,
+        alertSideDTO: {
+          data: {
+            side: 'None'
+          },
+          state: {
+            isStencil: false,
+            askSided: false,
+            bidSided: false
+          }
+        }
       },
       state: {
         isQuantVariant: isQuantVariant,
         quantComparerUnavail: false,
         isStencil: isStencil
+      }
+    };
+    if (alertDTO) {
+      if (alertDTO.data.subType === AlertSubTypes.bid) {
+        object.data.alertSideDTO.data.side = 'Bid';
+        object.data.alertSideDTO.state.bidSided = true;
+      } else if (alertDTO.data.subType === AlertSubTypes.ask) {
+        object.data.alertSideDTO.data.side = 'Ask';
+        object.data.alertSideDTO.state.askSided = true;
+      } else if (alertDTO.data.subType === AlertSubTypes.sell) {
+        object.data.alertSideDTO.data.side = 'Sell';
+        object.data.alertSideDTO.state.askSided = true;
+      } else if (alertDTO.data.subType === AlertSubTypes.buy) {
+        object.data.alertSideDTO.data.side = 'Buy';
+        object.data.alertSideDTO.state.bidSided = true;
       }
     }
     return object;
@@ -772,17 +914,9 @@ export class DTOService {
   public formSecurityQuoteObject(
     isStencil: boolean,
     rawData: BEQuoteDTO,
-    bestBidNum: number,
-    bestAskNum: number,
-    filteredMetricType: string,
     targetSecurity: DTOs.SecurityDTO,
     targetRow: DTOs.SecurityTableRowDTO
   ): DTOs.SecurityQuoteDTO {
-    const {axe} = targetRow.data.bestQuotes;
-
-    const bestAxeBidNum = axe[TriCoreDriverConfig[filteredMetricType].backendTargetQuoteAttr].data.bid.number;
-    const bestAxeAskNum = axe[TriCoreDriverConfig[filteredMetricType].backendTargetQuoteAttr].data.offer.number;
-
     const hasBid = !isStencil ? (!!rawData.bidVenues && rawData.bidVenues.length > 0) : true;
     const hasAsk = !isStencil ? (!!rawData.askVenues && rawData.askVenues.length > 0) : true;
     const bidBenchmark = !isStencil ? rawData.benchmarkName : 'T 0.5 01/01/2020';
@@ -805,12 +939,8 @@ export class DTOService {
     const consolidatedBenchmark = bidBenchmark === askBenchmark ? bidBenchmark : null;
     let convertedDate: Date = null;
     if (!isStencil) {
-      // stopped converting since BE is in EST now
-      // TODO: clean up code
       convertedDate = new Date(rawData.time);
-      // convertedDate = new Date(Date.UTC(convertBuffer.getFullYear(), convertBuffer.getMonth(), convertBuffer.getDate(), convertBuffer.getHours(), convertBuffer.getMinutes(), convertBuffer.getSeconds()));
     }
-    // const quoteDate: Date = !isStencil ? (hasBid ? new Date(rawData.bidTime) : new Date(rawData.askTime)) : null;
     const object: DTOs.SecurityQuoteDTO = {
       data: {
         uuid: this.utility.generateUUID(),
@@ -837,7 +967,7 @@ export class DTOService {
           benchmark: bidBenchmark,
           time: '12:01pm'
         },
-        currentMetric: filteredMetricType
+        currentMetric: null
       },
       state: {
         isStencil: isStencil,
@@ -848,9 +978,9 @@ export class DTOService {
         isBestBid: false,
         isBestAxeOffer: false,
         isBestAxeBid: false,
-        filteredByPrice:  filteredMetricType === TriCoreDriverConfig.Price.label,
-        filteredBySpread:  filteredMetricType === TriCoreDriverConfig.Spread.label,
-        filteredByYield: filteredMetricType === TriCoreDriverConfig.Yield.label,
+        filteredByPrice: false,
+        filteredBySpread: false,
+        filteredByYield: false,
         menuActiveSide: null,
         menuActiveDriver: null,
         isBidDownVoted: false,
@@ -877,10 +1007,7 @@ export class DTOService {
         benchmark: askBenchmark,
         time: this.utility.isQuoteTimeValid(rawData.askTime) && hasAsk ? new Date(rawData.askTime).toTimeString().slice(0, 5) : ''
       };
-      object.state.isBestBid = object.data.bid.tspread == bestBidNum || object.data.bid.price == bestBidNum || object.data.bid.yield == bestBidNum;
-      object.state.isBestOffer = object.data.ask.tspread == bestAskNum || object.data.ask.price == bestAskNum || object.data.ask.yield == bestAskNum;
-      object.state.isBestAxeBid = bestAxeBidNum && (object.data.bid.tspread == bestAxeBidNum || object.data.bid.price == bestAxeBidNum || object.data.bid.yield == bestAxeBidNum);
-      object.state.isBestAxeOffer = bestAxeAskNum && (object.data.ask.tspread == bestAxeAskNum || object.data.ask.price == bestAxeAskNum || object.data.ask.yield == bestAxeAskNum);
+      this.utility.highlightSecurityQutoe(object, targetRow);
       object.state.isBidDownVoted = rawData.bidQuoteStatus < 0;
       object.state.isAskDownVoted = rawData.askQuoteStatus < 0;
     }
@@ -1030,6 +1157,7 @@ export class DTOService {
     rawData: BEAlertDTO
   ): DTOs.AlertDTO {
     const parsedTitleList = rawData.keyWord.split('|');
+    const momentTime = moment(rawData.timeStamp);
     const object: DTOs.AlertDTO = {
       data: {
         id: rawData.alertId,
@@ -1039,9 +1167,15 @@ export class DTOService {
         titleTop: parsedTitleList[0] || '',
         titleBottom: parsedTitleList[1] || '',
         message: rawData.message,
-        time: moment(rawData.timeStamp).format(`HH:mm`),
-        titlePin: rawData.marketListType || null,
-        validUntilTime: rawData.validUntilTime
+        time: momentTime.format(`HH:mm`),
+        titlePin: null,
+        validUntilTime: !!rawData.marketListAlert ? rawData.marketListAlert.validUntilTime : null,
+        unixTimestamp: momentTime.unix(),
+        level: null,
+        quantity: null,
+        isUrgent: rawData.isUrgent,
+        trader: null,
+        dealer: null
       },
       api: {
         onMouseEnterAlert: null,
@@ -1055,7 +1189,8 @@ export class DTOService {
         isCountdownFinished: true,
         willBeRemoved: false,
         hasSecurity: false,
-        hasTitlePin: !!rawData.marketListType
+        hasTitlePin: !!rawData.marketListAlert,
+        isMarketListVariant: !!rawData.marketListAlert
       }
     }
     if (!!rawData.security) {
@@ -1068,6 +1203,66 @@ export class DTOService {
       object.data.security.state.isMultiLineVariant = true;
       object.data.security.state.isWidthFlexible = true;
       object.state.hasSecurity = true;
+      const targetDriver = object.data.security.data.mark.markDriver;
+      if (!!rawData.quote && !!object.data.security) {
+        object.data.dealer = rawData.quote.dealer;
+        switch (targetDriver) {
+          case TriCoreDriverConfig.Spread.label:
+            object.data.level = rawData.quote['spread'];
+            break;
+          case TriCoreDriverConfig.Price.label:
+            object.data.level = rawData.quote['price'];
+            break;
+          case TriCoreDriverConfig.Yield.label:
+            object.data.level = rawData.quote['yield'];
+            break;
+          default:
+            break;
+        }
+        object.data.quantity = rawData.quote['quantity'];
+      }
+      if (!!rawData.trades && rawData.type === AlertTypes.tradeAlert) {
+        let quantity = 0;
+        rawData.trades.forEach((eachRawTrade) => {
+          quantity = quantity + eachRawTrade.quantity;
+        })
+        object.data.quantity = quantity;
+        if (rawData.trades.length > 0) {
+          const lastTrade = rawData.trades[rawData.trades.length-1];
+          object.data.trader = lastTrade.trader;
+          switch (targetDriver) {
+            case TriCoreDriverConfig.Spread.label:
+              object.data.level = lastTrade.spread;
+              break;
+            case TriCoreDriverConfig.Price.label:
+              object.data.level = lastTrade.price;
+              break;
+            case TriCoreDriverConfig.Yield.label:
+              object.data.level = null;
+              break;
+            default:
+              break;
+          }
+        }
+      }
+    }
+    return object;
+  }
+
+  public formAlertCountSummaryObject(
+    type: AlertTypes,
+    count: number
+  ): DTOs.AlertCountSummaryDTO {
+    const object: DTOs.AlertCountSummaryDTO = {
+      data: {
+        count: count,
+        alertType: type
+      },
+      state: {
+        isAxe: type === AlertTypes.axeAlert,
+        isMark: type === AlertTypes.markAlert,
+        isTrade: type === AlertTypes.tradeAlert
+      }
     }
     return object;
   }

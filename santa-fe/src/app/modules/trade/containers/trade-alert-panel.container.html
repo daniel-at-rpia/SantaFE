@@ -5,21 +5,13 @@
     'sat-tradeAlertPanel--configureAlertState': state.configureAlert,
     'sat-tradeAlertPanel--alertPausedState': state.isAlertPaused,
     'sat-tradeAlertPanel--configureAxeAlertState': state.configuration.selectedAlert === constants.alertTypes.axeAlert,
-    'sat-tradeAlertPanel--configureMarkAlertState': state.configuration.selectedAlert === constants.alertTypes.markAlert
+    'sat-tradeAlertPanel--configureMarkAlertState': state.configuration.selectedAlert === constants.alertTypes.markAlert,
+    'sat-tradeAlertPanel--focusMode': state.focusMode
   }">
+  <section class="sat-tradeAlertPanel__alertCountsGrid">
+    <alert-count-summary *ngFor="let alertCountSummaryDTO of alertCounts$ | async" [summary]="alertCountSummaryDTO"></alert-count-summary>
+  </section>
   <section class="sat-tradeAlertPanel__utilities">
-    <div class="sat-tradeAlertPanel__utilities-pause">
-      <button
-        (click)="onTogglePauseAlert()"
-        [ngClass]="{
-          'santaBtn--labelled': true,
-          'sat-tradeAlertPanel__utilities-pause-btn': true,
-          'santaBtn--inverseLabelled': state.isAlertPaused
-        }">
-        <i class="fal fa-pause"></i>
-        <span>Pause Alert</span>
-      </button>
-    </div>
     <div class="sat-tradeAlertPanel__utilities-configureCTA">
       <button (click)="onClickConfigureAlert()" class="santaBtn--labelled">
         <i class="fal fa-pencil"></i>

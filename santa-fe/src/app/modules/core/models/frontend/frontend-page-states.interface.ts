@@ -1,7 +1,8 @@
 import * as DTOs from 'FEModels/frontend-models.interface';
 import {
   ObligorChartCategoryBlock,
-  TradeAlertConfigurationAxeGroupBlock
+  TradeAlertConfigurationAxeGroupBlock,
+  TradeCenterTableBlock
 } from 'FEModels/frontend-blocks.interface';
 import {
   SecurityDefinitionStub,
@@ -12,9 +13,8 @@ import {
   ObligorGraphAxesZoomState,
   SecurityMapEntry
 } from 'FEModels/frontend-adhoc-packages.interface';
-import { AlertTypes } from 'Core/constants/coreConstants.constant';
-import * as am4core from "@amcharts/amcharts4/core";
-import * as am4charts from "@amcharts/amcharts4/charts";
+import {AlertTypes} from 'Core/constants/coreConstants.constant';
+import * as am4charts from '@amcharts/amcharts4/charts';
 
 export interface GlobalAlertState {
   activated: boolean;
@@ -75,11 +75,13 @@ export interface TradeState {
   ownerInitial: string;
   displayAlertThumbnail: boolean;
   alertPanelMaximized: boolean;
+  focusMode: boolean;
 }
 
 export interface TradeCenterPanelState {
-  currentContentStage: number;
   bestQuoteValidWindow: number;
+  isFocusMode: boolean;
+  displayAlertTable: boolean;
   presets : {
     presetsReady: boolean;
     selectedPreset: DTOs.SearchShortcutDTO;
@@ -97,13 +99,14 @@ export interface TradeCenterPanelState {
   table: {
     metrics: Array<SecurityTableMetricStub>;
     dto: DTOs.SecurityTableDTO;
+    alertMetrics: Array<SecurityTableMetricStub>;
+    alertDto: DTOs.SecurityTableDTO;
   }
   fetchResult: {
     fetchTableDataFailed: boolean;
     fetchTableDataFailedError: string;
-    rowList: Array<DTOs.SecurityTableRowDTO>;
-    prinstineRowList: Array<DTOs.SecurityTableRowDTO>;
-    liveUpdatedRowList: Array<DTOs.SecurityTableRowDTO>;
+    mainTable: TradeCenterTableBlock;
+    alertTable: TradeCenterTableBlock;
   }
   filters: {
     quickFilters: {
@@ -114,6 +117,12 @@ export interface TradeCenterPanelState {
       strategy: Array<string>;
     }
     securityFilters: Array<DefinitionConfiguratorEmitterParamsItem>
+  }
+  alert: {
+    alertTableAlertList: Array<DTOs.AlertDTO>;
+    initialAlertListReceived: boolean;
+    delayedLoadingFreshDataForAlert: boolean;
+    newAlertsCount: number;
   }
 }
 
@@ -188,6 +197,7 @@ export interface TradeObligorGraphPanelState {
 export interface TradeAlertPanelState {
   isUserPM: boolean;
   configureAlert: boolean;
+  focusMode: boolean;
   isAlertPaused: boolean;
   securityMap: Array<SecurityMapEntry>;
   alertUpdateTimestamp: string;
@@ -215,4 +225,5 @@ export interface TradeAlertPanelState {
   autoUpdateCountdown: number;
   alertUpdateInProgress: boolean;
   isCenterPanelPresetSelected: boolean;
+  receivedActiveAlertsMap: object;  // currently BE passes the same marketlist alerts regardless of the timestamp FE provides, until the alert expires. This map is to avoid duplicates being created over and over on each heartbeat
 }

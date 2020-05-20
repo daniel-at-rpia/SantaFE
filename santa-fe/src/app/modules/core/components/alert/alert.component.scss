@@ -52,14 +52,20 @@ $alert_type_size: $iconButton_size_regular;
           align-items: center;
           justify-content: center;
           &-icon {
-            font-size: $font_size_x_small;
+            font-size: $font_size_normal;
             color: $font_color_inverse;
           }
           &--axe {
             background-color: $tradeAxeAlertColor;
           }
+          &--axe &-icon {
+            font-size: $font_size_small;
+          }
           &--mark {
             background-color: $tradeMarkAlertColor;
+          }
+          &--trade {
+            background-color: $tradeTradeAlertColor;
           }
         }
         &-innerText{
@@ -302,17 +308,16 @@ $alert_type_size: $iconButton_size_regular;
       }
     }
   }
-
-  &--typeGroupVariant {
+  &--typeTradeVariant {
     #{$alertBlockName} {
       &__thumbnail {
-        &-type-circle-innerText {
+        &-type-circle-inner--trade {
           display: flex;
         }
       }
     }
   }
-  &--typeBidVariant {
+  &--bidSidedVariant {
     #{$alertBlockName} {
       &__thumbnail {
         &-main {
@@ -330,7 +335,7 @@ $alert_type_size: $iconButton_size_regular;
       }
     }
   }
-  &--typeAskVariant {
+  &--askSidedVariant {
     #{$alertBlockName} {
       &__thumbnail {
         &-main {

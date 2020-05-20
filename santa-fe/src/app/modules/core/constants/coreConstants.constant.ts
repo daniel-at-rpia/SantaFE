@@ -9,14 +9,14 @@ export const APIUrlMap = {
   getSecurityIdMap: `security/get-security-identifiers`,
   getSecurityDTOs: `security/get-securities`,
   getPortfolios: `group/get-security-dtos-from-group-identifier`,
-  getAllQuotes: `liveQuote/get-all-quotes`,
+  getAllQuotes: `quote/get-all-quotes`,
   getObligorCurves: `group/get-security-dtos-from-security-and-group-definition`,
   getGroups: `group/get-groups`,
   getGroupHistoricalSummary: `group/get-group-historical-summary-from-security`,
   getTickers: `Obligor/get-tickers`,
   getSubIndustries: `obligor/get-subindustries`,
   getCountries: 'obligor/get-countries',
-  setQuoteStatus: 'liveQuote/set-quote-status',
+  setQuoteStatus: 'quote/set-quote-status',
   getAlertConfigurations: 'Alert/get-alert-configs',
   updateAlertConfiguration: 'Alert/update-alert-configs',
   getAlerts: 'Alert/get-alerts',
@@ -203,7 +203,8 @@ export const EngagementActionList = {
 export enum AlertTypes {
   axeAlert = 'Axe',
   markAlert = 'Mark',
-  marketListAlert = 'MarketList'
+  tradeAlert = 'Trade',
+  default = ''
 }
 
 export enum AlertSubTypes {
@@ -211,10 +212,11 @@ export enum AlertSubTypes {
   ask = 'Ask',
   both = 'Both',
   liquidation = 'Liquidation',
-  bwic = 'Bwic',
-  owic = 'Owic',
   quantityChange = 'QuantityChange',
-  ratingChange = 'RatingChange'
+  ratingChange = 'RatingChange',
+  buy = 'Buy',
+  sell = 'Sell',
+  default = ''
 }
 
 export const ALERT_COUNTDOWN = 5000;

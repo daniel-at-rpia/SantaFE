@@ -34,8 +34,6 @@ export interface BEFullSecurityDTO {
 }
 
 export interface BEPortfolioDTO {
-  date: string;
-  securityIdentifier: string;
   partitionOptionValue: {
     PortfolioShortName: string;
     StrategyName: string;
@@ -43,6 +41,7 @@ export interface BEPortfolioDTO {
   quantity: number;
   cs01Local: number;
   cs01Cad: number;
+  trades: Array<BETradeBlock>;
 }
 
 export interface BESecurityDTO {
@@ -81,6 +80,7 @@ export interface BESecurityDTO {
   isPreferred?: boolean;
   isCds?: boolean;
   unitPosition?: {
+    metricDate?: string;
     mark: {
       driver: string;
       enteredTime: string;
@@ -97,11 +97,11 @@ export interface BESecurityDTO {
       PortfolioShortName: Array<string>;
       StrategyName: Array<string>;
     };
-    date: string;
+    date?: string;
     securityIdentifier: string;
-    quantity: number;
-    cs01Local: number;
-    cs01Cad: number;
+    quantity?: number;
+    cs01Local?: number;
+    cs01Cad?: number;
     hedgeFactor: number;
   }
   curveSubType?: string;  // CDS only
@@ -387,14 +387,54 @@ export interface BEAlertDTO {
   message: string;
   isActive: boolean;
   isCancelled?: boolean;
-  urgency?: number;
+  isUrgent: boolean;
   isDeleted: boolean;
   quoteId?: string;
   security?: BESecurityDTO;
-  marketListType?: string;
   marketListDescription?: string;
   securityIdentifierToQuoteId?: {
     [property: string]: string;
   };
+  trades?: Array<BETradeBlock>;
+  quote?: any;
+  marketListAlert?: BEAlertMarketListBlock;
+}
+
+export interface BETradeBlock {
+  partitionOptionValue: any;
+  tradeId: string;
+  parentTradeId: string;
+  quantity: number;
+  tradeDateTime: string;
+  price: number;
+  counterpartyName: string;
+  spread: number;
+  shouldCalculateSpread: boolean;
+  shouldCalculatePrice: boolean;
+  securityQuantityAfterTrade: number;
+  fifoAvgSpread: number;
+  wgtAvgSpread: number;
+  fifoAvgPrice: number;
+  wgtAvgPrice: number;
+  trader: string;
+  isCancelled: boolean;
+}
+
+interface BEAlertMarketListBlock {
+  type: string;
+  subType: string;
+  keyWord: string;
+  message: string;
   validUntilTime: string;
+  marketListType: string;
+  marketListDescription: string;
+  securityIdentifierToQuoteId: object;
+  numUnderlyingSecurities: number;
+  alertConfigId: string;
+  alertId: string;
+  timeStamp: string;
+  isUrgent: boolean;
+  isActive: boolean;
+  isDeleted: boolean;
+  isCancelled: boolean;
 }

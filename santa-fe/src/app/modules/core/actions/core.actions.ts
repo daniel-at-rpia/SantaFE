@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
-import { AlertDTO } from 'FEModels/frontend-models.interface';
+import { AlertDTO, AlertCountSummaryDTO } from 'FEModels/frontend-models.interface';
 
 export enum CoreActions {
   UserLoggedIn = '[Core] User Logged In',
@@ -8,6 +8,7 @@ export enum CoreActions {
   LoadSecurityMap = '[Core] Load Security Map',
   FlushSecurityMap = '[Core] Fluahs Security Map',
   SendNewAlerts = '[Core] Send New Alerts',
+  SendAlertCountsByType = '[Core] Send Alert Counts',
   ReceivedNewAlerts = '[Core] Received New Alerts'
 }
 
@@ -53,6 +54,16 @@ export class CoreSendNewAlerts implements Action {
     list: Array<AlertDTO>
   ){
     this.list = list;
+  }
+}
+
+export class CoreSendAlertCountsByType implements Action {
+  readonly type = CoreActions.SendAlertCountsByType;
+  readonly payload: Array<AlertCountSummaryDTO>;
+  constructor(
+    payload: Array<AlertCountSummaryDTO> = []
+  ) {
+    this.payload = payload;
   }
 }
 

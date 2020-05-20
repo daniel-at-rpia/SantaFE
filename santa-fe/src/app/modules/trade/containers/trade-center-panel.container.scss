@@ -5,6 +5,7 @@ $tradeCenterPanel_presetsAndFilters_presets_title_height: 6rem;
 $tradeCenterPanel_presetsAndFilters_presets_categoryCanvas_ribbon_width: 10rem;
 $tradeCenterPanel_presetsAndFilters_presets_categoryCanvas_list_margin_left: $spacing_x_large + $tradeCenterPanel_presetsAndFilters_presets_categoryCanvas_ribbon_width - 6rem;
 $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
+$tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 5.5rem;
 .sat-tradeCenterPanel {
   $tradeCenterPanelBlockName: &;
   @include mix_border_generator;
@@ -36,7 +37,7 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
         &-text {
           text-align: center;
           font-size: $font_size_x_large;
-          color: $font_color_minor; 
+          color: $font_color_minor;
         }
       }
       &-content {
@@ -177,12 +178,30 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
       &-backBtn {
         margin: $spacing_medium $spacing_medium $spacing_large $spacing_medium;
         &>i {
-          margin-bottom: $spacing_x_small;
+          margin-left: $spacing_small;
+          margin-right: 0;
         }
       }
       security-definition-configurator {
-        @include mix_calculate(height, 100%, 5rem, '-'); // 5rem is the height of backBtn
+        @include mix_calculate(height, 100%, $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size, '-');
         display: flex;
+      }
+      &-alertConfigPrompt {
+        @include mix_calculate(height, 100%, $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size, '-');
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        &-icon {
+          font-size: $font_size_hero_large;
+          color: $font_color_trivial;
+        }
+        &-text {
+          margin: $spacing_large $spacing_small;
+          font-size: $font_size_normal;
+          color: $font_color_minor;
+          text-align: center;
+        }
       }
     }
   }
@@ -192,40 +211,60 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
     flex-direction: column;
     overflow: hidden;
     padding: $spacing_medium;
-    &-quickFilters {
+    &-utilities {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      margin-bottom: $spacing_small;
       &-keywordSearch {
         @include mix_border_radius(5px);
         flex: 0 1 25rem;
         display: flex;
         align-items: center;
-        padding: $spacing_x_small $spacing_small;
         margin-right: $spacing_medium;
         &-activeIcon {
           font-size: $font_size_x_large;
           color: $font_color_major;
-          margin-right: $spacing_small;
-        }
-        &-label {
-          color: $font_color_minor;
-          font-size: $font_size_large;
-          margin-right: $spacing_small;
+          margin: 0 $spacing_small;
         }
         santa-input {
           flex: 1 1 auto;
-          margin-bottom: $spacing_x_small;
+          margin: $spacing_x_small $spacing_x_small $spacing_x_small 0;
+        }
+      }
+      &-tableSwitch {
+        flex: 0 1 auto;
+        margin-right: $spacing_medium;
+        &-btnGroup {
+          &-mainBtn {
+            @include material('none');
+            @extend .santaBtn--inverseLabelled;
+            background-color: $color_active;
+          }
+          &-alertBtn {
+            @include material();
+            background-color: $color_white;
+            color: $font_color_major;
+            &-newAlertsCount {
+              @include mix_border_radius(3px);
+              margin-left: $spacing_small;
+              padding: $spacing_xx_small;
+              font-size: $font_size_x_small;
+              color: $font_color_inverse;
+              background-color: $color_highlight;
+            }
+          }
         }
       }
       &-driver {
+        flex: 0 0 auto;
         display: flex;
         align-items: center;
         &-label {
           flex: 0 0 auto;
           color: $font_color_minor;
           font-size: $font_size_large;
-          margin-right: $spacing_medium;
+          margin-right: $spacing_small;
         }
         &-btn {
           @include mix_border_radius(5px);
@@ -277,16 +316,24 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
         overflow: hidden;
       }
     }
+    &-alertTable {
+      flex: 1 1 auto;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      santa-table {
+        flex: 1 1 auto;
+        display: flex;
+        overflow: hidden;
+      }
+    }
   }
   &--keywordSearchActiveState {
     #{$tradeCenterPanelBlockName} {
       &__result {
-        &-quickFilters-keywordSearch {
+        &-utilities-keywordSearch {
           background-color: $color_filter;
           &-activeIcon {
-            color: $font_color_inverse;
-          }
-          &-label {
             color: $font_color_inverse;
           }
         }
@@ -297,6 +344,42 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
     #{$tradeCenterPanelBlockName} {
       &__presetsAndFilters {
         @include mix_fixed_div(relative, $z_index_tooltip);
+      }
+    }
+  }
+  &--displayAlertTableState {
+    #{$tradeCenterPanelBlockName} {
+      &__presetsAndFilters {
+        &-configurator {
+          security-definition-configurator {
+            display: none;
+          }
+          &-alertConfigPrompt {
+            display: flex;
+          }
+        }
+      }
+      &__result {
+        &-utilities-tableSwitch-btnGroup {
+          &-mainBtn {
+            @include material();
+            background-color: $color_white;
+            &>i, &>span {
+              color: $font_color_major;
+            }
+          }
+          &-alertBtn {
+            @include material('none');
+            @extend .santaBtn--inverseLabelled;
+            background-color: $color_active;
+          }
+        }
+        &-table {
+          display: none;
+        }
+        &-alertTable {
+          display: flex;
+        }
       }
     }
   }
@@ -345,6 +428,30 @@ $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
           transform: translate(0, 0);
           &-list-item {
             transform: translate(0, 0);
+          }
+        }
+      }
+    }
+  }
+  &--focusMode {
+    border: none;
+    #{$tradeCenterPanelBlockName} {
+      &__presetsAndFilters {
+        display: none;
+      }
+      &__result {
+        padding-top: 0;
+        &-utilities {
+          padding: $spacing_xx_small;
+          &-keywordSearch {
+            padding-left: 0;
+          }
+          &-focusMode {
+            &-cta {
+              @extend .santaBtn--inverseLabelled;
+              @include material('none');
+              background-color: $color_active;
+            }
           }
         }
       }

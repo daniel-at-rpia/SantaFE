@@ -452,11 +452,21 @@
   @include mix_border_radius(10px);
   flex: 1 1 auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  &__alertCountsGrid {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      min-width: 28rem;
+      flex: 1 1 auto;
+      padding: $spacing_x_small;
+      overflow-y: scroll;
+  }
   &__utilities {
     flex: 0 1 $trade_topPanels_baseState_height;
     display: flex;
     padding: $spacing_medium;
+    max-height: 100%;
     &-thumbnail {
       @include mix_border_generator(0 0 0 $typical_border_width);
       flex: 0 0 auto;
@@ -480,7 +490,7 @@
     }
     &-configureCTA {
       @include mix_border_generator(0 0 0 $typical_border_width);
-      flex: 1 1 auto;
+      flex: 0 1 auto;
       display: flex;
       justify-content: center;
       margin-left: $spacing_medium;
@@ -573,6 +583,9 @@
       &__configuration {
         display: flex;
       }
+      &__alertCountsGrid {
+        display: none;
+      }
     }
   }
   &--alertPausedState {
@@ -626,6 +639,14 @@
           display: flex;
           background-color: $tradeMarkAlertBackgroundColor;
         }
+      }
+    }
+  }
+  &--focusMode {
+    border: none;
+    #{$tradeAlertPanelBlockName} {
+      &__utilities {
+        display: none;
       }
     }
   }

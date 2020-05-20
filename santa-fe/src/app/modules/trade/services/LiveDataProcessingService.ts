@@ -9,7 +9,8 @@
       SecurityTableHeaderDTO,
       SecurityTableRowDTO,
       QuantComparerDTO,
-      SearchShortcutDTO
+      SearchShortcutDTO,
+      AlertDTO
     } from 'FEModels/frontend-models.interface';
     import {
       LiveDataDiffingResult,
@@ -46,15 +47,9 @@ export class LiveDataProcessingService {
     sendToAlertConfigCallback: (card: SecurityDTO) => void
   ): Array<SecurityTableRowDTO> {
     const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
-    const prinstineRowList: Array<SecurityTableRowDTO> = [];  // flush out the stencils
+    const prinstineRowList: Array<SecurityTableRowDTO> = [];
     const securityList = [];
-    let count = 0;
-    let nonEmptyCount = 0;
-    let validCount = 0;
     for (const eachKey in rawSecurityDTOMap){
-      count++;
-      nonEmptyCount++;
-      let sumSize = 0;
       let isValidFlag = true;
       const newBESecurity:BESecurityDTO = rawSecurityDTOMap[eachKey].security;
       const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false, selectedDriver);
@@ -62,15 +57,17 @@ export class LiveDataProcessingService {
       newSecurity.api.onClickSendToGraph = sendToGraphCallback;
       newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
       newSecurity.api.onClickSendToAlertConfig = sendToAlertConfigCallback;
-      rawSecurityDTOMap[eachKey].positions.forEach((eachPortfolio: BEPortfolioDTO) => {
-        // if (!eachPortfolio.security.isGovt) {
-        // disabling the check for isGovt for now
-        if(true){
-          this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio);
-        } else {
-          isValidFlag = false;
-        }
-      });
+      if (!!rawSecurityDTOMap[eachKey].positions) {
+        rawSecurityDTOMap[eachKey].positions.forEach((eachPortfolio: BEPortfolioDTO) => {
+          // if (!eachPortfolio.security.isGovt) {
+          // disabling the check for isGovt for now
+          if(true){
+            this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio);
+          } else {
+            isValidFlag = false;
+          }
+        });
+      }
       if (isValidFlag) {
         this.dtoService.appendPortfolioOverviewInfoForSecurityDTO(newSecurity);
         this.populateEachRowWithData(
@@ -78,12 +75,56 @@ export class LiveDataProcessingService {
           prinstineRowList,
           newSecurity,
           selectedDriver,
-          rawSecurityDTOMap[eachKey].bestQuotes
+          rawSecurityDTOMap[eachKey].bestQuotes,
+          null
         );
-        validCount++;
       }
     }
-    console.log('count is', count, nonEmptyCount, validCount);
+    return prinstineRowList;
+  }
+
+  public loadFinalStageDataForAlertTable(
+    alertDTOList: Array<AlertDTO>,
+    tableHeaderList: Array<SecurityTableHeaderDTO>,
+    selectedDriver: string,
+    serverReturn: BEFetchAllTradeDataReturn,
+    sendToGraphCallback: (card: SecurityDTO) => void,
+    openSecurityInBloombergCallback: (params: ClickedOpenSecurityInBloombergEmitterParams) => void,
+    sendToAlertConfigCallback: (card: SecurityDTO) => void
+  ): Array<SecurityTableRowDTO> {
+    const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
+    const prinstineRowList: Array<SecurityTableRowDTO> = [];
+    const securityList = [];
+    alertDTOList.forEach((eachAlertDTO) => {
+      if (eachAlertDTO.data && eachAlertDTO.data.security && eachAlertDTO.data.security.data && eachAlertDTO.data.security.data.securityID) {
+        const targetSecurityId = eachAlertDTO.data.security.data.securityID;
+        if (rawSecurityDTOMap[targetSecurityId]) {
+          const newBESecurity:BESecurityDTO = rawSecurityDTOMap[targetSecurityId].security;
+          const newSecurity = this.dtoService.formSecurityCardObject(targetSecurityId, newBESecurity, false, selectedDriver);
+          newSecurity.state.isInteractionThumbDownDisabled = true;
+          newSecurity.api.onClickSendToGraph = sendToGraphCallback;
+          newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
+          newSecurity.api.onClickSendToAlertConfig = sendToAlertConfigCallback;
+          if (!!rawSecurityDTOMap[targetSecurityId].positions) {
+            rawSecurityDTOMap[targetSecurityId].positions.forEach((eachPortfolio: BEPortfolioDTO) => {
+              this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio);
+            });
+          }
+          this.dtoService.appendPortfolioOverviewInfoForSecurityDTO(newSecurity);
+          this.dtoService.appendAlertInfoToSecurityDTO(newSecurity, eachAlertDTO);
+          this.populateEachRowWithData(
+            tableHeaderList,
+            prinstineRowList,
+            newSecurity,
+            selectedDriver,
+            rawSecurityDTOMap[targetSecurityId].bestQuotes,
+            eachAlertDTO
+          );
+        } else {
+          console.error('security not found for alert', eachAlertDTO);
+        }
+      }
+    });
     return prinstineRowList;
   }
 
@@ -92,9 +133,10 @@ export class LiveDataProcessingService {
     prinstineRowList: Array<SecurityTableRowDTO>,
     newSecurity: SecurityDTO,
     driverType: string,
-    bestQuoteServerReturn: BEBestQuoteDTO
+    bestQuoteServerReturn: BEBestQuoteDTO,
+    targetAlert: AlertDTO
   ) {
-    const newRow = this.dtoService.formSecurityTableRowObject(newSecurity);
+    const newRow = !!targetAlert ? this.dtoService.formSecurityTableRowObject(newSecurity, targetAlert.data.id) : this.dtoService.formSecurityTableRowObject(newSecurity, newSecurity.data.securityID);
     this.populateEachRowWithBestQuoteData(
       headerList,
       newRow,
@@ -102,20 +144,14 @@ export class LiveDataProcessingService {
       bestQuoteServerReturn
     );
     headerList.forEach((eachHeader, index) => {
-      if (!eachHeader.state.isPureTextVariant) {
-        // data only comes in final stage right now, no need for this logic at the moment
-        // if (eachHeader.data.readyStage === 1 || eachHeader.data.readyStage === 2) {
-          const newCell = this.utilityService.populateSecurityTableCellFromSecurityCard(
-            eachHeader,
-            newRow,
-            this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant),
-            driverType
-          );
-          newRow.data.cells.push(newCell);
-        // } else {
-        //   const emptyCell = this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant);
-        //   newRow.data.cells.push(emptyCell);
-        // }
+      if (!eachHeader.state.isSecurityCardVariant) {
+        const newCell = this.utilityService.populateSecurityTableCellFromSecurityCard(
+          eachHeader,
+          newRow,
+          this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant, null, targetAlert),
+          driverType
+        );
+        newRow.data.cells.push(newCell);
       }
     });
     prinstineRowList.push(newRow);
@@ -205,15 +241,17 @@ export class LiveDataProcessingService {
     let quantDiffCount = 0;
 
     // those lists are only used for logging purposes
+    const newRowList: Array<SecurityTableRowDTO> = [];
     const positionUpdateList: Array<SecurityTableRowDTO> = [];
     const markUpdateList: Array<SecurityTableRowDTO> = [];
     const newQuantUpdateList: Array<SecurityTableRowDTO> = [];
     const betterBidUpdateList: Array<SecurityTableRowDTO> = [];
     const betterAskUpdateList: Array<SecurityTableRowDTO> = [];
+    const validityUpdateList: Array<SecurityTableRowDTO> = [];
 
     newList.forEach((eachNewRow) => {
       const oldRow = oldRowList.find((eachOldRow) => {
-        return eachOldRow.data.security.data.securityID === eachNewRow.data.security.data.securityID;
+        return eachOldRow.data.rowId === eachNewRow.data.rowId;
       });
       if (!!oldRow) {
         const isSecurityDiff = this.isThereDiffInSecurity(oldRow.data.security, eachNewRow.data.security);
@@ -228,17 +266,21 @@ export class LiveDataProcessingService {
         }
         isQuantDiff === 3 && betterBidUpdateList.push(eachNewRow);
         isQuantDiff === 4 && betterAskUpdateList.push(eachNewRow);
+        isQuantDiff === 5 && validityUpdateList.push(eachNewRow);
       } else {
         updateList.push(eachNewRow);
+        newRowList.push(eachNewRow);
       }
     });
     if (updateList.length > 0) {
       console.log('=== new update ===');
+      console.log('new rows', newRowList);
       console.log('Position change: ', positionUpdateList);
       console.log('Mark change: ', markUpdateList);
       console.log('Best Quote overwrite: ', newQuantUpdateList);
       console.log('Best Bid change: ', betterBidUpdateList);
       console.log('Best Ask change: ', betterAskUpdateList);
+      console.log('Validity change: ', validityUpdateList);
     }
     return {
       newRowList: updateList,
@@ -282,6 +324,9 @@ export class LiveDataProcessingService {
       if (oldQuant.data.offer[eachAttr] !== newQuant.data.offer[eachAttr]) {
         return 4;
       }
+    }
+    if (oldQuant.state.bidIsStale !== newQuant.state.bidIsStale || oldQuant.state.askIsStale !== newQuant.state.askIsStale) {
+      return 5;
     }
     return 0;
   }

@@ -1,52 +1,63 @@
-// dependencies
-import {
-  Component,
-  EventEmitter,
-  Input,
-  isDevMode,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewEncapsulation
-} from '@angular/core';
-import {select, Store} from '@ngrx/store';
-import {interval, Observable, of, Subscription} from 'rxjs';
-import {catchError, first, tap, withLatestFrom} from 'rxjs/operators';
-import * as moment from 'moment';
+  // dependencies
+    import {
+      Component,
+      EventEmitter,
+      Input,
+      isDevMode,
+      OnChanges,
+      OnDestroy,
+      OnInit,
+      Output,
+      ViewEncapsulation
+    } from '@angular/core';
+    import {select, Store} from '@ngrx/store';
+    import {interval, Observable, of, Subscription} from 'rxjs';
+    import {catchError, first, tap, withLatestFrom} from 'rxjs/operators';
+    import * as moment from 'moment';
 
-import {DTOService} from 'Core/services/DTOService';
-import {UtilityService} from 'Core/services/UtilityService';
-import {RestfulCommService} from 'Core/services/RestfulCommService';
-import {TradeAlertPanelState} from 'FEModels/frontend-page-states.interface';
-import {SecurityMapEntry} from 'FEModels/frontend-adhoc-packages.interface';
-import {SecurityDTO} from 'FEModels/frontend-models.interface';
-import {TradeAlertConfigurationAxeGroupBlock} from 'FEModels/frontend-blocks.interface';
-import {
-  BEAlertConfigurationDTO,
-  BEAlertConfigurationReturn,
-  BEAlertDTO,
-  BESecurityDTO
-} from 'BEModels/backend-models.interface';
-import {
-  PayloadGetSecurities,
-  PayloadUpdateAlertConfig,
-  PayloadUpdateSingleAlertConfig
-} from 'BEModels/backend-payloads.interface';
-import {AlertSubTypes, AlertTypes} from 'Core/constants/coreConstants.constant';
-import {selectSecurityMapContent, selectSecurityMapValidStatus} from 'Core/selectors/core.selectors';
-import {
-  ALERT_MAX_SECURITY_SEARCH_COUNT,
-  ALERT_UPDATE_COUNTDOWN,
-  AxeAlertScope,
-  AxeAlertType
-} from 'Core/constants/tradeConstants.constant';
-import {FilterOptionsPortfolioResearchList, FullOwnerList} from 'Core/constants/securityDefinitionConstants.constant';
-import {CoreFlushSecurityMap, CoreSendNewAlerts} from 'Core/actions/core.actions';
-import {selectPresetSelected, selectSelectedSecurityForAlertConfig} from 'Trade/selectors/trade.selectors';
-import {mockAlert} from 'Core/components/alert/alert.mock';
-
-//
+    import { DTOService } from 'Core/services/DTOService';
+    import { UtilityService } from 'Core/services/UtilityService';
+    import { RestfulCommService } from 'Core/services/RestfulCommService';
+    import { TradeAlertPanelState } from 'FEModels/frontend-page-states.interface';
+    import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
+    import {SecurityDTO, AlertDTO} from 'FEModels/frontend-models.interface';
+    import { TradeAlertConfigurationAxeGroupBlock } from 'FEModels/frontend-blocks.interface';
+    import {
+      BESecurityDTO,
+      BEAlertConfigurationReturn,
+      BEAlertConfigurationDTO,
+      BEAlertDTO
+    } from 'BEModels/backend-models.interface';
+    import {
+      PayloadGetSecurities,
+      PayloadUpdateAlertConfig,
+      PayloadUpdateSingleAlertConfig
+    } from 'BEModels/backend-payloads.interface';
+    import {
+      EngagementActionList,
+      AlertTypes,
+      AlertSubTypes
+    } from 'Core/constants/coreConstants.constant';
+    import {
+      selectAlertCounts,
+      selectSecurityMapContent,
+      selectSecurityMapValidStatus
+    } from 'Core/selectors/core.selectors';
+    import {
+      ALERT_MAX_SECURITY_SEARCH_COUNT,
+      AxeAlertScope,
+      ALERT_UPDATE_COUNTDOWN,
+      AxeAlertType
+    } from 'Core/constants/tradeConstants.constant';
+    import { FullOwnerList, FilterOptionsPortfolioResearchList } from 'Core/constants/securityDefinitionConstants.constant';
+    import { CoreFlushSecurityMap, CoreSendNewAlerts } from 'Core/actions/core.actions';
+    import { TradeAlertTableSendNewAlertsEvent } from 'Trade/actions/trade.actions';
+    import {
+      selectSelectedSecurityForAlertConfig,
+      selectPresetSelected,
+      selectFocusMode
+    } from 'Trade/selectors/trade.selectors';
+  //
 
 @Component({
   selector: 'trade-alert-panel',
@@ -69,6 +80,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     centerPanelPresetSelectedSub: null
   }
   autoUpdateCount$: Observable<any>;
+  alertCounts$: Observable<any>;
   constants = {
     alertTypes: AlertTypes,
     alertSubTypes: AlertSubTypes,
@@ -87,6 +99,14 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   ){
     window['moment'] = moment;
     this.state = this.initializePageState();
+    this.store$.pipe(
+      select(selectFocusMode)
+    ).subscribe((value) => {
+      this.state.focusMode = !!value;
+    });
+    this.alertCounts$ = this.store$.pipe(
+      select(selectAlertCounts)
+    );
   }
 
   private initializePageState(): TradeAlertPanelState {
@@ -96,6 +116,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       isAlertPaused: true,
       securityMap: [],
       alertUpdateTimestamp: null,
+      focusMode: false,
       configuration: {
         selectedAlert: null,
         axe: {
@@ -125,9 +146,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           }
         }
       },
-      autoUpdateCountdown: 0,
+      autoUpdateCountdown: 4,
       alertUpdateInProgress: false,
-      isCenterPanelPresetSelected: false
+      isCenterPanelPresetSelected: false,
+      receivedActiveAlertsMap: {}
     };
     return state;
   }
@@ -678,29 +700,43 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlerts, {req: 'POST'}, payload).pipe(
       first(),
       tap((serverReturn: Array<BEAlertDTO>) => {
-        console.log('updateAlerts', serverReturn);
-        // serverReturn.push({...mockAlert, keyWord: `${1}|${Math.random().toFixed(2)}`});
-        if (!!serverReturn && serverReturn.length > 0) {
-          const updateList = [];
-          // temporarily filter out all the market listing alerts
+        if (!!serverReturn) {
           const filteredServerReturn = serverReturn.filter((eachRawAlert) => {
-            return eachRawAlert.type !== this.constants.alertTypes.marketListAlert;
+            // no filtering logic for now
+            return true;
           });
+          const updateList: Array<AlertDTO> = [];
+          const securityList: Array<AlertDTO> = [];
           filteredServerReturn.forEach((eachRawAlert) => {
-            // checking for cancelled and active alerts
-            const expired = moment().diff(moment(eachRawAlert.validUntilTime) ) > 0;
-            if (eachRawAlert.isActive && !eachRawAlert.isCancelled && !expired) {
-              const newAlert = this.dtoService.formAlertObject(eachRawAlert);
-              updateList.push(this.dtoService.formAlertObject(eachRawAlert));
-            }
-            // adding cancelled as well
-            if (eachRawAlert.isCancelled) {
-              updateList.push(this.dtoService.formAlertObject(eachRawAlert));
+            // Trade alerts are handled differently since BE passes the same trade alerts regardless of the timestamp FE provides
+            if (!!eachRawAlert.marketListAlert) {
+              if (this.state.receivedActiveAlertsMap[eachRawAlert.alertId]) {
+                // ignore, already have it
+              } else {
+                this.state.receivedActiveAlertsMap[eachRawAlert.alertId] = eachRawAlert.keyWord;
+                const newAlert = this.dtoService.formAlertObject(eachRawAlert);
+                if (newAlert.data.isUrgent) {
+                  updateList.push(newAlert);
+                }
+                if (newAlert.data.security && newAlert.data.security.data.securityID) {
+                  securityList.push(newAlert);
+                }
+              }
+            } else {
+              // checking for cancelled and active alerts
+              if (eachRawAlert.isActive) {
+                const newAlert = this.dtoService.formAlertObject(eachRawAlert);
+                if (newAlert.data.isUrgent) {
+                  updateList.push(newAlert);
+                }
+                if (newAlert.data.security && newAlert.data.security.data.securityID) {
+                  securityList.push(newAlert);
+                }
+              }
             }
           });
-          this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
-        } else {
-          this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy([])));
+          updateList.length > 0 && this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
+          this.store$.dispatch(new TradeAlertTableSendNewAlertsEvent(this.utilityService.deepCopy(securityList)));
         }
         this.state.alertUpdateInProgress = false;
       }),
@@ -727,6 +763,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       return this.constants.alertSubTypes.bid;
     }
   }
+
   private mapWatchTypesToWatchType(alertTypes: AxeAlertType[]): AxeAlertType {
     if (alertTypes.includes(AxeAlertType.normal) && alertTypes.includes(AxeAlertType.marketList)) {
       return AxeAlertType.both;
@@ -739,7 +776,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-    // public onClickSendMail() {
+  // public onClickSendMail() {
     //   this.restfulCommService.logEngagement(
     //     EngagementActionList.sendEmail,
     //     'n/a',
@@ -748,6 +785,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     //     'Trade - Alert Panel'
     //   );
     //   location.href = "mailto:santa@rpia.ca?subject=Santa%20Feedback";
-    // }
+  // }
 
 }

@@ -1,6 +1,22 @@
 {
   "hosting": [
     {
+      "target": "local4",
+      "site": "local4-santa-rpia",
+      "public": "dist/santa-fe",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
       "target": "local3",
       "site": "local3-santa-rpia",
       "public": "dist/santa-fe",
@@ -19,6 +35,22 @@
     {
       "target": "local",
       "site": "local-santa-rpia",
+      "public": "dist/santa-fe",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "target": "dev4",
+      "site": "dev4-santa-rpia",
       "public": "dist/santa-fe",
       "ignore": [
         "firebase.json",

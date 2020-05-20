@@ -1,23 +1,23 @@
 import {
+  AgGridColumnDefinition,
+  AgGridRow,
+  QuoteMetricBlock,
+  SecurityDefinitionFilterBlock,
   SecurityGroupMetricBlock,
   SecurityGroupMetricPackBlock,
   SecurityGroupPieChartBlock,
-  SecurityDefinitionFilterBlock,
-  QuoteMetricBlock,
-  SecurityPortfolioBlock,
   SecurityMarkBlock,
-  QuantitativeEntryBlock,
-  QuantitativeEntryStyleBlock,
-  AgGridColumnDefinition,
-  AgGridRow,
-  SecurityTableRowQuoteBlock
+  SecurityPortfolioBlock,
+  SecurityTableRowQuoteBlock,
+  SecurityCostPortfolioBlock
 } from 'FEModels/frontend-blocks.interface';
+import {AlertSubTypes, AlertTypes} from 'Core/constants/coreConstants.constant';
 import {
-  AlertTypes,
-  AlertSubTypes
-} from 'Core/constants/coreConstants.constant';
-import { SantaTableNumericFloatingFilterParams, ClickedOpenSecurityInBloombergEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
+  ClickedOpenSecurityInBloombergEmitterParams,
+  SantaTableNumericFloatingFilterParams
+} from 'FEModels/frontend-adhoc-packages.interface';
 import * as agGrid from 'ag-grid-community';
+import {Alert} from "Core/components/alert/alert.component";
 
 
 interface BasicDTOStructure {
@@ -79,6 +79,17 @@ export interface SecurityDTO extends BasicDTOStructure {
       positionAGBInMM: string;
       positionBBB: number;
       positionBBBInMM: string;
+    };
+    cost: {
+      current: SecurityCostPortfolioBlock;
+      firm: SecurityCostPortfolioBlock;
+      DOF: SecurityCostPortfolioBlock;
+      SOF: SecurityCostPortfolioBlock;
+      STIP: SecurityCostPortfolioBlock;
+      FIP: SecurityCostPortfolioBlock;
+      CIP: SecurityCostPortfolioBlock;
+      AGB: SecurityCostPortfolioBlock;
+      BBB: SecurityCostPortfolioBlock;
     }
     metricPack: SecurityGroupMetricPackBlock;
     bestQuote: {
@@ -97,6 +108,21 @@ export interface SecurityDTO extends BasicDTOStructure {
     cs01CadCurrentInK: string;
     hasIndex: boolean;
     hedgeFactor: number;
+    alert: {
+      alertTime: string;
+      alertTimeRaw: number;
+      alertType: string;
+      alertMessage: string;
+      alertValue: string;
+      alertTarget: string;
+      alertSide: string;
+      alertLevel: string;
+      alertLevelRaw: number;
+      alertQuantity: string;
+      alertQuantityRaw: number;
+      alertQuoteDealer: string;
+      alertTradeTrader: string;
+    }
   }
   api: {
     onClickCard: (card: SecurityDTO) => void;
@@ -284,6 +310,7 @@ export interface SecurityTableDTO extends BasicDTOStructure {
     isNativeEnabled: boolean;
     isAgGridReady: boolean;
     selectedSecurityCard: SecurityDTO;
+    isActivated: boolean;
   },
   api: {
     gridApi: agGrid.GridApi,
@@ -304,12 +331,13 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     frontendMetric: boolean;
     isDataTypeText: boolean;
     isDriverDependent: boolean;
-    pinned?: boolean;
+    pinned: boolean;
     groupBelongs: string;
     groupShow: boolean;
+    activePortfolios: Array<string>;
   },
   state: {
-    isPureTextVariant: boolean;
+    isSecurityCardVariant: boolean;
     isQuantVariant: boolean;
     isAxeSkewEnabled: boolean;
     istotalSkewEnabled: boolean;
@@ -318,6 +346,7 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
 
 export interface SecurityTableRowDTO extends BasicDTOStructure {
   data: {
+    rowId: string;
     security: SecurityDTO;
     cells: Array<SecurityTableCellDTO>;
     quotes: SecurityTableRowQuoteBlock;
@@ -348,6 +377,7 @@ export interface SecurityTableCellDTO extends BasicDTOStructure {
   data: {
     textData: string;
     quantComparerDTO: QuantComparerDTO;
+    alertSideDTO: SantaTableAlertSideCellDTO;
   },
   state: {
     isQuantVariant: boolean;
@@ -473,8 +503,14 @@ export interface AlertDTO extends BasicDTOStructure {
     titleBottom: string;
     message: string;
     time: string;
+    unixTimestamp: number;
     titlePin: string;
     validUntilTime: string;
+    level: number;
+    quantity: number;
+    isUrgent: boolean;
+    trader: string;
+    dealer: string;
   },
   state: {
     isRead: boolean;
@@ -485,5 +521,29 @@ export interface AlertDTO extends BasicDTOStructure {
     hasSecurity: boolean;
     hasTitlePin: boolean;
     isCancelled: boolean;
+    isMarketListVariant: boolean;
   };
+}
+
+export interface AlertCountSummaryDTO extends BasicDTOStructure {
+  data: {
+    count: number;
+    alertType: AlertTypes;
+  };
+  state: {
+    isAxe: boolean;
+    isMark: boolean;
+    isTrade: boolean;
+  };
+}
+
+export interface SantaTableAlertSideCellDTO extends BasicDTOStructure {
+  data: {
+    side: string;
+  },
+  state: {
+    isStencil: boolean;
+    askSided: boolean;
+    bidSided: boolean;
+  }
 }

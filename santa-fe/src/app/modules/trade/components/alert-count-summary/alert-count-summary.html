@@ -1,0 +1,25 @@
+<article
+  [title]="summary.data.alertType"
+  [ngClass]="{
+    'sat-alertCountSummary': true,
+    'sat-alertCountSummary--isAxe': summary.state.isAxe,
+    'sat-alertCountSummary--isMark': summary.state.isMark,
+    'sat-alertCountSummary--isTrade': summary.state.isTrade,
+    'sat-alertCountSummary--isGroup': false,
+    'sat-alertCountSummary--isOther': false
+  }">
+  <section class="sat-alertCountSummary__icon">
+    <i
+      [ngClass]="{
+        'sat-alertCountSummary__icon-img': true,
+        'far': summary.state.isMark,
+        'fas fa-axe': summary.state.isAxe,
+        'fa-bullseye-arrow': summary.state.isMark,
+        'fal fa-handshake': summary.state.isTrade
+      }">
+    </i>
+  </section>
+  <span class="sat-alertCountSummary__text">{{summary.data.alertType}}</span>
+  <span class="sat-alertCountSummary__count">{{summary.data.count}}</span>
+</article>
+

@@ -14,7 +14,8 @@
       SecurityTableDTO,
       SecurityTableRowDTO,
       SecurityTableHeaderDTO,
-      QuantComparerDTO
+      QuantComparerDTO,
+      SantaTableAlertSideCellDTO
     } from 'FEModels/frontend-models.interface';
     import {
       AgGridRowNode,
@@ -33,7 +34,8 @@
       AGGRID_DETAIL_COLUMN_WIDTH,
       AGGRID_SIMPLE_TEXT_COLUMN_WIDTH,
       SecurityTableMetricGroups,
-      SECURITY_TABLE_HEADER_NO_GROUP
+      SECURITY_TABLE_HEADER_NO_GROUP,
+      AGGRID_ALERT_SIDE_COLUMN_WIDTH
     } from 'Core/constants/securityTableConstants.constant';
   //
 
@@ -78,7 +80,7 @@ export class AgGridMiddleLayerService {
       const eachGroup: AgGridColumnDefinition = {
         headerName: SecurityTableMetricGroups[eachGroupKey],
         field: eachGroupKey,
-        headerClass: `${AGGRID_HEADER_CLASS} ag-numeric-header ${AGGRID_HEADER_CLASS}--${SecurityTableMetricGroups[eachGroupKey].replace(/(\s|\(|\))/g, '')}`,
+        headerClass: `${AGGRID_HEADER_CLASS} ${AGGRID_HEADER_CLASS}--${eachGroupKey}`,
         cellClass: `${AGGRID_CELL_CLASS}`,
         enableValue: false,
         hide: false,
@@ -92,10 +94,16 @@ export class AgGridMiddleLayerService {
       const isActiveByDefault = table.data.headers.find((eachActiveHeader) => {
         return eachActiveHeader.data.key === eachHeader.data.key;
       })
+      let groupName = SECURITY_TABLE_HEADER_NO_GROUP;
+      for (const eachGroupKey in SecurityTableMetricGroups) {
+        if (SecurityTableMetricGroups[eachGroupKey] === eachHeader.data.groupBelongs) {
+          groupName = eachGroupKey;
+        }
+      }
       const newAgColumn: AgGridColumnDefinition = {
         headerName: eachHeader.data.displayLabel,
         field: eachHeader.data.key,
-        headerClass: `${AGGRID_HEADER_CLASS} ag-numeric-header ${AGGRID_HEADER_CLASS}--${eachHeader.data.groupBelongs.replace(/(\s|\(|\))/g, '')}`,
+        headerClass: `${AGGRID_HEADER_CLASS} ${AGGRID_HEADER_CLASS}--${groupName}`,
         cellClass: `${AGGRID_CELL_CLASS}`,
         enableValue: false,
         sortable: true,
@@ -105,6 +113,9 @@ export class AgGridMiddleLayerService {
         enableRowGroup: false,
         hide: !isActiveByDefault
       };
+      if (eachHeader.data.key === 'alertTime') {
+        newAgColumn['sort'] = 'asc';
+      }
       this.loadAgGridHeadersComparator(eachHeader, newAgColumn);
       this.loadAgGridHeadersUILogics(eachHeader, newAgColumn);
       if (eachHeader.data.groupBelongs !== SECURITY_TABLE_HEADER_NO_GROUP) {
@@ -135,6 +146,16 @@ export class AgGridMiddleLayerService {
   ): Array<AgGridRow> {
     const targetRows = table.data.rows;
     const targetHeaders = table.data.allHeaders;
+    // minus one because securityCard is not one of the cells ( TODO: this is a bad design, what if a table has more than one security card column? should not treat it different from other columns )
+    const bestQuoteCellIndex = targetHeaders.findIndex((eachHeader) => {
+      return eachHeader.data.key === 'bestQuote';
+    }) - 1;
+    const bestAxeQuoteCellIndex = targetHeaders.findIndex((eachHeader) =>{
+      return eachHeader.data.key === 'bestAxeQuote';
+    }) - 1;
+    const alertSideCellIndex = targetHeaders.findIndex((eachHeader) => {
+      return eachHeader.data.key === 'alertSide';
+    }) - 1;
     const list = [];
     targetRows.forEach((eachRow, index) => {
       if (index === 0) {
@@ -142,7 +163,13 @@ export class AgGridMiddleLayerService {
       } else {
         eachRow.data.security.state.isAtListCeiling = false;
       }
-      const newAgRow = this.formAgGridRow(eachRow, targetHeaders);
+      const newAgRow = this.formAgGridRow(
+        eachRow,
+        targetHeaders,
+        bestQuoteCellIndex,
+        bestAxeQuoteCellIndex,
+        alertSideCellIndex
+      );
       !!newAgRow.id && list.push(newAgRow);
     });
     table.api.gridApi.setRowData(list);
@@ -155,15 +182,31 @@ export class AgGridMiddleLayerService {
     targetRows: Array<SecurityTableRowDTO>,
     location: number  // this is needed only for logging purpose
   ) {
+    // minus one because securityCard is not one of the cells ( TODO: this is a bad design, what if a table has more than one security card column? should not treat it different from other columns )
+    const bestQuoteCellIndex = table.data.allHeaders.findIndex((eachHeader) => {
+      return eachHeader.data.key === 'bestQuote';
+    }) - 1;
+    const bestAxeQuoteCellIndex = table.data.allHeaders.findIndex((eachHeader) =>{
+      return eachHeader.data.key === 'bestAxeQuote';
+    }) - 1;
+    const alertSideCellIndex = table.data.allHeaders.findIndex((eachHeader) => {
+      return eachHeader.data.key === 'alertSide';
+    }) - 1;
     targetRows.forEach((eachRow) => {
-      const id = eachRow.data.security.data.securityID;
+      const id = eachRow.data.rowId;
       const targetNode = table.api.gridApi.getRowNode(id);
       if (!!targetNode) {
-        const newAgRow = this.formAgGridRow(eachRow, table.data.allHeaders);
+        const newAgRow = this.formAgGridRow(
+          eachRow,
+          table.data.allHeaders,
+          bestQuoteCellIndex,
+          bestAxeQuoteCellIndex,
+          alertSideCellIndex
+        );
         targetNode.setData(newAgRow);
       } else {
-        this.restfulCommService.logError(`[AgGrid] Couldn't fine AgGrid Row for ${eachRow.data.security.data.securityID} (location - ${location})`);
-        console.error(`Couldn't fine AgGrid Row for ${eachRow.data.security.data.securityID}`, eachRow);
+        this.restfulCommService.logError(`[AgGrid] Couldn't fine AgGrid Row for ${eachRow.data.rowId} (location - ${location})`);
+        console.error(`Couldn't fine AgGrid Row for ${eachRow.data.rowId}`, eachRow);
       }
     });
   }
@@ -176,6 +219,8 @@ export class AgGridMiddleLayerService {
       newAgColumn.comparator = this.agCompareSecurities.bind(this);
     } else if (targetHeader.state.isQuantVariant) {
       newAgColumn.comparator = this.agCompareQuantComparer.bind(this);
+    } else if (targetHeader.data.key === 'alertSide') {
+      newAgColumn.comparator = this.agCompareAlertSide.bind(this);
     } else if (targetHeader.data.underlineAttrName && targetHeader.data.attrName != targetHeader.data.underlineAttrName) {
       newAgColumn.comparator = this.agCompareUnderlineValue.bind(this)
     }
@@ -192,9 +237,12 @@ export class AgGridMiddleLayerService {
     } else if (!!targetHeader.state.isQuantVariant) {
       newAgColumn.cellRenderer = targetHeader.data.key;
       newAgColumn.width = AGGRID_QUOTE_COLUMN_WIDTH;
+    } else if (targetHeader.data.key === 'alertSide') {
+      newAgColumn.cellRenderer = targetHeader.data.key;
+      newAgColumn.width = AGGRID_ALERT_SIDE_COLUMN_WIDTH;
     } else if (!targetHeader.data.isDataTypeText) {
       newAgColumn.cellClass = `${AGGRID_CELL_CLASS} ${AGGRID_CELL_CLASS}--numeric`;
-      newAgColumn.headerClass = `${AGGRID_HEADER_CLASS} ${AGGRID_HEADER_CLASS}--numeric ag-numeric-header ${AGGRID_HEADER_CLASS}--${targetHeader.data.groupBelongs.replace(/(\s|\(|\))/g, '')}`;
+      newAgColumn.headerClass = `${newAgColumn.headerClass} ${AGGRID_HEADER_CLASS}--numeric ag-numeric-header`;
       newAgColumn.width = AGGRID_SIMPLE_NUM_COLUMN_WIDTH;
       newAgColumn.resizable = true;
       // newAgColumn.suppressMenu = true;
@@ -217,19 +265,35 @@ export class AgGridMiddleLayerService {
 
   private formAgGridRow(
     targetRow: SecurityTableRowDTO,
-    targetHeaders: Array<SecurityTableHeaderDTO>
+    targetHeaders: Array<SecurityTableHeaderDTO>,
+    bestQuoteCellIndex: number,
+    bestAxeQuoteCellIndex: number,
+    alertSideCellIndex: number
   ): AgGridRow {
     const eachSecurity = targetRow.data.security;
     const newAgRow: AgGridRow = {
-      id: !eachSecurity.state.isStencil ? eachSecurity.data.securityID : this.utilityService.generateUUID(),
+      id: targetRow.data.rowId,
       securityCard: eachSecurity,
-      bestQuote: targetRow.data.cells[0].data.quantComparerDTO,
-      bestAxeQuote: targetRow.data.cells[1].data.quantComparerDTO,
+      bestQuote: targetRow.data.cells[bestQuoteCellIndex].data.quantComparerDTO,
+      bestAxeQuote: targetRow.data.cells[bestAxeQuoteCellIndex].data.quantComparerDTO,
+      alertSide: 
+        alertSideCellIndex > -1
+          ? targetRow.data.cells[alertSideCellIndex].data.alertSideDTO
+          : {
+            data: {
+              side: 'n/a'
+            },
+            state: {
+              isStencil: false,
+              bidSided: false,
+              askSided: false
+            }
+          },
       rowDTO: targetRow
     };
     newAgRow[AGGRID_DETAIL_COLUMN_KEY] = '';
     targetHeaders.forEach((eachHeader, index) => {
-      if (eachHeader.data.key === 'securityCard' || eachHeader.state.isQuantVariant) {
+      if (eachHeader.data.key === 'securityCard' || eachHeader.state.isQuantVariant || eachHeader.data.key === 'alertSide') {
         // skip those columns as they are already instantiated above
       } else {
         // can't directly use the cells from the target row to retrieve the data because we need to populate data for ALL columns, not just the active ones
@@ -247,19 +311,20 @@ export class AgGridMiddleLayerService {
     nodeB: AgGridRowNode,
     inverted: boolean
   ) {
+    // TODO: currently this logic causes a bit of delay on switching to alert table, this needs to be optimized
     if (!!nodeA && !!nodeB) {  // this check is for clicking on the "menu" icon on each header
       const columns = nodeA.columnController.allDisplayedColumns;
       if (!!columns) {
         const targetColumn = columns.find((eachColumn) => {
-          return !!eachColumn.sort;
+          return !!eachColumn.sort && eachColumn.colId !== "ag-Grid-AutoColumn";
         })
         const targetStub = SecurityTableMetrics.find((eachMetric) => {
-          return eachMetric.key === targetColumn.colId;
+          return eachMetric.key === targetColumn.colDef.field;
         });
         if (targetStub) {
           const securityA = nodeA.data ? nodeA.data.securityCard : null;
           const securityB = nodeB.data ? nodeB.data.securityCard : null;
-          const targetHeader = this.dtoService.formSecurityTableHeaderObject(targetStub);
+          const targetHeader = this.dtoService.formSecurityTableHeaderObject(targetStub, 'default', []);
           const underlineValueA = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityA, true);
           const underlineValueB = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityB, true);
           return this.returnSortValue(targetHeader, underlineValueA, underlineValueB, securityA, securityB);
@@ -286,7 +351,7 @@ export class AgGridMiddleLayerService {
     inverted: boolean
   ) {
     // as long as we only have one quantComparer in the table there is no need to find out the column
-    if (!!nodeA && !!nodeB) {
+    if (!!nodeA && !!nodeB && !nodeA.group && !nodeB.group) {
       const securityA = nodeA.data.securityCard;
       const securityB = nodeB.data.securityCard;
       const valueA = !!qA ? qA.data.delta : null;
@@ -334,6 +399,24 @@ export class AgGridMiddleLayerService {
       if (securityA.data.name < securityB.data.name) {
         return 1;
       } else if (securityA.data.name > securityB.data.name) {
+        return -1;
+      }
+    } else {
+      return 0;
+    }
+  }
+
+  private agCompareAlertSide(
+    sideA: SantaTableAlertSideCellDTO,
+    sideB: SantaTableAlertSideCellDTO,
+    nodeA: AgGridRowNode,
+    nodeB: AgGridRowNode,
+    inverted: boolean
+  ) {
+    if (!!sideA && !!sideB && !sideA.state.isStencil && !sideB.state.isStencil) {
+      if (sideA.data.side < sideB.data.side) {
+        return 1;
+      } else if (sideA.data.side > sideB.data.side) {
         return -1;
       }
     } else {

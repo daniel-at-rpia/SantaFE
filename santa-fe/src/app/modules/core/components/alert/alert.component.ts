@@ -25,6 +25,7 @@ export class Alert implements OnInit{
   @Output() clickedAlertThumbnail = new EventEmitter<AlertDTO>();
   @Output() clickedAlertDetail = new EventEmitter<AlertDTO>();
   @Output() clickedRemove = new EventEmitter<AlertDTO>();
+  @Output() countdownExpired = new EventEmitter<AlertDTO>();
 
   alertSubTypes = AlertSubTypes;
   alertTypes = AlertTypes;
@@ -32,24 +33,10 @@ export class Alert implements OnInit{
 
   constructor() { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     if (!!this.alertData.data.validUntilTime) {
      this.startCountdown();
     }
-  }
-  startCountdown( ){
-    this.validUntil = moment(this.alertData.data.validUntilTime);
-    const interval = setInterval(() => {
-      if (this.hasExpired()) {
-        this.onClickRemove();
-        clearInterval(interval);
-      }
-      this.validUntil = moment(this.validUntil.toISOString());
-    }, 1000);
-  }
-
-  hasExpired() {
-    return moment().diff(this.validUntil) > 0;
   }
 
   public onClickAlertThumbnail() {
@@ -63,4 +50,20 @@ export class Alert implements OnInit{
   public onClickRemove() {
     !!this.clickedRemove && this.clickedRemove.emit(this.alertData);
   }
+
+  private startCountdown( ){
+    this.validUntil = moment(this.alertData.data.validUntilTime);
+    const interval = setInterval(() => {
+      if (this.hasExpired()) {
+        !!this.countdownExpired && this.countdownExpired.emit(this.alertData);
+        clearInterval(interval);
+      }
+      this.validUntil = moment(this.validUntil.toISOString());
+    }, 1000);
+  }
+
+  private hasExpired() {
+    return moment().diff(this.validUntil) > 0;
+  }
+
 }

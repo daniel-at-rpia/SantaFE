@@ -12,7 +12,8 @@
         [hideAllAlerts]="!state.displayAlerts && !state.triggerActionMenuOpen"
         (clickedAlertThumbnail)="onClickAlertThumbnail($event)"
         (clickedAlertDetail)="loadAlertToTable($event)"
-        (clickedRemove)="onClickAlertRemove($event)">
+        (clickedRemove)="onClickAlertRemove($event)"
+        (countdownExpired)="onAlertExpired($event)">
       </alert>
     </li>
   </section>
@@ -28,7 +29,8 @@
           'fal': true,
           'fa-bell': state.displayAlerts,
           'fa-bell-on': !state.displayAlerts
-        }"></button>
+        }">
+      </button>
     </div>
     <div (click)="onClickAlertTrigger()" class="sat-globalAlert__trigger-mainBtn">
       <i

@@ -14,773 +14,4729 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
       }
     },
     "securityDtos": {
-      "146": {
-        "securityIdentifier": "146",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": false,
-          "securityIdentifier": "146",
-          "ccy": "USD",
-          "country": "US",
-          "industry": "Pipeline",
-          "name": "NGPLCO 7.768 12/15/2037 Bullet USD 144A SENIOR_SECURED",
-          "genericSeniority": "SR",
-          "globalIdentifier": "US62912XAC83",
-          "obligorName": "NGPL PIPECO LLC",
-          "obligorId": 949,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Energy",
-          "securitySubType": "Bond",
-          "subIndustry": "Pipelines",
-          "ticker": "NGPLCO",
-          "metrics": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isOnTheRun": false,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "63089",
-            "benchmarkName": "T 2.375 11/15/2049 USD",
-            "underlyingSecurityId": -1,
-            "zSpread": 781.984,
-            "gSpread": 753.5823,
-            "yieldWorst": 8.82447,
-            "amtOutstanding": 500000000,
-            "marketValue": 452986500,
-            "workoutTerm": 17.7534,
-            "ratingDouble": 14,
-            "isRated": true,
-            "rating": "BBB-",
-            "ratingNoNotch": "BBB",
-            "ratingBucket": "IG",
-            "price": 90.5973,
-            "spread": 700.8143000000001,
-            "isIndex": true
+      "79":{
+        "securityIdentifier":"79",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"79",
+          "ccy":"CAD",
+          "country":"CA",
+          "industry":"Wireless Telecommunications Services",
+          "name":"TCN 3.75 01/17/2025 Callable CAD SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"CA87971MAX17",
+          "obligorName":"TELUS CORP",
+          "obligorId":756,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Communications",
+          "securitySubType":"Bond",
+          "subIndustry":"Telecom Services",
+          "ticker":"TCN",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":true,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"28171",
+            "benchmarkName":"CAN 1.5 09/01/2024 CAD",
+            "underlyingSecurityId":-1,
+            "zSpread":136.3447,
+            "gSpread":171.38,
+            "yieldWorst":2.07707,
+            "amtOutstanding":800000000.0,
+            "marketValue":869024472.0,
+            "workoutTerm":4.6822,
+            "ratingDouble":16.0,
+            "isRated":true,
+            "rating":"BBB+",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":107.41573,
+            "spread":172.3712,
+            "isIndex":true
           },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": 156.105,
-              "gSpread": 142.2255,
-              "yieldWorst": 1.41213,
-              "ratingDouble": 0,
-              "price": -12.8637,
-              "spread": 140.1091
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":3.1793,
+              "gSpread":2.03,
+              "yieldWorst":0.013917,
+              "ratingDouble":0.0,
+              "price":-0.068526,
+              "spread":1.972
             },
-            "Wow": {
-              "zSpread": 245.029,
-              "gSpread": 226.6269,
-              "yieldWorst": 2.62018,
-              "ratingDouble": 0,
-              "price": -26.0697,
-              "spread": 225.3915
+            "Wow":{
+              "zSpread":20.6087,
+              "gSpread":15.12,
+              "yieldWorst":0.149751,
+              "ratingDouble":0.0,
+              "price":-0.726597,
+              "spread":15.0582
             },
-            "Mtd": {
-              "zSpread": 401.53,
-              "gSpread": 384.5179,
-              "yieldWorst": 3.81766,
-              "ratingDouble": 0,
-              "price": -41.6517,
-              "spread": 367.4918
+            "Mtd":{
+              "zSpread":18.888,
+              "gSpread":10.97,
+              "yieldWorst":0.090455,
+              "ratingDouble":0.0,
+              "price":-0.480396,
+              "spread":11.8715
             },
-            "Mom": {
-              "zSpread": 457.04,
-              "gSpread": 439.8111,
-              "yieldWorst": 3.96441,
-              "ratingDouble": 0,
-              "price": -43.7927,
-              "spread": 416.0477
+            "Mom":{
+              "zSpread":-17.5892,
+              "gSpread":-20.32,
+              "yieldWorst":-0.374031,
+              "ratingDouble":0.0,
+              "price":1.618287,
+              "spread":-19.5618
             },
-            "Ytd": {
-              "zSpread": 450.181,
-              "gSpread": 429.7814,
-              "yieldWorst": 3.50849,
-              "ratingDouble": 0,
-              "price": -37.5377,
-              "spread": 408.1453
+            "Ytd":{
+              "zSpread":null,
+              "gSpread":66.61,
+              "yieldWorst":-0.650903,
+              "ratingDouble":0.0,
+              "price":2.629022,
+              "spread":67.712
             },
-            "Yoy": {
-              "zSpread": 454.439,
-              "gSpread": 432.7833,
-              "yieldWorst": 2.80788,
-              "ratingDouble": 0,
-              "price": -28.9097,
-              "spread": 400.5361
+            "Yoy":{
+              "zSpread":null,
+              "gSpread":52.29,
+              "yieldWorst":-0.712037,
+              "ratingDouble":0.0,
+              "price":2.405913,
+              "spread":51.4364
             }
           },
-          "unitPosition": {
-            "partitionOptionValues": {
-              "PortfolioShortName": [
+          "unitPosition":{
+            "metricDate":"2020-05-15T00:00:00-04:00",
+            "securityIdentifier":"79",
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF"
+              ],
+              "StrategyName":[
+                "STOV",
+                "LTOV - Spread"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":"2020-05-15T00:00:00-04:00",
+              "user":null,
+              "value":170.0,
+              "spread":170.0,
+              "price":107.394571
+            },
+            "hedgeFactor":1.0,
+            "primaryPmName":"IL",
+            "backupPmName":"ST",
+            "researchName":"LC",
+            "owners":[
+              "IL",
+              "ST",
+              "LC"
+            ]
+          },
+          "securityType":"Bond",
+          "maturityType":"Callable"
+        },
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isOffTheRunCds":false,
+            "quoteMetric":"Price",
+            "totalActiveAxeBidQuantity":0.0,
+            "totalActiveAxeAskQuantity":0.0,
+            "totalActiveBidQuantity":0.0,
+            "totalActiveAskQuantity":0.0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuoteType":"Run",
+            "bidDealer":"HSBC",
+            "bidQuoteValue":107.58000183105469,
+            "bidTime":"2020-05-15T09:10:44",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"BMO",
+            "askQuoteValue":107.38999938964844,
+            "askTime":"2020-05-15T09:02:26",
+            "askIsOld":true,
+            "bidAxeDealer":null,
+            "bidAxeQuoteValue":null,
+            "bidAxeTime":null,
+            "bidAxeIsOld":false,
+            "askAxeDealer":"BNS",
+            "askAxeQuoteValue":107.45600128173828,
+            "askAxeTime":"2020-05-15T07:16:08",
+            "askAxeIsOld":true,
+            "globalIdentifier":"CA87971MAX17"
+          },
+          "bestSpreadQuote":{
+            "isOffTheRunCds":false,
+            "quoteMetric":"Spread",
+            "totalActiveAxeBidQuantity":0.0,
+            "totalActiveAxeAskQuantity":0.0,
+            "totalActiveBidQuantity":0.0,
+            "totalActiveAskQuantity":0.0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuoteType":"Run",
+            "bidDealer":"HSBC",
+            "bidQuoteValue":165.0,
+            "bidTime":"2020-05-15T09:10:44",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"BMO",
+            "askQuoteValue":170.0,
+            "askTime":"2020-05-15T09:02:26",
+            "askIsOld":true,
+            "bidAxeDealer":null,
+            "bidAxeQuoteValue":null,
+            "bidAxeTime":null,
+            "bidAxeIsOld":false,
+            "askAxeDealer":"BNS",
+            "askAxeQuoteValue":169.0,
+            "askAxeTime":"2020-05-15T07:16:08",
+            "askAxeIsOld":true,
+            "globalIdentifier":"CA87971MAX17"
+          },
+          "bestYieldQuote":{
+            "isOffTheRunCds":false,
+            "quoteMetric":"Yield",
+            "totalActiveAxeBidQuantity":0.0,
+            "totalActiveAxeAskQuantity":0.0,
+            "totalActiveBidQuantity":0.0,
+            "totalActiveAskQuantity":0.0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuoteType":"Run",
+            "bidDealer":"HSBC",
+            "bidQuoteValue":1.9466700553894043,
+            "bidTime":"2020-05-15T09:10:44",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"BMO",
+            "askQuoteValue":1.9910000562667847,
+            "askTime":"2020-05-15T09:02:26",
+            "askIsOld":true,
+            "bidAxeDealer":null,
+            "bidAxeQuoteValue":null,
+            "bidAxeTime":null,
+            "bidAxeIsOld":false,
+            "askAxeDealer":"BNS",
+            "askAxeQuoteValue":1.9759999513626099,
+            "askAxeTime":"2020-05-15T07:16:08",
+            "askAxeIsOld":true,
+            "globalIdentifier":"CA87971MAX17"
+          }
+        },
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
+            },
+            "trades":[
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"STOV"
+                },
+                "tradeId":"5040732",
+                "parentTradeId":"5040729",
+                "trader":"IL",
+                "quantity":3315000.0,
+                "tradeDateTime":"2020-04-16T13:34:00-04:00",
+                "price":1.07556,
+                "counterpartyName":"RBC TOR",
+                "spread":158.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":3315000.0,
+                "fifoAvgSpread":158.0,
+                "wgtAvgSpread":158.0,
+                "fifoAvgPrice":1.07556,
+                "wgtAvgPrice":1.07556
+              }
+            ],
+            "quantity":3315000.0,
+            "cs01Cad":1478.933530425,
+            "cs01Local":1478.933530425
+          }
+        ]
+      },
+      "6113":{
+        "securityIdentifier":"6113",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"6113",
+          "ccy":"USD",
+          "country":"US",
+          "industry":"Wireless Telecommunications Services",
+          "name":"S 7.125 06/15/2024 Bullet USD SENIOR_UNSECURED",
+          "genericSeniority":"SR",
+          "globalIdentifier":"US85207UAH86",
+          "obligorName":"SPRINT CORP",
+          "obligorId":724,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Communications",
+          "securitySubType":"Bond",
+          "subIndustry":"Cellular Telecom",
+          "ticker":"S",
+          "metrics":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":false,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"70901",
+            "benchmarkName":"T 0.375 04/30/2025 USD",
+            "underlyingSecurityId":-1,
+            "zSpread":389.082,
+            "gSpread":392.7705,
+            "yieldWorst":4.17115,
+            "amtOutstanding":2500000000.0,
+            "marketValue":2774000000.0,
+            "workoutTerm":4.0904,
+            "ratingDouble":12.0,
+            "isRated":true,
+            "rating":"BB",
+            "ratingNoNotch":"BB",
+            "ratingBucket":"HY",
+            "price":110.96,
+            "spread":385.84430000000003,
+            "isIndex":true
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":11.064,
+              "gSpread":11.18,
+              "yieldWorst":0.0994,
+              "ratingDouble":0.0,
+              "price":-0.415,
+              "spread":10.6882
+            },
+            "Wow":{
+              "zSpread":33.087,
+              "gSpread":33.9573,
+              "yieldWorst":0.33388,
+              "ratingDouble":0.0,
+              "price":-1.383,
+              "spread":33.4057
+            },
+            "Mtd":{
+              "zSpread":37.042,
+              "gSpread":35.7594,
+              "yieldWorst":0.29782,
+              "ratingDouble":0.0,
+              "price":-1.291,
+              "spread":35.7968
+            },
+            "Mom":{
+              "zSpread":100.63,
+              "gSpread":90.5331,
+              "yieldWorst":0.79261,
+              "ratingDouble":0.0,
+              "price":-3.472,
+              "spread":90.4689
+            },
+            "Ytd":{
+              "zSpread":46.939,
+              "gSpread":46.8093,
+              "yieldWorst":-0.95284,
+              "ratingDouble":3.0,
+              "price":3.091,
+              "spread":null
+            },
+            "Yoy":{
+              "zSpread":-86.437,
+              "gSpread":-86.2695,
+              "yieldWorst":-2.81237,
+              "ratingDouble":null,
+              "price":10.372,
+              "spread":null
+            }
+          },
+          "unitPosition":{
+            "metricDate":"2020-05-15T00:00:00-04:00",
+            "securityIdentifier":"6113",
+            "partitionOptionValues":{
+              "PortfolioShortName":[
                 "AGB",
+                "BBB",
                 "CIP",
                 "DOF",
-                "SOF",
                 "STIP"
               ],
-              "StrategyName": [
+              "StrategyName":[
+                "Basis",
                 "LTOV - Spread"
               ]
             },
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": "2020-03-20T10:47:30.272-04:00",
-              "user": "IL",
-              "value": 820,
-              "price": 72,
-              "spread": 73
+            "mark":{
+              "driver":"Price",
+              "enteredTime":"2020-05-15T00:00:00-04:00",
+              "user":null,
+              "value":112.25,
+              "spread":355.61,
+              "price":112.25
             },
-            "primaryPmName": "IL",
-            "backupPmName": "DM",
-            "researchName": "AG",
-            "owners": [
-              "IL",
-              "DM",
-              "AG"
-            ],
-            "date": "2020-03-20T00:00:00-04:00",
-            "securityIdentifier": "146",
-            "quantity": 24391000,
-            "cs01Cad": 26034.508922806996,
-            "cs01Local": 18259.57983083672,
-            "hedgeFactor": 1
+            "hedgeFactor":0.75,
+            "primaryPmName":"PM",
+            "backupPmName":"DJ",
+            "researchName":"LC",
+            "owners":[
+              "PM",
+              "DJ",
+              "LC"
+            ]
           },
-          "securityType": "Bond",
-          "maturityType": "Bullet"
+          "securityType":"Bond",
+          "maturityType":"Bullet"
         },
-        "bestQuotes": {
-          "bestPriceQuote": {
-            "isOffTheRunCds": false,
-            "quoteMetric": "Price",
-            "totalActiveAxeBidQuantity": 0,
-            "totalActiveAxeAskQuantity": 0,
-            "totalActiveBidQuantity": 0,
-            "totalActiveAskQuantity": 5000000,
-            "axeSkew": null,
-            "totalSkew": 1,
-            "bidQuoteType": "Run",
-            "bidDealer": "BARC",
-            "bidQuoteValue": 81.96900177001953,
-            "bidTime": "2020-03-20T14:09:48-04:00",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "BARC",
-            "askQuoteValue": 83.41000366210938,
-            "askTime": "2020-03-20T14:09:48-04:00",
-            "askIsOld": false,
-            "bidAxeDealer": "SUN",
-            "bidAxeQuoteValue": 104.73799896240234,
-            "bidAxeTime": "2020-03-20T07:52:51",
-            "bidAxeIsOld": true,
-            "askAxeDealer": "JPM",
-            "askAxeQuoteValue": 98.69539642333984,
-            "askAxeTime": "2020-03-20T08:03:52",
-            "askAxeIsOld": true,
-            "globalIdentifier": "US62912XAC83"
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isOffTheRunCds":false,
+            "quoteMetric":"Price",
+            "totalActiveAxeBidQuantity":3697000.0,
+            "totalActiveAxeAskQuantity":3000000.0,
+            "totalActiveBidQuantity":5697000.0,
+            "totalActiveAskQuantity":5000000.0,
+            "axeSkew":0.44796177392862474,
+            "totalSkew":0.46742077217911565,
+            "bidQuoteType":"Axe",
+            "bidDealer":"MS",
+            "bidQuoteValue":111.0,
+            "bidTime":"2020-05-15T13:58:27-04:00",
+            "bidIsOld":false,
+            "askQuoteType":"Axe",
+            "askDealer":"CS",
+            "askQuoteValue":111.5,
+            "askTime":"2020-05-15T13:22:47-04:00",
+            "askIsOld":false,
+            "bidAxeDealer":"MS",
+            "bidAxeQuoteValue":111.0,
+            "bidAxeTime":"2020-05-15T13:58:27-04:00",
+            "bidAxeIsOld":false,
+            "askAxeDealer":"CS",
+            "askAxeQuoteValue":111.5,
+            "askAxeTime":"2020-05-15T13:22:47-04:00",
+            "askAxeIsOld":false,
+            "globalIdentifier":"US85207UAH86"
           },
-          "bestSpreadQuote": {
-            "isOffTheRunCds": false,
-            "quoteMetric": "Spread",
-            "totalActiveAxeBidQuantity": 0,
-            "totalActiveAxeAskQuantity": 0,
-            "totalActiveBidQuantity": 0,
-            "totalActiveAskQuantity": 5000000,
-            "axeSkew": null,
-            "totalSkew": 1,
-            "bidQuoteType": "Run",
-            "bidDealer": "BARC",
-            "bidQuoteValue": 840,
-            "bidTime": "2020-03-20T14:09:48-04:00",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "BARC",
-            "askQuoteValue": 820,
-            "askTime": "2020-03-20T14:09:48-04:00",
-            "askIsOld": false,
-            "bidAxeDealer": "SUN",
-            "bidAxeQuoteValue": 565,
-            "bidAxeTime": "2020-03-20T07:52:51",
-            "bidAxeIsOld": true,
-            "askAxeDealer": "JPM",
-            "askAxeQuoteValue": 635,
-            "askAxeTime": "2020-03-20T08:03:52",
-            "askAxeIsOld": true,
-            "globalIdentifier": "US62912XAC83"
+          "bestSpreadQuote":{
+            "isOffTheRunCds":false,
+            "quoteMetric":"Spread",
+            "totalActiveAxeBidQuantity":3697000.0,
+            "totalActiveAxeAskQuantity":3000000.0,
+            "totalActiveBidQuantity":5697000.0,
+            "totalActiveAskQuantity":5000000.0,
+            "axeSkew":0.44796177392862474,
+            "totalSkew":0.46742077217911565,
+            "bidQuoteType":"Axe",
+            "bidDealer":"MS",
+            "bidQuoteValue":384.9649963378906,
+            "bidTime":"2020-05-15T13:58:27-04:00",
+            "bidIsOld":false,
+            "askQuoteType":"Axe",
+            "askDealer":"CS",
+            "askQuoteValue":372.50699,
+            "askTime":"2020-05-15T13:22:47-04:00",
+            "askIsOld":false,
+            "bidAxeDealer":"MS",
+            "bidAxeQuoteValue":384.9649963378906,
+            "bidAxeTime":"2020-05-15T13:58:27-04:00",
+            "bidAxeIsOld":false,
+            "askAxeDealer":"CS",
+            "askAxeQuoteValue":372.50699,
+            "askAxeTime":"2020-05-15T13:22:47-04:00",
+            "askAxeIsOld":false,
+            "globalIdentifier":"US85207UAH86"
           },
-          "bestYieldQuote": {
-            "isOffTheRunCds": false,
-            "quoteMetric": "Yield",
-            "totalActiveAxeBidQuantity": 0,
-            "totalActiveAxeAskQuantity": 0,
-            "totalActiveBidQuantity": 0,
-            "totalActiveAskQuantity": 5000000,
-            "axeSkew": null,
-            "totalSkew": 1,
-            "bidQuoteType": "Run",
-            "bidDealer": "BARC",
-            "bidQuoteValue": 9.949999809265137,
-            "bidTime": "2020-03-20T14:09:48-04:00",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "BARC",
-            "askQuoteValue": 9.75,
-            "askTime": "2020-03-20T14:09:48-04:00",
-            "askIsOld": false,
-            "bidAxeDealer": "SUN",
-            "bidAxeQuoteValue": 7.285999774932861,
-            "bidAxeTime": "2020-03-20T07:52:51",
-            "bidAxeIsOld": true,
-            "askAxeDealer": "JPM",
-            "askAxeQuoteValue": 7.904019832611084,
-            "askAxeTime": "2020-03-20T08:03:52",
-            "askAxeIsOld": true,
-            "globalIdentifier": "US62912XAC83"
+          "bestYieldQuote":{
+            "isOffTheRunCds":false,
+            "quoteMetric":"Yield",
+            "totalActiveAxeBidQuantity":3697000.0,
+            "totalActiveAxeAskQuantity":3000000.0,
+            "totalActiveBidQuantity":5697000.0,
+            "totalActiveAskQuantity":5000000.0,
+            "axeSkew":0.44796177392862474,
+            "totalSkew":0.46742077217911565,
+            "bidQuoteType":"Axe",
+            "bidDealer":"MS",
+            "bidQuoteValue":4.15939998626709,
+            "bidTime":"2020-05-15T13:58:27-04:00",
+            "bidIsOld":false,
+            "askQuoteType":"Axe",
+            "askDealer":"CS",
+            "askQuoteValue":4.03,
+            "askTime":"2020-05-15T13:22:47-04:00",
+            "askIsOld":false,
+            "bidAxeDealer":"MS",
+            "bidAxeQuoteValue":4.15939998626709,
+            "bidAxeTime":"2020-05-15T13:58:27-04:00",
+            "bidAxeIsOld":false,
+            "askAxeDealer":"CS",
+            "askAxeQuoteValue":4.03,
+            "askAxeTime":"2020-05-15T13:22:47-04:00",
+            "askAxeIsOld":false,
+            "globalIdentifier":"US85207UAH86"
           }
         },
-        "positions": [
+        "positions":[
           {
-            "partitionOptionValue": {
-              "PortfolioShortName": "AGB",
-              "StrategyName": "LTOV - Spread"
+            "partitionOptionValue":{
+              "PortfolioShortName":"AGB",
+              "StrategyName":""
             },
-            "date": "2020-03-20T00:00:00-04:00",
-            "securityIdentifier": "146",
-            "quantity": 256000,
-            "cs01Cad": 273.249734912,
-            "cs01Local": 191.64660885958762
+            "trades":[
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"AGB",
+                  "StrategyName":"Basis"
+                },
+                "tradeId":"4825250",
+                "parentTradeId":"4825238",
+                "trader":"PM",
+                "quantity":185000.0,
+                "tradeDateTime":"2020-02-19T17:54:00-05:00",
+                "price":1.145,
+                "counterpartyName":"CITI NY",
+                "spread":207.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":185000.0,
+                "fifoAvgSpread":207.0,
+                "wgtAvgSpread":207.0,
+                "fifoAvgPrice":1.145,
+                "wgtAvgPrice":1.145
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"AGB",
+                  "StrategyName":"Basis"
+                },
+                "tradeId":"4831885",
+                "parentTradeId":"4829811",
+                "trader":"PM",
+                "quantity":465000.0,
+                "tradeDateTime":"2020-02-20T09:52:00-05:00",
+                "price":1.14625,
+                "counterpartyName":"MS",
+                "spread":206.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":650000.0,
+                "fifoAvgSpread":206.2846153846154,
+                "wgtAvgSpread":206.2846153846154,
+                "fifoAvgPrice":1.1458942307692308,
+                "wgtAvgPrice":1.1458942307692308
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"AGB",
+                  "StrategyName":"Basis"
+                },
+                "tradeId":"4966883",
+                "parentTradeId":"4966863",
+                "trader":"PM",
+                "quantity":-45000.0,
+                "tradeDateTime":"2020-03-27T11:53:30-04:00",
+                "price":1.0645,
+                "counterpartyName":"MKTX",
+                "spread":499.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":605000.0,
+                "fifoAvgSpread":206.23140495867767,
+                "wgtAvgSpread":206.2846153846154,
+                "fifoAvgPrice":1.1459607438016528,
+                "wgtAvgPrice":1.1458942307692308
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"AGB",
+                  "StrategyName":"Basis"
+                },
+                "tradeId":"4969038",
+                "parentTradeId":"4969032",
+                "trader":"PM",
+                "quantity":-139000.0,
+                "tradeDateTime":"2020-03-30T10:39:50-04:00",
+                "price":1.082,
+                "counterpartyName":"MKTX",
+                "spread":460.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":466000.0,
+                "fifoAvgSpread":206.0021459227468,
+                "wgtAvgSpread":206.2846153846154,
+                "fifoAvgPrice":1.1462473175965666,
+                "wgtAvgPrice":1.1458942307692308
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"AGB",
+                  "StrategyName":"LTOV - Spread"
+                },
+                "tradeId":"5008265",
+                "parentTradeId":"5008092",
+                "trader":"PM",
+                "quantity":93000.0,
+                "tradeDateTime":"2020-04-07T15:51:00-04:00",
+                "price":1.105,
+                "counterpartyName":"SUM",
+                "spread":385.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":559000.0,
+                "fifoAvgSpread":235.78175313059035,
+                "wgtAvgSpread":236.01722856749691,
+                "fifoAvgPrice":1.1393850626118067,
+                "wgtAvgPrice":1.1390907183156735
+              }
+            ],
+            "quantity":559000.0,
+            "cs01Cad":316.69834755,
+            "cs01Local":224.94377977839338
           },
           {
-            "partitionOptionValue": {
-              "PortfolioShortName": "CIP",
-              "StrategyName": "LTOV - Spread"
+            "partitionOptionValue":{
+              "PortfolioShortName":"BBB",
+              "StrategyName":""
             },
-            "date": "2020-03-20T00:00:00-04:00",
-            "securityIdentifier": "146",
-            "quantity": 1458000,
-            "cs01Cad": 1556.242630866,
-            "cs01Local": 1091.48732702062
+            "trades":[
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"BBB",
+                  "StrategyName":"Basis"
+                },
+                "tradeId":"4825247",
+                "parentTradeId":"4825238",
+                "trader":"PM",
+                "quantity":91000.0,
+                "tradeDateTime":"2020-02-19T17:54:00-05:00",
+                "price":1.145,
+                "counterpartyName":"CITI NY",
+                "spread":207.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":91000.0,
+                "fifoAvgSpread":207.0,
+                "wgtAvgSpread":207.0,
+                "fifoAvgPrice":1.145,
+                "wgtAvgPrice":1.145
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"BBB",
+                  "StrategyName":"Basis"
+                },
+                "tradeId":"4831882",
+                "parentTradeId":"4829811",
+                "trader":"PM",
+                "quantity":225000.0,
+                "tradeDateTime":"2020-02-20T09:52:00-05:00",
+                "price":1.14625,
+                "counterpartyName":"MS",
+                "spread":206.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":316000.0,
+                "fifoAvgSpread":206.2879746835443,
+                "wgtAvgSpread":206.2879746835443,
+                "fifoAvgPrice":1.1458900316455696,
+                "wgtAvgPrice":1.1458900316455696
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"BBB",
+                  "StrategyName":"Basis"
+                },
+                "tradeId":"4966880",
+                "parentTradeId":"4966863",
+                "trader":"PM",
+                "quantity":-21000.0,
+                "tradeDateTime":"2020-03-27T11:53:30-04:00",
+                "price":1.0645,
+                "counterpartyName":"MKTX",
+                "spread":499.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":295000.0,
+                "fifoAvgSpread":206.23728813559322,
+                "wgtAvgSpread":206.2879746835443,
+                "fifoAvgPrice":1.1459533898305085,
+                "wgtAvgPrice":1.1458900316455696
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"BBB",
+                  "StrategyName":"Basis"
+                },
+                "tradeId":"4969035",
+                "parentTradeId":"4969032",
+                "trader":"PM",
+                "quantity":-68000.0,
+                "tradeDateTime":"2020-03-30T10:39:50-04:00",
+                "price":1.082,
+                "counterpartyName":"MKTX",
+                "spread":460.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":227000.0,
+                "fifoAvgSpread":206.00881057268722,
+                "wgtAvgSpread":206.2879746835443,
+                "fifoAvgPrice":1.146238986784141,
+                "wgtAvgPrice":1.1458900316455696
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"BBB",
+                  "StrategyName":"LTOV - Spread"
+                },
+                "tradeId":"5008262",
+                "parentTradeId":"5008092",
+                "trader":"PM",
+                "quantity":45000.0,
+                "tradeDateTime":"2020-04-07T15:51:00-04:00",
+                "price":1.105,
+                "counterpartyName":"SUM",
+                "spread":385.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":272000.0,
+                "fifoAvgSpread":235.62132352941177,
+                "wgtAvgSpread":235.85430240134028,
+                "fifoAvgPrice":1.1394163602941176,
+                "wgtAvgPrice":1.139125136704207
+              }
+            ],
+            "quantity":272000.0,
+            "cs01Cad":154.1000904,
+            "cs01Local":109.45386064351163
           },
           {
-            "partitionOptionValue": {
-              "PortfolioShortName": "DOF",
-              "StrategyName": "LTOV - Spread"
+            "partitionOptionValue":{
+              "PortfolioShortName":"CIP",
+              "StrategyName":""
             },
-            "date": "2020-03-20T00:00:00-04:00",
-            "securityIdentifier": "146",
-            "quantity": 9157000,
-            "cs01Cad": 9774.014931988999,
-            "cs01Local": 6855.109364559545
+            "trades":[
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"CIP",
+                  "StrategyName":"Basis"
+                },
+                "tradeId":"4825246",
+                "parentTradeId":"4825238",
+                "trader":"PM",
+                "quantity":140000.0,
+                "tradeDateTime":"2020-02-19T17:54:00-05:00",
+                "price":1.145,
+                "counterpartyName":"CITI NY",
+                "spread":207.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":140000.0,
+                "fifoAvgSpread":207.0,
+                "wgtAvgSpread":207.0,
+                "fifoAvgPrice":1.145,
+                "wgtAvgPrice":1.145
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"CIP",
+                  "StrategyName":"Basis"
+                },
+                "tradeId":"4831881",
+                "parentTradeId":"4829811",
+                "trader":"PM",
+                "quantity":350000.0,
+                "tradeDateTime":"2020-02-20T09:52:00-05:00",
+                "price":1.14625,
+                "counterpartyName":"MS",
+                "spread":206.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":490000.0,
+                "fifoAvgSpread":206.28571428571428,
+                "wgtAvgSpread":206.28571428571428,
+                "fifoAvgPrice":1.145892857142857,
+                "wgtAvgPrice":1.145892857142857
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"CIP",
+                  "StrategyName":"Basis"
+                },
+                "tradeId":"4966879",
+                "parentTradeId":"4966863",
+                "trader":"PM",
+                "quantity":-35000.0,
+                "tradeDateTime":"2020-03-27T11:53:30-04:00",
+                "price":1.0645,
+                "counterpartyName":"MKTX",
+                "spread":499.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":455000.0,
+                "fifoAvgSpread":206.23076923076923,
+                "wgtAvgSpread":206.28571428571428,
+                "fifoAvgPrice":1.1459615384615385,
+                "wgtAvgPrice":1.145892857142857
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"CIP",
+                  "StrategyName":"Basis"
+                },
+                "tradeId":"4969034",
+                "parentTradeId":"4969032",
+                "trader":"PM",
+                "quantity":-104000.0,
+                "tradeDateTime":"2020-03-30T10:39:50-04:00",
+                "price":1.082,
+                "counterpartyName":"MKTX",
+                "spread":460.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":351000.0,
+                "fifoAvgSpread":206.002849002849,
+                "wgtAvgSpread":206.28571428571428,
+                "fifoAvgPrice":1.1462464387464388,
+                "wgtAvgPrice":1.145892857142857
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"CIP",
+                  "StrategyName":"LTOV - Spread"
+                },
+                "tradeId":"5008261",
+                "parentTradeId":"5008092",
+                "trader":"PM",
+                "quantity":70000.0,
+                "tradeDateTime":"2020-04-07T15:51:00-04:00",
+                "price":1.105,
+                "counterpartyName":"SUM",
+                "spread":385.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":421000.0,
+                "fifoAvgSpread":235.7648456057007,
+                "wgtAvgSpread":236.00067865626062,
+                "fifoAvgPrice":1.1393883610451307,
+                "wgtAvgPrice":1.1390935697319307
+              }
+            ],
+            "quantity":421000.0,
+            "cs01Cad":238.51521345,
+            "cs01Local":169.41204165778822
           },
           {
-            "partitionOptionValue": {
-              "PortfolioShortName": "SOF",
-              "StrategyName": "LTOV - Spread"
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
             },
-            "date": "2020-03-20T00:00:00-04:00",
-            "securityIdentifier": "146",
-            "quantity": 8635000,
-            "cs01Cad": 9216.841644395,
-            "cs01Local": 6464.329951181792
+            "trades":[
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"Basis"
+                },
+                "tradeId":"4825249",
+                "parentTradeId":"4825238",
+                "trader":"PM",
+                "quantity":442000.0,
+                "tradeDateTime":"2020-02-19T17:54:00-05:00",
+                "price":1.145,
+                "counterpartyName":"CITI NY",
+                "spread":207.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":442000.0,
+                "fifoAvgSpread":207.0,
+                "wgtAvgSpread":207.0,
+                "fifoAvgPrice":1.145,
+                "wgtAvgPrice":1.145
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"Basis"
+                },
+                "tradeId":"4831884",
+                "parentTradeId":"4829811",
+                "trader":"PM",
+                "quantity":1105000.0,
+                "tradeDateTime":"2020-02-20T09:52:00-05:00",
+                "price":1.14625,
+                "counterpartyName":"MS",
+                "spread":206.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":1547000.0,
+                "fifoAvgSpread":206.28571428571428,
+                "wgtAvgSpread":206.28571428571428,
+                "fifoAvgPrice":1.145892857142857,
+                "wgtAvgPrice":1.145892857142857
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"Basis"
+                },
+                "tradeId":"4966882",
+                "parentTradeId":"4966863",
+                "trader":"PM",
+                "quantity":-100000.0,
+                "tradeDateTime":"2020-03-27T11:53:30-04:00",
+                "price":1.0645,
+                "counterpartyName":"MKTX",
+                "spread":499.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":1447000.0,
+                "fifoAvgSpread":206.23635107118176,
+                "wgtAvgSpread":206.28571428571428,
+                "fifoAvgPrice":1.145954561161023,
+                "wgtAvgPrice":1.145892857142857
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"Basis"
+                },
+                "tradeId":"4969037",
+                "parentTradeId":"4969032",
+                "trader":"PM",
+                "quantity":-332000.0,
+                "tradeDateTime":"2020-03-30T10:39:50-04:00",
+                "price":1.082,
+                "counterpartyName":"MKTX",
+                "spread":460.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":1115000.0,
+                "fifoAvgSpread":206.00896860986546,
+                "wgtAvgSpread":206.28571428571428,
+                "fifoAvgPrice":1.1462387892376682,
+                "wgtAvgPrice":1.145892857142857
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Spread"
+                },
+                "tradeId":"5008264",
+                "parentTradeId":"5008092",
+                "trader":"PM",
+                "quantity":221000.0,
+                "tradeDateTime":"2020-04-07T15:51:00-04:00",
+                "price":1.105,
+                "counterpartyName":"SUM",
+                "spread":385.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":1336000.0,
+                "fifoAvgSpread":235.6175149700599,
+                "wgtAvgSpread":235.84848160821218,
+                "fifoAvgPrice":1.1394171032934133,
+                "wgtAvgPrice":1.1391283949957227
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Spread"
+                },
+                "tradeId":"5121723",
+                "parentTradeId":"5121721",
+                "trader":"PM",
+                "quantity":-765000.0,
+                "tradeDateTime":"2020-05-08T15:31:30-04:00",
+                "price":1.1286,
+                "counterpartyName":"MKTX",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":571000.0,
+                "fifoAvgSpread":275.2802101576182,
+                "wgtAvgSpread":235.84848160821218,
+                "fifoAvgPrice":1.130284588441331,
+                "wgtAvgPrice":1.1391283949957227
+              }
+            ],
+            "quantity":571000.0,
+            "cs01Cad":323.49688095000005,
+            "cs01Local":229.7726265714895
           },
           {
-            "partitionOptionValue": {
-              "PortfolioShortName": "STIP",
-              "StrategyName": "LTOV - Spread"
+            "partitionOptionValue":{
+              "PortfolioShortName":"STIP",
+              "StrategyName":""
             },
-            "date": "2020-03-20T00:00:00-04:00",
-            "securityIdentifier": "146",
-            "quantity": 4885000,
-            "cs01Cad": 5214.159980645,
-            "cs01Local": 3657.0065792151777
+            "trades":[
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"Basis"
+                },
+                "tradeId":"4825245",
+                "parentTradeId":"4825238",
+                "trader":"PM",
+                "quantity":700000.0,
+                "tradeDateTime":"2020-02-19T17:54:00-05:00",
+                "price":1.145,
+                "counterpartyName":"CITI NY",
+                "spread":207.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":700000.0,
+                "fifoAvgSpread":207.0,
+                "wgtAvgSpread":207.0,
+                "fifoAvgPrice":1.145,
+                "wgtAvgPrice":1.145
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"Basis"
+                },
+                "tradeId":"4831880",
+                "parentTradeId":"4829811",
+                "trader":"PM",
+                "quantity":1750000.0,
+                "tradeDateTime":"2020-02-20T09:52:00-05:00",
+                "price":1.14625,
+                "counterpartyName":"MS",
+                "spread":206.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":2450000.0,
+                "fifoAvgSpread":206.28571428571428,
+                "wgtAvgSpread":206.28571428571428,
+                "fifoAvgPrice":1.145892857142857,
+                "wgtAvgPrice":1.145892857142857
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"Basis"
+                },
+                "tradeId":"4966878",
+                "parentTradeId":"4966863",
+                "trader":"PM",
+                "quantity":-165000.0,
+                "tradeDateTime":"2020-03-27T11:53:30-04:00",
+                "price":1.0645,
+                "counterpartyName":"MKTX",
+                "spread":499.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":2285000.0,
+                "fifoAvgSpread":206.23413566739606,
+                "wgtAvgSpread":206.28571428571428,
+                "fifoAvgPrice":1.1459573304157549,
+                "wgtAvgPrice":1.145892857142857
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"Basis"
+                },
+                "tradeId":"4969033",
+                "parentTradeId":"4969032",
+                "trader":"PM",
+                "quantity":-525000.0,
+                "tradeDateTime":"2020-03-30T10:39:50-04:00",
+                "price":1.082,
+                "counterpartyName":"MKTX",
+                "spread":460.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":1760000.0,
+                "fifoAvgSpread":206.0056818181818,
+                "wgtAvgSpread":206.28571428571428,
+                "fifoAvgPrice":1.1462428977272727,
+                "wgtAvgPrice":1.145892857142857
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Spread"
+                },
+                "tradeId":"5008260",
+                "parentTradeId":"5008092",
+                "trader":"PM",
+                "quantity":350000.0,
+                "tradeDateTime":"2020-04-07T15:51:00-04:00",
+                "price":1.105,
+                "counterpartyName":"SUM",
+                "spread":385.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":2110000.0,
+                "fifoAvgSpread":235.69668246445497,
+                "wgtAvgSpread":235.93026404874746,
+                "fifoAvgPrice":1.1394016587677724,
+                "wgtAvgPrice":1.1391096817874067
+              }
+            ],
+            "quantity":2110000.0,
+            "cs01Cad":1195.4087895,
+            "cs01Local":849.0722277860644
           }
         ]
       },
-      "23856": {
-        "securityIdentifier": "23856",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": false,
-          "securityIdentifier": "23856",
-          "ccy": "USD",
-          "country": "US",
-          "industry": "Commercial Finance",
-          "name": "AYR 4.4 09/25/2023 Callable USD SENIOR_UNSECURED",
-          "genericSeniority": "SR",
-          "globalIdentifier": "US00928QAR20",
-          "obligorName": "AIRCASTLE LTD",
-          "obligorId": 1684,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Financials",
-          "securitySubType": "Bond",
-          "subIndustry": "Finance-Leasing Compan",
-          "ticker": "AYR",
-          "metrics": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isOnTheRun": false,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "69150",
-            "benchmarkName": "T 0.5 03/15/2023 USD",
-            "underlyingSecurityId": -1,
-            "zSpread": 596.588,
-            "gSpread": 604.39,
-            "yieldWorst": 6.61259,
-            "amtOutstanding": 650000000,
-            "marketValue": 605645950,
-            "workoutTerm": 3.5205,
-            "ratingDouble": 14,
-            "isRated": true,
-            "rating": "BBB-",
-            "ratingNoNotch": "BBB",
-            "ratingBucket": "IG",
-            "price": 93.1763,
-            "spread": 606.7836,
-            "isIndex": true
+      "19454":{
+        "securityIdentifier":"19454",
+        "security":{
+          "isSovereign":false,
+          "isGovt":false,
+          "isEm":false,
+          "securityIdentifier":"19454",
+          "ccy":"USD",
+          "country":"CA",
+          "industry":"Exploration & Production",
+          "name":"ATHCN 9.875 02/24/2022 Callable USD 144A SENIOR_SECURED",
+          "genericSeniority":"SECURED",
+          "globalIdentifier":"US04682RAC16",
+          "obligorName":"ATHABASCA OIL CORP",
+          "obligorId":1942,
+          "paymentRank":"2ND LIEN",
+          "sector":"Energy",
+          "securitySubType":"Bond",
+          "subIndustry":"Oil Comp-Explor&Prodtn",
+          "ticker":"ATHCN",
+          "metrics":{
+            "isFixedForLife":false,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":true,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":"70900",
+            "benchmarkName":"T 0.125 04/30/2022 USD",
+            "underlyingSecurityId":-1,
+            "zSpread":null,
+            "gSpread":null,
+            "yieldWorst":null,
+            "amtOutstanding":450000000.0,
+            "marketValue":120124998.0,
+            "workoutTerm":1.7836,
+            "ratingDouble":8.0,
+            "isRated":true,
+            "rating":"B-",
+            "ratingNoNotch":"B",
+            "ratingBucket":"HY",
+            "price":null,
+            "spread":null,
+            "isIndex":false
           },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": 117.414,
-              "gSpread": 122.1492,
-              "yieldWorst": 1.12159,
-              "ratingDouble": 0,
-              "price": -3.3791,
-              "spread": 122.6315
+          "deltaMetrics":{
+            "Dod":{
+              "zSpread":null,
+              "gSpread":null,
+              "yieldWorst":null,
+              "ratingDouble":0.0,
+              "price":null,
+              "spread":null
             },
-            "Wow": {
-              "zSpread": 398.766,
-              "gSpread": 408.4625,
-              "yieldWorst": 4.0832,
-              "ratingDouble": 0,
-              "price": -12.9537,
-              "spread": 411.1479
+            "Wow":{
+              "zSpread":null,
+              "gSpread":null,
+              "yieldWorst":null,
+              "ratingDouble":0.0,
+              "price":null,
+              "spread":null
             },
-            "Mtd": {
-              "zSpread": 453.845,
-              "gSpread": 458.171,
-              "yieldWorst": 4.25949,
-              "ratingDouble": 0,
-              "price": -13.6207,
-              "spread": 461.9402
+            "Mtd":{
+              "zSpread":null,
+              "gSpread":null,
+              "yieldWorst":null,
+              "ratingDouble":0.0,
+              "price":null,
+              "spread":null
             },
-            "Mom": {
-              "zSpread": 504.9022,
-              "gSpread": 511.0735,
-              "yieldWorst": 4.29628,
-              "ratingDouble": 0,
-              "price": -13.8107,
-              "spread": 514.5586
+            "Mom":{
+              "zSpread":null,
+              "gSpread":null,
+              "yieldWorst":null,
+              "ratingDouble":0.0,
+              "price":null,
+              "spread":null
             },
-            "Ytd": {
-              "zSpread": 495.501,
-              "gSpread": 498.8214,
-              "yieldWorst": 3.92233,
-              "ratingDouble": 0,
-              "price": -12.7197,
-              "spread": null
+            "Ytd":{
+              "zSpread":null,
+              "gSpread":null,
+              "yieldWorst":null,
+              "ratingDouble":-1.0,
+              "price":null,
+              "spread":null
             },
-            "Yoy": {
-              "zSpread": 421.692,
-              "gSpread": 423.14,
-              "yieldWorst": 2.38476,
-              "ratingDouble": null,
-              "price": -7.5147,
-              "spread": 426.5432
+            "Yoy":{
+              "zSpread":null,
+              "gSpread":null,
+              "yieldWorst":null,
+              "ratingDouble":-1.0,
+              "price":null,
+              "spread":null
             }
           },
-          "unitPosition": {
-            "partitionOptionValues": {
-              "PortfolioShortName": [
-                "AGB",
-                "DOF"
-              ],
-              "StrategyName": [
-                "LTOV - Spread"
-              ]
-            },
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": "2020-03-20T00:00:00-04:00",
-              "user": null,
-              "value": 650,
-              "price": 72,
-              "spread": 73
-            },
-            "primaryPmName": "SP",
-            "backupPmName": "DA",
-            "researchName": "LP",
-            "owners": [
-              "SP",
-              "DA",
-              "LP"
-            ],
-            "date": "2020-03-20T00:00:00-04:00",
-            "securityIdentifier": "23856",
-            "quantity": 15731000,
-            "cs01Cad": 6559.686144626,
-            "cs01Local": 4600.7056702384625,
-            "hedgeFactor": 1
-          },
-          "securityType": "Bond",
-          "maturityType": "Callable"
-        },
-        "bestQuotes": null,
-        "positions": [
-          {
-            "partitionOptionValue": {
-              "PortfolioShortName": "AGB",
-              "StrategyName": "LTOV - Spread"
-            },
-            "date": "2020-03-20T00:00:00-04:00",
-            "securityIdentifier": "23856",
-            "quantity": 3000000,
-            "cs01Cad": 1250.973138,
-            "cs01Local": 877.3833202412682
-          },
-          {
-            "partitionOptionValue": {
-              "PortfolioShortName": "DOF",
-              "StrategyName": "LTOV - Spread"
-            },
-            "date": "2020-03-20T00:00:00-04:00",
-            "securityIdentifier": "23856",
-            "quantity": 12731000,
-            "cs01Cad": 5308.713006626,
-            "cs01Local": 3723.3223499971946
-          }
-        ]
-      },
-      "67055": {
-        "securityIdentifier": "67055",
-        "security": {
-          "isSovereign": false,
-          "isGovt": false,
-          "isEm": false,
-          "securityIdentifier": "67055",
-          "ccy": "USD",
-          "country": "US",
-          "industry": "Pipeline",
-          "name": "KMI 2.9 03/01/2030 Callable USD 144A SENIOR_UNSECURED",
-          "genericSeniority": "SR",
-          "globalIdentifier": "US880451AZ24",
-          "obligorName": "KINDER MORGAN INC/DE",
-          "obligorId": 443,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Energy",
-          "securitySubType": "Bond",
-          "subIndustry": "Pipelines",
-          "ticker": "KMI",
-          "metrics": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isOnTheRun": true,
-            "isNewIssue": true,
-            "benchmarkSecurityIdentifier": "66248",
-            "benchmarkName": "T 1.5 02/15/2030 USD",
-            "underlyingSecurityId": -1,
-            "zSpread": 471.868,
-            "gSpread": 455.156,
-            "yieldWorst": 5.69223,
-            "amtOutstanding": 1000000000,
-            "marketValue": 790233000,
-            "workoutTerm": 9.9562,
-            "ratingDouble": 15,
-            "isRated": true,
-            "rating": "BBB",
-            "ratingNoNotch": "BBB",
-            "ratingBucket": "IG",
-            "price": 79.0233,
-            "spread": 455.53060000000005,
-            "isIndex": true
-          },
-          "deltaMetrics": {
-            "Dod": {
-              "zSpread": 48.12,
-              "gSpread": 39.1958,
-              "yieldWorst": 0.34118,
-              "ratingDouble": 0,
-              "price": -2.257,
-              "spread": 39.2952
-            },
-            "Wow": {
-              "zSpread": 72.645,
-              "gSpread": 54.2191,
-              "yieldWorst": 0.87847,
-              "ratingDouble": 0,
-              "price": -5.9742,
-              "spread": 54.3867
-            },
-            "Mtd": {
-              "zSpread": 297.07,
-              "gSpread": 287.343,
-              "yieldWorst": 2.86461,
-              "ratingDouble": 0,
-              "price": -21.5907,
-              "spread": null
-            },
-            "Mom": {
-              "zSpread": null,
-              "gSpread": null,
-              "yieldWorst": null,
-              "ratingDouble": 0,
-              "price": null,
-              "spread": null
-            },
-            "Ytd": null,
-            "Yoy": null
-          },
-          "unitPosition": {
-            "partitionOptionValues": {
-              "PortfolioShortName": [
+          "unitPosition":{
+            "metricDate":"2020-05-15T00:00:00-04:00",
+            "securityIdentifier":"19454",
+            "partitionOptionValues":{
+              "PortfolioShortName":[
                 "DOF",
-                "SOF"
+                "SOF",
+                "STIP",
+                "AGB"
               ],
-              "StrategyName": [
-                "Portfolio Shorts"
+              "StrategyName":[
+                "",
+                "LTOV - Yield"
               ]
             },
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": "2020-03-20T10:49:30.07-04:00",
-              "user": "IL",
-              "value": 490,
-              "price": 72,
-              "spread": 73
+            "mark":{
+              "driver":"Price",
+              "enteredTime":"2020-05-15T00:00:00-04:00",
+              "user":null,
+              "value":24.5,
+              "spread":12365.41,
+              "price":24.5
             },
-            "primaryPmName": "IL",
-            "backupPmName": "DM",
-            "researchName": "AG",
-            "owners": [
-              "IL",
-              "DM",
-              "AG"
-            ],
-            "date": "2020-03-20T00:00:00-04:00",
-            "securityIdentifier": "67055",
-            "quantity": -10000000,
-            "cs01Cad": -9404.50161,
-            "cs01Local": -6595.9472646935055,
-            "hedgeFactor": 1
-          },
-          "securityType": "Bond",
-          "maturityType": "Callable"
-        },
-        "bestQuotes": {
-          "bestPriceQuote": {
-            "isOffTheRunCds": false,
-            "quoteMetric": "Price",
-            "totalActiveAxeBidQuantity": 8000,
-            "totalActiveAxeAskQuantity": 0,
-            "totalActiveBidQuantity": 8000,
-            "totalActiveAskQuantity": 0,
-            "axeSkew": 0,
-            "totalSkew": 0,
-            "bidQuoteType": "Run",
-            "bidDealer": "SUN",
-            "bidQuoteValue": 76.81999969482422,
-            "bidTime": "2020-03-20T13:18:28-04:00",
-            "bidIsOld": false,
-            "askQuoteType": null,
-            "askDealer": null,
-            "askQuoteValue": null,
-            "askTime": null,
-            "askIsOld": false,
-            "bidAxeDealer": "BARC",
-            "bidAxeQuoteValue": 75.87999725341797,
-            "bidAxeTime": "2020-03-20T14:09:48-04:00",
-            "bidAxeIsOld": false,
-            "askAxeDealer": null,
-            "askAxeQuoteValue": null,
-            "askAxeTime": null,
-            "askAxeIsOld": false,
-            "globalIdentifier": "US880451AZ24"
-          },
-          "bestSpreadQuote": {
-            "isOffTheRunCds": false,
-            "quoteMetric": "Spread",
-            "totalActiveAxeBidQuantity": 8000,
-            "totalActiveAxeAskQuantity": 0,
-            "totalActiveBidQuantity": 8000,
-            "totalActiveAskQuantity": 0,
-            "axeSkew": 0,
-            "totalSkew": 0,
-            "bidQuoteType": "Run",
-            "bidDealer": "SUN",
-            "bidQuoteValue": 510,
-            "bidTime": "2020-03-20T13:18:28-04:00",
-            "bidIsOld": false,
-            "askQuoteType": "Run",
-            "askDealer": "SUN",
-            "askQuoteValue": 500,
-            "askTime": "2020-03-20T13:18:28-04:00",
-            "askIsOld": false,
-            "bidAxeDealer": "BARC",
-            "bidAxeQuoteValue": 525,
-            "bidAxeTime": "2020-03-20T14:09:48-04:00",
-            "bidAxeIsOld": false,
-            "askAxeDealer": null,
-            "askAxeQuoteValue": null,
-            "askAxeTime": null,
-            "askAxeIsOld": false,
-            "globalIdentifier": "US880451AZ24"
-          },
-          "bestYieldQuote": {
-            "isOffTheRunCds": false,
-            "quoteMetric": "Yield",
-            "totalActiveAxeBidQuantity": 8000,
-            "totalActiveAxeAskQuantity": 0,
-            "totalActiveBidQuantity": 8000,
-            "totalActiveAskQuantity": 0,
-            "axeSkew": 0,
-            "totalSkew": 0,
-            "bidQuoteType": "Run",
-            "bidDealer": "SUN",
-            "bidQuoteValue": 6.035130023956299,
-            "bidTime": "2020-03-20T13:18:28-04:00",
-            "bidIsOld": false,
-            "askQuoteType": null,
-            "askDealer": null,
-            "askQuoteValue": null,
-            "askTime": null,
-            "askIsOld": false,
-            "bidAxeDealer": "BARC",
-            "bidAxeQuoteValue": 6.184999942779541,
-            "bidAxeTime": "2020-03-20T14:09:48-04:00",
-            "bidAxeIsOld": false,
-            "askAxeDealer": null,
-            "askAxeQuoteValue": null,
-            "askAxeTime": null,
-            "askAxeIsOld": false,
-            "globalIdentifier": "US880451AZ24"
-          }
-        },
-        "positions": [
-          {
-            "partitionOptionValue": {
-              "PortfolioShortName": "DOF",
-              "StrategyName": "Portfolio Shorts"
-            },
-            "date": "2020-03-20T00:00:00-04:00",
-            "securityIdentifier": "67055",
-            "quantity": -6000000,
-            "cs01Cad": -5642.700966,
-            "cs01Local": -3957.5683588161037
-          },
-          {
-            "partitionOptionValue": {
-              "PortfolioShortName": "SOF",
-              "StrategyName": "Portfolio Shorts"
-            },
-            "date": "2020-03-20T00:00:00-04:00",
-            "securityIdentifier": "67055",
-            "quantity": -4000000,
-            "cs01Cad": -3761.800644,
-            "cs01Local": -2638.3789058774023
-          }
-        ]
-      },
-      "1233|4.8Y": {
-        "securityIdentifier": "1233|4.8Y",
-        "security": {
-          "curveSubType": "XR14",
-          "securityIdentifier": "1233|4.8Y",
-          "ccy": "USD",
-          "country": "CA",
-          "industry": "Exploration & Production",
-          "name": "OVV CDS USD SR 12/20/2024",
-          "genericSeniority": "SR",
-          "globalIdentifier": "OVV CDS USD SR 5Y",
-          "obligorName": "OVINTIV INC",
-          "obligorId": 7279,
-          "paymentRank": "SR UNSECURED",
-          "sector": "Energy",
-          "securitySubType": null,
-          "subIndustry": "Oil Comp-Explor&Prodtn",
-          "ticker": "OVV",
-          "metrics": {
-            "isOnTheRun": false,
-            "workoutTerm": 4.7589,
-            "ratingDouble": 14.33,
-            "isRated": true,
-            "rating": "BBB-",
-            "ratingNoNotch": "BBB",
-            "ratingBucket": "Xover",
-            "price": 68.428,
-            "spread": 1100,
-            "isIndex": false
-          },
-          "deltaMetrics": {
-            "Dod": {
-              "ratingDouble": 0,
-              "price": -0.02,
-              "spread": 0
-            },
-            "Wow": null,
-            "Mtd": null,
-            "Mom": null,
-            "Ytd": null,
-            "Yoy": null
-          },
-          "unitPosition": {
-            "partitionOptionValues": {
-              "PortfolioShortName": [
-                "DOF"
-              ],
-              "StrategyName": [
-                "Portfolio Shorts",
-                "STOV"
-              ]
-            },
-            "mark": {
-              "driver": "Spread",
-              "enteredTime": "2020-03-20T00:00:00-04:00",
-              "user": null,
-              "value": 1500,
-              "price": 72,
-              "spread": 73
-            },
-            "primaryPmName": "DJ",
-            "backupPmName": "PM",
-            "researchName": "TW",
-            "owners": [
+            "hedgeFactor":0.0,
+            "primaryPmName":"DJ",
+            "backupPmName":"PM",
+            "researchName":"TW",
+            "owners":[
               "DJ",
               "PM",
               "TW"
-            ],
-            "date": "2020-03-20T00:00:00-04:00",
-            "securityIdentifier": "1233|4.8Y",
-            "quantity": -8500000,
-            "cs01Cad": -1844.9175,
-            "cs01Local": -1293.9525178846964,
-            "hedgeFactor": 1
+            ]
           },
-          "securityType": "Cds",
-          "maturityType": "Bullet"
+          "securityType":"Bond",
+          "maturityType":"Callable"
         },
-        "bestQuotes": null,
-        "positions": [
+        "bestQuotes":{
+          "bestPriceQuote":{
+            "isOffTheRunCds":false,
+            "quoteMetric":"Price",
+            "totalActiveAxeBidQuantity":0.0,
+            "totalActiveAxeAskQuantity":0.0,
+            "totalActiveBidQuantity":0.0,
+            "totalActiveAskQuantity":0.0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuoteType":"Axe",
+            "bidDealer":"MULT",
+            "bidQuoteValue":24.0,
+            "bidTime":"2020-05-15T09:19:05",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CF",
+            "askQuoteValue":22.0,
+            "askTime":"2020-05-15T07:24:51",
+            "askIsOld":true,
+            "bidAxeDealer":"COWN",
+            "bidAxeQuoteValue":24.0,
+            "bidAxeTime":"2020-05-15T09:19:05",
+            "bidAxeIsOld":true,
+            "askAxeDealer":"COWN",
+            "askAxeQuoteValue":26.0,
+            "askAxeTime":"2020-05-15T09:19:05",
+            "askAxeIsOld":true,
+            "globalIdentifier":"US04682RAC16"
+          },
+          "bestSpreadQuote":{
+            "isOffTheRunCds":false,
+            "quoteMetric":"Spread",
+            "totalActiveAxeBidQuantity":0.0,
+            "totalActiveAxeAskQuantity":0.0,
+            "totalActiveBidQuantity":0.0,
+            "totalActiveAskQuantity":0.0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuoteType":"Axe",
+            "bidDealer":"COWN",
+            "bidQuoteValue":12578.5,
+            "bidTime":"2020-05-15T09:19:05",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CF",
+            "askQuoteValue":13497.2998046875,
+            "askTime":"2020-05-15T07:24:51",
+            "askIsOld":true,
+            "bidAxeDealer":"COWN",
+            "bidAxeQuoteValue":12578.5,
+            "bidAxeTime":"2020-05-15T09:19:05",
+            "bidAxeIsOld":true,
+            "askAxeDealer":"COWN",
+            "askAxeQuoteValue":11759.7001953125,
+            "askAxeTime":"2020-05-15T09:19:05",
+            "askAxeIsOld":true,
+            "globalIdentifier":"US04682RAC16"
+          },
+          "bestYieldQuote":{
+            "isOffTheRunCds":false,
+            "quoteMetric":"Yield",
+            "totalActiveAxeBidQuantity":0.0,
+            "totalActiveAxeAskQuantity":0.0,
+            "totalActiveBidQuantity":0.0,
+            "totalActiveAskQuantity":0.0,
+            "axeSkew":null,
+            "totalSkew":null,
+            "bidQuoteType":"Axe",
+            "bidDealer":"MULT",
+            "bidQuoteValue":125.9280014038086,
+            "bidTime":"2020-05-15T09:19:05",
+            "bidIsOld":true,
+            "askQuoteType":"Run",
+            "askDealer":"CF",
+            "askQuoteValue":135.11199951171875,
+            "askTime":"2020-05-15T07:24:51",
+            "askIsOld":true,
+            "bidAxeDealer":"COWN",
+            "bidAxeQuoteValue":125.9280014038086,
+            "bidAxeTime":"2020-05-15T09:19:05",
+            "bidAxeIsOld":true,
+            "askAxeDealer":"COWN",
+            "askAxeQuoteValue":117.73799896240234,
+            "askAxeTime":"2020-05-15T09:19:05",
+            "askAxeIsOld":true,
+            "globalIdentifier":"US04682RAC16"
+          }
+        },
+        "positions":[
           {
-            "partitionOptionValue": {
-              "PortfolioShortName": "DOF",
-              "StrategyName": "Portfolio Shorts"
+            "partitionOptionValue":{
+              "PortfolioShortName":"AGB",
+              "StrategyName":"LTOV - Yield"
             },
-            "date": "2020-03-20T00:00:00-04:00",
-            "securityIdentifier": "1233|4.8Y",
-            "quantity": -6500000,
-            "cs01Cad": -1410.8075000000001,
-            "cs01Local": -989.4848506101839
+            "trades":[
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"AGB",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4574474",
+                "parentTradeId":"4574474",
+                "trader":"DJ",
+                "quantity":1000000.0,
+                "tradeDateTime":"2019-12-17T08:00:00-05:00",
+                "price":0.85125,
+                "counterpartyName":"NBF FI",
+                "spread":1679.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":1000000.0,
+                "fifoAvgSpread":1679.0,
+                "wgtAvgSpread":1679.0,
+                "fifoAvgPrice":0.85125,
+                "wgtAvgPrice":0.85125
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"AGB",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4575639",
+                "parentTradeId":"4575639",
+                "trader":"PM",
+                "quantity":15000.0,
+                "tradeDateTime":"2019-12-23T08:00:00-05:00",
+                "price":0.855,
+                "counterpartyName":"IMPC",
+                "spread":1660.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":1015000.0,
+                "fifoAvgSpread":1678.71921182266,
+                "wgtAvgSpread":1678.71921182266,
+                "fifoAvgPrice":0.8513054187192118,
+                "wgtAvgPrice":0.8513054187192118
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"AGB",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4636473",
+                "parentTradeId":"4636473",
+                "trader":"DJ",
+                "quantity":-16000.0,
+                "tradeDateTime":"2020-01-08T08:00:00-05:00",
+                "price":0.89,
+                "counterpartyName":"BTIG",
+                "spread":1463.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":999000.0,
+                "fifoAvgSpread":1678.7147147147148,
+                "wgtAvgSpread":1678.71921182266,
+                "fifoAvgPrice":0.8513063063063063,
+                "wgtAvgPrice":0.8513054187192118
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"AGB",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4636866",
+                "parentTradeId":"4636866",
+                "trader":"DJ",
+                "quantity":-20000.0,
+                "tradeDateTime":"2020-01-09T08:00:00-05:00",
+                "price":0.8887,
+                "counterpartyName":"MKTX",
+                "spread":1470.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":979000.0,
+                "fifoAvgSpread":1678.708886618999,
+                "wgtAvgSpread":1678.71921182266,
+                "fifoAvgPrice":0.8513074565883555,
+                "wgtAvgPrice":0.8513054187192118
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"AGB",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4707927",
+                "parentTradeId":"4707922",
+                "trader":"DJ",
+                "quantity":-16000.0,
+                "tradeDateTime":"2020-01-23T10:30:00-05:00",
+                "price":0.8575,
+                "counterpartyName":"NBF FI",
+                "spread":1692.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":963000.0,
+                "fifoAvgSpread":1678.7040498442368,
+                "wgtAvgSpread":1678.71921182266,
+                "fifoAvgPrice":0.8513084112149533,
+                "wgtAvgPrice":0.8513054187192118
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"AGB",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4709399",
+                "parentTradeId":"4709395",
+                "trader":"DJ",
+                "quantity":-57000.0,
+                "tradeDateTime":"2020-01-23T16:10:00-05:00",
+                "price":0.855,
+                "counterpartyName":"NBF FI",
+                "spread":1711.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":906000.0,
+                "fifoAvgSpread":1678.6854304635763,
+                "wgtAvgSpread":1678.71921182266,
+                "fifoAvgPrice":0.8513120860927152,
+                "wgtAvgPrice":0.8513054187192118
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"AGB",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4709428",
+                "parentTradeId":"4709400",
+                "trader":"DJ",
+                "quantity":-32000.0,
+                "tradeDateTime":"2020-01-23T16:12:00-05:00",
+                "price":0.8525,
+                "counterpartyName":"NBF FI",
+                "spread":1728.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":874000.0,
+                "fifoAvgSpread":1678.6739130434783,
+                "wgtAvgSpread":1678.71921182266,
+                "fifoAvgPrice":0.8513143592677346,
+                "wgtAvgPrice":0.8513054187192118
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"AGB",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4721325",
+                "parentTradeId":"4721320",
+                "trader":"DJ",
+                "quantity":-8000.0,
+                "tradeDateTime":"2020-01-27T16:19:06-05:00",
+                "price":0.8481,
+                "counterpartyName":"MKTX",
+                "spread":1764.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":866000.0,
+                "fifoAvgSpread":1678.6709006928406,
+                "wgtAvgSpread":1678.71921182266,
+                "fifoAvgPrice":0.8513149538106236,
+                "wgtAvgPrice":0.8513054187192118
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"AGB",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4721287",
+                "parentTradeId":"4721281",
+                "trader":"DJ",
+                "quantity":-8000.0,
+                "tradeDateTime":"2020-01-27T16:19:06-05:00",
+                "price":0.8481,
+                "counterpartyName":"MKTX",
+                "spread":1764.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":858000.0,
+                "fifoAvgSpread":1678.667832167832,
+                "wgtAvgSpread":1678.71921182266,
+                "fifoAvgPrice":0.8513155594405595,
+                "wgtAvgPrice":0.8513054187192118
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"AGB",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4754705",
+                "parentTradeId":"4754700",
+                "trader":"PM",
+                "quantity":-19000.0,
+                "tradeDateTime":"2020-02-04T15:48:00-05:00",
+                "price":0.8525,
+                "counterpartyName":"CSFB NY",
+                "spread":1745.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":839000.0,
+                "fifoAvgSpread":1678.6603098927294,
+                "wgtAvgSpread":1678.71921182266,
+                "fifoAvgPrice":0.8513170441001192,
+                "wgtAvgPrice":0.8513054187192118
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"AGB",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4850410",
+                "parentTradeId":"4850404",
+                "trader":"DJ",
+                "quantity":-81000.0,
+                "tradeDateTime":"2020-02-27T11:09:00-05:00",
+                "price":0.7975,
+                "counterpartyName":"NBF FI",
+                "spread":2210.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":758000.0,
+                "fifoAvgSpread":1678.6240105540896,
+                "wgtAvgSpread":1678.71921182266,
+                "fifoAvgPrice":0.8513242084432717,
+                "wgtAvgPrice":0.8513054187192118
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"AGB",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4851542",
+                "parentTradeId":"4851537",
+                "trader":"DJ",
+                "quantity":-80000.0,
+                "tradeDateTime":"2020-02-27T16:18:00-05:00",
+                "price":0.7975,
+                "counterpartyName":"NBF FI",
+                "spread":2213.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":678000.0,
+                "fifoAvgSpread":1678.5796460176991,
+                "wgtAvgSpread":1678.71921182266,
+                "fifoAvgPrice":0.8513329646017699,
+                "wgtAvgPrice":0.8513054187192118
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"AGB",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4916019",
+                "parentTradeId":"4916015",
+                "trader":"BT",
+                "quantity":-81000.0,
+                "tradeDateTime":"2020-03-12T16:05:00-04:00",
+                "price":0.395,
+                "counterpartyName":"NBF FI",
+                "spread":7222.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":597000.0,
+                "fifoAvgSpread":1678.5226130653266,
+                "wgtAvgSpread":1678.71921182266,
+                "fifoAvgPrice":0.8513442211055277,
+                "wgtAvgPrice":0.8513054187192118
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"AGB",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"5140764",
+                "parentTradeId":"5140758",
+                "trader":"DJ",
+                "quantity":-306000.0,
+                "tradeDateTime":"2020-05-14T16:17:00-04:00",
+                "price":0.245,
+                "counterpartyName":"RBC NY",
+                "spread":12346.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":291000.0,
+                "fifoAvgSpread":1678.020618556701,
+                "wgtAvgSpread":1678.71921182266,
+                "fifoAvgPrice":0.8514432989690721,
+                "wgtAvgPrice":0.8513054187192118
+              }
+            ],
+            "quantity":291000.0,
+            "cs01Cad":9.867032738999999,
+            "cs01Local":7.008333503089709
           },
           {
-            "partitionOptionValue": {
-              "PortfolioShortName": "DOF",
-              "StrategyName": "STOV"
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":""
             },
-            "date": "2020-03-20T00:00:00-04:00",
-            "securityIdentifier": "1233|4.8Y",
-            "quantity": -2000000,
-            "cs01Cad": -434.11,
-            "cs01Local": -304.46766727451256
+            "trades":[
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":""
+                },
+                "tradeId":"3094301",
+                "parentTradeId":"3094301",
+                "trader":"Unknown User",
+                "quantity":1000000.0,
+                "tradeDateTime":"2018-06-07T08:00:00-04:00",
+                "price":1.02625,
+                "counterpartyName":"RBC NY",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":1000000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.02625,
+                "wgtAvgPrice":1.02625
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":""
+                },
+                "tradeId":"3106500",
+                "parentTradeId":"3106500",
+                "trader":"Unknown User",
+                "quantity":1000000.0,
+                "tradeDateTime":"2018-06-19T08:00:00-04:00",
+                "price":1.03125,
+                "counterpartyName":"CC",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":2000000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.02875,
+                "wgtAvgPrice":1.02875
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":""
+                },
+                "tradeId":"3110129",
+                "parentTradeId":"3110129",
+                "trader":"Unknown User",
+                "quantity":1500000.0,
+                "tradeDateTime":"2018-06-21T08:00:00-04:00",
+                "price":1.0375,
+                "counterpartyName":"RBC NY",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":3500000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0325,
+                "wgtAvgPrice":1.0325
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":""
+                },
+                "tradeId":"3115305",
+                "parentTradeId":"3115305",
+                "trader":"Unknown User",
+                "quantity":3500000.0,
+                "tradeDateTime":"2018-06-27T08:00:00-04:00",
+                "price":1.0375,
+                "counterpartyName":"RBC NY",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":7000000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.035,
+                "wgtAvgPrice":1.035
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3401518",
+                "parentTradeId":"3401513",
+                "trader":"PM",
+                "quantity":364000.0,
+                "tradeDateTime":"2018-11-19T16:21:00-05:00",
+                "price":0.9125,
+                "counterpartyName":"RBC NY",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":7364000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0289448669201522,
+                "wgtAvgPrice":1.028944866920152
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3439885",
+                "parentTradeId":"3439880",
+                "trader":"PM",
+                "quantity":273000.0,
+                "tradeDateTime":"2018-12-11T10:02:00-05:00",
+                "price":0.94,
+                "counterpartyName":"RBC NY",
+                "spread":944.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":7637000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0257653528872595,
+                "wgtAvgPrice":1.0257653528872592
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3439904",
+                "parentTradeId":"3439898",
+                "trader":"PM",
+                "quantity":91000.0,
+                "tradeDateTime":"2018-12-11T10:03:00-05:00",
+                "price":0.93875,
+                "counterpartyName":"TD",
+                "spread":949.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":7728000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0247407155797101,
+                "wgtAvgPrice":1.02474071557971
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3440986",
+                "parentTradeId":"3440983",
+                "trader":"DJ",
+                "quantity":1117000.0,
+                "tradeDateTime":"2018-12-11T16:54:00-05:00",
+                "price":0.93875,
+                "counterpartyName":"RBC NY",
+                "spread":952.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":8845000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.013881288863765,
+                "wgtAvgPrice":1.0138812888637647
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3440990",
+                "parentTradeId":"3440987",
+                "trader":"DJ",
+                "quantity":750000.0,
+                "tradeDateTime":"2018-12-11T17:00:00-05:00",
+                "price":0.93875,
+                "counterpartyName":"TD",
+                "spread":952.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":9595000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0080085982282438,
+                "wgtAvgPrice":1.0080085982282436
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3443155",
+                "parentTradeId":"3443150",
+                "trader":"DJ",
+                "quantity":500000.0,
+                "tradeDateTime":"2018-12-12T13:33:00-05:00",
+                "price":0.9475,
+                "counterpartyName":"TD",
+                "spread":912.5,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":10095000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0050116394254582,
+                "wgtAvgPrice":1.005011639425458
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3443581",
+                "parentTradeId":"3443575",
+                "trader":"DJ",
+                "quantity":250000.0,
+                "tradeDateTime":"2018-12-12T16:30:00-05:00",
+                "price":0.9475,
+                "counterpartyName":"BTIG",
+                "spread":911.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":10345000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.003621797970034,
+                "wgtAvgPrice":1.0036217979700337
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3446070",
+                "parentTradeId":"3446067",
+                "trader":"DJ",
+                "quantity":250000.0,
+                "tradeDateTime":"2018-12-13T16:47:00-05:00",
+                "price":0.9475,
+                "counterpartyName":"OPCO",
+                "spread":913.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":10595000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0022975460122698,
+                "wgtAvgPrice":1.0022975460122698
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3448028",
+                "parentTradeId":"3448022",
+                "trader":"DJ",
+                "quantity":849000.0,
+                "tradeDateTime":"2018-12-14T14:12:00-05:00",
+                "price":0.9475,
+                "counterpartyName":"CSFB NY",
+                "spread":917.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":11444000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9982322614470465,
+                "wgtAvgPrice":0.9982322614470464
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3517866",
+                "parentTradeId":"3517830",
+                "trader":"DJ",
+                "quantity":1146000.0,
+                "tradeDateTime":"2019-01-24T16:18:09-05:00",
+                "price":0.96,
+                "counterpartyName":"GMPS",
+                "spread":892.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":12590000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9947521842732328,
+                "wgtAvgPrice":0.9947521842732325
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3565619",
+                "parentTradeId":"3565615",
+                "trader":"PM",
+                "quantity":230000.0,
+                "tradeDateTime":"2019-02-15T13:32:00-05:00",
+                "price":0.97375,
+                "counterpartyName":"STIF",
+                "spread":843.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":12820000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9943753900156006,
+                "wgtAvgPrice":0.9943753900156005
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3590203",
+                "parentTradeId":"3590198",
+                "trader":"DJ",
+                "quantity":458000.0,
+                "tradeDateTime":"2019-02-28T13:54:00-05:00",
+                "price":0.9625,
+                "counterpartyName":"GMPS",
+                "spread":890.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":13278000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9932759075161922,
+                "wgtAvgPrice":0.9932759075161921
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3595680",
+                "parentTradeId":"3595676",
+                "trader":"DJ",
+                "quantity":229000.0,
+                "tradeDateTime":"2019-03-04T09:40:28-05:00",
+                "price":0.951,
+                "counterpartyName":"MKTX",
+                "spread":935.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":13507000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.992559154512475,
+                "wgtAvgPrice":0.9925591545124749
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3604165",
+                "parentTradeId":"3604160",
+                "trader":"Unknown User",
+                "quantity":1000000.0,
+                "tradeDateTime":"2019-03-06T16:01:00-05:00",
+                "price":0.9475,
+                "counterpartyName":"GMPS",
+                "spread":954.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":14507000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9894531260770663,
+                "wgtAvgPrice":0.9894531260770661
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3682987",
+                "parentTradeId":"3682983",
+                "trader":"DJ",
+                "quantity":-238000.0,
+                "tradeDateTime":"2019-04-10T14:48:00-04:00",
+                "price":0.9625,
+                "counterpartyName":"STIF",
+                "spread":917.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":14269000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9888393720653165,
+                "wgtAvgPrice":0.9894531260770661
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4447068",
+                "parentTradeId":"4447068",
+                "trader":"PM",
+                "quantity":-357000.0,
+                "tradeDateTime":"2019-10-11T08:00:00-04:00",
+                "price":0.94,
+                "counterpartyName":"TD TOR",
+                "spread":1138.5,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":13912000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.987879366733755,
+                "wgtAvgPrice":0.9894531260770661
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4591830",
+                "parentTradeId":"4591830",
+                "trader":"DJ",
+                "quantity":460000.0,
+                "tradeDateTime":"2019-12-17T08:00:00-05:00",
+                "price":0.85125,
+                "counterpartyName":"NBF FI",
+                "spread":1679.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":14372000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.983506314361258,
+                "wgtAvgPrice":0.9850297028934138
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4593755",
+                "parentTradeId":"4593755",
+                "trader":"PM",
+                "quantity":235000.0,
+                "tradeDateTime":"2019-12-23T08:00:00-05:00",
+                "price":0.855,
+                "counterpartyName":"IMPC",
+                "spread":1660.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":14607000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9814388820428561,
+                "wgtAvgPrice":0.982937762030817
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4652390",
+                "parentTradeId":"4652390",
+                "trader":"DJ",
+                "quantity":-234000.0,
+                "tradeDateTime":"2020-01-08T08:00:00-05:00",
+                "price":0.89,
+                "counterpartyName":"BTIG",
+                "spread":1463.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":14373000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9807093334724831,
+                "wgtAvgPrice":0.982937762030817
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4652926",
+                "parentTradeId":"4652926",
+                "trader":"DJ",
+                "quantity":-230000.0,
+                "tradeDateTime":"2020-01-09T08:00:00-05:00",
+                "price":0.8887,
+                "counterpartyName":"MKTX",
+                "spread":1470.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":14143000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9799478717386693,
+                "wgtAvgPrice":0.982937762030817
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4707926",
+                "parentTradeId":"4707922",
+                "trader":"DJ",
+                "quantity":-235000.0,
+                "tradeDateTime":"2020-01-23T10:30:00-05:00",
+                "price":0.8575,
+                "counterpartyName":"NBF FI",
+                "spread":1692.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":13908000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.979081032499281,
+                "wgtAvgPrice":0.982937762030817
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4709398",
+                "parentTradeId":"4709395",
+                "trader":"DJ",
+                "quantity":-819000.0,
+                "tradeDateTime":"2020-01-23T16:10:00-05:00",
+                "price":0.855,
+                "counterpartyName":"NBF FI",
+                "spread":1711.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":13089000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9757627779051111,
+                "wgtAvgPrice":0.982937762030817
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4709427",
+                "parentTradeId":"4709400",
+                "trader":"DJ",
+                "quantity":-468000.0,
+                "tradeDateTime":"2020-01-23T16:12:00-05:00",
+                "price":0.8525,
+                "counterpartyName":"NBF FI",
+                "spread":1728.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":12621000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9734734965533635,
+                "wgtAvgPrice":0.982937762030817
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4721324",
+                "parentTradeId":"4721320",
+                "trader":"DJ",
+                "quantity":-117000.0,
+                "tradeDateTime":"2020-01-27T16:19:06-05:00",
+                "price":0.8481,
+                "counterpartyName":"MKTX",
+                "spread":1764.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":12504000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9728744001919386,
+                "wgtAvgPrice":0.982937762030817
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4721286",
+                "parentTradeId":"4721281",
+                "trader":"DJ",
+                "quantity":-117000.0,
+                "tradeDateTime":"2020-01-27T16:19:06-05:00",
+                "price":0.8481,
+                "counterpartyName":"MKTX",
+                "spread":1764.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":12387000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9722639864373941,
+                "wgtAvgPrice":0.982937762030817
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4754704",
+                "parentTradeId":"4754700",
+                "trader":"PM",
+                "quantity":-293000.0,
+                "tradeDateTime":"2020-02-04T15:48:00-05:00",
+                "price":0.8525,
+                "counterpartyName":"CSFB NY",
+                "spread":1745.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":12094000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9706835207540929,
+                "wgtAvgPrice":0.982937762030817
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4850409",
+                "parentTradeId":"4850404",
+                "trader":"DJ",
+                "quantity":-1170000.0,
+                "tradeDateTime":"2020-02-27T11:09:00-05:00",
+                "price":0.7975,
+                "counterpartyName":"NBF FI",
+                "spread":2210.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":10924000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9635272336140608,
+                "wgtAvgPrice":0.982937762030817
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4851541",
+                "parentTradeId":"4851537",
+                "trader":"DJ",
+                "quantity":-1170000.0,
+                "tradeDateTime":"2020-02-27T16:18:00-05:00",
+                "price":0.7975,
+                "counterpartyName":"NBF FI",
+                "spread":2213.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":9754000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9546541418905065,
+                "wgtAvgPrice":0.982937762030817
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4916018",
+                "parentTradeId":"4916015",
+                "trader":"BT",
+                "quantity":-1170000.0,
+                "tradeDateTime":"2020-03-12T16:05:00-04:00",
+                "price":0.395,
+                "counterpartyName":"NBF FI",
+                "spread":7222.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":8584000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9433622437092265,
+                "wgtAvgPrice":0.982937762030817
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"DOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"5140763",
+                "parentTradeId":"5140758",
+                "trader":"DJ",
+                "quantity":-4388000.0,
+                "tradeDateTime":"2020-05-14T16:17:00-04:00",
+                "price":0.245,
+                "counterpartyName":"RBC NY",
+                "spread":12346.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":4196000.0,
+                "fifoAvgSpread":1038.1179694947568,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9384488798856053,
+                "wgtAvgPrice":0.982937762030817
+              }
+            ],
+            "quantity":4196000.0,
+            "cs01Cad":142.275152484,
+            "cs01Local":101.05487071809078
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"SOF",
+              "StrategyName":""
+            },
+            "trades":[
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":""
+                },
+                "tradeId":"2952539",
+                "parentTradeId":"2952539",
+                "trader":"Unknown User",
+                "quantity":1000000.0,
+                "tradeDateTime":"2018-01-25T08:00:00-05:00",
+                "price":1.0225,
+                "counterpartyName":"TD",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":1000000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0225,
+                "wgtAvgPrice":1.0225
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":""
+                },
+                "tradeId":"2952565",
+                "parentTradeId":"2952565",
+                "trader":"Unknown User",
+                "quantity":1500000.0,
+                "tradeDateTime":"2018-01-25T08:00:00-05:00",
+                "price":1.0225,
+                "counterpartyName":"GUGH",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":2500000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0225,
+                "wgtAvgPrice":1.0225
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":""
+                },
+                "tradeId":"2962689",
+                "parentTradeId":"2962689",
+                "trader":"Unknown User",
+                "quantity":500000.0,
+                "tradeDateTime":"2018-02-02T08:00:00-05:00",
+                "price":1.0075,
+                "counterpartyName":"GUGH",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":3000000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.02,
+                "wgtAvgPrice":1.02
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":""
+                },
+                "tradeId":"3031377",
+                "parentTradeId":"3031377",
+                "trader":"Unknown User",
+                "quantity":1000000.0,
+                "tradeDateTime":"2018-04-11T08:00:00-04:00",
+                "price":1.005,
+                "counterpartyName":"RBC NY",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":4000000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.01625,
+                "wgtAvgPrice":1.01625
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":""
+                },
+                "tradeId":"3031351",
+                "parentTradeId":"3031351",
+                "trader":"Unknown User",
+                "quantity":1165000.0,
+                "tradeDateTime":"2018-04-11T08:00:00-04:00",
+                "price":1.00375,
+                "counterpartyName":"BAML NY",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":5165000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0134305421103582,
+                "wgtAvgPrice":1.0134305421103582
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":""
+                },
+                "tradeId":"3040382",
+                "parentTradeId":"3040382",
+                "trader":"Unknown User",
+                "quantity":1000000.0,
+                "tradeDateTime":"2018-04-18T08:00:00-04:00",
+                "price":1.02125,
+                "counterpartyName":"GMPS",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":6165000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.014698905109489,
+                "wgtAvgPrice":1.014698905109489
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":""
+                },
+                "tradeId":"3040443",
+                "parentTradeId":"3040443",
+                "trader":"Unknown User",
+                "quantity":2000000.0,
+                "tradeDateTime":"2018-04-18T08:00:00-04:00",
+                "price":1.02125,
+                "counterpartyName":"GUGH",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":8165000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0163035823637476,
+                "wgtAvgPrice":1.0163035823637476
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":""
+                },
+                "tradeId":"3043776",
+                "parentTradeId":"3043776",
+                "trader":"Unknown User",
+                "quantity":2000000.0,
+                "tradeDateTime":"2018-04-20T08:00:00-04:00",
+                "price":1.02,
+                "counterpartyName":"GUGH",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":10165000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.017030865715691,
+                "wgtAvgPrice":1.017030865715691
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":""
+                },
+                "tradeId":"3044959",
+                "parentTradeId":"3044959",
+                "trader":"Unknown User",
+                "quantity":1598000.0,
+                "tradeDateTime":"2018-04-23T08:00:00-04:00",
+                "price":1.02,
+                "counterpartyName":"RBC NY",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":11763000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0174342217121484,
+                "wgtAvgPrice":1.0174342217121484
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":""
+                },
+                "tradeId":"3075561",
+                "parentTradeId":"3075561",
+                "trader":"Unknown User",
+                "quantity":700000.0,
+                "tradeDateTime":"2018-05-22T08:00:00-04:00",
+                "price":1.024,
+                "counterpartyName":"BTIG",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":12463000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0178029968707374,
+                "wgtAvgPrice":1.0178029968707376
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":""
+                },
+                "tradeId":"3080443",
+                "parentTradeId":"3080443",
+                "trader":"Unknown User",
+                "quantity":500000.0,
+                "tradeDateTime":"2018-05-25T08:00:00-04:00",
+                "price":1.0155,
+                "counterpartyName":"MKTX",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":12963000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0177141672452363,
+                "wgtAvgPrice":1.0177141672452368
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":""
+                },
+                "tradeId":"3115307",
+                "parentTradeId":"3115307",
+                "trader":"Unknown User",
+                "quantity":114000.0,
+                "tradeDateTime":"2018-06-27T08:00:00-04:00",
+                "price":1.0375,
+                "counterpartyName":"RBC NY",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":13077000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0178866521373404,
+                "wgtAvgPrice":1.0178866521373406
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":""
+                },
+                "tradeId":"3115306",
+                "parentTradeId":"3115306",
+                "trader":"Unknown User",
+                "quantity":386000.0,
+                "tradeDateTime":"2018-06-27T08:00:00-04:00",
+                "price":1.0375,
+                "counterpartyName":"RBC NY",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":13463000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.018448989823962,
+                "wgtAvgPrice":1.0184489898239621
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3225901",
+                "parentTradeId":"3225895",
+                "trader":"DJ",
+                "quantity":1500000.0,
+                "tradeDateTime":"2018-08-24T11:18:00-04:00",
+                "price":1.03375,
+                "counterpartyName":"NBF FI",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":14963000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0199828744235782,
+                "wgtAvgPrice":1.0199828744235784
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3226076",
+                "parentTradeId":"3226074",
+                "trader":"DJ",
+                "quantity":1345000.0,
+                "tradeDateTime":"2018-08-24T13:11:00-04:00",
+                "price":1.0325,
+                "counterpartyName":"RBC TOR",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":16308000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0210152225901399,
+                "wgtAvgPrice":1.02101522259014
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3226328",
+                "parentTradeId":"3226326",
+                "trader":"DJ",
+                "quantity":500000.0,
+                "tradeDateTime":"2018-08-24T15:14:00-04:00",
+                "price":1.0325,
+                "counterpartyName":"BAML NY",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":16808000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0213568687529748,
+                "wgtAvgPrice":1.0213568687529753
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3306059",
+                "parentTradeId":"3306049",
+                "trader":"DJ",
+                "quantity":500000.0,
+                "tradeDateTime":"2018-09-27T16:36:00-04:00",
+                "price":1.0275,
+                "counterpartyName":"BAML NY",
+                "spread":601.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":17308000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0215343338340652,
+                "wgtAvgPrice":1.0215343338340657
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3312376",
+                "parentTradeId":"3312374",
+                "trader":"PM",
+                "quantity":250000.0,
+                "tradeDateTime":"2018-10-01T15:04:00-04:00",
+                "price":1.03125,
+                "counterpartyName":"TD",
+                "spread":551.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":17558000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0216726705775145,
+                "wgtAvgPrice":1.021672670577515
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3315838",
+                "parentTradeId":"3315836",
+                "trader":"DJ",
+                "quantity":1000000.0,
+                "tradeDateTime":"2018-10-02T16:34:00-04:00",
+                "price":1.04,
+                "counterpartyName":"CSFB NY",
+                "spread":512.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":18558000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0226602408664727,
+                "wgtAvgPrice":1.0226602408664731
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3322329",
+                "parentTradeId":"3322327",
+                "trader":"PM",
+                "quantity":25000.0,
+                "tradeDateTime":"2018-10-04T14:41:00-04:00",
+                "price":1.0375,
+                "counterpartyName":"STIF",
+                "spread":512.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":18583000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.022680205026099,
+                "wgtAvgPrice":1.0226802050260995
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3322332",
+                "parentTradeId":"3322326",
+                "trader":"PM",
+                "quantity":119000.0,
+                "tradeDateTime":"2018-10-04T14:41:00-04:00",
+                "price":1.0375,
+                "counterpartyName":"RBC NY",
+                "spread":512.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":18702000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.022774502726981,
+                "wgtAvgPrice":1.0227745027269814
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3322495",
+                "parentTradeId":"3322493",
+                "trader":"DJ",
+                "quantity":25000.0,
+                "tradeDateTime":"2018-10-04T15:38:00-04:00",
+                "price":1.0375,
+                "counterpartyName":"STIF",
+                "spread":512.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":18727000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0227941608372937,
+                "wgtAvgPrice":1.0227941608372941
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3325219",
+                "parentTradeId":"3325217",
+                "trader":"DJ",
+                "quantity":1000000.0,
+                "tradeDateTime":"2018-10-05T14:18:00-04:00",
+                "price":1.0375,
+                "counterpartyName":"BAML NY",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":19727000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0235396284280427,
+                "wgtAvgPrice":1.0235396284280431
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3401517",
+                "parentTradeId":"3401513",
+                "trader":"PM",
+                "quantity":1025000.0,
+                "tradeDateTime":"2018-11-19T16:21:00-05:00",
+                "price":0.9125,
+                "counterpartyName":"RBC NY",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":20752000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0180550669814958,
+                "wgtAvgPrice":1.018055066981496
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3439884",
+                "parentTradeId":"3439880",
+                "trader":"PM",
+                "quantity":769000.0,
+                "tradeDateTime":"2018-12-11T10:02:00-05:00",
+                "price":0.94,
+                "counterpartyName":"RBC NY",
+                "spread":944.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":21521000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0152659611542214,
+                "wgtAvgPrice":1.0152659611542219
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3439903",
+                "parentTradeId":"3439898",
+                "trader":"PM",
+                "quantity":256000.0,
+                "tradeDateTime":"2018-12-11T10:03:00-05:00",
+                "price":0.93875,
+                "counterpartyName":"TD",
+                "spread":949.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":21777000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0143664760986362,
+                "wgtAvgPrice":1.0143664760986366
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3440985",
+                "parentTradeId":"3440983",
+                "trader":"DJ",
+                "quantity":559000.0,
+                "tradeDateTime":"2018-12-11T16:54:00-05:00",
+                "price":0.93875,
+                "counterpartyName":"RBC NY",
+                "spread":952.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":22336000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0124740329512893,
+                "wgtAvgPrice":1.0124740329512898
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3440989",
+                "parentTradeId":"3440987",
+                "trader":"DJ",
+                "quantity":375000.0,
+                "tradeDateTime":"2018-12-11T17:00:00-05:00",
+                "price":0.93875,
+                "counterpartyName":"TD",
+                "spread":952.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":22711000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0112567148078024,
+                "wgtAvgPrice":1.0112567148078027
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3443154",
+                "parentTradeId":"3443150",
+                "trader":"DJ",
+                "quantity":250000.0,
+                "tradeDateTime":"2018-12-12T13:33:00-05:00",
+                "price":0.9475,
+                "counterpartyName":"TD",
+                "spread":912.5,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":22961000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0105625299420757,
+                "wgtAvgPrice":1.010562529942076
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3443580",
+                "parentTradeId":"3443575",
+                "trader":"DJ",
+                "quantity":125000.0,
+                "tradeDateTime":"2018-12-12T16:30:00-05:00",
+                "price":0.9475,
+                "counterpartyName":"BTIG",
+                "spread":911.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":23086000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0102210755436196,
+                "wgtAvgPrice":1.0102210755436198
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3446069",
+                "parentTradeId":"3446067",
+                "trader":"DJ",
+                "quantity":125000.0,
+                "tradeDateTime":"2018-12-13T16:47:00-05:00",
+                "price":0.9475,
+                "counterpartyName":"OPCO",
+                "spread":913.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":23211000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0098832988669166,
+                "wgtAvgPrice":1.0098832988669169
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3448027",
+                "parentTradeId":"3448022",
+                "trader":"DJ",
+                "quantity":424000.0,
+                "tradeDateTime":"2018-12-14T14:12:00-05:00",
+                "price":0.9475,
+                "counterpartyName":"CSFB NY",
+                "spread":917.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":23635000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0087641738946478,
+                "wgtAvgPrice":1.008764173894648
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3517865",
+                "parentTradeId":"3517830",
+                "trader":"DJ",
+                "quantity":2367000.0,
+                "tradeDateTime":"2019-01-24T16:18:09-05:00",
+                "price":0.96,
+                "counterpartyName":"GMPS",
+                "spread":892.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":26002000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0043250999923083,
+                "wgtAvgPrice":1.0043250999923086
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3565618",
+                "parentTradeId":"3565615",
+                "trader":"PM",
+                "quantity":473000.0,
+                "tradeDateTime":"2019-02-15T13:32:00-05:00",
+                "price":0.97375,
+                "counterpartyName":"STIF",
+                "spread":843.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":26475000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.003778847969783,
+                "wgtAvgPrice":1.0037788479697831
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3590202",
+                "parentTradeId":"3590198",
+                "trader":"DJ",
+                "quantity":947000.0,
+                "tradeDateTime":"2019-02-28T13:54:00-05:00",
+                "price":0.9625,
+                "counterpartyName":"GMPS",
+                "spread":890.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":27422000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0023533112099774,
+                "wgtAvgPrice":1.0023533112099776
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3595679",
+                "parentTradeId":"3595676",
+                "trader":"DJ",
+                "quantity":474000.0,
+                "tradeDateTime":"2019-03-04T09:40:28-05:00",
+                "price":0.951,
+                "counterpartyName":"MKTX",
+                "spread":935.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":27896000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0014807320045884,
+                "wgtAvgPrice":1.0014807320045886
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3604164",
+                "parentTradeId":"3604160",
+                "trader":"Unknown User",
+                "quantity":1000000.0,
+                "tradeDateTime":"2019-03-06T16:01:00-05:00",
+                "price":0.9475,
+                "counterpartyName":"GMPS",
+                "spread":954.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":28896000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9996126280454042,
+                "wgtAvgPrice":0.9996126280454043
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3682986",
+                "parentTradeId":"3682983",
+                "trader":"DJ",
+                "quantity":-474000.0,
+                "tradeDateTime":"2019-04-10T14:48:00-04:00",
+                "price":0.9625,
+                "counterpartyName":"STIF",
+                "spread":917.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":28422000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9992309302652874,
+                "wgtAvgPrice":0.9996126280454043
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4462174",
+                "parentTradeId":"4462174",
+                "trader":"PM",
+                "quantity":-712000.0,
+                "tradeDateTime":"2019-10-11T08:00:00-04:00",
+                "price":0.94,
+                "counterpartyName":"TD TOR",
+                "spread":1138.5,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":27710000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9986330386142187,
+                "wgtAvgPrice":0.9996126280454043
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4600982",
+                "parentTradeId":"4600982",
+                "trader":"DJ",
+                "quantity":965000.0,
+                "tradeDateTime":"2019-12-17T08:00:00-05:00",
+                "price":0.85125,
+                "counterpartyName":"NBF FI",
+                "spread":1679.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":28675000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9936731560592851,
+                "wgtAvgPrice":0.9946197793596566
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4601805",
+                "parentTradeId":"4601805",
+                "trader":"PM",
+                "quantity":465000.0,
+                "tradeDateTime":"2019-12-23T08:00:00-05:00",
+                "price":0.855,
+                "counterpartyName":"IMPC",
+                "spread":1660.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":29140000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9914602865477008,
+                "wgtAvgPrice":0.9923918041571089
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4660081",
+                "parentTradeId":"4660081",
+                "trader":"DJ",
+                "quantity":-467000.0,
+                "tradeDateTime":"2020-01-08T08:00:00-05:00",
+                "price":0.89,
+                "counterpartyName":"BTIG",
+                "spread":1463.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":28673000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9909547396505424,
+                "wgtAvgPrice":0.9923918041571089
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4660276",
+                "parentTradeId":"4660276",
+                "trader":"DJ",
+                "quantity":-470000.0,
+                "tradeDateTime":"2020-01-09T08:00:00-05:00",
+                "price":0.8887,
+                "counterpartyName":"MKTX",
+                "spread":1470.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":28203000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9904290412367479,
+                "wgtAvgPrice":0.9923918041571089
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4707925",
+                "parentTradeId":"4707922",
+                "trader":"DJ",
+                "quantity":-466000.0,
+                "tradeDateTime":"2020-01-23T10:30:00-05:00",
+                "price":0.8575,
+                "counterpartyName":"NBF FI",
+                "spread":1692.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":27737000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9899383585102931,
+                "wgtAvgPrice":0.9923918041571089
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4709397",
+                "parentTradeId":"4709395",
+                "trader":"DJ",
+                "quantity":-1634000.0,
+                "tradeDateTime":"2020-01-23T16:10:00-05:00",
+                "price":0.855,
+                "counterpartyName":"NBF FI",
+                "spread":1711.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":26103000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9889668428916216,
+                "wgtAvgPrice":0.9923918041571089
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4709426",
+                "parentTradeId":"4709400",
+                "trader":"DJ",
+                "quantity":-934000.0,
+                "tradeDateTime":"2020-01-23T16:12:00-05:00",
+                "price":0.8525,
+                "counterpartyName":"NBF FI",
+                "spread":1728.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":25169000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9884182526123406,
+                "wgtAvgPrice":0.9923918041571089
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4721285",
+                "parentTradeId":"4721281",
+                "trader":"DJ",
+                "quantity":-141000.0,
+                "tradeDateTime":"2020-01-27T16:19:06-05:00",
+                "price":0.8481,
+                "counterpartyName":"MKTX",
+                "spread":1764.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":25028000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9882388824516541,
+                "wgtAvgPrice":0.9923918041571089
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4721323",
+                "parentTradeId":"4721320",
+                "trader":"DJ",
+                "quantity":-141000.0,
+                "tradeDateTime":"2020-01-27T16:19:06-05:00",
+                "price":0.8481,
+                "counterpartyName":"MKTX",
+                "spread":1764.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":24887000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9880518543818058,
+                "wgtAvgPrice":0.9923918041571089
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4721284",
+                "parentTradeId":"4721281",
+                "trader":"DJ",
+                "quantity":-93000.0,
+                "tradeDateTime":"2020-01-27T16:19:06-05:00",
+                "price":0.8481,
+                "counterpartyName":"MKTX",
+                "spread":1764.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":24794000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9879273312091635,
+                "wgtAvgPrice":0.9923918041571089
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4721322",
+                "parentTradeId":"4721320",
+                "trader":"DJ",
+                "quantity":-93000.0,
+                "tradeDateTime":"2020-01-27T16:19:06-05:00",
+                "price":0.8481,
+                "counterpartyName":"MKTX",
+                "spread":1764.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":24701000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9878018703696206,
+                "wgtAvgPrice":0.9923918041571089
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4754703",
+                "parentTradeId":"4754700",
+                "trader":"PM",
+                "quantity":-584000.0,
+                "tradeDateTime":"2020-02-04T15:48:00-05:00",
+                "price":0.8525,
+                "counterpartyName":"CSFB NY",
+                "spread":1745.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":24117000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9869919144172161,
+                "wgtAvgPrice":0.9923918041571089
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4850408",
+                "parentTradeId":"4850404",
+                "trader":"DJ",
+                "quantity":-2334000.0,
+                "tradeDateTime":"2020-02-27T11:09:00-05:00",
+                "price":0.7975,
+                "counterpartyName":"NBF FI",
+                "spread":2210.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":21783000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9833429279713538,
+                "wgtAvgPrice":0.9923918041571089
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4851540",
+                "parentTradeId":"4851537",
+                "trader":"DJ",
+                "quantity":-2335000.0,
+                "tradeDateTime":"2020-02-27T16:18:00-05:00",
+                "price":0.7975,
+                "counterpartyName":"NBF FI",
+                "spread":2213.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":19448000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.978941742081448,
+                "wgtAvgPrice":0.9923918041571089
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4916017",
+                "parentTradeId":"4916015",
+                "trader":"BT",
+                "quantity":-2334000.0,
+                "tradeDateTime":"2020-03-12T16:05:00-04:00",
+                "price":0.395,
+                "counterpartyName":"NBF FI",
+                "spread":7222.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":17114000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9730554808928362,
+                "wgtAvgPrice":0.9923918041571089
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"5082208",
+                "parentTradeId":"5082207",
+                "trader":"DJ",
+                "quantity":2808000.0,
+                "tradeDateTime":"2020-04-29T11:16:56-04:00",
+                "price":0.145,
+                "counterpartyName":"NBF FI",
+                "spread":17844.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":19922000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.8563413060937657,
+                "wgtAvgPrice":0.872952180320488
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"5084322",
+                "parentTradeId":"5084321",
+                "trader":"DJ",
+                "quantity":3000000.0,
+                "tradeDateTime":"2020-04-29T17:28:28-04:00",
+                "price":0.1425,
+                "counterpartyName":"RBC NY",
+                "spread":18056.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":22922000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.7629147325713288,
+                "wgtAvgPrice":0.7773515983048933
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"SOF",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"5112770",
+                "parentTradeId":"5112768",
+                "trader":"DJ",
+                "quantity":300000.0,
+                "tradeDateTime":"2020-05-06T17:43:53-04:00",
+                "price":0.165,
+                "counterpartyName":"COWEN FI",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":23222000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.7551904013435535,
+                "wgtAvgPrice":0.7694407603283423
+              }
+            ],
+            "quantity":23222000.0,
+            "cs01Cad":787.395994038,
+            "cs01Local":559.2698302706159
+          },
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"STIP",
+              "StrategyName":""
+            },
+            "trades":[
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":""
+                },
+                "tradeId":"3093907",
+                "parentTradeId":"3093904",
+                "trader":"PM",
+                "quantity":500000.0,
+                "tradeDateTime":"2018-06-07T15:12:00-04:00",
+                "price":1.02625,
+                "counterpartyName":"GUGH",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":500000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.02625,
+                "wgtAvgPrice":1.02625
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":""
+                },
+                "tradeId":"3109723",
+                "parentTradeId":"3109722",
+                "trader":"PM",
+                "quantity":500000.0,
+                "tradeDateTime":"2018-06-21T15:55:00-04:00",
+                "price":1.0375,
+                "counterpartyName":"RBC TOR",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":1000000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.031875,
+                "wgtAvgPrice":1.031875
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":""
+                },
+                "tradeId":"3114993",
+                "parentTradeId":"3114981",
+                "trader":"DJ",
+                "quantity":2000000.0,
+                "tradeDateTime":"2018-06-27T11:25:00-04:00",
+                "price":1.0375,
+                "counterpartyName":"RBC TOR",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":3000000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0356250000000002,
+                "wgtAvgPrice":1.0356250000000002
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3225900",
+                "parentTradeId":"3225895",
+                "trader":"DJ",
+                "quantity":1500000.0,
+                "tradeDateTime":"2018-08-24T11:18:00-04:00",
+                "price":1.03375,
+                "counterpartyName":"NBF FI",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":4500000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.035,
+                "wgtAvgPrice":1.0350000000000001
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3226075",
+                "parentTradeId":"3226074",
+                "trader":"DJ",
+                "quantity":1345000.0,
+                "tradeDateTime":"2018-08-24T13:11:00-04:00",
+                "price":1.0325,
+                "counterpartyName":"RBC TOR",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":5845000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0344247219846021,
+                "wgtAvgPrice":1.0344247219846023
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3226327",
+                "parentTradeId":"3226326",
+                "trader":"DJ",
+                "quantity":500000.0,
+                "tradeDateTime":"2018-08-24T15:14:00-04:00",
+                "price":1.0325,
+                "counterpartyName":"BAML NY",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":6345000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.03427304964539,
+                "wgtAvgPrice":1.0342730496453902
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3249380",
+                "parentTradeId":"3249365",
+                "trader":"DJ",
+                "quantity":1500000.0,
+                "tradeDateTime":"2018-09-06T11:53:00-04:00",
+                "price":1.0275,
+                "counterpartyName":"RBC NY",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":7845000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0329780114722753,
+                "wgtAvgPrice":1.0329780114722755
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3306058",
+                "parentTradeId":"3306049",
+                "trader":"DJ",
+                "quantity":1500000.0,
+                "tradeDateTime":"2018-09-27T16:36:00-04:00",
+                "price":1.0275,
+                "counterpartyName":"BAML NY",
+                "spread":601.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":9345000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0320987158908508,
+                "wgtAvgPrice":1.032098715890851
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3312375",
+                "parentTradeId":"3312374",
+                "trader":"PM",
+                "quantity":250000.0,
+                "tradeDateTime":"2018-10-01T15:04:00-04:00",
+                "price":1.03125,
+                "counterpartyName":"TD",
+                "spread":551.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":9595000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0320766023970818,
+                "wgtAvgPrice":1.032076602397082
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3315837",
+                "parentTradeId":"3315836",
+                "trader":"DJ",
+                "quantity":1000000.0,
+                "tradeDateTime":"2018-10-02T16:34:00-04:00",
+                "price":1.04,
+                "counterpartyName":"CSFB NY",
+                "spread":512.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":10595000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0328244454931572,
+                "wgtAvgPrice":1.0328244454931572
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3322331",
+                "parentTradeId":"3322326",
+                "trader":"PM",
+                "quantity":119000.0,
+                "tradeDateTime":"2018-10-04T14:41:00-04:00",
+                "price":1.0375,
+                "counterpartyName":"RBC NY",
+                "spread":512.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":10714000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0328763767033788,
+                "wgtAvgPrice":1.0328763767033788
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3322328",
+                "parentTradeId":"3322327",
+                "trader":"PM",
+                "quantity":25000.0,
+                "tradeDateTime":"2018-10-04T14:41:00-04:00",
+                "price":1.0375,
+                "counterpartyName":"STIF",
+                "spread":512.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":10739000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0328871403296396,
+                "wgtAvgPrice":1.0328871403296396
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3322494",
+                "parentTradeId":"3322493",
+                "trader":"DJ",
+                "quantity":25000.0,
+                "tradeDateTime":"2018-10-04T15:38:00-04:00",
+                "price":1.0375,
+                "counterpartyName":"STIF",
+                "spread":512.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":10764000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0328978539576366,
+                "wgtAvgPrice":1.0328978539576366
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3325218",
+                "parentTradeId":"3325217",
+                "trader":"DJ",
+                "quantity":1000000.0,
+                "tradeDateTime":"2018-10-05T14:18:00-04:00",
+                "price":1.0375,
+                "counterpartyName":"BAML NY",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":11764000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0332890598435907,
+                "wgtAvgPrice":1.0332890598435907
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3401516",
+                "parentTradeId":"3401513",
+                "trader":"PM",
+                "quantity":611000.0,
+                "tradeDateTime":"2018-11-19T16:21:00-05:00",
+                "price":0.9125,
+                "counterpartyName":"RBC NY",
+                "spread":null,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":12375000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0273252525252525,
+                "wgtAvgPrice":1.0273252525252525
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3439883",
+                "parentTradeId":"3439880",
+                "trader":"PM",
+                "quantity":458000.0,
+                "tradeDateTime":"2018-12-11T10:02:00-05:00",
+                "price":0.94,
+                "counterpartyName":"RBC NY",
+                "spread":944.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":12833000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0242086807449544,
+                "wgtAvgPrice":1.0242086807449544
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3439902",
+                "parentTradeId":"3439898",
+                "trader":"PM",
+                "quantity":153000.0,
+                "tradeDateTime":"2018-12-11T10:03:00-05:00",
+                "price":0.93875,
+                "counterpartyName":"TD",
+                "spread":949.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":12986000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0232018134914522,
+                "wgtAvgPrice":1.0232018134914522
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3440984",
+                "parentTradeId":"3440983",
+                "trader":"DJ",
+                "quantity":559000.0,
+                "tradeDateTime":"2018-12-11T16:54:00-05:00",
+                "price":0.93875,
+                "counterpartyName":"RBC NY",
+                "spread":952.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":13545000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0197165005537099,
+                "wgtAvgPrice":1.0197165005537097
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3440988",
+                "parentTradeId":"3440987",
+                "trader":"DJ",
+                "quantity":375000.0,
+                "tradeDateTime":"2018-12-11T17:00:00-05:00",
+                "price":0.93875,
+                "counterpartyName":"TD",
+                "spread":952.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":13920000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0175352909482758,
+                "wgtAvgPrice":1.0175352909482758
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3443153",
+                "parentTradeId":"3443150",
+                "trader":"DJ",
+                "quantity":250000.0,
+                "tradeDateTime":"2018-12-12T13:33:00-05:00",
+                "price":0.9475,
+                "counterpartyName":"TD",
+                "spread":912.5,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":14170000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0162996647847564,
+                "wgtAvgPrice":1.0162996647847564
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3443579",
+                "parentTradeId":"3443575",
+                "trader":"DJ",
+                "quantity":125000.0,
+                "tradeDateTime":"2018-12-12T16:30:00-05:00",
+                "price":0.9475,
+                "counterpartyName":"BTIG",
+                "spread":911.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":14295000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0156980587618047,
+                "wgtAvgPrice":1.0156980587618047
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3446068",
+                "parentTradeId":"3446067",
+                "trader":"DJ",
+                "quantity":125000.0,
+                "tradeDateTime":"2018-12-13T16:47:00-05:00",
+                "price":0.9475,
+                "counterpartyName":"OPCO",
+                "spread":913.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":14420000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0151068828016643,
+                "wgtAvgPrice":1.0151068828016643
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3448026",
+                "parentTradeId":"3448022",
+                "trader":"DJ",
+                "quantity":424000.0,
+                "tradeDateTime":"2018-12-14T14:12:00-05:00",
+                "price":0.9475,
+                "counterpartyName":"CSFB NY",
+                "spread":917.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":14844000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0131757780921584,
+                "wgtAvgPrice":1.0131757780921584
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3517864",
+                "parentTradeId":"3517830",
+                "trader":"DJ",
+                "quantity":1487000.0,
+                "tradeDateTime":"2019-01-24T16:18:09-05:00",
+                "price":0.96,
+                "counterpartyName":"GMPS",
+                "spread":892.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":16331000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0083339201518584,
+                "wgtAvgPrice":1.0083339201518584
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3565617",
+                "parentTradeId":"3565615",
+                "trader":"PM",
+                "quantity":297000.0,
+                "tradeDateTime":"2019-02-15T13:32:00-05:00",
+                "price":0.97375,
+                "counterpartyName":"STIF",
+                "spread":843.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":16628000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0077162015876835,
+                "wgtAvgPrice":1.0077162015876835
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3590201",
+                "parentTradeId":"3590198",
+                "trader":"DJ",
+                "quantity":595000.0,
+                "tradeDateTime":"2019-02-28T13:54:00-05:00",
+                "price":0.9625,
+                "counterpartyName":"GMPS",
+                "spread":890.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":17223000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0061541252975672,
+                "wgtAvgPrice":1.0061541252975672
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3595678",
+                "parentTradeId":"3595676",
+                "trader":"DJ",
+                "quantity":297000.0,
+                "tradeDateTime":"2019-03-04T09:40:28-05:00",
+                "price":0.951,
+                "counterpartyName":"MKTX",
+                "spread":935.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":17520000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.005219149543379,
+                "wgtAvgPrice":1.005219149543379
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"3682985",
+                "parentTradeId":"3682983",
+                "trader":"DJ",
+                "quantity":-288000.0,
+                "tradeDateTime":"2019-04-10T14:48:00-04:00",
+                "price":0.9625,
+                "counterpartyName":"STIF",
+                "spread":917.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":17232000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.0048676590064995,
+                "wgtAvgPrice":1.005219149543379
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4469569",
+                "parentTradeId":"4469569",
+                "trader":"PM",
+                "quantity":-431000.0,
+                "tradeDateTime":"2019-10-11T08:00:00-04:00",
+                "price":0.94,
+                "counterpartyName":"TD TOR",
+                "spread":1138.5,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":16801000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":1.004172489732754,
+                "wgtAvgPrice":1.005219149543379
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4606727",
+                "parentTradeId":"4606727",
+                "trader":"DJ",
+                "quantity":575000.0,
+                "tradeDateTime":"2019-12-17T08:00:00-05:00",
+                "price":0.85125,
+                "counterpartyName":"NBF FI",
+                "spread":1679.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":17376000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9991120367173112,
+                "wgtAvgPrice":1.0001240608585584
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4607724",
+                "parentTradeId":"4607724",
+                "trader":"PM",
+                "quantity":285000.0,
+                "tradeDateTime":"2019-12-23T08:00:00-05:00",
+                "price":0.855,
+                "counterpartyName":"IMPC",
+                "spread":1660.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":17661000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9967864645263576,
+                "wgtAvgPrice":0.9977821573794412
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4664130",
+                "parentTradeId":"4664130",
+                "trader":"DJ",
+                "quantity":-283000.0,
+                "tradeDateTime":"2020-01-08T08:00:00-05:00",
+                "price":0.89,
+                "counterpartyName":"BTIG",
+                "spread":1463.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":17378000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9961234463114282,
+                "wgtAvgPrice":0.9977821573794412
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4664485",
+                "parentTradeId":"4664485",
+                "trader":"DJ",
+                "quantity":-280000.0,
+                "tradeDateTime":"2020-01-09T08:00:00-05:00",
+                "price":0.8887,
+                "counterpartyName":"MKTX",
+                "spread":1470.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":17098000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.995445856240496,
+                "wgtAvgPrice":0.9977821573794412
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4707924",
+                "parentTradeId":"4707922",
+                "trader":"DJ",
+                "quantity":-283000.0,
+                "tradeDateTime":"2020-01-23T10:30:00-05:00",
+                "price":0.8575,
+                "counterpartyName":"NBF FI",
+                "spread":1692.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":16815000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9947380761225096,
+                "wgtAvgPrice":0.9977821573794412
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4709396",
+                "parentTradeId":"4709395",
+                "trader":"DJ",
+                "quantity":-990000.0,
+                "tradeDateTime":"2020-01-23T16:10:00-05:00",
+                "price":0.855,
+                "counterpartyName":"NBF FI",
+                "spread":1711.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":15825000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9920629225908373,
+                "wgtAvgPrice":0.9977821573794412
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4709425",
+                "parentTradeId":"4709400",
+                "trader":"DJ",
+                "quantity":-566000.0,
+                "tradeDateTime":"2020-01-23T16:12:00-05:00",
+                "price":0.8525,
+                "counterpartyName":"NBF FI",
+                "spread":1728.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":15259000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9904072678419293,
+                "wgtAvgPrice":0.9977821573794412
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4721283",
+                "parentTradeId":"4721281",
+                "trader":"DJ",
+                "quantity":-141000.0,
+                "tradeDateTime":"2020-01-27T16:19:06-05:00",
+                "price":0.8481,
+                "counterpartyName":"MKTX",
+                "spread":1764.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":15118000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.990003026193941,
+                "wgtAvgPrice":0.9977821573794412
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4721321",
+                "parentTradeId":"4721320",
+                "trader":"DJ",
+                "quantity":-141000.0,
+                "tradeDateTime":"2020-01-27T16:19:06-05:00",
+                "price":0.8481,
+                "counterpartyName":"MKTX",
+                "spread":1764.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":14977000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.989591173132136,
+                "wgtAvgPrice":0.9977821573794412
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4754702",
+                "parentTradeId":"4754700",
+                "trader":"PM",
+                "quantity":-354000.0,
+                "tradeDateTime":"2020-02-04T15:48:00-05:00",
+                "price":0.8525,
+                "counterpartyName":"CSFB NY",
+                "spread":1745.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":14623000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.988522156876154,
+                "wgtAvgPrice":0.9977821573794412
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4850407",
+                "parentTradeId":"4850404",
+                "trader":"DJ",
+                "quantity":-1415000.0,
+                "tradeDateTime":"2020-02-27T11:09:00-05:00",
+                "price":0.7975,
+                "counterpartyName":"NBF FI",
+                "spread":2210.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":13208000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.983740403543307,
+                "wgtAvgPrice":0.9977821573794412
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4851539",
+                "parentTradeId":"4851537",
+                "trader":"DJ",
+                "quantity":-1415000.0,
+                "tradeDateTime":"2020-02-27T16:18:00-05:00",
+                "price":0.7975,
+                "counterpartyName":"NBF FI",
+                "spread":2213.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":11793000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.977992516747223,
+                "wgtAvgPrice":0.9977821573794412
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"4916016",
+                "parentTradeId":"4916015",
+                "trader":"BT",
+                "quantity":-1415000.0,
+                "tradeDateTime":"2020-03-12T16:05:00-04:00",
+                "price":0.395,
+                "counterpartyName":"NBF FI",
+                "spread":7222.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":10378000.0,
+                "fifoAvgSpread":null,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.9712423636538832,
+                "wgtAvgPrice":0.9977821573794412
+              },
+              {
+                "partitionOptionValue":{
+                  "PortfolioShortName":"STIP",
+                  "StrategyName":"LTOV - Yield"
+                },
+                "tradeId":"5140762",
+                "parentTradeId":"5140758",
+                "trader":"DJ",
+                "quantity":-5306000.0,
+                "tradeDateTime":"2020-05-14T16:17:00-04:00",
+                "price":0.245,
+                "counterpartyName":"RBC NY",
+                "spread":12346.0,
+                "isCancelled":false,
+                "shouldCalculateSpread":true,
+                "shouldCalculatePrice":true,
+                "securityQuantityAfterTrade":5072000.0,
+                "fifoAvgSpread":1035.1147476340693,
+                "wgtAvgSpread":null,
+                "fifoAvgPrice":0.937501380126183,
+                "wgtAvgPrice":0.9977821573794412
+              }
+            ],
+            "quantity":5072000.0,
+            "cs01Cad":171.977972688,
+            "cs01Local":122.1521220882165
+          }
+        ]
+      },
+      "1233|4.6Y":{
+        "securityIdentifier":"1233|4.6Y",
+        "security":{
+          "curveSubType":"XR14",
+          "securityIdentifier":"1233|4.6Y",
+          "ccy":"USD",
+          "country":"CA",
+          "industry":"Exploration & Production",
+          "name":"OVV CDS USD SR 12/20/2024",
+          "genericSeniority":"SR",
+          "globalIdentifier":"OVV CDS USD SR 5Y",
+          "obligorName":"OVINTIV INC",
+          "obligorId":7279,
+          "paymentRank":"SR UNSECURED",
+          "sector":"Energy",
+          "securitySubType":null,
+          "subIndustry":"Oil Comp-Explor&Prodtn",
+          "ticker":"OVV",
+          "metrics":{
+            "isOnTheRun":false,
+            "workoutTerm":4.6055,
+            "ratingDouble":13.67,
+            "isRated":true,
+            "rating":"BBB-",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"Xover",
+            "price":83.826,
+            "spread":525.0,
+            "isIndex":false
+          },
+          "deltaMetrics":{
+            "Dod":{
+              "ratingDouble":0.0,
+              "price":0.004,
+              "spread":0.0
+            },
+            "Wow":{
+              "ratingDouble":0.0,
+              "price":1.638,
+              "spread":-50.0
+            },
+            "Mtd":{
+              "ratingDouble":0.0,
+              "price":3.931,
+              "spread":-125.0
+            },
+            "Mom":{
+              "ratingDouble":0.0,
+              "price":8.83,
+              "spread":-300.0
+            },
+            "Ytd":null,
+            "Yoy":null
+          },
+          "unitPosition":{
+            "metricDate":"2020-05-15T00:00:00-04:00",
+            "securityIdentifier":"1233|4.6Y",
+            "partitionOptionValues":{
+              "PortfolioShortName":[
+                "DOF"
+              ],
+              "StrategyName":[
+                "Portfolio Shorts"
+              ]
+            },
+            "mark":{
+              "driver":"Spread",
+              "enteredTime":"2020-05-15T00:00:00-04:00",
+              "user":null,
+              "value":525.0,
+              "spread":525.0,
+              "price":83.834
+            },
+            "hedgeFactor":1.0,
+            "primaryPmName":"DJ",
+            "backupPmName":"PM",
+            "researchName":"TW",
+            "owners":[
+              "DJ",
+              "PM",
+              "TW"
+            ]
+          },
+          "securityType":"Cds",
+          "maturityType":"Bullet"
+        },
+        "bestQuotes":null,
+        "positions":[
+          {
+            "partitionOptionValue":{
+              "PortfolioShortName":"DOF",
+              "StrategyName":"Portfolio Shorts"
+            },
+            "trades":[
+
+            ],
+            "quantity":-162500000.0,
+            "cs01Cad":-73641.1,
+            "cs01Local":-52305.63250230841
           }
         ]
       }
