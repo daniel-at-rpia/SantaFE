@@ -1,58 +1,5 @@
 <article
   [ngClass]="{
-    'sat-tradeUtilityPanel': true,
-    'sat-tradeUtilityPanel--sidePanelsDisplayedState': sidePanelsDisplayed,
-    'sat-tradeUtilityPanel--pausedState': state.isPaused,
-    'sat-tradeUtilityPanel--loadingState': state.isCallingAPI || state.isProcessingData,
-    'sat-tradeUtilityPanel--editingValidWindowState': state.validWindowConfig.isEditing
+    'sat-tradeUtilityPanel': true
   }">
-  <section class="sat-tradeUtilityPanel__thumbnail">
-    <i class="sat-tradeUtilityPanel__thumbnail-icon fas fa-cog"></i>
-  </section>
-  <section class="sat-tradeUtilityPanel__validWindowConfig">
-    <div class="sat-tradeUtilityPanel__validWindowConfig-current">
-      <span class="sat-tradeUtilityPanel__validWindowConfig-current-label">Quotes are valid for</span>
-      <span class="sat-tradeUtilityPanel__validWindowConfig-current-value">{{state.validWindowConfig.valueDisplay}}</span>
-    </div>
-    <button (click)="onClickEditValidWindow()" class="sat-tradeUtilityPanel__validWindowConfig-editBtn santaBtn--iconOnly fal fa-pencil"></button>
-    <ul class="sat-tradeUtilityPanel__validWindowConfig-optionList">
-      <button
-        *ngFor="let eachOption of constants.utilityValidWindowOptions"
-        (click)="onSelectValidWindow(eachOption)"
-        [ngClass]="{
-          'sat-tradeUtilityPanel__validWindowConfig-optionList-item': true,
-          'sat-tradeUtilityPanel__validWindowConfig-optionList-item--selected': state.validWindowConfig.valueRaw === eachOption.value
-        }">
-        {{eachOption.label}}
-      </button>
-    </ul>
-    <div class="sat-tradeUtilityPanel__validWindowConfig-ctas">
-      <button (click)="onClickCancelEditValidWindow()" class="sat-tradeUtilityPanel__validWindowConfig-ctas-cancelBtn santaBtn--labelled santaBtn--inverseLabelled">
-        <i class="fal fa-times"></i>
-        <span>Cancel</span>
-      </button>
-    </div>
-  </section>
-  <section class="sat-tradeUtilityPanel__countdown">
-    <span class="sat-tradeUtilityPanel__countdown-clock">00 : {{state.updateCountdown}}</span>
-    <span class="sat-tradeUtilityPanel__countdown-label">Countdown to Next Update</span>
-    <div class="sat-tradeUtilityPanel__countdown-loading">
-      <div class="sat-tradeUtilityPanel__countdown-loading-icon">
-        <i class="fal fa-circle-notch fa-spin"></i>
-      </div>
-      <span class="sat-tradeUtilityPanel__countdown-loading-text">{{state.prompt}}</span>
-    </div>
-  </section>
-  <section class="sat-tradeUtilityPanel__cta">
-    <button (click)="onClickUpdateNow()" class="sat-tradeUtilityPanel__cta-updateNow santaBtn--labelled">
-      <i class="fal fa-sync"></i>
-      <span>Update Now</span>
-    </button>
-    <!--
-    <button class="sat-tradeUtilityPanel__cta-refresh santaBtn--labelled">
-      <i class="fal fa-cloud-download"></i>
-      <span>Update Now</span>
-    </button>
-    -->
-  </section>
 </article>
