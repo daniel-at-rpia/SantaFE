@@ -715,9 +715,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
               } else {
                 this.state.receivedActiveAlertsMap[eachRawAlert.alertId] = eachRawAlert.keyWord;
                 const newAlert = this.dtoService.formAlertObject(eachRawAlert);
-                if (newAlert.data.isUrgent) {
-                  updateList.push(newAlert);
-                }
+                updateList.push(newAlert);
                 if (newAlert.data.security && newAlert.data.security.data.securityID) {
                   securityList.push(newAlert);
                 }

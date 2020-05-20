@@ -16,7 +16,8 @@
       QuantComparerDTO,
       SearchShortcutDTO,
       AlertDTO,
-      SecurityTableDTO
+      SecurityTableDTO,
+      AlertCountSummaryDTO
     } from 'FEModels/frontend-models.interface';
     import { TradeCenterTableBlock } from 'FEModels/frontend-blocks.interface';
     import {PayloadGetTradeFullData} from 'BEModels/backend-payloads.interface';
@@ -34,8 +35,10 @@
     import {
       TriCoreDriverConfig,
       DEFAULT_DRIVER_IDENTIFIER,
-      EngagementActionList
+      EngagementActionList,
+      AlertTypes
     } from 'Core/constants/coreConstants.constant';
+    import { selectAlertCounts } from 'Core/selectors/core.selectors';
     import {
       SecurityTableMetrics,
       SECURITY_TABLE_FINAL_STAGE
@@ -83,7 +86,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     startNewUpdateSub: null,
     securityIDListFromAnalysisSub: null,
     validWindowSub: null,
-    newAlertsForAlertTableSub: null
+    newAlertsForAlertTableSub: null,
+    alertCountSub: null
   };
   constants = {
     defaultMetricIdentifier: DEFAULT_DRIVER_IDENTIFIER,
@@ -92,7 +96,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     strategyShortcuts: StrategyShortcuts,
     securityGroupDefinitionMap: SecurityDefinitionMap,
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
-    fullOwnerList: FullOwnerList
+    fullOwnerList: FullOwnerList,
+    alertTypes: AlertTypes
   }
 
   private initializePageState(): TradeCenterPanelState {
@@ -162,7 +167,12 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         alertTableAlertList: [],
         initialAlertListReceived: false,
         delayedLoadingFreshDataForAlert: false,
-        newAlertsCount: 0
+        axeAlertCount: 0,
+        unreadAxeAlertCount: 0,
+        markAlertCount: 0,
+        unreadMarkAlertCount: 0,
+        tradeAlertCount: 0,
+        unreadTradeAlertCount: 0
       }
     };
 
@@ -222,6 +232,33 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
           this.fetchAllData(true);
         }
       }
+    });
+
+    this.subscriptions.alertCountSub = this.store$.pipe(
+      select(selectAlertCounts)
+    ).subscribe((allCountsMap: Array<AlertCountSummaryDTO>) => {
+      allCountsMap.forEach((eachCount) => {
+        switch (eachCount.data.alertType) {
+          case this.constants.alertTypes.axeAlert:
+            const newAxeAlertCount = eachCount.data.count - this.state.alert.axeAlertCount;
+            this.state.alert.unreadAxeAlertCount = this.state.alert.unreadAxeAlertCount + newAxeAlertCount;
+            this.state.alert.axeAlertCount = eachCount.data.count;
+            break;
+          case this.constants.alertTypes.markAlert:
+            const newMarkAlertCount = eachCount.data.count - this.state.alert.markAlertCount;
+            this.state.alert.unreadMarkAlertCount = this.state.alert.unreadMarkAlertCount + newMarkAlertCount;
+            this.state.alert.markAlertCount = eachCount.data.count;
+            break;
+          case this.constants.alertTypes.tradeAlert:
+            const newTradeAlertCount = eachCount.data.count - this.state.alert.tradeAlertCount;
+            this.state.alert.unreadTradeAlertCount = this.state.alert.unreadTradeAlertCount + newTradeAlertCount;
+            this.state.alert.tradeAlertCount = eachCount.data.count;
+            break;
+          default:
+            // code...
+            break;
+        }
+      });
     });
   }
 
@@ -414,7 +451,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   public onSwitchTable() {
     this.state.displayAlertTable = !this.state.displayAlertTable;
     if (this.state.displayAlertTable) {
-      this.state.alert.newAlertsCount = 0;
+      // this.state.alert.newAlertsCount = 0;
     }
     const keywordCopy = this.state.filters.quickFilters.keyword;
     this.state.filters.quickFilters.keyword = '';
@@ -658,14 +695,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
           if (isInitialDataLoaded) {
             const newFilteredList = this.filterPrinstineRowList(targetTableBlock.prinstineRowList);
             targetTableBlock.liveUpdatedRowList = this.processingService.returnDiff(targetTableDTO, newFilteredList).newRowList;
-            if (targetTableBlock === this.state.fetchResult.alertTable && !this.state.displayAlertTable) {
-              this.state.alert.newAlertsCount = targetTableBlock.liveUpdatedRowList.length;
-            }
           } else {
             targetTableBlock.rowList = this.filterPrinstineRowList(targetTableBlock.prinstineRowList);
-            if (targetTableBlock === this.state.fetchResult.alertTable && !this.state.displayAlertTable) {
-              this.state.alert.newAlertsCount = targetTableBlock.rowList.length;
-            }
           }
           // only dispatch the action when both tables are done
           if (!!this.state.fetchResult.alertTable.fetchComplete && !!this.state.fetchResult.mainTable.fetchComplete) {
@@ -873,6 +904,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       }
     }
   }
+
   onToggleFocusMode() {
     this.state.isFocusMode = !this.state.isFocusMode;
     this.store$.dispatch(new TradeSetFocusMode(this.state.isFocusMode));

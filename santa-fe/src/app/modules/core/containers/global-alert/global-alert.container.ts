@@ -54,6 +54,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       triggerActionMenuOpen: false,
       presentList: [],
       storeList: [],
+      secondaryStoreList: [],
       totalSize: 0,
       displayTotalSize: '',
       originalDocumentTitle: document.title,
@@ -87,7 +88,11 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         // not canclled list
         alertListSorted = alertListSorted.filter(alert => alert.state.isCancelled === false);
         alertListSorted.forEach((eachAlert) => {
+          if (eachAlert.data.isUrgent) {
             this.generateNewAlert(eachAlert, alertListSorted);
+          } else {
+            this.state.secondaryStoreList.push(eachAlert);
+          }
         });
         this.updateTotalSize();
       } catch {
@@ -304,7 +309,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       this.state.displayTotalSize = `${this.state.totalSize}`;
     }
     // counting all types in buckets
-    const allAlerts = [...this.state.presentList, ...this.state.storeList];
+    const allAlerts = [...this.state.presentList, ...this.state.storeList, ...this.state.secondaryStoreList];
     const grouped = this.groupBy(allAlerts, alert => alert.data.type);
     const payload: Array<AlertCountSummaryDTO> = [];
     grouped.forEach((value, key) => {

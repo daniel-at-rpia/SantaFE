@@ -236,6 +236,27 @@
   }">
   <div class="sat-tradeAlertPanel__overview">
     <button (click)="onClickTest()">All Alerts</button>
+    <div class="sat-tradeAlertPanel__overview-cta">
+      <i class="sat-tradeAlertPanel__overview-cta-icon fal fa-bell"></i>
+      <span class="sat-tradeAlertPanel__overview-cta-regText">Show</span>
+      <span class="sat-tradeAlertPanel__overview-cta-countText">{{state.alert.axeAlertCount}}</span>
+      <span class="sat-tradeAlertPanel__overview-cta-regText">Axe Alerts</span>
+      <span *ngIf="state.alert.unreadAxeAlertCount > 0" class="sat-tradeAlertPanel__overview-cta-newAlertsCount">{{state.alert.unreadAxeAlertCount}} new</span>
+    </div>
+    <div class="sat-tradeAlertPanel__overview-cta">
+      <i class="sat-tradeAlertPanel__overview-cta-icon fal fa-bell"></i>
+      <span class="sat-tradeAlertPanel__overview-cta-regText">Show</span>
+      <span class="sat-tradeAlertPanel__overview-cta-countText">{{state.alert.markAlertCount}}</span>
+      <span class="sat-tradeAlertPanel__overview-cta-regText">Mark Alerts</span>
+      <span *ngIf="state.alert.unreadMarkAlertCount > 0" class="sat-tradeAlertPanel__overview-cta-newAlertsCount">{{state.alert.unreadMarkAlertCount}} new</span>
+    </div>
+    <div class="sat-tradeAlertPanel__overview-cta">
+      <i class="sat-tradeAlertPanel__overview-cta-icon fal fa-bell"></i>
+      <span class="sat-tradeAlertPanel__overview-cta-regText">Show</span>
+      <span class="sat-tradeAlertPanel__overview-cta-countText">{{state.alert.tradeAlertCount}}</span>
+      <span class="sat-tradeAlertPanel__overview-cta-regText">Trade Alerts</span>
+      <span *ngIf="state.alert.unreadTradeAlertCount > 0" class="sat-tradeAlertPanel__overview-cta-newAlertsCount">{{state.alert.unreadTradeAlertCount}} new</span>
+    </div>
   </div>
   <div class="sat-tradeAlertPanel__main">
     <div class="sat-tradeAlertPanel__main-table">

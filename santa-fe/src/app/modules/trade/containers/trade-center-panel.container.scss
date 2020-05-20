@@ -470,7 +470,43 @@ $tradeAlertPanel_table_height: 24rem;
   margin-top: $spacing_medium;
   &__overview {
     flex: 0 0 auto;
+    display: flex;
     padding: $spacing_medium;
+    &-cta {
+      @include mix_border_radius(3px);
+      @include material();
+      @include mix_alive('light');
+      display: flex;
+      align-items: center;
+      background-color: $color_white;
+      padding: $spacing_small $spacing_medium;
+      margin-left: $spacing_medium;
+      &-icon {
+        margin-right: $spacing_small;
+        font-size: $font_size_large;
+      }
+      &-regText {
+        color: $font_color_minor;
+        font-size: $font_size_normal;
+      }
+      &-countText {
+        @include mix_border_radius(3px);
+        margin: 0 $spacing_x_small;
+        padding: $spacing_minimum $spacing_x_small;
+        font-size: $font_size_x_small;
+        color: $font_color_inverse;
+        background-color: $color_active;
+        font-size: $font_size_normal;
+      }
+      &-newAlertsCount {
+        @include mix_border_radius(3px);
+        margin-left: $spacing_small;
+        padding: $spacing_xx_small;
+        font-size: $font_size_small;
+        color: $font_color_inverse;
+        background-color: $color_highlight;
+      }
+    }
   }
   &__main {
     @include mix_alive('normal');

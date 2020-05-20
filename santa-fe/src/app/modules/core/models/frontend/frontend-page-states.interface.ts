@@ -26,6 +26,7 @@ export interface GlobalAlertState {
   displayTotalSize: string;
   originalDocumentTitle: string;
   favicon: HTMLLinkElement;
+  secondaryStoreList: Array<DTOs.AlertDTO>;  // for alerts that are not suppose to be displayed, need this for calculating total count
 }
 
 export interface MarketState {
@@ -124,7 +125,12 @@ export interface TradeCenterPanelState {
     alertTableAlertList: Array<DTOs.AlertDTO>;
     initialAlertListReceived: boolean;
     delayedLoadingFreshDataForAlert: boolean;
-    newAlertsCount: number;
+    axeAlertCount: number;
+    unreadAxeAlertCount: number;
+    markAlertCount: number;
+    unreadMarkAlertCount: number;
+    tradeAlertCount: number;
+    unreadTradeAlertCount: number;
   }
 }
 
