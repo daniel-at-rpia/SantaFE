@@ -57,6 +57,14 @@
       selectPresetSelected,
       selectFocusMode
     } from 'Trade/selectors/trade.selectors';
+    import {
+      SecurityTableMetrics,
+      SECURITY_TABLE_FINAL_STAGE
+    } from 'Core/constants/securityTableConstants.constant';
+    import {
+      EngagementActionList,
+      AlertTypes
+    } from 'Core/constants/coreConstants.constant';
   //
 
 @Component({
@@ -88,7 +96,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     // axeAlertType: AxeAlertType,
     countdown: ALERT_UPDATE_COUNTDOWN,
     fullOwnerList: FullOwnerList,
-    researchList: FilterOptionsPortfolioResearchList
+    researchList: FilterOptionsPortfolioResearchList,
+    alertTypes: AlertTypes
   }
 
   constructor(
@@ -110,6 +119,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private initializePageState(): TradeAlertPanelState {
+    const alertTableMetrics = SecurityTableMetrics.filter((eachStub) => {
+      const targetSpecifics = eachStub.tableSpecifics.tradeAlert || eachStub.tableSpecifics.default;
+      return !targetSpecifics.disabled;
+    });
     const state: TradeAlertPanelState = {
       isUserPM: false,
       configureAlert: false,
@@ -149,7 +162,38 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       autoUpdateCountdown: 4,
       alertUpdateInProgress: false,
       isCenterPanelPresetSelected: false,
-      receivedActiveAlertsMap: {}
+      receivedActiveAlertsMap: {},
+      displayAlertTable: false,
+      table: {
+        alertMetrics: alertTableMetrics,
+        alertDto: this.dtoService.formSecurityTableObject(true)
+      },
+      fetchResult: {
+        alertTable: {
+          currentContentStage: 0,
+          fetchComplete: false,
+          rowList: [],
+          prinstineRowList: [],
+          liveUpdatedRowList: []
+        }
+      },
+      filters: {
+        quickFilters: {
+          portfolios: [],
+        }
+      },
+      alert: {
+        alertTableAlertList: [],
+        initialAlertListReceived: false,
+        delayedLoadingFreshDataForAlert: false,
+        axeAlertCount: 0,
+        unreadAxeAlertCount: 0,
+        markAlertCount: 0,
+        unreadMarkAlertCount: 0,
+        tradeAlertCount: 0,
+        unreadTradeAlertCount: 0,
+        scopedAlertType: null
+      }
     };
     return state;
   }
@@ -217,6 +261,44 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     for (const eachItem in this.subscriptions) {
       const eachSub = this.subscriptions[eachItem] as Subscription;
       eachSub.unsubscribe();
+    }
+  }
+
+  public onClickShowAllAlerts() {
+    if (this.state.fetchResult.alertTable.fetchComplete) {
+      if (!!this.state.alert.scopedAlertType || !this.state.displayAlertTable) {
+        this.state.displayAlertTable = true;
+        this.state.alert.scopedAlertType = null;
+        this.filterAlertTableByType(this.state.alert.scopedAlertType);
+      } else {
+        this.state.displayAlertTable = false;
+      }
+    }
+  }
+
+  public onClickSpecificAlertTypeTab(targetType: AlertTypes) {
+    if (this.state.fetchResult.alertTable.fetchComplete) {
+      if (this.state.alert.scopedAlertType !== targetType) {
+        this.state.displayAlertTable = true;
+        this.state.alert.scopedAlertType = targetType;
+        this.filterAlertTableByType(this.state.alert.scopedAlertType);
+        switch (this.state.alert.scopedAlertType) {
+          case this.constants.alertTypes.axeAlert:
+            this.state.alert.unreadAxeAlertCount = 0;
+            break;
+          case this.constants.alertTypes.markAlert:
+            this.state.alert.unreadMarkAlertCount = 0;
+            break;
+          case this.constants.alertTypes.tradeAlert:
+            this.state.alert.unreadTradeAlertCount = 0;
+            break;
+          default:
+            break;
+        }
+      } else {
+        this.state.displayAlertTable = false;
+        this.state.alert.scopedAlertType = null;
+      }
     }
   }
 
@@ -784,5 +866,20 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     //   );
     //   location.href = "mailto:santa@rpia.ca?subject=Santa%20Feedback";
   // }
+
+  private filterAlertTableByType(targetType: AlertTypes) {
+    if (!!targetType) {
+      this.state.fetchResult.alertTable.rowList = [];
+      this.state.fetchResult.alertTable.prinstineRowList.forEach((eachRow) => {
+        if (!!eachRow && !!eachRow.data.security && !eachRow.data.security.state.isStencil) {
+          if (eachRow.data.security.data.alert.alertType == targetType) {
+            this.state.fetchResult.alertTable.rowList.push(eachRow);
+          }
+        }
+      });
+    } else {
+      this.state.fetchResult.alertTable.rowList = this.utilityService.deepCopy(this.state.fetchResult.alertTable.prinstineRowList);
+    }
+  }
 
 }

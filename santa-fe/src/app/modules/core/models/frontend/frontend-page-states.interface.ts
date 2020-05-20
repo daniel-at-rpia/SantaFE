@@ -235,4 +235,29 @@ export interface TradeAlertPanelState {
   alertUpdateInProgress: boolean;
   isCenterPanelPresetSelected: boolean;
   receivedActiveAlertsMap: object;  // currently BE passes the same marketlist alerts regardless of the timestamp FE provides, until the alert expires. This map is to avoid duplicates being created over and over on each heartbeat
+  displayAlertTable: boolean;
+  table: {
+    alertMetrics: Array<SecurityTableMetricStub>;
+    alertDto: DTOs.SecurityTableDTO;
+  }
+  fetchResult: {
+    alertTable: TradeCenterTableBlock;
+  }
+  filters: {
+    quickFilters: {
+      portfolios: Array<string>;
+    }
+  }
+  alert: {
+    alertTableAlertList: Array<DTOs.AlertDTO>;
+    initialAlertListReceived: boolean;
+    delayedLoadingFreshDataForAlert: boolean;
+    axeAlertCount: number;
+    unreadAxeAlertCount: number;
+    markAlertCount: number;
+    unreadMarkAlertCount: number;
+    tradeAlertCount: number;
+    unreadTradeAlertCount: number;
+    scopedAlertType: AlertTypes;
+  }
 }
