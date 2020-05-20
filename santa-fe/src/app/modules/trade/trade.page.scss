@@ -26,11 +26,25 @@ $trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta
     &-centerPanel {
       @include mix_fixed_div(absolute, $z_index_base_item);
       @include mix_calculate(width, 100%, $spacing_medium*2, '-');
-      @include mix_calculate(height, 100%, $spacing_medium*2, '-');
+      @include mix_calculate(height, 100%, $tradeAlertPanel_height + $spacing_medium*2, '-');
       display: flex;
       overflow: hidden;
-      bottom: $spacing_medium;
+      top: $spacing_medium;
       trade-center-panel {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+    }
+    &-alertPanel {
+      @include mix_fixed_div(absolute, $z_index_base_item);
+      @include mix_calculate(width, 100%, $spacing_medium*2, '-');
+      display: flex;
+      height: $tradeAlertPanel_height;
+      overflow: hidden;
+      bottom: $spacing_medium;
+      trade-alert-panel {
         flex: 1 1 auto;
         display: flex;
         flex-direction: column;

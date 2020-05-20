@@ -1,5 +1,63 @@
 <article
   [ngClass]="{
-    'sat-tradeAlertPanel': true
+    'sat-tradeAlertPanel': true,
+    'sat-tradeAlertPanel--displayAlertTableState': state.table.displayAlert,
+    'sat-tradeAlertPanel--focusMode': state.isFocusMode,
+    'sat-tradeAlertPanel--scopeAllAlertsState': state.table.displayAlert && !state.alert.scopedAlertType,
+    'sat-tradeAlertPanel--scopeAxeAlertsState': state.table.displayAlert && state.alert.scopedAlertType === constants.alertTypes.axeAlert,
+    'sat-tradeAlertPanel--scopeMarkAlertsState': state.table.displayAlert && state.alert.scopedAlertType === constants.alertTypes.markAlert,
+    'sat-tradeAlertPanel--scopeTradeAlertsState': state.table.displayAlert && state.alert.scopedAlertType === constants.alertTypes.tradeAlert,
+    'sat-tradeAlertPanel--alertReadyState': state.fetchResult.alertTable.fetchComplete
   }">
+  <div class="sat-tradeAlertPanel__overview">
+    <div class="sat-tradeAlertPanel__overview-tab sat-tradeAlertPanel__overview-tab--all">
+      <div class="sat-tradeAlertPanel__overview-tab-cta sat-tradeAlertPanel__overview-tab-cta" (click)="onClickShowAllAlerts()">
+        <span class="sat-tradeAlertPanel__overview-tab-cta-regText">Show All Alerts</span>
+      </div>
+    </div>
+    <div class="sat-tradeAlertPanel__overview-tab sat-tradeAlertPanel__overview-tab--axe">
+      <div class="sat-tradeAlertPanel__overview-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.axeAlert)">
+        <i class="sat-tradeAlertPanel__overview-tab-cta-icon fas fa-axe"></i>
+        <span class="sat-tradeAlertPanel__overview-tab-cta-regText">Show</span>
+        <span class="sat-tradeAlertPanel__overview-tab-cta-countText">{{state.alert.axeAlertCount}}</span>
+        <span class="sat-tradeAlertPanel__overview-tab-cta-regText">Axe Alerts</span>
+        <span *ngIf="state.alert.unreadAxeAlertCount > 0" class="sat-tradeAlertPanel__overview-tab-cta-newAlertsCount">{{state.alert.unreadAxeAlertCount}} new</span>
+      </div>
+    </div>
+    <div class="sat-tradeAlertPanel__overview-tab sat-tradeAlertPanel__overview-tab--mark">
+      <div class="sat-tradeAlertPanel__overview-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.markAlert)">
+        <i class="sat-tradeAlertPanel__overview-tab-cta-icon far fa-bullseye-arrow"></i>
+        <span class="sat-tradeAlertPanel__overview-tab-cta-regText">Show</span>
+        <span class="sat-tradeAlertPanel__overview-tab-cta-countText">{{state.alert.markAlertCount}}</span>
+        <span class="sat-tradeAlertPanel__overview-tab-cta-regText">Mark Alerts</span>
+        <span *ngIf="state.alert.unreadMarkAlertCount > 0" class="sat-tradeAlertPanel__overview-tab-cta-newAlertsCount">{{state.alert.unreadMarkAlertCount}} new</span>
+      </div>
+    </div>
+    <div class="sat-tradeAlertPanel__overview-tab sat-tradeAlertPanel__overview-tab--trade">
+      <div class="sat-tradeAlertPanel__overview-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.tradeAlert)">
+        <i class="sat-tradeAlertPanel__overview-tab-cta-icon fal fa-handshake"></i>
+        <span class="sat-tradeAlertPanel__overview-tab-cta-regText">Show</span>
+        <span class="sat-tradeAlertPanel__overview-tab-cta-countText">{{state.alert.tradeAlertCount}}</span>
+        <span class="sat-tradeAlertPanel__overview-tab-cta-regText">Trade Alerts</span>
+        <span *ngIf="state.alert.unreadTradeAlertCount > 0" class="sat-tradeAlertPanel__overview-tab-cta-newAlertsCount">{{state.alert.unreadTradeAlertCount}} new</span>
+      </div>
+    </div>
+  </div>
+  <div class="sat-tradeAlertPanel__main">
+    <div class="sat-tradeAlertPanel__main-table">
+      <santa-table
+        [tableName]="'tradeAlert'"
+        [activated]="!!state.table.displayAlert"
+        [ownerInitial]="ownerInitial"
+        [activePortfolios]="state.filters.quickFilters.portfolios"
+        [tableData]="state.table.alertDto"
+        [newRows]="state.fetchResult.alertTable.rowList"
+        [receivedContentStage]="state.fetchResult.alertTable.currentContentStage"
+        [receivedSecurityTableMetricsUpdate]="state.table.alertMetrics"
+        [liveUpdatedRows]="state.fetchResult.alertTable.liveUpdatedRowList"
+        [activeTriCoreDriver]="state.filters.quickFilters.driverType"
+        (selectedSecurityForAnalysis)="onSelectSecurityForAnalysis($event)"
+      ></santa-table>
+    </div>
+  </div>
 </article>
