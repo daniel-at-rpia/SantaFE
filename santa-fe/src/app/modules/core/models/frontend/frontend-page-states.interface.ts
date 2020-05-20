@@ -131,6 +131,7 @@ export interface TradeCenterPanelState {
     unreadMarkAlertCount: number;
     tradeAlertCount: number;
     unreadTradeAlertCount: number;
+    scopedAlertType: AlertTypes;
   }
 }
 

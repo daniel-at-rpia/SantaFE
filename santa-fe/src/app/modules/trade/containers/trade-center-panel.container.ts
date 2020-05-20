@@ -172,7 +172,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         markAlertCount: 0,
         unreadMarkAlertCount: 0,
         tradeAlertCount: 0,
-        unreadTradeAlertCount: 0
+        unreadTradeAlertCount: 0,
+        scopedAlertType: null
       }
     };
 
@@ -240,18 +241,24 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       allCountsMap.forEach((eachCount) => {
         switch (eachCount.data.alertType) {
           case this.constants.alertTypes.axeAlert:
-            const newAxeAlertCount = eachCount.data.count - this.state.alert.axeAlertCount;
-            this.state.alert.unreadAxeAlertCount = this.state.alert.unreadAxeAlertCount + newAxeAlertCount;
+            if (this.state.alert.scopedAlertType !== this.constants.alertTypes.axeAlert || !this.state.table.displayAlert) {
+              const newAxeAlertCount = eachCount.data.count - this.state.alert.axeAlertCount;
+              this.state.alert.unreadAxeAlertCount = this.state.alert.unreadAxeAlertCount + newAxeAlertCount;
+            }
             this.state.alert.axeAlertCount = eachCount.data.count;
             break;
           case this.constants.alertTypes.markAlert:
-            const newMarkAlertCount = eachCount.data.count - this.state.alert.markAlertCount;
-            this.state.alert.unreadMarkAlertCount = this.state.alert.unreadMarkAlertCount + newMarkAlertCount;
+            if (this.state.alert.scopedAlertType !== this.constants.alertTypes.markAlert || !this.state.table.displayAlert) {
+              const newMarkAlertCount = eachCount.data.count - this.state.alert.markAlertCount;
+              this.state.alert.unreadMarkAlertCount = this.state.alert.unreadMarkAlertCount + newMarkAlertCount;
+            }
             this.state.alert.markAlertCount = eachCount.data.count;
             break;
           case this.constants.alertTypes.tradeAlert:
-            const newTradeAlertCount = eachCount.data.count - this.state.alert.tradeAlertCount;
-            this.state.alert.unreadTradeAlertCount = this.state.alert.unreadTradeAlertCount + newTradeAlertCount;
+            if (this.state.alert.scopedAlertType !== this.constants.alertTypes.tradeAlert || !this.state.table.displayAlert) {
+              const newTradeAlertCount = eachCount.data.count - this.state.alert.tradeAlertCount;
+              this.state.alert.unreadTradeAlertCount = this.state.alert.unreadTradeAlertCount + newTradeAlertCount;
+            }
             this.state.alert.tradeAlertCount = eachCount.data.count;
             break;
           default:
@@ -458,8 +465,42 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.onSearchKeywordChange(keywordCopy);
   }
 
-  public onClickTest() {
-    this.state.table.displayAlert = !this.state.table.displayAlert;
+  public onClickShowAllAlerts() {
+    if (this.state.fetchResult.alertTable.fetchComplete) {
+      if (!!this.state.alert.scopedAlertType || !this.state.table.displayAlert) {
+        this.state.table.displayAlert = true;
+        this.state.alert.scopedAlertType = null;
+        this.filterAlertTableByType(this.state.alert.scopedAlertType);
+      } else {
+        this.state.table.displayAlert = false;
+      }
+    }
+  }
+
+  public onClickSpecificAlertTypeTab(targetType: AlertTypes) {
+    if (this.state.fetchResult.alertTable.fetchComplete) {
+      if (this.state.alert.scopedAlertType !== targetType) {
+        this.state.table.displayAlert = true;
+        this.state.alert.scopedAlertType = targetType;
+        this.filterAlertTableByType(this.state.alert.scopedAlertType);
+        switch (this.state.alert.scopedAlertType) {
+          case this.constants.alertTypes.axeAlert:
+            this.state.alert.unreadAxeAlertCount = 0;
+            break;
+          case this.constants.alertTypes.markAlert:
+            this.state.alert.unreadMarkAlertCount = 0;
+            break;
+          case this.constants.alertTypes.tradeAlert:
+            this.state.alert.unreadTradeAlertCount = 0;
+            break;
+          default:
+            break;
+        }
+      } else {
+        this.state.table.displayAlert = false;
+        this.state.alert.scopedAlertType = null;
+      }
+    }
   }
 
   private populateSearchShortcuts() {
@@ -902,6 +943,21 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
         this.store$.dispatch(new TradeSecurityTableRowDTOListForAnalysisEvent(this.utilityService.deepCopy(securityTableRowDTOList)));
       }
+    }
+  }
+
+  private filterAlertTableByType(targetType: AlertTypes) {
+    if (!!targetType) {
+      this.state.fetchResult.alertTable.rowList = [];
+      this.state.fetchResult.alertTable.prinstineRowList.forEach((eachRow) => {
+        if (!!eachRow && !!eachRow.data.security && !eachRow.data.security.state.isStencil) {
+          if (eachRow.data.security.data.alert.alertType == targetType) {
+            this.state.fetchResult.alertTable.rowList.push(eachRow);
+          }
+        }
+      });
+    } else {
+      this.state.fetchResult.alertTable.rowList = this.utilityService.deepCopy(this.state.fetchResult.alertTable.prinstineRowList);
     }
   }
 
