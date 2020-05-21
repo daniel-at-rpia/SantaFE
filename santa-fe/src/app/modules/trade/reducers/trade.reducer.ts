@@ -9,21 +9,12 @@ import {
   SecurityDTO,
   AlertDTO
 } from 'FEModels/frontend-models.interface';
-import {
-  TradeActions,
-  TradeLiveUpdateStartEvent,
-  TradeLiveUpdateInProgressEvent,
-  TradeLiveUpdatePassRawDataEvent,
-  TradeLiveUpdatePassTableContentEvent
-} from 'Trade/actions/trade.actions';
+import { TradeActions } from 'Trade/actions/trade.actions';
 
 export interface TradeState {
   presetSelected: boolean;
-  initialDataLoaded: boolean;
   liveUpdateSecondCount: number;
   liveUpdateTick: number;
-  liveUpdateInProgress: boolean;
-  liveUpdateProcessingRawData: boolean;
   tableRowUpdateList: Array<SecurityTableRowDTO>;
   selectedSecurityForAnalysis: SecurityDTO;
   securityIDListFromAnalysis: Array<string>;
@@ -33,15 +24,22 @@ export interface TradeState {
   focusMode: boolean;
   darkMode: boolean;
   newAlertsForAlertTable: Array<AlertDTO>;
+  tradeAlertTable: {
+    initialDataLoaded: boolean;
+    liveUpdateInProgress: boolean;
+    liveUpdateProcessingRawData: boolean;
+  },
+  tradeMainTable: {
+    initialDataLoaded: boolean;
+    liveUpdateInProgress: boolean;
+    liveUpdateProcessingRawData: boolean;
+  }
 }
 
 const initialState: TradeState = {
   presetSelected: false,
-  initialDataLoaded: false,
   liveUpdateSecondCount: 0,
   liveUpdateTick: 0,
-  liveUpdateInProgress: false,
-  liveUpdateProcessingRawData: false,
   tableRowUpdateList: [],
   selectedSecurityForAnalysis: null,
   securityIDListFromAnalysis: [],
@@ -50,7 +48,17 @@ const initialState: TradeState = {
   selectedSecurityForAlertConfig: null,
   focusMode: false,
   darkMode: false,
-  newAlertsForAlertTable: []
+  newAlertsForAlertTable: [],
+  tradeAlertTable: {
+    initialDataLoaded: false,
+    liveUpdateInProgress: false,
+    liveUpdateProcessingRawData: false
+  },
+  tradeMainTable: {
+    initialDataLoaded: false,
+    liveUpdateInProgress: false,
+    liveUpdateProcessingRawData: false
+  }
 };
 
 export function tradeReducer(
@@ -69,7 +77,10 @@ export function tradeReducer(
         return {
           ...state,
           presetSelected: !oldFlag,
-          initialDataLoaded: false
+          tradeMainTable: {
+            ...state.tradeMainTable,
+            initialDataLoaded: false
+          }
         };
       }
     case TradeActions.LiveUpdateCount:
@@ -84,18 +95,28 @@ export function tradeReducer(
         ...state,
         liveUpdateSecondCount: 0,
         liveUpdateTick: oldTick + 1,
-        liveUpdateInProgress: true
+        tradeMainTable: {
+          ...state.tradeMainTable,
+          liveUpdateInProgress: true
+        },
+        tradeAlertTable: {
+          ...state.tradeAlertTable,
+          liveUpdateInProgress: true
+        }
       };
     case TradeActions.LiveUpdatePassRawDataEvent:
       return {
         ...state,
-        liveUpdateInProgress: false,
-        liveUpdateProcessingRawData: true
-      };
-    case TradeActions.LiveUpdatePassTableContentEvent:
-      return {
-        ...state,
-        tableRowUpdateList: action.rowList
+        tradeMainTable: {
+          ...state.tradeMainTable,
+          liveUpdateInProgress: false,
+          liveUpdateProcessingRawData: true
+        },
+        tradeAlertTable: {
+          ...state.tradeAlertTable,
+          liveUpdateInProgress: false,
+          liveUpdateProcessingRawData: true
+        }
       };
     case TradeActions.LiveUpdateProcessingDataCompleteEvent:
       if (state.initialDataLoaded) {
@@ -111,11 +132,6 @@ export function tradeReducer(
           liveUpdateProcessingRawData: false,
           initialDataLoaded: true
         }
-      }
-    case TradeActions.SwitchDriverEvent:
-      return {
-        ...state,
-        initialDataLoaded: false
       }
     case TradeActions.SelectSecurityForAnalysisEvent:
       return {

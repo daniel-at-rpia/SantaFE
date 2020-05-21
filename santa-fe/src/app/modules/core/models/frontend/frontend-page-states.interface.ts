@@ -2,7 +2,7 @@ import * as DTOs from 'FEModels/frontend-models.interface';
 import {
   ObligorChartCategoryBlock,
   TradeAlertConfigurationAxeGroupBlock,
-  TradeCenterTableBlock
+  TableFetchResultBlock
 } from 'FEModels/frontend-blocks.interface';
 import {
   SecurityDefinitionStub,
@@ -108,8 +108,8 @@ export interface TradeCenterPanelState {
   fetchResult: {
     fetchTableDataFailed: boolean;
     fetchTableDataFailedError: string;
-    mainTable: TradeCenterTableBlock;
-    alertTable: TradeCenterTableBlock;
+    mainTable: TableFetchResultBlock;
+    alertTable: TableFetchResultBlock;
   }
   filters: {
     quickFilters: {
@@ -241,10 +241,13 @@ export interface TradeAlertPanelState {
     alertDto: DTOs.SecurityTableDTO;
   }
   fetchResult: {
-    alertTable: TradeCenterTableBlock;
+    fetchTableDataFailed: boolean;
+    fetchTableDataFailedError: string;
+    alertTable: TableFetchResultBlock;
   }
   filters: {
     quickFilters: {
+      driverType: string;
       portfolios: Array<string>;
     }
   }

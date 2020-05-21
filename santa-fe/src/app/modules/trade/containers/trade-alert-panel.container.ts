@@ -18,21 +18,30 @@
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
+    import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
     import { TradeAlertPanelState } from 'FEModels/frontend-page-states.interface';
-    import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
-    import { SecurityDTO, AlertDTO } from 'FEModels/frontend-models.interface';
+    import { SecurityMapEntry, ClickedOpenSecurityInBloombergEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
+    import {
+      SecurityTableDTO,
+      SecurityDTO,
+      AlertDTO,
+      SecurityTableRowDTO
+    } from 'FEModels/frontend-models.interface';
+    import { TableFetchResultBlock } from 'FEModels/frontend-blocks.interface';
     // import { TradeAlertConfigurationAxeGroupBlock } from 'FEModels/frontend-blocks.interface';
     import {
       BESecurityDTO,
     //   BEAlertConfigurationReturn,
     //   BEAlertConfigurationDTO,
-      BEAlertDTO
+      BEAlertDTO,
+      BEFetchAllTradeDataReturn
     } from 'BEModels/backend-models.interface';
-    // import {
+    import {
     //   PayloadGetSecurities,
     //   PayloadUpdateAlertConfig,
     //   PayloadUpdateSingleAlertConfig
-    // } from 'BEModels/backend-payloads.interface';
+      PayloadGetTradeFullData
+    } from 'BEModels/backend-payloads.interface';
     // import {
     //   EngagementActionList,
     //   AlertTypes,
@@ -51,7 +60,12 @@
     } from 'Core/constants/tradeConstants.constant';
     import { FullOwnerList, FilterOptionsPortfolioResearchList } from 'Core/constants/securityDefinitionConstants.constant';
     import { CoreFlushSecurityMap, CoreSendNewAlerts } from 'Core/actions/core.actions';
-    import { TradeAlertTableSendNewAlertsEvent } from 'Trade/actions/trade.actions';
+    import {
+      TradeSelectedSecurityForAnalysisEvent,
+      TradeAlertTableSendNewAlertsEvent,
+      TradeLiveUpdatePassRawDataEvent,
+      TradeLiveUpdateProcessDataCompleteEvent
+    } from 'Trade/actions/trade.actions';
     import {
       selectSelectedSecurityForAlertConfig,
       selectPresetSelected,
@@ -62,6 +76,7 @@
       SECURITY_TABLE_FINAL_STAGE
     } from 'Core/constants/securityTableConstants.constant';
     import {
+      DEFAULT_DRIVER_IDENTIFIER,
       EngagementActionList,
       AlertTypes
     } from 'Core/constants/coreConstants.constant';
@@ -97,7 +112,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     countdown: ALERT_UPDATE_COUNTDOWN,
     fullOwnerList: FullOwnerList,
     researchList: FilterOptionsPortfolioResearchList,
-    alertTypes: AlertTypes
+    alertTypes: AlertTypes,
+    defaultMetricIdentifier: DEFAULT_DRIVER_IDENTIFIER,
+    securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE
   }
 
   constructor(
@@ -105,6 +122,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     private dtoService: DTOService,
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
+    private processingService: LiveDataProcessingService
   ){
     window['moment'] = moment;
     this.state = this.initializePageState();
@@ -169,6 +187,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         alertDto: this.dtoService.formSecurityTableObject(true)
       },
       fetchResult: {
+        fetchTableDataFailed: false,
+        fetchTableDataFailedError: '',
         alertTable: {
           currentContentStage: 0,
           fetchComplete: false,
@@ -179,6 +199,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       },
       filters: {
         quickFilters: {
+          driverType: this.constants.defaultMetricIdentifier,
           portfolios: [],
         }
       },
@@ -300,6 +321,27 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         this.state.alert.scopedAlertType = null;
       }
     }
+  }
+
+  public onSelectSecurityForAnalysis(targetSecurity: SecurityDTO) {
+    this.store$.dispatch(new TradeSelectedSecurityForAnalysisEvent(this.utilityService.deepCopy(targetSecurity)));
+    this.restfulCommService.logEngagement(
+      EngagementActionList.selectSecurityForAnalysis,
+      targetSecurity.data.securityID,
+      'n/a',
+      'Trade - Alert Panel'
+    );
+  }
+
+  public onClickOpenSecurityInBloomberg(pack: ClickedOpenSecurityInBloombergEmitterParams) {
+    const url = `bbg://securities/${pack.targetSecurity.data.globalIdentifier}%20${pack.yellowCard}/${pack.targetBBGModule}`;
+    window.open(url);
+    this.restfulCommService.logEngagement(
+      EngagementActionList.bloombergRedict,
+      pack.targetSecurity.data.securityID,
+      `BBG - ${pack.targetBBGModule}`,
+      'Trade - Alert Panel'
+    );
   }
 
   // public onClickConfigureAlert() {
@@ -881,5 +923,149 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.state.fetchResult.alertTable.rowList = this.utilityService.deepCopy(this.state.fetchResult.alertTable.prinstineRowList);
     }
   }
+
+  private fetchDataForAlertTable(isInitialFetch: boolean) {
+    const securityList = [];
+    this.state.alert.alertTableAlertList.forEach((eachAlert) => {
+      const targetSecurityId = eachAlert.data.security.data.securityID;
+      if (!securityList.includes(targetSecurityId)) {
+        securityList.push(targetSecurityId);
+      }
+    });
+    const payload: PayloadGetTradeFullData = {
+      maxNumberOfSecurities: 2000,
+      groupIdentifier: {},
+      groupFilters: {
+        SecurityIdentifier: securityList
+      }
+    };
+    this.state.fetchResult.alertTable.fetchComplete = false;
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolios, { req: 'POST' }, payload, false, false).pipe(
+      first(),
+      tap((serverReturn) => {
+        if (!isInitialFetch) {
+          this.state.displayAlertTable && this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
+        } else {
+          this.updateStage(0, this.state.fetchResult.alertTable, this.state.table.alertDto);
+        }
+        this.loadDataForAlertTable(serverReturn);
+      }),
+      catchError(err => {
+        this.restfulCommService.logError(`Get alert table failed`);
+        this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
+        this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
+        console.error('error', err);
+        this.state.fetchResult.fetchTableDataFailed = true;
+        this.state.fetchResult.fetchTableDataFailedError = err.message;
+        this.state.fetchResult.alertTable.prinstineRowList = [];
+        this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
+        return of('error');
+      })
+    ).subscribe();
+  }
+
+  private loadDataForAlertTable(serverReturn: BEFetchAllTradeDataReturn){
+    this.state.fetchResult.alertTable.prinstineRowList = [];  // flush out the stencils
+    this.state.fetchResult.alertTable.prinstineRowList = this.processingService.loadFinalStageDataForAlertTable(
+      this.state.alert.alertTableAlertList,
+      this.state.table.alertDto.data.headers,
+      this.state.filters.quickFilters.driverType,
+      serverReturn,
+      this.onSelectSecurityForAnalysis.bind(this),
+      this.onClickOpenSecurityInBloomberg.bind(this),
+      null
+    );
+    this.calculateQuantComparerWidthAndHeight();
+    this.updateStage(this.constants.securityTableFinalStage, this.state.fetchResult.alertTable, this.state.table.alertDto);
+    this.state.fetchResult.alertTable.fetchComplete = true;
+    // this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
+  }
+
+  private updateStage(
+    stageNumber: number,
+    targetTableBlock: TableFetchResultBlock,
+    targetTableDTO: SecurityTableDTO
+  ) {
+    targetTableBlock.currentContentStage = stageNumber;
+    if (targetTableBlock.currentContentStage === this.constants.securityTableFinalStage) {
+      this.store$.pipe(
+        select(selectInitialDataLoaded),
+        withLatestFrom(
+          this.store$.pipe(select(selectLiveUpdateProcessingRawData))
+        ),
+        first(),
+        tap(([isInitialDataLoaded, processingRawData]) => {
+          if (isInitialDataLoaded) {
+            const newFilteredList = this.filterPrinstineRowList(targetTableBlock.prinstineRowList);
+            targetTableBlock.liveUpdatedRowList = this.processingService.returnDiff(targetTableDTO, newFilteredList).newRowList;
+          } else {
+            targetTableBlock.rowList = this.filterPrinstineRowList(targetTableBlock.prinstineRowList);
+          }
+          // only dispatch the action when both tables are done
+          if (!!this.state.fetchResult.alertTable.fetchComplete && !!this.state.fetchResult.mainTable.fetchComplete) {
+            this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
+          }
+        })
+      ).subscribe();
+    }
+  }
+
+  private filterPrinstineRowList(
+    targetPrinstineList: Array<SecurityTableRowDTO>
+  ): Array<SecurityTableRowDTO> {
+    const filteredList: Array<SecurityTableRowDTO> = [];
+    targetPrinstineList.forEach((eachRow) => {
+      try {
+        if (this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.name, this.state.filters.quickFilters.keyword)
+        || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.obligorName, this.state.filters.quickFilters.keyword)) {
+          let portfolioIncludeFlag = this.filterByPortfolio(eachRow);
+          let ownerFlag = this.filterByOwner(eachRow);
+          let strategyFlag = this.filterByStrategy(eachRow);
+          let securityLevelFilterResultCombined = true;
+          if (this.state.filters.securityFilters.length > 0) {
+            const securityLevelFilterResult = this.state.filters.securityFilters.map((eachFilter) => {
+              return this.filterBySecurityAttribute(eachRow, eachFilter.targetAttribute, eachFilter.filterBy);
+            });
+            // only main table will apply security-level filters
+            if (!this.state.displayAlertTable) {
+              // as long as one of the filters failed, this security will not show
+              securityLevelFilterResultCombined = securityLevelFilterResult.filter((eachResult) => {
+                return eachResult;
+              }).length === securityLevelFilterResult.length;
+            }
+          }
+          strategyFlag && ownerFlag && securityLevelFilterResultCombined && portfolioIncludeFlag && filteredList.push(eachRow);
+        }
+      } catch(err) {
+        console.error('filter issue', err ? err.message : '', eachRow);
+      }
+    });
+    return filteredList;
+  }
+
+  private calculateQuantComparerWidthAndHeight() {
+    const bestSpreadList = [];
+    const bestPriceList = [];
+    const bestYieldList = [];
+    const combinedRowList = this.state.fetchResult.alertTable.prinstineRowList;
+    combinedRowList.forEach((eachRow) => {
+      const bestSpreadQuote = eachRow.data.bestQuotes.combined.bestSpreadQuote;
+      const bestPriceQuote = eachRow.data.bestQuotes.combined.bestPriceQuote;
+      const bestYieldQuote = eachRow.data.bestQuotes.combined.bestYieldQuote;
+      const bestAxeSpreadQuote = eachRow.data.bestQuotes.axe.bestSpreadQuote;
+      const bestAxePriceQuote = eachRow.data.bestQuotes.axe.bestPriceQuote;
+      const bestAxeYieldQuote = eachRow.data.bestQuotes.axe.bestYieldQuote;
+      !!bestSpreadQuote && bestSpreadList.push(bestSpreadQuote);
+      !!bestAxeSpreadQuote && bestSpreadList.push(bestAxeSpreadQuote);
+      !!bestPriceQuote && bestPriceList.push(bestPriceQuote);
+      !!bestAxePriceQuote && bestPriceList.push(bestAxePriceQuote);
+      !!bestYieldQuote && bestYieldList.push(bestYieldQuote);
+      !!bestYieldQuote && bestYieldList.push(bestAxeYieldQuote);
+    });
+    this.utilityService.calculateQuantComparerWidthAndHeightPerSet(bestSpreadList);
+    this.utilityService.calculateQuantComparerWidthAndHeightPerSet(bestYieldList);
+    this.utilityService.calculateQuantComparerWidthAndHeightPerSet(bestPriceList);
+  }
+
 
 }

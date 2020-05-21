@@ -19,6 +19,7 @@
       GroupMetricOptions
     } from 'Core/constants/marketConstants.constant';
     import {
+      QUANT_COMPARER_PERCENTILE,
       SecurityMetricOptions,
       BackendKeyDictionary,
       TriCoreDriverConfig,
@@ -925,6 +926,40 @@ export class UtilityService {
         targetQuote.state.isBestOffer = targetQuote.data.ask.tspread == bestAskNum || targetQuote.data.ask.price == bestAskNum || targetQuote.data.ask.yield == bestAskNum;
         targetQuote.state.isBestAxeBid = bestAxeBidNum && (targetQuote.data.bid.tspread == bestAxeBidNum || targetQuote.data.bid.price == bestAxeBidNum || targetQuote.data.bid.yield == bestAxeBidNum);
         targetQuote.state.isBestAxeOffer = bestAxeAskNum && (targetQuote.data.ask.tspread == bestAxeAskNum || targetQuote.data.ask.price == bestAxeAskNum || targetQuote.data.ask.yield == bestAxeAskNum);
+      }
+    }
+
+    public calculateQuantComparerWidthAndHeightPerSet(list: Array<DTOs.QuantComparerDTO>) {
+      const deltaList = [];
+      const sizeList = [];
+      list.forEach((eachComparer) => {
+        if (!!eachComparer && eachComparer.state.hasBid && eachComparer.state.hasOffer) {
+          deltaList.push(Math.abs(eachComparer.data.delta));
+          sizeList.push(eachComparer.data.bid.size, eachComparer.data.offer.size);
+        }
+      });
+      const maxDelta = this.findPercentile(deltaList, QUANT_COMPARER_PERCENTILE);
+      // const maxSize = this.utilityService.findPercentile(sizeList, QUANT_COMPARER_PERCENTILE);
+      const maxSize = 50;
+
+      list.forEach((eachComparer) => {
+        if (eachComparer.state.hasBid && eachComparer.state.hasOffer) {
+          eachComparer.style.lineWidth = this.calculateSingleQuantComparerWidth(eachComparer.data.delta, maxDelta);
+        } else {
+          eachComparer.style.lineWidth = 15;
+        }
+        eachComparer.style.bidLineHeight = Math.round(eachComparer.data.bid.size / maxSize * 100);
+        eachComparer.style.offerLineHeight = Math.round(eachComparer.data.offer.size / maxSize * 100);
+        eachComparer.state.isCalculated = true;
+      });
+    } 
+
+    private calculateSingleQuantComparerWidth(delta: number, maxAbsDelta: number): number {
+      if (delta < 0) {
+        return 100;
+      } else {
+        const result = 100 - Math.round(delta / maxAbsDelta * 100);
+        return result;
       }
     }
   // trade specific end

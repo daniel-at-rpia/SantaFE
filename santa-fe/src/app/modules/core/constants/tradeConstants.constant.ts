@@ -6,8 +6,6 @@ import {
 import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
 import { SecurityMetricOptions } from 'Core/constants/coreConstants.constant';
 
-export const QUANT_COMPARER_PERCENTILE = 90;
-
 export const PortfolioShortcuts: Array<SearchShortcutStub> = [{
     displayTitle: 'All Portfolios',
     includedDefinitions: [

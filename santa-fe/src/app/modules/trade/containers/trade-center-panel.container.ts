@@ -19,7 +19,7 @@
       SecurityTableDTO,
       AlertCountSummaryDTO
     } from 'FEModels/frontend-models.interface';
-    import { TradeCenterTableBlock } from 'FEModels/frontend-blocks.interface';
+    import { TableFetchResultBlock } from 'FEModels/frontend-blocks.interface';
     import {PayloadGetTradeFullData} from 'BEModels/backend-payloads.interface';
     import {
       BEPortfolioDTO,
@@ -45,7 +45,6 @@
     } from 'Core/constants/securityTableConstants.constant';
     import { SecurityDefinitionMap, FullOwnerList } from 'Core/constants/securityDefinitionConstants.constant';
     import {
-      QUANT_COMPARER_PERCENTILE,
       PortfolioShortcuts,
       OwnershipShortcuts,
       StrategyShortcuts
@@ -721,7 +720,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
   private updateStage(
     stageNumber: number,
-    targetTableBlock: TradeCenterTableBlock,
+    targetTableBlock: TableFetchResultBlock,
     targetTableDTO: SecurityTableDTO
   ) {
     targetTableBlock.currentContentStage = stageNumber;
@@ -874,7 +873,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     const bestSpreadList = [];
     const bestPriceList = [];
     const bestYieldList = [];
-    const combinedRowList = this.state.fetchResult.mainTable.prinstineRowList.concat(this.state.fetchResult.alertTable.prinstineRowList);
+    const combinedRowList = this.state.fetchResult.mainTable.prinstineRowList;
     combinedRowList.forEach((eachRow) => {
       const bestSpreadQuote = eachRow.data.bestQuotes.combined.bestSpreadQuote;
       const bestPriceQuote = eachRow.data.bestQuotes.combined.bestPriceQuote;
@@ -889,43 +888,9 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       !!bestYieldQuote && bestYieldList.push(bestYieldQuote);
       !!bestYieldQuote && bestYieldList.push(bestAxeYieldQuote);
     });
-    this.calculateQuantComparerWidthAndHeightPerSet(bestSpreadList);
-    this.calculateQuantComparerWidthAndHeightPerSet(bestYieldList);
-    this.calculateQuantComparerWidthAndHeightPerSet(bestPriceList);
-  }
-
-  private calculateQuantComparerWidthAndHeightPerSet(list: Array<QuantComparerDTO>) {
-    const deltaList = [];
-    const sizeList = [];
-    list.forEach((eachComparer) => {
-      if (!!eachComparer && eachComparer.state.hasBid && eachComparer.state.hasOffer) {
-        deltaList.push(Math.abs(eachComparer.data.delta));
-        sizeList.push(eachComparer.data.bid.size, eachComparer.data.offer.size);
-      }
-    });
-    const maxDelta = this.utilityService.findPercentile(deltaList, QUANT_COMPARER_PERCENTILE);
-    // const maxSize = this.utilityService.findPercentile(sizeList, QUANT_COMPARER_PERCENTILE);
-    const maxSize = 50;
-
-    list.forEach((eachComparer) => {
-      if (eachComparer.state.hasBid && eachComparer.state.hasOffer) {
-        eachComparer.style.lineWidth = this.calculateSingleQuantComparerWidth(eachComparer.data.delta, maxDelta);
-      } else {
-        eachComparer.style.lineWidth = 15;
-      }
-      eachComparer.style.bidLineHeight = Math.round(eachComparer.data.bid.size / maxSize * 100);
-      eachComparer.style.offerLineHeight = Math.round(eachComparer.data.offer.size / maxSize * 100);
-      eachComparer.state.isCalculated = true;
-    });
-  }
-
-  private calculateSingleQuantComparerWidth(delta: number, maxAbsDelta: number): number {
-    if (delta < 0) {
-      return 100;
-    } else {
-      const result = 100 - Math.round(delta / maxAbsDelta * 100);
-      return result;
-    }
+    this.utilityService.calculateQuantComparerWidthAndHeightPerSet(bestSpreadList);
+    this.utilityService.calculateQuantComparerWidthAndHeightPerSet(bestYieldList);
+    this.utilityService.calculateQuantComparerWidthAndHeightPerSet(bestPriceList);
   }
 
   private processSecurityIDsFromAnalysis(securityIDList: any[]) {

@@ -26,7 +26,7 @@ $trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta
     &-centerPanel {
       @include mix_fixed_div(absolute, $z_index_base_item);
       @include mix_calculate(width, 100%, $spacing_medium*2, '-');
-      @include mix_calculate(height, 100%, $tradeAlertPanel_height + $spacing_medium*2, '-');
+      @include mix_calculate(height, 100%, $tradeAlertPanel_height + $spacing_medium*3, '-');
       display: flex;
       overflow: hidden;
       top: $spacing_medium;
@@ -123,6 +123,9 @@ $trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta
       &__left {
         width: 100%;
         &-centerPanel {
+          @include mix_calculate(width, 100%, $spacing_medium*2 + $trade_right_cta_hover_gutter_spacing, '-');
+        }
+        &-alertPanel {
           @include mix_calculate(width, 100%, $spacing_medium*2 + $trade_right_cta_hover_gutter_spacing, '-');
         }
       }

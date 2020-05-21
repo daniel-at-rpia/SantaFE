@@ -246,7 +246,7 @@ export interface TradeAlertConfigurationAxeGroupBlock {
   isUrgent: boolean;
 }
 
-export interface TradeCenterTableBlock {
+export interface TableFetchResultBlock {
   currentContentStage: number;
   fetchComplete: boolean;
   rowList: Array<DTOs.SecurityTableRowDTO>;

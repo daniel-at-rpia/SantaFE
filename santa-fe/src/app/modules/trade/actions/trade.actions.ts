@@ -8,13 +8,13 @@ import {
 export enum TradeActions {
   LiveUpdateStartEvent = '[Trade] Live Update Start',
   LiveUpdateInProgressEvent = '[Trade] Live Update Processing',
-  LiveUpdatePassRawDataEvent = '[Trade] Live Update Pass Raw Data',
-  LiveUpdatePassTableContentEvent = '[Trade] Live Update Pass Table Content',
+  LiveUpdatePassRawDataToMainTableEvent = '[Trade] Live Update Pass Raw Data to Main Table',
+  LiveUpdateProcessingDataCompleteInMainTableEvent = '[Trade] Live Update Processing Data Complete in Main Table',
+  LiveUpdatePassRawDataToAlertTableEvent = '[Trade] Live Update Pass Raw Data to Main Table',
+  LiveUpdateProcessingDataCompleteInMainTableEvent = '[Trade] Live Update Processing Data Complete in Main Table',
   LiveUpdateUtilityInternalCountEvent = '[Trade] Live Update Utility Internal Count',
   LiveUpdateCount = '[Trade] Live Update Count',
-  LiveUpdateProcessingDataCompleteEvent = '[Trade] Live Update Processing Data Complete Event',
   TogglePresetEvent = '[Trade] Toggle Preset Event',
-  SwitchDriverEvent = '[Trade] Toggle Driver Event',
   SelectSecurityForAnalysisEvent = '[Trade] Select Security For Analysis Event',
   SecurityIDListFromAnalysisEvent = '[Trade] Security ID List From Analysis Event',
   SecurityTableRowDTOListForAnalysisEvent = '[Trade] SecurityTableRowDTO List For Analysis Event',
@@ -30,27 +30,12 @@ export class TradeLiveUpdateStartEvent implements Action {
   constructor(){}
 }
 
-export class TradeLiveUpdateInProgressEvent implements Action {
-  readonly type = TradeActions.LiveUpdateInProgressEvent;
+export class TradeLiveUpdatePassRawDataEventToMainTable implements Action {
+  readonly type = TradeActions.LiveUpdatePassRawDataToMainTableEvent;
   constructor(){}
 }
 
-export class TradeLiveUpdatePassRawDataEvent implements Action {
-  readonly type = TradeActions.LiveUpdatePassRawDataEvent;
-  constructor(){}
-}
-
-export class TradeLiveUpdatePassTableContentEvent implements Action {
-  readonly type = TradeActions.LiveUpdatePassTableContentEvent;
-  readonly rowList: Array<SecurityTableRowDTO>;
-  constructor(
-    rowList: Array<SecurityTableRowDTO>
-  ){
-    this.rowList = rowList;
-  }
-}
-
-export class TradeLiveUpdateUtilityInternalCountEvent implements Action {
+export class TradeLiveUpdateUtilityInternalCountEventInMainTable implements Action {
   readonly type = TradeActions.LiveUpdateUtilityInternalCountEvent;
   constructor(){}
 }
@@ -60,18 +45,13 @@ export class TradeLiveUpdateCount implements Action {
   constructor(){}
 }
 
-export class TradeLiveUpdateProcessDataCompleteEvent implements Action {
-  readonly type = TradeActions.LiveUpdateProcessingDataCompleteEvent;
+export class TradeLiveUpdateProcessDataCompleteInMainTableEvent implements Action {
+  readonly type = TradeActions.LiveUpdateProcessingDataCompleteInMainTableEvent;
   constructor(){}
 }
 
 export class TradeTogglePresetEvent implements Action {
   readonly type = TradeActions.TogglePresetEvent;
-  constructor(){}
-}
-
-export class TradeSwitchDriverEvent implements Action {
-  readonly type = TradeActions.SwitchDriverEvent;
   constructor(){}
 }
 
