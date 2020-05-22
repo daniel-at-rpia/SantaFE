@@ -247,6 +247,7 @@ export interface TradeAlertPanelState {
   }
   filters: {
     quickFilters: {
+      keyword: string;
       driverType: string;
       portfolios: Array<string>;
     }

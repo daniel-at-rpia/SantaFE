@@ -201,6 +201,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       },
       filters: {
         quickFilters: {
+          keyword: '',
           driverType: this.constants.defaultMetricIdentifier,
           portfolios: [],
         }
@@ -1020,23 +1021,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       try {
         if (this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.name, this.state.filters.quickFilters.keyword)
         || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.obligorName, this.state.filters.quickFilters.keyword)) {
-          let portfolioIncludeFlag = this.filterByPortfolio(eachRow);
-          let ownerFlag = this.filterByOwner(eachRow);
-          let strategyFlag = this.filterByStrategy(eachRow);
-          let securityLevelFilterResultCombined = true;
-          if (this.state.filters.securityFilters.length > 0) {
-            const securityLevelFilterResult = this.state.filters.securityFilters.map((eachFilter) => {
-              return this.filterBySecurityAttribute(eachRow, eachFilter.targetAttribute, eachFilter.filterBy);
-            });
-            // only main table will apply security-level filters
-            if (!this.state.displayAlertTable) {
-              // as long as one of the filters failed, this security will not show
-              securityLevelFilterResultCombined = securityLevelFilterResult.filter((eachResult) => {
-                return eachResult;
-              }).length === securityLevelFilterResult.length;
-            }
-          }
-          strategyFlag && ownerFlag && securityLevelFilterResultCombined && portfolioIncludeFlag && filteredList.push(eachRow);
+          filteredList.push(eachRow);
         }
       } catch(err) {
         console.error('filter issue', err ? err.message : '', eachRow);

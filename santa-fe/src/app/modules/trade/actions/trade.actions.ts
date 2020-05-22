@@ -30,7 +30,7 @@ export class TradeLiveUpdateStartEvent implements Action {
   constructor(){}
 }
 
-export class TradeLiveUpdateUtilityInternalCountEventInMainTable implements Action {
+export class TradeLiveUpdateUtilityInternalCountEvent implements Action {
   readonly type = TradeActions.LiveUpdateUtilityInternalCountEvent;
   constructor(){}
 }
