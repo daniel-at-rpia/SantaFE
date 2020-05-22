@@ -63,10 +63,12 @@
     import {
       TradeSelectedSecurityForAnalysisEvent,
       TradeAlertTableSendNewAlertsEvent,
-      TradeLiveUpdatePassRawDataEvent,
-      TradeLiveUpdateProcessDataCompleteEvent
+      TradeLiveUpdatePassRawDataToAlertTableEvent,
+      TradeLiveUpdateProcessDataCompleteInAlertTableEvent
     } from 'Trade/actions/trade.actions';
     import {
+      selectInitialDataLoadedInAlertTable,
+      selectLiveUpdateProcessingRawDataInAlertTable,
       selectSelectedSecurityForAlertConfig,
       selectPresetSelected,
       selectFocusMode
@@ -944,7 +946,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       first(),
       tap((serverReturn) => {
         if (!isInitialFetch) {
-          this.state.displayAlertTable && this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
+          this.state.displayAlertTable && this.store$.dispatch(new TradeLiveUpdatePassRawDataToAlertTableEvent());
         } else {
           this.updateStage(0, this.state.fetchResult.alertTable, this.state.table.alertDto);
         }
@@ -952,8 +954,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       }),
       catchError(err => {
         this.restfulCommService.logError(`Get alert table failed`);
-        this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
-        this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
+        this.store$.dispatch(new TradeLiveUpdatePassRawDataToAlertTableEvent());
+        this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteInAlertTableEvent());
         console.error('error', err);
         this.state.fetchResult.fetchTableDataFailed = true;
         this.state.fetchResult.fetchTableDataFailedError = err.message;
@@ -989,9 +991,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     targetTableBlock.currentContentStage = stageNumber;
     if (targetTableBlock.currentContentStage === this.constants.securityTableFinalStage) {
       this.store$.pipe(
-        select(selectInitialDataLoadedInMainTable),
+        select(selectInitialDataLoadedInAlertTable),
         withLatestFrom(
-          this.store$.pipe(select(selectLiveUpdateProcessingRawDataToMainTable))
+          this.store$.pipe(select(selectLiveUpdateProcessingRawDataInAlertTable))
         ),
         first(),
         tap(([isInitialDataLoaded, processingRawData]) => {
@@ -1002,8 +1004,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             targetTableBlock.rowList = this.filterPrinstineRowList(targetTableBlock.prinstineRowList);
           }
           // only dispatch the action when both tables are done
-          if (!!this.state.fetchResult.alertTable.fetchComplete && !!this.state.fetchResult.mainTable.fetchComplete) {
-            this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
+          if (!!this.state.fetchResult.alertTable.fetchComplete && !!this.state.fetchResult.alertTable.fetchComplete) {
+            this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteInAlertTableEvent());
           }
         })
       ).subscribe();

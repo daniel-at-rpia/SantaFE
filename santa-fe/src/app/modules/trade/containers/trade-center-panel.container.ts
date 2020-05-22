@@ -58,13 +58,12 @@
       selectLiveUpdateProcessingRawDataToMainTable
     } from 'Trade/selectors/trade.selectors';
     import {
-      TradeLiveUpdatePassRawDataEvent,
-      TradeLiveUpdateProcessDataCompleteEvent,
+      TradeLiveUpdatePassRawDataToMainTableEvent,
+      TradeLiveUpdateProcessDataCompleteInMainTableEvent,
       TradeSelectedSecurityForAnalysisEvent,
       TradeSecurityTableRowDTOListForAnalysisEvent,
       TradeSelectedSecurityForAlertConfigEvent,
       TradeTogglePresetEvent,
-      TradeSwitchDriverEvent,
       TradeSetFocusMode,
       TradeAlertTableReceiveNewAlertsEvent
     } from 'Trade/actions/trade.actions';
@@ -621,7 +620,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       first(),
       tap((serverReturn) => {
         if (!isInitialFetch) {
-          !this.state.displayAlertTable && this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
+          !this.state.displayAlertTable && this.store$.dispatch(new TradeLiveUpdatePassRawDataToMainTableEvent());
         } else {
           this.updateStage(0, this.state.fetchResult.mainTable, this.state.table.dto);
         }
@@ -629,8 +628,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       }),
       catchError(err => {
         this.restfulCommService.logError(`Get portfolios failed`);
-        this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
-        this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
+        this.store$.dispatch(new TradeLiveUpdatePassRawDataToMainTableEvent());
+        this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteInMainTableEvent());
         this.updateStage(this.constants.securityTableFinalStage, this.state.fetchResult.mainTable, this.state.table.dto);
         console.error('error', err);
         this.state.fetchResult.fetchTableDataFailed = true;
@@ -679,7 +678,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       first(),
       tap((serverReturn) => {
         if (!isInitialFetch) {
-          this.state.displayAlertTable && this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
+          this.state.displayAlertTable && this.store$.dispatch(new TradeLiveUpdatePassRawDataToMainTableEvent());
         } else {
           this.updateStage(0, this.state.fetchResult.alertTable, this.state.table.alertDto);
         }
@@ -687,8 +686,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       }),
       catchError(err => {
         this.restfulCommService.logError(`Get alert table failed`);
-        this.store$.dispatch(new TradeLiveUpdatePassRawDataEvent());
-        this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
+        this.store$.dispatch(new TradeLiveUpdatePassRawDataToMainTableEvent());
+        this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteInMainTableEvent());
         console.error('error', err);
         this.state.fetchResult.fetchTableDataFailed = true;
         this.state.fetchResult.fetchTableDataFailedError = err.message;
@@ -740,7 +739,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
           }
           // only dispatch the action when both tables are done
           if (!!this.state.fetchResult.alertTable.fetchComplete && !!this.state.fetchResult.mainTable.fetchComplete) {
-            this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteEvent());
+            this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteInMainTableEvent());
           }
         })
       ).subscribe();
