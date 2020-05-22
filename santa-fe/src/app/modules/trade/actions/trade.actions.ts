@@ -10,8 +10,8 @@ export enum TradeActions {
   LiveUpdateInProgressEvent = '[Trade] Live Update Processing',
   LiveUpdatePassRawDataToMainTableEvent = '[Trade] Live Update Pass Raw Data to Main Table',
   LiveUpdateProcessingDataCompleteInMainTableEvent = '[Trade] Live Update Processing Data Complete in Main Table',
-  LiveUpdatePassRawDataToAlertTableEvent = '[Trade] Live Update Pass Raw Data to Main Table',
-  LiveUpdateProcessingDataCompleteInMainTableEvent = '[Trade] Live Update Processing Data Complete in Main Table',
+  LiveUpdatePassRawDataToAlertTableEvent = '[Trade] Live Update Pass Raw Data to Alert Table',
+  LiveUpdateProcessingDataCompleteInAlertTableEvent = '[Trade] Live Update Processing Data Complete in Alert Table',
   LiveUpdateUtilityInternalCountEvent = '[Trade] Live Update Utility Internal Count',
   LiveUpdateCount = '[Trade] Live Update Count',
   TogglePresetEvent = '[Trade] Toggle Preset Event',
@@ -30,11 +30,6 @@ export class TradeLiveUpdateStartEvent implements Action {
   constructor(){}
 }
 
-export class TradeLiveUpdatePassRawDataEventToMainTable implements Action {
-  readonly type = TradeActions.LiveUpdatePassRawDataToMainTableEvent;
-  constructor(){}
-}
-
 export class TradeLiveUpdateUtilityInternalCountEventInMainTable implements Action {
   readonly type = TradeActions.LiveUpdateUtilityInternalCountEvent;
   constructor(){}
@@ -45,8 +40,23 @@ export class TradeLiveUpdateCount implements Action {
   constructor(){}
 }
 
+export class TradeLiveUpdatePassRawDataToMainTableEvent implements Action {
+  readonly type = TradeActions.LiveUpdatePassRawDataToMainTableEvent;
+  constructor(){}
+}
+
 export class TradeLiveUpdateProcessDataCompleteInMainTableEvent implements Action {
   readonly type = TradeActions.LiveUpdateProcessingDataCompleteInMainTableEvent;
+  constructor(){}
+}
+
+export class TradeLiveUpdatePassRawDataToAlertTableEvent implements Action {
+  readonly type = TradeActions.LiveUpdatePassRawDataToAlertTableEvent;
+  constructor(){}
+}
+
+export class TradeLiveUpdateProcessDataCompleteInAlertTableEvent implements Action {
+  readonly type = TradeActions.LiveUpdateProcessingDataCompleteInAlertTableEvent;
   constructor(){}
 }
 

@@ -104,35 +104,64 @@ export function tradeReducer(
           liveUpdateInProgress: true
         }
       };
-    case TradeActions.LiveUpdatePassRawDataEvent:
+    case TradeActions.LiveUpdatePassRawDataToMainTableEvent:
       return {
         ...state,
         tradeMainTable: {
           ...state.tradeMainTable,
-          liveUpdateInProgress: false,
-          liveUpdateProcessingRawData: true
-        },
-        tradeAlertTable: {
-          ...state.tradeAlertTable,
-          liveUpdateInProgress: false,
           liveUpdateProcessingRawData: true
         }
       };
-    case TradeActions.LiveUpdateProcessingDataCompleteEvent:
-      if (state.initialDataLoaded) {
+    case TradeActions.LiveUpdatePassRawDataToAlertTableEvent:
+      return {
+        ...state,
+        tradeAlertTable: {
+          ...state.tradeAlertTable,
+          liveUpdateProcessingRawData: true
+        }
+      };
+    case TradeActions.LiveUpdateProcessingDataCompleteInMainTableEvent:
+      if (state.tradeMainTable.initialDataLoaded) {
         return {
           ...state,
-          liveUpdateInProgress: false,
-          liveUpdateProcessingRawData: false
+          tradeMainTable: {
+            ...state.tradeMainTable,
+            liveUpdateInProgress: false,
+            liveUpdateProcessingRawData: false
+          }
         };
       } else {
         return {
           ...state,
-          liveUpdateInProgress: false,
-          liveUpdateProcessingRawData: false,
-          initialDataLoaded: true
+          tradeMainTable: {
+            ...state.tradeMainTable,
+            liveUpdateInProgress: false,
+            liveUpdateProcessingRawData: false,
+            initialDataLoaded: true
+          }
         }
-      }
+      };
+    case TradeActions.LiveUpdateProcessingDataCompleteInAlertTableEvent:
+      if (state.tradeAlertTable.initialDataLoaded) {
+        return {
+          ...state,
+          tradeAlertTable: {
+            ...state.tradeAlertTable,
+            liveUpdateInProgress: false,
+            liveUpdateProcessingRawData: false
+          }
+        };
+      } else {
+        return {
+          ...state,
+          tradeAlertTable: {
+            ...state.tradeAlertTable,
+            liveUpdateInProgress: false,
+            liveUpdateProcessingRawData: false,
+            initialDataLoaded: true
+          }
+        }
+      };
     case TradeActions.SelectSecurityForAnalysisEvent:
       return {
         ...state,

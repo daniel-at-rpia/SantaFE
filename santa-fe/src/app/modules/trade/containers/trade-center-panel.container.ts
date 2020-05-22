@@ -51,11 +51,11 @@
     } from 'Core/constants/tradeConstants.constant';
     import {
       selectLiveUpdateTick,
-      selectInitialDataLoaded,
+      selectInitialDataLoadedInMainTable,
       selectSecurityIDsFromAnalysis,
       selectBestQuoteValidWindow,
       selectNewAlertsForAlertTable,
-      selectLiveUpdateProcessingRawData
+      selectLiveUpdateProcessingRawDataToMainTable
     } from 'Trade/selectors/trade.selectors';
     import {
       TradeLiveUpdatePassRawDataEvent,
@@ -193,7 +193,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.startNewUpdateSub = this.store$.pipe(
       select(selectLiveUpdateTick),
       withLatestFrom(
-        this.store$.pipe(select(selectInitialDataLoaded))
+        this.store$.pipe(select(selectInitialDataLoadedInMainTable))
       )
     ).subscribe(([tick, isInitialDataLoaded]) => {
       if (tick > 0 && isInitialDataLoaded) {  // skip first beat
@@ -726,9 +726,9 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     targetTableBlock.currentContentStage = stageNumber;
     if (targetTableBlock.currentContentStage === this.constants.securityTableFinalStage) {
       this.store$.pipe(
-        select(selectInitialDataLoaded),
+        select(selectInitialDataLoadedInMainTable),
         withLatestFrom(
-          this.store$.pipe(select(selectLiveUpdateProcessingRawData))
+          this.store$.pipe(select(selectLiveUpdateProcessingRawDataToMainTable))
         ),
         first(),
         tap(([isInitialDataLoaded, processingRawData]) => {

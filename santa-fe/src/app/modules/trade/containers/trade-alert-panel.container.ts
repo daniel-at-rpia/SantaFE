@@ -989,9 +989,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     targetTableBlock.currentContentStage = stageNumber;
     if (targetTableBlock.currentContentStage === this.constants.securityTableFinalStage) {
       this.store$.pipe(
-        select(selectInitialDataLoaded),
+        select(selectInitialDataLoadedInMainTable),
         withLatestFrom(
-          this.store$.pipe(select(selectLiveUpdateProcessingRawData))
+          this.store$.pipe(select(selectLiveUpdateProcessingRawDataToMainTable))
         ),
         first(),
         tap(([isInitialDataLoaded, processingRawData]) => {

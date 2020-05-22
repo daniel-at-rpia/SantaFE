@@ -16,8 +16,8 @@ import {
 } from 'Trade/actions/trade.actions';
 import {
   selectLiveUpdateInProgress,
-  selectLiveUpdateProcessingRawData,
-  selectInitialDataLoaded
+  selectLiveUpdateProcessingRawDataToMainTable,
+  selectInitialDataLoadedInMainTable
 } from 'Trade/selectors/trade.selectors';
 
 @Injectable()
@@ -35,8 +35,8 @@ export class TradeEffect {
     ),
     withLatestFrom(
       this.store$.pipe(select(selectLiveUpdateInProgress)),
-      this.store$.pipe(select(selectLiveUpdateProcessingRawData)),
-      this.store$.pipe(select(selectInitialDataLoaded))
+      this.store$.pipe(select(selectLiveUpdateProcessingRawDataToMainTable)),
+      this.store$.pipe(select(selectInitialDataLoadedInMainTable))
     ),
     filter(([tick, isInProgress, isProcessingRawData, isInitialDataLoaded]) => {
       return !isInProgress && !isProcessingRawData && isInitialDataLoaded;

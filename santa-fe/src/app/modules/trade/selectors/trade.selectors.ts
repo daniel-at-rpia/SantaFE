@@ -18,24 +18,36 @@ export const selectLiveUpdateCount = createSelector(
   (state: TradeState) => state.liveUpdateSecondCount
 );
 
-export const selectLiveUpdateInProgress = createSelector(
-  getTradeState,
-  (state: TradeState) => state.liveUpdateInProgress
-);
-
-export const selectLiveUpdateProcessingRawData = createSelector(
-  getTradeState,
-  (state: TradeState) => state.liveUpdateProcessingRawData
-);
-
 export const selectPresetSelected = createSelector(
   getTradeState,
   (state: TradeState) => state.presetSelected
 );
 
-export const selectInitialDataLoaded = createSelector(
+export const selectLiveUpdateInProgress = createSelector(
   getTradeState,
-  (state: TradeState) => state.initialDataLoaded
+  // Right now there are two places access the InProg flag:
+  // 1. in trade.effects.ts, convert an internal count to an external count
+  (state: TradeState) => state.tradeMainTable.liveUpdateInProgress
+);
+
+export const selectInitialDataLoadedInAlertTable = createSelector(
+  getTradeState,
+  (state: TradeState) => state.tradeAlertTable.initialDataLoaded
+);
+
+export const selectLiveUpdateProcessingRawDataInAlertTable = createSelector(
+  getTradeState,
+  (state: TradeState) => state.tradeAlertTable.liveUpdateProcessingRawData
+);
+
+export const selectInitialDataLoadedInMainTable = createSelector(
+  getTradeState,
+  (state: TradeState) => state.tradeMainTable.initialDataLoaded
+);
+
+export const selectLiveUpdateProcessingRawDataToMainTable = createSelector(
+  getTradeState,
+  (state: TradeState) => state.tradeMainTable.liveUpdateProcessingRawData
 );
 
 export const selectSelectedSecurityForAnalysis = createSelector(

@@ -32,10 +32,10 @@
     import {
       selectLiveUpdateTick,
       selectLiveUpdateInProgress,
-      selectLiveUpdateProcessingRawData,
+      selectLiveUpdateProcessingRawDataToMainTable,
       selectLiveUpdateCount,
       selectPresetSelected,
-      selectInitialDataLoaded
+      selectInitialDataLoadedInMainTable
     } from 'Trade/selectors/trade.selectors';
     import {
       LIVE_UPDATE_COUNTDOWN,
@@ -106,23 +106,20 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
       }
     });
 
-    // triggering new update needs to be guarded with highest degree of async protection, so use selectors for fetching all flags here
     this.subscriptions.externalCountSub = this.store$.pipe(
       select(selectLiveUpdateCount),
       withLatestFrom(
         this.store$.pipe(select(selectPresetSelected)),
-        this.store$.pipe(select(selectLiveUpdateInProgress)),
-        this.store$.pipe(select(selectLiveUpdateProcessingRawData)),
-        this.store$.pipe(select(selectInitialDataLoaded))
+        this.store$.pipe(select(selectInitialDataLoadedInMainTable))
       )
-    ).subscribe(([count, isPresetSelected, isUpdateInProgress, isProcessingRawData, isInitialDataLoaded]) => {
-      if (isPresetSelected && !isUpdateInProgress && !isProcessingRawData && isInitialDataLoaded && count >= this.constants.liveUpdateCountdown) {
+    ).subscribe(([count, isPresetSelected, isInitialDataLoaded]) => {
+      if (isPresetSelected && isInitialDataLoaded && count >= this.constants.liveUpdateCountdown) {
         this.startUpdate();
       }
     });
 
     this.subscriptions.processingRawDataSub = this.store$.pipe(
-      select(selectLiveUpdateProcessingRawData)
+      select(selectLiveUpdateProcessingRawDataToMainTable)
     ).subscribe(flag => {
       if (!!flag) {
         this.state.isCallingAPI = false;
@@ -142,7 +139,7 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
     });
 
     this.subscriptions.initialDataLoadedSub = this.store$.pipe(
-      select(selectInitialDataLoaded)
+      select(selectInitialDataLoadedInMainTable)
     ).subscribe(flag => {
       this.state.isInitialDataLoaded = flag;
       this.state.isPaused = !this.state.isPresetSelected || !this.state.isInitialDataLoaded;
