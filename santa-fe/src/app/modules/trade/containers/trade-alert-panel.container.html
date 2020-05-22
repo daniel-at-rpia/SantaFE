@@ -1,7 +1,7 @@
 <article
   [ngClass]="{
     'sat-tradeAlertPanel': true,
-    'sat-tradeAlertPanel--displayAlertTableState': state.table.displayAlert,
+    'sat-tradeAlertPanel--displayAlertTableState': state.displayAlertTable,
     'sat-tradeAlertPanel--focusMode': state.isFocusMode,
     'sat-tradeAlertPanel--scopeAllAlertsState': state.table.displayAlert && !state.alert.scopedAlertType,
     'sat-tradeAlertPanel--scopeAxeAlertsState': state.table.displayAlert && state.alert.scopedAlertType === constants.alertTypes.axeAlert,
@@ -47,7 +47,7 @@
     <div class="sat-tradeAlertPanel__main-table">
       <santa-table
         [tableName]="'tradeAlert'"
-        [activated]="!!state.table.displayAlert"
+        [activated]="!!state.displayAlertTable"
         [ownerInitial]="ownerInitial"
         [activePortfolios]="state.filters.quickFilters.portfolios"
         [tableData]="state.table.alertDto"

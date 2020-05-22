@@ -63,12 +63,14 @@
     import { FullOwnerList, FilterOptionsPortfolioResearchList } from 'Core/constants/securityDefinitionConstants.constant';
     import { CoreFlushSecurityMap, CoreSendNewAlerts } from 'Core/actions/core.actions';
     import {
+      TradeAlertTableReceiveNewAlertsEvent,
       TradeSelectedSecurityForAnalysisEvent,
       TradeAlertTableSendNewAlertsEvent,
       TradeLiveUpdatePassRawDataToAlertTableEvent,
       TradeLiveUpdateProcessDataCompleteInAlertTableEvent
     } from 'Trade/actions/trade.actions';
     import {
+      selectNewAlertsForAlertTable,
       selectLiveUpdateTick,
       selectInitialDataLoadedInAlertTable,
       selectLiveUpdateProcessingRawDataInAlertTable,
@@ -214,7 +216,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       alert: {
         alertTableAlertList: [],
         initialAlertListReceived: false,
-        delayedLoadingFreshDataForAlert: false,
         axeAlertCount: 0,
         unreadAxeAlertCount: 0,
         markAlertCount: 0,
@@ -319,7 +320,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         if (this.state.fetchResult.fetchTableDataFailed) {
           window.location.reload(true);
         } else {
-          this.fetchAllData(false);
+          this.fetchUpdate([]);
         }
       }
     });
@@ -914,7 +915,14 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             }
           });
           updateList.length > 0 && this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
-          this.store$.dispatch(new TradeAlertTableSendNewAlertsEvent(this.utilityService.deepCopy(securityList)));
+          this.state.alert.alertTableAlertList = this.utilityService.deepCopy(securityList);
+          if (securityList.length > 0) {
+            if (this.state.alert.initialAlertListReceived) {
+              this.fetchUpdate(securityList);
+            } else {
+              this.loadFreshData(securityList);
+            }
+          }
         }
         this.state.alertUpdateInProgress = false;
       }),
@@ -1021,10 +1029,13 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     this.utilityService.calculateQuantComparerWidthAndHeightPerSet(bestPriceList);
   }
 
-  private loadFreshData() {
-    this.loadInitialStencilTable();
+  private loadFreshData(newAlertList: Array<AlertDTO>) {
+    newAlertList.forEach((eachAlert) => {
+      this.state.alert.alertTableAlertList.push(eachAlert);
+    });
+    // this.loadInitialStencilTable();
     this.updateStage(0, this.state.fetchResult.alertTable, this.state.table.alertDto);
-    this.fetchAllData(true);
+    this.fetchDataForAlertTable(true);
   }
 
   private loadInitialStencilTable() {
@@ -1054,8 +1065,15 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     this.state.fetchResult.alertTable.rowList = this.utilityService.deepCopy(this.state.fetchResult.alertTable.prinstineRowList);
   }
 
-  private fetchAllData(isInitialFetch: boolean) {
-    this.fetchDataForAlertTable(isInitialFetch);
+  private fetchUpdate(newAlertList: Array<AlertDTO>) {
+    if (newAlertList.length > 0) {
+      newAlertList.forEach((eachAlert) => {
+        this.state.alert.alertTableAlertList.push(eachAlert);
+      });
+    }
+    if (this.state.displayAlertTable && this.state.fetchResult.alertTable.fetchComplete) {
+      this.fetchDataForAlertTable(false);
+    }
   }
 
   private fetchDataForAlertTable(isInitialFetch: boolean) {
@@ -1112,6 +1130,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     this.calculateQuantComparerWidthAndHeight();
     this.updateStage(this.constants.securityTableFinalStage, this.state.fetchResult.alertTable, this.state.table.alertDto);
     this.state.fetchResult.alertTable.fetchComplete = true;
+    if (!this.state.alert.initialAlertListReceived) {
+      this.state.alert.initialAlertListReceived = true;
+    }
     // this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
   }
 

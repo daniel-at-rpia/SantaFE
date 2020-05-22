@@ -237,7 +237,6 @@ export interface TradeAlertPanelState {
   alert: {
     alertTableAlertList: Array<DTOs.AlertDTO>;
     initialAlertListReceived: boolean;
-    delayedLoadingFreshDataForAlert: boolean;
     axeAlertCount: number;
     unreadAxeAlertCount: number;
     markAlertCount: number;
