@@ -186,23 +186,6 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 5.5rem;
         @include mix_calculate(height, 100%, $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size, '-');
         display: flex;
       }
-      &-alertConfigPrompt {
-        @include mix_calculate(height, 100%, $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size, '-');
-        display: none;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        &-icon {
-          font-size: $font_size_hero_large;
-          color: $font_color_trivial;
-        }
-        &-text {
-          margin: $spacing_large $spacing_small;
-          font-size: $font_size_normal;
-          color: $font_color_minor;
-          text-align: center;
-        }
-      }
     }
   }
   &__result {
@@ -230,30 +213,6 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 5.5rem;
         santa-input {
           flex: 1 1 auto;
           margin: $spacing_x_small $spacing_x_small $spacing_x_small 0;
-        }
-      }
-      &-tableSwitch {
-        flex: 0 1 auto;
-        margin-right: $spacing_medium;
-        &-btnGroup {
-          &-mainBtn {
-            @include material('none');
-            @extend .santaBtn--inverseLabelled;
-            background-color: $color_active;
-          }
-          &-alertBtn {
-            @include material();
-            background-color: $color_white;
-            color: $font_color_major;
-            &-newAlertsCount {
-              @include mix_border_radius(3px);
-              margin-left: $spacing_small;
-              padding: $spacing_xx_small;
-              font-size: $font_size_x_small;
-              color: $font_color_inverse;
-              background-color: $color_highlight;
-            }
-          }
         }
       }
       &-driver {
@@ -316,17 +275,6 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 5.5rem;
         overflow: hidden;
       }
     }
-    &-alertTable {
-      flex: 1 1 auto;
-      display: none;
-      flex-direction: column;
-      overflow: hidden;
-      santa-table {
-        flex: 1 1 auto;
-        display: flex;
-        overflow: hidden;
-      }
-    }
   }
   &--keywordSearchActiveState {
     #{$tradeCenterPanelBlockName} {
@@ -344,42 +292,6 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 5.5rem;
     #{$tradeCenterPanelBlockName} {
       &__presetsAndFilters {
         @include mix_fixed_div(relative, $z_index_tooltip);
-      }
-    }
-  }
-  &--displayAlertTableState {
-    #{$tradeCenterPanelBlockName} {
-      &__presetsAndFilters {
-        &-configurator {
-          security-definition-configurator {
-            display: none;
-          }
-          &-alertConfigPrompt {
-            display: flex;
-          }
-        }
-      }
-      &__result {
-        &-utilities-tableSwitch-btnGroup {
-          &-mainBtn {
-            @include material();
-            background-color: $color_white;
-            &>i, &>span {
-              color: $font_color_major;
-            }
-          }
-          &-alertBtn {
-            @include material('none');
-            @extend .santaBtn--inverseLabelled;
-            background-color: $color_active;
-          }
-        }
-        &-table {
-          display: none;
-        }
-        &-alertTable {
-          display: flex;
-        }
       }
     }
   }

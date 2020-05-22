@@ -100,10 +100,6 @@
         (buryConfigurator)="buryConfigurator()"
         (boostConfigurator)="boostConfigurator()"
       ></security-definition-configurator>
-      <div class="sat-tradeCenterPanel__presetsAndFilters-configurator-alertConfigPrompt">
-        <i class="sat-tradeCenterPanel__presetsAndFilters-configurator-alertConfigPrompt-icon fas fa-times-hexagon"></i>
-        <span class="sat-tradeCenterPanel__presetsAndFilters-configurator-alertConfigPrompt-text">Filter is Disabled for Alert Table</span>
-      </div>
     </div>
   </section>
   <section class="sat-tradeCenterPanel__result">
@@ -129,21 +125,6 @@
           <span>Focused Mode</span>
         </button>
       </div>
-      <!--
-      <div class="sat-tradeCenterPanel__result-utilities-tableSwitch">
-        <div class="santaBtnGroup sat-tradeCenterPanel__result-utilities-tableSwitch-btnGroup">
-          <button (click)="onSwitchTable()" class="sat-tradeCenterPanel__result-utilities-tableSwitch-btnGroup-mainBtn santaBtn--labelled">
-            <i class="fal fa-search"></i>
-            <span>From Preset</span>
-          </button>
-          <button (click)="onSwitchTable()" class="sat-tradeCenterPanel__result-utilities-tableSwitch-btnGroup-alertBtn santaBtn--labelled">
-            <i class="fal fa-bell"></i>
-            <span>From Alerts</span>
-            <div *ngIf="state.alert.newAlertsCount > 0" class="sat-tradeCenterPanel__result-utilities-tableSwitch-btnGroup-alertBtn-newAlertsCount">{{state.alert.newAlertsCount}} new alerts</div>
-          </button>
-        </div>
-      </div>
-      -->
       <div class="sat-tradeCenterPanel__result-utilities-driver">
         <span class="sat-tradeCenterPanel__result-utilities-driver-label">Driver :</span>
         <div class="santaBtnGroup">
@@ -199,7 +180,7 @@
     <div class="sat-tradeCenterPanel__result-table">
       <santa-table
         [tableName]="'tradeMain'"
-        [activated]="!state.displayAlertTable"
+        [activated]="true"
         [ownerInitial]="ownerInitial"
         [activePortfolios]="state.filters.quickFilters.portfolios"
         [tableData]="state.table.dto"
@@ -207,21 +188,6 @@
         [receivedContentStage]="state.fetchResult.mainTable.currentContentStage"
         [receivedSecurityTableMetricsUpdate]="state.table.metrics"
         [liveUpdatedRows]="state.fetchResult.mainTable.liveUpdatedRowList"
-        [activeTriCoreDriver]="state.filters.quickFilters.driverType"
-        (selectedSecurityForAnalysis)="onSelectSecurityForAnalysis($event)"
-      ></santa-table>
-    </div>
-    <div class="sat-tradeCenterPanel__result-alertTable">
-      <santa-table
-        [tableName]="'tradeAlert'"
-        [activated]="!!state.displayAlertTable"
-        [ownerInitial]="ownerInitial"
-        [activePortfolios]="state.filters.quickFilters.portfolios"
-        [tableData]="state.table.alertDto"
-        [newRows]="state.fetchResult.alertTable.rowList"
-        [receivedContentStage]="state.fetchResult.alertTable.currentContentStage"
-        [receivedSecurityTableMetricsUpdate]="state.table.alertMetrics"
-        [liveUpdatedRows]="state.fetchResult.alertTable.liveUpdatedRowList"
         [activeTriCoreDriver]="state.filters.quickFilters.driverType"
         (selectedSecurityForAnalysis)="onSelectSecurityForAnalysis($event)"
       ></santa-table>

@@ -82,7 +82,6 @@ export interface TradeState {
 export interface TradeCenterPanelState {
   bestQuoteValidWindow: number;
   isFocusMode: boolean;
-  displayAlertTable: boolean;
   presets : {
     presetsReady: boolean;
     selectedPreset: DTOs.SearchShortcutDTO;
@@ -100,16 +99,11 @@ export interface TradeCenterPanelState {
   table: {
     metrics: Array<SecurityTableMetricStub>;
     dto: DTOs.SecurityTableDTO;
-    alertMetrics: Array<SecurityTableMetricStub>;
-    alertDto: DTOs.SecurityTableDTO;
-    displayMain: boolean;
-    displayAlert: boolean;
   }
   fetchResult: {
     fetchTableDataFailed: boolean;
     fetchTableDataFailedError: string;
     mainTable: TableFetchResultBlock;
-    alertTable: TableFetchResultBlock;
   }
   filters: {
     quickFilters: {
@@ -120,18 +114,6 @@ export interface TradeCenterPanelState {
       strategy: Array<string>;
     }
     securityFilters: Array<DefinitionConfiguratorEmitterParamsItem>
-  }
-  alert: {
-    alertTableAlertList: Array<DTOs.AlertDTO>;
-    initialAlertListReceived: boolean;
-    delayedLoadingFreshDataForAlert: boolean;
-    axeAlertCount: number;
-    unreadAxeAlertCount: number;
-    markAlertCount: number;
-    unreadMarkAlertCount: number;
-    tradeAlertCount: number;
-    unreadTradeAlertCount: number;
-    scopedAlertType: AlertTypes;
   }
 }
 

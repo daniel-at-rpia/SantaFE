@@ -22,6 +22,8 @@
     import { TradeAlertPanelState } from 'FEModels/frontend-page-states.interface';
     import { SecurityMapEntry, ClickedOpenSecurityInBloombergEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
     import {
+      SecurityTableHeaderDTO,
+      AlertCountSummaryDTO,
       SecurityTableDTO,
       SecurityDTO,
       AlertDTO,
@@ -48,7 +50,7 @@
     //   AlertSubTypes
     // } from 'Core/constants/coreConstants.constant';
     import {
-    //   selectAlertCounts,
+      selectAlertCounts,
       selectSecurityMapContent,
       selectSecurityMapValidStatus
     } from 'Core/selectors/core.selectors';
@@ -67,6 +69,7 @@
       TradeLiveUpdateProcessDataCompleteInAlertTableEvent
     } from 'Trade/actions/trade.actions';
     import {
+      selectLiveUpdateTick,
       selectInitialDataLoadedInAlertTable,
       selectLiveUpdateProcessingRawDataInAlertTable,
       selectSelectedSecurityForAlertConfig,
@@ -102,7 +105,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     securityMapSub: null,
     autoUpdateCountSub: null,
     // selectedSecurityForAlertConfigSub: null,
-    centerPanelPresetSelectedSub: null
+    centerPanelPresetSelectedSub: null,
+    alertCountSub: null,
+    startNewUpdateSub: null
   }
   autoUpdateCount$: Observable<any>;
   alertCounts$: Observable<any>;
@@ -269,6 +274,54 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       select(selectPresetSelected)
     ).subscribe(flag => {
       this.state.isCenterPanelPresetSelected = flag;
+    });
+
+    this.subscriptions.alertCountSub = this.store$.pipe(
+      select(selectAlertCounts)
+    ).subscribe((allCountsMap: Array<AlertCountSummaryDTO>) => {
+      allCountsMap.forEach((eachCount) => {
+        switch (eachCount.data.alertType) {
+          case this.constants.alertTypes.axeAlert:
+            if (this.state.alert.scopedAlertType !== this.constants.alertTypes.axeAlert || !this.state.displayAlertTable) {
+              const newAxeAlertCount = eachCount.data.count - this.state.alert.axeAlertCount;
+              this.state.alert.unreadAxeAlertCount = this.state.alert.unreadAxeAlertCount + newAxeAlertCount;
+            }
+            this.state.alert.axeAlertCount = eachCount.data.count;
+            break;
+          case this.constants.alertTypes.markAlert:
+            if (this.state.alert.scopedAlertType !== this.constants.alertTypes.markAlert || !this.state.displayAlertTable) {
+              const newMarkAlertCount = eachCount.data.count - this.state.alert.markAlertCount;
+              this.state.alert.unreadMarkAlertCount = this.state.alert.unreadMarkAlertCount + newMarkAlertCount;
+            }
+            this.state.alert.markAlertCount = eachCount.data.count;
+            break;
+          case this.constants.alertTypes.tradeAlert:
+            if (this.state.alert.scopedAlertType !== this.constants.alertTypes.tradeAlert || !this.state.displayAlertTable) {
+              const newTradeAlertCount = eachCount.data.count - this.state.alert.tradeAlertCount;
+              this.state.alert.unreadTradeAlertCount = this.state.alert.unreadTradeAlertCount + newTradeAlertCount;
+            }
+            this.state.alert.tradeAlertCount = eachCount.data.count;
+            break;
+          default:
+            // code...
+            break;
+        }
+      });
+    });
+
+    this.subscriptions.startNewUpdateSub = this.store$.pipe(
+      select(selectLiveUpdateTick),
+      withLatestFrom(
+        this.store$.pipe(select(selectInitialDataLoadedInAlertTable))
+      )
+    ).subscribe(([tick, isInitialDataLoaded]) => {
+      if (tick > 0 && isInitialDataLoaded) {  // skip first beat
+        if (this.state.fetchResult.fetchTableDataFailed) {
+          window.location.reload(true);
+        } else {
+          this.fetchAllData(false);
+        }
+      }
     });
   }
 
@@ -927,6 +980,84 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  private filterPrinstineRowList(
+    targetPrinstineList: Array<SecurityTableRowDTO>
+  ): Array<SecurityTableRowDTO> {
+    const filteredList: Array<SecurityTableRowDTO> = [];
+    targetPrinstineList.forEach((eachRow) => {
+      try {
+        if (this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.name, this.state.filters.quickFilters.keyword)
+        || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.obligorName, this.state.filters.quickFilters.keyword)) {
+          filteredList.push(eachRow);
+        }
+      } catch(err) {
+        console.error('filter issue', err ? err.message : '', eachRow);
+      }
+    });
+    return filteredList;
+  }
+
+  private calculateQuantComparerWidthAndHeight() {
+    const bestSpreadList = [];
+    const bestPriceList = [];
+    const bestYieldList = [];
+    const combinedRowList = this.state.fetchResult.alertTable.prinstineRowList;
+    combinedRowList.forEach((eachRow) => {
+      const bestSpreadQuote = eachRow.data.bestQuotes.combined.bestSpreadQuote;
+      const bestPriceQuote = eachRow.data.bestQuotes.combined.bestPriceQuote;
+      const bestYieldQuote = eachRow.data.bestQuotes.combined.bestYieldQuote;
+      const bestAxeSpreadQuote = eachRow.data.bestQuotes.axe.bestSpreadQuote;
+      const bestAxePriceQuote = eachRow.data.bestQuotes.axe.bestPriceQuote;
+      const bestAxeYieldQuote = eachRow.data.bestQuotes.axe.bestYieldQuote;
+      !!bestSpreadQuote && bestSpreadList.push(bestSpreadQuote);
+      !!bestAxeSpreadQuote && bestSpreadList.push(bestAxeSpreadQuote);
+      !!bestPriceQuote && bestPriceList.push(bestPriceQuote);
+      !!bestAxePriceQuote && bestPriceList.push(bestAxePriceQuote);
+      !!bestYieldQuote && bestYieldList.push(bestYieldQuote);
+      !!bestYieldQuote && bestYieldList.push(bestAxeYieldQuote);
+    });
+    this.utilityService.calculateQuantComparerWidthAndHeightPerSet(bestSpreadList);
+    this.utilityService.calculateQuantComparerWidthAndHeightPerSet(bestYieldList);
+    this.utilityService.calculateQuantComparerWidthAndHeightPerSet(bestPriceList);
+  }
+
+  private loadFreshData() {
+    this.loadInitialStencilTable();
+    this.updateStage(0, this.state.fetchResult.alertTable, this.state.table.alertDto);
+    this.fetchAllData(true);
+  }
+
+  private loadInitialStencilTable() {
+    const stencilAlertTableHeaderBuffer: Array<SecurityTableHeaderDTO> = [];
+    this.state.table.alertMetrics.forEach((eachStub) => {
+      const targetSpecifics = eachStub.tableSpecifics.tradeAlert || eachStub.tableSpecifics.default;
+      if (eachStub.isForSecurityCard || targetSpecifics.active) {
+        stencilAlertTableHeaderBuffer.push(this.dtoService.formSecurityTableHeaderObject(eachStub, 'tradeAlert', []));
+      }
+    });
+    for (let i = 0; i < 10; ++i) {
+      const stencilSecurity = this.dtoService.formSecurityCardObject(null, null, true);
+      stencilSecurity.state.isInteractionDisabled = true;
+      const newAlertTableRow = this.dtoService.formSecurityTableRowObject(stencilSecurity);
+      stencilAlertTableHeaderBuffer.forEach((eachHeader) => {
+        if (!eachHeader.state.isSecurityCardVariant) {
+          if (eachHeader.state.isQuantVariant) {
+            const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, this.state.filters.quickFilters.driverType, null, null, false);
+            newAlertTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, true, bestQuoteStencil, null));
+          } else {
+            newAlertTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, false, null, null));
+          }
+        }
+      });
+      this.state.fetchResult.alertTable.prinstineRowList.push(this.utilityService.deepCopy(newAlertTableRow));
+    };
+    this.state.fetchResult.alertTable.rowList = this.utilityService.deepCopy(this.state.fetchResult.alertTable.prinstineRowList);
+  }
+
+  private fetchAllData(isInitialFetch: boolean) {
+    this.fetchDataForAlertTable(isInitialFetch);
+  }
+
   private fetchDataForAlertTable(isInitialFetch: boolean) {
     const securityList = [];
     this.state.alert.alertTableAlertList.forEach((eachAlert) => {
@@ -1012,47 +1143,5 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       ).subscribe();
     }
   }
-
-  private filterPrinstineRowList(
-    targetPrinstineList: Array<SecurityTableRowDTO>
-  ): Array<SecurityTableRowDTO> {
-    const filteredList: Array<SecurityTableRowDTO> = [];
-    targetPrinstineList.forEach((eachRow) => {
-      try {
-        if (this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.name, this.state.filters.quickFilters.keyword)
-        || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.obligorName, this.state.filters.quickFilters.keyword)) {
-          filteredList.push(eachRow);
-        }
-      } catch(err) {
-        console.error('filter issue', err ? err.message : '', eachRow);
-      }
-    });
-    return filteredList;
-  }
-
-  private calculateQuantComparerWidthAndHeight() {
-    const bestSpreadList = [];
-    const bestPriceList = [];
-    const bestYieldList = [];
-    const combinedRowList = this.state.fetchResult.alertTable.prinstineRowList;
-    combinedRowList.forEach((eachRow) => {
-      const bestSpreadQuote = eachRow.data.bestQuotes.combined.bestSpreadQuote;
-      const bestPriceQuote = eachRow.data.bestQuotes.combined.bestPriceQuote;
-      const bestYieldQuote = eachRow.data.bestQuotes.combined.bestYieldQuote;
-      const bestAxeSpreadQuote = eachRow.data.bestQuotes.axe.bestSpreadQuote;
-      const bestAxePriceQuote = eachRow.data.bestQuotes.axe.bestPriceQuote;
-      const bestAxeYieldQuote = eachRow.data.bestQuotes.axe.bestYieldQuote;
-      !!bestSpreadQuote && bestSpreadList.push(bestSpreadQuote);
-      !!bestAxeSpreadQuote && bestSpreadList.push(bestAxeSpreadQuote);
-      !!bestPriceQuote && bestPriceList.push(bestPriceQuote);
-      !!bestAxePriceQuote && bestPriceList.push(bestAxePriceQuote);
-      !!bestYieldQuote && bestYieldList.push(bestYieldQuote);
-      !!bestYieldQuote && bestYieldList.push(bestAxeYieldQuote);
-    });
-    this.utilityService.calculateQuantComparerWidthAndHeightPerSet(bestSpreadList);
-    this.utilityService.calculateQuantComparerWidthAndHeightPerSet(bestYieldList);
-    this.utilityService.calculateQuantComparerWidthAndHeightPerSet(bestPriceList);
-  }
-
 
 }
