@@ -87,6 +87,7 @@
       EngagementActionList,
       AlertTypes
     } from 'Core/constants/coreConstants.constant';
+    import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
   //
 
 @Component({
@@ -881,6 +882,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlerts, {req: 'POST'}, payload).pipe(
       first(),
       tap((serverReturn: Array<BEAlertDTO>) => {
+        if (!this.state.alert.initialAlertListReceived) {
+          serverReturn = AlertSample;
+        }
         if (!!serverReturn) {
           const filteredServerReturn = serverReturn.filter((eachRawAlert) => {
             // no filtering logic for now
@@ -915,7 +919,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             }
           });
           updateList.length > 0 && this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
-          this.state.alert.alertTableAlertList = this.utilityService.deepCopy(securityList);
+          // this.state.alert.alertTableAlertList = this.utilityService.deepCopy(securityList);
           if (securityList.length > 0) {
             if (this.state.alert.initialAlertListReceived) {
               this.fetchUpdate(securityList);
