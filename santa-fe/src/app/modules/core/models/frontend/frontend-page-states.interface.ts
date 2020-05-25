@@ -118,6 +118,7 @@ export interface TradeCenterPanelState {
 }
 
 export interface TradeUtilityPanelState {
+  tongueExpanded: boolean;
   prompt: string;
   updateCountdown: string;
   isPaused: boolean;

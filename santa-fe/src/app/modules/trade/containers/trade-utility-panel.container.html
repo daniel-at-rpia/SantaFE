@@ -1,5 +1,32 @@
 <article
+  (click)="onToggleTongueExpand()"
   [ngClass]="{
-    'sat-tradeUtilityPanel': true
+    'sat-tradeUtilityPanel': true,
+    'sat-tradeUtilityPanel--unactivated': state.isPaused,
+    'sat-tradeUtilityPanel--updateInProgress': state.isCallingAPI || state.isProcessingData,
+    'sat-tradeUtilityPanel--tongueExpanded': state.tongueExpanded
   }">
+  <section class="sat-tradeUtilityPanel__validWindowConfig">
+    <button class="sat-tradeUtilityPanel__validWindowConfig-btn">
+      <span>{{state.validWindowConfig.valueDisplay}}</span>
+      <i class="fal fa-pencil"></i>
+    </button>
+    <span class="sat-tradeUtilityPanel__validWindowConfig-label">Change Quote Expiration Time</span>
+  </section>
+  <section class="sat-tradeUtilityPanel__tongue">
+    <div class="sat-tradeUtilityPanel__tongue-countdown">
+      <span class="sat-tradeUtilityPanel__tongue-countdown-label">Next Update</span>
+      <span class="sat-tradeUtilityPanel__tongue-countdown-prompt">{{state.prompt}}</span>
+      <span class="sat-tradeUtilityPanel__tongue-countdown-clock">00 : {{state.updateCountdown}}</span>
+      <div class="sat-tradeUtilityPanel__tongue-countdown-loading">
+        <i class="sat-tradeUtilityPanel__tongue-countdown-loading-icon fal fa-circle-notch fa-spin"></i>
+      </div>
+    </div>
+  </section>
+  <section class="sat-tradeUtilityPanel__updateNow">
+    <span class="sat-tradeUtilityPanel__updateNow-label">Update Now</span>
+    <button class="sat-tradeUtilityPanel__updateNow-btn">
+      <i class="fal fa-cloud-download"></i>
+    </button>
+  </section>
 </article>

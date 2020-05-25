@@ -72,6 +72,7 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
 
   private initializePageState() {
     this.state = {
+      tongueExpanded: false,
       prompt: this.constants.liveUpdateInprogPrompt,
       updateCountdown: this.constants.liveUpdateCountdown.toString(),
       isPaused: true,
@@ -159,6 +160,10 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
   //     this.state.isPaused = !this.state.isPaused;
   //   }
   // }
+
+  public onToggleTongueExpand() {
+    this.state.tongueExpanded = !this.state.tongueExpanded;
+  }
 
   public onClickUpdateNow() {
     this.startUpdate();
