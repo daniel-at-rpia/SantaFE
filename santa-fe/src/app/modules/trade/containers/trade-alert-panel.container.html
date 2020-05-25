@@ -3,43 +3,57 @@
     'sat-tradeAlertPanel': true,
     'sat-tradeAlertPanel--displayAlertTableState': state.displayAlertTable,
     'sat-tradeAlertPanel--focusMode': state.isFocusMode,
-    'sat-tradeAlertPanel--scopeAllAlertsState': state.table.displayAlert && !state.alert.scopedAlertType,
-    'sat-tradeAlertPanel--scopeAxeAlertsState': state.table.displayAlert && state.alert.scopedAlertType === constants.alertTypes.axeAlert,
-    'sat-tradeAlertPanel--scopeMarkAlertsState': state.table.displayAlert && state.alert.scopedAlertType === constants.alertTypes.markAlert,
-    'sat-tradeAlertPanel--scopeTradeAlertsState': state.table.displayAlert && state.alert.scopedAlertType === constants.alertTypes.tradeAlert,
+    'sat-tradeAlertPanel--scopeAllAlertsState': state.displayAlertTable && !state.alert.scopedAlertType,
+    'sat-tradeAlertPanel--scopeAxeAlertsState': state.displayAlertTable && state.alert.scopedAlertType === constants.alertTypes.axeAlert,
+    'sat-tradeAlertPanel--scopeMarkAlertsState': state.displayAlertTable && state.alert.scopedAlertType === constants.alertTypes.markAlert,
+    'sat-tradeAlertPanel--scopeTradeAlertsState': state.displayAlertTable && state.alert.scopedAlertType === constants.alertTypes.tradeAlert,
     'sat-tradeAlertPanel--alertReadyState': state.fetchResult.alertTable.fetchComplete
   }">
   <div class="sat-tradeAlertPanel__overview">
-    <div class="sat-tradeAlertPanel__overview-tab sat-tradeAlertPanel__overview-tab--all">
-      <div class="sat-tradeAlertPanel__overview-tab-cta sat-tradeAlertPanel__overview-tab-cta" (click)="onClickShowAllAlerts()">
-        <span class="sat-tradeAlertPanel__overview-tab-cta-regText">Show All Alerts</span>
-      </div>
+    <div class="sat-tradeAlertPanel__overview-tabIndicate">
+      <i
+        [ngClass]="{
+          'sat-tradeAlertPanel__overview-tabIndicate-icon': true,
+          'fal': !state.alert.scopedAlertType || state.alert.scopedAlertType === constants.alertTypes.tradeAlert,
+          'fa-bell': !state.alert.scopedAlertType,
+          'fas fa-axe': state.alert.scopedAlertType === constants.alertTypes.axeAlert,
+          'far fa-bullseye-arrow': state.alert.scopedAlertType === constants.alertTypes.markAlert,
+          'fa-handshake': state.alert.scopedAlertType === constants.alertTypes.tradeAlert
+        }">
+      </i>
     </div>
-    <div class="sat-tradeAlertPanel__overview-tab sat-tradeAlertPanel__overview-tab--axe">
-      <div class="sat-tradeAlertPanel__overview-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.axeAlert)">
-        <i class="sat-tradeAlertPanel__overview-tab-cta-icon fas fa-axe"></i>
-        <span class="sat-tradeAlertPanel__overview-tab-cta-regText">Show</span>
-        <span class="sat-tradeAlertPanel__overview-tab-cta-countText">{{state.alert.axeAlertCount}}</span>
-        <span class="sat-tradeAlertPanel__overview-tab-cta-regText">Axe Alerts</span>
-        <span *ngIf="state.alert.unreadAxeAlertCount > 0" class="sat-tradeAlertPanel__overview-tab-cta-newAlertsCount">{{state.alert.unreadAxeAlertCount}} new</span>
+    <div class="sat-tradeAlertPanel__overview-tabList">
+      <div class="sat-tradeAlertPanel__overview-tabList-tab sat-tradeAlertPanel__overview-tabList-tab--all">
+        <div class="sat-tradeAlertPanel__overview-tabList-tab-cta sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickShowAllAlerts()">
+          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Show All Alerts</span>
+        </div>
       </div>
-    </div>
-    <div class="sat-tradeAlertPanel__overview-tab sat-tradeAlertPanel__overview-tab--mark">
-      <div class="sat-tradeAlertPanel__overview-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.markAlert)">
-        <i class="sat-tradeAlertPanel__overview-tab-cta-icon far fa-bullseye-arrow"></i>
-        <span class="sat-tradeAlertPanel__overview-tab-cta-regText">Show</span>
-        <span class="sat-tradeAlertPanel__overview-tab-cta-countText">{{state.alert.markAlertCount}}</span>
-        <span class="sat-tradeAlertPanel__overview-tab-cta-regText">Mark Alerts</span>
-        <span *ngIf="state.alert.unreadMarkAlertCount > 0" class="sat-tradeAlertPanel__overview-tab-cta-newAlertsCount">{{state.alert.unreadMarkAlertCount}} new</span>
+      <div class="sat-tradeAlertPanel__overview-tabList-tab sat-tradeAlertPanel__overview-tabList-tab--axe">
+        <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.axeAlert)">
+          <i class="sat-tradeAlertPanel__overview-tabList-tab-cta-icon fas fa-axe"></i>
+          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Show</span>
+          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-countText">{{state.alert.axeAlertCount}}</span>
+          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Axe Alerts</span>
+          <span *ngIf="state.alert.unreadAxeAlertCount > 0" class="sat-tradeAlertPanel__overview-tabList-tab-cta-newAlertsCount">{{state.alert.unreadAxeAlertCount}} new</span>
+        </div>
       </div>
-    </div>
-    <div class="sat-tradeAlertPanel__overview-tab sat-tradeAlertPanel__overview-tab--trade">
-      <div class="sat-tradeAlertPanel__overview-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.tradeAlert)">
-        <i class="sat-tradeAlertPanel__overview-tab-cta-icon fal fa-handshake"></i>
-        <span class="sat-tradeAlertPanel__overview-tab-cta-regText">Show</span>
-        <span class="sat-tradeAlertPanel__overview-tab-cta-countText">{{state.alert.tradeAlertCount}}</span>
-        <span class="sat-tradeAlertPanel__overview-tab-cta-regText">Trade Alerts</span>
-        <span *ngIf="state.alert.unreadTradeAlertCount > 0" class="sat-tradeAlertPanel__overview-tab-cta-newAlertsCount">{{state.alert.unreadTradeAlertCount}} new</span>
+      <div class="sat-tradeAlertPanel__overview-tabList-tab sat-tradeAlertPanel__overview-tabList-tab--mark">
+        <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.markAlert)">
+          <i class="sat-tradeAlertPanel__overview-tabList-tab-cta-icon far fa-bullseye-arrow"></i>
+          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Show</span>
+          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-countText">{{state.alert.markAlertCount}}</span>
+          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Mark Alerts</span>
+          <span *ngIf="state.alert.unreadMarkAlertCount > 0" class="sat-tradeAlertPanel__overview-tabList-tab-cta-newAlertsCount">{{state.alert.unreadMarkAlertCount}} new</span>
+        </div>
+      </div>
+      <div class="sat-tradeAlertPanel__overview-tabList-tab sat-tradeAlertPanel__overview-tabList-tab--trade">
+        <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.tradeAlert)">
+          <i class="sat-tradeAlertPanel__overview-tabList-tab-cta-icon fal fa-handshake"></i>
+          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Show</span>
+          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-countText">{{state.alert.tradeAlertCount}}</span>
+          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Trade Alerts</span>
+          <span *ngIf="state.alert.unreadTradeAlertCount > 0" class="sat-tradeAlertPanel__overview-tabList-tab-cta-newAlertsCount">{{state.alert.unreadTradeAlertCount}} new</span>
+        </div>
       </div>
     </div>
   </div>

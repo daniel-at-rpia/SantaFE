@@ -103,6 +103,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   @Input() collapseConfiguration: boolean;
   @Output() configureAlert = new EventEmitter();
   @Output() saveConfig = new EventEmitter();
+  @Output() showAlertTable = new EventEmitter();
+  @Output() collapseAlertTable = new EventEmitter();
   state: TradeAlertPanelState;
   subscriptions = {
     securityMapSub: null,
@@ -352,6 +354,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       } else {
         this.state.displayAlertTable = false;
       }
+      if (this.state.displayAlertTable) {
+        this.showAlertTable && this.showAlertTable.emit();
+      } else {
+        this.collapseAlertTable && this.collapseAlertTable.emit();
+      }
     }
   }
 
@@ -377,6 +384,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       } else {
         this.state.displayAlertTable = false;
         this.state.alert.scopedAlertType = null;
+      }
+      if (this.state.displayAlertTable) {
+        this.showAlertTable && this.showAlertTable.emit();
+      } else {
+        this.collapseAlertTable && this.collapseAlertTable.emit();
       }
     }
   }

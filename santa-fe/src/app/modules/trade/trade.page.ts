@@ -129,7 +129,7 @@ export class TradePage implements OnInit, OnDestroy {
   }
 
   private loadOwnerInitial(serverReturn: string) {
-    const devWhitelist = ['AR', 'DZ', 'RC', 'MS'];
+    const devWhitelist = ['DZ', 'RC', 'MS'];
     if (devWhitelist.indexOf(serverReturn) !== -1) {
       this.state.ownerInitial = 'DM';
     } else {

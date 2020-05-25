@@ -30,6 +30,8 @@
         [collapseConfiguration]="!state.alertPanelMaximized"
         (configureAlert)="maximizeAlertPanel()"
         (saveConfig)="unMaximizeAlertPanel()"
+        (showAlertTable)="maximizeAlertPanel()"
+        (collapseAlertTable)="unMaximizeAlertPanel()"
       ></trade-alert-panel>
     </div>
   </section>
@@ -59,10 +61,6 @@
   <button
     (click)="unMaximizeLilMarket()"
     class="sat-trade__unMaximizeLilMarketCTA santaBtn--iconOnly fal fa-chevron-up">
-  </button>
-  <button
-    (click)="unMaximizeAlertPanel()"
-    class="sat-trade__unMaximizeAlertPanelCTA santaBtn--iconOnly fal fa-chevron-up">
   </button>
   <section class="sat-trade__preload">
     <i class="fas fa-chevron-right"></i>
