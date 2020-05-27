@@ -166,15 +166,12 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
   }
 
   public onClickUpdateNow() {
+    this.state.tongueExpanded = false;
     this.startUpdate();
   }
 
   public onClickEditValidWindow() {
-    this.state.validWindowConfig.isEditing = true;
-  }
-
-  public onClickCancelEditValidWindow() {
-    this.state.validWindowConfig.isEditing = false;
+    this.state.validWindowConfig.isEditing = !this.state.validWindowConfig.isEditing;
   }
 
   public onSelectValidWindow(eachOption) {

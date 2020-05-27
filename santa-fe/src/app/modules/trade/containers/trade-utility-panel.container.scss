@@ -122,6 +122,35 @@ $tradeUtilityPanel_side_btn_size: 2.25rem;
       margin-right: $spacing_large;
     }
   }
+  &__validWindowOptionList {
+    @include mix_fixed_div(absolute, $z_index_hovering_item);
+    @include mix_alive('light');
+    display: none;
+    justify-content: space-around;
+    bottom: -$spacing_medium;
+    width: 100%;
+    padding: 0 $spacing_xx_large;
+    transform: scale(0.01);
+    &-item {
+      @include mix_border_radius(50%);
+      padding: 0;
+      width: $tradeUtilityPanel_side_btn_size;
+      height: $tradeUtilityPanel_side_btn_size;
+      color: $font_color_major;
+      font-size: $font_size_x_small;
+      &:hover {
+        transform: scale(1.25);
+      }
+      &--selected {
+        @include material('none');
+        background-color: $color_active;
+        color: $font_color_inverse;
+        &:hover {
+          transform: scale(1);
+        }
+      }
+    }
+  }
   &:hover {
     transform: translate(0, 0);
   }
@@ -160,6 +189,28 @@ $tradeUtilityPanel_side_btn_size: 2.25rem;
         }
       }
       &__validWindowConfig, &__updateNow {
+        transform: scale(1);
+      }
+      &__validWindowOptionList {
+        display: flex;
+      }
+    }
+  }
+  &--editingValidWindowState {
+    #{$tradeUtilityPanelBlockName} {
+      &__validWindowConfig {
+        &-btn {
+          @include material('none');
+          background-color: $color_active;
+          &>span {
+            display: none;
+          }
+          &>i {
+            display: inline-block;
+          }
+        }
+      }
+      &__validWindowOptionList {
         transform: scale(1);
       }
     }
