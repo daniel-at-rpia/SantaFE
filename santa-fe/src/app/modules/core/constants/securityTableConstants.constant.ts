@@ -72,25 +72,6 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       }
     }
   },{
-    key: 'alertSide',
-    label: 'Side',
-    attrName: 'alertSide',
-    underlineAttrName: 'alertSide',
-    blockAttrName: 'alert',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.alert,
-    tableSpecifics: {
-      default: {
-        active: false,
-        disabled: true
-      },
-      tradeAlert: {
-        active: true,
-        disabled: false,
-        groupShow: true
-      }
-    }
-  },{
     key: 'alertTime',
     label: 'Time',
     attrName: 'alertTime',
@@ -118,6 +99,25 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     blockAttrName: 'alert',
     readyStage: SECURITY_TABLE_FINAL_STAGE,
     isDataTypeText: true,
+    groupBelongs: SecurityTableMetricGroups.alert,
+    tableSpecifics: {
+      default: {
+        active: false,
+        disabled: true
+      },
+      tradeAlert: {
+        active: true,
+        disabled: false,
+        groupShow: true
+      }
+    }
+  },{
+    key: 'alertSide',
+    label: 'Side',
+    attrName: 'alertSide',
+    underlineAttrName: 'alertSide',
+    blockAttrName: 'alert',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
     groupBelongs: SecurityTableMetricGroups.alert,
     tableSpecifics: {
       default: {
@@ -187,7 +187,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       tradeAlert: {
         active: true,
         disabled: false,
-        groupShow: false
+        groupShow: true
       }
     }
   },{
@@ -210,66 +210,66 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
         groupShow: false
       }
     }
-  },{
-    key: 'alertMessage',
-    label: 'Alert Message',
-    attrName: 'alertMessage',
-    underlineAttrName: 'alertMessage',
-    blockAttrName: 'alert',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDataTypeText: true,
-    groupBelongs: SecurityTableMetricGroups.alert,
-    tableSpecifics: {
-      default: {
-        active: false,
-        disabled: true
-      },
-      tradeAlert: {
-        active: true,
-        disabled: false,
-        groupShow: false
-      }
-    }
-  },{
-    key: 'alertValue',
-    label: 'Alert Value',
-    attrName: 'alertValue',
-    underlineAttrName: 'alertValue',
-    blockAttrName: 'alert',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDataTypeText: true,
-    groupBelongs: SecurityTableMetricGroups.alert,
-    tableSpecifics: {
-      default: {
-        active: false,
-        disabled: true
-      },
-      tradeAlert: {
-        active: true,
-        disabled: false,
-        groupShow: false
-      }
-    }
-  },{
-    key: 'alertTarget',
-    label: 'Alert Target',
-    attrName: 'alertTarget',
-    underlineAttrName: 'alertTarget',
-    blockAttrName: 'alert',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDataTypeText: true,
-    groupBelongs: SecurityTableMetricGroups.alert,
-    tableSpecifics: {
-      default: {
-        active: false,
-        disabled: true
-      },
-      tradeAlert: {
-        active: true,
-        disabled: false,
-        groupShow: false
-      }
-    }
+    // },{
+    //   key: 'alertMessage',
+    //   label: 'Alert Message',
+    //   attrName: 'alertMessage',
+    //   underlineAttrName: 'alertMessage',
+    //   blockAttrName: 'alert',
+    //   readyStage: SECURITY_TABLE_FINAL_STAGE,
+    //   isDataTypeText: true,
+    //   groupBelongs: SecurityTableMetricGroups.alert,
+    //   tableSpecifics: {
+    //     default: {
+    //       active: false,
+    //       disabled: true
+    //     },
+    //     tradeAlert: {
+    //       active: true,
+    //       disabled: false,
+    //       groupShow: false
+    //     }
+    //   }
+    // },{
+    //   key: 'alertValue',
+    //   label: 'Alert Value',
+    //   attrName: 'alertValue',
+    //   underlineAttrName: 'alertValue',
+    //   blockAttrName: 'alert',
+    //   readyStage: SECURITY_TABLE_FINAL_STAGE,
+    //   isDataTypeText: true,
+    //   groupBelongs: SecurityTableMetricGroups.alert,
+    //   tableSpecifics: {
+    //     default: {
+    //       active: false,
+    //       disabled: true
+    //     },
+    //     tradeAlert: {
+    //       active: true,
+    //       disabled: false,
+    //       groupShow: false
+    //     }
+    //   }
+    // },{
+    //   key: 'alertTarget',
+    //   label: 'Alert Target',
+    //   attrName: 'alertTarget',
+    //   underlineAttrName: 'alertTarget',
+    //   blockAttrName: 'alert',
+    //   readyStage: SECURITY_TABLE_FINAL_STAGE,
+    //   isDataTypeText: true,
+    //   groupBelongs: SecurityTableMetricGroups.alert,
+    //   tableSpecifics: {
+    //     default: {
+    //       active: false,
+    //       disabled: true
+    //     },
+    //     tradeAlert: {
+    //       active: true,
+    //       disabled: false,
+    //       groupShow: false
+    //     }
+    //   }
   },{
     key: 'bestQuote',
     label: 'Best Quote (Bid vs Ask)',
