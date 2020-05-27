@@ -350,7 +350,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     tableSpecifics: {
       default: {
         active: true,
-        groupShow: true
+        groupShow: false
       },
       tradeAlert: {
         active: false
@@ -367,7 +367,8 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupBelongs: SecurityTableMetricGroups.mark,
     tableSpecifics: {
       default: {
-        active: false
+        active: true,
+        groupShow: true
       },
       tradeAlert: {
         active: false
@@ -384,7 +385,8 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
     groupBelongs: SecurityTableMetricGroups.mark,
     tableSpecifics: {
       default: {
-        active: false
+        active: true,
+        groupShow: true
       },
       tradeAlert: {
         active: false
