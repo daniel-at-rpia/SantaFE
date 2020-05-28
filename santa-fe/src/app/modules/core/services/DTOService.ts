@@ -119,7 +119,7 @@ export class DTOService {
         },
         portfolios: [],
         strategyFirm: '',
-        strategyList: [],
+        strategyList: !isStencil && !!rawData.unitPosition && !!rawData.unitPosition.partitionOptionValues ? rawData.unitPosition.partitionOptionValues.StrategyName : [],
         position: {
           positionCurrent: 0,
           positionCurrentInMM: 'n/a',
@@ -232,6 +232,15 @@ export class DTOService {
       if (object.data.seniorityLevel < 5 && object.data.seniorityLevel > 0 && rawData.paymentRank) {
         object.data.seniority = `${object.data.seniorityLevel} - ${rawData.paymentRank}`;
       }
+      if (!!object.data.strategyList && object.data.strategyList.length > 0) {
+        object.data.strategyList.forEach((eachStrategy: string, index) => {
+          if (index === 0) {
+            object.data.strategyFirm = eachStrategy;
+          } else {
+            object.data.strategyFirm = `${object.data.strategyFirm} & ${eachStrategy}`;
+          }
+        });
+      }
     }
     return object;
   }
@@ -333,15 +342,6 @@ export class DTOService {
       dto.data.cost.firm.fifo.Price = dto.data.cost.firm.fifo.Price + eachPortfolioBlock.costFifoPrice;
       dto.data.cost.firm.weightedAvg['Default Spread'] = dto.data.cost.firm.weightedAvg['Default Spread'] + eachPortfolioBlock.costWeightedAvgSpread;
       dto.data.cost.firm.weightedAvg.Price = dto.data.cost.firm.weightedAvg.Price + eachPortfolioBlock.costWeightedAvgPrice;
-      if (eachPortfolioBlock.strategy.length > 0 && dto.data.strategyList.indexOf(eachPortfolioBlock.strategy) < 0) {
-        dto.data.strategyList.push(eachPortfolioBlock.strategy);
-        if (dto.data.strategyList.length === 1) {
-          dto.data.strategyFirm = `${eachPortfolioBlock.strategy}`;
-        } else {
-          dto.data.strategyFirm = `${dto.data.strategyFirm} & ${eachPortfolioBlock.strategy}`;
-          // console.warn('detected security with multiple strategies: ', dto.data.name, ' has strategy = ', dto.data.strategyList);
-        }
-      }
       dto.data.cs01CadFirm = dto.data.cs01CadFirm + eachPortfolioBlock.cs01Cad;
       dto.data.cs01LocalFirm = dto.data.cs01LocalFirm + eachPortfolioBlock.cs01Local;
     });

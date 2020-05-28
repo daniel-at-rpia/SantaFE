@@ -113,6 +113,7 @@
           (onInputChange)="onSearchKeywordChange($event)">
         </santa-input>
       </div>
+      <!--
       <div class="sat-tradeCenterPanel__result-utilities-focusMode">
         <button (click)="onToggleFocusMode()" class="sat-tradeCenterPanel__result-utilities-focusMode-cta santaBtn--labelled">
           <i
@@ -125,6 +126,22 @@
           <span>Focused Mode</span>
         </button>
       </div>
+      -->
+      <!--
+      <div class="sat-tradeCenterPanel__result-utilities-tableSwitch">
+        <div class="santaBtnGroup sat-tradeCenterPanel__result-utilities-tableSwitch-btnGroup">
+          <button (click)="onSwitchTable()" class="sat-tradeCenterPanel__result-utilities-tableSwitch-btnGroup-mainBtn santaBtn--labelled">
+            <i class="fal fa-search"></i>
+            <span>From Preset</span>
+          </button>
+          <button (click)="onSwitchTable()" class="sat-tradeCenterPanel__result-utilities-tableSwitch-btnGroup-alertBtn santaBtn--labelled">
+            <i class="fal fa-bell"></i>
+            <span>From Alerts</span>
+            <div *ngIf="state.alert.newAlertsCount > 0" class="sat-tradeCenterPanel__result-utilities-tableSwitch-btnGroup-alertBtn-newAlertsCount">{{state.alert.newAlertsCount}} new alerts</div>
+          </button>
+        </div>
+      </div>
+      -->
       <div class="sat-tradeCenterPanel__result-utilities-driver">
         <span class="sat-tradeCenterPanel__result-utilities-driver-label">Driver :</span>
         <div class="santaBtnGroup">
