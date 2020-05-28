@@ -196,7 +196,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       displayAlertTable: false,
       table: {
         alertMetrics: alertTableMetrics,
-        alertDto: this.dtoService.formSecurityTableObject(true)
+        alertDto: this.dtoService.formSecurityTableObject(true, false)
       },
       fetchResult: {
         fetchTableDataFailed: false,

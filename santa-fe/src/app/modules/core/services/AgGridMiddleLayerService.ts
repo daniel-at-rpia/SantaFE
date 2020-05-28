@@ -118,7 +118,7 @@ export class AgGridMiddleLayerService {
       }
       this.loadAgGridHeadersComparator(eachHeader, newAgColumn);
       this.loadAgGridHeadersUILogics(eachHeader, newAgColumn);
-      if (eachHeader.data.groupBelongs !== SECURITY_TABLE_HEADER_NO_GROUP) {
+      if (table.state.isGroupEnabled && eachHeader.data.groupBelongs !== SECURITY_TABLE_HEADER_NO_GROUP) {
         const targetGroup = groupList.find((eachGroup) => {
           return eachGroup.headerName === eachHeader.data.groupBelongs;
         });

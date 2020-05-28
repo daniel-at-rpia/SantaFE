@@ -749,7 +749,8 @@ export class DTOService {
   }
 
   public formSecurityTableObject(
-    isLiveVariant: boolean
+    isLiveVariant: boolean,
+    isGroupEnabled: boolean
   ): DTOs.SecurityTableDTO {
     const object: DTOs.SecurityTableDTO = {
       data: {
@@ -770,7 +771,8 @@ export class DTOService {
         isAgGridReady: false,
         isNativeEnabled: false,
         selectedSecurityCard: null,
-        isActivated: false
+        isActivated: false,
+        isGroupEnabled: isGroupEnabled
       },
       api: {
         gridApi: null,

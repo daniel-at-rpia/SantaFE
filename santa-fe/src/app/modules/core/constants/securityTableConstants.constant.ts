@@ -284,6 +284,10 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       default: {
         active: true,
         groupShow: true
+      },
+      tradeAlert: {
+        active: false,
+        groupShow: false
       }
     }
   },{
@@ -300,6 +304,10 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       default: {
         active: true,
         groupShow: true
+      },
+      tradeAlert: {
+        active: false,
+        groupShow: false
       }
     }
   },{
