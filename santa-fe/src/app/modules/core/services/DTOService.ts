@@ -58,6 +58,7 @@ export class DTOService {
     securityIdFull: string,
     rawData: BESecurityDTO,
     isStencil: boolean,
+    isSlimVariant: boolean,
     currentSelectedMetric?: string
   ): DTOs.SecurityDTO {
     // !isStencil && console.log('rawData', rawData.name, rawData);
@@ -214,7 +215,8 @@ export class DTOService {
         isWidthFlexible: false,
         isAtListCeiling: false,
         isActionMenuPrimaryActionsDisabled: false,
-        isActionMenuMinorActionsDisabled: false
+        isActionMenuMinorActionsDisabled: false,
+        isSlimVariant: isSlimVariant
       }
     };
     if (!isStencil) {
@@ -750,7 +752,8 @@ export class DTOService {
 
   public formSecurityTableObject(
     isLiveVariant: boolean,
-    isGroupEnabled: boolean
+    isGroupEnabled: boolean,
+    isSlimRowVariant: boolean
   ): DTOs.SecurityTableDTO {
     const object: DTOs.SecurityTableDTO = {
       data: {
@@ -772,7 +775,8 @@ export class DTOService {
         isNativeEnabled: false,
         selectedSecurityCard: null,
         isActivated: false,
-        isGroupEnabled: isGroupEnabled
+        isGroupEnabled: isGroupEnabled,
+        isSlimRowVariant: isSlimRowVariant
       },
       api: {
         gridApi: null,
@@ -1199,6 +1203,7 @@ export class DTOService {
       object.data.security = this.formSecurityCardObject(
         rawData.security.securityIdentifier || null,
         rawData.security,
+        false,
         false
       );
       object.data.security.state.isInteractionDisabled = true;

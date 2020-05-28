@@ -2,6 +2,7 @@
 @import "./security-card-mixin.scss";
 
 $securityCard_labelVariant_height: 2rem;
+$securityCard_labelVariant_height_slim: 1.6rem;
 $securityCard_labelVariant_expanded_height: 2.75rem;
 $securityCard_name_rightGap: 3rem;
 $securityCard_actionMenu_majorCTA_size: 3rem;
@@ -141,6 +142,9 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
         }
       }
     }
+  }
+  &--slimVariant {
+    height: $securityCard_labelVariant_height_slim;
   }
   &--multiLineVariant {
     height: $securityCard_labelVariant_expanded_height;

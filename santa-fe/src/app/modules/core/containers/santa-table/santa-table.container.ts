@@ -30,6 +30,7 @@
       AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS,
       AGGRID_DETAIL_ROW_HEIGHT_PER_ROW,
       AGGRID_ROW_HEIGHT,
+      AGGRID_ROW_HEIGHT_SLIM,
       SECURITY_TABLE_FINAL_STAGE,
       SECURITY_TABLE_ICONS
     } from 'Core/constants/securityTableConstants.constant';
@@ -132,6 +133,9 @@ export class SantaTable implements OnInit, OnChanges {
       sum: this.agAggregationSum.bind(this),
       avg: this.agAggregationAverage.bind(this)
     };
+    if (this.tableData.state.isSlimRowVariant) {
+      this.constants.agGridRowHeight = AGGRID_ROW_HEIGHT_SLIM;
+    }
   }
 
   public ngOnChanges() {

@@ -119,12 +119,12 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
             sampleSecurityRawData = rawCurveData[eachSecurity];
             break;
           }
-          const sampleSecurity = this.dtoService.formSecurityCardObject(sampleSecurityRawData.securityIdentifier, sampleSecurityRawData.security, false);
+          const sampleSecurity = this.dtoService.formSecurityCardObject(sampleSecurityRawData.securityIdentifier, sampleSecurityRawData.security, false, false);
           chartCategory.data.name = sampleSecurity.data.genericSeniority + " " + couponType + " " + sampleSecurity.data.securityType;
           chartCategory.data.color = this.getObligorChartCategoryColorFromScheme(chartCategory.data.name);
           for (const eachSecurityId in rawCurveData) {
             if (!!rawCurveData[eachSecurityId].security) {
-              const securityDTO = this.dtoService.formSecurityCardObject(eachSecurityId, rawCurveData[eachSecurityId].security, false);
+              const securityDTO = this.dtoService.formSecurityCardObject(eachSecurityId, rawCurveData[eachSecurityId].security, false, false);
               if (this.state.obligorSecurityID === eachSecurityId) {
                 chartCategory.state.isHidden = false;
               }

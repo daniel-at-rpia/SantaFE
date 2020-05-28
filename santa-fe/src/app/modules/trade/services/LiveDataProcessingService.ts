@@ -52,7 +52,7 @@ export class LiveDataProcessingService {
     for (const eachKey in rawSecurityDTOMap){
       let isValidFlag = true;
       const newBESecurity:BESecurityDTO = rawSecurityDTOMap[eachKey].security;
-      const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false, selectedDriver);
+      const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false, false, selectedDriver);
       newSecurity.state.isInteractionThumbDownDisabled = true;
       newSecurity.api.onClickSendToGraph = sendToGraphCallback;
       newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
@@ -100,7 +100,7 @@ export class LiveDataProcessingService {
         const targetSecurityId = eachAlertDTO.data.security.data.securityID;
         if (rawSecurityDTOMap[targetSecurityId]) {
           const newBESecurity:BESecurityDTO = rawSecurityDTOMap[targetSecurityId].security;
-          const newSecurity = this.dtoService.formSecurityCardObject(targetSecurityId, newBESecurity, false, selectedDriver);
+          const newSecurity = this.dtoService.formSecurityCardObject(targetSecurityId, newBESecurity, false, true, selectedDriver);
           newSecurity.state.isInteractionThumbDownDisabled = true;
           newSecurity.api.onClickSendToGraph = sendToGraphCallback;
           newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;

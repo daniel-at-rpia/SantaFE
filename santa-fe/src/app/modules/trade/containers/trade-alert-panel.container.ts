@@ -196,7 +196,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       displayAlertTable: false,
       table: {
         alertMetrics: alertTableMetrics,
-        alertDto: this.dtoService.formSecurityTableObject(true, false)
+        alertDto: this.dtoService.formSecurityTableObject(true, false, true)
       },
       fetchResult: {
         fetchTableDataFailed: false,
@@ -1060,7 +1060,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       }
     });
     for (let i = 0; i < 10; ++i) {
-      const stencilSecurity = this.dtoService.formSecurityCardObject(null, null, true);
+      const stencilSecurity = this.dtoService.formSecurityCardObject(null, null, true, false);
       stencilSecurity.state.isInteractionDisabled = true;
       const newAlertTableRow = this.dtoService.formSecurityTableRowObject(stencilSecurity);
       stencilAlertTableHeaderBuffer.forEach((eachHeader) => {

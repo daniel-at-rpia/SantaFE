@@ -4,7 +4,7 @@
 $trade_layout_animation_duration: $animation_duration_normal;
 $trade_left_size: 60%;
 $trade_left_utilityPanel_size: 75%;
-$trade_left_alertPanelMaximized_size: 50%;
+$trade_left_alertPanelMaximized_size: 40%;
 $trade_right_cta_hover_gutter_spacing: $spacing_medium;
 $trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta_hover_gutter_spacing;
 .sat-trade {
@@ -94,7 +94,7 @@ $trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta
   &__collapseGraphsCTA {
     @include mix_border_radius(50%);
     @include mix_fixed_div(absolute, $z_index_hovering_item);
-    @include mix_calculate(top, 66%, $iconButton_size_regular/2, '-');
+    @include mix_calculate(top, 58%, $iconButton_size_regular/2, '-');
     @include mix_calculate(right, 40%, $iconButton_size_regular/2, '-');
     @include mix_alive('custom', right $trade_layout_animation_duration, box-shadow $animation_duration_light);
     background-color: $color_kill;
