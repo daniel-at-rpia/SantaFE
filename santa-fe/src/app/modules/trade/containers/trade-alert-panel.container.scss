@@ -803,9 +803,6 @@ $tradeAlertPanel_overview_tabIndicate_width: 6rem;
       }
     }
   }
-  &--focusMode {
-    border: none;
-  }
   &--scopeAllAlertsState {
     #{$tradeAlertPanelBlockName} {
       &__overview {

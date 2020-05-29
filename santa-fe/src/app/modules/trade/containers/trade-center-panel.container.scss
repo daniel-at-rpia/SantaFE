@@ -345,28 +345,4 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 5.5rem;
       }
     }
   }
-  &--focusMode {
-    border: none;
-    #{$tradeCenterPanelBlockName} {
-      &__presetsAndFilters {
-        display: none;
-      }
-      &__result {
-        padding-top: 0;
-        &-utilities {
-          padding: $spacing_xx_small;
-          &-keywordSearch {
-            padding-left: 0;
-          }
-          &-focusMode {
-            &-cta {
-              @extend .santaBtn--inverseLabelled;
-              @include material('none');
-              background-color: $color_active;
-            }
-          }
-        }
-      }
-    }
-  }
 }

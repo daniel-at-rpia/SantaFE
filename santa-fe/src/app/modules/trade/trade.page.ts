@@ -24,7 +24,7 @@
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { TradeState } from 'FEModels/frontend-page-states.interface';
-    import {selectFocusMode, selectSelectedSecurityForAnalysis} from 'Trade/selectors/trade.selectors';
+    import { selectSelectedSecurityForAnalysis } from 'Trade/selectors/trade.selectors';
     import { CoreUserLoggedIn } from 'Core/actions/core.actions';
     import { selectDislayAlertThumbnail } from 'Core/selectors/core.selectors';
   //
@@ -39,8 +39,7 @@ export class TradePage implements OnInit, OnDestroy {
   state: TradeState;
   subscriptions = {
     receiveSelectedSecuritySub: null,
-    displayAlertThumbnailSub: null,
-    focusMode: null
+    displayAlertThumbnailSub: null
   };
   constants = {
   };
@@ -51,8 +50,7 @@ export class TradePage implements OnInit, OnDestroy {
       lilMarketMaximized: false,
       ownerInitial: null,
       displayAlertThumbnail: true,
-      alertPanelMaximized: false,
-      focusMode: false
+      alertPanelMaximized: false
     };
   }
 
@@ -91,11 +89,6 @@ export class TradePage implements OnInit, OnDestroy {
       select(selectDislayAlertThumbnail)
     ).subscribe((value) => {
       this.state.displayAlertThumbnail = !!value;
-    });
-    this.subscriptions.focusMode = this.store$.pipe(
-      select(selectFocusMode)
-    ).subscribe((value) => {
-      this.state.focusMode = !!value;
     });
   }
 

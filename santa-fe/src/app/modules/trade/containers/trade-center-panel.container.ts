@@ -64,7 +64,6 @@
       TradeSecurityTableRowDTOListForAnalysisEvent,
       TradeSelectedSecurityForAlertConfigEvent,
       TradeTogglePresetEvent,
-      TradeSetFocusMode,
       TradeAlertTableReceiveNewAlertsEvent
     } from 'Trade/actions/trade.actions';
     import { SecurityTableMetricStub, SearchShortcutStub } from 'FEModels/frontend-stub-models.interface';
@@ -105,7 +104,6 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     });
     const state: TradeCenterPanelState = {
       bestQuoteValidWindow: null,
-      isFocusMode: false,
       presets: {
         presetsReady: false,
         selectedPreset: null,
@@ -678,10 +676,5 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         this.store$.dispatch(new TradeSecurityTableRowDTOListForAnalysisEvent(this.utilityService.deepCopy(securityTableRowDTOList)));
       }
     }
-  }
-
-  onToggleFocusMode() {
-    this.state.isFocusMode = !this.state.isFocusMode;
-    this.store$.dispatch(new TradeSetFocusMode(this.state.isFocusMode));
   }
 }

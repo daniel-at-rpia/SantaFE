@@ -75,8 +75,7 @@
       selectInitialDataLoadedInAlertTable,
       selectLiveUpdateProcessingRawDataInAlertTable,
       selectSelectedSecurityForAlertConfig,
-      selectPresetSelected,
-      selectFocusMode
+      selectPresetSelected
     } from 'Trade/selectors/trade.selectors';
     import {
       SecurityTableMetrics,

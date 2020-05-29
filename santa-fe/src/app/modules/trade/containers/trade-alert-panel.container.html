@@ -2,7 +2,6 @@
   [ngClass]="{
     'sat-tradeAlertPanel': true,
     'sat-tradeAlertPanel--displayAlertTableState': state.displayAlertTable,
-    'sat-tradeAlertPanel--focusMode': state.isFocusMode,
     'sat-tradeAlertPanel--scopeAllAlertsState': state.displayAlertTable && !state.alert.scopedAlertType,
     'sat-tradeAlertPanel--scopeAxeAlertsState': state.displayAlertTable && state.alert.scopedAlertType === constants.alertTypes.axeAlert,
     'sat-tradeAlertPanel--scopeMarkAlertsState': state.displayAlertTable && state.alert.scopedAlertType === constants.alertTypes.markAlert,
