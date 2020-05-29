@@ -1,655 +1,655 @@
 @import "global.scss";
 @import "modules/trade/trade.scss";
 
-// .sat-tradeAlertAxeAlertConfiguration {
-  // $axeAlertConfigurationBlockName: &;
-  // display: flex;
-  // flex-direction: column;
-  // &__myGroup {
-  //   flex: 0 0 auto;
-  //   display: flex;
-  //   align-items: center;
-  //   &-title {
-  //     flex: 0 0 auto;
-  //     font-size: $font_size_normal;
-  //     color: $font_color_major;
-  //     margin-right: $spacing_medium;
-  //   }
-  //   &-content {
-  //     @include mix_border_radius(10px);
-  //     flex: 0 0 auto;
-  //     display: flex;
-  //     align-items: center;
-  //     // background-color: $color_gray_3;
-  //     margin-top: $spacing_x_small;
-  //     &-disableTag {
-  //       @include mix_border_radius(3px);
-  //       flex: 0 0 auto;
-  //       visibility: hidden;
-  //       display: flex;
-  //       align-items: center;
-  //       margin-right: $spacing_small;
-  //       padding: $spacing_xx_small $spacing_x_small;
-  //       background-color: $color_disabled;
-  //       &>i {
-  //         color: $font_color_inverse;
-  //         margin-right: $spacing_x_small;
-  //       }
-  //       &>span {
-  //         color: $font_color_inverse;
-  //       }
-  //     }
-  //     &-text {
-  //       flex: 1 1 auto;
-  //       color: $font_color_major;
-  //       font-size: $font_size_normal;
-  //       text-align: right;
-  //     }
-  //     &-btn{
-  //       margin-left: $spacing_medium;
-  //     }
+.sat-tradeAlertAxeAlertConfiguration {
+  $axeAlertConfigurationBlockName: &;
+  display: flex;
+  flex-direction: column;
+  &__myGroup {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    &-title {
+      flex: 0 0 auto;
+      font-size: $font_size_normal;
+      color: $font_color_major;
+      margin-right: $spacing_medium;
+    }
+    &-content {
+      @include mix_border_radius(10px);
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      // background-color: $color_gray_3;
+      margin-top: $spacing_x_small;
+      &-disableTag {
+        @include mix_border_radius(3px);
+        flex: 0 0 auto;
+        visibility: hidden;
+        display: flex;
+        align-items: center;
+        margin-right: $spacing_small;
+        padding: $spacing_xx_small $spacing_x_small;
+        background-color: $color_disabled;
+        &>i {
+          color: $font_color_inverse;
+          margin-right: $spacing_x_small;
+        }
+        &>span {
+          color: $font_color_inverse;
+        }
+      }
+      &-text {
+        flex: 1 1 auto;
+        color: $font_color_major;
+        font-size: $font_size_normal;
+        text-align: right;
+      }
+      &-btn{
+        margin-left: $spacing_medium;
+      }
 
-  //     &-btnGroup {
-  //       flex: 1 1 auto;
-  //       margin-left: $spacing_medium;
-  //       &-btn {
-  //         &--selected {
-  //           @include material('none');
-  //           background-color: $color_active;
-  //           color: $font_color_inverse;
-  //         }
-  //       }
-  //     }
-  //     &-disableBtn {
-  //       margin-left: $spacing_x_large;
-  //     }
-  //   }
-  // }
-  // &__textSeparator {
-  //   @include mix_border_generator($typical_border_width 0 0 0, $color_white);
-  //   flex: 0 0 auto;
-  //   display: flex;
-  //   margin: $spacing_medium 0;
-  //   padding-top: $spacing_medium;
-  //   &-content {
-  //     color: $font_color_major;
-  //     font-size: $font_size_normal;
-  //     margin-left: 12rem;
-  //   }
-  // }
-  // &__singleSecurities {
-  //   flex: 1 1 auto;
-  //   display: flex;
-  //   overflow: hidden;
-  //   &-watchList {
-  //     @include mix_border_generator(0 $typical_border_width 0 0, $color_white);
-  //     flex: 0 1 50%;
-  //     display: flex;
-  //     flex-direction: column;
-  //     margin-right: $spacing_medium;
-  //     padding-right: $spacing_medium;
-  //     &-securityList {
-  //       @include mix_enable_scrollbar('vertical');
-  //       flex: 1 1 auto;
-  //       display: flex;
-  //       flex-direction: column;
-  //       padding-right: $spacing_medium;
-  //       &-item {
-  //         flex: 0 1 auto;
-  //         display: flex;
-  //         align-items: center;
-  //         margin-top: $spacing_small;
-  //         &-newTag {
-  //           @include mix_border_radius(3px);
-  //           flex: 0 0 auto;
-  //           display: none;
-  //           align-items: center;
-  //           margin-right: $spacing_small;
-  //           padding: $spacing_xx_small $spacing_x_small;
-  //           background-color: $color_highlight;
-  //           &>i {
-  //             color: $font_color_inverse;
-  //             margin-right: $spacing_x_small;
-  //           }
-  //           &>span {
-  //             color: $font_color_inverse;
-  //           }
-  //         }
-  //         &-disableTag {
-  //           @include mix_border_radius(3px);
-  //           flex: 0 0 auto;
-  //           display: none;
-  //           align-items: center;
-  //           margin-right: $spacing_small;
-  //           padding: $spacing_xx_small $spacing_x_small;
-  //           background-color: $color_disabled;
-  //           &>i {
-  //             color: $font_color_inverse;
-  //             margin-right: $spacing_x_small;
-  //           }
-  //           &>span {
-  //             color: $font_color_inverse;
-  //           }
-  //         }
-  //         security-card {
-  //           flex: 1 1 auto;
-  //         }
-  //         &-btnGroup {
-  //           flex: 0 0 auto;
-  //           margin-left: $spacing_medium;
-  //           &-btn {
-  //             &--selected {
-  //               @include material('none');
-  //               background-color: $color_active;
-  //               color: $font_color_inverse;
-  //             }
-  //           }
-  //         }
-  //         &-disableBtn, &-urgentBtn {
-  //           flex: 0 0 auto;
-  //           margin-left: $spacing_medium;
-  //           color: $font_color_major;
-  //         }
-  //         &-removeBtn {
-  //           flex: 0 0 auto;
-  //           margin-left: $spacing_medium;
-  //           background-color: $color_kill;
-  //           color: $font_color_inverse;
-  //         }
-  //         &--deleted {
-  //           display: none;
-  //         }
-  //         &--disabled {
-  //           #{$axeAlertConfigurationBlockName} {
-  //             &__singleSecurities-watchList-securityList-item {
-  //               &-disableTag {
-  //                 display: flex;
-  //               }
-  //               &-btnGroup {
-  //                 &-btn {
-  //                   @include material('none');
-  //                   background-color: $color_disabled;
-  //                   &--selected {
-  //                     background-color: $color_active;
-  //                   }
-  //                 }
-  //               }
-  //               &-disableBtn {
-  //                 @include material('none');
-  //                 background-color: $color_active;
-  //                 color: $font_color_inverse;
-  //               }
-  //             }
-  //           }
-  //         }
-  //         &--urgent {
-  //           #{$axeAlertConfigurationBlockName} {
-  //             &__singleSecurities-watchList-securityList-item {
-  //               &-urgentBtn {
-  //                 @include material('none');
-  //                 background-color: $color_active;
-  //                 color: $font_color_inverse;
-  //               }
-  //             }
-  //           }
-  //         }
-  //         &--new {
-  //           #{$axeAlertConfigurationBlockName} {
-  //             &__watchList-securityList-item {
-  //               &-newTag {
-  //                 display: flex;
-  //               }
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  //   &-search {
-  //     flex: 0 1 50%;
-  //     display: flex;
-  //     flex-direction: column;
-  //     &-utility {
-  //       flex: 0 0 auto;
-  //       display: flex;
-  //       align-items: center;
-  //       &-label {
-  //         flex: 0 0 auto;
-  //         font-size: $font_size_normal;
-  //         color: $font_color_major;
-  //         margin-right: $spacing_medium;
-  //       }
-  //       santa-input {
-  //         flex: 1 1 auto;
-  //       }
-  //     }
-  //     &-result {
-  //       @include mix_enable_scrollbar('vertical');
-  //       flex: 1 1 auto;
-  //       display: none;
-  //       flex-wrap: wrap;
-  //       align-items: flex-start;
-  //       align-content: flex-start;
-  //       padding-left: $spacing_small;
-  //       padding-bottom: $spacing_large;
-  //       &-item {
-  //         flex: 1 1 45%;
-  //         margin-top: $spacing_small;
-  //         margin-right: $spacing_small;
-  //       }
-  //     }
-  //     &-prompt {
-  //       @include mix_border_radius(10px);
-  //       flex: 0 0 auto;
-  //       display: flex;
-  //       flex-direction: column;
-  //       padding: $spacing_medium;
-  //       margin-top: $spacing_medium;
-  //       &-line {
-  //         display: flex;
-  //         &-text {
-  //           color: $font_color_major;
-  //           font-size: $font_size_normal;
-  //         }
-  //         &-highlightText {
-  //           @include mix_border_radius(3px);
-  //           margin: 0 $spacing_small;
-  //           background-color: $color_active;
-  //           color: $font_color_inverse;
-  //           padding: 0 $spacing_x_small;
-  //           font-size: $font_size_normal;
-  //         }
-  //       }
-  //       &-more {
-  //         display: flex;
-  //         flex-direction: column;
-  //         margin-top: $spacing_small;
-  //         &-text {
-  //           font-size: $font_size_normal;
-  //           color: $font_color_major;
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-  // &--showSearchResult {
-  //   #{$axeAlertConfigurationBlockName} {
-  //     &__singleSecurities {
-  //       &-search {
-  //         &-result {
-  //           display: flex;
-  //         }
-  //         &-prompt {
-  //           display: none;
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-  // &--myGroupDisabled {
-  //   #{$axeAlertConfigurationBlockName} {
-  //     &__myGroup {
-  //       &-content {
-  //         &-disableTag {
-  //           visibility: visible;
-  //         }
-  //         &-btnGroup {
-  //           &-btn {
-  //             @include material('none');
-  //             background-color: $color_disabled;
-  //             &--selected {
-  //               background-color: $color_active;
-  //             }
-  //           }
-  //         }
-  //         &-disableBtn {
-  //           @include material('none');
-  //           @extend .santaBtn--inverseLabelled;
-  //           background-color: $color_active;
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-  // &--userIsNotPMState {
-  //   #{$axeAlertConfigurationBlockName} {
-  //     &__myGroup {
-  //       &-content {
-  //         display: none;
-  //       }
-  //     }
-  //     &__textSeparator {
-  //       display: none;
-  //     }
-  //   }
-  // }
-// }
+      &-btnGroup {
+        flex: 1 1 auto;
+        margin-left: $spacing_medium;
+        &-btn {
+          &--selected {
+            @include material('none');
+            background-color: $color_active;
+            color: $font_color_inverse;
+          }
+        }
+      }
+      &-disableBtn {
+        margin-left: $spacing_x_large;
+      }
+    }
+  }
+  &__textSeparator {
+    @include mix_border_generator($typical_border_width 0 0 0, $color_white);
+    flex: 0 0 auto;
+    display: flex;
+    margin: $spacing_medium 0;
+    padding-top: $spacing_medium;
+    &-content {
+      color: $font_color_major;
+      font-size: $font_size_normal;
+      margin-left: 12rem;
+    }
+  }
+  &__singleSecurities {
+    flex: 1 1 auto;
+    display: flex;
+    overflow: hidden;
+    &-watchList {
+      @include mix_border_generator(0 $typical_border_width 0 0, $color_white);
+      flex: 0 1 50%;
+      display: flex;
+      flex-direction: column;
+      margin-right: $spacing_medium;
+      padding-right: $spacing_medium;
+      &-securityList {
+        @include mix_enable_scrollbar('vertical');
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        padding-right: $spacing_medium;
+        &-item {
+          flex: 0 1 auto;
+          display: flex;
+          align-items: center;
+          margin-top: $spacing_small;
+          &-newTag {
+            @include mix_border_radius(3px);
+            flex: 0 0 auto;
+            display: none;
+            align-items: center;
+            margin-right: $spacing_small;
+            padding: $spacing_xx_small $spacing_x_small;
+            background-color: $color_highlight;
+            &>i {
+              color: $font_color_inverse;
+              margin-right: $spacing_x_small;
+            }
+            &>span {
+              color: $font_color_inverse;
+            }
+          }
+          &-disableTag {
+            @include mix_border_radius(3px);
+            flex: 0 0 auto;
+            display: none;
+            align-items: center;
+            margin-right: $spacing_small;
+            padding: $spacing_xx_small $spacing_x_small;
+            background-color: $color_disabled;
+            &>i {
+              color: $font_color_inverse;
+              margin-right: $spacing_x_small;
+            }
+            &>span {
+              color: $font_color_inverse;
+            }
+          }
+          security-card {
+            flex: 1 1 auto;
+          }
+          &-btnGroup {
+            flex: 0 0 auto;
+            margin-left: $spacing_medium;
+            &-btn {
+              &--selected {
+                @include material('none');
+                background-color: $color_active;
+                color: $font_color_inverse;
+              }
+            }
+          }
+          &-disableBtn, &-urgentBtn {
+            flex: 0 0 auto;
+            margin-left: $spacing_medium;
+            color: $font_color_major;
+          }
+          &-removeBtn {
+            flex: 0 0 auto;
+            margin-left: $spacing_medium;
+            background-color: $color_kill;
+            color: $font_color_inverse;
+          }
+          &--deleted {
+            display: none;
+          }
+          &--disabled {
+            #{$axeAlertConfigurationBlockName} {
+              &__singleSecurities-watchList-securityList-item {
+                &-disableTag {
+                  display: flex;
+                }
+                &-btnGroup {
+                  &-btn {
+                    @include material('none');
+                    background-color: $color_disabled;
+                    &--selected {
+                      background-color: $color_active;
+                    }
+                  }
+                }
+                &-disableBtn {
+                  @include material('none');
+                  background-color: $color_active;
+                  color: $font_color_inverse;
+                }
+              }
+            }
+          }
+          &--urgent {
+            #{$axeAlertConfigurationBlockName} {
+              &__singleSecurities-watchList-securityList-item {
+                &-urgentBtn {
+                  @include material('none');
+                  background-color: $color_active;
+                  color: $font_color_inverse;
+                }
+              }
+            }
+          }
+          &--new {
+            #{$axeAlertConfigurationBlockName} {
+              &__watchList-securityList-item {
+                &-newTag {
+                  display: flex;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    &-search {
+      flex: 0 1 50%;
+      display: flex;
+      flex-direction: column;
+      &-utility {
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        &-label {
+          flex: 0 0 auto;
+          font-size: $font_size_normal;
+          color: $font_color_major;
+          margin-right: $spacing_medium;
+        }
+        santa-input {
+          flex: 1 1 auto;
+        }
+      }
+      &-result {
+        @include mix_enable_scrollbar('vertical');
+        flex: 1 1 auto;
+        display: none;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        align-content: flex-start;
+        padding-left: $spacing_small;
+        padding-bottom: $spacing_large;
+        &-item {
+          flex: 1 1 45%;
+          margin-top: $spacing_small;
+          margin-right: $spacing_small;
+        }
+      }
+      &-prompt {
+        @include mix_border_radius(10px);
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        padding: $spacing_medium;
+        margin-top: $spacing_medium;
+        &-line {
+          display: flex;
+          &-text {
+            color: $font_color_major;
+            font-size: $font_size_normal;
+          }
+          &-highlightText {
+            @include mix_border_radius(3px);
+            margin: 0 $spacing_small;
+            background-color: $color_active;
+            color: $font_color_inverse;
+            padding: 0 $spacing_x_small;
+            font-size: $font_size_normal;
+          }
+        }
+        &-more {
+          display: flex;
+          flex-direction: column;
+          margin-top: $spacing_small;
+          &-text {
+            font-size: $font_size_normal;
+            color: $font_color_major;
+          }
+        }
+      }
+    }
+  }
+  &--showSearchResult {
+    #{$axeAlertConfigurationBlockName} {
+      &__singleSecurities {
+        &-search {
+          &-result {
+            display: flex;
+          }
+          &-prompt {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+  &--myGroupDisabled {
+    #{$axeAlertConfigurationBlockName} {
+      &__myGroup {
+        &-content {
+          &-disableTag {
+            visibility: visible;
+          }
+          &-btnGroup {
+            &-btn {
+              @include material('none');
+              background-color: $color_disabled;
+              &--selected {
+                background-color: $color_active;
+              }
+            }
+          }
+          &-disableBtn {
+            @include material('none');
+            @extend .santaBtn--inverseLabelled;
+            background-color: $color_active;
+          }
+        }
+      }
+    }
+  }
+  &--userIsNotPMState {
+    #{$axeAlertConfigurationBlockName} {
+      &__myGroup {
+        &-content {
+          display: none;
+        }
+      }
+      &__textSeparator {
+        display: none;
+      }
+    }
+  }
+}
 
-// .sat-tradeAlertMarkAlertConfiguration {
-  // $markAlertConfigurationBlockName: &;
-  // display: flex;
-  // flex-direction: column;
-  // &__title {
-  //   flex: 0 0 auto;
-  //   display: flex;
-  //   &-text {
-  //     font-size: $font_size_normal;
-  //     color: $font_color_major;
-  //   }
-  // }
-  // &__groupList {
-  //   flex: 1 1 auto;
-  //   display: flex;
-  //   margin-top: $spacing_large;
-  //   &-group {
-  //     @include mix_fixed_div(relative, $z_index_base_item);
-  //     @include mix_border_radius(5px);
-  //     @include mix_border_generator($typical_border_width);
-  //     display: flex;
-  //     flex-direction: column;
-  //     padding: $spacing_small;
-  //     background-color: $color_white;
-  //     &-disableTag {
-  //       @include mix_fixed_div(absolute, $z_index_hovering_item);
-  //       @include mix_border_radius(3px);
-  //       @include mix_calculate(left, 50%, 2.75rem, '-');
-  //       flex: 0 0 auto;
-  //       display: none;
-  //       align-items: center;
-  //       top: -$spacing_medium;
-  //       padding: $spacing_xx_small $spacing_x_small;
-  //       background-color: $color_disabled;
-  //       &>i {
-  //         color: $font_color_inverse;
-  //         margin-right: $spacing_x_small;
-  //       }
-  //       &>span {
-  //         color: $font_color_inverse;
-  //       }
-  //     }
-  //     &-text {
-  //       @include mix_border_generator(0 0 $typical_border_width 0);
-  //       font-size: $font_size_normal;
-  //       padding-bottom: $spacing_small;
-  //       margin-bottom: $spacing_small;
-  //       color: $font_color_major;
-  //       text-align: center;
-  //     }
-  //     &-threshold {
-  //       flex: 1 1 auto;
-  //       display: flex;
-  //       flex-direction: column;
-  //       margin-bottom: $spacing_small;
-  //       &-title {
-  //         flex: 0 0 auto;
-  //         color: $font_color_minor;
-  //         font-size: $font_size_normal;
-  //       }
-  //       &-entry {
-  //         flex: 0 0 auto;
-  //         display: flex;
-  //         align-items: center;
-  //         margin-top: $spacing_small;
-  //         margin-left: $spacing_medium;
-  //         &-label {
-  //           flex: 0 0 auto;
-  //           margin-right: $spacing_x_small;
-  //           margin-left: $spacing_large;
-  //           text-align: right;
-  //         }
-  //         &-input {
-  //           flex: 0 0 auto;
-  //         }
-  //         &-unit {
-  //           flex: 0 0 auto;
-  //           margin-left: $spacing_x_small;
-  //           color: $font_color_minor;
-  //         }
-  //       }
-  //     }
-  //     &-ctas {
-  //       flex: 0 0 auto;
-  //       display: flex;
-  //       justify-content: center;
-  //     }
-  //   }
-  // }
-  // &--disabledState {
-  //   #{$markAlertConfigurationBlockName} {
-  //     &__groupList {
-  //       &-group {
-  //         &-disableTag {
-  //           display: flex;
-  //         }
-  //         &-ctas-disableBtn {
-  //           @include material('none');
-  //           @extend .santaBtn--inverseLabelled;
-  //           background-color: $color_active;
-  //           &--selected{
-  //             @include material('none');
-  //             background-color: $color_active;
-  //             color: $font_color_inverse;
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-  // &--userIsNotPMState {
-  //   #{$markAlertConfigurationBlockName} {
-  //     &__groupList {
-  //       &-group {
-  //         display: none;  // this is temporary since now the only group we have is the "Securities I Own" group
-  //       }
-  //     }
-  //   }
-  // }
-// }
+.sat-tradeAlertMarkAlertConfiguration {
+  $markAlertConfigurationBlockName: &;
+  display: flex;
+  flex-direction: column;
+  &__title {
+    flex: 0 0 auto;
+    display: flex;
+    &-text {
+      font-size: $font_size_normal;
+      color: $font_color_major;
+    }
+  }
+  &__groupList {
+    flex: 1 1 auto;
+    display: flex;
+    margin-top: $spacing_large;
+    &-group {
+      @include mix_fixed_div(relative, $z_index_base_item);
+      @include mix_border_radius(5px);
+      @include mix_border_generator($typical_border_width);
+      display: flex;
+      flex-direction: column;
+      padding: $spacing_small;
+      background-color: $color_white;
+      &-disableTag {
+        @include mix_fixed_div(absolute, $z_index_hovering_item);
+        @include mix_border_radius(3px);
+        @include mix_calculate(left, 50%, 2.75rem, '-');
+        flex: 0 0 auto;
+        display: none;
+        align-items: center;
+        top: -$spacing_medium;
+        padding: $spacing_xx_small $spacing_x_small;
+        background-color: $color_disabled;
+        &>i {
+          color: $font_color_inverse;
+          margin-right: $spacing_x_small;
+        }
+        &>span {
+          color: $font_color_inverse;
+        }
+      }
+      &-text {
+        @include mix_border_generator(0 0 $typical_border_width 0);
+        font-size: $font_size_normal;
+        padding-bottom: $spacing_small;
+        margin-bottom: $spacing_small;
+        color: $font_color_major;
+        text-align: center;
+      }
+      &-threshold {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: $spacing_small;
+        &-title {
+          flex: 0 0 auto;
+          color: $font_color_minor;
+          font-size: $font_size_normal;
+        }
+        &-entry {
+          flex: 0 0 auto;
+          display: flex;
+          align-items: center;
+          margin-top: $spacing_small;
+          margin-left: $spacing_medium;
+          &-label {
+            flex: 0 0 auto;
+            margin-right: $spacing_x_small;
+            margin-left: $spacing_large;
+            text-align: right;
+          }
+          &-input {
+            flex: 0 0 auto;
+          }
+          &-unit {
+            flex: 0 0 auto;
+            margin-left: $spacing_x_small;
+            color: $font_color_minor;
+          }
+        }
+      }
+      &-ctas {
+        flex: 0 0 auto;
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+  &--disabledState {
+    #{$markAlertConfigurationBlockName} {
+      &__groupList {
+        &-group {
+          &-disableTag {
+            display: flex;
+          }
+          &-ctas-disableBtn {
+            @include material('none');
+            @extend .santaBtn--inverseLabelled;
+            background-color: $color_active;
+            &--selected{
+              @include material('none');
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--userIsNotPMState {
+    #{$markAlertConfigurationBlockName} {
+      &__groupList {
+        &-group {
+          display: none;  // this is temporary since now the only group we have is the "Securities I Own" group
+        }
+      }
+    }
+  }
+}
 
 // .sat-tradeAlertPanel {
-  // $tradeAlertPanelBlockName: &;
-  // @include mix_border_generator;
-  // @include mix_border_radius(10px);
-  // flex: 1 1 auto;
-  // display: flex;
-  // flex-direction: row;
-  // &__alertCountsGrid {
-  //     display: flex;
-  //     flex-direction: row;
-  //     flex-wrap: wrap;
-  //     min-width: 28rem;
-  //     flex: 1 1 auto;
-  //     padding: $spacing_x_small;
-  //     overflow-y: scroll;
-  // }
-  // &__utilities {
-  //   flex: 0 1 $trade_topPanels_baseState_height;
-  //   display: flex;
-  //   padding: $spacing_medium;
-  //   max-height: 100%;
-  //   &-thumbnail {
-  //     @include mix_border_generator(0 0 0 $typical_border_width);
-  //     flex: 0 0 auto;
-  //     display: flex;
-  //     margin-left: $spacing_medium;
-  //     padding-left: $spacing_medium;
-  //     &-icon {
-  //       color: $font_color_trivial;
-  //       font-size: $font_size_hero;
-  //     }
-  //   }
-  //   &-pause {
-  //     flex: 1 1 auto;
-  //     display: flex;
-  //     justify-content: center;
-  //     button {
-  //       &:last-of-type {
-  //         margin-left: $spacing_small;
-  //       }
-  //     }
-  //   }
-  //   &-configureCTA {
-  //     @include mix_border_generator(0 0 0 $typical_border_width);
-  //     flex: 0 1 auto;
-  //     display: flex;
-  //     justify-content: center;
-  //     margin-left: $spacing_medium;
-  //     padding-left: $spacing_medium;
-  //   }
-  // }
-  // &__configuration {
-  //   flex: 1 1 auto;
-  //   display: none;
-  //   flex-direction: column;
-  //   overflow: hidden;
-  //   &-alertTypeList {
-  //     flex: 0 0 auto;
-  //     display: flex;
-  //     padding: $spacing_medium $spacing_medium 0 $spacing_medium;
-  //     &-item {
-  //       @include mix_border_radius(5px, 'top');
-  //       display: flex;
-  //       padding: $spacing_small $spacing_small $spacing_medium $spacing_small;
-  //       margin-right: $spacing_medium;
-  //       &-btn {
-  //         flex: 1 1 auto;
-  //         color: $font_color_inverse;
-  //         i {
-  //           font-size: $font_size_x_large;
-  //         }
-  //         span {
-  //           font-size: $font_size_large;
-  //         }
-  //       }
-  //       &--axe &-btn {
-  //         background-color: $tradeAxeAlertColor;
-  //       }
-  //       &--mark &-btn {
-  //         background-color: $tradeMarkAlertColor;
-  //       }
-  //     }
-  //   }
-  //   &-main {
-  //     flex: 1 1 auto;
-  //     display: flex;
-  //     overflow: hidden;
-  //     margin: 0 $spacing_medium;
-  //     &-axeConfig {
-  //       @include mix_border_radius(5px, 'all-but-top-left');
-  //       flex: 1 1 auto;
-  //       display: none;
-  //       padding: $spacing_small;
-  //     }
-  //     &-markConfig {
-  //       @include mix_border_radius(5px);
-  //       flex: 1 1 auto;
-  //       display: none;
-  //       padding: $spacing_small;
-  //     }
-  //   }
-  //   &-ctas {
-  //     flex: 0 0 auto;
-  //     display: flex;
-  //     justify-content: center;
-  //     padding: $spacing_medium;
-  //     &-save {
-  //       background-color: $color_create;
-  //       padding: $spacing_small $spacing_x_large;
-  //       i {
-  //         font-size: $font_size_x_large;
-  //         color: $font_color_inverse;
-  //       }
-  //       span {
-  //         font-size: $font_size_large;
-  //         color: $font_color_inverse;
-  //       }
-  //     }
-  //   }
-  // }
-  // &--sidePanelsDisplayedState {
-  //   #{$tradeAlertPanelBlockName} {
-  //     &__utilities {
-  //       &-thumbnail {
-  //         display: none;
-  //       }
-  //     }
-  //   }
-  // }
-  // &--configureAlertState {
-  //   #{$tradeAlertPanelBlockName} {
-  //     &__utilities {
-  //       display: none;
-  //     }
-  //     &__configuration {
-  //       display: flex;
-  //     }
-  //     &__alertCountsGrid {
-  //       display: none;
-  //     }
-  //   }
-  // }
-  // &--alertPausedState {
-  //   #{$tradeAlertPanelBlockName} {
-  //     &__utilities {
-  //       &-pause {
-  //         &-btn {
-  //           @include material('none');
-  //           background-color: $color_active;
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-  // &--configureAxeAlertState {
-  //   #{$tradeAlertPanelBlockName} {
-  //     &__configuration {
-  //       &-alertTypeList-item {
-  //         &--axe {
-  //           background-color: $tradeAxeAlertBackgroundColor;
-  //           #{$tradeAlertPanelBlockName} {
-  //             &__configuration-alertTypeList-item-btn {
-  //               @include material('none');
-  //               background-color: $color_active;
-  //             }
-  //           }
-  //         }
-  //       }
-  //       &-main-axeConfig {
-  //         display: flex;
-  //         background-color: $tradeAxeAlertBackgroundColor;
-  //       }
-  //     }
-  //   }
-  // }
-  // &--configureMarkAlertState {
-  //   #{$tradeAlertPanelBlockName} {
-  //     &__configuration {
-  //       &-alertTypeList-item {
-  //         &--mark {
-  //           background-color: $tradeMarkAlertBackgroundColor;
-  //           #{$tradeAlertPanelBlockName} {
-  //             &__configuration-alertTypeList-item-btn {
-  //               @include material('none');
-  //               background-color: $color_active;
-  //             }
-  //           }
-  //         }
-  //       }
-  //       &-main-markConfig {
-  //         display: flex;
-  //         background-color: $tradeMarkAlertBackgroundColor;
-  //       }
-  //     }
-  //   }
-  // }
-  // &--focusMode {
-  //   border: none;
-  //   #{$tradeAlertPanelBlockName} {
-  //     &__utilities {
-  //       display: none;
-  //     }
-  //   }
-  // }
+//   $tradeAlertPanelBlockName: &;
+//   @include mix_border_generator;
+//   @include mix_border_radius(10px);
+//   flex: 1 1 auto;
+//   display: flex;
+//   flex-direction: row;
+//   &__alertCountsGrid {
+//       display: flex;
+//       flex-direction: row;
+//       flex-wrap: wrap;
+//       min-width: 28rem;
+//       flex: 1 1 auto;
+//       padding: $spacing_x_small;
+//       overflow-y: scroll;
+//   }
+//   &__utilities {
+//     flex: 0 1 $trade_topPanels_baseState_height;
+//     display: flex;
+//     padding: $spacing_medium;
+//     max-height: 100%;
+//     &-thumbnail {
+//       @include mix_border_generator(0 0 0 $typical_border_width);
+//       flex: 0 0 auto;
+//       display: flex;
+//       margin-left: $spacing_medium;
+//       padding-left: $spacing_medium;
+//       &-icon {
+//         color: $font_color_trivial;
+//         font-size: $font_size_hero;
+//       }
+//     }
+//     &-pause {
+//       flex: 1 1 auto;
+//       display: flex;
+//       justify-content: center;
+//       button {
+//         &:last-of-type {
+//           margin-left: $spacing_small;
+//         }
+//       }
+//     }
+//     &-configureCTA {
+//       @include mix_border_generator(0 0 0 $typical_border_width);
+//       flex: 0 1 auto;
+//       display: flex;
+//       justify-content: center;
+//       margin-left: $spacing_medium;
+//       padding-left: $spacing_medium;
+//     }
+//   }
+//   &__configuration {
+//     flex: 1 1 auto;
+//     display: none;
+//     flex-direction: column;
+//     overflow: hidden;
+//     &-alertTypeList {
+//       flex: 0 0 auto;
+//       display: flex;
+//       padding: $spacing_medium $spacing_medium 0 $spacing_medium;
+//       &-item {
+//         @include mix_border_radius(5px, 'top');
+//         display: flex;
+//         padding: $spacing_small $spacing_small $spacing_medium $spacing_small;
+//         margin-right: $spacing_medium;
+//         &-btn {
+//           flex: 1 1 auto;
+//           color: $font_color_inverse;
+//           i {
+//             font-size: $font_size_x_large;
+//           }
+//           span {
+//             font-size: $font_size_large;
+//           }
+//         }
+//         &--axe &-btn {
+//           background-color: $tradeAxeAlertColor;
+//         }
+//         &--mark &-btn {
+//           background-color: $tradeMarkAlertColor;
+//         }
+//       }
+//     }
+//     &-main {
+//       flex: 1 1 auto;
+//       display: flex;
+//       overflow: hidden;
+//       margin: 0 $spacing_medium;
+//       &-axeConfig {
+//         @include mix_border_radius(5px, 'all-but-top-left');
+//         flex: 1 1 auto;
+//         display: none;
+//         padding: $spacing_small;
+//       }
+//       &-markConfig {
+//         @include mix_border_radius(5px);
+//         flex: 1 1 auto;
+//         display: none;
+//         padding: $spacing_small;
+//       }
+//     }
+//     &-ctas {
+//       flex: 0 0 auto;
+//       display: flex;
+//       justify-content: center;
+//       padding: $spacing_medium;
+//       &-save {
+//         background-color: $color_create;
+//         padding: $spacing_small $spacing_x_large;
+//         i {
+//           font-size: $font_size_x_large;
+//           color: $font_color_inverse;
+//         }
+//         span {
+//           font-size: $font_size_large;
+//           color: $font_color_inverse;
+//         }
+//       }
+//     }
+//   }
+//   &--sidePanelsDisplayedState {
+//     #{$tradeAlertPanelBlockName} {
+//       &__utilities {
+//         &-thumbnail {
+//           display: none;
+//         }
+//       }
+//     }
+//   }
+//   &--configureAlertState {
+//     #{$tradeAlertPanelBlockName} {
+//       &__utilities {
+//         display: none;
+//       }
+//       &__configuration {
+//         display: flex;
+//       }
+//       &__alertCountsGrid {
+//         display: none;
+//       }
+//     }
+//   }
+//   &--alertPausedState {
+//     #{$tradeAlertPanelBlockName} {
+//       &__utilities {
+//         &-pause {
+//           &-btn {
+//             @include material('none');
+//             background-color: $color_active;
+//           }
+//         }
+//       }
+//     }
+//   }
+//   &--configureAxeAlertState {
+//     #{$tradeAlertPanelBlockName} {
+//       &__configuration {
+//         &-alertTypeList-item {
+//           &--axe {
+//             background-color: $tradeAxeAlertBackgroundColor;
+//             #{$tradeAlertPanelBlockName} {
+//               &__configuration-alertTypeList-item-btn {
+//                 @include material('none');
+//                 background-color: $color_active;
+//               }
+//             }
+//           }
+//         }
+//         &-main-axeConfig {
+//           display: flex;
+//           background-color: $tradeAxeAlertBackgroundColor;
+//         }
+//       }
+//     }
+//   }
+//   &--configureMarkAlertState {
+//     #{$tradeAlertPanelBlockName} {
+//       &__configuration {
+//         &-alertTypeList-item {
+//           &--mark {
+//             background-color: $tradeMarkAlertBackgroundColor;
+//             #{$tradeAlertPanelBlockName} {
+//               &__configuration-alertTypeList-item-btn {
+//                 @include material('none');
+//                 background-color: $color_active;
+//               }
+//             }
+//           }
+//         }
+//         &-main-markConfig {
+//           display: flex;
+//           background-color: $tradeMarkAlertBackgroundColor;
+//         }
+//       }
+//     }
+//   }
+//   &--focusMode {
+//     border: none;
+//     #{$tradeAlertPanelBlockName} {
+//       &__utilities {
+//         display: none;
+//       }
+//     }
+//   }
 // }
 
 $tradeAlertPanel_overview_tabIndicate_width: 6rem;
@@ -721,6 +721,9 @@ $tradeAlertPanel_overview_tabIndicate_width: 6rem;
         }
       }
     }
+    &-configureCTA {
+      margin-right: $spacing_medium;
+    }
   }
   &__main {
     @include mix_alive('normal');
@@ -740,65 +743,71 @@ $tradeAlertPanel_overview_tabIndicate_width: 6rem;
       }
     }
   }
-  &--alertReadyState {
-    #{$tradeAlertPanelBlockName} {
-      &__overview {
-        &-tabList {
-          &-tab {
-            &-cta {
-              @include material();
-              border: none;
-              background-color: $color_white;
-              &-regText {
-                color: $font_color_minor;
-              }
-              &-countText {
-                color: $font_color_inverse;
-                background-color: $color_active;
-              }
-            }
-            &--axe {
-              #{$tradeAlertPanelBlockName} {
-                &__overview-tabList-tab-cta {
-                  background-color: $tradeAxeAlertColor;
-                  &-icon, &-regText {
-                    color: $font_color_inverse;
-                  }
-                }
-              }
-            }
-            &--mark {
-              #{$tradeAlertPanelBlockName} {
-                &__overview-tabList-tab-cta {
-                  background-color: $tradeMarkAlertColor;
-                  &-icon, &-regText {
-                    color: $font_color_inverse;
-                  }
-                }
-              }
-            }
-            &--trade {
-              #{$tradeAlertPanelBlockName} {
-                &__overview-tabList-tab-cta {
-                  background-color: $tradeTradeAlertColor;
-                  &-icon, &-regText {
-                    color: $font_color_inverse;
-                  }
-                }
-              }
-            }
+  &__configuration {
+    flex: 1 1 auto;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    &-alertTypeList {
+      flex: 0 0 auto;
+      display: flex;
+      padding: $spacing_medium $spacing_medium 0 $spacing_medium;
+      &-item {
+        @include mix_border_radius(5px, 'top');
+        display: flex;
+        padding: $spacing_small $spacing_small $spacing_medium $spacing_small;
+        margin-right: $spacing_medium;
+        &-btn {
+          flex: 1 1 auto;
+          color: $font_color_inverse;
+          i {
+            font-size: $font_size_x_large;
           }
+          span {
+            font-size: $font_size_large;
+          }
+        }
+        &--axe &-btn {
+          background-color: $tradeAxeAlertColor;
+        }
+        &--mark &-btn {
+          background-color: $tradeMarkAlertColor;
         }
       }
     }
-  }
-  &--displayAlertTableState {
-    #{$tradeAlertPanelBlockName} {
-      &__main {
-        padding: $spacing_medium;
-        margin: -$spacing_small $spacing_medium $spacing_medium $spacing_medium;
-        &-table {
-          display: flex;
+    &-main {
+      flex: 1 1 auto;
+      display: flex;
+      overflow: hidden;
+      margin: 0 $spacing_medium;
+      &-axeConfig {
+        @include mix_border_radius(5px, 'all-but-top-left');
+        flex: 1 1 auto;
+        display: none;
+        padding: $spacing_small;
+      }
+      &-markConfig {
+        @include mix_border_radius(5px);
+        flex: 1 1 auto;
+        display: none;
+        padding: $spacing_small;
+      }
+    }
+    &-ctas {
+      flex: 0 0 auto;
+      display: flex;
+      justify-content: center;
+      padding: $spacing_medium;
+      &-save {
+        background-color: $color_create;
+        padding: $spacing_small $spacing_x_large;
+        i {
+          font-size: $font_size_x_large;
+          color: $font_color_inverse;
+        }
+        span {
+          font-size: $font_size_large;
+          color: $font_color_inverse;
         }
       }
     }
@@ -897,6 +906,124 @@ $tradeAlertPanel_overview_tabIndicate_width: 6rem;
               }
             }
           }
+        }
+      }
+    }
+  }
+  &--configureAlertState {
+    #{$tradeAlertPanelBlockName} {
+      &__utilities {
+        display: none;
+      }
+      &__configuration {
+        display: flex;
+      }
+      &__alertCountsGrid {
+        display: none;
+      }
+    }
+  }
+  &--configureAxeAlertState {
+    #{$tradeAlertPanelBlockName} {
+      &__configuration {
+        &-alertTypeList-item {
+          &--axe {
+            background-color: $tradeAxeAlertBackgroundColor;
+            #{$tradeAlertPanelBlockName} {
+              &__configuration-alertTypeList-item-btn {
+                @include material('none');
+                background-color: $color_active;
+              }
+            }
+          }
+        }
+        &-main-axeConfig {
+          display: flex;
+          background-color: $tradeAxeAlertBackgroundColor;
+        }
+      }
+    }
+  }
+  &--configureMarkAlertState {
+    #{$tradeAlertPanelBlockName} {
+      &__configuration {
+        &-alertTypeList-item {
+          &--mark {
+            background-color: $tradeMarkAlertBackgroundColor;
+            #{$tradeAlertPanelBlockName} {
+              &__configuration-alertTypeList-item-btn {
+                @include material('none');
+                background-color: $color_active;
+              }
+            }
+          }
+        }
+        &-main-markConfig {
+          display: flex;
+          background-color: $tradeMarkAlertBackgroundColor;
+        }
+      }
+    }
+  }
+  &--alertReadyState {
+    #{$tradeAlertPanelBlockName} {
+      &__overview {
+        &-tabList {
+          &-tab {
+            &-cta {
+              @include material();
+              border: none;
+              background-color: $color_white;
+              &-regText {
+                color: $font_color_minor;
+              }
+              &-countText {
+                color: $font_color_inverse;
+                background-color: $color_active;
+              }
+            }
+            &--axe {
+              #{$tradeAlertPanelBlockName} {
+                &__overview-tabList-tab-cta {
+                  background-color: $tradeAxeAlertColor;
+                  &-icon, &-regText {
+                    color: $font_color_inverse;
+                  }
+                }
+              }
+            }
+            &--mark {
+              #{$tradeAlertPanelBlockName} {
+                &__overview-tabList-tab-cta {
+                  background-color: $tradeMarkAlertColor;
+                  &-icon, &-regText {
+                    color: $font_color_inverse;
+                  }
+                }
+              }
+            }
+            &--trade {
+              #{$tradeAlertPanelBlockName} {
+                &__overview-tabList-tab-cta {
+                  background-color: $tradeTradeAlertColor;
+                  &-icon, &-regText {
+                    color: $font_color_inverse;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--displayAlertTableState {
+    #{$tradeAlertPanelBlockName} {
+      &__main {
+        padding: $spacing_medium;
+        margin: -$spacing_small $spacing_medium $spacing_medium $spacing_medium;
+        &-table {
+          display: flex;
         }
       }
     }

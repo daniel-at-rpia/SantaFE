@@ -191,27 +191,27 @@ export interface TradeAlertPanelState {
   isAlertPaused: boolean;
   securityMap: Array<SecurityMapEntry>;
   alertUpdateTimestamp: string;
-  // configuration: {
-  //   selectedAlert: AlertTypes,
-  //   axe: {
-  //     myGroup: TradeAlertConfigurationAxeGroupBlock;
-  //     securitySearchKeyword: string;
-  //     securityList: Array<TradeAlertConfigurationAxeGroupBlock>;
-  //     searchList: Array<DTOs.SecurityDTO>;
-  //     matchedResultCount: number;
-  //     searchIsValid: boolean;
-  //   },
-  //   mark: {
-  //     myGroup: {
-  //       disabled: boolean;
-  //       groupId: string;
-  //       makeMoneySpread: number;
-  //       makeMoneyPrice: number;
-  //       loseMoneySpread: number;
-  //       loseMoneyPrice: number;
-  //     }
-  //   }
-  // }
+  configuration: {
+    selectedAlert: AlertTypes,
+    axe: {
+      myGroup: TradeAlertConfigurationAxeGroupBlock;
+      securitySearchKeyword: string;
+      securityList: Array<TradeAlertConfigurationAxeGroupBlock>;
+      searchList: Array<DTOs.SecurityDTO>;
+      matchedResultCount: number;
+      searchIsValid: boolean;
+    },
+    mark: {
+      myGroup: {
+        disabled: boolean;
+        groupId: string;
+        makeMoneySpread: number;
+        makeMoneyPrice: number;
+        loseMoneySpread: number;
+        loseMoneyPrice: number;
+      }
+    }
+  }
   autoUpdateCountdown: number;
   alertUpdateInProgress: boolean;
   isCenterPanelPresetSelected: boolean;
