@@ -375,14 +375,14 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
                 }
               } else {
                 // checking for cancelled and active alerts
+                const newAlert = this.dtoService.formAlertObject(eachRawAlert);
                 if (eachRawAlert.isActive) {
-                  const newAlert = this.dtoService.formAlertObject(eachRawAlert);
                   if (newAlert.data.isUrgent) {
                     updateList.push(newAlert);
                   }
-                  if (newAlert.data.security && newAlert.data.security.data.securityID) {
-                    securityList.push(newAlert);
-                  }
+                }
+                if (newAlert.data.security && newAlert.data.security.data.securityID) {
+                  securityList.push(newAlert);
                 }
               }
             });
