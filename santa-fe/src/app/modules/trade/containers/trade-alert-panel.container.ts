@@ -217,7 +217,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           }
         },
         alert: {
-          alertTableAlertList: [],
+          alertTableAlertList: {},
           initialAlertListReceived: false,
           axeAlertCount: 0,
           unreadAxeAlertCount: 0,
@@ -1031,7 +1031,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
     private loadFreshData(newAlertList: Array<AlertDTO>) {
       newAlertList.forEach((eachAlert) => {
-        this.state.alert.alertTableAlertList.push(eachAlert);
+        this.state.alert.alertTableAlertList[eachAlert.data.id] = eachAlert;
       });
       // this.loadInitialStencilTable();
       this.updateStage(0, this.state.fetchResult.alertTable, this.state.table.alertDto);
@@ -1068,7 +1068,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     private fetchUpdate(newAlertList: Array<AlertDTO>) {
       if (newAlertList.length > 0) {
         newAlertList.forEach((eachAlert) => {
-          this.state.alert.alertTableAlertList.push(eachAlert);
+          this.state.alert.alertTableAlertList[eachAlert.data.id] = eachAlert;
         });
       }
       if (this.state.displayAlertTable && this.state.fetchResult.alertTable.fetchComplete) {
@@ -1078,12 +1078,15 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
     private fetchDataForAlertTable(isInitialFetch: boolean) {
       const securityList = [];
-      this.state.alert.alertTableAlertList.forEach((eachAlert) => {
-        const targetSecurityId = eachAlert.data.security.data.securityID;
-        if (!securityList.includes(targetSecurityId)) {
-          securityList.push(targetSecurityId);
+      for (const eachAlertId in this.state.alert.alertTableAlertList) {
+        const eachAlert = this.state.alert.alertTableAlertList[eachAlertId];
+        if (!!eachAlert.data.security) {
+          const targetSecurityId = eachAlert.data.security.data.securityID;
+          if (!securityList.includes(targetSecurityId)) {
+            securityList.push(targetSecurityId);
+          }
         }
-      });
+      }
       const payload: PayloadGetTradeFullData = {
         maxNumberOfSecurities: 2000,
         groupIdentifier: {},

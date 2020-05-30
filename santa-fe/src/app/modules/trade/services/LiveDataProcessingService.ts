@@ -13,6 +13,7 @@
       AlertDTO
     } from 'FEModels/frontend-models.interface';
     import {
+      AlertDTOMap,
       LiveDataDiffingResult,
       ClickedOpenSecurityInBloombergEmitterParams
     } from 'FEModels/frontend-adhoc-packages.interface';
@@ -84,7 +85,7 @@ export class LiveDataProcessingService {
   }
 
   public loadFinalStageDataForAlertTable(
-    alertDTOList: Array<AlertDTO>,
+    alertDTOMap: AlertDTOMap,
     tableHeaderList: Array<SecurityTableHeaderDTO>,
     selectedDriver: string,
     serverReturn: BEFetchAllTradeDataReturn,
@@ -95,7 +96,8 @@ export class LiveDataProcessingService {
     const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
     const prinstineRowList: Array<SecurityTableRowDTO> = [];
     const securityList = [];
-    alertDTOList.forEach((eachAlertDTO) => {
+    for (const eachAlertId in alertDTOMap) {
+      const eachAlertDTO = alertDTOMap[eachAlertId];
       if (eachAlertDTO.data && eachAlertDTO.data.security && eachAlertDTO.data.security.data && eachAlertDTO.data.security.data.securityID) {
         const targetSecurityId = eachAlertDTO.data.security.data.securityID;
         if (rawSecurityDTOMap[targetSecurityId]) {
@@ -124,7 +126,7 @@ export class LiveDataProcessingService {
           console.error('security not found for alert', eachAlertDTO);
         }
       }
-    });
+    };
     return prinstineRowList;
   }
 

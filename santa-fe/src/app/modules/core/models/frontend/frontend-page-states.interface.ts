@@ -11,7 +11,8 @@ import {
 import {
   DefinitionConfiguratorEmitterParamsItem,
   ObligorGraphAxesZoomState,
-  SecurityMapEntry
+  SecurityMapEntry,
+  AlertDTOMap
 } from 'FEModels/frontend-adhoc-packages.interface';
 import {AlertTypes} from 'Core/constants/coreConstants.constant';
 import * as am4charts from '@amcharts/amcharts4/charts';
@@ -234,7 +235,7 @@ export interface TradeAlertPanelState {
     }
   }
   alert: {
-    alertTableAlertList: Array<DTOs.AlertDTO>;
+    alertTableAlertList: AlertDTOMap;
     initialAlertListReceived: boolean;
     axeAlertCount: number;
     unreadAxeAlertCount: number;
