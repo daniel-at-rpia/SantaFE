@@ -30,7 +30,12 @@
           <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Show All Alerts</span>
         </div>
       </div>
-      <div class="sat-tradeAlertPanel__overview-tabList-tab sat-tradeAlertPanel__overview-tabList-tab--axe">
+      <div
+        [ngClass]="{
+          'sat-tradeAlertPanel__overview-tabList-tab': true,
+          'sat-tradeAlertPanel__overview-tabList-tab--axe': true,
+          'sat-tradeAlertPanel__overview-tabList-tab--empty': state.alert.axeAlertCount === 0
+        }">
         <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.axeAlert)">
           <i class="sat-tradeAlertPanel__overview-tabList-tab-cta-icon fas fa-axe"></i>
           <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Show</span>
@@ -39,7 +44,12 @@
           <span *ngIf="state.alert.unreadAxeAlertCount > 0" class="sat-tradeAlertPanel__overview-tabList-tab-cta-newAlertsCount">{{state.alert.unreadAxeAlertCount}} new</span>
         </div>
       </div>
-      <div class="sat-tradeAlertPanel__overview-tabList-tab sat-tradeAlertPanel__overview-tabList-tab--mark">
+      <div
+        [ngClass]="{
+          'sat-tradeAlertPanel__overview-tabList-tab': true,
+          'sat-tradeAlertPanel__overview-tabList-tab--mark': true,
+          'sat-tradeAlertPanel__overview-tabList-tab--empty': state.alert.markAlertCount === 0
+        }">
         <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.markAlert)">
           <i class="sat-tradeAlertPanel__overview-tabList-tab-cta-icon far fa-bullseye-arrow"></i>
           <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Show</span>
@@ -48,7 +58,12 @@
           <span *ngIf="state.alert.unreadMarkAlertCount > 0" class="sat-tradeAlertPanel__overview-tabList-tab-cta-newAlertsCount">{{state.alert.unreadMarkAlertCount}} new</span>
         </div>
       </div>
-      <div class="sat-tradeAlertPanel__overview-tabList-tab sat-tradeAlertPanel__overview-tabList-tab--trade">
+      <div
+        [ngClass]="{
+          'sat-tradeAlertPanel__overview-tabList-tab': true,
+          'sat-tradeAlertPanel__overview-tabList-tab--trade': true,
+          'sat-tradeAlertPanel__overview-tabList-tab--empty': state.alert.tradeAlertCount === 0
+        }">
         <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.tradeAlert)">
           <i class="sat-tradeAlertPanel__overview-tabList-tab-cta-icon fal fa-handshake"></i>
           <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Show</span>
@@ -83,20 +98,6 @@
     </div>
   </section>
   <section class="sat-tradeAlertPanel__configuration">
-    <ul class="sat-tradeAlertPanel__configuration-alertTypeList">
-      <li class="sat-tradeAlertPanel__configuration-alertTypeList-item sat-tradeAlertPanel__configuration-alertTypeList-item--axe">
-        <button (click)="selectAlertForConfigure(constants.alertTypes.axeAlert)" class="sat-tradeAlertPanel__configuration-alertTypeList-item-btn santaBtn--labelled santaBtn--inverseLabelled">
-          <i class="fas fa-axe"></i>
-          <span>Axe Alert</span>
-        </button>
-      </li>
-      <li class="sat-tradeAlertPanel__configuration-alertTypeList-item sat-tradeAlertPanel__configuration-alertTypeList-item--mark">
-        <button (click)="selectAlertForConfigure(constants.alertTypes.markAlert)" class="sat-tradeAlertPanel__configuration-alertTypeList-item-btn santaBtn--labelled santaBtn--inverseLabelled">
-          <i class="far fa-bullseye-arrow"></i>
-          <span>Mark Alert</span>
-        </button>
-      </li>
-    </ul>
     <ul class="sat-tradeAlertPanel__configuration-main">
       <article
         [ngClass]="{
@@ -353,23 +354,40 @@
               </div>
             </div>
             <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas">
-<!--              <button (click)="onToggleDisableMarkAlert()" class="sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas-disableBtn santaBtn&#45;&#45;labelled">-->
-<!--                <i class="fal fa-bell-slash"></i>-->
-<!--                <span>Disable</span>-->
-<!--              </button>-->
-            <button
-              title="Disable (mute)"
-              (click)="onToggleDisableMarkAlert()"
-              [ngClass]="{
-                'sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas-disableBtn santaBtn--iconOnly fal fa-bell-slash': true,
-                'sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas-disableBtn--selected': this.state.configuration.mark.myGroup.disabled
-              }"></button>
+              <button (click)="onToggleDisableMarkAlert()" class="sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas-disableBtn santaBtn--labelled">
+                <i class="fal fa-bell-slash"></i>
+                <span>Disable</span>
+              </button>
+              <!--
+              <button
+                title="Disable (mute)"
+                (click)="onToggleDisableMarkAlert()"
+                [ngClass]="{
+                  'sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas-disableBtn santaBtn--iconOnly fal fa-bell-slash': true,
+                  'sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas-disableBtn--selected': this.state.configuration.mark.myGroup.disabled
+                }">
+              </button>
+              -->
             </div>
           </div>
         </section>
       </article>
     </ul>
     <div class="sat-tradeAlertPanel__configuration-ctas">
+      <ul class="sat-tradeAlertPanel__configuration-ctas-alertTypeList">
+        <li class="sat-tradeAlertPanel__configuration-ctas-alertTypeList-item sat-tradeAlertPanel__configuration-ctas-alertTypeList-item--axe">
+          <button (click)="selectAlertForConfigure(constants.alertTypes.axeAlert)" class="sat-tradeAlertPanel__configuration-ctas-alertTypeList-item-btn santaBtn--labelled santaBtn--inverseLabelled">
+            <i class="fas fa-axe"></i>
+            <span>Axe Alert</span>
+          </button>
+        </li>
+        <li class="sat-tradeAlertPanel__configuration-ctas-alertTypeList-item sat-tradeAlertPanel__configuration-ctas-alertTypeList-item--mark">
+          <button (click)="selectAlertForConfigure(constants.alertTypes.markAlert)" class="sat-tradeAlertPanel__configuration-ctas-alertTypeList-item-btn santaBtn--labelled santaBtn--inverseLabelled">
+            <i class="far fa-bullseye-arrow"></i>
+            <span>Mark Alert</span>
+          </button>
+        </li>
+      </ul>
       <button (click)="onClickSaveConfiguration()" class="sat-tradeAlertPanel__configuration-ctas-save santaBtn--labelled santaBtn--inverseLabelled">
         <i class="fal fa-cloud-upload"></i>
         <span>Save</span>

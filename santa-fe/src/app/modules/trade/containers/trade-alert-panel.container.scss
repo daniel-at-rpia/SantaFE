@@ -746,40 +746,12 @@ $tradeAlertPanel_overview_tabIndicate_width: 6rem;
   &__configuration {
     flex: 1 1 auto;
     display: none;
-    flex-direction: column;
     overflow: hidden;
-    &-alertTypeList {
-      flex: 0 0 auto;
-      display: flex;
-      padding: $spacing_medium $spacing_medium 0 $spacing_medium;
-      &-item {
-        @include mix_border_radius(5px, 'top');
-        display: flex;
-        padding: $spacing_small $spacing_small $spacing_medium $spacing_small;
-        margin-right: $spacing_medium;
-        &-btn {
-          flex: 1 1 auto;
-          color: $font_color_inverse;
-          i {
-            font-size: $font_size_x_large;
-          }
-          span {
-            font-size: $font_size_large;
-          }
-        }
-        &--axe &-btn {
-          background-color: $tradeAxeAlertColor;
-        }
-        &--mark &-btn {
-          background-color: $tradeMarkAlertColor;
-        }
-      }
-    }
     &-main {
       flex: 1 1 auto;
       display: flex;
       overflow: hidden;
-      margin: 0 $spacing_medium;
+      margin: 0 0 $spacing_medium $spacing_medium;
       &-axeConfig {
         @include mix_border_radius(5px, 'all-but-top-left');
         flex: 1 1 auto;
@@ -796,11 +768,37 @@ $tradeAlertPanel_overview_tabIndicate_width: 6rem;
     &-ctas {
       flex: 0 0 auto;
       display: flex;
-      justify-content: center;
-      padding: $spacing_medium;
+      flex-direction: column;
+      &-alertTypeList {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        padding: $spacing_medium $spacing_medium $spacing_medium 0;
+        &-item {
+          @include mix_border_radius(5px, 'right');
+          display: flex;
+          padding: $spacing_small;
+          margin-bottom: $spacing_medium;
+          &-btn {
+            padding: $spacing_small;
+            flex: 1 1 auto;
+            color: $font_color_inverse;
+            i {
+              font-size: $font_size_normal;
+            }
+          }
+          &--axe &-btn {
+            background-color: $tradeAxeAlertColor;
+          }
+          &--mark &-btn {
+            background-color: $tradeMarkAlertColor;
+          }
+        }
+      }
       &-save {
+        margin: $spacing_medium;
         background-color: $color_create;
-        padding: $spacing_small $spacing_x_large;
+        padding: $spacing_small $spacing_medium;
         i {
           font-size: $font_size_x_large;
           color: $font_color_inverse;
@@ -912,25 +910,22 @@ $tradeAlertPanel_overview_tabIndicate_width: 6rem;
   }
   &--configureAlertState {
     #{$tradeAlertPanelBlockName} {
-      &__utilities {
-        display: none;
+      &__main {
+        flex: 0 0 auto;
       }
       &__configuration {
         display: flex;
-      }
-      &__alertCountsGrid {
-        display: none;
       }
     }
   }
   &--configureAxeAlertState {
     #{$tradeAlertPanelBlockName} {
       &__configuration {
-        &-alertTypeList-item {
+        &-ctas-alertTypeList-item {
           &--axe {
             background-color: $tradeAxeAlertBackgroundColor;
             #{$tradeAlertPanelBlockName} {
-              &__configuration-alertTypeList-item-btn {
+              &__configuration-ctas-alertTypeList-item-btn {
                 @include material('none');
                 background-color: $color_active;
               }
@@ -947,11 +942,11 @@ $tradeAlertPanel_overview_tabIndicate_width: 6rem;
   &--configureMarkAlertState {
     #{$tradeAlertPanelBlockName} {
       &__configuration {
-        &-alertTypeList-item {
+        &-ctas-alertTypeList-item {
           &--mark {
             background-color: $tradeMarkAlertBackgroundColor;
             #{$tradeAlertPanelBlockName} {
-              &__configuration-alertTypeList-item-btn {
+              &__configuration-ctas-alertTypeList-item-btn {
                 @include material('none');
                 background-color: $color_active;
               }
@@ -1008,6 +1003,25 @@ $tradeAlertPanel_overview_tabIndicate_width: 6rem;
                   background-color: $tradeTradeAlertColor;
                   &-icon, &-regText {
                     color: $font_color_inverse;
+                  }
+                }
+              }
+            }
+            &--empty {
+              #{$tradeAlertPanelBlockName} {
+                &__overview-tabList-tab-cta {
+                  @include material('none');
+                  @include mix_border_generator;
+                  background-color: transparent;
+                  &-icon {
+                    color: $color_disabled;
+                  }
+                  &-regText {
+                    color: $font_color_minor;
+                  }
+                  &-countText {
+                    background-color: transparent;
+                    color: $color_disabled;
                   }
                 }
               }
