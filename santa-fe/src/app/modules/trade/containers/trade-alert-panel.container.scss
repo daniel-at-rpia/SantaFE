@@ -623,130 +623,6 @@ $tradeAlertPanel_overview_tabIndicate_width: 7rem;
       }
     }
   }
-  &--scopeAllAlertsState {
-    #{$tradeAlertPanelBlockName} {
-      &__overview {
-        &-tabIndicate-icon {
-          color: $font_color_major;
-        }
-        &-tabList-tab--all {
-          #{$tradeAlertPanelBlockName} {
-            &__overview-tabList-tab-cta {
-              @include material('none');
-              background-color: $color_active;
-              &-regText {
-                color: $font_color_inverse;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  &--scopeAxeAlertsState {
-    border-color: $tradeAxeAlertColor;
-    background-color: $tradeAxeAlertBackgroundColor;
-    #{$tradeAlertPanelBlockName} {
-      &__overview {
-        &-tabIndicate {
-          transform: translate(0.5rem, 0);
-          &-icon {
-            color: $tradeAxeAlertColor;
-          }
-        }
-        &-tabList-tab--axe {
-          #{$tradeAlertPanelBlockName} {
-            &__overview-tabList-tab-cta {
-              @include material('none');
-              background-color: $color_active;
-              &-countText {
-                background-color: $color_white;
-                color: $tradeAxeAlertColor;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  &--scopeInquiryAlertsState {
-    border-color: $tradeAxeAlertColor;
-    background-color: $tradeAxeAlertBackgroundColor;
-    #{$tradeAlertPanelBlockName} {
-      &__overview {
-        &-tabIndicate {
-          transform: translate(1rem, 0);
-          &-icon {
-            color: $tradeAxeAlertColor;
-          }
-        }
-        &-tabList-tab--marketList {
-          #{$tradeAlertPanelBlockName} {
-            &__overview-tabList-tab-cta {
-              @include material('none');
-              background-color: $color_active;
-              &-countText {
-                background-color: $color_white;
-                color: $tradeAxeAlertColor;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  &--scopeMarkAlertsState {
-    border-color: $tradeMarkAlertColor;
-    background-color: $tradeMarkAlertBackgroundColor;
-    #{$tradeAlertPanelBlockName} {
-      &__overview {
-        &-tabIndicate {
-          transform: translate(1.5rem, 0);
-          &-icon {
-            color: $tradeMarkAlertColor;
-          }
-        }
-        &-tabList-tab--mark {
-          #{$tradeAlertPanelBlockName} {
-            &__overview-tabList-tab-cta {
-              @include material('none');
-              background-color: $color_active;
-              &-countText {
-                background-color: $color_white;
-                color: $tradeMarkAlertColor;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  &--scopeTradeAlertsState {
-    border-color: $tradeTradeAlertColor;
-    background-color: $tradeTradeAlertBackgroundColor;
-    #{$tradeAlertPanelBlockName} {
-      &__overview {
-        &-tabIndicate {
-          transform: translate(2rem, 0);
-          &-icon {
-            color: $tradeTradeAlertColor;
-          }
-        }
-        &-tabList-tab--trade {
-          #{$tradeAlertPanelBlockName} {
-            &__overview-tabList-tab-cta {
-              @include material('none');
-              background-color: $color_active;
-              &-countText {
-                background-color: $color_white;
-                color: $tradeTradeAlertColor;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
   &--keywordSearchActiveState {
     #{$tradeAlertPanelBlockName} {
       &__overview {
@@ -894,6 +770,130 @@ $tradeAlertPanel_overview_tabIndicate_width: 7rem;
                     color: $color_disabled;
                   }
                 }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--scopeAllAlertsState {
+    #{$tradeAlertPanelBlockName} {
+      &__overview {
+        &-tabIndicate-icon {
+          color: $font_color_major;
+        }
+        &-tabList-tab--all {
+          #{$tradeAlertPanelBlockName} {
+            &__overview-tabList-tab-cta {
+              @include material('none');
+              background-color: $color_active;
+              &-regText {
+                color: $font_color_inverse;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--scopeAxeAlertsState {
+    border-color: $tradeAxeAlertColor;
+    background-color: $tradeAxeAlertBackgroundColor;
+    #{$tradeAlertPanelBlockName} {
+      &__overview {
+        &-tabIndicate {
+          transform: translate(0.5rem, 0);
+          &-icon {
+            color: $tradeAxeAlertColor;
+          }
+        }
+        &-tabList-tab--axe {
+          #{$tradeAlertPanelBlockName} {
+            &__overview-tabList-tab-cta {
+              @include material('none');
+              background-color: $color_active;
+              &-countText {
+                background-color: $color_white;
+                color: $color_active;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--scopeMarketListAlertsState {
+    border-color: $tradeAxeAlertColor;
+    background-color: $tradeAxeAlertBackgroundColor;
+    #{$tradeAlertPanelBlockName} {
+      &__overview {
+        &-tabIndicate {
+          transform: translate(1rem, 0);
+          &-icon {
+            color: $tradeAxeAlertColor;
+          }
+        }
+        &-tabList-tab--marketList {
+          #{$tradeAlertPanelBlockName} {
+            &__overview-tabList-tab-cta {
+              @include material('none');
+              background-color: $color_active;
+              &-countText {
+                background-color: $color_white;
+                color: $color_active;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--scopeMarkAlertsState {
+    border-color: $tradeMarkAlertColor;
+    background-color: $tradeMarkAlertBackgroundColor;
+    #{$tradeAlertPanelBlockName} {
+      &__overview {
+        &-tabIndicate {
+          transform: translate(1.5rem, 0);
+          &-icon {
+            color: $tradeMarkAlertColor;
+          }
+        }
+        &-tabList-tab--mark {
+          #{$tradeAlertPanelBlockName} {
+            &__overview-tabList-tab-cta {
+              @include material('none');
+              background-color: $color_active;
+              &-countText {
+                background-color: $color_white;
+                color: $color_active;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--scopeTradeAlertsState {
+    border-color: $tradeTradeAlertColor;
+    background-color: $tradeTradeAlertBackgroundColor;
+    #{$tradeAlertPanelBlockName} {
+      &__overview {
+        &-tabIndicate {
+          transform: translate(2rem, 0);
+          &-icon {
+            color: $tradeTradeAlertColor;
+          }
+        }
+        &-tabList-tab--trade {
+          #{$tradeAlertPanelBlockName} {
+            &__overview-tabList-tab-cta {
+              @include material('none');
+              background-color: $color_active;
+              &-countText {
+                background-color: $color_white;
+                color: $color_active;
               }
             }
           }
