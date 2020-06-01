@@ -114,7 +114,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     startNewUpdateSub: null
   }
   autoUpdateCount$: Observable<any>;
-  alertCounts$: Observable<any>;
   constants = {
     // alertTypes: AlertTypes,
     alertTypes: AlertTypes,
@@ -137,14 +136,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   ){
     window['moment'] = moment;
     this.state = this.initializePageState();
-    // this.store$.pipe(
-    //   select(selectFocusMode)
-    // ).subscribe((value) => {
-    //   this.state.focusMode = !!value;
-    // });
-    // this.alertCounts$ = this.store$.pipe(
-    //   select(selectAlertCounts)
-    // );
   }
 
   // general
@@ -244,7 +235,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           this.store$.dispatch(new CoreFlushSecurityMap());
         }
       });
-
       this.autoUpdateCount$ = interval(1000);
       this.subscriptions.autoUpdateCountSub = this.autoUpdateCount$.subscribe(count => {
         if (this.state.isCenterPanelPresetSelected && !this.state.isAlertPaused && !this.state.alertUpdateInProgress) {
@@ -256,61 +246,28 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         }
       });
       // this.subscriptions.selectedSecurityForAlertConfigSub = this.store$.pipe(
-      //   select(selectSelectedSecurityForAlertConfig)
-      // ).subscribe((targetSecurity) => {
-      //   if (!!targetSecurity) {
-      //     if (!this.state.configureAlert) {
-      //       this.onClickConfigureAlert();
-      //       this.state.configuration.selectedAlert = this.constants.alertTypes.axeAlert;
-      //     }
-      //     const existMatchIndex = this.state.configuration.axe.securityList.findIndex((eachEntry) => {
-      //       return eachEntry.card.data.securityID === targetSecurity.data.securityID;
-      //     });
-      //     if (existMatchIndex < 0) {
-      //       this.addSecurityToWatchList(targetSecurity);
-      //     } else if (this.state.configuration.axe.securityList[existMatchIndex].isDeleted) {
-      //       this.state.configuration.axe.securityList[existMatchIndex].isDeleted = false;
-      //       this.state.configuration.axe.securityList[existMatchIndex].isDisabled = false;
-      //     }
-      //   }
+        //   select(selectSelectedSecurityForAlertConfig)
+        // ).subscribe((targetSecurity) => {
+        //   if (!!targetSecurity) {
+        //     if (!this.state.configureAlert) {
+        //       this.onClickConfigureAlert();
+        //       this.state.configuration.selectedAlert = this.constants.alertTypes.axeAlert;
+        //     }
+        //     const existMatchIndex = this.state.configuration.axe.securityList.findIndex((eachEntry) => {
+        //       return eachEntry.card.data.securityID === targetSecurity.data.securityID;
+        //     });
+        //     if (existMatchIndex < 0) {
+        //       this.addSecurityToWatchList(targetSecurity);
+        //     } else if (this.state.configuration.axe.securityList[existMatchIndex].isDeleted) {
+        //       this.state.configuration.axe.securityList[existMatchIndex].isDeleted = false;
+        //       this.state.configuration.axe.securityList[existMatchIndex].isDisabled = false;
+        //     }
+        //   }
       // });
       this.subscriptions.centerPanelPresetSelectedSub = this.store$.pipe(
         select(selectPresetSelected)
       ).subscribe(flag => {
         this.state.isCenterPanelPresetSelected = flag;
-      });
-
-      this.subscriptions.alertCountSub = this.store$.pipe(
-        select(selectAlertCounts)
-      ).subscribe((allCountsMap: Array<AlertCountSummaryDTO>) => {
-        allCountsMap.forEach((eachCount) => {
-          switch (eachCount.data.alertType) {
-            case this.constants.alertTypes.axeAlert:
-              if (this.state.alert.scopedAlertType !== this.constants.alertTypes.axeAlert || !this.state.displayAlertTable) {
-                const newAxeAlertCount = eachCount.data.count - this.state.alert.axeAlertCount;
-                this.state.alert.unreadAxeAlertCount = this.state.alert.unreadAxeAlertCount + newAxeAlertCount;
-              }
-              this.state.alert.axeAlertCount = eachCount.data.count;
-              break;
-            case this.constants.alertTypes.markAlert:
-              if (this.state.alert.scopedAlertType !== this.constants.alertTypes.markAlert || !this.state.displayAlertTable) {
-                const newMarkAlertCount = eachCount.data.count - this.state.alert.markAlertCount;
-                this.state.alert.unreadMarkAlertCount = this.state.alert.unreadMarkAlertCount + newMarkAlertCount;
-              }
-              this.state.alert.markAlertCount = eachCount.data.count;
-              break;
-            case this.constants.alertTypes.tradeAlert:
-              if (this.state.alert.scopedAlertType !== this.constants.alertTypes.tradeAlert || !this.state.displayAlertTable) {
-                const newTradeAlertCount = eachCount.data.count - this.state.alert.tradeAlertCount;
-                this.state.alert.unreadTradeAlertCount = this.state.alert.unreadTradeAlertCount + newTradeAlertCount;
-              }
-              this.state.alert.tradeAlertCount = eachCount.data.count;
-              break;
-            default:
-              // code...
-              break;
-          }
-        });
       });
 
       this.subscriptions.startNewUpdateSub = this.store$.pipe(
@@ -1036,6 +993,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       // this.loadInitialStencilTable();
       this.updateStage(0, this.state.fetchResult.alertTable, this.state.table.alertDto);
       this.fetchDataForAlertTable(true);
+      this.state.alert.axeAlertCount = 0;
+      this.state.alert.markAlertCount = 0;
+      this.state.alert.tradeAlertCount = 0;
+      this.countAlerts(newAlertList);
     }
 
     private loadInitialStencilTable() {
@@ -1070,6 +1031,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         newAlertList.forEach((eachAlert) => {
           this.state.alert.alertTableAlertList[eachAlert.data.id] = eachAlert;
         });
+        this.countAlerts(newAlertList);
       }
       if (this.state.displayAlertTable && this.state.fetchResult.alertTable.fetchComplete) {
         this.fetchDataForAlertTable(false);
@@ -1136,7 +1098,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       if (!this.state.alert.initialAlertListReceived) {
         this.state.alert.initialAlertListReceived = true;
       }
-      // this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
     }
 
     private updateStage(
@@ -1159,13 +1120,28 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             } else {
               targetTableBlock.rowList = this.filterPrinstineRowList(targetTableBlock.prinstineRowList);
             }
-            // only dispatch the action when both tables are done
-            if (!!this.state.fetchResult.alertTable.fetchComplete && !!this.state.fetchResult.alertTable.fetchComplete) {
+            if (!!this.state.fetchResult.alertTable.fetchComplete) {
               this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteInAlertTableEvent());
             }
           })
         ).subscribe();
       }
+    }
+
+    private countAlerts(alertList: Array<AlertDTO>) {
+      alertList.forEach((eachAlert) => {
+        switch (eachAlert.data.type) {
+          case this.constants.alertTypes.axeAlert:
+            this.state.alert.axeAlertCount++;
+            break;
+          case this.constants.alertTypes.markAlert:
+            this.state.alert.markAlertCount++;
+          case this.constants.alertTypes.tradeAlert:
+            this.state.alert.tradeAlertCount++;
+          default:
+            break;
+        }
+      });
     }
   // table section end
 

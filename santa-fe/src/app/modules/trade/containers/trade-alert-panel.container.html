@@ -38,10 +38,8 @@
         }">
         <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.axeAlert)">
           <i class="sat-tradeAlertPanel__overview-tabList-tab-cta-icon fas fa-axe"></i>
-          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Show</span>
           <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-countText">{{state.alert.axeAlertCount}}</span>
           <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Axe Alerts</span>
-          <span *ngIf="state.alert.unreadAxeAlertCount > 0" class="sat-tradeAlertPanel__overview-tabList-tab-cta-newAlertsCount">{{state.alert.unreadAxeAlertCount}} new</span>
         </div>
       </div>
       <div
@@ -52,10 +50,8 @@
         }">
         <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.markAlert)">
           <i class="sat-tradeAlertPanel__overview-tabList-tab-cta-icon far fa-bullseye-arrow"></i>
-          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Show</span>
           <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-countText">{{state.alert.markAlertCount}}</span>
           <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Mark Alerts</span>
-          <span *ngIf="state.alert.unreadMarkAlertCount > 0" class="sat-tradeAlertPanel__overview-tabList-tab-cta-newAlertsCount">{{state.alert.unreadMarkAlertCount}} new</span>
         </div>
       </div>
       <div
@@ -66,10 +62,8 @@
         }">
         <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.tradeAlert)">
           <i class="sat-tradeAlertPanel__overview-tabList-tab-cta-icon fal fa-handshake"></i>
-          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Show</span>
           <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-countText">{{state.alert.tradeAlertCount}}</span>
           <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Trade Alerts</span>
-          <span *ngIf="state.alert.unreadTradeAlertCount > 0" class="sat-tradeAlertPanel__overview-tabList-tab-cta-newAlertsCount">{{state.alert.unreadTradeAlertCount}} new</span>
         </div>
       </div>
     </div>
