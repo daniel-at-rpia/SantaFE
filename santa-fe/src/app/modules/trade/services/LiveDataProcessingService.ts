@@ -13,6 +13,7 @@
       AlertDTO
     } from 'FEModels/frontend-models.interface';
     import {
+      AlertDTOMap,
       LiveDataDiffingResult,
       ClickedOpenSecurityInBloombergEmitterParams
     } from 'FEModels/frontend-adhoc-packages.interface';
@@ -52,7 +53,7 @@ export class LiveDataProcessingService {
     for (const eachKey in rawSecurityDTOMap){
       let isValidFlag = true;
       const newBESecurity:BESecurityDTO = rawSecurityDTOMap[eachKey].security;
-      const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false, selectedDriver);
+      const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false, false, selectedDriver);
       newSecurity.state.isInteractionThumbDownDisabled = true;
       newSecurity.api.onClickSendToGraph = sendToGraphCallback;
       newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
@@ -84,7 +85,7 @@ export class LiveDataProcessingService {
   }
 
   public loadFinalStageDataForAlertTable(
-    alertDTOList: Array<AlertDTO>,
+    alertDTOMap: AlertDTOMap,
     tableHeaderList: Array<SecurityTableHeaderDTO>,
     selectedDriver: string,
     serverReturn: BEFetchAllTradeDataReturn,
@@ -95,12 +96,13 @@ export class LiveDataProcessingService {
     const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
     const prinstineRowList: Array<SecurityTableRowDTO> = [];
     const securityList = [];
-    alertDTOList.forEach((eachAlertDTO) => {
+    for (const eachAlertId in alertDTOMap) {
+      const eachAlertDTO = alertDTOMap[eachAlertId];
       if (eachAlertDTO.data && eachAlertDTO.data.security && eachAlertDTO.data.security.data && eachAlertDTO.data.security.data.securityID) {
         const targetSecurityId = eachAlertDTO.data.security.data.securityID;
         if (rawSecurityDTOMap[targetSecurityId]) {
           const newBESecurity:BESecurityDTO = rawSecurityDTOMap[targetSecurityId].security;
-          const newSecurity = this.dtoService.formSecurityCardObject(targetSecurityId, newBESecurity, false, selectedDriver);
+          const newSecurity = this.dtoService.formSecurityCardObject(targetSecurityId, newBESecurity, false, true, selectedDriver);
           newSecurity.state.isInteractionThumbDownDisabled = true;
           newSecurity.api.onClickSendToGraph = sendToGraphCallback;
           newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
@@ -124,7 +126,7 @@ export class LiveDataProcessingService {
           console.error('security not found for alert', eachAlertDTO);
         }
       }
-    });
+    };
     return prinstineRowList;
   }
 

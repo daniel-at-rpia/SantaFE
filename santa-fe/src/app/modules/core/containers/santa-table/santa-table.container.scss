@@ -48,7 +48,7 @@ $alt-background: $color_white;
 @mixin default-cell() {
   background: $distinguish_type_color_8 !important;
   border-radius: 4px;
-  padding: 0 $spacing_x_small;
+  padding: 0 $spacing_xx_small;
 }
 
   .ag-body-horizontal-scroll {
@@ -94,7 +94,8 @@ $alt-background: $color_white;
 
         .ag-sort-descending-icon, .ag-sort-ascending-icon {
           position: absolute;
-          right: $spacing_x_small;
+          right: $spacing_xx_small;
+          margin-right: 0px !important;
         }
 
         .ag-cell-label-container {
@@ -107,7 +108,7 @@ $alt-background: $color_white;
           }
           .ag-header-cell-text {
             @include header-line-height;
-            padding: 0 $spacing_large;
+            padding: 0 $spacing_small;
           }
           .ag-header-icon {
             @include flex-center-vertical;

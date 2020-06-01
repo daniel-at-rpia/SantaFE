@@ -1,205 +1,217 @@
 @import "global.scss";
 @import "modules/trade/trade.scss";
 
-$tradeUtilityPanel_spacing: $spacing_medium;
+$tradeUtilityPanel_width: 5.75rem;
+$tradeUtilityPanel_tongue_expandWidth: $tradeUtilityPanel_width*1.5;
+$tradeUtilityPanel_side_width: 8.5rem;
+$tradeUtilityPanel_width_expand: $tradeUtilityPanel_tongue_expandWidth + $tradeUtilityPanel_side_width*2 + $spacing_small*2;
+$tradeUtilityPanel_tongue_topGutter: $spacing_large;
+$tradeUtilityPanel_side_btn_size: 2.25rem;
 .sat-tradeUtilityPanel {
   $tradeUtilityPanelBlockName: &;
-  @include mix_border_generator;
-  @include mix_border_radius(10px);
-  flex: 1 1 auto;
+  @include mix_fixed_div(absolute, $z_index_tradeUtilityTongue);
+  @include material();
+  @include mix_border_radius(10px, 'bottom');
+  @include mix_alive('light');
+  @include mix_calculate(left, 50%, $tradeUtilityPanel_width/2, '-');
   display: flex;
-  overflow: hidden;
-  height: $trade_topPanels_baseState_height;
-  &__thumbnail {
-    @include mix_border_generator(0 $typical_border_width 0 0);
-    flex: 0 0 auto;
-    display: flex;
-    margin: $spacing_medium;
-    padding-right: $spacing_medium;
-    &-icon {
-      color: $font_color_trivial;
-      font-size: $font_size_hero;
-    }
-  }
-  &__validWindowConfig {
-    @include mix_alive('light');
-    flex: 0 0 13rem;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    padding: $tradeUtilityPanel_spacing 0 $tradeUtilityPanel_spacing $tradeUtilityPanel_spacing;
-    &-current {
-      flex: 0 0 auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-right: $spacing_medium;
-      &-label {
-        color: $font_color_minor;
-        font-size: $font_size_small;
-      }
-      &-value {
-        @include mix_border_radius(5px);
-        margin-top: $spacing_small;
-        padding: $spacing_x_small $spacing_small;
-        background-color: $color_active;
-        color: $font_color_inverse;
-      }
-    }
-    &-editBtn {
-      flex: 0 0 auto;
-      margin-right: $spacing_medium;
-    }
-    &-optionList {
-      flex: 0 0 auto;
-      display: none;
-      &-item {
-        @include mix_alive('material');
-        @include material;
-        @include mix_border_radius(5px);
-        padding: $spacing_small;
-        margin-right: $spacing_small;
-        &--selected {
-          @include material('none');
-          background-color: $color_active;
-          color: $font_color_inverse;
-        }
-      }
-    }
-    &-ctas {
-      flex: 0 0 auto;
-      display: none;
-      &-cancelBtn {
-        background-color: $color_kill;
-        margin-right: $spacing_medium;
-      }
-    }
-  }
-  &__countdown {
-    @include mix_border_generator(0 $typical_border_width 0 $typical_border_width);
+  top: 0;
+  background-color: $color_white;
+  transform: translate(0, -$tradeUtilityPanel_tongue_topGutter);
+  width: $tradeUtilityPanel_width;
+  &__tongue {
     flex: 1 1 auto;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: $tradeUtilityPanel_spacing;
-    overflow: hidden;
-    &-clock {
-      @include mix_border_radius(5px);
-      padding: $spacing_xx_small $spacing_x_small;
-      background-color: $color_active;
-      font-size: $font_size_large;
-      color: $font_color_inverse;
-    }
-    &-label {
-      @include mix_text_overflow_multi_line(1);
-      margin-top: $spacing_small;
-      color: $font_color_minor;
-      font-size: $font_size_small;
-      line-height: $line_height_x_small;
-      text-align: center;
-    }
-    &-loading {
-      flex: 1 1 auto;
-      display: none;
+    justify-content: center;
+    padding: $spacing_x_small 0;
+    &-countdown {
+      display: flex;
       flex-direction: column;
-      align-items: center;
-      &-icon {
-        &>i {
-          color: $font_color_major;
+      max-width: $tradeUtilityPanel_tongue_expandWidth;
+      &-label {
+        @include mix_text_overflow_multi_line(1);
+        color: $font_color_minor;
+        font-size: $font_size_small;
+        text-align: center;
+        margin-bottom: $spacing_minimum;
+      }
+      &-prompt {
+        @include mix_text_overflow_multi_line(1);
+        display: none;
+        color: $font_color_minor;
+        font-size: $font_size_small;
+        text-align: center;
+        margin-bottom: $spacing_minimum;
+      }
+      &-clock {
+        font-size: $font_size_large;
+        color: $font_color_major;
+        text-align: center;
+      }
+      &-loading {
+        display: none;
+        justify-content: center;
+        margin-top: $spacing_xx_small;
+        &-icon {
           font-size: $font_size_x_large;
         }
       }
-      &-text {
-        margin-top: $spacing_small;
+    }
+  }
+  &__validWindowConfig {
+    @include mix_fixed_div(absolute, $z_index_base_item);
+    @include mix_alive('light');
+    @include mix_calculate(height, 100%, $spacing_small*2, '-');
+    @include mix_border_generator(0 $typical_border_width 0 0, $color_white);
+    display: flex;
+    align-items: center;
+    margin: $spacing_small 0;
+    padding-right: $spacing_small;
+    max-width: $tradeUtilityPanel_side_width;
+    left: 0;
+    transform: scale(0.01);
+    &-btn {
+      @include mix_fixed_div(absolute, $z_index_base_item);
+      @include mix_border_radius(50%);
+      left: -$spacing_medium;
+      padding: 0;
+      width: $tradeUtilityPanel_side_btn_size;
+      height: $tradeUtilityPanel_side_btn_size;
+      &>span {
         color: $font_color_major;
+        font-size: $font_size_x_small;
+      }
+      &>i {
+        display: none;
+        color: $font_color_inverse;
+      }
+      &:hover {
+        transform: scale(1.25);
+      }
+    }
+    &-label {
+      color: $font_color_inverse;
+      margin-left: $spacing_large;
+    }
+  }
+  &__updateNow {
+    @include mix_fixed_div(absolute, $z_index_base_item);
+    @include mix_alive('light');
+    @include mix_calculate(height, 100%, $spacing_small*2, '-');
+    @include mix_border_generator(0 0 0$typical_border_width, $color_white);
+    display: flex;
+    align-items: center;
+    margin: $spacing_small 0;
+    padding-left: $spacing_small;
+    max-width: $tradeUtilityPanel_side_width;
+    right: 0;
+    transform: scale(0.01);
+    &-btn {
+      @include mix_fixed_div(absolute, $z_index_base_item);
+      @include mix_border_radius(50%);
+      right: -$spacing_medium;
+      padding: 0;
+      width: $tradeUtilityPanel_side_btn_size;
+      height: $tradeUtilityPanel_side_btn_size;
+      &:hover {
+        transform: scale(1.25);
+      }
+    }
+    &-label {
+      color: $font_color_inverse;
+      margin-right: $spacing_large;
+    }
+  }
+  &__validWindowOptionList {
+    @include mix_fixed_div(absolute, $z_index_hovering_item);
+    @include mix_alive('light');
+    display: none;
+    justify-content: space-around;
+    bottom: -$spacing_medium;
+    width: 100%;
+    padding: 0 $spacing_xx_large;
+    transform: scale(0.01);
+    &-item {
+      @include mix_border_radius(50%);
+      padding: 0;
+      width: $tradeUtilityPanel_side_btn_size;
+      height: $tradeUtilityPanel_side_btn_size;
+      color: $font_color_major;
+      font-size: $font_size_x_small;
+      &:hover {
+        transform: scale(1.25);
+      }
+      &--selected {
+        @include material('none');
+        background-color: $color_active;
+        color: $font_color_inverse;
+        &:hover {
+          transform: scale(1);
+        }
       }
     }
   }
-  &__cta {
-    flex: 0 0 auto;
-    display: flex;
-    padding: $tradeUtilityPanel_spacing $tradeUtilityPanel_spacing $tradeUtilityPanel_spacing 0;
-    &-updateNow {
-      @include mix_border_radius(5px);
-      @include mix_border_generator($typical_border_width, $color_white);
-      flex: 1 1 auto;
-    }
-    &-pause {
-      @include mix_border_radius(5px);
-      @include mix_border_generator($typical_border_width, $color_white);
-      flex: 1 1 auto;
+  &:hover {
+    transform: translate(0, 0);
+  }
+  &--unactivated {
+    transform: translate(0, -125%);
+  }
+  &--updateInProgress {
+    #{$tradeUtilityPanelBlockName} {
+      &__tongue {
+        &-countdown {
+          &-label, &-clock {
+            display: none;
+          }
+          &-prompt {
+            display: -webkit-box;
+          }
+          &-loading {
+            display: flex;
+          }
+        }
+      }
     }
   }
-  &--sidePanelsDisplayedState {
+  &--tongueExpanded {
+    @include mix_calculate(left, 50%, $tradeUtilityPanel_width_expand/2, '-');
+    @include material('none');
+    transform: translate(0, 0);
+    width: $tradeUtilityPanel_width_expand;
+    background-color: $color_active;
     #{$tradeUtilityPanelBlockName} {
-      &__thumbnail {
-        display: none;
+      &__tongue {
+        &-countdown {
+          &-label, &-prompt, &-clock, &-loading-icon {
+            color: $font_color_inverse;
+          }
+        }
+      }
+      &__validWindowConfig, &__updateNow {
+        transform: scale(1);
+      }
+      &__validWindowOptionList {
+        display: flex;
       }
     }
   }
   &--editingValidWindowState {
     #{$tradeUtilityPanelBlockName} {
-      &__countdown {
-        display: none;
-      }
-      &__cta {
-        display: none;
-      }
       &__validWindowConfig {
-        flex: 0 0 35rem;
-        &-editBtn {
-          display: none;
-        }
-        &-optionList {
-          display: flex;
-        }
-        &-ctas {
-          display: flex;
-        }
-      }
-    }
-  }
-  &--pausedState {
-    #{$tradeUtilityPanelBlockName} {
-      &__cta {
-        &-updateNow {
+        &-btn {
           @include material('none');
-          border-color: $color_disabled;
-          background-color: inherit;
-          color: $color_disabled;
-        }
-        &-pause {
-          @include material('none');
-          @extend .santaBtn--inverseLabelled;
-          border-color: $color_active;
           background-color: $color_active;
+          &>span {
+            display: none;
+          }
+          &>i {
+            display: inline-block;
+          }
         }
       }
-    }
-  }
-  &--loadingState {
-    #{$tradeUtilityPanelBlockName} {
-      &__countdown {
-        &-clock, &-label {
-          display: none;
-        }
-        &-loading {
-          display: flex;
-        }
-      }
-      &__cta {
-        &-updateNow {
-          @include material('none');
-          @extend .santaBtn--inverseLabelled;
-          background-color: $color_active;
-        }
-        &-pause {
-          @include material('none');
-          border-color: $color_disabled;
-          background-color: inherit;
-          color: $color_disabled;
-        }
+      &__validWindowOptionList {
+        transform: scale(1);
       }
     }
   }

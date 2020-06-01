@@ -348,10 +348,10 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   }
 
   private loadStencilList() {
-    const group = this.dtoService.formSecurityCardObject('', null, true);
+    const group = this.dtoService.formSecurityCardObject('', null, true, false);
     group.state.isStencil = false;
     group.data.name = 'Group';
-    const stencilCard = this.dtoService.formSecurityCardObject('', null, true);
+    const stencilCard = this.dtoService.formSecurityCardObject('', null, true, false);
     this.applyStatesToSecurityCards(group);
     this.applyStatesToSecurityCards(stencilCard);
     this.state.table.presentList = [
@@ -406,7 +406,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   private loadSecurityList(rawData: BEHistoricalSummaryDTO) {
     this.state.table = this.initializePageState().table;
     if (!!rawData.BaseSecurity && !!rawData.Group) {
-      const baseSecurityDTO = this.dtoService.formSecurityCardObject('', rawData.BaseSecurity.security, false);
+      const baseSecurityDTO = this.dtoService.formSecurityCardObject('', rawData.BaseSecurity.security, false, false);
       baseSecurityDTO.state.isActionMenuPrimaryActionsDisabled = true;
       this.applyStatesToSecurityCards(baseSecurityDTO);
       this.state.table.presentList.push(baseSecurityDTO);
@@ -418,7 +418,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
         this.state.table.moveDistanceLevelList.push('');
       }
       this.state.table.moveDistanceBasisList.push('');
-      const groupDTO = this.dtoService.formSecurityCardObject('', null, true);
+      const groupDTO = this.dtoService.formSecurityCardObject('', null, true, false);
       groupDTO.state.isStencil = false;
       groupDTO.state.isInteractionThumbDownDisabled = true;
       groupDTO.state.isActionMenuMinorActionsDisabled = true;
@@ -448,7 +448,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     if (!!rawData.Top) {
       let index = 1;
       for (const eachSecurityIdentifier in rawData.Top) {
-        const eachTopSecurityDTO = this.dtoService.formSecurityCardObject(eachSecurityIdentifier, rawData.Top[eachSecurityIdentifier].security, false);
+        const eachTopSecurityDTO = this.dtoService.formSecurityCardObject(eachSecurityIdentifier, rawData.Top[eachSecurityIdentifier].security, false, false);
         this.applyStatesToSecurityCards(eachTopSecurityDTO);
         this.state.table.presentList.push(eachTopSecurityDTO);
         this.state.table.prinstineTopSecurityList.push(eachTopSecurityDTO);
@@ -471,7 +471,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     if (!!rawData.Bottom) {
       let index = 1;
       for (const eachSecurityIdentifier in rawData.Bottom) {
-        const eachBottomSecurityDTO = this.dtoService.formSecurityCardObject(eachSecurityIdentifier, rawData.Bottom[eachSecurityIdentifier].security, false);
+        const eachBottomSecurityDTO = this.dtoService.formSecurityCardObject(eachSecurityIdentifier, rawData.Bottom[eachSecurityIdentifier].security, false, false);
         this.applyStatesToSecurityCards(eachBottomSecurityDTO);
         this.state.table.presentList.push(eachBottomSecurityDTO);
         this.state.table.prinstineBottomSecurityList.push(eachBottomSecurityDTO);

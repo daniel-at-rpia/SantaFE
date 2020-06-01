@@ -30,6 +30,7 @@
       AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS,
       AGGRID_DETAIL_ROW_HEIGHT_PER_ROW,
       AGGRID_ROW_HEIGHT,
+      AGGRID_ROW_HEIGHT_SLIM,
       SECURITY_TABLE_FINAL_STAGE,
       SECURITY_TABLE_ICONS
     } from 'Core/constants/securityTableConstants.constant';
@@ -132,6 +133,9 @@ export class SantaTable implements OnInit, OnChanges {
       sum: this.agAggregationSum.bind(this),
       avg: this.agAggregationAverage.bind(this)
     };
+    if (this.tableData.state.isSlimRowVariant) {
+      this.constants.agGridRowHeight = AGGRID_ROW_HEIGHT_SLIM;
+    }
   }
 
   public ngOnChanges() {
@@ -145,27 +149,27 @@ export class SantaTable implements OnInit, OnChanges {
     }
     if (!!this.tableData.state.isActivated) {
       if (!!activateStatusChanged) {
-        console.log('just become activated');
+        console.log(`[${this.tableName}] - just become activated`);
         this.loadTableRows(this.newRows);
         this.tableData.state.loadedContentStage = this.receivedContentStage;
       } else if (this.tableData.state.loadedContentStage !== this.receivedContentStage) {
-        console.log('rows updated for inter-stage change', this.receivedContentStage);
+        console.log(`[${this.tableName}] - rows updated for inter-stage change`, this.receivedContentStage);
         this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate; // saving initial cache
         this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
         this.tableData.state.loadedContentStage = this.receivedContentStage;
         this.loadTableRows(this.newRows);
       } else if (this.securityTableMetricsCache !== this.receivedSecurityTableMetricsUpdate && this.receivedContentStage === this.constants.securityTableFinalStage) {
-        console.log("metrics update", this.receivedSecurityTableMetricsUpdate);
+        console.log(`[${this.tableName}] - metrics update`, this.receivedSecurityTableMetricsUpdate);
         this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate;
         this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
         this.loadTableHeaders(true);  // skip reloading the agGrid columns since that won't be necessary and reloading them creates a problem for identifying the columns in later use, such as sorting
         this.loadTableRows(this.newRows, true);
       } else if (!!this.newRows && this.newRows != this.tableData.data.rows && this.tableData.state.loadedContentStage === this.receivedContentStage) {
-        console.log('rows updated for change within same stage, triggered when filters are applied', this.tableData.state.loadedContentStage);
+        console.log(`[${this.tableName}] - rows updated for change within same stage, triggered when filters are applied`, this.tableData.state.loadedContentStage);
         this.loadTableRows(this.newRows);
       } else if (this.liveUpdateRowsCache !== this.liveUpdatedRows && this.tableData.state.loadedContentStage === this.constants.securityTableFinalStage) {
         this.liveUpdateRowsCache = this.utilityService.deepCopy(this.liveUpdatedRows);
-        console.log('rows updated from live update', this.liveUpdatedRows);
+        console.log(`[${this.tableName}] - rows updated from live update`, this.liveUpdatedRows);
         if (this.liveUpdateRowsCache.length > 0) {
           this.liveUpdateRows(this.liveUpdateRowsCache);
         }

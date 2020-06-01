@@ -141,6 +141,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     isAtListCeiling: boolean;
     isActionMenuPrimaryActionsDisabled: boolean;
     isActionMenuMinorActionsDisabled: boolean;
+    isSlimVariant: boolean;
   }
 }
 
@@ -311,6 +312,8 @@ export interface SecurityTableDTO extends BasicDTOStructure {
     isAgGridReady: boolean;
     selectedSecurityCard: SecurityDTO;
     isActivated: boolean;
+    isGroupEnabled: boolean;
+    isSlimRowVariant: boolean;
   },
   api: {
     gridApi: agGrid.GridApi,
@@ -341,6 +344,7 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     isQuantVariant: boolean;
     isAxeSkewEnabled: boolean;
     istotalSkewEnabled: boolean;
+    isNarrowColumnVariant: boolean;
   }
 }
 

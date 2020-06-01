@@ -1,42 +1,107 @@
 <article
   [ngClass]="{
     'sat-tradeAlertPanel': true,
-    'sat-tradeAlertPanel--sidePanelsDisplayedState': sidePanelsDisplayed,
+    'sat-tradeAlertPanel--keywordSearchActiveState': !!state.filters.quickFilters.keyword && state.filters.quickFilters.keyword.length >= 2,
+    'sat-tradeAlertPanel--displayAlertTableState': state.displayAlertTable,
+    'sat-tradeAlertPanel--scopeAllAlertsState': state.displayAlertTable && !state.alert.scopedAlertType,
+    'sat-tradeAlertPanel--scopeAxeAlertsState': state.displayAlertTable && state.alert.scopedAlertType === constants.alertTypes.axeAlert,
+    'sat-tradeAlertPanel--scopeMarkAlertsState': state.displayAlertTable && state.alert.scopedAlertType === constants.alertTypes.markAlert,
+    'sat-tradeAlertPanel--scopeTradeAlertsState': state.displayAlertTable && state.alert.scopedAlertType === constants.alertTypes.tradeAlert,
+    'sat-tradeAlertPanel--alertReadyState': state.fetchResult.alertTable.fetchComplete,
     'sat-tradeAlertPanel--configureAlertState': state.configureAlert,
-    'sat-tradeAlertPanel--alertPausedState': state.isAlertPaused,
     'sat-tradeAlertPanel--configureAxeAlertState': state.configuration.selectedAlert === constants.alertTypes.axeAlert,
-    'sat-tradeAlertPanel--configureMarkAlertState': state.configuration.selectedAlert === constants.alertTypes.markAlert,
-    'sat-tradeAlertPanel--focusMode': state.focusMode
+    'sat-tradeAlertPanel--configureMarkAlertState': state.configuration.selectedAlert === constants.alertTypes.markAlert
   }">
-  <section class="sat-tradeAlertPanel__alertCountsGrid">
-    <alert-count-summary *ngFor="let alertCountSummaryDTO of alertCounts$ | async" [summary]="alertCountSummaryDTO"></alert-count-summary>
-  </section>
-  <section class="sat-tradeAlertPanel__utilities">
-    <div class="sat-tradeAlertPanel__utilities-configureCTA">
+  <section class="sat-tradeAlertPanel__overview">
+    <div class="sat-tradeAlertPanel__overview-tabIndicate">
+      <i
+        [ngClass]="{
+          'sat-tradeAlertPanel__overview-tabIndicate-icon': true,
+          'fal': !state.alert.scopedAlertType || state.alert.scopedAlertType === constants.alertTypes.tradeAlert,
+          'fa-bell': !state.alert.scopedAlertType,
+          'fas fa-axe': state.alert.scopedAlertType === constants.alertTypes.axeAlert,
+          'far fa-bullseye-arrow': state.alert.scopedAlertType === constants.alertTypes.markAlert,
+          'fa-handshake': state.alert.scopedAlertType === constants.alertTypes.tradeAlert
+        }">
+      </i>
+    </div>
+    <div class="sat-tradeAlertPanel__overview-tabList">
+      <div class="sat-tradeAlertPanel__overview-tabList-tab sat-tradeAlertPanel__overview-tabList-tab--all">
+        <div class="sat-tradeAlertPanel__overview-tabList-tab-cta sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickShowAllAlerts()">
+          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Show All Alerts</span>
+        </div>
+      </div>
+      <div
+        [ngClass]="{
+          'sat-tradeAlertPanel__overview-tabList-tab': true,
+          'sat-tradeAlertPanel__overview-tabList-tab--axe': true,
+          'sat-tradeAlertPanel__overview-tabList-tab--empty': state.alert.axeAlertCount === 0
+        }">
+        <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.axeAlert)">
+          <i class="sat-tradeAlertPanel__overview-tabList-tab-cta-icon fas fa-axe"></i>
+          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-countText">{{state.alert.axeAlertCount}}</span>
+          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Axe Alerts</span>
+        </div>
+      </div>
+      <div
+        [ngClass]="{
+          'sat-tradeAlertPanel__overview-tabList-tab': true,
+          'sat-tradeAlertPanel__overview-tabList-tab--mark': true,
+          'sat-tradeAlertPanel__overview-tabList-tab--empty': state.alert.markAlertCount === 0
+        }">
+        <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.markAlert)">
+          <i class="sat-tradeAlertPanel__overview-tabList-tab-cta-icon far fa-bullseye-arrow"></i>
+          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-countText">{{state.alert.markAlertCount}}</span>
+          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Mark Alerts</span>
+        </div>
+      </div>
+      <div
+        [ngClass]="{
+          'sat-tradeAlertPanel__overview-tabList-tab': true,
+          'sat-tradeAlertPanel__overview-tabList-tab--trade': true,
+          'sat-tradeAlertPanel__overview-tabList-tab--empty': state.alert.tradeAlertCount === 0
+        }">
+        <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.tradeAlert)">
+          <i class="sat-tradeAlertPanel__overview-tabList-tab-cta-icon fal fa-handshake"></i>
+          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-countText">{{state.alert.tradeAlertCount}}</span>
+          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Trade Alerts</span>
+        </div>
+      </div>
+    </div>
+    <div class="sat-tradeAlertPanel__overview-keywordSearch">
+      <i class="sat-tradeAlertPanel__overview-keywordSearch-activeIcon fal fa-search"></i>
+      <santa-input
+        [inputValue]="state.filters.quickFilters.keyword"
+        [placeholder]="'filter security name by keyword'"
+        [isHero]="true"
+        (onInputChange)="onTableSearchKeywordChange($event)">
+      </santa-input>
+    </div>
+    <div class="sat-tradeAlertPanel__overview-configureCTA">
       <button (click)="onClickConfigureAlert()" class="santaBtn--labelled">
         <i class="fal fa-pencil"></i>
         <span>Configure Alert</span>
       </button>
     </div>
-    <div class="sat-tradeAlertPanel__utilities-thumbnail">
-      <i class="sat-tradeAlertPanel__utilities-thumbnail-icon fas fa-bell"></i>
+  </section>
+  <section class="sat-tradeAlertPanel__main">
+    <div class="sat-tradeAlertPanel__main-table">
+      <santa-table
+        [tableName]="'tradeAlert'"
+        [activated]="!!state.displayAlertTable"
+        [ownerInitial]="ownerInitial"
+        [activePortfolios]="state.filters.quickFilters.portfolios"
+        [tableData]="state.table.alertDto"
+        [newRows]="state.fetchResult.alertTable.rowList"
+        [receivedContentStage]="state.fetchResult.alertTable.currentContentStage"
+        [receivedSecurityTableMetricsUpdate]="state.table.alertMetrics"
+        [liveUpdatedRows]="state.fetchResult.alertTable.liveUpdatedRowList"
+        [activeTriCoreDriver]="state.filters.quickFilters.driverType"
+        (selectedSecurityForAnalysis)="onSelectSecurityForAnalysis($event)"
+      ></santa-table>
     </div>
   </section>
   <section class="sat-tradeAlertPanel__configuration">
-    <ul class="sat-tradeAlertPanel__configuration-alertTypeList">
-      <li class="sat-tradeAlertPanel__configuration-alertTypeList-item sat-tradeAlertPanel__configuration-alertTypeList-item--axe">
-        <button (click)="selectAlertForConfigure(constants.alertTypes.axeAlert)" class="sat-tradeAlertPanel__configuration-alertTypeList-item-btn santaBtn--labelled santaBtn--inverseLabelled">
-          <i class="fas fa-axe"></i>
-          <span>Axe Alert</span>
-        </button>
-      </li>
-      <li class="sat-tradeAlertPanel__configuration-alertTypeList-item sat-tradeAlertPanel__configuration-alertTypeList-item--mark">
-        <button (click)="selectAlertForConfigure(constants.alertTypes.markAlert)" class="sat-tradeAlertPanel__configuration-alertTypeList-item-btn santaBtn--labelled santaBtn--inverseLabelled">
-          <i class="far fa-bullseye-arrow"></i>
-          <span>Mark Alert</span>
-        </button>
-      </li>
-    </ul>
     <ul class="sat-tradeAlertPanel__configuration-main">
       <article
         [ngClass]="{
@@ -203,7 +268,7 @@
                 [inputValue]="state.configuration.axe.securitySearchKeyword"
                 [placeholder]="'find security by name / CUSIP / ISIN'"
                 [isHero]="true"
-                (onInputChange)="onSearchKeywordChange($event)">
+                (onInputChange)="onConfigSearchKeywordChange($event)">
               </santa-input>
             </div>
             <ul class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-search-result">
@@ -293,23 +358,40 @@
               </div>
             </div>
             <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas">
-<!--              <button (click)="onToggleDisableMarkAlert()" class="sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas-disableBtn santaBtn&#45;&#45;labelled">-->
-<!--                <i class="fal fa-bell-slash"></i>-->
-<!--                <span>Disable</span>-->
-<!--              </button>-->
-            <button
-              title="Disable (mute)"
-              (click)="onToggleDisableMarkAlert()"
-              [ngClass]="{
-                'sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas-disableBtn santaBtn--iconOnly fal fa-bell-slash': true,
-                'sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas-disableBtn--selected': this.state.configuration.mark.myGroup.disabled
-              }"></button>
+              <button (click)="onToggleDisableMarkAlert()" class="sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas-disableBtn santaBtn--labelled">
+                <i class="fal fa-bell-slash"></i>
+                <span>Disable</span>
+              </button>
+              <!--
+              <button
+                title="Disable (mute)"
+                (click)="onToggleDisableMarkAlert()"
+                [ngClass]="{
+                  'sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas-disableBtn santaBtn--iconOnly fal fa-bell-slash': true,
+                  'sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas-disableBtn--selected': this.state.configuration.mark.myGroup.disabled
+                }">
+              </button>
+              -->
             </div>
           </div>
         </section>
       </article>
     </ul>
     <div class="sat-tradeAlertPanel__configuration-ctas">
+      <ul class="sat-tradeAlertPanel__configuration-ctas-alertTypeList">
+        <li class="sat-tradeAlertPanel__configuration-ctas-alertTypeList-item sat-tradeAlertPanel__configuration-ctas-alertTypeList-item--axe">
+          <button (click)="selectAlertForConfigure(constants.alertTypes.axeAlert)" class="sat-tradeAlertPanel__configuration-ctas-alertTypeList-item-btn santaBtn--labelled santaBtn--inverseLabelled">
+            <i class="fas fa-axe"></i>
+            <span>Axe Alert</span>
+          </button>
+        </li>
+        <li class="sat-tradeAlertPanel__configuration-ctas-alertTypeList-item sat-tradeAlertPanel__configuration-ctas-alertTypeList-item--mark">
+          <button (click)="selectAlertForConfigure(constants.alertTypes.markAlert)" class="sat-tradeAlertPanel__configuration-ctas-alertTypeList-item-btn santaBtn--labelled santaBtn--inverseLabelled">
+            <i class="far fa-bullseye-arrow"></i>
+            <span>Mark Alert</span>
+          </button>
+        </li>
+      </ul>
       <button (click)="onClickSaveConfiguration()" class="sat-tradeAlertPanel__configuration-ctas-save santaBtn--labelled santaBtn--inverseLabelled">
         <i class="fal fa-cloud-upload"></i>
         <span>Save</span>
