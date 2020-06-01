@@ -1032,14 +1032,16 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     }
 
     private fetchUpdate(newAlertList: Array<AlertDTO>) {
-      if (newAlertList.length > 0) {
-        newAlertList.forEach((eachAlert) => {
-          this.state.alert.alertTableAlertList[eachAlert.data.id] = eachAlert;
-        });
-        this.countAlerts(newAlertList);
-      }
-      if (this.state.displayAlertTable && this.state.fetchResult.alertTable.fetchComplete) {
-        this.fetchDataForAlertTable(false);
+      if (this.state.alert.initialAlertListReceived) {
+        if (newAlertList.length > 0) {
+          newAlertList.forEach((eachAlert) => {
+            this.state.alert.alertTableAlertList[eachAlert.data.id] = eachAlert;
+          });
+          this.countAlerts(newAlertList);
+        }
+        if (this.state.fetchResult.alertTable.fetchComplete) {
+          this.fetchDataForAlertTable(false);
+        }
       }
     }
 
