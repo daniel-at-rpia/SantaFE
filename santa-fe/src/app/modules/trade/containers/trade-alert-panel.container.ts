@@ -1132,8 +1132,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             break;
           case this.constants.alertTypes.markAlert:
             this.state.alert.markAlertCount++;
+            break;
           case this.constants.alertTypes.tradeAlert:
             this.state.alert.tradeAlertCount++;
+            break;
           default:
             break;
         }
