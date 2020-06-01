@@ -728,6 +728,7 @@ $tradeAlertPanel_overview_tabIndicate_width: 6rem;
       display: flex;
       align-items: center;
       margin: 0 $spacing_medium;
+      visibility: hidden; // still needs it to retain the container's height
       &-activeIcon {
         font-size: $font_size_x_large;
         color: $font_color_major;
@@ -1072,6 +1073,11 @@ $tradeAlertPanel_overview_tabIndicate_width: 6rem;
   }
   &--displayAlertTableState {
     #{$tradeAlertPanelBlockName} {
+      &__overview {
+        &-keywordSearch {
+          visibility: visible;
+        }
+      }
       &__main {
         padding: $spacing_medium;
         margin: -$spacing_small $spacing_medium $spacing_medium $spacing_medium;
