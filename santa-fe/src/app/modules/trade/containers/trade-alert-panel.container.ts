@@ -371,7 +371,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         if (!!this.state.alert.scopedAlertType || !this.state.displayAlertTable) {
           this.state.displayAlertTable = true;
           this.state.alert.scopedAlertType = null;
-          this.filterAlertTableByType(this.state.alert.scopedAlertType);
+          this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
         } else {
           this.state.displayAlertTable = false;
         }
@@ -411,20 +411,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         if (this.state.alert.scopedAlertType !== targetType) {
           this.state.displayAlertTable = true;
           this.state.alert.scopedAlertType = targetType;
-          this.filterAlertTableByType(this.state.alert.scopedAlertType);
-          switch (this.state.alert.scopedAlertType) {
-            case this.constants.alertTypes.axeAlert:
-              this.state.alert.unreadAxeAlertCount = 0;
-              break;
-            case this.constants.alertTypes.markAlert:
-              this.state.alert.unreadMarkAlertCount = 0;
-              break;
-            case this.constants.alertTypes.tradeAlert:
-              this.state.alert.unreadTradeAlertCount = 0;
-              break;
-            default:
-              break;
-          }
+          this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
         } else {
           this.state.displayAlertTable = false;
           this.state.alert.scopedAlertType = null;
@@ -449,7 +436,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       }
     }
 
-    public onSearchKeywordChange(keyword: string) {
+    public onConfigSearchKeywordChange(keyword: string) {
       const config = this.state.configuration.axe;
       config.securitySearchKeyword = keyword;
       if (keyword.length >= 2) {
@@ -914,6 +901,17 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   // configuration section end
 
   // table section
+    public onTableSearchKeywordChange(newKeyword: string) {
+      const targetTable = this.state.fetchResult.alertTable;
+      if (!!newKeyword && newKeyword.length >= 2 && newKeyword != this.state.filters.quickFilters.keyword) {
+        this.state.filters.quickFilters.keyword = newKeyword;
+        targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
+      } else if ((!newKeyword || newKeyword.length < 2) && !!this.state.filters.quickFilters.keyword && this.state.filters.quickFilters.keyword.length >= 2) {
+        this.state.filters.quickFilters.keyword = newKeyword;
+        targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
+      }
+    }
+
     public onSelectSecurityForAnalysis(targetSecurity: SecurityDTO) {
       this.store$.dispatch(new TradeSelectedSecurityForAnalysisEvent(this.utilityService.deepCopy(targetSecurity)));
       this.restfulCommService.logEngagement(
@@ -935,30 +933,21 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       );
     }
 
-    private filterAlertTableByType(targetType: AlertTypes) {
-      if (!!targetType) {
-        this.state.fetchResult.alertTable.rowList = [];
-        this.state.fetchResult.alertTable.prinstineRowList.forEach((eachRow) => {
-          if (!!eachRow && !!eachRow.data.security && !eachRow.data.security.state.isStencil) {
-            if (eachRow.data.security.data.alert.alertType == targetType) {
-              this.state.fetchResult.alertTable.rowList.push(eachRow);
-            }
-          }
-        });
-      } else {
-        this.state.fetchResult.alertTable.rowList = this.utilityService.deepCopy(this.state.fetchResult.alertTable.prinstineRowList);
-      }
-    }
-
     private filterPrinstineRowList(
       targetPrinstineList: Array<SecurityTableRowDTO>
     ): Array<SecurityTableRowDTO> {
       const filteredList: Array<SecurityTableRowDTO> = [];
       targetPrinstineList.forEach((eachRow) => {
         try {
-          if (this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.name, this.state.filters.quickFilters.keyword)
-          || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.obligorName, this.state.filters.quickFilters.keyword)) {
-            filteredList.push(eachRow);
+          if (!!eachRow && !!eachRow.data.security && !eachRow.data.security.state.isStencil) {
+            if (
+              this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.name, this.state.filters.quickFilters.keyword)
+              || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.obligorName, this.state.filters.quickFilters.keyword)
+              || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.alert.alertMessage, this.state.filters.quickFilters.keyword)) {
+              if (!this.state.alert.scopedAlertType || eachRow.data.security.data.alert.alertType == this.state.alert.scopedAlertType) {
+                filteredList.push(eachRow);
+              }
+            }
           }
         } catch(err) {
           console.error('filter issue', err ? err.message : '', eachRow);

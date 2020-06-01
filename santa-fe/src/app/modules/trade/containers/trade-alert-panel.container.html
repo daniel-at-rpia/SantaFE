@@ -1,6 +1,7 @@
 <article
   [ngClass]="{
     'sat-tradeAlertPanel': true,
+    'sat-tradeAlertPanel--keywordSearchActiveState': !!state.filters.quickFilters.keyword && state.filters.quickFilters.keyword.length >= 2,
     'sat-tradeAlertPanel--displayAlertTableState': state.displayAlertTable,
     'sat-tradeAlertPanel--scopeAllAlertsState': state.displayAlertTable && !state.alert.scopedAlertType,
     'sat-tradeAlertPanel--scopeAxeAlertsState': state.displayAlertTable && state.alert.scopedAlertType === constants.alertTypes.axeAlert,
@@ -66,6 +67,15 @@
           <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Trade Alerts</span>
         </div>
       </div>
+    </div>
+    <div class="sat-tradeAlertPanel__overview-keywordSearch">
+      <i class="sat-tradeAlertPanel__overview-keywordSearch-activeIcon fal fa-search"></i>
+      <santa-input
+        [inputValue]="state.filters.quickFilters.keyword"
+        [placeholder]="'filter security name by keyword'"
+        [isHero]="true"
+        (onInputChange)="onTableSearchKeywordChange($event)">
+      </santa-input>
     </div>
     <div class="sat-tradeAlertPanel__overview-configureCTA">
       <button (click)="onClickConfigureAlert()" class="santaBtn--labelled">
@@ -258,7 +268,7 @@
                 [inputValue]="state.configuration.axe.securitySearchKeyword"
                 [placeholder]="'find security by name / CUSIP / ISIN'"
                 [isHero]="true"
-                (onInputChange)="onSearchKeywordChange($event)">
+                (onInputChange)="onConfigSearchKeywordChange($event)">
               </santa-input>
             </div>
             <ul class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-search-result">
