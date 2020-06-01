@@ -1177,7 +1177,7 @@ export class DTOService {
         titleBottom: parsedTitleList[1] || '',
         message: rawData.message,
         time: momentTime.format(`HH:mm`),
-        titlePin: null,
+        titlePin: !!rawData.marketListAlert && rawData.marketListAlert.subType,
         validUntilTime: !!rawData.marketListAlert ? rawData.marketListAlert.validUntilTime : null,
         unixTimestamp: momentTime.unix(),
         level: null,

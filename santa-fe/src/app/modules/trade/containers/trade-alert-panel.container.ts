@@ -316,18 +316,24 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
               return true;
             });
             const updateList: Array<AlertDTO> = [];
-            const securityList: Array<AlertDTO> = [];
+            const alertTableList: Array<AlertDTO> = [];
             filteredServerReturn.forEach((eachRawAlert) => {
               // Trade alerts are handled differently since BE passes the same trade alerts regardless of the timestamp FE provides
               if (!!eachRawAlert.marketListAlert) {
                 if (this.state.receivedActiveAlertsMap[eachRawAlert.alertId]) {
                   // ignore, already have it
+                } else if (!eachRawAlert.isActive) {
+                  // ignore, already expired
+                  const newAlert = this.dtoService.formAlertObject(eachRawAlert);
+                  if (newAlert.data.security && newAlert.data.security.data.securityID) {
+                    alertTableList.push(newAlert);
+                  }
                 } else {
                   this.state.receivedActiveAlertsMap[eachRawAlert.alertId] = eachRawAlert.keyWord;
                   const newAlert = this.dtoService.formAlertObject(eachRawAlert);
                   updateList.push(newAlert);
                   if (newAlert.data.security && newAlert.data.security.data.securityID) {
-                    securityList.push(newAlert);
+                    alertTableList.push(newAlert);
                   }
                 }
               } else {
@@ -339,16 +345,16 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
                   }
                 }
                 if (newAlert.data.security && newAlert.data.security.data.securityID) {
-                  securityList.push(newAlert);
+                  alertTableList.push(newAlert);
                 }
               }
             });
             updateList.length > 0 && this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
-            if (securityList.length > 0) {
+            if (alertTableList.length > 0) {
               if (this.state.alert.initialAlertListReceived) {
-                this.fetchUpdate(securityList);
+                this.fetchUpdate(alertTableList);
               } else {
-                this.loadFreshData(securityList);
+                this.loadFreshData(alertTableList);
               }
             }
           }
@@ -944,7 +950,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
               this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.name, this.state.filters.quickFilters.keyword)
               || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.obligorName, this.state.filters.quickFilters.keyword)
               || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.alert.alertMessage, this.state.filters.quickFilters.keyword)) {
-              if (!this.state.alert.scopedAlertType || eachRow.data.security.data.alert.alertType == this.state.alert.scopedAlertType) {
+              if (!this.state.alert.scopedAlertType || eachRow.data.alert.data.type == this.state.alert.scopedAlertType) {
                 filteredList.push(eachRow);
               }
             }
@@ -1128,6 +1134,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       alertList.forEach((eachAlert) => {
         switch (eachAlert.data.type) {
           case this.constants.alertTypes.axeAlert:
+            if (eachAlert.state.isMarketListVariant) {
+              // code...
+            } else {
+
+            }
             this.state.alert.axeAlertCount++;
             break;
           case this.constants.alertTypes.markAlert:
