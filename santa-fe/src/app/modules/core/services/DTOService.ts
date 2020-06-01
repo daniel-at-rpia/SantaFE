@@ -813,7 +813,8 @@ export class DTOService {
         isQuantVariant: !!stub.isForQuantComparer,
         isSecurityCardVariant: !!stub.isForSecurityCard,
         isAxeSkewEnabled: false,
-        istotalSkewEnabled: false
+        istotalSkewEnabled: false,
+        isNarrowColumnVariant: !!stub.isColumnWidthNarrow
       }
     };
     return object;

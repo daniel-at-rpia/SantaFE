@@ -24,6 +24,7 @@
       AgGridColumn
     } from 'FEModels/frontend-blocks.interface';
     import {
+      AGGRID_NARROW_COLUMN_WIDTH,
       SecurityTableMetrics,
       AGGRID_SECURITY_CARD_COLUMN_WIDTH,
       AGGRID_QUOTE_COLUMN_WIDTH,
@@ -260,6 +261,9 @@ export class AgGridMiddleLayerService {
       newAgColumn.resizable = true;
       newAgColumn.enableRowGroup = true;
       newAgColumn.enablePivot = true;
+    }
+    if (targetHeader.state.isNarrowColumnVariant) {
+      newAgColumn.width = AGGRID_NARROW_COLUMN_WIDTH;
     }
   }
 

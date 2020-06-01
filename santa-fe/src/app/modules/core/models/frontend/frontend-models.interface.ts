@@ -344,6 +344,7 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     isQuantVariant: boolean;
     isAxeSkewEnabled: boolean;
     istotalSkewEnabled: boolean;
+    isNarrowColumnVariant: boolean;
   }
 }
 
