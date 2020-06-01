@@ -847,6 +847,16 @@ $tradeAlertPanel_overview_tabIndicate_width: 7rem;
                 }
               }
             }
+            &--marketList {
+              #{$tradeAlertPanelBlockName} {
+                &__overview-tabList-tab-cta {
+                  background-color: $tradeAxeAlertColor;
+                  &-icon, &-regText {
+                    color: $font_color_inverse;
+                  }
+                }
+              }
+            }
             &--mark {
               #{$tradeAlertPanelBlockName} {
                 &__overview-tabList-tab-cta {
