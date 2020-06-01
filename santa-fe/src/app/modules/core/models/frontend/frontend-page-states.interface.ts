@@ -237,12 +237,14 @@ export interface TradeAlertPanelState {
   alert: {
     alertTableAlertList: AlertDTOMap;
     initialAlertListReceived: boolean;
-    axeAlertCount: number;
+    nonMarketListAxeAlertCount: number;
+    marketListAxeAlertCount: number;
     unreadAxeAlertCount: number;
     markAlertCount: number;
     unreadMarkAlertCount: number;
     tradeAlertCount: number;
     unreadTradeAlertCount: number;
     scopedAlertType: AlertTypes;
+    scopedForMarketListOnly: boolean;
   }
 }

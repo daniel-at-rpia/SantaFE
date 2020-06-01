@@ -35,12 +35,24 @@
         [ngClass]="{
           'sat-tradeAlertPanel__overview-tabList-tab': true,
           'sat-tradeAlertPanel__overview-tabList-tab--axe': true,
-          'sat-tradeAlertPanel__overview-tabList-tab--empty': state.alert.axeAlertCount === 0
+          'sat-tradeAlertPanel__overview-tabList-tab--empty': state.alert.nonMarketListAxeAlertCount === 0
         }">
         <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.axeAlert)">
           <i class="sat-tradeAlertPanel__overview-tabList-tab-cta-icon fas fa-axe"></i>
-          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-countText">{{state.alert.axeAlertCount}}</span>
+          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-countText">{{state.alert.nonMarketListAxeAlertCount}}</span>
           <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Axe Alerts</span>
+        </div>
+      </div>
+      <div
+        [ngClass]="{
+          'sat-tradeAlertPanel__overview-tabList-tab': true,
+          'sat-tradeAlertPanel__overview-tabList-tab--marketList': true,
+          'sat-tradeAlertPanel__overview-tabList-tab--empty': state.alert.marketListAxeAlertCount === 0
+        }">
+        <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.axeAlert, true)">
+          <i class="sat-tradeAlertPanel__overview-tabList-tab-cta-icon fal fa-alarm-clock"></i>
+          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-countText">{{state.alert.marketListAxeAlertCount}}</span>
+          <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Inquiry Alerts</span>
         </div>
       </div>
       <div

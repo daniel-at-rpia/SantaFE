@@ -446,7 +446,7 @@
   }
 }
 
-$tradeAlertPanel_overview_tabIndicate_width: 6rem;
+$tradeAlertPanel_overview_tabIndicate_width: 7rem;
 .sat-tradeAlertPanel {
   $tradeAlertPanelBlockName: &;
   @include mix_border_generator;
@@ -669,13 +669,39 @@ $tradeAlertPanel_overview_tabIndicate_width: 6rem;
       }
     }
   }
+  &--scopeInquiryAlertsState {
+    border-color: $tradeAxeAlertColor;
+    background-color: $tradeAxeAlertBackgroundColor;
+    #{$tradeAlertPanelBlockName} {
+      &__overview {
+        &-tabIndicate {
+          transform: translate(1rem, 0);
+          &-icon {
+            color: $tradeAxeAlertColor;
+          }
+        }
+        &-tabList-tab--marketList {
+          #{$tradeAlertPanelBlockName} {
+            &__overview-tabList-tab-cta {
+              @include material('none');
+              background-color: $color_active;
+              &-countText {
+                background-color: $color_white;
+                color: $tradeAxeAlertColor;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
   &--scopeMarkAlertsState {
     border-color: $tradeMarkAlertColor;
     background-color: $tradeMarkAlertBackgroundColor;
     #{$tradeAlertPanelBlockName} {
       &__overview {
         &-tabIndicate {
-          transform: translate(1rem, 0);
+          transform: translate(1.5rem, 0);
           &-icon {
             color: $tradeMarkAlertColor;
           }
@@ -701,7 +727,7 @@ $tradeAlertPanel_overview_tabIndicate_width: 6rem;
     #{$tradeAlertPanelBlockName} {
       &__overview {
         &-tabIndicate {
-          transform: translate(1.5rem, 0);
+          transform: translate(2rem, 0);
           &-icon {
             color: $tradeTradeAlertColor;
           }

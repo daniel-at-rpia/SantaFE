@@ -210,12 +210,14 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         alert: {
           alertTableAlertList: {},
           initialAlertListReceived: false,
-          axeAlertCount: 0,
+          nonMarketListAxeAlertCount: 0,
+          marketListAxeAlertCount: 0,
           unreadAxeAlertCount: 0,
           markAlertCount: 0,
           unreadMarkAlertCount: 0,
           tradeAlertCount: 0,
           unreadTradeAlertCount: 0,
+          scopedForMarketListOnly: false,
           scopedAlertType: null
         }
       };
@@ -412,7 +414,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       }
     }
 
-    public onClickSpecificAlertTypeTab(targetType: AlertTypes) {
+    public onClickSpecificAlertTypeTab(
+      targetType: AlertTypes,
+      isMarketListOnly?: boolean
+    ) {
       if (this.state.fetchResult.alertTable.fetchComplete) {
         if (this.state.alert.scopedAlertType !== targetType) {
           this.state.displayAlertTable = true;
@@ -423,10 +428,12 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           this.state.alert.scopedAlertType = null;
         }
         if (this.state.displayAlertTable) {
+          this.state.alert.scopedForMarketListOnly = !!isMarketListOnly;
           // collapse the configuration UI
           this.state.configureAlert = false;
           this.showAlertTable && this.showAlertTable.emit();
         } else {
+          this.state.alert.scopedForMarketListOnly = false;
           this.collapseAlertTable && this.collapseAlertTable.emit();
         }
       }
@@ -951,7 +958,16 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
               || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.obligorName, this.state.filters.quickFilters.keyword)
               || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.alert.alertMessage, this.state.filters.quickFilters.keyword)) {
               if (!this.state.alert.scopedAlertType || eachRow.data.alert.data.type == this.state.alert.scopedAlertType) {
-                filteredList.push(eachRow);
+                if (this.state.alert.scopedAlertType === this.constants.alertTypes.axeAlert) {
+                  // the axe tab only have non-marketList alerts, the inquiry tab only have marketList alerts
+                  if (this.state.alert.scopedForMarketListOnly && eachRow.data.alert.state.isMarketListVariant) {
+                    filteredList.push(eachRow);
+                  } else if (!this.state.alert.scopedForMarketListOnly && !eachRow.data.alert.state.isMarketListVariant) {
+                    filteredList.push(eachRow);
+                  }
+                } else {
+                  filteredList.push(eachRow);
+                }
               }
             }
           }
@@ -993,7 +1009,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       // this.loadInitialStencilTable();
       this.updateStage(0, this.state.fetchResult.alertTable, this.state.table.alertDto);
       this.fetchDataForAlertTable(true);
-      this.state.alert.axeAlertCount = 0;
+      this.state.alert.nonMarketListAxeAlertCount = 0;
+      this.state.alert.marketListAxeAlertCount = 0;
       this.state.alert.markAlertCount = 0;
       this.state.alert.tradeAlertCount = 0;
       this.countAlerts(newAlertList);
@@ -1135,11 +1152,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         switch (eachAlert.data.type) {
           case this.constants.alertTypes.axeAlert:
             if (eachAlert.state.isMarketListVariant) {
-              // code...
+              this.state.alert.marketListAxeAlertCount++;
             } else {
-
+              this.state.alert.nonMarketListAxeAlertCount++;
             }
-            this.state.alert.axeAlertCount++;
             break;
           case this.constants.alertTypes.markAlert:
             this.state.alert.markAlertCount++;
