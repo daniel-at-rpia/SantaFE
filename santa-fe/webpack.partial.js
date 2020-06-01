@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const version = "1.4.7";
+const version = "1.5.0-beta";
 
 module.exports = {
   output: {
