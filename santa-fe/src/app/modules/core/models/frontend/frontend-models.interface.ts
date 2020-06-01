@@ -367,6 +367,7 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
         bestPriceQuote: QuantComparerDTO;
       }
     }
+    alert: AlertDTO;
   },
   state: {
     expandViewSortByQuoteMetric: string;

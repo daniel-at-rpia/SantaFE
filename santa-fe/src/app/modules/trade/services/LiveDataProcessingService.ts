@@ -138,7 +138,7 @@ export class LiveDataProcessingService {
     bestQuoteServerReturn: BEBestQuoteDTO,
     targetAlert: AlertDTO
   ) {
-    const newRow = !!targetAlert ? this.dtoService.formSecurityTableRowObject(newSecurity, targetAlert.data.id) : this.dtoService.formSecurityTableRowObject(newSecurity, newSecurity.data.securityID);
+    const newRow = !!targetAlert ? this.dtoService.formSecurityTableRowObject(newSecurity, targetAlert, targetAlert.data.id) : this.dtoService.formSecurityTableRowObject(newSecurity, null, newSecurity.data.securityID);
     this.populateEachRowWithBestQuoteData(
       headerList,
       newRow,

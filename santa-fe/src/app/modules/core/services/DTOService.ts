@@ -822,6 +822,7 @@ export class DTOService {
 
   public formSecurityTableRowObject(
     securityDTO: DTOs.SecurityDTO,
+    alert: DTOs.AlertDTO,
     id?: string
   ): DTOs.SecurityTableRowDTO {
     const object: DTOs.SecurityTableRowDTO = {
@@ -859,7 +860,8 @@ export class DTOService {
             bestPriceQuote: null,
             bestYieldQuote: null
           }
-        }
+        },
+        alert: alert
       },
       state: {
         expandViewSortByQuoteMetric: null,
