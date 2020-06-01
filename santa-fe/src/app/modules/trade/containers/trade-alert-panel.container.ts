@@ -419,21 +419,32 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       isMarketListOnly?: boolean
     ) {
       if (this.state.fetchResult.alertTable.fetchComplete) {
-        if (this.state.alert.scopedAlertType !== targetType) {
-          this.state.displayAlertTable = true;
-          this.state.alert.scopedAlertType = targetType;
-          this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
+        if (targetType === this.constants.alertTypes.axeAlert) {
+          if (this.state.alert.scopedAlertType !== targetType || this.state.alert.scopedForMarketListOnly !== !!isMarketListOnly) {
+            this.state.displayAlertTable = true;
+            this.state.alert.scopedAlertType = targetType;
+            this.state.alert.scopedForMarketListOnly = !!isMarketListOnly;
+            this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
+          } else {
+            this.state.displayAlertTable = false;
+            this.state.alert.scopedAlertType = null;
+          }
         } else {
-          this.state.displayAlertTable = false;
-          this.state.alert.scopedAlertType = null;
+          this.state.alert.scopedForMarketListOnly = false;
+          if (this.state.alert.scopedAlertType !== targetType) {
+            this.state.displayAlertTable = true;
+            this.state.alert.scopedAlertType = targetType;
+            this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
+          } else {
+            this.state.displayAlertTable = false;
+            this.state.alert.scopedAlertType = null;
+          }
         }
         if (this.state.displayAlertTable) {
-          this.state.alert.scopedForMarketListOnly = !!isMarketListOnly;
           // collapse the configuration UI
           this.state.configureAlert = false;
           this.showAlertTable && this.showAlertTable.emit();
         } else {
-          this.state.alert.scopedForMarketListOnly = false;
           this.collapseAlertTable && this.collapseAlertTable.emit();
         }
       }
