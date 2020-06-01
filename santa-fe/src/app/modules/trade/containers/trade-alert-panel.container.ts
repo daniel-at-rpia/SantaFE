@@ -386,19 +386,24 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     }
 
     public onClickConfigureAlert() {
-      this.configureAlert.emit();
-      this.state.configureAlert = true;
-      this.state.configuration.axe = this.initializePageState().configuration.axe;
-      this.loadAllConfigurations();
-      // collapse the alert table
-      this.state.displayAlertTable = false;
-      this.state.alert.scopedAlertType = null;
-      this.restfulCommService.logEngagement(
-        this.restfulCommService.engagementMap.tradeAlertOpenConfiguration,
-        null,
-        null,
-        'Trade Alert Panel'
-      );
+      this.state.configureAlert = !this.state.configureAlert;
+      if (this.state.configureAlert) {
+        this.configureAlert.emit();
+        this.state.configureAlert = true;
+        this.state.configuration.axe = this.initializePageState().configuration.axe;
+        this.loadAllConfigurations();
+        // collapse the alert table
+        this.state.displayAlertTable = false;
+        this.state.alert.scopedAlertType = null;
+        this.restfulCommService.logEngagement(
+          this.restfulCommService.engagementMap.tradeAlertOpenConfiguration,
+          null,
+          null,
+          'Trade Alert Panel'
+        );
+      } else if (!this.state.displayAlertTable) {
+        this.collapseAlertTable.emit();
+      }
     }
 
     public onClickSpecificAlertTypeTab(targetType: AlertTypes) {

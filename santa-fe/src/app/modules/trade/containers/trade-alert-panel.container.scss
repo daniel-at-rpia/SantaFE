@@ -848,7 +848,7 @@ $tradeAlertPanel_overview_tabIndicate_width: 6rem;
               background-color: $color_active;
               &-countText {
                 background-color: $color_white;
-                color: $font_color_major;
+                color: $tradeAxeAlertColor;
               }
             }
           }
@@ -874,7 +874,7 @@ $tradeAlertPanel_overview_tabIndicate_width: 6rem;
               background-color: $color_active;
               &-countText {
                 background-color: $color_white;
-                color: $font_color_major;
+                color: $tradeMarkAlertColor;
               }
             }
           }
@@ -900,7 +900,7 @@ $tradeAlertPanel_overview_tabIndicate_width: 6rem;
               background-color: $color_active;
               &-countText {
                 background-color: $color_white;
-                color: $font_color_major;
+                color: $tradeTradeAlertColor;
               }
             }
           }
@@ -910,6 +910,15 @@ $tradeAlertPanel_overview_tabIndicate_width: 6rem;
   }
   &--configureAlertState {
     #{$tradeAlertPanelBlockName} {
+      &__overview {
+        &-configureCTA {
+          &>button {
+            @include material('none');
+            background-color: $color_active;
+            @extend .santaBtn--inverseLabelled;
+          }
+        }
+      }
       &__main {
         flex: 0 0 auto;
       }
