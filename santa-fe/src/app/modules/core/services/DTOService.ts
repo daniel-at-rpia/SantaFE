@@ -1194,7 +1194,7 @@ export class DTOService {
         isCancelled: !!rawData.isCancelled,
         isNew: true,
         isSlidedOut: false,
-        isRead: false,
+        isRead: !rawData.isActive,
         isCountdownFinished: true,
         willBeRemoved: false,
         hasSecurity: false,

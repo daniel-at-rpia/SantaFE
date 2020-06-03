@@ -385,7 +385,7 @@ export interface BEAlertDTO {
   subType: string;
   keyWord: string;
   message: string;
-  isActive: boolean;
+  isActive: boolean;  // true if the alert has not been read/deleted in the FE, false otherwise
   isCancelled?: boolean;
   isUrgent: boolean;
   isDeleted: boolean;

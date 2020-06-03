@@ -339,15 +339,24 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
                   }
                 }
               } else {
-                // checking for cancelled and active alerts
                 const newAlert = this.dtoService.formAlertObject(eachRawAlert);
-                if (eachRawAlert.isActive) {
-                  if (newAlert.data.isUrgent) {
+                if (eachRawAlert.isCancelled) {
+                  // cancellation of alerts carries diff meaning depending on the alert type:
+                  // axe & mark & inquiry: it could be the trader entered it by mistake, but it could also be the trader changed his mind so he/she cancels the previous legitmate entry. So when such an cancelled alert comes in
+                  // trade: since it is past tense, so it could only be cancelled because of entered by mistake
+                  if (newAlert.data.type === this.constants.alertTypes.markAlert || newAlert.data.type === this.constants.alertTypes.axeAlert) {
+                    alertTableList.push(newAlert);
+                    updateList.push(newAlert);
+                  } else if (newAlert.data.type === this.constants.alertTypes.tradeAlert) {
+                    
+                  }
+                } else {
+                  if (!newAlert.state.isRead && newAlert.data.isUrgent) {
                     updateList.push(newAlert);
                   }
-                }
-                if (newAlert.data.security && newAlert.data.security.data.securityID) {
-                  alertTableList.push(newAlert);
+                  if (newAlert.data.security && newAlert.data.security.data.securityID) {
+                    alertTableList.push(newAlert);
+                  }
                 }
               }
             });
