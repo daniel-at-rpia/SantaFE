@@ -82,6 +82,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       try {
         alertListSorted.forEach((eachAlert) => {
           if (eachAlert.state.isCancelled) {
+            console.log('cancel alert ', eachAlert);
             this.onAlertExpired(eachAlert);
           } else if (eachAlert.data.isUrgent) {
             this.generateNewAlert(eachAlert, alertListSorted);
@@ -370,15 +371,6 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     this.state.storeList.forEach((eachAlert) => {
       eachAlert.state.isSlidedOut = this.state.triggerActionMenuOpen;
     });
-  }
-
-  private filterCancelledAlerts(alertListSorted: AlertDTO[], currList: AlertDTO[]) {
-    // console.log('filterCancelledAlerts', alertListSorted);
-    const newAlerts = currList.slice();
-    alertListSorted.forEach(alert => {
-
-    });
-    return newAlerts;
   }
 
 }

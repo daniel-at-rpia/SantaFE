@@ -116,6 +116,26 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       }
     }
   },{
+    key: 'alertStatus',
+    label: 'Status',
+    attrName: 'alertStatus',
+    underlineAttrName: 'alertStatus',
+    blockAttrName: 'alert',
+    readyStage: SECURITY_TABLE_FINAL_STAGE,
+    isDataTypeText: true,
+    groupBelongs: SecurityTableMetricGroups.alert,
+    tableSpecifics: {
+      default: {
+        active: false,
+        disabled: true
+      },
+      tradeAlert: {
+        active: true,
+        disabled: false,
+        groupShow: true
+      }
+    }
+  },{
     key: 'alertSide',
     label: 'Side',
     attrName: 'alertSide',

@@ -122,6 +122,7 @@ export interface SecurityDTO extends BasicDTOStructure {
       alertQuantityRaw: number;
       alertQuoteDealer: string;
       alertTradeTrader: string;
+      alertStatus: string;
     }
   }
   api: {
@@ -516,6 +517,7 @@ export interface AlertDTO extends BasicDTOStructure {
     isUrgent: boolean;
     trader: string;
     dealer: string;
+    status: string;
   },
   state: {
     isRead: boolean;

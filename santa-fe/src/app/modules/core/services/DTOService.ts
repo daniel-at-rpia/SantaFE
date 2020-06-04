@@ -196,7 +196,8 @@ export class DTOService {
           alertQuantity: null,
           alertQuantityRaw: null,
           alertQuoteDealer: null,
-          alertTradeTrader: null
+          alertTradeTrader: null,
+          alertStatus: null
         }
       },
       api: {
@@ -378,7 +379,8 @@ export class DTOService {
       alertLevelRaw: targetAlert.data.level,
       alertQuantityRaw: targetAlert.data.quantity,
       alertQuoteDealer: targetAlert.data.dealer,
-      alertTradeTrader: targetAlert.data.trader
+      alertTradeTrader: targetAlert.data.trader,
+      alertStatus: targetAlert.data.status
     };
   }
 
@@ -1184,7 +1186,8 @@ export class DTOService {
         quantity: null,
         isUrgent: rawData.isUrgent,
         trader: null,
-        dealer: null
+        dealer: null,
+        status: null
       },
       api: {
         onMouseEnterAlert: null,
@@ -1255,6 +1258,11 @@ export class DTOService {
           }
         }
       }
+    }
+    if (object.data.type === AlertTypes.axeAlert && object.state.isMarketListVariant) {
+      object.data.status = object.state.isCancelled ? 'Expired' : `Valid Until ${object.data.validUntilTime}`;
+    } else {
+      object.data.status = object.state.isCancelled ? 'Cancelled' : object.state.isRead ? 'Read' : 'Active';
     }
     return object;
   }
