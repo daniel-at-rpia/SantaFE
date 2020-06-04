@@ -246,5 +246,6 @@ export interface TradeAlertPanelState {
     unreadTradeAlertCount: number;
     scopedAlertType: AlertTypes;
     scopedForMarketListOnly: boolean;
+    recentUpdatedAlertList: Array<string>;  // the rowId of the alerts that are recently updated on FE, we need to track them because those rows needs to be forced to be updated in the next update call, the diffing logic wouldnt work because every update we are just fetching new securities, so agGrid has to be updated through manually tracking the alerts that are updated recently
   }
 }

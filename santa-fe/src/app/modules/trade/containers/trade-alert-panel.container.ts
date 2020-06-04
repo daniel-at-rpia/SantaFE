@@ -224,7 +224,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           tradeAlertCount: 0,
           unreadTradeAlertCount: 0,
           scopedForMarketListOnly: false,
-          scopedAlertType: null
+          scopedAlertType: null,
+          recentUpdatedAlertList: []
         }
       };
       return state;
@@ -303,6 +304,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
               targetEntry.state.isRead = true;
               this.dtoService.appendAlertStatus(targetEntry);
             }
+            !this.state.alert.recentUpdatedAlertList.includes(eachReadAlert.data.id) && this.state.alert.recentUpdatedAlertList.push(eachReadAlert.data.id);
           });
           this.store$.dispatch(new CoreReceivedReadAlerts());
         }
@@ -1176,7 +1178,12 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           tap(([isInitialDataLoaded, processingRawData]) => {
             if (isInitialDataLoaded) {
               const newFilteredList = this.filterPrinstineRowList(targetTableBlock.prinstineRowList);
-              targetTableBlock.liveUpdatedRowList = this.processingService.returnDiff(targetTableDTO, newFilteredList).newRowList;
+              targetTableBlock.liveUpdatedRowList = this.processingService.returnDiff(
+                targetTableDTO,
+                newFilteredList,
+                this.state.alert.recentUpdatedAlertList
+              ).newRowList;
+              this.state.alert.recentUpdatedAlertList = [];
             } else {
               targetTableBlock.rowList = this.filterPrinstineRowList(targetTableBlock.prinstineRowList);
             }

@@ -235,7 +235,8 @@ export class LiveDataProcessingService {
 
   public returnDiff(
     table: SecurityTableDTO,
-    newList: Array<SecurityTableRowDTO>
+    newList: Array<SecurityTableRowDTO>,
+    diffOverwriteRowList?: Array<string>
   ): LiveDataDiffingResult {
     const updateList: Array<SecurityTableRowDTO> = [];
     const oldRowList: Array<SecurityTableRowDTO> = this.utilityService.deepCopy(table.data.rows);
@@ -250,39 +251,47 @@ export class LiveDataProcessingService {
     const betterBidUpdateList: Array<SecurityTableRowDTO> = [];
     const betterAskUpdateList: Array<SecurityTableRowDTO> = [];
     const validityUpdateList: Array<SecurityTableRowDTO> = [];
+    const overwriteUpdateList: Array<SecurityTableRowDTO> = [];
 
     newList.forEach((eachNewRow) => {
-      const oldRow = oldRowList.find((eachOldRow) => {
-        return eachOldRow.data.rowId === eachNewRow.data.rowId;
-      });
-      if (!!oldRow) {
-        const isSecurityDiff = this.isThereDiffInSecurity(oldRow.data.security, eachNewRow.data.security);
-        const isQuantDiff = this.isThereDiffInQuantComparer(oldRow.data.cells[0].data.quantComparerDTO, eachNewRow.data.cells[0].data.quantComparerDTO);
-        if ( isSecurityDiff > 0 || isQuantDiff > 0) {
-          updateList.push(eachNewRow);
-        }
-        isSecurityDiff === 1 && positionUpdateList.push(eachNewRow);
-        isSecurityDiff === 2 && markUpdateList.push(eachNewRow);
-        if (isQuantDiff === 1 || isQuantDiff === 2) {
-          newQuantUpdateList.push(eachNewRow);
-        }
-        isQuantDiff === 3 && betterBidUpdateList.push(eachNewRow);
-        isQuantDiff === 4 && betterAskUpdateList.push(eachNewRow);
-        isQuantDiff === 5 && validityUpdateList.push(eachNewRow);
-      } else {
+      // if this row is specified in the overwrite list, then there is no need to do diffing, just add it to the list of rows to be updated
+      if (!!diffOverwriteRowList && diffOverwriteRowList.length > 0 && diffOverwriteRowList.includes(eachNewRow.data.rowId)) {
+        overwriteUpdateList.push(eachNewRow);
         updateList.push(eachNewRow);
-        newRowList.push(eachNewRow);
+      } else {
+        const oldRow = oldRowList.find((eachOldRow) => {
+          return eachOldRow.data.rowId === eachNewRow.data.rowId;
+        });
+        if (!!oldRow) {
+          const isSecurityDiff = this.isThereDiffInSecurity(oldRow.data.security, eachNewRow.data.security);
+          const isQuantDiff = this.isThereDiffInQuantComparer(oldRow.data.cells[0].data.quantComparerDTO, eachNewRow.data.cells[0].data.quantComparerDTO);
+          if ( isSecurityDiff > 0 || isQuantDiff > 0) {
+            updateList.push(eachNewRow);
+          }
+          isSecurityDiff === 1 && positionUpdateList.push(eachNewRow);
+          isSecurityDiff === 2 && markUpdateList.push(eachNewRow);
+          if (isQuantDiff === 1 || isQuantDiff === 2) {
+            newQuantUpdateList.push(eachNewRow);
+          }
+          isQuantDiff === 3 && betterBidUpdateList.push(eachNewRow);
+          isQuantDiff === 4 && betterAskUpdateList.push(eachNewRow);
+          isQuantDiff === 5 && validityUpdateList.push(eachNewRow);
+        } else {
+          updateList.push(eachNewRow);
+          newRowList.push(eachNewRow);
+        }
       }
     });
     if (updateList.length > 0) {
       console.log('=== new update ===');
-      console.log('new rows', newRowList);
-      console.log('Position change: ', positionUpdateList);
-      console.log('Mark change: ', markUpdateList);
-      console.log('Best Quote overwrite: ', newQuantUpdateList);
-      console.log('Best Bid change: ', betterBidUpdateList);
-      console.log('Best Ask change: ', betterAskUpdateList);
-      console.log('Validity change: ', validityUpdateList);
+      newRowList.length > 0 && console.log('new rows', newRowList);
+      newRowList.length > 0 && console.log('Position change: ', positionUpdateList);
+      newRowList.length > 0 && console.log('Mark change: ', markUpdateList);
+      newRowList.length > 0 && console.log('Best Quote overwrite: ', newQuantUpdateList);
+      newRowList.length > 0 && console.log('Best Bid change: ', betterBidUpdateList);
+      newRowList.length > 0 && console.log('Best Ask change: ', betterAskUpdateList);
+      newRowList.length > 0 && console.log('Validity change: ', validityUpdateList);
+      newRowList.length > 0 && console.log('Overwrite update: ', overwriteUpdateList);
     }
     return {
       newRowList: updateList,
