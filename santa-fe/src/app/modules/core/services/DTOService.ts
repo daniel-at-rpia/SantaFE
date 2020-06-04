@@ -1259,12 +1259,16 @@ export class DTOService {
         }
       }
     }
-    if (object.data.type === AlertTypes.axeAlert && object.state.isMarketListVariant) {
-      object.data.status = object.state.isCancelled ? 'Expired' : `Valid Until ${object.data.validUntilTime}`;
-    } else {
-      object.data.status = object.state.isCancelled ? 'Cancelled' : object.state.isRead ? 'Read' : 'Active';
-    }
+    this.appendAlertStatus(object);
     return object;
+  }
+
+  public appendAlertStatus(alertDTO: DTOs.AlertDTO) {
+    if (alertDTO.data.type === AlertTypes.axeAlert && alertDTO.state.isMarketListVariant) {
+      alertDTO.data.status = alertDTO.state.isCancelled ? 'Expired' : `Valid Until ${alertDTO.data.validUntilTime}`;
+    } else {
+      alertDTO.data.status = alertDTO.state.isCancelled ? 'Cancelled' : alertDTO.state.isRead ? 'Read' : 'Active';
+    }
   }
 
   public formAlertCountSummaryObject(

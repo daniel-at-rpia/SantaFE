@@ -13,6 +13,7 @@ export interface CoreState {
     initials: string;
   };
   alert: {
+    readAlerts: Array<AlertDTO>;
     newAlerts: Array<AlertDTO>;
     countByTypeArr: Array<AlertCountSummaryDTO>;
     displayThumbnail: boolean;
@@ -28,6 +29,7 @@ const initialState: CoreState = {
     initials: null
   },
   alert: {
+    readAlerts: [],
     newAlerts: [],
     countByTypeArr: [],
     displayThumbnail: true
@@ -51,13 +53,13 @@ export function coreReducer(
         }
       };
     case CoreActions.ToggleAlertThumbnailDisplay:
-       return {
-         ...state,
-         alert: {
-           ...state.alert,
-           displayThumbnail: action.value
-         }
-       };
+      return {
+        ...state,
+        alert: {
+          ...state.alert,
+          displayThumbnail: action.value
+        }
+      };
     case CoreActions.LoadSecurityMap:
       return {
         ...state,
@@ -98,6 +100,22 @@ export function coreReducer(
           newAlerts: []
         }
       };
+    case CoreActions.SendReadAlerts:
+      return {
+        ...state,
+        alert: {
+          ...state.alert,
+          readAlerts: action.list
+        }
+      };
+    case CoreActions.ReceivedReadAlerts: 
+      return {
+        ...state,
+        alert: {
+          ...state.alert,
+          readAlerts: []
+        }
+      }
     default:
       return {
         ...state

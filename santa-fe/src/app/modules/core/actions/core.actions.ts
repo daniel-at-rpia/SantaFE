@@ -9,7 +9,9 @@ export enum CoreActions {
   FlushSecurityMap = '[Core] Fluahs Security Map',
   SendNewAlerts = '[Core] Send New Alerts',
   SendAlertCountsByType = '[Core] Send Alert Counts',
-  ReceivedNewAlerts = '[Core] Received New Alerts'
+  ReceivedNewAlerts = '[Core] Received New Alerts',
+  SendReadAlerts = '[Core] Send Read Alerts',
+  ReceivedReadAlerts = '[Core] Received Read Alerts'
 }
 
 export class CoreUserLoggedIn implements Action {
@@ -69,5 +71,20 @@ export class CoreSendAlertCountsByType implements Action {
 
 export class CoreReceivedNewAlerts implements Action {
   readonly type = CoreActions.ReceivedNewAlerts;
+  constructor(){}
+}
+
+export class CoreSendReadAlerts implements Action {
+  readonly type = CoreActions.SendReadAlerts;
+  readonly list: Array<AlertDTO>;
+  constructor(
+    list: Array<AlertDTO>
+  ){
+    this.list = list;
+  }
+}
+
+export class CoreReceivedReadAlerts implements Action {
+  readonly type = CoreActions.ReceivedReadAlerts;
   constructor(){}
 }

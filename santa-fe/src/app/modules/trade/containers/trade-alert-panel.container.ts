@@ -51,7 +51,8 @@
     import {
       selectAlertCounts,
       selectSecurityMapContent,
-      selectSecurityMapValidStatus
+      selectSecurityMapValidStatus,
+      selectReadAlerts
     } from 'Core/selectors/core.selectors';
     import {
       ALERT_MAX_SECURITY_SEARCH_COUNT,
@@ -60,7 +61,11 @@
       AxeAlertType
     } from 'Core/constants/tradeConstants.constant';
     import { FullOwnerList, FilterOptionsPortfolioResearchList } from 'Core/constants/securityDefinitionConstants.constant';
-    import { CoreFlushSecurityMap, CoreSendNewAlerts } from 'Core/actions/core.actions';
+    import {
+      CoreFlushSecurityMap,
+      CoreSendNewAlerts,
+      CoreReceivedReadAlerts
+    } from 'Core/actions/core.actions';
     import {
       TradeAlertTableReceiveNewAlertsEvent,
       TradeSelectedSecurityForAnalysisEvent,
@@ -111,7 +116,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     // selectedSecurityForAlertConfigSub: null,
     centerPanelPresetSelectedSub: null,
     alertCountSub: null,
-    startNewUpdateSub: null
+    startNewUpdateSub: null,
+    receivedReadAlertsSub: null
   }
   autoUpdateCount$: Observable<any>;
   constants = {
@@ -271,7 +277,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       ).subscribe(flag => {
         this.state.isCenterPanelPresetSelected = flag;
       });
-
       this.subscriptions.startNewUpdateSub = this.store$.pipe(
         select(selectLiveUpdateTick),
         withLatestFrom(
@@ -284,6 +289,22 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           } else {
             this.fetchUpdate([]);
           }
+        }
+      });
+      this.subscriptions.receivedReadAlertsSub = this.store$.pipe(
+        select(selectReadAlerts)
+      ).subscribe((alertList: Array<AlertDTO>) => {
+        if (alertList.length > 0) {
+          alertList.forEach((eachReadAlert) => {
+            // instead of just assigning the DTO to the corresponding entry, we just flip the isRead flag
+            // doing so because the DTO in the Core Store might be outdated
+            const targetEntry = this.state.alert.alertTableAlertList[eachReadAlert.data.id];
+            if (!!targetEntry) {
+              targetEntry.state.isRead = true;
+              this.dtoService.appendAlertStatus(targetEntry);
+            }
+          });
+          this.store$.dispatch(new CoreReceivedReadAlerts());
         }
       });
     }
@@ -1132,8 +1153,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         null
       );
       this.calculateQuantComparerWidthAndHeight();
-      this.updateStage(this.constants.securityTableFinalStage, this.state.fetchResult.alertTable, this.state.table.alertDto);
       this.state.fetchResult.alertTable.fetchComplete = true;
+      this.updateStage(this.constants.securityTableFinalStage, this.state.fetchResult.alertTable, this.state.table.alertDto);
       if (!this.state.alert.initialAlertListReceived) {
         this.state.alert.initialAlertListReceived = true;
       }
