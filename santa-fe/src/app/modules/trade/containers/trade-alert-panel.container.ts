@@ -335,64 +335,65 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlerts, {req: 'POST'}, payload).pipe(
         first(),
         tap((serverReturn: Array<BEAlertDTO>) => {
-          if (!!serverReturn) {
-            const filteredServerReturn = serverReturn.filter((eachRawAlert) => {
-              // no filtering logic for now
-              return true;
-            });
-            const updateList: Array<AlertDTO> = [];
-            const alertTableList: Array<AlertDTO> = [];
-            filteredServerReturn.forEach((eachRawAlert) => {
-              // Trade alerts are handled differently since BE passes the same trade alerts regardless of the timestamp FE provides
-              if (!!eachRawAlert.marketListAlert) {
-                if (this.state.receivedActiveAlertsMap[eachRawAlert.alertId]) {
-                  // ignore, already have it
-                } else if (!eachRawAlert.isActive) {
-                  // ignore, already expired
-                  const newAlert = this.dtoService.formAlertObject(eachRawAlert);
-                  if (newAlert.data.security && newAlert.data.security.data.securityID) {
-                    alertTableList.push(newAlert);
-                  }
-                } else {
-                  this.state.receivedActiveAlertsMap[eachRawAlert.alertId] = eachRawAlert.keyWord;
-                  const newAlert = this.dtoService.formAlertObject(eachRawAlert);
-                  updateList.push(newAlert);
-                  if (newAlert.data.security && newAlert.data.security.data.securityID) {
-                    alertTableList.push(newAlert);
-                  }
+          const filteredServerReturn = !!serverReturn ? serverReturn.filter((eachRawAlert) => {
+            // no filtering logic for now
+            return true;
+          }) : [];
+          const updateList: Array<AlertDTO> = [];
+          const alertTableList: Array<AlertDTO> = [];
+          filteredServerReturn.forEach((eachRawAlert) => {
+            // Trade alerts are handled differently since BE passes the same trade alerts regardless of the timestamp FE provides
+            if (!!eachRawAlert.marketListAlert) {
+              if (this.state.receivedActiveAlertsMap[eachRawAlert.alertId]) {
+                // ignore, already have it
+              } else if (!eachRawAlert.isActive) {
+                // ignore, already expired
+                const newAlert = this.dtoService.formAlertObject(eachRawAlert);
+                if (newAlert.data.security && newAlert.data.security.data.securityID) {
+                  alertTableList.push(newAlert);
                 }
               } else {
+                this.state.receivedActiveAlertsMap[eachRawAlert.alertId] = eachRawAlert.keyWord;
                 const newAlert = this.dtoService.formAlertObject(eachRawAlert);
-                if (eachRawAlert.isCancelled) {
-                  // cancellation of alerts carries diff meaning depending on the alert type:
-                  // axe & mark & inquiry: it could be the trader entered it by mistake, but it could also be the trader changed his mind so he/she cancels the previous legitmate entry. So when such an cancelled alert comes in
-                  // trade: since it is past tense, so it could only be cancelled because of entered by mistake
-                  if (newAlert.data.type === this.constants.alertTypes.markAlert || newAlert.data.type === this.constants.alertTypes.axeAlert) {
-                    alertTableList.push(newAlert);
-                    updateList.push(newAlert);
-                  } else if (newAlert.data.type === this.constants.alertTypes.tradeAlert) {
-                    
-                  }
-                } else {
-                  if (!newAlert.state.isRead && newAlert.data.isUrgent) {
-                    updateList.push(newAlert);
-                  }
-                  if (newAlert.data.security && newAlert.data.security.data.securityID) {
-                    alertTableList.push(newAlert);
-                  }
+                updateList.push(newAlert);
+                if (newAlert.data.security && newAlert.data.security.data.securityID) {
+                  alertTableList.push(newAlert);
                 }
               }
-            });
-            updateList.length > 0 && this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
-            if (alertTableList.length > 0) {
-              if (this.state.alert.initialAlertListReceived) {
-                this.fetchUpdate(alertTableList);
+            } else {
+              const newAlert = this.dtoService.formAlertObject(eachRawAlert);
+              if (eachRawAlert.isCancelled) {
+                // cancellation of alerts carries diff meaning depending on the alert type:
+                // axe & mark & inquiry: it could be the trader entered it by mistake, but it could also be the trader changed his mind so he/she cancels the previous legitmate entry. So when such an cancelled alert comes in
+                // trade: since it is past tense, so it could only be cancelled because of entered by mistake
+                if (newAlert.data.type === this.constants.alertTypes.markAlert || newAlert.data.type === this.constants.alertTypes.axeAlert) {
+                  alertTableList.push(newAlert);
+                  updateList.push(newAlert);
+                } else if (newAlert.data.type === this.constants.alertTypes.tradeAlert) {
+                  
+                }
               } else {
-                this.loadFreshData(alertTableList);
+                if (!newAlert.state.isRead && newAlert.data.isUrgent) {
+                  updateList.push(newAlert);
+                }
+                if (newAlert.data.security && newAlert.data.security.data.securityID) {
+                  alertTableList.push(newAlert);
+                }
               }
             }
+          });
+          updateList.length > 0 && this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
+          const numOfUpdate = this.flagMarketListAlertsForCountdownUpdate();
+          if (alertTableList.length > 0) {
+            if (this.state.alert.initialAlertListReceived) {
+              this.fetchUpdate(alertTableList);
+            } else {
+              this.loadFreshData(alertTableList);
+            }
+          } else if (numOfUpdate > 0){
+            // if there is no new alert, but there are existing active marketlist alerts, then the table still needs to be updated for refreshing the countdowns
+            this.fetchUpdate([]);
           }
-          this.flagMarketListAlertsForCountdownUpdate();
           this.state.alertUpdateInProgress = false;
         }),
         catchError(err => {
@@ -405,15 +406,18 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.state.alertUpdateTimestamp = moment().format("YYYY-MM-DDTHH:mm:ss.SSS");
     }
 
-    private flagMarketListAlertsForCountdownUpdate() {
+    private flagMarketListAlertsForCountdownUpdate(): number {
+      let numOfUpdate = 0;
       this.state.fetchResult.alertTable.prinstineRowList.forEach((eachRow) => {
         if (!!eachRow && !!eachRow.data.alert && !!eachRow.data.alert.state) {
           if (eachRow.data.alert.state.isMarketListVariant && !eachRow.data.alert.state.isExpired) {
+            numOfUpdate++;
             this.dtoService.appendAlertStatus(eachRow.data.alert);
             this.state.alert.recentUpdatedAlertList.push(eachRow.data.rowId);
           }
         }
       });
+      return numOfUpdate;
     }
   // general end
 
