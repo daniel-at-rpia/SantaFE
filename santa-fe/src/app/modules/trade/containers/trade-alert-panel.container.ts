@@ -392,6 +392,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
               }
             }
           }
+          this.flagMarketListAlertsForCountdownUpdate();
           this.state.alertUpdateInProgress = false;
         }),
         catchError(err => {
@@ -402,6 +403,15 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       ).subscribe();
       // timeStamp needs to be updated right after the API call initiates, NOT when it returns
       this.state.alertUpdateTimestamp = moment().format("YYYY-MM-DDTHH:mm:ss.SSS");
+    }
+
+    private flagMarketListAlertsForCountdownUpdate() {
+      this.state.fetchResult.alertTable.prinstineRowList.forEach((eachRow) => {
+        if (!!eachRow && !!eachRow.data.alert && !!eachRow.data.alert.state) {
+          this.dtoService.appendAlertStatus(eachRow.data.alert);
+          this.state.alert.recentUpdatedAlertList.push(eachRow.data.rowId);
+        }
+      });
     }
   // general end
 
