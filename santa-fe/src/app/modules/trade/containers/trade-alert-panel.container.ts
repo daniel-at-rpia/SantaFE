@@ -408,8 +408,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     private flagMarketListAlertsForCountdownUpdate() {
       this.state.fetchResult.alertTable.prinstineRowList.forEach((eachRow) => {
         if (!!eachRow && !!eachRow.data.alert && !!eachRow.data.alert.state) {
-          this.dtoService.appendAlertStatus(eachRow.data.alert);
-          this.state.alert.recentUpdatedAlertList.push(eachRow.data.rowId);
+          if (eachRow.data.alert.state.isMarketListVariant && !eachRow.data.alert.state.isExpired) {
+            this.dtoService.appendAlertStatus(eachRow.data.alert);
+            this.state.alert.recentUpdatedAlertList.push(eachRow.data.rowId);
+          }
         }
       });
     }
