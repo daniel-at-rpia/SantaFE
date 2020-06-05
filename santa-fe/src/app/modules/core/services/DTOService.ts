@@ -1271,7 +1271,7 @@ export class DTOService {
         alertDTO.data.status = 'Expired';
       } else if (moment().diff(alertDTO.data.validUntilMoment) > 0) {
         alertDTO.state.isExpired = true;
-        alertDTO.data.status = 'Expired';
+        alertDTO.data.status = `Expired at ${alertDTO.data.validUntilMoment.format('HH:mm:ss')}`;
       } else {
         alertDTO.data.status = `Valid For ${this.utility.parseCountdown(alertDTO.data.validUntilMoment)}`
       }
