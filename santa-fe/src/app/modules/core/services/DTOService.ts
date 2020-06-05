@@ -1181,6 +1181,7 @@ export class DTOService {
         time: momentTime.format(`HH:mm`),
         titlePin: !!rawData.marketListAlert && rawData.marketListAlert.subType,
         validUntilTime: !!rawData.marketListAlert ? rawData.marketListAlert.validUntilTime : null,
+        validUntilMoment: !!rawData.marketListAlert ? moment(rawData.marketListAlert.validUntilTime) : null,
         unixTimestamp: momentTime.unix(),
         level: null,
         quantity: null,
@@ -1265,7 +1266,7 @@ export class DTOService {
 
   public appendAlertStatus(alertDTO: DTOs.AlertDTO) {
     if (alertDTO.data.type === AlertTypes.axeAlert && alertDTO.state.isMarketListVariant) {
-      alertDTO.data.status = alertDTO.state.isCancelled ? 'Expired' : `Valid Until ${alertDTO.data.validUntilTime}`;
+      alertDTO.data.status = alertDTO.state.isCancelled ? 'Expired' : `Valid For ${this.utility.parseCountdown(alertDTO.data.validUntilMoment)}`;
     } else {
       alertDTO.data.status = alertDTO.state.isCancelled ? 'Cancelled' : alertDTO.state.isRead ? 'Read' : 'Active';
     }

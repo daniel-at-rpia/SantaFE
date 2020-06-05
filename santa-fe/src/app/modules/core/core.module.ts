@@ -76,7 +76,8 @@ import {CountdownPipe} from 'App/pipes/Countdown.pipe';
     UtilityService,
     GraphService,
     RestfulCommService,
-    AgGridMiddleLayerService
+    AgGridMiddleLayerService,
+    CountdownPipe
   ],
     exports: [
         SantaTable,
