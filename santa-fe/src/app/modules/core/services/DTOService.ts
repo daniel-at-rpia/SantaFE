@@ -1203,7 +1203,8 @@ export class DTOService {
         willBeRemoved: false,
         hasSecurity: false,
         hasTitlePin: !!rawData.marketListAlert,
-        isMarketListVariant: !!rawData.marketListAlert
+        isMarketListVariant: !!rawData.marketListAlert,
+        isExpired: false
       }
     }
     if (!!rawData.security) {
@@ -1266,7 +1267,14 @@ export class DTOService {
 
   public appendAlertStatus(alertDTO: DTOs.AlertDTO) {
     if (alertDTO.data.type === AlertTypes.axeAlert && alertDTO.state.isMarketListVariant) {
-      alertDTO.data.status = alertDTO.state.isCancelled ? 'Expired' : `Valid For ${this.utility.parseCountdown(alertDTO.data.validUntilMoment)}`;
+      if (alertDTO.state.isCancelled) {
+        alertDTO.data.status = 'Expired';
+      } else if (moment().diff(alertDTO.data.validUntilMoment) > 0) {
+        alertDTO.state.isExpired = true;
+        alertDTO.data.status = 'Expired';
+      } else {
+        alertDTO.data.status = `Valid For ${this.utility.parseCountdown(alertDTO.data.validUntilMoment)}`
+      }
     } else {
       alertDTO.data.status = alertDTO.state.isCancelled ? 'Cancelled' : alertDTO.state.isRead ? 'Read' : 'Active';
     }

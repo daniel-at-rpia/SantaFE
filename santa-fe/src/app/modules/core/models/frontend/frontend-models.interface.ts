@@ -532,6 +532,7 @@ export interface AlertDTO extends BasicDTOStructure {
     hasTitlePin: boolean;
     isCancelled: boolean;
     isMarketListVariant: boolean;
+    isExpired: boolean;
   };
 }
 
