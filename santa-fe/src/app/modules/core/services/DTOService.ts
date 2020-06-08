@@ -12,7 +12,8 @@
       BEHistoricalQuantBlock,
       BEHistoricalSummaryDTO,
       BESingleBestQuoteDTO,
-      BEAlertDTO
+      BEAlertDTO,
+      BEAlertMarketListQuoteBlock
     } from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
     import * as Blocks from 'FEModels/frontend-blocks.interface';
@@ -1180,8 +1181,8 @@ export class DTOService {
         message: rawData.message,
         time: momentTime.format(`HH:mm`),
         titlePin: !!rawData.marketListAlert && rawData.marketListAlert.subType,
-        validUntilTime: !!rawData.marketListAlert ? rawData.marketListAlert.validUntilTime : null,
-        validUntilMoment: !!rawData.marketListAlert ? moment(rawData.marketListAlert.validUntilTime) : null,
+        validUntilTime: null,
+        validUntilMoment: null,
         unixTimestamp: momentTime.unix(),
         level: null,
         quantity: null,
@@ -1203,57 +1204,66 @@ export class DTOService {
         willBeRemoved: false,
         hasSecurity: false,
         hasTitlePin: !!rawData.marketListAlert,
-        isMarketListVariant: !!rawData.marketListAlert,
+        isMarketListVariant: !!rawData.isMarketListAlert,
         isExpired: false
       }
     }
+    this.appendAlertDetailInfo(object, rawData);
+    this.appendAlertStatus(object);
+    return object;
+  }
+
+  private appendAlertDetailInfo(
+    alertDTO: DTOs.AlertDTO,
+    rawData: BEAlertDTO
+  ) {
     if (!!rawData.security) {
-      object.data.security = this.formSecurityCardObject(
+      alertDTO.data.security = this.formSecurityCardObject(
         rawData.security.securityIdentifier || null,
         rawData.security,
         false,
         false
       );
-      object.data.security.state.isInteractionDisabled = true;
-      object.data.security.state.isMultiLineVariant = true;
-      object.data.security.state.isWidthFlexible = true;
-      object.state.hasSecurity = true;
-      const targetDriver = object.data.security.data.mark.markDriver;
-      if (!!rawData.quote && !!object.data.security) {
-        object.data.dealer = rawData.quote.dealer;
+      alertDTO.data.security.state.isInteractionDisabled = true;
+      alertDTO.data.security.state.isMultiLineVariant = true;
+      alertDTO.data.security.state.isWidthFlexible = true;
+      alertDTO.state.hasSecurity = true;
+      const targetDriver = alertDTO.data.security.data.mark.markDriver;
+      if (!!rawData.quote && !!alertDTO.data.security) {
+        alertDTO.data.dealer = rawData.quote.dealer;
         switch (targetDriver) {
           case TriCoreDriverConfig.Spread.label:
-            object.data.level = rawData.quote['spread'];
+            alertDTO.data.level = rawData.quote.spread;
             break;
           case TriCoreDriverConfig.Price.label:
-            object.data.level = rawData.quote['price'];
+            alertDTO.data.level = rawData.quote.price;
             break;
           case TriCoreDriverConfig.Yield.label:
-            object.data.level = rawData.quote['yield'];
+            alertDTO.data.level = rawData.quote.yield;
             break;
           default:
             break;
         }
-        object.data.quantity = rawData.quote['quantity'];
+        alertDTO.data.quantity = rawData.quote.quantity;
       }
       if (!!rawData.trades && rawData.type === AlertTypes.tradeAlert) {
         let quantity = 0;
         rawData.trades.forEach((eachRawTrade) => {
           quantity = quantity + eachRawTrade.quantity;
         })
-        object.data.quantity = quantity;
+        alertDTO.data.quantity = quantity;
         if (rawData.trades.length > 0) {
           const lastTrade = rawData.trades[rawData.trades.length-1];
-          object.data.trader = lastTrade.trader;
+          alertDTO.data.trader = lastTrade.trader;
           switch (targetDriver) {
             case TriCoreDriverConfig.Spread.label:
-              object.data.level = lastTrade.spread;
+              alertDTO.data.level = lastTrade.spread;
               break;
             case TriCoreDriverConfig.Price.label:
-              object.data.level = lastTrade.price;
+              alertDTO.data.level = lastTrade.price;
               break;
             case TriCoreDriverConfig.Yield.label:
-              object.data.level = null;
+              alertDTO.data.level = null;
               break;
             default:
               break;
@@ -1261,8 +1271,21 @@ export class DTOService {
         }
       }
     }
-    this.appendAlertStatus(object);
-    return object;
+    if (rawData.isMarketListAlert) {
+      const quoteBlock = rawData.quote as BEAlertMarketListQuoteBlock;
+      alertDTO.data.validUntilTime = 
+        !!rawData.marketListAlert
+          ? rawData.marketListAlert.validUntilTime
+          : !!quoteBlock
+            ? quoteBlock.validUntilTime
+            : null;
+      alertDTO.data.validUntilMoment = 
+        !!rawData.marketListAlert
+          ? moment(rawData.marketListAlert.validUntilTime)
+          : !!quoteBlock
+            ? moment(quoteBlock.validUntilTime)
+            : null;
+    }
   }
 
   public appendAlertStatus(alertDTO: DTOs.AlertDTO) {
