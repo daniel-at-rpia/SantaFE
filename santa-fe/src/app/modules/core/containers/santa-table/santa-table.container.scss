@@ -39,12 +39,6 @@ $alt-background: $color_white;
   justify-content: center;
 }
 
-@mixin header-color($background, $color: white) {
-  .ag-cell-label-container, .ag-header-group-cell-label {
-      background: $background !important;
-      color: $color;
-  }
-}
 @mixin default-cell() {
   background: $distinguish_type_color_8 !important;
   border-radius: 4px;
@@ -140,38 +134,24 @@ $alt-background: $color_white;
           }
         }
 
-        &--bestQuote {
-          @include header-color($distinguish_type_color_1);
+        &--bestQuote, &--markDiscrepancies, &--position, &--delta, &--ownership {
+          .ag-cell-label-container, .ag-header-group-cell-label {
+            background: $color_gray_6 !important;
+            color: $color_white;
+          }
         }
-        &--mark {
-          @include header-color($distinguish_type_color_2);
-        }
-        &--markDiscrepancies {
-          @include header-color($distinguish_type_color_3);
-        }
-        &--cost {
-          @include header-color($distinguish_type_color_4)
-        }
-        &--position {
-          @include header-color($distinguish_type_color_5);
-        }
-        &--cs01 {
-          @include header-color($distinguish_type_color_6);
-        }
-        &--delta {
-          @include header-color($distinguish_type_color_7);
-        }
-        &--securityInfo {
-          @include header-color($distinguish_type_color_1);
-        }
-        &--ownership {
-          @include header-color($distinguish_type_color_2);
-        }
-        &--alert {
-          @include header-color($distinguish_type_color_6);
+        &--mark, &--cost, &--cs01, &--securityInfo, &--alert {
+          .ag-cell-label-container, .ag-header-group-cell-label {
+            @include mix_border_generator($typical_border_width, $color_gray_6);
+            background: $color_white !important;
+            color: $color_gray_6;
+          }
         }
         &--noGroup {
-          @include header-color(transparent, black);
+          .ag-cell-label-container, .ag-header-group-cell-label {
+            background: transparent !important;
+            color: $font_color_major;
+          }
         }
         .ag-header-cell {
           overflow: hidden;
