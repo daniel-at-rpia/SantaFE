@@ -215,7 +215,7 @@ export class SantaTable implements OnInit, OnChanges {
           }
           this.tableData.state.selectedSecurityCard = null;
         }
-        if (!!params.node.master) {
+        if (!!params.node.master && this.tableName !== 'tradeAlert') {
           params.node.setExpanded(!params.node.expanded);
           if (!params.node.group) {
             const targetRow = this.tableData.data.rows.find((eachRow) => {
