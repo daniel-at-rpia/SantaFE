@@ -598,8 +598,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
           groupShow: true
         },
         tradeAlert: {
-          active: true,
-          groupShow: true
+          active: false
         }
       }
     }
@@ -621,8 +620,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
           groupShow: false
         },
         tradeAlert: {
-          active: true,
-          groupShow: false
+          active: false
         }
       }
     }
@@ -644,8 +642,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
           groupShow: false
         },
         tradeAlert: {
-          active: true,
-          groupShow: false
+          active: false
         }
       }
     }
@@ -667,8 +664,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
           groupShow: false
         },
         tradeAlert: {
-          active: true,
-          groupShow: false
+          active: false
         }
       }
     }
@@ -690,8 +686,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
           groupShow: false
         },
         tradeAlert: {
-          active: true,
-          groupShow: false
+          active: false
         }
       }
     }
@@ -713,8 +708,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
           groupShow: false
         },
         tradeAlert: {
-          active: true,
-          groupShow: false
+          active: false
         }
       }
     }
@@ -736,8 +730,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
           groupShow: false
         },
         tradeAlert: {
-          active: true,
-          groupShow: false
+          active: false
         }
       }
     }
@@ -777,7 +770,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
           groupShow: true
         },
         tradeAlert: {
-          active: false
+          active: true
         }
       }
     }
@@ -796,7 +789,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
           active: true
         },
         tradeAlert: {
-          active: false
+          active: true
         }
       }
     }
@@ -815,7 +808,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
           active: true
         },
         tradeAlert: {
-          active: false
+          active: true
         }
       }
     }
@@ -834,7 +827,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
           active: true
         },
         tradeAlert: {
-          active: false
+          active: true
         }
       }
     }
@@ -853,7 +846,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
           active: true
         },
         tradeAlert: {
-          active: false
+          active: true
         }
       }
     }
@@ -872,7 +865,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
           active: true
         },
         tradeAlert: {
-          active: false
+          active: true
         }
       }
     }
@@ -891,7 +884,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
           active: true
         },
         tradeAlert: {
-          active: false
+          active: true
         }
       }
     }
@@ -910,7 +903,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
           active: true
         },
         tradeAlert: {
-          active: false
+          active: true
         }
       }
     }
@@ -929,7 +922,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
           active: true
         },
         tradeAlert: {
-          active: false
+          active: true
         }
       }
     }
@@ -948,7 +941,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
           active: true
         },
         tradeAlert: {
-          active: false
+          active: true
         }
       }
     }
