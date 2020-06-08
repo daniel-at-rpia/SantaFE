@@ -36,7 +36,8 @@
       AGGRID_SIMPLE_TEXT_COLUMN_WIDTH,
       SecurityTableMetricGroups,
       SECURITY_TABLE_HEADER_NO_GROUP,
-      AGGRID_ALERT_SIDE_COLUMN_WIDTH
+      AGGRID_ALERT_SIDE_COLUMN_WIDTH,
+      AGGRID_ALERT_MESSAGE_COLUMN_WIDTH
     } from 'Core/constants/securityTableConstants.constant';
   //
 
@@ -264,6 +265,9 @@ export class AgGridMiddleLayerService {
     }
     if (targetHeader.state.isNarrowColumnVariant) {
       newAgColumn.width = AGGRID_NARROW_COLUMN_WIDTH;
+    }
+    if (targetHeader.data.key === 'alertMessage') {
+      newAgColumn.width = AGGRID_ALERT_MESSAGE_COLUMN_WIDTH;
     }
   }
 
