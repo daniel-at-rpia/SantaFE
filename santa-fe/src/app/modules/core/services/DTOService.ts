@@ -1276,7 +1276,7 @@ export class DTOService {
         alertDTO.data.status = `Valid For ${this.utility.parseCountdown(alertDTO.data.validUntilMoment)}`
       }
     } else {
-      alertDTO.data.status = alertDTO.state.isCancelled ? 'Cancelled' : alertDTO.state.isRead ? 'Read' : 'Active';
+      alertDTO.data.status = alertDTO.state.isCancelled ? 'Cancelled' : 'Active';
     }
   }
 

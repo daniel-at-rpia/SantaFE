@@ -22,8 +22,9 @@
       CoreToggleAlertThumbnailDisplay
     } from 'Core/actions/core.actions';
     import {selectAlertCounts, selectNewAlerts} from 'Core/selectors/core.selectors';
-    import { CoreReceivedNewAlerts, CoreSendReadAlerts } from 'Core/actions/core.actions';
+    import { CoreReceivedNewAlerts } from 'Core/actions/core.actions';
     import {favAlertBase64, favLogoBase64} from "../../../../../assets/icons";
+
 //
 
 @Component({
@@ -145,12 +146,14 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   }
 
   public onClickClearAlerts() {
-    const allAlerts: Array<AlertDTO> = this.state.presentList.concat(this.state.storeList);
     const payload: PayloadSetAlertsToInactive = {
-      alertIds: allAlerts.map((eachAlert) => {
+      alertIds: this.state.presentList.map((eachAlert) => {
         return eachAlert.data.id;
       })
     };
+    this.state.storeList.forEach((eachAlert) => {
+      payload.alertIds.push(eachAlert.data.id);
+    });
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.readAlert, {req: 'POST'}, payload).pipe(
       first(),
       tap((serverReturn) => {}),
@@ -163,7 +166,6 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     this.state.storeList = [];
     this.updateTotalSize();
     this.state.triggerActionMenuOpen = false;
-    this.store$.dispatch(new CoreSendReadAlerts(allAlerts));
     this.restfulCommService.logEngagement(
       this.restfulCommService.engagementMap.globalAlertClearedAll,
       null,
@@ -199,7 +201,6 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         this.removeSingleAlert(targetAlert, true);
       };
       setTimeout(removeTarget.bind(this), 300);
-      this.store$.dispatch(new CoreSendReadAlerts([targetAlert]));
       this.restfulCommService.logEngagement(
         this.restfulCommService.engagementMap.globalAlertClearedSingle,
         null,

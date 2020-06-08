@@ -37,8 +37,3 @@ export const selectAlertCounts = createSelector(
   getCoreState,
   (state: CoreState) => state.alert.countByTypeArr
 );
-
-export const selectReadAlerts = createSelector(
-  getCoreState,
-  (state: CoreState) => state.alert.readAlerts
-);
