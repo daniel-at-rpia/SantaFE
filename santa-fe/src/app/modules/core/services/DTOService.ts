@@ -796,27 +796,27 @@ export class DTOService {
     const object: DTOs.SecurityTableHeaderDTO = {
       data: {
         key: stub.key,
-        displayLabel: stub.label,
-        attrName: stub.attrName,
-        underlineAttrName: stub.underlineAttrName,
-        blockAttrName: stub.blockAttrName || null,
-        isAttrChangable: !!stub.isAttrChangable,
-        readyStage: stub.readyStage,
-        metricPackDeltaScope: stub.metricPackDeltaScope || null,
-        frontendMetric: !!stub.isFrontEndMetric,
-        isDataTypeText: !!stub.isDataTypeText,
-        isDriverDependent: !!stub.isDriverDependent,
-        groupBelongs: stub.groupBelongs,
-        pinned: (useSpecificsFrom && stub.tableSpecifics[useSpecificsFrom]) ? !!stub.tableSpecifics[useSpecificsFrom].pinned : !!stub.tableSpecifics.default.pinned,
-        groupShow: (useSpecificsFrom && stub.tableSpecifics[useSpecificsFrom]) ? !!stub.tableSpecifics[useSpecificsFrom].groupShow : !!stub.tableSpecifics.default.groupShow,
+        displayLabel: stub.content.label,
+        attrName: stub.content.attrName,
+        underlineAttrName: stub.content.underlineAttrName,
+        blockAttrName: stub.content.blockAttrName || null,
+        isAttrChangable: !!stub.content.isAttrChangable,
+        readyStage: stub.content.readyStage,
+        metricPackDeltaScope: stub.content.metricPackDeltaScope || null,
+        frontendMetric: !!stub.content.isFrontEndMetric,
+        isDataTypeText: !!stub.content.isDataTypeText,
+        isDriverDependent: !!stub.content.isDriverDependent,
+        groupBelongs: stub.content.groupBelongs,
+        pinned: (useSpecificsFrom && stub.content.tableSpecifics[useSpecificsFrom]) ? !!stub.content.tableSpecifics[useSpecificsFrom].pinned : !!stub.content.tableSpecifics.default.pinned,
+        groupShow: (useSpecificsFrom && stub.content.tableSpecifics[useSpecificsFrom]) ? !!stub.content.tableSpecifics[useSpecificsFrom].groupShow : !!stub.content.tableSpecifics.default.groupShow,
         activePortfolios: activePortfolios || []
       },
       state: {
-        isQuantVariant: !!stub.isForQuantComparer,
-        isSecurityCardVariant: !!stub.isForSecurityCard,
+        isQuantVariant: !!stub.content.isForQuantComparer,
+        isSecurityCardVariant: !!stub.content.isForSecurityCard,
         isAxeSkewEnabled: false,
         istotalSkewEnabled: false,
-        isNarrowColumnVariant: !!stub.isColumnWidthNarrow
+        isNarrowColumnVariant: !!stub.content.isColumnWidthNarrow
       }
     };
     return object;

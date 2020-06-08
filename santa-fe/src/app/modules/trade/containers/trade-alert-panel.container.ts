@@ -141,7 +141,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   // general
     private initializePageState(): TradeAlertPanelState {
       const alertTableMetrics = SecurityTableMetrics.filter((eachStub) => {
-        const targetSpecifics = eachStub.tableSpecifics.tradeAlert || eachStub.tableSpecifics.default;
+        const targetSpecifics = eachStub.content.tableSpecifics.tradeAlert || eachStub.content.tableSpecifics.default;
         return !targetSpecifics.disabled;
       });
       const state: TradeAlertPanelState = {
@@ -1056,8 +1056,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     private loadInitialStencilTable() {
       const stencilAlertTableHeaderBuffer: Array<SecurityTableHeaderDTO> = [];
       this.state.table.alertMetrics.forEach((eachStub) => {
-        const targetSpecifics = eachStub.tableSpecifics.tradeAlert || eachStub.tableSpecifics.default;
-        if (eachStub.isForSecurityCard || targetSpecifics.active) {
+        const targetSpecifics = eachStub.content.tableSpecifics.tradeAlert || eachStub.content.tableSpecifics.default;
+        if (eachStub.content.isForSecurityCard || targetSpecifics.active) {
           stencilAlertTableHeaderBuffer.push(this.dtoService.formSecurityTableHeaderObject(eachStub, 'tradeAlert', []));
         }
       });
