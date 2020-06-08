@@ -1211,8 +1211,8 @@ export class DTOService {
         isCountdownFinished: true,
         willBeRemoved: false,
         hasSecurity: false,
-        hasTitlePin: !!rawData.marketListAlert,
-        isMarketListVariant: !!rawData.isMarketListAlert,
+        hasTitlePin: !!rawData.isMarketListAlert || !!rawData.marketListAlert,  // TODO: remove first part as soon as BE is promoted
+        isMarketListVariant: !!rawData.isMarketListAlert || !!rawData.marketListAlert,  // TODO: remove first part as soon as BE is promoted
         isExpired: false
       }
     }
@@ -1279,7 +1279,7 @@ export class DTOService {
         }
       }
     }
-    if (rawData.isMarketListAlert) {
+    if (alertDTO.state.isMarketListVariant) {
       const quoteBlock = rawData.quote as BEAlertMarketListQuoteBlock;
       alertDTO.data.validUntilTime = 
         !!rawData.marketListAlert
