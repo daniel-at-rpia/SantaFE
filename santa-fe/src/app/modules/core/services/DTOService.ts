@@ -906,7 +906,15 @@ export class DTOService {
       }
     };
     if (alertDTO) {
-      if (alertDTO.data.subType === AlertSubTypes.bid) {
+      if (alertDTO.state.isMarketListVariant) {
+        if (alertDTO.data.subType === AlertSubTypes.ask) {
+          object.data.alertSideDTO.data.side = 'BWIC';
+          object.data.alertSideDTO.state.askSided = true;
+        } else if (alertDTO.data.subType === AlertSubTypes.bid) {
+          object.data.alertSideDTO.data.side = 'OWIC';
+          object.data.alertSideDTO.state.bidSided = true;
+        }
+      } else if (alertDTO.data.subType === AlertSubTypes.bid) {
         object.data.alertSideDTO.data.side = 'Bid';
         object.data.alertSideDTO.state.bidSided = true;
       } else if (alertDTO.data.subType === AlertSubTypes.ask) {
