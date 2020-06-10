@@ -529,5 +529,6 @@ export interface BEAlertMarketListQuoteBlock extends BEQuoteBaseBlock {
   validUntilTime: string,
   priceType: string,
   isNatural: string,
-  ioiQualifier: string
+  ioiQualifier: string,
+  isTraded: boolean
 }

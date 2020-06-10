@@ -1197,7 +1197,8 @@ export class DTOService {
         isUrgent: rawData.isUrgent,
         trader: null,
         dealer: null,
-        status: null
+        status: null,
+        isMarketListTraded: false
       },
       api: {
         onMouseEnterAlert: null,
@@ -1288,19 +1289,20 @@ export class DTOService {
             ? quoteBlock.validUntilTime
             : null;
       alertDTO.data.validUntilMoment = 
-        !!rawData.marketListAlert
-          ? moment(rawData.marketListAlert.validUntilTime)
-          : !!quoteBlock
-            ? moment(quoteBlock.validUntilTime)
-            : null;
+        !quoteBlock
+          ? null
+          : quoteBlock.isTraded || alertDTO.state.isCancelled
+            ? moment(quoteBlock.eventTime)
+            : moment(quoteBlock.validUntilTime);
+      alertDTO.data.isMarketListTraded = quoteBlock.isTraded;
     }
   }
 
   public appendAlertStatus(alertDTO: DTOs.AlertDTO) {
     if (alertDTO.data.type === AlertTypes.axeAlert && alertDTO.state.isMarketListVariant) {
-      if (alertDTO.state.isCancelled) {
-        alertDTO.data.status = 'Expired';
-      } else if (moment().diff(alertDTO.data.validUntilMoment) > 0) {
+      if (alertDTO.state.isCancelled && alertDTO.data.isMarketListTraded) {
+        alertDTO.data.status = `Traded at ${alertDTO.data.validUntilMoment.format('HH:mm:ss')}`;
+      } else if (alertDTO.state.isCancelled ||  moment().diff(alertDTO.data.validUntilMoment) > 0) {
         alertDTO.state.isExpired = true;
         alertDTO.data.status = `Expired at ${alertDTO.data.validUntilMoment.format('HH:mm:ss')}`;
       } else {

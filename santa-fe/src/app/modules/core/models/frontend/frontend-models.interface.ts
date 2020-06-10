@@ -521,6 +521,7 @@ export interface AlertDTO extends BasicDTOStructure {
     trader: string;
     dealer: string;
     status: string;
+    isMarketListTraded: boolean;
   },
   state: {
     isRead: boolean;
