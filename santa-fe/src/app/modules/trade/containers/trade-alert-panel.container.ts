@@ -370,7 +370,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             }
           } else if (numOfUpdate > 0){
             // if there is no new alert, but there are existing active marketlist alerts, then the table still needs to be updated for refreshing the countdowns
-            this.fetchUpdate([]);
+            this.state.fetchResult.alertTable.liveUpdatedRowList = this.identifyTableUpdate(this.state.fetchResult.alertTable, true);
+            this.state.alert.recentUpdatedAlertList = [];
           }
           this.state.alertUpdateInProgress = false;
         }),
@@ -391,6 +392,20 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           if (eachRow.data.alert.state.isMarketListVariant && !eachRow.data.alert.state.isExpired) {
             numOfUpdate++;
             this.dtoService.appendAlertStatus(eachRow.data.alert);
+            this.dtoService.appendAlertInfoToSecurityDTO(eachRow.data.security, eachRow.data.alert);
+            this.state.table.alertDto.data.headers.forEach((eachHeader, index) =>{
+              // the benefit of doing this loop is if in the future we need to refresh any other cells as well, it can be done easily by just appending to the if condition
+              if (eachHeader.data.key === 'alertStatus') {
+                // minus one because securityCard is not one of the cells ( TODO: this is a bad design, what if a table has more than one security card column? should not treat it different from other columns )
+                // this basically updates the alert status cell
+                eachRow.data.cells[index-1] = this.utilityService.populateSecurityTableCellFromSecurityCard(
+                    eachHeader,
+                    eachRow,
+                    eachRow.data.cells[index-1],
+                    this.constants.defaultMetricIdentifier
+                );
+              }
+            });
             this.state.alert.recentUpdatedAlertList.push(eachRow.data.rowId);
           }
         }
@@ -1171,12 +1186,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           first(),
           tap(([isInitialDataLoaded, processingRawData]) => {
             if (isInitialDataLoaded) {
-              const newFilteredList = this.filterPrinstineRowList(targetTableBlock.prinstineRowList);
-              targetTableBlock.liveUpdatedRowList = this.processingService.returnDiff(
-                targetTableDTO,
-                newFilteredList,
-                this.state.alert.recentUpdatedAlertList
-              ).newRowList;
+              targetTableBlock.liveUpdatedRowList = this.identifyTableUpdate(targetTableBlock, false);
               this.state.alert.recentUpdatedAlertList = [];
             } else {
               targetTableBlock.rowList = this.filterPrinstineRowList(targetTableBlock.prinstineRowList);
@@ -1211,6 +1221,28 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           }
         }
       });
+    }
+
+    private identifyTableUpdate(
+      targetTableBlock: TableFetchResultBlock,
+      countdownUpdateOnly: boolean
+    ): Array<SecurityTableRowDTO> {
+      if (countdownUpdateOnly) {
+        const updateList:Array<SecurityTableRowDTO> = [];
+        targetTableBlock.rowList.forEach((eachRow) => {
+          if (this.state.alert.recentUpdatedAlertList.indexOf(eachRow.data.rowId) >= 0) {
+            updateList.push(eachRow);
+          }
+        });
+        return updateList;
+      } else {
+        const newFilteredList = this.filterPrinstineRowList(targetTableBlock.prinstineRowList);
+        return this.processingService.returnDiff(
+          this.state.table.alertDto,
+          newFilteredList,
+          this.state.alert.recentUpdatedAlertList
+        ).newRowList;
+      }
     }
   // table section end
 
