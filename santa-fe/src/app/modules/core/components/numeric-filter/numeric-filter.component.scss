@@ -24,7 +24,8 @@
     &>input {
       font-size: $font_size_small;
       width: 100%;
-      min-width: 2rem;
+      min-width: 1.75rem;
+      padding: $spacing_xx_small;
     }
   }
   &__midSymbol {

@@ -13,6 +13,7 @@
       AlertDTO
     } from 'FEModels/frontend-models.interface';
     import {
+      AlertDTOMap,
       LiveDataDiffingResult,
       ClickedOpenSecurityInBloombergEmitterParams
     } from 'FEModels/frontend-adhoc-packages.interface';
@@ -52,7 +53,7 @@ export class LiveDataProcessingService {
     for (const eachKey in rawSecurityDTOMap){
       let isValidFlag = true;
       const newBESecurity:BESecurityDTO = rawSecurityDTOMap[eachKey].security;
-      const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false, selectedDriver);
+      const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false, false, selectedDriver);
       newSecurity.state.isInteractionThumbDownDisabled = true;
       newSecurity.api.onClickSendToGraph = sendToGraphCallback;
       newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
@@ -84,7 +85,7 @@ export class LiveDataProcessingService {
   }
 
   public loadFinalStageDataForAlertTable(
-    alertDTOList: Array<AlertDTO>,
+    alertDTOMap: AlertDTOMap,
     tableHeaderList: Array<SecurityTableHeaderDTO>,
     selectedDriver: string,
     serverReturn: BEFetchAllTradeDataReturn,
@@ -95,12 +96,13 @@ export class LiveDataProcessingService {
     const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
     const prinstineRowList: Array<SecurityTableRowDTO> = [];
     const securityList = [];
-    alertDTOList.forEach((eachAlertDTO) => {
+    for (const eachAlertId in alertDTOMap) {
+      const eachAlertDTO = alertDTOMap[eachAlertId];
       if (eachAlertDTO.data && eachAlertDTO.data.security && eachAlertDTO.data.security.data && eachAlertDTO.data.security.data.securityID) {
         const targetSecurityId = eachAlertDTO.data.security.data.securityID;
         if (rawSecurityDTOMap[targetSecurityId]) {
           const newBESecurity:BESecurityDTO = rawSecurityDTOMap[targetSecurityId].security;
-          const newSecurity = this.dtoService.formSecurityCardObject(targetSecurityId, newBESecurity, false, selectedDriver);
+          const newSecurity = this.dtoService.formSecurityCardObject(targetSecurityId, newBESecurity, false, true, selectedDriver);
           newSecurity.state.isInteractionThumbDownDisabled = true;
           newSecurity.api.onClickSendToGraph = sendToGraphCallback;
           newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
@@ -124,7 +126,7 @@ export class LiveDataProcessingService {
           console.error('security not found for alert', eachAlertDTO);
         }
       }
-    });
+    };
     return prinstineRowList;
   }
 
@@ -136,7 +138,7 @@ export class LiveDataProcessingService {
     bestQuoteServerReturn: BEBestQuoteDTO,
     targetAlert: AlertDTO
   ) {
-    const newRow = !!targetAlert ? this.dtoService.formSecurityTableRowObject(newSecurity, targetAlert.data.id) : this.dtoService.formSecurityTableRowObject(newSecurity, newSecurity.data.securityID);
+    const newRow = !!targetAlert ? this.dtoService.formSecurityTableRowObject(newSecurity, targetAlert, targetAlert.data.id) : this.dtoService.formSecurityTableRowObject(newSecurity, null, newSecurity.data.securityID);
     this.populateEachRowWithBestQuoteData(
       headerList,
       newRow,
@@ -233,7 +235,8 @@ export class LiveDataProcessingService {
 
   public returnDiff(
     table: SecurityTableDTO,
-    newList: Array<SecurityTableRowDTO>
+    newList: Array<SecurityTableRowDTO>,
+    diffOverwriteRowList?: Array<string>
   ): LiveDataDiffingResult {
     const updateList: Array<SecurityTableRowDTO> = [];
     const oldRowList: Array<SecurityTableRowDTO> = this.utilityService.deepCopy(table.data.rows);
@@ -248,39 +251,47 @@ export class LiveDataProcessingService {
     const betterBidUpdateList: Array<SecurityTableRowDTO> = [];
     const betterAskUpdateList: Array<SecurityTableRowDTO> = [];
     const validityUpdateList: Array<SecurityTableRowDTO> = [];
+    const overwriteUpdateList: Array<SecurityTableRowDTO> = [];
 
     newList.forEach((eachNewRow) => {
-      const oldRow = oldRowList.find((eachOldRow) => {
-        return eachOldRow.data.rowId === eachNewRow.data.rowId;
-      });
-      if (!!oldRow) {
-        const isSecurityDiff = this.isThereDiffInSecurity(oldRow.data.security, eachNewRow.data.security);
-        const isQuantDiff = this.isThereDiffInQuantComparer(oldRow.data.cells[0].data.quantComparerDTO, eachNewRow.data.cells[0].data.quantComparerDTO);
-        if ( isSecurityDiff > 0 || isQuantDiff > 0) {
-          updateList.push(eachNewRow);
-        }
-        isSecurityDiff === 1 && positionUpdateList.push(eachNewRow);
-        isSecurityDiff === 2 && markUpdateList.push(eachNewRow);
-        if (isQuantDiff === 1 || isQuantDiff === 2) {
-          newQuantUpdateList.push(eachNewRow);
-        }
-        isQuantDiff === 3 && betterBidUpdateList.push(eachNewRow);
-        isQuantDiff === 4 && betterAskUpdateList.push(eachNewRow);
-        isQuantDiff === 5 && validityUpdateList.push(eachNewRow);
-      } else {
+      // if this row is specified in the overwrite list, then there is no need to do diffing, just add it to the list of rows to be updated
+      if (!!diffOverwriteRowList && diffOverwriteRowList.length > 0 && diffOverwriteRowList.includes(eachNewRow.data.rowId)) {
+        overwriteUpdateList.push(eachNewRow);
         updateList.push(eachNewRow);
-        newRowList.push(eachNewRow);
+      } else {
+        const oldRow = oldRowList.find((eachOldRow) => {
+          return eachOldRow.data.rowId === eachNewRow.data.rowId;
+        });
+        if (!!oldRow) {
+          const isSecurityDiff = this.isThereDiffInSecurity(oldRow.data.security, eachNewRow.data.security);
+          const isQuantDiff = this.isThereDiffInQuantComparer(oldRow.data.cells[0].data.quantComparerDTO, eachNewRow.data.cells[0].data.quantComparerDTO);
+          if ( isSecurityDiff > 0 || isQuantDiff > 0) {
+            updateList.push(eachNewRow);
+          }
+          isSecurityDiff === 1 && positionUpdateList.push(eachNewRow);
+          isSecurityDiff === 2 && markUpdateList.push(eachNewRow);
+          if (isQuantDiff === 1 || isQuantDiff === 2) {
+            newQuantUpdateList.push(eachNewRow);
+          }
+          isQuantDiff === 3 && betterBidUpdateList.push(eachNewRow);
+          isQuantDiff === 4 && betterAskUpdateList.push(eachNewRow);
+          isQuantDiff === 5 && validityUpdateList.push(eachNewRow);
+        } else {
+          updateList.push(eachNewRow);
+          newRowList.push(eachNewRow);
+        }
       }
     });
     if (updateList.length > 0) {
       console.log('=== new update ===');
-      console.log('new rows', newRowList);
-      console.log('Position change: ', positionUpdateList);
-      console.log('Mark change: ', markUpdateList);
-      console.log('Best Quote overwrite: ', newQuantUpdateList);
-      console.log('Best Bid change: ', betterBidUpdateList);
-      console.log('Best Ask change: ', betterAskUpdateList);
-      console.log('Validity change: ', validityUpdateList);
+      newRowList.length > 0 && console.log('new rows', newRowList);
+      newRowList.length > 0 && console.log('Position change: ', positionUpdateList);
+      newRowList.length > 0 && console.log('Mark change: ', markUpdateList);
+      newRowList.length > 0 && console.log('Best Quote overwrite: ', newQuantUpdateList);
+      newRowList.length > 0 && console.log('Best Bid change: ', betterBidUpdateList);
+      newRowList.length > 0 && console.log('Best Ask change: ', betterAskUpdateList);
+      newRowList.length > 0 && console.log('Validity change: ', validityUpdateList);
+      newRowList.length > 0 && console.log('Overwrite update: ', overwriteUpdateList);
     }
     return {
       newRowList: updateList,

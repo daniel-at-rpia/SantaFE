@@ -11,7 +11,8 @@ import {
   SecurityTableRowDTO,
   NumericFilterDTO,
   SecurityQuoteDTO,
-  SecurityDTO
+  SecurityDTO,
+  AlertDTO
 } from 'FEModels/frontend-models.interface';
 
 import {
@@ -108,4 +109,8 @@ export interface ClickedOpenSecurityInBloombergEmitterParams {
   targetBBGModule: string;
   yellowCard: string;
   targetSecurity: SecurityDTO;
+}
+
+export interface AlertDTOMap {
+  [property: string]: AlertDTO
 }

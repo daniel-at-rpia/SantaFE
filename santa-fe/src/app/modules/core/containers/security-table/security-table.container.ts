@@ -85,8 +85,8 @@ export class SecurityTable implements OnInit, OnChanges {
     const targetIndex = this.tableData.data.headers.indexOf(targetHeader);
     this.tableData.state.selectedHeader = null;
     this.securityTableMetrics.forEach((eachStub) => {
-      if (eachStub.label === targetHeader.data.displayLabel) {
-        eachStub.tableSpecifics.default.active = false;
+      if (eachStub.content.label === targetHeader.data.displayLabel) {
+        eachStub.content.tableSpecifics.default.active = false;
       }
     });
     if (targetIndex > 0) {
@@ -110,15 +110,15 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   public onClickAddHeader(targetStub: SecurityTableMetricStub) {
-    if (!targetStub.tableSpecifics.default.disabled) {
-      if (!targetStub.tableSpecifics.default.active) {
-        targetStub.tableSpecifics.default.active = true;
+    if (!targetStub.content.tableSpecifics.default.disabled) {
+      if (!targetStub.content.tableSpecifics.default.active) {
+        targetStub.content.tableSpecifics.default.active = true;
         this.nativeLoadTableHeader.emit();
         this.loadTableRowsUponHeaderChange();
         this.onCollapseAddColumnDropdown();
       } else {
         const targetHeader = this.tableData.data.headers.find((eachHeader) => {
-          return targetStub.label === eachHeader.data.displayLabel;
+          return targetStub.content.label === eachHeader.data.displayLabel;
         })
         !!targetHeader && this.onClickRemoveHeader(targetHeader);
         this.onCollapseAddColumnDropdown();

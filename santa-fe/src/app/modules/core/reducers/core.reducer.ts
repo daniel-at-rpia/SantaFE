@@ -4,7 +4,7 @@ import {
   ActionReducerMap
 } from '@ngrx/store';
 
-import { AlertDTO } from 'FEModels/frontend-models.interface';
+import { AlertDTO, AlertCountSummaryDTO } from 'FEModels/frontend-models.interface';
 import { CoreActions } from 'Core/actions/core.actions';
 import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
 
@@ -14,7 +14,7 @@ export interface CoreState {
   };
   alert: {
     newAlerts: Array<AlertDTO>;
-    countByTypeArr: Array<{type: string, count: number}>;
+    countByTypeArr: Array<AlertCountSummaryDTO>;
     displayThumbnail: boolean;
   };
   securityMap: {

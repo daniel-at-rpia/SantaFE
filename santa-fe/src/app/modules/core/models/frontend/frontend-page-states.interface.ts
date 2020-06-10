@@ -2,7 +2,7 @@ import * as DTOs from 'FEModels/frontend-models.interface';
 import {
   ObligorChartCategoryBlock,
   TradeAlertConfigurationAxeGroupBlock,
-  TradeCenterTableBlock
+  TableFetchResultBlock
 } from 'FEModels/frontend-blocks.interface';
 import {
   SecurityDefinitionStub,
@@ -11,7 +11,8 @@ import {
 import {
   DefinitionConfiguratorEmitterParamsItem,
   ObligorGraphAxesZoomState,
-  SecurityMapEntry
+  SecurityMapEntry,
+  AlertDTOMap
 } from 'FEModels/frontend-adhoc-packages.interface';
 import {AlertTypes} from 'Core/constants/coreConstants.constant';
 import * as am4charts from '@amcharts/amcharts4/charts';
@@ -26,6 +27,7 @@ export interface GlobalAlertState {
   displayTotalSize: string;
   originalDocumentTitle: string;
   favicon: HTMLLinkElement;
+  secondaryStoreList: Array<DTOs.AlertDTO>;  // for alerts that are not suppose to be displayed, need this for calculating total count
 }
 
 export interface MarketState {
@@ -75,13 +77,10 @@ export interface TradeState {
   ownerInitial: string;
   displayAlertThumbnail: boolean;
   alertPanelMaximized: boolean;
-  focusMode: boolean;
 }
 
 export interface TradeCenterPanelState {
   bestQuoteValidWindow: number;
-  isFocusMode: boolean;
-  displayAlertTable: boolean;
   presets : {
     presetsReady: boolean;
     selectedPreset: DTOs.SearchShortcutDTO;
@@ -99,14 +98,11 @@ export interface TradeCenterPanelState {
   table: {
     metrics: Array<SecurityTableMetricStub>;
     dto: DTOs.SecurityTableDTO;
-    alertMetrics: Array<SecurityTableMetricStub>;
-    alertDto: DTOs.SecurityTableDTO;
   }
   fetchResult: {
     fetchTableDataFailed: boolean;
     fetchTableDataFailedError: string;
-    mainTable: TradeCenterTableBlock;
-    alertTable: TradeCenterTableBlock;
+    mainTable: TableFetchResultBlock;
   }
   filters: {
     quickFilters: {
@@ -118,15 +114,10 @@ export interface TradeCenterPanelState {
     }
     securityFilters: Array<DefinitionConfiguratorEmitterParamsItem>
   }
-  alert: {
-    alertTableAlertList: Array<DTOs.AlertDTO>;
-    initialAlertListReceived: boolean;
-    delayedLoadingFreshDataForAlert: boolean;
-    newAlertsCount: number;
-  }
 }
 
 export interface TradeUtilityPanelState {
+  tongueExpanded: boolean;
   prompt: string;
   updateCountdown: string;
   isPaused: boolean;
@@ -197,7 +188,7 @@ export interface TradeObligorGraphPanelState {
 export interface TradeAlertPanelState {
   isUserPM: boolean;
   configureAlert: boolean;
-  focusMode: boolean;
+  // focusMode: boolean;
   isAlertPaused: boolean;
   securityMap: Array<SecurityMapEntry>;
   alertUpdateTimestamp: string;
@@ -226,4 +217,35 @@ export interface TradeAlertPanelState {
   alertUpdateInProgress: boolean;
   isCenterPanelPresetSelected: boolean;
   receivedActiveAlertsMap: object;  // currently BE passes the same marketlist alerts regardless of the timestamp FE provides, until the alert expires. This map is to avoid duplicates being created over and over on each heartbeat
+  displayAlertTable: boolean;
+  table: {
+    alertMetrics: Array<SecurityTableMetricStub>;
+    alertDto: DTOs.SecurityTableDTO;
+  }
+  fetchResult: {
+    fetchTableDataFailed: boolean;
+    fetchTableDataFailedError: string;
+    alertTable: TableFetchResultBlock;
+  }
+  filters: {
+    quickFilters: {
+      keyword: string;
+      driverType: string;
+      portfolios: Array<string>;
+    }
+  }
+  alert: {
+    alertTableAlertList: AlertDTOMap;
+    initialAlertListReceived: boolean;
+    nonMarketListAxeAlertCount: number;
+    marketListAxeAlertCount: number;
+    unreadAxeAlertCount: number;
+    markAlertCount: number;
+    unreadMarkAlertCount: number;
+    tradeAlertCount: number;
+    unreadTradeAlertCount: number;
+    scopedAlertType: AlertTypes;
+    scopedForMarketListOnly: boolean;
+    recentUpdatedAlertList: Array<string>;  // the rowId of the alerts that are recently updated on FE, we need to track them because those rows needs to be forced to be updated in the next update call, the diffing logic wouldnt work because every update we are just fetching new securities, so agGrid has to be updated through manually tracking the alerts that are updated recently
+  }
 }

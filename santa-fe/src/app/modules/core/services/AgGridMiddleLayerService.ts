@@ -24,6 +24,7 @@
       AgGridColumn
     } from 'FEModels/frontend-blocks.interface';
     import {
+      AGGRID_NARROW_COLUMN_WIDTH,
       SecurityTableMetrics,
       AGGRID_SECURITY_CARD_COLUMN_WIDTH,
       AGGRID_QUOTE_COLUMN_WIDTH,
@@ -35,7 +36,8 @@
       AGGRID_SIMPLE_TEXT_COLUMN_WIDTH,
       SecurityTableMetricGroups,
       SECURITY_TABLE_HEADER_NO_GROUP,
-      AGGRID_ALERT_SIDE_COLUMN_WIDTH
+      AGGRID_ALERT_SIDE_COLUMN_WIDTH,
+      AGGRID_ALERT_MESSAGE_COLUMN_WIDTH
     } from 'Core/constants/securityTableConstants.constant';
   //
 
@@ -118,7 +120,7 @@ export class AgGridMiddleLayerService {
       }
       this.loadAgGridHeadersComparator(eachHeader, newAgColumn);
       this.loadAgGridHeadersUILogics(eachHeader, newAgColumn);
-      if (eachHeader.data.groupBelongs !== SECURITY_TABLE_HEADER_NO_GROUP) {
+      if (table.state.isGroupEnabled && eachHeader.data.groupBelongs !== SECURITY_TABLE_HEADER_NO_GROUP) {
         const targetGroup = groupList.find((eachGroup) => {
           return eachGroup.headerName === eachHeader.data.groupBelongs;
         });
@@ -260,6 +262,13 @@ export class AgGridMiddleLayerService {
       newAgColumn.resizable = true;
       newAgColumn.enableRowGroup = true;
       newAgColumn.enablePivot = true;
+    }
+    if (targetHeader.state.isNarrowColumnVariant) {
+      newAgColumn.width = AGGRID_NARROW_COLUMN_WIDTH;
+    }
+    if (targetHeader.data.key === 'alertMessage') {
+      newAgColumn.cellClass = `${AGGRID_CELL_CLASS} ${AGGRID_CELL_CLASS}--alertMessage`;
+      newAgColumn.width = AGGRID_ALERT_MESSAGE_COLUMN_WIDTH;
     }
   }
 
