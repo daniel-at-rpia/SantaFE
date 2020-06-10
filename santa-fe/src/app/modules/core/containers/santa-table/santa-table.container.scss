@@ -221,6 +221,11 @@ $alt-background: $color_white;
         &--numeric {
           @include mix_quantative_text;
         }
+        &--alertMessage {
+          @include mix_text_overflow_multi_line(2);
+          padding-top: $spacing_minimum;
+          padding-bottom: $spacing_small;
+        }
         santa-table-quote-cell {
           flex: 1 1 auto;
         }

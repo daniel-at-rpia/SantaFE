@@ -267,6 +267,7 @@ export class AgGridMiddleLayerService {
       newAgColumn.width = AGGRID_NARROW_COLUMN_WIDTH;
     }
     if (targetHeader.data.key === 'alertMessage') {
+      newAgColumn.cellClass = `${AGGRID_CELL_CLASS} ${AGGRID_CELL_CLASS}--alertMessage`;
       newAgColumn.width = AGGRID_ALERT_MESSAGE_COLUMN_WIDTH;
     }
   }
