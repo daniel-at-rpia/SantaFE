@@ -72,25 +72,27 @@ export interface SecurityTableQuoteMetric {
 
 export interface SecurityTableMetricStub {
   key: string;
-  label: string;
-  attrName: string;
-  underlineAttrName: string;
-  readyStage: number;
-  tableSpecifics: {
-    default: SecurityTableMetricStubTableSpecificsBlock;
-    tradeMain?: SecurityTableMetricStubTableSpecificsBlock;
-    tradeAlert?: SecurityTableMetricStubTableSpecificsBlock;
-  };
-  blockAttrName?: string;
-  isFrontEndMetric?: boolean;
-  isForQuantComparer?: boolean;
-  isForSecurityCard?: boolean;
-  isDataTypeText?: boolean;
-  isDriverDependent?: boolean;  // isDriverDependent means the cells will be re-processed when driver is changed
-  isAttrChangable?: boolean;  // isAttrChangable means the 'attrName' & 'underlineAttrName' will be overwritten with driver-specific attributes, commonly used for columns that are switching between spread/price/yield
-  metricPackDeltaScope?: string;
-  groupBelongs: string;
-  isColumnWidthNarrow?: boolean;
+  content: {
+    label: string;
+    attrName: string;
+    underlineAttrName: string;
+    readyStage: number;
+    tableSpecifics: {
+      default: SecurityTableMetricStubTableSpecificsBlock;
+      tradeMain?: SecurityTableMetricStubTableSpecificsBlock;
+      tradeAlert?: SecurityTableMetricStubTableSpecificsBlock;
+    };
+    blockAttrName?: string;
+    isFrontEndMetric?: boolean;
+    isForQuantComparer?: boolean;
+    isForSecurityCard?: boolean;
+    isDataTypeText?: boolean;
+    isDriverDependent?: boolean;  // isDriverDependent means the cells will be re-processed when driver is changed
+    isAttrChangable?: boolean;  // isAttrChangable means the 'attrName' & 'underlineAttrName' will be overwritten with driver-specific attributes, commonly used for columns that are switching between spread/price/yield
+    metricPackDeltaScope?: string;
+    groupBelongs: string;
+    isColumnWidthNarrow?: boolean;
+  }
 }
 
 interface SecurityTableMetricStubTableSpecificsBlock {

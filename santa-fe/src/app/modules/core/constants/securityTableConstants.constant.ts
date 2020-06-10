@@ -22,7 +22,8 @@ export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_qu
 export const AGGRID_ALERT_SIDE_COLUMN_WIDTH = 115;
 export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 140;
 export const AGGRID_SIMPLE_TEXT_COLUMN_WIDTH = 135;
-export const AGGRID_NARROW_COLUMN_WIDTH = 85;
+export const AGGRID_NARROW_COLUMN_WIDTH = 95;
+export const AGGRID_ALERT_MESSAGE_COLUMN_WIDTH = 240;
 export const AGGRID_ROW_HEIGHT = 40;
 export const AGGRID_ROW_HEIGHT_SLIM = 32;
 export const AGGRID_DETAIL_ROW_HEIGHT_PER_ROW = 34;
@@ -61,1302 +62,1373 @@ export const SECURITY_TABLE_ICONS = {
 export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
   {
     key: 'securityCard',
-    label: 'Security',
-    attrName: null,
-    underlineAttrName: null,
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isForSecurityCard: true,
-    groupBelongs: SECURITY_TABLE_HEADER_NO_GROUP,
-    tableSpecifics: {
-      default: {
-        active: true,
-        pinned: true
+    content: {
+      label: 'Security',
+      attrName: null,
+      underlineAttrName: null,
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isForSecurityCard: true,
+      groupBelongs: SECURITY_TABLE_HEADER_NO_GROUP,
+      tableSpecifics: {
+        default: {
+          active: true,
+          pinned: true
+        }
       }
     }
   },{
     key: 'alertTime',
-    label: 'Time',
-    attrName: 'alertTime',
-    underlineAttrName: 'alertTimeRaw',
-    blockAttrName: 'alert',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDataTypeText: true,
-    groupBelongs: SecurityTableMetricGroups.alert,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: false,
-        disabled: true
-      },
-      tradeAlert: {
-        active: true,
-        disabled: false,
-        groupShow: true
+    content : {
+      label: 'Time',
+      attrName: 'alertTime',
+      underlineAttrName: 'alertTimeRaw',
+      blockAttrName: 'alert',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.alert,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true,
+          disabled: false,
+          groupShow: true
+        }
       }
     }
   },{
     key: 'alertType',
-    label: 'Type',
-    attrName: 'alertType',
-    underlineAttrName: 'alertType',
-    blockAttrName: 'alert',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDataTypeText: true,
-    groupBelongs: SecurityTableMetricGroups.alert,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: false,
-        disabled: true
-      },
-      tradeAlert: {
-        active: true,
-        disabled: false,
-        groupShow: true
+    content: {
+      label: 'Type',
+      attrName: 'alertType',
+      underlineAttrName: 'alertType',
+      blockAttrName: 'alert',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.alert,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true,
+          disabled: false,
+          groupShow: true
+        }
+      }
+    }
+  },{
+    key: 'alertStatus',
+    content: {
+      label: 'Status',
+      attrName: 'alertStatus',
+      underlineAttrName: 'alertStatus',
+      blockAttrName: 'alert',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.alert,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true,
+          disabled: false,
+          groupShow: true
+        }
       }
     }
   },{
     key: 'alertSide',
-    label: 'Side',
-    attrName: 'alertSide',
-    underlineAttrName: 'alertSide',
-    blockAttrName: 'alert',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.alert,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: false,
-        disabled: true
-      },
-      tradeAlert: {
-        active: true,
-        disabled: false,
-        groupShow: true
+    content: {
+      label: 'Side',
+      attrName: 'alertSide',
+      underlineAttrName: 'alertSide',
+      blockAttrName: 'alert',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.alert,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true,
+          disabled: false,
+          groupShow: true
+        }
       }
     }
   },{
     key: 'alertLevel',
-    label: 'Level',
-    attrName: 'alertLevel',
-    underlineAttrName: 'alertLevelRaw',
-    blockAttrName: 'alert',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDataTypeText: false,
-    groupBelongs: SecurityTableMetricGroups.alert,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: false,
-        disabled: true
-      },
-      tradeAlert: {
-        active: true,
-        disabled: false,
-        groupShow: true
+    content: {
+      label: 'Level',
+      attrName: 'alertLevel',
+      underlineAttrName: 'alertLevelRaw',
+      blockAttrName: 'alert',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: false,
+      groupBelongs: SecurityTableMetricGroups.alert,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true,
+          disabled: false,
+          groupShow: true
+        }
       }
     }
   },{
     key: 'alertQuantity',
-    label: 'Quantity (MM)',
-    attrName: 'alertQuantity',
-    underlineAttrName: 'alertQuantityRaw',
-    blockAttrName: 'alert',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDataTypeText: false,
-    groupBelongs: SecurityTableMetricGroups.alert,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: false,
-        disabled: true
-      },
-      tradeAlert: {
-        active: true,
-        disabled: false,
-        groupShow: true
+    content: {
+      label: 'Quantity (MM)',
+      attrName: 'alertQuantity',
+      underlineAttrName: 'alertQuantityRaw',
+      blockAttrName: 'alert',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: false,
+      groupBelongs: SecurityTableMetricGroups.alert,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true,
+          disabled: false,
+          groupShow: true
+        }
       }
     }
   },{
     key: 'alertQuoteDealer',
-    label: 'Dealer',
-    attrName: 'alertQuoteDealer',
-    underlineAttrName: 'alertQuoteDealer',
-    blockAttrName: 'alert',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDataTypeText: true,
-    groupBelongs: SecurityTableMetricGroups.alert,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: false,
-        disabled: true
-      },
-      tradeAlert: {
-        active: true,
-        disabled: false,
-        groupShow: true
+    content: {
+      label: 'Dealer',
+      attrName: 'alertQuoteDealer',
+      underlineAttrName: 'alertQuoteDealer',
+      blockAttrName: 'alert',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.alert,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true,
+          disabled: false,
+          groupShow: true
+        }
       }
     }
   },{
     key: 'alertTradeTrader',
-    label: 'Trader',
-    attrName: 'alertTradeTrader',
-    underlineAttrName: 'alertTradeTrader',
-    blockAttrName: 'alert',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDataTypeText: true,
-    groupBelongs: SecurityTableMetricGroups.alert,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: false,
-        disabled: true
-      },
-      tradeAlert: {
-        active: true,
-        disabled: false,
-        groupShow: false
+    content: {
+      label: 'Trader',
+      attrName: 'alertTradeTrader',
+      underlineAttrName: 'alertTradeTrader',
+      blockAttrName: 'alert',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.alert,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true,
+          disabled: false,
+          groupShow: false
+        }
       }
     }
-    // },{
-    //   key: 'alertMessage',
-    //   label: 'Alert Message',
-    //   attrName: 'alertMessage',
-    //   underlineAttrName: 'alertMessage',
-    //   blockAttrName: 'alert',
-    //   readyStage: SECURITY_TABLE_FINAL_STAGE,
-    //   isDataTypeText: true,
-    //   groupBelongs: SecurityTableMetricGroups.alert,
-    //   tableSpecifics: {
-    //     default: {
-    //       active: false,
-    //       disabled: true
-    //     },
-    //     tradeAlert: {
-    //       active: true,
-    //       disabled: false,
-    //       groupShow: false
-    //     }
-    //   }
-    // },{
-    //   key: 'alertValue',
-    //   label: 'Alert Value',
-    //   attrName: 'alertValue',
-    //   underlineAttrName: 'alertValue',
-    //   blockAttrName: 'alert',
-    //   readyStage: SECURITY_TABLE_FINAL_STAGE,
-    //   isDataTypeText: true,
-    //   groupBelongs: SecurityTableMetricGroups.alert,
-    //   tableSpecifics: {
-    //     default: {
-    //       active: false,
-    //       disabled: true
-    //     },
-    //     tradeAlert: {
-    //       active: true,
-    //       disabled: false,
-    //       groupShow: false
-    //     }
-    //   }
-    // },{
-    //   key: 'alertTarget',
-    //   label: 'Alert Target',
-    //   attrName: 'alertTarget',
-    //   underlineAttrName: 'alertTarget',
-    //   blockAttrName: 'alert',
-    //   readyStage: SECURITY_TABLE_FINAL_STAGE,
-    //   isDataTypeText: true,
-    //   groupBelongs: SecurityTableMetricGroups.alert,
-    //   tableSpecifics: {
-    //     default: {
-    //       active: false,
-    //       disabled: true
-    //     },
-    //     tradeAlert: {
-    //       active: true,
-    //       disabled: false,
-    //       groupShow: false
-    //     }
-    //   }
+  },{
+    key: 'alertMessage',
+    content: {
+      label: 'Alert Message',
+      attrName: 'alertMessage',
+      underlineAttrName: 'alertMessage',
+      blockAttrName: 'alert',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.alert,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true,
+          disabled: false,
+          groupShow: false
+        }
+      }
+    }
   },{
     key: 'bestQuote',
-    label: 'Best Quote (Bid vs Ask)',
-    attrName: null,
-    blockAttrName: 'combined',
-    underlineAttrName: null,
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isForQuantComparer: true,
-    isDriverDependent: true,
-    groupBelongs: SecurityTableMetricGroups.bestQuote,
-    tableSpecifics: {
-      default: {
-        active: true,
-        groupShow: true
-      },
-      tradeAlert: {
-        active: false,
-        groupShow: false
+    content: {
+      label: 'Best Quote (Bid vs Ask)',
+      attrName: null,
+      blockAttrName: 'combined',
+      underlineAttrName: null,
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isForQuantComparer: true,
+      isDriverDependent: true,
+      groupBelongs: SecurityTableMetricGroups.bestQuote,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: true
+        },
+        tradeAlert: {
+          active: false,
+          groupShow: false
+        }
       }
     }
   },{
     key: 'bestAxeQuote',
-    label: 'Best Axe Quote (Bid vs Ask)',
-    attrName: null,
-    blockAttrName: 'axe',
-    underlineAttrName: null,
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isForQuantComparer: true,
-    isDriverDependent: true,
-    groupBelongs: SecurityTableMetricGroups.bestQuote,
-    tableSpecifics: {
-      default: {
-        active: true,
-        groupShow: true
-      },
-      tradeAlert: {
-        active: false,
-        groupShow: false
+    content: {
+      label: 'Best Axe Quote (Bid vs Ask)',
+      attrName: null,
+      blockAttrName: 'axe',
+      underlineAttrName: null,
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isForQuantComparer: true,
+      isDriverDependent: true,
+      groupBelongs: SecurityTableMetricGroups.bestQuote,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: true
+        },
+        tradeAlert: {
+          active: false,
+          groupShow: false
+        }
       }
     }
   },{
     key: 'bestBid',
-    label: 'Best Bid',
-    attrName: 'bid',
-    blockAttrName: 'bestQuote',
-    underlineAttrName: 'bid',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isFrontEndMetric: true,
-    isDriverDependent: true,
-    groupBelongs: SecurityTableMetricGroups.bestQuote,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Best Bid',
+      attrName: 'bid',
+      blockAttrName: 'bestQuote',
+      underlineAttrName: 'bid',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isFrontEndMetric: true,
+      isDriverDependent: true,
+      groupBelongs: SecurityTableMetricGroups.bestQuote,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   },{
     key: 'bestAsk',
-    label: 'Best Ask',
-    attrName: 'ask',
-    blockAttrName: 'bestQuote',
-    underlineAttrName: 'ask',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isFrontEndMetric: true,
-    isDriverDependent: true,
-    groupBelongs: SecurityTableMetricGroups.bestQuote,
-    tableSpecifics: {
-      default: {
-        active: false
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Best Ask',
+      attrName: 'ask',
+      blockAttrName: 'bestQuote',
+      underlineAttrName: 'ask',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isFrontEndMetric: true,
+      isDriverDependent: true,
+      groupBelongs: SecurityTableMetricGroups.bestQuote,
+      tableSpecifics: {
+        default: {
+          active: false
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   },{
     key: 'mark',
-    label: 'Mark',
-    attrName: 'mark',
-    underlineAttrName: 'markRaw',
-    blockAttrName: 'mark',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDriverDependent: true,
-    groupBelongs: SecurityTableMetricGroups.mark,
-    tableSpecifics: {
-      default: {
-        active: true,
-        groupShow: false
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Mark',
+      attrName: 'mark',
+      underlineAttrName: 'markRaw',
+      blockAttrName: 'mark',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDriverDependent: true,
+      groupBelongs: SecurityTableMetricGroups.mark,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: false
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   },{
     key: 'price',
-    label: 'Price',
-    attrName: 'price',
-    underlineAttrName: 'priceRaw',
-    blockAttrName: 'mark',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDriverDependent: true,
-    groupBelongs: SecurityTableMetricGroups.mark,
-    tableSpecifics: {
-      default: {
-        active: true,
-        groupShow: true
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Price',
+      attrName: 'price',
+      underlineAttrName: 'priceRaw',
+      blockAttrName: 'mark',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDriverDependent: true,
+      groupBelongs: SecurityTableMetricGroups.mark,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: true
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   },{
     key: 'spread',
-    label: 'Spread',
-    attrName: 'spread',
-    underlineAttrName: 'spreadRaw',
-    blockAttrName: 'mark',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDriverDependent: true,
-    groupBelongs: SecurityTableMetricGroups.mark,
-    tableSpecifics: {
-      default: {
-        active: true,
-        groupShow: true
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Spread',
+      attrName: 'spread',
+      underlineAttrName: 'spreadRaw',
+      blockAttrName: 'mark',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDriverDependent: true,
+      groupBelongs: SecurityTableMetricGroups.mark,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: true
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   },{
     key: 'markDriver',
-    label: 'Driver',
-    attrName: 'markDriver',
-    underlineAttrName: 'markDriver',
-    blockAttrName: 'mark',
-    isDataTypeText: true,
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDriverDependent: true,
-    groupBelongs: SecurityTableMetricGroups.mark,
-    tableSpecifics: {
-      default: {
-        active: false
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Driver',
+      attrName: 'markDriver',
+      underlineAttrName: 'markDriver',
+      blockAttrName: 'mark',
+      isDataTypeText: true,
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDriverDependent: true,
+      groupBelongs: SecurityTableMetricGroups.mark,
+      tableSpecifics: {
+        default: {
+          active: false
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   },{
     key: 'indexMark',
-    label: 'Index Mark (t-1)',
-    attrName: DEFAULT_DRIVER_IDENTIFIER,
-    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
-    blockAttrName: 'metricPack',
-    isAttrChangable: true,
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDriverDependent: true,
-    groupBelongs: SecurityTableMetricGroups.mark,
-    tableSpecifics: {
-      default: {
-        active: false
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Index Mark (t-1)',
+      attrName: DEFAULT_DRIVER_IDENTIFIER,
+      underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+      blockAttrName: 'metricPack',
+      isAttrChangable: true,
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDriverDependent: true,
+      groupBelongs: SecurityTableMetricGroups.mark,
+      tableSpecifics: {
+        default: {
+          active: false
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   },{
     key: 'markDeltaToIndex',
-    label: 'Δ to Index Mark (t-1)',
-    attrName: 'markDisIndex',
-    underlineAttrName: 'markDisIndexRaw',
-    blockAttrName: 'mark',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isFrontEndMetric: true,
-    isDriverDependent: true,
-    groupBelongs: SecurityTableMetricGroups.mark,
-    tableSpecifics: {
-      default: {
-        active: false
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Δ to Index Mark (t-1)',
+      attrName: 'markDisIndex',
+      underlineAttrName: 'markDisIndexRaw',
+      blockAttrName: 'mark',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isFrontEndMetric: true,
+      isDriverDependent: true,
+      groupBelongs: SecurityTableMetricGroups.mark,
+      tableSpecifics: {
+        default: {
+          active: false
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   },{
     key: 'markLastUpdatedBy',
-    label: 'Mark Last Updated By',
-    attrName: 'markChangedBy',
-    underlineAttrName: 'markChangedBy',
-    blockAttrName: 'mark',
-    isDataTypeText: true,
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.mark,
-    tableSpecifics: {
-      default: {
-        active: false
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Mark Last Updated By',
+      attrName: 'markChangedBy',
+      underlineAttrName: 'markChangedBy',
+      blockAttrName: 'mark',
+      isDataTypeText: true,
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.mark,
+      tableSpecifics: {
+        default: {
+          active: false
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   },{
     key: 'markLastUpdateTime',
-    label: 'Mark Last Update Time',
-    attrName: 'markChangedTime',
-    underlineAttrName: 'markChangedTime',
-    blockAttrName: 'mark',
-    isDataTypeText: true,
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.mark,
-    tableSpecifics: {
-      default: {
-        active: false
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'markDeltaToBid',
-    label: 'Δ to Bid',
-    attrName: 'markDisBid',
-    underlineAttrName: 'markDisBidRaw',
-    blockAttrName: 'mark',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isFrontEndMetric: true,
-    isDriverDependent: true,
-    groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
-    tableSpecifics: {
-      default: {
-        active: false
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'markDeltaToAsk',
-    label: 'Δ to Ask',
-    attrName: 'markDisAsk',
-    underlineAttrName: 'markDisAskRaw',
-    blockAttrName: 'mark',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isFrontEndMetric: true,
-    isDriverDependent: true,
-    groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'markDeltaToMid',
-    label: 'Δ to Mid',
-    attrName: 'markDisMid',
-    underlineAttrName: 'markDisMidRaw',
-    blockAttrName: 'mark',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isFrontEndMetric: true,
-    isDriverDependent: true,
-    groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'markDeltaToLiquidation',
-    label: 'Δ to Liquid',
-    attrName: 'markDisLiquidation',
-    underlineAttrName: 'markDisLiquidationRaw',
-    blockAttrName: 'mark',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isFrontEndMetric: true,
-    isDriverDependent: true,
-    groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
-    tableSpecifics: {
-      default: {
-        active: true,
-        groupShow: true
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  // },{
-  //   key: 'costCurrentFifo',
-  //   label: 'Fifo',
-  //   attrName: DEFAULT_DRIVER_IDENTIFIER,
-  //   underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
-  //   blockAttrName: 'cost',
-  //   readyStage: SECURITY_TABLE_FINAL_STAGE,
-  //   groupBelongs: SecurityTableMetricGroups.cost,
-  //   isDriverDependent: true,
-  //   isAttrChangable: true,
-  //   tableSpecifics: {
-  //     default: {
-  //       active: true,
-  //       groupShow: true
-  //     },
-  //     tradeAlert: {
-  //       active: true,
-  //       groupShow: true
-  //     }
-  //   }
-  // },{
-  //   key: 'costCurrentWeightedAvg',
-  //   label: 'Wgt Avg',
-  //   attrName: DEFAULT_DRIVER_IDENTIFIER,
-  //   underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
-  //   blockAttrName: 'cost',
-  //   readyStage: SECURITY_TABLE_FINAL_STAGE,
-  //   groupBelongs: SecurityTableMetricGroups.cost,
-  //   isDriverDependent: true,
-  //   isAttrChangable: true,
-  //   tableSpecifics: {
-  //     default: {
-  //       active: true,
-  //       groupShow: true
-  //     },
-  //     tradeAlert: {
-  //       active: true,
-  //       groupShow: true
-  //     }
-  //   }
-  },{
-    key: 'costDOFWeightedAvg',
-    label: 'DOF Cost',
-    attrName: DEFAULT_DRIVER_IDENTIFIER,
-    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
-    blockAttrName: 'cost',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.cost,
-    isDriverDependent: true,
-    isAttrChangable: true,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: true,
-        groupShow: true
-      },
-      tradeAlert: {
-        active: true,
-        groupShow: true
-      }
-    }
-  },{
-    key: 'costSOFWeightedAvg',
-    label: 'SOF Cost',
-    attrName: DEFAULT_DRIVER_IDENTIFIER,
-    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
-    blockAttrName: 'cost',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.cost,
-    isDriverDependent: true,
-    isAttrChangable: true,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: true,
-        groupShow: false
-      },
-      tradeAlert: {
-        active: true,
-        groupShow: false
-      }
-    }
-  },{
-    key: 'costSTIPWeightedAvg',
-    label: 'STIP Cost',
-    attrName: DEFAULT_DRIVER_IDENTIFIER,
-    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
-    blockAttrName: 'cost',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.cost,
-    isDriverDependent: true,
-    isAttrChangable: true,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: true,
-        groupShow: false
-      },
-      tradeAlert: {
-        active: true,
-        groupShow: false
-      }
-    }
-  },{
-    key: 'costFIPWeightedAvg',
-    label: 'FIP Cost',
-    attrName: DEFAULT_DRIVER_IDENTIFIER,
-    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
-    blockAttrName: 'cost',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.cost,
-    isDriverDependent: true,
-    isAttrChangable: true,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: true,
-        groupShow: false
-      },
-      tradeAlert: {
-        active: true,
-        groupShow: false
-      }
-    }
-  },{
-    key: 'costCIPWeightedAvg',
-    label: 'CIP Cost',
-    attrName: DEFAULT_DRIVER_IDENTIFIER,
-    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
-    blockAttrName: 'cost',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.cost,
-    isDriverDependent: true,
-    isAttrChangable: true,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: true,
-        groupShow: false
-      },
-      tradeAlert: {
-        active: true,
-        groupShow: false
-      }
-    }
-  },{
-    key: 'costAGBWeightedAvg',
-    label: 'AGB Cost',
-    attrName: DEFAULT_DRIVER_IDENTIFIER,
-    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
-    blockAttrName: 'cost',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.cost,
-    isDriverDependent: true,
-    isAttrChangable: true,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: true,
-        groupShow: false
-      },
-      tradeAlert: {
-        active: true,
-        groupShow: false
-      }
-    }
-  },{
-    key: 'costBBBWeightedAvg',
-    label: 'BBB Cost',
-    attrName: DEFAULT_DRIVER_IDENTIFIER,
-    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
-    blockAttrName: 'cost',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.cost,
-    isDriverDependent: true,
-    isAttrChangable: true,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: true,
-        groupShow: false
-      },
-      tradeAlert: {
-        active: true,
-        groupShow: false
-      }
-    }
-  },{
-    key: 'currentPosition',
-    label: 'Position',
-    attrName: 'positionCurrentInMM',
-    underlineAttrName: 'positionCurrent',
-    blockAttrName: 'position',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.position,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: true,
-        groupShow: true
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'unitPosition',
-    label: 'Firm Position',
-    attrName: 'positionFirmInMM',
-    underlineAttrName: 'positionFirm',
-    blockAttrName: 'position',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.position,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: true,
-        groupShow: true
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'hfPosition',
-    label: 'HF Position',
-    attrName: 'positionHFInMM',
-    underlineAttrName: 'positionHF',
-    blockAttrName: 'position',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.position,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'nlfPosition',
-    label: 'NLF Position',
-    attrName: 'positionNLFInMM',
-    underlineAttrName: 'positionNLF',
-    blockAttrName: 'position',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.position,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'dofPosition',
-    label: 'DOF Position',
-    attrName: 'positionDOFInMM',
-    underlineAttrName: 'positionDOF',
-    blockAttrName: 'position',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.position,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'sofPosition',
-    label: 'SOF Position',
-    attrName: 'positionSOFInMM',
-    underlineAttrName: 'positionSOF',
-    blockAttrName: 'position',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.position,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'stipPosition',
-    label: 'STIP Position',
-    attrName: 'positionSTIPInMM',
-    underlineAttrName: 'positionSTIP',
-    blockAttrName: 'position',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.position,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'fipPosition',
-    label: 'FIP Position',
-    attrName: 'positionFIPInMM',
-    underlineAttrName: 'positionFIP',
-    blockAttrName: 'position',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.position,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'cipPosition',
-    label: 'CIP Position',
-    attrName: 'positionCIPInMM',
-    underlineAttrName: 'positionCIP',
-    blockAttrName: 'position',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.position,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'agbPosition',
-    label: 'AGB Position',
-    attrName: 'positionAGBInMM',
-    underlineAttrName: 'positionAGB',
-    blockAttrName: 'position',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.position,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'bbbPosition',
-    label: 'BBB Position',
-    attrName: 'positionBBBInMM',
-    underlineAttrName: 'positionBBB',
-    blockAttrName: 'position',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.position,
-    isColumnWidthNarrow: true,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'cs01CadCurrent',
-    label: 'CS01 Cad',
-    attrName: 'cs01CadCurrentInK',
-    underlineAttrName: 'cs01CadCurrent',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.cs01,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'cs01LocalCurrent',
-    label: 'CS01 Local',
-    attrName: 'cs01LocalCurrentInK',
-    underlineAttrName: 'cs01LocalCurrent',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.cs01,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'cs01CadFirm',
-    label: 'Firm CS01 CAD',
-    attrName: 'cs01CadFirmInK',
-    underlineAttrName: 'cs01CadFirm',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.cs01,
-    tableSpecifics: {
-      default: {
-        active: true,
-        groupShow: true
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'cs01LocalFirm',
-    label: 'Firm CS01 Local',
-    attrName: 'cs01LocalFirmInK',
-    underlineAttrName: 'cs01LocalFirm',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SecurityTableMetricGroups.cs01,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'dodDelta',
-    label: 'DoD Δ',
-    attrName: DEFAULT_DRIVER_IDENTIFIER,
-    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
-    blockAttrName: 'metricPack',
-    isAttrChangable: true,
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    metricPackDeltaScope: 'Dod',
-    isDriverDependent: true,
-    groupBelongs: SecurityTableMetricGroups.delta,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'wowDelta',
-    label: 'WoW Δ',
-    attrName: DEFAULT_DRIVER_IDENTIFIER,
-    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
-    blockAttrName: 'metricPack',
-    isAttrChangable: true,
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    metricPackDeltaScope: 'Wow',
-    isDriverDependent: true,
-    groupBelongs: SecurityTableMetricGroups.delta,
-    tableSpecifics: {
-      default: {
-        active: true,
-        groupShow: true
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'thirtyDayDelta',
-    label: 'MoM Δ',
-    attrName: DEFAULT_DRIVER_IDENTIFIER,
-    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
-    blockAttrName: 'metricPack',
-    isAttrChangable: true,
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    metricPackDeltaScope: 'Mom',
-    isDriverDependent: true,
-    groupBelongs: SecurityTableMetricGroups.delta,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'yoyDelta',
-    label: 'YoY Δ',
-    attrName: DEFAULT_DRIVER_IDENTIFIER,
-    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
-    blockAttrName: 'metricPack',
-    isAttrChangable: true,
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    metricPackDeltaScope: 'Yoy',
-    isDriverDependent: true,
-    groupBelongs: SecurityTableMetricGroups.delta,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'ytdDelta',
-    label: 'YtD Δ',
-    attrName: DEFAULT_DRIVER_IDENTIFIER,
-    underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
-    blockAttrName: 'metricPack',
-    isAttrChangable: true,
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    metricPackDeltaScope: 'Ytd',
-    isDriverDependent: true,
-    groupBelongs: SecurityTableMetricGroups.delta,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  },{
-    key: 'quoteCount',
-    label: 'Quote Count',
-    attrName: null,
-    underlineAttrName: null,
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SECURITY_TABLE_HEADER_NO_GROUP,
-    tableSpecifics: {
-      default: {
-        active: false,
-        disabled: true
+    content: {
+      label: 'Mark Last Update Time',
+      attrName: 'markChangedTime',
+      underlineAttrName: 'markChangedTime',
+      blockAttrName: 'mark',
+      isDataTypeText: true,
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.mark,
+      tableSpecifics: {
+        default: {
+          active: false
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   },{
     key: 'ticker',
-    label: 'Ticker',
-    attrName: 'ticker',
-    underlineAttrName: 'ticker',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDataTypeText: true,
-    groupBelongs: SecurityTableMetricGroups.securityInfo,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Ticker',
+      attrName: 'ticker',
+      underlineAttrName: 'ticker',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   },{
     key: 'rating',
-    label: 'Rating',
-    attrName: 'ratingValue',
-    underlineAttrName: 'ratingValue',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDataTypeText: true,
-    groupBelongs: SecurityTableMetricGroups.securityInfo,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Rating',
+      attrName: 'ratingValue',
+      underlineAttrName: 'ratingValue',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   },{
     key: 'currency',
-    label: 'Currency',
-    attrName: 'currency',
-    underlineAttrName: 'currency',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDataTypeText: true,
-    groupBelongs: SecurityTableMetricGroups.securityInfo,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Currency',
+      attrName: 'currency',
+      underlineAttrName: 'currency',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   },{
     key: 'sector',
-    label: 'Sector',
-    attrName: 'sector',
-    underlineAttrName: 'sector',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDataTypeText: true,
-    groupBelongs: SecurityTableMetricGroups.securityInfo,
-    tableSpecifics: {
-      default: {
-        active: true,
-        groupShow: true
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Sector',
+      attrName: 'sector',
+      underlineAttrName: 'sector',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: true
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   },{
     key: 'issuer',
-    label: 'Issuer',
-    attrName: 'obligorName',
-    underlineAttrName: 'obligorName',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDataTypeText: true,
-    groupBelongs: SecurityTableMetricGroups.securityInfo,
-    tableSpecifics: {
-      default: {
-        active: true,
-        groupShow: true
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Issuer',
+      attrName: 'obligorName',
+      underlineAttrName: 'obligorName',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: true
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   },{
     key: 'industry',
-    label: 'Industry',
-    attrName: 'industry',
-    underlineAttrName: 'industry',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDataTypeText: true,
-    groupBelongs: SecurityTableMetricGroups.securityInfo,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Industry',
+      attrName: 'industry',
+      underlineAttrName: 'industry',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   },{
     key: 'securityType',
-    label: 'Security Type',
-    attrName: 'securityType',
-    underlineAttrName: 'securityType',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDataTypeText: true,
-    groupBelongs: SecurityTableMetricGroups.securityInfo,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Security Type',
+      attrName: 'securityType',
+      underlineAttrName: 'securityType',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   },{
     key: 'seniority',
-    label: 'Seniority',
-    attrName: 'seniority',
-    underlineAttrName: 'seniority',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDataTypeText: true,
-    groupBelongs: SecurityTableMetricGroups.securityInfo,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Seniority',
+      attrName: 'seniority',
+      underlineAttrName: 'seniority',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   },{
     key: 'country',
-    label: 'Country',
-    attrName: 'country',
-    underlineAttrName: 'country',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDataTypeText: true,
-    groupBelongs: SecurityTableMetricGroups.securityInfo,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Country',
+      attrName: 'country',
+      underlineAttrName: 'country',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   },{
     key: 'maturityType',
-    label: 'Maturity Type',
-    attrName: 'maturityType',
-    underlineAttrName: 'maturityType',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDataTypeText: true,
-    groupBelongs: SecurityTableMetricGroups.securityInfo,
-    tableSpecifics: {
-      default: {
-        active: false
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Maturity Type',
+      attrName: 'maturityType',
+      underlineAttrName: 'maturityType',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: false
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'markDeltaToBid',
+    content: {
+      label: 'Δ to Bid',
+      attrName: 'markDisBid',
+      underlineAttrName: 'markDisBidRaw',
+      blockAttrName: 'mark',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isFrontEndMetric: true,
+      isDriverDependent: true,
+      groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
+      tableSpecifics: {
+        default: {
+          active: false
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'markDeltaToAsk',
+    content: {
+      label: 'Δ to Ask',
+      attrName: 'markDisAsk',
+      underlineAttrName: 'markDisAskRaw',
+      blockAttrName: 'mark',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isFrontEndMetric: true,
+      isDriverDependent: true,
+      groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'markDeltaToMid',
+    content: {
+      label: 'Δ to Mid',
+      attrName: 'markDisMid',
+      underlineAttrName: 'markDisMidRaw',
+      blockAttrName: 'mark',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isFrontEndMetric: true,
+      isDriverDependent: true,
+      groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'markDeltaToLiquidation',
+    content: {
+      label: 'Δ to Liquid',
+      attrName: 'markDisLiquidation',
+      underlineAttrName: 'markDisLiquidationRaw',
+      blockAttrName: 'mark',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isFrontEndMetric: true,
+      isDriverDependent: true,
+      groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'costDOFWeightedAvg',
+    content: {
+      label: 'DOF Cost',
+      attrName: DEFAULT_DRIVER_IDENTIFIER,
+      underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+      blockAttrName: 'cost',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.cost,
+      isDriverDependent: true,
+      isAttrChangable: true,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'costSOFWeightedAvg',
+    content: {
+      label: 'SOF Cost',
+      attrName: DEFAULT_DRIVER_IDENTIFIER,
+      underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+      blockAttrName: 'cost',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.cost,
+      isDriverDependent: true,
+      isAttrChangable: true,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: false
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'costSTIPWeightedAvg',
+    content: {
+      label: 'STIP Cost',
+      attrName: DEFAULT_DRIVER_IDENTIFIER,
+      underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+      blockAttrName: 'cost',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.cost,
+      isDriverDependent: true,
+      isAttrChangable: true,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: false
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'costFIPWeightedAvg',
+    content: {
+      label: 'FIP Cost',
+      attrName: DEFAULT_DRIVER_IDENTIFIER,
+      underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+      blockAttrName: 'cost',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.cost,
+      isDriverDependent: true,
+      isAttrChangable: true,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: false
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'costCIPWeightedAvg',
+    content: {
+      label: 'CIP Cost',
+      attrName: DEFAULT_DRIVER_IDENTIFIER,
+      underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+      blockAttrName: 'cost',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.cost,
+      isDriverDependent: true,
+      isAttrChangable: true,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: false
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'costAGBWeightedAvg',
+    content: {
+      label: 'AGB Cost',
+      attrName: DEFAULT_DRIVER_IDENTIFIER,
+      underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+      blockAttrName: 'cost',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.cost,
+      isDriverDependent: true,
+      isAttrChangable: true,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: false
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'costBBBWeightedAvg',
+    content: {
+      label: 'BBB Cost',
+      attrName: DEFAULT_DRIVER_IDENTIFIER,
+      underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+      blockAttrName: 'cost',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.cost,
+      isDriverDependent: true,
+      isAttrChangable: true,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: false
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'currentPosition',
+    content: {
+      label: 'Position',
+      attrName: 'positionCurrentInMM',
+      underlineAttrName: 'positionCurrent',
+      blockAttrName: 'position',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.position,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'unitPosition',
+    content: {
+      label: 'Firm Position',
+      attrName: 'positionFirmInMM',
+      underlineAttrName: 'positionFirm',
+      blockAttrName: 'position',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.position,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: true
+        },
+        tradeAlert: {
+          active: true
+        }
+      }
+    }
+  },{
+    key: 'hfPosition',
+    content: {
+      label: 'HF Position',
+      attrName: 'positionHFInMM',
+      underlineAttrName: 'positionHF',
+      blockAttrName: 'position',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.position,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: true
+        }
+      }
+    }
+  },{
+    key: 'nlfPosition',
+    content: {
+      label: 'NLF Position',
+      attrName: 'positionNLFInMM',
+      underlineAttrName: 'positionNLF',
+      blockAttrName: 'position',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.position,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: true
+        }
+      }
+    }
+  },{
+    key: 'dofPosition',
+    content: {
+      label: 'DOF Position',
+      attrName: 'positionDOFInMM',
+      underlineAttrName: 'positionDOF',
+      blockAttrName: 'position',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.position,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: true
+        }
+      }
+    }
+  },{
+    key: 'sofPosition',
+    content: {
+      label: 'SOF Position',
+      attrName: 'positionSOFInMM',
+      underlineAttrName: 'positionSOF',
+      blockAttrName: 'position',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.position,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: true
+        }
+      }
+    }
+  },{
+    key: 'stipPosition',
+    content: {
+      label: 'STIP Position',
+      attrName: 'positionSTIPInMM',
+      underlineAttrName: 'positionSTIP',
+      blockAttrName: 'position',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.position,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: true
+        }
+      }
+    }
+  },{
+    key: 'fipPosition',
+    content: {
+      label: 'FIP Position',
+      attrName: 'positionFIPInMM',
+      underlineAttrName: 'positionFIP',
+      blockAttrName: 'position',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.position,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: true
+        }
+      }
+    }
+  },{
+    key: 'cipPosition',
+    content: {
+      label: 'CIP Position',
+      attrName: 'positionCIPInMM',
+      underlineAttrName: 'positionCIP',
+      blockAttrName: 'position',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.position,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: true
+        }
+      }
+    }
+  },{
+    key: 'agbPosition',
+    content: {
+      label: 'AGB Position',
+      attrName: 'positionAGBInMM',
+      underlineAttrName: 'positionAGB',
+      blockAttrName: 'position',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.position,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: true
+        }
+      }
+    }
+  },{
+    key: 'bbbPosition',
+    content: {
+      label: 'BBB Position',
+      attrName: 'positionBBBInMM',
+      underlineAttrName: 'positionBBB',
+      blockAttrName: 'position',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.position,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: true
+        }
+      }
+    }
+  },{
+    key: 'cs01CadCurrent',
+    content: {
+      label: 'CS01 Cad',
+      attrName: 'cs01CadCurrentInK',
+      underlineAttrName: 'cs01CadCurrent',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.cs01,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'cs01LocalCurrent',
+    content: {
+      label: 'CS01 Local',
+      attrName: 'cs01LocalCurrentInK',
+      underlineAttrName: 'cs01LocalCurrent',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.cs01,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'cs01CadFirm',
+    content: {
+      label: 'Firm CS01 CAD',
+      attrName: 'cs01CadFirmInK',
+      underlineAttrName: 'cs01CadFirm',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.cs01,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'cs01LocalFirm',
+    content: {
+      label: 'Firm CS01 Local',
+      attrName: 'cs01LocalFirmInK',
+      underlineAttrName: 'cs01LocalFirm',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableMetricGroups.cs01,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'dodDelta',
+    content: {
+      label: 'DoD Δ',
+      attrName: DEFAULT_DRIVER_IDENTIFIER,
+      underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+      blockAttrName: 'metricPack',
+      isAttrChangable: true,
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      metricPackDeltaScope: 'Dod',
+      isDriverDependent: true,
+      groupBelongs: SecurityTableMetricGroups.delta,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'wowDelta',
+    content: {
+      label: 'WoW Δ',
+      attrName: DEFAULT_DRIVER_IDENTIFIER,
+      underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+      blockAttrName: 'metricPack',
+      isAttrChangable: true,
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      metricPackDeltaScope: 'Wow',
+      isDriverDependent: true,
+      groupBelongs: SecurityTableMetricGroups.delta,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'thirtyDayDelta',
+    content: {
+      label: 'MoM Δ',
+      attrName: DEFAULT_DRIVER_IDENTIFIER,
+      underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+      blockAttrName: 'metricPack',
+      isAttrChangable: true,
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      metricPackDeltaScope: 'Mom',
+      isDriverDependent: true,
+      groupBelongs: SecurityTableMetricGroups.delta,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'yoyDelta',
+    content: {
+      label: 'YoY Δ',
+      attrName: DEFAULT_DRIVER_IDENTIFIER,
+      underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+      blockAttrName: 'metricPack',
+      isAttrChangable: true,
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      metricPackDeltaScope: 'Yoy',
+      isDriverDependent: true,
+      groupBelongs: SecurityTableMetricGroups.delta,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'ytdDelta',
+    content: {
+      label: 'YtD Δ',
+      attrName: DEFAULT_DRIVER_IDENTIFIER,
+      underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
+      blockAttrName: 'metricPack',
+      isAttrChangable: true,
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      metricPackDeltaScope: 'Ytd',
+      isDriverDependent: true,
+      groupBelongs: SecurityTableMetricGroups.delta,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'quoteCount',
+    content: {
+      label: 'Quote Count',
+      attrName: null,
+      underlineAttrName: null,
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SECURITY_TABLE_HEADER_NO_GROUP,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        }
       }
     }
   },{
     key: 'primaryPM',
-    label: 'Primary',
-    attrName: 'primaryPmName',
-    underlineAttrName: 'primaryPmName',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDataTypeText: true,
-    groupBelongs: SecurityTableMetricGroups.ownership,
-    tableSpecifics: {
-      default: {
-        active: true,
-        groupShow: true
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Primary',
+      attrName: 'primaryPmName',
+      underlineAttrName: 'primaryPmName',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.ownership,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: true
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   },{
     key: 'backupPM',
-    label: 'Backup',
-    attrName: 'backupPmName',
-    underlineAttrName: 'backupPmName',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDataTypeText: true,
-    groupBelongs: SecurityTableMetricGroups.ownership,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Backup',
+      attrName: 'backupPmName',
+      underlineAttrName: 'backupPmName',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.ownership,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   },{
     key: 'research',
-    label: 'Research',
-    attrName: 'researchName',
-    underlineAttrName: 'researchName',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDataTypeText: true,
-    groupBelongs: SecurityTableMetricGroups.ownership,
-    tableSpecifics: {
-      default: {
-        active: true,
-        groupShow: true
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Research',
+      attrName: 'researchName',
+      underlineAttrName: 'researchName',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.ownership,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: true
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   },{
     key: 'strategy',
-    label: 'Strategy',
-    attrName: 'strategyFirm',
-    underlineAttrName: 'strategyFirm',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    isDataTypeText: true,
-    groupBelongs: SECURITY_TABLE_HEADER_NO_GROUP,
-    tableSpecifics: {
-      default: {
-        active: false
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Strategy',
+      attrName: 'strategyFirm',
+      underlineAttrName: 'strategyFirm',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SECURITY_TABLE_HEADER_NO_GROUP,
+      tableSpecifics: {
+        default: {
+          active: false
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   },{
     key: 'hedgeFactor',
-    label: 'Hedge Factor',
-    attrName: 'hedgeFactor',
-    underlineAttrName: 'hedgeFactor',
-    readyStage: SECURITY_TABLE_FINAL_STAGE,
-    groupBelongs: SECURITY_TABLE_HEADER_NO_GROUP,
-    tableSpecifics: {
-      default: {
-        active: true
-      },
-      tradeAlert: {
-        active: false
+    content: {
+      label: 'Hedge Factor',
+      attrName: 'hedgeFactor',
+      underlineAttrName: 'hedgeFactor',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SECURITY_TABLE_HEADER_NO_GROUP,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
       }
     }
   }

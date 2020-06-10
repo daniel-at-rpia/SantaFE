@@ -63,7 +63,7 @@ export class SantaTable implements OnInit, OnChanges {
 
   agGridConfig = {
     defaultColDef: {
-      sortingOrder: ["desc", "asc", null],
+      sortingOrder: ["desc", "asc"],
       sortable: true
     },
     autoGroupColumnDef: {
@@ -215,7 +215,7 @@ export class SantaTable implements OnInit, OnChanges {
           }
           this.tableData.state.selectedSecurityCard = null;
         }
-        if (!!params.node.master) {
+        if (!!params.node.master && this.tableName !== 'tradeAlert') {
           params.node.setExpanded(!params.node.expanded);
           if (!params.node.group) {
             const targetRow = this.tableData.data.rows.find((eachRow) => {
@@ -311,8 +311,8 @@ export class SantaTable implements OnInit, OnChanges {
     this.tableData.data.headers = [];
     this.tableData.data.allHeaders = [];
     this.securityTableMetrics.forEach((eachStub) => {
-      const targetSpecifics = eachStub.tableSpecifics[this.tableName] || eachStub.tableSpecifics.default;
-      if (eachStub.isForSecurityCard || targetSpecifics.active) {
+      const targetSpecifics = eachStub.content.tableSpecifics[this.tableName] || eachStub.content.tableSpecifics.default;
+      if (eachStub.content.isForSecurityCard || targetSpecifics.active) {
         this.tableData.data.headers.push(
           this.dtoService.formSecurityTableHeaderObject(
             eachStub,

@@ -77,18 +77,14 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.newAlertSubscription = this.store$.pipe(
       select(selectNewAlerts),
     ).subscribe((alertList: AlertDTO[]) => {
-      let alertListSorted: AlertDTO[] = this.utilityService.deepCopy(alertList).reverse();
-      let cancelledAlertList = alertListSorted.filter(alert => alert.state.isCancelled === true);
+      // the BE returns the array in a sequential order with the latest one on top, because the Alert present list is in a first-in-last-out order, we need to sort it reversely so it is presented in a sequential order
+      const alertListSorted: AlertDTO[] = this.utilityService.deepCopy(alertList).reverse();
       try {
-        // the BE returns the array in a sequential order with the latest one on top, because the Alert present list is in a first-in-last-out order, we need to sort it reversely so it is presented in a sequential order
-        this.state.presentList = this.filterCancelledAlerts(
-        cancelledAlertList, this.state.presentList);
-        this.state.storeList = this.filterCancelledAlerts(
-        cancelledAlertList, this.state.storeList);
-        // not canclled list
-        alertListSorted = alertListSorted.filter(alert => alert.state.isCancelled === false);
         alertListSorted.forEach((eachAlert) => {
-          if (eachAlert.data.isUrgent) {
+          if (eachAlert.state.isCancelled) {
+            console.log('cancel alert ', eachAlert);
+            this.onAlertExpired(eachAlert);
+          } else if (eachAlert.data.isUrgent) {
             this.generateNewAlert(eachAlert, alertListSorted);
           } else {
             this.state.secondaryStoreList.push(eachAlert);
@@ -216,11 +212,19 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
 
   public onAlertExpired(targetAlert: AlertDTO) {
     if (targetAlert) {
-      targetAlert.state.willBeRemoved = true;
-      const removeTarget = () => {
-        this.removeSingleAlert(targetAlert, true);
-      };
-      setTimeout(removeTarget.bind(this), 300);
+      const isFromPresent = !!this.state.presentList.find((eachAlert) => {
+        return targetAlert.data.id === eachAlert.data.id;
+      });
+      const isFromStore = !!this.state.storeList.find((eachAlert) => {
+        return targetAlert.data.id === eachAlert.data.id;
+      });
+      if (isFromPresent || isFromStore) {
+        targetAlert.state.willBeRemoved = true;
+        const removeTarget = () => {
+          this.removeSingleAlert(targetAlert, isFromPresent);
+        };
+        setTimeout(removeTarget.bind(this), 300);
+      }
     }
   }
 
@@ -367,22 +371,6 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     this.state.storeList.forEach((eachAlert) => {
       eachAlert.state.isSlidedOut = this.state.triggerActionMenuOpen;
     });
-  }
-
-  private filterCancelledAlerts(alertListSorted: AlertDTO[], currList: AlertDTO[]) {
-    // console.log('filterCancelledAlerts', alertListSorted);
-    const newAlerts = currList.slice();
-    alertListSorted.forEach(alert => {
-      if (alert.state.isCancelled) {
-       const index = newAlerts.findIndex((eachAlert) => {
-          return eachAlert.data.id === alert.data.id;
-        });
-       if (index > -1) {
-          newAlerts.splice(index, 1);
-        }
-      }
-    });
-    return newAlerts;
   }
 
 }

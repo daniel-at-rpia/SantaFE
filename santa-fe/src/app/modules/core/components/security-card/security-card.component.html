@@ -29,7 +29,10 @@
     <ul class="sat-securityCard__actionMenu-mainList">
       <button (click)="onClickSendToGraph()" class="sat-securityCard__actionMenu-mainList-graphBtn fal fa-chart-line"></button>
       <button (click)="onClickThumbDown()" class="sat-securityCard__actionMenu-mainList-thumbDownBtn fal fa-thumbs-down"></button>
+      <!--
+      TODO: temporarily disable this since the UI needs to be upgrade to work with multiple types of alerts
       <button (click)="onClickSendToAlertConfig()" class="sat-securityCard__actionMenu-mainList-alertBtn fal fa-bell"></button>
+      -->
     </ul>
     <ul class="sat-securityCard__actionMenu-minorList sat-securityCard__actionMenu-minorList--bottom">
       <button title="Open In Bloomberg YAS" (click)="onClickOpenSecurityInBloomberg('YAS')" class="sat-securityCard__actionMenu-minorList-btn">YAS</button>

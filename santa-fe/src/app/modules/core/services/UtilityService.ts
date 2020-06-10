@@ -2,6 +2,8 @@
     import { Injectable } from '@angular/core';
 
     import * as _ from 'lodash';
+    import * as moment from 'moment';
+    import uuid from 'uuidv4';
 
     import {
       BESecurityDTO,
@@ -27,7 +29,7 @@
       AlertTypes,
       AlertSubTypes
     } from 'Core/constants/coreConstants.constant';
-    import uuid from 'uuidv4';
+    import { CountdownPipe } from 'App/pipes/Countdown.pipe';
   // dependencies
 
 @Injectable()
@@ -38,7 +40,9 @@ export class UtilityService {
   keyDictionary = BackendKeyDictionary;
   triCoreDriverConfig = TriCoreDriverConfig;
 
-  constructor(){}
+  constructor(
+    private countdownPipe: CountdownPipe
+  ){}
 
   // shared
     public deepCopy(input): any {
@@ -482,6 +486,10 @@ export class UtilityService {
           return AlertSubTypes.default;
       }
     }
+
+    public parseCountdown(value: moment.Moment) {
+      return this.countdownPipe.transform(value);
+    }
   // shared end
 
   // market specific
@@ -584,7 +592,7 @@ export class UtilityService {
 
     public parsePositionToMM(position: number, hasUnitSuffix: boolean, enableNull?: boolean): string {
       const value = this.round(position/1000000, 2).toFixed(2);
-      if (!!enableNull && position === 0) {
+      if (!!enableNull && position == 0) {
         return null;
       } else {
         return !!hasUnitSuffix ? `${value}MM` : `${value}`;

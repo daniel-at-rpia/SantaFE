@@ -385,10 +385,11 @@ export interface BEAlertDTO {
   subType: string;
   keyWord: string;
   message: string;
-  isActive: boolean;
-  isCancelled?: boolean;
+  isActive: boolean;  // true if the alert has not been read/deleted in the FE, false otherwise
+  isCancelled: boolean;
   isUrgent: boolean;
   isDeleted: boolean;
+  isMarketListAlert: boolean;
   quoteId?: string;
   security?: BESecurityDTO;
   marketListDescription?: string;
@@ -396,7 +397,7 @@ export interface BEAlertDTO {
     [property: string]: string;
   };
   trades?: Array<BETradeBlock>;
-  quote?: any;
+  quote?: BEAlertRegularQuoteBlock|BEAlertMarketListQuoteBlock|BEAlertCDSQuoteBlock;
   marketListAlert?: BEAlertMarketListBlock;
 }
 
@@ -437,4 +438,97 @@ interface BEAlertMarketListBlock {
   isActive: boolean;
   isDeleted: boolean;
   isCancelled: boolean;
+}
+
+interface BEQuoteBaseBlock {
+  quoteID: string,
+  eventDate: string,
+  creationTime: string,
+  lastModifiedTime: string,
+  discriminator: string,
+  quoteStatus: string,
+  venue: string,
+  eventTime: string,
+  securityID: number,
+  globalIdentifierType: string,
+  globalIdentifier: string,
+  benchmarkSecurityID: number,
+  globalBenchmarkIdentifierType: string,
+  globalBenchmarkIdentifier: string,
+  curveID: string,
+  tenor: string,
+  securityType: string,
+  securityName: string,
+  ticker: string,
+  issuer: string,
+  industrySector: string,
+  currency: string,
+  actionFlag: string,
+  isActive: boolean,
+  dealer: string,
+  side: string,
+  quantity: number,
+  price: number,
+  yieldType: string,
+  yield: number,
+  spread: number,
+  rate: number,
+  type: string,
+  stringQuantity: string
+}
+
+interface BEAlertRegularQuoteBlock extends BEQuoteBaseBlock {
+  class: string,
+  msG1MessageID: string,
+  messageSequenceNumber: number,
+  messageSequenceTimestamp: number,
+  priceValidityIndicator: boolean,
+  bloombergIdentifier: string,
+  bloombergGlobalIdentifier: string,
+  benchmarkYellowkey: string,
+  isSpreadDerived: boolean,
+  isYieldDerived: boolean,
+  isPriceDerived: boolean,
+  coupon: number,
+  maturity: string,
+  equityReferencePrice: boolean,
+  isGreyMarket: boolean
+}
+
+interface BEAlertCDSQuoteBlock extends BEQuoteBaseBlock {
+  class: string,
+  msG1MessageID: string,
+  messageSequenceNumber: number,
+  messageSequenceTimestamp: number,
+  priceValidityIndicator: boolean,
+  bloombergIdentifier: string,
+  bloombergGlobalIdentifier: string,
+  senoirity: string,
+  term: string,
+  upfrontPoints?: number
+}
+
+export interface BEAlertMarketListQuoteBlock extends BEQuoteBaseBlock {
+  partyIds: string,
+  partySubIds: string,
+  allowAddOns: string,
+  allowPartialFill: string,
+  inquiryType: string,
+  inquiryState: string,
+  openTradingLevelMarkup: number,
+  partyRank: number,
+  settleDate: number,
+  sizeIsMaximum: string,
+  timersAllowed: string,
+  tradingProtocol: string,
+  workflowType: string,
+  marketListType: string,
+  marketListDescription: string,
+  fixid: string,
+  fixRefID: string,
+  validUntilTime: string,
+  priceType: string,
+  isNatural: string,
+  ioiQualifier: string,
+  isTraded: boolean
 }

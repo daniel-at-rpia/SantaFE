@@ -99,7 +99,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
   private initializePageState(): TradeCenterPanelState {
     const mainTableMetrics = SecurityTableMetrics.filter((eachStub) => {
-      const targetSpecifics = eachStub.tableSpecifics.tradeMain || eachStub.tableSpecifics.default;
+      const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
       return !targetSpecifics.disabled;
     });
     const state: TradeCenterPanelState = {
@@ -271,13 +271,13 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       // driver update needs to be to both tables
       const newMetrics: Array<SecurityTableMetricStub> = this.utilityService.deepCopy(this.state.table.metrics);
       newMetrics.forEach((eachMetricStub) => {
-        if (eachMetricStub.isDriverDependent && eachMetricStub.isAttrChangable) {
+        if (eachMetricStub.content.isDriverDependent && eachMetricStub.content.isAttrChangable) {
           if (targetDriver === this.constants.defaultMetricIdentifier) {
-            eachMetricStub.attrName = targetDriver;
-            eachMetricStub.underlineAttrName = targetDriver;
+            eachMetricStub.content.attrName = targetDriver;
+            eachMetricStub.content.underlineAttrName = targetDriver;
           } else {
-            eachMetricStub.attrName = TriCoreDriverConfig[targetDriver].driverLabel;
-            eachMetricStub.underlineAttrName = TriCoreDriverConfig[targetDriver].driverLabel;
+            eachMetricStub.content.attrName = TriCoreDriverConfig[targetDriver].driverLabel;
+            eachMetricStub.content.underlineAttrName = TriCoreDriverConfig[targetDriver].driverLabel;
           }
         }
       });
@@ -407,8 +407,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   private loadInitialStencilTable() {
     const stencilMainTableHeaderBuffer: Array<SecurityTableHeaderDTO> = [];
     this.state.table.metrics.forEach((eachStub) => {
-      const targetSpecifics = eachStub.tableSpecifics.tradeMain || eachStub.tableSpecifics.default;
-      if (eachStub.isForSecurityCard || targetSpecifics.active) {
+      const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
+      if (eachStub.content.isForSecurityCard || targetSpecifics.active) {
         stencilMainTableHeaderBuffer.push(this.dtoService.formSecurityTableHeaderObject(eachStub, 'tradeMain', []));
       }
     });
@@ -588,7 +588,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       targetRow.data.security.data.cs01CadCurrent = targetRow.data.security.data.cs01CadFirm;
       targetRow.data.security.data.cs01LocalCurrent = targetRow.data.security.data.cs01LocalFirm;
     }
-    targetRow.data.security.data.position.positionCurrentInMM = this.utilityService.parsePositionToMM(targetRow.data.security.data.position.positionCurrent, false);
+    targetRow.data.security.data.position.positionCurrentInMM = this.utilityService.parsePositionToMM(targetRow.data.security.data.position.positionCurrent, false, true);
     targetRow.data.security.data.cs01CadCurrentInK = this.utilityService.parseNumberToThousands(targetRow.data.security.data.cs01CadCurrent, false);
     targetRow.data.security.data.cs01LocalCurrentInK = this.utilityService.parseNumberToThousands(targetRow.data.security.data.cs01LocalCurrent, false);
     return includeFlag;

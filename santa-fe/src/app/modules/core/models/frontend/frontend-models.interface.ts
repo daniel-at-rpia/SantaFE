@@ -17,6 +17,8 @@ import {
   SantaTableNumericFloatingFilterParams
 } from 'FEModels/frontend-adhoc-packages.interface';
 import * as agGrid from 'ag-grid-community';
+import * as moment from 'moment';
+
 import {Alert} from "Core/components/alert/alert.component";
 
 
@@ -122,6 +124,7 @@ export interface SecurityDTO extends BasicDTOStructure {
       alertQuantityRaw: number;
       alertQuoteDealer: string;
       alertTradeTrader: string;
+      alertStatus: string;
     }
   }
   api: {
@@ -511,11 +514,14 @@ export interface AlertDTO extends BasicDTOStructure {
     unixTimestamp: number;
     titlePin: string;
     validUntilTime: string;
+    validUntilMoment: moment.Moment;
     level: number;
     quantity: number;
     isUrgent: boolean;
     trader: string;
     dealer: string;
+    status: string;
+    isMarketListTraded: boolean;
   },
   state: {
     isRead: boolean;
@@ -527,6 +533,7 @@ export interface AlertDTO extends BasicDTOStructure {
     hasTitlePin: boolean;
     isCancelled: boolean;
     isMarketListVariant: boolean;
+    isExpired: boolean;
   };
 }
 

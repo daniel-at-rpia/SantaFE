@@ -12,7 +12,8 @@
       BEHistoricalQuantBlock,
       BEHistoricalSummaryDTO,
       BESingleBestQuoteDTO,
-      BEAlertDTO
+      BEAlertDTO,
+      BEAlertMarketListQuoteBlock
     } from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
     import * as Blocks from 'FEModels/frontend-blocks.interface';
@@ -196,7 +197,8 @@ export class DTOService {
           alertQuantity: null,
           alertQuantityRaw: null,
           alertQuoteDealer: null,
-          alertTradeTrader: null
+          alertTradeTrader: null,
+          alertStatus: null
         }
       },
       api: {
@@ -354,9 +356,9 @@ export class DTOService {
     block.positionCIPInMM = this.utility.parsePositionToMM(block.positionCIP, false, true);
     block.positionAGBInMM = this.utility.parsePositionToMM(block.positionAGB, false, true);
     block.positionBBBInMM = this.utility.parsePositionToMM(block.positionBBB, false, true);
-    block.positionFirmInMM = this.utility.parsePositionToMM(block.positionFirm, false);
-    block.positionHFInMM = this.utility.parsePositionToMM(block.positionHF, false);
-    block.positionNLFInMM = this.utility.parsePositionToMM(block.positionNLF, false);
+    block.positionFirmInMM = this.utility.parsePositionToMM(block.positionFirm, false, true);
+    block.positionHFInMM = this.utility.parsePositionToMM(block.positionHF, false, true);
+    block.positionNLFInMM = this.utility.parsePositionToMM(block.positionNLF, false, true);
     dto.data.cs01CadFirmInK = this.utility.parseNumberToThousands(dto.data.cs01CadFirm, false);
     dto.data.cs01LocalFirmInK = this.utility.parseNumberToThousands(dto.data.cs01LocalFirm, false);
   }
@@ -374,11 +376,12 @@ export class DTOService {
       alertTarget: targetAlert.data.titleTop,
       alertSide: null,
       alertLevel: this.utility.parseTriCoreDriverNumber(targetAlert.data.level, dto.data.mark.markDriver, dto, true) as string,
-      alertQuantity: this.utility.parsePositionToMM(targetAlert.data.quantity, false),
+      alertQuantity: this.utility.parsePositionToMM(targetAlert.data.quantity, false, true),
       alertLevelRaw: targetAlert.data.level,
       alertQuantityRaw: targetAlert.data.quantity,
       alertQuoteDealer: targetAlert.data.dealer,
-      alertTradeTrader: targetAlert.data.trader
+      alertTradeTrader: targetAlert.data.trader,
+      alertStatus: targetAlert.data.status
     };
   }
 
@@ -794,27 +797,27 @@ export class DTOService {
     const object: DTOs.SecurityTableHeaderDTO = {
       data: {
         key: stub.key,
-        displayLabel: stub.label,
-        attrName: stub.attrName,
-        underlineAttrName: stub.underlineAttrName,
-        blockAttrName: stub.blockAttrName || null,
-        isAttrChangable: !!stub.isAttrChangable,
-        readyStage: stub.readyStage,
-        metricPackDeltaScope: stub.metricPackDeltaScope || null,
-        frontendMetric: !!stub.isFrontEndMetric,
-        isDataTypeText: !!stub.isDataTypeText,
-        isDriverDependent: !!stub.isDriverDependent,
-        groupBelongs: stub.groupBelongs,
-        pinned: (useSpecificsFrom && stub.tableSpecifics[useSpecificsFrom]) ? !!stub.tableSpecifics[useSpecificsFrom].pinned : !!stub.tableSpecifics.default.pinned,
-        groupShow: (useSpecificsFrom && stub.tableSpecifics[useSpecificsFrom]) ? !!stub.tableSpecifics[useSpecificsFrom].groupShow : !!stub.tableSpecifics.default.groupShow,
+        displayLabel: stub.content.label,
+        attrName: stub.content.attrName,
+        underlineAttrName: stub.content.underlineAttrName,
+        blockAttrName: stub.content.blockAttrName || null,
+        isAttrChangable: !!stub.content.isAttrChangable,
+        readyStage: stub.content.readyStage,
+        metricPackDeltaScope: stub.content.metricPackDeltaScope || null,
+        frontendMetric: !!stub.content.isFrontEndMetric,
+        isDataTypeText: !!stub.content.isDataTypeText,
+        isDriverDependent: !!stub.content.isDriverDependent,
+        groupBelongs: stub.content.groupBelongs,
+        pinned: (useSpecificsFrom && stub.content.tableSpecifics[useSpecificsFrom]) ? !!stub.content.tableSpecifics[useSpecificsFrom].pinned : !!stub.content.tableSpecifics.default.pinned,
+        groupShow: (useSpecificsFrom && stub.content.tableSpecifics[useSpecificsFrom]) ? !!stub.content.tableSpecifics[useSpecificsFrom].groupShow : !!stub.content.tableSpecifics.default.groupShow,
         activePortfolios: activePortfolios || []
       },
       state: {
-        isQuantVariant: !!stub.isForQuantComparer,
-        isSecurityCardVariant: !!stub.isForSecurityCard,
+        isQuantVariant: !!stub.content.isForQuantComparer,
+        isSecurityCardVariant: !!stub.content.isForSecurityCard,
         isAxeSkewEnabled: false,
         istotalSkewEnabled: false,
-        isNarrowColumnVariant: !!stub.isColumnWidthNarrow
+        isNarrowColumnVariant: !!stub.content.isColumnWidthNarrow
       }
     };
     return object;
@@ -903,7 +906,15 @@ export class DTOService {
       }
     };
     if (alertDTO) {
-      if (alertDTO.data.subType === AlertSubTypes.bid) {
+      if (alertDTO.state.isMarketListVariant) {
+        if (alertDTO.data.subType === AlertSubTypes.ask) {
+          object.data.alertSideDTO.data.side = 'BWIC';
+          object.data.alertSideDTO.state.askSided = true;
+        } else if (alertDTO.data.subType === AlertSubTypes.bid) {
+          object.data.alertSideDTO.data.side = 'OWIC';
+          object.data.alertSideDTO.state.bidSided = true;
+        }
+      } else if (alertDTO.data.subType === AlertSubTypes.bid) {
         object.data.alertSideDTO.data.side = 'Bid';
         object.data.alertSideDTO.state.bidSided = true;
       } else if (alertDTO.data.subType === AlertSubTypes.ask) {
@@ -1178,13 +1189,16 @@ export class DTOService {
         message: rawData.message,
         time: momentTime.format(`HH:mm`),
         titlePin: !!rawData.marketListAlert && rawData.marketListAlert.subType,
-        validUntilTime: !!rawData.marketListAlert ? rawData.marketListAlert.validUntilTime : null,
+        validUntilTime: null,
+        validUntilMoment: null,
         unixTimestamp: momentTime.unix(),
         level: null,
         quantity: null,
         isUrgent: rawData.isUrgent,
         trader: null,
-        dealer: null
+        dealer: null,
+        status: null,
+        isMarketListTraded: false
       },
       api: {
         onMouseEnterAlert: null,
@@ -1194,61 +1208,72 @@ export class DTOService {
         isCancelled: !!rawData.isCancelled,
         isNew: true,
         isSlidedOut: false,
-        isRead: false,
+        isRead: !rawData.isActive,
         isCountdownFinished: true,
         willBeRemoved: false,
         hasSecurity: false,
-        hasTitlePin: !!rawData.marketListAlert,
-        isMarketListVariant: !!rawData.marketListAlert
+        hasTitlePin: !!rawData.isMarketListAlert || !!rawData.marketListAlert,  // TODO: remove first part as soon as BE is promoted
+        isMarketListVariant: !!rawData.isMarketListAlert || !!rawData.marketListAlert,  // TODO: remove first part as soon as BE is promoted
+        isExpired: false
       }
     }
+    this.appendAlertDetailInfo(object, rawData);
+    this.appendAlertStatus(object);
+    return object;
+  }
+
+  private appendAlertDetailInfo(
+    alertDTO: DTOs.AlertDTO,
+    rawData: BEAlertDTO
+  ) {
     if (!!rawData.security) {
-      object.data.security = this.formSecurityCardObject(
+      alertDTO.data.security = this.formSecurityCardObject(
         rawData.security.securityIdentifier || null,
         rawData.security,
         false,
         false
       );
-      object.data.security.state.isInteractionDisabled = true;
-      object.data.security.state.isMultiLineVariant = true;
-      object.data.security.state.isWidthFlexible = true;
-      object.state.hasSecurity = true;
-      const targetDriver = object.data.security.data.mark.markDriver;
-      if (!!rawData.quote && !!object.data.security) {
-        object.data.dealer = rawData.quote.dealer;
+      alertDTO.data.security.state.isInteractionDisabled = true;
+      alertDTO.data.security.state.isMultiLineVariant = true;
+      alertDTO.data.security.state.isWidthFlexible = true;
+      alertDTO.state.hasSecurity = true;
+      const targetDriver = alertDTO.data.security.data.mark.markDriver;
+      if (!!rawData.quote && !!alertDTO.data.security) {
+        alertDTO.data.dealer = rawData.quote.dealer;
         switch (targetDriver) {
           case TriCoreDriverConfig.Spread.label:
-            object.data.level = rawData.quote['spread'];
+            alertDTO.data.level = rawData.quote.spread;
             break;
           case TriCoreDriverConfig.Price.label:
-            object.data.level = rawData.quote['price'];
+            alertDTO.data.level = rawData.quote.price;
             break;
           case TriCoreDriverConfig.Yield.label:
-            object.data.level = rawData.quote['yield'];
+            alertDTO.data.level = rawData.quote.yield;
             break;
           default:
             break;
         }
-        object.data.quantity = rawData.quote['quantity'];
+        alertDTO.data.quantity = rawData.quote.quantity;
       }
       if (!!rawData.trades && rawData.type === AlertTypes.tradeAlert) {
         let quantity = 0;
         rawData.trades.forEach((eachRawTrade) => {
           quantity = quantity + eachRawTrade.quantity;
         })
-        object.data.quantity = quantity;
+        alertDTO.data.quantity = quantity;
         if (rawData.trades.length > 0) {
           const lastTrade = rawData.trades[rawData.trades.length-1];
-          object.data.trader = lastTrade.trader;
+          alertDTO.data.trader = lastTrade.trader;
+          alertDTO.data.dealer = lastTrade.counterpartyName;
           switch (targetDriver) {
             case TriCoreDriverConfig.Spread.label:
-              object.data.level = lastTrade.spread;
+              alertDTO.data.level = lastTrade.spread;
               break;
             case TriCoreDriverConfig.Price.label:
-              object.data.level = lastTrade.price;
+              alertDTO.data.level = lastTrade.price;
               break;
             case TriCoreDriverConfig.Yield.label:
-              object.data.level = null;
+              alertDTO.data.level = null;
               break;
             default:
               break;
@@ -1256,7 +1281,37 @@ export class DTOService {
         }
       }
     }
-    return object;
+    if (alertDTO.state.isMarketListVariant) {
+      const quoteBlock = rawData.quote as BEAlertMarketListQuoteBlock;
+      alertDTO.data.validUntilTime = 
+        !!rawData.marketListAlert
+          ? rawData.marketListAlert.validUntilTime
+          : !!quoteBlock
+            ? quoteBlock.validUntilTime
+            : null;
+      alertDTO.data.validUntilMoment = 
+        !quoteBlock
+          ? null
+          : quoteBlock.isTraded || alertDTO.state.isCancelled
+            ? moment(quoteBlock.eventTime)
+            : moment(quoteBlock.validUntilTime);
+      alertDTO.data.isMarketListTraded = quoteBlock.isTraded;
+    }
+  }
+
+  public appendAlertStatus(alertDTO: DTOs.AlertDTO) {
+    if (alertDTO.data.type === AlertTypes.axeAlert && alertDTO.state.isMarketListVariant) {
+      if (alertDTO.state.isCancelled && alertDTO.data.isMarketListTraded) {
+        alertDTO.data.status = `Traded at ${alertDTO.data.validUntilMoment.format('HH:mm:ss')}`;
+      } else if (alertDTO.state.isCancelled ||  moment().diff(alertDTO.data.validUntilMoment) > 0) {
+        alertDTO.state.isExpired = true;
+        alertDTO.data.status = `Expired at ${alertDTO.data.validUntilMoment.format('HH:mm:ss')}`;
+      } else {
+        alertDTO.data.status = `Valid For ${this.utility.parseCountdown(alertDTO.data.validUntilMoment)}`
+      }
+    } else {
+      alertDTO.data.status = alertDTO.state.isCancelled ? 'Cancelled' : 'Active';
+    }
   }
 
   public formAlertCountSummaryObject(
