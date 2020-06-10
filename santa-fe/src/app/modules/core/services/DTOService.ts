@@ -356,9 +356,9 @@ export class DTOService {
     block.positionCIPInMM = this.utility.parsePositionToMM(block.positionCIP, false, true);
     block.positionAGBInMM = this.utility.parsePositionToMM(block.positionAGB, false, true);
     block.positionBBBInMM = this.utility.parsePositionToMM(block.positionBBB, false, true);
-    block.positionFirmInMM = this.utility.parsePositionToMM(block.positionFirm, false);
-    block.positionHFInMM = this.utility.parsePositionToMM(block.positionHF, false);
-    block.positionNLFInMM = this.utility.parsePositionToMM(block.positionNLF, false);
+    block.positionFirmInMM = this.utility.parsePositionToMM(block.positionFirm, false, true);
+    block.positionHFInMM = this.utility.parsePositionToMM(block.positionHF, false, true);
+    block.positionNLFInMM = this.utility.parsePositionToMM(block.positionNLF, false, true);
     dto.data.cs01CadFirmInK = this.utility.parseNumberToThousands(dto.data.cs01CadFirm, false);
     dto.data.cs01LocalFirmInK = this.utility.parseNumberToThousands(dto.data.cs01LocalFirm, false);
   }
@@ -376,7 +376,7 @@ export class DTOService {
       alertTarget: targetAlert.data.titleTop,
       alertSide: null,
       alertLevel: this.utility.parseTriCoreDriverNumber(targetAlert.data.level, dto.data.mark.markDriver, dto, true) as string,
-      alertQuantity: this.utility.parsePositionToMM(targetAlert.data.quantity, false),
+      alertQuantity: this.utility.parsePositionToMM(targetAlert.data.quantity, false, true),
       alertLevelRaw: targetAlert.data.level,
       alertQuantityRaw: targetAlert.data.quantity,
       alertQuoteDealer: targetAlert.data.dealer,

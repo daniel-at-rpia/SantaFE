@@ -592,7 +592,7 @@ export class UtilityService {
 
     public parsePositionToMM(position: number, hasUnitSuffix: boolean, enableNull?: boolean): string {
       const value = this.round(position/1000000, 2).toFixed(2);
-      if (!!enableNull && position === 0) {
+      if (!!enableNull && position == 0) {
         return null;
       } else {
         return !!hasUnitSuffix ? `${value}MM` : `${value}`;

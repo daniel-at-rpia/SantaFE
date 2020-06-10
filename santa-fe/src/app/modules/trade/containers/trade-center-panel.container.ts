@@ -588,7 +588,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       targetRow.data.security.data.cs01CadCurrent = targetRow.data.security.data.cs01CadFirm;
       targetRow.data.security.data.cs01LocalCurrent = targetRow.data.security.data.cs01LocalFirm;
     }
-    targetRow.data.security.data.position.positionCurrentInMM = this.utilityService.parsePositionToMM(targetRow.data.security.data.position.positionCurrent, false);
+    targetRow.data.security.data.position.positionCurrentInMM = this.utilityService.parsePositionToMM(targetRow.data.security.data.position.positionCurrent, false, true);
     targetRow.data.security.data.cs01CadCurrentInK = this.utilityService.parseNumberToThousands(targetRow.data.security.data.cs01CadCurrent, false);
     targetRow.data.security.data.cs01LocalCurrentInK = this.utilityService.parseNumberToThousands(targetRow.data.security.data.cs01LocalCurrent, false);
     return includeFlag;
