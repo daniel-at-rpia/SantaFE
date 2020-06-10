@@ -136,15 +136,18 @@ $alt-background: $color_white;
 
         &--bestQuote, &--markDiscrepancies, &--position, &--delta, &--ownership {
           .ag-cell-label-container, .ag-header-group-cell-label {
-            background: $color_gray_6 !important;
+            background: linear-gradient(45deg,  $theme_color_1 40%, $theme_color_2 100%) !important;
             color: $color_white;
           }
         }
         &--mark, &--cost, &--cs01, &--securityInfo, &--alert {
           .ag-cell-label-container, .ag-header-group-cell-label {
-            @include mix_border_generator($typical_border_width, $color_gray_6);
-            background: $color_white !important;
-            color: $color_gray_6;
+            background: linear-gradient(45deg,  $theme_color_1 40%, $theme_color_2 100%) !important;
+            // background: $theme_color_1 !important;
+            color: $color_white;
+            // @include mix_border_generator($typical_border_width, $color_gray_6);
+            // background: $color_white !important;
+            // color: $color_gray_6;
           }
         }
         &--noGroup {

@@ -523,6 +523,188 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       }
     }
   },{
+    key: 'ticker',
+    content: {
+      label: 'Ticker',
+      attrName: 'ticker',
+      underlineAttrName: 'ticker',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'rating',
+    content: {
+      label: 'Rating',
+      attrName: 'ratingValue',
+      underlineAttrName: 'ratingValue',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'currency',
+    content: {
+      label: 'Currency',
+      attrName: 'currency',
+      underlineAttrName: 'currency',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'sector',
+    content: {
+      label: 'Sector',
+      attrName: 'sector',
+      underlineAttrName: 'sector',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'issuer',
+    content: {
+      label: 'Issuer',
+      attrName: 'obligorName',
+      underlineAttrName: 'obligorName',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'industry',
+    content: {
+      label: 'Industry',
+      attrName: 'industry',
+      underlineAttrName: 'industry',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'securityType',
+    content: {
+      label: 'Security Type',
+      attrName: 'securityType',
+      underlineAttrName: 'securityType',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'seniority',
+    content: {
+      label: 'Seniority',
+      attrName: 'seniority',
+      underlineAttrName: 'seniority',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'country',
+    content: {
+      label: 'Country',
+      attrName: 'country',
+      underlineAttrName: 'country',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'maturityType',
+    content: {
+      label: 'Maturity Type',
+      attrName: 'maturityType',
+      underlineAttrName: 'maturityType',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: false
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
     key: 'markDeltaToBid',
     content: {
       label: 'Δ to Bid',
@@ -1158,188 +1340,6 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
         }
       }
     }
-  },{
-    key: 'ticker',
-    content: {
-      label: 'Ticker',
-      attrName: 'ticker',
-      underlineAttrName: 'ticker',
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.securityInfo,
-      tableSpecifics: {
-        default: {
-          active: true
-        },
-        tradeAlert: {
-          active: false
-        }
-      }
-    }
-  },{
-    key: 'rating',
-    content: {
-      label: 'Rating',
-      attrName: 'ratingValue',
-      underlineAttrName: 'ratingValue',
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.securityInfo,
-      tableSpecifics: {
-        default: {
-          active: true
-        },
-        tradeAlert: {
-          active: false
-        }
-      }
-    }
-  },{
-    key: 'currency',
-    content: {
-      label: 'Currency',
-      attrName: 'currency',
-      underlineAttrName: 'currency',
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.securityInfo,
-      tableSpecifics: {
-        default: {
-          active: true
-        },
-        tradeAlert: {
-          active: false
-        }
-      }
-    }
-  },{
-    key: 'sector',
-    content: {
-      label: 'Sector',
-      attrName: 'sector',
-      underlineAttrName: 'sector',
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.securityInfo,
-      tableSpecifics: {
-        default: {
-          active: true,
-          groupShow: true
-        },
-        tradeAlert: {
-          active: false
-        }
-      }
-    }
-  },{
-    key: 'issuer',
-    content: {
-      label: 'Issuer',
-      attrName: 'obligorName',
-      underlineAttrName: 'obligorName',
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.securityInfo,
-      tableSpecifics: {
-        default: {
-          active: true,
-          groupShow: true
-        },
-        tradeAlert: {
-          active: false
-        }
-      }
-    }
-  },{
-    key: 'industry',
-    content: {
-      label: 'Industry',
-      attrName: 'industry',
-      underlineAttrName: 'industry',
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.securityInfo,
-      tableSpecifics: {
-        default: {
-          active: true
-        },
-        tradeAlert: {
-          active: false
-        }
-      }
-    }
-  },{
-    key: 'securityType',
-    content: {
-      label: 'Security Type',
-      attrName: 'securityType',
-      underlineAttrName: 'securityType',
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.securityInfo,
-      tableSpecifics: {
-        default: {
-          active: true
-        },
-        tradeAlert: {
-          active: false
-        }
-      }
-    }
-  },{
-    key: 'seniority',
-    content: {
-      label: 'Seniority',
-      attrName: 'seniority',
-      underlineAttrName: 'seniority',
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.securityInfo,
-      tableSpecifics: {
-        default: {
-          active: true
-        },
-        tradeAlert: {
-          active: false
-        }
-      }
-    }
-  },{
-    key: 'country',
-    content: {
-      label: 'Country',
-      attrName: 'country',
-      underlineAttrName: 'country',
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.securityInfo,
-      tableSpecifics: {
-        default: {
-          active: true
-        },
-        tradeAlert: {
-          active: false
-        }
-      }
-    }
-  },{
-    key: 'maturityType',
-    content: {
-      label: 'Maturity Type',
-      attrName: 'maturityType',
-      underlineAttrName: 'maturityType',
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.securityInfo,
-      tableSpecifics: {
-      default: {
-        active: false
-      },
-      tradeAlert: {
-        active: false
-      }
-    }
-  }
   },{
     key: 'primaryPM',
     content: {
