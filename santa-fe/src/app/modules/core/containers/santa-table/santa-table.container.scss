@@ -228,6 +228,7 @@ $alt-background: $color_white;
           @include mix_text_overflow_multi_line(2);
           padding-top: $spacing_minimum;
           padding-bottom: $spacing_small;
+          -webkit-box-align: stretch;
         }
         santa-table-quote-cell {
           flex: 1 1 auto;

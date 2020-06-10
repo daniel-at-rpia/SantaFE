@@ -1264,6 +1264,7 @@ export class DTOService {
         if (rawData.trades.length > 0) {
           const lastTrade = rawData.trades[rawData.trades.length-1];
           alertDTO.data.trader = lastTrade.trader;
+          alertDTO.data.dealer = lastTrade.counterpartyName;
           switch (targetDriver) {
             case TriCoreDriverConfig.Spread.label:
               alertDTO.data.level = lastTrade.spread;
