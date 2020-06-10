@@ -246,6 +246,14 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             this.updateAlert();
             this.state.autoUpdateCountdown = 0;
           }
+          if (this.state.alert.initialAlertListReceived && this.state.fetchResult.alertTable.fetchComplete) {
+            const numOfUpdate = this.flagMarketListAlertsForCountdownUpdate();
+            if (numOfUpdate > 0){
+              // if there is no new alert, but there are existing active marketlist alerts, then the table still needs to be updated for refreshing the countdowns
+              this.state.fetchResult.alertTable.liveUpdatedRowList = this.identifyTableUpdate(this.state.fetchResult.alertTable, true);
+              this.state.alert.recentUpdatedAlertList = [];
+            }
+          }
         }
       });
       // this.subscriptions.selectedSecurityForAlertConfigSub = this.store$.pipe(
@@ -361,17 +369,12 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             }
           });
           updateList.length > 0 && this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
-          const numOfUpdate = this.flagMarketListAlertsForCountdownUpdate();
           if (alertTableList.length > 0) {
             if (this.state.alert.initialAlertListReceived) {
               this.fetchUpdate(alertTableList);
             } else {
               this.loadFreshData(alertTableList);
             }
-          } else if (numOfUpdate > 0){
-            // if there is no new alert, but there are existing active marketlist alerts, then the table still needs to be updated for refreshing the countdowns
-            this.state.fetchResult.alertTable.liveUpdatedRowList = this.identifyTableUpdate(this.state.fetchResult.alertTable, true);
-            this.state.alert.recentUpdatedAlertList = [];
           }
           this.state.alertUpdateInProgress = false;
         }),
