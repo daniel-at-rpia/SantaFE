@@ -1283,18 +1283,15 @@ export class DTOService {
     }
     if (alertDTO.state.isMarketListVariant) {
       const quoteBlock = rawData.quote as BEAlertMarketListQuoteBlock;
-      alertDTO.data.validUntilTime = 
-        !!rawData.marketListAlert
-          ? rawData.marketListAlert.validUntilTime
-          : !!quoteBlock
-            ? quoteBlock.validUntilTime
-            : null;
-      alertDTO.data.validUntilMoment = 
-        !quoteBlock
-          ? null
-          : quoteBlock.isTraded || alertDTO.state.isCancelled
+      if (!!quoteBlock) {
+        alertDTO.data.validUntilTime = quoteBlock.validUntilTime;
+        alertDTO.data.validUntilMoment = 
+          quoteBlock.isTraded
             ? moment(quoteBlock.eventTime)
-            : moment(quoteBlock.validUntilTime);
+            : alertDTO.state.isCancelled
+              ? moment(quoteBlock.lastModifiedTime)
+              : moment(quoteBlock.validUntilTime);
+      }
       alertDTO.data.isMarketListTraded = quoteBlock.isTraded;
     }
   }
@@ -1303,7 +1300,9 @@ export class DTOService {
     if (alertDTO.data.type === AlertTypes.axeAlert && alertDTO.state.isMarketListVariant) {
       if (alertDTO.state.isCancelled && alertDTO.data.isMarketListTraded) {
         alertDTO.data.status = `Traded at ${alertDTO.data.validUntilMoment.format('HH:mm:ss')}`;
-      } else if (alertDTO.state.isCancelled ||  moment().diff(alertDTO.data.validUntilMoment) > 0) {
+      } else if (alertDTO.state.isCancelled) {
+        alertDTO.data.status = `Cancelled at ${alertDTO.data.validUntilMoment.format('HH:mm:ss')}`;
+      } else if (moment().diff(alertDTO.data.validUntilMoment) > 0) {
         alertDTO.state.isExpired = true;
         alertDTO.data.status = `Expired at ${alertDTO.data.validUntilMoment.format('HH:mm:ss')}`;
       } else {
