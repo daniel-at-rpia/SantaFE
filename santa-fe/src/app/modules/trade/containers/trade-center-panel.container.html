@@ -176,6 +176,7 @@
         [receivedSecurityTableMetricsUpdate]="state.table.metrics"
         [liveUpdatedRows]="state.fetchResult.mainTable.liveUpdatedRowList"
         [activeTriCoreDriver]="state.filters.quickFilters.driverType"
+        [removeRows]="state.fetchResult.mainTable.removalRowList"
         (selectedSecurityForAnalysis)="onSelectSecurityForAnalysis($event)"
       ></santa-table>
     </div>

@@ -214,6 +214,20 @@ export class AgGridMiddleLayerService {
     });
   }
 
+  public removeAgGridRow(
+    table: SecurityTableDTO,
+    removeRowIdList: Array<string>
+  ) {
+    const agGridRemovalList = [];
+    removeRowIdList.forEach((eachRowId) => {
+      const targetNode = table.api.gridApi.getRowNode(eachRowId);
+      !!targetNode && agGridRemovalList.push(targetNode);
+    });
+    table.api.gridApi.updateRowData({
+      remove: agGridRemovalList
+    });
+  }
+
   private loadAgGridHeadersComparator(
     targetHeader: SecurityTableHeaderDTO,
     newAgColumn: AgGridColumnDefinition

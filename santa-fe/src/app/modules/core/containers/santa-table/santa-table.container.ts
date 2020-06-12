@@ -56,6 +56,8 @@ export class SantaTable implements OnInit, OnChanges {
   @Input() receivedSecurityTableMetricsUpdate: Array<SecurityTableMetricStub>;
   securityTableMetricsCache: Array<SecurityTableMetricStub>;// use this only for detecting diff
   @Input() liveUpdatedRows: Array<SecurityTableRowDTO>;
+  @Input() removeRows: Array<string>;
+  @Input() removeRowsCache: Array<string>;
   @Input() activeTriCoreDriver: string;
   @Output() selectedSecurityForAnalysis = new EventEmitter<SecurityDTO>();
   liveUpdateRowsCache: Array<SecurityTableRowDTO>;
@@ -174,6 +176,11 @@ export class SantaTable implements OnInit, OnChanges {
           this.liveUpdateRows(this.liveUpdateRowsCache);
         }
         this.liveUpdateAllQuotesForExpandedRows();
+      }
+      // removal can happen in parallel to other input changes
+      if (this.removeRows.length > 0 && JSON.stringify(this.removeRows) != JSON.stringify(this.removeRowsCache)) {
+        this.removeRowsCache = this.utilityService.deepCopy(this.removeRows);
+        this.removeTableRows();
       }
     }
   }
@@ -643,5 +650,12 @@ export class SantaTable implements OnInit, OnChanges {
         rowNodes: [params.node, params.node['detailNode']]
       });
     }
+  }
+
+  private removeTableRows() {
+    this.tableData.data.rows = this.tableData.data.rows.filter((eachRow) => {
+      return this.removeRowsCache.indexOf(eachRow.data.rowId) < 0;
+    });
+    this.agGridMiddleLayerService.removeAgGridRow(this.tableData, this.removeRowsCache);
   }
 }

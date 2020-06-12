@@ -130,7 +130,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
           fetchComplete: false,
           rowList: [],
           prinstineRowList: [],
-          liveUpdatedRowList: []
+          liveUpdatedRowList: [],
+          removalRowList: []
         }
       },
       filters: {

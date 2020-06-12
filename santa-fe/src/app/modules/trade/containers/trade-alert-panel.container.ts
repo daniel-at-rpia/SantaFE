@@ -197,7 +197,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             fetchComplete: false,
             rowList: [],
             prinstineRowList: [],
-            liveUpdatedRowList: []
+            liveUpdatedRowList: [],
+            removalRowList: []
           }
         },
         filters: {
@@ -293,6 +294,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           } else {
             this.fetchUpdate([]);
           }
+          if (tick === 1) {
+            const testAlert = this.state.alert.alertTableAlertList['5248742'];
+            this.populateTableRowRemovalList([testAlert]);
+          }
         }
       });
     }
@@ -327,6 +332,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           }) : [];
           const updateList: Array<AlertDTO> = [];
           const alertTableList: Array<AlertDTO> = [];
+          const alertTableRemovalList: Array<AlertDTO> = [];  // currently the only alerts that needs to be removed are the cancelled trade alerts
           filteredServerReturn.forEach((eachRawAlert) => {
             // Trade alerts are handled differently since BE passes the same trade alerts regardless of the timestamp FE provides
             if (!!eachRawAlert.marketListAlert) {
@@ -356,7 +362,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
                   alertTableList.push(newAlert);
                   updateList.push(newAlert);
                 } else if (newAlert.data.type === this.constants.alertTypes.tradeAlert) {
-                  
+                  alertTableRemovalList.push(newAlert);
                 }
               } else {
                 if (!newAlert.state.isRead && newAlert.data.isUrgent) {
@@ -369,6 +375,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             }
           });
           updateList.length > 0 && this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
+          if (alertTableRemovalList.length > 0) {
+            console.log('remove alerts', alertTableRemovalList);
+            this.populateTableRowRemovalList(alertTableRemovalList);
+          }
           if (alertTableList.length > 0) {
             if (this.state.alert.initialAlertListReceived) {
               this.fetchUpdate(alertTableList);
@@ -1167,8 +1177,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         null
       );
       this.calculateQuantComparerWidthAndHeight();
-      this.updateStage(this.constants.securityTableFinalStage, this.state.fetchResult.alertTable, this.state.table.alertDto);
       this.state.fetchResult.alertTable.fetchComplete = true;
+      this.updateStage(this.constants.securityTableFinalStage, this.state.fetchResult.alertTable, this.state.table.alertDto);
       if (!this.state.alert.initialAlertListReceived) {
         this.state.alert.initialAlertListReceived = true;
       }
@@ -1246,6 +1256,27 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           this.state.alert.recentUpdatedAlertList
         ).newRowList;
       }
+    }
+
+    private populateTableRowRemovalList(alertList: Array<AlertDTO>) {
+      // find the corresponding row basd on the alert, since the rowIds are the alertIds in alert table
+      this.state.fetchResult.alertTable.removalRowList = [];
+      alertList.forEach((eachAlert) => {
+        const targetRow = this.state.fetchResult.alertTable.prinstineRowList.find((eachRow) => {
+          return eachRow.data.rowId === eachAlert.data.id;
+        });
+        if (!!targetRow) {
+          !this.state.fetchResult.alertTable.removalRowList.includes(targetRow.data.rowId) && this.state.fetchResult.alertTable.removalRowList.push(targetRow.data.rowId);
+          if (!!this.state.alert.alertTableAlertList[eachAlert.data.id]) {
+            delete this.state.alert.alertTableAlertList[eachAlert.data.id];
+          }
+          const targetIndex = this.state.fetchResult.alertTable.prinstineRowList.findIndex((eachRow) => {
+            return eachRow.data.rowId === eachAlert.data.id;
+          });
+          this.state.fetchResult.alertTable.prinstineRowList.splice(targetIndex, 1);
+          this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
+        }
+      });
     }
   // table section end
 
