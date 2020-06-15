@@ -295,7 +295,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             this.fetchUpdate([]);
           }
           if (tick === 1) {
-            const testAlert = this.state.alert.alertTableAlertList['5248742'];
+            const testAlert = this.state.alert.alertTableAlertList['2f7d73a1-0bfc-4400-a551-e1f6f9c55114'];
             this.populateTableRowRemovalList([testAlert]);
           }
         }
