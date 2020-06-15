@@ -181,6 +181,7 @@ export const EngagementActionList = {
   selectPreset: 'Select Preset',
   switchDriver: 'Switch Driver',
   applyFilter: 'Apply Filter',
+  applyKeywordSearch: 'Apply Keyword Search',
   selectSecurityForAnalysis: 'Select Security For Analysis',
   bloombergRedict: 'Bloomberg Redirect',
   clickGroupByOption: 'Click Group By Option',

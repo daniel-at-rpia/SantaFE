@@ -1,8 +1,8 @@
   // dependencies
-    import {Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-    import {of, Subscription} from 'rxjs';
-    import {catchError, first, tap, withLatestFrom} from 'rxjs/operators';
-    import {select, Store} from '@ngrx/store';
+    import { Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+    import { of, Subscription, Subject } from 'rxjs';
+    import { catchError, first, tap, withLatestFrom, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+    import { select, Store } from '@ngrx/store';
 
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
@@ -84,8 +84,10 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     securityIDListFromAnalysisSub: null,
     validWindowSub: null,
     newAlertsForAlertTableSub: null,
-    alertCountSub: null
+    alertCountSub: null,
+    keywordSearchSub: null
   };
+  keywordChanged$: Subject<string> = new Subject<string>();
   constants = {
     defaultMetricIdentifier: DEFAULT_DRIVER_IDENTIFIER,
     portfolioShortcuts: PortfolioShortcuts,
@@ -185,6 +187,26 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       select(selectBestQuoteValidWindow)
     ).subscribe((window) => {
       this.state.bestQuoteValidWindow = window;
+    });
+
+    this.subscriptions.keywordSearchSub = this.keywordChanged$.pipe(
+      debounceTime(250),
+      distinctUntilChanged()
+    ).subscribe((keyword) => {
+      const targetTable = this.state.fetchResult.mainTable;
+      if (!!keyword && keyword.length >= 2) {
+        this.state.filters.quickFilters.keyword = keyword;
+        targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
+        this.restfulCommService.logEngagement(
+          EngagementActionList.applyKeywordSearch,
+          'n/a',
+          keyword,
+          'Trade - Center Panel'
+        );
+      } else if (!keyword || keyword.length < 2) {
+        this.state.filters.quickFilters.keyword = keyword;
+        targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
+      }
     });
   }
 
@@ -351,14 +373,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   public onSearchKeywordChange(newKeyword: string) {
-    const targetTable = this.state.fetchResult.mainTable;
-    if (!!newKeyword && newKeyword.length >= 2 && newKeyword != this.state.filters.quickFilters.keyword) {
-      this.state.filters.quickFilters.keyword = newKeyword;
-      targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
-    } else if ((!newKeyword || newKeyword.length < 2) && !!this.state.filters.quickFilters.keyword && this.state.filters.quickFilters.keyword.length >= 2) {
-      this.state.filters.quickFilters.keyword = newKeyword;
-      targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
-    }
+    this.keywordChanged$.next(newKeyword);
   }
 
   private populateSearchShortcuts() {

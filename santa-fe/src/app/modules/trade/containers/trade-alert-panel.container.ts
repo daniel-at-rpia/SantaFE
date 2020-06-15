@@ -1,18 +1,8 @@
   // dependencies
-    import {
-      Component,
-      EventEmitter,
-      Input,
-      isDevMode,
-      OnChanges,
-      OnDestroy,
-      OnInit,
-      Output,
-      ViewEncapsulation
-    } from '@angular/core';
-    import {select, Store} from '@ngrx/store';
-    import {interval, Observable, of, Subscription} from 'rxjs';
-    import {catchError, first, tap, withLatestFrom} from 'rxjs/operators';
+    import { Component,EventEmitter,Input,isDevMode,OnChanges,OnDestroy,OnInit,Output,ViewEncapsulation } from '@angular/core';
+    import { select, Store } from '@ngrx/store';
+    import { interval, Observable, of, Subscription, Subject } from 'rxjs';
+    import { catchError, first, tap, withLatestFrom, debounceTime, distinctUntilChanged } from 'rxjs/operators';
     import * as moment from 'moment';
 
     import { DTOService } from 'Core/services/DTOService';
@@ -111,8 +101,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     // selectedSecurityForAlertConfigSub: null,
     centerPanelPresetSelectedSub: null,
     alertCountSub: null,
-    startNewUpdateSub: null
+    startNewUpdateSub: null,
+    keywordSearchSub: null
   }
+  keywordChanged$: Subject<string> = new Subject<string>();
   autoUpdateCount$: Observable<any>;
   constants = {
     // alertTypes: AlertTypes,
@@ -294,6 +286,26 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           } else {
             this.fetchUpdate([]);
           }
+        }
+      });
+
+      this.subscriptions.keywordSearchSub = this.keywordChanged$.pipe(
+        debounceTime(250),
+        distinctUntilChanged()
+      ).subscribe((keyword) => {
+        const targetTable = this.state.fetchResult.alertTable;
+        if (!!keyword && keyword.length >= 2 && keyword != this.state.filters.quickFilters.keyword) {
+          this.state.filters.quickFilters.keyword = keyword;
+          targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
+          this.restfulCommService.logEngagement(
+            EngagementActionList.applyKeywordSearch,
+            'n/a',
+            keyword,
+            'Trade - Alert Panel'
+          );
+        } else if ((!keyword || keyword.length < 2) && !!this.state.filters.quickFilters.keyword && this.state.filters.quickFilters.keyword.length >= 2) {
+          this.state.filters.quickFilters.keyword = keyword;
+          targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
         }
       });
     }
@@ -989,14 +1001,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
   // table section
     public onTableSearchKeywordChange(newKeyword: string) {
-      const targetTable = this.state.fetchResult.alertTable;
-      if (!!newKeyword && newKeyword.length >= 2 && newKeyword != this.state.filters.quickFilters.keyword) {
-        this.state.filters.quickFilters.keyword = newKeyword;
-        targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
-      } else if ((!newKeyword || newKeyword.length < 2) && !!this.state.filters.quickFilters.keyword && this.state.filters.quickFilters.keyword.length >= 2) {
-        this.state.filters.quickFilters.keyword = newKeyword;
-        targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
-      }
+      this.keywordChanged$.next(newKeyword);
     }
 
     public onSelectSecurityForAnalysis(targetSecurity: SecurityDTO) {
