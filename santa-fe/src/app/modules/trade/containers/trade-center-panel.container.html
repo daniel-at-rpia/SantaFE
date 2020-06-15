@@ -95,7 +95,7 @@
       </button>
       <security-definition-configurator
         [configuratorData]="state.configurator.dto"
-        (clickedApplyFilter)="onApplyFilter($event)"
+        (clickedApplyFilter)="onApplyFilter($event, true)"
         (buryConfigurator)="buryConfigurator()"
         (boostConfigurator)="boostConfigurator()"
       ></security-definition-configurator>

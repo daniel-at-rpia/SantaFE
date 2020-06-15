@@ -1,5 +1,5 @@
   // dependencies
-    import { Component,EventEmitter,Input,isDevMode,OnChanges,OnDestroy,OnInit,Output,ViewEncapsulation } from '@angular/core';
+    import { Component, EventEmitter, Input, isDevMode, OnChanges, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
     import { select, Store } from '@ngrx/store';
     import { interval, Observable, of, Subscription, Subject } from 'rxjs';
     import { catchError, first, tap, withLatestFrom, debounceTime, distinctUntilChanged } from 'rxjs/operators';

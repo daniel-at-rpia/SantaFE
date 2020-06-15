@@ -1,21 +1,7 @@
   // dependencies
-    import {
-      Component,
-      OnInit,
-      OnChanges,
-      ViewEncapsulation,
-      Input,
-      Output,
-      EventEmitter
-    } from '@angular/core';
+    import { Component, OnInit, OnChanges, ViewEncapsulation, Input, Output, EventEmitter, isDevMode } from '@angular/core';
     import { of } from 'rxjs';
-    import {
-      tap,
-      first,
-      delay,
-      catchError
-    } from 'rxjs/operators';
-
+    import { tap, first, delay, catchError } from 'rxjs/operators';
 
     import { DTOService } from 'Core/services/DTOService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
@@ -127,7 +113,9 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   }
 
   public onMouseLeaveFilter(targetDefinition: SecurityDefinitionDTO) {
-    this.configuratorData.state.groupByDisabled && this.onClickDefinition(targetDefinition);
+    if (!isDevMode()) {
+      this.configuratorData.state.groupByDisabled && this.onClickDefinition(targetDefinition);
+    }
   }
 
   public onClickFilterOption(targetOption:SecurityDefinitionFilterBlock) {

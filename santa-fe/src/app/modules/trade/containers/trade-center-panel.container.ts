@@ -257,7 +257,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       this.state.presets.selectedPreset = targetPreset;
       this.state.configurator.dto = this.utilityService.applyShortcutToConfigurator(targetPreset, this.state.configurator.dto);
       const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
-      this.onApplyFilter(params);
+      this.onApplyFilter(params, false);
       this.loadFreshData();
     }
     this.store$.dispatch(new TradeTogglePresetEvent);
@@ -308,7 +308,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public onApplyFilter(params: DefinitionConfiguratorEmitterParams) {
+  public onApplyFilter(params: DefinitionConfiguratorEmitterParams, logEngagement: boolean) {
     this.state.filters.securityFilters = params.filterList;
     this.state.filters.quickFilters.portfolios = [];
     this.state.filters.quickFilters.owner = [];
@@ -322,15 +322,19 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         this.state.filters.quickFilters.strategy = eachFilter.filterBy;
       };
     });
-    // if (this.state.currentContentStage === this.constants.securityTableFinalStage) {
-      this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
-    // }
-    this.restfulCommService.logEngagement(
-      EngagementActionList.applyFilter,
-      'n/a',
-      'n/a',
-      'Trade - Center Panel'
-    );
+    this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
+    if (!!logEngagement) {
+      let filterValue = '';
+      params.filterList.forEach((eachFilter) => {
+        filterValue = `${filterValue} | ${eachFilter.targetAttribute}: ${eachFilter.filterBy.toString()}`; 
+      });
+      this.restfulCommService.logEngagement(
+        EngagementActionList.applyFilter,
+        'n/a',
+        `Filter By : ${filterValue}`,
+        'Trade - Center Panel'
+      );
+    }
   }
 
   public onSelectSecurityForAnalysis(targetSecurity: SecurityDTO) {
