@@ -294,10 +294,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           } else {
             this.fetchUpdate([]);
           }
-          if (tick === 1) {
-            const testAlert = this.state.alert.alertTableAlertList['2f7d73a1-0bfc-4400-a551-e1f6f9c55114'];
-            this.populateTableRowRemovalList([testAlert]);
-          }
         }
       });
     }
@@ -1072,7 +1068,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.state.alert.marketListAxeAlertCount = 0;
       this.state.alert.markAlertCount = 0;
       this.state.alert.tradeAlertCount = 0;
-      this.countAlerts(newAlertList);
+      this.alertCountIncrement(newAlertList);
       newAlertList.forEach((eachAlert) => {
         this.state.alert.alertTableAlertList[eachAlert.data.id] = eachAlert;
       });
@@ -1111,7 +1107,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     private fetchUpdate(newAlertList: Array<AlertDTO>) {
       if (this.state.alert.initialAlertListReceived) {
         if (newAlertList.length > 0) {
-          this.countAlerts(newAlertList);
+          this.alertCountIncrement(newAlertList);
           newAlertList.forEach((eachAlert) => {
             this.state.alert.alertTableAlertList[eachAlert.data.id] = eachAlert;
           });
@@ -1212,7 +1208,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       }
     }
 
-    private countAlerts(alertList: Array<AlertDTO>) {
+    private alertCountIncrement(alertList: Array<AlertDTO>) {
       alertList.forEach((eachAlert) => {
         if (!this.state.alert.alertTableAlertList[eachAlert.data.id]) {
           switch (eachAlert.data.type) {
@@ -1228,6 +1224,30 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
               break;
             case this.constants.alertTypes.tradeAlert:
               this.state.alert.tradeAlertCount++;
+              break;
+            default:
+              break;
+          }
+        }
+      });
+    }
+
+    private alertCountDecrement(removalList: Array<AlertDTO>) {
+      removalList.forEach((eachAlert) => {
+        if (!this.state.alert.alertTableAlertList[eachAlert.data.id]) {
+          switch (eachAlert.data.type) {
+            case this.constants.alertTypes.axeAlert:
+              if (eachAlert.state.isMarketListVariant) {
+                this.state.alert.marketListAxeAlertCount--;
+              } else {
+                this.state.alert.nonMarketListAxeAlertCount--;
+              }
+              break;
+            case this.constants.alertTypes.markAlert:
+              this.state.alert.markAlertCount--;
+              break;
+            case this.constants.alertTypes.tradeAlert:
+              this.state.alert.tradeAlertCount--;
               break;
             default:
               break;
@@ -1277,6 +1297,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
         }
       });
+      this.alertCountDecrement(alertList);
     }
   // table section end
 
