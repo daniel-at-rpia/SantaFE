@@ -196,8 +196,8 @@ export const EngagementActionList = {
   globalAlertInteractedAlert: 'Global Alert Interacted Alert',
   tradeAlertOpenConfiguration: 'Trade Alert Open/Close Configuration',
   tradeAlertConfigure: 'Trade Alert Configure',
-  tradeAlertPause: 'Trade Alert Pause',
-  tradeAlertAddSingleSecurity: 'Trade Alert Add Single Security'
+  tradeAlertAddSingleSecurity: 'Trade Alert Add Single Security',
+  tradeAlertClickedTab: 'Trade Alert Click Tab'
 }
 
 export enum AlertTypes {

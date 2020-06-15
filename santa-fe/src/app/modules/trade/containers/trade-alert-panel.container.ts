@@ -440,6 +440,12 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         } else {
           this.collapseAlertTable && this.collapseAlertTable.emit();
         }
+        this.restfulCommService.logEngagement(
+          EngagementActionList.tradeAlertClickedTab,
+          'n/a',
+          `All Alerts Tab - ${this.state.displayAlertTable ? 'Open' : 'Close'}`,
+          'Trade - Alert Panel'
+        );
       }
     }
 
@@ -469,6 +475,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       isMarketListOnly?: boolean
     ) {
       if (this.state.fetchResult.alertTable.fetchComplete) {
+        const tabName = isMarketListOnly ? 'Inquiry' : targetType;
         if (targetType === this.constants.alertTypes.axeAlert) {
           if (this.state.alert.scopedAlertType !== targetType || this.state.alert.scopedForMarketListOnly !== !!isMarketListOnly) {
             this.state.displayAlertTable = true;
@@ -497,6 +504,12 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         } else {
           this.collapseAlertTable && this.collapseAlertTable.emit();
         }
+        this.restfulCommService.logEngagement(
+          EngagementActionList.tradeAlertClickedTab,
+          'n/a',
+          `${tabName} Tab - ${this.state.displayAlertTable ? 'Open' : 'Close'}`,
+          'Trade - Alert Panel'
+        );
       }
     }
   // overview section end
