@@ -1188,7 +1188,7 @@ export class DTOService {
         titleBottom: parsedTitleList[1] || '',
         message: rawData.message,
         time: momentTime.format(`HH:mm`),
-        titlePin: !!rawData.marketListAlert && rawData.marketListAlert.subType,
+        titlePin: null,
         validUntilTime: null,
         validUntilMoment: null,
         unixTimestamp: momentTime.unix(),
@@ -1293,6 +1293,12 @@ export class DTOService {
               : moment(quoteBlock.validUntilTime);
       }
       alertDTO.data.isMarketListTraded = quoteBlock.isTraded;
+      alertDTO.data.titlePin =
+        !!rawData.marketListAlert
+          ? rawData.marketListAlert.subType
+          : quoteBlock
+            ? quoteBlock.marketListType
+            : null;
     }
   }
 
