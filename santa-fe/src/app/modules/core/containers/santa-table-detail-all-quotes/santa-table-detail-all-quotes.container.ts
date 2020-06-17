@@ -141,6 +141,14 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     this.rowData.state.presentingAllQuotes = true;
   }
 
+  public onClickSwitchViewToHistory() {
+    this.rowData.state.viewHistoryState = true;
+  }
+
+  public onClickSwitchViewToQuote() {
+    this.rowData.state.viewHistoryState = false;
+  }
+
   private updateQuoteUponClick(params: ClickedSpecificQuoteEmitterParams, targetQuoteList: Array<SecurityQuoteDTO>){
     targetQuoteList.forEach((eachQuote) => {
       if (eachQuote.data.uuid === params.targetQuote.data.uuid) {

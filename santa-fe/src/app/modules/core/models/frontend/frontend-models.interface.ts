@@ -372,6 +372,7 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
       }
     }
     alert: AlertDTO;
+    historicalTradeVisualizer: HistoricalTradeVisualizerDTO;
   },
   state: {
     expandViewSortByQuoteMetric: string;
@@ -379,6 +380,7 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
     presentingAllQuotes: boolean;
     isCDSVariant: boolean;
     isCDSOffTheRun: boolean;
+    viewHistoryState: boolean;
   }
 }
 

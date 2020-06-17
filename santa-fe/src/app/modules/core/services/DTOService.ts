@@ -857,14 +857,16 @@ export class DTOService {
             bestYieldQuote: null
           }
         },
-        alert: alert
+        alert: alert,
+        historicalTradeVisualizer: this.formHistoricalTradeObject(securityDTO)
       },
       state: {
         expandViewSortByQuoteMetric: null,
         isExpanded: false,
         presentingAllQuotes: false,
         isCDSVariant: this.utility.isCDS(false, securityDTO),
-        isCDSOffTheRun: false
+        isCDSOffTheRun: false,
+        viewHistoryState: false
       }
     };
     return object;
@@ -1353,11 +1355,11 @@ export class DTOService {
     return object;
   }
 
-  public formHistoricalTradeObject(): DTOs.HistoricalTradeVisualizerDTO {
+  public formHistoricalTradeObject(targetSecurity: DTOs.SecurityDTO): DTOs.HistoricalTradeVisualizerDTO {
     const object: DTOs.HistoricalTradeVisualizerDTO = {
       data: {
-        prinstineTradeList: [],
-        displayTradeList: []
+        prinstineTradeList: targetSecurity.data.tradeHistory || [],
+        displayTradeList: targetSecurity.data.tradeHistory || []
       },
       state: {
         
