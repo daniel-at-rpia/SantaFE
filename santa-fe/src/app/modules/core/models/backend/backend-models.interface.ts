@@ -402,7 +402,10 @@ export interface BEAlertDTO {
 }
 
 export interface BETradeBlock {
-  partitionOptionValue: any;
+  partitionOptionValue: {
+    PortfolioShortName: string;
+    StrategyName: string;
+  };
   tradeId: string;
   parentTradeId: string;
   quantity: number;

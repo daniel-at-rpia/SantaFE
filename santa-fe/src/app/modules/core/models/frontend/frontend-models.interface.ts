@@ -126,6 +126,7 @@ export interface SecurityDTO extends BasicDTOStructure {
       alertTradeTrader: string;
       alertStatus: string;
     }
+    tradeHistory: Array<TradeDTO>;
   }
   api: {
     onClickCard: (card: SecurityDTO) => void;
@@ -557,5 +558,25 @@ export interface SantaTableAlertSideCellDTO extends BasicDTOStructure {
     isStencil: boolean;
     askSided: boolean;
     bidSided: boolean;
+  }
+}
+
+export interface TradeDTO extends BasicDTOStructure {
+  data: {
+    tradeId: string,
+    trader: string,
+    counterPartyName: string,
+    quantity: number,
+    postTradeSumQuantity: number,
+    tradeDateTime: string,
+    price: number,
+    spread: number,
+    wgtAvgSpread: number,
+    wgtAvgPrice: number,
+    vestedPortfolio: string,
+    vestedStrategy: string
+  },
+  state: {
+    isCancelled: boolean
   }
 }

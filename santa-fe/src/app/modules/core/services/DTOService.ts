@@ -3,18 +3,7 @@
     import { any } from '@amcharts/amcharts4/.internal/core/utils/Array';
     import * as moment from 'moment';
 
-    import {
-      BESecurityDTO,
-      BESecurityGroupDTO,
-      BEBestQuoteDTO,
-      BEQuoteDTO,
-      BEPortfolioDTO,
-      BEHistoricalQuantBlock,
-      BEHistoricalSummaryDTO,
-      BESingleBestQuoteDTO,
-      BEAlertDTO,
-      BEAlertMarketListQuoteBlock
-    } from 'BEModels/backend-models.interface';
+    import * as BEModels from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
     import * as Blocks from 'FEModels/frontend-blocks.interface';
     import {
@@ -57,7 +46,7 @@ export class DTOService {
 
   public formSecurityCardObject(
     securityIdFull: string,
-    rawData: BESecurityDTO,
+    rawData: BEModels.BESecurityDTO,
     isStencil: boolean,
     isSlimVariant: boolean,
     currentSelectedMetric?: string
@@ -199,7 +188,8 @@ export class DTOService {
           alertQuoteDealer: null,
           alertTradeTrader: null,
           alertStatus: null
-        }
+        },
+        tradeHistory: []
       },
       api: {
         onClickCard: null,
@@ -251,7 +241,7 @@ export class DTOService {
 
   public appendPortfolioInfoToSecurityDTO(
     dto: DTOs.SecurityDTO,
-    targetPortfolio: BEPortfolioDTO
+    targetPortfolio: BEModels.BEPortfolioDTO
   ) {
     const lastTrade = !!targetPortfolio.trades && targetPortfolio.trades.length > 0 ? targetPortfolio.trades[targetPortfolio.trades.length-1] : null;
     const newBlock: Blocks.SecurityPortfolioBlock = {
@@ -301,6 +291,9 @@ export class DTOService {
       }
     };
     dto.data.cost[newBlock.portfolioName] = newCostPortfolioBlock;
+    targetPortfolio.trades.forEach((eachRawTrade) => {
+      dto.data.tradeHistory.push(this.formTradeObject(eachRawTrade));
+    });
   }
 
   public appendPortfolioOverviewInfoForSecurityDTO(
@@ -386,7 +379,7 @@ export class DTOService {
   }
 
   public formSecurityGroupObject(
-    rawData: BESecurityGroupDTO
+    rawData: BEModels.BESecurityGroupDTO
   ): DTOs.SecurityGroupDTO {
     const object:DTOs.SecurityGroupDTO = {
       data: {
@@ -598,7 +591,7 @@ export class DTOService {
   public formQuantComparerObject(
     isStencil: boolean,
     quantMetricType: string,
-    BEdto: BEBestQuoteDTO,
+    BEdto: BEModels.BEBestQuoteDTO,
     securityCard: DTOs.SecurityDTO,
     axeOnly: boolean
   ): DTOs.QuantComparerDTO {
@@ -663,7 +656,7 @@ export class DTOService {
   }
 
   private populateQuantCompareObject(
-    rawData: BESingleBestQuoteDTO,
+    rawData: BEModels.BESingleBestQuoteDTO,
     driverType: string,
     securityCard: DTOs.SecurityDTO,
     axeOnly: boolean
@@ -933,7 +926,7 @@ export class DTOService {
 
   public formSecurityQuoteObject(
     isStencil: boolean,
-    rawData: BEQuoteDTO,
+    rawData: BEModels.BEQuoteDTO,
     targetSecurity: DTOs.SecurityDTO,
     targetRow: DTOs.SecurityTableRowDTO
   ): DTOs.SecurityQuoteDTO {
@@ -1064,7 +1057,7 @@ export class DTOService {
 
   public formMoveVisualizerObject(
     isStencil: boolean,
-    rawData: BEHistoricalQuantBlock,
+    rawData: BEModels.BEHistoricalQuantBlock,
     colorCodeInversed: boolean,
     identifier?: string
   ): DTOs.MoveVisualizerDTO {
@@ -1124,7 +1117,7 @@ export class DTOService {
 
   public formHistoricalSummaryObject(
     isStencil: boolean,
-    rawData: BEHistoricalSummaryDTO,
+    rawData: BEModels.BEHistoricalSummaryDTO,
     isLevel: boolean,
     isColorCodeInversed: boolean
   ): DTOs.HistoricalSummaryDTO {
@@ -1174,7 +1167,7 @@ export class DTOService {
   }
 
   public formAlertObject(
-    rawData: BEAlertDTO
+    rawData: BEModels.BEAlertDTO
   ): DTOs.AlertDTO {
     const parsedTitleList = rawData.keyWord.split('|');
     const momentTime = moment(rawData.timeStamp);
@@ -1224,7 +1217,7 @@ export class DTOService {
 
   private appendAlertDetailInfo(
     alertDTO: DTOs.AlertDTO,
-    rawData: BEAlertDTO
+    rawData: BEModels.BEAlertDTO
   ) {
     if (!!rawData.security) {
       alertDTO.data.security = this.formSecurityCardObject(
@@ -1282,7 +1275,7 @@ export class DTOService {
       }
     }
     if (alertDTO.state.isMarketListVariant) {
-      const quoteBlock = rawData.quote as BEAlertMarketListQuoteBlock;
+      const quoteBlock = rawData.quote as BEModels.BEAlertMarketListQuoteBlock;
       if (!!quoteBlock) {
         alertDTO.data.validUntilTime = quoteBlock.validUntilTime;
         alertDTO.data.validUntilMoment = 
@@ -1332,6 +1325,29 @@ export class DTOService {
         isAxe: type === AlertTypes.axeAlert,
         isMark: type === AlertTypes.markAlert,
         isTrade: type === AlertTypes.tradeAlert
+      }
+    }
+    return object;
+  }
+
+  public formTradeObject(rawData: BEModels.BETradeBlock): DTOs.TradeDTO {
+    const object: DTOs.TradeDTO = {
+      data: {
+        tradeId: rawData.tradeId,
+        trader: rawData.trader,
+        counterPartyName: rawData.counterpartyName,
+        quantity: rawData.quantity,
+        postTradeSumQuantity: rawData.securityQuantityAfterTrade,
+        tradeDateTime: rawData.tradeDateTime,
+        price: rawData.price,
+        spread: rawData.spread,
+        wgtAvgPrice: rawData.price,
+        wgtAvgSpread: rawData.spread,
+        vestedPortfolio: rawData.partitionOptionValue.PortfolioShortName,
+        vestedStrategy: rawData.partitionOptionValue.StrategyName
+      },
+      state: {
+        isCancelled: rawData.isCancelled
       }
     }
     return object;
