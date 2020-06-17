@@ -1352,4 +1352,17 @@ export class DTOService {
     }
     return object;
   }
+
+  public formHistoricalTradeObject(): DTOs.HistoricalTradeVisualizerDTO {
+    const object: DTOs.HistoricalTradeVisualizerDTO = {
+      data: {
+        prinstineTradeList: [],
+        displayTradeList: []
+      },
+      state: {
+        
+      }
+    };
+    return object;
+  }
 }

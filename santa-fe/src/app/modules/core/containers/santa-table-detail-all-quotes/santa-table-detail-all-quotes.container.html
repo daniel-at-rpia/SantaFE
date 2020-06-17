@@ -5,6 +5,9 @@
     'santaTableDetailAllQuotes--securityIsCDSState': rowData.state.isCDSVariant,
     'santaTableDetailAllQuotes--securityIsOffTheRunCDSState': rowData.state.isCDSVariant && rowData.state.isCDSOffTheRun
   }">
+  <section class="santaTableDetailAllQuotes__history">
+    <historical-trade-visualizer></historical-trade-visualizer>
+  </section>
   <section (click)="onClickClose()" class="santaTableDetailAllQuotes__backgroundCTA"></section>
   <section class="santaTableDetailAllQuotes__main">
     <div class="santaTableDetailAllQuotes__main-content">

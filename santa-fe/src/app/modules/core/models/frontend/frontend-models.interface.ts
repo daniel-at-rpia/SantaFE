@@ -575,8 +575,18 @@ export interface TradeDTO extends BasicDTOStructure {
     wgtAvgPrice: number,
     vestedPortfolio: string,
     vestedStrategy: string
-  },
+  }
   state: {
     isCancelled: boolean
+  }
+}
+
+export interface HistoricalTradeVisualizerDTO extends BasicDTOStructure {
+  data: {
+    prinstineTradeList: Array<TradeDTO>;
+    displayTradeList: Array<TradeDTO>;
+  }
+  state: {
+    
   }
 }
