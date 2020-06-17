@@ -921,7 +921,7 @@ export class UtilityService {
       const quantCell = targetRow.data.cells.find((eachCell) => {
         return eachCell.state.isQuantVariant && !eachCell.state.quantComparerUnavail
       });
-      if (quantCell) {
+      if (quantCell && quantCell.data.quantComparerDTO) {
         const {axe, combined} = targetRow.data.bestQuotes;
         const filteredMetricType = quantCell.data.quantComparerDTO.data.driverType;
         const bestAxeBidNum = this.triCoreDriverConfig[filteredMetricType] ? axe[this.triCoreDriverConfig[filteredMetricType].backendTargetQuoteAttr].data.bid.number : null;
