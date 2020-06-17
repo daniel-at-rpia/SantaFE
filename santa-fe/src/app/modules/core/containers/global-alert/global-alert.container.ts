@@ -1,8 +1,8 @@
 // dependencies
-    import {Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-    import {interval, Observable, of, Subscription} from 'rxjs';
-    import {catchError, filter, first, tap} from 'rxjs/operators';
-    import {select, Store} from '@ngrx/store';
+    import { Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+    import { interval, Observable, of, Subscription } from 'rxjs';
+    import { catchError, filter, first, tap } from 'rxjs/operators';
+    import { select, Store } from '@ngrx/store';
 
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
@@ -23,7 +23,7 @@
     } from 'Core/actions/core.actions';
     import {selectAlertCounts, selectNewAlerts} from 'Core/selectors/core.selectors';
     import { CoreReceivedNewAlerts } from 'Core/actions/core.actions';
-    import {favAlertBase64, favLogoBase64} from "../../../../../assets/icons";
+    import { favAlertBase64, favLogoBase64 } from "src/assets/icons";
 
 //
 
