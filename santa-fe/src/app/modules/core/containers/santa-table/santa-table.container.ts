@@ -234,7 +234,7 @@ export class SantaTable implements OnInit, OnChanges {
               try {
                 targetRow.state.isExpanded = !targetRow.state.isExpanded;
                 if (targetRow.data.security) {
-                  targetRow.data.security.state.isMultiLineVariant = params.node.expanded;
+                  // targetRow.data.security.state.isMultiLineVariant = params.node.expanded;
                   if (targetRow.state.isExpanded) {
                     this.fetchSecurityQuotes(targetRow, params);
                   } else {
@@ -275,9 +275,9 @@ export class SantaTable implements OnInit, OnChanges {
   public onRowClickedToCollapse(targetRow: SecurityTableRowDTO) {
     try {
       targetRow.state.isExpanded = false;
-      if (targetRow.data.security) {
-        targetRow.data.security.state.isMultiLineVariant = false;
-      }
+      // if (targetRow.data.security) {
+        // targetRow.data.security.state.isMultiLineVariant = false;
+      // }
     } catch {
       console.warn('read only issue', targetRow);
       // ignore, seems AgGrid causes some weird read only error
