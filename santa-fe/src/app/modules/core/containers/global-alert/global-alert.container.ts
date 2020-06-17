@@ -340,7 +340,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       ).subscribe();
       if (isFromPresent) {
         const indexOfTarget = this.state.presentList.findIndex((eachAlert) => {
-          return eachAlert.data.id = targetAlert.data.id;
+          return eachAlert.data.id === targetAlert.data.id;
         });
         if (indexOfTarget >= 0) {
           this.state.presentList.splice(indexOfTarget, 1);
@@ -355,7 +355,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         this.updateTotalSize();
       } else {
         const indexOfTarget = this.state.storeList.findIndex((eachAlert) => {
-          return eachAlert.data.id = targetAlert.data.id;
+          return eachAlert.data.id === targetAlert.data.id;
         });
         if (indexOfTarget >= 0) {
           this.state.storeList.splice(indexOfTarget, 1);
