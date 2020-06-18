@@ -1,24 +1,7 @@
   // dependencies
-    import {
-      Component,
-      OnInit,
-      OnChanges,
-      ViewEncapsulation,
-      Input,
-      Output,
-      EventEmitter
-    } from '@angular/core';
-    import {
-      Observable,
-      Subscription,
-      of
-    } from 'rxjs';
-    import {
-      tap,
-      first,
-      delay,
-      catchError
-    } from 'rxjs/operators';
+    import { Component, OnInit, OnChanges, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
+    import { Observable, Subscription, of } from 'rxjs';
+    import { tap, first, delay, catchError } from 'rxjs/operators';
 
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';

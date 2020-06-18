@@ -181,6 +181,7 @@ export const EngagementActionList = {
   selectPreset: 'Select Preset',
   switchDriver: 'Switch Driver',
   applyFilter: 'Apply Filter',
+  applyKeywordSearch: 'Apply Keyword Search',
   selectSecurityForAnalysis: 'Select Security For Analysis',
   bloombergRedict: 'Bloomberg Redirect',
   clickGroupByOption: 'Click Group By Option',
@@ -196,8 +197,8 @@ export const EngagementActionList = {
   globalAlertInteractedAlert: 'Global Alert Interacted Alert',
   tradeAlertOpenConfiguration: 'Trade Alert Open/Close Configuration',
   tradeAlertConfigure: 'Trade Alert Configure',
-  tradeAlertPause: 'Trade Alert Pause',
-  tradeAlertAddSingleSecurity: 'Trade Alert Add Single Security'
+  tradeAlertAddSingleSecurity: 'Trade Alert Add Single Security',
+  tradeAlertClickedTab: 'Trade Alert Click Tab'
 }
 
 export enum AlertTypes {

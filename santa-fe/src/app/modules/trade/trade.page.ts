@@ -1,10 +1,5 @@
   // dependencies
-    import {
-      Component,
-      ViewEncapsulation,
-      OnInit,
-      OnDestroy
-    } from '@angular/core';
+    import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
     import {
       Observable,
       Subscription,

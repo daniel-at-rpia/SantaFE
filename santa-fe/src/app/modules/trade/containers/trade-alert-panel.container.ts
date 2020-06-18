@@ -1,18 +1,8 @@
   // dependencies
-    import {
-      Component,
-      EventEmitter,
-      Input,
-      isDevMode,
-      OnChanges,
-      OnDestroy,
-      OnInit,
-      Output,
-      ViewEncapsulation
-    } from '@angular/core';
-    import {select, Store} from '@ngrx/store';
-    import {interval, Observable, of, Subscription} from 'rxjs';
-    import {catchError, first, tap, withLatestFrom} from 'rxjs/operators';
+    import { Component, EventEmitter, Input, isDevMode, OnChanges, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
+    import { select, Store } from '@ngrx/store';
+    import { interval, Observable, of, Subscription, Subject } from 'rxjs';
+    import { catchError, first, tap, withLatestFrom, debounceTime, distinctUntilChanged } from 'rxjs/operators';
     import * as moment from 'moment';
 
     import { DTOService } from 'Core/services/DTOService';
@@ -111,8 +101,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     // selectedSecurityForAlertConfigSub: null,
     centerPanelPresetSelectedSub: null,
     alertCountSub: null,
-    startNewUpdateSub: null
+    startNewUpdateSub: null,
+    keywordSearchSub: null
   }
+  keywordChanged$: Subject<string> = new Subject<string>();
   autoUpdateCount$: Observable<any>;
   constants = {
     // alertTypes: AlertTypes,
@@ -197,7 +189,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             fetchComplete: false,
             rowList: [],
             prinstineRowList: [],
-            liveUpdatedRowList: []
+            liveUpdatedRowList: [],
+            removalRowList: []
           }
         },
         filters: {
@@ -295,6 +288,26 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           }
         }
       });
+
+      this.subscriptions.keywordSearchSub = this.keywordChanged$.pipe(
+        debounceTime(250),
+        distinctUntilChanged()
+      ).subscribe((keyword) => {
+        const targetTable = this.state.fetchResult.alertTable;
+        if (!!keyword && keyword.length >= 2 && keyword != this.state.filters.quickFilters.keyword) {
+          this.state.filters.quickFilters.keyword = keyword;
+          targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
+          this.restfulCommService.logEngagement(
+            EngagementActionList.applyKeywordSearch,
+            'n/a',
+            keyword,
+            'Trade - Alert Panel'
+          );
+        } else if ((!keyword || keyword.length < 2) && !!this.state.filters.quickFilters.keyword && this.state.filters.quickFilters.keyword.length >= 2) {
+          this.state.filters.quickFilters.keyword = keyword;
+          targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
+        }
+      });
     }
 
     public ngOnChanges() {
@@ -327,6 +340,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           }) : [];
           const updateList: Array<AlertDTO> = [];
           const alertTableList: Array<AlertDTO> = [];
+          const alertTableRemovalList: Array<AlertDTO> = [];  // currently the only alerts that needs to be removed are the cancelled trade alerts
           filteredServerReturn.forEach((eachRawAlert) => {
             // Trade alerts are handled differently since BE passes the same trade alerts regardless of the timestamp FE provides
             if (!!eachRawAlert.marketListAlert) {
@@ -356,7 +370,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
                   alertTableList.push(newAlert);
                   updateList.push(newAlert);
                 } else if (newAlert.data.type === this.constants.alertTypes.tradeAlert) {
-                  
+                  alertTableRemovalList.push(newAlert);
                 }
               } else {
                 if (!newAlert.state.isRead && newAlert.data.isUrgent) {
@@ -369,6 +383,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             }
           });
           updateList.length > 0 && this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
+          if (alertTableRemovalList.length > 0) {
+            console.log('remove alerts', alertTableRemovalList);
+            this.populateTableRowRemovalList(alertTableRemovalList);
+          }
           if (alertTableList.length > 0) {
             if (this.state.alert.initialAlertListReceived) {
               this.fetchUpdate(alertTableList);
@@ -434,6 +452,12 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         } else {
           this.collapseAlertTable && this.collapseAlertTable.emit();
         }
+        this.restfulCommService.logEngagement(
+          EngagementActionList.tradeAlertClickedTab,
+          'n/a',
+          `All Alerts Tab - ${this.state.displayAlertTable ? 'Open' : 'Close'}`,
+          'Trade - Alert Panel'
+        );
       }
     }
 
@@ -463,6 +487,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       isMarketListOnly?: boolean
     ) {
       if (this.state.fetchResult.alertTable.fetchComplete) {
+        const tabName = isMarketListOnly ? 'Inquiry' : targetType;
         if (targetType === this.constants.alertTypes.axeAlert) {
           if (this.state.alert.scopedAlertType !== targetType || this.state.alert.scopedForMarketListOnly !== !!isMarketListOnly) {
             this.state.displayAlertTable = true;
@@ -491,6 +516,12 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         } else {
           this.collapseAlertTable && this.collapseAlertTable.emit();
         }
+        this.restfulCommService.logEngagement(
+          EngagementActionList.tradeAlertClickedTab,
+          'n/a',
+          `${tabName} Tab - ${this.state.displayAlertTable ? 'Open' : 'Close'}`,
+          'Trade - Alert Panel'
+        );
       }
     }
   // overview section end
@@ -970,14 +1001,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
   // table section
     public onTableSearchKeywordChange(newKeyword: string) {
-      const targetTable = this.state.fetchResult.alertTable;
-      if (!!newKeyword && newKeyword.length >= 2 && newKeyword != this.state.filters.quickFilters.keyword) {
-        this.state.filters.quickFilters.keyword = newKeyword;
-        targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
-      } else if ((!newKeyword || newKeyword.length < 2) && !!this.state.filters.quickFilters.keyword && this.state.filters.quickFilters.keyword.length >= 2) {
-        this.state.filters.quickFilters.keyword = newKeyword;
-        targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
-      }
+      this.keywordChanged$.next(newKeyword);
     }
 
     public onSelectSecurityForAnalysis(targetSecurity: SecurityDTO) {
@@ -1062,7 +1086,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.state.alert.marketListAxeAlertCount = 0;
       this.state.alert.markAlertCount = 0;
       this.state.alert.tradeAlertCount = 0;
-      this.countAlerts(newAlertList);
+      this.alertCountIncrement(newAlertList);
       newAlertList.forEach((eachAlert) => {
         this.state.alert.alertTableAlertList[eachAlert.data.id] = eachAlert;
       });
@@ -1101,7 +1125,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     private fetchUpdate(newAlertList: Array<AlertDTO>) {
       if (this.state.alert.initialAlertListReceived) {
         if (newAlertList.length > 0) {
-          this.countAlerts(newAlertList);
+          this.alertCountIncrement(newAlertList);
           newAlertList.forEach((eachAlert) => {
             this.state.alert.alertTableAlertList[eachAlert.data.id] = eachAlert;
           });
@@ -1167,8 +1191,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         null
       );
       this.calculateQuantComparerWidthAndHeight();
-      this.updateStage(this.constants.securityTableFinalStage, this.state.fetchResult.alertTable, this.state.table.alertDto);
       this.state.fetchResult.alertTable.fetchComplete = true;
+      this.updateStage(this.constants.securityTableFinalStage, this.state.fetchResult.alertTable, this.state.table.alertDto);
       if (!this.state.alert.initialAlertListReceived) {
         this.state.alert.initialAlertListReceived = true;
       }
@@ -1202,7 +1226,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       }
     }
 
-    private countAlerts(alertList: Array<AlertDTO>) {
+    private alertCountIncrement(alertList: Array<AlertDTO>) {
       alertList.forEach((eachAlert) => {
         if (!this.state.alert.alertTableAlertList[eachAlert.data.id]) {
           switch (eachAlert.data.type) {
@@ -1218,6 +1242,30 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
               break;
             case this.constants.alertTypes.tradeAlert:
               this.state.alert.tradeAlertCount++;
+              break;
+            default:
+              break;
+          }
+        }
+      });
+    }
+
+    private alertCountDecrement(removalList: Array<AlertDTO>) {
+      removalList.forEach((eachAlert) => {
+        if (!this.state.alert.alertTableAlertList[eachAlert.data.id]) {
+          switch (eachAlert.data.type) {
+            case this.constants.alertTypes.axeAlert:
+              if (eachAlert.state.isMarketListVariant) {
+                this.state.alert.marketListAxeAlertCount--;
+              } else {
+                this.state.alert.nonMarketListAxeAlertCount--;
+              }
+              break;
+            case this.constants.alertTypes.markAlert:
+              this.state.alert.markAlertCount--;
+              break;
+            case this.constants.alertTypes.tradeAlert:
+              this.state.alert.tradeAlertCount--;
               break;
             default:
               break;
@@ -1246,6 +1294,28 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           this.state.alert.recentUpdatedAlertList
         ).newRowList;
       }
+    }
+
+    private populateTableRowRemovalList(alertList: Array<AlertDTO>) {
+      // find the corresponding row basd on the alert, since the rowIds are the alertIds in alert table
+      this.state.fetchResult.alertTable.removalRowList = [];
+      alertList.forEach((eachAlert) => {
+        const targetRow = this.state.fetchResult.alertTable.prinstineRowList.find((eachRow) => {
+          return eachRow.data.rowId === eachAlert.data.id;
+        });
+        if (!!targetRow) {
+          !this.state.fetchResult.alertTable.removalRowList.includes(targetRow.data.rowId) && this.state.fetchResult.alertTable.removalRowList.push(targetRow.data.rowId);
+          if (!!this.state.alert.alertTableAlertList[eachAlert.data.id]) {
+            delete this.state.alert.alertTableAlertList[eachAlert.data.id];
+          }
+          const targetIndex = this.state.fetchResult.alertTable.prinstineRowList.findIndex((eachRow) => {
+            return eachRow.data.rowId === eachAlert.data.id;
+          });
+          this.state.fetchResult.alertTable.prinstineRowList.splice(targetIndex, 1);
+          this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
+        }
+      });
+      this.alertCountDecrement(alertList);
     }
   // table section end
 

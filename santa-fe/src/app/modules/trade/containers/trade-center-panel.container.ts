@@ -1,8 +1,8 @@
   // dependencies
-    import {Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-    import {of, Subscription} from 'rxjs';
-    import {catchError, first, tap, withLatestFrom} from 'rxjs/operators';
-    import {select, Store} from '@ngrx/store';
+    import { Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+    import { of, Subscription, Subject } from 'rxjs';
+    import { catchError, first, tap, withLatestFrom, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+    import { select, Store } from '@ngrx/store';
 
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
@@ -84,8 +84,10 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     securityIDListFromAnalysisSub: null,
     validWindowSub: null,
     newAlertsForAlertTableSub: null,
-    alertCountSub: null
+    alertCountSub: null,
+    keywordSearchSub: null
   };
+  keywordChanged$: Subject<string> = new Subject<string>();
   constants = {
     defaultMetricIdentifier: DEFAULT_DRIVER_IDENTIFIER,
     portfolioShortcuts: PortfolioShortcuts,
@@ -130,7 +132,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
           fetchComplete: false,
           rowList: [],
           prinstineRowList: [],
-          liveUpdatedRowList: []
+          liveUpdatedRowList: [],
+          removalRowList: []
         }
       },
       filters: {
@@ -185,6 +188,26 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     ).subscribe((window) => {
       this.state.bestQuoteValidWindow = window;
     });
+
+    this.subscriptions.keywordSearchSub = this.keywordChanged$.pipe(
+      debounceTime(250),
+      distinctUntilChanged()
+    ).subscribe((keyword) => {
+      const targetTable = this.state.fetchResult.mainTable;
+      if (!!keyword && keyword.length >= 2) {
+        this.state.filters.quickFilters.keyword = keyword;
+        targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
+        this.restfulCommService.logEngagement(
+          EngagementActionList.applyKeywordSearch,
+          'n/a',
+          keyword,
+          'Trade - Center Panel'
+        );
+      } else if (!keyword || keyword.length < 2) {
+        this.state.filters.quickFilters.keyword = keyword;
+        targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
+      }
+    });
   }
 
   public ngOnChanges() {
@@ -234,7 +257,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       this.state.presets.selectedPreset = targetPreset;
       this.state.configurator.dto = this.utilityService.applyShortcutToConfigurator(targetPreset, this.state.configurator.dto);
       const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
-      this.onApplyFilter(params);
+      this.onApplyFilter(params, false);
       this.loadFreshData();
     }
     this.store$.dispatch(new TradeTogglePresetEvent);
@@ -285,7 +308,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public onApplyFilter(params: DefinitionConfiguratorEmitterParams) {
+  public onApplyFilter(params: DefinitionConfiguratorEmitterParams, logEngagement: boolean) {
     this.state.filters.securityFilters = params.filterList;
     this.state.filters.quickFilters.portfolios = [];
     this.state.filters.quickFilters.owner = [];
@@ -299,15 +322,19 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         this.state.filters.quickFilters.strategy = eachFilter.filterBy;
       };
     });
-    // if (this.state.currentContentStage === this.constants.securityTableFinalStage) {
-      this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
-    // }
-    this.restfulCommService.logEngagement(
-      EngagementActionList.applyFilter,
-      'n/a',
-      'n/a',
-      'Trade - Center Panel'
-    );
+    this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
+    if (!!logEngagement) {
+      let filterValue = '';
+      params.filterList.forEach((eachFilter) => {
+        filterValue = `${filterValue} | ${eachFilter.targetAttribute}: ${eachFilter.filterBy.toString()}`; 
+      });
+      this.restfulCommService.logEngagement(
+        EngagementActionList.applyFilter,
+        'n/a',
+        `Filter By : ${filterValue}`,
+        'Trade - Center Panel'
+      );
+    }
   }
 
   public onSelectSecurityForAnalysis(targetSecurity: SecurityDTO) {
@@ -350,14 +377,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   public onSearchKeywordChange(newKeyword: string) {
-    const targetTable = this.state.fetchResult.mainTable;
-    if (!!newKeyword && newKeyword.length >= 2 && newKeyword != this.state.filters.quickFilters.keyword) {
-      this.state.filters.quickFilters.keyword = newKeyword;
-      targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
-    } else if ((!newKeyword || newKeyword.length < 2) && !!this.state.filters.quickFilters.keyword && this.state.filters.quickFilters.keyword.length >= 2) {
-      this.state.filters.quickFilters.keyword = newKeyword;
-      targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
-    }
+    this.keywordChanged$.next(newKeyword);
   }
 
   private populateSearchShortcuts() {

@@ -1,23 +1,7 @@
   // dependencies
-    import {
-      Component,
-      ViewEncapsulation,
-      OnInit,
-      OnDestroy,
-      Input
-    } from '@angular/core';
-    import {
-      Observable,
-      Subscription,
-      interval,
-      of
-    } from 'rxjs';
-    import {
-      tap,
-      first,
-      withLatestFrom,
-      switchMap
-    } from 'rxjs/operators';
+    import { Component, ViewEncapsulation, OnInit, OnDestroy, Input } from '@angular/core';
+    import { Observable, Subscription, interval, of } from 'rxjs';
+    import { tap, first, withLatestFrom, switchMap } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
 
     import { TradeState } from 'Trade/reducers/trade.reducer';

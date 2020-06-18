@@ -1,8 +1,8 @@
 // dependencies
-    import {Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-    import {interval, Observable, of, Subscription} from 'rxjs';
-    import {catchError, filter, first, tap} from 'rxjs/operators';
-    import {select, Store} from '@ngrx/store';
+    import { Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+    import { interval, Observable, of, Subscription } from 'rxjs';
+    import { catchError, filter, first, tap } from 'rxjs/operators';
+    import { select, Store } from '@ngrx/store';
 
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
@@ -23,7 +23,7 @@
     } from 'Core/actions/core.actions';
     import {selectAlertCounts, selectNewAlerts} from 'Core/selectors/core.selectors';
     import { CoreReceivedNewAlerts } from 'Core/actions/core.actions';
-    import {favAlertBase64, favLogoBase64} from "../../../../../assets/icons";
+    import { favAlertBase64, favLogoBase64 } from "src/assets/icons";
 
 //
 
@@ -339,7 +339,9 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         })
       ).subscribe();
       if (isFromPresent) {
-        const indexOfTarget = this.state.presentList.indexOf(targetAlert);
+        const indexOfTarget = this.state.presentList.findIndex((eachAlert) => {
+          return eachAlert.data.id === targetAlert.data.id;
+        });
         if (indexOfTarget >= 0) {
           this.state.presentList.splice(indexOfTarget, 1);
           if (this.state.storeList.length > 0) {
@@ -352,7 +354,9 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         }
         this.updateTotalSize();
       } else {
-        const indexOfTarget = this.state.storeList.indexOf(targetAlert);
+        const indexOfTarget = this.state.storeList.findIndex((eachAlert) => {
+          return eachAlert.data.id === targetAlert.data.id;
+        });
         if (indexOfTarget >= 0) {
           this.state.storeList.splice(indexOfTarget, 1);
         } else {

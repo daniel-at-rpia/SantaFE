@@ -252,4 +252,5 @@ export interface TableFetchResultBlock {
   rowList: Array<DTOs.SecurityTableRowDTO>;
   prinstineRowList: Array<DTOs.SecurityTableRowDTO>;
   liveUpdatedRowList: Array<DTOs.SecurityTableRowDTO>;
+  removalRowList: Array<string>;  // rowIds of the rows that need to be removed, since data within the row may be updated, therefore only use the rowId instead of the DTO
 }
