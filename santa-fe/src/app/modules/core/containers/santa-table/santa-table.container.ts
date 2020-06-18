@@ -52,7 +52,7 @@ export class SantaTable implements OnInit, OnChanges {
   @Input() tableData: SecurityTableDTO;
   @Input() newRows: Array<SecurityTableRowDTO>;
   @Input() receivedContentStage: number;
-  private securityTableMetrics: Array<SecurityTableMetricStub>;
+  public securityTableMetrics: Array<SecurityTableMetricStub>;
   @Input() receivedSecurityTableMetricsUpdate: Array<SecurityTableMetricStub>;
   private securityTableMetricsCache: Array<SecurityTableMetricStub>;// use this only for detecting diff
   @Input() liveUpdatedRows: Array<SecurityTableRowDTO>;
