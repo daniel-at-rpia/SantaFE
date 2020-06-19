@@ -1502,7 +1502,9 @@ export const TradeHistoryHeaderConfigList: Array<TradeHistoryHeaderConfigStub> =
     headerKey: 'quantity',
     headerDisplayLabel: 'Quantity',
     attrName: 'quantity',
-    size: 5
+    size: 6,
+    applyQuantColorCodes: true,
+    underlineAttrName: 'rawQuantity'
   },{
     headerKey: 'spread',
     headerDisplayLabel: 'Spread',

@@ -89,7 +89,16 @@ button {
           line-height: $line_height_default;
           &-text {
             @include mix_text_overflow_multi_line(2);
+            @include mix_border_radius(3px);
             color: $font_color_inverse;
+            &--positive {
+              padding: $spacing_xx_small $spacing_small;
+              background-color: $color_ask;
+            }
+            &--negative {
+              padding: $spacing_xx_small $spacing_small;
+              background-color: $color_bid;
+            }
           }
           &:first-of-type {
             border-left-width: 0;

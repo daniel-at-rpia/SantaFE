@@ -1343,6 +1343,7 @@ export class DTOService {
         trader: rawData.trader,
         counterPartyName: rawData.counterpartyName,
         quantity: this.utility.parseNumberToThousands(rawData.quantity, true),
+        rawQuantity: rawData.quantity,
         postTradeSumQuantity: this.utility.parseNumberToThousands(rawData.quantityAfterTrade, true),
         tradeDateTime: moment(rawData.tradeDateTime).unix(),
         tradeDateTimeParsed: moment(rawData.tradeDateTime).format(`MMM DD - HH:mm`),

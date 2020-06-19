@@ -36,7 +36,14 @@
           [ngStyle]="{
             'width': eachHeader.size ? eachHeader.size + 'rem' : '4rem' 
           }">
-          <span class="sat-historicalTradeVisualizer__tableContent-rowList-row-cell-text">{{eachTrade.data[eachHeader.attrName]}}</span>
+          <span
+            [ngClass]="{
+              'sat-historicalTradeVisualizer__tableContent-rowList-row-cell-text': true,
+              'sat-historicalTradeVisualizer__tableContent-rowList-row-cell-text--positive': eachHeader.applyQuantColorCodes && eachTrade.data[eachHeader.underlineAttrName] > 0,
+              'sat-historicalTradeVisualizer__tableContent-rowList-row-cell-text--negative': eachHeader.applyQuantColorCodes && eachTrade.data[eachHeader.underlineAttrName] < 0
+            }">
+            {{eachTrade.data[eachHeader.attrName]}}
+          </span>
         </div>
       </li>
     </ul>

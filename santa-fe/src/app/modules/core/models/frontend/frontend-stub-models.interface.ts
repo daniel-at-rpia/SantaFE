@@ -130,5 +130,7 @@ export interface TradeHistoryHeaderConfigStub {
   headerKey: string;
   headerDisplayLabel: string;
   attrName: string;
+  underlineAttrName?: string;
   size?: number;
+  applyQuantColorCodes?: boolean;
 }
