@@ -590,6 +590,7 @@ export interface HistoricalTradeVisualizerDTO extends BasicDTOStructure {
     displayTradeList: Array<TradeDTO>;
   }
   state: {
-    
+    disabledPortfolio: Array<string>;
+    selectedPortfolio: Array<string>;
   }
 }

@@ -2,6 +2,19 @@
   [ngClass]="{
     'sat-historicalTradeVisualizer': true 
   }">
+  <section class="sat-historicalTradeVisualizer__tableUtility">
+    <span class="sat-historicalTradeVisualizer__tableUtility-label">Show Trades From: </span>
+    <button
+      *ngFor="let eachPortfolio of constants.portfolioList"
+      (click)="onTogglePortfolio(eachPortfolio)"
+      [ngClass]="{
+        'sat-historicalTradeVisualizer__tableUtility-btn': true,
+        'sat-historicalTradeVisualizer__tableUtility-btn--selected': historyData.state.selectedPortfolio.indexOf(eachPortfolio) >= 0,
+        'sat-historicalTradeVisualizer__tableUtility-btn--disabled': historyData.state.disabledPortfolio.indexOf(eachPortfolio) >= 0
+      }">
+      {{eachPortfolio}}
+    </button>
+  </section>
   <section class="sat-historicalTradeVisualizer__tableHeader">
     <ul class="sat-historicalTradeVisualizer__tableHeader-list">
       <li

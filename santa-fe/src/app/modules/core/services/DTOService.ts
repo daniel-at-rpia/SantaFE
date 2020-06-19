@@ -31,7 +31,8 @@
       GroupMetricOptions
     } from 'Core/constants/marketConstants.constant';
     import {
-      ConfiguratorDefinitionLayout
+      ConfiguratorDefinitionLayout,
+      FilterOptionsPortfolioList
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       QuoteHeaderConfigList
@@ -1363,12 +1364,26 @@ export class DTOService {
     const object: DTOs.HistoricalTradeVisualizerDTO = {
       data: {
         prinstineTradeList: targetSecurity.data.tradeHistory || [],
-        displayTradeList: targetSecurity.data.tradeHistory || []
+        displayTradeList: []
       },
       state: {
-        
+        disabledPortfolio: this.utility.deepCopy(FilterOptionsPortfolioList),
+        selectedPortfolio: []
       }
     };
+    object.data.prinstineTradeList.forEach((eachTrade) => {
+      if (!!eachTrade.data.vestedPortfolio) {
+        const indexInDisabledList = object.state.disabledPortfolio.indexOf(eachTrade.data.vestedPortfolio);
+        if (indexInDisabledList >= 0) {
+          object.state.disabledPortfolio.splice(indexInDisabledList, 1);
+        }
+      }
+    });
+    !object.state.disabledPortfolio.includes('DOF') && object.state.selectedPortfolio.push('DOF');
+    !object.state.disabledPortfolio.includes('SOF') && object.state.selectedPortfolio.push('SOF');
+    object.data.displayTradeList = object.data.prinstineTradeList.filter((eachTrade) => {
+      return object.state.selectedPortfolio.includes(eachTrade.data.vestedPortfolio);
+    });
     return object;
   }
 }
