@@ -570,7 +570,7 @@ export interface TradeDTO extends BasicDTOStructure {
     counterPartyName: string;
     quantity: string;
     postTradeSumQuantity: string;
-    tradeDateTime: string;
+    tradeDateTime: number;
     tradeDateTimeParsed: string;
     price: string;
     spread: string;

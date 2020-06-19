@@ -1344,7 +1344,7 @@ export class DTOService {
         counterPartyName: rawData.counterpartyName,
         quantity: this.utility.parseNumberToThousands(rawData.quantity, true),
         postTradeSumQuantity: this.utility.parseNumberToThousands(rawData.quantityAfterTrade, true),
-        tradeDateTime: rawData.tradeDateTime,
+        tradeDateTime: moment(rawData.tradeDateTime).unix(),
         tradeDateTimeParsed: moment(rawData.tradeDateTime).format(`MMM DD - HH:mm`),
         price: this.utility.parseTriCoreDriverNumber(rawData.price, TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
         spread: this.utility.parseTriCoreDriverNumber(rawData.spread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
@@ -1371,19 +1371,31 @@ export class DTOService {
         selectedPortfolio: []
       }
     };
-    object.data.prinstineTradeList.forEach((eachTrade) => {
-      if (!!eachTrade.data.vestedPortfolio) {
-        const indexInDisabledList = object.state.disabledPortfolio.indexOf(eachTrade.data.vestedPortfolio);
-        if (indexInDisabledList >= 0) {
-          object.state.disabledPortfolio.splice(indexInDisabledList, 1);
+    if (object.data.prinstineTradeList.length > 0) {
+      object.data.prinstineTradeList.sort((tradeA, tradeB) => {
+        if (tradeA.data.tradeDateTime > tradeB.data.tradeDateTime) {
+          return -1
+        } else if (tradeA.data.tradeDateTime < tradeB.data.tradeDateTime) {
+          return 1;
+        } else {
+          return 0;
         }
-      }
-    });
-    !object.state.disabledPortfolio.includes('DOF') && object.state.selectedPortfolio.push('DOF');
-    !object.state.disabledPortfolio.includes('SOF') && object.state.selectedPortfolio.push('SOF');
-    object.data.displayTradeList = object.data.prinstineTradeList.filter((eachTrade) => {
-      return object.state.selectedPortfolio.includes(eachTrade.data.vestedPortfolio);
-    });
+      });
+      object.data.prinstineTradeList.forEach((eachTrade) => {
+        if (!!eachTrade.data.vestedPortfolio) {
+          const indexInDisabledList = object.state.disabledPortfolio.indexOf(eachTrade.data.vestedPortfolio);
+          if (indexInDisabledList >= 0) {
+            object.state.disabledPortfolio.splice(indexInDisabledList, 1);
+          }
+        }
+      });
+      object.state.selectedPortfolio = FilterOptionsPortfolioList.filter((eachPortfolio) => {
+        return !object.state.disabledPortfolio.includes(eachPortfolio);
+      });
+      object.data.displayTradeList = object.data.prinstineTradeList.filter((eachTrade) => {
+        return object.state.selectedPortfolio.includes(eachTrade.data.vestedPortfolio);
+      });
+    }
     return object;
   }
 }

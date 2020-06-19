@@ -1509,18 +1509,18 @@ export const TradeHistoryHeaderConfigList: Array<TradeHistoryHeaderConfigStub> =
     attrName: 'spread'
   },{
     headerKey: 'wgtAvgSpread',
-    headerDisplayLabel: 'Wgt Avg Spread',
+    headerDisplayLabel: 'Spread Cost',
     attrName: 'wgtAvgSpread',
-    size: 7
+    size: 6
   },{
     headerKey: 'price',
     headerDisplayLabel: 'Price',
     attrName: 'price'
   },{
     headerKey: 'wgtAvgPrice',
-    headerDisplayLabel: 'Wgt Avg Price',
+    headerDisplayLabel: 'Price Cost',
     attrName: 'wgtAvgPrice',
-    size: 7
+    size: 6
   },{
     headerKey: 'strategy',
     headerDisplayLabel: 'Strategy',

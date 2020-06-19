@@ -25,6 +25,7 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
     @include mix_fixed_div(relative, $z_index_base_item_lift);
     display: flex;
     justify-content: center;
+    align-self: center;
     margin-bottom: $spacing_small;
     &-quoteBtn {
       @include material('none');
