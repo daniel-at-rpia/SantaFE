@@ -16,7 +16,7 @@
     } from 'FEModels/frontend-models.interface';
     import { PayloadGetAllQuotes } from 'BEModels/backend-payloads.interface';
     import { AgGridRowParams, ClickedSortQuotesByMetricEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
-    import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
+    import { SecurityTableHeaderConfigStub } from 'FEModels/frontend-stub-models.interface';
     import { SantaTableSecurityCell } from 'Core/components/santa-table-security-cell/santa-table-security-cell.component';
     import { SantaTableQuoteCell } from 'Core/components/santa-table-quote-cell/santa-table-quote-cell.component';
     import { SantaTableAlertSideCell } from 'Core/components/santa-table-alert-side-cell/santa-table-alert-side-cell.component';
@@ -52,9 +52,9 @@ export class SantaTable implements OnInit, OnChanges {
   @Input() tableData: SecurityTableDTO;
   @Input() newRows: Array<SecurityTableRowDTO>;
   @Input() receivedContentStage: number;
-  private securityTableMetrics: Array<SecurityTableMetricStub>;
-  @Input() receivedSecurityTableMetricsUpdate: Array<SecurityTableMetricStub>;
-  private securityTableMetricsCache: Array<SecurityTableMetricStub>;// use this only for detecting diff
+  public securityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub>;
+  @Input() receivedSecurityTableHeaderConfigsUpdate: Array<SecurityTableHeaderConfigStub>;
+  private securityTableHeaderConfigsCache: Array<SecurityTableHeaderConfigStub>;// use this only for detecting diff
   @Input() liveUpdatedRows: Array<SecurityTableRowDTO>;
   @Input() removeRows: Array<string>;
   private removeRowsCache: Array<string> = [];
@@ -156,14 +156,14 @@ export class SantaTable implements OnInit, OnChanges {
         this.tableData.state.loadedContentStage = this.receivedContentStage;
       } else if (this.tableData.state.loadedContentStage !== this.receivedContentStage) {
         console.log(`[${this.tableName}] - rows updated for inter-stage change`, this.receivedContentStage);
-        this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate; // saving initial cache
-        this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
+        this.securityTableHeaderConfigsCache = this.receivedSecurityTableHeaderConfigsUpdate; // saving initial cache
+        this.securityTableHeaderConfigs = this.receivedSecurityTableHeaderConfigsUpdate;
         this.tableData.state.loadedContentStage = this.receivedContentStage;
         this.loadTableRows(this.newRows);
-      } else if (this.securityTableMetricsCache !== this.receivedSecurityTableMetricsUpdate && this.receivedContentStage === this.constants.securityTableFinalStage) {
-        console.log(`[${this.tableName}] - metrics update`, this.receivedSecurityTableMetricsUpdate);
-        this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate;
-        this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
+      } else if (this.securityTableHeaderConfigsCache !== this.receivedSecurityTableHeaderConfigsUpdate && this.receivedContentStage === this.constants.securityTableFinalStage) {
+        console.log(`[${this.tableName}] - metrics update`, this.receivedSecurityTableHeaderConfigsUpdate);
+        this.securityTableHeaderConfigsCache = this.receivedSecurityTableHeaderConfigsUpdate;
+        this.securityTableHeaderConfigs = this.receivedSecurityTableHeaderConfigsUpdate;
         this.loadTableHeaders(true);  // skip reloading the agGrid columns since that won't be necessary and reloading them creates a problem for identifying the columns in later use, such as sorting
         this.loadTableRows(this.newRows, true);
       } else if (!!this.newRows && this.newRows != this.tableData.data.rows && this.tableData.state.loadedContentStage === this.receivedContentStage && JSON.stringify(this.removeRows) == JSON.stringify(this.removeRowsCache)) {  // the reason for checking removeRowsCache diffing is if they are different, then the newRows diffing is caused by a removal update, in that case bypass this condition since the removal is handled in the bit code below
@@ -194,8 +194,8 @@ export class SantaTable implements OnInit, OnChanges {
     this.tableData.api.columnApi = params.columnApi;
     this.tableData.state.isAgGridReady = true;
     this.agGridMiddleLayerService.onGridReady(this.tableData, this.ownerInitial);
-    this.securityTableMetricsCache = this.receivedSecurityTableMetricsUpdate; // saving initial cache
-    this.securityTableMetrics = this.receivedSecurityTableMetricsUpdate;
+    this.securityTableHeaderConfigsCache = this.receivedSecurityTableHeaderConfigsUpdate; // saving initial cache
+    this.securityTableHeaderConfigs = this.receivedSecurityTableHeaderConfigsUpdate;
     this.loadTableHeaders();
   }
 
@@ -319,7 +319,7 @@ export class SantaTable implements OnInit, OnChanges {
   private loadTableHeaders(skipAgGrid = false) {
     this.tableData.data.headers = [];
     this.tableData.data.allHeaders = [];
-    this.securityTableMetrics.forEach((eachStub) => {
+    this.securityTableHeaderConfigs.forEach((eachStub) => {
       const targetSpecifics = eachStub.content.tableSpecifics[this.tableName] || eachStub.content.tableSpecifics.default;
       if (eachStub.content.isForSecurityCard || targetSpecifics.active) {
         this.tableData.data.headers.push(

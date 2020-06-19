@@ -9,7 +9,7 @@
     import {
       SecurityDefinitionStub,
       SecurityDefinitionBundleStub,
-      SecurityTableMetricStub,
+      SecurityTableHeaderConfigStub,
       SecurityMetricOptionStub
     } from 'FEModels/frontend-stub-models.interface';
     import { UtilityService } from './UtilityService';
@@ -34,7 +34,7 @@
       ConfiguratorDefinitionLayout
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
-      QuoteMetricList
+      QuoteHeaderConfigList
     } from 'Core/constants/securityTableConstants.constant';
   //
 
@@ -783,7 +783,7 @@ export class DTOService {
   }
 
   public formSecurityTableHeaderObject(
-    stub: SecurityTableMetricStub,
+    stub: SecurityTableHeaderConfigStub,
     useSpecificsFrom: string,
     activePortfolios: Array<string>
   ): DTOs.SecurityTableHeaderDTO {
@@ -834,7 +834,7 @@ export class DTOService {
           secondaryQuotes: [],
           secondarySecurityName: ''
         },
-        quoteHeaders: QuoteMetricList.map((eachQuoteMetricStub) => {
+        quoteHeaders: QuoteHeaderConfigList.map((eachQuoteMetricStub) => {
           const metricBlock: Blocks.QuoteMetricBlock = {
             displayLabelList: eachQuoteMetricStub.labelList,
             isSizeTwo: eachQuoteMetricStub.size === 2,

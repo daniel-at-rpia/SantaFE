@@ -40,7 +40,7 @@
     } from 'Core/constants/coreConstants.constant';
     import { selectAlertCounts } from 'Core/selectors/core.selectors';
     import {
-      SecurityTableMetrics,
+      SecurityTableHeaderConfigs,
       SECURITY_TABLE_FINAL_STAGE
     } from 'Core/constants/securityTableConstants.constant';
     import { SecurityDefinitionMap, FullOwnerList } from 'Core/constants/securityDefinitionConstants.constant';
@@ -66,7 +66,7 @@
       TradeTogglePresetEvent,
       TradeAlertTableReceiveNewAlertsEvent
     } from 'Trade/actions/trade.actions';
-    import { SecurityTableMetricStub, SearchShortcutStub } from 'FEModels/frontend-stub-models.interface';
+    import { SecurityTableHeaderConfigStub, SearchShortcutStub } from 'FEModels/frontend-stub-models.interface';
   //
 
 @Component({
@@ -100,7 +100,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   private initializePageState(): TradeCenterPanelState {
-    const mainTableMetrics = SecurityTableMetrics.filter((eachStub) => {
+    const mainTableMetrics = SecurityTableHeaderConfigs.filter((eachStub) => {
       const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
       return !targetSpecifics.disabled;
     });
@@ -292,7 +292,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       );
       this.state.filters.quickFilters.driverType = targetDriver;
       // driver update needs to be to both tables
-      const newMetrics: Array<SecurityTableMetricStub> = this.utilityService.deepCopy(this.state.table.metrics);
+      const newMetrics: Array<SecurityTableHeaderConfigStub> = this.utilityService.deepCopy(this.state.table.metrics);
       newMetrics.forEach((eachMetricStub) => {
         if (eachMetricStub.content.isDriverDependent && eachMetricStub.content.isAttrChangable) {
           if (targetDriver === this.constants.defaultMetricIdentifier) {

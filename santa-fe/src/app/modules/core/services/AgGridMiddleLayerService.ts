@@ -25,7 +25,7 @@
     } from 'FEModels/frontend-blocks.interface';
     import {
       AGGRID_NARROW_COLUMN_WIDTH,
-      SecurityTableMetrics,
+      SecurityTableHeaderConfigs,
       AGGRID_SECURITY_CARD_COLUMN_WIDTH,
       AGGRID_QUOTE_COLUMN_WIDTH,
       AGGRID_SIMPLE_NUM_COLUMN_WIDTH,
@@ -34,7 +34,7 @@
       AGGRID_DETAIL_COLUMN_KEY,
       AGGRID_DETAIL_COLUMN_WIDTH,
       AGGRID_SIMPLE_TEXT_COLUMN_WIDTH,
-      SecurityTableMetricGroups,
+      SecurityTableHeaderConfigGroups,
       SECURITY_TABLE_HEADER_NO_GROUP,
       AGGRID_ALERT_SIDE_COLUMN_WIDTH,
       AGGRID_ALERT_MESSAGE_COLUMN_WIDTH,
@@ -78,10 +78,10 @@ export class AgGridMiddleLayerService {
       width: AGGRID_DETAIL_COLUMN_WIDTH
     };
     list.push(detailColumn);
-    for (const eachGroupKey in SecurityTableMetricGroups) {
+    for (const eachGroupKey in SecurityTableHeaderConfigGroups) {
       // we are treating the groups as definitions as well for the sake of simplicity, since agGrid allows that
       const eachGroup: AgGridColumnDefinition = {
-        headerName: SecurityTableMetricGroups[eachGroupKey],
+        headerName: SecurityTableHeaderConfigGroups[eachGroupKey],
         field: eachGroupKey,
         headerClass: `${AGGRID_HEADER_CLASS} ${AGGRID_HEADER_CLASS}--${eachGroupKey}`,
         cellClass: `${AGGRID_CELL_CLASS}`,
@@ -98,8 +98,8 @@ export class AgGridMiddleLayerService {
         return eachActiveHeader.data.key === eachHeader.data.key;
       })
       let groupName = SECURITY_TABLE_HEADER_NO_GROUP;
-      for (const eachGroupKey in SecurityTableMetricGroups) {
-        if (SecurityTableMetricGroups[eachGroupKey] === eachHeader.data.groupBelongs) {
+      for (const eachGroupKey in SecurityTableHeaderConfigGroups) {
+        if (SecurityTableHeaderConfigGroups[eachGroupKey] === eachHeader.data.groupBelongs) {
           groupName = eachGroupKey;
         }
       }
@@ -345,7 +345,7 @@ export class AgGridMiddleLayerService {
         const targetColumn = columns.find((eachColumn) => {
           return !!eachColumn.sort && eachColumn.colId !== "ag-Grid-AutoColumn";
         })
-        const targetStub = SecurityTableMetrics.find((eachMetric) => {
+        const targetStub = SecurityTableHeaderConfigs.find((eachMetric) => {
           return eachMetric.key === targetColumn.colDef.field;
         });
         if (targetStub) {

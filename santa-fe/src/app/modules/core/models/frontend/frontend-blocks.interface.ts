@@ -187,10 +187,10 @@ export interface AgGridRowNode {
 
 export interface AgGridRow {
   id: string;
-  securityCard: DTOs.SecurityDTO;    // this needs to be identical to SecurityTableMetrics' key for Security column
-  bestQuote: DTOs.QuantComparerDTO;  // this needs to be identical to SecurityTableMetrics' key for Best Quote column
-  bestAxeQuote: DTOs.QuantComparerDTO;  // this needs to be identical to SecurityTableMetrics' key for Best Axe Quote column
-  alertSide: DTOs.SantaTableAlertSideCellDTO,  // this needs to be identical to SecurityTableMetrics' key for Alert Side column
+  securityCard: DTOs.SecurityDTO;    // this needs to be identical to SecurityTableHeaderConfigs' key for Security column
+  bestQuote: DTOs.QuantComparerDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Best Quote column
+  bestAxeQuote: DTOs.QuantComparerDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Best Axe Quote column
+  alertSide: DTOs.SantaTableAlertSideCellDTO,  // this needs to be identical to SecurityTableHeaderConfigs' key for Alert Side column
   rowDTO: DTOs.SecurityTableRowDTO;
 }
 
