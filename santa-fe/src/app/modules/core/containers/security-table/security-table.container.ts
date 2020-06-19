@@ -16,7 +16,7 @@
     import { QuoteMetricBlock } from 'FEModels/frontend-blocks.interface';
     import { PayloadGetAllQuotes } from 'BEModels/backend-payloads.interface';
     import { ClickedSortQuotesByMetricEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
-    import { SecurityTableMetricStub } from 'FEModels/frontend-stub-models.interface';
+    import { SecurityTableHeaderConfigStub } from 'FEModels/frontend-stub-models.interface';
     import { BEQuoteDTO } from 'BEModels/backend-models.interface';
 
     import { SECURITY_TABLE_FINAL_STAGE } from 'Core/constants/securityTableConstants.constant';
@@ -30,7 +30,7 @@
 })
 export class SecurityTable implements OnInit, OnChanges {
   @Input() tableData: SecurityTableDTO;
-  @Input() securityTableMetrics: Array<SecurityTableMetricStub>;
+  @Input() securityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub>;
   @Input() activeTriCoreDriver: string;
   @Output() selectedSecurityForAnalysis = new EventEmitter<SecurityDTO>();
   @Output() clickedSortQuotesByMetric = new EventEmitter<ClickedSortQuotesByMetricEmitterParams>();
@@ -67,7 +67,7 @@ export class SecurityTable implements OnInit, OnChanges {
   public onClickRemoveHeader(targetHeader: SecurityTableHeaderDTO) {
     const targetIndex = this.tableData.data.headers.indexOf(targetHeader);
     this.tableData.state.selectedHeader = null;
-    this.securityTableMetrics.forEach((eachStub) => {
+    this.securityTableHeaderConfigs.forEach((eachStub) => {
       if (eachStub.content.label === targetHeader.data.displayLabel) {
         eachStub.content.tableSpecifics.default.active = false;
       }
@@ -92,7 +92,7 @@ export class SecurityTable implements OnInit, OnChanges {
     this.tableData.state.isAddingColumn = false;
   }
 
-  public onClickAddHeader(targetStub: SecurityTableMetricStub) {
+  public onClickAddHeader(targetStub: SecurityTableHeaderConfigStub) {
     if (!targetStub.content.tableSpecifics.default.disabled) {
       if (!targetStub.content.tableSpecifics.default.active) {
         targetStub.content.tableSpecifics.default.active = true;

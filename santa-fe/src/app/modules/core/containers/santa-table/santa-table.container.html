@@ -32,7 +32,7 @@
     <security-table
       *ngIf="tableData.state.isNativeEnabled"
       [tableData]="tableData"
-      [securityTableMetrics]="securityTableMetrics"
+      [securityTableHeaderConfigs]="securityTableHeaderConfigs"
       [activeTriCoreDriver]="activeTriCoreDriver"
       (clickedSortQuotesByMetric)="onClickSortQuotesByMetric($event)"
       (selectedSecurityForAnalysis)="onSelectSecurityForAnalysis($event)"

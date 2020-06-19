@@ -1,6 +1,6 @@
 import {
-  SecurityTableMetricStub,
-  SecurityTableQuoteMetric
+  SecurityTableHeaderConfigStub,
+  SecurityTableQuoteHeaderConfigStub
 } from 'FEModels/frontend-stub-models.interface';
 
 import {
@@ -39,7 +39,7 @@ export const AGGRID_CELL_CLASS = 'santaTable__agGridTable-agGrid-cell';
 export const AGGRID_DETAIL_COLUMN_KEY = 'Quotes';
 
 export const SECURITY_TABLE_HEADER_NO_GROUP = 'noGroup';
-export const SecurityTableMetricGroups = {
+export const SecurityTableHeaderConfigGroups = {
   bestQuote: 'Best Quote',
   alert: 'Alert-related',
   mark: 'Mark',
@@ -60,7 +60,7 @@ export const SECURITY_TABLE_ICONS = {
   sortDescending: '<i class="fas fa-sort-amount-down"></i>'
 };
 
-export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
+export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = [
   {
     key: 'securityCard',
     content: {
@@ -86,7 +86,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       blockAttrName: 'alert',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.alert,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
       isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
@@ -109,7 +109,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       blockAttrName: 'alert',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.alert,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
       isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
@@ -132,7 +132,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       blockAttrName: 'alert',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.alert,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
       tableSpecifics: {
         default: {
           active: false,
@@ -153,7 +153,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'alertSide',
       blockAttrName: 'alert',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.alert,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
       isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
@@ -176,7 +176,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       blockAttrName: 'alert',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: false,
-      groupBelongs: SecurityTableMetricGroups.alert,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
       isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
@@ -199,7 +199,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       blockAttrName: 'alert',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: false,
-      groupBelongs: SecurityTableMetricGroups.alert,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
       isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
@@ -222,7 +222,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       blockAttrName: 'alert',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.alert,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
       isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
@@ -245,7 +245,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       blockAttrName: 'alert',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.alert,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
       isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
@@ -268,7 +268,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       blockAttrName: 'alert',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.alert,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
       tableSpecifics: {
         default: {
           active: false,
@@ -291,7 +291,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isForQuantComparer: true,
       isDriverDependent: true,
-      groupBelongs: SecurityTableMetricGroups.bestQuote,
+      groupBelongs: SecurityTableHeaderConfigGroups.bestQuote,
       tableSpecifics: {
         default: {
           active: true,
@@ -313,7 +313,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isForQuantComparer: true,
       isDriverDependent: true,
-      groupBelongs: SecurityTableMetricGroups.bestQuote,
+      groupBelongs: SecurityTableHeaderConfigGroups.bestQuote,
       tableSpecifics: {
         default: {
           active: true,
@@ -335,7 +335,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isFrontEndMetric: true,
       isDriverDependent: true,
-      groupBelongs: SecurityTableMetricGroups.bestQuote,
+      groupBelongs: SecurityTableHeaderConfigGroups.bestQuote,
       tableSpecifics: {
         default: {
           active: true
@@ -355,7 +355,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isFrontEndMetric: true,
       isDriverDependent: true,
-      groupBelongs: SecurityTableMetricGroups.bestQuote,
+      groupBelongs: SecurityTableHeaderConfigGroups.bestQuote,
       tableSpecifics: {
         default: {
           active: false
@@ -374,7 +374,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       blockAttrName: 'mark',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDriverDependent: true,
-      groupBelongs: SecurityTableMetricGroups.mark,
+      groupBelongs: SecurityTableHeaderConfigGroups.mark,
       tableSpecifics: {
         default: {
           active: true,
@@ -394,7 +394,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       blockAttrName: 'mark',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDriverDependent: true,
-      groupBelongs: SecurityTableMetricGroups.mark,
+      groupBelongs: SecurityTableHeaderConfigGroups.mark,
       tableSpecifics: {
         default: {
           active: true,
@@ -414,7 +414,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       blockAttrName: 'mark',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDriverDependent: true,
-      groupBelongs: SecurityTableMetricGroups.mark,
+      groupBelongs: SecurityTableHeaderConfigGroups.mark,
       tableSpecifics: {
         default: {
           active: true,
@@ -435,7 +435,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       isDataTypeText: true,
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDriverDependent: true,
-      groupBelongs: SecurityTableMetricGroups.mark,
+      groupBelongs: SecurityTableHeaderConfigGroups.mark,
       tableSpecifics: {
         default: {
           active: false
@@ -455,7 +455,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       isAttrChangable: true,
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDriverDependent: true,
-      groupBelongs: SecurityTableMetricGroups.mark,
+      groupBelongs: SecurityTableHeaderConfigGroups.mark,
       tableSpecifics: {
         default: {
           active: false
@@ -475,7 +475,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isFrontEndMetric: true,
       isDriverDependent: true,
-      groupBelongs: SecurityTableMetricGroups.mark,
+      groupBelongs: SecurityTableHeaderConfigGroups.mark,
       tableSpecifics: {
         default: {
           active: false
@@ -494,7 +494,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       blockAttrName: 'mark',
       isDataTypeText: true,
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.mark,
+      groupBelongs: SecurityTableHeaderConfigGroups.mark,
       tableSpecifics: {
         default: {
           active: false
@@ -513,7 +513,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       blockAttrName: 'mark',
       isDataTypeText: true,
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.mark,
+      groupBelongs: SecurityTableHeaderConfigGroups.mark,
       tableSpecifics: {
         default: {
           active: false
@@ -531,7 +531,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'ticker',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
       tableSpecifics: {
         default: {
           active: true
@@ -549,7 +549,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'ratingValue',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
       tableSpecifics: {
         default: {
           active: true
@@ -567,7 +567,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'currency',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
       tableSpecifics: {
         default: {
           active: true
@@ -585,7 +585,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'sector',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
       tableSpecifics: {
         default: {
           active: true,
@@ -604,7 +604,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'obligorName',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
       tableSpecifics: {
         default: {
           active: true,
@@ -623,7 +623,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'industry',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
       tableSpecifics: {
         default: {
           active: true
@@ -641,7 +641,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'securityType',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
       tableSpecifics: {
         default: {
           active: true
@@ -659,7 +659,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'seniority',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
       tableSpecifics: {
         default: {
           active: true
@@ -677,7 +677,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'country',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
       tableSpecifics: {
         default: {
           active: true
@@ -695,7 +695,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'maturityType',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.securityInfo,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
       tableSpecifics: {
         default: {
           active: false
@@ -715,7 +715,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isFrontEndMetric: true,
       isDriverDependent: true,
-      groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
+      groupBelongs: SecurityTableHeaderConfigGroups.markDiscrepancies,
       tableSpecifics: {
         default: {
           active: false
@@ -735,7 +735,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isFrontEndMetric: true,
       isDriverDependent: true,
-      groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
+      groupBelongs: SecurityTableHeaderConfigGroups.markDiscrepancies,
       tableSpecifics: {
         default: {
           active: true
@@ -755,7 +755,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isFrontEndMetric: true,
       isDriverDependent: true,
-      groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
+      groupBelongs: SecurityTableHeaderConfigGroups.markDiscrepancies,
       tableSpecifics: {
         default: {
           active: true
@@ -775,7 +775,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isFrontEndMetric: true,
       isDriverDependent: true,
-      groupBelongs: SecurityTableMetricGroups.markDiscrepancies,
+      groupBelongs: SecurityTableHeaderConfigGroups.markDiscrepancies,
       tableSpecifics: {
         default: {
           active: true,
@@ -794,7 +794,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
       blockAttrName: 'cost',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.cost,
+      groupBelongs: SecurityTableHeaderConfigGroups.cost,
       isDriverDependent: true,
       isAttrChangable: true,
       isColumnWidthNarrow: true,
@@ -816,7 +816,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
       blockAttrName: 'cost',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.cost,
+      groupBelongs: SecurityTableHeaderConfigGroups.cost,
       isDriverDependent: true,
       isAttrChangable: true,
       isColumnWidthNarrow: true,
@@ -838,7 +838,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
       blockAttrName: 'cost',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.cost,
+      groupBelongs: SecurityTableHeaderConfigGroups.cost,
       isDriverDependent: true,
       isAttrChangable: true,
       isColumnWidthNarrow: true,
@@ -860,7 +860,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
       blockAttrName: 'cost',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.cost,
+      groupBelongs: SecurityTableHeaderConfigGroups.cost,
       isDriverDependent: true,
       isAttrChangable: true,
       isColumnWidthNarrow: true,
@@ -882,7 +882,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
       blockAttrName: 'cost',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.cost,
+      groupBelongs: SecurityTableHeaderConfigGroups.cost,
       isDriverDependent: true,
       isAttrChangable: true,
       isColumnWidthNarrow: true,
@@ -904,7 +904,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
       blockAttrName: 'cost',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.cost,
+      groupBelongs: SecurityTableHeaderConfigGroups.cost,
       isDriverDependent: true,
       isAttrChangable: true,
       isColumnWidthNarrow: true,
@@ -926,7 +926,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
       blockAttrName: 'cost',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.cost,
+      groupBelongs: SecurityTableHeaderConfigGroups.cost,
       isDriverDependent: true,
       isAttrChangable: true,
       isColumnWidthNarrow: true,
@@ -948,7 +948,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'positionCurrent',
       blockAttrName: 'position',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.position,
+      groupBelongs: SecurityTableHeaderConfigGroups.position,
       isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
@@ -968,7 +968,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'positionFirm',
       blockAttrName: 'position',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.position,
+      groupBelongs: SecurityTableHeaderConfigGroups.position,
       isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
@@ -988,7 +988,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'positionHF',
       blockAttrName: 'position',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.position,
+      groupBelongs: SecurityTableHeaderConfigGroups.position,
       isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
@@ -1007,7 +1007,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'positionNLF',
       blockAttrName: 'position',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.position,
+      groupBelongs: SecurityTableHeaderConfigGroups.position,
       isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
@@ -1026,7 +1026,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'positionDOF',
       blockAttrName: 'position',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.position,
+      groupBelongs: SecurityTableHeaderConfigGroups.position,
       isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
@@ -1045,7 +1045,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'positionSOF',
       blockAttrName: 'position',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.position,
+      groupBelongs: SecurityTableHeaderConfigGroups.position,
       isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
@@ -1064,7 +1064,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'positionSTIP',
       blockAttrName: 'position',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.position,
+      groupBelongs: SecurityTableHeaderConfigGroups.position,
       isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
@@ -1083,7 +1083,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'positionFIP',
       blockAttrName: 'position',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.position,
+      groupBelongs: SecurityTableHeaderConfigGroups.position,
       isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
@@ -1102,7 +1102,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'positionCIP',
       blockAttrName: 'position',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.position,
+      groupBelongs: SecurityTableHeaderConfigGroups.position,
       isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
@@ -1121,7 +1121,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'positionAGB',
       blockAttrName: 'position',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.position,
+      groupBelongs: SecurityTableHeaderConfigGroups.position,
       isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
@@ -1140,7 +1140,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'positionBBB',
       blockAttrName: 'position',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.position,
+      groupBelongs: SecurityTableHeaderConfigGroups.position,
       isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
@@ -1158,7 +1158,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       attrName: 'cs01CadCurrentInK',
       underlineAttrName: 'cs01CadCurrent',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.cs01,
+      groupBelongs: SecurityTableHeaderConfigGroups.cs01,
       tableSpecifics: {
         default: {
           active: true
@@ -1175,7 +1175,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       attrName: 'cs01LocalCurrentInK',
       underlineAttrName: 'cs01LocalCurrent',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.cs01,
+      groupBelongs: SecurityTableHeaderConfigGroups.cs01,
       tableSpecifics: {
         default: {
           active: true
@@ -1192,7 +1192,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       attrName: 'cs01CadFirmInK',
       underlineAttrName: 'cs01CadFirm',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.cs01,
+      groupBelongs: SecurityTableHeaderConfigGroups.cs01,
       tableSpecifics: {
         default: {
           active: true,
@@ -1210,7 +1210,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       attrName: 'cs01LocalFirmInK',
       underlineAttrName: 'cs01LocalFirm',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableMetricGroups.cs01,
+      groupBelongs: SecurityTableHeaderConfigGroups.cs01,
       tableSpecifics: {
         default: {
           active: true
@@ -1231,7 +1231,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       metricPackDeltaScope: 'Dod',
       isDriverDependent: true,
-      groupBelongs: SecurityTableMetricGroups.delta,
+      groupBelongs: SecurityTableHeaderConfigGroups.delta,
       tableSpecifics: {
         default: {
           active: true
@@ -1252,7 +1252,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       metricPackDeltaScope: 'Wow',
       isDriverDependent: true,
-      groupBelongs: SecurityTableMetricGroups.delta,
+      groupBelongs: SecurityTableHeaderConfigGroups.delta,
       tableSpecifics: {
         default: {
           active: true,
@@ -1274,7 +1274,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       metricPackDeltaScope: 'Mom',
       isDriverDependent: true,
-      groupBelongs: SecurityTableMetricGroups.delta,
+      groupBelongs: SecurityTableHeaderConfigGroups.delta,
       tableSpecifics: {
         default: {
           active: true
@@ -1295,7 +1295,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       metricPackDeltaScope: 'Yoy',
       isDriverDependent: true,
-      groupBelongs: SecurityTableMetricGroups.delta,
+      groupBelongs: SecurityTableHeaderConfigGroups.delta,
       tableSpecifics: {
         default: {
           active: true
@@ -1316,7 +1316,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       metricPackDeltaScope: 'Ytd',
       isDriverDependent: true,
-      groupBelongs: SecurityTableMetricGroups.delta,
+      groupBelongs: SecurityTableHeaderConfigGroups.delta,
       tableSpecifics: {
         default: {
           active: true
@@ -1349,7 +1349,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'primaryPmName',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.ownership,
+      groupBelongs: SecurityTableHeaderConfigGroups.ownership,
       tableSpecifics: {
         default: {
           active: true,
@@ -1368,7 +1368,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'backupPmName',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.ownership,
+      groupBelongs: SecurityTableHeaderConfigGroups.ownership,
       tableSpecifics: {
         default: {
           active: true
@@ -1386,7 +1386,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
       underlineAttrName: 'researchName',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
-      groupBelongs: SecurityTableMetricGroups.ownership,
+      groupBelongs: SecurityTableHeaderConfigGroups.ownership,
       tableSpecifics: {
         default: {
           active: true,
@@ -1435,7 +1435,7 @@ export const SecurityTableMetrics: Array<SecurityTableMetricStub> = [
   }
 ];
 
-export const QuoteMetricList: Array<SecurityTableQuoteMetric> = [
+export const QuoteHeaderConfigList: Array<SecurityTableQuoteHeaderConfigStub> = [
   {
     labelList: ['B Time', 'A Time'],
     textOnly: true,

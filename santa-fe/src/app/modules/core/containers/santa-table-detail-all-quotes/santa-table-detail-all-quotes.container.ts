@@ -25,7 +25,7 @@
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
-    import { QuoteMetricList } from 'Core/constants/securityTableConstants.constant';
+    import { QuoteHeaderConfigList } from 'Core/constants/securityTableConstants.constant';
   //
 
 @Component({
