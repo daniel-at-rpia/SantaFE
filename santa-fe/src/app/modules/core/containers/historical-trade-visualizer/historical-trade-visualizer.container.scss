@@ -1,0 +1,53 @@
+@import "global.scss";
+
+.sat-historicalTradeVisualizer {
+  $blockName: &;
+  display: flex;
+  flex-direction: column;
+  &__tableHeader {
+    display: flex;
+    &-list {
+      flex: 1 1 auto;
+      display: flex;
+      &-item {
+        @include mix_border_generator(0 $typical_border_width);
+        padding: 0 $spacing_x_small;
+        &-text {
+
+        }
+        &:first-of-type {
+          border-left-width: 0;
+        }
+        &:last-of-type {
+          border-right-width: 0;
+        }
+      }
+    }
+  }
+  &__tableContent {
+    flex: 1 1 auto;
+    display: flex;
+    &-rowList {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      &-row {
+        display: flex;
+        margin: $spacing_x_small 0 ;
+        &-cell {
+          @include mix_border_generator(0 $typical_border_width);
+          padding: 0 $spacing_x_small;
+          &-text {
+            
+          }
+          &:first-of-type {
+            border-left-width: 0;
+          }
+          &:last-of-type {
+            border-right-width: 0;
+          }
+        }
+      }
+    }
+  }
+}

@@ -125,3 +125,10 @@ export interface TradeFilterConstantStub {
 export interface ObligorChartCategoryColorSchemeStub {
   categoryScheme: Array<{label: string, value: string}>;
 }
+
+export interface TradeHistoryHeaderConfigStub {
+  headerKey: string;
+  headerDisplayLabel: string;
+  attrName: string;
+  size?: number;
+}

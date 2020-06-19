@@ -1,6 +1,7 @@
 import {
   SecurityTableHeaderConfigStub,
-  SecurityTableQuoteHeaderConfigStub
+  SecurityTableQuoteHeaderConfigStub,
+  TradeHistoryHeaderConfigStub
 } from 'FEModels/frontend-stub-models.interface';
 
 import {
@@ -1475,5 +1476,25 @@ export const QuoteHeaderConfigList: Array<SecurityTableQuoteHeaderConfigStub> = 
     size: 4,
     textOnly: true,
     isNonCDS: true
+  }
+];
+
+export const TradeHistoryHeaderConfigList: Array<TradeHistoryHeaderConfigStub> = [
+  {
+    headerKey: 'tradeDateTime',
+    headerDisplayLabel: 'Date & Time',
+    attrName: 'tradeDateTime'
+  },{
+    headerKey: 'trader',
+    headerDisplayLabel: 'Trader',
+    attrName: 'trader'
+  },{
+    headerKey: 'counterPartyName',
+    headerDisplayLabel: 'Counter Party',
+    attrName: 'counterPartyName'
+  },{
+    headerKey: 'quantity',
+    headerDisplayLabel: 'Quantity',
+    attrName: 'quantity'
   }
 ];

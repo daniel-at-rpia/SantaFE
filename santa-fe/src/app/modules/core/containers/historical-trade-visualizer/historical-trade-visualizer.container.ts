@@ -2,6 +2,7 @@
     import { Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
     import { HistoricalTradeVisualizerDTO } from 'FEModels/frontend-models.interface';
+    import { TradeHistoryHeaderConfigList } from 'Core/constants/securityTableConstants.constant';
   //
 
 @Component({
@@ -13,6 +14,12 @@
 
 export class HistoricalTradeVisualizer {
   @Input() historyData: HistoricalTradeVisualizerDTO;
+  
+  public constants = {
+    headerConfigList: TradeHistoryHeaderConfigList
+  };
 
   constructor() {} 
+
+  
 }
