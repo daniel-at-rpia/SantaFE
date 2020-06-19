@@ -415,7 +415,7 @@ export interface BETradeBlock {
   spread: number;
   shouldCalculateSpread: boolean;
   shouldCalculatePrice: boolean;
-  securityQuantityAfterTrade: number;
+  quantityAfterTrade: number;
   fifoAvgSpread: number;
   wgtAvgSpread: number;
   fifoAvgPrice: number;

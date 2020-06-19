@@ -1483,7 +1483,12 @@ export const TradeHistoryHeaderConfigList: Array<TradeHistoryHeaderConfigStub> =
   {
     headerKey: 'tradeDateTime',
     headerDisplayLabel: 'Date & Time',
-    attrName: 'tradeDateTime'
+    attrName: 'tradeDateTimeParsed',
+    size: 8
+  },{
+    headerKey: 'portfolio',
+    headerDisplayLabel: 'Fund',
+    attrName: 'vestedPortfolio'
   },{
     headerKey: 'trader',
     headerDisplayLabel: 'Trader',
@@ -1491,10 +1496,40 @@ export const TradeHistoryHeaderConfigList: Array<TradeHistoryHeaderConfigStub> =
   },{
     headerKey: 'counterPartyName',
     headerDisplayLabel: 'Counter Party',
-    attrName: 'counterPartyName'
+    attrName: 'counterPartyName',
+    size: 7
   },{
     headerKey: 'quantity',
     headerDisplayLabel: 'Quantity',
-    attrName: 'quantity'
+    attrName: 'quantity',
+    size: 5
+  },{
+    headerKey: 'spread',
+    headerDisplayLabel: 'Spread',
+    attrName: 'spread'
+  },{
+    headerKey: 'wgtAvgSpread',
+    headerDisplayLabel: 'Wgt Avg Spread',
+    attrName: 'wgtAvgSpread',
+    size: 7
+  },{
+    headerKey: 'price',
+    headerDisplayLabel: 'Price',
+    attrName: 'price'
+  },{
+    headerKey: 'wgtAvgPrice',
+    headerDisplayLabel: 'Wgt Avg Price',
+    attrName: 'wgtAvgPrice',
+    size: 7
+  },{
+    headerKey: 'strategy',
+    headerDisplayLabel: 'Strategy',
+    attrName: 'vestedStrategy',
+    size: 7
+  },{
+    headerKey: 'postTradeSumQuantity',
+    headerDisplayLabel: 'Quantity After Trade',
+    attrName: 'postTradeSumQuantity',
+    size: 9
   }
 ];

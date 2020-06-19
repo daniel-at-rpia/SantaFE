@@ -565,21 +565,22 @@ export interface SantaTableAlertSideCellDTO extends BasicDTOStructure {
 
 export interface TradeDTO extends BasicDTOStructure {
   data: {
-    tradeId: string,
-    trader: string,
-    counterPartyName: string,
-    quantity: number,
-    postTradeSumQuantity: number,
-    tradeDateTime: string,
-    price: number,
-    spread: number,
-    wgtAvgSpread: number,
-    wgtAvgPrice: number,
-    vestedPortfolio: string,
-    vestedStrategy: string
+    tradeId: string;
+    trader: string;
+    counterPartyName: string;
+    quantity: string;
+    postTradeSumQuantity: string;
+    tradeDateTime: string;
+    tradeDateTimeParsed: string;
+    price: string;
+    spread: string;
+    wgtAvgSpread: string;
+    wgtAvgPrice: string;
+    vestedPortfolio: string;
+    vestedStrategy: string;
   }
   state: {
-    isCancelled: boolean
+    isCancelled: boolean;
   }
 }
 

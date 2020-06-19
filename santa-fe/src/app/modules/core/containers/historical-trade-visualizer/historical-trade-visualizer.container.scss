@@ -1,30 +1,41 @@
 @import "global.scss";
 
+@mixin mix_tradeVisualizer_cell_style() {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 $spacing_x_small;
+  overflow: hidden;
+}
+
 .sat-historicalTradeVisualizer {
   $blockName: &;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   &__tableHeader {
     display: flex;
     &-list {
       flex: 1 1 auto;
       display: flex;
       &-item {
-        @include mix_border_generator(0 $typical_border_width);
-        padding: 0 $spacing_x_small;
+        @include mix_border_generator(0 0 0 $typical_border_width);
+        @include mix_tradeVisualizer_cell_style;
+        display: flex;
+        border-color: transparent;
         &-text {
-
+          @include mix_text_overflow();
+          color: $font_color_inverse;
         }
         &:first-of-type {
           border-left-width: 0;
-        }
-        &:last-of-type {
-          border-right-width: 0;
         }
       }
     }
   }
   &__tableContent {
+    @include mix_enable_scrollbar('vertical');
     flex: 1 1 auto;
     display: flex;
     &-rowList {
@@ -35,16 +46,17 @@
         display: flex;
         margin: $spacing_x_small 0 ;
         &-cell {
-          @include mix_border_generator(0 $typical_border_width);
-          padding: 0 $spacing_x_small;
+          @include mix_border_generator(0 0 0 $typical_border_width);
+          @include mix_tradeVisualizer_cell_style;
+          display: flex;
+          height: 1.75rem;
+          line-height: $line_height_default;
           &-text {
-            
+            @include mix_text_overflow_multi_line(2);
+            color: $font_color_inverse;
           }
           &:first-of-type {
             border-left-width: 0;
-          }
-          &:last-of-type {
-            border-right-width: 0;
           }
         }
       }

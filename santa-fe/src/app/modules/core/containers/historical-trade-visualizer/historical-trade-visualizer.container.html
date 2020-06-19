@@ -4,7 +4,12 @@
   }">
   <section class="sat-historicalTradeVisualizer__tableHeader">
     <ul class="sat-historicalTradeVisualizer__tableHeader-list">
-      <li class="sat-historicalTradeVisualizer__tableHeader-list-item" *ngFor="let eachHeader of constants.headerConfigList">
+      <li
+        class="sat-historicalTradeVisualizer__tableHeader-list-item"
+        *ngFor="let eachHeader of constants.headerConfigList"
+        [ngStyle]="{
+          'width': eachHeader.size ? eachHeader.size + 'rem' : '4rem' 
+        }">
         <span class="sat-historicalTradeVisualizer__tableHeader-list-item-text">{{eachHeader.headerDisplayLabel}}</span>
       </li>
     </ul>
@@ -12,7 +17,12 @@
   <section class="sat-historicalTradeVisualizer__tableContent">
     <ul class="sat-historicalTradeVisualizer__tableContent-rowList">
       <li class="sat-historicalTradeVisualizer__tableContent-rowList-row" *ngFor="let eachTrade of historyData.data.displayTradeList">
-        <div class="sat-historicalTradeVisualizer__tableContent-rowList-row-cell" *ngFor="let eachHeader of constants.headerConfigList">
+        <div
+          class="sat-historicalTradeVisualizer__tableContent-rowList-row-cell"
+          *ngFor="let eachHeader of constants.headerConfigList"
+          [ngStyle]="{
+            'width': eachHeader.size ? eachHeader.size + 'rem' : '4rem' 
+          }">
           <span class="sat-historicalTradeVisualizer__tableContent-rowList-row-cell-text">{{eachTrade.data[eachHeader.attrName]}}</span>
         </div>
       </li>

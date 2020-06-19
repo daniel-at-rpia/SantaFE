@@ -292,7 +292,7 @@ export class DTOService {
     };
     dto.data.cost[newBlock.portfolioName] = newCostPortfolioBlock;
     targetPortfolio.trades.forEach((eachRawTrade) => {
-      dto.data.tradeHistory.push(this.formTradeObject(eachRawTrade));
+      dto.data.tradeHistory.push(this.formTradeObject(eachRawTrade, dto));
     });
   }
 
@@ -1332,19 +1332,23 @@ export class DTOService {
     return object;
   }
 
-  public formTradeObject(rawData: BEModels.BETradeBlock): DTOs.TradeDTO {
+  public formTradeObject(
+    rawData: BEModels.BETradeBlock,
+    targetSecurity: DTOs.SecurityDTO
+  ): DTOs.TradeDTO {
     const object: DTOs.TradeDTO = {
       data: {
         tradeId: rawData.tradeId,
         trader: rawData.trader,
         counterPartyName: rawData.counterpartyName,
-        quantity: rawData.quantity,
-        postTradeSumQuantity: rawData.securityQuantityAfterTrade,
+        quantity: this.utility.parseNumberToThousands(rawData.quantity, true),
+        postTradeSumQuantity: this.utility.parseNumberToThousands(rawData.quantityAfterTrade, true),
         tradeDateTime: rawData.tradeDateTime,
-        price: rawData.price,
-        spread: rawData.spread,
-        wgtAvgPrice: rawData.price,
-        wgtAvgSpread: rawData.spread,
+        tradeDateTimeParsed: moment(rawData.tradeDateTime).format(`MMM DD - HH:mm`),
+        price: this.utility.parseTriCoreDriverNumber(rawData.price, TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
+        spread: this.utility.parseTriCoreDriverNumber(rawData.spread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
+        wgtAvgPrice: this.utility.parseTriCoreDriverNumber(rawData.wgtAvgPrice, TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
+        wgtAvgSpread: this.utility.parseTriCoreDriverNumber(rawData.wgtAvgSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
         vestedPortfolio: rawData.partitionOptionValue.PortfolioShortName,
         vestedStrategy: rawData.partitionOptionValue.StrategyName
       },

@@ -36,6 +36,11 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
     @include mix_fixed_div(relative, $z_index_base_item_lift);
     flex: 1 1 auto;
     display: none;
+    overflow: hidden;
+    historical-trade-visualizer {
+      display: flex;
+      flex-direction: column;
+    }
   }
   &__backgroundCTA {
     @include mix_fixed_div(absolute, $z_index_base_item_solid);
