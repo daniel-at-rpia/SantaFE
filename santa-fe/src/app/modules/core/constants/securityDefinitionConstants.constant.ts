@@ -190,7 +190,7 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'Wireless Telecommunications Services'
   ];
 
-  const FilterOptionsPortfolioList = [
+  export const FilterOptionsPortfolioList = [
     'DOF',
     'SOF',
     'STIP',

@@ -419,8 +419,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
             &-btn {
               @include material('none');
               background-color: $color_active;
-              &-text {
-                background-color: $color_active;
+              &-content-text {
                 color: $font_color_inverse;
               }
             }
@@ -440,8 +439,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
             &-btn {
               @include material('none');
               background-color: $color_active;
-              &-text {
-                background-color: $color_active;
+              &-content-text {
                 color: $font_color_inverse;
               }
             }
@@ -461,8 +459,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
             &-btn {
               @include material('none');
               background-color: $color_active;
-              &-text {
-                background-color: $color_active;
+              &-content-text {
                 color: $font_color_inverse;
               }
             }
@@ -482,8 +479,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
             &-btn {
               @include material('none');
               background-color: $color_active;
-              &-text {
-                background-color: $color_active;
+              &-content-text {
                 color: $font_color_inverse;
               }
             }
@@ -503,8 +499,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
             &-btn {
               @include material('none');
               background-color: $color_active;
-              &-text {
-                background-color: $color_active;
+              &-content-text {
                 color: $font_color_inverse;
               }
             }
@@ -524,8 +519,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
             &-btn {
               @include material('none');
               background-color: $color_active;
-              &-text {
-                background-color: $color_active;
+              &-content-text {
                 color: $font_color_inverse;
               }
             }
@@ -581,8 +575,8 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       &__main-twoSideEntry-cta--bid {
         #{$securityQuoteBlockName} {
           &__main-twoSideEntry-cta-btn {
-            background-color: $color_detailTableBackground;
-            &-text {
+            background-color: transparent;
+            &-content-text {
               color: $font_color_inverse;
             }
             &-downVoteIcon {
@@ -598,8 +592,8 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       &__main-twoSideEntry-cta--ask {
         #{$securityQuoteBlockName} {
           &__main-twoSideEntry-cta-btn {
-            background-color: $color_detailTableBackground;
-            &-text {
+            background-color: transparent;
+            &-content-text {
               color: $font_color_inverse;
             }
             &-downVoteIcon {

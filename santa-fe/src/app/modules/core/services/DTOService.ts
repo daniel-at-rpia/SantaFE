@@ -3,18 +3,7 @@
     import { any } from '@amcharts/amcharts4/.internal/core/utils/Array';
     import * as moment from 'moment';
 
-    import {
-      BESecurityDTO,
-      BESecurityGroupDTO,
-      BEBestQuoteDTO,
-      BEQuoteDTO,
-      BEPortfolioDTO,
-      BEHistoricalQuantBlock,
-      BEHistoricalSummaryDTO,
-      BESingleBestQuoteDTO,
-      BEAlertDTO,
-      BEAlertMarketListQuoteBlock
-    } from 'BEModels/backend-models.interface';
+    import * as BEModels from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
     import * as Blocks from 'FEModels/frontend-blocks.interface';
     import {
@@ -42,7 +31,8 @@
       GroupMetricOptions
     } from 'Core/constants/marketConstants.constant';
     import {
-      ConfiguratorDefinitionLayout
+      ConfiguratorDefinitionLayout,
+      FilterOptionsPortfolioList
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       QuoteHeaderConfigList
@@ -57,7 +47,7 @@ export class DTOService {
 
   public formSecurityCardObject(
     securityIdFull: string,
-    rawData: BESecurityDTO,
+    rawData: BEModels.BESecurityDTO,
     isStencil: boolean,
     isSlimVariant: boolean,
     currentSelectedMetric?: string
@@ -199,7 +189,8 @@ export class DTOService {
           alertQuoteDealer: null,
           alertTradeTrader: null,
           alertStatus: null
-        }
+        },
+        tradeHistory: []
       },
       api: {
         onClickCard: null,
@@ -251,7 +242,7 @@ export class DTOService {
 
   public appendPortfolioInfoToSecurityDTO(
     dto: DTOs.SecurityDTO,
-    targetPortfolio: BEPortfolioDTO
+    targetPortfolio: BEModels.BEPortfolioDTO
   ) {
     const lastTrade = !!targetPortfolio.trades && targetPortfolio.trades.length > 0 ? targetPortfolio.trades[targetPortfolio.trades.length-1] : null;
     const newBlock: Blocks.SecurityPortfolioBlock = {
@@ -301,6 +292,9 @@ export class DTOService {
       }
     };
     dto.data.cost[newBlock.portfolioName] = newCostPortfolioBlock;
+    targetPortfolio.trades.forEach((eachRawTrade) => {
+      dto.data.tradeHistory.push(this.formTradeObject(eachRawTrade, dto));
+    });
   }
 
   public appendPortfolioOverviewInfoForSecurityDTO(
@@ -386,7 +380,7 @@ export class DTOService {
   }
 
   public formSecurityGroupObject(
-    rawData: BESecurityGroupDTO
+    rawData: BEModels.BESecurityGroupDTO
   ): DTOs.SecurityGroupDTO {
     const object:DTOs.SecurityGroupDTO = {
       data: {
@@ -598,7 +592,7 @@ export class DTOService {
   public formQuantComparerObject(
     isStencil: boolean,
     quantMetricType: string,
-    BEdto: BEBestQuoteDTO,
+    BEdto: BEModels.BEBestQuoteDTO,
     securityCard: DTOs.SecurityDTO,
     axeOnly: boolean
   ): DTOs.QuantComparerDTO {
@@ -663,7 +657,7 @@ export class DTOService {
   }
 
   private populateQuantCompareObject(
-    rawData: BESingleBestQuoteDTO,
+    rawData: BEModels.BESingleBestQuoteDTO,
     driverType: string,
     securityCard: DTOs.SecurityDTO,
     axeOnly: boolean
@@ -864,14 +858,16 @@ export class DTOService {
             bestYieldQuote: null
           }
         },
-        alert: alert
+        alert: alert,
+        historicalTradeVisualizer: this.formHistoricalTradeObject(securityDTO)
       },
       state: {
         expandViewSortByQuoteMetric: null,
         isExpanded: false,
         presentingAllQuotes: false,
         isCDSVariant: this.utility.isCDS(false, securityDTO),
-        isCDSOffTheRun: false
+        isCDSOffTheRun: false,
+        viewHistoryState: false
       }
     };
     return object;
@@ -933,7 +929,7 @@ export class DTOService {
 
   public formSecurityQuoteObject(
     isStencil: boolean,
-    rawData: BEQuoteDTO,
+    rawData: BEModels.BEQuoteDTO,
     targetSecurity: DTOs.SecurityDTO,
     targetRow: DTOs.SecurityTableRowDTO
   ): DTOs.SecurityQuoteDTO {
@@ -1064,7 +1060,7 @@ export class DTOService {
 
   public formMoveVisualizerObject(
     isStencil: boolean,
-    rawData: BEHistoricalQuantBlock,
+    rawData: BEModels.BEHistoricalQuantBlock,
     colorCodeInversed: boolean,
     identifier?: string
   ): DTOs.MoveVisualizerDTO {
@@ -1124,7 +1120,7 @@ export class DTOService {
 
   public formHistoricalSummaryObject(
     isStencil: boolean,
-    rawData: BEHistoricalSummaryDTO,
+    rawData: BEModels.BEHistoricalSummaryDTO,
     isLevel: boolean,
     isColorCodeInversed: boolean
   ): DTOs.HistoricalSummaryDTO {
@@ -1174,7 +1170,7 @@ export class DTOService {
   }
 
   public formAlertObject(
-    rawData: BEAlertDTO
+    rawData: BEModels.BEAlertDTO
   ): DTOs.AlertDTO {
     const parsedTitleList = rawData.keyWord.split('|');
     const momentTime = moment(rawData.timeStamp);
@@ -1224,7 +1220,7 @@ export class DTOService {
 
   private appendAlertDetailInfo(
     alertDTO: DTOs.AlertDTO,
-    rawData: BEAlertDTO
+    rawData: BEModels.BEAlertDTO
   ) {
     if (!!rawData.security) {
       alertDTO.data.security = this.formSecurityCardObject(
@@ -1282,7 +1278,7 @@ export class DTOService {
       }
     }
     if (alertDTO.state.isMarketListVariant) {
-      const quoteBlock = rawData.quote as BEAlertMarketListQuoteBlock;
+      const quoteBlock = rawData.quote as BEModels.BEAlertMarketListQuoteBlock;
       if (!!quoteBlock) {
         alertDTO.data.validUntilTime = quoteBlock.validUntilTime;
         alertDTO.data.validUntilMoment = 
@@ -1334,6 +1330,60 @@ export class DTOService {
         isTrade: type === AlertTypes.tradeAlert
       }
     }
+    return object;
+  }
+
+  public formTradeObject(
+    rawData: BEModels.BETradeBlock,
+    targetSecurity: DTOs.SecurityDTO
+  ): DTOs.TradeDTO {
+    const object: DTOs.TradeDTO = {
+      data: {
+        tradeId: rawData.tradeId,
+        trader: rawData.trader,
+        counterPartyName: rawData.counterpartyName,
+        quantity: this.utility.parseNumberToThousands(rawData.quantity, true),
+        postTradeSumQuantity: this.utility.parseNumberToThousands(rawData.quantityAfterTrade, true),
+        tradeDateTime: rawData.tradeDateTime,
+        tradeDateTimeParsed: moment(rawData.tradeDateTime).format(`MMM DD - HH:mm`),
+        price: this.utility.parseTriCoreDriverNumber(rawData.price, TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
+        spread: this.utility.parseTriCoreDriverNumber(rawData.spread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
+        wgtAvgPrice: this.utility.parseTriCoreDriverNumber(rawData.wgtAvgPrice, TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
+        wgtAvgSpread: this.utility.parseTriCoreDriverNumber(rawData.wgtAvgSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
+        vestedPortfolio: rawData.partitionOptionValue.PortfolioShortName,
+        vestedStrategy: rawData.partitionOptionValue.StrategyName
+      },
+      state: {
+        isCancelled: rawData.isCancelled
+      }
+    }
+    return object;
+  }
+
+  public formHistoricalTradeObject(targetSecurity: DTOs.SecurityDTO): DTOs.HistoricalTradeVisualizerDTO {
+    const object: DTOs.HistoricalTradeVisualizerDTO = {
+      data: {
+        prinstineTradeList: targetSecurity.data.tradeHistory || [],
+        displayTradeList: []
+      },
+      state: {
+        disabledPortfolio: this.utility.deepCopy(FilterOptionsPortfolioList),
+        selectedPortfolio: []
+      }
+    };
+    object.data.prinstineTradeList.forEach((eachTrade) => {
+      if (!!eachTrade.data.vestedPortfolio) {
+        const indexInDisabledList = object.state.disabledPortfolio.indexOf(eachTrade.data.vestedPortfolio);
+        if (indexInDisabledList >= 0) {
+          object.state.disabledPortfolio.splice(indexInDisabledList, 1);
+        }
+      }
+    });
+    !object.state.disabledPortfolio.includes('DOF') && object.state.selectedPortfolio.push('DOF');
+    !object.state.disabledPortfolio.includes('SOF') && object.state.selectedPortfolio.push('SOF');
+    object.data.displayTradeList = object.data.prinstineTradeList.filter((eachTrade) => {
+      return object.state.selectedPortfolio.includes(eachTrade.data.vestedPortfolio);
+    });
     return object;
   }
 }

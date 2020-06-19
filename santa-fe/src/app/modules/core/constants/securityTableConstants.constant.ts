@@ -1,6 +1,7 @@
 import {
   SecurityTableHeaderConfigStub,
-  SecurityTableQuoteHeaderConfigStub
+  SecurityTableQuoteHeaderConfigStub,
+  TradeHistoryHeaderConfigStub
 } from 'FEModels/frontend-stub-models.interface';
 
 import {
@@ -28,9 +29,9 @@ export const AGGRID_ALERT_MESSAGE_COLUMN_WIDTH = 240;
 export const AGGRID_ROW_HEIGHT = 40;
 export const AGGRID_ROW_HEIGHT_SLIM = 32;
 export const AGGRID_DETAIL_ROW_HEIGHT_PER_ROW = 34;
-export const AGGRID_DETAIL_ROW_HEIGHT_OFFSET = 120;
-export const AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS = 155;
-export const AGGRID_DETAIL_ROW_DEFAULT_COUNT = 10;
+export const AGGRID_DETAIL_ROW_HEIGHT_OFFSET = 140;
+export const AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS = 175;
+export const AGGRID_DETAIL_ROW_DEFAULT_COUNT = 9;
 export const AGGRID_DETAIL_ROW_HEIGHT_MAX = AGGRID_DETAIL_ROW_HEIGHT_OFFSET + AGGRID_DETAIL_ROW_HEIGHT_PER_ROW * AGGRID_DETAIL_ROW_DEFAULT_COUNT;
 export const AGGRID_DETAIL_ROW_HEIGHT_DEFAULT = 200;
 export const AGGRID_HEADER_CLASS = 'santaTable__agGridTable-agGrid-header';
@@ -1475,5 +1476,60 @@ export const QuoteHeaderConfigList: Array<SecurityTableQuoteHeaderConfigStub> = 
     size: 4,
     textOnly: true,
     isNonCDS: true
+  }
+];
+
+export const TradeHistoryHeaderConfigList: Array<TradeHistoryHeaderConfigStub> = [
+  {
+    headerKey: 'tradeDateTime',
+    headerDisplayLabel: 'Date & Time',
+    attrName: 'tradeDateTimeParsed',
+    size: 8
+  },{
+    headerKey: 'portfolio',
+    headerDisplayLabel: 'Fund',
+    attrName: 'vestedPortfolio'
+  },{
+    headerKey: 'trader',
+    headerDisplayLabel: 'Trader',
+    attrName: 'trader'
+  },{
+    headerKey: 'counterPartyName',
+    headerDisplayLabel: 'Counter Party',
+    attrName: 'counterPartyName',
+    size: 7
+  },{
+    headerKey: 'quantity',
+    headerDisplayLabel: 'Quantity',
+    attrName: 'quantity',
+    size: 5
+  },{
+    headerKey: 'spread',
+    headerDisplayLabel: 'Spread',
+    attrName: 'spread'
+  },{
+    headerKey: 'wgtAvgSpread',
+    headerDisplayLabel: 'Wgt Avg Spread',
+    attrName: 'wgtAvgSpread',
+    size: 7
+  },{
+    headerKey: 'price',
+    headerDisplayLabel: 'Price',
+    attrName: 'price'
+  },{
+    headerKey: 'wgtAvgPrice',
+    headerDisplayLabel: 'Wgt Avg Price',
+    attrName: 'wgtAvgPrice',
+    size: 7
+  },{
+    headerKey: 'strategy',
+    headerDisplayLabel: 'Strategy',
+    attrName: 'vestedStrategy',
+    size: 7
+  },{
+    headerKey: 'postTradeSumQuantity',
+    headerDisplayLabel: 'Quantity After Trade',
+    attrName: 'postTradeSumQuantity',
+    size: 9
   }
 ];

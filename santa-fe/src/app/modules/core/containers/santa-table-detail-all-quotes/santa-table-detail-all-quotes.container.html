@@ -3,8 +3,24 @@
     'santaTableDetailAllQuotes': true,
     'santaTableDetailAllQuotes--showMoreQuoteCta': ((rowData.data.quotes.primaryQuotes.length > 0 && rowData.data.quotes.primaryPresentQuotes.length < rowData.data.quotes.primaryQuotes.length) || (rowData.data.quotes.secondaryQuotes.length > 0 && rowData.data.quotes.secondaryPresentQuotes.length < rowData.data.quotes.secondaryQuotes.length)) && !rowData.state.presentingAllQuotes,
     'santaTableDetailAllQuotes--securityIsCDSState': rowData.state.isCDSVariant,
-    'santaTableDetailAllQuotes--securityIsOffTheRunCDSState': rowData.state.isCDSVariant && rowData.state.isCDSOffTheRun
+    'santaTableDetailAllQuotes--securityIsOffTheRunCDSState': rowData.state.isCDSVariant && rowData.state.isCDSOffTheRun,
+    'santaTableDetailAllQuotes--viewHistoryState': rowData.state.viewHistoryState
   }">
+  <section class="santaTableDetailAllQuotes__viewSwitch">
+    <div class="santaBtnGroup">
+      <button (click)="onClickSwitchViewToHistory()" class="santaBtn--labelled santaTableDetailAllQuotes__viewSwitch-historyBtn">
+        <i class="fal fa-history"></i>
+        <span>Trade History</span>
+      </button>
+      <button (click)="onClickSwitchViewToQuote()" class="santaBtn--labelled santaTableDetailAllQuotes__viewSwitch-quoteBtn">
+        <i class="fal fa-comments-dollar"></i>
+        <span>Live Quotes</span>
+      </button>
+    </div>
+  </section>
+  <section class="santaTableDetailAllQuotes__history">
+    <historical-trade-visualizer [historyData]="rowData.data.historicalTradeVisualizer"></historical-trade-visualizer>
+  </section>
   <section (click)="onClickClose()" class="santaTableDetailAllQuotes__backgroundCTA"></section>
   <section class="santaTableDetailAllQuotes__main">
     <div class="santaTableDetailAllQuotes__main-content">
