@@ -293,7 +293,10 @@ export class DTOService {
     };
     dto.data.cost[newBlock.portfolioName] = newCostPortfolioBlock;
     targetPortfolio.trades.forEach((eachRawTrade) => {
-      dto.data.tradeHistory.push(this.formTradeObject(eachRawTrade, dto));
+      if (eachRawTrade.counterpartyName !== 'DUMMY CORPORATE ACTION') {
+        // just a hacky filter to avoid a BE fix
+        dto.data.tradeHistory.push(this.formTradeObject(eachRawTrade, dto));
+      }
     });
   }
 
@@ -1342,9 +1345,9 @@ export class DTOService {
         tradeId: rawData.tradeId,
         trader: rawData.trader,
         counterPartyName: rawData.counterpartyName,
-        quantity: this.utility.parseNumberToThousands(rawData.quantity, true),
+        quantity: this.utility.parseNumberToCommas(rawData.quantity),
         rawQuantity: rawData.quantity,
-        postTradeSumQuantity: this.utility.parseNumberToThousands(rawData.quantityAfterTrade, true),
+        postTradeSumQuantity: this.utility.parseNumberToCommas(rawData.quantityAfterTrade),
         tradeDateTime: moment(rawData.tradeDateTime).unix(),
         tradeDateTimeParsed: moment(rawData.tradeDateTime).format(`MMM DD - HH:mm`),
         price: this.utility.parseTriCoreDriverNumber(rawData.price, TriCoreDriverConfig.Price.label, targetSecurity, true) as string,

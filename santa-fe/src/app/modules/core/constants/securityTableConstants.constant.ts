@@ -33,7 +33,7 @@ export const AGGRID_DETAIL_ROW_HEIGHT_OFFSET = 140;
 export const AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS = 175;
 export const AGGRID_DETAIL_ROW_DEFAULT_COUNT = 9;
 export const AGGRID_DETAIL_ROW_HEIGHT_MAX = AGGRID_DETAIL_ROW_HEIGHT_OFFSET + AGGRID_DETAIL_ROW_HEIGHT_PER_ROW * AGGRID_DETAIL_ROW_DEFAULT_COUNT;
-export const AGGRID_DETAIL_ROW_HEIGHT_DEFAULT = 200;
+export const AGGRID_DETAIL_ROW_HEIGHT_DEFAULT = 300;
 export const AGGRID_HEADER_CLASS = 'santaTable__agGridTable-agGrid-header';
 export const AGGRID_ROW_CLASS = 'santaTable__agGridTable-agGrid-row';
 export const AGGRID_CELL_CLASS = 'santaTable__agGridTable-agGrid-cell';
@@ -1502,7 +1502,7 @@ export const TradeHistoryHeaderConfigList: Array<TradeHistoryHeaderConfigStub> =
     headerKey: 'quantity',
     headerDisplayLabel: 'Quantity',
     attrName: 'quantity',
-    size: 6,
+    size: 7,
     applyQuantColorCodes: true,
     underlineAttrName: 'rawQuantity'
   },{

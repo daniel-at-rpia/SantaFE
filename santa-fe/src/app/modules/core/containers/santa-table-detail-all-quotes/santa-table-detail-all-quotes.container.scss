@@ -15,12 +15,13 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
 .santaTableDetailAllQuotes {
   $santaTableDetailAllQuotesBlockName: &;
   @include mix_fixed_div(relative, $z_index_base_item);
-  @include mix_gradient($theme_color_1, $theme_color_2, 40%, 45deg);
+  // @include mix_gradient($color_detailTableBackground, $color_gray_4, 40%, 45deg);
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   height: 100%;
   padding: $spacing_small 0;
+  background-color: $color_detailTableBackground;
   &__viewSwitch {
     @include mix_fixed_div(relative, $z_index_base_item_lift);
     display: flex;
