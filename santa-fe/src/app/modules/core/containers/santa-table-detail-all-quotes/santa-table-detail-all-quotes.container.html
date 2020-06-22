@@ -1,4 +1,5 @@
 <article
+  *ngIf="!!rowData"
   [ngClass]="{
     'santaTableDetailAllQuotes': true,
     'santaTableDetailAllQuotes--showMoreQuoteCta': ((rowData.data.quotes.primaryQuotes.length > 0 && rowData.data.quotes.primaryPresentQuotes.length < rowData.data.quotes.primaryQuotes.length) || (rowData.data.quotes.secondaryQuotes.length > 0 && rowData.data.quotes.secondaryPresentQuotes.length < rowData.data.quotes.secondaryQuotes.length)) && !rowData.state.presentingAllQuotes,
@@ -19,7 +20,10 @@
     </div>
   </section>
   <section class="santaTableDetailAllQuotes__history">
-    <historical-trade-visualizer [historyData]="rowData.data.historicalTradeVisualizer"></historical-trade-visualizer>
+    <historical-trade-visualizer
+      [historyData]="rowData.data.historicalTradeVisualizer"
+      [showGraph]="rowData.state.viewHistoryState">
+    </historical-trade-visualizer>
   </section>
   <section (click)="onClickClose()" class="santaTableDetailAllQuotes__backgroundCTA"></section>
   <section class="santaTableDetailAllQuotes__main">

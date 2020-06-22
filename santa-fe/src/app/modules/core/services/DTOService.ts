@@ -870,7 +870,8 @@ export class DTOService {
         presentingAllQuotes: false,
         isCDSVariant: this.utility.isCDS(false, securityDTO),
         isCDSOffTheRun: false,
-        viewHistoryState: true
+        viewHistoryState: false,
+        quotesLoaded: false
       }
     };
     return object;

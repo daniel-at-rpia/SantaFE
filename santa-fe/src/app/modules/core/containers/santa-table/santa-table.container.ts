@@ -233,6 +233,8 @@ export class SantaTable implements OnInit, OnChanges {
             if (!!targetRow) {
               try {
                 targetRow.state.isExpanded = !targetRow.state.isExpanded;
+                // just set it to false for now, since the fetch will update it to true anyways
+                targetRow.state.quotesLoaded = false;
                 if (targetRow.data.security) {
                   // targetRow.data.security.state.isMultiLineVariant = params.node.expanded;
                   if (targetRow.state.isExpanded) {
@@ -605,6 +607,7 @@ export class SantaTable implements OnInit, OnChanges {
     serverReturn: Array<Array<BEQuoteDTO>>,
     params: any  // this is a AgGridRowParams, can't enforce type checking here because agGrid's native function redrawRows() would throw an compliation error
   ) {
+    targetRow.state.quotesLoaded = true;
     const primaryList = serverReturn[0];
     targetRow.state.isCDSOffTheRun = serverReturn.length > 1;
     primaryList.forEach((eachRawQuote) => {

@@ -14,8 +14,10 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class HistoricalTradeVisualizer implements OnInit, OnDestroy {
+export class HistoricalTradeVisualizer implements OnDestroy, OnChanges {
   @Input() historyData: HistoricalTradeVisualizerDTO;
+  @Input() showGraph: boolean;
+  private showGraphReceived: boolean;
   
   public constants = {
     headerConfigList: TradeHistoryHeaderConfigList,
@@ -24,19 +26,22 @@ export class HistoricalTradeVisualizer implements OnInit, OnDestroy {
 
   constructor(private graphService: GraphService) {} 
 
-  public ngOnInit() {
-    const testFun = () => {
-      if (!this.historyData.graph.timeSeries) {
-        this.historyData.graph.timeSeries = this.graphService.generateTradeHistoryTimeSeries(this.historyData);
-      }
-    };
-    setTimeout(testFun.bind(this), 300);
-  }
-
   public ngOnDestroy() {
     if (this.historyData.graph.timeSeries) {
       this.graphService.destoryGraph(this.historyData.graph.timeSeries);
       this.historyData.graph.timeSeries = null;
+    }
+  }
+
+  public ngOnChanges() {
+    if (!!this.showGraph && !this.showGraphReceived) {
+      this.showGraphReceived = true;
+      const testFun = () => {
+        if (!this.historyData.graph.timeSeries) {
+          this.historyData.graph.timeSeries = this.graphService.generateTradeHistoryTimeSeries(this.historyData);
+        }
+      };
+      setTimeout(testFun.bind(this), 1);
     }
   }
 
