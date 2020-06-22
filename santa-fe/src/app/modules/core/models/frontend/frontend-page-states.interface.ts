@@ -6,7 +6,7 @@ import {
 } from 'FEModels/frontend-blocks.interface';
 import {
   SecurityDefinitionStub,
-  SecurityTableMetricStub
+  SecurityTableHeaderConfigStub
 } from 'FEModels/frontend-stub-models.interface';
 import {
   DefinitionConfiguratorEmitterParamsItem,
@@ -96,7 +96,7 @@ export interface TradeCenterPanelState {
     boosted: boolean;
   }
   table: {
-    metrics: Array<SecurityTableMetricStub>;
+    metrics: Array<SecurityTableHeaderConfigStub>;
     dto: DTOs.SecurityTableDTO;
   }
   fetchResult: {
@@ -219,7 +219,7 @@ export interface TradeAlertPanelState {
   receivedActiveAlertsMap: object;  // currently BE passes the same marketlist alerts regardless of the timestamp FE provides, until the alert expires. This map is to avoid duplicates being created over and over on each heartbeat
   displayAlertTable: boolean;
   table: {
-    alertMetrics: Array<SecurityTableMetricStub>;
+    alertMetrics: Array<SecurityTableHeaderConfigStub>;
     alertDto: DTOs.SecurityTableDTO;
   }
   fetchResult: {

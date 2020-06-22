@@ -32,7 +32,8 @@ import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-fil
 import { NumericFilter } from 'Core/components/numeric-filter/numeric-filter.component';
 import { GlobalAlert } from 'Core/containers/global-alert/global-alert.container';
 import { Alert } from 'Core/components/alert/alert.component';
-import {CountdownPipe} from 'App/pipes/Countdown.pipe';
+import { CountdownPipe } from 'App/pipes/Countdown.pipe';
+import { HistoricalTradeVisualizer } from 'Core/containers/historical-trade-visualizer/historical-trade-visualizer.container';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import {CountdownPipe} from 'App/pipes/Countdown.pipe';
     SantaTableNumericFloatingFilter,
     NumericFilter,
     GlobalAlert,
-    Alert
+    Alert,
+    HistoricalTradeVisualizer
   ],
     imports: [
         CommonModule,

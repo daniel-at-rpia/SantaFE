@@ -126,6 +126,7 @@ export interface SecurityDTO extends BasicDTOStructure {
       alertTradeTrader: string;
       alertStatus: string;
     }
+    tradeHistory: Array<TradeDTO>;
   }
   api: {
     onClickCard: (card: SecurityDTO) => void;
@@ -371,6 +372,7 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
       }
     }
     alert: AlertDTO;
+    historicalTradeVisualizer: HistoricalTradeVisualizerDTO;
   },
   state: {
     expandViewSortByQuoteMetric: string;
@@ -378,6 +380,7 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
     presentingAllQuotes: boolean;
     isCDSVariant: boolean;
     isCDSOffTheRun: boolean;
+    viewHistoryState: boolean;
   }
 }
 
@@ -557,5 +560,38 @@ export interface SantaTableAlertSideCellDTO extends BasicDTOStructure {
     isStencil: boolean;
     askSided: boolean;
     bidSided: boolean;
+  }
+}
+
+export interface TradeDTO extends BasicDTOStructure {
+  data: {
+    tradeId: string;
+    trader: string;
+    counterPartyName: string;
+    quantity: string;
+    rawQuantity: number;
+    postTradeSumQuantity: string;
+    tradeDateTime: number;
+    tradeDateTimeParsed: string;
+    price: string;
+    spread: string;
+    wgtAvgSpread: string;
+    wgtAvgPrice: string;
+    vestedPortfolio: string;
+    vestedStrategy: string;
+  }
+  state: {
+    isCancelled: boolean;
+  }
+}
+
+export interface HistoricalTradeVisualizerDTO extends BasicDTOStructure {
+  data: {
+    prinstineTradeList: Array<TradeDTO>;
+    displayTradeList: Array<TradeDTO>;
+  }
+  state: {
+    disabledPortfolio: Array<string>;
+    selectedPortfolio: Array<string>;
   }
 }

@@ -67,7 +67,7 @@
       selectPresetSelected
     } from 'Trade/selectors/trade.selectors';
     import {
-      SecurityTableMetrics,
+      SecurityTableHeaderConfigs,
       SECURITY_TABLE_FINAL_STAGE
     } from 'Core/constants/securityTableConstants.constant';
     import {
@@ -132,7 +132,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
   // general
     private initializePageState(): TradeAlertPanelState {
-      const alertTableMetrics = SecurityTableMetrics.filter((eachStub) => {
+      const alertTableMetrics = SecurityTableHeaderConfigs.filter((eachStub) => {
         const targetSpecifics = eachStub.content.tableSpecifics.tradeAlert || eachStub.content.tableSpecifics.default;
         return !targetSpecifics.disabled;
       });

@@ -25,7 +25,7 @@
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
-    import { QuoteMetricList } from 'Core/constants/securityTableConstants.constant';
+    import { QuoteHeaderConfigList } from 'Core/constants/securityTableConstants.constant';
   //
 
 @Component({
@@ -139,6 +139,14 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     this.rowData.data.quotes.primaryPresentQuotes = this.utilityService.deepCopy(this.rowData.data.quotes.primaryQuotes);
     this.rowData.data.quotes.secondaryPresentQuotes = this.utilityService.deepCopy(this.rowData.data.quotes.secondaryPresentQuotes);
     this.rowData.state.presentingAllQuotes = true;
+  }
+
+  public onClickSwitchViewToHistory() {
+    this.rowData.state.viewHistoryState = true;
+  }
+
+  public onClickSwitchViewToQuote() {
+    this.rowData.state.viewHistoryState = false;
   }
 
   private updateQuoteUponClick(params: ClickedSpecificQuoteEmitterParams, targetQuoteList: Array<SecurityQuoteDTO>){

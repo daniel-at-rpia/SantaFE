@@ -1,5 +1,5 @@
 import {
-  SecurityTableMetricStub,
+  SecurityTableHeaderConfigStub,
   SecurityMetricOptionStub,
   TriCoreDriverConfigStub
 } from 'FEModels/frontend-stub-models.interface';

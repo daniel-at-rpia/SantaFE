@@ -492,6 +492,10 @@ export class UtilityService {
     public parseCountdown(value: moment.Moment) {
       return this.countdownPipe.transform(value);
     }
+
+    public parseNumberToCommas(value: number): string {
+      return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
   // shared end
 
   // market specific

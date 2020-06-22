@@ -20,7 +20,7 @@
       [rowGroupPanelShow]="'always'"
       [masterDetail]="true"
       [detailCellRenderer]="'detailAllQuotes'"
-      [detailRowHeight]="constants.agGridDetailRowHeightDefault"
+      [detailRowHeight]="constants.agGridDetailRowHeightMinimum"
       [animateRows]="true"
       [suppressContextMenu]="true"
       [context]="agGridConfig.context"
@@ -32,7 +32,7 @@
     <security-table
       *ngIf="tableData.state.isNativeEnabled"
       [tableData]="tableData"
-      [securityTableMetrics]="securityTableMetrics"
+      [securityTableHeaderConfigs]="securityTableHeaderConfigs"
       [activeTriCoreDriver]="activeTriCoreDriver"
       (clickedSortQuotesByMetric)="onClickSortQuotesByMetric($event)"
       (selectedSecurityForAnalysis)="onSelectSecurityForAnalysis($event)"

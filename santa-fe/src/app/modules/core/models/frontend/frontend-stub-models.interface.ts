@@ -63,14 +63,14 @@ export interface SecurityMetricOptionStub {
   deltaOptions: Array<string>;
 }
 
-export interface SecurityTableQuoteMetric {
+export interface SecurityTableQuoteHeaderConfigStub {
   size?: number;
   labelList: Array<string>;
   textOnly: boolean;
   isNonCDS: boolean;
 }
 
-export interface SecurityTableMetricStub {
+export interface SecurityTableHeaderConfigStub {
   key: string;
   content: {
     label: string;
@@ -78,9 +78,9 @@ export interface SecurityTableMetricStub {
     underlineAttrName: string;
     readyStage: number;
     tableSpecifics: {
-      default: SecurityTableMetricStubTableSpecificsBlock;
-      tradeMain?: SecurityTableMetricStubTableSpecificsBlock;
-      tradeAlert?: SecurityTableMetricStubTableSpecificsBlock;
+      default: SecurityTableHeaderConfigStubTableSpecificsBlock;
+      tradeMain?: SecurityTableHeaderConfigStubTableSpecificsBlock;
+      tradeAlert?: SecurityTableHeaderConfigStubTableSpecificsBlock;
     };
     blockAttrName?: string;
     isFrontEndMetric?: boolean;
@@ -95,7 +95,7 @@ export interface SecurityTableMetricStub {
   }
 }
 
-interface SecurityTableMetricStubTableSpecificsBlock {
+interface SecurityTableHeaderConfigStubTableSpecificsBlock {
   active: boolean;
   pinned?: boolean;
   disabled?: boolean;
@@ -124,4 +124,13 @@ export interface TradeFilterConstantStub {
 
 export interface ObligorChartCategoryColorSchemeStub {
   categoryScheme: Array<{label: string, value: string}>;
+}
+
+export interface TradeHistoryHeaderConfigStub {
+  headerKey: string;
+  headerDisplayLabel: string;
+  attrName: string;
+  underlineAttrName?: string;
+  size?: number;
+  applyQuantColorCodes?: boolean;
 }
