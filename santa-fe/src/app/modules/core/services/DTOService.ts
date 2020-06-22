@@ -1283,6 +1283,11 @@ export class DTOService {
     if (alertDTO.state.isMarketListVariant) {
       const quoteBlock = rawData.quote as BEModels.BEAlertMarketListQuoteBlock;
       if (!!quoteBlock) {
+        if (quoteBlock.isTraded || alertDTO.state.isCancelled) {
+          const momentTime = moment(quoteBlock.eventTime);
+          alertDTO.data.time = momentTime.format(`HH:mm`);
+          alertDTO.data.unixTimestamp = momentTime.unix();
+        }
         alertDTO.data.validUntilTime = quoteBlock.validUntilTime;
         alertDTO.data.validUntilMoment = 
           quoteBlock.isTraded

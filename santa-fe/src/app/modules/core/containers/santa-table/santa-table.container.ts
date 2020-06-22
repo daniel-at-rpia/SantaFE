@@ -24,7 +24,7 @@
     import { BEQuoteDTO } from 'BEModels/backend-models.interface';
     import {
       AGGRID_DETAIL_ROW_DEFAULT_COUNT,
-      AGGRID_DETAIL_ROW_HEIGHT_DEFAULT,
+      AGGRID_DETAIL_ROW_HEIGHT_MINIMUM,
       AGGRID_DETAIL_ROW_HEIGHT_MAX,
       AGGRID_DETAIL_ROW_HEIGHT_OFFSET,
       AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS,
@@ -107,7 +107,7 @@ export class SantaTable implements OnInit, OnChanges {
     agGridDetailRowHeightMax: AGGRID_DETAIL_ROW_HEIGHT_MAX,
     agGridDetailRowHeightPerRow: AGGRID_DETAIL_ROW_HEIGHT_PER_ROW,
     agGridDetailRowHeightOffset: AGGRID_DETAIL_ROW_HEIGHT_OFFSET,
-    agGridDetailRowHeightDefault: AGGRID_DETAIL_ROW_HEIGHT_DEFAULT,
+    agGridDetailRowHeightMinimum: AGGRID_DETAIL_ROW_HEIGHT_MINIMUM,
     agGridDetailRowDefaultCount: AGGRID_DETAIL_ROW_DEFAULT_COUNT,
     agGridDetailRowHeightOffsetOffTheRunCDS: AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS
   };
@@ -645,6 +645,9 @@ export class SantaTable implements OnInit, OnChanges {
       }
       if (dynamicHeight > this.constants.agGridDetailRowHeightMax) {
         dynamicHeight = this.constants.agGridDetailRowHeightMax;
+      }
+      if (dynamicHeight < this.constants.agGridDetailRowHeightMinimum) {
+        dynamicHeight = this.constants.agGridDetailRowHeightMinimum;
       }
       params.node.detailNode.rowHeight = dynamicHeight;
       params.api.resetRowHeights();
