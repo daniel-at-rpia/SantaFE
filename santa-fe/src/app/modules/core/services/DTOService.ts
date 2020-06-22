@@ -870,7 +870,7 @@ export class DTOService {
         presentingAllQuotes: false,
         isCDSVariant: this.utility.isCDS(false, securityDTO),
         isCDSOffTheRun: false,
-        viewHistoryState: true
+        viewHistoryState: false
       }
     };
     return object;
@@ -1373,15 +1373,11 @@ export class DTOService {
     const object: DTOs.HistoricalTradeVisualizerDTO = {
       data: {
         prinstineTradeList: targetSecurity.data.tradeHistory || [],
-        displayTradeList: [],
-        timeSeriesId: `${targetSecurity.data.securityID}-tradeHistory`
+        displayTradeList: []
       },
       state: {
         disabledPortfolio: this.utility.deepCopy(FilterOptionsPortfolioList),
         selectedPortfolio: []
-      },
-      graph: {
-        timeSeries: null
       }
     };
     if (object.data.prinstineTradeList.length > 0) {

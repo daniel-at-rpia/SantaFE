@@ -1,10 +1,9 @@
   // dependencies
-    import { Component, Input, OnChanges, OnDestroy, OnInit, AfterViewInit, ViewEncapsulation } from '@angular/core';
+    import { Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
     import { HistoricalTradeVisualizerDTO } from 'FEModels/frontend-models.interface';
     import { TradeHistoryHeaderConfigList } from 'Core/constants/securityTableConstants.constant';
     import { FilterOptionsPortfolioList } from 'Core/constants/securityDefinitionConstants.constant';
-    import { GraphService } from 'Core/services/GraphService';
   //
 
 @Component({
@@ -14,7 +13,7 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class HistoricalTradeVisualizer implements OnInit, OnDestroy {
+export class HistoricalTradeVisualizer {
   @Input() historyData: HistoricalTradeVisualizerDTO;
   
   public constants = {
@@ -22,23 +21,7 @@ export class HistoricalTradeVisualizer implements OnInit, OnDestroy {
     portfolioList: FilterOptionsPortfolioList
   };
 
-  constructor(private graphService: GraphService) {} 
-
-  public ngOnInit() {
-    const testFun = () => {
-      if (!this.historyData.graph.timeSeries) {
-        this.historyData.graph.timeSeries = this.graphService.generateTradeHistoryTimeSeries(this.historyData);
-      }
-    };
-    setTimeout(testFun.bind(this), 300);
-  }
-
-  public ngOnDestroy() {
-    if (this.historyData.graph.timeSeries) {
-      this.graphService.destoryGraph(this.historyData.graph.timeSeries);
-      this.historyData.graph.timeSeries = null;
-    }
-  }
+  constructor() {} 
 
   public onTogglePortfolio(targetPortfolio) {
     if (!!targetPortfolio && this.historyData.state.disabledPortfolio.indexOf(targetPortfolio) < 0) {
