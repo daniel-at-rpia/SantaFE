@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import * as am4plugins_regression from "@amcharts/amcharts4/plugins/regression";
+import * as moment from 'moment';
 
 import { UtilityService } from './UtilityService';
 import {
@@ -631,10 +632,33 @@ export class GraphService {
       chart.padding(0, 15, 0, 15);
 
       // Load data
-      chart.dataSource.url = "https://www.amcharts.com/wp-content/uploads/assets/stock/MSFT.csv";
-      chart.dataSource.parser = new am4core.CSVParser();
-      chart.dataSource.parser.options['useColumnNames'] = true;
-      chart.dataSource.parser.options['reverse'] = true;
+      chart.data = dto.data.prinstineTradeList.map((eachTrade) => {
+        return {
+          Date: moment.unix(eachTrade.data.tradeDateTime).format('YYYY-MM-DD'),
+          BuySpread: eachTrade.data.rawQuantity >= 0 ? eachTrade.data.spread : null,
+          SellSpread: eachTrade.data.rawQuantity < 0 ? eachTrade.data.spread : null,
+          Volume: eachTrade.data.rawQuantity
+        };
+      });
+      // [
+      //   {
+      //     Date: new Date('2014-08-08T08:02:17'),
+      //     Close: 43.20,
+      //     Volume: 28942700
+      //   },{
+      //     Date: new Date('2014-08-08T06:02:17'),
+      //     Close: 99.20,
+      //     Volume: 39442700
+      //   },{
+      //     Date: new Date('2014-08-07T08:02:17'),
+      //     Close: 43.23,
+      //     Volume: 30314900
+      //   },{
+      //     Date: new Date('2014-08-06T08:02:17'),
+      //     Close: 42.74,
+      //     Volume: 24634000
+      //   }
+      // ];
 
       // the following line makes value axes to be arranged vertically.
       chart.leftAxesContainer.layout = "vertical";
@@ -656,7 +680,10 @@ export class GraphService {
 
       dateAxis.groupData = true;
       dateAxis.minZoomCount = 5;
-
+      // dateAxis.baseInterval = {
+      //   "timeUnit": "minute",
+      //   "count": 1
+      // };
       // these two lines makes the axis to be initially zoomed-in
       // dateAxis.start = 0.7;
       // dateAxis.keepSelection = true;
@@ -677,16 +704,27 @@ export class GraphService {
       //valueAxis.renderer.maxLabelPosition = 0.95;
       valueAxis.renderer.fontSize = "0.8em"
 
-      let series = chart.series.push(new am4charts.CandlestickSeries());
-      series.dataFields.dateX = "Date";
-      series.dataFields.openValueY = "Open";
-      series.dataFields.valueY = "Close";
-      series.dataFields.lowValueY = "Low";
-      series.dataFields.highValueY = "High";
-      series.clustered = false;
-      series.tooltipText = "open: {openValueY.value}\nlow: {lowValueY.value}\nhigh: {highValueY.value}\nclose: {valueY.value}";
-      series.name = "MSFT";
-      series.defaultState.transitionDuration = 0;
+      let lineBuy = chart.series.push(new am4charts.LineSeries());
+      lineBuy.dataFields.dateX = "Date";
+      lineBuy.dataFields.valueY = "BuySpread";
+      lineBuy.strokeOpacity = 0;
+      // series.dataFields.lowValueY = "Low";
+      // series.dataFields.highValueY = "High";
+      // series.clustered = false;
+      // series.tooltipText = "open: {openValueY.value}\nlow: {lowValueY.value}\nhigh: {highValueY.value}\nclose: {valueY.value}";
+      // series.name = "MSFT";
+      // series.defaultState.transitionDuration = 0;
+      let bulletBuy = lineBuy.bullets.push(new am4charts.CircleBullet());
+      bulletBuy.stroke = am4core.color('#BC2B5D');
+      bulletBuy.fill = am4core.color('#BC2B5D');
+
+      let lineSell = chart.series.push(new am4charts.LineSeries());
+      lineSell.dataFields.dateX = "Date";
+      lineSell.dataFields.valueY = "SellSpread";
+      lineSell.strokeOpacity = 0;
+      let bulletSell = lineSell.bullets.push(new am4charts.CircleBullet());
+      bulletSell.stroke = am4core.color('#26A77B');
+      bulletSell.fill = am4core.color('#26A77B');
 
       let valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
       valueAxis2.tooltip.disabled = true;
@@ -718,16 +756,16 @@ export class GraphService {
 
       chart.cursor = new am4charts.XYCursor();
 
-      let scrollbarX = new am4charts.XYChartScrollbar();
+      // let scrollbarX = new am4charts.XYChartScrollbar();
 
-      let sbSeries = chart.series.push(new am4charts.LineSeries());
-      sbSeries.dataFields.valueY = "Close";
-      sbSeries.dataFields.dateX = "Date";
-      scrollbarX.series.push(sbSeries);
-      sbSeries.disabled = true;
-      scrollbarX.marginBottom = 20;
-      chart.scrollbarX = scrollbarX;
-      scrollbarX.scrollbarChart.xAxes.getIndex(0).minHeight = undefined;
+      // let sbSeries = chart.series.push(new am4charts.LineSeries());
+      // sbSeries.dataFields.valueY = "Close";
+      // sbSeries.dataFields.dateX = "Date";
+      // scrollbarX.series.push(sbSeries);
+      // sbSeries.disabled = true;
+      // scrollbarX.marginBottom = 20;
+      // chart.scrollbarX = scrollbarX;
+      // scrollbarX.scrollbarChart.xAxes.getIndex(0).minHeight = undefined;
 
       return chart;
     }
