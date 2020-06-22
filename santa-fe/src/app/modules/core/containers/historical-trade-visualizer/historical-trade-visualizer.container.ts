@@ -36,12 +36,12 @@ export class HistoricalTradeVisualizer implements OnDestroy, OnChanges {
   public ngOnChanges() {
     if (!!this.showGraph && !this.showGraphReceived) {
       this.showGraphReceived = true;
-      const testFun = () => {
+      const renderGraphs = () => {
         if (!this.historyData.graph.timeSeries) {
           this.historyData.graph.timeSeries = this.graphService.generateTradeHistoryTimeSeries(this.historyData);
         }
       };
-      setTimeout(testFun.bind(this), 1);
+      setTimeout(renderGraphs.bind(this), 1);
     }
   }
 

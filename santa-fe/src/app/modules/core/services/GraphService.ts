@@ -634,31 +634,12 @@ export class GraphService {
       // Load data
       chart.data = dto.data.prinstineTradeList.map((eachTrade) => {
         return {
-          Date: moment.unix(eachTrade.data.tradeDateTime).format('YYYY-MM-DD'),
+          Date: new Date(moment.unix(eachTrade.data.tradeDateTime).format()),
           BuySpread: eachTrade.data.rawQuantity >= 0 ? eachTrade.data.spread : null,
           SellSpread: eachTrade.data.rawQuantity < 0 ? eachTrade.data.spread : null,
           Volume: eachTrade.data.rawQuantity
         };
       });
-      // [
-      //   {
-      //     Date: new Date('2014-08-08T08:02:17'),
-      //     Close: 43.20,
-      //     Volume: 28942700
-      //   },{
-      //     Date: new Date('2014-08-08T06:02:17'),
-      //     Close: 99.20,
-      //     Volume: 39442700
-      //   },{
-      //     Date: new Date('2014-08-07T08:02:17'),
-      //     Close: 43.23,
-      //     Volume: 30314900
-      //   },{
-      //     Date: new Date('2014-08-06T08:02:17'),
-      //     Close: 42.74,
-      //     Volume: 24634000
-      //   }
-      // ];
 
       // the following line makes value axes to be arranged vertically.
       chart.leftAxesContainer.layout = "vertical";
@@ -677,19 +658,18 @@ export class GraphService {
       dateAxis.renderer.maxLabelPosition = 0.99;
       dateAxis.keepSelection = true;
       dateAxis.minHeight = 30;
-
-      dateAxis.groupData = true;
+      dateAxis.groupData = false;
       dateAxis.minZoomCount = 5;
-      // dateAxis.baseInterval = {
-      //   "timeUnit": "minute",
-      //   "count": 1
-      // };
+      dateAxis.baseInterval = {
+        "timeUnit": "minute",
+        "count": 1
+      };
       // these two lines makes the axis to be initially zoomed-in
       // dateAxis.start = 0.7;
       // dateAxis.keepSelection = true;
 
       let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-      valueAxis.tooltip.disabled = true;
+      // valueAxis.tooltip.disabled = true;
       valueAxis.zIndex = 1;
       valueAxis.renderer.baseGrid.disabled = true;
       // height of axis
@@ -717,6 +697,7 @@ export class GraphService {
       let bulletBuy = lineBuy.bullets.push(new am4charts.CircleBullet());
       bulletBuy.stroke = am4core.color('#BC2B5D');
       bulletBuy.fill = am4core.color('#BC2B5D');
+      bulletBuy.tooltipText = "Time: {dateX.value}\nSpread:{BuySpread}\nQuantity:{Volume}";
 
       let lineSell = chart.series.push(new am4charts.LineSeries());
       lineSell.dataFields.dateX = "Date";
@@ -725,9 +706,10 @@ export class GraphService {
       let bulletSell = lineSell.bullets.push(new am4charts.CircleBullet());
       bulletSell.stroke = am4core.color('#26A77B');
       bulletSell.fill = am4core.color('#26A77B');
+      bulletBuy.tooltipText = "Time:{Date}\nSpread:{valueY.value}\nQuantity:{Volume}";
 
       let valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
-      valueAxis2.tooltip.disabled = true;
+      // valueAxis2.tooltip.disabled = true;
       // height of axis
       valueAxis2.height = am4core.percent(35);
       valueAxis2.zIndex = 3
@@ -755,6 +737,7 @@ export class GraphService {
       series2.defaultState.transitionDuration = 0;
 
       chart.cursor = new am4charts.XYCursor();
+      chart.cursor.behavior = "zoomXY";
 
       // let scrollbarX = new am4charts.XYChartScrollbar();
 
@@ -766,7 +749,6 @@ export class GraphService {
       // scrollbarX.marginBottom = 20;
       // chart.scrollbarX = scrollbarX;
       // scrollbarX.scrollbarChart.xAxes.getIndex(0).minHeight = undefined;
-
       return chart;
     }
   // TradeHistoryVisualizer Charts end

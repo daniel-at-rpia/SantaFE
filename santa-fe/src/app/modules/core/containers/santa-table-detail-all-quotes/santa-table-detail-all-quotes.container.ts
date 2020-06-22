@@ -53,7 +53,6 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
       this.parentNode = typeSafeParams.node.parent;
       this.rowData = typeSafeParams.node.data.rowDTO;
       this.parent = typeSafeParams.context.componentParent;
-      console.log('test, agInit', params);
     }
   }
 

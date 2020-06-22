@@ -128,8 +128,13 @@ button {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    margin-right: $spacing_small;
+    margin-bottom: $spacing_small;
     &-timeSeries {
+      @include mix_border_radius(10px);
       flex: 1 1 auto;
+      padding: $spacing_small;
+      background-color: $color_white;
     }
   }
 }
