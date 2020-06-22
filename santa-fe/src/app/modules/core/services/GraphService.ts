@@ -14,7 +14,8 @@ import { TradeObligorGraphPanelState } from 'FEModels/frontend-page-states.inter
 import {
   ObligorGraphCategoryData,
   ObligorGraphAxesZoomState,
-  LilMarketGraphSeriesDataPack
+  LilMarketGraphSeriesDataPack,
+  AmchartPieDataBlock
 } from 'src/app/modules/core/models/frontend/frontend-adhoc-packages.interface';
 import { MIN_OBLIGOR_CURVE_VALUES } from 'src/app/modules/core/constants/coreConstants.constant'
 import { HistoricalTradeVisualizerDTO } from 'FEModels/frontend-models.interface';
@@ -26,7 +27,7 @@ export class GraphService {
     private utility: UtilityService
   ) { }
 
-    public destoryGraph(chart: am4charts.XYChart) {
+    public destoryGraph(chart: am4charts.XYChart|am4charts.PieChart) {
       chart.dispose();
       return null;
     }
@@ -629,7 +630,6 @@ export class GraphService {
     public generateTradeHistoryTimeSeries(dto: HistoricalTradeVisualizerDTO): am4charts.XYChart {
       // Create chart
       let chart = am4core.create(dto.data.timeSeriesId, am4charts.XYChart);
-      chart.padding(0, 15, 0, 15);
 
       // Load data
       chart.data = dto.data.prinstineTradeList.map((eachTrade) => {
@@ -749,6 +749,78 @@ export class GraphService {
       // scrollbarX.marginBottom = 20;
       // chart.scrollbarX = scrollbarX;
       // scrollbarX.scrollbarChart.xAxes.getIndex(0).minHeight = undefined;
+      return chart;
+    }
+
+    public generateTradeHistoryFundPie(dto: HistoricalTradeVisualizerDTO): am4charts.PieChart {
+      const chart = am4core.create(dto.data.fundPieId, am4charts.PieChart);
+      chart.data = [ {
+        "country": "Lithuania",
+        "litres": 501.9
+      }, {
+        "country": "Czechia",
+        "litres": 301.9
+      }, {
+        "country": "Ireland",
+        "litres": 201.1
+      }, {
+        "country": "Germany",
+        "litres": 165.8
+      }, {
+        "country": "Australia",
+        "litres": 139.9
+      }, {
+        "country": "Austria",
+        "litres": 128.3
+      }, {
+        "country": "UK",
+        "litres": 99
+      }
+      ];
+      const fundList:Array<AmchartPieDataBlock> = [];
+      dto.data.prinstineTradeList.forEach((eachTrade) => {
+        fundList.findIndex((eachItem) => { return eachItem.subject === eachTrade.data.vestedPortfolio});
+      });
+      const pieSeries = chart.series.push(new am4charts.PieSeries());
+      pieSeries.dataFields.value = "litres";
+      pieSeries.dataFields.category = "country";
+      pieSeries.slices.template.stroke = am4core.color("#fff");
+      pieSeries.slices.template.strokeOpacity = 1;
+      chart.hiddenState.properties.radius = am4core.percent(0);
+      return chart;
+    }
+
+    public generateTradeHistoryBuyAndSellPie(dto: HistoricalTradeVisualizerDTO): am4charts.PieChart {
+      const chart = am4core.create(dto.data.buySellPieId, am4charts.PieChart);
+      chart.data = [ {
+        "country": "Lithuania",
+        "litres": 501.9
+      }, {
+        "country": "Czechia",
+        "litres": 301.9
+      }, {
+        "country": "Ireland",
+        "litres": 201.1
+      }, {
+        "country": "Germany",
+        "litres": 165.8
+      }, {
+        "country": "Australia",
+        "litres": 139.9
+      }, {
+        "country": "Austria",
+        "litres": 128.3
+      }, {
+        "country": "UK",
+        "litres": 99
+      }
+      ];
+      const pieSeries = chart.series.push(new am4charts.PieSeries());
+      pieSeries.dataFields.value = "litres";
+      pieSeries.dataFields.category = "country";
+      pieSeries.slices.template.stroke = am4core.color("#fff");
+      pieSeries.slices.template.strokeOpacity = 1;
+      chart.hiddenState.properties.radius = am4core.percent(0);
       return chart;
     }
   // TradeHistoryVisualizer Charts end

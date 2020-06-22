@@ -593,6 +593,8 @@ export interface HistoricalTradeVisualizerDTO extends BasicDTOStructure {
     prinstineTradeList: Array<TradeDTO>;
     displayTradeList: Array<TradeDTO>;
     timeSeriesId: string;
+    fundPieId: string;
+    buySellPieId: string;
   };
   state: {
     disabledPortfolio: Array<string>;
@@ -600,5 +602,7 @@ export interface HistoricalTradeVisualizerDTO extends BasicDTOStructure {
   };
   graph: {
     timeSeries: am4Charts.XYChart;
+    fundPie: am4Charts.PieChart;
+    buySellPie: am4Charts.PieChart;
   }
 }

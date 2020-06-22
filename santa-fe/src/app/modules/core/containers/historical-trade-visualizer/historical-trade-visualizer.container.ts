@@ -31,6 +31,14 @@ export class HistoricalTradeVisualizer implements OnDestroy, OnChanges {
       this.graphService.destoryGraph(this.historyData.graph.timeSeries);
       this.historyData.graph.timeSeries = null;
     }
+    if (this.historyData.graph.fundPie) {
+      this.graphService.destoryGraph(this.historyData.graph.fundPie);
+      this.historyData.graph.fundPie = null;
+    }
+    if (this.historyData.graph.buySellPie) {
+      this.graphService.destoryGraph(this.historyData.graph.buySellPie);
+      this.historyData.graph.buySellPie = null;
+    }
   }
 
   public ngOnChanges() {
@@ -39,6 +47,8 @@ export class HistoricalTradeVisualizer implements OnDestroy, OnChanges {
       const renderGraphs = () => {
         if (!this.historyData.graph.timeSeries) {
           this.historyData.graph.timeSeries = this.graphService.generateTradeHistoryTimeSeries(this.historyData);
+          this.historyData.graph.fundPie = this.graphService.generateTradeHistoryFundPie(this.historyData);
+          this.historyData.graph.buySellPie = this.graphService.generateTradeHistoryBuyAndSellPie(this.historyData);
         }
       };
       setTimeout(renderGraphs.bind(this), 1);

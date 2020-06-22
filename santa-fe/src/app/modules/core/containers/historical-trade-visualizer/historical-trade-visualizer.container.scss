@@ -130,6 +130,22 @@ button {
     overflow: hidden;
     margin-right: $spacing_small;
     margin-bottom: $spacing_small;
+    &-pies {
+      flex: 1 1 auto;
+      display: flex;
+      margin-bottom: $spacing_small;
+      &-fundPie {
+        @include mix_border_radius(10px);
+        flex: 0 1 50%;
+        background-color: $color_white;
+        margin-right: $spacing_small;
+      }
+      &-buyAndSellPie {
+        @include mix_border_radius(10px);
+        background-color: $color_white;
+        flex: 0 1 50%;
+      }
+    }
     &-timeSeries {
       @include mix_border_radius(10px);
       flex: 1 1 auto;

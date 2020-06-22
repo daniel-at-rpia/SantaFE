@@ -114,3 +114,8 @@ export interface ClickedOpenSecurityInBloombergEmitterParams {
 export interface AlertDTOMap {
   [property: string]: AlertDTO
 }
+
+export interface AmchartPieDataBlock {
+  subject: string;
+  quantity: number;
+}
