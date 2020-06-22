@@ -1354,7 +1354,7 @@ export class DTOService {
         rawQuantity: rawData.quantity,
         postTradeSumQuantity: this.utility.parseNumberToCommas(rawData.quantityAfterTrade),
         tradeDateTime: moment(rawData.tradeDateTime).unix(),
-        tradeDateTimeParsed: moment(rawData.tradeDateTime).format(`MMM DD - HH:mm`),
+        tradeDateTimeParsed: moment(rawData.tradeDateTime).format(`YY MMM DD - HH:mm`),
         price: this.utility.parseTriCoreDriverNumber(rawData.price, TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
         spread: this.utility.parseTriCoreDriverNumber(rawData.spread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
         wgtAvgPrice: this.utility.parseTriCoreDriverNumber(rawData.wgtAvgPrice, TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
