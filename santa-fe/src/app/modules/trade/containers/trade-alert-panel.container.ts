@@ -336,7 +336,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         tap((serverReturn: Array<BEAlertDTO>) => {
           const filteredServerReturn = !!serverReturn ? serverReturn.filter((eachRawAlert) => {
             // no filtering logic for now
-            return false;
+            return true;
           }) : [];
           const updateList: Array<AlertDTO> = [];
           const alertTableList: Array<AlertDTO> = [];

@@ -31,25 +31,29 @@ export class HistoricalTradeVisualizer implements OnDestroy, OnChanges {
       // this.historyData.graph.timeSeries = null;
     // }
     this.historyData.state.graphReceived = false;
-    if (this.historyData.graph.volumeByFundPie) {
-      this.graphService.destoryGraph(this.historyData.graph.volumeByFundPie);
-      this.historyData.graph.volumeByFundPie = null;
+    if (this.historyData.graph.positionPie) {
+      this.graphService.destoryGraph(this.historyData.graph.positionPie);
+      this.historyData.graph.positionPie = null;
     }
-    if (this.historyData.graph.volumeBySidePie) {
-      this.graphService.destoryGraph(this.historyData.graph.volumeBySidePie);
-      this.historyData.graph.volumeBySidePie = null;
+    if (this.historyData.graph.volumeLeftPie) {
+      this.graphService.destoryGraph(this.historyData.graph.volumeLeftPie);
+      this.historyData.graph.volumeLeftPie = null;
+    }
+    if (this.historyData.graph.volumeRightPie) {
+      this.graphService.destoryGraph(this.historyData.graph.volumeRightPie);
+      this.historyData.graph.volumeRightPie = null;
     }
   }
 
   public ngOnChanges() {
     if (!!this.showGraph && !this.historyData.state.graphReceived) {
       const renderGraphs = () => {
-        if (!this.historyData.graph.volumeByFundPie) {
+        if (!this.historyData.graph.positionPie) {
           this.historyData.state.graphReceived = true;
           // this.historyData.graph.timeSeries = this.graphService.generateTradeHistoryTimeSeries(this.historyData);
           this.historyData.graph.positionPie = this.graphService.generateTradeHistoryPositionPie(this.historyData);
-          this.historyData.graph.volumeByFundPie = this.graphService.generateTradeHistoryVolumeByFundPie(this.historyData);
-          this.historyData.graph.volumeBySidePie = this.graphService.generateTradeHistoryVolumeBySidePie(this.historyData);
+          this.historyData.graph.volumeLeftPie = this.graphService.generateTradeHistoryVolumeLeftPie(this.historyData);
+          this.historyData.graph.volumeRightPie = this.graphService.generateTradeHistoryVolumeRightPie(this.historyData);
         }
       };
       setTimeout(renderGraphs.bind(this), 100);

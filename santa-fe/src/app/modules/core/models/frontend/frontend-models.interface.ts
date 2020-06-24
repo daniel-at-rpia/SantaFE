@@ -595,8 +595,8 @@ export interface HistoricalTradeVisualizerDTO extends BasicDTOStructure {
     positionList: Array<SecurityPortfolioBlock>;
     timeSeriesId: string;
     positionPieId: string;
-    volumeByFundPieId: string;
-    volumeBySidePieId: string;
+    volumeLeftPieId: string;
+    volumeRightPieId: string;
   };
   state: {
     disabledPortfolio: Array<string>;
@@ -606,7 +606,7 @@ export interface HistoricalTradeVisualizerDTO extends BasicDTOStructure {
   graph: {
     timeSeries: am4Charts.XYChart;
     positionPie: am4Charts.PieChart;
-    volumeByFundPie: am4Charts.PieChart;
-    volumeBySidePie: am4Charts.PieChart;
+    volumeLeftPie: am4Charts.PieChart;
+    volumeRightPie: am4Charts.PieChart;
   }
 }

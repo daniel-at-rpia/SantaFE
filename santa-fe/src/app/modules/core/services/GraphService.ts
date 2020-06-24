@@ -2,6 +2,11 @@ import { Injectable } from '@angular/core';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import * as am4plugins_regression from "@amcharts/amcharts4/plugins/regression";
+import am4themes_dataviz from "@amcharts/amcharts4/themes/dataviz";
+import am4themes_material from "@amcharts/amcharts4/themes/material";
+import am4themes_frozen from "@amcharts/amcharts4/themes/frozen";
+import am4themes_moonrisekingdom from "@amcharts/amcharts4/themes/moonrisekingdom";
+import am4themes_spiritedaway from "@amcharts/amcharts4/themes/spiritedaway";
 import * as moment from 'moment';
 
 import { UtilityService } from './UtilityService';
@@ -752,21 +757,22 @@ export class GraphService {
       return chart;
     }
 
-    public generateTradeHistoryVolumeByFundPie(dto: HistoricalTradeVisualizerDTO): am4charts.PieChart {
-      const chart = am4core.create(dto.data.volumeByFundPieId, am4charts.PieChart);
-      const fundList: Array<AmchartPieDataBlock> = [];
+    public generateTradeHistoryVolumeLeftPie(dto: HistoricalTradeVisualizerDTO): am4charts.PieChart {
+      am4core.useTheme(am4themes_dataviz);
+      const chart = am4core.create(dto.data.volumeLeftPieId, am4charts.PieChart);
+      const pieDataList: Array<AmchartPieDataBlock> = [];
       dto.data.prinstineTradeList.forEach((eachTrade) => {
-        const existFund = fundList.find((eachItem) => { return eachItem.subject === eachTrade.data.vestedPortfolio});
-        if (existFund) {
-          existFund.quantity = existFund.quantity + Math.abs(eachTrade.data.rawQuantity);
+        const exist = pieDataList.find((eachItem) => { return eachItem.subject === eachTrade.data.counterPartyName});
+        if (exist) {
+          exist.quantity = exist.quantity + Math.abs(eachTrade.data.rawQuantity);
         } else {
-          fundList.push({
+          pieDataList.push({
             quantity: Math.abs(eachTrade.data.rawQuantity),
-            subject: eachTrade.data.vestedPortfolio
+            subject: eachTrade.data.counterPartyName
           });
         }
       });
-      chart.data = fundList;
+      chart.data = pieDataList;
       const pieSeries = chart.series.push(new am4charts.PieSeries());
       pieSeries.dataFields.value = "quantity";
       pieSeries.dataFields.category = "subject";
@@ -776,28 +782,23 @@ export class GraphService {
       return chart;
     }
 
-    public generateTradeHistoryVolumeBySidePie(dto: HistoricalTradeVisualizerDTO): am4charts.PieChart {
-      const chart = am4core.create(dto.data.volumeBySidePieId, am4charts.PieChart);
-      const buyAndSell: Array<AmchartPieDataBlock> = [
-      {
-        subject: 'Buy',
-        quantity: 0,
-        color: '#26A77B'
-      },{
-        subject: 'Sell',
-        quantity: 0,
-        color: '#BC2B5D'
-      }];
+    public generateTradeHistoryVolumeRightPie(dto: HistoricalTradeVisualizerDTO): am4charts.PieChart {
+      am4core.useTheme(am4themes_frozen);
+      const chart = am4core.create(dto.data.volumeRightPieId, am4charts.PieChart);
+      const pieDataList: Array<AmchartPieDataBlock> = [];
       dto.data.prinstineTradeList.forEach((eachTrade) => {
-        if (eachTrade.data.rawQuantity > 0) {
-          buyAndSell[0].quantity = buyAndSell[0].quantity + eachTrade.data.rawQuantity;
-        } else if (eachTrade.data.rawQuantity < 0) {
-          buyAndSell[1].quantity = buyAndSell[1].quantity + Math.abs(eachTrade.data.rawQuantity);
+        const exist = pieDataList.find((eachItem) => { return eachItem.subject === eachTrade.data.trader});
+        if (exist) {
+          exist.quantity = exist.quantity + Math.abs(eachTrade.data.rawQuantity);
+        } else {
+          pieDataList.push({
+            quantity: Math.abs(eachTrade.data.rawQuantity),
+            subject: eachTrade.data.trader
+          });
         }
       });
-      chart.data = buyAndSell;
+      chart.data = pieDataList;
       const pieSeries = chart.series.push(new am4charts.PieSeries());
-      pieSeries.slices.template.propertyFields.fill = "color";
       pieSeries.dataFields.value = "quantity";
       pieSeries.dataFields.category = "subject";
       pieSeries.slices.template.stroke = am4core.color("#fff");

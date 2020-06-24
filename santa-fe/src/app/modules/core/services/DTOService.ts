@@ -1380,8 +1380,8 @@ export class DTOService {
         positionList: targetSecurity.data.portfolios,
         timeSeriesId: `${targetSecurity.data.securityID}-tradeTimeSeries`,
         positionPieId: `${targetSecurity.data.securityID}-position`,
-        volumeByFundPieId: `${targetSecurity.data.securityID}-fundPie`,
-        volumeBySidePieId: `${targetSecurity.data.securityID}-buySellPie`
+        volumeLeftPieId: `${targetSecurity.data.securityID}-volumeLeft`,
+        volumeRightPieId: `${targetSecurity.data.securityID}-volumeRight`
       },
       state: {
         disabledPortfolio: this.utility.deepCopy(FilterOptionsPortfolioList),
@@ -1391,8 +1391,8 @@ export class DTOService {
       graph: {
         timeSeries: null,
         positionPie: null,
-        volumeByFundPie: null,
-        volumeBySidePie: null
+        volumeLeftPie: null,
+        volumeRightPie: null
       }
     };
     if (object.data.prinstineTradeList.length > 0) {
