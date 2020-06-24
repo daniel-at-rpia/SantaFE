@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const version = "1.5.6-alertTableGraphs-alpha";
+const version = "1.5.7";
 
 module.exports = {
   output: {
