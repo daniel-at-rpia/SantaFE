@@ -752,8 +752,8 @@ export class GraphService {
       return chart;
     }
 
-    public generateTradeHistoryFundPie(dto: HistoricalTradeVisualizerDTO): am4charts.PieChart {
-      const chart = am4core.create(dto.data.fundPieId, am4charts.PieChart);
+    public generateTradeHistoryVolumeByFundPie(dto: HistoricalTradeVisualizerDTO): am4charts.PieChart {
+      const chart = am4core.create(dto.data.volumeByFundPieId, am4charts.PieChart);
       const fundList: Array<AmchartPieDataBlock> = [];
       dto.data.prinstineTradeList.forEach((eachTrade) => {
         const existFund = fundList.find((eachItem) => { return eachItem.subject === eachTrade.data.vestedPortfolio});
@@ -776,8 +776,8 @@ export class GraphService {
       return chart;
     }
 
-    public generateTradeHistoryBuyAndSellPie(dto: HistoricalTradeVisualizerDTO): am4charts.PieChart {
-      const chart = am4core.create(dto.data.buySellPieId, am4charts.PieChart);
+    public generateTradeHistoryVolumeBySidePie(dto: HistoricalTradeVisualizerDTO): am4charts.PieChart {
+      const chart = am4core.create(dto.data.volumeBySidePieId, am4charts.PieChart);
       const buyAndSell: Array<AmchartPieDataBlock> = [
       {
         subject: 'Buy',
@@ -798,6 +798,24 @@ export class GraphService {
       chart.data = buyAndSell;
       const pieSeries = chart.series.push(new am4charts.PieSeries());
       pieSeries.slices.template.propertyFields.fill = "color";
+      pieSeries.dataFields.value = "quantity";
+      pieSeries.dataFields.category = "subject";
+      pieSeries.slices.template.stroke = am4core.color("#fff");
+      pieSeries.slices.template.strokeOpacity = 1;
+      chart.hiddenState.properties.radius = am4core.percent(0);
+      return chart;
+    }
+
+    public generateTradeHistoryPositionPie(dto: HistoricalTradeVisualizerDTO): am4charts.PieChart {
+      const chart = am4core.create(dto.data.positionPieId, am4charts.PieChart);
+      const fundList: Array<AmchartPieDataBlock> = dto.data.positionList.map((eachPosition) => {
+        return {
+          subject: eachPosition.portfolioName,
+          quantity: eachPosition.quantity
+        }
+      });
+      chart.data = fundList;
+      const pieSeries = chart.series.push(new am4charts.PieSeries());
       pieSeries.dataFields.value = "quantity";
       pieSeries.dataFields.category = "subject";
       pieSeries.slices.template.stroke = am4core.color("#fff");

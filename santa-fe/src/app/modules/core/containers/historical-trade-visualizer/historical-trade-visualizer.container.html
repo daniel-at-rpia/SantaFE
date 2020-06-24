@@ -1,6 +1,7 @@
 <article
   [ngClass]="{
-    'sat-historicalTradeVisualizer': true 
+    'sat-historicalTradeVisualizer': true,
+    'sat-historicalTradeVisualizer--displayGraphsState': historyData.state.graphReceived 
   }">
   <section class="sat-historicalTradeVisualizer__table">
     <div class="sat-historicalTradeVisualizer__table-utility">
@@ -51,10 +52,25 @@
     </div>
   </section>
   <section class="sat-historicalTradeVisualizer__graphs">
-    <div class="sat-historicalTradeVisualizer__graphs-pies">
-      <div class="sat-historicalTradeVisualizer__graphs-pies-fundPie" id="{{historyData.data.fundPieId}}"></div>
-      <div class="sat-historicalTradeVisualizer__graphs-pies-buyAndSellPie" id="{{historyData.data.buySellPieId}}"></div>
+    <div class="sat-historicalTradeVisualizer__graphs-positionPie">
+      <span class="sat-historicalTradeVisualizer__graphs-positionPie-title">Position</span>
+      <div class="sat-historicalTradeVisualizer__graphs-positionPie-graphContainer">
+        <div class="sat-historicalTradeVisualizer__graphs-positionPie-graphContainer-content" id="{{historyData.data.positionPieId}}"></div>
+      </div>
     </div>
-    <div class="sat-historicalTradeVisualizer__graphs-timeSeries" id="{{historyData.data.timeSeriesId}}"></div>
+    <div class="sat-historicalTradeVisualizer__graphs-volumePies">
+      <span class="sat-historicalTradeVisualizer__graphs-volumePies-title">Trade Volume</span>
+      <div class="sat-historicalTradeVisualizer__graphs-volumePies-graphsContainer">
+        <div class="sat-historicalTradeVisualizer__graphs-volumePies-graphsContainer-byFund">
+          <div class="sat-historicalTradeVisualizer__graphs-volumePies-graphsContainer-byFund-content" id="{{historyData.data.volumeByFundPieId}}"></div>
+        </div>
+        <div class="sat-historicalTradeVisualizer__graphs-volumePies-graphsContainer-bySide">
+          <div class="sat-historicalTradeVisualizer__graphs-volumePies-graphsContainer-bySide-content" id="{{historyData.data.volumeBySidePieId}}"></div>
+        </div>
+      </div>
+    </div>
+    <!--
+      <div class="sat-historicalTradeVisualizer__graphs-timeSeries" id="{{historyData.data.timeSeriesId}}"></div>
+    -->
   </section>
 </article>

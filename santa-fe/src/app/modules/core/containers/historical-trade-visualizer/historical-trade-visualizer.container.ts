@@ -17,7 +17,6 @@
 export class HistoricalTradeVisualizer implements OnDestroy, OnChanges {
   @Input() historyData: HistoricalTradeVisualizerDTO;
   @Input() showGraph: boolean;
-  private showGraphReceived: boolean;
   
   public constants = {
     headerConfigList: TradeHistoryHeaderConfigList,
@@ -27,31 +26,33 @@ export class HistoricalTradeVisualizer implements OnDestroy, OnChanges {
   constructor(private graphService: GraphService) {} 
 
   public ngOnDestroy() {
-    if (this.historyData.graph.timeSeries) {
-      this.graphService.destoryGraph(this.historyData.graph.timeSeries);
-      this.historyData.graph.timeSeries = null;
+    // if (this.historyData.graph.timeSeries) {
+      // this.graphService.destoryGraph(this.historyData.graph.timeSeries);
+      // this.historyData.graph.timeSeries = null;
+    // }
+    this.historyData.state.graphReceived = false;
+    if (this.historyData.graph.volumeByFundPie) {
+      this.graphService.destoryGraph(this.historyData.graph.volumeByFundPie);
+      this.historyData.graph.volumeByFundPie = null;
     }
-    if (this.historyData.graph.fundPie) {
-      this.graphService.destoryGraph(this.historyData.graph.fundPie);
-      this.historyData.graph.fundPie = null;
-    }
-    if (this.historyData.graph.buySellPie) {
-      this.graphService.destoryGraph(this.historyData.graph.buySellPie);
-      this.historyData.graph.buySellPie = null;
+    if (this.historyData.graph.volumeBySidePie) {
+      this.graphService.destoryGraph(this.historyData.graph.volumeBySidePie);
+      this.historyData.graph.volumeBySidePie = null;
     }
   }
 
   public ngOnChanges() {
-    if (!!this.showGraph && !this.showGraphReceived) {
-      this.showGraphReceived = true;
+    if (!!this.showGraph && !this.historyData.state.graphReceived) {
       const renderGraphs = () => {
-        if (!this.historyData.graph.timeSeries) {
-          this.historyData.graph.timeSeries = this.graphService.generateTradeHistoryTimeSeries(this.historyData);
-          this.historyData.graph.fundPie = this.graphService.generateTradeHistoryFundPie(this.historyData);
-          this.historyData.graph.buySellPie = this.graphService.generateTradeHistoryBuyAndSellPie(this.historyData);
+        if (!this.historyData.graph.volumeByFundPie) {
+          this.historyData.state.graphReceived = true;
+          // this.historyData.graph.timeSeries = this.graphService.generateTradeHistoryTimeSeries(this.historyData);
+          this.historyData.graph.positionPie = this.graphService.generateTradeHistoryPositionPie(this.historyData);
+          this.historyData.graph.volumeByFundPie = this.graphService.generateTradeHistoryVolumeByFundPie(this.historyData);
+          this.historyData.graph.volumeBySidePie = this.graphService.generateTradeHistoryVolumeBySidePie(this.historyData);
         }
       };
-      setTimeout(renderGraphs.bind(this), 1);
+      setTimeout(renderGraphs.bind(this), 100);
     }
   }
 

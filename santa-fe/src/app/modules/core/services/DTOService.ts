@@ -1375,18 +1375,22 @@ export class DTOService {
       data: {
         prinstineTradeList: targetSecurity.data.tradeHistory || [],
         displayTradeList: [],
+        positionList: targetSecurity.data.portfolios,
         timeSeriesId: `${targetSecurity.data.securityID}-tradeTimeSeries`,
-        fundPieId: `${targetSecurity.data.securityID}-fundPie`,
-        buySellPieId: `${targetSecurity.data.securityID}-buySellPie`
+        positionPieId: `${targetSecurity.data.securityID}-position`,
+        volumeByFundPieId: `${targetSecurity.data.securityID}-fundPie`,
+        volumeBySidePieId: `${targetSecurity.data.securityID}-buySellPie`
       },
       state: {
         disabledPortfolio: this.utility.deepCopy(FilterOptionsPortfolioList),
-        selectedPortfolio: []
+        selectedPortfolio: [],
+        graphReceived: false
       },
       graph: {
         timeSeries: null,
-        fundPie: null,
-        buySellPie: null
+        positionPie: null,
+        volumeByFundPie: null,
+        volumeBySidePie: null
       }
     };
     if (object.data.prinstineTradeList.length > 0) {

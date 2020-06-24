@@ -592,17 +592,21 @@ export interface HistoricalTradeVisualizerDTO extends BasicDTOStructure {
   data: {
     prinstineTradeList: Array<TradeDTO>;
     displayTradeList: Array<TradeDTO>;
+    positionList: Array<SecurityPortfolioBlock>;
     timeSeriesId: string;
-    fundPieId: string;
-    buySellPieId: string;
+    positionPieId: string;
+    volumeByFundPieId: string;
+    volumeBySidePieId: string;
   };
   state: {
     disabledPortfolio: Array<string>;
     selectedPortfolio: Array<string>;
+    graphReceived: boolean;
   };
   graph: {
     timeSeries: am4Charts.XYChart;
-    fundPie: am4Charts.PieChart;
-    buySellPie: am4Charts.PieChart;
+    positionPie: am4Charts.PieChart;
+    volumeByFundPie: am4Charts.PieChart;
+    volumeBySidePie: am4Charts.PieChart;
   }
 }
