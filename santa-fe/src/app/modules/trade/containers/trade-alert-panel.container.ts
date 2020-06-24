@@ -33,11 +33,6 @@
       PayloadUpdateSingleAlertConfig,
       PayloadGetTradeFullData
     } from 'BEModels/backend-payloads.interface';
-    // import {
-    //   EngagementActionList,
-    //   AlertTypes,
-    //   AlertSubTypes
-    // } from 'Core/constants/coreConstants.constant';
     import {
       selectAlertCounts,
       selectSecurityMapContent,
@@ -74,7 +69,8 @@
       DEFAULT_DRIVER_IDENTIFIER,
       EngagementActionList,
       AlertSubTypes,
-      AlertTypes
+      AlertTypes,
+      KEYWORDSEARCH_DEBOUNCE_TIME
     } from 'Core/constants/coreConstants.constant';
     import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
   //
@@ -116,7 +112,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     fullOwnerList: FullOwnerList,
     researchList: FilterOptionsPortfolioResearchList,
     defaultMetricIdentifier: DEFAULT_DRIVER_IDENTIFIER,
-    securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE
+    securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
+    keywordSearchDebounceTime: KEYWORDSEARCH_DEBOUNCE_TIME
   }
 
   constructor(
@@ -290,7 +287,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       });
 
       this.subscriptions.keywordSearchSub = this.keywordChanged$.pipe(
-        debounceTime(250),
+        debounceTime(this.constants.keywordSearchDebounceTime),
         distinctUntilChanged()
       ).subscribe((keyword) => {
         const targetTable = this.state.fetchResult.alertTable;
@@ -410,24 +407,26 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       let numOfUpdate = 0;
       this.state.fetchResult.alertTable.prinstineRowList.forEach((eachRow) => {
         if (!!eachRow && !!eachRow.data.alert && !!eachRow.data.alert.state) {
-          if (eachRow.data.alert.state.isMarketListVariant && !eachRow.data.alert.state.isExpired) {
-            numOfUpdate++;
-            this.dtoService.appendAlertStatus(eachRow.data.alert);
-            this.dtoService.appendAlertInfoToSecurityDTO(eachRow.data.security, eachRow.data.alert);
-            this.state.table.alertDto.data.headers.forEach((eachHeader, index) =>{
-              // the benefit of doing this loop is if in the future we need to refresh any other cells as well, it can be done easily by just appending to the if condition
-              if (eachHeader.data.key === 'alertStatus') {
-                // minus one because securityCard is not one of the cells ( TODO: this is a bad design, what if a table has more than one security card column? should not treat it different from other columns )
-                // this basically updates the alert status cell
-                eachRow.data.cells[index-1] = this.utilityService.populateSecurityTableCellFromSecurityCard(
-                    eachHeader,
-                    eachRow,
-                    eachRow.data.cells[index-1],
-                    this.constants.defaultMetricIdentifier
-                );
-              }
-            });
-            this.state.alert.recentUpdatedAlertList.push(eachRow.data.rowId);
+          if (eachRow.data.alert.state.isMarketListVariant) {
+            if (!eachRow.data.alert.state.isExpired || eachRow.data.alert.data.status.indexOf('-') >= 0) {
+              numOfUpdate++;
+              this.dtoService.appendAlertStatus(eachRow.data.alert);
+              this.dtoService.appendAlertInfoToSecurityDTO(eachRow.data.security, eachRow.data.alert);
+              this.state.table.alertDto.data.headers.forEach((eachHeader, index) =>{
+                // the benefit of doing this loop is if in the future we need to refresh any other cells as well, it can be done easily by just appending to the if condition
+                if (eachHeader.data.key === 'alertStatus') {
+                  // minus one because securityCard is not one of the cells ( TODO: this is a bad design, what if a table has more than one security card column? should not treat it different from other columns )
+                  // this basically updates the alert status cell
+                  eachRow.data.cells[index-1] = this.utilityService.populateSecurityTableCellFromSecurityCard(
+                      eachHeader,
+                      eachRow,
+                      eachRow.data.cells[index-1],
+                      this.constants.defaultMetricIdentifier
+                  );
+                }
+              });
+              this.state.alert.recentUpdatedAlertList.push(eachRow.data.rowId);
+            }
           }
         }
       });
