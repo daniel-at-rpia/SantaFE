@@ -367,7 +367,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
                 // axe & mark & inquiry: it could be the trader entered it by mistake, but it could also be the trader changed his mind so he/she cancels the previous legitmate entry. So when such an cancelled alert comes in
                 // trade: since it is past tense, so it could only be cancelled because of entered by mistake
                 if (newAlert.data.type === this.constants.alertTypes.markAlert || newAlert.data.type === this.constants.alertTypes.axeAlert) {
-                  alertTableList.push(newAlert);
+                  !newAlert.state.isRead && alertTableList.push(newAlert);
                   updateList.push(newAlert);
                 } else if (newAlert.data.type === this.constants.alertTypes.tradeAlert) {
                   alertTableRemovalList.push(newAlert);
@@ -1148,7 +1148,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         }
       }
       const payload: PayloadGetTradeFullData = {
-        maxNumberOfSecurities: 2000,
         groupIdentifier: {},
         groupFilters: {
           SecurityIdentifier: securityList
