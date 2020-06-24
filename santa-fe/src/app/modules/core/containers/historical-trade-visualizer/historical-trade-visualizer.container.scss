@@ -128,7 +128,8 @@ button {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    margin: 0 $spacing_small;
+    max-width: 45rem;
+    margin: $spacing_small;
     &-positionPie {
       flex: 0 1 50%;
       display: flex;

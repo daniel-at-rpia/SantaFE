@@ -402,6 +402,12 @@ export class SantaTable implements OnInit, OnChanges {
               serverReturn,
               params
             );
+          } else {
+            this.loadQuotes(
+              targetRow,
+              [],
+              params
+            );
           }
         }),
         catchError(err => {
@@ -608,26 +614,28 @@ export class SantaTable implements OnInit, OnChanges {
     params: any  // this is a AgGridRowParams, can't enforce type checking here because agGrid's native function redrawRows() would throw an compliation error
   ) {
     targetRow.state.quotesLoaded = true;
-    const primaryList = serverReturn[0];
-    targetRow.state.isCDSOffTheRun = serverReturn.length > 1;
-    primaryList.forEach((eachRawQuote) => {
-      const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, targetRow.data.security, targetRow);
-      newQuote.state.isCDSVariant = targetRow.state.isCDSVariant;
-      if (newQuote.state.hasAsk || newQuote.state.hasBid) {
-        targetRow.data.quotes.primaryQuotes.push(newQuote);
-      }
-    });
-    if (targetRow.state.isCDSOffTheRun) {
-      const secondaryList = serverReturn[1];
-      secondaryList.forEach((eachRawQuote) => {
+    if (serverReturn.length > 0) {
+      const primaryList = serverReturn[0];
+      targetRow.state.isCDSOffTheRun = serverReturn.length > 1;
+      primaryList.forEach((eachRawQuote) => {
         const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, targetRow.data.security, targetRow);
         newQuote.state.isCDSVariant = targetRow.state.isCDSVariant;
         if (newQuote.state.hasAsk || newQuote.state.hasBid) {
-          targetRow.data.quotes.secondaryQuotes.push(newQuote);
+          targetRow.data.quotes.primaryQuotes.push(newQuote);
         }
       });
-      targetRow.data.quotes.primarySecurityName = primaryList.length > 0 ? primaryList[0].name : '';
-      targetRow.data.quotes.secondarySecurityName = secondaryList.length > 0 ? secondaryList[0].name : '';
+      if (targetRow.state.isCDSOffTheRun) {
+        const secondaryList = serverReturn[1];
+        secondaryList.forEach((eachRawQuote) => {
+          const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, targetRow.data.security, targetRow);
+          newQuote.state.isCDSVariant = targetRow.state.isCDSVariant;
+          if (newQuote.state.hasAsk || newQuote.state.hasBid) {
+            targetRow.data.quotes.secondaryQuotes.push(newQuote);
+          }
+        });
+        targetRow.data.quotes.primarySecurityName = primaryList.length > 0 ? primaryList[0].name : '';
+        targetRow.data.quotes.secondarySecurityName = secondaryList.length > 0 ? secondaryList[0].name : '';
+      }
     }
     this.performChronologicalSortOnQuotes(targetRow.data.quotes.primaryQuotes);
     this.performChronologicalSortOnQuotes(targetRow.data.quotes.secondaryQuotes);
