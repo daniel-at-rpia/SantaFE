@@ -17,79 +17,53 @@ button {
   $blockName: &;
   flex: 1 1 auto;
   display: flex;
-  flex-direction: column;
   overflow: hidden;
   margin-left: $spacing_medium;
-  &__tableUtility {
+  &__table {
     flex: 0 0 auto;
     display: flex;
-    align-items: center;
-    margin-bottom: $spacing_small;
-    &-label {
-      margin: 0 $spacing_medium;
-      font-size: $font_size_normal;
-      color: $font_color_inverse;
-    }
-    &-btn {
-      margin-right: $spacing_small;
-      &--selected {
-        @include material('none');
-        background-color: $color_active;
+    flex-direction: column;
+    overflow: hidden;
+    &-utility {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      margin-bottom: $spacing_small;
+      &-label {
+        margin: 0 $spacing_medium;
+        font-size: $font_size_normal;
         color: $font_color_inverse;
       }
-      &--disabled {
-        @include material('none');
-        @include mix_border_generator($typical_border_width, $color_disabled);
-        background-color: transparent;
-        color: $color_disabled;
-        cursor: not-allowed;
-      }
-    }
-  }
-  &__tableHeader {
-    flex: 0 0 auto;
-    display: flex;
-    margin-bottom: $spacing_small;
-    &-list {
-      flex: 1 1 auto;
-      display: flex;
-      &-item {
-        @include mix_border_generator(0 0 0 $typical_border_width);
-        @include mix_tradeVisualizer_cell_style;
-        display: flex;
-        border-color: transparent;
-        &-text {
-          @include mix_text_overflow();
+      &-btn {
+        margin-right: $spacing_small;
+        &--selected {
+          @include material('none');
+          background-color: $color_active;
           color: $font_color_inverse;
         }
-        &:first-of-type {
-          border-left-width: 0;
+        &--disabled {
+          @include material('none');
+          @include mix_border_generator($typical_border_width, $color_disabled);
+          background-color: transparent;
+          color: $color_disabled;
+          cursor: not-allowed;
         }
       }
     }
-  }
-  &__tableContent {
-    @include mix_enable_scrollbar('vertical');
-    flex: 1 1 auto;
-    display: flex;
-    margin-bottom: $spacing_small;
-    &-rowList {
-      flex: 1 1 auto;
+    &-header {
+      flex: 0 0 auto;
       display: flex;
-      flex-direction: column;
-      &-row {
-        @include mix_border_radius(5px);
+      margin-bottom: $spacing_small;
+      &-list {
+        flex: 1 1 auto;
         display: flex;
-        padding: $spacing_x_small 0 ;
-        &-cell {
+        &-item {
           @include mix_border_generator(0 0 0 $typical_border_width);
           @include mix_tradeVisualizer_cell_style;
           display: flex;
-          height: 1.75rem;
-          line-height: $line_height_default;
+          border-color: transparent;
           &-text {
-            @include mix_text_overflow_multi_line(2);
-            @include mix_border_radius(3px);
+            @include mix_text_overflow();
             color: $font_color_inverse;
             &--positive {
               padding: $spacing_xx_small $spacing_small;
@@ -104,8 +78,146 @@ button {
             border-left-width: 0;
           }
         }
-        &:hover {
-          background-color: $color_active;
+      }
+    }
+    &-content {
+      @include mix_enable_scrollbar('vertical');
+      flex: 1 1 auto;
+      display: flex;
+      margin-bottom: $spacing_small;
+      &-rowList {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        &-row {
+          @include mix_border_radius(5px);
+          display: flex;
+          padding: $spacing_x_small 0 ;
+          &-cell {
+            @include mix_border_generator(0 0 0 $typical_border_width);
+            @include mix_tradeVisualizer_cell_style;
+            display: flex;
+            height: 1.75rem;
+            line-height: $line_height_default;
+            &-text {
+              @include mix_text_overflow_multi_line(2);
+              @include mix_border_radius(3px);
+              color: $font_color_inverse;
+              &--positive {
+                padding: $spacing_xx_small $spacing_small;
+                background-color: $color_bid;
+              }
+              &--negative {
+                padding: $spacing_xx_small $spacing_small;
+                background-color: $color_ask;
+              }
+            }
+            &:first-of-type {
+              border-left-width: 0;
+            }
+          }
+          &:hover {
+            background-color: $color_active;
+          }
+        }
+      }
+    }
+  }
+  &__graphs {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin: 0 $spacing_small;
+    &-positionPie {
+      flex: 0 1 50%;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: $spacing_small;
+      overflow: hidden;
+      &-title {
+        flex: 0 0 auto;
+        text-align: center;
+        font-size: $font_size_normal;
+        color: $font_color_inverse;
+        margin-bottom: $spacing_small;
+      }
+      &-graphContainer {
+        @include mix_border_radius(10px);
+        flex: 1 1 auto;
+        display: flex;
+        background-color: $color_white;
+        overflow: hidden;
+        &-content {
+          @include mix_alive('light');
+          flex: 1 1 auto;
+          transform: scale(0.001);
+        }
+      }
+    }
+    &-volumePies {
+      flex: 0 1 50%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      &-title {
+        flex: 0 0 auto;
+        text-align: center;
+        font-size: $font_size_normal;
+        color: $font_color_inverse;
+        margin-bottom: $spacing_small;
+      }
+      &-graphsContainer {
+        flex: 1 1 auto;
+        display: flex;
+        overflow: hidden;
+        &-byFund {
+          @include mix_border_radius(10px);
+          flex: 0 1 50%;
+          display: flex;
+          background-color: $color_white;
+          margin-right: $spacing_x_small;
+          &-content {
+            @include mix_alive('light');
+            flex: 1 1 auto;
+            transform: scale(0.001);
+          }
+        }
+        &-bySide {
+          @include mix_border_radius(10px);
+          flex: 0 1 50%;
+          display: flex;
+          background-color: $color_white;
+          margin-left: $spacing_x_small;
+          &-content {
+            @include mix_alive('light');
+            flex: 1 1 auto;
+            transform: scale(0.001);
+          }
+        }
+      }
+    }
+    &-timeSeries {
+      @include mix_border_radius(10px);
+      flex: 0 1 67%;
+      overflow: hidden;
+      padding: $spacing_small;
+      background-color: $color_white;
+    }
+  }
+  &--displayGraphsState {
+    #{$blockName} {
+      &__graphs {
+        &-positionPie-graphContainer-content {
+          transform: scale(1);
+        }
+        &-volumePies-graphsContainer {
+          &-byFund-content {
+            transform: scale(1);
+          }
+          &-bySide-content {
+            transform: scale(1);
+          }
         }
       }
     }

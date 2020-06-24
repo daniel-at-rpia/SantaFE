@@ -1,9 +1,10 @@
   // dependencies
-    import { Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+    import { Component, Input, OnChanges, OnDestroy, OnInit, AfterViewInit, ViewEncapsulation } from '@angular/core';
 
     import { HistoricalTradeVisualizerDTO } from 'FEModels/frontend-models.interface';
     import { TradeHistoryHeaderConfigList } from 'Core/constants/securityTableConstants.constant';
     import { FilterOptionsPortfolioList } from 'Core/constants/securityDefinitionConstants.constant';
+    import { GraphService } from 'Core/services/GraphService';
   //
 
 @Component({
@@ -13,15 +14,47 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class HistoricalTradeVisualizer {
+export class HistoricalTradeVisualizer implements OnDestroy, OnChanges {
   @Input() historyData: HistoricalTradeVisualizerDTO;
+  @Input() showGraph: boolean;
   
   public constants = {
     headerConfigList: TradeHistoryHeaderConfigList,
     portfolioList: FilterOptionsPortfolioList
   };
 
-  constructor() {} 
+  constructor(private graphService: GraphService) {} 
+
+  public ngOnDestroy() {
+    // if (this.historyData.graph.timeSeries) {
+      // this.graphService.destoryGraph(this.historyData.graph.timeSeries);
+      // this.historyData.graph.timeSeries = null;
+    // }
+    this.historyData.state.graphReceived = false;
+    if (this.historyData.graph.volumeByFundPie) {
+      this.graphService.destoryGraph(this.historyData.graph.volumeByFundPie);
+      this.historyData.graph.volumeByFundPie = null;
+    }
+    if (this.historyData.graph.volumeBySidePie) {
+      this.graphService.destoryGraph(this.historyData.graph.volumeBySidePie);
+      this.historyData.graph.volumeBySidePie = null;
+    }
+  }
+
+  public ngOnChanges() {
+    if (!!this.showGraph && !this.historyData.state.graphReceived) {
+      const renderGraphs = () => {
+        if (!this.historyData.graph.volumeByFundPie) {
+          this.historyData.state.graphReceived = true;
+          // this.historyData.graph.timeSeries = this.graphService.generateTradeHistoryTimeSeries(this.historyData);
+          this.historyData.graph.positionPie = this.graphService.generateTradeHistoryPositionPie(this.historyData);
+          this.historyData.graph.volumeByFundPie = this.graphService.generateTradeHistoryVolumeByFundPie(this.historyData);
+          this.historyData.graph.volumeBySidePie = this.graphService.generateTradeHistoryVolumeBySidePie(this.historyData);
+        }
+      };
+      setTimeout(renderGraphs.bind(this), 100);
+    }
+  }
 
   public onTogglePortfolio(targetPortfolio) {
     if (!!targetPortfolio && this.historyData.state.disabledPortfolio.indexOf(targetPortfolio) < 0) {

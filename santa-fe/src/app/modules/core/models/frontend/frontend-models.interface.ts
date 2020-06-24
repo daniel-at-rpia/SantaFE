@@ -18,6 +18,7 @@ import {
 } from 'FEModels/frontend-adhoc-packages.interface';
 import * as agGrid from 'ag-grid-community';
 import * as moment from 'moment';
+import * as am4Charts from '@amcharts/amcharts4/charts';
 
 import {Alert} from "Core/components/alert/alert.component";
 
@@ -28,6 +29,7 @@ interface BasicDTOStructure {
   state: object;
   style?: object;
   api?: object;
+  graph?: object;
 }
 
 export interface SecurityDTO extends BasicDTOStructure {
@@ -381,6 +383,7 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
     isCDSVariant: boolean;
     isCDSOffTheRun: boolean;
     viewHistoryState: boolean;
+    quotesLoaded: boolean;
   }
 }
 
@@ -589,9 +592,21 @@ export interface HistoricalTradeVisualizerDTO extends BasicDTOStructure {
   data: {
     prinstineTradeList: Array<TradeDTO>;
     displayTradeList: Array<TradeDTO>;
-  }
+    positionList: Array<SecurityPortfolioBlock>;
+    timeSeriesId: string;
+    positionPieId: string;
+    volumeByFundPieId: string;
+    volumeBySidePieId: string;
+  };
   state: {
     disabledPortfolio: Array<string>;
     selectedPortfolio: Array<string>;
+    graphReceived: boolean;
+  };
+  graph: {
+    timeSeries: am4Charts.XYChart;
+    positionPie: am4Charts.PieChart;
+    volumeByFundPie: am4Charts.PieChart;
+    volumeBySidePie: am4Charts.PieChart;
   }
 }

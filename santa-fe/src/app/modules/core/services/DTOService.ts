@@ -870,7 +870,8 @@ export class DTOService {
         presentingAllQuotes: false,
         isCDSVariant: this.utility.isCDS(false, securityDTO),
         isCDSOffTheRun: false,
-        viewHistoryState: false
+        viewHistoryState: false,
+        quotesLoaded: false
       }
     };
     return object;
@@ -1373,11 +1374,23 @@ export class DTOService {
     const object: DTOs.HistoricalTradeVisualizerDTO = {
       data: {
         prinstineTradeList: targetSecurity.data.tradeHistory || [],
-        displayTradeList: []
+        displayTradeList: [],
+        positionList: targetSecurity.data.portfolios,
+        timeSeriesId: `${targetSecurity.data.securityID}-tradeTimeSeries`,
+        positionPieId: `${targetSecurity.data.securityID}-position`,
+        volumeByFundPieId: `${targetSecurity.data.securityID}-fundPie`,
+        volumeBySidePieId: `${targetSecurity.data.securityID}-buySellPie`
       },
       state: {
         disabledPortfolio: this.utility.deepCopy(FilterOptionsPortfolioList),
-        selectedPortfolio: []
+        selectedPortfolio: [],
+        graphReceived: false
+      },
+      graph: {
+        timeSeries: null,
+        positionPie: null,
+        volumeByFundPie: null,
+        volumeBySidePie: null
       }
     };
     if (object.data.prinstineTradeList.length > 0) {
