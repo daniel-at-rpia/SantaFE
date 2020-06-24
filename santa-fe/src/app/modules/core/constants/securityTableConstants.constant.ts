@@ -1507,22 +1507,21 @@ export const TradeHistoryHeaderConfigList: Array<TradeHistoryHeaderConfigStub> =
     underlineAttrName: 'rawQuantity'
   },{
     headerKey: 'spread',
-    headerDisplayLabel: 'Spread',
+    headerDisplayLabel: 'Sprd',
     attrName: 'spread'
   },{
     headerKey: 'wgtAvgSpread',
-    headerDisplayLabel: 'Spread Cost',
+    headerDisplayLabel: 'Sprd Cost',
     attrName: 'wgtAvgSpread',
-    size: 6
+    size: 5
   },{
     headerKey: 'price',
-    headerDisplayLabel: 'Price',
+    headerDisplayLabel: 'Px',
     attrName: 'price'
   },{
     headerKey: 'wgtAvgPrice',
-    headerDisplayLabel: 'Price Cost',
-    attrName: 'wgtAvgPrice',
-    size: 6
+    headerDisplayLabel: 'Px Cost',
+    attrName: 'wgtAvgPrice'
   },{
     headerKey: 'strategy',
     headerDisplayLabel: 'Strategy',

@@ -96,6 +96,7 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
   &__ctas {
     display: flex;
     justify-content: center;
+    margin-top: $spacing_x_small;
     &-moreQuoteCta {
       @include mix_fixed_div(relative, $z_index_base_item_solid);
       display: none;
