@@ -131,9 +131,10 @@ button {
     margin-right: $spacing_small;
     margin-bottom: $spacing_small;
     &-pies {
-      flex: 1 1 auto;
+      flex: 0 1 33%;
       display: flex;
       margin-bottom: $spacing_small;
+      overflow: hidden;
       &-fundPie {
         @include mix_border_radius(10px);
         flex: 0 1 50%;
@@ -148,7 +149,8 @@ button {
     }
     &-timeSeries {
       @include mix_border_radius(10px);
-      flex: 1 1 auto;
+      flex: 0 1 67%;
+      overflow: hidden;
       padding: $spacing_small;
       background-color: $color_white;
     }

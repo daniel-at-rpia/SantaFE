@@ -118,4 +118,5 @@ export interface AlertDTOMap {
 export interface AmchartPieDataBlock {
   subject: string;
   quantity: number;
+  color?: string;
 }

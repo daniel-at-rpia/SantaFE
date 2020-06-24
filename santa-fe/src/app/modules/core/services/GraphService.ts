@@ -754,36 +754,22 @@ export class GraphService {
 
     public generateTradeHistoryFundPie(dto: HistoricalTradeVisualizerDTO): am4charts.PieChart {
       const chart = am4core.create(dto.data.fundPieId, am4charts.PieChart);
-      chart.data = [ {
-        "country": "Lithuania",
-        "litres": 501.9
-      }, {
-        "country": "Czechia",
-        "litres": 301.9
-      }, {
-        "country": "Ireland",
-        "litres": 201.1
-      }, {
-        "country": "Germany",
-        "litres": 165.8
-      }, {
-        "country": "Australia",
-        "litres": 139.9
-      }, {
-        "country": "Austria",
-        "litres": 128.3
-      }, {
-        "country": "UK",
-        "litres": 99
-      }
-      ];
-      const fundList:Array<AmchartPieDataBlock> = [];
+      const fundList: Array<AmchartPieDataBlock> = [];
       dto.data.prinstineTradeList.forEach((eachTrade) => {
-        fundList.findIndex((eachItem) => { return eachItem.subject === eachTrade.data.vestedPortfolio});
+        const existFund = fundList.find((eachItem) => { return eachItem.subject === eachTrade.data.vestedPortfolio});
+        if (existFund) {
+          existFund.quantity = existFund.quantity + Math.abs(eachTrade.data.rawQuantity);
+        } else {
+          fundList.push({
+            quantity: Math.abs(eachTrade.data.rawQuantity),
+            subject: eachTrade.data.vestedPortfolio
+          });
+        }
       });
+      chart.data = fundList;
       const pieSeries = chart.series.push(new am4charts.PieSeries());
-      pieSeries.dataFields.value = "litres";
-      pieSeries.dataFields.category = "country";
+      pieSeries.dataFields.value = "quantity";
+      pieSeries.dataFields.category = "subject";
       pieSeries.slices.template.stroke = am4core.color("#fff");
       pieSeries.slices.template.strokeOpacity = 1;
       chart.hiddenState.properties.radius = am4core.percent(0);
@@ -792,32 +778,28 @@ export class GraphService {
 
     public generateTradeHistoryBuyAndSellPie(dto: HistoricalTradeVisualizerDTO): am4charts.PieChart {
       const chart = am4core.create(dto.data.buySellPieId, am4charts.PieChart);
-      chart.data = [ {
-        "country": "Lithuania",
-        "litres": 501.9
-      }, {
-        "country": "Czechia",
-        "litres": 301.9
-      }, {
-        "country": "Ireland",
-        "litres": 201.1
-      }, {
-        "country": "Germany",
-        "litres": 165.8
-      }, {
-        "country": "Australia",
-        "litres": 139.9
-      }, {
-        "country": "Austria",
-        "litres": 128.3
-      }, {
-        "country": "UK",
-        "litres": 99
-      }
-      ];
+      const buyAndSell: Array<AmchartPieDataBlock> = [
+      {
+        subject: 'Buy',
+        quantity: 0,
+        color: '#26A77B'
+      },{
+        subject: 'Sell',
+        quantity: 0,
+        color: '#BC2B5D'
+      }];
+      dto.data.prinstineTradeList.forEach((eachTrade) => {
+        if (eachTrade.data.rawQuantity > 0) {
+          buyAndSell[0].quantity = buyAndSell[0].quantity + eachTrade.data.rawQuantity;
+        } else if (eachTrade.data.rawQuantity < 0) {
+          buyAndSell[1].quantity = buyAndSell[1].quantity + Math.abs(eachTrade.data.rawQuantity);
+        }
+      });
+      chart.data = buyAndSell;
       const pieSeries = chart.series.push(new am4charts.PieSeries());
-      pieSeries.dataFields.value = "litres";
-      pieSeries.dataFields.category = "country";
+      pieSeries.slices.template.propertyFields.fill = "color";
+      pieSeries.dataFields.value = "quantity";
+      pieSeries.dataFields.category = "subject";
       pieSeries.slices.template.stroke = am4core.color("#fff");
       pieSeries.slices.template.strokeOpacity = 1;
       chart.hiddenState.properties.radius = am4core.percent(0);
