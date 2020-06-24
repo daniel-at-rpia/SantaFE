@@ -373,7 +373,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
                   alertTableRemovalList.push(newAlert);
                 }
               } else {
-                if (!newAlert.state.isRead && newAlert.data.isUrgent) {
+                if (!newAlert.state.isRead && newAlert.data.isUrgent && !newAlert.state.isRead) {
                   updateList.push(newAlert);
                 }
                 if (newAlert.data.security && newAlert.data.security.data.securityID) {
