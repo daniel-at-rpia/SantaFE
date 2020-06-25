@@ -331,6 +331,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlerts, {req: 'POST'}, payload).pipe(
         first(),
         tap((serverReturn: Array<BEAlertDTO>) => {
+          serverReturn = this.state.alert.initialAlertListReceived ? [] : AlertSample;
           const filteredServerReturn = !!serverReturn ? serverReturn.filter((eachRawAlert) => {
             // no filtering logic for now
             return true;
@@ -405,7 +406,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
     private flagMarketListAlertsForCountdownUpdate(): number {
       let numOfUpdate = 0;
-      this.state.fetchResult.alertTable.prinstineRowList.forEach((eachRow) => {
+      this.state.fetchResult.alertTable.rowList.forEach((eachRow) => {
         if (!!eachRow && !!eachRow.data.alert && !!eachRow.data.alert.state) {
           if (eachRow.data.alert.state.isMarketListVariant) {
             if (!eachRow.data.alert.state.isExpired || eachRow.data.alert.data.status.indexOf('-') >= 0) {

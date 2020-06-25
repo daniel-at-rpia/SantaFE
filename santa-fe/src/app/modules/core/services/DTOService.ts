@@ -1296,9 +1296,6 @@ export class DTOService {
             : alertDTO.state.isCancelled
               ? moment(quoteBlock.lastModifiedTime)
               : moment(quoteBlock.validUntilTime);
-        if (moment().diff(alertDTO.data.validUntilMoment) > 0) {
-          alertDTO.state.isExpired = true;
-        }
       }
       alertDTO.data.isMarketListTraded = quoteBlock.isTraded;
       alertDTO.data.titlePin =
@@ -1312,6 +1309,9 @@ export class DTOService {
 
   public appendAlertStatus(alertDTO: DTOs.AlertDTO) {
     if (alertDTO.data.type === AlertTypes.axeAlert && alertDTO.state.isMarketListVariant) {
+      if (moment().diff(alertDTO.data.validUntilMoment) > 0) {
+        alertDTO.state.isExpired = true;
+      }
       if (alertDTO.state.isCancelled && alertDTO.data.isMarketListTraded) {
         alertDTO.data.status = `Traded at ${alertDTO.data.validUntilMoment.format('HH:mm:ss')}`;
       } else if (alertDTO.state.isCancelled) {
