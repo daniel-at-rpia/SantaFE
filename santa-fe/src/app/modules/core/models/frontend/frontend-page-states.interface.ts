@@ -105,6 +105,9 @@ export interface TradeCenterPanelState {
     mainTable: TableFetchResultBlock;
   }
   filters: {
+    keyword: {
+      defaultValueForUI: string;
+    }
     quickFilters: {
       driverType: string;
       portfolios: Array<string>;

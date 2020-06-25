@@ -139,6 +139,9 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         }
       },
       filters: {
+        keyword: {
+          defaultValueForUI: ''
+        },
         quickFilters: {
           driverType: this.constants.defaultMetricIdentifier,
           portfolios: [],
