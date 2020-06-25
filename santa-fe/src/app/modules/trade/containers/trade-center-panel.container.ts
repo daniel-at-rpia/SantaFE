@@ -190,19 +190,19 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     });
 
     this.subscriptions.keywordSearchSub = this.keywordChanged$.pipe(
-      debounceTime(250),
+      // debounceTime(250),
       distinctUntilChanged()
     ).subscribe((keyword) => {
       const targetTable = this.state.fetchResult.mainTable;
       if (!!keyword && keyword.length >= 2) {
         this.state.filters.quickFilters.keyword = keyword;
         targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
-        this.restfulCommService.logEngagement(
-          EngagementActionList.applyKeywordSearch,
-          'n/a',
-          keyword,
-          'Trade - Center Panel'
-        );
+        // this.restfulCommService.logEngagement(
+        //   EngagementActionList.applyKeywordSearch,
+        //   'n/a',
+        //   keyword,
+        //   'Trade - Center Panel'
+        // );
       } else if (!keyword || keyword.length < 2) {
         this.state.filters.quickFilters.keyword = keyword;
         targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
