@@ -331,7 +331,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlerts, {req: 'POST'}, payload).pipe(
         first(),
         tap((serverReturn: Array<BEAlertDTO>) => {
-          serverReturn = this.state.alert.initialAlertListReceived ? [] : AlertSample;
           const filteredServerReturn = !!serverReturn ? serverReturn.filter((eachRawAlert) => {
             // no filtering logic for now
             return true;
