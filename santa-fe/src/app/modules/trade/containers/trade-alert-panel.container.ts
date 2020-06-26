@@ -191,6 +191,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           }
         },
         filters: {
+          keyword: {
+            defaultValueForUI: ''
+          },
           quickFilters: {
             keyword: '',
             driverType: this.constants.defaultMetricIdentifier,

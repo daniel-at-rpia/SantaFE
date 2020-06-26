@@ -231,6 +231,9 @@ export interface TradeAlertPanelState {
     alertTable: TableFetchResultBlock;
   }
   filters: {
+    keyword: {
+      defaultValueForUI: string;
+    }
     quickFilters: {
       keyword: string;
       driverType: string;
