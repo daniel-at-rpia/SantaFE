@@ -21,7 +21,8 @@
       TriCoreDriverConfig,
       DEFAULT_DRIVER_IDENTIFIER,
       AlertTypes,
-      AlertSubTypes
+      AlertSubTypes,
+      ALERT_STATUS_SORTINGVALUE_UNIT
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
@@ -1434,9 +1435,17 @@ export class DTOService {
   }
 
   public formSecurityTableAlertStatusCellObject(alertDTO: DTOs.AlertDTO): DTOs.SantaTableAlertStatusCellDTO {
+    // the order on sorting value is:
+    // 1. highlighted ones goes to the top, the will have sorting value = unixTimestamp of alert time + unixTimestamp of validUntilTime
+    // 2. active normal alerts, they will have sorting value = unixTimestamp of alert time
+    // 3. traded marketlists, they will have sorting value = unix timeStamp of alert time - units
+    // 4. cancelled marketlists, they will have sorting value = -unixTimestamp of alert time - 2 units
+    // 5. expired marketlists, they will have sorting value = unixTimestamp of alert time - 3 units
+    // 6. cancelled normal alerts, they will have sorting value = 0
     const object: DTOs.SantaTableAlertStatusCellDTO = {
       data: {
         statusText: alertDTO.data.status,
+        sortingValue: alertDTO.data.unixTimestamp,
         countdownPercent: 0
       },
       state: {
@@ -1444,7 +1453,19 @@ export class DTOService {
         highlightedState: alertDTO.state.isMarketListVariant && !alertDTO.state.isCancelled && !alertDTO.state.isExpired && !alertDTO.data.isMarketListTraded
       }
     };
+    if (alertDTO.state.isMarketListVariant) {
+      if (alertDTO.data.isMarketListTraded) {
+        object.data.sortingValue = alertDTO.data.validUntilMoment.unix() - ALERT_STATUS_SORTINGVALUE_UNIT;
+      } else if (alertDTO.state.isCancelled) {
+        object.data.sortingValue = alertDTO.data.validUntilMoment.unix() - 2 * ALERT_STATUS_SORTINGVALUE_UNIT;
+      } else if (alertDTO.state.isExpired) {
+        object.data.sortingValue = alertDTO.data.validUntilMoment.unix() - 3 * ALERT_STATUS_SORTINGVALUE_UNIT;
+      }
+    } else if (alertDTO.state.isCancelled) {
+      object.data.sortingValue = object.data.sortingValue - 10 * ALERT_STATUS_SORTINGVALUE_UNIT;
+    }
     if (object.state.highlightedState) {
+      object.data.sortingValue = object.data.sortingValue + alertDTO.data.validUntilMoment.unix();
       const countdownInMinutes = Math.abs(moment().diff(alertDTO.data.validUntilMoment, 'minutes'));
       if (countdownInMinutes >= 60) {
         object.data.countdownPercent = 100;

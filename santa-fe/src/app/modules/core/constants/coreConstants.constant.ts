@@ -223,6 +223,7 @@ export enum AlertSubTypes {
 export const ALERT_COUNTDOWN = 5000;
 export const ALERT_PRESENT_LIST_SIZE_CAP = 20;
 export const ALERT_TOTALSIZE_MAX_DISPLAY_THRESHOLD = 99;
+export const ALERT_STATUS_SORTINGVALUE_UNIT = 315360000;  // 10 years in seconds
 
 export const QUANT_COMPARER_PERCENTILE = 90;
 export const KEYWORDSEARCH_DEBOUNCE_TIME = 500;

@@ -15,7 +15,8 @@
       SecurityTableRowDTO,
       SecurityTableHeaderDTO,
       QuantComparerDTO,
-      SantaTableAlertSideCellDTO
+      SantaTableAlertSideCellDTO,
+      SantaTableAlertStatusCellDTO
     } from 'FEModels/frontend-models.interface';
     import {
       AgGridRowNode,
@@ -246,6 +247,8 @@ export class AgGridMiddleLayerService {
       newAgColumn.comparator = this.agCompareQuantComparer.bind(this);
     } else if (targetHeader.data.key === 'alertSide') {
       newAgColumn.comparator = this.agCompareAlertSide.bind(this);
+    } else if (targetHeader.data.key === 'alertStatus') {
+      newAgColumn.comparator = this.agCompareAlertStatus.bind(this);
     } else if (targetHeader.data.underlineAttrName && targetHeader.data.attrName != targetHeader.data.underlineAttrName) {
       newAgColumn.comparator = this.agCompareUnderlineValue.bind(this)
     }
@@ -448,6 +451,24 @@ export class AgGridMiddleLayerService {
       if (sideA.data.side < sideB.data.side) {
         return 1;
       } else if (sideA.data.side > sideB.data.side) {
+        return -1;
+      }
+    } else {
+      return 0;
+    }
+  }
+
+  private agCompareAlertStatus(
+    statusA: SantaTableAlertStatusCellDTO,
+    statusB: SantaTableAlertStatusCellDTO,
+    nodeA: AgGridRowNode,
+    nodeB: AgGridRowNode,
+    inverted: boolean
+  ) {
+    if (!!statusA && !!statusB) {
+      if (statusA.data.sortingValue > statusB.data.sortingValue) {
+        return 1;
+      } else if (statusA.data.sortingValue < statusB.data.sortingValue) {
         return -1;
       }
     } else {

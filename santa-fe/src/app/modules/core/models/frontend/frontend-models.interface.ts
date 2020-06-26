@@ -619,6 +619,7 @@ export interface SantaTableAlertStatusCellDTO extends BasicDTOStructure {
   data: {
     statusText: string;
     countdownPercent: number;
+    sortingValue: number;
   }
   state: {
     grayedOutState: boolean;
