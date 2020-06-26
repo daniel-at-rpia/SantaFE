@@ -812,6 +812,7 @@ export class DTOService {
       state: {
         isQuantVariant: !!stub.content.isForQuantComparer,
         isSecurityCardVariant: !!stub.content.isForSecurityCard,
+        isCustomComponent: !!stub.content.isCustomComponent,
         isAxeSkewEnabled: false,
         istotalSkewEnabled: false,
         isNarrowColumnVariant: !!stub.content.isColumnWidthNarrow
@@ -880,7 +881,7 @@ export class DTOService {
   public formSecurityTableCellObject(
     isStencil: boolean,
     textData: string,
-    isQuantVariant: boolean,
+    targetHeader: DTOs.SecurityTableHeaderDTO,
     quantComparerDTO: DTOs.QuantComparerDTO,
     alertDTO: DTOs.AlertDTO
   ): DTOs.SecurityTableCellDTO {
@@ -888,7 +889,19 @@ export class DTOService {
       data: {
         textData: !!isStencil ? 'PLACE' : textData,
         quantComparerDTO: quantComparerDTO,
-        alertSideDTO: {
+        alertSideDTO: null,
+        alertStatusDTO: null
+      },
+      state: {
+        isQuantVariant: targetHeader.state.isQuantVariant,
+        quantComparerUnavail: false,
+        isStencil: isStencil
+      }
+    };
+    if (alertDTO) {
+      if (targetHeader.data.key === 'alertSide') {
+        // TODO: instead of hand-curate it, use a function
+        object.data.alertSideDTO = {
           data: {
             side: 'None'
           },
@@ -897,35 +910,31 @@ export class DTOService {
             askSided: false,
             bidSided: false
           }
-        }
-      },
-      state: {
-        isQuantVariant: isQuantVariant,
-        quantComparerUnavail: false,
-        isStencil: isStencil
-      }
-    };
-    if (alertDTO) {
-      if (alertDTO.state.isMarketListVariant) {
-        if (alertDTO.data.subType === AlertSubTypes.ask) {
-          object.data.alertSideDTO.data.side = 'BWIC';
-          object.data.alertSideDTO.state.askSided = true;
+        };
+        if (alertDTO.state.isMarketListVariant) {
+          if (alertDTO.data.subType === AlertSubTypes.ask) {
+            object.data.alertSideDTO.data.side = 'BWIC';
+            object.data.alertSideDTO.state.askSided = true;
+          } else if (alertDTO.data.subType === AlertSubTypes.bid) {
+            object.data.alertSideDTO.data.side = 'OWIC';
+            object.data.alertSideDTO.state.bidSided = true;
+          }
         } else if (alertDTO.data.subType === AlertSubTypes.bid) {
-          object.data.alertSideDTO.data.side = 'OWIC';
+          object.data.alertSideDTO.data.side = 'Bid';
+          object.data.alertSideDTO.state.bidSided = true;
+        } else if (alertDTO.data.subType === AlertSubTypes.ask) {
+          object.data.alertSideDTO.data.side = 'Ask';
+          object.data.alertSideDTO.state.askSided = true;
+        } else if (alertDTO.data.subType === AlertSubTypes.sell) {
+          object.data.alertSideDTO.data.side = 'Sell';
+          object.data.alertSideDTO.state.askSided = true;
+        } else if (alertDTO.data.subType === AlertSubTypes.buy) {
+          object.data.alertSideDTO.data.side = 'Buy';
           object.data.alertSideDTO.state.bidSided = true;
         }
-      } else if (alertDTO.data.subType === AlertSubTypes.bid) {
-        object.data.alertSideDTO.data.side = 'Bid';
-        object.data.alertSideDTO.state.bidSided = true;
-      } else if (alertDTO.data.subType === AlertSubTypes.ask) {
-        object.data.alertSideDTO.data.side = 'Ask';
-        object.data.alertSideDTO.state.askSided = true;
-      } else if (alertDTO.data.subType === AlertSubTypes.sell) {
-        object.data.alertSideDTO.data.side = 'Sell';
-        object.data.alertSideDTO.state.askSided = true;
-      } else if (alertDTO.data.subType === AlertSubTypes.buy) {
-        object.data.alertSideDTO.data.side = 'Buy';
-        object.data.alertSideDTO.state.bidSided = true;
+      }
+      if (targetHeader.data.key === 'alertStatus') {
+        object.data.alertStatusDTO = this.formSecurityTableAlertStatusCellObject(alertDTO);
       }
     }
     return object;
@@ -1421,6 +1430,19 @@ export class DTOService {
         return object.state.selectedPortfolio.includes(eachTrade.data.vestedPortfolio);
       });
     }
+    return object;
+  }
+
+  public formSecurityTableAlertStatusCellObject(alertDTO: DTOs.AlertDTO): DTOs.SantaTableAlertStatusCellDTO {
+    const object: DTOs.SantaTableAlertStatusCellDTO = {
+      data: {
+        statusText: alertDTO.data.status
+      },
+      state: {
+        grayedOutState: false,
+        highlightedState: false
+      }
+    };
     return object;
   }
 }

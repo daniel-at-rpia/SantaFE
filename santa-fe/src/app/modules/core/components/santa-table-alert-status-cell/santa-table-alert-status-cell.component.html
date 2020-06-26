@@ -1,0 +1,9 @@
+<article
+  *ngIf="statusData"
+  [ngClass]="{
+    'santaTableAlertStatusCell': true
+  }">
+  <section class="santaTableAlertStatusCell__main">
+    <span class="santaTableAlertStatusCell__main-text">{{statusData.data.statusText}}</span>
+  </section>
+</article>

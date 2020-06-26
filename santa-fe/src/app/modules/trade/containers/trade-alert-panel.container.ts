@@ -1113,9 +1113,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           if (!eachHeader.state.isSecurityCardVariant) {
             if (eachHeader.state.isQuantVariant) {
               const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, this.state.filters.quickFilters.driverType, null, null, false);
-              newAlertTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, true, bestQuoteStencil, null));
+              newAlertTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, eachHeader, bestQuoteStencil, null));
             } else {
-              newAlertTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, false, null, null));
+              newAlertTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, eachHeader, null, null));
             }
           }
         });

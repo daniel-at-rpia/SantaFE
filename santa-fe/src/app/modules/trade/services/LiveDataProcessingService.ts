@@ -150,7 +150,7 @@ export class LiveDataProcessingService {
         const newCell = this.utilityService.populateSecurityTableCellFromSecurityCard(
           eachHeader,
           newRow,
-          this.dtoService.formSecurityTableCellObject(false, null, eachHeader.state.isQuantVariant, null, targetAlert),
+          this.dtoService.formSecurityTableCellObject(false, null, eachHeader, null, targetAlert),
           driverType
         );
         newRow.data.cells.push(newCell);

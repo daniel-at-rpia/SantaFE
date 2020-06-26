@@ -445,9 +445,9 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         if (!eachHeader.state.isSecurityCardVariant) {
           if (eachHeader.state.isQuantVariant) {
             const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, this.state.filters.quickFilters.driverType, null, null, false);
-            newMainTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, true, bestQuoteStencil, null));
+            newMainTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, eachHeader, bestQuoteStencil, null));
           } else {
-            newMainTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, false, null, null));
+            newMainTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, eachHeader, null, null));
           }
         }
       });

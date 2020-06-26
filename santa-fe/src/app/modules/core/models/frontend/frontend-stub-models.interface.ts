@@ -92,6 +92,7 @@ export interface SecurityTableHeaderConfigStub {
     metricPackDeltaScope?: string;
     groupBelongs: string;
     isColumnWidthNarrow?: boolean;
+    isCustomComponent?: boolean;
   }
 }
 

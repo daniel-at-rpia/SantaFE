@@ -348,6 +348,7 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
   state: {
     isSecurityCardVariant: boolean;
     isQuantVariant: boolean;
+    isCustomComponent: boolean;
     isAxeSkewEnabled: boolean;
     istotalSkewEnabled: boolean;
     isNarrowColumnVariant: boolean;
@@ -392,6 +393,7 @@ export interface SecurityTableCellDTO extends BasicDTOStructure {
     textData: string;
     quantComparerDTO: QuantComparerDTO;
     alertSideDTO: SantaTableAlertSideCellDTO;
+    alertStatusDTO: SantaTableAlertStatusCellDTO;
   },
   state: {
     isQuantVariant: boolean;
@@ -610,5 +612,15 @@ export interface HistoricalTradeVisualizerDTO extends BasicDTOStructure {
     positionPie: am4Charts.PieChart;
     volumeLeftPie: am4Charts.PieChart;
     volumeRightPie: am4Charts.PieChart;
+  }
+}
+
+export interface SantaTableAlertStatusCellDTO extends BasicDTOStructure {
+  data: {
+    statusText: string;
+  }
+  state: {
+    grayedOutState: boolean;
+    highlightedState: boolean;
   }
 }

@@ -159,6 +159,9 @@ export class AgGridMiddleLayerService {
     const alertSideCellIndex = targetHeaders.findIndex((eachHeader) => {
       return eachHeader.data.key === 'alertSide';
     }) - 1;
+    const alertStatusCellIndex = targetHeaders.findIndex((eachHeader) => {
+      return eachHeader.data.key === 'alertStatus';
+    }) - 1;
     const list = [];
     targetRows.forEach((eachRow, index) => {
       if (index === 0) {
@@ -171,7 +174,8 @@ export class AgGridMiddleLayerService {
         targetHeaders,
         bestQuoteCellIndex,
         bestAxeQuoteCellIndex,
-        alertSideCellIndex
+        alertSideCellIndex,
+        alertStatusCellIndex
       );
       !!newAgRow.id && list.push(newAgRow);
     });
@@ -195,6 +199,9 @@ export class AgGridMiddleLayerService {
     const alertSideCellIndex = table.data.allHeaders.findIndex((eachHeader) => {
       return eachHeader.data.key === 'alertSide';
     }) - 1;
+    const alertStatusCellIndex = table.data.allHeaders.findIndex((eachHeader) => {
+      return eachHeader.data.key === 'alertStatus';
+    }) - 1;
     targetRows.forEach((eachRow) => {
       const id = eachRow.data.rowId;
       const targetNode = table.api.gridApi.getRowNode(id);
@@ -204,7 +211,8 @@ export class AgGridMiddleLayerService {
           table.data.allHeaders,
           bestQuoteCellIndex,
           bestAxeQuoteCellIndex,
-          alertSideCellIndex
+          alertSideCellIndex,
+          alertStatusCellIndex
         );
         targetNode.setData(newAgRow);
       } else {
@@ -247,16 +255,16 @@ export class AgGridMiddleLayerService {
     targetHeader: SecurityTableHeaderDTO,
     newAgColumn: AgGridColumnDefinition
   ) {
-    if (targetHeader.data.key === 'securityCard') {
-      newAgColumn.cellClass = `${AGGRID_CELL_CLASS} ${AGGRID_CELL_CLASS}--securityCard`;
+    if (targetHeader.state.isCustomComponent) {
       newAgColumn.cellRenderer = targetHeader.data.key;
-      newAgColumn.width = AGGRID_SECURITY_CARD_COLUMN_WIDTH;
-    } else if (!!targetHeader.state.isQuantVariant) {
-      newAgColumn.cellRenderer = targetHeader.data.key;
-      newAgColumn.width = AGGRID_QUOTE_COLUMN_WIDTH;
-    } else if (targetHeader.data.key === 'alertSide') {
-      newAgColumn.cellRenderer = targetHeader.data.key;
-      newAgColumn.width = AGGRID_ALERT_SIDE_COLUMN_WIDTH;
+      if (targetHeader.data.key === 'securityCard') {
+        newAgColumn.cellClass = `${AGGRID_CELL_CLASS} ${AGGRID_CELL_CLASS}--securityCard`;
+        newAgColumn.width = AGGRID_SECURITY_CARD_COLUMN_WIDTH;
+      } else if (!!targetHeader.state.isQuantVariant) {
+        newAgColumn.width = AGGRID_QUOTE_COLUMN_WIDTH;
+      } else if (targetHeader.data.key === 'alertSide') {
+        newAgColumn.width = AGGRID_ALERT_SIDE_COLUMN_WIDTH;
+      }
     } else if (!targetHeader.data.isDataTypeText) {
       newAgColumn.cellClass = `${AGGRID_CELL_CLASS} ${AGGRID_CELL_CLASS}--numeric`;
       newAgColumn.headerClass = `${newAgColumn.headerClass} ${AGGRID_HEADER_CLASS}--numeric ag-numeric-header`;
@@ -295,7 +303,8 @@ export class AgGridMiddleLayerService {
     targetHeaders: Array<SecurityTableHeaderDTO>,
     bestQuoteCellIndex: number,
     bestAxeQuoteCellIndex: number,
-    alertSideCellIndex: number
+    alertSideCellIndex: number,
+    alertStatusCellIndex: number
   ): AgGridRow {
     const eachSecurity = targetRow.data.security;
     const newAgRow: AgGridRow = {
@@ -306,21 +315,16 @@ export class AgGridMiddleLayerService {
       alertSide: 
         alertSideCellIndex > -1
           ? targetRow.data.cells[alertSideCellIndex].data.alertSideDTO
-          : {
-            data: {
-              side: 'n/a'
-            },
-            state: {
-              isStencil: false,
-              bidSided: false,
-              askSided: false
-            }
-          },
+          : null,
+      alertStatus:
+        alertStatusCellIndex > -1
+          ? targetRow.data.cells[alertStatusCellIndex].data.alertStatusDTO
+          : null,
       rowDTO: targetRow
     };
     newAgRow[AGGRID_DETAIL_COLUMN_KEY] = '';
     targetHeaders.forEach((eachHeader, index) => {
-      if (eachHeader.data.key === 'securityCard' || eachHeader.state.isQuantVariant || eachHeader.data.key === 'alertSide') {
+      if (eachHeader.state.isCustomComponent) {
         // skip those columns as they are already instantiated above
       } else {
         // can't directly use the cells from the target row to retrieve the data because we need to populate data for ALL columns, not just the active ones

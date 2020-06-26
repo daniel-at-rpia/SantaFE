@@ -71,6 +71,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isForSecurityCard: true,
       groupBelongs: SECURITY_TABLE_HEADER_NO_GROUP,
+      isCustomComponent: true,
       tableSpecifics: {
         default: {
           active: true,
@@ -132,8 +133,8 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'alertStatus',
       blockAttrName: 'alert',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.alert,
+      isCustomComponent: true,
       tableSpecifics: {
         default: {
           active: false,
@@ -156,6 +157,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.alert,
       isColumnWidthNarrow: true,
+      isCustomComponent: true,
       tableSpecifics: {
         default: {
           active: false,
@@ -293,6 +295,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       isForQuantComparer: true,
       isDriverDependent: true,
       groupBelongs: SecurityTableHeaderConfigGroups.bestQuote,
+      isCustomComponent: true,
       tableSpecifics: {
         default: {
           active: true,
@@ -315,6 +318,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       isForQuantComparer: true,
       isDriverDependent: true,
       groupBelongs: SecurityTableHeaderConfigGroups.bestQuote,
+      isCustomComponent: true,
       tableSpecifics: {
         default: {
           active: true,
