@@ -48,7 +48,7 @@ export const SecurityTableHeaderConfigGroups = {
   cost: 'Position Cost',
   position: 'Position (MM)',
   cs01: 'CS01 (k)',
-  delta: 'Security Driver Deltas',
+  delta: 'Deltas (GSpread)',
   securityInfo: 'Security Info',
   ownership: 'Ownership'
 };

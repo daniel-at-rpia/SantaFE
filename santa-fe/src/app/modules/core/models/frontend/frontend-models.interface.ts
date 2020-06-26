@@ -417,6 +417,7 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
       yield: number;
       benchmark: string;
       time: string;
+      rawTime: string;
     };
     ask: {
       isAxe: boolean;
@@ -426,6 +427,7 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
       yield: number;
       benchmark: string;
       time: string;
+      rawTime: string;
     }
   },
   state: {

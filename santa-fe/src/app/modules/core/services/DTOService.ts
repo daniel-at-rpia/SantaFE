@@ -957,16 +957,13 @@ export class DTOService {
       }
     }
     const consolidatedBenchmark = bidBenchmark === askBenchmark ? bidBenchmark : null;
-    let convertedDate: Date = null;
-    if (!isStencil) {
-      convertedDate = new Date(rawData.time);
-    }
+    let convertedDate: moment.Moment = !isStencil ? moment(rawData.time) : null;
     const object: DTOs.SecurityQuoteDTO = {
       data: {
         uuid: this.utility.generateUUID(),
         broker: !isStencil ? rawData.dealer : 'RBC',
-        time: !isStencil ? `${convertedDate.toTimeString().slice(0, 5)}` : '12:01 pm',
-        unixTimestamp: !isStencil ? convertedDate.getTime() : 0,
+        time: !isStencil ? convertedDate.format('HH:mm') : '12:01',
+        unixTimestamp: !isStencil ? convertedDate.unix() : 0,
         dataSource: dataSource,
         consolidatedBenchmark: consolidatedBenchmark,
         bid: {
@@ -976,7 +973,8 @@ export class DTOService {
           yield: 5,
           tspread: 300,
           benchmark: bidBenchmark,
-          time: '12:01pm'
+          time: '12:01',
+          rawTime: ''
         },
         ask: {
           isAxe: false,
@@ -985,7 +983,8 @@ export class DTOService {
           yield: 5,
           tspread: 300,
           benchmark: bidBenchmark,
-          time: '12:01pm'
+          time: '12:01',
+          rawTime: ''
         },
         currentMetric: null
       },
@@ -1016,7 +1015,8 @@ export class DTOService {
         yield: !!rawData.bidYield ? this.utility.parseTriCoreDriverNumber(rawData.bidYield, TriCoreDriverConfig.Yield.label, targetSecurity, false) as number : null,
         tspread: !!rawData.bidSpread ? this.utility.parseTriCoreDriverNumber(rawData.bidSpread, TriCoreDriverConfig.Spread.label, targetSecurity, false) as number : null,
         benchmark: bidBenchmark,
-        time: this.utility.isQuoteTimeValid(rawData.bidTime) && hasBid ? new Date(rawData.bidTime).toTimeString().slice(0, 5) : ''
+        time: this.utility.isQuoteTimeValid(rawData.bidTime) && hasBid ? moment(rawData.bidTime).format('HH:mm') : '',
+        rawTime: rawData.bidTime.slice(0, 19)  // remove timezone
       };
       object.data.ask = {
         isAxe: rawData.quoteType === SECURITY_TABLE_QUOTE_TYPE_AXE,
@@ -1025,7 +1025,8 @@ export class DTOService {
         yield: !!rawData.askYield ? this.utility.parseTriCoreDriverNumber(rawData.askYield, TriCoreDriverConfig.Yield.label, targetSecurity, false) as number : null,
         tspread: !!rawData.askSpread ? this.utility.parseTriCoreDriverNumber(rawData.askSpread, TriCoreDriverConfig.Spread.label, targetSecurity, false) as number : null,
         benchmark: askBenchmark,
-        time: this.utility.isQuoteTimeValid(rawData.askTime) && hasAsk ? new Date(rawData.askTime).toTimeString().slice(0, 5) : ''
+        time: this.utility.isQuoteTimeValid(rawData.askTime) && hasAsk ? moment(rawData.askTime).format('HH:mm') : '',
+        rawTime: rawData.askTime.slice(0, 19)  // remove timezone
       };
       this.utility.highlightSecurityQutoe(object, targetRow);
       object.state.isBidDownVoted = rawData.bidQuoteStatus < 0;
