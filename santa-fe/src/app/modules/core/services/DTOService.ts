@@ -1318,7 +1318,7 @@ export class DTOService {
   }
 
   public appendAlertStatus(alertDTO: DTOs.AlertDTO) {
-    if (alertDTO.data.type === AlertTypes.axeAlert && alertDTO.state.isMarketListVariant) {
+    if (alertDTO.state.isMarketListVariant) {
       if (moment().diff(alertDTO.data.validUntilMoment) > 0) {
         alertDTO.state.isExpired = true;
       }
@@ -1436,13 +1436,22 @@ export class DTOService {
   public formSecurityTableAlertStatusCellObject(alertDTO: DTOs.AlertDTO): DTOs.SantaTableAlertStatusCellDTO {
     const object: DTOs.SantaTableAlertStatusCellDTO = {
       data: {
-        statusText: alertDTO.data.status
+        statusText: alertDTO.data.status,
+        countdownPercent: 0
       },
       state: {
-        grayedOutState: false,
-        highlightedState: false
+        grayedOutState: alertDTO.state.isCancelled || alertDTO.state.isExpired,
+        highlightedState: alertDTO.state.isMarketListVariant && !alertDTO.state.isCancelled && !alertDTO.state.isExpired && !alertDTO.data.isMarketListTraded
       }
     };
+    if (object.state.highlightedState) {
+      const countdownInMinutes = Math.abs(moment().diff(alertDTO.data.validUntilMoment, 'minutes'));
+      if (countdownInMinutes >= 60) {
+        object.data.countdownPercent = 100;
+      } else {
+        object.data.countdownPercent = this.utility.round(countdownInMinutes*100/60);
+      }
+    }
     return object;
   }
 }

@@ -618,6 +618,7 @@ export interface HistoricalTradeVisualizerDTO extends BasicDTOStructure {
 export interface SantaTableAlertStatusCellDTO extends BasicDTOStructure {
   data: {
     statusText: string;
+    countdownPercent: number;
   }
   state: {
     grayedOutState: boolean;

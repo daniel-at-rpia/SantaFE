@@ -334,6 +334,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlerts, {req: 'POST'}, payload).pipe(
         first(),
         tap((serverReturn: Array<BEAlertDTO>) => {
+          // using synthetic alerts for dev purposes
+          serverReturn = !this.state.alert.initialAlertListReceived ? AlertSample : [];
           const filteredServerReturn = !!serverReturn ? serverReturn.filter((eachRawAlert) => {
             // no filtering logic for now
             return true;
@@ -421,10 +423,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
                   // minus one because securityCard is not one of the cells ( TODO: this is a bad design, what if a table has more than one security card column? should not treat it different from other columns )
                   // this basically updates the alert status cell
                   eachRow.data.cells[index-1] = this.utilityService.populateSecurityTableCellFromSecurityCard(
-                      eachHeader,
-                      eachRow,
-                      eachRow.data.cells[index-1],
-                      this.constants.defaultMetricIdentifier
+                    eachHeader,
+                    eachRow,
+                    this.dtoService.formSecurityTableCellObject(false, null, eachHeader, null, eachRow.data.alert),
+                    this.constants.defaultMetricIdentifier
                   );
                 }
               });

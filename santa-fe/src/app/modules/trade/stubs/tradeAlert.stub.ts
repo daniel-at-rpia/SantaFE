@@ -910,7 +910,7 @@ export const AlertSample: Array<BEAlertDTO> = [
       "marketListDescription":"OWIC started @ 3:59:13 PM and ends @ 4:25:00 PM",
       "fixid":"55150463",
       "fixRefID":null,
-      "validUntilTime":"2020-06-24T20:55:30-04:00",
+      "validUntilTime":"2020-06-26T18:21:30-04:00",
       "priceType":"SPREAD",
       "isNatural":null,
       "ioiQualifier":null,
