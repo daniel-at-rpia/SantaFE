@@ -1,6 +1,5 @@
 <article
   title="{{cardData.data.name}}"
-  (click)="onClickCard()"
   class="sat-securityCard--type-{{cardData.data.ratingLevel}}{{cardData.data.seniorityLevel}}"
   [ngClass]="{
     'sat-securityCard': true,
@@ -13,12 +12,13 @@
     'sat-securityCard--atListCeilingVariant': cardData.state.isAtListCeiling,
     'sat-securityCard--primaryActionDisabledState': cardData.state.isActionMenuPrimaryActionsDisabled,
     'sat-securityCard--minorActionDisabledState': cardData.state.isActionMenuMinorActionsDisabled,
-    'sat-securityCard--slimVariant': cardData.state.isSlimVariant && !cardData.isMultiLineVariant
+    'sat-securityCard--slimVariant': cardData.state.isSlimVariant && !cardData.isMultiLineVariant,
+    'sat-securityCard--configAlertState': cardData.state.configAlertState
   }">
-  <section class="sat-securityCard__name">
+  <section class="sat-securityCard__name" (click)="onClickCard()">
     <span class="sat-securityCard__name-text">{{cardData.data.name}}</span>
   </section>
-  <section class="sat-securityCard__rating">
+  <section class="sat-securityCard__rating" (click)="onClickCard()">
     <span class="sat-securityCard__rating-text">{{cardData.data.ratingValue}}</span>
   </section>
   <section class="sat-securityCard__actionMenu">
@@ -29,14 +29,46 @@
     <ul class="sat-securityCard__actionMenu-mainList">
       <button (click)="onClickSendToGraph()" class="sat-securityCard__actionMenu-mainList-graphBtn fal fa-chart-line"></button>
       <button (click)="onClickThumbDown()" class="sat-securityCard__actionMenu-mainList-thumbDownBtn fal fa-thumbs-down"></button>
-      <!--
-      TODO: temporarily disable this since the UI needs to be upgrade to work with multiple types of alerts
       <button (click)="onClickSendToAlertConfig()" class="sat-securityCard__actionMenu-mainList-alertBtn fal fa-bell"></button>
-      -->
     </ul>
     <ul class="sat-securityCard__actionMenu-minorList sat-securityCard__actionMenu-minorList--bottom">
       <button title="Open In Bloomberg YAS" (click)="onClickOpenSecurityInBloomberg('YAS')" class="sat-securityCard__actionMenu-minorList-btn">YAS</button>
       <button title="Open In Bloomberg TDH" (click)="onClickOpenSecurityInBloomberg('TDH')" class="sat-securityCard__actionMenu-minorList-btn">TDH</button>
     </ul>
+  </section>
+  <section (mouseleave)="onMouseLeaveShortcutConfig()" class="sat-securityCard__alertShortcutConfig">
+    <div class="sat-securityCard__alertShortcutConfig-content">
+      <!-- <div class="sat-securityCard__alertShortcutConfig-content-alertTypePin"> -->
+        <!-- <i class="sat-securityCard__alertShortcutConfig-content-alertTypePin-icon fas fa-axe"></i> -->
+      <!-- </div> -->
+      <div class="sat-securityCard__alertShortcutConfig-content-title">
+        <div class="sat-securityCard__alertShortcutConfig-content-title-alertType">
+          <i class="sat-securityCard__alertShortcutConfig-content-title-alertType-icon fas fa-axe"></i>
+        </div>
+        <div class="sat-securityCard__alertShortcutConfig-content-title-text">
+          <span class="sat-securityCard__alertShortcutConfig-content-title-text-label">Watch Axe On</span>
+          <span class="sat-securityCard__alertShortcutConfig-content-title-text-securityName">{{cardData.data.name}}</span>
+        </div>
+      </div>
+      <div class="sat-securityCard__alertShortcutConfig-content-driver">
+      </div>
+      <div class="sat-securityCard__alertShortcutConfig-content-level">
+
+        <div class="santaBtnGroup sat-securityCard__alertShortcutConfig-content-level-btnGroup">
+          <button class="sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn">Sprd</button>
+          <button class="sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn">Px</button>
+        </div>
+        <div class="santaBtnGroup sat-securityCard__alertShortcutConfig-content-level-btnGroup">
+          <button class="sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn"><</button>
+          <button class="sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn">></button>
+        </div>
+        <input
+          type="text">
+      </div>
+      <div class="sat-securityCard__alertShortcutConfig-content-save">
+        <button class="sat-securityCard__alertShortcutConfig-content-save-cta fal fa-check"></button>
+        <div class="sat-securityCard__alertShortcutConfig-content-save-borderMask"></div>
+      </div>
+    </div>
   </section>
 </article>

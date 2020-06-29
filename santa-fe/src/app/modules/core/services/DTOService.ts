@@ -210,7 +210,8 @@ export class DTOService {
         isAtListCeiling: false,
         isActionMenuPrimaryActionsDisabled: false,
         isActionMenuMinorActionsDisabled: false,
-        isSlimVariant: isSlimVariant
+        isSlimVariant: isSlimVariant,
+        configAlertState: false
       }
     };
     if (!isStencil) {

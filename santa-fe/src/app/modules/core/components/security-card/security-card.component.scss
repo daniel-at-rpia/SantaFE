@@ -143,6 +143,137 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
       }
     }
   }
+  &__alertShortcutConfig {
+    @include mix_fixed_div(absolute, $z_index_dropdown);
+    @include mix_alive('custom', transform $animation_duration_light);
+    display: flex;
+    left: 0;
+    top: -$spacing_large;
+    width: 100%;
+    transform: scale(0.001);
+    padding: $spacing_small;  // this padding is important, without it the mouse leave would be too sensitive. The mouseleave is necessary for simplifying the row-click/card-click scenarios handling in the SantaTable
+    &-content {
+      @include mix_fixed_div(relative, $z_index_base_item);
+      @include mix_border_radius(15px);
+      @include mix_border_generator($typical_border_width, $color_active);
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      background-color: $color_white;
+      padding: $spacing_small;
+      &-alertTypePin {
+        @include mix_fixed_div(absolute, $z_index_base_item);
+        @include mix_border_radius(50%);
+        @include mix_border_generator($typical_border_width*2, $color_active);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: $iconButton_size_large;
+        height: $iconButton_size_large;
+        background-color: $tradeAxeAlertColor;
+        top: -$iconButton_size_large/2;
+        left: -$iconButton_size_large/2;
+        &-icon {
+          font-size: $font_size_large;
+          color: $font_color_inverse;
+        }
+      }
+      &-title {
+        display: flex;
+        width: 100%;  // this is necessary for making sure the text doesn't overflow, we can't just use overflow:hidden because of the saveCTA and the alertTypePin
+        overflow: hidden;
+        &-alertType {
+          @include mix_border_radius(10px);
+          flex: 0 0 auto;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: $tradeAxeAlertColor;
+          width: $iconButton_size_regular;
+          height: $iconButton_size_regular;
+          &-icon {
+            font-size: $font_size_normal;
+            color: $font_color_inverse;
+          }
+        }
+        &-text {
+          flex: 1 1 auto;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          margin-left: $spacing_small;
+          &-label {
+            color: $font_color_minor;
+            text-align: left;
+            margin-bottom: $spacing_x_small;
+          }
+          &-securityName {
+            @include mix_text_overflow;
+            color: $font_color_major;
+            font-size: $font_size_normal;
+            text-align: left;
+          }
+        }
+      }
+      &-driver {
+        display: flex;
+        justify-content: center;
+        margin-top: $spacing_small;
+        &-btnGroup {
+          &-btn {
+            @extend .santaBtn;
+          }
+        }
+      }
+      &-level {
+        @include mix_fixed_div(relative, $z_index_base_item_solid);
+        display: flex;
+        padding: 0 $spacing_x_small;
+        margin-top: $spacing_medium;
+        margin-bottom: $spacing_large;
+        &-btnGroup {
+          margin-right: $spacing_medium;
+          &-btn {
+            @extend .santaBtn;
+          }
+        }
+        &>input {
+          flex: 1 1 auto;
+        }
+      }
+      &-save {
+        @include mix_fixed_div(absolute, $z_index_base_item);
+        @include mix_border_radius(50%);
+        @include mix_calculate(left, 50%, $iconButton_size_large/2 + $spacing_x_small, '-');
+        @include mix_border_generator($typical_border_width, $color_active);
+        background-color: $color_white;
+        bottom: -$iconButton_size_large/2 - $spacing_x_small;
+        padding: $spacing_x_small;
+        &-cta {
+          @include mix_fixed_div(relative, $z_index_hovering_item);
+          @extend .santaBtn;
+          @extend .santaBtn--iconOnly;
+          @include mix_border_radius(50%);
+          // @include material('none');
+          color: $font_color_inverse;
+          // background-color: $color_disabled;
+          background-color: $color_create;
+          width: $iconButton_size_large;
+          height: $iconButton_size_large;
+          font-size: $font_size_large;
+        }
+        &-borderMask {
+          @include mix_fixed_div(absolute, $z_index_base_item);
+          width: 150%;
+          height: 55%;
+          top: -$typical_border_width*2;
+          left: -25%;
+          background-color: $color_white;
+        }
+      }
+    }
+  }
   &--slimVariant {
     height: $securityCard_labelVariant_height_slim;
   }
@@ -179,6 +310,19 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
             color: $font_color_inverse;
           }
         }
+      }
+      &__alertShortcutConfig {
+        display: flex;
+      }
+    }
+  }
+  &--configAlertState {
+    #{$securityCardBlockName} {
+      &__actionMenu {
+        transform: scale(0.01);
+      }
+      &__alertShortcutConfig {
+        transform: scale(1);
       }
     }
   }

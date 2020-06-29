@@ -57,8 +57,11 @@ export class SecurityCard implements OnInit {
   }
 
   public onClickSendToAlertConfig() {
-    if (!!this.cardData.api.onClickSendToAlertConfig) {
-      this.cardData.api.onClickSendToAlertConfig(this.cardData);
-    }
+    this.cardData.state.configAlertState = true;
+  }
+
+  public onMouseLeaveShortcutConfig() {
+    // this.cardData.state.configAlertState = false;
+    // this.cardData.state.isSelected = false;
   }
 }

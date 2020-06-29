@@ -148,6 +148,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     isActionMenuPrimaryActionsDisabled: boolean;
     isActionMenuMinorActionsDisabled: boolean;
     isSlimVariant: boolean;
+    configAlertState: boolean;
   }
 }
 
