@@ -1239,7 +1239,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.delta,
       tableSpecifics: {
         default: {
-          active: true
+          active: false
         },
         tradeAlert: {
           active: false
@@ -1260,7 +1260,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.delta,
       tableSpecifics: {
         default: {
-          active: true,
+          active: false,
           groupShow: true
         },
         tradeAlert: {
@@ -1282,7 +1282,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.delta,
       tableSpecifics: {
         default: {
-          active: true
+          active: false
         },
         tradeAlert: {
           active: false
@@ -1303,7 +1303,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.delta,
       tableSpecifics: {
         default: {
-          active: true
+          active: false
         },
         tradeAlert: {
           active: false
@@ -1324,7 +1324,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.delta,
       tableSpecifics: {
         default: {
-          active: true
+          active: false
         },
         tradeAlert: {
           active: false

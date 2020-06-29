@@ -303,13 +303,15 @@ export class UtilityService {
         metricList.forEach((eachMetric) => {
           let keyToRetrieveMetric = eachMetric.backendDtoAttrName;
           if (eachMetric.label === 'Default Spread') {
-            if (this.isCDS(isGroup, rawData)) {
-              keyToRetrieveMetric = 'spread';
-             } else if (this.isFloat(isGroup, rawData)) {
-               keyToRetrieveMetric = 'zSpread';
-            } else {
-              keyToRetrieveMetric = 'gSpread';
-            }
+            keyToRetrieveMetric = 'spread';
+            // this logic is disabled, since after BE cut off Citi, we no longer have those spread metrics
+            // if (this.isCDS(isGroup, rawData)) {
+            //   keyToRetrieveMetric = 'spread';
+            //  } else if (this.isFloat(isGroup, rawData)) {
+            //    keyToRetrieveMetric = 'zSpread';
+            // } else {
+            //   keyToRetrieveMetric = 'gSpread';
+            // }
           };
           const rawValue = rawData.metrics && rawData.metrics['Index'] ? rawData.metrics['Index'][keyToRetrieveMetric] : null;
           if (rawValue === null || rawValue === undefined) {
