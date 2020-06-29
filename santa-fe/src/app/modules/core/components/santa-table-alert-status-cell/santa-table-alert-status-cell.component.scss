@@ -50,8 +50,8 @@ $santaTableAlertStatusCell_countdown_height: 0.3125rem;
     }
   }
   &--highlightedState {
-    border-color: $color_ask;
-    background-color: $color_ask;
+    background: linear-gradient(45deg,  $theme_color_1 40%, $theme_color_2 100%) !important;
+    border-color: transparent;
     #{$blockname} {
       &__main {
         &-text {
