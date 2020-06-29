@@ -1436,7 +1436,7 @@ export class DTOService {
 
   public formSecurityTableAlertStatusCellObject(alertDTO: DTOs.AlertDTO): DTOs.SantaTableAlertStatusCellDTO {
     // the order on sorting value is:
-    // 1. highlighted ones goes to the top, the will have sorting value = unixTimestamp of alert time + unixTimestamp of validUntilTime
+    // 1. highlighted ones goes to the top, the will have sorting value = 2099's unix * 2 - unixTimestamp of validUntilTime (this ensures the highlighted ones goes to the top, and have the soon-to-be-expired ones sorted to the top among themselves)
     // 2. active normal alerts, they will have sorting value = unixTimestamp of alert time
     // 3. traded marketlists, they will have sorting value = unix timeStamp of alert time - units
     // 4. cancelled marketlists, they will have sorting value = -unixTimestamp of alert time - 2 units
@@ -1465,7 +1465,7 @@ export class DTOService {
       object.data.sortingValue = object.data.sortingValue - 10 * ALERT_STATUS_SORTINGVALUE_UNIT;
     }
     if (object.state.highlightedState) {
-      object.data.sortingValue = object.data.sortingValue + alertDTO.data.validUntilMoment.unix();
+      object.data.sortingValue = 4070908800*2 - alertDTO.data.validUntilMoment.unix();
       const countdownInMinutes = Math.abs(moment().diff(alertDTO.data.validUntilMoment, 'minutes'));
       if (countdownInMinutes >= 60) {
         object.data.countdownPercent = 100;
