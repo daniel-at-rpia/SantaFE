@@ -62,9 +62,9 @@ export class DTOService {
         ticker: !isStencil ? rawData.ticker : null,
         obligorName: !isStencil ? rawData.obligorName : null,
         isGovt: !isStencil ? rawData.isGovt : false,
-        ratingLevel: !isStencil && rawData.metrics ? this.utility.mapRatings(rawData.metrics.ratingNoNotch) : 0,
-        ratingValue: !isStencil && rawData.metrics ? rawData.metrics.ratingNoNotch : null,
-        ratingBucket: !isStencil && rawData.metrics ? rawData.metrics.ratingBucket : null,
+        ratingLevel: !isStencil && rawData.metrics ? this.utility.mapRatings(rawData.metrics.Default.ratingNoNotch) : 0,
+        ratingValue: !isStencil && rawData.metrics ? rawData.metrics.Default.ratingNoNotch : null,
+        ratingBucket: !isStencil && rawData.metrics ? rawData.metrics.Default.ratingBucket : null,
         seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.genericSeniority) : 5,
         currency: !isStencil ? rawData.ccy : null,
         country: !isStencil ? rawData.country : null,
@@ -173,7 +173,7 @@ export class DTOService {
           ask: null,
           displayAsk: null
         },
-        hasIndex: !isStencil && rawData.metrics ? !!rawData.metrics.isIndex : false,
+        hasIndex: !isStencil && rawData.metrics ? !!rawData.metrics.Index : false,
         hedgeFactor: !isStencil && !!rawData.unitPosition ? rawData.unitPosition.hedgeFactor : null,
         alert: {
           alertTime: null,
@@ -252,8 +252,8 @@ export class DTOService {
       strategy: targetPortfolio.partitionOptionValue.StrategyName,
       cs01Cad: targetPortfolio.cs01Cad,
       cs01Local: targetPortfolio.cs01Local,
-      costFifoSpread: !!lastTrade ? lastTrade.fifoAvgSpread : null,
-      costFifoPrice: !!lastTrade ? lastTrade.fifoAvgPrice : null,
+      costFifoSpread: null,
+      costFifoPrice: null,
       costWeightedAvgSpread: !!lastTrade ? lastTrade.wgtAvgSpread : null,
       costWeightedAvgPrice: !!lastTrade ? lastTrade.wgtAvgPrice : null
     };

@@ -227,7 +227,7 @@ export class UtilityService {
           return false;  // TODO: haven't isFloat in FE yet
         } else {
           const rawDataInput = input as BESecurityDTO;
-          return rawDataInput.metrics ? rawDataInput.metrics.isFloat : false;
+          return rawDataInput.metrics && rawDataInput.metrics.Default ? rawDataInput.metrics.Default.isFloat : false;
         }
       }
     }
