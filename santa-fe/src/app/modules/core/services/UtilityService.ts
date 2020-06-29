@@ -311,7 +311,7 @@ export class UtilityService {
               keyToRetrieveMetric = 'gSpread';
             }
           };
-          const rawValue = rawData.metrics ? rawData.metrics[keyToRetrieveMetric] : null;
+          const rawValue = rawData.metrics && rawData.metrics['Index'] ? rawData.metrics['Index'][keyToRetrieveMetric] : null;
           if (rawValue === null || rawValue === undefined) {
             object.raw[eachMetric.label] = null;
           } else {
