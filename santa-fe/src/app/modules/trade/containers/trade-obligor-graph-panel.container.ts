@@ -142,7 +142,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
                   spreadMid: spreadMid,
                   yieldMid: yieldMid,
                   mark: securityDTO.data.mark.mark,
-                  workoutTerm: rawCurveData[eachSecurityId].security.metrics.workoutTerm,
+                  workoutTerm: rawCurveData[eachSecurityId].security.metrics.Default.workoutTerm,
                   currentPosition: null,
                   cS01: null
                 }

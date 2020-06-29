@@ -198,7 +198,9 @@ export const EngagementActionList = {
   tradeAlertOpenConfiguration: 'Trade Alert Open/Close Configuration',
   tradeAlertConfigure: 'Trade Alert Configure',
   tradeAlertAddSingleSecurity: 'Trade Alert Add Single Security',
-  tradeAlertClickedTab: 'Trade Alert Click Tab'
+  tradeAlertClickedTab: 'Trade Alert Click Tab',
+  santaTableAllQuotesDisplayTradeHistory: 'Switch To Display Trade History',
+  santaTableAllQuotesDisplayQuotes: 'Switch To Display Quotes'
 }
 
 export enum AlertTypes {
@@ -223,5 +225,7 @@ export enum AlertSubTypes {
 export const ALERT_COUNTDOWN = 5000;
 export const ALERT_PRESENT_LIST_SIZE_CAP = 20;
 export const ALERT_TOTALSIZE_MAX_DISPLAY_THRESHOLD = 99;
+export const ALERT_STATUS_SORTINGVALUE_UNIT = 315360000;  // 10 years in seconds
 
 export const QUANT_COMPARER_PERCENTILE = 90;
+export const KEYWORDSEARCH_DEBOUNCE_TIME = 500;

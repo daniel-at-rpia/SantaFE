@@ -47,10 +47,13 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
 
   public agInit(params: any){
     // don't forget this is triggered when the row is updated in live too
+    // agInit is triggered twice, once when the SantaTable's onRowClicked() sets the node via setExpanded(). And later triggered again when SantaTable's loadQuotes() recalc the height of the table view. There is no need to react to both agInit, just react to the 2nd one when all quotes data comes in 
     const typeSafeParams = params as AgGridRowParams;
-    this.parentNode = typeSafeParams.node.parent;
-    this.rowData = typeSafeParams.node.data.rowDTO;
-    this.parent = typeSafeParams.context.componentParent;
+    if (!!typeSafeParams && !!typeSafeParams.node.data.rowDTO && typeSafeParams.node.data.rowDTO.state.quotesLoaded) {
+      this.parentNode = typeSafeParams.node.parent;
+      this.rowData = typeSafeParams.node.data.rowDTO;
+      this.parent = typeSafeParams.context.componentParent;
+    }
   }
 
   public refresh(): boolean {
@@ -143,10 +146,22 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
 
   public onClickSwitchViewToHistory() {
     this.rowData.state.viewHistoryState = true;
+    this.restfulCommService.logEngagement(
+      this.restfulCommService.engagementMap.santaTableAllQuotesDisplayTradeHistory,
+      this.rowData.data.security.data.securityID,
+      '',
+      'Trade Center Panel'
+    );
   }
 
   public onClickSwitchViewToQuote() {
     this.rowData.state.viewHistoryState = false;
+    this.restfulCommService.logEngagement(
+      this.restfulCommService.engagementMap.santaTableAllQuotesDisplayQuotes,
+      this.rowData.data.security.data.securityID,
+      '',
+      'Trade Center Panel'
+    );
   }
 
   private updateQuoteUponClick(params: ClickedSpecificQuoteEmitterParams, targetQuoteList: Array<SecurityQuoteDTO>){

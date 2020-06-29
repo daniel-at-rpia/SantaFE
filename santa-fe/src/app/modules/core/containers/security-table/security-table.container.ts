@@ -184,7 +184,7 @@ export class SecurityTable implements OnInit, OnChanges {
             const newCell = this.utilityService.populateSecurityTableCellFromSecurityCard(
               eachHeader,
               eachRow,
-              this.dtoService.formSecurityTableCellObject(false, null, false, null, null),
+              this.dtoService.formSecurityTableCellObject(false, null, eachHeader, null, null),
               this.activeTriCoreDriver
             );
             eachRow.data.cells[index-1] = newCell;

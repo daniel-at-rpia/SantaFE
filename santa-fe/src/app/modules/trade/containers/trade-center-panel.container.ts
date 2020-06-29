@@ -36,7 +36,8 @@
       TriCoreDriverConfig,
       DEFAULT_DRIVER_IDENTIFIER,
       EngagementActionList,
-      AlertTypes
+      AlertTypes,
+      KEYWORDSEARCH_DEBOUNCE_TIME
     } from 'Core/constants/coreConstants.constant';
     import { selectAlertCounts } from 'Core/selectors/core.selectors';
     import {
@@ -96,7 +97,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     securityGroupDefinitionMap: SecurityDefinitionMap,
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
     fullOwnerList: FullOwnerList,
-    alertTypes: AlertTypes
+    alertTypes: AlertTypes,
+    keywordSearchDebounceTime: KEYWORDSEARCH_DEBOUNCE_TIME
   }
 
   private initializePageState(): TradeCenterPanelState {
@@ -137,6 +139,9 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         }
       },
       filters: {
+        keyword: {
+          defaultValueForUI: ''
+        },
         quickFilters: {
           driverType: this.constants.defaultMetricIdentifier,
           portfolios: [],
@@ -190,7 +195,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     });
 
     this.subscriptions.keywordSearchSub = this.keywordChanged$.pipe(
-      // debounceTime(250),
+      debounceTime(this.constants.keywordSearchDebounceTime),
       distinctUntilChanged()
     ).subscribe((keyword) => {
       const targetTable = this.state.fetchResult.mainTable;
@@ -440,9 +445,9 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         if (!eachHeader.state.isSecurityCardVariant) {
           if (eachHeader.state.isQuantVariant) {
             const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, this.state.filters.quickFilters.driverType, null, null, false);
-            newMainTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, true, bestQuoteStencil, null));
+            newMainTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, eachHeader, bestQuoteStencil, null));
           } else {
-            newMainTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, false, null, null));
+            newMainTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, eachHeader, null, null));
           }
         }
       });

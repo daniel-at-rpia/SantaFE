@@ -1,0 +1,19 @@
+<article
+  *ngIf="statusData"
+  [ngClass]="{
+    'santaTableAlertStatusCell': true,
+    'santaTableAlertStatusCell--grayedOutState': statusData.state.grayedOutState,
+    'santaTableAlertStatusCell--highlightedState': statusData.state.highlightedState
+  }">
+  <section class="santaTableAlertStatusCell__main">
+    <span class="santaTableAlertStatusCell__main-text">{{statusData.data.statusText}}</span>
+  </section>
+  <section class="santaTableAlertStatusCell__countdown">
+    <div
+      class="santaTableAlertStatusCell__countdown-line"
+      [ngStyle]="{
+        'width': statusData.data.countdownPercent + '%'
+      }"></div>
+    <div class="santaTableAlertStatusCell__countdown-backgroundLine"></div>
+  </section>
+</article>

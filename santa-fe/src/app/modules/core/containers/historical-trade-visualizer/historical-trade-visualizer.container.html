@@ -1,51 +1,76 @@
 <article
   [ngClass]="{
-    'sat-historicalTradeVisualizer': true 
+    'sat-historicalTradeVisualizer': true,
+    'sat-historicalTradeVisualizer--displayGraphsState': historyData.state.graphReceived 
   }">
-  <section class="sat-historicalTradeVisualizer__tableUtility">
-    <span class="sat-historicalTradeVisualizer__tableUtility-label">Show Trades From: </span>
-    <button
-      *ngFor="let eachPortfolio of constants.portfolioList"
-      (click)="onTogglePortfolio(eachPortfolio)"
-      [ngClass]="{
-        'sat-historicalTradeVisualizer__tableUtility-btn': true,
-        'sat-historicalTradeVisualizer__tableUtility-btn--selected': historyData.state.selectedPortfolio.indexOf(eachPortfolio) >= 0,
-        'sat-historicalTradeVisualizer__tableUtility-btn--disabled': historyData.state.disabledPortfolio.indexOf(eachPortfolio) >= 0
-      }">
-      {{eachPortfolio}}
-    </button>
-  </section>
-  <section class="sat-historicalTradeVisualizer__tableHeader">
-    <ul class="sat-historicalTradeVisualizer__tableHeader-list">
-      <li
-        class="sat-historicalTradeVisualizer__tableHeader-list-item"
-        *ngFor="let eachHeader of constants.headerConfigList"
-        [ngStyle]="{
-          'width': eachHeader.size ? eachHeader.size + 'rem' : '4rem' 
+  <section class="sat-historicalTradeVisualizer__table">
+    <div class="sat-historicalTradeVisualizer__table-utility">
+      <span class="sat-historicalTradeVisualizer__table-utility-label">Show Trades From: </span>
+      <button
+        *ngFor="let eachPortfolio of constants.portfolioList"
+        (click)="onTogglePortfolio(eachPortfolio)"
+        [ngClass]="{
+          'sat-historicalTradeVisualizer__table-utility-btn': true,
+          'sat-historicalTradeVisualizer__table-utility-btn--selected': historyData.state.selectedPortfolio.indexOf(eachPortfolio) >= 0,
+          'sat-historicalTradeVisualizer__table-utility-btn--disabled': historyData.state.disabledPortfolio.indexOf(eachPortfolio) >= 0
         }">
-        <span class="sat-historicalTradeVisualizer__tableHeader-list-item-text">{{eachHeader.headerDisplayLabel}}</span>
-      </li>
-    </ul>
-  </section>
-  <section class="sat-historicalTradeVisualizer__tableContent">
-    <ul class="sat-historicalTradeVisualizer__tableContent-rowList">
-      <li class="sat-historicalTradeVisualizer__tableContent-rowList-row" *ngFor="let eachTrade of historyData.data.displayTradeList">
-        <div
-          class="sat-historicalTradeVisualizer__tableContent-rowList-row-cell"
+        {{eachPortfolio}}
+      </button>
+    </div>
+    <div class="sat-historicalTradeVisualizer__table-header">
+      <ul class="sat-historicalTradeVisualizer__table-header-list">
+        <li
+          class="sat-historicalTradeVisualizer__table-header-list-item"
           *ngFor="let eachHeader of constants.headerConfigList"
           [ngStyle]="{
             'width': eachHeader.size ? eachHeader.size + 'rem' : '4rem' 
           }">
-          <span
-            [ngClass]="{
-              'sat-historicalTradeVisualizer__tableContent-rowList-row-cell-text': true,
-              'sat-historicalTradeVisualizer__tableContent-rowList-row-cell-text--positive': eachHeader.applyQuantColorCodes && eachTrade.data[eachHeader.underlineAttrName] > 0,
-              'sat-historicalTradeVisualizer__tableContent-rowList-row-cell-text--negative': eachHeader.applyQuantColorCodes && eachTrade.data[eachHeader.underlineAttrName] < 0
+          <span class="sat-historicalTradeVisualizer__table-header-list-item-text">{{eachHeader.headerDisplayLabel}}</span>
+        </li>
+      </ul>
+    </div>
+    <div class="sat-historicalTradeVisualizer__table-content">
+      <ul class="sat-historicalTradeVisualizer__table-content-rowList">
+        <li class="sat-historicalTradeVisualizer__table-content-rowList-row" *ngFor="let eachTrade of historyData.data.displayTradeList">
+          <div
+            class="sat-historicalTradeVisualizer__table-content-rowList-row-cell"
+            *ngFor="let eachHeader of constants.headerConfigList"
+            [ngStyle]="{
+              'width': eachHeader.size ? eachHeader.size + 'rem' : '4rem' 
             }">
-            {{eachTrade.data[eachHeader.attrName]}}
-          </span>
+            <span
+              [ngClass]="{
+                'sat-historicalTradeVisualizer__table-content-rowList-row-cell-text': true,
+                'sat-historicalTradeVisualizer__table-content-rowList-row-cell-text--positive': eachHeader.applyQuantColorCodes && eachTrade.data[eachHeader.underlineAttrName] > 0,
+                'sat-historicalTradeVisualizer__table-content-rowList-row-cell-text--negative': eachHeader.applyQuantColorCodes && eachTrade.data[eachHeader.underlineAttrName] < 0
+              }">
+              {{eachTrade.data[eachHeader.attrName]}}
+            </span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+  <section class="sat-historicalTradeVisualizer__graphs">
+    <div class="sat-historicalTradeVisualizer__graphs-positionPie">
+      <span class="sat-historicalTradeVisualizer__graphs-positionPie-title">Position</span>
+      <div class="sat-historicalTradeVisualizer__graphs-positionPie-graphContainer">
+        <div class="sat-historicalTradeVisualizer__graphs-positionPie-graphContainer-content" id="{{historyData.data.positionPieId}}"></div>
+      </div>
+    </div>
+    <div class="sat-historicalTradeVisualizer__graphs-volumePies">
+      <span class="sat-historicalTradeVisualizer__graphs-volumePies-title">Trade Volume</span>
+      <div class="sat-historicalTradeVisualizer__graphs-volumePies-graphsContainer">
+        <div class="sat-historicalTradeVisualizer__graphs-volumePies-graphsContainer-left">
+          <div class="sat-historicalTradeVisualizer__graphs-volumePies-graphsContainer-left-content" id="{{historyData.data.volumeLeftPieId}}"></div>
         </div>
-      </li>
-    </ul>
+        <div class="sat-historicalTradeVisualizer__graphs-volumePies-graphsContainer-right">
+          <div class="sat-historicalTradeVisualizer__graphs-volumePies-graphsContainer-right-content" id="{{historyData.data.volumeRightPieId}}"></div>
+        </div>
+      </div>
+    </div>
+    <!--
+      <div class="sat-historicalTradeVisualizer__graphs-timeSeries" id="{{historyData.data.timeSeriesId}}"></div>
+    -->
   </section>
 </article>

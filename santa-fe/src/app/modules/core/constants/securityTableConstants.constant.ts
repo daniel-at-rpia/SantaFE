@@ -21,19 +21,19 @@ export const AGGRID_DETAIL_COLUMN_WIDTH = 50;
 export const AGGRID_SECURITY_CARD_COLUMN_WIDTH = 276;
 export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_quant + $spacing_small * 2
 export const AGGRID_ALERT_SIDE_COLUMN_WIDTH = 115;
-export const AGGRID_ALERT_STATUS_COLUMN_WIDTH = 145;  // can not use simple text because cancelled status would wrap into 2 lines
+export const AGGRID_ALERT_STATUS_COLUMN_WIDTH = 155;  // can not use simple text because cancelled status would wrap into 2 lines
 export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 140;
 export const AGGRID_SIMPLE_TEXT_COLUMN_WIDTH = 135;
 export const AGGRID_NARROW_COLUMN_WIDTH = 95;
 export const AGGRID_ALERT_MESSAGE_COLUMN_WIDTH = 240;
 export const AGGRID_ROW_HEIGHT = 40;
-export const AGGRID_ROW_HEIGHT_SLIM = 32;
+export const AGGRID_ROW_HEIGHT_SLIM = 34;
 export const AGGRID_DETAIL_ROW_HEIGHT_PER_ROW = 34;
-export const AGGRID_DETAIL_ROW_HEIGHT_OFFSET = 140;
-export const AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS = 175;
+export const AGGRID_DETAIL_ROW_HEIGHT_OFFSET = 145;
+export const AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS = 185;
 export const AGGRID_DETAIL_ROW_DEFAULT_COUNT = 9;
 export const AGGRID_DETAIL_ROW_HEIGHT_MAX = AGGRID_DETAIL_ROW_HEIGHT_OFFSET + AGGRID_DETAIL_ROW_HEIGHT_PER_ROW * AGGRID_DETAIL_ROW_DEFAULT_COUNT;
-export const AGGRID_DETAIL_ROW_HEIGHT_MINIMUM = 300;
+export const AGGRID_DETAIL_ROW_HEIGHT_MINIMUM = 400;
 export const AGGRID_HEADER_CLASS = 'santaTable__agGridTable-agGrid-header';
 export const AGGRID_ROW_CLASS = 'santaTable__agGridTable-agGrid-row';
 export const AGGRID_CELL_CLASS = 'santaTable__agGridTable-agGrid-cell';
@@ -48,7 +48,7 @@ export const SecurityTableHeaderConfigGroups = {
   cost: 'Position Cost',
   position: 'Position (MM)',
   cs01: 'CS01 (k)',
-  delta: 'Security Driver Deltas',
+  delta: 'Deltas (GSpread)',
   securityInfo: 'Security Info',
   ownership: 'Ownership'
 };
@@ -71,6 +71,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isForSecurityCard: true,
       groupBelongs: SECURITY_TABLE_HEADER_NO_GROUP,
+      isCustomComponent: true,
       tableSpecifics: {
         default: {
           active: true,
@@ -132,8 +133,8 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'alertStatus',
       blockAttrName: 'alert',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.alert,
+      isCustomComponent: true,
       tableSpecifics: {
         default: {
           active: false,
@@ -156,6 +157,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.alert,
       isColumnWidthNarrow: true,
+      isCustomComponent: true,
       tableSpecifics: {
         default: {
           active: false,
@@ -293,6 +295,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       isForQuantComparer: true,
       isDriverDependent: true,
       groupBelongs: SecurityTableHeaderConfigGroups.bestQuote,
+      isCustomComponent: true,
       tableSpecifics: {
         default: {
           active: true,
@@ -315,6 +318,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       isForQuantComparer: true,
       isDriverDependent: true,
       groupBelongs: SecurityTableHeaderConfigGroups.bestQuote,
+      isCustomComponent: true,
       tableSpecifics: {
         default: {
           active: true,
@@ -1235,7 +1239,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.delta,
       tableSpecifics: {
         default: {
-          active: true
+          active: false
         },
         tradeAlert: {
           active: false
@@ -1256,7 +1260,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.delta,
       tableSpecifics: {
         default: {
-          active: true,
+          active: false,
           groupShow: true
         },
         tradeAlert: {
@@ -1278,7 +1282,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.delta,
       tableSpecifics: {
         default: {
-          active: true
+          active: false
         },
         tradeAlert: {
           active: false
@@ -1299,7 +1303,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.delta,
       tableSpecifics: {
         default: {
-          active: true
+          active: false
         },
         tradeAlert: {
           active: false
@@ -1320,7 +1324,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.delta,
       tableSpecifics: {
         default: {
-          active: true
+          active: false
         },
         tradeAlert: {
           active: false
@@ -1507,22 +1511,21 @@ export const TradeHistoryHeaderConfigList: Array<TradeHistoryHeaderConfigStub> =
     underlineAttrName: 'rawQuantity'
   },{
     headerKey: 'spread',
-    headerDisplayLabel: 'Spread',
+    headerDisplayLabel: 'Sprd',
     attrName: 'spread'
   },{
     headerKey: 'wgtAvgSpread',
-    headerDisplayLabel: 'Spread Cost',
+    headerDisplayLabel: 'Sprd Cost',
     attrName: 'wgtAvgSpread',
-    size: 6
+    size: 5
   },{
     headerKey: 'price',
-    headerDisplayLabel: 'Price',
+    headerDisplayLabel: 'Px',
     attrName: 'price'
   },{
     headerKey: 'wgtAvgPrice',
-    headerDisplayLabel: 'Price Cost',
-    attrName: 'wgtAvgPrice',
-    size: 6
+    headerDisplayLabel: 'Px Cost',
+    attrName: 'wgtAvgPrice'
   },{
     headerKey: 'strategy',
     headerDisplayLabel: 'Strategy',

@@ -190,7 +190,8 @@ export interface AgGridRow {
   securityCard: DTOs.SecurityDTO;    // this needs to be identical to SecurityTableHeaderConfigs' key for Security column
   bestQuote: DTOs.QuantComparerDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Best Quote column
   bestAxeQuote: DTOs.QuantComparerDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Best Axe Quote column
-  alertSide: DTOs.SantaTableAlertSideCellDTO,  // this needs to be identical to SecurityTableHeaderConfigs' key for Alert Side column
+  alertSide: DTOs.SantaTableAlertSideCellDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Alert Side column
+  alertStatus: DTOs.SantaTableAlertStatusCellDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Alert Status column
   rowDTO: DTOs.SecurityTableRowDTO;
 }
 

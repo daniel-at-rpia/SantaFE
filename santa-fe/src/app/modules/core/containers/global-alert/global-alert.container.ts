@@ -82,8 +82,14 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       try {
         alertListSorted.forEach((eachAlert) => {
           if (eachAlert.state.isCancelled) {
-            console.log('cancel alert ', eachAlert);
-            this.onAlertExpired(eachAlert);
+            if (eachAlert.state.isExpired) {
+              // if it is naturally expired, then don't do anything
+              // because if it is the first load after refreshing the FE, then nothing needs to be done for the naturally expired ones
+              // and if it is not the first load, the expiration will be picked up at individual alert level
+            } else {
+              console.log('cancel alert ', eachAlert);
+              this.onAlertExpired(eachAlert);
+            }
           } else if (eachAlert.data.isUrgent) {
             this.generateNewAlert(eachAlert, alertListSorted);
           } else {

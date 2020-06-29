@@ -613,6 +613,11 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
               visibility: hidden;
             }
           }
+          &-text {
+            &--bid {
+              visibility: hidden;
+            }
+          }
         }
       }
     }
@@ -622,6 +627,11 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       &__main {
         &-twoSideEntry {
           &-cta {
+            &--ask {
+              visibility: hidden;
+            }
+          }
+          &-text {
             &--ask {
               visibility: hidden;
             }

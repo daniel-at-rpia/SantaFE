@@ -2,6 +2,7 @@
     import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewEncapsulation } from '@angular/core';
     import { of } from 'rxjs';
     import { catchError, first, tap } from 'rxjs/operators';
+    import * as moment from 'moment';
 
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
@@ -20,6 +21,7 @@
     import { SantaTableSecurityCell } from 'Core/components/santa-table-security-cell/santa-table-security-cell.component';
     import { SantaTableQuoteCell } from 'Core/components/santa-table-quote-cell/santa-table-quote-cell.component';
     import { SantaTableAlertSideCell } from 'Core/components/santa-table-alert-side-cell/santa-table-alert-side-cell.component';
+    import { SantaTableAlertStatusCell } from 'Core/components/santa-table-alert-status-cell/santa-table-alert-status-cell.component';
     import { SantaTableDetailAllQuotes } from 'Core/containers/santa-table-detail-all-quotes/santa-table-detail-all-quotes.container';
     import { BEQuoteDTO } from 'BEModels/backend-models.interface';
     import {
@@ -129,7 +131,8 @@ export class SantaTable implements OnInit, OnChanges {
       alertSide: SantaTableAlertSideCell,
       detailAllQuotes: SantaTableDetailAllQuotes,
       numericFloatingFilter: SantaTableNumericFloatingFilter,
-      numericFilter: SantaTableNumericFilter
+      numericFilter: SantaTableNumericFilter,
+      alertStatus: SantaTableAlertStatusCell
     };
     this.tableData.data.agGridAggregationMap = {
       sum: this.agAggregationSum.bind(this),
@@ -233,6 +236,8 @@ export class SantaTable implements OnInit, OnChanges {
             if (!!targetRow) {
               try {
                 targetRow.state.isExpanded = !targetRow.state.isExpanded;
+                // just set it to false for now, since the fetch will update it to true anyways
+                targetRow.state.quotesLoaded = false;
                 if (targetRow.data.security) {
                   // targetRow.data.security.state.isMultiLineVariant = params.node.expanded;
                   if (targetRow.state.isExpanded) {
@@ -398,6 +403,12 @@ export class SantaTable implements OnInit, OnChanges {
             this.loadQuotes(
               targetRow,
               serverReturn,
+              params
+            );
+          } else {
+            this.loadQuotes(
+              targetRow,
+              [],
               params
             );
           }
@@ -605,27 +616,34 @@ export class SantaTable implements OnInit, OnChanges {
     serverReturn: Array<Array<BEQuoteDTO>>,
     params: any  // this is a AgGridRowParams, can't enforce type checking here because agGrid's native function redrawRows() would throw an compliation error
   ) {
-    const primaryList = serverReturn[0];
-    targetRow.state.isCDSOffTheRun = serverReturn.length > 1;
-    primaryList.forEach((eachRawQuote) => {
-      const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, targetRow.data.security, targetRow);
-      newQuote.state.isCDSVariant = targetRow.state.isCDSVariant;
-      if (newQuote.state.hasAsk || newQuote.state.hasBid) {
-        targetRow.data.quotes.primaryQuotes.push(newQuote);
-      }
-    });
-    if (targetRow.state.isCDSOffTheRun) {
-      const secondaryList = serverReturn[1];
-      secondaryList.forEach((eachRawQuote) => {
+    targetRow.state.quotesLoaded = true;
+    const primaryQuoteDTOList: Array<SecurityQuoteDTO> = [];
+    const secondaryQuoteDTOList: Array<SecurityQuoteDTO> = [];
+    if (serverReturn.length > 0) {
+      const primaryRawList = serverReturn[0];
+      targetRow.state.isCDSOffTheRun = serverReturn.length > 1;
+      primaryRawList.forEach((eachRawQuote) => {
         const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, targetRow.data.security, targetRow);
         newQuote.state.isCDSVariant = targetRow.state.isCDSVariant;
         if (newQuote.state.hasAsk || newQuote.state.hasBid) {
-          targetRow.data.quotes.secondaryQuotes.push(newQuote);
+          primaryQuoteDTOList.push(newQuote);
         }
       });
-      targetRow.data.quotes.primarySecurityName = primaryList.length > 0 ? primaryList[0].name : '';
-      targetRow.data.quotes.secondarySecurityName = secondaryList.length > 0 ? secondaryList[0].name : '';
+      if (targetRow.state.isCDSOffTheRun) {
+        const secondaryRawList = serverReturn[1];
+        secondaryRawList.forEach((eachRawQuote) => {
+          const newQuote = this.dtoService.formSecurityQuoteObject(false, eachRawQuote, targetRow.data.security, targetRow);
+          newQuote.state.isCDSVariant = targetRow.state.isCDSVariant;
+          if (newQuote.state.hasAsk || newQuote.state.hasBid) {
+            secondaryQuoteDTOList.push(newQuote);
+          }
+        });
+        targetRow.data.quotes.primarySecurityName = primaryRawList.length > 0 ? primaryRawList[0].name : '';
+        targetRow.data.quotes.secondarySecurityName = secondaryRawList.length > 0 ? secondaryRawList[0].name : '';
+      }
     }
+    targetRow.data.quotes.primaryQuotes = this.decoupleIncorrectDoubleSidedQuotes(primaryQuoteDTOList);
+    targetRow.data.quotes.secondaryQuotes = this.decoupleIncorrectDoubleSidedQuotes(secondaryQuoteDTOList);
     this.performChronologicalSortOnQuotes(targetRow.data.quotes.primaryQuotes);
     this.performChronologicalSortOnQuotes(targetRow.data.quotes.secondaryQuotes);
     targetRow.data.quotes.primaryPresentQuotes = this.utilityService.deepCopy(targetRow.data.quotes.primaryQuotes);
@@ -659,5 +677,33 @@ export class SantaTable implements OnInit, OnChanges {
 
   private removeTableRows() {
     this.agGridMiddleLayerService.removeAgGridRow(this.tableData, this.removeRowsCache);
+  }
+
+  private decoupleIncorrectDoubleSidedQuotes(quoteList: Array<SecurityQuoteDTO>): Array<SecurityQuoteDTO> {
+    const newQuoteList: Array<SecurityQuoteDTO> = [];
+    quoteList.forEach((eachQuote) => {
+      // check if it is double-sided
+      if (eachQuote.state.hasAsk && eachQuote.state.hasBid) {
+        // check if it is incorrect (> 5min apart)
+        const askTime = moment(eachQuote.data.ask.rawTime);
+        const bidTime = moment(eachQuote.data.bid.rawTime);
+        if (Math.abs(askTime.diff(bidTime, 'minutes')) >= 5) {
+          // create new single-sided quotes
+          const newBidQuote: SecurityQuoteDTO = this.utilityService.deepCopy(eachQuote);
+          const newAskQuote: SecurityQuoteDTO = this.utilityService.deepCopy(eachQuote);
+          newBidQuote.state.hasAsk = false;
+          newBidQuote.data.unixTimestamp = bidTime.unix();
+          newAskQuote.state.hasBid = false;
+          newAskQuote.data.unixTimestamp = askTime.unix();
+          newQuoteList.push(newBidQuote);
+          newQuoteList.push(newAskQuote);
+        } else {
+          newQuoteList.push(eachQuote);
+        }
+      } else {
+        newQuoteList.push(eachQuote);
+      }
+    });
+    return newQuoteList;
   }
 }

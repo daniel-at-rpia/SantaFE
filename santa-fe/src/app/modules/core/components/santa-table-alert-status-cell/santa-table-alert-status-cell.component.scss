@@ -1,0 +1,66 @@
+@import "global.scss";
+
+$santaTableAlertStatusCell_countdown_height: 0.3125rem;
+.santaTableAlertStatusCell {
+  $blockname: &;
+  @include mix_border_radius(5px);
+  @include mix_border_generator($typical_border_width, $font_color_major);
+  display: flex;
+  flex-direction: column;
+  background-color: $color_white;
+  padding: $spacing_x_small;
+  &__main {
+    display: flex;
+    &-text {
+      color: $font_color_major;
+      line-height: $line_height_minimum;
+    }
+  }
+  &__countdown {
+    @include mix_fixed_div(relative, $z_index_base_item_solid);
+    display: none;
+    flex-direction: column;
+    align-items: flex-end;
+    height: $santaTableAlertStatusCell_countdown_height;
+    margin-top: $spacing_xx_small;
+    &-line {
+      @include mix_fixed_div(absolute, $z_index_base_item_lift);
+      @include mix_border_radius(5px);
+      height: $santaTableAlertStatusCell_countdown_height;
+      background-color: $color_white;
+    }
+    &-backgroundLine {
+      @include mix_fixed_div(absolute, $z_index_base_item_solid);
+      @include mix_border_radius(5px);
+      width: 100%;
+      height: $santaTableAlertStatusCell_countdown_height;
+      background-color: $color_white;
+      opacity: 0.25;
+    }
+  }
+  &--grayedOutState {
+    border-color: $color_disabled;
+    background-color: transparent;
+    #{$blockname} {
+      &__main {
+        &-text {
+          color: $color_disabled;
+        }
+      }
+    }
+  }
+  &--highlightedState {
+    background: linear-gradient(45deg,  $theme_color_1 40%, $theme_color_2 100%) !important;
+    border-color: transparent;
+    #{$blockname} {
+      &__main {
+        &-text {
+          color: $font_color_inverse;
+        }
+      }
+      &__countdown {
+        display: flex;
+      }
+    }
+  }
+}

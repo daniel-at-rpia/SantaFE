@@ -105,6 +105,9 @@ export interface TradeCenterPanelState {
     mainTable: TableFetchResultBlock;
   }
   filters: {
+    keyword: {
+      defaultValueForUI: string;
+    }
     quickFilters: {
       driverType: string;
       portfolios: Array<string>;
@@ -228,6 +231,9 @@ export interface TradeAlertPanelState {
     alertTable: TableFetchResultBlock;
   }
   filters: {
+    keyword: {
+      defaultValueForUI: string;
+    }
     quickFilters: {
       keyword: string;
       driverType: string;

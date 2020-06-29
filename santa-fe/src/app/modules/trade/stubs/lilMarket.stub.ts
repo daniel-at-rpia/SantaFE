@@ -112,132 +112,133 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
       },
       "historicalBasis":null,
       "security":{
-        "isSovereign":false,
-        "isGovt":false,
-        "isEm":false,
-        "securityIdentifier":"2508",
-        "ccy":"USD",
-        "country":"US",
-        "industry":"Medical Equipment & Devices Manufacturing",
-        "name":"BDX FRN 06/06/2022 Bullet USD SENIOR_UNSECURED",
-        "genericSeniority":"SR",
-        "globalIdentifier":"US075887BU29",
-        "obligorName":"BECTON DICKINSON AND CO",
-        "obligorId":1278,
-        "paymentRank":"SR UNSECURED",
-        "sector":"Health Care",
-        "securitySubType":"FRN",
-        "subIndustry":"Drug Delivery Systems",
-        "ticker":"BDX",
+        "securityIdentifier":"79",
         "metrics":{
-          "isFixedForLife":false,
-          "isFixedToFloatInFixed":false,
-          "isFloat":true,
-          "isOnTheRun":false,
-          "isNewIssue":false,
-          "benchmarkSecurityIdentifier":null,
-          "benchmarkName":null,
-          "underlyingSecurityId":-1,
-          "zSpread":0,
-          "gSpread":0,
-          "yieldWorst":0,
-          "amtOutstanding":500000000,
-          "marketValue":508136980,
-          "workoutTerm":2.2603,
-          "ratingDouble":14,
-          "isRated":true,
-          "rating":"BBB-",
-          "ratingNoNotch":"BBB",
-          "ratingBucket":"Xover",
-          "price":0,
-          "spread":0,
-          "isIndex":false
+          "Default":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":true,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":null,
+            "benchmarkName":null,
+            "underlyingSecurityId":-1,
+            "yieldWorst":null,
+            "amtOutstanding":800000000,
+            "marketValue":885715240,
+            "workoutTerm":4.5644,
+            "ratingDouble":16,
+            "isRated":true,
+            "rating":"BBB+",
+            "ratingNoNotch":"BBB",
+            "ratingBucket":"IG",
+            "price":null,
+            "spread":null
+          },
+          "Index":{
+            "isFixedForLife":true,
+            "isFixedToFloatInFixed":false,
+            "isFloat":false,
+            "isOnTheRun":true,
+            "isNewIssue":false,
+            "benchmarkSecurityIdentifier":null,
+            "benchmarkName":null,
+            "underlyingSecurityId":-1,
+            "yieldWorst":1.676677,
+            "amtOutstanding":800000000,
+            "marketValue":885715240,
+            "workoutTerm":4.5644,
+            "ratingDouble":null,
+            "isRated":true,
+            "rating":null,
+            "ratingNoNotch":null,
+            "ratingBucket":"NR",
+            "price":109.060295,
+            "spread":null
+          }
         },
         "deltaMetrics":{
           "Dod":{
-            "zSpread":0,
-            "gSpread":0,
-            "yieldWorst":0,
-            "ratingDouble":-1,
-            "price":0,
-            "spread":0
+            "yieldWorst":null,
+            "ratingDouble":0,
+            "price":null,
+            "spread":null
           },
           "Wow":{
-            "zSpread":0,
-            "gSpread":0,
-            "yieldWorst":0,
-            "ratingDouble":-1,
-            "price":0,
-            "spread":0
+            "yieldWorst":null,
+            "ratingDouble":0,
+            "price":null,
+            "spread":null
           },
           "Mtd":{
-            "zSpread":0,
-            "gSpread":0,
-            "yieldWorst":0,
-            "ratingDouble":-1,
-            "price":0,
-            "spread":0
+            "yieldWorst":null,
+            "ratingDouble":0,
+            "price":null,
+            "spread":null
           },
           "Mom":{
-            "zSpread":0,
-            "gSpread":0,
-            "yieldWorst":0,
-            "ratingDouble":-1,
-            "price":0,
-            "spread":0
+            "yieldWorst":null,
+            "ratingDouble":0,
+            "price":null,
+            "spread":null
           },
           "Ytd":{
-            "zSpread":0,
-            "gSpread":0,
-            "yieldWorst":0,
-            "ratingDouble":-1,
-            "price":0,
-            "spread":0
+            "yieldWorst":null,
+            "ratingDouble":0,
+            "price":null,
+            "spread":null
           },
           "Yoy":{
-            "zSpread":0,
-            "gSpread":0,
-            "yieldWorst":0,
+            "yieldWorst":null,
             "ratingDouble":0,
-            "price":0,
-            "spread":0
+            "price":null,
+            "spread":null
           }
         },
+        "ccy":"CAD",
+        "country":"CA",
+        "industry":"Telecommunications",
+        "name":"TCN 3.75 01/17/2025 Callable CAD SENIOR_UNSECURED",
+        "genericSeniority":"SR",
+        "globalIdentifier":"CA87971MAX17",
+        "obligorName":"TELUS CORP",
+        "obligorId":756,
+        "paymentRank":"SR UNSECURED",
+        "sector":"Communications",
+        "securitySubType":"Bond",
+        "subIndustry":"Telecom Services",
+        "ticker":"TCN",
         "unitPosition":{
+          "metricDate":"2020-06-29T00:00:00-04:00",
+          "securityIdentifier":"79",
           "partitionOptionValues":{
             "PortfolioShortName":[
-              "AGB",
               "DOF"
             ],
             "StrategyName":[
-              "Short Carry"
+              "LTOV - Spread"
             ]
           },
           "mark":{
             "driver":"Spread",
-            "enteredTime":null,
+            "enteredTime":"2020-06-29T00:00:00-04:00",
             "user":null,
-            "value":62,
-            "price": 72,
-            "spread": 73
+            "value":124,
+            "spread":124,
+            "price":109.220155
           },
-          "primaryPmName":"DJ",
-          "backupPmName":"PM",
-          "researchName":"AG",
-          "owners":[
-            "DJ",
-            "PM",
-            "AG"
-          ],
-          "date":"2020-03-04T00:00:00-05:00",
-          "securityIdentifier":"2508",
-          "quantity":3354000,
           "hedgeFactor":1,
-          "cs01Cad":1001.3637936120001,
-          "cs01Local":1001.3637936120001
+          "primaryPmName":"IL",
+          "backupPmName":"ST",
+          "researchName":"LC",
+          "owners":[
+            "IL",
+            "ST",
+            "LC"
+          ]
         },
         "securityType":"Bond",
-        "maturityType":"Bullet"
+        "maturityType":"Callable"
       },
       "rank":0,
       "name":"BDX FRN 06/06/2022 Bullet USD SENIOR_UNSECURED",

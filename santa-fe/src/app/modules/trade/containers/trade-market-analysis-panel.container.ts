@@ -106,12 +106,12 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit() {
-    this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
-      select(selectSelectedSecurityForAnalysis),
-      delay(500)
-    ).subscribe((targetSecurity) => {
-      !!targetSecurity && this.onSecuritySelected(targetSecurity);
-    });
+    // this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
+    //   select(selectSelectedSecurityForAnalysis),
+    //   delay(500)
+    // ).subscribe((targetSecurity) => {
+    //   !!targetSecurity && this.onSecuritySelected(targetSecurity);
+    // });
   }
 
   public ngOnChanges() {

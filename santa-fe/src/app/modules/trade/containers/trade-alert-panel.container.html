@@ -84,7 +84,7 @@
     <div class="sat-tradeAlertPanel__overview-keywordSearch">
       <i class="sat-tradeAlertPanel__overview-keywordSearch-activeIcon fal fa-search"></i>
       <santa-input
-        [inputValue]="state.filters.quickFilters.keyword"
+        [inputValue]="state.filters.keyword.defaultValueForUI"
         [placeholder]="'filter security name and alert message'"
         [isHero]="true"
         (onInputChange)="onTableSearchKeywordChange($event)">

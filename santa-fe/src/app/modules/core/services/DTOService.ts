@@ -21,7 +21,8 @@
       TriCoreDriverConfig,
       DEFAULT_DRIVER_IDENTIFIER,
       AlertTypes,
-      AlertSubTypes
+      AlertSubTypes,
+      ALERT_STATUS_SORTINGVALUE_UNIT
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
@@ -61,9 +62,9 @@ export class DTOService {
         ticker: !isStencil ? rawData.ticker : null,
         obligorName: !isStencil ? rawData.obligorName : null,
         isGovt: !isStencil ? rawData.isGovt : false,
-        ratingLevel: !isStencil && rawData.metrics ? this.utility.mapRatings(rawData.metrics.ratingNoNotch) : 0,
-        ratingValue: !isStencil && rawData.metrics ? rawData.metrics.ratingNoNotch : null,
-        ratingBucket: !isStencil && rawData.metrics ? rawData.metrics.ratingBucket : null,
+        ratingLevel: !isStencil && rawData.metrics ? this.utility.mapRatings(rawData.metrics.Default.ratingNoNotch) : 0,
+        ratingValue: !isStencil && rawData.metrics ? rawData.metrics.Default.ratingNoNotch : null,
+        ratingBucket: !isStencil && rawData.metrics ? rawData.metrics.Default.ratingBucket : null,
         seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.genericSeniority) : 5,
         currency: !isStencil ? rawData.ccy : null,
         country: !isStencil ? rawData.country : null,
@@ -172,7 +173,7 @@ export class DTOService {
           ask: null,
           displayAsk: null
         },
-        hasIndex: !isStencil && rawData.metrics ? !!rawData.metrics.isIndex : false,
+        hasIndex: !isStencil && rawData.metrics ? !!rawData.metrics.Index : false,
         hedgeFactor: !isStencil && !!rawData.unitPosition ? rawData.unitPosition.hedgeFactor : null,
         alert: {
           alertTime: null,
@@ -251,8 +252,8 @@ export class DTOService {
       strategy: targetPortfolio.partitionOptionValue.StrategyName,
       cs01Cad: targetPortfolio.cs01Cad,
       cs01Local: targetPortfolio.cs01Local,
-      costFifoSpread: !!lastTrade ? lastTrade.fifoAvgSpread : null,
-      costFifoPrice: !!lastTrade ? lastTrade.fifoAvgPrice : null,
+      costFifoSpread: null,
+      costFifoPrice: null,
       costWeightedAvgSpread: !!lastTrade ? lastTrade.wgtAvgSpread : null,
       costWeightedAvgPrice: !!lastTrade ? lastTrade.wgtAvgPrice : null
     };
@@ -812,6 +813,7 @@ export class DTOService {
       state: {
         isQuantVariant: !!stub.content.isForQuantComparer,
         isSecurityCardVariant: !!stub.content.isForSecurityCard,
+        isCustomComponent: !!stub.content.isCustomComponent,
         isAxeSkewEnabled: false,
         istotalSkewEnabled: false,
         isNarrowColumnVariant: !!stub.content.isColumnWidthNarrow
@@ -870,7 +872,8 @@ export class DTOService {
         presentingAllQuotes: false,
         isCDSVariant: this.utility.isCDS(false, securityDTO),
         isCDSOffTheRun: false,
-        viewHistoryState: false
+        viewHistoryState: false,
+        quotesLoaded: false
       }
     };
     return object;
@@ -879,7 +882,7 @@ export class DTOService {
   public formSecurityTableCellObject(
     isStencil: boolean,
     textData: string,
-    isQuantVariant: boolean,
+    targetHeader: DTOs.SecurityTableHeaderDTO,
     quantComparerDTO: DTOs.QuantComparerDTO,
     alertDTO: DTOs.AlertDTO
   ): DTOs.SecurityTableCellDTO {
@@ -887,7 +890,19 @@ export class DTOService {
       data: {
         textData: !!isStencil ? 'PLACE' : textData,
         quantComparerDTO: quantComparerDTO,
-        alertSideDTO: {
+        alertSideDTO: null,
+        alertStatusDTO: null
+      },
+      state: {
+        isQuantVariant: targetHeader.state.isQuantVariant,
+        quantComparerUnavail: false,
+        isStencil: isStencil
+      }
+    };
+    if (alertDTO) {
+      if (targetHeader.data.key === 'alertSide') {
+        // TODO: instead of hand-curate it, use a function
+        object.data.alertSideDTO = {
           data: {
             side: 'None'
           },
@@ -896,35 +911,31 @@ export class DTOService {
             askSided: false,
             bidSided: false
           }
-        }
-      },
-      state: {
-        isQuantVariant: isQuantVariant,
-        quantComparerUnavail: false,
-        isStencil: isStencil
-      }
-    };
-    if (alertDTO) {
-      if (alertDTO.state.isMarketListVariant) {
-        if (alertDTO.data.subType === AlertSubTypes.ask) {
-          object.data.alertSideDTO.data.side = 'BWIC';
-          object.data.alertSideDTO.state.askSided = true;
+        };
+        if (alertDTO.state.isMarketListVariant) {
+          if (alertDTO.data.subType === AlertSubTypes.ask) {
+            object.data.alertSideDTO.data.side = 'BWIC';
+            object.data.alertSideDTO.state.askSided = true;
+          } else if (alertDTO.data.subType === AlertSubTypes.bid) {
+            object.data.alertSideDTO.data.side = 'OWIC';
+            object.data.alertSideDTO.state.bidSided = true;
+          }
         } else if (alertDTO.data.subType === AlertSubTypes.bid) {
-          object.data.alertSideDTO.data.side = 'OWIC';
+          object.data.alertSideDTO.data.side = 'Bid';
+          object.data.alertSideDTO.state.bidSided = true;
+        } else if (alertDTO.data.subType === AlertSubTypes.ask) {
+          object.data.alertSideDTO.data.side = 'Ask';
+          object.data.alertSideDTO.state.askSided = true;
+        } else if (alertDTO.data.subType === AlertSubTypes.sell) {
+          object.data.alertSideDTO.data.side = 'Sell';
+          object.data.alertSideDTO.state.askSided = true;
+        } else if (alertDTO.data.subType === AlertSubTypes.buy) {
+          object.data.alertSideDTO.data.side = 'Buy';
           object.data.alertSideDTO.state.bidSided = true;
         }
-      } else if (alertDTO.data.subType === AlertSubTypes.bid) {
-        object.data.alertSideDTO.data.side = 'Bid';
-        object.data.alertSideDTO.state.bidSided = true;
-      } else if (alertDTO.data.subType === AlertSubTypes.ask) {
-        object.data.alertSideDTO.data.side = 'Ask';
-        object.data.alertSideDTO.state.askSided = true;
-      } else if (alertDTO.data.subType === AlertSubTypes.sell) {
-        object.data.alertSideDTO.data.side = 'Sell';
-        object.data.alertSideDTO.state.askSided = true;
-      } else if (alertDTO.data.subType === AlertSubTypes.buy) {
-        object.data.alertSideDTO.data.side = 'Buy';
-        object.data.alertSideDTO.state.bidSided = true;
+      }
+      if (targetHeader.data.key === 'alertStatus') {
+        object.data.alertStatusDTO = this.formSecurityTableAlertStatusCellObject(alertDTO);
       }
     }
     return object;
@@ -956,16 +967,13 @@ export class DTOService {
       }
     }
     const consolidatedBenchmark = bidBenchmark === askBenchmark ? bidBenchmark : null;
-    let convertedDate: Date = null;
-    if (!isStencil) {
-      convertedDate = new Date(rawData.time);
-    }
+    let convertedDate: moment.Moment = !isStencil ? moment(rawData.time) : null;
     const object: DTOs.SecurityQuoteDTO = {
       data: {
         uuid: this.utility.generateUUID(),
         broker: !isStencil ? rawData.dealer : 'RBC',
-        time: !isStencil ? `${convertedDate.toTimeString().slice(0, 5)}` : '12:01 pm',
-        unixTimestamp: !isStencil ? convertedDate.getTime() : 0,
+        time: !isStencil ? convertedDate.format('HH:mm') : '12:01',
+        unixTimestamp: !isStencil ? convertedDate.unix() : 0,
         dataSource: dataSource,
         consolidatedBenchmark: consolidatedBenchmark,
         bid: {
@@ -975,7 +983,8 @@ export class DTOService {
           yield: 5,
           tspread: 300,
           benchmark: bidBenchmark,
-          time: '12:01pm'
+          time: '12:01',
+          rawTime: ''
         },
         ask: {
           isAxe: false,
@@ -984,7 +993,8 @@ export class DTOService {
           yield: 5,
           tspread: 300,
           benchmark: bidBenchmark,
-          time: '12:01pm'
+          time: '12:01',
+          rawTime: ''
         },
         currentMetric: null
       },
@@ -1015,7 +1025,8 @@ export class DTOService {
         yield: !!rawData.bidYield ? this.utility.parseTriCoreDriverNumber(rawData.bidYield, TriCoreDriverConfig.Yield.label, targetSecurity, false) as number : null,
         tspread: !!rawData.bidSpread ? this.utility.parseTriCoreDriverNumber(rawData.bidSpread, TriCoreDriverConfig.Spread.label, targetSecurity, false) as number : null,
         benchmark: bidBenchmark,
-        time: this.utility.isQuoteTimeValid(rawData.bidTime) && hasBid ? new Date(rawData.bidTime).toTimeString().slice(0, 5) : ''
+        time: this.utility.isQuoteTimeValid(rawData.bidTime) && hasBid ? moment(rawData.bidTime).format('HH:mm') : '',
+        rawTime: rawData.bidTime.slice(0, 19)  // remove timezone
       };
       object.data.ask = {
         isAxe: rawData.quoteType === SECURITY_TABLE_QUOTE_TYPE_AXE,
@@ -1024,7 +1035,8 @@ export class DTOService {
         yield: !!rawData.askYield ? this.utility.parseTriCoreDriverNumber(rawData.askYield, TriCoreDriverConfig.Yield.label, targetSecurity, false) as number : null,
         tspread: !!rawData.askSpread ? this.utility.parseTriCoreDriverNumber(rawData.askSpread, TriCoreDriverConfig.Spread.label, targetSecurity, false) as number : null,
         benchmark: askBenchmark,
-        time: this.utility.isQuoteTimeValid(rawData.askTime) && hasAsk ? new Date(rawData.askTime).toTimeString().slice(0, 5) : ''
+        time: this.utility.isQuoteTimeValid(rawData.askTime) && hasAsk ? moment(rawData.askTime).format('HH:mm') : '',
+        rawTime: rawData.askTime.slice(0, 19)  // remove timezone
       };
       this.utility.highlightSecurityQutoe(object, targetRow);
       object.state.isBidDownVoted = rawData.bidQuoteStatus < 0;
@@ -1307,13 +1319,15 @@ export class DTOService {
   }
 
   public appendAlertStatus(alertDTO: DTOs.AlertDTO) {
-    if (alertDTO.data.type === AlertTypes.axeAlert && alertDTO.state.isMarketListVariant) {
+    if (alertDTO.state.isMarketListVariant) {
+      if (moment().diff(alertDTO.data.validUntilMoment) > 0) {
+        alertDTO.state.isExpired = true;
+      }
       if (alertDTO.state.isCancelled && alertDTO.data.isMarketListTraded) {
         alertDTO.data.status = `Traded at ${alertDTO.data.validUntilMoment.format('HH:mm:ss')}`;
       } else if (alertDTO.state.isCancelled) {
         alertDTO.data.status = `Cancelled at ${alertDTO.data.validUntilMoment.format('HH:mm:ss')}`;
-      } else if (moment().diff(alertDTO.data.validUntilMoment) > 0) {
-        alertDTO.state.isExpired = true;
+      } else if (alertDTO.state.isExpired) {
         alertDTO.data.status = `Expired at ${alertDTO.data.validUntilMoment.format('HH:mm:ss')}`;
       } else {
         alertDTO.data.status = `Valid For ${this.utility.parseCountdown(alertDTO.data.validUntilMoment)}`
@@ -1373,11 +1387,23 @@ export class DTOService {
     const object: DTOs.HistoricalTradeVisualizerDTO = {
       data: {
         prinstineTradeList: targetSecurity.data.tradeHistory || [],
-        displayTradeList: []
+        displayTradeList: [],
+        positionList: targetSecurity.data.portfolios,
+        timeSeriesId: `${targetSecurity.data.securityID}-tradeTimeSeries`,
+        positionPieId: `${targetSecurity.data.securityID}-position`,
+        volumeLeftPieId: `${targetSecurity.data.securityID}-volumeLeft`,
+        volumeRightPieId: `${targetSecurity.data.securityID}-volumeRight`
       },
       state: {
         disabledPortfolio: this.utility.deepCopy(FilterOptionsPortfolioList),
-        selectedPortfolio: []
+        selectedPortfolio: [],
+        graphReceived: false
+      },
+      graph: {
+        timeSeries: null,
+        positionPie: null,
+        volumeLeftPie: null,
+        volumeRightPie: null
       }
     };
     if (object.data.prinstineTradeList.length > 0) {
@@ -1404,6 +1430,48 @@ export class DTOService {
       object.data.displayTradeList = object.data.prinstineTradeList.filter((eachTrade) => {
         return object.state.selectedPortfolio.includes(eachTrade.data.vestedPortfolio);
       });
+    }
+    return object;
+  }
+
+  public formSecurityTableAlertStatusCellObject(alertDTO: DTOs.AlertDTO): DTOs.SantaTableAlertStatusCellDTO {
+    // the order on sorting value is:
+    // 1. highlighted ones goes to the top, the will have sorting value = 2099's unix * 2 - unixTimestamp of validUntilTime (this ensures the highlighted ones goes to the top, and have the soon-to-be-expired ones sorted to the top among themselves)
+    // 2. active normal alerts, they will have sorting value = unixTimestamp of alert time
+    // 3. traded marketlists, they will have sorting value = unix timeStamp of alert time - units
+    // 4. cancelled marketlists, they will have sorting value = -unixTimestamp of alert time - 2 units
+    // 5. expired marketlists, they will have sorting value = unixTimestamp of alert time - 3 units
+    // 6. cancelled normal alerts, they will have sorting value = 0
+    const object: DTOs.SantaTableAlertStatusCellDTO = {
+      data: {
+        statusText: alertDTO.data.status,
+        sortingValue: alertDTO.data.unixTimestamp,
+        countdownPercent: 0
+      },
+      state: {
+        grayedOutState: alertDTO.state.isCancelled || alertDTO.state.isExpired,
+        highlightedState: alertDTO.state.isMarketListVariant && !alertDTO.state.isCancelled && !alertDTO.state.isExpired && !alertDTO.data.isMarketListTraded
+      }
+    };
+    if (alertDTO.state.isMarketListVariant) {
+      if (alertDTO.data.isMarketListTraded) {
+        object.data.sortingValue = alertDTO.data.validUntilMoment.unix() - ALERT_STATUS_SORTINGVALUE_UNIT;
+      } else if (alertDTO.state.isCancelled) {
+        object.data.sortingValue = alertDTO.data.validUntilMoment.unix() - 2 * ALERT_STATUS_SORTINGVALUE_UNIT;
+      } else if (alertDTO.state.isExpired) {
+        object.data.sortingValue = alertDTO.data.validUntilMoment.unix() - 3 * ALERT_STATUS_SORTINGVALUE_UNIT;
+      }
+    } else if (alertDTO.state.isCancelled) {
+      object.data.sortingValue = object.data.sortingValue - 10 * ALERT_STATUS_SORTINGVALUE_UNIT;
+    }
+    if (object.state.highlightedState) {
+      object.data.sortingValue = 4070908800*2 - alertDTO.data.validUntilMoment.unix();
+      const countdownInMinutes = Math.abs(moment().diff(alertDTO.data.validUntilMoment, 'minutes'));
+      if (countdownInMinutes >= 60) {
+        object.data.countdownPercent = 100;
+      } else {
+        object.data.countdownPercent = this.utility.round(countdownInMinutes*100/60);
+      }
     }
     return object;
   }

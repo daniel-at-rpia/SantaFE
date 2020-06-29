@@ -22,7 +22,7 @@ export interface PayloadGetGroupHistoricalSummary {
 }
 
 export interface PayloadGetTradeFullData {
-  maxNumberOfSecurities: number;
+  maxNumberOfSecurities?: number;  // when this is not passed, then there is no cap to the NumberOfSecurities, it always return
   groupIdentifier: object;
   groupFilters: {
     PortfolioShortName?: Array<string>;

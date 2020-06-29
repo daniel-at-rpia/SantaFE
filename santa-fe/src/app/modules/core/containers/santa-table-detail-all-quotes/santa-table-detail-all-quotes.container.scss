@@ -40,6 +40,7 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
     display: none;
     overflow: hidden;
     historical-trade-visualizer {
+      flex: 1 1 auto;
       display: flex;
       flex-direction: column;
     }
@@ -95,6 +96,7 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
   &__ctas {
     display: flex;
     justify-content: center;
+    margin-top: $spacing_x_small;
     &-moreQuoteCta {
       @include mix_fixed_div(relative, $z_index_base_item_solid);
       display: none;
@@ -120,16 +122,6 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
         color: $font_color_inverse;
       }
     }
-  }
-  ::-webkit-scrollbar-thumb {
-    @include mix_border_radius(3px);
-    @include mix_border_generator($spacing_xx_small,  $color_white);
-    background-color: $theme_color_1;
-  }
-  ::-webkit-scrollbar-thumb:horizontal {
-    @include mix_border_radius(5px);
-    @include mix_border_generator($spacing_x_small,  $color_white);
-    background-color: $theme_color_1;
   }
   &--showMoreQuoteCta {
     #{$santaTableDetailAllQuotesBlockName} {

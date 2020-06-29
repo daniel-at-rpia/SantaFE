@@ -1,9 +1,10 @@
   // dependencies
-    import { Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+    import { Component, Input, OnChanges, OnDestroy, OnInit, AfterViewInit, ViewEncapsulation } from '@angular/core';
 
     import { HistoricalTradeVisualizerDTO } from 'FEModels/frontend-models.interface';
     import { TradeHistoryHeaderConfigList } from 'Core/constants/securityTableConstants.constant';
     import { FilterOptionsPortfolioList } from 'Core/constants/securityDefinitionConstants.constant';
+    import { GraphService } from 'Core/services/GraphService';
   //
 
 @Component({
@@ -13,15 +14,51 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class HistoricalTradeVisualizer {
+export class HistoricalTradeVisualizer implements OnDestroy, OnChanges {
   @Input() historyData: HistoricalTradeVisualizerDTO;
+  @Input() showGraph: boolean;
   
   public constants = {
     headerConfigList: TradeHistoryHeaderConfigList,
     portfolioList: FilterOptionsPortfolioList
   };
 
-  constructor() {} 
+  constructor(private graphService: GraphService) {} 
+
+  public ngOnDestroy() {
+    // if (this.historyData.graph.timeSeries) {
+      // this.graphService.destoryGraph(this.historyData.graph.timeSeries);
+      // this.historyData.graph.timeSeries = null;
+    // }
+    this.historyData.state.graphReceived = false;
+    if (this.historyData.graph.positionPie) {
+      this.graphService.destoryGraph(this.historyData.graph.positionPie);
+      this.historyData.graph.positionPie = null;
+    }
+    if (this.historyData.graph.volumeLeftPie) {
+      this.graphService.destoryGraph(this.historyData.graph.volumeLeftPie);
+      this.historyData.graph.volumeLeftPie = null;
+    }
+    if (this.historyData.graph.volumeRightPie) {
+      this.graphService.destoryGraph(this.historyData.graph.volumeRightPie);
+      this.historyData.graph.volumeRightPie = null;
+    }
+  }
+
+  public ngOnChanges() {
+    if (!!this.showGraph && !this.historyData.state.graphReceived) {
+      const renderGraphs = () => {
+        if (!this.historyData.graph.positionPie) {
+          this.historyData.state.graphReceived = true;
+          // this.historyData.graph.timeSeries = this.graphService.generateTradeHistoryTimeSeries(this.historyData);
+          this.historyData.graph.positionPie = this.graphService.generateTradeHistoryPositionPie(this.historyData);
+          this.historyData.graph.volumeLeftPie = this.graphService.generateTradeHistoryVolumeLeftPie(this.historyData);
+          this.historyData.graph.volumeRightPie = this.graphService.generateTradeHistoryVolumeRightPie(this.historyData);
+        }
+      };
+      setTimeout(renderGraphs.bind(this), 100);
+    }
+  }
 
   public onTogglePortfolio(targetPortfolio) {
     if (!!targetPortfolio && this.historyData.state.disabledPortfolio.indexOf(targetPortfolio) < 0) {

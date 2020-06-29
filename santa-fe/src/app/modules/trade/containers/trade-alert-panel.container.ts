@@ -33,11 +33,6 @@
       PayloadUpdateSingleAlertConfig,
       PayloadGetTradeFullData
     } from 'BEModels/backend-payloads.interface';
-    // import {
-    //   EngagementActionList,
-    //   AlertTypes,
-    //   AlertSubTypes
-    // } from 'Core/constants/coreConstants.constant';
     import {
       selectAlertCounts,
       selectSecurityMapContent,
@@ -74,7 +69,8 @@
       DEFAULT_DRIVER_IDENTIFIER,
       EngagementActionList,
       AlertSubTypes,
-      AlertTypes
+      AlertTypes,
+      KEYWORDSEARCH_DEBOUNCE_TIME
     } from 'Core/constants/coreConstants.constant';
     import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
   //
@@ -116,7 +112,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     fullOwnerList: FullOwnerList,
     researchList: FilterOptionsPortfolioResearchList,
     defaultMetricIdentifier: DEFAULT_DRIVER_IDENTIFIER,
-    securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE
+    securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
+    keywordSearchDebounceTime: KEYWORDSEARCH_DEBOUNCE_TIME
   }
 
   constructor(
@@ -194,6 +191,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           }
         },
         filters: {
+          keyword: {
+            defaultValueForUI: ''
+          },
           quickFilters: {
             keyword: '',
             driverType: this.constants.defaultMetricIdentifier,
@@ -290,7 +290,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       });
 
       this.subscriptions.keywordSearchSub = this.keywordChanged$.pipe(
-        // debounceTime(250),
+        debounceTime(this.constants.keywordSearchDebounceTime),
         distinctUntilChanged()
       ).subscribe((keyword) => {
         const targetTable = this.state.fetchResult.alertTable;
@@ -334,6 +334,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlerts, {req: 'POST'}, payload).pipe(
         first(),
         tap((serverReturn: Array<BEAlertDTO>) => {
+          // using synthetic alerts for dev purposes
+          // serverReturn = !this.state.alert.initialAlertListReceived ? AlertSample : [];
           const filteredServerReturn = !!serverReturn ? serverReturn.filter((eachRawAlert) => {
             // no filtering logic for now
             return true;
@@ -367,13 +369,13 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
                 // axe & mark & inquiry: it could be the trader entered it by mistake, but it could also be the trader changed his mind so he/she cancels the previous legitmate entry. So when such an cancelled alert comes in
                 // trade: since it is past tense, so it could only be cancelled because of entered by mistake
                 if (newAlert.data.type === this.constants.alertTypes.markAlert || newAlert.data.type === this.constants.alertTypes.axeAlert) {
-                  alertTableList.push(newAlert);
+                  !newAlert.state.isRead && alertTableList.push(newAlert);
                   updateList.push(newAlert);
                 } else if (newAlert.data.type === this.constants.alertTypes.tradeAlert) {
                   alertTableRemovalList.push(newAlert);
                 }
               } else {
-                if (!newAlert.state.isRead && newAlert.data.isUrgent) {
+                if (!newAlert.state.isRead && newAlert.data.isUrgent && !newAlert.state.isRead) {
                   updateList.push(newAlert);
                 }
                 if (newAlert.data.security && newAlert.data.security.data.securityID) {
@@ -408,26 +410,28 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
     private flagMarketListAlertsForCountdownUpdate(): number {
       let numOfUpdate = 0;
-      this.state.fetchResult.alertTable.prinstineRowList.forEach((eachRow) => {
+      this.state.fetchResult.alertTable.rowList.forEach((eachRow) => {
         if (!!eachRow && !!eachRow.data.alert && !!eachRow.data.alert.state) {
-          if (eachRow.data.alert.state.isMarketListVariant && !eachRow.data.alert.state.isExpired) {
-            numOfUpdate++;
-            this.dtoService.appendAlertStatus(eachRow.data.alert);
-            this.dtoService.appendAlertInfoToSecurityDTO(eachRow.data.security, eachRow.data.alert);
-            this.state.table.alertDto.data.headers.forEach((eachHeader, index) =>{
-              // the benefit of doing this loop is if in the future we need to refresh any other cells as well, it can be done easily by just appending to the if condition
-              if (eachHeader.data.key === 'alertStatus') {
-                // minus one because securityCard is not one of the cells ( TODO: this is a bad design, what if a table has more than one security card column? should not treat it different from other columns )
-                // this basically updates the alert status cell
-                eachRow.data.cells[index-1] = this.utilityService.populateSecurityTableCellFromSecurityCard(
+          if (eachRow.data.alert.state.isMarketListVariant) {
+            if (!eachRow.data.alert.state.isExpired || eachRow.data.alert.data.status.indexOf('-') >= 0) {
+              numOfUpdate++;
+              this.dtoService.appendAlertStatus(eachRow.data.alert);
+              this.dtoService.appendAlertInfoToSecurityDTO(eachRow.data.security, eachRow.data.alert);
+              this.state.table.alertDto.data.headers.forEach((eachHeader, index) =>{
+                // the benefit of doing this loop is if in the future we need to refresh any other cells as well, it can be done easily by just appending to the if condition
+                if (eachHeader.data.key === 'alertStatus') {
+                  // minus one because securityCard is not one of the cells ( TODO: this is a bad design, what if a table has more than one security card column? should not treat it different from other columns )
+                  // this basically updates the alert status cell
+                  eachRow.data.cells[index-1] = this.utilityService.populateSecurityTableCellFromSecurityCard(
                     eachHeader,
                     eachRow,
-                    eachRow.data.cells[index-1],
+                    this.dtoService.formSecurityTableCellObject(false, null, eachHeader, null, eachRow.data.alert),
                     this.constants.defaultMetricIdentifier
-                );
-              }
-            });
-            this.state.alert.recentUpdatedAlertList.push(eachRow.data.rowId);
+                  );
+                }
+              });
+              this.state.alert.recentUpdatedAlertList.push(eachRow.data.rowId);
+            }
           }
         }
       });
@@ -1111,9 +1115,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           if (!eachHeader.state.isSecurityCardVariant) {
             if (eachHeader.state.isQuantVariant) {
               const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, this.state.filters.quickFilters.driverType, null, null, false);
-              newAlertTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, true, bestQuoteStencil, null));
+              newAlertTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, eachHeader, bestQuoteStencil, null));
             } else {
-              newAlertTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, false, null, null));
+              newAlertTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, eachHeader, null, null));
             }
           }
         });
@@ -1148,7 +1152,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         }
       }
       const payload: PayloadGetTradeFullData = {
-        maxNumberOfSecurities: 2000,
         groupIdentifier: {},
         groupFilters: {
           SecurityIdentifier: securityList

@@ -63,7 +63,10 @@ export interface BESecurityDTO {
   isSovereign?: boolean;
   isGovt?: boolean;
   isEm?: boolean;
-  metrics: BESecurityMetricDTO;
+  metrics: {
+    Default: BESecurityMetricDTO;
+    Index?: BESecurityMetricDTO;
+  };
   deltaMetrics: {
     Dod: BESecurityDeltaMetricDTO;
     Wow: BESecurityDeltaMetricDTO;
@@ -198,7 +201,6 @@ interface BESecurityMetricDTO {
   ratingNoNotch: string;
   ratingBucket: string
   price: number;
-  isIndex: boolean;
   isFixedForLife?: boolean;
   isFixedToFloatInFixed?: boolean;
   isFloat?: boolean;
@@ -389,7 +391,7 @@ export interface BEAlertDTO {
   isCancelled: boolean;
   isUrgent: boolean;
   isDeleted: boolean;
-  isMarketListAlert: boolean;
+  isMarketListAlert?: boolean;
   quoteId?: string;
   security?: BESecurityDTO;
   marketListDescription?: string;
@@ -413,12 +415,8 @@ export interface BETradeBlock {
   price: number;
   counterpartyName: string;
   spread: number;
-  shouldCalculateSpread: boolean;
-  shouldCalculatePrice: boolean;
   quantityAfterTrade: number;
-  fifoAvgSpread: number;
   wgtAvgSpread: number;
-  fifoAvgPrice: number;
   wgtAvgPrice: number;
   trader: string;
   isCancelled: boolean;

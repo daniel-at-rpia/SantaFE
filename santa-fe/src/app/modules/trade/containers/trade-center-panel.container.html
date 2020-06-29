@@ -106,7 +106,7 @@
       <div class="sat-tradeCenterPanel__result-utilities-keywordSearch">
         <i class="sat-tradeCenterPanel__result-utilities-keywordSearch-activeIcon fal fa-search"></i>
         <santa-input
-          [inputValue]="state.filters.quickFilters.keyword"
+          [inputValue]="state.filters.keyword.defaultValueForUI"
           [placeholder]="'filter security name by keyword'"
           [isHero]="true"
           (onInputChange)="onSearchKeywordChange($event)">
