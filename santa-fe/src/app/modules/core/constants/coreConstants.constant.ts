@@ -198,7 +198,9 @@ export const EngagementActionList = {
   tradeAlertOpenConfiguration: 'Trade Alert Open/Close Configuration',
   tradeAlertConfigure: 'Trade Alert Configure',
   tradeAlertAddSingleSecurity: 'Trade Alert Add Single Security',
-  tradeAlertClickedTab: 'Trade Alert Click Tab'
+  tradeAlertClickedTab: 'Trade Alert Click Tab',
+  santaTableAllQuotesDisplayTradeHistory: 'Switch To Display Trade History',
+  santaTableAllQuotesDisplayQuotes: 'Switch To Display Quotes'
 }
 
 export enum AlertTypes {

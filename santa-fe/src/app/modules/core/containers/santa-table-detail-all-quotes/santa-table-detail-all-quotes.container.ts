@@ -146,10 +146,22 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
 
   public onClickSwitchViewToHistory() {
     this.rowData.state.viewHistoryState = true;
+    this.restfulCommService.logEngagement(
+      this.restfulCommService.engagementMap.santaTableAllQuotesDisplayTradeHistory,
+      this.rowData.data.security.data.securityID,
+      '',
+      'Trade Center Panel'
+    );
   }
 
   public onClickSwitchViewToQuote() {
     this.rowData.state.viewHistoryState = false;
+    this.restfulCommService.logEngagement(
+      this.restfulCommService.engagementMap.santaTableAllQuotesDisplayQuotes,
+      this.rowData.data.security.data.securityID,
+      '',
+      'Trade Center Panel'
+    );
   }
 
   private updateQuoteUponClick(params: ClickedSpecificQuoteEmitterParams, targetQuoteList: Array<SecurityQuoteDTO>){
