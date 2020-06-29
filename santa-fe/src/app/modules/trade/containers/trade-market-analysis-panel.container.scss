@@ -219,6 +219,26 @@ $tradeMarketAnalysisPanel_config_label_width: 6rem;
       }
     }
   }
+  &__constructionPrompt {
+    @include mix_border_radius(10px);
+    flex: 0 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: $color_gray_1;
+    padding: $spacing_large;
+    margin: $spacing_small;
+    &-icon {
+      font-size: $font_size_xxxx_large;
+      color: $color_disabled;
+    }
+    &-title {
+      text-align: center;
+      font-size: $font_size_xx_large;
+      color: $color_disabled;
+      margin: $spacing_large 0;
+    }
+  }
   &__errorPrompt {
     @include mix_border_radius(10px);
     flex: 0 1 auto;
