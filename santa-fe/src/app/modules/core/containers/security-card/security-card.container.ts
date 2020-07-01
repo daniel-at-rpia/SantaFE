@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 
 import { UtilityService } from 'Core/services/UtilityService';
+import { DTOService } from 'Core/services/DTOService';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { SecurityDTO } from 'FEModels/frontend-models.interface';
 import { TriCoreDriverConfig } from 'Core/constants/coreConstants.constant';
@@ -26,7 +27,8 @@ export class SecurityCard implements OnInit {
 
   constructor(
     private utilityService: UtilityService,
-    private restfulCommService: RestfulCommService
+    private restfulCommService: RestfulCommService,
+    private dtoService: DTOService
   ) { }
 
   public ngOnInit() {
@@ -67,11 +69,20 @@ export class SecurityCard implements OnInit {
 
   public onClickOpenShortcutConfig() {
     this.cardData.state.configAlertState = true;
+    this.cardData.data.alert.shortcutConfig = {
+      driver: null,
+      numericFilterDTO: this.dtoService.formNumericFilterObject()
+    };
+    if (this.cardData.data.mark.markDriver === TriCoreDriverConfig.Spread.label || this.cardData.data.mark.markDriver === TriCoreDriverConfig.Price.label) {
+      this.cardData.data.alert.shortcutConfig.driver = this.cardData.data.mark.markDriver;
+    }
   }
 
   public onSaveShortcutConfig() {
+    this.cardData.state.configAlertState = false;
+    this.cardData.state.isSelected = false;
     if (!!this.cardData.api.onClickSendToAlertConfig) {
-      // this.cardData.api.onClickSendToAlertConfig()
+      this.cardData.api.onClickSendToAlertConfig(this.cardData);
     }
   }
 

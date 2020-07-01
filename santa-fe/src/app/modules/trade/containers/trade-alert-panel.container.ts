@@ -94,7 +94,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   subscriptions = {
     securityMapSub: null,
     autoUpdateCountSub: null,
-    // selectedSecurityForAlertConfigSub: null,
+    selectedSecurityForAlertConfigSub: null,
     centerPanelPresetSelectedSub: null,
     alertCountSub: null,
     startNewUpdateSub: null,
@@ -249,25 +249,26 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           }
         }
       });
-      // this.subscriptions.selectedSecurityForAlertConfigSub = this.store$.pipe(
-        //   select(selectSelectedSecurityForAlertConfig)
-        // ).subscribe((targetSecurity) => {
-        //   if (!!targetSecurity) {
-        //     if (!this.state.configureAlert) {
-        //       this.onClickConfigureAlert();
-        //       this.state.configuration.selectedAlert = this.constants.alertTypes.axeAlert;
-        //     }
-        //     const existMatchIndex = this.state.configuration.axe.securityList.findIndex((eachEntry) => {
-        //       return eachEntry.card.data.securityID === targetSecurity.data.securityID;
-        //     });
-        //     if (existMatchIndex < 0) {
-        //       this.addSecurityToWatchList(targetSecurity);
-        //     } else if (this.state.configuration.axe.securityList[existMatchIndex].isDeleted) {
-        //       this.state.configuration.axe.securityList[existMatchIndex].isDeleted = false;
-        //       this.state.configuration.axe.securityList[existMatchIndex].isDisabled = false;
-        //     }
-        //   }
-      // });
+      this.subscriptions.selectedSecurityForAlertConfigSub = this.store$.pipe(
+          select(selectSelectedSecurityForAlertConfig)
+        ).subscribe((targetSecurity) => {
+          console.log('test', targetSecurity);
+          // if (!!targetSecurity) {
+          //   if (!this.state.configureAlert) {
+          //     this.onClickConfigureAlert();
+          //     this.state.configuration.selectedAlert = this.constants.alertTypes.axeAlert;
+          //   }
+          //   const existMatchIndex = this.state.configuration.axe.securityList.findIndex((eachEntry) => {
+          //     return eachEntry.card.data.securityID === targetSecurity.data.securityID;
+          //   });
+          //   if (existMatchIndex < 0) {
+          //     this.addSecurityToWatchList(targetSecurity);
+          //   } else if (this.state.configuration.axe.securityList[existMatchIndex].isDeleted) {
+          //     this.state.configuration.axe.securityList[existMatchIndex].isDeleted = false;
+          //     this.state.configuration.axe.securityList[existMatchIndex].isDisabled = false;
+          //   }
+          // }
+      });
       this.subscriptions.centerPanelPresetSelectedSub = this.store$.pipe(
         select(selectPresetSelected)
       ).subscribe(flag => {
