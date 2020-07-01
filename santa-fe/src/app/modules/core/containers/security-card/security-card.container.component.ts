@@ -8,18 +8,22 @@ import {
 } from '@angular/core';
 
 import { UtilityService } from 'Core/services/UtilityService';
+import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { SecurityDTO } from 'FEModels/frontend-models.interface';
-import { ClickedOpenSecurityInBloombergEmitterParams } from 'Core/models/frontend/frontend-adhoc-packages.interface';
 
 @Component({
   selector: 'security-card',
-  templateUrl: './security-card.component.html',
-  styleUrls: ['./security-card.component.scss'],
+  templateUrl: './security-card.container.component.html',
+  styleUrls: ['./security-card.container.component.scss'],
   encapsulation: ViewEncapsulation.Emulated
 })
 export class SecurityCard implements OnInit {
   @Input() cardData: SecurityDTO;
-  constructor(private utilityService: UtilityService) { }
+
+  constructor(
+    private utilityService: UtilityService,
+    private restfulCommService: RestfulCommService
+  ) { }
 
   public ngOnInit() {
   }
@@ -46,14 +50,15 @@ export class SecurityCard implements OnInit {
   }
 
   public onClickOpenSecurityInBloomberg(targetModule: string) {
-    if (!!this.cardData.api.onClickOpenSecurityInBloomberg) {
-      const payload: ClickedOpenSecurityInBloombergEmitterParams = {
-        targetBBGModule: targetModule,
-        yellowCard: this.utilityService.isCDS(false, this.cardData) ? `Corp` : 'Govt',
-        targetSecurity: this.cardData
-      }
-      this.cardData.api.onClickOpenSecurityInBloomberg(payload);
-    }
+    const yellowCard = this.utilityService.isCDS(false, this.cardData) ? `Corp` : 'Govt';
+    const url = `bbg://securities/${this.cardData.data.globalIdentifier}%20${yellowCard}/${targetModule}`;
+    window.open(url);
+    this.restfulCommService.logEngagement(
+      this.restfulCommService.engagementMap.bloombergRedict,
+      this.cardData.data.securityID,
+      `BBG - ${targetModule}`,
+      'Core - Security Card'
+    );
   }
 
   public onClickSendToAlertConfig() {
@@ -61,7 +66,7 @@ export class SecurityCard implements OnInit {
   }
 
   public onMouseLeaveShortcutConfig() {
-    // this.cardData.state.configAlertState = false;
-    // this.cardData.state.isSelected = false;
+    this.cardData.state.configAlertState = false;
+    this.cardData.state.isSelected = false;
   }
 }

@@ -12,10 +12,7 @@ import {
   SecurityCostPortfolioBlock
 } from 'FEModels/frontend-blocks.interface';
 import {AlertSubTypes, AlertTypes} from 'Core/constants/coreConstants.constant';
-import {
-  ClickedOpenSecurityInBloombergEmitterParams,
-  SantaTableNumericFloatingFilterParams
-} from 'FEModels/frontend-adhoc-packages.interface';
+import { SantaTableNumericFloatingFilterParams } from 'FEModels/frontend-adhoc-packages.interface';
 import * as agGrid from 'ag-grid-community';
 import * as moment from 'moment';
 import * as am4Charts from '@amcharts/amcharts4/charts';
@@ -134,7 +131,6 @@ export interface SecurityDTO extends BasicDTOStructure {
     onClickCard: (card: SecurityDTO) => void;
     onClickSendToGraph: (card: SecurityDTO) => void;
     onClickThumbDown: (card: SecurityDTO) => void;
-    onClickOpenSecurityInBloomberg: (params: ClickedOpenSecurityInBloombergEmitterParams) => void;
     onClickSendToAlertConfig: (card: SecurityDTO) => void;
   }
   state: {

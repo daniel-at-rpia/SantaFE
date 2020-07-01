@@ -10,7 +10,7 @@
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
     import { TradeAlertPanelState } from 'FEModels/frontend-page-states.interface';
-    import { SecurityMapEntry, ClickedOpenSecurityInBloombergEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
+    import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       SecurityTableHeaderDTO,
       AlertCountSummaryDTO,
@@ -1018,17 +1018,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       );
     }
 
-    public onClickOpenSecurityInBloomberg(pack: ClickedOpenSecurityInBloombergEmitterParams) {
-      const url = `bbg://securities/${pack.targetSecurity.data.globalIdentifier}%20${pack.yellowCard}/${pack.targetBBGModule}`;
-      window.open(url);
-      this.restfulCommService.logEngagement(
-        EngagementActionList.bloombergRedict,
-        pack.targetSecurity.data.securityID,
-        `BBG - ${pack.targetBBGModule}`,
-        'Trade - Alert Panel'
-      );
-    }
-
     private filterPrinstineRowList(
       targetPrinstineList: Array<SecurityTableRowDTO>
     ): Array<SecurityTableRowDTO> {
@@ -1190,7 +1179,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         this.state.filters.quickFilters.driverType,
         serverReturn,
         this.onSelectSecurityForAnalysis.bind(this),
-        this.onClickOpenSecurityInBloomberg.bind(this),
         null
       );
       this.calculateQuantComparerWidthAndHeight();

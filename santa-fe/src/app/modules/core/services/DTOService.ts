@@ -197,7 +197,6 @@ export class DTOService {
         onClickCard: null,
         onClickSendToGraph: null,
         onClickThumbDown: null,
-        onClickOpenSecurityInBloomberg: null,
         onClickSendToAlertConfig: null
       },
       state: {
