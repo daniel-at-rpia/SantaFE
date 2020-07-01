@@ -264,7 +264,7 @@ export class SantaTable implements OnInit, OnChanges {
           this.tableData.state.selectedSecurityCard.state.isSelected = false;
           this.updateRowSecurityCardInAgGrid(this.tableData.state.selectedSecurityCard);
           this.tableData.state.selectedSecurityCard = targetCard;
-        } else if (!!storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID) {
+        } else if (!!storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID && !targetCard.state.configAlertState) {
           // scenario: there is already a card selected, and it is the same card user is selecting again
           this.tableData.state.selectedSecurityCard = null;
         }

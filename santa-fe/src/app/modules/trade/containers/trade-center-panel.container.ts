@@ -20,7 +20,7 @@
       AlertCountSummaryDTO
     } from 'FEModels/frontend-models.interface';
     import { TableFetchResultBlock } from 'FEModels/frontend-blocks.interface';
-    import {PayloadGetTradeFullData} from 'BEModels/backend-payloads.interface';
+    import { PayloadGetTradeFullData } from 'BEModels/backend-payloads.interface';
     import {
       BEPortfolioDTO,
       BESecurityDTO,
