@@ -1,6 +1,7 @@
 @import "global.scss";
 @import "modules/trade/trade.scss";
 
+$tradeAlertAxeAlertConfiguration_singleSecurities_watchList_width: 67%;
 .sat-tradeAlertAxeAlertConfiguration {
   $axeAlertConfigurationBlockName: &;
   display: flex;
@@ -83,7 +84,7 @@
     overflow: hidden;
     &-watchList {
       @include mix_border_generator(0 $typical_border_width 0 0, $color_white);
-      flex: 0 1 50%;
+      flex: 1 1 auto;
       display: flex;
       flex-direction: column;
       margin-right: $spacing_medium;
@@ -144,6 +145,9 @@
                 color: $font_color_inverse;
               }
             }
+          }
+          numeric-filter {
+            margin-left: $spacing_medium;
           }
           &-disableBtn, &-urgentBtn {
             flex: 0 0 auto;
@@ -206,7 +210,7 @@
       }
     }
     &-search {
-      flex: 0 1 50%;
+      flex: 0 0 28rem;
       display: flex;
       flex-direction: column;
       &-utility {
@@ -233,7 +237,7 @@
         padding-left: $spacing_small;
         padding-bottom: $spacing_large;
         &-item {
-          flex: 1 1 45%;
+          flex: 1 1 100%;
           margin-top: $spacing_small;
           margin-right: $spacing_small;
         }

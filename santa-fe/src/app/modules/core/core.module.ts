@@ -92,7 +92,8 @@ import { SantaTableAlertStatusCell } from 'Core/components/santa-table-alert-sta
         SecurityDefinitionConfigurator,
         SearchShortcut,
         GlobalAlert,
-        Alert
+        Alert,
+        NumericFilter
     ]
 })
 export class CoreModule { }

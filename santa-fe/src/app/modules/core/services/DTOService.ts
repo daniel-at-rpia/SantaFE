@@ -55,16 +55,38 @@ export class DTOService {
   ): DTOs.SecurityDTO {
     // !isStencil && console.log('rawData', rawData.name, rawData);
     const object:DTOs.SecurityDTO = {
-      data: {
+      data: null,
+      api: {
+        onClickCard: null,
+        onClickSendToGraph: null,
+        onClickThumbDown: null,
+        onClickSendToAlertConfig: null
+      },
+      state: {
+        isSelected: false,
+        isStencil: isStencil,
+        isInteractionDisabled: false,
+        isInteractionThumbDownDisabled: false,
+        isMultiLineVariant: false,
+        isWidthFlexible: false,
+        isAtListCeiling: false,
+        isActionMenuPrimaryActionsDisabled: false,
+        isActionMenuMinorActionsDisabled: false,
+        isSlimVariant: isSlimVariant,
+        configAlertState: false
+      }
+    };
+    try {
+      object.data = {
         securityID: !isStencil ? rawData.securityIdentifier : null,
         globalIdentifier: !isStencil ? rawData.globalIdentifier : null,
         name: !isStencil ? rawData.name : 'PLACEHOLDER',
         ticker: !isStencil ? rawData.ticker : null,
         obligorName: !isStencil ? rawData.obligorName : null,
         isGovt: !isStencil ? rawData.isGovt : false,
-        ratingLevel: !isStencil && rawData.metrics ? this.utility.mapRatings(rawData.metrics.Default.ratingNoNotch) : 0,
-        ratingValue: !isStencil && rawData.metrics ? rawData.metrics.Default.ratingNoNotch : null,
-        ratingBucket: !isStencil && rawData.metrics ? rawData.metrics.Default.ratingBucket : null,
+        ratingLevel: !isStencil && rawData.metrics && rawData.metrics.Default ? this.utility.mapRatings(rawData.metrics.Default.ratingNoNotch) : 0,
+        ratingValue: !isStencil && rawData.metrics && rawData.metrics.Default ? rawData.metrics.Default.ratingNoNotch : null,
+        ratingBucket: !isStencil && rawData.metrics && rawData.metrics.Default ? rawData.metrics.Default.ratingBucket : null,
         seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.genericSeniority) : 5,
         currency: !isStencil ? rawData.ccy : null,
         country: !isStencil ? rawData.country : null,
@@ -196,54 +218,37 @@ export class DTOService {
           }
         },
         tradeHistory: []
-      },
-      api: {
-        onClickCard: null,
-        onClickSendToGraph: null,
-        onClickThumbDown: null,
-        onClickSendToAlertConfig: null
-      },
-      state: {
-        isSelected: false,
-        isStencil: isStencil,
-        isInteractionDisabled: false,
-        isInteractionThumbDownDisabled: false,
-        isMultiLineVariant: false,
-        isWidthFlexible: false,
-        isAtListCeiling: false,
-        isActionMenuPrimaryActionsDisabled: false,
-        isActionMenuMinorActionsDisabled: false,
-        isSlimVariant: isSlimVariant,
-        configAlertState: false
       }
-    };
-    if (!isStencil) {
-      // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
-      if ((!!currentSelectedMetric && !!TriCoreDriverConfig[object.data.mark.markDriver] && object.data.mark.markDriver === currentSelectedMetric) || currentSelectedMetric === DEFAULT_DRIVER_IDENTIFIER){
-        let targetDriver = object.data.mark.markDriver;
-        if (currentSelectedMetric === DEFAULT_DRIVER_IDENTIFIER) {
-          targetDriver = this.utility.findSecurityTargetDefaultTriCoreDriver(object);
-        }
-        object.data.mark.mark = this.utility.parseTriCoreDriverNumber(object.data.mark.markRaw, targetDriver, object, true) as string;
-      } else {
-        object.data.mark.mark = null;
-        object.data.mark.markRaw = null;
-      }
-      if (object.data.seniorityLevel < 5 && object.data.seniorityLevel > 0 && rawData.paymentRank) {
-        object.data.seniority = `${object.data.seniorityLevel} - ${rawData.paymentRank}`;
-      }
-      if (!!object.data.strategyList && object.data.strategyList.length > 0) {
-        object.data.strategyList.forEach((eachStrategy: string, index) => {
-          if (index === 0) {
-            object.data.strategyFirm = eachStrategy;
-          } else {
-            object.data.strategyFirm = `${object.data.strategyFirm} & ${eachStrategy}`;
+      if (!isStencil) {
+        // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
+        if ((!!currentSelectedMetric && !!TriCoreDriverConfig[object.data.mark.markDriver] && object.data.mark.markDriver === currentSelectedMetric) || currentSelectedMetric === DEFAULT_DRIVER_IDENTIFIER){
+          let targetDriver = object.data.mark.markDriver;
+          if (currentSelectedMetric === DEFAULT_DRIVER_IDENTIFIER) {
+            targetDriver = this.utility.findSecurityTargetDefaultTriCoreDriver(object);
           }
-        });
+          object.data.mark.mark = this.utility.parseTriCoreDriverNumber(object.data.mark.markRaw, targetDriver, object, true) as string;
+        } else {
+          object.data.mark.mark = null;
+          object.data.mark.markRaw = null;
+        }
+        if (object.data.seniorityLevel < 5 && object.data.seniorityLevel > 0 && rawData.paymentRank) {
+          object.data.seniority = `${object.data.seniorityLevel} - ${rawData.paymentRank}`;
+        }
+        if (!!object.data.strategyList && object.data.strategyList.length > 0) {
+          object.data.strategyList.forEach((eachStrategy: string, index) => {
+            if (index === 0) {
+              object.data.strategyFirm = eachStrategy;
+            } else {
+              object.data.strategyFirm = `${object.data.strategyFirm} & ${eachStrategy}`;
+            }
+          });
+        }
+        if (object.data.mark.markDriver === TriCoreDriverConfig.Spread.label || object.data.mark.markDriver === TriCoreDriverConfig.Price.label) {
+          object.data.alert.shortcutConfig.driver = object.data.mark.markDriver;
+        }
       }
-      if (object.data.mark.markDriver === TriCoreDriverConfig.Spread.label || object.data.mark.markDriver === TriCoreDriverConfig.Price.label) {
-        object.data.alert.shortcutConfig.driver = object.data.mark.markDriver;
-      }
+    } catch (err) {
+      console.warn('Data issue on security', object, err);
     }
     return object;
   }

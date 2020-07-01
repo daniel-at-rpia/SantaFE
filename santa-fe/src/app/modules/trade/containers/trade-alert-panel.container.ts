@@ -70,7 +70,8 @@
       EngagementActionList,
       AlertSubTypes,
       AlertTypes,
-      KEYWORDSEARCH_DEBOUNCE_TIME
+      KEYWORDSEARCH_DEBOUNCE_TIME,
+      TriCoreDriverConfig
     } from 'Core/constants/coreConstants.constant';
     import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
   //
@@ -113,7 +114,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     researchList: FilterOptionsPortfolioResearchList,
     defaultMetricIdentifier: DEFAULT_DRIVER_IDENTIFIER,
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
-    keywordSearchDebounceTime: KEYWORDSEARCH_DEBOUNCE_TIME
+    keywordSearchDebounceTime: KEYWORDSEARCH_DEBOUNCE_TIME,
+    driver: TriCoreDriverConfig
   }
 
   constructor(
@@ -148,6 +150,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
               groupId: null,
               scopes: [],
               axeAlertTypes: [],
+              targetDriver: null,
+              targetRange: this.dtoService.formNumericFilterObject(),
               isDeleted: false,
               isDisabled: false,
               isUrgent: false
@@ -671,6 +675,28 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.state.configuration.mark.myGroup.disabled = !this.state.configuration.mark.myGroup.disabled;
     }
 
+    public onSelectAxeRangeDriver(targetBlock: TradeAlertConfigurationAxeGroupBlock, targetDriver: string) {
+      targetBlock.targetDriver = targetDriver;
+    }
+
+    public onChangeAxeRangeMin(newValue, targetBlock: TradeAlertConfigurationAxeGroupBlock) {
+      targetBlock.targetRange.data.minNumber = newValue === "" ? newValue : parseFloat(newValue);
+      this.checkIsFilled(targetBlock);
+    }
+
+    public onChangeAxeRangeMax(newValue, targetBlock: TradeAlertConfigurationAxeGroupBlock) {
+      targetBlock.targetRange.data.maxNumber = newValue === "" ? newValue : parseFloat(newValue);
+      this.checkIsFilled(targetBlock);
+    }
+
+    public onClickedClearRange(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
+      targetBlock.targetRange.data = {
+        minNumber: "",
+        maxNumber: ""
+      };
+      this.checkIsFilled(targetBlock);
+    }
+
     private fetchSecurities(matchList: Array<SecurityMapEntry>) {
       const list = matchList.map((eachEntry) => {
         return eachEntry.secruityId;
@@ -732,8 +758,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       const newEntry: TradeAlertConfigurationAxeGroupBlock = {
         card: copy,
         groupId: null,
-        axeAlertTypes: this.state.configuration.axe.myGroup.axeAlertTypes,
+        axeAlertTypes: [this.constants.axeAlertType.normal, this.constants.axeAlertType.marketList],
         scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],
+        targetDriver: null,
+        targetRange: this.dtoService.formNumericFilterObject(),
         isDeleted: false,
         isDisabled: false,
         isUrgent: true
@@ -802,6 +830,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         groupId: rawGroupConfig.alertConfigID,
         axeAlertTypes: WatchType === AxeAlertType.both ? [AxeAlertType.normal, AxeAlertType.marketList] : [WatchType],
         scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],
+        targetDriver: null,
+        targetRange: this.dtoService.formNumericFilterObject(),
         isDeleted: false,
         isDisabled: !rawGroupConfig.isEnabled,
         isUrgent: rawGroupConfig.isUrgent
@@ -832,6 +862,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         groupId: rawGroupConfig.alertConfigID,
         axeAlertTypes: WatchType === AxeAlertType.both ? [AxeAlertType.normal, AxeAlertType.marketList] : [WatchType],
         scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],
+        targetDriver: null,
+        targetRange: this.dtoService.formNumericFilterObject(),
         isDeleted: false,
         isDisabled: !rawGroupConfig.isEnabled,
         isUrgent: rawGroupConfig.isUrgent
@@ -1000,6 +1032,14 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         return AxeAlertType.marketList;
       } else {
         return AxeAlertType.both;
+      }
+    }
+
+    private checkIsFilled(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
+      if (targetBlock.targetRange.data.minNumber !== "" || targetBlock.targetRange.data.maxNumber !== "") {
+        targetBlock.targetRange.state.isFilled = true;
+      } else {
+        targetBlock.targetRange.state.isFilled = false;
       }
     }
   // configuration section end

@@ -269,6 +269,32 @@
                     <span>Inquiry</span>
                   </button>
                 </div>
+                <numeric-filter
+                  [filterData]="eachSecurityBlock.targetRange"
+                  (detectedMinChange)="onChangeAxeRangeMin($event, eachSecurityBlock)"
+                  (detectedMaxChange)="onChangeAxeRangeMax($event, eachSecurityBlock)"
+                  (detectedClickedClear)="onClickedClearRange(eachSecurityBlock)"
+                ></numeric-filter>
+                <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup">
+                  <button
+                    title="Numeric Range Driver"
+                    (click)="onSelectAxeRangeDriver(eachSecurityBlock, constants.driver.Spread.label)"
+                    [ngClass]="{
+                      'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn': true,
+                      'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': eachSecurityBlock.targetDriver === constants.driver.Spread.label
+                    }">
+                    <span>Sprd</span>
+                  </button>
+                  <button
+                    title="Numeric Range Driver"
+                    (click)="onSelectAxeRangeDriver(eachSecurityBlock, constants.driver.Price.label)"
+                    [ngClass]="{
+                      'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn': true,
+                      'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': eachSecurityBlock.targetDriver === constants.driver.Price.label
+                    }">
+                    <span>Px</span>
+                  </button>
+                </div>
                 <button title="Urgent" (click)="onTogglePriority(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-urgentBtn santaBtn--iconOnly fal fa-exclamation"></button>
                 <button title="Disable (mute)" (click)="onToggleDisableTargetGroupFromAxeWatchList(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-disableBtn santaBtn--iconOnly fal fa-bell-slash"></button>
                 <button title="Remove" (click)="onClickRemoveSecurityFromAxeWatchList(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-removeBtn santaBtn--iconOnly fal fa-eraser"></button>
