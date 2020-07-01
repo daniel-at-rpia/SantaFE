@@ -124,6 +124,10 @@ export interface SecurityDTO extends BasicDTOStructure {
       alertQuoteDealer: string;
       alertTradeTrader: string;
       alertStatus: string;
+      shortcutConfig: {
+        numericFilterDTO: NumericFilterDTO;
+        driver: string;
+      }
     }
     tradeHistory: Array<TradeDTO>;
   }

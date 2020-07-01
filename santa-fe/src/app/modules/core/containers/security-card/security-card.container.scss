@@ -161,7 +161,7 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
       flex-direction: column;
       width: 100%;
       background-color: $color_white;
-      padding: $spacing_small;
+      padding: $spacing_small $spacing_small $spacing_large+$spacing_medium $spacing_small;
       &-alertTypePin {
         @include mix_fixed_div(absolute, $z_index_base_item);
         @include mix_border_radius(50%);
@@ -216,40 +216,42 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
           }
         }
       }
-      &-driver {
+      &-label {
+        @include mix_border_generator(0 0 $typical_border_width 0);
         display: flex;
         justify-content: center;
-        margin-top: $spacing_small;
-        &-btnGroup {
-          &-btn {
-            @extend .santaBtn;
-          }
-        }
+        margin: $spacing_medium 0 0 0;
+        font-size: $font_size_normal;
+        color: $font_color_minor;
+        text-align: center;
+        padding-bottom: $spacing_small;
       }
       &-level {
         @include mix_fixed_div(relative, $z_index_base_item_solid);
         display: flex;
         padding: 0 $spacing_x_small;
-        margin-top: $spacing_medium;
-        margin-bottom: $spacing_large;
+        margin: $spacing_medium 0 0 0;
         &-btnGroup {
+          flex: 0 0 auto;
           margin-right: $spacing_medium;
           &-btn {
             @extend .santaBtn;
+            &--selected {
+              @include material('none');
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
           }
-        }
-        &>input {
-          flex: 1 1 auto;
         }
       }
       &-save {
         @include mix_fixed_div(absolute, $z_index_base_item);
         @include mix_border_radius(50%);
-        @include mix_calculate(left, 50%, $iconButton_size_large/2 + $spacing_x_small, '-');
+        @include mix_calculate(left, 50%, $iconButton_size_large/2 + $spacing_medium, '-');
         @include mix_border_generator($typical_border_width, $color_active);
         background-color: $color_white;
-        bottom: -$iconButton_size_large/2 - $spacing_x_small;
-        padding: $spacing_x_small;
+        bottom: -$iconButton_size_large/3 - $spacing_medium;
+        padding: $spacing_medium;
         &-cta {
           @include mix_fixed_div(relative, $z_index_hovering_item);
           @extend .santaBtn;
@@ -266,8 +268,8 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
         &-borderMask {
           @include mix_fixed_div(absolute, $z_index_base_item);
           width: 150%;
-          height: 55%;
-          top: -$typical_border_width*2;
+          height: 61%;
+          top: 0;
           left: -25%;
           background-color: $color_white;
         }

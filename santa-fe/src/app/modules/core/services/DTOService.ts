@@ -189,7 +189,11 @@ export class DTOService {
           alertQuantityRaw: null,
           alertQuoteDealer: null,
           alertTradeTrader: null,
-          alertStatus: null
+          alertStatus: null,
+          shortcutConfig: {
+            numericFilterDTO: this.formNumericFilterObject(),
+            driver: null
+          }
         },
         tradeHistory: []
       },
@@ -236,6 +240,9 @@ export class DTOService {
             object.data.strategyFirm = `${object.data.strategyFirm} & ${eachStrategy}`;
           }
         });
+      }
+      if (object.data.mark.markDriver === TriCoreDriverConfig.Spread.label || object.data.mark.markDriver === TriCoreDriverConfig.Price.label) {
+        object.data.alert.shortcutConfig.driver = object.data.mark.markDriver;
       }
     }
     return object;
@@ -379,7 +386,8 @@ export class DTOService {
       alertQuantityRaw: targetAlert.data.quantity,
       alertQuoteDealer: targetAlert.data.dealer,
       alertTradeTrader: targetAlert.data.trader,
-      alertStatus: targetAlert.data.status
+      alertStatus: targetAlert.data.status,
+      shortcutConfig: dto.data.alert.shortcutConfig
     };
   }
 
@@ -1473,6 +1481,24 @@ export class DTOService {
         object.data.countdownPercent = this.utility.round(countdownInMinutes*100/60);
       }
     }
+    return object;
+  }
+
+  public formNumericFilterObject(): DTOs.NumericFilterDTO {
+    const object: DTOs.NumericFilterDTO = {
+      data: {
+        minNumber: null,
+        maxNumber: null
+      },
+      api: {
+        params: null,
+        valueGetter: null,
+        floatingParams: null
+      },
+      state: {
+        isFilled: false
+      }
+    };
     return object;
   }
 }

@@ -29,7 +29,7 @@
     <ul class="sat-securityCard__actionMenu-mainList">
       <button (click)="onClickSendToGraph()" class="sat-securityCard__actionMenu-mainList-graphBtn fal fa-chart-line"></button>
       <button (click)="onClickThumbDown()" class="sat-securityCard__actionMenu-mainList-thumbDownBtn fal fa-thumbs-down"></button>
-      <button (click)="onClickSendToAlertConfig()" class="sat-securityCard__actionMenu-mainList-alertBtn fal fa-bell"></button>
+      <button (click)="onClickOpenShortcutConfig()" class="sat-securityCard__actionMenu-mainList-alertBtn fal fa-bell"></button>
     </ul>
     <ul class="sat-securityCard__actionMenu-minorList sat-securityCard__actionMenu-minorList--bottom">
       <button title="Open In Bloomberg YAS" (click)="onClickOpenSecurityInBloomberg('YAS')" class="sat-securityCard__actionMenu-minorList-btn">YAS</button>
@@ -50,20 +50,30 @@
           <span class="sat-securityCard__alertShortcutConfig-content-title-text-securityName">{{cardData.data.name}}</span>
         </div>
       </div>
-      <div class="sat-securityCard__alertShortcutConfig-content-driver">
-      </div>
+      <span class="sat-securityCard__alertShortcutConfig-content-label">
+        Define Range (Optional)
+      </span>
       <div class="sat-securityCard__alertShortcutConfig-content-level">
-
         <div class="santaBtnGroup sat-securityCard__alertShortcutConfig-content-level-btnGroup">
-          <button class="sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn">Sprd</button>
-          <button class="sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn">Px</button>
+          <button
+            (click)="onSelectShortcutConfigDriver(constants.driver.Spread.label)"
+            [ngClass]="{
+              'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn': true,
+              'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.driver === constants.driver.Spread.label
+            }">Sprd</button>
+          <button
+            (click)="onSelectShortcutConfigDriver(constants.driver.Price.label)"
+            [ngClass]="{
+              'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn': true,
+              'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.driver === constants.driver.Price.label
+            }">Px</button>
         </div>
-        <div class="santaBtnGroup sat-securityCard__alertShortcutConfig-content-level-btnGroup">
-          <button class="sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn"><</button>
-          <button class="sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn">></button>
-        </div>
-        <input
-          type="text">
+        <numeric-filter
+          [filterData]="cardData.data.alert.shortcutConfig.numericFilterDTO"
+          (detectedMinChange)="onShortcutConfigFilterChangeMin($event)"
+          (detectedMaxChange)="onShortcutConfigFilterChangeMax($event)"
+          (detectedClickedClear)="onShortcutConfigFilterClickedClear()"
+        ></numeric-filter>
       </div>
       <div class="sat-securityCard__alertShortcutConfig-content-save">
         <button class="sat-securityCard__alertShortcutConfig-content-save-cta fal fa-check"></button>

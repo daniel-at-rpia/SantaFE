@@ -10,15 +10,19 @@ import {
 import { UtilityService } from 'Core/services/UtilityService';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { SecurityDTO } from 'FEModels/frontend-models.interface';
+import { TriCoreDriverConfig } from 'Core/constants/coreConstants.constant';
 
 @Component({
   selector: 'security-card',
-  templateUrl: './security-card.container.component.html',
-  styleUrls: ['./security-card.container.component.scss'],
+  templateUrl: './security-card.container.html',
+  styleUrls: ['./security-card.container.scss'],
   encapsulation: ViewEncapsulation.Emulated
 })
 export class SecurityCard implements OnInit {
   @Input() cardData: SecurityDTO;
+  constants = {
+    driver: TriCoreDriverConfig
+  };
 
   constructor(
     private utilityService: UtilityService,
@@ -61,12 +65,49 @@ export class SecurityCard implements OnInit {
     );
   }
 
-  public onClickSendToAlertConfig() {
+  public onClickOpenShortcutConfig() {
     this.cardData.state.configAlertState = true;
+  }
+
+  public onSaveShortcutConfig() {
+    if (!!this.cardData.api.onClickSendToAlertConfig) {
+      // this.cardData.api.onClickSendToAlertConfig()
+    }
   }
 
   public onMouseLeaveShortcutConfig() {
     this.cardData.state.configAlertState = false;
     this.cardData.state.isSelected = false;
+  }
+
+  public onShortcutConfigFilterChangeMin(newValue) {
+    this.cardData.data.alert.shortcutConfig.numericFilterDTO.data.minNumber = newValue === "" ? newValue : parseFloat(newValue);
+    this.checkIsFilled();
+  }
+
+  public onShortcutConfigFilterChangeMax(newValue) {
+    this.cardData.data.alert.shortcutConfig.numericFilterDTO.data.maxNumber = newValue === "" ? newValue : parseFloat(newValue);
+    this.checkIsFilled();
+  }
+
+  public onShortcutConfigFilterClickedClear() {
+    this.cardData.data.alert.shortcutConfig.numericFilterDTO.data = {
+      minNumber: "",
+      maxNumber: ""
+    };
+    this.checkIsFilled();
+  }
+
+  public onSelectShortcutConfigDriver(driver: string) {
+    this.cardData.data.alert.shortcutConfig.driver = driver;
+  }
+
+  private checkIsFilled() {
+    const dto = this.cardData.data.alert.shortcutConfig.numericFilterDTO;
+    if (dto.data.minNumber !== "" || dto.data.maxNumber !== "") {
+      dto.state.isFilled = true;
+    } else {
+      dto.state.isFilled = false;
+    }
   }
 }
