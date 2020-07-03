@@ -769,7 +769,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         card: copy,
         groupId: null,
         axeAlertTypes: [this.constants.axeAlertType.normal, this.constants.axeAlertType.marketList],
-        scopes: copy.data.alert.shortcutConfig.side.length > 0 ? copy.data.alert.shortcutConfig.side : [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid],
+        scopes: copy.data.alert.shortcutConfig.side.length > 0 ? copy.data.alert.shortcutConfig.side.map((eachSide) => {return eachSide as AxeAlertScope}) : [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid],
         targetDriver: copy.data.alert.shortcutConfig.driver || null,
         targetRange: copy.data.alert.shortcutConfig.numericFilterDTO,
         isDeleted: false,
