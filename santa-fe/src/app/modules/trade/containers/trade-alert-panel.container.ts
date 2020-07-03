@@ -840,7 +840,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         card: null,
         groupId: rawGroupConfig.alertConfigID,
         axeAlertTypes: WatchType === AxeAlertType.both ? [AxeAlertType.normal, AxeAlertType.marketList] : [WatchType],
-        scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],
+        scopes: targetScope === this.constants.axeAlertScope.both || targetScope === this.constants.axeAlertScope.liquidation ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],  // from now on we will remove "liquidation" as a side option, just to be backward-compatible, in code we treat liquidation the same as "both"
         targetDriver: this.populateWatchDriverFromRawConfig(rawGroupConfig),
         targetRange: this.populateRangeNumberFilterFromRawConfig(rawGroupConfig),
         isDeleted: false,
