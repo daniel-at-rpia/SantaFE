@@ -1198,7 +1198,64 @@ export class DTOService {
     return object;
   }
 
-  public formAlertObject(
+  public formSystemAlertObject(
+    titleTop: string,
+    titleBottom: string,
+    message: string,
+    targetSecurity: DTOs.SecurityDTO
+  ): DTOs.AlertDTO {
+    const momentTime = moment();
+    const validUntilMoment = moment().add(10, 's');
+    const object: DTOs.AlertDTO = {
+      data: {
+        id: this.utility.generateUUID(),
+        type: AlertTypes.system,
+        subType: AlertSubTypes.default,
+        security: null,
+        titleTop: titleTop,
+        titleBottom: titleBottom,
+        message: message,
+        time: momentTime.format(`HH:mm`),
+        titlePin: null,
+        validUntilTime: validUntilMoment.format(),
+        validUntilMoment: validUntilMoment,
+        unixTimestamp: momentTime.unix(),
+        level: null,
+        quantity: null,
+        isUrgent: true,
+        trader: null,
+        dealer: null,
+        status: null,
+        isMarketListTraded: false
+      },
+      api: {
+        onMouseEnterAlert: null,
+        onMouseLeaveAlert: null
+      },
+      state: {
+        isCancelled: false,
+        isNew: true,
+        isSlidedOut: false,
+        isRead: false,
+        isCountdownFinished: true,
+        willBeRemoved: false,
+        hasSecurity: false,
+        hasTitlePin: false,
+        isMarketListVariant: false,
+        isExpired: false
+      }
+    }
+    if (targetSecurity) {
+      object.data.security = this.utility.deepCopy(targetSecurity);
+      object.data.security.state.isInteractionDisabled = true;
+      object.data.security.state.isMultiLineVariant = true;
+      object.data.security.state.isWidthFlexible = true;
+      object.state.hasSecurity = true;
+    }
+    return object;
+  }
+
+  public formAlertObjectFromRawData(
     rawData: BEModels.BEAlertDTO
   ): DTOs.AlertDTO {
     const parsedTitleList = rawData.keyWord.split('|');

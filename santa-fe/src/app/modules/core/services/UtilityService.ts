@@ -464,7 +464,7 @@ export class UtilityService {
         case AlertTypes.tradeAlert:
           return AlertTypes.tradeAlert;
         default:
-          return AlertTypes.default;
+          return AlertTypes.system;
       }
     }
 

@@ -270,11 +270,13 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
               targetEntry.targetDriver = targetSecurity.data.alert.shortcutConfig.driver;
               targetEntry.targetRange = targetSecurity.data.alert.shortcutConfig.numericFilterDTO;
             }
-          }
-          this.saveAxeConfiguration();
-          if (this.state.configureAlert) {
-            // this is necessary because after the save, the newly added config from shortcut would need to receive its groupId popualted from BE, otherwise FE would not be able to distinguish the newly-created and already-saved-to-be alerts from the ones that user can add manually from the keyWord search
-            setTimeout(this.loadAllConfigurations.bind(this), 1000);
+            const systemAlert = this.dtoService.formSystemAlertObject('Axe Watchlist', 'Updated', `Start watching for axe on`, targetSecurity);
+            this.store$.dispatch(new CoreSendNewAlerts([systemAlert]));
+            this.saveAxeConfiguration();
+            if (this.state.configureAlert) {
+              // this is necessary because after the save, the newly added config from shortcut would need to receive its groupId popualted from BE, otherwise FE would not be able to distinguish the newly-created and already-saved-to-be alerts from the ones that user can add manually from the keyWord search
+              setTimeout(this.loadAllConfigurations.bind(this), 1000);
+            }
           }
       });
       this.subscriptions.centerPanelPresetSelectedSub = this.store$.pipe(
@@ -360,20 +362,20 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
                 // ignore, already have it
               } else if (!eachRawAlert.isActive) {
                 // ignore, already expired
-                const newAlert = this.dtoService.formAlertObject(eachRawAlert);
+                const newAlert = this.dtoService.formAlertObjectFromRawData(eachRawAlert);
                 if (newAlert.data.security && newAlert.data.security.data.securityID) {
                   alertTableList.push(newAlert);
                 }
               } else {
                 this.state.receivedActiveAlertsMap[eachRawAlert.alertId] = eachRawAlert.keyWord;
-                const newAlert = this.dtoService.formAlertObject(eachRawAlert);
+                const newAlert = this.dtoService.formAlertObjectFromRawData(eachRawAlert);
                 updateList.push(newAlert);
                 if (newAlert.data.security && newAlert.data.security.data.securityID) {
                   alertTableList.push(newAlert);
                 }
               }
             } else {
-              const newAlert = this.dtoService.formAlertObject(eachRawAlert);
+              const newAlert = this.dtoService.formAlertObjectFromRawData(eachRawAlert);
               if (eachRawAlert.isCancelled) {
                 // cancellation of alerts carries diff meaning depending on the alert type:
                 // axe & mark & inquiry: it could be the trader entered it by mistake, but it could also be the trader changed his mind so he/she cancels the previous legitmate entry. So when such an cancelled alert comes in
