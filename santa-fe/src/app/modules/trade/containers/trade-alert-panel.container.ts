@@ -792,6 +792,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         first(),
         tap((serverReturn: BEAlertConfigurationReturn) => {
           if (!!serverReturn) {
+            this.state.configuration.axe.securityList = [];
             this.state.isAlertPaused = false;
             for (const eachGroupId in serverReturn.Axe) {
               const eachConfiguration = serverReturn.Axe[eachGroupId];
