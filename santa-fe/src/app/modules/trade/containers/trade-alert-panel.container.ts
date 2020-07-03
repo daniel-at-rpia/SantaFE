@@ -257,21 +257,24 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.subscriptions.selectedSecurityForAlertConfigSub = this.store$.pipe(
           select(selectSelectedSecurityForAlertConfig)
         ).subscribe((targetSecurity) => {
-          console.log('test', targetSecurity);
           if (!!targetSecurity) {
-          //   if (!this.state.configureAlert) {
-          //     this.onClickConfigureAlert();
-          //     this.state.configuration.selectedAlert = this.constants.alertTypes.axeAlert;
-          //   }
             const existMatchIndex = this.state.configuration.axe.securityList.findIndex((eachEntry) => {
               return eachEntry.card.data.securityID === targetSecurity.data.securityID;
             });
             if (existMatchIndex < 0) {
               this.addSecurityToWatchList(targetSecurity);
-          //   } else if (this.state.configuration.axe.securityList[existMatchIndex].isDeleted) {
-          //     this.state.configuration.axe.securityList[existMatchIndex].isDeleted = false;
-          //     this.state.configuration.axe.securityList[existMatchIndex].isDisabled = false;
+            } else {
+              const targetEntry = this.state.configuration.axe.securityList[existMatchIndex];
+              targetEntry.isDeleted = false;
+              targetEntry.isDisabled = false;
+              targetEntry.targetDriver = targetSecurity.data.alert.shortcutConfig.driver;
+              targetEntry.targetRange = targetSecurity.data.alert.shortcutConfig.numericFilterDTO;
             }
+          }
+          this.saveAxeConfiguration();
+          if (this.state.configureAlert) {
+            // this is necessary because after the save, the newly added config from shortcut would need to receive its groupId popualted from BE, otherwise FE would not be able to distinguish the newly-created and already-saved-to-be alerts from the ones that user can add manually from the keyWord search
+            setTimeout(this.loadAllConfigurations.bind(this), 1000);
           }
       });
       this.subscriptions.centerPanelPresetSelectedSub = this.store$.pipe(
@@ -314,6 +317,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
         }
       });
+      this.loadAllConfigurations();
     }
 
     public ngOnChanges() {
@@ -737,13 +741,19 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         return eachEntry.card.data.securityID === targetSecurity.data.securityID;
       });
       if (existMatchIndex >= 0) {
+        const targetEntry: TradeAlertConfigurationAxeGroupBlock = config.securityList[existMatchIndex];
         if (config.securityList[existMatchIndex].isDeleted) {
-          config.securityList[existMatchIndex].isDeleted = false;
-          config.securityList[existMatchIndex].isDisabled = false;
-          config.securityList[existMatchIndex].scopes = [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid];
+          targetEntry.isDeleted = false;
+          targetEntry.isDisabled = false;
+          targetEntry.scopes = [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid];
         } else {
-          config.securityList.splice(existMatchIndex, 1);
-        }
+          if (targetEntry.groupId) {
+            // means the card exist in BE
+            targetEntry.isDeleted = true;
+          } else 
+            // means the card was just added on FE
+            config.securityList.splice(existMatchIndex, 1);
+          }
       } else {
         this.addSecurityToWatchList(targetSecurity);
       }

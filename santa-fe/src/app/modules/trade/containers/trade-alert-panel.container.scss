@@ -147,6 +147,7 @@ $tradeAlertAxeAlertConfiguration_singleSecurities_watchList_width: 67%;
             }
           }
           numeric-filter {
+            flex: 0 0 9.25rem;
             margin-left: $spacing_medium;
           }
           &-disableBtn, &-urgentBtn {
