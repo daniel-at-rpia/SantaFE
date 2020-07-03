@@ -226,6 +226,24 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
         text-align: center;
         padding-bottom: $spacing_small;
       }
+      &-side {
+        display: flex;
+        justify-content: center;
+        padding: 0 $spacing_x_small;
+        margin: $spacing_medium 0 0 0;
+        &-btnGroup {
+          flex: 0 0 auto;
+          margin-right: $spacing_medium;
+          &-btn {
+            @extend .santaBtn;
+            &--selected {
+              @include material('none');
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
+          }
+        }
+      }
       &-level {
         @include mix_fixed_div(relative, $z_index_base_item_solid);
         display: flex;

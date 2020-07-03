@@ -214,7 +214,8 @@ export class DTOService {
           alertStatus: null,
           shortcutConfig: {
             numericFilterDTO: this.formNumericFilterObject(),
-            driver: null
+            driver: null,
+            side: []
           }
         },
         tradeHistory: []

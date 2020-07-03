@@ -53,6 +53,26 @@
       <span class="sat-securityCard__alertShortcutConfig-content-label">
         Define Range (Optional)
       </span>
+      <div class="sat-securityCard__alertShortcutConfig-content-side">
+        <div class="sat-securityCard__alertShortcutConfig-content-side-btnGroup santaBtnGroup">
+          <button
+            (click)="onSelectSide(constants.side.bid)"
+            [ngClass]="{
+              'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn': true,
+              'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.side.indexOf(constants.side.bid) >= 0
+            }">
+            Bid
+          </button>
+          <button
+            (click)="onSelectSide(constants.side.ask)"
+            [ngClass]="{
+              'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn': true,
+              'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.side.indexOf(constants.side.ask) >= 0
+            }">
+            Ask
+          </button>
+        </div>
+      </div>
       <div class="sat-securityCard__alertShortcutConfig-content-level">
         <div class="santaBtnGroup sat-securityCard__alertShortcutConfig-content-level-btnGroup">
           <button

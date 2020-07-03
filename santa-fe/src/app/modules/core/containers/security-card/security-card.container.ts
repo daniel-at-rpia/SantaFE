@@ -11,7 +11,7 @@ import { UtilityService } from 'Core/services/UtilityService';
 import { DTOService } from 'Core/services/DTOService';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { SecurityDTO } from 'FEModels/frontend-models.interface';
-import { TriCoreDriverConfig } from 'Core/constants/coreConstants.constant';
+import { TriCoreDriverConfig, AlertSubTypes } from 'Core/constants/coreConstants.constant';
 
 @Component({
   selector: 'security-card',
@@ -22,7 +22,8 @@ import { TriCoreDriverConfig } from 'Core/constants/coreConstants.constant';
 export class SecurityCard implements OnInit {
   @Input() cardData: SecurityDTO;
   constants = {
-    driver: TriCoreDriverConfig
+    driver: TriCoreDriverConfig,
+    side: AlertSubTypes
   };
 
   constructor(
@@ -71,7 +72,8 @@ export class SecurityCard implements OnInit {
     this.cardData.state.configAlertState = true;
     this.cardData.data.alert.shortcutConfig = {
       driver: null,
-      numericFilterDTO: this.dtoService.formNumericFilterObject()
+      numericFilterDTO: this.dtoService.formNumericFilterObject(),
+      side: []
     };
     if (this.cardData.data.mark.markDriver === TriCoreDriverConfig.Spread.label || this.cardData.data.mark.markDriver === TriCoreDriverConfig.Price.label) {
       this.cardData.data.alert.shortcutConfig.driver = this.cardData.data.mark.markDriver;
@@ -111,6 +113,16 @@ export class SecurityCard implements OnInit {
 
   public onSelectShortcutConfigDriver(driver: string) {
     this.cardData.data.alert.shortcutConfig.driver = driver;
+  }
+
+  public onSelectSide(targetSide: string) {
+    if (this.cardData.data.alert.shortcutConfig.side.indexOf(targetSide) >= 0) {
+      this.cardData.data.alert.shortcutConfig.side = this.cardData.data.alert.shortcutConfig.side.filter((eachSide) => {
+        return eachSide !== targetSide;
+      });
+    } else {
+      this.cardData.data.alert.shortcutConfig.side.push(targetSide);
+    }
   }
 
   private checkIsFilled() {

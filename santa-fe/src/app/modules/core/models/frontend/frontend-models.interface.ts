@@ -127,6 +127,7 @@ export interface SecurityDTO extends BasicDTOStructure {
       shortcutConfig: {
         numericFilterDTO: NumericFilterDTO;
         driver: string;
+        side: Array<string>;
       }
     }
     tradeHistory: Array<TradeDTO>;
