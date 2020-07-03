@@ -1,0 +1,104 @@
+<article
+  title="{{cardData.data.name}}"
+  class="sat-securityCard--type-{{cardData.data.ratingLevel}}{{cardData.data.seniorityLevel}}"
+  [ngClass]="{
+    'sat-securityCard': true,
+    'sat-securityCard--tableState': cardData.state.isInteractionDisabled,
+    'sat-securityCard--thumbDownDisabled': cardData.state.isInteractionThumbDownDisabled,
+    'sat-securityCard--stencilState': cardData.state.isStencil,
+    'sat-securityCard--selectedState': cardData.state.isSelected,
+    'sat-securityCard--multiLineVariant': cardData.state.isMultiLineVariant,
+    'sat-securityCard--flexibleWidthVariant': cardData.state.isWidthFlexible,
+    'sat-securityCard--atListCeilingVariant': cardData.state.isAtListCeiling,
+    'sat-securityCard--primaryActionDisabledState': cardData.state.isActionMenuPrimaryActionsDisabled,
+    'sat-securityCard--minorActionDisabledState': cardData.state.isActionMenuMinorActionsDisabled,
+    'sat-securityCard--slimVariant': cardData.state.isSlimVariant && !cardData.isMultiLineVariant,
+    'sat-securityCard--configAlertState': cardData.state.configAlertState
+  }">
+  <section class="sat-securityCard__name" (click)="onClickCard()">
+    <span class="sat-securityCard__name-text">{{cardData.data.name}}</span>
+  </section>
+  <section class="sat-securityCard__rating" (click)="onClickCard()">
+    <span class="sat-securityCard__rating-text">{{cardData.data.ratingValue}}</span>
+  </section>
+  <section class="sat-securityCard__actionMenu">
+    <ul class="sat-securityCard__actionMenu-minorList sat-securityCard__actionMenu-minorList--top">
+      <button title="Open In Bloomberg DES" (click)="onClickOpenSecurityInBloomberg('DES')" class="sat-securityCard__actionMenu-minorList-btn">DES</button>
+      <button title="Open In Bloomberg QMGR" (click)="onClickOpenSecurityInBloomberg('QMGR')" class="sat-securityCard__actionMenu-minorList-btn">QMGR</button>
+    </ul>
+    <ul class="sat-securityCard__actionMenu-mainList">
+      <button (click)="onClickSendToGraph()" class="sat-securityCard__actionMenu-mainList-graphBtn fal fa-chart-line"></button>
+      <button (click)="onClickThumbDown()" class="sat-securityCard__actionMenu-mainList-thumbDownBtn fal fa-thumbs-down"></button>
+      <button (click)="onClickOpenShortcutConfig()" class="sat-securityCard__actionMenu-mainList-alertBtn fal fa-bell"></button>
+    </ul>
+    <ul class="sat-securityCard__actionMenu-minorList sat-securityCard__actionMenu-minorList--bottom">
+      <button title="Open In Bloomberg YAS" (click)="onClickOpenSecurityInBloomberg('YAS')" class="sat-securityCard__actionMenu-minorList-btn">YAS</button>
+      <button title="Open In Bloomberg TDH" (click)="onClickOpenSecurityInBloomberg('TDH')" class="sat-securityCard__actionMenu-minorList-btn">TDH</button>
+    </ul>
+  </section>
+  <section (mouseleave)="onMouseLeaveShortcutConfig()" class="sat-securityCard__alertShortcutConfig">
+    <div class="sat-securityCard__alertShortcutConfig-content">
+      <!-- <div class="sat-securityCard__alertShortcutConfig-content-alertTypePin"> -->
+        <!-- <i class="sat-securityCard__alertShortcutConfig-content-alertTypePin-icon fas fa-axe"></i> -->
+      <!-- </div> -->
+      <div class="sat-securityCard__alertShortcutConfig-content-title">
+        <div class="sat-securityCard__alertShortcutConfig-content-title-alertType">
+          <i class="sat-securityCard__alertShortcutConfig-content-title-alertType-icon fas fa-axe"></i>
+        </div>
+        <div class="sat-securityCard__alertShortcutConfig-content-title-text">
+          <span class="sat-securityCard__alertShortcutConfig-content-title-text-label">Watch Axe On</span>
+          <span class="sat-securityCard__alertShortcutConfig-content-title-text-securityName">{{cardData.data.name}}</span>
+        </div>
+      </div>
+      <span class="sat-securityCard__alertShortcutConfig-content-label">
+        Define Range (Optional)
+      </span>
+      <div class="sat-securityCard__alertShortcutConfig-content-side">
+        <div class="sat-securityCard__alertShortcutConfig-content-side-btnGroup santaBtnGroup">
+          <button
+            (click)="onSelectSide(constants.side.bid)"
+            [ngClass]="{
+              'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn': true,
+              'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.side.indexOf(constants.side.bid) >= 0
+            }">
+            Bid
+          </button>
+          <button
+            (click)="onSelectSide(constants.side.ask)"
+            [ngClass]="{
+              'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn': true,
+              'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.side.indexOf(constants.side.ask) >= 0
+            }">
+            Ask
+          </button>
+        </div>
+      </div>
+      <div class="sat-securityCard__alertShortcutConfig-content-level">
+        <div class="santaBtnGroup sat-securityCard__alertShortcutConfig-content-level-btnGroup">
+          <button
+            (click)="onSelectShortcutConfigDriver(constants.driver.Spread.label)"
+            [ngClass]="{
+              'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn': true,
+              'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.driver === constants.driver.Spread.label
+            }">Sprd</button>
+          <button
+            (click)="onSelectShortcutConfigDriver(constants.driver.Price.label)"
+            [ngClass]="{
+              'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn': true,
+              'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.driver === constants.driver.Price.label
+            }">Px</button>
+        </div>
+        <numeric-filter
+          [filterData]="cardData.data.alert.shortcutConfig.numericFilterDTO"
+          (detectedMinChange)="onShortcutConfigFilterChangeMin($event)"
+          (detectedMaxChange)="onShortcutConfigFilterChangeMax($event)"
+          (detectedClickedClear)="onShortcutConfigFilterClickedClear()"
+        ></numeric-filter>
+      </div>
+      <div class="sat-securityCard__alertShortcutConfig-content-save">
+        <button (click)="onSaveShortcutConfig()" class="sat-securityCard__alertShortcutConfig-content-save-cta fal fa-check"></button>
+        <div class="sat-securityCard__alertShortcutConfig-content-save-borderMask"></div>
+      </div>
+    </div>
+  </section>
+</article>

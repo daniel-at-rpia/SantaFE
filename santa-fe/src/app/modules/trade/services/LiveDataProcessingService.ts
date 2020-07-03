@@ -12,11 +12,7 @@
       SearchShortcutDTO,
       AlertDTO
     } from 'FEModels/frontend-models.interface';
-    import {
-      AlertDTOMap,
-      LiveDataDiffingResult,
-      ClickedOpenSecurityInBloombergEmitterParams
-    } from 'FEModels/frontend-adhoc-packages.interface';
+    import { AlertDTOMap, LiveDataDiffingResult } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       BEPortfolioDTO,
       BESecurityDTO,
@@ -44,7 +40,6 @@ export class LiveDataProcessingService {
     selectedDriver: string,
     serverReturn: BEFetchAllTradeDataReturn,
     sendToGraphCallback: (card: SecurityDTO) => void,
-    openSecurityInBloombergCallback: (params: ClickedOpenSecurityInBloombergEmitterParams) => void,
     sendToAlertConfigCallback: (card: SecurityDTO) => void
   ): Array<SecurityTableRowDTO> {
     const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
@@ -56,7 +51,6 @@ export class LiveDataProcessingService {
       const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false, false, selectedDriver);
       newSecurity.state.isInteractionThumbDownDisabled = true;
       newSecurity.api.onClickSendToGraph = sendToGraphCallback;
-      newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
       newSecurity.api.onClickSendToAlertConfig = sendToAlertConfigCallback;
       if (!!rawSecurityDTOMap[eachKey].positions) {
         rawSecurityDTOMap[eachKey].positions.forEach((eachPortfolio: BEPortfolioDTO) => {
@@ -90,7 +84,6 @@ export class LiveDataProcessingService {
     selectedDriver: string,
     serverReturn: BEFetchAllTradeDataReturn,
     sendToGraphCallback: (card: SecurityDTO) => void,
-    openSecurityInBloombergCallback: (params: ClickedOpenSecurityInBloombergEmitterParams) => void,
     sendToAlertConfigCallback: (card: SecurityDTO) => void
   ): Array<SecurityTableRowDTO> {
     const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
@@ -105,7 +98,6 @@ export class LiveDataProcessingService {
           const newSecurity = this.dtoService.formSecurityCardObject(targetSecurityId, newBESecurity, false, true, selectedDriver);
           newSecurity.state.isInteractionThumbDownDisabled = true;
           newSecurity.api.onClickSendToGraph = sendToGraphCallback;
-          newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
           newSecurity.api.onClickSendToAlertConfig = sendToAlertConfigCallback;
           if (!!rawSecurityDTOMap[targetSecurityId].positions) {
             rawSecurityDTOMap[targetSecurityId].positions.forEach((eachPortfolio: BEPortfolioDTO) => {

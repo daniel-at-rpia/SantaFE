@@ -214,7 +214,7 @@ export class SantaTable implements OnInit, OnChanges {
       // IMPORTANT: If this logic ever needs to be modified, please test all scenarios on Daniel's notebook's page 10
       if (
         (!targetCard.state.isSelected && !storedSelectedCard) ||
-        (targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID) ||
+        (targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID && !targetCard.state.configAlertState) ||
         (!targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID !== targetCard.data.securityID)
       ) {
         // this function gets triggered both when parent and child are being clicked, so this if condition is to make sure only execute the logic when it is the parent that is clicked
@@ -264,7 +264,7 @@ export class SantaTable implements OnInit, OnChanges {
           this.tableData.state.selectedSecurityCard.state.isSelected = false;
           this.updateRowSecurityCardInAgGrid(this.tableData.state.selectedSecurityCard);
           this.tableData.state.selectedSecurityCard = targetCard;
-        } else if (!!storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID) {
+        } else if (!!storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID && !targetCard.state.configAlertState) {
           // scenario: there is already a card selected, and it is the same card user is selecting again
           this.tableData.state.selectedSecurityCard = null;
         }

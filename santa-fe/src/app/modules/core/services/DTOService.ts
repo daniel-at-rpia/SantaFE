@@ -55,16 +55,38 @@ export class DTOService {
   ): DTOs.SecurityDTO {
     // !isStencil && console.log('rawData', rawData.name, rawData);
     const object:DTOs.SecurityDTO = {
-      data: {
+      data: null,
+      api: {
+        onClickCard: null,
+        onClickSendToGraph: null,
+        onClickThumbDown: null,
+        onClickSendToAlertConfig: null
+      },
+      state: {
+        isSelected: false,
+        isStencil: isStencil,
+        isInteractionDisabled: false,
+        isInteractionThumbDownDisabled: false,
+        isMultiLineVariant: false,
+        isWidthFlexible: false,
+        isAtListCeiling: false,
+        isActionMenuPrimaryActionsDisabled: false,
+        isActionMenuMinorActionsDisabled: false,
+        isSlimVariant: isSlimVariant,
+        configAlertState: false
+      }
+    };
+    try {
+      object.data = {
         securityID: !isStencil ? rawData.securityIdentifier : null,
         globalIdentifier: !isStencil ? rawData.globalIdentifier : null,
         name: !isStencil ? rawData.name : 'PLACEHOLDER',
         ticker: !isStencil ? rawData.ticker : null,
         obligorName: !isStencil ? rawData.obligorName : null,
         isGovt: !isStencil ? rawData.isGovt : false,
-        ratingLevel: !isStencil && rawData.metrics ? this.utility.mapRatings(rawData.metrics.Default.ratingNoNotch) : 0,
-        ratingValue: !isStencil && rawData.metrics ? rawData.metrics.Default.ratingNoNotch : null,
-        ratingBucket: !isStencil && rawData.metrics ? rawData.metrics.Default.ratingBucket : null,
+        ratingLevel: !isStencil && rawData.metrics && rawData.metrics.Default ? this.utility.mapRatings(rawData.metrics.Default.ratingNoNotch) : 0,
+        ratingValue: !isStencil && rawData.metrics && rawData.metrics.Default ? rawData.metrics.Default.ratingNoNotch : null,
+        ratingBucket: !isStencil && rawData.metrics && rawData.metrics.Default ? rawData.metrics.Default.ratingBucket : null,
         seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.genericSeniority) : 5,
         currency: !isStencil ? rawData.ccy : null,
         country: !isStencil ? rawData.country : null,
@@ -189,54 +211,45 @@ export class DTOService {
           alertQuantityRaw: null,
           alertQuoteDealer: null,
           alertTradeTrader: null,
-          alertStatus: null
+          alertStatus: null,
+          shortcutConfig: {
+            numericFilterDTO: this.formNumericFilterObject(),
+            driver: null,
+            side: []
+          }
         },
         tradeHistory: []
-      },
-      api: {
-        onClickCard: null,
-        onClickSendToGraph: null,
-        onClickThumbDown: null,
-        onClickOpenSecurityInBloomberg: null,
-        onClickSendToAlertConfig: null
-      },
-      state: {
-        isSelected: false,
-        isStencil: isStencil,
-        isInteractionDisabled: false,
-        isInteractionThumbDownDisabled: false,
-        isMultiLineVariant: false,
-        isWidthFlexible: false,
-        isAtListCeiling: false,
-        isActionMenuPrimaryActionsDisabled: false,
-        isActionMenuMinorActionsDisabled: false,
-        isSlimVariant: isSlimVariant
       }
-    };
-    if (!isStencil) {
-      // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
-      if ((!!currentSelectedMetric && !!TriCoreDriverConfig[object.data.mark.markDriver] && object.data.mark.markDriver === currentSelectedMetric) || currentSelectedMetric === DEFAULT_DRIVER_IDENTIFIER){
-        let targetDriver = object.data.mark.markDriver;
-        if (currentSelectedMetric === DEFAULT_DRIVER_IDENTIFIER) {
-          targetDriver = this.utility.findSecurityTargetDefaultTriCoreDriver(object);
-        }
-        object.data.mark.mark = this.utility.parseTriCoreDriverNumber(object.data.mark.markRaw, targetDriver, object, true) as string;
-      } else {
-        object.data.mark.mark = null;
-        object.data.mark.markRaw = null;
-      }
-      if (object.data.seniorityLevel < 5 && object.data.seniorityLevel > 0 && rawData.paymentRank) {
-        object.data.seniority = `${object.data.seniorityLevel} - ${rawData.paymentRank}`;
-      }
-      if (!!object.data.strategyList && object.data.strategyList.length > 0) {
-        object.data.strategyList.forEach((eachStrategy: string, index) => {
-          if (index === 0) {
-            object.data.strategyFirm = eachStrategy;
-          } else {
-            object.data.strategyFirm = `${object.data.strategyFirm} & ${eachStrategy}`;
+      if (!isStencil) {
+        // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
+        if ((!!currentSelectedMetric && !!TriCoreDriverConfig[object.data.mark.markDriver] && object.data.mark.markDriver === currentSelectedMetric) || currentSelectedMetric === DEFAULT_DRIVER_IDENTIFIER){
+          let targetDriver = object.data.mark.markDriver;
+          if (currentSelectedMetric === DEFAULT_DRIVER_IDENTIFIER) {
+            targetDriver = this.utility.findSecurityTargetDefaultTriCoreDriver(object);
           }
-        });
+          object.data.mark.mark = this.utility.parseTriCoreDriverNumber(object.data.mark.markRaw, targetDriver, object, true) as string;
+        } else {
+          object.data.mark.mark = null;
+          object.data.mark.markRaw = null;
+        }
+        if (object.data.seniorityLevel < 5 && object.data.seniorityLevel > 0 && rawData.paymentRank) {
+          object.data.seniority = `${object.data.seniorityLevel} - ${rawData.paymentRank}`;
+        }
+        if (!!object.data.strategyList && object.data.strategyList.length > 0) {
+          object.data.strategyList.forEach((eachStrategy: string, index) => {
+            if (index === 0) {
+              object.data.strategyFirm = eachStrategy;
+            } else {
+              object.data.strategyFirm = `${object.data.strategyFirm} & ${eachStrategy}`;
+            }
+          });
+        }
+        if (object.data.mark.markDriver === TriCoreDriverConfig.Spread.label || object.data.mark.markDriver === TriCoreDriverConfig.Price.label) {
+          object.data.alert.shortcutConfig.driver = object.data.mark.markDriver;
+        }
       }
+    } catch (err) {
+      console.warn('Data issue on security', object, err);
     }
     return object;
   }
@@ -379,7 +392,8 @@ export class DTOService {
       alertQuantityRaw: targetAlert.data.quantity,
       alertQuoteDealer: targetAlert.data.dealer,
       alertTradeTrader: targetAlert.data.trader,
-      alertStatus: targetAlert.data.status
+      alertStatus: targetAlert.data.status,
+      shortcutConfig: dto.data.alert.shortcutConfig
     };
   }
 
@@ -1184,7 +1198,64 @@ export class DTOService {
     return object;
   }
 
-  public formAlertObject(
+  public formSystemAlertObject(
+    titleTop: string,
+    titleBottom: string,
+    message: string,
+    targetSecurity: DTOs.SecurityDTO
+  ): DTOs.AlertDTO {
+    const momentTime = moment();
+    const validUntilMoment = moment().add(10, 's');
+    const object: DTOs.AlertDTO = {
+      data: {
+        id: this.utility.generateUUID(),
+        type: AlertTypes.system,
+        subType: AlertSubTypes.default,
+        security: null,
+        titleTop: titleTop,
+        titleBottom: titleBottom,
+        message: message,
+        time: momentTime.format(`HH:mm`),
+        titlePin: null,
+        validUntilTime: validUntilMoment.format(),
+        validUntilMoment: validUntilMoment,
+        unixTimestamp: momentTime.unix(),
+        level: null,
+        quantity: null,
+        isUrgent: true,
+        trader: null,
+        dealer: null,
+        status: null,
+        isMarketListTraded: false
+      },
+      api: {
+        onMouseEnterAlert: null,
+        onMouseLeaveAlert: null
+      },
+      state: {
+        isCancelled: false,
+        isNew: true,
+        isSlidedOut: false,
+        isRead: false,
+        isCountdownFinished: true,
+        willBeRemoved: false,
+        hasSecurity: false,
+        hasTitlePin: false,
+        isMarketListVariant: false,
+        isExpired: false
+      }
+    }
+    if (targetSecurity) {
+      object.data.security = this.utility.deepCopy(targetSecurity);
+      object.data.security.state.isInteractionDisabled = true;
+      object.data.security.state.isMultiLineVariant = true;
+      object.data.security.state.isWidthFlexible = true;
+      object.state.hasSecurity = true;
+    }
+    return object;
+  }
+
+  public formAlertObjectFromRawData(
     rawData: BEModels.BEAlertDTO
   ): DTOs.AlertDTO {
     const parsedTitleList = rawData.keyWord.split('|');
@@ -1473,6 +1544,24 @@ export class DTOService {
         object.data.countdownPercent = this.utility.round(countdownInMinutes*100/60);
       }
     }
+    return object;
+  }
+
+  public formNumericFilterObject(): DTOs.NumericFilterDTO {
+    const object: DTOs.NumericFilterDTO = {
+      data: {
+        minNumber: null,
+        maxNumber: null
+      },
+      api: {
+        params: null,
+        valueGetter: null,
+        floatingParams: null
+      },
+      state: {
+        isFilled: false
+      }
+    };
     return object;
   }
 }

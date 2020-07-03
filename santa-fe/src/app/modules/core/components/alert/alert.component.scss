@@ -67,6 +67,10 @@ $alert_type_size: $iconButton_size_regular;
           &--trade {
             background-color: $tradeTradeAlertColor;
           }
+          &--system {
+            background-color: $alert_default_color;
+            display: flex;
+          }
         }
         &-innerText{
           display: none;
@@ -115,12 +119,12 @@ $alert_type_size: $iconButton_size_regular;
         justify-content: center;
         align-items: center;
         background-color: $color_white;
-        padding: $spacing_x_small $spacing_small;
+        padding: $spacing_xx_small $spacing_small;
         margin: 0 $spacing_x_small;
         &-text {
           @include mix_text_overflow_multi_line(1);
           font-weight: bold;
-          line-height: $line_height_minimum;
+          line-height: $line_height_small;
           color: $alert_default_color;
           user-select: none;
           word-break: break-all;
@@ -293,8 +297,13 @@ $alert_type_size: $iconButton_size_regular;
   &--typeAxeVariant {
     #{$alertBlockName} {
       &__thumbnail {
-        &-type-circle-inner--axe {
-          display: flex;
+        &-type-circle-inner {
+          &--axe {
+            display: flex;
+          }
+          &--system {
+            display: none;
+          }
         }
       }
     }
@@ -302,8 +311,13 @@ $alert_type_size: $iconButton_size_regular;
   &--typeMarkVariant {
     #{$alertBlockName} {
       &__thumbnail {
-        &-type-circle-inner--mark {
-          display: flex;
+        &-type-circle-inner {
+          &--mark {
+            display: flex;
+          }
+          &--system {
+            display: none;
+          }
         }
       }
     }
@@ -311,8 +325,13 @@ $alert_type_size: $iconButton_size_regular;
   &--typeTradeVariant {
     #{$alertBlockName} {
       &__thumbnail {
-        &-type-circle-inner--trade {
-          display: flex;
+        &-type-circle-inner {
+          &--trade {
+            display: flex;
+          }
+          &--system {
+            display: none;
+          }
         }
       }
     }

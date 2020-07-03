@@ -20,17 +20,14 @@
       AlertCountSummaryDTO
     } from 'FEModels/frontend-models.interface';
     import { TableFetchResultBlock } from 'FEModels/frontend-blocks.interface';
-    import {PayloadGetTradeFullData} from 'BEModels/backend-payloads.interface';
+    import { PayloadGetTradeFullData } from 'BEModels/backend-payloads.interface';
     import {
       BEPortfolioDTO,
       BESecurityDTO,
       BEBestQuoteDTO,
       BEFetchAllTradeDataReturn
     } from 'BEModels/backend-models.interface';
-    import {
-      DefinitionConfiguratorEmitterParams,
-      ClickedOpenSecurityInBloombergEmitterParams
-    } from 'FEModels/frontend-adhoc-packages.interface';
+    import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
 
     import {
       TriCoreDriverConfig,
@@ -362,17 +359,6 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  public onClickOpenSecurityInBloomberg(pack: ClickedOpenSecurityInBloombergEmitterParams) {
-    const url = `bbg://securities/${pack.targetSecurity.data.globalIdentifier}%20${pack.yellowCard}/${pack.targetBBGModule}`;
-    window.open(url);
-    this.restfulCommService.logEngagement(
-      EngagementActionList.bloombergRedict,
-      pack.targetSecurity.data.securityID,
-      `BBG - ${pack.targetBBGModule}`,
-      'Trade - Center Panel'
-    );
-  }
-
   public openLinkForCertificate() {
     window.open('https://rpiadev01:1225/portfolio/get-credit-positions');
   }
@@ -505,7 +491,6 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       this.state.filters.quickFilters.driverType,
       serverReturn,
       this.onSelectSecurityForAnalysis.bind(this),
-      this.onClickOpenSecurityInBloomberg.bind(this),
       this.onSelectSecurityForAlertConfig.bind(this)
     );
     this.calculateQuantComparerWidthAndHeight();

@@ -333,17 +333,19 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     isFromPresent: boolean
   ) {
     if (!!targetAlert) {
-      const payload: PayloadSetAlertsToInactive = {
-        alertIds: [targetAlert.data.id]
-      };
-      this.restfulCommService.callAPI(this.restfulCommService.apiMap.readAlert, {req: 'POST'}, payload).pipe(
-        first(),
-        tap((serverReturn) => {}),
-        catchError(err => {
-          console.error(`${this.restfulCommService.apiMap.readAlert} failed`, err);
-          return of('error')
-        })
-      ).subscribe();
+      if (targetAlert.data.type !== AlertTypes.system) {
+        const payload: PayloadSetAlertsToInactive = {
+          alertIds: [targetAlert.data.id]
+        };
+        this.restfulCommService.callAPI(this.restfulCommService.apiMap.readAlert, {req: 'POST'}, payload).pipe(
+          first(),
+          tap((serverReturn) => {}),
+          catchError(err => {
+            console.error(`${this.restfulCommService.apiMap.readAlert} failed`, err);
+            return of('error')
+          })
+        ).subscribe();
+      }
       if (isFromPresent) {
         const indexOfTarget = this.state.presentList.findIndex((eachAlert) => {
           return eachAlert.data.id === targetAlert.data.id;

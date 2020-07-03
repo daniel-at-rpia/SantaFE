@@ -14,7 +14,7 @@
       SecurityDefinitionDTO
     } from 'FEModels/frontend-models.interface';
     import { TradeMarketAnalysisPanelState } from 'FEModels/frontend-page-states.interface';
-    import { LilMarketGraphSeriesDataPack, ClickedOpenSecurityInBloombergEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
+    import { LilMarketGraphSeriesDataPack } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       BEHistoricalSummaryDTO,
       BEHistoricalSummaryOverviewDTO,
@@ -236,17 +236,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
       'n/a',
       'Trade - Lil Market Panel'
     );
-  }
-
-  public onClickOpenSecurityInBloomberg(pack: ClickedOpenSecurityInBloombergEmitterParams) {
-    this.restfulCommService.logEngagement(
-      EngagementActionList.bloombergRedict,
-      pack.targetSecurity.data.securityID,
-      `BBG - ${pack.targetBBGModule}`,
-      'Trade - Lil Market Panel'
-    );
-    const url = `bbg://securities/${pack.targetSecurity.data.globalIdentifier}%20${pack.yellowCard}/${pack.targetBBGModule}`;
-    window.open(url);
   }
 
   private onSecuritySelected(targetSecurity: SecurityDTO) {
@@ -481,7 +470,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     targetSecurity.api.onClickCard = this.onSelectSecurityCardInPresentList.bind(this);
     targetSecurity.api.onClickThumbDown = this.onClickSecurityCardThumbDown.bind(this);
     targetSecurity.api.onClickSendToGraph = this.onClickSecurityCardSendToGraph.bind(this);
-    targetSecurity.api.onClickOpenSecurityInBloomberg = this.onClickOpenSecurityInBloomberg.bind(this);
     targetSecurity.api.onClickSendToAlertConfig = this.onClickSecurityCardSentToAlertConfig.bind(this);
   }
 

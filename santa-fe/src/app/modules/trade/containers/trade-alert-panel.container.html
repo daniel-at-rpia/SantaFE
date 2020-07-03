@@ -154,14 +154,6 @@
                 }">
                 <span>Ask</span>
               </button>
-              <button
-                (click)="onSelectAxeWatchlistSide(constants.axeAlertScope.liquidation, state.configuration.axe.myGroup)"
-                [ngClass]="{
-                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn': true,
-                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': state.configuration.axe.myGroup.scopes.indexOf(constants.axeAlertScope.liquidation) >= 0
-                }">
-                <span>Liquidation</span>
-              </button>
             </div>
             <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup">
               <button
@@ -240,14 +232,6 @@
                     }">
                     <span>Ask</span>
                   </button>
-                  <button
-                    (click)="onSelectAxeWatchlistSide(constants.axeAlertScope.liquidation, eachSecurityBlock)"
-                    [ngClass]="{
-                      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn': true,
-                      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.scopes.indexOf(constants.axeAlertScope.liquidation) >= 0
-                    }">
-                    <span>Liquidation</span>
-                  </button>
                 </div>
                 <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup">
                   <button
@@ -267,6 +251,32 @@
                       'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.axeAlertTypes.indexOf(constants.axeAlertType.marketList) >= 0
                     }">
                     <span>Inquiry</span>
+                  </button>
+                </div>
+                <numeric-filter
+                  [filterData]="eachSecurityBlock.targetRange"
+                  (detectedMinChange)="onChangeAxeRangeMin($event, eachSecurityBlock)"
+                  (detectedMaxChange)="onChangeAxeRangeMax($event, eachSecurityBlock)"
+                  (detectedClickedClear)="onClickedClearRange(eachSecurityBlock)"
+                ></numeric-filter>
+                <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup">
+                  <button
+                    title="Numeric Range Driver"
+                    (click)="onSelectAxeRangeDriver(eachSecurityBlock, constants.driver.Spread.label)"
+                    [ngClass]="{
+                      'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn': true,
+                      'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': eachSecurityBlock.targetDriver === constants.driver.Spread.label
+                    }">
+                    <span>Sprd</span>
+                  </button>
+                  <button
+                    title="Numeric Range Driver"
+                    (click)="onSelectAxeRangeDriver(eachSecurityBlock, constants.driver.Price.label)"
+                    [ngClass]="{
+                      'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn': true,
+                      'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': eachSecurityBlock.targetDriver === constants.driver.Price.label
+                    }">
+                    <span>Px</span>
                   </button>
                 </div>
                 <button title="Urgent" (click)="onTogglePriority(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-urgentBtn santaBtn--iconOnly fal fa-exclamation"></button>

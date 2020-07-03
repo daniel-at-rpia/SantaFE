@@ -13,7 +13,7 @@ import { AgGridMiddleLayerService } from 'Core/services/AgGridMiddleLayerService
 
 import { AgGridModule } from 'ag-grid-angular';
 
-import { SecurityCard } from 'Core/components/security-card/security-card.component';
+import { SecurityCard } from 'Core/containers/security-card/security-card.container';
 import { QuantitativeComparer } from 'Core/components/quantitative-comparer/quantitative-comparer.component';
 import { SecurityQuote } from 'Core/components/security-quote/security-quote.component';
 import { SecurityTableRow } from 'Core/components/security-table-row/security-table-row.component';
@@ -92,7 +92,8 @@ import { SantaTableAlertStatusCell } from 'Core/components/santa-table-alert-sta
         SecurityDefinitionConfigurator,
         SearchShortcut,
         GlobalAlert,
-        Alert
+        Alert,
+        NumericFilter
     ]
 })
 export class CoreModule { }
