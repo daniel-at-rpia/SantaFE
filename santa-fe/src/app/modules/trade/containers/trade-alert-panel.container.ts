@@ -17,7 +17,8 @@
       SecurityTableDTO,
       SecurityDTO,
       AlertDTO,
-      SecurityTableRowDTO
+      SecurityTableRowDTO,
+      NumericFilterDTO
     } from 'FEModels/frontend-models.interface';
     import { TableFetchResultBlock, TradeAlertConfigurationAxeGroupBlock } from 'FEModels/frontend-blocks.interface';
     import {
@@ -257,21 +258,21 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           select(selectSelectedSecurityForAlertConfig)
         ).subscribe((targetSecurity) => {
           console.log('test', targetSecurity);
-          // if (!!targetSecurity) {
+          if (!!targetSecurity) {
           //   if (!this.state.configureAlert) {
           //     this.onClickConfigureAlert();
           //     this.state.configuration.selectedAlert = this.constants.alertTypes.axeAlert;
           //   }
-          //   const existMatchIndex = this.state.configuration.axe.securityList.findIndex((eachEntry) => {
-          //     return eachEntry.card.data.securityID === targetSecurity.data.securityID;
-          //   });
-          //   if (existMatchIndex < 0) {
-          //     this.addSecurityToWatchList(targetSecurity);
+            const existMatchIndex = this.state.configuration.axe.securityList.findIndex((eachEntry) => {
+              return eachEntry.card.data.securityID === targetSecurity.data.securityID;
+            });
+            if (existMatchIndex < 0) {
+              this.addSecurityToWatchList(targetSecurity);
           //   } else if (this.state.configuration.axe.securityList[existMatchIndex].isDeleted) {
           //     this.state.configuration.axe.securityList[existMatchIndex].isDeleted = false;
           //     this.state.configuration.axe.securityList[existMatchIndex].isDisabled = false;
-          //   }
-          // }
+            }
+          }
       });
       this.subscriptions.centerPanelPresetSelectedSub = this.store$.pipe(
         select(selectPresetSelected)
@@ -748,7 +749,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       }
     }
 
-    private addSecurityToWatchList(targetSecurity) {
+    private addSecurityToWatchList(targetSecurity: SecurityDTO) {
       const targetScope = this.constants.axeAlertScope.both;
       const copy:SecurityDTO = this.utilityService.deepCopy(targetSecurity);
       copy.state.isSelected = false;
@@ -760,8 +761,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         groupId: null,
         axeAlertTypes: [this.constants.axeAlertType.normal, this.constants.axeAlertType.marketList],
         scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],
-        targetDriver: null,
-        targetRange: this.dtoService.formNumericFilterObject(),
+        targetDriver: copy.data.alert.shortcutConfig.driver || null,
+        targetRange: copy.data.alert.shortcutConfig.numericFilterDTO,
         isDeleted: false,
         isDisabled: false,
         isUrgent: true
@@ -830,12 +831,13 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         groupId: rawGroupConfig.alertConfigID,
         axeAlertTypes: WatchType === AxeAlertType.both ? [AxeAlertType.normal, AxeAlertType.marketList] : [WatchType],
         scopes: targetScope === this.constants.axeAlertScope.both ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],
-        targetDriver: null,
-        targetRange: this.dtoService.formNumericFilterObject(),
+        targetDriver: this.populateWatchDriverFromRawConfig(rawGroupConfig),
+        targetRange: this.populateRangeNumberFilterFromRawConfig(rawGroupConfig),
         isDeleted: false,
         isDisabled: !rawGroupConfig.isEnabled,
         isUrgent: rawGroupConfig.isUrgent
       };
+      this.checkIsFilled(newEntry);
       this.state.configuration.axe.securityList.unshift(newEntry);
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSecurityDTOs, {req: 'POST'}, payload).pipe(
         first(),
@@ -925,6 +927,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             },
             isUrgent: eachEntry.isUrgent
           };
+          this.appendRangeToAxeConfigPayloads(payload, eachEntry);
           payload.groupFilters.SecurityIdentifier = [eachEntry.card.data.securityID];
           if (!!eachEntry.groupId) {
             payload.alertConfigID = eachEntry.groupId;
@@ -1040,6 +1043,51 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         targetBlock.targetRange.state.isFilled = true;
       } else {
         targetBlock.targetRange.state.isFilled = false;
+      }
+    }
+
+    private populateWatchDriverFromRawConfig(rawGroupConfig: BEAlertConfigurationDTO): string {
+      if (rawGroupConfig.parameters.UpperSpreadThreshold || rawGroupConfig.parameters.LowerSpreadThreshold) {
+        return this.constants.driver.Spread.label;
+      } else if (rawGroupConfig.parameters.UpperPriceThreshold || rawGroupConfig.parameters.LowerPriceThreshold) {
+        return this.constants.driver.Price.label;
+      } else {
+        return null;
+      }
+    }
+
+    private populateRangeNumberFilterFromRawConfig(rawGroupConfig: BEAlertConfigurationDTO): NumericFilterDTO {
+      const dto = this.dtoService.formNumericFilterObject();
+      if (rawGroupConfig.parameters.UpperSpreadThreshold || rawGroupConfig.parameters.LowerSpreadThreshold) {
+        dto.data.minNumber = rawGroupConfig.parameters.LowerSpreadThreshold;
+        dto.data.maxNumber = rawGroupConfig.parameters.UpperSpreadThreshold;
+      } else if (rawGroupConfig.parameters.UpperPriceThreshold || rawGroupConfig.parameters.LowerPriceThreshold) {
+        dto.data.minNumber = rawGroupConfig.parameters.LowerPriceThreshold;
+        dto.data.maxNumber = rawGroupConfig.parameters.UpperPriceThreshold;
+      }
+      return dto;
+    }
+
+    private appendRangeToAxeConfigPayloads(
+      payload: PayloadUpdateSingleAlertConfig,
+      targetBlock: TradeAlertConfigurationAxeGroupBlock
+    ) {
+      if (targetBlock && targetBlock.targetDriver && targetBlock.targetRange && targetBlock.targetRange.data) {
+        if (targetBlock.targetDriver === this.constants.driver.Spread.label) {
+          if (targetBlock.targetRange.data.maxNumber) {
+            payload.parameters.UpperSpreadThreshold = parseFloat(targetBlock.targetRange.data.maxNumber as string);
+          }
+          if (targetBlock.targetRange.data.minNumber) {
+            payload.parameters.LowerSpreadThreshold = parseFloat(targetBlock.targetRange.data.minNumber as string);
+          }
+        } else if (targetBlock.targetDriver === this.constants.driver.Price.label) {
+          if (targetBlock.targetRange.data.maxNumber) {
+            payload.parameters.UpperPriceThreshold = parseFloat(targetBlock.targetRange.data.maxNumber as string);
+          }
+          if (targetBlock.targetRange.data.minNumber) {
+            payload.parameters.LowerPriceThreshold = parseFloat(targetBlock.targetRange.data.minNumber as string);
+          }
+        }
       }
     }
   // configuration section end
