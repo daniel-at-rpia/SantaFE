@@ -720,10 +720,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       const payload = {
         identifiers: list
       };
-      // this.state.configuration.axe.searchList = [];
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSecurityDTOs, {req: 'POST'}, payload).pipe(
         first(),
         tap((serverReturn: Array<BESecurityDTO>) => {
+          this.state.configuration.axe.searchList = [];
           if (!!serverReturn) {
             serverReturn.forEach((eachRawData) => {
               const eachCard = this.dtoService.formSecurityCardObject(eachRawData.securityIdentifier, eachRawData, false, false);
