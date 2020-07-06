@@ -59,21 +59,21 @@ export class DTOService {
       api: {
         onClickCard: null,
         onClickSendToGraph: null,
-        onClickThumbDown: null,
-        onClickSendToAlertConfig: null
+        onClickSendToAlertConfig: null,
+        onClickSearch: null
       },
       state: {
         isSelected: false,
         isStencil: isStencil,
         isInteractionDisabled: false,
-        isInteractionThumbDownDisabled: false,
         isMultiLineVariant: false,
         isWidthFlexible: false,
         isAtListCeiling: false,
         isActionMenuPrimaryActionsDisabled: false,
         isActionMenuMinorActionsDisabled: false,
         isSlimVariant: isSlimVariant,
-        configAlertState: false
+        configAlertState: false,
+        isTradeAlertTableVariant: false
       }
     };
     try {

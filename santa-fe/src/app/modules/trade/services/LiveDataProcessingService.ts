@@ -49,7 +49,6 @@ export class LiveDataProcessingService {
       let isValidFlag = true;
       const newBESecurity:BESecurityDTO = rawSecurityDTOMap[eachKey].security;
       const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false, false, selectedDriver);
-      newSecurity.state.isInteractionThumbDownDisabled = true;
       newSecurity.api.onClickSendToGraph = sendToGraphCallback;
       newSecurity.api.onClickSendToAlertConfig = sendToAlertConfigCallback;
       if (!!rawSecurityDTOMap[eachKey].positions) {
@@ -84,7 +83,8 @@ export class LiveDataProcessingService {
     selectedDriver: string,
     serverReturn: BEFetchAllTradeDataReturn,
     sendToGraphCallback: (card: SecurityDTO) => void,
-    sendToAlertConfigCallback: (card: SecurityDTO) => void
+    sendToAlertConfigCallback: (card: SecurityDTO) => void,
+    searchCallback: (card: SecurityDTO) => void
   ): Array<SecurityTableRowDTO> {
     const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
     const prinstineRowList: Array<SecurityTableRowDTO> = [];
@@ -96,9 +96,11 @@ export class LiveDataProcessingService {
         if (rawSecurityDTOMap[targetSecurityId]) {
           const newBESecurity:BESecurityDTO = rawSecurityDTOMap[targetSecurityId].security;
           const newSecurity = this.dtoService.formSecurityCardObject(targetSecurityId, newBESecurity, false, true, selectedDriver);
-          newSecurity.state.isInteractionThumbDownDisabled = true;
           newSecurity.api.onClickSendToGraph = sendToGraphCallback;
           newSecurity.api.onClickSendToAlertConfig = sendToAlertConfigCallback;
+          newSecurity.api.onClickSearch = searchCallback;
+          newSecurity.state.isTradeAlertTableVariant = true;
+          newSecurity.state.isActionMenuMinorActionsDisabled = true;
           if (!!rawSecurityDTOMap[targetSecurityId].positions) {
             rawSecurityDTOMap[targetSecurityId].positions.forEach((eachPortfolio: BEPortfolioDTO) => {
               this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio);

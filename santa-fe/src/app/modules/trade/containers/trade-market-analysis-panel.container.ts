@@ -385,7 +385,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
       this.state.table.moveDistanceBasisList.push('');
       const groupDTO = this.dtoService.formSecurityCardObject('', null, true, false);
       groupDTO.state.isStencil = false;
-      groupDTO.state.isInteractionThumbDownDisabled = true;
       groupDTO.state.isActionMenuMinorActionsDisabled = true;
       groupDTO.data.name = rawData.Group.group.name;
       this.applyStatesToSecurityCards(groupDTO);
@@ -462,7 +461,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     targetSecurity.state.isMultiLineVariant = false;
     targetSecurity.state.isWidthFlexible = true;
     targetSecurity.api.onClickCard = this.onSelectSecurityCardInPresentList.bind(this);
-    targetSecurity.api.onClickThumbDown = this.onClickSecurityCardThumbDown.bind(this);
+    // targetSecurity.api.onClickThumbDown = this.onClickSecurityCardThumbDown.bind(this);
     targetSecurity.api.onClickSendToGraph = this.onClickSecurityCardSendToGraph.bind(this);
     targetSecurity.api.onClickSendToAlertConfig = this.onClickSecurityCardSentToAlertConfig.bind(this);
   }

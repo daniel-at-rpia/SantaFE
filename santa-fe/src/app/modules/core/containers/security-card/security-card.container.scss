@@ -92,29 +92,12 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
       display: flex;
       justify-content: center;
       margin: -$spacing_small 0;  // achieve a closer distance between the three lists
-      &-thumbDownBtn {
+      &-btn {
         @extend .santaBtn;
         @extend .santaBtn--iconOnly;  // this is necessary for usage within AgGrid
         @include mix_fixed_div(relative, $z_index_hovering_item);
         @include mix_border_radius(50%);
         margin: 0 $spacing_x_small;
-        background-color: $color_kill;
-        color: $font_color_inverse;
-        height: $securityCard_actionMenu_majorCTA_size;
-        width: $securityCard_actionMenu_majorCTA_size;
-        font-size: $font_size_large;
-        &:hover {
-          transform: scale(1.25);
-          background-color: $color_active;
-          color: $font_color_inverse;
-        }
-      }
-      &-alertBtn {
-        @extend .santaBtn;
-        @extend .santaBtn--iconOnly;
-        @include mix_fixed_div(relative, $z_index_hovering_item);
-        @include mix_border_radius(50%);
-        margin: 0 $spacing_x_small;
         color: $font_color_major;
         height: $securityCard_actionMenu_majorCTA_size;
         width: $securityCard_actionMenu_majorCTA_size;
@@ -124,21 +107,8 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
           background-color: $color_active;
           color: $font_color_inverse;
         }
-      }
-      &-graphBtn {
-        @extend .santaBtn;
-        @extend .santaBtn--iconOnly;
-        @include mix_fixed_div(relative, $z_index_hovering_item);
-        @include mix_border_radius(50%);
-        margin: 0 $spacing_x_small;
-        color: $font_color_major;
-        height: $securityCard_actionMenu_majorCTA_size;
-        width: $securityCard_actionMenu_majorCTA_size;
-        font-size: $font_size_large;
-        &:hover {
-          transform: scale(1.25);
-          background-color: $color_active;
-          color: $font_color_inverse;
+        &--search {
+          display: none;
         }
       }
     }
@@ -346,22 +316,16 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
       }
     }
   }
-  &--thumbDownDisabled {
+  &--tradeAlertTableVariant {
     #{$securityCardBlockName} {
       &__actionMenu {
         @include mix_calculate(left, 50%, $securityCard_actionMenu_majorCTA_size/2 + $spacing_x_small, '-');
         &-mainList {
-          margin: -$spacing_x_small 0;
-          &-thumbDownBtn {
+          &-btn {
             display: none;
-          }
-        }
-        &-minorList-btn {
-          &:first-of-type {
-            left: -$securityCard_actionMenu_majorCTA_size/2 + $spacing_x_small;
-          }
-          &:nth-of-type(2) {
-            right: -$securityCard_actionMenu_majorCTA_size/2 + $spacing_x_small;
+            &--search {
+              display: flex;
+            }
           }
         }
       }

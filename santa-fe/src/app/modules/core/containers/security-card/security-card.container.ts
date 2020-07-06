@@ -44,9 +44,10 @@ export class SecurityCard implements OnInit {
     }
   }
 
-  public onClickThumbDown() {
-    if (!!this.cardData.api.onClickThumbDown) {
-      this.cardData.api.onClickThumbDown(this.cardData);
+  public onClickSearch() {
+    this.cardData.state.isSelected = false;
+    if (!!this.cardData.api.onClickSearch) {
+      this.cardData.api.onClickSearch(this.cardData);
     }
   }
 

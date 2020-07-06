@@ -135,13 +135,12 @@ export interface SecurityDTO extends BasicDTOStructure {
   api: {
     onClickCard: (card: SecurityDTO) => void;
     onClickSendToGraph: (card: SecurityDTO) => void;
-    onClickThumbDown: (card: SecurityDTO) => void;
     onClickSendToAlertConfig: (card: SecurityDTO) => void;
+    onClickSearch: (card: SecurityDTO) => void;
   }
   state: {
     isStencil: boolean;
     isInteractionDisabled: boolean;
-    isInteractionThumbDownDisabled: boolean;
     isSelected: boolean;
     isMultiLineVariant: boolean;
     isWidthFlexible: boolean;
@@ -150,6 +149,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     isActionMenuMinorActionsDisabled: boolean;
     isSlimVariant: boolean;
     configAlertState: boolean;
+    isTradeAlertTableVariant: boolean;
   }
 }
 

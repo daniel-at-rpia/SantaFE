@@ -4,7 +4,6 @@
   [ngClass]="{
     'sat-securityCard': true,
     'sat-securityCard--tableState': cardData.state.isInteractionDisabled,
-    'sat-securityCard--thumbDownDisabled': cardData.state.isInteractionThumbDownDisabled,
     'sat-securityCard--stencilState': cardData.state.isStencil,
     'sat-securityCard--selectedState': cardData.state.isSelected,
     'sat-securityCard--multiLineVariant': cardData.state.isMultiLineVariant,
@@ -13,7 +12,8 @@
     'sat-securityCard--primaryActionDisabledState': cardData.state.isActionMenuPrimaryActionsDisabled,
     'sat-securityCard--minorActionDisabledState': cardData.state.isActionMenuMinorActionsDisabled,
     'sat-securityCard--slimVariant': cardData.state.isSlimVariant && !cardData.isMultiLineVariant,
-    'sat-securityCard--configAlertState': cardData.state.configAlertState
+    'sat-securityCard--configAlertState': cardData.state.configAlertState,
+    'sat-securityCard--tradeAlertTableVariant': cardData.state.isTradeAlertTableVariant
   }">
   <section class="sat-securityCard__name" (click)="onClickCard()">
     <span class="sat-securityCard__name-text">{{cardData.data.name}}</span>
@@ -27,9 +27,9 @@
       <button title="Open In Bloomberg QMGR" (click)="onClickOpenSecurityInBloomberg('QMGR')" class="sat-securityCard__actionMenu-minorList-btn">QMGR</button>
     </ul>
     <ul class="sat-securityCard__actionMenu-mainList">
-      <button (click)="onClickSendToGraph()" class="sat-securityCard__actionMenu-mainList-graphBtn fal fa-chart-line"></button>
-      <button (click)="onClickThumbDown()" class="sat-securityCard__actionMenu-mainList-thumbDownBtn fal fa-thumbs-down"></button>
-      <button (click)="onClickOpenShortcutConfig()" class="sat-securityCard__actionMenu-mainList-alertBtn fal fa-bell"></button>
+      <button (click)="onClickSearch()" class="sat-securityCard__actionMenu-mainList-btn sat-securityCard__actionMenu-mainList-btn--search fal fa-search"></button>
+      <button (click)="onClickSendToGraph()" class="sat-securityCard__actionMenu-mainList-btn fal fa-chart-line"></button>
+      <button (click)="onClickOpenShortcutConfig()" class="sat-securityCard__actionMenu-mainList-btn fal fa-bell"></button>
     </ul>
     <ul class="sat-securityCard__actionMenu-minorList sat-securityCard__actionMenu-minorList--bottom">
       <button title="Open In Bloomberg YAS" (click)="onClickOpenSecurityInBloomberg('YAS')" class="sat-securityCard__actionMenu-minorList-btn">YAS</button>

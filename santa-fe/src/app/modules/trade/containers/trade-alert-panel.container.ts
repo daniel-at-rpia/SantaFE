@@ -52,7 +52,8 @@
       TradeSelectedSecurityForAnalysisEvent,
       TradeAlertTableSendNewAlertsEvent,
       TradeLiveUpdatePassRawDataToAlertTableEvent,
-      TradeLiveUpdateProcessDataCompleteInAlertTableEvent
+      TradeLiveUpdateProcessDataCompleteInAlertTableEvent,
+      TradeKeywordSearchThisSecurityEvent
     } from 'Trade/actions/trade.actions';
     import {
       selectNewAlertsForAlertTable,
@@ -1127,6 +1128,12 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       );
     }
 
+    public onClickedSecurityCardSearch(targetSecurity: SecurityDTO) {
+      if (targetSecurity && targetSecurity.data) {
+        this.store$.dispatch(new TradeKeywordSearchThisSecurityEvent(targetSecurity.data.name));
+      }
+    }
+
     private filterPrinstineRowList(
       targetPrinstineList: Array<SecurityTableRowDTO>
     ): Array<SecurityTableRowDTO> {
@@ -1288,7 +1295,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         this.state.filters.quickFilters.driverType,
         serverReturn,
         this.onSelectSecurityForAnalysis.bind(this),
-        null
+        null,
+        this.onClickedSecurityCardSearch.bind(this)
       );
       this.calculateQuantComparerWidthAndHeight();
       this.state.fetchResult.alertTable.fetchComplete = true;

@@ -1,7 +1,7 @@
   // dependencies
     import { Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
     import { of, Subscription, Subject } from 'rxjs';
-    import { catchError, first, tap, withLatestFrom, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+    import { catchError, first, tap, withLatestFrom, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
     import { select, Store } from '@ngrx/store';
 
     import { DTOService } from 'Core/services/DTOService';
@@ -53,7 +53,8 @@
       selectSecurityIDsFromAnalysis,
       selectBestQuoteValidWindow,
       selectNewAlertsForAlertTable,
-      selectLiveUpdateProcessingRawDataToMainTable
+      selectLiveUpdateProcessingRawDataToMainTable,
+      selectKeywordSearchInMainTable
     } from 'Trade/selectors/trade.selectors';
     import {
       TradeLiveUpdatePassRawDataToMainTableEvent,
@@ -83,7 +84,8 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     validWindowSub: null,
     newAlertsForAlertTableSub: null,
     alertCountSub: null,
-    keywordSearchSub: null
+    keywordSearchSub: null,
+    receiveKeywordSearchInMainTable: null
   };
   keywordChanged$: Subject<string> = new Subject<string>();
   constants = {
@@ -209,6 +211,13 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         this.state.filters.quickFilters.keyword = keyword;
         targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
       }
+    });
+
+    this.subscriptions.receiveKeywordSearchInMainTable = this.store$.pipe(
+      select(selectKeywordSearchInMainTable)
+    ).subscribe((keyword) => {
+      this.state.filters.keyword.defaultValueForUI = keyword;
+      this.keywordChanged$.next(keyword);
     });
   }
 
