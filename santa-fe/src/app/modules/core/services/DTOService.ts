@@ -60,6 +60,7 @@ export class DTOService {
         onClickCard: null,
         onClickSendToGraph: null,
         onClickSendToAlertConfig: null,
+        onMouseLeaveShortcutConfig: null,
         onClickSearch: null
       },
       state: {
@@ -198,6 +199,7 @@ export class DTOService {
         hasIndex: !isStencil && rawData.metrics ? !!rawData.metrics.Index : false,
         hedgeFactor: !isStencil && !!rawData.unitPosition ? rawData.unitPosition.hedgeFactor : null,
         alert: {
+          alertId: null,
           alertTime: null,
           alertTimeRaw: null,
           alertType: null,
@@ -379,6 +381,7 @@ export class DTOService {
     targetAlert: DTOs.AlertDTO
   ) {
     dto.data.alert = {
+      alertId: targetAlert.data.id,
       alertTime: targetAlert.data.time,
       alertTimeRaw: targetAlert.data.unixTimestamp,
       alertType: !!targetAlert.data.titlePin ? `${targetAlert.data.type} - ${targetAlert.data.titlePin}` : targetAlert.data.type,

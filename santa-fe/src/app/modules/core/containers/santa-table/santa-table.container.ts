@@ -193,7 +193,6 @@ export class SantaTable implements OnInit, OnChanges {
   public onGridReady(params) {
     this.tableData.api.gridApi = params.api;
     this.tableData.data.agGridRowData = [];
-    this.tableData.api.gridApi = params.api;
     this.tableData.api.columnApi = params.columnApi;
     this.tableData.state.isAgGridReady = true;
     this.agGridMiddleLayerService.onGridReady(this.tableData, this.ownerInitial);
@@ -352,6 +351,11 @@ export class SantaTable implements OnInit, OnChanges {
     rowList: Array<SecurityTableRowDTO>,
     isUpdate: boolean = false
   ) {
+    if (!isUpdate) {
+      rowList.forEach((eachRow) => {
+        eachRow.data.security.api.onMouseLeaveShortcutConfig = this.onMouseLeaveSecurityCardAlertShortcutConfig.bind(this);
+      });
+    }
     this.tableData.data.rows = rowList;
     // doesn't need to update dynamic columns if the entire data is not loaded
     this.receivedContentStage === this.constants.securityTableFinalStage && this.updateDriverDependentColumns();
@@ -705,5 +709,14 @@ export class SantaTable implements OnInit, OnChanges {
       }
     });
     return newQuoteList;
+  }
+
+  private onMouseLeaveSecurityCardAlertShortcutConfig() {
+    if (this.tableData.state.selectedSecurityCard && this.tableData.state.selectedSecurityCard.data && this.tableData.state.selectedSecurityCard.data.name) {
+      const rowId = this.tableName === 'tradeAlert' ? this.tableData.state.selectedSecurityCard.data.alert.alertId : this.tableData.state.selectedSecurityCard.data.securityID;
+      const targetNode = this.tableData.api.gridApi.getRowNode(rowId);
+      !!targetNode && targetNode.setData(targetNode.data);
+      this.tableData.state.selectedSecurityCard = null;
+    }
   }
 }

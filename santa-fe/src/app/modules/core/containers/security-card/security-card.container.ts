@@ -92,6 +92,9 @@ export class SecurityCard implements OnInit {
   public onMouseLeaveShortcutConfig() {
     this.cardData.state.configAlertState = false;
     this.cardData.state.isSelected = false;
+    if (!!this.cardData.api.onMouseLeaveShortcutConfig) {
+      this.cardData.api.onMouseLeaveShortcutConfig();
+    }
   }
 
   public onShortcutConfigFilterChangeMin(newValue) {

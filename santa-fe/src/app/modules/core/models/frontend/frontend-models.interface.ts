@@ -110,6 +110,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     hasIndex: boolean;
     hedgeFactor: number;
     alert: {
+      alertId: string;
       alertTime: string;
       alertTimeRaw: number;
       alertType: string;
@@ -136,6 +137,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     onClickCard: (card: SecurityDTO) => void;
     onClickSendToGraph: (card: SecurityDTO) => void;
     onClickSendToAlertConfig: (card: SecurityDTO) => void;
+    onMouseLeaveShortcutConfig: () => void;
     onClickSearch: (card: SecurityDTO) => void;
   }
   state: {

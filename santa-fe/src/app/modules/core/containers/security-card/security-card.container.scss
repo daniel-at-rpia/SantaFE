@@ -40,11 +40,12 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
   }
   &__rating {
     @include mix_fixed_div(absolute, $z_index_base_item_solid);
-    right: 0;
-    height: 100%;
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
+    right: 0;
+    height: 100%;
+    width: 100%;
     &-text {
       @include mix_rating_style;
       font-size: $font_size_x_large;
@@ -121,7 +122,7 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
     top: -$spacing_x_large;
     width: 100%;
     transform: scale(0.001);
-    padding: $spacing_x_large $spacing_medium;  // this padding is important, without it the mouse leave would be too sensitive. The mouseleave is necessary for simplifying the row-click/card-click scenarios handling in the SantaTable
+    padding: $spacing_small $spacing_medium $spacing_x_large $spacing_medium;  // this padding is important, without it the mouse leave would be too sensitive. The mouseleave is necessary for simplifying the row-click/card-click scenarios handling in the SantaTable
     &-content {
       @include mix_fixed_div(relative, $z_index_base_item);
       @include mix_border_radius(15px);
