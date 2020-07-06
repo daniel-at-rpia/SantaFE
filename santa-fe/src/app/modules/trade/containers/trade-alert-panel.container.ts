@@ -236,6 +236,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           this.store$.dispatch(new CoreFlushSecurityMap());
         }
       });
+
       this.autoUpdateCount$ = interval(1000);
       this.subscriptions.autoUpdateCountSub = this.autoUpdateCount$.subscribe(count => {
         if (this.state.isCenterPanelPresetSelected && !this.state.isAlertPaused && !this.state.alertUpdateInProgress) {
@@ -277,8 +278,15 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
               // this is necessary because after the save, the newly added config from shortcut would need to receive its groupId popualted from BE, otherwise FE would not be able to distinguish the newly-created and already-saved-to-be alerts from the ones that user can add manually from the keyWord search
               setTimeout(this.loadAllConfigurations.bind(this), 1000);
             }
+            this.restfulCommService.logEngagement(
+              EngagementActionList.sendToAlertConfig,
+              targetSecurity.data.securityID,
+              `Current Number of Alerts = ${this.state.configuration.axe.securityList.length}`,
+              'Trade - Alert Panel'
+            );
           }
       });
+
       this.subscriptions.centerPanelPresetSelectedSub = this.store$.pipe(
         select(selectPresetSelected)
       ).subscribe(flag => {

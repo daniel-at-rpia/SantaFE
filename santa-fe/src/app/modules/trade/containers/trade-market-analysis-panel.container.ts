@@ -230,12 +230,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
 
   public onClickSecurityCardSentToAlertConfig(targetSecurity: SecurityDTO) {
     this.store$.dispatch(new TradeSelectedSecurityForAlertConfigEvent(this.utilityService.deepCopy(targetSecurity)));
-    this.restfulCommService.logEngagement(
-      EngagementActionList.sendToAlertConfig,
-      targetSecurity.data.securityID,
-      'n/a',
-      'Trade - Lil Market Panel'
-    );
   }
 
   private onSecuritySelected(targetSecurity: SecurityDTO) {

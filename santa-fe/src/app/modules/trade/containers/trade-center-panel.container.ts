@@ -351,12 +351,6 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
   public onSelectSecurityForAlertConfig(targetSecurity: SecurityDTO) {
     this.store$.dispatch(new TradeSelectedSecurityForAlertConfigEvent(this.utilityService.deepCopy(targetSecurity)));
-    this.restfulCommService.logEngagement(
-      EngagementActionList.sendToAlertConfig,
-      targetSecurity.data.securityID,
-      'n/a',
-      'Trade - Center Panel'
-    );
   }
 
   public openLinkForCertificate() {
