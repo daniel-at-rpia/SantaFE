@@ -6,84 +6,12 @@ $tradeAlertAxeAlertConfiguration_singleSecurities_watchList_width: 67%;
   $axeAlertConfigurationBlockName: &;
   display: flex;
   flex-direction: column;
-  &__myGroup {
-    flex: 0 0 auto;
-    display: flex;
-    align-items: center;
-    &-title {
-      flex: 0 0 auto;
-      font-size: $font_size_normal;
-      color: $font_color_major;
-      margin-right: $spacing_medium;
-    }
-    &-content {
-      @include mix_border_radius(10px);
-      flex: 0 0 auto;
-      display: flex;
-      align-items: center;
-      // background-color: $color_gray_3;
-      margin-top: $spacing_x_small;
-      &-disableTag {
-        @include mix_border_radius(3px);
-        flex: 0 0 auto;
-        visibility: hidden;
-        display: flex;
-        align-items: center;
-        margin-right: $spacing_small;
-        padding: $spacing_xx_small $spacing_x_small;
-        background-color: $color_disabled;
-        &>i {
-          color: $font_color_inverse;
-          margin-right: $spacing_x_small;
-        }
-        &>span {
-          color: $font_color_inverse;
-        }
-      }
-      &-text {
-        flex: 1 1 auto;
-        color: $font_color_major;
-        font-size: $font_size_normal;
-        text-align: right;
-      }
-      &-btn{
-        margin-left: $spacing_medium;
-      }
-
-      &-btnGroup {
-        flex: 1 1 auto;
-        margin-left: $spacing_medium;
-        &-btn {
-          &--selected {
-            @include material('none');
-            background-color: $color_active;
-            color: $font_color_inverse;
-          }
-        }
-      }
-      &-disableBtn {
-        margin-left: $spacing_x_large;
-      }
-    }
-  }
-  &__textSeparator {
-    @include mix_border_generator($typical_border_width 0 0 0, $color_white);
-    flex: 0 0 auto;
-    display: flex;
-    margin: $spacing_medium 0;
-    padding-top: $spacing_medium;
-    &-content {
-      color: $font_color_major;
-      font-size: $font_size_normal;
-      margin-left: 12rem;
-    }
-  }
   &__singleSecurities {
     flex: 1 1 auto;
     display: flex;
     overflow: hidden;
     &-watchList {
-      @include mix_border_generator(0 $typical_border_width 0 0, $color_white);
+      @include mix_border_generator(0 $typical_border_width 0 0);
       flex: 1 1 auto;
       display: flex;
       flex-direction: column;
@@ -292,164 +220,6 @@ $tradeAlertAxeAlertConfiguration_singleSecurities_watchList_width: 67%;
       }
     }
   }
-  &--myGroupDisabled {
-    #{$axeAlertConfigurationBlockName} {
-      &__myGroup {
-        &-content {
-          &-disableTag {
-            visibility: visible;
-          }
-          &-btnGroup {
-            &-btn {
-              @include material('none');
-              background-color: $color_disabled;
-              &--selected {
-                background-color: $color_active;
-              }
-            }
-          }
-          &-disableBtn {
-            @include material('none');
-            @extend .santaBtn--inverseLabelled;
-            background-color: $color_active;
-          }
-        }
-      }
-    }
-  }
-  &--userIsNotPMState {
-    #{$axeAlertConfigurationBlockName} {
-      &__myGroup {
-        &-content {
-          display: none;
-        }
-      }
-      &__textSeparator {
-        display: none;
-      }
-    }
-  }
-}
-
-.sat-tradeAlertMarkAlertConfiguration {
-  $markAlertConfigurationBlockName: &;
-  display: flex;
-  flex-direction: column;
-  &__title {
-    flex: 0 0 auto;
-    display: flex;
-    &-text {
-      font-size: $font_size_normal;
-      color: $font_color_major;
-    }
-  }
-  &__groupList {
-    flex: 1 1 auto;
-    display: flex;
-    margin-top: $spacing_large;
-    &-group {
-      @include mix_fixed_div(relative, $z_index_base_item);
-      @include mix_border_radius(5px);
-      @include mix_border_generator($typical_border_width);
-      display: flex;
-      flex-direction: column;
-      padding: $spacing_small;
-      background-color: $color_white;
-      &-disableTag {
-        @include mix_fixed_div(absolute, $z_index_hovering_item);
-        @include mix_border_radius(3px);
-        @include mix_calculate(left, 50%, 2.75rem, '-');
-        flex: 0 0 auto;
-        display: none;
-        align-items: center;
-        top: -$spacing_medium;
-        padding: $spacing_xx_small $spacing_x_small;
-        background-color: $color_disabled;
-        &>i {
-          color: $font_color_inverse;
-          margin-right: $spacing_x_small;
-        }
-        &>span {
-          color: $font_color_inverse;
-        }
-      }
-      &-text {
-        @include mix_border_generator(0 0 $typical_border_width 0);
-        font-size: $font_size_normal;
-        padding-bottom: $spacing_small;
-        margin-bottom: $spacing_small;
-        color: $font_color_major;
-        text-align: center;
-      }
-      &-threshold {
-        flex: 1 1 auto;
-        display: flex;
-        flex-direction: column;
-        margin-bottom: $spacing_small;
-        &-title {
-          flex: 0 0 auto;
-          color: $font_color_minor;
-          font-size: $font_size_normal;
-        }
-        &-entry {
-          flex: 0 0 auto;
-          display: flex;
-          align-items: center;
-          margin-top: $spacing_small;
-          margin-left: $spacing_medium;
-          &-label {
-            flex: 0 0 auto;
-            margin-right: $spacing_x_small;
-            margin-left: $spacing_large;
-            text-align: right;
-          }
-          &-input {
-            flex: 0 0 auto;
-          }
-          &-unit {
-            flex: 0 0 auto;
-            margin-left: $spacing_x_small;
-            color: $font_color_minor;
-          }
-        }
-      }
-      &-ctas {
-        flex: 0 0 auto;
-        display: flex;
-        justify-content: center;
-      }
-    }
-  }
-  &--disabledState {
-    #{$markAlertConfigurationBlockName} {
-      &__groupList {
-        &-group {
-          &-disableTag {
-            display: flex;
-          }
-          &-ctas-disableBtn {
-            @include material('none');
-            @extend .santaBtn--inverseLabelled;
-            background-color: $color_active;
-            &--selected{
-              @include material('none');
-              background-color: $color_active;
-              color: $font_color_inverse;
-            }
-          }
-        }
-      }
-    }
-  }
-  &--userIsNotPMState {
-    #{$markAlertConfigurationBlockName} {
-      &__groupList {
-        &-group {
-          display: none;  // this is temporary since now the only group we have is the "Securities I Own" group
-        }
-      }
-    }
-  }
 }
 
 $tradeAlertPanel_overview_tabIndicate_width: 7rem;
@@ -574,13 +344,7 @@ $tradeAlertPanel_overview_tabIndicate_width: 7rem;
       &-axeConfig {
         @include mix_border_radius(5px, 'all-but-top-left');
         flex: 1 1 auto;
-        display: none;
-        padding: $spacing_small;
-      }
-      &-markConfig {
-        @include mix_border_radius(5px);
-        flex: 1 1 auto;
-        display: none;
+        display: flex;
         padding: $spacing_small;
       }
     }
@@ -588,32 +352,7 @@ $tradeAlertPanel_overview_tabIndicate_width: 7rem;
       flex: 0 0 auto;
       display: flex;
       flex-direction: column;
-      &-alertTypeList {
-        flex: 1 1 auto;
-        display: flex;
-        flex-direction: column;
-        padding: $spacing_medium $spacing_medium $spacing_medium 0;
-        &-item {
-          @include mix_border_radius(5px, 'right');
-          display: flex;
-          padding: $spacing_small;
-          margin-bottom: $spacing_medium;
-          &-btn {
-            padding: $spacing_small;
-            flex: 1 1 auto;
-            color: $font_color_inverse;
-            i {
-              font-size: $font_size_normal;
-            }
-          }
-          &--axe &-btn {
-            background-color: $tradeAxeAlertColor;
-          }
-          &--mark &-btn {
-            background-color: $tradeMarkAlertColor;
-          }
-        }
-      }
+      justify-content: flex-end;
       &-save {
         margin: $spacing_medium;
         background-color: $color_create;
@@ -657,48 +396,6 @@ $tradeAlertPanel_overview_tabIndicate_width: 7rem;
       }
       &__configuration {
         display: flex;
-      }
-    }
-  }
-  &--configureAxeAlertState {
-    #{$tradeAlertPanelBlockName} {
-      &__configuration {
-        &-ctas-alertTypeList-item {
-          &--axe {
-            background-color: $tradeAxeAlertBackgroundColor;
-            #{$tradeAlertPanelBlockName} {
-              &__configuration-ctas-alertTypeList-item-btn {
-                @include material('none');
-                background-color: $color_active;
-              }
-            }
-          }
-        }
-        &-main-axeConfig {
-          display: flex;
-          background-color: $tradeAxeAlertBackgroundColor;
-        }
-      }
-    }
-  }
-  &--configureMarkAlertState {
-    #{$tradeAlertPanelBlockName} {
-      &__configuration {
-        &-ctas-alertTypeList-item {
-          &--mark {
-            background-color: $tradeMarkAlertBackgroundColor;
-            #{$tradeAlertPanelBlockName} {
-              &__configuration-ctas-alertTypeList-item-btn {
-                @include material('none');
-                background-color: $color_active;
-              }
-            }
-          }
-        }
-        &-main-markConfig {
-          display: flex;
-          background-color: $tradeMarkAlertBackgroundColor;
-        }
       }
     }
   }

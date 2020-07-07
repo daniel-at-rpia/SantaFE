@@ -9,9 +9,7 @@
     'sat-tradeAlertPanel--scopeMarkAlertsState': state.displayAlertTable && state.alert.scopedAlertType === constants.alertTypes.markAlert,
     'sat-tradeAlertPanel--scopeTradeAlertsState': state.displayAlertTable && state.alert.scopedAlertType === constants.alertTypes.tradeAlert,
     'sat-tradeAlertPanel--alertReadyState': state.fetchResult.alertTable.fetchComplete,
-    'sat-tradeAlertPanel--configureAlertState': state.configureAlert,
-    'sat-tradeAlertPanel--configureAxeAlertState': state.configuration.selectedAlert === constants.alertTypes.axeAlert,
-    'sat-tradeAlertPanel--configureMarkAlertState': state.configuration.selectedAlert === constants.alertTypes.markAlert
+    'sat-tradeAlertPanel--configureAlertState': state.configureAlert
   }">
   <section class="sat-tradeAlertPanel__overview">
     <div class="sat-tradeAlertPanel__overview-tabIndicate">
@@ -121,79 +119,8 @@
         [ngClass]="{
           'sat-tradeAlertPanel__configuration-main-axeConfig': true,
           'sat-tradeAlertAxeAlertConfiguration': true,
-          'sat-tradeAlertAxeAlertConfiguration--showSearchResult': state.configuration.axe.searchIsValid,
-          'sat-tradeAlertAxeAlertConfiguration--myGroupDisabled': state.configuration.axe.myGroup.isDisabled,
-          'sat-tradeAlertAxeAlertConfiguration--userIsNotPMState': !state.isUserPM
+          'sat-tradeAlertAxeAlertConfiguration--showSearchResult': state.configuration.axe.searchIsValid
         }">
-        <section class="sat-tradeAlertAxeAlertConfiguration__myGroup">
-          <span class="sat-tradeAlertAxeAlertConfiguration__myGroup-title">
-            Watch For Axe From :
-          </span>
-          <div class="sat-tradeAlertAxeAlertConfiguration__myGroup-content">
-            <div class="sat-tradeAlertAxeAlertConfiguration__myGroup-content-disableTag">
-              <i class="fal fa-bell-slash"></i>
-              <span>Disabled</span>
-            </div>
-            <span class="sat-tradeAlertAxeAlertConfiguration__myGroup-content-text">
-              Securities I Own
-            </span>
-            <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup">
-              <button
-                (click)="onSelectAxeWatchlistSide(constants.axeAlertScope.bid, state.configuration.axe.myGroup)"
-                [ngClass]="{
-                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn': true,
-                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': state.configuration.axe.myGroup.scopes.indexOf(constants.axeAlertScope.bid) >= 0
-                }">
-                <span>Bid</span>
-              </button>
-              <button
-                (click)="onSelectAxeWatchlistSide(constants.axeAlertScope.ask, state.configuration.axe.myGroup)"
-                [ngClass]="{
-                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn': true,
-                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': state.configuration.axe.myGroup.scopes.indexOf(constants.axeAlertScope.ask) >= 0
-                }">
-                <span>Ask</span>
-              </button>
-            </div>
-            <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup">
-              <button
-                title="Watching"
-                (click)="onSelectAxeAlertWatchType(constants.axeAlertType.normal, state.configuration.axe.myGroup)"
-                [ngClass]="{
-                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn': true,
-                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': state.configuration.axe.myGroup.axeAlertTypes.indexOf(constants.axeAlertType.normal) >= 0
-                }">
-                <span>Axe</span>
-              </button>
-              <button
-                title="Watching"
-                (click)="onSelectAxeAlertWatchType(constants.axeAlertType.marketList, state.configuration.axe.myGroup)"
-                [ngClass]="{
-                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn': true,
-                  'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': state.configuration.axe.myGroup.axeAlertTypes.indexOf(constants.axeAlertType.marketList) >= 0
-                }">
-                <span>Inquiry</span>
-              </button>
-            </div>
-            <button
-              title="Urgent"
-              (click)="onTogglePriority(state.configuration.axe.myGroup)"
-              [ngClass]="{
-              'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btn santaBtn--iconOnly fal fa-exclamation': true,
-              'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': state.configuration.axe.myGroup.isUrgent
-              }"></button>
-            <button
-              title="Disable (mute)"
-              (click)="onToggleDisableTargetGroupFromAxeWatchList(state.configuration.axe.myGroup)"
-              [ngClass]="{
-                'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btn santaBtn--iconOnly fal fa-bell-slash': true,
-                'sat-tradeAlertAxeAlertConfiguration__myGroup-content-btnGroup-btn--selected': state.configuration.axe.myGroup.isDisabled
-              }"></button>
-          </div>
-        </section>
-        <section class="sat-tradeAlertAxeAlertConfiguration__textSeparator">
-          <span class="sat-tradeAlertAxeAlertConfiguration__textSeparator-content">And Individual Securities :</span>
-        </section>
         <section class="sat-tradeAlertAxeAlertConfiguration__singleSecurities">
           <div class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList">
             <ul class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList">
@@ -314,108 +241,8 @@
           </div>
         </section>
       </article>
-      <article
-        [ngClass]="{
-          'sat-tradeAlertPanel__configuration-main-markConfig': true,
-          'sat-tradeAlertMarkAlertConfiguration': true,
-          'sat-tradeAlertMarkAlertConfiguration--disabledState': state.configuration.mark.myGroup.disabled,
-          'sat-tradeAlertMarkAlertConfiguration--userIsNotPMState': !state.isUserPM
-        }">
-        <section class="sat-tradeAlertMarkAlertConfiguration__title">
-          <span class="sat-tradeAlertMarkAlertConfiguration__title-text">
-            Watch For Mark Discrepancies From :
-          </span>
-        </section>
-        <section class="sat-tradeAlertMarkAlertConfiguration__groupList">
-          <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group">
-            <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-disableTag">
-              <i class="fal fa-bell-slash"></i>
-              <span>Disabled</span>
-            </div>
-            <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-text">
-              Securities I Own
-            </span>
-            <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold">
-              <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-title">Make-Money Threshold</span>
-              <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry">
-                <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-label">Spread</span>
-                <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-input">
-                  <santa-input
-                    [inputValue]="state.configuration.mark.myGroup.makeMoneySpread"
-                    [placeholder]="''"
-                    (onInputChange)="onEnterMarkAlertThreshold(true, true, $event)">
-                  </santa-input>
-                </div>
-                <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-unit">bps</span>
-                <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-label">Price</span>
-                <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-input">
-                  <santa-input
-                    [inputValue]="state.configuration.mark.myGroup.makeMoneyPrice"
-                    [placeholder]="''"
-                    (onInputChange)="onEnterMarkAlertThreshold(true, false, $event)">
-                  </santa-input>
-                </div>
-                <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-unit">pts</div>
-              </div>
-            </div>
-            <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold">
-              <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-title">Lose-Money Threshold</span>
-              <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry">
-                <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-label">Spread</span>
-                <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-input">
-                  <santa-input
-                    [inputValue]="state.configuration.mark.myGroup.loseMoneySpread"
-                    [placeholder]="''"
-                    (onInputChange)="onEnterMarkAlertThreshold(false, true, $event)">
-                  </santa-input>
-                </div>
-                <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-unit">bps</span>
-                <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-label">Price</span>
-                <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-input">
-                  <santa-input
-                    [inputValue]="state.configuration.mark.myGroup.loseMoneyPrice"
-                    [placeholder]="''"
-                    (onInputChange)="onEnterMarkAlertThreshold(false, false, $event)">
-                  </santa-input>
-                </div>
-                <span class="sat-tradeAlertMarkAlertConfiguration__groupList-group-threshold-entry-unit">pts</span>
-              </div>
-            </div>
-            <div class="sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas">
-              <button (click)="onToggleDisableMarkAlert()" class="sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas-disableBtn santaBtn--labelled">
-                <i class="fal fa-bell-slash"></i>
-                <span>Disable</span>
-              </button>
-              <!--
-              <button
-                title="Disable (mute)"
-                (click)="onToggleDisableMarkAlert()"
-                [ngClass]="{
-                  'sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas-disableBtn santaBtn--iconOnly fal fa-bell-slash': true,
-                  'sat-tradeAlertMarkAlertConfiguration__groupList-group-ctas-disableBtn--selected': this.state.configuration.mark.myGroup.disabled
-                }">
-              </button>
-              -->
-            </div>
-          </div>
-        </section>
-      </article>
     </ul>
     <div class="sat-tradeAlertPanel__configuration-ctas">
-      <ul class="sat-tradeAlertPanel__configuration-ctas-alertTypeList">
-        <li class="sat-tradeAlertPanel__configuration-ctas-alertTypeList-item sat-tradeAlertPanel__configuration-ctas-alertTypeList-item--axe">
-          <button (click)="selectAlertForConfigure(constants.alertTypes.axeAlert)" class="sat-tradeAlertPanel__configuration-ctas-alertTypeList-item-btn santaBtn--labelled santaBtn--inverseLabelled">
-            <i class="fas fa-axe"></i>
-            <span>Axe Alert</span>
-          </button>
-        </li>
-        <li class="sat-tradeAlertPanel__configuration-ctas-alertTypeList-item sat-tradeAlertPanel__configuration-ctas-alertTypeList-item--mark">
-          <button (click)="selectAlertForConfigure(constants.alertTypes.markAlert)" class="sat-tradeAlertPanel__configuration-ctas-alertTypeList-item-btn santaBtn--labelled santaBtn--inverseLabelled">
-            <i class="far fa-bullseye-arrow"></i>
-            <span>Mark Alert</span>
-          </button>
-        </li>
-      </ul>
       <button (click)="onClickSaveConfiguration()" class="sat-tradeAlertPanel__configuration-ctas-save santaBtn--labelled santaBtn--inverseLabelled">
         <i class="fal fa-cloud-upload"></i>
         <span>Save</span>

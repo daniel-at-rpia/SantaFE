@@ -196,24 +196,12 @@ export interface TradeAlertPanelState {
   securityMap: Array<SecurityMapEntry>;
   alertUpdateTimestamp: string;
   configuration: {
-    selectedAlert: AlertTypes,
     axe: {
-      myGroup: TradeAlertConfigurationAxeGroupBlock;
       securitySearchKeyword: string;
       securityList: Array<TradeAlertConfigurationAxeGroupBlock>;
       searchList: Array<DTOs.SecurityDTO>;
       matchedResultCount: number;
       searchIsValid: boolean;
-    },
-    mark: {
-      myGroup: {
-        disabled: boolean;
-        groupId: string;
-        makeMoneySpread: number;
-        makeMoneyPrice: number;
-        loseMoneySpread: number;
-        loseMoneyPrice: number;
-      }
     }
   }
   autoUpdateCountdown: number;
