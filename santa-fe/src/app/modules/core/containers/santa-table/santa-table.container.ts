@@ -696,9 +696,17 @@ export class SantaTable implements OnInit, OnChanges {
           const newBidQuote: SecurityQuoteDTO = this.utilityService.deepCopy(eachQuote);
           const newAskQuote: SecurityQuoteDTO = this.utilityService.deepCopy(eachQuote);
           newBidQuote.state.hasAsk = false;
+          newBidQuote.data.ask.isAxe = false;
+          newBidQuote.state.isBestOffer = false;
+          newBidQuote.state.isBestAxeOffer = false;
           newBidQuote.data.unixTimestamp = bidTime.unix();
+          newBidQuote.data.time = bidTime.format('HH:mm');
           newAskQuote.state.hasBid = false;
+          newAskQuote.data.bid.isAxe = false;
+          newAskQuote.state.isBestBid = false;
+          newAskQuote.state.isBestAxeBid = false;
           newAskQuote.data.unixTimestamp = askTime.unix();
+          newAskQuote.data.time = askTime.format('HH:mm');
           newQuoteList.push(newBidQuote);
           newQuoteList.push(newAskQuote);
         } else {
