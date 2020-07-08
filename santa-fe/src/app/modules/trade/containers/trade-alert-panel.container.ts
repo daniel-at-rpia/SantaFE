@@ -225,7 +225,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             this.state.autoUpdateCountdown = 0;
           }
           if (this.state.alert.initialAlertListReceived && this.state.fetchResult.alertTable.fetchComplete) {
-            const numOfUpdate = this.flagMarketListAlertsForCountdownUpdate();
+            const numOfUpdate = this.marketListAlertsCountdownUpdate();
             if (numOfUpdate > 0){
               // if there is no new alert, but there are existing active marketlist alerts, then the table still needs to be updated for refreshing the countdowns
               this.state.fetchResult.alertTable.liveUpdatedRowList = this.identifyTableUpdate(this.state.fetchResult.alertTable, true);
@@ -403,7 +403,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.state.alertUpdateTimestamp = moment().format("YYYY-MM-DDTHH:mm:ss.SSS");
     }
 
-    private flagMarketListAlertsForCountdownUpdate(): number {
+    private marketListAlertsCountdownUpdate(): number {
       let numOfUpdate = 0;
       this.state.fetchResult.alertTable.rowList.forEach((eachRow) => {
         if (!!eachRow && !!eachRow.data.alert && !!eachRow.data.alert.state) {

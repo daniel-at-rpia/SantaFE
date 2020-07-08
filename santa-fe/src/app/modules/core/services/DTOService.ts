@@ -1376,9 +1376,7 @@ export class DTOService {
         }
         alertDTO.data.validUntilTime = quoteBlock.validUntilTime;
         alertDTO.data.validUntilMoment = 
-          quoteBlock.isTraded
-            ? moment(quoteBlock.eventTime)
-            : alertDTO.state.isCancelled
+            quoteBlock.isTraded || alertDTO.state.isCancelled
               ? moment(quoteBlock.lastModifiedTime)
               : moment(quoteBlock.validUntilTime);
       }
