@@ -79,7 +79,7 @@ $tradeAlertAxeAlertConfiguration_singleSecurities_watchList_width: 67%;
             flex: 0 0 9.25rem;
             margin-left: $spacing_medium;
           }
-          &-disableBtn, &-urgentBtn {
+          &-disableBtn, &-urgentBtn, &-sendEmailBtn {
             flex: 0 0 auto;
             margin-left: $spacing_medium;
             color: $font_color_major;
@@ -120,6 +120,17 @@ $tradeAlertAxeAlertConfiguration_singleSecurities_watchList_width: 67%;
             #{$axeAlertConfigurationBlockName} {
               &__singleSecurities-watchList-securityList-item {
                 &-urgentBtn {
+                  @include material('none');
+                  background-color: $color_active;
+                  color: $font_color_inverse;
+                }
+              }
+            }
+          }
+          &--sendEmail {
+            #{$axeAlertConfigurationBlockName} {
+              &__singleSecurities-watchList-securityList-item {
+                &-sendEmailBtn {
                   @include material('none');
                   background-color: $color_active;
                   color: $font_color_inverse;

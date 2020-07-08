@@ -15,7 +15,8 @@ const AlertConfigSample: BEAlertConfigurationReturn = {
       "subType": "Both",
       "parameters": {},
       "isEnabled": true,
-      "isUrgent": false
+      "isUrgent": false,
+      "sendEmail": false
     }
   }
 }
@@ -190,7 +191,8 @@ export const AlertSample: Array<BEAlertDTO> = [
     "isUrgent":true,
     "isActive":true,
     "isDeleted":false,
-    "isCancelled":false
+    "isCancelled":false,
+    "sendEmail":false
   },
   {
     "type":"Trade",
@@ -343,7 +345,8 @@ export const AlertSample: Array<BEAlertDTO> = [
     "isUrgent":true,
     "isActive":true,
     "isDeleted":false,
-    "isCancelled":false
+    "isCancelled":false,
+    "sendEmail": false
   },
   {
     "type":"Mark",
@@ -516,6 +519,7 @@ export const AlertSample: Array<BEAlertDTO> = [
     "isUrgent":true,
     "isActive":true,
     "isDeleted":false,
-    "isCancelled":false
+    "isCancelled":false,
+    "sendEmail":false
   }
 ]

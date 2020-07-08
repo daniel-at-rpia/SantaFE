@@ -131,6 +131,7 @@
                   'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--disabled': eachSecurityBlock.isDisabled,
                   'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--deleted': eachSecurityBlock.isDeleted,
                   'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--urgent':eachSecurityBlock.isUrgent,
+                  'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--sendEmail': eachSecurityBlock.sendEmail,
                   'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--new': eachSecurityBlock.groupId == null
                 }">
                 <div class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-newTag">
@@ -207,6 +208,7 @@
                   </button>
                 </div>
                 <button title="Urgent" (click)="onTogglePriority(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-urgentBtn santaBtn--iconOnly fal fa-exclamation"></button>
+                <button title="Send Email" (click)="onToggleSendEmail(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-sendEmailBtn santaBtn--iconOnly fal fa-envelope"></button>
                 <button title="Disable (mute)" (click)="onToggleDisableTargetGroupFromAxeWatchList(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-disableBtn santaBtn--iconOnly fal fa-bell-slash"></button>
                 <button title="Remove" (click)="onClickRemoveSecurityFromAxeWatchList(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-removeBtn santaBtn--iconOnly fal fa-eraser"></button>
               </li>

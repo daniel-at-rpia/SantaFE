@@ -381,6 +381,7 @@ export interface BEAlertConfigurationDTO {
   };
   isEnabled: boolean;
   isUrgent: boolean;
+  sendEmail: boolean;
 }
 
 export interface BEAlertDTO {
@@ -405,6 +406,7 @@ export interface BEAlertDTO {
   trades?: Array<BETradeBlock>;
   quote?: BEAlertRegularQuoteBlock|BEAlertMarketListQuoteBlock|BEAlertCDSQuoteBlock;
   marketListAlert?: BEAlertMarketListBlock;
+  sendEmail: boolean;
 }
 
 export interface BETradeBlock {

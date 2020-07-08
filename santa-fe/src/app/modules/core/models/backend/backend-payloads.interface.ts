@@ -94,6 +94,7 @@ export interface PayloadUpdateSingleAlertConfig {
   isEnabled?: boolean;
   isDeleted?: boolean;
   isUrgent?: boolean;
+  sendEmail: boolean;
 }
 
 export interface PayloadSetAlertsToInactive {

@@ -661,6 +661,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.checkIsFilled(targetBlock);
     }
 
+    public onToggleSendEmail(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
+      targetBlock.sendEmail = !targetBlock.sendEmail;
+    }
+
     private fetchSecurities(matchList: Array<SecurityMapEntry>) {
       const list = matchList.map((eachEntry) => {
         return eachEntry.secruityId;
@@ -733,7 +737,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         targetRange: copy.data.alert.shortcutConfig.numericFilterDTO,
         isDeleted: false,
         isDisabled: false,
-        isUrgent: true
+        isUrgent: true,
+        sendEmail: false
       };
       this.state.configuration.axe.securityList.unshift(newEntry);
       this.restfulCommService.logEngagement(
@@ -792,7 +797,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         targetRange: this.populateRangeNumberFilterFromRawConfig(rawGroupConfig),
         isDeleted: false,
         isDisabled: !rawGroupConfig.isEnabled,
-        isUrgent: rawGroupConfig.isUrgent
+        isUrgent: rawGroupConfig.isUrgent,
+        sendEmail: !!rawGroupConfig.sendEmail
       };
       this.checkIsFilled(newEntry);
       this.state.configuration.axe.securityList.unshift(newEntry);
@@ -845,7 +851,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             parameters: {
               WatchType: this.mapWatchTypesToWatchType(eachEntry.axeAlertTypes)
             },
-            isUrgent: eachEntry.isUrgent
+            isUrgent: eachEntry.isUrgent,
+            sendEmail: eachEntry.sendEmail
           };
           this.appendRangeToAxeConfigPayloads(payload, eachEntry);
           payload.groupFilters.SecurityIdentifier = [eachEntry.card.data.securityID];
