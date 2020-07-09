@@ -75,7 +75,7 @@ export class SecurityCard implements OnInit {
       driver: null,
       numericFilterDTO: this.dtoService.formNumericFilterObject(),
       side: [],
-      isUrgent: false,
+      isUrgent: true,
       sendEmail: false
     };
     if (this.cardData.data.mark.markDriver === TriCoreDriverConfig.Spread.label || this.cardData.data.mark.markDriver === TriCoreDriverConfig.Price.label) {

@@ -737,8 +737,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         targetRange: copy.data.alert.shortcutConfig.numericFilterDTO,
         isDeleted: false,
         isDisabled: false,
-        isUrgent: true,
-        sendEmail: false
+        isUrgent: !!copy.data.alert.shortcutConfig.isUrgent,
+        sendEmail: !!copy.data.alert.shortcutConfig.sendEmail
       };
       this.state.configuration.axe.securityList.unshift(newEntry);
       this.restfulCommService.logEngagement(

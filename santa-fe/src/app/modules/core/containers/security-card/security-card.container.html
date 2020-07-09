@@ -1,5 +1,4 @@
 <article
-  title="{{cardData.data.name}}"
   class="sat-securityCard--type-{{cardData.data.ratingLevel}}{{cardData.data.seniorityLevel}}"
   [ngClass]="{
     'sat-securityCard': true,
@@ -15,10 +14,16 @@
     'sat-securityCard--configAlertState': cardData.state.configAlertState,
     'sat-securityCard--tradeAlertTableVariant': cardData.state.isTradeAlertTableVariant
   }">
-  <section class="sat-securityCard__name" (click)="onClickCard()">
+  <section
+    title="{{cardData.data.name}}"
+    class="sat-securityCard__name"
+    (click)="onClickCard()">
     <span class="sat-securityCard__name-text">{{cardData.data.name}}</span>
   </section>
-  <section class="sat-securityCard__rating" (click)="onClickCard()">
+  <section
+    title="{{cardData.data.name}}"
+    class="sat-securityCard__rating"
+    (click)="onClickCard()">
     <span class="sat-securityCard__rating-text">{{cardData.data.ratingValue}}</span>
   </section>
   <section class="sat-securityCard__actionMenu">
@@ -36,7 +41,7 @@
       <button title="Open In Bloomberg TDH" (click)="onClickOpenSecurityInBloomberg('TDH')" class="sat-securityCard__actionMenu-minorList-btn">TDH</button>
     </ul>
   </section>
-  <section class="sat-securityCard__alertShortcutConfig">
+  <section (mouseleave)="onMouseLeaveShortcutConfig()" class="sat-securityCard__alertShortcutConfig">
     <div class="sat-securityCard__alertShortcutConfig-content">
       <!-- <div class="sat-securityCard__alertShortcutConfig-content-alertTypePin"> -->
         <!-- <i class="sat-securityCard__alertShortcutConfig-content-alertTypePin-icon fas fa-axe"></i> -->
