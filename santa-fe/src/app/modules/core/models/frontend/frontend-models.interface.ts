@@ -129,6 +129,8 @@ export interface SecurityDTO extends BasicDTOStructure {
         numericFilterDTO: NumericFilterDTO;
         driver: string;
         side: Array<string>;
+        isUrgent: boolean;
+        sendEmail: boolean;
       }
     }
     tradeHistory: Array<TradeDTO>;

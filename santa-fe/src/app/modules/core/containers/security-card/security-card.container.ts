@@ -74,7 +74,9 @@ export class SecurityCard implements OnInit {
     this.cardData.data.alert.shortcutConfig = {
       driver: null,
       numericFilterDTO: this.dtoService.formNumericFilterObject(),
-      side: []
+      side: [],
+      isUrgent: false,
+      sendEmail: false
     };
     if (this.cardData.data.mark.markDriver === TriCoreDriverConfig.Spread.label || this.cardData.data.mark.markDriver === TriCoreDriverConfig.Price.label) {
       this.cardData.data.alert.shortcutConfig.driver = this.cardData.data.mark.markDriver;
@@ -127,6 +129,14 @@ export class SecurityCard implements OnInit {
     } else {
       this.cardData.data.alert.shortcutConfig.side.push(targetSide);
     }
+  }
+
+  public onToggleUrgentFlag() {
+    this.cardData.data.alert.shortcutConfig.isUrgent = !this.cardData.data.alert.shortcutConfig.isUrgent;
+  }
+
+  public onToggleSendEmailFlag() {
+    this.cardData.data.alert.shortcutConfig.sendEmail = !this.cardData.data.alert.shortcutConfig.sendEmail;
   }
 
   private checkIsFilled() {

@@ -36,7 +36,7 @@
       <button title="Open In Bloomberg TDH" (click)="onClickOpenSecurityInBloomberg('TDH')" class="sat-securityCard__actionMenu-minorList-btn">TDH</button>
     </ul>
   </section>
-  <section (mouseleave)="onMouseLeaveShortcutConfig()" class="sat-securityCard__alertShortcutConfig">
+  <section class="sat-securityCard__alertShortcutConfig">
     <div class="sat-securityCard__alertShortcutConfig-content">
       <!-- <div class="sat-securityCard__alertShortcutConfig-content-alertTypePin"> -->
         <!-- <i class="sat-securityCard__alertShortcutConfig-content-alertTypePin-icon fas fa-axe"></i> -->
@@ -50,10 +50,8 @@
           <span class="sat-securityCard__alertShortcutConfig-content-title-text-securityName">{{cardData.data.name}}</span>
         </div>
       </div>
-      <span class="sat-securityCard__alertShortcutConfig-content-label">
-        Define Range (Optional)
-      </span>
       <div class="sat-securityCard__alertShortcutConfig-content-side">
+        <span class="sat-securityCard__alertShortcutConfig-content-side-label">Side :</span>
         <div class="sat-securityCard__alertShortcutConfig-content-side-btnGroup santaBtnGroup">
           <button
             (click)="onSelectSide(constants.side.bid)"
@@ -73,6 +71,9 @@
           </button>
         </div>
       </div>
+      <span class="sat-securityCard__alertShortcutConfig-content-label">
+        Define Range (Optional)
+      </span>
       <div class="sat-securityCard__alertShortcutConfig-content-level">
         <div class="santaBtnGroup sat-securityCard__alertShortcutConfig-content-level-btnGroup">
           <button
@@ -95,9 +96,34 @@
           (detectedClickedClear)="onShortcutConfigFilterClickedClear()"
         ></numeric-filter>
       </div>
-      <div class="sat-securityCard__alertShortcutConfig-content-save">
-        <button (click)="onSaveShortcutConfig()" class="sat-securityCard__alertShortcutConfig-content-save-cta fal fa-check"></button>
-        <div class="sat-securityCard__alertShortcutConfig-content-save-borderMask"></div>
+      <div class="sat-securityCard__alertShortcutConfig-content-ctas">
+        <div class="sat-securityCard__alertShortcutConfig-content-ctas-urgentFlag">
+          <button
+            title="Is Urgent (display on the right edge of the screen)"
+            (click)="onToggleUrgentFlag()"
+            [ngClass]="{
+              'sat-securityCard__alertShortcutConfig-content-ctas-urgentFlag-btn': true,
+              'fal fa-exclamation': true,
+              'sat-securityCard__alertShortcutConfig-content-ctas-urgentFlag-btn--selected': cardData.data.alert.shortcutConfig.isUrgent
+            }">
+          </button>
+          <div class="sat-securityCard__alertShortcutConfig-content-ctas-urgentFlag-borderMask"></div>
+        </div>
+        <div class="sat-securityCard__alertShortcutConfig-content-ctas-save">
+          <button (click)="onSaveShortcutConfig()" class="sat-securityCard__alertShortcutConfig-content-ctas-save-btn fal fa-check"></button>
+          <div class="sat-securityCard__alertShortcutConfig-content-ctas-save-borderMask"></div>
+        </div>
+        <div class="sat-securityCard__alertShortcutConfig-content-ctas-sendEmailFlag">
+          <button
+            title="Also Notify Me Via Email"
+            (click)="onToggleSendEmailFlag()"
+            [ngClass]="{
+              'sat-securityCard__alertShortcutConfig-content-ctas-sendEmailFlag-btn': true,
+              'fal fa-envelope': true,
+              'sat-securityCard__alertShortcutConfig-content-ctas-sendEmailFlag-btn--selected': cardData.data.alert.shortcutConfig.sendEmail
+            }"></button>
+          <div class="sat-securityCard__alertShortcutConfig-content-ctas-sendEmailFlag-borderMask"></div>
+        </div>
       </div>
     </div>
   </section>

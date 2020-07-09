@@ -217,7 +217,9 @@ export class DTOService {
           shortcutConfig: {
             numericFilterDTO: this.formNumericFilterObject(),
             driver: null,
-            side: []
+            side: [],
+            isUrgent: false,
+            sendEmail: false
           }
         },
         tradeHistory: []
