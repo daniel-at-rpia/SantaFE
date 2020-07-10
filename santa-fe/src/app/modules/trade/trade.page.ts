@@ -22,6 +22,8 @@
     import { selectSelectedSecurityForAnalysis } from 'Trade/selectors/trade.selectors';
     import { CoreUserLoggedIn } from 'Core/actions/core.actions';
     import { selectDislayAlertThumbnail } from 'Core/selectors/core.selectors';
+    import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
+    import { CoreLoadSecurityMap } from 'Core/actions/core.actions';
   //
 
 @Component({
@@ -59,21 +61,7 @@ export class TradePage implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getUserInitials, {req: 'GET'}).pipe(
-      first(),
-      tap((serverReturn) => {
-        this.loadOwnerInitial(serverReturn);
-      }),
-      catchError(err => {
-        if (!!err && !!err.error && !!err.error.text) {
-          this.loadOwnerInitial(err.error.text);
-        } else {
-          this.loadOwnerInitial('n/a');
-          this.restfulCommService.logError(`Can not find user, error`);
-        }
-        return of('error');
-      })
-    ).subscribe();
+    this.fetchOwnerInitial();
     this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
       select(selectSelectedSecurityForAnalysis)
     ).subscribe((targetSecurity) => {
@@ -116,6 +104,24 @@ export class TradePage implements OnInit, OnDestroy {
     this.state.alertPanelMaximized = false;
   }
 
+  private fetchOwnerInitial() {
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getUserInitials, {req: 'GET'}).pipe(
+      first(),
+      tap((serverReturn) => {
+        this.loadOwnerInitial(serverReturn);
+      }),
+      catchError(err => {
+        if (!!err && !!err.error && !!err.error.text) {
+          this.loadOwnerInitial(err.error.text);
+        } else {
+          this.loadOwnerInitial('n/a');
+          this.restfulCommService.logError(`Can not find user, error`);
+        }
+        return of('error');
+      })
+    ).subscribe();
+  }
+
   private loadOwnerInitial(serverReturn: string) {
     const devWhitelist = ['DZ', 'RC', 'MS'];
     if (devWhitelist.indexOf(serverReturn) !== -1) {
@@ -127,4 +133,24 @@ export class TradePage implements OnInit, OnDestroy {
     this.store$.dispatch(new CoreUserLoggedIn(serverReturn));
   }
 
+  private fetchSecurityMap() {
+    // this first call happens in app.root.ts, this function is only called when the first call fails due to BE server being unavail
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSecurityIdMap, {req: 'GET'}).pipe(
+      first(),
+      tap((serverReturn: Object) => {
+        if (!!serverReturn) {
+          const map:Array<SecurityMapEntry> = [];
+          for (const eachSecurityId in serverReturn) {
+            map.push({
+              keywords: serverReturn[eachSecurityId],
+              secruityId: eachSecurityId
+            });
+          }
+          this.store$.dispatch(new CoreLoadSecurityMap(map));
+        } else {
+          this.restfulCommService.logError('Failed to load SecurityId map, can not populate alert configuration');
+        }
+      })
+    ).subscribe();
+  }
 }

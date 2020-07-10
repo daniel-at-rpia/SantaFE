@@ -72,17 +72,10 @@ export class AppRoot implements OnInit, OnDestroy {
         if (!!serverReturn) {
           const map:Array<SecurityMapEntry> = [];
           for (const eachSecurityId in serverReturn) {
-            // const existIndex = map.findIndex((eachItem) => {
-            //   return eachItem.secruityId === serverReturn[eachKeyword];
-            // });
-            // if (existIndex >= 0) {
-              // map[existIndex].keywords.push(eachKeyword);
-            // } else {
-              map.push({
-                keywords: serverReturn[eachSecurityId],
-                secruityId: eachSecurityId
-              });
-            // }
+            map.push({
+              keywords: serverReturn[eachSecurityId],
+              secruityId: eachSecurityId
+            });
           }
           this.store$.dispatch(new CoreLoadSecurityMap(map));
         } else {
