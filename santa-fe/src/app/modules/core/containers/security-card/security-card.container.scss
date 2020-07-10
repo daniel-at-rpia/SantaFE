@@ -466,6 +466,14 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
   &--tableState {
     @include material('none');
     @include mix_border_generator($typical_border_width, $color_gray_85);
+    #{$securityCardBlockName} {
+      &__actionMenu {
+        display: none;
+      }
+      &__alertShortcutConfig {
+        display: none;
+      }
+    }
   }
   &--stencilState {
     background: $color_white;
