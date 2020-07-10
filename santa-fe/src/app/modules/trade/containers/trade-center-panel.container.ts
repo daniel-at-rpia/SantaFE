@@ -27,16 +27,18 @@
       BEBestQuoteDTO,
       BEFetchAllTradeDataReturn
     } from 'BEModels/backend-models.interface';
-    import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
-
+    import { DefinitionConfiguratorEmitterParams, SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       TriCoreDriverConfig,
       DEFAULT_DRIVER_IDENTIFIER,
       EngagementActionList,
       AlertTypes,
-      KEYWORDSEARCH_DEBOUNCE_TIME
+      KEYWORDSEARCH_DEBOUNCE_TIME,
+      FAILED_USER_INITIALS_FALLBACK,
+      DevWhitelist
     } from 'Core/constants/coreConstants.constant';
     import { selectAlertCounts, selectUserInitials } from 'Core/selectors/core.selectors';
+    import { CoreLoadSecurityMap, CoreUserLoggedIn } from 'Core/actions/core.actions';
     import {
       SecurityTableHeaderConfigs,
       SECURITY_TABLE_FINAL_STAGE
@@ -97,7 +99,9 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
     fullOwnerList: FullOwnerList,
     alertTypes: AlertTypes,
-    keywordSearchDebounceTime: KEYWORDSEARCH_DEBOUNCE_TIME
+    keywordSearchDebounceTime: KEYWORDSEARCH_DEBOUNCE_TIME,
+    userInitialsFallback: FAILED_USER_INITIALS_FALLBACK,
+    devWhitelist: DevWhitelist
   }
 
   private initializePageState(): TradeCenterPanelState {
@@ -260,6 +264,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       this.state.presets.selectedPreset = null;
       this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true);
     } else {
+      this.checkInitialPageLoadData();
       this.restfulCommService.logEngagement(
         EngagementActionList.selectPreset,
         'n/a',
@@ -691,5 +696,63 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         this.store$.dispatch(new TradeSecurityTableRowDTOListForAnalysisEvent(this.utilityService.deepCopy(securityTableRowDTOList)));
       }
     }
+  }
+
+  private checkInitialPageLoadData() {
+    this.store$.pipe(
+      first(),
+      select(selectUserInitials)
+    ).subscribe((userInitials) => {
+      // use userInitial as an indicator for whether the inital page load data was fetched successfully, since it should be the last API to fail
+      if (userInitials === this.constants.userInitialsFallback) {
+        this.fetchSecurityMap();
+        this.fetchOwnerInitial();
+      }
+    });
+  }
+
+  private fetchOwnerInitial() {
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getUserInitials, {req: 'GET'}).pipe(
+      first(),
+      tap((serverReturn) => {
+        this.loadOwnerInitial(serverReturn);
+      }),
+      catchError(err => {
+        if (!!err && !!err.error && !!err.error.text) {
+          this.loadOwnerInitial(err.error.text);
+        } else {
+          this.loadOwnerInitial(this.constants.userInitialsFallback);
+          this.restfulCommService.logError(`Can not find user, error`);
+        }
+        return of('error');
+      })
+    ).subscribe();
+  }
+
+  private loadOwnerInitial(serverReturn: string) {
+    const ownerInitials = this.constants.devWhitelist.indexOf(serverReturn) !== -1 ? 'DM' : serverReturn;
+    this.restfulCommService.updateUser(ownerInitials);
+    this.store$.dispatch(new CoreUserLoggedIn(ownerInitials));
+  }
+
+  private fetchSecurityMap() {
+    // this first call happens in app.root.ts, this function is only called when the first call fails due to BE server being unavail
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSecurityIdMap, {req: 'GET'}).pipe(
+      first(),
+      tap((serverReturn: Object) => {
+        if (!!serverReturn) {
+          const map:Array<SecurityMapEntry> = [];
+          for (const eachSecurityId in serverReturn) {
+            map.push({
+              keywords: serverReturn[eachSecurityId],
+              secruityId: eachSecurityId
+            });
+          }
+          this.store$.dispatch(new CoreLoadSecurityMap(map));
+        } else {
+          this.restfulCommService.logError('Failed to load SecurityId map, can not populate alert configuration');
+        }
+      })
+    ).subscribe();
   }
 }

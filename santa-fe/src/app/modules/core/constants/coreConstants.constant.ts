@@ -26,6 +26,9 @@ export const APIUrlMap = {
   logError: 'feLogger/log'
 };
 
+export const FAILED_USER_INITIALS_FALLBACK = 'n/a';
+export const DevWhitelist = ['DZ', 'RC', 'MS'];
+
 export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
   {
     label: 'Default Spread',
