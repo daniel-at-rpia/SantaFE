@@ -260,6 +260,7 @@ export class LiveDataProcessingService {
           const isSecurityDiff = this.isThereDiffInSecurity(oldRow.data.security, eachNewRow.data.security);
           const isQuantDiff = this.isThereDiffInQuantComparer(oldRow.data.cells[0].data.quantComparerDTO, eachNewRow.data.cells[0].data.quantComparerDTO);
           if ( isSecurityDiff > 0 || isQuantDiff > 0) {
+            this.carryOverOldRowStates(eachNewRow, oldRow);
             updateList.push(eachNewRow);
           }
           isSecurityDiff === 1 && positionUpdateList.push(eachNewRow);
@@ -334,5 +335,14 @@ export class LiveDataProcessingService {
       return 5;
     }
     return 0;
+  }
+
+  private carryOverOldRowStates(
+    newRow: SecurityTableRowDTO,
+    oldRow: SecurityTableRowDTO
+  ) {
+    // when an old row is overwritten with a new row, some states of the row and the security card needs to be carried over because they are changed by user interaction, if they are not carried over, it would appear like as the interaction got terminated and the row was refreshed
+    // this causes bad UX, especially in case of the user is entering stuff in the alert shortcut config UI
+    newRow.data.security.state = oldRow.data.security.state;
   }
 }
