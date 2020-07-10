@@ -132,6 +132,6 @@ export class TradePage implements OnInit, OnDestroy {
       this.state.ownerInitial = serverReturn;
     }
     this.restfulCommService.updateUser(this.state.ownerInitial);
-    this.store$.dispatch(new CoreUserLoggedIn(serverReturn));
+    this.store$.dispatch(new CoreUserLoggedIn(this.state.ownerInitial));
   }
 }
