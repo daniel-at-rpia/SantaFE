@@ -37,7 +37,8 @@
     import {
       selectAlertCounts,
       selectSecurityMapContent,
-      selectSecurityMapValidStatus
+      selectSecurityMapValidStatus,
+      selectUserInitials
     } from 'Core/selectors/core.selectors';
     import {
       ALERT_MAX_SECURITY_SEARCH_COUNT,
@@ -86,7 +87,6 @@
 })
 
 export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
-  @Input() ownerInitial: string;
   @Input() sidePanelsDisplayed: boolean;
   @Input() collapseConfiguration: boolean;
   @Output() configureAlert = new EventEmitter();
@@ -95,6 +95,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   @Output() collapseAlertTable = new EventEmitter();
   state: TradeAlertPanelState;
   subscriptions = {
+    userInitialsSub: null,
     securityMapSub: null,
     autoUpdateCountSub: null,
     selectedSecurityForAlertConfigSub: null,
@@ -302,15 +303,20 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
         }
       });
+
+      this.subscriptions.userInitialsSub = this.store$.pipe(
+        select(selectUserInitials)
+      ).subscribe((userInitials) => {
+        if (userInitials) {
+          this.state.isUserPM = this.constants.fullOwnerList.indexOf(userInitials) >= 0;
+        }
+      });
       this.loadAllConfigurations();
     }
 
     public ngOnChanges() {
       if (!!this.collapseConfiguration) {
         this.state.configureAlert = false;
-      }
-      if (!!this.ownerInitial) {
-        this.state.isUserPM = this.constants.fullOwnerList.indexOf(this.ownerInitial) >= 0;
       }
     }
 

@@ -44,7 +44,6 @@
 export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   @Output() populateGraph = new EventEmitter();
   @Input() collapseGraph: boolean;
-  @Input() ownerInitial: string;
   state: TradeMarketAnalysisPanelState;
   subscriptions = {
     receiveSelectedSecuritySub: null

@@ -36,7 +36,7 @@
       AlertTypes,
       KEYWORDSEARCH_DEBOUNCE_TIME
     } from 'Core/constants/coreConstants.constant';
-    import { selectAlertCounts } from 'Core/selectors/core.selectors';
+    import { selectAlertCounts, selectUserInitials } from 'Core/selectors/core.selectors';
     import {
       SecurityTableHeaderConfigs,
       SECURITY_TABLE_FINAL_STAGE
@@ -75,10 +75,10 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
-  @Input() ownerInitial: string;
+export class TradeCenterPanel implements OnInit, OnDestroy {
   state: TradeCenterPanelState;
   subscriptions = {
+    userInitialsSub: null,
     startNewUpdateSub: null,
     securityIDListFromAnalysisSub: null,
     validWindowSub: null,
@@ -219,22 +219,24 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       this.state.filters.keyword.defaultValueForUI = keyword;
       this.keywordChanged$.next(keyword);
     });
-  }
 
-  public ngOnChanges() {
-    if (!!this.ownerInitial) {
-      const matchedInitial = this.constants.fullOwnerList.find((eachInitial) => {
-        return eachInitial === this.ownerInitial;
-      });
-      if (!!matchedInitial) {
-        const filter = [];
-        filter.push(this.ownerInitial);
-        this.constants.ownershipShortcuts[0].includedDefinitions[0].selectedOptions = filter;
-      } else {
-        this.constants.ownershipShortcuts.splice(0, 1);
+    this.subscriptions.userInitialsSub = this.store$.pipe(
+      select(selectUserInitials)
+    ).subscribe((userInitials) => {
+      if (userInitials) {
+        const matchedInitial = this.constants.fullOwnerList.find((eachInitial) => {
+          return eachInitial === userInitials;
+        });
+        if (!!matchedInitial) {
+          const filter = [];
+          filter.push(userInitials);
+          this.constants.ownershipShortcuts[0].includedDefinitions[0].selectedOptions = filter;
+        } else {
+          this.constants.ownershipShortcuts.splice(0, 1);
+        }
+        this.populateSearchShortcuts();
       }
-      this.populateSearchShortcuts();
-    }
+    });
   }
 
   public ngOnDestroy() {

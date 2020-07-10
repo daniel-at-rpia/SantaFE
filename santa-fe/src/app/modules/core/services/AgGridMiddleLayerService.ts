@@ -45,7 +45,6 @@
 
 @Injectable()
 export class AgGridMiddleLayerService {
-  ownerInitial: string;
 
   constructor(
     private utilityService: UtilityService,
@@ -53,8 +52,8 @@ export class AgGridMiddleLayerService {
     private restfulCommService: RestfulCommService
   ){}
 
-  public onGridReady(table: SecurityTableDTO, ownerInitial: string) {
-    this.ownerInitial = ownerInitial;
+  public onGridReady(table: SecurityTableDTO) {
+    // nothing atm
   }
 
   public loadAgGridHeaders(

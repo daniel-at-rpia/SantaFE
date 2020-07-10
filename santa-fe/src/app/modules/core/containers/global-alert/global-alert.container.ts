@@ -35,7 +35,6 @@
 })
 
 export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
-  @Input() ownerInitial: string;
   state: GlobalAlertState;
   subscriptions = {
     newAlertSubscription: null,
