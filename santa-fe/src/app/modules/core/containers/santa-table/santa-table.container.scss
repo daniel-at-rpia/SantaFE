@@ -234,6 +234,14 @@ $alt-background: $color_white;
           flex: 1 1 auto;
         }
       }
+      // those overflow: visible; are for making the material effect on security card more natural
+      .ag-floating-top {
+        overflow-y: visible !important;
+        overflow: visible;
+        .ag-pinned-left-floating-top {
+          overflow: visible;
+        }
+      }
     }
   }
   &__nativeSecurityTable {

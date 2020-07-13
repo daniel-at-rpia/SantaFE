@@ -24,6 +24,7 @@
       [animateRows]="true"
       [suppressContextMenu]="true"
       [context]="agGridConfig.context"
+      [pinnedTopRowData]="tableData.data.agGridPinnedTopRowData"
       (gridReady)="onGridReady($event)"
       (rowClicked)="onRowClicked($event)">
     </ag-grid-angular>

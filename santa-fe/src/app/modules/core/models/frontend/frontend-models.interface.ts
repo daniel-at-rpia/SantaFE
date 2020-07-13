@@ -313,6 +313,7 @@ export interface SecurityTableDTO extends BasicDTOStructure {
     agGridRowData: Array<AgGridRow>;
     agGridFrameworkComponents: object;
     agGridAggregationMap: object;
+    agGridPinnedTopRowData: Array<AgGridRow>;
   },
   state: {
     loadedContentStage: number;

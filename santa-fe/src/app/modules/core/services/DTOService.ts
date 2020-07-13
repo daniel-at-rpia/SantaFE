@@ -783,7 +783,8 @@ export class DTOService {
         agGridColumnDefs: [],
         agGridRowData: [],
         agGridFrameworkComponents: {},
-        agGridAggregationMap: {}
+        agGridAggregationMap: {},
+        agGridPinnedTopRowData: []
       },
       state: {
         loadedContentStage: null,
