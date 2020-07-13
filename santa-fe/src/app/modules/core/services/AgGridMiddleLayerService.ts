@@ -179,7 +179,6 @@ export class AgGridMiddleLayerService {
       );
       !!newAgRow.id && list.push(newAgRow);
     });
-    table.data.agGridPinnedTopRowData = [list[0]];
     table.api.gridApi.setRowData(list);
     // this.resizeAllAutoSizeColumns(table);
     return list;

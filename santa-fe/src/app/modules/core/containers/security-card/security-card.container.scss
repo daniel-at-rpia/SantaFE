@@ -111,6 +111,9 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
         &--search {
           display: none;
         }
+        &--pin {
+          display: none;
+        }
       }
     }
   }
@@ -400,6 +403,37 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
               display: flex;
             }
           }
+        }
+      }
+    }
+  }
+  &--pinActionEnabledState {
+    #{$securityCardBlockName} {
+      &__actionMenu {
+        &-mainList {
+          &-btn--pin {
+            display: flex;
+          }
+        }
+      }
+    }
+  }
+  &--threePrimaryActionVariant {
+    #{$securityCardBlockName} {
+      &__actionMenu {
+        &-minorList-btn {
+          &:first-of-type {
+            left: 2.5rem;
+          }
+          &:nth-of-type(2) {
+            right: 2.5rem;
+          }
+        }
+        &-minorList--top {
+          top: -2.5rem;
+        }
+        &-minorList--bottom {
+          bottom: -2.5rem;
         }
       }
     }

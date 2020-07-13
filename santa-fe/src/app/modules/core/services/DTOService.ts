@@ -61,7 +61,8 @@ export class DTOService {
         onClickSendToGraph: null,
         onClickSendToAlertConfig: null,
         onMouseLeaveShortcutConfig: null,
-        onClickSearch: null
+        onClickSearch: null,
+        onClickPin: null
       },
       state: {
         isSelected: false,

@@ -319,6 +319,28 @@ export class SantaTable implements OnInit, OnChanges {
     payload.targetRow.state.expandViewSortByQuoteMetric = payload.targetRow.state.expandViewSortByQuoteMetric === payload.targetMetricLabel ? null : payload.targetMetricLabel;
   }
 
+  public onClickSecurityCardPin(targetSecurity: SecurityDTO) {
+    if (targetSecurity && targetSecurity.data && targetSecurity.data.securityID) {
+      if (this.tableName === 'tradeMain') {
+        // in the Trade Main Table, rowId = securityId
+        const targetRow = this.tableData.data.agGridRowData.find((eachRow) => {
+          return eachRow.id === targetSecurity.data.securityID;
+        });
+        const existIndexInPinnedList = this.tableData.data.agGridPinnedTopRowData.findIndex((eachRow) => {
+          return eachRow.id === targetSecurity.data.securityID;
+        });
+        if (existIndexInPinnedList >= 0) {
+          // already pinned, so now unpin it
+          this.tableData.data.agGridPinnedTopRowData.splice(existIndexInPinnedList, 1);
+        } else {
+          // pin it
+          this.tableData.data.agGridPinnedTopRowData.push(targetRow);
+        }
+        this.tableData.api.gridApi.setPinnedTopRowData(this.tableData.data.agGridPinnedTopRowData);
+      }
+    }
+  }
+
   private loadTableHeaders(skipAgGrid = false) {
     this.tableData.data.headers = [];
     this.tableData.data.allHeaders = [];
@@ -353,6 +375,9 @@ export class SantaTable implements OnInit, OnChanges {
     if (!isUpdate) {
       rowList.forEach((eachRow) => {
         eachRow.data.security.api.onMouseLeaveShortcutConfig = this.onMouseLeaveSecurityCardAlertShortcutConfig.bind(this);
+        if (this.tableName === 'tradeMain') {
+          eachRow.data.security.api.onClickPin = this.onClickSecurityCardPin.bind(this);
+        }
       });
     }
     this.tableData.data.rows = rowList;

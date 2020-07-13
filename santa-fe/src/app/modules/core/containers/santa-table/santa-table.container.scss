@@ -241,6 +241,19 @@ $alt-background: $color_white;
         .ag-pinned-left-floating-top {
           overflow: visible;
         }
+        .ag-row {
+          &.ag-row-even {
+            background-color: $color_gray_85;
+            border-color: $color_gray_85;
+          }
+          &.ag-row-odd {
+            background-color: $color_gray_8;
+            border-color: $color_gray_8;
+          }
+          &>.ag-cell {
+            color: $font_color_inverse;
+          }
+        }
       }
     }
   }

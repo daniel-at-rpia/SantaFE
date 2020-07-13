@@ -12,7 +12,9 @@
     'sat-securityCard--minorActionDisabledState': cardData.state.isActionMenuMinorActionsDisabled,
     'sat-securityCard--slimVariant': cardData.state.isSlimVariant && !cardData.isMultiLineVariant,
     'sat-securityCard--configAlertState': cardData.state.configAlertState,
-    'sat-securityCard--tradeAlertTableVariant': cardData.state.isTradeAlertTableVariant
+    'sat-securityCard--tradeAlertTableVariant': cardData.state.isTradeAlertTableVariant,
+    'sat-securityCard--pinActionEnabledState': !!cardData.api.onClickPin,
+    'sat-securityCard--threePrimaryActionVariant': !!cardData.api.onClickPin && !cardData.state.isTradeAlertTableVariant
   }">
   <section
     title="{{cardData.data.name}}"
@@ -32,6 +34,7 @@
       <button title="Open In Bloomberg QMGR" (click)="onClickOpenSecurityInBloomberg('QMGR')" class="sat-securityCard__actionMenu-minorList-btn">QMGR</button>
     </ul>
     <ul class="sat-securityCard__actionMenu-mainList">
+      <button (click)="onClickPin()" class="sat-securityCard__actionMenu-mainList-btn sat-securityCard__actionMenu-mainList-btn--pin fal fa-thumbtack"></button>
       <button (click)="onClickSearch()" class="sat-securityCard__actionMenu-mainList-btn sat-securityCard__actionMenu-mainList-btn--search fal fa-search"></button>
       <button (click)="onClickSendToGraph()" class="sat-securityCard__actionMenu-mainList-btn fal fa-chart-line"></button>
       <button (click)="onClickOpenShortcutConfig()" class="sat-securityCard__actionMenu-mainList-btn fal fa-bell"></button>

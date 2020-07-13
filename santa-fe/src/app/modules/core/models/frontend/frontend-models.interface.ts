@@ -141,6 +141,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     onClickSendToAlertConfig: (card: SecurityDTO) => void;
     onMouseLeaveShortcutConfig: () => void;
     onClickSearch: (card: SecurityDTO) => void;
+    onClickPin: (card: SecurityDTO) => void;
   }
   state: {
     isStencil: boolean;
