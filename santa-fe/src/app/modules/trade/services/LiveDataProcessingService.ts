@@ -280,13 +280,13 @@ export class LiveDataProcessingService {
     if (updateList.length > 0) {
       console.log('=== new update ===');
       newRowList.length > 0 && console.log('new rows', newRowList);
-      newRowList.length > 0 && console.log('Position change: ', positionUpdateList);
-      newRowList.length > 0 && console.log('Mark change: ', markUpdateList);
-      newRowList.length > 0 && console.log('Best Quote overwrite: ', newQuantUpdateList);
-      newRowList.length > 0 && console.log('Best Bid change: ', betterBidUpdateList);
-      newRowList.length > 0 && console.log('Best Ask change: ', betterAskUpdateList);
-      newRowList.length > 0 && console.log('Validity change: ', validityUpdateList);
-      newRowList.length > 0 && console.log('Overwrite update: ', overwriteUpdateList);
+      positionUpdateList.length > 0 && console.log('Position change: ', positionUpdateList);
+      markUpdateList.length > 0 && console.log('Mark change: ', markUpdateList);
+      newQuantUpdateList.length > 0 && console.log('Best Quote overwrite: ', newQuantUpdateList);
+      betterBidUpdateList.length > 0 && console.log('Best Bid change: ', betterBidUpdateList);
+      betterAskUpdateList.length > 0 && console.log('Best Ask change: ', betterAskUpdateList);
+      validityUpdateList.length > 0 && console.log('Validity change: ', validityUpdateList);
+      overwriteUpdateList.length > 0 && console.log('Overwrite update: ', overwriteUpdateList);
     }
     return {
       newRowList: updateList,

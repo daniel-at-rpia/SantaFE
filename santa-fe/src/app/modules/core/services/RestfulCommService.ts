@@ -24,7 +24,7 @@ export class RestfulCommService {
 
   constructor(private http: HttpClient) {
     console.log(window.location.host);
-    if (window.location.host.indexOf('local-santa') !== -1) {
+    if (window.location.host.indexOf('local') > -1 && window.location.host.indexOf('santa-rpia.web.app') > -1) {
       console.log('changing BE to localhost');
       this.endpoint = 'https://localhost:51225';
     }
