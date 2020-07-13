@@ -8,7 +8,7 @@ import {APIUrlMap, EngagementActionList} from 'Core/constants/coreConstants.cons
 @Injectable()
 export class RestfulCommService {
 
-  private endpoint = 'https://rpiadev01.rpia.ca:1225';
+  private endpoint = 'https://rpiadev01.ad.rpia:1225';
   // private endpoint = 'https://rpia-quant-dt.ad.rpia:51225';
   // private endpoint = 'https://localhost:51225';
   //private endpoint = 'https://rpia-solutions:51225';
@@ -24,7 +24,7 @@ export class RestfulCommService {
 
   constructor(private http: HttpClient) {
     console.log(window.location.host);
-    if (window.location.host.indexOf('local-santa') !== -1) {
+    if (window.location.host.indexOf('local') > -1 && window.location.host.indexOf('santa-rpia.web.app') > -1) {
       console.log('changing BE to localhost');
       this.endpoint = 'https://localhost:51225';
     }
