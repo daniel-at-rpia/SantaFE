@@ -342,6 +342,13 @@ export class SantaTable implements OnInit, OnChanges {
     }
   }
 
+  public onClickClearAllPinnedRows() {
+    this.tableData.data.agGridPinnedTopRowData = [];
+    if (this.tableData.state.isAgGridReady) {
+      this.tableData.api.gridApi.setPinnedTopRowData([]);
+    }
+  }
+
   private loadTableHeaders(skipAgGrid = false) {
     this.tableData.data.headers = [];
     this.tableData.data.allHeaders = [];
