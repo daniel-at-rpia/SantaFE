@@ -334,7 +334,8 @@ export class SantaTable implements OnInit, OnChanges {
           this.tableData.data.agGridPinnedTopRowData.splice(existIndexInPinnedList, 1);
         } else {
           // pin it
-          this.tableData.data.agGridPinnedTopRowData.push(targetRow);
+          // the deep copy is to make sure the pinned rows are retained as the state of the table changes. it also ensures when clicking on the pinned row's card, it doesn't trigger both the regular row and the pinned row 
+          this.tableData.data.agGridPinnedTopRowData.push(this.utilityService.deepCopy(targetRow));
         }
         this.tableData.api.gridApi.setPinnedTopRowData(this.tableData.data.agGridPinnedTopRowData);
       }
