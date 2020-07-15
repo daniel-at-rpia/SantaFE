@@ -7,9 +7,6 @@ Because of this, while component models need to follow "BasicDTOStructure", bloc
 */
 
 import * as DTOs from 'FEModels/frontend-models.interface';
-import {
-  AxeAlertScope, AxeAlertType
-} from 'Core/constants/tradeConstants.constant';
 import * as am4charts from "@amcharts/amcharts4/charts";
 import {
   GridApi,
@@ -235,19 +232,6 @@ export interface SecurityTableRowQuoteBlock {
   secondaryPresentQuotes: Array<DTOs.SecurityQuoteDTO>;
   secondaryQuotes: Array<DTOs.SecurityQuoteDTO>;
   secondarySecurityName: string;
-}
-
-export interface TradeAlertConfigurationAxeGroupBlock {
-  card: DTOs.SecurityDTO;
-  groupId: string;
-  scopes: Array<AxeAlertScope>;
-  axeAlertTypes: Array<AxeAlertType>;
-  isDeleted: boolean;
-  isDisabled: boolean;
-  isUrgent: boolean;
-  targetDriver: string;
-  targetRange: DTOs.NumericFilterDTO;
-  sendEmail: boolean;
 }
 
 export interface TableFetchResultBlock {
