@@ -19,6 +19,7 @@ import * as am4Charts from '@amcharts/amcharts4/charts';
 
 import {Alert} from "Core/components/alert/alert.component";
 
+import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 
 interface BasicDTOStructure {
   [property: string]: object;
@@ -630,5 +631,22 @@ export interface SantaTableAlertStatusCellDTO extends BasicDTOStructure {
   state: {
     grayedOutState: boolean;
     highlightedState: boolean;
+  }
+}
+
+export interface TradeAlertConfigurationAxeGroupBlockDTO extends BasicDTOStructure {
+  data: {
+    card: SecurityDTO;
+    groupId: string;
+    scopes: Array<AxeAlertScope>;
+    axeAlertTypes: Array<AxeAlertType>;
+    targetDriver: string;
+    targetRange: NumericFilterDTO;
+    sendEmail: boolean;
+  },
+  state: {
+    isDeleted: boolean;
+    isDisabled: boolean;
+    isUrgent: boolean;
   }
 }
