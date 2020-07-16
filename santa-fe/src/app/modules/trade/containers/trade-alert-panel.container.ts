@@ -735,22 +735,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       copy.state.isInteractionDisabled = true;
       copy.state.isMultiLineVariant = false;
       copy.state.isWidthFlexible = true;
-      const newEntry: TradeAlertConfigurationAxeGroupBlockDTO = {
-        data: {
-          card: copy,
-          groupId: null,
-          scopes: copy.data.alert.shortcutConfig.side.length > 0 ? copy.data.alert.shortcutConfig.side.map((eachSide) => {return eachSide as AxeAlertScope}) : [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid],
-          axeAlertTypes: [this.constants.axeAlertType.normal, this.constants.axeAlertType.marketList],
-          targetDriver: copy.data.alert.shortcutConfig.driver || null,
-          targetRange: copy.data.alert.shortcutConfig.numericFilterDTO,
-          sendEmail: !!copy.data.alert.shortcutConfig.sendEmail
-        },
-        state: {
-          isDeleted: false,
-          isDisabled: false,
-          isUrgent: !!copy.data.alert.shortcutConfig.isUrgent,
-        }
-      };
+      const newEntry: TradeAlertConfigurationAxeGroupBlockDTO = this.dtoService.formWatchListObject(copy);
       this.state.configuration.axe.securityList.unshift(newEntry);
       this.restfulCommService.logEngagement(
         this.restfulCommService.engagementMap.tradeAlertAddSingleSecurity,

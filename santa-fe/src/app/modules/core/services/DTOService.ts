@@ -38,6 +38,10 @@
     import {
       QuoteHeaderConfigList
     } from 'Core/constants/securityTableConstants.constant';
+    import {
+      AxeAlertScope,
+      AxeAlertType
+    } from 'Core/constants/tradeConstants.constant';
   //
 
 @Injectable()
@@ -1565,6 +1569,26 @@ export class DTOService {
         isFilled: false
       }
     };
+    return object;
+  }
+
+  public formWatchListObject(copy: DTOs.SecurityDTO) {
+    const object: DTOs.TradeAlertConfigurationAxeGroupBlockDTO = {
+      data: {
+        card: copy,
+        groupId: null,
+        scopes: copy.data.alert.shortcutConfig.side.length > 0 ? copy.data.alert.shortcutConfig.side.map((eachSide) => {return eachSide as AxeAlertScope}) : [AxeAlertScope.ask, AxeAlertScope.bid],
+        axeAlertTypes: [AxeAlertType.normal, AxeAlertType.marketList],
+        targetDriver: copy.data.alert.shortcutConfig.driver || null,
+        targetRange: copy.data.alert.shortcutConfig.numericFilterDTO,
+        sendEmail: !!copy.data.alert.shortcutConfig.sendEmail
+      },
+      state: {
+        isDeleted: false,
+        isDisabled: false,
+        isUrgent: !!copy.data.alert.shortcutConfig.isUrgent,
+      }
+    }
     return object;
   }
 }
