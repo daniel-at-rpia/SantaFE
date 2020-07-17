@@ -719,6 +719,7 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   private carryAxeLevelOnOldQuotes(quoteList: Array<SecurityQuoteDTO>) {
+    const mergedList = [];  // this list is for recording all the axe quotes that are merged into other run quotes. axe quotes are merged if the run is close enough (5mins) with it. To complete the merge, we need to keep track of the merged axe quotes, and after looping through all of them, then remove them from the list 
     quoteList.forEach((eachQuote) => {
       if (eachQuote.state.hasBid && eachQuote.data.bid.isAxe) {
         const targetAxeBid = eachQuote;
@@ -734,6 +735,9 @@ export class SantaTable implements OnInit, OnChanges {
             eachOldQuote.state.hasBid = true;
             eachOldQuote.state.isBestAxeBid = targetAxeBid.state.isBestAxeBid;
             eachOldQuote.state.isBestBid = targetAxeBid.state.isBestAxeBid;
+            if (Math.abs(targetAxeBid.data.unixTimestamp - eachOldQuote.data.unixTimestamp) <= 300) {
+              !mergedList.includes(targetAxeBid) && mergedList.push(targetAxeBid);
+            }
           }
         });
       }
@@ -751,10 +755,19 @@ export class SantaTable implements OnInit, OnChanges {
             eachOldQuote.state.hasAsk = true;
             eachOldQuote.state.isBestAxeOffer = targetAxeAsk.state.isBestAxeOffer;
             eachOldQuote.state.isBestOffer = targetAxeAsk.state.isBestOffer;
+            if (Math.abs(targetAxeAsk.data.unixTimestamp - eachOldQuote.data.unixTimestamp) <= 300) {
+              !mergedList.includes(targetAxeAsk) && mergedList.push(targetAxeAsk);
+            }
           }
         })
       }
     });
+    mergedList.forEach((eachMergedAxeQuote) => {
+      const itemIndex = quoteList.findIndex((eachQuote) => {
+        return eachQuote.data.uuid === eachMergedAxeQuote.data.uuid;
+      });
+      itemIndex >= 0 && quoteList.splice(itemIndex, 1);
+    })
   }
 
   private isOldQuoteRecentEnough(targetQuote: SecurityQuoteDTO, oldQuote: SecurityQuoteDTO): boolean {
