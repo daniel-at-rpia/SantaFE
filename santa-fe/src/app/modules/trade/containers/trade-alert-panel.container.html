@@ -123,92 +123,23 @@
         <section class="sat-tradeAlertAxeAlertConfiguration__singleSecurities">
           <div class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList">
             <ul class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList">
-              <li
-                *ngFor="let eachSecurityBlock of state.configuration.axe.securityList"
-                [ngClass]="{
-                  'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item': true,
-                  'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--disabled': eachSecurityBlock.state.isDisabled,
-                  'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--deleted': eachSecurityBlock.state.isDeleted,
-                  'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--urgent':eachSecurityBlock.state.isUrgent,
-                  'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--sendEmail': eachSecurityBlock.data.sendEmail,
-                  'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--new': eachSecurityBlock.data.groupId == null
-                }">
-                <div class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-newTag">
-                  <i class="fal fa-sparkles"></i>
-                  <span>New</span>
-                </div>
-                <div class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-disableTag">
-                  <i class="fal fa-bell-slash"></i>
-                  <span>Disabled</span>
-                </div>
-                <security-card *ngIf="eachSecurityBlock.data.card" [cardData]="eachSecurityBlock.data.card"></security-card>
-                <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup">
-                  <button
-                    (click)="onSelectAxeWatchlistSide(constants.axeAlertScope.bid, eachSecurityBlock)"
-                    [ngClass]="{
-                      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn': true,
-                      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.data.scopes.indexOf(constants.axeAlertScope.bid) >= 0
-                    }">
-                    <span>Bid</span>
-                  </button>
-                  <button
-                    (click)="onSelectAxeWatchlistSide(constants.axeAlertScope.ask, eachSecurityBlock)"
-                    [ngClass]="{
-                      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn': true,
-                      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.data.scopes.indexOf(constants.axeAlertScope.ask) >= 0
-                    }">
-                    <span>Ask</span>
-                  </button>
-                </div>
-                <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup">
-                  <button
-                    title="Watching"
-                    (click)="onSelectAxeAlertWatchType(constants.axeAlertType.normal, eachSecurityBlock)"
-                    [ngClass]="{
-                      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn': true,
-                      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.data.axeAlertTypes.indexOf(constants.axeAlertType.normal) >= 0
-                    }">
-                    <span>Axe</span>
-                  </button>
-                  <button
-                    title="Watching"
-                    (click)="onSelectAxeAlertWatchType(constants.axeAlertType.marketList, eachSecurityBlock)"
-                    [ngClass]="{
-                      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn': true,
-                      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.data.axeAlertTypes.indexOf(constants.axeAlertType.marketList) >= 0
-                    }">
-                    <span>Inquiry</span>
-                  </button>
-                </div>
-                <numeric-filter
-                  [filterData]="eachSecurityBlock.data.targetRange"
-                  (detectedMinChange)="onChangeAxeRangeMin($event, eachSecurityBlock)"
-                  (detectedMaxChange)="onChangeAxeRangeMax($event, eachSecurityBlock)"
-                  (detectedClickedClear)="onClickedClearRange(eachSecurityBlock)"
-                ></numeric-filter>
-                <div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup">
-                  <button
-                    (click)="onSelectAxeRangeDriver(eachSecurityBlock, constants.driver.Spread.label)"
-                    [ngClass]="{
-                      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn': true,
-                      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.data.targetDriver === constants.driver.Spread.label
-                    }">
-                    <span>Sprd</span>
-                  </button>
-                  <button
-                    (click)="onSelectAxeRangeDriver(eachSecurityBlock, constants.driver.Price.label)"
-                    [ngClass]="{
-                      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn': true,
-                      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.data.targetDriver === constants.driver.Price.label
-                    }">
-                    <span>Px</span>
-                  </button>
-                </div>
-                <button title="Urgent" (click)="onTogglePriority(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-urgentBtn santaBtn--iconOnly fal fa-exclamation"></button>
-                <button title="Send Email" (click)="onToggleSendEmail(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-sendEmailBtn santaBtn--iconOnly fal fa-envelope"></button>
-                <button title="Disable (mute)" (click)="onToggleDisableTargetGroupFromAxeWatchList(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-disableBtn santaBtn--iconOnly fal fa-bell-slash"></button>
-                <button title="Remove" (click)="onClickRemoveSecurityFromAxeWatchList(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-removeBtn santaBtn--iconOnly fal fa-eraser"></button>
-              </li>
+            <alert-watch-list
+            [securityBlockList]="state.configuration.axe.securityList"
+            [constants]="constants"
+            (selectAxeWatchlistSideBid)="onSelectAxeWatchlistSide($event)"
+            (selectAxeWatchlistSideAsk)="onSelectAxeWatchlistSide($event)"
+            (selectAxeWatchlistTypeNormal)="onSelectAxeAlertWatchType($event)"
+            (selectAxeWatchlistTypeMarketList)="onSelectAxeAlertWatchType($event)"
+            (changeAxeWatchlistRangeMin)="onChangeAxeRangeMin($event)"
+            (changeAxeWatchlistRangeMax)="onChangeAxeRangeMax($event)"
+            (clickAxeWatchlistClearRange)="onClickedClearRange($event)"
+            (selectAxeWatchlistRangeDriverSprd)="onSelectAxeRangeDriver($event)"
+            (selectAxeWatchlistRangeDriverPx)="onSelectAxeRangeDriver($event)"
+            (toggleAxeWatchlistPriority)="onTogglePriority($event)"
+            (toggleAxeWatchlistSendEmail)="onToggleSendEmail($event)"
+            (toggleDisableTargetGroupFromAxeWatchlist)="onToggleDisableTargetGroupFromAxeWatchList($event)"
+            (clickRemoveSecurityFromAxeWatchlist)="onClickRemoveSecurityFromAxeWatchList($event)"
+            ></alert-watch-list>
             </ul>
           </div>
           <div class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-search">

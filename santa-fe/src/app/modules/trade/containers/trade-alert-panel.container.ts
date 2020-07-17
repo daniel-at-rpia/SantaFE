@@ -21,7 +21,13 @@
       NumericFilterDTO,
       TradeAlertConfigurationAxeGroupBlockDTO
     } from 'FEModels/frontend-models.interface';
-    import { TableFetchResultBlock } from 'FEModels/frontend-blocks.interface';
+    import { 
+      TableFetchResultBlock,
+      SelectAxeWatchlistSide,
+      SelectAxeWatchlistType,
+      SelectAxeWatchlistRangeValue,
+      SelectAxeWatchlistRangeDriver
+    } from 'FEModels/frontend-blocks.interface';
     import {
       BESecurityDTO,
       BEAlertConfigurationReturn,
@@ -561,8 +567,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         config.searchList = [];
       }
     }
-
-    public onSelectAxeWatchlistSide(targetScope: AxeAlertScope, targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+  
+    public onSelectAxeWatchlistSide({targetScope, targetBlock}: SelectAxeWatchlistSide) {
       if (!!targetScope && !!targetBlock && !targetBlock.state.isDisabled) {
         this.addScopeToAxeWatchlistEntry(targetBlock, targetScope);
         this.restfulCommService.logEngagement(
@@ -591,7 +597,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       }
     }
 
-    public onSelectAxeAlertWatchType(targetType: AxeAlertType, targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+    public onSelectAxeAlertWatchType({targetType, targetBlock}: SelectAxeWatchlistType) {
       if (!!targetType && !!targetBlock && !targetBlock.state.isDisabled) {
         if (targetBlock.data.axeAlertTypes.indexOf(targetType) === -1) {
           targetBlock.data.axeAlertTypes = [targetType, ...targetBlock.data.axeAlertTypes];
@@ -646,16 +652,16 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       );
     }
 
-    public onSelectAxeRangeDriver(targetBlock: TradeAlertConfigurationAxeGroupBlockDTO, targetDriver: string) {
+    public onSelectAxeRangeDriver({targetBlock, targetDriver}: SelectAxeWatchlistRangeDriver) {
       targetBlock.data.targetDriver = targetDriver;
     }
 
-    public onChangeAxeRangeMin(newValue, targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+    public onChangeAxeRangeMin({newValue, targetBlock}: SelectAxeWatchlistRangeValue) {
       targetBlock.data.targetRange.data.minNumber = newValue === "" ? newValue : parseFloat(newValue);
       this.checkIsFilled(targetBlock);
     }
 
-    public onChangeAxeRangeMax(newValue, targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+    public onChangeAxeRangeMax({newValue, targetBlock}: SelectAxeWatchlistRangeValue) {
       targetBlock.data.targetRange.data.maxNumber = newValue === "" ? newValue : parseFloat(newValue);
       this.checkIsFilled(targetBlock);
     }
