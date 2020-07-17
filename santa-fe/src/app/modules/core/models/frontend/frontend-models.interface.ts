@@ -12,10 +12,7 @@ import {
   SecurityCostPortfolioBlock
 } from 'FEModels/frontend-blocks.interface';
 import {AlertSubTypes, AlertTypes} from 'Core/constants/coreConstants.constant';
-import {
-  ClickedOpenSecurityInBloombergEmitterParams,
-  SantaTableNumericFloatingFilterParams
-} from 'FEModels/frontend-adhoc-packages.interface';
+import { SantaTableNumericFloatingFilterParams } from 'FEModels/frontend-adhoc-packages.interface';
 import * as agGrid from 'ag-grid-community';
 import * as moment from 'moment';
 import * as am4Charts from '@amcharts/amcharts4/charts';
@@ -113,6 +110,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     hasIndex: boolean;
     hedgeFactor: number;
     alert: {
+      alertId: string;
       alertTime: string;
       alertTimeRaw: number;
       alertType: string;
@@ -127,20 +125,25 @@ export interface SecurityDTO extends BasicDTOStructure {
       alertQuoteDealer: string;
       alertTradeTrader: string;
       alertStatus: string;
+      shortcutConfig: {
+        numericFilterDTO: NumericFilterDTO;
+        driver: string;
+        side: Array<string>;
+        isUrgent: boolean;
+        sendEmail: boolean;
+      }
     }
     tradeHistory: Array<TradeDTO>;
   }
   api: {
     onClickCard: (card: SecurityDTO) => void;
     onClickSendToGraph: (card: SecurityDTO) => void;
-    onClickThumbDown: (card: SecurityDTO) => void;
-    onClickOpenSecurityInBloomberg: (params: ClickedOpenSecurityInBloombergEmitterParams) => void;
     onClickSendToAlertConfig: (card: SecurityDTO) => void;
+    onClickSearch: (card: SecurityDTO) => void;
   }
   state: {
     isStencil: boolean;
     isInteractionDisabled: boolean;
-    isInteractionThumbDownDisabled: boolean;
     isSelected: boolean;
     isMultiLineVariant: boolean;
     isWidthFlexible: boolean;
@@ -148,6 +151,8 @@ export interface SecurityDTO extends BasicDTOStructure {
     isActionMenuPrimaryActionsDisabled: boolean;
     isActionMenuMinorActionsDisabled: boolean;
     isSlimVariant: boolean;
+    configAlertState: boolean;
+    isTradeAlertTableVariant: boolean;
   }
 }
 

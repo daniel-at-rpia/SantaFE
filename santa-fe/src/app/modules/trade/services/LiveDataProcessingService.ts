@@ -12,11 +12,7 @@
       SearchShortcutDTO,
       AlertDTO
     } from 'FEModels/frontend-models.interface';
-    import {
-      AlertDTOMap,
-      LiveDataDiffingResult,
-      ClickedOpenSecurityInBloombergEmitterParams
-    } from 'FEModels/frontend-adhoc-packages.interface';
+    import { AlertDTOMap, LiveDataDiffingResult } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       BEPortfolioDTO,
       BESecurityDTO,
@@ -44,7 +40,6 @@ export class LiveDataProcessingService {
     selectedDriver: string,
     serverReturn: BEFetchAllTradeDataReturn,
     sendToGraphCallback: (card: SecurityDTO) => void,
-    openSecurityInBloombergCallback: (params: ClickedOpenSecurityInBloombergEmitterParams) => void,
     sendToAlertConfigCallback: (card: SecurityDTO) => void
   ): Array<SecurityTableRowDTO> {
     const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
@@ -54,9 +49,7 @@ export class LiveDataProcessingService {
       let isValidFlag = true;
       const newBESecurity:BESecurityDTO = rawSecurityDTOMap[eachKey].security;
       const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false, false, selectedDriver);
-      newSecurity.state.isInteractionThumbDownDisabled = true;
       newSecurity.api.onClickSendToGraph = sendToGraphCallback;
-      newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
       newSecurity.api.onClickSendToAlertConfig = sendToAlertConfigCallback;
       if (!!rawSecurityDTOMap[eachKey].positions) {
         rawSecurityDTOMap[eachKey].positions.forEach((eachPortfolio: BEPortfolioDTO) => {
@@ -90,8 +83,8 @@ export class LiveDataProcessingService {
     selectedDriver: string,
     serverReturn: BEFetchAllTradeDataReturn,
     sendToGraphCallback: (card: SecurityDTO) => void,
-    openSecurityInBloombergCallback: (params: ClickedOpenSecurityInBloombergEmitterParams) => void,
-    sendToAlertConfigCallback: (card: SecurityDTO) => void
+    sendToAlertConfigCallback: (card: SecurityDTO) => void,
+    searchCallback: (card: SecurityDTO) => void
   ): Array<SecurityTableRowDTO> {
     const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
     const prinstineRowList: Array<SecurityTableRowDTO> = [];
@@ -103,10 +96,11 @@ export class LiveDataProcessingService {
         if (rawSecurityDTOMap[targetSecurityId]) {
           const newBESecurity:BESecurityDTO = rawSecurityDTOMap[targetSecurityId].security;
           const newSecurity = this.dtoService.formSecurityCardObject(targetSecurityId, newBESecurity, false, true, selectedDriver);
-          newSecurity.state.isInteractionThumbDownDisabled = true;
           newSecurity.api.onClickSendToGraph = sendToGraphCallback;
-          newSecurity.api.onClickOpenSecurityInBloomberg = openSecurityInBloombergCallback;
           newSecurity.api.onClickSendToAlertConfig = sendToAlertConfigCallback;
+          newSecurity.api.onClickSearch = searchCallback;
+          newSecurity.state.isTradeAlertTableVariant = true;
+          newSecurity.state.isActionMenuMinorActionsDisabled = true;
           if (!!rawSecurityDTOMap[targetSecurityId].positions) {
             rawSecurityDTOMap[targetSecurityId].positions.forEach((eachPortfolio: BEPortfolioDTO) => {
               this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio);
@@ -266,6 +260,7 @@ export class LiveDataProcessingService {
           const isSecurityDiff = this.isThereDiffInSecurity(oldRow.data.security, eachNewRow.data.security);
           const isQuantDiff = this.isThereDiffInQuantComparer(oldRow.data.cells[0].data.quantComparerDTO, eachNewRow.data.cells[0].data.quantComparerDTO);
           if ( isSecurityDiff > 0 || isQuantDiff > 0) {
+            this.carryOverOldRowStates(eachNewRow, oldRow);
             updateList.push(eachNewRow);
           }
           isSecurityDiff === 1 && positionUpdateList.push(eachNewRow);
@@ -285,13 +280,13 @@ export class LiveDataProcessingService {
     if (updateList.length > 0) {
       console.log('=== new update ===');
       newRowList.length > 0 && console.log('new rows', newRowList);
-      newRowList.length > 0 && console.log('Position change: ', positionUpdateList);
-      newRowList.length > 0 && console.log('Mark change: ', markUpdateList);
-      newRowList.length > 0 && console.log('Best Quote overwrite: ', newQuantUpdateList);
-      newRowList.length > 0 && console.log('Best Bid change: ', betterBidUpdateList);
-      newRowList.length > 0 && console.log('Best Ask change: ', betterAskUpdateList);
-      newRowList.length > 0 && console.log('Validity change: ', validityUpdateList);
-      newRowList.length > 0 && console.log('Overwrite update: ', overwriteUpdateList);
+      positionUpdateList.length > 0 && console.log('Position change: ', positionUpdateList);
+      markUpdateList.length > 0 && console.log('Mark change: ', markUpdateList);
+      newQuantUpdateList.length > 0 && console.log('Best Quote overwrite: ', newQuantUpdateList);
+      betterBidUpdateList.length > 0 && console.log('Best Bid change: ', betterBidUpdateList);
+      betterAskUpdateList.length > 0 && console.log('Best Ask change: ', betterAskUpdateList);
+      validityUpdateList.length > 0 && console.log('Validity change: ', validityUpdateList);
+      overwriteUpdateList.length > 0 && console.log('Overwrite update: ', overwriteUpdateList);
     }
     return {
       newRowList: updateList,
@@ -340,5 +335,14 @@ export class LiveDataProcessingService {
       return 5;
     }
     return 0;
+  }
+
+  private carryOverOldRowStates(
+    newRow: SecurityTableRowDTO,
+    oldRow: SecurityTableRowDTO
+  ) {
+    // when an old row is overwritten with a new row, some states of the row and the security card needs to be carried over because they are changed by user interaction, if they are not carried over, it would appear like as the interaction got terminated and the row was refreshed
+    // this causes bad UX, especially in case of the user is entering stuff in the alert shortcut config UI
+    newRow.data.security.state = oldRow.data.security.state;
   }
 }

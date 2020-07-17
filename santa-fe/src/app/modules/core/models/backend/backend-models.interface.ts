@@ -369,14 +369,19 @@ export interface BEAlertConfigurationDTO {
   type: string;
   subType: string;
   parameters?: {
-    LoseMoneyPriceThreshold?: number,
-    MakeMoneyPriceThreshold?: number,
-    LoseMoneySpreadThreshold?: number,
-    MakeMoneySpreadThreshold?: number,
-    WatchType?: AxeAlertType
+    LoseMoneyPriceThreshold?: number;
+    MakeMoneyPriceThreshold?: number;
+    LoseMoneySpreadThreshold?: number;
+    MakeMoneySpreadThreshold?: number;
+    WatchType?: AxeAlertType;
+    UpperPriceThreshold?: number;
+    UpperSpreadThreshold?: number;
+    LowerPriceThreshold?: number;
+    LowerSpreadThreshold?: number;
   };
   isEnabled: boolean;
   isUrgent: boolean;
+  sendEmail: boolean;
 }
 
 export interface BEAlertDTO {
@@ -401,6 +406,7 @@ export interface BEAlertDTO {
   trades?: Array<BETradeBlock>;
   quote?: BEAlertRegularQuoteBlock|BEAlertMarketListQuoteBlock|BEAlertCDSQuoteBlock;
   marketListAlert?: BEAlertMarketListBlock;
+  sendEmail: boolean;
 }
 
 export interface BETradeBlock {

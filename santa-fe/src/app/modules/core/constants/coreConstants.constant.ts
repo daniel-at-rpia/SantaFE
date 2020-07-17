@@ -26,6 +26,9 @@ export const APIUrlMap = {
   logError: 'feLogger/log'
 };
 
+export const FAILED_USER_INITIALS_FALLBACK = 'n/a';
+export const DevWhitelist = ['DZ', 'RC', 'MS', 'SC'];
+
 export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
   {
     label: 'Default Spread',
@@ -207,7 +210,7 @@ export enum AlertTypes {
   axeAlert = 'Axe',
   markAlert = 'Mark',
   tradeAlert = 'Trade',
-  default = ''
+  system = 'System'
 }
 
 export enum AlertSubTypes {

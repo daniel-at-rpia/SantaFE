@@ -14,7 +14,7 @@
       SecurityDefinitionDTO
     } from 'FEModels/frontend-models.interface';
     import { TradeMarketAnalysisPanelState } from 'FEModels/frontend-page-states.interface';
-    import { LilMarketGraphSeriesDataPack, ClickedOpenSecurityInBloombergEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
+    import { LilMarketGraphSeriesDataPack } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       BEHistoricalSummaryDTO,
       BEHistoricalSummaryOverviewDTO,
@@ -44,7 +44,6 @@
 export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   @Output() populateGraph = new EventEmitter();
   @Input() collapseGraph: boolean;
-  @Input() ownerInitial: string;
   state: TradeMarketAnalysisPanelState;
   subscriptions = {
     receiveSelectedSecuritySub: null
@@ -230,23 +229,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
 
   public onClickSecurityCardSentToAlertConfig(targetSecurity: SecurityDTO) {
     this.store$.dispatch(new TradeSelectedSecurityForAlertConfigEvent(this.utilityService.deepCopy(targetSecurity)));
-    this.restfulCommService.logEngagement(
-      EngagementActionList.sendToAlertConfig,
-      targetSecurity.data.securityID,
-      'n/a',
-      'Trade - Lil Market Panel'
-    );
-  }
-
-  public onClickOpenSecurityInBloomberg(pack: ClickedOpenSecurityInBloombergEmitterParams) {
-    this.restfulCommService.logEngagement(
-      EngagementActionList.bloombergRedict,
-      pack.targetSecurity.data.securityID,
-      `BBG - ${pack.targetBBGModule}`,
-      'Trade - Lil Market Panel'
-    );
-    const url = `bbg://securities/${pack.targetSecurity.data.globalIdentifier}%20${pack.yellowCard}/${pack.targetBBGModule}`;
-    window.open(url);
   }
 
   private onSecuritySelected(targetSecurity: SecurityDTO) {
@@ -402,7 +384,6 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
       this.state.table.moveDistanceBasisList.push('');
       const groupDTO = this.dtoService.formSecurityCardObject('', null, true, false);
       groupDTO.state.isStencil = false;
-      groupDTO.state.isInteractionThumbDownDisabled = true;
       groupDTO.state.isActionMenuMinorActionsDisabled = true;
       groupDTO.data.name = rawData.Group.group.name;
       this.applyStatesToSecurityCards(groupDTO);
@@ -479,9 +460,8 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     targetSecurity.state.isMultiLineVariant = false;
     targetSecurity.state.isWidthFlexible = true;
     targetSecurity.api.onClickCard = this.onSelectSecurityCardInPresentList.bind(this);
-    targetSecurity.api.onClickThumbDown = this.onClickSecurityCardThumbDown.bind(this);
+    // targetSecurity.api.onClickThumbDown = this.onClickSecurityCardThumbDown.bind(this);
     targetSecurity.api.onClickSendToGraph = this.onClickSecurityCardSendToGraph.bind(this);
-    targetSecurity.api.onClickOpenSecurityInBloomberg = this.onClickOpenSecurityInBloomberg.bind(this);
     targetSecurity.api.onClickSendToAlertConfig = this.onClickSecurityCardSentToAlertConfig.bind(this);
   }
 

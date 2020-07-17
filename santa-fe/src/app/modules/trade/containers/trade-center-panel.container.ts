@@ -1,7 +1,7 @@
   // dependencies
     import { Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
     import { of, Subscription, Subject } from 'rxjs';
-    import { catchError, first, tap, withLatestFrom, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+    import { catchError, first, tap, withLatestFrom, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
     import { select, Store } from '@ngrx/store';
 
     import { DTOService } from 'Core/services/DTOService';
@@ -20,26 +20,25 @@
       AlertCountSummaryDTO
     } from 'FEModels/frontend-models.interface';
     import { TableFetchResultBlock } from 'FEModels/frontend-blocks.interface';
-    import {PayloadGetTradeFullData} from 'BEModels/backend-payloads.interface';
+    import { PayloadGetTradeFullData } from 'BEModels/backend-payloads.interface';
     import {
       BEPortfolioDTO,
       BESecurityDTO,
       BEBestQuoteDTO,
       BEFetchAllTradeDataReturn
     } from 'BEModels/backend-models.interface';
-    import {
-      DefinitionConfiguratorEmitterParams,
-      ClickedOpenSecurityInBloombergEmitterParams
-    } from 'FEModels/frontend-adhoc-packages.interface';
-
+    import { DefinitionConfiguratorEmitterParams, SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       TriCoreDriverConfig,
       DEFAULT_DRIVER_IDENTIFIER,
       EngagementActionList,
       AlertTypes,
-      KEYWORDSEARCH_DEBOUNCE_TIME
+      KEYWORDSEARCH_DEBOUNCE_TIME,
+      FAILED_USER_INITIALS_FALLBACK,
+      DevWhitelist
     } from 'Core/constants/coreConstants.constant';
-    import { selectAlertCounts } from 'Core/selectors/core.selectors';
+    import { selectAlertCounts, selectUserInitials } from 'Core/selectors/core.selectors';
+    import { CoreLoadSecurityMap, CoreUserLoggedIn } from 'Core/actions/core.actions';
     import {
       SecurityTableHeaderConfigs,
       SECURITY_TABLE_FINAL_STAGE
@@ -56,7 +55,8 @@
       selectSecurityIDsFromAnalysis,
       selectBestQuoteValidWindow,
       selectNewAlertsForAlertTable,
-      selectLiveUpdateProcessingRawDataToMainTable
+      selectLiveUpdateProcessingRawDataToMainTable,
+      selectKeywordSearchInMainTable
     } from 'Trade/selectors/trade.selectors';
     import {
       TradeLiveUpdatePassRawDataToMainTableEvent,
@@ -77,16 +77,17 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
-  @Input() ownerInitial: string;
+export class TradeCenterPanel implements OnInit, OnDestroy {
   state: TradeCenterPanelState;
   subscriptions = {
+    userInitialsSub: null,
     startNewUpdateSub: null,
     securityIDListFromAnalysisSub: null,
     validWindowSub: null,
     newAlertsForAlertTableSub: null,
     alertCountSub: null,
-    keywordSearchSub: null
+    keywordSearchSub: null,
+    receiveKeywordSearchInMainTable: null
   };
   keywordChanged$: Subject<string> = new Subject<string>();
   constants = {
@@ -98,7 +99,9 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
     fullOwnerList: FullOwnerList,
     alertTypes: AlertTypes,
-    keywordSearchDebounceTime: KEYWORDSEARCH_DEBOUNCE_TIME
+    keywordSearchDebounceTime: KEYWORDSEARCH_DEBOUNCE_TIME,
+    userInitialsFallback: FAILED_USER_INITIALS_FALLBACK,
+    devWhitelist: DevWhitelist
   }
 
   private initializePageState(): TradeCenterPanelState {
@@ -213,22 +216,31 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
       }
     });
-  }
 
-  public ngOnChanges() {
-    if (!!this.ownerInitial) {
-      const matchedInitial = this.constants.fullOwnerList.find((eachInitial) => {
-        return eachInitial === this.ownerInitial;
-      });
-      if (!!matchedInitial) {
-        const filter = [];
-        filter.push(this.ownerInitial);
-        this.constants.ownershipShortcuts[0].includedDefinitions[0].selectedOptions = filter;
-      } else {
-        this.constants.ownershipShortcuts.splice(0, 1);
+    this.subscriptions.receiveKeywordSearchInMainTable = this.store$.pipe(
+      select(selectKeywordSearchInMainTable)
+    ).subscribe((keyword) => {
+      this.state.filters.keyword.defaultValueForUI = keyword;
+      this.keywordChanged$.next(keyword);
+    });
+
+    this.subscriptions.userInitialsSub = this.store$.pipe(
+      select(selectUserInitials)
+    ).subscribe((userInitials) => {
+      if (userInitials) {
+        const matchedInitial = this.constants.fullOwnerList.find((eachInitial) => {
+          return eachInitial === userInitials;
+        });
+        if (!!matchedInitial) {
+          const filter = [];
+          filter.push(userInitials);
+          this.constants.ownershipShortcuts[0].includedDefinitions[0].selectedOptions = filter;
+        } else {
+          this.constants.ownershipShortcuts.splice(0, 1);
+        }
+        this.populateSearchShortcuts();
       }
-      this.populateSearchShortcuts();
-    }
+    });
   }
 
   public ngOnDestroy() {
@@ -252,6 +264,7 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       this.state.presets.selectedPreset = null;
       this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true);
     } else {
+      this.checkInitialPageLoadData();
       this.restfulCommService.logEngagement(
         EngagementActionList.selectPreset,
         'n/a',
@@ -354,23 +367,6 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
 
   public onSelectSecurityForAlertConfig(targetSecurity: SecurityDTO) {
     this.store$.dispatch(new TradeSelectedSecurityForAlertConfigEvent(this.utilityService.deepCopy(targetSecurity)));
-    this.restfulCommService.logEngagement(
-      EngagementActionList.sendToAlertConfig,
-      targetSecurity.data.securityID,
-      'n/a',
-      'Trade - Center Panel'
-    );
-  }
-
-  public onClickOpenSecurityInBloomberg(pack: ClickedOpenSecurityInBloombergEmitterParams) {
-    const url = `bbg://securities/${pack.targetSecurity.data.globalIdentifier}%20${pack.yellowCard}/${pack.targetBBGModule}`;
-    window.open(url);
-    this.restfulCommService.logEngagement(
-      EngagementActionList.bloombergRedict,
-      pack.targetSecurity.data.securityID,
-      `BBG - ${pack.targetBBGModule}`,
-      'Trade - Center Panel'
-    );
   }
 
   public openLinkForCertificate() {
@@ -505,7 +501,6 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
       this.state.filters.quickFilters.driverType,
       serverReturn,
       this.onSelectSecurityForAnalysis.bind(this),
-      this.onClickOpenSecurityInBloomberg.bind(this),
       this.onSelectSecurityForAlertConfig.bind(this)
     );
     this.calculateQuantComparerWidthAndHeight();
@@ -701,5 +696,63 @@ export class TradeCenterPanel implements OnInit, OnChanges, OnDestroy {
         this.store$.dispatch(new TradeSecurityTableRowDTOListForAnalysisEvent(this.utilityService.deepCopy(securityTableRowDTOList)));
       }
     }
+  }
+
+  private checkInitialPageLoadData() {
+    this.store$.pipe(
+      first(),
+      select(selectUserInitials)
+    ).subscribe((userInitials) => {
+      // use userInitial as an indicator for whether the inital page load data was fetched successfully, since it should be the last API to fail
+      if (userInitials === this.constants.userInitialsFallback) {
+        this.fetchSecurityMap();
+        this.fetchOwnerInitial();
+      }
+    });
+  }
+
+  private fetchOwnerInitial() {
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getUserInitials, {req: 'GET'}).pipe(
+      first(),
+      tap((serverReturn) => {
+        this.loadOwnerInitial(serverReturn);
+      }),
+      catchError(err => {
+        if (!!err && !!err.error && !!err.error.text) {
+          this.loadOwnerInitial(err.error.text);
+        } else {
+          this.loadOwnerInitial(this.constants.userInitialsFallback);
+          this.restfulCommService.logError(`Can not find user, error`);
+        }
+        return of('error');
+      })
+    ).subscribe();
+  }
+
+  private loadOwnerInitial(serverReturn: string) {
+    const ownerInitials = this.constants.devWhitelist.indexOf(serverReturn) !== -1 ? 'DM' : serverReturn;
+    this.restfulCommService.updateUser(ownerInitials);
+    this.store$.dispatch(new CoreUserLoggedIn(ownerInitials));
+  }
+
+  private fetchSecurityMap() {
+    // this first call happens in app.root.ts, this function is only called when the first call fails due to BE server being unavail
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSecurityIdMap, {req: 'GET'}).pipe(
+      first(),
+      tap((serverReturn: Object) => {
+        if (!!serverReturn) {
+          const map:Array<SecurityMapEntry> = [];
+          for (const eachSecurityId in serverReturn) {
+            map.push({
+              keywords: serverReturn[eachSecurityId],
+              secruityId: eachSecurityId
+            });
+          }
+          this.store$.dispatch(new CoreLoadSecurityMap(map));
+        } else {
+          this.restfulCommService.logError('Failed to load SecurityId map, can not populate alert configuration');
+        }
+      })
+    ).subscribe();
   }
 }

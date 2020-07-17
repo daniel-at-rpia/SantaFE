@@ -1,0 +1,522 @@
+@import "global.scss";
+@import "./security-card-mixin.scss";
+
+$securityCard_labelVariant_height: 2rem;
+$securityCard_labelVariant_height_slim: 1.6rem;
+$securityCard_labelVariant_expanded_height: 2.75rem;
+$securityCard_name_rightGap: 3rem;
+$securityCard_actionMenu_majorCTA_size: 3rem;
+$securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
+
+.sat-securityCard {
+  $securityCardBlockName: &;
+  @include mix_fixed_div(relative, $z_index_base_item);
+  @include mix_securityCard();
+  @include mix_border_radius(5px);
+  @include mix_alive('custom', height $animation_duration_light, box-shadow $animation_duration_light);
+  display: flex;
+  flex-wrap: nowrap;
+  background-color: $color_white;
+  height: $securityCard_labelVariant_height;
+  width: $securityCard_width;
+  &__name {
+    @include mix_fixed_div(relative, $z_index_base_item_lift);
+    @include mix_calculate(flex-basis, 100%, $securityCard_name_rightGap, '-');
+    flex-grow: 0;
+    flex-shrink: 1;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    &-text {
+      @include mix_text_overflow_multi_line(1);
+      word-break: break-all;
+      color: $font_color_inverse;
+      margin-left: $spacing_small;
+      font-size: $font_size_small;
+      user-select: none;
+      line-height: $line_height_minimum;
+      text-align: left;
+    }
+  }
+  &__rating {
+    @include mix_fixed_div(absolute, $z_index_base_item_solid);
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    &-text {
+      @include mix_rating_style;
+      font-size: $font_size_x_large;
+      margin-right: $spacing_x_small;
+      color: $color_black;
+    }
+  }
+  &__actionMenu {
+    @include mix_fixed_div(absolute, $z_index_tooltip);  // needs to be no less than the z-index of "sat-tradeMarketAnalysisPanel__table-content-securityList-item-numberOfSecurityTag"
+    @include mix_alive('custom', transform $animation_duration_light);
+    @include mix_calculate(left, 50%, $securityCard_actionMenu_majorCTA_size*3/2 + $spacing_x_small * 2, '-');
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.01);
+    top: 0;
+    &-minorList {
+      @include mix_fixed_div(relative, $z_index_base_item);
+      display: flex;
+      justify-content: center;
+      &-btn {
+        @extend .santaBtn;
+        @extend .santaBtn--iconOnly;  // this is necessary for usage within AgGrid
+        @include mix_fixed_div(absolute, $z_index_base_item);
+        @include mix_border_radius(50%);
+        transform: scale(0.01);
+        background-color: $color_bloomberg_1;
+        color: $color_bloomberg_2;
+        padding: $spacing_xx_small;
+        word-break: break-all;  // so "QMGR" would clip into 2 lines
+        &:first-of-type {
+          left: -$securityCard_actionMenu_majorCTA_size/2 + $spacing_xx_small;
+        }
+        &:nth-of-type(2) {
+          right: -$securityCard_actionMenu_majorCTA_size/2 + $spacing_xx_small;
+        }
+      }
+      &--top {
+        top: -$securityCard_actionMenu_majorCTA_size + $spacing_small;
+      }
+      &--bottom {
+        top: $spacing_x_small;
+      }
+    }
+    &-mainList {
+      display: flex;
+      justify-content: center;
+      margin: -$spacing_small 0;  // achieve a closer distance between the three lists
+      &-btn {
+        @extend .santaBtn;
+        @extend .santaBtn--iconOnly;  // this is necessary for usage within AgGrid
+        @include mix_fixed_div(relative, $z_index_hovering_item);
+        @include mix_border_radius(50%);
+        margin: 0 $spacing_x_small;
+        color: $font_color_major;
+        height: $securityCard_actionMenu_majorCTA_size;
+        width: $securityCard_actionMenu_majorCTA_size;
+        font-size: $font_size_large;
+        &:hover {
+          transform: scale(1.25);
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+        &--search {
+          display: none;
+        }
+      }
+    }
+  }
+  &__alertShortcutConfig {
+    @include mix_fixed_div(absolute, $z_index_dropdown);
+    @include mix_alive('custom', transform $animation_duration_light);
+    display: flex;
+    left: 0;
+    top: -$spacing_x_large;
+    width: 100%;
+    transform: scale(0.001);
+    padding: $spacing_small $spacing_medium $spacing_x_large $spacing_medium;  // this padding is important, without it the mouse leave would be too sensitive. The mouseleave is necessary for simplifying the row-click/card-click scenarios handling in the SantaTable
+    &-content {
+      @include mix_fixed_div(relative, $z_index_base_item);
+      @include mix_border_radius(15px);
+      @include mix_border_generator($typical_border_width, $color_active);
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      background-color: $color_white;
+      padding: $spacing_small $spacing_small $spacing_large+$spacing_medium $spacing_small;
+      &-alertTypePin {
+        @include mix_fixed_div(absolute, $z_index_base_item);
+        @include mix_border_radius(50%);
+        @include mix_border_generator($typical_border_width*2, $color_active);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: $iconButton_size_large;
+        height: $iconButton_size_large;
+        background-color: $tradeAxeAlertColor;
+        top: -$iconButton_size_large/2;
+        left: -$iconButton_size_large/2;
+        &-icon {
+          font-size: $font_size_large;
+          color: $font_color_inverse;
+        }
+      }
+      &-title {
+        @include mix_fixed_div(relative, $z_index_base_item_solid);
+        display: flex;
+        width: 100%;  // this is necessary for making sure the text doesn't overflow, we can't just use overflow:hidden because of the saveCTA and the alertTypePin
+        overflow: hidden;
+        &-alertType {
+          @include mix_border_radius(10px);
+          flex: 0 0 auto;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: $tradeAxeAlertColor;
+          width: $iconButton_size_regular;
+          height: $iconButton_size_regular;
+          &-icon {
+            font-size: $font_size_normal;
+            color: $font_color_inverse;
+          }
+        }
+        &-text {
+          flex: 1 1 auto;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          margin-left: $spacing_small;
+          &-label {
+            color: $font_color_minor;
+            text-align: left;
+            margin-bottom: $spacing_x_small;
+          }
+          &-securityName {
+            @include mix_text_overflow;
+            color: $font_color_major;
+            font-size: $font_size_normal;
+            text-align: left;
+          }
+        }
+      }
+      &-side {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 $spacing_x_small;
+        margin: $spacing_medium 0 0 0;
+        &-label {
+          font-size: $font_size_normal;
+          color: $font_color_minor;
+          margin-right: $spacing_medium;
+        }
+        &-btnGroup {
+          flex: 0 0 auto;
+          margin-right: $spacing_medium;
+          &-btn {
+            @extend .santaBtn;
+            &--selected {
+              @include material('none');
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
+          }
+        }
+      }
+      &-label {
+        @include mix_border_generator(0 0 $typical_border_width 0);
+        display: flex;
+        justify-content: center;
+        margin: $spacing_medium 0 0 0;
+        font-size: $font_size_normal;
+        color: $font_color_minor;
+        text-align: center;
+        padding-bottom: $spacing_small;
+      }
+      &-level {
+        @include mix_fixed_div(relative, $z_index_base_item_solid);
+        display: flex;
+        padding: 0 $spacing_x_small;
+        margin: $spacing_medium 0 0 0;
+        &-btnGroup {
+          flex: 0 0 auto;
+          margin-right: $spacing_medium;
+          &-btn {
+            @extend .santaBtn;
+            &--selected {
+              @include material('none');
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
+          }
+        }
+      }
+      &-ctas {
+        &-close {
+          @include mix_fixed_div(absolute, $z_index_base_item);
+          @include mix_border_radius(50%);
+          @include mix_border_generator($typical_border_width, $color_active);
+          right: -$iconButton_size_regular/3;
+          background-color: $color_white;
+          top: -$spacing_medium;
+          padding: $spacing_small;
+          &-btn {
+            @include mix_fixed_div(relative, $z_index_hovering_item);
+            @extend .santaBtn;
+            @extend .santaBtn--iconOnly;
+            @include mix_border_radius(50%);
+            background-color: $color_kill;
+            width: $iconButton_size_regular;
+            height: $iconButton_size_regular;
+            font-size: $font_size_large;
+            color: $font_color_inverse;
+          }
+          &-borderMask {
+            @include mix_fixed_div(absolute, $z_index_base_item);
+            width: 100%;
+            height: 100%;
+            top: $spacing_medium;
+            right: 19%;
+            background-color: $color_white;
+          }
+        }
+        &-urgentFlag {
+          @include mix_fixed_div(absolute, $z_index_base_item);
+          @include mix_border_radius(50%);
+          @include mix_border_generator($typical_border_width, $color_active);
+          left: -$iconButton_size_regular/3;
+          background-color: $color_white;
+          bottom: -$spacing_medium;
+          padding: $spacing_small;
+          &-btn {
+            @include mix_fixed_div(relative, $z_index_hovering_item);
+            @extend .santaBtn;
+            @extend .santaBtn--iconOnly;
+            @include mix_border_radius(50%);
+            background-color: $color_white;
+            width: $iconButton_size_regular;
+            height: $iconButton_size_regular;
+            font-size: $font_size_large;
+            &--selected {
+              @include material('none');
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
+          }
+          &-borderMask {
+            @include mix_fixed_div(absolute, $z_index_base_item);
+            width: 100%;
+            height: 77%;
+            top: -$spacing_minimum;
+            left: 20%;
+            background-color: $color_white;
+          }
+        }
+        &-save {
+          @include mix_fixed_div(absolute, $z_index_base_item);
+          @include mix_border_radius(50%);
+          @include mix_calculate(left, 50%, $iconButton_size_large/2 + $spacing_medium, '-');
+          @include mix_border_generator($typical_border_width, $color_active);
+          background-color: $color_white;
+          bottom: -$iconButton_size_large/3 - $spacing_medium;
+          padding: $spacing_medium;
+          &-btn {
+            @include mix_fixed_div(relative, $z_index_hovering_item);
+            @extend .santaBtn;
+            @extend .santaBtn--iconOnly;
+            @include mix_border_radius(50%);
+            // @include material('none');
+            color: $font_color_inverse;
+            // background-color: $color_disabled;
+            background-color: $color_create;
+            width: $iconButton_size_large;
+            height: $iconButton_size_large;
+            font-size: $font_size_large;
+          }
+          &-borderMask {
+            @include mix_fixed_div(absolute, $z_index_base_item);
+            width: 150%;
+            height: 61%;
+            top: 0;
+            left: -25%;
+            background-color: $color_white;
+          }
+        }
+        &-sendEmailFlag {
+          @include mix_fixed_div(absolute, $z_index_base_item);
+          @include mix_border_radius(50%);
+          @include mix_border_generator($typical_border_width, $color_active);
+          right: -$iconButton_size_regular/3;
+          background-color: $color_white;
+          bottom: -$spacing_medium;
+          padding: $spacing_small;
+          &-btn {
+            @include mix_fixed_div(relative, $z_index_hovering_item);
+            @extend .santaBtn;
+            @extend .santaBtn--iconOnly;
+            @include mix_border_radius(50%);
+            background-color: $color_white;
+            width: $iconButton_size_regular;
+            height: $iconButton_size_regular;
+            font-size: $font_size_large;
+            &--selected {
+              @include material('none');
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
+          }
+          &-borderMask {
+            @include mix_fixed_div(absolute, $z_index_base_item);
+            width: 100%;
+            height: 77%;
+            top: -$spacing_minimum;
+            right: 20%;
+            background-color: $color_white;
+          }
+        }
+      }
+    }
+  }
+  &--slimVariant {
+    height: $securityCard_labelVariant_height_slim;
+  }
+  &--multiLineVariant {
+    height: $securityCard_labelVariant_expanded_height;
+    #{$securityCardBlockName} {
+      &__name {
+        &-text {
+          @include mix_text_overflow_multi_line(2);
+          line-height: 1.25;
+        }
+      }
+    }
+  }
+  &--flexibleWidthVariant {
+    width: inherit;
+  }
+  &--selectedState {
+    @include material('none');
+    background: $color_active;
+    #{$securityCardBlockName} {
+      &__rating {
+        &-text {
+          color: $font_color_inverse;
+        }
+      }
+      &__actionMenu {
+        transform: scale(1);
+        &-minorList-btn {
+          transform: scale(1);
+          &:hover {
+            transform: scale(1.25);
+            background-color: $color_active;
+            color: $font_color_inverse;
+          }
+        }
+      }
+      &__alertShortcutConfig {
+        display: flex;
+      }
+    }
+  }
+  &--configAlertState {
+    #{$securityCardBlockName} {
+      &__actionMenu {
+        transform: scale(0.01);
+      }
+      &__alertShortcutConfig {
+        transform: scale(1);
+      }
+    }
+  }
+  &--tradeAlertTableVariant {
+    #{$securityCardBlockName} {
+      &__actionMenu {
+        @include mix_calculate(left, 50%, $securityCard_actionMenu_majorCTA_size/2 + $spacing_x_small, '-');
+        &-mainList {
+          &-btn {
+            display: none;
+            &--search {
+              display: flex;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--atListCeilingVariant {
+    #{$securityCardBlockName} {
+      &__actionMenu {
+        top: $spacing_small;
+        &-minorList--top {
+          #{$securityCardBlockName} {
+            &__actionMenu-minorList-btn {
+              top: 2.5rem;
+              &:first-of-type {
+                left: -2.5rem;
+              }
+              &:nth-of-type(2) {
+                right: -2.5rem
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--primaryActionDisabledState {
+    #{$securityCardBlockName} {
+      &__actionMenu {
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+        left: unset;
+        top: $spacing_medium;
+        &-mainList {
+          display: none;
+        }
+        &-minorList {
+          flex: 0 1 auto;
+          display: flex;
+          top: unset;
+          left: unset;
+          right: unset;
+          bottom: unset;
+          &-btn {
+            @include mix_fixed_div(relative, $z_index_base_item);
+            top: unset;
+            left: unset;
+            right: unset;
+            bottom: unset;
+            margin: 0 $spacing_x_small;
+          }
+        }
+      }
+    }
+  }
+  &--minorActionDisabledState {
+    #{$securityCardBlockName} {
+      &__actionMenu {
+        &-minorList {
+          display: none;
+        }
+      }
+    }
+  }
+  &--tableState {
+    @include material('none');
+    @include mix_border_generator($typical_border_width, $color_gray_85);
+    #{$securityCardBlockName} {
+      &__actionMenu {
+        display: none;
+      }
+      &__alertShortcutConfig {
+        display: none;
+      }
+    }
+  }
+  &--stencilState {
+    background: $color_white;
+    #{$securityCardBlockName} {
+      &__name-text {
+        @include mix_stencil_animation;
+      }
+      &__rating {
+        align-items: center;
+        &-text {
+          @include mix_stencil_animation;
+          font-size: $font_size_large;
+        }
+      }
+    }
+  }
+}

@@ -464,7 +464,7 @@ export class UtilityService {
         case AlertTypes.tradeAlert:
           return AlertTypes.tradeAlert;
         default:
-          return AlertTypes.default;
+          return AlertTypes.system;
       }
     }
 
@@ -940,8 +940,12 @@ export class UtilityService {
         targetQuote.state.filteredByYield = filteredMetricType === TriCoreDriverConfig.Yield.label;
         targetQuote.state.isBestBid = targetQuote.data.bid.tspread == bestBidNum || targetQuote.data.bid.price == bestBidNum || targetQuote.data.bid.yield == bestBidNum;
         targetQuote.state.isBestOffer = targetQuote.data.ask.tspread == bestAskNum || targetQuote.data.ask.price == bestAskNum || targetQuote.data.ask.yield == bestAskNum;
-        targetQuote.state.isBestAxeBid = bestAxeBidNum && (targetQuote.data.bid.tspread == bestAxeBidNum || targetQuote.data.bid.price == bestAxeBidNum || targetQuote.data.bid.yield == bestAxeBidNum);
-        targetQuote.state.isBestAxeOffer = bestAxeAskNum && (targetQuote.data.ask.tspread == bestAxeAskNum || targetQuote.data.ask.price == bestAxeAskNum || targetQuote.data.ask.yield == bestAxeAskNum);
+        if (targetQuote.state.hasBid && targetQuote.data.bid.isAxe) {
+          targetQuote.state.isBestAxeBid = bestAxeBidNum && (targetQuote.data.bid.tspread == bestAxeBidNum || targetQuote.data.bid.price == bestAxeBidNum || targetQuote.data.bid.yield == bestAxeBidNum);
+        }
+        if (targetQuote.state.hasAsk && targetQuote.data.ask.isAxe) {
+          targetQuote.state.isBestAxeOffer = bestAxeAskNum && (targetQuote.data.ask.tspread == bestAxeAskNum || targetQuote.data.ask.price == bestAxeAskNum || targetQuote.data.ask.yield == bestAxeAskNum);
+        }
       }
     }
 

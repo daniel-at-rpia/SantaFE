@@ -74,3 +74,8 @@ export const selectNewAlertsForAlertTable = createSelector(
   getTradeState,
   (state: TradeState) => state.newAlertsForAlertTable
 );
+
+export const selectKeywordSearchInMainTable = createSelector(
+  getTradeState,
+  (state: TradeState) => state.keywordSearchInMainTable
+);

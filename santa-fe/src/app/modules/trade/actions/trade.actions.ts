@@ -21,7 +21,8 @@ export enum TradeActions {
   ChangeBestQuoteValidWindowEvent = '[Trade] Change Best Quote Valid Window Event',
   SelectSecurityForAlertConfigEvent = '[Trade] Select Security For Alert Config Event',
   AlertTableSendNewAlerts = '[Trade] Alert Table Send New Alerts',
-  AlertTableReceiveNewAlerts = '[Trade] Alert Table Receive New Alerts'
+  AlertTableReceiveNewAlerts = '[Trade] Alert Table Receive New Alerts',
+  KeywordSearchThisSecurity = '[Trade] Keyword Search This Security'
 }
 
 export class TradeLiveUpdateStartEvent implements Action {
@@ -127,4 +128,12 @@ export class TradeAlertTableSendNewAlertsEvent implements Action {
 export class TradeAlertTableReceiveNewAlertsEvent implements Action {
   readonly type = TradeActions.AlertTableReceiveNewAlerts;
   constructor(){}
+}
+
+export class TradeKeywordSearchThisSecurityEvent implements Action {
+  readonly type = TradeActions.KeywordSearchThisSecurity;
+  readonly keyword: string;
+  constructor(keyword: string){
+    this.keyword = keyword;
+  }
 }

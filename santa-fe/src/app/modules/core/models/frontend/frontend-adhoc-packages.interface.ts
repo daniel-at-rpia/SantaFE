@@ -105,12 +105,6 @@ export interface ClickedSpecificQuoteEmitterParams {
   targetDriver: string;
 }
 
-export interface ClickedOpenSecurityInBloombergEmitterParams {
-  targetBBGModule: string;
-  yellowCard: string;
-  targetSecurity: SecurityDTO;
-}
-
 export interface AlertDTOMap {
   [property: string]: AlertDTO
 }

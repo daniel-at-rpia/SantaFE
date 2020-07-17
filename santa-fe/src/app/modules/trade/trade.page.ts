@@ -22,6 +22,9 @@
     import { selectSelectedSecurityForAnalysis } from 'Trade/selectors/trade.selectors';
     import { CoreUserLoggedIn } from 'Core/actions/core.actions';
     import { selectDislayAlertThumbnail } from 'Core/selectors/core.selectors';
+    import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
+    import { CoreLoadSecurityMap } from 'Core/actions/core.actions';
+    import { FAILED_USER_INITIALS_FALLBACK, DevWhitelist } from 'Core/constants/coreConstants.constant';
   //
 
 @Component({
@@ -37,6 +40,8 @@ export class TradePage implements OnInit, OnDestroy {
     displayAlertThumbnailSub: null
   };
   constants = {
+    userInitialsFallback: FAILED_USER_INITIALS_FALLBACK,
+    devWhitelist: DevWhitelist
   };
 
   private initializePageState() {
@@ -59,21 +64,7 @@ export class TradePage implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getUserInitials, {req: 'GET'}).pipe(
-      first(),
-      tap((serverReturn) => {
-        this.loadOwnerInitial(serverReturn);
-      }),
-      catchError(err => {
-        if (!!err && !!err.error && !!err.error.text) {
-          this.loadOwnerInitial(err.error.text);
-        } else {
-          this.loadOwnerInitial('n/a');
-          this.restfulCommService.logError(`Can not find user, error`);
-        }
-        return of('error');
-      })
-    ).subscribe();
+    this.fetchOwnerInitial();
     this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
       select(selectSelectedSecurityForAnalysis)
     ).subscribe((targetSecurity) => {
@@ -116,15 +107,31 @@ export class TradePage implements OnInit, OnDestroy {
     this.state.alertPanelMaximized = false;
   }
 
+  private fetchOwnerInitial() {
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getUserInitials, {req: 'GET'}).pipe(
+      first(),
+      tap((serverReturn) => {
+        this.loadOwnerInitial(serverReturn);
+      }),
+      catchError(err => {
+        if (!!err && !!err.error && !!err.error.text) {
+          this.loadOwnerInitial(err.error.text);
+        } else {
+          this.loadOwnerInitial(this.constants.userInitialsFallback);
+          this.restfulCommService.logError(`Can not find user, error`);
+        }
+        return of('error');
+      })
+    ).subscribe();
+  }
+
   private loadOwnerInitial(serverReturn: string) {
-    const devWhitelist = ['DZ', 'RC', 'MS'];
-    if (devWhitelist.indexOf(serverReturn) !== -1) {
+    if (this.constants.devWhitelist.indexOf(serverReturn) !== -1) {
       this.state.ownerInitial = 'DM';
     } else {
       this.state.ownerInitial = serverReturn;
     }
     this.restfulCommService.updateUser(this.state.ownerInitial);
-    this.store$.dispatch(new CoreUserLoggedIn(serverReturn));
+    this.store$.dispatch(new CoreUserLoggedIn(this.state.ownerInitial));
   }
-
 }

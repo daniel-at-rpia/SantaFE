@@ -81,15 +81,20 @@ export interface PayloadUpdateSingleAlertConfig {
     ResearchName?: Array<string>;
   };
   parameters?: {
-    LoseMoneyPriceThreshold?: number,
-    MakeMoneyPriceThreshold?: number,
-    LoseMoneySpreadThreshold?: number,
-    MakeMoneySpreadThreshold?: number,
-    WatchType?: AxeAlertType
+    LoseMoneyPriceThreshold?: number;
+    MakeMoneyPriceThreshold?: number;
+    LoseMoneySpreadThreshold?: number;
+    MakeMoneySpreadThreshold?: number;
+    WatchType?: AxeAlertType;
+    UpperPriceThreshold?: number;
+    UpperSpreadThreshold?: number;
+    LowerPriceThreshold?: number;
+    LowerSpreadThreshold?: number;
   };
   isEnabled?: boolean;
   isDeleted?: boolean;
   isUrgent?: boolean;
+  sendEmail: boolean;
 }
 
 export interface PayloadSetAlertsToInactive {

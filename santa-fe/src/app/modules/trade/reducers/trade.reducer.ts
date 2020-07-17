@@ -32,7 +32,8 @@ export interface TradeState {
     initialDataLoaded: boolean;
     liveUpdateInProgress: boolean;
     liveUpdateProcessingRawData: boolean;
-  }
+  },
+  keywordSearchInMainTable: string;
 }
 
 const initialState: TradeState = {
@@ -56,7 +57,8 @@ const initialState: TradeState = {
     initialDataLoaded: false,
     liveUpdateInProgress: false,
     liveUpdateProcessingRawData: false
-  }
+  },
+  keywordSearchInMainTable: ''
 };
 
 export function tradeReducer(
@@ -194,6 +196,11 @@ export function tradeReducer(
       return {
         ...state,
         newAlertsForAlertTable: []
+      }
+    case TradeActions.KeywordSearchThisSecurity:
+      return {
+        ...state,
+        keywordSearchInMainTable: action.keyword
       }
     default:
       return state;

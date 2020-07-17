@@ -245,6 +245,9 @@ export interface TradeAlertConfigurationAxeGroupBlock {
   isDeleted: boolean;
   isDisabled: boolean;
   isUrgent: boolean;
+  targetDriver: string;
+  targetRange: DTOs.NumericFilterDTO;
+  sendEmail: boolean;
 }
 
 export interface TableFetchResultBlock {

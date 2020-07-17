@@ -15,7 +15,8 @@ const AlertConfigSample: BEAlertConfigurationReturn = {
       "subType": "Both",
       "parameters": {},
       "isEnabled": true,
-      "isUrgent": false
+      "isUrgent": false,
+      "sendEmail": false
     }
   }
 }
@@ -142,7 +143,7 @@ export const AlertSample: Array<BEAlertDTO> = [
       "marketListDescription":"BWIC started @ 8:16:22 AM and ends @ 8:21:22 AM",
       "fixid":"55835072",
       "fixRefID":null,
-      "validUntilTime":"2020-06-29T08:21:22-04:00",
+      "validUntilTime":"2020-07-08T14:45:22-04:00",
       "priceType":"SPREAD",
       "isNatural":null,
       "ioiQualifier":null,
@@ -179,7 +180,7 @@ export const AlertSample: Array<BEAlertDTO> = [
       "spread":282.98,
       "rate":null,
       "type":"Axe",
-      "isTraded":true,
+      "isTraded":false,
       "stringQuantity":"260K"
     },
     "marketListAlert":null,
@@ -190,7 +191,8 @@ export const AlertSample: Array<BEAlertDTO> = [
     "isUrgent":true,
     "isActive":true,
     "isDeleted":false,
-    "isCancelled":true
+    "isCancelled":false,
+    "sendEmail":false
   },
   {
     "type":"Trade",
@@ -343,7 +345,8 @@ export const AlertSample: Array<BEAlertDTO> = [
     "isUrgent":true,
     "isActive":true,
     "isDeleted":false,
-    "isCancelled":false
+    "isCancelled":false,
+    "sendEmail": false
   },
   {
     "type":"Mark",
@@ -516,6 +519,7 @@ export const AlertSample: Array<BEAlertDTO> = [
     "isUrgent":true,
     "isActive":true,
     "isDeleted":false,
-    "isCancelled":false
+    "isCancelled":false,
+    "sendEmail":false
   }
 ]
