@@ -11,22 +11,17 @@
 })
 
 export class AlertWatchList implements OnInit {
-  @Input() securityBlockList: TradeAlertConfigurationAxeGroupBlockDTO[];
-  @Input() constants;
-  @Output() selectAxeWatchlistSideBid = new EventEmitter<SelectAxeWatchlistSide>();
-  @Output() selectAxeWatchlistSideAsk = new EventEmitter<SelectAxeWatchlistSide>();
-  @Output() selectAxeWatchlistTypeNormal = new EventEmitter<SelectAxeWatchlistType>();
-  @Output() selectAxeWatchlistTypeMarketList = new EventEmitter<SelectAxeWatchlistType>();
+  @Input() securityBlockList: TradeAlertConfigurationAxeGroupBlockDTO;
+  @Output() selectAxeWatchlistSide = new EventEmitter<SelectAxeWatchlistSide>();
+  @Output() selectAxeWatchlistType = new EventEmitter<SelectAxeWatchlistType>();
   @Output() changeAxeWatchlistRangeMin = new EventEmitter<SelectAxeWatchlistRangeValue>();
   @Output() changeAxeWatchlistRangeMax = new EventEmitter<SelectAxeWatchlistRangeValue>();
   @Output() clickAxeWatchlistClearRange = new EventEmitter<TradeAlertConfigurationAxeGroupBlockDTO>();
-  @Output() selectAxeWatchlistRangeDriverSprd = new EventEmitter<SelectAxeWatchlistRangeDriver>();
-  @Output() selectAxeWatchlistRangeDriverPx = new EventEmitter<SelectAxeWatchlistRangeDriver>();
+  @Output() selectAxeWatchlistRangeDriver = new EventEmitter<SelectAxeWatchlistRangeDriver>();
   @Output() toggleAxeWatchlistPriority = new EventEmitter<TradeAlertConfigurationAxeGroupBlockDTO>();
   @Output() toggleAxeWatchlistSendEmail = new EventEmitter<TradeAlertConfigurationAxeGroupBlockDTO>();
   @Output() toggleDisableTargetGroupFromAxeWatchlist = new EventEmitter<TradeAlertConfigurationAxeGroupBlockDTO>();
   @Output() clickRemoveSecurityFromAxeWatchlist = new EventEmitter<TradeAlertConfigurationAxeGroupBlockDTO>();
-  
 
   constructor() {}
 
@@ -34,20 +29,12 @@ export class AlertWatchList implements OnInit {
 
   public onSelectAxeAlertWatchlistSide(targetScope: AxeAlertScope, targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
     const emitObject = {targetScope, targetBlock};
-    if (AxeAlertScope.bid === targetScope) {
-      this.selectAxeWatchlistSideBid.emit(emitObject)
-    } else if (AxeAlertScope.ask === targetScope) {
-      this.selectAxeWatchlistSideAsk.emit(emitObject)
-    }
+    this.selectAxeWatchlistSide.emit(emitObject)
   }
 
   public onSelectAxeAlertWatchlistType(targetType: AxeAlertType, targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
     const emitObject = {targetType, targetBlock};
-    if (AxeAlertType.normal === targetType) {
-      this.selectAxeWatchlistTypeNormal.emit(emitObject)
-    } else if (AxeAlertType.marketList) {
-      this.selectAxeWatchlistTypeMarketList.emit(emitObject)
-    } 
+    this.selectAxeWatchlistType.emit(emitObject)
   }
 
   public onChangeAxeWatchlistRangeMin(newValue, targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
@@ -64,11 +51,7 @@ export class AlertWatchList implements OnInit {
 
   public onSelectAxeWatchlistRangeDriver(targetBlock: TradeAlertConfigurationAxeGroupBlockDTO, targetDriver: string) {
     const emitObject = {targetBlock, targetDriver};
-    if (targetDriver === 'Spread') {
-      this.selectAxeWatchlistRangeDriverSprd.emit(emitObject);
-    } else if (targetDriver === 'Price') {
-      this.selectAxeWatchlistRangeDriverPx.emit(emitObject)
-    }
+    this.selectAxeWatchlistRangeDriver.emit(emitObject);
   }
 
   public onToggleAxeWatchlistPriority(targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
