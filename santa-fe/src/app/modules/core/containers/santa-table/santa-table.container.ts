@@ -215,16 +215,18 @@ export class SantaTable implements OnInit, OnChanges {
         (targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID && !targetCard.state.configAlertState) ||
         (!targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID !== targetCard.data.securityID)
       ) {
-        // this function gets triggered both when parent and child are being clicked, so this if condition is to make sure only execute the logic when it is the parent that is clicked
         targetCard.state.isSelected = false;
+        targetCard.state.configAlertState = false;
         if (!!storedSelectedCard) {
           if (storedSelectedCard.data.securityID !== targetCard.data.securityID) {
             // if the card selected is in a diff row, that row also needs to be updated through AgGrid's life cycle
             storedSelectedCard.state.isSelected = false;
+            storedSelectedCard.state.configAlertState = false;
             this.updateRowSecurityCardInAgGrid(storedSelectedCard);
           }
           this.tableData.state.selectedSecurityCard = null;
         }
+        // this function gets triggered both when parent and child are being clicked, so this if condition is to make sure only execute the logic when it is the parent that is clicked
         if (!!params.node.master && this.tableName !== 'tradeAlert') {
           params.node.setExpanded(!params.node.expanded);
           if (!params.node.group) {
@@ -260,6 +262,7 @@ export class SantaTable implements OnInit, OnChanges {
         } else if (!!storedSelectedCard && storedSelectedCard.data.securityID !== targetCard.data.securityID) {
           // scenario: there is already a card selected, and the user is selecting a diff card
           this.tableData.state.selectedSecurityCard.state.isSelected = false;
+          this.tableData.state.selectedSecurityCard.state.configAlertState = false;
           this.updateRowSecurityCardInAgGrid(this.tableData.state.selectedSecurityCard);
           this.tableData.state.selectedSecurityCard = targetCard;
         } else if (!!storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID && !targetCard.state.configAlertState) {
@@ -350,11 +353,6 @@ export class SantaTable implements OnInit, OnChanges {
     rowList: Array<SecurityTableRowDTO>,
     isUpdate: boolean = false
   ) {
-    if (!isUpdate) {
-      rowList.forEach((eachRow) => {
-        eachRow.data.security.api.onMouseLeaveShortcutConfig = this.onMouseLeaveSecurityCardAlertShortcutConfig.bind(this);
-      });
-    }
     this.tableData.data.rows = rowList;
     // doesn't need to update dynamic columns if the entire data is not loaded
     this.receivedContentStage === this.constants.securityTableFinalStage && this.updateDriverDependentColumns();
@@ -716,14 +714,5 @@ export class SantaTable implements OnInit, OnChanges {
       }
     });
     return newQuoteList;
-  }
-
-  private onMouseLeaveSecurityCardAlertShortcutConfig() {
-    if (this.tableData.state.selectedSecurityCard && this.tableData.state.selectedSecurityCard.data && this.tableData.state.selectedSecurityCard.data.name) {
-      const rowId = this.tableName === 'tradeAlert' ? this.tableData.state.selectedSecurityCard.data.alert.alertId : this.tableData.state.selectedSecurityCard.data.securityID;
-      const targetNode = this.tableData.api.gridApi.getRowNode(rowId);
-      !!targetNode && targetNode.setData(targetNode.data);
-      this.tableData.state.selectedSecurityCard = null;
-    }
   }
 }

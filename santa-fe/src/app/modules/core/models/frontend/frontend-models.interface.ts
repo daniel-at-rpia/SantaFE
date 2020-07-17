@@ -139,7 +139,6 @@ export interface SecurityDTO extends BasicDTOStructure {
     onClickCard: (card: SecurityDTO) => void;
     onClickSendToGraph: (card: SecurityDTO) => void;
     onClickSendToAlertConfig: (card: SecurityDTO) => void;
-    onMouseLeaveShortcutConfig: () => void;
     onClickSearch: (card: SecurityDTO) => void;
   }
   state: {

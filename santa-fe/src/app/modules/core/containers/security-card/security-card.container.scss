@@ -151,6 +151,7 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
         }
       }
       &-title {
+        @include mix_fixed_div(relative, $z_index_base_item_solid);
         display: flex;
         width: 100%;  // this is necessary for making sure the text doesn't overflow, we can't just use overflow:hidden because of the saveCTA and the alertTypePin
         overflow: hidden;
@@ -240,6 +241,34 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
         }
       }
       &-ctas {
+        &-close {
+          @include mix_fixed_div(absolute, $z_index_base_item);
+          @include mix_border_radius(50%);
+          @include mix_border_generator($typical_border_width, $color_active);
+          right: -$iconButton_size_regular/3;
+          background-color: $color_white;
+          top: -$spacing_medium;
+          padding: $spacing_small;
+          &-btn {
+            @include mix_fixed_div(relative, $z_index_hovering_item);
+            @extend .santaBtn;
+            @extend .santaBtn--iconOnly;
+            @include mix_border_radius(50%);
+            background-color: $color_kill;
+            width: $iconButton_size_regular;
+            height: $iconButton_size_regular;
+            font-size: $font_size_large;
+            color: $font_color_inverse;
+          }
+          &-borderMask {
+            @include mix_fixed_div(absolute, $z_index_base_item);
+            width: 100%;
+            height: 100%;
+            top: $spacing_medium;
+            right: 19%;
+            background-color: $color_white;
+          }
+        }
         &-urgentFlag {
           @include mix_fixed_div(absolute, $z_index_base_item);
           @include mix_border_radius(50%);

@@ -60,7 +60,6 @@ export class DTOService {
         onClickCard: null,
         onClickSendToGraph: null,
         onClickSendToAlertConfig: null,
-        onMouseLeaveShortcutConfig: null,
         onClickSearch: null
       },
       state: {
