@@ -127,7 +127,6 @@
             *ngFor="let securityBlock of state.configuration.axe.securityList">
                   <alert-watch-list
                   [eachSecurityBlock]="securityBlock"
-                  [constants]="constants"
                   (selectAxeWatchlistSide)="onSelectAxeWatchlistSide($event)"
                   (selectAxeWatchlistType)="onSelectAxeAlertWatchType($event)"
                   (changeAxeWatchlistRangeMin)="onChangeAxeRangeMin($event)"

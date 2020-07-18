@@ -2,6 +2,7 @@
     import { TradeAlertConfigurationAxeGroupBlockDTO, SecurityDTO } from 'FEModels/frontend-models.interface';
     import { SelectAxeWatchlistSide, SelectAxeWatchlistType, SelectAxeWatchlistRangeValue, SelectAxeWatchlistRangeDriver } from 'Core/models/frontend/frontend-blocks.interface';
     import { AxeAlertScope, AxeAlertType } from 'App/modules/core/constants/tradeConstants.constant';
+    import { TriCoreDriverConfig } from 'Core/constants/coreConstants.constant';
 
 
 @Component({
@@ -12,7 +13,6 @@
 
 export class AlertWatchList implements OnInit {
   @Input() eachSecurityBlock: TradeAlertConfigurationAxeGroupBlockDTO;
-  @Input() constants;
   @Output() selectAxeWatchlistSide = new EventEmitter<SelectAxeWatchlistSide>();
   @Output() selectAxeWatchlistType = new EventEmitter<SelectAxeWatchlistType>();
   @Output() changeAxeWatchlistRangeMin = new EventEmitter<SelectAxeWatchlistRangeValue>();
@@ -23,6 +23,12 @@ export class AlertWatchList implements OnInit {
   @Output() toggleAxeWatchlistSendEmail = new EventEmitter<TradeAlertConfigurationAxeGroupBlockDTO>();
   @Output() toggleDisableTargetGroupFromAxeWatchlist = new EventEmitter<TradeAlertConfigurationAxeGroupBlockDTO>();
   @Output() clickRemoveSecurityFromAxeWatchlist = new EventEmitter<TradeAlertConfigurationAxeGroupBlockDTO>();
+
+  constants = {
+    axeAlertScope: AxeAlertScope,
+    axeAlertType: AxeAlertType,
+    driver: TriCoreDriverConfig,
+  }
 
   constructor() {}
 
