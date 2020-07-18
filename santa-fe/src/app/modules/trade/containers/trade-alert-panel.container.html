@@ -123,20 +123,23 @@
         <section class="sat-tradeAlertAxeAlertConfiguration__singleSecurities">
           <div class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList">
             <ul class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList">
-            <alert-watch-list
-            [securityBlockList]="state.configuration.axe.securityList"
-            [constants]="constants"
-            (selectAxeWatchlistSide)="onSelectAxeWatchlistSide($event)"
-            (selectAxeWatchlistType)="onSelectAxeAlertWatchType($event)"
-            (changeAxeWatchlistRangeMin)="onChangeAxeRangeMin($event)"
-            (changeAxeWatchlistRangeMax)="onChangeAxeRangeMax($event)"
-            (clickAxeWatchlistClearRange)="onClickedClearRange($event)"
-            (selectAxeWatchlistRangeDriver)="onSelectAxeRangeDriver($event)"
-            (toggleAxeWatchlistPriority)="onTogglePriority($event)"
-            (toggleAxeWatchlistSendEmail)="onToggleSendEmail($event)"
-            (toggleDisableTargetGroupFromAxeWatchlist)="onToggleDisableTargetGroupFromAxeWatchList($event)"
-            (clickRemoveSecurityFromAxeWatchlist)="onClickRemoveSecurityFromAxeWatchList($event)"
-            ></alert-watch-list>
+            <li 
+            *ngFor="let securityBlock of state.configuration.axe.securityList">
+                  <alert-watch-list
+                  [eachSecurityBlock]="securityBlock"
+                  [constants]="constants"
+                  (selectAxeWatchlistSide)="onSelectAxeWatchlistSide($event)"
+                  (selectAxeWatchlistType)="onSelectAxeAlertWatchType($event)"
+                  (changeAxeWatchlistRangeMin)="onChangeAxeRangeMin($event)"
+                  (changeAxeWatchlistRangeMax)="onChangeAxeRangeMax($event)"
+                  (clickAxeWatchlistClearRange)="onClickedClearRange($event)"
+                  (selectAxeWatchlistRangeDriver)="onSelectAxeRangeDriver($event)"
+                  (toggleAxeWatchlistPriority)="onTogglePriority($event)"
+                  (toggleAxeWatchlistSendEmail)="onToggleSendEmail($event)"
+                  (toggleDisableTargetGroupFromAxeWatchlist)="onToggleDisableTargetGroupFromAxeWatchList($event)"
+                  (clickRemoveSecurityFromAxeWatchlist)="onClickRemoveSecurityFromAxeWatchList($event)"
+                  ></alert-watch-list>
+             </li>
             </ul>
           </div>
           <div class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-search">

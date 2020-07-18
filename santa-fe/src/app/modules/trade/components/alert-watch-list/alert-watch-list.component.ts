@@ -11,7 +11,8 @@
 })
 
 export class AlertWatchList implements OnInit {
-  @Input() securityBlockList: TradeAlertConfigurationAxeGroupBlockDTO;
+  @Input() eachSecurityBlock: TradeAlertConfigurationAxeGroupBlockDTO;
+  @Input() constants;
   @Output() selectAxeWatchlistSide = new EventEmitter<SelectAxeWatchlistSide>();
   @Output() selectAxeWatchlistType = new EventEmitter<SelectAxeWatchlistType>();
   @Output() changeAxeWatchlistRangeMin = new EventEmitter<SelectAxeWatchlistRangeValue>();

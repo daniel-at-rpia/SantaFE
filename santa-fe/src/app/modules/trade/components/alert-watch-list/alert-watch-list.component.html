@@ -1,12 +1,11 @@
-<li
-*ngFor="let eachSecurityBlock of securityBlockList"
+<div   
 [ngClass]="{
-  'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item': true,
-  'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--disabled': eachSecurityBlock.state.isDisabled,
-  'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--deleted': eachSecurityBlock.state.isDeleted,
-  'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--urgent':eachSecurityBlock.state.isUrgent,
-  'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--sendEmail': eachSecurityBlock.data.sendEmail,
-  'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--new': eachSecurityBlock.data.groupId == null
+'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item': true,
+'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--disabled': eachSecurityBlock.state.isDisabled,
+'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--deleted': eachSecurityBlock.state.isDeleted,
+'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--urgent':eachSecurityBlock.state.isUrgent,
+'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--sendEmail': eachSecurityBlock.data.sendEmail,
+'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--new': eachSecurityBlock.data.groupId == null
 }">
 <div class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-newTag">
   <i class="fal fa-sparkles"></i>
@@ -83,4 +82,4 @@
 <button title="Send Email" (click)="onToggleAxeWatchlistSendEmail(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-sendEmailBtn santaBtn--iconOnly fal fa-envelope"></button>
 <button title="Disable (mute)" (click)="onToggleDisableTargetGroupFromAxeWatchlist(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-disableBtn santaBtn--iconOnly fal fa-bell-slash"></button>
 <button title="Remove" (click)="onClickRemoveSecurityFromAxeWatchlist(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-removeBtn santaBtn--iconOnly fal fa-eraser"></button>
-</li>
+</div>
