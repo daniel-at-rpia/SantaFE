@@ -215,16 +215,18 @@ export class SantaTable implements OnInit, OnChanges {
         (targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID && !targetCard.state.configAlertState) ||
         (!targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID !== targetCard.data.securityID)
       ) {
-        // this function gets triggered both when parent and child are being clicked, so this if condition is to make sure only execute the logic when it is the parent that is clicked
         targetCard.state.isSelected = false;
+        targetCard.state.configAlertState = false;
         if (!!storedSelectedCard) {
           if (storedSelectedCard.data.securityID !== targetCard.data.securityID) {
             // if the card selected is in a diff row, that row also needs to be updated through AgGrid's life cycle
             storedSelectedCard.state.isSelected = false;
+            storedSelectedCard.state.configAlertState = false;
             this.updateRowSecurityCardInAgGrid(storedSelectedCard);
           }
           this.tableData.state.selectedSecurityCard = null;
         }
+        // this function gets triggered both when parent and child are being clicked, so this if condition is to make sure only execute the logic when it is the parent that is clicked
         if (!!params.node.master && this.tableName !== 'tradeAlert') {
           params.node.setExpanded(!params.node.expanded);
           if (!params.node.group) {
@@ -260,6 +262,7 @@ export class SantaTable implements OnInit, OnChanges {
         } else if (!!storedSelectedCard && storedSelectedCard.data.securityID !== targetCard.data.securityID) {
           // scenario: there is already a card selected, and the user is selecting a diff card
           this.tableData.state.selectedSecurityCard.state.isSelected = false;
+          this.tableData.state.selectedSecurityCard.state.configAlertState = false;
           this.updateRowSecurityCardInAgGrid(this.tableData.state.selectedSecurityCard);
           this.tableData.state.selectedSecurityCard = targetCard;
         } else if (!!storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID && !targetCard.state.configAlertState) {
@@ -682,6 +685,8 @@ export class SantaTable implements OnInit, OnChanges {
     targetRow.data.quotes.secondaryQuotes = this.decoupleIncorrectDoubleSidedQuotes(secondaryQuoteDTOList);
     this.performChronologicalSortOnQuotes(targetRow.data.quotes.primaryQuotes);
     this.performChronologicalSortOnQuotes(targetRow.data.quotes.secondaryQuotes);
+    this.carryAxeLevelOnOldQuotes(targetRow.data.quotes.primaryQuotes);
+    this.carryAxeLevelOnOldQuotes(targetRow.data.quotes.secondaryQuotes);
     targetRow.data.quotes.primaryPresentQuotes = this.utilityService.deepCopy(targetRow.data.quotes.primaryQuotes);
     targetRow.data.quotes.secondaryPresentQuotes = this.utilityService.deepCopy(targetRow.data.quotes.secondaryQuotes);
     if (!targetRow.state.presentingAllQuotes) {
@@ -751,12 +756,64 @@ export class SantaTable implements OnInit, OnChanges {
     return newQuoteList;
   }
 
-  private onMouseLeaveSecurityCardAlertShortcutConfig() {
-    if (this.tableData.state.selectedSecurityCard && this.tableData.state.selectedSecurityCard.data && this.tableData.state.selectedSecurityCard.data.name) {
-      const rowId = this.tableName === 'tradeAlert' ? this.tableData.state.selectedSecurityCard.data.alert.alertId : this.tableData.state.selectedSecurityCard.data.securityID;
-      const targetNode = this.tableData.api.gridApi.getRowNode(rowId);
-      !!targetNode && targetNode.setData(targetNode.data);
-      this.tableData.state.selectedSecurityCard = null;
+  private carryAxeLevelOnOldQuotes(quoteList: Array<SecurityQuoteDTO>) {
+    const mergedList = [];  // this list is for recording all the axe quotes that are merged into other run quotes. axe quotes are merged if the run is close enough (5mins) with it. To complete the merge, we need to keep track of the merged axe quotes, and after looping through all of them, then remove them from the list 
+    quoteList.forEach((eachQuote) => {
+      if (eachQuote.state.hasBid && eachQuote.data.bid.isAxe) {
+        const targetAxeBid = eachQuote;
+        quoteList.forEach((eachOldQuote) => {
+          if (
+            eachOldQuote.data.uuid !== targetAxeBid.data.uuid && 
+            eachOldQuote.data.broker === targetAxeBid.data.broker &&
+            !eachOldQuote.state.hasBid &&
+            this.isOldQuoteRecentEnough(targetAxeBid, eachOldQuote)
+          ) {
+            console.log('test, carry bid axe on ', eachOldQuote, 'form',targetAxeBid);
+            eachOldQuote.data.bid = this.utilityService.deepCopy(targetAxeBid.data.bid);
+            eachOldQuote.state.hasBid = true;
+            eachOldQuote.state.isBestAxeBid = targetAxeBid.state.isBestAxeBid;
+            eachOldQuote.state.isBestBid = targetAxeBid.state.isBestAxeBid;
+            if (Math.abs(targetAxeBid.data.unixTimestamp - eachOldQuote.data.unixTimestamp) <= 300) {
+              !mergedList.includes(targetAxeBid) && mergedList.push(targetAxeBid);
+            }
+          }
+        });
+      }
+      if (eachQuote.state.hasAsk && eachQuote.data.ask.isAxe) {
+        const targetAxeAsk = eachQuote;
+        quoteList.forEach((eachOldQuote) => {
+          if (
+            eachOldQuote.data.uuid !== targetAxeAsk.data.uuid &&
+            eachOldQuote.data.broker === targetAxeAsk.data.broker &&
+            !eachOldQuote.state.hasAsk &&
+            this.isOldQuoteRecentEnough(targetAxeAsk, eachOldQuote)
+          ) {
+            console.log('test, carry ask axe on ', eachOldQuote, 'from', targetAxeAsk);
+            eachOldQuote.data.ask = this.utilityService.deepCopy(targetAxeAsk.data.ask);
+            eachOldQuote.state.hasAsk = true;
+            eachOldQuote.state.isBestAxeOffer = targetAxeAsk.state.isBestAxeOffer;
+            eachOldQuote.state.isBestOffer = targetAxeAsk.state.isBestOffer;
+            if (Math.abs(targetAxeAsk.data.unixTimestamp - eachOldQuote.data.unixTimestamp) <= 300) {
+              !mergedList.includes(targetAxeAsk) && mergedList.push(targetAxeAsk);
+            }
+          }
+        })
+      }
+    });
+    mergedList.forEach((eachMergedAxeQuote) => {
+      const itemIndex = quoteList.findIndex((eachQuote) => {
+        return eachQuote.data.uuid === eachMergedAxeQuote.data.uuid;
+      });
+      itemIndex >= 0 && quoteList.splice(itemIndex, 1);
+    })
+  }
+
+  private isOldQuoteRecentEnough(targetQuote: SecurityQuoteDTO, oldQuote: SecurityQuoteDTO): boolean {
+    if (targetQuote.data.unixTimestamp > 0 && oldQuote.data.unixTimestamp > 0) {
+      const diffInSeconds = targetQuote.data.unixTimestamp - oldQuote.data.unixTimestamp;
+      return diffInSeconds <= 7200 && diffInSeconds > -60 ;
+    } else {
+      return false;
     }
   }
 }

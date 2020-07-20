@@ -44,11 +44,12 @@
       <button title="Open In Bloomberg TDH" (click)="onClickOpenSecurityInBloomberg('TDH')" class="sat-securityCard__actionMenu-minorList-btn">TDH</button>
     </ul>
   </section>
-  <section (mouseleave)="onMouseLeaveShortcutConfig()" class="sat-securityCard__alertShortcutConfig">
+  <section class="sat-securityCard__alertShortcutConfig">
     <div class="sat-securityCard__alertShortcutConfig-content">
       <!-- <div class="sat-securityCard__alertShortcutConfig-content-alertTypePin"> -->
         <!-- <i class="sat-securityCard__alertShortcutConfig-content-alertTypePin-icon fas fa-axe"></i> -->
       <!-- </div> -->
+      <div></div>
       <div class="sat-securityCard__alertShortcutConfig-content-title">
         <div class="sat-securityCard__alertShortcutConfig-content-title-alertType">
           <i class="sat-securityCard__alertShortcutConfig-content-title-alertType-icon fas fa-axe"></i>
@@ -105,6 +106,10 @@
         ></numeric-filter>
       </div>
       <div class="sat-securityCard__alertShortcutConfig-content-ctas">
+        <div class="sat-securityCard__alertShortcutConfig-content-ctas-close">
+          <button (click)="onCloseShortcutConfig()" class="sat-securityCard__alertShortcutConfig-content-ctas-close-btn fal fa-times"></button>
+          <div class="sat-securityCard__alertShortcutConfig-content-ctas-close-borderMask"></div>
+        </div>
         <div class="sat-securityCard__alertShortcutConfig-content-ctas-urgentFlag">
           <button
             title="Is Urgent (display on the right edge of the screen)"

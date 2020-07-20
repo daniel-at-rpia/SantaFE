@@ -48,7 +48,7 @@ export const SecurityTableHeaderConfigGroups = {
   cost: 'Position Cost',
   position: 'Position (MM)',
   cs01: 'CS01 (k)',
-  delta: 'Deltas (Spread)',
+  delta: 'Deltas',
   securityInfo: 'Security Info',
   ownership: 'Ownership'
 };
@@ -1240,7 +1240,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       tableSpecifics: {
         default: {
           active: true,
-          groupShow: true
+          groupShow: false
         },
         tradeAlert: {
           active: false
@@ -1261,7 +1261,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.delta,
       tableSpecifics: {
         default: {
-          active: false,
+          active: true,
           groupShow: true
         },
         tradeAlert: {
