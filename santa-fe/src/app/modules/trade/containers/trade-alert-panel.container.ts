@@ -653,7 +653,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     }
 
     private checkRangeActive(targetEntry: TradeAlertConfigurationAxeGroupBlockDTO ) {
-      (targetEntry.data.targetRange.state.isFilled && targetEntry.data.targetDriver ) ? targetEntry.state.isRangeActive = true : targetEntry.state.isRangeActive = false
+      targetEntry.state.isRangeActive = (targetEntry.data.targetRange.state.isFilled && targetEntry.data.targetDriver ) ?  true : false;
     }
 
     public onSelectAxeRangeDriver({targetBlock, targetDriver}: SelectAxeWatchlistRangeDriver) {
