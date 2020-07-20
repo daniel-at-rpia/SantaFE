@@ -9,10 +9,11 @@ $tradeAlertAxeAlertConfiguration_singleSecurities_watchList_width: 67%;
       &-securityList {
         &-item {
           @include mix_fixed_div(relative, $z_index_base_item);
+          @include mix_border_radius(5px);
           flex: 0 1 auto;
           display: flex;
           align-items: center;
-          padding: $spacing_small 0;
+          padding: $spacing_small;
           &-newTag {
             @include mix_border_radius(3px);
             flex: 0 0 auto;
@@ -76,6 +77,9 @@ $tradeAlertAxeAlertConfiguration_singleSecurities_watchList_width: 67%;
           }
           &--deleted {
             display: none;
+          }
+          &--rangeActive {
+            background-color: $color_deeporange_5;
           }
           &--disabled {
             #{$axeAlertConfigurationBlockName} {
