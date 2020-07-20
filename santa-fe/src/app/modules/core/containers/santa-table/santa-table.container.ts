@@ -385,7 +385,6 @@ export class SantaTable implements OnInit, OnChanges {
   ) {
     if (!isUpdate) {
       rowList.forEach((eachRow) => {
-        eachRow.data.security.api.onMouseLeaveShortcutConfig = this.onMouseLeaveSecurityCardAlertShortcutConfig.bind(this);
         if (this.tableName === 'tradeMain') {
           eachRow.data.security.api.onClickPin = this.onClickSecurityCardPin.bind(this);
         }
