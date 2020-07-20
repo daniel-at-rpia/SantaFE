@@ -72,11 +72,11 @@ $tradeAlertAxeAlertConfiguration_singleSecurities_watchList_width: 67%;
     background-color: $color_kill;
     color: $font_color_inverse;
   }
-  &--deleted {
-    display: none;
-  }
   &--rangeActive {
     background-color: $color_filter;
+  }
+  &--deleted {
+    display: none;
   }
   &--disabled {
     #{$axeAlertConfigurationBlockName} {
