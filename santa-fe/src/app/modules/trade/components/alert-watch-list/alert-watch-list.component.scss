@@ -2,7 +2,7 @@
 @import "modules/trade/trade.scss";
 
 $tradeAlertAxeAlertConfiguration_singleSecurities_watchList_width: 67%;
-.sat-AlertWatchList {
+.sat-alertWatchList {
   $axeAlertConfigurationBlockName: &;
   @include mix_fixed_div(relative, $z_index_base_item);
   @include mix_border_radius(5px);
