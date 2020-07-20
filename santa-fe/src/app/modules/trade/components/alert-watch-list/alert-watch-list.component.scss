@@ -76,7 +76,7 @@ $tradeAlertAxeAlertConfiguration_singleSecurities_watchList_width: 67%;
     display: none;
   }
   &--rangeActive {
-    background-color: $color_deeporange_5;
+    background-color: $color_filter;
   }
   &--disabled {
     #{$axeAlertConfigurationBlockName} {
