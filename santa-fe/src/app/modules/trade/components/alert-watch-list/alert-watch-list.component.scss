@@ -10,7 +10,7 @@ $tradeAlertAxeAlertConfiguration_singleSecurities_watchList_width: 67%;
   display: flex;
   align-items: center;
   padding: $spacing_small;
-  margin-bottom: $spacing_small;
+  margin-bottom: $spacing_xx_small;
   &-newTag {
     @include mix_border_radius(3px);
     flex: 0 0 auto;
