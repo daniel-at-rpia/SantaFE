@@ -816,6 +816,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         }
       };
       this.checkIsFilled(newEntry);
+      this.checkRangeActive(newEntry);
       this.state.configuration.axe.securityList.unshift(newEntry);
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSecurityDTOs, {req: 'POST'}, payload).pipe(
         first(),
