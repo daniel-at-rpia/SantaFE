@@ -679,6 +679,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         maxNumber: ""
       };
       this.checkIsFilled(targetBlock);
+      this.checkRangeActive(targetBlock);
     }
 
     public onToggleSendEmail(targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
