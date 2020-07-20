@@ -322,7 +322,8 @@ export class AgGridMiddleLayerService {
         alertStatusCellIndex > -1
           ? targetRow.data.cells[alertStatusCellIndex].data.alertStatusDTO
           : null,
-      rowDTO: targetRow
+      rowDTO: targetRow,
+      isFullWidth: targetRow.state.isAgGridFullSizeVariant
     };
     newAgRow[AGGRID_DETAIL_COLUMN_KEY] = '';
     targetHeaders.forEach((eachHeader, index) => {

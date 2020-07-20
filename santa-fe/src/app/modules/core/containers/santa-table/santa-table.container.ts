@@ -15,6 +15,7 @@
       SecurityTableHeaderDTO,
       SecurityTableRowDTO
     } from 'FEModels/frontend-models.interface';
+    import { AgGridRow, AgGridRowNode } from 'FEModels/frontend-blocks.interface';
     import { PayloadGetAllQuotes } from 'BEModels/backend-payloads.interface';
     import { AgGridRowParams, ClickedSortQuotesByMetricEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
     import { SecurityTableHeaderConfigStub } from 'FEModels/frontend-stub-models.interface';
@@ -38,6 +39,7 @@
     } from 'Core/constants/securityTableConstants.constant';
     import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
     import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-filter/santa-table-numeric-filter.component';
+    import { SantaTableFullWidthCellRenderer } from 'Core/components/santa-table-full-width-cell-renderer/santa-table-full-width-cell-renderer.component';
   //
 
 @Component({
@@ -131,7 +133,8 @@ export class SantaTable implements OnInit, OnChanges {
       detailAllQuotes: SantaTableDetailAllQuotes,
       numericFloatingFilter: SantaTableNumericFloatingFilter,
       numericFilter: SantaTableNumericFilter,
-      alertStatus: SantaTableAlertStatusCell
+      alertStatus: SantaTableAlertStatusCell,
+      fullWidthCell: SantaTableFullWidthCellRenderer
     };
     this.tableData.data.agGridAggregationMap = {
       sum: this.agAggregationSum.bind(this),
@@ -339,6 +342,10 @@ export class SantaTable implements OnInit, OnChanges {
           // pin it
           // the deep copy is to make sure the pinned rows are retained as the state of the table changes. it also ensures when clicking on the pinned row's card, it doesn't trigger both the regular row and the pinned row 
           this.tableData.data.agGridPinnedTopRowData.push(this.utilityService.deepCopy(targetRow));
+          const fullWidthCell: AgGridRow = this.utilityService.deepCopy(targetRow);
+          fullWidthCell.id = `${fullWidthCell.id} - fullWidth`;
+          fullWidthCell.isFullWidth = true;
+          this.tableData.data.agGridPinnedTopRowData.push(fullWidthCell);
         }
         this.tableData.api.gridApi.setPinnedTopRowData(this.tableData.data.agGridPinnedTopRowData);
       }
@@ -350,6 +357,10 @@ export class SantaTable implements OnInit, OnChanges {
     if (this.tableData.state.isAgGridReady) {
       this.tableData.api.gridApi.setPinnedTopRowData([]);
     }
+  }
+
+  public isFullWidthCell(rowNode: AgGridRowNode) {
+    return !!rowNode.data.isFullWidth;
   }
 
   private loadTableHeaders(skipAgGrid = false) {

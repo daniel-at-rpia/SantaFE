@@ -26,6 +26,8 @@
       [suppressContextMenu]="true"
       [context]="agGridConfig.context"
       [pinnedTopRowData]="tableData.data.agGridPinnedTopRowData"
+      [fullWidthCellRenderer]="'fullWidthCell'"
+      [isFullWidthCell]="isFullWidthCell"
       (gridReady)="onGridReady($event)"
       (rowClicked)="onRowClicked($event)">
     </ag-grid-angular>

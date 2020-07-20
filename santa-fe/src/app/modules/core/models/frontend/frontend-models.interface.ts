@@ -392,6 +392,7 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
     isCDSOffTheRun: boolean;
     viewHistoryState: boolean;
     quotesLoaded: boolean;
+    isAgGridFullSizeVariant: boolean;
   }
 }
 

@@ -193,6 +193,7 @@ export interface AgGridRow {
   alertSide: DTOs.SantaTableAlertSideCellDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Alert Side column
   alertStatus: DTOs.SantaTableAlertStatusCellDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Alert Status column
   rowDTO: DTOs.SecurityTableRowDTO;
+  isFullWidth: boolean;
 }
 
 export interface AgGridColumn {
