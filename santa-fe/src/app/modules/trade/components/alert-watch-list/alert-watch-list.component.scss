@@ -2,139 +2,131 @@
 @import "modules/trade/trade.scss";
 
 $tradeAlertAxeAlertConfiguration_singleSecurities_watchList_width: 67%;
-.sat-tradeAlertAxeAlertConfiguration {
+.sat-AlertWatchList {
   $axeAlertConfigurationBlockName: &;
-  &__singleSecurities {
-    &-watchList {
-      &-securityList {
-        &-item {
-          @include mix_fixed_div(relative, $z_index_base_item);
-          @include mix_border_radius(5px);
-          flex: 0 1 auto;
+  @include mix_fixed_div(relative, $z_index_base_item);
+  @include mix_border_radius(5px);
+  flex: 0 1 auto;
+  display: flex;
+  align-items: center;
+  padding: $spacing_small;
+  &-newTag {
+    @include mix_border_radius(3px);
+    flex: 0 0 auto;
+    display: none;
+    align-items: center;
+    margin-right: $spacing_small;
+    padding: $spacing_xx_small $spacing_x_small;
+    background-color: $color_highlight;
+    &>i {
+      color: $font_color_inverse;
+      margin-right: $spacing_x_small;
+    }
+    &>span {
+      color: $font_color_inverse;
+    }
+  }
+  &-disableTag {
+    @include mix_border_radius(3px);
+    flex: 0 0 auto;
+    display: none;
+    align-items: center;
+    margin-right: $spacing_small;
+    padding: $spacing_xx_small $spacing_x_small;
+    background-color: $color_disabled;
+    &>i {
+      color: $font_color_inverse;
+      margin-right: $spacing_x_small;
+    }
+    &>span {
+      color: $font_color_inverse;
+    }
+  }
+  security-card {
+    flex: 1 1 auto;
+  }
+  &-btnGroup {
+    flex: 0 0 auto;
+    margin-left: $spacing_medium;
+    &-btn {
+      &--selected {
+        @include material('none');
+        background-color: $color_active;
+        color: $font_color_inverse;
+      }
+    }
+  }
+  numeric-filter {
+    flex: 0 0 9.25rem;
+    margin-left: $spacing_medium;
+  }
+  &-disableBtn, &-urgentBtn, &-sendEmailBtn {
+    flex: 0 0 auto;
+    margin-left: $spacing_medium;
+    color: $font_color_major;
+  }
+  &-removeBtn {
+    flex: 0 0 auto;
+    margin-left: $spacing_medium;
+    background-color: $color_kill;
+    color: $font_color_inverse;
+  }
+  &--deleted {
+    display: none;
+  }
+  &--rangeActive {
+    background-color: $color_deeporange_5;
+  }
+  &--disabled {
+    #{$axeAlertConfigurationBlockName} {
+      &__singleSecurities-watchList-securityList-item {
+        &-disableTag {
           display: flex;
-          align-items: center;
-          padding: $spacing_small;
-          &-newTag {
-            @include mix_border_radius(3px);
-            flex: 0 0 auto;
-            display: none;
-            align-items: center;
-            margin-right: $spacing_small;
-            padding: $spacing_xx_small $spacing_x_small;
-            background-color: $color_highlight;
-            &>i {
-              color: $font_color_inverse;
-              margin-right: $spacing_x_small;
-            }
-            &>span {
-              color: $font_color_inverse;
-            }
-          }
-          &-disableTag {
-            @include mix_border_radius(3px);
-            flex: 0 0 auto;
-            display: none;
-            align-items: center;
-            margin-right: $spacing_small;
-            padding: $spacing_xx_small $spacing_x_small;
+        }
+        &-btnGroup {
+          &-btn {
+            @include material('none');
             background-color: $color_disabled;
-            &>i {
-              color: $font_color_inverse;
-              margin-right: $spacing_x_small;
-            }
-            &>span {
-              color: $font_color_inverse;
+            &--selected {
+              background-color: $color_active;
             }
           }
-          security-card {
-            flex: 1 1 auto;
-          }
-          &-btnGroup {
-            flex: 0 0 auto;
-            margin-left: $spacing_medium;
-            &-btn {
-              &--selected {
-                @include material('none');
-                background-color: $color_active;
-                color: $font_color_inverse;
-              }
-            }
-          }
-          numeric-filter {
-            flex: 0 0 9.25rem;
-            margin-left: $spacing_medium;
-          }
-          &-disableBtn, &-urgentBtn, &-sendEmailBtn {
-            flex: 0 0 auto;
-            margin-left: $spacing_medium;
-            color: $font_color_major;
-          }
-          &-removeBtn {
-            flex: 0 0 auto;
-            margin-left: $spacing_medium;
-            background-color: $color_kill;
-            color: $font_color_inverse;
-          }
-          &--deleted {
-            display: none;
-          }
-          &--rangeActive {
-            background-color: $color_deeporange_5;
-          }
-          &--disabled {
-            #{$axeAlertConfigurationBlockName} {
-              &__singleSecurities-watchList-securityList-item {
-                &-disableTag {
-                  display: flex;
-                }
-                &-btnGroup {
-                  &-btn {
-                    @include material('none');
-                    background-color: $color_disabled;
-                    &--selected {
-                      background-color: $color_active;
-                    }
-                  }
-                }
-                &-disableBtn {
-                  @include material('none');
-                  background-color: $color_active;
-                  color: $font_color_inverse;
-                }
-              }
-            }
-          }
-          &--urgent {
-            #{$axeAlertConfigurationBlockName} {
-              &__singleSecurities-watchList-securityList-item {
-                &-urgentBtn {
-                  @include material('none');
-                  background-color: $color_active;
-                  color: $font_color_inverse;
-                }
-              }
-            }
-          }
-          &--sendEmail {
-            #{$axeAlertConfigurationBlockName} {
-              &__singleSecurities-watchList-securityList-item {
-                &-sendEmailBtn {
-                  @include material('none');
-                  background-color: $color_active;
-                  color: $font_color_inverse;
-                }
-              }
-            }
-          }
-          &--new {
-            #{$axeAlertConfigurationBlockName} {
-              &__watchList-securityList-item {
-                &-newTag {
-                  display: flex;
-                }
-              }
-            }
-          }
+        }
+        &-disableBtn {
+          @include material('none');
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--urgent {
+    #{$axeAlertConfigurationBlockName} {
+      &__singleSecurities-watchList-securityList-item {
+        &-urgentBtn {
+          @include material('none');
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--sendEmail {
+    #{$axeAlertConfigurationBlockName} {
+      &__singleSecurities-watchList-securityList-item {
+        &-sendEmailBtn {
+          @include material('none');
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--new {
+    #{$axeAlertConfigurationBlockName} {
+      &__watchList-securityList-item {
+        &-newTag {
+          display: flex;
         }
       }
     }

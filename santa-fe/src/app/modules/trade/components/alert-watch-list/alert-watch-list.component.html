@@ -1,47 +1,47 @@
 <div   
 [ngClass]="{
-'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item': true,
-'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--disabled': eachSecurityBlock.state.isDisabled,
-'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--deleted': eachSecurityBlock.state.isDeleted,
-'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--urgent':eachSecurityBlock.state.isUrgent,
-'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--sendEmail': eachSecurityBlock.data.sendEmail,
-'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--new': eachSecurityBlock.data.groupId == null,
-'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item--rangeActive': eachSecurityBlock.state.isRangeActive
+'sat-AlertWatchList': true,
+'sat-AlertWatchList--disabled': eachSecurityBlock.state.isDisabled,
+'sat-AlertWatchList--deleted': eachSecurityBlock.state.isDeleted,
+'sat-AlertWatchList--urgent':eachSecurityBlock.state.isUrgent,
+'sat-AlertWatchList--sendEmail': eachSecurityBlock.data.sendEmail,
+'sat-AlertWatchList--new': eachSecurityBlock.data.groupId == null,
+'sat-AlertWatchList--rangeActive': eachSecurityBlock.state.isRangeActive
 }">
-<div class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-newTag">
+<div class="sat-AlertWatchList-newTag">
   <i class="fal fa-sparkles"></i>
   <span>New</span>
 </div>
-<div class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-disableTag">
+<div class="sat-AlertWatchList-disableTag">
   <i class="fal fa-bell-slash"></i>
   <span>Disabled</span>
 </div>
 <security-card *ngIf="eachSecurityBlock.data.card" [cardData]="eachSecurityBlock.data.card"></security-card>
-<div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup">
+<div class="santaBtnGroup sat-AlertWatchList-btnGroup">
   <button
     (click)="onSelectAxeAlertWatchlistSide(constants.axeAlertScope.bid, eachSecurityBlock)"
     [ngClass]="{
-      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn': true,
-      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.data.scopes.indexOf(constants.axeAlertScope.bid) >= 0
+      'sat-AlertWatchList-btnGroup-btn': true,
+      'sat-AlertWatchList-btnGroup-btn--selected': eachSecurityBlock.data.scopes.indexOf(constants.axeAlertScope.bid) >= 0
     }">
     <span>Bid</span>
   </button>
   <button
     (click)="onSelectAxeAlertWatchlistSide(constants.axeAlertScope.ask, eachSecurityBlock)"
     [ngClass]="{
-      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn': true,
-      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.data.scopes.indexOf(constants.axeAlertScope.ask) >= 0
+      'sat-AlertWatchList-btnGroup-btn': true,
+      'sat-AlertWatchList-btnGroup-btn--selected': eachSecurityBlock.data.scopes.indexOf(constants.axeAlertScope.ask) >= 0
     }">
     <span>Ask</span>
   </button>
 </div>
-<div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup">
+<div class="santaBtnGroup sat-AlertWatchList-btnGroup">
   <button
     title="Watching"
     (click)="onSelectAxeAlertWatchlistType(constants.axeAlertType.normal, eachSecurityBlock)"
     [ngClass]="{
-      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn': true,
-      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.data.axeAlertTypes.indexOf(constants.axeAlertType.normal) >= 0
+      'sat-AlertWatchList-btnGroup-btn': true,
+      'sat-AlertWatchList-btnGroup-btn--selected': eachSecurityBlock.data.axeAlertTypes.indexOf(constants.axeAlertType.normal) >= 0
     }">
     <span>Axe</span>
   </button>
@@ -49,8 +49,8 @@
     title="Watching"
     (click)="onSelectAxeAlertWatchlistType(constants.axeAlertType.marketList, eachSecurityBlock)"
     [ngClass]="{
-      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn': true,
-      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.data.axeAlertTypes.indexOf(constants.axeAlertType.marketList) >= 0
+      'sat-AlertWatchList-btnGroup-btn': true,
+      'sat-AlertWatchList-btnGroup-btn--selected': eachSecurityBlock.data.axeAlertTypes.indexOf(constants.axeAlertType.marketList) >= 0
     }">
     <span>Inquiry</span>
   </button>
@@ -61,26 +61,26 @@
   (detectedMaxChange)="onChangeAxeWatchlistRangeMax($event, eachSecurityBlock)"
   (detectedClickedClear)="onClickAxeWatchlistClearRange(eachSecurityBlock)"
 ></numeric-filter>
-<div class="santaBtnGroup sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup">
+<div class="santaBtnGroup sat-AlertWatchList-btnGroup">
   <button
     (click)="onSelectAxeWatchlistRangeDriver(eachSecurityBlock, constants.driver.Spread.label)"
     [ngClass]="{
-      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn': true,
-      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.data.targetDriver === constants.driver.Spread.label
+      'sat-AlertWatchList-btnGroup-btn': true,
+      'sat-AlertWatchList-btnGroup-btn--selected': eachSecurityBlock.data.targetDriver === constants.driver.Spread.label
     }">
     <span>Sprd</span>
   </button>
   <button
     (click)="onSelectAxeWatchlistRangeDriver(eachSecurityBlock, constants.driver.Price.label)"
     [ngClass]="{
-      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn': true,
-      'sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-btnGroup-btn--selected': eachSecurityBlock.data.targetDriver === constants.driver.Price.label
+      'sat-AlertWatchList-btnGroup-btn': true,
+      'sat-AlertWatchList-btnGroup-btn--selected': eachSecurityBlock.data.targetDriver === constants.driver.Price.label
     }">
     <span>Px</span>
   </button>
 </div>
-<button title="Urgent" (click)="onToggleAxeWatchlistPriority(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-urgentBtn santaBtn--iconOnly fal fa-exclamation"></button>
-<button title="Send Email" (click)="onToggleAxeWatchlistSendEmail(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-sendEmailBtn santaBtn--iconOnly fal fa-envelope"></button>
-<button title="Disable (mute)" (click)="onToggleDisableTargetGroupFromAxeWatchlist(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-disableBtn santaBtn--iconOnly fal fa-bell-slash"></button>
-<button title="Remove" (click)="onClickRemoveSecurityFromAxeWatchlist(eachSecurityBlock)" class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-watchList-securityList-item-removeBtn santaBtn--iconOnly fal fa-eraser"></button>
+<button title="Urgent" (click)="onToggleAxeWatchlistPriority(eachSecurityBlock)" class="sat-AlertWatchList-urgentBtn santaBtn--iconOnly fal fa-exclamation"></button>
+<button title="Send Email" (click)="onToggleAxeWatchlistSendEmail(eachSecurityBlock)" class="sat-AlertWatchList-sendEmailBtn santaBtn--iconOnly fal fa-envelope"></button>
+<button title="Disable (mute)" (click)="onToggleDisableTargetGroupFromAxeWatchlist(eachSecurityBlock)" class="sat-AlertWatchList-disableBtn santaBtn--iconOnly fal fa-bell-slash"></button>
+<button title="Remove" (click)="onClickRemoveSecurityFromAxeWatchlist(eachSecurityBlock)" class="sat-AlertWatchList-removeBtn santaBtn--iconOnly fal fa-eraser"></button>
 </div>
