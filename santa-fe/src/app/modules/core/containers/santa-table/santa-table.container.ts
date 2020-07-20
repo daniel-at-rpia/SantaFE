@@ -134,7 +134,7 @@ export class SantaTable implements OnInit, OnChanges {
       numericFloatingFilter: SantaTableNumericFloatingFilter,
       numericFilter: SantaTableNumericFilter,
       alertStatus: SantaTableAlertStatusCell,
-      fullWidthCell: SantaTableFullWidthCellRenderer
+      fullWidthCell: SantaTableDetailAllQuotes
     };
     this.tableData.data.agGridAggregationMap = {
       sum: this.agAggregationSum.bind(this),
@@ -230,7 +230,7 @@ export class SantaTable implements OnInit, OnChanges {
           this.tableData.state.selectedSecurityCard = null;
         }
         // this function gets triggered both when parent and child are being clicked, so this if condition is to make sure only execute the logic when it is the parent that is clicked
-        if (!!params.node.master && this.tableName !== 'tradeAlert') {
+        if ((!!params.node.master || params.rowPinned) && this.tableName !== 'tradeAlert') {
           params.node.setExpanded(!params.node.expanded);
           if (!params.node.group) {
             const targetRow = this.tableData.data.rows.find((eachRow) => {
@@ -704,7 +704,7 @@ export class SantaTable implements OnInit, OnChanges {
       targetRow.data.quotes.secondaryPresentQuotes = targetRow.data.quotes.secondaryPresentQuotes.slice(0, this.constants.agGridDetailRowDefaultCount);
     }
     this.agGridMiddleLayerService.updateAgGridRows(this.tableData, [targetRow], 4);
-    if (!!params && !!params.node && !!params.node.detailNode) {
+    if (!!params && !!params.node && (!!params.node.detailNode || params.rowPinned)) {
       const longestList = targetRow.data.quotes.primaryQuotes.length < targetRow.data.quotes.secondaryQuotes.length ? targetRow.data.quotes.secondaryQuotes : targetRow.data.quotes.primaryQuotes;
       let dynamicHeight = longestList.length * this.constants.agGridDetailRowHeightPerRow;
       if (targetRow.state.isCDSOffTheRun) {
@@ -718,11 +718,28 @@ export class SantaTable implements OnInit, OnChanges {
       if (dynamicHeight < this.constants.agGridDetailRowHeightMinimum) {
         dynamicHeight = this.constants.agGridDetailRowHeightMinimum;
       }
-      params.node.detailNode.rowHeight = dynamicHeight;
-      params.api.resetRowHeights();
-      params.api.redrawRows({
-        rowNodes: [params.node, params.node['detailNode']]
-      });
+      if (params.node.detailNode) {
+        params.node.rowHeight = 200;
+        params.node.detailNode.rowHeight = dynamicHeight;
+          params.api.onRowHeightChanged();
+        // params.api.resetRowHeights();
+        params.api.redrawRows({
+          rowNodes: [params.node, params.node['detailNode']]
+        });
+      } else if (params.rowPinned) {
+        const fullWidthNode: AgGridRowNode = params.api.getPinnedTopRow(params.node.rowIndex+1);
+        if (!!fullWidthNode) {
+          params.node.rowHeight = 200;
+          fullWidthNode.data.rowDTO.state.quotesLoaded = true;
+          fullWidthNode.rowHeight = 200;
+          // params.api.resetRowHeights();
+          fullWidthNode.setRowHeight(200);
+          params.api.onRowHeightChanged();
+          params.api.redrawRows({
+            rowNodes: [params.node, fullWidthNode]
+          });
+        }
+      }
     }
   }
 

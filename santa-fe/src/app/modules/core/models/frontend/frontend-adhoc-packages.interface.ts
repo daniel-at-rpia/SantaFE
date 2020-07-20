@@ -54,7 +54,9 @@ export interface AgGridRowParams {
   columnApi: ColumnApi;
   context: {
     componentParent: any;  // entire "this" of a container component
-  }
+  };
+  rowPinned: string;
+  rowIndex: number;
 }
 
 export interface SantaTableNumericFloatingFilterChange {
