@@ -648,5 +648,6 @@ export interface TradeAlertConfigurationAxeGroupBlockDTO extends BasicDTOStructu
     isDeleted: boolean;
     isDisabled: boolean;
     isUrgent: boolean;
+    isRangeActive: boolean;
   }
 }

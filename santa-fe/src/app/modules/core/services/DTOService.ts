@@ -1587,6 +1587,7 @@ export class DTOService {
         isDeleted: false,
         isDisabled: false,
         isUrgent: !!copy.data.alert.shortcutConfig.isUrgent,
+        isRangeActive: false
       }
     }
     return object;

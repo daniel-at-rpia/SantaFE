@@ -652,18 +652,25 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       );
     }
 
+    private checkRangeActive(targetEntry: TradeAlertConfigurationAxeGroupBlockDTO ) {
+      (targetEntry.data.targetRange.state.isFilled && targetEntry.data.targetDriver ) ? targetEntry.state.isRangeActive = true : targetEntry.state.isRangeActive = false
+    }
+
     public onSelectAxeRangeDriver({targetBlock, targetDriver}: SelectAxeWatchlistRangeDriver) {
       targetBlock.data.targetDriver = targetDriver;
+      this.checkRangeActive(targetBlock);
     }
 
     public onChangeAxeRangeMin({newValue, targetBlock}: SelectAxeWatchlistRangeValue) {
       targetBlock.data.targetRange.data.minNumber = newValue === "" ? newValue : parseFloat(newValue);
       this.checkIsFilled(targetBlock);
+      this.checkRangeActive(targetBlock);
     }
 
     public onChangeAxeRangeMax({newValue, targetBlock}: SelectAxeWatchlistRangeValue) {
       targetBlock.data.targetRange.data.maxNumber = newValue === "" ? newValue : parseFloat(newValue);
       this.checkIsFilled(targetBlock);
+      this.checkRangeActive(targetBlock);
     }
 
     public onClickedClearRange(targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
@@ -804,6 +811,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           isDeleted: false,
           isDisabled: !rawGroupConfig.isEnabled,
           isUrgent: rawGroupConfig.isUrgent,
+          isRangeActive: false
         }
       };
       this.checkIsFilled(newEntry);
