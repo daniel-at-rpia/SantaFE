@@ -5,8 +5,7 @@
 'sat-alertWatchList--deleted': eachSecurityBlock.state.isDeleted,
 'sat-alertWatchList--urgent':eachSecurityBlock.state.isUrgent,
 'sat-alertWatchList--sendEmail': eachSecurityBlock.data.sendEmail,
-'sat-alertWatchList--new': eachSecurityBlock.data.groupId == null,
-'sat-alertWatchList--rangeActive': eachSecurityBlock.state.isRangeActive
+'sat-alertWatchList--new': eachSecurityBlock.data.groupId == null
 }">
 <div class="sat-alertWatchList-newTag">
   <i class="fal fa-sparkles"></i>
@@ -56,12 +55,13 @@
   </button>
 </div>
 <numeric-filter
+  [numericRangeActive]="eachSecurityBlock.state.isRangeActive"
   [filterData]="eachSecurityBlock.data.targetRange"
   (detectedMinChange)="onChangeAxeWatchlistRangeMin($event, eachSecurityBlock)"
   (detectedMaxChange)="onChangeAxeWatchlistRangeMax($event, eachSecurityBlock)"
   (detectedClickedClear)="onClickAxeWatchlistClearRange(eachSecurityBlock)"
 ></numeric-filter>
-<div class="santaBtnGroup sat-alertWatchList-btnGroup">
+<div class="santaBtnGroup sat-alertWatchList-btnGroup" [ngClass]="{'sat-alertWatchList-range--active': eachSecurityBlock.state.isRangeActive}">
   <button
     (click)="onSelectAxeWatchlistRangeDriver(eachSecurityBlock, constants.driver.Spread.label)"
     [ngClass]="{

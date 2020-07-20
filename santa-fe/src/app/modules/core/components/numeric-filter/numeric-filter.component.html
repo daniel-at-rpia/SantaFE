@@ -1,7 +1,8 @@
 <article
   [ngClass]="{
     'sat-numericFilter': true,
-    'sat-numericFilter--filled': filterData.state.isFilled
+    'sat-numericFilter--filled': filterData.state.isFilled,
+    'sat-numericFilter-range--active': numericRangeActive
   }">
   <button (click)="onClickedClear()" class="sat-numericFilter__clearCTA santaBtn fal fa-eraser"></button>
   <section class="sat-numericFilter__minInput">

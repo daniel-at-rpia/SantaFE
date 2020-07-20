@@ -34,6 +34,13 @@
       color: $font_color_minor;
     }
   }
+  &-range {
+    &--active {
+      @include mix_border_radius(5px);
+      background-color: $color_filter;
+      padding: $spacing_small;
+    }
+  }
   &--filled {
     #{$numericFilterBlockName} {
       &__clearCTA {
