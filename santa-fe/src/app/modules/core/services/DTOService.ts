@@ -1592,4 +1592,35 @@ export class DTOService {
     }
     return object;
   }
+
+  public formNewEntryObject(
+    rawGroupConfig: BEModels.BEAlertConfigurationDTO,
+    targetScope: AxeAlertScope,
+    watchType: AxeAlertType,
+    populateDriversFn,
+    populateRangeNumbersFn,
+    checkFilled,
+    checkRangeActive,
+    dtoNumericFilterObjectFn = this.formNumericFilterObject) {
+    const object: DTOs.TradeAlertConfigurationAxeGroupBlockDTO = {
+      data: {
+        card: null,
+        groupId: rawGroupConfig.alertConfigID,
+        scopes: targetScope === AxeAlertScope.both || targetScope === AxeAlertScope.liquidation ? [AxeAlertScope.ask, AxeAlertScope.bid] : [targetScope],  // from now on we will remove "liquidation" as a side option, just to be backward-compatible, in code we treat liquidation the same as "both"
+        axeAlertTypes: watchType === AxeAlertType.both ? [AxeAlertType.normal, AxeAlertType.marketList] : [watchType],
+        targetDriver: populateDriversFn(rawGroupConfig),
+        targetRange: populateRangeNumbersFn(rawGroupConfig, dtoNumericFilterObjectFn),
+        sendEmail: !!rawGroupConfig.sendEmail
+      },
+      state: {
+        isDeleted: false,
+        isDisabled: !rawGroupConfig.isEnabled,
+        isUrgent: rawGroupConfig.isUrgent,
+        isRangeActive: false
+      }
+    }
+    checkFilled(object);
+    checkRangeActive(object);
+    return object;
+  }
 }

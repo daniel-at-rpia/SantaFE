@@ -798,25 +798,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       const payload: PayloadGetSecurities = {
         identifiers: rawGroupConfig.groupFilters.SecurityIdentifier
       };
-      const newEntry: TradeAlertConfigurationAxeGroupBlockDTO = {
-        data: {
-          card: null,
-          groupId: rawGroupConfig.alertConfigID,
-          scopes: targetScope === this.constants.axeAlertScope.both || targetScope === this.constants.axeAlertScope.liquidation ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],  // from now on we will remove "liquidation" as a side option, just to be backward-compatible, in code we treat liquidation the same as "both"
-          axeAlertTypes: WatchType === AxeAlertType.both ? [AxeAlertType.normal, AxeAlertType.marketList] : [WatchType],
-          targetDriver: this.populateWatchDriverFromRawConfig(rawGroupConfig),
-          targetRange: this.populateRangeNumberFilterFromRawConfig(rawGroupConfig),
-          sendEmail: !!rawGroupConfig.sendEmail
-        },
-        state: {
-          isDeleted: false,
-          isDisabled: !rawGroupConfig.isEnabled,
-          isUrgent: rawGroupConfig.isUrgent,
-          isRangeActive: false
-        }
-      };
-      this.checkIsFilled(newEntry);
-      this.checkRangeActive(newEntry);
+      const newEntry = this.dtoService.formNewEntryObject(rawGroupConfig, targetScope, WatchType, this.populateWatchDriverFromRawConfig, this.populateRangeNumberFilterFromRawConfig, this.checkIsFilled, this.checkRangeActive);
       this.state.configuration.axe.securityList.unshift(newEntry);
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSecurityDTOs, {req: 'POST'}, payload).pipe(
         first(),
@@ -934,16 +916,16 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
     private populateWatchDriverFromRawConfig(rawGroupConfig: BEAlertConfigurationDTO): string {
       if (rawGroupConfig.parameters.UpperSpreadThreshold || rawGroupConfig.parameters.LowerSpreadThreshold) {
-        return this.constants.driver.Spread.label;
+        return TriCoreDriverConfig.Spread.label;
       } else if (rawGroupConfig.parameters.UpperPriceThreshold || rawGroupConfig.parameters.LowerPriceThreshold) {
-        return this.constants.driver.Price.label;
+        return TriCoreDriverConfig.Price.label;
       } else {
         return null;
       }
     }
 
-    private populateRangeNumberFilterFromRawConfig(rawGroupConfig: BEAlertConfigurationDTO): NumericFilterDTO {
-      const dto = this.dtoService.formNumericFilterObject();
+    private populateRangeNumberFilterFromRawConfig(rawGroupConfig: BEAlertConfigurationDTO, formNumericFilterObjectFn): NumericFilterDTO {
+      const dto = formNumericFilterObjectFn();
       if (rawGroupConfig.parameters.UpperSpreadThreshold || rawGroupConfig.parameters.LowerSpreadThreshold) {
         dto.data.minNumber = rawGroupConfig.parameters.LowerSpreadThreshold;
         dto.data.maxNumber = rawGroupConfig.parameters.UpperSpreadThreshold;
