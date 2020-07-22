@@ -248,7 +248,7 @@ export class AgGridMiddleLayerService {
       newAgColumn.comparator = this.agCompareAlertSide.bind(this);
     } else if (targetHeader.data.key === 'alertStatus') {
       newAgColumn.comparator = this.agCompareAlertStatus.bind(this);
-    } else if (targetHeader.data.underlineAttrName && targetHeader.data.attrName != targetHeader.data.underlineAttrName) {
+    } else if (targetHeader.data.underlineAttrName && targetHeader.data.attrName != targetHeader.data.underlineAttrName || targetHeader.data.key === 'wowDelta' ) {
       newAgColumn.comparator = this.agCompareUnderlineValue.bind(this)
     }
   }
@@ -486,10 +486,6 @@ export class AgGridMiddleLayerService {
       return -16;
     } else if (securityA != null && securityB == null) {
       return 16;
-    } else if (valueA == null && valueB != null) {
-      return -4;
-    } else if (valueA != null && valueB == null) {
-      return 4;
     } else if (valueA < valueB) {
       return targetHeader.data.isDataTypeText ? 1 : -1;
     } else if (valueA > valueB) {
