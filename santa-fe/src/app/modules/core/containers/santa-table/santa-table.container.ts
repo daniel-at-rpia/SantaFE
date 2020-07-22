@@ -140,9 +140,6 @@ export class SantaTable implements OnInit, OnChanges {
       sum: this.agAggregationSum.bind(this),
       avg: this.agAggregationAverage.bind(this)
     };
-    if (this.tableData.state.isSlimRowVariant) {
-      this.constants.agGridRowHeight = AGGRID_ROW_HEIGHT_SLIM;
-    }
   }
 
   public ngOnChanges() {
@@ -232,10 +229,13 @@ export class SantaTable implements OnInit, OnChanges {
         // this function gets triggered both when parent and child are being clicked, so this if condition is to make sure only execute the logic when it is the parent that is clicked
         if ((!!params.node.master || params.rowPinned) && this.tableName !== 'tradeAlert') {
           params.node.setExpanded(!params.node.expanded);
-          if (!params.node.group) {
-            const targetRow = this.tableData.data.rows.find((eachRow) => {
-              return eachRow.data.rowId == params.node.data.id;
-            });
+          if (!params.node.group && params.node.data.id.indexOf(`fullWidth`) < 0) {
+            // clicked on a regular row
+            const targetRow = params.rowPinned
+              ? this.tableData.data.agGridPinnedTopRowData.find((eachRow) => {
+                return eachRow.id === `${params.node.data.id} - fullWidth`
+              }).rowDTO 
+              : params.node.data.rowDTO;
             if (!!targetRow) {
               try {
                 targetRow.state.isExpanded = !targetRow.state.isExpanded;
@@ -441,7 +441,7 @@ export class SantaTable implements OnInit, OnChanges {
     params?: any  // this is a AgGridRowParams, can't enforce type checking here because agGrid's native function redrawRows() would throw an compliation error
   ){
     if (!!targetRow) {
-      targetRow.data.quotes = this.dtoService.formSecurityTableRowObject(targetRow.data.security ,targetRow.data.alert, targetRow.data.rowId).data.quotes;
+      targetRow.data.quotes = this.dtoService.formSecurityTableRowObject(targetRow.data.security ,targetRow.data.alert, false, targetRow.data.rowId).data.quotes;
       const payload: PayloadGetAllQuotes = {
         "identifier": targetRow.data.security.data.securityID
       };
@@ -719,26 +719,24 @@ export class SantaTable implements OnInit, OnChanges {
         dynamicHeight = this.constants.agGridDetailRowHeightMinimum;
       }
       if (params.node.detailNode) {
-        params.node.rowHeight = 200;
         params.node.detailNode.rowHeight = dynamicHeight;
-          params.api.onRowHeightChanged();
-        // params.api.resetRowHeights();
+        params.api.onRowHeightChanged();
+        // params.api.resetRowHeights();  not sure we still need this, just disabling it for a bit testing
         params.api.redrawRows({
           rowNodes: [params.node, params.node['detailNode']]
         });
       } else if (params.rowPinned) {
+        // when it is a pinned row, populate the fullwidth cell right beneath it
         const fullWidthNode: AgGridRowNode = params.api.getPinnedTopRow(params.node.rowIndex+1);
-        if (!!fullWidthNode) {
-          params.node.rowHeight = 200;
-          fullWidthNode.data.rowDTO.state.quotesLoaded = true;
-          fullWidthNode.rowHeight = 200;
-          // params.api.resetRowHeights();
-          fullWidthNode.setRowHeight(200);
-          params.api.onRowHeightChanged();
-          params.api.redrawRows({
-            rowNodes: [params.node, fullWidthNode]
-          });
-        }
+        fullWidthNode.data.rowDTO = this.utilityService.deepCopy(targetRow);
+        // fullWidthNode.data.rowDTO.state.quotesLoaded = true;
+        fullWidthNode.data.rowDTO.style.rowHeight = dynamicHeight;
+        // fullWidthNode.rowHeight = dynamicHeight;
+        // params.api.resetRowHeights();
+        // fullWidthNode.setRowHeight(dynamicHeight);
+        params.api.setPinnedTopRowData(this.tableData.data.agGridPinnedTopRowData);
+        params.api.onRowHeightChanged();
+        params.api.redrawRows();
       }
     }
   }
@@ -842,5 +840,19 @@ export class SantaTable implements OnInit, OnChanges {
     } else {
       return false;
     }
+  }
+
+  public getRowHeight(params: AgGridRowParams) {
+    if (params && params.node) {
+      // if (params.node.isRowPinned()) {
+        // console.log(this.pinnedRowHeights[params.data.id]);
+        // return this.pinnedRowHeights[params.data.id]
+        // return 200;
+      // }
+      if (params.node.data && params.node.data.rowDTO && params.node.data.rowDTO.style) {
+        return params.node.data.rowDTO.style.rowHeight;
+      }
+    }
+    return this.constants.agGridRowHeight;
   }
 }

@@ -182,6 +182,7 @@ export interface AgGridRowNode {
   setExpanded: Function;
   setData: Function;
   setRowHeight: Function;
+  isRowPinned: Function;
   firstChild: boolean;
   lastChild: boolean;
 }

@@ -26,7 +26,9 @@
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
-      SECURITY_TABLE_QUOTE_TYPE_AXE
+      SECURITY_TABLE_QUOTE_TYPE_AXE,
+      AGGRID_ROW_HEIGHT,
+      AGGRID_ROW_HEIGHT_SLIM
     } from 'Core/constants/securityTableConstants.constant';
     import {
       GroupMetricOptions
@@ -772,8 +774,7 @@ export class DTOService {
 
   public formSecurityTableObject(
     isLiveVariant: boolean,
-    isGroupEnabled: boolean,
-    isSlimRowVariant: boolean
+    isGroupEnabled: boolean
   ): DTOs.SecurityTableDTO {
     const object: DTOs.SecurityTableDTO = {
       data: {
@@ -796,8 +797,7 @@ export class DTOService {
         isNativeEnabled: false,
         selectedSecurityCard: null,
         isActivated: false,
-        isGroupEnabled: isGroupEnabled,
-        isSlimRowVariant: isSlimRowVariant
+        isGroupEnabled: isGroupEnabled
       },
       api: {
         gridApi: null,
@@ -845,6 +845,7 @@ export class DTOService {
   public formSecurityTableRowObject(
     securityDTO: DTOs.SecurityDTO,
     alert: DTOs.AlertDTO,
+    isSlimRowHeight: boolean,
     id?: string
   ): DTOs.SecurityTableRowDTO {
     const object: DTOs.SecurityTableRowDTO = {
@@ -885,6 +886,9 @@ export class DTOService {
         },
         alert: alert,
         historicalTradeVisualizer: this.formHistoricalTradeObject(securityDTO)
+      },
+      style: {
+        rowHeight: !!isSlimRowHeight ? AGGRID_ROW_HEIGHT_SLIM : AGGRID_ROW_HEIGHT
       },
       state: {
         expandViewSortByQuoteMetric: null,

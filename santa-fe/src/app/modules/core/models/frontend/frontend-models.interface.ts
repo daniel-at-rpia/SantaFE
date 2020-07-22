@@ -326,7 +326,6 @@ export interface SecurityTableDTO extends BasicDTOStructure {
     selectedSecurityCard: SecurityDTO;
     isActivated: boolean;
     isGroupEnabled: boolean;
-    isSlimRowVariant: boolean;
   },
   api: {
     gridApi: agGrid.GridApi,
@@ -383,6 +382,9 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
     }
     alert: AlertDTO;
     historicalTradeVisualizer: HistoricalTradeVisualizerDTO;
+  },
+  style: {
+    rowHeight: number;
   },
   state: {
     expandViewSortByQuoteMetric: string;

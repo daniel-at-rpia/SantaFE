@@ -127,7 +127,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       },
       table: {
         metrics: mainTableMetrics,
-        dto: this.dtoService.formSecurityTableObject(true, true, false)
+        dto: this.dtoService.formSecurityTableObject(true, true)
       },
       fetchResult: {
         fetchTableDataFailed: false,
@@ -436,7 +436,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     for (let i = 0; i < 10; ++i) {
       const stencilSecurity = this.dtoService.formSecurityCardObject(null, null, true, false);
       stencilSecurity.state.isInteractionDisabled = true;
-      const newMainTableRow = this.dtoService.formSecurityTableRowObject(stencilSecurity, null);
+      const newMainTableRow = this.dtoService.formSecurityTableRowObject(stencilSecurity, null, false);
       stencilMainTableHeaderBuffer.forEach((eachHeader) => {
         if (!eachHeader.state.isSecurityCardVariant) {
           if (eachHeader.state.isQuantVariant) {
