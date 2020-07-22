@@ -798,7 +798,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       const payload: PayloadGetSecurities = {
         identifiers: rawGroupConfig.groupFilters.SecurityIdentifier
       };
-      const newEntry = this.dtoService.formNewEntryObject(rawGroupConfig, targetScope, WatchType, this.populateWatchDriverFromRawConfig, this.populateRangeNumberFilterFromRawConfig, this.checkIsFilled, this.checkRangeActive);
+      const newEntry = this.dtoService.formNewAlertWatchlistEntryObject(rawGroupConfig, targetScope, WatchType, this.populateWatchDriverFromRawConfig, this.populateRangeNumberFilterFromRawConfig, this.checkIsFilled, this.checkRangeActive);
       this.state.configuration.axe.securityList.unshift(newEntry);
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSecurityDTOs, {req: 'POST'}, payload).pipe(
         first(),

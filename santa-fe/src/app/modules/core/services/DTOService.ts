@@ -1593,7 +1593,7 @@ export class DTOService {
     return object;
   }
 
-  public formNewEntryObject(
+  public formNewAlertWatchlistEntryObject(
     rawGroupConfig: BEModels.BEAlertConfigurationDTO,
     targetScope: AxeAlertScope,
     watchType: AxeAlertType,
