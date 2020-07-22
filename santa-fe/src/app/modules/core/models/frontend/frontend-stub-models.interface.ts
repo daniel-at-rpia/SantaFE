@@ -37,7 +37,6 @@ export interface SecurityDefinitionMapStub {
   COUPON_TYPE: SecurityDefinitionStub;
   CURRENCY: SecurityDefinitionStub;
   INDUSTRY: SecurityDefinitionStub;
-  TICKER: SecurityDefinitionStub;
   MATURITY: SecurityDefinitionStub;
   IS_NEWISSUE: SecurityDefinitionStub;
   IS_ONTHERUN: SecurityDefinitionStub;
@@ -45,7 +44,6 @@ export interface SecurityDefinitionMapStub {
   RATING_BUCKET: SecurityDefinitionStub;
   SECTOR: SecurityDefinitionStub;
   SENIORITY: SecurityDefinitionStub;
-  SUB_INDUSTRY: SecurityDefinitionStub;
   TENOR: SecurityDefinitionStub;
   PORTFOLIO: SecurityDefinitionStub;
   PRIMARY_PORTFOLIO_MANAGER: SecurityDefinitionStub;
