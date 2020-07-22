@@ -166,6 +166,7 @@ export interface AgGridColumnDefinition {
 }
 
 export interface AgGridRowNode {
+  rowIndex: number;
   columnController: {
     allDisplayedColumns: Array<AgGridColumn>
   }

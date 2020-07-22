@@ -15,7 +15,7 @@
       [getRowNodeId]="getRowNodeId"
       [aggFuncs]="tableData.data.agGridAggregationMap"
       [floatingFilter]="true"
-      [getRowHeight]="getRowHeight"
+      [getRowHeight]="getRowHeight.bind(this)"
       [rowHeight]="constants.agGridRowHeight"
       [sideBar]="agGridConfig.sideBar"
       [icons]="icons"
