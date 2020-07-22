@@ -626,6 +626,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
     public onClickRemoveSecurityFromAxeWatchList(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
       targetBlock.isDeleted = true;
+      this.state.configuration.axe.searchList.forEach((eachCard) => {
+        if (eachCard.data.securityID === targetBlock.card.data.securityID) {
+          this.updateTargetSecurityExist(eachCard);
+        }
+      });
       this.restfulCommService.logEngagement(
         this.restfulCommService.engagementMap.tradeAlertConfigure,
         null,
@@ -678,12 +683,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
               eachCard.state.isActionMenuMinorActionsDisabled = true;
               eachCard.state.isWidthFlexible = true;
               eachCard.api.onClickCard = this.onClickSearchResult.bind(this);
-              const existInWatchlist = this.state.configuration.axe.securityList.find((eachEntry) => {
-                return eachEntry.card.data.securityID === eachCard.data.securityID;
-              })
-              if (!!existInWatchlist) {
-                eachCard.state.isSelected = true;
-              }
+              this.updateTargetSecurityExist(eachCard);
               this.state.configuration.axe.searchList.push(eachCard);
             });
           } else {
@@ -693,28 +693,16 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       ).subscribe();
     }
 
-    private onClickSearchResult(targetSecurity:SecurityDTO) {
-      const config = this.state.configuration.axe;
-      const existMatchIndex = config.securityList.findIndex((eachEntry) => {
-        return eachEntry.card.data.securityID === targetSecurity.data.securityID;
+    private onClickSearchResult(targetSecurity: SecurityDTO) {
+      this.addSecurityToWatchList(targetSecurity);
+      this.updateTargetSecurityExist(targetSecurity);
+    }
+
+    private updateTargetSecurityExist(targetSecurity: SecurityDTO) {
+      const existList = this.state.configuration.axe.securityList.filter((eachEntry) => {
+        return eachEntry.card.data.securityID === targetSecurity.data.securityID && !eachEntry.isDeleted;
       });
-      if (existMatchIndex >= 0) {
-        const targetEntry: TradeAlertConfigurationAxeGroupBlock = config.securityList[existMatchIndex];
-        if (config.securityList[existMatchIndex].isDeleted) {
-          targetEntry.isDeleted = false;
-          targetEntry.isDisabled = false;
-          targetEntry.scopes = [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid];
-        } else {
-          if (targetEntry.groupId) {
-            // means the card exist in BE
-            targetEntry.isDeleted = true;
-          } else 
-            // means the card was just added on FE
-            config.securityList.splice(existMatchIndex, 1);
-          }
-      } else {
-        this.addSecurityToWatchList(targetSecurity);
-      }
+      targetSecurity.state.isSelected = existList.length > 0;
     }
 
     private addSecurityToWatchList(targetSecurity: SecurityDTO) {
@@ -860,7 +848,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           if (eachEntry.isDeleted) {
             payload.isDeleted = true;
           }
-          entirePayload.alertConfigs.push(payload);
+          if (!eachEntry.groupId && eachEntry.isDeleted) {
+            // if the entry does not have a groupId but is deleted, then it means it was only created on FE and deleted on FE, therefore no need to save to BE
+          } else {
+            entirePayload.alertConfigs.push(payload);
+          }
         });
         this.restfulCommService.callAPI(this.restfulCommService.apiMap.updateAlertConfiguration, {req: 'POST'}, entirePayload).pipe(
           first(),
