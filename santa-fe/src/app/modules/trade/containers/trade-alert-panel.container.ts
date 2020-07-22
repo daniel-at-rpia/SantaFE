@@ -239,18 +239,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           select(selectSelectedSecurityForAlertConfig)
         ).subscribe((targetSecurity) => {
           if (!!targetSecurity) {
-            const existMatchIndex = this.state.configuration.axe.securityList.findIndex((eachEntry) => {
-              return eachEntry.card.data.securityID === targetSecurity.data.securityID;
-            });
-            if (existMatchIndex < 0) {
-              this.addSecurityToWatchList(targetSecurity);
-            } else {
-              const targetEntry = this.state.configuration.axe.securityList[existMatchIndex];
-              targetEntry.isDeleted = false;
-              targetEntry.isDisabled = false;
-              targetEntry.targetDriver = targetSecurity.data.alert.shortcutConfig.driver;
-              targetEntry.targetRange = targetSecurity.data.alert.shortcutConfig.numericFilterDTO;
-            }
+            this.addSecurityToWatchList(targetSecurity);
             const systemAlert = this.dtoService.formSystemAlertObject('Axe Watchlist', 'Updated', `Start watching for axe on`, targetSecurity);
             this.store$.dispatch(new CoreSendNewAlerts([systemAlert]));
             this.saveAxeConfiguration();
