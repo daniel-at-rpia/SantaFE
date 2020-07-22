@@ -54,14 +54,14 @@
     <span>Inquiry</span>
   </button>
 </div>
-<numeric-filter
-  [numericRangeActive]="eachSecurityBlock.state.isRangeActive"
+<div class="sat-alertWatchList-range" [ngClass]="{'sat-alertWatchList-range--active': eachSecurityBlock.state.isRangeActive}">
+  <numeric-filter
   [filterData]="eachSecurityBlock.data.targetRange"
   (detectedMinChange)="onChangeAxeWatchlistRangeMin($event, eachSecurityBlock)"
   (detectedMaxChange)="onChangeAxeWatchlistRangeMax($event, eachSecurityBlock)"
   (detectedClickedClear)="onClickAxeWatchlistClearRange(eachSecurityBlock)"
 ></numeric-filter>
-<div class="santaBtnGroup sat-alertWatchList-btnGroup" [ngClass]="{'sat-alertWatchList-range--active': eachSecurityBlock.state.isRangeActive}">
+<div class="santaBtnGroup sat-alertWatchList-btnGroup">
   <button
     (click)="onSelectAxeWatchlistRangeDriver(eachSecurityBlock, constants.driver.Spread.label)"
     [ngClass]="{
@@ -78,6 +78,7 @@
     }">
     <span>Px</span>
   </button>
+</div>
 </div>
 <button title="Urgent" (click)="onToggleAxeWatchlistPriority(eachSecurityBlock)" class="sat-alertWatchList-urgentBtn santaBtn--iconOnly fal fa-exclamation"></button>
 <button title="Send Email" (click)="onToggleAxeWatchlistSendEmail(eachSecurityBlock)" class="sat-alertWatchList-sendEmailBtn santaBtn--iconOnly fal fa-envelope"></button>

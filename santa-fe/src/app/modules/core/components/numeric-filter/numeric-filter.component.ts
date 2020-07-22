@@ -19,7 +19,6 @@ import {
 })
 export class NumericFilter {
   @Input() filterData: NumericFilterDTO;
-  @Input() numericRangeActive: boolean;
   @Output() detectedMinChange = new EventEmitter<Number>();
   @Output() detectedMaxChange = new EventEmitter<Number>();
   @Output() detectedClickedClear = new EventEmitter;

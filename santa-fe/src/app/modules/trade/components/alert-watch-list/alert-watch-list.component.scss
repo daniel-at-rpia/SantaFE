@@ -46,10 +46,14 @@ $tradeAlertAxeAlertConfiguration_singleSecurities_watchList_width: 67%;
     flex: 1 1 auto;
   }
   &-range {
+    display: flex;
+    flex: 0 0 17rem;
+    padding: $spacing_small 0;
+    justify-content: center;
+    margin-left: $spacing_xx_small;
    &--active {
     @include mix_border_radius(5px);
     background-color: $color_filter;
-    padding: $spacing_small;
    }
   }
   &-btnGroup {
@@ -65,12 +69,14 @@ $tradeAlertAxeAlertConfiguration_singleSecurities_watchList_width: 67%;
   }
   numeric-filter {
     flex: 0 0 9.25rem;
-    margin-left: $spacing_medium;
   }
   &-disableBtn, &-urgentBtn, &-sendEmailBtn {
     flex: 0 0 auto;
     margin-left: $spacing_medium;
     color: $font_color_major;
+  }
+  &-urgentBtn {
+    margin-left: $spacing_x_small;
   }
   &-removeBtn {
     flex: 0 0 auto;
