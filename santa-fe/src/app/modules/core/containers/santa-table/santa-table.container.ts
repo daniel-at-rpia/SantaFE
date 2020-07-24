@@ -727,8 +727,11 @@ export class SantaTable implements OnInit, OnChanges {
       targetRow.data.quotes.primaryPresentQuotes = targetRow.data.quotes.primaryPresentQuotes.slice(0, this.constants.agGridDetailRowDefaultCount);
       targetRow.data.quotes.secondaryPresentQuotes = targetRow.data.quotes.secondaryPresentQuotes.slice(0, this.constants.agGridDetailRowDefaultCount);
     }
-    this.agGridMiddleLayerService.updateAgGridRows(this.tableData, [targetRow], 4);
     if (!!params && !!params.node && (!!params.node.detailNode || params.rowPinned)) {
+      if (!!params.node.detailNode) {
+        // only trigger the update if it is not a pinned row, otherwise middleLayer would complain that the row does not exist
+        this.agGridMiddleLayerService.updateAgGridRows(this.tableData, [targetRow], 4);
+      }
       const longestList = targetRow.data.quotes.primaryQuotes.length < targetRow.data.quotes.secondaryQuotes.length ? targetRow.data.quotes.secondaryQuotes : targetRow.data.quotes.primaryQuotes;
       let dynamicHeight = longestList.length * this.constants.agGridDetailRowHeightPerRow;
       if (targetRow.state.isCDSOffTheRun) {
