@@ -166,6 +166,7 @@ export interface AgGridColumnDefinition {
 }
 
 export interface AgGridRowNode {
+  rowIndex: number;
   columnController: {
     allDisplayedColumns: Array<AgGridColumn>
   }
@@ -181,6 +182,8 @@ export interface AgGridRowNode {
   expanded?: boolean;
   setExpanded: Function;
   setData: Function;
+  setRowHeight: Function;
+  isRowPinned: Function;
   firstChild: boolean;
   lastChild: boolean;
 }
@@ -193,6 +196,7 @@ export interface AgGridRow {
   alertSide: DTOs.SantaTableAlertSideCellDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Alert Side column
   alertStatus: DTOs.SantaTableAlertStatusCellDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Alert Status column
   rowDTO: DTOs.SecurityTableRowDTO;
+  isFullWidth: boolean;
 }
 
 export interface AgGridColumn {

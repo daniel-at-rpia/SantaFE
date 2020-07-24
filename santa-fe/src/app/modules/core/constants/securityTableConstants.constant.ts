@@ -1539,3 +1539,5 @@ export const TradeHistoryHeaderConfigList: Array<TradeHistoryHeaderConfigStub> =
     size: 9
   }
 ];
+
+export const AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD = 'fullWidth';

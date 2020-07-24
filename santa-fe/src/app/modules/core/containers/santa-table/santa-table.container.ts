@@ -15,6 +15,7 @@
       SecurityTableHeaderDTO,
       SecurityTableRowDTO
     } from 'FEModels/frontend-models.interface';
+    import { AgGridRow, AgGridRowNode } from 'FEModels/frontend-blocks.interface';
     import { PayloadGetAllQuotes } from 'BEModels/backend-payloads.interface';
     import { AgGridRowParams, ClickedSortQuotesByMetricEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
     import { SecurityTableHeaderConfigStub } from 'FEModels/frontend-stub-models.interface';
@@ -34,10 +35,12 @@
       AGGRID_ROW_HEIGHT,
       AGGRID_ROW_HEIGHT_SLIM,
       SECURITY_TABLE_FINAL_STAGE,
-      SECURITY_TABLE_ICONS
+      SECURITY_TABLE_ICONS,
+      AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD
     } from 'Core/constants/securityTableConstants.constant';
     import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
     import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-filter/santa-table-numeric-filter.component';
+    import { SantaTableFullWidthCellRenderer } from 'Core/components/santa-table-full-width-cell-renderer/santa-table-full-width-cell-renderer.component';
   //
 
 @Component({
@@ -110,7 +113,8 @@ export class SantaTable implements OnInit, OnChanges {
     agGridDetailRowHeightOffset: AGGRID_DETAIL_ROW_HEIGHT_OFFSET,
     agGridDetailRowHeightMinimum: AGGRID_DETAIL_ROW_HEIGHT_MINIMUM,
     agGridDetailRowDefaultCount: AGGRID_DETAIL_ROW_DEFAULT_COUNT,
-    agGridDetailRowHeightOffsetOffTheRunCDS: AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS
+    agGridDetailRowHeightOffsetOffTheRunCDS: AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS,
+    agGridPinnedFullWidthRowKeyword: AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD
   };
 
   icons = SECURITY_TABLE_ICONS;
@@ -131,15 +135,13 @@ export class SantaTable implements OnInit, OnChanges {
       detailAllQuotes: SantaTableDetailAllQuotes,
       numericFloatingFilter: SantaTableNumericFloatingFilter,
       numericFilter: SantaTableNumericFilter,
-      alertStatus: SantaTableAlertStatusCell
+      alertStatus: SantaTableAlertStatusCell,
+      fullWidthCell: SantaTableDetailAllQuotes
     };
     this.tableData.data.agGridAggregationMap = {
       sum: this.agAggregationSum.bind(this),
       avg: this.agAggregationAverage.bind(this)
     };
-    if (this.tableData.state.isSlimRowVariant) {
-      this.constants.agGridRowHeight = AGGRID_ROW_HEIGHT_SLIM;
-    }
   }
 
   public ngOnChanges() {
@@ -201,93 +203,116 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   public onRowClicked(params: AgGridRowParams) {
-    if (!!params && !!params.data && !!params.data.securityCard) {
-      // this if checks whether the user is clicking on the entire row, or clicking on the security card
-      const targetCard = params.data.securityCard;
-      if (!!params.node) {
-        params.data.securityCard.state.isAtListCeiling = !!params.node.firstChild;
-      }
-      const storedSelectedCard = this.tableData.state.selectedSecurityCard;
-      // console.log('test, clicked on row', targetCard.state.isSelected, storedSelectedCard, storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID);
-      // IMPORTANT: If this logic ever needs to be modified, please test all scenarios on Daniel's notebook's page 10
-      if (
-        (!targetCard.state.isSelected && !storedSelectedCard) ||
-        (targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID && !targetCard.state.configAlertState) ||
-        (!targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID !== targetCard.data.securityID)
-      ) {
-        targetCard.state.isSelected = false;
-        targetCard.state.configAlertState = false;
-        if (!!storedSelectedCard) {
-          if (storedSelectedCard.data.securityID !== targetCard.data.securityID) {
-            // if the card selected is in a diff row, that row also needs to be updated through AgGrid's life cycle
-            storedSelectedCard.state.isSelected = false;
-            storedSelectedCard.state.configAlertState = false;
-            this.updateRowSecurityCardInAgGrid(storedSelectedCard);
-          }
-          this.tableData.state.selectedSecurityCard = null;
+    if (this.tableName === 'tradeMain') {
+      // only the table in Trade Center Panel will react to row clicks
+      if (!!params && !!params.rowPinned && params.data.id.indexOf(this.constants.agGridPinnedFullWidthRowKeyword) >= 0) {
+        // clicking on a pinned full width row, just ignore
+      } else if (!!params && !!params.node && params.node.detail){
+        // this onRowClicked function gets triggered both when parent and child are being clicked, so it gets here if it is the detail table being clicked, then just ignore
+      } else if (!!params && !!params.node && !!params.node.group){
+        // clicked on group row in pivoting or grouping mode
+        params.node.setExpanded(!params.node.expanded);
+      } else if (!!params && !!params.data && !!params.data.securityCard) {
+        // clicking on a regular row in
+        const targetCard = params.data.securityCard;
+        if (!!params.node) {
+          params.data.securityCard.state.isAtListCeiling = !!params.node.firstChild;
         }
-        // this function gets triggered both when parent and child are being clicked, so this if condition is to make sure only execute the logic when it is the parent that is clicked
-        if (!!params.node.master && this.tableName !== 'tradeAlert') {
-          params.node.setExpanded(!params.node.expanded);
-          if (!params.node.group) {
-            const targetRow = this.tableData.data.rows.find((eachRow) => {
-              return eachRow.data.rowId == params.node.data.id;
-            });
-            if (!!targetRow) {
-              try {
-                targetRow.state.isExpanded = !targetRow.state.isExpanded;
-                // just set it to false for now, since the fetch will update it to true anyways
-                targetRow.state.quotesLoaded = false;
-                if (targetRow.data.security) {
-                  // targetRow.data.security.state.isMultiLineVariant = params.node.expanded;
-                  if (targetRow.state.isExpanded) {
-                    this.fetchSecurityQuotes(targetRow, params);
-                  } else {
-                    targetRow.state.presentingAllQuotes = false;
-                  }
-                }
-              } catch {
-                // ignore, seems AgGrid causes some weird read only error
-              }
-            } else {
-              this.restfulCommService.logError(`[Santa Table] Could't find targetRow - ${params}`);
-              console.error(`Could't find targetRow`, params);
+        const storedSelectedCard = this.tableData.state.selectedSecurityCard;
+        // this if checks whether the user is clicking on the entire row, or clicking on the security card
+        // IMPORTANT: If this logic ever needs to be modified, please test all scenarios on Daniel's notebook's page 10
+        if (
+          (!targetCard.state.isSelected && !storedSelectedCard) ||
+          (targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID && !targetCard.state.configAlertState) ||
+          (!targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID !== targetCard.data.securityID)
+        ) {
+          targetCard.state.isSelected = false;
+          targetCard.state.configAlertState = false;
+          if (!!storedSelectedCard) {
+            if (storedSelectedCard.data.securityID !== targetCard.data.securityID) {
+              // if the card selected is in a diff row, that row also needs to be updated through AgGrid's life cycle
+              storedSelectedCard.state.isSelected = false;
+              storedSelectedCard.state.configAlertState = false;
+              this.updateRowSecurityCardInAgGrid(storedSelectedCard);
             }
+            this.tableData.state.selectedSecurityCard = null;
           }
+          const targetRow = params.rowPinned
+            ? this.tableData.data.agGridPinnedTopRowData.find((eachRow) => {
+              return eachRow.id === `${params.node.data.id} - ${this.constants.agGridPinnedFullWidthRowKeyword}`
+            }).rowDTO 
+            : params.node.data.rowDTO;
+          if (!!targetRow) {
+            params.node.setExpanded(!params.node.expanded);
+            targetRow.state.isExpanded = !targetRow.state.isExpanded;
+            // just set it to false for now, since the fetch will update it to true anyways
+            targetRow.state.quotesLoaded = false;
+            if (targetRow.data.security) {
+              // targetRow.data.security.state.isMultiLineVariant = params.node.expanded;
+              if (targetRow.state.isExpanded) {
+                this.setAgGridRowHeight(targetRow, params, !!params.rowPinned, this.constants.agGridDetailRowHeightMinimum);
+                this.fetchSecurityQuotes(targetRow, params);
+              } else {
+                targetRow.state.presentingAllQuotes = false;
+                if (params.rowPinned) {
+                  this.onRowClickedToCollapse(targetRow, true, params);
+                }
+              }
+            }
+          } else {
+            this.restfulCommService.logError(`[Santa Table] Could't find targetRow - ${params}`);
+            console.error(`Could't find targetRow`, params);
+          }
+        } else {
+          // gets to here if the user clicked on the security card
+          if (storedSelectedCard === null) {
+            this.tableData.state.selectedSecurityCard = targetCard;
+          } else if (!!storedSelectedCard && storedSelectedCard.data.securityID !== targetCard.data.securityID) {
+            // scenario: there is already a card selected, and the user is selecting a diff card
+            this.tableData.state.selectedSecurityCard.state.isSelected = false;
+            this.tableData.state.selectedSecurityCard.state.configAlertState = false;
+            this.updateRowSecurityCardInAgGrid(this.tableData.state.selectedSecurityCard);
+            this.tableData.state.selectedSecurityCard = targetCard;
+          } else if (!!storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID && !targetCard.state.configAlertState) {
+            // scenario: there is already a card selected, and it is the same card user is selecting again
+            this.tableData.state.selectedSecurityCard = null;
+          }
+          params.node.setData(params.data);  // need this to trigger a refresh so the row can adopt new classname from the agGridRowClassRules
         }
       } else {
-        // gets to here if the user clicked on the security card
-        if (storedSelectedCard === null) {
-          this.tableData.state.selectedSecurityCard = targetCard;
-        } else if (!!storedSelectedCard && storedSelectedCard.data.securityID !== targetCard.data.securityID) {
-          // scenario: there is already a card selected, and the user is selecting a diff card
-          this.tableData.state.selectedSecurityCard.state.isSelected = false;
-          this.tableData.state.selectedSecurityCard.state.configAlertState = false;
-          this.updateRowSecurityCardInAgGrid(this.tableData.state.selectedSecurityCard);
-          this.tableData.state.selectedSecurityCard = targetCard;
-        } else if (!!storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID && !targetCard.state.configAlertState) {
-          // scenario: there is already a card selected, and it is the same card user is selecting again
-          this.tableData.state.selectedSecurityCard = null;
-        }
-        params.node.setData(params.data);  // need this to trigger a refresh so the row can adopt new classname from the agGridRowClassRules
+        console.warn('AgGrid data issue, if you see this call Daniel');
       }
-    } else if (!!params && !!params.node && !!params.node.group){
-      params.node.setExpanded(!params.node.expanded);
-    } else {
-      console.warn('AgGrid data issue, if you see this call Daniel');
     }
   }
 
-  public onRowClickedToCollapse(targetRow: SecurityTableRowDTO) {
+  public onRowClickedToCollapse(
+    targetRow: SecurityTableRowDTO,
+    isPinnedFullWidthCell: boolean,
+    params?: AgGridRowParams
+  ) {
     try {
+      if (isPinnedFullWidthCell) {
+        this.setAgGridRowHeight(targetRow, params, isPinnedFullWidthCell, 0);
+      }
       targetRow.state.isExpanded = false;
-      // if (targetRow.data.security) {
-        // targetRow.data.security.state.isMultiLineVariant = false;
-      // }
     } catch {
       console.warn('read only issue', targetRow);
       // ignore, seems AgGrid causes some weird read only error
     }
+  }
+
+  public getRowHeight(params: AgGridRowParams) {
+    if (params && params.node) {
+      // if (params.node.isRowPinned()) {
+        // console.log(this.pinnedRowHeights[params.data.id]);
+        // return this.pinnedRowHeights[params.data.id]
+        // return 200;
+      // }
+      if (params.node.data && params.node.data.rowDTO && params.node.data.rowDTO.style) {
+        return params.node.data.rowDTO.style.rowHeight;
+      }
+    }
+    return this.constants.agGridRowHeight;
   }
 
   public getRowNodeId(row) {
@@ -322,6 +347,46 @@ export class SantaTable implements OnInit, OnChanges {
     payload.targetRow.state.expandViewSortByQuoteMetric = payload.targetRow.state.expandViewSortByQuoteMetric === payload.targetMetricLabel ? null : payload.targetMetricLabel;
   }
 
+  public onClickSecurityCardPin(targetSecurity: SecurityDTO) {
+    if (targetSecurity && targetSecurity.data && targetSecurity.data.securityID) {
+      if (this.tableName === 'tradeMain') {
+        // in the Trade Main Table, rowId = securityId
+        const targetRow = this.tableData.data.agGridRowData.find((eachRow) => {
+          return eachRow.id === targetSecurity.data.securityID;
+        });
+        const existIndexInPinnedList = this.tableData.data.agGridPinnedTopRowData.findIndex((eachRow) => {
+          return eachRow.id === targetSecurity.data.securityID;
+        });
+        if (existIndexInPinnedList >= 0) {
+          // already pinned, so now unpin it
+          this.tableData.data.agGridPinnedTopRowData.splice(existIndexInPinnedList, 2);
+        } else {
+          // pin it
+          // the deep copy is to make sure the pinned rows are retained as the state of the table changes. it also ensures when clicking on the pinned row's card, it doesn't trigger both the regular row and the pinned row 
+          this.tableData.data.agGridPinnedTopRowData.push(this.utilityService.deepCopy(targetRow));
+          const fullWidthCell: AgGridRow = this.utilityService.deepCopy(targetRow);
+          fullWidthCell.id = `${fullWidthCell.id} - ${this.constants.agGridPinnedFullWidthRowKeyword}`;
+          fullWidthCell.isFullWidth = true;
+          fullWidthCell.rowDTO.style.rowHeight = 0;
+          this.tableData.data.agGridPinnedTopRowData.push(fullWidthCell);
+        }
+        this.tableData.api.gridApi.setPinnedTopRowData(this.tableData.data.agGridPinnedTopRowData);
+      }
+    }
+  }
+
+  public onClickClearAllPinnedRows() {
+    this.tableData.data.agGridPinnedTopRowData = [];
+    if (this.tableData.state.isAgGridReady) {
+      this.tableData.api.gridApi.setPinnedTopRowData([]);
+    }
+  }
+
+  public isFullWidthCell(rowNode: AgGridRowNode) {
+    // note: when table is in group/pivot mode, the group row will also trigger this function, so check whether rowNode.data exist or not
+    return !!rowNode && !!rowNode.data && rowNode.data.isFullWidth; 
+  }
+
   private loadTableHeaders(skipAgGrid = false) {
     this.tableData.data.headers = [];
     this.tableData.data.allHeaders = [];
@@ -353,6 +418,13 @@ export class SantaTable implements OnInit, OnChanges {
     rowList: Array<SecurityTableRowDTO>,
     isUpdate: boolean = false
   ) {
+    if (!isUpdate) {
+      rowList.forEach((eachRow) => {
+        if (this.tableName === 'tradeMain') {
+          eachRow.data.security.api.onClickPin = this.onClickSecurityCardPin.bind(this);
+        }
+      });
+    }
     this.tableData.data.rows = rowList;
     // doesn't need to update dynamic columns if the entire data is not loaded
     this.receivedContentStage === this.constants.securityTableFinalStage && this.updateDriverDependentColumns();
@@ -393,7 +465,7 @@ export class SantaTable implements OnInit, OnChanges {
     params?: any  // this is a AgGridRowParams, can't enforce type checking here because agGrid's native function redrawRows() would throw an compliation error
   ){
     if (!!targetRow) {
-      targetRow.data.quotes = this.dtoService.formSecurityTableRowObject(targetRow.data.security ,targetRow.data.alert, targetRow.data.rowId).data.quotes;
+      targetRow.data.quotes = this.dtoService.formSecurityTableRowObject(targetRow.data.security ,targetRow.data.alert, false, targetRow.data.rowId).data.quotes;
       const payload: PayloadGetAllQuotes = {
         "identifier": targetRow.data.security.data.securityID
       };
@@ -548,6 +620,16 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   private liveUpdateAllQuotesForExpandedRows() {
+    this.tableData.data.agGridPinnedTopRowData.forEach((eachAgGridRow) => {
+      if (eachAgGridRow.rowDTO.state.isExpanded) {
+        try {
+          this.fetchSecurityQuotes(eachAgGridRow.rowDTO);
+        } catch {
+          console.warn('read only issue at live updating all quotes in pinned rows', eachAgGridRow);
+          // ignore, seems AgGrid causes some weird read only error
+        }
+      }
+    });
     this.tableData.data.rows.forEach((eachRow) => {
       if (eachRow.state.isExpanded) {
         try {
@@ -656,7 +738,7 @@ export class SantaTable implements OnInit, OnChanges {
       targetRow.data.quotes.secondaryPresentQuotes = targetRow.data.quotes.secondaryPresentQuotes.slice(0, this.constants.agGridDetailRowDefaultCount);
     }
     this.agGridMiddleLayerService.updateAgGridRows(this.tableData, [targetRow], 4);
-    if (!!params && !!params.node && !!params.node.detailNode) {
+    if (!!params && !!params.node && (!!params.node.detailNode || params.rowPinned)) {
       const longestList = targetRow.data.quotes.primaryQuotes.length < targetRow.data.quotes.secondaryQuotes.length ? targetRow.data.quotes.secondaryQuotes : targetRow.data.quotes.primaryQuotes;
       let dynamicHeight = longestList.length * this.constants.agGridDetailRowHeightPerRow;
       if (targetRow.state.isCDSOffTheRun) {
@@ -670,11 +752,7 @@ export class SantaTable implements OnInit, OnChanges {
       if (dynamicHeight < this.constants.agGridDetailRowHeightMinimum) {
         dynamicHeight = this.constants.agGridDetailRowHeightMinimum;
       }
-      params.node.detailNode.rowHeight = dynamicHeight;
-      params.api.resetRowHeights();
-      params.api.redrawRows({
-        rowNodes: [params.node, params.node['detailNode']]
-      });
+      this.setAgGridRowHeight(targetRow, params, !!params.rowPinned, dynamicHeight);
     }
   }
 
@@ -776,6 +854,37 @@ export class SantaTable implements OnInit, OnChanges {
       return diffInSeconds <= 7200 && diffInSeconds > -60 ;
     } else {
       return false;
+    }
+  }
+
+  private setAgGridRowHeight(
+    targetRow: SecurityTableRowDTO,
+    params: AgGridRowParams,
+    isPinned: boolean,
+    targetHeight: number
+  ) {
+    if (isPinned) {
+      // when it is a pinned row, populate the fullwidth cell right beneath it
+      let fullWidthNode: AgGridRowNode;
+      if (params.data.id.indexOf(this.constants.agGridPinnedFullWidthRowKeyword) >= 0) {
+        // the params is the fullWidthCell's params
+        fullWidthNode = params.node;
+      } else {
+        // the params is the regular row's params
+        fullWidthNode = params.api.getPinnedTopRow(params.node.rowIndex+1) as any;  // skip AgGrid's unnecessary type checking
+      }
+      fullWidthNode.data.rowDTO = this.utilityService.deepCopy(targetRow);
+      fullWidthNode.data.rowDTO.style.rowHeight = targetHeight;
+      params.api.setPinnedTopRowData(this.tableData.data.agGridPinnedTopRowData);
+      params.api.onRowHeightChanged();
+      params.api.redrawRows();
+    } else {
+      params.node.detailNode.rowHeight = targetHeight;
+      params.api.onRowHeightChanged();
+      // params.api.resetRowHeights();  not sure we still need this, just disabling it for a bit testing
+      params.api.redrawRows({
+        rowNodes: [params.node as any, params.node['detailNode'] as any]
+      });
     }
   }
 }

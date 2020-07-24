@@ -35,6 +35,7 @@ import { Alert } from 'Core/components/alert/alert.component';
 import { CountdownPipe } from 'App/pipes/Countdown.pipe';
 import { HistoricalTradeVisualizer } from 'Core/containers/historical-trade-visualizer/historical-trade-visualizer.container';
 import { SantaTableAlertStatusCell } from 'Core/components/santa-table-alert-status-cell/santa-table-alert-status-cell.component';
+import { SantaTableFullWidthCellRenderer } from 'Core/components/santa-table-full-width-cell-renderer/santa-table-full-width-cell-renderer.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { SantaTableAlertStatusCell } from 'Core/components/santa-table-alert-sta
     GlobalAlert,
     Alert,
     HistoricalTradeVisualizer,
-    SantaTableAlertStatusCell
+    SantaTableAlertStatusCell,
+    SantaTableFullWidthCellRenderer
   ],
     imports: [
         CommonModule,
@@ -71,7 +73,8 @@ import { SantaTableAlertStatusCell } from 'Core/components/santa-table-alert-sta
             SantaTableDetailAllQuotes,
             SantaTableNumericFilter,
             SantaTableNumericFloatingFilter,
-            SantaTableAlertStatusCell
+            SantaTableAlertStatusCell,
+            SantaTableFullWidthCellRenderer
         ]),
 
         FormModule
