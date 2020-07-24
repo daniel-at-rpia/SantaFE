@@ -7,40 +7,40 @@
 'sat-alertWatchList--sendEmail': eachSecurityBlock.data.sendEmail,
 'sat-alertWatchList--new': eachSecurityBlock.data.groupId == null
 }">
-<div class="sat-alertWatchList-newTag">
+<div class="sat-alertWatchList__newTag">
   <i class="fal fa-sparkles"></i>
   <span>New</span>
 </div>
-<div class="sat-alertWatchList-disableTag">
+<div class="sat-alertWatchList__disableTag">
   <i class="fal fa-bell-slash"></i>
   <span>Disabled</span>
 </div>
 <security-card *ngIf="eachSecurityBlock.data.card" [cardData]="eachSecurityBlock.data.card"></security-card>
-<div class="santaBtnGroup sat-alertWatchList-btnGroup">
+<div class="santaBtnGroup sat-alertWatchList__btnGroup">
   <button
     (click)="onSelectAxeAlertWatchlistSide(constants.axeAlertScope.bid, eachSecurityBlock)"
     [ngClass]="{
-      'sat-alertWatchList-btnGroup-btn': true,
-      'sat-alertWatchList-btnGroup-btn--selected': eachSecurityBlock.data.scopes.indexOf(constants.axeAlertScope.bid) >= 0
+      'sat-alertWatchList__btnGroup-btn': true,
+      'sat-alertWatchList__btnGroup-btn--selected': eachSecurityBlock.data.scopes.indexOf(constants.axeAlertScope.bid) >= 0
     }">
     <span>Bid</span>
   </button>
   <button
     (click)="onSelectAxeAlertWatchlistSide(constants.axeAlertScope.ask, eachSecurityBlock)"
     [ngClass]="{
-      'sat-alertWatchList-btnGroup-btn': true,
-      'sat-alertWatchList-btnGroup-btn--selected': eachSecurityBlock.data.scopes.indexOf(constants.axeAlertScope.ask) >= 0
+      'sat-alertWatchList__btnGroup-btn': true,
+      'sat-alertWatchList__btnGroup-btn--selected': eachSecurityBlock.data.scopes.indexOf(constants.axeAlertScope.ask) >= 0
     }">
     <span>Ask</span>
   </button>
 </div>
-<div class="santaBtnGroup sat-alertWatchList-btnGroup">
+<div class="santaBtnGroup sat-alertWatchList__btnGroup">
   <button
     title="Watching"
     (click)="onSelectAxeAlertWatchlistType(constants.axeAlertType.normal, eachSecurityBlock)"
     [ngClass]="{
-      'sat-alertWatchList-btnGroup-btn': true,
-      'sat-alertWatchList-btnGroup-btn--selected': eachSecurityBlock.data.axeAlertTypes.indexOf(constants.axeAlertType.normal) >= 0
+      'sat-alertWatchList__btnGroup-btn': true,
+      'sat-alertWatchList__btnGroup-btn--selected': eachSecurityBlock.data.axeAlertTypes.indexOf(constants.axeAlertType.normal) >= 0
     }">
     <span>Axe</span>
   </button>
@@ -48,40 +48,40 @@
     title="Watching"
     (click)="onSelectAxeAlertWatchlistType(constants.axeAlertType.marketList, eachSecurityBlock)"
     [ngClass]="{
-      'sat-alertWatchList-btnGroup-btn': true,
-      'sat-alertWatchList-btnGroup-btn--selected': eachSecurityBlock.data.axeAlertTypes.indexOf(constants.axeAlertType.marketList) >= 0
+      'sat-alertWatchList__btnGroup-btn': true,
+      'sat-alertWatchList__btnGroup-btn--selected': eachSecurityBlock.data.axeAlertTypes.indexOf(constants.axeAlertType.marketList) >= 0
     }">
     <span>Inquiry</span>
   </button>
 </div>
-<div class="sat-alertWatchList-range" [ngClass]="{'sat-alertWatchList-range--active': eachSecurityBlock.state.isRangeActive}">
+<div class="sat-alertWatchList__range" [ngClass]="{'sat-alertWatchList__range--active': eachSecurityBlock.state.isRangeActive}">
   <numeric-filter
   [filterData]="eachSecurityBlock.data.targetRange"
   (detectedMinChange)="onChangeAxeWatchlistRangeMin($event, eachSecurityBlock)"
   (detectedMaxChange)="onChangeAxeWatchlistRangeMax($event, eachSecurityBlock)"
   (detectedClickedClear)="onClickAxeWatchlistClearRange(eachSecurityBlock)"
 ></numeric-filter>
-<div class="santaBtnGroup sat-alertWatchList-btnGroup">
+<div class="santaBtnGroup sat-alertWatchList__btnGroup">
   <button
     (click)="onSelectAxeWatchlistRangeDriver(eachSecurityBlock, constants.driver.Spread.label)"
     [ngClass]="{
-      'sat-alertWatchList-btnGroup-btn': true,
-      'sat-alertWatchList-btnGroup-btn--selected': eachSecurityBlock.data.targetDriver === constants.driver.Spread.label
+      'sat-alertWatchList__btnGroup-btn': true,
+      'sat-alertWatchList__btnGroup-btn--selected': eachSecurityBlock.data.targetDriver === constants.driver.Spread.label
     }">
     <span>Sprd</span>
   </button>
   <button
     (click)="onSelectAxeWatchlistRangeDriver(eachSecurityBlock, constants.driver.Price.label)"
     [ngClass]="{
-      'sat-alertWatchList-btnGroup-btn': true,
-      'sat-alertWatchList-btnGroup-btn--selected': eachSecurityBlock.data.targetDriver === constants.driver.Price.label
+      'sat-alertWatchList__btnGroup-btn': true,
+      'sat-alertWatchList__btnGroup-btn--selected': eachSecurityBlock.data.targetDriver === constants.driver.Price.label
     }">
     <span>Px</span>
   </button>
 </div>
 </div>
-<button title="Urgent" (click)="onToggleAxeWatchlistPriority(eachSecurityBlock)" class="sat-alertWatchList-urgentBtn santaBtn--iconOnly fal fa-exclamation"></button>
-<button title="Send Email" (click)="onToggleAxeWatchlistSendEmail(eachSecurityBlock)" class="sat-alertWatchList-sendEmailBtn santaBtn--iconOnly fal fa-envelope"></button>
-<button title="Disable (mute)" (click)="onToggleDisableTargetGroupFromAxeWatchlist(eachSecurityBlock)" class="sat-alertWatchList-disableBtn santaBtn--iconOnly fal fa-bell-slash"></button>
-<button title="Remove" (click)="onClickRemoveSecurityFromAxeWatchlist(eachSecurityBlock)" class="sat-alertWatchList-removeBtn santaBtn--iconOnly fal fa-eraser"></button>
+<button title="Urgent" (click)="onToggleAxeWatchlistPriority(eachSecurityBlock)" class="sat-alertWatchList__urgentBtn santaBtn--iconOnly fal fa-exclamation"></button>
+<button title="Send Email" (click)="onToggleAxeWatchlistSendEmail(eachSecurityBlock)" class="sat-alertWatchList__sendEmailBtn santaBtn--iconOnly fal fa-envelope"></button>
+<button title="Disable (mute)" (click)="onToggleDisableTargetGroupFromAxeWatchlist(eachSecurityBlock)" class="sat-alertWatchList__disableBtn santaBtn--iconOnly fal fa-bell-slash"></button>
+<button title="Remove" (click)="onClickRemoveSecurityFromAxeWatchlist(eachSecurityBlock)" class="sat-alertWatchList__removeBtn santaBtn--iconOnly fal fa-eraser"></button>
 </div>
