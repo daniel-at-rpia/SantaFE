@@ -359,7 +359,7 @@ export class SantaTable implements OnInit, OnChanges {
         });
         if (existIndexInPinnedList >= 0) {
           // already pinned, so now unpin it
-          this.tableData.data.agGridPinnedTopRowData.splice(existIndexInPinnedList, 1);
+          this.tableData.data.agGridPinnedTopRowData.splice(existIndexInPinnedList, 2);
         } else {
           // pin it
           // the deep copy is to make sure the pinned rows are retained as the state of the table changes. it also ensures when clicking on the pinned row's card, it doesn't trigger both the regular row and the pinned row 
@@ -384,7 +384,7 @@ export class SantaTable implements OnInit, OnChanges {
 
   public isFullWidthCell(rowNode: AgGridRowNode) {
     // note: when table is in group/pivot mode, the group row will also trigger this function, so check whether rowNode.data exist or not
-    return !!rowNode && !!rowNode.data && rowNode.data.isFullWidth;
+    return !!rowNode && !!rowNode.data && rowNode.data.isFullWidth; 
   }
 
   private loadTableHeaders(skipAgGrid = false) {
