@@ -204,16 +204,19 @@ export class AgGridMiddleLayerService {
     }) - 1;
     targetRows.forEach((eachRow) => {
       const id = eachRow.data.rowId;
-      const targetNode = table.api.gridApi.getRowNode(id);
+      const newAgRow = this.formAgGridRow(
+        eachRow,
+        table.data.allHeaders,
+        bestQuoteCellIndex,
+        bestAxeQuoteCellIndex,
+        alertSideCellIndex,
+        alertStatusCellIndex
+      );
+      const existIndexInPinned = table.data.agGridPinnedTopRowData.findIndex((eachAgGridRow) => {
+        return eachAgGridRow.id === id;
+      });
+      const targetNode = existIndexInPinned >= 0 ? table.api.gridApi.getPinnedTopRow(existIndexInPinned) : table.api.gridApi.getRowNode(id);
       if (!!targetNode) {
-        const newAgRow = this.formAgGridRow(
-          eachRow,
-          table.data.allHeaders,
-          bestQuoteCellIndex,
-          bestAxeQuoteCellIndex,
-          alertSideCellIndex,
-          alertStatusCellIndex
-        );
         targetNode.setData(newAgRow);
       } else {
         this.restfulCommService.logError(`[AgGrid] Couldn't fine AgGrid Row for ${eachRow.data.rowId} (location - ${location})`);
