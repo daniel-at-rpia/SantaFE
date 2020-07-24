@@ -7,16 +7,16 @@
 'sat-alertWatchList--sendEmail': eachSecurityBlock.data.sendEmail,
 'sat-alertWatchList--new': eachSecurityBlock.data.groupId == null
 }">
-<div class="sat-alertWatchList__newTag">
+<section class="sat-alertWatchList__newTag">
   <i class="fal fa-sparkles"></i>
   <span>New</span>
-</div>
-<div class="sat-alertWatchList__disableTag">
+</section>
+<section class="sat-alertWatchList__disableTag">
   <i class="fal fa-bell-slash"></i>
   <span>Disabled</span>
-</div>
+</section>
 <security-card *ngIf="eachSecurityBlock.data.card" [cardData]="eachSecurityBlock.data.card"></security-card>
-<div class="santaBtnGroup sat-alertWatchList__btnGroup">
+<section class="santaBtnGroup sat-alertWatchList__btnGroup">
   <button
     (click)="onSelectAxeAlertWatchlistSide(constants.axeAlertScope.bid, eachSecurityBlock)"
     [ngClass]="{
@@ -33,8 +33,8 @@
     }">
     <span>Ask</span>
   </button>
-</div>
-<div class="santaBtnGroup sat-alertWatchList__btnGroup">
+</section>
+<section class="santaBtnGroup sat-alertWatchList__btnGroup">
   <button
     title="Watching"
     (click)="onSelectAxeAlertWatchlistType(constants.axeAlertType.normal, eachSecurityBlock)"
@@ -53,8 +53,8 @@
     }">
     <span>Inquiry</span>
   </button>
-</div>
-<div class="sat-alertWatchList__range" [ngClass]="{'sat-alertWatchList__range--active': eachSecurityBlock.state.isRangeActive}">
+</section>
+<section class="sat-alertWatchList__range" [ngClass]="{'sat-alertWatchList__range--active': eachSecurityBlock.state.isRangeActive}">
   <numeric-filter
   [filterData]="eachSecurityBlock.data.targetRange"
   (detectedMinChange)="onChangeAxeWatchlistRangeMin($event, eachSecurityBlock)"
@@ -79,7 +79,7 @@
     <span>Px</span>
   </button>
 </div>
-</div>
+</section>
 <button title="Urgent" (click)="onToggleAxeWatchlistPriority(eachSecurityBlock)" class="sat-alertWatchList__urgentBtn santaBtn--iconOnly fal fa-exclamation"></button>
 <button title="Send Email" (click)="onToggleAxeWatchlistSendEmail(eachSecurityBlock)" class="sat-alertWatchList__sendEmailBtn santaBtn--iconOnly fal fa-envelope"></button>
 <button title="Disable (mute)" (click)="onToggleDisableTargetGroupFromAxeWatchlist(eachSecurityBlock)" class="sat-alertWatchList__disableBtn santaBtn--iconOnly fal fa-bell-slash"></button>
