@@ -1,5 +1,5 @@
-    import {Component, Input, OnInit, EventEmitter, Output} from '@angular/core';
-    import { TradeAlertConfigurationAxeGroupBlockDTO, SecurityDTO } from 'FEModels/frontend-models.interface';
+    import {Component, Input, OnInit, EventEmitter, Output, ViewEncapsulation} from '@angular/core';
+    import { TradeAlertConfigurationAxeGroupBlockDTO } from 'FEModels/frontend-models.interface';
     import { SelectAxeWatchlistSide, SelectAxeWatchlistType, SelectAxeWatchlistRangeValue, SelectAxeWatchlistRangeDriver } from 'Core/models/frontend/frontend-blocks.interface';
     import { AxeAlertScope, AxeAlertType } from 'App/modules/core/constants/tradeConstants.constant';
     import { TriCoreDriverConfig } from 'Core/constants/coreConstants.constant';
@@ -8,7 +8,8 @@
 @Component({
   selector: 'alert-watch-list',
   templateUrl: './alert-watch-list.component.html',
-  styleUrls: ['./alert-watch-list.component.scss']
+  styleUrls: ['./alert-watch-list.component.scss'],
+  encapsulation: ViewEncapsulation.Emulated
 })
 
 export class AlertWatchList implements OnInit {
