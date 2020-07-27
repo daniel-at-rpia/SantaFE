@@ -20,6 +20,7 @@ import { MoveVisualizer } from 'Trade/components/move-visualizer/move-visualizer
 import { ObligorGraph } from './components/obligor-graph/obligor-graph';
 import { HistoricalSummary } from 'Trade/containers/historical-summary.container';
 import {AlertCountSummary} from "Trade/components/alert-count-summary/alert-count-summary";
+import { AlertWatchList } from "Trade/components/alert-watch-list/alert-watch-list.component";
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import {AlertCountSummary} from "Trade/components/alert-count-summary/alert-coun
     TradeObligorGraphPanel,
     MoveVisualizer,
     ObligorGraph,
-    HistoricalSummary
+    HistoricalSummary,
+    AlertWatchList
   ],
   imports: [
     // Angular framework modules

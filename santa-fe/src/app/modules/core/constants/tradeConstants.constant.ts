@@ -384,7 +384,6 @@ export const MarketAnalysisGroupByOptions: Array<SecurityDefinitionStub> = [
   SecurityDefinitionMap.SECTOR,
   SecurityDefinitionMap.INDUSTRY,
   SecurityDefinitionMap.TENOR,
-  SecurityDefinitionMap.TICKER,
   SecurityDefinitionMap.COUNTRY,
   SecurityDefinitionMap.QUOTED_TODAY
 ];

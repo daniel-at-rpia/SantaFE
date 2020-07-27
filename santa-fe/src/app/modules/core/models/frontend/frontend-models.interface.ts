@@ -19,6 +19,7 @@ import * as am4Charts from '@amcharts/amcharts4/charts';
 
 import {Alert} from "Core/components/alert/alert.component";
 
+import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 
 interface BasicDTOStructure {
   [property: string]: object;
@@ -140,6 +141,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     onClickSendToGraph: (card: SecurityDTO) => void;
     onClickSendToAlertConfig: (card: SecurityDTO) => void;
     onClickSearch: (card: SecurityDTO) => void;
+    onClickPin: (card: SecurityDTO) => void;
   }
   state: {
     isStencil: boolean;
@@ -312,6 +314,7 @@ export interface SecurityTableDTO extends BasicDTOStructure {
     agGridRowData: Array<AgGridRow>;
     agGridFrameworkComponents: object;
     agGridAggregationMap: object;
+    agGridPinnedTopRowData: Array<AgGridRow>;
   },
   state: {
     loadedContentStage: number;
@@ -324,7 +327,6 @@ export interface SecurityTableDTO extends BasicDTOStructure {
     selectedSecurityCard: SecurityDTO;
     isActivated: boolean;
     isGroupEnabled: boolean;
-    isSlimRowVariant: boolean;
   },
   api: {
     gridApi: agGrid.GridApi,
@@ -382,6 +384,9 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
     alert: AlertDTO;
     historicalTradeVisualizer: HistoricalTradeVisualizerDTO;
   },
+  style: {
+    rowHeight: number;
+  },
   state: {
     expandViewSortByQuoteMetric: string;
     isExpanded: boolean;
@@ -390,6 +395,7 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
     isCDSOffTheRun: boolean;
     viewHistoryState: boolean;
     quotesLoaded: boolean;
+    isAgGridFullSizeVariant: boolean;
   }
 }
 
@@ -629,5 +635,23 @@ export interface SantaTableAlertStatusCellDTO extends BasicDTOStructure {
   state: {
     grayedOutState: boolean;
     highlightedState: boolean;
+  }
+}
+
+export interface TradeAlertConfigurationAxeGroupBlockDTO extends BasicDTOStructure {
+  data: {
+    card: SecurityDTO;
+    groupId: string;
+    scopes: Array<AxeAlertScope>;
+    axeAlertTypes: Array<AxeAlertType>;
+    targetDriver: string;
+    targetRange: NumericFilterDTO;
+    sendEmail: boolean;
+  },
+  state: {
+    isDeleted: boolean;
+    isDisabled: boolean;
+    isUrgent: boolean;
+    isRangeActive: boolean;
   }
 }

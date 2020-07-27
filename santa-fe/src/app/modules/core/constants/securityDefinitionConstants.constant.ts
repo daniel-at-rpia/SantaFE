@@ -249,8 +249,7 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'Basis'
   ];
 
-  const FilterOptionsCountry = [
-  ];
+  const FilterOptionsCountry = ["AE","AL","AM","AO","AR","AT","AU","AW","AZ","BB","BE","BG","BH","BJ","BM","BO","BR","BS","BY","BZ","CA","CD","CG","CH","CI","CL","CM","CN","CO","CR","CY","CZ","DE","DK","DO","EC","EE","EG","ES","ET","FI","FR","GA","GB","GE","GG","GH","GR","GT","HK","HN","HR","HU","ID","IE","IL","IM","IN","IQ","IS","IT","JE","JM","JO","JP","KE","KH","KR","KW","KY","KZ","LA","LB","LC","LK","LT","LU","LV","MA","MC","MD","ME","MK","MN","MO","MT","MU","MULT","MX","MY","MZ","NA","NG","NL","NO","NZ","OM","PA","PE","PG","PH","PK","PL","PR","PT","PY","QA","RO","RS","RU","RW","SA","SC","SE","SG","SI","SK","SN","SNAT","SR","SV","TG","TH","TJ","TN","TR","TT","TW","UA","US","UY","UZ","VE","VG","VN","ZA","ZM"];
 
 export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
   SECURITY_TYPE: {
@@ -294,14 +293,6 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-city',
     optionList: FilterOptionsIndustryType,
     securityDTOAttr: 'industry'
-  },
-  TICKER: {
-    key: 'TICKER',
-    displayName: 'Ticker',
-    icon: 'fas fa-user-tie',
-    optionList: [],
-    urlForGetLongOptionListFromServer: APIUrlMap.getTickers,
-    securityDTOAttr: 'ticker'
   },
   MATURITY: {
     key: 'MATURITY',
@@ -349,13 +340,6 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-gavel',
     optionList: FilterOptionsSeniorityType,
     securityDTOAttr: 'seniority'
-  },
-  SUB_INDUSTRY: {
-    key: 'SUB_INDUSTRY',
-    displayName: 'Sub-Industry',
-    icon: 'fal fa-building',
-    optionList: [],
-    urlForGetLongOptionListFromServer: APIUrlMap.getSubIndustries
   },
   TENOR: {
     key: 'TENOR',
@@ -409,8 +393,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     key: 'COUNTRY',
     displayName: 'Country',
     icon: 'fal fa-globe-americas',
-    optionList: [],
-    urlForGetLongOptionListFromServer: APIUrlMap.getCountries,
+    optionList: FilterOptionsCountry,
     securityDTOAttr: 'country'
   },
   QUOTED_TODAY: {
@@ -431,7 +414,9 @@ export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> =
       SecurityDefinitionMap.RATING,
       SecurityDefinitionMap.SECTOR,
       SecurityDefinitionMap.TENOR,
-      SecurityDefinitionMap.STRATEGY
+      SecurityDefinitionMap.STRATEGY,
+      SecurityDefinitionMap.INDUSTRY,
+      SecurityDefinitionMap.COUNTRY
     ]
   },{
     label: 'Owner',
@@ -446,14 +431,6 @@ export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> =
     list: [
       SecurityDefinitionMap.RATING_BUCKET,
       SecurityDefinitionMap.SENIORITY
-    ]
-  },{
-    label: 'Issuer',
-    list: [
-      SecurityDefinitionMap.INDUSTRY,
-      SecurityDefinitionMap.SUB_INDUSTRY,
-      SecurityDefinitionMap.TICKER,
-      SecurityDefinitionMap.COUNTRY
     ]
   },{
     label: 'Bond',

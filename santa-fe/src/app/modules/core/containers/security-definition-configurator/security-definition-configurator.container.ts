@@ -112,12 +112,6 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     }
   }
 
-  public onMouseLeaveFilter(targetDefinition: SecurityDefinitionDTO) {
-    if (!isDevMode()) {
-      this.configuratorData.state.groupByDisabled && this.onClickDefinition(targetDefinition);
-    }
-  }
-
   public onClickFilterOption(targetOption:SecurityDefinitionFilterBlock) {
     const targetDefinition = this.configuratorData.state.showFiltersFromDefinition;
     targetOption.isSelected = !targetOption.isSelected;
@@ -158,6 +152,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   }
 
   public triggerApplyFilter() {
+    this.configuratorData.state.groupByDisabled && this.onClickDefinition(this.configuratorData.state.showFiltersFromDefinition);
     const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.configuratorData);
     this.clickedApplyFilter.emit(params);
     this.lastExecutedConfiguration = this.utilityService.deepCopy(this.configuratorData);
