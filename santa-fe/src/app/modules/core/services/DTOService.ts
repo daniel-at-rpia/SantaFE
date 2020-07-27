@@ -40,6 +40,10 @@
     import {
       QuoteHeaderConfigList
     } from 'Core/constants/securityTableConstants.constant';
+    import {
+      AxeAlertScope,
+      AxeAlertType
+    } from 'Core/constants/tradeConstants.constant';
   //
 
 @Injectable()
@@ -1571,6 +1575,58 @@ export class DTOService {
         isFilled: false
       }
     };
+    return object;
+  }
+
+  public formWatchListObject(copy: DTOs.SecurityDTO) {
+    const object: DTOs.TradeAlertConfigurationAxeGroupBlockDTO = {
+      data: {
+        card: copy,
+        groupId: null,
+        scopes: copy.data.alert.shortcutConfig.side.length > 0 ? copy.data.alert.shortcutConfig.side.map((eachSide) => {return eachSide as AxeAlertScope}) : [AxeAlertScope.ask, AxeAlertScope.bid],
+        axeAlertTypes: [AxeAlertType.normal, AxeAlertType.marketList],
+        targetDriver: copy.data.alert.shortcutConfig.driver || null,
+        targetRange: copy.data.alert.shortcutConfig.numericFilterDTO,
+        sendEmail: !!copy.data.alert.shortcutConfig.sendEmail
+      },
+      state: {
+        isDeleted: false,
+        isDisabled: false,
+        isUrgent: !!copy.data.alert.shortcutConfig.isUrgent,
+        isRangeActive: false
+      }
+    }
+    return object;
+  }
+
+  public formNewAlertWatchlistEntryObject(
+    rawGroupConfig: BEModels.BEAlertConfigurationDTO,
+    targetScope: AxeAlertScope,
+    watchType: AxeAlertType,
+    populateDriversFn,
+    populateRangeNumbersFn,
+    checkFilled,
+    checkRangeActive,
+    dtoNumericFilterObjectFn = this.formNumericFilterObject) {
+    const object: DTOs.TradeAlertConfigurationAxeGroupBlockDTO = {
+      data: {
+        card: null,
+        groupId: rawGroupConfig.alertConfigID,
+        scopes: targetScope === AxeAlertScope.both || targetScope === AxeAlertScope.liquidation ? [AxeAlertScope.ask, AxeAlertScope.bid] : [targetScope],  // from now on we will remove "liquidation" as a side option, just to be backward-compatible, in code we treat liquidation the same as "both"
+        axeAlertTypes: watchType === AxeAlertType.both ? [AxeAlertType.normal, AxeAlertType.marketList] : [watchType],
+        targetDriver: populateDriversFn(rawGroupConfig),
+        targetRange: populateRangeNumbersFn(rawGroupConfig, dtoNumericFilterObjectFn),
+        sendEmail: !!rawGroupConfig.sendEmail
+      },
+      state: {
+        isDeleted: false,
+        isDisabled: !rawGroupConfig.isEnabled,
+        isUrgent: rawGroupConfig.isUrgent,
+        isRangeActive: false
+      }
+    }
+    checkFilled(object);
+    checkRangeActive(object);
     return object;
   }
 }

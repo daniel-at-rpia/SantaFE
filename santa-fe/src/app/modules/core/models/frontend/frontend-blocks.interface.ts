@@ -7,14 +7,13 @@ Because of this, while component models need to follow "BasicDTOStructure", bloc
 */
 
 import * as DTOs from 'FEModels/frontend-models.interface';
-import {
-  AxeAlertScope, AxeAlertType
-} from 'Core/constants/tradeConstants.constant';
 import * as am4charts from "@amcharts/amcharts4/charts";
 import {
   GridApi,
   ColumnApi
 } from 'ag-grid-community';
+import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
+import { DTOService } from 'Core/services/DTOService';
 
 export interface SecurityPortfolioBlock {
   portfolioName: string;
@@ -241,19 +240,6 @@ export interface SecurityTableRowQuoteBlock {
   secondarySecurityName: string;
 }
 
-export interface TradeAlertConfigurationAxeGroupBlock {
-  card: DTOs.SecurityDTO;
-  groupId: string;
-  scopes: Array<AxeAlertScope>;
-  axeAlertTypes: Array<AxeAlertType>;
-  isDeleted: boolean;
-  isDisabled: boolean;
-  isUrgent: boolean;
-  targetDriver: string;
-  targetRange: DTOs.NumericFilterDTO;
-  sendEmail: boolean;
-}
-
 export interface TableFetchResultBlock {
   currentContentStage: number;
   fetchComplete: boolean;
@@ -261,4 +247,24 @@ export interface TableFetchResultBlock {
   prinstineRowList: Array<DTOs.SecurityTableRowDTO>;
   liveUpdatedRowList: Array<DTOs.SecurityTableRowDTO>;
   removalRowList: Array<string>;  // rowIds of the rows that need to be removed, since data within the row may be updated, therefore only use the rowId instead of the DTO
+}
+
+export interface AxeAlertBlock {
+  targetBlock: DTOs.TradeAlertConfigurationAxeGroupBlockDTO;
+}
+
+export interface SelectAxeWatchlistSide extends AxeAlertBlock {
+  targetScope: AxeAlertScope;
+}
+
+export interface SelectAxeWatchlistType extends AxeAlertBlock {
+  targetType: AxeAlertType;
+}
+
+export interface SelectAxeWatchlistRangeValue extends AxeAlertBlock {
+  newValue: any;
+}
+
+export interface SelectAxeWatchlistRangeDriver extends AxeAlertBlock {
+  targetDriver: string;
 }

@@ -18,9 +18,16 @@
       SecurityDTO,
       AlertDTO,
       SecurityTableRowDTO,
-      NumericFilterDTO
+      NumericFilterDTO,
+      TradeAlertConfigurationAxeGroupBlockDTO
     } from 'FEModels/frontend-models.interface';
-    import { TableFetchResultBlock, TradeAlertConfigurationAxeGroupBlock } from 'FEModels/frontend-blocks.interface';
+    import { 
+      TableFetchResultBlock,
+      SelectAxeWatchlistSide,
+      SelectAxeWatchlistType,
+      SelectAxeWatchlistRangeValue,
+      SelectAxeWatchlistRangeDriver
+    } from 'FEModels/frontend-blocks.interface';
     import {
       BESecurityDTO,
       BEAlertConfigurationReturn,
@@ -549,50 +556,50 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         config.searchList = [];
       }
     }
-
-    public onSelectAxeWatchlistSide(targetScope: AxeAlertScope, targetBlock: TradeAlertConfigurationAxeGroupBlock) {
-      if (!!targetScope && !!targetBlock && !targetBlock.isDisabled) {
+  
+    public onSelectAxeWatchlistSide({targetScope, targetBlock}: SelectAxeWatchlistSide) {
+      if (!!targetScope && !!targetBlock && !targetBlock.state.isDisabled) {
         this.addScopeToAxeWatchlistEntry(targetBlock, targetScope);
         this.restfulCommService.logEngagement(
           this.restfulCommService.engagementMap.tradeAlertConfigure,
           null,
-          `Change Scope to ${targetBlock.scopes.toString()}`,
+          `Change Scope to ${targetBlock.data.scopes.toString()}`,
           'Trade Alert Panel'
         );
       }
     }
 
-    public onSelectAxeWatchlistSideType(targetType: AxeAlertType, targetBlock: TradeAlertConfigurationAxeGroupBlock) {
-      const currTypes: AxeAlertType[] = targetBlock.axeAlertTypes.slice();
-      if (!!targetType && !!targetBlock && !targetBlock.isDisabled) {
-        if (targetBlock.axeAlertTypes.indexOf(targetType) === -1) {
-          targetBlock.axeAlertTypes = [targetType, ...currTypes];
+    public onSelectAxeWatchlistSideType(targetType: AxeAlertType, targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+      const currTypes: AxeAlertType[] = targetBlock.data.axeAlertTypes.slice();
+      if (!!targetType && !!targetBlock && !targetBlock.state.isDisabled) {
+        if (targetBlock.data.axeAlertTypes.indexOf(targetType) === -1) {
+          targetBlock.data.axeAlertTypes = [targetType, ...currTypes];
         } else {
-          targetBlock.axeAlertTypes = currTypes.filter((a: AxeAlertType) => a !== targetType);
+          targetBlock.data.axeAlertTypes = currTypes.filter((a: AxeAlertType) => a !== targetType);
         }
         this.restfulCommService.logEngagement(
           this.restfulCommService.engagementMap.tradeAlertConfigure,
           null,
-          `Change AlertType to ${targetBlock.axeAlertTypes.toString()}`,
+          `Change AlertType to ${targetBlock.data.axeAlertTypes.toString()}`,
           'Trade Alert Panel'
         );
       }
     }
 
-    public onSelectAxeAlertWatchType(targetType: AxeAlertType, targetBlock: TradeAlertConfigurationAxeGroupBlock) {
-      if (!!targetType && !!targetBlock && !targetBlock.isDisabled) {
-        if (targetBlock.axeAlertTypes.indexOf(targetType) === -1) {
-          targetBlock.axeAlertTypes = [targetType, ...targetBlock.axeAlertTypes];
+    public onSelectAxeAlertWatchType({targetType, targetBlock}: SelectAxeWatchlistType) {
+      if (!!targetType && !!targetBlock && !targetBlock.state.isDisabled) {
+        if (targetBlock.data.axeAlertTypes.indexOf(targetType) === -1) {
+          targetBlock.data.axeAlertTypes = [targetType, ...targetBlock.data.axeAlertTypes];
         } else {
-          if (targetBlock.axeAlertTypes.length > 1) {
-            targetBlock.axeAlertTypes =
-              targetBlock.axeAlertTypes.filter((a: AxeAlertType) => a !== targetType);
+          if (targetBlock.data.axeAlertTypes.length > 1) {
+            targetBlock.data.axeAlertTypes =
+              targetBlock.data.axeAlertTypes.filter((a: AxeAlertType) => a !== targetType);
           }
         }
         this.restfulCommService.logEngagement(
           this.restfulCommService.engagementMap.tradeAlertConfigure,
           null,
-          `Change Alert Type to ${targetBlock.axeAlertTypes.toString()}`,
+          `Change Alert Type to ${targetBlock.data.axeAlertTypes.toString()}`,
           'Trade Alert Panel'
         );
       }
@@ -604,8 +611,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.state.configureAlert = false;
     }
 
-    public onTogglePriority(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
-      targetBlock.isUrgent = !targetBlock.isUrgent;
+    public onTogglePriority(targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+      targetBlock.state.isUrgent = !targetBlock.state.isUrgent;
       this.restfulCommService.logEngagement(
         this.restfulCommService.engagementMap.tradeAlertConfigure,
         null,
@@ -614,8 +621,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       );
     }
 
-    public onToggleDisableTargetGroupFromAxeWatchList(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
-      targetBlock.isDisabled = !targetBlock.isDisabled;
+    public onToggleDisableTargetGroupFromAxeWatchList(targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+      targetBlock.state.isDisabled = !targetBlock.state.isDisabled;
       this.restfulCommService.logEngagement(
         this.restfulCommService.engagementMap.tradeAlertConfigure,
         null,
@@ -624,10 +631,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       );
     }
 
-    public onClickRemoveSecurityFromAxeWatchList(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
-      targetBlock.isDeleted = true;
+    public onClickRemoveSecurityFromAxeWatchList(targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+      targetBlock.state.isDeleted = true;
       this.state.configuration.axe.searchList.forEach((eachCard) => {
-        if (eachCard.data.securityID === targetBlock.card.data.securityID) {
+        if (eachCard.data.securityID === targetBlock.data.card.data.securityID) {
           this.updateTargetSecurityExist(eachCard);
         }
       });
@@ -639,30 +646,38 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       );
     }
 
-    public onSelectAxeRangeDriver(targetBlock: TradeAlertConfigurationAxeGroupBlock, targetDriver: string) {
-      targetBlock.targetDriver = targetDriver;
+    private checkRangeActive(targetEntry: TradeAlertConfigurationAxeGroupBlockDTO ) {
+      targetEntry.state.isRangeActive = (targetEntry.data.targetRange.state.isFilled && targetEntry.data.targetDriver ) ?  true : false;
     }
 
-    public onChangeAxeRangeMin(newValue, targetBlock: TradeAlertConfigurationAxeGroupBlock) {
-      targetBlock.targetRange.data.minNumber = newValue === "" ? newValue : parseFloat(newValue);
+    public onSelectAxeRangeDriver({targetBlock, targetDriver}: SelectAxeWatchlistRangeDriver) {
+      targetBlock.data.targetDriver = targetDriver;
+      this.checkRangeActive(targetBlock);
+    }
+
+    public onChangeAxeRangeMin({newValue, targetBlock}: SelectAxeWatchlistRangeValue) {
+      targetBlock.data.targetRange.data.minNumber = newValue === "" ? newValue : parseFloat(newValue);
       this.checkIsFilled(targetBlock);
+      this.checkRangeActive(targetBlock);
     }
 
-    public onChangeAxeRangeMax(newValue, targetBlock: TradeAlertConfigurationAxeGroupBlock) {
-      targetBlock.targetRange.data.maxNumber = newValue === "" ? newValue : parseFloat(newValue);
+    public onChangeAxeRangeMax({newValue, targetBlock}: SelectAxeWatchlistRangeValue) {
+      targetBlock.data.targetRange.data.maxNumber = newValue === "" ? newValue : parseFloat(newValue);
       this.checkIsFilled(targetBlock);
+      this.checkRangeActive(targetBlock);
     }
 
-    public onClickedClearRange(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
-      targetBlock.targetRange.data = {
+    public onClickedClearRange(targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+      targetBlock.data.targetRange.data = {
         minNumber: "",
         maxNumber: ""
       };
       this.checkIsFilled(targetBlock);
+      this.checkRangeActive(targetBlock);
     }
 
-    public onToggleSendEmail(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
-      targetBlock.sendEmail = !targetBlock.sendEmail;
+    public onToggleSendEmail(targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+      targetBlock.data.sendEmail = !targetBlock.data.sendEmail;
     }
 
     private fetchSecurities(matchList: Array<SecurityMapEntry>) {
@@ -700,7 +715,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
     private updateTargetSecurityExist(targetSecurity: SecurityDTO) {
       const existList = this.state.configuration.axe.securityList.filter((eachEntry) => {
-        return eachEntry.card.data.securityID === targetSecurity.data.securityID && !eachEntry.isDeleted;
+        return eachEntry.data.card.data.securityID === targetSecurity.data.securityID && !eachEntry.state.isDeleted;
       });
       targetSecurity.state.isSelected = existList.length > 0;
     }
@@ -711,18 +726,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       copy.state.isInteractionDisabled = true;
       copy.state.isMultiLineVariant = false;
       copy.state.isWidthFlexible = true;
-      const newEntry: TradeAlertConfigurationAxeGroupBlock = {
-        card: copy,
-        groupId: null,
-        axeAlertTypes: [this.constants.axeAlertType.normal, this.constants.axeAlertType.marketList],
-        scopes: copy.data.alert.shortcutConfig.side.length > 0 ? copy.data.alert.shortcutConfig.side.map((eachSide) => {return eachSide as AxeAlertScope}) : [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid],
-        targetDriver: copy.data.alert.shortcutConfig.driver || null,
-        targetRange: copy.data.alert.shortcutConfig.numericFilterDTO,
-        isDeleted: false,
-        isDisabled: false,
-        isUrgent: !!copy.data.alert.shortcutConfig.isUrgent,
-        sendEmail: !!copy.data.alert.shortcutConfig.sendEmail
-      };
+      const newEntry: TradeAlertConfigurationAxeGroupBlockDTO = this.dtoService.formWatchListObject(copy);
       this.state.configuration.axe.securityList.unshift(newEntry);
       this.restfulCommService.logEngagement(
         this.restfulCommService.engagementMap.tradeAlertAddSingleSecurity,
@@ -771,19 +775,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       const payload: PayloadGetSecurities = {
         identifiers: rawGroupConfig.groupFilters.SecurityIdentifier
       };
-      const newEntry: TradeAlertConfigurationAxeGroupBlock = {
-        card: null,
-        groupId: rawGroupConfig.alertConfigID,
-        axeAlertTypes: WatchType === AxeAlertType.both ? [AxeAlertType.normal, AxeAlertType.marketList] : [WatchType],
-        scopes: targetScope === this.constants.axeAlertScope.both || targetScope === this.constants.axeAlertScope.liquidation ? [this.constants.axeAlertScope.ask, this.constants.axeAlertScope.bid] : [targetScope],  // from now on we will remove "liquidation" as a side option, just to be backward-compatible, in code we treat liquidation the same as "both"
-        targetDriver: this.populateWatchDriverFromRawConfig(rawGroupConfig),
-        targetRange: this.populateRangeNumberFilterFromRawConfig(rawGroupConfig),
-        isDeleted: false,
-        isDisabled: !rawGroupConfig.isEnabled,
-        isUrgent: rawGroupConfig.isUrgent,
-        sendEmail: !!rawGroupConfig.sendEmail
-      };
-      this.checkIsFilled(newEntry);
+      const newEntry = this.dtoService.formNewAlertWatchlistEntryObject(rawGroupConfig, targetScope, WatchType, this.populateWatchDriverFromRawConfig, this.populateRangeNumberFilterFromRawConfig, this.checkIsFilled, this.checkRangeActive);
       this.state.configuration.axe.securityList.unshift(newEntry);
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSecurityDTOs, {req: 'POST'}, payload).pipe(
         first(),
@@ -793,7 +785,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
               const eachCard = this.dtoService.formSecurityCardObject(eachRawData.securityIdentifier, eachRawData, false, false);
               eachCard.state.isInteractionDisabled = true;
               eachCard.state.isWidthFlexible = true;
-              newEntry.card = eachCard;
+              newEntry.data.card = eachCard;
             });
           } else {
             this.restfulCommService.logError(`'security/get-securities' API returned an empty result with this payload: ${payload.identifiers.toString()}`);
@@ -802,21 +794,21 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       ).subscribe();
     }
 
-    private addScopeToAxeWatchlistEntry(targetEntry: TradeAlertConfigurationAxeGroupBlock, targetScope: AxeAlertScope) {
+    private addScopeToAxeWatchlistEntry(targetEntry: TradeAlertConfigurationAxeGroupBlockDTO, targetScope: AxeAlertScope) {
       if (targetScope === this.constants.axeAlertScope.liquidation) {
-        if (targetEntry.scopes.indexOf(targetScope) >= 0) {
-          targetEntry.scopes = [];
+        if (targetEntry.data.scopes.indexOf(targetScope) >= 0) {
+          targetEntry.data.scopes = [];
         } else {
-          targetEntry.scopes = [targetScope];
+          targetEntry.data.scopes = [targetScope];
         }
-      } else if ((targetScope === this.constants.axeAlertScope.bid || this.constants.axeAlertScope.ask) && targetEntry.scopes.indexOf(this.constants.axeAlertScope.liquidation) >= 0){
-        targetEntry.scopes.splice(targetEntry.scopes.indexOf(this.constants.axeAlertScope.liquidation), 1);
-        targetEntry.scopes.push(targetScope);
+      } else if ((targetScope === this.constants.axeAlertScope.bid || this.constants.axeAlertScope.ask) && targetEntry.data.scopes.indexOf(this.constants.axeAlertScope.liquidation) >= 0){
+        targetEntry.data.scopes.splice(targetEntry.data.scopes.indexOf(this.constants.axeAlertScope.liquidation), 1);
+        targetEntry.data.scopes.push(targetScope);
       } else {
-        if (targetEntry.scopes.indexOf(targetScope) >= 0) {
-          targetEntry.scopes.splice(targetEntry.scopes.indexOf(targetScope), 1);
+        if (targetEntry.data.scopes.indexOf(targetScope) >= 0) {
+          targetEntry.data.scopes.splice(targetEntry.data.scopes.indexOf(targetScope), 1);
         } else {
-          targetEntry.scopes.push(targetScope);
+          targetEntry.data.scopes.push(targetScope);
         }
       }
     }
@@ -829,23 +821,23 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         this.state.configuration.axe.securityList.forEach((eachEntry) => {
           const payload: PayloadUpdateSingleAlertConfig = {
             type: this.constants.alertTypes.axeAlert,
-            subType: this.mapAxeScopesToAlertSubtypes(eachEntry.scopes),
+            subType: this.mapAxeScopesToAlertSubtypes(eachEntry.data.scopes),
             groupFilters: {},
             parameters: {
-              WatchType: this.mapWatchTypesToWatchType(eachEntry.axeAlertTypes)
+              WatchType: this.mapWatchTypesToWatchType(eachEntry.data.axeAlertTypes)
             },
-            isUrgent: eachEntry.isUrgent,
-            sendEmail: eachEntry.sendEmail
+            isUrgent: eachEntry.state.isUrgent,
+            sendEmail: eachEntry.data.sendEmail
           };
           this.appendRangeToAxeConfigPayloads(payload, eachEntry);
-          payload.groupFilters.SecurityIdentifier = [eachEntry.card.data.securityID];
-          if (!!eachEntry.groupId) {
-            payload.alertConfigID = eachEntry.groupId;
+          payload.groupFilters.SecurityIdentifier = [eachEntry.data.card.data.securityID];
+          if (!!eachEntry.data.groupId) {
+            payload.alertConfigID = eachEntry.data.groupId;
           }
-          if (eachEntry.isDisabled) {
+          if (eachEntry.state.isDisabled) {
             payload.isEnabled = false;
           }
-          if (eachEntry.isDeleted) {
+          if (eachEntry.state.isDeleted) {
             payload.isDeleted = true;
           }
           if (!eachEntry.groupId && eachEntry.isDeleted) {
@@ -895,26 +887,26 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       }
     }
 
-    private checkIsFilled(targetBlock: TradeAlertConfigurationAxeGroupBlock) {
-      if (!!targetBlock.targetRange.data.minNumber || !!targetBlock.targetRange.data.maxNumber) {
-        targetBlock.targetRange.state.isFilled = true;
+    private checkIsFilled(targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+      if (!!targetBlock.data.targetRange.data.minNumber || !!targetBlock.data.targetRange.data.maxNumber) {
+        targetBlock.data.targetRange.state.isFilled = true;
       } else {
-        targetBlock.targetRange.state.isFilled = false;
+        targetBlock.data.targetRange.state.isFilled = false;
       }
     }
 
     private populateWatchDriverFromRawConfig(rawGroupConfig: BEAlertConfigurationDTO): string {
       if (rawGroupConfig.parameters.UpperSpreadThreshold || rawGroupConfig.parameters.LowerSpreadThreshold) {
-        return this.constants.driver.Spread.label;
+        return TriCoreDriverConfig.Spread.label;
       } else if (rawGroupConfig.parameters.UpperPriceThreshold || rawGroupConfig.parameters.LowerPriceThreshold) {
-        return this.constants.driver.Price.label;
+        return TriCoreDriverConfig.Price.label;
       } else {
         return null;
       }
     }
 
-    private populateRangeNumberFilterFromRawConfig(rawGroupConfig: BEAlertConfigurationDTO): NumericFilterDTO {
-      const dto = this.dtoService.formNumericFilterObject();
+    private populateRangeNumberFilterFromRawConfig(rawGroupConfig: BEAlertConfigurationDTO, formNumericFilterObjectFn): NumericFilterDTO {
+      const dto = formNumericFilterObjectFn();
       if (rawGroupConfig.parameters.UpperSpreadThreshold || rawGroupConfig.parameters.LowerSpreadThreshold) {
         dto.data.minNumber = rawGroupConfig.parameters.LowerSpreadThreshold;
         dto.data.maxNumber = rawGroupConfig.parameters.UpperSpreadThreshold;
@@ -927,22 +919,22 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
     private appendRangeToAxeConfigPayloads(
       payload: PayloadUpdateSingleAlertConfig,
-      targetBlock: TradeAlertConfigurationAxeGroupBlock
+      targetBlock: TradeAlertConfigurationAxeGroupBlockDTO
     ) {
-      if (targetBlock && targetBlock.targetDriver && targetBlock.targetRange && targetBlock.targetRange.data) {
-        if (targetBlock.targetDriver === this.constants.driver.Spread.label) {
-          if (targetBlock.targetRange.data.maxNumber) {
-            payload.parameters.UpperSpreadThreshold = parseFloat(targetBlock.targetRange.data.maxNumber as string);
+      if (targetBlock && targetBlock.data.targetDriver && targetBlock.data.targetRange && targetBlock.data.targetRange.data) {
+        if (targetBlock.data.targetDriver === this.constants.driver.Spread.label) {
+          if (targetBlock.data.targetRange.data.maxNumber) {
+            payload.parameters.UpperSpreadThreshold = parseFloat(targetBlock.data.targetRange.data.maxNumber as string);
           }
-          if (targetBlock.targetRange.data.minNumber) {
-            payload.parameters.LowerSpreadThreshold = parseFloat(targetBlock.targetRange.data.minNumber as string);
+          if (targetBlock.data.targetRange.data.minNumber) {
+            payload.parameters.LowerSpreadThreshold = parseFloat(targetBlock.data.targetRange.data.minNumber as string);
           }
-        } else if (targetBlock.targetDriver === this.constants.driver.Price.label) {
-          if (targetBlock.targetRange.data.maxNumber) {
-            payload.parameters.UpperPriceThreshold = parseFloat(targetBlock.targetRange.data.maxNumber as string);
+        } else if (targetBlock.data.targetDriver === this.constants.driver.Price.label) {
+          if (targetBlock.data.targetRange.data.maxNumber) {
+            payload.parameters.UpperPriceThreshold = parseFloat(targetBlock.data.targetRange.data.maxNumber as string);
           }
-          if (targetBlock.targetRange.data.minNumber) {
-            payload.parameters.LowerPriceThreshold = parseFloat(targetBlock.targetRange.data.minNumber as string);
+          if (targetBlock.data.targetRange.data.minNumber) {
+            payload.parameters.LowerPriceThreshold = parseFloat(targetBlock.data.targetRange.data.minNumber as string);
           }
         }
       }
