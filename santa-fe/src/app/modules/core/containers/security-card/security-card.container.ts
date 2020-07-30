@@ -136,6 +136,13 @@ export class SecurityCard implements OnInit {
     this.cardData.data.alert.shortcutConfig.sendEmail = !this.cardData.data.alert.shortcutConfig.sendEmail;
   }
 
+  public onClickPin() {
+    this.cardData.state.isSelected = false;
+    if (!!this.cardData.api.onClickPin) {
+      this.cardData.api.onClickPin(this.cardData);
+    }
+  }
+
   private checkIsFilled() {
     const dto = this.cardData.data.alert.shortcutConfig.numericFilterDTO;
     if (dto.data.minNumber !== "" || dto.data.maxNumber !== "") {

@@ -1,6 +1,7 @@
 <article
   [ngClass]="{
     'santaTable': true,
+    'santaTable--hasPinnedRowsState': tableData.data.agGridPinnedTopRowData.length > 0,
     'santaTable--nativeEnabledState': tableData.state.isNativeEnabled
   }">
   <section class="santaTable__agGridTable">
@@ -14,6 +15,7 @@
       [getRowNodeId]="getRowNodeId"
       [aggFuncs]="tableData.data.agGridAggregationMap"
       [floatingFilter]="true"
+      [getRowHeight]="getRowHeight.bind(this)"
       [rowHeight]="constants.agGridRowHeight"
       [sideBar]="agGridConfig.sideBar"
       [icons]="icons"
@@ -24,6 +26,9 @@
       [animateRows]="true"
       [suppressContextMenu]="true"
       [context]="agGridConfig.context"
+      [pinnedTopRowData]="tableData.data.agGridPinnedTopRowData"
+      [fullWidthCellRenderer]="'fullWidthCell'"
+      [isFullWidthCell]="isFullWidthCell"
       (gridReady)="onGridReady($event)"
       (rowClicked)="onRowClicked($event)">
     </ag-grid-angular>
@@ -42,8 +47,14 @@
       (nativePerformDefaultSort)="onNativePerformDefaultSort()"
     ></security-table>
   </section>
-  <!--
   <section class="santaTable__floatingCTA">
+    <div class="santaTable__floatingCTA-clearAllPinned">
+      <button (click)="onClickClearAllPinnedRows()" class="santaBtn--labelled santaTable__floatingCTA-clearAllPinned-btn">
+        <i class="fal fa-thumbtack"></i>
+        <span>Unpin All</span>
+      </button>
+    </div>
+    <!--
     <div class="santaTable__floatingCTA-tableSwitch santaBtnGroup">
       <button
         (click)="onToggleNativeTable(true)"
@@ -58,6 +69,6 @@
           'santaTable__floatingCTA-tableSwitch-btn--active': !tableData.state.isNativeEnabled
         }">AgGrid</button>
     </div>
-  </section>
-  -->
+    -->
+  </section>  
 </article>

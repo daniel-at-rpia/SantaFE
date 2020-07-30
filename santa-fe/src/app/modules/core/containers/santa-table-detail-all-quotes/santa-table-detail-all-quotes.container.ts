@@ -38,6 +38,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   @Input() rowData: SecurityTableRowDTO;
   private parentNode: AgGridRowNode;
   private parent: any; // a hacky way to talk to "santa-table.container.ts"
+  private params: AgGridRowParams;
 
   constructor(
     private dtoService: DTOService,
@@ -49,6 +50,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     // don't forget this is triggered when the row is updated in live too
     // agInit is triggered twice, once when the SantaTable's onRowClicked() sets the node via setExpanded(). And later triggered again when SantaTable's loadQuotes() recalc the height of the table view. There is no need to react to both agInit, just react to the 2nd one when all quotes data comes in 
     const typeSafeParams = params as AgGridRowParams;
+    this.params = typeSafeParams;
     if (!!typeSafeParams && !!typeSafeParams.node.data.rowDTO && typeSafeParams.node.data.rowDTO.state.quotesLoaded) {
       this.parentNode = typeSafeParams.node.parent;
       this.rowData = typeSafeParams.node.data.rowDTO;
@@ -61,8 +63,9 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   }
 
   public onClickClose() {
-    this.parentNode.setExpanded(false);
-    this.parent.onRowClickedToCollapse(this.rowData);
+    // the pinned rows won't have a parent
+    this.parentNode && this.parentNode.setExpanded(false);
+    this.parent.onRowClickedToCollapse(this.rowData, !this.parentNode, this.params);
   }
 
   public onClickSelectForAnalysis() {

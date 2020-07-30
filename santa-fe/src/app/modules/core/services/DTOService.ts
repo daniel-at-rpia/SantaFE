@@ -26,7 +26,9 @@
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
-      SECURITY_TABLE_QUOTE_TYPE_AXE
+      SECURITY_TABLE_QUOTE_TYPE_AXE,
+      AGGRID_ROW_HEIGHT,
+      AGGRID_ROW_HEIGHT_SLIM
     } from 'Core/constants/securityTableConstants.constant';
     import {
       GroupMetricOptions
@@ -38,6 +40,10 @@
     import {
       QuoteHeaderConfigList
     } from 'Core/constants/securityTableConstants.constant';
+    import {
+      AxeAlertScope,
+      AxeAlertType
+    } from 'Core/constants/tradeConstants.constant';
   //
 
 @Injectable()
@@ -60,7 +66,8 @@ export class DTOService {
         onClickCard: null,
         onClickSendToGraph: null,
         onClickSendToAlertConfig: null,
-        onClickSearch: null
+        onClickSearch: null,
+        onClickPin: null
       },
       state: {
         isSelected: false,
@@ -771,8 +778,7 @@ export class DTOService {
 
   public formSecurityTableObject(
     isLiveVariant: boolean,
-    isGroupEnabled: boolean,
-    isSlimRowVariant: boolean
+    isGroupEnabled: boolean
   ): DTOs.SecurityTableDTO {
     const object: DTOs.SecurityTableDTO = {
       data: {
@@ -782,7 +788,8 @@ export class DTOService {
         agGridColumnDefs: [],
         agGridRowData: [],
         agGridFrameworkComponents: {},
-        agGridAggregationMap: {}
+        agGridAggregationMap: {},
+        agGridPinnedTopRowData: []
       },
       state: {
         loadedContentStage: null,
@@ -794,8 +801,7 @@ export class DTOService {
         isNativeEnabled: false,
         selectedSecurityCard: null,
         isActivated: false,
-        isGroupEnabled: isGroupEnabled,
-        isSlimRowVariant: isSlimRowVariant
+        isGroupEnabled: isGroupEnabled
       },
       api: {
         gridApi: null,
@@ -843,6 +849,7 @@ export class DTOService {
   public formSecurityTableRowObject(
     securityDTO: DTOs.SecurityDTO,
     alert: DTOs.AlertDTO,
+    isSlimRowHeight: boolean,
     id?: string
   ): DTOs.SecurityTableRowDTO {
     const object: DTOs.SecurityTableRowDTO = {
@@ -884,6 +891,9 @@ export class DTOService {
         alert: alert,
         historicalTradeVisualizer: this.formHistoricalTradeObject(securityDTO)
       },
+      style: {
+        rowHeight: !!isSlimRowHeight ? AGGRID_ROW_HEIGHT_SLIM : AGGRID_ROW_HEIGHT
+      },
       state: {
         expandViewSortByQuoteMetric: null,
         isExpanded: false,
@@ -891,7 +901,8 @@ export class DTOService {
         isCDSVariant: this.utility.isCDS(false, securityDTO),
         isCDSOffTheRun: false,
         viewHistoryState: false,
-        quotesLoaded: false
+        quotesLoaded: false,
+        isAgGridFullSizeVariant: false
       }
     };
     return object;
@@ -1564,6 +1575,58 @@ export class DTOService {
         isFilled: false
       }
     };
+    return object;
+  }
+
+  public formWatchListObject(copy: DTOs.SecurityDTO) {
+    const object: DTOs.TradeAlertConfigurationAxeGroupBlockDTO = {
+      data: {
+        card: copy,
+        groupId: null,
+        scopes: copy.data.alert.shortcutConfig.side.length > 0 ? copy.data.alert.shortcutConfig.side.map((eachSide) => {return eachSide as AxeAlertScope}) : [AxeAlertScope.ask, AxeAlertScope.bid],
+        axeAlertTypes: [AxeAlertType.normal, AxeAlertType.marketList],
+        targetDriver: copy.data.alert.shortcutConfig.driver || null,
+        targetRange: copy.data.alert.shortcutConfig.numericFilterDTO,
+        sendEmail: !!copy.data.alert.shortcutConfig.sendEmail
+      },
+      state: {
+        isDeleted: false,
+        isDisabled: false,
+        isUrgent: !!copy.data.alert.shortcutConfig.isUrgent,
+        isRangeActive: false
+      }
+    }
+    return object;
+  }
+
+  public formNewAlertWatchlistEntryObject(
+    rawGroupConfig: BEModels.BEAlertConfigurationDTO,
+    targetScope: AxeAlertScope,
+    watchType: AxeAlertType,
+    populateDriversFn,
+    populateRangeNumbersFn,
+    checkFilled,
+    checkRangeActive,
+    dtoNumericFilterObjectFn = this.formNumericFilterObject) {
+    const object: DTOs.TradeAlertConfigurationAxeGroupBlockDTO = {
+      data: {
+        card: null,
+        groupId: rawGroupConfig.alertConfigID,
+        scopes: targetScope === AxeAlertScope.both || targetScope === AxeAlertScope.liquidation ? [AxeAlertScope.ask, AxeAlertScope.bid] : [targetScope],  // from now on we will remove "liquidation" as a side option, just to be backward-compatible, in code we treat liquidation the same as "both"
+        axeAlertTypes: watchType === AxeAlertType.both ? [AxeAlertType.normal, AxeAlertType.marketList] : [watchType],
+        targetDriver: populateDriversFn(rawGroupConfig),
+        targetRange: populateRangeNumbersFn(rawGroupConfig, dtoNumericFilterObjectFn),
+        sendEmail: !!rawGroupConfig.sendEmail
+      },
+      state: {
+        isDeleted: false,
+        isDisabled: !rawGroupConfig.isEnabled,
+        isUrgent: rawGroupConfig.isUrgent,
+        isRangeActive: false
+      }
+    }
+    checkFilled(object);
+    checkRangeActive(object);
     return object;
   }
 }
