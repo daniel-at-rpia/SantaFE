@@ -251,7 +251,7 @@ export class AgGridMiddleLayerService {
       newAgColumn.comparator = this.agCompareAlertSide.bind(this);
     } else if (targetHeader.data.key === 'alertStatus') {
       newAgColumn.comparator = this.agCompareAlertStatus.bind(this);
-    } else if (targetHeader.data.underlineAttrName && targetHeader.data.attrName != targetHeader.data.underlineAttrName || targetHeader.data.key === 'wowDelta' ) {
+    } else if (targetHeader.data.underlineAttrName && targetHeader.data.attrName != targetHeader.data.underlineAttrName || targetHeader.data.attrName == targetHeader.data.underlineAttrName) {
       newAgColumn.comparator = this.agCompareUnderlineValue.bind(this)
     }
   }
