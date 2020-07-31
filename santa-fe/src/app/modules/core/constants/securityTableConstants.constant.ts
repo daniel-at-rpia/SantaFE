@@ -1,7 +1,8 @@
 import {
   SecurityTableHeaderConfigStub,
   SecurityTableQuoteHeaderConfigStub,
-  TradeHistoryHeaderConfigStub
+  TradeHistoryHeaderConfigStub,
+  SecurityTableSpecificAlertHeaderConfigsStub
 } from 'FEModels/frontend-stub-models.interface';
 
 import {
@@ -1440,6 +1441,25 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
     }
   }
 ];
+
+export const SecurityTableAlertHeaderConfigs: SecurityTableSpecificAlertHeaderConfigsStub = {
+  axe: {
+    include: ['cs01CadFirm'],
+    exclude: ['alertTradeTrader', 'hfPosition', 'nlfPosition', 'dofPosition', 'sofPosition', 'stipPosition', 'fipPosition', 'cipPosition', 'agbPosition', 'bbbPosition']
+  },
+  mark: {
+    include: ['cs01CadFirm'],
+    exclude: ['alertTradeTrader', 'hfPosition', 'nlfPosition', 'dofPosition', 'sofPosition', 'stipPosition', 'fipPosition', 'cipPosition', 'agbPosition', 'bbbPosition']
+  },
+  trade: {
+    include: ['cs01CadFirm'],
+    exclude: ['alertType', 'alertStatus', 'hfPosition', 'nlfPosition']
+  },
+  all: {
+    include: ['cs01CadFirm'],
+    exclude: []
+  },
+}
 
 export const QuoteHeaderConfigList: Array<SecurityTableQuoteHeaderConfigStub> = [
   {
