@@ -148,7 +148,7 @@ export class AgGridMiddleLayerService {
     table: SecurityTableDTO
   ): Array<AgGridRow> {
     const targetRows = table.data.rows;
-    const targetHeaders = table.data.allHeaders;
+    const targetHeaders = table.data.headers;
     // minus one because securityCard is not one of the cells ( TODO: this is a bad design, what if a table has more than one security card column? should not treat it different from other columns )
     const bestQuoteCellIndex = targetHeaders.findIndex((eachHeader) => {
       return eachHeader.data.key === 'bestQuote';
@@ -312,11 +312,20 @@ export class AgGridMiddleLayerService {
     alertStatusCellIndex: number
   ): AgGridRow {
     const eachSecurity = targetRow.data.security;
+    if (!targetRow.data.cells[bestAxeQuoteCellIndex]) {
+      console.log("");
+    }
     const newAgRow: AgGridRow = {
       id: targetRow.data.rowId,
       securityCard: eachSecurity,
-      bestQuote: targetRow.data.cells[bestQuoteCellIndex].data.quantComparerDTO,
-      bestAxeQuote: targetRow.data.cells[bestAxeQuoteCellIndex].data.quantComparerDTO,
+      bestQuote: 
+        bestQuoteCellIndex > -1
+        ? targetRow.data.cells[bestQuoteCellIndex].data.quantComparerDTO
+        : null,
+      bestAxeQuote:
+        bestAxeQuoteCellIndex > -1
+        ? targetRow.data.cells[bestAxeQuoteCellIndex].data.quantComparerDTO
+        : null,
       alertSide: 
         alertSideCellIndex > -1
           ? targetRow.data.cells[alertSideCellIndex].data.alertSideDTO
