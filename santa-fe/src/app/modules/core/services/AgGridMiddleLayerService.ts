@@ -312,13 +312,10 @@ export class AgGridMiddleLayerService {
     alertStatusCellIndex: number
   ): AgGridRow {
     const eachSecurity = targetRow.data.security;
-    if (!targetRow.data.cells[bestAxeQuoteCellIndex]) {
-      console.log("");
-    }
     const newAgRow: AgGridRow = {
       id: targetRow.data.rowId,
       securityCard: eachSecurity,
-      bestQuote: 
+      bestQuote:
         bestQuoteCellIndex > -1
         ? targetRow.data.cells[bestQuoteCellIndex].data.quantComparerDTO
         : null,
