@@ -46,7 +46,7 @@ export class AppRoot implements OnInit, OnDestroy {
     private store$: Store<any>,
     private restfulCommService: RestfulCommService
   ) {
-    LicenseManager.setLicenseKey("RPIA_RPIA_Risk_Reporting_1Devs13_March_2019__MTU1MjQzNTIwMDAwMA==7be91d469fa0bf581cca26d77da1f928");
+    LicenseManager.setLicenseKey("CompanyName=RPIA LP,LicensedGroup=RPIA Risk Reporting,LicenseType=MultipleApplications,LicensedConcurrentDeveloperCount=2,LicensedProductionInstancesCount=0,AssetReference=AG-009115,ExpiryDate=27_July_2021_[v2]_MTYyNzM0MDQwMDAwMA==d6f3ed228387383c08504da9e3fe52e6");
     this.titleService.setTitle(this.title);
   }
 
