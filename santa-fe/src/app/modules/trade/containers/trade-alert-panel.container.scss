@@ -349,6 +349,7 @@ $tradeAlertPanel_overview_tabIndicate_width: 7rem;
                   @include material('none');
                   @include mix_border_generator;
                   background-color: transparent;
+                  pointer-events: none;
                   &-icon {
                     color: $color_disabled;
                   }

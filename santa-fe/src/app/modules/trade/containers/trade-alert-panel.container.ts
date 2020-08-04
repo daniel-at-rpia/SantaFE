@@ -505,7 +505,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     ) {
       if (this.state.fetchResult.alertTable.fetchComplete) {
         const tabName = isMarketListOnly ? 'Inquiry' : targetType;
-        if (targetType === this.constants.alertTypes.axeAlert) {
+        if (targetType === this.constants.alertTypes.axeAlert && this.state.alert.nonMarketListAxeAlertCount > 0 || targetType === this.constants.alertTypes.axeAlert && this.state.alert.marketListAxeAlertCount > 0) {
           if (this.state.alert.scopedAlertType !== targetType || this.state.alert.scopedForMarketListOnly !== !!isMarketListOnly) {
             this.state.displayAlertTable = true;
             this.state.alert.scopedAlertType = targetType;
@@ -518,7 +518,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           }
         } else {
           this.state.alert.scopedForMarketListOnly = false;
-          if (this.state.alert.scopedAlertType !== targetType) {
+          const alertTypeCount = (targetType === 'Mark') ? this.state.alert.markAlertCount : this.state.alert.tradeAlertCount; 
+          if (this.state.alert.scopedAlertType !== targetType && alertTypeCount > 0) {
             this.state.displayAlertTable = true;
             this.state.alert.scopedAlertType = targetType;
             this.getAlertHeaders(this.state.alert.scopedAlertType);
