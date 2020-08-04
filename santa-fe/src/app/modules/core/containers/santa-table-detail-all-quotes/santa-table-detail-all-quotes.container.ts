@@ -30,6 +30,7 @@
     import { QuoteHeaderConfigList } from 'Core/constants/securityTableConstants.constant';
     import * as BEModels from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
+    import { GraphService } from 'Core/services/GraphService';
 
   //
 
@@ -48,7 +49,8 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   constructor(
     private dtoService: DTOService,
     private utilityService: UtilityService,
-    private restfulCommService: RestfulCommService
+    private restfulCommService: RestfulCommService,
+    private graphService: GraphService
   ) { }
 
   public agInit(params: any){
@@ -71,6 +73,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     // the pinned rows won't have a parent
     this.parentNode && this.parentNode.setExpanded(false);
     this.parent.onRowClickedToCollapse(this.rowData, !this.parentNode, this.params);
+    this.rowData.data.historicalTradeVisualizer.state.graphReceived = true;
   }
 
   public onClickSelectForAnalysis() {
@@ -191,11 +194,19 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   }
 
   private fetchTradeAllHistory() {
+    this.showAllTradeHistoryButton = false;
     const securityID = this.rowData.data.security.data.securityID;
     const payload = {
       "identifier": securityID
     }
     const security = this.rowData.data.security;
+    this.rowData.data.historicalTradeVisualizer.state.graphReceived = true;
+    this.graphService.destoryGraph(this.rowData.data.historicalTradeVisualizer.graph.positionPie);
+    this.rowData.data.historicalTradeVisualizer.graph.positionPie = null;
+    this.graphService.destoryGraph(this.rowData.data.historicalTradeVisualizer.graph.volumeLeftPie);
+    this.rowData.data.historicalTradeVisualizer.graph.volumeLeftPie = null;
+    this.graphService.destoryGraph(this.rowData.data.historicalTradeVisualizer.graph.volumeRightPie);
+    this.rowData.data.historicalTradeVisualizer.graph.volumeRightPie = null;
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAllTradeHistory, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((allTradeHistory: Object) => {
@@ -215,7 +226,6 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   private onClickGetAllTradeHistory(showAllTradeHistory: boolean) {
     if (!showAllTradeHistory) {
       this.fetchTradeAllHistory();
-      this.showAllTradeHistoryButton = false;
     }
   }
 
