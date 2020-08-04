@@ -1,5 +1,5 @@
   // dependencies
-    import { Component, Input, OnChanges, OnDestroy, OnInit, AfterViewInit, ViewEncapsulation } from '@angular/core';
+    import { Component, Input, OnChanges, OnDestroy, OnInit, AfterViewInit, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
 
     import { HistoricalTradeVisualizerDTO } from 'FEModels/frontend-models.interface';
     import { TradeHistoryHeaderConfigList } from 'Core/constants/securityTableConstants.constant';
@@ -17,6 +17,8 @@
 export class HistoricalTradeVisualizer implements OnDestroy, OnChanges {
   @Input() historyData: HistoricalTradeVisualizerDTO;
   @Input() showGraph: boolean;
+  @Input() showAllTradeHistoryButton: boolean;
+  @Output() allTradeHistoryData = new EventEmitter<boolean>();
   
   public constants = {
     headerConfigList: TradeHistoryHeaderConfigList,
@@ -74,5 +76,8 @@ export class HistoricalTradeVisualizer implements OnDestroy, OnChanges {
       });
     }
   }
-  
+
+  public getAllTradeHistory() {
+    this.allTradeHistoryData.emit(false);
+  }
 }

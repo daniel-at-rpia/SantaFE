@@ -49,6 +49,7 @@
           </div>
         </li>
       </ul>
+      <button [ngClass]="{'santaBtn--none': !showAllTradeHistoryButton}" (click)="getAllTradeHistory()">View All Trade History</button>
     </div>
   </section>
   <section class="sat-historicalTradeVisualizer__graphs">

@@ -44,7 +44,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   private parentNode: AgGridRowNode;
   private parent: any; // a hacky way to talk to "santa-table.container.ts"
   private params: AgGridRowParams;
-
+  public showAllTradeHistoryButton: boolean = true;
   constructor(
     private dtoService: DTOService,
     private utilityService: UtilityService,
@@ -213,8 +213,9 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   }
 
   private onClickGetAllTradeHistory(showAllTradeHistory: boolean) {
-    if (!!showAllTradeHistory) {
+    if (!showAllTradeHistory) {
       this.fetchTradeAllHistory();
+      this.showAllTradeHistoryButton = false;
     }
   }
 
