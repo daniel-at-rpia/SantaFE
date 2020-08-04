@@ -488,7 +488,8 @@ export class SantaTable implements OnInit, OnChanges {
         }),
         catchError(err => {
           console.error('quote/get-all-quotes failed', err);
-          return of('error')
+          this.hanldeAgGridCrash();
+          return of('error');
         })
       ).subscribe();
     }
@@ -591,6 +592,12 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   private liveUpdateRows(targetRows: Array<SecurityTableRowDTO>) {
+    // updated rows are in fact new securityDTOs, therefore the pin click API needs to be assigned here
+    targetRows.forEach((eachRow) => {
+      if (this.tableName === 'tradeMain') {
+        eachRow.data.security.api.onClickPin = this.onClickSecurityCardPin.bind(this);
+      }
+    });
     // realUpdates contains the rows that already exist in the table, those needs to be updated via the agGridAPI, the others are simply pushed into the table
     const realUpdates: Array<SecurityTableRowDTO> = [];
     const insertions: Array<SecurityTableRowDTO> = [];
@@ -886,5 +893,12 @@ export class SantaTable implements OnInit, OnChanges {
         rowNodes: [params.node as any, params.node['detailNode'] as any]
       });
     }
+  }
+
+  private hanldeAgGridCrash(){
+    this.restfulCommService.logError('AgGridCrashed');
+    setTimeout(function(){
+      window.location.reload(true);
+    }, 3000);
   }
 }
