@@ -53,9 +53,7 @@
       </span>
     </div>
     <div class="sat-alert__detail-message">
-      <span class="sat-alert__detail-message-text">
-        {{alertData.data.message}}
-      </span>
+      <p class="sat-alert__detail-message-text" [innerHtml]="alertData.data.paragraphMessage"></p>
     </div>
     <div class="sat-alert__detail-card">
       <security-card *ngIf="alertData.state.hasSecurity" [cardData]="alertData.data.security"></security-card>
