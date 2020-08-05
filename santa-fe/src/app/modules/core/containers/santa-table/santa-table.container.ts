@@ -388,6 +388,7 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   private loadTableHeaders(skipAgGrid = false) {
+    this.agGridMiddleLayerService.selectedDriverType = this.activeTriCoreDriver;
     this.tableData.data.headers = [];
     this.tableData.data.allHeaders = [];
     this.securityTableHeaderConfigs.forEach((eachStub) => {
@@ -410,7 +411,7 @@ export class SantaTable implements OnInit, OnChanges {
       );
     });
     if (this.tableData.state.isAgGridReady && !skipAgGrid) {
-      this.tableData.data.agGridColumnDefs = this.agGridMiddleLayerService.loadAgGridHeaders(this.tableData);
+      this.tableData.data.agGridColumnDefs = this.agGridMiddleLayerService.loadAgGridHeaders(this.tableData, this.activeTriCoreDriver);
     }
   }
 
@@ -534,8 +535,8 @@ export class SantaTable implements OnInit, OnChanges {
           return 0;
         }
       } else {
-        valueA = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityA, true);
-        valueB = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityB, true);
+        valueA = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityA, true, this.activeTriCoreDriver);
+        valueB = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityB, true, this.activeTriCoreDriver);
         if (!!securityA && !!securityB && !securityA.state.isStencil && !securityB.state.isStencil) {
           if (valueA == null && valueB != null) {
             return 4;
