@@ -51,6 +51,7 @@ button {
         &-all-trade-history {
           flex-basis: 15%;
           width: 0;
+          margin-left: $spacing_small;
           &--none {
             display: none;
           }
