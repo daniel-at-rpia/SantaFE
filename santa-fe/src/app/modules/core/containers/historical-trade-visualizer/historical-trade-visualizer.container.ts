@@ -49,6 +49,10 @@ export class HistoricalTradeVisualizer implements OnDestroy, OnChanges {
 
   public ngOnChanges() {
     if (!!this.showGraph && !this.historyData.state.graphReceived) {
+
+      if (this.historyData.state.showAllTradeHistory) {
+        this.showAllTradeHistoryButton = false;
+      }
       const renderGraphs = () => {
         if (!this.historyData.graph.positionPie) {
           this.historyData.state.graphReceived = true;
