@@ -96,7 +96,7 @@ button {
       align-content: flex-start;
       margin-bottom: $spacing_medium;
       &-rowList {
-        flex: 1 1 auto;
+        flex: 1 1 100%;
         display: flex;
         flex-direction: column;
         margin-bottom: $spacing_medium;
