@@ -84,8 +84,6 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     startNewUpdateSub: null,
     securityIDListFromAnalysisSub: null,
     validWindowSub: null,
-    newAlertsForAlertTableSub: null,
-    alertCountSub: null,
     keywordSearchSub: null,
     receiveKeywordSearchInMainTable: null
   };

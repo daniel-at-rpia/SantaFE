@@ -13,6 +13,11 @@ const routes: Routes = [
         pathMatch: 'full'
       },
       {
+        path: 'structure',
+        redirectTo: 'structure',
+        pathMatch: 'full'
+      },
+      {
         path: '**',
         redirectTo: 'trade',
         pathMatch: 'full'

@@ -15,6 +15,7 @@ import { CoreModule } from 'Core/core.module';
 import { HomeModule } from './modules/home/home.module';
 import { MarketModule } from 'Market/market.module';
 import { TradeModule } from 'Trade/trade.module';
+import { StructureModule } from 'Structure/structure.module';
 import { AgGridModule } from 'ag-grid-angular';
 
 import { AppRoot } from './app.root';
@@ -48,7 +49,8 @@ import { AppRoot } from './app.root';
     CoreModule,
     HomeModule,
     MarketModule,
-    TradeModule
+    TradeModule,
+    StructureModule
   ],
   providers: [],
   bootstrap: [AppRoot]
