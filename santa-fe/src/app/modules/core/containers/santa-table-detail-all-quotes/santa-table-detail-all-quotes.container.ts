@@ -224,7 +224,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   }
 
   private onClickGetAllTradeHistory(showAllTradeHistory: boolean) {
-    if (!showAllTradeHistory) {
+    if (showAllTradeHistory) {
       this.fetchTradeAllHistory();
     }
   }
