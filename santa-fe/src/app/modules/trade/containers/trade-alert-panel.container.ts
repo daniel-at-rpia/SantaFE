@@ -1138,7 +1138,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.state.fetchResult.alertTable.prinstineRowList = [];  // flush out the stencils
       this.state.fetchResult.alertTable.prinstineRowList = this.processingService.loadFinalStageDataForAlertTable(
         this.state.alert.alertTableAlertList,
-        this.state.table.alertDto.data.headers,
+        this.state.table.alertDto.data.allHeaders,
         this.state.filters.quickFilters.driverType,
         serverReturn,
         this.onSelectSecurityForAnalysis.bind(this),
