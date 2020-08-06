@@ -148,7 +148,7 @@ export class AgGridMiddleLayerService {
     table: SecurityTableDTO
   ): Array<AgGridRow> {
     const targetRows = table.data.rows;
-    const targetHeaders = table.data.headers;
+    const targetHeaders = table.data.allHeaders;
     // minus one because securityCard is not one of the cells ( TODO: this is a bad design, what if a table has more than one security card column? should not treat it different from other columns )
     const bestQuoteCellIndex = targetHeaders.findIndex((eachHeader) => {
       return eachHeader.data.key === 'bestQuote';
