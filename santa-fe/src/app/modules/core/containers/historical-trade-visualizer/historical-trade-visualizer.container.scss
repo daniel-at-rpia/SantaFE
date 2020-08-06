@@ -48,14 +48,6 @@ button {
           color: $color_disabled;
           cursor: not-allowed;
         }
-        &-all-trade-history {
-          flex-basis: 15%;
-          width: 0;
-          margin-left: $spacing_small;
-          &--none {
-            display: none;
-          }
-        }
       }
     }
     &-header {
@@ -131,6 +123,12 @@ button {
             background-color: $color_active;
           }
         }
+      }
+      &-allTradeHistoryBtn {
+        flex-basis: 15%;
+        width: 0;
+        margin-left: $spacing_small;
+        visibility: hidden;
       }
     }
   }
@@ -215,6 +213,17 @@ button {
       overflow: hidden;
       padding: $spacing_small;
       background-color: $color_white;
+    }
+  }
+  &--showingAllHistory {
+    #{$blockName} {
+        &__table {
+         &-content {
+            &-allTradeHistoryBtn {
+              visibility: visible;
+            }
+          }
+        }
     }
   }
   &--displayGraphsState {
