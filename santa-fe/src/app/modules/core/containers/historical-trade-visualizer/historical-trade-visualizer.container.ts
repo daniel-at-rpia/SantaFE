@@ -82,6 +82,6 @@ export class HistoricalTradeVisualizer implements OnDestroy, OnChanges {
   }
 
   public getAllTradeHistory() {
-    this.allTradeHistoryData.emit(true);
+    this.historyData && this.allTradeHistoryData.emit(true);
   }
 }
