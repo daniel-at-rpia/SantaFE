@@ -367,6 +367,8 @@ export class AgGridMiddleLayerService {
           const securityA = nodeA.data ? nodeA.data.securityCard : null;
           const securityB = nodeB.data ? nodeB.data.securityCard : null;
           const targetHeader = this.dtoService.formSecurityTableHeaderObject(targetStub, 'default', []);
+          // If all headers' attr and underlineAttrName are set to the selected driver, this results in only certain headers being shown (even when Combined is selected)
+          // Set it for only Price as only certain headers can be sortable with Price as the driver anyway
           if (this.selectedDriverType === this.triCoreDriverConfig.Price.label) {
             targetHeader.data.attrName = this.selectedDriverType;
             targetHeader.data.underlineAttrName = this.selectedDriverType;
