@@ -18,6 +18,8 @@ import * as am4charts from '@amcharts/amcharts4/charts';
 
 export interface GlobalNavState {
   menuIsActive: boolean;
+  version: string;
+  user: string;
 }
 
 export interface GlobalAlertState {

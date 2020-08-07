@@ -25,9 +25,72 @@ $globalNav_menu_width: 16rem;
   &__menu {
     @include mix_fixed_div(fixed, $z_index_mainNavMenu);
     @include mix_alive('normal');
+    display: flex;
+    flex-direction: column;
     height: 100%;
     width: 0;
-    background: $color_active;
+    background-color: $color_active;
+    overflow: hidden;
+    &-topCanvas {
+      @include mix_border_generator(0 0 $typical_border_width 0);
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: $spacing_medium;
+      padding-bottom: $spacing_medium;
+      &-logo {
+        @include mix_border_radius(10px);
+        margin: 0 $spacing_medium;
+        padding: $spacing_x_small;
+        background-color: $color_white;
+        &-img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      &-title {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: $spacing_medium;
+        &-majorText {
+          font-size: $font_size_large;
+          color: $theme_color_3;
+          margin-bottom: $spacing_small;
+          font-weight: bold;
+        }
+        &-minorText {
+          font-size: $font_size_large;
+          color: $font_color_inverse;
+        }
+      }
+      &-ctas {
+        margin-top: $spacing_medium; 
+        &-releaseNoteBtn {
+          @include material('none');
+          @include mix_border_generator($typical_border_width, $color_disabled);
+          background-color: transparent;
+          color: $color_disabled;
+        }
+      }
+    }
+    &-legendCanvas {
+      flex: 1 1 auto;
+    }
+    &-bottomCanvas {
+      @include mix_border_generator($typical_border_width 0 0 0);
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: $spacing_medium;
+      padding-top: $spacing_medium;
+      &-textEntry {
+        font-size: $font_size_normal;
+        margin-bottom: $spacing_small;
+      }
+    }
   }
   &--menuActiveState {
     #{$blockName} {

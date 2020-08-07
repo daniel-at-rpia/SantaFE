@@ -9,5 +9,24 @@
     </button>
   </section>
   <section class="sat-globalNav__menu">
+    <div class="sat-globalNav__menu-topCanvas">
+      <div class="sat-globalNav__menu-topCanvas-logo">
+        <img class="sat-globalNav__menu-topCanvas-logo-img" src="assets/rpia-full.png">
+      </div>
+      <div class="sat-globalNav__menu-topCanvas-title">
+        <span class="sat-globalNav__menu-topCanvas-title-majorText">{{state.user}}</span>
+        <span class="sat-globalNav__menu-topCanvas-title-minorText">Welcome To Santa!</span>
+      </div>
+      <div class="sat-globalNav__menu-topCanvas-ctas">
+        <button class="sat-globalNav__menu-topCanvas-ctas-releaseNoteBtn">View Release Note</button>
+      </div>
+    </div>
+    <div class="sat-globalNav__menu-navigationCanvas"></div>
+    <div class="sat-globalNav__menu-legendCanvas"></div>
+    <div class="sat-globalNav__menu-bottomCanvas">
+      <p class="sat-globalNav__menu-bottomCanvas-textEntry">© RP Investment Advisors 2020</p>
+      <p class="sat-globalNav__menu-bottomCanvas-textEntry">All rights reserved.</p>
+      <p class="sat-globalNav__menu-bottomCanvas-textEntry">Version - {{state.version}}</p>
+    </div>
   </section>
 </article>

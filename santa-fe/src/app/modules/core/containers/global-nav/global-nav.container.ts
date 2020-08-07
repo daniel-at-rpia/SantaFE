@@ -8,8 +8,11 @@
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { GlobalNavState } from 'FEModels/frontend-page-states.interface';
+    import { selectUserInitials} from 'Core/selectors/core.selectors';
 
 //
+
+declare const VERSION: string;
 
 @Component({
   selector: 'global-nav',
@@ -20,10 +23,15 @@
 
 export class GlobalNav implements OnInit, OnChanges, OnDestroy {
   state: GlobalNavState;
+  subscriptions = {
+    userInitialsSub: null
+  }
 
   private initializePageState(): GlobalNavState {
     const state: GlobalNavState = {
-      menuIsActive: false
+      menuIsActive: false,
+      version: VERSION,
+      user: 'Anonymous User'
     };
     return state;
   }
@@ -38,6 +46,13 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
+    this.subscriptions.userInitialsSub = this.store$.pipe(
+      select(selectUserInitials)
+    ).subscribe((userInitials) => {
+      if (userInitials) {
+        this.state.user = userInitials;
+      }
+    });
   }
 
   public ngOnChanges() {
