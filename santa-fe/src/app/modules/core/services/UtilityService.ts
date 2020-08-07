@@ -1,5 +1,6 @@
   // dependencies
     import { Injectable } from '@angular/core';
+    import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
     import * as _ from 'lodash';
     import * as moment from 'moment';
@@ -41,7 +42,8 @@ export class UtilityService {
   triCoreDriverConfig = TriCoreDriverConfig;
 
   constructor(
-    private countdownPipe: CountdownPipe
+    private countdownPipe: CountdownPipe,
+    private domSanitizer: DomSanitizer
   ){}
 
   // shared
@@ -972,6 +974,15 @@ export class UtilityService {
         eachComparer.style.offerLineHeight = Math.round(eachComparer.data.offer.size / maxSize * 100);
         eachComparer.state.isCalculated = true;
       });
+    }
+
+    public parsePureTextToParagraph(rawText: string): SafeHtml {
+      // example: '[DM] bought {6MM} in [CIP], {2MM} in [BBB]';
+      let parsedString = rawText.replace(/\[/g, '<code>');
+      parsedString = parsedString.replace(/\]/g, '</code>');
+      parsedString = parsedString.replace(/\{/g, '<kbd>');
+      parsedString = parsedString.replace(/\}/g, '</kbd>');
+      return this.domSanitizer.bypassSecurityTrustHtml(parsedString);
     } 
 
     private calculateSingleQuantComparerWidth(delta: number, maxAbsDelta: number): number {
