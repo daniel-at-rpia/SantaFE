@@ -694,7 +694,7 @@ export class UtilityService {
     public retrieveAttrFromSecurityBasedOnTableHeader(
       targetHeader: DTOs.SecurityTableHeaderDTO,
       securityCard: DTOs.SecurityDTO,
-      isRetrievingUnderlineValue: boolean,
+      isRetrievingUnderlineValue: boolean
     ): any {
       if (!!targetHeader && !!securityCard) {
         if (!!targetHeader.data.blockAttrName) {
