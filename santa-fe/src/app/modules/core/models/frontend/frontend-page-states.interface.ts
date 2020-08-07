@@ -17,7 +17,7 @@ import {AlertTypes} from 'Core/constants/coreConstants.constant';
 import * as am4charts from '@amcharts/amcharts4/charts';
 
 export interface GlobalNavState {
-  
+  menuIsActive: boolean;
 }
 
 export interface GlobalAlertState {

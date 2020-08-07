@@ -1,1 +1,48 @@
 @import "global.scss";
+
+$globalNav_navTrigger_size: 3rem;
+$globalNav_menu_width: 16rem;
+.sat-globalNav {
+  $blockName: &;
+  &__navTrigger {
+    @include mix_fixed_div(fixed, $z_index_navTrigger);
+    @include mix_alive('normal');
+    left: $spacing_medium;
+    top: $spacing_medium;
+    &-cta {
+      @include mix_border_radius(5px);
+      padding: $spacing_small;
+      width: $globalNav_navTrigger_size;
+      height: $globalNav_navTrigger_size;
+      &-img {
+        @include mix_alive('normal');
+        transform: rotate(0deg);
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+  &__menu {
+    @include mix_fixed_div(fixed, $z_index_mainNavMenu);
+    @include mix_alive('normal');
+    height: 100%;
+    width: 0;
+    background: $color_active;
+  }
+  &--menuActiveState {
+    #{$blockName} {
+      &__navTrigger {
+        left: $globalNav_menu_width - $globalNav_navTrigger_size/2;
+        &-cta {
+          @include mix_border_radius(50%);
+          &-img {
+            transform: rotate(360deg);
+          }
+        }
+      }
+      &__menu {
+        width: $globalNav_menu_width;
+      }
+    }
+  }
+}

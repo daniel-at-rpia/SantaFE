@@ -23,6 +23,7 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
 
   private initializePageState(): GlobalNavState {
     const state: GlobalNavState = {
+      menuIsActive: false
     };
     return state;
   }
@@ -43,6 +44,10 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnDestroy() {
+  }
+
+  public onClickNavTrigger() {
+    this.state.menuIsActive = !this.state.menuIsActive;
   }
 
 }

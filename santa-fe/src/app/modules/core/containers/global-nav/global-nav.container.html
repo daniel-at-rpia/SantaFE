@@ -1,1 +1,13 @@
-<article>Global Nav</article>
+<article
+  [ngClass]="{
+    'sat-globalNav': true,
+    'sat-globalNav--menuActiveState': state.menuIsActive
+  }">
+  <section class="sat-globalNav__navTrigger">
+    <button (click)="onClickNavTrigger()" class="sat-globalNav__navTrigger-cta">
+      <img class="sat-globalNav__navTrigger-cta-img" src="assets/rpia.png">
+    </button>
+  </section>
+  <section class="sat-globalNav__menu">
+  </section>
+</article>
