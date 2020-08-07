@@ -388,6 +388,7 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   private loadTableHeaders(skipAgGrid = false) {
+    this.agGridMiddleLayerService.selectedDriverType = this.activeTriCoreDriver;
     this.tableData.data.headers = [];
     this.tableData.data.allHeaders = [];
     this.securityTableHeaderConfigs.forEach((eachStub) => {
