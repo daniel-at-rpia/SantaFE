@@ -744,10 +744,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           if (!!serverReturn) {
             this.state.configuration.axe.securityList = [];
             this.state.isAlertPaused = false;
-            for (const eachGroupId in serverReturn.Axe) {
-              const eachConfiguration = serverReturn.Axe[eachGroupId];
-              this.populateConfigurationFromEachGroup(eachConfiguration);
-            }
+            this.populateConfigurationFromEachGroup(serverReturn.Axe);
           } else {
             this.restfulCommService.logError(`'Alert/get-alert-configs' API returned an empty result`);
           }
@@ -759,24 +756,33 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       ).subscribe();
     }
 
-    private populateConfigurationFromEachGroup(
-      rawGroupConfig: BEAlertConfigurationDTO
-    ) {
-      if (!!rawGroupConfig && !!rawGroupConfig.groupFilters) {
-        if (rawGroupConfig.groupFilters.SecurityIdentifier && rawGroupConfig.groupFilters.SecurityIdentifier.length > 0) {
-          this.populateConfigurationFromSecurityGroup(rawGroupConfig);
+    private populateConfigurationFromEachGroup(rawGroupConfig: Object) {
+      let securitiesArray = [];
+      for (const eachGroupId in rawGroupConfig) {
+        if (!!rawGroupConfig[eachGroupId] && !!rawGroupConfig[eachGroupId].groupFilters) {
+          if (rawGroupConfig[eachGroupId].groupFilters.SecurityIdentifier && rawGroupConfig[eachGroupId].groupFilters.SecurityIdentifier > 0) {
+            const security = rawGroupConfig[eachGroupId];
+            securitiesArray.push(security);
+          }
         }
       }
+      this.populateConfigurationFromSecurityGroup(securitiesArray);
     }
 
-    private populateConfigurationFromSecurityGroup(rawGroupConfig: BEAlertConfigurationDTO) {
-      const { WatchType } = rawGroupConfig.parameters;
-      const targetScope = rawGroupConfig.subType as AxeAlertScope;
+    private populateConfigurationFromSecurityGroup(rawGroupConfig: BEAlertConfigurationDTO[]) {
+      const allIdentifiers = [];
+      rawGroupConfig.forEach(security => {
+        security.groupFilters.SecurityIdentifier.forEach(securityID => allIdentifiers.push(securityID));
+        const { WatchType } = security.parameters;
+        const targetScope = security.subType as AxeAlertScope;
+        const newEntry = this.dtoService.formNewAlertWatchlistEntryObject(security, targetScope, WatchType, this.populateWatchDriverFromRawConfig, this.populateRangeNumberFilterFromRawConfig, this.checkIsFilled, this.checkRangeActive);
+        this.state.configuration.axe.securityList.unshift(newEntry);
+      })
+
       const payload: PayloadGetSecurities = {
-        identifiers: rawGroupConfig.groupFilters.SecurityIdentifier
+          identifiers: allIdentifiers
       };
-      const newEntry = this.dtoService.formNewAlertWatchlistEntryObject(rawGroupConfig, targetScope, WatchType, this.populateWatchDriverFromRawConfig, this.populateRangeNumberFilterFromRawConfig, this.checkIsFilled, this.checkRangeActive);
-      this.state.configuration.axe.securityList.unshift(newEntry);
+
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSecurityDTOs, {req: 'POST'}, payload).pipe(
         first(),
         tap((serverReturn: Array<BESecurityDTO>) => {
@@ -785,7 +791,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
               const eachCard = this.dtoService.formSecurityCardObject(eachRawData.securityIdentifier, eachRawData, false, false);
               eachCard.state.isInteractionDisabled = true;
               eachCard.state.isWidthFlexible = true;
-              newEntry.data.card = eachCard;
+              this.state.configuration.axe.securityList.forEach(security => {
+                if (security.data.securityIdentifier === eachRawData.securityIdentifier) {
+                  security.data.card = eachCard;
+                }
+              })
             });
           } else {
             this.restfulCommService.logError(`'security/get-securities' API returned an empty result with this payload: ${payload.identifiers.toString()}`);
