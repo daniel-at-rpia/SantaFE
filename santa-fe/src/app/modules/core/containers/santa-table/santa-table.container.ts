@@ -535,8 +535,8 @@ export class SantaTable implements OnInit, OnChanges {
           return 0;
         }
       } else {
-        valueA = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityA, true, this.activeTriCoreDriver);
-        valueB = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityB, true, this.activeTriCoreDriver);
+        valueA = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityA, true);
+        valueB = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityB, true);
         if (!!securityA && !!securityB && !securityA.state.isStencil && !securityB.state.isStencil) {
           if (valueA == null && valueB != null) {
             return 4;

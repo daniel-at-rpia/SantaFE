@@ -644,7 +644,7 @@ export class UtilityService {
         return newCellDTO;
       } else {
         let value;
-        value = this.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, targetRow.data.security, false, 'DEFAULT');
+        value = this.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, targetRow.data.security, false);
         newCellDTO.data.textData = value;
         return newCellDTO;
       }
@@ -693,14 +693,13 @@ export class UtilityService {
       targetHeader: DTOs.SecurityTableHeaderDTO,
       securityCard: DTOs.SecurityDTO,
       isRetrievingUnderlineValue: boolean,
-      driverType: string
     ): any {
       if (!!targetHeader && !!securityCard) {
         if (!!targetHeader.data.blockAttrName) {
           if (targetHeader.data.blockAttrName === 'metricPack') {
-            return this.retrieveSecurityMetricFromMetricPack(securityCard, targetHeader, driverType);
+            return this.retrieveSecurityMetricFromMetricPack(securityCard, targetHeader);
           } else if (targetHeader.data.blockAttrName === 'cost') {
-            return this.retrieveSecurityMetricFromCostPack(securityCard, targetHeader, driverType);
+            return this.retrieveSecurityMetricFromCostPack(securityCard, targetHeader);
           } else {
             return isRetrievingUnderlineValue ? securityCard.data[targetHeader.data.blockAttrName][targetHeader.data.underlineAttrName] : securityCard.data[targetHeader.data.blockAttrName][targetHeader.data.attrName];
           }
@@ -713,7 +712,7 @@ export class UtilityService {
     }
 
     // TODO: move this into a SecurityTableHelper service
-    private retrieveSecurityMetricFromMetricPack(dto: DTOs.SecurityDTO, header: DTOs.SecurityTableHeaderDTO, driverType: string): number {
+    private retrieveSecurityMetricFromMetricPack(dto: DTOs.SecurityDTO, header: DTOs.SecurityTableHeaderDTO): number {
       if (!!dto && !!header) {
         if (header.data.key === 'indexMark') {
           if (!dto.data.hasIndex) {
@@ -724,18 +723,7 @@ export class UtilityService {
         let underlineAttrName = header.data.underlineAttrName;
         if ( header.data.isDriverDependent && header.data.isAttrChangable && attrName === DEFAULT_DRIVER_IDENTIFIER ) {
           // when the metric is set to default, the actual metric to be used for each row depends on the driver of the mark of that particular row
-          //const targetDriver = this.findSecurityTargetDefaultTriCoreDriver(dto);
-          let targetDriver;
-          switch(driverType) {
-            case 'Price':
-            targetDriver = 'Price';
-            break;
-            case 'Yield':
-            targetDriver = 'Yield';
-            break;
-            default:
-            targetDriver = 'Spread';
-          }
+          const targetDriver = this.findSecurityTargetDefaultTriCoreDriver(dto);
           attrName = TriCoreDriverConfig[targetDriver].driverLabel;
           underlineAttrName = TriCoreDriverConfig[targetDriver].driverLabel;
         }
@@ -759,8 +747,7 @@ export class UtilityService {
     // TODO: move this into a SecurityTableHelper service
     private retrieveSecurityMetricFromCostPack(
       dto: DTOs.SecurityDTO,
-      header: DTOs.SecurityTableHeaderDTO,
-      driverType: string
+      header: DTOs.SecurityTableHeaderDTO
     ): number {
       if (!!dto && !!header) {
         let targetBlock = null;
@@ -791,7 +778,7 @@ export class UtilityService {
           const targetAttr = 
             header.data.underlineAttrName !== DEFAULT_DRIVER_IDENTIFIER 
               ? header.data.underlineAttrName 
-              : driverType === this.triCoreDriverConfig.Price.label
+              : dto.data.mark.markDriver === this.triCoreDriverConfig.Price.label
                 ? this.triCoreDriverConfig.Price.driverLabel 
                 : this.triCoreDriverConfig.Spread.driverLabel;
           if (targetInnerBlock[targetAttr] !== undefined) {

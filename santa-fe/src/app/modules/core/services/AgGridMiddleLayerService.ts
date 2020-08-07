@@ -333,7 +333,7 @@ export class AgGridMiddleLayerService {
         // skip those columns as they are already instantiated above
       } else {
         // can't directly use the cells from the target row to retrieve the data because we need to populate data for ALL columns, not just the active ones
-        const textData = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(eachHeader, eachSecurity, false, this.selectedDriverType);
+        const textData = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(eachHeader, eachSecurity, false);
         newAgRow[eachHeader.data.key] = !eachSecurity.state.isStencil ? textData : '';
       }
     });
@@ -361,8 +361,12 @@ export class AgGridMiddleLayerService {
           const securityA = nodeA.data ? nodeA.data.securityCard : null;
           const securityB = nodeB.data ? nodeB.data.securityCard : null;
           const targetHeader = this.dtoService.formSecurityTableHeaderObject(targetStub, 'default', []);
-          const underlineValueA = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityA, true, this.selectedDriverType);
-          const underlineValueB = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityB, true, this.selectedDriverType);
+          if (this.selectedDriverType === 'Price') {
+            targetHeader.data.attrName = this.selectedDriverType;
+            targetHeader.data.underlineAttrName = this.selectedDriverType;
+          }
+          const underlineValueA = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityA, true);
+          const underlineValueB = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityB, true);
           return this.returnSortValue(targetHeader, underlineValueA, underlineValueB, securityA, securityB);
         } else {
           this.restfulCommService.logError(`[AgGrid] Error at Custom AgGrid sorting, couldnt find header for column ${targetColumn}`);
