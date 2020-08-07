@@ -163,3 +163,22 @@
     font-size: $form_basic_fontSize;
     padding: 0 $spacing_small;
   }
+
+  .santa-paragraph {
+    text-align: justify;
+    color: $font_color_minor;
+    font-size: $font_size_small;
+    line-height: $line_height_normal;
+    &>kbd {
+      @include mix_gradient($theme_color_1, $theme_color_2, 40%, 90deg);
+      @include mix_border_radius(3px);
+      padding: 0 $spacing_x_small;
+      color: $font_color_inverse;
+    }
+    &>code {
+      @include mix_border_radius(3px);
+      background-color: $color_gray_2;
+      padding: 0 $spacing_x_small;
+      color: $font_color_major;
+    }
+  }
