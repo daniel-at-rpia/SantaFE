@@ -647,6 +647,7 @@ export interface TradeAlertConfigurationAxeGroupBlockDTO extends BasicDTOStructu
     targetDriver: string;
     targetRange: NumericFilterDTO;
     sendEmail: boolean;
+    securityIdentifier?: string;
   },
   state: {
     isDeleted: boolean;

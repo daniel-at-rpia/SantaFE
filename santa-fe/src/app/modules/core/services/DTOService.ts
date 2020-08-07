@@ -1608,6 +1608,7 @@ export class DTOService {
     checkFilled,
     checkRangeActive,
     dtoNumericFilterObjectFn = this.formNumericFilterObject) {
+    const securityIdentifier = rawGroupConfig.title.split(/[\[\]]+/)[1];
     const object: DTOs.TradeAlertConfigurationAxeGroupBlockDTO = {
       data: {
         card: null,
@@ -1616,7 +1617,8 @@ export class DTOService {
         axeAlertTypes: watchType === AxeAlertType.both ? [AxeAlertType.normal, AxeAlertType.marketList] : [watchType],
         targetDriver: populateDriversFn(rawGroupConfig),
         targetRange: populateRangeNumbersFn(rawGroupConfig, dtoNumericFilterObjectFn),
-        sendEmail: !!rawGroupConfig.sendEmail
+        sendEmail: !!rawGroupConfig.sendEmail,
+        securityIdentifier: securityIdentifier
       },
       state: {
         isDeleted: false,
