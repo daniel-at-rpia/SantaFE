@@ -2,7 +2,7 @@
 
 // need this reset because styling for button is stripped away for buttons in AgGrid, so we need to bring back the santa styling in each component
 button {
-  @extend .santaBtn;  
+  @extend .santaBtn;
 }
 
 @mixin mix_tradeVisualizer_cell_style() {
@@ -84,11 +84,14 @@ button {
       @include mix_enable_scrollbar('vertical');
       flex: 1 1 auto;
       display: flex;
-      margin-bottom: $spacing_small;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      margin-bottom: $spacing_medium;
       &-rowList {
-        flex: 1 1 auto;
+        flex: 1 1 100%;
         display: flex;
         flex-direction: column;
+        margin-bottom: $spacing_medium;
         &-row {
           @include mix_border_radius(5px);
           display: flex;
@@ -120,6 +123,12 @@ button {
             background-color: $color_active;
           }
         }
+      }
+      &-allTradeHistoryBtn {
+        flex-basis: 15%;
+        width: 0;
+        margin-left: $spacing_small;
+        visibility: hidden;
       }
     }
   }
@@ -204,6 +213,17 @@ button {
       overflow: hidden;
       padding: $spacing_small;
       background-color: $color_white;
+    }
+  }
+  &--showingAllHistory {
+    #{$blockName} {
+        &__table {
+         &-content {
+            &-allTradeHistoryBtn {
+              visibility: visible;
+            }
+          }
+        }
     }
   }
   &--displayGraphsState {
