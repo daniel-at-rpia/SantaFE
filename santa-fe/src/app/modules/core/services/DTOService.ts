@@ -1483,7 +1483,8 @@ export class DTOService {
       state: {
         disabledPortfolio: this.utility.deepCopy(FilterOptionsPortfolioList),
         selectedPortfolio: [],
-        graphReceived: false
+        graphReceived: false,
+        showAllTradeHistory: false
       },
       graph: {
         timeSeries: null,
