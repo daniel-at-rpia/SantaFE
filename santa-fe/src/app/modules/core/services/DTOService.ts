@@ -1618,7 +1618,8 @@ export class DTOService {
         axeAlertTypes: watchType === AxeAlertType.both ? [AxeAlertType.normal, AxeAlertType.marketList] : [watchType],
         targetDriver: populateDriversFn(rawGroupConfig),
         targetRange: populateRangeNumbersFn(rawGroupConfig, dtoNumericFilterObjectFn),
-        sendEmail: !!rawGroupConfig.sendEmail
+        sendEmail: !!rawGroupConfig.sendEmail,
+        securityIdentifier: rawGroupConfig.groupFilters.SecurityIdentifier[0]
       },
       state: {
         isDeleted: false,
