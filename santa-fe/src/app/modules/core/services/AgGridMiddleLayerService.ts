@@ -61,9 +61,7 @@ export class AgGridMiddleLayerService {
     // nothing atm
   }
 
-  public loadAgGridHeaders(
-    table: SecurityTableDTO, driverType: string
-  ): Array<AgGridColumnDefinition> {
+  public loadAgGridHeaders(table: SecurityTableDTO): Array<AgGridColumnDefinition> {
     const list = [];
     const groupList = [];
     // the detail column is for triggering the All Quotes table

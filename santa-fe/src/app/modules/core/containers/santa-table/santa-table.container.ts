@@ -411,7 +411,7 @@ export class SantaTable implements OnInit, OnChanges {
       );
     });
     if (this.tableData.state.isAgGridReady && !skipAgGrid) {
-      this.tableData.data.agGridColumnDefs = this.agGridMiddleLayerService.loadAgGridHeaders(this.tableData, this.activeTriCoreDriver);
+      this.tableData.data.agGridColumnDefs = this.agGridMiddleLayerService.loadAgGridHeaders(this.tableData);
     }
   }
 
