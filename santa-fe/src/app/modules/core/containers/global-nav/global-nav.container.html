@@ -21,8 +21,18 @@
         <button class="sat-globalNav__menu-topCanvas-ctas-releaseNoteBtn">View Release Note</button>
       </div>
     </div>
-    <div class="sat-globalNav__menu-navigationCanvas"></div>
-    <div class="sat-globalNav__menu-legendCanvas"></div>
+    <div class="sat-globalNav__menu-navigationCanvas">
+      <div class="sat-globalNav__menu-navigationCanvas-cta sat-globalNav__menu-navigationCanvas-cta--active">Trade</div>
+      <div class="sat-globalNav__menu-navigationCanvas-cta sat-globalNav__menu-navigationCanvas-cta--disabled">Structuring</div>
+    </div>
+    <div class="sat-globalNav__menu-legendCanvas">
+      <div class="sat-globalNav__menu-legendCanvas-title">Seniority Legend</div>
+      <ul class="sat-globalNav__menu-legendCanvas-list">
+        <li *ngFor="let eachCard of state.legend.seniorityCards" class="sat-globalNav__menu-legendCanvas-list-item">
+          <security-card [cardData]="eachCard"></security-card>
+        </li>
+      </ul>
+    </div>
     <div class="sat-globalNav__menu-bottomCanvas">
       <p class="sat-globalNav__menu-bottomCanvas-textEntry">© RP Investment Advisors 2020</p>
       <p class="sat-globalNav__menu-bottomCanvas-textEntry">All rights reserved.</p>

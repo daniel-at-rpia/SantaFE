@@ -1,7 +1,7 @@
 @import "global.scss";
 
 $globalNav_navTrigger_size: 3rem;
-$globalNav_menu_width: 16rem;
+$globalNav_menu_width: 18rem;
 .sat-globalNav {
   $blockName: &;
   &__navTrigger {
@@ -75,8 +75,57 @@ $globalNav_menu_width: 16rem;
         }
       }
     }
+    &-navigationCanvas {
+      @include mix_border_generator(0 0 $typical_border_width 0);
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: $spacing_medium;
+      margin: 0 $spacing_medium $spacing_medium $spacing_medium;
+      &-cta {
+        @include mix_border_radius(5px);
+        @include mix_border_generator();
+        text-align: center;
+        margin-bottom: $spacing_medium;
+        color: $font_color_inverse;
+        font-size: $font_size_x_large;
+        padding: $spacing_medium;
+        cursor: pointer;
+        &:hover {
+          background-color: $color_gray_6;
+        }
+        &--active {
+          @include mix_theme_background;
+          cursor: initial;
+        }
+        &--disabled {
+          border-color: $color_disabled;
+          color: $color_disabled;
+          cursor: not-allowed;
+          &:hover {
+            background-color: transparent;
+          }
+        }
+        &:last-of-type {
+          margin-bottom: 0;
+        }
+      }
+    }
     &-legendCanvas {
       flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      margin: 0 $spacing_medium;
+      &-title {
+        font-size: $font_size_normal;
+        color: $font_color_inverse;
+        text-align: center;
+      }
+      &-list {
+        &-item {
+          margin-top: $spacing_small;
+        }
+      }
     }
     &-bottomCanvas {
       @include mix_border_generator($typical_border_width 0 0 0);

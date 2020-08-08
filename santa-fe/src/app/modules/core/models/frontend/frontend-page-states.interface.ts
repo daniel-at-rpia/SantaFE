@@ -20,6 +20,9 @@ export interface GlobalNavState {
   menuIsActive: boolean;
   version: string;
   user: string;
+  legend: {
+    seniorityCards: Array<DTOs.SecurityDTO>;
+  }
 }
 
 export interface GlobalAlertState {

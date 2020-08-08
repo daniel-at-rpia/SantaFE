@@ -8,7 +8,8 @@
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { GlobalNavState } from 'FEModels/frontend-page-states.interface';
-    import { selectUserInitials} from 'Core/selectors/core.selectors';
+    import { selectUserInitials } from 'Core/selectors/core.selectors';
+    import { SeniorityLegendList } from 'Core/stubs/securities.stub';
 
 //
 
@@ -31,8 +32,17 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
     const state: GlobalNavState = {
       menuIsActive: false,
       version: VERSION,
-      user: 'Anonymous User'
+      user: 'Anonymous User',
+      legend: {
+        seniorityCards: []
+      }
     };
+    state.legend.seniorityCards = SeniorityLegendList.map((eachStub)=>{
+      const card = this.dtoService.formSecurityCardObject(null, eachStub, false, false);
+      card.state.isInteractionDisabled = true;
+      card.state.isWidthFlexible = true;
+      return card;
+    });
     return state;
   }
 
