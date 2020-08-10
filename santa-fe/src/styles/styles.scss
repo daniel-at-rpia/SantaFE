@@ -16,7 +16,7 @@ html {
 
 @font-face {
   font-family: SantaOpenSans;
-  src: url(fonts/OpenSans-Light.ttf);
+  src: url(fonts/Ubuntu-Light.ttf);
 }
 
 @font-face {
@@ -89,4 +89,7 @@ html {
   }
   table{
     @extend .santaTable;
+  }
+  p {
+    @extend .santa-paragraph;
   }

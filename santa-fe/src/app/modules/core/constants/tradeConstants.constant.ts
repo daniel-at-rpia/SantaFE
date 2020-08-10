@@ -351,7 +351,7 @@ export const StrategyShortcuts: Array<SearchShortcutStub> = [
 export const LIVE_UPDATE_COUNTDOWN = 30;  // seconds
 export const ALERT_UPDATE_COUNTDOWN = 5;  // seconds
 
-export const LIVE_UPDATE_INPROG_PROMPT = 'Fetching Update ...';
+export const LIVE_UPDATE_INPROG_PROMPT = 'Fetching ...';
 export const LIVE_UPDATE_PROCESSING_PROMPT = 'Processing ...';
 
 export const UTILITY_VALID_WINDOW_OPTIONS = [

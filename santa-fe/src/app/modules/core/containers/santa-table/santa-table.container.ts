@@ -156,6 +156,9 @@ export class SantaTable implements OnInit, OnChanges {
     if (!!this.tableData.state.isActivated) {
       if (!!activateStatusChanged) {
         console.log(`[${this.tableName}] - just become activated`);
+        this.securityTableHeaderConfigsCache = this.receivedSecurityTableHeaderConfigsUpdate;
+        this.securityTableHeaderConfigs = this.receivedSecurityTableHeaderConfigsUpdate;
+        this.loadTableHeaders();
         this.loadTableRows(this.newRows);
         this.tableData.state.loadedContentStage = this.receivedContentStage;
       } else if (this.tableData.state.loadedContentStage !== this.receivedContentStage) {
@@ -168,8 +171,8 @@ export class SantaTable implements OnInit, OnChanges {
         console.log(`[${this.tableName}] - metrics update`, this.receivedSecurityTableHeaderConfigsUpdate);
         this.securityTableHeaderConfigsCache = this.receivedSecurityTableHeaderConfigsUpdate;
         this.securityTableHeaderConfigs = this.receivedSecurityTableHeaderConfigsUpdate;
-        this.loadTableHeaders(true);  // skip reloading the agGrid columns since that won't be necessary and reloading them creates a problem for identifying the columns in later use, such as sorting
-        this.loadTableRows(this.newRows, true);
+        this.loadTableHeaders();
+        this.loadTableRows(this.newRows);
       } else if (!!this.newRows && this.newRows != this.tableData.data.rows && this.tableData.state.loadedContentStage === this.receivedContentStage && JSON.stringify(this.removeRows) == JSON.stringify(this.removeRowsCache)) {  // the reason for checking removeRowsCache diffing is if they are different, then the newRows diffing is caused by a removal update, in that case bypass this condition since the removal is handled in the bit code below
         console.log(`[${this.tableName}] - rows updated for change within same stage, triggered when filters are applied`, this.tableData.state.loadedContentStage);
         this.loadTableRows(this.newRows);
@@ -388,6 +391,7 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   private loadTableHeaders(skipAgGrid = false) {
+    this.agGridMiddleLayerService.selectedDriverType = this.activeTriCoreDriver;
     this.tableData.data.headers = [];
     this.tableData.data.allHeaders = [];
     this.securityTableHeaderConfigs.forEach((eachStub) => {

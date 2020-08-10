@@ -1230,6 +1230,7 @@ export class DTOService {
         titleTop: titleTop,
         titleBottom: titleBottom,
         message: message,
+        paragraphMessage: this.utility.parsePureTextToParagraph(message),
         time: momentTime.format(`HH:mm`),
         titlePin: null,
         validUntilTime: validUntilMoment.format(),
@@ -1284,6 +1285,7 @@ export class DTOService {
         titleTop: parsedTitleList[0] || '',
         titleBottom: parsedTitleList[1] || '',
         message: rawData.message,
+        paragraphMessage: this.utility.parsePureTextToParagraph(rawData.message),
         time: momentTime.format(`HH:mm`),
         titlePin: null,
         validUntilTime: null,
@@ -1481,7 +1483,8 @@ export class DTOService {
       state: {
         disabledPortfolio: this.utility.deepCopy(FilterOptionsPortfolioList),
         selectedPortfolio: [],
-        graphReceived: false
+        graphReceived: false,
+        showAllTradeHistory: false
       },
       graph: {
         timeSeries: null,
@@ -1616,7 +1619,8 @@ export class DTOService {
         axeAlertTypes: watchType === AxeAlertType.both ? [AxeAlertType.normal, AxeAlertType.marketList] : [watchType],
         targetDriver: populateDriversFn(rawGroupConfig),
         targetRange: populateRangeNumbersFn(rawGroupConfig, dtoNumericFilterObjectFn),
-        sendEmail: !!rawGroupConfig.sendEmail
+        sendEmail: !!rawGroupConfig.sendEmail,
+        securityIdentifier: rawGroupConfig.groupFilters.SecurityIdentifier[0]
       },
       state: {
         isDeleted: false,
