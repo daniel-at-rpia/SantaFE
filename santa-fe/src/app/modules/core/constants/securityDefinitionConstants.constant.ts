@@ -457,3 +457,25 @@ export const SeniorityValueToLevelMapping = [
     values: [FilterOptionsSeniorityType[10], FilterOptionsSeniorityType[11], FilterOptionsSeniorityType[12]]
   }
 ];
+
+export const RatingValueToLevelMapping = [
+  {
+    level: 1,
+    values: ['AAA', 'AA']
+  },{
+    level: 2,
+    values: ['A']
+  },{
+    level: 3,
+    values: ['BBB']
+  },{
+    level: 4,
+    values: ['BB', 'B']
+  },{
+    level: 5,
+    values: ['CCC', 'CC', 'C', 'D']
+  },{
+    level: 6,
+    values: ['NR']
+  }
+];

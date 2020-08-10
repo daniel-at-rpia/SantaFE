@@ -2647,27 +2647,6 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
         "ratingBucket":"IG",
         "price":null,
         "spread":null
-      },
-      "Index":{
-        "isFixedForLife":true,
-        "isFixedToFloatInFixed":false,
-        "isFloat":false,
-        "isOnTheRun":true,
-        "isNewIssue":false,
-        "benchmarkSecurityIdentifier":null,
-        "benchmarkName":null,
-        "underlyingSecurityId":-1,
-        "yieldWorst":1.676677,
-        "amtOutstanding":800000000,
-        "marketValue":885715240,
-        "workoutTerm":4.5644,
-        "ratingDouble":null,
-        "isRated":true,
-        "rating":null,
-        "ratingNoNotch":null,
-        "ratingBucket":"NR",
-        "price":109.060295,
-        "spread":null
       }
     },
     "deltaMetrics":{
@@ -2711,7 +2690,7 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
     "ccy":"CAD",
     "country":"CA",
     "industry":"Telecommunications",
-    "name":"Security Name",
+    "name":"",
     "genericSeniority":"Secured",
     "globalIdentifier":"CA87971MAX17",
     "obligorName":"TELUS CORP",
@@ -2748,27 +2727,6 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
         "ratingBucket":"IG",
         "price":null,
         "spread":null
-      },
-      "Index":{
-        "isFixedForLife":true,
-        "isFixedToFloatInFixed":false,
-        "isFloat":false,
-        "isOnTheRun":true,
-        "isNewIssue":false,
-        "benchmarkSecurityIdentifier":null,
-        "benchmarkName":null,
-        "underlyingSecurityId":-1,
-        "yieldWorst":1.676677,
-        "amtOutstanding":800000000,
-        "marketValue":885715240,
-        "workoutTerm":4.5644,
-        "ratingDouble":null,
-        "isRated":true,
-        "rating":null,
-        "ratingNoNotch":null,
-        "ratingBucket":"NR",
-        "price":109.060295,
-        "spread":null
       }
     },
     "deltaMetrics":{
@@ -2812,7 +2770,7 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
     "ccy":"CAD",
     "country":"CA",
     "industry":"Telecommunications",
-    "name":"Security Name",
+    "name":"",
     "genericSeniority":"Sr Preferred",
     "globalIdentifier":"CA87971MAX17",
     "obligorName":"TELUS CORP",
@@ -2849,27 +2807,6 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
         "ratingBucket":"IG",
         "price":null,
         "spread":null
-      },
-      "Index":{
-        "isFixedForLife":true,
-        "isFixedToFloatInFixed":false,
-        "isFloat":false,
-        "isOnTheRun":true,
-        "isNewIssue":false,
-        "benchmarkSecurityIdentifier":null,
-        "benchmarkName":null,
-        "underlyingSecurityId":-1,
-        "yieldWorst":1.676677,
-        "amtOutstanding":800000000,
-        "marketValue":885715240,
-        "workoutTerm":4.5644,
-        "ratingDouble":null,
-        "isRated":true,
-        "rating":null,
-        "ratingNoNotch":null,
-        "ratingBucket":"NR",
-        "price":109.060295,
-        "spread":null
       }
     },
     "deltaMetrics":{
@@ -2913,7 +2850,7 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
     "ccy":"CAD",
     "country":"CA",
     "industry":"Telecommunications",
-    "name":"Security Name",
+    "name":"",
     "genericSeniority":"SLA",
     "globalIdentifier":"CA87971MAX17",
     "obligorName":"TELUS CORP",
@@ -2950,8 +2887,70 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
         "ratingBucket":"IG",
         "price":null,
         "spread":null
+      }
+    },
+    "deltaMetrics":{
+      "Dod":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
       },
-      "Index":{
+      "Wow":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Mtd":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Mom":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Ytd":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Yoy":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      }
+    },
+    "ccy":"CAD",
+    "country":"CA",
+    "industry":"Telecommunications",
+    "name":"",
+    "genericSeniority":"Subordinated",
+    "globalIdentifier":"CA87971MAX17",
+    "obligorName":"TELUS CORP",
+    "obligorId":756,
+    "paymentRank":"Subordinated",
+    "sector":"Communications",
+    "securitySubType":"Bond",
+    "subIndustry":"Telecom Services",
+    "ticker":"TCN",
+    "unitPosition":null,
+    "securityType":"Bond",
+    "maturityType":"Callable"
+  }
+];
+
+export const RatingLegendList: Array<BESecurityDTO> = [
+  {
+    "securityIdentifier":"79",
+    "metrics":{
+      "Default":{
         "isFixedForLife":true,
         "isFixedToFloatInFixed":false,
         "isFloat":false,
@@ -2960,16 +2959,16 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
         "benchmarkSecurityIdentifier":null,
         "benchmarkName":null,
         "underlyingSecurityId":-1,
-        "yieldWorst":1.676677,
+        "yieldWorst":null,
         "amtOutstanding":800000000,
         "marketValue":885715240,
         "workoutTerm":4.5644,
-        "ratingDouble":null,
+        "ratingDouble":16,
         "isRated":true,
-        "rating":null,
-        "ratingNoNotch":null,
-        "ratingBucket":"NR",
-        "price":109.060295,
+        "rating":"BBB+",
+        "ratingNoNotch":"AAA",
+        "ratingBucket":"IG",
+        "price":null,
         "spread":null
       }
     },
@@ -3014,8 +3013,408 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
     "ccy":"CAD",
     "country":"CA",
     "industry":"Telecommunications",
-    "name":"Security Name",
-    "genericSeniority":"Subordinated",
+    "name":"",
+    "genericSeniority":"",
+    "globalIdentifier":"CA87971MAX17",
+    "obligorName":"TELUS CORP",
+    "obligorId":756,
+    "paymentRank":"SR UNSECURED",
+    "sector":"Communications",
+    "securitySubType":"Bond",
+    "subIndustry":"Telecom Services",
+    "ticker":"TCN",
+    "unitPosition":null,
+    "securityType":"Bond",
+    "maturityType":"Callable"
+  },
+  {
+    "securityIdentifier":"79",
+    "metrics":{
+      "Default":{
+        "isFixedForLife":true,
+        "isFixedToFloatInFixed":false,
+        "isFloat":false,
+        "isOnTheRun":true,
+        "isNewIssue":false,
+        "benchmarkSecurityIdentifier":null,
+        "benchmarkName":null,
+        "underlyingSecurityId":-1,
+        "yieldWorst":null,
+        "amtOutstanding":800000000,
+        "marketValue":885715240,
+        "workoutTerm":4.5644,
+        "ratingDouble":16,
+        "isRated":true,
+        "rating":"BBB+",
+        "ratingNoNotch":"A",
+        "ratingBucket":"IG",
+        "price":null,
+        "spread":null
+      }
+    },
+    "deltaMetrics":{
+      "Dod":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Wow":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Mtd":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Mom":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Ytd":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Yoy":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      }
+    },
+    "ccy":"CAD",
+    "country":"CA",
+    "industry":"Telecommunications",
+    "name": "",
+    "genericSeniority":"",
+    "globalIdentifier":"CA87971MAX17",
+    "obligorName":"TELUS CORP",
+    "obligorId":756,
+    "paymentRank":"SR UNSECURED",
+    "sector":"Communications",
+    "securitySubType":"Bond",
+    "subIndustry":"Telecom Services",
+    "ticker":"TCN",
+    "unitPosition":null,
+    "securityType":"Bond",
+    "maturityType":"Callable"
+  },
+  {
+    "securityIdentifier":"79",
+    "metrics":{
+      "Default":{
+        "isFixedForLife":true,
+        "isFixedToFloatInFixed":false,
+        "isFloat":false,
+        "isOnTheRun":true,
+        "isNewIssue":false,
+        "benchmarkSecurityIdentifier":null,
+        "benchmarkName":null,
+        "underlyingSecurityId":-1,
+        "yieldWorst":null,
+        "amtOutstanding":800000000,
+        "marketValue":885715240,
+        "workoutTerm":4.5644,
+        "ratingDouble":16,
+        "isRated":true,
+        "rating":"BBB+",
+        "ratingNoNotch":"BBB",
+        "ratingBucket":"IG",
+        "price":null,
+        "spread":null
+      }
+    },
+    "deltaMetrics":{
+      "Dod":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Wow":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Mtd":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Mom":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Ytd":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Yoy":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      }
+    },
+    "ccy":"CAD",
+    "country":"CA",
+    "industry":"Telecommunications",
+    "name":"",
+    "genericSeniority":"",
+    "globalIdentifier":"CA87971MAX17",
+    "obligorName":"TELUS CORP",
+    "obligorId":756,
+    "paymentRank":"SLA",
+    "sector":"Communications",
+    "securitySubType":"Bond",
+    "subIndustry":"Telecom Services",
+    "ticker":"TCN",
+    "unitPosition":null,
+    "securityType":"Bond",
+    "maturityType":"Callable"
+  },
+  {
+    "securityIdentifier":"79",
+    "metrics":{
+      "Default":{
+        "isFixedForLife":true,
+        "isFixedToFloatInFixed":false,
+        "isFloat":false,
+        "isOnTheRun":true,
+        "isNewIssue":false,
+        "benchmarkSecurityIdentifier":null,
+        "benchmarkName":null,
+        "underlyingSecurityId":-1,
+        "yieldWorst":null,
+        "amtOutstanding":800000000,
+        "marketValue":885715240,
+        "workoutTerm":4.5644,
+        "ratingDouble":16,
+        "isRated":true,
+        "rating":"BBB+",
+        "ratingNoNotch":"BB",
+        "ratingBucket":"IG",
+        "price":null,
+        "spread":null
+      }
+    },
+    "deltaMetrics":{
+      "Dod":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Wow":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Mtd":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Mom":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Ytd":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Yoy":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      }
+    },
+    "ccy":"CAD",
+    "country":"CA",
+    "industry":"Telecommunications",
+    "name":"",
+    "genericSeniority":"",
+    "globalIdentifier":"CA87971MAX17",
+    "obligorName":"TELUS CORP",
+    "obligorId":756,
+    "paymentRank":"Subordinated",
+    "sector":"Communications",
+    "securitySubType":"Bond",
+    "subIndustry":"Telecom Services",
+    "ticker":"TCN",
+    "unitPosition":null,
+    "securityType":"Bond",
+    "maturityType":"Callable"
+  },
+  {
+    "securityIdentifier":"79",
+    "metrics":{
+      "Default":{
+        "isFixedForLife":true,
+        "isFixedToFloatInFixed":false,
+        "isFloat":false,
+        "isOnTheRun":true,
+        "isNewIssue":false,
+        "benchmarkSecurityIdentifier":null,
+        "benchmarkName":null,
+        "underlyingSecurityId":-1,
+        "yieldWorst":null,
+        "amtOutstanding":800000000,
+        "marketValue":885715240,
+        "workoutTerm":4.5644,
+        "ratingDouble":16,
+        "isRated":true,
+        "rating":"BBB+",
+        "ratingNoNotch":"CCC",
+        "ratingBucket":"IG",
+        "price":null,
+        "spread":null
+      }
+    },
+    "deltaMetrics":{
+      "Dod":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Wow":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Mtd":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Mom":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Ytd":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Yoy":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      }
+    },
+    "ccy":"CAD",
+    "country":"CA",
+    "industry":"Telecommunications",
+    "name":"",
+    "genericSeniority":"",
+    "globalIdentifier":"CA87971MAX17",
+    "obligorName":"TELUS CORP",
+    "obligorId":756,
+    "paymentRank":"Subordinated",
+    "sector":"Communications",
+    "securitySubType":"Bond",
+    "subIndustry":"Telecom Services",
+    "ticker":"TCN",
+    "unitPosition":null,
+    "securityType":"Bond",
+    "maturityType":"Callable"
+  },
+  {
+    "securityIdentifier":"79",
+    "metrics":{
+      "Default":{
+        "isFixedForLife":true,
+        "isFixedToFloatInFixed":false,
+        "isFloat":false,
+        "isOnTheRun":true,
+        "isNewIssue":false,
+        "benchmarkSecurityIdentifier":null,
+        "benchmarkName":null,
+        "underlyingSecurityId":-1,
+        "yieldWorst":null,
+        "amtOutstanding":800000000,
+        "marketValue":885715240,
+        "workoutTerm":4.5644,
+        "ratingDouble":16,
+        "isRated":true,
+        "rating":"BBB+",
+        "ratingNoNotch":"NR",
+        "ratingBucket":"IG",
+        "price":null,
+        "spread":null
+      }
+    },
+    "deltaMetrics":{
+      "Dod":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Wow":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Mtd":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Mom":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Ytd":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      },
+      "Yoy":{
+        "yieldWorst":null,
+        "ratingDouble":0,
+        "price":null,
+        "spread":null
+      }
+    },
+    "ccy":"CAD",
+    "country":"CA",
+    "industry":"Telecommunications",
+    "name":"",
+    "genericSeniority":"",
     "globalIdentifier":"CA87971MAX17",
     "obligorName":"TELUS CORP",
     "obligorId":756,

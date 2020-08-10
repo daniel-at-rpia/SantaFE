@@ -23,6 +23,7 @@ export interface GlobalNavState {
   user: string;
   legend: {
     seniority: Array<GlobalNavLegendBlock>;
+    rating: Array<GlobalNavLegendBlock>;
   }
 }
 

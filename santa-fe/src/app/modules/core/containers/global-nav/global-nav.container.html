@@ -36,6 +36,16 @@
           <div class="sat-globalNav__menu-legendCanvas-list-item-spacer"></div>
         </li>
       </ul>
+      <div class="sat-globalNav__menu-legendCanvas-title">Rating Legend</div>
+      <ul class="sat-globalNav__menu-legendCanvas-list">
+        <li *ngFor="let eachLegend of state.legend.rating" class="sat-globalNav__menu-legendCanvas-list-item">
+          <security-card [cardData]="eachLegend.card"></security-card>
+          <span class="sat-globalNav__menu-legendCanvas-list-item-text">
+            {{eachLegend.legend}}
+          </span>
+          <div class="sat-globalNav__menu-legendCanvas-list-item-spacer"></div>
+        </li>
+      </ul>
     </div>
     <div class="sat-globalNav__menu-bottomCanvas">
       <p class="sat-globalNav__menu-bottomCanvas-textEntry">© RP Investment Advisors 2020</p>

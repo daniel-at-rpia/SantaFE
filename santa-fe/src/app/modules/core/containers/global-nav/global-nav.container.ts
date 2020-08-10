@@ -9,8 +9,10 @@
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { GlobalNavState } from 'FEModels/frontend-page-states.interface';
     import { selectUserInitials } from 'Core/selectors/core.selectors';
-    import { SeniorityLegendList } from 'Core/stubs/securities.stub';
-    import { SeniorityValueToLevelMapping } from 'Core/constants/securityDefinitionConstants.constant';
+    import { SeniorityLegendList, RatingLegendList } from 'Core/stubs/securities.stub';
+    import { SeniorityValueToLevelMapping, RatingValueToLevelMapping } from 'Core/constants/securityDefinitionConstants.constant';
+    import { BESecurityDTO } from 'Core/models/backend/backend-models.interface';
+    import { GlobalNavLegendBlock } from 'Core/models/frontend/frontend-blocks.interface';
 //
 
 declare const VERSION: string;
@@ -28,7 +30,8 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
     userInitialsSub: null
   };
   constants = {
-    seniorityMapping: SeniorityValueToLevelMapping
+    seniorityMapping: SeniorityValueToLevelMapping,
+    ratingMapping: RatingValueToLevelMapping
   }
 
   private initializePageState(): GlobalNavState {
@@ -37,30 +40,10 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
       version: VERSION,
       user: 'Anonymous User',
       legend: {
-        seniority: []
+        seniority: this.loadLegend(this.constants.seniorityMapping, SeniorityLegendList),
+        rating: this.loadLegend(this.constants.ratingMapping, RatingLegendList)
       }
     };
-    let level = 0;
-    state.legend.seniority = SeniorityLegendList.map((eachStub)=>{
-      const card = this.dtoService.formSecurityCardObject(null, eachStub, false, false);
-      card.state.isInteractionDisabled = true;
-      card.state.isWidthFlexible = true;
-      let legend: string = '';
-      if (this.constants.seniorityMapping.length > level) {
-        this.constants.seniorityMapping[level].values.forEach((eachSeniorityText, index) => {
-          if (index === 0) {
-            legend = `${eachSeniorityText}`;
-          } else {
-            legend = `${legend} ∙ ${eachSeniorityText}`;
-          }
-        });
-      }
-      level++;
-      return {
-        card: card,
-        legend: legend
-      };
-    });
     return state;
   }
 
@@ -91,6 +74,31 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
 
   public onClickNavTrigger() {
     this.state.menuIsActive = !this.state.menuIsActive;
+  }
+
+  private loadLegend(mapping, stubList: Array<BESecurityDTO>): Array<GlobalNavLegendBlock> {
+    let level = 0;
+    const legendBlockList = stubList.map((eachStub)=>{
+      const card = this.dtoService.formSecurityCardObject(null, eachStub, false, false);
+      card.state.isInteractionDisabled = true;
+      card.state.isWidthFlexible = true;
+      let legend: string = '';
+      if (mapping.length > level) {
+        mapping[level].values.forEach((eachText, index) => {
+          if (index === 0) {
+            legend = `${eachText}`;
+          } else {
+            legend = `${legend} ∙ ${eachText}`;
+          }
+        });
+      }
+      level++;
+      return {
+        card: card,
+        legend: legend
+      };
+    });
+    return legendBlockList;
   }
 
 }
