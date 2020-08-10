@@ -94,6 +94,17 @@ export interface SecurityTableHeaderConfigStub {
   }
 }
 
+export interface SecurityTableSpecificAlertHeaderStub {
+  include: string[];
+  exclude: string[];
+}
+export interface SecurityTableSpecificAlertHeaderConfigsStub {
+  axe: SecurityTableSpecificAlertHeaderStub;
+  mark: SecurityTableSpecificAlertHeaderStub;
+  trade: SecurityTableSpecificAlertHeaderStub;
+  all: SecurityTableSpecificAlertHeaderStub;
+}
+
 interface SecurityTableHeaderConfigStubTableSpecificsBlock {
   active: boolean;
   pinned?: boolean;

@@ -73,7 +73,8 @@
     } from 'Trade/selectors/trade.selectors';
     import {
       SecurityTableHeaderConfigs,
-      SECURITY_TABLE_FINAL_STAGE
+      SECURITY_TABLE_FINAL_STAGE,
+      SecurityTableAlertHeaderConfigs
     } from 'Core/constants/securityTableConstants.constant';
     import {
       DEFAULT_DRIVER_IDENTIFIER,
@@ -439,6 +440,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   // overview section
     public onClickShowAllAlerts() {
       if (this.state.fetchResult.alertTable.fetchComplete) {
+        this.getAlertHeaders('all');
         if (!!this.state.alert.scopedAlertType || !this.state.displayAlertTable) {
           this.state.displayAlertTable = true;
           this.state.alert.scopedAlertType = null;
@@ -483,17 +485,32 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       }
     }
 
+    private getAlertHeaders(alertType: string) {
+      const securityTableHeaderConfigsCopy = this.utilityService.deepCopy(SecurityTableHeaderConfigs);
+      const formattedAlert = alertType.toLowerCase();
+      const headerAlertConfig = SecurityTableAlertHeaderConfigs[formattedAlert];
+      securityTableHeaderConfigsCopy.forEach(metric => {
+          if (headerAlertConfig.include.indexOf(metric.key) > -1) {
+            metric.content.tableSpecifics.tradeAlert.active = true;
+          } else if (headerAlertConfig.exclude.indexOf(metric.key) > -1) {
+            metric.content.tableSpecifics.tradeAlert.active = false;
+          }
+        })
+        this.state.table.alertMetrics = securityTableHeaderConfigsCopy;
+    }
+
     public onClickSpecificAlertTypeTab(
       targetType: AlertTypes,
       isMarketListOnly?: boolean
     ) {
       if (this.state.fetchResult.alertTable.fetchComplete) {
         const tabName = isMarketListOnly ? 'Inquiry' : targetType;
-        if (targetType === this.constants.alertTypes.axeAlert) {
+        if (targetType === this.constants.alertTypes.axeAlert && this.state.alert.nonMarketListAxeAlertCount > 0 || targetType === this.constants.alertTypes.axeAlert && this.state.alert.marketListAxeAlertCount > 0) {
           if (this.state.alert.scopedAlertType !== targetType || this.state.alert.scopedForMarketListOnly !== !!isMarketListOnly) {
             this.state.displayAlertTable = true;
             this.state.alert.scopedAlertType = targetType;
             this.state.alert.scopedForMarketListOnly = !!isMarketListOnly;
+            this.getAlertHeaders(this.state.alert.scopedAlertType);
             this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
           } else {
             this.state.displayAlertTable = false;
@@ -501,9 +518,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           }
         } else {
           this.state.alert.scopedForMarketListOnly = false;
-          if (this.state.alert.scopedAlertType !== targetType) {
+          const alertTypeCount = (targetType === 'Mark') ? this.state.alert.markAlertCount : this.state.alert.tradeAlertCount; 
+          if (this.state.alert.scopedAlertType !== targetType && alertTypeCount > 0) {
             this.state.displayAlertTable = true;
             this.state.alert.scopedAlertType = targetType;
+            this.getAlertHeaders(this.state.alert.scopedAlertType);
             this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
           } else {
             this.state.displayAlertTable = false;
@@ -1129,7 +1148,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.state.fetchResult.alertTable.prinstineRowList = [];  // flush out the stencils
       this.state.fetchResult.alertTable.prinstineRowList = this.processingService.loadFinalStageDataForAlertTable(
         this.state.alert.alertTableAlertList,
-        this.state.table.alertDto.data.headers,
+        this.state.table.alertDto.data.allHeaders,
         this.state.filters.quickFilters.driverType,
         serverReturn,
         this.onSelectSecurityForAnalysis.bind(this),

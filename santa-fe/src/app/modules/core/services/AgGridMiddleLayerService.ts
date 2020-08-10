@@ -318,8 +318,14 @@ export class AgGridMiddleLayerService {
     const newAgRow: AgGridRow = {
       id: targetRow.data.rowId,
       securityCard: eachSecurity,
-      bestQuote: targetRow.data.cells[bestQuoteCellIndex].data.quantComparerDTO,
-      bestAxeQuote: targetRow.data.cells[bestAxeQuoteCellIndex].data.quantComparerDTO,
+      bestQuote:
+        bestQuoteCellIndex > -1
+        ? targetRow.data.cells[bestQuoteCellIndex].data.quantComparerDTO
+        : null,
+      bestAxeQuote:
+        bestAxeQuoteCellIndex > -1
+        ? targetRow.data.cells[bestAxeQuoteCellIndex].data.quantComparerDTO
+        : null,
       alertSide: 
         alertSideCellIndex > -1
           ? targetRow.data.cells[alertSideCellIndex].data.alertSideDTO
