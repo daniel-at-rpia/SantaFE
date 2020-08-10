@@ -153,6 +153,9 @@ $globalNav_menu_width: 24rem;
             display: none;
           }
         }
+        &:last-of-type {
+          padding-bottom: 0;
+        }
       }
     }
     &-bottomCanvas {
