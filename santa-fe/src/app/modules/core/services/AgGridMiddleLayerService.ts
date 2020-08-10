@@ -41,24 +41,27 @@
       AGGRID_ALERT_MESSAGE_COLUMN_WIDTH,
       AGGRID_ALERT_STATUS_COLUMN_WIDTH
     } from 'Core/constants/securityTableConstants.constant';
+    import {
+      TriCoreDriverConfig,
+      DEFAULT_DRIVER_IDENTIFIER
+    } from 'Core/constants/coreConstants.constant';
   //
 
 @Injectable()
 export class AgGridMiddleLayerService {
-
+  defaultDriver = DEFAULT_DRIVER_IDENTIFIER;
+  triCoreDriverConfig = TriCoreDriverConfig;
+  public selectedDriverType: string = this.defaultDriver;
   constructor(
     private utilityService: UtilityService,
     private dtoService: DTOService,
     private restfulCommService: RestfulCommService
   ){}
-
   public onGridReady(table: SecurityTableDTO) {
     // nothing atm
   }
 
-  public loadAgGridHeaders(
-    table: SecurityTableDTO
-  ): Array<AgGridColumnDefinition> {
+  public loadAgGridHeaders(table: SecurityTableDTO): Array<AgGridColumnDefinition> {
     const list = [];
     const groupList = [];
     // the detail column is for triggering the All Quotes table
@@ -252,7 +255,7 @@ export class AgGridMiddleLayerService {
     } else if (targetHeader.data.key === 'alertStatus') {
       newAgColumn.comparator = this.agCompareAlertStatus.bind(this);
     } else if (targetHeader.data.underlineAttrName && targetHeader.data.attrName != targetHeader.data.underlineAttrName || targetHeader.data.attrName == targetHeader.data.underlineAttrName) {
-      newAgColumn.comparator = this.agCompareUnderlineValue.bind(this)
+      newAgColumn.comparator = this.agCompareUnderlineValue.bind(this);
     }
   }
 
@@ -368,6 +371,12 @@ export class AgGridMiddleLayerService {
           const securityA = nodeA.data ? nodeA.data.securityCard : null;
           const securityB = nodeB.data ? nodeB.data.securityCard : null;
           const targetHeader = this.dtoService.formSecurityTableHeaderObject(targetStub, 'default', []);
+          // If all headers' attr and underlineAttrName are set to the selected driver, this results in only certain headers being shown (even when Combined is selected)
+          // Set it for only Price as only certain headers can be sortable with Price as the driver anyway
+          if (this.selectedDriverType === this.triCoreDriverConfig.Price.label) {
+            targetHeader.data.attrName = this.selectedDriverType;
+            targetHeader.data.underlineAttrName = this.selectedDriverType;
+          }
           const underlineValueA = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityA, true);
           const underlineValueB = this.utilityService.retrieveAttrFromSecurityBasedOnTableHeader(targetHeader, securityB, true);
           return this.returnSortValue(targetHeader, underlineValueA, underlineValueB, securityA, securityB);

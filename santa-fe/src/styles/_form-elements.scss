@@ -169,8 +169,9 @@
     color: $font_color_minor;
     font-size: $font_size_small;
     line-height: $line_height_normal;
+    margin: 0;
     &>kbd {
-      @include mix_gradient($theme_color_1, $theme_color_2, 40%, 90deg);
+      @include mix_theme_background;
       @include mix_border_radius(3px);
       padding: 0 $spacing_x_small;
       color: $font_color_inverse;

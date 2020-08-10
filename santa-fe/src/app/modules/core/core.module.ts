@@ -36,6 +36,7 @@ import { CountdownPipe } from 'App/pipes/Countdown.pipe';
 import { HistoricalTradeVisualizer } from 'Core/containers/historical-trade-visualizer/historical-trade-visualizer.container';
 import { SantaTableAlertStatusCell } from 'Core/components/santa-table-alert-status-cell/santa-table-alert-status-cell.component';
 import { SantaTableFullWidthCellRenderer } from 'Core/components/santa-table-full-width-cell-renderer/santa-table-full-width-cell-renderer.component';
+import { GlobalNav } from 'Core/containers/global-nav/global-nav.container';
 
 @NgModule({
   declarations: [
@@ -60,25 +61,26 @@ import { SantaTableFullWidthCellRenderer } from 'Core/components/santa-table-ful
     Alert,
     HistoricalTradeVisualizer,
     SantaTableAlertStatusCell,
-    SantaTableFullWidthCellRenderer
+    SantaTableFullWidthCellRenderer,
+    GlobalNav
   ],
-    imports: [
-        CommonModule,
-        FormsModule,
+  imports: [
+    CommonModule,
+    FormsModule,
 
-        AgGridModule.withComponents([
-            SantaTableSecurityCell,
-            SantaTableQuoteCell,
-            SantaTableAlertSideCell,
-            SantaTableDetailAllQuotes,
-            SantaTableNumericFilter,
-            SantaTableNumericFloatingFilter,
-            SantaTableAlertStatusCell,
-            SantaTableFullWidthCellRenderer
-        ]),
+    AgGridModule.withComponents([
+      SantaTableSecurityCell,
+      SantaTableQuoteCell,
+      SantaTableAlertSideCell,
+      SantaTableDetailAllQuotes,
+      SantaTableNumericFilter,
+      SantaTableNumericFloatingFilter,
+      SantaTableAlertStatusCell,
+      SantaTableFullWidthCellRenderer
+    ]),
 
-        FormModule
-    ],
+    FormModule
+  ],
   providers: [
     DTOService,
     UtilityService,
@@ -87,16 +89,17 @@ import { SantaTableFullWidthCellRenderer } from 'Core/components/santa-table-ful
     AgGridMiddleLayerService,
     CountdownPipe
   ],
-    exports: [
-        SantaTable,
-        SecurityCard,
-        SecurityTable,
-        SecurityDefinition,
-        SecurityDefinitionConfigurator,
-        SearchShortcut,
-        GlobalAlert,
-        Alert,
-        NumericFilter
-    ]
+  exports: [
+    SantaTable,
+    SecurityCard,
+    SecurityTable,
+    SecurityDefinition,
+    SecurityDefinitionConfigurator,
+    SearchShortcut,
+    GlobalAlert,
+    Alert,
+    NumericFilter,
+    GlobalNav
+  ]
 })
 export class CoreModule { }
