@@ -1,0 +1,24 @@
+@import "global.scss";
+
+.sat-structureMainPanel { 
+	$structureMainPanelBlockName: &;
+	border: 1px solid $color_border_gray;
+  height: 80vh;
+  padding: $spacing_large;
+  &__fundGroup {
+    overflow-x: scroll;
+    width: 150vw;
+    display: flex;
+    height: 100%;
+    justify-content: space-around;
+    &-fund {
+      @include mix_border_radius(10px);
+      width: 0;
+      flex: 0 0 13.5%;
+      border: 1px solid $color_border_gray;
+      height: 100%;
+      padding: $spacing_large;
+      text-align: center;
+    }
+  }
+}

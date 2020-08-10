@@ -1,0 +1,10 @@
+<article 
+  [ngClass]="{
+  'sat-structureMainPanel': true
+  }">
+  <section class="sat-structureMainPanel__fundGroup">
+    <section *ngFor="let fund of funds" class="sat-structureMainPanel__fundGroup-fund">
+      <structure-fund [fund]="fund"></structure-fund>
+    </section>
+  </section>
+</article>
