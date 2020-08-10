@@ -445,16 +445,16 @@ export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> =
 export const SeniorityValueToLevelMapping = [
   {
     level: 1,
-    values: [FilterOptionsSeniorityType[0], FilterOptionsSeniorityType[1], FilterOptionsSeniorityType[2], FilterOptionsSeniorityType[3], FilterOptionsSeniorityType[4]]
+    values: ['Secured']
   },{
     level: 2,
-    values: [FilterOptionsSeniorityType[5], FilterOptionsSeniorityType[6], FilterOptionsSeniorityType[7], FilterOptionsSeniorityType[8]]
+    values: ['Senior']
   },{
     level: 3,
-    values: [FilterOptionsSeniorityType[9]]
+    values: ['SLA']
   },{
     level: 4,
-    values: [FilterOptionsSeniorityType[10], FilterOptionsSeniorityType[11], FilterOptionsSeniorityType[12]]
+    values: ['Subordinated']
   }
 ];
 
