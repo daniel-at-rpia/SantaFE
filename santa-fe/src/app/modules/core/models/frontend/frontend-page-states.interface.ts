@@ -1,7 +1,8 @@
 import * as DTOs from 'FEModels/frontend-models.interface';
 import {
   ObligorChartCategoryBlock,
-  TableFetchResultBlock
+  TableFetchResultBlock,
+  GlobalNavLegendBlock
 } from 'FEModels/frontend-blocks.interface';
 import {
   SecurityDefinitionStub,
@@ -21,7 +22,7 @@ export interface GlobalNavState {
   version: string;
   user: string;
   legend: {
-    seniorityCards: Array<DTOs.SecurityDTO>;
+    seniority: Array<GlobalNavLegendBlock>;
   }
 }
 

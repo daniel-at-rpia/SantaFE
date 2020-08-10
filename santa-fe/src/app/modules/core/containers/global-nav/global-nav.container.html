@@ -28,8 +28,12 @@
     <div class="sat-globalNav__menu-legendCanvas">
       <div class="sat-globalNav__menu-legendCanvas-title">Seniority Legend</div>
       <ul class="sat-globalNav__menu-legendCanvas-list">
-        <li *ngFor="let eachCard of state.legend.seniorityCards" class="sat-globalNav__menu-legendCanvas-list-item">
-          <security-card [cardData]="eachCard"></security-card>
+        <li *ngFor="let eachLegend of state.legend.seniority" class="sat-globalNav__menu-legendCanvas-list-item">
+          <security-card [cardData]="eachLegend.card"></security-card>
+          <span class="sat-globalNav__menu-legendCanvas-list-item-text">
+            {{eachLegend.legend}}
+          </span>
+          <div class="sat-globalNav__menu-legendCanvas-list-item-spacer"></div>
         </li>
       </ul>
     </div>

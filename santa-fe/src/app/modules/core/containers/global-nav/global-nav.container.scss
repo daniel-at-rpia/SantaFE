@@ -1,7 +1,7 @@
 @import "global.scss";
 
 $globalNav_navTrigger_size: 3rem;
-$globalNav_menu_width: 18rem;
+$globalNav_menu_width: 19rem;
 .sat-globalNav {
   $blockName: &;
   &__navTrigger {
@@ -112,6 +112,7 @@ $globalNav_menu_width: 18rem;
       }
     }
     &-legendCanvas {
+      @include mix_enable_scrollbar('vertical');
       flex: 1 1 auto;
       display: flex;
       flex-direction: column;
@@ -122,8 +123,31 @@ $globalNav_menu_width: 18rem;
         text-align: center;
       }
       &-list {
+        display: flex;
+        flex-direction: column;
+        padding: $spacing_medium;
         &-item {
-          margin-top: $spacing_small;
+          display: flex;
+          flex-direction: column;
+          &>security-card {
+            margin: 0 $spacing_large;
+          }
+          &-text {
+            font-size: $font_size_normal;
+            color: $font_color_inverse;
+            text-align: center;
+            margin-top: $spacing_x_small;
+          }
+          &-spacer {
+            @include mix_border_generator(0 0 $typical_border_width 0);
+            align-self: center;
+            width: 25%;
+            height: $spacing_medium;
+            margin-bottom: $spacing_medium;
+          }
+          &:last-of-type &-spacer {
+            display: none;
+          }
         }
       }
     }

@@ -10,7 +10,7 @@
     import { GlobalNavState } from 'FEModels/frontend-page-states.interface';
     import { selectUserInitials } from 'Core/selectors/core.selectors';
     import { SeniorityLegendList } from 'Core/stubs/securities.stub';
-
+    import { SeniorityValueToLevelMapping } from 'Core/constants/securityDefinitionConstants.constant';
 //
 
 declare const VERSION: string;
@@ -26,6 +26,9 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
   state: GlobalNavState;
   subscriptions = {
     userInitialsSub: null
+  };
+  constants = {
+    seniorityMapping: SeniorityValueToLevelMapping
   }
 
   private initializePageState(): GlobalNavState {
@@ -34,14 +37,29 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
       version: VERSION,
       user: 'Anonymous User',
       legend: {
-        seniorityCards: []
+        seniority: []
       }
     };
-    state.legend.seniorityCards = SeniorityLegendList.map((eachStub)=>{
+    let level = 0;
+    state.legend.seniority = SeniorityLegendList.map((eachStub)=>{
       const card = this.dtoService.formSecurityCardObject(null, eachStub, false, false);
       card.state.isInteractionDisabled = true;
       card.state.isWidthFlexible = true;
-      return card;
+      let legend: string = '';
+      if (this.constants.seniorityMapping.length > level) {
+        this.constants.seniorityMapping[level].values.forEach((eachSeniorityText, index) => {
+          if (index === 0) {
+            legend = `${eachSeniorityText}`;
+          } else {
+            legend = `${legend} ∙ ${eachSeniorityText}`;
+          }
+        });
+      }
+      level++;
+      return {
+        card: card,
+        legend: legend
+      };
     });
     return state;
   }
