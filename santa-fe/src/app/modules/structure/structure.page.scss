@@ -1,0 +1,12 @@
+@import "global.scss";
+
+.sat-structure {
+	$tradeBlockName: &;
+	@include mix_fixed_div(absolute, $z_index_base_item);
+	@include mix_alive('custom', width $animation_duration_light);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+  padding: $spacing_medium;
+}
