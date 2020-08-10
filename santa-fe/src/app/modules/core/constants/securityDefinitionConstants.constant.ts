@@ -54,25 +54,19 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
   ];
 
   const FilterOptionsTenor = [
-  //  '0.25Y',
-  //  '0.5Y',
-  //  '0.75Y',
-  //  '1Y',
+    // '0.25Y','0.5Y','0.75Y','1Y',
     '2Y',
     '3Y',
-  //  '4Y',
+    // '4Y',
     '5Y',
-  //  '6Y',
+    // '6Y',
     '7Y',
-  //  '8Y',
-  //  '9Y',
+    // '8Y',
+    // '9Y',
     '10Y',
-  //  '15Y',
-  //  '20Y',
-  //  '25Y',
+    // '15Y','20Y','25Y',
     '30Y',
-  //  '40Y',
-  //  '50Y'
+    // '40Y','50Y'
   ];
 
   const FilterOptionsSecurityType = [
@@ -102,18 +96,19 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
   ];
 
   const FilterOptionsSeniorityType = [
-    'Secured',
-    '1st lien',
-    '2nd lien',
-    '3rd lien',
-    'Asset Backed',
-    'Sr Preferred',
-    'Sr Unsecured',
-    'Sr Non Preferred',
-    'Unsecured',
-    'Sr Subordinated',
-    'Subordinated',
-    'Jr Subordinated'
+    'Secured',  // 0
+    '1st lien',  // 1
+    '2nd lien',  // 2
+    '3rd lien',  // 3
+    'Asset Backed',  // 4
+    'Sr Preferred',  // 5
+    'Sr Unsecured',  // 6
+    'Sr Non Preferred',  // 7
+    'Unsecured',  // 8
+    'SLA',  // 9
+    'Sr Subordinated',  // 10
+    'Subordinated',  // 11
+    'Jr Subordinated'  // 12
   ];
 
   const FilterOptionsIndustryType = [
@@ -249,7 +244,9 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'Basis'
   ];
 
-  const FilterOptionsCountry = ["AE","AL","AM","AO","AR","AT","AU","AW","AZ","BB","BE","BG","BH","BJ","BM","BO","BR","BS","BY","BZ","CA","CD","CG","CH","CI","CL","CM","CN","CO","CR","CY","CZ","DE","DK","DO","EC","EE","EG","ES","ET","FI","FR","GA","GB","GE","GG","GH","GR","GT","HK","HN","HR","HU","ID","IE","IL","IM","IN","IQ","IS","IT","JE","JM","JO","JP","KE","KH","KR","KW","KY","KZ","LA","LB","LC","LK","LT","LU","LV","MA","MC","MD","ME","MK","MN","MO","MT","MU","MULT","MX","MY","MZ","NA","NG","NL","NO","NZ","OM","PA","PE","PG","PH","PK","PL","PR","PT","PY","QA","RO","RS","RU","RW","SA","SC","SE","SG","SI","SK","SN","SNAT","SR","SV","TG","TH","TJ","TN","TR","TT","TW","UA","US","UY","UZ","VE","VG","VN","ZA","ZM"];
+  const FilterOptionsCountry = [
+    "AE","AL","AM","AO","AR","AT","AU","AW","AZ","BB","BE","BG","BH","BJ","BM","BO","BR","BS","BY","BZ","CA","CD","CG","CH","CI","CL","CM","CN","CO","CR","CY","CZ","DE","DK","DO","EC","EE","EG","ES","ET","FI","FR","GA","GB","GE","GG","GH","GR","GT","HK","HN","HR","HU","ID","IE","IL","IM","IN","IQ","IS","IT","JE","JM","JO","JP","KE","KH","KR","KW","KY","KZ","LA","LB","LC","LK","LT","LU","LV","MA","MC","MD","ME","MK","MN","MO","MT","MU","MULT","MX","MY","MZ","NA","NG","NL","NO","NZ","OM","PA","PE","PG","PH","PK","PL","PR","PT","PY","QA","RO","RS","RU","RW","SA","SC","SE","SG","SI","SK","SN","SNAT","SR","SV","TG","TH","TJ","TN","TR","TT","TW","UA","US","UY","UZ","VE","VG","VN","ZA","ZM"
+  ];
 
 export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
   SECURITY_TYPE: {
@@ -442,5 +439,43 @@ export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> =
       SecurityDefinitionMap.IS_NEWISSUE,
       SecurityDefinitionMap.IS_ONTHERUN
     ]
+  }
+];
+
+export const SeniorityValueToLevelMapping = [
+  {
+    level: 1,
+    values: [FilterOptionsSeniorityType[0], FilterOptionsSeniorityType[1], FilterOptionsSeniorityType[2], FilterOptionsSeniorityType[3], FilterOptionsSeniorityType[4]]
+  },{
+    level: 2,
+    values: [FilterOptionsSeniorityType[5], FilterOptionsSeniorityType[6], FilterOptionsSeniorityType[7], FilterOptionsSeniorityType[8]]
+  },{
+    level: 3,
+    values: [FilterOptionsSeniorityType[9]]
+  },{
+    level: 4,
+    values: [FilterOptionsSeniorityType[10], FilterOptionsSeniorityType[11], FilterOptionsSeniorityType[12]]
+  }
+];
+
+export const RatingValueToLevelMapping = [
+  {
+    level: 1,
+    values: ['AAA', 'AA']
+  },{
+    level: 2,
+    values: ['A']
+  },{
+    level: 3,
+    values: ['BBB']
+  },{
+    level: 4,
+    values: ['BB', 'B']
+  },{
+    level: 5,
+    values: ['CCC', 'CC', 'C', 'D']
+  },{
+    level: 6,
+    values: ['NR']
   }
 ];

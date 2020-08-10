@@ -268,3 +268,8 @@ export interface SelectAxeWatchlistRangeValue extends AxeAlertBlock {
 export interface SelectAxeWatchlistRangeDriver extends AxeAlertBlock {
   targetDriver: string;
 }
+
+export interface GlobalNavLegendBlock {
+  card: DTOs.SecurityDTO;
+  legend: string;
+}
