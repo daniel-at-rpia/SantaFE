@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const version = "1.7.0-unstable";
+const version = "1.7.0-unstable-hotfix-1";
 
 module.exports = {
   output: {
