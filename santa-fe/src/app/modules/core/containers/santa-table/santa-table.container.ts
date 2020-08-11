@@ -315,7 +315,7 @@ export class SantaTable implements OnInit, OnChanges {
         return params.node.data.rowDTO.style.rowHeight;
       }
     }
-    return this.constants.agGridRowHeight;
+    return AGGRID_ROW_HEIGHT;
   }
 
   public getRowNodeId(row) {
