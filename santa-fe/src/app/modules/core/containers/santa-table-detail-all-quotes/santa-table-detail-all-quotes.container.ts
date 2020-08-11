@@ -175,6 +175,12 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     );
   }
 
+  public onClickGetAllTradeHistory(showAllTradeHistory: boolean) {
+    if (showAllTradeHistory) {
+      this.fetchTradeAllHistory();
+    }
+  }
+
   private updateQuoteUponClick(params: ClickedSpecificQuoteEmitterParams, targetQuoteList: Array<SecurityQuoteDTO>){
     targetQuoteList.forEach((eachQuote) => {
       if (eachQuote.data.uuid === params.targetQuote.data.uuid) {
@@ -221,12 +227,6 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
         return of('error');
       })
     ).subscribe();
-  }
-
-  private onClickGetAllTradeHistory(showAllTradeHistory: boolean) {
-    if (showAllTradeHistory) {
-      this.fetchTradeAllHistory();
-    }
   }
 
   private setAllTradeHistory(rawData: BEModels.BETradeBlock, targetSecurity: DTOs.SecurityDTO ) {
