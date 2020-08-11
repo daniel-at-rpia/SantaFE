@@ -293,15 +293,15 @@ export class SantaTable implements OnInit, OnChanges {
     isPinnedFullWidthCell: boolean,
     params?: AgGridRowParams
   ) {
-    try {
+    // try {
       if (isPinnedFullWidthCell) {
         this.setAgGridRowHeight(targetRow, params, isPinnedFullWidthCell, 0);
       }
       targetRow.state.isExpanded = false;
-    } catch {
-      console.warn('read only issue', targetRow);
+    // } catch {
+      // console.warn('read only issue', targetRow);
       // ignore, seems AgGrid causes some weird read only error
-    }
+    // }
   }
 
   public getRowHeight(params: AgGridRowParams) {
