@@ -1,242 +1,29 @@
 import { PortfolioStructureDTO } from 'FEModels/frontend-models.interface';
 
-export const PortfolioBlock: Array<PortfolioStructureDTO> = [
-  {
-    data: {
-      portfolioName: 'DOF',
-      marketValue: {
-        data: {
-          metricName: 'Market Value',
-          currentValue: 0,
-          targetValue: 0, 
-          difference: 0.
-        },
-        state: {
-          isStencil: false,
-          isSelected: false,
-          isTargetExceeded: false
-        }
-      },
-      CS01: {
-        data: {
-          metricName: 'CS01',
-          currentValue: 0,
-          targetValue: 0, 
-          difference: 0.
-        },
-        state: {
-          isStencil: false,
-          isSelected: false,
-          isTargetExceeded: false
-        }
-      }
-    }, 
-    state: {
-      isEditing: false
-    }
-  },
-  {
-    data: {
-      portfolioName: 'SOF',
-      marketValue: {
-        data: {
-          metricName: 'Market Value',
-          currentValue: 0,
-          targetValue: 0, 
-          difference: 0.
-        },
-        state: {
-          isStencil: false,
-          isSelected: false,
-          isTargetExceeded: false
-        }
-      },
-      CS01: {
-        data: {
-          metricName: 'CS01',
-          currentValue: 0,
-          targetValue: 0, 
-          difference: 0.
-        },
-        state: {
-          isStencil: false,
-          isSelected: false,
-          isTargetExceeded: false
-        }
-      }
-    }, 
-    state: {
-      isEditing: false
-    }
-  },
-  {
-    data: {
-      portfolioName: 'STIP',
-      marketValue: {
-        data: {
-          metricName: 'Market Value',
-          currentValue: 0,
-          targetValue: 0, 
-          difference: 0.
-        },
-        state: {
-          isStencil: false,
-          isSelected: false,
-          isTargetExceeded: false
-        }
-      },
-      CS01: {
-        data: {
-          metricName: 'CS01',
-          currentValue: 0,
-          targetValue: 0, 
-          difference: 0.
-        },
-        state: {
-          isStencil: false,
-          isSelected: false,
-          isTargetExceeded: false
-        }
-      }
-    }, 
-    state: {
-      isEditing: false
-    }
-  },
-  {
-    data: {
-      portfolioName: 'FIP',
-      marketValue: {
-        data: {
-          metricName: 'Market Value',
-          currentValue: 0,
-          targetValue: 0, 
-          difference: 0.
-        },
-        state: {
-          isStencil: false,
-          isSelected: false,
-          isTargetExceeded: false
-        }
-      },
-      CS01: {
-        data: {
-          metricName: 'CS01',
-          currentValue: 0,
-          targetValue: 0, 
-          difference: 0.
-        },
-        state: {
-          isStencil: false,
-          isSelected: false,
-          isTargetExceeded: false
-        }
-      }
-    }, 
-    state: {
-      isEditing: false
-    }
-  },
-  {
-    data: {
-      portfolioName: 'CIP',
-      marketValue: {
-        data: {
-          metricName: 'Market Value',
-          currentValue: 0,
-          targetValue: 0, 
-          difference: 0.
-        },
-        state: {
-          isStencil: false,
-          isSelected: false,
-          isTargetExceeded: false
-        }
-      },
-      CS01: {
-        data: {
-          metricName: 'CS01',
-          currentValue: 0,
-          targetValue: 0, 
-          difference: 0.
-        },
-        state: {
-          isStencil: false,
-          isSelected: false,
-          isTargetExceeded: false
-        }
-      }
-    }, 
-    state: {
-      isEditing: false
-    }
-  },
-  {
-    data: {
-      portfolioName: 'AGB',
-      marketValue: {
-        data: {
-          metricName: 'Market Value',
-          currentValue: 0,
-          targetValue: 0, 
-          difference: 0.
-        },
-        state: {
-          isStencil: false,
-          isSelected: false,
-          isTargetExceeded: false
-        }
-      },
-      CS01: {
-        data: {
-          metricName: 'CS01',
-          currentValue: 0,
-          targetValue: 0, 
-          difference: 0.
-        },
-        state: {
-          isStencil: false,
-          isSelected: false,
-          isTargetExceeded: false
-        }
-      }
-    }, 
-    state: {
-      isEditing: false
-    }
-  },
-  {
-    data: {
-      portfolioName: 'BBB',
-      marketValue: {
-        data: {
-          metricName: 'Market Value',
-          currentValue: 0,
-          targetValue: 0, 
-          difference: 0.
-        },
-        state: {
-          isStencil: false,
-          isSelected: false,
-          isTargetExceeded: false
-        }
-      },
-      CS01: {
-        data: {
-          metricName: 'CS01',
-          currentValue: 0,
-          targetValue: 0, 
-          difference: 0.
-        },
-        state: {
-          isStencil: false,
-          isSelected: false,
-          isTargetExceeded: false
-        }
-      }
-    }, 
-    state: {
-      isEditing: false
-    }
-  }
-]
+export enum PortfolioView {
+  positive = 'Positive',
+  negative = 'Negative', 
+  neutral = 'Neutral'
+}
+
+export enum PortfolioBreakdownGroupOptions {
+  currency = 'Currency',
+  tenor = 'Tenor',
+  rating = 'Rating',
+  bics = 'BICS'
+}
+
+export enum PortfolioShortNames {
+  DOF = 'DOF',
+  SOF = 'SOF',
+  STIP = 'STIP',
+  FIP = 'FIP',
+  CIP = 'CIP',
+  AGB = 'AGB',
+  BBB = 'BBB'
+}
+
+export enum PortfolioMetricValues {
+  CSO1 = 'CS01 Value',
+  Leverage = 'Leverage Value'
+}
