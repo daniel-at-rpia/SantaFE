@@ -3,6 +3,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { DTOService } from 'Core/services/DTOService';
 import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
 
+import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 
 
 @Component({
@@ -13,13 +14,20 @@ import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface
 })
 
 export class StructureMainPanel implements OnInit {
-  funds = [];
   state: StructureMainPanelState; 
-  constants = {};
+  constants = {
+    portfolioMetricValues: PortfolioMetricValues
+  };
 
   private initializePageState(): StructureMainPanelState { 
     const state: StructureMainPanelState = {
-        isUserPM: true, 
+        isUserPM: false,
+        selectedMetricValue: this.constants.portfolioMetricValues.CSO1,
+        fetchResult: {
+          fundList: [],
+          fetchFundDataFailed: false,
+          fetchFundDataFailedError: ''
+        }
     }
     return state; 
   }

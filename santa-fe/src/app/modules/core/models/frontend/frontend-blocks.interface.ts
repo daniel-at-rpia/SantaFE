@@ -268,3 +268,9 @@ export interface SelectAxeWatchlistRangeValue extends AxeAlertBlock {
 export interface SelectAxeWatchlistRangeDriver extends AxeAlertBlock {
   targetDriver: string;
 }
+
+export interface PortfolioMetricTotal {
+  currentValue: number;
+  targetValue: number;
+  exceededAmount?: number;
+}

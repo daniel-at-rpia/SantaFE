@@ -9,17 +9,17 @@ import {
   SecurityMarkBlock,
   SecurityPortfolioBlock,
   SecurityTableRowQuoteBlock,
-  SecurityCostPortfolioBlock
+  SecurityCostPortfolioBlock, 
+  PortfolioMetricTotal
 } from 'FEModels/frontend-blocks.interface';
 import {AlertSubTypes, AlertTypes} from 'Core/constants/coreConstants.constant';
 import { SantaTableNumericFloatingFilterParams } from 'FEModels/frontend-adhoc-packages.interface';
 import * as agGrid from 'ag-grid-community';
 import * as moment from 'moment';
 import * as am4Charts from '@amcharts/amcharts4/charts';
-
 import {Alert} from "Core/components/alert/alert.component";
-
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
+import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 
 interface BasicDTOStructure {
   [property: string]: object;
@@ -653,5 +653,24 @@ export interface TradeAlertConfigurationAxeGroupBlockDTO extends BasicDTOStructu
     isDisabled: boolean;
     isUrgent: boolean;
     isRangeActive: boolean;
+  }
+}
+
+export interface PortfolioStructureDTO extends BasicDTOStructure {
+  data: {
+    portfolioName: string,
+    portfolioId: number;
+    portfolioShortName: PortfolioShortNames;
+    indexId: number;
+    indexShortName: string;
+    CS01Values: PortfolioMetricTotal;
+    LeverageValues: PortfolioMetricTotal;
+    children?: [];
+  },
+  api: {
+    onSubmitMetricValues: (CS01: number, leverage: number) => void;
+  }
+  state: {
+    isEditingMetricValues: boolean;
   }
 }
