@@ -20,10 +20,6 @@
       left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
-      &-icon {
-        font-size: $font_size_large;
-        line-height: 30px;
-      }
     }
     &-divider {
       height: $typical_border_width;
