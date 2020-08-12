@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
 
+import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.interface';
+
 @Component({
   selector: 'structure-fund',
   templateUrl: './structure-fund.container.html', 
@@ -8,7 +10,7 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, V
 })
 
 export class StructureFund implements OnInit {
-  @Input() fund; 
+  @Input() fund: PortfolioStructureDTO; 
 
   constructor() {}
 
