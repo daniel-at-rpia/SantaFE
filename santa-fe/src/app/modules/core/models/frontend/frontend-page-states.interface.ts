@@ -17,6 +17,10 @@ import {AlertTypes} from 'Core/constants/coreConstants.constant';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 
+export interface RootState {
+  ownerInitial: string;
+}
+
 export interface GlobalAlertState {
   activated: boolean;
   displayAlerts: boolean;

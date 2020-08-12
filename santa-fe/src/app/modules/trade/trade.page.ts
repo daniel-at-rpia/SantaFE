@@ -64,7 +64,6 @@ export class TradePage implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.fetchOwnerInitial();
     this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
       select(selectSelectedSecurityForAnalysis)
     ).subscribe((targetSecurity) => {
@@ -105,33 +104,5 @@ export class TradePage implements OnInit, OnDestroy {
 
   public unMaximizeAlertPanel() {
     this.state.alertPanelMaximized = false;
-  }
-
-  private fetchOwnerInitial() {
-    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getUserInitials, {req: 'GET'}).pipe(
-      first(),
-      tap((serverReturn) => {
-        this.loadOwnerInitial(serverReturn);
-      }),
-      catchError(err => {
-        if (!!err && !!err.error && !!err.error.text) {
-          this.loadOwnerInitial(err.error.text);
-        } else {
-          this.loadOwnerInitial(this.constants.userInitialsFallback);
-          this.restfulCommService.logError(`Can not find user, error`);
-        }
-        return of('error');
-      })
-    ).subscribe();
-  }
-
-  private loadOwnerInitial(serverReturn: string) {
-    if (this.constants.devWhitelist.indexOf(serverReturn) !== -1) {
-      this.state.ownerInitial = 'DM';
-    } else {
-      this.state.ownerInitial = serverReturn;
-    }
-    this.restfulCommService.updateUser(this.state.ownerInitial);
-    this.store$.dispatch(new CoreUserLoggedIn(this.state.ownerInitial));
   }
 }
