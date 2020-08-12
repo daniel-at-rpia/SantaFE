@@ -26,9 +26,8 @@
       }
     }
     &-divider {
-      width: 100%;
-      height: 3px;
-      display: inline-block;
+      height: $typical_border_width;
+      background: $color_border_gray;
     }
   }
 }
