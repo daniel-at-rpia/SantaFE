@@ -366,8 +366,10 @@ export class SantaTable implements OnInit, OnChanges {
         } else {
           // pin it
           // the deep copy is to make sure the pinned rows are retained as the state of the table changes. it also ensures when clicking on the pinned row's card, it doesn't trigger both the regular row and the pinned row 
-          this.tableData.data.agGridPinnedTopRowData.push(this.utilityService.deepCopy(targetRow));
-          const fullWidthCell: AgGridRow = this.utilityService.deepCopy(targetRow);
+          const copy: AgGridRow = this.utilityService.deepCopy(targetRow);
+          copy.rowDTO.state.isExpanded = false;  // always reset the isExpanded flag
+          this.tableData.data.agGridPinnedTopRowData.push(copy);
+          const fullWidthCell: AgGridRow = this.utilityService.deepCopy(copy);
           fullWidthCell.id = `${fullWidthCell.id} - ${this.constants.agGridPinnedFullWidthRowKeyword}`;
           fullWidthCell.isFullWidth = true;
           fullWidthCell.rowDTO.style.rowHeight = 0;
