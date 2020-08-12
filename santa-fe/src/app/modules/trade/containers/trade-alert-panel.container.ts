@@ -73,7 +73,8 @@
     } from 'Trade/selectors/trade.selectors';
     import {
       SecurityTableHeaderConfigs,
-      SECURITY_TABLE_FINAL_STAGE
+      SECURITY_TABLE_FINAL_STAGE,
+      SecurityTableAlertHeaderConfigs
     } from 'Core/constants/securityTableConstants.constant';
     import {
       DEFAULT_DRIVER_IDENTIFIER,
@@ -438,6 +439,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   // overview section
     public onClickShowAllAlerts() {
       if (this.state.fetchResult.alertTable.fetchComplete) {
+        this.getAlertHeaders('all');
         if (!!this.state.alert.scopedAlertType || !this.state.displayAlertTable) {
           this.state.displayAlertTable = true;
           this.state.alert.scopedAlertType = null;
@@ -482,17 +484,32 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       }
     }
 
+    private getAlertHeaders(alertType: string) {
+      const securityTableHeaderConfigsCopy = this.utilityService.deepCopy(SecurityTableHeaderConfigs);
+      const formattedAlert = alertType.toLowerCase();
+      const headerAlertConfig = SecurityTableAlertHeaderConfigs[formattedAlert];
+      securityTableHeaderConfigsCopy.forEach(metric => {
+          if (headerAlertConfig.include.indexOf(metric.key) > -1) {
+            metric.content.tableSpecifics.tradeAlert.active = true;
+          } else if (headerAlertConfig.exclude.indexOf(metric.key) > -1) {
+            metric.content.tableSpecifics.tradeAlert.active = false;
+          }
+        })
+        this.state.table.alertMetrics = securityTableHeaderConfigsCopy;
+    }
+
     public onClickSpecificAlertTypeTab(
       targetType: AlertTypes,
       isMarketListOnly?: boolean
     ) {
       if (this.state.fetchResult.alertTable.fetchComplete) {
         const tabName = isMarketListOnly ? 'Inquiry' : targetType;
-        if (targetType === this.constants.alertTypes.axeAlert) {
+        if (targetType === this.constants.alertTypes.axeAlert && this.state.alert.nonMarketListAxeAlertCount > 0 || targetType === this.constants.alertTypes.axeAlert && this.state.alert.marketListAxeAlertCount > 0) {
           if (this.state.alert.scopedAlertType !== targetType || this.state.alert.scopedForMarketListOnly !== !!isMarketListOnly) {
             this.state.displayAlertTable = true;
             this.state.alert.scopedAlertType = targetType;
             this.state.alert.scopedForMarketListOnly = !!isMarketListOnly;
+            this.getAlertHeaders(this.state.alert.scopedAlertType);
             this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
           } else {
             this.state.displayAlertTable = false;
@@ -500,9 +517,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           }
         } else {
           this.state.alert.scopedForMarketListOnly = false;
-          if (this.state.alert.scopedAlertType !== targetType) {
+          const alertTypeCount = (targetType === 'Mark') ? this.state.alert.markAlertCount : this.state.alert.tradeAlertCount; 
+          if (this.state.alert.scopedAlertType !== targetType && alertTypeCount > 0) {
             this.state.displayAlertTable = true;
             this.state.alert.scopedAlertType = targetType;
+            this.getAlertHeaders(this.state.alert.scopedAlertType);
             this.state.fetchResult.alertTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.alertTable.prinstineRowList);
           } else {
             this.state.displayAlertTable = false;
@@ -743,10 +762,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           if (!!serverReturn) {
             this.state.configuration.axe.securityList = [];
             this.state.isAlertPaused = false;
-            for (const eachGroupId in serverReturn.Axe) {
-              const eachConfiguration = serverReturn.Axe[eachGroupId];
-              this.populateConfigurationFromEachGroup(eachConfiguration);
-            }
+            this.populateConfigurationFromEachGroup(serverReturn.Axe);
           } else {
             this.restfulCommService.logError(`'Alert/get-alert-configs' API returned an empty result`);
           }
@@ -758,24 +774,33 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       ).subscribe();
     }
 
-    private populateConfigurationFromEachGroup(
-      rawGroupConfig: BEAlertConfigurationDTO
-    ) {
-      if (!!rawGroupConfig && !!rawGroupConfig.groupFilters) {
-        if (rawGroupConfig.groupFilters.SecurityIdentifier && rawGroupConfig.groupFilters.SecurityIdentifier.length > 0) {
-          this.populateConfigurationFromSecurityGroup(rawGroupConfig);
+    private populateConfigurationFromEachGroup(rawGroupConfig: Object) {
+      let securitiesArray = [];
+      for (const eachGroupId in rawGroupConfig) {
+        if (!!rawGroupConfig[eachGroupId] && !!rawGroupConfig[eachGroupId].groupFilters) {
+          if (rawGroupConfig[eachGroupId].groupFilters.SecurityIdentifier && rawGroupConfig[eachGroupId].groupFilters.SecurityIdentifier > 0) {
+            const security = rawGroupConfig[eachGroupId];
+            securitiesArray.push(security);
+          }
         }
       }
+      securitiesArray.length > 0 && this.populateConfigurationFromSecurityGroup(securitiesArray);
     }
 
-    private populateConfigurationFromSecurityGroup(rawGroupConfig: BEAlertConfigurationDTO) {
-      const { WatchType } = rawGroupConfig.parameters;
-      const targetScope = rawGroupConfig.subType as AxeAlertScope;
+    private populateConfigurationFromSecurityGroup(rawGroupConfig: BEAlertConfigurationDTO[]) {
+      const allIdentifiers = [];
+      rawGroupConfig.forEach(security => {
+        security.groupFilters.SecurityIdentifier.forEach(securityID => allIdentifiers.push(securityID));
+        const { WatchType } = security.parameters;
+        const targetScope = security.subType as AxeAlertScope;
+        const newEntry = this.dtoService.formNewAlertWatchlistEntryObject(security, targetScope, WatchType, this.populateWatchDriverFromRawConfig, this.populateRangeNumberFilterFromRawConfig, this.checkIsFilled, this.checkRangeActive);
+        this.state.configuration.axe.securityList.unshift(newEntry);
+      })
+
       const payload: PayloadGetSecurities = {
-        identifiers: rawGroupConfig.groupFilters.SecurityIdentifier
+          identifiers: allIdentifiers
       };
-      const newEntry = this.dtoService.formNewAlertWatchlistEntryObject(rawGroupConfig, targetScope, WatchType, this.populateWatchDriverFromRawConfig, this.populateRangeNumberFilterFromRawConfig, this.checkIsFilled, this.checkRangeActive);
-      this.state.configuration.axe.securityList.unshift(newEntry);
+
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSecurityDTOs, {req: 'POST'}, payload).pipe(
         first(),
         tap((serverReturn: Array<BESecurityDTO>) => {
@@ -784,7 +809,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
               const eachCard = this.dtoService.formSecurityCardObject(eachRawData.securityIdentifier, eachRawData, false, false);
               eachCard.state.isInteractionDisabled = true;
               eachCard.state.isWidthFlexible = true;
-              newEntry.data.card = eachCard;
+              this.state.configuration.axe.securityList.forEach(security => {
+                if (security.data.securityIdentifier === eachRawData.securityIdentifier) {
+                  security.data.card = eachCard;
+                }
+              })
             });
           } else {
             this.restfulCommService.logError(`'security/get-securities' API returned an empty result with this payload: ${payload.identifiers.toString()}`);
@@ -1118,7 +1147,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.state.fetchResult.alertTable.prinstineRowList = [];  // flush out the stencils
       this.state.fetchResult.alertTable.prinstineRowList = this.processingService.loadFinalStageDataForAlertTable(
         this.state.alert.alertTableAlertList,
-        this.state.table.alertDto.data.headers,
+        this.state.table.alertDto.data.allHeaders,
         this.state.filters.quickFilters.driverType,
         serverReturn,
         this.onSelectSecurityForAnalysis.bind(this),

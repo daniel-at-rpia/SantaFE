@@ -40,7 +40,7 @@ $trade_gutter_width_for_alerts: $page_gutter_width_for_alerts - $trade_right_cta
     &-alertPanel {
       @include mix_fixed_div(absolute, $z_index_base_item);
       @include mix_calculate(width, 100%, $spacing_medium*2, '-');
-      @include mix_alive('normal');
+      @include mix_alive('heavy');
       display: flex;
       height: $tradeAlertPanel_height;
       overflow: hidden;

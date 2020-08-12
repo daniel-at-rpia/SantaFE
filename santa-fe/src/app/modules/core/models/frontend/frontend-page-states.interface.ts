@@ -1,7 +1,8 @@
 import * as DTOs from 'FEModels/frontend-models.interface';
 import {
   ObligorChartCategoryBlock,
-  TableFetchResultBlock
+  TableFetchResultBlock,
+  GlobalNavLegendBlock
 } from 'FEModels/frontend-blocks.interface';
 import {
   SecurityDefinitionStub,
@@ -15,6 +16,16 @@ import {
 } from 'FEModels/frontend-adhoc-packages.interface';
 import {AlertTypes} from 'Core/constants/coreConstants.constant';
 import * as am4charts from '@amcharts/amcharts4/charts';
+
+export interface GlobalNavState {
+  menuIsActive: boolean;
+  version: string;
+  user: string;
+  legend: {
+    seniority: Array<GlobalNavLegendBlock>;
+    rating: Array<GlobalNavLegendBlock>;
+  }
+}
 
 export interface GlobalAlertState {
   activated: boolean;

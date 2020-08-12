@@ -1,5 +1,5 @@
   // dependencies
-    import { Component, Input, OnChanges, OnDestroy, OnInit, AfterViewInit, ViewEncapsulation } from '@angular/core';
+    import { Component, Input, OnChanges, OnDestroy, OnInit, AfterViewInit, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
 
     import { HistoricalTradeVisualizerDTO } from 'FEModels/frontend-models.interface';
     import { TradeHistoryHeaderConfigList } from 'Core/constants/securityTableConstants.constant';
@@ -17,6 +17,8 @@
 export class HistoricalTradeVisualizer implements OnDestroy, OnChanges {
   @Input() historyData: HistoricalTradeVisualizerDTO;
   @Input() showGraph: boolean;
+  @Input() showAllTradeHistoryButton: boolean;
+  @Output() allTradeHistoryData = new EventEmitter<boolean>();
   
   public constants = {
     headerConfigList: TradeHistoryHeaderConfigList,
@@ -31,22 +33,34 @@ export class HistoricalTradeVisualizer implements OnDestroy, OnChanges {
       // this.historyData.graph.timeSeries = null;
     // }
     this.historyData.state.graphReceived = false;
-    if (this.historyData.graph.positionPie) {
-      this.graphService.destoryGraph(this.historyData.graph.positionPie);
-      this.historyData.graph.positionPie = null;
-    }
-    if (this.historyData.graph.volumeLeftPie) {
-      this.graphService.destoryGraph(this.historyData.graph.volumeLeftPie);
-      this.historyData.graph.volumeLeftPie = null;
-    }
-    if (this.historyData.graph.volumeRightPie) {
-      this.graphService.destoryGraph(this.historyData.graph.volumeRightPie);
-      this.historyData.graph.volumeRightPie = null;
+    try {
+      if (this.historyData.graph.positionPie) {
+        this.graphService.destoryGraph(this.historyData.graph.positionPie);
+        this.historyData.graph.positionPie = null;
+      }
+      if (this.historyData.graph.volumeLeftPie) {
+        this.graphService.destoryGraph(this.historyData.graph.volumeLeftPie);
+        this.historyData.graph.volumeLeftPie = null;
+      }
+      if (this.historyData.graph.volumeRightPie) {
+        this.graphService.destoryGraph(this.historyData.graph.volumeRightPie);
+        this.historyData.graph.volumeRightPie = null;
+      }
+    } catch(err) {
+      if (err && err.message == 'EventDispatcher is disposed') {
+        console.log('dispose misbehavior captured');
+      } else {
+        console.warn('new amchart error', err);
+      }
     }
   }
 
   public ngOnChanges() {
     if (!!this.showGraph && !this.historyData.state.graphReceived) {
+
+      if (this.historyData.state.showAllTradeHistory) {
+        this.showAllTradeHistoryButton = false;
+      }
       const renderGraphs = () => {
         if (!this.historyData.graph.positionPie) {
           this.historyData.state.graphReceived = true;
@@ -74,5 +88,8 @@ export class HistoricalTradeVisualizer implements OnDestroy, OnChanges {
       });
     }
   }
-  
+
+  public getAllTradeHistory() {
+    this.historyData && this.allTradeHistoryData.emit(true);
+  }
 }
