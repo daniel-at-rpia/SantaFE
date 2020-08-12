@@ -1,40 +1,34 @@
 @import "global.scss";
 
-.sat-structureMainPanel {
-  &__fund {
-      &-configuration {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        &-title {
-          font-size: 1.5rem;
-          font-weight: 700;
-          color: $color_gray_8;
-          flex: 0 0 auto;
-        }
+.sat-fundStructuring {
+  &__configuration {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &-title {
+      flex: 0 0 auto;
+      font-size: $font_size_x_large;
+      font-weight: 700;
+      color: $font_color_minor;
+    }
+  }
+  &__utility {
+    @include mix_fixed_div(relative, $z_index_base_item);
+    &-btn {
+      @include mix_fixed_div(absolute, $z_index_base_item_solid);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      &-icon {
+        font-size: $font_size_large;
+        line-height: 30px;
       }
-      &-utility {
-        position: relative;
-        &-btn {
-          @extend .santaBtn;
-          position: absolute;
-          z-index: 2;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          background-color: white;
-          text-align: center;
-          &-icon {
-            font-size: 1.1rem;
-            line-height: 30px;
-          }
-        }
-        &-divider {
-          width: 100%;
-          height: 3px;
-          display: inline-block;
-        }
-      }
-    
+    }
+    &-divider {
+      width: 100%;
+      height: 3px;
+      display: inline-block;
+    }
   }
 }
