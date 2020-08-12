@@ -785,7 +785,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           }
         }
       }
-      this.populateConfigurationFromSecurityGroup(securitiesArray);
+      securitiesArray.length > 0 && this.populateConfigurationFromSecurityGroup(securitiesArray);
     }
 
     private populateConfigurationFromSecurityGroup(rawGroupConfig: BEAlertConfigurationDTO[]) {
