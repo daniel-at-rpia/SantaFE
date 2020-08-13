@@ -2,7 +2,25 @@
   'sat-fundStructuring': true
   }">
   <header class="sat-fundStructuring__configuration">
+    <div class="sat-fundStructuring__targetBar">
+      <target-bar
+        [targetMetric]="constants.Leverage"
+        [currentValue]="fund.data.LeverageValues.currentValue"
+        [targetValue]="fund.data.LeverageValues.targetValue"
+        [selectedMetricValue]="selectedMetricValue"
+      >
+      </target-bar>
+    </div>
     <h2 class="sat-fundStructuring__configuration-title">{{ fund.data.portfolioShortName }}</h2>
+    <div class="sat-fundStructuring__targetBar">
+      <target-bar
+        [targetMetric]="constants.CS01"
+        [currentValue]="fund.data.CS01Values.currentValue"
+        [targetValue]="fund.data.CS01Values.targetValue"
+        [selectedMetricValue]="selectedMetricValue"
+      >
+      </target-bar>
+    </div>
   </header>
   <section class="sat-fundStructuring__utility">
     <button class="sat-fundStructuring__utility-btn"><i class="fas fa-pen"></i></button>
