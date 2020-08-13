@@ -9,6 +9,7 @@ import { MarketPage } from 'Market/market.page';
 import { MarketGroupPanel } from 'Market/containers/market-group-panel.container';
 import { SecurityGroupSimple } from 'Market/components/security-group-simple/security-group-simple.component';
 import { SecurityGroupAverageVisualizer } from 'Market/components/security-group-average-visualizer/security-group-average-visualizer.component';
+import { NavigationModule } from 'Core/constants/coreConstants.constant';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,7 @@ import { SecurityGroupAverageVisualizer } from 'Market/components/security-group
     CommonModule,
     RouterModule.forChild([
       {
-        path: 'market', component: MarketPage
+        path: NavigationModule.market, component: MarketPage
       }
     ]),
     CoreModule,

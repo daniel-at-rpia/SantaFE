@@ -4,6 +4,12 @@ import {
   TriCoreDriverConfigStub
 } from 'FEModels/frontend-stub-models.interface';
 
+export enum NavigationModule {
+  trade = 'trade',
+  structuring = 'structuring',
+  market = 'market'
+}
+
 export const APIUrlMap = {
   getUserInitials: `user/get-user-initials`,
   getSecurityIdMap: `security/get-security-identifiers`,
