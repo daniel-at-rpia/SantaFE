@@ -14,12 +14,14 @@ export class TargetBar implements OnInit {
   @Input() currentValue: number;
   @Input() targetValue: number;
   @Input() selectedMetricValue: PortfolioMetricValues;
+  @Input() stencilState;
   currentPercentage: string;
   exceededPercentage: string;
   displayedCurrentValue: string;
   displayedTotalValue: string;
   state = {
    isInactiveMetric: false,
+   isStencil: this.stencilState
   }
   constructor() {}
   ngOnInit() {

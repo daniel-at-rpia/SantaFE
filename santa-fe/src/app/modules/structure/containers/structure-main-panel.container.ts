@@ -37,5 +37,13 @@ export class StructureMainPanel implements OnInit {
     this.state = this.initializePageState();
   }
 
-  public ngOnInit() {}; 
+  public ngOnInit() {
+    this.fetchFunds();
+  }; 
+
+  private fetchFunds() {
+    this.state.fetchResult.fundList.forEach(fund => {
+      fund.state.isStencil = true;
+    })
+  }
 }
