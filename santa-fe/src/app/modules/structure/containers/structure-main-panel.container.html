@@ -3,8 +3,8 @@
   'sat-structureMainPanel': true
   }">
   <section class="sat-structureMainPanel__fundGroup">
-    <section *ngFor="let fund of state.fetchResult.fundList" class="sat-structureMainPanel__fundGroup-fund">
+    <div *ngFor="let fund of state.fetchResult.fundList" class="sat-structureMainPanel__fundGroup-fund">
       <structure-fund [fund]="fund"></structure-fund>
-    </section>
+    </div>
   </section>
 </article>
