@@ -1,6 +1,6 @@
 @import "global.scss";
 
-.sat-structure {
+.sat-structurePage {
 	$tradeBlockName: &;
 	@include mix_fixed_div(absolute, $z_index_base_item);
 	@include mix_alive('custom', width $animation_duration_light);
