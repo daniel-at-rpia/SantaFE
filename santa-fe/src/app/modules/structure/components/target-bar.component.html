@@ -1,0 +1,20 @@
+<article
+[ngClass]="{
+  'sat-fundTargetBar': true,
+  'sat-fundTargetBar--inactive': state.isInactiveMetric,
+  'sat-fundTargetBar--stencilState': false
+  }"
+>
+    <p class="sat-fundTargetBar__type">{{ targetMetric }}</p>
+    <div class="sat-fundTargetBar__indicator">
+      <span class="sat-fundTargetBar__indicator--total"></span>
+      <span 
+      [ngStyle]="{'width': exceededPercentage}"
+      class="sat-fundTargetBar__indicator--exceeded"></span>
+      <span
+      [ngStyle]="{'width': currentPercentage}"
+      class="sat-fundTargetBar__indicator--current"></span>
+      <span 
+      class="sat-fundTargetBar__indicator-values">{{ displayedCurrentValue }}/{{ displayedTotalValue }}</span>
+    </div>
+</article>
