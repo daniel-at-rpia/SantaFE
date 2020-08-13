@@ -13,7 +13,14 @@ import {PortfolioMetricValues } from 'Core/constants/structureConstants.constant
 })
 
 export class StructureFund implements OnInit {
-  @Input() fund: PortfolioStructureDTO; 
+  @Input() fund; 
+  @Input() selectedMetricValue;
+
+  constants = {
+    CS01: PortfolioMetricValues.CSO1,
+    Leverage: PortfolioMetricValues.Leverage
+  }
+
 
   constructor() {}
 
