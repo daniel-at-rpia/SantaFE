@@ -2,6 +2,9 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, V
 
 import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.interface';
 
+import {PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+
+
 @Component({
   selector: 'structure-fund',
   templateUrl: './structure-fund.container.html', 

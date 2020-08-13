@@ -3,7 +3,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { DTOService } from 'Core/services/DTOService';
 import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
 
-import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import { PortfolioMetricValues} from 'Core/constants/structureConstants.constants';
 
 
 @Component({
@@ -15,6 +15,7 @@ import { PortfolioMetricValues } from 'Core/constants/structureConstants.constan
 
 export class StructureMainPanel implements OnInit {
   state: StructureMainPanelState; 
+  selectedMetricValue: PortfolioMetricValues = PortfolioMetricValues.CSO1;
   constants = {
     portfolioMetricValues: PortfolioMetricValues
   };
