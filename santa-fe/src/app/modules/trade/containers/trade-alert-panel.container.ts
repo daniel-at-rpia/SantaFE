@@ -778,7 +778,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       let securitiesArray = [];
       for (const eachGroupId in rawGroupConfig) {
         if (!!rawGroupConfig[eachGroupId] && !!rawGroupConfig[eachGroupId].groupFilters) {
-          if (rawGroupConfig[eachGroupId].groupFilters.SecurityIdentifier && rawGroupConfig[eachGroupId].groupFilters.SecurityIdentifier > 0) {
+          if (rawGroupConfig[eachGroupId].groupFilters.SecurityIdentifier && rawGroupConfig[eachGroupId].groupFilters.SecurityIdentifier.length > 0) {
             const security = rawGroupConfig[eachGroupId];
             securitiesArray.push(security);
           }
