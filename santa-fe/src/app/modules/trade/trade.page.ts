@@ -24,7 +24,6 @@
     import { selectDislayAlertThumbnail } from 'Core/selectors/core.selectors';
     import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
     import { CoreLoadSecurityMap } from 'Core/actions/core.actions';
-    import { FAILED_USER_INITIALS_FALLBACK, DevWhitelist } from 'Core/constants/coreConstants.constant';
   //
 
 @Component({
@@ -38,10 +37,6 @@ export class TradePage implements OnInit, OnDestroy {
   subscriptions = {
     receiveSelectedSecuritySub: null,
     displayAlertThumbnailSub: null
-  };
-  constants = {
-    userInitialsFallback: FAILED_USER_INITIALS_FALLBACK,
-    devWhitelist: DevWhitelist
   };
 
   private initializePageState() {
