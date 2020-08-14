@@ -12,4 +12,13 @@
     </div>
     <span class="sat-portfolioBreakdown__title-text">{{breakdownData.data.title}}</span>
   </section>
+  <section class="sat-portfolioBreakdown__rating">
+    <div
+      class="sat-portfolioBreakdown__rating-fill"
+      [ngStyle]="{
+        'width': breakdownData.style.ratingFillWidth + '%'
+      }">
+    </div>
+    <span class="sat-portfolioBreakdown__rating-hoverText">{{breakdownData.data.ratingHoverText}}</span>
+  </section>
 </article>

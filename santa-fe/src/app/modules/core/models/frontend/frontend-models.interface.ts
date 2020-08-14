@@ -666,7 +666,11 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     title: string;
     definition: SecurityDefinitionDTO;
     categoryList: Array<PortfolioBreakdownCategoryBlock>;
+    ratingHoverText: string;
   },
+  style: {
+    ratingFillWidth: number;
+  }
   state: {
     isEditing: boolean;
     isStencil: boolean;

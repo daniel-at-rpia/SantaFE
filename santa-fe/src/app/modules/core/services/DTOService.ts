@@ -1665,12 +1665,18 @@ export class DTOService {
     return object;
   }
 
-  public formPortfolioBreakdown(): DTOs.PortfolioBreakdownDTO {
+  public formPortfolioBreakdown(
+    isStencil: boolean
+  ): DTOs.PortfolioBreakdownDTO {
     const object: DTOs.PortfolioBreakdownDTO = {
       data: {
         title: 'Test',
         definition: null,
-        categoryList: []
+        categoryList: [],
+        ratingHoverText: !isStencil ? '20%' : '99%'
+      },
+      style: {
+        ratingFillWidth: 20
       },
       state: {
         isEditing: false,

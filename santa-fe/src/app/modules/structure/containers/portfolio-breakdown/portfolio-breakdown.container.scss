@@ -1,15 +1,21 @@
 @import "global.scss";
 @import "modules/structure/structure.scss";
 
+$portfolioBreakdown_borderWidth: 2px; // can't use rem because fractions of a pixel doesn't look well here
+$portfolioBreakdown_borderColor: $color_active;
+$portfolioBreakdown_rating_width: 12rem;
+$portfolioBreakdown_rating_thickness: 1.75rem;
+
 .sat-portfolioBreakdown {
   $blockName: &;
   @include mix_fixed_div(relative, $z_index_base_item);
-  @include mix_border_generator($typical_border_width*2, $color_active);
+  @include mix_border_generator($portfolioBreakdown_borderWidth, $portfolioBreakdown_borderColor);
   @include mix_border_radius(10px);
   display: flex;
   width: $portfolioBreakdownWidth;
   height: 8rem;
   background-color: $color_white;
+  margin-top: $portfolioBreakdown_rating_thickness;
   &__title {
     @include mix_fixed_div(absolute, $z_index_base_item_solid);
     display: flex;
@@ -28,6 +34,31 @@
     &-text {
       color: $font_color_trivial;
       font-size: $font_size_large;
+    }
+  }
+  &__rating {
+    @include mix_fixed_div(absolute, $z_index_hovering_item);
+    @include mix_border_generator($portfolioBreakdown_borderWidth, $portfolioBreakdown_borderColor);
+    @include mix_border_radius(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: -$portfolioBreakdown_rating_thickness/2;
+    right: $spacing_medium;
+    width: $portfolioBreakdown_rating_width;
+    height: $portfolioBreakdown_rating_thickness;
+    overflow: hidden;
+    background-color: $color_active;
+    &-fill {
+      @include mix_fixed_div(absolute, $z_index_base_item_solid);
+      height: 100%;
+      background-color: $color_red_5;
+      left: 0;
+    }
+    &-hoverText {
+      @include mix_fixed_div(absolute, $z_index_hovering_item);
+      color: $font_color_inverse;
+      font-size: $font_size_normal;
     }
   }
 }
