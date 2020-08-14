@@ -14,7 +14,7 @@
       background-color: $color_gray_9;
       @include mix_fixed_div(relative, $z_index_base_item);
       width: 8rem;
-      height: 1.5rem;
+      height: $font_size_x_large;
       &--total,
       &--exceeded,
       &--current,
@@ -49,6 +49,7 @@
         text-align: center;
         width: 50%;
         height: 100%;
+        line-height: $font_size_x_large;
       }
     }
     &--stencilState {
