@@ -4,18 +4,19 @@
   $structureMainPanelBlockName: &;
   @include mix_border_generator();
   flex: 1 1 auto;
-  margin: $spacing_xx_large $spacing_medium $spacing_medium;
-  padding: $spacing_medium;
+  display: flex;
+  overflow: hidden;
   &__fundGroup {
     @include mix_enable_scrollbar($direction: 'horizontal');
+    overflow-y: hidden;
     display: flex;
-    height: 100%;
-    width: 100%;
+    flex: 1 1 auto;
+    margin-right: $spacing_medium;
     &-fund {
       @include mix_border_radius(10px);
       @include mix_border_generator();
       flex: 0 0 30rem;
-      margin: $spacing_medium;
+      margin: $spacing_medium 0 $spacing_medium $spacing_medium;
     }
   }
 }
