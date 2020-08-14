@@ -37,6 +37,7 @@ import { HistoricalTradeVisualizer } from 'Core/containers/historical-trade-visu
 import { SantaTableAlertStatusCell } from 'Core/components/santa-table-alert-status-cell/santa-table-alert-status-cell.component';
 import { SantaTableFullWidthCellRenderer } from 'Core/components/santa-table-full-width-cell-renderer/santa-table-full-width-cell-renderer.component';
 import { GlobalNav } from 'Core/containers/global-nav/global-nav.container';
+import { AppRoutingModule } from 'App/app-routing.module';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { GlobalNav } from 'Core/containers/global-nav/global-nav.container';
   imports: [
     CommonModule,
     FormsModule,
+    AppRoutingModule,
 
     AgGridModule.withComponents([
       SantaTableSecurityCell,
