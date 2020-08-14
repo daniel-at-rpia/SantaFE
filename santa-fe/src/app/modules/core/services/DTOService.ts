@@ -1657,7 +1657,8 @@ export class DTOService {
         onSubmitMetricValues: null
       },
       state: {
-        isEditing: false
+        isEditing: false,
+        isStencil: false
       }
     }
     return object;
