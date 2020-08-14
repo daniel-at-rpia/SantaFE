@@ -5,6 +5,7 @@ $portfolioBreakdown_borderWidth: 2px; // can't use rem because fractions of a pi
 $portfolioBreakdown_borderColor: $color_active;
 $portfolioBreakdown_rating_width: 12rem;
 $portfolioBreakdown_rating_thickness: 1.75rem;
+$portfolioBreakdown_categoryList_cell_width: 3.5rem;
 
 .sat-portfolioBreakdown {
   $blockName: &;
@@ -12,15 +13,16 @@ $portfolioBreakdown_rating_thickness: 1.75rem;
   @include mix_border_generator($portfolioBreakdown_borderWidth, $portfolioBreakdown_borderColor);
   @include mix_border_radius(10px);
   display: flex;
+  flex-direction: column;
   width: $portfolioBreakdownWidth;
   height: 8rem;
   background-color: $color_white;
   margin-top: $portfolioBreakdown_rating_thickness;
+  padding: $spacing_small;
   &__title {
     @include mix_fixed_div(absolute, $z_index_base_item_solid);
     display: flex;
     align-items: flex-start;
-    padding: $spacing_medium;
     &-definition {
       @include mix_border_radius(10px);
       display: flex;
@@ -59,6 +61,36 @@ $portfolioBreakdown_rating_thickness: 1.75rem;
       @include mix_fixed_div(absolute, $z_index_hovering_item);
       color: $font_color_inverse;
       font-size: $font_size_normal;
+    }
+  }
+  &__categoryListHeader {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: $portfolioBreakdown_rating_thickness;
+    &-cell {
+      @include mix_fixed_div(relative, $z_index_base_item);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: $portfolioBreakdown_categoryList_cell_width;
+      &-icon {
+        color: $font_color_minor;
+        font-size: $font_size_large;
+      }
+      &-tooltip {
+        @include mix_fixed_div(absolute, $z_index_hovering_item);
+        @include mix_border_radius(3px);
+        display: none;
+        top: -100%;
+        color: $font_color_inverse;
+        line-height: $line_height_small;
+        width: 4.25rem;
+        background-color: $color_active;
+        text-align: center;
+      }
+      &:hover>&-tooltip {
+        display: block;
+      }
     }
   }
 }
