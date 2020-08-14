@@ -1,0 +1,29 @@
+@import "global.scss";
+
+.sat-structureMainPanel { 
+  $structureMainPanelBlockName: &;
+  @include mix_border_radius(10px);
+  @include mix_border_generator();
+  flex: 1 1 auto;
+  display: flex;
+  overflow: hidden;
+  &__fundGroup {
+    @include mix_enable_scrollbar($direction: 'horizontal');
+    overflow-y: hidden;
+    display: flex;
+    flex: 1 1 auto;
+    margin-right: $spacing_medium;
+    &-fund {
+      @include mix_border_radius(10px);
+      @include mix_border_generator();
+      flex: 0 0 30rem;
+      margin: $spacing_medium 0 $spacing_medium $spacing_medium;
+    }
+  }
+  ::-webkit-scrollbar-thumb:horizontal {
+    @include mix_border_radius(10px);
+  }
+  ::-webkit-scrollbar:horizontal {
+    height: $scroll_bar_width_medium * 1.5;
+  }
+}

@@ -37,3 +37,8 @@ export const selectAlertCounts = createSelector(
   getCoreState,
   (state: CoreState) => state.alert.countByTypeArr
 );
+
+export const ownerInitials = createSelector(
+  getCoreState,
+  (state: CoreState) => state.user.initials
+)

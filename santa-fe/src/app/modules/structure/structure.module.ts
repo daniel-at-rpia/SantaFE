@@ -5,9 +5,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { CoreModule } from 'Core/core.module';
 import { StructurePage } from 'Structure/structure.page';
 
+import { StructureMainPanel } from 'Structure/containers/structure-main-panel.container';
+import { StructureFund } from 'App/modules/structure/containers/structure-fund.container';
+
 @NgModule({
   declarations: [
-    StructurePage
+    StructurePage,
+    StructureMainPanel,
+    StructureFund
   ],
   imports: [
     // Angular framework modules

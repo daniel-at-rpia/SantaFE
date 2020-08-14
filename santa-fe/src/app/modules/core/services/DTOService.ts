@@ -44,6 +44,7 @@
       AxeAlertScope,
       AxeAlertType
     } from 'Core/constants/tradeConstants.constant';
+    import { PortfolioShortNames } from 'Core/constants/structureConstants.constants';
   //
 
 @Injectable()
@@ -1631,6 +1632,34 @@ export class DTOService {
     }
     checkFilled(object);
     checkRangeActive(object);
+    return object;
+  }
+
+  public formStructureFund(portfolioName: PortfolioShortNames) {
+    const object: DTOs.PortfolioStructureDTO = {
+      data: {
+        portfolioName: '',
+        portfolioId: null,
+        portfolioShortName: portfolioName,
+        indexId: null,
+        indexShortName: '',
+        CS01Values: {
+          currentValue: null,
+          targetValue: null
+        },
+        LeverageValues: {
+          currentValue: null,
+          targetValue: null
+        },
+        children: []
+      },
+      api: {
+        onSubmitMetricValues: null
+      },
+      state: {
+        isEditing: false
+      }
+    }
     return object;
   }
 }

@@ -10,17 +10,20 @@ import {
   SecurityMarkBlock,
   SecurityPortfolioBlock,
   SecurityTableRowQuoteBlock,
-  SecurityCostPortfolioBlock
+  SecurityCostPortfolioBlock, 
+  PortfolioMetricTotal,
+  PortfolioBreakDownValues,
+  NestedPortfolioBreakdownValues,
+  PortfolioBreakDownOverrides
 } from 'FEModels/frontend-blocks.interface';
 import {AlertSubTypes, AlertTypes} from 'Core/constants/coreConstants.constant';
 import { SantaTableNumericFloatingFilterParams } from 'FEModels/frontend-adhoc-packages.interface';
 import * as agGrid from 'ag-grid-community';
 import * as moment from 'moment';
 import * as am4Charts from '@amcharts/amcharts4/charts';
-
 import {Alert} from "Core/components/alert/alert.component";
-
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
+import { PortfolioShortNames } from 'Core/constants/structureConstants.constants';
 
 interface BasicDTOStructure {
   [property: string]: object;
@@ -657,5 +660,38 @@ export interface TradeAlertConfigurationAxeGroupBlockDTO extends BasicDTOStructu
     isDisabled: boolean;
     isUrgent: boolean;
     isRangeActive: boolean;
+  }
+}
+
+export interface PortfolioBreakdownDTO extends BasicDTOStructure {
+  data: {
+    category: string;
+    values: Array<PortfolioBreakDownValues | NestedPortfolioBreakdownValues>;
+    overrides?: Array<PortfolioBreakDownOverrides>
+  },
+  style: {
+    icon: string
+  },
+  state: {
+    isEditing: boolean;
+    isStencil: boolean;
+  }
+}
+export interface PortfolioStructureDTO extends BasicDTOStructure {
+  data: {
+    portfolioName: string,
+    portfolioId: number;
+    portfolioShortName: PortfolioShortNames;
+    indexId: number;
+    indexShortName: string;
+    CS01Values: PortfolioMetricTotal;
+    LeverageValues: PortfolioMetricTotal;
+    children: Array<PortfolioBreakdownDTO>;
+  },
+  api: {
+    onSubmitMetricValues: (CS01: number, leverage: number) => void;
+  }
+  state: {
+    isEditing: boolean;
   }
 }

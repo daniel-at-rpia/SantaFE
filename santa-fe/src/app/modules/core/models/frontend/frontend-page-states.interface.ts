@@ -16,6 +16,11 @@ import {
 } from 'FEModels/frontend-adhoc-packages.interface';
 import {AlertTypes} from 'Core/constants/coreConstants.constant';
 import * as am4charts from '@amcharts/amcharts4/charts';
+import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+
+export interface RootState {
+  ownerInitial: string;
+}
 
 export interface GlobalNavState {
   menuIsActive: boolean;
@@ -126,6 +131,17 @@ export interface TradeCenterPanelState {
       strategy: Array<string>;
     }
     securityFilters: Array<DefinitionConfiguratorEmitterParamsItem>
+  }
+}
+
+export interface StructureMainPanelState {
+  ownerInitial: string;
+  isUserPM: boolean;
+  selectedMetricValue: PortfolioMetricValues;
+  fetchResult: {
+    fundList: DTOs.PortfolioStructureDTO[];
+    fetchFundDataFailed: boolean;
+    fetchFundDataFailedError: string;
   }
 }
 
@@ -255,5 +271,5 @@ export interface TradeAlertPanelState {
 }
 
 export interface StructureState {
-  ownerInitial: string;
+
 }
