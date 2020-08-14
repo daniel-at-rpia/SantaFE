@@ -287,3 +287,7 @@
     user-select: none;
     line-height: $line_height_minimum;
   }
+
+  @mixin mix_theme_background(){
+    @include mix_gradient($theme_color_1, $theme_color_2, 40%, 90deg);
+  }

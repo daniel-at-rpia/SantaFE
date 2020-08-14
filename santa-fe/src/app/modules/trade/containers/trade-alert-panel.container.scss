@@ -202,7 +202,7 @@ $tradeAlertPanel_overview_tabIndicate_width: 7rem;
     }
   }
   &__main {
-    @include mix_alive('normal');
+    @include mix_alive('heavy');
     @include mix_border_radius(10px);
     flex: 1 1 auto;
     display: flex;
@@ -349,6 +349,7 @@ $tradeAlertPanel_overview_tabIndicate_width: 7rem;
                   @include material('none');
                   @include mix_border_generator;
                   background-color: transparent;
+                  pointer-events: none;
                   &-icon {
                     color: $color_disabled;
                   }
