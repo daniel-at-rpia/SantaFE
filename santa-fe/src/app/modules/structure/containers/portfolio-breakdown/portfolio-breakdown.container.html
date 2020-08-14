@@ -21,18 +21,26 @@
     </div>
     <span class="sat-portfolioBreakdown__rating-hoverText">{{breakdownData.data.ratingHoverText}}</span>
   </section>
-  <section class="sat-portfolioBreakdown__categoryListHeader">
-    <div class="sat-portfolioBreakdown__categoryListHeader-cell">
-      <i class="sat-portfolioBreakdown__categoryListHeader-cell-icon fas fa-pennant"></i>
-      <div class="sat-portfolioBreakdown__categoryListHeader-cell-tooltip">Target</div>
+  <section class="sat-portfolioBreakdown__categoryHeader">
+    <div class="sat-portfolioBreakdown__categoryHeader-cell">
+      <i class="sat-portfolioBreakdown__categoryHeader-cell-icon fas fa-pennant"></i>
+      <div class="sat-portfolioBreakdown__categoryHeader-cell-tooltip">Target</div>
     </div>
-    <div class="sat-portfolioBreakdown__categoryListHeader-cell">
-      <i class="sat-portfolioBreakdown__categoryListHeader-cell-icon fas fa-chart-pie"></i>
-      <div class="sat-portfolioBreakdown__categoryListHeader-cell-tooltip">Current %</div>
+    <div class="sat-portfolioBreakdown__categoryHeader-cell">
+      <i class="sat-portfolioBreakdown__categoryHeader-cell-icon fas fa-chart-pie"></i>
+      <div class="sat-portfolioBreakdown__categoryHeader-cell-tooltip">Current %</div>
     </div>
-    <div class="sat-portfolioBreakdown__categoryListHeader-cell">
-      <i class="sat-portfolioBreakdown__categoryListHeader-cell-icon fas fa-analytics"></i>
-      <div class="sat-portfolioBreakdown__categoryListHeader-cell-tooltip">Index %</div>
+    <div class="sat-portfolioBreakdown__categoryHeader-cell">
+      <i class="sat-portfolioBreakdown__categoryHeader-cell-icon fas fa-analytics"></i>
+      <div class="sat-portfolioBreakdown__categoryHeader-cell-tooltip">Index %</div>
     </div>
+  </section>
+  <section class="sat-portfolioBreakdown__categoryContent">
+    <ul class="sat-portfolioBreakdown__categoryContent-list">
+      <li class="sat-portfolioBreakdown__categoryContent-list-item" *ngFor="let eachCategory of breakdownData.data.categoryList">
+        <span class="sat-portfolioBreakdown__categoryContent-list-item-title">{{eachCategory.category}}</span>
+        <move-visualizer [visualizerData]="eachCategory.moveVisualizer"></move-visualizer>
+      </li>
+    </ul>
   </section>
 </article>

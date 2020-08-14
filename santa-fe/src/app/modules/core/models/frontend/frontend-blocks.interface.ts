@@ -282,6 +282,7 @@ export interface PortfolioBreakdownCategoryBlock {
   currentPct: number;
   indexLevel: number;
   indexPct: number;
+  moveVisualizer: DTOs.MoveVisualizerDTO;
 }
 
 export interface GlobalNavLegendBlock {

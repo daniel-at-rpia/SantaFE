@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
 import { CoreModule } from 'Core/core.module';
+import { TradeModule } from 'Trade/trade.module';
 import { StructurePage } from 'Structure/structure.page';
 import { NavigationModule } from 'Core/constants/coreConstants.constant';
 
@@ -27,7 +28,8 @@ import { PortfolioBreakdown } from 'App/modules/structure/containers/portfolio-b
     ]),
 
     // Native modules
-    CoreModule
+    CoreModule,
+    TradeModule
   ]
 })
 export class StructureModule { }

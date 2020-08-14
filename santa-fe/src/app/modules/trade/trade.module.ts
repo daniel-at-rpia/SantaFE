@@ -54,6 +54,9 @@ import { NavigationModule } from "Core/constants/coreConstants.constant";
   ],
   providers: [
     LiveDataProcessingService
+  ],
+  exports: [
+    MoveVisualizer
   ]
 })
 export class TradeModule { }

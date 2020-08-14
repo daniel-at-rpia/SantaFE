@@ -1661,7 +1661,7 @@ export class DTOService {
         isEditing: false
       }
     };
-    object.data.children.push(this.formPortfolioBreakdown());
+    object.data.children.push(this.formPortfolioBreakdown(false));
     return object;
   }
 
@@ -1684,6 +1684,29 @@ export class DTOService {
       }
     };
     object.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
+    const moveVisualizer = this.formMoveVisualizerObject(
+      false,
+      {
+        targetSecurityIdentifier: 'test',
+        startMetric: 12,
+        endMetric: 22,
+        minMetric: 12,
+        maxMetric: 25,
+        isLevelRange: false,
+        isBasisRange: true,
+        isValid: true
+      },
+      false);
+    object.data.categoryList.push({
+      category: 'test',
+      targetLevel: 123,
+      targetPct: 12,
+      currentLevel: 154,
+      currentPct: 14,
+      indexLevel: 111,
+      indexPct: 16,
+      moveVisualizer: moveVisualizer
+    });
     return object;
   }
 }
