@@ -22,8 +22,26 @@
       </div>
     </div>
     <div class="sat-globalNav__menu-navigationCanvas">
-      <div class="sat-globalNav__menu-navigationCanvas-cta sat-globalNav__menu-navigationCanvas-cta--active">Trade</div>
-      <div class="sat-globalNav__menu-navigationCanvas-cta sat-globalNav__menu-navigationCanvas-cta--disabled">Structuring</div>
+      <a
+        routerLink="/trade"
+        routerLinkActive="active"
+        (click)="onClickNavCTA()"
+        [ngClass]="{
+          'sat-globalNav__menu-navigationCanvas-cta': true,
+          'sat-globalNav__menu-navigationCanvas-cta--active': state.currentModule === this.constants.moduleUrl.trade
+        }">
+        Trade
+      </a>
+      <a
+        routerLink="/structuring"
+        routerLinkActive="active"
+        (click)="onClickNavCTA()"
+        [ngClass]="{
+          'sat-globalNav__menu-navigationCanvas-cta': true,
+          'sat-globalNav__menu-navigationCanvas-cta--active': state.currentModule === this.constants.moduleUrl.structuring
+        }">
+        Structuring
+      </a>
     </div>
     <div class="sat-globalNav__menu-legendCanvas">
       <div class="sat-globalNav__menu-legendCanvas-title">Seniority Legend</div>
