@@ -8,7 +8,15 @@
   width: 100%;
 	height: 100%;
   padding: $spacing_medium;
+  overflow: hidden;
   &__main {
-    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex: 1 1 auto;
+    margin-right: $page_gutter_width_for_alerts;
+    structure-main-panel {
+      display: flex;
+      overflow: hidden;
+    }
   }
 }
