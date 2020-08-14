@@ -1629,4 +1629,19 @@ export class DTOService {
     checkRangeActive(object);
     return object;
   }
+
+  public formStructureFund(rawData) {
+    const object = {
+      data: {
+        portfolioShortName: rawData.portfolioShortName
+      },
+      api: {
+        onSubmitMetricValues: null
+      },
+      state: {
+        isEditing: false
+      }
+    }
+    return object;
+  }
 }

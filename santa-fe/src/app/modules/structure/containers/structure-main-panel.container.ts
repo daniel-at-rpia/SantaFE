@@ -3,7 +3,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { DTOService } from 'Core/services/DTOService';
 import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
 
-import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import { PortfolioMetricValues, PortfolioShortNames } from 'Core/constants/structureConstants.constants';
 
 
 @Component({
@@ -14,7 +14,8 @@ import { PortfolioMetricValues } from 'Core/constants/structureConstants.constan
 })
 
 export class StructureMainPanel implements OnInit {
-  state: StructureMainPanelState; 
+  state: StructureMainPanelState;
+  portfolioList: PortfolioShortNames[] = [PortfolioShortNames.SOF, PortfolioShortNames.DOF, PortfolioShortNames.AGB, PortfolioShortNames.STIP, PortfolioShortNames.CIP, PortfolioShortNames.BBB, PortfolioShortNames.FIP]
   constants = {
     portfolioMetricValues: PortfolioMetricValues
   };
@@ -36,5 +37,18 @@ export class StructureMainPanel implements OnInit {
     this.state = this.initializePageState();
   }
 
-  public ngOnInit() {}; 
+  public ngOnInit() {
+    this.loadInitialFunds();
+  };
+
+  private loadInitialFunds() {
+    this.portfolioList.forEach(portfolio => {
+      const portfolioData = {
+        portfolioShortName: portfolio
+      }
+      const fund = this.dtoService.formStructureFund(portfolioData);
+      this.state.fetchResult.fundList.push(fund);
+    })
+  }
+
 }
