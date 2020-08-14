@@ -44,6 +44,7 @@
       AxeAlertScope,
       AxeAlertType
     } from 'Core/constants/tradeConstants.constant';
+    import { PortfolioShortNames } from 'Core/constants/structureConstants.constants';
   //
 
 @Injectable()
@@ -1630,10 +1631,23 @@ export class DTOService {
     return object;
   }
 
-  public formStructureFund(rawData) {
-    const object = {
+  public formStructureFund(portfolioName: PortfolioShortNames) {
+    const object: DTOs.PortfolioStructureDTO = {
       data: {
-        portfolioShortName: rawData.portfolioShortName
+        portfolioName: '',
+        portfolioId: null,
+        portfolioShortName: portfolioName,
+        indexId: null,
+        indexShortName: '',
+        CS01Values: {
+          currentValue: null,
+          targetValue: null
+        },
+        LeverageValues: {
+          currentValue: null,
+          targetValue: null
+        },
+        children: []
       },
       api: {
         onSubmitMetricValues: null

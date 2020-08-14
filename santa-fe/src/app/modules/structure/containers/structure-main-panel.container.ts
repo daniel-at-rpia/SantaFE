@@ -43,10 +43,7 @@ export class StructureMainPanel implements OnInit {
 
   private loadInitialFunds() {
     this.portfolioList.forEach(portfolio => {
-      const portfolioData = {
-        portfolioShortName: portfolio
-      }
-      const fund = this.dtoService.formStructureFund(portfolioData);
+      const fund = this.dtoService.formStructureFund(portfolio);
       this.state.fetchResult.fundList.push(fund);
     })
   }
