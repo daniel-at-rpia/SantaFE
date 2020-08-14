@@ -677,6 +677,7 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     isStencil: boolean;
   }
 }
+
 export interface PortfolioStructureDTO extends BasicDTOStructure {
   data: {
     portfolioName: string,
