@@ -19,11 +19,11 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   subscriptions = {
     ownerInitialsSub: null
   };
-  portfolioList: PortfolioShortNames[] = [PortfolioShortNames.SOF, PortfolioShortNames.DOF, PortfolioShortNames.AGB, PortfolioShortNames.STIP, PortfolioShortNames.CIP, PortfolioShortNames.BBB, PortfolioShortNames.FIP]
   constants = {
-    portfolioMetricValues: PortfolioMetricValues
+    portfolioMetricValues: PortfolioMetricValues,
+    portfolioShortNames: PortfolioShortNames
   };
-
+  portfolioList: PortfolioShortNames[] = [this.constants.portfolioShortNames.SOF, this.constants.portfolioShortNames.DOF, this.constants.portfolioShortNames.AGB, this.constants.portfolioShortNames.STIP, this.constants.portfolioShortNames.CIP, this.constants.portfolioShortNames.BBB, this.constants.portfolioShortNames.FIP]
   private initializePageState(): StructureMainPanelState { 
     const state: StructureMainPanelState = {
         ownerInitial: null,
