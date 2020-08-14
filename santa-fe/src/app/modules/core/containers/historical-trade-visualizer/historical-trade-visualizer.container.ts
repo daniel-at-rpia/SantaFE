@@ -33,17 +33,25 @@ export class HistoricalTradeVisualizer implements OnDestroy, OnChanges {
       // this.historyData.graph.timeSeries = null;
     // }
     this.historyData.state.graphReceived = false;
-    if (this.historyData.graph.positionPie) {
-      this.graphService.destoryGraph(this.historyData.graph.positionPie);
-      this.historyData.graph.positionPie = null;
-    }
-    if (this.historyData.graph.volumeLeftPie) {
-      this.graphService.destoryGraph(this.historyData.graph.volumeLeftPie);
-      this.historyData.graph.volumeLeftPie = null;
-    }
-    if (this.historyData.graph.volumeRightPie) {
-      this.graphService.destoryGraph(this.historyData.graph.volumeRightPie);
-      this.historyData.graph.volumeRightPie = null;
+    try {
+      if (this.historyData.graph.positionPie) {
+        this.graphService.destoryGraph(this.historyData.graph.positionPie);
+        this.historyData.graph.positionPie = null;
+      }
+      if (this.historyData.graph.volumeLeftPie) {
+        this.graphService.destoryGraph(this.historyData.graph.volumeLeftPie);
+        this.historyData.graph.volumeLeftPie = null;
+      }
+      if (this.historyData.graph.volumeRightPie) {
+        this.graphService.destoryGraph(this.historyData.graph.volumeRightPie);
+        this.historyData.graph.volumeRightPie = null;
+      }
+    } catch(err) {
+      if (err && err.message == 'EventDispatcher is disposed') {
+        console.log('dispose misbehavior captured');
+      } else {
+        console.warn('new amchart error', err);
+      }
     }
   }
 
