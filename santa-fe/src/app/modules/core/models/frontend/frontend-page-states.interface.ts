@@ -1,7 +1,8 @@
 import * as DTOs from 'FEModels/frontend-models.interface';
 import {
   ObligorChartCategoryBlock,
-  TableFetchResultBlock
+  TableFetchResultBlock,
+  GlobalNavLegendBlock
 } from 'FEModels/frontend-blocks.interface';
 import {
   SecurityDefinitionStub,
@@ -19,6 +20,16 @@ import { PortfolioMetricValues } from 'Core/constants/structureConstants.constan
 
 export interface RootState {
   ownerInitial: string;
+}
+
+export interface GlobalNavState {
+  menuIsActive: boolean;
+  version: string;
+  user: string;
+  legend: {
+    seniority: Array<GlobalNavLegendBlock>;
+    rating: Array<GlobalNavLegendBlock>;
+  }
 }
 
 export interface GlobalAlertState {

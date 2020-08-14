@@ -9,8 +9,10 @@
     } from '@angular/core';
     import {
       tap,
-      first
+      first,
+      catchError
     } from 'rxjs/operators';
+    import { of } from 'rxjs';
     import { ICellRendererAngularComp } from 'ag-grid-angular';
 
     import { AgGridRowNode } from 'FEModels/frontend-blocks.interface';
@@ -26,6 +28,10 @@
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { QuoteHeaderConfigList } from 'Core/constants/securityTableConstants.constant';
+    import * as BEModels from 'BEModels/backend-models.interface';
+    import * as DTOs from 'FEModels/frontend-models.interface';
+    import { GraphService } from 'Core/services/GraphService';
+
   //
 
 @Component({
@@ -39,11 +45,12 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   private parentNode: AgGridRowNode;
   private parent: any; // a hacky way to talk to "santa-table.container.ts"
   private params: AgGridRowParams;
-
+  public showAllTradeHistoryButton: boolean =  true;
   constructor(
     private dtoService: DTOService,
     private utilityService: UtilityService,
-    private restfulCommService: RestfulCommService
+    private restfulCommService: RestfulCommService,
+    private graphService: GraphService
   ) { }
 
   public agInit(params: any){
@@ -66,6 +73,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     // the pinned rows won't have a parent
     this.parentNode && this.parentNode.setExpanded(false);
     this.parent.onRowClickedToCollapse(this.rowData, !this.parentNode, this.params);
+    this.rowData.data.historicalTradeVisualizer.state.graphReceived = true;
   }
 
   public onClickSelectForAnalysis() {
@@ -167,6 +175,12 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     );
   }
 
+  public onClickGetAllTradeHistory(showAllTradeHistory: boolean) {
+    if (showAllTradeHistory) {
+      this.fetchTradeAllHistory();
+    }
+  }
+
   private updateQuoteUponClick(params: ClickedSpecificQuoteEmitterParams, targetQuoteList: Array<SecurityQuoteDTO>){
     targetQuoteList.forEach((eachQuote) => {
       if (eachQuote.data.uuid === params.targetQuote.data.uuid) {
@@ -183,5 +197,54 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
         eachQuote.state.menuActiveSide = null;
       }
     });
+  }
+
+  private fetchTradeAllHistory() {
+    this.showAllTradeHistoryButton = false;
+    const securityID = this.rowData.data.security.data.securityID;
+    const payload = {
+      "identifier": securityID
+    }
+    const security = this.rowData.data.security;
+    this.rowData.data.historicalTradeVisualizer.state.graphReceived = true;
+    this.graphService.destoryGraph(this.rowData.data.historicalTradeVisualizer.graph.positionPie);
+    this.rowData.data.historicalTradeVisualizer.graph.positionPie = null;
+    this.graphService.destoryGraph(this.rowData.data.historicalTradeVisualizer.graph.volumeLeftPie);
+    this.rowData.data.historicalTradeVisualizer.graph.volumeLeftPie = null;
+    this.graphService.destoryGraph(this.rowData.data.historicalTradeVisualizer.graph.volumeRightPie);
+    this.rowData.data.historicalTradeVisualizer.graph.volumeRightPie = null;
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAllTradeHistory, { req: 'POST' }, payload, false, false).pipe(
+      first(),
+      tap((allTradeHistory: Object) => {
+        if (!!allTradeHistory) {
+          const securityAllTradeHistoryData = allTradeHistory[securityID];
+          this.setAllTradeHistory(securityAllTradeHistoryData, security);
+        }
+      }),
+      catchError(err => {
+        this.restfulCommService.logError(`Get all trade history for security ${securityID} failed`);
+        console.error('error', err);
+        return of('error');
+      })
+    ).subscribe();
+  }
+
+  private setAllTradeHistory(rawData: BEModels.BETradeBlock, targetSecurity: DTOs.SecurityDTO ) {
+    this.rowData.data.security.data.tradeHistory = []
+    for (let fund in rawData) {
+      if (Object.prototype.hasOwnProperty.call(rawData, fund)) {
+        const currentFund = rawData[fund];
+        currentFund.forEach(entry => {
+          const newTradeBlock = this.dtoService.formTradeObject(entry, targetSecurity)
+          this.rowData.data.security.data.tradeHistory.push(newTradeBlock);
+        })
+      }
+    }
+    this.setHistoricalTradeVisualizer(targetSecurity)
+    this.rowData.data.historicalTradeVisualizer.state.showAllTradeHistory = true;
+  }
+
+  private setHistoricalTradeVisualizer(targetSecurity: DTOs.SecurityDTO) {
+    this.rowData.data.historicalTradeVisualizer = this.dtoService.formHistoricalTradeObject(targetSecurity)
   }
 }

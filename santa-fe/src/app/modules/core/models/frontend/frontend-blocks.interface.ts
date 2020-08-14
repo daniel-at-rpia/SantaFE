@@ -291,3 +291,7 @@ export interface NestedPortfolioBreakdownValues {
   level2?: Array<PortfolioBreakDownValues>;
   level3?: Array<PortfolioBreakDownValues>;
 }
+export interface GlobalNavLegendBlock {
+  card: DTOs.SecurityDTO;
+  legend: string;
+}

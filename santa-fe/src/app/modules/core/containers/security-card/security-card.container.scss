@@ -538,6 +538,9 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
       }
     }
   }
+  &--tableState#{&}--darkBackgroundVariant {
+    @include mix_border_generator($typical_border_width, $color_white);
+  }
   &--stencilState {
     background: $color_white;
     #{$securityCardBlockName} {

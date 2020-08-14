@@ -1,3 +1,4 @@
+import { SafeHtml } from '@angular/platform-browser';
 import {
   AgGridColumnDefinition,
   AgGridRow,
@@ -534,6 +535,7 @@ export interface AlertDTO extends BasicDTOStructure {
     titleTop: string;
     titleBottom: string;
     message: string;
+    paragraphMessage: SafeHtml;
     time: string;
     unixTimestamp: number;
     titlePin: string;
@@ -620,6 +622,7 @@ export interface HistoricalTradeVisualizerDTO extends BasicDTOStructure {
     disabledPortfolio: Array<string>;
     selectedPortfolio: Array<string>;
     graphReceived: boolean;
+    showAllTradeHistory: boolean;
   };
   graph: {
     timeSeries: am4Charts.XYChart;
@@ -650,6 +653,7 @@ export interface TradeAlertConfigurationAxeGroupBlockDTO extends BasicDTOStructu
     targetDriver: string;
     targetRange: NumericFilterDTO;
     sendEmail: boolean;
+    securityIdentifier?: string;
   },
   state: {
     isDeleted: boolean;

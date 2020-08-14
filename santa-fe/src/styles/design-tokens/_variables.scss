@@ -17,7 +17,7 @@ $color_rating_bbb: #0f8276;
 $color_rating_bb: #E66F0E;
 $color_rating_b: #E687C8; //#1EBCE8;
 $color_rating_ccctod: #E687C8;
-$color_rating_nr: $color_gray_4;
+$color_rating_nr: $color_white;
 
 $color_seniority_1: #16c1ff;
 $color_seniority_2: #adf7b6;
@@ -117,8 +117,8 @@ $z_index_base_item: unset;
 $z_index_buried_item: -1;
 
 $animation_duration_light: 0.2s;
-$animation_duration_normal: 0.5s;
-$animation_duration_heavy: 1s;
+$animation_duration_normal: 0.35s;
+$animation_duration_heavy: 0.5s;
 $animation_duration_loading: 1.5s;
 $animation_duration_extra_heavy: 2.5s;
 $animation_duration_debug: 20s;

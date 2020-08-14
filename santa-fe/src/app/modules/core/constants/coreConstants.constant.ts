@@ -23,7 +23,8 @@ export const APIUrlMap = {
   readAlert: 'Alert/set-alerts-to-inactive',
   deleteAlert: 'Alert/delete-alerts',
   logEngagement: 'feLogger/track',
-  logError: 'feLogger/log'
+  logError: 'feLogger/log',
+  getAllTradeHistory: 'trade/get-all-trades-for-security'
 };
 
 export const FAILED_USER_INITIALS_FALLBACK = 'n/a';
