@@ -10,4 +10,11 @@
     </button>
     <hr class="sat-fundStructuring__utility-divider">
   </section>
+  <section class="sat-fundStructuring__content">
+    <ul class="sat-fundStructuring__content-breakdownList">
+      <li class="sat-fundStructuring__content-breakdownList-item" *ngFor="let eachBreakdown of fund.data.children">
+        <portfolio-breakdown [breakdownData]="eachBreakdown"></portfolio-breakdown>
+      </li>
+    </ul>
+  </section>
 </article>

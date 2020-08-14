@@ -1,1 +1,6 @@
-@import "global.scss"
+@import "global.scss";
+
+.sat-portfolioBreakdown {
+  $blockName: &;
+  @include mix_fixed_div(relative, $z_index_base_item);
+}

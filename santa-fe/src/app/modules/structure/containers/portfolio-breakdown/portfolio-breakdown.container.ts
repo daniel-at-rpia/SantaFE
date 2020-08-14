@@ -4,8 +4,8 @@ import { PortfolioBreakdownDTO } from 'FEModels/frontend-models.interface';
 
 @Component({
   selector: 'portfolio-breakdown',
-  templateUrl: './portfolio-breakdown.component.html',
-  styleUrls: ['./portfolio-breakdown.component.scss'],
+  templateUrl: './portfolio-breakdown.container.html',
+  styleUrls: ['./portfolio-breakdown.container.scss'],
   encapsulation: ViewEncapsulation.Emulated
 })
 

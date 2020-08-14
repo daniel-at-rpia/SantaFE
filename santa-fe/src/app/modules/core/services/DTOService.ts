@@ -1659,7 +1659,23 @@ export class DTOService {
       state: {
         isEditing: false
       }
-    }
+    };
+    object.data.children.push(this.formPortfolioBreakdown());
+    return object;
+  }
+
+  public formPortfolioBreakdown(): DTOs.PortfolioBreakdownDTO {
+    const object: DTOs.PortfolioBreakdownDTO = {
+      data: {
+        title: 'Test',
+        definition: null,
+        categoryList: []
+      },
+      state: {
+        isEditing: false,
+        isStencil: false
+      }
+    };
     return object;
   }
 }

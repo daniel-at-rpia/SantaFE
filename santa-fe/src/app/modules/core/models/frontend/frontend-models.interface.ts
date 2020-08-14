@@ -12,9 +12,7 @@ import {
   SecurityTableRowQuoteBlock,
   SecurityCostPortfolioBlock, 
   PortfolioMetricTotal,
-  PortfolioBreakDownValues,
-  NestedPortfolioBreakdownValues,
-  PortfolioBreakDownOverrides
+  PortfolioBreakdownCategoryBlock
 } from 'FEModels/frontend-blocks.interface';
 import {AlertSubTypes, AlertTypes} from 'Core/constants/coreConstants.constant';
 import { SantaTableNumericFloatingFilterParams } from 'FEModels/frontend-adhoc-packages.interface';
@@ -665,12 +663,9 @@ export interface TradeAlertConfigurationAxeGroupBlockDTO extends BasicDTOStructu
 
 export interface PortfolioBreakdownDTO extends BasicDTOStructure {
   data: {
-    category: string;
-    values: Array<PortfolioBreakDownValues | NestedPortfolioBreakdownValues>;
-    overrides?: Array<PortfolioBreakDownOverrides>
-  },
-  style: {
-    icon: string
+    title: string;
+    definition: SecurityDefinitionDTO;
+    categoryList: Array<PortfolioBreakdownCategoryBlock>;
   },
   state: {
     isEditing: boolean;
