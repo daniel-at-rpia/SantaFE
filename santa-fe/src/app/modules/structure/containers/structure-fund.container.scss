@@ -21,12 +21,15 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      text-align: center;
+      &>i {
+        color: $font_color_major;
+        font-size: $font_size_large;
+      }
     }
     &-divider {
       height: $typical_border_width;
       background: $color_border_gray;
-      margin: $font_size_normal;
+      margin: $spacing_medium $spacing_large;
     }
   }
 }

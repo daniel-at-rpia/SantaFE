@@ -93,3 +93,6 @@ html {
   p {
     @extend .santa-paragraph;
   }
+  hr {
+    border-style: none;
+  }
