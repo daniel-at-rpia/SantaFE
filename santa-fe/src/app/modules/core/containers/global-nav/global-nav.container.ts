@@ -102,6 +102,10 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
     this.state.menuIsActive = !this.state.menuIsActive;
   }
 
+  public onClickNavCTA() {
+    this.state.menuIsActive = false;
+  }
+
   private loadLegend(mapping, stubList: Array<BESecurityDTO>): Array<GlobalNavLegendBlock> {
     let level = 0;
     const legendBlockList = stubList.map((eachStub)=>{
