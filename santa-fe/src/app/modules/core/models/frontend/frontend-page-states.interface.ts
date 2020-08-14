@@ -135,6 +135,7 @@ export interface TradeCenterPanelState {
 }
 
 export interface StructureMainPanelState {
+  ownerInitial: string;
   isUserPM: boolean;
   selectedMetricValue: PortfolioMetricValues;
   fetchResult: {
@@ -270,5 +271,5 @@ export interface TradeAlertPanelState {
 }
 
 export interface StructureState {
-  ownerInitial: string;
+
 }

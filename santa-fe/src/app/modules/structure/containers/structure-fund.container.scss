@@ -14,6 +14,8 @@
   }
   &__utility {
     @include mix_fixed_div(relative, $z_index_base_item);
+    display: flex;
+    flex-direction: column;
     &-btn {
       @include mix_fixed_div(absolute, $z_index_base_item_solid);
       top: 50%;
@@ -24,6 +26,7 @@
     &-divider {
       height: $typical_border_width;
       background: $color_border_gray;
+      margin: $font_size_normal;
     }
   }
 }

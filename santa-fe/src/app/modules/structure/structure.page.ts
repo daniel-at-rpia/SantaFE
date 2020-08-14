@@ -34,22 +34,17 @@ export class StructurePage implements OnInit, OnDestroy {
   constants = {
   };
 
-  private initializePageState(): StructureState {
-    return {
-      ownerInitial: null
-    };
-  }
+  private initializePageState() {}
 
   constructor(
     private store$: Store<any>,
     private dtoService: DTOService,
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService
-  ) {
-    this.state = this.initializePageState();
-  }
+  ) {}
 
   public ngOnInit() {
+
   }
 
   public ngOnDestroy() {
