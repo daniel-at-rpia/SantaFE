@@ -1,4 +1,5 @@
 @import "global.scss";
+@import "modules/structure/structure.scss";
 
 .sat-structureMainPanel { 
   $structureMainPanelBlockName: &;
@@ -16,7 +17,7 @@
     &-fund {
       @include mix_border_radius(10px);
       @include mix_border_generator();
-      flex: 0 0 30rem;
+      flex: 0 0 auto;
       margin: $spacing_medium 0 $spacing_medium $spacing_medium;
     }
   }

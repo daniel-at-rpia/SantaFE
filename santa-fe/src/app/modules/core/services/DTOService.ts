@@ -35,7 +35,8 @@
     } from 'Core/constants/marketConstants.constant';
     import {
       ConfiguratorDefinitionLayout,
-      FilterOptionsPortfolioList
+      FilterOptionsPortfolioList,
+      SecurityDefinitionMap
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       QuoteHeaderConfigList
@@ -1676,6 +1677,7 @@ export class DTOService {
         isStencil: false
       }
     };
+    object.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
     return object;
   }
 }

@@ -1,7 +1,8 @@
 @import "global.scss";
+@import "modules/structure/structure.scss";
 
 .sat-structurePage {
-	$tradeBlockName: &;
+	$blockName: &;
 	@include mix_fixed_div(absolute, $z_index_base_item);
 	display: flex;
 	justify-content: center;

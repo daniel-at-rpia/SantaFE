@@ -1,4 +1,5 @@
 @import "global.scss";
+@import "modules/structure/structure.scss";
 
 .sat-fundStructuring {
   &__configuration {
@@ -30,6 +31,19 @@
       height: $typical_border_width;
       background: $color_border_gray;
       margin: $spacing_medium $spacing_large;
+    }
+  }
+  &__content {
+    display: flex;
+    flex-direction: column;
+    &-breakdownList {
+      @include mix_enable_scrollbar('vertical');
+      display: flex;
+      flex-direction: column;
+      padding: $spacing_medium;
+      &-item {
+        
+      }
     }
   }
 }

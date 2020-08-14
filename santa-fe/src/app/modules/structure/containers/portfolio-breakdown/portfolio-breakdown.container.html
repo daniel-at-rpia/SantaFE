@@ -2,4 +2,14 @@
   [ngClass]="{
     'sat-portfolioBreakdown': true
   }">
+  <section class="sat-portfolioBreakdown__title">
+    <div class="sat-portfolioBreakdown__title-definition">
+      <security-definition
+        [definitionData]="breakdownData.data.definition"
+        [backgroundVariant]="true"
+        [interactionDisabled]="true">
+      </security-definition>
+    </div>
+    <span class="sat-portfolioBreakdown__title-text">{{breakdownData.data.title}}</span>
+  </section>
 </article>
