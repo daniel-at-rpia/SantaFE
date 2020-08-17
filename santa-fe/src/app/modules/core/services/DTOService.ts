@@ -1670,7 +1670,7 @@ export class DTOService {
   ): DTOs.PortfolioBreakdownDTO {
     const object: DTOs.PortfolioBreakdownDTO = {
       data: {
-        title: 'Test',
+        title: 'Currency',
         definition: null,
         categoryList: [],
         ratingHoverText: !isStencil ? '20%' : '99%'
@@ -1684,7 +1684,7 @@ export class DTOService {
       }
     };
     object.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
-    const moveVisualizer = this.formMoveVisualizerObject(
+    const moveVisualizer1 = this.formMoveVisualizerObject(
       false,
       {
         targetSecurityIdentifier: 'test',
@@ -1697,15 +1697,88 @@ export class DTOService {
         isValid: true
       },
       false);
+    moveVisualizer1.style = {
+      leftGap: 0,
+      leftEdge: 0,
+      moveDistance: 60,
+      rightEdge: 40,
+      rightGap: 0,
+      endPinLocation: 60
+    };
     object.data.categoryList.push({
-      category: 'test',
+      category: 'USD',
       targetLevel: 123,
       targetPct: 12,
+      diffToTarget: 45,
       currentLevel: 154,
       currentPct: 14,
       indexLevel: 111,
       indexPct: 16,
-      moveVisualizer: moveVisualizer
+      moveVisualizer: moveVisualizer1
+    });
+    const moveVisualizer2 = this.formMoveVisualizerObject(
+      false,
+      {
+        targetSecurityIdentifier: 'test',
+        startMetric: 12,
+        endMetric: 22,
+        minMetric: 12,
+        maxMetric: 25,
+        isLevelRange: false,
+        isBasisRange: true,
+        isValid: true
+      },
+      false);
+    moveVisualizer2.style = {
+      leftGap: 0,
+      leftEdge: 0,
+      moveDistance: 30,
+      rightEdge: 40,
+      rightGap: 30,
+      endPinLocation: 30
+    };
+    object.data.categoryList.push({
+      category: 'EUR',
+      targetLevel: 123,
+      targetPct: 12,
+      diffToTarget: 25,
+      currentLevel: 154,
+      currentPct: 14,
+      indexLevel: 111,
+      indexPct: 16,
+      moveVisualizer: moveVisualizer2
+    });
+    const moveVisualizer3 = this.formMoveVisualizerObject(
+      false,
+      {
+        targetSecurityIdentifier: 'test',
+        startMetric: 12,
+        endMetric: 22,
+        minMetric: 12,
+        maxMetric: 25,
+        isLevelRange: false,
+        isBasisRange: true,
+        isValid: true
+      },
+      false);
+    moveVisualizer3.style = {
+      leftGap: 0,
+      leftEdge: 0,
+      moveDistance: 50,
+      rightEdge: 10,
+      rightGap: 40,
+      endPinLocation: 50
+    };
+    object.data.categoryList.push({
+      category: 'CAD',
+      targetLevel: 123,
+      targetPct: 12,
+      diffToTarget: 16,
+      currentLevel: 154,
+      currentPct: 14,
+      indexLevel: 111,
+      indexPct: 16,
+      moveVisualizer: moveVisualizer3
     });
     return object;
   }

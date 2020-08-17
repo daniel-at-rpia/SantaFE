@@ -39,7 +39,14 @@
     <ul class="sat-portfolioBreakdown__categoryContent-list">
       <li class="sat-portfolioBreakdown__categoryContent-list-item" *ngFor="let eachCategory of breakdownData.data.categoryList">
         <span class="sat-portfolioBreakdown__categoryContent-list-item-title">{{eachCategory.category}}</span>
-        <move-visualizer [visualizerData]="eachCategory.moveVisualizer"></move-visualizer>
+        <div class="sat-portfolioBreakdown__categoryContent-list-item-moveVisualizer">
+          <move-visualizer [visualizerData]="eachCategory.moveVisualizer"></move-visualizer>
+        </div>
+        <div class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--target">{{eachCategory.diffToTarget}}k</div>
+        <hr class="sat-portfolioBreakdown__categoryContent-list-item-cellDivider">
+        <div class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--current">{{eachCategory.currentPct}}%</div>
+        <hr class="sat-portfolioBreakdown__categoryContent-list-item-cellDivider">
+        <div class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--index">{{eachCategory.indexPct}}%</div>
       </li>
     </ul>
   </section>

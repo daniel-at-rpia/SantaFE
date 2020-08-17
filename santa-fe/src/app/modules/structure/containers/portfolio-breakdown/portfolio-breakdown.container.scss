@@ -15,7 +15,6 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
   display: flex;
   flex-direction: column;
   width: $portfolioBreakdownWidth;
-  height: 8rem;
   background-color: $color_white;
   margin-top: $portfolioBreakdown_rating_thickness;
   padding: $spacing_small;
@@ -90,6 +89,42 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
       }
       &:hover>&-tooltip {
         display: block;
+      }
+    }
+  }
+  &__categoryContent {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    &-list {
+      display: flex;
+      flex-direction: column;
+      &-item {
+        display: flex;
+        &-title {
+          flex: 0 0 7rem;
+          display: flex;
+          justify-content: flex-end;
+          align-items: flex-end;
+          text-align: right;
+          padding: $spacing_x_small;
+        }
+        &-moveVisualizer {
+          flex: 1 1 auto;
+        }
+        &-cell {
+          flex: 0 0 ($portfolioBreakdown_categoryList_cell_width - $spacing_x_small*4/3 - $typical_border_width*2/3);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          font-size: $font_size_normal;
+        }
+        &-cellDivider {
+          @include mix_border_generator(0 $typical_border_width 0 0);
+          flex: 0 0 $spacing_x_small+$typical_border_width;
+          margin: $spacing_x_small $spacing_x_small $spacing_x_small 0;
+        }
       }
     }
   }
