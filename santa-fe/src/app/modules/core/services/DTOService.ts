@@ -1133,7 +1133,9 @@ export class DTOService {
         isInvalid: false,
         isPlaceholder: false,
         isStencil: !!isStencil,
-        isColorCodeInversed: false
+        isColorCodeInversed: false,
+        structuringBreakdownVariant: false,
+        structuringBreakdownExceededState: false
       }
     };
     if (!isStencil) {
@@ -1716,12 +1718,13 @@ export class DTOService {
       indexPct: 16,
       moveVisualizer: moveVisualizer1
     });
+    moveVisualizer1.state.structuringBreakdownVariant = true;
     const moveVisualizer2 = this.formMoveVisualizerObject(
       false,
       {
         targetSecurityIdentifier: 'test',
         startMetric: 12,
-        endMetric: 22,
+        endMetric: 54,
         minMetric: 12,
         maxMetric: 25,
         isLevelRange: false,
@@ -1735,7 +1738,7 @@ export class DTOService {
       moveDistance: 30,
       rightEdge: 40,
       rightGap: 30,
-      endPinLocation: 30
+      endPinLocation: 70
     };
     object.data.categoryList.push({
       category: 'EUR',
@@ -1748,12 +1751,14 @@ export class DTOService {
       indexPct: 16,
       moveVisualizer: moveVisualizer2
     });
+    moveVisualizer2.state.structuringBreakdownVariant = true;
+    moveVisualizer2.state.structuringBreakdownExceededState = true;
     const moveVisualizer3 = this.formMoveVisualizerObject(
       false,
       {
         targetSecurityIdentifier: 'test',
         startMetric: 12,
-        endMetric: 22,
+        endMetric: 83,
         minMetric: 12,
         maxMetric: 25,
         isLevelRange: false,
@@ -1780,6 +1785,7 @@ export class DTOService {
       indexPct: 16,
       moveVisualizer: moveVisualizer3
     });
+    moveVisualizer3.state.structuringBreakdownVariant = true;
     return object;
   }
 }

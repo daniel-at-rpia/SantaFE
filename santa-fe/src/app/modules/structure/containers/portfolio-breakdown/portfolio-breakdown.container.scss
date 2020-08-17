@@ -105,9 +105,9 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
           flex: 0 0 7rem;
           display: flex;
           justify-content: flex-end;
-          align-items: flex-end;
+          align-items: center;
           text-align: right;
-          padding: $spacing_x_small;
+          margin-right: $spacing_small;
         }
         &-moveVisualizer {
           flex: 1 1 auto;
