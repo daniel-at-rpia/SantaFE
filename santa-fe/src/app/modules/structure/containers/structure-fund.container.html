@@ -1,13 +1,71 @@
 <article [ngClass]="{
-  'sat-fundStructuring': true
+  'sat-fundStructuring': true,
+  'sat-fundStructuring--editing': state.isEditing
   }">
   <header class="sat-fundStructuring__configuration">
     <h2 class="sat-fundStructuring__configuration-title">{{ fund.data.portfolioShortName }}</h2>
   </header>
-  <section class="sat-fundStructuring__utility">
-    <button class="sat-fundStructuring__utility-btn">
+  <section 
+  [ngClass]="{
+    'sat-fundStructuring__setTarget': true
+  }">
+  <div class="sat-fundStructuring__setTarget-group">
+    <label for="CS01Target" class="sat-fundStructuring__setTarget-group-label">Target CS01 Value:</label>
+    <santa-input
+      [inputValue]="fund.data.CS01Values.targetValue"
+      [placeholder]="fund.data.CS01Values.targetValue"
+      [isNumeric]="fund.state.isNumeric"
+      (onInputChange)="onChangeValue($event, constants.CS01)"
+      [ngClass]="{
+        'sat-fundStructuring__setTarget-group-input': true,
+        'sat-fundStructuring__setTarget-group-input--error': state.hasErrors.updatedCS01Value
+      }">
+    </santa-input>
+  </div>
+  <div class="sat-fundStructuring__setTarget-group">
+      <label for="leverageTarget" class="sat-fundStructuring__setTarget-group-label">Leverage Target Value:</label>
+      <santa-input
+        [inputValue]="fund.data.LeverageValues.targetValue"
+        [placeholder]="fund.data.LeverageValues.targetValue"
+        [isNumeric]="fund.state.isNumeric"
+        (onInputChange)="onChangeValue($event, constants.Leverage)"
+        [ngClass]="{
+          'sat-fundStructuring__setTarget-group-input': true,
+          'sat-fundStructuring__setTarget-group-input--error': state.hasErrors.updatedLeverageValue
+        }">
+    </santa-input>
+  </div>
+  <div [ngClass]="{
+    'sat-fundStructuring__setTarget-message': true,
+    'sat-fundStructuring__setTarget-message--error': state.hasErrors.isUpdatedCS01Invalid || state.hasErrors.isUpdatedLeverageInvalid
+  }">
+  <p class="sat-fundStructur__edit-message-text">{{ state.hasErrors.errorMessage }}</p>
+  </div>
+</section>
+<section class="sat-fundStructuring__utility">
+  <div class="sat-fundStructuring__utility-btnGroup">
+    <button [ngClass]="{
+      'sat-fundStructuring__utility-btnGroup-btn': true,
+      'sat-fundStructuring__utility-btnGroup-btn--cancel': true,
+      'sat-fundStructuring__utility-btnGroup-btn--inActive': !state.isEditing
+    }" (click)="closeEditMenu()">
+      <i class="fas fa-times"></i>
+    </button>
+    <button [ngClass]="{
+      'sat-fundStructuring__utility-btnGroup-btn': true,
+      'sat-fundStructuring__utility-btnGroup-btn--edit': true,
+      'sat-fundStructuring__utility-btnGroup-btn--inActive': state.isEditing
+      }" (click)="showEditMenu()">
       <i class="fal fa-pencil"></i>
     </button>
-    <hr class="sat-fundStructuring__utility-divider">
-  </section>
+    <button [ngClass]="{
+      'sat-fundStructuring__utility-btnGroup-btn': true,
+      'sat-fundStructuring__utility-btnGroup-btn--save': true,
+      'sat-fundStructuring__utility-btnGroup-btn--inActive': !state.isEditing
+      }" (click)="saveEditDetails(fund.data.CS01Values.targetValue, fund.data.LeverageValues.targetValue)">
+      <i class="fas fa-cloud-upload-alt"></i>
+    </button>
+  </div>
+  <hr class="sat-fundStructuring__utility-divider">
+</section>
 </article>

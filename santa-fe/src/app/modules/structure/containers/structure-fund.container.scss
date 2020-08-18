@@ -1,6 +1,8 @@
 @import "global.scss";
 
+$tradeUtilityPanel_side_btn_size: $iconButton_size_large;
 .sat-fundStructuring {
+  $blockName: &;
   &__configuration {
     display: flex;
     justify-content: center;
@@ -12,24 +14,118 @@
       color: $font_color_minor;
     }
   }
+  &__setTarget {
+    @include mix_alive('light');
+    margin-bottom: convert_px_to_rem(28px);
+    height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    &-group,
+    &-message {
+      flex-basis: 70%;
+    }
+    &-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: $spacing_x_small;
+      &-label,
+      &-input {
+        margin-right: $spacing_x_small;
+      }
+      &-input {
+        @include mix_border_generator($static_color: $color_black);
+        @include mix_border_radius(5px);
+        &--error {
+          border-color: $color_negative;
+        }
+      }
+      &-measurement {
+        font-weight: bold;
+      }
+    }
+    &-message {
+      text-align: center;
+      &--error {
+        display: none;
+      }
+    }
+  }
   &__utility {
     @include mix_fixed_div(relative, $z_index_base_item);
-    display: flex;
-    flex-direction: column;
-    &-btn {
+    &-btnGroup {
       @include mix_fixed_div(absolute, $z_index_base_item_solid);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      &>i {
-        color: $font_color_major;
-        font-size: $font_size_large;
+      &-btn {
+        margin-right: $spacing_large;
+        &>i {
+          font-size: $font_size_large;
+        }
+        &--cancel {
+          background-color: $color_kill;
+        }
+        &--setTarget {
+          &>i{
+            color: $font_color_major;
+          }
+        }
+        &--save {
+          background-color: $color_create;
+        }
+        &--cancel,
+        &--save {
+          @include mix_border_radius(50%);
+          color: $color_white;
+          width: $tradeUtilityPanel_side_btn_size;
+          height: $tradeUtilityPanel_side_btn_size;
+          &>i{
+            color: $color_white;
+          }
+        }
+        &--inActive {
+          display: none;
+        }
       }
     }
     &-divider {
       height: $typical_border_width;
       background: $color_border_gray;
       margin: $spacing_medium $spacing_large;
+    }
+  }
+  &--nonEdit {
+    #{$blockName} {
+      &__setTarget {
+        visibility: hidden;
+        height: 0;
+      }
+    }
+  }
+  &--editing {
+    #{$blockName} {
+      &__setTarget {
+        height: 7rem;
+      }
+    }
+  }
+  &--nonEdit {
+    #{$blockName} {
+      &__utility {
+        &-btnGroup {
+         &-btn {
+          &--edit {
+            display: none;
+          }
+         }
+        }
+      }
     }
   }
 }
