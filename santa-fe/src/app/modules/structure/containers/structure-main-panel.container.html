@@ -4,7 +4,12 @@
   }">
   <section class="sat-structureMainPanel__fundGroup">
     <div *ngFor="let fund of state.fetchResult.fundList" class="sat-structureMainPanel__fundGroup-fund">
-      <structure-fund [fund]="fund"></structure-fund>
+      <structure-fund
+        [fund]="fund"
+        [ownerInitial]="state.ownerInitial"
+        (updatedFundData)="getFundFromNewTargets($event)"
+        >
+      </structure-fund>
     </div>
   </section>
 </article>
