@@ -5,7 +5,10 @@ import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { ownerInitials } from 'Core/selectors/core.selectors';
 import { PortfolioMetricValues, PortfolioShortNames } from 'Core/constants/structureConstants.constants';
-
+import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.interface';
+import { RestfulCommService } from 'Core/services/RestfulCommService';
+import { catchError, first, tap } from 'rxjs/operators';
+import { UtilityService } from 'Core/services/UtilityService';
 
 @Component({
     selector: 'structure-main-panel',
@@ -39,7 +42,9 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
   constructor(
     private dtoService: DTOService,
-    private store$: Store<any>
+    private store$: Store<any>,
+    private restfulCommService: RestfulCommService,
+    private utilityService: UtilityService
     ) {
     this.state = this.initializePageState();
   }
@@ -64,5 +69,23 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       const fund = this.dtoService.formStructureFund(portfolio);
       this.state.fetchResult.fundList.push(fund);
     })
+  }
+  private getFundFromNewTargets(fund: PortfolioStructureDTO) {
+    const payload = fund;
+    const fundListCopy = this.utilityService.deepCopy(this.state.fetchResult.fundList);
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getFundWithUpdatedMetric, {req: 'POST'}, payload).pipe(
+      first(),
+      tap((serverReturn) => {
+        if (serverReturn) {
+          const updatedFund = this.dtoService.formStructureFund(serverReturn);
+          this.state.fetchResult.fundList = [];
+          this.state.fetchResult.fundList = fundListCopy.map(fund => {
+            return fund.data.portfolioId === updatedFund.data.portfolioId ? updatedFund : fund;
+          })
+        } else {
+          this.restfulCommService.logError(`Cannot receive updated target and leverage value`)
+        }
+      })
+    ).subscribe()
   }
 }
