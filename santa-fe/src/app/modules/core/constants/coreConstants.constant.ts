@@ -30,7 +30,8 @@ export const APIUrlMap = {
   deleteAlert: 'Alert/delete-alerts',
   logEngagement: 'feLogger/track',
   logError: 'feLogger/log',
-  getAllTradeHistory: 'trade/get-all-trades-for-security'
+  getAllTradeHistory: 'trade/get-all-trades-for-security',
+  getFundWithUpdatedMetric: '/'
 };
 
 export const FAILED_USER_INITIALS_FALLBACK = 'n/a';
