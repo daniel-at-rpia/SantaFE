@@ -693,5 +693,6 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
   }
   state: {
     isEditing: boolean;
+    isNumeric: boolean;
   }
 }

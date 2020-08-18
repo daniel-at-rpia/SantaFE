@@ -18,6 +18,7 @@ export class SantaInput implements OnChanges{
   @Input() inputValue: string;
   @Input() placeholder: string;
   @Input() isHero: boolean;
+  @Input() isNumeric: boolean;
   @Output() onInputChange = new EventEmitter<String>();
   constructor(
   ) {

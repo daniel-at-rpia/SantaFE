@@ -4,9 +4,9 @@
     'santaInput--heroVariant': !!isHero
   }">
   <input
+    type="{{ isNumeric ? 'number' : 'text' }}"
     class="santaInput__inputElement"
     [(ngModel)]="inputValue"
-    type=""
     [placeholder]="placeholder"
     (keyup)="onKey()"
   >
