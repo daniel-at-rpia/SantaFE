@@ -8,6 +8,7 @@ import { NavigationModule } from 'Core/constants/coreConstants.constant';
 
 import { StructureMainPanel } from 'Structure/containers/structure-main-panel.container';
 import { StructureFund } from 'App/modules/structure/containers/structure-fund.container';
+import { FormModule } from 'App/modules/form/form.module';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { StructureFund } from 'App/modules/structure/containers/structure-fund.c
     ]),
 
     // Native modules
-    CoreModule
+    CoreModule,
+    FormModule
   ]
 })
 export class StructureModule { }
