@@ -540,8 +540,8 @@ export interface BEAlertMarketListQuoteBlock extends BEQuoteBaseBlock {
   isTraded: boolean
 }
 
-export interface BEStructuringBreakdownDTO {
-  total: number;  // what is this for? I have no clue. - DZ
+export interface BEStructuringBreakdownSingleEntry {
+  total: number;  // what is this for? Target Total or Current Total? - DZ
   targetLevel: number;
   targetPct: number;
   currentLevel: number;
