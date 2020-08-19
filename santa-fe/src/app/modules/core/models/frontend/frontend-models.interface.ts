@@ -680,7 +680,7 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
 }
 export interface PortfolioStructureDTO extends BasicDTOStructure {
   data: {
-    portfolioName: string,
+    date: string;
     portfolioId: number;
     portfolioShortName: PortfolioShortNames;
     indexId: number;
