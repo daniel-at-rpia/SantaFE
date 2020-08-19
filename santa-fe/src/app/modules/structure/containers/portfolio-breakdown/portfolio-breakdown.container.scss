@@ -101,6 +101,7 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
       flex-direction: column;
       &-item {
         display: flex;
+        align-items: center;
         &-title {
           flex: 0 0 7rem;
           display: flex;
@@ -123,6 +124,7 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
           color: $font_color_major;
           &--target {
             @include mix_border_radius(5px);
+            align-self: stretch;
             background-color: $color_active;
             color: $font_color_inverse;
             margin: $spacing_x_small 0;
@@ -139,6 +141,18 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
         }
         &--negativeDiff &-cell--target {
           background-color: $color_red_5;
+        }
+      }
+    }
+  }
+  &--stencilState {
+    #{$blockName} {
+      &__categoryContent {
+        &-list-item-cell {
+          @include mix_stencil_animation;
+          background-color: $color_stencil;
+          color: $color_stencil;
+          // line-height: 
         }
       }
     }

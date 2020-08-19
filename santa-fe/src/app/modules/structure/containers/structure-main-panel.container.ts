@@ -49,7 +49,11 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     ).subscribe((value) => {
       this.state.ownerInitial = value;
     });
-    this.loadInitialFunds();
+    this.loadStencilFunds();
+    const fakeAsyncLoadData = this.loadInitialFunds.bind(this);
+    setTimeout(() => {
+      fakeAsyncLoadData();
+    }, 3000);
   };
   public ngOnDestroy() {
     for (const eachItem in this.subscriptions) {
@@ -60,9 +64,16 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     }
   }
   private loadInitialFunds() {
-    this.portfolioList.forEach(portfolio => {
-      const fund = this.dtoService.formStructureFund(portfolio);
-      this.state.fetchResult.fundList.push(fund);
+    this.state.fetchResult.fundList = this.portfolioList.map(portfolio => {
+      const eachFund = this.dtoService.formStructureFund(portfolio, false);
+      return eachFund;
     })
+  }
+
+  private loadStencilFunds() {
+    this.state.fetchResult.fundList = this.portfolioList.map((eachPortfolioName) => {
+      const eachFund = this.dtoService.formStructureFund(eachPortfolioName, true);
+      return eachFund;
+    });
   }
 }

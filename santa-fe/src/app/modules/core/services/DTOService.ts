@@ -1174,21 +1174,24 @@ export class DTOService {
 
   public formMoveVisualizerObjectForStructuring(
     rawData: BEModels.BEStructuringBreakdownSingleEntry,
-    max: number
+    max: number,
+    isStencil: boolean
   ): DTOs.MoveVisualizerDTO {
     let moveDistance, rightEdge;
-    if (rawData.targetLevel > rawData.currentLevel) {
-      moveDistance = this.utility.round(rawData.currentLevel / max * 100, 2);
-      rightEdge = this.utility.round((rawData.targetLevel - rawData.currentLevel) / max * 100, 2);
-    } else {
-      moveDistance = this.utility.round(rawData.targetLevel / max * 100, 2);
-      rightEdge = this.utility.round((rawData.currentLevel - rawData.targetLevel) / max * 100);
+    if (!!rawData && !isStencil) {
+      if (rawData.targetLevel > rawData.currentLevel) {
+        moveDistance = this.utility.round(rawData.currentLevel / max * 100, 2);
+        rightEdge = this.utility.round((rawData.targetLevel - rawData.currentLevel) / max * 100, 2);
+      } else {
+        moveDistance = this.utility.round(rawData.targetLevel / max * 100, 2);
+        rightEdge = this.utility.round((rawData.currentLevel - rawData.targetLevel) / max * 100);
+      }
     }
     const object: DTOs.MoveVisualizerDTO = {
       data: {
         identifier: '',
         start: 0,
-        end: rawData.currentLevel,
+        end: !isStencil ? rawData.currentLevel : 999,
         min: 0,
         max: 0,
         isBasis: false,
@@ -1197,16 +1200,16 @@ export class DTOService {
       style: {
         leftGap: 0,
         leftEdge: 0,
-        moveDistance: moveDistance,
-        rightEdge: rightEdge,
+        moveDistance: !isStencil ? moveDistance : 40,
+        rightEdge: !isStencil ? rightEdge : 30,
         rightGap: 0,
-        endPinLocation: rawData.currentLevel < rawData.targetLevel ? moveDistance : moveDistance + rightEdge
+        endPinLocation: !isStencil ? rawData.currentLevel < rawData.targetLevel ? moveDistance : moveDistance + rightEdge : 40
       },
       state: {
         isInversed: false,
         isInvalid: false,
         isPlaceholder: false,
-        isStencil: false,
+        isStencil: !!isStencil,
         isColorCodeInversed: false,
         structuringBreakdownVariant: true,
         structuringBreakdownExceededState: rawData.currentLevel > rawData.targetLevel
@@ -1687,7 +1690,10 @@ export class DTOService {
     return object;
   }
 
-  public formStructureFund(portfolioName: PortfolioShortNames) {
+  public formStructureFund(
+    portfolioName: PortfolioShortNames,
+    isStencil: boolean
+  ): DTOs.PortfolioStructureDTO {
     const object: DTOs.PortfolioStructureDTO = {
       data: {
         portfolioName: '',
@@ -1709,22 +1715,23 @@ export class DTOService {
         onSubmitMetricValues: null
       },
       state: {
-        isEditing: false
+        isEditing: false,
+        isStencil: !!isStencil
       }
     };
-    const BICSBreakdown = this.formPortfolioBreakdown(false, BreakdownSampleBICSCS01);
+    const BICSBreakdown = this.formPortfolioBreakdown(isStencil, BreakdownSampleBICSCS01);
     BICSBreakdown.data.title = 'BICS';
     BICSBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.SECTOR);
     object.data.children.push(BICSBreakdown);
-    const currencyBreakdown = this.formPortfolioBreakdown(false, BreakdownSampleCurrencyCS01);
+    const currencyBreakdown = this.formPortfolioBreakdown(isStencil, BreakdownSampleCurrencyCS01);
     currencyBreakdown.data.title = 'Currency';
     currencyBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
     object.data.children.push(currencyBreakdown);
-    const tenorBreakdown = this.formPortfolioBreakdown(false, BreakdownSampleTenorCS01);
+    const tenorBreakdown = this.formPortfolioBreakdown(isStencil, BreakdownSampleTenorCS01);
     tenorBreakdown.data.title = 'Tenor';
     tenorBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.TENOR);
     object.data.children.push(tenorBreakdown);
-    const ratingBreakdown = this.formPortfolioBreakdown(false, BreakdownSampleRatingCS01);
+    const ratingBreakdown = this.formPortfolioBreakdown(isStencil, BreakdownSampleRatingCS01);
     ratingBreakdown.data.title = 'Rating';
     ratingBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.RATING);
     object.data.children.push(ratingBreakdown);
@@ -1747,7 +1754,7 @@ export class DTOService {
       },
       state: {
         isEditing: false,
-        isStencil: false
+        isStencil: !!isStencil
       }
     };
     let findMax = 0;
@@ -1758,7 +1765,7 @@ export class DTOService {
       }
     })
     rawData.forEach((eachEntry, index) => {
-      const eachMoveVisualizer = this.formMoveVisualizerObjectForStructuring(eachEntry, findMax);
+      const eachMoveVisualizer = this.formMoveVisualizerObjectForStructuring(eachEntry, findMax, !!isStencil);
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
         category: `entry -  ${index}`,
         targetLevel: eachEntry.targetLevel,

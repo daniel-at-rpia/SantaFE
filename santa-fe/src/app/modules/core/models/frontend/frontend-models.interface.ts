@@ -695,5 +695,6 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
   }
   state: {
     isEditing: boolean;
+    isStencil: boolean;
   }
 }
