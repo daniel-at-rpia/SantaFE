@@ -1,6 +1,6 @@
 import { BEStructuringBreakdownSingleEntry } from 'BEModels/backend-models.interface';
 
-const BreakdownSampleCurrencyCS01: Array<BEStructuringBreakdownSingleEntry> =  [
+export const BreakdownSampleCurrencyCS01: Array<BEStructuringBreakdownSingleEntry> =  [
   {
     total: null,
     targetLevel: 120,
@@ -25,7 +25,7 @@ const BreakdownSampleCurrencyCS01: Array<BEStructuringBreakdownSingleEntry> =  [
   }
 ];
 
-const BreakdownSampleBICSCS01: Array<BEStructuringBreakdownSingleEntry> =  [
+export const BreakdownSampleBICSCS01: Array<BEStructuringBreakdownSingleEntry> =  [
   {
     total: null,
     targetLevel: 65,
@@ -116,7 +116,7 @@ const BreakdownSampleBICSCS01: Array<BEStructuringBreakdownSingleEntry> =  [
   }
 ];
 
-const BreakdownSampleTenorCS01: Array<BEStructuringBreakdownSingleEntry> =  [
+export const BreakdownSampleTenorCS01: Array<BEStructuringBreakdownSingleEntry> =  [
   {
     total: null,
     targetLevel: 60,
@@ -163,7 +163,7 @@ const BreakdownSampleTenorCS01: Array<BEStructuringBreakdownSingleEntry> =  [
   }
 ];
 
-const BreakdownSampleRatingCS01: Array<BEStructuringBreakdownSingleEntry> =  [
+export const BreakdownSampleRatingCS01: Array<BEStructuringBreakdownSingleEntry> =  [
   {
     total: null,
     targetLevel: 53,

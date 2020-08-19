@@ -46,6 +46,12 @@
       AxeAlertType
     } from 'Core/constants/tradeConstants.constant';
     import { PortfolioShortNames } from 'Core/constants/structureConstants.constants';
+    import {
+      BreakdownSampleBICSCS01,
+      BreakdownSampleCurrencyCS01,
+      BreakdownSampleRatingCS01,
+      BreakdownSampleTenorCS01
+    } from 'Structure/stubs/structure.stub';
   //
 
 @Injectable()
@@ -1663,16 +1669,32 @@ export class DTOService {
         isEditing: false
       }
     };
-    object.data.children.push(this.formPortfolioBreakdown(false));
+    const BICSBreakdown = this.formPortfolioBreakdown(false, null);
+    BICSBreakdown.data.title = 'BICS';
+    BICSBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.SECTOR);
+    object.data.children.push(BICSBreakdown);
+    const currencyBreakdown = this.formPortfolioBreakdown(false, null);
+    currencyBreakdown.data.title = 'Currency';
+    currencyBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
+    object.data.children.push(currencyBreakdown);
+    const tenorBreakdown = this.formPortfolioBreakdown(false, null);
+    tenorBreakdown.data.title = 'Tenor';
+    tenorBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.TENOR);
+    object.data.children.push(tenorBreakdown);
+    const ratingBreakdown = this.formPortfolioBreakdown(false, null);
+    ratingBreakdown.data.title = 'Rating';
+    ratingBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.RATING);
+    object.data.children.push(ratingBreakdown);
     return object;
   }
 
   public formPortfolioBreakdown(
-    isStencil: boolean
+    isStencil: boolean,
+    rawData: Array<BEModels.BEStructuringBreakdownSingleEntry>
   ): DTOs.PortfolioBreakdownDTO {
     const object: DTOs.PortfolioBreakdownDTO = {
       data: {
-        title: 'Currency',
+        title: '',
         definition: null,
         categoryList: [],
         ratingHoverText: !isStencil ? '20%' : '99%'
@@ -1685,7 +1707,6 @@ export class DTOService {
         isStencil: false
       }
     };
-    object.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
     const moveVisualizer1 = this.formMoveVisualizerObject(
       false,
       {
