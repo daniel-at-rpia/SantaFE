@@ -31,7 +31,8 @@ export const APIUrlMap = {
   logEngagement: 'feLogger/track',
   logError: 'feLogger/log',
   getAllTradeHistory: 'trade/get-all-trades-for-security',
-  getFundWithUpdatedMetric: '/'
+  getPortfolioStructures: 'portfolioStructuring/get-portfolio-structures',
+  updatePortfolioStructures: 'portfolioStructuring/update-portfolio-structures'
 };
 
 export const FAILED_USER_INITIALS_FALLBACK = 'n/a';
