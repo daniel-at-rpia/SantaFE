@@ -1172,6 +1172,49 @@ export class DTOService {
     return object;
   }
 
+  public formMoveVisualizerObjectForStructuring(
+    rawData: BEModels.BEStructuringBreakdownSingleEntry,
+    max: number
+  ): DTOs.MoveVisualizerDTO {
+    let moveDistance, rightEdge;
+    if (rawData.targetLevel > rawData.currentLevel) {
+      moveDistance = this.utility.round(rawData.currentLevel / max * 100, 2);
+      rightEdge = this.utility.round((rawData.targetLevel - rawData.currentLevel) / max * 100, 2);
+    } else {
+      moveDistance = this.utility.round(rawData.targetLevel / max * 100, 2);
+      rightEdge = this.utility.round((rawData.currentLevel - rawData.targetLevel) / max * 100);
+    }
+    const object: DTOs.MoveVisualizerDTO = {
+      data: {
+        identifier: '',
+        start: 0,
+        end: rawData.currentLevel,
+        min: 0,
+        max: 0,
+        isBasis: false,
+        timeSeries: []
+      },
+      style: {
+        leftGap: 0,
+        leftEdge: 0,
+        moveDistance: moveDistance,
+        rightEdge: rightEdge,
+        rightGap: 0,
+        endPinLocation: rawData.currentLevel < rawData.targetLevel ? moveDistance : moveDistance + rightEdge
+      },
+      state: {
+        isInversed: false,
+        isInvalid: false,
+        isPlaceholder: false,
+        isStencil: false,
+        isColorCodeInversed: false,
+        structuringBreakdownVariant: true,
+        structuringBreakdownExceededState: rawData.currentLevel > rawData.targetLevel
+      }
+    };
+    return object;
+  }
+
   public formHistoricalSummaryObject(
     isStencil: boolean,
     rawData: BEModels.BEHistoricalSummaryDTO,
@@ -1669,19 +1712,19 @@ export class DTOService {
         isEditing: false
       }
     };
-    const BICSBreakdown = this.formPortfolioBreakdown(false, null);
+    const BICSBreakdown = this.formPortfolioBreakdown(false, BreakdownSampleBICSCS01);
     BICSBreakdown.data.title = 'BICS';
     BICSBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.SECTOR);
     object.data.children.push(BICSBreakdown);
-    const currencyBreakdown = this.formPortfolioBreakdown(false, null);
+    const currencyBreakdown = this.formPortfolioBreakdown(false, BreakdownSampleCurrencyCS01);
     currencyBreakdown.data.title = 'Currency';
     currencyBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
     object.data.children.push(currencyBreakdown);
-    const tenorBreakdown = this.formPortfolioBreakdown(false, null);
+    const tenorBreakdown = this.formPortfolioBreakdown(false, BreakdownSampleTenorCS01);
     tenorBreakdown.data.title = 'Tenor';
     tenorBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.TENOR);
     object.data.children.push(tenorBreakdown);
-    const ratingBreakdown = this.formPortfolioBreakdown(false, null);
+    const ratingBreakdown = this.formPortfolioBreakdown(false, BreakdownSampleRatingCS01);
     ratingBreakdown.data.title = 'Rating';
     ratingBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.RATING);
     object.data.children.push(ratingBreakdown);
@@ -1707,106 +1750,27 @@ export class DTOService {
         isStencil: false
       }
     };
-    const moveVisualizer1 = this.formMoveVisualizerObject(
-      false,
-      {
-        targetSecurityIdentifier: 'test',
-        startMetric: 12,
-        endMetric: 22,
-        minMetric: 12,
-        maxMetric: 25,
-        isLevelRange: false,
-        isBasisRange: true,
-        isValid: true
-      },
-      false);
-    moveVisualizer1.style = {
-      leftGap: 0,
-      leftEdge: 0,
-      moveDistance: 60,
-      rightEdge: 40,
-      rightGap: 0,
-      endPinLocation: 60
-    };
-    object.data.categoryList.push({
-      category: 'USD',
-      targetLevel: 123,
-      targetPct: 12,
-      diffToTarget: 45,
-      currentLevel: 154,
-      currentPct: 14,
-      indexLevel: 111,
-      indexPct: 16,
-      moveVisualizer: moveVisualizer1
+    let findMax = 0;
+    rawData.forEach((eachEntry) => {
+      const highestVal = Math.max(eachEntry.currentLevel, eachEntry.targetLevel);
+      if (highestVal > findMax) {
+        findMax = highestVal;
+      }
+    })
+    rawData.forEach((eachEntry, index) => {
+      const eachMoveVisualizer = this.formMoveVisualizerObjectForStructuring(eachEntry, findMax);
+      object.data.categoryList.push({
+        category: `entry -  ${index}`,
+        targetLevel: eachEntry.targetLevel,
+        targetPct: eachEntry.targetPct,
+        diffToTarget: eachEntry.targetLevel - eachEntry.currentLevel,
+        currentLevel: eachEntry.currentLevel,
+        currentPct: eachEntry.currentPct,
+        indexLevel: null,
+        indexPct: eachEntry.indexPct,
+        moveVisualizer: eachMoveVisualizer
+      });
     });
-    moveVisualizer1.state.structuringBreakdownVariant = true;
-    const moveVisualizer2 = this.formMoveVisualizerObject(
-      false,
-      {
-        targetSecurityIdentifier: 'test',
-        startMetric: 12,
-        endMetric: 54,
-        minMetric: 12,
-        maxMetric: 25,
-        isLevelRange: false,
-        isBasisRange: true,
-        isValid: true
-      },
-      false);
-    moveVisualizer2.style = {
-      leftGap: 0,
-      leftEdge: 0,
-      moveDistance: 30,
-      rightEdge: 40,
-      rightGap: 30,
-      endPinLocation: 70
-    };
-    object.data.categoryList.push({
-      category: 'EUR',
-      targetLevel: 123,
-      targetPct: 12,
-      diffToTarget: 25,
-      currentLevel: 154,
-      currentPct: 14,
-      indexLevel: 111,
-      indexPct: 16,
-      moveVisualizer: moveVisualizer2
-    });
-    moveVisualizer2.state.structuringBreakdownVariant = true;
-    moveVisualizer2.state.structuringBreakdownExceededState = true;
-    const moveVisualizer3 = this.formMoveVisualizerObject(
-      false,
-      {
-        targetSecurityIdentifier: 'test',
-        startMetric: 12,
-        endMetric: 83,
-        minMetric: 12,
-        maxMetric: 25,
-        isLevelRange: false,
-        isBasisRange: true,
-        isValid: true
-      },
-      false);
-    moveVisualizer3.style = {
-      leftGap: 0,
-      leftEdge: 0,
-      moveDistance: 50,
-      rightEdge: 10,
-      rightGap: 40,
-      endPinLocation: 50
-    };
-    object.data.categoryList.push({
-      category: 'CAD',
-      targetLevel: 123,
-      targetPct: 12,
-      diffToTarget: 16,
-      currentLevel: 154,
-      currentPct: 14,
-      indexLevel: 111,
-      indexPct: 16,
-      moveVisualizer: moveVisualizer3
-    });
-    moveVisualizer3.state.structuringBreakdownVariant = true;
     return object;
   }
 }
