@@ -25,13 +25,13 @@ export class StructureFund implements OnInit {
   constructor(private dtoService: DTOService) {}
 
   public ngOnInit() {
-    this.targetBarCS01 = this.createTargetBar(this.constants.CS01, this.fund.data.currentTotals.CS01, this.fund.data.targetTotals.CS01, this.selectedMetricValue);
-    this.targetBarLeverage = this.createTargetBar(this.constants.leverage, this.fund.data.currentTotals.leverage, this.fund.data.targetTotals.leverage, this.selectedMetricValue)
+    this.targetBarCS01 = this.createTargetBar(this.constants.CS01, this.fund.data.currentTotals.CS01, this.fund.data.targetTotals.CS01, this.selectedMetricValue, this.fund.state.isStencil);
+    this.targetBarLeverage = this.createTargetBar(this.constants.leverage, this.fund.data.currentTotals.leverage, this.fund.data.targetTotals.leverage, this.selectedMetricValue, this.fund.state.isStencil)
 
   }
 
-  private createTargetBar(constantValue: PortfolioMetricValues, currentValue: number, targetValue: number, selectedMetric: PortfolioMetricValues) {
-    const newTargetBar = this.dtoService.formTargetBarObject(constantValue, currentValue,targetValue, selectedMetric);
+  private createTargetBar(constantValue: PortfolioMetricValues, currentValue: number, targetValue: number, selectedMetric: PortfolioMetricValues, isStencil: boolean) {
+    const newTargetBar = this.dtoService.formTargetBarObject(constantValue, currentValue,targetValue, selectedMetric, isStencil);
     newTargetBar.utility.getDisplayValues = this.getDisplayedValues;
     newTargetBar.utility.setInactiveMetric = this.setInactiveMetric;
     newTargetBar.utility.convertNumtoStr = this.convertValuesForDisplay;

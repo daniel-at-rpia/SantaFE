@@ -1670,7 +1670,7 @@ export class DTOService {
     return object;
   }
 
-  public formTargetBarObject(targetMetric: PortfolioMetricValues, currentValue: number, targetValue: number, selectedMetricValue: PortfolioMetricValues) {
+  public formTargetBarObject(targetMetric: PortfolioMetricValues, currentValue: number, targetValue: number, selectedMetricValue: PortfolioMetricValues, isStencil: boolean) {
     const object: DTOs.TargetBarDTO = {
       data: {
         targetMetric,
@@ -1684,7 +1684,7 @@ export class DTOService {
       },
       state: {
         isInactiveMetric: false,
-        isStencil: false
+        isStencil
       },
       utility: {
         getDisplayValues: null,
