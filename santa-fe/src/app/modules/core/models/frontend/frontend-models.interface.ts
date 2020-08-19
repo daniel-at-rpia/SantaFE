@@ -11,7 +11,7 @@ import {
   SecurityPortfolioBlock,
   SecurityTableRowQuoteBlock,
   SecurityCostPortfolioBlock, 
-  PortfolioMetricTotal,
+  PortfolioMetricTotals,
   PortfolioBreakDownValues,
   NestedPortfolioBreakdownValues,
   PortfolioBreakDownOverrides
@@ -23,7 +23,7 @@ import * as moment from 'moment';
 import * as am4Charts from '@amcharts/amcharts4/charts';
 import {Alert} from "Core/components/alert/alert.component";
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
-import { PortfolioShortNames } from 'Core/constants/structureConstants.constants';
+import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 
 interface BasicDTOStructure {
   [property: string]: object;
@@ -677,15 +677,19 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     isStencil: boolean;
   }
 }
+
 export interface PortfolioStructureDTO extends BasicDTOStructure {
   data: {
-    portfolioName: string,
+    date: Date;
     portfolioId: number;
     portfolioShortName: PortfolioShortNames;
+    portfolioNav: number;
+    targetTotals: PortfolioMetricTotals;
+    currentTotals: PortfolioMetricTotals;
     indexId: number;
     indexShortName: string;
-    CS01Values: PortfolioMetricTotal;
-    LeverageValues: PortfolioMetricTotal;
+    indexNav: number;
+    indexTotals: PortfolioMetricTotals;
     children: Array<PortfolioBreakdownDTO>;
   },
   api: {
