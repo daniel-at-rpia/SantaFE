@@ -1759,17 +1759,25 @@ export class DTOService {
     })
     rawData.forEach((eachEntry, index) => {
       const eachMoveVisualizer = this.formMoveVisualizerObjectForStructuring(eachEntry, findMax);
-      object.data.categoryList.push({
+      const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
         category: `entry -  ${index}`,
         targetLevel: eachEntry.targetLevel,
         targetPct: eachEntry.targetPct,
-        diffToTarget: eachEntry.targetLevel - eachEntry.currentLevel,
+        diffToTarget: Math.round(eachEntry.targetLevel - eachEntry.currentLevel),
+        diffToTargetDisplay: '-',
         currentLevel: eachEntry.currentLevel,
         currentPct: eachEntry.currentPct,
         indexLevel: null,
         indexPct: eachEntry.indexPct,
         moveVisualizer: eachMoveVisualizer
-      });
+      };
+      if (eachCategoryBlock.diffToTarget < 0) {
+        eachCategoryBlock.diffToTargetDisplay = `${eachCategoryBlock.diffToTarget}k`;
+      }
+      if (eachCategoryBlock.diffToTarget > 0) {
+        eachCategoryBlock.diffToTargetDisplay = `+${eachCategoryBlock.diffToTarget}k`;
+      }
+      object.data.categoryList.push(eachCategoryBlock);
     });
     return object;
   }

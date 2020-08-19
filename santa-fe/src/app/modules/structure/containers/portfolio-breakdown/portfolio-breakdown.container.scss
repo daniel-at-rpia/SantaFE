@@ -113,17 +113,32 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
           flex: 1 1 auto;
         }
         &-cell {
+          @include mix_text_overflow;
           flex: 0 0 ($portfolioBreakdown_categoryList_cell_width - $spacing_x_small*4/3 - $typical_border_width*2/3);
           display: flex;
           align-items: center;
           justify-content: center;
           text-align: center;
           font-size: $font_size_normal;
+          color: $font_color_major;
+          &--target {
+            @include mix_border_radius(5px);
+            background-color: $color_active;
+            color: $font_color_inverse;
+            margin: $spacing_x_small 0;
+          }
         }
         &-cellDivider {
           @include mix_border_generator(0 $typical_border_width 0 0);
           flex: 0 0 $spacing_x_small+$typical_border_width;
           margin: $spacing_x_small $spacing_x_small $spacing_x_small 0;
+        }
+        &--noSignificantDiff &-cell--target{
+          background-color: transparent;
+          color: $font_color_major;
+        }
+        &--negativeDiff &-cell--target {
+          background-color: $color_red_5;
         }
       }
     }

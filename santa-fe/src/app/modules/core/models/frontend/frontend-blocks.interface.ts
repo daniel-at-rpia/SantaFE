@@ -279,6 +279,7 @@ export interface PortfolioBreakdownCategoryBlock {
   targetLevel: number;
   targetPct: number;
   diffToTarget: number;
+  diffToTargetDisplay: string;
   currentLevel: number;
   currentPct: number;
   indexLevel: number;
