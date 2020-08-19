@@ -273,9 +273,9 @@ export interface PortfolioBreakDownOverrides {
   [property: string]: string | number;
 }
 
-export interface PortfolioMetricTotal {
-  currentValue: number;
-  targetValue: number;
+export interface PortfolioMetricTotals {
+  CS01: number;
+  leverage: number;
 }
 export interface PortfolioBreakDownValues {
   category: string;

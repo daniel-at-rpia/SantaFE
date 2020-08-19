@@ -1638,18 +1638,24 @@ export class DTOService {
   public formStructureFund(portfolioName: PortfolioShortNames) {
     const object: DTOs.PortfolioStructureDTO = {
       data: {
-        portfolioName: '',
+        date: null,
         portfolioId: null,
         portfolioShortName: portfolioName,
+        portfolioNav: null,
+        targetTotals: {
+          CS01: null,
+          leverage: null
+        },
+        currentTotals :{
+          CS01: null,
+          leverage: null
+        },
         indexId: null,
         indexShortName: '',
-        CS01Values: {
-          currentValue: null,
-          targetValue: null
-        },
-        LeverageValues: {
-          currentValue: null,
-          targetValue: null
+        indexNav: null,
+        indexTotals: {
+          CS01: null,
+          leverage: null
         },
         children: []
       },
