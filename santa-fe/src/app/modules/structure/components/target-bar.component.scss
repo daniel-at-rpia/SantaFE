@@ -6,20 +6,20 @@
       font-size: $font_size_small;
       margin: 0 0 $spacing_x_small 0;
       text-align: center;
-      font-weight: bold;
     }
     &__indicator {
-      @include mix_border_generator($static_color: $color_gray_9);
-      @include mix_border_radius(3px);
-      background-color: $color_gray_9;
+      @include mix_border_generator($static_color: $color_active);
+      @include mix_border_radius(5px);
+      background-color: $color_active;
       @include mix_fixed_div(relative, $z_index_base_item);
-      width: 8rem;
-      height: $font_size_x_large;
+      height: $spacing_large;
+      overflow: hidden;
       &--total,
       &--exceeded,
       &--current,
       &-values {
         @include mix_fixed_div(absolute, $z_index_base_item_solid);
+        display: inline-block;
         top: 0;
         left: 0;
         right: 0;
@@ -28,54 +28,54 @@
         height: 100%;
       }
       &--total {
-        @include mix_gradient($color_gray_7, $color_gray_95, 40%, 45deg);
+        background-color: $color_active;
         width: 100%;
         z-index: $z_index_base_item_solid;
       }
       &--current {
-        @include mix_gradient($color_blue_6, $color_blue_9, 40%, 45deg);
+        @include mix_theme_background;
         z-index: $z_index_base_item_lift; 
       }
       &--exceeded {
-        @include mix_gradient($color_orange_6, $color_orange_9, 40%, 45deg);
+        background-color: $color_red_5;
         z-index: $z_index_hovering_item;
+
       }
       &-values {
         @include mix_fixed_div(absolute, $z_index_hovering_item_lift);
         top: 50%; 
         left: 50%;
         transform: translate(-50%, -50%);
-        color: $color_white;
-        text-align: center;
-        width: 50%;
         height: 100%;
-        line-height: $font_size_large;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        line-height: $line_height_minimum;
+        &-text {
+          color: $font_color_inverse;
+        }
       }
     }
     &--stencilState {
       #{$fundTargetBarBlockName} {
-        &__indicator,
-        &__type {
-          @include mix_stencil_animation();
+        &__indicator {
           &-values {
-            @include mix_border_radius(3px);
-            color: transparent;
-            height: 50%;
-            background: $color_stencil!important;
+            &-text {
+              @include mix_stencil_animation();
+            }
           }
         }
       }
     }
     &--inactive {
-      opacity: .3;
       #{$fundTargetBarBlockName} {
         &__type,
         &__indicator {
           &--exceeded {
-            @include mix_gradient($color_gray_4, $color_gray_5, 40%, 45deg);
+            background-color: $color_red_5;
           }
           &--current {
-            @include mix_gradient($color_gray_7, $color_gray_8, 40%, 45deg);
+            @include mix_gradient($color_gray_6, $color_gray_4, 0%, 90deg);
           }
         }
       }
@@ -83,12 +83,9 @@
        &--stencilState {
         #{$fundTargetBarBlockName} {
           &__indicator {
-            &--total {
-              z-index: $z_index_hovering_item;
-            }
             &--exceeded,
             &--current {
-              z-index: $z_index_base_item_lift
+              display: none;
             }
           }
         }
