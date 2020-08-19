@@ -44,7 +44,7 @@
       AxeAlertScope,
       AxeAlertType
     } from 'Core/constants/tradeConstants.constant';
-    import { PortfolioShortNames } from 'Core/constants/structureConstants.constants';
+    import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
   //
 
 @Injectable()
@@ -1665,6 +1665,31 @@ export class DTOService {
       state: {
         isEditing: false,
         isStencil: false
+      }
+    }
+    return object;
+  }
+
+  public formTargetBarObject(targetMetric: PortfolioMetricValues, currentValue: number, targetValue: number, selectedMetricValue: PortfolioMetricValues) {
+    const object: DTOs.TargetBarDTO = {
+      data: {
+        targetMetric,
+        currentValue,
+        targetValue,
+        displayedCurrentValue: '',
+        displayedTargetValue: '',
+        currentPercentage: '',
+        exceededPercentage: '',
+        selectedMetricValue
+      },
+      state: {
+        isInactiveMetric: false,
+        isStencil: false
+      },
+      utility: {
+        getDisplayValues: null,
+        convertNumtoStr: null,
+        setInactiveMetric: null
       }
     }
     return object;

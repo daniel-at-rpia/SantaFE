@@ -700,3 +700,25 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     isStencil: boolean;
   }
 }
+
+export interface TargetBarDTO extends BasicDTOStructure {
+  data: {
+    targetMetric: PortfolioMetricValues;
+    currentValue: number;
+    targetValue: number;
+    displayedCurrentValue: string;
+    displayedTargetValue: string;
+    currentPercentage: string;
+    exceededPercentage: string;
+    selectedMetricValue: PortfolioMetricValues
+  }
+  state: {
+    isInactiveMetric: boolean,
+    isStencil: boolean;
+  }
+  utility: {
+    getDisplayValues: (targetBar: TargetBarDTO) => void;
+    convertNumtoStr: (targetBar: TargetBarDTO) => void;
+    setInactiveMetric: (targetBar: TargetBarDTO) => void;
+  }
+}
