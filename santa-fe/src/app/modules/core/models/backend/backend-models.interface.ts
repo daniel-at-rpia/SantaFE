@@ -567,7 +567,7 @@ export interface BEStructuringMetricTotalBlock {
 export interface BEStructuringOverrides {
   [property: string]: {
     portfolioId: number;
-    date: Date;
+    date: string;
     bucket: {
       [property: string]: string;
     }
@@ -579,7 +579,7 @@ export interface BEStructuringOverrides {
 }
 
 export interface BEPortfolioStructuringBlock {
-  date: Date;
+  date: string;
   portfolioId: number;
   portfolioShortName: PortfolioShortNames;
   portfolioNav: number;
