@@ -1682,10 +1682,15 @@ export class DTOService {
           leverageValue: rawConfig.indexTotals.leverageValue
         },
         children: [],
-        overrides: rawConfig.overrides
+        overrides: rawConfig.overrides,
+        cs01TotalsInK: {
+          currentTotal: null,
+          targetTotal: null
+        }
       },
       api: {
-        onSubmitMetricValues: null
+        onSubmitMetricValues: null,
+        convertToK: null
       },
       state: {
         isEditing: false,

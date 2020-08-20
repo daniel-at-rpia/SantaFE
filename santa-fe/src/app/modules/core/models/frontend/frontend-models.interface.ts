@@ -697,10 +697,15 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     indexNav: number;
     indexTotals: PortfolioMetricTotals;
     children: Array<PortfolioBreakdownDTO>
-    overrides?: PortfolioBreakDownOverrides;
+    overrides?: PortfolioBreakDownOverrides,
+    cs01TotalsInK?: {
+      currentTotal: number;
+      targetTotal: number;
+    }
   },
   api: {
     onSubmitMetricValues: (CS01: number, leverage: number) => void;
+    convertToK: (value: number) => number;
   }
   state: {
     isEditing: boolean;
