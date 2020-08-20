@@ -29,7 +29,9 @@ export class StructureFund implements OnInit, OnChanges {
 
   constructor() {}
 
-  public ngOnInit() {}
+  public ngOnInit() {
+    this.fund.api.onSubmitMetricValues = this.saveEditDetails.bind(this);
+  }
   
   public ngOnChanges() {
     this.state.currentOwnerInitials =  this.ownerInitial !== null ? this.ownerInitial : null
@@ -78,6 +80,10 @@ export class StructureFund implements OnInit, OnChanges {
     this.resetErrors();
     this.fund.data.targetTotals.CS01 = targetCS01 * 1000;
     this.updatedFundData.emit(this.fund)
+  }
+
+  private onClickSaveNewMetrics(targetCS01: number, targetLeverage: number) {
+    this.fund.api.onSubmitMetricValues(targetCS01, targetLeverage)
   }
 
 

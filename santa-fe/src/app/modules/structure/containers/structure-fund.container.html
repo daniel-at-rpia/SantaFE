@@ -62,7 +62,7 @@
       'sat-fundStructuring__utility-btnGroup-btn': true,
       'sat-fundStructuring__utility-btnGroup-btn--save': true,
       'sat-fundStructuring__utility-btnGroup-btn--inActive': !state.isEditing
-      }" (click)="saveEditDetails(fund.data.targetTotals.CS01, fund.data.targetTotals.leverageValue)">
+      }" (click)="onClickSaveNewMetrics(fund.data.targetTotals.CS01, fund.data.targetTotals.leverageValue)">
       <i class="fas fa-cloud-upload-alt"></i>
     </button>
   </div>
