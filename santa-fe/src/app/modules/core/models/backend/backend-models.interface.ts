@@ -553,15 +553,15 @@ export interface BEStructuringBreakdownBlock {
   groupOption: string;
   breakdown: {
     [property: string]: {
-      CS01: BEStructuringBreakdownSingleEntry;
-      LeverageValue: BEStructuringBreakdownSingleEntry;
+      cs01: BEStructuringBreakdownSingleEntry;
+      leverageValue: BEStructuringBreakdownSingleEntry;
     }
   }
 }
 
 export interface BEStructuringMetricTotalBlock {
-  CS01: number;
-  LeverageValue: number;
+  cs01: number;
+  leverageValue: number;
 }
 
 export interface BEStructuringOverrides {
@@ -572,18 +572,23 @@ export interface BEStructuringOverrides {
       [property: string]: string;
     }
     breakdown: {
-      CS01: BEStructuringBreakdownSingleEntry,
-      LeverageValue: BEStructuringBreakdownSingleEntry
+      cs01: BEStructuringBreakdownSingleEntry,
+      leverageValue: BEStructuringBreakdownSingleEntry
     }
   }
 }
 
 export interface BEPortfolioStructuringBlock {
-  date: string;
+  rpPortfolioDate: string;
   portfolioId: number;
   portfolioShortName: PortfolioShortNames;
   portfolioNav: number;
-  targetTotals: BEStructuringMetricTotalBlock
+  target: {
+    portfolioTargetId: string;
+    date: string;
+    portfolioId: number;
+    target: BEStructuringMetricTotalBlock;
+  }
   currentTotals: BEStructuringMetricTotalBlock
   indexId: number;
   indexShortName: string;

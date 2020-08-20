@@ -248,30 +248,35 @@ const BreakdownSampleRatingCS01: Array<BEStructuringBreakdownSingleEntry> =  [
 ];
 
 export const BreakdownSampleStructureBlock: BEPortfolioStructuringBlock = {
-  date: null,
+  rpPortfolioDate: null,
   portfolioId: null,
   portfolioShortName: PortfolioShortNames.SOF,
   portfolioNav: null,
-  targetTotals: {
-    CS01: 235000,
-    LeverageValue: 1.3
+  target: {
+    portfolioTargetId: null,
+    date: null,
+    portfolioId: null,
+    target: {
+      cs01: 22000,
+      leverageValue: 1.8
+    }
   },
   currentTotals: {
-    CS01: 180000,
-    LeverageValue: 1.5
+    cs01: 180000,
+    leverageValue: 1.5
   },
   indexId: null,
   indexShortName: '',
   indexNav: null,
   indexTotals: {
-    CS01: null,
-    LeverageValue: null
+    cs01: null,
+    leverageValue: null
   },
   ccyBreakdown: {
     groupOption: 'ccy',
     breakdown: {
       'US': {
-        CS01: {
+        cs01: {
           total: null,
           targetLevel: null,
           targetPct: null,
@@ -279,7 +284,7 @@ export const BreakdownSampleStructureBlock: BEPortfolioStructuringBlock = {
           currentPct: null,
           indexPct: null
         },
-        LeverageValue: {
+        leverageValue: {
           total: null,
           targetLevel: null,
           targetPct: null,
@@ -294,7 +299,7 @@ export const BreakdownSampleStructureBlock: BEPortfolioStructuringBlock = {
     groupOption: 'bics',
     breakdown: {
       'finance': {
-        CS01: {
+        cs01: {
           total: null,
           targetLevel: null,
           targetPct: null,
@@ -302,7 +307,7 @@ export const BreakdownSampleStructureBlock: BEPortfolioStructuringBlock = {
           currentPct: null,
           indexPct: null
         },
-        LeverageValue: {
+        leverageValue: {
           total: null,
           targetLevel: null,
           targetPct: null,
@@ -317,7 +322,7 @@ export const BreakdownSampleStructureBlock: BEPortfolioStructuringBlock = {
     groupOption: 'bics',
     breakdown: {
       'Banking': {
-        CS01: {
+        cs01: {
           total: null,
           targetLevel: null,
           targetPct: null,
@@ -325,7 +330,7 @@ export const BreakdownSampleStructureBlock: BEPortfolioStructuringBlock = {
           currentPct: null,
           indexPct: null
         },
-        LeverageValue: {
+        leverageValue: {
           total: null,
           targetLevel: null,
           targetPct: null,
@@ -340,7 +345,7 @@ export const BreakdownSampleStructureBlock: BEPortfolioStructuringBlock = {
     groupOption: 'bics',
     breakdown: {
       'finance': {
-        CS01: {
+        cs01: {
           total: null,
           targetLevel: null,
           targetPct: null,
@@ -348,7 +353,7 @@ export const BreakdownSampleStructureBlock: BEPortfolioStructuringBlock = {
           currentPct: null,
           indexPct: null
         },
-        LeverageValue: {
+        leverageValue: {
           total: null,
           targetLevel: null,
           targetPct: null,
@@ -363,7 +368,7 @@ export const BreakdownSampleStructureBlock: BEPortfolioStructuringBlock = {
     groupOption: 'rating',
     breakdown: {
       'AAA': {
-        CS01: {
+        cs01: {
           total: null,
           targetLevel: null,
           targetPct: null,
@@ -371,7 +376,7 @@ export const BreakdownSampleStructureBlock: BEPortfolioStructuringBlock = {
           currentPct: null,
           indexPct: null
         },
-        LeverageValue: {
+        leverageValue: {
           total: null,
           targetLevel: null,
           targetPct: null,
@@ -386,7 +391,7 @@ export const BreakdownSampleStructureBlock: BEPortfolioStructuringBlock = {
     groupOption: 'tenor',
     breakdown: {
       '5Y': {
-        CS01: {
+        cs01: {
           total: null,
           targetLevel: null,
           targetPct: null,
@@ -394,7 +399,7 @@ export const BreakdownSampleStructureBlock: BEPortfolioStructuringBlock = {
           currentPct: null,
           indexPct: null
         },
-        LeverageValue: {
+        leverageValue: {
           total: null,
           targetLevel: null,
           targetPct: null,

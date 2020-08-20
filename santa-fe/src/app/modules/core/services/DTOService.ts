@@ -1657,24 +1657,29 @@ export class DTOService {
   public formStructureFundObject(rawConfig: BEModels.BEPortfolioStructuringBlock) {
     const object: DTOs.PortfolioStructureDTO = {
       data: {
-        date: rawConfig.date,
+        rpPortfolioDate: rawConfig.rpPortfolioDate,
         portfolioId: rawConfig.portfolioId,
         portfolioShortName: rawConfig.portfolioShortName,
         portfolioNav: rawConfig.portfolioNav,
-        targetTotals: {
-          CS01: rawConfig.targetTotals.CS01,
-          leverageValue: rawConfig.targetTotals.LeverageValue
-      },
+        target: {
+          portfolioTargetId: rawConfig.target.portfolioTargetId,
+          date: rawConfig.target.date,
+          portfolioId: rawConfig.target.portfolioId,
+          target: {
+            cs01: rawConfig.target.target.cs01,
+            leverageValue: rawConfig.target.target.leverageValue
+          }
+        },
         currentTotals :{
-          CS01: rawConfig.currentTotals.CS01,
-          leverageValue: rawConfig.currentTotals.LeverageValue
+          cs01: rawConfig.currentTotals.cs01,
+          leverageValue: rawConfig.currentTotals.leverageValue
         },
         indexId: rawConfig.indexId,
         indexShortName: rawConfig.indexShortName,
         indexNav: rawConfig.indexNav,
         indexTotals: {
-          CS01: rawConfig.indexTotals.CS01,
-          leverageValue: rawConfig.indexTotals.LeverageValue
+          cs01: rawConfig.indexTotals.cs01,
+          leverageValue: rawConfig.indexTotals.leverageValue
         },
         children: [],
         overrides: rawConfig.overrides

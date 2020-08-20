@@ -681,11 +681,16 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
 
 export interface PortfolioStructureDTO extends BasicDTOStructure {
   data: {
-    date: string;
+    rpPortfolioDate: string;
     portfolioId: number;
     portfolioShortName: PortfolioShortNames;
     portfolioNav: number;
-    targetTotals: PortfolioMetricTotals;
+    target : {
+      portfolioTargetId: string;
+      date: string;
+      portfolioId: number;
+      target: PortfolioMetricTotals;
+    };
     currentTotals: PortfolioMetricTotals;
     indexId: number;
     indexShortName: string;

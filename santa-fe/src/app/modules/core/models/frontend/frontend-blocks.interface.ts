@@ -277,14 +277,14 @@ export interface PortfolioBreakDownOverrides {
       [property: string]: string;
     }
     breakdown: {
-      CS01: PortfolioBreakDownValues,
-      LeverageValue: PortfolioBreakDownValues
+      cs01: PortfolioBreakDownValues,
+      leverageValue: PortfolioBreakDownValues
     }
   }
 }
 
 export interface PortfolioMetricTotals {
-  CS01: number;
+  cs01: number;
   leverageValue: number;
 }
 export interface PortfolioBreakDownValues {
@@ -298,8 +298,8 @@ export interface PortfolioBreakDownValues {
 
 export interface PortfolioBreakdownTypes {
   [property: string]: {
-    CS01: PortfolioBreakDownValues,
-    LeverageValue: PortfolioBreakDownValues
+    cs01: PortfolioBreakDownValues,
+    leverageValue: PortfolioBreakDownValues
   }
 }
 
