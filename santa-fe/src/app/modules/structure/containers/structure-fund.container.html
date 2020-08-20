@@ -12,8 +12,8 @@
   <div class="sat-fundStructuring__setTarget-group">
     <label for="CS01Target" class="sat-fundStructuring__setTarget-group-label">Target CS01 Value:</label>
     <santa-input
-      [inputValue]="fund.data.target.target.cs01"
-      [placeholder]="fund.data.target.target.cs01"
+      [inputValue]="fund.data.cs01TotalsInK.targetTotal"
+      [placeholder]="fund.data.cs01TotalsInK.targetTotal"
       [isNumeric]="fund.state.isNumeric"
       (onInputChange)="onChangeValue($event, constants.CS01)"
       [hasError]="state.hasErrors.updatedCS01Value"

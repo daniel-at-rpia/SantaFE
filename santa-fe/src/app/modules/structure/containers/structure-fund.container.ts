@@ -31,6 +31,7 @@ export class StructureFund implements OnInit, OnChanges {
 
   public ngOnInit() {
     this.fund.api.onSubmitMetricValues = this.saveEditDetails.bind(this);
+    this.getCS01Placeholder();
   }
   
   public ngOnChanges() {
@@ -93,5 +94,9 @@ export class StructureFund implements OnInit, OnChanges {
       return;
     }
     this.fund.data.target.target.leverageValue = amount;
+  }
+
+  private getCS01Placeholder() {
+   this.fund.data.cs01TotalsInK.targetTotal = this.fund.api.convertToK(this.fund.data.target.target.cs01);
   }
 }
