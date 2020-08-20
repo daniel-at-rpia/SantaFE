@@ -76,6 +76,12 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       this.state.fetchResult.fundList.push(fund);
     })
   }
+
+  private resetAPIErrors() {
+    this.state.fetchResult.fetchFundDataFailed = false;
+    this.state.fetchResult.fetchFundDataFailedError = '';
+  }
+
   private fetchFunds() {
     const currentDate = new Date();
     const currentDateFormat = 'YYYYMMDD';
@@ -83,6 +89,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     const payload = {
       date: formattedDate
     }
+    this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioStructures, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn) => {
