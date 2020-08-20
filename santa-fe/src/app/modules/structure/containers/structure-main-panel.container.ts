@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { DTOService } from 'Core/services/DTOService';
 import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
 import { Store, select } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+import { Subscription, of } from 'rxjs';
 import { ownerInitials } from 'Core/selectors/core.selectors';
 import { PortfolioMetricValues, PortfolioShortNames } from 'Core/constants/structureConstants.constants';
 import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.interface';
@@ -77,15 +77,15 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getFundWithUpdatedMetric, {req: 'POST'}, payload).pipe(
       first(),
       tap((serverReturn) => {
-        if (serverReturn) {
-          const updatedFund = this.dtoService.formStructureFundObject(serverReturn);
-          this.state.fetchResult.fundList = [];
-          this.state.fetchResult.fundList = fundListCopy.map(fund => {
-            return fund.data.portfolioId === updatedFund.data.portfolioId ? updatedFund : fund;
-          })
-        } else {
-          this.restfulCommService.logError(`Cannot receive updated target and leverage value`)
-        }
+        const updatedFund = this.dtoService.formStructureFundObject(serverReturn);
+        this.state.fetchResult.fundList = [];
+        this.state.fetchResult.fundList = fundListCopy.map(fund => {
+          return fund.data.portfolioId === updatedFund.data.portfolioId ? updatedFund : fund;
+        })
+      }),
+      catchError(err => {
+        this.restfulCommService.logError('Cannot retrieve fund with updated targets');
+        return of('error');
       })
     ).subscribe()
   }
