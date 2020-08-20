@@ -1684,6 +1684,7 @@ export class DTOService {
       },
       state: {
         isEditing: false,
+        isStencil: false,
         isNumeric: true
       }
     }

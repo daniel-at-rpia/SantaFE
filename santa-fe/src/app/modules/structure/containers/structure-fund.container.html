@@ -12,8 +12,8 @@
   <div class="sat-fundStructuring__setTarget-group">
     <label for="CS01Target" class="sat-fundStructuring__setTarget-group-label">Target CS01 Value:</label>
     <santa-input
-      [inputValue]="fund.data.CS01Values.targetValue"
-      [placeholder]="fund.data.CS01Values.targetValue"
+      [inputValue]="fund.data.targetTotals.CS01"
+      [placeholder]="fund.data.targetTotals.CS01"
       [isNumeric]="fund.state.isNumeric"
       (onInputChange)="onChangeValue($event, constants.CS01)"
       [ngClass]="{
@@ -25,8 +25,8 @@
   <div class="sat-fundStructuring__setTarget-group">
       <label for="leverageTarget" class="sat-fundStructuring__setTarget-group-label">Leverage Target Value:</label>
       <santa-input
-        [inputValue]="fund.data.LeverageValues.targetValue"
-        [placeholder]="fund.data.LeverageValues.targetValue"
+        [inputValue]="fund.data.targetTotals.leverageValue"
+        [placeholder]="fund.data.targetTotals.leverageValue"
         [isNumeric]="fund.state.isNumeric"
         (onInputChange)="onChangeValue($event, constants.Leverage)"
         [ngClass]="{
@@ -62,7 +62,7 @@
       'sat-fundStructuring__utility-btnGroup-btn': true,
       'sat-fundStructuring__utility-btnGroup-btn--save': true,
       'sat-fundStructuring__utility-btnGroup-btn--inActive': !state.isEditing
-      }" (click)="saveEditDetails(fund.data.CS01Values.targetValue, fund.data.LeverageValues.targetValue)">
+      }" (click)="saveEditDetails(fund.data.targetTotals.CS01, fund.data.targetTotals.leverageValue)">
       <i class="fas fa-cloud-upload-alt"></i>
     </button>
   </div>

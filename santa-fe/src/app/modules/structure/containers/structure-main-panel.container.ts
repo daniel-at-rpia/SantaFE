@@ -9,6 +9,7 @@ import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.inte
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { catchError, first, tap } from 'rxjs/operators';
 import { UtilityService } from 'Core/services/UtilityService';
+import { BreakdownSampleStructureBlock } from 'Structure/stubs/structure.stub';
 
 @Component({
     selector: 'structure-main-panel',
@@ -66,7 +67,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
   private loadInitialFunds() {
     this.portfolioList.forEach(portfolio => {
-      const fund = this.dtoService.formStructureFund(portfolio);
+      const fund = this.dtoService.formStructureFundObject(BreakdownSampleStructureBlock);
       this.state.fetchResult.fundList.push(fund);
     })
   }
@@ -77,7 +78,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       first(),
       tap((serverReturn) => {
         if (serverReturn) {
-          const updatedFund = this.dtoService.formStructureFund(serverReturn);
+          const updatedFund = this.dtoService.formStructureFundObject(serverReturn);
           this.state.fetchResult.fundList = [];
           this.state.fetchResult.fundList = fundListCopy.map(fund => {
             return fund.data.portfolioId === updatedFund.data.portfolioId ? updatedFund : fund;
