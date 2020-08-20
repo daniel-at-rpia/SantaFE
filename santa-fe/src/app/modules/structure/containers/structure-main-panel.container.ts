@@ -58,6 +58,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       this.state.ownerInitial = value;
     });
     this.loadInitialFunds();
+    this.fetchFunds();
   };
   public ngOnDestroy() {
     for (const eachItem in this.subscriptions) {
