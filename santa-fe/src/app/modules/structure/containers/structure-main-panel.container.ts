@@ -117,6 +117,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
             }
           })
           newFund.state.isStencil = false;
+          newFund.api.convertToK = this.convertValuesToK;
           this.state.fetchResult.fundList.push(newFund);
         })
       }),
