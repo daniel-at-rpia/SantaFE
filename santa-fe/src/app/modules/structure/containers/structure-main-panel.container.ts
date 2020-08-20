@@ -64,6 +64,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   private loadInitialFunds() {
     this.portfolioList.forEach(portfolio => {
       const fund = this.dtoService.formStructureFundObject(BreakdownSampleStructureBlock);
+      fund.data.portfolioShortName = portfolio;
       this.state.fetchResult.fundList.push(fund);
     })
   }
