@@ -16,9 +16,9 @@
       [placeholder]="fund.data.target.target.cs01"
       [isNumeric]="fund.state.isNumeric"
       (onInputChange)="onChangeValue($event, constants.CS01)"
+      [hasError]="state.hasErrors.updatedCS01Value"
       [ngClass]="{
-        'sat-fundStructuring__setTarget-group-input': true,
-        'sat-fundStructuring__setTarget-group-input--error': state.hasErrors.updatedCS01Value
+        'sat-fundStructuring__setTarget-group-input': true
       }">
     </santa-input>
   </div>
@@ -29,9 +29,9 @@
         [placeholder]="fund.data.target.target.leverageValue"
         [isNumeric]="fund.state.isNumeric"
         (onInputChange)="onChangeValue($event, constants.Leverage)"
+        [hasError]="state.hasErrors.updatedLeverageValue"
         [ngClass]="{
-          'sat-fundStructuring__setTarget-group-input': true,
-          'sat-fundStructuring__setTarget-group-input--error': state.hasErrors.updatedLeverageValue
+          'sat-fundStructuring__setTarget-group-input': true
         }">
     </santa-input>
   </div>

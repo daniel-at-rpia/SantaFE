@@ -35,13 +35,6 @@ $tradeUtilityPanel_side_btn_size: $iconButton_size_large;
       &-input {
         margin-right: $spacing_x_small;
       }
-      &-input {
-        @include mix_border_generator($static_color: $color_black);
-        @include mix_border_radius(5px);
-        &--error {
-          border-color: $color_negative;
-        }
-      }
       &-measurement {
         font-weight: bold;
       }

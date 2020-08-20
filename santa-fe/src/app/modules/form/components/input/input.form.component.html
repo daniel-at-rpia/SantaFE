@@ -5,7 +5,11 @@
   }">
   <input
     type="{{ isNumeric ? 'number' : 'text' }}"
-    class="santaInput__inputElement"
+    [ngClass]="{
+      'santaInput__inputElement': true,
+      'santaInput__inputElement--error': hasError,
+      'santaInput__inputElement--setFunds': isNumeric
+    }"
     [(ngModel)]="inputValue"
     [placeholder]="placeholder"
     (keyup)="onKey()"

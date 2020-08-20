@@ -5,6 +5,13 @@
   display: flex;
   &__inputElement {
     flex: 1 1 auto;
+    &--setFunds {
+      @include mix_border_generator($static_color: $color_active);
+      @include mix_border_radius(5px);
+    }
+    &--error {
+      @include mix_border_generator($static_color: $color_negative);
+    }
   }
   &--heroVariant {
     #{$santaInputBlockName} {
