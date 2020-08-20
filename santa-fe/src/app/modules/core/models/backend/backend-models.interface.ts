@@ -539,3 +539,12 @@ export interface BEAlertMarketListQuoteBlock extends BEQuoteBaseBlock {
   ioiQualifier: string,
   isTraded: boolean
 }
+
+export interface BEStructuringBreakdownSingleEntry {
+  total: number;  // what is this for? Target Total or Current Total? - DZ
+  targetLevel: number;
+  targetPct: number;
+  currentLevel: number;
+  currentPct: number;
+  indexPct: number;
+}
