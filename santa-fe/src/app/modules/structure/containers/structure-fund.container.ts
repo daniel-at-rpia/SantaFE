@@ -25,8 +25,8 @@ export class StructureFund implements OnInit {
   constructor(private dtoService: DTOService) {}
 
   public ngOnInit() {
-    this.targetBarCS01 = this.createTargetBar(this.constants.CS01, this.fund.data.currentTotals.CS01, this.fund.data.targetTotals.CS01, this.selectedMetricValue, this.fund.state.isStencil);
-    this.targetBarLeverage = this.createTargetBar(this.constants.leverage, this.fund.data.currentTotals.leverage, this.fund.data.targetTotals.leverage, this.selectedMetricValue, this.fund.state.isStencil)
+    this.targetBarCS01 = this.createTargetBar(this.constants.CS01, this.fund.data.currentTotals.cs01, this.fund.data.target.target.cs01, this.selectedMetricValue, this.fund.state.isStencil);
+    this.targetBarLeverage = this.createTargetBar(this.constants.leverage, this.fund.data.currentTotals.leverageValue, this.fund.data.target.target.leverageValue, this.selectedMetricValue, this.fund.state.isStencil)
 
   }
 

@@ -5,6 +5,7 @@ import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { ownerInitials } from 'Core/selectors/core.selectors';
 import { PortfolioMetricValues, PortfolioShortNames } from 'Core/constants/structureConstants.constants';
+import { BreakdownSampleStructureBlock } from 'Structure/stubs/structure.stub';
 
 @Component({
     selector: 'structure-main-panel',
@@ -62,7 +63,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
   private loadInitialFunds() {
     this.portfolioList.forEach(portfolio => {
-      const fund = this.dtoService.formStructureFund(portfolio);
+      const fund = this.dtoService.formStructureFundObject(BreakdownSampleStructureBlock);
       this.state.fetchResult.fundList.push(fund);
     })
   }

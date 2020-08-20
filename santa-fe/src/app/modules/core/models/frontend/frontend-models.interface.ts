@@ -12,8 +12,7 @@ import {
   SecurityTableRowQuoteBlock,
   SecurityCostPortfolioBlock, 
   PortfolioMetricTotals,
-  PortfolioBreakDownValues,
-  NestedPortfolioBreakdownValues,
+  PortfolioBreakdownTypes,
   PortfolioBreakDownOverrides
 } from 'FEModels/frontend-blocks.interface';
 import {AlertSubTypes, AlertTypes} from 'Core/constants/coreConstants.constant';
@@ -665,9 +664,10 @@ export interface TradeAlertConfigurationAxeGroupBlockDTO extends BasicDTOStructu
 
 export interface PortfolioBreakdownDTO extends BasicDTOStructure {
   data: {
-    category: string;
-    values: Array<PortfolioBreakDownValues | NestedPortfolioBreakdownValues>;
-    overrides?: Array<PortfolioBreakDownOverrides>
+    groupOption: string;
+    breakdown: PortfolioBreakdownTypes
+    breakdownLevel2?: PortfolioBreakdownTypes,
+    breakdownLevel3?: PortfolioBreakdownTypes
   },
   style: {
     icon: string
@@ -680,17 +680,23 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
 
 export interface PortfolioStructureDTO extends BasicDTOStructure {
   data: {
-    date: Date;
+    rpPortfolioDate: string;
     portfolioId: number;
     portfolioShortName: PortfolioShortNames;
     portfolioNav: number;
-    targetTotals: PortfolioMetricTotals;
+    target : {
+      portfolioTargetId: string;
+      date: string;
+      portfolioId: number;
+      target: PortfolioMetricTotals;
+    };
     currentTotals: PortfolioMetricTotals;
     indexId: number;
     indexShortName: string;
     indexNav: number;
     indexTotals: PortfolioMetricTotals;
     children: Array<PortfolioBreakdownDTO>;
+    overrides?: PortfolioBreakDownOverrides;
   },
   api: {
     onSubmitMetricValues: (CS01: number, leverage: number) => void;

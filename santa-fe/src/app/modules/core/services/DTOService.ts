@@ -1635,41 +1635,6 @@ export class DTOService {
     return object;
   }
 
-  public formStructureFund(portfolioName: PortfolioShortNames) {
-    const object: DTOs.PortfolioStructureDTO = {
-      data: {
-        date: null,
-        portfolioId: null,
-        portfolioShortName: portfolioName,
-        portfolioNav: null,
-        targetTotals: {
-          CS01: null,
-          leverage: null
-        },
-        currentTotals :{
-          CS01: null,
-          leverage: null
-        },
-        indexId: null,
-        indexShortName: '',
-        indexNav: null,
-        indexTotals: {
-          CS01: null,
-          leverage: null
-        },
-        children: []
-      },
-      api: {
-        onSubmitMetricValues: null
-      },
-      state: {
-        isEditing: false,
-        isStencil: false
-      }
-    }
-    return object;
-  }
-
   public formTargetBarObject(targetMetric: PortfolioMetricValues, currentValue: number, targetValue: number, selectedMetricValue: PortfolioMetricValues, isStencil: boolean) {
     const object: DTOs.TargetBarDTO = {
       data: {
@@ -1694,4 +1659,46 @@ export class DTOService {
     }
     return object;
   }
-}
+
+  public formStructureFundObject(rawConfig: BEModels.BEPortfolioStructuringBlock) {
+    const object: DTOs.PortfolioStructureDTO = {
+      data: {
+        rpPortfolioDate: rawConfig.rpPortfolioDate,
+        portfolioId: rawConfig.portfolioId,
+        portfolioShortName: rawConfig.portfolioShortName,
+        portfolioNav: rawConfig.portfolioNav,
+        target: {
+          portfolioTargetId: rawConfig.target.portfolioTargetId,
+          date: rawConfig.target.date,
+          portfolioId: rawConfig.target.portfolioId,
+          target: {
+            cs01: rawConfig.target.target.cs01,
+            leverageValue: rawConfig.target.target.leverageValue
+          }
+        },
+        currentTotals :{
+          cs01: rawConfig.currentTotals.cs01,
+          leverageValue: rawConfig.currentTotals.leverageValue
+        },
+        indexId: rawConfig.indexId,
+        indexShortName: rawConfig.indexShortName,
+        indexNav: rawConfig.indexNav,
+        indexTotals: {
+          cs01: rawConfig.indexTotals.cs01,
+          leverageValue: rawConfig.indexTotals.leverageValue
+        },
+        children: [],
+        overrides: rawConfig.overrides
+      },
+      api: {
+        onSubmitMetricValues: null
+      },
+      state: {
+        isEditing: false,
+        isStencil: false
+      }
+    }
+    return object;
+    }
+  }
+
