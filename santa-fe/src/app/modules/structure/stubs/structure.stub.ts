@@ -1,5 +1,5 @@
-import { BEStructuringBreakdownSingleEntry } from 'BEModels/backend-models.interface';
-
+import { BEStructuringBreakdownSingleEntry, BEPortfolioStructuringBlock } from 'BEModels/backend-models.interface';
+import {PortfolioShortNames} from 'Core/constants/structureConstants.constants';
 const BreakdownSampleCurrencyCS01: Array<BEStructuringBreakdownSingleEntry> =  [
   {
     total: null,
@@ -246,3 +246,163 @@ const BreakdownSampleRatingCS01: Array<BEStructuringBreakdownSingleEntry> =  [
     indexPct: 0
   }
 ];
+
+export const BreakdownSampleStructureBlock: BEPortfolioStructuringBlock = {
+  date: null,
+  portfolioId: null,
+  portfolioShortName: PortfolioShortNames.SOF,
+  portfolioNav: null,
+  targetTotals: {
+    CS01: 235000,
+    LeverageValue: 1.3
+  },
+  currentTotals: {
+    CS01: 180000,
+    LeverageValue: 1.5
+  },
+  indexId: null,
+  indexShortName: '',
+  indexNav: null,
+  indexTotals: {
+    CS01: null,
+    LeverageValue: null
+  },
+  ccyBreakdown: {
+    groupOption: 'ccy',
+    breakdown: {
+      'US': {
+        CS01: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        },
+        LeverageValue: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        }
+      }
+    }
+  },
+  bicsLevel1Breakdown: {
+    groupOption: 'bics',
+    breakdown: {
+      'finance': {
+        CS01: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        },
+        LeverageValue: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        }
+      }
+    }
+  },
+  bicsLevel2Breakdown: {
+    groupOption: 'bics',
+    breakdown: {
+      'Banking': {
+        CS01: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        },
+        LeverageValue: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        }
+      }
+    }
+  },
+  bicsLevel3Breakdown: {
+    groupOption: 'bics',
+    breakdown: {
+      'finance': {
+        CS01: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        },
+        LeverageValue: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        }
+      }
+    }
+  },
+  ratingBreakdown: {
+    groupOption: 'rating',
+    breakdown: {
+      'AAA': {
+        CS01: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        },
+        LeverageValue: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        }
+      }
+    }
+  },
+  tenorBreakdown: {
+    groupOption: 'tenor',
+    breakdown: {
+      '5Y': {
+        CS01: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        },
+        LeverageValue: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        }
+      }
+    }
+  }
+}
