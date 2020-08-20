@@ -68,6 +68,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   private loadInitialFunds() {
     this.portfolioList.forEach(portfolio => {
       const fund = this.dtoService.formStructureFundObject(BreakdownSampleStructureBlock);
+      fund.api.convertToK = this.convertValuesToK.bind(this);
       this.state.fetchResult.fundList.push(fund);
     })
   }
@@ -89,4 +90,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       })
     ).subscribe()
   }
-}
+
+  private convertValuesToK(value: number) {
+    return value / 1000;
+  }
+ }
