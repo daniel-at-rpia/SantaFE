@@ -78,7 +78,7 @@ export class StructureFund implements OnInit, OnChanges {
     this.state.hasErrors.updatedLeverageValue = false;
     this.state.isEditing = false;
     this.resetErrors();
-    this.fund.data.targetTotals.CS01 = targetCS01 * 1000;
+    this.fund.data.target.target.cs01 = targetCS01 * 1000;
     this.updatedFundData.emit(this.fund)
   }
 
@@ -89,9 +89,9 @@ export class StructureFund implements OnInit, OnChanges {
 
   private onChangeValue(amount: number, type: PortfolioMetricValues) {
     if (type === PortfolioMetricValues.CSO1) {
-      this.fund.data.targetTotals.CS01 = amount;
+      this.fund.data.target.target.cs01 = amount;
       return;
     }
-    this.fund.data.targetTotals.leverageValue = amount;
+    this.fund.data.target.target.leverageValue = amount;
   }
 }
