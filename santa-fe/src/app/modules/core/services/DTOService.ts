@@ -1635,29 +1635,49 @@ export class DTOService {
     return object;
   }
 
-  public formStructureFund(portfolioName: PortfolioShortNames) {
+  public formStructureBreakdownObject(portfolioBreakdown: BEModels.BEStructuringBreakdownBlock ) {
+    const object: DTOs.PortfolioBreakdownDTO = {
+      data: {
+        groupOption: portfolioBreakdown.groupOption,
+        breakdown: portfolioBreakdown.breakdown,
+        breakdownLevel2: null,
+        breakdownLevel3: null
+      },
+      style: {
+        icon: ''
+      },
+      state: {
+        isEditing: false,
+        isStencil: false
+      }
+    }
+    return object;
+  }
+
+  public formStructureFundObject(rawConfig: BEModels.BEPortfolioStructuringBlock) {
     const object: DTOs.PortfolioStructureDTO = {
       data: {
-        date: null,
-        portfolioId: null,
-        portfolioShortName: portfolioName,
-        portfolioNav: null,
+        date: rawConfig.date,
+        portfolioId: rawConfig.portfolioId,
+        portfolioShortName: rawConfig.portfolioShortName,
+        portfolioNav: rawConfig.portfolioNav,
         targetTotals: {
-          CS01: null,
-          leverage: null
-        },
+          CS01: rawConfig.targetTotals.CS01,
+          leverageValue: rawConfig.targetTotals.LeverageValue
+      },
         currentTotals :{
-          CS01: null,
-          leverage: null
+          CS01: rawConfig.currentTotals.CS01,
+          leverageValue: rawConfig.currentTotals.LeverageValue
         },
-        indexId: null,
-        indexShortName: '',
-        indexNav: null,
+        indexId: rawConfig.indexId,
+        indexShortName: rawConfig.indexShortName,
+        indexNav: rawConfig.indexNav,
         indexTotals: {
-          CS01: null,
-          leverage: null
+          CS01: rawConfig.indexTotals.CS01,
+          leverageValue: rawConfig.indexTotals.LeverageValue
         },
-        children: []
+        children: [],
+        overrides: rawConfig.overrides
       },
       api: {
         onSubmitMetricValues: null

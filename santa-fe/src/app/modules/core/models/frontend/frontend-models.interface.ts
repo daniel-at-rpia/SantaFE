@@ -13,8 +13,8 @@ import {
   SecurityCostPortfolioBlock, 
   PortfolioMetricTotals,
   PortfolioBreakDownValues,
-  NestedPortfolioBreakdownValues,
-  PortfolioBreakDownOverrides
+  PortfolioBreakDownOverrides,
+  PortfolioBreakdownTypes
 } from 'FEModels/frontend-blocks.interface';
 import {AlertSubTypes, AlertTypes} from 'Core/constants/coreConstants.constant';
 import { SantaTableNumericFloatingFilterParams } from 'FEModels/frontend-adhoc-packages.interface';
@@ -665,9 +665,10 @@ export interface TradeAlertConfigurationAxeGroupBlockDTO extends BasicDTOStructu
 
 export interface PortfolioBreakdownDTO extends BasicDTOStructure {
   data: {
-    category: string;
-    values: Array<PortfolioBreakDownValues | NestedPortfolioBreakdownValues>;
-    overrides?: Array<PortfolioBreakDownOverrides>
+    groupOption: string;
+    breakdown: PortfolioBreakdownTypes
+    breakdownLevel2?: PortfolioBreakdownTypes,
+    breakdownLevel3?: PortfolioBreakdownTypes
   },
   style: {
     icon: string
@@ -690,12 +691,14 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     indexShortName: string;
     indexNav: number;
     indexTotals: PortfolioMetricTotals;
-    children: Array<PortfolioBreakdownDTO>;
+    children: Array<PortfolioBreakdownDTO>
+    overrides?: PortfolioBreakDownOverrides;
   },
   api: {
     onSubmitMetricValues: (CS01: number, leverage: number) => void;
   }
   state: {
     isEditing: boolean;
+    isStencil: boolean;
   }
 }
