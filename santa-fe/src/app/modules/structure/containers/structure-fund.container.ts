@@ -67,12 +67,12 @@ export class StructureFund implements OnInit, OnChanges {
       if (invalidTarget === 'both') {
         this.state.hasErrors.updatedCS01Value = true;
         this.state.hasErrors.updatedLeverageValue = true;
-        this.state.hasErrors.errorMessage = 'Please enter valid inputs for Target CS01 Value and Target Leverage Value'
+        this.state.hasErrors.errorMessage = 'Please enter valid target levels for CS01 and Leverage'
         return;
       }
       const invalidInputErrorRef = `updated${invalidTarget.split(' ').join('')}`;
       this.state.hasErrors[invalidInputErrorRef] = true;
-      this.state.hasErrors.errorMessage = `Please enter a valid input for Target ${invalidTarget}`;
+      this.state.hasErrors.errorMessage = `Please enter a valid target level for ${invalidTarget}`;
       return;
     }
     this.state.hasErrors.updatedCS01Value = false;
