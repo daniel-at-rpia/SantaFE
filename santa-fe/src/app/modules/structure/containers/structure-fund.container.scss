@@ -59,6 +59,14 @@ $tradeUtilityPanel_side_btn_size: $iconButton_size_large;
         &>i {
           font-size: $font_size_large;
         }
+        &--cancel,
+        &--save {
+          @include roundedButton($size: $tradeUtilityPanel_side_btn_size);
+          &>i{
+            color: $color_white;
+            font-size: $font_size_x_large;
+          }
+        }
         &--cancel {
           background-color: $color_negative;
         }
@@ -70,16 +78,6 @@ $tradeUtilityPanel_side_btn_size: $iconButton_size_large;
         &--save {
           background-color: $color_positive;
         }
-        &--cancel,
-        &--save {
-          @include mix_border_radius(50%);
-          color: $color_white;
-          width: $tradeUtilityPanel_side_btn_size;
-          height: $tradeUtilityPanel_side_btn_size;
-          &>i{
-            color: $color_white;
-          }
-        }
         &--inActive {
           display: none;
         }
@@ -89,14 +87,6 @@ $tradeUtilityPanel_side_btn_size: $iconButton_size_large;
       height: $typical_border_width;
       background: $color_border_gray;
       margin: $spacing_medium $spacing_large;
-    }
-  }
-  &--nonEdit {
-    #{$blockName} {
-      &__setTarget {
-        visibility: hidden;
-        height: 0;
-      }
     }
   }
   &--editing {
