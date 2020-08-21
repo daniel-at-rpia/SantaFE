@@ -112,7 +112,10 @@ $tradeUtilityPanel_side_btn_size: $iconButton_size_large;
   &--error {
     #{$blockName} {
       &__setTarget {
-        height: auto;
+       overflow: visible;
+      }
+      &__utility {
+        margin-top: $spacing_x_large;
       }
     }
   }
