@@ -1,0 +1,37 @@
+<article [ngClass]="{
+  'sat-structureUtilityPanel': true,
+  'sat-structureUtilityPanel--tongueExpanded': state.isExpanded
+}">
+  <section [ngClass]="{
+    'sat-structureUtilityPanel__cs01': true,
+    'sat-structureUtilityPanel__cs01--selected': true
+  }">
+    <button class="sat-structureUtilityPanel__cs01-btn">
+      <i class="fal fa-check"></i>
+    </button>
+    <div class="sat-structureUtilityPanel__cs01-text">
+      <span class="sat-structureUtilityPanel__cs01-text-targetType">{{ constants.cs01 }}</span>
+      <span class="sat-structureUtilityPanel__cs01-text-targetStatus">Selected</span>
+    </div>
+  </section>
+  <section class="sat-structureUtilityPanel__tongue" (click)="onToggleTongueExpand()">
+    <p class="sat-structureUtilityPanel__tongue-text">Switch Target Level</p>
+    <div class="sat-structureUtilityPanel__tongue-barGroup">
+      <span class="sat-structureUtilityPanel__tongue-barGroup-bar"></span>
+    <span class="sat-structureUtilityPanel__tongue-barGroup-bar"></span>
+    <span class="sat-structureUtilityPanel__tongue-barGroup-bar"></span>
+    </div>
+  </section>
+  <section [ngClass]="{
+    'sat-structureUtilityPanel__leverage': true,
+    'sat-structureUtilityPanel__leverage--selected': false
+  }">
+    <button class="sat-structureUtilityPanel__leverage-btn">
+      <i class="fal fa-check"></i>
+    </button>
+    <div class="sat-structureUtilityPanel__leverage-text">
+      <span class="sat-structureUtilityPanel__leverage-text-targetType">{{ constants.leverage }}</span>
+      <span class="sat-structureUtilityPanel__leverage-text-targetStatus">Selected</span>
+    </div>
+  </section>
+</article>
