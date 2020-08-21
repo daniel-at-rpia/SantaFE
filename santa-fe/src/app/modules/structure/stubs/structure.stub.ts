@@ -257,7 +257,7 @@ export const BreakdownSampleStructureBlock: BEPortfolioStructuringBlock = {
     date: null,
     portfolioId: null,
     target: {
-      cs01: 22000,
+      cs01: 220000,
       leverageValue: 1.8
     }
   },

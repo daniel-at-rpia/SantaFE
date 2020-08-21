@@ -1,7 +1,7 @@
 @import "global.scss";
 
 .sat-fundTargetBar {
-  $fundTargetBarBlockName: &;
+  $blockName: &;
     &__type {
       font-size: $font_size_small;
       margin: 0 0 $spacing_x_small 0;
@@ -57,7 +57,7 @@
       }
     }
     &--stencilState {
-      #{$fundTargetBarBlockName} {
+      #{$blockName} {
         &__indicator {
           &-values {
             &-text {
@@ -68,7 +68,7 @@
       }
     }
     &--inactive {
-      #{$fundTargetBarBlockName} {
+      #{$blockName} {
         &__type,
         &__indicator {
           &--exceeded {
@@ -79,9 +79,9 @@
           }
         }
       }
-      &#{$fundTargetBarBlockName} {
+      &#{$blockName} {
        &--stencilState {
-        #{$fundTargetBarBlockName} {
+        #{$blockName} {
           &__indicator {
             &--exceeded,
             &--current {
