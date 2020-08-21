@@ -40,9 +40,10 @@ $tradeUtilityPanel_side_btn_size: $iconButton_size_large;
       }
     }
     &-message {
-      text-align: center;
-      &--error {
-        display: none;
+      &-text {
+        text-align: center;
+        color: $color_active;
+        margin: $spacing_x_small 0;
       }
     }
   }
