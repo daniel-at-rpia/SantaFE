@@ -122,4 +122,11 @@ $tradeUtilityPanel_side_btn_size: $iconButton_size_large;
       }
     }
   }
+  &--error {
+    #{$blockName} {
+      &__setTarget {
+        height: auto;
+      }
+    }
+  }
 }

@@ -1,6 +1,7 @@
 <article [ngClass]="{
   'sat-fundStructuring': true,
-  'sat-fundStructuring--editing': state.isEditing
+  'sat-fundStructuring--editing': state.isEditing,
+  'sat-fundStructuring--error': state.hasErrors.updatedCS01Value|| state.hasErrors.updatedLeverageValue
   }">
   <header class="sat-fundStructuring__configuration">
     <h2 class="sat-fundStructuring__configuration-title">{{ fund.data.portfolioShortName }}</h2>
@@ -36,8 +37,7 @@
     </santa-input>
   </div>
   <div [ngClass]="{
-    'sat-fundStructuring__setTarget-message': true,
-    'sat-fundStructuring__setTarget-message--error': state.hasErrors.isUpdatedCS01Invalid || state.hasErrors.isUpdatedLeverageInvalid
+    'sat-fundStructuring__setTarget-message': true
   }">
   <p class="sat-fundStructuring__setTarget-message-text">{{ state.hasErrors.errorMessage }}</p>
   </div>
