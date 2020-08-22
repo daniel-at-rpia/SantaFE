@@ -148,6 +148,17 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
   }
   &--stencilState {
     #{$blockName} {
+      &__rating {
+        background-color: $color_white;
+        &-fill {
+          background-color: $color_stencil;
+        }
+        &-hoverText {
+          @include mix_stencil_animation;
+          background-color: $color_stencil;
+          color: $color_stencil;
+        }
+      }
       &__categoryContent {
         &-list-item-cell {
           @include mix_stencil_animation;

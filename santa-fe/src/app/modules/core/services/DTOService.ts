@@ -1747,10 +1747,10 @@ export class DTOService {
         title: '',
         definition: null,
         categoryList: [],
-        ratingHoverText: !isStencil ? '20%' : '99%'
+        ratingHoverText: !isStencil ? '20%' : '33%'
       },
       style: {
-        ratingFillWidth: 20
+        ratingFillWidth: !isStencil ? 20 : 33
       },
       state: {
         isEditing: false,
