@@ -1209,7 +1209,7 @@ export class DTOService {
         isInversed: false,
         isInvalid: false,
         isPlaceholder: false,
-        isStencil: !!isStencil,
+        isStencil: true,
         isColorCodeInversed: false,
         structuringBreakdownVariant: true,
         structuringBreakdownExceededState: rawData.currentLevel > rawData.targetLevel
@@ -1754,7 +1754,7 @@ export class DTOService {
       },
       state: {
         isEditing: false,
-        isStencil: !!isStencil
+        isStencil: true
       }
     };
     let findMax = 0;

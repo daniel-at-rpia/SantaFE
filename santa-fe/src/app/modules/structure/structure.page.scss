@@ -21,4 +21,8 @@
       flex: 1 1 auto;
     }
   }
+  &__iconLoad {
+    visibility: hidden;
+    width: 0;
+  }
 }

@@ -49,11 +49,15 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     ).subscribe((value) => {
       this.state.ownerInitial = value;
     });
-    this.loadStencilFunds();
+    const initialWaitForIcons = this.loadStencilFunds.bind(this
+      );
+    setTimeout(() => {
+      initialWaitForIcons();
+    }, 200);
     const fakeAsyncLoadData = this.loadInitialFunds.bind(this);
     setTimeout(() => {
       fakeAsyncLoadData();
-    }, 3000);
+    }, 2000);
   };
   public ngOnDestroy() {
     for (const eachItem in this.subscriptions) {
@@ -64,10 +68,18 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     }
   }
   private loadInitialFunds() {
-    this.state.fetchResult.fundList = this.portfolioList.map(portfolio => {
+    this.portfolioList.forEach(portfolio => {
       const eachFund = this.dtoService.formStructureFund(portfolio, false);
-      return eachFund;
-    })
+      this.state.fetchResult.fundList.forEach((eachPortfolio) => {
+        if (eachPortfolio.data.portfolioShortName === portfolio) {
+          eachPortfolio.data.children = eachFund.data.children;
+        }
+      });
+    });
+    const flipStencil = this.loadFundsData.bind(this);
+    setTimeout(() => {
+      flipStencil();
+    }, 1);
   }
 
   private loadStencilFunds() {
@@ -75,5 +87,17 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       const eachFund = this.dtoService.formStructureFund(eachPortfolioName, true);
       return eachFund;
     });
+  }
+
+  private loadFundsData() {
+    this.state.fetchResult.fundList.forEach((eachFund) => {
+      eachFund.state.isStencil = false;
+      eachFund.data.children.forEach((eachChild) => {
+        eachChild.state.isStencil = false;
+        eachChild.data.categoryList.forEach((eachCategory) => {
+          eachCategory.moveVisualizer.state.isStencil = false;
+        })
+      })
+    })
   }
 }
