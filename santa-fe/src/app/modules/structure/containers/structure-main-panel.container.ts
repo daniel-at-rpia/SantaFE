@@ -26,7 +26,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     ownerInitialsSub: null
   };
   constants = {
-    portfolioMetricValues: PortfolioMetricValues,
+    cs01: PortfolioMetricValues.CSO1,
+    leverage: PortfolioMetricValues.Leverage,
     portfolioShortNames: PortfolioShortNames
   };
   portfolioList: PortfolioShortNames[] = [this.constants.portfolioShortNames.SOF, this.constants.portfolioShortNames.DOF, this.constants.portfolioShortNames.AGB, this.constants.portfolioShortNames.STIP, this.constants.portfolioShortNames.CIP, this.constants.portfolioShortNames.BBB, this.constants.portfolioShortNames.FIP];
@@ -44,7 +45,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     const state: StructureMainPanelState = {
         ownerInitial: null,
         isUserPM: false,
-        selectedMetricValue: this.constants.portfolioMetricValues.CSO1,
+        selectedMetricValue: this.constants.cs01,
         fetchResult: {
           fundList: [],
           fetchFundDataFailed: false,
