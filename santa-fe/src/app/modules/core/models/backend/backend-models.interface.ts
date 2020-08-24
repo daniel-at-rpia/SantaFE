@@ -548,6 +548,7 @@ export interface BEStructuringBreakdownSingleEntry {
   currentPct: number;
   indexPct: number;
 }
+
 export interface BEStructuringBreakdownBlock {
   groupOption: string;
   breakdown: {
@@ -563,21 +564,7 @@ export interface BEStructuringMetricTotalBlock {
   leverageValue: number;
 }
 
-export interface BEStructuringOverrides {
-  [property: string]: {
-    portfolioId: number;
-    date: string;
-    bucket: {
-      [property: string]: string;
-    }
-    breakdown: {
-      cs01: BEStructuringBreakdownSingleEntry,
-      leverageValue: BEStructuringBreakdownSingleEntry
-    }
-  }
-}
-
-export interface BEPortfolioStructuringBlock {
+export interface BEPortfolioStructuringDTO {
   rpPortfolioDate: string;
   portfolioId: number;
   portfolioShortName: PortfolioShortNames;
@@ -599,5 +586,5 @@ export interface BEPortfolioStructuringBlock {
   bicsLevel3Breakdown?: BEStructuringBreakdownBlock
   ratingBreakdown: BEStructuringBreakdownBlock
   tenorBreakdown: BEStructuringBreakdownBlock
-  overrides?: BEStructuringOverrides
+  overrides?: BEStructuringBreakdownBlock
 }

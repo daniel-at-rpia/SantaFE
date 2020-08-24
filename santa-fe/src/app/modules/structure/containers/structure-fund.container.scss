@@ -1,6 +1,10 @@
 @import "global.scss";
+@import "modules/structure/structure.scss";
 
 .sat-fundStructuring {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   &__configuration {
     display: flex;
     justify-content: space-evenly;
@@ -34,5 +38,19 @@
   }
   &__targetBar {
     width: 8rem;
+  }
+  &__content {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    &-breakdownList {
+      @include mix_enable_scrollbar('vertical');
+      display: flex;
+      flex-direction: column;
+      padding: $spacing_medium;
+      &-item {
+        
+      }
+    }
   }
 }
