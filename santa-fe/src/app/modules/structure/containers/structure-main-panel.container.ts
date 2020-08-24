@@ -23,7 +23,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   };
   portfolioList: PortfolioShortNames[] = [PortfolioShortNames.SOF, PortfolioShortNames.DOF, PortfolioShortNames.AGB, PortfolioShortNames.STIP, PortfolioShortNames.CIP, PortfolioShortNames.BBB, PortfolioShortNames.FIP]
   constants = {
-    portfolioMetricValues: PortfolioMetricValues
+    cs01: PortfolioMetricValues.CSO1,
+    leverage: PortfolioMetricValues.Leverage
   };
 
   private initializePageState(): StructureMainPanelState { 
@@ -54,7 +55,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.subscriptions.selectedMetricLevelSub = this.store$.pipe(
       select(selectMetricLevel)
     ).subscribe((value) => {
-      const metric = value === this.constants.portfolioMetricValues.CSO1 ? this.constants.portfolioMetricValues.CSO1 : this.constants.portfolioMetricValues.Leverage
+      const metric = value === this.constants.cs01 ? this.constants.cs01 : this.constants.leverage
       this.state.selectedMetricValue = metric;
     });
     this.loadInitialFunds();
