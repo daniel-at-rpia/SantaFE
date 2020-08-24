@@ -103,10 +103,8 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
         display: flex;
         align-items: center;
         &-title {
+          @include mix_text_overflow;
           flex: 0 0 7rem;
-          display: flex;
-          justify-content: flex-end;
-          align-items: center;
           text-align: right;
           margin-right: $spacing_small;
         }

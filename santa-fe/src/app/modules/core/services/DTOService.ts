@@ -1710,37 +1710,36 @@ export class DTOService {
   }
 
   public formStructureFundObject(
-    rawConfig: BEModels.BEPortfolioStructuringBlock,
+    rawData: BEModels.BEPortfolioStructuringDTO,
     isStencil: boolean
   ): DTOs.PortfolioStructureDTO {
     const object: DTOs.PortfolioStructureDTO = {
       data: {
-        rpPortfolioDate: rawConfig.rpPortfolioDate,
-        portfolioId: rawConfig.portfolioId,
-        portfolioShortName: rawConfig.portfolioShortName,
-        portfolioNav: rawConfig.portfolioNav,
+        rpPortfolioDate: rawData.rpPortfolioDate,
+        portfolioId: rawData.portfolioId,
+        portfolioShortName: rawData.portfolioShortName,
+        portfolioNav: rawData.portfolioNav,
         target: {
-          portfolioTargetId: rawConfig.target.portfolioTargetId,
-          date: rawConfig.target.date,
-          portfolioId: rawConfig.target.portfolioId,
+          portfolioTargetId: rawData.target.portfolioTargetId,
+          date: rawData.target.date,
+          portfolioId: rawData.target.portfolioId,
           target: {
-            cs01: rawConfig.target.target.cs01,
-            leverageValue: rawConfig.target.target.leverageValue
+            cs01: rawData.target.target.cs01,
+            leverageValue: rawData.target.target.leverageValue
           }
         },
         currentTotals :{
-          cs01: rawConfig.currentTotals.cs01,
-          leverageValue: rawConfig.currentTotals.leverageValue
+          cs01: rawData.currentTotals.cs01,
+          leverageValue: rawData.currentTotals.leverageValue
         },
-        indexId: rawConfig.indexId,
-        indexShortName: rawConfig.indexShortName,
-        indexNav: rawConfig.indexNav,
+        indexId: rawData.indexId,
+        indexShortName: rawData.indexShortName,
+        indexNav: rawData.indexNav,
         indexTotals: {
-          cs01: rawConfig.indexTotals.cs01,
-          leverageValue: rawConfig.indexTotals.leverageValue
+          cs01: rawData.indexTotals.cs01,
+          leverageValue: rawData.indexTotals.leverageValue
         },
-        children: [],
-        overrides: rawConfig.overrides
+        children: []
       },
       api: {
         onSubmitMetricValues: null
@@ -1750,19 +1749,19 @@ export class DTOService {
         isStencil: !!isStencil
       }
     };
-    const BICSBreakdown = this.formPortfolioBreakdown(isStencil, BreakdownSampleBICSCS01);
+    const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.bicsLevel1Breakdown);
     BICSBreakdown.data.title = 'BICS';
     BICSBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.SECTOR);
     object.data.children.push(BICSBreakdown);
-    const currencyBreakdown = this.formPortfolioBreakdown(isStencil, BreakdownSampleCurrencyCS01);
+    const currencyBreakdown = this.formPortfolioBreakdown(isStencil, rawData.ccyBreakdown);
     currencyBreakdown.data.title = 'Currency';
     currencyBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
     object.data.children.push(currencyBreakdown);
-    const tenorBreakdown = this.formPortfolioBreakdown(isStencil, BreakdownSampleTenorCS01);
+    const tenorBreakdown = this.formPortfolioBreakdown(isStencil, rawData.tenorBreakdown);
     tenorBreakdown.data.title = 'Tenor';
     tenorBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.TENOR);
     object.data.children.push(tenorBreakdown);
-    const ratingBreakdown = this.formPortfolioBreakdown(isStencil, BreakdownSampleRatingCS01);
+    const ratingBreakdown = this.formPortfolioBreakdown(isStencil, rawData.ratingBreakdown);
     ratingBreakdown.data.title = 'Rating';
     ratingBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.RATING);
     object.data.children.push(ratingBreakdown);
@@ -1771,7 +1770,7 @@ export class DTOService {
 
   public formPortfolioBreakdown(
     isStencil: boolean,
-    rawData: Array<BEModels.BEStructuringBreakdownSingleEntry>
+    rawData: BEModels.BEStructuringBreakdownBlock
   ): DTOs.PortfolioBreakdownDTO {
     const object: DTOs.PortfolioBreakdownDTO = {
       data: {
@@ -1789,34 +1788,39 @@ export class DTOService {
       }
     };
     let findMax = 0;
-    rawData.forEach((eachEntry) => {
-      const highestVal = Math.max(eachEntry.currentLevel, eachEntry.targetLevel);
-      if (highestVal > findMax) {
-        findMax = highestVal;
+    for (const eachCategory in rawData.breakdown) {
+      const eachEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].cs01 : null;
+      if (!!eachEntry) {
+        const highestVal = Math.max(eachEntry.currentLevel, eachEntry.targetLevel);
+        if (highestVal > findMax) {
+          findMax = highestVal;
+        }
       }
-    })
-    rawData.forEach((eachEntry, index) => {
-      const eachMoveVisualizer = this.formMoveVisualizerObjectForStructuring(eachEntry, findMax, !!isStencil);
-      const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
-        category: `entry -  ${index}`,
-        targetLevel: eachEntry.targetLevel,
-        targetPct: eachEntry.targetPct,
-        diffToTarget: Math.round(eachEntry.targetLevel - eachEntry.currentLevel),
-        diffToTargetDisplay: '-',
-        currentLevel: eachEntry.currentLevel,
-        currentPct: eachEntry.currentPct,
-        indexLevel: null,
-        indexPct: eachEntry.indexPct,
-        moveVisualizer: eachMoveVisualizer
-      };
-      if (eachCategoryBlock.diffToTarget < 0) {
-        eachCategoryBlock.diffToTargetDisplay = `${eachCategoryBlock.diffToTarget}k`;
+    }
+    for (const eachCategory in rawData.breakdown) {
+      const eachEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].cs01 : null;
+      if (!!eachEntry) {
+        const eachMoveVisualizer = this.formMoveVisualizerObjectForStructuring(eachEntry, findMax, !!isStencil);
+        const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
+          category: `${eachCategory}`,
+          targetLevel: eachEntry.targetLevel,
+          targetPct: eachEntry.targetPct,
+          diffToTarget: Math.round(eachEntry.targetLevel - eachEntry.currentLevel),
+          diffToTargetDisplay: '-',
+          currentLevel: eachEntry.currentLevel,
+          currentPct: eachEntry.currentPct,
+          indexPct: eachEntry.indexPct,
+          moveVisualizer: eachMoveVisualizer
+        };
+        if (eachCategoryBlock.diffToTarget < 0) {
+          eachCategoryBlock.diffToTargetDisplay = `${eachCategoryBlock.diffToTarget}k`;
+        }
+        if (eachCategoryBlock.diffToTarget > 0) {
+          eachCategoryBlock.diffToTargetDisplay = `+${eachCategoryBlock.diffToTarget}k`;
+        }
+        object.data.categoryList.push(eachCategoryBlock);
       }
-      if (eachCategoryBlock.diffToTarget > 0) {
-        eachCategoryBlock.diffToTargetDisplay = `+${eachCategoryBlock.diffToTarget}k`;
-      }
-      object.data.categoryList.push(eachCategoryBlock);
-    });
+    }
     return object;
   }
 }
