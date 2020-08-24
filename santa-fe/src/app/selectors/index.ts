@@ -13,5 +13,5 @@ export const getTradeState = (appState: AppState) => {
 }
 
 export const getStructureState = (appState: AppState) => {
-  return appState.structure;
+  return appState.structuring;
 }

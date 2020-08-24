@@ -22,13 +22,13 @@ import {
 export interface AppState {
   core: CoreState;
   trade: TradeState;
-  structure: StructureState;
+  structuring: StructureState;
 }
 
 export const appReducers: ActionReducerMap<AppState> = {
   core: coreReducer,
   trade: tradeReducer,
-  structure: structureReducer
+  structuring: structureReducer
 };
 
 export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [] : [];
