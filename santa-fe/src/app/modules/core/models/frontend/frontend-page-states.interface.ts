@@ -274,3 +274,7 @@ export interface TradeAlertPanelState {
 export interface StructureState {
 
 }
+
+export interface StructureUtilityPanelState {
+  isExpanded: boolean
+}

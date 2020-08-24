@@ -2,10 +2,11 @@ import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { DTOService } from 'Core/services/DTOService';
 import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
 import { Store, select } from '@ngrx/store';
+import { selectMetricLevel } from 'Structure/selectors/structure.selectors';
+import { StructureMetricSelect } from 'Structure/actions/structure.actions';
 import { Subscription } from 'rxjs';
 import { ownerInitials } from 'Core/selectors/core.selectors';
 import { PortfolioMetricValues, PortfolioShortNames } from 'Core/constants/structureConstants.constants';
-
 
 @Component({
     selector: 'structure-main-panel',
@@ -17,7 +18,8 @@ import { PortfolioMetricValues, PortfolioShortNames } from 'Core/constants/struc
 export class StructureMainPanel implements OnInit, OnDestroy {
   state: StructureMainPanelState;
   subscriptions = {
-    ownerInitialsSub: null
+    ownerInitialsSub: null,
+    selectedMetricLevelSub: null
   };
   portfolioList: PortfolioShortNames[] = [PortfolioShortNames.SOF, PortfolioShortNames.DOF, PortfolioShortNames.AGB, PortfolioShortNames.STIP, PortfolioShortNames.CIP, PortfolioShortNames.BBB, PortfolioShortNames.FIP]
   constants = {
@@ -28,7 +30,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     const state: StructureMainPanelState = {
         ownerInitial: null,
         isUserPM: false,
-        selectedMetricValue: this.constants.portfolioMetricValues.CSO1,
+        selectedMetricValue: null,
         fetchResult: {
           fundList: [],
           fetchFundDataFailed: false,
@@ -48,6 +50,12 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       select(ownerInitials)
     ).subscribe((value) => {
       this.state.ownerInitial = value;
+    });
+    this.subscriptions.selectedMetricLevelSub = this.store$.pipe(
+      select(selectMetricLevel)
+    ).subscribe((value) => {
+      const metric = value === this.constants.portfolioMetricValues.CSO1 ? this.constants.portfolioMetricValues.CSO1 : this.constants.portfolioMetricValues.Leverage
+      this.state.selectedMetricValue = metric;
     });
     this.loadInitialFunds();
   };

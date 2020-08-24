@@ -5,7 +5,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { CoreModule } from 'Core/core.module';
 import { StructurePage } from 'Structure/structure.page';
 import { NavigationModule } from 'Core/constants/coreConstants.constant';
-
+import { StoreModule } from '@ngrx/store';
+import { reducer } from 'Structure/reducers/structure.reducer';
 import { StructureMainPanel } from 'Structure/containers/structure-main-panel.container';
 import { StructureFund } from 'App/modules/structure/containers/structure-fund.container';
 import { StructureUtilityPanel } from 'Structure/containers/structure-utility-panel.container';
@@ -20,12 +21,12 @@ import { StructureUtilityPanel } from 'Structure/containers/structure-utility-pa
   imports: [
     // Angular framework modules
     CommonModule,
+    StoreModule.forFeature(NavigationModule.structuring, reducer),
     RouterModule.forChild([
       {
         path: NavigationModule.structuring, component: StructurePage
       }
     ]),
-
     // Native modules
     CoreModule
   ]
