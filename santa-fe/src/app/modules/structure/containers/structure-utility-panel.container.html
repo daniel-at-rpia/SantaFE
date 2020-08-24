@@ -4,9 +4,9 @@
 }">
   <section [ngClass]="{
     'sat-structureUtilityPanel__cs01': true,
-    'sat-structureUtilityPanel__cs01--selected': true
+    'sat-structureUtilityPanel__cs01--selected': state.selectedMetricValue === constants.cs01
   }">
-    <button class="sat-structureUtilityPanel__cs01-btn">
+    <button class="sat-structureUtilityPanel__cs01-btn" (click)="setMetricLevel(constants.cs01)">
       <i class="fal fa-check"></i>
     </button>
     <div class="sat-structureUtilityPanel__cs01-text">
@@ -24,9 +24,9 @@
   </section>
   <section [ngClass]="{
     'sat-structureUtilityPanel__leverage': true,
-    'sat-structureUtilityPanel__leverage--selected': false
+    'sat-structureUtilityPanel__leverage--selected': state.selectedMetricValue === constants.leverage
   }">
-    <button class="sat-structureUtilityPanel__leverage-btn">
+    <button class="sat-structureUtilityPanel__leverage-btn" (click)="setMetricLevel(constants.leverage)">
       <i class="fal fa-check"></i>
     </button>
     <div class="sat-structureUtilityPanel__leverage-text">
