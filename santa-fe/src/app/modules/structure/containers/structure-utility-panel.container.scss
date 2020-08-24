@@ -73,6 +73,11 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
             background-color: $color_disabled;
             pointer-events: none;
           }
+          &-text {
+            &-targetStatus {
+              display: inline-block;
+            }
+          }
         }
       }
     }
@@ -85,7 +90,6 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     }
     &-text {
       &-targetStatus {
-        display: inline-block;
         margin-left: $spacing_small;
       }
       &-targetType {
