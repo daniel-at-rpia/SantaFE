@@ -72,7 +72,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
   private loadInitialFunds() {
     this.portfolioList.forEach(portfolio => {
-      const fund = this.dtoService.formStructureFundObject(BreakdownSampleStructureBlock, false);
+      const eachFund = this.dtoService.formStructureFundObject(BreakdownSampleStructureBlock, false);
+      eachFund.data.portfolioShortName = portfolio;
       this.state.fetchResult.fundList.forEach((eachPortfolio) => {
         if (eachPortfolio.data.portfolioShortName === portfolio) {
           eachPortfolio.data.children = eachFund.data.children;
@@ -87,7 +88,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
 
   private loadStencilFunds() {
     this.state.fetchResult.fundList = this.portfolioList.map((eachPortfolioName) => {
-      const eachFund = this.dtoService.formStructureFund(eachPortfolioName, true);
+      const eachFund = this.dtoService.formStructureFundObject(BreakdownSampleStructureBlock, true);
+      eachFund.data.portfolioShortName = eachPortfolioName;
       return eachFund;
     });
   }

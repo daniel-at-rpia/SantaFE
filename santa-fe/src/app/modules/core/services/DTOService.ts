@@ -1709,8 +1709,8 @@ export class DTOService {
     return object;
   }
 
-  public formStructureFund(
-    portfolioName: PortfolioShortNames,
+  public formStructureFundObject(
+    rawConfig: BEModels.BEPortfolioStructuringBlock,
     isStencil: boolean
   ): DTOs.PortfolioStructureDTO {
     const object: DTOs.PortfolioStructureDTO = {
@@ -1767,7 +1767,6 @@ export class DTOService {
     ratingBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.RATING);
     object.data.children.push(ratingBreakdown);
     return object;
-    }
   }
 
   public formPortfolioBreakdown(
