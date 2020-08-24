@@ -5,7 +5,7 @@ import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { ownerInitials } from 'Core/selectors/core.selectors';
 import { PortfolioMetricValues, PortfolioShortNames } from 'Core/constants/structureConstants.constants';
-
+import { BreakdownSampleStructureBlock } from 'Structure/stubs/structure.stub';
 
 @Component({
     selector: 'structure-main-panel',
@@ -15,15 +15,16 @@ import { PortfolioMetricValues, PortfolioShortNames } from 'Core/constants/struc
 })
 
 export class StructureMainPanel implements OnInit, OnDestroy {
-  state: StructureMainPanelState;
+  state: StructureMainPanelState; 
+  selectedMetricValue: PortfolioMetricValues = PortfolioMetricValues.CSO1;
   subscriptions = {
     ownerInitialsSub: null
   };
-  portfolioList: PortfolioShortNames[] = [PortfolioShortNames.SOF, PortfolioShortNames.DOF, PortfolioShortNames.AGB, PortfolioShortNames.STIP, PortfolioShortNames.CIP, PortfolioShortNames.BBB, PortfolioShortNames.FIP]
   constants = {
-    portfolioMetricValues: PortfolioMetricValues
+    portfolioMetricValues: PortfolioMetricValues,
+    portfolioShortNames: PortfolioShortNames
   };
-
+  portfolioList: PortfolioShortNames[] = [this.constants.portfolioShortNames.SOF, this.constants.portfolioShortNames.DOF, this.constants.portfolioShortNames.AGB, this.constants.portfolioShortNames.STIP, this.constants.portfolioShortNames.CIP, this.constants.portfolioShortNames.BBB, this.constants.portfolioShortNames.FIP]
   private initializePageState(): StructureMainPanelState { 
     const state: StructureMainPanelState = {
         ownerInitial: null,
@@ -50,6 +51,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       this.state.ownerInitial = value;
     });
     this.loadInitialFunds();
+    this.fetchFunds();
   };
   public ngOnDestroy() {
     for (const eachItem in this.subscriptions) {
@@ -61,8 +63,14 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
   private loadInitialFunds() {
     this.portfolioList.forEach(portfolio => {
-      const fund = this.dtoService.formStructureFund(portfolio);
+      const fund = this.dtoService.formStructureFundObject(BreakdownSampleStructureBlock);
+      fund.data.portfolioShortName = portfolio;
       this.state.fetchResult.fundList.push(fund);
+    })
+  }
+  private fetchFunds() {
+    this.state.fetchResult.fundList.forEach(fund => {
+      fund.state.isStencil = true;
     })
   }
 }

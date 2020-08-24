@@ -270,26 +270,36 @@ export interface SelectAxeWatchlistRangeDriver extends AxeAlertBlock {
 }
 
 export interface PortfolioBreakDownOverrides {
-  [property: string]: string | number;
+ [property: string] : {
+    portfolioId: number;
+    date: string;
+    bucket: {
+      [property: string]: string;
+    }
+    breakdown: {
+      cs01: PortfolioBreakDownValues,
+      leverageValue: PortfolioBreakDownValues
+    }
+  }
 }
 
-export interface PortfolioMetricTotal {
-  currentValue: number;
-  targetValue: number;
+export interface PortfolioMetricTotals {
+  cs01: number;
+  leverageValue: number;
 }
 export interface PortfolioBreakDownValues {
-  category: string;
   targetLevel: number;
   targetPct: number;
   currentLevel: number;
   currentPct: number;
-  indexLevel: number;
   indexPct: number;
 }
-export interface NestedPortfolioBreakdownValues {
-  level1: Array<PortfolioBreakDownValues>;
-  level2?: Array<PortfolioBreakDownValues>;
-  level3?: Array<PortfolioBreakDownValues>;
+
+export interface PortfolioBreakdownTypes {
+  [property: string]: {
+    cs01: PortfolioBreakDownValues,
+    leverageValue: PortfolioBreakDownValues
+  }
 }
 
 export interface GlobalNavLegendBlock {

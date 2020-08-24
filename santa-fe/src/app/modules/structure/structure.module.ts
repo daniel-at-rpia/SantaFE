@@ -8,12 +8,14 @@ import { NavigationModule } from 'Core/constants/coreConstants.constant';
 
 import { StructureMainPanel } from 'Structure/containers/structure-main-panel.container';
 import { StructureFund } from 'App/modules/structure/containers/structure-fund.container';
+import { TargetBar } from 'App/modules/structure/components/target-bar.component'
 
 @NgModule({
   declarations: [
     StructurePage,
     StructureMainPanel,
-    StructureFund
+    StructureFund, 
+    TargetBar
   ],
   imports: [
     // Angular framework modules

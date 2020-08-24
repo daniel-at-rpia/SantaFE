@@ -1,5 +1,5 @@
-import { BEStructuringBreakdownSingleEntry } from 'BEModels/backend-models.interface';
-
+import { BEStructuringBreakdownSingleEntry, BEPortfolioStructuringBlock } from 'BEModels/backend-models.interface';
+import {PortfolioShortNames} from 'Core/constants/structureConstants.constants';
 const BreakdownSampleCurrencyCS01: Array<BEStructuringBreakdownSingleEntry> =  [
   {
     total: null,
@@ -246,3 +246,168 @@ const BreakdownSampleRatingCS01: Array<BEStructuringBreakdownSingleEntry> =  [
     indexPct: 0
   }
 ];
+
+export const BreakdownSampleStructureBlock: BEPortfolioStructuringBlock = {
+  rpPortfolioDate: null,
+  portfolioId: null,
+  portfolioShortName: PortfolioShortNames.SOF,
+  portfolioNav: null,
+  target: {
+    portfolioTargetId: null,
+    date: null,
+    portfolioId: null,
+    target: {
+      cs01: 220000,
+      leverageValue: 1.8
+    }
+  },
+  currentTotals: {
+    cs01: 180000,
+    leverageValue: 1.5
+  },
+  indexId: null,
+  indexShortName: '',
+  indexNav: null,
+  indexTotals: {
+    cs01: null,
+    leverageValue: null
+  },
+  ccyBreakdown: {
+    groupOption: 'ccy',
+    breakdown: {
+      'US': {
+        cs01: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        },
+        leverageValue: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        }
+      }
+    }
+  },
+  bicsLevel1Breakdown: {
+    groupOption: 'bics',
+    breakdown: {
+      'finance': {
+        cs01: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        },
+        leverageValue: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        }
+      }
+    }
+  },
+  bicsLevel2Breakdown: {
+    groupOption: 'bics',
+    breakdown: {
+      'Banking': {
+        cs01: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        },
+        leverageValue: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        }
+      }
+    }
+  },
+  bicsLevel3Breakdown: {
+    groupOption: 'bics',
+    breakdown: {
+      'finance': {
+        cs01: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        },
+        leverageValue: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        }
+      }
+    }
+  },
+  ratingBreakdown: {
+    groupOption: 'rating',
+    breakdown: {
+      'AAA': {
+        cs01: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        },
+        leverageValue: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        }
+      }
+    }
+  },
+  tenorBreakdown: {
+    groupOption: 'tenor',
+    breakdown: {
+      '5Y': {
+        cs01: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        },
+        leverageValue: {
+          total: null,
+          targetLevel: null,
+          targetPct: null,
+          currentLevel: null,
+          currentPct: null,
+          indexPct: null
+        }
+      }
+    }
+  }
+}
