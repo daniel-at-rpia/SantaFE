@@ -9,7 +9,7 @@ import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.inte
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { catchError, first, tap } from 'rxjs/operators';
 import { UtilityService } from 'Core/services/UtilityService';
-import { BreakdownSampleStructureBlock } from 'Structure/stubs/structure.stub';
+import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 
 @Component({
     selector: 'structure-main-panel',
@@ -19,15 +19,26 @@ import { BreakdownSampleStructureBlock } from 'Structure/stubs/structure.stub';
 })
 
 export class StructureMainPanel implements OnInit, OnDestroy {
-  state: StructureMainPanelState;
+  state: StructureMainPanelState; 
+  selectedMetricValue: PortfolioMetricValues = PortfolioMetricValues.CSO1;
   subscriptions = {
     ownerInitialsSub: null
   };
-  portfolioList: PortfolioShortNames[] = [PortfolioShortNames.SOF, PortfolioShortNames.DOF, PortfolioShortNames.AGB, PortfolioShortNames.STIP, PortfolioShortNames.CIP, PortfolioShortNames.BBB, PortfolioShortNames.FIP]
   constants = {
-    portfolioMetricValues: PortfolioMetricValues
+    portfolioMetricValues: PortfolioMetricValues,
+    portfolioShortNames: PortfolioShortNames
   };
-
+  portfolioList: PortfolioShortNames[] = [this.constants.portfolioShortNames.SOF, this.constants.portfolioShortNames.DOF, this.constants.portfolioShortNames.AGB, this.constants.portfolioShortNames.STIP, this.constants.portfolioShortNames.CIP, this.constants.portfolioShortNames.BBB, this.constants.portfolioShortNames.FIP];
+  
+  constructor(
+    private dtoService: DTOService,
+    private store$: Store<any>,
+    private restfulCommService: RestfulCommService,
+    private utilityService: UtilityService
+    ) {
+    this.state = this.initializePageState();
+  }
+  
   private initializePageState(): StructureMainPanelState { 
     const state: StructureMainPanelState = {
         ownerInitial: null,
@@ -41,22 +52,24 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     }
     return state; 
   }
-  constructor(
-    private dtoService: DTOService,
-    private store$: Store<any>,
-    private restfulCommService: RestfulCommService,
-    private utilityService: UtilityService
-    ) {
-    this.state = this.initializePageState();
-  }
+  
   public ngOnInit() {
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
       select(ownerInitials)
     ).subscribe((value) => {
       this.state.ownerInitial = value;
     });
-    this.loadInitialFunds();
-  };
+    const initialWaitForIcons = this.loadStencilFunds.bind(this
+      );
+    setTimeout(() => {
+      initialWaitForIcons();
+    }, 200);
+    const fakeAsyncLoadData = this.loadInitialFunds.bind(this);
+    setTimeout(() => {
+      fakeAsyncLoadData();
+    }, 2000);
+  }
+
   public ngOnDestroy() {
     for (const eachItem in this.subscriptions) {
       if (this.subscriptions.hasOwnProperty(eachItem)) {
@@ -65,11 +78,42 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       }
     }
   }
+
   private loadInitialFunds() {
     this.portfolioList.forEach(portfolio => {
-      const fund = this.dtoService.formStructureFundObject(BreakdownSampleStructureBlock);
-      fund.api.convertToK = this.convertValuesToK.bind(this);
-      this.state.fetchResult.fundList.push(fund);
+      const eachFund = this.dtoService.formStructureFundObject(PortfolioStructuringSample, false);
+      eachFund.api.convertToK = this.convertValuesToK.bind(this);
+      eachFund.data.portfolioShortName = portfolio;
+      this.state.fetchResult.fundList.forEach((eachPortfolio) => {
+        if (eachPortfolio.data.portfolioShortName === portfolio) {
+          eachPortfolio.data.children = eachFund.data.children;
+        }
+      });
+    });
+    const flipStencil = this.loadFundsData.bind(this);
+    setTimeout(() => {
+      flipStencil();
+    }, 1);
+  }
+
+  private loadStencilFunds() {
+    this.state.fetchResult.fundList = this.portfolioList.map((eachPortfolioName) => {
+      const eachFund = this.dtoService.formStructureFundObject(PortfolioStructuringSample, true);
+      eachFund.api.convertToK = this.convertValuesToK.bind(this);
+      eachFund.data.portfolioShortName = eachPortfolioName;
+      return eachFund;
+    });
+  }
+
+  private loadFundsData() {
+    this.state.fetchResult.fundList.forEach((eachFund) => {
+      eachFund.state.isStencil = false;
+      eachFund.data.children.forEach((eachChild) => {
+        eachChild.state.isStencil = false;
+        eachChild.data.categoryList.forEach((eachCategory) => {
+          eachCategory.moveVisualizer.state.isStencil = false;
+        })
+      })
     })
   }
   private getFundFromNewTargets(fund: PortfolioStructureDTO) {
@@ -78,7 +122,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioStructures, {req: 'POST'}, payload).pipe(
       first(),
       tap((serverReturn) => {
-        const updatedFund = this.dtoService.formStructureFundObject(serverReturn);
+        const updatedFund = this.dtoService.formStructureFundObject(serverReturn, false);
         this.state.fetchResult.fundList = [];
         this.state.fetchResult.fundList = fundListCopy.map(fund => {
           return fund.data.portfolioId === updatedFund.data.portfolioId ? updatedFund : fund;

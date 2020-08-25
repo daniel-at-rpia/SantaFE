@@ -35,7 +35,8 @@
     } from 'Core/constants/marketConstants.constant';
     import {
       ConfiguratorDefinitionLayout,
-      FilterOptionsPortfolioList
+      FilterOptionsPortfolioList,
+      SecurityDefinitionMap
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       QuoteHeaderConfigList
@@ -44,7 +45,7 @@
       AxeAlertScope,
       AxeAlertType
     } from 'Core/constants/tradeConstants.constant';
-    import { PortfolioShortNames } from 'Core/constants/structureConstants.constants';
+    import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
   //
 
 @Injectable()
@@ -1132,7 +1133,9 @@ export class DTOService {
         isInvalid: false,
         isPlaceholder: false,
         isStencil: !!isStencil,
-        isColorCodeInversed: false
+        isColorCodeInversed: false,
+        structuringBreakdownVariant: false,
+        structuringBreakdownExceededState: false
       }
     };
     if (!isStencil) {
@@ -1160,6 +1163,52 @@ export class DTOService {
         object.state.isInvalid = true;
       }
     }
+    return object;
+  }
+
+  public formMoveVisualizerObjectForStructuring(
+    rawData: BEModels.BEStructuringBreakdownSingleEntry,
+    max: number,
+    isStencil: boolean
+  ): DTOs.MoveVisualizerDTO {
+    let moveDistance, rightEdge;
+    if (!!rawData && !isStencil) {
+      if (rawData.targetLevel > rawData.currentLevel) {
+        moveDistance = this.utility.round(rawData.currentLevel / max * 100, 2);
+        rightEdge = this.utility.round((rawData.targetLevel - rawData.currentLevel) / max * 100, 2);
+      } else {
+        moveDistance = this.utility.round(rawData.targetLevel / max * 100, 2);
+        rightEdge = this.utility.round((rawData.currentLevel - rawData.targetLevel) / max * 100);
+      }
+    }
+    const object: DTOs.MoveVisualizerDTO = {
+      data: {
+        identifier: '',
+        start: 0,
+        end: !isStencil ? rawData.currentLevel : 999,
+        min: 0,
+        max: 0,
+        isBasis: false,
+        timeSeries: []
+      },
+      style: {
+        leftGap: 0,
+        leftEdge: 0,
+        moveDistance: !isStencil ? moveDistance : 40,
+        rightEdge: !isStencil ? rightEdge : 30,
+        rightGap: 0,
+        endPinLocation: !isStencil ? rawData.currentLevel < rawData.targetLevel ? moveDistance : moveDistance + rightEdge : 40
+      },
+      state: {
+        isInversed: false,
+        isInvalid: false,
+        isPlaceholder: false,
+        isStencil: true,
+        isColorCodeInversed: false,
+        structuringBreakdownVariant: true,
+        structuringBreakdownExceededState: rawData.currentLevel > rawData.targetLevel
+      }
+    };
     return object;
   }
 
@@ -1635,54 +1684,62 @@ export class DTOService {
     return object;
   }
 
-  public formStructureBreakdownObject(portfolioBreakdown: BEModels.BEStructuringBreakdownBlock ) {
-    const object: DTOs.PortfolioBreakdownDTO = {
+  public formTargetBarObject(targetMetric: PortfolioMetricValues, currentValue: number, targetValue: number, selectedMetricValue: PortfolioMetricValues, isStencil: boolean) {
+    const object: DTOs.TargetBarDTO = {
       data: {
-        groupOption: portfolioBreakdown.groupOption,
-        breakdown: portfolioBreakdown.breakdown,
-        breakdownLevel2: null,
-        breakdownLevel3: null
-      },
-      style: {
-        icon: ''
+        targetMetric,
+        currentValue,
+        targetValue,
+        displayedCurrentValue: '',
+        displayedTargetValue: '',
+        currentPercentage: '',
+        exceededPercentage: '',
+        selectedMetricValue
       },
       state: {
-        isEditing: false,
-        isStencil: false
+        isInactiveMetric: false,
+        isStencil
+      },
+      utility: {
+        getDisplayValues: null,
+        convertNumtoStr: null,
+        setInactiveMetric: null
       }
     }
     return object;
   }
 
-  public formStructureFundObject(rawConfig: BEModels.BEPortfolioStructuringBlock) {
+  public formStructureFundObject(
+    rawData: BEModels.BEPortfolioStructuringDTO,
+    isStencil: boolean
+  ): DTOs.PortfolioStructureDTO {
     const object: DTOs.PortfolioStructureDTO = {
       data: {
-        rpPortfolioDate: rawConfig.rpPortfolioDate,
-        portfolioId: rawConfig.portfolioId,
-        portfolioShortName: rawConfig.portfolioShortName,
-        portfolioNav: rawConfig.portfolioNav,
+        rpPortfolioDate: rawData.rpPortfolioDate,
+        portfolioId: rawData.portfolioId,
+        portfolioShortName: rawData.portfolioShortName,
+        portfolioNav: rawData.portfolioNav,
         target: {
-          portfolioTargetId: rawConfig.target.portfolioTargetId,
-          date: rawConfig.target.date,
-          portfolioId: rawConfig.target.portfolioId,
+          portfolioTargetId: rawData.target.portfolioTargetId,
+          date: rawData.target.date,
+          portfolioId: rawData.target.portfolioId,
           target: {
-            cs01: rawConfig.target.target.cs01,
-            leverageValue: rawConfig.target.target.leverageValue
+            cs01: rawData.target.target.cs01,
+            leverageValue: rawData.target.target.leverageValue
           }
         },
         currentTotals :{
-          cs01: rawConfig.currentTotals.cs01,
-          leverageValue: rawConfig.currentTotals.leverageValue
+          cs01: rawData.currentTotals.cs01,
+          leverageValue: rawData.currentTotals.leverageValue
         },
-        indexId: rawConfig.indexId,
-        indexShortName: rawConfig.indexShortName,
-        indexNav: rawConfig.indexNav,
+        indexId: rawData.indexId,
+        indexShortName: rawData.indexShortName,
+        indexNav: rawData.indexNav,
         indexTotals: {
-          cs01: rawConfig.indexTotals.cs01,
-          leverageValue: rawConfig.indexTotals.leverageValue
+          cs01: rawData.indexTotals.cs01,
+          leverageValue: rawData.indexTotals.leverageValue
         },
         children: [],
-        overrides: rawConfig.overrides,
         cs01TotalsInK: {
           currentTotal: null,
           targetTotal: null
@@ -1694,10 +1751,83 @@ export class DTOService {
       },
       state: {
         isEditing: false,
-        isStencil: false,
+        isStencil: !!isStencil,
         isNumeric: true
+      }
+    };
+    const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.bicsLevel1Breakdown);
+    BICSBreakdown.data.title = 'BICS';
+    BICSBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.SECTOR);
+    object.data.children.push(BICSBreakdown);
+    const currencyBreakdown = this.formPortfolioBreakdown(isStencil, rawData.ccyBreakdown);
+    currencyBreakdown.data.title = 'Currency';
+    currencyBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
+    object.data.children.push(currencyBreakdown);
+    const tenorBreakdown = this.formPortfolioBreakdown(isStencil, rawData.tenorBreakdown);
+    tenorBreakdown.data.title = 'Tenor';
+    tenorBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.TENOR);
+    object.data.children.push(tenorBreakdown);
+    const ratingBreakdown = this.formPortfolioBreakdown(isStencil, rawData.ratingBreakdown);
+    ratingBreakdown.data.title = 'Rating';
+    ratingBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.RATING);
+    object.data.children.push(ratingBreakdown);
+    return object;
+  }
+
+  public formPortfolioBreakdown(
+    isStencil: boolean,
+    rawData: BEModels.BEStructuringBreakdownBlock
+  ): DTOs.PortfolioBreakdownDTO {
+    const object: DTOs.PortfolioBreakdownDTO = {
+      data: {
+        title: '',
+        definition: null,
+        categoryList: [],
+        ratingHoverText: !isStencil ? '20%' : '33%'
+      },
+      style: {
+        ratingFillWidth: !isStencil ? 20 : 33
+      },
+      state: {
+        isEditing: false,
+        isStencil: true
+      }
+    };
+    let findMax = 0;
+    for (const eachCategory in rawData.breakdown) {
+      const eachEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].cs01 : null;
+      if (!!eachEntry) {
+        const highestVal = Math.max(eachEntry.currentLevel, eachEntry.targetLevel);
+        if (highestVal > findMax) {
+          findMax = highestVal;
+        }
+      }
+    }
+    for (const eachCategory in rawData.breakdown) {
+      const eachEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].cs01 : null;
+      if (!!eachEntry) {
+        const eachMoveVisualizer = this.formMoveVisualizerObjectForStructuring(eachEntry, findMax, !!isStencil);
+        const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
+          category: `${eachCategory}`,
+          targetLevel: eachEntry.targetLevel,
+          targetPct: eachEntry.targetPct,
+          diffToTarget: Math.round(eachEntry.targetLevel - eachEntry.currentLevel),
+          diffToTargetDisplay: '-',
+          currentLevel: eachEntry.currentLevel,
+          currentPct: eachEntry.currentPct,
+          indexPct: eachEntry.indexPct,
+          moveVisualizer: eachMoveVisualizer
+        };
+        if (eachCategoryBlock.diffToTarget < 0) {
+          eachCategoryBlock.diffToTargetDisplay = `${eachCategoryBlock.diffToTarget}k`;
+        }
+        if (eachCategoryBlock.diffToTarget > 0) {
+          eachCategoryBlock.diffToTargetDisplay = `+${eachCategoryBlock.diffToTarget}k`;
+        }
+        object.data.categoryList.push(eachCategoryBlock);
       }
     }
     return object;
   }
 }
+

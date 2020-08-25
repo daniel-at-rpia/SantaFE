@@ -1,11 +1,15 @@
 @import "global.scss";
+@import "modules/structure/structure.scss";
 
 $tradeUtilityPanel_side_btn_size: $iconButton_size_large;
 .sat-fundStructuring {
   $blockName: &;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   &__configuration {
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
     &-title {
       flex: 0 0 auto;
@@ -46,6 +50,8 @@ $tradeUtilityPanel_side_btn_size: $iconButton_size_large;
   }
   &__utility {
     @include mix_fixed_div(relative, $z_index_base_item);
+    display: flex;
+    flex-direction: column;
     &-btnGroup {
       @include mix_fixed_div(absolute, $z_index_base_item_solid);
       display: flex;
@@ -92,7 +98,7 @@ $tradeUtilityPanel_side_btn_size: $iconButton_size_large;
   &--editing {
     #{$blockName} {
       &__setTarget {
-        height: 5rem;
+        height: 8rem;
       }
     }
   }
@@ -114,8 +120,22 @@ $tradeUtilityPanel_side_btn_size: $iconButton_size_large;
       &__setTarget {
        overflow: visible;
       }
-      &__utility {
-        margin-top: $spacing_x_large;
+    }
+  }
+  &__targetBar {
+    width: 8rem;
+  }
+  &__content {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    &-breakdownList {
+      @include mix_enable_scrollbar('vertical');
+      display: flex;
+      flex-direction: column;
+      padding: $spacing_medium;
+      &-item {
+        
       }
     }
   }

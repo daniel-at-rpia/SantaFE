@@ -1,0 +1,95 @@
+@import "global.scss";
+
+.sat-fundTargetBar {
+  $blockName: &;
+    &__type {
+      font-size: $font_size_small;
+      margin: 0 0 $spacing_x_small 0;
+      text-align: center;
+    }
+    &__indicator {
+      @include mix_border_generator($static_color: $color_active);
+      @include mix_border_radius(5px);
+      background-color: $color_active;
+      @include mix_fixed_div(relative, $z_index_base_item);
+      height: $spacing_large;
+      overflow: hidden;
+      &--total,
+      &--exceeded,
+      &--current,
+      &-values {
+        @include mix_fixed_div(absolute, $z_index_base_item_solid);
+        display: inline-block;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 0;
+        height: 100%;
+      }
+      &--total {
+        background-color: $color_active;
+        width: 100%;
+        z-index: $z_index_base_item_solid;
+      }
+      &--current {
+        @include mix_theme_background;
+        z-index: $z_index_base_item_lift; 
+      }
+      &--exceeded {
+        background-color: $color_red_5;
+        z-index: $z_index_hovering_item;
+
+      }
+      &-values {
+        @include mix_fixed_div(absolute, $z_index_hovering_item_lift);
+        top: 50%; 
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        line-height: $line_height_minimum;
+        &-text {
+          color: $font_color_inverse;
+        }
+      }
+    }
+    &--stencilState {
+      #{$blockName} {
+        &__indicator {
+          &-values {
+            &-text {
+              @include mix_stencil_animation();
+            }
+          }
+        }
+      }
+    }
+    &--inactive {
+      #{$blockName} {
+        &__type,
+        &__indicator {
+          &--exceeded {
+            background-color: $color_red_5;
+          }
+          &--current {
+            @include mix_gradient($color_gray_6, $color_gray_4, 0%, 90deg);
+          }
+        }
+      }
+      &#{$blockName} {
+       &--stencilState {
+        #{$blockName} {
+          &__indicator {
+            &--exceeded,
+            &--current {
+              display: none;
+            }
+          }
+        }
+       }
+      }
+    }
+  }

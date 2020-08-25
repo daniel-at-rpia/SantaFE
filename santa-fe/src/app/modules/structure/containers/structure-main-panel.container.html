@@ -6,6 +6,7 @@
     <div *ngFor="let fund of state.fetchResult.fundList" class="sat-structureMainPanel__fundGroup-fund">
       <structure-fund
         [fund]="fund"
+        [selectedMetricValue]="selectedMetricValue"
         [ownerInitial]="state.ownerInitial"
         (updatedFundData)="getFundFromNewTargets($event)"
         >
