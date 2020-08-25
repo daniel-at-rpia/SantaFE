@@ -116,7 +116,7 @@
           <button
             *ngFor="let eachOption of state.utility.pieConfigurator.left.options; let optionIndex = index"
             (click)="onSelectPieConfiguratorMetric(state.utility.pieConfigurator.left, eachOption)"
-            class="sat-marketGroupPanel__groups-utility-pieConfigurator-leftPie-btn--{{optionIndex+1}} {{eachOption.icon}}"
+            class="sat-marketGroupPanel__groups-utility-pieConfigurator-leftPie-btn--{{optionIndex+1}} {{eachOption?.icon}}"
             [ngClass]="{
               'sat-marketGroupPanel__groups-utility-pieConfigurator-leftPie-btn': true,
               'santaBtn--iconOnly santaBtn--small': true,
@@ -134,7 +134,7 @@
           <button
             *ngFor="let eachOption of state.utility.pieConfigurator.right.options; let optionIndex = index"
             (click)="onSelectPieConfiguratorMetric(state.utility.pieConfigurator.right, eachOption)"
-            class="sat-marketGroupPanel__groups-utility-pieConfigurator-rightPie-btn--{{optionIndex+1}} {{eachOption.icon}}"
+            class="sat-marketGroupPanel__groups-utility-pieConfigurator-rightPie-btn--{{optionIndex+1}} {{eachOption?.icon}}"
             [ngClass]="{
               'sat-marketGroupPanel__groups-utility-pieConfigurator-rightPie-btn': true,
               'santaBtn--iconOnly santaBtn--small': true,
