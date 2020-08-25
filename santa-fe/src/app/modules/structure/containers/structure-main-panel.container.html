@@ -4,7 +4,7 @@
   }">
   <section class="sat-structureMainPanel__fundGroup">
     <div *ngFor="let fund of state.fetchResult.fundList" class="sat-structureMainPanel__fundGroup-fund">
-      <structure-fund [fund]="fund" [selectedMetric]="state.selectedMetricValue"></structure-fund>
+      <structure-fund [fund]="fund"></structure-fund>
     </div>
   </section>
 </article>

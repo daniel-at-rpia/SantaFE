@@ -1,6 +1,6 @@
 import { AlertTypes } from 'Core/constants/coreConstants.constant';
 import {AxeAlertType} from "Core/constants/tradeConstants.constant";
-
+import { PortfolioShortNames } from 'Core/constants/structureConstants.constants';
 export interface BEFetchAllTradeDataReturn {
   numberOfSecurities: number;
   securityDtos: BEFullSecurityCollection;
@@ -547,4 +547,44 @@ export interface BEStructuringBreakdownSingleEntry {
   currentLevel: number;
   currentPct: number;
   indexPct: number;
+}
+
+export interface BEStructuringBreakdownBlock {
+  groupOption: string;
+  breakdown: {
+    [property: string]: {
+      cs01: BEStructuringBreakdownSingleEntry;
+      leverageValue: BEStructuringBreakdownSingleEntry;
+    }
+  }
+}
+
+export interface BEStructuringMetricTotalBlock {
+  cs01: number;
+  leverageValue: number;
+}
+
+export interface BEPortfolioStructuringDTO {
+  rpPortfolioDate: string;
+  portfolioId: number;
+  portfolioShortName: PortfolioShortNames;
+  portfolioNav: number;
+  target: {
+    portfolioTargetId: string;
+    date: string;
+    portfolioId: number;
+    target: BEStructuringMetricTotalBlock;
+  }
+  currentTotals: BEStructuringMetricTotalBlock
+  indexId: number;
+  indexShortName: string;
+  indexNav: number;
+  indexTotals: BEStructuringMetricTotalBlock
+  ccyBreakdown: BEStructuringBreakdownBlock
+  bicsLevel1Breakdown: BEStructuringBreakdownBlock
+  bicsLevel2Breakdown?: BEStructuringBreakdownBlock
+  bicsLevel3Breakdown?: BEStructuringBreakdownBlock
+  ratingBreakdown: BEStructuringBreakdownBlock
+  tenorBreakdown: BEStructuringBreakdownBlock
+  overrides?: BEStructuringBreakdownBlock
 }

@@ -11,10 +11,8 @@ import {
   SecurityPortfolioBlock,
   SecurityTableRowQuoteBlock,
   SecurityCostPortfolioBlock, 
-  PortfolioMetricTotal,
-  PortfolioBreakDownValues,
-  NestedPortfolioBreakdownValues,
-  PortfolioBreakDownOverrides
+  PortfolioMetricTotals,
+  PortfolioBreakdownCategoryBlock
 } from 'FEModels/frontend-blocks.interface';
 import {AlertSubTypes, AlertTypes} from 'Core/constants/coreConstants.constant';
 import { SantaTableNumericFloatingFilterParams } from 'FEModels/frontend-adhoc-packages.interface';
@@ -23,7 +21,7 @@ import * as moment from 'moment';
 import * as am4Charts from '@amcharts/amcharts4/charts';
 import {Alert} from "Core/components/alert/alert.component";
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
-import { PortfolioShortNames } from 'Core/constants/structureConstants.constants';
+import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 
 interface BasicDTOStructure {
   [property: string]: object;
@@ -506,6 +504,8 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
     isPlaceholder: boolean;
     isStencil: boolean;
     isColorCodeInversed: boolean;
+    structuringBreakdownVariant: boolean;
+    structuringBreakdownExceededState: boolean;
   }
 }
 
@@ -665,27 +665,37 @@ export interface TradeAlertConfigurationAxeGroupBlockDTO extends BasicDTOStructu
 
 export interface PortfolioBreakdownDTO extends BasicDTOStructure {
   data: {
-    category: string;
-    values: Array<PortfolioBreakDownValues | NestedPortfolioBreakdownValues>;
-    overrides?: Array<PortfolioBreakDownOverrides>
+    title: string;
+    definition: SecurityDefinitionDTO;
+    categoryList: Array<PortfolioBreakdownCategoryBlock>;
+    ratingHoverText: string;
   },
   style: {
-    icon: string
-  },
+    ratingFillWidth: number;
+  }
   state: {
     isEditing: boolean;
     isStencil: boolean;
   }
 }
+
 export interface PortfolioStructureDTO extends BasicDTOStructure {
   data: {
-    portfolioName: string,
+    rpPortfolioDate: string;
     portfolioId: number;
     portfolioShortName: PortfolioShortNames;
+    portfolioNav: number;
+    target : {
+      portfolioTargetId: string;
+      date: string;
+      portfolioId: number;
+      target: PortfolioMetricTotals;
+    };
+    currentTotals: PortfolioMetricTotals;
     indexId: number;
     indexShortName: string;
-    CS01Values: PortfolioMetricTotal;
-    LeverageValues: PortfolioMetricTotal;
+    indexNav: number;
+    indexTotals: PortfolioMetricTotals;
     children: Array<PortfolioBreakdownDTO>;
   },
   api: {
@@ -693,5 +703,28 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
   }
   state: {
     isEditing: boolean;
+    isStencil: boolean;
+  }
+}
+
+export interface TargetBarDTO extends BasicDTOStructure {
+  data: {
+    targetMetric: PortfolioMetricValues;
+    currentValue: number;
+    targetValue: number;
+    displayedCurrentValue: string;
+    displayedTargetValue: string;
+    currentPercentage: string;
+    exceededPercentage: string;
+    selectedMetricValue: PortfolioMetricValues
+  }
+  state: {
+    isInactiveMetric: boolean,
+    isStencil: boolean;
+  }
+  utility: {
+    getDisplayValues: (targetBar: TargetBarDTO) => void;
+    convertNumtoStr: (targetBar: TargetBarDTO) => void;
+    setInactiveMetric: (targetBar: TargetBarDTO) => void;
   }
 }

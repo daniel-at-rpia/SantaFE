@@ -7,6 +7,7 @@ import { StructureMetricSelect } from 'Structure/actions/structure.actions';
 import { Subscription } from 'rxjs';
 import { ownerInitials } from 'Core/selectors/core.selectors';
 import { PortfolioMetricValues, PortfolioShortNames } from 'Core/constants/structureConstants.constants';
+import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 
 @Component({
     selector: 'structure-main-panel',
@@ -16,17 +17,26 @@ import { PortfolioMetricValues, PortfolioShortNames } from 'Core/constants/struc
 })
 
 export class StructureMainPanel implements OnInit, OnDestroy {
-  state: StructureMainPanelState;
+  state: StructureMainPanelState; 
+  selectedMetricValue: PortfolioMetricValues = PortfolioMetricValues.CSO1;
   subscriptions = {
     ownerInitialsSub: null,
     selectedMetricLevelSub: null
   };
-  portfolioList: PortfolioShortNames[] = [PortfolioShortNames.SOF, PortfolioShortNames.DOF, PortfolioShortNames.AGB, PortfolioShortNames.STIP, PortfolioShortNames.CIP, PortfolioShortNames.BBB, PortfolioShortNames.FIP]
   constants = {
     cs01: PortfolioMetricValues.CSO1,
-    leverage: PortfolioMetricValues.Leverage
+    leverage: PortfolioMetricValues.Leverage,
+    portfolioShortNames: PortfolioShortNames
   };
-
+  portfolioList: PortfolioShortNames[] = [this.constants.portfolioShortNames.SOF, this.constants.portfolioShortNames.DOF, this.constants.portfolioShortNames.AGB, this.constants.portfolioShortNames.STIP, this.constants.portfolioShortNames.CIP, this.constants.portfolioShortNames.BBB, this.constants.portfolioShortNames.FIP];
+  
+  constructor(
+    private dtoService: DTOService,
+    private store$: Store<any>
+    ) {
+    this.state = this.initializePageState();
+  }
+  
   private initializePageState(): StructureMainPanelState { 
     const state: StructureMainPanelState = {
         ownerInitial: null,
@@ -40,12 +50,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     }
     return state; 
   }
-  constructor(
-    private dtoService: DTOService,
-    private store$: Store<any>
-    ) {
-    this.state = this.initializePageState();
-  }
+  
   public ngOnInit() {
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
       select(ownerInitials)
@@ -58,8 +63,16 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       const metric = value === this.constants.cs01 ? this.constants.cs01 : this.constants.leverage
       this.state.selectedMetricValue = metric;
     });
-    this.loadInitialFunds();
-  };
+    const initialWaitForIcons = this.loadStencilFunds.bind(this);
+    setTimeout(() => {
+      initialWaitForIcons();
+    }, 200);
+    const fakeAsyncLoadData = this.loadInitialFunds.bind(this);
+    setTimeout(() => {
+      fakeAsyncLoadData();
+    }, 2000);
+  }
+
   public ngOnDestroy() {
     for (const eachItem in this.subscriptions) {
       if (this.subscriptions.hasOwnProperty(eachItem)) {
@@ -68,10 +81,40 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       }
     }
   }
+
   private loadInitialFunds() {
     this.portfolioList.forEach(portfolio => {
-      const fund = this.dtoService.formStructureFund(portfolio);
-      this.state.fetchResult.fundList.push(fund);
+      const eachFund = this.dtoService.formStructureFundObject(PortfolioStructuringSample, false);
+      eachFund.data.portfolioShortName = portfolio;
+      this.state.fetchResult.fundList.forEach((eachPortfolio) => {
+        if (eachPortfolio.data.portfolioShortName === portfolio) {
+          eachPortfolio.data.children = eachFund.data.children;
+        }
+      });
+    });
+    const flipStencil = this.loadFundsData.bind(this);
+    setTimeout(() => {
+      flipStencil();
+    }, 1);
+  }
+
+  private loadStencilFunds() {
+    this.state.fetchResult.fundList = this.portfolioList.map((eachPortfolioName) => {
+      const eachFund = this.dtoService.formStructureFundObject(PortfolioStructuringSample, true);
+      eachFund.data.portfolioShortName = eachPortfolioName;
+      return eachFund;
+    });
+  }
+
+  private loadFundsData() {
+    this.state.fetchResult.fundList.forEach((eachFund) => {
+      eachFund.state.isStencil = false;
+      eachFund.data.children.forEach((eachChild) => {
+        eachChild.state.isStencil = false;
+        eachChild.data.categoryList.forEach((eachCategory) => {
+          eachCategory.moveVisualizer.state.isStencil = false;
+        })
+      })
     })
   }
 }

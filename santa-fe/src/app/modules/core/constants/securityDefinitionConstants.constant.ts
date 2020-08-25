@@ -279,7 +279,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
   CURRENCY: {
     key: 'CURRENCY',
     displayName: 'Currency',
-    icon: 'fal fa-dollar-sign',
+    icon: 'fas fa-dollar-sign',
     optionList: FilterOptionsCurrency,
     securityDTOAttr: 'currency',
     locked: true
