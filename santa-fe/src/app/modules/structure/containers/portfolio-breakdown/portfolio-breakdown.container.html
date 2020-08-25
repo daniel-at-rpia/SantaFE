@@ -1,0 +1,60 @@
+<article
+  [ngClass]="{
+    'sat-portfolioBreakdown': true,
+    'sat-portfolioBreakdown--stencilState': breakdownData.state.isStencil
+  }">
+  <section class="sat-portfolioBreakdown__title">
+    <div class="sat-portfolioBreakdown__title-definition">
+      <security-definition
+        [definitionData]="breakdownData.data.definition"
+        [backgroundVariant]="true"
+        [interactionDisabled]="true">
+      </security-definition>
+    </div>
+    <span class="sat-portfolioBreakdown__title-text">{{breakdownData.data.title}}</span>
+  </section>
+  <section class="sat-portfolioBreakdown__rating">
+    <div
+      class="sat-portfolioBreakdown__rating-fill"
+      [ngStyle]="{
+        'width': breakdownData.style.ratingFillWidth + '%'
+      }">
+    </div>
+    <span class="sat-portfolioBreakdown__rating-hoverText">{{breakdownData.data.ratingHoverText}}</span>
+  </section>
+  <section class="sat-portfolioBreakdown__categoryHeader">
+    <div class="sat-portfolioBreakdown__categoryHeader-cell">
+      <i class="sat-portfolioBreakdown__categoryHeader-cell-icon fas fa-pennant"></i>
+      <div class="sat-portfolioBreakdown__categoryHeader-cell-tooltip">Target</div>
+    </div>
+    <div class="sat-portfolioBreakdown__categoryHeader-cell">
+      <i class="sat-portfolioBreakdown__categoryHeader-cell-icon fas fa-chart-pie"></i>
+      <div class="sat-portfolioBreakdown__categoryHeader-cell-tooltip">Current %</div>
+    </div>
+    <div class="sat-portfolioBreakdown__categoryHeader-cell">
+      <i class="sat-portfolioBreakdown__categoryHeader-cell-icon fas fa-analytics"></i>
+      <div class="sat-portfolioBreakdown__categoryHeader-cell-tooltip">Index %</div>
+    </div>
+  </section>
+  <section class="sat-portfolioBreakdown__categoryContent">
+    <ul class="sat-portfolioBreakdown__categoryContent-list">
+      <li
+        *ngFor="let eachCategory of breakdownData.data.categoryList"
+        [ngClass]="{
+          'sat-portfolioBreakdown__categoryContent-list-item': true,
+          'sat-portfolioBreakdown__categoryContent-list-item--noSignificantDiff': eachCategory.diffToTarget === 0,
+          'sat-portfolioBreakdown__categoryContent-list-item--negativeDiff': eachCategory.diffToTarget < 0
+        }">
+        <span class="sat-portfolioBreakdown__categoryContent-list-item-title">{{eachCategory.category}}</span>
+        <div class="sat-portfolioBreakdown__categoryContent-list-item-moveVisualizer">
+          <move-visualizer [visualizerData]="eachCategory.moveVisualizer"></move-visualizer>
+        </div>
+        <div class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--target">{{eachCategory.diffToTargetDisplay}}</div>
+        <hr class="sat-portfolioBreakdown__categoryContent-list-item-cellDivider">
+        <div class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--current">{{eachCategory.currentPct}}%</div>
+        <hr class="sat-portfolioBreakdown__categoryContent-list-item-cellDivider">
+        <div class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--index">{{eachCategory.indexPct}}%</div>
+      </li>
+    </ul>
+  </section>
+</article>
