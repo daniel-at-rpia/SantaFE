@@ -18,7 +18,6 @@ import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 
 export class StructureMainPanel implements OnInit, OnDestroy {
   state: StructureMainPanelState; 
-  selectedMetricValue: PortfolioMetricValues = PortfolioMetricValues.CSO1;
   subscriptions = {
     ownerInitialsSub: null,
     selectedMetricLevelSub: null
