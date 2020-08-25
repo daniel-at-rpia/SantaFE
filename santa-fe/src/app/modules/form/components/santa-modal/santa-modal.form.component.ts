@@ -3,15 +3,23 @@ import { Component, ViewEncapsulation, ElementRef, Input, OnInit, OnDestroy } fr
 @Component({ 
   selector: 'santa-modal', 
   templateUrl: 'santa-modal.form.component.html', 
-  styleUrls: ['santa-modal.form.component.less'],
+  styleUrls: ['santa-modal.form.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 
-export class SantaModal {
-  private innerContent: any;
+export class SantaModal implements OnInit, OnDestroy {
+  private modalElement: Node;
 
   constructor(private elementRef: ElementRef){
-    this.innerContent = elementRef;
+    this.modalElement = elementRef.nativeElement;
+  }
+
+  public ngOnInit() {
+    document.body.appendChild(this.modalElement);
+  }
+
+  public ngOnDestroy() {
+
   }
 
   public openModal() {
