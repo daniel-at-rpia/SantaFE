@@ -60,8 +60,8 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       }
       &-targetStatus {
         @include mix_border_radius(3px);
+        @include mix_theme_background();
         display: none;
-        background-color: $color_positive;
         padding: $spacing_xx_small $spacing_x_small;
       }
     }
