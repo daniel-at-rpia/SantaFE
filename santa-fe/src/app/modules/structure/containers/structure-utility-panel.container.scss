@@ -37,10 +37,10 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     transform: scale(0.01);
     &-btn {
       @include mix_fixed_div(absolute, $z_index_base_item);
-      @include roundedButton($color_positive, $font_color_inverse, $iconButton_size_regular);
+      @include roundedButton($size: $iconButton_size_regular);
       padding: 0;
       &>i {
-        color: $font_color_inverse;
+        color: $color_black;
         font-size: $font_size_x_small;
       }
     }
@@ -70,8 +70,12 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
         &__cs01,
         &__leverage {
           &-btn {
-            background-color: $color_disabled;
+            @include material('none');
+            background-color: $color_active;
             pointer-events: none;
+            &>i{
+              color: $font_color_inverse;
+            }
           }
           &-text {
             &-targetStatus {
