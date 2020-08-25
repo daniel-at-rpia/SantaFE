@@ -121,17 +121,14 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     flex-wrap: wrap;
     justify-content: center;
     flex: 1 1 auto;
-    &-barGroup {
+    &-bar {
       display: flex;
+      justify-content: center;
       flex-wrap: wrap;
       flex-basis: 20%;
       margin-bottom: $spacing_small;
-      &-bar {
-        display: inline-block;
-        flex-basis: 100%; 
-        height: $spacing_xx_small; 
-        background-color: $color_active;
-        margin-bottom: $spacing_x_small;
+      &>i{
+        font-size: $font_size_xx_large;
       }
     }
     &-text {
@@ -152,7 +149,7 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
         transform: scale(1);
       }
       &__tongue {
-        &-barGroup {
+        &-bar {
           display: none;
         }
         &-text {
