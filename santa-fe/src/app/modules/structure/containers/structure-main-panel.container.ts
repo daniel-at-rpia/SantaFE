@@ -21,13 +21,13 @@ import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 
 export class StructureMainPanel implements OnInit, OnDestroy {
   state: StructureMainPanelState; 
-  selectedMetricValue: PortfolioMetricValues = PortfolioMetricValues.CSO1;
+  selectedMetricValue: PortfolioMetricValues = PortfolioMetricValues.cs01;
   subscriptions = {
     ownerInitialsSub: null
   };
   constants = {
-    cs01: PortfolioMetricValues.CSO1,
-    leverage: PortfolioMetricValues.Leverage,
+    cs01: PortfolioMetricValues.cs01,
+    creditLeverage: PortfolioMetricValues.creditLeverage,
     portfolioShortNames: PortfolioShortNames
   };
   portfolioList: PortfolioShortNames[] = [this.constants.portfolioShortNames.SOF, this.constants.portfolioShortNames.DOF, this.constants.portfolioShortNames.AGB, this.constants.portfolioShortNames.STIP, this.constants.portfolioShortNames.CIP, this.constants.portfolioShortNames.BBB, this.constants.portfolioShortNames.FIP];

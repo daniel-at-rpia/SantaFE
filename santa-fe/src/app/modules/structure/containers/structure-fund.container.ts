@@ -18,15 +18,15 @@ export class StructureFund implements OnInit {
   targetBarCS01: TargetBarDTO;
   targetBarLeverage: TargetBarDTO; 
   constants = {
-    CS01: PortfolioMetricValues.CSO1,
-    leverage: PortfolioMetricValues.Leverage
+    cs01: PortfolioMetricValues.cs01,
+    creditLeverage: PortfolioMetricValues.creditLeverage
   }
 
   constructor(private dtoService: DTOService) {}
 
   public ngOnInit() {
-    this.targetBarCS01 = this.createTargetBar(this.constants.CS01, this.fund.data.currentTotals.cs01, this.fund.data.target.target.cs01, this.selectedMetricValue, this.fund.state.isStencil);
-    this.targetBarLeverage = this.createTargetBar(this.constants.leverage, this.fund.data.currentTotals.leverageValue, this.fund.data.target.target.leverageValue, this.selectedMetricValue, this.fund.state.isStencil)
+    this.targetBarCS01 = this.createTargetBar(this.constants.cs01, this.fund.data.currentTotals.cs01, this.fund.data.target.target.cs01, this.selectedMetricValue, this.fund.state.isStencil);
+    this.targetBarLeverage = this.createTargetBar(this.constants.creditLeverage, this.fund.data.currentTotals.leverageValue, this.fund.data.target.target.leverageValue, this.selectedMetricValue, this.fund.state.isStencil)
 
   }
 
@@ -53,7 +53,7 @@ export class StructureFund implements OnInit {
   }
 
   private convertValuesForDisplay(targetBar: TargetBarDTO) {
-    if (targetBar.data.targetMetric === PortfolioMetricValues.CSO1) {
+    if (targetBar.data.targetMetric === PortfolioMetricValues.cs01) {
       const formattedCurrentValue = `${targetBar.data.currentValue / 1000}K`;
       const formattedTargetValue = `${targetBar.data.targetValue / 1000}K`;
       targetBar.data.displayedCurrentValue = formattedCurrentValue;
