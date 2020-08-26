@@ -1747,11 +1747,13 @@ export class DTOService {
       },
       api: {
         onSubmitMetricValues: null,
-        convertToK: null
       },
       state: {
         isEditing: false,
         isStencil: !!isStencil
+      },
+      utility: {
+        convertToK: null
       }
     };
     const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.bicsLevel1Breakdown);

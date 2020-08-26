@@ -84,7 +84,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.portfolioList.forEach(portfolio => {
       const eachFund = this.dtoService.formStructureFundObject(PortfolioStructuringSample, false);
       eachFund.data.portfolioShortName = portfolio;
-      eachFund.api.convertToK = this.convertValuesToK.bind(this);
+      eachFund.utility.convertToK = this.convertValuesToK.bind(this);
       this.state.fetchResult.fundList.forEach((eachPortfolio) => {
         if (eachPortfolio.data.portfolioShortName === portfolio) {
           eachPortfolio.data.children = eachFund.data.children;
@@ -97,6 +97,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.state.fetchResult.fundList = this.portfolioList.map((eachPortfolioName) => {
       const eachFund = this.dtoService.formStructureFundObject(PortfolioStructuringSample, true);
       eachFund.data.portfolioShortName = eachPortfolioName;
+      eachFund.utility.convertToK = this.convertValuesToK.bind(this);
       return eachFund;
     });
   }
@@ -140,7 +141,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         this.state.fetchResult.fundList = [];
         serverReturn.forEach(eachFund => {
           const newFund = this.dtoService.formStructureFundObject(eachFund, false);
-          newFund.api.convertToK = this.convertValuesToK;
+          newFund.utility.convertToK = this.convertValuesToK.bind(this);
           this.state.fetchResult.fundList.push(newFund);
           const flipStencil = this.loadFundsData.bind(this);
           setTimeout(() => {
