@@ -67,7 +67,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     setTimeout(() => {
       initialWaitForIcons();
     }, 200);
-    const fakeAsyncLoadData = this.loadInitialFunds.bind(this);
+    this.loadInitialFunds();
     this.fetchFunds();
   }
 
