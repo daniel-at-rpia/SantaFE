@@ -1,4 +1,8 @@
-import { Component, ViewEncapsulation, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewEncapsulation, ElementRef, Input, OnInit, OnDestroy, OnChanges } from '@angular/core';
+
+import { DTOService } from 'Core/services/DTOService';
+import { SantaModalDTO } from 'FEModels/frontend-models.interface';
+import { ModalService } from 'Form/services/ModalService';
 
 @Component({ 
   selector: 'santa-modal', 
@@ -8,21 +12,35 @@ import { Component, ViewEncapsulation, ElementRef, Input, OnInit, OnDestroy } fr
 })
 
 export class SantaModal implements OnInit, OnDestroy {
-  private modalElement: Node;
+  @Input() modalId: string;
+  private modalData: SantaModalDTO;
 
-  constructor(private elementRef: ElementRef){
-    this.modalElement = elementRef.nativeElement;
+  constructor(
+    private elementRef: ElementRef,
+    private dtoService: DTOService,
+    private modalService: ModalService
+  ){
+    this.modalData = this.dtoService.formSantaModal(elementRef);
   }
 
   public ngOnInit() {
-    document.body.appendChild(this.modalElement);
+    this.modalData.data.id = this.modalId;
+    this.modalData.api.openModal = this.openModal.bind(this);
+    this.modalData.api.closeModal = this.closeModal.bind(this);
+    document.body.appendChild(this.modalData.data.modalElement);
+    this.modalService.registerModal(this.modalData);
   }
+
 
   public ngOnDestroy() {
 
   }
 
   public openModal() {
-    
+    this.modalData.state.isPresenting = true;
+  }
+
+  public closeModal() {
+    this.modalData.state.isPresenting = false;
   }
 }
