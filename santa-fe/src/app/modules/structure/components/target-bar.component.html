@@ -2,7 +2,8 @@
 [ngClass]="{
   'sat-fundTargetBar': true,
   'sat-fundTargetBar--inactive': targetBar.state.isInactiveMetric,
-  'sat-fundTargetBar--stencilState': targetBar.state.isStencil
+  'sat-fundTargetBar--stencilState': targetBar.state.isStencil,
+  'sat-fundTargetBar--empty': targetBar.state.isEmpty
   }"
 >
     <p class="sat-fundTargetBar__type">{{ targetBar.data.targetMetric }}</p>

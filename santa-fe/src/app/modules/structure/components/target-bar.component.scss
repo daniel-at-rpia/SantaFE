@@ -92,4 +92,14 @@
        }
       }
     }
+    &--empty {
+      #{$blockName} {
+        &__indicator {
+          &--exceeded,
+          &--current {
+            display: none;
+          }
+        }
+      }
+    }
   }
