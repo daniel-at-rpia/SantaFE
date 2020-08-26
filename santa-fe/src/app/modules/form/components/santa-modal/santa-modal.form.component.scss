@@ -1,16 +1,18 @@
 @import "global.scss";
 
 $modal_ctas_btn_size: 4rem;
+$modal_animation_duration: $animation_duration_normal;
 .santaModal {
   $blockName: &;
   @include mix_fixed_div(fixed, $z_index_modal);
+  @include mix_alive('custom', width 0s);
   display: flex;
   height: 100%;
-  width: 100%;
-  padding: $spacing_xx_large $page_gutter_width_for_alerts;
+  width: 0;
+  transition-delay: $modal_animation_duration;
   &__background {
     @include mix_fixed_div(absolute, $z_index_base_item);
-    @include mix_alive('custom', $animation_duration_normal background-color);
+    @include mix_alive('custom', $modal_animation_duration background-color);
     top: 0;
     left: 0;
     height: 100%;
@@ -20,12 +22,13 @@ $modal_ctas_btn_size: 4rem;
   &__foreground {
     @include mix_fixed_div(relative, $z_index_base_item_solid);
     @include mix_border_radius(25px);
-    @include mix_alive('custom', $animation_duration_normal transform);
+    @include mix_alive('custom', $modal_animation_duration transform);
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     background-color: $color_gray_1;
     transform: translate(0, 100%) scale(0.01);
+    margin: $spacing_xx_large $page_gutter_width_for_alerts;
     &-title {
       flex: 0 0 auto;
       display: flex;
@@ -49,7 +52,7 @@ $modal_ctas_btn_size: 4rem;
   }
   &__ctas {
     @include mix_fixed_div(absolute, $z_index_hovering_item);
-    @include mix_alive('custom', $animation_duration_normal transform);
+    @include mix_alive('custom', $modal_animation_duration transform);
     display: flex;
     justify-content: space-evenly;
     left: 0;
@@ -75,6 +78,8 @@ $modal_ctas_btn_size: 4rem;
     }
   }
   &--presentState {
+    width: 100%;
+    transition-delay: 0s;
     #{$blockName} {
       &__background {
         background-color: rgba($color_black, 0.5);

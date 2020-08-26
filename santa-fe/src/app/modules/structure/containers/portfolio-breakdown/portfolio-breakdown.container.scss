@@ -144,6 +144,17 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
       }
     }
   }
+  &__ctas {
+    @include mix_fixed_div(absolute, $z_index_hovering_item);
+    display: flex;
+    justify-content: center;
+    left: 0;
+    bottom: 0 - $iconButton_size_regular/2;
+    width: 100%;
+    &-editBtn {
+      @include mix_border_radius(50%);
+    }
+  }
   &--stencilState {
     #{$blockName} {
       &__rating {

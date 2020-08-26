@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
 
 import { PortfolioBreakdownDTO } from 'FEModels/frontend-models.interface';
+import { ModalService } from 'Form/services/ModalService';
 
 @Component({
   selector: 'portfolio-breakdown',
@@ -11,6 +12,12 @@ import { PortfolioBreakdownDTO } from 'FEModels/frontend-models.interface';
 
 export class PortfolioBreakdown {
   @Input() breakdownData: PortfolioBreakdownDTO;
-  constructor() { }
+  constructor(
+    private modalService: ModalService
+  ) { }
+
+  public onClickEdit() {
+    this.modalService.triggerModalOpen('testModal');
+  }
 
 }
