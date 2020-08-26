@@ -723,11 +723,13 @@ export interface TargetBarDTO extends BasicDTOStructure {
     displayedTargetValue: string;
     currentPercentage: string;
     exceededPercentage: string;
-    selectedMetricValue: PortfolioMetricValues
+    selectedMetricValue: PortfolioMetricValues;
+    displayedResults: string;
   }
   state: {
     isInactiveMetric: boolean,
     isStencil: boolean;
+    isEmpty: boolean;
   }
   utility: {
     getDisplayValues: (targetBar: TargetBarDTO) => void;

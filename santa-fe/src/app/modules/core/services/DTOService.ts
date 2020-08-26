@@ -1694,11 +1694,13 @@ export class DTOService {
         displayedTargetValue: '',
         currentPercentage: '',
         exceededPercentage: '',
-        selectedMetricValue
+        selectedMetricValue,
+        displayedResults: ''
       },
       state: {
         isInactiveMetric: false,
-        isStencil
+        isStencil,
+        isEmpty: false
       },
       utility: {
         getDisplayValues: null,

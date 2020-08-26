@@ -17,6 +17,11 @@ export class TargetBar implements OnInit {
   }
 
   private loadTargetBarConfiguration(targetBar: TargetBarDTO) {
+    if (this.targetBar.state.isEmpty) {
+      this.targetBar.data.currentPercentage = '0';
+      this.targetBar.data.exceededPercentage = '0';
+      return
+    }
     this.targetBar.utility.getDisplayValues(targetBar);
     this.targetBar.utility.setInactiveMetric(targetBar);
     this.targetBar.utility.convertNumtoStr(targetBar);

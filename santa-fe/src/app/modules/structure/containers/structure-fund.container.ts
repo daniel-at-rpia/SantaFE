@@ -35,10 +35,16 @@ export class StructureFund implements OnInit {
 
   private createTargetBar(constantValue: PortfolioMetricValues, currentValue: number, targetValue: number, selectedMetric: PortfolioMetricValues, isStencil: boolean) {
     const newTargetBar = this.dtoService.formTargetBarObject(constantValue, currentValue,targetValue, selectedMetric, isStencil);
+    if (targetValue === null || currentValue === null) {
+      newTargetBar.state.isEmpty = true;
+      newTargetBar.data.displayedResults = 'N/A';
+      return newTargetBar;
+    }
+    newTargetBar.state.isEmpty = false;
     newTargetBar.utility.getDisplayValues = this.getDisplayedValues;
     newTargetBar.utility.setInactiveMetric = this.setInactiveMetric;
     newTargetBar.utility.convertNumtoStr = this.convertValuesForDisplay.bind(this);
-    return newTargetBar
+    return newTargetBar;
   }
 
   private getDisplayedValues(targetBar: TargetBarDTO) {
@@ -60,18 +66,19 @@ export class StructureFund implements OnInit {
     targetBar.data.displayedTargetValue = targetBar.data.targetMetric === this.constants.cs01 ? `${this.utilityService.round(targetBar.data.targetValue)}K`: `${this.utilityService.round(targetBar.data.targetValue, 2)}`;
   }
 
+  private getDisplayedResults(valueA: string, valueB: string) {
+    return `${valueA}/${valueB}`;
+  }
+
   private convertValuesForDisplay(targetBar: TargetBarDTO) {
-    if (targetBar.data.currentValue === null || targetBar.data.targetValue === null) {
-      targetBar.data.displayedCurrentValue = '';
-      targetBar.data.displayedTargetValue = '';
-      return;
-    } else if (targetBar.data.targetMetric === PortfolioMetricValues.cs01) {
+   if (targetBar.data.targetMetric === PortfolioMetricValues.cs01) {
       targetBar.data.currentValue = this.fund.utility.convertToK(targetBar.data.currentValue);
       targetBar.data.targetValue = this.fund.utility.convertToK(targetBar.data.targetValue);
       this.getRoundedValues(targetBar);
+      targetBar.data.displayedResults = this.getDisplayedResults(targetBar.data.displayedCurrentValue, targetBar.data.displayedTargetValue);
       return;
-    } else {
-      this.getRoundedValues(targetBar);
     }
+    this.getRoundedValues(targetBar);
+    targetBar.data.displayedResults = this.getDisplayedResults(targetBar.data.displayedCurrentValue, targetBar.data.displayedTargetValue);
   }
 }
