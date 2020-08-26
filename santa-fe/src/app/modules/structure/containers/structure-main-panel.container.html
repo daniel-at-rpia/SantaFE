@@ -8,6 +8,8 @@
     </div>
   </section>
   <section>
-    <santa-modal></santa-modal>
+    <santa-modal>
+      <portfolio-breakdown *ngIf="state.fetchResult.fundList[0]?.data.children[0]" [breakdownData]="state.fetchResult.fundList[0]?.data.children[0]"></portfolio-breakdown>
+    </santa-modal>
   </section>
 </article>

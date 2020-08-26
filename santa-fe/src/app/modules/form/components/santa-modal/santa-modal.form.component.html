@@ -1,0 +1,19 @@
+<article
+  [ngClass]="{
+    'santaModal': true
+  }">
+  <section class="santaModal__background"></section>
+  <section class="santaModal__foreground">
+    <div class="santaModal__foreground-title">
+      <span class="santaModal__foreground-title-text">Modal</span>
+    </div>
+    <hr class="santaModal__foreground-divider">
+    <div class="santaModal__foreground-content">
+      <ng-content></ng-content>
+    </div>
+  </section>
+  <section class="santaModal__ctas">
+    <button class="santaBtn--iconOnly santaModal__ctas-btn santaModal__ctas-btn--cancel fal fa-times"></button>
+    <button class="santaBtn--iconOnly santaModal__ctas-btn santaModal__ctas-btn--confirm fal fa-check"></button>
+  </section>
+</article>
