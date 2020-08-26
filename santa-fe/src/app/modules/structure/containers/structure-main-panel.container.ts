@@ -66,9 +66,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       initialWaitForIcons();
     }, 200);
     const fakeAsyncLoadData = this.loadInitialFunds.bind(this);
-    setTimeout(() => {
-      fakeAsyncLoadData();
-    }, 2000);
+    this.fetchFunds();
   }
 
   public ngOnDestroy() {
@@ -91,10 +89,6 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         }
       });
     });
-    const flipStencil = this.loadFundsData.bind(this);
-    setTimeout(() => {
-      flipStencil();
-    }, 1);
   }
 
   private loadStencilFunds() {
@@ -138,6 +132,10 @@ export class StructureMainPanel implements OnInit, OnDestroy {
           const newFund = this.dtoService.formStructureFundObject(eachFund, false);
           newFund.api.convertToK = this.convertValuesToK;
           this.state.fetchResult.fundList.push(newFund);
+          const flipStencil = this.loadFundsData.bind(this);
+          setTimeout(() => {
+            flipStencil();
+          }, 1);
         })
       }),
       catchError(err => {
