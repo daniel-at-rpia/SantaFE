@@ -2,7 +2,7 @@ import { BEPortfolioStructuringDTO } from 'BEModels/backend-models.interface';
 import {PortfolioShortNames} from 'Core/constants/structureConstants.constants';
 
 export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
-  rpPortfolioDate: null,
+  date: null,
   portfolioId: null,
   portfolioShortName: PortfolioShortNames.SOF,
   portfolioNav: null,
@@ -26,8 +26,13 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
     Cs01: null,
     CreditLeverage: null
   },
+  inDb: null,
   ccyBreakdown: {
-    groupOption: 'ccy',
+    date: null,
+    groupOption: 1,
+    indexId: null,
+    portfolioBreakdownId: null,
+    portfolioId: null,
     breakdown: {
       'USD': {
         Cs01: {
@@ -65,7 +70,11 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
     }
   },
   bicsLevel1Breakdown: {
-    groupOption: 'bics',
+    date: null,
+    groupOption: 5,
+    indexId: null,
+    portfolioBreakdownId: null,
+    portfolioId: null,
     breakdown: {
       'Communications': {
         Cs01: {
@@ -182,7 +191,11 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
   bicsLevel2Breakdown: null,
   bicsLevel3Breakdown: null,
   ratingBreakdown: {
-    groupOption: 'rating',
+    date: null,
+    groupOption: 14,
+    indexId: null,
+    portfolioBreakdownId: null,
+    portfolioId: null,
     breakdown: {
       'AAA': {
         Cs01: {
@@ -275,7 +288,11 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
     }
   },
   tenorBreakdown: {
-    groupOption: 'tenor',
+    date: null,
+    groupOption: 20,
+    indexId: null,
+    portfolioBreakdownId: null,
+    portfolioId: null,
     breakdown: {
       '2Y': {
         Cs01: {
