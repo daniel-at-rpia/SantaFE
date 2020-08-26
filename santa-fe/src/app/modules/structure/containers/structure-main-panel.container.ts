@@ -11,6 +11,7 @@ import { catchError, first, tap} from 'rxjs/operators';
 import { UtilityService } from 'Core/services/UtilityService';
 import * as moment from 'moment';
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
+import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.interface';
 
 @Component({
     selector: 'structure-main-panel',
@@ -30,7 +31,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     creditLeverage: PortfolioMetricValues.creditLeverage,
     portfolioShortNames: PortfolioShortNames
   };
-  portfolioList: PortfolioShortNames[] = [this.constants.portfolioShortNames.SOF, this.constants.portfolioShortNames.DOF, this.constants.portfolioShortNames.AGB, this.constants.portfolioShortNames.STIP, this.constants.portfolioShortNames.CIP, this.constants.portfolioShortNames.BBB, this.constants.portfolioShortNames.FIP];
+  portfolioList: Array<PortfolioShortNames> = [this.constants.portfolioShortNames.SOF, this.constants.portfolioShortNames.DOF, this.constants.portfolioShortNames.AGB, this.constants.portfolioShortNames.STIP, this.constants.portfolioShortNames.CIP, this.constants.portfolioShortNames.BBB, this.constants.portfolioShortNames.FIP];
   
   constructor(
     private dtoService: DTOService,
@@ -117,6 +118,14 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.state.fetchResult.fetchFundDataFailedError = '';
   }
 
+  private sortFunds(funds: Array<PortfolioStructureDTO>) {
+    funds.sort((fundA, fundB) => {
+      const fundAShortName = fundA.data.portfolioShortName;
+      const fundBShortName = fundB.data.portfolioShortName;
+      return this.portfolioList.indexOf(fundAShortName) - this.portfolioList.indexOf(fundBShortName);
+    })
+  }
+
   private fetchFunds() {
     const currentDate = new Date();
     const currentDateFormat = 'YYYYMMDD';
@@ -138,6 +147,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
             flipStencil();
           }, 1);
         })
+        this.state.fetchResult.fundList.length > 1 && this.sortFunds(this.state.fetchResult.fundList);
       }),
       catchError(err => {
         this.state.fetchResult.fetchFundDataFailed = true;
