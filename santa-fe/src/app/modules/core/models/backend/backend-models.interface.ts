@@ -552,15 +552,15 @@ export interface BEStructuringBreakdownBlock {
   groupOption: string;
   breakdown: {
     [property: string]: {
-      cs01: BEStructuringBreakdownSingleEntry;
-      leverageValue: BEStructuringBreakdownSingleEntry;
+      CreditLeverage: BEStructuringBreakdownSingleEntry;
+      Cs01: BEStructuringBreakdownSingleEntry;
     }
   }
 }
 
 export interface BEStructuringMetricTotalBlock {
-  cs01: number;
-  leverageValue: number;
+  CreditLeverage: number;
+  Cs01: number;
 }
 
 export interface BEPortfolioStructuringDTO {

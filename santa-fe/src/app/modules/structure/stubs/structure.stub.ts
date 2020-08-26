@@ -11,26 +11,26 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
     date: null,
     portfolioId: null,
     target: {
-      cs01: 220000,
-      leverageValue: 1.8
+      Cs01: 220000,
+      CreditLeverage: 1.8
     }
   },
   currentTotals: {
-    cs01: 180000,
-    leverageValue: 1.5
+    Cs01: 180000,
+    CreditLeverage: 1.5
   },
   indexId: null,
   indexShortName: '',
   indexNav: null,
   indexTotals: {
-    cs01: null,
-    leverageValue: null
+    Cs01: null,
+    CreditLeverage: null
   },
   ccyBreakdown: {
     groupOption: 'ccy',
     breakdown: {
       'USD': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 120,
           targetPct: null,
@@ -38,10 +38,10 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 8.7,
           indexPct: 20
         },
-        leverageValue: null
+        CreditLeverage: null
       },
       'CAD': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 360,
           targetPct: null,
@@ -49,10 +49,10 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 47.8,
           indexPct: 28
         },
-        leverageValue: null
+        CreditLeverage: null
       },
       'EUR': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 720,
           targetPct: null,
@@ -60,7 +60,7 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 43.4,
           indexPct: 52
         },
-        leverageValue: null
+        CreditLeverage: null
       }
     }
   },
@@ -68,7 +68,7 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
     groupOption: 'bics',
     breakdown: {
       'Communications': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 65,
           targetPct: null,
@@ -76,10 +76,10 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 1.5,
           indexPct: 4
         },
-        leverageValue: null
+        CreditLeverage: null
       },
       'Consumer, Cyclical': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 92,
           targetPct: null,
@@ -87,10 +87,10 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 5.7,
           indexPct: 10
         },
-        leverageValue: null
+        CreditLeverage: null
       },
       'Consumer, Noncyclical': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 70,
           targetPct: null,
@@ -98,10 +98,10 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 2,
           indexPct: 3
         },
-        leverageValue: null
+        CreditLeverage: null
       },
       'Energy': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 65,
           targetPct: null,
@@ -109,10 +109,10 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 16.1,
           indexPct: 12
         },
-        leverageValue: null
+        CreditLeverage: null
       },
       'Diversified': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 180,
           targetPct: null,
@@ -120,10 +120,10 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 20,
           indexPct: 28
         },
-        leverageValue: null
+        CreditLeverage: null
       },
       'Financial': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 230,
           targetPct: null,
@@ -131,10 +131,10 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 10.4,
           indexPct: 10
         },
-        leverageValue: null
+        CreditLeverage: null
       },
       'Industrial': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 5,
           targetPct: null,
@@ -142,10 +142,10 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 1,
           indexPct: 20
         },
-        leverageValue: null
+        CreditLeverage: null
       },
       'Basic Materials': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 90,
           targetPct: null,
@@ -153,10 +153,10 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 7.8,
           indexPct: 8
         },
-        leverageValue: null
+        CreditLeverage: null
       },
       'Technology': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 102,
           targetPct: null,
@@ -164,10 +164,10 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 12.2,
           indexPct: 21
         },
-        leverageValue: null
+        CreditLeverage: null
       },
       'Utilities': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 23,
           targetPct: null,
@@ -175,7 +175,7 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 4.3,
           indexPct: 20
         },
-        leverageValue: null
+        CreditLeverage: null
       }
     }
   },
@@ -185,7 +185,7 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
     groupOption: 'rating',
     breakdown: {
       'AAA': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 53,
           targetPct: null,
@@ -193,10 +193,10 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 8,
           indexPct: 6
         },
-        leverageValue: null
+        CreditLeverage: null
       },
       'AA': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 120,
           targetPct: null,
@@ -204,10 +204,10 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 40,
           indexPct: 17
         },
-        leverageValue: null
+        CreditLeverage: null
       },
       'A': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 250,
           targetPct: null,
@@ -215,10 +215,10 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 34,
           indexPct: 12
         },
-        leverageValue: null
+        CreditLeverage: null
       },
       'BBB': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 344,
           targetPct: null,
@@ -226,10 +226,10 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 8,
           indexPct: 20
         },
-        leverageValue: null
+        CreditLeverage: null
       },
       'BB': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 212,
           targetPct: null,
@@ -237,10 +237,10 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 40,
           indexPct: 28
         },
-        leverageValue: null
+        CreditLeverage: null
       },
       'B': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 174,
           targetPct: null,
@@ -248,10 +248,10 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 34,
           indexPct: 15
         },
-        leverageValue: null
+        CreditLeverage: null
       },
       'CCCToD': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 84,
           targetPct: null,
@@ -259,10 +259,10 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 8,
           indexPct: 13
         },
-        leverageValue: null
+        CreditLeverage: null
       },
       'NR': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 43,
           targetPct: null,
@@ -270,7 +270,7 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 40,
           indexPct: 10
         },
-        leverageValue: null
+        CreditLeverage: null
       }
     }
   },
@@ -278,7 +278,7 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
     groupOption: 'tenor',
     breakdown: {
       '2Y': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 60,
           targetPct: null,
@@ -286,10 +286,10 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 8.7,
           indexPct: 20
         },
-        leverageValue: null
+        CreditLeverage: null
       },
       '3Y': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 180,
           targetPct: null,
@@ -297,10 +297,10 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 13.0,
           indexPct: 8
         },
-        leverageValue: null
+        CreditLeverage: null
       },
       '5Y': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 360,
           targetPct: null,
@@ -308,10 +308,10 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 17.4,
           indexPct: 12
         },
-        leverageValue: null
+        CreditLeverage: null
       },
       '7Y': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 120,
           targetPct: null,
@@ -319,10 +319,10 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 8.7,
           indexPct: 1.7
         },
-        leverageValue: null
+        CreditLeverage: null
       },
       '10Y': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 50,
           targetPct: null,
@@ -330,10 +330,10 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 7.6,
           indexPct: 12
         },
-        leverageValue: null
+        CreditLeverage: null
       },
       '30Y': {
-        cs01: {
+        Cs01: {
           total: null,
           targetLevel: 300,
           targetPct: null,
@@ -341,7 +341,7 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
           currentPct: 43.4,
           indexPct: 52
         },
-        leverageValue: null
+        CreditLeverage: null
       }
     }
   }
