@@ -1727,19 +1727,19 @@ export class DTOService {
           portfolioId: rawData.target.portfolioId,
           target: {
             cs01: rawData.target.target.Cs01 || null,
-            leverageValue: rawData.target.target.CreditLeverage || null
+            creditLeverage: rawData.target.target.CreditLeverage || null
           }
         },
         currentTotals :{
           cs01: rawData.currentTotals.Cs01,
-          leverageValue: rawData.currentTotals.CreditLeverage
+          creditLeverage: rawData.currentTotals.CreditLeverage
         },
         indexId: rawData.indexId,
         indexShortName: rawData.indexShortName,
         indexNav: rawData.indexNav,
         indexTotals: {
           cs01: rawData.indexTotals.Cs01,
-          leverageValue: rawData.indexTotals.CreditLeverage
+          creditLeverage: rawData.indexTotals.CreditLeverage
         },
         children: [],
         cs01TotalsInK: {

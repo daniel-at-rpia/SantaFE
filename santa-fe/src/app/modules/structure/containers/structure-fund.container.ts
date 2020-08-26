@@ -30,7 +30,7 @@ export class StructureFund implements OnInit {
 
   public ngOnInit() {
     this.targetBarCS01 = this.createTargetBar(this.constants.cs01, this.fund.data.currentTotals.cs01, this.fund.data.target.target.cs01, this.selectedMetricValue, this.fund.state.isStencil);
-    this.targetBarLeverage = this.createTargetBar(this.constants.creditLeverage, this.fund.data.currentTotals.leverageValue, this.fund.data.target.target.leverageValue, this.selectedMetricValue, this.fund.state.isStencil)
+    this.targetBarLeverage = this.createTargetBar(this.constants.creditLeverage, this.fund.data.currentTotals.creditLeverage, this.fund.data.target.target.creditLeverage, this.selectedMetricValue, this.fund.state.isStencil)
   }
 
   private createTargetBar(constantValue: PortfolioMetricValues, currentValue: number, targetValue: number, selectedMetric: PortfolioMetricValues, isStencil: boolean) {
