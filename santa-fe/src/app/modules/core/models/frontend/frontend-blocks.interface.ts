@@ -274,8 +274,7 @@ export interface PortfolioMetricTotals {
   creditLeverage: number;
 }
 
-export interface PortfolioBreakdownCategoryBlock {
-  category: string;
+export interface PortfolioBreakdownCategoryBlockDetailed {
   targetLevel: number;
   targetPct: number;
   diffToTarget: number;
@@ -284,6 +283,12 @@ export interface PortfolioBreakdownCategoryBlock {
   currentPct: number;
   indexPct: number;
   moveVisualizer: DTOs.MoveVisualizerDTO;
+}
+
+export interface PortfolioBreakdownCategoryBlock {
+  category: string;
+  cs01: PortfolioBreakdownCategoryBlockDetailed;
+  creditLeverage: PortfolioBreakdownCategoryBlockDetailed;
 }
 
 export interface GlobalNavLegendBlock {
