@@ -41,8 +41,8 @@ export class StructureFund implements OnInit {
       return newTargetBar;
     }
     newTargetBar.state.isEmpty = false;
-    newTargetBar.utility.getDisplayValues = this.getDisplayedValues;
-    newTargetBar.utility.setInactiveMetric = this.setInactiveMetric;
+    newTargetBar.utility.getDisplayValues = this.getDisplayedValues.bind(this);
+    newTargetBar.utility.setInactiveMetric = this.setInactiveMetric.bind(this);
     newTargetBar.utility.convertNumtoStr = this.convertValuesForDisplay.bind(this);
     return newTargetBar;
   }
