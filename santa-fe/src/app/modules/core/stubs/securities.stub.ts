@@ -120,7 +120,6 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
           "subIndustry":"Telecom Services",
           "ticker":"TCN",
           "unitPosition":{
-            "metricDate":"2020-06-29T00:00:00-04:00",
             "securityIdentifier":"79",
             "partitionOptionValues":{
               "PortfolioShortName":[
@@ -369,7 +368,6 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
           "subIndustry":"Cellular Telecom",
           "ticker":"S",
           "unitPosition":{
-            "metricDate":"2020-06-29T00:00:00-04:00",
             "securityIdentifier":"6113",
             "partitionOptionValues":{
               "PortfolioShortName":[
@@ -654,7 +652,6 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
           "subIndustry":"Oil Comp-Explor&Prodtn",
           "ticker":"ATHCN",
           "unitPosition":{
-            "metricDate":"2020-06-29T00:00:00-04:00",
             "securityIdentifier":"19454",
             "partitionOptionValues":{
               "PortfolioShortName":[

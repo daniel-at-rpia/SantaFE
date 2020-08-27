@@ -209,7 +209,6 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
         "subIndustry":"Telecom Services",
         "ticker":"TCN",
         "unitPosition":{
-          "metricDate":"2020-06-29T00:00:00-04:00",
           "securityIdentifier":"79",
           "partitionOptionValues":{
             "PortfolioShortName":[
