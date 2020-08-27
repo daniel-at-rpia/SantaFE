@@ -17,8 +17,8 @@ export class StructureUtilityPanel implements OnInit {
     selectedMetricLevelSub: null
   }
   constants = {
-    cs01: PortfolioMetricValues.CSO1,
-    leverage: PortfolioMetricValues.Leverage
+    cs01: PortfolioMetricValues.cs01,
+    leverage: PortfolioMetricValues.creditLeverage
   }
   constructor(private store$: Store<any>) {}
   public ngOnInit() {

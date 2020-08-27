@@ -3,6 +3,7 @@ import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.inte
 import {PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 import { DTOService } from 'Core/services/DTOService';
 import { TargetBarDTO } from 'FEModels/frontend-models.interface';
+import { UtilityService } from 'Core/services/UtilityService'
 
 
 @Component({
@@ -18,24 +19,32 @@ export class StructureFund implements OnInit {
   targetBarCS01: TargetBarDTO;
   targetBarLeverage: TargetBarDTO; 
   constants = {
-    CS01: PortfolioMetricValues.CSO1,
-    leverage: PortfolioMetricValues.Leverage
+    cs01: PortfolioMetricValues.cs01,
+    creditLeverage: PortfolioMetricValues.creditLeverage
   }
 
-  constructor(private dtoService: DTOService) {}
+  constructor(
+    private dtoService: DTOService,
+    private utilityService: UtilityService,
+  ){}
 
   public ngOnInit() {
-    this.targetBarCS01 = this.createTargetBar(this.constants.CS01, this.fund.data.currentTotals.cs01, this.fund.data.target.target.cs01, this.selectedMetricValue, this.fund.state.isStencil);
-    this.targetBarLeverage = this.createTargetBar(this.constants.leverage, this.fund.data.currentTotals.leverageValue, this.fund.data.target.target.leverageValue, this.selectedMetricValue, this.fund.state.isStencil)
-
+    this.targetBarCS01 = this.createTargetBar(this.constants.cs01, this.fund.data.currentTotals.cs01, this.fund.data.target.target.cs01, this.selectedMetricValue, this.fund.state.isStencil);
+    this.targetBarLeverage = this.createTargetBar(this.constants.creditLeverage, this.fund.data.currentTotals.creditLeverage, this.fund.data.target.target.creditLeverage, this.selectedMetricValue, this.fund.state.isStencil)
   }
 
   private createTargetBar(constantValue: PortfolioMetricValues, currentValue: number, targetValue: number, selectedMetric: PortfolioMetricValues, isStencil: boolean) {
     const newTargetBar = this.dtoService.formTargetBarObject(constantValue, currentValue,targetValue, selectedMetric, isStencil);
+    if (targetValue === null || currentValue === null) {
+      newTargetBar.state.isEmpty = true;
+      newTargetBar.data.displayedResults = 'N/A';
+      return newTargetBar;
+    }
+    newTargetBar.state.isEmpty = false;
     newTargetBar.utility.getDisplayValues = this.getDisplayedValues;
     newTargetBar.utility.setInactiveMetric = this.setInactiveMetric;
-    newTargetBar.utility.convertNumtoStr = this.convertValuesForDisplay;
-    return newTargetBar
+    newTargetBar.utility.convertNumtoStr = this.convertValuesForDisplay.bind(this);
+    return newTargetBar;
   }
 
   private getDisplayedValues(targetBar: TargetBarDTO) {
@@ -52,15 +61,24 @@ export class StructureFund implements OnInit {
     targetBar.state.isInactiveMetric = targetBar.data.targetMetric !== targetBar.data.selectedMetricValue ? true : false;
   }
 
+  private getRoundedValues(targetBar: TargetBarDTO) {
+    targetBar.data.displayedCurrentValue = targetBar.data.targetMetric === this.constants.cs01 ? `${this.utilityService.round(targetBar.data.currentValue)}K`: `${this.utilityService.round(targetBar.data.currentValue, 2)}`;
+    targetBar.data.displayedTargetValue = targetBar.data.targetMetric === this.constants.cs01 ? `${this.utilityService.round(targetBar.data.targetValue)}K`: `${this.utilityService.round(targetBar.data.targetValue, 2)}`;
+  }
+
+  private getDisplayedResults(valueA: string, valueB: string) {
+    return `${valueA}/${valueB}`;
+  }
+
   private convertValuesForDisplay(targetBar: TargetBarDTO) {
-    if (targetBar.data.targetMetric === PortfolioMetricValues.CSO1) {
-      const formattedCurrentValue = `${targetBar.data.currentValue / 1000}K`;
-      const formattedTargetValue = `${targetBar.data.targetValue / 1000}K`;
-      targetBar.data.displayedCurrentValue = formattedCurrentValue;
-      targetBar.data.displayedTargetValue = formattedTargetValue;
+   if (targetBar.data.targetMetric === PortfolioMetricValues.cs01) {
+      targetBar.data.currentValue = this.fund.utility.convertToK(targetBar.data.currentValue);
+      targetBar.data.targetValue = this.fund.utility.convertToK(targetBar.data.targetValue);
+      this.getRoundedValues(targetBar);
+      targetBar.data.displayedResults = this.getDisplayedResults(targetBar.data.displayedCurrentValue, targetBar.data.displayedTargetValue);
       return;
     }
-    targetBar.data.displayedCurrentValue = `${targetBar.data.currentValue}`;
-    targetBar.data.displayedTargetValue = `${targetBar.data.targetValue}`;
+    this.getRoundedValues(targetBar);
+    targetBar.data.displayedResults = this.getDisplayedResults(targetBar.data.displayedCurrentValue, targetBar.data.displayedTargetValue);
   }
 }

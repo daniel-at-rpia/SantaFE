@@ -67,7 +67,7 @@
         }
       }
     }
-    &--inactive {
+    &--inactiveState {
       #{$blockName} {
         &__type,
         &__indicator {
@@ -90,6 +90,16 @@
           }
         }
        }
+      }
+    }
+    &--emptyState {
+      #{$blockName} {
+        &__indicator {
+          &--exceeded,
+          &--current {
+            display: none;
+          }
+        }
       }
     }
   }

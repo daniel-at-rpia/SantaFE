@@ -1694,11 +1694,13 @@ export class DTOService {
         displayedTargetValue: '',
         currentPercentage: '',
         exceededPercentage: '',
-        selectedMetricValue
+        selectedMetricValue,
+        displayedResults: ''
       },
       state: {
         isInactiveMetric: false,
-        isStencil
+        isStencil,
+        isEmpty: false
       },
       utility: {
         getDisplayValues: null,
@@ -1715,7 +1717,7 @@ export class DTOService {
   ): DTOs.PortfolioStructureDTO {
     const object: DTOs.PortfolioStructureDTO = {
       data: {
-        rpPortfolioDate: rawData.rpPortfolioDate,
+        rpPortfolioDate: rawData.date,
         portfolioId: rawData.portfolioId,
         portfolioShortName: rawData.portfolioShortName,
         portfolioNav: rawData.portfolioNav,
@@ -1724,29 +1726,36 @@ export class DTOService {
           date: rawData.target.date,
           portfolioId: rawData.target.portfolioId,
           target: {
-            cs01: rawData.target.target.cs01,
-            leverageValue: rawData.target.target.leverageValue
+            cs01: rawData.target.target.Cs01 || null,
+            creditLeverage: rawData.target.target.CreditLeverage || null
           }
         },
         currentTotals :{
-          cs01: rawData.currentTotals.cs01,
-          leverageValue: rawData.currentTotals.leverageValue
+          cs01: rawData.currentTotals.Cs01,
+          creditLeverage: rawData.currentTotals.CreditLeverage
         },
         indexId: rawData.indexId,
         indexShortName: rawData.indexShortName,
         indexNav: rawData.indexNav,
         indexTotals: {
-          cs01: rawData.indexTotals.cs01,
-          leverageValue: rawData.indexTotals.leverageValue
+          cs01: rawData.indexTotals.Cs01,
+          creditLeverage: rawData.indexTotals.CreditLeverage
         },
-        children: []
+        children: [],
+        cs01TotalsInK: {
+          currentTotal: null,
+          targetTotal: null
+        }
       },
       api: {
-        onSubmitMetricValues: null
+        onSubmitMetricValues: null,
       },
       state: {
         isEditing: false,
         isStencil: !!isStencil
+      },
+      utility: {
+        convertToK: null
       }
     };
     const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.bicsLevel1Breakdown);
@@ -1789,7 +1798,7 @@ export class DTOService {
     };
     let findMax = 0;
     for (const eachCategory in rawData.breakdown) {
-      const eachEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].cs01 : null;
+      const eachEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].Cs01 : null;
       if (!!eachEntry) {
         const highestVal = Math.max(eachEntry.currentLevel, eachEntry.targetLevel);
         if (highestVal > findMax) {
@@ -1798,7 +1807,7 @@ export class DTOService {
       }
     }
     for (const eachCategory in rawData.breakdown) {
-      const eachEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].cs01 : null;
+      const eachEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].Cs01 : null;
       if (!!eachEntry) {
         const eachMoveVisualizer = this.formMoveVisualizerObjectForStructuring(eachEntry, findMax, !!isStencil);
         const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {

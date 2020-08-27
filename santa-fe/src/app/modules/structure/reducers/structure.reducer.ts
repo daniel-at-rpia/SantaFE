@@ -7,7 +7,7 @@ export interface StructureState {
 }
 
 const initialState: StructureState = {
-  selectedMetric: PortfolioMetricValues.CSO1
+  selectedMetric: PortfolioMetricValues.cs01
 }
 
 export function structureReducer(

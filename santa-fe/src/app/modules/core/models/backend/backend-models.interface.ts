@@ -548,24 +548,27 @@ export interface BEStructuringBreakdownSingleEntry {
   currentPct: number;
   indexPct: number;
 }
-
 export interface BEStructuringBreakdownBlock {
-  groupOption: string;
+  date: string;
+  groupOption: number;
+  indexId: number
+  portfolioBreakdownId: string;
+  portfolioId: number;
   breakdown: {
     [property: string]: {
-      cs01: BEStructuringBreakdownSingleEntry;
-      leverageValue: BEStructuringBreakdownSingleEntry;
+      CreditLeverage: BEStructuringBreakdownSingleEntry;
+      Cs01: BEStructuringBreakdownSingleEntry;
     }
   }
 }
 
 export interface BEStructuringMetricTotalBlock {
-  cs01: number;
-  leverageValue: number;
+  CreditLeverage: number;
+  Cs01: number;
 }
 
 export interface BEPortfolioStructuringDTO {
-  rpPortfolioDate: string;
+  date: string;
   portfolioId: number;
   portfolioShortName: PortfolioShortNames;
   portfolioNav: number;
@@ -579,12 +582,13 @@ export interface BEPortfolioStructuringDTO {
   indexId: number;
   indexShortName: string;
   indexNav: number;
-  indexTotals: BEStructuringMetricTotalBlock
-  ccyBreakdown: BEStructuringBreakdownBlock
-  bicsLevel1Breakdown: BEStructuringBreakdownBlock
-  bicsLevel2Breakdown?: BEStructuringBreakdownBlock
-  bicsLevel3Breakdown?: BEStructuringBreakdownBlock
-  ratingBreakdown: BEStructuringBreakdownBlock
-  tenorBreakdown: BEStructuringBreakdownBlock
-  overrides?: BEStructuringBreakdownBlock
+  indexTotals: BEStructuringMetricTotalBlock;
+  inDb: boolean;
+  ccyBreakdown: BEStructuringBreakdownBlock;
+  bicsLevel1Breakdown: BEStructuringBreakdownBlock;
+  bicsLevel2Breakdown?: BEStructuringBreakdownBlock;
+  bicsLevel3Breakdown?: BEStructuringBreakdownBlock;
+  ratingBreakdown: BEStructuringBreakdownBlock;
+  tenorBreakdown: BEStructuringBreakdownBlock;
+  overrides?: BEStructuringBreakdownBlock;
 }
