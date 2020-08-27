@@ -62,12 +62,6 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     ).subscribe((value) => {
       this.state.ownerInitial = value;
     });
-    const initialWaitForIcons = this.loadStencilFunds.bind(this
-      );
-    setTimeout(() => {
-      initialWaitForIcons();
-    }, 200);
-    this.loadInitialFunds();
     this.fetchFunds();
   }
 
@@ -80,19 +74,6 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     }
   }
 
-  private loadInitialFunds() {
-    this.portfolioList.forEach(portfolio => {
-      const eachFund = this.dtoService.formStructureFundObject(PortfolioStructuringSample, false);
-      eachFund.data.portfolioShortName = portfolio;
-      eachFund.utility.convertToK = this.convertValuesToK.bind(this);
-      this.state.fetchResult.fundList.forEach((eachPortfolio) => {
-        if (eachPortfolio.data.portfolioShortName === portfolio) {
-          eachPortfolio.data.children = eachFund.data.children;
-        }
-      });
-    });
-  }
-
   private loadStencilFunds() {
     this.state.fetchResult.fundList = this.portfolioList.map((eachPortfolioName) => {
       const eachFund = this.dtoService.formStructureFundObject(PortfolioStructuringSample, true);
@@ -102,14 +83,12 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     });
   }
 
-  private loadFundsData() {
-    this.state.fetchResult.fundList.forEach((eachFund) => {
-      eachFund.state.isStencil = false;
-      eachFund.data.children.forEach((eachChild) => {
-        eachChild.state.isStencil = false;
-        eachChild.data.categoryList.forEach((eachCategory) => {
-          eachCategory.moveVisualizer.state.isStencil = false;
-        })
+  private removeStencil(eachFund: PortfolioStructureDTO) {
+    eachFund.state.isStencil = false;
+    eachFund.data.children.forEach((eachChild) => {
+      eachChild.state.isStencil = false;
+      eachChild.data.categoryList.forEach((eachCategory) => {
+        eachCategory.moveVisualizer.state.isStencil = false;
       })
     })
   }
@@ -128,6 +107,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
 
   private fetchFunds() {
+    this.loadStencilFunds();
     const currentDate = new Date();
     const currentDateFormat = 'YYYYMMDD';
     const formattedDate = moment(currentDate).format(currentDateFormat);
@@ -143,10 +123,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
           const newFund = this.dtoService.formStructureFundObject(eachFund, false);
           newFund.utility.convertToK = this.convertValuesToK.bind(this);
           this.state.fetchResult.fundList.push(newFund);
-          const flipStencil = this.loadFundsData.bind(this);
-          setTimeout(() => {
-            flipStencil();
-          }, 1);
+          this.removeStencil(newFund);
         })
         this.state.fetchResult.fundList.length > 1 && this.sortFunds(this.state.fetchResult.fundList);
       }),
