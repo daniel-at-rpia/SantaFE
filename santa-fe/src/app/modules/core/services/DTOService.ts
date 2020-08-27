@@ -1806,28 +1806,42 @@ export class DTOService {
         }
       }
     }
-    for (const eachCategory in rawData.breakdown) {
-      const eachEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].Cs01 : null;
-      if (!!eachEntry) {
-        const eachMoveVisualizer = this.formMoveVisualizerObjectForStructuring(eachEntry, findMax, !!isStencil);
-        const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
-          category: `${eachCategory}`,
-          targetLevel: eachEntry.targetLevel,
-          targetPct: eachEntry.targetPct,
-          diffToTarget: Math.round(eachEntry.targetLevel - eachEntry.currentLevel),
+
+    const createMoveVisualizer = this.formMoveVisualizerObjectForStructuring.bind(this);
+    function createBreakdown(breakdown: BEModels.BEStructuringBreakdownSingleEntry, metricValue: PortfolioMetricValues) {
+      const eachBreakdown = breakdown;
+      if (!!eachBreakdown) {
+        const eachMoveVisualizer = createMoveVisualizer(eachBreakdown, findMax, !!isStencil);
+        const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlockDetailed = {
+          targetLevel: eachBreakdown.targetLevel,
+          targetPct: eachBreakdown.targetPct,
+          diffToTarget: Math.round(eachBreakdown.targetLevel - eachBreakdown.currentLevel),
           diffToTargetDisplay: '-',
-          currentLevel: eachEntry.currentLevel,
-          currentPct: eachEntry.currentPct,
-          indexPct: eachEntry.indexPct,
+          currentLevel: eachBreakdown.currentLevel,
+          currentPct: eachBreakdown.currentPct,
+          indexPct: eachBreakdown.indexPct,
           moveVisualizer: eachMoveVisualizer
         };
-        if (eachCategoryBlock.diffToTarget < 0) {
-          eachCategoryBlock.diffToTargetDisplay = `${eachCategoryBlock.diffToTarget}k`;
+        if (metricValue === PortfolioMetricValues.cs01) {
+          eachCategoryBlock.diffToTargetDisplay =  eachCategoryBlock.diffToTarget < 0 ? `${eachCategoryBlock.diffToTarget}k` : eachCategoryBlock.diffToTarget > 0 ? `+${eachCategoryBlock.diffToTarget}k`: null;
+          return eachCategoryBlock;
         }
-        if (eachCategoryBlock.diffToTarget > 0) {
-          eachCategoryBlock.diffToTargetDisplay = `+${eachCategoryBlock.diffToTarget}k`;
+        eachCategoryBlock.diffToTargetDisplay = eachCategoryBlock.diffToTarget < 0 ? `${eachCategoryBlock.diffToTarget}` : eachCategoryBlock.diffToTarget > 0 ? `+${eachCategoryBlock.diffToTarget}`: null;
+        return eachCategoryBlock;
+      }
+    }
+    for (const eachCategory in rawData.breakdown) {
+      if (!!rawData.breakdown[eachCategory]) {
+        if (!!rawData.breakdown[eachCategory].Cs01 && !!rawData.breakdown[eachCategory].CreditLeverage) {
+          const cs01Breakdown = createBreakdown(rawData.breakdown[eachCategory].Cs01, PortfolioMetricValues.cs01);
+          const creditLeverageBreakdown = createBreakdown(rawData.breakdown[eachCategory].CreditLeverage, PortfolioMetricValues.creditLeverage);
+          const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
+            category: `${eachCategory}`,
+            cs01: cs01Breakdown,
+            creditLeverage: creditLeverageBreakdown
+          }
+          object.data.categoryList.push(eachCategoryBlock)
         }
-        object.data.categoryList.push(eachCategoryBlock);
       }
     }
     return object;
