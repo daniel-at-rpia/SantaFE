@@ -67,7 +67,7 @@
         }
       }
     }
-    &--inactive {
+    &--inactiveState {
       #{$blockName} {
         &__type,
         &__indicator {
@@ -92,7 +92,7 @@
        }
       }
     }
-    &--empty {
+    &--emptyState {
       #{$blockName} {
         &__indicator {
           &--exceeded,
