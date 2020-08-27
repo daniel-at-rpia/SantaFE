@@ -94,7 +94,6 @@ export const AlertSample: Array<BEAlertDTO> = [
       "subIndustry":"Food-Wholesale/Distrib",
       "ticker":"SYY",
       "unitPosition":{
-        "metricDate":"2020-06-29T00:00:00-04:00",
         "securityIdentifier":"69458",
         "partitionOptionValues":{
           "PortfolioShortName":[
@@ -266,7 +265,6 @@ export const AlertSample: Array<BEAlertDTO> = [
       "subIndustry":"Diversified Banking Inst",
       "ticker":"C",
       "unitPosition":{
-        "metricDate":"2020-06-29T00:00:00-04:00",
         "securityIdentifier":"74721",
         "partitionOptionValues":{
           "PortfolioShortName":[
@@ -425,7 +423,6 @@ export const AlertSample: Array<BEAlertDTO> = [
       "subIndustry":"Commer Banks Non-US",
       "ticker":"ISPIM",
       "unitPosition":{
-        "metricDate":"2020-06-29T00:00:00-04:00",
         "securityIdentifier":"60102",
         "partitionOptionValues":{
           "PortfolioShortName":[

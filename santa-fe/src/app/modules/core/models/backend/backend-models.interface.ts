@@ -83,7 +83,6 @@ export interface BESecurityDTO {
   isPreferred?: boolean;
   isCds?: boolean;
   unitPosition?: {
-    metricDate?: string;
     mark: {
       driver: string;
       enteredTime: string;
