@@ -46,14 +46,30 @@
           'sat-portfolioBreakdown__categoryContent-list-item--negativeDiff': eachCategory.diffToTarget < 0
         }">
         <span class="sat-portfolioBreakdown__categoryContent-list-item-title">{{eachCategory.category}}</span>
-        <div class="sat-portfolioBreakdown__categoryContent-list-item-moveVisualizer">
-          <move-visualizer [visualizerData]="eachCategory.moveVisualizer"></move-visualizer>
+        <div *ngIf="selectedMetricValue === constants.cs01; else creditLeverageVisualizer" class="sat-portfolioBreakdown__categoryContent-list-item-moveVisualizer">
+          <move-visualizer [visualizerData]="eachCategory.cs01.moveVisualizer"></move-visualizer>
         </div>
-        <div class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--target">{{eachCategory.diffToTargetDisplay}}</div>
+        <ng-template #creditLeverageVisualizer>
+          <div class="sat-portfolioBreakdown__categoryContent-list-item-moveVisualizer">
+            <move-visualizer [visualizerData]="eachCategory.creditLeverage.moveVisualizer"></move-visualizer>
+          </div>
+        </ng-template>
+        <div *ngIf="selectedMetricValue === constants.cs01; else creditLeverageDiffToTargetDisplay" class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--target">
+          {{eachCategory.cs01.diffToTargetDisplay}}
+        </div>
+        <ng-template #creditLeverageDiffToTargetDisplay>
+          <div class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--target">{{eachCategory.creditLeverage.diffToTargetDisplay}}</div>
+        </ng-template>
         <hr class="sat-portfolioBreakdown__categoryContent-list-item-cellDivider">
-        <div class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--current">{{eachCategory.currentPct}}%</div>
+        <div *ngIf="selectedMetricValue === constants.cs01; else creditLeverageCurrentPct"class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--current">{{eachCategory.cs01.currentPct}}%</div>
+        <ng-template #creditLeverageCurrentPct>
+          <div class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--current">{{eachCategory.creditLeverage.currentPct}}%</div>
+        </ng-template>
         <hr class="sat-portfolioBreakdown__categoryContent-list-item-cellDivider">
-        <div class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--index">{{eachCategory.indexPct}}%</div>
+        <div *ngIf="selectedMetricValue === constants.cs01;else creditLeverageIndexPct"class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--index">{{eachCategory.cs01.indexPct}}%</div>
+        <ng-template #creditLeverageIndexPct>
+          <div class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--index">{{eachCategory.creditLeverage.indexPct}}%</div>
+        </ng-template>
       </li>
     </ul>
   </section>
