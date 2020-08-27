@@ -34,7 +34,7 @@ export interface BEFullSecurityDTO {
 }
 
 export interface BEPortfolioDTO {
-  partitionOptionValue: {
+  partitionOptionValues: {
     PortfolioShortName: string;
     StrategyName: string;
   }
