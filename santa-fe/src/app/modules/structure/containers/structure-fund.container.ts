@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation, OnChanges } from '@angular/core';
 import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.interface';
 import {PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 import { DTOService } from 'Core/services/DTOService';
@@ -31,6 +31,17 @@ export class StructureFund implements OnInit {
   public ngOnInit() {
     this.targetBarCS01 = this.createTargetBar(this.constants.cs01, this.fund.data.currentTotals.cs01, this.fund.data.target.target.cs01, this.selectedMetricValue, this.fund.state.isStencil);
     this.targetBarLeverage = this.createTargetBar(this.constants.creditLeverage, this.fund.data.currentTotals.creditLeverage, this.fund.data.target.target.creditLeverage, this.selectedMetricValue, this.fund.state.isStencil)
+  }
+
+  public ngOnChanges() {
+    if (this.targetBarLeverage && this.targetBarCS01) {
+      if (this.targetBarCS01.data.currentValue && this.targetBarCS01.data.targetValue && this.targetBarLeverage.data.currentValue && this.targetBarLeverage.data.targetValue) {
+        this.targetBarCS01.data.selectedMetricValue = this.selectedMetricValue;
+        this.targetBarLeverage.data.selectedMetricValue = this.selectedMetricValue;
+        this.targetBarCS01.utility.setInactiveMetric(this.targetBarCS01);
+        this.targetBarLeverage.utility.setInactiveMetric(this.targetBarLeverage);
+      }
+    }
   }
 
   private createTargetBar(constantValue: PortfolioMetricValues, currentValue: number, targetValue: number, selectedMetric: PortfolioMetricValues, isStencil: boolean) {

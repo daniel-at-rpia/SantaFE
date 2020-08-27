@@ -13,9 +13,9 @@ export class TargetBar implements OnInit {
   constructor() {}
 
   public ngOnInit() {
-   this.loadTargetBarConfiguration(this.targetBar);
+    this.loadTargetBarConfiguration(this.targetBar);
   }
-
+  
   private loadTargetBarConfiguration(targetBar: TargetBarDTO) {
     if (this.targetBar.state.isEmpty) return;
     this.targetBar.utility.getDisplayValues(targetBar);
