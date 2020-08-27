@@ -17,7 +17,7 @@ export class StructureFund implements OnInit {
   @Input() fund: PortfolioStructureDTO;
   @Input() selectedMetricValue: PortfolioMetricValues;
   targetBarCS01: TargetBarDTO;
-  targetBarLeverage: TargetBarDTO; 
+  targetBarCreditLeverage: TargetBarDTO;
   constants = {
     cs01: PortfolioMetricValues.cs01,
     creditLeverage: PortfolioMetricValues.creditLeverage
@@ -30,16 +30,16 @@ export class StructureFund implements OnInit {
 
   public ngOnInit() {
     this.targetBarCS01 = this.createTargetBar(this.constants.cs01, this.fund.data.currentTotals.cs01, this.fund.data.target.target.cs01, this.selectedMetricValue, this.fund.state.isStencil);
-    this.targetBarLeverage = this.createTargetBar(this.constants.creditLeverage, this.fund.data.currentTotals.creditLeverage, this.fund.data.target.target.creditLeverage, this.selectedMetricValue, this.fund.state.isStencil)
+    this.targetBarCreditLeverage = this.createTargetBar(this.constants.creditLeverage, this.fund.data.currentTotals.creditLeverage, this.fund.data.target.target.creditLeverage, this.selectedMetricValue, this.fund.state.isStencil)
   }
 
   public ngOnChanges() {
-    if (this.targetBarLeverage && this.targetBarCS01) {
-      if (this.targetBarCS01.data.currentValue && this.targetBarCS01.data.targetValue && this.targetBarLeverage.data.currentValue && this.targetBarLeverage.data.targetValue) {
+    if (this.targetBarCreditLeverage && this.targetBarCS01) {
+      if (this.targetBarCS01.data.currentValue && this.targetBarCS01.data.targetValue && this.targetBarCreditLeverage.data.currentValue && this.targetBarCreditLeverage.data.targetValue) {
         this.targetBarCS01.data.selectedMetricValue = this.selectedMetricValue;
-        this.targetBarLeverage.data.selectedMetricValue = this.selectedMetricValue;
+        this.targetBarCreditLeverage.data.selectedMetricValue = this.selectedMetricValue;
         this.targetBarCS01.utility.setInactiveMetric(this.targetBarCS01);
-        this.targetBarLeverage.utility.setInactiveMetric(this.targetBarLeverage);
+        this.targetBarCreditLeverage.utility.setInactiveMetric(this.targetBarCreditLeverage);
       }
     }
   }
