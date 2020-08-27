@@ -242,7 +242,7 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
         },
         "positions":[
           {
-            "partitionOptionValue":{
+            "partitionOptionValues":{
               "PortfolioShortName":"DOF",
               "StrategyName":"LTOV - Spread"
             },
@@ -491,7 +491,7 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
         },
         "positions":[
           {
-            "partitionOptionValue":{
+            "partitionOptionValues":{
               "PortfolioShortName":"SOF",
               "StrategyName":"Relative Value - Single Name"
             },
@@ -778,7 +778,7 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
         },
         "positions":[
           {
-            "partitionOptionValue":{
+            "partitionOptionValues":{
               "PortfolioShortName":"DOF",
               "StrategyName":"LTOV - Yield"
             },
@@ -1473,7 +1473,7 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
             "cs01Local":149.86920957188775
           },
           {
-            "partitionOptionValue":{
+            "partitionOptionValues":{
               "PortfolioShortName":"SOF",
               "StrategyName":"LTOV - Yield"
             },
