@@ -4,7 +4,11 @@ import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { ownerInitials } from 'Core/selectors/core.selectors';
-import { PortfolioMetricValues, PortfolioShortNames } from 'Core/constants/structureConstants.constants';
+import {
+  PortfolioMetricValues,
+  PortfolioShortNames,
+  STRUCTURE_EDIT_MODAL_ID
+} from 'Core/constants/structureConstants.constants';
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 
 @Component({
@@ -22,7 +26,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   };
   constants = {
     portfolioMetricValues: PortfolioMetricValues,
-    portfolioShortNames: PortfolioShortNames
+    portfolioShortNames: PortfolioShortNames,
+    editModalId: STRUCTURE_EDIT_MODAL_ID
   };
   portfolioList: PortfolioShortNames[] = [this.constants.portfolioShortNames.SOF, this.constants.portfolioShortNames.DOF, this.constants.portfolioShortNames.AGB, this.constants.portfolioShortNames.STIP, this.constants.portfolioShortNames.CIP, this.constants.portfolioShortNames.BBB, this.constants.portfolioShortNames.FIP];
   

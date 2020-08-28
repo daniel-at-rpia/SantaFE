@@ -22,6 +22,7 @@
     flex-direction: column;
     &-btn {
       @include mix_fixed_div(absolute, $z_index_base_item_solid);
+      @include mix_border_radius(50%);
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
@@ -49,7 +50,10 @@
       flex-direction: column;
       padding: $spacing_medium;
       &-item {
-        
+        margin-top: $spacing_medium;
+        &:first-of-type {
+          margin-top: 0;
+        }
       }
     }
   }

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation, Input, Output, EventEmitter } fro
 
 import { PortfolioBreakdownDTO } from 'FEModels/frontend-models.interface';
 import { ModalService } from 'Form/services/ModalService';
+import { STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
 
 @Component({
   selector: 'portfolio-breakdown',
@@ -12,12 +13,15 @@ import { ModalService } from 'Form/services/ModalService';
 
 export class PortfolioBreakdown {
   @Input() breakdownData: PortfolioBreakdownDTO;
+  constants = {
+    editModalId: STRUCTURE_EDIT_MODAL_ID
+  };
   constructor(
     private modalService: ModalService
   ) { }
 
   public onClickEdit() {
-    this.modalService.triggerModalOpen('testModal');
+    this.modalService.triggerModalOpen(this.constants.editModalId);
   }
 
 }

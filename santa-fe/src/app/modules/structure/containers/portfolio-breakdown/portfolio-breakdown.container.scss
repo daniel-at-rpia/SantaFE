@@ -16,7 +16,7 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
   flex-direction: column;
   width: $portfolioBreakdownWidth;
   background-color: $color_white;
-  margin-top: $portfolioBreakdown_rating_thickness;
+  margin-top: $portfolioBreakdown_rating_thickness/2;
   padding: $spacing_small;
   &__title {
     @include mix_fixed_div(absolute, $z_index_base_item_solid);
