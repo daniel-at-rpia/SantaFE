@@ -111,5 +111,14 @@
           }
         }
       }
+      &#{$blockName} {
+        &--inactiveState {
+          #{$blockName} {
+            &__indicator {
+              background-color: $color_gray_6;
+            }
+          }
+        }
+      }
     }
   }

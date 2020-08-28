@@ -35,27 +35,27 @@ export class StructureFund implements OnInit {
 
   public ngOnChanges() {
     if (this.targetBarCreditLeverage && this.targetBarCS01) {
-      if (this.targetBarCS01.data.currentValue && this.targetBarCS01.data.targetValue && this.targetBarCreditLeverage.data.currentValue && this.targetBarCreditLeverage.data.targetValue) {
-        this.targetBarCS01.data.selectedMetricValue = this.selectedMetricValue;
-        this.targetBarCreditLeverage.data.selectedMetricValue = this.selectedMetricValue;
-        this.targetBarCS01.utility.setInactiveMetric(this.targetBarCS01);
-        this.targetBarCreditLeverage.utility.setInactiveMetric(this.targetBarCreditLeverage);
-      }
+      this.targetBarCS01.data.selectedMetricValue = this.selectedMetricValue;
+      this.targetBarCreditLeverage.data.selectedMetricValue = this.selectedMetricValue;
+      this.targetBarCS01.utility.setInactiveMetric(this.targetBarCS01);
+      console.log(this.targetBarCS01.state.isInactiveMetric, 'is inactive')
+      this.targetBarCreditLeverage.utility.setInactiveMetric(this.targetBarCreditLeverage);
     }
   }
 
   private createTargetBar(constantValue: PortfolioMetricValues, currentValue: number, targetValue: number, selectedMetric: PortfolioMetricValues, isStencil: boolean) {
     const newTargetBar = this.dtoService.formTargetBarObject(constantValue, currentValue,targetValue, selectedMetric, isStencil);
     newTargetBar.utility.convertNumtoStr = this.convertValuesForDisplay.bind(this);
+    newTargetBar.utility.setInactiveMetric = this.setInactiveMetric.bind(this);
     if (!targetValue) {
       newTargetBar.state.isEmpty = true;
       newTargetBar.utility.convertNumtoStr(newTargetBar);
+      newTargetBar.utility.setInactiveMetric(newTargetBar);
       newTargetBar.data.displayedResults = constantValue === this.constants.cs01 ? `${newTargetBar.data.displayedCurrentValue} / -` : `${newTargetBar.data.displayedCurrentValue} / -`;
       return newTargetBar;
     }
     newTargetBar.state.isEmpty = false;
     newTargetBar.utility.getDisplayValues = this.getDisplayedValues.bind(this);
-    newTargetBar.utility.setInactiveMetric = this.setInactiveMetric.bind(this);
     return newTargetBar;
   }
 
