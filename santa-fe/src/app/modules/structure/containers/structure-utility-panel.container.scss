@@ -5,7 +5,7 @@ $structureUtilityPanel_tongue_expandWidth: $structureUtilityPanel_width*1.5;
 $structureUtilityPanel_side_width: 10rem;
 $structureUtilityPanel_width_expand: $structureUtilityPanel_tongue_expandWidth + $structureUtilityPanel_side_width*2 + $spacing_small*2;
 $structureUtilityPanel_tongue_topGutter: convert_px_to_rem(30px);
-$structureUtilityPanel_side_btn_size: 2.25rem;
+$structureUtilityPanel_side_btn_size: convert_px_to_rem(45px);
 .sat-structureUtilityPanel {
   $blockName: &;
   @include mix_fixed_div(absolute, $z_index_UtilityTongue);
@@ -37,7 +37,7 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     transform: scale(0.01);
     &-btn {
       @include mix_fixed_div(absolute, $z_index_base_item);
-      @include roundedButton($size: $iconButton_size_regular);
+      @include roundedButton($size: $structureUtilityPanel_side_btn_size);
       padding: 0;
       &>i {
         color: $color_black;
