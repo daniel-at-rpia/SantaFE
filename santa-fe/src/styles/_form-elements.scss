@@ -42,11 +42,12 @@
       padding: 0;
       width: $iconButton_size_regular;
       height: $iconButton_size_regular;
+      font-size: $font_size_normal;
     }
     &--iconOnly#{$btnBlockName}--small {
       width: $iconButton_size_small;
       height: $iconButton_size_small;
-      font-size: $font_size_normal;
+      font-size: $font_size_small;
     }
     &--labelled#{$btnBlockName}--loading {
       @include material('none');

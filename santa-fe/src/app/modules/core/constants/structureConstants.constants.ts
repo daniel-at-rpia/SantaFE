@@ -27,3 +27,5 @@ export enum PortfolioMetricValues {
   CSO1 = 'CS01 Value',
   Leverage = 'Leverage Value'
 }
+
+export const STRUCTURE_EDIT_MODAL_ID = 'Edit Fund Target';

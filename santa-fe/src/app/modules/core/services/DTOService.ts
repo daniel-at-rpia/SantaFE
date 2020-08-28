@@ -1,5 +1,5 @@
   // dependencies
-    import { Injectable } from '@angular/core';
+    import { Injectable, ElementRef } from '@angular/core';
     import { any } from '@amcharts/amcharts4/.internal/core/utils/Array';
     import * as moment from 'moment';
 
@@ -1821,6 +1821,25 @@ export class DTOService {
         object.data.categoryList.push(eachCategoryBlock);
       }
     }
+    return object;
+  }
+
+  public formSantaModal(
+    elementRef: ElementRef
+  ): DTOs.SantaModalDTO{
+    const object: DTOs.SantaModalDTO = {
+      data: {
+        id: null,
+        modalElement: elementRef.nativeElement
+      },
+      state: {
+        isPresenting: false
+      },
+      api: {
+        openModal: null,
+        closeModal: null
+      }
+    };
     return object;
   }
 }
