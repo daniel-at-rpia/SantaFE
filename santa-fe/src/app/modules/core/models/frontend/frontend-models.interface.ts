@@ -697,6 +697,10 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     indexNav: number;
     indexTotals: PortfolioMetricTotals;
     children: Array<PortfolioBreakdownDTO>;
+    cs01TotalsInK?: {
+      currentTotal: number;
+      targetTotal: number;
+    }
   },
   api: {
     onSubmitMetricValues: (CS01: number, leverage: number) => void;
@@ -716,11 +720,13 @@ export interface TargetBarDTO extends BasicDTOStructure {
     displayedTargetValue: string;
     currentPercentage: string;
     exceededPercentage: string;
-    selectedMetricValue: PortfolioMetricValues
+    selectedMetricValue: PortfolioMetricValues;
+    displayedResults: string;
   }
   state: {
     isInactiveMetric: boolean,
     isStencil: boolean;
+    isEmpty: boolean;
   }
   utility: {
     getDisplayValues: (targetBar: TargetBarDTO) => void;

@@ -24,8 +24,8 @@ export enum PortfolioShortNames {
 }
 
 export enum PortfolioMetricValues {
-  CSO1 = 'CS01 Value',
-  Leverage = 'Leverage Value'
+  cs01 = 'CS01',
+  creditLeverage = 'Credit Leverage'
 }
 
 export const STRUCTURE_EDIT_MODAL_ID = 'Edit Fund Target';
