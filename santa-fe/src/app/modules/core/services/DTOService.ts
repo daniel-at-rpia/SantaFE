@@ -1171,14 +1171,24 @@ export class DTOService {
     max: number,
     isStencil: boolean
   ): DTOs.MoveVisualizerDTO {
-    let moveDistance, rightEdge;
+    let moveDistance, rightEdge, endPinLocation;
     if (!!rawData && !isStencil) {
-      if (rawData.targetLevel > rawData.currentLevel) {
-        moveDistance = this.utility.round(rawData.currentLevel / max * 100, 2);
-        rightEdge = this.utility.round((rawData.targetLevel - rawData.currentLevel) / max * 100, 2);
+      if (rawData.targetLevel !== null && rawData.targetLevel >= 0) {
+        // if target is set
+        if (rawData.targetLevel > rawData.currentLevel) {
+          moveDistance = this.utility.round(rawData.currentLevel / max * 100, 2);
+          rightEdge = this.utility.round((rawData.targetLevel - rawData.currentLevel) / max * 100, 2);
+          endPinLocation = moveDistance + rightEdge;
+        } else {
+          moveDistance = this.utility.round(rawData.targetLevel / max * 100, 2);
+          rightEdge = this.utility.round((rawData.currentLevel - rawData.targetLevel) / max * 100);
+          endPinLocation = moveDistance;
+        }
       } else {
-        moveDistance = this.utility.round(rawData.targetLevel / max * 100, 2);
-        rightEdge = this.utility.round((rawData.currentLevel - rawData.targetLevel) / max * 100);
+        // is target is not set
+        moveDistance = this.utility.round(rawData.currentLevel / max * 100, 2);
+        rightEdge = 0;
+        endPinLocation = moveDistance;
       }
     }
     const object: DTOs.MoveVisualizerDTO = {
@@ -1197,7 +1207,7 @@ export class DTOService {
         moveDistance: !isStencil ? moveDistance : 40,
         rightEdge: !isStencil ? rightEdge : 30,
         rightGap: 0,
-        endPinLocation: !isStencil ? rawData.currentLevel < rawData.targetLevel ? moveDistance : moveDistance + rightEdge : 40
+        endPinLocation: !isStencil ? endPinLocation : 40
       },
       state: {
         isInversed: false,
@@ -1206,7 +1216,7 @@ export class DTOService {
         isStencil: true,
         isColorCodeInversed: false,
         structuringBreakdownVariant: true,
-        structuringBreakdownExceededState: rawData.currentLevel > rawData.targetLevel
+        structuringBreakdownExceededState: rawData.targetLevel !== null && rawData.currentLevel > rawData.targetLevel
       }
     };
     return object;
@@ -1761,7 +1771,7 @@ export class DTOService {
     const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.bicsLevel1Breakdown);
     BICSBreakdown.data.title = 'BICS';
     BICSBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.SECTOR);
-    object.data.children.push(BICSBreakdown);
+    // object.data.children.push(BICSBreakdown);
     const currencyBreakdown = this.formPortfolioBreakdown(isStencil, rawData.ccyBreakdown);
     currencyBreakdown.data.title = 'Currency';
     currencyBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
@@ -1814,7 +1824,7 @@ export class DTOService {
           category: `${eachCategory}`,
           targetLevel: eachEntry.targetLevel,
           targetPct: eachEntry.targetPct,
-          diffToTarget: Math.round(eachEntry.targetLevel - eachEntry.currentLevel),
+          diffToTarget: eachEntry.targetLevel != null ? Math.round(eachEntry.targetLevel - eachEntry.currentLevel) : 0,
           diffToTargetDisplay: '-',
           currentLevel: eachEntry.currentLevel,
           currentPct: eachEntry.currentPct,
@@ -1852,4 +1862,3 @@ export class DTOService {
     return object;
   }
 }
-

@@ -150,4 +150,4 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       })
     ).subscribe()
   }
- }
+}
