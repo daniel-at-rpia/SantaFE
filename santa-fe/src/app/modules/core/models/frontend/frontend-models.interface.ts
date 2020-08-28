@@ -709,9 +709,6 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     isEditing: boolean;
     isStencil: boolean;
   }
-  utility: {
-    convertToK: (value: number) => number;
-  }
 }
 
 export interface TargetBarDTO extends BasicDTOStructure {

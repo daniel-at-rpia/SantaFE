@@ -1699,7 +1699,7 @@ export class DTOService {
       },
       state: {
         isInactiveMetric: false,
-        isStencil,
+        isStencil: !!isStencil,
         isEmpty: false
       },
       utility: {

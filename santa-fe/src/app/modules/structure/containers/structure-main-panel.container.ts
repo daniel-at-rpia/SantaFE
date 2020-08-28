@@ -18,6 +18,7 @@ import {
 } from 'Core/constants/structureConstants.constants';
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.interface';
+import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backend-models.interface';
 
 @Component({
     selector: 'structure-main-panel',
@@ -75,7 +76,14 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       const metric = value === this.constants.cs01 ? this.constants.cs01 : this.constants.creditLeverage
       this.state.selectedMetricValue = metric;
     });
-    this.fetchFunds();
+    const initialWaitForIcons = this.loadStencilFunds.bind(this);
+    setTimeout(() => {
+      initialWaitForIcons();
+    }, 200);
+    const loadData = this.fetchFunds.bind(this);
+    setTimeout(() => {
+      loadData();
+    }, 500);
   }
 
   public ngOnDestroy() {
@@ -91,7 +99,6 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.state.fetchResult.fundList = this.portfolioList.map((eachPortfolioName) => {
       const eachFund = this.dtoService.formStructureFundObject(PortfolioStructuringSample, true);
       eachFund.data.portfolioShortName = eachPortfolioName;
-      eachFund.utility.convertToK = this.convertValuesToK.bind(this);
       return eachFund;
     });
   }
@@ -131,13 +138,15 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioStructures, { req: 'POST' }, payload, false, false).pipe(
       first(),
-      tap((serverReturn) => {
+      tap((serverReturn: Array<BEPortfolioStructuringDTO>) => {
         this.state.fetchResult.fundList = [];
         serverReturn.forEach(eachFund => {
           const newFund = this.dtoService.formStructureFundObject(eachFund, false);
-          newFund.utility.convertToK = this.convertValuesToK.bind(this);
           this.state.fetchResult.fundList.push(newFund);
-          this.removeStencil(newFund);
+          const flipStencil = this.removeStencil.bind(this);
+          setTimeout(() => {
+            flipStencil(newFund);
+          }, 1)
         })
         this.state.fetchResult.fundList.length > 1 && this.sortFunds(this.state.fetchResult.fundList);
       }),
@@ -149,9 +158,5 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         return of('error')
       })
     ).subscribe()
-  }
-
-  private convertValuesToK(value: number) {
-    return value / 1000;
   }
  }

@@ -609,8 +609,8 @@ export class UtilityService {
       }
     }
 
-    public parseNumberToThousands(number: number, hasUnitSuffix: boolean): string {
-      const value = this.round(number/1000, 1).toFixed(1);
+    public parseNumberToThousands(number: number, hasUnitSuffix: boolean, decimal: number = 1): string {
+      const value = this.round(number/1000, decimal).toFixed(decimal);
       if (value === 0) {
         return null;
       } else {
