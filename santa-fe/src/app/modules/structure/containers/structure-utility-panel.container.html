@@ -7,7 +7,11 @@
     'sat-structureUtilityPanel__cs01--selected': state.selectedMetricValue === constants.cs01
   }">
     <button class="sat-structureUtilityPanel__cs01-btn" (click)="setMetricLevel(constants.cs01)">
-      <i class="fal fa-check"></i>
+      <i [ngClass]="{
+        'fal': true,
+        'fa-check': state.selectedMetricValue === constants.cs01,
+        'fa-exchange-alt': state.selectedMetricValue === constants.leverage
+      }"></i>
     </button>
     <div class="sat-structureUtilityPanel__cs01-text">
       <span class="sat-structureUtilityPanel__cs01-text-targetType">{{ constants.cs01 }}</span>
@@ -25,7 +29,11 @@
     'sat-structureUtilityPanel__leverage--selected': state.selectedMetricValue === constants.leverage
   }">
     <button class="sat-structureUtilityPanel__leverage-btn" (click)="setMetricLevel(constants.leverage)">
-      <i class="fal fa-check"></i>
+      <i [ngClass]="{
+        'fal': true,
+        'fa-check': state.selectedMetricValue === constants.leverage,
+        'fa-exchange-alt': state.selectedMetricValue === constants.cs01
+      }"></i>
     </button>
     <div class="sat-structureUtilityPanel__leverage-text">
       <span class="sat-structureUtilityPanel__leverage-text-targetType">{{ constants.leverage }}</span>
