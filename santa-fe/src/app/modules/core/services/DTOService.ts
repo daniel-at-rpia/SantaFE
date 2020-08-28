@@ -272,9 +272,9 @@ export class DTOService {
   ) {
     const lastTrade = !!targetPortfolio.trades && targetPortfolio.trades.length > 0 ? targetPortfolio.trades[targetPortfolio.trades.length-1] : null;
     const newBlock: Blocks.SecurityPortfolioBlock = {
-      portfolioName: targetPortfolio.partitionOptionValue.PortfolioShortName,
+      portfolioName: targetPortfolio.partitionOptionValues.PortfolioShortName,
       quantity: targetPortfolio.quantity,
-      strategy: targetPortfolio.partitionOptionValue.StrategyName,
+      strategy: targetPortfolio.partitionOptionValues.StrategyName,
       cs01Cad: targetPortfolio.cs01Cad,
       cs01Local: targetPortfolio.cs01Local,
       costFifoSpread: null,
