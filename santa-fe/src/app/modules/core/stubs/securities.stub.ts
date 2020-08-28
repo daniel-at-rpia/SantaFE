@@ -120,7 +120,6 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
           "subIndustry":"Telecom Services",
           "ticker":"TCN",
           "unitPosition":{
-            "metricDate":"2020-06-29T00:00:00-04:00",
             "securityIdentifier":"79",
             "partitionOptionValues":{
               "PortfolioShortName":[
@@ -146,7 +145,40 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
               "IL",
               "ST",
               "LC"
-            ]
+            ],
+            "metrics": {
+              "FO": {
+                "2020-06-29T00:00:00-04:00": {
+                  "backupPmName":"ST",
+                  "date":"2020-06-29T00:00:00-04:00",
+                  "hedgeFactor": 1,
+                  "mark":{
+                    "driver":"Spread",
+                    "enteredTime":"2020-06-29T00:00:00-04:00",
+                    "user":null,
+                    "value":124,
+                    "spread":124,
+                    "price":109.220155
+                  },
+                  "owners":[
+                    "IL",
+                    "ST",
+                    "LC"
+                  ],
+                  "partitionOptionValues":{
+                    "PortfolioShortName":[
+                      "DOF"
+                    ],
+                    "StrategyName":[
+                      "LTOV - Spread"
+                    ]
+                  },
+                  "primaryPmName":"IL",
+                  "researchName":"LC",
+                  "source": 1
+                }
+              }
+            }
           },
           "securityType":"Bond",
           "maturityType":"Callable"
@@ -242,7 +274,7 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
         },
         "positions":[
           {
-            "partitionOptionValue":{
+            "partitionOptionValues":{
               "PortfolioShortName":"DOF",
               "StrategyName":"LTOV - Spread"
             },
@@ -369,7 +401,6 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
           "subIndustry":"Cellular Telecom",
           "ticker":"S",
           "unitPosition":{
-            "metricDate":"2020-06-29T00:00:00-04:00",
             "securityIdentifier":"6113",
             "partitionOptionValues":{
               "PortfolioShortName":[
@@ -395,7 +426,40 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
               "PM",
               "DJ",
               "LC"
-            ]
+            ],
+            "metrics": {
+              "FO": {
+              "2020-06-29T00:00:00-04:00": {
+                  "backupPmName":"DJ",
+                  "date": "2020-06-29T00:00:00-04:00",
+                  "hedgeFactor":0.75,
+                  "mark":{
+                    "driver":"Price",
+                    "enteredTime":"2020-06-29T00:00:00-04:00",
+                    "user":null,
+                    "value":113.162501,
+                    "spread":324.3,
+                    "price":113.162501
+                  },
+                  "partitionOptionValues":{
+                    "PortfolioShortName":[
+                      "SOF"
+                    ],
+                    "StrategyName":[
+                      "Relative Value - Single Name"
+                    ]
+                  },
+                  "owners":[
+                    "PM",
+                    "DJ",
+                    "LC"
+                  ],
+                  "primaryPmName":"PM",
+                  "researchName":"LC",
+                  "source": 1
+                }
+              }
+            }
           },
           "securityType":"Bond",
           "maturityType":"Bullet"
@@ -491,7 +555,7 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
         },
         "positions":[
           {
-            "partitionOptionValue":{
+            "partitionOptionValues":{
               "PortfolioShortName":"SOF",
               "StrategyName":"Relative Value - Single Name"
             },
@@ -654,7 +718,6 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
           "subIndustry":"Oil Comp-Explor&Prodtn",
           "ticker":"ATHCN",
           "unitPosition":{
-            "metricDate":"2020-06-29T00:00:00-04:00",
             "securityIdentifier":"19454",
             "partitionOptionValues":{
               "PortfolioShortName":[
@@ -682,7 +745,43 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
               "DJ",
               "PM",
               "TW"
-            ]
+            ],
+            "metrics": {
+              "FO": {
+                "2020-06-29T00:00:00-04:00": {
+                  "backupPmName":"PM",
+                  "date": "2020-06-29T00:00:00-04:00",
+                  "hedgeFactor":0,
+                  "mark":{
+                    "driver":"Price",
+                    "enteredTime":"2020-06-29T00:00:00-04:00",
+                    "user":null,
+                    "value":41,
+                    "spread":8005.9,
+                    "price":41
+                  },
+                  "partitionOptionValues":{
+                    "PortfolioShortName":[
+                      "DOF",
+                      "SOF",
+                      ""
+                    ],
+                    "StrategyName":[
+                      "LTOV - Yield"
+                    ]
+                  },
+                  "owners":[
+                    "DJ",
+                    "PM",
+                    "TW"
+                  ],
+                  "primaryPmName":"DJ",
+                  "researchName":"TW",
+                  "source": 1
+                }
+              }
+              
+            }
           },
           "securityType":"Bond",
           "maturityType":"Callable"
@@ -778,7 +877,7 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
         },
         "positions":[
           {
-            "partitionOptionValue":{
+            "partitionOptionValues":{
               "PortfolioShortName":"DOF",
               "StrategyName":"LTOV - Yield"
             },
@@ -1473,7 +1572,7 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
             "cs01Local":149.86920957188775
           },
           {
-            "partitionOptionValue":{
+            "partitionOptionValues":{
               "PortfolioShortName":"SOF",
               "StrategyName":"LTOV - Yield"
             },
