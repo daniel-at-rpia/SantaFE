@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
 import { CoreModule } from 'Core/core.module';
+import { FormModule } from 'App/modules/form/form.module';
 import { TradeModule } from 'Trade/trade.module';
 import { StructurePage } from 'Structure/structure.page';
 import { NavigationModule } from 'Core/constants/coreConstants.constant';
@@ -34,7 +35,8 @@ import { PortfolioBreakdown } from 'App/modules/structure/containers/portfolio-b
     ]),
     // Native modules
     CoreModule,
-    TradeModule
+    TradeModule,  // this is here because of move visualizer, TODO: move Move Visualizer to core module and remove this dependency
+    FormModule
   ]
 })
 export class StructureModule { }

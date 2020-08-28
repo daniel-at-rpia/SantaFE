@@ -1,0 +1,20 @@
+<article
+  [ngClass]="{
+    'santaModal': true,
+    'santaModal--presentState': modalData.state.isPresenting
+  }">
+  <section (click)="closeModal()" class="santaModal__background"></section>
+  <section class="santaModal__foreground">
+    <div class="santaModal__foreground-title">
+      <span class="santaModal__foreground-title-text">Modal - {{modalData.data.id}}</span>
+    </div>
+    <hr class="santaModal__foreground-divider">
+    <div class="santaModal__foreground-content">
+      <ng-content></ng-content>
+    </div>
+  </section>
+  <section class="santaModal__ctas">
+    <button (click)="closeModal()" class="santaBtn--iconOnly santaModal__ctas-btn santaModal__ctas-btn--cancel fal fa-times"></button>
+    <button class="santaBtn--iconOnly santaModal__ctas-btn santaModal__ctas-btn--confirm fal fa-check"></button>
+  </section>
+</article>

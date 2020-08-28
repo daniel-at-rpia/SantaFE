@@ -2,6 +2,9 @@ import { Component, OnInit, ViewEncapsulation, Input, Output, EventEmitter } fro
 
 import { PortfolioBreakdownDTO } from 'FEModels/frontend-models.interface';
 import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import { ModalService } from 'Form/services/ModalService';
+import { STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
+
 @Component({
   selector: 'portfolio-breakdown',
   templateUrl: './portfolio-breakdown.container.html',
@@ -14,8 +17,15 @@ export class PortfolioBreakdown {
   @Input() selectedMetricValue: PortfolioMetricValues;
   constants = {
     cs01: PortfolioMetricValues.cs01,
-    creditLeverage: PortfolioMetricValues.creditLeverage
+    creditLeverage: PortfolioMetricValues.creditLeverage,
+    editModalId: STRUCTURE_EDIT_MODAL_ID
   }
-  constructor() { }
+  constructor(
+    private modalService: ModalService
+  ) { }
+
+  public onClickEdit() {
+    this.modalService.triggerModalOpen(this.constants.editModalId);
+  }
 
 }

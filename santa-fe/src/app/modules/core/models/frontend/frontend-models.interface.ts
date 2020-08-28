@@ -737,3 +737,17 @@ export interface TargetBarDTO extends BasicDTOStructure {
     setInactiveMetric: (targetBar: TargetBarDTO) => void;
   }
 }
+
+export interface SantaModalDTO extends BasicDTOStructure {
+  data: {
+    id: string;
+    modalElement: Node;
+  },
+  state: {
+    isPresenting: boolean;
+  },
+  api: {
+    openModal: () => void;
+    closeModal: () => void;
+  }
+}
