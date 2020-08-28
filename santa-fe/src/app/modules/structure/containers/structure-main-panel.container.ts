@@ -4,12 +4,16 @@ import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { ownerInitials } from 'Core/selectors/core.selectors';
-import { PortfolioMetricValues, PortfolioShortNames } from 'Core/constants/structureConstants.constants';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { of  } from 'rxjs';
 import { catchError, first, tap} from 'rxjs/operators';
 import { UtilityService } from 'Core/services/UtilityService';
 import * as moment from 'moment';
+import {
+  PortfolioMetricValues,
+  PortfolioShortNames,
+  STRUCTURE_EDIT_MODAL_ID
+} from 'Core/constants/structureConstants.constants';
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.interface';
 
@@ -29,7 +33,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   constants = {
     cs01: PortfolioMetricValues.cs01,
     creditLeverage: PortfolioMetricValues.creditLeverage,
-    portfolioShortNames: PortfolioShortNames
+    portfolioShortNames: PortfolioShortNames,
+    editModalId: STRUCTURE_EDIT_MODAL_ID
   };
   portfolioList: Array<PortfolioShortNames> = [this.constants.portfolioShortNames.SOF, this.constants.portfolioShortNames.DOF, this.constants.portfolioShortNames.AGB, this.constants.portfolioShortNames.STIP, this.constants.portfolioShortNames.CIP, this.constants.portfolioShortNames.BBB, this.constants.portfolioShortNames.FIP];
   
