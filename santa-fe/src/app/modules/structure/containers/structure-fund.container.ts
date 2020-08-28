@@ -50,7 +50,7 @@ export class StructureFund implements OnInit {
     if (!targetValue) {
       newTargetBar.state.isEmpty = true;
       newTargetBar.utility.convertNumtoStr(newTargetBar);
-      newTargetBar.data.displayedResults = constantValue === this.constants.cs01 ? `${newTargetBar.data.displayedCurrentValue}/0K` : `${newTargetBar.data.displayedCurrentValue}/0`;
+      newTargetBar.data.displayedResults = constantValue === this.constants.cs01 ? `${newTargetBar.data.displayedCurrentValue} / -` : `${newTargetBar.data.displayedCurrentValue} / -`;
       return newTargetBar;
     }
     newTargetBar.state.isEmpty = false;
