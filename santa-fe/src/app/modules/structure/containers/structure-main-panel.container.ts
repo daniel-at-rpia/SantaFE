@@ -83,7 +83,6 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.state.fetchResult.fundList = this.portfolioList.map((eachPortfolioName) => {
       const eachFund = this.dtoService.formStructureFundObject(PortfolioStructuringSample, true);
       eachFund.data.portfolioShortName = eachPortfolioName;
-      eachFund.utility.convertToK = this.convertValuesToK.bind(this);
       return eachFund;
     });
   }
@@ -126,7 +125,6 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         this.state.fetchResult.fundList = [];
         serverReturn.forEach(eachFund => {
           const newFund = this.dtoService.formStructureFundObject(eachFund, false);
-          newFund.utility.convertToK = this.convertValuesToK.bind(this);
           this.state.fetchResult.fundList.push(newFund);
           this.removeStencil(newFund);
         })
@@ -140,9 +138,5 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         return of('error')
       })
     ).subscribe()
-  }
-
-  private convertValuesToK(value: number) {
-    return value / 1000;
   }
  }

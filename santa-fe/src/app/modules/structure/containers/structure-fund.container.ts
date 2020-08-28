@@ -72,13 +72,13 @@ export class StructureFund implements OnInit {
 
   private convertValuesForDisplay(targetBar: TargetBarDTO) {
    if (targetBar.data.targetMetric === PortfolioMetricValues.cs01) {
-      targetBar.data.currentValue = this.fund.utility.convertToK(targetBar.data.currentValue);
-      targetBar.data.targetValue = this.fund.utility.convertToK(targetBar.data.targetValue);
-      this.getRoundedValues(targetBar);
+      targetBar.data.displayedCurrentValue = this.utilityService.parseNumberToThousands(targetBar.data.currentValue, true, 0);
+      targetBar.data.displayedTargetValue = this.utilityService.parseNumberToThousands(targetBar.data.targetValue,true, 0);
       targetBar.data.displayedResults = this.getDisplayedResults(targetBar.data.displayedCurrentValue, targetBar.data.displayedTargetValue);
       return;
     }
-    this.getRoundedValues(targetBar);
+    targetBar.data.displayedCurrentValue = this.utilityService.round(targetBar.data.currentValue,2);
+    targetBar.data.displayedTargetValue = this.utilityService.round(targetBar.data.targetValue,2);
     targetBar.data.displayedResults = this.getDisplayedResults(targetBar.data.displayedCurrentValue, targetBar.data.displayedTargetValue);
   }
 }
