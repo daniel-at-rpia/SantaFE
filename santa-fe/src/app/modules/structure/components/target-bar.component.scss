@@ -2,6 +2,7 @@
 
 .sat-fundTargetBar {
   $blockName: &;
+  position: relative;
     &__type {
       font-size: $font_size_small;
       margin: 0 0 $spacing_x_small 0;
@@ -14,9 +15,15 @@
       @include mix_fixed_div(relative, $z_index_base_item);
       height: $spacing_large;
       overflow: hidden;
-      &--total,
-      &--exceeded,
-      &--current,
+      &:hover,
+      &:focus {
+        + #{$blockName} {
+          &__tooltip {
+            display: block;
+          }
+        }
+      }
+      &-bar,
       &-values {
         @include mix_fixed_div(absolute, $z_index_base_item_solid);
         display: inline-block;
@@ -57,6 +64,21 @@
           color: $font_color_inverse;
         }
       }
+    }
+    &__tooltip {
+      @include mix_fixed_div(absolute, $z_index_hovering_item);
+      @include mix_border_radius(3px);
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+      color: $font_color_inverse;
+      line-height: $line_height_small;
+      background-color:  $color_active;
+      text-align: center;
+      width:100%;
+      padding: $spacing_xx_small;
+      font-size: $font_size_x_small;
+      margin-top: $spacing_xx_small;
     }
     &--stencilState {
       #{$blockName} {
