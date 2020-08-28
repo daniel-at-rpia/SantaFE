@@ -16,6 +16,7 @@ import {
 } from 'Core/constants/structureConstants.constants';
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.interface';
+import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backend-models.interface';
 
 @Component({
     selector: 'structure-main-panel',
@@ -128,7 +129,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioStructures, { req: 'POST' }, payload, false, false).pipe(
       first(),
-      tap((serverReturn) => {
+      tap((serverReturn: Array<BEPortfolioStructuringDTO>) => {
         this.state.fetchResult.fundList = [];
         serverReturn.forEach(eachFund => {
           const newFund = this.dtoService.formStructureFundObject(eachFund, false);
