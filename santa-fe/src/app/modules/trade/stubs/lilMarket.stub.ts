@@ -209,7 +209,6 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
         "subIndustry":"Telecom Services",
         "ticker":"TCN",
         "unitPosition":{
-          "metricDate":"2020-06-29T00:00:00-04:00",
           "securityIdentifier":"79",
           "partitionOptionValues":{
             "PortfolioShortName":[
@@ -235,7 +234,40 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
             "IL",
             "ST",
             "LC"
-          ]
+          ],
+          "metrics": {
+            "FO": {
+              "2020-06-29T00:00:00-04:00": {
+                "backupPmName":"ST",
+                "date": "2020-06-29T00:00:00-04:00",
+                "hedgeFactor":1,
+                "mark":{
+                  "driver":"Spread",
+                  "enteredTime":"2020-06-29T00:00:00-04:00",
+                  "user":null,
+                  "value":124,
+                  "spread":124,
+                  "price":109.220155
+                },
+                "partitionOptionValues":{
+                  "PortfolioShortName":[
+                    "DOF"
+                  ],
+                  "StrategyName":[
+                    "LTOV - Spread"
+                  ]
+                },
+                "owners":[
+                  "IL",
+                  "ST",
+                  "LC"
+                ],
+                "primaryPmName":"IL",
+                "researchName":"LC",
+                "source": 1
+              }
+            }
+          }
         },
         "securityType":"Bond",
         "maturityType":"Callable"

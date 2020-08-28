@@ -94,7 +94,6 @@ export const AlertSample: Array<BEAlertDTO> = [
       "subIndustry":"Food-Wholesale/Distrib",
       "ticker":"SYY",
       "unitPosition":{
-        "metricDate":"2020-06-29T00:00:00-04:00",
         "securityIdentifier":"69458",
         "partitionOptionValues":{
           "PortfolioShortName":[
@@ -120,7 +119,40 @@ export const AlertSample: Array<BEAlertDTO> = [
           "DA",
           "DM",
           "PD"
-        ]
+        ],
+        "metrics": {
+          "FO": {
+            "2020-06-29T00:00:00-04:00": {
+              "backupPmName":"DM",
+              "date": "2020-06-29T00:00:00-04:00",
+              "hedgeFactor": 1,
+              "mark": {
+                "driver":"Spread",
+                "enteredTime":"2020-06-29T00:00:00-04:00",
+                "user":null,
+                "value":275,
+                "spread":275,
+                "price":142.194017
+              },
+              "owners":[
+                "DA",
+                "DM",
+                "PD"
+              ],
+              "partitionOptionValues":{
+                "PortfolioShortName":[
+                  "STIP"
+                ],
+                "StrategyName":[
+                  "LTOV - Spread"
+                ]
+              },
+              "primaryPmName":"DA",
+              "researchName":"PD",
+              "source": 1
+            }
+          }
+        }
       },
       "securityType":"Bond",
       "maturityType":"Callable"
@@ -266,7 +298,6 @@ export const AlertSample: Array<BEAlertDTO> = [
       "subIndustry":"Diversified Banking Inst",
       "ticker":"C",
       "unitPosition":{
-        "metricDate":"2020-06-29T00:00:00-04:00",
         "securityIdentifier":"74721",
         "partitionOptionValues":{
           "PortfolioShortName":[
@@ -296,7 +327,44 @@ export const AlertSample: Array<BEAlertDTO> = [
           "ST",
           "DA",
           "LP"
-        ]
+        ],
+        "metrics":{
+          "FO": {
+            "2020-06-29T08:14:22.442-04:00": {
+              "backupPmName":"DA",
+              "date": "2020-06-29T08:14:22.442-04:00",
+              "hedgeFactor":1.0,
+              "mark":{
+                "driver":"Spread",
+                "enteredTime":"2020-06-29T08:14:22.442-04:00",
+                "user":"DM",
+                "value":158.0,
+                "spread":158.0,
+                "price":102.950161
+              },
+              "partitionOptionValues":{
+                "PortfolioShortName":[
+                  "AGB",
+                  "BBB",
+                  "CIP",
+                  "STIP",
+                  ""
+                ],
+                "StrategyName":[
+                  ""
+                ]
+              },
+              "owners":[
+                "ST",
+                "DA",
+                "LP"
+              ],
+              "primaryPmName":"ST",
+              "researchName":"LP",
+              "source": 1
+            }
+          }
+        }
       },
       "securityType":"Bond",
       "maturityType":"Callable"
@@ -425,7 +493,6 @@ export const AlertSample: Array<BEAlertDTO> = [
       "subIndustry":"Commer Banks Non-US",
       "ticker":"ISPIM",
       "unitPosition":{
-        "metricDate":"2020-06-29T00:00:00-04:00",
         "securityIdentifier":"60102",
         "partitionOptionValues":{
           "PortfolioShortName":[
@@ -454,7 +521,43 @@ export const AlertSample: Array<BEAlertDTO> = [
           "DM",
           "RS",
           "LP"
-        ]
+        ],
+        "metrics": {
+          "FO": {
+            "2020-06-29T00:00:00-04:00": {
+              "backupPmName":"RS",
+              "date": "2020-06-29T00:00:00-04:00",
+              "hedgeFactor":1.0,
+              "mark":{
+                "driver":"Spread",
+                "enteredTime":"2020-06-29T00:00:00-04:00",
+                "user":null,
+                "value":245.0,
+                "spread":245.0,
+                "price":102.025422
+              },
+              "partitionOptionValues":{
+                "PortfolioShortName":[
+                  "AGB",
+                  "DOF",
+                  "STIP",
+                  ""
+                ],
+                "StrategyName":[
+                  "LTOV - Spread"
+                ]
+              },
+              "owners":[
+                "DM",
+                "RS",
+                "LP"
+              ],
+              "primaryPmName":"DM",
+              "researchName":"LP",
+              "source": 1
+            }
+          }
+        }
       },
       "securityType":"Bond",
       "maturityType":"Bullet"
