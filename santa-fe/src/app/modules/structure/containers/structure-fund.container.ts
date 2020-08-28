@@ -40,7 +40,6 @@ export class StructureFund implements OnInit {
       this.targetBarCS01.data.selectedMetricValue = this.selectedMetricValue;
       this.targetBarCreditLeverage.data.selectedMetricValue = this.selectedMetricValue;
       this.targetBarCS01.utility.setInactiveMetric(this.targetBarCS01);
-      console.log(this.targetBarCS01.state.isInactiveMetric, 'is inactive')
       this.targetBarCreditLeverage.utility.setInactiveMetric(this.targetBarCreditLeverage);
     }
   }
