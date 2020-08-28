@@ -67,7 +67,14 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     ).subscribe((value) => {
       this.state.ownerInitial = value;
     });
-    this.fetchFunds();
+    const initialWaitForIcons = this.loadStencilFunds.bind(this);
+    setTimeout(() => {
+      initialWaitForIcons();
+    }, 200);
+    const loadData = this.fetchFunds.bind(this);
+    setTimeout(() => {
+      loadData();
+    }, 500);
   }
 
   public ngOnDestroy() {
@@ -126,7 +133,10 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         serverReturn.forEach(eachFund => {
           const newFund = this.dtoService.formStructureFundObject(eachFund, false);
           this.state.fetchResult.fundList.push(newFund);
-          this.removeStencil(newFund);
+          const flipStencil = this.removeStencil.bind(this);
+          setTimeout(() => {
+            flipStencil(newFund);
+          }, 1)
         })
         this.state.fetchResult.fundList.length > 1 && this.sortFunds(this.state.fetchResult.fundList);
       }),
