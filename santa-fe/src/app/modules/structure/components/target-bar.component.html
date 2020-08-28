@@ -8,13 +8,13 @@
 >
     <p class="sat-fundTargetBar__type">{{ targetBar.data.targetMetric }}</p>
     <section class="sat-fundTargetBar__indicator">
-      <div class="sat-fundTargetBar__indicator--total"></div>
+      <div class="sat-fundTargetBar__indicator-bar sat-fundTargetBar__indicator-bar--total"></div>
       <div
       [ngStyle]="{'width': targetBar.data.exceededPercentage}"
-      class="sat-fundTargetBar__indicator--exceeded"></div>
+      class="sat-fundTargetBar__indicator-bar sat-fundTargetBar__indicator-bar--exceeded"></div>
       <div
       [ngStyle]="{'width': targetBar.data.currentPercentage}"
-      class="sat-fundTargetBar__indicator--current"></div>
+      class="sat-fundTargetBar__indicator-bar sat-fundTargetBar__indicator-bar--current"></div>
       <div
       class="sat-fundTargetBar__indicator-values">
         <span class="sat-fundTargetBar__indicator-values-text">{{ targetBar.data.displayedResults }}</span>
