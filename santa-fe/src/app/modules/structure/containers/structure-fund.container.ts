@@ -46,15 +46,16 @@ export class StructureFund implements OnInit {
 
   private createTargetBar(constantValue: PortfolioMetricValues, currentValue: number, targetValue: number, selectedMetric: PortfolioMetricValues, isStencil: boolean) {
     const newTargetBar = this.dtoService.formTargetBarObject(constantValue, currentValue,targetValue, selectedMetric, isStencil);
-    if (targetValue === null || currentValue === null) {
+    newTargetBar.utility.convertNumtoStr = this.convertValuesForDisplay.bind(this);
+    if (!targetValue) {
       newTargetBar.state.isEmpty = true;
-      newTargetBar.data.displayedResults = 'N/A';
+      newTargetBar.utility.convertNumtoStr(newTargetBar);
+      newTargetBar.data.displayedResults = constantValue === this.constants.cs01 ? `${newTargetBar.data.displayedCurrentValue}/0K` : `${newTargetBar.data.displayedCurrentValue}/0`;
       return newTargetBar;
     }
     newTargetBar.state.isEmpty = false;
     newTargetBar.utility.getDisplayValues = this.getDisplayedValues.bind(this);
     newTargetBar.utility.setInactiveMetric = this.setInactiveMetric.bind(this);
-    newTargetBar.utility.convertNumtoStr = this.convertValuesForDisplay.bind(this);
     return newTargetBar;
   }
 
