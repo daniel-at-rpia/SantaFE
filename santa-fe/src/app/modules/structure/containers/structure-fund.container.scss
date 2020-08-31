@@ -2,6 +2,7 @@
 @import "modules/structure/structure.scss";
 
 .sat-fundStructuring {
+  $blockName: &;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -53,6 +54,27 @@
         margin-top: $spacing_medium;
         &:first-of-type {
           margin-top: 0;
+        }
+      }
+    }
+    &-error-message {
+      display: none;
+      width: 70%;
+      margin: 0 auto;
+      text-align: center
+    }
+  }
+  &--errorState {
+    flex: 1 1 auto;
+    #{$blockName} {
+      &__content {
+        &-breakdownList {
+          &-item {
+            display: none;
+          }
+        }
+        &-error-message {
+          display: block;
         }
       }
     }

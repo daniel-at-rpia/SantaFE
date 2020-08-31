@@ -1,14 +1,19 @@
 <article [ngClass]="{
-  'sat-fundStructuring': true
+  'sat-fundStructuring': true,
+  'sat-fundStructuring--errorState': fetchDataFailedState
   }">
   <header class="sat-fundStructuring__configuration">
     <div class="sat-fundStructuring__targetBar">
-      <target-bar [targetBar]="targetBarLeverage">
+      <target-bar
+        [targetBar]="targetBarLeverage"
+        [fetchDataFailedState]="fetchDataFailedState">
       </target-bar>
     </div>
     <h2 class="sat-fundStructuring__configuration-title">{{ fund.data.portfolioShortName }}</h2>
     <div class="sat-fundStructuring__targetBar">
-      <target-bar [targetBar]="targetBarCS01">
+      <target-bar
+        [targetBar]="targetBarCS01"
+        [fetchDataFailedState]="fetchDataFailedState">
       </target-bar>
     </div>
   </header>

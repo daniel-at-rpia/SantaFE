@@ -16,6 +16,7 @@ import { UtilityService } from 'Core/services/UtilityService'
 export class StructureFund implements OnInit {
   @Input() fund: PortfolioStructureDTO;
   @Input() selectedMetricValue: PortfolioMetricValues;
+  @Input() fetchDataFailedState: boolean;
   targetBarCS01: TargetBarDTO;
   targetBarLeverage: TargetBarDTO; 
   constants = {
