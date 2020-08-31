@@ -282,7 +282,9 @@ export interface PortfolioBreakdownCategoryBlock {
   diffToTargetDisplay: string;
   currentLevel: number;
   currentPct: number;
+  currentPctDisplay: string;
   indexPct: number;
+  indexPctDisplay: string;
   moveVisualizer: DTOs.MoveVisualizerDTO;
 }
 

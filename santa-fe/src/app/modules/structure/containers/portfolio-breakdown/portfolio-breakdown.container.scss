@@ -49,16 +49,17 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
     width: $portfolioBreakdown_rating_width;
     height: $portfolioBreakdown_rating_thickness;
     overflow: hidden;
-    background-color: $color_active;
+    background-color: $color_white;
     &-fill {
       @include mix_fixed_div(absolute, $z_index_base_item_solid);
       height: 100%;
       background-color: $color_red_5;
       left: 0;
+      display: none;
     }
     &-hoverText {
       @include mix_fixed_div(absolute, $z_index_hovering_item);
-      color: $font_color_inverse;
+      color: $font_color_minor;
       font-size: $font_size_normal;
     }
   }
@@ -174,6 +175,19 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
           background-color: $color_stencil;
           color: $color_stencil;
           // line-height: 
+        }
+      }
+    }
+  }
+  &--ratingAvailableState {
+    #{$blockName} {
+      &__rating {
+        background-color: $color_active;
+        &-fill {
+          display: flex;
+        }
+        &-hoverText {
+          color: $font_color_inverse;
         }
       }
     }

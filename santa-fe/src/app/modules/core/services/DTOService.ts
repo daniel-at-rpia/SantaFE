@@ -1118,7 +1118,8 @@ export class DTOService {
         min: 0,
         max: 0,
         isBasis: false,
-        timeSeries: []
+        timeSeries: [],
+        endPinText: '123'
       },
       style: {
         leftGap: 10,
@@ -1142,6 +1143,7 @@ export class DTOService {
       if (rawData != null) {
         object.data.start = rawData.startMetric != null ? this.utility.round(rawData.startMetric) : null;
         object.data.end = rawData.endMetric != null ? this.utility.round(rawData.endMetric) : null;
+        object.data.endPinText = `${object.data.end}`;
         object.data.min = rawData.minMetric != null ? this.utility.round(rawData.minMetric) : null;
         object.data.max = rawData.maxMetric != null ? this.utility.round(rawData.maxMetric) : null;
         object.state.isInversed = rawData.startMetric > rawData.endMetric;
@@ -1160,6 +1162,7 @@ export class DTOService {
       } else {
         object.data.start = null;
         object.data.end = null;
+        object.data.endPinText = '';
         object.state.isInvalid = true;
       }
     }
@@ -1199,7 +1202,8 @@ export class DTOService {
         min: 0,
         max: 0,
         isBasis: false,
-        timeSeries: []
+        timeSeries: [],
+        endPinText: ''
       },
       style: {
         leftGap: 0,
@@ -1796,7 +1800,7 @@ export class DTOService {
         title: '',
         definition: null,
         displayCategoryList: [],
-        ratingHoverText: !isStencil ? '20%' : '33%',
+        ratingHoverText: !isStencil ? 'n/a' : '33%',
         rawCs01CategoryList: [],
         rawLeverageCategoryList: []
       },
@@ -1806,7 +1810,8 @@ export class DTOService {
       state: {
         isEditing: false,
         isStencil: true,
-        isDisplayingCs01: true
+        isDisplayingCs01: true,
+        isTargetAlignmentRatingAvail: false
       }
     };
     let findMax = 0;
@@ -1825,7 +1830,8 @@ export class DTOService {
         findMax,
         isStencil,
         eachCategory,
-        rawData.breakdown[eachCategory].Cs01
+        rawData.breakdown[eachCategory].Cs01,
+        true
       );
       !!eachCs01CategoryBlock && object.data.rawCs01CategoryList.push(eachCs01CategoryBlock);
       const eachLeverageCategoryBlock = this.formPortfolioBreakdownCategoryBlock(
@@ -1833,7 +1839,8 @@ export class DTOService {
         findMax,
         isStencil,
         eachCategory,
-        rawData.breakdown[eachCategory].CreditLeverage
+        rawData.breakdown[eachCategory].CreditLeverage,
+        false
       );
       !!eachLeverageCategoryBlock && object.data.rawLeverageCategoryList.push(eachLeverageCategoryBlock);
     }
@@ -1845,19 +1852,26 @@ export class DTOService {
     maxValue: number,
     isStencil: boolean,
     categoryName: string,
-    rawCategoryData: BEModels.BEStructuringBreakdownSingleEntry 
+    rawCategoryData: BEModels.BEStructuringBreakdownSingleEntry,
+    isCs01: boolean
   ): Blocks.PortfolioBreakdownCategoryBlock {
     if (!!rawCategoryData) {
+      rawCategoryData.currentLevel = !!isCs01 ? this.utility.round(rawCategoryData.currentLevel/1000, 0) : this.utility.round(rawCategoryData.currentLevel, 2);
+      maxValue = !!isCs01 ? maxValue/1000 : maxValue;
+      minValue = !!isCs01 ? minValue/1000 : minValue;
       const eachMoveVisualizer = this.formMoveVisualizerObjectForStructuring(rawCategoryData, maxValue, !!isStencil);
+      eachMoveVisualizer.data.endPinText = !!isCs01 ? `${eachMoveVisualizer.data.end}k` : `${eachMoveVisualizer.data.end}`;
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
         category: `${categoryName}`,
         targetLevel: rawCategoryData.targetLevel,
-        targetPct: rawCategoryData.targetPct,
+        targetPct: this.utility.round(rawCategoryData.targetPct*100, 1),
         diffToTarget: rawCategoryData.targetLevel != null ? Math.round(rawCategoryData.targetLevel - rawCategoryData.currentLevel) : 0,
         diffToTargetDisplay: '-',
         currentLevel: rawCategoryData.currentLevel,
-        currentPct: rawCategoryData.currentPct,
+        currentPct: this.utility.round(rawCategoryData.currentPct*100, 1),
+        currentPctDisplay: rawCategoryData.currentPct != null ? `${this.utility.round(rawCategoryData.currentPct*100, 1)}%` : '-',
         indexPct: rawCategoryData.indexPct,
+        indexPctDisplay: rawCategoryData.indexPct != null ? `${this.utility.round(rawCategoryData.indexPct*100, 1)}%` : '-',
         moveVisualizer: eachMoveVisualizer
       };
       if (eachCategoryBlock.diffToTarget < 0) {

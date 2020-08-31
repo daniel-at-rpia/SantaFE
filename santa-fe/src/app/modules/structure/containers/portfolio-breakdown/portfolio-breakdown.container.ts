@@ -38,6 +38,7 @@ export class PortfolioBreakdown implements OnChanges {
   }
 
   public removeStencil() {
+    this.breakdownData.state.isStencil = false;
     this.breakdownData.data.displayCategoryList.forEach((eachCategory) => {
       eachCategory.moveVisualizer.state.isStencil = false;
     });

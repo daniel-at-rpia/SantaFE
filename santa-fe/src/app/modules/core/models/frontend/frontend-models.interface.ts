@@ -489,6 +489,7 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
     max: number;
     isBasis: boolean;
     timeSeries: Array<any>;
+    endPinText: string;
   }
   style: {
     leftGap: number;
@@ -679,6 +680,7 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     isEditing: boolean;
     isStencil: boolean;
     isDisplayingCs01: boolean;
+    isTargetAlignmentRatingAvail: boolean;
   }
 }
 
