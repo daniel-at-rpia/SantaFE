@@ -2,17 +2,46 @@
 @import "modules/structure/structure.scss";
 
 .sat-structureMainPanel { 
-  $structureMainPanelBlockName: &;
+  $blockName: &;
   @include mix_border_radius(10px);
   @include mix_border_generator();
   flex: 1 1 auto;
   display: flex;
   overflow: hidden;
+  flex-direction: column;
+  &__errorPrompt,
+  &__fundGroup {
+    display: flex;
+    flex: 1 1 auto;
+  }
+  &__errorPrompt {
+    @include mix_border_radius(10px);
+    flex: 0 1 auto;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    background-color: $color_red_1;
+    padding: $spacing_large;
+    &-icon {
+      font-size: $font_size_xxxx_large;
+      color: $color_kill;
+    }
+    &-title {
+      text-align: center;
+      font-size: $font_size_xx_large;
+      color: $color_kill;
+      margin: $spacing_large 0;
+    }
+    &-text {
+      text-align: center;
+      font-size: $font_size_large;
+      color: $font_color_major;
+      margin-bottom: $spacing_medium;
+    }
+  }
   &__fundGroup {
     @include mix_enable_scrollbar($direction: 'horizontal');
     overflow-y: hidden;
-    display: flex;
-    flex: 1 1 auto;
     margin-right: $spacing_medium;
     &-fund {
       @include mix_border_radius(10px);
@@ -22,6 +51,21 @@
       margin: $spacing_medium 0 $spacing_medium $spacing_medium;
       &>structure-fund {
         display: flex;
+      }
+    }
+  }
+  &--fetchDataFailedState {
+    #{$blockName} {
+      &__errorPrompt {
+        display: flex;
+      }
+      &__fundGroup {
+        &-fund {
+          flex: 0 0 22.5%;
+          &>structure-fund {
+            flex: 1 1 auto;
+          }
+        }
       }
     }
   }

@@ -1,10 +1,20 @@
 <article 
   [ngClass]="{
-  'sat-structureMainPanel': true
+  'sat-structureMainPanel': true,
+  'sat-structureMainPanel--fetchDataFailedState': state.fetchResult.fetchFundDataFailed
   }">
+  <section class="sat-structureMainPanel__errorPrompt">
+    <i class="sat-structureMainPanel__errorPrompt-icon fal fa-sad-tear"></i>
+    <span class="sat-structureMainPanel__errorPrompt-title">Backend request failed due to </span>
+    <span class="sat-structureMainPanel__errorPrompt-text">{{state.fetchResult.fetchFundDataFailedError}}</span>
+  </section>
   <section class="sat-structureMainPanel__fundGroup">
     <div *ngFor="let fund of state.fetchResult.fundList" class="sat-structureMainPanel__fundGroup-fund">
-      <structure-fund [fund]="fund" [selectedMetricValue]="selectedMetricValue"></structure-fund>
+      <structure-fund 
+        [fund]="fund"
+        [selectedMetricValue]="selectedMetricValue"
+        [fetchDataFailedState]="state.fetchResult.fetchFundDataFailed">
+      </structure-fund>
     </div>
   </section>
   <section>
