@@ -14,9 +14,7 @@
       @include mix_fixed_div(relative, $z_index_base_item);
       height: $spacing_large;
       overflow: hidden;
-      &--total,
-      &--exceeded,
-      &--current,
+      &-bar
       &-values {
         @include mix_fixed_div(absolute, $z_index_base_item_solid);
         display: inline-block;
@@ -27,19 +25,20 @@
         width: 0;
         height: 100%;
       }
-      &--total {
-        background-color: $color_active;
-        width: 100%;
-        z-index: $z_index_base_item_solid;
-      }
-      &--current {
-        @include mix_theme_background;
-        z-index: $z_index_base_item_lift; 
-      }
-      &--exceeded {
-        background-color: $color_red_5;
-        z-index: $z_index_hovering_item;
-
+      &-bar {
+        &--total {
+          background-color: $color_active;
+          width: 100%;
+          z-index: $z_index_base_item_solid;
+        }
+        &--current {
+          @include mix_theme_background;
+          z-index: $z_index_base_item_lift; 
+        }
+        &--exceeded {
+          background-color: $color_red_5;
+          z-index: $z_index_hovering_item;
+        }
       }
       &-values {
         @include mix_fixed_div(absolute, $z_index_hovering_item_lift);
@@ -71,11 +70,13 @@
       #{$blockName} {
         &__type,
         &__indicator {
-          &--exceeded {
-            background-color: $color_red_5;
-          }
-          &--current {
-            @include mix_gradient($color_gray_6, $color_gray_4, 0%, 90deg);
+          &-bar {
+            &--exceeded {
+              background-color: $color_red_5;
+            }
+            &--current {
+              @include mix_gradient($color_gray_6, $color_gray_4, 0%, 90deg);
+            }
           }
         }
       }
