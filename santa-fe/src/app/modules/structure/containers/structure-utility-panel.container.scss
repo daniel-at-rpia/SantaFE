@@ -88,21 +88,6 @@ $structureUtilityPanel_side_btn_size: convert_px_to_rem(45px);
   }
   &__cs01 {
     @include mix_border_generator(0 $typical_border_width 0 0, $color_white);
-    left: 0;
-    &-btn {
-      left: -$spacing_medium;
-    }
-    &-text {
-      &-targetStatus {
-        margin-left: $spacing_small;
-      }
-      &-targetType {
-        margin: 0 $spacing_small $spacing_x_small $spacing_large;
-      }
-    }
-  }
-  &__leverage {
-    @include mix_border_generator(0 0 0 $typical_border_width, $color_white);
     right: 0;
     &-btn {
       right: -$spacing_medium;
@@ -113,6 +98,21 @@ $structureUtilityPanel_side_btn_size: convert_px_to_rem(45px);
       }
       &-targetType {
         margin: 0 $spacing_large $spacing_x_small $spacing_small;
+      }
+    }
+  }
+  &__leverage {
+    @include mix_border_generator(0 0 0 $typical_border_width, $color_white);
+    left: 0;
+    &-btn {
+      left: -$spacing_medium;
+    }
+    &-text {
+      &-targetStatus {
+        margin-left: $spacing_small;
+      }
+      &-targetType {
+        margin: 0 $spacing_small $spacing_x_small $spacing_large;
       }
     }
   }

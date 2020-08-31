@@ -2,6 +2,28 @@
   'sat-structureUtilityPanel': true,
   'sat-structureUtilityPanel--tongueExpanded': state.isExpanded
 }">
+<section [ngClass]="{
+  'sat-structureUtilityPanel__leverage': true,
+  'sat-structureUtilityPanel__leverage--selected': state.selectedMetricValue === constants.leverage
+}">
+  <button class="sat-structureUtilityPanel__leverage-btn" (click)="setMetricLevel(constants.leverage)">
+    <i [ngClass]="{
+      'fal': true,
+      'fa-check': state.selectedMetricValue === constants.leverage,
+      'fa-exchange-alt': state.selectedMetricValue === constants.cs01
+    }"></i>
+  </button>
+  <div class="sat-structureUtilityPanel__leverage-text">
+    <span class="sat-structureUtilityPanel__leverage-text-targetType">{{ constants.leverage }}</span>
+    <span class="sat-structureUtilityPanel__leverage-text-targetStatus">Selected</span>
+  </div>
+</section>
+  <section class="sat-structureUtilityPanel__tongue" (click)="onToggleTongueExpand()">
+    <p class="sat-structureUtilityPanel__tongue-text">Switch Target Level</p>
+    <div class="sat-structureUtilityPanel__tongue-bar">
+      <i class="fal fa-bars"></i>
+    </div>
+  </section>
   <section [ngClass]="{
     'sat-structureUtilityPanel__cs01': true,
     'sat-structureUtilityPanel__cs01--selected': state.selectedMetricValue === constants.cs01
@@ -16,28 +38,6 @@
     <div class="sat-structureUtilityPanel__cs01-text">
       <span class="sat-structureUtilityPanel__cs01-text-targetType">{{ constants.cs01 }}</span>
       <span class="sat-structureUtilityPanel__cs01-text-targetStatus">Selected</span>
-    </div>
-  </section>
-  <section class="sat-structureUtilityPanel__tongue" (click)="onToggleTongueExpand()">
-    <p class="sat-structureUtilityPanel__tongue-text">Switch Target Level</p>
-    <div class="sat-structureUtilityPanel__tongue-bar">
-      <i class="fal fa-bars"></i>
-    </div>
-  </section>
-  <section [ngClass]="{
-    'sat-structureUtilityPanel__leverage': true,
-    'sat-structureUtilityPanel__leverage--selected': state.selectedMetricValue === constants.leverage
-  }">
-    <button class="sat-structureUtilityPanel__leverage-btn" (click)="setMetricLevel(constants.leverage)">
-      <i [ngClass]="{
-        'fal': true,
-        'fa-check': state.selectedMetricValue === constants.leverage,
-        'fa-exchange-alt': state.selectedMetricValue === constants.cs01
-      }"></i>
-    </button>
-    <div class="sat-structureUtilityPanel__leverage-text">
-      <span class="sat-structureUtilityPanel__leverage-text-targetType">{{ constants.leverage }}</span>
-      <span class="sat-structureUtilityPanel__leverage-text-targetStatus">Selected</span>
     </div>
   </section>
 </article>
