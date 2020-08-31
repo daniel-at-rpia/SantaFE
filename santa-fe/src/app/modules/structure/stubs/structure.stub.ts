@@ -5,7 +5,7 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
   "date":"2020-08-31T00:00:00-04:00",
   "inDb":true,
   "portfolioId":15,
-  "portfolioShortName":"SOF",
+  "portfolioShortName": PortfolioShortNames.SOF,
   "portfolioNav":736829937.9316701,
   "currentTotals":{
     "CreditLeverage":2.0067948600267513,

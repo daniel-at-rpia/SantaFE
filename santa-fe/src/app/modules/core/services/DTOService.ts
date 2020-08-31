@@ -36,7 +36,10 @@
     import {
       ConfiguratorDefinitionLayout,
       FilterOptionsPortfolioList,
-      SecurityDefinitionMap
+      SecurityDefinitionMap,
+      FilterOptionsCurrency,
+      FilterOptionsRating,
+      FilterOptionsTenor
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       QuoteHeaderConfigList
@@ -1777,19 +1780,19 @@ export class DTOService {
         convertToK: null
       }
     };
-    const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.bicsLevel1Breakdown);
+    const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.bicsLevel1Breakdown, []);
     BICSBreakdown.data.title = 'BICS';
     BICSBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.SECTOR);
     // object.data.children.push(BICSBreakdown);
-    const currencyBreakdown = this.formPortfolioBreakdown(isStencil, rawData.ccyBreakdown);
+    const currencyBreakdown = this.formPortfolioBreakdown(isStencil, rawData.ccyBreakdown, FilterOptionsCurrency);
     currencyBreakdown.data.title = 'Currency';
     currencyBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
     object.data.children.push(currencyBreakdown);
-    const tenorBreakdown = this.formPortfolioBreakdown(isStencil, rawData.tenorBreakdown);
+    const tenorBreakdown = this.formPortfolioBreakdown(isStencil, rawData.tenorBreakdown, FilterOptionsTenor);
     tenorBreakdown.data.title = 'Tenor';
     tenorBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.TENOR);
     object.data.children.push(tenorBreakdown);
-    const ratingBreakdown = this.formPortfolioBreakdown(isStencil, rawData.ratingBreakdown);
+    const ratingBreakdown = this.formPortfolioBreakdown(isStencil, rawData.ratingBreakdown, FilterOptionsRating);
     ratingBreakdown.data.title = 'Rating';
     ratingBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.RATING);
     object.data.children.push(ratingBreakdown);
@@ -1798,7 +1801,8 @@ export class DTOService {
 
   public formPortfolioBreakdown(
     isStencil: boolean,
-    rawData: BEModels.BEStructuringBreakdownBlock
+    rawData: BEModels.BEStructuringBreakdownBlock,
+    definitionList: Array<string>
   ): DTOs.PortfolioBreakdownDTO {
     const object: DTOs.PortfolioBreakdownDTO = {
       data: {
@@ -1847,26 +1851,30 @@ export class DTOService {
         }
       }
     }
-    for (const eachCategory in rawData.breakdown) {
-      const eachCs01CategoryBlock = this.formPortfolioBreakdownCategoryBlock(
-        findCs01Min,
-        findCs01Max,
-        isStencil,
-        eachCategory,
-        rawData.breakdown[eachCategory].Cs01,
-        true
-      );
+    definitionList.forEach((eachCategoryText) => {
+      const eachCs01CategoryBlock = rawData.breakdown[eachCategoryText] 
+        ? this.formPortfolioBreakdownCategoryBlock(
+          findCs01Min,
+          findCs01Max,
+          isStencil,
+          eachCategoryText,
+          rawData.breakdown[eachCategoryText].Cs01,
+          true
+        )
+        : null;
       !!eachCs01CategoryBlock && object.data.rawCs01CategoryList.push(eachCs01CategoryBlock);
-      const eachLeverageCategoryBlock = this.formPortfolioBreakdownCategoryBlock(
-        findLeverageMin,
-        findLeverageMax,
-        isStencil,
-        eachCategory,
-        rawData.breakdown[eachCategory].CreditLeverage,
-        false
-      );
+      const eachLeverageCategoryBlock = rawData.breakdown[eachCategoryText] 
+        ? this.formPortfolioBreakdownCategoryBlock(
+          findLeverageMin,
+          findLeverageMax,
+          isStencil,
+          eachCategoryText,
+          rawData.breakdown[eachCategoryText].CreditLeverage,
+          false
+        )
+        : null;
       !!eachLeverageCategoryBlock && object.data.rawLeverageCategoryList.push(eachLeverageCategoryBlock);
-    }
+    });
     return object;
   }
 

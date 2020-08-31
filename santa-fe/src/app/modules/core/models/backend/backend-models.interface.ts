@@ -596,7 +596,7 @@ export interface BEStructuringMetricTotalBlock {
 export interface BEPortfolioStructuringDTO {
   date: string;
   portfolioId: number;
-  portfolioShortName: string;
+  portfolioShortName: PortfolioShortNames;
   portfolioNav: number;
   target: {
     portfolioTargetId: string;
