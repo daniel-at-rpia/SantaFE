@@ -144,6 +144,11 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       catchError(err => {
         this.state.fetchResult.fetchFundDataFailed = true;
         this.state.fetchResult.fetchFundDataFailedError = err.message;
+        setTimeout(() => {
+          this.state.fetchResult.fundList.forEach(eachFund => {
+            eachFund.state.isStencil = false;
+          }, 1)
+        })
         this.restfulCommService.logError('Get portfolio funds failed')
         console.error(`${this.restfulCommService.apiMap.getPortfolioStructures} failed`, err);
         return of('error')
