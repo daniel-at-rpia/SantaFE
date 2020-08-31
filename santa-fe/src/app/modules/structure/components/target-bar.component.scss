@@ -80,13 +80,12 @@
       font-size: $font_size_x_small;
       margin-top: $spacing_xx_small;
     }
-    &--stencilState {
+    &--emptyState {
       #{$blockName} {
         &__indicator {
-          &-values {
-            &-text {
-              @include mix_stencil_animation();
-            }
+          background-color: $color_active;
+          &-bar {
+            display: none;
           }
         }
       }
@@ -97,47 +96,24 @@
         &__indicator {
           &-bar {
             &--exceeded {
-              background-color: $color_gray_6;
+              background-color: $color_disabled;
             }
             &--current {
               @include mix_gradient($color_gray_6, $color_gray_4, 0%, 90deg);
             }
           }
         }
-      }
-      &#{$blockName} {
-       &--stencilState {
-        #{$blockName} {
-          &__indicator {
-           &-bar {
-            &--exceeded,
-            &--current {
-              display: none;
-            }
-           }
-          }
+        &__indicator {
+          background-color: $color_disabled;
         }
-       }
       }
     }
-    &--emptyState {
+    &--stencilState {
       #{$blockName} {
         &__indicator {
-          background-color: $color_gray_85;
-          &-bar {
-            &--exceeded,
-            &--current,
-            &--total {
-              display: none;
-            }
-          }
-        }
-      }
-      &#{$blockName} {
-        &--inactiveState {
-          #{$blockName} {
-            &__indicator {
-              background-color: $color_gray_6;
+          &-values {
+            &-text {
+              @include mix_stencil_animation();
             }
           }
         }
