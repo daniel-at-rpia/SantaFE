@@ -1745,7 +1745,9 @@ export class DTOService {
         cs01TotalsInK: {
           currentTotal: null,
           targetTotal: null
-        }
+        },
+        cs01TargetBar: null,
+        creditLeverageTargetBar: null
       },
       api: {
         onSubmitMetricValues: null,
