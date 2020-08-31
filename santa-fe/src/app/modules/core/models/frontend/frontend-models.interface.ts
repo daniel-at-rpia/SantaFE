@@ -727,6 +727,7 @@ export interface TargetBarDTO extends BasicDTOStructure {
     isInactiveMetric: boolean,
     isStencil: boolean;
     isEmpty: boolean;
+    isError: boolean;
   }
   utility: {
     getDisplayValues: (targetBar: TargetBarDTO) => void;

@@ -1700,7 +1700,8 @@ export class DTOService {
       state: {
         isInactiveMetric: false,
         isStencil: !!isStencil,
-        isEmpty: false
+        isEmpty: false,
+        isError: false
       },
       utility: {
         getDisplayValues: null,
