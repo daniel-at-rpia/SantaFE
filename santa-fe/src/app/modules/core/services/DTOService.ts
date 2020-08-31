@@ -1708,6 +1708,45 @@ export class DTOService {
         setInactiveMetric: null
       }
     }
+
+    function getDisplayedValues(targetBar: DTOs.TargetBarDTO) {
+      if (targetBar.data.currentValue > targetBar.data.targetValue) {
+        const difference = targetBar.data.currentValue - targetBar.data.targetValue;
+        targetBar.data.currentPercentage = '100%';
+        targetBar.data.exceededPercentage = targetBar.data.currentValue / targetBar.data.targetValue >= 2 ? '100%' : `${(difference / targetBar.data.targetValue) * 100}%`
+        return;
+      }
+      targetBar.data.currentPercentage = `${(targetBar.data.currentValue / targetBar.data.targetValue) * 100}%`;
+    }
+
+    function setInactiveMetric(targetBar: DTOs.TargetBarDTO) {
+      targetBar.state.isInactiveMetric = targetBar.data.targetMetric !== targetBar.data.selectedMetricValue ? true : false;
+    }
+
+    function getDisplayedResults(valueA: string, valueB: string) {
+      return `${valueA}/${valueB}`;
+    }
+    
+    const convertValuesForDisplay =  (targetBar: DTOs.TargetBarDTO) => {
+     if (targetBar.data.targetMetric === PortfolioMetricValues.cs01) {
+        targetBar.data.displayedCurrentValue = this.utility.parseNumberToThousands(targetBar.data.currentValue, true, 0);
+        targetBar.data.displayedTargetValue = this.utility.parseNumberToThousands(targetBar.data.targetValue,true, 0);
+        targetBar.data.displayedResults = getDisplayedResults(targetBar.data.displayedCurrentValue, targetBar.data.displayedTargetValue);
+        return;
+      }
+      targetBar.data.displayedCurrentValue = this.utility.round(targetBar.data.currentValue,2);
+      targetBar.data.displayedTargetValue = this.utility.round(targetBar.data.targetValue,2);
+      targetBar.data.displayedResults = getDisplayedResults(targetBar.data.displayedCurrentValue, targetBar.data.displayedTargetValue);
+    }
+    convertValuesForDisplay(object);
+    setInactiveMetric(object);
+    getDisplayedValues(object);
+    if (!targetValue) {
+      object.state.isEmpty = true;
+      object.data.displayedResults = targetMetric === PortfolioMetricValues.cs01 ? `${object.data.displayedCurrentValue} / -` : `${object.data.displayedCurrentValue} / -`;
+      return object;
+    }
+    object.state.isEmpty = false;
     return object;
   }
 
