@@ -1,8 +1,8 @@
 @import "global.scss";
 
 .sat-fundTargetBar {
+  @include mix_fixed_div(relative, $z_index_base_item);
   $blockName: &;
-  position: relative;
     &__type {
       font-size: $font_size_small;
       margin: 0 0 $spacing_x_small 0;
