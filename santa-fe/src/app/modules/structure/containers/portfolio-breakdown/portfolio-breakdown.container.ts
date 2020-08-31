@@ -52,21 +52,19 @@ export class PortfolioBreakdown implements OnChanges {
   }
 
   public calculateAlignmentRating() {
-    let allCs01CategoriesHaveTarget = !this.breakdownData.data.rawCs01CategoryList.find((eachCategory) => {
+    const targetList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawCs01CategoryList : this.breakdownData.data.rawLeverageCategoryList;
+    let allCategoriesHaveTarget = !targetList.find((eachCategory) => {
       return eachCategory.targetLevel == null;
     });
-    if (allCs01CategoriesHaveTarget) {
+    if (allCategoriesHaveTarget) {
       let misalignment = 0;
-      this.breakdownData.data.rawCs01CategoryList.forEach((eachCategory) => {
+      targetList.forEach((eachCategory) => {
         misalignment = misalignment + Math.abs(eachCategory.targetPct - eachCategory.currentPct);
       });
       this.breakdownData.style.ratingFillWidth = 100 - this.utilityService.round(misalignment, 0);
       this.breakdownData.data.ratingHoverText = `${100 - this.utilityService.round(misalignment, 0)}`;
       this.breakdownData.state.isTargetAlignmentRatingAvail = true;
     }
-    let allLeverageCategoriesHaveTarget = !this.breakdownData.data.rawLeverageCategoryList.find((eachCategory) => {
-      return eachCategory.targetLevel == null;
-    });
   }
 
 }

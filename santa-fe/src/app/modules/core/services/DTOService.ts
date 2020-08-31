@@ -1819,25 +1819,38 @@ export class DTOService {
         isTargetAlignmentRatingAvail: !!isStencil
       }
     };
-    let findMax = 0;
-    let findMin = 0;
+    let findCs01Max = 0;
+    let findCs01Min = 0;
+    let findLeverageMax = 0;
+    let findLeverageMin = 0;
     for (const eachCategory in rawData.breakdown) {
-      const eachEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].Cs01 : null;
-      if (!!eachEntry) {
-        const highestVal = Math.max(eachEntry.currentLevel, eachEntry.targetLevel);
-        const lowestVal = Math.min(eachEntry.currentLevel, eachEntry.targetLevel);
-        if (highestVal > findMax) {
-          findMax = highestVal;
+      const eachCs01Entry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].Cs01 : null;
+      if (!!eachCs01Entry) {
+        const highestVal = Math.max(eachCs01Entry.currentLevel, eachCs01Entry.targetLevel);
+        const lowestVal = Math.min(eachCs01Entry.currentLevel, eachCs01Entry.targetLevel);
+        if (highestVal > findCs01Max) {
+          findCs01Max = highestVal;
         }
-        if (lowestVal < findMin) {
-          findMin = lowestVal;
+        if (lowestVal < findCs01Min) {
+          findCs01Min = lowestVal;
+        }
+      }
+      const eachLeverageEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].CreditLeverage : null;
+      if (!!eachLeverageEntry) {
+        const highestVal = Math.max(eachLeverageEntry.currentLevel, eachLeverageEntry.targetLevel);
+        const lowestVal = Math.min(eachLeverageEntry.currentLevel, eachLeverageEntry.targetLevel);
+        if (highestVal > findLeverageMax) {
+          findLeverageMax = highestVal;
+        }
+        if (lowestVal < findLeverageMin) {
+          findLeverageMin = lowestVal;
         }
       }
     }
     for (const eachCategory in rawData.breakdown) {
       const eachCs01CategoryBlock = this.formPortfolioBreakdownCategoryBlock(
-        findMin,
-        findMax,
+        findCs01Min,
+        findCs01Max,
         isStencil,
         eachCategory,
         rawData.breakdown[eachCategory].Cs01,
@@ -1845,8 +1858,8 @@ export class DTOService {
       );
       !!eachCs01CategoryBlock && object.data.rawCs01CategoryList.push(eachCs01CategoryBlock);
       const eachLeverageCategoryBlock = this.formPortfolioBreakdownCategoryBlock(
-        findMin,
-        findMax,
+        findLeverageMin,
+        findLeverageMax,
         isStencil,
         eachCategory,
         rawData.breakdown[eachCategory].CreditLeverage,
