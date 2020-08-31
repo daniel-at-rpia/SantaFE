@@ -25,6 +25,11 @@ export class StructureUtilityPanel implements OnInit {
     this.initializePageState();
   }
 
+  public setMetricLevel(metricLevel: PortfolioMetricValues) {
+    const selectedMetric = metricLevel === this.constants.cs01 ? this.constants.cs01 : this.constants.leverage;
+    this.store$.dispatch(new StructureMetricSelect(selectedMetric));
+  }
+
   private initializePageState() {
     this.state = {
       selectedMetricValue: null,
@@ -40,10 +45,5 @@ export class StructureUtilityPanel implements OnInit {
 
   private onToggleTongueExpand() {
     this.state.isExpanded = !this.state.isExpanded;
-  }
-
-  public setMetricLevel(metricLevel: PortfolioMetricValues) {
-    const selectedMetric = metricLevel === this.constants.cs01 ? this.constants.cs01 : this.constants.leverage;
-    this.store$.dispatch(new StructureMetricSelect(selectedMetric));
   }
 }
