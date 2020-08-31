@@ -39,7 +39,7 @@
   <section class="sat-portfolioBreakdown__categoryContent">
     <ul class="sat-portfolioBreakdown__categoryContent-list">
       <li
-        *ngFor="let eachCategory of breakdownData.data.categoryList"
+        *ngFor="let eachCategory of breakdownData.data.displayCategoryList"
         [ngClass]="{
           'sat-portfolioBreakdown__categoryContent-list-item': true,
           'sat-portfolioBreakdown__categoryContent-list-item--noSignificantDiff': eachCategory.diffToTarget === 0,

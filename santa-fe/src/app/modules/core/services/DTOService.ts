@@ -1795,15 +1795,18 @@ export class DTOService {
       data: {
         title: '',
         definition: null,
-        categoryList: [],
-        ratingHoverText: !isStencil ? '20%' : '33%'
+        displayCategoryList: [],
+        ratingHoverText: !isStencil ? '20%' : '33%',
+        rawCs01CategoryList: [],
+        rawLeverageCategoryList: []
       },
       style: {
         ratingFillWidth: !isStencil ? 20 : 33
       },
       state: {
         isEditing: false,
-        isStencil: true
+        isStencil: true,
+        isDisplayingCs01: true
       }
     };
     let findMax = 0;
@@ -1817,30 +1820,56 @@ export class DTOService {
       }
     }
     for (const eachCategory in rawData.breakdown) {
-      const eachEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].Cs01 : null;
-      if (!!eachEntry) {
-        const eachMoveVisualizer = this.formMoveVisualizerObjectForStructuring(eachEntry, findMax, !!isStencil);
-        const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
-          category: `${eachCategory}`,
-          targetLevel: eachEntry.targetLevel,
-          targetPct: eachEntry.targetPct,
-          diffToTarget: eachEntry.targetLevel != null ? Math.round(eachEntry.targetLevel - eachEntry.currentLevel) : 0,
-          diffToTargetDisplay: '-',
-          currentLevel: eachEntry.currentLevel,
-          currentPct: eachEntry.currentPct,
-          indexPct: eachEntry.indexPct,
-          moveVisualizer: eachMoveVisualizer
-        };
-        if (eachCategoryBlock.diffToTarget < 0) {
-          eachCategoryBlock.diffToTargetDisplay = `${eachCategoryBlock.diffToTarget}k`;
-        }
-        if (eachCategoryBlock.diffToTarget > 0) {
-          eachCategoryBlock.diffToTargetDisplay = `+${eachCategoryBlock.diffToTarget}k`;
-        }
-        object.data.categoryList.push(eachCategoryBlock);
-      }
+      const eachCs01CategoryBlock = this.formPortfolioBreakdownCategoryBlock(
+        0,
+        findMax,
+        isStencil,
+        eachCategory,
+        rawData.breakdown[eachCategory].Cs01
+      );
+      !!eachCs01CategoryBlock && object.data.rawCs01CategoryList.push(eachCs01CategoryBlock);
+      const eachLeverageCategoryBlock = this.formPortfolioBreakdownCategoryBlock(
+        0,
+        findMax,
+        isStencil,
+        eachCategory,
+        rawData.breakdown[eachCategory].CreditLeverage
+      );
+      !!eachLeverageCategoryBlock && object.data.rawLeverageCategoryList.push(eachLeverageCategoryBlock);
     }
     return object;
+  }
+
+  public formPortfolioBreakdownCategoryBlock(
+    minValue: number,
+    maxValue: number,
+    isStencil: boolean,
+    categoryName: string,
+    rawCategoryData: BEModels.BEStructuringBreakdownSingleEntry 
+  ): Blocks.PortfolioBreakdownCategoryBlock {
+    if (!!rawCategoryData) {
+      const eachMoveVisualizer = this.formMoveVisualizerObjectForStructuring(rawCategoryData, maxValue, !!isStencil);
+      const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
+        category: `${categoryName}`,
+        targetLevel: rawCategoryData.targetLevel,
+        targetPct: rawCategoryData.targetPct,
+        diffToTarget: rawCategoryData.targetLevel != null ? Math.round(rawCategoryData.targetLevel - rawCategoryData.currentLevel) : 0,
+        diffToTargetDisplay: '-',
+        currentLevel: rawCategoryData.currentLevel,
+        currentPct: rawCategoryData.currentPct,
+        indexPct: rawCategoryData.indexPct,
+        moveVisualizer: eachMoveVisualizer
+      };
+      if (eachCategoryBlock.diffToTarget < 0) {
+        eachCategoryBlock.diffToTargetDisplay = `${eachCategoryBlock.diffToTarget}k`;
+      }
+      if (eachCategoryBlock.diffToTarget > 0) {
+        eachCategoryBlock.diffToTargetDisplay = `+${eachCategoryBlock.diffToTarget}k`;
+      }
+      return eachCategoryBlock;
+    } else {
+      return null;
+    }
   }
 
   public formSantaModal(
