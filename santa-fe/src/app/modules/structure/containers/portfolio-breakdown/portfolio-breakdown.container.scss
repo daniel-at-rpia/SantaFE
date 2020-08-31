@@ -1,7 +1,7 @@
 @import "global.scss";
 @import "modules/structure/structure.scss";
 
-$portfolioBreakdown_borderWidth: 2px; // can't use rem because fractions of a pixel doesn't look well here
+$portfolioBreakdown_borderWidth: 3px; // can't use rem because fractions of a pixel doesn't look well here
 $portfolioBreakdown_borderColor: $color_active;
 $portfolioBreakdown_rating_width: 12rem;
 $portfolioBreakdown_rating_thickness: 1.75rem;
@@ -50,12 +50,13 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
     height: $portfolioBreakdown_rating_thickness;
     overflow: hidden;
     background-color: $color_white;
+    visibility: hidden;
     &-fill {
       @include mix_fixed_div(absolute, $z_index_base_item_solid);
+      @include mix_border_radius(3px, 'left');
       height: 100%;
       background-color: $color_red_5;
       left: 0;
-      display: none;
     }
     &-hoverText {
       @include mix_fixed_div(absolute, $z_index_hovering_item);
@@ -182,12 +183,39 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
   &--ratingAvailableState {
     #{$blockName} {
       &__rating {
-        background-color: $color_active;
-        &-fill {
-          display: flex;
-        }
+        visibility: visible;
         &-hoverText {
           color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--goodRating {
+    #{$blockName} {
+      &__rating {
+        background-color: $color_active;
+        &-fill {
+          background-color: $color_green_5;
+        }
+      }
+    }
+  }
+  &--averageRating {
+    #{$blockName} {
+      &__rating {
+        background-color: $color_active;
+        &-fill {
+          background-color: $color_orange_5;
+        }
+      }
+    }
+  }
+  &--badRating {
+    #{$blockName} {
+      &__rating {
+        background-color: $color_active;
+        &-fill {
+          background-color: $color_red_5;
         }
       }
     }
