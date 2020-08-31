@@ -14,10 +14,7 @@ import { STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.const
 
 export class PortfolioBreakdown {
   @Input() breakdownData: PortfolioBreakdownDTO;
-  @Input() selectedMetricValue: PortfolioMetricValues;
   constants = {
-    cs01: PortfolioMetricValues.cs01,
-    creditLeverage: PortfolioMetricValues.creditLeverage,
     editModalId: STRUCTURE_EDIT_MODAL_ID
   }
   constructor(

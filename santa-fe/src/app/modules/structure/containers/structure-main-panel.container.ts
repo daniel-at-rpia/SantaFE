@@ -108,8 +108,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     eachFund.data.children.forEach((eachChild) => {
       eachChild.state.isStencil = false;
       eachChild.data.categoryList.forEach((eachCategory) => {
-        eachCategory.cs01.moveVisualizer.state.isStencil = false;
-        eachCategory.creditLeverage.moveVisualizer.state.isStencil = false;
+        eachCategory.moveVisualizer.state.isStencil = false;
       })
     })
   }
