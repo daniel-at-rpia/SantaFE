@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, Input, OnChanges, ViewEncapsulation} from '@angular/core';
 import { TargetBarDTO } from 'App/modules/core/models/frontend/frontend-models.interface';
 
 @Component({
@@ -8,12 +8,21 @@ import { TargetBarDTO } from 'App/modules/core/models/frontend/frontend-models.i
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class TargetBar implements OnInit {
+export class TargetBar implements OnInit, OnChanges {
   @Input() targetBar: TargetBarDTO;
+  @Input() fetchDataFailedState: boolean;
   constructor() {}
 
   public ngOnInit() {
    this.loadTargetBarConfiguration(this.targetBar);
+  }
+
+  public ngOnChanges() {
+    if (this.fetchDataFailedState) {
+      this.targetBar.state.isStencil = false;
+      this.targetBar.state.isError = true;
+      this.targetBar.data.displayedResults = '-';
+    }
   }
 
   private loadTargetBarConfiguration(targetBar: TargetBarDTO) {
