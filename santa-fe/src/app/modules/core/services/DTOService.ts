@@ -1810,7 +1810,7 @@ export class DTOService {
         rawLeverageCategoryList: []
       },
       style: {
-        ratingFillWidth: !isStencil ? 20 : 33
+        ratingFillWidth: null
       },
       state: {
         isEditing: false,
