@@ -157,39 +157,6 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
       @include mix_border_radius(50%);
     }
   }
-  &--stencilState {
-    #{$blockName} {
-      &__rating {
-        background-color: $color_white;
-        &-fill {
-          background-color: $color_stencil;
-        }
-        &-hoverText {
-          @include mix_stencil_animation;
-          background-color: $color_stencil;
-          color: $color_stencil;
-        }
-      }
-      &__categoryContent {
-        &-list-item-cell {
-          @include mix_stencil_animation;
-          background-color: $color_stencil;
-          color: $color_stencil;
-          // line-height: 
-        }
-      }
-    }
-  }
-  &--ratingAvailableState {
-    #{$blockName} {
-      &__rating {
-        visibility: visible;
-        &-hoverText {
-          color: $font_color_inverse;
-        }
-      }
-    }
-  }
   &--goodRating {
     #{$blockName} {
       &__rating {
@@ -216,6 +183,39 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
         background-color: $color_active;
         &-fill {
           background-color: $color_red_5;
+        }
+      }
+    }
+  }
+  &--ratingAvailableState {
+    #{$blockName} {
+      &__rating {
+        visibility: visible;
+        &-hoverText {
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--stencilState {
+    #{$blockName} {
+      &__rating {
+        background-color: $color_white;
+        &-fill {
+          background-color: $color_stencil;
+        }
+        &-hoverText {
+          @include mix_stencil_animation;
+          background-color: $color_stencil;
+          color: $color_stencil;
+        }
+      }
+      &__categoryContent {
+        &-list-item-cell {
+          @include mix_stencil_animation;
+          background-color: $color_stencil;
+          color: $color_stencil;
+          // line-height: 
         }
       }
     }
