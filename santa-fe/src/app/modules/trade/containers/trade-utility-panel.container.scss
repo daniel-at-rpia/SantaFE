@@ -9,7 +9,7 @@ $tradeUtilityPanel_tongue_topGutter: $spacing_large;
 $tradeUtilityPanel_side_btn_size: 2.25rem;
 .sat-tradeUtilityPanel {
   $tradeUtilityPanelBlockName: &;
-  @include mix_fixed_div(absolute, $z_index_UtilityTongue);
+  @include mix_fixed_div(absolute, $z_index_utilityTongue);
   @include material();
   @include mix_border_radius(10px, 'bottom');
   @include mix_alive('light');
