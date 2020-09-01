@@ -1,6 +1,7 @@
 import { Component, OnInit, OnChanges, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
 
 import { PortfolioBreakdownDTO } from 'FEModels/frontend-models.interface';
+import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 import { ModalService } from 'Form/services/ModalService';
 import { UtilityService } from 'Core/services/UtilityService';
 import { STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
@@ -17,7 +18,7 @@ export class PortfolioBreakdown implements OnChanges {
   @Input() dataIsReady: boolean;
   constants = {
     editModalId: STRUCTURE_EDIT_MODAL_ID
-  };
+  }
   constructor(
     private modalService: ModalService,
     private utilityService: UtilityService

@@ -706,6 +706,8 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
       currentTotal: number;
       targetTotal: number;
     }
+    cs01TargetBar: TargetBarDTO;
+    creditLeverageTargetBar: TargetBarDTO;
   },
   api: {
     onSubmitMetricValues: (CS01: number, leverage: number) => void;
