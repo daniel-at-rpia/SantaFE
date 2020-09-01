@@ -136,11 +136,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
 
   private fetchFunds() {
     this.loadStencilFunds();
-    const currentDate = new Date();
-    const currentDateFormat = 'YYYYMMDD';
-    const formattedDate = moment(currentDate).format(currentDateFormat);
-    const payload = {
-      date: formattedDate
+    const payload = { // assumes current date if nothing is passed in
+      yyyyMMDD: ""
     }
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioStructures, { req: 'POST' }, payload, false, false).pipe(
