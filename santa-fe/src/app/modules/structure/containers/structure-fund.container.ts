@@ -37,7 +37,9 @@ export class StructureFund implements OnInit, OnChanges {
     private utilityService: UtilityService,
   ){}
 
-  public ngOnInit() {}
+  public ngOnInit() {
+    this.fund.api.onSubmitMetricValues = this.saveEditDetails.bind(this);
+  }
 
   public ngOnChanges() {
     this.state.currentOwnerInitials =  this.ownerInitial !== null ? this.ownerInitial : null
