@@ -1808,7 +1808,8 @@ export class DTOService {
           targetTotal: null
         },
         cs01TargetBar: null,
-        creditLeverageTargetBar: null
+        creditLeverageTargetBar: null,
+        originalBEData: rawData
       },
       api: {
         onSubmitMetricValues: null,
