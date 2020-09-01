@@ -19,7 +19,7 @@
     'sat-fundStructuring__setTarget': true
   }">
   <div class="sat-fundStructuring__setTarget-group">
-    <label for="CS01Target" class="sat-fundStructuring__setTarget-group-label">Target CS01 Value:</label>
+    <label for="CS01Target" class="sat-fundStructuring__setTarget-group-label">Target CS01:</label>
     <santa-input
       [inputValue]="fund.data.cs01TotalsInK.targetTotal"
       [placeholder]="fund.data.cs01TotalsInK.targetTotal"
@@ -33,10 +33,10 @@
     <span class="sat-fundStructuring__setTarget-group-unit">K</span>
   </div>
   <div class="sat-fundStructuring__setTarget-group">
-      <label for="leverageTarget" class="sat-fundStructuring__setTarget-group-label">Leverage Target Value:</label>
+      <label for="leverageTarget" class="sat-fundStructuring__setTarget-group-label">Target Credit Leverage:</label>
       <santa-input
-        [inputValue]="fund.data.target.target.leverageValue"
-        [placeholder]="fund.data.target.target.leverageValue"
+        [inputValue]="fund.data.target.target.creditLeverage"
+        [placeholder]="fund.data.target.target.creditLeverage"
         [isNumeric]="fund.state.isNumeric"
         (onInputChange)="onChangeValue($event, constants.leverage)"
         [hasError]="state.hasErrors.updatedLeverageValue"
