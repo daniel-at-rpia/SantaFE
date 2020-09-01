@@ -2,6 +2,8 @@ import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { DTOService } from 'Core/services/DTOService';
 import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
 import { Store, select } from '@ngrx/store';
+import { selectMetricLevel } from 'Structure/selectors/structure.selectors';
+import { StructureMetricSelect } from 'Structure/actions/structure.actions';
 import { Subscription } from 'rxjs';
 import { ownerInitials } from 'Core/selectors/core.selectors';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
@@ -27,9 +29,9 @@ import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backe
 
 export class StructureMainPanel implements OnInit, OnDestroy {
   state: StructureMainPanelState; 
-  selectedMetricValue: PortfolioMetricValues = PortfolioMetricValues.cs01;
   subscriptions = {
-    ownerInitialsSub: null
+    ownerInitialsSub: null,
+    selectedMetricLevelSub: null
   };
   constants = {
     cs01: PortfolioMetricValues.cs01,
@@ -52,7 +54,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     const state: StructureMainPanelState = {
         ownerInitial: null,
         isUserPM: false,
-        selectedMetricValue: this.constants.cs01,
+        selectedMetricValue: null,
         fetchResult: {
           fundList: [],
           fetchFundDataFailed: false,
@@ -67,6 +69,12 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       select(ownerInitials)
     ).subscribe((value) => {
       this.state.ownerInitial = value;
+    });
+    this.subscriptions.selectedMetricLevelSub = this.store$.pipe(
+      select(selectMetricLevel)
+    ).subscribe((value) => {
+      const metric = value === this.constants.cs01 ? this.constants.cs01 : this.constants.creditLeverage
+      this.state.selectedMetricValue = metric;
     });
     const initialWaitForIcons = this.loadStencilFunds.bind(this);
     setTimeout(() => {
