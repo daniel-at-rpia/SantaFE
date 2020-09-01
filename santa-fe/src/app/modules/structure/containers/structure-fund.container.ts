@@ -85,13 +85,11 @@ export class StructureFund implements OnInit, OnChanges {
       this.state.hasErrors[invalidInputErrorRef] = true;
       this.state.hasErrors.errorMessage = `Please enter a valid target level for ${invalidTarget}`;
       return;
+    } else {
+      this.state.isEditing = false;
+      this.resetErrors();
+      this.updatedFundData.emit(this.fund)
     }
-    this.state.hasErrors.updatedCS01Value = false;
-    this.state.hasErrors.updatedLeverageValue = false;
-    this.state.isEditing = false;
-    this.resetErrors();
-    this.fund.data.target.target.cs01 = targetCS01 * 1000;
-    this.updatedFundData.emit(this.fund)
   }
 
   private onClickSaveNewMetrics(targetCS01: number, targetLeverage: number) {
