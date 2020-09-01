@@ -10,11 +10,12 @@
 	height: 100%;
   padding: $spacing_medium;
   overflow: hidden;
-  &__main {
+  &__left {
     overflow: hidden;
     display: flex;
     flex: 1 1 auto;
     margin-right: $page_gutter_width_for_alerts;
+    &-mainPanel,
     structure-main-panel {
       display: flex;
       overflow: hidden;

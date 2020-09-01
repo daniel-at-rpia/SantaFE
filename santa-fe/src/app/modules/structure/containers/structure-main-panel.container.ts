@@ -4,6 +4,7 @@ import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface
 import { Store, select } from '@ngrx/store';
 import { selectMetricLevel } from 'Structure/selectors/structure.selectors';
 import { Subscription, of } from 'rxjs';
+import { StructureMetricSelect } from 'Structure/actions/structure.actions';
 import { ownerInitials } from 'Core/selectors/core.selectors';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { catchError, first, tap} from 'rxjs/operators';
@@ -27,7 +28,6 @@ import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backe
 
 export class StructureMainPanel implements OnInit, OnDestroy {
   state: StructureMainPanelState; 
-  selectedMetricValue: PortfolioMetricValues = PortfolioMetricValues.cs01;
   subscriptions = {
     ownerInitialsSub: null,
     selectedMetricLevelSub: null
@@ -53,7 +53,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     const state: StructureMainPanelState = {
         ownerInitial: null,
         isUserPM: false,
-        selectedMetricValue: this.constants.cs01,
+        selectedMetricValue: null,
         fetchResult: {
           fundList: [],
           fetchFundDataFailed: false,
@@ -97,7 +97,6 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   private loadStencilFunds() {
     this.state.fetchResult.fundList = this.portfolioList.map((eachPortfolioName) => {
       const eachFund = this.dtoService.formStructureFundObject(PortfolioStructuringSample, true);
-      eachFund.api.convertToK = this.convertValuesToK.bind(this);
       eachFund.data.portfolioShortName = eachPortfolioName;
       return eachFund;
     });
@@ -107,7 +106,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     eachFund.state.isStencil = false;
     eachFund.data.children.forEach((eachChild) => {
       eachChild.state.isStencil = false;
-      eachChild.data.categoryList.forEach((eachCategory) => {
+      eachChild.data.displayCategoryList.forEach((eachCategory) => {
         eachCategory.moveVisualizer.state.isStencil = false;
       })
     })
@@ -129,10 +128,6 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         return of('error');
       })
     ).subscribe()
-  }
-
-  private convertValuesToK(value: number) {
-    return value / 1000;
   }
 
   private resetAPIErrors() {
@@ -164,10 +159,6 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         serverReturn.forEach(eachFund => {
           const newFund = this.dtoService.formStructureFundObject(eachFund, false);
           this.state.fetchResult.fundList.push(newFund);
-          const flipStencil = this.removeStencil.bind(this);
-          setTimeout(() => {
-            flipStencil(newFund);
-          }, 1)
         })
         this.state.fetchResult.fundList.length > 1 && this.sortFunds(this.state.fetchResult.fundList);
       }),
@@ -180,4 +171,4 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       })
     ).subscribe()
   }
- }
+}

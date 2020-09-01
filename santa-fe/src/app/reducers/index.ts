@@ -14,15 +14,21 @@ import {
   CoreState,
   coreReducer
 } from 'Core/reducers/core.reducer';
+import {
+  StructureState,
+  structureReducer
+} from 'Structure/reducers/structure.reducer';
 
 export interface AppState {
   core: CoreState;
   trade: TradeState;
+  structuring: StructureState;
 }
 
 export const appReducers: ActionReducerMap<AppState> = {
   core: coreReducer,
-  trade: tradeReducer
+  trade: tradeReducer,
+  structuring: structureReducer
 };
 
 export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [] : [];

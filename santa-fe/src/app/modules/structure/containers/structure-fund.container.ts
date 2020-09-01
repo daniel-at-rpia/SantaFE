@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnChanges, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation, OnChanges } from '@angular/core';
 import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.interface';
 import {PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 import { DTOService } from 'Core/services/DTOService';
@@ -18,8 +18,6 @@ export class StructureFund implements OnInit, OnChanges {
   @Input() selectedMetricValue: PortfolioMetricValues;
   @Input() ownerInitial: string;
   @Output() updatedFundData = new EventEmitter<PortfolioStructureDTO>();
-  targetBarCS01: TargetBarDTO;
-  targetBarLeverage: TargetBarDTO;
   constants = {
     cs01: PortfolioMetricValues.cs01,
     creditLeverage: PortfolioMetricValues.creditLeverage
@@ -110,4 +108,5 @@ export class StructureFund implements OnInit, OnChanges {
    this.fund.data.cs01TotalsInK.targetTotal = this.fund.api.convertToK(this.fund.data.target.target.cs01);
   }
 }
+
 
