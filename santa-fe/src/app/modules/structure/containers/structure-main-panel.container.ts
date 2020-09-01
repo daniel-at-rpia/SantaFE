@@ -112,7 +112,9 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     })
   }
   private getFundFromNewTargets(fund: PortfolioStructureDTO) {
-    const payload = fund;
+    const payload = {
+      portfolioStructure: fund.data.originalBEData
+    }
     const fundListCopy = this.utilityService.deepCopy(this.state.fetchResult.fundList);
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioStructures, {req: 'POST'}, payload).pipe(
       first(),
