@@ -65,6 +65,9 @@ $tradeUtilityPanel_side_btn_size: $iconButton_size_large;
         &>i {
           font-size: $font_size_large;
         }
+        &--edit {
+          margin-right: 0;
+        }
         &--cancel,
         &--save {
           @include roundedButton($size: $tradeUtilityPanel_side_btn_size);
