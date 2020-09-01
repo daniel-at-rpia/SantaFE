@@ -713,7 +713,6 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
   },
   api: {
     onSubmitMetricValues: (CS01: number, leverage: number) => void;
-    convertToK: (value: number) => number;
   }
   state: {
     isEditing: boolean;

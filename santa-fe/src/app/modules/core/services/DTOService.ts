@@ -1812,8 +1812,7 @@ export class DTOService {
         originalBEData: rawData
       },
       api: {
-        onSubmitMetricValues: null,
-        convertToK: null
+        onSubmitMetricValues: null
       },
       state: {
         isEditing: false,
