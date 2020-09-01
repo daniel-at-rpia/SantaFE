@@ -105,10 +105,4 @@ export class StructureFund implements OnInit, OnChanges {
     }
     this.fund.data.target.target.creditLeverage = amount;
   }
-
-  private getCS01Placeholder() {
-   this.fund.data.cs01TotalsInK.targetTotal = this.fund.api.convertToK(this.fund.data.target.target.cs01);
-  }
 }
-
-
