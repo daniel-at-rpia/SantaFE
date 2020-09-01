@@ -120,6 +120,9 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       first(),
       tap((serverReturn) => {
         const updatedFund = this.dtoService.formStructureFundObject(serverReturn, false);
+        updatedFund.data.cs01TotalsInK.currentTotal = updatedFund.data.currentTotals.cs01 / 1000; //this is used in the set funds input fields, which are numbers - parseNumberToThousands() returns a string
+        updatedFund.data.cs01TargetBar.data.displayedCurrentValue = this.utilityService.parseNumberToThousands(updatedFund.data.currentTotals.cs01, true);
+        updatedFund.data.cs01TargetBar.data.displayedTargetValue = this.utilityService.parseNumberToThousands(updatedFund.data.target.target.cs01, true);
         this.state.fetchResult.fundList = [];
         this.state.fetchResult.fundList = fundListCopy.map(fund => {
           return fund.data.portfolioId === updatedFund.data.portfolioId ? updatedFund : fund;
