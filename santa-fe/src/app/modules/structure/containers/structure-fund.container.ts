@@ -99,8 +99,10 @@ export class StructureFund implements OnInit, OnChanges {
   private onChangeValue(amount: number, type: PortfolioMetricValues) {
     if (type === PortfolioMetricValues.cs01) {
       this.fund.data.target.target.cs01 = amount * 1000;
+      this.fund.data.originalBEData.target.target.Cs01 = amount * 1000;
       return;
     }
     this.fund.data.target.target.creditLeverage = amount;
+    this.fund.data.originalBEData.target.target.CreditLeverage = amount;
   }
 }
