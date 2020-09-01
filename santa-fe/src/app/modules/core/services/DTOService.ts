@@ -1820,6 +1820,7 @@ export class DTOService {
         isNumeric: true
       }
     };
+    object.data.cs01TotalsInK.targetTotal = object.data.target.target.cs01 / 1000;
     object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, PortfolioMetricValues.cs01, object.state.isStencil);
     object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, PortfolioMetricValues.cs01, object.state.isStencil);
     const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.bicsLevel1Breakdown, []);
