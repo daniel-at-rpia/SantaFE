@@ -1778,7 +1778,7 @@ export class DTOService {
   ): DTOs.PortfolioStructureDTO {
     const object: DTOs.PortfolioStructureDTO = {
       data: {
-        rpPortfolioDate: rawData.date,
+        date: rawData.date,
         portfolioId: rawData.portfolioId,
         portfolioShortName: rawData.portfolioShortName,
         portfolioNav: rawData.portfolioNav,
