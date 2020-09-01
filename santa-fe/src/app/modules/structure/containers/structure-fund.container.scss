@@ -135,7 +135,10 @@ $tradeUtilityPanel_side_btn_size: $iconButton_size_large;
       flex-direction: column;
       padding: $spacing_medium;
       &-item {
-        
+        margin-top: $spacing_medium;
+        &:first-of-type {
+          margin-top: 0;
+        }
       }
     }
   }

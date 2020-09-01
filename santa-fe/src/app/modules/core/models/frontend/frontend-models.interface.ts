@@ -722,15 +722,31 @@ export interface TargetBarDTO extends BasicDTOStructure {
     displayedTargetValue: string;
     currentPercentage: string;
     exceededPercentage: string;
-    selectedMetricValue: PortfolioMetricValues
+    selectedMetricValue: PortfolioMetricValues;
+    displayedResults: string;
   }
   state: {
     isInactiveMetric: boolean,
     isStencil: boolean;
+    isEmpty: boolean;
   }
   utility: {
     getDisplayValues: (targetBar: TargetBarDTO) => void;
     convertNumtoStr: (targetBar: TargetBarDTO) => void;
     setInactiveMetric: (targetBar: TargetBarDTO) => void;
+  }
+}
+
+export interface SantaModalDTO extends BasicDTOStructure {
+  data: {
+    id: string;
+    modalElement: Node;
+  },
+  state: {
+    isPresenting: boolean;
+  },
+  api: {
+    openModal: () => void;
+    closeModal: () => void;
   }
 }

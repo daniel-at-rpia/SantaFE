@@ -32,8 +32,8 @@ import { PortfolioBreakdown } from 'App/modules/structure/containers/portfolio-b
 
     // Native modules
     CoreModule,
-    FormModule,
-    TradeModule
+    TradeModule,  // this is here because of move visualizer, TODO: move Move Visualizer to core module and remove this dependency
+    FormModule
   ]
 })
 export class StructureModule { }

@@ -1,5 +1,5 @@
   // dependencies
-    import { Injectable } from '@angular/core';
+    import { Injectable, ElementRef } from '@angular/core';
     import { any } from '@amcharts/amcharts4/.internal/core/utils/Array';
     import * as moment from 'moment';
 
@@ -272,9 +272,9 @@ export class DTOService {
   ) {
     const lastTrade = !!targetPortfolio.trades && targetPortfolio.trades.length > 0 ? targetPortfolio.trades[targetPortfolio.trades.length-1] : null;
     const newBlock: Blocks.SecurityPortfolioBlock = {
-      portfolioName: targetPortfolio.partitionOptionValue.PortfolioShortName,
+      portfolioName: targetPortfolio.partitionOptionValues.PortfolioShortName,
       quantity: targetPortfolio.quantity,
-      strategy: targetPortfolio.partitionOptionValue.StrategyName,
+      strategy: targetPortfolio.partitionOptionValues.StrategyName,
       cs01Cad: targetPortfolio.cs01Cad,
       cs01Local: targetPortfolio.cs01Local,
       costFifoSpread: null,
@@ -1694,11 +1694,13 @@ export class DTOService {
         displayedTargetValue: '',
         currentPercentage: '',
         exceededPercentage: '',
-        selectedMetricValue
+        selectedMetricValue,
+        displayedResults: ''
       },
       state: {
         isInactiveMetric: false,
-        isStencil
+        isStencil: !!isStencil,
+        isEmpty: false
       },
       utility: {
         getDisplayValues: null,
@@ -1715,7 +1717,7 @@ export class DTOService {
   ): DTOs.PortfolioStructureDTO {
     const object: DTOs.PortfolioStructureDTO = {
       data: {
-        rpPortfolioDate: rawData.rpPortfolioDate,
+        rpPortfolioDate: rawData.date,
         portfolioId: rawData.portfolioId,
         portfolioShortName: rawData.portfolioShortName,
         portfolioNav: rawData.portfolioNav,
@@ -1724,20 +1726,20 @@ export class DTOService {
           date: rawData.target.date,
           portfolioId: rawData.target.portfolioId,
           target: {
-            cs01: rawData.target.target.cs01,
-            leverageValue: rawData.target.target.leverageValue
+            cs01: rawData.target.target.Cs01 || null,
+            creditLeverage: rawData.target.target.CreditLeverage || null
           }
         },
         currentTotals :{
-          cs01: rawData.currentTotals.cs01,
-          leverageValue: rawData.currentTotals.leverageValue
+          cs01: rawData.currentTotals.Cs01,
+          creditLeverage: rawData.currentTotals.CreditLeverage
         },
         indexId: rawData.indexId,
         indexShortName: rawData.indexShortName,
         indexNav: rawData.indexNav,
         indexTotals: {
-          cs01: rawData.indexTotals.cs01,
-          leverageValue: rawData.indexTotals.leverageValue
+          cs01: rawData.indexTotals.Cs01,
+          creditLeverage: rawData.indexTotals.CreditLeverage
         },
         children: [],
         cs01TotalsInK: {
@@ -1795,7 +1797,7 @@ export class DTOService {
     };
     let findMax = 0;
     for (const eachCategory in rawData.breakdown) {
-      const eachEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].cs01 : null;
+      const eachEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].Cs01 : null;
       if (!!eachEntry) {
         const highestVal = Math.max(eachEntry.currentLevel, eachEntry.targetLevel);
         if (highestVal > findMax) {
@@ -1804,7 +1806,7 @@ export class DTOService {
       }
     }
     for (const eachCategory in rawData.breakdown) {
-      const eachEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].cs01 : null;
+      const eachEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].Cs01 : null;
       if (!!eachEntry) {
         const eachMoveVisualizer = this.formMoveVisualizerObjectForStructuring(eachEntry, findMax, !!isStencil);
         const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
@@ -1827,6 +1829,25 @@ export class DTOService {
         object.data.categoryList.push(eachCategoryBlock);
       }
     }
+    return object;
+  }
+
+  public formSantaModal(
+    elementRef: ElementRef
+  ): DTOs.SantaModalDTO{
+    const object: DTOs.SantaModalDTO = {
+      data: {
+        id: null,
+        modalElement: elementRef.nativeElement
+      },
+      state: {
+        isPresenting: false
+      },
+      api: {
+        openModal: null,
+        closeModal: null
+      }
+    };
     return object;
   }
 }

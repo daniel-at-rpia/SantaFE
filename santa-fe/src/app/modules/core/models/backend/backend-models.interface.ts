@@ -34,7 +34,7 @@ export interface BEFullSecurityDTO {
 }
 
 export interface BEPortfolioDTO {
-  partitionOptionValue: {
+  partitionOptionValues: {
     PortfolioShortName: string;
     StrategyName: string;
   }
@@ -83,7 +83,6 @@ export interface BESecurityDTO {
   isPreferred?: boolean;
   isCds?: boolean;
   unitPosition?: {
-    metricDate?: string;
     mark: {
       driver: string;
       enteredTime: string;
@@ -106,6 +105,31 @@ export interface BESecurityDTO {
     cs01Local?: number;
     cs01Cad?: number;
     hedgeFactor: number;
+    metrics: {
+      [property: string]: {
+        [date: string]: {
+          backupPmName: string;
+          date: string;
+          hedgeFactor: number;
+          mark: {
+            driver: string;
+            enteredTime: string;
+            price: number;
+            spread: number;
+            user: string;
+            value: number;
+          };
+          owners: Array<string>;
+          partitionOptionValues: {
+            PortfolioShortName: Array<string>;
+            StrategyName: Array<string>;
+          };
+          primaryPmName: string;
+          researchName: string;
+          source: number;
+        }
+      }
+    }
   }
   curveSubType?: string;  // CDS only
 }
@@ -549,22 +573,26 @@ export interface BEStructuringBreakdownSingleEntry {
   indexPct: number;
 }
 export interface BEStructuringBreakdownBlock {
-  groupOption: string;
+  date: string;
+  groupOption: number;
+  indexId: number
+  portfolioBreakdownId: string;
+  portfolioId: number;
   breakdown: {
     [property: string]: {
-      cs01: BEStructuringBreakdownSingleEntry;
-      leverageValue: BEStructuringBreakdownSingleEntry;
+      CreditLeverage: BEStructuringBreakdownSingleEntry;
+      Cs01: BEStructuringBreakdownSingleEntry;
     }
   }
 }
 
 export interface BEStructuringMetricTotalBlock {
-  cs01: number;
-  leverageValue: number;
+  CreditLeverage: number;
+  Cs01: number;
 }
 
 export interface BEPortfolioStructuringDTO {
-  rpPortfolioDate: string;
+  date: string;
   portfolioId: number;
   portfolioShortName: PortfolioShortNames;
   portfolioNav: number;
@@ -578,12 +606,13 @@ export interface BEPortfolioStructuringDTO {
   indexId: number;
   indexShortName: string;
   indexNav: number;
-  indexTotals: BEStructuringMetricTotalBlock
-  ccyBreakdown: BEStructuringBreakdownBlock
-  bicsLevel1Breakdown: BEStructuringBreakdownBlock
-  bicsLevel2Breakdown?: BEStructuringBreakdownBlock
-  bicsLevel3Breakdown?: BEStructuringBreakdownBlock
-  ratingBreakdown: BEStructuringBreakdownBlock
-  tenorBreakdown: BEStructuringBreakdownBlock
-  overrides?: BEStructuringBreakdownBlock
+  indexTotals: BEStructuringMetricTotalBlock;
+  inDb: boolean;
+  ccyBreakdown: BEStructuringBreakdownBlock;
+  bicsLevel1Breakdown: BEStructuringBreakdownBlock;
+  bicsLevel2Breakdown?: BEStructuringBreakdownBlock;
+  bicsLevel3Breakdown?: BEStructuringBreakdownBlock;
+  ratingBreakdown: BEStructuringBreakdownBlock;
+  tenorBreakdown: BEStructuringBreakdownBlock;
+  overrides?: BEStructuringBreakdownBlock;
 }

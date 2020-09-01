@@ -17,6 +17,7 @@ export class TargetBar implements OnInit {
   }
 
   private loadTargetBarConfiguration(targetBar: TargetBarDTO) {
+    if (this.targetBar.state.isEmpty) return;
     this.targetBar.utility.getDisplayValues(targetBar);
     this.targetBar.utility.setInactiveMetric(targetBar);
     this.targetBar.utility.convertNumtoStr(targetBar);

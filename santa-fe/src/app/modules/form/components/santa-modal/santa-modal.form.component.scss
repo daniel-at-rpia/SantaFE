@@ -1,0 +1,95 @@
+@import "global.scss";
+
+$modal_ctas_btn_size: 4rem;
+$modal_animation_duration: $animation_duration_normal;
+.santaModal {
+  $blockName: &;
+  @include mix_fixed_div(fixed, $z_index_modal);
+  @include mix_alive('custom', width 0s);
+  display: flex;
+  height: 100%;
+  width: 0;
+  transition-delay: $modal_animation_duration;
+  &__background {
+    @include mix_fixed_div(absolute, $z_index_base_item);
+    @include mix_alive('custom', $modal_animation_duration background-color);
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba($color_black, 0);
+  }
+  &__foreground {
+    @include mix_fixed_div(relative, $z_index_base_item_solid);
+    @include mix_border_radius(25px);
+    @include mix_alive('custom', $modal_animation_duration transform);
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    background-color: $color_gray_1;
+    transform: translate(0, 100%) scale(0.01);
+    margin: $spacing_xx_large $page_gutter_width_for_alerts;
+    &-title {
+      flex: 0 0 auto;
+      display: flex;
+      justify-content: center;
+      padding: $spacing_large;
+      &-text {
+        font-size: $font_size_x_large;
+        color: $font_color_minor;
+      }
+    }
+    &-divider {
+      flex: 0 0 auto;
+      height: $typical_border_width;
+      margin: 0 $spacing_large;
+      background-color: $color_border_gray;
+    }
+    &-content {
+      flex: 1 1 auto;
+      padding: $spacing_large;
+    }
+  }
+  &__ctas {
+    @include mix_fixed_div(absolute, $z_index_hovering_item);
+    @include mix_alive('custom', $modal_animation_duration transform);
+    display: flex;
+    justify-content: space-evenly;
+    left: 0;
+    bottom: $spacing_xx_large - $modal_ctas_btn_size/2;
+    width: 100%;
+    transform: scale(0.01);
+    &-btn {
+      @include mix_border_radius(50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: $modal_ctas_btn_size;
+      height: $modal_ctas_btn_size;
+      font-size: $font_size_x_large;
+      &--cancel {
+        background-color: $color_kill;
+        color: $font_color_inverse;
+      }
+      &--confirm {
+        background-color: $color_create;
+        color: $font_color_inverse;
+      }
+    }
+  }
+  &--presentState {
+    width: 100%;
+    transition-delay: 0s;
+    #{$blockName} {
+      &__background {
+        background-color: rgba($color_black, 0.5);
+      }
+      &__foreground {
+        transform: translate(0, 0) scale(1);
+      }
+      &__ctas {
+        transform: scale(1);
+      }
+    }
+  }
+}
