@@ -32,7 +32,7 @@ export const APIUrlMap = {
   logError: 'feLogger/log',
   getAllTradeHistory: 'trade/get-all-trades-for-security',
   getPortfolioStructures: 'portfolioStructuring/get-portfolio-structures',
-  updatePortfolioStructures: 'portfolioStructuring/update-portfolio-structures'
+  updatePortfolioStructures: 'portfolioStructuring/update-portfolio-structure'
 };
 
 export const FAILED_USER_INITIALS_FALLBACK = 'n/a';
