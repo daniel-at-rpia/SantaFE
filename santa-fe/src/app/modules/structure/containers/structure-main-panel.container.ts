@@ -149,7 +149,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     const currentDateFormat = 'YYYYMMDD';
     const formattedDate = moment(currentDate).format(currentDateFormat);
     const payload = {
-      date: formattedDate
+      "yyyyMMDD": formattedDate
     }
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioStructures, { req: 'POST' }, payload, false, false).pipe(
