@@ -489,6 +489,7 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
     max: number;
     isBasis: boolean;
     timeSeries: Array<any>;
+    endPinText: string;
   }
   style: {
     leftGap: number;
@@ -667,8 +668,10 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
   data: {
     title: string;
     definition: SecurityDefinitionDTO;
-    categoryList: Array<PortfolioBreakdownCategoryBlock>;
+    displayCategoryList: Array<PortfolioBreakdownCategoryBlock>;
     ratingHoverText: string;
+    rawCs01CategoryList: Array<PortfolioBreakdownCategoryBlock>;
+    rawLeverageCategoryList: Array<PortfolioBreakdownCategoryBlock>;
   },
   style: {
     ratingFillWidth: number;
@@ -676,6 +679,8 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
   state: {
     isEditing: boolean;
     isStencil: boolean;
+    isDisplayingCs01: boolean;
+    isTargetAlignmentRatingAvail: boolean;
   }
 }
 

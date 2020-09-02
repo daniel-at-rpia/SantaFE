@@ -103,16 +103,6 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     });
   }
 
-  private removeStencil(eachFund: PortfolioStructureDTO) {
-    eachFund.state.isStencil = false;
-    eachFund.data.children.forEach((eachChild) => {
-      eachChild.state.isStencil = false;
-      eachChild.data.categoryList.forEach((eachCategory) => {
-        eachCategory.moveVisualizer.state.isStencil = false;
-      })
-    })
-  }
-
   private resetAPIErrors() {
     this.state.fetchResult.fetchFundDataFailed = false;
     this.state.fetchResult.fetchFundDataFailedError = '';
@@ -142,10 +132,6 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         serverReturn.forEach(eachFund => {
           const newFund = this.dtoService.formStructureFundObject(eachFund, false);
           this.state.fetchResult.fundList.push(newFund);
-          const flipStencil = this.removeStencil.bind(this);
-          setTimeout(() => {
-            flipStencil(newFund);
-          }, 1)
         })
         this.state.fetchResult.fundList.length > 1 && this.sortFunds(this.state.fetchResult.fundList);
       }),
@@ -158,4 +144,4 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       })
     ).subscribe()
   }
- }
+}

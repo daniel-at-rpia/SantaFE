@@ -1,7 +1,11 @@
 <article
   [ngClass]="{
     'sat-portfolioBreakdown': true,
-    'sat-portfolioBreakdown--stencilState': breakdownData.state.isStencil
+    'sat-portfolioBreakdown--stencilState': breakdownData.state.isStencil,
+    'sat-portfolioBreakdown--ratingAvailableState': breakdownData.state.isTargetAlignmentRatingAvail,
+    'sat-portfolioBreakdown--goodRating': breakdownData.state.isTargetAlignmentRatingAvail && breakdownData.style.ratingFillWidth >= 80,
+    'sat-portfolioBreakdown--averageRating': breakdownData.state.isTargetAlignmentRatingAvail && breakdownData.style.ratingFillWidth >= 60 && breakdownData.style.ratingFillWidth < 80,
+    'sat-portfolioBreakdown--badRating': breakdownData.state.isTargetAlignmentRatingAvail && breakdownData.style.ratingFillWidth < 60
   }">
   <section class="sat-portfolioBreakdown__title">
     <div class="sat-portfolioBreakdown__title-definition">
@@ -39,7 +43,7 @@
   <section class="sat-portfolioBreakdown__categoryContent">
     <ul class="sat-portfolioBreakdown__categoryContent-list">
       <li
-        *ngFor="let eachCategory of breakdownData.data.categoryList"
+        *ngFor="let eachCategory of breakdownData.data.displayCategoryList"
         [ngClass]="{
           'sat-portfolioBreakdown__categoryContent-list-item': true,
           'sat-portfolioBreakdown__categoryContent-list-item--noSignificantDiff': eachCategory.diffToTarget === 0,
@@ -51,9 +55,9 @@
         </div>
         <div class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--target">{{eachCategory.diffToTargetDisplay}}</div>
         <hr class="sat-portfolioBreakdown__categoryContent-list-item-cellDivider">
-        <div class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--current">{{eachCategory.currentPct}}%</div>
+        <div class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--current">{{eachCategory.currentPctDisplay}}</div>
         <hr class="sat-portfolioBreakdown__categoryContent-list-item-cellDivider">
-        <div class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--index">{{eachCategory.indexPct}}%</div>
+        <div class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--index">{{eachCategory.indexPctDisplay}}</div>
       </li>
     </ul>
   </section>

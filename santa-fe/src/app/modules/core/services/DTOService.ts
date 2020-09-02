@@ -36,7 +36,10 @@
     import {
       ConfiguratorDefinitionLayout,
       FilterOptionsPortfolioList,
-      SecurityDefinitionMap
+      SecurityDefinitionMap,
+      FilterOptionsCurrency,
+      FilterOptionsRating,
+      FilterOptionsTenor
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       QuoteHeaderConfigList
@@ -1118,7 +1121,8 @@ export class DTOService {
         min: 0,
         max: 0,
         isBasis: false,
-        timeSeries: []
+        timeSeries: [],
+        endPinText: '123'
       },
       style: {
         leftGap: 10,
@@ -1142,6 +1146,7 @@ export class DTOService {
       if (rawData != null) {
         object.data.start = rawData.startMetric != null ? this.utility.round(rawData.startMetric) : null;
         object.data.end = rawData.endMetric != null ? this.utility.round(rawData.endMetric) : null;
+        object.data.endPinText = `${object.data.end}`;
         object.data.min = rawData.minMetric != null ? this.utility.round(rawData.minMetric) : null;
         object.data.max = rawData.maxMetric != null ? this.utility.round(rawData.maxMetric) : null;
         object.state.isInversed = rawData.startMetric > rawData.endMetric;
@@ -1160,6 +1165,7 @@ export class DTOService {
       } else {
         object.data.start = null;
         object.data.end = null;
+        object.data.endPinText = '';
         object.state.isInvalid = true;
       }
     }
@@ -1169,16 +1175,31 @@ export class DTOService {
   public formMoveVisualizerObjectForStructuring(
     rawData: BEModels.BEStructuringBreakdownSingleEntry,
     max: number,
+    min: number,
     isStencil: boolean
   ): DTOs.MoveVisualizerDTO {
-    let moveDistance, rightEdge;
+    const totalDistance = max - min;
+    let moveDistance, leftEdge, rightEdge, endPinLocation;
     if (!!rawData && !isStencil) {
-      if (rawData.targetLevel > rawData.currentLevel) {
-        moveDistance = this.utility.round(rawData.currentLevel / max * 100, 2);
-        rightEdge = this.utility.round((rawData.targetLevel - rawData.currentLevel) / max * 100, 2);
+      if (rawData.targetLevel !== null && rawData.targetLevel >= 0) {
+        // if target is set
+        if (rawData.targetLevel > rawData.currentLevel) {
+          moveDistance = this.utility.round(rawData.currentLevel / totalDistance * 100, 2);
+          leftEdge = min < 0 ? this.utility.round(Math.abs(min) / totalDistance * 100, 2) : 0;
+          rightEdge = this.utility.round((rawData.targetLevel - rawData.currentLevel) / totalDistance * 100, 2);
+          endPinLocation = moveDistance + rightEdge;
+        } else {
+          moveDistance = this.utility.round(rawData.targetLevel / totalDistance * 100, 2);
+          leftEdge = min < 0 ? this.utility.round(Math.abs(min) / totalDistance * 100, 2) : 0;
+          rightEdge = this.utility.round((rawData.currentLevel - rawData.targetLevel) / totalDistance * 100);
+          endPinLocation = moveDistance;
+        }
       } else {
-        moveDistance = this.utility.round(rawData.targetLevel / max * 100, 2);
-        rightEdge = this.utility.round((rawData.currentLevel - rawData.targetLevel) / max * 100);
+        // is target is not set
+        moveDistance = this.utility.round(rawData.currentLevel / totalDistance * 100, 2);
+        leftEdge = min < 0 ? this.utility.round(Math.abs(min) / totalDistance * 100, 2) : 0;
+        rightEdge = 0;
+        endPinLocation = moveDistance;
       }
     }
     const object: DTOs.MoveVisualizerDTO = {
@@ -1189,15 +1210,16 @@ export class DTOService {
         min: 0,
         max: 0,
         isBasis: false,
-        timeSeries: []
+        timeSeries: [],
+        endPinText: ''
       },
       style: {
         leftGap: 0,
-        leftEdge: 0,
+        leftEdge: !isStencil ? leftEdge : 0,
         moveDistance: !isStencil ? moveDistance : 40,
         rightEdge: !isStencil ? rightEdge : 30,
         rightGap: 0,
-        endPinLocation: !isStencil ? rawData.currentLevel < rawData.targetLevel ? moveDistance : moveDistance + rightEdge : 40
+        endPinLocation: !isStencil ? endPinLocation : 40
       },
       state: {
         isInversed: false,
@@ -1206,7 +1228,7 @@ export class DTOService {
         isStencil: true,
         isColorCodeInversed: false,
         structuringBreakdownVariant: true,
-        structuringBreakdownExceededState: rawData.currentLevel > rawData.targetLevel
+        structuringBreakdownExceededState: rawData.targetLevel !== null && rawData.currentLevel > rawData.targetLevel
       }
     };
     return object;
@@ -1799,22 +1821,21 @@ export class DTOService {
         convertToK: null
       }
     };
-
     object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, PortfolioMetricValues.cs01, object.state.isStencil);
     object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, PortfolioMetricValues.cs01, object.state.isStencil);
-    const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.bicsLevel1Breakdown);
+    const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.bicsLevel1Breakdown, []);
     BICSBreakdown.data.title = 'BICS';
     BICSBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.SECTOR);
-    object.data.children.push(BICSBreakdown);
-    const currencyBreakdown = this.formPortfolioBreakdown(isStencil, rawData.ccyBreakdown);
+    // object.data.children.push(BICSBreakdown);
+    const currencyBreakdown = this.formPortfolioBreakdown(isStencil, rawData.ccyBreakdown, FilterOptionsCurrency);
     currencyBreakdown.data.title = 'Currency';
     currencyBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
     object.data.children.push(currencyBreakdown);
-    const tenorBreakdown = this.formPortfolioBreakdown(isStencil, rawData.tenorBreakdown);
+    const tenorBreakdown = this.formPortfolioBreakdown(isStencil, rawData.tenorBreakdown, FilterOptionsTenor);
     tenorBreakdown.data.title = 'Tenor';
     tenorBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.TENOR);
     object.data.children.push(tenorBreakdown);
-    const ratingBreakdown = this.formPortfolioBreakdown(isStencil, rawData.ratingBreakdown);
+    const ratingBreakdown = this.formPortfolioBreakdown(isStencil, rawData.ratingBreakdown, FilterOptionsRating);
     ratingBreakdown.data.title = 'Rating';
     ratingBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.RATING);
     object.data.children.push(ratingBreakdown);
@@ -1823,59 +1844,130 @@ export class DTOService {
 
   public formPortfolioBreakdown(
     isStencil: boolean,
-    rawData: BEModels.BEStructuringBreakdownBlock
+    rawData: BEModels.BEStructuringBreakdownBlock,
+    definitionList: Array<string>
   ): DTOs.PortfolioBreakdownDTO {
     const object: DTOs.PortfolioBreakdownDTO = {
       data: {
         title: '',
         definition: null,
-        categoryList: [],
-        ratingHoverText: !isStencil ? '20%' : '33%'
+        displayCategoryList: [],
+        ratingHoverText: !isStencil ? 'n/a' : '33%',
+        rawCs01CategoryList: [],
+        rawLeverageCategoryList: []
       },
       style: {
-        ratingFillWidth: !isStencil ? 20 : 33
+        ratingFillWidth: null
       },
       state: {
         isEditing: false,
-        isStencil: true
+        isStencil: true,
+        isDisplayingCs01: true,
+        isTargetAlignmentRatingAvail: !!isStencil
       }
     };
-    let findMax = 0;
+    let findCs01Max = 0;
+    let findCs01Min = 0;
+    let findLeverageMax = 0;
+    let findLeverageMin = 0;
     for (const eachCategory in rawData.breakdown) {
-      const eachEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].Cs01 : null;
-      if (!!eachEntry) {
-        const highestVal = Math.max(eachEntry.currentLevel, eachEntry.targetLevel);
-        if (highestVal > findMax) {
-          findMax = highestVal;
+      const eachCs01Entry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].Cs01 : null;
+      if (!!eachCs01Entry) {
+        const highestVal = Math.max(eachCs01Entry.currentLevel, eachCs01Entry.targetLevel);
+        const lowestVal = Math.min(eachCs01Entry.currentLevel, eachCs01Entry.targetLevel);
+        if (highestVal > findCs01Max) {
+          findCs01Max = highestVal;
+        }
+        if (lowestVal < findCs01Min) {
+          findCs01Min = lowestVal;
+        }
+      }
+      const eachLeverageEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].CreditLeverage : null;
+      if (!!eachLeverageEntry) {
+        const highestVal = Math.max(eachLeverageEntry.currentLevel, eachLeverageEntry.targetLevel);
+        const lowestVal = Math.min(eachLeverageEntry.currentLevel, eachLeverageEntry.targetLevel);
+        if (highestVal > findLeverageMax) {
+          findLeverageMax = highestVal;
+        }
+        if (lowestVal < findLeverageMin) {
+          findLeverageMin = lowestVal;
         }
       }
     }
-    for (const eachCategory in rawData.breakdown) {
-      const eachEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].Cs01 : null;
-      if (!!eachEntry) {
-        const eachMoveVisualizer = this.formMoveVisualizerObjectForStructuring(eachEntry, findMax, !!isStencil);
-        const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
-          category: `${eachCategory}`,
-          targetLevel: eachEntry.targetLevel,
-          targetPct: eachEntry.targetPct,
-          diffToTarget: Math.round(eachEntry.targetLevel - eachEntry.currentLevel),
-          diffToTargetDisplay: '-',
-          currentLevel: eachEntry.currentLevel,
-          currentPct: eachEntry.currentPct,
-          indexPct: eachEntry.indexPct,
-          moveVisualizer: eachMoveVisualizer
-        };
-        if (eachCategoryBlock.diffToTarget < 0) {
-          eachCategoryBlock.diffToTargetDisplay = `${eachCategoryBlock.diffToTarget}k`;
-        }
-        if (eachCategoryBlock.diffToTarget > 0) {
-          eachCategoryBlock.diffToTargetDisplay = `+${eachCategoryBlock.diffToTarget}k`;
-        }
-        object.data.categoryList.push(eachCategoryBlock);
-      }
-    }
+    definitionList.forEach((eachCategoryText) => {
+      const eachCs01CategoryBlock = rawData.breakdown[eachCategoryText] 
+        ? this.formPortfolioBreakdownCategoryBlock(
+          findCs01Min,
+          findCs01Max,
+          isStencil,
+          eachCategoryText,
+          rawData.breakdown[eachCategoryText].Cs01,
+          true
+        )
+        : null;
+      !!eachCs01CategoryBlock && object.data.rawCs01CategoryList.push(eachCs01CategoryBlock);
+      const eachLeverageCategoryBlock = rawData.breakdown[eachCategoryText] 
+        ? this.formPortfolioBreakdownCategoryBlock(
+          findLeverageMin,
+          findLeverageMax,
+          isStencil,
+          eachCategoryText,
+          rawData.breakdown[eachCategoryText].CreditLeverage,
+          false
+        )
+        : null;
+      !!eachLeverageCategoryBlock && object.data.rawLeverageCategoryList.push(eachLeverageCategoryBlock);
+    });
     return object;
   }
+
+  public formPortfolioBreakdownCategoryBlock(
+    minValue: number,
+    maxValue: number,
+    isStencil: boolean,
+    categoryName: string,
+    rawCategoryData: BEModels.BEStructuringBreakdownSingleEntry,
+    isCs01: boolean
+  ): Blocks.PortfolioBreakdownCategoryBlock {
+    if (!!rawCategoryData) {
+      rawCategoryData.currentLevel = !!isCs01 ? this.utility.round(rawCategoryData.currentLevel/1000, 0) : this.utility.round(rawCategoryData.currentLevel, 2);
+      if (rawCategoryData.targetLevel != null) {
+        rawCategoryData.targetLevel = !!isCs01 ? this.utility.round(rawCategoryData.targetLevel/1000, 0) : this.utility.round(rawCategoryData.targetLevel, 2);
+      }
+      maxValue = !!isCs01 ? maxValue/1000 : maxValue;
+      minValue = !!isCs01 ? minValue/1000 : minValue;
+      const eachMoveVisualizer = this.formMoveVisualizerObjectForStructuring(
+        rawCategoryData,
+        maxValue,
+        minValue,
+        !!isStencil
+      );
+      eachMoveVisualizer.data.endPinText = !!isCs01 ? `${eachMoveVisualizer.data.end}k` : `${eachMoveVisualizer.data.end}`;
+      const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
+        category: `${categoryName}`,
+        targetLevel: rawCategoryData.targetLevel,
+        targetPct: this.utility.round(rawCategoryData.targetPct*100, 1),
+        diffToTarget: rawCategoryData.targetLevel != null ? Math.round(rawCategoryData.targetLevel - rawCategoryData.currentLevel) : 0,
+        diffToTargetDisplay: '-',
+        currentLevel: rawCategoryData.currentLevel,
+        currentPct: this.utility.round(rawCategoryData.currentPct*100, 1),
+        currentPctDisplay: rawCategoryData.currentPct != null ? `${this.utility.round(rawCategoryData.currentPct*100, 1)}%` : '-',
+        indexPct: rawCategoryData.indexPct,
+        indexPctDisplay: rawCategoryData.indexPct != null ? `${this.utility.round(rawCategoryData.indexPct*100, 1)}%` : '-',
+        moveVisualizer: eachMoveVisualizer
+      };
+      if (eachCategoryBlock.diffToTarget < 0) {
+        eachCategoryBlock.diffToTargetDisplay = `${eachCategoryBlock.diffToTarget}k`;
+      }
+      if (eachCategoryBlock.diffToTarget > 0) {
+        eachCategoryBlock.diffToTargetDisplay = `+${eachCategoryBlock.diffToTarget}k`;
+      }
+      return eachCategoryBlock;
+    } else {
+      return null;
+    }
+  }
+
   public formSantaModal(
     elementRef: ElementRef
   ): DTOs.SantaModalDTO{
@@ -1895,4 +1987,3 @@ export class DTOService {
     return object;
   }
 }
-
