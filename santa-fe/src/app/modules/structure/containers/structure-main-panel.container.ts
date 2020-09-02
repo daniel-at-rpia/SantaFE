@@ -11,11 +11,7 @@ import { StructureMetricSelect } from 'Structure/actions/structure.actions';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { UtilityService } from 'Core/services/UtilityService';
-import {
-  PortfolioMetricValues,
-  PortfolioShortNames,
-  STRUCTURE_EDIT_MODAL_ID
-} from 'Core/constants/structureConstants.constants';
+import { PortfolioMetricValues, PortfolioShortNames } from 'Core/constants/structureConstants.constants';
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.interface';
 import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backend-models.interface';
@@ -36,8 +32,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   constants = {
     cs01: PortfolioMetricValues.cs01,
     creditLeverage: PortfolioMetricValues.creditLeverage,
-    portfolioShortNames: PortfolioShortNames,
-    editModalId: STRUCTURE_EDIT_MODAL_ID
+    portfolioShortNames: PortfolioShortNames
   };
   portfolioList: Array<PortfolioShortNames> = [this.constants.portfolioShortNames.SOF, this.constants.portfolioShortNames.DOF, this.constants.portfolioShortNames.AGB, this.constants.portfolioShortNames.STIP, this.constants.portfolioShortNames.CIP, this.constants.portfolioShortNames.BBB, this.constants.portfolioShortNames.FIP];
   

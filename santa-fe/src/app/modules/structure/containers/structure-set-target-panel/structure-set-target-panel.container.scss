@@ -1,0 +1,7 @@
+@import "global.scss";
+@import "modules/structure/structure.scss";
+
+.sat-structureSetTargetPanel {
+  $blockName: &;
+  display: flex;
+}

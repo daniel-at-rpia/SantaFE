@@ -279,3 +279,7 @@ export interface StructureUtilityPanelState {
   selectedMetricValue: PortfolioMetricValues;
   isExpanded: boolean
 }
+
+export interface StructureSetTargetPanelState {
+  
+}

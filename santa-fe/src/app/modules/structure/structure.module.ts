@@ -14,6 +14,7 @@ import { StructureFund } from 'App/modules/structure/containers/structure-fund.c
 import { StructureUtilityPanel } from 'Structure/containers/structure-utility-panel.container';
 import { TargetBar } from 'App/modules/structure/components/target-bar.component'
 import { PortfolioBreakdown } from 'App/modules/structure/containers/portfolio-breakdown/portfolio-breakdown.container';
+import { StructureSetTargetPanel } from 'Structure/containers/structure-set-target-panel/structure-set-target-panel.container';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { PortfolioBreakdown } from 'App/modules/structure/containers/portfolio-b
     StructureFund,
     StructureUtilityPanel,
     TargetBar,
-    PortfolioBreakdown
+    PortfolioBreakdown,
+    StructureSetTargetPanel
   ],
   imports: [
     // Angular framework modules

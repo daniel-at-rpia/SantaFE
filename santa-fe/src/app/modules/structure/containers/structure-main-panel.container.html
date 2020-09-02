@@ -7,10 +7,4 @@
       <structure-fund [fund]="fund"></structure-fund>
     </div>
   </section>
-  <section>
-    <santa-modal [modalId]="constants.editModalId">
-      <!--Demo purpose only-->
-      <portfolio-breakdown *ngIf="state.fetchResult.fundList[0]?.data.children[0]" [breakdownData]="state.fetchResult.fundList[0]?.data.children[0]"></portfolio-breakdown>
-    </santa-modal>
-  </section>
 </article>
