@@ -79,19 +79,19 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         //Show active and inactive target bars
         fund.data.creditLeverageTargetBar.state.isInactiveMetric = fund.data.creditLeverageTargetBar.data.targetMetric !== this.state.selectedMetricValue ? true : false;
         fund.data.cs01TargetBar.state.isInactiveMetric = fund.data.cs01TargetBar.data.targetMetric !== this.state.selectedMetricValue ? true : false;
-
-        //Show breakdown data for selected target
+        fund.state.isStencil = true; 
         fund.data.children.forEach(breakdown => {
-          breakdown.data.displayCategoryList = [];
-          if (this.state.selectedMetricValue === this.constants.cs01) {
-            breakdown.data.displayCategoryList = breakdown.data.rawCs01CategoryList;
-            return
-          }
-          breakdown.data.displayCategoryList = breakdown.data.rawLeverageCategoryList;
-          breakdown.data.displayCategoryList.forEach(category => {
-            category.moveVisualizer.state.isStencil = false;
+          breakdown.state.isDisplayingCs01 = this.state.selectedMetricValue === this.constants.cs01;
+          breakdown.state.isStencil = true;
+          const targetList  = breakdown.state.isDisplayingCs01 ? breakdown.data.rawCs01CategoryList : breakdown.data.rawLeverageCategoryList;
+          targetList.forEach(target => {
+            target.moveVisualizer.state.isStencil = true;
           })
         })
+
+        setTimeout(() => {
+          fund.state.isStencil = false;
+        }, 500)
       })
     });
     const initialWaitForIcons = this.loadStencilFunds.bind(this);
