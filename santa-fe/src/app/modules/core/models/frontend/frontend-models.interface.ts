@@ -737,11 +737,6 @@ export interface TargetBarDTO extends BasicDTOStructure {
     isStencil: boolean;
     isEmpty: boolean;
   }
-  utility: {
-    getDisplayValues: (targetBar: TargetBarDTO) => void;
-    convertNumtoStr: (targetBar: TargetBarDTO) => void;
-    setInactiveMetric: (targetBar: TargetBarDTO) => void;
-  }
 }
 
 export interface SantaModalDTO extends BasicDTOStructure {

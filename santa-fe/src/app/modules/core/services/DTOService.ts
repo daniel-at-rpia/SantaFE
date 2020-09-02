@@ -1722,11 +1722,6 @@ export class DTOService {
         isInactiveMetric: false,
         isStencil: !!isStencil,
         isEmpty: false
-      },
-      utility: {
-        getDisplayValues: null,
-        convertNumtoStr: null,
-        setInactiveMetric: null
       }
     }
 
