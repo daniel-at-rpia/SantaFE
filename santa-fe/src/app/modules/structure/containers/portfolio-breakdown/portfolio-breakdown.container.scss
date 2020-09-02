@@ -1,7 +1,7 @@
 @import "global.scss";
 @import "modules/structure/structure.scss";
 
-$portfolioBreakdown_borderWidth: 2px; // can't use rem because fractions of a pixel doesn't look well here
+$portfolioBreakdown_borderWidth: 3px; // can't use rem because fractions of a pixel doesn't look well here
 $portfolioBreakdown_borderColor: $color_active;
 $portfolioBreakdown_rating_width: 12rem;
 $portfolioBreakdown_rating_thickness: 1.75rem;
@@ -49,16 +49,18 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
     width: $portfolioBreakdown_rating_width;
     height: $portfolioBreakdown_rating_thickness;
     overflow: hidden;
-    background-color: $color_active;
+    background-color: $color_white;
+    visibility: hidden;
     &-fill {
       @include mix_fixed_div(absolute, $z_index_base_item_solid);
+      @include mix_border_radius(3px, 'left');
       height: 100%;
       background-color: $color_red_5;
       left: 0;
     }
     &-hoverText {
       @include mix_fixed_div(absolute, $z_index_hovering_item);
-      color: $font_color_inverse;
+      color: $font_color_minor;
       font-size: $font_size_normal;
     }
   }
@@ -146,13 +148,54 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
   }
   &__ctas {
     @include mix_fixed_div(absolute, $z_index_hovering_item);
-    display: flex;
+    display: none;  // temporarily hide edit for v0.4 release
+    // display: flex;
     justify-content: center;
     left: 0;
     bottom: 0 - $iconButton_size_regular/2;
     width: 100%;
     &-editBtn {
       @include mix_border_radius(50%);
+    }
+  }
+  &--goodRating {
+    #{$blockName} {
+      &__rating {
+        background-color: $color_active;
+        &-fill {
+          background-color: $color_green_5;
+        }
+      }
+    }
+  }
+  &--averageRating {
+    #{$blockName} {
+      &__rating {
+        background-color: $color_active;
+        &-fill {
+          background-color: $color_orange_5;
+        }
+      }
+    }
+  }
+  &--badRating {
+    #{$blockName} {
+      &__rating {
+        background-color: $color_active;
+        &-fill {
+          background-color: $color_red_5;
+        }
+      }
+    }
+  }
+  &--ratingAvailableState {
+    #{$blockName} {
+      &__rating {
+        visibility: visible;
+        &-hoverText {
+          color: $font_color_inverse;
+        }
+      }
     }
   }
   &--stencilState {

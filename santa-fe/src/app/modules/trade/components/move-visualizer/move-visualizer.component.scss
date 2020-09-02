@@ -136,6 +136,9 @@ $moveVisualizer_line_stencilMaskAnimationDuration: $animation_duration_heavy;
   &--structuringBreakdownVariant {
     #{$moveVisualizerBlockName} {
       &__bar {
+        &-leftEdge {
+          background-color: $theme_color_1;
+        }
         &-moveDistance {
           @include mix_gradient($theme_color_1, $theme_color_2, 0%, 90deg);  // can't use mix_theme_background since that is optimized for a light background where here we are looking for high contrast with a black background
           &-arrow {

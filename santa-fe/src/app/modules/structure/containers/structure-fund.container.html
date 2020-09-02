@@ -4,17 +4,12 @@
   }">
   <header class="sat-fundStructuring__configuration">
     <div class="sat-fundStructuring__targetBar">
-      <target-bar
-        [targetBar]="targetBarLeverage"
-        [fetchDataFailedState]="fetchDataFailedState">
+      <target-bar [targetBar]="fund.data.creditLeverageTargetBar">
       </target-bar>
     </div>
     <h2 class="sat-fundStructuring__configuration-title">{{ fund.data.portfolioShortName }}</h2>
     <div class="sat-fundStructuring__targetBar">
-      <target-bar
-        [targetBar]="targetBarCS01"
-        [fetchDataFailedState]="fetchDataFailedState">
-      </target-bar>
+      <target-bar [targetBar]="fund.data.cs01TargetBar"></target-bar>
     </div>
   </header>
   <section class="sat-fundStructuring__utility">
@@ -26,7 +21,10 @@
   <section class="sat-fundStructuring__content">
     <ul class="sat-fundStructuring__content-breakdownList">
       <li class="sat-fundStructuring__content-breakdownList-item" *ngFor="let eachBreakdown of fund.data.children">
-        <portfolio-breakdown [breakdownData]="eachBreakdown"></portfolio-breakdown>
+        <portfolio-breakdown
+          [breakdownData]="eachBreakdown"
+          [dataIsReady]="!fund.state.isStencil">
+        </portfolio-breakdown>
       </li>
       <p class="sat-fundStructuring__content-error-message">No available portfolio data to show</p>
     </ul>

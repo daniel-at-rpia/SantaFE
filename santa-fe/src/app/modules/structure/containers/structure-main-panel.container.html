@@ -10,11 +10,7 @@
   </section>
   <section class="sat-structureMainPanel__fundGroup">
     <div *ngFor="let fund of state.fetchResult.fundList" class="sat-structureMainPanel__fundGroup-fund">
-      <structure-fund 
-        [fund]="fund"
-        [selectedMetricValue]="selectedMetricValue"
-        [fetchDataFailedState]="state.fetchResult.fetchFundDataFailed">
-      </structure-fund>
+      <structure-fund [fund]="fund"></structure-fund>
     </div>
   </section>
   <section>

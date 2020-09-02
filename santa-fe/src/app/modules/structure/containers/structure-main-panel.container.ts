@@ -2,6 +2,8 @@ import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { DTOService } from 'Core/services/DTOService';
 import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
 import { Store, select } from '@ngrx/store';
+import { selectMetricLevel } from 'Structure/selectors/structure.selectors';
+import { StructureMetricSelect } from 'Structure/actions/structure.actions';
 import { Subscription } from 'rxjs';
 import { ownerInitials } from 'Core/selectors/core.selectors';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
@@ -27,9 +29,9 @@ import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backe
 
 export class StructureMainPanel implements OnInit, OnDestroy {
   state: StructureMainPanelState; 
-  selectedMetricValue: PortfolioMetricValues = PortfolioMetricValues.cs01;
   subscriptions = {
-    ownerInitialsSub: null
+    ownerInitialsSub: null,
+    selectedMetricLevelSub: null
   };
   constants = {
     cs01: PortfolioMetricValues.cs01,
@@ -52,7 +54,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     const state: StructureMainPanelState = {
         ownerInitial: null,
         isUserPM: false,
-        selectedMetricValue: this.constants.cs01,
+        selectedMetricValue: null,
         fetchResult: {
           fundList: [],
           fetchFundDataFailed: false,
@@ -63,10 +65,35 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
   
   public ngOnInit() {
+    this.state = this.initializePageState();
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
       select(ownerInitials)
     ).subscribe((value) => {
       this.state.ownerInitial = value;
+    });
+    this.subscriptions.selectedMetricLevelSub = this.store$.pipe(
+      select(selectMetricLevel)
+    ).subscribe((value) => {
+      const metric = value === this.constants.cs01 ? this.constants.cs01 : this.constants.creditLeverage
+      this.state.selectedMetricValue = metric;
+      this.state.fetchResult.fundList.forEach(fund => {
+        //Show active and inactive target bars
+        fund.data.creditLeverageTargetBar.state.isInactiveMetric = fund.data.creditLeverageTargetBar.data.targetMetric !== this.state.selectedMetricValue ? true : false;
+        fund.data.cs01TargetBar.state.isInactiveMetric = fund.data.cs01TargetBar.data.targetMetric !== this.state.selectedMetricValue ? true : false;
+        fund.state.isStencil = true; 
+        fund.data.children.forEach(breakdown => {
+          breakdown.state.isDisplayingCs01 = this.state.selectedMetricValue === this.constants.cs01;
+          breakdown.state.isStencil = true;
+          const targetList  = breakdown.state.isDisplayingCs01 ? breakdown.data.rawCs01CategoryList : breakdown.data.rawLeverageCategoryList;
+          targetList.forEach(target => {
+            target.moveVisualizer.state.isStencil = true;
+          })
+        })
+
+        setTimeout(() => {
+          fund.state.isStencil = false;
+        }, 500)
+      })
     });
     const initialWaitForIcons = this.loadStencilFunds.bind(this);
     setTimeout(() => {
@@ -95,16 +122,6 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     });
   }
 
-  private removeStencil(eachFund: PortfolioStructureDTO) {
-    eachFund.state.isStencil = false;
-    eachFund.data.children.forEach((eachChild) => {
-      eachChild.state.isStencil = false;
-      eachChild.data.categoryList.forEach((eachCategory) => {
-        eachCategory.moveVisualizer.state.isStencil = false;
-      })
-    })
-  }
-
   private resetAPIErrors() {
     this.state.fetchResult.fetchFundDataFailed = false;
     this.state.fetchResult.fetchFundDataFailedError = '';
@@ -120,11 +137,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
 
   private fetchFunds() {
     this.loadStencilFunds();
-    const currentDate = new Date();
-    const currentDateFormat = 'YYYYMMDD';
-    const formattedDate = moment(currentDate).format(currentDateFormat);
-    const payload = {
-      date: formattedDate
+    const payload = { // assumes current date if nothing is passed in
+      yyyyMMDD: ""
     }
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioStructures, { req: 'POST' }, payload, false, false).pipe(
@@ -134,10 +148,6 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         serverReturn.forEach(eachFund => {
           const newFund = this.dtoService.formStructureFundObject(eachFund, false);
           this.state.fetchResult.fundList.push(newFund);
-          const flipStencil = this.removeStencil.bind(this);
-          setTimeout(() => {
-            flipStencil(newFund);
-          }, 1)
         })
         this.state.fetchResult.fundList.length > 1 && this.sortFunds(this.state.fetchResult.fundList);
       }),
@@ -155,4 +165,4 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       })
     ).subscribe()
   }
- }
+}

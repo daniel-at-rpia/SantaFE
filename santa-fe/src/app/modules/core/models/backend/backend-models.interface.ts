@@ -565,13 +565,15 @@ export interface BEAlertMarketListQuoteBlock extends BEQuoteBaseBlock {
 }
 
 export interface BEStructuringBreakdownSingleEntry {
-  total: number;  // what is this for? Target Total or Current Total? - DZ
   targetLevel: number;
   targetPct: number;
   currentLevel: number;
   currentPct: number;
+  indexLevel: number;
   indexPct: number;
+  view: string;
 }
+
 export interface BEStructuringBreakdownBlock {
   date: string;
   groupOption: number;

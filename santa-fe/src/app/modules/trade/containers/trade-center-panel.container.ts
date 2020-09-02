@@ -168,6 +168,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    this.state = this.initializePageState();
     this.subscriptions.startNewUpdateSub = this.store$.pipe(
       select(selectLiveUpdateTick),
       withLatestFrom(

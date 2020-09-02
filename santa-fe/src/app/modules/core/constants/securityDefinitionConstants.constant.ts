@@ -19,7 +19,7 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'Not bail in'
   ];
 
-  const FilterOptionsCurrency = [
+  export const FilterOptionsCurrency = [
     'CAD',
     'EUR',
     'GBP',
@@ -32,7 +32,7 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'None'
   ];
 
-  const FilterOptionsRating = [
+  export const FilterOptionsRating = [
     'AAA',
     'AA',
     'A',
@@ -53,7 +53,7 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'Xover'
   ];
 
-  const FilterOptionsTenor = [
+  export const FilterOptionsTenor = [
     // '0.25Y','0.5Y','0.75Y','1Y',
     '2Y',
     '3Y',

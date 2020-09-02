@@ -1,6 +1,7 @@
 @import "global.scss";
 
 .sat-fundTargetBar {
+  @include mix_fixed_div(relative, $z_index_base_item);
   $blockName: &;
     &__type {
       font-size: $font_size_small;
@@ -14,7 +15,15 @@
       @include mix_fixed_div(relative, $z_index_base_item);
       height: $spacing_large;
       overflow: hidden;
-      &-bar
+      &:hover,
+      &:focus {
+        + #{$blockName} {
+          &__tooltip {
+            display: block;
+          }
+        }
+      }
+      &-bar,
       &-values {
         @include mix_fixed_div(absolute, $z_index_base_item_solid);
         display: inline-block;
@@ -33,7 +42,7 @@
         }
         &--current {
           @include mix_theme_background;
-          z-index: $z_index_base_item_lift; 
+          z-index: $z_index_base_item_lift;
         }
         &--exceeded {
           background-color: $color_red_5;
@@ -50,18 +59,33 @@
         justify-content: center;
         align-items: center;
         line-height: $line_height_minimum;
+        width: 80%;
         &-text {
           color: $font_color_inverse;
         }
       }
     }
-    &--stencilState {
+    &__tooltip {
+      @include mix_fixed_div(absolute, $z_index_hovering_item);
+      @include mix_border_radius(3px);
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+      color: $font_color_inverse;
+      line-height: $line_height_small;
+      background-color:  $color_active;
+      text-align: center;
+      width:100%;
+      padding: $spacing_xx_small;
+      font-size: $font_size_x_small;
+      margin-top: $spacing_xx_small;
+    }
+    &--emptyState {
       #{$blockName} {
         &__indicator {
-          &-values {
-            &-text {
-              @include mix_stencil_animation();
-            }
+          background-color: $color_active;
+          &-bar {
+            display: none;
           }
         }
       }
@@ -72,47 +96,25 @@
         &__indicator {
           &-bar {
             &--exceeded {
-              background-color: $color_red_5;
+              background-color: $color_gray_6;
             }
             &--current {
               @include mix_gradient($color_gray_6, $color_gray_4, 0%, 90deg);
             }
           }
         }
-      }
-      &#{$blockName} {
-       &--stencilState {
-        #{$blockName} {
-          &__indicator {
-            &-bar {
-              &--exceeded,
-              &--current {
-                display: none;
-              }
-            }
-          }
-        }
-       }
-      }
-    }
-    &--emptyState {
-      #{$blockName} {
-        &__indicator {
-          &-bar {
-            &--exceeded,
-            &--current {
-              display: none;
-            }
-          }
-        }
-      }
-    }
-    &--errorState {
-      #{$blockName} {
         &__indicator {
           background-color: $color_disabled;
-          &-bar {
-            display: none;
+        }
+      }
+    }
+    &--stencilState {
+      #{$blockName} {
+        &__indicator {
+          &-values {
+            &-text {
+              @include mix_stencil_animation();
+            }
           }
         }
       }
