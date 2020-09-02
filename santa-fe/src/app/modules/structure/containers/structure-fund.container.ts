@@ -1,9 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation, OnChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.interface';
 import {PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 import { DTOService } from 'Core/services/DTOService';
 import { TargetBarDTO } from 'FEModels/frontend-models.interface';
-import { UtilityService } from 'Core/services/UtilityService'
+import { UtilityService } from 'Core/services/UtilityService';
+import { StructureFundState } from 'Core/models/frontend/frontend-page-states.interface';
 
 
 @Component({
@@ -13,43 +14,43 @@ import { UtilityService } from 'Core/services/UtilityService'
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class StructureFund implements OnInit, OnChanges {
+export class StructureFund implements OnInit {
   @Input() fund: PortfolioStructureDTO;
-  @Input() ownerInitial: string;
   @Output() updatedFundData = new EventEmitter<PortfolioStructureDTO>();
+  state: StructureFundState
   constants = {
     cs01: PortfolioMetricValues.cs01,
     creditLeverage: PortfolioMetricValues.creditLeverage
   }
-  state = {
-    currentOwnerInitials: null,
-    isEditing: false,
-    hasErrors: {
-      updatedCS01: false,
-      updatedCreditLeverage: false,
-      errorMessage: ''
-    }
-  }
-  
+
   constructor(
     private dtoService: DTOService,
     private utilityService: UtilityService,
-  ){}
+  ){
+    this.initializeStructureFundState();
+  }
 
   public ngOnInit() {
     this.fund.api.onSubmitMetricValues = this.saveEditDetails.bind(this);
   }
 
-  public ngOnChanges() {
-    this.state.currentOwnerInitials =  this.ownerInitial !== null ? this.ownerInitial : null
+  private initializeStructureFundState() {
+   this.state = {
+      isEditingFundTargets: false,
+      hasErrors: {
+        updatedCS01: false,
+        updatedCreditLeverage: false,
+        errorMessage: ''
+      }
+    }
   }
 
   private showEditMenu() {
-    this.state.isEditing = true;
+    this.state.isEditingFundTargets = true;
   }
 
   private closeEditMenu() {
-    this.state.isEditing = false;
+    this.state.isEditingFundTargets = false;
     this.resetErrors();
   }
 
@@ -81,7 +82,7 @@ export class StructureFund implements OnInit, OnChanges {
       this.state.hasErrors.errorMessage = `*Please enter a valid target level for ${invalidTarget}`;
       return;
     } else {
-      this.state.isEditing = false;
+      this.state.isEditingFundTargets = false;
       this.updatedFundData.emit(this.fund)
     }
   }

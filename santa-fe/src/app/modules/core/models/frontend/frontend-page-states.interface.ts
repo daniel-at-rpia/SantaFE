@@ -277,5 +277,14 @@ export interface StructureState {
 
 export interface StructureUtilityPanelState {
   selectedMetricValue: PortfolioMetricValues;
-  isExpanded: boolean
+  isExpanded: boolean;
+}
+
+export interface StructureFundState {
+  isEditingFundTargets: boolean;
+  hasErrors: {
+    updatedCS01: boolean;
+    updatedCreditLeverage: boolean;
+    errorMessage: string;
+  }
 }
