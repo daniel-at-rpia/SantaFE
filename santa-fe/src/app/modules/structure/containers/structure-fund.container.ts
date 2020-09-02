@@ -15,7 +15,6 @@ import { UtilityService } from 'Core/services/UtilityService'
 
 export class StructureFund implements OnInit {
   @Input() fund: PortfolioStructureDTO;
-  @Input() selectedMetricValue: PortfolioMetricValues;
   constants = {
     cs01: PortfolioMetricValues.cs01,
     creditLeverage: PortfolioMetricValues.creditLeverage

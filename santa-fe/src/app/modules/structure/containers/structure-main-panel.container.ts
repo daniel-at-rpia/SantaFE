@@ -75,6 +75,24 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     ).subscribe((value) => {
       const metric = value === this.constants.cs01 ? this.constants.cs01 : this.constants.creditLeverage
       this.state.selectedMetricValue = metric;
+      this.state.fetchResult.fundList.forEach(fund => {
+        //Show active and inactive target bars
+        fund.data.creditLeverageTargetBar.state.isInactiveMetric = fund.data.creditLeverageTargetBar.data.targetMetric !== this.state.selectedMetricValue ? true : false;
+        fund.data.cs01TargetBar.state.isInactiveMetric = fund.data.cs01TargetBar.data.targetMetric !== this.state.selectedMetricValue ? true : false;
+        fund.state.isStencil = true; 
+        fund.data.children.forEach(breakdown => {
+          breakdown.state.isDisplayingCs01 = this.state.selectedMetricValue === this.constants.cs01;
+          breakdown.state.isStencil = true;
+          const targetList  = breakdown.state.isDisplayingCs01 ? breakdown.data.rawCs01CategoryList : breakdown.data.rawLeverageCategoryList;
+          targetList.forEach(target => {
+            target.moveVisualizer.state.isStencil = true;
+          })
+        })
+
+        setTimeout(() => {
+          fund.state.isStencil = false;
+        }, 500)
+      })
     });
     const initialWaitForIcons = this.loadStencilFunds.bind(this);
     setTimeout(() => {
@@ -118,11 +136,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
 
   private fetchFunds() {
     this.loadStencilFunds();
-    const currentDate = new Date();
-    const currentDateFormat = 'YYYYMMDD';
-    const formattedDate = moment(currentDate).format(currentDateFormat);
-    const payload = {
-      date: formattedDate
+    const payload = { // assumes current date if nothing is passed in
+      yyyyMMDD: ""
     }
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioStructures, { req: 'POST' }, payload, false, false).pipe(
