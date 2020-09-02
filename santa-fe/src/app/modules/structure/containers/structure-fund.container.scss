@@ -23,6 +23,7 @@
     &-btn {
       @include mix_fixed_div(absolute, $z_index_base_item_solid);
       @include mix_border_radius(50%);
+      display: none;  // temporarily hide the edit for v0.4 release
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
