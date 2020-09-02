@@ -154,10 +154,14 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       catchError(err => {
         this.state.fetchResult.fetchFundDataFailed = true;
         this.state.fetchResult.fetchFundDataFailedError = err.message;
-        setTimeout(() => {
-          this.state.fetchResult.fundList.forEach(eachFund => {
-            eachFund.state.isStencil = false;
-          }, 1)
+        this.state.fetchResult.fundList.forEach(eachFund => {
+          eachFund.state.isDataUnavailable = this.state.fetchResult.fetchFundDataFailed;
+          eachFund.data.creditLeverageTargetBar.state.isDataUnavailable = this.state.fetchResult.fetchFundDataFailed;
+          eachFund.data.creditLeverageTargetBar.state.isStencil = !this.state.fetchResult.fetchFundDataFailed;
+          eachFund.data.creditLeverageTargetBar.data.displayedResults = '-';
+          eachFund.data.cs01TargetBar.state.isDataUnavailable = this.state.fetchResult.fetchFundDataFailed;
+          eachFund.data.cs01TargetBar.state.isStencil = !this.state.fetchResult.fetchFundDataFailed;
+          eachFund.data.cs01TargetBar.data.displayedResults = '-';
         })
         this.restfulCommService.logError('Get portfolio funds failed')
         console.error(`${this.restfulCommService.apiMap.getPortfolioStructures} failed`, err);
