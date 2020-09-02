@@ -1740,10 +1740,6 @@ export class DTOService {
       targetBar.data.currentPercentage = `${(targetBar.data.currentValue / targetBar.data.targetValue) * 100}%`;
     }
 
-    function setInactiveMetric(targetBar: DTOs.TargetBarDTO) {
-      targetBar.state.isInactiveMetric = targetBar.data.targetMetric !== targetBar.data.selectedMetricValue ? true : false;
-    }
-
     function getDisplayedResults(valueA: string, valueB: string) {
       return `${valueA}/${valueB}`;
     }
@@ -1760,7 +1756,6 @@ export class DTOService {
       targetBar.data.displayedResults = getDisplayedResults(targetBar.data.displayedCurrentValue, targetBar.data.displayedTargetValue);
     }
     convertValuesForDisplay(object);
-    setInactiveMetric(object);
     getDisplayedValues(object);
     if (!targetValue) {
       object.state.isEmpty = true;
