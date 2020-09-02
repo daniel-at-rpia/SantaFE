@@ -17,7 +17,7 @@ import {
   STRUCTURE_EDIT_MODAL_ID
 } from 'Core/constants/structureConstants.constants';
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
-import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.interface';
+import { PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/frontend-models.interface';
 import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backend-models.interface';
 
 @Component({
@@ -135,6 +135,12 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     })
   }
 
+  private setEmptyTargetBar(targetBar: TargetBarDTO) {
+    targetBar.state.isDataUnavailable = true;
+    targetBar.state.isStencil = false;
+    targetBar.data.displayedResults = '-';
+  }
+
   private fetchFunds() {
     this.loadStencilFunds();
     const payload = { // assumes current date if nothing is passed in
@@ -156,12 +162,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         this.state.fetchResult.fetchFundDataFailedError = err.message;
         this.state.fetchResult.fundList.forEach(eachFund => {
           eachFund.state.isDataUnavailable = this.state.fetchResult.fetchFundDataFailed;
-          eachFund.data.creditLeverageTargetBar.state.isDataUnavailable = this.state.fetchResult.fetchFundDataFailed;
-          eachFund.data.creditLeverageTargetBar.state.isStencil = !this.state.fetchResult.fetchFundDataFailed;
-          eachFund.data.creditLeverageTargetBar.data.displayedResults = '-';
-          eachFund.data.cs01TargetBar.state.isDataUnavailable = this.state.fetchResult.fetchFundDataFailed;
-          eachFund.data.cs01TargetBar.state.isStencil = !this.state.fetchResult.fetchFundDataFailed;
-          eachFund.data.cs01TargetBar.data.displayedResults = '-';
+          this.setEmptyTargetBar(eachFund.data.creditLeverageTargetBar);
+          this.setEmptyTargetBar(eachFund.data.cs01TargetBar);
         })
         this.restfulCommService.logError('Get portfolio funds failed')
         console.error(`${this.restfulCommService.apiMap.getPortfolioStructures} failed`, err);
