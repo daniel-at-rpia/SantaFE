@@ -148,8 +148,7 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
   }
   &__ctas {
     @include mix_fixed_div(absolute, $z_index_hovering_item);
-    display: none;  // temporarily hide edit for v0.4 release
-    // display: flex;
+    display: none;
     justify-content: center;
     left: 0;
     bottom: 0 - $iconButton_size_regular/2;
@@ -195,6 +194,13 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
         &-hoverText {
           color: $font_color_inverse;
         }
+      }
+    }
+  }
+  &--editableState {
+    #{$blockName} {
+      &__ctas {
+        display: flex;
       }
     }
   }

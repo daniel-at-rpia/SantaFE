@@ -1,16 +1,16 @@
 import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
+import { of, Subscription } from 'rxjs';
+import { catchError, first, tap} from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
+import * as moment from 'moment';
+
 import { DTOService } from 'Core/services/DTOService';
 import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
-import { Store, select } from '@ngrx/store';
 import { selectMetricLevel } from 'Structure/selectors/structure.selectors';
 import { StructureMetricSelect } from 'Structure/actions/structure.actions';
-import { Subscription } from 'rxjs';
-import { ownerInitials } from 'Core/selectors/core.selectors';
+import { selectUserInitials } from 'Core/selectors/core.selectors';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
-import { of  } from 'rxjs';
-import { catchError, first, tap} from 'rxjs/operators';
 import { UtilityService } from 'Core/services/UtilityService';
-import * as moment from 'moment';
 import {
   PortfolioMetricValues,
   PortfolioShortNames,
@@ -67,7 +67,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   public ngOnInit() {
     this.state = this.initializePageState();
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
-      select(ownerInitials)
+      select(selectUserInitials)
     ).subscribe((value) => {
       this.state.ownerInitial = value;
     });

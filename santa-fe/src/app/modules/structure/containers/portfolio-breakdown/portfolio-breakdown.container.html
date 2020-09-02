@@ -5,7 +5,8 @@
     'sat-portfolioBreakdown--ratingAvailableState': breakdownData.state.isTargetAlignmentRatingAvail,
     'sat-portfolioBreakdown--goodRating': breakdownData.state.isTargetAlignmentRatingAvail && breakdownData.style.ratingFillWidth >= 80,
     'sat-portfolioBreakdown--averageRating': breakdownData.state.isTargetAlignmentRatingAvail && breakdownData.style.ratingFillWidth >= 60 && breakdownData.style.ratingFillWidth < 80,
-    'sat-portfolioBreakdown--badRating': breakdownData.state.isTargetAlignmentRatingAvail && breakdownData.style.ratingFillWidth < 60
+    'sat-portfolioBreakdown--badRating': breakdownData.state.isTargetAlignmentRatingAvail && breakdownData.style.ratingFillWidth < 60,
+    'sat-portfolioBreakdown--editableState': breakdownData.state.isEditable && !breakdownData.state.isStencil
   }">
   <section class="sat-portfolioBreakdown__title">
     <div class="sat-portfolioBreakdown__title-definition">

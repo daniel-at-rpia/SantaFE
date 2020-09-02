@@ -1,10 +1,13 @@
-import { Component, OnInit, OnChanges, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnChanges, OnDestroy, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
+import { of, Subscription } from 'rxjs';
+import { catchError, first, tap} from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
 
 import { PortfolioBreakdownDTO } from 'FEModels/frontend-models.interface';
-import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import { PortfolioMetricValues, STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
 import { ModalService } from 'Form/services/ModalService';
 import { UtilityService } from 'Core/services/UtilityService';
-import { STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
+import { selectUserInitials } from 'Core/selectors/core.selectors';
 
 @Component({
   selector: 'portfolio-breakdown',
@@ -13,20 +16,46 @@ import { STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.const
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class PortfolioBreakdown implements OnChanges {
+export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
   @Input() breakdownData: PortfolioBreakdownDTO;
   @Input() dataIsReady: boolean;
+  subscriptions = {
+    ownerInitialsSub: null
+  };
   constants = {
     editModalId: STRUCTURE_EDIT_MODAL_ID
   }
+
   constructor(
     private modalService: ModalService,
-    private utilityService: UtilityService
+    private utilityService: UtilityService,
+    private store$: Store<any>
   ) { }
+
+  public ngOnInit() {
+    this.subscriptions.ownerInitialsSub = this.store$.pipe(
+      select(selectUserInitials)
+    ).subscribe((initials) => {
+      if (initials == 'DM') {
+        this.breakdownData.state.isEditable = true;
+      } else {
+        this.breakdownData.state.isEditable = false;
+      }
+    });
+  }
 
   public ngOnChanges() {
     if (!!this.breakdownData) {
       this.loadData();
+    }
+  }
+
+  public ngOnDestroy() {
+    for (const eachItem in this.subscriptions) {
+      if (this.subscriptions.hasOwnProperty(eachItem)) {
+        const eachSub = this.subscriptions[eachItem] as Subscription;
+        eachSub.unsubscribe();
+      }
     }
   }
 

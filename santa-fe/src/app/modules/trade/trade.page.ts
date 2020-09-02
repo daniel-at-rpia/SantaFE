@@ -21,7 +21,7 @@
     import { TradeState } from 'FEModels/frontend-page-states.interface';
     import { selectSelectedSecurityForAnalysis } from 'Trade/selectors/trade.selectors';
     import { CoreUserLoggedIn } from 'Core/actions/core.actions';
-    import { selectDislayAlertThumbnail, ownerInitials } from 'Core/selectors/core.selectors';
+    import { selectDislayAlertThumbnail, selectUserInitials } from 'Core/selectors/core.selectors';
     import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
     import { CoreLoadSecurityMap } from 'Core/actions/core.actions';
     import { TradeStoreResetEvent } from 'Trade/actions/trade.actions';
@@ -75,7 +75,7 @@ export class TradePage implements OnInit, OnDestroy {
       this.state.displayAlertThumbnail = !!value;
     });
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
-      select(ownerInitials)
+      select(selectUserInitials)
     ).subscribe((value) => {
       this.state.ownerInitial = value;
     });

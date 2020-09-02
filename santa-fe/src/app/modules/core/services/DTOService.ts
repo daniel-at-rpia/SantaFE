@@ -1856,7 +1856,7 @@ export class DTOService {
         ratingFillWidth: null
       },
       state: {
-        isEditing: false,
+        isEditable: false,
         isStencil: true,
         isDisplayingCs01: true,
         isTargetAlignmentRatingAvail: !!isStencil
