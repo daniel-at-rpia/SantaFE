@@ -730,7 +730,6 @@ export interface TargetBarDTO extends BasicDTOStructure {
     displayedTargetValue: string;
     currentPercentage: string;
     exceededPercentage: string;
-    selectedMetricValue: PortfolioMetricValues;
     displayedResults: string;
   }
   state: {

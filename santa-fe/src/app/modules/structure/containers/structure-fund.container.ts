@@ -15,7 +15,6 @@ import { UtilityService } from 'Core/services/UtilityService'
 
 export class StructureFund implements OnInit, OnChanges {
   @Input() fund: PortfolioStructureDTO;
-  @Input() selectedMetricValue: PortfolioMetricValues;
   @Input() ownerInitial: string;
   @Output() updatedFundData = new EventEmitter<PortfolioStructureDTO>();
   constants = {
@@ -43,10 +42,6 @@ export class StructureFund implements OnInit, OnChanges {
 
   public ngOnChanges() {
     this.state.currentOwnerInitials =  this.ownerInitial !== null ? this.ownerInitial : null
-  }
-
-  private setInactiveMetric(targetBar: TargetBarDTO) {
-    targetBar.state.isInactiveMetric = targetBar.data.targetMetric !== targetBar.data.selectedMetricValue ? true : false;
   }
 
   private showEditMenu() {

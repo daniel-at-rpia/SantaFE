@@ -1706,7 +1706,7 @@ export class DTOService {
     return object;
   }
 
-  public formTargetBarObject(targetMetric: PortfolioMetricValues, currentValue: number, targetValue: number, selectedMetricValue: PortfolioMetricValues, isStencil: boolean) {
+  public formTargetBarObject(targetMetric: PortfolioMetricValues, currentValue: number, targetValue: number, isStencil: boolean) {
     const object: DTOs.TargetBarDTO = {
       data: {
         targetMetric,
@@ -1716,7 +1716,6 @@ export class DTOService {
         displayedTargetValue: '',
         currentPercentage: '',
         exceededPercentage: '',
-        selectedMetricValue,
         displayedResults: ''
       },
       state: {
@@ -1741,10 +1740,6 @@ export class DTOService {
       targetBar.data.currentPercentage = `${(targetBar.data.currentValue / targetBar.data.targetValue) * 100}%`;
     }
 
-    function setInactiveMetric(targetBar: DTOs.TargetBarDTO) {
-      targetBar.state.isInactiveMetric = targetBar.data.targetMetric !== targetBar.data.selectedMetricValue ? true : false;
-    }
-
     function getDisplayedResults(valueA: string, valueB: string) {
       return `${valueA}/${valueB}`;
     }
@@ -1761,7 +1756,6 @@ export class DTOService {
       targetBar.data.displayedResults = getDisplayedResults(targetBar.data.displayedCurrentValue, targetBar.data.displayedTargetValue);
     }
     convertValuesForDisplay(object);
-    setInactiveMetric(object);
     getDisplayedValues(object);
     if (!targetValue) {
       object.state.isEmpty = true;
@@ -1821,8 +1815,10 @@ export class DTOService {
       }
     };
     object.data.cs01TotalsInK.targetTotal = object.data.target.target.cs01 / 1000;
-    object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, PortfolioMetricValues.cs01, object.state.isStencil);
-    object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, PortfolioMetricValues.cs01, object.state.isStencil);
+    object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, object.state.isStencil);
+    object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil);
+    object.data.cs01TargetBar.state.isInactiveMetric = false;
+    object.data.creditLeverageTargetBar.state.isInactiveMetric = true;
     const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.bicsLevel1Breakdown, []);
     BICSBreakdown.data.title = 'BICS';
     BICSBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.SECTOR);
