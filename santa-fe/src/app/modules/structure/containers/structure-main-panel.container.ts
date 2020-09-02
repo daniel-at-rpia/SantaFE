@@ -134,7 +134,6 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         category.moveVisualizer.state.isStencil = true;
       })
     })
-    const fundListCopy = this.utilityService.deepCopy(this.state.fetchResult.fundList);
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioStructures, {req: 'POST'}, payload).pipe(
       first(),
       tap((serverReturn) => {
@@ -142,10 +141,9 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         updatedFund.data.cs01TotalsInK.currentTotal = updatedFund.data.currentTotals.cs01 / 1000; //this is used in the set funds input fields, which are numbers - parseNumberToThousands() returns a string
         updatedFund.data.cs01TargetBar.data.displayedCurrentValue = this.utilityService.parseNumberToThousands(updatedFund.data.currentTotals.cs01, true);
         updatedFund.data.cs01TargetBar.data.displayedTargetValue = this.utilityService.parseNumberToThousands(updatedFund.data.target.target.cs01, true);
-        this.state.fetchResult.fundList = [];
-        this.state.fetchResult.fundList = fundListCopy.map(fund => {
-          return fund.data.portfolioId === updatedFund.data.portfolioId ? updatedFund : fund;
-        })
+        const selectedFund = this.state.fetchResult.fundList.find(fund => fund.data.portfolioId === updatedFund.data.portfolioId);
+        const selectedFundIndex = this.state.fetchResult.fundList.indexOf(selectedFund);
+        this.state.fetchResult.fundList[selectedFundIndex] = updatedFund;
       }),
       catchError(err => {
         this.restfulCommService.logError('Cannot retrieve fund with updated targets');
