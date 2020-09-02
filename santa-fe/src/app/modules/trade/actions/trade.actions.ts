@@ -6,6 +6,7 @@ import {
 } from 'FEModels/frontend-models.interface';
 
 export enum TradeActions {
+  TradeStoreReset = '[Trade] Reset Store Upon Entering',
   LiveUpdateStartEvent = '[Trade] Live Update Start',
   LiveUpdateInProgressEvent = '[Trade] Live Update Processing',
   LiveUpdatePassRawDataToMainTableEvent = '[Trade] Live Update Pass Raw Data to Main Table',
@@ -23,6 +24,11 @@ export enum TradeActions {
   AlertTableSendNewAlerts = '[Trade] Alert Table Send New Alerts',
   AlertTableReceiveNewAlerts = '[Trade] Alert Table Receive New Alerts',
   KeywordSearchThisSecurity = '[Trade] Keyword Search This Security'
+}
+
+export class TradeStoreResetEvent implements Action {
+  readonly type = TradeActions.TradeStoreReset;
+  constructor(){}
 }
 
 export class TradeLiveUpdateStartEvent implements Action {

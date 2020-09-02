@@ -15,6 +15,8 @@ export function structureReducer(
   action
 ): StructureState {
   switch(action.type) {
+    case StructureActions.StructureStoreReset:
+      return initialState;
     case StructureActions.SelectedMetricLevel:
       return {
         ...state,
