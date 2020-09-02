@@ -65,6 +65,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
   
   public ngOnInit() {
+    this.state = this.initializePageState();
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
       select(ownerInitials)
     ).subscribe((value) => {

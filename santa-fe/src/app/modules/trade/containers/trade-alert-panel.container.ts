@@ -211,6 +211,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
+      this.state = this.initializePageState();
       this.subscriptions.securityMapSub = this.store$.pipe(
         select(selectSecurityMapContent),
         withLatestFrom(

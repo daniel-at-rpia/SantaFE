@@ -19,6 +19,7 @@
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { StructureState } from 'FEModels/frontend-page-states.interface';
+    import { StructureStoreResetEvent } from 'Structure/actions/structure.actions';
   //
 
 @Component({
@@ -44,7 +45,7 @@ export class StructurePage implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit() {
-
+    this.store$.dispatch(new StructureStoreResetEvent);
   }
 
   public ngOnDestroy() {

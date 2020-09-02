@@ -24,6 +24,7 @@
     import { selectDislayAlertThumbnail, ownerInitials } from 'Core/selectors/core.selectors';
     import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
     import { CoreLoadSecurityMap } from 'Core/actions/core.actions';
+    import { TradeStoreResetEvent } from 'Trade/actions/trade.actions';
   //
 
 @Component({
@@ -60,6 +61,8 @@ export class TradePage implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    this.initializePageState();
+    this.store$.dispatch(new TradeStoreResetEvent());
     this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
       select(selectSelectedSecurityForAnalysis)
     ).subscribe((targetSecurity) => {
