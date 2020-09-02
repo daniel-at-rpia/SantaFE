@@ -125,6 +125,15 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     const payload = {
       portfolioStructure: fund.data.originalBEData
     }
+    fund.state.isStencil = true;
+    fund.data.cs01TargetBar.state.isStencil = true;
+    fund.data.creditLeverageTargetBar.state.isStencil = true;
+    fund.data.children.forEach(breakdown => {
+      breakdown.state.isStencil = true;
+      breakdown.data.displayCategoryList.forEach(category => {
+        category.moveVisualizer.state.isStencil = true;
+      })
+    })
     const fundListCopy = this.utilityService.deepCopy(this.state.fetchResult.fundList);
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioStructures, {req: 'POST'}, payload).pipe(
       first(),
