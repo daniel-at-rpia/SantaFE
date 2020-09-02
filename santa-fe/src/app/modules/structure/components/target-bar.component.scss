@@ -96,7 +96,7 @@
         &__indicator {
           &-bar {
             &--exceeded {
-              background-color: $color_disabled;
+              background-color: $color_gray_6;
             }
             &--current {
               @include mix_gradient($color_gray_6, $color_gray_4, 0%, 90deg);
