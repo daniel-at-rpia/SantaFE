@@ -1,6 +1,7 @@
 <article [ngClass]="{
   'sat-fundStructuring': true,
-  'sat-fundStructuring--editing': state.isEditing,
+  'sat-fundStructuring--editing': fund.state.isEditing,
+  'sat-fundStructuring--setFundTargets': state.isEditingFundTargets,
   'sat-fundStructuring--error': state.hasErrors.updatedCS01|| state.hasErrors.updatedCreditLeverage
   }">
   <header class="sat-fundStructuring__configuration">
