@@ -715,6 +715,7 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
   state: {
     isEditing: boolean;
     isStencil: boolean;
+    isDataUnavailable: boolean;
   }
 }
 
@@ -733,7 +734,7 @@ export interface TargetBarDTO extends BasicDTOStructure {
     isInactiveMetric: boolean,
     isStencil: boolean;
     isEmpty: boolean;
-    isError: boolean;
+    isDataUnavailable: boolean;
   }
   utility: {
     getDisplayValues: (targetBar: TargetBarDTO) => void;
