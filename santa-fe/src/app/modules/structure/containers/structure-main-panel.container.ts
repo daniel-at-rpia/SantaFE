@@ -75,10 +75,11 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       const metric = value === this.constants.cs01 ? this.constants.cs01 : this.constants.creditLeverage
       this.state.selectedMetricValue = metric;
       this.state.fetchResult.fundList.forEach(fund => {
-        //Show active and inactive target bars
-        fund.data.creditLeverageTargetBar.state.isInactiveMetric = fund.data.creditLeverageTargetBar.data.targetMetric !== this.state.selectedMetricValue ? true : false;
-        fund.data.cs01TargetBar.state.isInactiveMetric = fund.data.cs01TargetBar.data.targetMetric !== this.state.selectedMetricValue ? true : false;
         fund.state.isStencil = true; 
+        //Switch active and inactive target bars
+        fund.data.creditLeverageTargetBar.state.isInactiveMetric = this.state.selectedMetricValue === this.constants.cs01;
+        fund.data.cs01TargetBar.state.isInactiveMetric = this.state.selectedMetricValue === this.constants.creditLeverage;
+        //Switch values to be displayed in breakdowns
         fund.data.children.forEach(breakdown => {
           breakdown.state.isDisplayingCs01 = this.state.selectedMetricValue === this.constants.cs01;
           breakdown.state.isStencil = true;
