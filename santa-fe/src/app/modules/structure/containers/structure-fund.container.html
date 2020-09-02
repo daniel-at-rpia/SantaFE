@@ -25,7 +25,7 @@
       [placeholder]="'Ex. 185'"
       [isNumeric]="fund.state.isNumeric"
       (onInputChange)="onChangeValue($event, constants.cs01)"
-      [hasError]="state.hasErrors.updatedCS01Value"
+      [hasError]="state.hasErrors.updatedCS01"
       [ngClass]="{
         'sat-fundStructuring__setTarget-group-input': true
       }">
@@ -39,7 +39,7 @@
         [placeholder]="'Ex 1.25'"
         [isNumeric]="fund.state.isNumeric"
         (onInputChange)="onChangeValue($event, constants.leverage)"
-        [hasError]="state.hasErrors.updatedLeverageValue"
+        [hasError]="state.hasErrors.updatedCreditLeverage"
         [ngClass]="{
           'sat-fundStructuring__setTarget-group-input': true
         }">

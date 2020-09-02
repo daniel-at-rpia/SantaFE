@@ -26,8 +26,8 @@ export class StructureFund implements OnInit, OnChanges {
     currentOwnerInitials: null,
     isEditing: false,
     hasErrors: {
-      updatedCS01Value: false,
-      updatedLeverageValue: false,
+      updatedCS01: false,
+      updatedCreditLeverage: false,
       errorMessage: ''
     }
   }
@@ -64,8 +64,8 @@ export class StructureFund implements OnInit, OnChanges {
   }
 
   private resetErrors() {
-    this.state.hasErrors.updatedCS01Value = false;
-    this.state.hasErrors.updatedLeverageValue = false;
+    this.state.hasErrors.updatedCS01 = false;
+    this.state.hasErrors.updatedCreditLeverage = false;
     this.state.hasErrors.errorMessage = '';
   }
 
@@ -76,18 +76,17 @@ export class StructureFund implements OnInit, OnChanges {
     if (isTargetCS01Invalid || isTargetLeverageInvalid) {
       const invalidTarget = isTargetCS01Invalid && isTargetLeverageInvalid ? 'both' : isTargetCS01Invalid ? this.constants.cs01 : this.constants.creditLeverage;
       if (invalidTarget === 'both') {
-        this.state.hasErrors.updatedCS01Value = true;
-        this.state.hasErrors.updatedLeverageValue = true;
+        this.state.hasErrors.updatedCS01 = true;
+        this.state.hasErrors.updatedCreditLeverage = true;
         this.state.hasErrors.errorMessage = '*Please enter valid target levels for CS01 and Credit Leverage';
         return;
       }
       const invalidInputErrorRef = `updated${invalidTarget.split(' ').join('')}`;
       this.state.hasErrors[invalidInputErrorRef] = true;
-      this.state.hasErrors.errorMessage = `Please enter a valid target level for ${invalidTarget}`;
+      this.state.hasErrors.errorMessage = `*Please enter a valid target level for ${invalidTarget}`;
       return;
     } else {
       this.state.isEditing = false;
-      this.resetErrors();
       this.updatedFundData.emit(this.fund)
     }
   }
