@@ -1721,7 +1721,8 @@ export class DTOService {
       state: {
         isInactiveMetric: false,
         isStencil: !!isStencil,
-        isEmpty: false
+        isEmpty: false,
+        isDataUnavailable: false
       },
       utility: {
         getDisplayValues: null,
@@ -1809,7 +1810,8 @@ export class DTOService {
       },
       state: {
         isEditing: false,
-        isStencil: !!isStencil
+        isStencil: !!isStencil,
+        isDataUnavailable: false
       },
       utility: {
         convertToK: null
