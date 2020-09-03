@@ -3,5 +3,21 @@
 
 .sat-structureSetTargetPanel {
   $blockName: &;
+  flex: 1 1 auto;
   display: flex;
+  margin-bottom: $spacing_large;
+  &__preview {
+    @include mix_border_generator(0 $typical_border_width 0 0);
+    flex: 0 1 50%;
+    display: flex;
+    align-items: center;
+    padding-right: $spacing_large;
+    margin-right: $spacing_large;
+    &>portfolio-breakdown {
+      flex: 1 1 auto;
+    }
+  }
+  &__edit {
+    flex: 0 1 50%;
+  }
 }

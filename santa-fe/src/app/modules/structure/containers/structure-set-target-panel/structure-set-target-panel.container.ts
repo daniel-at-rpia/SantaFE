@@ -48,6 +48,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       if (!!pack) {
         this.state.targetFund = this.utilityService.deepCopy(pack.targetFund);
         this.state.targetBreakdown = this.utilityService.deepCopy(pack.targetBreakdown);
+        this.state.targetBreakdown.state.isPreviewVariant = true;
       }
     })
   }

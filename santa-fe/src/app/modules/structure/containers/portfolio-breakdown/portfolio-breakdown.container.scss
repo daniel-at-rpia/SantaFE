@@ -204,6 +204,12 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
       }
     }
   }
+  &--previewVariant {
+    flex: 1 1 auto;
+    width: auto;
+    #{$blockName} {
+    }
+  }
   &--stencilState {
     #{$blockName} {
       &__rating {
