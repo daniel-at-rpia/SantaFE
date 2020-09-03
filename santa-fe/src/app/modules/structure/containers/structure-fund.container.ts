@@ -55,7 +55,7 @@ export class StructureFund implements OnInit {
   }
 
   private validateInput(value: number) {
-    const isInputInvalid = value <= 0 || value === null ? true : false;
+    const isInputInvalid = value < 0 ? true : false;
     return isInputInvalid;
   }
 
@@ -70,13 +70,7 @@ export class StructureFund implements OnInit {
     const isTargetCS01Invalid = this.validateInput(targetCS01);
     const isTargetLeverageInvalid = this.validateInput(targetLeverage);
     if (isTargetCS01Invalid || isTargetLeverageInvalid) {
-      const invalidTarget = isTargetCS01Invalid && isTargetLeverageInvalid ? 'both' : isTargetCS01Invalid ? this.constants.cs01 : this.constants.creditLeverage;
-      if (invalidTarget === 'both') {
-        this.state.hasErrors.updatedCS01 = true;
-        this.state.hasErrors.updatedCreditLeverage = true;
-        this.state.hasErrors.errorMessage = '*Please enter valid target levels for CS01 and Credit Leverage';
-        return;
-      }
+      const invalidTarget = isTargetCS01Invalid ? this.constants.cs01 : this.constants.creditLeverage;
       const invalidInputErrorRef = `updated${invalidTarget.split(' ').join('')}`;
       this.state.hasErrors[invalidInputErrorRef] = true;
       this.state.hasErrors.errorMessage = `*Please enter a valid target level for ${invalidTarget}`;
