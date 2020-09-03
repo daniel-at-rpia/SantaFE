@@ -20,25 +20,25 @@ $structureFund_btn_size: $iconButton_size_large;
   }
   &__setTarget {
     @include mix_alive('light');
-    transform: translate(0, -100%);
     margin-bottom: $spacing_medium;
     height: 0;
-    overflow: hidden;
     display: flex;
+    flex: 1 0 auto;
+    overflow: hidden;
     flex-wrap: wrap;
     justify-content: center;
-    &-group,
-    &-message {
-      flex-basis: 70%;
-    }
     &-group {
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: $spacing_x_small;
+      flex: 0 0 100%;
       &-label,
       &-input {
         margin-right: $spacing_x_small;
+      }
+      &-input {
+        width: 5rem;
       }
     }
     &-message {
@@ -119,6 +119,50 @@ $structureFund_btn_size: $iconButton_size_large;
       text-align: center
     }
   }
+  &--editing {
+    #{$blockName} {
+      &__utility {
+        &-btnGroup {
+          &-btn {
+            &--edit {
+              display: flex;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--setFundTargets {
+    #{$blockName} {
+      &__setTarget {
+        height: 7rem;
+      }
+      &__utility {
+        &-btnGroup {
+          &-btn {
+            &--edit {
+              display: none;
+            }
+            &--save,
+            &--cancel {
+              display: flex;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--invalidInput {
+    #{$blockName} {
+      &__setTarget {
+        margin-bottom: $spacing_medium;
+        &-message {
+          display: flex; 
+          flex: 0 0 auto;
+        }
+      }
+    }
+  }
   &--errorState {
     flex: 1 1 auto;
     #{$blockName} {
@@ -130,51 +174,6 @@ $structureFund_btn_size: $iconButton_size_large;
         }
         &-errorMessage {
           display: block;
-        }
-      }
-    }
-  }
-  &--editing {
-    #{$blockName} {
-      &__utility {
-        &-btnGroup {
-          &-btn {
-            &--edit {
-              display: block;
-            }
-          }
-        }
-      }
-    }
-  }
-  &--setFundTargets {
-    #{$blockName} {
-      &__setTarget {
-        transform: translate(0,0);
-        height: auto;
-        overflow: visible;
-      }
-      &__utility {
-        &-btnGroup {
-          &-btn {
-            &--edit {
-              display: none;
-            }
-            &--save,
-            &--cancel {
-              display: block;
-            }
-          }
-        }
-      }
-    }
-  }
-  &--error {
-    #{$blockName} {
-      &__setTarget {
-        margin-bottom: $spacing_medium;
-        &-message {
-          display: block; 
         }
       }
     }
