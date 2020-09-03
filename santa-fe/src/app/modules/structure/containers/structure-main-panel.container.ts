@@ -18,6 +18,7 @@ import {
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.interface';
 import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backend-models.interface';
+import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 
 @Component({
     selector: 'structure-main-panel',
@@ -148,8 +149,13 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         const selectedFund = this.state.fetchResult.fundList.find(fund => fund.data.portfolioId === updatedFund.data.portfolioId);
         const selectedFundIndex = this.state.fetchResult.fundList.indexOf(selectedFund);
         this.state.fetchResult.fundList[selectedFundIndex] = updatedFund;
+        const alert = this.dtoService.formSystemAlertObject('Portfolio', 'Updated', `Successfully updated ${updatedFund.data.portfolioShortName} target CS01 level as ${updatedFund.data.cs01TargetBar.data.displayedTargetValue} and Credit Leverage level as ${updatedFund.data.creditLeverageTargetBar.data.displayedTargetValue}`, null);
+        this.store$.dispatch(new CoreSendNewAlerts([alert]));
+      
       }),
       catchError(err => {
+        const alert = this.dtoService.formSystemAlertObject('Portfolio', 'ERROR', `Unable to update ${fund.data.portfolioShortName} target levels`, null);
+        this.store$.dispatch(new CoreSendNewAlerts([alert]));
         this.restfulCommService.logError('Cannot retrieve fund with updated targets');
         return of('error');
       })
