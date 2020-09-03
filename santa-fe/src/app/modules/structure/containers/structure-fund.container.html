@@ -2,6 +2,7 @@
   'sat-fundStructuring': true,
   'sat-fundStructuring--editing': fund.state.isEditing,
   'sat-fundStructuring--setFundTargets': state.isEditingFundTargets,
+  'sat-fundStructuring--invalidInput': state.hasErrors.updatedCS01 || state.hasErrors.updatedCreditLeverage,
   'sat-fundStructuring--errorState': fund.state.isDataUnavailable
   }">
   <header class="sat-fundStructuring__configuration">
@@ -14,10 +15,7 @@
       <target-bar [targetBar]="fund.data.cs01TargetBar"></target-bar>
     </div>
   </header>
-  <section 
-  [ngClass]="{
-    'sat-fundStructuring__setTarget': true
-  }">
+  <section class="sat-fundStructuring__setTarget">
   <div class="sat-fundStructuring__setTarget-group">
     <label for="CS01Target" class="sat-fundStructuring__setTarget-group-label">Target CS01:</label>
     <santa-input
@@ -45,21 +43,20 @@
         }">
     </santa-input>
   </div>
-  <div [ngClass]="{
-    'sat-fundStructuring__setTarget-message': true
-  }">
+  <div class="sat-fundStructuring__setTarget-message">
   <p class="sat-fundStructuring__setTarget-message-text">{{ state.hasErrors.errorMessage }}</p>
   </div>
+
 </section>
 <section class="sat-fundStructuring__utility">
   <div class="sat-fundStructuring__utility-btnGroup">
-    <button class="sat-fundStructuring__utility-btnGroup-btn sat-fundStructuring__utility-btnGroup-btn--cancel" (click)="closeEditMenu()">
+    <button class="sat-fundStructuring__utility-btnGroup-btn santaBtn--iconOnly sat-fundStructuring__utility-btnGroup-btn--cancel" (click)="closeEditMenu()">
       <i class="fal fa-times"></i>
     </button>
-    <button class="sat-fundStructuring__utility-btnGroup-btn sat-fundStructuring__utility-btnGroup-btn--edit" (click)="showEditMenu()">
+    <button class="sat-fundStructuring__utility-btnGroup-btn santaBtn--iconOnly sat-fundStructuring__utility-btnGroup-btn--edit" (click)="showEditMenu()">
       <i class="fal fa-pencil"></i>
     </button>
-    <button class="sat-fundStructuring__utility-btnGroup-btn sat-fundStructuring__utility-btnGroup-btn--save"
+    <button class="sat-fundStructuring__utility-btnGroup-btn santaBtn--iconOnly sat-fundStructuring__utility-btnGroup-btn--save"
     (click)="onClickSaveNewMetrics(fund.data.target.target.cs01, fund.data.target.target.creditLeverage)">
       <i class="fal fa-cloud-upload-alt"></i>
     </button>
