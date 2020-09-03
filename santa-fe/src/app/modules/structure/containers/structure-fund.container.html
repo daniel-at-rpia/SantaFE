@@ -54,25 +54,14 @@
 </section>
 <section class="sat-fundStructuring__utility">
   <div class="sat-fundStructuring__utility-btnGroup">
-    <button [ngClass]="{
-      'sat-fundStructuring__utility-btnGroup-btn': true,
-      'sat-fundStructuring__utility-btnGroup-btn--cancel': true,
-      'sat-fundStructuring__utility-btnGroup-btn--inActive': !state.isEditing
-    }" (click)="closeEditMenu()">
+    <button class="sat-fundStructuring__utility-btnGroup-btn sat-fundStructuring__utility-btnGroup-btn--cancel" (click)="closeEditMenu()">
       <i class="fal fa-times"></i>
     </button>
-    <button [ngClass]="{
-      'sat-fundStructuring__utility-btnGroup-btn': true,
-      'sat-fundStructuring__utility-btnGroup-btn--edit': true,
-      'sat-fundStructuring__utility-btnGroup-btn--inActive': state.isEditing
-      }" (click)="showEditMenu()">
+    <button class="sat-fundStructuring__utility-btnGroup-btn sat-fundStructuring__utility-btnGroup-btn--edit" (click)="showEditMenu()">
       <i class="fal fa-pencil"></i>
     </button>
-    <button [ngClass]="{
-      'sat-fundStructuring__utility-btnGroup-btn': true,
-      'sat-fundStructuring__utility-btnGroup-btn--save': true,
-      'sat-fundStructuring__utility-btnGroup-btn--inActive': !state.isEditing
-      }" (click)="onClickSaveNewMetrics(fund.data.target.target.cs01, fund.data.target.target.creditLeverage)">
+    <button class="sat-fundStructuring__utility-btnGroup-btn sat-fundStructuring__utility-btnGroup-btn--save"
+    (click)="onClickSaveNewMetrics(fund.data.target.target.cs01, fund.data.target.target.creditLeverage)">
       <i class="fal fa-cloud-upload-alt"></i>
     </button>
   </div>

@@ -74,24 +74,16 @@ $tradeUtilityPanel_side_btn_size: $iconButton_size_large;
         &--cancel,
         &--save {
           @include roundedButton($size: $tradeUtilityPanel_side_btn_size);
+          display: none;
           &>i{
             color: $color_white;
-            font-size: $font_size_x_large;
           }
         }
         &--cancel {
           background-color: $color_negative;
         }
-        &--setTarget {
-          &>i{
-            color: $font_color_major;
-          }
-        }
         &--save {
           background-color: $color_positive;
-        }
-        &--inActive {
-          display: none;
         }
       }
     }
