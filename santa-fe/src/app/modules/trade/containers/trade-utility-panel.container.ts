@@ -79,6 +79,7 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    this.initializePageState();
     this.internalCount$ = interval(1000);
 
     this.subscriptions.internalCountSub = this.internalCount$.subscribe(internalCount => {

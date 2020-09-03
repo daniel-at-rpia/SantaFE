@@ -66,6 +66,7 @@ $tradeUtilityPanel_side_btn_size: $iconButton_size_large;
       left: 50%;
       transform: translate(-50%, -50%);
       &-btn {
+        @include roundedButton($size: $tradeUtilityPanel_side_btn_size);
         margin-right: $spacing_large;
         &>i {
           font-size: $font_size_large;
@@ -75,7 +76,6 @@ $tradeUtilityPanel_side_btn_size: $iconButton_size_large;
         }
         &--cancel,
         &--save {
-          @include roundedButton($size: $tradeUtilityPanel_side_btn_size);
           display: none;
           &>i{
             color: $color_white;

@@ -66,6 +66,8 @@ export function tradeReducer(
   action
   ): TradeState {
   switch (action.type) {
+    case TradeActions.TradeStoreReset:
+      return initialState;
     case TradeActions.TogglePresetEvent:
       const oldFlag = state.presetSelected;
       if (!oldFlag) {
