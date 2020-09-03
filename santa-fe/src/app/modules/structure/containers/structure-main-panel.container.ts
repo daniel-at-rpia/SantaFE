@@ -39,7 +39,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     portfolioShortNames: PortfolioShortNames,
     editModalId: STRUCTURE_EDIT_MODAL_ID
   };
-  portfolioList: Array<PortfolioShortNames> = [this.constants.portfolioShortNames.SOF, this.constants.portfolioShortNames.DOF, this.constants.portfolioShortNames.AGB, this.constants.portfolioShortNames.STIP, this.constants.portfolioShortNames.CIP, this.constants.portfolioShortNames.BBB, this.constants.portfolioShortNames.FIP];
+  portfolioList: Array<PortfolioShortNames> = [this.constants.portfolioShortNames.FIP, this.constants.portfolioShortNames.BBB, this.constants.portfolioShortNames.CIP, this.constants.portfolioShortNames.STIP, this.constants.portfolioShortNames.AGB, this.constants.portfolioShortNames.DOF, this.constants.portfolioShortNames.SOF];
   
   constructor(
     private dtoService: DTOService,
