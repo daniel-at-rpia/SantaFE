@@ -2,7 +2,7 @@
   'sat-fundStructuring': true,
   'sat-fundStructuring--editing': fund.state.isEditing,
   'sat-fundStructuring--setFundTargets': state.isEditingFundTargets,
-  'sat-fundStructuring--error': state.hasErrors.updatedCS01 || state.hasErrors.updatedCreditLeverage
+  'sat-fundStructuring--errorState': fund.state.isDataUnavailable
   }">
   <header class="sat-fundStructuring__configuration">
     <div class="sat-fundStructuring__targetBar">
@@ -11,8 +11,7 @@
     </div>
     <h2 class="sat-fundStructuring__configuration-title">{{ fund.data.portfolioShortName }}</h2>
     <div class="sat-fundStructuring__targetBar">
-      <target-bar [targetBar]="fund.data.cs01TargetBar">
-      </target-bar>
+      <target-bar [targetBar]="fund.data.cs01TargetBar"></target-bar>
     </div>
   </header>
   <section 
@@ -75,6 +74,7 @@
           [dataIsReady]="!fund.state.isStencil">
         </portfolio-breakdown>
       </li>
+      <p class="sat-fundStructuring__content-errorMessage">No available portfolio data to show</p>
     </ul>
   </section>
 </article>

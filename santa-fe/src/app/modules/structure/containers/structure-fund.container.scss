@@ -114,6 +114,25 @@ $tradeUtilityPanel_side_btn_size: $iconButton_size_large;
         }
       }
     }
+    &-errorMessage {
+      display: none;
+      text-align: center
+    }
+  }
+  &--errorState {
+    flex: 1 1 auto;
+    #{$blockName} {
+      &__content {
+        &-breakdownList {
+          &-item {
+            display: none;
+          }
+        }
+        &-errorMessage {
+          display: block;
+        }
+      }
+    }
   }
   &--editing {
     #{$blockName} {

@@ -719,6 +719,7 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     isEditing: boolean;
     isStencil: boolean;
     isNumeric: boolean;
+    isDataUnavailable: boolean;
   }
 }
 
@@ -737,6 +738,7 @@ export interface TargetBarDTO extends BasicDTOStructure {
     isInactiveMetric: boolean,
     isStencil: boolean;
     isEmpty: boolean;
+    isDataUnavailable: boolean;
   }
 }
 

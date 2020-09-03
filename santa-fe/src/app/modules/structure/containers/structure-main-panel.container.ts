@@ -16,7 +16,7 @@ import {
   STRUCTURE_EDIT_MODAL_ID
 } from 'Core/constants/structureConstants.constants';
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
-import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.interface';
+import { PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/frontend-models.interface';
 import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 
@@ -39,7 +39,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     portfolioShortNames: PortfolioShortNames,
     editModalId: STRUCTURE_EDIT_MODAL_ID
   };
-  portfolioList: Array<PortfolioShortNames> = [this.constants.portfolioShortNames.SOF, this.constants.portfolioShortNames.DOF, this.constants.portfolioShortNames.AGB, this.constants.portfolioShortNames.STIP, this.constants.portfolioShortNames.CIP, this.constants.portfolioShortNames.BBB, this.constants.portfolioShortNames.FIP];
+  portfolioList: Array<PortfolioShortNames> = [this.constants.portfolioShortNames.FIP, this.constants.portfolioShortNames.BBB, this.constants.portfolioShortNames.CIP, this.constants.portfolioShortNames.STIP, this.constants.portfolioShortNames.AGB, this.constants.portfolioShortNames.DOF, this.constants.portfolioShortNames.SOF];
   
   constructor(
     private dtoService: DTOService,
@@ -185,6 +185,12 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     })
   }
 
+  private setEmptyTargetBar(targetBar: TargetBarDTO) {
+    targetBar.state.isDataUnavailable = true;
+    targetBar.state.isStencil = false;
+    targetBar.data.displayedResults = '-';
+  }
+
   private fetchFunds() {
     this.loadStencilFunds();
     const payload = { // assumes current date if nothing is passed in
@@ -202,8 +208,15 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         this.state.fetchResult.fundList.length > 1 && this.sortFunds(this.state.fetchResult.fundList);
       }),
       catchError(err => {
-        this.state.fetchResult.fetchFundDataFailed = true;
-        this.state.fetchResult.fetchFundDataFailedError = err.message;
+        setTimeout(() => {
+          this.state.fetchResult.fetchFundDataFailed = true;
+          this.state.fetchResult.fetchFundDataFailedError = err.message;
+          this.state.fetchResult.fundList.forEach(eachFund => {
+            eachFund.state.isDataUnavailable = this.state.fetchResult.fetchFundDataFailed;
+            this.setEmptyTargetBar(eachFund.data.creditLeverageTargetBar);
+            this.setEmptyTargetBar(eachFund.data.cs01TargetBar);
+          })
+        }, 500);
         this.restfulCommService.logError('Get portfolio funds failed')
         console.error(`${this.restfulCommService.apiMap.getPortfolioStructures} failed`, err);
         return of('error')

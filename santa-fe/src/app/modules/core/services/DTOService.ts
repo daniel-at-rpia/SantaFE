@@ -1722,7 +1722,8 @@ export class DTOService {
       state: {
         isInactiveMetric: false,
         isStencil: !!isStencil,
-        isEmpty: false
+        isEmpty: false,
+        isDataUnavailable: false
       }
     }
 
@@ -1807,7 +1808,8 @@ export class DTOService {
       state: {
         isEditing: false,
         isStencil: !!isStencil,
-        isNumeric: true
+        isNumeric: true,
+        isDataUnavailable: false
       }
     };
     object.data.cs01TotalsInK.targetTotal = object.data.target.target.cs01 / 1000;
