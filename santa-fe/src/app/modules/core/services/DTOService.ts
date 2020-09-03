@@ -1330,7 +1330,8 @@ export class DTOService {
         hasSecurity: false,
         hasTitlePin: false,
         isMarketListVariant: false,
-        isExpired: false
+        isExpired: false,
+        isError: false
       }
     }
     if (targetSecurity) {

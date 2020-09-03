@@ -149,12 +149,13 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         const selectedFund = this.state.fetchResult.fundList.find(fund => fund.data.portfolioId === updatedFund.data.portfolioId);
         const selectedFundIndex = this.state.fetchResult.fundList.indexOf(selectedFund);
         this.state.fetchResult.fundList[selectedFundIndex] = updatedFund;
-        const alert = this.dtoService.formSystemAlertObject('Portfolio', 'Updated', `Successfully updated ${updatedFund.data.portfolioShortName} target CS01 level as ${updatedFund.data.cs01TargetBar.data.displayedTargetValue} and Credit Leverage level as ${updatedFund.data.creditLeverageTargetBar.data.displayedTargetValue}`, null);
+        const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `Successfully updated ${updatedFund.data.portfolioShortName} target CS01 level as ${updatedFund.data.cs01TargetBar.data.displayedTargetValue} and Credit Leverage level as ${updatedFund.data.creditLeverageTargetBar.data.displayedTargetValue}`, null);
         this.store$.dispatch(new CoreSendNewAlerts([alert]));
       
       }),
       catchError(err => {
-        const alert = this.dtoService.formSystemAlertObject('Portfolio', 'ERROR', `Unable to update ${fund.data.portfolioShortName} target levels`, null);
+        const alert = this.dtoService.formSystemAlertObject('Structuring', 'ERROR', `Unable to update ${fund.data.portfolioShortName} target levels`, null);
+        alert.state.isError = true;
         this.store$.dispatch(new CoreSendNewAlerts([alert]));
         fund.state.isStencil = false;
         fund.data.cs01TargetBar.state.isStencil = false;

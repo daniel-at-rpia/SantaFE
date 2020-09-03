@@ -562,6 +562,7 @@ export interface AlertDTO extends BasicDTOStructure {
     isCancelled: boolean;
     isMarketListVariant: boolean;
     isExpired: boolean;
+    isError?: boolean;
   };
 }
 
