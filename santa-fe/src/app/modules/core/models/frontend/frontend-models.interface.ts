@@ -681,6 +681,7 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     isStencil: boolean;
     isDisplayingCs01: boolean;
     isTargetAlignmentRatingAvail: boolean;
+    isPreviewVariant: boolean;
   }
 }
 

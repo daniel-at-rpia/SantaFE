@@ -281,5 +281,6 @@ export interface StructureUtilityPanelState {
 }
 
 export interface StructureSetTargetPanelState {
-  
+  targetFund: DTOs.PortfolioStructureDTO;
+  targetBreakdown: DTOs.PortfolioBreakdownDTO;
 }

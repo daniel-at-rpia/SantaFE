@@ -23,7 +23,8 @@
       <li class="sat-fundStructuring__content-breakdownList-item" *ngFor="let eachBreakdown of fund.data.children">
         <portfolio-breakdown
           [breakdownData]="eachBreakdown"
-          [dataIsReady]="!fund.state.isStencil">
+          [dataIsReady]="!fund.state.isStencil"
+          (clickedEdit)="onClickedEditInBreakdown($event)">
         </portfolio-breakdown>
       </li>
       <p class="sat-fundStructuring__content-errorMessage">No available portfolio data to show</p>

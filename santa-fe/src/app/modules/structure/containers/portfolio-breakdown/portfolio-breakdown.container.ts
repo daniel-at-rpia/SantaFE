@@ -19,6 +19,7 @@ import { selectUserInitials } from 'Core/selectors/core.selectors';
 export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
   @Input() breakdownData: PortfolioBreakdownDTO;
   @Input() dataIsReady: boolean;
+  @Output() clickedEdit = new EventEmitter<PortfolioBreakdownDTO>();
   subscriptions = {
     ownerInitialsSub: null
   };
@@ -79,6 +80,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
 
   public onClickEdit() {
     this.modalService.triggerModalOpen(this.constants.editModalId);
+    !!this.clickedEdit && this.clickedEdit.emit(this.breakdownData);
   }
 
   public calculateAlignmentRating() {
