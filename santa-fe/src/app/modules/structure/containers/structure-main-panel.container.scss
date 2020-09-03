@@ -9,11 +9,6 @@
   display: flex;
   overflow: hidden;
   flex-direction: column;
-  &__errorPrompt,
-  &__fundGroup {
-    display: flex;
-    flex: 1 1 auto;
-  }
   &__errorPrompt {
     @include mix_border_radius(10px);
     flex: 0 1 auto;
@@ -41,6 +36,8 @@
   }
   &__fundGroup {
     @include mix_enable_scrollbar($direction: 'horizontal');
+    display: flex;
+    flex: 1 1 auto;
     overflow-y: hidden;
     margin-right: $spacing_medium;
     &-fund {
