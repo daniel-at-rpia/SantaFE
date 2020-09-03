@@ -16,6 +16,9 @@
     </div>
   </header>
   <section class="sat-fundStructuring__setTarget">
+    <div class="sat-fundStructuring__setTarget-message">
+      <p class="sat-fundStructuring__setTarget-message-text">{{ state.hasErrors.errorMessage }}</p>
+    </div>
   <div class="sat-fundStructuring__setTarget-group">
     <label for="CS01Target" class="sat-fundStructuring__setTarget-group-label">Target CS01:</label>
     <santa-input
@@ -43,10 +46,6 @@
         }">
     </santa-input>
   </div>
-  <div class="sat-fundStructuring__setTarget-message">
-  <p class="sat-fundStructuring__setTarget-message-text">{{ state.hasErrors.errorMessage }}</p>
-  </div>
-
 </section>
 <section class="sat-fundStructuring__utility">
   <div class="sat-fundStructuring__utility-btnGroup">

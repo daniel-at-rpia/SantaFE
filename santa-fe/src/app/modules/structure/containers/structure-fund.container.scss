@@ -42,9 +42,9 @@ $structureFund_btn_size: $iconButton_size_large;
       }
     }
     &-message {
-      display: none;
+      visibility: hidden;
       &-text {
-        @include mix_border_radius(10px);
+        @include mix_border_radius(5px);
         text-align: center;
         color: $color_negative;
         background-color: $color_red_1;
@@ -157,7 +157,7 @@ $structureFund_btn_size: $iconButton_size_large;
       &__setTarget {
         margin-bottom: $spacing_medium;
         &-message {
-          display: flex; 
+          visibility: visible; 
           flex: 0 0 auto;
         }
       }
