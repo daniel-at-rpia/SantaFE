@@ -156,6 +156,15 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       catchError(err => {
         const alert = this.dtoService.formSystemAlertObject('Portfolio', 'ERROR', `Unable to update ${fund.data.portfolioShortName} target levels`, null);
         this.store$.dispatch(new CoreSendNewAlerts([alert]));
+        fund.state.isStencil = false;
+        fund.data.cs01TargetBar.state.isStencil = false;
+        fund.data.creditLeverageTargetBar.state.isStencil = false;
+        fund.data.children.forEach(breakdown => {
+          breakdown.state.isStencil = false;
+          breakdown.data.displayCategoryList.forEach(category => {
+            category.moveVisualizer.state.isStencil = false;
+          })
+        })
         this.restfulCommService.logError('Cannot retrieve fund with updated targets');
         return of('error');
       })
