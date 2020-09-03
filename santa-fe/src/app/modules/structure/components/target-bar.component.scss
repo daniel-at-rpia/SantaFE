@@ -108,6 +108,16 @@
         }
       }
     }
+    &--errorState {
+      #{$blockName} {
+        &__indicator {
+          background-color: $color_disabled;
+          &-bar {
+            display: none;
+          }
+        }
+      }
+    }
     &--stencilState {
       #{$blockName} {
         &__indicator {
