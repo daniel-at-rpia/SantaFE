@@ -23,7 +23,7 @@
     <label for="CS01Target" class="sat-fundStructuring__setTarget-group-label">Target CS01:</label>
     <santa-input
       [inputValue]="fund.data.cs01TotalsInK.targetTotal"
-      [placeholder]="'Ex. 185'"
+      [placeholder]="'0'"
       [isNumeric]="fund.state.isNumeric"
       (onInputChange)="onChangeValue($event, constants.cs01)"
       [hasError]="state.hasErrors.updatedCS01"
@@ -37,7 +37,7 @@
       <label for="leverageTarget" class="sat-fundStructuring__setTarget-group-label">Target Credit Leverage:</label>
       <santa-input
         [inputValue]="fund.data.target.target.creditLeverage"
-        [placeholder]="'Ex 1.25'"
+        [placeholder]="'0'"
         [isNumeric]="fund.state.isNumeric"
         (onInputChange)="onChangeValue($event, constants.leverage)"
         [hasError]="state.hasErrors.updatedCreditLeverage"
