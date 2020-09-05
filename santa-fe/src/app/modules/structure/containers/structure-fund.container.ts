@@ -54,9 +54,8 @@ export class StructureFund implements OnInit {
     this.resetErrors();
   }
 
-  private validateInput(value: number) {
-    const isInputInvalid = value < 0 ? true : false;
-    return isInputInvalid;
+  private validateInput(value: number | string) {
+     return parseFloat(value as string);
   }
 
   private resetErrors() {
@@ -74,7 +73,6 @@ export class StructureFund implements OnInit {
       const invalidInputErrorRef = `updated${invalidTarget.split(' ').join('')}`;
       this.state.hasErrors[invalidInputErrorRef] = true;
       this.state.hasErrors.errorMessage = `*Please enter a valid target level for ${invalidTarget}`;
-      return;
     } else {
       this.state.isEditingFundTargets = false;
       this.updatedFundData.emit(this.fund)
