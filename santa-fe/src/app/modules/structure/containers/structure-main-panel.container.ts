@@ -146,7 +146,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         const selectedFund = this.state.fetchResult.fundList.find(fund => fund.data.portfolioId === updatedFund.data.portfolioId);
         const selectedFundIndex = this.state.fetchResult.fundList.indexOf(selectedFund);
         this.state.fetchResult.fundList[selectedFundIndex] = updatedFund;
-        const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `Successfully updated ${updatedFund.data.portfolioShortName} target CS01 level as ${updatedFund.data.cs01TargetBar.data.displayedTargetValue} and Credit Leverage level as ${updatedFund.data.creditLeverageTargetBar.data.displayedTargetValue}`, null);
+        const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `Successfully updated ${updatedFund.data.portfolioShortName}. Target CS01 level is ${updatedFund.data.cs01TargetBar.data.displayedTargetValue} and Credit Leverage level is ${updatedFund.data.creditLeverageTargetBar.data.displayedTargetValue}`, null);
         this.store$.dispatch(new CoreSendNewAlerts([alert]));
       
       }),
