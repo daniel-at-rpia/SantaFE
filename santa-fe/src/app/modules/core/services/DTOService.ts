@@ -1728,13 +1728,39 @@ export class DTOService {
     }
 
     function getDisplayedValues(targetBar: DTOs.TargetBarDTO) {
-      if (targetBar.data.currentValue > targetBar.data.targetValue) {
-        const difference = targetBar.data.currentValue - targetBar.data.targetValue;
+      const currentAbsValue = Math.abs(targetBar.data.currentValue);
+      const targetAbsValue = Math.abs(targetBar.data.targetValue);
+      if (targetBar.data.targetValue < 0 && targetBar.data.currentValue > 0) {
+        if (targetBar.data.currentValue >= targetAbsValue) {
+          targetBar.data.exceededPercentage = '100%';
+        } else {
+          const exceedAmount = targetBar.data.currentValue / targetAbsValue;
+          targetBar.data.exceededPercentage = `${exceedAmount * 100}%`;
+          targetBar.data.currentPercentage = '100%';
+        }
+      } else if (targetBar.data.targetValue > 0 && targetBar.data.currentValue < 0) {
+        targetBar.data.exceededPercentage = '0';
+        targetBar.data.currentPercentage = '0';
+      } else if (targetBar.data.currentValue < 0 && targetBar.data.targetValue < 0) {
+        if (targetBar.data.currentValue < targetBar.data.targetValue) {
+          const difference = 1 - ((currentAbsValue - targetAbsValue) / targetAbsValue);
+          targetBar.data.currentPercentage = `${difference * 100}%`;
+          targetBar.data.exceededPercentage = '0';
+        } else {
+          targetBar.data.exceededPercentage = targetAbsValue / currentAbsValue >= 2 ? '100%' : `${((targetAbsValue - currentAbsValue) / targetAbsValue) * 100}%`;
+          targetBar.data.currentPercentage = '100%';
+        }
+      } else if (currentAbsValue === targetAbsValue) {
         targetBar.data.currentPercentage = '100%';
-        targetBar.data.exceededPercentage = targetBar.data.currentValue / targetBar.data.targetValue >= 2 ? '100%' : `${(difference / targetBar.data.targetValue) * 100}%`
-        return;
+        targetBar.data.exceededPercentage = '0';
+      } else if (targetBar.data.currentValue > targetBar.data.targetValue) {
+        targetBar.data.currentPercentage = '100%';
+        targetBar.data.exceededPercentage = targetBar.data.currentValue / targetBar.data.targetValue >= 2 ? '100%' : `${((currentAbsValue - targetAbsValue) / targetBar.data.targetValue) * 100}%`
+      } else {
+        const difference = targetBar.data.currentValue / targetBar.data.targetValue;
+        targetBar.data.currentPercentage = `${difference * 100}%`;
+        targetBar.data.exceededPercentage = '0';
       }
-      targetBar.data.currentPercentage = `${(targetBar.data.currentValue / targetBar.data.targetValue) * 100}%`;
     }
 
     function getDisplayedResults(valueA: string, valueB: string) {
