@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation, OnChanges } from '@angular/core';
 import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.interface';
 import {PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 import { DTOService } from 'Core/services/DTOService';
@@ -14,8 +14,9 @@ import { StructureFundState } from 'Core/models/frontend/frontend-page-states.in
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class StructureFund implements OnInit {
+export class StructureFund implements OnInit, OnChanges {
   @Input() fund: PortfolioStructureDTO;
+  @Input() ownerInitial: string;
   @Output() updatedFundData = new EventEmitter<PortfolioStructureDTO>();
   state: StructureFundState
   constants = {
@@ -32,6 +33,10 @@ export class StructureFund implements OnInit {
 
   public ngOnInit() {
     this.fund.api.onSubmitMetricValues = this.saveEditDetails.bind(this);
+  }
+
+  public ngOnChanges() {
+    this.fund.state.isEditing = this.ownerInitial === 'DM';
   }
 
   private initializeStructureFundState() {

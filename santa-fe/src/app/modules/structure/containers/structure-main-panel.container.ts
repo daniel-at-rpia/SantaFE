@@ -69,10 +69,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
       select(ownerInitials)
     ).subscribe((value) => {
-      this.state.ownerInitial = value;
-      this.state.fetchResult.fundList.forEach(fund => {
-        fund.state.isEditing = this.state.ownerInitial === 'DM';
-      })
+        this.state.ownerInitial = value;
     });
     this.subscriptions.selectedMetricLevelSub = this.store$.pipe(
       select(selectMetricLevel)
