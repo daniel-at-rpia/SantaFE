@@ -72,6 +72,7 @@ $structureFund_btn_size: $iconButton_size_large;
           font-size: $font_size_large;
         }
         &--edit {
+          display: none;
           margin-right: 0;
         }
         &--cancel,
