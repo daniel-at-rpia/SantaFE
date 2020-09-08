@@ -571,7 +571,6 @@ export interface BEStructuringBreakdownSingleEntry {
   currentPct: number;
   indexLevel: number;
   indexPct: number;
-  view: string;
 }
 
 export interface BEStructuringBreakdownBlock {
@@ -582,8 +581,11 @@ export interface BEStructuringBreakdownBlock {
   portfolioId: number;
   breakdown: {
     [property: string]: {
-      CreditLeverage: BEStructuringBreakdownSingleEntry;
-      Cs01: BEStructuringBreakdownSingleEntry;
+      metricBreakdowns: {
+        CreditLeverage: BEStructuringBreakdownSingleEntry;
+        Cs01: BEStructuringBreakdownSingleEntry;
+      }
+      view: string;
     }
   }
 }
