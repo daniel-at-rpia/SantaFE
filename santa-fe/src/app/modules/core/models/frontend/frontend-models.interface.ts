@@ -22,6 +22,7 @@ import * as am4Charts from '@amcharts/amcharts4/charts';
 import {Alert} from "Core/components/alert/alert.component";
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import { BEPortfolioStructuringDTO } from 'Core/models/backend/backend-models.interface';
 
 interface BasicDTOStructure {
   [property: string]: object;
@@ -561,6 +562,7 @@ export interface AlertDTO extends BasicDTOStructure {
     isCancelled: boolean;
     isMarketListVariant: boolean;
     isExpired: boolean;
+    isError?: boolean;
   };
 }
 
@@ -687,7 +689,7 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
 
 export interface PortfolioStructureDTO extends BasicDTOStructure {
   data: {
-    rpPortfolioDate: string;
+    date: string;
     portfolioId: number;
     portfolioShortName: PortfolioShortNames;
     portfolioNav: number;
@@ -709,6 +711,7 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     }
     cs01TargetBar: TargetBarDTO;
     creditLeverageTargetBar: TargetBarDTO;
+    originalBEData: BEPortfolioStructuringDTO; // used when updating portfolios for portfolio structuring
   },
   api: {
     onSubmitMetricValues: (CS01: number, leverage: number) => void;
@@ -716,7 +719,14 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
   state: {
     isEditing: boolean;
     isStencil: boolean;
+    isNumeric: boolean;
     isDataUnavailable: boolean;
+    isEditingFundTargets: boolean;
+    hasErrors: {
+      updatedCS01: boolean;
+      updatedCreditLeverage: boolean;
+      errorMessage: string;
+    }
   }
 }
 
@@ -736,11 +746,6 @@ export interface TargetBarDTO extends BasicDTOStructure {
     isStencil: boolean;
     isEmpty: boolean;
     isDataUnavailable: boolean;
-  }
-  utility: {
-    getDisplayValues: (targetBar: TargetBarDTO) => void;
-    convertNumtoStr: (targetBar: TargetBarDTO) => void;
-    setInactiveMetric: (targetBar: TargetBarDTO) => void;
   }
 }
 

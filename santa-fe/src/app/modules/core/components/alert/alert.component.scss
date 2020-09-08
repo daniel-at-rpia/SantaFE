@@ -457,6 +457,21 @@ $alert_type_size: $iconButton_size_regular;
       }
     }
   }
+  &--errorState {
+    #{$alertBlockName} {
+      &__thumbnail {
+        &-main {
+          background-color: $color_red_1;
+          &-upper,
+          &-lower {
+            &-text{
+              color: $color_red_5;
+            }
+          }
+        }
+      }
+    }
+  }
   &--hiddenState {
     #{$alertBlockName} {
       &__thumbnail {

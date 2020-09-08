@@ -95,8 +95,11 @@
         &__type,
         &__indicator {
           &-bar {
+            &--total {
+              background-color: $color_disabled;
+            }
             &--exceeded {
-              background-color: $color_gray_6;
+              background-color: $color_gray_7;
             }
             &--current {
               @include mix_gradient($color_gray_6, $color_gray_4, 0%, 90deg);
