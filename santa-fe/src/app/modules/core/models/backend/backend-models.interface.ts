@@ -573,6 +573,14 @@ export interface BEStructuringBreakdownSingleEntry {
   indexPct: number;
 }
 
+export interface BEMetricBreakdowns {
+  metricBreakdowns: {
+    CreditLeverage: BEStructuringBreakdownSingleEntry;
+    Cs01: BEStructuringBreakdownSingleEntry;
+  },
+  view: string;
+}
+
 export interface BEStructuringBreakdownBlock {
   date: string;
   groupOption: number;
