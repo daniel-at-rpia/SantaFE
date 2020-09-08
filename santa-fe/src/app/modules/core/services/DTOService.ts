@@ -1805,8 +1805,8 @@ export class DTOService {
           date: rawData.target.date,
           portfolioId: rawData.target.portfolioId,
           target: {
-            cs01: rawData.target.target.Cs01 || null,
-            creditLeverage: rawData.target.target.CreditLeverage || null
+            cs01: rawData.target.target.Cs01 || 0,
+            creditLeverage: rawData.target.target.CreditLeverage || 0
           }
         },
         currentTotals :{
