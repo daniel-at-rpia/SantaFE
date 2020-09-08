@@ -73,7 +73,9 @@ export class StructureFund implements OnInit, OnChanges {
     this.resetErrors();
     const isTargetCS01Invalid = this.validateInput(targetCS01);
     const isTargetLeverageInvalid = this.validateInput(targetLeverage);
-    if (!isTargetCS01Invalid || !isTargetLeverageInvalid) {
+    this.fund.data.cs01TargetBar.state.isEmpty = targetCS01 === 0;
+    this.fund.data.creditLeverageTargetBar.state.isEmpty = targetLeverage === 0;
+    if (isTargetCS01Invalid || isTargetLeverageInvalid ) {
       const invalidTarget = isTargetCS01Invalid ? this.constants.cs01 : this.constants.creditLeverage;
       const invalidInputErrorRef = `updated${invalidTarget.split(' ').join('')}`;
       this.state.hasErrors[invalidInputErrorRef] = true;
