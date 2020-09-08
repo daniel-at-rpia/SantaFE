@@ -720,6 +720,12 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     isStencil: boolean;
     isNumeric: boolean;
     isDataUnavailable: boolean;
+    isEditingFundTargets: boolean;
+    hasErrors: {
+      updatedCS01: boolean;
+      updatedCreditLeverage: boolean;
+      errorMessage: string;
+    }
   }
 }
 

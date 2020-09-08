@@ -4,8 +4,6 @@ import {PortfolioMetricValues } from 'Core/constants/structureConstants.constant
 import { DTOService } from 'Core/services/DTOService';
 import { TargetBarDTO } from 'FEModels/frontend-models.interface';
 import { UtilityService } from 'Core/services/UtilityService';
-import { StructureFundState } from 'Core/models/frontend/frontend-page-states.interface';
-
 
 @Component({
   selector: 'structure-fund',
@@ -18,7 +16,6 @@ export class StructureFund implements OnInit, OnChanges {
   @Input() fund: PortfolioStructureDTO;
   @Input() ownerInitial: string;
   @Output() updatedFundData = new EventEmitter<PortfolioStructureDTO>();
-  state: StructureFundState
   constants = {
     cs01: PortfolioMetricValues.cs01,
     creditLeverage: PortfolioMetricValues.creditLeverage
@@ -27,9 +24,7 @@ export class StructureFund implements OnInit, OnChanges {
   constructor(
     private dtoService: DTOService,
     private utilityService: UtilityService,
-  ){
-    this.initializeStructureFundState();
-  }
+  ){}
 
   public ngOnInit() {
     this.fund.api.onSubmitMetricValues = this.saveEditDetails.bind(this);
@@ -39,23 +34,12 @@ export class StructureFund implements OnInit, OnChanges {
     this.fund.state.isEditing = this.ownerInitial === 'DM';
   }
 
-  private initializeStructureFundState() {
-   this.state = {
-      isEditingFundTargets: false,
-      hasErrors: {
-        updatedCS01: false,
-        updatedCreditLeverage: false,
-        errorMessage: ''
-      }
-    }
-  }
-
   private showEditMenu() {
-    this.state.isEditingFundTargets = true;
+    this.fund.state.isEditingFundTargets = true;
   }
 
   private closeEditMenu() {
-    this.state.isEditingFundTargets = false;
+    this.fund.state.isEditingFundTargets = false;
     this.resetErrors();
   }
 
@@ -64,9 +48,9 @@ export class StructureFund implements OnInit, OnChanges {
   }
 
   private resetErrors() {
-    this.state.hasErrors.updatedCS01 = false;
-    this.state.hasErrors.updatedCreditLeverage = false;
-    this.state.hasErrors.errorMessage = '';
+    this.fund.state.hasErrors.updatedCS01 = false;
+    this.fund.state.hasErrors.updatedCreditLeverage = false;
+    this.fund.state.hasErrors.errorMessage = '';
   }
 
   private saveEditDetails(targetCS01: number, targetLeverage: number) {
@@ -78,10 +62,10 @@ export class StructureFund implements OnInit, OnChanges {
     if (isTargetCS01Invalid || isTargetLeverageInvalid ) {
       const invalidTarget = isTargetCS01Invalid ? this.constants.cs01 : this.constants.creditLeverage;
       const invalidInputErrorRef = `updated${invalidTarget.split(' ').join('')}`;
-      this.state.hasErrors[invalidInputErrorRef] = true;
-      this.state.hasErrors.errorMessage = `*Please enter a valid target level for ${invalidTarget}`;
+      this.fund.state.hasErrors[invalidInputErrorRef] = true;
+      this.fund.state.hasErrors.errorMessage = `*Please enter a valid target level for ${invalidTarget}`;
     } else {
-      this.state.isEditingFundTargets = false;
+      this.fund.state.isEditingFundTargets = false;
       this.updatedFundData.emit(this.fund)
     }
   }

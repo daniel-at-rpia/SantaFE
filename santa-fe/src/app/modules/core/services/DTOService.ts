@@ -1836,7 +1836,13 @@ export class DTOService {
         isEditing: false,
         isStencil: !!isStencil,
         isNumeric: true,
-        isDataUnavailable: false
+        isDataUnavailable: false,
+        isEditingFundTargets: false,
+        hasErrors: {
+          updatedCS01: false,
+          updatedCreditLeverage: false,
+          errorMessage: ''
+        }
       }
     };
     object.data.cs01TotalsInK.targetTotal = object.data.target.target.cs01 / 1000;

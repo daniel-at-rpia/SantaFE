@@ -1,8 +1,8 @@
 <article [ngClass]="{
   'sat-fundStructuring': true,
   'sat-fundStructuring--editing': fund.state.isEditing,
-  'sat-fundStructuring--setFundTargets': state.isEditingFundTargets,
-  'sat-fundStructuring--invalidInput': state.hasErrors.updatedCS01 || state.hasErrors.updatedCreditLeverage,
+  'sat-fundStructuring--setFundTargets': fund.state.isEditingFundTargets,
+  'sat-fundStructuring--invalidInput': fund.state.hasErrors.updatedCS01 || fund.state.hasErrors.updatedCreditLeverage,
   'sat-fundStructuring--errorState': fund.state.isDataUnavailable
   }">
   <header class="sat-fundStructuring__configuration">
@@ -17,7 +17,7 @@
   </header>
   <section class="sat-fundStructuring__setTarget">
     <div class="sat-fundStructuring__setTarget-message">
-      <p class="sat-fundStructuring__setTarget-message-text">{{ state.hasErrors.errorMessage }}</p>
+      <p class="sat-fundStructuring__setTarget-message-text">{{ fund.state.hasErrors.errorMessage }}</p>
     </div>
   <div class="sat-fundStructuring__setTarget-group">
     <label for="CS01Target" class="sat-fundStructuring__setTarget-group-label">Target CS01:</label>
@@ -26,7 +26,7 @@
       [placeholder]="'0'"
       [isNumeric]="fund.state.isNumeric"
       (onInputChange)="onChangeValue($event, constants.cs01)"
-      [hasError]="state.hasErrors.updatedCS01"
+      [hasError]="fund.state.hasErrors.updatedCS01"
       [ngClass]="{
         'sat-fundStructuring__setTarget-group-input': true
       }">
@@ -40,7 +40,7 @@
         [placeholder]="'0'"
         [isNumeric]="fund.state.isNumeric"
         (onInputChange)="onChangeValue($event, constants.leverage)"
-        [hasError]="state.hasErrors.updatedCreditLeverage"
+        [hasError]="fund.state.hasErrors.updatedCreditLeverage"
         [ngClass]="{
           'sat-fundStructuring__setTarget-group-input': true
         }">
