@@ -9,6 +9,7 @@ import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { UtilityService } from 'Core/services/UtilityService';
 import { selectSetTargetTransferPack } from 'Structure/selectors/structure.selectors';
 import { StructureSetTargetOverlayTransferPack } from 'FEModels/frontend-adhoc-packages.interface';
+import { StructureSetTargetPanelEditRowBlock } from 'FEModels/frontend-blocks.interface';
 
 @Component({
   selector: 'structure-set-target-panel',
@@ -35,7 +36,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   private initializePageState(): StructureSetTargetPanelState {
     const state: StructureSetTargetPanelState = {
       targetBreakdown: null,
-      targetFund: null
+      targetFund: null,
+      editRowList: []
     }
     return state;
   }
@@ -59,6 +61,18 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         const eachSub = this.subscriptions[eachItem] as Subscription;
         eachSub.unsubscribe();
       }
+    }
+  }
+
+  private loadEditRows() {
+    if (!!this.state.targetBreakdown) {
+      this.state.targetBreakdown.data.displayCategoryList.forEach((eachCategory) => {
+        const newRow: StructureSetTargetPanelEditRowBlock = {
+          targetBlockFromBreakdown: eachCategory,
+          rowTitle: eachCategory.category
+        };
+        this.state.editRowList.push(newRow);
+      });
     }
   }
 

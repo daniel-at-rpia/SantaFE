@@ -2,7 +2,8 @@ import * as DTOs from 'FEModels/frontend-models.interface';
 import {
   ObligorChartCategoryBlock,
   TableFetchResultBlock,
-  GlobalNavLegendBlock
+  GlobalNavLegendBlock,
+  StructureSetTargetPanelEditRowBlock
 } from 'FEModels/frontend-blocks.interface';
 import {
   SecurityDefinitionStub,
@@ -283,4 +284,5 @@ export interface StructureUtilityPanelState {
 export interface StructureSetTargetPanelState {
   targetFund: DTOs.PortfolioStructureDTO;
   targetBreakdown: DTOs.PortfolioBreakdownDTO;
+  editRowList: Array<StructureSetTargetPanelEditRowBlock>;
 }

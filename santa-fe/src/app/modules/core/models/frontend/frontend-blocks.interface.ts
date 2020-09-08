@@ -292,3 +292,8 @@ export interface GlobalNavLegendBlock {
   card: DTOs.SecurityDTO;
   legend: string;
 }
+
+export interface StructureSetTargetPanelEditRowBlock {
+  targetBlockFromBreakdown: PortfolioBreakdownCategoryBlock;
+  rowTitle: string;
+}

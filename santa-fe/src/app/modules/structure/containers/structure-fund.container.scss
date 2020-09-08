@@ -123,10 +123,7 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
       flex-direction: column;
       padding: $spacing_x_small $spacing_medium $spacing_large $spacing_medium;
       &-item {
-        margin-top: $spacing_medium;
-        &:first-of-type {
-          margin-top: 0;
-        }
+        margin-bottom: $spacing_medium;
       }
     }
     &-errorMessage {

@@ -1,23 +1,49 @@
 @import "global.scss";
 @import "modules/structure/structure.scss";
 
+$structureSetTargetPanel_edit_column_size: 12rem;
 .sat-structureSetTargetPanel {
   $blockName: &;
   flex: 1 1 auto;
   display: flex;
+  flex-wrap: wrap;
   margin-bottom: $spacing_large;
+  &__utilities {
+    flex: 0 0 100%;
+    height: 4rem;
+    background-color: $color_gray_3;
+    margin-bottom: $spacing_large;
+  }
   &__preview {
     @include mix_border_generator(0 $typical_border_width 0 0);
     flex: 0 1 50%;
     display: flex;
     align-items: center;
     padding-right: $spacing_large;
-    margin-right: $spacing_large;
     &>portfolio-breakdown {
       flex: 1 1 auto;
     }
   }
   &__edit {
     flex: 0 1 50%;
+    display: flex;
+    flex-direction: column;
+    padding-left: $spacing_large;
+    &-header {
+      display: flex;
+      justify-content: flex-end;
+      &-item {
+        flex: 0 0 $structureSetTargetPanel_edit_column_size;
+      }
+    }
+    &-rowList {
+      @include mix_enable_scrollbar('vertical');
+      display: flex;
+      flex-direction: column;
+      &-item {
+        display: flex;
+        
+      }
+    }
   }
 }
