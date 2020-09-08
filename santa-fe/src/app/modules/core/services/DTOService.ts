@@ -1791,7 +1791,8 @@ export class DTOService {
 
   public formStructureFundObject(
     rawData: BEModels.BEPortfolioStructuringDTO,
-    isStencil: boolean
+    isStencil: boolean,
+    selectedMetricValue: PortfolioMetricValues = PortfolioMetricValues.cs01
   ): DTOs.PortfolioStructureDTO {
     const object: DTOs.PortfolioStructureDTO = {
       data: {
@@ -1841,8 +1842,8 @@ export class DTOService {
     object.data.cs01TotalsInK.targetTotal = object.data.target.target.cs01 / 1000;
     object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, object.state.isStencil);
     object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil);
-    object.data.cs01TargetBar.state.isInactiveMetric = false;
-    object.data.creditLeverageTargetBar.state.isInactiveMetric = true;
+    object.data.cs01TargetBar.state.isInactiveMetric = selectedMetricValue !== object.data.cs01TargetBar.data.targetMetric;
+    object.data.creditLeverageTargetBar.state.isInactiveMetric = selectedMetricValue !== object.data.creditLeverageTargetBar.data.targetMetric;
     const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.bicsLevel1Breakdown, []);
     BICSBreakdown.data.title = 'BICS';
     BICSBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.SECTOR);
