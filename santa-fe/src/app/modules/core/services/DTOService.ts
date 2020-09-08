@@ -1785,7 +1785,7 @@ export class DTOService {
       object.data.displayedResults = targetMetric === PortfolioMetricValues.cs01 ? `${object.data.displayedCurrentValue} / -` : `${object.data.displayedCurrentValue} / -`;
       return object;
     }
-    object.state.isEmpty = object.data.targetValue === 0 || object.data.targetValue === null;
+    object.state.isEmpty = !object.data.targetValue;
     return object;
   }
 
