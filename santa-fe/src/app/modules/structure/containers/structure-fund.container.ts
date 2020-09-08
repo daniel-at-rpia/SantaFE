@@ -44,8 +44,8 @@ export class StructureFund implements OnInit, OnChanges {
   }
 
   private validateInput(value: number | string) {
-     const validatedInput = parseFloat(value as string);
-     return validatedInput || validatedInput === 0 ? false : true;
+     const result = value || value === 0 ? false : true;
+     return result;
   }
 
   private resetErrors() {
