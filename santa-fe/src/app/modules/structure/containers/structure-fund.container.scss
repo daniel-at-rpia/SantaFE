@@ -1,7 +1,6 @@
 @import "global.scss";
 @import "modules/structure/structure.scss";
 
-$structureFund_btn_size: $iconButton_size_large;
 .sat-fundStructuring {
   $blockName: &;
   display: flex;
@@ -66,7 +65,7 @@ $structureFund_btn_size: $iconButton_size_large;
       left: 50%;
       transform: translate(-50%, -50%);
       &-btn {
-        @include roundedButton($size: $structureFund_btn_size);
+        @include roundedButton($size: $iconButton_size_large);
         margin-right: $spacing_large;
         &>i {
           font-size: $font_size_large;
