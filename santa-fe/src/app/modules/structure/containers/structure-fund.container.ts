@@ -44,7 +44,8 @@ export class StructureFund implements OnInit, OnChanges {
   }
 
   private validateInput(value: number | string) {
-     return parseFloat(value as string);
+     const validatedInput = parseFloat(value as string);
+     return validatedInput || validatedInput === 0 ? false : true;
   }
 
   private resetErrors() {
@@ -74,13 +75,14 @@ export class StructureFund implements OnInit, OnChanges {
     this.fund.api.onSubmitMetricValues(targetCS01, targetLeverage)
   }
 
-  private onChangeValue(amount: number, type: PortfolioMetricValues) {
+  private onChangeValue(amount: string, type: PortfolioMetricValues) {
+    const value = !parseFloat(amount) ? 0 : parseFloat(amount);
     if (type === PortfolioMetricValues.cs01) {
-      this.fund.data.target.target.cs01 = amount * 1000;
-      this.fund.data.originalBEData.target.target.Cs01 = amount * 1000;
+      this.fund.data.target.target.cs01 = value * 1000;
+      this.fund.data.originalBEData.target.target.Cs01 = value * 1000;
       return;
     }
-    this.fund.data.target.target.creditLeverage = amount;
-    this.fund.data.originalBEData.target.target.CreditLeverage = amount;
+    this.fund.data.target.target.creditLeverage = value;
+    this.fund.data.originalBEData.target.target.CreditLeverage = value;
   }
 }
