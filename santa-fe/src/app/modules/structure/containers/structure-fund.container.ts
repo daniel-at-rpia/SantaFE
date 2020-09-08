@@ -6,7 +6,7 @@ import { TargetBarDTO } from 'FEModels/frontend-models.interface';
 import { UtilityService } from 'Core/services/UtilityService';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { ownerInitials } from 'Core/selectors/core.selectors';
+import { selectUserInitials } from 'Core/selectors/core.selectors';
 
 @Component({
   selector: 'structure-fund',
@@ -34,7 +34,7 @@ export class StructureFund implements OnInit {
 
   public ngOnInit() {
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
-      select(ownerInitials)
+      select(selectUserInitials)
     ).subscribe((value) => {
       this.fund.state.isEditing = value === 'DM';
     });

@@ -5,7 +5,7 @@ import { Store, select } from '@ngrx/store';
 import { selectMetricLevel } from 'Structure/selectors/structure.selectors';
 import { Subscription, of } from 'rxjs';
 import { StructureMetricSelect } from 'Structure/actions/structure.actions';
-import { ownerInitials } from 'Core/selectors/core.selectors';
+import { selectUserInitials } from 'Core/selectors/core.selectors';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { catchError, first, tap} from 'rxjs/operators';
 import { UtilityService } from 'Core/services/UtilityService';
@@ -68,7 +68,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   public ngOnInit() {
     this.state = this.initializePageState();
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
-      select(ownerInitials)
+      select(selectUserInitials)
     ).subscribe((value) => {
         this.state.ownerInitial = value;
     });
