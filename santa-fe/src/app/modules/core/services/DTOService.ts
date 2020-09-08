@@ -1330,7 +1330,8 @@ export class DTOService {
         hasSecurity: false,
         hasTitlePin: false,
         isMarketListVariant: false,
-        isExpired: false
+        isExpired: false,
+        isError: false
       }
     }
     if (targetSecurity) {
@@ -1723,22 +1724,43 @@ export class DTOService {
         isStencil: !!isStencil,
         isEmpty: false,
         isDataUnavailable: false
-      },
-      utility: {
-        getDisplayValues: null,
-        convertNumtoStr: null,
-        setInactiveMetric: null
       }
     }
 
     function getDisplayedValues(targetBar: DTOs.TargetBarDTO) {
-      if (targetBar.data.currentValue > targetBar.data.targetValue) {
-        const difference = targetBar.data.currentValue - targetBar.data.targetValue;
+      const currentAbsValue = Math.abs(targetBar.data.currentValue);
+      const targetAbsValue = Math.abs(targetBar.data.targetValue);
+      if (targetBar.data.targetValue < 0 && targetBar.data.currentValue > 0) {
+        if (targetBar.data.currentValue >= targetAbsValue) {
+          targetBar.data.exceededPercentage = '100%';
+        } else {
+          const exceedAmount = targetBar.data.currentValue / targetAbsValue;
+          targetBar.data.exceededPercentage = `${exceedAmount * 100}%`;
+          targetBar.data.currentPercentage = '100%';
+        }
+      } else if (targetBar.data.targetValue > 0 && targetBar.data.currentValue < 0) {
+        targetBar.data.exceededPercentage = '0';
+        targetBar.data.currentPercentage = '0';
+      } else if (targetBar.data.currentValue < 0 && targetBar.data.targetValue < 0) {
+        if (targetBar.data.currentValue < targetBar.data.targetValue) {
+          const difference = 1 - ((currentAbsValue - targetAbsValue) / targetAbsValue);
+          targetBar.data.currentPercentage = `${difference * 100}%`;
+          targetBar.data.exceededPercentage = '0';
+        } else {
+          targetBar.data.exceededPercentage = targetAbsValue / currentAbsValue >= 2 ? '100%' : `${((targetAbsValue - currentAbsValue) / targetAbsValue) * 100}%`;
+          targetBar.data.currentPercentage = '100%';
+        }
+      } else if (currentAbsValue === targetAbsValue) {
         targetBar.data.currentPercentage = '100%';
-        targetBar.data.exceededPercentage = targetBar.data.currentValue / targetBar.data.targetValue >= 2 ? '100%' : `${(difference / targetBar.data.targetValue) * 100}%`
-        return;
+        targetBar.data.exceededPercentage = '0';
+      } else if (targetBar.data.currentValue > targetBar.data.targetValue) {
+        targetBar.data.currentPercentage = '100%';
+        targetBar.data.exceededPercentage = targetBar.data.currentValue / targetBar.data.targetValue >= 2 ? '100%' : `${((currentAbsValue - targetAbsValue) / targetBar.data.targetValue) * 100}%`
+      } else {
+        const difference = targetBar.data.currentValue / targetBar.data.targetValue;
+        targetBar.data.currentPercentage = `${difference * 100}%`;
+        targetBar.data.exceededPercentage = '0';
       }
-      targetBar.data.currentPercentage = `${(targetBar.data.currentValue / targetBar.data.targetValue) * 100}%`;
     }
 
     function getDisplayedResults(valueA: string, valueB: string) {
@@ -1763,17 +1785,18 @@ export class DTOService {
       object.data.displayedResults = targetMetric === PortfolioMetricValues.cs01 ? `${object.data.displayedCurrentValue} / -` : `${object.data.displayedCurrentValue} / -`;
       return object;
     }
-    object.state.isEmpty = false;
+    object.state.isEmpty = !object.data.targetValue;
     return object;
   }
 
   public formStructureFundObject(
     rawData: BEModels.BEPortfolioStructuringDTO,
-    isStencil: boolean
+    isStencil: boolean,
+    selectedMetricValue: PortfolioMetricValues = PortfolioMetricValues.cs01
   ): DTOs.PortfolioStructureDTO {
     const object: DTOs.PortfolioStructureDTO = {
       data: {
-        rpPortfolioDate: rawData.date,
+        date: rawData.date,
         portfolioId: rawData.portfolioId,
         portfolioShortName: rawData.portfolioShortName,
         portfolioNav: rawData.portfolioNav,
@@ -1782,8 +1805,8 @@ export class DTOService {
           date: rawData.target.date,
           portfolioId: rawData.target.portfolioId,
           target: {
-            cs01: rawData.target.target.Cs01 || null,
-            creditLeverage: rawData.target.target.CreditLeverage || null
+            cs01: rawData.target.target.Cs01 || 0,
+            creditLeverage: rawData.target.target.CreditLeverage || 0
           }
         },
         currentTotals :{
@@ -1803,24 +1826,30 @@ export class DTOService {
           targetTotal: null
         },
         cs01TargetBar: null,
-        creditLeverageTargetBar: null
+        creditLeverageTargetBar: null,
+        originalBEData: rawData
       },
       api: {
-        onSubmitMetricValues: null,
+        onSubmitMetricValues: null
       },
       state: {
         isEditing: false,
         isStencil: !!isStencil,
-        isDataUnavailable: false
-      },
-      utility: {
-        convertToK: null
+        isNumeric: true,
+        isDataUnavailable: false,
+        isEditingFundTargets: false,
+        hasErrors: {
+          updatedCS01: false,
+          updatedCreditLeverage: false,
+          errorMessage: ''
+        }
       }
     };
+    object.data.cs01TotalsInK.targetTotal = object.data.target.target.cs01 / 1000;
     object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, object.state.isStencil);
     object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil);
-    object.data.cs01TargetBar.state.isInactiveMetric = false;
-    object.data.creditLeverageTargetBar.state.isInactiveMetric = true;
+    object.data.cs01TargetBar.state.isInactiveMetric = selectedMetricValue !== object.data.cs01TargetBar.data.targetMetric;
+    object.data.creditLeverageTargetBar.state.isInactiveMetric = selectedMetricValue !== object.data.creditLeverageTargetBar.data.targetMetric;
     const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.bicsLevel1Breakdown, []);
     BICSBreakdown.data.title = 'BICS';
     BICSBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.SECTOR);

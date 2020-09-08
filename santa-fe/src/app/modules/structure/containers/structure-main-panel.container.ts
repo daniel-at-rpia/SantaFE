@@ -3,11 +3,10 @@ import { DTOService } from 'Core/services/DTOService';
 import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
 import { Store, select } from '@ngrx/store';
 import { selectMetricLevel } from 'Structure/selectors/structure.selectors';
+import { Subscription, of } from 'rxjs';
 import { StructureMetricSelect } from 'Structure/actions/structure.actions';
-import { Subscription } from 'rxjs';
-import { ownerInitials } from 'Core/selectors/core.selectors';
+import { selectUserInitials } from 'Core/selectors/core.selectors';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
-import { of  } from 'rxjs';
 import { catchError, first, tap} from 'rxjs/operators';
 import { UtilityService } from 'Core/services/UtilityService';
 import * as moment from 'moment';
@@ -19,6 +18,8 @@ import {
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 import { PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/frontend-models.interface';
 import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backend-models.interface';
+import { CoreSendNewAlerts } from 'Core/actions/core.actions';
+import { PayloadUpdatePortfolio } from 'App/modules/core/models/backend/backend-payloads.interface';
 
 @Component({
     selector: 'structure-main-panel',
@@ -67,9 +68,9 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   public ngOnInit() {
     this.state = this.initializePageState();
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
-      select(ownerInitials)
+      select(selectUserInitials)
     ).subscribe((value) => {
-      this.state.ownerInitial = value;
+        this.state.ownerInitial = value;
     });
     this.subscriptions.selectedMetricLevelSub = this.store$.pipe(
       select(selectMetricLevel)
@@ -77,10 +78,11 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       const metric = value === this.constants.cs01 ? this.constants.cs01 : this.constants.creditLeverage
       this.state.selectedMetricValue = metric;
       this.state.fetchResult.fundList.forEach(fund => {
-        //Show active and inactive target bars
-        fund.data.creditLeverageTargetBar.state.isInactiveMetric = fund.data.creditLeverageTargetBar.data.targetMetric !== this.state.selectedMetricValue ? true : false;
-        fund.data.cs01TargetBar.state.isInactiveMetric = fund.data.cs01TargetBar.data.targetMetric !== this.state.selectedMetricValue ? true : false;
         fund.state.isStencil = true; 
+        //Switch active and inactive target bars
+        fund.data.creditLeverageTargetBar.state.isInactiveMetric = this.state.selectedMetricValue === this.constants.cs01;
+        fund.data.cs01TargetBar.state.isInactiveMetric = this.state.selectedMetricValue === this.constants.creditLeverage;
+        //Switch values to be displayed in breakdowns
         fund.data.children.forEach(breakdown => {
           breakdown.state.isDisplayingCs01 = this.state.selectedMetricValue === this.constants.cs01;
           breakdown.state.isStencil = true;
@@ -120,6 +122,52 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       eachFund.data.portfolioShortName = eachPortfolioName;
       return eachFund;
     });
+  }
+
+  private getFundFromNewTargets(fund: PortfolioStructureDTO) {
+    const payload: PayloadUpdatePortfolio = {
+      portfolioStructure: fund.data.originalBEData
+    }
+    fund.state.isStencil = true;
+    fund.data.cs01TargetBar.state.isStencil = true;
+    fund.data.creditLeverageTargetBar.state.isStencil = true;
+    fund.data.children.forEach(breakdown => {
+      breakdown.state.isStencil = true;
+      breakdown.data.displayCategoryList.forEach(category => {
+        category.moveVisualizer.state.isStencil = true;
+      })
+    })
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioStructures, {req: 'POST'}, payload).pipe(
+      first(),
+      tap((serverReturn: BEPortfolioStructuringDTO) => {
+        const updatedFund = this.dtoService.formStructureFundObject(serverReturn, false, this.state.selectedMetricValue);
+        updatedFund.data.cs01TotalsInK.currentTotal = updatedFund.data.currentTotals.cs01 / 1000; //this is used in the set funds input fields, which are numbers - parseNumberToThousands() returns a string
+        updatedFund.data.cs01TargetBar.data.displayedCurrentValue = this.utilityService.parseNumberToThousands(updatedFund.data.currentTotals.cs01, true);
+        updatedFund.data.cs01TargetBar.data.displayedTargetValue = this.utilityService.parseNumberToThousands(updatedFund.data.target.target.cs01, true);
+        const selectedFund = this.state.fetchResult.fundList.find(fund => fund.data.portfolioId === updatedFund.data.portfolioId);
+        const selectedFundIndex = this.state.fetchResult.fundList.indexOf(selectedFund);
+        this.state.fetchResult.fundList[selectedFundIndex] = updatedFund;
+        const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `Successfully updated ${updatedFund.data.portfolioShortName}. Target CS01 level is ${updatedFund.data.cs01TargetBar.data.displayedTargetValue} and Credit Leverage level is ${updatedFund.data.creditLeverageTargetBar.data.displayedTargetValue}`, null);
+        this.store$.dispatch(new CoreSendNewAlerts([alert]));
+      
+      }),
+      catchError(err => {
+        const alert = this.dtoService.formSystemAlertObject('Structuring', 'ERROR', `Unable to update ${fund.data.portfolioShortName} target levels`, null);
+        alert.state.isError = true;
+        this.store$.dispatch(new CoreSendNewAlerts([alert]));
+        fund.state.isStencil = false;
+        fund.data.cs01TargetBar.state.isStencil = false;
+        fund.data.creditLeverageTargetBar.state.isStencil = false;
+        fund.data.children.forEach(breakdown => {
+          breakdown.state.isStencil = false;
+          breakdown.data.displayCategoryList.forEach(category => {
+            category.moveVisualizer.state.isStencil = false;
+          })
+        })
+        this.restfulCommService.logError('Cannot retrieve fund with updated targets');
+        return of('error');
+      })
+    ).subscribe()
   }
 
   private resetAPIErrors() {

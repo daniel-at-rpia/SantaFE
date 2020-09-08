@@ -1,5 +1,6 @@
 import { AlertTypes, AlertSubTypes } from 'Core/constants/coreConstants.constant';
 import {AxeAlertType} from "Core/constants/tradeConstants.constant";
+import { BEPortfolioStructuringDTO } from './backend-models.interface';
 
 export interface PayloadGetSantaGroups {
   source: string;
@@ -99,4 +100,8 @@ export interface PayloadUpdateSingleAlertConfig {
 
 export interface PayloadSetAlertsToInactive {
   alertIds: Array<string>;
+}
+
+export interface PayloadUpdatePortfolio {
+  portfolioStructure: BEPortfolioStructuringDTO
 }
