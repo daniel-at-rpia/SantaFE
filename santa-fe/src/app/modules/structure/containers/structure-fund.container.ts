@@ -1,9 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation, OnChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.interface';
 import {PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 import { DTOService } from 'Core/services/DTOService';
 import { TargetBarDTO } from 'FEModels/frontend-models.interface';
 import { UtilityService } from 'Core/services/UtilityService';
+import { Store, select } from '@ngrx/store';
+import { Subscription } from 'rxjs';
+import { ownerInitials } from 'Core/selectors/core.selectors';
 
 @Component({
   selector: 'structure-fund',
@@ -12,26 +15,30 @@ import { UtilityService } from 'Core/services/UtilityService';
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class StructureFund implements OnInit, OnChanges {
+export class StructureFund implements OnInit {
   @Input() fund: PortfolioStructureDTO;
-  @Input() ownerInitial: string;
   @Output() updatedFundData = new EventEmitter<PortfolioStructureDTO>();
   constants = {
     cs01: PortfolioMetricValues.cs01,
     creditLeverage: PortfolioMetricValues.creditLeverage
   }
+  subscriptions = {
+    ownerInitialsSub: null
+  }
 
   constructor(
     private dtoService: DTOService,
     private utilityService: UtilityService,
+    private store$: Store<any>,
   ){}
 
   public ngOnInit() {
+    this.subscriptions.ownerInitialsSub = this.store$.pipe(
+      select(ownerInitials)
+    ).subscribe((value) => {
+      this.fund.state.isEditing = value === 'DM';
+    });
     this.fund.api.onSubmitMetricValues = this.saveEditDetails.bind(this);
-  }
-
-  public ngOnChanges() {
-    this.fund.state.isEditing = this.ownerInitial === 'DM';
   }
 
   private showEditMenu() {
