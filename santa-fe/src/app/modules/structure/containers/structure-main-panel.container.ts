@@ -19,6 +19,7 @@ import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 import { PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/frontend-models.interface';
 import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
+import { PayloadUpdatePortfolio } from 'App/modules/core/models/backend/backend-payloads.interface';
 
 @Component({
     selector: 'structure-main-panel',
@@ -124,7 +125,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
 
   private getFundFromNewTargets(fund: PortfolioStructureDTO) {
-    const payload = {
+    const payload: PayloadUpdatePortfolio = {
       portfolioStructure: fund.data.originalBEData
     }
     fund.state.isStencil = true;
