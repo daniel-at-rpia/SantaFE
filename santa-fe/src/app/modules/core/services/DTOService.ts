@@ -1898,7 +1898,7 @@ export class DTOService {
     let findLeverageMax = 0;
     let findLeverageMin = 0;
     for (const eachCategory in rawData.breakdown) {
-      const eachCs01Entry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].Cs01 : null;
+      const eachCs01Entry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].metricBreakdowns.Cs01 : null;
       if (!!eachCs01Entry) {
         const highestVal = Math.max(eachCs01Entry.currentLevel, eachCs01Entry.targetLevel);
         const lowestVal = Math.min(eachCs01Entry.currentLevel, eachCs01Entry.targetLevel);
@@ -1909,7 +1909,7 @@ export class DTOService {
           findCs01Min = lowestVal;
         }
       }
-      const eachLeverageEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].CreditLeverage : null;
+      const eachLeverageEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].metricBreakdowns.CreditLeverage : null;
       if (!!eachLeverageEntry) {
         const highestVal = Math.max(eachLeverageEntry.currentLevel, eachLeverageEntry.targetLevel);
         const lowestVal = Math.min(eachLeverageEntry.currentLevel, eachLeverageEntry.targetLevel);
@@ -1928,7 +1928,7 @@ export class DTOService {
           findCs01Max,
           isStencil,
           eachCategoryText,
-          rawData.breakdown[eachCategoryText].Cs01,
+          rawData.breakdown[eachCategoryText].metricBreakdowns.Cs01,
           true
         )
         : null;
@@ -1939,7 +1939,7 @@ export class DTOService {
           findLeverageMax,
           isStencil,
           eachCategoryText,
-          rawData.breakdown[eachCategoryText].CreditLeverage,
+          rawData.breakdown[eachCategoryText].metricBreakdowns.CreditLeverage,
           false
         )
         : null;
