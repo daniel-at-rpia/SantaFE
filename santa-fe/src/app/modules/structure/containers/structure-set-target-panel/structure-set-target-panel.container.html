@@ -1,0 +1,12 @@
+<article
+  [ngClass]="{
+    'sat-structureSetTargetPanel': true
+  }">
+  <section class="sat-structureSetTargetPanel__preview">
+    <portfolio-breakdown
+      *ngIf="state.targetBreakdown"
+      [breakdownData]="state.targetBreakdown"
+      [dataIsReady]="true">
+    </portfolio-breakdown>
+  </section>
+</article>

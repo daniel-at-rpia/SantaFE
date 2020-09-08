@@ -279,3 +279,8 @@ export interface StructureUtilityPanelState {
   selectedMetricValue: PortfolioMetricValues;
   isExpanded: boolean;
 }
+
+export interface StructureSetTargetPanelState {
+  targetFund: DTOs.PortfolioStructureDTO;
+  targetBreakdown: DTOs.PortfolioBreakdownDTO;
+}

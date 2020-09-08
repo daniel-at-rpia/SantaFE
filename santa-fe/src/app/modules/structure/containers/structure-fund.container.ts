@@ -1,12 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
-import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.interface';
-import {PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
-import { DTOService } from 'Core/services/DTOService';
-import { TargetBarDTO } from 'FEModels/frontend-models.interface';
-import { UtilityService } from 'Core/services/UtilityService';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation, OnChanges } from '@angular/core';
+import { of, Subscription } from 'rxjs';
+import { catchError, first, tap} from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+
+import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.interface';
+import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import { DTOService } from 'Core/services/DTOService';
+import { UtilityService } from 'Core/services/UtilityService';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
+import { PortfolioBreakdownDTO, TargetBarDTO } from 'FEModels/frontend-models.interface';
+import { StructureSendSetTargetTransferEvent} from 'Structure/actions/structure.actions';
 
 @Component({
   selector: 'structure-fund',
@@ -29,7 +32,7 @@ export class StructureFund implements OnInit {
   constructor(
     private dtoService: DTOService,
     private utilityService: UtilityService,
-    private store$: Store<any>,
+    private store$: Store<any>
   ){}
 
   public ngOnInit() {
@@ -39,6 +42,13 @@ export class StructureFund implements OnInit {
       this.fund.state.isEditing = value === 'DM';
     });
     this.fund.api.onSubmitMetricValues = this.saveEditDetails.bind(this);
+  }
+
+  public onClickedEditInBreakdown(targetBreakdown: PortfolioBreakdownDTO) {
+    this.store$.dispatch(new StructureSendSetTargetTransferEvent({
+      targetFund: this.utilityService.deepCopy(this.fund),
+      targetBreakdown: this.utilityService.deepCopy(targetBreakdown)
+    }));
   }
 
   private showEditMenu() {

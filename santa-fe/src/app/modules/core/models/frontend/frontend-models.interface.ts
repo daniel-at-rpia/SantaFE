@@ -679,10 +679,11 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     ratingFillWidth: number;
   }
   state: {
-    isEditing: boolean;
+    isEditable: boolean;
     isStencil: boolean;
     isDisplayingCs01: boolean;
     isTargetAlignmentRatingAvail: boolean;
+    isPreviewVariant: boolean;
   }
 }
 

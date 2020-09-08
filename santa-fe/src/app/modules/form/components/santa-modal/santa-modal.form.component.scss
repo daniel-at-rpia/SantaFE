@@ -28,7 +28,7 @@ $modal_animation_duration: $animation_duration_normal;
     flex-direction: column;
     background-color: $color_gray_1;
     transform: translate(0, 100%) scale(0.01);
-    margin: $spacing_xx_large $page_gutter_width_for_alerts;
+    margin: auto $page_gutter_width_for_alerts;
     &-title {
       flex: 0 0 auto;
       display: flex;
@@ -47,33 +47,38 @@ $modal_animation_duration: $animation_duration_normal;
     }
     &-content {
       flex: 1 1 auto;
-      padding: $spacing_large;
-    }
-  }
-  &__ctas {
-    @include mix_fixed_div(absolute, $z_index_hovering_item);
-    @include mix_alive('custom', $modal_animation_duration transform);
-    display: flex;
-    justify-content: space-evenly;
-    left: 0;
-    bottom: $spacing_xx_large - $modal_ctas_btn_size/2;
-    width: 100%;
-    transform: scale(0.01);
-    &-btn {
-      @include mix_border_radius(50%);
       display: flex;
-      align-items: center;
-      justify-content: center;
-      width: $modal_ctas_btn_size;
-      height: $modal_ctas_btn_size;
-      font-size: $font_size_x_large;
-      &--cancel {
-        background-color: $color_kill;
-        color: $font_color_inverse;
+      padding: $spacing_large;
+      &>* {
+        flex: 1 1 auto;
+        display: flex;
       }
-      &--confirm {
-        background-color: $color_create;
-        color: $font_color_inverse;
+    }
+    &-ctas {
+      @include mix_fixed_div(absolute, $z_index_hovering_item);
+      @include mix_alive('custom', $modal_animation_duration transform);
+      display: flex;
+      justify-content: space-evenly;
+      left: 0;
+      bottom: -$modal_ctas_btn_size/2;
+      width: 100%;
+      transform: scale(0.01);
+      &-btn {
+        @include mix_border_radius(50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: $modal_ctas_btn_size;
+        height: $modal_ctas_btn_size;
+        font-size: $font_size_x_large;
+        &--cancel {
+          background-color: $color_kill;
+          color: $font_color_inverse;
+        }
+        &--confirm {
+          background-color: $color_create;
+          color: $font_color_inverse;
+        }
       }
     }
   }
@@ -86,9 +91,9 @@ $modal_animation_duration: $animation_duration_normal;
       }
       &__foreground {
         transform: translate(0, 0) scale(1);
-      }
-      &__ctas {
-        transform: scale(1);
+        &-ctas {
+          transform: scale(1);
+        }
       }
     }
   }

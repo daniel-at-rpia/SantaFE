@@ -1887,10 +1887,11 @@ export class DTOService {
         ratingFillWidth: null
       },
       state: {
-        isEditing: false,
+        isEditable: false,
         isStencil: true,
         isDisplayingCs01: true,
-        isTargetAlignmentRatingAvail: !!isStencil
+        isTargetAlignmentRatingAvail: !!isStencil,
+        isPreviewVariant: false
       }
     };
     let findCs01Max = 0;
