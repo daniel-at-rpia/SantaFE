@@ -135,7 +135,11 @@
   &--setFundTargets {
     #{$blockName} {
       &__setTarget {
-        height: 7rem;
+        background-color: $color_active;
+        color: $font_color-inverse;
+        height: 8rem;
+        padding-bottom: $spacing_medium;
+        margin-bottom: 0;
       }
       &__utility {
         &-btnGroup {
@@ -155,7 +159,6 @@
   &--invalidInput {
     #{$blockName} {
       &__setTarget {
-        margin-bottom: $spacing_medium;
         &-message {
           visibility: visible; 
           flex: 0 0 auto;
