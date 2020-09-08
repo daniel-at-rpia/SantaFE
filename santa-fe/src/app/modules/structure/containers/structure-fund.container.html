@@ -19,21 +19,21 @@
     <div class="sat-fundStructuring__setTarget-message">
       <p class="sat-fundStructuring__setTarget-message-text">{{ fund.state.hasErrors.errorMessage }}</p>
     </div>
-  <div class="sat-fundStructuring__setTarget-group">
-    <label for="CS01Target" class="sat-fundStructuring__setTarget-group-label">Target CS01:</label>
-    <santa-input
-      [inputValue]="fund.data.cs01TotalsInK.targetTotal"
-      [placeholder]="'0'"
-      [isNumeric]="fund.state.isNumeric"
-      (onInputChange)="onChangeValue($event, constants.cs01)"
-      [hasError]="fund.state.hasErrors.updatedCS01"
-      [ngClass]="{
-        'sat-fundStructuring__setTarget-group-input': true
-      }">
-    </santa-input>
-    <span class="sat-fundStructuring__setTarget-group-unit">K</span>
-  </div>
-  <div class="sat-fundStructuring__setTarget-group">
+    <div class="sat-fundStructuring__setTarget-group">
+      <label for="CS01Target" class="sat-fundStructuring__setTarget-group-label">Target CS01:</label>
+      <santa-input
+        [inputValue]="fund.data.cs01TotalsInK.targetTotal"
+        [placeholder]="'0'"
+        [isNumeric]="fund.state.isNumeric"
+        (onInputChange)="onChangeValue($event, constants.cs01)"
+        [hasError]="fund.state.hasErrors.updatedCS01"
+        [ngClass]="{
+          'sat-fundStructuring__setTarget-group-input': true
+        }">
+      </santa-input>
+      <span class="sat-fundStructuring__setTarget-group-unit">K</span>
+    </div>
+    <div class="sat-fundStructuring__setTarget-group">
       <label for="leverageTarget" class="sat-fundStructuring__setTarget-group-label">Target Credit Leverage:</label>
       <santa-input
         [inputValue]="fund.data.target.target.creditLeverage"
@@ -44,23 +44,23 @@
         [ngClass]="{
           'sat-fundStructuring__setTarget-group-input': true
         }">
-    </santa-input>
-  </div>
-</section>
-<section class="sat-fundStructuring__utility">
-  <div class="sat-fundStructuring__utility-btnGroup">
-    <button class="sat-fundStructuring__utility-btnGroup-btn santaBtn--iconOnly sat-fundStructuring__utility-btnGroup-btn--cancel" (click)="closeEditMenu()">
-      <i class="fal fa-times"></i>
-    </button>
-    <button class="sat-fundStructuring__utility-btnGroup-btn santaBtn--iconOnly sat-fundStructuring__utility-btnGroup-btn--edit" (click)="showEditMenu()">
-      <i class="fal fa-pencil"></i>
-    </button>
-    <button class="sat-fundStructuring__utility-btnGroup-btn santaBtn--iconOnly sat-fundStructuring__utility-btnGroup-btn--save"
-    (click)="onClickSaveNewMetrics(fund.data.target.target.cs01, fund.data.target.target.creditLeverage)">
-      <i class="fal fa-cloud-upload-alt"></i>
-    </button>
-  </div>
-  <hr class="sat-fundStructuring__utility-divider">
+      </santa-input>
+    </div>
+  </section>
+  <section class="sat-fundStructuring__utility">
+    <div class="sat-fundStructuring__utility-btnGroup">
+      <button class="sat-fundStructuring__utility-btnGroup-btn santaBtn--iconOnly sat-fundStructuring__utility-btnGroup-btn--cancel" (click)="closeEditMenu()">
+        <i class="fal fa-times"></i>
+      </button>
+      <button class="sat-fundStructuring__utility-btnGroup-btn santaBtn--iconOnly sat-fundStructuring__utility-btnGroup-btn--edit" (click)="showEditMenu()">
+        <i class="fal fa-pencil"></i>
+      </button>
+      <button class="sat-fundStructuring__utility-btnGroup-btn santaBtn--iconOnly sat-fundStructuring__utility-btnGroup-btn--save"
+      (click)="onClickSaveNewMetrics(fund.data.target.target.cs01, fund.data.target.target.creditLeverage)">
+        <i class="fal fa-cloud-upload-alt"></i>
+      </button>
+    </div>
+    <hr class="sat-fundStructuring__utility-divider">
   </section>
   <section class="sat-fundStructuring__content">
     <ul class="sat-fundStructuring__content-breakdownList">
