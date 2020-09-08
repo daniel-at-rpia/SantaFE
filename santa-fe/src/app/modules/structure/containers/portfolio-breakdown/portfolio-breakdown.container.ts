@@ -37,11 +37,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
       select(selectUserInitials)
     ).subscribe((initials) => {
-      if (initials == 'DM') {
-        this.breakdownData.state.isEditable = true;
-      } else {
-        this.breakdownData.state.isEditable = false;
-      }
+      this.breakdownData.state.isEditable = initials === 'DM';
     });
   }
 
