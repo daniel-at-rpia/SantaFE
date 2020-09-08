@@ -92,17 +92,17 @@
   }
   &--inactiveState {
     #{$blockName} {
-      &__type,
       &__indicator {
+        background-color: $color_gray_3;
         &-bar {
           &--total {
-            background-color: $color_disabled;
+            background-color: $color_gray_3;
           }
           &--exceeded {
             background-color: $color_gray_7;
           }
           &--current {
-            @include mix_gradient($color_gray_6, $color_gray_4, 0%, 90deg);
+            @include mix_gradient($color_gray_3, $color_gray_6, 0%, 90deg);
           }
         }
       }
