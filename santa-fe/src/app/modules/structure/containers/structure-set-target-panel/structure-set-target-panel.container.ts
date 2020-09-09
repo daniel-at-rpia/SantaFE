@@ -10,6 +10,7 @@ import { UtilityService } from 'Core/services/UtilityService';
 import { selectSetTargetTransferPack } from 'Structure/selectors/structure.selectors';
 import { StructureSetTargetOverlayTransferPack } from 'FEModels/frontend-adhoc-packages.interface';
 import { StructureSetTargetPanelEditRowBlock } from 'FEModels/frontend-blocks.interface';
+import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 
 @Component({
   selector: 'structure-set-target-panel',
@@ -23,6 +24,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   subscriptions = {
     setTargetTransferPackSub: null
   };
+  constants = {
+    metric: PortfolioMetricValues
+  }
 
   constructor(
     private store$: Store<any>,
@@ -63,6 +67,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         eachSub.unsubscribe();
       }
     }
+  }
+
+  public onValueChange(newValue: number, metric: PortfolioMetricValues, targetCategory: StructureSetTargetPanelEditRowBlock) {
+    console.log('test, params are', newValue, metric, targetCategory);
   }
 
   private loadEditRows() {

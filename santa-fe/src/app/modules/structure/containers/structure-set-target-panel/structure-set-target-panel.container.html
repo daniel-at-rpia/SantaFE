@@ -3,26 +3,79 @@
     'sat-structureSetTargetPanel': true
   }">
   <section class="sat-structureSetTargetPanel__utilities"></section>
-  <section class="sat-structureSetTargetPanel__preview">
-    <portfolio-breakdown
-      *ngIf="state.targetBreakdown"
-      [breakdownData]="state.targetBreakdown"
-      [dataIsReady]="true">
-    </portfolio-breakdown>
-  </section>
-  <section class="sat-structureSetTargetPanel__edit">
-    <div *ngIf="state.targetFund" class="sat-structureSetTargetPanel__edit-header">
-      <div class="sat-structureSetTargetPanel__edit-header-item">
-        <target-bar [targetBar]="state.targetFund.data.cs01TargetBar"></target-bar>
-      </div>
-      <div class="sat-structureSetTargetPanel__edit-header-item">
-        <target-bar [targetBar]="state.targetFund.data.creditLeverageTargetBar"></target-bar>
-      </div>
+  <section class="sat-structureSetTargetPanel__main">
+    <div class="sat-structureSetTargetPanel__main-preview">
+      <portfolio-breakdown
+        *ngIf="state.targetBreakdown"
+        [breakdownData]="state.targetBreakdown"
+        [dataIsReady]="true">
+      </portfolio-breakdown>
     </div>
-    <ul class="sat-structureSetTargetPanel__edit-rowList">
-      <li *ngFor="let eachCategory of state.editRowList" class="sat-structureSetTargetPanel__edit-rowList-item">
-        <span class="sat-structureSetTargetPanel__edit-rowList-item-text">{{eachCategory.rowTitle}}</span>
-      </li>
-    </ul>
+    <div class="sat-structureSetTargetPanel__main-edit">
+      <div *ngIf="state.targetFund" class="sat-structureSetTargetPanel__main-edit-header">
+        <div class="sat-structureSetTargetPanel__main-edit-header-item">
+          <target-bar [targetBar]="state.targetFund.data.cs01TargetBar"></target-bar>
+        </div>
+        <div class="sat-structureSetTargetPanel__main-edit-header-item">
+          <target-bar [targetBar]="state.targetFund.data.creditLeverageTargetBar"></target-bar>
+        </div>
+      </div>
+      <ul class="sat-structureSetTargetPanel__main-edit-rowList">
+        <li
+          *ngFor="let eachCategory of state.editRowList"
+          [ngClass]="{
+            'sat-structureSetTargetPanel__main-edit-rowList-item': true,
+            'sat-structureSetTargetEditRow': true
+          }">
+          <section class="sat-structureSetTargetEditRow__lock">
+            <button class="sat-structureSetTargetEditRow__lock-btn santaBtn--iconOnly santaBtn--small fal fa-lock-alt"></button>
+          </section>
+          <section class="sat-structureSetTargetEditRow__label">
+            <span class="sat-structureSetTargetEditRow__label-text">{{eachCategory.rowTitle}}</span>
+          </section>
+          <section class="sat-structureSetTargetEditRow__column">
+            <div class="sat-structureSetTargetEditRow__column-item">
+              <santa-input
+                [inputValue]=""
+                [placeholder]="''"
+                [isNumeric]="true"
+                (onInputChange)="onValueChange($event, constants.metric.cs01, eachCategory)">
+              </santa-input>
+              <span class="sat-structureSetTargetEditRow__column-item-unitText">K</span>
+            </div>
+            <div class="sat-structureSetTargetEditRow__column-item">
+              <santa-input
+                [inputValue]=""
+                [placeholder]="''"
+                [isNumeric]="true"
+                (onInputChange)="onValueChange($event, constants.metric.cs01, eachCategory)">
+              </santa-input>
+              <span class="sat-structureSetTargetEditRow__column-item-unitText">%</span>
+            </div>
+          </section>
+          <hr class="sat-structureSetTargetEditRow__divider">
+          <section class="sat-structureSetTargetEditRow__column">
+            <div class="sat-structureSetTargetEditRow__column-item">
+              <santa-input
+                [inputValue]=""
+                [placeholder]="''"
+                [isNumeric]="true"
+                (onInputChange)="onValueChange($event, constants.metric.creditLeverage, eachCategory)">
+              </santa-input>
+              <span class="sat-structureSetTargetEditRow__column-item-unitText">K</span>
+            </div>
+            <div class="sat-structureSetTargetEditRow__column-item">
+              <santa-input
+                [inputValue]=""
+                [placeholder]="''"
+                [isNumeric]="true"
+                (onInputChange)="onValueChange($event, constants.metric.creditLeverage, eachCategory)">
+              </santa-input>
+              <span class="sat-structureSetTargetEditRow__column-item-unitText">%</span>
+            </div>
+          </section>
+        </li>
+      </ul>
+    </div>
   </section>
 </article>
