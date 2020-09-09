@@ -1,6 +1,6 @@
 import { AlertTypes } from 'Core/constants/coreConstants.constant';
 import {AxeAlertType} from "Core/constants/tradeConstants.constant";
-
+import { PortfolioShortNames } from 'Core/constants/structureConstants.constants';
 export interface BEFetchAllTradeDataReturn {
   numberOfSecurities: number;
   securityDtos: BEFullSecurityCollection;
@@ -562,4 +562,59 @@ export interface BEAlertMarketListQuoteBlock extends BEQuoteBaseBlock {
   isNatural: string,
   ioiQualifier: string,
   isTraded: boolean
+}
+
+export interface BEStructuringBreakdownSingleEntry {
+  targetLevel: number;
+  targetPct: number;
+  currentLevel: number;
+  currentPct: number;
+  indexLevel: number;
+  indexPct: number;
+  view: string;
+}
+
+export interface BEStructuringBreakdownBlock {
+  date: string;
+  groupOption: number;
+  indexId: number
+  portfolioBreakdownId: string;
+  portfolioId: number;
+  breakdown: {
+    [property: string]: {
+      CreditLeverage: BEStructuringBreakdownSingleEntry;
+      Cs01: BEStructuringBreakdownSingleEntry;
+    }
+  }
+}
+
+export interface BEStructuringMetricTotalBlock {
+  CreditLeverage: number;
+  Cs01: number;
+}
+
+export interface BEPortfolioStructuringDTO {
+  date: string;
+  portfolioId: number;
+  portfolioShortName: PortfolioShortNames;
+  portfolioNav: number;
+  target: {
+    portfolioTargetId: string;
+    date: string;
+    portfolioId: number;
+    target: BEStructuringMetricTotalBlock;
+  }
+  currentTotals: BEStructuringMetricTotalBlock
+  indexId: number;
+  indexShortName: string;
+  indexNav: number;
+  indexTotals: BEStructuringMetricTotalBlock;
+  inDb: boolean;
+  ccyBreakdown: BEStructuringBreakdownBlock;
+  bicsLevel1Breakdown: BEStructuringBreakdownBlock;
+  bicsLevel2Breakdown?: BEStructuringBreakdownBlock;
+  bicsLevel3Breakdown?: BEStructuringBreakdownBlock;
+  ratingBreakdown: BEStructuringBreakdownBlock;
+  tenorBreakdown: BEStructuringBreakdownBlock;
+  overrides?: BEStructuringBreakdownBlock;
 }

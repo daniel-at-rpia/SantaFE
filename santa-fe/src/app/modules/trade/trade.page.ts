@@ -21,10 +21,10 @@
     import { TradeState } from 'FEModels/frontend-page-states.interface';
     import { selectSelectedSecurityForAnalysis } from 'Trade/selectors/trade.selectors';
     import { CoreUserLoggedIn } from 'Core/actions/core.actions';
-    import { selectDislayAlertThumbnail } from 'Core/selectors/core.selectors';
+    import { selectDislayAlertThumbnail, ownerInitials } from 'Core/selectors/core.selectors';
     import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
     import { CoreLoadSecurityMap } from 'Core/actions/core.actions';
-    import { FAILED_USER_INITIALS_FALLBACK, DevWhitelist } from 'Core/constants/coreConstants.constant';
+    import { TradeStoreResetEvent } from 'Trade/actions/trade.actions';
   //
 
 @Component({
@@ -37,11 +37,8 @@ export class TradePage implements OnInit, OnDestroy {
   state: TradeState;
   subscriptions = {
     receiveSelectedSecuritySub: null,
-    displayAlertThumbnailSub: null
-  };
-  constants = {
-    userInitialsFallback: FAILED_USER_INITIALS_FALLBACK,
-    devWhitelist: DevWhitelist
+    displayAlertThumbnailSub: null,
+    ownerInitialsSub: null
   };
 
   private initializePageState() {
@@ -64,7 +61,8 @@ export class TradePage implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.fetchOwnerInitial();
+    this.initializePageState();
+    this.store$.dispatch(new TradeStoreResetEvent());
     this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
       select(selectSelectedSecurityForAnalysis)
     ).subscribe((targetSecurity) => {
@@ -75,6 +73,11 @@ export class TradePage implements OnInit, OnDestroy {
       select(selectDislayAlertThumbnail)
     ).subscribe((value) => {
       this.state.displayAlertThumbnail = !!value;
+    });
+    this.subscriptions.ownerInitialsSub = this.store$.pipe(
+      select(ownerInitials)
+    ).subscribe((value) => {
+      this.state.ownerInitial = value;
     });
   }
 
@@ -105,33 +108,5 @@ export class TradePage implements OnInit, OnDestroy {
 
   public unMaximizeAlertPanel() {
     this.state.alertPanelMaximized = false;
-  }
-
-  private fetchOwnerInitial() {
-    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getUserInitials, {req: 'GET'}).pipe(
-      first(),
-      tap((serverReturn) => {
-        this.loadOwnerInitial(serverReturn);
-      }),
-      catchError(err => {
-        if (!!err && !!err.error && !!err.error.text) {
-          this.loadOwnerInitial(err.error.text);
-        } else {
-          this.loadOwnerInitial(this.constants.userInitialsFallback);
-          this.restfulCommService.logError(`Can not find user, error`);
-        }
-        return of('error');
-      })
-    ).subscribe();
-  }
-
-  private loadOwnerInitial(serverReturn: string) {
-    if (this.constants.devWhitelist.indexOf(serverReturn) !== -1) {
-      this.state.ownerInitial = 'DM';
-    } else {
-      this.state.ownerInitial = serverReturn;
-    }
-    this.restfulCommService.updateUser(this.state.ownerInitial);
-    this.store$.dispatch(new CoreUserLoggedIn(this.state.ownerInitial));
   }
 }

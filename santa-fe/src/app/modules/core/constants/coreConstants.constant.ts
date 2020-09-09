@@ -4,6 +4,12 @@ import {
   TriCoreDriverConfigStub
 } from 'FEModels/frontend-stub-models.interface';
 
+export enum NavigationModule {
+  trade = 'trade',
+  structuring = 'structuring',
+  market = 'market'
+}
+
 export const APIUrlMap = {
   getUserInitials: `user/get-user-initials`,
   getSecurityIdMap: `security/get-security-identifiers`,
@@ -24,7 +30,9 @@ export const APIUrlMap = {
   deleteAlert: 'Alert/delete-alerts',
   logEngagement: 'feLogger/track',
   logError: 'feLogger/log',
-  getAllTradeHistory: 'trade/get-all-trades-for-security'
+  getAllTradeHistory: 'trade/get-all-trades-for-security',
+  getPortfolioStructures: 'portfolioStructuring/get-portfolio-structures',
+  updatePortfolioStructures: 'portfolioStructuring/update-portfolio-structures'
 };
 
 export const FAILED_USER_INITIALS_FALLBACK = 'n/a';

@@ -108,7 +108,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     autoUpdateCountSub: null,
     selectedSecurityForAlertConfigSub: null,
     centerPanelPresetSelectedSub: null,
-    alertCountSub: null,
     startNewUpdateSub: null,
     keywordSearchSub: null
   }
@@ -212,6 +211,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
+      this.state = this.initializePageState();
       this.subscriptions.securityMapSub = this.store$.pipe(
         select(selectSecurityMapContent),
         withLatestFrom(

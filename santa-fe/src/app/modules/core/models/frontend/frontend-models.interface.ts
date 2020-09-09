@@ -10,17 +10,18 @@ import {
   SecurityMarkBlock,
   SecurityPortfolioBlock,
   SecurityTableRowQuoteBlock,
-  SecurityCostPortfolioBlock
+  SecurityCostPortfolioBlock, 
+  PortfolioMetricTotals,
+  PortfolioBreakdownCategoryBlock
 } from 'FEModels/frontend-blocks.interface';
 import {AlertSubTypes, AlertTypes} from 'Core/constants/coreConstants.constant';
 import { SantaTableNumericFloatingFilterParams } from 'FEModels/frontend-adhoc-packages.interface';
 import * as agGrid from 'ag-grid-community';
 import * as moment from 'moment';
 import * as am4Charts from '@amcharts/amcharts4/charts';
-
 import {Alert} from "Core/components/alert/alert.component";
-
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
+import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 
 interface BasicDTOStructure {
   [property: string]: object;
@@ -488,6 +489,7 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
     max: number;
     isBasis: boolean;
     timeSeries: Array<any>;
+    endPinText: string;
   }
   style: {
     leftGap: number;
@@ -503,6 +505,8 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
     isPlaceholder: boolean;
     isStencil: boolean;
     isColorCodeInversed: boolean;
+    structuringBreakdownVariant: boolean;
+    structuringBreakdownExceededState: boolean;
   }
 }
 
@@ -657,5 +661,98 @@ export interface TradeAlertConfigurationAxeGroupBlockDTO extends BasicDTOStructu
     isDisabled: boolean;
     isUrgent: boolean;
     isRangeActive: boolean;
+  }
+}
+
+export interface PortfolioBreakdownDTO extends BasicDTOStructure {
+  data: {
+    title: string;
+    definition: SecurityDefinitionDTO;
+    displayCategoryList: Array<PortfolioBreakdownCategoryBlock>;
+    ratingHoverText: string;
+    rawCs01CategoryList: Array<PortfolioBreakdownCategoryBlock>;
+    rawLeverageCategoryList: Array<PortfolioBreakdownCategoryBlock>;
+  },
+  style: {
+    ratingFillWidth: number;
+  }
+  state: {
+    isEditing: boolean;
+    isStencil: boolean;
+    isDisplayingCs01: boolean;
+    isTargetAlignmentRatingAvail: boolean;
+  }
+}
+
+export interface PortfolioStructureDTO extends BasicDTOStructure {
+  data: {
+    rpPortfolioDate: string;
+    portfolioId: number;
+    portfolioShortName: PortfolioShortNames;
+    portfolioNav: number;
+    target : {
+      portfolioTargetId: string;
+      date: string;
+      portfolioId: number;
+      target: PortfolioMetricTotals;
+    };
+    currentTotals: PortfolioMetricTotals;
+    indexId: number;
+    indexShortName: string;
+    indexNav: number;
+    indexTotals: PortfolioMetricTotals;
+    children: Array<PortfolioBreakdownDTO>;
+    cs01TotalsInK?: {
+      currentTotal: number;
+      targetTotal: number;
+    }
+    cs01TargetBar: TargetBarDTO;
+    creditLeverageTargetBar: TargetBarDTO;
+  },
+  api: {
+    onSubmitMetricValues: (CS01: number, leverage: number) => void;
+  }
+  state: {
+    isEditing: boolean;
+    isStencil: boolean;
+    isDataUnavailable: boolean;
+  }
+}
+
+export interface TargetBarDTO extends BasicDTOStructure {
+  data: {
+    targetMetric: PortfolioMetricValues;
+    currentValue: number;
+    targetValue: number;
+    displayedCurrentValue: string;
+    displayedTargetValue: string;
+    currentPercentage: string;
+    exceededPercentage: string;
+    displayedResults: string;
+  }
+  state: {
+    isInactiveMetric: boolean,
+    isStencil: boolean;
+    isEmpty: boolean;
+    isDataUnavailable: boolean;
+  }
+  utility: {
+    getDisplayValues: (targetBar: TargetBarDTO) => void;
+    convertNumtoStr: (targetBar: TargetBarDTO) => void;
+    setInactiveMetric: (targetBar: TargetBarDTO) => void;
+  }
+}
+
+export interface SantaModalDTO extends BasicDTOStructure {
+  data: {
+    id: string;
+    modalElement: Node;
+  },
+  state: {
+    isPresenting: boolean;
+  },
+  api: {
+    openModal: () => void;
+    closeModal: () => void;
   }
 }

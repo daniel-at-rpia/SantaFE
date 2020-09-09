@@ -25,7 +25,9 @@
       "BEModels/*": ["src/app/modules/core/models/backend/*"],
       "FEModels/*": ["src/app/modules/core/models/frontend/*"],
       "Market/*": ["src/app/modules/market/*"],
-      "Trade/*": ["src/app/modules/trade/*"]
+      "Trade/*": ["src/app/modules/trade/*"],
+      "Structure/*": ["src/app/modules/structure/*"],
+      "Form/*": ["src/app/modules/form/*"]
     },
     "lib": [
       "es2018",

@@ -1,0 +1,81 @@
+@import "global.scss";
+@import "modules/structure/structure.scss";
+
+.sat-fundStructuring {
+  $blockName: &;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  &__configuration {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    &-title {
+      flex: 0 0 auto;
+      font-size: $font_size_x_large;
+      font-weight: 700;
+      color: $font_color_minor;
+    }
+  }
+  &__utility {
+    @include mix_fixed_div(relative, $z_index_base_item);
+    display: flex;
+    flex-direction: column;
+    &-btn {
+      @include mix_fixed_div(absolute, $z_index_base_item_solid);
+      @include mix_border_radius(50%);
+      display: none;  // temporarily hide the edit for v0.4 release
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      &>i {
+        color: $font_color_major;
+        font-size: $font_size_large;
+      }
+    }
+    &-divider {
+      height: $typical_border_width;
+      background: $color_border_gray;
+      margin: $spacing_medium $spacing_large;
+    }
+  }
+  &__targetBar {
+    width: 8rem;
+  }
+  &__content {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    &-breakdownList {
+      @include mix_enable_scrollbar('vertical');
+      display: flex;
+      flex-direction: column;
+      padding: $spacing_x_small $spacing_medium $spacing_large $spacing_medium;
+      &-item {
+        margin-top: $spacing_medium;
+        &:first-of-type {
+          margin-top: 0;
+        }
+      }
+    }
+    &-errorMessage {
+      display: none;
+      text-align: center
+    }
+  }
+  &--errorState {
+    flex: 1 1 auto;
+    #{$blockName} {
+      &__content {
+        &-breakdownList {
+          &-item {
+            display: none;
+          }
+        }
+        &-errorMessage {
+          display: block;
+        }
+      }
+    }
+  }
+}

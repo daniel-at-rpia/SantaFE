@@ -46,7 +46,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   @Input() collapseGraph: boolean;
   state: TradeMarketAnalysisPanelState;
   subscriptions = {
-    receiveSelectedSecuritySub: null
+    // receiveSelectedSecuritySub: null
   }
   constants = {
     marketAnalysisGroupByOptions: MarketAnalysisGroupByOptions,

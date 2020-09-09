@@ -91,6 +91,7 @@ $globalNav_menu_width: 24rem;
         font-size: $font_size_x_large;
         padding: $spacing_medium;
         cursor: pointer;
+        text-decoration: none;
         &:hover {
           background-color: $color_gray_6;
         }

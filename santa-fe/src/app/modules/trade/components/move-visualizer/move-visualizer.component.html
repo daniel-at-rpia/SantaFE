@@ -9,7 +9,9 @@
     'sat-moveVisualizer--invalidState': visualizerData.state.isInvalid,
     'sat-moveVisualizer--stencilState': visualizerData.state.isStencil,
     'sat-moveVisualizer--pinIsNullState': visualizerData.data.end == null,
-    'sat-moveVisualizer--colorCodeInversedState': visualizerData.state.isColorCodeInversed
+    'sat-moveVisualizer--colorCodeInversedState': visualizerData.state.isColorCodeInversed,
+    'sat-moveVisualizer--structuringBreakdownVariant': visualizerData.state.structuringBreakdownVariant,
+    'sat-moveVisualizer--exceededState': visualizerData.state.structuringBreakdownExceededState
   }">
   <section class="sat-moveVisualizer__bar">
     <!--line-->
@@ -55,6 +57,7 @@
       [ngStyle]="{
         'flex-basis': visualizerData.style.rightGap + '%'
       }"></div>
+    <div class="sat-moveVisualizer__bar-stencilMask"></div>
   </section>
   <section class="sat-moveVisualizer__pins">
     <!--pin-->
@@ -63,7 +66,7 @@
       [ngStyle]="{
         'left': visualizerData.style.endPinLocation + '%'
       }">
-      <span class="sat-moveVisualizer__pins-end-value">{{visualizerData.data.end}}</span>
+      <span class="sat-moveVisualizer__pins-end-value">{{visualizerData.data.endPinText}}</span>
       <i class="sat-moveVisualizer__pins-end-icon fas fa-map-marker"></i>
     </div>
   </section>

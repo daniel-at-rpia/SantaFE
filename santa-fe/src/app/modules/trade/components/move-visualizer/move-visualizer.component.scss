@@ -1,13 +1,15 @@
   @import "global.scss";
 @import "modules/trade/trade.scss";
 
-$moveVisualizer_line_thickness: 1rem;
+$moveVisualizer_line_thickness: 0.5rem;
 $moveVisualizer_line_padding_bottom: $spacing_x_small;
 $moveVisualizer_pin_end_width: 3rem;
 $moveVisualizer_pin_start_width: 1.2rem;
 $moveVisualizer_padding_right: $spacing_xx_small;
 $moveVisualizer_color_default: $color_negative;
 $moveVisualizer_color_inversed: $color_positive;
+$moveVisualizer_structuringVariant_color_exceed: $color_red_5;
+$moveVisualizer_line_stencilMaskAnimationDuration: $animation_duration_heavy;
 .sat-moveVisualizer {
   $moveVisualizerBlockName: &;
   @include mix_fixed_div(relative, $z_index_base_item);
@@ -59,6 +61,16 @@ $moveVisualizer_color_inversed: $color_positive;
       flex-grow: 0;
       flex-shrink: 0;
     }
+    &-stencilMask {
+      @include mix_fixed_div(absolute, $z_index_base_item);
+      @include mix_alive('custom', $moveVisualizer_line_stencilMaskAnimationDuration transform ease-in);
+      width: 100%;
+      transform: scale(0, 1);
+      transform-origin: right;
+      right: 0;
+      height: $moveVisualizer_line_thickness;
+      background-color: $color_white;
+    }
   }
   &__pins {
     @include mix_fixed_div(relative, $z_index_base_item_lift);
@@ -69,16 +81,19 @@ $moveVisualizer_color_inversed: $color_positive;
     width: 100%;
     &-end {
       @include mix_fixed_div(relative, $z_index_base_item_lift);
+      @include mix_alive('custom', $animation_duration_light transform);
       display: flex;
       flex-direction: column;
       align-items: center;
       width: $moveVisualizer_pin_end_width;
       margin-left: -$moveVisualizer_pin_end_width/2;
+      transform: scale(1, 1);
+      transition-delay: $moveVisualizer_line_stencilMaskAnimationDuration + 0.3s;
       &-value {
         @include mix_fixed_div(relative, $z_index_base_item_lift);
         @include mix_border_radius(3px);
         padding: $spacing_minimum $spacing_xx_small;
-        margin-bottom: -$spacing_xx_small;
+        margin-bottom: -$spacing_x_small;
         line-height: $line_height_minimum;
         color: $font_color_inverse;
         background-color: $moveVisualizer_color_default;
@@ -118,29 +133,45 @@ $moveVisualizer_color_inversed: $color_positive;
     height: 100%;
     width: 100%;
   }
-  &--stencilState {
+  &--structuringBreakdownVariant {
     #{$moveVisualizerBlockName} {
       &__bar {
         &-leftEdge {
-          @include mix_stencil_animation(true);
-          background-color: $color_active!important;
+          background-color: $theme_color_1;
         }
         &-moveDistance {
-          @include mix_stencil_animation(true);
-        }
-        &-rightEdge {
-          @include mix_stencil_animation(true);
-          background-color: $color_active!important;
+          @include mix_gradient($theme_color_1, $theme_color_2, 0%, 90deg);  // can't use mix_theme_background since that is optimized for a light background where here we are looking for high contrast with a black background
+          &-arrow {
+            display: none;
+          }
         }
       }
       &__pins {
         &-end {
           &-value {
-            @include mix_stencil_animation;
+            background-color: $theme_color_1;
           }
           &-icon {
-            @include mix_stencil_animation;
-            background: none!important;
+            color: $theme_color_1;
+          }
+        }
+      }
+    }
+  }
+  &--structuringBreakdownVariant#{$moveVisualizerBlockName}--exceededState {
+    #{$moveVisualizerBlockName} {
+      &__bar {
+        &-rightEdge {
+          background-color: $moveVisualizer_structuringVariant_color_exceed;
+        }
+      }
+      &__pins {
+        &-end {
+          &-value {
+            background-color: $moveVisualizer_structuringVariant_color_exceed;
+          }
+          &-icon {
+            color: $moveVisualizer_structuringVariant_color_exceed;
           }
         }
       }
@@ -249,6 +280,39 @@ $moveVisualizer_color_inversed: $color_positive;
     #{$moveVisualizerBlockName} {
       &__pins {
         visibility: hidden;
+      }
+    }
+  }
+  &--stencilState {
+    #{$moveVisualizerBlockName} {
+      &__bar {
+        &-leftEdge {
+          @include mix_stencil_animation(true);
+          background-color: $color_active!important;
+        }
+        &-moveDistance {
+          @include mix_stencil_animation(true);
+        }
+        &-rightEdge {
+          @include mix_stencil_animation(true);
+          background-color: $color_active!important;
+        }
+        &-stencilMask {
+          transform: scale(1, 1);
+          z-index: $z_index_buried_item;
+        }
+      }
+      &__pins {
+        &-end {
+          transform: scale(0.01, 0.01);
+          &-value {
+            @include mix_stencil_animation;
+          }
+          &-icon {
+            @include mix_stencil_animation;
+            background: none!important;
+          }
+        }
       }
     }
   }
