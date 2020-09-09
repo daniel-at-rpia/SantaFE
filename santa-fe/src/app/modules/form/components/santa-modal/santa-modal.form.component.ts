@@ -13,7 +13,7 @@ import { ModalService } from 'Form/services/ModalService';
 
 export class SantaModal implements OnInit, OnDestroy {
   @Input() modalId: string;
-  private modalData: SantaModalDTO;
+  public modalData: SantaModalDTO;
 
   constructor(
     private elementRef: ElementRef,
