@@ -1,0 +1,224 @@
+@import "global.scss";
+@import "modules/structure/structure.scss";
+
+$portfolioBreakdown_borderWidth: 3px; // can't use rem because fractions of a pixel doesn't look well here
+$portfolioBreakdown_borderColor: $color_active;
+$portfolioBreakdown_rating_width: 12rem;
+$portfolioBreakdown_rating_thickness: 1.75rem;
+$portfolioBreakdown_categoryList_cell_width: 3.5rem;
+
+.sat-portfolioBreakdown {
+  $blockName: &;
+  @include mix_fixed_div(relative, $z_index_base_item);
+  @include mix_border_generator($portfolioBreakdown_borderWidth, $portfolioBreakdown_borderColor);
+  @include mix_border_radius(10px);
+  display: flex;
+  flex-direction: column;
+  width: $portfolioBreakdownWidth;
+  background-color: $color_white;
+  margin-top: $portfolioBreakdown_rating_thickness/2;
+  padding: $spacing_small;
+  &__title {
+    @include mix_fixed_div(absolute, $z_index_base_item_solid);
+    display: flex;
+    align-items: flex-start;
+    &-definition {
+      @include mix_border_radius(10px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: $color_gray_3;
+      width: 3rem;
+      height: 3rem;
+      margin-right: $spacing_medium;
+    }
+    &-text {
+      color: $font_color_trivial;
+      font-size: $font_size_large;
+    }
+  }
+  &__rating {
+    @include mix_fixed_div(absolute, $z_index_hovering_item);
+    @include mix_border_generator($portfolioBreakdown_borderWidth, $portfolioBreakdown_borderColor);
+    @include mix_border_radius(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: -$portfolioBreakdown_rating_thickness/2;
+    right: $spacing_medium;
+    width: $portfolioBreakdown_rating_width;
+    height: $portfolioBreakdown_rating_thickness;
+    overflow: hidden;
+    background-color: $color_white;
+    visibility: hidden;
+    &-fill {
+      @include mix_fixed_div(absolute, $z_index_base_item_solid);
+      @include mix_border_radius(3px, 'left');
+      height: 100%;
+      background-color: $color_red_5;
+      left: 0;
+    }
+    &-hoverText {
+      @include mix_fixed_div(absolute, $z_index_hovering_item);
+      color: $font_color_minor;
+      font-size: $font_size_normal;
+    }
+  }
+  &__categoryHeader {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: $portfolioBreakdown_rating_thickness;
+    &-cell {
+      @include mix_fixed_div(relative, $z_index_base_item);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: $portfolioBreakdown_categoryList_cell_width;
+      &-icon {
+        color: $font_color_minor;
+        font-size: $font_size_large;
+      }
+      &-tooltip {
+        @include mix_fixed_div(absolute, $z_index_hovering_item);
+        @include mix_border_radius(3px);
+        display: none;
+        top: -100%;
+        color: $font_color_inverse;
+        line-height: $line_height_small;
+        width: 4.25rem;
+        background-color: $color_active;
+        text-align: center;
+      }
+      &:hover>&-tooltip {
+        display: block;
+      }
+    }
+  }
+  &__categoryContent {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    &-list {
+      display: flex;
+      flex-direction: column;
+      &-item {
+        display: flex;
+        align-items: center;
+        &-title {
+          @include mix_text_overflow;
+          flex: 0 0 7rem;
+          text-align: right;
+          margin-right: $spacing_small;
+        }
+        &-moveVisualizer {
+          flex: 1 1 auto;
+          margin-right: $spacing_small;
+        }
+        &-cell {
+          @include mix_text_overflow;
+          flex: 0 0 ($portfolioBreakdown_categoryList_cell_width - $spacing_x_small*4/3 - $typical_border_width*2/3);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          font-size: $font_size_normal;
+          color: $font_color_major;
+          &--target {
+            @include mix_border_radius(5px);
+            align-self: stretch;
+            background-color: $color_active;
+            color: $font_color_inverse;
+            margin: $spacing_x_small 0;
+          }
+        }
+        &-cellDivider {
+          @include mix_border_generator(0 $typical_border_width 0 0);
+          flex: 0 0 $spacing_x_small+$typical_border_width;
+          margin: $spacing_x_small $spacing_x_small $spacing_x_small 0;
+        }
+        &--noSignificantDiff &-cell--target{
+          background-color: transparent;
+          color: $font_color_major;
+        }
+        &--negativeDiff &-cell--target {
+          background-color: $color_red_5;
+        }
+      }
+    }
+  }
+  &__ctas {
+    @include mix_fixed_div(absolute, $z_index_hovering_item);
+    display: none;  // temporarily hide edit for v0.4 release
+    // display: flex;
+    justify-content: center;
+    left: 0;
+    bottom: 0 - $iconButton_size_regular/2;
+    width: 100%;
+    &-editBtn {
+      @include mix_border_radius(50%);
+    }
+  }
+  &--goodRating {
+    #{$blockName} {
+      &__rating {
+        background-color: $color_active;
+        &-fill {
+          background-color: $color_green_5;
+        }
+      }
+    }
+  }
+  &--averageRating {
+    #{$blockName} {
+      &__rating {
+        background-color: $color_active;
+        &-fill {
+          background-color: $color_orange_5;
+        }
+      }
+    }
+  }
+  &--badRating {
+    #{$blockName} {
+      &__rating {
+        background-color: $color_active;
+        &-fill {
+          background-color: $color_red_5;
+        }
+      }
+    }
+  }
+  &--ratingAvailableState {
+    #{$blockName} {
+      &__rating {
+        visibility: visible;
+        &-hoverText {
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--stencilState {
+    #{$blockName} {
+      &__rating {
+        background-color: $color_white;
+        &-fill {
+          background-color: $color_stencil;
+        }
+        &-hoverText {
+          @include mix_stencil_animation;
+          background-color: $color_stencil;
+          color: $color_stencil;
+        }
+      }
+      &__categoryContent {
+        &-list-item-cell {
+          @include mix_stencil_animation;
+          background-color: $color_stencil;
+          color: $color_stencil;
+          // line-height: 
+        }
+      }
+    }
+  }
+}

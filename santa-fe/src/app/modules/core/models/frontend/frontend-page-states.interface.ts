@@ -14,13 +14,19 @@ import {
   SecurityMapEntry,
   AlertDTOMap
 } from 'FEModels/frontend-adhoc-packages.interface';
-import {AlertTypes} from 'Core/constants/coreConstants.constant';
+import { AlertTypes, NavigationModule } from 'Core/constants/coreConstants.constant';
 import * as am4charts from '@amcharts/amcharts4/charts';
+import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+
+export interface RootState {
+  ownerInitial: string;
+}
 
 export interface GlobalNavState {
   menuIsActive: boolean;
   version: string;
   user: string;
+  currentModule: NavigationModule,
   legend: {
     seniority: Array<GlobalNavLegendBlock>;
     rating: Array<GlobalNavLegendBlock>;
@@ -126,6 +132,17 @@ export interface TradeCenterPanelState {
       strategy: Array<string>;
     }
     securityFilters: Array<DefinitionConfiguratorEmitterParamsItem>
+  }
+}
+
+export interface StructureMainPanelState {
+  ownerInitial: string;
+  isUserPM: boolean;
+  selectedMetricValue: PortfolioMetricValues;
+  fetchResult: {
+    fundList: DTOs.PortfolioStructureDTO[];
+    fetchFundDataFailed: boolean;
+    fetchFundDataFailedError: string;
   }
 }
 
@@ -252,4 +269,13 @@ export interface TradeAlertPanelState {
     scopedForMarketListOnly: boolean;
     recentUpdatedAlertList: Array<string>;  // the rowId of the alerts that are recently updated on FE, we need to track them because those rows needs to be forced to be updated in the next update call, the diffing logic wouldnt work because every update we are just fetching new securities, so agGrid has to be updated through manually tracking the alerts that are updated recently
   }
+}
+
+export interface StructureState {
+
+}
+
+export interface StructureUtilityPanelState {
+  selectedMetricValue: PortfolioMetricValues;
+  isExpanded: boolean
 }

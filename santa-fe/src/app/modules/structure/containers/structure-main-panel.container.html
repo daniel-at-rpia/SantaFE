@@ -1,0 +1,22 @@
+<article 
+  [ngClass]="{
+  'sat-structureMainPanel': true,
+  'sat-structureMainPanel--fetchDataFailedState': state.fetchResult.fetchFundDataFailed
+  }">
+  <section class="sat-structureMainPanel__errorPrompt">
+    <i class="sat-structureMainPanel__errorPrompt-icon fal fa-sad-tear"></i>
+    <span class="sat-structureMainPanel__errorPrompt-title">Backend request failed due to </span>
+    <span class="sat-structureMainPanel__errorPrompt-text">{{state.fetchResult.fetchFundDataFailedError}}</span>
+  </section>
+  <section class="sat-structureMainPanel__fundGroup">
+    <div *ngFor="let fund of state.fetchResult.fundList" class="sat-structureMainPanel__fundGroup-fund">
+      <structure-fund [fund]="fund"></structure-fund>
+    </div>
+  </section>
+  <section>
+    <santa-modal [modalId]="constants.editModalId">
+      <!--Demo purpose only-->
+      <portfolio-breakdown *ngIf="state.fetchResult.fundList[0]?.data.children[0]" [breakdownData]="state.fetchResult.fundList[0]?.data.children[0]"></portfolio-breakdown>
+    </santa-modal>
+  </section>
+</article>

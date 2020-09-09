@@ -21,6 +21,7 @@ import { ObligorGraph } from './components/obligor-graph/obligor-graph';
 import { HistoricalSummary } from 'Trade/containers/historical-summary.container';
 import {AlertCountSummary} from "Trade/components/alert-count-summary/alert-count-summary";
 import { AlertWatchList } from "Trade/components/alert-watch-list/alert-watch-list.component";
+import { NavigationModule } from "Core/constants/coreConstants.constant";
 
 @NgModule({
   declarations: [
@@ -41,10 +42,10 @@ import { AlertWatchList } from "Trade/components/alert-watch-list/alert-watch-li
     CommonModule,
     RouterModule.forChild([
       {
-        path: 'trade', component: TradePage
+        path: NavigationModule.trade, component: TradePage
       }
     ]),
-    StoreModule.forFeature('trade', reducer),
+    StoreModule.forFeature(NavigationModule.trade, reducer),
     EffectsModule.forFeature([TradeEffect]),
 
     // Native modules
@@ -53,6 +54,9 @@ import { AlertWatchList } from "Trade/components/alert-watch-list/alert-watch-li
   ],
   providers: [
     LiveDataProcessingService
+  ],
+  exports: [
+    MoveVisualizer
   ]
 })
 export class TradeModule { }

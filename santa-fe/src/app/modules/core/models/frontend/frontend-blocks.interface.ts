@@ -269,6 +269,25 @@ export interface SelectAxeWatchlistRangeDriver extends AxeAlertBlock {
   targetDriver: string;
 }
 
+export interface PortfolioMetricTotals {
+  cs01: number;
+  creditLeverage: number;
+}
+
+export interface PortfolioBreakdownCategoryBlock {
+  category: string;
+  targetLevel: number;
+  targetPct: number;
+  diffToTarget: number;
+  diffToTargetDisplay: string;
+  currentLevel: number;
+  currentPct: number;
+  currentPctDisplay: string;
+  indexPct: number;
+  indexPctDisplay: string;
+  moveVisualizer: DTOs.MoveVisualizerDTO;
+}
+
 export interface GlobalNavLegendBlock {
   card: DTOs.SecurityDTO;
   legend: string;
