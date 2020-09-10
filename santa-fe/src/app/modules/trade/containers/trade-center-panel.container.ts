@@ -285,6 +285,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     this.state.presets.selectedPreset = null;
     this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true);
     this.state.filters.quickFilters = this.initializePageState().filters.quickFilters;
+    this.state.filters.keyword.defaultValueForUI = null;
     // const alertTableCopy = this.utilityService.deepCopy(this.state.fetchResult.alertTable);
     this.state.fetchResult = this.initializePageState().fetchResult;
     // this.state.fetchResult.alertTable = alertTableCopy;
