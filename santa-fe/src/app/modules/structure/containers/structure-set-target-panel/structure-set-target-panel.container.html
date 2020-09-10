@@ -36,19 +36,21 @@
           <section class="sat-structureSetTargetEditRow__column">
             <div class="sat-structureSetTargetEditRow__column-item">
               <santa-input
-                [inputValue]=""
+                [inputValue]="eachCategory.targetCs01.level.initial"
                 [placeholder]="''"
                 [isNumeric]="true"
-                (onInputChange)="onValueChange($event, constants.metric.cs01, eachCategory)">
+                [isGrayedOut]="!eachCategory.targetCs01.level.isActive"
+                (onInputChange)="onValueChange($event, constants.metric.cs01, eachCategory, false)">
               </santa-input>
               <span class="sat-structureSetTargetEditRow__column-item-unitText">K</span>
             </div>
             <div class="sat-structureSetTargetEditRow__column-item">
               <santa-input
-                [inputValue]=""
+                [inputValue]="eachCategory.targetCs01.percent.initial"
                 [placeholder]="''"
                 [isNumeric]="true"
-                (onInputChange)="onValueChange($event, constants.metric.cs01, eachCategory)">
+                [isGrayedOut]="!eachCategory.targetCs01.percent.isActive"
+                (onInputChange)="onValueChange($event, constants.metric.cs01, eachCategory, true)">
               </santa-input>
               <span class="sat-structureSetTargetEditRow__column-item-unitText">%</span>
             </div>
@@ -57,19 +59,21 @@
           <section class="sat-structureSetTargetEditRow__column">
             <div class="sat-structureSetTargetEditRow__column-item">
               <santa-input
-                [inputValue]=""
+                [inputValue]="eachCategory.targetCreditLeverage.level.initial"
                 [placeholder]="''"
                 [isNumeric]="true"
-                (onInputChange)="onValueChange($event, constants.metric.creditLeverage, eachCategory)">
+                [isGrayedOut]="!eachCategory.targetCreditLeverage.level.isActive"
+                (onInputChange)="onValueChange($event, constants.metric.creditLeverage, eachCategory, false)">
               </santa-input>
               <span class="sat-structureSetTargetEditRow__column-item-unitText">K</span>
             </div>
             <div class="sat-structureSetTargetEditRow__column-item">
               <santa-input
-                [inputValue]=""
+                [inputValue]="eachCategory.targetCreditLeverage.percent.initial"
                 [placeholder]="''"
                 [isNumeric]="true"
-                (onInputChange)="onValueChange($event, constants.metric.creditLeverage, eachCategory)">
+                [isGrayedOut]="!eachCategory.targetCreditLeverage.percent.isActive"
+                (onInputChange)="onValueChange($event, constants.metric.creditLeverage, eachCategory, true)">
               </santa-input>
               <span class="sat-structureSetTargetEditRow__column-item-unitText">%</span>
             </div>

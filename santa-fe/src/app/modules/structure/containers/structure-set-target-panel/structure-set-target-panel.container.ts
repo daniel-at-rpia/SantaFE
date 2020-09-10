@@ -9,7 +9,7 @@ import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { UtilityService } from 'Core/services/UtilityService';
 import { selectSetTargetTransferPack } from 'Structure/selectors/structure.selectors';
 import { StructureSetTargetOverlayTransferPack } from 'FEModels/frontend-adhoc-packages.interface';
-import { StructureSetTargetPanelEditRowBlock } from 'FEModels/frontend-blocks.interface';
+import { StructureSetTargetPanelEditRowBlock, StructureSetTargetPanelEditRowItemBlock } from 'FEModels/frontend-blocks.interface';
 import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 
 @Component({
@@ -69,19 +69,87 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
-  public onValueChange(newValue: number, metric: PortfolioMetricValues, targetCategory: StructureSetTargetPanelEditRowBlock) {
-    console.log('test, params are', newValue, metric, targetCategory);
+  public onValueChange(
+    newValue: number,
+    metric: PortfolioMetricValues,
+    targetCategory: StructureSetTargetPanelEditRowBlock,
+    isPercent: boolean
+  ) {
+    if (metric === this.constants.metric.cs01) {
+      if (!!isPercent) {
+        const targetItem = targetCategory.targetCs01.percent;
+        const counterPartyItem = targetCategory.targetCs01.level;
+        targetItem.modified = newValue;
+        targetItem.isActive = true;
+      } else {
+        const targetItem = targetCategory.targetCs01.level;
+        const counterPartyItem = targetCategory.targetCs01.percent;
+        targetItem.modified = newValue;
+        targetItem.isActive = true;
+      }
+    } else if (metric === this.constants.metric.creditLeverage) {
+      if (!!isPercent) {
+        const targetItem = targetCategory.targetCreditLeverage.percent;
+        const counterPartyItem = targetCategory.targetCreditLeverage.level;
+        targetItem.modified = newValue;
+        targetItem.isActive = true;
+      } else {
+        const targetItem = targetCategory.targetCreditLeverage.level;
+        const counterPartyItem = targetCategory.targetCreditLeverage.percent;
+        targetItem.modified = newValue;
+        targetItem.isActive = true;
+      }
+    }
   }
 
   private loadEditRows() {
     if (!!this.state.targetBreakdown) {
-      this.state.targetBreakdown.data.displayCategoryList.forEach((eachCategory) => {
+      this.state.targetBreakdown.data.rawCs01CategoryList.forEach((eachCategory) => {
         const newRow: StructureSetTargetPanelEditRowBlock = {
           targetBlockFromBreakdown: eachCategory,
-          rowTitle: eachCategory.category
+          rowTitle: eachCategory.category,
+          targetCs01: {
+            level: {
+              initial: eachCategory.targetLevel,
+              modified: null,
+              isActive: false,
+              isImplied: false
+            },
+            percent: {
+              initial: eachCategory.targetPct,
+              modified: null,
+              isActive: false,
+              isImplied: false
+            }
+          },
+          targetCreditLeverage: {
+            level: {
+              initial: null,
+              modified: null,
+              isActive: false,
+              isImplied: false
+            },
+            percent: {
+              initial: null,
+              modified: null,
+              isActive: false,
+              isImplied: false
+            }
+          }
         };
         this.state.editRowList.push(newRow);
       });
+      this.state.targetBreakdown.data.rawLeverageCategoryList.forEach((eachCategory) => {
+        const targetRow = this.state.editRowList.find((eachRow) => {
+          return eachRow.rowTitle === eachCategory.category;
+        });
+        if (!!targetRow) {
+          targetRow.targetCreditLeverage.level.initial = eachCategory.targetLevel;
+          targetRow.targetCreditLeverage.percent.initial = eachCategory.targetPct;
+        };
+      });
+    }
+  }
     }
   }
 

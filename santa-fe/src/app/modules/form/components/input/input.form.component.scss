@@ -21,4 +21,20 @@
       }
     }
   }
+  &--numericVariant {
+    #{$santaInputBlockName} {
+      &__inputElement {
+        text-align: right;
+      }
+    }
+  }
+  &--grayedOutState {
+    #{$santaInputBlockName} {
+      &__inputElement {
+        background-color: $color_gray_2;
+        border-color: $color_border_gray;
+        color: $color_disabled;
+      }
+    }
+  }
 }

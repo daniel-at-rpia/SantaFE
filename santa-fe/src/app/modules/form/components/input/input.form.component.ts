@@ -20,6 +20,7 @@ export class SantaInput implements OnChanges{
   @Input() isHero: boolean;
   @Input() isNumeric: boolean;
   @Input() hasError: boolean;
+  @Input() isGrayedOut: boolean;
   @Output() onInputChange = new EventEmitter<String>();
   constructor(
   ) {

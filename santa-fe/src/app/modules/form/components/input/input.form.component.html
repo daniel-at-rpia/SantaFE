@@ -1,7 +1,9 @@
 <article
   [ngClass]="{
     'santaInput': true,
-    'santaInput--heroVariant': !!isHero
+    'santaInput--heroVariant': !!isHero,
+    'santaInput--numericVariant': !!isNumeric,
+    'santaInput--grayedOutState': !!isGrayedOut
   }">
   <input
     type="{{ isNumeric ? 'number' : 'text' }}"
