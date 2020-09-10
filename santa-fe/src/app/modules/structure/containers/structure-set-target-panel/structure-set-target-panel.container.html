@@ -36,7 +36,7 @@
           <section class="sat-structureSetTargetEditRow__column">
             <div class="sat-structureSetTargetEditRow__column-item">
               <santa-input
-                [inputValue]="eachCategory.targetCs01.level.initial"
+                [inputValue]="eachCategory.targetCs01.level.initialDisplayValue"
                 [placeholder]="''"
                 [isNumeric]="true"
                 [isGrayedOut]="!eachCategory.targetCs01.level.isActive"
@@ -46,7 +46,7 @@
             </div>
             <div class="sat-structureSetTargetEditRow__column-item">
               <santa-input
-                [inputValue]="eachCategory.targetCs01.percent.initial"
+                [inputValue]="eachCategory.targetCs01.percent.initialDisplayValue"
                 [placeholder]="''"
                 [isNumeric]="true"
                 [isGrayedOut]="!eachCategory.targetCs01.percent.isActive"
@@ -59,7 +59,7 @@
           <section class="sat-structureSetTargetEditRow__column">
             <div class="sat-structureSetTargetEditRow__column-item">
               <santa-input
-                [inputValue]="eachCategory.targetCreditLeverage.level.initial"
+                [inputValue]="eachCategory.targetCreditLeverage.level.initialDisplayValue"
                 [placeholder]="''"
                 [isNumeric]="true"
                 [isGrayedOut]="!eachCategory.targetCreditLeverage.level.isActive"
@@ -69,7 +69,7 @@
             </div>
             <div class="sat-structureSetTargetEditRow__column-item">
               <santa-input
-                [inputValue]="eachCategory.targetCreditLeverage.percent.initial"
+                [inputValue]="eachCategory.targetCreditLeverage.percent.initialDisplayValue"
                 [placeholder]="''"
                 [isNumeric]="true"
                 [isGrayedOut]="!eachCategory.targetCreditLeverage.percent.isActive"

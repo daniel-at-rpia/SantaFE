@@ -285,4 +285,6 @@ export interface StructureSetTargetPanelState {
   targetFund: DTOs.PortfolioStructureDTO;
   targetBreakdown: DTOs.PortfolioBreakdownDTO;
   editRowList: Array<StructureSetTargetPanelEditRowBlock>;
+  totalUnallocatedCS01: number;
+  totalUnallocatedCreditLeverage: number;
 }

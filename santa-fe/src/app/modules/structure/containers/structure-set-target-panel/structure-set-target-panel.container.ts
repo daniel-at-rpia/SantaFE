@@ -41,7 +41,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     const state: StructureSetTargetPanelState = {
       targetBreakdown: null,
       targetFund: null,
-      editRowList: []
+      editRowList: [],
+      totalUnallocatedCS01: 0,
+      totalUnallocatedCreditLeverage: 0
     }
     return state;
   }
@@ -70,7 +72,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   public onValueChange(
-    newValue: number,
+    newValue: string,
     metric: PortfolioMetricValues,
     targetCategory: StructureSetTargetPanelEditRowBlock,
     isPercent: boolean
@@ -79,24 +81,24 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       if (!!isPercent) {
         const targetItem = targetCategory.targetCs01.percent;
         const counterPartyItem = targetCategory.targetCs01.level;
-        targetItem.modified = newValue;
+        targetItem.modifiedDisplayValue = newValue;
         targetItem.isActive = true;
       } else {
         const targetItem = targetCategory.targetCs01.level;
         const counterPartyItem = targetCategory.targetCs01.percent;
-        targetItem.modified = newValue;
+        targetItem.modifiedDisplayValue = newValue;
         targetItem.isActive = true;
       }
     } else if (metric === this.constants.metric.creditLeverage) {
       if (!!isPercent) {
         const targetItem = targetCategory.targetCreditLeverage.percent;
         const counterPartyItem = targetCategory.targetCreditLeverage.level;
-        targetItem.modified = newValue;
+        targetItem.modifiedDisplayValue = newValue;
         targetItem.isActive = true;
       } else {
         const targetItem = targetCategory.targetCreditLeverage.level;
         const counterPartyItem = targetCategory.targetCreditLeverage.percent;
-        targetItem.modified = newValue;
+        targetItem.modifiedDisplayValue = newValue;
         targetItem.isActive = true;
       }
     }
@@ -110,28 +112,32 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           rowTitle: eachCategory.category,
           targetCs01: {
             level: {
-              initial: eachCategory.targetLevel,
-              modified: null,
+              initialDisplayValue: eachCategory.targetLevel,
+              modifiedDisplayValue: null,
+              modifiedUnderlineValue: null,
               isActive: false,
               isImplied: false
             },
             percent: {
-              initial: eachCategory.targetPct,
-              modified: null,
+              initialDisplayValue: eachCategory.targetPct,
+              modifiedDisplayValue: null,
+              modifiedUnderlineValue: null,
               isActive: false,
               isImplied: false
             }
           },
           targetCreditLeverage: {
             level: {
-              initial: null,
-              modified: null,
+              initialDisplayValue: null,
+              modifiedDisplayValue: null,
+              modifiedUnderlineValue: null,
               isActive: false,
               isImplied: false
             },
             percent: {
-              initial: null,
-              modified: null,
+              initialDisplayValue: null,
+              modifiedDisplayValue: null,
+              modifiedUnderlineValue: null,
               isActive: false,
               isImplied: false
             }
@@ -144,13 +150,35 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           return eachRow.rowTitle === eachCategory.category;
         });
         if (!!targetRow) {
-          targetRow.targetCreditLeverage.level.initial = eachCategory.targetLevel;
-          targetRow.targetCreditLeverage.percent.initial = eachCategory.targetPct;
+          targetRow.targetCreditLeverage.level.initialDisplayValue =eachCategory.targetLevel;
+          targetRow.targetCreditLeverage.percent.initialDisplayValue =eachCategory.targetPct;
         };
       });
     }
   }
-    }
+
+  private calculateAllocation() {
+
+  }
+
+  private implyCounterParty(
+    impliedValue: string,
+    counterPartyItem: StructureSetTargetPanelEditRowItemBlock,
+    metric: PortfolioMetricValues
+  ) {
+    counterPartyItem.isActive = false;
+    counterPartyItem.isImplied = true;
+    // if (metric === this.constants.metric.cs01) {
+    //   if (this.state.totalUnallocatedCS01 >= impliedValue) {
+    //     counterPartyItem.modifiedDisplayValue = `${impliedValue}`;
+    //     this.state.totalUnallocatedCS01 = this.state.totalUnallocatedCS01 - impliedValue;
+    //   } else {
+    //     counterPartyItem.modified = this.state.totalUnallocatedCS01;
+    //     this.state.totalUnallocatedCS01 = 0;
+    //   }
+    // } else if (metric === this.constants.metric.creditLeverage) {
+
+    // }
   }
 
 }

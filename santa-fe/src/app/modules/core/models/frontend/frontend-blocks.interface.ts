@@ -307,8 +307,9 @@ export interface StructureSetTargetPanelEditRowBlock {
 }
 
 export interface StructureSetTargetPanelEditRowItemBlock {
-  initial: number;
-  modified: number;
+  initialDisplayValue: number;
+  modifiedDisplayValue: string;
+  modifiedUnderlineValue: number;
   isActive: boolean;
   isImplied: boolean;
 }
