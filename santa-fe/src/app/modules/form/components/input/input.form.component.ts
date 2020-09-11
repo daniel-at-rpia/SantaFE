@@ -22,6 +22,8 @@ export class SantaInput implements OnChanges{
   @Input() hasError: boolean;
   @Input() isGrayedOut: boolean;
   @Output() onInputChange = new EventEmitter<String>();
+  @Output() onInputFocus = new EventEmitter();
+  @Output() onInputBlur = new EventEmitter();
   constructor(
   ) {
   }
@@ -30,8 +32,16 @@ export class SantaInput implements OnChanges{
     // nothing to do atm
   }
 
-  onKey() {
-    this.onInputChange.emit(this.inputValue);
+  public onKey() {
+    !!this.onInputChange && this.onInputChange.emit(this.inputValue);
+  }
+
+  public onFocus() {
+    !!this.onInputFocus && this.onInputFocus.emit();
+  }
+
+  public onBlur() {
+    !!this.onInputBlur && this.onInputBlur.emit();
   }
 
 }

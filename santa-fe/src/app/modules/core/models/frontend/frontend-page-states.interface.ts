@@ -287,4 +287,6 @@ export interface StructureSetTargetPanelState {
   editRowList: Array<StructureSetTargetPanelEditRowBlock>;
   totalUnallocatedCS01: number;
   totalUnallocatedCreditLeverage: number;
+  remainingUnallocatedCS01: number;
+  remainingUnallocatedCreditLeverage: number;
 }

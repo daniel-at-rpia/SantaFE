@@ -1958,6 +1958,10 @@ export class DTOService {
     isCs01: boolean
   ): Blocks.PortfolioBreakdownCategoryBlock {
     if (!!rawCategoryData) {
+      const rawCurrentLevel = rawCategoryData.currentLevel;
+      const rawCurrentPct = rawCategoryData.currentPct;
+      const rawTargetLevel = rawCategoryData.targetLevel;
+      const rawTargetPct = rawCategoryData.targetPct;
       rawCategoryData.currentLevel = !!isCs01 ? this.utility.round(rawCategoryData.currentLevel/1000, 0) : this.utility.round(rawCategoryData.currentLevel, 2);
       if (rawCategoryData.targetLevel != null) {
         rawCategoryData.targetLevel = !!isCs01 ? this.utility.round(rawCategoryData.targetLevel/1000, 0) : this.utility.round(rawCategoryData.targetLevel, 2);
@@ -1991,7 +1995,13 @@ export class DTOService {
         currentPctDisplay: rawCategoryData.currentPct != null ? `${rawCategoryData.currentPct}%` : '-',
         indexPct: rawCategoryData.indexPct,
         indexPctDisplay: rawCategoryData.indexPct != null ? `${rawCategoryData.indexPct}%` : '-',
-        moveVisualizer: eachMoveVisualizer
+        moveVisualizer: eachMoveVisualizer,
+        raw: {
+          currentLevel: rawCurrentLevel,
+          currentPct: rawCurrentPct,
+          targetLevel: rawTargetLevel,
+          targetPct: rawTargetPct
+        }
       };
       if (eachCategoryBlock.diffToTarget < 0) {
         eachCategoryBlock.diffToTargetDisplay = `${eachCategoryBlock.diffToTarget}k`;

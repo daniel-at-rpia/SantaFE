@@ -48,7 +48,7 @@ $structureSetTargetPanel_edit_column_size: 12rem;
         @include mix_enable_scrollbar('vertical');
         display: flex;
         flex-direction: column;
-        padding-bottom: $spacing_small;
+        padding-bottom: $spacing_x_large;
         margin-top: $spacing_small;
         &-item {
           &:nth-child(odd) {
@@ -86,6 +86,7 @@ $structureSetTargetPanel_edit_column_size: 12rem;
     display: flex;
     padding: 0 $spacing_medium;
     &-item {
+      @include mix_fixed_div(relative, $z_index_base_item);
       display: flex;
       align-items: center;
       margin-right: $spacing_small;
@@ -96,11 +97,73 @@ $structureSetTargetPanel_edit_column_size: 12rem;
       &:last-of-type {
         margin-right: 0;
       }
+      &-ctas {
+        @include mix_fixed_div(absolute, $z_index_hovering_item);
+        @include mix_alive('light');
+        display: flex;
+        justify-content: center;
+        transform: scale(0.01) translate(0, -50%);
+        top: 85%;
+        width: 100%;
+        &-save {
+          background-color: $color_create;
+          color: $font_color_inverse;
+          margin-right: $spacing_medium;
+        }
+        &-cancel {
+          background-color: $color_kill;
+          color: $font_color_inverse;
+        }
+      }
     }
   }
   &__divider {
     flex: 0 0 $typical_border_width;
     background-color: $color_border_gray;
     margin: $spacing_small 0;
+  }
+  &--focusedCs01LevelState {
+    #{$blockName} {
+      &__column-item--cs01Level {
+        #{$blockName} {
+          &__column-item-ctas {
+            transform: scale(1) translate(0, 0);
+          }
+        }
+      }
+    }
+  }
+  &--focusedCs01PercentState {
+    #{$blockName} {
+      &__column-item--cs01Percent {
+        #{$blockName} {
+          &__column-item-ctas {
+            transform: scale(1) translate(0, 0);
+          }
+        }
+      }
+    }
+  }
+  &--focusedCreditLeverageLevelState {
+    #{$blockName} {
+      &__column-item--creditLeverageLevel {
+        #{$blockName} {
+          &__column-item-ctas {
+            transform: scale(1) translate(0, 0);
+          }
+        }
+      }
+    }
+  }
+  &--focusedCreditLeveragePercentState {
+    #{$blockName} {
+      &__column-item--creditLeveragePercent {
+        #{$blockName} {
+          &__column-item-ctas {
+            transform: scale(1) translate(0, 0);
+          }
+        }
+      }
+    }
   }
 }

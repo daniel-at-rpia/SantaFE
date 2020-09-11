@@ -14,6 +14,7 @@ import {
 } from 'ag-grid-community';
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { DTOService } from 'Core/services/DTOService';
+import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 
 export interface SecurityPortfolioBlock {
   portfolioName: string;
@@ -286,6 +287,12 @@ export interface PortfolioBreakdownCategoryBlock {
   indexPct: number;
   indexPctDisplay: string;
   moveVisualizer: DTOs.MoveVisualizerDTO;
+  raw: {
+    currentLevel: number;
+    currentPct: number;
+    targetLevel: number;
+    targetPct: number;
+  }
 }
 
 export interface GlobalNavLegendBlock {
@@ -307,9 +314,13 @@ export interface StructureSetTargetPanelEditRowBlock {
 }
 
 export interface StructureSetTargetPanelEditRowItemBlock {
-  initialDisplayValue: number;
+  initialDisplayValue: string;
+  initialUnderlineValue: number;  // underline values won't be rounded, so they are accurate
   modifiedDisplayValue: string;
-  modifiedUnderlineValue: number;
+  modifiedUnderlineValue: number;  // underline values won't be rounded, so they are accurate
   isActive: boolean;
   isImplied: boolean;
+  isFocused: boolean;
+  metric: PortfolioMetricValues;
+  isPercent: boolean;
 }

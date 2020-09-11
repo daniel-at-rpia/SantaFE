@@ -43,7 +43,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       targetFund: null,
       editRowList: [],
       totalUnallocatedCS01: 0,
-      totalUnallocatedCreditLeverage: 0
+      totalUnallocatedCreditLeverage: 0,
+      remainingUnallocatedCS01: 0,
+      remainingUnallocatedCreditLeverage: 0
     }
     return state;
   }
@@ -58,6 +60,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.state.targetBreakdown = this.utilityService.deepCopy(pack.targetBreakdown);
         this.state.targetBreakdown.state.isPreviewVariant = true;
         this.loadEditRows();
+        this.calculateAllocation();
       }
     })
   }
@@ -73,73 +76,95 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   public onValueChange(
     newValue: string,
-    metric: PortfolioMetricValues,
-    targetCategory: StructureSetTargetPanelEditRowBlock,
-    isPercent: boolean
+    targetItem: StructureSetTargetPanelEditRowItemBlock
   ) {
-    if (metric === this.constants.metric.cs01) {
-      if (!!isPercent) {
-        const targetItem = targetCategory.targetCs01.percent;
-        const counterPartyItem = targetCategory.targetCs01.level;
-        targetItem.modifiedDisplayValue = newValue;
-        targetItem.isActive = true;
+    targetItem.isFocused = true;
+    this.setTarget(
+      newValue,
+      targetItem
+    );
+  }
+
+  public onClickSaveEdit(
+    targetCategory: StructureSetTargetPanelEditRowBlock,
+    targetItem: StructureSetTargetPanelEditRowItemBlock
+  ) {
+    targetItem.isFocused = false;
+    let counterPartyItem = null;
+    if (targetItem.metric === this.constants.metric.cs01) {
+      if (!!targetItem.isPercent) {
+        counterPartyItem = targetCategory.targetCs01.level;
       } else {
-        const targetItem = targetCategory.targetCs01.level;
-        const counterPartyItem = targetCategory.targetCs01.percent;
-        targetItem.modifiedDisplayValue = newValue;
-        targetItem.isActive = true;
+        counterPartyItem = targetCategory.targetCs01.percent;
       }
-    } else if (metric === this.constants.metric.creditLeverage) {
-      if (!!isPercent) {
-        const targetItem = targetCategory.targetCreditLeverage.percent;
-        const counterPartyItem = targetCategory.targetCreditLeverage.level;
-        targetItem.modifiedDisplayValue = newValue;
-        targetItem.isActive = true;
+    } else if (targetItem.metric === this.constants.metric.creditLeverage) {
+      if (!!targetItem.isPercent) {
+        counterPartyItem = targetCategory.targetCreditLeverage.level;
       } else {
-        const targetItem = targetCategory.targetCreditLeverage.level;
-        const counterPartyItem = targetCategory.targetCreditLeverage.percent;
-        targetItem.modifiedDisplayValue = newValue;
-        targetItem.isActive = true;
+        counterPartyItem = targetCategory.targetCreditLeverage.percent;
       }
     }
+    this.implyCounterParty(
+      targetItem.modifiedUnderlineValue,
+      counterPartyItem,
+      targetItem.metric,
+      targetItem.isPercent
+    );
   }
 
   private loadEditRows() {
     if (!!this.state.targetBreakdown) {
+      this.state.editRowList = [];
       this.state.targetBreakdown.data.rawCs01CategoryList.forEach((eachCategory) => {
         const newRow: StructureSetTargetPanelEditRowBlock = {
           targetBlockFromBreakdown: eachCategory,
           rowTitle: eachCategory.category,
           targetCs01: {
             level: {
-              initialDisplayValue: eachCategory.targetLevel,
+              initialDisplayValue: `${eachCategory.targetLevel}`,
+              initialUnderlineValue: eachCategory.raw.targetLevel,
               modifiedDisplayValue: null,
               modifiedUnderlineValue: null,
               isActive: false,
-              isImplied: false
+              isImplied: false,
+              isFocused: false,
+              metric: this.constants.metric.cs01,
+              isPercent: false
             },
             percent: {
-              initialDisplayValue: eachCategory.targetPct,
+              initialDisplayValue: `${eachCategory.targetPct}`,
+              initialUnderlineValue: eachCategory.raw.targetPct,
               modifiedDisplayValue: null,
               modifiedUnderlineValue: null,
               isActive: false,
-              isImplied: false
+              isImplied: false,
+              isFocused: false,
+              metric: this.constants.metric.cs01,
+              isPercent: true
             }
           },
           targetCreditLeverage: {
             level: {
               initialDisplayValue: null,
+              initialUnderlineValue: null,
               modifiedDisplayValue: null,
               modifiedUnderlineValue: null,
               isActive: false,
-              isImplied: false
+              isImplied: false,
+              isFocused: false,
+              metric: this.constants.metric.creditLeverage,
+              isPercent: false
             },
             percent: {
               initialDisplayValue: null,
+              initialUnderlineValue: null,
               modifiedDisplayValue: null,
               modifiedUnderlineValue: null,
               isActive: false,
-              isImplied: false
+              isImplied: false,
+              isFocused: false,
+              metric: this.constants.metric.creditLeverage,
+              isPercent: true
             }
           }
         };
@@ -150,35 +175,84 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           return eachRow.rowTitle === eachCategory.category;
         });
         if (!!targetRow) {
-          targetRow.targetCreditLeverage.level.initialDisplayValue =eachCategory.targetLevel;
-          targetRow.targetCreditLeverage.percent.initialDisplayValue =eachCategory.targetPct;
+          targetRow.targetCreditLeverage.level.initialDisplayValue = `${eachCategory.targetLevel}`;
+          targetRow.targetCreditLeverage.level.initialUnderlineValue = eachCategory.raw.targetLevel;
+          targetRow.targetCreditLeverage.percent.initialDisplayValue = `${eachCategory.targetPct}`;
+          targetRow.targetCreditLeverage.percent.initialUnderlineValue = eachCategory.raw.targetPct;
         };
       });
     }
   }
 
   private calculateAllocation() {
+    this.state.totalUnallocatedCS01 = this.state.targetFund.data.target.target.cs01;
+    this.state.remainingUnallocatedCS01 = this.state.targetFund.data.target.target.cs01;
+    this.state.totalUnallocatedCreditLeverage = this.state.targetFund.data.target.target.creditLeverage;
+    this.state.remainingUnallocatedCreditLeverage = this.state.targetFund.data.target.target.creditLeverage;
+    this.state.editRowList.forEach((eachRow) => {
+      if (eachRow.targetCs01.level.initialUnderlineValue != null) {
+        this.state.remainingUnallocatedCS01 = this.state.remainingUnallocatedCS01 - eachRow.targetCs01.level.initialUnderlineValue;
+      }
+      if (eachRow.targetCreditLeverage.level.initialUnderlineValue != null) {
+        this.state.remainingUnallocatedCreditLeverage = this.state.remainingUnallocatedCreditLeverage - eachRow.targetCreditLeverage.level.initialUnderlineValue;
+      }
+    });
+  }
 
+  private setTarget(
+    displayValue: string,
+    targetItem: StructureSetTargetPanelEditRowItemBlock
+  ) {
+    if (targetItem.metric === this.constants.metric.cs01 && !targetItem.isPercent) {
+      targetItem.modifiedDisplayValue = displayValue;
+      targetItem.isActive = true;
+      targetItem.modifiedUnderlineValue = parseFloat(displayValue)*1000;
+    } else {
+      targetItem.modifiedDisplayValue = displayValue;
+      targetItem.isActive = true;
+      targetItem.modifiedUnderlineValue = parseFloat(displayValue);
+    }
   }
 
   private implyCounterParty(
-    impliedValue: string,
+    targetUnderlineValue: number,
     counterPartyItem: StructureSetTargetPanelEditRowItemBlock,
-    metric: PortfolioMetricValues
+    metric: PortfolioMetricValues,
+    targetIsPercent: boolean
   ) {
     counterPartyItem.isActive = false;
     counterPartyItem.isImplied = true;
-    // if (metric === this.constants.metric.cs01) {
-    //   if (this.state.totalUnallocatedCS01 >= impliedValue) {
-    //     counterPartyItem.modifiedDisplayValue = `${impliedValue}`;
-    //     this.state.totalUnallocatedCS01 = this.state.totalUnallocatedCS01 - impliedValue;
-    //   } else {
-    //     counterPartyItem.modified = this.state.totalUnallocatedCS01;
-    //     this.state.totalUnallocatedCS01 = 0;
-    //   }
-    // } else if (metric === this.constants.metric.creditLeverage) {
-
-    // }
+    counterPartyItem.isFocused = false;
+    let impliedValue = null;
+    if (metric === this.constants.metric.cs01) {
+      if (!!targetIsPercent) {
+        impliedValue = (targetUnderlineValue/100) * this.state.totalUnallocatedCS01;
+        if (impliedValue > this.state.remainingUnallocatedCS01) {
+          impliedValue = this.state.remainingUnallocatedCS01;
+        }
+        counterPartyItem.modifiedUnderlineValue = impliedValue;
+        counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue/1000, 0);
+      } else {
+        impliedValue = targetUnderlineValue > this.state.remainingUnallocatedCS01 ? this.state.remainingUnallocatedCS01 / this.state.totalUnallocatedCS01 : targetUnderlineValue / this.state.totalUnallocatedCS01;
+        counterPartyItem.modifiedUnderlineValue = impliedValue;
+        counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue*100, 1);
+      }
+    } else if (metric === this.constants.metric.creditLeverage) {
+      if (!!targetIsPercent) {
+        impliedValue = (targetUnderlineValue/100) * this.state.totalUnallocatedCreditLeverage;
+        if (impliedValue > this.state.remainingUnallocatedCreditLeverage) {
+          impliedValue = this.state.remainingUnallocatedCreditLeverage;
+        }
+        counterPartyItem.modifiedUnderlineValue = impliedValue;
+        counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue, 2);
+      } else {
+        impliedValue = targetUnderlineValue > this.state.remainingUnallocatedCreditLeverage ? this.state.remainingUnallocatedCreditLeverage / this.state.totalUnallocatedCreditLeverage : targetUnderlineValue / this.state.totalUnallocatedCreditLeverage;
+        counterPartyItem.modifiedUnderlineValue = impliedValue;
+        counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue*100, 1);
+      }
+    }
+    counterPartyItem.initialDisplayValue = counterPartyItem.modifiedDisplayValue;
+    counterPartyItem.initialUnderlineValue = counterPartyItem.modifiedUnderlineValue;
   }
 
 }
