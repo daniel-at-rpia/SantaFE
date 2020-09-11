@@ -2,7 +2,11 @@
   [ngClass]="{
     'sat-structureSetTargetPanel': true
   }">
-  <section class="sat-structureSetTargetPanel__utilities"></section>
+  <section class="sat-structureSetTargetPanel__utilities">
+    Unallocated CS01: {{state.remainingUnallocatedCS01}}
+    <br>
+    Unallocated Credit Leverage : {{state.remainingUnallocatedCreditLeverage}}
+  </section>
   <section class="sat-structureSetTargetPanel__main">
     <div class="sat-structureSetTargetPanel__main-preview">
       <portfolio-breakdown

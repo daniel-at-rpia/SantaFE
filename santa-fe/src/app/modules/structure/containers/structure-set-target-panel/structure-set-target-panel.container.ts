@@ -110,6 +110,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       targetItem.metric,
       targetItem.isPercent
     );
+    this.applyChangeToPreview();
   }
 
   private loadEditRows() {
@@ -253,6 +254,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
     counterPartyItem.savedDisplayValue = counterPartyItem.modifiedDisplayValue;
     counterPartyItem.savedUnderlineValue = counterPartyItem.modifiedUnderlineValue;
+  }
+
+  private applyChangeToPreview() {
+
   }
 
 }
