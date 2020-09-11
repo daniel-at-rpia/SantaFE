@@ -40,7 +40,7 @@
           <section class="sat-structureSetTargetEditRow__column">
             <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--cs01Level">
               <santa-input
-                [inputValue]="eachCategory.targetCs01.level.initialDisplayValue"
+                [inputValue]="eachCategory.targetCs01.level.savedDisplayValue"
                 [placeholder]="''"
                 [isNumeric]="true"
                 [isGrayedOut]="!eachCategory.targetCs01.level.isActive"
@@ -53,7 +53,7 @@
             </div>
             <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--cs01Percent">
               <santa-input
-                [inputValue]="eachCategory.targetCs01.percent.initialDisplayValue"
+                [inputValue]="eachCategory.targetCs01.percent.savedDisplayValue"
                 [placeholder]="''"
                 [isNumeric]="true"
                 [isGrayedOut]="!eachCategory.targetCs01.percent.isActive"
@@ -69,7 +69,7 @@
           <section class="sat-structureSetTargetEditRow__column">
             <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--creditLeverageLevel">
               <santa-input
-                [inputValue]="eachCategory.targetCreditLeverage.level.initialDisplayValue"
+                [inputValue]="eachCategory.targetCreditLeverage.level.savedDisplayValue"
                 [placeholder]="''"
                 [isNumeric]="true"
                 [isGrayedOut]="!eachCategory.targetCreditLeverage.level.isActive"
@@ -82,7 +82,7 @@
             </div>
             <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--creditLeveragePercent">
               <santa-input
-                [inputValue]="eachCategory.targetCreditLeverage.percent.initialDisplayValue"
+                [inputValue]="eachCategory.targetCreditLeverage.percent.savedDisplayValue"
                 [placeholder]="''"
                 [isNumeric]="true"
                 [isGrayedOut]="!eachCategory.targetCreditLeverage.percent.isActive"

@@ -314,8 +314,8 @@ export interface StructureSetTargetPanelEditRowBlock {
 }
 
 export interface StructureSetTargetPanelEditRowItemBlock {
-  initialDisplayValue: string;
-  initialUnderlineValue: number;  // underline values won't be rounded, so they are accurate
+  savedDisplayValue: string;
+  savedUnderlineValue: number;  // underline values won't be rounded, so they are accurate
   modifiedDisplayValue: string;
   modifiedUnderlineValue: number;  // underline values won't be rounded, so they are accurate
   isActive: boolean;

@@ -121,8 +121,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           rowTitle: eachCategory.category,
           targetCs01: {
             level: {
-              initialDisplayValue: `${eachCategory.targetLevel}`,
-              initialUnderlineValue: eachCategory.raw.targetLevel,
+              savedDisplayValue: `${eachCategory.targetLevel}`,
+              savedUnderlineValue: eachCategory.raw.targetLevel,
               modifiedDisplayValue: null,
               modifiedUnderlineValue: null,
               isActive: false,
@@ -132,8 +132,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               isPercent: false
             },
             percent: {
-              initialDisplayValue: `${eachCategory.targetPct}`,
-              initialUnderlineValue: eachCategory.raw.targetPct,
+              savedDisplayValue: `${eachCategory.targetPct}`,
+              savedUnderlineValue: eachCategory.raw.targetPct,
               modifiedDisplayValue: null,
               modifiedUnderlineValue: null,
               isActive: false,
@@ -145,8 +145,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           },
           targetCreditLeverage: {
             level: {
-              initialDisplayValue: null,
-              initialUnderlineValue: null,
+              savedDisplayValue: null,
+              savedUnderlineValue: null,
               modifiedDisplayValue: null,
               modifiedUnderlineValue: null,
               isActive: false,
@@ -156,8 +156,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               isPercent: false
             },
             percent: {
-              initialDisplayValue: null,
-              initialUnderlineValue: null,
+              savedDisplayValue: null,
+              savedUnderlineValue: null,
               modifiedDisplayValue: null,
               modifiedUnderlineValue: null,
               isActive: false,
@@ -175,10 +175,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           return eachRow.rowTitle === eachCategory.category;
         });
         if (!!targetRow) {
-          targetRow.targetCreditLeverage.level.initialDisplayValue = `${eachCategory.targetLevel}`;
-          targetRow.targetCreditLeverage.level.initialUnderlineValue = eachCategory.raw.targetLevel;
-          targetRow.targetCreditLeverage.percent.initialDisplayValue = `${eachCategory.targetPct}`;
-          targetRow.targetCreditLeverage.percent.initialUnderlineValue = eachCategory.raw.targetPct;
+          targetRow.targetCreditLeverage.level.savedDisplayValue = `${eachCategory.targetLevel}`;
+          targetRow.targetCreditLeverage.level.savedUnderlineValue = eachCategory.raw.targetLevel;
+          targetRow.targetCreditLeverage.percent.savedDisplayValue = `${eachCategory.targetPct}`;
+          targetRow.targetCreditLeverage.percent.savedUnderlineValue = eachCategory.raw.targetPct;
         };
       });
     }
@@ -190,11 +190,11 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     this.state.totalUnallocatedCreditLeverage = this.state.targetFund.data.target.target.creditLeverage;
     this.state.remainingUnallocatedCreditLeverage = this.state.targetFund.data.target.target.creditLeverage;
     this.state.editRowList.forEach((eachRow) => {
-      if (eachRow.targetCs01.level.initialUnderlineValue != null) {
-        this.state.remainingUnallocatedCS01 = this.state.remainingUnallocatedCS01 - eachRow.targetCs01.level.initialUnderlineValue;
+      if (eachRow.targetCs01.level.savedUnderlineValue != null) {
+        this.state.remainingUnallocatedCS01 = this.state.remainingUnallocatedCS01 - eachRow.targetCs01.level.savedUnderlineValue;
       }
-      if (eachRow.targetCreditLeverage.level.initialUnderlineValue != null) {
-        this.state.remainingUnallocatedCreditLeverage = this.state.remainingUnallocatedCreditLeverage - eachRow.targetCreditLeverage.level.initialUnderlineValue;
+      if (eachRow.targetCreditLeverage.level.savedUnderlineValue != null) {
+        this.state.remainingUnallocatedCreditLeverage = this.state.remainingUnallocatedCreditLeverage - eachRow.targetCreditLeverage.level.savedUnderlineValue;
       }
     });
   }
@@ -251,8 +251,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue*100, 1);
       }
     }
-    counterPartyItem.initialDisplayValue = counterPartyItem.modifiedDisplayValue;
-    counterPartyItem.initialUnderlineValue = counterPartyItem.modifiedUnderlineValue;
+    counterPartyItem.savedDisplayValue = counterPartyItem.modifiedDisplayValue;
+    counterPartyItem.savedUnderlineValue = counterPartyItem.modifiedUnderlineValue;
   }
 
 }
