@@ -45,7 +45,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       totalUnallocatedCS01: 0,
       totalUnallocatedCreditLeverage: 0,
       remainingUnallocatedCS01: 0,
-      remainingUnallocatedCreditLeverage: 0
+      remainingUnallocatedCreditLeverage: 0,
+      activeMetric: null
     }
     return state;
   }
@@ -59,6 +60,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.state.targetFund = this.utilityService.deepCopy(pack.targetFund);
         this.state.targetBreakdown = this.utilityService.deepCopy(pack.targetBreakdown);
         this.state.targetBreakdown.state.isPreviewVariant = true;
+        this.state.activeMetric = pack.targetFund.data.cs01TargetBar.state.isInactiveMetric ? this.constants.metric.creditLeverage : this.constants.metric.cs01;
         this.loadEditRows();
         this.calculateAllocation();
       }
@@ -112,6 +114,15 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     );
     this.calculateAllocation();
     this.applyChangeToPreview();
+  }
+
+  public onClickChangeActiveMetric(newMetric: PortfolioMetricValues) {
+    if (this.state.activeMetric !== newMetric) {
+      this.state.activeMetric = newMetric;
+      this.state.targetFund.data.cs01TargetBar.state.isInactiveMetric = !this.state.targetFund.data.cs01TargetBar.state.isInactiveMetric;
+      this.state.targetFund.data.creditLeverageTargetBar.state.isInactiveMetric = !this.state.targetFund.data.creditLeverageTargetBar.state.isInactiveMetric;
+      this.applyChangeToPreview();
+    }
   }
 
   private loadEditRows() {
@@ -199,6 +210,16 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.state.remainingUnallocatedCreditLeverage = this.state.remainingUnallocatedCreditLeverage - eachRow.targetCreditLeverage.level.savedUnderlineValue;
       }
     });
+    if (!!this.state.remainingUnallocatedCS01) {
+      this.state.displayPercentageUnallocatedCS01 = this.utilityService.round(this.state.remainingUnallocatedCS01/this.state.totalUnallocatedCS01 * 100, 0);
+    } else {
+      this.state.displayPercentageUnallocatedCS01 = 0;
+    }
+    if (!!this.state.remainingUnallocatedCreditLeverage) {
+      this.state.displayPercentageUnallocatedCreditLeverage = this.utilityService.round(this.state.remainingUnallocatedCreditLeverage/this.state.remainingUnallocatedCreditLeverage * 100, 0);
+    } else {
+      this.state.displayPercentageUnallocatedCreditLeverage = 0;
+    }
   }
 
   private setTarget(
