@@ -12,7 +12,7 @@
             'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--active': state.activeMetric === constants.metric.cs01,
             'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--highlightUnallocated': state.displayPercentageUnallocatedCS01 > 0
           }">
-          <span class="sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn-mainText">CS01</span>
+          <span class="sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn-mainText">{{constants.metric.cs01}}</span>
           <span class="sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn-unallocatedText">
             {{state.displayPercentageUnallocatedCS01}}% unallocated
           </span>
@@ -24,7 +24,7 @@
             'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--active': state.activeMetric === constants.metric.creditLeverage,
             'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--highlightUnallocated': state.displayPercentageUnallocatedCreditLeverage > 0
           }">
-          <span class="sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn-mainText">Credit Leverage</span>
+          <span class="sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn-mainText">{{constants.metric.creditLeverage}}</span>
           <span class="sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn-unallocatedText">
             {{state.displayPercentageUnallocatedCreditLeverage}}% unallocated
           </span>
