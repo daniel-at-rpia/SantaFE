@@ -2,11 +2,104 @@
   [ngClass]="{
     'sat-structureSetTargetPanel': true
   }">
-  <section class="sat-structureSetTargetPanel__preview">
-    <portfolio-breakdown
-      *ngIf="state.targetBreakdown"
-      [breakdownData]="state.targetBreakdown"
-      [dataIsReady]="true">
-    </portfolio-breakdown>
+  <section class="sat-structureSetTargetPanel__utilities">
+    Unallocated CS01: {{state.remainingUnallocatedCS01}}
+    <br>
+    Unallocated Credit Leverage : {{state.remainingUnallocatedCreditLeverage}}
+  </section>
+  <section class="sat-structureSetTargetPanel__main">
+    <div class="sat-structureSetTargetPanel__main-preview">
+      <portfolio-breakdown
+        *ngIf="state.targetBreakdown"
+        [breakdownData]="state.targetBreakdown"
+        [dataIsReady]="true">
+      </portfolio-breakdown>
+    </div>
+    <div class="sat-structureSetTargetPanel__main-edit">
+      <div *ngIf="state.targetFund" class="sat-structureSetTargetPanel__main-edit-header">
+        <div class="sat-structureSetTargetPanel__main-edit-header-item">
+          <target-bar [targetBar]="state.targetFund.data.cs01TargetBar"></target-bar>
+        </div>
+        <div class="sat-structureSetTargetPanel__main-edit-header-item">
+          <target-bar [targetBar]="state.targetFund.data.creditLeverageTargetBar"></target-bar>
+        </div>
+      </div>
+      <ul class="sat-structureSetTargetPanel__main-edit-rowList">
+        <li
+          *ngFor="let eachCategory of state.editRowList"
+          [ngClass]="{
+            'sat-structureSetTargetPanel__main-edit-rowList-item': true,
+            'sat-structureSetTargetEditRow': true,
+            'sat-structureSetTargetEditRow--focusedCs01LevelState': eachCategory.targetCs01.level.isFocused,
+            'sat-structureSetTargetEditRow--focusedCs01PercentState': eachCategory.targetCs01.percent.isFocused,
+            'sat-structureSetTargetEditRow--focusedCreditLeverageLevelState': eachCategory.targetCreditLeverage.level.isFocused,
+            'sat-structureSetTargetEditRow--focusedCreditLeveragePercentState': eachCategory.targetCreditLeverage.percent.isFocused
+          }">
+          <section class="sat-structureSetTargetEditRow__lock">
+            <button class="sat-structureSetTargetEditRow__lock-btn santaBtn--iconOnly santaBtn--small fal fa-lock-alt"></button>
+          </section>
+          <section class="sat-structureSetTargetEditRow__label">
+            <span class="sat-structureSetTargetEditRow__label-text">{{eachCategory.rowTitle}}</span>
+          </section>
+          <section class="sat-structureSetTargetEditRow__column">
+            <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--cs01Level">
+              <santa-input
+                [inputValue]="eachCategory.targetCs01.level.savedDisplayValue"
+                [placeholder]="''"
+                [isNumeric]="true"
+                [isGrayedOut]="!eachCategory.targetCs01.level.isActive"
+                (onInputChange)="onValueChange($event, eachCategory.targetCs01.level)">
+              </santa-input>
+              <span class="sat-structureSetTargetEditRow__column-item-unitText">K</span>
+              <div class="sat-structureSetTargetEditRow__column-item-ctas">
+                <button (click)="onClickSaveEdit(eachCategory, eachCategory.targetCs01.level)" class="santaBtn--small santaBtn--iconOnly sat-structureSetTargetEditRow__column-item-ctas-save fal fa-check"></button>
+              </div>
+            </div>
+            <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--cs01Percent">
+              <santa-input
+                [inputValue]="eachCategory.targetCs01.percent.savedDisplayValue"
+                [placeholder]="''"
+                [isNumeric]="true"
+                [isGrayedOut]="!eachCategory.targetCs01.percent.isActive"
+                (onInputChange)="onValueChange($event, eachCategory.targetCs01.percent)">
+              </santa-input>
+              <span class="sat-structureSetTargetEditRow__column-item-unitText">%</span>
+              <div class="sat-structureSetTargetEditRow__column-item-ctas">
+                <button (click)="onClickSaveEdit(eachCategory, eachCategory.targetCs01.percent)" class="santaBtn--small santaBtn--iconOnly sat-structureSetTargetEditRow__column-item-ctas-save fal fa-check"></button>
+              </div>
+            </div>
+          </section>
+          <hr class="sat-structureSetTargetEditRow__divider">
+          <section class="sat-structureSetTargetEditRow__column">
+            <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--creditLeverageLevel">
+              <santa-input
+                [inputValue]="eachCategory.targetCreditLeverage.level.savedDisplayValue"
+                [placeholder]="''"
+                [isNumeric]="true"
+                [isGrayedOut]="!eachCategory.targetCreditLeverage.level.isActive"
+                (onInputChange)="onValueChange($event, eachCategory.targetCreditLeverage.level)">
+              </santa-input>
+              <span class="sat-structureSetTargetEditRow__column-item-unitText"></span>
+              <div class="sat-structureSetTargetEditRow__column-item-ctas">
+                <button (click)="onClickSaveEdit(eachCategory, eachCategory.targetCreditLeverage.level)" class="santaBtn--small santaBtn--iconOnly sat-structureSetTargetEditRow__column-item-ctas-save fal fa-check"></button>
+              </div>
+            </div>
+            <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--creditLeveragePercent">
+              <santa-input
+                [inputValue]="eachCategory.targetCreditLeverage.percent.savedDisplayValue"
+                [placeholder]="''"
+                [isNumeric]="true"
+                [isGrayedOut]="!eachCategory.targetCreditLeverage.percent.isActive"
+                (onInputChange)="onValueChange($event, eachCategory.targetCreditLeverage.percent)">
+              </santa-input>
+              <span class="sat-structureSetTargetEditRow__column-item-unitText">%</span>
+              <div class="sat-structureSetTargetEditRow__column-item-ctas">
+                <button (click)="onClickSaveEdit(eachCategory, eachCategory.targetCreditLeverage.percent)" class="santaBtn--small santaBtn--iconOnly sat-structureSetTargetEditRow__column-item-ctas-save fal fa-check"></button>
+              </div>
+            </div>
+          </section>
+        </li>
+      </ul>
+    </div>
   </section>
 </article>

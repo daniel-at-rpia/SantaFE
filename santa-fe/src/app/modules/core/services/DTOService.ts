@@ -1958,9 +1958,22 @@ export class DTOService {
     isCs01: boolean
   ): Blocks.PortfolioBreakdownCategoryBlock {
     if (!!rawCategoryData) {
+      const rawCurrentLevel = rawCategoryData.currentLevel;
+      const rawCurrentPct = rawCategoryData.currentPct;
+      const rawTargetLevel = rawCategoryData.targetLevel;
+      const rawTargetPct = rawCategoryData.targetPct;
       rawCategoryData.currentLevel = !!isCs01 ? this.utility.round(rawCategoryData.currentLevel/1000, 0) : this.utility.round(rawCategoryData.currentLevel, 2);
       if (rawCategoryData.targetLevel != null) {
         rawCategoryData.targetLevel = !!isCs01 ? this.utility.round(rawCategoryData.targetLevel/1000, 0) : this.utility.round(rawCategoryData.targetLevel, 2);
+      }
+      if (rawCategoryData.targetPct != null) {
+        rawCategoryData.targetPct = this.utility.round(rawCategoryData.targetPct*100, 1);
+      }
+      if (rawCategoryData.currentPct != null) {
+        rawCategoryData.currentPct = this.utility.round(rawCategoryData.currentPct*100, 1);
+      }
+      if (rawCategoryData.indexPct != null) {
+        rawCategoryData.indexPct = this.utility.round(rawCategoryData.indexPct*100, 1);
       }
       maxValue = !!isCs01 ? maxValue/1000 : maxValue;
       minValue = !!isCs01 ? minValue/1000 : minValue;
@@ -1974,15 +1987,21 @@ export class DTOService {
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
         category: `${categoryName}`,
         targetLevel: rawCategoryData.targetLevel,
-        targetPct: this.utility.round(rawCategoryData.targetPct*100, 1),
+        targetPct: rawCategoryData.targetPct,
         diffToTarget: rawCategoryData.targetLevel != null ? Math.round(rawCategoryData.targetLevel - rawCategoryData.currentLevel) : 0,
         diffToTargetDisplay: '-',
         currentLevel: rawCategoryData.currentLevel,
-        currentPct: this.utility.round(rawCategoryData.currentPct*100, 1),
-        currentPctDisplay: rawCategoryData.currentPct != null ? `${this.utility.round(rawCategoryData.currentPct*100, 1)}%` : '-',
+        currentPct: rawCategoryData.currentPct,
+        currentPctDisplay: rawCategoryData.currentPct != null ? `${rawCategoryData.currentPct}%` : '-',
         indexPct: rawCategoryData.indexPct,
-        indexPctDisplay: rawCategoryData.indexPct != null ? `${this.utility.round(rawCategoryData.indexPct*100, 1)}%` : '-',
-        moveVisualizer: eachMoveVisualizer
+        indexPctDisplay: rawCategoryData.indexPct != null ? `${rawCategoryData.indexPct}%` : '-',
+        moveVisualizer: eachMoveVisualizer,
+        raw: {
+          currentLevel: rawCurrentLevel,
+          currentPct: rawCurrentPct,
+          targetLevel: rawTargetLevel,
+          targetPct: rawTargetPct
+        }
       };
       if (eachCategoryBlock.diffToTarget < 0) {
         eachCategoryBlock.diffToTargetDisplay = `${eachCategoryBlock.diffToTarget}k`;

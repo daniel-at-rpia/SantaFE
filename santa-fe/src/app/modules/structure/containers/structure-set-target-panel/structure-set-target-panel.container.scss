@@ -1,23 +1,169 @@
 @import "global.scss";
 @import "modules/structure/structure.scss";
 
+$structureSetTargetPanel_edit_column_size: 12rem;
 .sat-structureSetTargetPanel {
   $blockName: &;
   flex: 1 1 auto;
   display: flex;
+  flex-direction: column;
   margin-bottom: $spacing_large;
-  &__preview {
-    @include mix_border_generator(0 $typical_border_width 0 0);
-    flex: 0 1 50%;
+  &__utilities {
+    flex: 0 0 4rem;
+    background-color: $color_gray_3;
+    margin-bottom: $spacing_large;
+  }
+  &__main {
+    flex: 1 1 auto;
     display: flex;
-    align-items: center;
-    padding-right: $spacing_large;
-    margin-right: $spacing_large;
-    &>portfolio-breakdown {
-      flex: 1 1 auto;
+    overflow: hidden;
+    &-preview {
+      @include mix_border_generator(0 $typical_border_width 0 0);
+      flex: 0 1 50%;
+      display: flex;
+      align-items: center;
+      padding-right: $spacing_large;
+      &>portfolio-breakdown {
+        flex: 1 1 auto;
+      }
+    }
+    &-edit {
+      flex: 0 1 50%;
+      display: flex;
+      flex-direction: column;
+      padding-left: $spacing_large;
+      &-header {
+        display: flex;
+        justify-content: flex-end;
+        margin-right: $scroll_bar_width;
+        &-item {
+          flex: 0 0 $structureSetTargetPanel_edit_column_size;
+          padding: 0 $spacing_medium;
+          &:first-of-type {
+            margin-right: $typical_border_width;
+          }
+        }
+      }
+      &-rowList {
+        @include mix_enable_scrollbar('vertical');
+        display: flex;
+        flex-direction: column;
+        padding-bottom: $spacing_x_large;
+        margin-top: $spacing_small;
+        &-item {
+          &:nth-child(odd) {
+            background-color: $color_gray_2;
+          }
+          &:nth-child(even) {
+            background-color: $color_blue_gray_1;
+          }
+        }
+      }
     }
   }
-  &__edit {
-    flex: 0 1 50%;
+}
+
+.sat-structureSetTargetEditRow {
+  $blockName: &;
+  display: flex;
+  &__lock {
+    @include mix_fixed_div(relative, $z_index_base_item); // for some reason I need this position relative so the shadow won't be clipped by the next row's background color, weird
+    flex: 0 0 auto;
+    margin: $spacing_small $spacing_medium;
+  }
+  &__label {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    &-text {
+      font-size: $font_size_normal;
+      color: $font_color_major;
+    }
+  }
+  &__column {
+    flex: 0 0 $structureSetTargetPanel_edit_column_size;
+    display: flex;
+    padding: 0 $spacing_medium;
+    &-item {
+      @include mix_fixed_div(relative, $z_index_base_item);
+      display: flex;
+      align-items: center;
+      margin-right: $spacing_small;
+      &-unitText {
+        margin-left: $spacing_x_small;
+        color: $font_color_minor;
+      }
+      &:last-of-type {
+        margin-right: 0;
+      }
+      &-ctas {
+        @include mix_fixed_div(absolute, $z_index_hovering_item);
+        @include mix_alive('light');
+        display: flex;
+        justify-content: center;
+        transform: scale(0.01) translate(0, -50%);
+        top: 85%;
+        width: 100%;
+        &-save {
+          background-color: $color_create;
+          color: $font_color_inverse;
+          margin-right: $spacing_medium;
+        }
+        &-cancel {
+          background-color: $color_kill;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &__divider {
+    flex: 0 0 $typical_border_width;
+    background-color: $color_border_gray;
+    margin: $spacing_small 0;
+  }
+  &--focusedCs01LevelState {
+    #{$blockName} {
+      &__column-item--cs01Level {
+        #{$blockName} {
+          &__column-item-ctas {
+            transform: scale(1) translate(0, 0);
+          }
+        }
+      }
+    }
+  }
+  &--focusedCs01PercentState {
+    #{$blockName} {
+      &__column-item--cs01Percent {
+        #{$blockName} {
+          &__column-item-ctas {
+            transform: scale(1) translate(0, 0);
+          }
+        }
+      }
+    }
+  }
+  &--focusedCreditLeverageLevelState {
+    #{$blockName} {
+      &__column-item--creditLeverageLevel {
+        #{$blockName} {
+          &__column-item-ctas {
+            transform: scale(1) translate(0, 0);
+          }
+        }
+      }
+    }
+  }
+  &--focusedCreditLeveragePercentState {
+    #{$blockName} {
+      &__column-item--creditLeveragePercent {
+        #{$blockName} {
+          &__column-item-ctas {
+            transform: scale(1) translate(0, 0);
+          }
+        }
+      }
+    }
   }
 }

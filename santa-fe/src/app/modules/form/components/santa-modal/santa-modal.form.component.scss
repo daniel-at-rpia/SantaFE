@@ -29,6 +29,7 @@ $modal_animation_duration: $animation_duration_normal;
     background-color: $color_gray_1;
     transform: translate(0, 100%) scale(0.01);
     margin: auto $page_gutter_width_for_alerts;
+    max-height: 90%;  // loosely define the size restriction so that modal size can adapt to the content's need
     &-title {
       flex: 0 0 auto;
       display: flex;
@@ -49,6 +50,7 @@ $modal_animation_duration: $animation_duration_normal;
       flex: 1 1 auto;
       display: flex;
       padding: $spacing_large;
+      overflow: hidden;
       &>* {
         flex: 1 1 auto;
         display: flex;
