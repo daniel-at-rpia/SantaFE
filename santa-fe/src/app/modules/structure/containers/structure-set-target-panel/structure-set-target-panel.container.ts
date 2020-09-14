@@ -90,6 +90,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     targetItem: StructureSetTargetPanelEditRowItemBlock
   ) {
     targetItem.isFocused = false;
+    targetItem.savedDisplayValue = targetItem.modifiedDisplayValue;
     targetItem.savedUnderlineValue = targetItem.modifiedUnderlineValue;
     let counterPartyItem = null;
     if (targetItem.metric === this.constants.metric.cs01) {
@@ -204,6 +205,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     displayValue: string,
     targetItem: StructureSetTargetPanelEditRowItemBlock
   ) {
+    if (displayValue == '') {
+      displayValue = '0'
+    };
     if (targetItem.metric === this.constants.metric.cs01 && !targetItem.isPercent) {
       targetItem.modifiedDisplayValue = displayValue;
       targetItem.isActive = true;
