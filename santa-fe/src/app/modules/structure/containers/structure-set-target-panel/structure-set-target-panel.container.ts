@@ -90,6 +90,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     targetItem: StructureSetTargetPanelEditRowItemBlock
   ) {
     targetItem.isFocused = false;
+    targetItem.savedUnderlineValue = targetItem.modifiedUnderlineValue;
     let counterPartyItem = null;
     if (targetItem.metric === this.constants.metric.cs01) {
       if (!!targetItem.isPercent) {
@@ -105,11 +106,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       }
     }
     this.implyCounterParty(
-      targetItem.modifiedUnderlineValue,
-      counterPartyItem,
-      targetItem.metric,
-      targetItem.isPercent
+      targetItem,
+      counterPartyItem
     );
+    this.calculateAllocation();
     this.applyChangeToPreview();
   }
 
@@ -216,40 +216,45 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private implyCounterParty(
-    targetUnderlineValue: number,
-    counterPartyItem: StructureSetTargetPanelEditRowItemBlock,
-    metric: PortfolioMetricValues,
-    targetIsPercent: boolean
+    targetItem: StructureSetTargetPanelEditRowItemBlock,
+    counterPartyItem: StructureSetTargetPanelEditRowItemBlock
   ) {
+    const targetIsPercent: boolean = targetItem.isPercent;
+    const targetUnderlineValue: number = targetItem.savedUnderlineValue;
+    const metric: PortfolioMetricValues = targetItem.metric;
     counterPartyItem.isActive = false;
     counterPartyItem.isImplied = true;
     counterPartyItem.isFocused = false;
     let impliedValue = null;
     if (metric === this.constants.metric.cs01) {
-      if (!!targetIsPercent) {
-        impliedValue = (targetUnderlineValue/100) * this.state.totalUnallocatedCS01;
-        if (impliedValue > this.state.remainingUnallocatedCS01) {
-          impliedValue = this.state.remainingUnallocatedCS01;
+      if (this.state.totalUnallocatedCS01 > 0) {
+        if (!!targetIsPercent) {
+          impliedValue = (targetUnderlineValue/100) * this.state.totalUnallocatedCS01;
+          counterPartyItem.modifiedUnderlineValue = impliedValue;
+          counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue/1000, 0);
+        } else {
+          impliedValue = targetUnderlineValue / this.state.totalUnallocatedCS01;
+          counterPartyItem.modifiedUnderlineValue = impliedValue;
+          counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue*100, 1);
         }
-        counterPartyItem.modifiedUnderlineValue = impliedValue;
-        counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue/1000, 0);
       } else {
-        impliedValue = targetUnderlineValue > this.state.remainingUnallocatedCS01 ? this.state.remainingUnallocatedCS01 / this.state.totalUnallocatedCS01 : targetUnderlineValue / this.state.totalUnallocatedCS01;
-        counterPartyItem.modifiedUnderlineValue = impliedValue;
-        counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue*100, 1);
+        counterPartyItem.modifiedUnderlineValue = 0;
+        counterPartyItem.modifiedDisplayValue = '0';
       }
     } else if (metric === this.constants.metric.creditLeverage) {
-      if (!!targetIsPercent) {
-        impliedValue = (targetUnderlineValue/100) * this.state.totalUnallocatedCreditLeverage;
-        if (impliedValue > this.state.remainingUnallocatedCreditLeverage) {
-          impliedValue = this.state.remainingUnallocatedCreditLeverage;
+      if (this.state.totalUnallocatedCreditLeverage > 0) {
+        if (!!targetIsPercent) {
+          impliedValue = (targetUnderlineValue/100) * this.state.totalUnallocatedCreditLeverage;
+          counterPartyItem.modifiedUnderlineValue = impliedValue;
+          counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue, 2);
+        } else {
+          impliedValue = targetUnderlineValue / this.state.totalUnallocatedCreditLeverage;
+          counterPartyItem.modifiedUnderlineValue = impliedValue;
+          counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue*100, 1);
         }
-        counterPartyItem.modifiedUnderlineValue = impliedValue;
-        counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue, 2);
       } else {
-        impliedValue = targetUnderlineValue > this.state.remainingUnallocatedCreditLeverage ? this.state.remainingUnallocatedCreditLeverage / this.state.totalUnallocatedCreditLeverage : targetUnderlineValue / this.state.totalUnallocatedCreditLeverage;
-        counterPartyItem.modifiedUnderlineValue = impliedValue;
-        counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue*100, 1);
+        counterPartyItem.modifiedUnderlineValue = 0;
+        counterPartyItem.modifiedDisplayValue = '0';
       }
     }
     counterPartyItem.savedDisplayValue = counterPartyItem.modifiedDisplayValue;
