@@ -289,4 +289,7 @@ export interface StructureSetTargetPanelState {
   totalUnallocatedCreditLeverage: number;
   remainingUnallocatedCS01: number;
   remainingUnallocatedCreditLeverage: number;
+  displayPercentageUnallocatedCS01: number;
+  displayPercentageUnallocatedCreditLeverage: number;
+  activeMetric: PortfolioMetricValues;
 }

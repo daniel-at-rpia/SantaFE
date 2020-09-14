@@ -3,9 +3,34 @@
     'sat-structureSetTargetPanel': true
   }">
   <section class="sat-structureSetTargetPanel__utilities">
-    Unallocated CS01: {{state.remainingUnallocatedCS01}}
-    <br>
-    Unallocated Credit Leverage : {{state.remainingUnallocatedCreditLeverage}}
+    <div class="sat-structureSetTargetPanel__utilities-metricSwitch">
+      <div class="sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup santaBtnGroup">
+        <button
+          (click)="onClickChangeActiveMetric(constants.metric.cs01)"
+          [ngClass]="{
+            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn': true,
+            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--active': state.activeMetric === constants.metric.cs01,
+            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--highlightUnallocated': state.displayPercentageUnallocatedCS01 > 0
+          }">
+          <span class="sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn-mainText">{{constants.metric.cs01}}</span>
+          <span class="sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn-unallocatedText">
+            {{state.displayPercentageUnallocatedCS01}}% unallocated
+          </span>
+        </button>
+        <button
+          (click)="onClickChangeActiveMetric(constants.metric.creditLeverage)"
+          [ngClass]="{
+            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn': true,
+            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--active': state.activeMetric === constants.metric.creditLeverage,
+            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--highlightUnallocated': state.displayPercentageUnallocatedCreditLeverage > 0
+          }">
+          <span class="sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn-mainText">{{constants.metric.creditLeverage}}</span>
+          <span class="sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn-unallocatedText">
+            {{state.displayPercentageUnallocatedCreditLeverage}}% unallocated
+          </span>
+        </button>
+      </div>
+    </div>
   </section>
   <section class="sat-structureSetTargetPanel__main">
     <div class="sat-structureSetTargetPanel__main-preview">
