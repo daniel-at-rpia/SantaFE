@@ -35,84 +35,88 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
     "groupOption":1,
     "breakdown":{
       "CAD":{
-        "Cs01":{
-          "targetLevel":30000.0,
-          "targetPct":0.1,
-          "view":null,
-          "currentLevel":40904.435163882,
-          "currentPct":0.13117221377160826,
-          "indexLevel":null,
-          "indexPct":null
+        "metricBreakdowns": {
+          "Cs01":{
+            "targetLevel":30000.0,
+            "targetPct":0.1,
+            "currentLevel":40904.435163882,
+            "currentPct":0.13117221377160826,
+            "indexLevel":null,
+            "indexPct":null
+          },
+          "CreditLeverage":{
+            "targetLevel":0.2,
+            "targetPct":0.1142857142857143,
+            "currentLevel":0.18782971120734382,
+            "currentPct":0.09359686679925021,
+            "indexLevel":null,
+            "indexPct":null
+          }
         },
-        "CreditLeverage":{
-          "targetLevel":0.2,
-          "targetPct":0.1142857142857143,
-          "view":null,
-          "currentLevel":0.18782971120734382,
-          "currentPct":0.09359686679925021,
-          "indexLevel":null,
-          "indexPct":null
-        }
+        "view":null,
       },
       "EUR":{
-        "Cs01":{
-          "targetLevel":85000.0,
-          "targetPct":0.2833333333333333,
-          "view":null,
-          "currentLevel":81253.84161694397,
-          "currentPct":0.26056456322255356,
-          "indexLevel":null,
-          "indexPct":null
+        "metricBreakdowns" :{
+          "Cs01":{
+            "targetLevel":85000.0,
+            "targetPct":0.2833333333333333,
+            "currentLevel":81253.84161694397,
+            "currentPct":0.26056456322255356,
+            "indexLevel":null,
+            "indexPct":null
+          },
+          "CreditLeverage":{
+            "targetLevel":0.35000000000000003,
+            "targetPct":0.2,
+            "currentLevel":0.30903883237036706,
+            "currentPct":0.15399622478913835,
+            "indexLevel":null,
+            "indexPct":null
+          }
         },
-        "CreditLeverage":{
-          "targetLevel":0.35000000000000003,
-          "targetPct":0.2,
-          "view":null,
-          "currentLevel":0.30903883237036706,
-          "currentPct":0.15399622478913835,
-          "indexLevel":null,
-          "indexPct":null
-        }
+        "view": null
       },
       "GBP":{
-        "Cs01":{
-          "targetLevel":0.0,
-          "targetPct":0.0,
-          "view":null,
-          "currentLevel":0.0,
-          "currentPct":0.0,
-          "indexLevel":null,
-          "indexPct":null
+        "metricBreakdowns" : {
+          "Cs01":{
+            "targetLevel":0.0,
+            "targetPct":0.0,
+            "currentLevel":0.0,
+            "currentPct":0.0,
+            "indexLevel":null,
+            "indexPct":null
+          },
+          "CreditLeverage":{
+            "targetLevel":0.0,
+            "targetPct":0.0,
+            "currentLevel":0.0,
+            "currentPct":0.0,
+            "indexLevel":null,
+            "indexPct":null
+          }
         },
-        "CreditLeverage":{
-          "targetLevel":0.0,
-          "targetPct":0.0,
-          "view":null,
-          "currentLevel":0.0,
-          "currentPct":0.0,
-          "indexLevel":null,
-          "indexPct":null
-        }
+        "view": null
       },
       "USD":{
-        "Cs01":{
-          "targetLevel":211000.0,
-          "targetPct":0.7033333333333334,
-          "view":null,
-          "currentLevel":189679.37532362936,
-          "currentPct":0.6082632230058387,
-          "indexLevel":null,
-          "indexPct":null
+        "metricBreakdowns": {
+          "Cs01":{
+            "targetLevel":211000.0,
+            "targetPct":0.7033333333333334,
+            "currentLevel":189679.37532362936,
+            "currentPct":0.6082632230058387,
+            "indexLevel":null,
+            "indexPct":null
+          },
+          "CreditLeverage":{
+            "targetLevel":1.33,
+            "targetPct":0.76,
+            "currentLevel":1.5099263164490406,
+            "currentPct":0.7524069084116115,
+            "indexLevel":null,
+            "indexPct":null
+          }
         },
-        "CreditLeverage":{
-          "targetLevel":1.33,
-          "targetPct":0.76,
-          "view":null,
-          "currentLevel":1.5099263164490406,
-          "currentPct":0.7524069084116115,
-          "indexLevel":null,
-          "indexPct":null
-        }
+        "view": null
       }
     }
   },
@@ -154,184 +158,193 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
     "groupOption":14,
     "breakdown":{
       "A":{
-        "Cs01":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":8638.400372886,
-          "currentPct":0.02770159509151392,
-          "indexLevel":0.0,
-          "indexPct":null
+        "metricBreakdowns": {
+          "Cs01":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":8638.400372886,
+            "currentPct":0.02770159509151392,
+            "indexLevel":0.0,
+            "indexPct":null
+          },
+          "CreditLeverage":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":0.04279461842968872,
+            "currentPct":0.0213248594971577,
+            "indexLevel":0.0,
+            "indexPct":null
+          }
         },
-        "CreditLeverage":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":0.04279461842968872,
-          "currentPct":0.0213248594971577,
-          "indexLevel":0.0,
-          "indexPct":null
-        }
+        "view": null
       },
       "B":{
-        "Cs01":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":38425.38154028537,
-          "currentPct":0.12322239242429313,
-          "indexLevel":0.0,
-          "indexPct":null
+        "metricBreakdowns" : {
+          "Cs01":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":38425.38154028537,
+            "currentPct":0.12322239242429313,
+            "indexLevel":0.0,
+            "indexPct":null
+          },
+          "CreditLeverage":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":0.20134647176807569,
+            "currentPct":0.10033236370028956,
+            "indexLevel":0.0,
+            "indexPct":null
+          }
         },
-        "CreditLeverage":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":0.20134647176807569,
-          "currentPct":0.10033236370028956,
-          "indexLevel":0.0,
-          "indexPct":null
-        }
+        "view": null
       },
       "D":{
-        "Cs01":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":0.9812618240000001,
-          "currentPct":3.1467073247181524E-06,
-          "indexLevel":0.0,
-          "indexPct":null
+        "metricBreakdowns": {
+          "Cs01":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":0.9812618240000001,
+            "currentPct":3.1467073247181524E-06,
+            "indexLevel":0.0,
+            "indexPct":null
+          },
+          "CreditLeverage":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":6.603095978506766E-05,
+            "currentPct":3.290369190211472E-05,
+            "indexLevel":0.0,
+            "indexPct":null
+          }
         },
-        "CreditLeverage":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":6.603095978506766E-05,
-          "currentPct":3.290369190211472E-05,
-          "indexLevel":0.0,
-          "indexPct":null
-        }
+        "view": null
       },
       "AA":{
-        "Cs01":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":-2877.36,
-          "currentPct":-0.009227108979887332,
-          "indexLevel":0.0,
-          "indexPct":null
+        "metricBreakdowns": {
+          "Cs01":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":-2877.36,
+            "currentPct":-0.009227108979887332,
+            "indexLevel":0.0,
+            "indexPct":null
+          },
+          "CreditLeverage":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":-0.009150604888641565,
+            "currentPct":-0.0045598108062323735,
+            "indexLevel":0.0,
+            "indexPct":null
+          }
         },
-        "CreditLeverage":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":-0.009150604888641565,
-          "currentPct":-0.0045598108062323735,
-          "indexLevel":0.0,
-          "indexPct":null
-        }
+        "view": null
       },
       "BB":{
-        "Cs01":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":110197.013510963,
-          "currentPct":0.35337943563675467,
-          "indexLevel":0.0,
-          "indexPct":null
+        "metricBreakdowns": {
+          "Cs01":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":110197.013510963,
+            "currentPct":0.35337943563675467,
+            "indexLevel":0.0,
+            "indexPct":null
+          },
+          "CreditLeverage":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":0.577637960695684,
+            "currentPct":0.28784106048985186,
+            "indexLevel":0.0,
+            "indexPct":null
+          }
         },
-        "CreditLeverage":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":0.577637960695684,
-          "currentPct":0.28784106048985186,
-          "indexLevel":0.0,
-          "indexPct":null
-        }
+        "view": null
       },
       "NR":{
-        "Cs01":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":0.0,
-          "currentPct":0.0,
-          "indexLevel":null,
-          "indexPct":null
+        "metricBreakdowns": {
+          "Cs01":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":0.0,
+            "currentPct":0.0,
+            "indexLevel":null,
+            "indexPct":null
+          },
+          "CreditLeverage":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":0.0,
+            "currentPct":0.0,
+            "indexLevel":null,
+            "indexPct":null
+          }
         },
-        "CreditLeverage":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":0.0,
-          "currentPct":0.0,
-          "indexLevel":null,
-          "indexPct":null
-        }
+        "view": null
       },
       "AAA":{
-        "Cs01":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":0.0,
-          "currentPct":0.0,
-          "indexLevel":0.0,
-          "indexPct":null
+        "metricBreakdowns": {
+          "Cs01":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":0.0,
+            "currentPct":0.0,
+            "indexLevel":0.0,
+            "indexPct":null
+          },
+          "CreditLeverage":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":0.0,
+            "currentPct":0.0,
+            "indexLevel":0.0,
+            "indexPct":null
+          }
         },
-        "CreditLeverage":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":0.0,
-          "currentPct":0.0,
-          "indexLevel":0.0,
-          "indexPct":null
-        }
+        "view": null
       },
       "BBB":{
-        "Cs01":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":151442.73544492494,
-          "currentPct":0.48564608674707666,
-          "indexLevel":0.0,
-          "indexPct":null
+        "metricBreakdowns": {
+          "Cs01":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":151442.73544492494,
+            "currentPct":0.48564608674707666,
+            "indexLevel":0.0,
+            "indexPct":null
+          },
+          "CreditLeverage":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":0.6352991240060555,
+            "currentPct":0.31657402391273154,
+            "indexLevel":0.0,
+            "indexPct":null
+          }
         },
-        "CreditLeverage":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":0.6352991240060555,
-          "currentPct":0.31657402391273154,
-          "indexLevel":0.0,
-          "indexPct":null
-        }
+        "view": null
       },
       "CCC":{
-        "Cs01":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":6010.499973572,
-          "currentPct":0.019274452372924755,
-          "indexLevel":0.0,
-          "indexPct":null
+        "metricBreakdowns": {
+          "Cs01":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":6010.499973572,
+            "currentPct":0.019274452372924755,
+            "indexLevel":0.0,
+            "indexPct":null
+          },
+          "CreditLeverage":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":0.5588012590561043,
+            "currentPct":0.2784545995142998,
+            "indexLevel":0.0,
+            "indexPct":null
+          }
         },
-        "CreditLeverage":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":0.5588012590561043,
-          "currentPct":0.2784545995142998,
-          "indexLevel":0.0,
-          "indexPct":null
-        }
+        "view": null
       }
     }
   },
@@ -343,144 +356,151 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
     "groupOption":20,
     "breakdown":{
       "2Y":{
-        "Cs01":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":85114.44546042301,
-          "currentPct":0.272944735460978,
-          "indexLevel":0.0,
-          "indexPct":null
+        "metricBreakdowns": {
+          "Cs01":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":85114.44546042301,
+            "currentPct":0.272944735460978,
+            "indexLevel":0.0,
+            "indexPct":null
+          },
+          "CreditLeverage":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":0.762997397823872,
+            "currentPct":0.38020697233283773,
+            "indexLevel":0.0,
+            "indexPct":null
+          }
         },
-        "CreditLeverage":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":0.762997397823872,
-          "currentPct":0.38020697233283773,
-          "indexLevel":0.0,
-          "indexPct":null
-        }
+        "view": null
       },
       "3Y":{
-        "Cs01":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":103013.4393964336,
-          "currentPct":0.3303431728055968,
-          "indexLevel":0.0,
-          "indexPct":null
+        "metricBreakdowns": {
+          "Cs01":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":103013.4393964336,
+            "currentPct":0.3303431728055968,
+            "indexLevel":0.0,
+            "indexPct":null
+          },
+          "CreditLeverage":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":0.4655051596600113,
+            "currentPct":0.23196449668692393,
+            "indexLevel":0.0,
+            "indexPct":null
+          },
         },
-        "CreditLeverage":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":0.4655051596600113,
-          "currentPct":0.23196449668692393,
-          "indexLevel":0.0,
-          "indexPct":null
-        }
+        "view": null
       },
       "5Y":{
-        "Cs01":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":69163.35648253582,
-          "currentPct":0.22179283359717067,
-          "indexLevel":0.0,
-          "indexPct":null
+        "metricBreakdowns": {
+          "Cs01":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":69163.35648253582,
+            "currentPct":0.22179283359717067,
+            "indexLevel":0.0,
+            "indexPct":null
+          },
+          "CreditLeverage":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":0.24167782408344604,
+            "currentPct":0.12042976035937444,
+            "indexLevel":0.0,
+            "indexPct":null
+          }
         },
-        "CreditLeverage":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":0.24167782408344604,
-          "currentPct":0.12042976035937444,
-          "indexLevel":0.0,
-          "indexPct":null
-        }
+        "view": null
       },
       "7Y":{
-        "Cs01":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":44874.968165486,
-          "currentPct":0.1439049064878618,
-          "indexLevel":0.0,
-          "indexPct":null
+        "metricBreakdowns": {
+          "Cs01":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":44874.968165486,
+            "currentPct":0.1439049064878618,
+            "indexLevel":0.0,
+            "indexPct":null
+          },
+          "CreditLeverage":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":0.09907837674761077,
+            "currentPct":0.04937145231988985,
+            "indexLevel":0.0,
+            "indexPct":null
+          }
         },
-        "CreditLeverage":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":0.09907837674761077,
-          "currentPct":0.04937145231988985,
-          "indexLevel":0.0,
-          "indexPct":null
-        }
+        "view": null
       },
       "10Y":{
-        "Cs01":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":21512.021907665996,
-          "currentPct":0.06898468405752423,
-          "indexLevel":0.0,
-          "indexPct":null
+        "metricBreakdowns": {
+          "Cs01":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":21512.021907665996,
+            "currentPct":0.06898468405752423,
+            "indexLevel":0.0,
+            "indexPct":null
+          },
+          "CreditLeverage":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":0.03649658126794331,
+            "currentPct":0.018186503261951145,
+            "indexLevel":0.0,
+            "indexPct":null
+          }
         },
-        "CreditLeverage":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":0.03649658126794331,
-          "currentPct":0.018186503261951145,
-          "indexLevel":0.0,
-          "indexPct":null
-        }
+        "view": null
       },
       "20Y":{
-        "Cs01":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":15239.141575000001,
-          "currentPct":0.048868831175958825,
-          "indexLevel":0.0,
-          "indexPct":null
+        "metricBreakdowns": {
+          "Cs01":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":15239.141575000001,
+            "currentPct":0.048868831175958825,
+            "indexLevel":0.0,
+            "indexPct":null
+          },
+          "CreditLeverage":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":0.020216093795587163,
+            "currentPct":0.010073821793283682,
+            "indexLevel":0.0,
+            "indexPct":null
+          }
         },
-        "CreditLeverage":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":0.020216093795587163,
-          "currentPct":0.010073821793283682,
-          "indexLevel":0.0,
-          "indexPct":null
-        }
+        "view": null
       },
       "30Y":{
-        "Cs01":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":0.0,
-          "currentPct":0.0,
-          "indexLevel":0.0,
-          "indexPct":null
+        "metricBreakdowns": {
+          "Cs01":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":0.0,
+            "currentPct":0.0,
+            "indexLevel":0.0,
+            "indexPct":null
+          },
+          "CreditLeverage":{
+            "targetLevel":null,
+            "targetPct":null,
+            "currentLevel":0.0,
+            "currentPct":0.0,
+            "indexLevel":0.0,
+            "indexPct":null
+          }
         },
-        "CreditLeverage":{
-          "targetLevel":null,
-          "targetPct":null,
-          "view":null,
-          "currentLevel":0.0,
-          "currentPct":0.0,
-          "indexLevel":0.0,
-          "indexPct":null
-        }
+        "view": null
       }
     }
   }
