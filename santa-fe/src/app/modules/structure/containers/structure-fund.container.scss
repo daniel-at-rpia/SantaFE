@@ -33,7 +33,7 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
     &-group {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-end;
       margin-bottom: $spacing_x_small;
       flex: 0 0 100%;
       &-label,
