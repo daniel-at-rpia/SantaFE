@@ -1,6 +1,8 @@
 <article
   [ngClass]="{
-    'sat-structureSetTargetPanel': true
+    'sat-structureSetTargetPanel': true,
+    'sat-structureSetTargetPanel--distributeAvailableState': (state.activeMetric === constants.metric.cs01 && state.displayPercentageUnallocatedCS01 > 0) || (state.activeMetric === constants.metric.creditLeverage && state.displayPercentageUnallocatedCreditLeverage > 0),
+    'sat-structureSetTargetPanel--creditLeverageActiveState': state.activeMetric === constants.metric.creditLeverage
   }">
   <section class="sat-structureSetTargetPanel__utilities">
     <div class="sat-structureSetTargetPanel__utilities-metricSwitch">
@@ -29,6 +31,28 @@
             {{state.displayPercentageUnallocatedCreditLeverage}}% unallocated
           </span>
         </button>
+      </div>
+    </div>
+    <div class="sat-structureSetTargetPanel__utilities-distribution">
+      <div class="sat-structureSetTargetPanel__utilities-distribution-label sat-structureSetTargetPanel__utilities-distribution-label--cs01">
+        {{state.displayRemainingUnallocatedCS01}} ({{state.displayPercentageUnallocatedCS01}}%)
+        <br>
+        unallocated target
+      </div>
+      <div class="sat-structureSetTargetPanel__utilities-distribution-label sat-structureSetTargetPanel__utilities-distribution-label--creditLeverage">
+        {{state.displayRemainingUnallocatedCreditLeverage}} ({{state.displayPercentageUnallocatedCreditLeverage}}%)
+        <br>
+        unallocated target
+      </div>
+      <hr class="sat-structureSetTargetPanel__utilities-distribution-divider">
+      <div class="sat-structureSetTargetPanel__utilities-distribution-label sat-structureSetTargetPanel__utilities-distribution-label--distribute">
+        Distribute To All Unlocked
+        <i class="sat-structureSetTargetPanel__utilities-distribution-label-icon fal fa-unlock-alt"></i>
+        Rows :
+      </div>
+      <div class="sat-structureSetTargetPanel__utilities-distribution-ctas">
+        <button class="sat-structureSetTargetPanel__utilities-distribution-ctas-evenly">Evenly</button>
+        <button class="sat-structureSetTargetPanel__utilities-distribution-ctas-proportionally">Proprotionally</button>
       </div>
     </div>
   </section>
@@ -61,7 +85,7 @@
             'sat-structureSetTargetEditRow--focusedCreditLeveragePercentState': eachCategory.targetCreditLeverage.percent.isFocused
           }">
           <section class="sat-structureSetTargetEditRow__lock">
-            <button class="sat-structureSetTargetEditRow__lock-btn santaBtn--iconOnly santaBtn--small fal fa-lock-alt"></button>
+            <button class="sat-structureSetTargetEditRow__lock-btn santaBtn--iconOnly santaBtn--small fal fa-unlock-alt"></button>
           </section>
           <section class="sat-structureSetTargetEditRow__label">
             <span class="sat-structureSetTargetEditRow__label-text">{{eachCategory.rowTitle}}</span>

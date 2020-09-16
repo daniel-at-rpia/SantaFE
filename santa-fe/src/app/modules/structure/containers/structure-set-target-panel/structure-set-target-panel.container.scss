@@ -11,6 +11,7 @@ $structureSetTargetPanel_edit_column_size: 12rem;
   &__utilities {
     @include mix_border_generator(0 0 $typical_border_width 0);
     display: flex;
+    align-items: center;
     margin-top: -$spacing_small;
     padding-bottom: $spacing_medium;
     margin-bottom: $spacing_medium;
@@ -47,7 +48,54 @@ $structureSetTargetPanel_edit_column_size: 12rem;
       }
     }
     &-distribution {
-
+      @include mix_border_radius(5px);
+      display: flex;
+      align-items: center;
+      align-self: stretch;
+      padding: $spacing_small $spacing_medium;
+      background-color: $color_disabled;
+      &-label {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        color: $font_color_inverse;
+        &-icon {
+          @include mix_border_generator($typical_border_width, $font_color_major);
+          @include mix_border_radius(3px);
+          font-size: $font_size_normal;
+          background-color: $color_white;
+          color: $font_color_major;
+          margin: 0 $spacing_x_small;
+          padding: $spacing_xx_small;
+        }
+        &--cs01 {
+          display: flex;
+        }
+        &--creditLeverage {
+          display: none;
+        }
+        &--distribute {
+          display: none;
+        }
+      }
+      &-divider {
+        display: none;
+        height: 100%;
+        width: $typical_border_width;
+        background-color: $color_white;
+        margin: 0 $spacing_medium;
+      }
+      &-ctas {
+        display: none;
+        margin-left: $spacing_medium;
+        &-evenly {
+          margin-right: $spacing_medium;
+          padding: $spacing_x_small $spacing_small;
+        }
+        &-proportionally {
+          padding: $spacing_x_small $spacing_small;
+        }
+      }
     }
     &-applyCurrent {
 
@@ -97,6 +145,34 @@ $structureSetTargetPanel_edit_column_size: 12rem;
           &:nth-child(even) {
             background-color: $color_blue_gray_1;
           }
+        }
+      }
+    }
+  }
+  &--creditLeverageActiveState {
+    #{$blockName} {
+      &__utilities-distribution-label {
+        &--cs01 {
+          display: none;
+        }
+        &--creditLeverage {
+          display: flex;
+        }
+      }
+    }
+  }
+  &--distributeAvailableState {
+    #{$blockName} {
+      &__utilities-distribution {
+        @include mix_theme_background();
+        &-label--distribute {
+          display: flex;
+        }
+        &-divider {
+          display: flex;
+        }
+        &-ctas {
+          display: flex;
         }
       }
     }
