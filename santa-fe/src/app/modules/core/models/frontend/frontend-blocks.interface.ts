@@ -323,4 +323,5 @@ export interface StructureSetTargetPanelEditRowItemBlock {
   isFocused: boolean;
   metric: PortfolioMetricValues;
   isPercent: boolean;
+  isLocked: boolean;
 }

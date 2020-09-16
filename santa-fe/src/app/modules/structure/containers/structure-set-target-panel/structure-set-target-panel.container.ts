@@ -129,6 +129,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
+  public onToggleLock(targetRow: StructureSetTargetPanelEditRowItemBlock) {
+    if (!!targetRow) {
+      targetRow.isLocked = !targetRow.isLocked;
+    }
+  }
+
   private loadEditRows() {
     if (!!this.state.targetBreakdown) {
       this.state.editRowList = [];
@@ -146,7 +152,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               isImplied: false,
               isFocused: false,
               metric: this.constants.metric.cs01,
-              isPercent: false
+              isPercent: false,
+              isLocked: false
             },
             percent: {
               savedDisplayValue: `${eachCategory.targetPct}`,
@@ -157,7 +164,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               isImplied: false,
               isFocused: false,
               metric: this.constants.metric.cs01,
-              isPercent: true
+              isPercent: true,
+              isLocked: false
             }
           },
           targetCreditLeverage: {
@@ -170,7 +178,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               isImplied: false,
               isFocused: false,
               metric: this.constants.metric.creditLeverage,
-              isPercent: false
+              isPercent: false,
+              isLocked: false
             },
             percent: {
               savedDisplayValue: null,
@@ -181,7 +190,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               isImplied: false,
               isFocused: false,
               metric: this.constants.metric.creditLeverage,
-              isPercent: true
+              isPercent: true,
+              isLocked: false
             }
           }
         };

@@ -55,7 +55,7 @@ $structureSetTargetPanel_edit_column_size: 12rem;
       padding: $spacing_small $spacing_medium;
       background-color: $color_disabled;
       &-label {
-        display: flex;
+        display: none;
         align-items: center;
         text-align: center;
         color: $font_color_inverse;
@@ -67,15 +67,6 @@ $structureSetTargetPanel_edit_column_size: 12rem;
           color: $font_color_major;
           margin: 0 $spacing_x_small;
           padding: $spacing_xx_small;
-        }
-        &--cs01 {
-          display: flex;
-        }
-        &--creditLeverage {
-          display: none;
-        }
-        &--distribute {
-          display: none;
         }
       }
       &-divider {
@@ -138,13 +129,17 @@ $structureSetTargetPanel_edit_column_size: 12rem;
         flex-direction: column;
         padding-bottom: $spacing_x_large;
         margin-top: $spacing_small;
-        &-item {
-          &:nth-child(odd) {
-            background-color: $color_gray_2;
-          }
-          &:nth-child(even) {
-            background-color: $color_blue_gray_1;
-          }
+      }
+    }
+  }
+  &--cs01ActiveState {
+    #{$blockName} {
+      &__utilities-distribution-label {
+        &--cs01 {
+          display: flex;
+        }
+        &--creditLeverage {
+          display: none;
         }
       }
     }
@@ -158,6 +153,49 @@ $structureSetTargetPanel_edit_column_size: 12rem;
         &--creditLeverage {
           display: flex;
         }
+      }
+    }
+  }
+  &--cs01NoFundAllocationState {
+    #{$blockName} {
+      &__utilities {
+        &-metricSwitch-btnGroup-btn--cs01 {
+          #{$blockName} {
+            &__utilities-metricSwitch-btnGroup-btn-unallocatedText {
+              display: none;
+            }
+          }
+        }
+        &-distribution {
+          display: none;
+        }
+      }
+    }
+  }
+  &--cs01NoFundAllocationState#{$blockName}--cs01ActiveState {
+    #{$blockName} {
+      &__utilities-distribution {
+        display: none;
+      }
+    }
+  }
+  &--creditLeverageNoFundAllocationState {
+    #{$blockName} {
+      &__utilities {
+        &-metricSwitch-btnGroup-btn--creditLeverage {
+          #{$blockName} {
+            &__utilities-metricSwitch-btnGroup-btn-unallocatedText {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--creditLeverageNoFundAllocationState#{$blockName}--creditLeverageActiveState {
+    #{$blockName} {
+      &__utilities-distribution {
+        display: none;
       }
     }
   }
@@ -181,7 +219,9 @@ $structureSetTargetPanel_edit_column_size: 12rem;
 
 .sat-structureSetTargetEditRow {
   $blockName: &;
+  @include mix_alive('custom', $animation_duration_light background-color);
   display: flex;
+  background-color: $color_gray_2;
   &__lock {
     @include mix_fixed_div(relative, $z_index_base_item); // for some reason I need this position relative so the shadow won't be clipped by the next row's background color, weird
     flex: 0 0 auto;
@@ -278,6 +318,27 @@ $structureSetTargetPanel_edit_column_size: 12rem;
           &__column-item-ctas {
             transform: scale(1) translate(0, 0);
           }
+        }
+      }
+    }
+  }
+  &--evenState {
+    background-color: $color_blue_gray_1;
+  }
+  &--lockedState {
+    background-color: $color_green_1;
+    #{$blockName} {
+      &__lock {
+        &-btn {
+          @include material('none');
+          background-color: $color_create;
+          color: $font_color_inverse;
+        }
+      }
+      &__column {
+        cursor: not-allowed;
+        &-item {
+          pointer-events: none;
         }
       }
     }

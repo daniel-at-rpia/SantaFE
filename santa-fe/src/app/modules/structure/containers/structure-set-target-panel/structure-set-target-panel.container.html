@@ -2,7 +2,10 @@
   [ngClass]="{
     'sat-structureSetTargetPanel': true,
     'sat-structureSetTargetPanel--distributeAvailableState': (state.activeMetric === constants.metric.cs01 && state.displayPercentageUnallocatedCS01 > 0) || (state.activeMetric === constants.metric.creditLeverage && state.displayPercentageUnallocatedCreditLeverage > 0),
-    'sat-structureSetTargetPanel--creditLeverageActiveState': state.activeMetric === constants.metric.creditLeverage
+    'sat-structureSetTargetPanel--cs01ActiveState': state.activeMetric === constants.metric.cs01,
+    'sat-structureSetTargetPanel--creditLeverageActiveState': state.activeMetric === constants.metric.creditLeverage,
+    'sat-structureSetTargetPanel--cs01NoFundAllocationState': state.totalUnallocatedCS01 === 0,
+    'sat-structureSetTargetPanel--creditLeverageNoFundAllocationState': state.totalUnallocatedCreditLeverage === 0
   }">
   <section class="sat-structureSetTargetPanel__utilities">
     <div class="sat-structureSetTargetPanel__utilities-metricSwitch">
@@ -11,6 +14,7 @@
           (click)="onClickChangeActiveMetric(constants.metric.cs01)"
           [ngClass]="{
             'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn': true,
+            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--cs01': true,
             'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--active': state.activeMetric === constants.metric.cs01,
             'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--highlightUnallocated': state.displayPercentageUnallocatedCS01 > 0
           }">
@@ -23,6 +27,7 @@
           (click)="onClickChangeActiveMetric(constants.metric.creditLeverage)"
           [ngClass]="{
             'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn': true,
+            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--creditLeverage': true,
             'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--active': state.activeMetric === constants.metric.creditLeverage,
             'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--highlightUnallocated': state.displayPercentageUnallocatedCreditLeverage > 0
           }">
@@ -75,17 +80,26 @@
       </div>
       <ul class="sat-structureSetTargetPanel__main-edit-rowList">
         <li
-          *ngFor="let eachCategory of state.editRowList"
+          *ngFor="let eachCategory of state.editRowList; let categoryIndex = index;"
           [ngClass]="{
-            'sat-structureSetTargetPanel__main-edit-rowList-item': true,
             'sat-structureSetTargetEditRow': true,
             'sat-structureSetTargetEditRow--focusedCs01LevelState': eachCategory.targetCs01.level.isFocused,
             'sat-structureSetTargetEditRow--focusedCs01PercentState': eachCategory.targetCs01.percent.isFocused,
             'sat-structureSetTargetEditRow--focusedCreditLeverageLevelState': eachCategory.targetCreditLeverage.level.isFocused,
-            'sat-structureSetTargetEditRow--focusedCreditLeveragePercentState': eachCategory.targetCreditLeverage.percent.isFocused
+            'sat-structureSetTargetEditRow--focusedCreditLeveragePercentState': eachCategory.targetCreditLeverage.percent.isFocused,
+            'sat-structureSetTargetEditRow--lockedState': eachCategory.isLocked,
+            'sat-structureSetTargetEditRow--evenState': categoryIndex%2 === 0
           }">
           <section class="sat-structureSetTargetEditRow__lock">
-            <button class="sat-structureSetTargetEditRow__lock-btn santaBtn--iconOnly santaBtn--small fal fa-unlock-alt"></button>
+            <button
+              (click)="onToggleLock(eachCategory)"
+              [ngClass]="{
+                'sat-structureSetTargetEditRow__lock-btn': true,
+                'santaBtn--iconOnly': true,
+                'fal fa-unlock-alt': !eachCategory.isLocked,
+                'fas fa-lock-alt': eachCategory.isLocked
+              }">
+            </button>
           </section>
           <section class="sat-structureSetTargetEditRow__label">
             <span class="sat-structureSetTargetEditRow__label-text">{{eachCategory.rowTitle}}</span>
