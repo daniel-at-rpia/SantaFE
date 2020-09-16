@@ -1958,27 +1958,28 @@ export class DTOService {
     isCs01: boolean
   ): Blocks.PortfolioBreakdownCategoryBlock {
     if (!!rawCategoryData) {
-      const rawCurrentLevel = rawCategoryData.currentLevel;
-      const rawCurrentPct = rawCategoryData.currentPct;
-      const rawTargetLevel = rawCategoryData.targetLevel;
-      const rawTargetPct = rawCategoryData.targetPct;
-      rawCategoryData.currentLevel = !!isCs01 ? this.utility.round(rawCategoryData.currentLevel/1000, 0) : this.utility.round(rawCategoryData.currentLevel, 2);
-      if (rawCategoryData.targetLevel != null) {
-        rawCategoryData.targetLevel = !!isCs01 ? this.utility.round(rawCategoryData.targetLevel/1000, 0) : this.utility.round(rawCategoryData.targetLevel, 2);
+      const parsedRawData = this.utility.deepCopy(rawCategoryData);
+      const rawCurrentLevel = parsedRawData.currentLevel;
+      const rawCurrentPct = parsedRawData.currentPct;
+      const rawTargetLevel = parsedRawData.targetLevel;
+      const rawTargetPct = parsedRawData.targetPct;
+      parsedRawData.currentLevel = !!isCs01 ? this.utility.round(parsedRawData.currentLevel/1000, 0) : this.utility.round(parsedRawData.currentLevel, 2);
+      if (parsedRawData.targetLevel != null) {
+        parsedRawData.targetLevel = !!isCs01 ? this.utility.round(parsedRawData.targetLevel/1000, 0) : this.utility.round(parsedRawData.targetLevel, 2);
       }
-      if (rawCategoryData.targetPct != null) {
-        rawCategoryData.targetPct = this.utility.round(rawCategoryData.targetPct*100, 1);
+      if (parsedRawData.targetPct != null) {
+        parsedRawData.targetPct = this.utility.round(parsedRawData.targetPct*100, 1);
       }
-      if (rawCategoryData.currentPct != null) {
-        rawCategoryData.currentPct = this.utility.round(rawCategoryData.currentPct*100, 1);
+      if (parsedRawData.currentPct != null) {
+        parsedRawData.currentPct = this.utility.round(parsedRawData.currentPct*100, 1);
       }
-      if (rawCategoryData.indexPct != null) {
-        rawCategoryData.indexPct = this.utility.round(rawCategoryData.indexPct*100, 1);
+      if (parsedRawData.indexPct != null) {
+        parsedRawData.indexPct = this.utility.round(parsedRawData.indexPct*100, 1);
       }
       maxValue = !!isCs01 ? maxValue/1000 : maxValue;
       minValue = !!isCs01 ? minValue/1000 : minValue;
       const eachMoveVisualizer = this.formMoveVisualizerObjectForStructuring(
-        rawCategoryData,
+        parsedRawData,
         maxValue,
         minValue,
         !!isStencil
@@ -1986,15 +1987,15 @@ export class DTOService {
       eachMoveVisualizer.data.endPinText = !!isCs01 ? `${eachMoveVisualizer.data.end}k` : `${eachMoveVisualizer.data.end}`;
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
         category: `${categoryName}`,
-        targetLevel: rawCategoryData.targetLevel,
-        targetPct: rawCategoryData.targetPct,
-        diffToTarget: rawCategoryData.targetLevel != null ? Math.round(rawCategoryData.targetLevel - rawCategoryData.currentLevel) : 0,
+        targetLevel: parsedRawData.targetLevel,
+        targetPct: parsedRawData.targetPct,
+        diffToTarget: parsedRawData.targetLevel != null ? Math.round(parsedRawData.targetLevel - parsedRawData.currentLevel) : 0,
         diffToTargetDisplay: '-',
-        currentLevel: rawCategoryData.currentLevel,
-        currentPct: rawCategoryData.currentPct,
-        currentPctDisplay: rawCategoryData.currentPct != null ? `${rawCategoryData.currentPct}%` : '-',
-        indexPct: rawCategoryData.indexPct,
-        indexPctDisplay: rawCategoryData.indexPct != null ? `${rawCategoryData.indexPct}%` : '-',
+        currentLevel: parsedRawData.currentLevel,
+        currentPct: parsedRawData.currentPct,
+        currentPctDisplay: parsedRawData.currentPct != null ? `${parsedRawData.currentPct}%` : '-',
+        indexPct: parsedRawData.indexPct,
+        indexPctDisplay: parsedRawData.indexPct != null ? `${parsedRawData.indexPct}%` : '-',
         moveVisualizer: eachMoveVisualizer,
         raw: {
           currentLevel: rawCurrentLevel,
