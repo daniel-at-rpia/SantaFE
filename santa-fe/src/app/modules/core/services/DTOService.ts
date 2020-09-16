@@ -1187,12 +1187,12 @@ export class DTOService {
           moveDistance = this.utility.round(rawData.currentLevel / totalDistance * 100, 2);
           leftEdge = min < 0 ? this.utility.round(Math.abs(min) / totalDistance * 100, 2) : 0;
           rightEdge = this.utility.round((rawData.targetLevel - rawData.currentLevel) / totalDistance * 100, 2);
-          endPinLocation = moveDistance + rightEdge;
+          endPinLocation = moveDistance;
         } else {
           moveDistance = this.utility.round(rawData.targetLevel / totalDistance * 100, 2);
           leftEdge = min < 0 ? this.utility.round(Math.abs(min) / totalDistance * 100, 2) : 0;
           rightEdge = this.utility.round((rawData.currentLevel - rawData.targetLevel) / totalDistance * 100);
-          endPinLocation = moveDistance;
+          endPinLocation = moveDistance + rightEdge;
         }
       } else {
         // is target is not set
