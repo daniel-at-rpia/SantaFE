@@ -123,7 +123,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.state.activeMetric = newMetric;
       this.state.targetFund.data.cs01TargetBar.state.isInactiveMetric = !this.state.targetFund.data.cs01TargetBar.state.isInactiveMetric;
       this.state.targetFund.data.creditLeverageTargetBar.state.isInactiveMetric = !this.state.targetFund.data.creditLeverageTargetBar.state.isInactiveMetric;
-      this.applyChangeToPreview();
+      this.refeshPreview();
     }
   }
 
@@ -280,7 +280,19 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     counterPartyItem.savedUnderlineValue = counterPartyItem.modifiedUnderlineValue;
   }
 
-  private applyChangeToPreview() {
+  private refeshPreview() {
+    this.state.targetBreakdown.data.displayCategoryList = this.state.activeMetric === PortfolioMetricValues.cs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
+    this.state.targetBreakdown.state.isStencil = true;
+    this.state.targetBreakdown.data.displayCategoryList.forEach(category => {
+      category.moveVisualizer.state.isStencil = true;
+    })
+    setTimeout(() => {
+      this.state.targetBreakdown.state.isStencil = false;
+      this.state.targetBreakdown.data.displayCategoryList.forEach(category => {
+      category.moveVisualizer.state.isStencil = false;
+      })
+    }, 300);
+  }
 
   }
 
