@@ -51,15 +51,11 @@
           'sat-portfolioBreakdown__categoryContent-list-item--noSignificantDiff': eachCategory.diffToTarget === 0,
           'sat-portfolioBreakdown__categoryContent-list-item--negativeDiff': eachCategory.diffToTarget < 0
         }">
-        <span class="sat-portfolioBreakdown__categoryContent-list-item-title">{{eachCategory.category}}</span>
-        <div class="sat-portfolioBreakdown__categoryContent-list-item-moveVisualizer">
-          <move-visualizer [visualizerData]="eachCategory.moveVisualizer"></move-visualizer>
-        </div>
-        <div class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--target">{{eachCategory.diffToTargetDisplay}}</div>
-        <hr class="sat-portfolioBreakdown__categoryContent-list-item-cellDivider">
-        <div class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--current">{{eachCategory.currentPctDisplay}}</div>
-        <hr class="sat-portfolioBreakdown__categoryContent-list-item-cellDivider">
-        <div class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--index">{{eachCategory.indexPctDisplay}}</div>
+        <category-content-list-item
+          [eachCategory]="eachCategory"
+          [stencilState]="breakdownData.state.isStencil"
+          [isBtnDiveIn]="breakdownData.data.title === 'BICS'">
+        </category-content-list-item>
       </li>
     </ul>
   </section>
