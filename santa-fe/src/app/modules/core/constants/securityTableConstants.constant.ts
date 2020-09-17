@@ -640,6 +640,24 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       }
     }
   },{
+    key: 'subIndustry',
+    content: {
+      label: 'SubIndustry',
+      attrName: 'subIndustry',
+      underlineAttrName: 'subIndustry',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
     key: 'securityType',
     content: {
       label: 'Security Type',

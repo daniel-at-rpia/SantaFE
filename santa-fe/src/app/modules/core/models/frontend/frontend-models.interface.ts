@@ -48,6 +48,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     currency: string;
     sector: string;
     industry: string;
+    subIndustry: string;
     securityType: string;
     seniority: string;
     genericSeniority: string;
