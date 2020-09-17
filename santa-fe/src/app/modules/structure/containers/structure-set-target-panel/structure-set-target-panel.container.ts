@@ -151,6 +151,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     if (unlockedList.length > 0) {
       const totalNumberOfRows = unlockedList.length;
       const isCs01 = this.state.activeMetric === this.constants.metric.cs01;
+      this.clearUnlockRowsBeforeDistribution(unlockedList, isCs01);
       const totalValue = isCs01 ? this.state.remainingUnallocatedCS01 : this.state.remainingUnallocatedCreditLeverage;
       unlockedList.forEach((eachUnlockedRow) => {
         const targetItem = isCs01 ? eachUnlockedRow.targetCs01.level : eachUnlockedRow.targetCreditLeverage.level;
@@ -174,12 +175,14 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     });
     if (unlockedList.length > 0) {
       const isCs01 = this.state.activeMetric === this.constants.metric.cs01;
+      this.clearUnlockRowsBeforeDistribution(unlockedList, isCs01);
       let totalValue = 0;
+      const totalRemainingPercent = isCs01 ? this.state.remainingUnallocatedCS01/this.state.totalUnallocatedCS01 : this.state.remainingUnallocatedCreditLeverage/this.state.totalUnallocatedCreditLeverage;
       unlockedList.forEach((eachUnlockedRow) => {
         totalValue = totalValue + eachUnlockedRow.targetBlockFromBreakdown.raw.currentLevel;
       });
       unlockedList.forEach((eachUnlockedRow) => {
-        const distributedValue = eachUnlockedRow.targetBlockFromBreakdown.raw.currentLevel/totalValue * 100;
+        const distributedValue = eachUnlockedRow.targetBlockFromBreakdown.raw.currentLevel/totalValue * 100 * totalRemainingPercent;
         const parsedValue = this.utilityService.round(distributedValue, 3);
         const targetItem = isCs01 ? eachUnlockedRow.targetCs01.percent : eachUnlockedRow.targetCreditLeverage.percent;
         this.setTarget(
@@ -362,6 +365,17 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   private applyChangeToPreview() {
 
+  }
+
+  private clearUnlockRowsBeforeDistribution(
+    unlockedRowList: Array<StructureSetTargetPanelEditRowBlock>,
+    isCs01: boolean
+  ) {
+    unlockedRowList.forEach((eachRow) => {
+      const targetItem = isCs01 ? eachRow.targetCs01.percent : eachRow.targetCreditLeverage.percent;
+      this.setTarget('0', targetItem);
+      this.onClickSaveEdit(eachRow, targetItem);
+    });
   }
 
 }
