@@ -50,9 +50,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       displayPercentageUnallocatedCS01: 0,
       displayPercentageUnallocatedCreditLeverage: 0,
       displayRemainingUnallocatedCS01: '',
-      displayRemainingUnallocatedCreditLeverage: '',
-      isDistributingEvenly: false,
-      isDistributingProportionally: false
+      displayRemainingUnallocatedCreditLeverage: ''
     };
     return state;
   }
