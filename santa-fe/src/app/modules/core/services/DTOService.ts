@@ -1985,11 +1985,12 @@ export class DTOService {
         !!isStencil
       );
       eachMoveVisualizer.data.endPinText = !!isCs01 ? `${eachMoveVisualizer.data.end}k` : `${eachMoveVisualizer.data.end}`;
+      const diffToTarget = !!isCs01 ? Math.round(parsedRawData.targetLevel - parsedRawData.currentLevel) : this.utility.round(parsedRawData.targetLevel - parsedRawData.currentLevel, 2);
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
         category: `${categoryName}`,
         targetLevel: parsedRawData.targetLevel,
         targetPct: parsedRawData.targetPct,
-        diffToTarget: parsedRawData.targetLevel != null ? Math.round(parsedRawData.targetLevel - parsedRawData.currentLevel) : 0,
+        diffToTarget: parsedRawData.targetLevel != null ? diffToTarget : 0,
         diffToTargetDisplay: '-',
         currentLevel: parsedRawData.currentLevel,
         currentPct: parsedRawData.currentPct,
