@@ -311,6 +311,7 @@ export interface StructureSetTargetPanelEditRowBlock {
     level: StructureSetTargetPanelEditRowItemBlock;
     percent: StructureSetTargetPanelEditRowItemBlock;
   };
+  isLocked: boolean;
 }
 
 export interface StructureSetTargetPanelEditRowItemBlock {
@@ -323,5 +324,4 @@ export interface StructureSetTargetPanelEditRowItemBlock {
   isFocused: boolean;
   metric: PortfolioMetricValues;
   isPercent: boolean;
-  isLocked: boolean;
 }

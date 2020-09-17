@@ -14,8 +14,10 @@
     }"
     [(ngModel)]="inputValue"
     [placeholder]="placeholder"
+    [disabled]="!!isDisabled"
     (keyup)="onKey()"
     (focus)="onFocus()"
     (blur)="onBlur()"
+    (keyup.enter)="onPressedEnterKey()"
   >
 </article>

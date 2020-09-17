@@ -84,11 +84,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     newValue: string,
     targetItem: StructureSetTargetPanelEditRowItemBlock
   ) {
-    targetItem.isFocused = true;
-    this.setTarget(
-      newValue,
-      targetItem
-    );
+    if (newValue !== targetItem.modifiedDisplayValue) {
+      targetItem.isFocused = true;
+      this.setTarget(
+        newValue,
+        targetItem
+      );
+    }
   }
 
   public onClickSaveEdit(
@@ -129,10 +131,17 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
-  public onToggleLock(targetRow: StructureSetTargetPanelEditRowItemBlock) {
+  public onToggleLock(targetRow: StructureSetTargetPanelEditRowBlock) {
     if (!!targetRow) {
       targetRow.isLocked = !targetRow.isLocked;
     }
+  }
+
+  public onPressedEnterKeyInInput(
+    targetCategory: StructureSetTargetPanelEditRowBlock,
+    targetItem: StructureSetTargetPanelEditRowItemBlock
+  ) {
+    this.onClickSaveEdit(targetCategory, targetItem);
   }
 
   private loadEditRows() {
@@ -144,7 +153,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           rowTitle: eachCategory.category,
           targetCs01: {
             level: {
-              savedDisplayValue: `${eachCategory.targetLevel}`,
+              savedDisplayValue: !!eachCategory.targetLevel ? `${eachCategory.targetLevel}` : null,
               savedUnderlineValue: eachCategory.raw.targetLevel,
               modifiedDisplayValue: null,
               modifiedUnderlineValue: null,
@@ -152,11 +161,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               isImplied: false,
               isFocused: false,
               metric: this.constants.metric.cs01,
-              isPercent: false,
-              isLocked: false
+              isPercent: false
             },
             percent: {
-              savedDisplayValue: `${eachCategory.targetPct}`,
+              savedDisplayValue: !!eachCategory.targetPct ? `${eachCategory.targetPct}` : null,
               savedUnderlineValue: eachCategory.raw.targetPct,
               modifiedDisplayValue: null,
               modifiedUnderlineValue: null,
@@ -164,8 +172,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               isImplied: false,
               isFocused: false,
               metric: this.constants.metric.cs01,
-              isPercent: true,
-              isLocked: false
+              isPercent: true
             }
           },
           targetCreditLeverage: {
@@ -178,8 +185,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               isImplied: false,
               isFocused: false,
               metric: this.constants.metric.creditLeverage,
-              isPercent: false,
-              isLocked: false
+              isPercent: false
             },
             percent: {
               savedDisplayValue: null,
@@ -190,10 +196,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               isImplied: false,
               isFocused: false,
               metric: this.constants.metric.creditLeverage,
-              isPercent: true,
-              isLocked: false
+              isPercent: true
             }
-          }
+          },
+          isLocked: false
         };
         this.state.editRowList.push(newRow);
       });
@@ -202,9 +208,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           return eachRow.rowTitle === eachCategory.category;
         });
         if (!!targetRow) {
-          targetRow.targetCreditLeverage.level.savedDisplayValue = `${eachCategory.targetLevel}`;
+          targetRow.targetCreditLeverage.level.savedDisplayValue = !!eachCategory.targetLevel ? `${eachCategory.targetLevel}` : null;
           targetRow.targetCreditLeverage.level.savedUnderlineValue = eachCategory.raw.targetLevel;
-          targetRow.targetCreditLeverage.percent.savedDisplayValue = `${eachCategory.targetPct}`;
+          targetRow.targetCreditLeverage.percent.savedDisplayValue = !!eachCategory.targetPct ? `${eachCategory.targetPct}` : null;
           targetRow.targetCreditLeverage.percent.savedUnderlineValue = eachCategory.raw.targetPct;
         };
       });
