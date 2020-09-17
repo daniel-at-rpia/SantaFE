@@ -15,6 +15,7 @@ import { StructureUtilityPanel } from 'Structure/containers/structure-utility-pa
 import { TargetBar } from 'App/modules/structure/components/target-bar.component'
 import { PortfolioBreakdown } from 'App/modules/structure/containers/portfolio-breakdown/portfolio-breakdown.container';
 import { StructureSetTargetPanel } from 'Structure/containers/structure-set-target-panel/structure-set-target-panel.container';
+import { CategoryContentListItem } from 'Structure/components/category-content-list-item.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { StructureSetTargetPanel } from 'Structure/containers/structure-set-targ
     StructureUtilityPanel,
     TargetBar,
     PortfolioBreakdown,
-    StructureSetTargetPanel
+    StructureSetTargetPanel,
+    CategoryContentListItem
   ],
   imports: [
     // Angular framework modules
