@@ -2006,10 +2006,10 @@ export class DTOService {
         }
       };
       if (eachCategoryBlock.diffToTarget < 0) {
-        eachCategoryBlock.diffToTargetDisplay = `${eachCategoryBlock.diffToTarget}k`;
+        eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `${eachCategoryBlock.diffToTarget}k` : `${eachCategoryBlock.diffToTarget}`;
       }
       if (eachCategoryBlock.diffToTarget > 0) {
-        eachCategoryBlock.diffToTargetDisplay = `+${eachCategoryBlock.diffToTarget}k`;
+        eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `+${eachCategoryBlock.diffToTarget}k` : `+${eachCategoryBlock.diffToTarget}`;
       }
       return eachCategoryBlock;
     } else {
