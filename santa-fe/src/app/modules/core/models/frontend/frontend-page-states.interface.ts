@@ -294,6 +294,4 @@ export interface StructureSetTargetPanelState {
   displayPercentageUnallocatedCS01: number;
   displayPercentageUnallocatedCreditLeverage: number;
   activeMetric: PortfolioMetricValues;
-  isDistributingEvenly: boolean;
-  isDistributingProportionally: boolean;
 }
