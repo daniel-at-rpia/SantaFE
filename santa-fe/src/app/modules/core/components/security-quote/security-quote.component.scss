@@ -23,7 +23,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
-    padding: $spacing_xx_small 0;
+    padding: $spacing_x_small 0;
     &-tags {
       flex: 0 0 $securityQuote_tags_size;
       display: flex;
@@ -123,18 +123,14 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
               font-size: $font_size_xx_small;
             }
           }
-
           &-text {
             @include mix_border_radius(3px);
             @include mix_quantative_text;
             flex: 1 1 auto;
             padding: $spacing_xx_small $spacing_x_small;
-
-
             &-axeIcon{
               visibility: hidden;
             }
-
             &-withIcon{
               display: flex;
               flex-direction: row;
@@ -149,6 +145,15 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
             font-size: $font_size_small;
             color: $color_warning;
             padding: $spacing_xx_small;
+          }
+          &-executableTag {
+            @include mix_fixed_div(absolute, $z_index_hovering_item);
+            @include mix_border_radius(3px);
+            @include mix_theme_background;
+            display: none;
+            top: -$spacing_x_small;
+            color: $font_color_inverse;
+            padding: $spacing_minimum $spacing_xx_small;
           }
         }
         &-actionMenu {
@@ -240,6 +245,32 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
     #{$blockName} {
       &__main-tags-executable {
         display: inline-block;
+      }
+    }
+  }
+  &--askExecutableState {
+    #{$blockName} {
+      &__main-twoSideEntry-cta--ask {
+        #{$blockName} {
+          &__main-twoSideEntry-cta-btn-executableTag {
+            display: flex;
+            transform: rotate(35deg);
+            right: -$spacing_x_small;
+          }
+        }
+      }
+    }
+  }
+  &--bidExecutableState {
+    #{$blockName} {
+      &__main-twoSideEntry-cta--bid {
+        #{$blockName} {
+          &__main-twoSideEntry-cta-btn-executableTag {
+            display: flex;
+            transform: rotate(-35deg);
+            left: -$spacing_x_small;
+          }
+        }
       }
     }
   }
