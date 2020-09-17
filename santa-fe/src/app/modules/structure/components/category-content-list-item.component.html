@@ -1,0 +1,23 @@
+<article [ngClass]="{
+  'sat-portfolioBreakdownCategory': true,
+  'sat-portfolioBreakdownCategory--stencilState': stencilState,
+  'sat-portfolioBreakdownCategory--noSignificantDiff': eachCategory.diffToTarget === 0,
+  'sat-portfolioBreakdownCategory--negativeDiff': eachCategory.diffToTarget < 0
+  }">
+   <button [ngClass]="{
+    'sat-portfolioBreakdownCategory__btn': true,
+    'sat-portfolioBreakdownCategory__btn--diveIn': isDiveIn
+    }">
+    <span class="sat-portfolioBreakdownCategory__btn-text">{{ eachCategory.category }}</span>
+  </button>
+  <section class="sat-portfolioBreakdownCategory__moveVisualizer">
+    <move-visualizer [visualizerData]="eachCategory.moveVisualizer"></move-visualizer>
+  </section>
+  <section class="sat-portfolioBreakdownCategory__cellGroup">
+    <div class="sat-portfolioBreakdownCategory__cellGroup-cell sat-portfolioBreakdownCategory__cellGroup-cell--target">{{eachCategory.diffToTargetDisplay}}</div>
+    <hr class="sat-portfolioBreakdownCategory__cellGroup-cellDivider">
+    <div class="sat-portfolioBreakdownCategory__cellGroup-cell sat-portfolioBreakdownCategory__cellGroup-cell--current">{{eachCategory.currentPctDisplay}}</div>
+    <hr class="sat-portfolioBreakdownCategory__cellGroup-cellDivider">
+    <div class="sat-portfolioBreakdownCategory__cellGroup-cell sat-portfolioBreakdownCategory__cellGroup-cell--index">{{eachCategory.indexPctDisplay}}</div>
+  </section>
+</article>
