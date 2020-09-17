@@ -29,7 +29,7 @@ export const AGGRID_NARROW_COLUMN_WIDTH = 95;
 export const AGGRID_ALERT_MESSAGE_COLUMN_WIDTH = 240;
 export const AGGRID_ROW_HEIGHT = 40;
 export const AGGRID_ROW_HEIGHT_SLIM = 34;
-export const AGGRID_DETAIL_ROW_HEIGHT_PER_ROW = 34;
+export const AGGRID_DETAIL_ROW_HEIGHT_PER_ROW = 37;
 export const AGGRID_DETAIL_ROW_HEIGHT_OFFSET = 145;
 export const AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS = 185;
 export const AGGRID_DETAIL_ROW_DEFAULT_COUNT = 9;
@@ -627,6 +627,24 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       label: 'Industry',
       attrName: 'industry',
       underlineAttrName: 'industry',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'subIndustry',
+    content: {
+      label: 'SubIndustry',
+      attrName: 'subIndustry',
+      underlineAttrName: 'subIndustry',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
