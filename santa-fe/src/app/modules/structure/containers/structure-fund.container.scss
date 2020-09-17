@@ -37,15 +37,15 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
       margin-bottom: $spacing_x_small;
       flex: 0 0 100%;
       padding-right: $fundStructuring_setTarget_backgroundIcon_gutter;
-      &:last-child {
-        padding-right: $fundStructuring_setTarget_backgroundIcon_gutter + .5rem;
-      }
       &-label,
       &-input {
         margin-right: $spacing_x_small;
       }
       &-input {
         width: 5rem;
+      }
+      &:last-child {
+        padding-right: $fundStructuring_setTarget_backgroundIcon_gutter + .5rem;
       }
     }
     &-message {
