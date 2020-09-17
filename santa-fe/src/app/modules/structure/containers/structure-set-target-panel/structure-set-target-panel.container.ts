@@ -50,7 +50,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       displayPercentageUnallocatedCS01: 0,
       displayPercentageUnallocatedCreditLeverage: 0,
       displayRemainingUnallocatedCS01: '',
-      displayRemainingUnallocatedCreditLeverage: ''
+      displayRemainingUnallocatedCreditLeverage: '',
+      isDistributingEvenly: false,
+      isDistributingProportionally: false
     };
     return state;
   }
@@ -142,6 +144,17 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     targetItem: StructureSetTargetPanelEditRowItemBlock
   ) {
     this.onClickSaveEdit(targetCategory, targetItem);
+  }
+
+  public onClickDistributeEvenly() {
+    if (!this.state.isDistributingEvenly && !this.state.isDistributingProportionally) {
+      this.state.isDistributingEvenly = true;
+      this.distributeEvenly();
+      const delayedFlipForAnimation = () => {
+        this.state.isDistributingEvenly = false;
+      };
+      setTimeout(delayedFlipForAnimation.bind(this), 300);
+    }
   }
 
   private loadEditRows() {
@@ -308,6 +321,30 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
     counterPartyItem.savedDisplayValue = counterPartyItem.modifiedDisplayValue;
     counterPartyItem.savedUnderlineValue = counterPartyItem.modifiedUnderlineValue;
+  }
+
+  private distributeEvenly() {
+    const unlockedList = this.state.editRowList.filter((eachRow) => {
+      return !eachRow.isLocked;
+    });
+    if (unlockedList.length > 0) {
+      const totalNumberOfRows = unlockedList.length;
+      const isCs01 = this.state.activeMetric === this.constants.metric.cs01;
+      const totalValue = isCs01 ? this.state.remainingUnallocatedCS01 : this.state.remainingUnallocatedCreditLeverage;
+      unlockedList.forEach((eachUnlockedRow) => {
+        const targetItem = isCs01 ? eachUnlockedRow.targetCs01.level : eachUnlockedRow.targetCreditLeverage.level;
+        const distributedValue = totalValue/totalNumberOfRows;
+        const parsedValue = isCs01 ? this.utilityService.round(distributedValue/1000, 3) : this.utilityService.round(distributedValue, 3);
+        this.setTarget(
+          `${parsedValue}`,
+          targetItem
+        );
+        this.onClickSaveEdit(
+          eachUnlockedRow,
+          targetItem
+        );
+      });
+    }
   }
 
   private applyChangeToPreview() {

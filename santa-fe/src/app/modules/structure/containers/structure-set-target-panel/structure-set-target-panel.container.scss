@@ -1,7 +1,7 @@
 @import "global.scss";
 @import "modules/structure/structure.scss";
 
-$structureSetTargetPanel_edit_column_size: 12rem;
+$structureSetTargetPanel_edit_column_size: 14rem;
 .sat-structureSetTargetPanel {
   $blockName: &;
   flex: 1 1 auto;
@@ -243,6 +243,7 @@ $structureSetTargetPanel_edit_column_size: 12rem;
     padding: 0 $spacing_medium;
     &-item {
       @include mix_fixed_div(relative, $z_index_base_item);
+      flex: 1 1 auto;
       display: flex;
       align-items: center;
       margin-right: $spacing_small;
@@ -270,6 +271,9 @@ $structureSetTargetPanel_edit_column_size: 12rem;
           background-color: $color_kill;
           color: $font_color_inverse;
         }
+      }
+      santa-input {
+        flex: 1 1 auto;
       }
     }
   }
