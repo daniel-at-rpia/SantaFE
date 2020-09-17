@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const version = "1.7.10-executableQuote-alpha";
+const version = "1.7.10";
 
 module.exports = {
   output: {
