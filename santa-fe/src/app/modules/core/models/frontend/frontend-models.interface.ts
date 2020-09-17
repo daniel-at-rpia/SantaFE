@@ -48,6 +48,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     currency: string;
     sector: string;
     industry: string;
+    subIndustry: string;
     securityType: string;
     seniority: string;
     genericSeniority: string;
@@ -433,6 +434,7 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
       benchmark: string;
       time: string;
       rawTime: string;
+      isExecutable: boolean;
     };
     ask: {
       isAxe: boolean;
@@ -443,6 +445,7 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
       benchmark: string;
       time: string;
       rawTime: string;
+      isExecutable: boolean;
     }
   },
   state: {
@@ -462,6 +465,7 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
     isBidDownVoted: boolean;
     isAskDownVoted: boolean;
     isCDSVariant: boolean;
+    isQuoteExecutable: boolean;
   }
 }
 

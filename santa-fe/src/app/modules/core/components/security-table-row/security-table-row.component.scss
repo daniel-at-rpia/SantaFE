@@ -2,7 +2,7 @@
 
 
 $securityTableRow_expandCanvas_height: 40rem + $spacing_medium * 2;
-$securityTableRow_expandCanvas_label_leftPadding: $spacing_x_small;
+$securityTableRow_expandCanvas_label_leftPadding: $spacing_x_small + $securityQuote_tags_size;
 $securityTableRow_expandCanvas_label_rightPadding: $spacing_small + $scroll_bar_width + $spacing_x_small;
 
 .sat-securityTableRow {

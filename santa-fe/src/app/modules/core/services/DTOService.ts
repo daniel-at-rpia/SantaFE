@@ -104,6 +104,7 @@ export class DTOService {
         country: !isStencil ? rawData.country : null,
         sector: !isStencil ? rawData.sector : null,
         industry: !isStencil ? rawData.industry : null,
+        subIndustry: !isStencil ? rawData.subIndustry : null,
         securityType: !isStencil ? rawData.securityType : null,
         seniority: null,
         genericSeniority: !isStencil ? rawData.genericSeniority : null,
@@ -1018,7 +1019,8 @@ export class DTOService {
           tspread: 300,
           benchmark: bidBenchmark,
           time: '12:01',
-          rawTime: ''
+          rawTime: '',
+          isExecutable: false
         },
         ask: {
           isAxe: false,
@@ -1028,7 +1030,8 @@ export class DTOService {
           tspread: 300,
           benchmark: bidBenchmark,
           time: '12:01',
-          rawTime: ''
+          rawTime: '',
+          isExecutable: false
         },
         currentMetric: null
       },
@@ -1048,7 +1051,8 @@ export class DTOService {
         menuActiveDriver: null,
         isBidDownVoted: false,
         isAskDownVoted: false,
-        isCDSVariant: false
+        isCDSVariant: false,
+        isQuoteExecutable: false
       }
     };
     if (!isStencil) {
@@ -1060,7 +1064,8 @@ export class DTOService {
         tspread: !!rawData.bidSpread ? this.utility.parseTriCoreDriverNumber(rawData.bidSpread, TriCoreDriverConfig.Spread.label, targetSecurity, false) as number : null,
         benchmark: bidBenchmark,
         time: this.utility.isQuoteTimeValid(rawData.bidTime) && hasBid ? moment(rawData.bidTime).format('HH:mm') : '',
-        rawTime: rawData.bidTime.slice(0, 19)  // remove timezone
+        rawTime: rawData.bidTime.slice(0, 19),  // remove timezone,
+        isExecutable: rawData.bidQuoteCondition === 'A'
       };
       object.data.ask = {
         isAxe: rawData.quoteType === SECURITY_TABLE_QUOTE_TYPE_AXE,
@@ -1070,11 +1075,13 @@ export class DTOService {
         tspread: !!rawData.askSpread ? this.utility.parseTriCoreDriverNumber(rawData.askSpread, TriCoreDriverConfig.Spread.label, targetSecurity, false) as number : null,
         benchmark: askBenchmark,
         time: this.utility.isQuoteTimeValid(rawData.askTime) && hasAsk ? moment(rawData.askTime).format('HH:mm') : '',
-        rawTime: rawData.askTime.slice(0, 19)  // remove timezone
+        rawTime: rawData.askTime.slice(0, 19),  // remove timezone
+        isExecutable: rawData.askQuoteCondition === 'A'
       };
       this.utility.highlightSecurityQutoe(object, targetRow);
       object.state.isBidDownVoted = rawData.bidQuoteStatus < 0;
       object.state.isAskDownVoted = rawData.askQuoteStatus < 0;
+      object.state.isQuoteExecutable = object.data.ask.isExecutable || object.data.bid.isExecutable;
     }
     return object;
   }
