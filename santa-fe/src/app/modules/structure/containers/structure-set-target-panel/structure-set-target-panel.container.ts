@@ -344,7 +344,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.state.targetBreakdown = updatedPortfolioBreakdown;
       this.state.targetBreakdown.state.isPreviewVariant = true;
       this.state.targetBreakdown.state.isDisplayingCs01 = targetItem.metric === PortfolioMetricValues.cs01;
-      this.state.activeMetric = targetItem.metric;
    }, 300);
   }
 
