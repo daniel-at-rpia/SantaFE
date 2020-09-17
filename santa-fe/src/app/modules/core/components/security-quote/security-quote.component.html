@@ -22,9 +22,13 @@
     'sat-securityQuote--menuActiveOnTSpreadState': messageData.state.menuActiveDriver === 'tspread',
     'sat-securityQuote--menuActiveOnPriceState': messageData.state.menuActiveDriver === 'price',
     'sat-securityQuote--menuActiveOnYieldState': messageData.state.menuActiveDriver === 'yield',
-    'sat-securityQuote--cdsVariant': messageData.state.isCDSVariant
+    'sat-securityQuote--cdsVariant': messageData.state.isCDSVariant,
+    'sat-securityQuote--executableState': messageData.state.isQuoteExecutable
   }">
   <section class="sat-securityQuote__main">
+    <div class="sat-securityQuote__main-tags">
+      <span class="sat-securityQuote__main-tags-executable">Executable</span>
+    </div>
     <div class="sat-securityQuote__main-twoSideEntry">
       <span class="sat-securityQuote__main-twoSideEntry-text sat-securityQuote__main-twoSideEntry-text--bid">
         {{messageData.data.bid.time}}

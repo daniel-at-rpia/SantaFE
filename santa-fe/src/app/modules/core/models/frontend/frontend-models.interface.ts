@@ -433,6 +433,7 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
       benchmark: string;
       time: string;
       rawTime: string;
+      isExecutable: boolean;
     };
     ask: {
       isAxe: boolean;
@@ -443,6 +444,7 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
       benchmark: string;
       time: string;
       rawTime: string;
+      isExecutable: boolean;
     }
   },
   state: {
@@ -462,6 +464,7 @@ export interface SecurityQuoteDTO extends BasicDTOStructure {
     isBidDownVoted: boolean;
     isAskDownVoted: boolean;
     isCDSVariant: boolean;
+    isQuoteExecutable: boolean;
   }
 }
 
