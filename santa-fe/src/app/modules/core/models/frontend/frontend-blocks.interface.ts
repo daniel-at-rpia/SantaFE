@@ -324,3 +324,13 @@ export interface StructureSetTargetPanelEditRowItemBlock {
   metric: PortfolioMetricValues;
   isPercent: boolean;
 }
+
+export interface BICsHierarchyBlock {
+  name: string;
+  tier: number;
+  children: Array<BICsHierarchyBlock>;
+}
+
+export interface BICsHierarchyAllDataBlock {
+  children: Array<BICsHierarchyBlock>;
+}

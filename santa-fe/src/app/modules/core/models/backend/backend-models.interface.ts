@@ -633,3 +633,7 @@ export interface BEPortfolioStructuringDTO {
   tenorBreakdown: BEStructuringBreakdownBlock;
   overrides?: BEStructuringOverrideBlock;
 }
+
+export interface BEBICsHierarchyBlock {
+  [category: string]: BEBICsHierarchyBlock;
+}
