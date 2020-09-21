@@ -100,7 +100,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   public onClickSaveEdit(
     targetCategory: StructureSetTargetPanelEditRowBlock,
-    targetItem: StructureSetTargetPanelEditRowItemBlock
+    targetItem: StructureSetTargetPanelEditRowItemBlock,
+    skipImmediateRefresh?: boolean
   ) {
     targetItem.isFocused = false;
     targetItem.savedDisplayValue = targetItem.modifiedDisplayValue;
@@ -123,8 +124,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       targetItem,
       counterPartyItem
     );
-    this.calculateAllocation();
-    this.refreshPreview();
+    if (!skipImmediateRefresh) {
+      this.calculateAllocation();
+      this.refreshPreview();
+    }
   }
 
   public onClickChangeActiveMetric(newMetric: PortfolioMetricValues) {
@@ -168,9 +171,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         );
         this.onClickSaveEdit(
           eachUnlockedRow,
-          targetItem
+          targetItem,
+          true
         );
       });
+      this.calculateAllocation();
+      this.refreshPreview();
     }
   }
 
@@ -196,9 +202,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         );
         this.onClickSaveEdit(
           eachUnlockedRow,
-          targetItem
+          targetItem,
+          true
         );
       });
+      this.calculateAllocation();
+      this.refreshPreview();
     }
   }
 
@@ -311,13 +320,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     if (displayValue == '') {
       displayValue = '0'
     };
+    targetItem.modifiedDisplayValue = displayValue;
+    targetItem.isActive = true;
     if (targetItem.metric === this.constants.metric.cs01 && !targetItem.isPercent) {
-      targetItem.modifiedDisplayValue = displayValue;
-      targetItem.isActive = true;
       targetItem.modifiedUnderlineValue = parseFloat(displayValue)*1000;
+    } else if (targetItem.isPercent) {
+      targetItem.modifiedUnderlineValue = parseFloat(displayValue)/100;
     } else {
-      targetItem.modifiedDisplayValue = displayValue;
-      targetItem.isActive = true;
       targetItem.modifiedUnderlineValue = parseFloat(displayValue);
     }
   }
@@ -336,7 +345,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     if (metric === this.constants.metric.cs01) {
       if (this.state.totalUnallocatedCS01 > 0) {
         if (!!targetIsPercent) {
-          impliedValue = (targetUnderlineValue/100) * this.state.totalUnallocatedCS01;
+          impliedValue = targetUnderlineValue * this.state.totalUnallocatedCS01;
           counterPartyItem.modifiedUnderlineValue = impliedValue;
           counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue/1000, 0);
         } else {
@@ -351,7 +360,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     } else if (metric === this.constants.metric.creditLeverage) {
       if (this.state.totalUnallocatedCreditLeverage > 0) {
         if (!!targetIsPercent) {
-          impliedValue = (targetUnderlineValue/100) * this.state.totalUnallocatedCreditLeverage;
+          impliedValue = targetUnderlineValue * this.state.totalUnallocatedCreditLeverage;
           counterPartyItem.modifiedUnderlineValue = impliedValue;
           counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue, 2);
         } else {
@@ -372,6 +381,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     const breakdownTitle = this.state.targetBreakdown.data.title; 
     const breakdown = this.state.targetFund.data.children.find(breakdown => breakdown.data.title === breakdownTitle);
     const breakdownIndex = this.state.targetFund.data.children.indexOf(breakdown);
+    const breakdownDefinition = this.state.targetBreakdown.data.definition;
     const categoryDataList = [
       {
         name: PortfolioBreakdownGroupOptions.currency,
@@ -411,6 +421,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     })
     setTimeout(() => {
       const updatedPortfolioBreakdown = this.dtoService.formPortfolioBreakdown(false, rawData, definitionList);
+      updatedPortfolioBreakdown.data.definition = breakdownDefinition;
       updatedPortfolioBreakdown.data.title = breakdownTitle;
       this.state.targetFund.data.children[breakdownIndex] = updatedPortfolioBreakdown; 
       this.state.targetBreakdown = updatedPortfolioBreakdown;
@@ -433,7 +444,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     unlockedRowList.forEach((eachRow) => {
       const targetItem = isCs01 ? eachRow.targetCs01.percent : eachRow.targetCreditLeverage.percent;
       this.setTarget('0', targetItem);
-      this.onClickSaveEdit(eachRow, targetItem);
+      this.onClickSaveEdit(eachRow, targetItem, true);
     });
   }
 
