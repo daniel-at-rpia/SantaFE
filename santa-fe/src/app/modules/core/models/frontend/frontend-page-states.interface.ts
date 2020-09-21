@@ -18,6 +18,8 @@ import {
 import { AlertTypes, NavigationModule } from 'Core/constants/coreConstants.constant';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import { BICsHierarchyAllDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
+import { BEBICsHierarchyBlock } from 'Core/models/backend/backend-models.interface';
 
 export interface RootState {
   ownerInitial: string;
@@ -273,7 +275,15 @@ export interface TradeAlertPanelState {
 }
 
 export interface StructureState {
-
+  BICSData: {
+    formattedBICsHierarchy: BICsHierarchyAllDataBlock;
+    tierCounter: number;
+  }
+  fetchResult: {
+    fetchBICsHierarchyFailed: boolean;
+    fetchBICsHierarchyError: string;
+    fetchBICsHierarchy: BEBICsHierarchyBlock;
+  }
 }
 
 export interface StructureUtilityPanelState {

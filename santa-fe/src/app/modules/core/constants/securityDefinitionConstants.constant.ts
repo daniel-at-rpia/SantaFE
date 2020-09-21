@@ -64,7 +64,8 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     // '8Y',
     // '9Y',
     '10Y',
-    // '15Y','20Y','25Y',
+    // '15Y','25Y',
+    '20Y',
     '30Y',
     // '40Y','50Y'
   ];

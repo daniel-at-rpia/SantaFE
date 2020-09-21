@@ -16,6 +16,7 @@ import { TargetBar } from 'App/modules/structure/components/target-bar.component
 import { PortfolioBreakdown } from 'App/modules/structure/containers/portfolio-breakdown/portfolio-breakdown.container';
 import { StructureSetTargetPanel } from 'Structure/containers/structure-set-target-panel/structure-set-target-panel.container';
 import { CategoryContentListItem } from 'Structure/components/category-content-list-item.component';
+import { BICsHierarchyService } from 'Structure/services/BICsHierarchyService';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,9 @@ import { CategoryContentListItem } from 'Structure/components/category-content-l
     CoreModule,
     TradeModule,  // this is here because of move visualizer, TODO: move Move Visualizer to core module and remove this dependency
     FormModule
+  ],
+  providers: [
+    BICsHierarchyService
   ]
 })
 export class StructureModule { }

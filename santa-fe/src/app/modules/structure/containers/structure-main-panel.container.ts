@@ -16,7 +16,7 @@ import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 import { PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/frontend-models.interface';
 import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
-import { PayloadUpdatePortfolio } from 'App/modules/core/models/backend/backend-payloads.interface';
+import { PayloadUpdatePortfolio, PayloadGetPortfolioStructures } from 'App/modules/core/models/backend/backend-payloads.interface';
 
 @Component({
     selector: 'structure-main-panel',
@@ -187,9 +187,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
 
   private fetchFunds() {
     this.loadStencilFunds();
-    const payload = { // assumes current date if nothing is passed in
-      yyyyMMDD: ""
-    }
+    //If nothing is passed in, BE assumes current date
+    let payload: PayloadGetPortfolioStructures;
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioStructures, { req: 'POST' }, payload, false, false).pipe(
       first(),
