@@ -641,13 +641,15 @@ export class DTOService {
             number: 33,
             displayNumber: '33',
             broker: 'GS',
-            size: null
+            size: null,
+            isExecutable: false
           },
           offer: {
             number: 33,
             displayNumber: '33',
             broker: 'JPM',
-            size: null
+            size: null,
+            isExecutable: false
           }
         },
         style: {
@@ -670,7 +672,8 @@ export class DTOService {
           noTotalSkew: true,
           longEdgeState: false,
           bidIsStale: false,
-          askIsStale: false
+          askIsStale: false,
+          hasExecutableQuote: false
         }
       };
       return stencilObject;
@@ -679,7 +682,7 @@ export class DTOService {
       const backendTargetQuoteAttr = TriCoreDriverConfig[driverType]['backendTargetQuoteAttr'];
       if (!!BEdto && !!BEdto[backendTargetQuoteAttr]) {
         const rawData = BEdto[backendTargetQuoteAttr];
-        return this.populateQuantCompareObject(
+        return this.populateBestQuoteComparerObject(
           rawData,
           driverType,
           securityCard,
@@ -691,7 +694,7 @@ export class DTOService {
     }
   }
 
-  private populateQuantCompareObject(
+  private populateBestQuoteComparerObject(
     rawData: BEModels.BESingleBestQuoteDTO,
     driverType: string,
     securityCard: DTOs.SecurityDTO,
@@ -746,13 +749,15 @@ export class DTOService {
             number: !!bidNumber ? parseFloat(bidNumber) : null,
             displayNumber: bidNumber,  // not been used right now but could come in handy
             broker: bidDealer,
-            size: bidSize
+            size: bidSize,
+            isExecutable: rawData.bestBidQuoteCondition === 'A'
           },
           offer: {
             number: !!offerNumber ? parseFloat(offerNumber) : null,
             displayNumber: offerNumber,  // not been used right now but could come in handy
             broker: askDealer,
-            size: offerSize
+            size: offerSize,
+            isExecutable: rawData.bestAskQuoteCondition === 'A'
           }
         },
         style: {
@@ -775,7 +780,8 @@ export class DTOService {
           noTotalSkew: rawData.totalSkew === null,
           longEdgeState: (bidNumber && parseFloat(bidNumber).toString().length > 4) || (offerNumber && parseFloat(offerNumber).toString().length > 4),
           bidIsStale: bidIsStale,
-          askIsStale: askIsStale
+          askIsStale: askIsStale,
+          hasExecutableQuote: rawData.bestAskQuoteCondition === 'A' || rawData.bestBidQuoteCondition === 'A'
         }
       };
       return object;

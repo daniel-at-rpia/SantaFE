@@ -695,7 +695,7 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
   }
 }
 
-export const CompactSecuritySample: BESecurityDTO = PortfolioList.securityDtos.securityDtos[0].security;
+export const CompactSecuritySample: BESecurityDTO = PortfolioList.securityDtos.securityDtos['17163'].security;
 
 export const SeniorityLegendList: Array<BESecurityDTO> = [
   {

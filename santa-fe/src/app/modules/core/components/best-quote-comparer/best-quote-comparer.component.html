@@ -12,7 +12,10 @@
     'sat-bestQuoteComparer--noOfferState': !bestQuoteData.state.hasOffer,
     'sat-bestQuoteComparer--longEdgeState': bestQuoteData.state.longEdgeState,
     'sat-bestQuoteComparer--bidIsStaleState': bestQuoteData.state.bidIsStale,
-    'sat-bestQuoteComparer--askIsStaleState': bestQuoteData.state.askIsStale
+    'sat-bestQuoteComparer--askIsStaleState': bestQuoteData.state.askIsStale,
+    'sat-bestQuoteComparer--askIsExecutableState': bestQuoteData.data.offer.isExecutable,
+    'sat-bestQuoteComparer--bidIsExecutableState': bestQuoteData.data.bid.isExecutable,
+    'sat-bestQuoteComparer--hasExecutableQuoteState': bestQuoteData.state.hasExecutableQuote
   }">
   <section class="sat-bestQuoteComparer__base">
     <div class="sat-bestQuoteComparer__base-line"></div>
@@ -33,6 +36,7 @@
           }">
         </div>
       </div>
+      <div class="sat-bestQuoteComparer__content-driver-executableTag">exec</div>
     </div>
     <div class="sat-bestQuoteComparer__content-driver sat-bestQuoteComparer__content-driver--right">
       <div class="sat-bestQuoteComparer__content-driver-edge">
@@ -48,6 +52,7 @@
           }">
         </div>
       </div>
+      <div class="sat-bestQuoteComparer__content-driver-executableTag">exec</div>
     </div>
   </section>
   <section class="sat-bestQuoteComparer__crossing">

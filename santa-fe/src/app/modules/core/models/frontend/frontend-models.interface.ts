@@ -276,12 +276,14 @@ export interface BestQuoteComparerDTO extends BasicDTOStructure {
       displayNumber: string;
       broker: string;
       size: number;
+      isExecutable: boolean;
     },
     offer: {
       number: number;
       displayNumber: string;
       broker: string;
       size: number;
+      isExecutable: boolean;
     }
   },
   style: {
@@ -305,6 +307,7 @@ export interface BestQuoteComparerDTO extends BasicDTOStructure {
     longEdgeState: boolean;
     bidIsStale: boolean;
     askIsStale: boolean;
+    hasExecutableQuote: boolean;
   }
 }
 
