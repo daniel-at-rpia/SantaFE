@@ -821,7 +821,6 @@ export class SantaTable implements OnInit, OnChanges {
             !eachOldQuote.state.hasBid &&
             this.isOldQuoteRecentEnough(targetAxeBid, eachOldQuote)
           ) {
-            console.log('test, carry bid axe on ', eachOldQuote, 'form',targetAxeBid);
             eachOldQuote.data.bid = this.utilityService.deepCopy(targetAxeBid.data.bid);
             eachOldQuote.state.hasBid = true;
             eachOldQuote.state.isBestAxeBid = targetAxeBid.state.isBestAxeBid;
@@ -841,7 +840,6 @@ export class SantaTable implements OnInit, OnChanges {
             !eachOldQuote.state.hasAsk &&
             this.isOldQuoteRecentEnough(targetAxeAsk, eachOldQuote)
           ) {
-            console.log('test, carry ask axe on ', eachOldQuote, 'from', targetAxeAsk);
             eachOldQuote.data.ask = this.utilityService.deepCopy(targetAxeAsk.data.ask);
             eachOldQuote.state.hasAsk = true;
             eachOldQuote.state.isBestAxeOffer = targetAxeAsk.state.isBestAxeOffer;
