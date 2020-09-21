@@ -445,6 +445,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       const targetItem = isCs01 ? eachRow.targetCs01.percent : eachRow.targetCreditLeverage.percent;
       this.setTarget('0', targetItem);
       this.onClickSaveEdit(eachRow, targetItem, true);
+      this.calculateAllocation();
     });
   }
 
