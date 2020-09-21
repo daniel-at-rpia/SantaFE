@@ -104,7 +104,7 @@ export class StructurePage implements OnInit, OnDestroy {
   private iterateBICsData(data: BEBICsHierarchyBlock, parent: BICsHierarchyAllDataBlock | BICsHierarchyBlock, counter: number) {
     if (!data) return;
     for (let category in data) {
-      if (!!data[category] && !!category) {
+      if (!!category) {
         const BICsData: BICsHierarchyBlock = {
           name: category,
           tier: counter,
