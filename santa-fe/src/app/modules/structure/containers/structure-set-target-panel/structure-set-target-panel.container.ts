@@ -101,7 +101,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   public onClickSaveEdit(
     targetCategory: StructureSetTargetPanelEditRowBlock,
     targetItem: StructureSetTargetPanelEditRowItemBlock,
-    skipImmediateRefresh?: boolean
+    notOneOffEdit?: boolean
   ) {
     targetItem.isFocused = false;
     targetItem.savedDisplayValue = targetItem.modifiedDisplayValue;
@@ -124,7 +124,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       targetItem,
       counterPartyItem
     );
-    if (!skipImmediateRefresh) {
+    if (!notOneOffEdit) {
+      targetCategory.isLocked = true;
       this.calculateAllocation();
       this.refreshPreview();
     }

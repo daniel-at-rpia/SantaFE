@@ -336,12 +336,6 @@ $structureSetTargetPanel_edit_column_size: 14rem;
           color: $font_color_inverse;
         }
       }
-      &__column {
-        cursor: not-allowed;
-        &-item {
-          pointer-events: none;
-        }
-      }
     }
   }
 }
