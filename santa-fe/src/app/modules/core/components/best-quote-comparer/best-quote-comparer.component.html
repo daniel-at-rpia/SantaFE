@@ -1,0 +1,97 @@
+<article
+  [ngClass]="{
+    'sat-bestQuoteComparer': true,
+    'sat-bestQuoteComparer--axeSkewEnabledState': bestQuoteData.state.axeSkewEnabled,
+    'sat-bestQuoteComparer--totalSkewEnabledState': bestQuoteData.state.totalSkewEnabled,
+    'sat-bestQuoteComparer--noAxeSkewState': bestQuoteData.state.noAxeSkew,
+    'sat-bestQuoteComparer--noTotalSkewState': bestQuoteData.state.noTotalSkew,
+    'sat-bestQuoteComparer--crossedState': bestQuoteData.state.isCrossed,
+    'sat-bestQuoteComparer--crossedStateTier2': bestQuoteData.state.isCrossedTier2,
+    'sat-bestQuoteComparer--stencilState': bestQuoteData.state.isStencil,
+    'sat-bestQuoteComparer--noBidState': !bestQuoteData.state.hasBid,
+    'sat-bestQuoteComparer--noOfferState': !bestQuoteData.state.hasOffer,
+    'sat-bestQuoteComparer--longEdgeState': bestQuoteData.state.longEdgeState,
+    'sat-bestQuoteComparer--bidIsStaleState': bestQuoteData.state.bidIsStale,
+    'sat-bestQuoteComparer--askIsStaleState': bestQuoteData.state.askIsStale
+  }">
+  <section class="sat-bestQuoteComparer__base">
+    <div class="sat-bestQuoteComparer__base-line"></div>
+    <div class="sat-bestQuoteComparer__base-background"></div>
+  </section>
+  <section class="sat-bestQuoteComparer__content">
+    <div class="sat-bestQuoteComparer__content-driver sat-bestQuoteComparer__content-driver--left">
+      <div class="sat-bestQuoteComparer__content-driver-edge">
+        <span class="sat-bestQuoteComparer__content-driver-edge-number">{{bestQuoteData.data.bid.number}}</span>
+        <span class="sat-bestQuoteComparer__content-driver-edge-broker">{{bestQuoteData.data.bid.broker}}</span>
+      </div>
+      <div class="sat-bestQuoteComparer__content-driver-line">
+        <div
+          class="sat-bestQuoteComparer__content-driver-line-content"
+          [ngStyle]="{
+            'width': bestQuoteData.style.lineWidth + '%',
+            'height': bestQuoteData.style.bidLineHeight + '%'
+          }">
+        </div>
+      </div>
+    </div>
+    <div class="sat-bestQuoteComparer__content-driver sat-bestQuoteComparer__content-driver--right">
+      <div class="sat-bestQuoteComparer__content-driver-edge">
+        <span class="sat-bestQuoteComparer__content-driver-edge-number">{{bestQuoteData.data.offer.number}}</span>
+        <span class="sat-bestQuoteComparer__content-driver-edge-broker">{{bestQuoteData.data.offer.broker}}</span>
+      </div>
+      <div class="sat-bestQuoteComparer__content-driver-line">
+        <div
+          class="sat-bestQuoteComparer__content-driver-line-content"
+          [ngStyle]="{
+            'width': bestQuoteData.style.lineWidth + '%',
+            'height': bestQuoteData.style.offerLineHeight + '%'
+          }">
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="sat-bestQuoteComparer__crossing">
+    <div class="sat-bestQuoteComparer__crossing-content">
+      <span class="sat-bestQuoteComparer__crossing-content-value">{{-bestQuoteData.data.delta}}</span>
+    </div>
+  </section>
+  <section class="sat-bestQuoteComparer__mid">
+    <div class="sat-bestQuoteComparer__mid-content">
+      <span class="sat-bestQuoteComparer__mid-content-value">{{bestQuoteData.data.mid}}</span>
+    </div>
+  </section>
+  <section class="sat-bestQuoteComparer__skew sat-bestQuoteComparer__skew--total">
+    <div
+      class="sat-bestQuoteComparer__skew-leftSpacing"
+      [ngStyle]="{
+        'flex-basis': bestQuoteData.style.totalSkew + '%'
+      }"></div>
+    <div class="sat-bestQuoteComparer__skew-indicator">
+      <i class="sat-bestQuoteComparer__skew-indicator-icon fas fa-map-marker"></i>
+      <div class="sat-bestQuoteComparer__skew-indicator-line"></div>
+    </div>
+    <div
+      class="sat-bestQuoteComparer__skew-rightSpacing"
+      [ngStyle]="{
+        'flex-basis': 100 - bestQuoteData.style.totalSkew + '%'
+      }"
+    ></div>
+  </section>
+  <section class="sat-bestQuoteComparer__skew sat-bestQuoteComparer__skew--axe">
+    <div
+      class="sat-bestQuoteComparer__skew-leftSpacing"
+      [ngStyle]="{
+        'flex-basis': bestQuoteData.style.axeSkew + '%'
+      }"></div>
+    <div class="sat-bestQuoteComparer__skew-indicator">
+      <i class="sat-bestQuoteComparer__skew-indicator-icon fas fa-map-marker"></i>
+      <div class="sat-bestQuoteComparer__skew-indicator-line"></div>
+    </div>
+    <div
+      class="sat-bestQuoteComparer__skew-rightSpacing"
+      [ngStyle]="{
+        'flex-basis': 100 - bestQuoteData.style.axeSkew + '%'
+      }"
+    ></div>
+  </section>
+</article>

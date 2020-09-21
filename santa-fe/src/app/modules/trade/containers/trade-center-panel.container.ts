@@ -13,7 +13,7 @@
       SecurityDTO,
       SecurityTableHeaderDTO,
       SecurityTableRowDTO,
-      QuantComparerDTO,
+      BestQuoteComparerDTO,
       SearchShortcutDTO,
       AlertDTO,
       SecurityTableDTO,
@@ -439,8 +439,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       const newMainTableRow = this.dtoService.formSecurityTableRowObject(stencilSecurity, null, false);
       stencilMainTableHeaderBuffer.forEach((eachHeader) => {
         if (!eachHeader.state.isSecurityCardVariant) {
-          if (eachHeader.state.isQuantVariant) {
-            const bestQuoteStencil = this.dtoService.formQuantComparerObject(true, this.state.filters.quickFilters.driverType, null, null, false);
+          if (eachHeader.state.isBestQuoteVariant) {
+            const bestQuoteStencil = this.dtoService.formBestQuoteComparerObject(true, this.state.filters.quickFilters.driverType, null, null, false);
             newMainTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, eachHeader, bestQuoteStencil, null));
           } else {
             newMainTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, eachHeader, null, null));
@@ -503,7 +503,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       this.onSelectSecurityForAnalysis.bind(this),
       this.onSelectSecurityForAlertConfig.bind(this)
     );
-    this.calculateQuantComparerWidthAndHeight();
+    this.calculateBestQuoteComparerWidthAndHeight();
     this.state.fetchResult.mainTable.fetchComplete = true;
     this.updateStage(this.constants.securityTableFinalStage, this.state.fetchResult.mainTable, this.state.table.dto);
   }
@@ -656,7 +656,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     return includeFlag;
   }
 
-  private calculateQuantComparerWidthAndHeight() {
+  private calculateBestQuoteComparerWidthAndHeight() {
     const bestSpreadList = [];
     const bestPriceList = [];
     const bestYieldList = [];
@@ -675,9 +675,9 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       !!bestYieldQuote && bestYieldList.push(bestYieldQuote);
       !!bestYieldQuote && bestYieldList.push(bestAxeYieldQuote);
     });
-    this.utilityService.calculateQuantComparerWidthAndHeightPerSet(bestSpreadList);
-    this.utilityService.calculateQuantComparerWidthAndHeightPerSet(bestYieldList);
-    this.utilityService.calculateQuantComparerWidthAndHeightPerSet(bestPriceList);
+    this.utilityService.calculateBestQuoteComparerWidthAndHeightPerSet(bestSpreadList);
+    this.utilityService.calculateBestQuoteComparerWidthAndHeightPerSet(bestYieldList);
+    this.utilityService.calculateBestQuoteComparerWidthAndHeightPerSet(bestPriceList);
   }
 
   private processSecurityIDsFromAnalysis(securityIDList: any[]) {

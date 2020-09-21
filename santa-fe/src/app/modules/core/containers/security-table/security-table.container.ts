@@ -57,7 +57,7 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   public onClickHeaderCTA(targetHeader: SecurityTableHeaderDTO) {
-    if (targetHeader.state.isQuantVariant) {
+    if (targetHeader.state.isBestQuoteVariant) {
       this.tableData.state.selectedHeader = this.tableData.state.selectedHeader && this.tableData.state.selectedHeader.data.displayLabel === targetHeader.data.displayLabel ? null : targetHeader;
     } else {
       this.onClickSortBy(targetHeader);
@@ -122,7 +122,7 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   public onClickToggleQuantAxeSkew(targetHeader: SecurityTableHeaderDTO) {
-    if (targetHeader.state.isQuantVariant) {
+    if (targetHeader.state.isBestQuoteVariant) {
       targetHeader.state.isAxeSkewEnabled = !targetHeader.state.isAxeSkewEnabled;
       if (this.tableData.state.loadedContentStage >= 2) {
         this.applySkewToggleToRows(targetHeader, true);
@@ -132,7 +132,7 @@ export class SecurityTable implements OnInit, OnChanges {
   }
 
   public onClickToggleQuantSkew(targetHeader: SecurityTableHeaderDTO, isAxe: boolean) {
-    if (targetHeader.state.isQuantVariant) {
+    if (targetHeader.state.isBestQuoteVariant) {
       if (isAxe) {
         targetHeader.state.isAxeSkewEnabled = !targetHeader.state.isAxeSkewEnabled;
       } else {
@@ -170,7 +170,7 @@ export class SecurityTable implements OnInit, OnChanges {
 
   private loadTableRowsUponHeaderChange() {
     this.tableData.data.headers.forEach((eachHeader, index) => {
-      if (!eachHeader.state.isSecurityCardVariant && !eachHeader.state.isQuantVariant) {
+      if (!eachHeader.state.isSecurityCardVariant && !eachHeader.state.isBestQuoteVariant) {
         this.tableData.data.rows.forEach((eachRow) => {
           const targetCell = eachRow.data.cells[index-1];
           if (!!targetCell) {
@@ -201,7 +201,7 @@ export class SecurityTable implements OnInit, OnChanges {
   private applySkewToggleToRows(targetHeader: SecurityTableHeaderDTO, isAxe: boolean) {
     const columnIndex = this.tableData.data.headers.indexOf(targetHeader) - 1;
     this.tableData.data.rows.forEach((eachRow) => {
-      const targetQuant = eachRow.data.cells[columnIndex].data.quantComparerDTO;
+      const targetQuant = eachRow.data.cells[columnIndex].data.bestQuoteComparerDTO;
       if (!!targetQuant) {
         if (isAxe) {
           targetQuant.state.axeSkewEnabled = targetHeader.state.isAxeSkewEnabled;

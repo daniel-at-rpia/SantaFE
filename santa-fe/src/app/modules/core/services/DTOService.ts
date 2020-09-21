@@ -624,15 +624,15 @@ export class DTOService {
     return object;
   }
 
-  public formQuantComparerObject(
+  public formBestQuoteComparerObject(
     isStencil: boolean,
     quantMetricType: string,
     BEdto: BEModels.BEBestQuoteDTO,
     securityCard: DTOs.SecurityDTO,
     axeOnly: boolean
-  ): DTOs.QuantComparerDTO {
+  ): DTOs.BestQuoteComparerDTO {
     if (isStencil) {
-      const stencilObject: DTOs.QuantComparerDTO = {
+      const stencilObject: DTOs.BestQuoteComparerDTO = {
         data: {
           driverType: 'Spread',
           delta: 0,
@@ -696,7 +696,7 @@ export class DTOService {
     driverType: string,
     securityCard: DTOs.SecurityDTO,
     axeOnly: boolean
-  ): DTOs.QuantComparerDTO {
+  ): DTOs.BestQuoteComparerDTO {
     const bidQuantity = axeOnly ? rawData.totalActiveAxeBidQuantity : rawData.totalActiveBidQuantity;
     const askQuantity = axeOnly ? rawData.totalActiveAxeAskQuantity : rawData.totalActiveAskQuantity;
     const bidValue = axeOnly ? rawData.bidAxeQuoteValue : rawData.bidQuoteValue;
@@ -737,7 +737,7 @@ export class DTOService {
         delta = 0;
         mid = 0;
       }
-      const object: DTOs.QuantComparerDTO = {
+      const object: DTOs.BestQuoteComparerDTO = {
         data: {
           driverType: driverType,
           delta: delta,
@@ -841,7 +841,7 @@ export class DTOService {
         activePortfolios: activePortfolios || []
       },
       state: {
-        isQuantVariant: !!stub.content.isForQuantComparer,
+        isBestQuoteVariant: !!stub.content.isForBestQuoteComparer,
         isSecurityCardVariant: !!stub.content.isForSecurityCard,
         isCustomComponent: !!stub.content.isCustomComponent,
         isAxeSkewEnabled: false,
@@ -918,19 +918,19 @@ export class DTOService {
     isStencil: boolean,
     textData: string,
     targetHeader: DTOs.SecurityTableHeaderDTO,
-    quantComparerDTO: DTOs.QuantComparerDTO,
+    bestQuoteComparerDTO: DTOs.BestQuoteComparerDTO,
     alertDTO: DTOs.AlertDTO
   ): DTOs.SecurityTableCellDTO {
     const object: DTOs.SecurityTableCellDTO = {
       data: {
         textData: !!isStencil ? 'PLACE' : textData,
-        quantComparerDTO: quantComparerDTO,
+        bestQuoteComparerDTO: bestQuoteComparerDTO,
         alertSideDTO: null,
         alertStatusDTO: null
       },
       state: {
-        isQuantVariant: targetHeader.state.isQuantVariant,
-        quantComparerUnavail: false,
+        isBestQuoteVariant: targetHeader.state.isBestQuoteVariant,
+        bestQuoteComparerUnavail: false,
         isStencil: isStencil
       }
     };

@@ -1,11 +1,11 @@
 @import "global.scss";
 @import "modules/trade/trade.scss";
 
-$quantComparer_edge_width: 2.7rem;
-$quantComparer_edge_width_long: 4.15rem;
-$quantComparer_min_height: 2.5rem;
-.sat-quantComparer {
-  $quantComparerBlockName: &;
+$bestQuoteComparer_edge_width: 2.7rem;
+$bestQuoteComparer_edge_width_long: 4.15rem;
+$bestQuoteComparer_min_height: 2.5rem;
+.sat-bestQuoteComparer {
+  $bestQuoteComparerBlockName: &;
   @include mix_fixed_div(relative, $z_index_base_item);
   flex: 1 1 auto;
   display: flex;
@@ -20,11 +20,11 @@ $quantComparer_min_height: 2.5rem;
     &-line {
       @include mix_fixed_div(absolute, $z_index_base_item_lift);
       @include mix_border_generator(0 0 $typical_border_width 0);
-      @include mix_calculate(width, 100%, $quantComparer_edge_width * 2, '-');
+      @include mix_calculate(width, 100%, $bestQuoteComparer_edge_width * 2, '-');
       display: none;  // changed the design to not show the line for now
       height: 50%;
-      margin-left: $quantComparer_edge_width;
-      margin-right: $quantComparer_edge_width;
+      margin-left: $bestQuoteComparer_edge_width;
+      margin-right: $bestQuoteComparer_edge_width;
     }
     &-background {
       @include mix_fixed_div(absolute, $z_index_base_item);
@@ -53,7 +53,7 @@ $quantComparer_min_height: 2.5rem;
         flex-direction: column;
         justify-content: space-between;
         height: 100%;
-        width: $quantComparer_edge_width;
+        width: $bestQuoteComparer_edge_width;
         padding: $spacing_xx_small;
         direction: ltr;
         &-number {
@@ -79,7 +79,7 @@ $quantComparer_min_height: 2.5rem;
         }
       }
       &--left {
-        #{$quantComparerBlockName}__content-driver {
+        #{$bestQuoteComparerBlockName}__content-driver {
           &-edge {
             background-color: $color_quant_left_background;
             margin-right: -$spacing_xx_small;  // small tweak that hides the space between edge and line cuzed by edge's border-radius
@@ -100,7 +100,7 @@ $quantComparer_min_height: 2.5rem;
       }
       &--right {
         direction: rtl;
-        #{$quantComparerBlockName}__content-driver {
+        #{$bestQuoteComparerBlockName}__content-driver {
           &-edge {
             background-color: $color_quant_right_background;
             margin-left: -$spacing_xx_small;
@@ -150,7 +150,7 @@ $quantComparer_min_height: 2.5rem;
     width: 100%;
     &-leftSpacing {
       flex: 0 1 50%;
-      margin-left: $quantComparer_edge_width;
+      margin-left: $bestQuoteComparer_edge_width;
     }
     &-indicator {
       flex: 0 0 auto;
@@ -167,10 +167,10 @@ $quantComparer_min_height: 2.5rem;
     }
     &-rightSpacing {
       flex: 0 1 50%;
-      margin-right: $quantComparer_edge_width;
+      margin-right: $bestQuoteComparer_edge_width;
     }
     &--axe {
-      #{$quantComparerBlockName} {
+      #{$bestQuoteComparerBlockName} {
         &__skew {
           &-indicator {
             &-icon {
@@ -184,7 +184,7 @@ $quantComparer_min_height: 2.5rem;
       }
     }
     &--total {
-      #{$quantComparerBlockName} {
+      #{$bestQuoteComparerBlockName} {
         &__skew {
           &-indicator {
             &-icon {
@@ -220,44 +220,44 @@ $quantComparer_min_height: 2.5rem;
     }
   }
   &--axeSkewEnabledState {
-    #{$quantComparerBlockName} {
+    #{$bestQuoteComparerBlockName} {
       &__skew--axe {
         display: flex;
       }
     }
   }
   &--totalSkewEnabledState {
-    #{$quantComparerBlockName} {
+    #{$bestQuoteComparerBlockName} {
       &__skew--total {
         display: flex;
       }
     }
   }
   &--noAxeSkewState {
-    #{$quantComparerBlockName} {
+    #{$bestQuoteComparerBlockName} {
       &__skew--axe {
         display: none;
       }
     }
   }
   &--noTotalSkewState {
-    #{$quantComparerBlockName} {
+    #{$bestQuoteComparerBlockName} {
       &__skew--total {
         display: none;
       }
     }
   }
   &--longEdgeState {
-    #{$quantComparerBlockName} {
+    #{$bestQuoteComparerBlockName} {
       &__content {
         &-driver-edge {
-          width: $quantComparer_edge_width_long;
+          width: $bestQuoteComparer_edge_width_long;
         }
       }
     }
   }
   &--crossedState {
-    #{$quantComparerBlockName} {
+    #{$bestQuoteComparerBlockName} {
       &__crossing {
         display: flex;
       }
@@ -269,7 +269,7 @@ $quantComparer_min_height: 2.5rem;
     }
   }
   &--crossedStateTier2 {
-    #{$quantComparerBlockName} {
+    #{$bestQuoteComparerBlockName} {
       &__base {
         &-background {
           display: block;
@@ -302,7 +302,7 @@ $quantComparer_min_height: 2.5rem;
     }
   }
   &--bidIsStaleState {
-    #{$quantComparerBlockName} {
+    #{$bestQuoteComparerBlockName} {
       &__base {
         &-background {
           background-color: inherit;
@@ -310,7 +310,7 @@ $quantComparer_min_height: 2.5rem;
       }
       &__content {
         &-driver--left {
-          #{$quantComparerBlockName} {
+          #{$bestQuoteComparerBlockName} {
             &__content-driver {
               &-edge {
                 background-color: $color_gray_4;
@@ -345,7 +345,7 @@ $quantComparer_min_height: 2.5rem;
     }
   }
   &--askIsStaleState {
-    #{$quantComparerBlockName} {
+    #{$bestQuoteComparerBlockName} {
       &__base {
         &-background {
           background-color: inherit;
@@ -353,7 +353,7 @@ $quantComparer_min_height: 2.5rem;
       }
       &__content {
         &-driver--right {
-          #{$quantComparerBlockName} {
+          #{$bestQuoteComparerBlockName} {
             &__content-driver {
               &-edge {
                 background-color: $color_gray_4;
@@ -383,7 +383,7 @@ $quantComparer_min_height: 2.5rem;
     }
   }
   &--noBidState {
-    #{$quantComparerBlockName} {
+    #{$bestQuoteComparerBlockName} {
       &__content {
         &-driver--left {
           visibility: hidden;
@@ -398,7 +398,7 @@ $quantComparer_min_height: 2.5rem;
     }
   }
   &--noOfferState {
-    #{$quantComparerBlockName} {
+    #{$bestQuoteComparerBlockName} {
       &__content {
         &-driver--right {
           visibility: hidden;
@@ -413,7 +413,7 @@ $quantComparer_min_height: 2.5rem;
     }
   }
   &--stencilState {
-    #{$quantComparerBlockName} {
+    #{$bestQuoteComparerBlockName} {
       &__content {
         &-driver {
           &-edge {

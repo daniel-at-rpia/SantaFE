@@ -507,9 +507,9 @@ export class SantaTable implements OnInit, OnChanges {
       const securityB = rowB.data.security;
       let valueA;
       let valueB;
-      if (targetHeader.state.isQuantVariant) {
-        const qA = rowA.data.cells[0].data.quantComparerDTO;
-        const qB = rowB.data.cells[0].data.quantComparerDTO;
+      if (targetHeader.state.isBestQuoteVariant) {
+        const qA = rowA.data.cells[0].data.bestQuoteComparerDTO;
+        const qB = rowB.data.cells[0].data.bestQuoteComparerDTO;
         valueA = !!qA ? qA.data.delta : null;
         valueB = !!qB ? qB.data.delta : null;
         if (!!securityA && !!securityB && !securityA.state.isStencil && !securityB.state.isStencil) {

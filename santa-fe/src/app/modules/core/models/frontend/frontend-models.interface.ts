@@ -266,7 +266,7 @@ export interface SearchShortcutDTO extends BasicDTOStructure {
   }
 }
 
-export interface QuantComparerDTO extends BasicDTOStructure {
+export interface BestQuoteComparerDTO extends BasicDTOStructure {
   data: {
     driverType: string;
     delta: number;
@@ -357,7 +357,7 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
   },
   state: {
     isSecurityCardVariant: boolean;
-    isQuantVariant: boolean;
+    isBestQuoteVariant: boolean;
     isCustomComponent: boolean;
     isAxeSkewEnabled: boolean;
     istotalSkewEnabled: boolean;
@@ -374,14 +374,14 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
     quoteHeaders: Array<QuoteMetricBlock>;
     bestQuotes: {
       combined: {
-        bestSpreadQuote: QuantComparerDTO;
-        bestYieldQuote: QuantComparerDTO;
-        bestPriceQuote: QuantComparerDTO;
+        bestSpreadQuote: BestQuoteComparerDTO;
+        bestYieldQuote: BestQuoteComparerDTO;
+        bestPriceQuote: BestQuoteComparerDTO;
       }
       axe: {
-        bestSpreadQuote: QuantComparerDTO;
-        bestYieldQuote: QuantComparerDTO;
-        bestPriceQuote: QuantComparerDTO;
+        bestSpreadQuote: BestQuoteComparerDTO;
+        bestYieldQuote: BestQuoteComparerDTO;
+        bestPriceQuote: BestQuoteComparerDTO;
       }
     }
     alert: AlertDTO;
@@ -405,13 +405,13 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
 export interface SecurityTableCellDTO extends BasicDTOStructure {
   data: {
     textData: string;
-    quantComparerDTO: QuantComparerDTO;
+    bestQuoteComparerDTO: BestQuoteComparerDTO;
     alertSideDTO: SantaTableAlertSideCellDTO;
     alertStatusDTO: SantaTableAlertStatusCellDTO;
   },
   state: {
-    isQuantVariant: boolean;
-    quantComparerUnavail: boolean;
+    isBestQuoteVariant: boolean;
+    bestQuoteComparerUnavail: boolean;
     isStencil: boolean;
   }
 }
