@@ -292,22 +292,22 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     const categoryDataList = [
       {
         name: PortfolioBreakdownGroupOptions.currency,
-        rawData: this.state.targetFund.data.originalBEData.ccyBreakdown,
+        rawData: this.state.targetFund.data.originalBEData.breakdowns.Ccy,
         definitionList: FilterOptionsCurrency
       }, 
       {
         name: PortfolioBreakdownGroupOptions.tenor,
-        rawData: this.state.targetFund.data.originalBEData.tenorBreakdown,
+        rawData: this.state.targetFund.data.originalBEData.breakdowns.Tenor,
         definitionList: FilterOptionsTenor
       },
       {
         name: PortfolioBreakdownGroupOptions.rating,
-        rawData: this.state.targetFund.data.originalBEData.ratingBreakdown,
+        rawData: this.state.targetFund.data.originalBEData.breakdowns.RatingNoNotch,
         definitionList: FilterOptionsRating
       },
       {
         name: PortfolioBreakdownGroupOptions.bics,
-        rawData: this.state.targetFund.data.originalBEData.bicsLevel1Breakdown,
+        rawData: this.state.targetFund.data.originalBEData.breakdowns.BicsLevel1,
         definitionList: null
       }
     ];
