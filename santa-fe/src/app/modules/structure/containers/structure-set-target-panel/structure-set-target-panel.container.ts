@@ -332,7 +332,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.state.targetFund.data.children[breakdownIndex] = updatedPortfolioBreakdown; 
       this.state.targetBreakdown = updatedPortfolioBreakdown;
       this.state.targetBreakdown.state.isPreviewVariant = true;
-      this.loadEditRows();
+      this.state.editRowList.forEach(rowList => {
+        rowList.targetBlockFromBreakdown = this.state.activeMetric === PortfolioMetricValues.cs01 ? this.state.targetBreakdown.data.rawCs01CategoryList.find(breakdown => breakdown.category === rowList.rowTitle) : this.state.targetBreakdown.data.rawLeverageCategoryList.find(breakdown => breakdown.category === rowList.rowTitle);
+      });
       this.state.targetBreakdown.state.isDisplayingCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
       this.state.targetBreakdown.state.isStencil = false;
       this.state.targetBreakdown.data.displayCategoryList.forEach(category => {
