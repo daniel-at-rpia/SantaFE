@@ -114,7 +114,7 @@
                 [placeholder]="''"
                 [isNumeric]="true"
                 [isGrayedOut]="!eachCategory.targetCs01.level.isActive"
-                [isDisabled]="eachCategory.isLocked"
+                [isDisabled]="eachCategory.isLocked || state.activeMetric !== constants.metric.cs01"
                 (onInputChange)="onValueChange($event, eachCategory.targetCs01.level)"
                 (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCs01.level)">
               </santa-input>
@@ -129,7 +129,7 @@
                 [placeholder]="''"
                 [isNumeric]="true"
                 [isGrayedOut]="!eachCategory.targetCs01.percent.isActive"
-                [isDisabled]="eachCategory.isLocked"
+                [isDisabled]="eachCategory.isLocked || state.activeMetric !== constants.metric.cs01"
                 (onInputChange)="onValueChange($event, eachCategory.targetCs01.percent)"
                 (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCs01.percent)">
               </santa-input>
@@ -147,7 +147,7 @@
                 [placeholder]="''"
                 [isNumeric]="true"
                 [isGrayedOut]="!eachCategory.targetCreditLeverage.level.isActive"
-                [isDisabled]="eachCategory.isLocked"
+                [isDisabled]="eachCategory.isLocked || state.activeMetric !== constants.metric.creditLeverage"
                 (onInputChange)="onValueChange($event, eachCategory.targetCreditLeverage.level)"
                 (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCreditLeverage.level)">
               </santa-input>
@@ -162,7 +162,7 @@
                 [placeholder]="''"
                 [isNumeric]="true"
                 [isGrayedOut]="!eachCategory.targetCreditLeverage.percent.isActive"
-                [isDisabled]="eachCategory.isLocked"
+                [isDisabled]="eachCategory.isLocked || state.activeMetric !== constants.metric.creditLeverage"
                 (onInputChange)="onValueChange($event, eachCategory.targetCreditLeverage.percent)"
                 (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCreditLeverage.percent)">
               </santa-input>
