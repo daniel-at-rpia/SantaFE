@@ -33,15 +33,19 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
     &-group {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-end;
       margin-bottom: $spacing_x_small;
       flex: 0 0 100%;
+      padding-right: $fundStructuring_setTarget_backgroundIcon_gutter;
       &-label,
       &-input {
         margin-right: $spacing_x_small;
       }
       &-input {
         width: 5rem;
+      }
+      &:last-child {
+        padding-right: $fundStructuring_setTarget_backgroundIcon_gutter + .5rem;
       }
     }
     &-message {
@@ -58,7 +62,7 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
     &-backgroundIcon {
       @include mix_fixed_div(absolute, $z_index_base_item);
       @include mix_alive('light');
-      left: $fundStructuring_setTarget_backgroundIcon_gutter;
+      left: $fundStructuring_setTarget_backgroundIcon_gutter* 2;
       top: $fundStructuring_setTarget_backgroundIcon_gutter;
       font-size: $funtStructuring_setTarget_backgroundIcon_size;
       color: $color_gray_6;
