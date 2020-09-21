@@ -598,7 +598,7 @@ export interface BEStructuringOverrideBlock {
   portfolioId: number;
   indexId: number;
   bucket: {
-    [property: string]: string;
+    [property: string]: Array<string>;
   }
   breakdown: BEMetricBreakdowns;
 }
@@ -637,5 +637,5 @@ export interface BEPortfolioStructuringDTO {
     RatingNoNotch: BEStructuringBreakdownBlock;
     Tenor: BEStructuringBreakdownBlock;
   }
-  overrides?: BEStructuringOverrideBlock;
+  overrides?: Array<BEStructuringOverrideBlock>;
 }
