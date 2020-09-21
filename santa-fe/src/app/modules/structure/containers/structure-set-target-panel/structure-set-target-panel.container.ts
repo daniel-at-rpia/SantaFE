@@ -10,7 +10,12 @@ import { UtilityService } from 'Core/services/UtilityService';
 import { selectSetTargetTransferPack } from 'Structure/selectors/structure.selectors';
 import { StructureSetTargetOverlayTransferPack } from 'FEModels/frontend-adhoc-packages.interface';
 import { StructureSetTargetPanelEditRowBlock, StructureSetTargetPanelEditRowItemBlock } from 'FEModels/frontend-blocks.interface';
-import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import { PortfolioBreakdownGroupOptions, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import {
+  FilterOptionsCurrency,
+  FilterOptionsRating,
+  FilterOptionsTenor
+} from 'Core/constants/securityDefinitionConstants.constant';
 
 @Component({
   selector: 'structure-set-target-panel',
@@ -119,7 +124,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       counterPartyItem
     );
     this.calculateAllocation();
-    this.applyChangeToPreview();
+    this.refreshPreview();
   }
 
   public onClickChangeActiveMetric(newMetric: PortfolioMetricValues) {
@@ -127,7 +132,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.state.activeMetric = newMetric;
       this.state.targetFund.data.cs01TargetBar.state.isInactiveMetric = !this.state.targetFund.data.cs01TargetBar.state.isInactiveMetric;
       this.state.targetFund.data.creditLeverageTargetBar.state.isInactiveMetric = !this.state.targetFund.data.creditLeverageTargetBar.state.isInactiveMetric;
-      this.applyChangeToPreview();
+      this.refreshPreview();
     }
   }
 
@@ -363,8 +368,60 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     counterPartyItem.savedUnderlineValue = counterPartyItem.modifiedUnderlineValue;
   }
 
-  private applyChangeToPreview() {
-
+  private refreshPreview() {
+    const breakdownTitle = this.state.targetBreakdown.data.title; 
+    const breakdown = this.state.targetFund.data.children.find(breakdown => breakdown.data.title === breakdownTitle);
+    const breakdownIndex = this.state.targetFund.data.children.indexOf(breakdown);
+    const categoryDataList = [
+      {
+        name: PortfolioBreakdownGroupOptions.currency,
+        rawData: this.state.targetFund.data.originalBEData.ccyBreakdown,
+        definitionList: FilterOptionsCurrency
+      }, 
+      {
+        name: PortfolioBreakdownGroupOptions.tenor,
+        rawData: this.state.targetFund.data.originalBEData.tenorBreakdown,
+        definitionList: FilterOptionsTenor
+      },
+      {
+        name: PortfolioBreakdownGroupOptions.rating,
+        rawData: this.state.targetFund.data.originalBEData.ratingBreakdown,
+        definitionList: FilterOptionsRating
+      },
+      {
+        name: PortfolioBreakdownGroupOptions.bics,
+        rawData: this.state.targetFund.data.originalBEData.bicsLevel1Breakdown,
+        definitionList: null
+      }
+    ];
+    const categoryData = categoryDataList.find(categoryData => categoryData.name === breakdownTitle);
+    const { rawData, definitionList } = categoryData;
+    for (let category in rawData.breakdown) {
+      if (!!rawData.breakdown[category]) {
+        const matchedRowListItem = this.state.editRowList.find(rowList => rowList.rowTitle === category);
+        rawData.breakdown[category].metricBreakdowns.Cs01.targetLevel = matchedRowListItem.targetCs01.level.savedUnderlineValue;
+        rawData.breakdown[category].metricBreakdowns.Cs01.targetPct = matchedRowListItem.targetCs01.percent.savedUnderlineValue;
+        rawData.breakdown[category].metricBreakdowns.CreditLeverage.targetLevel = matchedRowListItem.targetCreditLeverage.level.savedUnderlineValue;
+        rawData.breakdown[category].metricBreakdowns.CreditLeverage.targetPct = matchedRowListItem.targetCreditLeverage.percent.savedUnderlineValue;
+      }
+    }
+    this.state.targetBreakdown.state.isStencil = true;
+    this.state.targetBreakdown.data.displayCategoryList.forEach(category => {
+      category.moveVisualizer.state.isStencil = true;
+    })
+    setTimeout(() => {
+      const updatedPortfolioBreakdown = this.dtoService.formPortfolioBreakdown(false, rawData, definitionList);
+      updatedPortfolioBreakdown.data.title = breakdownTitle;
+      this.state.targetFund.data.children[breakdownIndex] = updatedPortfolioBreakdown; 
+      this.state.targetBreakdown = updatedPortfolioBreakdown;
+      this.state.targetBreakdown.state.isPreviewVariant = true;
+      this.loadEditRows();
+      this.state.targetBreakdown.state.isDisplayingCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
+      this.state.targetBreakdown.state.isStencil = false;
+      this.state.targetBreakdown.data.displayCategoryList.forEach(category => {
+        category.moveVisualizer.state.isStencil = false;
+      })
+   }, 300);
   }
 
   private clearUnlockRowsBeforeDistribution(
