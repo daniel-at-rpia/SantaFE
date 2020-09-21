@@ -105,3 +105,7 @@ export interface PayloadSetAlertsToInactive {
 export interface PayloadUpdatePortfolio {
   portfolioStructure: BEPortfolioStructuringDTO
 }
+
+export interface PayloadGetPortfolioStructures {
+  yyyyMMDD?: string;
+}
