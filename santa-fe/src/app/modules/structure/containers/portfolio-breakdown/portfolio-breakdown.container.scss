@@ -67,7 +67,7 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
   &__categoryHeader {
     display: flex;
     justify-content: flex-end;
-    margin-top: $portfolioBreakdown_rating_thickness;
+    margin: $portfolioBreakdown_rating_thickness 0 $portfolioBreakdown_rating_thickness/2;
     &-cell {
       @include mix_fixed_div(relative, $z_index_base_item);
       display: flex;
