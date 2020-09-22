@@ -3,41 +3,9 @@
     'sat-structureSetTargetPanel': true,
     'sat-structureSetTargetPanel--distributeAvailableState': (state.activeMetric === constants.metric.cs01 && state.displayPercentageUnallocatedCS01 !== 0) || (state.activeMetric === constants.metric.creditLeverage && state.displayPercentageUnallocatedCreditLeverage !== 0),
     'sat-structureSetTargetPanel--cs01ActiveState': state.activeMetric === constants.metric.cs01,
-    'sat-structureSetTargetPanel--creditLeverageActiveState': state.activeMetric === constants.metric.creditLeverage,
-    'sat-structureSetTargetPanel--cs01NoFundAllocationState': state.totalUnallocatedCS01 === 0,
-    'sat-structureSetTargetPanel--creditLeverageNoFundAllocationState': state.totalUnallocatedCreditLeverage === 0
+    'sat-structureSetTargetPanel--creditLeverageActiveState': state.activeMetric === constants.metric.creditLeverage
   }">
   <section class="sat-structureSetTargetPanel__utilities">
-    <div class="sat-structureSetTargetPanel__utilities-metricSwitch">
-      <div class="sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup santaBtnGroup">
-        <button
-          (click)="onClickChangeActiveMetric(constants.metric.cs01)"
-          [ngClass]="{
-            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn': true,
-            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--cs01': true,
-            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--active': state.activeMetric === constants.metric.cs01,
-            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--highlightUnallocated': state.displayPercentageUnallocatedCS01 > 0
-          }">
-          <span class="sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn-mainText">{{constants.metric.cs01}}</span>
-          <span class="sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn-unallocatedText">
-            {{state.displayPercentageUnallocatedCS01}}% unallocated
-          </span>
-        </button>
-        <button
-          (click)="onClickChangeActiveMetric(constants.metric.creditLeverage)"
-          [ngClass]="{
-            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn': true,
-            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--creditLeverage': true,
-            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--active': state.activeMetric === constants.metric.creditLeverage,
-            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--highlightUnallocated': state.displayPercentageUnallocatedCreditLeverage > 0
-          }">
-          <span class="sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn-mainText">{{constants.metric.creditLeverage}}</span>
-          <span class="sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn-unallocatedText">
-            {{state.displayPercentageUnallocatedCreditLeverage}}% unallocated
-          </span>
-        </button>
-      </div>
-    </div>
     <div class="sat-structureSetTargetPanel__utilities-distribution">
       <div class="sat-structureSetTargetPanel__utilities-distribution-label sat-structureSetTargetPanel__utilities-distribution-label--cs01">
         {{state.displayRemainingUnallocatedCS01}} ({{state.displayPercentageUnallocatedCS01}}%)
@@ -72,9 +40,41 @@
     <div class="sat-structureSetTargetPanel__main-edit">
       <div *ngIf="state.targetFund" class="sat-structureSetTargetPanel__main-edit-header">
         <div class="sat-structureSetTargetPanel__main-edit-header-item">
+          <button
+            (click)="onClickChangeActiveMetric(constants.metric.creditLeverage)"
+            [ngClass]="{
+              'santaBtn--labelled': true,
+              'sat-structureSetTargetPanel__main-edit-header-item-btn': true,
+              'sat-structureSetTargetPanel__main-edit-header-item-btn--selected': state.activeMetric === constants.metric.creditLeverage
+            }">
+            <i
+              [ngClass]="{
+                'fal': true,
+                'fa-check-square': state.activeMetric === constants.metric.creditLeverage,
+                'fa-square': state.activeMetric !== constants.metric.creditLeverage
+              }">
+            </i>
+            <span>{{state.displayPercentageUnallocatedCreditLeverage}}% unallocated</span>
+          </button>
           <target-bar [targetBar]="state.targetFund.data.creditLeverageTargetBar"></target-bar>
         </div>
         <div class="sat-structureSetTargetPanel__main-edit-header-item">
+          <button
+            (click)="onClickChangeActiveMetric(constants.metric.cs01)"
+            [ngClass]="{
+              'santaBtn--labelled': true,
+              'sat-structureSetTargetPanel__main-edit-header-item-btn': true,
+              'sat-structureSetTargetPanel__main-edit-header-item-btn--selected': state.activeMetric === constants.metric.cs01
+            }">
+            <i
+              [ngClass]="{
+                'fal': true,
+                'fa-check-square': state.activeMetric === constants.metric.cs01,
+                'fa-square': state.activeMetric !== constants.metric.cs01
+              }">
+            </i>
+            <span>{{state.displayPercentageUnallocatedCS01}}% unallocated</span>
+          </button>
           <target-bar [targetBar]="state.targetFund.data.cs01TargetBar"></target-bar>
         </div>
       </div>
