@@ -6,6 +6,7 @@ $funtStructuring_setTarget_backgroundIcon_size: $font_size_hero;
 $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_height - $funtStructuring_setTarget_backgroundIcon_size)/2;
 .sat-fundStructuring {
   $blockName: &;
+  @include mix_alive('light');
   display: flex;
   flex-direction: column;
   overflow: hidden;

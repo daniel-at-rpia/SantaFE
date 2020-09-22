@@ -81,16 +81,22 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
 
   public calculateAlignmentRating() {
     const targetList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawCs01CategoryList : this.breakdownData.data.rawLeverageCategoryList;
-    let allCategoriesHaveTarget = !targetList.find((eachCategory) => {
-      return eachCategory.targetLevel == null;
+    let totalLevel = 0;
+    targetList.forEach((eachCategory) => {
+      totalLevel = totalLevel + eachCategory.currentLevel;
     });
-    if (allCategoriesHaveTarget) {
-      let misalignment = 0;
-      targetList.forEach((eachCategory) => {
-        misalignment = misalignment + Math.abs(eachCategory.targetPct - eachCategory.currentPct);
+    const targetListWithTargets = targetList.filter((eachCategory) => {
+      return !!eachCategory.targetLevel;
+    });
+    if (targetListWithTargets.length > 0) {
+      let misalignmentAggregate = 0;
+      targetListWithTargets.forEach((eachCategory) => {
+        const misalignmentPercentage = eachCategory.diffToTarget / totalLevel * 100;
+        misalignmentAggregate = misalignmentAggregate + Math.abs(misalignmentPercentage);
       });
-      this.breakdownData.style.ratingFillWidth = 100 - this.utilityService.round(misalignment, 0);
-      this.breakdownData.data.ratingHoverText = `${100 - this.utilityService.round(misalignment, 0)}`;
+      misalignmentAggregate = misalignmentAggregate > 100 ? 100 : misalignmentAggregate;
+      this.breakdownData.style.ratingFillWidth = 100 - this.utilityService.round(misalignmentAggregate, 0);
+      this.breakdownData.data.ratingHoverText = `${100 - this.utilityService.round(misalignmentAggregate, 0)}`;
       this.breakdownData.state.isTargetAlignmentRatingAvail = true;
     }
   }

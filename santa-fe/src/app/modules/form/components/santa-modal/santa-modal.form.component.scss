@@ -7,6 +7,7 @@ $modal_animation_duration: $animation_duration_normal;
   @include mix_fixed_div(fixed, $z_index_modal);
   @include mix_alive('custom', width 0s);
   display: flex;
+  justify-content: center;
   height: 100%;
   width: 0;
   transition-delay: $modal_animation_duration;
@@ -30,6 +31,7 @@ $modal_animation_duration: $animation_duration_normal;
     transform: translate(0, 100%) scale(0.01);
     margin: auto $page_gutter_width_for_alerts;
     max-height: 90%;  // loosely define the size restriction so that modal size can adapt to the content's need
+    max-width: 92rem;  // loosely define the width restriction to reduce unnecessary size-up, generally a smaller a modal, the better the UX
     &-title {
       flex: 0 0 auto;
       display: flex;

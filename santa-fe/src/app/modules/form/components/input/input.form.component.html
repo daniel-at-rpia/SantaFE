@@ -3,7 +3,8 @@
     'santaInput': true,
     'santaInput--heroVariant': !!isHero,
     'santaInput--numericVariant': !!isNumeric,
-    'santaInput--grayedOutState': !!isGrayedOut
+    'santaInput--grayedOutState': !!isGrayedOut,
+    'santaInput--disabledState': !!isDisabled
   }">
   <input
     type="{{ isNumeric ? 'number' : 'text' }}"
@@ -14,8 +15,10 @@
     }"
     [(ngModel)]="inputValue"
     [placeholder]="placeholder"
+    [disabled]="!!isDisabled"
     (keyup)="onKey()"
     (focus)="onFocus()"
     (blur)="onBlur()"
+    (keyup.enter)="onPressedEnterKey()"
   >
 </article>
