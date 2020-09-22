@@ -4,12 +4,15 @@
   'sat-portfolioBreakdownCategory--noSignificantDiff': eachCategory.diffToTarget === 0,
   'sat-portfolioBreakdownCategory--negativeDiff': eachCategory.diffToTarget < 0
   }">
-   <button [ngClass]="{
-    'sat-portfolioBreakdownCategory__btn': true,
-    'sat-portfolioBreakdownCategory__btn--diveIn': isBtnDiveIn
-    }">
-    <span class="sat-portfolioBreakdownCategory__btn-text">{{ eachCategory.category }}</span>
-  </button>
+  <section class="sat-portfolioBreakdownCategory__cta">
+    <button [ngClass]="{
+      'sat-portfolioBreakdownCategory__cta-btn': true,
+      'sat-portfolioBreakdownCategory__cta-btn--diveIn': isBtnDiveIn
+      }">
+      <span class="sat-portfolioBreakdownCategory__cta-btn-text">{{ eachCategory.category }}</span>
+    </button>
+    <span class="sat-portfolioBreakdownCategory__cta-tooltip">{{eachCategory.category}}</span>
+  </section>
   <section class="sat-portfolioBreakdownCategory__moveVisualizer">
     <move-visualizer [visualizerData]="eachCategory.moveVisualizer"></move-visualizer>
   </section>

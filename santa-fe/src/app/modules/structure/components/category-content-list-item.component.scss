@@ -2,35 +2,66 @@
 
 $portfolioBreakdownCategory_cell_width: 3.5rem;
 .sat-portfolioBreakdownCategory {
+  $blockName: &;
   display: flex;
   flex: 1 1 auto;
   align-items: center;
-  $blockName: &;
-  &__btn {
-    @include mix_border_generator();
-    @include mix_text_overflow;
-    flex: 0 0 7rem;
-    margin: 0 $spacing_small $spacing_small 0;
-    padding: $spacing_xx_small;
-    box-shadow: none;
+  &__cta {
+    @include mix_fixed_div(relative, $z_index_base_item);
     display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-    cursor: not-allowed;
-    &-text {
-      flex: 1 1 auto;
-      text-align: right;
-      padding-left: convert_px_to_rem(31.25px);
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    &--diveIn {
-      border: none;
-      cursor: pointer;
-      @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
-      &:hover{
-        @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
+    width: 7rem;
+    margin-right: $spacing_small;
+    &-btn {
+      @include mix_border_generator();
+      @include mix_text_overflow;
+      flex: 0 0 7rem;
+      margin: 0 $spacing_small $spacing_small 0;
+      padding: $spacing_xx_small;
+      box-shadow: none;
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+      cursor: not-allowed;
+      &-text {
+        flex: 1 1 auto;
+        text-align: right;
+        padding-left: convert_px_to_rem(31.25px);
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
+      &--diveIn {
+        border: none;
+        cursor: pointer;
+        @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
+        &:hover{
+          @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
+        }
+      }
+      &:hover,
+      &:focus {
+        + #{$blockName} {
+          &__cta {
+            &-tooltip {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+    &-tooltip {
+      @include mix_fixed_div(absolute, $z_index_hovering_item);
+      @include mix_border_radius(3px);
+      display: none;
+      top: -1.25rem;
+      color: $font_color_inverse;
+      line-height: $line_height_small;
+      background-color:  $color_active;
+      text-align: center;
+      width: auto;
+      padding: $spacing_x_small;
+      font-size: $font_size_x_small;
+      margin-top: $spacing_xx_small;
+      white-space: nowrap;
     }
   }
   &__cellGroup {
