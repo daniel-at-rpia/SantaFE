@@ -11,42 +11,11 @@ $structureSetTargetPanel_edit_column_size: 14rem;
   &__utilities {
     @include mix_border_generator(0 0 $typical_border_width 0);
     display: flex;
+    justify-content: center;
     align-items: center;
     margin-top: -$spacing_small;
     padding-bottom: $spacing_medium;
     margin-bottom: $spacing_medium;
-    &-metricSwitch {
-      flex: 0 0 auto;
-      &-btnGroup {
-        margin-right: $spacing_medium;
-        &-btn {
-          flex-direction: row;
-          &-mainText {
-            font-size: $font_size_normal;
-          }
-          &-unallocatedText {
-            @include mix_border_radius(3px);
-            padding: $spacing_xx_small $spacing_small;
-            font-size: $font_size_x_small;
-            margin-left: $spacing_x_small;
-            color: $font_color_minor;
-          }
-          &--active {
-            @include material('none');
-            background-color: $color_active;
-            color: $font_color_inverse;
-          }
-          &--highlightUnallocated &-unallocatedText {
-            background-color: $color_active;
-            color: $font_color_inverse;
-          }
-          &--active#{$blockName}__utilities-metricSwitch-btnGroup-btn--highlightUnallocated &-unallocatedText {
-            background-color: $color_white;
-            color:$font_color_major;
-          }
-        }
-      }
-    }
     &-distribution {
       @include mix_border_radius(5px);
       display: flex;
@@ -109,12 +78,28 @@ $structureSetTargetPanel_edit_column_size: 14rem;
       flex-direction: column;
       padding-left: $spacing_large;
       &-header {
+        flex: 0 0 auto;
         display: flex;
         justify-content: flex-end;
         margin-right: $scroll_bar_width;
         &-item {
           flex: 0 0 $structureSetTargetPanel_edit_column_size;
+          display: flex;
+          flex-direction: column;
           padding: 0 $spacing_medium;
+          &-btn {
+            align-self: center;
+            margin-top: $spacing_small;
+            margin-bottom: $spacing_x_small;
+            &>i {
+              font-size: $font_size_large;
+            }
+            &--selected {
+              @include material('none');
+              @extend .santaBtn--inverseLabelled;
+              background-color: $color_active;
+            }
+          }
           &:first-of-type {
             margin-right: $typical_border_width;
           }
@@ -150,49 +135,6 @@ $structureSetTargetPanel_edit_column_size: 14rem;
         &--creditLeverage {
           display: flex;
         }
-      }
-    }
-  }
-  &--cs01NoFundAllocationState {
-    #{$blockName} {
-      &__utilities {
-        &-metricSwitch-btnGroup-btn--cs01 {
-          #{$blockName} {
-            &__utilities-metricSwitch-btnGroup-btn-unallocatedText {
-              display: none;
-            }
-          }
-        }
-        &-distribution {
-          display: none;
-        }
-      }
-    }
-  }
-  &--cs01NoFundAllocationState#{$blockName}--cs01ActiveState {
-    #{$blockName} {
-      &__utilities-distribution {
-        display: none;
-      }
-    }
-  }
-  &--creditLeverageNoFundAllocationState {
-    #{$blockName} {
-      &__utilities {
-        &-metricSwitch-btnGroup-btn--creditLeverage {
-          #{$blockName} {
-            &__utilities-metricSwitch-btnGroup-btn-unallocatedText {
-              display: none;
-            }
-          }
-        }
-      }
-    }
-  }
-  &--creditLeverageNoFundAllocationState#{$blockName}--creditLeverageActiveState {
-    #{$blockName} {
-      &__utilities-distribution {
-        display: none;
       }
     }
   }
@@ -334,12 +276,6 @@ $structureSetTargetPanel_edit_column_size: 14rem;
           @include material('none');
           background-color: $color_create;
           color: $font_color_inverse;
-        }
-      }
-      &__column {
-        cursor: not-allowed;
-        &-item {
-          pointer-events: none;
         }
       }
     }

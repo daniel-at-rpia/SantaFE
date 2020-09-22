@@ -3,41 +3,9 @@
     'sat-structureSetTargetPanel': true,
     'sat-structureSetTargetPanel--distributeAvailableState': (state.activeMetric === constants.metric.cs01 && state.displayPercentageUnallocatedCS01 !== 0) || (state.activeMetric === constants.metric.creditLeverage && state.displayPercentageUnallocatedCreditLeverage !== 0),
     'sat-structureSetTargetPanel--cs01ActiveState': state.activeMetric === constants.metric.cs01,
-    'sat-structureSetTargetPanel--creditLeverageActiveState': state.activeMetric === constants.metric.creditLeverage,
-    'sat-structureSetTargetPanel--cs01NoFundAllocationState': state.totalUnallocatedCS01 === 0,
-    'sat-structureSetTargetPanel--creditLeverageNoFundAllocationState': state.totalUnallocatedCreditLeverage === 0
+    'sat-structureSetTargetPanel--creditLeverageActiveState': state.activeMetric === constants.metric.creditLeverage
   }">
   <section class="sat-structureSetTargetPanel__utilities">
-    <div class="sat-structureSetTargetPanel__utilities-metricSwitch">
-      <div class="sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup santaBtnGroup">
-        <button
-          (click)="onClickChangeActiveMetric(constants.metric.cs01)"
-          [ngClass]="{
-            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn': true,
-            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--cs01': true,
-            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--active': state.activeMetric === constants.metric.cs01,
-            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--highlightUnallocated': state.displayPercentageUnallocatedCS01 > 0
-          }">
-          <span class="sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn-mainText">{{constants.metric.cs01}}</span>
-          <span class="sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn-unallocatedText">
-            {{state.displayPercentageUnallocatedCS01}}% unallocated
-          </span>
-        </button>
-        <button
-          (click)="onClickChangeActiveMetric(constants.metric.creditLeverage)"
-          [ngClass]="{
-            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn': true,
-            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--creditLeverage': true,
-            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--active': state.activeMetric === constants.metric.creditLeverage,
-            'sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn--highlightUnallocated': state.displayPercentageUnallocatedCreditLeverage > 0
-          }">
-          <span class="sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn-mainText">{{constants.metric.creditLeverage}}</span>
-          <span class="sat-structureSetTargetPanel__utilities-metricSwitch-btnGroup-btn-unallocatedText">
-            {{state.displayPercentageUnallocatedCreditLeverage}}% unallocated
-          </span>
-        </button>
-      </div>
-    </div>
     <div class="sat-structureSetTargetPanel__utilities-distribution">
       <div class="sat-structureSetTargetPanel__utilities-distribution-label sat-structureSetTargetPanel__utilities-distribution-label--cs01">
         {{state.displayRemainingUnallocatedCS01}} ({{state.displayPercentageUnallocatedCS01}}%)
@@ -51,13 +19,13 @@
       </div>
       <hr class="sat-structureSetTargetPanel__utilities-distribution-divider">
       <div class="sat-structureSetTargetPanel__utilities-distribution-label sat-structureSetTargetPanel__utilities-distribution-label--distribute">
-        Distribute To All Unlocked
+        Distribute Among All Unlocked
         <i class="sat-structureSetTargetPanel__utilities-distribution-label-icon fal fa-unlock-alt"></i>
         Rows :
       </div>
       <div class="sat-structureSetTargetPanel__utilities-distribution-ctas">
         <button (click)="onClickDistributeEvenly()" class="sat-structureSetTargetPanel__utilities-distribution-ctas-evenly">Evenly</button>
-        <button (click)="onClickDistributeProportionally()" class="sat-structureSetTargetPanel__utilities-distribution-ctas-proportionally">Proprotionally</button>
+        <button (click)="onClickDistributeProportionally()" class="sat-structureSetTargetPanel__utilities-distribution-ctas-proportionally">Proportionally</button>
       </div>
     </div>
   </section>
@@ -72,10 +40,42 @@
     <div class="sat-structureSetTargetPanel__main-edit">
       <div *ngIf="state.targetFund" class="sat-structureSetTargetPanel__main-edit-header">
         <div class="sat-structureSetTargetPanel__main-edit-header-item">
-          <target-bar [targetBar]="state.targetFund.data.cs01TargetBar"></target-bar>
+          <button
+            (click)="onClickChangeActiveMetric(constants.metric.creditLeverage)"
+            [ngClass]="{
+              'santaBtn--labelled': true,
+              'sat-structureSetTargetPanel__main-edit-header-item-btn': true,
+              'sat-structureSetTargetPanel__main-edit-header-item-btn--selected': state.activeMetric === constants.metric.creditLeverage
+            }">
+            <i
+              [ngClass]="{
+                'fal': true,
+                'fa-check-square': state.activeMetric === constants.metric.creditLeverage,
+                'fa-square': state.activeMetric !== constants.metric.creditLeverage
+              }">
+            </i>
+            <span>{{state.displayPercentageUnallocatedCreditLeverage}}% unallocated</span>
+          </button>
+          <target-bar [targetBar]="state.targetFund.data.creditLeverageTargetBar"></target-bar>
         </div>
         <div class="sat-structureSetTargetPanel__main-edit-header-item">
-          <target-bar [targetBar]="state.targetFund.data.creditLeverageTargetBar"></target-bar>
+          <button
+            (click)="onClickChangeActiveMetric(constants.metric.cs01)"
+            [ngClass]="{
+              'santaBtn--labelled': true,
+              'sat-structureSetTargetPanel__main-edit-header-item-btn': true,
+              'sat-structureSetTargetPanel__main-edit-header-item-btn--selected': state.activeMetric === constants.metric.cs01
+            }">
+            <i
+              [ngClass]="{
+                'fal': true,
+                'fa-check-square': state.activeMetric === constants.metric.cs01,
+                'fa-square': state.activeMetric !== constants.metric.cs01
+              }">
+            </i>
+            <span>{{state.displayPercentageUnallocatedCS01}}% unallocated</span>
+          </button>
+          <target-bar [targetBar]="state.targetFund.data.cs01TargetBar"></target-bar>
         </div>
       </div>
       <ul class="sat-structureSetTargetPanel__main-edit-rowList">
@@ -105,39 +105,6 @@
             <span class="sat-structureSetTargetEditRow__label-text">{{eachCategory.rowTitle}}</span>
           </section>
           <section class="sat-structureSetTargetEditRow__column">
-            <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--cs01Level">
-              <div class="sat-structureSetTargetEditRow__column-item-ctas">
-                <button *ngIf="eachCategory.targetCs01.level.isFocused" (click)="onClickSaveEdit(eachCategory, eachCategory.targetCs01.level)" class="santaBtn--small santaBtn--iconOnly sat-structureSetTargetEditRow__column-item-ctas-save fal fa-check"></button>
-              </div>
-              <santa-input
-                [inputValue]="eachCategory.targetCs01.level.savedDisplayValue"
-                [placeholder]="''"
-                [isNumeric]="true"
-                [isGrayedOut]="!eachCategory.targetCs01.level.isActive"
-                [isDisabled]="eachCategory.isLocked"
-                (onInputChange)="onValueChange($event, eachCategory.targetCs01.level)"
-                (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCs01.level)">
-              </santa-input>
-              <span class="sat-structureSetTargetEditRow__column-item-unitText">K</span>
-            </div>
-            <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--cs01Percent">
-              <div class="sat-structureSetTargetEditRow__column-item-ctas">
-                <button *ngIf="eachCategory.targetCs01.percent.isFocused" (click)="onClickSaveEdit(eachCategory, eachCategory.targetCs01.percent)" class="santaBtn--small santaBtn--iconOnly sat-structureSetTargetEditRow__column-item-ctas-save fal fa-check"></button>
-              </div>
-              <santa-input
-                [inputValue]="eachCategory.targetCs01.percent.savedDisplayValue"
-                [placeholder]="''"
-                [isNumeric]="true"
-                [isGrayedOut]="!eachCategory.targetCs01.percent.isActive"
-                [isDisabled]="eachCategory.isLocked"
-                (onInputChange)="onValueChange($event, eachCategory.targetCs01.percent)"
-                (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCs01.percent)">
-              </santa-input>
-              <span class="sat-structureSetTargetEditRow__column-item-unitText">%</span>
-            </div>
-          </section>
-          <hr class="sat-structureSetTargetEditRow__divider">
-          <section class="sat-structureSetTargetEditRow__column">
             <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--creditLeverageLevel">
               <div class="sat-structureSetTargetEditRow__column-item-ctas">
                 <button *ngIf="eachCategory.targetCreditLeverage.level.isFocused" (click)="onClickSaveEdit(eachCategory, eachCategory.targetCreditLeverage.level)" class="santaBtn--small santaBtn--iconOnly sat-structureSetTargetEditRow__column-item-ctas-save fal fa-check"></button>
@@ -147,7 +114,7 @@
                 [placeholder]="''"
                 [isNumeric]="true"
                 [isGrayedOut]="!eachCategory.targetCreditLeverage.level.isActive"
-                [isDisabled]="eachCategory.isLocked"
+                [isDisabled]="state.activeMetric !== constants.metric.creditLeverage"
                 (onInputChange)="onValueChange($event, eachCategory.targetCreditLeverage.level)"
                 (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCreditLeverage.level)">
               </santa-input>
@@ -162,9 +129,42 @@
                 [placeholder]="''"
                 [isNumeric]="true"
                 [isGrayedOut]="!eachCategory.targetCreditLeverage.percent.isActive"
-                [isDisabled]="eachCategory.isLocked"
+                [isDisabled]="state.activeMetric !== constants.metric.creditLeverage"
                 (onInputChange)="onValueChange($event, eachCategory.targetCreditLeverage.percent)"
                 (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCreditLeverage.percent)">
+              </santa-input>
+              <span class="sat-structureSetTargetEditRow__column-item-unitText">%</span>
+            </div>
+          </section>
+          <hr class="sat-structureSetTargetEditRow__divider">
+          <section class="sat-structureSetTargetEditRow__column">
+            <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--cs01Level">
+              <div class="sat-structureSetTargetEditRow__column-item-ctas">
+                <button *ngIf="eachCategory.targetCs01.level.isFocused" (click)="onClickSaveEdit(eachCategory, eachCategory.targetCs01.level)" class="santaBtn--small santaBtn--iconOnly sat-structureSetTargetEditRow__column-item-ctas-save fal fa-check"></button>
+              </div>
+              <santa-input
+                [inputValue]="eachCategory.targetCs01.level.savedDisplayValue"
+                [placeholder]="''"
+                [isNumeric]="true"
+                [isGrayedOut]="!eachCategory.targetCs01.level.isActive"
+                [isDisabled]="state.activeMetric !== constants.metric.cs01"
+                (onInputChange)="onValueChange($event, eachCategory.targetCs01.level)"
+                (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCs01.level)">
+              </santa-input>
+              <span class="sat-structureSetTargetEditRow__column-item-unitText">K</span>
+            </div>
+            <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--cs01Percent">
+              <div class="sat-structureSetTargetEditRow__column-item-ctas">
+                <button *ngIf="eachCategory.targetCs01.percent.isFocused" (click)="onClickSaveEdit(eachCategory, eachCategory.targetCs01.percent)" class="santaBtn--small santaBtn--iconOnly sat-structureSetTargetEditRow__column-item-ctas-save fal fa-check"></button>
+              </div>
+              <santa-input
+                [inputValue]="eachCategory.targetCs01.percent.savedDisplayValue"
+                [placeholder]="''"
+                [isNumeric]="true"
+                [isGrayedOut]="!eachCategory.targetCs01.percent.isActive"
+                [isDisabled]="state.activeMetric !== constants.metric.cs01"
+                (onInputChange)="onValueChange($event, eachCategory.targetCs01.percent)"
+                (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCs01.percent)">
               </santa-input>
               <span class="sat-structureSetTargetEditRow__column-item-unitText">%</span>
             </div>

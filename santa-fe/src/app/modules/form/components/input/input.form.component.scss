@@ -37,4 +37,11 @@
       }
     }
   }
+  &--disabledState {
+    #{$blockName} {
+      &__inputElement {
+        cursor: not-allowed;
+      }
+    }
+  }
 }
