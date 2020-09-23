@@ -33,4 +33,16 @@ export class ModalService {
       exist.api.closeModal();
     }
   }
+
+  public bindModalSaveCallback(
+    targetModalId: string,
+    callback: () => void
+  ) {
+    const exist = this.registeredModals.find((eachModal) => {
+      return eachModal.data.id === targetModalId;
+    });
+    if (!!exist) {
+      exist.api.saveModal = callback;
+    }
+  }
 }

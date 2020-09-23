@@ -2030,7 +2030,8 @@ export class DTOService {
       },
       api: {
         openModal: null,
-        closeModal: null
+        closeModal: null,
+        saveModal: null
       }
     };
     return object;

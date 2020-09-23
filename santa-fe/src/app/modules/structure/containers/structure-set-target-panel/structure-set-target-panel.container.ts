@@ -7,10 +7,15 @@ import { StructureSetTargetPanelState } from 'FEModels/frontend-page-states.inte
 import { DTOService } from 'Core/services/DTOService';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { UtilityService } from 'Core/services/UtilityService';
+import { ModalService } from 'Form/services/ModalService';
 import { selectSetTargetTransferPack } from 'Structure/selectors/structure.selectors';
 import { StructureSetTargetOverlayTransferPack } from 'FEModels/frontend-adhoc-packages.interface';
 import { StructureSetTargetPanelEditRowBlock, StructureSetTargetPanelEditRowItemBlock } from 'FEModels/frontend-blocks.interface';
-import { PortfolioBreakdownGroupOptions, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import {
+  PortfolioBreakdownGroupOptions,
+  PortfolioMetricValues,
+  STRUCTURE_EDIT_MODAL_ID
+} from 'Core/constants/structureConstants.constants';
 import {
   FilterOptionsCurrency,
   FilterOptionsRating,
@@ -30,14 +35,16 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     setTargetTransferPackSub: null
   };
   constants = {
-    metric: PortfolioMetricValues
+    metric: PortfolioMetricValues,
+    editModalId: STRUCTURE_EDIT_MODAL_ID
   }
 
   constructor(
     private store$: Store<any>,
     private utilityService: UtilityService,
     private dtoService: DTOService,
-    private restfulCommService: RestfulCommService
+    private restfulCommService: RestfulCommService,
+    private modalService: ModalService
   ){
     this.state = this.initializePageState();
   }
@@ -74,6 +81,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.calculateAllocation();
       }
     })
+    this.modalService.bindModalSaveCallback(STRUCTURE_EDIT_MODAL_ID, this.submitTargetChanges.bind(this));
   }
 
   public ngOnDestroy() {
@@ -448,6 +456,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.onClickSaveEdit(eachRow, targetItem, true);
       this.calculateAllocation();
     });
+  }
+
+  private submitTargetChanges() {
+    console.log('test, state is', this.state);
   }
 
 }

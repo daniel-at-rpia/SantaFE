@@ -760,5 +760,6 @@ export interface SantaModalDTO extends BasicDTOStructure {
   api: {
     openModal: () => void;
     closeModal: () => void;
+    saveModal: () => void;
   }
 }
