@@ -447,11 +447,20 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     // const targetBreakdownRawData = this.state.targetFund.data.originalBEData.breakdowns.find(() => {
 
     // });
-    // const payload: PayloadUpdateBreakdown = {
-    //   portfolioBreakdown: this.state.targetFund.
-    // };
-    // this.restfulCommService.callAPI(
-    //   this.restfulCommService.apiMap.updatePortfolioBreakdown)
+    const payload: PayloadUpdateBreakdown = {
+      portfolioBreakdown: this.state.targetBreakdownRawData
+    };
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
+      first(),
+      tap((serverReturn) => {
+
+      }),
+      catchError(err => {
+        console.error('update breakdown failed');
+        return of('error');
+      })
+    ).subscribe();
+
     return true;
     // return false;
   }
