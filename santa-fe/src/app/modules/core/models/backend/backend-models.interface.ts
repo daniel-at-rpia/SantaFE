@@ -583,7 +583,7 @@ export interface BEMetricBreakdowns {
 
 export interface BEStructuringBreakdownBlock {
   date: string;
-  groupOption: number;
+  groupOption: string;
   indexId: number
   portfolioBreakdownId: string;
   portfolioId: number;

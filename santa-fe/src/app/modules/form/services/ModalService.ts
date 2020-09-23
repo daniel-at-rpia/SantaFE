@@ -36,7 +36,7 @@ export class ModalService {
 
   public bindModalSaveCallback(
     targetModalId: string,
-    callback: () => void
+    callback: () => boolean
   ) {
     const exist = this.registeredModals.find((eachModal) => {
       return eachModal.data.id === targetModalId;

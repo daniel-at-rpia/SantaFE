@@ -18,6 +18,7 @@ import {
 import { AlertTypes, NavigationModule } from 'Core/constants/coreConstants.constant';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import { BEStructuringBreakdownBlock } from 'BEModels/backend-models.interface';
 
 export interface RootState {
   ownerInitial: string;
@@ -284,6 +285,7 @@ export interface StructureUtilityPanelState {
 export interface StructureSetTargetPanelState {
   targetFund: DTOs.PortfolioStructureDTO;
   targetBreakdown: DTOs.PortfolioBreakdownDTO;
+  targetBreakdownRawData: BEStructuringBreakdownBlock;
   editRowList: Array<StructureSetTargetPanelEditRowBlock>;
   totalUnallocatedCS01: number;
   totalUnallocatedCreditLeverage: number;

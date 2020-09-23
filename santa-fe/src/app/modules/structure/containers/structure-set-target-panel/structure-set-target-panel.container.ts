@@ -21,6 +21,8 @@ import {
   FilterOptionsRating,
   FilterOptionsTenor
 } from 'Core/constants/securityDefinitionConstants.constant';
+import { PayloadUpdateBreakdown } from 'BEModels/backend-payloads.interface';
+import { BEStructuringBreakdownBlock } from 'BEModels/backend-models.interface';
 
 @Component({
   selector: 'structure-set-target-panel',
@@ -53,6 +55,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     const state: StructureSetTargetPanelState = {
       targetBreakdown: null,
       targetFund: null,
+      targetBreakdownRawData: null,
       editRowList: [],
       totalUnallocatedCS01: 0,
       totalUnallocatedCreditLeverage: 0,
@@ -76,6 +79,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.state.targetFund = this.utilityService.deepCopy(pack.targetFund);
         this.state.targetBreakdown = this.utilityService.deepCopy(pack.targetBreakdown);
         this.state.targetBreakdown.state.isPreviewVariant = true;
+        this.state.targetBreakdownRawData = this.retrieveRawBreakdownDataForTargetBreakdown();
         this.state.activeMetric = pack.targetFund.data.cs01TargetBar.state.isInactiveMetric ? this.constants.metric.creditLeverage : this.constants.metric.cs01;
         this.loadEditRows();
         this.calculateAllocation();
@@ -391,30 +395,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     const breakdown = this.state.targetFund.data.children.find(breakdown => breakdown.data.title === breakdownTitle);
     const breakdownIndex = this.state.targetFund.data.children.indexOf(breakdown);
     const breakdownDefinition = this.state.targetBreakdown.data.definition;
-    const categoryDataList = [
-      {
-        name: PortfolioBreakdownGroupOptions.currency,
-        rawData: this.state.targetFund.data.originalBEData.breakdowns.Ccy,
-        definitionList: FilterOptionsCurrency
-      }, 
-      {
-        name: PortfolioBreakdownGroupOptions.tenor,
-        rawData: this.state.targetFund.data.originalBEData.breakdowns.Tenor,
-        definitionList: FilterOptionsTenor
-      },
-      {
-        name: PortfolioBreakdownGroupOptions.rating,
-        rawData: this.state.targetFund.data.originalBEData.breakdowns.RatingNoNotch,
-        definitionList: FilterOptionsRating
-      },
-      {
-        name: PortfolioBreakdownGroupOptions.bics,
-        rawData: this.state.targetFund.data.originalBEData.breakdowns.BicsLevel1,
-        definitionList: null
-      }
-    ];
-    const categoryData = categoryDataList.find(categoryData => categoryData.name === breakdownTitle);
-    const { rawData, definitionList } = categoryData;
+    const definitionList = this.state.targetBreakdown.data.displayCategoryList.map((eachCategory) => {
+      return eachCategory.category;
+    });
+    const rawData = this.state.targetBreakdownRawData;
     for (let category in rawData.breakdown) {
       if (!!rawData.breakdown[category]) {
         const matchedRowListItem = this.state.editRowList.find(rowList => rowList.rowTitle === category);
@@ -458,8 +442,32 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     });
   }
 
-  private submitTargetChanges() {
-    console.log('test, state is', this.state);
+  private submitTargetChanges(): boolean {
+    console.log('test, targetRawData', this.state.targetBreakdownRawData);
+    // const targetBreakdownRawData = this.state.targetFund.data.originalBEData.breakdowns.find(() => {
+
+    // });
+    // const payload: PayloadUpdateBreakdown = {
+    //   portfolioBreakdown: this.state.targetFund.
+    // };
+    // this.restfulCommService.callAPI(
+    //   this.restfulCommService.apiMap.updatePortfolioBreakdown)
+    return true;
+    // return false;
+  }
+
+  private retrieveRawBreakdownDataForTargetBreakdown(): BEStructuringBreakdownBlock {
+    if (!!this.state.targetFund && !!this.state.targetBreakdown) {
+      const rawDataObject = this.state.targetFund.data.originalBEData.breakdowns;
+      for (let eachBreakdownKey in rawDataObject) {
+        const eachBreakdown: BEStructuringBreakdownBlock = rawDataObject[eachBreakdownKey];
+        if (eachBreakdown.groupOption === this.state.targetBreakdown.data.backendGroupOptionIdentifier) {
+          return this.utilityService.deepCopy(eachBreakdown);
+        }
+      }
+    } else {
+      return null;
+    }
   }
 
 }
