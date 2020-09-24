@@ -22,9 +22,14 @@ import {
   FilterOptionsTenor
 } from 'Core/constants/securityDefinitionConstants.constant';
 import { PayloadUpdateBreakdown } from 'BEModels/backend-payloads.interface';
-import { BEStructuringBreakdownBlock, BEPortfolioStructuringDTO } from 'BEModels/backend-models.interface';
+import {
+  BEStructuringBreakdownBlock,
+  BEPortfolioStructuringDTO,
+  BEMetricBreakdowns
+} from 'BEModels/backend-models.interface';
 import { StructureSetTargetPostEditUpdatePack } from 'FEModels/frontend-adhoc-packages.interface';
 import { StructureReloadBreakdownDataPostEditEvent } from 'Structure/actions/structure.actions';
+import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 
 @Component({
   selector: 'structure-set-target-panel',
@@ -445,24 +450,67 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private submitTargetChanges(): boolean {
+    const payload: PayloadUpdateBreakdown = this.traverseEditRowsToFormSubmitPayload();
+    if (!!payload) {
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
+        first(),
+        tap((serverReturn: BEPortfolioStructuringDTO) => {
+          const updatePack: StructureSetTargetPostEditUpdatePack = {
+            targetFund: serverReturn,
+            targetBreakdownBackendGroupOptionIdentifier: this.state.targetBreakdown.data.backendGroupOptionIdentifier
+          };
+          this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
+        }),
+        catchError(err => {
+          console.error('update breakdown failed');
+          return of('error');
+        })
+      ).subscribe();
+      return true;
+    } else {
+      this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target because no change is detected', null)]));
+      return false;
+    }
+  }
+
+  private traverseEditRowsToFormSubmitPayload(): PayloadUpdateBreakdown {
     const payload: PayloadUpdateBreakdown = {
-      portfolioBreakdown: this.state.targetBreakdownRawData
+      portfolioBreakdown: {
+        date: this.state.targetBreakdownRawData.date,
+        groupOption: this.state.targetBreakdownRawData.groupOption,
+        indexId: this.state.targetBreakdownRawData.indexId,
+        portfolioId: this.state.targetBreakdownRawData.portfolioId,
+        breakdown: {}
+      }
     };
-    this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
-      first(),
-      tap((serverReturn: BEPortfolioStructuringDTO) => {
-        const updatePack: StructureSetTargetPostEditUpdatePack = {
-          targetFund: serverReturn,
-          targetBreakdownBackendGroupOptionIdentifier: this.state.targetBreakdown.data.backendGroupOptionIdentifier
+    this.state.editRowList.forEach((eachRow) => {
+      if(this.cs01ModifiedInEditRow(eachRow) || this.creditLeverageModifiedInEditRow(eachRow)) {
+        const modifiedMetricBreakdowns: BEMetricBreakdowns = {
+          view: null,
+          metricBreakdowns: {}
         };
-        this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
-      }),
-      catchError(err => {
-        console.error('update breakdown failed');
-        return of('error');
-      })
-    ).subscribe();
-    return true;
+        if (this.cs01ModifiedInEditRow(eachRow)) {
+          modifiedMetricBreakdowns.metricBreakdowns.Cs01 = {
+            targetLevel: eachRow.targetCs01.level.savedUnderlineValue
+          };
+        }
+        if (this.creditLeverageModifiedInEditRow(eachRow)) {
+          modifiedMetricBreakdowns.metricBreakdowns.CreditLeverage = {
+            targetLevel: eachRow.targetCreditLeverage.level.savedUnderlineValue
+          };
+        }
+        payload.portfolioBreakdown.breakdown[eachRow.rowTitle] = modifiedMetricBreakdowns;
+      }
+    });
+    return payload;
+  }
+
+  private cs01ModifiedInEditRow(targetRow: StructureSetTargetPanelEditRowBlock): boolean {
+    return targetRow.targetCs01.level.isActive || targetRow.targetCs01.level.isImplied;
+  }
+
+  private creditLeverageModifiedInEditRow(targetRow: StructureSetTargetPanelEditRowBlock): boolean {
+    return targetRow.targetCreditLeverage.level.isActive || targetRow.targetCreditLeverage.level.isImplied;
   }
 
   private retrieveRawBreakdownDataForTargetBreakdown(): BEStructuringBreakdownBlock {
