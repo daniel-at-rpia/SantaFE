@@ -483,8 +483,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         breakdown: {}
       }
     };
+    let hasModification = false;
     this.state.editRowList.forEach((eachRow) => {
       if(this.cs01ModifiedInEditRow(eachRow) || this.creditLeverageModifiedInEditRow(eachRow)) {
+        hasModification = true;
         const modifiedMetricBreakdowns: BEMetricBreakdowns = {
           view: null,
           metricBreakdowns: {}
@@ -502,7 +504,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         payload.portfolioBreakdown.breakdown[eachRow.rowTitle] = modifiedMetricBreakdowns;
       }
     });
-    return payload;
+    return hasModification ? payload : null;
   }
 
   private cs01ModifiedInEditRow(targetRow: StructureSetTargetPanelEditRowBlock): boolean {

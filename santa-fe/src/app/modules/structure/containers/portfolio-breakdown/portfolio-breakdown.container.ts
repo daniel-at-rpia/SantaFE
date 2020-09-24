@@ -98,6 +98,8 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       this.breakdownData.style.ratingFillWidth = 100 - this.utilityService.round(misalignmentAggregate, 0);
       this.breakdownData.data.ratingHoverText = `${100 - this.utilityService.round(misalignmentAggregate, 0)}`;
       this.breakdownData.state.isTargetAlignmentRatingAvail = true;
+    } else {
+      this.breakdownData.state.isTargetAlignmentRatingAvail = false;
     }
   }
 
