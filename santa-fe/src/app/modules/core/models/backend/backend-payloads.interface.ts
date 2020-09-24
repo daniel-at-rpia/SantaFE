@@ -102,10 +102,17 @@ export interface PayloadSetAlertsToInactive {
   alertIds: Array<string>;
 }
 
-export interface PayloadUpdatePortfolio {
-  portfolioStructure: BEPortfolioStructuringDTO
-}
-
 export interface PayloadGetPortfolioStructures {
   yyyyMMDD?: string;
+}
+
+export interface PayloadUpdatePortfolioStructuresTargets {
+  portfolioTarget: {
+    date: string,
+    portfolioId: number,
+    target: {
+      CreditLeverage: number,
+      Cs01: number
+    }
+  }
 }
