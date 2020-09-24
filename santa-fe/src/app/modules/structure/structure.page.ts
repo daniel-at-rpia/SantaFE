@@ -23,7 +23,7 @@
     import { STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
     import { BICsHierarchyAllDataBlock, BICsHierarchyBlock } from '../core/models/frontend/frontend-blocks.interface';
     import { BEBICsHierarchyBlock } from 'Core/models/backend/backend-models.interface';
-    import { BICsHierarchyService } from 'Structure/services/BICsHierarchyService';
+    import { BICsDataProcessingService } from 'App/modules/structure/services/BICsDataProcessingService';
   //
 
 @Component({
@@ -42,16 +42,14 @@ export class StructurePage implements OnInit, OnDestroy {
 
   private initializePageState(): StructureState {
     const state: StructureState = {
-      BICSData: {
+      BICsData: {
         formattedBICsHierarchy: {
           children: [],
         },
-        tierCounter: 1
       },
       fetchResult: {
         fetchBICsHierarchyFailed: false,
-        fetchBICsHierarchyError: '',
-        fetchBICsHierarchy: null
+        fetchBICsHierarchyError: ''
       }
     }
     return state;
@@ -62,7 +60,7 @@ export class StructurePage implements OnInit, OnDestroy {
     private dtoService: DTOService,
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
-    private BICsHierarchyService: BICsHierarchyService
+    private bicsDataProcessingService: BICsDataProcessingService
   ) {
     this.state = this.initializePageState();
   }
@@ -76,43 +74,25 @@ export class StructurePage implements OnInit, OnDestroy {
   public ngOnDestroy() {
   }
 
-  private updateBICsFetch(receivedData: boolean, data: BEBICsHierarchyBlock, message: string = '') {
+  private updateBICsFetch(receivedData: boolean, message: string = '') {
     this.state.fetchResult.fetchBICsHierarchyFailed = !receivedData;
-    this.state.fetchResult.fetchBICsHierarchy = data;
     this.state.fetchResult.fetchBICsHierarchyError = message;
   }
+
   private fetchBICsHierarchy() {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getBICsHierarchy, {req: 'GET'}).pipe(
       first(),
       tap((serverReturn: BEBICsHierarchyBlock) => {
        if (!!serverReturn) {
-         this.updateBICsFetch(true, serverReturn);
-         if (!!this.state.fetchResult.fetchBICsHierarchy) {
-          this.iterateBICsData(this.state.fetchResult.fetchBICsHierarchy, this.state.BICSData.formattedBICsHierarchy, this.state.BICSData.tierCounter);
-          this.BICsHierarchyService.storeFormattedBICsData(this.state.BICSData.formattedBICsHierarchy);
-         }
+         this.updateBICsFetch(true);
+         this.state.BICsData.formattedBICsHierarchy =  this.bicsDataProcessingService.formFormattedBICsHierarchy(serverReturn, this.state.BICsData.formattedBICsHierarchy, 1);
        }
       }),
       catchError(err => {
-        this.updateBICsFetch(false, null, err);
+        this.updateBICsFetch(false, err);
         this.restfulCommService.logError('Cannot retrieve BICs hierarchy data');
         return of('error');
       })
     ).subscribe()
-  }
-
-  private iterateBICsData(data: BEBICsHierarchyBlock, parent: BICsHierarchyAllDataBlock | BICsHierarchyBlock, counter: number) {
-    if (!data) return;
-    for (let category in data) {
-      if (!!category) {
-        const BICsData: BICsHierarchyBlock = {
-          name: category,
-          tier: counter,
-          children: []
-        }
-        parent.children.push(BICsData);
-        this.iterateBICsData(data[category], BICsData, BICsData.tier + 1);
-      }
-    }
   }
 }

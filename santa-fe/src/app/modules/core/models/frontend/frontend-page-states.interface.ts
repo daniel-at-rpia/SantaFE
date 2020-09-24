@@ -275,14 +275,12 @@ export interface TradeAlertPanelState {
 }
 
 export interface StructureState {
-  BICSData: {
+  BICsData: {
     formattedBICsHierarchy: BICsHierarchyAllDataBlock;
-    tierCounter: number;
   }
   fetchResult: {
     fetchBICsHierarchyFailed: boolean;
     fetchBICsHierarchyError: string;
-    fetchBICsHierarchy: BEBICsHierarchyBlock;
   }
 }
 
