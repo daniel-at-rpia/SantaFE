@@ -17,7 +17,7 @@ import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 import { PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/frontend-models.interface';
 import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
-import { PayloadUpdatePortfolio, PayloadGetPortfolioStructures } from 'App/modules/core/models/backend/backend-payloads.interface';
+import { PayloadUpdatePortfolioStructuresTargets, PayloadGetPortfolioStructures } from 'App/modules/core/models/backend/backend-payloads.interface';
 import { StructureSetTargetPostEditUpdatePack } from 'FEModels/frontend-adhoc-packages.interface';
 
 @Component({
@@ -132,8 +132,15 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
 
   private getFundFromNewTargets(fund: PortfolioStructureDTO) {
-    const payload: PayloadUpdatePortfolio = {
-      portfolioStructure: fund.data.originalBEData
+    const payload: PayloadUpdatePortfolioStructuresTargets = {
+      portfolioTarget: {
+        date: fund.data.originalBEData.target.date,
+        portfolioId: fund.data.originalBEData.target.portfolioId,
+        target: {
+          CreditLeverage: fund.data.target.target.creditLeverage,
+          Cs01: fund.data.target.target.cs01
+        }
+      }
     }
     fund.state.isStencil = true;
     fund.data.cs01TargetBar.state.isStencil = true;
@@ -144,7 +151,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         category.moveVisualizer.state.isStencil = true;
       })
     })
-    this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioStructures, {req: 'POST'}, payload).pipe(
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioTargets, {req: 'POST'}, payload).pipe(
       first(),
       tap((serverReturn: BEPortfolioStructuringDTO) => {
         const updatedFund = this.dtoService.formStructureFundObject(serverReturn, false, this.state.selectedMetricValue);
