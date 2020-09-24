@@ -8,7 +8,7 @@ import {
 } from 'ag-grid-community';
 
 import * as DTOs from 'FEModels/frontend-models.interface';
-
+import { BEPortfolioStructuringDTO } from 'BEModels/backend-models.interface';
 import {
   QuoteMetricBlock,
   AgGridRow,
@@ -114,4 +114,9 @@ export interface AmchartPieDataBlock {
 export interface StructureSetTargetOverlayTransferPack {
   targetFund: DTOs.PortfolioStructureDTO;
   targetBreakdown: DTOs.PortfolioBreakdownDTO;
+}
+
+export interface StructureSetTargetPostEditUpdatePack {
+  targetFund: BEPortfolioStructuringDTO;
+  targetBreakdownBackendGroupOptionIdentifier: string;
 }

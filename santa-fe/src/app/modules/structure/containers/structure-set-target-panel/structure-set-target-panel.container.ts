@@ -22,7 +22,9 @@ import {
   FilterOptionsTenor
 } from 'Core/constants/securityDefinitionConstants.constant';
 import { PayloadUpdateBreakdown } from 'BEModels/backend-payloads.interface';
-import { BEStructuringBreakdownBlock } from 'BEModels/backend-models.interface';
+import { BEStructuringBreakdownBlock, BEPortfolioStructuringDTO } from 'BEModels/backend-models.interface';
+import { StructureSetTargetPostEditUpdatePack } from 'FEModels/frontend-adhoc-packages.interface';
+import { StructureReloadBreakdownDataPostEditEvent } from 'Structure/actions/structure.actions';
 
 @Component({
   selector: 'structure-set-target-panel',
@@ -443,26 +445,24 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private submitTargetChanges(): boolean {
-    console.log('test, targetRawData', this.state.targetBreakdownRawData);
-    // const targetBreakdownRawData = this.state.targetFund.data.originalBEData.breakdowns.find(() => {
-
-    // });
     const payload: PayloadUpdateBreakdown = {
       portfolioBreakdown: this.state.targetBreakdownRawData
     };
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
       first(),
-      tap((serverReturn) => {
-
+      tap((serverReturn: BEPortfolioStructuringDTO) => {
+        const updatePack: StructureSetTargetPostEditUpdatePack = {
+          targetFund: serverReturn,
+          targetBreakdownBackendGroupOptionIdentifier: this.state.targetBreakdown.data.backendGroupOptionIdentifier
+        };
+        this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
       }),
       catchError(err => {
         console.error('update breakdown failed');
         return of('error');
       })
     ).subscribe();
-
     return true;
-    // return false;
   }
 
   private retrieveRawBreakdownDataForTargetBreakdown(): BEStructuringBreakdownBlock {
