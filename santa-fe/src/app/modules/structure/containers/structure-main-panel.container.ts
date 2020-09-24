@@ -9,6 +9,7 @@ import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface
 import { selectMetricLevel } from 'Structure/selectors/structure.selectors';
 import { StructureMetricSelect } from 'Structure/actions/structure.actions';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
+import { selectReloadBreakdownDataPostEdit } from 'Structure/selectors/structure.selectors';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { UtilityService } from 'Core/services/UtilityService';
 import { PortfolioMetricValues, PortfolioShortNames } from 'Core/constants/structureConstants.constants';
@@ -17,6 +18,7 @@ import { PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/fronte
 import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import { PayloadUpdatePortfolioStructuresTargets, PayloadGetPortfolioStructures } from 'App/modules/core/models/backend/backend-payloads.interface';
+import { StructureSetTargetPostEditUpdatePack } from 'FEModels/frontend-adhoc-packages.interface';
 
 @Component({
     selector: 'structure-main-panel',
@@ -29,7 +31,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   state: StructureMainPanelState; 
   subscriptions = {
     ownerInitialsSub: null,
-    selectedMetricLevelSub: null
+    selectedMetricLevelSub: null,
+    reloadFundUponEditSub: null
   };
   constants = {
     cs01: PortfolioMetricValues.cs01,
@@ -93,6 +96,14 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         }, 500)
       })
     });
+    this.subscriptions.reloadFundUponEditSub = this.store$.pipe(
+      select(selectReloadBreakdownDataPostEdit)
+    ).subscribe((updatePack: StructureSetTargetPostEditUpdatePack) => {
+      if (!!updatePack && !!updatePack.targetFund) {
+        const systemAlertMessage = `Successfully Updated Target for ${updatePack.targetBreakdownBackendGroupOptionIdentifier}`;
+        this.reloadFund(updatePack.targetFund, systemAlertMessage);
+      }
+    });
     const initialWaitForIcons = this.loadStencilFunds.bind(this);
     setTimeout(() => {
       initialWaitForIcons();
@@ -144,15 +155,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       first(),
       tap((serverReturn: BEPortfolioStructuringDTO) => {
         const updatedFund = this.dtoService.formStructureFundObject(serverReturn, false, this.state.selectedMetricValue);
-        updatedFund.data.cs01TotalsInK.currentTotal = updatedFund.data.currentTotals.cs01 / 1000; //this is used in the set funds input fields, which are numbers - parseNumberToThousands() returns a string
-        updatedFund.data.cs01TargetBar.data.displayedCurrentValue = this.utilityService.parseNumberToThousands(updatedFund.data.currentTotals.cs01, true);
-        updatedFund.data.cs01TargetBar.data.displayedTargetValue = this.utilityService.parseNumberToThousands(updatedFund.data.target.target.cs01, true);
-        const selectedFund = this.state.fetchResult.fundList.find(fund => fund.data.portfolioId === updatedFund.data.portfolioId);
-        const selectedFundIndex = this.state.fetchResult.fundList.indexOf(selectedFund);
-        this.state.fetchResult.fundList[selectedFundIndex] = updatedFund;
-        const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `Successfully updated ${updatedFund.data.portfolioShortName}. Target CS01 level is ${updatedFund.data.cs01TargetBar.data.displayedTargetValue} and Credit Leverage level is ${updatedFund.data.creditLeverageTargetBar.data.displayedTargetValue}`, null);
-        this.store$.dispatch(new CoreSendNewAlerts([alert]));
-      
+        const systemAlertMessage = `Successfully updated ${updatedFund.data.portfolioShortName}. Target CS01 level is ${updatedFund.data.cs01TargetBar.data.displayedTargetValue} and Credit Leverage level is ${updatedFund.data.creditLeverageTargetBar.data.displayedTargetValue}`;
+        this.reloadFund(serverReturn, systemAlertMessage);
       }),
       catchError(err => {
         const alert = this.dtoService.formSystemAlertObject('Structuring', 'ERROR', `Unable to update ${fund.data.portfolioShortName} target levels`, null);
@@ -222,5 +226,20 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         return of('error')
       })
     ).subscribe()
+  }
+
+  private reloadFund(
+    serverReturn: BEPortfolioStructuringDTO,
+    systemAlertMessage: string
+  ) {
+    const updatedFund = this.dtoService.formStructureFundObject(serverReturn, false, this.state.selectedMetricValue);
+    updatedFund.data.cs01TotalsInK.currentTotal = updatedFund.data.currentTotals.cs01 / 1000; //this is used in the set funds input fields, which are numbers - parseNumberToThousands() returns a string
+    updatedFund.data.cs01TargetBar.data.displayedCurrentValue = this.utilityService.parseNumberToThousands(updatedFund.data.currentTotals.cs01, true);
+    updatedFund.data.cs01TargetBar.data.displayedTargetValue = this.utilityService.parseNumberToThousands(updatedFund.data.target.target.cs01, true);
+    const selectedFund = this.state.fetchResult.fundList.find(fund => fund.data.portfolioId === updatedFund.data.portfolioId);
+    const selectedFundIndex = this.state.fetchResult.fundList.indexOf(selectedFund);
+    this.state.fetchResult.fundList[selectedFundIndex] = updatedFund;
+    const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${systemAlertMessage}`, null);
+    this.store$.dispatch(new CoreSendNewAlerts([alert]));
   }
 }

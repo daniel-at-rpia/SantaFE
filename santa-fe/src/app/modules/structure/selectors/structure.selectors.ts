@@ -11,3 +11,8 @@ export const selectSetTargetTransferPack = createSelector(
   getStructureState,
   (state: StructureState) => state.setTargetTransfer
 );
+
+export const selectReloadBreakdownDataPostEdit = createSelector(
+  getStructureState,
+  (state: StructureState) => state.reloadBreakdownDataPostEdit
+);
