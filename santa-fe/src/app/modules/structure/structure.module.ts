@@ -15,8 +15,9 @@ import { StructureUtilityPanel } from 'Structure/containers/structure-utility-pa
 import { TargetBar } from 'App/modules/structure/components/target-bar.component'
 import { PortfolioBreakdown } from 'App/modules/structure/containers/portfolio-breakdown/portfolio-breakdown.container';
 import { StructureSetTargetPanel } from 'Structure/containers/structure-set-target-panel/structure-set-target-panel.container';
-import { CategoryContentListItem } from 'Structure/components/category-content-list-item.component';
-import { BICsDataProcessingService } from 'App/modules/structure/services/BICsDataProcessingService';
+import { PortfolioBreakdownRow } from 'App/modules/structure/components/portfolio-breakdown-row.component';
+import { BICsDataProcessingService } from 'Structure/services/BICsDataProcessingService';
+import { StructurePopover } from 'Structure/containers/structure-popover/structure-popover.container';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { BICsDataProcessingService } from 'App/modules/structure/services/BICsDa
     TargetBar,
     PortfolioBreakdown,
     StructureSetTargetPanel,
-    CategoryContentListItem
+    PortfolioBreakdownRow,
+    StructurePopover
   ],
   imports: [
     // Angular framework modules
