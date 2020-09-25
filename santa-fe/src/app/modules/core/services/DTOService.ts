@@ -1933,7 +1933,9 @@ export class DTOService {
           isStencil,
           eachCategoryText,
           rawData.breakdown[eachCategoryText].metricBreakdowns.Cs01,
-          true
+          true,
+          rawData.portfolioId,
+          rawData.groupOption
         )
         : null;
       !!eachCs01CategoryBlock && object.data.rawCs01CategoryList.push(eachCs01CategoryBlock);
@@ -1944,7 +1946,9 @@ export class DTOService {
           isStencil,
           eachCategoryText,
           rawData.breakdown[eachCategoryText].metricBreakdowns.CreditLeverage,
-          false
+          false,
+          rawData.portfolioId,
+          rawData.groupOption
         )
         : null;
       !!eachLeverageCategoryBlock && object.data.rawLeverageCategoryList.push(eachLeverageCategoryBlock);
@@ -1958,8 +1962,10 @@ export class DTOService {
     isStencil: boolean,
     categoryName: string,
     rawCategoryData: BEModels.BEStructuringBreakdownSingleEntry,
-    isCs01: boolean
-  ): Blocks.PortfolioBreakdownCategoryBlock {
+    isCs01: boolean,
+    portfolioId: number,
+    groupOption: string
+  ): DTOs.StructurePortfolioBreakdownRowDTO {
     if (!!rawCategoryData) {
       const parsedRawData = this.utility.deepCopy(rawCategoryData);
       const rawCurrentLevel = parsedRawData.currentLevel;
@@ -2001,11 +2007,17 @@ export class DTOService {
         indexPct: parsedRawData.indexPct,
         indexPctDisplay: parsedRawData.indexPct != null ? `${parsedRawData.indexPct}%` : '-',
         moveVisualizer: eachMoveVisualizer,
+        bicsLevel: 1,
+        children: null,
+        portfolioId,
         raw: {
           currentLevel: rawCurrentLevel,
           currentPct: rawCurrentPct,
           targetLevel: rawTargetLevel,
           targetPct: rawTargetPct
+        },
+        state: {
+          isDisplayCs01: !!isCs01
         }
       };
       if (eachCategoryBlock.diffToTarget < 0) {
@@ -2014,7 +2026,12 @@ export class DTOService {
       if (eachCategoryBlock.diffToTarget > 0) {
         eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `+${eachCategoryBlock.diffToTarget}k` : `+${eachCategoryBlock.diffToTarget}`;
       }
-      return eachCategoryBlock;
+
+      const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock);
+      if (groupOption === 'BicsLevel1' || groupOption === 'BicsLevel2' || groupOption === 'BicsLevel3') {
+        eachCategoryBlockDTO.state.isBtnDiveIn = true;
+      }
+      return eachCategoryBlockDTO;
     } else {
       return null;
     }
@@ -2036,6 +2053,30 @@ export class DTOService {
         closeModal: null
       }
     };
+    return object;
+  }
+
+  public formStructurePopoverObject(categoryRow: DTOs.StructurePortfolioBreakdownRowDTO): DTOs.StructurePopoverDTO {
+    const object = {
+      data: {
+        mainRow: categoryRow
+      },
+      state: {
+        isActive: false
+      }
+    }
+    return object;
+  }
+
+  public formStructureBreakdownRowObject(categoryRow: Blocks.PortfolioBreakdownCategoryBlock): DTOs.StructurePortfolioBreakdownRowDTO {
+    const object = {
+      data: categoryRow,
+      state: {
+        isSelected: false,
+        isBtnDiveIn: false,
+        isStencil: false
+      }
+    }
     return object;
   }
 }
