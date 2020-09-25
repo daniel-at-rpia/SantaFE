@@ -70,7 +70,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
   public removeStencil() {
     this.breakdownData.state.isStencil = false;
     this.breakdownData.data.displayCategoryList.forEach((eachCategory) => {
-      eachCategory.moveVisualizer.state.isStencil = false;
+      eachCategory.data.moveVisualizer.state.isStencil = false;
     });
   }
 
@@ -87,7 +87,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     if (allCategoriesHaveTarget) {
       let misalignment = 0;
       targetList.forEach((eachCategory) => {
-        misalignment = misalignment + Math.abs(eachCategory.targetPct - eachCategory.currentPct);
+        misalignment = misalignment + Math.abs(eachCategory.data.targetPct - eachCategory.data.currentPct);
       });
       this.breakdownData.style.ratingFillWidth = 100 - this.utilityService.round(misalignment, 0);
       this.breakdownData.data.ratingHoverText = `${100 - this.utilityService.round(misalignment, 0)}`;

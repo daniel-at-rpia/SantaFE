@@ -137,12 +137,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.state.editRowList = [];
       this.state.targetBreakdown.data.rawCs01CategoryList.forEach((eachCategory) => {
         const newRow: StructureSetTargetPanelEditRowBlock = {
-          targetBlockFromBreakdown: eachCategory,
-          rowTitle: eachCategory.category,
+          targetBlockFromBreakdown: eachCategory.data,
+          rowTitle: eachCategory.data.category,
           targetCs01: {
             level: {
               savedDisplayValue: `${eachCategory.targetLevel}`,
-              savedUnderlineValue: eachCategory.raw.targetLevel,
+              savedUnderlineValue: eachCategory.data.raw.targetLevel,
               modifiedDisplayValue: null,
               modifiedUnderlineValue: null,
               isActive: false,
@@ -153,7 +153,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             },
             percent: {
               savedDisplayValue: `${eachCategory.targetPct}`,
-              savedUnderlineValue: eachCategory.raw.targetPct,
+              savedUnderlineValue: eachCategory.data.raw.targetPct,
               modifiedDisplayValue: null,
               modifiedUnderlineValue: null,
               isActive: false,
@@ -192,13 +192,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       });
       this.state.targetBreakdown.data.rawLeverageCategoryList.forEach((eachCategory) => {
         const targetRow = this.state.editRowList.find((eachRow) => {
-          return eachRow.rowTitle === eachCategory.category;
+          return eachRow.rowTitle === eachCategory.data.category;
         });
         if (!!targetRow) {
           targetRow.targetCreditLeverage.level.savedDisplayValue = `${eachCategory.targetLevel}`;
-          targetRow.targetCreditLeverage.level.savedUnderlineValue = eachCategory.raw.targetLevel;
+          targetRow.targetCreditLeverage.level.savedUnderlineValue = eachCategory.data.raw.targetLevel;
           targetRow.targetCreditLeverage.percent.savedDisplayValue = `${eachCategory.targetPct}`;
-          targetRow.targetCreditLeverage.percent.savedUnderlineValue = eachCategory.raw.targetPct;
+          targetRow.targetCreditLeverage.percent.savedUnderlineValue = eachCategory.data.raw.targetPct;
         };
       });
     }
@@ -324,7 +324,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
     this.state.targetBreakdown.state.isStencil = true;
     this.state.targetBreakdown.data.displayCategoryList.forEach(category => {
-      category.moveVisualizer.state.isStencil = true;
+      category.data.moveVisualizer.state.isStencil = true;
     })
     setTimeout(() => {
       const updatedPortfolioBreakdown = this.dtoService.formPortfolioBreakdown(false, rawData, definitionList);
@@ -336,7 +336,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.state.targetBreakdown.state.isDisplayingCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
       this.state.targetBreakdown.state.isStencil = false;
       this.state.targetBreakdown.data.displayCategoryList.forEach(category => {
-        category.moveVisualizer.state.isStencil = false;
+        category.data.moveVisualizer.state.isStencil = false;
       })
    }, 300);
   }

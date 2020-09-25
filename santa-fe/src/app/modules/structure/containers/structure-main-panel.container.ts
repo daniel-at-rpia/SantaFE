@@ -84,7 +84,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
           breakdown.state.isStencil = true;
           const targetList  = breakdown.state.isDisplayingCs01 ? breakdown.data.rawCs01CategoryList : breakdown.data.rawLeverageCategoryList;
           targetList.forEach(target => {
-            target.moveVisualizer.state.isStencil = true;
+            target.data.moveVisualizer.state.isStencil = true;
           })
         })
 
@@ -130,7 +130,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     fund.data.children.forEach(breakdown => {
       breakdown.state.isStencil = true;
       breakdown.data.displayCategoryList.forEach(category => {
-        category.moveVisualizer.state.isStencil = true;
+        category.data.moveVisualizer.state.isStencil = true;
       })
     })
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioStructures, {req: 'POST'}, payload).pipe(
@@ -157,7 +157,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         fund.data.children.forEach(breakdown => {
           breakdown.state.isStencil = false;
           breakdown.data.displayCategoryList.forEach(category => {
-            category.moveVisualizer.state.isStencil = false;
+            category.data.moveVisualizer.state.isStencil = false;
           })
         })
         this.restfulCommService.logError('Cannot retrieve fund with updated targets');
