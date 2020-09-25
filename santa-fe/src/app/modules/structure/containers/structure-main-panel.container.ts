@@ -17,6 +17,7 @@ import { PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/fronte
 import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import { PayloadUpdatePortfolio, PayloadGetPortfolioStructures } from 'App/modules/core/models/backend/backend-payloads.interface';
+import { BICsDataProcessingService } from 'Structure/services/BICsDataProcessingService';
 
 @Component({
     selector: 'structure-main-panel',
@@ -42,7 +43,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     private dtoService: DTOService,
     private store$: Store<any>,
     private restfulCommService: RestfulCommService,
-    private utilityService: UtilityService
+    private utilityService: UtilityService,
+    private BICsDataProcessingService: BICsDataProcessingService
     ) {
     this.state = this.initializePageState();
   }
@@ -195,6 +197,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       tap((serverReturn: Array<BEPortfolioStructuringDTO>) => {
         this.state.fetchResult.fundList = [];
         serverReturn.forEach(eachFund => {
+          this.BICsDataProcessingService.getRawBICsData(eachFund);
           const newFund = this.dtoService.formStructureFundObject(eachFund, false);
           this.state.fetchResult.fundList.push(newFund);
         })
