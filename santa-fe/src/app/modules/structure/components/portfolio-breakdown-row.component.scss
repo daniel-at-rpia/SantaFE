@@ -1,7 +1,7 @@
 @import "global.scss";
 
 $portfolioBreakdownCategory_cell_width: 3.5rem;
-.sat-portfolioBreakdownCategory {
+.sat-portfolioBreakdownRow {
   $blockName: &;
   display: flex;
   flex: 1 1 auto;
@@ -19,7 +19,7 @@ $portfolioBreakdownCategory_cell_width: 3.5rem;
       padding: $spacing_xx_small;
       box-shadow: none;
       display: flex;
-      justify-content: space-between;
+    justify-content: space-between;
       flex-direction: row;
       cursor: not-allowed;
       &-text {
@@ -100,6 +100,17 @@ $portfolioBreakdownCategory_cell_width: 3.5rem;
     &>move-visualizer {
       flex: 1 1 auto;
       margin-right: $spacing_small;
+    }
+  }
+  &--selected {
+    #{$blockName} {
+      &__cta {
+        &-btn {
+          background-color: $color_active;
+          box-shadow: none;
+          color: $font_color_inverse;
+        }
+      }
     }
   }
   &--noSignificantDiff {
