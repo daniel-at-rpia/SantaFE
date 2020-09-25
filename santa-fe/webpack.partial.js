@@ -1,6 +1,5 @@
 const webpack = require('webpack');
-const version = "1.7.10-executableQuote-alpha";
-
+const version = "1.7.16-alpha-2";
 module.exports = {
   output: {
     filename: `[name].${version}.min.js`

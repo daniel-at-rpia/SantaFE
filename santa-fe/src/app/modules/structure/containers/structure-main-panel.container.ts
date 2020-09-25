@@ -1,24 +1,24 @@
 import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
+import { of, Subscription } from 'rxjs';
+import { catchError, first, tap} from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
+import * as moment from 'moment';
+
 import { DTOService } from 'Core/services/DTOService';
 import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
-import { Store, select } from '@ngrx/store';
 import { selectMetricLevel } from 'Structure/selectors/structure.selectors';
 import { StructureMetricSelect } from 'Structure/actions/structure.actions';
-import { Subscription } from 'rxjs';
-import { ownerInitials } from 'Core/selectors/core.selectors';
+import { selectUserInitials } from 'Core/selectors/core.selectors';
+import { selectReloadBreakdownDataPostEdit } from 'Structure/selectors/structure.selectors';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
-import { of  } from 'rxjs';
-import { catchError, first, tap} from 'rxjs/operators';
 import { UtilityService } from 'Core/services/UtilityService';
-import * as moment from 'moment';
-import {
-  PortfolioMetricValues,
-  PortfolioShortNames,
-  STRUCTURE_EDIT_MODAL_ID
-} from 'Core/constants/structureConstants.constants';
+import { PortfolioMetricValues, PortfolioShortNames } from 'Core/constants/structureConstants.constants';
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 import { PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/frontend-models.interface';
 import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backend-models.interface';
+import { CoreSendNewAlerts } from 'Core/actions/core.actions';
+import { PayloadUpdatePortfolioStructuresTargets, PayloadGetPortfolioStructures } from 'App/modules/core/models/backend/backend-payloads.interface';
+import { StructureSetTargetPostEditUpdatePack } from 'FEModels/frontend-adhoc-packages.interface';
 
 @Component({
     selector: 'structure-main-panel',
@@ -31,13 +31,13 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   state: StructureMainPanelState; 
   subscriptions = {
     ownerInitialsSub: null,
-    selectedMetricLevelSub: null
+    selectedMetricLevelSub: null,
+    reloadFundUponEditSub: null
   };
   constants = {
     cs01: PortfolioMetricValues.cs01,
     creditLeverage: PortfolioMetricValues.creditLeverage,
-    portfolioShortNames: PortfolioShortNames,
-    editModalId: STRUCTURE_EDIT_MODAL_ID
+    portfolioShortNames: PortfolioShortNames
   };
   portfolioList: Array<PortfolioShortNames> = [this.constants.portfolioShortNames.FIP, this.constants.portfolioShortNames.BBB, this.constants.portfolioShortNames.CIP, this.constants.portfolioShortNames.STIP, this.constants.portfolioShortNames.AGB, this.constants.portfolioShortNames.DOF, this.constants.portfolioShortNames.SOF];
   
@@ -67,9 +67,9 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   public ngOnInit() {
     this.state = this.initializePageState();
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
-      select(ownerInitials)
+      select(selectUserInitials)
     ).subscribe((value) => {
-      this.state.ownerInitial = value;
+        this.state.ownerInitial = value;
     });
     this.subscriptions.selectedMetricLevelSub = this.store$.pipe(
       select(selectMetricLevel)
@@ -77,10 +77,11 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       const metric = value === this.constants.cs01 ? this.constants.cs01 : this.constants.creditLeverage
       this.state.selectedMetricValue = metric;
       this.state.fetchResult.fundList.forEach(fund => {
-        //Show active and inactive target bars
-        fund.data.creditLeverageTargetBar.state.isInactiveMetric = fund.data.creditLeverageTargetBar.data.targetMetric !== this.state.selectedMetricValue ? true : false;
-        fund.data.cs01TargetBar.state.isInactiveMetric = fund.data.cs01TargetBar.data.targetMetric !== this.state.selectedMetricValue ? true : false;
         fund.state.isStencil = true; 
+        //Switch active and inactive target bars
+        fund.data.creditLeverageTargetBar.state.isInactiveMetric = this.state.selectedMetricValue === this.constants.cs01;
+        fund.data.cs01TargetBar.state.isInactiveMetric = this.state.selectedMetricValue === this.constants.creditLeverage;
+        //Switch values to be displayed in breakdowns
         fund.data.children.forEach(breakdown => {
           breakdown.state.isDisplayingCs01 = this.state.selectedMetricValue === this.constants.cs01;
           breakdown.state.isStencil = true;
@@ -94,6 +95,14 @@ export class StructureMainPanel implements OnInit, OnDestroy {
           fund.state.isStencil = false;
         }, 500)
       })
+    });
+    this.subscriptions.reloadFundUponEditSub = this.store$.pipe(
+      select(selectReloadBreakdownDataPostEdit)
+    ).subscribe((updatePack: StructureSetTargetPostEditUpdatePack) => {
+      if (!!updatePack && !!updatePack.targetFund) {
+        const systemAlertMessage = `Successfully Updated Target for ${updatePack.targetBreakdownBackendGroupOptionIdentifier}`;
+        this.reloadFund(updatePack.targetFund, systemAlertMessage);
+      }
     });
     const initialWaitForIcons = this.loadStencilFunds.bind(this);
     setTimeout(() => {
@@ -122,6 +131,52 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     });
   }
 
+  private getFundFromNewTargets(fund: PortfolioStructureDTO) {
+    const payload: PayloadUpdatePortfolioStructuresTargets = {
+      portfolioTarget: {
+        date: fund.data.originalBEData.target.date,
+        portfolioId: fund.data.originalBEData.target.portfolioId,
+        target: {
+          CreditLeverage: fund.data.target.target.creditLeverage,
+          Cs01: fund.data.target.target.cs01
+        }
+      }
+    }
+    fund.state.isStencil = true;
+    fund.data.cs01TargetBar.state.isStencil = true;
+    fund.data.creditLeverageTargetBar.state.isStencil = true;
+    fund.data.children.forEach(breakdown => {
+      breakdown.state.isStencil = true;
+      breakdown.data.displayCategoryList.forEach(category => {
+        category.moveVisualizer.state.isStencil = true;
+      })
+    })
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioTargets, {req: 'POST'}, payload).pipe(
+      first(),
+      tap((serverReturn: BEPortfolioStructuringDTO) => {
+        const updatedFund = this.dtoService.formStructureFundObject(serverReturn, false, this.state.selectedMetricValue);
+        const systemAlertMessage = `Successfully updated ${updatedFund.data.portfolioShortName}. Target CS01 level is ${updatedFund.data.cs01TargetBar.data.displayedTargetValue} and Credit Leverage level is ${updatedFund.data.creditLeverageTargetBar.data.displayedTargetValue}`;
+        this.reloadFund(serverReturn, systemAlertMessage);
+      }),
+      catchError(err => {
+        const alert = this.dtoService.formSystemAlertObject('Structuring', 'ERROR', `Unable to update ${fund.data.portfolioShortName} target levels`, null);
+        alert.state.isError = true;
+        this.store$.dispatch(new CoreSendNewAlerts([alert]));
+        fund.state.isStencil = false;
+        fund.data.cs01TargetBar.state.isStencil = false;
+        fund.data.creditLeverageTargetBar.state.isStencil = false;
+        fund.data.children.forEach(breakdown => {
+          breakdown.state.isStencil = false;
+          breakdown.data.displayCategoryList.forEach(category => {
+            category.moveVisualizer.state.isStencil = false;
+          })
+        })
+        this.restfulCommService.logError('Cannot retrieve fund with updated targets');
+        return of('error');
+      })
+    ).subscribe()
+  }
+
   private resetAPIErrors() {
     this.state.fetchResult.fetchFundDataFailed = false;
     this.state.fetchResult.fetchFundDataFailedError = '';
@@ -143,9 +198,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
 
   private fetchFunds() {
     this.loadStencilFunds();
-    const payload = { // assumes current date if nothing is passed in
-      yyyyMMDD: ""
-    }
+    //If nothing is passed in, BE assumes current date
+    let payload: PayloadGetPortfolioStructures;
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioStructures, { req: 'POST' }, payload, false, false).pipe(
       first(),
@@ -172,5 +226,20 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         return of('error')
       })
     ).subscribe()
+  }
+
+  private reloadFund(
+    serverReturn: BEPortfolioStructuringDTO,
+    systemAlertMessage: string
+  ) {
+    const updatedFund = this.dtoService.formStructureFundObject(serverReturn, false, this.state.selectedMetricValue);
+    updatedFund.data.cs01TotalsInK.currentTotal = updatedFund.data.currentTotals.cs01 / 1000; //this is used in the set funds input fields, which are numbers - parseNumberToThousands() returns a string
+    updatedFund.data.cs01TargetBar.data.displayedCurrentValue = this.utilityService.parseNumberToThousands(updatedFund.data.currentTotals.cs01, true);
+    updatedFund.data.cs01TargetBar.data.displayedTargetValue = this.utilityService.parseNumberToThousands(updatedFund.data.target.target.cs01, true);
+    const selectedFund = this.state.fetchResult.fundList.find(fund => fund.data.portfolioId === updatedFund.data.portfolioId);
+    const selectedFundIndex = this.state.fetchResult.fundList.indexOf(selectedFund);
+    this.state.fetchResult.fundList[selectedFundIndex] = updatedFund;
+    const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${systemAlertMessage}`, null);
+    this.store$.dispatch(new CoreSendNewAlerts([alert]));
   }
 }

@@ -6,3 +6,13 @@ export const selectMetricLevel = createSelector(
   getStructureState, 
   (state: StructureState) => state.selectedMetric
 );
+
+export const selectSetTargetTransferPack = createSelector(
+  getStructureState,
+  (state: StructureState) => state.setTargetTransfer
+);
+
+export const selectReloadBreakdownDataPostEdit = createSelector(
+  getStructureState,
+  (state: StructureState) => state.reloadBreakdownDataPostEdit
+);

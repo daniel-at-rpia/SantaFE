@@ -10,7 +10,8 @@
     'sat-alert--hiddenState': hideAllAlerts && alertData.state.isCountdownFinished,
     'sat-alert--willBeRemovedState': alertData.state.willBeRemoved,
     'sat-alert--hasSecurityState': alertData.state.hasSecurity,
-    'sat-alert--hasTitlePinState': alertData.state.hasTitlePin
+    'sat-alert--hasTitlePinState': alertData.state.hasTitlePin,
+    'sat-alert--errorState': alertData.state.isError
   }">
   <section (click)="onClickAlertThumbnail()" class="sat-alert__thumbnail">
     <div class="sat-alert__thumbnail-type">
