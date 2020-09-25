@@ -14,7 +14,8 @@ import {
 } from 'ag-grid-community';
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { DTOService } from 'Core/services/DTOService';
-import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import { PortfolioMetricValues, PortfolioShortNames } from 'Core/constants/structureConstants.constants';
+import { BEStructuringBreakdownBlock } from 'Core/models/backend/backend-models.interface';
 
 export interface SecurityPortfolioBlock {
   portfolioName: string;
@@ -287,11 +288,17 @@ export interface PortfolioBreakdownCategoryBlock {
   indexPct: number;
   indexPctDisplay: string;
   moveVisualizer: DTOs.MoveVisualizerDTO;
+  bicsLevel: number;
+  portfolioId: number;
+  children?: DTOs.PortfolioBreakdownDTO;
   raw: {
     currentLevel: number;
     currentPct: number;
     targetLevel: number;
     targetPct: number;
+  }
+  state: {
+    isDisplayCs01: boolean;
   }
 }
 
@@ -327,10 +334,18 @@ export interface StructureSetTargetPanelEditRowItemBlock {
 
 export interface BICsHierarchyBlock {
   name: string;
-  tier: number;
+  bicsLevel: number;
   children: Array<BICsHierarchyBlock>;
 }
 
 export interface BICsHierarchyAllDataBlock {
   children: Array<BICsHierarchyBlock>;
+}
+
+export interface BICsCategorizationBlock {
+  portfolioId: number,
+  bicsLevel1: BEStructuringBreakdownBlock,
+  bicsLevel2?: BEStructuringBreakdownBlock,
+  bicsLevel3?: BEStructuringBreakdownBlock,
+  bicsLevel4?: BEStructuringBreakdownBlock
 }
