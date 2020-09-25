@@ -13,7 +13,7 @@
 
 $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
 .sat-securityQuote {
-  $securityQuoteBlockName: &;
+  $blockName: &;
   @include mix_border_radius(5px);
   flex: 1 1 auto;
   display: flex;
@@ -23,7 +23,20 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
-    padding: $spacing_xx_small 0;
+    padding: $spacing_x_small 0;
+    &-tags {
+      flex: 0 0 $securityQuote_tags_size;
+      display: flex;
+      justify-content: flex-end;
+      overflow: hidden;
+      &-executable {
+        @include mix_theme_background;
+        @include mix_border_radius(3px);
+        display: none;
+        color: $font_color_inverse;
+        padding: $spacing_x_small $spacing_medium;
+      }
+    }
     &-entry {
       flex: 0 0 $securityQuote_main_size_1;
       text-align: center;
@@ -110,18 +123,14 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
               font-size: $font_size_xx_small;
             }
           }
-
           &-text {
             @include mix_border_radius(3px);
             @include mix_quantative_text;
             flex: 1 1 auto;
             padding: $spacing_xx_small $spacing_x_small;
-
-
             &-axeIcon{
               visibility: hidden;
             }
-
             &-withIcon{
               display: flex;
               flex-direction: row;
@@ -136,6 +145,15 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
             font-size: $font_size_small;
             color: $color_warning;
             padding: $spacing_xx_small;
+          }
+          &-executableTag {
+            @include mix_fixed_div(absolute, $z_index_hovering_item);
+            @include mix_border_radius(3px);
+            @include mix_theme_background;
+            display: none;
+            top: -$spacing_x_small;
+            color: $font_color_inverse;
+            padding: $spacing_minimum $spacing_xx_small;
           }
         }
         &-actionMenu {
@@ -223,11 +241,44 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
     background-color: $color_active;
   }
 
-  &--bestAxeBidState#{$securityQuoteBlockName}--filteredBySpreadState,
+  &--executableState {
+    #{$blockName} {
+      &__main-tags-executable {
+        display: inline-block;
+      }
+    }
+  }
+  &--askExecutableState {
+    #{$blockName} {
+      &__main-twoSideEntry-cta--ask {
+        #{$blockName} {
+          &__main-twoSideEntry-cta-btn-executableTag {
+            display: flex;
+            transform: rotate(35deg);
+            right: -$spacing_x_small;
+          }
+        }
+      }
+    }
+  }
+  &--bidExecutableState {
+    #{$blockName} {
+      &__main-twoSideEntry-cta--bid {
+        #{$blockName} {
+          &__main-twoSideEntry-cta-btn-executableTag {
+            display: flex;
+            transform: rotate(-35deg);
+            left: -$spacing_x_small;
+          }
+        }
+      }
+    }
+  }
+  &--bestAxeBidState#{$blockName}--filteredBySpreadState,
   {
-    #{$securityQuoteBlockName} {
-      &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--tspread {
-        #{$securityQuoteBlockName} {
+    #{$blockName} {
+      &__main-twoSideEntry-cta--bid#{$blockName}__main-twoSideEntry-cta--tspread {
+        #{$blockName} {
           &__main-twoSideEntry-cta-btn {
             &-content {
               background-color: $color_bid;
@@ -241,10 +292,10 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
-  &--bestAxeBidState#{$securityQuoteBlockName}--filteredByPriceState {
-    #{$securityQuoteBlockName} {
-      &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--price {
-        #{$securityQuoteBlockName} {
+  &--bestAxeBidState#{$blockName}--filteredByPriceState {
+    #{$blockName} {
+      &__main-twoSideEntry-cta--bid#{$blockName}__main-twoSideEntry-cta--price {
+        #{$blockName} {
           &__main-twoSideEntry-cta-btn {
             &-content {
               background-color: $color_bid;
@@ -258,10 +309,10 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
-  &--bestAxeBidState#{$securityQuoteBlockName}--filteredByYieldState {
-    #{$securityQuoteBlockName} {
-      &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--yield {
-        #{$securityQuoteBlockName} {
+  &--bestAxeBidState#{$blockName}--filteredByYieldState {
+    #{$blockName} {
+      &__main-twoSideEntry-cta--bid#{$blockName}__main-twoSideEntry-cta--yield {
+        #{$blockName} {
           &__main-twoSideEntry-cta-btn {
             &-content {
               background-color: $color_bid;
@@ -275,10 +326,10 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
-  &--bestBidState#{$securityQuoteBlockName}--filteredBySpreadState {
-    #{$securityQuoteBlockName} {
-      &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--tspread {
-        #{$securityQuoteBlockName} {
+  &--bestBidState#{$blockName}--filteredBySpreadState {
+    #{$blockName} {
+      &__main-twoSideEntry-cta--bid#{$blockName}__main-twoSideEntry-cta--tspread {
+        #{$blockName} {
           &__main-twoSideEntry-cta-btn {
             &-content {
               background-color: $color_bid;
@@ -290,10 +341,10 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
     }
   }
 
-  &--bestBidState#{$securityQuoteBlockName}--filteredByPriceState {
-    #{$securityQuoteBlockName} {
-      &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--price {
-        #{$securityQuoteBlockName} {
+  &--bestBidState#{$blockName}--filteredByPriceState {
+    #{$blockName} {
+      &__main-twoSideEntry-cta--bid#{$blockName}__main-twoSideEntry-cta--price {
+        #{$blockName} {
           &__main-twoSideEntry-cta-btn {
             &-content {
               background-color: $color_bid;
@@ -304,10 +355,10 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
-  &--bestBidState#{$securityQuoteBlockName}--filteredByYieldState {
-    #{$securityQuoteBlockName} {
-      &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--yield {
-        #{$securityQuoteBlockName} {
+  &--bestBidState#{$blockName}--filteredByYieldState {
+    #{$blockName} {
+      &__main-twoSideEntry-cta--bid#{$blockName}__main-twoSideEntry-cta--yield {
+        #{$blockName} {
           &__main-twoSideEntry-cta-btn {
             &-content {
               background-color: $color_bid;
@@ -318,10 +369,10 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
-  &--bestAxeOfferState#{$securityQuoteBlockName}--filteredBySpreadState {
-    #{$securityQuoteBlockName} {
-      &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--tspread {
-        #{$securityQuoteBlockName} {
+  &--bestAxeOfferState#{$blockName}--filteredBySpreadState {
+    #{$blockName} {
+      &__main-twoSideEntry-cta--ask#{$blockName}__main-twoSideEntry-cta--tspread {
+        #{$blockName} {
           &__main-twoSideEntry-cta-btn {
             &-content {
               background-color: $color_ask;
@@ -335,10 +386,10 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
-  &--bestAxeOfferState#{$securityQuoteBlockName}--filteredByPriceState {
-    #{$securityQuoteBlockName} {
-      &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--price {
-        #{$securityQuoteBlockName} {
+  &--bestAxeOfferState#{$blockName}--filteredByPriceState {
+    #{$blockName} {
+      &__main-twoSideEntry-cta--ask#{$blockName}__main-twoSideEntry-cta--price {
+        #{$blockName} {
           &__main-twoSideEntry-cta-btn {
             &-content {
               background-color: $color_ask;
@@ -352,10 +403,10 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
-  &--bestAxeOfferState#{$securityQuoteBlockName}--filteredByYieldState {
-    #{$securityQuoteBlockName} {
-      &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--yield {
-        #{$securityQuoteBlockName} {
+  &--bestAxeOfferState#{$blockName}--filteredByYieldState {
+    #{$blockName} {
+      &__main-twoSideEntry-cta--ask#{$blockName}__main-twoSideEntry-cta--yield {
+        #{$blockName} {
           &__main-twoSideEntry-cta-btn {
             &-content {
               background-color: $color_ask;
@@ -369,10 +420,10 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
-  &--bestOfferState#{$securityQuoteBlockName}--filteredBySpreadState {
-    #{$securityQuoteBlockName} {
-      &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--tspread {
-        #{$securityQuoteBlockName} {
+  &--bestOfferState#{$blockName}--filteredBySpreadState {
+    #{$blockName} {
+      &__main-twoSideEntry-cta--ask#{$blockName}__main-twoSideEntry-cta--tspread {
+        #{$blockName} {
           &__main-twoSideEntry-cta-btn {
             &-content {
               background-color: $color_ask;
@@ -383,10 +434,10 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
-  &--bestOfferState#{$securityQuoteBlockName}--filteredByPriceState {
-    #{$securityQuoteBlockName} {
-      &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--price {
-        #{$securityQuoteBlockName} {
+  &--bestOfferState#{$blockName}--filteredByPriceState {
+    #{$blockName} {
+      &__main-twoSideEntry-cta--ask#{$blockName}__main-twoSideEntry-cta--price {
+        #{$blockName} {
           &__main-twoSideEntry-cta-btn {
             &-content {
               background-color: $color_ask;
@@ -397,10 +448,10 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
-  &--bestOfferState#{$securityQuoteBlockName}--filteredByYieldState {
-    #{$securityQuoteBlockName} {
-      &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--yield {
-        #{$securityQuoteBlockName} {
+  &--bestOfferState#{$blockName}--filteredByYieldState {
+    #{$blockName} {
+      &__main-twoSideEntry-cta--ask#{$blockName}__main-twoSideEntry-cta--yield {
+        #{$blockName} {
           &__main-twoSideEntry-cta-btn {
             &-content {
               background-color: $color_ask;
@@ -411,10 +462,10 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
-  &--menuActiveOnBidState#{$securityQuoteBlockName}--menuActiveOnTSpreadState {
-    #{$securityQuoteBlockName} {
-      &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--tspread {
-        #{$securityQuoteBlockName} {
+  &--menuActiveOnBidState#{$blockName}--menuActiveOnTSpreadState {
+    #{$blockName} {
+      &__main-twoSideEntry-cta--bid#{$blockName}__main-twoSideEntry-cta--tspread {
+        #{$blockName} {
           &__main-twoSideEntry-cta {
             &-btn {
               @include material('none');
@@ -431,10 +482,10 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
-  &--menuActiveOnBidState#{$securityQuoteBlockName}--menuActiveOnYieldState {
-    #{$securityQuoteBlockName} {
-      &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--yield {
-        #{$securityQuoteBlockName} {
+  &--menuActiveOnBidState#{$blockName}--menuActiveOnYieldState {
+    #{$blockName} {
+      &__main-twoSideEntry-cta--bid#{$blockName}__main-twoSideEntry-cta--yield {
+        #{$blockName} {
           &__main-twoSideEntry-cta {
             &-btn {
               @include material('none');
@@ -451,10 +502,10 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
-  &--menuActiveOnBidState#{$securityQuoteBlockName}--menuActiveOnPriceState {
-    #{$securityQuoteBlockName} {
-      &__main-twoSideEntry-cta--bid#{$securityQuoteBlockName}__main-twoSideEntry-cta--price {
-        #{$securityQuoteBlockName} {
+  &--menuActiveOnBidState#{$blockName}--menuActiveOnPriceState {
+    #{$blockName} {
+      &__main-twoSideEntry-cta--bid#{$blockName}__main-twoSideEntry-cta--price {
+        #{$blockName} {
           &__main-twoSideEntry-cta {
             &-btn {
               @include material('none');
@@ -471,10 +522,10 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
-  &--menuActiveOnAskState#{$securityQuoteBlockName}--menuActiveOnTSpreadState {
-    #{$securityQuoteBlockName} {
-      &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--tspread {
-        #{$securityQuoteBlockName} {
+  &--menuActiveOnAskState#{$blockName}--menuActiveOnTSpreadState {
+    #{$blockName} {
+      &__main-twoSideEntry-cta--ask#{$blockName}__main-twoSideEntry-cta--tspread {
+        #{$blockName} {
           &__main-twoSideEntry-cta {
             &-btn {
               @include material('none');
@@ -491,10 +542,10 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
-  &--menuActiveOnAskState#{$securityQuoteBlockName}--menuActiveOnYieldState {
-    #{$securityQuoteBlockName} {
-      &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--yield {
-        #{$securityQuoteBlockName} {
+  &--menuActiveOnAskState#{$blockName}--menuActiveOnYieldState {
+    #{$blockName} {
+      &__main-twoSideEntry-cta--ask#{$blockName}__main-twoSideEntry-cta--yield {
+        #{$blockName} {
           &__main-twoSideEntry-cta {
             &-btn {
               @include material('none');
@@ -511,10 +562,10 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
       }
     }
   }
-  &--menuActiveOnAskState#{$securityQuoteBlockName}--menuActiveOnPriceState {
-    #{$securityQuoteBlockName} {
-      &__main-twoSideEntry-cta--ask#{$securityQuoteBlockName}__main-twoSideEntry-cta--price {
-        #{$securityQuoteBlockName} {
+  &--menuActiveOnAskState#{$blockName}--menuActiveOnPriceState {
+    #{$blockName} {
+      &__main-twoSideEntry-cta--ask#{$blockName}__main-twoSideEntry-cta--price {
+        #{$blockName} {
           &__main-twoSideEntry-cta {
             &-btn {
               @include material('none');
@@ -532,7 +583,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
     }
   }
   &--bidIsAxe {
-    #{$securityQuoteBlockName} {
+    #{$blockName} {
       &__main {
         &-twoSideEntry-axeIcon {
           &--bid {
@@ -543,7 +594,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
     }
   }
   &--askIsAxe {
-    #{$securityQuoteBlockName} {
+    #{$blockName} {
       &__main {
         &-twoSideEntry-axeIcon {
           &--ask {
@@ -554,7 +605,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
     }
   }
   &--diffBenchmark {
-    #{$securityQuoteBlockName} {
+    #{$blockName} {
       &__main {
         &-entry--benchmark {
           display: none;
@@ -571,9 +622,9 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
     }
   }
   &--bidDownVotedState {
-    #{$securityQuoteBlockName} {
+    #{$blockName} {
       &__main-twoSideEntry-cta--bid {
-        #{$securityQuoteBlockName} {
+        #{$blockName} {
           &__main-twoSideEntry-cta-btn {
             background-color: transparent;
             &-content-text {
@@ -588,9 +639,9 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
     }
   }
   &--askDownVotedState {
-    #{$securityQuoteBlockName} {
+    #{$blockName} {
       &__main-twoSideEntry-cta--ask {
-        #{$securityQuoteBlockName} {
+        #{$blockName} {
           &__main-twoSideEntry-cta-btn {
             background-color: transparent;
             &-content-text {
@@ -605,7 +656,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
     }
   }
   &--noBid {
-    #{$securityQuoteBlockName} {
+    #{$blockName} {
       &__main {
         &-twoSideEntry {
           &-cta {
@@ -623,7 +674,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
     }
   }
   &--noAsk {
-    #{$securityQuoteBlockName} {
+    #{$blockName} {
       &__main {
         &-twoSideEntry {
           &-cta {
@@ -641,7 +692,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
     }
   }
   &--cdsVariant {
-    #{$securityQuoteBlockName} {
+    #{$blockName} {
       &__main {
         &-spacing--nonCDS {
           display: none;
@@ -653,7 +704,7 @@ $securityQuote_twoSideEntry_axeIconSize: 1.5rem;
     }
   }
   &--stencilState {
-    #{$securityQuoteBlockName} {
+    #{$blockName} {
       &__main {
         &-entry {
           @include mix_stencil_animation;

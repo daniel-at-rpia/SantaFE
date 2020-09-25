@@ -310,6 +310,7 @@ export interface BEQuoteDTO {
   bidQuantity: number; // null;
   bidIsNatural: boolean; // false;
   bidQualifier: string; // null;
+  bidQuoteCondition: string;  // 'A'
   askQuoteId: string;
   askQuoteStatus: number;  // 0; -1; -2
   askTime: string;
@@ -321,6 +322,7 @@ export interface BEQuoteDTO {
   askQuantity: number; // null;
   askIsNatural: boolean; // null;
   askQualifier: string; // null
+  askQuoteCondition: string;  // 'A'
 }
 
 export interface BEHistoricalSummaryOverviewDTO {
