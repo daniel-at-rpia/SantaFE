@@ -34,6 +34,7 @@ export interface BEFullSecurityDTO {
 }
 
 export interface BEPortfolioDTO {
+  source: number;
   partitionOptionValues: {
     PortfolioShortName: string;
     StrategyName: string;
@@ -66,6 +67,7 @@ export interface BESecurityDTO {
   metrics: {
     Default: BESecurityMetricDTO;
     Index?: BESecurityMetricDTO;
+    FO?: BESecurityMetricDTO;
   };
   deltaMetrics: {
     Dod: BESecurityDeltaMetricDTO;
@@ -129,9 +131,14 @@ export interface BESecurityDTO {
           source: number;
         }
       }
-    }
+    };
+    strategyAsOfDate: string;
   }
   curveSubType?: string;  // CDS only
+  bicsLevel1: string;
+  bicsLevel2: string;
+  bicsLevel3: string;
+  bicsLevel4: string;
 }
 
 export interface BEBestQuoteDTO {
@@ -217,7 +224,6 @@ interface BEGroupMetricDTO {
 
 interface BESecurityMetricDTO {
   // CDSs don't have a lot of those attributes
-  isOnTheRun: boolean;
   workoutTerm: number;
   ratingDouble: number;
   isRated: boolean;
@@ -225,6 +231,7 @@ interface BESecurityMetricDTO {
   ratingNoNotch: string;
   ratingBucket: string
   price: number;
+  isOnTheRun?: boolean;
   isFixedForLife?: boolean;
   isFixedToFloatInFixed?: boolean;
   isFloat?: boolean;
@@ -289,6 +296,8 @@ export interface BESingleBestQuoteDTO {
   askAxeIsOld: boolean;
   isOffTheRunCds: boolean;
   globalIdentifier: string;
+  bestBidQuoteCondition: string;
+  bestAskQuoteCondition: string;
 }
 
 export interface BEQuoteDTO {
@@ -568,26 +577,26 @@ export interface BEAlertMarketListQuoteBlock extends BEQuoteBaseBlock {
 
 export interface BEStructuringBreakdownSingleEntry {
   targetLevel: number;
-  targetPct: number;
-  currentLevel: number;
-  currentPct: number;
-  indexLevel: number;
-  indexPct: number;
+  targetPct?: number;
+  currentLevel?: number;
+  currentPct?: number;
+  indexLevel?: number;
+  indexPct?: number;
 }
 
 export interface BEMetricBreakdowns {
   metricBreakdowns: {
-    CreditLeverage: BEStructuringBreakdownSingleEntry;
-    Cs01: BEStructuringBreakdownSingleEntry;
+    CreditLeverage?: BEStructuringBreakdownSingleEntry;
+    Cs01?: BEStructuringBreakdownSingleEntry;
   },
   view: string;
 }
 
 export interface BEStructuringBreakdownBlock {
   date: string;
-  groupOption: number;
+  groupOption: string;
   indexId: number
-  portfolioBreakdownId: string;
+  portfolioBreakdownId?: string;
   portfolioId: number;
   breakdown: {
     [property: string]: BEMetricBreakdowns
@@ -600,7 +609,7 @@ export interface BEStructuringOverrideBlock {
   portfolioId: number;
   indexId: number;
   bucket: {
-    [property: string]: string;
+    [property: string]: Array<string>;
   }
   breakdown: BEMetricBreakdowns;
 }
@@ -627,11 +636,17 @@ export interface BEPortfolioStructuringDTO {
   indexNav: number;
   indexTotals: BEStructuringMetricTotalBlock;
   inDb: boolean;
-  ccyBreakdown: BEStructuringBreakdownBlock;
-  bicsLevel1Breakdown: BEStructuringBreakdownBlock;
-  bicsLevel2Breakdown?: BEStructuringBreakdownBlock;
-  bicsLevel3Breakdown?: BEStructuringBreakdownBlock;
-  ratingBreakdown: BEStructuringBreakdownBlock;
-  tenorBreakdown: BEStructuringBreakdownBlock;
-  overrides?: BEStructuringOverrideBlock;
+  breakdowns: {
+    BicsLevel1: BEStructuringBreakdownBlock;
+    BicsLevel2?: BEStructuringBreakdownBlock;
+    BicsLevel3?: BEStructuringBreakdownBlock;
+    BicsLevel4?: BEStructuringBreakdownBlock;
+    BicsLevel5?: BEStructuringBreakdownBlock;
+    BicsLevel6?: BEStructuringBreakdownBlock;
+    BicsLevel7?: BEStructuringBreakdownBlock;
+    Ccy: BEStructuringBreakdownBlock;
+    RatingNoNotch: BEStructuringBreakdownBlock;
+    Tenor: BEStructuringBreakdownBlock;
+  }
+  overrides?: Array<BEStructuringOverrideBlock>;
 }

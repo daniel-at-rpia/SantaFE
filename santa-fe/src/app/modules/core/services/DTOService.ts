@@ -624,15 +624,15 @@ export class DTOService {
     return object;
   }
 
-  public formQuantComparerObject(
+  public formBestQuoteComparerObject(
     isStencil: boolean,
     quantMetricType: string,
     BEdto: BEModels.BEBestQuoteDTO,
     securityCard: DTOs.SecurityDTO,
     axeOnly: boolean
-  ): DTOs.QuantComparerDTO {
+  ): DTOs.BestQuoteComparerDTO {
     if (isStencil) {
-      const stencilObject: DTOs.QuantComparerDTO = {
+      const stencilObject: DTOs.BestQuoteComparerDTO = {
         data: {
           driverType: 'Spread',
           delta: 0,
@@ -641,13 +641,15 @@ export class DTOService {
             number: 33,
             displayNumber: '33',
             broker: 'GS',
-            size: null
+            size: null,
+            isExecutable: false
           },
           offer: {
             number: 33,
             displayNumber: '33',
             broker: 'JPM',
-            size: null
+            size: null,
+            isExecutable: false
           }
         },
         style: {
@@ -670,7 +672,8 @@ export class DTOService {
           noTotalSkew: true,
           longEdgeState: false,
           bidIsStale: false,
-          askIsStale: false
+          askIsStale: false,
+          hasExecutableQuote: false
         }
       };
       return stencilObject;
@@ -679,7 +682,7 @@ export class DTOService {
       const backendTargetQuoteAttr = TriCoreDriverConfig[driverType]['backendTargetQuoteAttr'];
       if (!!BEdto && !!BEdto[backendTargetQuoteAttr]) {
         const rawData = BEdto[backendTargetQuoteAttr];
-        return this.populateQuantCompareObject(
+        return this.populateBestQuoteComparerObject(
           rawData,
           driverType,
           securityCard,
@@ -691,12 +694,12 @@ export class DTOService {
     }
   }
 
-  private populateQuantCompareObject(
+  private populateBestQuoteComparerObject(
     rawData: BEModels.BESingleBestQuoteDTO,
     driverType: string,
     securityCard: DTOs.SecurityDTO,
     axeOnly: boolean
-  ): DTOs.QuantComparerDTO {
+  ): DTOs.BestQuoteComparerDTO {
     const bidQuantity = axeOnly ? rawData.totalActiveAxeBidQuantity : rawData.totalActiveBidQuantity;
     const askQuantity = axeOnly ? rawData.totalActiveAxeAskQuantity : rawData.totalActiveAskQuantity;
     const bidValue = axeOnly ? rawData.bidAxeQuoteValue : rawData.bidQuoteValue;
@@ -737,7 +740,7 @@ export class DTOService {
         delta = 0;
         mid = 0;
       }
-      const object: DTOs.QuantComparerDTO = {
+      const object: DTOs.BestQuoteComparerDTO = {
         data: {
           driverType: driverType,
           delta: delta,
@@ -746,13 +749,15 @@ export class DTOService {
             number: !!bidNumber ? parseFloat(bidNumber) : null,
             displayNumber: bidNumber,  // not been used right now but could come in handy
             broker: bidDealer,
-            size: bidSize
+            size: bidSize,
+            isExecutable: rawData.bestBidQuoteCondition === 'A'
           },
           offer: {
             number: !!offerNumber ? parseFloat(offerNumber) : null,
             displayNumber: offerNumber,  // not been used right now but could come in handy
             broker: askDealer,
-            size: offerSize
+            size: offerSize,
+            isExecutable: rawData.bestAskQuoteCondition === 'A'
           }
         },
         style: {
@@ -775,7 +780,8 @@ export class DTOService {
           noTotalSkew: rawData.totalSkew === null,
           longEdgeState: (bidNumber && parseFloat(bidNumber).toString().length > 4) || (offerNumber && parseFloat(offerNumber).toString().length > 4),
           bidIsStale: bidIsStale,
-          askIsStale: askIsStale
+          askIsStale: askIsStale,
+          hasExecutableQuote: rawData.bestAskQuoteCondition === 'A' || rawData.bestBidQuoteCondition === 'A'
         }
       };
       return object;
@@ -841,7 +847,7 @@ export class DTOService {
         activePortfolios: activePortfolios || []
       },
       state: {
-        isQuantVariant: !!stub.content.isForQuantComparer,
+        isBestQuoteVariant: !!stub.content.isForBestQuoteComparer,
         isSecurityCardVariant: !!stub.content.isForSecurityCard,
         isCustomComponent: !!stub.content.isCustomComponent,
         isAxeSkewEnabled: false,
@@ -918,19 +924,19 @@ export class DTOService {
     isStencil: boolean,
     textData: string,
     targetHeader: DTOs.SecurityTableHeaderDTO,
-    quantComparerDTO: DTOs.QuantComparerDTO,
+    bestQuoteComparerDTO: DTOs.BestQuoteComparerDTO,
     alertDTO: DTOs.AlertDTO
   ): DTOs.SecurityTableCellDTO {
     const object: DTOs.SecurityTableCellDTO = {
       data: {
         textData: !!isStencil ? 'PLACE' : textData,
-        quantComparerDTO: quantComparerDTO,
+        bestQuoteComparerDTO: bestQuoteComparerDTO,
         alertSideDTO: null,
         alertStatusDTO: null
       },
       state: {
-        isQuantVariant: targetHeader.state.isQuantVariant,
-        quantComparerUnavail: false,
+        isBestQuoteVariant: targetHeader.state.isBestQuoteVariant,
+        bestQuoteComparerUnavail: false,
         isStencil: isStencil
       }
     };
@@ -1194,12 +1200,12 @@ export class DTOService {
           moveDistance = this.utility.round(rawData.currentLevel / totalDistance * 100, 2);
           leftEdge = min < 0 ? this.utility.round(Math.abs(min) / totalDistance * 100, 2) : 0;
           rightEdge = this.utility.round((rawData.targetLevel - rawData.currentLevel) / totalDistance * 100, 2);
-          endPinLocation = moveDistance + rightEdge;
+          endPinLocation = moveDistance;
         } else {
           moveDistance = this.utility.round(rawData.targetLevel / totalDistance * 100, 2);
           leftEdge = min < 0 ? this.utility.round(Math.abs(min) / totalDistance * 100, 2) : 0;
           rightEdge = this.utility.round((rawData.currentLevel - rawData.targetLevel) / totalDistance * 100);
-          endPinLocation = moveDistance;
+          endPinLocation = moveDistance + rightEdge;
         }
       } else {
         // is target is not set
@@ -1337,7 +1343,8 @@ export class DTOService {
         hasSecurity: false,
         hasTitlePin: false,
         isMarketListVariant: false,
-        isExpired: false
+        isExpired: false,
+        isError: false
       }
     }
     if (targetSecurity) {
@@ -1730,22 +1737,43 @@ export class DTOService {
         isStencil: !!isStencil,
         isEmpty: false,
         isDataUnavailable: false
-      },
-      utility: {
-        getDisplayValues: null,
-        convertNumtoStr: null,
-        setInactiveMetric: null
       }
     }
 
     function getDisplayedValues(targetBar: DTOs.TargetBarDTO) {
-      if (targetBar.data.currentValue > targetBar.data.targetValue) {
-        const difference = targetBar.data.currentValue - targetBar.data.targetValue;
+      const currentAbsValue = Math.abs(targetBar.data.currentValue);
+      const targetAbsValue = Math.abs(targetBar.data.targetValue);
+      if (targetBar.data.targetValue < 0 && targetBar.data.currentValue > 0) {
+        if (targetBar.data.currentValue >= targetAbsValue) {
+          targetBar.data.exceededPercentage = '100%';
+        } else {
+          const exceedAmount = targetBar.data.currentValue / targetAbsValue;
+          targetBar.data.exceededPercentage = `${exceedAmount * 100}%`;
+          targetBar.data.currentPercentage = '100%';
+        }
+      } else if (targetBar.data.targetValue > 0 && targetBar.data.currentValue < 0) {
+        targetBar.data.exceededPercentage = '0';
+        targetBar.data.currentPercentage = '0';
+      } else if (targetBar.data.currentValue < 0 && targetBar.data.targetValue < 0) {
+        if (targetBar.data.currentValue < targetBar.data.targetValue) {
+          const difference = 1 - ((currentAbsValue - targetAbsValue) / targetAbsValue);
+          targetBar.data.currentPercentage = `${difference * 100}%`;
+          targetBar.data.exceededPercentage = '0';
+        } else {
+          targetBar.data.exceededPercentage = targetAbsValue / currentAbsValue >= 2 ? '100%' : `${((targetAbsValue - currentAbsValue) / targetAbsValue) * 100}%`;
+          targetBar.data.currentPercentage = '100%';
+        }
+      } else if (currentAbsValue === targetAbsValue) {
         targetBar.data.currentPercentage = '100%';
-        targetBar.data.exceededPercentage = targetBar.data.currentValue / targetBar.data.targetValue >= 2 ? '100%' : `${(difference / targetBar.data.targetValue) * 100}%`
-        return;
+        targetBar.data.exceededPercentage = '0';
+      } else if (targetBar.data.currentValue > targetBar.data.targetValue) {
+        targetBar.data.currentPercentage = '100%';
+        targetBar.data.exceededPercentage = targetBar.data.currentValue / targetBar.data.targetValue >= 2 ? '100%' : `${((currentAbsValue - targetAbsValue) / targetBar.data.targetValue) * 100}%`
+      } else {
+        const difference = targetBar.data.currentValue / targetBar.data.targetValue;
+        targetBar.data.currentPercentage = `${difference * 100}%`;
+        targetBar.data.exceededPercentage = '0';
       }
-      targetBar.data.currentPercentage = `${(targetBar.data.currentValue / targetBar.data.targetValue) * 100}%`;
     }
 
     function getDisplayedResults(valueA: string, valueB: string) {
@@ -1770,17 +1798,18 @@ export class DTOService {
       object.data.displayedResults = targetMetric === PortfolioMetricValues.cs01 ? `${object.data.displayedCurrentValue} / -` : `${object.data.displayedCurrentValue} / -`;
       return object;
     }
-    object.state.isEmpty = false;
+    object.state.isEmpty = !object.data.targetValue;
     return object;
   }
 
   public formStructureFundObject(
     rawData: BEModels.BEPortfolioStructuringDTO,
-    isStencil: boolean
+    isStencil: boolean,
+    selectedMetricValue: PortfolioMetricValues = PortfolioMetricValues.cs01
   ): DTOs.PortfolioStructureDTO {
     const object: DTOs.PortfolioStructureDTO = {
       data: {
-        rpPortfolioDate: rawData.date,
+        date: rawData.date,
         portfolioId: rawData.portfolioId,
         portfolioShortName: rawData.portfolioShortName,
         portfolioNav: rawData.portfolioNav,
@@ -1789,8 +1818,8 @@ export class DTOService {
           date: rawData.target.date,
           portfolioId: rawData.target.portfolioId,
           target: {
-            cs01: rawData.target.target.Cs01 || null,
-            creditLeverage: rawData.target.target.CreditLeverage || null
+            cs01: rawData.target.target.Cs01 || 0,
+            creditLeverage: rawData.target.target.CreditLeverage || 0
           }
         },
         currentTotals :{
@@ -1810,40 +1839,50 @@ export class DTOService {
           targetTotal: null
         },
         cs01TargetBar: null,
-        creditLeverageTargetBar: null
+        creditLeverageTargetBar: null,
+        originalBEData: rawData
       },
       api: {
-        onSubmitMetricValues: null,
+        onSubmitMetricValues: null
       },
       state: {
         isEditing: false,
         isStencil: !!isStencil,
-        isDataUnavailable: false
-      },
-      utility: {
-        convertToK: null
+        isNumeric: true,
+        isDataUnavailable: false,
+        isEditingFundTargets: false,
+        hasErrors: {
+          updatedCS01: false,
+          updatedCreditLeverage: false,
+          errorMessage: ''
+        }
       }
     };
+    object.data.cs01TotalsInK.targetTotal = object.data.target.target.cs01 / 1000;
     object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, object.state.isStencil);
     object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil);
-    object.data.cs01TargetBar.state.isInactiveMetric = false;
-    object.data.creditLeverageTargetBar.state.isInactiveMetric = true;
-    const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.bicsLevel1Breakdown, []);
+    object.data.cs01TargetBar.state.isInactiveMetric = selectedMetricValue !== object.data.cs01TargetBar.data.targetMetric;
+    object.data.creditLeverageTargetBar.state.isInactiveMetric = selectedMetricValue !== object.data.creditLeverageTargetBar.data.targetMetric;
+    const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.BicsLevel1, []);
     BICSBreakdown.data.title = 'BICS';
     BICSBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.SECTOR);
+    BICSBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
     // object.data.children.push(BICSBreakdown);
-    const currencyBreakdown = this.formPortfolioBreakdown(isStencil, rawData.ccyBreakdown, FilterOptionsCurrency);
+    const currencyBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Ccy, FilterOptionsCurrency);
     currencyBreakdown.data.title = 'Currency';
     currencyBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
     object.data.children.push(currencyBreakdown);
-    const tenorBreakdown = this.formPortfolioBreakdown(isStencil, rawData.tenorBreakdown, FilterOptionsTenor);
+    currencyBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
+    const tenorBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Tenor, FilterOptionsTenor);
     tenorBreakdown.data.title = 'Tenor';
     tenorBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.TENOR);
     object.data.children.push(tenorBreakdown);
-    const ratingBreakdown = this.formPortfolioBreakdown(isStencil, rawData.ratingBreakdown, FilterOptionsRating);
+    tenorBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
+    const ratingBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.RatingNoNotch, FilterOptionsRating);
     ratingBreakdown.data.title = 'Rating';
     ratingBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.RATING);
     object.data.children.push(ratingBreakdown);
+    ratingBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
     return object;
   }
 
@@ -1859,16 +1898,18 @@ export class DTOService {
         displayCategoryList: [],
         ratingHoverText: !isStencil ? 'n/a' : '33%',
         rawCs01CategoryList: [],
-        rawLeverageCategoryList: []
+        rawLeverageCategoryList: [],
+        backendGroupOptionIdentifier: !isStencil ? rawData.groupOption : null
       },
       style: {
         ratingFillWidth: null
       },
       state: {
-        isEditing: false,
+        isEditable: false,
         isStencil: true,
         isDisplayingCs01: true,
-        isTargetAlignmentRatingAvail: !!isStencil
+        isTargetAlignmentRatingAvail: !!isStencil,
+        isPreviewVariant: false
       }
     };
     let findCs01Max = 0;
@@ -1935,37 +1976,58 @@ export class DTOService {
     isCs01: boolean
   ): Blocks.PortfolioBreakdownCategoryBlock {
     if (!!rawCategoryData) {
-      rawCategoryData.currentLevel = !!isCs01 ? this.utility.round(rawCategoryData.currentLevel/1000, 0) : this.utility.round(rawCategoryData.currentLevel, 2);
-      if (rawCategoryData.targetLevel != null) {
-        rawCategoryData.targetLevel = !!isCs01 ? this.utility.round(rawCategoryData.targetLevel/1000, 0) : this.utility.round(rawCategoryData.targetLevel, 2);
+      const parsedRawData = this.utility.deepCopy(rawCategoryData);
+      const rawCurrentLevel = parsedRawData.currentLevel;
+      const rawCurrentPct = parsedRawData.currentPct;
+      const rawTargetLevel = parsedRawData.targetLevel;
+      const rawTargetPct = parsedRawData.targetPct;
+      parsedRawData.currentLevel = !!isCs01 ? this.utility.round(parsedRawData.currentLevel/1000, 0) : this.utility.round(parsedRawData.currentLevel, 2);
+      if (parsedRawData.targetLevel != null) {
+        parsedRawData.targetLevel = !!isCs01 ? this.utility.round(parsedRawData.targetLevel/1000, 0) : this.utility.round(parsedRawData.targetLevel, 2);
+      }
+      if (parsedRawData.targetPct != null) {
+        parsedRawData.targetPct = this.utility.round(parsedRawData.targetPct*100, 1);
+      }
+      if (parsedRawData.currentPct != null) {
+        parsedRawData.currentPct = this.utility.round(parsedRawData.currentPct*100, 1);
+      }
+      if (parsedRawData.indexPct != null) {
+        parsedRawData.indexPct = this.utility.round(parsedRawData.indexPct*100, 1);
       }
       maxValue = !!isCs01 ? maxValue/1000 : maxValue;
       minValue = !!isCs01 ? minValue/1000 : minValue;
       const eachMoveVisualizer = this.formMoveVisualizerObjectForStructuring(
-        rawCategoryData,
+        parsedRawData,
         maxValue,
         minValue,
         !!isStencil
       );
       eachMoveVisualizer.data.endPinText = !!isCs01 ? `${eachMoveVisualizer.data.end}k` : `${eachMoveVisualizer.data.end}`;
+      const diffToTarget = !!isCs01 ? Math.round(parsedRawData.targetLevel - parsedRawData.currentLevel) : this.utility.round(parsedRawData.targetLevel - parsedRawData.currentLevel, 2);
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
         category: `${categoryName}`,
-        targetLevel: rawCategoryData.targetLevel,
-        targetPct: this.utility.round(rawCategoryData.targetPct*100, 1),
-        diffToTarget: rawCategoryData.targetLevel != null ? Math.round(rawCategoryData.targetLevel - rawCategoryData.currentLevel) : 0,
+        targetLevel: parsedRawData.targetLevel,
+        targetPct: parsedRawData.targetPct,
+        diffToTarget: parsedRawData.targetLevel != null ? diffToTarget : 0,
         diffToTargetDisplay: '-',
-        currentLevel: rawCategoryData.currentLevel,
-        currentPct: this.utility.round(rawCategoryData.currentPct*100, 1),
-        currentPctDisplay: rawCategoryData.currentPct != null ? `${this.utility.round(rawCategoryData.currentPct*100, 1)}%` : '-',
-        indexPct: rawCategoryData.indexPct,
-        indexPctDisplay: rawCategoryData.indexPct != null ? `${this.utility.round(rawCategoryData.indexPct*100, 1)}%` : '-',
-        moveVisualizer: eachMoveVisualizer
+        currentLevel: parsedRawData.currentLevel,
+        currentPct: parsedRawData.currentPct,
+        currentPctDisplay: parsedRawData.currentPct != null ? `${parsedRawData.currentPct}%` : '-',
+        indexPct: parsedRawData.indexPct,
+        indexPctDisplay: parsedRawData.indexPct != null ? `${parsedRawData.indexPct}%` : '-',
+        moveVisualizer: eachMoveVisualizer,
+        raw: {
+          currentLevel: rawCurrentLevel,
+          currentPct: rawCurrentPct,
+          targetLevel: rawTargetLevel,
+          targetPct: rawTargetPct
+        }
       };
       if (eachCategoryBlock.diffToTarget < 0) {
-        eachCategoryBlock.diffToTargetDisplay = `${eachCategoryBlock.diffToTarget}k`;
+        eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `${eachCategoryBlock.diffToTarget}k` : `${eachCategoryBlock.diffToTarget}`;
       }
       if (eachCategoryBlock.diffToTarget > 0) {
-        eachCategoryBlock.diffToTargetDisplay = `+${eachCategoryBlock.diffToTarget}k`;
+        eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `+${eachCategoryBlock.diffToTarget}k` : `+${eachCategoryBlock.diffToTarget}`;
       }
       return eachCategoryBlock;
     } else {
@@ -1986,7 +2048,8 @@ export class DTOService {
       },
       api: {
         openModal: null,
-        closeModal: null
+        closeModal: null,
+        saveModal: null
       }
     };
     return object;

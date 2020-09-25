@@ -20,7 +20,7 @@ export const SECURITY_TABLE_FINAL_STAGE = 1;
 
 export const AGGRID_DETAIL_COLUMN_WIDTH = 50;
 export const AGGRID_SECURITY_CARD_COLUMN_WIDTH = 285;
-export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_quant + $spacing_small * 2
+export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_best_quote + $spacing_small * 2
 export const AGGRID_ALERT_SIDE_COLUMN_WIDTH = 115;
 export const AGGRID_ALERT_STATUS_COLUMN_WIDTH = 155;  // can not use simple text because cancelled status would wrap into 2 lines
 export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 140;
@@ -293,7 +293,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'combined',
       underlineAttrName: null,
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isForQuantComparer: true,
+      isForBestQuoteComparer: true,
       isDriverDependent: true,
       groupBelongs: SecurityTableHeaderConfigGroups.bestQuote,
       isCustomComponent: true,
@@ -316,7 +316,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'axe',
       underlineAttrName: null,
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isForQuantComparer: true,
+      isForBestQuoteComparer: true,
       isDriverDependent: true,
       groupBelongs: SecurityTableHeaderConfigGroups.bestQuote,
       isCustomComponent: true,

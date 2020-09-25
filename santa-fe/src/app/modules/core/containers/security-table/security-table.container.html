@@ -12,7 +12,7 @@
             [ngClass]="{
               'sat-securityTableHead': true,
               'sat-securityTableHead--securityCardVariant': eachHead.state.isSecurityCardVariant,
-              'sat-securityTableHead--quantVariant': eachHead.state.isQuantVariant,
+              'sat-securityTableHead--bestQuoteVariant': eachHead.state.isBestQuoteVariant,
               'sat-securityTableHead--selectedState': tableData.state.selectedHeader?.data.displayLabel === eachHead.data.displayLabel,
               'sat-securityTableHead--sortedState': tableData.state.sortedByHeader?.data.displayLabel === eachHead.data.displayLabel
             }">
@@ -59,7 +59,7 @@
             (click)="onClickAddHeader(eachOption)"
             [ngClass]="{
               'sat-securityTable__main-table-addColumnDropdown-optionList-item': true,
-              'sat-securityTable__main-table-addColumnDropdown-optionList-item--hidden': eachOption.label === 'Security' || eachOption.isForQuantComparer,
+              'sat-securityTable__main-table-addColumnDropdown-optionList-item--hidden': eachOption.label === 'Security' || eachOption.isForBestQuoteComparer,
               'sat-securityTable__main-table-addColumnDropdown-optionList-item--active': eachOption.active,
               'sat-securityTable__main-table-addColumnDropdown-optionList-item--disabled': eachOption.disabled
             }">{{eachOption.label}}</li>

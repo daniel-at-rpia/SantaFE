@@ -22,6 +22,7 @@ import * as am4Charts from '@amcharts/amcharts4/charts';
 import {Alert} from "Core/components/alert/alert.component";
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import { BEPortfolioStructuringDTO } from 'Core/models/backend/backend-models.interface';
 
 interface BasicDTOStructure {
   [property: string]: object;
@@ -266,7 +267,7 @@ export interface SearchShortcutDTO extends BasicDTOStructure {
   }
 }
 
-export interface QuantComparerDTO extends BasicDTOStructure {
+export interface BestQuoteComparerDTO extends BasicDTOStructure {
   data: {
     driverType: string;
     delta: number;
@@ -276,12 +277,14 @@ export interface QuantComparerDTO extends BasicDTOStructure {
       displayNumber: string;
       broker: string;
       size: number;
+      isExecutable: boolean;
     },
     offer: {
       number: number;
       displayNumber: string;
       broker: string;
       size: number;
+      isExecutable: boolean;
     }
   },
   style: {
@@ -305,6 +308,7 @@ export interface QuantComparerDTO extends BasicDTOStructure {
     longEdgeState: boolean;
     bidIsStale: boolean;
     askIsStale: boolean;
+    hasExecutableQuote: boolean;
   }
 }
 
@@ -357,7 +361,7 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
   },
   state: {
     isSecurityCardVariant: boolean;
-    isQuantVariant: boolean;
+    isBestQuoteVariant: boolean;
     isCustomComponent: boolean;
     isAxeSkewEnabled: boolean;
     istotalSkewEnabled: boolean;
@@ -374,14 +378,14 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
     quoteHeaders: Array<QuoteMetricBlock>;
     bestQuotes: {
       combined: {
-        bestSpreadQuote: QuantComparerDTO;
-        bestYieldQuote: QuantComparerDTO;
-        bestPriceQuote: QuantComparerDTO;
+        bestSpreadQuote: BestQuoteComparerDTO;
+        bestYieldQuote: BestQuoteComparerDTO;
+        bestPriceQuote: BestQuoteComparerDTO;
       }
       axe: {
-        bestSpreadQuote: QuantComparerDTO;
-        bestYieldQuote: QuantComparerDTO;
-        bestPriceQuote: QuantComparerDTO;
+        bestSpreadQuote: BestQuoteComparerDTO;
+        bestYieldQuote: BestQuoteComparerDTO;
+        bestPriceQuote: BestQuoteComparerDTO;
       }
     }
     alert: AlertDTO;
@@ -405,13 +409,13 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
 export interface SecurityTableCellDTO extends BasicDTOStructure {
   data: {
     textData: string;
-    quantComparerDTO: QuantComparerDTO;
+    bestQuoteComparerDTO: BestQuoteComparerDTO;
     alertSideDTO: SantaTableAlertSideCellDTO;
     alertStatusDTO: SantaTableAlertStatusCellDTO;
   },
   state: {
-    isQuantVariant: boolean;
-    quantComparerUnavail: boolean;
+    isBestQuoteVariant: boolean;
+    bestQuoteComparerUnavail: boolean;
     isStencil: boolean;
   }
 }
@@ -565,6 +569,7 @@ export interface AlertDTO extends BasicDTOStructure {
     isCancelled: boolean;
     isMarketListVariant: boolean;
     isExpired: boolean;
+    isError?: boolean;
   };
 }
 
@@ -676,21 +681,23 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     ratingHoverText: string;
     rawCs01CategoryList: Array<PortfolioBreakdownCategoryBlock>;
     rawLeverageCategoryList: Array<PortfolioBreakdownCategoryBlock>;
+    backendGroupOptionIdentifier: string;
   },
   style: {
     ratingFillWidth: number;
   }
   state: {
-    isEditing: boolean;
+    isEditable: boolean;
     isStencil: boolean;
     isDisplayingCs01: boolean;
     isTargetAlignmentRatingAvail: boolean;
+    isPreviewVariant: boolean;
   }
 }
 
 export interface PortfolioStructureDTO extends BasicDTOStructure {
   data: {
-    rpPortfolioDate: string;
+    date: string;
     portfolioId: number;
     portfolioShortName: PortfolioShortNames;
     portfolioNav: number;
@@ -712,6 +719,7 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     }
     cs01TargetBar: TargetBarDTO;
     creditLeverageTargetBar: TargetBarDTO;
+    originalBEData: BEPortfolioStructuringDTO; // used when updating portfolios for portfolio structuring
   },
   api: {
     onSubmitMetricValues: (CS01: number, leverage: number) => void;
@@ -719,7 +727,14 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
   state: {
     isEditing: boolean;
     isStencil: boolean;
+    isNumeric: boolean;
     isDataUnavailable: boolean;
+    isEditingFundTargets: boolean;
+    hasErrors: {
+      updatedCS01: boolean;
+      updatedCreditLeverage: boolean;
+      errorMessage: string;
+    }
   }
 }
 
@@ -740,11 +755,6 @@ export interface TargetBarDTO extends BasicDTOStructure {
     isEmpty: boolean;
     isDataUnavailable: boolean;
   }
-  utility: {
-    getDisplayValues: (targetBar: TargetBarDTO) => void;
-    convertNumtoStr: (targetBar: TargetBarDTO) => void;
-    setInactiveMetric: (targetBar: TargetBarDTO) => void;
-  }
 }
 
 export interface SantaModalDTO extends BasicDTOStructure {
@@ -758,5 +768,6 @@ export interface SantaModalDTO extends BasicDTOStructure {
   api: {
     openModal: () => void;
     closeModal: () => void;
+    saveModal: () => boolean;
   }
 }

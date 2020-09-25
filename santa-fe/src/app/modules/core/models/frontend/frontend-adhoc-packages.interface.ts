@@ -7,14 +7,8 @@ import {
   SerializedNumberFilter
 } from 'ag-grid-community';
 
-import {
-  SecurityTableRowDTO,
-  NumericFilterDTO,
-  SecurityQuoteDTO,
-  SecurityDTO,
-  AlertDTO
-} from 'FEModels/frontend-models.interface';
-
+import * as DTOs from 'FEModels/frontend-models.interface';
+import { BEPortfolioStructuringDTO } from 'BEModels/backend-models.interface';
 import {
   QuoteMetricBlock,
   AgGridRow,
@@ -27,7 +21,7 @@ export interface SecurityMapEntry {
 }
 
 export interface ClickedSortQuotesByMetricEmitterParams {
-  targetRow: SecurityTableRowDTO;
+  targetRow: DTOs.SecurityTableRowDTO;
   targetBlock: QuoteMetricBlock;
   targetMetricLabel: string; 
 }
@@ -42,7 +36,7 @@ export interface DefinitionConfiguratorEmitterParamsItem {
 }
 
 export interface LiveDataDiffingResult {
-  newRowList: Array<SecurityTableRowDTO>;
+  newRowList: Array<DTOs.SecurityTableRowDTO>;
   markDiffCount: number;
   quantDiffCount: number;
 }
@@ -60,10 +54,10 @@ export interface AgGridRowParams {
 }
 
 export interface SantaTableNumericFloatingFilterChange {
-  model: NumericFilterDTO
+  model: DTOs.NumericFilterDTO
 }
 
-export interface SantaTableNumericFloatingFilterParams extends IFloatingFilterParams<NumericFilterDTO, SantaTableNumericFloatingFilterChange> {
+export interface SantaTableNumericFloatingFilterParams extends IFloatingFilterParams<DTOs.NumericFilterDTO, SantaTableNumericFloatingFilterChange> {
   minValue: number;
   maxValue: number;
 }
@@ -102,17 +96,27 @@ export interface LilMarketGraphSeriesDataPackEntryBlock {
 }
 
 export interface ClickedSpecificQuoteEmitterParams {
-  targetQuote: SecurityQuoteDTO;
+  targetQuote: DTOs.SecurityQuoteDTO;
   isOnBidSide: boolean;
   targetDriver: string;
 }
 
 export interface AlertDTOMap {
-  [property: string]: AlertDTO
+  [property: string]: DTOs.AlertDTO;
 }
 
 export interface AmchartPieDataBlock {
   subject: string;
   quantity: number;
   color?: string;
+}
+
+export interface StructureSetTargetOverlayTransferPack {
+  targetFund: DTOs.PortfolioStructureDTO;
+  targetBreakdown: DTOs.PortfolioBreakdownDTO;
+}
+
+export interface StructureSetTargetPostEditUpdatePack {
+  targetFund: BEPortfolioStructuringDTO;
+  targetBreakdownBackendGroupOptionIdentifier: string;
 }

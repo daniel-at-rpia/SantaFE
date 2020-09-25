@@ -14,6 +14,7 @@ import {
 } from 'ag-grid-community';
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { DTOService } from 'Core/services/DTOService';
+import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 
 export interface SecurityPortfolioBlock {
   portfolioName: string;
@@ -190,8 +191,8 @@ export interface AgGridRowNode {
 export interface AgGridRow {
   id: string;
   securityCard: DTOs.SecurityDTO;    // this needs to be identical to SecurityTableHeaderConfigs' key for Security column
-  bestQuote: DTOs.QuantComparerDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Best Quote column
-  bestAxeQuote: DTOs.QuantComparerDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Best Axe Quote column
+  bestQuote: DTOs.BestQuoteComparerDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Best Quote column
+  bestAxeQuote: DTOs.BestQuoteComparerDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Best Axe Quote column
   alertSide: DTOs.SantaTableAlertSideCellDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Alert Side column
   alertStatus: DTOs.SantaTableAlertStatusCellDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Alert Status column
   rowDTO: DTOs.SecurityTableRowDTO;
@@ -286,9 +287,41 @@ export interface PortfolioBreakdownCategoryBlock {
   indexPct: number;
   indexPctDisplay: string;
   moveVisualizer: DTOs.MoveVisualizerDTO;
+  raw: {
+    currentLevel: number;
+    currentPct: number;
+    targetLevel: number;
+    targetPct: number;
+  }
 }
 
 export interface GlobalNavLegendBlock {
   card: DTOs.SecurityDTO;
   legend: string;
+}
+
+export interface StructureSetTargetPanelEditRowBlock {
+  targetBlockFromBreakdown: PortfolioBreakdownCategoryBlock;
+  rowTitle: string;
+  targetCs01: {
+    level: StructureSetTargetPanelEditRowItemBlock;
+    percent: StructureSetTargetPanelEditRowItemBlock;
+  };
+  targetCreditLeverage: {
+    level: StructureSetTargetPanelEditRowItemBlock;
+    percent: StructureSetTargetPanelEditRowItemBlock;
+  };
+  isLocked: boolean;
+}
+
+export interface StructureSetTargetPanelEditRowItemBlock {
+  savedDisplayValue: string;
+  savedUnderlineValue: number;  // underline values won't be rounded, so they are accurate
+  modifiedDisplayValue: string;
+  modifiedUnderlineValue: number;  // underline values won't be rounded, so they are accurate
+  isActive: boolean;
+  isImplied: boolean;
+  isFocused: boolean;
+  metric: PortfolioMetricValues;
+  isPercent: boolean;
 }
