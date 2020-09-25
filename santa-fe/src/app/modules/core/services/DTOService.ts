@@ -1887,7 +1887,7 @@ export class DTOService {
         ratingHoverText: !isStencil ? 'n/a' : '33%',
         rawCs01CategoryList: [],
         rawLeverageCategoryList: [],
-        backendGroupOptionIdentifier: !isStencil ? rawData.groupOption : null
+        backendGroupOptionIdentifier: !isStencil ? rawData.groupOption : null,
         popover: null,
         portfolioId: rawData.portfolioId
       },

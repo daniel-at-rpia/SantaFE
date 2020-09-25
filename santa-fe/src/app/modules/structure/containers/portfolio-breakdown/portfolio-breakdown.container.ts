@@ -87,15 +87,15 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     const targetList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawCs01CategoryList : this.breakdownData.data.rawLeverageCategoryList;
     let totalLevel = 0;
     targetList.forEach((eachCategory) => {
-      totalLevel = totalLevel + eachCategory.currentLevel;
+      totalLevel = totalLevel + eachCategory.data.currentLevel;
     });
     const targetListWithTargets = targetList.filter((eachCategory) => {
-      return !!eachCategory.targetLevel;
+      return !!eachCategory.data.targetLevel;
     });
     if (targetListWithTargets.length > 0) {
       let misalignmentAggregate = 0;
       targetListWithTargets.forEach((eachCategory) => {
-        const misalignmentPercentage = eachCategory.diffToTarget / totalLevel * 100;
+        const misalignmentPercentage = eachCategory.data.diffToTarget / totalLevel * 100;
         misalignmentAggregate = misalignmentAggregate + Math.abs(misalignmentPercentage);
       });
       misalignmentAggregate = misalignmentAggregate > 100 ? 100 : misalignmentAggregate;
