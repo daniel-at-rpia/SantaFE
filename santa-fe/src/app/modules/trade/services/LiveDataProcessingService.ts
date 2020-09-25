@@ -259,9 +259,6 @@ export class LiveDataProcessingService {
         if (!!oldRow) {
           const isSecurityDiff = this.isThereDiffInSecurity(oldRow.data.security, eachNewRow.data.security);
           const isBestQuoteDiff = this.isThereDiffInBestQuoteComparer(oldRow.data.cells[0].data.bestQuoteComparerDTO, eachNewRow.data.cells[0].data.bestQuoteComparerDTO);
-          if (isBestQuoteDiff > 0) {
-            console.log('test, there is best quote diff', oldRow);
-          }
           if ( isSecurityDiff > 0 || isBestQuoteDiff > 0) {
             this.carryOverOldRowStates(eachNewRow, oldRow);
             updateList.push(eachNewRow);
@@ -315,7 +312,6 @@ export class LiveDataProcessingService {
     oldBestQuote: BestQuoteComparerDTO,
     newBestQuote: BestQuoteComparerDTO
   ): number {
-    console.log('test, old quote', oldBestQuote, 'new quote', newBestQuote);
     if (oldBestQuote && !newBestQuote) {
       return 1;
     }

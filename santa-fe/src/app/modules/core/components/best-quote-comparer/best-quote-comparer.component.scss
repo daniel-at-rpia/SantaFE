@@ -23,8 +23,7 @@ $bestQuoteComparer_min_height: 2.5rem;
       @include mix_calculate(width, 100%, $bestQuoteComparer_edge_width * 2, '-');
       display: none;  // changed the design to not show the line for now
       height: 50%;
-      margin-left: $bestQuoteComparer_edge_width;
-      margin-right: $bestQuoteComparer_edge_width;
+      margin: 0 $bestQuoteComparer_edge_width;
     }
     &-background {
       @include mix_fixed_div(absolute, $z_index_base_item);
