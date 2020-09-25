@@ -674,6 +674,7 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     ratingHoverText: string;
     rawCs01CategoryList: Array<StructurePortfolioBreakdownRowDTO>;
     rawLeverageCategoryList: Array<StructurePortfolioBreakdownRowDTO>;
+    backendGroupOptionIdentifier: string;
     popover: StructurePopoverDTO;
     portfolioId: number;
   },
@@ -762,6 +763,7 @@ export interface SantaModalDTO extends BasicDTOStructure {
   api: {
     openModal: () => void;
     closeModal: () => void;
+    saveModal: () => boolean;
   }
 }
 

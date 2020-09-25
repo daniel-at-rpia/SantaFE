@@ -32,7 +32,8 @@ export const APIUrlMap = {
   logError: 'feLogger/log',
   getAllTradeHistory: 'trade/get-all-trades-for-security',
   getPortfolioStructures: 'portfolioStructuring/get-portfolio-structures',
-  updatePortfolioStructures: 'portfolioStructuring/update-portfolio-structure',
+  updatePortfolioTargets: 'portfolioStructuring/update-portfolio-target',
+  updatePortfolioBreakdown: 'portfolioStructuring/update-portfolio-breakdown'
   getBICsHierarchy: 'portfolioStructuring/get-bics-hierarchy'
 };
 
