@@ -20,6 +20,7 @@
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { StructureState } from 'FEModels/frontend-page-states.interface';
     import { StructureStoreResetEvent } from 'Structure/actions/structure.actions';
+    import { STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
   //
 
 @Component({
@@ -33,6 +34,7 @@ export class StructurePage implements OnInit, OnDestroy {
   subscriptions = {
   };
   constants = {
+    editModalId: STRUCTURE_EDIT_MODAL_ID
   };
 
   private initializePageState() {}

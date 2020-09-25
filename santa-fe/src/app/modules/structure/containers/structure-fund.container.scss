@@ -1,8 +1,12 @@
 @import "global.scss";
 @import "modules/structure/structure.scss";
 
+$fundStructuring_setTarget_height: 8rem;
+$funtStructuring_setTarget_backgroundIcon_size: $font_size_hero;
+$fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_height - $funtStructuring_setTarget_backgroundIcon_size)/2;
 .sat-fundStructuring {
   $blockName: &;
+  @include mix_alive('light');
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -17,20 +21,92 @@
       color: $font_color_minor;
     }
   }
+  &__setTarget {
+    @include mix_fixed_div(relative, $z_index_base_item);
+    @include mix_alive('light');
+    margin-bottom: $spacing_medium;
+    height: 0;
+    display: flex;
+    flex: 0 0 auto;
+    overflow: hidden;
+    flex-wrap: wrap;
+    justify-content: center;
+    &-group {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin-bottom: $spacing_x_small;
+      flex: 0 0 100%;
+      padding-right: $fundStructuring_setTarget_backgroundIcon_gutter;
+      &-label,
+      &-input {
+        margin-right: $spacing_x_small;
+      }
+      &-input {
+        width: 5rem;
+      }
+      &:last-child {
+        padding-right: $fundStructuring_setTarget_backgroundIcon_gutter + .5rem;
+      }
+    }
+    &-message {
+      visibility: hidden;
+      &-text {
+        @include mix_border_radius(5px);
+        text-align: center;
+        color: $color_negative;
+        background-color: $color_red_1;
+        margin: $spacing_x_small 0;
+        padding: $spacing_x_small;
+      }
+    }
+    &-backgroundIcon {
+      @include mix_fixed_div(absolute, $z_index_base_item);
+      @include mix_alive('light');
+      left: $fundStructuring_setTarget_backgroundIcon_gutter* 2;
+      top: $fundStructuring_setTarget_backgroundIcon_gutter;
+      font-size: $funtStructuring_setTarget_backgroundIcon_size;
+      color: $color_gray_6;
+      opacity: 0;
+      transform: translate(0, -100%);
+      transition-delay: $animation_duration_light/2;
+    }
+  }
   &__utility {
     @include mix_fixed_div(relative, $z_index_base_item);
     display: flex;
     flex-direction: column;
-    &-btn {
+    &-btnGroup {
       @include mix_fixed_div(absolute, $z_index_base_item_solid);
-      @include mix_border_radius(50%);
-      display: none;  // temporarily hide the edit for v0.4 release
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      &>i {
-        color: $font_color_major;
-        font-size: $font_size_large;
+      &-btn {
+        @include roundedButton($size: $iconButton_size_large);
+        margin-right: $spacing_large;
+        &>i {
+          font-size: $font_size_large;
+        }
+        &--edit {
+          display: none;
+          margin-right: 0;
+        }
+        &--cancel,
+        &--save {
+          display: none;
+          &>i{
+            color: $color_white;
+          }
+        }
+        &--cancel {
+          background-color: $color_negative;
+        }
+        &--save {
+          background-color: $color_positive;
+        }
       }
     }
     &-divider {
@@ -52,15 +128,63 @@
       flex-direction: column;
       padding: $spacing_x_small $spacing_medium $spacing_large $spacing_medium;
       &-item {
-        margin-top: $spacing_medium;
-        &:first-of-type {
-          margin-top: 0;
-        }
+        margin-bottom: $spacing_medium;
       }
     }
     &-errorMessage {
       display: none;
       text-align: center
+    }
+  }
+  &--editing {
+    #{$blockName} {
+      &__utility {
+        &-btnGroup {
+          &-btn {
+            &--edit {
+              display: flex;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--setFundTargets {
+    #{$blockName} {
+      &__setTarget {
+        background-color: $color_active;
+        color: $font_color-inverse;
+        height: $fundStructuring_setTarget_height;
+        padding-bottom: $spacing_medium;
+        margin-bottom: 0;
+        &-backgroundIcon {
+          opacity: 1;
+          transform: translate(0, 0);
+        }
+      }
+      &__utility {
+        &-btnGroup {
+          &-btn {
+            &--edit {
+              display: none;
+            }
+            &--save,
+            &--cancel {
+              display: flex;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--invalidInput {
+    #{$blockName} {
+      &__setTarget {
+        &-message {
+          visibility: visible; 
+          flex: 0 0 auto;
+        }
+      }
     }
   }
   &--errorState {

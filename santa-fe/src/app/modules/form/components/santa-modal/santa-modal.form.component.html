@@ -12,9 +12,9 @@
     <div class="santaModal__foreground-content">
       <ng-content></ng-content>
     </div>
-  </section>
-  <section class="santaModal__ctas">
-    <button (click)="closeModal()" class="santaBtn--iconOnly santaModal__ctas-btn santaModal__ctas-btn--cancel fal fa-times"></button>
-    <button class="santaBtn--iconOnly santaModal__ctas-btn santaModal__ctas-btn--confirm fal fa-check"></button>
+    <section class="santaModal__foreground-ctas">
+      <button (click)="closeModal()" class="santaBtn--iconOnly santaModal__foreground-ctas-btn santaModal__foreground-ctas-btn--cancel fal fa-times"></button>
+      <button (click)="saveModal()" class="santaBtn--iconOnly santaModal__foreground-ctas-btn santaModal__foreground-ctas-btn--confirm fal fa-check"></button>
+    </section>
   </section>
 </article>
