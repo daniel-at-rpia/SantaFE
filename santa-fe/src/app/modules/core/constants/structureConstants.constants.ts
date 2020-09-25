@@ -28,4 +28,11 @@ export enum PortfolioMetricValues {
   creditLeverage = 'Credit Leverage'
 }
 
+export enum BICsLevels {
+  bicsLevel1 = 1,
+  bicsLevel2,
+  bicsLevel3,
+  bicsLevel4
+}
+
 export const STRUCTURE_EDIT_MODAL_ID = 'Edit Fund Target';
