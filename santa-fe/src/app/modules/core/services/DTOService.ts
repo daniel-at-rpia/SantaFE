@@ -1882,7 +1882,9 @@ export class DTOService {
         displayCategoryList: [],
         ratingHoverText: !isStencil ? 'n/a' : '33%',
         rawCs01CategoryList: [],
-        rawLeverageCategoryList: []
+        rawLeverageCategoryList: [],
+        popover: null,
+        portfolioId: rawData.portfolioId
       },
       style: {
         ratingFillWidth: null

@@ -670,10 +670,12 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
   data: {
     title: string;
     definition: SecurityDefinitionDTO;
-    displayCategoryList: Array<PortfolioBreakdownCategoryBlock>;
+    displayCategoryList: Array<StructurePortfolioBreakdownRowDTO>;
     ratingHoverText: string;
-    rawCs01CategoryList: Array<PortfolioBreakdownCategoryBlock>;
-    rawLeverageCategoryList: Array<PortfolioBreakdownCategoryBlock>;
+    rawCs01CategoryList: Array<StructurePortfolioBreakdownRowDTO>;
+    rawLeverageCategoryList: Array<StructurePortfolioBreakdownRowDTO>;
+    popover: StructurePopoverDTO;
+    portfolioId: number;
   },
   style: {
     ratingFillWidth: number;
