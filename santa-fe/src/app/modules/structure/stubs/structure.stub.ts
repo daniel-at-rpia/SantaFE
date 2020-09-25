@@ -33,7 +33,7 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
       "date":"2020-08-31T00:00:00",
       "portfolioId":15,
       "indexId":-1,
-      "groupOption":1,
+      "groupOption": 'Ccy',
       "breakdown":{
         "CAD":{
           "metricBreakdowns": {
@@ -126,7 +126,7 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
       "date":"2020-08-31T00:00:00",
       "portfolioId":15,
       "indexId":-1,
-      "groupOption":5,
+      "groupOption": 'BicsLevel1',
       "breakdown":{
         
       }
@@ -136,7 +136,7 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
       "date":"2020-08-31T00:00:00",
       "portfolioId":15,
       "indexId":-1,
-      "groupOption":6,
+      "groupOption": 'BicsLevel2',
       "breakdown":{
         
       }
@@ -146,7 +146,7 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
       "date":"2020-08-31T00:00:00",
       "portfolioId":15,
       "indexId":-1,
-      "groupOption":7,
+      "groupOption": 'BicsLevel3',
       "breakdown":{
         
       }
@@ -156,7 +156,7 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
       "date":"2020-08-31T00:00:00",
       "portfolioId":15,
       "indexId":-1,
-      "groupOption":14,
+      "groupOption": 'RatingNoNotch',
       "breakdown":{
         "A":{
           "metricBreakdowns": {
@@ -354,7 +354,7 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO = {
       "date":"2020-08-31T00:00:00",
       "portfolioId":15,
       "indexId":-1,
-      "groupOption":20,
+      "groupOption": 'Tenor',
       "breakdown":{
         "2Y":{
           "metricBreakdowns": {
