@@ -48,18 +48,22 @@
         *ngFor="let eachCategory of breakdownData.data.displayCategoryList"
         [ngClass]="{
           'sat-portfolioBreakdown__categoryContent-list-item': true,
-          'sat-portfolioBreakdown__categoryContent-list-item--noSignificantDiff': eachCategory.diffToTarget === 0,
-          'sat-portfolioBreakdown__categoryContent-list-item--negativeDiff': eachCategory.diffToTarget < 0
+          'sat-portfolioBreakdown__categoryContent-list-item--noSignificantDiff': eachCategory.data.diffToTarget === 0,
+          'sat-portfolioBreakdown__categoryContent-list-item--negativeDiff': eachCategory.data.diffToTarget < 0
         }">
-        <category-content-list-item
-          [eachCategory]="eachCategory"
-          [stencilState]="breakdownData.state.isStencil"
-          [isBtnDiveIn]="breakdownData.data.title === 'BICS'">
-        </category-content-list-item>
+        <portfolio-breakdown-row
+          [breakdownRow]="eachCategory"
+          (breakdownRowDiveIn)="updatePopoverData($event)">
+        </portfolio-breakdown-row>
       </li>
     </ul>
   </section>
   <section class="sat-portfolioBreakdown__ctas">
     <button (click)="onClickEdit()" class="santaBtn--iconOnly sat-portfolioBreakdown__ctas-editBtn fal fa-pencil"></button>
+  </section>
+  <section class="sat-portfolioBreakdown__popover" *ngIf="breakdownData.data.popover">
+    <structure-popover
+      [popover]="breakdownData.data.popover">
+    </structure-popover>
   </section>
 </article>

@@ -3,11 +3,13 @@ import { of, Subscription } from 'rxjs';
 import { catchError, first, tap} from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
-import { PortfolioBreakdownDTO } from 'FEModels/frontend-models.interface';
+import { PortfolioBreakdownDTO, StructurePortfolioBreakdownRowDTO } from 'FEModels/frontend-models.interface';
 import { PortfolioMetricValues, STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
 import { ModalService } from 'Form/services/ModalService';
 import { UtilityService } from 'Core/services/UtilityService';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
+import { BICsDataProcessingService } from 'Structure/services/BICsDataProcessingService';
+import { DTOService } from 'Core/services/DTOService';
 
 @Component({
   selector: 'portfolio-breakdown',
@@ -30,7 +32,9 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
   constructor(
     private modalService: ModalService,
     private utilityService: UtilityService,
-    private store$: Store<any>
+    private store$: Store<any>,
+    private bicsDataProcessingService: BICsDataProcessingService,
+    private dtoService: DTOService
   ) { }
 
   public ngOnInit() {
@@ -95,4 +99,12 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+public updatePopoverData(breakdownRow: StructurePortfolioBreakdownRowDTO)
+ {
+  const subBicsLevel = this.bicsDataProcessingService.formSubTierBreakdown(breakdownRow);
+  breakdownRow.data.children = subBicsLevel;
+  this.breakdownData.data.popover = this.dtoService.formStructurePopoverObject(breakdownRow);
+  this.breakdownData.data.popover.data.mainRow.state.isSelected = true;
+  this.breakdownData.data.popover.state.isActive = true;
+ }
 }
