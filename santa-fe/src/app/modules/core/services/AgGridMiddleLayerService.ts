@@ -14,7 +14,7 @@
       SecurityTableDTO,
       SecurityTableRowDTO,
       SecurityTableHeaderDTO,
-      QuantComparerDTO,
+      BestQuoteComparerDTO,
       SantaTableAlertSideCellDTO,
       SantaTableAlertStatusCellDTO
     } from 'FEModels/frontend-models.interface';
@@ -248,8 +248,8 @@ export class AgGridMiddleLayerService {
   ) {
     if (targetHeader.data.key === 'securityCard') {
       newAgColumn.comparator = this.agCompareSecurities.bind(this);
-    } else if (targetHeader.state.isQuantVariant) {
-      newAgColumn.comparator = this.agCompareQuantComparer.bind(this);
+    } else if (targetHeader.state.isBestQuoteVariant) {
+      newAgColumn.comparator = this.agCompareBestQuoteComparer.bind(this);
     } else if (targetHeader.data.key === 'alertSide') {
       newAgColumn.comparator = this.agCompareAlertSide.bind(this);
     } else if (targetHeader.data.key === 'alertStatus') {
@@ -268,7 +268,7 @@ export class AgGridMiddleLayerService {
       if (targetHeader.data.key === 'securityCard') {
         newAgColumn.cellClass = `${AGGRID_CELL_CLASS} ${AGGRID_CELL_CLASS}--securityCard`;
         newAgColumn.width = AGGRID_SECURITY_CARD_COLUMN_WIDTH;
-      } else if (!!targetHeader.state.isQuantVariant) {
+      } else if (!!targetHeader.state.isBestQuoteVariant) {
         newAgColumn.width = AGGRID_QUOTE_COLUMN_WIDTH;
       } else if (targetHeader.data.key === 'alertSide') {
         newAgColumn.width = AGGRID_ALERT_SIDE_COLUMN_WIDTH;
@@ -320,11 +320,11 @@ export class AgGridMiddleLayerService {
       securityCard: eachSecurity,
       bestQuote:
         bestQuoteCellIndex > -1
-        ? targetRow.data.cells[bestQuoteCellIndex].data.quantComparerDTO
+        ? targetRow.data.cells[bestQuoteCellIndex].data.bestQuoteComparerDTO
         : null,
       bestAxeQuote:
         bestAxeQuoteCellIndex > -1
-        ? targetRow.data.cells[bestAxeQuoteCellIndex].data.quantComparerDTO
+        ? targetRow.data.cells[bestAxeQuoteCellIndex].data.bestQuoteComparerDTO
         : null,
       alertSide: 
         alertSideCellIndex > -1
@@ -395,14 +395,14 @@ export class AgGridMiddleLayerService {
     }
   }
 
-  private agCompareQuantComparer(
-    qA: QuantComparerDTO,
-    qB: QuantComparerDTO,
+  private agCompareBestQuoteComparer(
+    qA: BestQuoteComparerDTO,
+    qB: BestQuoteComparerDTO,
     nodeA: AgGridRowNode,
     nodeB: AgGridRowNode,
     inverted: boolean
   ) {
-    // as long as we only have one quantComparer in the table there is no need to find out the column
+    // as long as we only have one bestQuoteComparer in the table there is no need to find out the column
     if (!!nodeA && !!nodeB && !nodeA.group && !nodeB.group) {
       const securityA = nodeA.data.securityCard;
       const securityB = nodeB.data.securityCard;
