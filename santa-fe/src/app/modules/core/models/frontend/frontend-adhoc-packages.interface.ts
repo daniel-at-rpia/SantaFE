@@ -114,6 +114,7 @@ export interface AmchartPieDataBlock {
 export interface StructureSetTargetOverlayTransferPack {
   targetFund: DTOs.PortfolioStructureDTO;
   targetBreakdown: DTOs.PortfolioBreakdownDTO;
+  isCreateNewOverride: boolean;
 }
 
 export interface StructureSetTargetPostEditUpdatePack {

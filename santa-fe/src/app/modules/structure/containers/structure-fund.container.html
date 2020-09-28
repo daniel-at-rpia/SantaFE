@@ -20,7 +20,7 @@
     <div class="sat-fundStructuring__editFund-message">
       <p class="sat-fundStructuring__editFund-message-text">{{ fund.state.hasErrors.errorMessage }}</p>
     </div>
-    <button class="sat-fundStructuring__editFund-overrideCta santaBtn--labelled santaBtn--inverseLabelled">
+    <button (click)="onClickedAddCustomBreakdown()" class="sat-fundStructuring__editFund-overrideCta santaBtn--labelled santaBtn--inverseLabelled">
       <i class="fal fa-plus"></i>
       <span>Add Custom Breakdown</span>
     </button>
