@@ -30,10 +30,11 @@ export class PortfolioBreakdownRow implements OnInit {
         }
       }
     });
+    this.breakdownRow.state.isBtnDiveIn = this.breakdownRow.data.bicsLevel < 4;
   };
 
   public onClickDiveIn(row: StructurePortfolioBreakdownRowDTO) {
-    console.log(row, 'breakdown row');
+    if (!row.data.bicsLevel) return;
     !!this.breakdownRowDiveIn && this.breakdownRowDiveIn.emit(row);
   }
 }
