@@ -2064,13 +2064,14 @@ export class DTOService {
     return object;
   }
 
-  public formStructurePopoverObject(categoryRow: DTOs.StructurePortfolioBreakdownRowDTO): DTOs.StructurePopoverDTO {
+  public formStructurePopoverObject(categoryRow: DTOs.StructurePortfolioBreakdownRowDTO, isDisplayCs01: boolean): DTOs.StructurePopoverDTO {
     const object = {
       data: {
         mainRow: categoryRow
       },
       state: {
-        isActive: false
+        isActive: false,
+        isDisplayCs01
       }
     }
     return object;
