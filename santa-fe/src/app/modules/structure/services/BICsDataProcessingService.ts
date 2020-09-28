@@ -35,12 +35,13 @@ export class BICsDataProcessingService {
   }
 
   public getRawBICsData(rawData: BEPortfolioStructuringDTO) {
+    const { BicsLevel1, BicsLevel2, BicsLevel3, BicsLevel4 } = rawData.breakdowns;
     const block: BICsCategorizationBlock = {
       portfolioId: rawData.portfolioId,
-      bicsLevel1: rawData.breakdowns.BicsLevel1,
-      bicsLevel2: rawData.breakdowns.BicsLevel2,
-      bicsLevel3: rawData.breakdowns.BicsLevel3,
-      bicsLevel4: rawData.breakdowns.BicsLevel4
+      bicsLevel1: BicsLevel1,
+      bicsLevel2: BicsLevel2,
+      bicsLevel3: BicsLevel3,
+      bicsLevel4: BicsLevel4
     }
     this.bicsRawData.push(block);
   }
@@ -53,15 +54,15 @@ export class BICsDataProcessingService {
     return definitionList;
   }
 
-   public getSubTierList(category: string, bicsLevel: number = 1): Array<string> {
+   public getSubLevelList(category: string, bicsLevel: number = 1): Array<string> {
     if(!!this.formattedBICsHierarchyData) {
       const BICSDataList = this.formattedBICsHierarchyData.children.map(category => category); 
-      this.getSubTiers(category, bicsLevel, BICSDataList);
+      this.getSubLevels(category, bicsLevel, BICSDataList);
       return this.subBicsLevelList;
     }
   }
 
-  private getSubTiers(category: string, bicsLevel: number, data: Array<BICsHierarchyBlock>): Array<string> {
+  private getSubLevels(category: string, bicsLevel: number, data: Array<BICsHierarchyBlock>): Array<string> {
     if (!data || data.length <= 0) return;
     data.forEach(block => {
       for (let key in block) {
@@ -71,19 +72,17 @@ export class BICsDataProcessingService {
           this.subBicsLevelList = subLevels;
         } else {
           if (Array.isArray(value)) {
-            this.getSubTiers(category, bicsLevel, value);
+            this.getSubLevels(category, bicsLevel, value);
           }
         }
       }
     })
   }
 
-  
-
-  public formSubTierBreakdown(breakdownRow: StructurePortfolioBreakdownRowDTO) {
+  public formSubLevelBreakdown(breakdownRow: StructurePortfolioBreakdownRowDTO, isDisplayCs01: boolean) {
   const categoryPortfolioId = breakdownRow.data.portfolioId;
   const selectedSubRawBICsData = this.bicsRawData.find(rawData => rawData.portfolioId === categoryPortfolioId); 
-  const subTierList = this.getSubTierList(breakdownRow.data.category, breakdownRow.data.bicsLevel);
+  const subTierList = this.getSubLevelList(breakdownRow.data.category, breakdownRow.data.bicsLevel);
   const subBICsLevel = BICsLevels[breakdownRow.data.bicsLevel + 1];
   const selectedSubRawBreakdown: BEStructuringBreakdownBlock  = selectedSubRawBICsData[subBICsLevel];
   const { date, groupOption, indexId, portfolioBreakdownId, portfolioId } = selectedSubRawBreakdown;
@@ -105,7 +104,7 @@ export class BICsDataProcessingService {
     }
   })
   const definitionList = this.getBICsBreakdownDefinitionList(object);
-  const breakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, object, definitionList);
+  const breakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, object, definitionList, isDisplayCs01);
   breakdown.data.rawCs01CategoryList.forEach(category => {
     category.data.bicsLevel = breakdownRow.data.bicsLevel + 1;
     category.data.moveVisualizer.state.isStencil = false;

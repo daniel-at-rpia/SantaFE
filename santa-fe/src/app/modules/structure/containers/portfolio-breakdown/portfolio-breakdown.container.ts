@@ -109,9 +109,9 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
 
 public updatePopoverData(breakdownRow: StructurePortfolioBreakdownRowDTO)
  {
-  const subBicsLevel = this.bicsDataProcessingService.formSubTierBreakdown(breakdownRow);
+  const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.breakdownData.state.isDisplayingCs01);
   breakdownRow.data.children = subBicsLevel;
-  this.breakdownData.data.popover = this.dtoService.formStructurePopoverObject(breakdownRow);
+  this.breakdownData.data.popover = this.dtoService.formStructurePopoverObject(breakdownRow, this.breakdownData.state.isDisplayingCs01);
   this.breakdownData.data.popover.data.mainRow.state.isSelected = true;
   this.breakdownData.data.popover.state.isActive = true;
  }
