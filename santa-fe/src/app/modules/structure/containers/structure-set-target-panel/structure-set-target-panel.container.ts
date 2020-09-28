@@ -398,6 +398,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private refreshPreview() {
+    const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
     const breakdownTitle = this.state.targetBreakdown.data.title; 
     const breakdown = this.state.targetFund.data.children.find(breakdown => breakdown.data.title === breakdownTitle);
     const breakdownIndex = this.state.targetFund.data.children.indexOf(breakdown);
@@ -420,7 +421,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       category.data.moveVisualizer.state.isStencil = true;
     })
     setTimeout(() => {
-      const updatedPortfolioBreakdown = this.dtoService.formPortfolioBreakdown(false, rawData, definitionList);
+      const updatedPortfolioBreakdown = this.dtoService.formPortfolioBreakdown(false, rawData, definitionList, isDisplayCs01);
       updatedPortfolioBreakdown.data.definition = breakdownDefinition;
       updatedPortfolioBreakdown.data.title = breakdownTitle;
       this.state.targetFund.data.children[breakdownIndex] = updatedPortfolioBreakdown; 
