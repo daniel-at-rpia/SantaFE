@@ -1851,33 +1851,32 @@ export class DTOService {
     object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil);
     object.data.cs01TargetBar.state.isInactiveMetric = selectedMetricValue !== object.data.cs01TargetBar.data.targetMetric;
     object.data.creditLeverageTargetBar.state.isInactiveMetric = selectedMetricValue !== object.data.creditLeverageTargetBar.data.targetMetric;
-    const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.BicsLevel1, BICsLevel1DefinitionList);
+    const isDisplayCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
+    const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.BicsLevel1, BICsLevel1DefinitionList, isDisplayCs01);
     BICSBreakdown.data.title = 'BICS';
     BICSBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.SECTOR);
-    BICSBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
     object.data.children.push(BICSBreakdown);
-    const currencyBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Ccy, FilterOptionsCurrency);
+    const currencyBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Ccy, FilterOptionsCurrency, isDisplayCs01);
     currencyBreakdown.data.title = 'Currency';
     currencyBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
     object.data.children.push(currencyBreakdown);
-    currencyBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
-    const tenorBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Tenor, FilterOptionsTenor);
+    const tenorBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Tenor, FilterOptionsTenor, isDisplayCs01);
     tenorBreakdown.data.title = 'Tenor';
     tenorBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.TENOR);
     object.data.children.push(tenorBreakdown);
     tenorBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
-    const ratingBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.RatingNoNotch, FilterOptionsRating);
+    const ratingBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.RatingNoNotch, FilterOptionsRating, isDisplayCs01);
     ratingBreakdown.data.title = 'Rating';
     ratingBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.RATING);
     object.data.children.push(ratingBreakdown);
-    ratingBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
     return object;
   }
 
   public formPortfolioBreakdown(
     isStencil: boolean,
     rawData: BEModels.BEStructuringBreakdownBlock,
-    definitionList: Array<string>
+    definitionList: Array<string>,
+    isDisplayCs01: boolean
   ): DTOs.PortfolioBreakdownDTO {
     const object: DTOs.PortfolioBreakdownDTO = {
       data: {
@@ -1897,7 +1896,7 @@ export class DTOService {
       state: {
         isEditable: false,
         isStencil: true,
-        isDisplayingCs01: true,
+        isDisplayingCs01: !!isDisplayCs01,
         isTargetAlignmentRatingAvail: !!isStencil,
         isPreviewVariant: false
       }
