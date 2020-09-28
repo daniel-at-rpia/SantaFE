@@ -1878,6 +1878,7 @@ export class DTOService {
     definitionList: Array<string>,
     isDisplayCs01: boolean
   ): DTOs.PortfolioBreakdownDTO {
+    const isBicsBreakdown = rawData.groupOption.indexOf('BicsLevel') > -1;
     const object: DTOs.PortfolioBreakdownDTO = {
       data: {
         title: '',
@@ -1898,7 +1899,8 @@ export class DTOService {
         isStencil: true,
         isDisplayingCs01: !!isDisplayCs01,
         isTargetAlignmentRatingAvail: !!isStencil,
-        isPreviewVariant: false
+        isPreviewVariant: false,
+        isBICs: !!isBicsBreakdown
       }
     };
     let findCs01Max = 0;
@@ -2035,9 +2037,7 @@ export class DTOService {
       }
 
       const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock);
-      if (groupOption === 'BicsLevel1' || groupOption === 'BicsLevel2' || groupOption === 'BicsLevel3') {
-        eachCategoryBlockDTO.state.isBtnDiveIn = true;
-      }
+      eachCategoryBlockDTO.state.isBtnDiveIn = !!isBicsBreakdown;
       return eachCategoryBlockDTO;
     } else {
       return null;
