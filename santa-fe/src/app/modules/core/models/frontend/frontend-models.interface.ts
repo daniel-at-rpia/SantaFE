@@ -687,6 +687,7 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     isDisplayingCs01: boolean;
     isTargetAlignmentRatingAvail: boolean;
     isPreviewVariant: boolean;
+    isBICs: boolean;
   }
 }
 
@@ -773,6 +774,7 @@ export interface StructurePopoverDTO extends BasicDTOStructure {
   }
   state: {
     isActive: boolean;
+    isDisplayCs01: boolean;
   }
 }
 
