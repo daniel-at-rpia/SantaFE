@@ -1,7 +1,7 @@
 <article [ngClass]="{
   'sat-fundStructuring': true,
-  'sat-fundStructuring--editing': fund.state.isEditing,
-  'sat-fundStructuring--setFundTargets': fund.state.isEditingFundTargets,
+  'sat-fundStructuring--editAvailableState': fund.state.isEditAvailable,
+  'sat-fundStructuring--editingState': fund.state.isEditingFund,
   'sat-fundStructuring--invalidInput': fund.state.hasErrors.updatedCS01 || fund.state.hasErrors.updatedCreditLeverage,
   'sat-fundStructuring--errorState': fund.state.isDataUnavailable
   }">
@@ -15,13 +15,17 @@
       <target-bar [targetBar]="fund.data.cs01TargetBar"></target-bar>
     </div>
   </header>
-  <section class="sat-fundStructuring__setTarget">
-    <i class="sat-fundStructuring__setTarget-backgroundIcon fal fa-pencil"></i>
-    <div class="sat-fundStructuring__setTarget-message">
-      <p class="sat-fundStructuring__setTarget-message-text">{{ fund.state.hasErrors.errorMessage }}</p>
+  <section class="sat-fundStructuring__editFund">
+    <i class="sat-fundStructuring__editFund-backgroundIcon fal fa-pencil"></i>
+    <div class="sat-fundStructuring__editFund-message">
+      <p class="sat-fundStructuring__editFund-message-text">{{ fund.state.hasErrors.errorMessage }}</p>
     </div>
-    <div class="sat-fundStructuring__setTarget-group">
-      <label for="CS01Target" class="sat-fundStructuring__setTarget-group-label">Target CS01:</label>
+    <button class="sat-fundStructuring__editFund-overrideCta santaBtn--labelled santaBtn--inverseLabelled">
+      <i class="fal fa-plus"></i>
+      <span>Add Custom Breakdown</span>
+    </button>
+    <div class="sat-fundStructuring__editFund-group">
+      <label for="CS01Target" class="sat-fundStructuring__editFund-group-label">Target CS01:</label>
       <santa-input
         [inputValue]="fund.data.cs01TotalsInK.targetTotal"
         [placeholder]="'0'"
@@ -29,13 +33,13 @@
         (onInputChange)="onChangeValue($event, constants.cs01)"
         [hasError]="fund.state.hasErrors.updatedCS01"
         [ngClass]="{
-          'sat-fundStructuring__setTarget-group-input': true
+          'sat-fundStructuring__editFund-group-input': true
         }">
       </santa-input>
-      <span class="sat-fundStructuring__setTarget-group-unit">K</span>
+      <span class="sat-fundStructuring__editFund-group-unit">K</span>
     </div>
-    <div class="sat-fundStructuring__setTarget-group">
-      <label for="leverageTarget" class="sat-fundStructuring__setTarget-group-label">Target Credit Leverage:</label>
+    <div class="sat-fundStructuring__editFund-group">
+      <label for="leverageTarget" class="sat-fundStructuring__editFund-group-label">Target Credit Leverage:</label>
       <santa-input
         [inputValue]="fund.data.target.target.creditLeverage"
         [placeholder]="'0'"
@@ -43,7 +47,7 @@
         (onInputChange)="onChangeValue($event, constants.creditLeverage)"
         [hasError]="fund.state.hasErrors.updatedCreditLeverage"
         [ngClass]="{
-          'sat-fundStructuring__setTarget-group-input': true
+          'sat-fundStructuring__editFund-group-input': true
         }">
       </santa-input>
     </div>

@@ -725,11 +725,11 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     onSubmitMetricValues: (CS01: number, leverage: number) => void;
   }
   state: {
-    isEditing: boolean;
+    isEditAvailable: boolean;
     isStencil: boolean;
     isNumeric: boolean;
     isDataUnavailable: boolean;
-    isEditingFundTargets: boolean;
+    isEditingFund: boolean;
     hasErrors: {
       updatedCS01: boolean;
       updatedCreditLeverage: boolean;

@@ -1846,11 +1846,11 @@ export class DTOService {
         onSubmitMetricValues: null
       },
       state: {
-        isEditing: false,
+        isEditAvailable: false,
         isStencil: !!isStencil,
         isNumeric: true,
         isDataUnavailable: false,
-        isEditingFundTargets: false,
+        isEditingFund: false,
         hasErrors: {
           updatedCS01: false,
           updatedCreditLeverage: false,

@@ -39,7 +39,7 @@ export class StructureFund implements OnInit {
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
       select(selectUserInitials)
     ).subscribe((value) => {
-      this.fund.state.isEditing = value === 'DM';
+      this.fund.state.isEditAvailable = value === 'DM';
     });
     this.fund.api.onSubmitMetricValues = this.saveEditDetails.bind(this);
   }
@@ -63,11 +63,11 @@ export class StructureFund implements OnInit {
   }
 
   public showEditMenu() {
-    this.fund.state.isEditingFundTargets = true;
+    this.fund.state.isEditingFund = true;
   }
 
   public closeEditMenu() {
-    this.fund.state.isEditingFundTargets = false;
+    this.fund.state.isEditingFund = false;
     this.resetErrors();
   }
 
@@ -98,7 +98,7 @@ export class StructureFund implements OnInit {
       this.fund.state.hasErrors[invalidInputErrorRef] = true;
       this.fund.state.hasErrors.errorMessage = `*Please enter a valid target level for ${invalidTarget}`;
     } else {
-      this.fund.state.isEditingFundTargets = false;
+      this.fund.state.isEditingFund = false;
       this.updatedFundData.emit(this.fund)
     }
   }
