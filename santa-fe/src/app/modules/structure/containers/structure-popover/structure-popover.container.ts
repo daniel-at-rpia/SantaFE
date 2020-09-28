@@ -16,13 +16,17 @@ export class StructurePopover implements OnInit {
   ) {}
   public ngOnInit() {};
 
-  public getNextBicsLevel(breakdownRow: StructurePortfolioBreakdownRowDTO ) {
-    const subBicsLevel = this.bicsDataProcessingService.formSubTierBreakdown(breakdownRow);
+  public getNextBicsLevel(breakdownRow: StructurePortfolioBreakdownRowDTO) {
+    if (breakdownRow.state.isBicsLevel1) {
+      this.closePopover();
+      return;
+    }
+    const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.popover.state.isDisplayCs01);
     breakdownRow.data.children = subBicsLevel;
     breakdownRow.state.isSelected = !breakdownRow.state.isSelected;
   }
 
-  private closePopover() {
+  public closePopover() {
     this.popover.state.isActive = false;
     this.popover.data.mainRow.state.isSelected = false;
   }

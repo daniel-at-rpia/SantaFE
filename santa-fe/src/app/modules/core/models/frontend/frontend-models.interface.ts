@@ -784,5 +784,6 @@ export interface StructurePortfolioBreakdownRowDTO extends BasicDTOStructure {
     isSelected: boolean;
     isBtnDiveIn: boolean;
     isStencil: boolean;
+    isBicsLevel1: boolean;
   }
 }

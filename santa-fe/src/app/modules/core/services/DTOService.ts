@@ -2038,6 +2038,7 @@ export class DTOService {
 
       const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock);
       eachCategoryBlockDTO.state.isBtnDiveIn = !!isBicsBreakdown;
+      eachCategoryBlockDTO.state.isBicsLevel1 = groupOption === 'BicsLevel1';
       return eachCategoryBlockDTO;
     } else {
       return null;
@@ -2083,7 +2084,8 @@ export class DTOService {
       state: {
         isSelected: false,
         isBtnDiveIn: false,
-        isStencil: false
+        isStencil: false,
+        isBicsLevel1: false
       }
     }
     return object;
