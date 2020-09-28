@@ -33,7 +33,8 @@ export const APIUrlMap = {
   getAllTradeHistory: 'trade/get-all-trades-for-security',
   getPortfolioStructures: 'portfolioStructuring/get-portfolio-structures',
   updatePortfolioTargets: 'portfolioStructuring/update-portfolio-target',
-  updatePortfolioBreakdown: 'portfolioStructuring/update-portfolio-breakdown'
+  updatePortfolioBreakdown: 'portfolioStructuring/update-portfolio-breakdown',
+  getBICsHierarchy: 'portfolioStructuring/get-bics-hierarchy'
 };
 
 export const FAILED_USER_INITIALS_FALLBACK = 'n/a';

@@ -51,13 +51,28 @@ export class StructureFund implements OnInit {
     }));
   }
 
-  private showEditMenu() {
+  public onChangeValue(amount: string, type: PortfolioMetricValues) {
+    const value = !parseFloat(amount) ? 0 : parseFloat(amount);
+    if (type === PortfolioMetricValues.cs01) {
+      this.fund.data.target.target.cs01 = value * 1000;
+      this.fund.data.originalBEData.target.target.Cs01 = value * 1000;
+      return;
+    }
+    this.fund.data.target.target.creditLeverage = value;
+    this.fund.data.originalBEData.target.target.CreditLeverage = value;
+  }
+
+  public showEditMenu() {
     this.fund.state.isEditingFundTargets = true;
   }
 
-  private closeEditMenu() {
+  public closeEditMenu() {
     this.fund.state.isEditingFundTargets = false;
     this.resetErrors();
+  }
+
+  public onClickSaveNewMetrics(targetCS01: number, targetLeverage: number) {
+    this.fund.api.onSubmitMetricValues(targetCS01, targetLeverage)
   }
 
   private validateInput(value: number | string) {
@@ -86,20 +101,5 @@ export class StructureFund implements OnInit {
       this.fund.state.isEditingFundTargets = false;
       this.updatedFundData.emit(this.fund)
     }
-  }
-
-  private onClickSaveNewMetrics(targetCS01: number, targetLeverage: number) {
-    this.fund.api.onSubmitMetricValues(targetCS01, targetLeverage)
-  }
-
-  private onChangeValue(amount: string, type: PortfolioMetricValues) {
-    const value = !parseFloat(amount) ? 0 : parseFloat(amount);
-    if (type === PortfolioMetricValues.cs01) {
-      this.fund.data.target.target.cs01 = value * 1000;
-      this.fund.data.originalBEData.target.target.Cs01 = value * 1000;
-      return;
-    }
-    this.fund.data.target.target.creditLeverage = value;
-    this.fund.data.originalBEData.target.target.CreditLeverage = value;
   }
 }

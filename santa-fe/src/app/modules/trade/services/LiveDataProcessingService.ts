@@ -8,7 +8,7 @@
       SecurityTableDTO,
       SecurityTableHeaderDTO,
       SecurityTableRowDTO,
-      QuantComparerDTO,
+      BestQuoteComparerDTO,
       SearchShortcutDTO,
       AlertDTO
     } from 'FEModels/frontend-models.interface';
@@ -160,7 +160,7 @@ export class LiveDataProcessingService {
     quote: BEBestQuoteDTO
   ){
     const newPriceQuant = !!quote 
-      ? this.dtoService.formQuantComparerObject(
+      ? this.dtoService.formBestQuoteComparerObject(
           false,
           TriCoreDriverConfig.Price.label,
           quote,
@@ -169,7 +169,7 @@ export class LiveDataProcessingService {
         )
       : null;
     const newSpreadQuant = !!quote 
-      ? this.dtoService.formQuantComparerObject(
+      ? this.dtoService.formBestQuoteComparerObject(
           false,
           TriCoreDriverConfig.Spread.label,
           quote,
@@ -178,7 +178,7 @@ export class LiveDataProcessingService {
         )
       : null;
     const newYieldQuant = !!quote 
-    ? this.dtoService.formQuantComparerObject(
+    ? this.dtoService.formBestQuoteComparerObject(
         false,
         TriCoreDriverConfig.Yield.label,
         quote,
@@ -187,7 +187,7 @@ export class LiveDataProcessingService {
       )
     : null;
     const newAxePriceQuant = !!quote 
-      ? this.dtoService.formQuantComparerObject(
+      ? this.dtoService.formBestQuoteComparerObject(
           false,
           TriCoreDriverConfig.Price.label,
           quote,
@@ -196,7 +196,7 @@ export class LiveDataProcessingService {
         )
       : null;
     const newAxeSpreadQuant = !!quote
-      ? this.dtoService.formQuantComparerObject(
+      ? this.dtoService.formBestQuoteComparerObject(
         false,
         TriCoreDriverConfig.Spread.label,
         quote,
@@ -205,7 +205,7 @@ export class LiveDataProcessingService {
       )
       : null;
     const newAxeYieldQuant = !!quote
-      ? this.dtoService.formQuantComparerObject(
+      ? this.dtoService.formBestQuoteComparerObject(
         false,
         TriCoreDriverConfig.Yield.label,
         quote,
@@ -241,7 +241,7 @@ export class LiveDataProcessingService {
     const newRowList: Array<SecurityTableRowDTO> = [];
     const positionUpdateList: Array<SecurityTableRowDTO> = [];
     const markUpdateList: Array<SecurityTableRowDTO> = [];
-    const newQuantUpdateList: Array<SecurityTableRowDTO> = [];
+    const newBestQuoteUpdateList: Array<SecurityTableRowDTO> = [];
     const betterBidUpdateList: Array<SecurityTableRowDTO> = [];
     const betterAskUpdateList: Array<SecurityTableRowDTO> = [];
     const validityUpdateList: Array<SecurityTableRowDTO> = [];
@@ -258,19 +258,19 @@ export class LiveDataProcessingService {
         });
         if (!!oldRow) {
           const isSecurityDiff = this.isThereDiffInSecurity(oldRow.data.security, eachNewRow.data.security);
-          const isQuantDiff = this.isThereDiffInQuantComparer(oldRow.data.cells[0].data.quantComparerDTO, eachNewRow.data.cells[0].data.quantComparerDTO);
-          if ( isSecurityDiff > 0 || isQuantDiff > 0) {
+          const isBestQuoteDiff = this.isThereDiffInBestQuoteComparer(oldRow.data.cells[0].data.bestQuoteComparerDTO, eachNewRow.data.cells[0].data.bestQuoteComparerDTO);
+          if ( isSecurityDiff > 0 || isBestQuoteDiff > 0) {
             this.carryOverOldRowStates(eachNewRow, oldRow);
             updateList.push(eachNewRow);
           }
           isSecurityDiff === 1 && positionUpdateList.push(eachNewRow);
           isSecurityDiff === 2 && markUpdateList.push(eachNewRow);
-          if (isQuantDiff === 1 || isQuantDiff === 2) {
-            newQuantUpdateList.push(eachNewRow);
+          if (isBestQuoteDiff === 1 || isBestQuoteDiff === 2) {
+            newBestQuoteUpdateList.push(eachNewRow);
           }
-          isQuantDiff === 3 && betterBidUpdateList.push(eachNewRow);
-          isQuantDiff === 4 && betterAskUpdateList.push(eachNewRow);
-          isQuantDiff === 5 && validityUpdateList.push(eachNewRow);
+          isBestQuoteDiff === 3 && betterBidUpdateList.push(eachNewRow);
+          isBestQuoteDiff === 4 && betterAskUpdateList.push(eachNewRow);
+          isBestQuoteDiff === 5 && validityUpdateList.push(eachNewRow);
         } else {
           updateList.push(eachNewRow);
           newRowList.push(eachNewRow);
@@ -282,7 +282,7 @@ export class LiveDataProcessingService {
       newRowList.length > 0 && console.log('new rows', newRowList);
       positionUpdateList.length > 0 && console.log('Position change: ', positionUpdateList);
       markUpdateList.length > 0 && console.log('Mark change: ', markUpdateList);
-      newQuantUpdateList.length > 0 && console.log('Best Quote overwrite: ', newQuantUpdateList);
+      newBestQuoteUpdateList.length > 0 && console.log('Best Quote overwrite: ', newBestQuoteUpdateList);
       betterBidUpdateList.length > 0 && console.log('Best Bid change: ', betterBidUpdateList);
       betterAskUpdateList.length > 0 && console.log('Best Ask change: ', betterAskUpdateList);
       validityUpdateList.length > 0 && console.log('Validity change: ', validityUpdateList);
@@ -308,30 +308,30 @@ export class LiveDataProcessingService {
     return 0;
   }
 
-  private isThereDiffInQuantComparer(
-    oldQuant: QuantComparerDTO,
-    newQuant: QuantComparerDTO
+  private isThereDiffInBestQuoteComparer(
+    oldBestQuote: BestQuoteComparerDTO,
+    newBestQuote: BestQuoteComparerDTO
   ): number {
-    if (oldQuant && !newQuant) {
+    if (oldBestQuote && !newBestQuote) {
       return 1;
     }
-    if (!oldQuant && newQuant) {
+    if (!oldBestQuote && newBestQuote) {
       return 2;
     }
-    if (!oldQuant && !newQuant) {
+    if (!oldBestQuote && !newBestQuote) {
       return -1;
     }
-    for (const eachAttr in oldQuant.data.bid) {
-      if (oldQuant.data.bid[eachAttr] !== newQuant.data.bid[eachAttr]) {
+    for (const eachAttr in oldBestQuote.data.bid) {
+      if (oldBestQuote.data.bid[eachAttr] !== newBestQuote.data.bid[eachAttr]) {
         return 3;
       }
     }
-    for (const eachAttr in oldQuant.data.offer) {
-      if (oldQuant.data.offer[eachAttr] !== newQuant.data.offer[eachAttr]) {
+    for (const eachAttr in oldBestQuote.data.offer) {
+      if (oldBestQuote.data.offer[eachAttr] !== newBestQuote.data.offer[eachAttr]) {
         return 4;
       }
     }
-    if (oldQuant.state.bidIsStale !== newQuant.state.bidIsStale || oldQuant.state.askIsStale !== newQuant.state.askIsStale) {
+    if (oldBestQuote.state.bidIsStale !== newBestQuote.state.bidIsStale || oldBestQuote.state.askIsStale !== newBestQuote.state.askIsStale) {
       return 5;
     }
     return 0;
