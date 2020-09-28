@@ -64,6 +64,11 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     this.breakdownData.data.displayCategoryList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawCs01CategoryList : this.breakdownData.data.rawLeverageCategoryList;
     if (this.dataIsReady) {
       this.calculateAlignmentRating();
+     if (!!this.breakdownData.data.popover) {
+      const popoverCategory = this.breakdownData.data.popover.data.mainRow.data.category; 
+      const popoverRow = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawCs01CategoryList.find(row => row.data.category === popoverCategory) : this.breakdownData.data.rawLeverageCategoryList.find(row => row.data.category === popoverCategory);
+      this.updatePopoverData(popoverRow);
+     }
       const flipStencil = this.removeStencil.bind(this);
       setTimeout(() => {
         flipStencil();
