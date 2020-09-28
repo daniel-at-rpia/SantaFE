@@ -13,7 +13,7 @@ import { ModalService } from 'Form/services/ModalService';
 
 export class SantaModal implements OnInit, OnDestroy {
   @Input() modalId: string;
-  private modalData: SantaModalDTO;
+  public modalData: SantaModalDTO;
 
   constructor(
     private elementRef: ElementRef,
@@ -42,5 +42,16 @@ export class SantaModal implements OnInit, OnDestroy {
 
   public closeModal() {
     this.modalData.state.isPresenting = false;
+  }
+
+  public saveModal() {
+    if (!!this.modalData.api.saveModal) {
+      const canClose = this.modalData.api.saveModal();
+      if (canClose) {
+        this.modalData.state.isPresenting = false;
+      }
+    } else {
+      this.modalData.state.isPresenting = false;
+    }
   }
 }

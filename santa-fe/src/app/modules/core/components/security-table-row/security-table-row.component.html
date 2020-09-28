@@ -12,7 +12,7 @@
       *ngFor="let eachCell of rowData.data.cells"
       [ngClass]="{
         'sat-securityTableCell': true,
-        'sat-securityTableCell--quantVariant': eachCell.state.isQuantVariant,
+        'sat-securityTableCell--bestQuoteVariant': eachCell.state.isBestQuoteVariant,
         'sat-securityTableCell--stencilState': eachCell.state.isStencil
       }">
       <section class="sat-securityTableCell__metric">
@@ -20,8 +20,8 @@
           {{eachCell.data.textData}}
         </span>
       </section>
-      <section class="sat-securityTableCell__quant">
-        <quant-comparer *ngIf="eachCell.data.quantComparerDTO" [quantData]="eachCell.data.quantComparerDTO"></quant-comparer>
+      <section class="sat-securityTableCell__bestQuote">
+        <best-quote-comparer *ngIf="eachCell.data.bestQuoteComparerDTO" [bestQuoteData]="eachCell.data.bestQuoteComparerDTO"></best-quote-comparer>
       </section>
     </article>
   </section>

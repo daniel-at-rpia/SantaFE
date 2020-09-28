@@ -18,8 +18,8 @@ import {
 import { AlertTypes, NavigationModule } from 'Core/constants/coreConstants.constant';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import { BEStructuringBreakdownBlock, BEBICsHierarchyBlock } from 'BEModels/backend-models.interface';
 import { BICsHierarchyAllDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
-import { BEBICsHierarchyBlock } from 'Core/models/backend/backend-models.interface';
 
 export interface RootState {
   ownerInitial: string;
@@ -292,11 +292,14 @@ export interface StructureUtilityPanelState {
 export interface StructureSetTargetPanelState {
   targetFund: DTOs.PortfolioStructureDTO;
   targetBreakdown: DTOs.PortfolioBreakdownDTO;
+  targetBreakdownRawData: BEStructuringBreakdownBlock;
   editRowList: Array<StructureSetTargetPanelEditRowBlock>;
   totalUnallocatedCS01: number;
   totalUnallocatedCreditLeverage: number;
   remainingUnallocatedCS01: number;
   remainingUnallocatedCreditLeverage: number;
+  displayRemainingUnallocatedCS01: string;
+  displayRemainingUnallocatedCreditLeverage: string;
   displayPercentageUnallocatedCS01: number;
   displayPercentageUnallocatedCreditLeverage: number;
   activeMetric: PortfolioMetricValues;

@@ -6,7 +6,7 @@ import {
   Output
 } from '@angular/core';
 
-import { QuantComparerDTO } from 'FEModels/frontend-models.interface';
+import { BestQuoteComparerDTO } from 'FEModels/frontend-models.interface';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 
 @Component({
@@ -16,7 +16,7 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
   encapsulation: ViewEncapsulation.Emulated
 })
 export class SantaTableQuoteCell implements ICellRendererAngularComp {
-  @Input() comparerData: QuantComparerDTO;
+  @Input() comparerData: BestQuoteComparerDTO;
   constructor() { }
 
   agInit(params: any){

@@ -507,9 +507,9 @@ export class SantaTable implements OnInit, OnChanges {
       const securityB = rowB.data.security;
       let valueA;
       let valueB;
-      if (targetHeader.state.isQuantVariant) {
-        const qA = rowA.data.cells[0].data.quantComparerDTO;
-        const qB = rowB.data.cells[0].data.quantComparerDTO;
+      if (targetHeader.state.isBestQuoteVariant) {
+        const qA = rowA.data.cells[0].data.bestQuoteComparerDTO;
+        const qB = rowB.data.cells[0].data.bestQuoteComparerDTO;
         valueA = !!qA ? qA.data.delta : null;
         valueB = !!qB ? qB.data.delta : null;
         if (!!securityA && !!securityB && !securityA.state.isStencil && !securityB.state.isStencil) {
@@ -821,7 +821,6 @@ export class SantaTable implements OnInit, OnChanges {
             !eachOldQuote.state.hasBid &&
             this.isOldQuoteRecentEnough(targetAxeBid, eachOldQuote)
           ) {
-            console.log('test, carry bid axe on ', eachOldQuote, 'form',targetAxeBid);
             eachOldQuote.data.bid = this.utilityService.deepCopy(targetAxeBid.data.bid);
             eachOldQuote.state.hasBid = true;
             eachOldQuote.state.isBestAxeBid = targetAxeBid.state.isBestAxeBid;
@@ -841,7 +840,6 @@ export class SantaTable implements OnInit, OnChanges {
             !eachOldQuote.state.hasAsk &&
             this.isOldQuoteRecentEnough(targetAxeAsk, eachOldQuote)
           ) {
-            console.log('test, carry ask axe on ', eachOldQuote, 'from', targetAxeAsk);
             eachOldQuote.data.ask = this.utilityService.deepCopy(targetAxeAsk.data.ask);
             eachOldQuote.state.hasAsk = true;
             eachOldQuote.state.isBestAxeOffer = targetAxeAsk.state.isBestAxeOffer;

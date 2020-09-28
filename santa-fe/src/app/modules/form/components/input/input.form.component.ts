@@ -21,9 +21,11 @@ export class SantaInput implements OnChanges{
   @Input() isNumeric: boolean;
   @Input() hasError: boolean;
   @Input() isGrayedOut: boolean;
-  @Output() onInputChange = new EventEmitter<String>();
+  @Input() isDisabled: boolean;
+  @Output() onInputChange = new EventEmitter<string>();
   @Output() onInputFocus = new EventEmitter();
   @Output() onInputBlur = new EventEmitter();
+  @Output() onEnterKeyPressed = new EventEmitter<string>();
   constructor(
   ) {
   }
@@ -42,6 +44,10 @@ export class SantaInput implements OnChanges{
 
   public onBlur() {
     !!this.onInputBlur && this.onInputBlur.emit();
+  }
+
+  public onPressedEnterKey() {
+    !!this.onEnterKeyPressed && this.onEnterKeyPressed.emit(this.inputValue);
   }
 
 }

@@ -1,7 +1,7 @@
 @import "global.scss";
 @import "modules/structure/structure.scss";
 
-$portfolioBreakdown_borderWidth: 3px; // can't use rem because fractions of a pixel doesn't look well here
+$portfolioBreakdown_borderWidth: $typical_border_width*2; // can't use rem because fractions of a pixel doesn't look well here
 $portfolioBreakdown_borderColor: $color_active;
 $portfolioBreakdown_rating_width: 12rem;
 $portfolioBreakdown_rating_thickness: 1.75rem;
