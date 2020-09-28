@@ -26,7 +26,8 @@
         'sat-popover__mainCategory-list-item--negative  Diff': popover.data.mainRow.data.diffToTarget < 0
         }">
         <portfolio-breakdown-row
-          [breakdownRow]="popover.data.mainRow">
+          [breakdownRow]="popover.data.mainRow"
+          (breakdownRowDiveIn)="getNextBicsLevel($event)">
         </portfolio-breakdown-row>
       </li>
     </ul>
