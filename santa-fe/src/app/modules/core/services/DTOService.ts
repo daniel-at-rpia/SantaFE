@@ -1999,6 +1999,9 @@ export class DTOService {
       );
       eachMoveVisualizer.data.endPinText = !!isCs01 ? `${eachMoveVisualizer.data.end}k` : `${eachMoveVisualizer.data.end}`;
       const diffToTarget = !!isCs01 ? Math.round(parsedRawData.targetLevel - parsedRawData.currentLevel) : this.utility.round(parsedRawData.targetLevel - parsedRawData.currentLevel, 2);
+
+      const isBicsBreakdown = groupOption.indexOf('BicsLevel') > -1;
+
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
         category: `${categoryName}`,
         targetLevel: parsedRawData.targetLevel,
@@ -2011,7 +2014,7 @@ export class DTOService {
         indexPct: parsedRawData.indexPct,
         indexPctDisplay: parsedRawData.indexPct != null ? `${parsedRawData.indexPct}%` : '-',
         moveVisualizer: eachMoveVisualizer,
-        bicsLevel: 1,
+        bicsLevel: !!isBicsBreakdown ? 1 : null,
         children: null,
         portfolioId,
         raw: {
