@@ -1,7 +1,7 @@
   @import "global.scss";
 @import "modules/market/market.scss";
 
-$securityDefinitionConfigurator_ctas_height: 7rem;
+$securityDefinitionConfigurator_ctas_height: 5rem;
 .sat-securityDefinitionConfigurator {
   $securityDefinitionConfiguratorBlockName: &;
   @include mix_fixed_div(relative, $z_index_base_item);

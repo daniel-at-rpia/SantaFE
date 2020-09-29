@@ -10,7 +10,7 @@ import {
   selector: 'santa-loadable-button',
   templateUrl: './loadable-button.form.component.html',
   styleUrls: ['./loadable-button.form.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.Emulated
 })
 
 export class SantaLoadableButton {

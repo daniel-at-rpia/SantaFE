@@ -303,4 +303,9 @@ export interface StructureSetTargetPanelState {
   displayPercentageUnallocatedCS01: number;
   displayPercentageUnallocatedCreditLeverage: number;
   activeMetric: PortfolioMetricValues;
+  targetBreakdownIsOverride: boolean;
+  configurator: {
+    dto: DTOs.SecurityDefinitionConfiguratorDTO;
+    display: boolean;
+  }
 }

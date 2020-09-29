@@ -21,19 +21,17 @@ export class SantaModal implements OnInit, OnDestroy {
     private modalService: ModalService
   ){
     this.modalData = this.dtoService.formSantaModal(elementRef);
+    document.body.appendChild(this.modalData.data.modalElement);
   }
 
   public ngOnInit() {
     this.modalData.data.id = this.modalId;
     this.modalData.api.openModal = this.openModal.bind(this);
     this.modalData.api.closeModal = this.closeModal.bind(this);
-    document.body.appendChild(this.modalData.data.modalElement);
     this.modalService.registerModal(this.modalData);
   }
 
-
   public ngOnDestroy() {
-
   }
 
   public openModal() {

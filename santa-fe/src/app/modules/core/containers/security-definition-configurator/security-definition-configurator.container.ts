@@ -19,7 +19,7 @@
   selector: 'security-definition-configurator',
   templateUrl: './security-definition-configurator.container.html',
   styleUrls: ['./security-definition-configurator.container.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.Emulated
 })
 
 export class SecurityDefinitionConfigurator implements OnInit, OnChanges {

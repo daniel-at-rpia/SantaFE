@@ -9,7 +9,10 @@ import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { UtilityService } from 'Core/services/UtilityService';
 import { ModalService } from 'Form/services/ModalService';
 import { selectSetTargetTransferPack } from 'Structure/selectors/structure.selectors';
-import { StructureSetTargetOverlayTransferPack } from 'FEModels/frontend-adhoc-packages.interface';
+import {
+  StructureSetTargetOverlayTransferPack,
+  DefinitionConfiguratorEmitterParams
+} from 'FEModels/frontend-adhoc-packages.interface';
 import { StructureSetTargetPanelEditRowBlock, StructureSetTargetPanelEditRowItemBlock } from 'FEModels/frontend-blocks.interface';
 import {
   PortfolioBreakdownGroupOptions,
@@ -72,7 +75,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       displayPercentageUnallocatedCS01: 0,
       displayPercentageUnallocatedCreditLeverage: 0,
       displayRemainingUnallocatedCS01: '',
-      displayRemainingUnallocatedCreditLeverage: ''
+      displayRemainingUnallocatedCreditLeverage: '',
+      targetBreakdownIsOverride: false,
+      configurator: {
+        dto: this.dtoService.createSecurityDefinitionConfigurator(true),
+        display: false
+      }
     };
     return state;
   }
@@ -88,6 +96,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         if (!!this.state.targetBreakdown) {
           this.state.targetBreakdown.state.isPreviewVariant = true;
         }
+        this.state.targetBreakdownIsOverride = !!pack.isCreateNewOverride;
         this.state.targetBreakdownRawData = this.retrieveRawBreakdownDataForTargetBreakdown();
         this.state.activeMetric = pack.targetFund.data.cs01TargetBar.state.isInactiveMetric ? this.constants.metric.creditLeverage : this.constants.metric.cs01;
         this.loadEditRows();
@@ -231,6 +240,14 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.calculateAllocation();
       this.refreshPreview();
     }
+  }
+
+  public onApplyConfiguratorFilter(params: DefinitionConfiguratorEmitterParams) {
+    console.log('test, params is', params);
+  }
+
+  public onClickNewOverrideRow() {
+    this.state.configurator.display = !this.state.configurator.display;
   }
 
   private loadEditRows() {
