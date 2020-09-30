@@ -20,7 +20,6 @@ import * as am4charts from '@amcharts/amcharts4/charts';
 import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 import { BEStructuringBreakdownBlock } from 'BEModels/backend-models.interface';
 import { BICsHierarchyAllDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
-import { BEBICsHierarchyBlock } from 'Core/models/backend/backend-models.interface';
 
 export interface RootState {
   ownerInitial: string;
