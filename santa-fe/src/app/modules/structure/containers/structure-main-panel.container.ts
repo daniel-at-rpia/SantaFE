@@ -125,15 +125,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     }
   }
 
-  private loadStencilFunds() {
-    this.state.fetchResult.fundList = this.portfolioList.map((eachPortfolioName) => {
-      const eachFund = this.dtoService.formStructureFundObject(PortfolioStructuringSample, true);
-      eachFund.data.portfolioShortName = eachPortfolioName;
-      return eachFund;
-    });
-  }
-
-  private getFundFromNewTargets(fund: PortfolioStructureDTO) {
+  public getFundFromNewTargets(fund: PortfolioStructureDTO) {
     const payload: PayloadUpdatePortfolioStructuresTargets = {
       portfolioTarget: {
         date: fund.data.originalBEData.target.date,
@@ -177,6 +169,14 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         return of('error');
       })
     ).subscribe()
+  }
+
+  private loadStencilFunds() {
+    this.state.fetchResult.fundList = this.portfolioList.map((eachPortfolioName) => {
+      const eachFund = this.dtoService.formStructureFundObject(PortfolioStructuringSample, true);
+      eachFund.data.portfolioShortName = eachPortfolioName;
+      return eachFund;
+    });
   }
 
   private resetAPIErrors() {

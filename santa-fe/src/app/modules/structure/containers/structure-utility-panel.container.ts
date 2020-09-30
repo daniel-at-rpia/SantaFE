@@ -44,7 +44,7 @@ export class StructureUtilityPanel implements OnInit {
     });
   }
 
-  private onToggleTongueExpand() {
+  public onToggleTongueExpand() {
     this.state.isExpanded = !this.state.isExpanded;
   }
 }
