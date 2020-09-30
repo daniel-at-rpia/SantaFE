@@ -524,12 +524,13 @@ export class DTOService {
 
   public createSecurityDefinitionConfigurator(
     groupByDisabled: boolean,
-    noMainCTA?: boolean
+    noMainCTA: boolean,
+    definitionLayoutMap: Array<SecurityDefinitionBundleStub> = ConfiguratorDefinitionLayout
   ): DTOs.SecurityDefinitionConfiguratorDTO {
     const object: DTOs.SecurityDefinitionConfiguratorDTO = {
       data: {
         filterSearchInputValue: '',
-        definitionList: ConfiguratorDefinitionLayout.map((eachBundle) => {
+        definitionList: definitionLayoutMap.map((eachBundle) => {
           const newList = this.formSecurityDefinitionBundleObject(eachBundle);
           newList.data.list.forEach((eachDefinition) => {
             eachDefinition.state.isMiniPillVariant = true;

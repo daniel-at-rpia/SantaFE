@@ -33,6 +33,7 @@ import {
 import { StructureSetTargetPostEditUpdatePack } from 'FEModels/frontend-adhoc-packages.interface';
 import { StructureReloadBreakdownDataPostEditEvent } from 'Structure/actions/structure.actions';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
+import { CustomeBreakdownConfiguratorDefinitionLayout } from 'Core/constants/structureConstants.constants';
 
 @Component({
   selector: 'structure-set-target-panel',
@@ -48,7 +49,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   };
   constants = {
     metric: PortfolioMetricValues,
-    editModalId: STRUCTURE_EDIT_MODAL_ID
+    editModalId: STRUCTURE_EDIT_MODAL_ID,
+    configuratorLayout: CustomeBreakdownConfiguratorDefinitionLayout
   }
 
   constructor(
@@ -78,7 +80,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       displayRemainingUnallocatedCreditLeverage: '',
       targetBreakdownIsOverride: false,
       configurator: {
-        dto: this.dtoService.createSecurityDefinitionConfigurator(true),
+        dto: this.dtoService.createSecurityDefinitionConfigurator(true, false, this.constants.configuratorLayout),
         display: false
       }
     };
