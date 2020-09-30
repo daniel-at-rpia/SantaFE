@@ -63,8 +63,7 @@
     <button (click)="onClickEdit()" class="santaBtn--iconOnly sat-portfolioBreakdown__ctas-editBtn fal fa-pencil"></button>
   </section>
   <section class="sat-portfolioBreakdown__popover" *ngIf="breakdownData.data.popover">
-    <structure-popover
-      [popover]="breakdownData.data.popover">
+    <structure-popover [popover]="breakdownData.data.popover">
     </structure-popover>
   </section>
 </article>
