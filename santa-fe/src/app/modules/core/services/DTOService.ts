@@ -2022,15 +2022,12 @@ export class DTOService {
         bicsLevel: !!isBicsBreakdown ? 1 : null,
         children: null,
         portfolioId,
+        hasTooltip:  displayedCategory !== categoryName,
         raw: {
           currentLevel: rawCurrentLevel,
           currentPct: rawCurrentPct,
           targetLevel: rawTargetLevel,
           targetPct: rawTargetPct
-        },
-        state: {
-          isDisplayCs01: !!isCs01,
-          showTooltip: displayedCategory !== categoryName
         }
       };
       if (eachCategoryBlock.diffToTarget < 0) {

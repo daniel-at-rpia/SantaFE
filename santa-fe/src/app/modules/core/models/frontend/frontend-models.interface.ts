@@ -677,6 +677,7 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     backendGroupOptionIdentifier: string;
     popover: StructurePopoverDTO;
     portfolioId: number;
+    selectedCategory?: string;
   },
   style: {
     ratingFillWidth: number;
