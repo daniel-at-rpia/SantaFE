@@ -1,11 +1,11 @@
 @import "global.scss";
-$portfolioBreakdown_borderWidth: $typical_border_width*2;
-$portfolioBreakdown_borderColor: $color_active;
-$portfolioBreakdown_categoryList_cell_width: 3.5rem;
+$portfolioBreakdownRow_borderWidth: $typical_border_width*2;
+$portfolioBreakdownRow_borderColor: $color_active;
+$portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
 .sat-popover {
   $blockName: &;
   @include mix_fixed_div(absolute, $z_index_tooltip);
-  @include mix_border_generator($portfolioBreakdown_borderWidth, $portfolioBreakdown_borderColor);
+  @include mix_border_generator($portfolioBreakdownRow_borderWidth, $portfolioBreakdownRow_borderColor);
   @include mix_border_radius(10px);
   @include mix_alive('light');
   background-color: $color_white;
@@ -33,7 +33,7 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
       display: flex;
       justify-content: center;
       align-items: center;
-      width: $portfolioBreakdown_categoryList_cell_width;
+      width: $portfolioBreakdownRow_categoryList_cell_width;
       &-icon {
         color: $font_color_minor;
         font-size: $font_size_large;
