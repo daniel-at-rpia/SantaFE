@@ -625,16 +625,16 @@ export class UtilityService {
       newCellDTO: DTOs.SecurityTableCellDTO,
       triCoreMetric: string
     ): DTOs.SecurityTableCellDTO {
-      if (targetHeader.state.isQuantVariant) {
+      if (targetHeader.state.isBestQuoteVariant) {
         let targetDriver = triCoreMetric;
         if (triCoreMetric === DEFAULT_DRIVER_IDENTIFIER) {
           targetDriver = this.findSecurityTargetDefaultTriCoreDriver(targetRow.data.security);
         }
         if (!!targetDriver) {
           const targetQuantLocationFromRow = TriCoreDriverConfig[targetDriver].backendTargetQuoteAttr;
-          newCellDTO.data.quantComparerDTO = targetRow.data.bestQuotes[targetHeader.data.blockAttrName][targetQuantLocationFromRow];
+          newCellDTO.data.bestQuoteComparerDTO = targetRow.data.bestQuotes[targetHeader.data.blockAttrName][targetQuantLocationFromRow];
         } else {
-          newCellDTO.data.quantComparerDTO = null;
+          newCellDTO.data.bestQuoteComparerDTO = null;
         }
         if (targetHeader.data.key === 'bestQuote') {
           this.populateMarkDataInSecurityCardWithBestQuoteData(
@@ -669,20 +669,20 @@ export class UtilityService {
       }
       this.calculateMarkDiscrepancies(
         targetSecurity,
-        newCellDTO.data.quantComparerDTO,
+        newCellDTO.data.bestQuoteComparerDTO,
         targetDriver
       );
-      if (!!newCellDTO.data.quantComparerDTO) {
-        if (newCellDTO.data.quantComparerDTO.state.hasBid) {
-          targetSecurity.data.bestQuote.bid = newCellDTO.data.quantComparerDTO.data.bid.number;
-          targetSecurity.data.bestQuote.displayBid = newCellDTO.data.quantComparerDTO.data.bid.displayNumber;
+      if (!!newCellDTO.data.bestQuoteComparerDTO) {
+        if (newCellDTO.data.bestQuoteComparerDTO.state.hasBid) {
+          targetSecurity.data.bestQuote.bid = newCellDTO.data.bestQuoteComparerDTO.data.bid.number;
+          targetSecurity.data.bestQuote.displayBid = newCellDTO.data.bestQuoteComparerDTO.data.bid.displayNumber;
         } else {
           targetSecurity.data.bestQuote.bid = null;
           targetSecurity.data.bestQuote.displayBid = null;
         }
-        if (newCellDTO.data.quantComparerDTO.state.hasOffer) {
-          targetSecurity.data.bestQuote.ask = newCellDTO.data.quantComparerDTO.data.offer.number;
-          targetSecurity.data.bestQuote.displayAsk = newCellDTO.data.quantComparerDTO.data.offer.displayNumber;
+        if (newCellDTO.data.bestQuoteComparerDTO.state.hasOffer) {
+          targetSecurity.data.bestQuote.ask = newCellDTO.data.bestQuoteComparerDTO.data.offer.number;
+          targetSecurity.data.bestQuote.displayAsk = newCellDTO.data.bestQuoteComparerDTO.data.offer.displayNumber;
         } else {
           targetSecurity.data.bestQuote.ask = null;
           targetSecurity.data.bestQuote.displayAsk = null;
@@ -827,7 +827,7 @@ export class UtilityService {
     // TODO: move this into a SecurityTableHelper service
     public calculateMarkDiscrepancies(
       targetSecurity: DTOs.SecurityDTO,
-      targetQuant: DTOs.QuantComparerDTO,
+      targetQuant: DTOs.BestQuoteComparerDTO,
       activeDriver: string
     ) {
       const markBlock = targetSecurity.data.mark;
@@ -926,12 +926,12 @@ export class UtilityService {
       targetQuote: DTOs.SecurityQuoteDTO,
       targetRow: DTOs.SecurityTableRowDTO
     ) {
-      const quantCell = targetRow.data.cells.find((eachCell) => {
-        return eachCell.state.isQuantVariant && !eachCell.state.quantComparerUnavail
+      const bestQuoteCell = targetRow.data.cells.find((eachCell) => {
+        return eachCell.state.isBestQuoteVariant && !eachCell.state.bestQuoteComparerUnavail
       });
-      if (quantCell && quantCell.data.quantComparerDTO) {
+      if (bestQuoteCell && bestQuoteCell.data.bestQuoteComparerDTO) {
         const {axe, combined} = targetRow.data.bestQuotes;
-        const filteredMetricType = quantCell.data.quantComparerDTO.data.driverType;
+        const filteredMetricType = bestQuoteCell.data.bestQuoteComparerDTO.data.driverType;
         const bestAxeBidNum = this.triCoreDriverConfig[filteredMetricType] ? axe[this.triCoreDriverConfig[filteredMetricType].backendTargetQuoteAttr].data.bid.number : null;
         const bestAxeAskNum = this.triCoreDriverConfig[filteredMetricType] ? axe[this.triCoreDriverConfig[filteredMetricType].backendTargetQuoteAttr].data.offer.number : null;
         const bestBidNum = this.triCoreDriverConfig[filteredMetricType] ? combined[this.triCoreDriverConfig[filteredMetricType].backendTargetQuoteAttr].data.bid.number : null;
@@ -951,7 +951,7 @@ export class UtilityService {
       }
     }
 
-    public calculateQuantComparerWidthAndHeightPerSet(list: Array<DTOs.QuantComparerDTO>) {
+    public calculateBestQuoteComparerWidthAndHeightPerSet(list: Array<DTOs.BestQuoteComparerDTO>) {
       const deltaList = [];
       const sizeList = [];
       list.forEach((eachComparer) => {
@@ -966,7 +966,7 @@ export class UtilityService {
 
       list.forEach((eachComparer) => {
         if (eachComparer.state.hasBid && eachComparer.state.hasOffer) {
-          eachComparer.style.lineWidth = this.calculateSingleQuantComparerWidth(eachComparer.data.delta, maxDelta);
+          eachComparer.style.lineWidth = this.calculateSingleBestQuoteComparerWidth(eachComparer.data.delta, maxDelta);
         } else {
           eachComparer.style.lineWidth = 15;
         }
@@ -985,7 +985,7 @@ export class UtilityService {
       return this.domSanitizer.bypassSecurityTrustHtml(parsedString);
     } 
 
-    private calculateSingleQuantComparerWidth(delta: number, maxAbsDelta: number): number {
+    private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {
       if (delta < 0) {
         return 100;
       } else {

@@ -200,8 +200,8 @@ $securityTable_addColumnCTA_width: 9rem;
       }
     }
   }
-  &--quantVariant {
-    width: $securityTable_cell_width_quant;
+  &--bestQuoteVariant {
+    width: $securityTable_cell_width_best_quote;
     align-items: center;
     #{$securityTableHeadBlockName} {
       &__actionMenu {

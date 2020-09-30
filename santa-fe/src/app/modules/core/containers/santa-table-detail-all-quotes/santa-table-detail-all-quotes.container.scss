@@ -9,7 +9,7 @@ button {
 
 
 // had to go with a hard-coded approached because AgGrid has a stupid global width setting that messes up flex grid's auto layout. This hard code needs to be maintained, this is really frustrating
-$santaTableDetailAllQuotes_width: $securityQuote_main_size_1 * 2 + $securityQuote_main_size_2 * 3 + $securityQuote_main_size_3 * 2 + $securityQuote_main_size_4 + $spacing_small * 6 * 2 + $securityTableRow_expandCanvas_label_leftPadding + $securityTableRow_expandCanvas_label_rightPadding;
+$santaTableDetailAllQuotes_width: $securityQuote_main_size_1 * 2 + $securityQuote_main_size_2 + $securityQuote_main_size_3 * 4 + $securityQuote_main_size_4 + $spacing_small * 6 * 2 + $securityTableRow_expandCanvas_label_leftPadding + $securityTableRow_expandCanvas_label_rightPadding;
 $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $securityQuote_main_size_2 * 2 + $securityQuote_main_size_3 + $spacing_small * 9 + $securityTableRow_expandCanvas_label_leftPadding + $securityTableRow_expandCanvas_label_rightPadding;
 
 .santaTableDetailAllQuotes {

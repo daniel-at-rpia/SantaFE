@@ -22,9 +22,16 @@
     'sat-securityQuote--menuActiveOnTSpreadState': messageData.state.menuActiveDriver === 'tspread',
     'sat-securityQuote--menuActiveOnPriceState': messageData.state.menuActiveDriver === 'price',
     'sat-securityQuote--menuActiveOnYieldState': messageData.state.menuActiveDriver === 'yield',
-    'sat-securityQuote--cdsVariant': messageData.state.isCDSVariant
+    'sat-securityQuote--cdsVariant': messageData.state.isCDSVariant,
+    'sat-securityQuote--executableState': messageData.state.isQuoteExecutable,
+    'sat-securityQuote--askExecutableState': messageData.data.ask.isExecutable,
+    'sat-securityQuote--bidExecutableState':
+    messageData.data.bid.isExecutable
   }">
   <section class="sat-securityQuote__main">
+    <div class="sat-securityQuote__main-tags">
+      <span class="sat-securityQuote__main-tags-executable">Executable</span>
+    </div>
     <div class="sat-securityQuote__main-twoSideEntry">
       <span class="sat-securityQuote__main-twoSideEntry-text sat-securityQuote__main-twoSideEntry-text--bid">
         {{messageData.data.bid.time}}
@@ -53,6 +60,7 @@
             <span class="sat-securityQuote__main-twoSideEntry-cta-btn-content-text">{{messageData.data.bid.price}}</span>
           </span>
           <i class="sat-securityQuote__main-twoSideEntry-cta-btn-downVoteIcon fas fa-thumbs-down"></i>
+          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-executableTag">exec</span>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
           <button (click)="onClickUpVote()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-upVote santaBtn santaBtn--iconOnly fal fa-thumbs-up"></button>
@@ -73,6 +81,8 @@
             <span class="sat-securityQuote__main-twoSideEntry-cta-btn-content-text">{{messageData.data.ask.price}}</span>
             <i class="sat-securityQuote__main-twoSideEntry-cta-btn-content-icon sat-securityQuote__main-twoSideEntry-cta-btn-content-icon--iconRight fas fa-axe"></i>
           </span>
+          <i class="sat-securityQuote__main-twoSideEntry-cta-btn-downVoteIcon fas fa-thumbs-down"></i>
+          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-executableTag">exec</span>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
           <button (click)="onClickUpVote()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-upVote santaBtn santaBtn--iconOnly fal fa-thumbs-up"></button>
@@ -95,6 +105,7 @@
             <span class="sat-securityQuote__main-twoSideEntry-cta-btn-content-text">{{messageData.data.bid.yield}}</span>
           </span>
           <i class="sat-securityQuote__main-twoSideEntry-cta-btn-downVoteIcon fas fa-thumbs-down"></i>
+          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-executableTag">exec</span>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
           <button (click)="onClickUpVote()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-upVote santaBtn santaBtn--iconOnly fal fa-thumbs-up"></button>
@@ -115,6 +126,7 @@
             <i class="sat-securityQuote__main-twoSideEntry-cta-btn-content-icon sat-securityQuote__main-twoSideEntry-cta-btn-content-icon--iconRight fas fa-axe"></i>
           </span>
           <i class="sat-securityQuote__main-twoSideEntry-cta-btn-downVoteIcon fas fa-thumbs-down"></i>
+          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-executableTag">exec</span>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
           <button (click)="onClickUpVote()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-upVote santaBtn santaBtn--iconOnly fal fa-thumbs-up"></button>
@@ -137,6 +149,7 @@
             <span class="sat-securityQuote__main-twoSideEntry-cta-btn-content-text">{{messageData.data.bid.tspread}}</span>
           </span>
           <i class="sat-securityQuote__main-twoSideEntry-cta-btn-downVoteIcon fas fa-thumbs-down"></i>
+          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-executableTag">exec</span>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
           <button (click)="onClickUpVote()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-upVote santaBtn santaBtn--iconOnly fal fa-thumbs-up"></button>
@@ -157,6 +170,7 @@
             <i class="sat-securityQuote__main-twoSideEntry-cta-btn-content-icon sat-securityQuote__main-twoSideEntry-cta-btn-content-icon--iconRight fas fa-axe"></i>
           </span>
           <i class="sat-securityQuote__main-twoSideEntry-cta-btn-downVoteIcon fas fa-thumbs-down"></i>
+          <span class="sat-securityQuote__main-twoSideEntry-cta-btn-executableTag">exec</span>
         </button>
         <div class="sat-securityQuote__main-twoSideEntry-cta-actionMenu">
           <button (click)="onClickUpVote()" class="sat-securityQuote__main-twoSideEntry-cta-actionMenu-upVote santaBtn santaBtn--iconOnly fal fa-thumbs-up"></button>

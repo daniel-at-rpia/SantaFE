@@ -40,7 +40,7 @@
         [inputValue]="fund.data.target.target.creditLeverage"
         [placeholder]="'0'"
         [isNumeric]="fund.state.isNumeric"
-        (onInputChange)="onChangeValue($event, constants.leverage)"
+        (onInputChange)="onChangeValue($event, constants.creditLeverage)"
         [hasError]="fund.state.hasErrors.updatedCreditLeverage"
         [ngClass]="{
           'sat-fundStructuring__setTarget-group-input': true

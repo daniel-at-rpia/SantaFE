@@ -20,7 +20,7 @@ export const SECURITY_TABLE_FINAL_STAGE = 1;
 
 export const AGGRID_DETAIL_COLUMN_WIDTH = 50;
 export const AGGRID_SECURITY_CARD_COLUMN_WIDTH = 285;
-export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_quant + $spacing_small * 2
+export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_best_quote + $spacing_small * 2
 export const AGGRID_ALERT_SIDE_COLUMN_WIDTH = 115;
 export const AGGRID_ALERT_STATUS_COLUMN_WIDTH = 155;  // can not use simple text because cancelled status would wrap into 2 lines
 export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 140;
@@ -29,7 +29,7 @@ export const AGGRID_NARROW_COLUMN_WIDTH = 95;
 export const AGGRID_ALERT_MESSAGE_COLUMN_WIDTH = 240;
 export const AGGRID_ROW_HEIGHT = 40;
 export const AGGRID_ROW_HEIGHT_SLIM = 34;
-export const AGGRID_DETAIL_ROW_HEIGHT_PER_ROW = 34;
+export const AGGRID_DETAIL_ROW_HEIGHT_PER_ROW = 37;
 export const AGGRID_DETAIL_ROW_HEIGHT_OFFSET = 145;
 export const AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS = 185;
 export const AGGRID_DETAIL_ROW_DEFAULT_COUNT = 9;
@@ -293,7 +293,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'combined',
       underlineAttrName: null,
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isForQuantComparer: true,
+      isForBestQuoteComparer: true,
       isDriverDependent: true,
       groupBelongs: SecurityTableHeaderConfigGroups.bestQuote,
       isCustomComponent: true,
@@ -316,7 +316,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'axe',
       underlineAttrName: null,
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isForQuantComparer: true,
+      isForBestQuoteComparer: true,
       isDriverDependent: true,
       groupBelongs: SecurityTableHeaderConfigGroups.bestQuote,
       isCustomComponent: true,
@@ -627,6 +627,24 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       label: 'Industry',
       attrName: 'industry',
       underlineAttrName: 'industry',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'subIndustry',
+    content: {
+      label: 'SubIndustry',
+      attrName: 'subIndustry',
+      underlineAttrName: 'subIndustry',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
