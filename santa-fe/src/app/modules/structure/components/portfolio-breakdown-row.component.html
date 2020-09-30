@@ -7,11 +7,12 @@
   'sat-portfolioBreakdownRow--negativeDiff': breakdownRow.data.diffToTarget < 0
   }">
   <section class="sat-portfolioBreakdownRow__cta">
-    <button (click)="onClickDiveIn(breakdownRow)" [ngClass]="{
+    <button (click)="onClickDiveIn(breakdownRow)" 
+    [ngClass]="{
       'sat-portfolioBreakdownRow__cta-btn': true,
-      'sat-portfolioBreakdownRow__cta-btn--diveIn': breakdownRow.state.isBtnDiveIn
-      }">
-      <span class="sat-portfolioBreakdownRow__cta-btn-text">{{ breakdownRow.data.category }}</span>
+      'sat-portfolioBreakdownRow__cta-btn--diveIn': breakdownRow.data.bicsLevel < 4
+     }">
+      <span class="sat-portfolioBreakdownRow__cta-btn-text">{{ breakdownRow.data.displayCategory }}</span>
     </button>
     <span class="sat-portfolioBreakdownRow__cta-tooltip">{{breakdownRow.data.category}}</span>
   </section>
