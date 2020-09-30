@@ -291,14 +291,12 @@ export interface PortfolioBreakdownCategoryBlock {
   bicsLevel: number;
   portfolioId: number;
   children?: DTOs.PortfolioBreakdownDTO;
+  hasTooltip: boolean;
   raw: {
     currentLevel: number;
     currentPct: number;
     targetLevel: number;
     targetPct: number;
-  }
-  state: {
-    isDisplayCs01: boolean;
   }
 }
 
