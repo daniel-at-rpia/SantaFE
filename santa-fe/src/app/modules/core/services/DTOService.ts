@@ -2026,7 +2026,7 @@ export class DTOService {
     categoryName: string,
     rawCategoryData: BEModels.BEStructuringBreakdownSingleEntry,
     isCs01: boolean,
-    portfolioId: number,
+    portfolioID: number,
     groupOption: string
   ): DTOs.StructurePortfolioBreakdownRowDTO {
     if (!!rawCategoryData) {
@@ -2077,7 +2077,7 @@ export class DTOService {
         moveVisualizer: eachMoveVisualizer,
         bicsLevel: !!isBicsBreakdown ? 1 : null,
         children: null,
-        portfolioId,
+        portfolioID: portfolioID,
         raw: {
           currentLevel: rawCurrentLevel,
           currentPct: rawCurrentPct,
