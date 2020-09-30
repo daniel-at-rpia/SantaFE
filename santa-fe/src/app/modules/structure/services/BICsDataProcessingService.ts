@@ -108,10 +108,12 @@ export class BICsDataProcessingService {
   breakdown.data.rawCs01CategoryList.forEach(category => {
     category.data.bicsLevel = breakdownRow.data.bicsLevel + 1;
     category.data.moveVisualizer.state.isStencil = false;
+    category.state.isStencil = false;
   })
   breakdown.data.rawLeverageCategoryList.forEach(category => {
     category.data.bicsLevel = breakdownRow.data.bicsLevel + 1;
     category.data.moveVisualizer.state.isStencil = false;
+    category.state.isStencil = false;
   })
   breakdown.data.displayCategoryList = breakdown.state.isDisplayingCs01 ? breakdown.data.rawCs01CategoryList : breakdown.data.rawLeverageCategoryList;
   breakdown.data.title = breakdownRow.data.category;

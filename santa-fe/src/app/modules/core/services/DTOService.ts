@@ -2085,7 +2085,7 @@ export class DTOService {
       state: {
         isSelected: false,
         isBtnDiveIn: false,
-        isStencil: false,
+        isStencil: true,
         isBicsLevel1: false
       }
     }
