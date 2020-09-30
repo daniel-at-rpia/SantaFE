@@ -998,9 +998,9 @@ export class UtilityService {
 
   // structuring specific
     public formBucketIdentifierForOverride(rawData: BEStructuringOverrideBlock): string {
-      let identifier = '';
+      let identifier = 'Custom';
       for (let eachIdentifier in rawData.bucket) {
-        identifier = identifier === '' ? `${eachIdentifier}` : `${identifier} - ${eachIdentifier}`;
+        identifier = `${identifier} - ${eachIdentifier}`;
       }
       return identifier;
     }

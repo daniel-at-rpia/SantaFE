@@ -1901,7 +1901,8 @@ export class DTOService {
         isStencil: true,
         isDisplayingCs01: true,
         isTargetAlignmentRatingAvail: !!isStencil,
-        isPreviewVariant: false
+        isPreviewVariant: false,
+        isOverrideVariant: false
       }
     };
     let findCs01Max = 0;
@@ -2110,8 +2111,9 @@ export class DTOService {
           definitionList.push(eachCategory);
         }
         const newBreakdown = this.formPortfolioBreakdown(false, eachRawBreakdown, definitionList);
+        newBreakdown.state.isOverrideVariant = true;
         newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.OVERRIDE);
-        newBreakdown.data.title = newBreakdown.data.definition.data.displayName;
+        newBreakdown.data.title = newBreakdown.data.backendGroupOptionIdentifier;
         object.data.children.unshift(newBreakdown);
       });
     }
