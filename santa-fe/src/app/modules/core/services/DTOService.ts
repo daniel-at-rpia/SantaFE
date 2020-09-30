@@ -2003,9 +2003,12 @@ export class DTOService {
       const diffToTarget = !!isCs01 ? Math.round(parsedRawData.targetLevel - parsedRawData.currentLevel) : this.utility.round(parsedRawData.targetLevel - parsedRawData.currentLevel, 2);
 
       const isBicsBreakdown = groupOption.indexOf('BicsLevel') > -1;
-
+      
+    
+      const displayedCategory = categoryName.length > 11 ? `${categoryName.substring(0,8)}...` : categoryName;
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
         category: `${categoryName}`,
+        displayCategory: displayedCategory,
         targetLevel: parsedRawData.targetLevel,
         targetPct: parsedRawData.targetPct,
         diffToTarget: parsedRawData.targetLevel != null ? diffToTarget : 0,
@@ -2026,7 +2029,8 @@ export class DTOService {
           targetPct: rawTargetPct
         },
         state: {
-          isDisplayCs01: !!isCs01
+          isDisplayCs01: !!isCs01,
+          showTooltip: displayedCategory !== categoryName
         }
       };
       if (eachCategoryBlock.diffToTarget < 0) {

@@ -1,15 +1,18 @@
 <article [ngClass]="{
   'sat-portfolioBreakdownRow': true,
+  'sat-portfolioBreakdownRow--isBicsDiveIn': breakdownRow.state.isBtnDiveIn,
+  'sat-portfolioBreakdownRow--showTooltip': breakdownRow.data.state.showTooltip,
   'sat-portfolioBreakdownRow--selected': breakdownRow.state.isSelected,
   'sat-portfolioBreakdownRow--noSignificantDiff': breakdownRow.data.diffToTarget === 0,
   'sat-portfolioBreakdownRow--negativeDiff': breakdownRow.data.diffToTarget < 0
   }">
   <section class="sat-portfolioBreakdownRow__cta">
-    <button (click)="onClickDiveIn(breakdownRow)" [ngClass]="{
+    <button (click)="onClickDiveIn(breakdownRow)" 
+    [ngClass]="{
       'sat-portfolioBreakdownRow__cta-btn': true,
-      'sat-portfolioBreakdownRow__cta-btn--diveIn': breakdownRow.state.isBtnDiveIn
-      }">
-      <span class="sat-portfolioBreakdownRow__cta-btn-text">{{ breakdownRow.data.category }}</span>
+      'sat-portfolioBreakdownRow__cta-btn--diveIn': breakdownRow.data.bicsLevel < 4
+     }">
+      <span class="sat-portfolioBreakdownRow__cta-btn-text">{{ breakdownRow.data.displayCategory }}</span>
     </button>
     <span class="sat-portfolioBreakdownRow__cta-tooltip">{{breakdownRow.data.category}}</span>
   </section>
