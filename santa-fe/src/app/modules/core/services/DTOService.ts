@@ -2128,7 +2128,7 @@ export class DTOService {
       },
       state: {
         isActive: false,
-        isDisplayCs01
+        isDisplayCs01: isDisplayCs01
       }
     }
     return object;
