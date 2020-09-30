@@ -1,7 +1,7 @@
   @import "global.scss";
 @import "modules/market/market.scss";
 
-$securityDefinitionConfigurator_ctas_height: 5rem;
+$securityDefinitionConfigurator_ctas_height: 6rem;
 .sat-securityDefinitionConfigurator {
   $securityDefinitionConfiguratorBlockName: &;
   @include mix_fixed_div(relative, $z_index_base_item);
@@ -185,9 +185,9 @@ $securityDefinitionConfigurator_ctas_height: 5rem;
         display: none;
         align-items: flex-start;
         &-btn {
-          transform: translate(0, 150%);
+          transform: translate(0, 200%);
           padding: $spacing_x_small $spacing_medium;
-          margin: 0 $spacing_medium $spacing_medium $spacing_medium;
+          margin: 0 $spacing_medium $spacing_large $spacing_medium;
           background-color: $color_filter;
           &>i {
             font-size: $font_size_xx_large;

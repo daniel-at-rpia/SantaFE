@@ -2,7 +2,8 @@
 @import "modules/structure/structure.scss";
 
 $structureSetTargetPanel_edit_column_size: 14rem;
-$structureSetTargetPanel_configurator_container_width: $securityDefinitionConfigurator_width + $spacing_medium;
+$structureSetTargetPanel_configurator_container_leftPadding: $spacing_large;
+$structureSetTargetPanel_configurator_container_width: $securityDefinitionConfigurator_width + $structureSetTargetPanel_configurator_container_leftPadding;
 .sat-structureSetTargetPanel {
   $blockName: &;
   flex: 1 1 auto;
@@ -84,7 +85,7 @@ $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfig
       height: 100%;
       width: 0rem;
       right: 50%;
-      padding: $spacing_medium 0 $spacing_medium $spacing_medium;
+      padding-left: 0;
       &-content { 
         display: none;
         height: 100%;
@@ -192,8 +193,15 @@ $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfig
         }
         &-configurator {
           width: $structureSetTargetPanel_configurator_container_width;
+          padding-left: $structureSetTargetPanel_configurator_container_leftPadding;
           &-content {
             display: flex;
+          }
+        }
+        &-edit {
+          &-header-createRow {
+            @include material('none');
+            background-color: $color_active;
           }
         }
       }
@@ -201,8 +209,11 @@ $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfig
   }
   &--editingOverrideState {
     #{$blockName} {
-      &__main-edit-header-createRow {
-        display: flex;
+      &__main {
+        min-height: 32rem;
+        &-edit-header-createRow {
+          display: flex;
+        }
       }
     }
   }

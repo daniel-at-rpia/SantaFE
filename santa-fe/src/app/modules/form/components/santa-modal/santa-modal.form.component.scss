@@ -27,7 +27,7 @@ $modal_animation_duration: $animation_duration_normal;
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
-    background-color: $color_gray_1;
+    background-color: $color_gray_2;
     transform: translate(0, 100%) scale(0.01);
     margin: auto $page_gutter_width_for_alerts;
     max-height: 90%;  // loosely define the size restriction so that modal size can adapt to the content's need

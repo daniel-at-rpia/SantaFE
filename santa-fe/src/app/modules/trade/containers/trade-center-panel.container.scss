@@ -318,7 +318,7 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 8rem;
   &--presetSelectedState {
     #{$tradeCenterPanelBlockName} {
       &__presetsAndFilters {
-        flex: 0 0 9rem;
+        flex: 0 0 10rem;
         overflow: visible;
         &-presets {
           transform: translate(-100%, 0);

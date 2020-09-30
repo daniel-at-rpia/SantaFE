@@ -4,7 +4,7 @@
     'sat-structureSetTargetPanel--distributeAvailableState': (state.activeMetric === constants.metric.cs01 && state.displayPercentageUnallocatedCS01 !== 0) || (state.activeMetric === constants.metric.creditLeverage && state.displayPercentageUnallocatedCreditLeverage !== 0),
     'sat-structureSetTargetPanel--cs01ActiveState': state.activeMetric === constants.metric.cs01,
     'sat-structureSetTargetPanel--creditLeverageActiveState': state.activeMetric === constants.metric.creditLeverage,
-    'sat-structureSetTargetPanel--editingOverrideState': true,
+    'sat-structureSetTargetPanel--editingOverrideState': state.targetBreakdownIsOverride,
     'sat-structureSetTargetPanel--displayConfiguratorState': state.configurator.display
   }">
   <section class="sat-structureSetTargetPanel__utilities">
