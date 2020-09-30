@@ -264,8 +264,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       };
       const newBreakdown = this.dtoService.formPortfolioBreakdown(false, this.state.targetBreakdownRawData, []);
       newBreakdown.state.isPreviewVariant = true;
-      newBreakdown.data.title = 'Custom';
-      newBreakdown.data.definition = this.dtoService.formSecurityDefinitionObject(this.constants.definitionMap.PORTFOLIO);
+      newBreakdown.data.definition = this.dtoService.formSecurityDefinitionObject(this.constants.definitionMap.OVERRIDE);
+      newBreakdown.data.title = newBreakdown.data.definition.data.displayName;
       this.state.targetBreakdown = newBreakdown;
     }
     this.state.configurator.display = false;

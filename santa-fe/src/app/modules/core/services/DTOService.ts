@@ -1864,26 +1864,17 @@ export class DTOService {
     object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil);
     object.data.cs01TargetBar.state.isInactiveMetric = selectedMetricValue !== object.data.cs01TargetBar.data.targetMetric;
     object.data.creditLeverageTargetBar.state.isInactiveMetric = selectedMetricValue !== object.data.creditLeverageTargetBar.data.targetMetric;
-    const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.BicsLevel1, []);
-    BICSBreakdown.data.title = 'BICS';
-    BICSBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.SECTOR);
-    BICSBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
-    // object.data.children.push(BICSBreakdown);
-    const currencyBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Ccy, FilterOptionsCurrency);
-    currencyBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
-    currencyBreakdown.data.title = currencyBreakdown.data.definition.data.displayName;
-    object.data.children.push(currencyBreakdown);
-    currencyBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
-    const tenorBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Tenor, FilterOptionsTenor);
-    tenorBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.TENOR);
-    tenorBreakdown.data.title = tenorBreakdown.data.definition.data.displayName;
-    object.data.children.push(tenorBreakdown);
-    tenorBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
-    const ratingBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.RatingNoNotch, FilterOptionsRating);
-    ratingBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.RATING);
-    ratingBreakdown.data.title = ratingBreakdown.data.definition.data.displayName;
-    object.data.children.push(ratingBreakdown);
-    ratingBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
+    this.processBreakdownDataForStructureFund(
+      object,
+      rawData,
+      isStencil,
+      selectedMetricValue
+    );
+    !isStencil && this.processOverrideDataForStructureFund(
+      object,
+      rawData,
+      selectedMetricValue
+    )
     return object;
   }
 
@@ -2054,5 +2045,75 @@ export class DTOService {
       }
     };
     return object;
+  }
+
+  private processBreakdownDataForStructureFund(
+    object: DTOs.PortfolioStructureDTO,
+    rawData: BEModels.BEPortfolioStructuringDTO,
+    isStencil: boolean,
+    selectedMetricValue: PortfolioMetricValues
+  ){
+    const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.BicsLevel1, []);
+    BICSBreakdown.data.title = 'BICS';
+    BICSBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.SECTOR);
+    BICSBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
+    // object.data.children.push(BICSBreakdown);
+    const currencyBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Ccy, FilterOptionsCurrency);
+    currencyBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
+    currencyBreakdown.data.title = currencyBreakdown.data.definition.data.displayName;
+    object.data.children.push(currencyBreakdown);
+    currencyBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
+    const tenorBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Tenor, FilterOptionsTenor);
+    tenorBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.TENOR);
+    tenorBreakdown.data.title = tenorBreakdown.data.definition.data.displayName;
+    object.data.children.push(tenorBreakdown);
+    tenorBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
+    const ratingBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.RatingNoNotch, FilterOptionsRating);
+    ratingBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.RATING);
+    ratingBreakdown.data.title = ratingBreakdown.data.definition.data.displayName;
+    object.data.children.push(ratingBreakdown);
+    ratingBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
+  }
+
+  private processOverrideDataForStructureFund(
+    object: DTOs.PortfolioStructureDTO,
+    rawData: BEModels.BEPortfolioStructuringDTO,
+    selectedMetricValue: PortfolioMetricValues
+  ){
+    if(rawData.overrides) {
+      const overrideList: Array<BEModels.BEStructuringBreakdownBlock> = [];
+      rawData.overrides.forEach((eachRawOverride) => {
+        eachRawOverride
+        const overrideBucketIdentifier = this.utility.formBucketIdentifierForOverride(eachRawOverride);
+        const matchExistBreakdown = overrideList.find((eachBEDTO) => {
+          return eachBEDTO.groupOption === overrideBucketIdentifier;
+        });
+        if (!!matchExistBreakdown) {
+          const categoryKey = this.utility.formCategoryKeyForOverride(eachRawOverride);
+          matchExistBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
+        } else {
+          const newConvertedBreakdown: BEModels.BEStructuringBreakdownBlock = {
+            date: eachRawOverride.date,
+            groupOption: overrideBucketIdentifier,
+            indexId: eachRawOverride.indexId,
+            portfolioId: eachRawOverride.portfolioId,
+            breakdown: {}
+          };
+          const categoryKey = this.utility.formCategoryKeyForOverride(eachRawOverride);
+          newConvertedBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
+          overrideList.push(newConvertedBreakdown);
+        }
+      });
+      overrideList.forEach((eachRawBreakdown) => {
+        const definitionList = [];
+        for (let eachCategory in eachRawBreakdown.breakdown) {
+          definitionList.push(eachCategory);
+        }
+        const newBreakdown = this.formPortfolioBreakdown(false, eachRawBreakdown, definitionList);
+        newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.OVERRIDE);
+        newBreakdown.data.title = newBreakdown.data.definition.data.displayName;
+        object.data.children.unshift(newBreakdown);
+      });
+    }
   }
 }

@@ -650,6 +650,7 @@ export interface BEPortfolioStructuringDTO {
   }
   overrides?: Array<BEStructuringOverrideBlock>;
 }
+
 export interface BEBICsHierarchyBlock {
   [category: string]: BEBICsHierarchyBlock;
 }

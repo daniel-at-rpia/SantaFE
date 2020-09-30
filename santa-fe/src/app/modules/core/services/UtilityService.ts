@@ -9,7 +9,8 @@
     import {
       BESecurityDTO,
       BESecurityDeltaMetricDTO,
-      BESecurityGroupDTO
+      BESecurityGroupDTO,
+      BEStructuringOverrideBlock
     } from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
     import {
@@ -994,4 +995,23 @@ export class UtilityService {
       }
     }
   // trade specific end
+
+  // structuring specific
+    public formBucketIdentifierForOverride(rawData: BEStructuringOverrideBlock): string {
+      let identifier = '';
+      for (let eachIdentifier in rawData.bucket) {
+        identifier = identifier === '' ? `${eachIdentifier}` : `${identifier} - ${eachIdentifier}`;
+      }
+      return identifier;
+    }
+
+    public formCategoryKeyForOverride(rawData: BEStructuringOverrideBlock): string {
+      let categoryKey = '';
+      for (let eachIdentifier in rawData.bucket) {
+        categoryKey = categoryKey === '' ? `${rawData.bucket[eachIdentifier]}` : `${categoryKey} - ${rawData.bucket[eachIdentifier]}`;
+      }
+      return categoryKey;
+    }
+
+  // structuring specific end
 }

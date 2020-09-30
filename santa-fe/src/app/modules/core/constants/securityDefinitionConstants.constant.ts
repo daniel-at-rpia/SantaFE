@@ -399,6 +399,12 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     displayName: 'Quoted Today',
     icon: 'far fa-calendar-day',
     optionList: FilterOptionsBoolean
+  },
+  OVERRIDE: {
+    key: 'OVERRIDE',
+    displayName: 'Custom',
+    icon: 'fas fa-star',
+    optionList: []
   }
 };
 
