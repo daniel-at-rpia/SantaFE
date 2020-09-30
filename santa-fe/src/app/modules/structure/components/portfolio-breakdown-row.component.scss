@@ -49,8 +49,8 @@ $portfolioBreakdownRowBtnHeight: 2.25rem;
   &__cellGroup {
     display: flex;
     align-items: center;
-    justify-content: center;
-    flex: 1 1 auto;
+    justify-content: flex-end;
+    flex: 1 1 9rem;
     text-align: center;
     &-cell {
       @include mix_text_overflow;
