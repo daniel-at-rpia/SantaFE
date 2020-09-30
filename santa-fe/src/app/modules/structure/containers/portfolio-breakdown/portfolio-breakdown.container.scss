@@ -104,16 +104,9 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
       &-item {
         display: flex;
         align-items: center;
-        category-content-list-item {
+        &>portfolio-breakdown-row {
           display: flex;
           flex: 1 1 auto;
-        }
-        &--noSignificantDiff &-cell--target{
-          background-color: transparent;
-          color: $font_color_major;
-        }
-        &--negativeDiff &-cell--target {
-          background-color: $color_red_5;
         }
       }
     }
@@ -193,14 +186,6 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
           @include mix_stencil_animation;
           background-color: $color_stencil;
           color: $color_stencil;
-        }
-      }
-      &__categoryContent {
-        &-list-item-cell {
-          @include mix_stencil_animation;
-          background-color: $color_stencil;
-          color: $color_stencil;
-          // line-height: 
         }
       }
     }

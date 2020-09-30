@@ -47,11 +47,7 @@
     <ul class="sat-portfolioBreakdown__categoryContent-list">
       <li
         *ngFor="let eachCategory of breakdownData.data.displayCategoryList"
-        [ngClass]="{
-          'sat-portfolioBreakdown__categoryContent-list-item': true,
-          'sat-portfolioBreakdown__categoryContent-list-item--noSignificantDiff': eachCategory.data.diffToTarget === 0,
-          'sat-portfolioBreakdown__categoryContent-list-item--negativeDiff': eachCategory.data.diffToTarget < 0
-        }">
+        class="sat-portfolioBreakdown__categoryContent-list-item">
         <portfolio-breakdown-row
           [breakdownRow]="eachCategory"
           (breakdownRowDiveIn)="updatePopoverData($event)">

@@ -19,12 +19,7 @@
   </section>
   <section class="sat-popover__mainCategory">
     <ul class="sat-popover__mainCategory-list">
-      <li 
-      [ngClass]="{
-        'sat-popover__mainCategory-list-item': true,
-        'sat-popover__mainCategory-list-item--noSignificantDiff': popover.data.mainRow.data.diffToTarget === 0,
-        'sat-popover__mainCategory-list-item--negative  Diff': popover.data.mainRow.data.diffToTarget < 0
-        }">
+      <li class="sat-popover__mainCategory-list-item">
         <portfolio-breakdown-row
           [breakdownRow]="popover.data.mainRow"
           (breakdownRowDiveIn)="getNextBicsLevel($event)">
@@ -37,14 +32,10 @@
       <div class="sat-popover__levels-firstDiveIn-category">
         <span class="sat-popover__levels-firstDiveIn-category-text"> Level {{ popover.data.mainRow.data.bicsLevel + 1 }} - {{ popover.data.mainRow.data.category }}</span>
       </div>
-      <ul class="sat-popover__levels-firstDiveIn-list">
+      <ul class="sat-popover__levels-firstDiveIn-list" *ngIf="popover.data.mainRow.data.children; else elseBlock">
         <li
           *ngFor="let secondLevel of popover.data.mainRow.data.children.data.displayCategoryList" 
-          [ngClass]="{
-          'sat-popover__levels-firstDiveIn-list-item': true,
-          'sat-popover__levels-firstDiveIn-list-item--noSignificantDiff': secondLevel.data.diffToTarget === 0,
-          'sat-popover__levels-firstDiveIn-list-item--negativeDiff': secondLevel.data.diffToTarget < 0
-          }">
+          class="sat-popover__levels-firstDiveIn-list-item">
           <portfolio-breakdown-row
             [breakdownRow]="secondLevel"
             (breakdownRowDiveIn)="getNextBicsLevel($event)">
@@ -59,11 +50,7 @@
             <ul class="sat-popover__levels-secondDiveIn-list"
             *ngIf="secondLevel.data.children">
               <li *ngFor="let thirdLevel of secondLevel.data.children.data.displayCategoryList"
-              [ngClass]="{
-                'sat-popover__levels-secondDiveIn-list-item': true,
-                'sat-popover__levels-secondDiveIn-list-item--noSignificantDiff': thirdLevel.data.diffToTarget === 0,
-                'sat-popover__levels-secondDiveIn-list-item--negative  Diff': thirdLevel.data.diffToTarget < 0
-                }">
+              class="sat-popover__levels-secondDiveIn-list-item">
                 <portfolio-breakdown-row
                   [breakdownRow]="thirdLevel"
                   (breakdownRowDiveIn)="getNextBicsLevel($event)">
@@ -72,16 +59,9 @@
                   'sat-popover__levels-thirdDiveIn': true,
                   'sat-popover__levels-thirdDiveIn--active': thirdLevel.state.isSelected
                 }">
-                  <div class="sat-popover__levels-thirdDiveIn-category">
-                    <span class="sat-popover__levels-thirdDiveIn-category-text"> Level {{ thirdLevel.data.bicsLevel + 1 }} - {{ thirdLevel.data.category }}</span>
-                  </div>
                   <ul class="sat-popover__levels-thirdDiveIn-list" *ngIf="thirdLevel.data.children">
                     <li *ngFor="let fourthLevel of thirdLevel.data.children.data.displayCategoryList"
-                    [ngClass]="{
-                      'sat-popover__levels-thirdDiveIn-list-item': true,
-                      'sat-popover__levels-thirdDiveIn-list-item--noSignificantDiff': fourthLevel.data.diffToTarget === 0,
-                      'sat-popover__levels-thirdDiveIn-list-item--negativeDiff': fourthLevel.data.diffToTarget < 0
-                      }">
+                    class="sat-popover__levels-thirdDiveIn-list-item">
                       <portfolio-breakdown-row
                         [breakdownRow]="fourthLevel">
                       </portfolio-breakdown-row>
