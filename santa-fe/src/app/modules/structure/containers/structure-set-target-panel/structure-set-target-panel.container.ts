@@ -22,7 +22,8 @@ import {
 import {
   FilterOptionsCurrency,
   FilterOptionsRating,
-  FilterOptionsTenor
+  FilterOptionsTenor,
+  SecurityDefinitionMap
 } from 'Core/constants/securityDefinitionConstants.constant';
 import { PayloadUpdateBreakdown } from 'BEModels/backend-payloads.interface';
 import {
@@ -50,8 +51,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   constants = {
     metric: PortfolioMetricValues,
     editModalId: STRUCTURE_EDIT_MODAL_ID,
-    configuratorLayout: CustomeBreakdownConfiguratorDefinitionLayout
-  }
+    configuratorLayout: CustomeBreakdownConfiguratorDefinitionLayout,
+    definitionMap: SecurityDefinitionMap
+  };
 
   constructor(
     private store$: Store<any>,
@@ -95,6 +97,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       if (!!pack) {
         this.state.targetFund = this.utilityService.deepCopy(pack.targetFund);
         this.state.targetBreakdown = this.utilityService.deepCopy(pack.targetBreakdown);
+        this.state.configurator.display = false;
         if (!!this.state.targetBreakdown) {
           this.state.targetBreakdown.state.isPreviewVariant = true;
         }
@@ -244,12 +247,29 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
-  public onApplyConfiguratorFilter(params: DefinitionConfiguratorEmitterParams) {
-    console.log('test, params is', params);
-  }
-
   public onClickNewOverrideRow() {
     this.state.configurator.display = !this.state.configurator.display;
+  }
+
+  public onApplyConfiguratorFilter(params: DefinitionConfiguratorEmitterParams) {
+    // create new edit row
+    if (this.state.editRowList.length === 0) {
+      this.state.targetBreakdownRawData = {
+        date: null,
+        indexId: null,
+        portfolioId: null,
+        portfolioBreakdownId: null,
+        groupOption: "Test",
+        breakdown: {}
+      };
+      const newBreakdown = this.dtoService.formPortfolioBreakdown(false, this.state.targetBreakdownRawData, []);
+      newBreakdown.state.isPreviewVariant = true;
+      newBreakdown.data.title = 'Custom';
+      newBreakdown.data.definition = this.dtoService.formSecurityDefinitionObject(this.constants.definitionMap.PORTFOLIO);
+      this.state.targetBreakdown = newBreakdown;
+    }
+    this.state.configurator.display = false;
+    this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, this.constants.configuratorLayout);
   }
 
   private loadEditRows() {
