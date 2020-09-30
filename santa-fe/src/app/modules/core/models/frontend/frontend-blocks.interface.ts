@@ -290,7 +290,7 @@ export interface PortfolioBreakdownCategoryBlock {
   indexPctDisplay: string;
   moveVisualizer: DTOs.MoveVisualizerDTO;
   bicsLevel: number;
-  portfolioId: number;
+  portfolioID: number;
   children?: DTOs.PortfolioBreakdownDTO;
   hasTooltip: boolean;
   raw: {
@@ -343,7 +343,7 @@ export interface BICsHierarchyAllDataBlock {
 }
 
 export interface BICsCategorizationBlock {
-  portfolioId: number,
+  portfolioID: number,
   bicsLevel1: BEStructuringBreakdownBlock,
   bicsLevel2?: BEStructuringBreakdownBlock,
   bicsLevel3?: BEStructuringBreakdownBlock,

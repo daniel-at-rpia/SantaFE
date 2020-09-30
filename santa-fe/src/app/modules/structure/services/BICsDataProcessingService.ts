@@ -37,7 +37,7 @@ export class BICsDataProcessingService {
   public getRawBICsData(rawData: BEPortfolioStructuringDTO) {
     const { BicsLevel1, BicsLevel2, BicsLevel3, BicsLevel4 } = rawData.breakdowns;
     const block: BICsCategorizationBlock = {
-      portfolioId: rawData.portfolioId,
+      portfolioID: rawData.portfolioId,
       bicsLevel1: BicsLevel1,
       bicsLevel2: BicsLevel2,
       bicsLevel3: BicsLevel3,
@@ -80,8 +80,8 @@ export class BICsDataProcessingService {
   }
 
   public formSubLevelBreakdown(breakdownRow: StructurePortfolioBreakdownRowDTO, isDisplayCs01: boolean) {
-  const categoryPortfolioId = breakdownRow.data.portfolioId;
-  const selectedSubRawBICsData = this.bicsRawData.find(rawData => rawData.portfolioId === categoryPortfolioId); 
+  const categoryPortfolioID = breakdownRow.data.portfolioID;
+  const selectedSubRawBICsData = this.bicsRawData.find(rawData => rawData.portfolioID === categoryPortfolioID);
   const subTierList = this.getSubLevelList(breakdownRow.data.category, breakdownRow.data.bicsLevel);
   const subBICsLevel = BICsLevels[breakdownRow.data.bicsLevel + 1];
   const selectedSubRawBreakdown: BEStructuringBreakdownBlock  = selectedSubRawBICsData[subBICsLevel];
