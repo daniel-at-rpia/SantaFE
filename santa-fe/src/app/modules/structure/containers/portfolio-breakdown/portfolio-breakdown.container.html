@@ -1,6 +1,7 @@
 <article
   [ngClass]="{
     'sat-portfolioBreakdown': true,
+    'sat-portfolioBreakdown--isBics': breakdownData.state.isBICs, 
     'sat-portfolioBreakdown--stencilState': breakdownData.state.isStencil,
     'sat-portfolioBreakdown--ratingAvailableState': breakdownData.state.isTargetAlignmentRatingAvail,
     'sat-portfolioBreakdown--goodRating': breakdownData.state.isTargetAlignmentRatingAvail && breakdownData.style.ratingFillWidth >= 80,

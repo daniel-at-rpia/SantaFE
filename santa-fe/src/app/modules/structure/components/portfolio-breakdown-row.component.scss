@@ -28,24 +28,6 @@ $portfolioBreakdownCategory_cell_width: 3.5rem;
         overflow: hidden;
         text-overflow: ellipsis;
       }
-      &--diveIn {
-        border: none;
-        cursor: pointer;
-        @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
-        &:hover{
-          @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
-        }
-      }
-      &:hover,
-      &:focus {
-        + #{$blockName} {
-          &__cta {
-            &-tooltip {
-              display: block;
-            }
-          }
-        }
-      }
     }
     &-tooltip {
       @include mix_fixed_div(absolute, $z_index_hovering_item);
@@ -94,11 +76,29 @@ $portfolioBreakdownCategory_cell_width: 3.5rem;
   }
   &__moveVisualizer {
     display: flex;
-    flex: 0 0 6.5rem;
+    flex: 1 1 auto;
     margin-right: $spacing_small;
     &>move-visualizer {
       flex: 1 1 auto;
       margin-right: $spacing_small;
+    }
+  }
+  &--isBicsDiveIn {
+    #{$blockName} {
+      &__cta {
+        &-btn {
+          display: flex;
+          border: none;
+          height: $portfolioBreakdownRowBtnHeight;
+          &--diveIn {
+            @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
+            cursor: pointer;
+            &:hover{
+              @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
+            }
+          }
+        }
+      }
     }
   }
   &--selected {
@@ -108,6 +108,9 @@ $portfolioBreakdownCategory_cell_width: 3.5rem;
           background-color: $color_active;
           box-shadow: none;
           color: $font_color_inverse;
+          &:hover {
+            box-shadow: none;
+          }
         }
       }
     }
@@ -130,6 +133,21 @@ $portfolioBreakdownCategory_cell_width: 3.5rem;
         &-cell {
           &--target {
             background-color: $color_red_5;
+          }
+        }
+      }
+    }
+  }
+  &--showTooltip {
+    #{$blockName} {
+      &__cta {
+        &:hover {
+          #{$blockName} {
+            &__cta {
+              &-tooltip {
+                display: block;
+              }
+            }
           }
         }
       }
