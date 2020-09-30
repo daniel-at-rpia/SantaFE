@@ -9,12 +9,11 @@ $portfolioBreakdownCategory_cell_width: 3.5rem;
   &__cta {
     @include mix_fixed_div(relative, $z_index_base_item);
     display: flex;
-    width: 7rem;
+    flex: 0 0 7rem;
     margin-right: $spacing_small;
     &-btn {
       @include mix_border_generator();
-      @include mix_text_overflow;
-      flex: 0 0 7rem;
+      flex: 1 1 auto;
       margin: 0 $spacing_small $spacing_small 0;
       padding: $spacing_xx_small;
       box-shadow: none;
@@ -25,7 +24,7 @@ $portfolioBreakdownCategory_cell_width: 3.5rem;
       &-text {
         flex: 1 1 auto;
         text-align: right;
-        padding-left: convert_px_to_rem(31.25px);
+        padding-left: $spacing_small;
         overflow: hidden;
         text-overflow: ellipsis;
       }
