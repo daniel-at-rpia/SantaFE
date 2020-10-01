@@ -141,9 +141,10 @@ public updatePopoverData(breakdownRow: StructurePortfolioBreakdownRowDTO)
     if (breakdownRow.data.category !== this.breakdownData.data.selectedCategory) {
       const previousRowCategory = this.breakdownData.data.selectedCategory;
       this.breakdownData.data.selectedCategory = breakdownRow.data.category; 
-      const rowList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawCs01CategoryList : this.breakdownData.data.rawLeverageCategoryList; 
-      const previousRow = rowList.find(row => row.data.category === previousRowCategory);
-      previousRow.state.isSelected = false;
+      const previousCs01Row = this.breakdownData.data.rawCs01CategoryList.find(row => row.data.category === previousRowCategory);
+      const previousLeverageRow = this.breakdownData.data.rawLeverageCategoryList.find(row => row.data.category === previousRowCategory);
+      previousCs01Row.state.isSelected = false;
+      previousLeverageRow.state.isSelected = false;
     }
   } else {
     this.breakdownData.data.selectedCategory = breakdownRow.data.category;
