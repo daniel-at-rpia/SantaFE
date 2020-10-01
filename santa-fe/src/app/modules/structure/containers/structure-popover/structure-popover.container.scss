@@ -10,10 +10,10 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
   @include mix_alive('light');
   background-color: $color_white;
   width: 29rem;
-  height: 35rem;
-  top: 50%;
-  left: 50%;
-  transform: scale(0) translate(-50%, -50%);
+  height: 36rem;
+  top: 0;
+  left: 0;
+  transform: scale(0) translate(0, 0);
   padding: $spacing_small;
   &__close-btn {
     @include mix_fixed_div(absolute, $z_index_base_item_solid);
@@ -165,6 +165,6 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
     }
   }
   &--active {
-    transform: scale(1) translate(-50%, -50%);
+    transform: scale(1) translate(1rem, 3rem);
   }
 }
