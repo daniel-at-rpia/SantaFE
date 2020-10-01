@@ -2063,10 +2063,8 @@ export class DTOService {
       const isBicsBreakdown = groupOption.indexOf('BicsLevel') > -1;
       
     
-      const displayedCategory = categoryName.length > 11 ? `${categoryName.substring(0,8)}...` : categoryName;
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
         category: `${categoryName}`,
-        displayCategory: displayedCategory,
         targetLevel: parsedRawData.targetLevel,
         targetPct: parsedRawData.targetPct,
         diffToTarget: parsedRawData.targetLevel != null ? diffToTarget : 0,
@@ -2080,7 +2078,6 @@ export class DTOService {
         bicsLevel: !!isBicsBreakdown ? 1 : null,
         children: null,
         portfolioId,
-        hasTooltip:  displayedCategory !== categoryName,
         raw: {
           currentLevel: rawCurrentLevel,
           currentPct: rawCurrentPct,

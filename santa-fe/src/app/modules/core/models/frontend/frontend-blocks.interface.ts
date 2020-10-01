@@ -278,7 +278,6 @@ export interface PortfolioMetricTotals {
 
 export interface PortfolioBreakdownCategoryBlock {
   category: string;
-  displayCategory: string;
   targetLevel: number;
   targetPct: number;
   diffToTarget: number;
@@ -292,7 +291,6 @@ export interface PortfolioBreakdownCategoryBlock {
   bicsLevel: number;
   portfolioId: number;
   children?: DTOs.PortfolioBreakdownDTO;
-  hasTooltip: boolean;
   raw: {
     currentLevel: number;
     currentPct: number;

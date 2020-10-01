@@ -4,7 +4,7 @@ $portfolioBreakdownRow_borderColor: $color_active;
 $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
 .sat-popover {
   $blockName: &;
-  @include mix_fixed_div(absolute, $z_index_tooltip);
+  @include mix_fixed_div(absolute, $z_index_modal);
   @include mix_border_generator($portfolioBreakdownRow_borderWidth, $portfolioBreakdownRow_borderColor);
   @include mix_border_radius(10px);
   @include mix_alive('light');

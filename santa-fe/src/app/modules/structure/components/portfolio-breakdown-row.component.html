@@ -2,20 +2,18 @@
   'sat-portfolioBreakdownRow': true,
   'sat-portfolioBreakdownRow--stencilState': breakdownRow.state.isStencil,
   'sat-portfolioBreakdownRow--isBicsDiveIn': breakdownRow.state.isBtnDiveIn,
-  'sat-portfolioBreakdownRow--showTooltip': breakdownRow.data.hasTooltip,
   'sat-portfolioBreakdownRow--selected': breakdownRow.state.isSelected,
   'sat-portfolioBreakdownRow--noSignificantDiff': breakdownRow.data.diffToTarget === 0,
   'sat-portfolioBreakdownRow--negativeDiff': breakdownRow.data.diffToTarget < 0
   }">
   <section class="sat-portfolioBreakdownRow__cta">
-    <button (click)="onClickDiveIn(breakdownRow)" 
+    <button title="{{breakdownRow.data.category}}" (click)="onClickDiveIn(breakdownRow)"
     [ngClass]="{
       'sat-portfolioBreakdownRow__cta-btn': true,
       'sat-portfolioBreakdownRow__cta-btn--diveIn': breakdownRow.data.bicsLevel < 4
      }">
-      <span class="sat-portfolioBreakdownRow__cta-btn-text">{{ breakdownRow.data.displayCategory }}</span>
+      <span class="sat-portfolioBreakdownRow__cta-btn-text">{{ breakdownRow.data.category }}</span>
     </button>
-    <span class="sat-portfolioBreakdownRow__cta-tooltip">{{breakdownRow.data.category}}</span>
   </section>
   <section class="sat-portfolioBreakdownRow__moveVisualizer">
     <move-visualizer [visualizerData]="breakdownRow.data.moveVisualizer"></move-visualizer>

@@ -30,21 +30,6 @@ $portfolioBreakdownRowBtnHeight: 2.25rem;
         text-overflow: ellipsis;
       }
     }
-    &-tooltip {
-      @include mix_fixed_div(absolute, $z_index_hovering_item);
-      @include mix_border_radius(3px);
-      display: none;
-      top: -1.25rem;
-      color: $font_color_inverse;
-      line-height: $line_height_small;
-      background-color:  $color_active;
-      text-align: center;
-      width: auto;
-      padding: $spacing_x_small;
-      font-size: $font_size_x_small;
-      margin-top: $spacing_xx_small;
-      white-space: nowrap;
-    }
   }
   &__cellGroup {
     display: flex;
@@ -134,21 +119,6 @@ $portfolioBreakdownRowBtnHeight: 2.25rem;
         &-cell {
           &--target {
             background-color: $color_red_5;
-          }
-        }
-      }
-    }
-  }
-  &--showTooltip {
-    #{$blockName} {
-      &__cta {
-        &:hover {
-          #{$blockName} {
-            &__cta {
-              &-tooltip {
-                display: block;
-              }
-            }
           }
         }
       }
