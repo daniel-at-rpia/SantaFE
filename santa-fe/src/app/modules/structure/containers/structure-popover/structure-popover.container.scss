@@ -98,6 +98,11 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
           margin-bottom: $spacing_small;
         }
       }
+      &-message {
+        display: none;
+        color: $color_active;
+        flex: 1 1 auto;
+      }
     }
     &-secondDiveIn {
       @include mix_alive('light');
@@ -140,6 +145,22 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
       }
       &--active {
         display: flex;
+      }
+    }
+  }
+  &--noDataAvailable {
+    #{$blockName} {
+      &__levels {
+        &-firstDiveIn {
+          padding: $spacing_small;
+          &-category,
+          &-list {
+            display: none;
+          }
+          &-message {
+            display: flex;
+          }
+        }
       }
     }
   }
