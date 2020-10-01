@@ -64,7 +64,7 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
         display: flex;
         align-items: center;
         flex: 1 1 auto;
-        margin-bottom: $spacing_small;
+        margin-bottom: $spacing_x_small;
         &>portfolio-breakdown-row {
           display: flex;
           flex: 1 1 auto;
@@ -95,7 +95,7 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
         flex: 1 1 auto;
         padding: $spacing_small 0;
         &-item {
-          margin-bottom: $spacing_small;
+          margin-bottom: $spacing_x_small;
         }
       }
       &-message {
@@ -121,7 +121,7 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
         flex-direction: column;
         flex: 1 1 auto;
         &-item {
-          margin-bottom: $spacing_small;
+          margin-bottom: $spacing_x_small;
           &>portfolio-breakdown-row {
             display: flex;
             flex: 1 1 auto;
