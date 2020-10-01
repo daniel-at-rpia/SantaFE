@@ -31,34 +31,27 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
       }
     }
   }
-  &__cellGroup {
+  &__cell {
+    @include mix_text_overflow;
+    flex: 0 0 ($portfolioBreakdownRowCategory_cell_width - $spacing_x_small*4/3 - $typical_border_width*2/3);
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    flex: 1 1 9rem;
+    justify-content: center;
     text-align: center;
-    &-cell {
-      @include mix_text_overflow;
-      flex: 0 0 ($portfolioBreakdownRowCategory_cell_width - $spacing_x_small*4/3 - $typical_border_width*2/3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      font-size: $font_size_normal;
-      color: $font_color_major;
-      &--target {
-        @include mix_border_radius(5px);
-        align-self: stretch;
-        background-color: $color_active;
-        color: $font_color_inverse;
-        margin: $spacing_x_small 0;
-      }
+    font-size: $font_size_normal;
+    color: $font_color_major;
+    &--target {
+      @include mix_border_radius(5px);
+      align-self: stretch;
+      background-color: $color_active;
+      color: $font_color_inverse;
+      margin: $spacing_x_small 0;
     }
-    &-cellDivider {
-      @include mix_border_generator(0 $typical_border_width 0 0);
-      flex: 0 0 $spacing_x_small+$typical_border_width;
-      margin: $spacing_x_small $spacing_x_small $spacing_x_small 0;
-    }
+  }
+  &__cellDivider {
+    @include mix_border_generator(0 $typical_border_width 0 0);
+    flex: 0 0 $spacing_x_small+$typical_border_width;
+    margin: $spacing_x_small $spacing_x_small $spacing_x_small 0;
   }
   &__moveVisualizer {
     display: flex;
@@ -111,35 +104,29 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
   }
   &--noSignificantDiff {
     #{$blockName} {
-      &__cellGroup {
-        &-cell {
-          &--target {
-            background-color: transparent;
-            color: $font_color_major;
-          }
+      &__cell {
+        &--target {
+          background-color: transparent;
+          color: $font_color_major;
         }
       }
     }
   }
   &--negativeDiff {
     #{$blockName} {
-      &__cellGroup {
-        &-cell {
-          &--target {
-            background-color: $color_red_5;
-          }
+      &__cell {
+        &--target {
+          background-color: $color_red_5;
         }
       }
     }
   }
   &--stencilState {
     #{$blockName} {
-      &__cellGroup {
-        &-cell {
-          @include mix_stencil_animation;
-          background-color: $color_stencil;
-          color: $color_stencil;
-        }
+      &__cell {
+        @include mix_stencil_animation;
+        background-color: $color_stencil;
+        color: $color_stencil;
       }
     }
   }

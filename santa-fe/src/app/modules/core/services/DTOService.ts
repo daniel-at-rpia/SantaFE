@@ -1193,83 +1193,30 @@ export class DTOService {
     isStencil: boolean,
     groupOption: string
   ): DTOs.MoveVisualizerDTO {
-    let totalDistance = max - min;
+    const parsedMin = min < 0 ? 0 : min;
+    const parsedCurrentLevel = rawData.currentLevel < 0 ? 0 : rawData.currentLevel;
+    const totalDistance = max - parsedMin;
     let moveDistance, leftEdge, rightEdge, endPinLocation;
     if (!!rawData && !isStencil) {
-      if (rawData.targetLevel !== null) {
+      if (rawData.targetLevel !== null && rawData.targetLevel >= 0) {
         // if target is set
-        if (rawData.targetLevel >= 0) {
-          if (rawData.targetLevel > rawData.currentLevel) {
-            if (min < 0 ) {
-              totalDistance = max + Math.abs(min);
-              if (rawData.currentLevel < 0) {
-                const difference = Math.abs(min) - Math.abs(rawData.currentLevel);
-                moveDistance = this.utility.round(Math.abs(difference) / totalDistance * 100, 2);
-                leftEdge = 0;
-                rightEdge = this.utility.round((Math.abs(rawData.currentLevel) + rawData.targetLevel) / totalDistance * 100, 2);
-                endPinLocation = moveDistance;
-              } else {
-                moveDistance = this.utility.round((Math.abs(min) + rawData.currentLevel) / totalDistance * 100, 2);
-                leftEdge = 0;
-                rightEdge = this.utility.round((rawData.targetLevel - rawData.currentLevel) / totalDistance * 100, 2);
-                endPinLocation = moveDistance;
-              }
-            } else {
-              moveDistance = this.utility.round(rawData.currentLevel / totalDistance * 100, 2);
-              leftEdge = 0;
-              rightEdge = this.utility.round((rawData.targetLevel - rawData.currentLevel) / totalDistance * 100, 2);
-              endPinLocation = moveDistance;
-            }
-          } else {
-           if (min < 0) {
-            totalDistance = max + Math.abs(min);
-            moveDistance = this.utility.round((Math.abs(min) + rawData.targetLevel) / totalDistance * 100, 2);
-            leftEdge =  0;
-            rightEdge = this.utility.round((rawData.currentLevel - rawData.targetLevel) / totalDistance * 100);
-            endPinLocation = moveDistance + rightEdge;
-           } else {
-            moveDistance = this.utility.round(rawData.targetLevel / totalDistance * 100, 2);
-            leftEdge =  0;
-            rightEdge = this.utility.round((rawData.currentLevel - rawData.targetLevel) / totalDistance * 100);
-            endPinLocation = moveDistance + rightEdge;
-           }
-          }
+        if (rawData.targetLevel > parsedCurrentLevel) {
+          moveDistance = this.utility.round(parsedCurrentLevel / totalDistance * 100, 2);
+          leftEdge =  0;
+          rightEdge = this.utility.round((rawData.targetLevel - parsedCurrentLevel) / totalDistance * 100, 2);
+          endPinLocation = moveDistance;
         } else {
-          if (rawData.targetLevel > rawData.currentLevel) {
-            totalDistance = max + Math.abs(min); 
-            leftEdge = 0;
-            moveDistance = this.utility.round((Math.abs(min) - Math.abs(rawData.currentLevel)) / totalDistance * 100, 2);
-            rightEdge = this.utility.round((Math.abs(rawData.currentLevel) - Math.abs(rawData.targetLevel)) / totalDistance * 100, 2);
-            endPinLocation = moveDistance;
-          } else {
-            totalDistance = max + Math.abs(min);
-            leftEdge = 0;
-            moveDistance = this.utility.round((Math.abs(min) - Math.abs(rawData.targetLevel)) / totalDistance * 100, 2);
-            rightEdge = this.utility.round((Math.abs(rawData.targetLevel) - Math.abs(rawData.currentLevel)) / totalDistance * 100, 2);
-            endPinLocation = moveDistance + rightEdge;
-          }
+          moveDistance = this.utility.round(rawData.targetLevel / totalDistance * 100, 2);
+          leftEdge = 0;
+          rightEdge = this.utility.round((parsedCurrentLevel - rawData.targetLevel) / totalDistance * 100);
+          endPinLocation = moveDistance + rightEdge;
         }
       } else {
         // is target is not set
-        if (min < 0) {
-          totalDistance = max + Math.abs(min);
-          leftEdge = 0;
-          rightEdge = 0;
-          if (rawData.currentLevel < 0) {
-            const difference = Math.abs(min) - Math.abs(rawData.currentLevel);
-            moveDistance = this.utility.round(Math.abs(difference) / totalDistance * 100, 2);
-            endPinLocation = moveDistance;
-          } else {
-            const amount = Math.abs(min) + rawData.currentLevel;
-            moveDistance = this.utility.round(amount / totalDistance * 100, 2);
-            endPinLocation = moveDistance;
-          }
-        } else {
-          moveDistance = this.utility.round(rawData.currentLevel / totalDistance * 100, 2);
-          leftEdge = min < 0 ? this.utility.round(Math.abs(min) / totalDistance * 100, 2) : 0;
-          rightEdge = 0;
-          endPinLocation = moveDistance;
-        }
+        moveDistance = this.utility.round(parsedCurrentLevel / totalDistance * 100, 2);
+        leftEdge =  0;
+        rightEdge = 0;
+        endPinLocation = moveDistance;
       }
     }
     const object: DTOs.MoveVisualizerDTO = {

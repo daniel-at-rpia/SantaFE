@@ -15,11 +15,9 @@
   <section class="sat-portfolioBreakdownRow__moveVisualizer">
     <move-visualizer [visualizerData]="breakdownRow.data.moveVisualizer"></move-visualizer>
   </section>
-  <section class="sat-portfolioBreakdownRow__cellGroup">
-    <div class="sat-portfolioBreakdownRow__cellGroup-cell sat-portfolioBreakdownRow__cellGroup-cell--target">{{breakdownRow.data.diffToTargetDisplay}}</div>
-    <hr class="sat-portfolioBreakdownRow__cellGroup-cellDivider">
-    <div class="sat-portfolioBreakdownRow__cellGroup-cell sat-portfolioBreakdownRow__cellGroup-cell--current">{{breakdownRow.data.currentPctDisplay}}</div>
-    <hr class="sat-portfolioBreakdownRow__cellGroup-cellDivider">
-    <div class="sat-portfolioBreakdownRow__cellGroup-cell sat-portfolioBreakdownRow__cellGroup-cell--index">{{breakdownRow.data.indexPctDisplay}}</div>
-  </section>
+    <div class="sat-portfolioBreakdownRow__cell sat-portfolioBreakdownRow__cell--target">{{breakdownRow.data.diffToTargetDisplay}}</div>
+    <hr class="sat-portfolioBreakdownRow__cellDivider">
+    <div class="sat-portfolioBreakdownRow__cell sat-portfolioBreakdownRow__cell--current">{{breakdownRow.data.currentPctDisplay}}</div>
+    <hr class="sat-portfolioBreakdownRow__cellDivider">
+    <div class="sat-portfolioBreakdownRow__cell sat-portfolioBreakdownRow__cell--index">{{breakdownRow.data.indexPctDisplay}}</div>
 </article>

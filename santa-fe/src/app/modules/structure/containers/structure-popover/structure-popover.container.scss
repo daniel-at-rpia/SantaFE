@@ -14,7 +14,7 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
   top: 0;
   left: 0;
   transform: scale(0) translate(0, 0);
-  padding: $spacing_small;
+  padding: $spacing_medium $spacing_small;
   &__close-btn {
     @include mix_fixed_div(absolute, $z_index_base_item_solid);
     @include roundedButton($color_red_5, $font_color_inverse, $iconButton_size_large);
@@ -22,37 +22,6 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
     bottom: -$iconButton_size_large/2; 
     left: 50%;
     transform: translateX(-50%);
-  }
-  &__categoryHeader {
-    display: flex;
-    justify-content: flex-end;
-    flex: 0 0 100%;
-    margin: $spacing_medium 0 $spacing_medium 0;
-    &-cell {
-      @include mix_fixed_div(relative, $z_index_base_item);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: $portfolioBreakdownRow_categoryList_cell_width;
-      &-icon {
-        color: $font_color_minor;
-        font-size: $font_size_large;
-      }
-      &-tooltip {
-        @include mix_fixed_div(absolute, $z_index_hovering_item);
-        @include mix_border_radius(3px);
-        display: none;
-        top: -100%;
-        color: $font_color_inverse;
-        line-height: $line_height_small;
-        width: 4.25rem;
-        background-color: $color_active;
-        text-align: center;
-      }
-      &:hover>&-tooltip {
-        display: block;
-      }
-    }
   }
   &__mainCategory {
     flex: 0 0 100%;
@@ -77,7 +46,7 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
-    height: 27rem;
+    height: 30rem;
     &-firstDiveIn {
       @include mix_enable_scrollbar('vertical');
       display: flex;
