@@ -14,8 +14,8 @@ $portfolioBreakdownRowBtnHeight: 2.25rem;
     margin-right: $spacing_small;
     &-btn {
       @include mix_border_generator();
-      flex: 1 1 auto;
       display: flex;
+      flex: 1 1 auto;
       margin: 0 $spacing_small $spacing_small 0;
       padding: $spacing_xx_small;
       box-shadow: none;
@@ -76,12 +76,10 @@ $portfolioBreakdownRowBtnHeight: 2.25rem;
           @include mix_text_overflow_multi_line();
           -webkit-box-align: end;
           height: $portfolioBreakdownRowBtnHeight;
-          &--diveIn {
-            @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
-            cursor: pointer;
-            &:hover{
-              @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
-            }
+          @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
+          cursor: pointer;
+          &:hover{
+            @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
           }
         }
       }
