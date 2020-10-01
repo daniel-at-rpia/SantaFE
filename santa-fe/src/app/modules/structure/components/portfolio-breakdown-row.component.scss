@@ -69,13 +69,23 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
       margin-right: $spacing_small;
     }
   }
+  &--isBicsRow {
+    #{$blockName} {
+      &__cta {
+        &-btn {
+          min-height: $portfolioBreakdownRowBtnMinHeight;
+          word-break: break-word;
+        }
+      }
+    }
+  }
   &--isBicsDiveIn {
     #{$blockName} {
       &__cta {
         &-btn {
           @include mix_text_overflow_multi_line();
           -webkit-box-align: end;
-          height: $portfolioBreakdownRowBtnHeight;
+          height: auto;
           @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
           cursor: pointer;
           &:hover{
