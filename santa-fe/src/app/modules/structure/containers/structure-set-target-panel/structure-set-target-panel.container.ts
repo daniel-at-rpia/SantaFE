@@ -262,7 +262,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         groupOption: "Test",
         breakdown: {}
       };
-      const newBreakdown = this.dtoService.formPortfolioBreakdown(false, this.state.targetBreakdownRawData, []);
+      const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
+      const newBreakdown = this.dtoService.formPortfolioBreakdown(false, this.state.targetBreakdownRawData, [], isDisplayCs01);
       newBreakdown.state.isPreviewVariant = true;
       newBreakdown.data.definition = this.dtoService.formSecurityDefinitionObject(this.constants.definitionMap.OVERRIDE);
       newBreakdown.data.title = newBreakdown.data.definition.data.displayName;
@@ -277,12 +278,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     if (!!this.state.targetBreakdown) {
       this.state.targetBreakdown.data.rawCs01CategoryList.forEach((eachCategory) => {
         const newRow: StructureSetTargetPanelEditRowBlock = {
-          targetBlockFromBreakdown: eachCategory,
-          rowTitle: eachCategory.category,
+          targetBlockFromBreakdown: eachCategory.data,
+          rowTitle: eachCategory.data.category,
           targetCs01: {
             level: {
-              savedDisplayValue: !!eachCategory.targetLevel ? `${eachCategory.targetLevel}` : null,
-              savedUnderlineValue: eachCategory.raw.targetLevel,
+              savedDisplayValue: !!eachCategory.data.targetLevel ? `${eachCategory.data.targetLevel}` : null,
+              savedUnderlineValue: eachCategory.data.raw.targetLevel,
               modifiedDisplayValue: null,
               modifiedUnderlineValue: null,
               isActive: false,
@@ -292,8 +293,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               isPercent: false
             },
             percent: {
-              savedDisplayValue: !!eachCategory.targetPct ? `${eachCategory.targetPct}` : null,
-              savedUnderlineValue: eachCategory.raw.targetPct,
+              savedDisplayValue: !!eachCategory.data.targetPct ? `${eachCategory.data.targetPct}` : null,
+              savedUnderlineValue: eachCategory.data.raw.targetPct,
               modifiedDisplayValue: null,
               modifiedUnderlineValue: null,
               isActive: false,
@@ -333,13 +334,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       });
       this.state.targetBreakdown.data.rawLeverageCategoryList.forEach((eachCategory) => {
         const targetRow = this.state.editRowList.find((eachRow) => {
-          return eachRow.rowTitle === eachCategory.category;
+          return eachRow.rowTitle === eachCategory.data.category;
         });
         if (!!targetRow) {
-          targetRow.targetCreditLeverage.level.savedDisplayValue = !!eachCategory.targetLevel ? `${eachCategory.targetLevel}` : null;
-          targetRow.targetCreditLeverage.level.savedUnderlineValue = eachCategory.raw.targetLevel;
-          targetRow.targetCreditLeverage.percent.savedDisplayValue = !!eachCategory.targetPct ? `${eachCategory.targetPct}` : null;
-          targetRow.targetCreditLeverage.percent.savedUnderlineValue = eachCategory.raw.targetPct;
+          targetRow.targetCreditLeverage.level.savedDisplayValue = !!eachCategory.data.targetLevel ? `${eachCategory.data.targetLevel}` : null;
+          targetRow.targetCreditLeverage.level.savedUnderlineValue = eachCategory.data.raw.targetLevel;
+          targetRow.targetCreditLeverage.percent.savedDisplayValue = !!eachCategory.data.targetPct ? `${eachCategory.data.targetPct}` : null;
+          targetRow.targetCreditLeverage.percent.savedUnderlineValue = eachCategory.data.raw.targetPct;
         };
       });
     }
@@ -440,12 +441,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   private refreshPreview() {
     if (!!this.state.targetBreakdown) {
+      const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
       const breakdownTitle = this.state.targetBreakdown.data.title; 
       const breakdown = this.state.targetFund.data.children.find(breakdown => breakdown.data.title === breakdownTitle);
       const breakdownIndex = this.state.targetFund.data.children.indexOf(breakdown);
       const breakdownDefinition = this.state.targetBreakdown.data.definition;
       const definitionList = this.state.targetBreakdown.data.displayCategoryList.map((eachCategory) => {
-        return eachCategory.category;
+        return eachCategory.data.category;
       });
       const rawData = this.state.targetBreakdownRawData;
       for (let category in rawData.breakdown) {
@@ -459,22 +461,23 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       }
       this.state.targetBreakdown.state.isStencil = true;
       this.state.targetBreakdown.data.displayCategoryList.forEach(category => {
-        category.moveVisualizer.state.isStencil = true;
+        category.data.moveVisualizer.state.isStencil = true;
       })
       setTimeout(() => {
-        const updatedPortfolioBreakdown = this.dtoService.formPortfolioBreakdown(false, rawData, definitionList);
+        const updatedPortfolioBreakdown = this.dtoService.formPortfolioBreakdown(false, rawData, definitionList, isDisplayCs01);
         updatedPortfolioBreakdown.data.definition = breakdownDefinition;
         updatedPortfolioBreakdown.data.title = breakdownTitle;
         this.state.targetFund.data.children[breakdownIndex] = updatedPortfolioBreakdown; 
         this.state.targetBreakdown = updatedPortfolioBreakdown;
         this.state.targetBreakdown.state.isPreviewVariant = true;
         this.state.editRowList.forEach(rowList => {
-          rowList.targetBlockFromBreakdown = this.state.activeMetric === PortfolioMetricValues.cs01 ? this.state.targetBreakdown.data.rawCs01CategoryList.find(breakdown => breakdown.category === rowList.rowTitle) : this.state.targetBreakdown.data.rawLeverageCategoryList.find(breakdown => breakdown.category === rowList.rowTitle);
+          const targetBlockFromBreakdown = this.state.activeMetric === PortfolioMetricValues.cs01 ? this.state.targetBreakdown.data.rawCs01CategoryList.find(breakdown => breakdown.data.category === rowList.rowTitle) : this.state.targetBreakdown.data.rawLeverageCategoryList.find(breakdown => breakdown.data.category === rowList.rowTitle);
+          rowList.targetBlockFromBreakdown = targetBlockFromBreakdown.data;
         });
         this.state.targetBreakdown.state.isDisplayingCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
         this.state.targetBreakdown.state.isStencil = false;
         this.state.targetBreakdown.data.displayCategoryList.forEach(category => {
-          category.moveVisualizer.state.isStencil = false;
+          category.data.moveVisualizer.state.isStencil = false;
         })
       }, 300);
     }

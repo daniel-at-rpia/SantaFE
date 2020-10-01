@@ -49,22 +49,21 @@
         *ngFor="let eachCategory of breakdownData.data.displayCategoryList"
         [ngClass]="{
           'sat-portfolioBreakdown__categoryContent-list-item': true,
-          'sat-portfolioBreakdown__categoryContent-list-item--noSignificantDiff': eachCategory.diffToTarget === 0,
-          'sat-portfolioBreakdown__categoryContent-list-item--negativeDiff': eachCategory.diffToTarget < 0
+          'sat-portfolioBreakdown__categoryContent-list-item--noSignificantDiff': eachCategory.data.diffToTarget === 0,
+          'sat-portfolioBreakdown__categoryContent-list-item--negativeDiff': eachCategory.data.diffToTarget < 0
         }">
-        <span class="sat-portfolioBreakdown__categoryContent-list-item-title">{{eachCategory.category}}</span>
-        <div class="sat-portfolioBreakdown__categoryContent-list-item-moveVisualizer">
-          <move-visualizer [visualizerData]="eachCategory.moveVisualizer"></move-visualizer>
-        </div>
-        <div class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--target">{{eachCategory.diffToTargetDisplay}}</div>
-        <hr class="sat-portfolioBreakdown__categoryContent-list-item-cellDivider">
-        <div class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--current">{{eachCategory.currentPctDisplay}}</div>
-        <hr class="sat-portfolioBreakdown__categoryContent-list-item-cellDivider">
-        <div class="sat-portfolioBreakdown__categoryContent-list-item-cell sat-portfolioBreakdown__categoryContent-list-item-cell--index">{{eachCategory.indexPctDisplay}}</div>
+        <portfolio-breakdown-row
+          [breakdownRow]="eachCategory"
+          (breakdownRowDiveIn)="updatePopoverData($event)">
+        </portfolio-breakdown-row>
       </li>
     </ul>
   </section>
   <section class="sat-portfolioBreakdown__ctas">
     <button (click)="onClickEdit()" class="santaBtn--iconOnly sat-portfolioBreakdown__ctas-editBtn fal fa-pencil"></button>
+  </section>
+  <section class="sat-portfolioBreakdown__popover" *ngIf="breakdownData.data.popover">
+    <structure-popover [popover]="breakdownData.data.popover">
+    </structure-popover>
   </section>
 </article>
