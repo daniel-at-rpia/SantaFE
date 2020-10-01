@@ -23,7 +23,8 @@
     import { STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
     import { BICsHierarchyAllDataBlock, BICsHierarchyBlock } from '../core/models/frontend/frontend-blocks.interface';
     import { BEBICsHierarchyBlock } from 'Core/models/backend/backend-models.interface';
-    import { BICsDataProcessingService } from 'App/modules/structure/services/BICsDataProcessingService';
+    import { BICsDataProcessingService } from 'Structure/services/BICsDataProcessingService';
+
   //
 
 @Component({

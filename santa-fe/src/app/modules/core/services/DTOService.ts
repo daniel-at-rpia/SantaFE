@@ -39,7 +39,8 @@
       SecurityDefinitionMap,
       FilterOptionsCurrency,
       FilterOptionsRating,
-      FilterOptionsTenor
+      FilterOptionsTenor,
+      BICsLevel1DefinitionList
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       QuoteHeaderConfigList
@@ -1863,34 +1864,34 @@ export class DTOService {
     object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil);
     object.data.cs01TargetBar.state.isInactiveMetric = selectedMetricValue !== object.data.cs01TargetBar.data.targetMetric;
     object.data.creditLeverageTargetBar.state.isInactiveMetric = selectedMetricValue !== object.data.creditLeverageTargetBar.data.targetMetric;
-    const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.BicsLevel1, []);
+    const isDisplayCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
+    const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.BicsLevel1, BICsLevel1DefinitionList, isDisplayCs01);
     BICSBreakdown.data.title = 'BICS';
     BICSBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.SECTOR);
-    BICSBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
-    // object.data.children.push(BICSBreakdown);
-    const currencyBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Ccy, FilterOptionsCurrency);
+    object.data.children.push(BICSBreakdown);
+    const currencyBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Ccy, FilterOptionsCurrency, isDisplayCs01);
     currencyBreakdown.data.title = 'Currency';
     currencyBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
     object.data.children.push(currencyBreakdown);
-    currencyBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
-    const tenorBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Tenor, FilterOptionsTenor);
+    const tenorBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Tenor, FilterOptionsTenor, isDisplayCs01);
     tenorBreakdown.data.title = 'Tenor';
     tenorBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.TENOR);
     object.data.children.push(tenorBreakdown);
     tenorBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
-    const ratingBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.RatingNoNotch, FilterOptionsRating);
+    const ratingBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.RatingNoNotch, FilterOptionsRating, isDisplayCs01);
     ratingBreakdown.data.title = 'Rating';
     ratingBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.RATING);
     object.data.children.push(ratingBreakdown);
-    ratingBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
     return object;
   }
 
   public formPortfolioBreakdown(
     isStencil: boolean,
     rawData: BEModels.BEStructuringBreakdownBlock,
-    definitionList: Array<string>
+    definitionList: Array<string>,
+    isDisplayCs01: boolean
   ): DTOs.PortfolioBreakdownDTO {
+    const isBicsBreakdown = rawData.groupOption.indexOf('BicsLevel') > -1;
     const object: DTOs.PortfolioBreakdownDTO = {
       data: {
         title: '',
@@ -1899,7 +1900,9 @@ export class DTOService {
         ratingHoverText: !isStencil ? 'n/a' : '33%',
         rawCs01CategoryList: [],
         rawLeverageCategoryList: [],
-        backendGroupOptionIdentifier: !isStencil ? rawData.groupOption : null
+        backendGroupOptionIdentifier: !isStencil ? rawData.groupOption : null,
+        popover: null,
+        portfolioId: rawData.portfolioId
       },
       style: {
         ratingFillWidth: null
@@ -1907,9 +1910,10 @@ export class DTOService {
       state: {
         isEditable: false,
         isStencil: true,
-        isDisplayingCs01: true,
+        isDisplayingCs01: !!isDisplayCs01,
         isTargetAlignmentRatingAvail: !!isStencil,
-        isPreviewVariant: false
+        isPreviewVariant: false,
+        isBICs: !!isBicsBreakdown
       }
     };
     let findCs01Max = 0;
@@ -1948,7 +1952,9 @@ export class DTOService {
           isStencil,
           eachCategoryText,
           rawData.breakdown[eachCategoryText].metricBreakdowns.Cs01,
-          true
+          true,
+          rawData.portfolioId,
+          rawData.groupOption
         )
         : null;
       !!eachCs01CategoryBlock && object.data.rawCs01CategoryList.push(eachCs01CategoryBlock);
@@ -1959,7 +1965,9 @@ export class DTOService {
           isStencil,
           eachCategoryText,
           rawData.breakdown[eachCategoryText].metricBreakdowns.CreditLeverage,
-          false
+          false,
+          rawData.portfolioId,
+          rawData.groupOption
         )
         : null;
       !!eachLeverageCategoryBlock && object.data.rawLeverageCategoryList.push(eachLeverageCategoryBlock);
@@ -1973,8 +1981,10 @@ export class DTOService {
     isStencil: boolean,
     categoryName: string,
     rawCategoryData: BEModels.BEStructuringBreakdownSingleEntry,
-    isCs01: boolean
-  ): Blocks.PortfolioBreakdownCategoryBlock {
+    isCs01: boolean,
+    portfolioID: number,
+    groupOption: string
+  ): DTOs.StructurePortfolioBreakdownRowDTO {
     if (!!rawCategoryData) {
       const parsedRawData = this.utility.deepCopy(rawCategoryData);
       const rawCurrentLevel = parsedRawData.currentLevel;
@@ -2004,8 +2014,14 @@ export class DTOService {
       );
       eachMoveVisualizer.data.endPinText = !!isCs01 ? `${eachMoveVisualizer.data.end}k` : `${eachMoveVisualizer.data.end}`;
       const diffToTarget = !!isCs01 ? Math.round(parsedRawData.targetLevel - parsedRawData.currentLevel) : this.utility.round(parsedRawData.targetLevel - parsedRawData.currentLevel, 2);
+
+      const isBicsBreakdown = groupOption.indexOf('BicsLevel') > -1;
+      
+    
+      const displayedCategory = categoryName.length > 11 ? `${categoryName.substring(0,8)}...` : categoryName;
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
         category: `${categoryName}`,
+        displayCategory: displayedCategory,
         targetLevel: parsedRawData.targetLevel,
         targetPct: parsedRawData.targetPct,
         diffToTarget: parsedRawData.targetLevel != null ? diffToTarget : 0,
@@ -2016,6 +2032,10 @@ export class DTOService {
         indexPct: parsedRawData.indexPct,
         indexPctDisplay: parsedRawData.indexPct != null ? `${parsedRawData.indexPct}%` : '-',
         moveVisualizer: eachMoveVisualizer,
+        bicsLevel: !!isBicsBreakdown ? 1 : null,
+        children: null,
+        portfolioID: portfolioID,
+        hasTooltip:  displayedCategory !== categoryName,
         raw: {
           currentLevel: rawCurrentLevel,
           currentPct: rawCurrentPct,
@@ -2029,7 +2049,11 @@ export class DTOService {
       if (eachCategoryBlock.diffToTarget > 0) {
         eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `+${eachCategoryBlock.diffToTarget}k` : `+${eachCategoryBlock.diffToTarget}`;
       }
-      return eachCategoryBlock;
+
+      const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock);
+      eachCategoryBlockDTO.state.isBtnDiveIn = !!isBicsBreakdown;
+      eachCategoryBlockDTO.state.isBicsLevel1 = groupOption === 'BicsLevel1';
+      return eachCategoryBlockDTO;
     } else {
       return null;
     }
@@ -2052,6 +2076,32 @@ export class DTOService {
         saveModal: null
       }
     };
+    return object;
+  }
+
+  public formStructurePopoverObject(categoryRow: DTOs.StructurePortfolioBreakdownRowDTO, isDisplayCs01: boolean): DTOs.StructurePopoverDTO {
+    const object = {
+      data: {
+        mainRow: categoryRow
+      },
+      state: {
+        isActive: false,
+        isDisplayCs01: isDisplayCs01
+      }
+    }
+    return object;
+  }
+
+  public formStructureBreakdownRowObject(categoryRow: Blocks.PortfolioBreakdownCategoryBlock): DTOs.StructurePortfolioBreakdownRowDTO {
+    const object = {
+      data: categoryRow,
+      state: {
+        isSelected: false,
+        isBtnDiveIn: false,
+        isStencil: false,
+        isBicsLevel1: false
+      }
+    }
     return object;
   }
 }

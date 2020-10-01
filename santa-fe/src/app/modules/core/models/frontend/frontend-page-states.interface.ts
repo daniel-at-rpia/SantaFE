@@ -18,7 +18,7 @@ import {
 import { AlertTypes, NavigationModule } from 'Core/constants/coreConstants.constant';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
-import { BEStructuringBreakdownBlock, BEBICsHierarchyBlock } from 'BEModels/backend-models.interface';
+import { BEStructuringBreakdownBlock } from 'BEModels/backend-models.interface';
 import { BICsHierarchyAllDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
 
 export interface RootState {

@@ -67,7 +67,7 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
   &__categoryHeader {
     display: flex;
     justify-content: flex-end;
-    margin-top: $portfolioBreakdown_rating_thickness;
+    margin: $portfolioBreakdown_rating_thickness 0 $portfolioBreakdown_rating_thickness/2;
     &-cell {
       @include mix_fixed_div(relative, $z_index_base_item);
       display: flex;
@@ -104,37 +104,9 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
       &-item {
         display: flex;
         align-items: center;
-        &-title {
-          @include mix_text_overflow;
-          flex: 0 0 7rem;
-          text-align: right;
-          margin-right: $spacing_small;
-        }
-        &-moveVisualizer {
-          flex: 1 1 auto;
-          margin-right: 1.25rem;
-        }
-        &-cell {
-          @include mix_text_overflow;
-          flex: 0 0 ($portfolioBreakdown_categoryList_cell_width - $spacing_x_small*4/3 - $typical_border_width*2/3);
+        category-content-list-item {
           display: flex;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
-          font-size: $font_size_normal;
-          color: $font_color_major;
-          &--target {
-            @include mix_border_radius(5px);
-            align-self: stretch;
-            background-color: $color_active;
-            color: $font_color_inverse;
-            margin: $spacing_x_small 0;
-          }
-        }
-        &-cellDivider {
-          @include mix_border_generator(0 $typical_border_width 0 0);
-          flex: 0 0 $spacing_x_small+$typical_border_width;
-          margin: $spacing_x_small $spacing_x_small $spacing_x_small 0;
+          flex: 1 1 auto;
         }
         &--noSignificantDiff &-cell--target{
           background-color: transparent;
