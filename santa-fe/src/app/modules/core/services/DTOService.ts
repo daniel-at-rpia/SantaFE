@@ -2078,7 +2078,6 @@ export class DTOService {
     
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
         category: `${categoryName}`,
-        displayCategory: displayedCategory,
         targetLevel: parsedRawData.targetLevel,
         targetPct: parsedRawData.targetPct,
         diffToTarget: parsedRawData.targetLevel != null ? diffToTarget : 0,
