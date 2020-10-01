@@ -105,6 +105,7 @@ export class DTOService {
         country: !isStencil ? rawData.country : null,
         sector: !isStencil ? rawData.sector : null,
         industry: !isStencil ? rawData.industry : null,
+        subIndustry: !isStencil ? rawData.subIndustry : null,
         securityType: !isStencil ? rawData.securityType : null,
         seniority: null,
         genericSeniority: !isStencil ? rawData.genericSeniority : null,
@@ -624,15 +625,15 @@ export class DTOService {
     return object;
   }
 
-  public formQuantComparerObject(
+  public formBestQuoteComparerObject(
     isStencil: boolean,
     quantMetricType: string,
     BEdto: BEModels.BEBestQuoteDTO,
     securityCard: DTOs.SecurityDTO,
     axeOnly: boolean
-  ): DTOs.QuantComparerDTO {
+  ): DTOs.BestQuoteComparerDTO {
     if (isStencil) {
-      const stencilObject: DTOs.QuantComparerDTO = {
+      const stencilObject: DTOs.BestQuoteComparerDTO = {
         data: {
           driverType: 'Spread',
           delta: 0,
@@ -641,13 +642,15 @@ export class DTOService {
             number: 33,
             displayNumber: '33',
             broker: 'GS',
-            size: null
+            size: null,
+            isExecutable: false
           },
           offer: {
             number: 33,
             displayNumber: '33',
             broker: 'JPM',
-            size: null
+            size: null,
+            isExecutable: false
           }
         },
         style: {
@@ -670,7 +673,8 @@ export class DTOService {
           noTotalSkew: true,
           longEdgeState: false,
           bidIsStale: false,
-          askIsStale: false
+          askIsStale: false,
+          hasExecutableQuote: false
         }
       };
       return stencilObject;
@@ -679,7 +683,7 @@ export class DTOService {
       const backendTargetQuoteAttr = TriCoreDriverConfig[driverType]['backendTargetQuoteAttr'];
       if (!!BEdto && !!BEdto[backendTargetQuoteAttr]) {
         const rawData = BEdto[backendTargetQuoteAttr];
-        return this.populateQuantCompareObject(
+        return this.populateBestQuoteComparerObject(
           rawData,
           driverType,
           securityCard,
@@ -691,12 +695,12 @@ export class DTOService {
     }
   }
 
-  private populateQuantCompareObject(
+  private populateBestQuoteComparerObject(
     rawData: BEModels.BESingleBestQuoteDTO,
     driverType: string,
     securityCard: DTOs.SecurityDTO,
     axeOnly: boolean
-  ): DTOs.QuantComparerDTO {
+  ): DTOs.BestQuoteComparerDTO {
     const bidQuantity = axeOnly ? rawData.totalActiveAxeBidQuantity : rawData.totalActiveBidQuantity;
     const askQuantity = axeOnly ? rawData.totalActiveAxeAskQuantity : rawData.totalActiveAskQuantity;
     const bidValue = axeOnly ? rawData.bidAxeQuoteValue : rawData.bidQuoteValue;
@@ -737,7 +741,7 @@ export class DTOService {
         delta = 0;
         mid = 0;
       }
-      const object: DTOs.QuantComparerDTO = {
+      const object: DTOs.BestQuoteComparerDTO = {
         data: {
           driverType: driverType,
           delta: delta,
@@ -746,13 +750,15 @@ export class DTOService {
             number: !!bidNumber ? parseFloat(bidNumber) : null,
             displayNumber: bidNumber,  // not been used right now but could come in handy
             broker: bidDealer,
-            size: bidSize
+            size: bidSize,
+            isExecutable: rawData.bestBidQuoteCondition === 'A'
           },
           offer: {
             number: !!offerNumber ? parseFloat(offerNumber) : null,
             displayNumber: offerNumber,  // not been used right now but could come in handy
             broker: askDealer,
-            size: offerSize
+            size: offerSize,
+            isExecutable: rawData.bestAskQuoteCondition === 'A'
           }
         },
         style: {
@@ -775,7 +781,8 @@ export class DTOService {
           noTotalSkew: rawData.totalSkew === null,
           longEdgeState: (bidNumber && parseFloat(bidNumber).toString().length > 4) || (offerNumber && parseFloat(offerNumber).toString().length > 4),
           bidIsStale: bidIsStale,
-          askIsStale: askIsStale
+          askIsStale: askIsStale,
+          hasExecutableQuote: rawData.bestAskQuoteCondition === 'A' || rawData.bestBidQuoteCondition === 'A'
         }
       };
       return object;
@@ -841,7 +848,7 @@ export class DTOService {
         activePortfolios: activePortfolios || []
       },
       state: {
-        isQuantVariant: !!stub.content.isForQuantComparer,
+        isBestQuoteVariant: !!stub.content.isForBestQuoteComparer,
         isSecurityCardVariant: !!stub.content.isForSecurityCard,
         isCustomComponent: !!stub.content.isCustomComponent,
         isAxeSkewEnabled: false,
@@ -918,19 +925,19 @@ export class DTOService {
     isStencil: boolean,
     textData: string,
     targetHeader: DTOs.SecurityTableHeaderDTO,
-    quantComparerDTO: DTOs.QuantComparerDTO,
+    bestQuoteComparerDTO: DTOs.BestQuoteComparerDTO,
     alertDTO: DTOs.AlertDTO
   ): DTOs.SecurityTableCellDTO {
     const object: DTOs.SecurityTableCellDTO = {
       data: {
         textData: !!isStencil ? 'PLACE' : textData,
-        quantComparerDTO: quantComparerDTO,
+        bestQuoteComparerDTO: bestQuoteComparerDTO,
         alertSideDTO: null,
         alertStatusDTO: null
       },
       state: {
-        isQuantVariant: targetHeader.state.isQuantVariant,
-        quantComparerUnavail: false,
+        isBestQuoteVariant: targetHeader.state.isBestQuoteVariant,
+        bestQuoteComparerUnavail: false,
         isStencil: isStencil
       }
     };
@@ -1019,7 +1026,8 @@ export class DTOService {
           tspread: 300,
           benchmark: bidBenchmark,
           time: '12:01',
-          rawTime: ''
+          rawTime: '',
+          isExecutable: false
         },
         ask: {
           isAxe: false,
@@ -1029,7 +1037,8 @@ export class DTOService {
           tspread: 300,
           benchmark: bidBenchmark,
           time: '12:01',
-          rawTime: ''
+          rawTime: '',
+          isExecutable: false
         },
         currentMetric: null
       },
@@ -1049,7 +1058,8 @@ export class DTOService {
         menuActiveDriver: null,
         isBidDownVoted: false,
         isAskDownVoted: false,
-        isCDSVariant: false
+        isCDSVariant: false,
+        isQuoteExecutable: false
       }
     };
     if (!isStencil) {
@@ -1061,7 +1071,8 @@ export class DTOService {
         tspread: !!rawData.bidSpread ? this.utility.parseTriCoreDriverNumber(rawData.bidSpread, TriCoreDriverConfig.Spread.label, targetSecurity, false) as number : null,
         benchmark: bidBenchmark,
         time: this.utility.isQuoteTimeValid(rawData.bidTime) && hasBid ? moment(rawData.bidTime).format('HH:mm') : '',
-        rawTime: rawData.bidTime.slice(0, 19)  // remove timezone
+        rawTime: rawData.bidTime.slice(0, 19),  // remove timezone,
+        isExecutable: rawData.bidQuoteCondition === 'A'
       };
       object.data.ask = {
         isAxe: rawData.quoteType === SECURITY_TABLE_QUOTE_TYPE_AXE,
@@ -1071,11 +1082,13 @@ export class DTOService {
         tspread: !!rawData.askSpread ? this.utility.parseTriCoreDriverNumber(rawData.askSpread, TriCoreDriverConfig.Spread.label, targetSecurity, false) as number : null,
         benchmark: askBenchmark,
         time: this.utility.isQuoteTimeValid(rawData.askTime) && hasAsk ? moment(rawData.askTime).format('HH:mm') : '',
-        rawTime: rawData.askTime.slice(0, 19)  // remove timezone
+        rawTime: rawData.askTime.slice(0, 19),  // remove timezone
+        isExecutable: rawData.askQuoteCondition === 'A'
       };
       this.utility.highlightSecurityQutoe(object, targetRow);
       object.state.isBidDownVoted = rawData.bidQuoteStatus < 0;
       object.state.isAskDownVoted = rawData.askQuoteStatus < 0;
+      object.state.isQuoteExecutable = object.data.ask.isExecutable || object.data.bid.isExecutable;
     }
     return object;
   }
@@ -2065,6 +2078,7 @@ export class DTOService {
     
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
         category: `${categoryName}`,
+        displayCategory: displayedCategory,
         targetLevel: parsedRawData.targetLevel,
         targetPct: parsedRawData.targetPct,
         diffToTarget: parsedRawData.targetLevel != null ? diffToTarget : 0,

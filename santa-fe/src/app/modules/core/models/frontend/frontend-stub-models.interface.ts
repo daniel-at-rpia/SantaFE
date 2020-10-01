@@ -82,7 +82,7 @@ export interface SecurityTableHeaderConfigStub {
     };
     blockAttrName?: string;
     isFrontEndMetric?: boolean;
-    isForQuantComparer?: boolean;
+    isForBestQuoteComparer?: boolean;
     isForSecurityCard?: boolean;
     isDataTypeText?: boolean;
     isDriverDependent?: boolean;  // isDriverDependent means the cells will be re-processed when driver is changed

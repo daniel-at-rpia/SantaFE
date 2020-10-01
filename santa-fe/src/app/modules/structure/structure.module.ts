@@ -15,6 +15,7 @@ import { StructureUtilityPanel } from 'Structure/containers/structure-utility-pa
 import { TargetBar } from 'App/modules/structure/components/target-bar.component'
 import { PortfolioBreakdown } from 'App/modules/structure/containers/portfolio-breakdown/portfolio-breakdown.container';
 import { StructureSetTargetPanel } from 'Structure/containers/structure-set-target-panel/structure-set-target-panel.container';
+
 import { PortfolioBreakdownRow } from 'App/modules/structure/components/portfolio-breakdown-row.component';
 import { BICsDataProcessingService } from 'Structure/services/BICsDataProcessingService';
 import { StructurePopover } from 'Structure/containers/structure-popover/structure-popover.container';

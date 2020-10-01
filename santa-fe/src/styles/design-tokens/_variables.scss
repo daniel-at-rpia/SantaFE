@@ -141,13 +141,14 @@ $securityCard_width: 18rem;
 
 $securityTable_cell_width: 8.75rem;
 $securityTable_cell_width_primary: $securityCard_width + $spacing_small * 2;
-$securityTable_cell_width_quant: 19rem;
+$securityTable_cell_width_best_quote: 19rem;
 
 $securityQuote_spacing_height: $spacing_small;
-$securityQuote_main_size_1: 4rem;
+$securityQuote_main_size_1: 4.25rem;
 $securityQuote_main_size_2: 8rem;
 $securityQuote_main_size_3: 12rem;
 $securityQuote_main_size_4: 10rem;
+$securityQuote_tags_size: 6.5rem;
 
 $securityDefinition_configuratorVariant_width: 6.5rem;
 $securityDefinitionConfigurator_filters_width: 15rem;

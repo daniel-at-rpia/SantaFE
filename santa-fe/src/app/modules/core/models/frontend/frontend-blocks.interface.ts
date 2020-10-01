@@ -192,8 +192,8 @@ export interface AgGridRowNode {
 export interface AgGridRow {
   id: string;
   securityCard: DTOs.SecurityDTO;    // this needs to be identical to SecurityTableHeaderConfigs' key for Security column
-  bestQuote: DTOs.QuantComparerDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Best Quote column
-  bestAxeQuote: DTOs.QuantComparerDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Best Axe Quote column
+  bestQuote: DTOs.BestQuoteComparerDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Best Quote column
+  bestAxeQuote: DTOs.BestQuoteComparerDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Best Axe Quote column
   alertSide: DTOs.SantaTableAlertSideCellDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Alert Side column
   alertStatus: DTOs.SantaTableAlertStatusCellDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Alert Status column
   rowDTO: DTOs.SecurityTableRowDTO;
@@ -278,6 +278,7 @@ export interface PortfolioMetricTotals {
 
 export interface PortfolioBreakdownCategoryBlock {
   category: string;
+  displayCategory: string;
   targetLevel: number;
   targetPct: number;
   diffToTarget: number;
@@ -291,6 +292,7 @@ export interface PortfolioBreakdownCategoryBlock {
   bicsLevel: number;
   portfolioID: number;
   children?: DTOs.PortfolioBreakdownDTO;
+  hasTooltip: boolean;
   raw: {
     currentLevel: number;
     currentPct: number;

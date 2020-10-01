@@ -2,7 +2,7 @@
 
 
 $securityTableRow_expandCanvas_height: 40rem + $spacing_medium * 2;
-$securityTableRow_expandCanvas_label_leftPadding: $spacing_x_small;
+$securityTableRow_expandCanvas_label_leftPadding: $spacing_x_small + $securityQuote_tags_size;
 $securityTableRow_expandCanvas_label_rightPadding: $spacing_small + $scroll_bar_width + $spacing_x_small;
 
 .sat-securityTableRow {
@@ -190,7 +190,7 @@ $securityTableRow_expandCanvas_label_rightPadding: $spacing_small + $scroll_bar_
   align-items: center;
   width: $securityTable_cell_width;
   padding: $spacing_x_small 0;
-  min-height: 3.125rem; // so when QuantComparer is rendered the dimension doesn't change
+  min-height: 3.125rem; // so when BestQuoteComparer is rendered the dimension doesn't change
   &__metric {
     flex: 1 1 auto;
     display: flex;
@@ -202,23 +202,23 @@ $securityTableRow_expandCanvas_label_rightPadding: $spacing_small + $scroll_bar_
       user-select: none;
     }
   }
-  &__quant {
+  &__bestQuote {
     flex: 1 1 auto;
     display: none;
-    quant-comparer {
+    best-quote-comparer {
       flex: 1 1 auto;
     }
   }
   &--securityCardVariant {
     width: $securityTable_cell_width_primary;
   }
-  &--quantVariant {
-    width: $securityTable_cell_width_quant;
+  &--bestQuoteVariant {
+    width: $securityTable_cell_width_best_quote;
     #{$securityTableCellBlockName} {
       &__metric {
         display: none;
       }
-      &__quant {
+      &__bestQuote {
         display: flex;
       }
     }
