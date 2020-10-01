@@ -84,7 +84,26 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     this.breakdownData.data.displayCategoryList.forEach((eachCategory) => {
       eachCategory.data.moveVisualizer.state.isStencil = false;
       eachCategory.state.isStencil = false;
+      if (!!this.breakdownData.data.popover) {
+        this.removeRowStencils(eachCategory);
+      }
     });
+  }
+
+  private removeRowStencils(row: StructurePortfolioBreakdownRowDTO) {
+    if (!row) {
+      return null;
+    } else {
+      if (!!row.data.children) {
+        row.data.children.data.displayCategoryList.forEach(row => {
+          row.state.isStencil = false;
+          row.data.moveVisualizer.state.isStencil = false;
+          if (row.data.children) {
+            this.removeRowStencils(row);
+          }
+        })
+      }
+    }
   }
 
   public onClickEdit() {
@@ -142,9 +161,11 @@ public updatePopoverData(breakdownRow: StructurePortfolioBreakdownRowDTO)
     const oppositeMetricList = this.breakdownData.state.isDisplayingCs01 ? block.children.data.rawLeverageCategoryList : block.children.data.rawCs01CategoryList;
     block.children.data.displayCategoryList = currentMetricList;
     block.children.data.displayCategoryList.forEach(row => {
+      row.state.isStencil = true;
       const selectedValue = oppositeMetricList.find(previousRow => previousRow.data.category === row.data.category);
       row.state.isSelected = !!selectedValue.data.children && selectedValue.state.isSelected;
       row.data.children = selectedValue.data.children;
+      row.data.moveVisualizer.state.isStencil = true;
       if (!!row.data.children) {
         row.data.children.data.displayCategoryList = this.breakdownData.state.isDisplayingCs01 ? row.data.children.data.rawCs01CategoryList : row.data.children.data.rawLeverageCategoryList;
         this.switchPopoverValues(row.data);

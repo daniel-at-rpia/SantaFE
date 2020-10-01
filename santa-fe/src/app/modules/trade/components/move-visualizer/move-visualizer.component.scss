@@ -11,7 +11,7 @@ $moveVisualizer_color_inversed: $color_positive;
 $moveVisualizer_structuringVariant_color_exceed: $color_red_5;
 $moveVisualizer_line_stencilMaskAnimationDuration: $animation_duration_heavy;
 .sat-moveVisualizer {
-  $moveVisualizerBlockName: &;
+  $blockName: &;
   @include mix_fixed_div(relative, $z_index_base_item);
   flex: 1 1 auto;
   display: flex;
@@ -134,7 +134,7 @@ $moveVisualizer_line_stencilMaskAnimationDuration: $animation_duration_heavy;
     width: 100%;
   }
   &--structuringBreakdownVariant {
-    #{$moveVisualizerBlockName} {
+    #{$blockName} {
       &__bar {
         &-leftEdge {
           background-color: $theme_color_1;
@@ -158,8 +158,8 @@ $moveVisualizer_line_stencilMaskAnimationDuration: $animation_duration_heavy;
       }
     }
   }
-  &--structuringBreakdownVariant#{$moveVisualizerBlockName}--exceededState {
-    #{$moveVisualizerBlockName} {
+  &--structuringBreakdownVariant#{$blockName}--exceededState {
+    #{$blockName} {
       &__bar {
         &-rightEdge {
           background-color: $moveVisualizer_structuringVariant_color_exceed;
@@ -177,8 +177,35 @@ $moveVisualizer_line_stencilMaskAnimationDuration: $animation_duration_heavy;
       }
     }
   }
+  &--bicsLevel2Variant {
+    #{$blockName} {
+      &__bar {
+        &-stencilMask {
+          background-color: $color_gray_1
+        }
+      }
+    }
+  }
+  &--bicsLevel3Variant {
+    #{$blockName} {
+      &__bar {
+        &-stencilMask {
+          background-color: $color_gray_2
+        }
+      }
+    }
+  }
+  &--bicsLevel4Variant {
+    #{$blockName} {
+      &__bar {
+        &-stencilMask {
+          background-color: $color_gray_3
+        }
+      }
+    }
+  }
   &--noLeftEdge {
-    #{$moveVisualizerBlockName} {
+    #{$blockName} {
       &__bar {
         &-moveDistance {
           border-top-left-radius: 3px;
@@ -188,7 +215,7 @@ $moveVisualizer_line_stencilMaskAnimationDuration: $animation_duration_heavy;
     }
   }
   &--noRightEdge {
-    #{$moveVisualizerBlockName} {
+    #{$blockName} {
       &__bar {
         &-moveDistance {
           border-top-right-radius: 3px;
@@ -198,7 +225,7 @@ $moveVisualizer_line_stencilMaskAnimationDuration: $animation_duration_heavy;
     }
   }
   &--invalidState {
-    #{$moveVisualizerBlockName} {
+    #{$blockName} {
       &__bar {
         display: none;
       }
@@ -212,15 +239,15 @@ $moveVisualizer_line_stencilMaskAnimationDuration: $animation_duration_heavy;
       }
     }
   }
-  &--invalidState#{$moveVisualizerBlockName}--visualizingBasisState {
-    #{$moveVisualizerBlockName} {
+  &--invalidState#{$blockName}--visualizingBasisState {
+    #{$blockName} {
       &__invalidHighlight {
         display: none;
       }
     }
   }
   &--inversedState {
-    #{$moveVisualizerBlockName} {
+    #{$blockName} {
       &__bar {
         &-moveDistance {
           background-color: $moveVisualizer_color_inversed;
@@ -239,7 +266,7 @@ $moveVisualizer_line_stencilMaskAnimationDuration: $animation_duration_heavy;
     }
   }
   &--colorCodeInversedState {
-    #{$moveVisualizerBlockName} {
+    #{$blockName} {
       &__bar {
         &-moveDistance {
           background-color: $moveVisualizer_color_inversed;
@@ -257,8 +284,8 @@ $moveVisualizer_line_stencilMaskAnimationDuration: $animation_duration_heavy;
       }
     }
   }
-  &--colorCodeInversedState#{$moveVisualizerBlockName}--inversedState {
-    #{$moveVisualizerBlockName} {
+  &--colorCodeInversedState#{$blockName}--inversedState {
+    #{$blockName} {
       &__bar {
         &-moveDistance {
           background-color: $moveVisualizer_color_default;
@@ -277,14 +304,14 @@ $moveVisualizer_line_stencilMaskAnimationDuration: $animation_duration_heavy;
     }
   }
   &--pinIsNullState {
-    #{$moveVisualizerBlockName} {
+    #{$blockName} {
       &__pins {
         visibility: hidden;
       }
     }
   }
   &--stencilState {
-    #{$moveVisualizerBlockName} {
+    #{$blockName} {
       &__bar {
         &-leftEdge {
           @include mix_stencil_animation(true);
@@ -317,7 +344,7 @@ $moveVisualizer_line_stencilMaskAnimationDuration: $animation_duration_heavy;
     }
   }
   &--placeholderState {
-    #{$moveVisualizerBlockName} {
+    #{$blockName} {
       &__bar {
         visibility: hidden;
       }

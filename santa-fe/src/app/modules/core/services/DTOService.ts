@@ -1177,7 +1177,8 @@ export class DTOService {
     rawData: BEModels.BEStructuringBreakdownSingleEntry,
     max: number,
     min: number,
-    isStencil: boolean
+    isStencil: boolean,
+    groupOption: string
   ): DTOs.MoveVisualizerDTO {
     let totalDistance = max - min;
     let moveDistance, leftEdge, rightEdge, endPinLocation;
@@ -1267,7 +1268,8 @@ export class DTOService {
         max: 0,
         isBasis: false,
         timeSeries: [],
-        endPinText: ''
+        endPinText: '',
+        bicsLevelVisualizer: groupOption
       },
       style: {
         leftGap: 0,
@@ -2052,7 +2054,8 @@ export class DTOService {
         parsedRawData,
         maxValue,
         minValue,
-        !!isStencil
+        !!isStencil,
+        groupOption
       );
       eachMoveVisualizer.data.endPinText = !!isCs01 ? `${eachMoveVisualizer.data.end}k` : `${eachMoveVisualizer.data.end}`;
       const diffToTarget = !!isCs01 ? Math.round(parsedRawData.targetLevel - parsedRawData.currentLevel) : this.utility.round(parsedRawData.targetLevel - parsedRawData.currentLevel, 2);
