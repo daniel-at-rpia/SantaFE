@@ -1198,23 +1198,25 @@ export class DTOService {
     const totalDistance = max - parsedMin;
     let moveDistance, leftEdge, rightEdge, endPinLocation;
     if (!!rawData && !isStencil) {
+      leftEdge = 0
       if (rawData.targetLevel !== null && rawData.targetLevel >= 0) {
         // if target is set
         if (rawData.targetLevel > parsedCurrentLevel) {
           moveDistance = this.utility.round(parsedCurrentLevel / totalDistance * 100, 2);
-          leftEdge =  0;
           rightEdge = this.utility.round((rawData.targetLevel - parsedCurrentLevel) / totalDistance * 100, 2);
           endPinLocation = moveDistance;
         } else {
           moveDistance = this.utility.round(rawData.targetLevel / totalDistance * 100, 2);
-          leftEdge = 0;
           rightEdge = this.utility.round((parsedCurrentLevel - rawData.targetLevel) / totalDistance * 100);
           endPinLocation = moveDistance + rightEdge;
         }
+      } else if (rawData.targetLevel !== null && rawData.targetLevel < 0) {
+        moveDistance = 0;
+        rightEdge = this.utility.round(parsedCurrentLevel / totalDistance * 100);
+        endPinLocation = moveDistance + rightEdge;
       } else {
         // is target is not set
         moveDistance = this.utility.round(parsedCurrentLevel / totalDistance * 100, 2);
-        leftEdge =  0;
         rightEdge = 0;
         endPinLocation = moveDistance;
       }
