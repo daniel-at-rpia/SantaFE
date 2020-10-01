@@ -1,7 +1,7 @@
 @import "global.scss";
 
-$portfolioBreakdownCategory_cell_width: 3.5rem;
-$portfolioBreakdownRowBtnHeight: 2.25rem;
+$portfolioBreakdownRowCategory_cell_width: 3.5rem;
+$portfolioBreakdownRowBtnMinHeight: 2.25rem;
 .sat-portfolioBreakdownRow {
   $blockName: &;
   display: flex;
@@ -39,7 +39,7 @@ $portfolioBreakdownRowBtnHeight: 2.25rem;
     text-align: center;
     &-cell {
       @include mix_text_overflow;
-      flex: 0 0 ($portfolioBreakdownCategory_cell_width - $spacing_x_small*4/3 - $typical_border_width*2/3);
+      flex: 0 0 ($portfolioBreakdownRowCategory_cell_width - $spacing_x_small*4/3 - $typical_border_width*2/3);
       display: flex;
       align-items: center;
       justify-content: center;
