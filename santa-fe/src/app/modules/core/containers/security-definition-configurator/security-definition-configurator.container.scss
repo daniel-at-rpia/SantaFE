@@ -108,9 +108,10 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
       }
       &-search {
         display: flex;
+        align-self: stretch;
         margin: $spacing_medium;
-        input {
-          width: 100%;
+        santa-input {
+          flex: 1 1 auto;
         }
       }
       &-loadLongOptionCta {
