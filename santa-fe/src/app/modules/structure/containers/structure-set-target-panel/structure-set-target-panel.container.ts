@@ -255,40 +255,54 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   public onApplyConfiguratorFilter(params: DefinitionConfiguratorEmitterParams) {
-    if (this.overrideCheckRowAlreadyExist()) {
-      // code...
+    if (params.filterList.length === 0) {
+      const alert = this.dtoService.formSystemAlertObject('Apply Blocked', 'Bucket is Empty', `Define the bucket with value before apply`, null);
+      this.store$.dispatch(new CoreSendNewAlerts([alert]));
     } else {
-      const now = moment();
-      const payload: PayloadGetPortfolioOverride = {
-        portfolioOverride: {
-          date: now.format('YYYY-MM-DDT00:00:00-04:00'),
-          portfolioId: this.state.targetFund.data.portfolioId,
-          bucket: {
-            Tenor: ['2Y'],
-            Ccy: ['USD']
+      const bucket = {}
+      let bucketToString = '';
+      params.filterList.forEach((eachItem) => {
+        bucket[eachItem.targetAttribute] = eachItem.filterBy;
+        eachItem.filterBy.forEach((eachValue) => {
+          bucketToString = bucketToString === '' ? `${eachValue}` : `${bucketToString} - ${eachValue}`;
+        });
+      });
+      if (this.overrideCheckRowAlreadyExist(bucketToString)) {
+        const alert = this.dtoService.formSystemAlertObject('Apply Blocked', 'Bucket Already Exist', `${bucketToString} bucket already exist`, null);
+        this.store$.dispatch(new CoreSendNewAlerts([alert]));
+      } else {
+        const now = moment();
+        const payload: PayloadGetPortfolioOverride = {
+          portfolioOverride: {
+            date: now.format('YYYY-MM-DDT00:00:00-04:00'),
+            portfolioId: this.state.targetFund.data.portfolioId,
+            bucket: {
+              Tenor: ['2Y'],
+              Ccy: ['USD']
+            }
           }
-        }
-      };
-      this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioOverride, {req: 'POST'}, payload).pipe(
-        first(),
-        tap((serverReturn: BEStructuringOverrideBlock) => {
-          const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
-          const rawBreakdownList = this.utilityService.convertRawOverrideToRawBreakdown([serverReturn]);
-          this.state.targetBreakdownRawData = rawBreakdownList[0];
-          const newBreakdown = this.dtoService.formPortfolioBreakdown(false, this.state.targetBreakdownRawData, [], isDisplayCs01);
-          newBreakdown.state.isPreviewVariant = true;
-          newBreakdown.data.definition = this.dtoService.formSecurityDefinitionObject(this.constants.definitionMap.OVERRIDE);
-          newBreakdown.data.title = newBreakdown.data.definition.data.displayName;
-          this.state.targetBreakdown = newBreakdown;
-        }),
-        catchError(err => {
-          console.error(`${this.restfulCommService.apiMap.readAlert} failed`, err);
-          return of('error')
-        })
-      ).subscribe();
-    }
-    this.state.configurator.display = false;
-    this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, this.constants.configuratorLayout);
+        };
+        this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioOverride, {req: 'POST'}, payload).pipe(
+          first(),
+          tap((serverReturn: BEStructuringOverrideBlock) => {
+            const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
+            const rawBreakdownList = this.utilityService.convertRawOverrideToRawBreakdown([serverReturn]);
+            this.state.targetBreakdownRawData = rawBreakdownList[0];
+            const newBreakdown = this.dtoService.formPortfolioBreakdown(false, this.state.targetBreakdownRawData, [], isDisplayCs01);
+            newBreakdown.state.isPreviewVariant = true;
+            newBreakdown.data.definition = this.dtoService.formSecurityDefinitionObject(this.constants.definitionMap.OVERRIDE);
+            newBreakdown.data.title = newBreakdown.data.definition.data.displayName;
+            this.state.targetBreakdown = newBreakdown;
+          }),
+          catchError(err => {
+            console.error(`${this.restfulCommService.apiMap.readAlert} failed`, err);
+            return of('error')
+          })
+        ).subscribe();
+        this.state.configurator.display = false;
+        this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, this.constants.configuratorLayout);
+      }
+    } 
   }
 
   private loadEditRows() {
@@ -593,8 +607,18 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
-  private overrideCheckRowAlreadyExist(): boolean {
-    return false;
+  private overrideCheckRowAlreadyExist(bucketToString: string): boolean {
+    if (this.state.editRowList.length > 0) {
+      let exist = false;
+      this.state.editRowList.forEach((eachRow) => {
+        if (eachRow.rowTitle === bucketToString) {
+          exist = true;
+        }
+      });
+      return exist;
+    } else {
+      return false;
+    }
   }
 
 }
