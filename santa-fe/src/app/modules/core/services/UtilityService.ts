@@ -33,6 +33,7 @@
       AlertSubTypes
     } from 'Core/constants/coreConstants.constant';
     import { CountdownPipe } from 'App/pipes/Countdown.pipe';
+    import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
   // dependencies
 
 @Injectable()
@@ -42,6 +43,7 @@ export class UtilityService {
   securityMetricOptions = SecurityMetricOptions;
   keyDictionary = BackendKeyDictionary;
   triCoreDriverConfig = TriCoreDriverConfig;
+  definitionMap = SecurityDefinitionMap;
 
   constructor(
     private countdownPipe: CountdownPipe,
@@ -410,6 +412,16 @@ export class UtilityService {
         });
       });
       return params;
+    }
+
+    public findDefinationKeyFromSecurityDTOAttr(attr: string): string {
+      let targetKey = null;
+      for (let eachKey in this.definitionMap) {
+        if (!!this.definitionMap[eachKey] && this.definitionMap[eachKey].securityDTOAttr === attr) {
+          targetKey = eachKey;
+        }
+      }
+      return targetKey;
     }
 
     public skewedNumber(input: number): number {

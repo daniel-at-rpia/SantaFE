@@ -262,10 +262,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       const bucket = {}
       let bucketToString = '';
       params.filterList.forEach((eachItem) => {
-        bucket[eachItem.targetAttribute] = eachItem.filterBy;
-        eachItem.filterBy.forEach((eachValue) => {
-          bucketToString = bucketToString === '' ? `${eachValue}` : `${bucketToString} - ${eachValue}`;
-        });
+        const property = this.utilityService.convertFEKey(this.utilityService.findDefinationKeyFromSecurityDTOAttr(eachItem.targetAttribute));
+        if (!!property) {
+          bucket[property] = eachItem.filterBy;
+          eachItem.filterBy.forEach((eachValue) => {
+            bucketToString = bucketToString === '' ? `${eachValue}` : `${bucketToString} - ${eachValue}`;
+          });
+        }
       });
       if (this.overrideCheckRowAlreadyExist(bucketToString)) {
         const alert = this.dtoService.formSystemAlertObject('Apply Blocked', 'Bucket Already Exist', `${bucketToString} bucket already exist`, null);
@@ -276,10 +279,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           portfolioOverride: {
             date: now.format('YYYY-MM-DDT00:00:00-04:00'),
             portfolioId: this.state.targetFund.data.portfolioId,
-            bucket: {
-              Tenor: ['2Y'],
-              Ccy: ['USD']
-            }
+            bucket: bucket
           }
         };
         this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioOverride, {req: 'POST'}, payload).pipe(
@@ -288,10 +288,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
             const rawBreakdownList = this.utilityService.convertRawOverrideToRawBreakdown([serverReturn]);
             this.state.targetBreakdownRawData = rawBreakdownList[0];
-            const newBreakdown = this.dtoService.formPortfolioBreakdown(false, this.state.targetBreakdownRawData, [], isDisplayCs01);
+            const newBreakdown = this.dtoService.formProtfolioOverrideBreakdown(this.state.targetBreakdownRawData, isDisplayCs01);
             newBreakdown.state.isPreviewVariant = true;
-            newBreakdown.data.definition = this.dtoService.formSecurityDefinitionObject(this.constants.definitionMap.OVERRIDE);
-            newBreakdown.data.title = newBreakdown.data.definition.data.displayName;
             this.state.targetBreakdown = newBreakdown;
           }),
           catchError(err => {

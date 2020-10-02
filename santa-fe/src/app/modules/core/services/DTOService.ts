@@ -1970,6 +1970,21 @@ export class DTOService {
     return object;
   }
 
+  public formProtfolioOverrideBreakdown(
+    rawData: BEModels.BEStructuringBreakdownBlock,
+    isDisplayCs01: boolean
+  ): DTOs.PortfolioBreakdownDTO {
+    const definitionList = [];
+    for (let eachCategory in rawData.breakdown) {
+      definitionList.push(eachCategory);
+    }
+    const newBreakdown = this.formPortfolioBreakdown(false, rawData, definitionList, isDisplayCs01);
+    newBreakdown.state.isOverrideVariant = true;
+    newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.OVERRIDE);
+    newBreakdown.data.title = newBreakdown.data.backendGroupOptionIdentifier;
+    return newBreakdown;
+  }
+
   public formPortfolioBreakdownCategoryBlock(
     minValue: number,
     maxValue: number,
@@ -2136,15 +2151,8 @@ export class DTOService {
     if(rawData.overrides) {
       const overrideList: Array<BEModels.BEStructuringBreakdownBlock> = this.utility.convertRawOverrideToRawBreakdown(rawData.overrides);
       overrideList.forEach((eachRawBreakdown) => {
-        const definitionList = [];
-        for (let eachCategory in eachRawBreakdown.breakdown) {
-          definitionList.push(eachCategory);
-        }
         const isDisplayCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
-        const newBreakdown = this.formPortfolioBreakdown(false, eachRawBreakdown, definitionList, isDisplayCs01);
-        newBreakdown.state.isOverrideVariant = true;
-        newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.OVERRIDE);
-        newBreakdown.data.title = newBreakdown.data.backendGroupOptionIdentifier;
+        const newBreakdown = this.formProtfolioOverrideBreakdown(eachRawBreakdown, isDisplayCs01);
         object.data.children.unshift(newBreakdown);
       });
     }
