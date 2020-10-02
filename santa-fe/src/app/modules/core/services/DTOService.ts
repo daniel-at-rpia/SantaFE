@@ -2134,29 +2134,7 @@ export class DTOService {
     selectedMetricValue: PortfolioMetricValues
   ){
     if(rawData.overrides) {
-      const overrideList: Array<BEModels.BEStructuringBreakdownBlock> = [];
-      rawData.overrides.forEach((eachRawOverride) => {
-        eachRawOverride
-        const overrideBucketIdentifier = this.utility.formBucketIdentifierForOverride(eachRawOverride);
-        const matchExistBreakdown = overrideList.find((eachBEDTO) => {
-          return eachBEDTO.groupOption === overrideBucketIdentifier;
-        });
-        if (!!matchExistBreakdown) {
-          const categoryKey = this.utility.formCategoryKeyForOverride(eachRawOverride);
-          matchExistBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
-        } else {
-          const newConvertedBreakdown: BEModels.BEStructuringBreakdownBlock = {
-            date: eachRawOverride.date,
-            groupOption: overrideBucketIdentifier,
-            indexId: eachRawOverride.indexId,
-            portfolioId: eachRawOverride.portfolioId,
-            breakdown: {}
-          };
-          const categoryKey = this.utility.formCategoryKeyForOverride(eachRawOverride);
-          newConvertedBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
-          overrideList.push(newConvertedBreakdown);
-        }
-      });
+      const overrideList: Array<BEModels.BEStructuringBreakdownBlock> = this.utility.convertRawOverrideToRawBreakdown(rawData.overrides);
       overrideList.forEach((eachRawBreakdown) => {
         const definitionList = [];
         for (let eachCategory in eachRawBreakdown.breakdown) {

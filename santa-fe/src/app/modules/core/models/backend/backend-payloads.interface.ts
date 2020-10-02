@@ -2,7 +2,8 @@ import { AlertTypes, AlertSubTypes } from 'Core/constants/coreConstants.constant
 import { AxeAlertType } from "Core/constants/tradeConstants.constant";
 import {
   BEPortfolioStructuringDTO,
-  BEStructuringBreakdownBlock
+  BEStructuringBreakdownBlock,
+  BEStructuringOverrideBlock
 } from './backend-models.interface';
 
 export interface PayloadGetSantaGroups {
@@ -122,4 +123,8 @@ export interface PayloadUpdatePortfolioStructuresTargets {
 
 export interface PayloadUpdateBreakdown {
   portfolioBreakdown: BEStructuringBreakdownBlock;
+}
+
+export interface PayloadGetPortfolioOverride {
+  portfolioOverride: BEStructuringOverrideBlock;
 }

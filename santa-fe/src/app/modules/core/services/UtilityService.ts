@@ -10,7 +10,8 @@
       BESecurityDTO,
       BESecurityDeltaMetricDTO,
       BESecurityGroupDTO,
-      BEStructuringOverrideBlock
+      BEStructuringOverrideBlock,
+      BEStructuringBreakdownBlock
     } from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
     import {
@@ -1011,6 +1012,35 @@ export class UtilityService {
         categoryKey = categoryKey === '' ? `${rawData.bucket[eachIdentifier]}` : `${categoryKey} - ${rawData.bucket[eachIdentifier]}`;
       }
       return categoryKey;
+    }
+
+    public convertRawOverrideToRawBreakdown(
+      overrideRawDataList: Array<BEStructuringOverrideBlock>
+    ): Array<BEStructuringBreakdownBlock> {
+      const breakdownList: Array<BEStructuringBreakdownBlock> = [];
+      overrideRawDataList.forEach((eachRawOverride) => {
+        eachRawOverride
+        const overrideBucketIdentifier = this.formBucketIdentifierForOverride(eachRawOverride);
+        const matchExistBreakdown = breakdownList.find((eachBEDTO) => {
+          return eachBEDTO.groupOption === overrideBucketIdentifier;
+        });
+        if (!!matchExistBreakdown) {
+          const categoryKey = this.formCategoryKeyForOverride(eachRawOverride);
+          matchExistBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
+        } else {
+          const newConvertedBreakdown: BEStructuringBreakdownBlock = {
+            date: eachRawOverride.date,
+            groupOption: overrideBucketIdentifier,
+            indexId: eachRawOverride.indexId,
+            portfolioId: eachRawOverride.portfolioId,
+            breakdown: {}
+          };
+          const categoryKey = this.formCategoryKeyForOverride(eachRawOverride);
+          newConvertedBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
+          breakdownList.push(newConvertedBreakdown);
+        }
+      });
+      return breakdownList;
     }
 
   // structuring specific end

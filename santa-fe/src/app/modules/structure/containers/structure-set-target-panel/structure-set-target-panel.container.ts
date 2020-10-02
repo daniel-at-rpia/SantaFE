@@ -29,12 +29,15 @@ import { PayloadUpdateBreakdown } from 'BEModels/backend-payloads.interface';
 import {
   BEStructuringBreakdownBlock,
   BEPortfolioStructuringDTO,
-  BEMetricBreakdowns
+  BEMetricBreakdowns,
+  BEStructuringOverrideBlock
 } from 'BEModels/backend-models.interface';
+import { PayloadGetPortfolioOverride } from 'BEModels/backend-payloads.interface';
 import { StructureSetTargetPostEditUpdatePack } from 'FEModels/frontend-adhoc-packages.interface';
 import { StructureReloadBreakdownDataPostEditEvent } from 'Structure/actions/structure.actions';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import { CustomeBreakdownConfiguratorDefinitionLayout } from 'Core/constants/structureConstants.constants';
+import * as moment from 'moment';
 
 @Component({
   selector: 'structure-set-target-panel',
@@ -252,22 +255,37 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   public onApplyConfiguratorFilter(params: DefinitionConfiguratorEmitterParams) {
-    // create new edit row
-    if (this.state.editRowList.length === 0) {
-      this.state.targetBreakdownRawData = {
-        date: null,
-        indexId: null,
-        portfolioId: null,
-        portfolioBreakdownId: null,
-        groupOption: "Test",
-        breakdown: {}
+    if (this.overrideCheckRowAlreadyExist()) {
+      // code...
+    } else {
+      const now = moment();
+      const payload: PayloadGetPortfolioOverride = {
+        portfolioOverride: {
+          date: now.format('YYYY-MM-DDT00:00:00-04:00'),
+          portfolioId: this.state.targetFund.data.portfolioId,
+          bucket: {
+            Tenor: ['2Y'],
+            Ccy: ['USD']
+          }
+        }
       };
-      const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
-      const newBreakdown = this.dtoService.formPortfolioBreakdown(false, this.state.targetBreakdownRawData, [], isDisplayCs01);
-      newBreakdown.state.isPreviewVariant = true;
-      newBreakdown.data.definition = this.dtoService.formSecurityDefinitionObject(this.constants.definitionMap.OVERRIDE);
-      newBreakdown.data.title = newBreakdown.data.definition.data.displayName;
-      this.state.targetBreakdown = newBreakdown;
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioOverride, {req: 'POST'}, payload).pipe(
+        first(),
+        tap((serverReturn: BEStructuringOverrideBlock) => {
+          const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
+          const rawBreakdownList = this.utilityService.convertRawOverrideToRawBreakdown([serverReturn]);
+          this.state.targetBreakdownRawData = rawBreakdownList[0];
+          const newBreakdown = this.dtoService.formPortfolioBreakdown(false, this.state.targetBreakdownRawData, [], isDisplayCs01);
+          newBreakdown.state.isPreviewVariant = true;
+          newBreakdown.data.definition = this.dtoService.formSecurityDefinitionObject(this.constants.definitionMap.OVERRIDE);
+          newBreakdown.data.title = newBreakdown.data.definition.data.displayName;
+          this.state.targetBreakdown = newBreakdown;
+        }),
+        catchError(err => {
+          console.error(`${this.restfulCommService.apiMap.readAlert} failed`, err);
+          return of('error')
+        })
+      ).subscribe();
     }
     this.state.configurator.display = false;
     this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, this.constants.configuratorLayout);
@@ -573,6 +591,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     } else {
       return null;
     }
+  }
+
+  private overrideCheckRowAlreadyExist(): boolean {
+    return false;
   }
 
 }
