@@ -23,7 +23,7 @@
     import { STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
     import { BICsHierarchyAllDataBlock, BICsHierarchyBlock } from '../core/models/frontend/frontend-blocks.interface';
     import { BEBICsHierarchyBlock } from 'Core/models/backend/backend-models.interface';
-    import { BICsDataProcessingService } from 'Structure/services/BICsDataProcessingService';
+    import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 
   //
 
@@ -86,7 +86,7 @@ export class StructurePage implements OnInit, OnDestroy {
       tap((serverReturn: BEBICsHierarchyBlock) => {
        if (!!serverReturn) {
          this.updateBICsFetch(true);
-         this.state.BICsData.formattedBICsHierarchy =  this.bicsDataProcessingService.formFormattedBICsHierarchy(serverReturn, this.state.BICsData.formattedBICsHierarchy, 1);
+         this.state.BICsData.formattedBICsHierarchy = this.bicsDataProcessingService.formFormattedBICsHierarchy(serverReturn, this.state.BICsData.formattedBICsHierarchy, 1);
        }
       }),
       catchError(err => {

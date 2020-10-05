@@ -8,7 +8,7 @@ import { PortfolioMetricValues, STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/s
 import { ModalService } from 'Form/services/ModalService';
 import { UtilityService } from 'Core/services/UtilityService';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
-import { BICsDataProcessingService } from 'Structure/services/BICsDataProcessingService';
+import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 import { DTOService } from 'Core/services/DTOService';
 import { PortfolioBreakdownCategoryBlock } from 'Core/models/frontend/frontend-blocks.interface'; 
 @Component({

@@ -38,6 +38,7 @@ import { SantaTableAlertStatusCell } from 'Core/components/santa-table-alert-sta
 import { SantaTableFullWidthCellRenderer } from 'Core/components/santa-table-full-width-cell-renderer/santa-table-full-width-cell-renderer.component';
 import { GlobalNav } from 'Core/containers/global-nav/global-nav.container';
 import { AppRoutingModule } from 'App/app-routing.module';
+import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 
 @NgModule({
   declarations: [
@@ -89,7 +90,8 @@ import { AppRoutingModule } from 'App/app-routing.module';
     GraphService,
     RestfulCommService,
     AgGridMiddleLayerService,
-    CountdownPipe
+    CountdownPipe,
+    BICsDataProcessingService
   ],
   exports: [
     SantaTable,

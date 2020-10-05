@@ -19,7 +19,7 @@ import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backe
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import { PayloadUpdatePortfolioStructuresTargets, PayloadGetPortfolioStructures } from 'App/modules/core/models/backend/backend-payloads.interface';
 import { StructureSetTargetPostEditUpdatePack } from 'FEModels/frontend-adhoc-packages.interface';
-import { BICsDataProcessingService } from 'Structure/services/BICsDataProcessingService';
+import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 
 @Component({
     selector: 'structure-main-panel',
