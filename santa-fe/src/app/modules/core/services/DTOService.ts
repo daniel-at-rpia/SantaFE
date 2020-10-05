@@ -1191,28 +1191,33 @@ export class DTOService {
     rawData: BEModels.BEStructuringBreakdownSingleEntry,
     max: number,
     min: number,
-    isStencil: boolean
+    isStencil: boolean,
+    groupOption: string
   ): DTOs.MoveVisualizerDTO {
-    const totalDistance = max - min;
+    const parsedMin = min < 0 ? 0 : min;
+    const parsedCurrentLevel = rawData.currentLevel < 0 ? 0 : rawData.currentLevel;
+    const totalDistance = max - parsedMin;
     let moveDistance, leftEdge, rightEdge, endPinLocation;
     if (!!rawData && !isStencil) {
+      leftEdge = 0
       if (rawData.targetLevel !== null && rawData.targetLevel >= 0) {
         // if target is set
-        if (rawData.targetLevel > rawData.currentLevel) {
-          moveDistance = this.utility.round(rawData.currentLevel / totalDistance * 100, 2);
-          leftEdge = min < 0 ? this.utility.round(Math.abs(min) / totalDistance * 100, 2) : 0;
-          rightEdge = this.utility.round((rawData.targetLevel - rawData.currentLevel) / totalDistance * 100, 2);
+        if (rawData.targetLevel > parsedCurrentLevel) {
+          moveDistance = this.utility.round(parsedCurrentLevel / totalDistance * 100, 2);
+          rightEdge = this.utility.round((rawData.targetLevel - parsedCurrentLevel) / totalDistance * 100, 2);
           endPinLocation = moveDistance;
         } else {
           moveDistance = this.utility.round(rawData.targetLevel / totalDistance * 100, 2);
-          leftEdge = min < 0 ? this.utility.round(Math.abs(min) / totalDistance * 100, 2) : 0;
-          rightEdge = this.utility.round((rawData.currentLevel - rawData.targetLevel) / totalDistance * 100);
+          rightEdge = this.utility.round((parsedCurrentLevel - rawData.targetLevel) / totalDistance * 100);
           endPinLocation = moveDistance + rightEdge;
         }
+      } else if (rawData.targetLevel !== null && rawData.targetLevel < 0) {
+        moveDistance = 0;
+        rightEdge = this.utility.round(parsedCurrentLevel / totalDistance * 100);
+        endPinLocation = moveDistance + rightEdge;
       } else {
         // is target is not set
-        moveDistance = this.utility.round(rawData.currentLevel / totalDistance * 100, 2);
-        leftEdge = min < 0 ? this.utility.round(Math.abs(min) / totalDistance * 100, 2) : 0;
+        moveDistance = this.utility.round(parsedCurrentLevel / totalDistance * 100, 2);
         rightEdge = 0;
         endPinLocation = moveDistance;
       }
@@ -1226,7 +1231,8 @@ export class DTOService {
         max: 0,
         isBasis: false,
         timeSeries: [],
-        endPinText: ''
+        endPinText: '',
+        bicsLevelVisualizer: groupOption
       },
       style: {
         leftGap: 0,
@@ -2020,7 +2026,8 @@ export class DTOService {
         parsedRawData,
         maxValue,
         minValue,
-        !!isStencil
+        !!isStencil,
+        groupOption
       );
       eachMoveVisualizer.data.endPinText = !!isCs01 ? `${eachMoveVisualizer.data.end}k` : `${eachMoveVisualizer.data.end}`;
       const diffToTarget = !!isCs01 ? Math.round(parsedRawData.targetLevel - parsedRawData.currentLevel) : this.utility.round(parsedRawData.targetLevel - parsedRawData.currentLevel, 2);
@@ -2028,10 +2035,8 @@ export class DTOService {
       const isBicsBreakdown = groupOption.indexOf('BicsLevel') > -1;
       
     
-      const displayedCategory = categoryName.length > 11 ? `${categoryName.substring(0,8)}...` : categoryName;
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
         category: `${categoryName}`,
-        displayCategory: displayedCategory,
         targetLevel: parsedRawData.targetLevel,
         targetPct: parsedRawData.targetPct,
         diffToTarget: parsedRawData.targetLevel != null ? diffToTarget : 0,
@@ -2045,7 +2050,6 @@ export class DTOService {
         bicsLevel: !!isBicsBreakdown ? 1 : null,
         children: null,
         portfolioID: portfolioID,
-        hasTooltip:  displayedCategory !== categoryName,
         raw: {
           currentLevel: rawCurrentLevel,
           currentPct: rawCurrentPct,
@@ -2108,7 +2112,7 @@ export class DTOService {
       state: {
         isSelected: false,
         isBtnDiveIn: false,
-        isStencil: false,
+        isStencil: true,
         isBicsLevel1: false
       }
     }

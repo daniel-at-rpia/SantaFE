@@ -1,55 +1,27 @@
 @import "global.scss";
-$portfolioBreakdown_categoryList_cell_width: 3.5rem;
+$portfolioBreakdownRow_borderWidth: $typical_border_width*2;
+$portfolioBreakdownRow_borderColor: $color_active;
+$portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
 .sat-popover {
   $blockName: &;
-  @include mix_fixed_div(absolute, $z_index_tooltip);
-  @include mix_border_generator(3px, $static_color: $color_black);
+  @include mix_fixed_div(absolute, $z_index_modal);
+  @include mix_border_generator($portfolioBreakdownRow_borderWidth, $portfolioBreakdownRow_borderColor);
+  @include mix_border_radius(10px);
+  @include mix_alive('light');
   background-color: $color_white;
-  width: 425px;
-  height: 475px;
-  align-content: flex-start;
-  flex-wrap: wrap;
-  top: $spacing_small;
-  right: 0;
-  padding: $spacing_small;
-  display: none;
+  width: 29rem;
+  height: 36rem;
+  top: 0;
+  left: 0;
+  transform: scale(0) translate(0, 0);
+  padding: $spacing_medium $spacing_small;
   &__close-btn {
-    background-color: $color_red_5;
-    color: $font_color_inverse;
-    margin-left: auto;
-    width: 25px;
-    height: 25px
-  }
-  &__categoryHeader {
-    display: flex;
-    justify-content: flex-end;
-    flex: 1 1 100%;
-    margin: $spacing_medium 0;
-    &-cell {
-      @include mix_fixed_div(relative, $z_index_base_item);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: $portfolioBreakdown_categoryList_cell_width;
-      &-icon {
-        color: $font_color_minor;
-        font-size: $font_size_large;
-      }
-      &-tooltip {
-        @include mix_fixed_div(absolute, $z_index_hovering_item);
-        @include mix_border_radius(3px);
-        display: none;
-        top: -100%;
-        color: $font_color_inverse;
-        line-height: $line_height_small;
-        width: 4.25rem;
-        background-color: $color_active;
-        text-align: center;
-      }
-      &:hover>&-tooltip {
-        display: block;
-      }
-    }
+    @include mix_fixed_div(absolute, $z_index_base_item_solid);
+    @include roundedButton($color_red_5, $font_color_inverse, $iconButton_size_large);
+    font-size: $font_size_xx_large;
+    bottom: -$iconButton_size_large/2; 
+    left: 50%;
+    transform: translateX(-50%);
   }
   &__mainCategory {
     flex: 0 0 100%;
@@ -61,9 +33,11 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
         display: flex;
         align-items: center;
         flex: 1 1 auto;
-        &>category-content-list-item {
+        margin-bottom: $spacing_x_small;
+        &>portfolio-breakdown-row {
           display: flex;
           flex: 1 1 auto;
+          margin-right: $scroll_bar_width;
         }
       }
     }
@@ -72,58 +46,55 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
-    background-color: $color_gray_1;
-    height: 25rem;
+    height: 30rem;
     &-firstDiveIn {
       @include mix_enable_scrollbar('vertical');
       display: flex;
-      flex: 1 1 auto;
+      background-color: $color_gray_1;
       padding: $spacing_small 0;
       &-category {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        width: 2rem;
+        @include bicsLevelCategory;
         &-text {
-          text-align:center;
-          transform: rotate(-90deg);
-          white-space: nowrap;
+          @include bicsLevelCategoryText;
         }
       }
       &-list {
         display: flex;
         flex-direction: column;
-        width: 100%;
+        flex: 1 1 auto;
+        padding: $spacing_small 0;
+        &-item {
+          margin-bottom: $spacing_x_small;
+        }
       }
-      &-item {
-        display: flex;
-        align-items: center;
+      &-message {
+        display: none;
+        color: $color_active;
+        flex: 1 1 auto;
       }
     }
     &-secondDiveIn {
+      @include mix_alive('light');
       display: none;
       flex: 1 1 auto;
       background-color: $color_gray_2;
-      padding: $spacing_x_small $spacing_xx_small;
-      min-height: 10rem;
+      padding: $spacing_small 0;
       &-category {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        width: 3rem;
+        @include bicsLevelCategory;
         &-text {
-          text-align:center;
-          transform: rotate(-90deg);
+         @include bicsLevelCategoryText;
         }
       }
       &-list {
         display: flex;
         flex-direction: column;
+        flex: 1 1 auto;
         &-item {
-          display: flex;
-          align-items: center;
+          margin-bottom: $spacing_x_small;
+          &>portfolio-breakdown-row {
+            display: flex;
+            flex: 1 1 auto;
+          }
         }
       }
       &--active {
@@ -134,31 +105,35 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
       display: none;
       flex: 1 1 auto;
       background-color: $color_gray_3;
-      &-category {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        width: 2rem;
-        &-text {
-          text-align:center;
-          transform: rotate(-90deg);
-        }
-      }
+      padding: $spacing_small 0;
       &-list {
         display: flex;
         flex-direction: column;
-      }
-      &-item {
-        display: flex;
-        align-items: center;
+        flex: 1 1 auto;
+        padding-left: $spacing_small;
       }
       &--active {
         display: flex;
       }
     }
   }
+  &--noDataAvailable {
+    #{$blockName} {
+      &__levels {
+        &-firstDiveIn {
+          padding: $spacing_small;
+          &-category,
+          &-list {
+            display: none;
+          }
+          &-message {
+            display: flex;
+          }
+        }
+      }
+    }
+  }
   &--active {
-    display: flex;
+    transform: scale(1) translate(1rem, 3rem);
   }
 }

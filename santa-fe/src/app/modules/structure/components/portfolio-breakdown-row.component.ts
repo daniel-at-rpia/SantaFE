@@ -1,4 +1,4 @@
-import {Component, Input, Output, OnInit, ViewEncapsulation, EventEmitter} from '@angular/core';
+import {Component, Input, Output, ViewEncapsulation, EventEmitter} from '@angular/core';
 import { StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend-models.interface';
 
 
@@ -9,14 +9,13 @@ import { StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class PortfolioBreakdownRow implements OnInit {
+export class PortfolioBreakdownRow {
   @Input() breakdownRow: StructurePortfolioBreakdownRowDTO;
   @Output() breakdownRowDiveIn = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
   subscriptions = {
     selectedMetricLevelSub: null
   }
   constructor() {}
-  public ngOnInit() {};
 
   public onClickDiveIn(row: StructurePortfolioBreakdownRowDTO) {
     if (!row.data.bicsLevel) return;

@@ -498,6 +498,7 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
     isBasis: boolean;
     timeSeries: Array<any>;
     endPinText: string;
+    bicsLevelVisualizer?: string;
   }
   style: {
     leftGap: number;
