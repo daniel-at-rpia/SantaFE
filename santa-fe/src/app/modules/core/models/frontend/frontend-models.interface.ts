@@ -507,6 +507,7 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
     rightEdge: number;
     rightGap: number;
     endPinLocation: number;
+    backgroundColor: string;
   }
   state: {
     isInversed: boolean;

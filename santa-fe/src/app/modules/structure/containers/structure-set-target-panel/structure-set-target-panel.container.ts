@@ -104,7 +104,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         if (!!this.state.targetBreakdown) {
           this.state.targetBreakdown.state.isPreviewVariant = true;
         }
-        this.state.targetBreakdownIsOverride = !!pack.isCreateNewOverride;
+        this.state.targetBreakdownIsOverride = !!pack.isCreateNewOverride || pack.targetBreakdown.state.isOverrideVariant;
         this.state.targetBreakdownRawData = this.retrieveRawBreakdownDataForTargetBreakdown();
         this.state.activeMetric = pack.targetFund.data.cs01TargetBar.state.isInactiveMetric ? this.constants.metric.creditLeverage : this.constants.metric.cs01;
         this.loadEditRows();

@@ -66,13 +66,13 @@ $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfig
     display: flex;
     overflow: hidden;
     &-preview {
-      // @include mix_border_generator(0 $typical_border_width 0 0);
       @include mix_alive('custom', margin-right $animation_duration_light);
       flex: 0 1 50%;
       display: flex;
       align-items: center;
       padding-right: $spacing_large;
       margin-right: 0;
+      overflow: hidden;
       &>portfolio-breakdown {
         flex: 1 1 auto;
       }

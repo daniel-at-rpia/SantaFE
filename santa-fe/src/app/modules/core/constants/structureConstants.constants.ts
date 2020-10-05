@@ -45,7 +45,6 @@ export const CustomeBreakdownConfiguratorDefinitionLayout: Array<SecurityDefinit
   {
     label: 'Basic',
     list: [
-      SecurityDefinitionMap.PORTFOLIO,
       SecurityDefinitionMap.COUPON_TYPE,
       SecurityDefinitionMap.CURRENCY,
       SecurityDefinitionMap.RATING,

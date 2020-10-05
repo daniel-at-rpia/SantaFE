@@ -1145,7 +1145,8 @@ export class DTOService {
         moveDistance: 40,
         rightEdge: 20,
         rightGap: 10,
-        endPinLocation: 70
+        endPinLocation: 70,
+        backgroundColor: '#ffffff'
       },
       state: {
         isInversed: false,
@@ -1192,7 +1193,8 @@ export class DTOService {
     max: number,
     min: number,
     isStencil: boolean,
-    groupOption: string
+    groupOption: string,
+    isOverride: boolean
   ): DTOs.MoveVisualizerDTO {
     const parsedMin = min < 0 ? 0 : min;
     const parsedCurrentLevel = rawData.currentLevel < 0 ? 0 : rawData.currentLevel;
@@ -1240,7 +1242,8 @@ export class DTOService {
         moveDistance: !isStencil ? moveDistance : 40,
         rightEdge: !isStencil ? rightEdge : 30,
         rightGap: 0,
-        endPinLocation: !isStencil ? endPinLocation : 40
+        endPinLocation: !isStencil ? endPinLocation : 40,
+        backgroundColor: isOverride ? '#ffffff' : '#eeeeee'
       },
       state: {
         isInversed: false,
@@ -1889,7 +1892,8 @@ export class DTOService {
     isStencil: boolean,
     rawData: BEModels.BEStructuringBreakdownBlock,
     definitionList: Array<string>,
-    isDisplayCs01: boolean
+    isDisplayCs01: boolean,
+    isOverride = false
   ): DTOs.PortfolioBreakdownDTO {
     const isBicsBreakdown = rawData.groupOption.indexOf('BicsLevel') > -1;
     const object: DTOs.PortfolioBreakdownDTO = {
@@ -1955,7 +1959,8 @@ export class DTOService {
           rawData.breakdown[eachCategoryText].metricBreakdowns.Cs01,
           true,
           rawData.portfolioId,
-          rawData.groupOption
+          rawData.groupOption,
+          isOverride
         )
         : null;
       !!eachCs01CategoryBlock && object.data.rawCs01CategoryList.push(eachCs01CategoryBlock);
@@ -1968,7 +1973,8 @@ export class DTOService {
           rawData.breakdown[eachCategoryText].metricBreakdowns.CreditLeverage,
           false,
           rawData.portfolioId,
-          rawData.groupOption
+          rawData.groupOption,
+          isOverride
         )
         : null;
       !!eachLeverageCategoryBlock && object.data.rawLeverageCategoryList.push(eachLeverageCategoryBlock);
@@ -1984,7 +1990,7 @@ export class DTOService {
     for (let eachCategory in rawData.breakdown) {
       definitionList.push(eachCategory);
     }
-    const newBreakdown = this.formPortfolioBreakdown(false, rawData, definitionList, isDisplayCs01);
+    const newBreakdown = this.formPortfolioBreakdown(false, rawData, definitionList, isDisplayCs01, true);
     newBreakdown.state.isOverrideVariant = true;
     newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.OVERRIDE);
     newBreakdown.data.title = newBreakdown.data.backendGroupOptionIdentifier;
@@ -1999,7 +2005,8 @@ export class DTOService {
     rawCategoryData: BEModels.BEStructuringBreakdownSingleEntry,
     isCs01: boolean,
     portfolioID: number,
-    groupOption: string
+    groupOption: string,
+    isOverride: boolean
   ): DTOs.StructurePortfolioBreakdownRowDTO {
     if (!!rawCategoryData) {
       const parsedRawData = this.utility.deepCopy(rawCategoryData);
@@ -2027,7 +2034,8 @@ export class DTOService {
         maxValue,
         minValue,
         !!isStencil,
-        groupOption
+        groupOption,
+        isOverride
       );
       eachMoveVisualizer.data.endPinText = !!isCs01 ? `${eachMoveVisualizer.data.end}k` : `${eachMoveVisualizer.data.end}`;
       const diffToTarget = !!isCs01 ? Math.round(parsedRawData.targetLevel - parsedRawData.currentLevel) : this.utility.round(parsedRawData.targetLevel - parsedRawData.currentLevel, 2);

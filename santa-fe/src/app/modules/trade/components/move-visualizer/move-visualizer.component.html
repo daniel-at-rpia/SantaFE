@@ -60,7 +60,11 @@
       [ngStyle]="{
         'flex-basis': visualizerData.style.rightGap + '%'
       }"></div>
-    <div class="sat-moveVisualizer__bar-stencilMask"></div>
+    <div
+      class="sat-moveVisualizer__bar-stencilMask"
+      [ngStyle]="{
+        'background-color': visualizerData.style.backgroundColor
+      }"></div>
   </section>
   <section class="sat-moveVisualizer__pins">
     <!--pin-->
