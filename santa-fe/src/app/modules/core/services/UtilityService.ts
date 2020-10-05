@@ -43,7 +43,7 @@ export class UtilityService {
   groupGroupMetricOptions = GroupMetricOptions;
   securityMetricOptions = SecurityMetricOptions;
   keyDictionary = FrontendKayToBackendKeyDictionary;
-  labelDicionary = BackendKeyToDisplayLabelDictionary;
+  labelDictionary = BackendKeyToDisplayLabelDictionary;
   triCoreDriverConfig = TriCoreDriverConfig;
   definitionMap = SecurityDefinitionMap;
 
@@ -279,16 +279,16 @@ export class UtilityService {
     }
 
     public convertBEKeyToLabel(backendKey: string): string{
-      if (!!this.labelDicionary[backendKey]) {
-        return this.labelDicionary[backendKey];
+      if (!!this.labelDictionary[backendKey]) {
+        return this.labelDictionary[backendKey];
       } else {
         return backendKey;
       }
     }
 
     public convertLabelToBEKey(label: string): string{
-      for (const eachKey in this.labelDicionary){
-        if (this.labelDicionary[eachKey] === label) {
+      for (const eachKey in this.labelDictionary){
+        if (this.labelDictionary[eachKey] === label) {
           return eachKey;
         }
       }
@@ -434,7 +434,7 @@ export class UtilityService {
       return params;
     }
 
-    public findDefinationKeyFromSecurityDTOAttr(attr: string): string {
+    public findDefinitionKeyFromSecurityDTOAttr(attr: string): string {
       let targetKey = null;
       for (let eachKey in this.definitionMap) {
         if (!!this.definitionMap[eachKey] && this.definitionMap[eachKey].securityDTOAttr === attr) {

@@ -1984,7 +1984,7 @@ export class DTOService {
     return object;
   }
 
-  public formProtfolioOverrideBreakdown(
+  public formPortfolioOverrideBreakdown(
     rawData: BEModels.BEStructuringBreakdownBlock,
     isDisplayCs01: boolean
   ): DTOs.PortfolioBreakdownDTO {
@@ -2166,7 +2166,7 @@ export class DTOService {
       const overrideList: Array<BEModels.BEStructuringBreakdownBlock> = this.utility.convertRawOverrideToRawBreakdown(rawData.overrides);
       overrideList.forEach((eachRawBreakdown) => {
         const isDisplayCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
-        const newBreakdown = this.formProtfolioOverrideBreakdown(eachRawBreakdown, isDisplayCs01);
+        const newBreakdown = this.formPortfolioOverrideBreakdown(eachRawBreakdown, isDisplayCs01);
         object.data.children.unshift(newBreakdown);
       });
     }
