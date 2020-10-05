@@ -85,7 +85,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       displayRemainingUnallocatedCreditLeverage: '',
       targetBreakdownIsOverride: false,
       configurator: {
-        dto: this.dtoService.createSecurityDefinitionConfigurator(true, false, this.constants.configuratorLayout),
+        dto: this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout),
         display: false
       }
     };
@@ -312,7 +312,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       }
     }
     this.state.configurator.display = false;
-    this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, this.constants.configuratorLayout);
+    this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
   }
 
   private loadEditRows() {

@@ -526,6 +526,7 @@ export class DTOService {
   public createSecurityDefinitionConfigurator(
     groupByDisabled: boolean,
     noMainCTA: boolean,
+    securityAttrOnly: boolean,
     definitionLayoutMap: Array<SecurityDefinitionBundleStub> = ConfiguratorDefinitionLayout
   ): DTOs.SecurityDefinitionConfiguratorDTO {
     const object: DTOs.SecurityDefinitionConfiguratorDTO = {
@@ -546,7 +547,8 @@ export class DTOService {
         showLongFilterOptions: false,
         isLoading: false,
         isLoadingLongOptionListFromServer: false,
-        noMainCTA: !!noMainCTA
+        noMainCTA: !!noMainCTA,
+        securityAttrOnly: securityAttrOnly
       }
     };
     return object;
