@@ -566,6 +566,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           }),
           catchError(err => {
             console.error('update breakdown failed');
+            this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'update breakdown failed', null)]));
             return of('error');
           })
         ).subscribe();
@@ -576,8 +577,34 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       }
     } else {
       const payload: Array<PayloadUpdateOverride> = this.traverseEditRowsToFormUpdateOverridePayload();
-      console.log('test, ', payload);
-      return false;
+      if (!!payload && payload.length > 0) {
+        let callCount = 0;
+        const callCompleteThreshold = payload.length;
+        payload.forEach((eachPayload) => {
+          this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
+            first(),
+            tap((serverReturn: BEPortfolioStructuringDTO) => {
+              callCount++;
+              if (callCount === callCompleteThreshold) {
+                const updatePack: StructureSetTargetPostEditUpdatePack = {
+                  targetFund: serverReturn,
+                  targetBreakdownBackendGroupOptionIdentifier: this.state.targetBreakdown.data.backendGroupOptionIdentifier
+                };
+                this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
+              }
+            }),
+            catchError(err => {
+              console.error('update breakdown failed');
+              this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'update breakdown failed', null)]));
+              return of('error');
+            })
+          ).subscribe();
+        });
+        return true;
+      } else {
+        this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target because no change is detected', null)]));
+        return false;
+      }
     }
   }
 
