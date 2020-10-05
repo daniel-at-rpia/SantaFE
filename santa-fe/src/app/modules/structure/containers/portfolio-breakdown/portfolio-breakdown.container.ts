@@ -161,4 +161,48 @@ public updatePopoverData(breakdownRow: StructurePortfolioBreakdownRowDTO)
       }
     })
   }
+
+  public onClickSetView(breakdown: PortfolioBreakdownDTO) {
+    if (!breakdown.state.isPreviewVariant) {
+      this.breakdownData.state.isEditingView = !this.breakdownData.state.isEditingView;
+      breakdown.data.displayCategoryList.forEach(row => {
+      this.toggleSetView(row, this.breakdownData.state.isEditingView)
+    })
+    }
+  }
+
+  private toggleSetView(row: StructurePortfolioBreakdownRowDTO, isEditing: boolean) {
+    if (!row) {
+      return null;
+    } else {
+      row.state.isEditingView = !!isEditing;
+      if (row.data.children) {
+        row.data.children.state.isEditingView = !!isEditing;
+        if(row.data.children.data.displayCategoryList.length > 0) {
+          row.data.children.data.displayCategoryList.forEach(category => {
+            category.state.isEditingView = isEditing;
+            this.toggleSetView(category, isEditing);
+          })
+        }
+      } else {
+        return null;
+      }
+    }
+  }
+
+  private removeRowStencils(row: StructurePortfolioBreakdownRowDTO) {
+  if (!row) {
+    return null;
+  } else {
+    if (!!row.data.children) {
+      row.data.children.data.displayCategoryList.forEach(row => {
+        row.state.isStencil = false;
+        row.data.moveVisualizer.state.isStencil = false;
+        if (row.data.children) {
+          this.removeRowStencils(row);
+        }
+      })
+    }
+  }
+}
 }

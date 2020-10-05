@@ -79,7 +79,7 @@ export class BICsDataProcessingService {
     })
   }
 
-  public formSubLevelBreakdown(breakdownRow: StructurePortfolioBreakdownRowDTO, isDisplayCs01: boolean) {
+  public formSubLevelBreakdown(breakdownRow: StructurePortfolioBreakdownRowDTO, isDisplayCs01: boolean, isEditingView: boolean) {
   const categoryPortfolioID = breakdownRow.data.portfolioID;
   const selectedSubRawBICsData = this.bicsRawData.find(rawData => rawData.portfolioID === categoryPortfolioID);
   const subTierList = this.getSubLevelList(breakdownRow.data.category, breakdownRow.data.bicsLevel);
@@ -105,13 +105,16 @@ export class BICsDataProcessingService {
   })
   const definitionList = this.getBICsBreakdownDefinitionList(object);
   const breakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, object, definitionList, isDisplayCs01);
+  breakdown.state.isEditingView = !!isEditingView;
   breakdown.data.rawCs01CategoryList.forEach(category => {
     category.data.bicsLevel = breakdownRow.data.bicsLevel + 1;
+    category.state.isEditingView = breakdown.state.isEditingView;
     category.data.moveVisualizer.state.isStencil = false;
     category.state.isStencil = false;
   })
   breakdown.data.rawLeverageCategoryList.forEach(category => {
     category.data.bicsLevel = breakdownRow.data.bicsLevel + 1;
+    category.state.isEditingView = breakdown.state.isEditingView;
     category.data.moveVisualizer.state.isStencil = false;
     category.state.isStencil = false;
   })
