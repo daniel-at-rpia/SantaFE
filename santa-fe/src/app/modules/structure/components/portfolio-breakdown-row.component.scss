@@ -25,9 +25,21 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
       &-text {
         flex: 1 1 auto;
         text-align: right;
-        padding-left: $spacing_small;
+        padding-left: $spacing_medium;
         overflow: hidden;
         text-overflow: ellipsis;
+      }
+      &-view {
+        @include mix_fixed_div(absolute, $z_index_base_item_solid);
+        @include mix_border_radius(3px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        left: $spacing_x_small;
+        width: $iconButton_size_x_small;
+        height: $iconButton_size_x_small;
+        color: $font_color_inverse;
+        font-size: $font_size_x_small;
       }
     }
   }
@@ -53,13 +65,42 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
     flex: 0 0 $spacing_x_small+$typical_border_width;
     margin: $spacing_x_small $spacing_x_small $spacing_x_small 0;
   }
-  &__moveVisualizer {
+  &__utility {
+    @include mix_fixed_div(relative, $z_index_base_item_solid);
     display: flex;
     flex: 1 1 auto;
     margin-right: $spacing_small;
-    &>move-visualizer {
+    &-moveVisualizer {
+      display: flex;
       flex: 1 1 auto;
-      margin-right: $spacing_small;
+      &>move-visualizer {
+        flex: 1 1 auto;
+      }
+    }
+    &-btnGroup {
+      @include mix_fixed_div(absolute, $z_index_dropdown);
+      @include mix_alive('light');
+      display: flex;
+      transform: scale(0);
+      justify-content: center;
+      width: 100%;
+      &-btn {
+        @include mix_border_radius(3px);
+        width: $iconButton_size_x_small;
+        height: $iconButton_size_x_small;
+        color: $font_color_inverse;
+        padding: $spacing_small;
+        margin-right: $spacing_small;
+        &--overweight {
+          background-color: $color_positive;
+        }
+        &--underweight {
+          background-color: $color_kill;
+        }
+        &--neutral {
+          background-color: $color_active;
+        }
+      }
     }
   }
   &--isBicsRow {
@@ -83,6 +124,49 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
           cursor: pointer;
           &:hover{
             @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
+          }
+        }
+      }
+    }
+  }
+  &--isEditingView {
+    #{$blockName} {
+      &__utility {
+        &-btnGroup {
+          transform: scale(1);
+        }
+      }
+    }
+  }
+  &--overweight {
+    #{$blockName} {
+      &__cta {
+        &-btn {
+          &-view {
+            background-color: $color_positive;
+          }
+        }
+      }
+    }
+  }
+  &--underweight {
+    #{$blockName} {
+      &__cta {
+        &-btn {
+          &-view {
+            background-color: $color_kill;
+          }
+        }
+      }
+    }
+  }
+  &--neutral {
+    #{$blockName} {
+      &__cta {
+        &-btn {
+          &-view {
+            background-color: $color_white;
+            color: $color_active;
           }
         }
       }
