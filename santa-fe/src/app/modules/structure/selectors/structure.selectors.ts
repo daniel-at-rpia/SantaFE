@@ -16,3 +16,5 @@ export const selectReloadBreakdownDataPostEdit = createSelector(
   getStructureState,
   (state: StructureState) => state.reloadBreakdownDataPostEdit
 );
+
+export const selectSetViewData = createSelector(getStructureState, (state: StructureState) => state.viewData);

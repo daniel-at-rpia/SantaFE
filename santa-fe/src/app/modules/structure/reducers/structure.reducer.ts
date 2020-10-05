@@ -3,19 +3,22 @@ import { StructureActions } from 'Structure/actions/structure.actions';
 import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 import {
   StructureSetTargetOverlayTransferPack,
-  StructureSetTargetPostEditUpdatePack
+  StructureSetTargetPostEditUpdatePack,
+  StructureSetViewData,
 } from 'FEModels/frontend-adhoc-packages.interface';
 
 export interface StructureState {
   selectedMetric: string;
   setTargetTransfer: StructureSetTargetOverlayTransferPack;
   reloadBreakdownDataPostEdit: StructureSetTargetPostEditUpdatePack;
+  viewData: StructureSetViewData;
 }
 
 const initialState: StructureState = {
   selectedMetric: PortfolioMetricValues.cs01,
   setTargetTransfer: null,
-  reloadBreakdownDataPostEdit: null
+  reloadBreakdownDataPostEdit: null,
+  viewData: null
 }
 
 export function structureReducer(
@@ -39,6 +42,11 @@ export function structureReducer(
       return {
         ...state,
         reloadBreakdownDataPostEdit: action.pack
+      }
+    case StructureActions.SetView:
+      return {
+        ...state,
+        viewData: action.viewData
       }
     default:
       return state;
