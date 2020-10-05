@@ -16,6 +16,10 @@ import { TargetBar } from 'App/modules/structure/components/target-bar.component
 import { PortfolioBreakdown } from 'App/modules/structure/containers/portfolio-breakdown/portfolio-breakdown.container';
 import { StructureSetTargetPanel } from 'Structure/containers/structure-set-target-panel/structure-set-target-panel.container';
 
+import { PortfolioBreakdownRow } from 'App/modules/structure/components/portfolio-breakdown-row.component';
+import { BICsDataProcessingService } from 'Structure/services/BICsDataProcessingService';
+import { StructurePopover } from 'Structure/containers/structure-popover/structure-popover.container';
+
 @NgModule({
   declarations: [
     StructurePage,
@@ -24,7 +28,9 @@ import { StructureSetTargetPanel } from 'Structure/containers/structure-set-targ
     StructureUtilityPanel,
     TargetBar,
     PortfolioBreakdown,
-    StructureSetTargetPanel
+    StructureSetTargetPanel,
+    PortfolioBreakdownRow,
+    StructurePopover
   ],
   imports: [
     // Angular framework modules
@@ -39,6 +45,9 @@ import { StructureSetTargetPanel } from 'Structure/containers/structure-set-targ
     CoreModule,
     TradeModule,  // this is here because of move visualizer, TODO: move Move Visualizer to core module and remove this dependency
     FormModule
+  ],
+  providers: [
+    BICsDataProcessingService
   ]
 })
 export class StructureModule { }

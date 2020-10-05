@@ -1,4 +1,6 @@
 import { PortfolioStructureDTO } from 'FEModels/frontend-models.interface';
+import { SecurityDefinitionBundleStub } from 'FEModels/frontend-stub-models.interface';
+import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
 
 export enum PortfolioView {
   positive = 'Positive',
@@ -28,4 +30,35 @@ export enum PortfolioMetricValues {
   creditLeverage = 'Credit Leverage'
 }
 
+export enum BICsLevels {
+  bicsLevel1 = 1,
+  bicsLevel2,
+  bicsLevel3,
+  bicsLevel4
+}
+
 export const STRUCTURE_EDIT_MODAL_ID = 'Edit Fund Target';
+
+
+
+export const CustomeBreakdownConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> = [
+  {
+    label: 'Basic',
+    list: [
+      SecurityDefinitionMap.COUPON_TYPE,
+      SecurityDefinitionMap.CURRENCY,
+      SecurityDefinitionMap.RATING,
+      SecurityDefinitionMap.SECTOR,
+      SecurityDefinitionMap.TENOR,
+      SecurityDefinitionMap.STRATEGY,
+      SecurityDefinitionMap.INDUSTRY,
+      SecurityDefinitionMap.COUNTRY
+    ]
+  },{
+    label: 'Quality',
+    list: [
+      SecurityDefinitionMap.RATING_BUCKET,
+      SecurityDefinitionMap.SENIORITY
+    ]
+  }
+];

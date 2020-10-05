@@ -233,6 +233,7 @@ export interface SecurityDefinitionConfiguratorDTO extends BasicDTOStructure {
     isLoadingLongOptionListFromServer: boolean;
     showFiltersFromDefinition: SecurityDefinitionDTO;
     noMainCTA: boolean;
+    securityAttrOnly: boolean;
   }
 }
 
@@ -498,6 +499,7 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
     isBasis: boolean;
     timeSeries: Array<any>;
     endPinText: string;
+    bicsLevelVisualizer?: string;
   }
   style: {
     leftGap: number;
@@ -506,6 +508,7 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
     rightEdge: number;
     rightGap: number;
     endPinLocation: number;
+    backgroundColor: string;
   }
   state: {
     isInversed: boolean;
@@ -677,11 +680,14 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
   data: {
     title: string;
     definition: SecurityDefinitionDTO;
-    displayCategoryList: Array<PortfolioBreakdownCategoryBlock>;
+    displayCategoryList: Array<StructurePortfolioBreakdownRowDTO>;
     ratingHoverText: string;
-    rawCs01CategoryList: Array<PortfolioBreakdownCategoryBlock>;
-    rawLeverageCategoryList: Array<PortfolioBreakdownCategoryBlock>;
+    rawCs01CategoryList: Array<StructurePortfolioBreakdownRowDTO>;
+    rawLeverageCategoryList: Array<StructurePortfolioBreakdownRowDTO>;
     backendGroupOptionIdentifier: string;
+    popover: StructurePopoverDTO;
+    portfolioId: number;
+    selectedCategory?: string;
   },
   style: {
     ratingFillWidth: number;
@@ -692,6 +698,8 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     isDisplayingCs01: boolean;
     isTargetAlignmentRatingAvail: boolean;
     isPreviewVariant: boolean;
+    isBICs: boolean;
+    isOverrideVariant: boolean;
   }
 }
 
@@ -725,11 +733,11 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     onSubmitMetricValues: (CS01: number, leverage: number) => void;
   }
   state: {
-    isEditing: boolean;
+    isEditAvailable: boolean;
     isStencil: boolean;
     isNumeric: boolean;
     isDataUnavailable: boolean;
-    isEditingFundTargets: boolean;
+    isEditingFund: boolean;
     hasErrors: {
       updatedCS01: boolean;
       updatedCreditLeverage: boolean;
@@ -769,5 +777,25 @@ export interface SantaModalDTO extends BasicDTOStructure {
     openModal: () => void;
     closeModal: () => void;
     saveModal: () => boolean;
+  }
+}
+
+export interface StructurePopoverDTO extends BasicDTOStructure {
+  data: {
+    mainRow: StructurePortfolioBreakdownRowDTO
+  }
+  state: {
+    isActive: boolean;
+    isDisplayCs01: boolean;
+  }
+}
+
+export interface StructurePortfolioBreakdownRowDTO extends BasicDTOStructure {
+  data: PortfolioBreakdownCategoryBlock,
+  state: {
+    isSelected: boolean;
+    isBtnDiveIn: boolean;
+    isStencil: boolean;
+    isBicsLevel1: boolean;
   }
 }

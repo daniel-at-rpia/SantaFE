@@ -31,6 +31,7 @@ export interface DefinitionConfiguratorEmitterParams {
 }
 
 export interface DefinitionConfiguratorEmitterParamsItem {
+  key: string;
   targetAttribute: string;
   filterBy: Array<string>;
 }
@@ -114,6 +115,7 @@ export interface AmchartPieDataBlock {
 export interface StructureSetTargetOverlayTransferPack {
   targetFund: DTOs.PortfolioStructureDTO;
   targetBreakdown: DTOs.PortfolioBreakdownDTO;
+  isCreateNewOverride: boolean;
 }
 
 export interface StructureSetTargetPostEditUpdatePack {

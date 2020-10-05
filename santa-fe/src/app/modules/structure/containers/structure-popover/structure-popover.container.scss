@@ -1,0 +1,139 @@
+@import "global.scss";
+$portfolioBreakdownRow_borderWidth: $typical_border_width*2;
+$portfolioBreakdownRow_borderColor: $color_active;
+$portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
+.sat-popover {
+  $blockName: &;
+  @include mix_fixed_div(absolute, $z_index_modal);
+  @include mix_border_generator($portfolioBreakdownRow_borderWidth, $portfolioBreakdownRow_borderColor);
+  @include mix_border_radius(10px);
+  @include mix_alive('light');
+  background-color: $color_white;
+  width: 29rem;
+  height: 36rem;
+  top: 0;
+  left: 0;
+  transform: scale(0) translate(0, 0);
+  padding: $spacing_medium $spacing_small;
+  &__close-btn {
+    @include mix_fixed_div(absolute, $z_index_base_item_solid);
+    @include roundedButton($color_red_5, $font_color_inverse, $iconButton_size_large);
+    font-size: $font_size_xx_large;
+    bottom: -$iconButton_size_large/2; 
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  &__mainCategory {
+    flex: 0 0 100%;
+    display: flex;
+    &-list {
+      display: flex;
+      flex: 1 1 auto;
+      &-item {
+        display: flex;
+        align-items: center;
+        flex: 1 1 auto;
+        margin-bottom: $spacing_x_small;
+        &>portfolio-breakdown-row {
+          display: flex;
+          flex: 1 1 auto;
+          margin-right: $scroll_bar_width;
+        }
+      }
+    }
+  }
+  &__levels {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    height: 30rem;
+    &-firstDiveIn {
+      @include mix_enable_scrollbar('vertical');
+      display: flex;
+      background-color: $color_gray_1;
+      padding: $spacing_small 0;
+      &-category {
+        @include bicsLevelCategory;
+        &-text {
+          @include bicsLevelCategoryText;
+        }
+      }
+      &-list {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        padding: $spacing_small 0;
+        &-item {
+          margin-bottom: $spacing_x_small;
+        }
+      }
+      &-message {
+        display: none;
+        color: $color_active;
+        flex: 1 1 auto;
+      }
+    }
+    &-secondDiveIn {
+      @include mix_alive('light');
+      display: none;
+      flex: 1 1 auto;
+      background-color: $color_gray_2;
+      padding: $spacing_small 0;
+      &-category {
+        @include bicsLevelCategory;
+        &-text {
+         @include bicsLevelCategoryText;
+        }
+      }
+      &-list {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        &-item {
+          margin-bottom: $spacing_x_small;
+          &>portfolio-breakdown-row {
+            display: flex;
+            flex: 1 1 auto;
+          }
+        }
+      }
+      &--active {
+        display: flex;
+      }
+    }
+    &-thirdDiveIn {
+      display: none;
+      flex: 1 1 auto;
+      background-color: $color_gray_3;
+      padding: $spacing_small 0;
+      &-list {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        padding-left: $spacing_small;
+      }
+      &--active {
+        display: flex;
+      }
+    }
+  }
+  &--noDataAvailable {
+    #{$blockName} {
+      &__levels {
+        &-firstDiveIn {
+          padding: $spacing_small;
+          &-category,
+          &-list {
+            display: none;
+          }
+          &-message {
+            display: flex;
+          }
+        }
+      }
+    }
+  }
+  &--active {
+    transform: scale(1) translate(1rem, 3rem);
+  }
+}

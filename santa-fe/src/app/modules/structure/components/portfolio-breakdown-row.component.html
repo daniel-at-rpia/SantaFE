@@ -1,0 +1,23 @@
+<article [ngClass]="{
+  'sat-portfolioBreakdownRow': true,
+  'sat-portfolioBreakdownRow--stencilState': breakdownRow.state.isStencil,
+  'sat-portfolioBreakdownRow--isBicsRow': breakdownRow.state.isBtnDiveIn,
+  'sat-portfolioBreakdownRow--isBicsDiveIn': breakdownRow.state.isBtnDiveIn && breakdownRow.data.bicsLevel < 4,
+  'sat-portfolioBreakdownRow--selected': breakdownRow.state.isSelected,
+  'sat-portfolioBreakdownRow--noSignificantDiff': breakdownRow.data.diffToTarget === 0,
+  'sat-portfolioBreakdownRow--negativeDiff': breakdownRow.data.diffToTarget < 0
+  }">
+  <section class="sat-portfolioBreakdownRow__cta">
+    <button (click)="onClickDiveIn(breakdownRow)" class="sat-portfolioBreakdownRow__cta-btn">
+      <span class="sat-portfolioBreakdownRow__cta-btn-text">{{ breakdownRow.data.category }}</span>
+    </button>
+  </section>
+  <section class="sat-portfolioBreakdownRow__moveVisualizer">
+    <move-visualizer [visualizerData]="breakdownRow.data.moveVisualizer"></move-visualizer>
+  </section>
+    <div class="sat-portfolioBreakdownRow__cell sat-portfolioBreakdownRow__cell--target">{{breakdownRow.data.diffToTargetDisplay}}</div>
+    <hr class="sat-portfolioBreakdownRow__cellDivider">
+    <div class="sat-portfolioBreakdownRow__cell sat-portfolioBreakdownRow__cell--current">{{breakdownRow.data.currentPctDisplay}}</div>
+    <hr class="sat-portfolioBreakdownRow__cellDivider">
+    <div class="sat-portfolioBreakdownRow__cell sat-portfolioBreakdownRow__cell--index">{{breakdownRow.data.indexPctDisplay}}</div>
+</article>

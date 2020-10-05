@@ -19,7 +19,7 @@
   selector: 'security-definition-configurator',
   templateUrl: './security-definition-configurator.container.html',
   styleUrls: ['./security-definition-configurator.container.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.Emulated
 })
 
 export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
@@ -44,9 +44,10 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
 
   ngOnChanges() {
     if (!!this.configuratorData) {
-      if (this.configuratorData.state.groupByDisabled) {
+      if (this.configuratorData.state.securityAttrOnly) {
         this.hideFiltersForGroupByDisabledVariant();
-      } else {
+      }
+      if (!this.configuratorData.state.groupByDisabled) {
         this.configuratorData.data.definitionList.forEach((eachBundle) => {
           eachBundle.data.list.forEach((eachDefinition) => {
             if (eachDefinition.state.isLocked) {

@@ -233,6 +233,23 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'TW'
   ];
 
+  export const BICsLevel1DefinitionList = [
+    'Communications',
+    'Consumer Discretionary',
+    'Consumer Staples',
+    'Energy',
+    'Financials',
+    'Government',
+    'Health Care',
+    'Industrials',
+    'Materials',
+    'Not Classified',
+    'Real Estate',
+    'Technology',
+    'Utilities'
+  ];
+
+
   const FullStrategyList = [
     'Short Carry',
     'STOV',
@@ -399,6 +416,12 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     displayName: 'Quoted Today',
     icon: 'far fa-calendar-day',
     optionList: FilterOptionsBoolean
+  },
+  OVERRIDE: {
+    key: 'OVERRIDE',
+    displayName: 'Custom',
+    icon: 'fas fa-star',
+    optionList: []
   }
 };
 

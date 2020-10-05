@@ -1,0 +1,66 @@
+<article [ngClass]="{
+  'sat-popover': true,
+  'sat-popover--active': popover.state.isActive,
+  'sat-popover--noDataAvailable': popover.data.mainRow.data.children.data.displayCategoryList.length === 0
+}">
+  <button class="sat-popover__close-btn santaBtn--iconOnly fal fa-times" (click)="closePopover()"></button>
+  <section class="sat-popover__mainCategory">
+    <ul class="sat-popover__mainCategory-list">
+      <li class="sat-popover__mainCategory-list-item">
+        <portfolio-breakdown-row
+          [breakdownRow]="popover.data.mainRow"
+          (breakdownRowDiveIn)="getNextBicsLevel($event)">
+        </portfolio-breakdown-row>
+      </li>
+    </ul>
+  </section>
+  <section class="sat-popover__levels">
+    <div class="sat-popover__levels-firstDiveIn">
+      <p class="sat-popover__levels-firstDiveIn-message">No further BICs data is available<p>
+      <div class="sat-popover__levels-firstDiveIn-category">
+        <span class="sat-popover__levels-firstDiveIn-category-text"> Level {{ popover.data.mainRow.data.bicsLevel + 1 }} - {{ popover.data.mainRow.data.category }}</span>
+      </div>
+      <ul class="sat-popover__levels-firstDiveIn-list">
+        <li
+          *ngFor="let secondLevel of popover.data.mainRow.data.children.data.displayCategoryList" 
+          class="sat-popover__levels-firstDiveIn-list-item">
+          <portfolio-breakdown-row
+            [breakdownRow]="secondLevel"
+            (breakdownRowDiveIn)="getNextBicsLevel($event)">
+          </portfolio-breakdown-row>
+          <div [ngClass]="{
+            'sat-popover__levels-secondDiveIn': true,
+            'sat-popover__levels-secondDiveIn--active': secondLevel.state.isSelected
+          }">
+            <div class="sat-popover__levels-secondDiveIn-category">
+              <span class="sat-popover__levels-secondDiveIn-category-text"> Level {{secondLevel.data.bicsLevel + 1 }} - {{ secondLevel.data.category }}</span>
+            </div>
+            <ul class="sat-popover__levels-secondDiveIn-list"
+            *ngIf="secondLevel.data.children">
+              <li *ngFor="let thirdLevel of secondLevel.data.children.data.displayCategoryList"
+              class="sat-popover__levels-secondDiveIn-list-item">
+                <portfolio-breakdown-row
+                  [breakdownRow]="thirdLevel"
+                  (breakdownRowDiveIn)="getNextBicsLevel($event)">
+                </portfolio-breakdown-row>
+                <div [ngClass]="{
+                  'sat-popover__levels-thirdDiveIn': true,
+                  'sat-popover__levels-thirdDiveIn--active': thirdLevel.state.isSelected
+                }">
+                  <ul class="sat-popover__levels-thirdDiveIn-list" *ngIf="thirdLevel.data.children">
+                    <li *ngFor="let fourthLevel of thirdLevel.data.children.data.displayCategoryList"
+                    class="sat-popover__levels-thirdDiveIn-list-item">
+                      <portfolio-breakdown-row
+                        [breakdownRow]="fourthLevel">
+                      </portfolio-breakdown-row>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+</article>

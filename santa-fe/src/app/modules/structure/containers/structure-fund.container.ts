@@ -4,9 +4,10 @@ import { catchError, first, tap} from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.interface';
-import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import { PortfolioMetricValues, STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
 import { DTOService } from 'Core/services/DTOService';
 import { UtilityService } from 'Core/services/UtilityService';
+import { ModalService } from 'Form/services/ModalService';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
 import { PortfolioBreakdownDTO, TargetBarDTO } from 'FEModels/frontend-models.interface';
 import { StructureSendSetTargetTransferEvent} from 'Structure/actions/structure.actions';
@@ -23,7 +24,8 @@ export class StructureFund implements OnInit {
   @Output() updatedFundData = new EventEmitter<PortfolioStructureDTO>();
   constants = {
     cs01: PortfolioMetricValues.cs01,
-    creditLeverage: PortfolioMetricValues.creditLeverage
+    creditLeverage: PortfolioMetricValues.creditLeverage,
+    editModalId: STRUCTURE_EDIT_MODAL_ID
   }
   subscriptions = {
     ownerInitialsSub: null
@@ -32,14 +34,15 @@ export class StructureFund implements OnInit {
   constructor(
     private dtoService: DTOService,
     private utilityService: UtilityService,
-    private store$: Store<any>
+    private store$: Store<any>,
+    private modalService: ModalService
   ){}
 
   public ngOnInit() {
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
       select(selectUserInitials)
     ).subscribe((value) => {
-      this.fund.state.isEditing = value === 'DM';
+      this.fund.state.isEditAvailable = value === 'DM';
     });
     this.fund.api.onSubmitMetricValues = this.saveEditDetails.bind(this);
   }
@@ -47,8 +50,18 @@ export class StructureFund implements OnInit {
   public onClickedEditInBreakdown(targetBreakdown: PortfolioBreakdownDTO) {
     this.store$.dispatch(new StructureSendSetTargetTransferEvent({
       targetFund: this.utilityService.deepCopy(this.fund),
-      targetBreakdown: this.utilityService.deepCopy(targetBreakdown)
+      targetBreakdown: this.utilityService.deepCopy(targetBreakdown),
+      isCreateNewOverride: false
     }));
+  }
+
+  public onClickedAddCustomBreakdown() {
+    this.store$.dispatch(new StructureSendSetTargetTransferEvent({
+      targetFund: this.utilityService.deepCopy(this.fund),
+      targetBreakdown: null,
+      isCreateNewOverride: true
+    }));
+    this.modalService.triggerModalOpen(this.constants.editModalId);
   }
 
   public onChangeValue(amount: string, type: PortfolioMetricValues) {
@@ -63,11 +76,11 @@ export class StructureFund implements OnInit {
   }
 
   public showEditMenu() {
-    this.fund.state.isEditingFundTargets = true;
+    this.fund.state.isEditingFund = true;
   }
 
   public closeEditMenu() {
-    this.fund.state.isEditingFundTargets = false;
+    this.fund.state.isEditingFund = false;
     this.resetErrors();
   }
 
@@ -98,7 +111,7 @@ export class StructureFund implements OnInit {
       this.fund.state.hasErrors[invalidInputErrorRef] = true;
       this.fund.state.hasErrors.errorMessage = `*Please enter a valid target level for ${invalidTarget}`;
     } else {
-      this.fund.state.isEditingFundTargets = false;
+      this.fund.state.isEditingFund = false;
       this.updatedFundData.emit(this.fund)
     }
   }

@@ -9,7 +9,9 @@
     import {
       BESecurityDTO,
       BESecurityDeltaMetricDTO,
-      BESecurityGroupDTO
+      BESecurityGroupDTO,
+      BEStructuringOverrideBlock,
+      BEStructuringBreakdownBlock
     } from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
     import {
@@ -24,13 +26,15 @@
     import {
       QUANT_COMPARER_PERCENTILE,
       SecurityMetricOptions,
-      BackendKeyDictionary,
+      FrontendKayToBackendKeyDictionary,
+      BackendKeyToDisplayLabelDictionary,
       TriCoreDriverConfig,
       DEFAULT_DRIVER_IDENTIFIER,
       AlertTypes,
       AlertSubTypes
     } from 'Core/constants/coreConstants.constant';
     import { CountdownPipe } from 'App/pipes/Countdown.pipe';
+    import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
   // dependencies
 
 @Injectable()
@@ -38,8 +42,10 @@ export class UtilityService {
   // Any code about naming stuff goes into this service
   groupGroupMetricOptions = GroupMetricOptions;
   securityMetricOptions = SecurityMetricOptions;
-  keyDictionary = BackendKeyDictionary;
+  keyDictionary = FrontendKayToBackendKeyDictionary;
+  labelDictionary = BackendKeyToDisplayLabelDictionary;
   triCoreDriverConfig = TriCoreDriverConfig;
+  definitionMap = SecurityDefinitionMap;
 
   constructor(
     private countdownPipe: CountdownPipe,
@@ -272,6 +278,23 @@ export class UtilityService {
       }
     }
 
+    public convertBEKeyToLabel(backendKey: string): string{
+      if (!!this.labelDictionary[backendKey]) {
+        return this.labelDictionary[backendKey];
+      } else {
+        return backendKey;
+      }
+    }
+
+    public convertLabelToBEKey(label: string): string{
+      for (const eachKey in this.labelDictionary){
+        if (this.labelDictionary[eachKey] === label) {
+          return eachKey;
+        }
+      }
+      return null;
+    }
+
     public convertBETenorToFE(backendTenor: string): string {
       switch (backendTenor) {
         case "3M":
@@ -400,6 +423,7 @@ export class UtilityService {
             return eachOption.isSelected;
           });
           activeFilters.length > 0 && params.filterList.push({
+            key: eachDefinition.data.key,
             targetAttribute: eachDefinition.data.securityDTOAttr,
             filterBy: activeFilters.map((eachFilter) => {
               return eachFilter.displayLabel;
@@ -408,6 +432,16 @@ export class UtilityService {
         });
       });
       return params;
+    }
+
+    public findDefinitionKeyFromSecurityDTOAttr(attr: string): string {
+      let targetKey = null;
+      for (let eachKey in this.definitionMap) {
+        if (!!this.definitionMap[eachKey] && this.definitionMap[eachKey].securityDTOAttr === attr) {
+          targetKey = eachKey;
+        }
+      }
+      return targetKey;
     }
 
     public skewedNumber(input: number): number {
@@ -994,4 +1028,110 @@ export class UtilityService {
       }
     }
   // trade specific end
+
+  // structuring specific
+    public formBucketIdentifierForOverride(rawData: BEStructuringOverrideBlock): string {
+      const list = [];
+      for (let eachIdentifier in rawData.bucket) {
+        list.push(eachIdentifier);
+      }
+      list.sort((identifierA, identifierB) => {
+        if (identifierA > identifierB) {
+          return 1;
+        } else if (identifierB < identifierA) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+      let identifier = '';
+      list.forEach((eachIdentifier) => {
+        const parsedIdentifier = this.convertBEKeyToLabel(eachIdentifier);
+        identifier = identifier === '' ? `${parsedIdentifier}` : `${identifier} - ${parsedIdentifier}`;
+      });
+      return identifier;
+    }
+
+    public formBEBucketObjectFromBucketIdentifier(identifier: string): {[property: string]: Array<string>} {
+      const result = {};
+      if (!!identifier) {
+        const array = identifier.split(' - ');
+        array.forEach((eachLabel) => {
+          const eachKey = this.convertLabelToBEKey(eachLabel);
+          if (eachKey) {
+            result[eachKey] = [];
+          };
+        });
+        return result;
+      } else {
+        return result;
+      }
+    }
+
+    public formCategoryKeyForOverride(rawData: BEStructuringOverrideBlock): string {
+      const list = [];
+      for (let eachIdentifier in rawData.bucket) {
+        list.push(eachIdentifier);
+      }
+      list.sort((identifierA, identifierB) => {
+        if (identifierA > identifierB) {
+          return 1;
+        } else if (identifierB < identifierA) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+      let categoryKey = '';
+      list.forEach((eachIdentifier) => {
+        categoryKey = categoryKey === '' ? `${rawData.bucket[eachIdentifier]}` : `${categoryKey} - ${rawData.bucket[eachIdentifier]}`;
+      });
+      return categoryKey;
+    }
+
+    public populateBEBucketObjectFromRowTitle(
+      bucket: {[property: string]: Array<string>},
+      rowTitle: string
+    ): {[property: string]: Array<string>} {
+      if (!!rowTitle) {
+        const array = rowTitle.split(' - ');
+        let index = 0;
+        for (let eachBucketItem in bucket) {
+          bucket[eachBucketItem].push(array[index]);
+          index++;
+        }
+      }
+      return bucket;
+    }
+
+    public convertRawOverrideToRawBreakdown(
+      overrideRawDataList: Array<BEStructuringOverrideBlock>
+    ): Array<BEStructuringBreakdownBlock> {
+      const breakdownList: Array<BEStructuringBreakdownBlock> = [];
+      overrideRawDataList.forEach((eachRawOverride) => {
+        eachRawOverride
+        const overrideBucketIdentifier = this.formBucketIdentifierForOverride(eachRawOverride);
+        const matchExistBreakdown = breakdownList.find((eachBEDTO) => {
+          return eachBEDTO.groupOption === overrideBucketIdentifier;
+        });
+        if (!!matchExistBreakdown) {
+          const categoryKey = this.formCategoryKeyForOverride(eachRawOverride);
+          matchExistBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
+        } else {
+          const newConvertedBreakdown: BEStructuringBreakdownBlock = {
+            date: eachRawOverride.date,
+            groupOption: overrideBucketIdentifier,
+            indexId: eachRawOverride.indexId,
+            portfolioId: eachRawOverride.portfolioId,
+            breakdown: {}
+          };
+          const categoryKey = this.formCategoryKeyForOverride(eachRawOverride);
+          newConvertedBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
+          breakdownList.push(newConvertedBreakdown);
+        }
+      });
+      return breakdownList;
+    }
+
+  // structuring specific end
 }

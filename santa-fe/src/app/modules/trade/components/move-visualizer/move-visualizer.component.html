@@ -11,7 +11,10 @@
     'sat-moveVisualizer--pinIsNullState': visualizerData.data.end == null,
     'sat-moveVisualizer--colorCodeInversedState': visualizerData.state.isColorCodeInversed,
     'sat-moveVisualizer--structuringBreakdownVariant': visualizerData.state.structuringBreakdownVariant,
-    'sat-moveVisualizer--exceededState': visualizerData.state.structuringBreakdownExceededState
+    'sat-moveVisualizer--exceededState': visualizerData.state.structuringBreakdownExceededState,
+    'sat-moveVisualizer--bicsLevel2Variant': visualizerData.data.bicsLevelVisualizer === 'BicsLevel2',
+    'sat-moveVisualizer--bicsLevel3Variant': visualizerData.data.bicsLevelVisualizer === 'BicsLevel3',
+    'sat-moveVisualizer--bicsLevel4Variant': visualizerData.data.bicsLevelVisualizer === 'BicsLevel4'
   }">
   <section class="sat-moveVisualizer__bar">
     <!--line-->
@@ -57,7 +60,11 @@
       [ngStyle]="{
         'flex-basis': visualizerData.style.rightGap + '%'
       }"></div>
-    <div class="sat-moveVisualizer__bar-stencilMask"></div>
+    <div
+      class="sat-moveVisualizer__bar-stencilMask"
+      [ngStyle]="{
+        'background-color': visualizerData.style.backgroundColor
+      }"></div>
   </section>
   <section class="sat-moveVisualizer__pins">
     <!--pin-->

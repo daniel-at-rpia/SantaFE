@@ -2,7 +2,6 @@
 @import "modules/structure/structure.scss";
 
 $portfolioBreakdown_borderWidth: $typical_border_width*2; // can't use rem because fractions of a pixel doesn't look well here
-$portfolioBreakdown_borderColor: $color_active;
 $portfolioBreakdown_rating_width: 12rem;
 $portfolioBreakdown_rating_thickness: 1.75rem;
 $portfolioBreakdown_categoryList_cell_width: 3.5rem;
@@ -10,12 +9,12 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
 .sat-portfolioBreakdown {
   $blockName: &;
   @include mix_fixed_div(relative, $z_index_base_item);
-  @include mix_border_generator($portfolioBreakdown_borderWidth, $portfolioBreakdown_borderColor);
+  @include mix_border_generator($portfolioBreakdown_borderWidth);
   @include mix_border_radius(10px);
   display: flex;
   flex-direction: column;
   width: $portfolioBreakdownWidth;
-  background-color: $color_white;
+  background-color: $color_gray_2;
   margin-top: $portfolioBreakdown_rating_thickness/2;
   padding: $spacing_small;
   &__title {
@@ -39,7 +38,7 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
   }
   &__rating {
     @include mix_fixed_div(absolute, $z_index_hovering_item);
-    @include mix_border_generator($portfolioBreakdown_borderWidth, $portfolioBreakdown_borderColor);
+    @include mix_border_generator($portfolioBreakdown_borderWidth, $color_active);
     @include mix_border_radius(5px);
     display: flex;
     justify-content: center;
@@ -67,7 +66,7 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
   &__categoryHeader {
     display: flex;
     justify-content: flex-end;
-    margin-top: $portfolioBreakdown_rating_thickness;
+    margin: $portfolioBreakdown_rating_thickness 0 $portfolioBreakdown_rating_thickness/2;
     &-cell {
       @include mix_fixed_div(relative, $z_index_base_item);
       display: flex;
@@ -104,44 +103,9 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
       &-item {
         display: flex;
         align-items: center;
-        &-title {
-          @include mix_text_overflow;
-          flex: 0 0 7rem;
-          text-align: right;
-          margin-right: $spacing_small;
-        }
-        &-moveVisualizer {
-          flex: 1 1 auto;
-          margin-right: 1.25rem;
-        }
-        &-cell {
-          @include mix_text_overflow;
-          flex: 0 0 ($portfolioBreakdown_categoryList_cell_width - $spacing_x_small*4/3 - $typical_border_width*2/3);
+        &>portfolio-breakdown-row {
           display: flex;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
-          font-size: $font_size_normal;
-          color: $font_color_major;
-          &--target {
-            @include mix_border_radius(5px);
-            align-self: stretch;
-            background-color: $color_active;
-            color: $font_color_inverse;
-            margin: $spacing_x_small 0;
-          }
-        }
-        &-cellDivider {
-          @include mix_border_generator(0 $typical_border_width 0 0);
-          flex: 0 0 $spacing_x_small+$typical_border_width;
-          margin: $spacing_x_small $spacing_x_small $spacing_x_small 0;
-        }
-        &--noSignificantDiff &-cell--target{
-          background-color: transparent;
-          color: $font_color_major;
-        }
-        &--negativeDiff &-cell--target {
-          background-color: $color_red_5;
+          flex: 1 1 auto;
         }
       }
     }
@@ -204,6 +168,21 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
       }
     }
   }
+  &--overrideVariant {
+    border-color: $color_active;
+    background-color: $color_white;
+    #{$blockName} {
+      &__title {
+        &-definition {
+          background-color: $color_active;
+          padding-bottom: $spacing_minimum; // for some weird reason the icon was not centered perfectly
+        }
+        &-text {
+          color: $font_color_major;
+        }
+      }
+    }
+  }
   &--previewVariant {
     flex: 1 1 auto;
     width: auto;
@@ -221,14 +200,6 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
           @include mix_stencil_animation;
           background-color: $color_stencil;
           color: $color_stencil;
-        }
-      }
-      &__categoryContent {
-        &-list-item-cell {
-          @include mix_stencil_animation;
-          background-color: $color_stencil;
-          color: $color_stencil;
-          // line-height: 
         }
       }
     }
