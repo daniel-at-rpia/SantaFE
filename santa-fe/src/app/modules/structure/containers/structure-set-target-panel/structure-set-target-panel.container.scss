@@ -209,8 +209,11 @@ $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfig
   }
   &--editingOverrideState {
     #{$blockName} {
+      &__utilities {
+        display: none;
+      }
       &__main {
-        min-height: 32rem;
+        min-height: 44rem;
         &-edit-header-createRow {
           display: flex;
         }

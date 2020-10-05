@@ -1044,20 +1044,19 @@ export class UtilityService {
           return 0;
         }
       });
-      let identifier = 'Custom';
+      let identifier = '';
       list.forEach((eachIdentifier) => {
         const parsedIdentifier = this.convertBEKeyToLabel(eachIdentifier);
-        identifier = `${identifier} - ${parsedIdentifier}`;
+        identifier = identifier === '' ? `${parsedIdentifier}` : `${identifier} - ${parsedIdentifier}`;
       });
       return identifier;
     }
 
     public formBEBucketObjectFromBucketIdentifier(identifier: string): {[property: string]: Array<string>} {
       const result = {};
-      if (!!identifier && identifier.indexOf('Custom - ') >= 0) {
-        const contentfulSection: string = identifier.slice(identifier.indexOf('Custom - ') + 9);
-        const contentfulArray = contentfulSection.split(' - ');
-        contentfulArray.forEach((eachLabel) => {
+      if (!!identifier) {
+        const array = identifier.split(' - ');
+        array.forEach((eachLabel) => {
           const eachKey = this.convertLabelToBEKey(eachLabel);
           if (eachKey) {
             result[eachKey] = [];
