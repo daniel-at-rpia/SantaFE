@@ -1919,7 +1919,8 @@ export class DTOService {
         isDisplayingCs01: !!isDisplayCs01,
         isTargetAlignmentRatingAvail: !!isStencil,
         isPreviewVariant: false,
-        isBICs: !!isBicsBreakdown
+        isBICs: !!isBicsBreakdown,
+        isEditingView: false
       }
     };
     let findCs01Max = 0;
@@ -2111,7 +2112,8 @@ export class DTOService {
         isSelected: false,
         isBtnDiveIn: false,
         isStencil: true,
-        isBicsLevel1: false
+        isBicsLevel1: false,
+        isEditingView: false
       }
     }
     return object;
