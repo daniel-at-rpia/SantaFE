@@ -125,6 +125,10 @@ export interface PayloadUpdateBreakdown {
   portfolioBreakdown: BEStructuringBreakdownBlock;
 }
 
+export interface PayloadUpdateOverride {
+  portfolioOverride: BEStructuringOverrideBlock;
+}
+
 export interface PayloadGetPortfolioOverride {
   portfolioOverride: BEStructuringOverrideBlock;
 }

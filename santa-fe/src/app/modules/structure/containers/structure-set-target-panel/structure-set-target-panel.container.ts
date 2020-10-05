@@ -25,7 +25,7 @@ import {
   FilterOptionsTenor,
   SecurityDefinitionMap
 } from 'Core/constants/securityDefinitionConstants.constant';
-import { PayloadUpdateBreakdown } from 'BEModels/backend-payloads.interface';
+import { PayloadUpdateBreakdown, PayloadUpdateOverride } from 'BEModels/backend-payloads.interface';
 import {
   BEStructuringBreakdownBlock,
   BEPortfolioStructuringDTO,
@@ -262,7 +262,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       const bucket = {}
       let bucketToString = '';
       params.filterList.forEach((eachItem) => {
-        const property = this.utilityService.convertFEKey(this.utilityService.findDefinationKeyFromSecurityDTOAttr(eachItem.targetAttribute));
+        const property = this.utilityService.convertFEKey(eachItem.key);
         if (!!property) {
           bucket[property] = eachItem.filterBy;
           eachItem.filterBy.forEach((eachValue) => {
@@ -302,7 +302,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             const newBreakdown = this.dtoService.formProtfolioOverrideBreakdown(this.state.targetBreakdownRawData, isDisplayCs01);
             newBreakdown.state.isPreviewVariant = true;
             this.state.targetBreakdown = newBreakdown;
+            const prevEditRowsForInheritance = this.utilityService.deepCopy(this.state.editRowList);
             this.loadEditRows();
+            this.inheritEditRowStates(prevEditRowsForInheritance);
           }),
           catchError(err => {
             console.error(`${this.restfulCommService.apiMap.readAlert} failed`, err);
@@ -386,6 +388,18 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         };
       });
     }
+  }
+
+  private inheritEditRowStates(oldRows: Array<StructureSetTargetPanelEditRowBlock>) {
+    this.state.editRowList = this.state.editRowList.map((eachNewRow) => {
+      const matchedOldRow = oldRows.find((eachOldRow) => {
+        return eachOldRow.rowTitle === eachNewRow.rowTitle;
+      });
+      if (matchedOldRow) {
+        eachNewRow = matchedOldRow;
+      };
+      return eachNewRow;
+    });
   }
 
   private calculateAllocation() {
@@ -538,30 +552,36 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private submitTargetChanges(): boolean {
-    const payload: PayloadUpdateBreakdown = this.traverseEditRowsToFormSubmitPayload();
-    if (!!payload) {
-      this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
-        first(),
-        tap((serverReturn: BEPortfolioStructuringDTO) => {
-          const updatePack: StructureSetTargetPostEditUpdatePack = {
-            targetFund: serverReturn,
-            targetBreakdownBackendGroupOptionIdentifier: this.state.targetBreakdown.data.backendGroupOptionIdentifier
-          };
-          this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
-        }),
-        catchError(err => {
-          console.error('update breakdown failed');
-          return of('error');
-        })
-      ).subscribe();
-      return true;
+    if (!this.state.targetBreakdownIsOverride) {
+      const payload: PayloadUpdateBreakdown = this.traverseEditRowsToFormUpdateBreakdownPayload();
+      if (!!payload) {
+        this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
+          first(),
+          tap((serverReturn: BEPortfolioStructuringDTO) => {
+            const updatePack: StructureSetTargetPostEditUpdatePack = {
+              targetFund: serverReturn,
+              targetBreakdownBackendGroupOptionIdentifier: this.state.targetBreakdown.data.backendGroupOptionIdentifier
+            };
+            this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
+          }),
+          catchError(err => {
+            console.error('update breakdown failed');
+            return of('error');
+          })
+        ).subscribe();
+        return true;
+      } else {
+        this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target because no change is detected', null)]));
+        return false;
+      }
     } else {
-      this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target because no change is detected', null)]));
+      const payload: Array<PayloadUpdateOverride> = this.traverseEditRowsToFormUpdateOverridePayload();
+      console.log('test, ', payload);
       return false;
     }
   }
 
-  private traverseEditRowsToFormSubmitPayload(): PayloadUpdateBreakdown {
+  private traverseEditRowsToFormUpdateBreakdownPayload(): PayloadUpdateBreakdown {
     const payload: PayloadUpdateBreakdown = {
       portfolioBreakdown: {
         date: this.state.targetBreakdownRawData.date,
@@ -595,6 +615,42 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     return hasModification ? payload : null;
   }
 
+  private traverseEditRowsToFormUpdateOverridePayload(): Array<PayloadUpdateOverride> {
+    const payload: Array<PayloadUpdateOverride> = [];
+    this.state.editRowList.forEach((eachRow) => {
+      const eachPayload: PayloadUpdateOverride = {
+        portfolioOverride: {
+          date: this.state.targetBreakdownRawData.date,
+          indexId: this.state.targetBreakdownRawData.indexId,
+          portfolioId: this.state.targetBreakdownRawData.portfolioId,
+          bucket: this.utilityService.populateBEBucketObjectFromRowTitle(
+            this.utilityService.formBEBucketObjectFromBucketIdentifier(this.state.targetBreakdown.data.title),
+            eachRow.rowTitle
+          )
+        }
+      };
+      if(this.cs01ModifiedInEditRow(eachRow) || this.creditLeverageModifiedInEditRow(eachRow)) {
+        const modifiedMetricBreakdowns: BEMetricBreakdowns = {
+          view: null,
+          metricBreakdowns: {}
+        };
+        if (this.cs01ModifiedInEditRow(eachRow)) {
+          modifiedMetricBreakdowns.metricBreakdowns.Cs01 = {
+            targetLevel: eachRow.targetCs01.level.savedUnderlineValue
+          };
+        }
+        if (this.creditLeverageModifiedInEditRow(eachRow)) {
+          modifiedMetricBreakdowns.metricBreakdowns.CreditLeverage = {
+            targetLevel: eachRow.targetCreditLeverage.level.savedUnderlineValue
+          };
+        }
+        eachPayload.portfolioOverride.breakdown = modifiedMetricBreakdowns;
+      }
+      payload.push(eachPayload);
+    });
+    return payload;
+  }
+
   private cs01ModifiedInEditRow(targetRow: StructureSetTargetPanelEditRowBlock): boolean {
     return targetRow.targetCs01.level.isActive || targetRow.targetCs01.level.isImplied;
   }
@@ -605,7 +661,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   private retrieveRawBreakdownDataForTargetBreakdown(): BEStructuringBreakdownBlock {
     if (!!this.state.targetFund && !!this.state.targetBreakdown) {
-      const rawDataObject = this.state.targetFund.data.originalBEData.breakdowns;
+      let rawDataObject;
+      if (this.state.targetBreakdown.state.isOverrideVariant) {
+        rawDataObject = this.utilityService.convertRawOverrideToRawBreakdown(this.state.targetFund.data.originalBEData.overrides);
+      } else {
+        rawDataObject = this.state.targetFund.data.originalBEData.breakdowns;
+      }
       for (let eachBreakdownKey in rawDataObject) {
         const eachBreakdown: BEStructuringBreakdownBlock = rawDataObject[eachBreakdownKey];
         if (eachBreakdown.groupOption === this.state.targetBreakdown.data.backendGroupOptionIdentifier) {

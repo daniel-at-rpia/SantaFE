@@ -404,6 +404,7 @@ export class UtilityService {
             return eachOption.isSelected;
           });
           activeFilters.length > 0 && params.filterList.push({
+            key: eachDefinition.data.key,
             targetAttribute: eachDefinition.data.securityDTOAttr,
             filterBy: activeFilters.map((eachFilter) => {
               return eachFilter.displayLabel;
@@ -1018,12 +1019,43 @@ export class UtilityService {
       return identifier;
     }
 
+    public formBEBucketObjectFromBucketIdentifier(identifier: string): {[property: string]: Array<string>} {
+      const result = {};
+      if (!!identifier && identifier.indexOf('Custom - ') >= 0) {
+        const contentfulSection: string = identifier.slice(identifier.indexOf('Custom - ') + 9);
+        const contentfulArray = contentfulSection.split(' - ');
+        contentfulArray.forEach((eachKey) => {
+          if (eachKey) {
+            result[eachKey] = [];
+          };
+        });
+        return result;
+      } else {
+        return result;
+      }
+    }
+
     public formCategoryKeyForOverride(rawData: BEStructuringOverrideBlock): string {
       let categoryKey = '';
       for (let eachIdentifier in rawData.bucket) {
         categoryKey = categoryKey === '' ? `${rawData.bucket[eachIdentifier]}` : `${categoryKey} - ${rawData.bucket[eachIdentifier]}`;
       }
       return categoryKey;
+    }
+
+    public populateBEBucketObjectFromRowTitle(
+      bucket: {[property: string]: Array<string>},
+      rowTitle: string
+    ): {[property: string]: Array<string>} {
+      if (!!rowTitle) {
+        const array = rowTitle.split(' - ');
+        let index = 0;
+        for (let eachBucketItem in bucket) {
+          bucket[eachBucketItem].push(array[index]);
+          index++;
+        }
+      }
+      return bucket;
     }
 
     public convertRawOverrideToRawBreakdown(

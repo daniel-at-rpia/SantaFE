@@ -31,6 +31,7 @@ export interface DefinitionConfiguratorEmitterParams {
 }
 
 export interface DefinitionConfiguratorEmitterParamsItem {
+  key: string;
   targetAttribute: string;
   filterBy: Array<string>;
 }
