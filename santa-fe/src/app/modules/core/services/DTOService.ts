@@ -2024,6 +2024,13 @@ export class DTOService {
 
       const isBicsBreakdown = groupOption.indexOf('BicsLevel') > -1;
       
+      const isCustomBreakdown = groupOption.includes('Custom');
+
+      let categoryBucket: Blocks.StructureBucketData = {};
+
+      if (!isCustomBreakdown) {
+        categoryBucket[groupOption] = [categoryName];
+      }
     
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
         category: `${categoryName}`,
@@ -2045,7 +2052,8 @@ export class DTOService {
           currentPct: rawCurrentPct,
           targetLevel: rawTargetLevel,
           targetPct: rawTargetPct
-        }
+        },
+        bucket: categoryBucket
       };
       if (eachCategoryBlock.diffToTarget < 0) {
         eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `${eachCategoryBlock.diffToTarget}k` : `${eachCategoryBlock.diffToTarget}`;

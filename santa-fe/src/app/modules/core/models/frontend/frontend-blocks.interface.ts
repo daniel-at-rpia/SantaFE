@@ -290,13 +290,14 @@ export interface PortfolioBreakdownCategoryBlock {
   moveVisualizer: DTOs.MoveVisualizerDTO;
   bicsLevel: number;
   portfolioID: number;
-  children?: DTOs.PortfolioBreakdownDTO;
   raw: {
     currentLevel: number;
     currentPct: number;
     targetLevel: number;
     targetPct: number;
   }
+  bucket: StructureBucketData;
+  children?: DTOs.PortfolioBreakdownDTO;
 }
 
 export interface GlobalNavLegendBlock {
