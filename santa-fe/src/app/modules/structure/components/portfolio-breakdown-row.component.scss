@@ -69,7 +69,7 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
     @include mix_fixed_div(relative, $z_index_base_item_solid);
     display: flex;
     flex: 1 1 auto;
-    margin-right: $spacing_small;
+    align-items: center;
     &-moveVisualizer {
       display: flex;
       flex: 1 1 auto;

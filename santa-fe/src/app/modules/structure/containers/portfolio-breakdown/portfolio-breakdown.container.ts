@@ -90,22 +90,6 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  private removeRowStencils(row: StructurePortfolioBreakdownRowDTO) {
-    if (!row) {
-      return null;
-    } else {
-      if (!!row.data.children) {
-        row.data.children.data.displayCategoryList.forEach(row => {
-          row.state.isStencil = false;
-          row.data.moveVisualizer.state.isStencil = false;
-          if (row.data.children) {
-            this.removeRowStencils(row);
-          }
-        })
-      }
-    }
-  }
-
   public onClickEdit() {
     this.modalService.triggerModalOpen(this.constants.editModalId);
     !!this.clickedEdit && this.clickedEdit.emit(this.breakdownData);
@@ -153,7 +137,7 @@ public updatePopoverData(breakdownRow: StructurePortfolioBreakdownRowDTO)
   } else {
     this.breakdownData.data.selectedCategory = breakdownRow.data.category;
   }
-  const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.breakdownData.state.isDisplayingCs01);
+  const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.breakdownData.state.isDisplayingCs01, this.breakdownData.state.isEditingView);
   breakdownRow.data.children = subBicsLevel;
   this.breakdownData.data.popover = this.dtoService.formStructurePopoverObject(breakdownRow, this.breakdownData.state.isDisplayingCs01);
   this.breakdownData.data.popover.data.mainRow.state.isSelected = true;
