@@ -217,7 +217,6 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn: Array<BEPortfolioStructuringDTO>) => {
-        console.log(serverReturn, 'server return fetch all funds')
         this.state.fetchResult.fundList = [];
         serverReturn.forEach(eachFund => {
           this.BICsDataProcessingService.getRawBICsData(eachFund);
