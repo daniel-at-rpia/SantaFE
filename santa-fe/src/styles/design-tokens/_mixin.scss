@@ -300,3 +300,16 @@
     height: $size;
     line-height: $size;
   }
+
+  @mixin bicsLevelCategoryText {
+    writing-mode: vertical-rl;
+    transform: rotate(-180deg);
+    padding: $spacing_small;
+  }
+
+  @mixin bicsLevelCategory {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
