@@ -1,8 +1,8 @@
 import { PortfolioStructureDTO } from 'FEModels/frontend-models.interface';
 
 export enum PortfolioView {
-  positive = 'Positive',
-  negative = 'Negative', 
+  overweight = 'Overweight',
+  underweight = 'Underweight',
   neutral = 'Neutral'
 }
 
