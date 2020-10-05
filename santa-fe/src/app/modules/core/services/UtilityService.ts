@@ -1012,10 +1012,23 @@ export class UtilityService {
 
   // structuring specific
     public formBucketIdentifierForOverride(rawData: BEStructuringOverrideBlock): string {
-      let identifier = 'Custom';
+      const list = [];
       for (let eachIdentifier in rawData.bucket) {
-        identifier = `${identifier} - ${eachIdentifier}`;
+        list.push(eachIdentifier);
       }
+      list.sort((identifierA, identifierB) => {
+        if (identifierA > identifierB) {
+          return 1;
+        } else if (identifierB < identifierA) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+      let identifier = 'Custom';
+      list.forEach((eachIdentifier) => {
+        identifier = `${identifier} - ${eachIdentifier}`;
+      });
       return identifier;
     }
 
@@ -1036,10 +1049,23 @@ export class UtilityService {
     }
 
     public formCategoryKeyForOverride(rawData: BEStructuringOverrideBlock): string {
-      let categoryKey = '';
+      const list = [];
       for (let eachIdentifier in rawData.bucket) {
-        categoryKey = categoryKey === '' ? `${rawData.bucket[eachIdentifier]}` : `${categoryKey} - ${rawData.bucket[eachIdentifier]}`;
+        list.push(eachIdentifier);
       }
+      list.sort((identifierA, identifierB) => {
+        if (identifierA > identifierB) {
+          return 1;
+        } else if (identifierB < identifierA) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+      let categoryKey = '';
+      list.forEach((eachIdentifier) => {
+        categoryKey = categoryKey === '' ? `${rawData.bucket[eachIdentifier]}` : `${categoryKey} - ${rawData.bucket[eachIdentifier]}`;
+      });
       return categoryKey;
     }
 
