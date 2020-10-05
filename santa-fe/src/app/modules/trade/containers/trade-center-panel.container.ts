@@ -120,7 +120,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         individualShortcutList: []
       },
       configurator: {
-        dto: this.dtoService.createSecurityDefinitionConfigurator(true),
+        dto: this.dtoService.createSecurityDefinitionConfigurator(true, false, true),
         boosted: false
       },
       table: {
@@ -261,7 +261,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     if (this.state.presets.selectedPreset === targetPreset) {
       targetPreset.state.isSelected = false;
       this.state.presets.selectedPreset = null;
-      this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true);
+      this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, true);
     } else {
       this.checkInitialPageLoadData();
       this.restfulCommService.logEngagement(
@@ -283,7 +283,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   public onUnselectPreset() {
     this.state.presets.selectedPreset.state.isSelected = false;
     this.state.presets.selectedPreset = null;
-    this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true);
+    this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, true);
     this.state.filters.quickFilters = this.initializePageState().filters.quickFilters;
     this.state.filters.keyword.defaultValueForUI = null;
     // const alertTableCopy = this.utilityService.deepCopy(this.state.fetchResult.alertTable);

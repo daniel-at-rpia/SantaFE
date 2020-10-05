@@ -53,6 +53,7 @@ export interface SecurityDefinitionMapStub {
   STRATEGY: SecurityDefinitionStub;
   COUNTRY: SecurityDefinitionStub;
   QUOTED_TODAY: SecurityDefinitionStub;
+  OVERRIDE: SecurityDefinitionStub;
 }
 
 export interface SecurityMetricOptionStub {

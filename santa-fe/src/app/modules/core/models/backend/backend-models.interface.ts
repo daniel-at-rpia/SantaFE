@@ -604,14 +604,14 @@ export interface BEStructuringBreakdownBlock {
 }
 
 export interface BEStructuringOverrideBlock {
-  portfolioOverrideId: string;
+  portfolioOverrideId?: string;
   date: string;
   portfolioId: number;
-  indexId: number;
+  indexId?: number;
   bucket: {
     [property: string]: Array<string>;
   }
-  breakdown: BEMetricBreakdowns;
+  breakdown?: BEMetricBreakdowns;
 }
 
 export interface BEStructuringMetricTotalBlock {
@@ -650,6 +650,7 @@ export interface BEPortfolioStructuringDTO {
   }
   overrides?: Array<BEStructuringOverrideBlock>;
 }
+
 export interface BEBICsHierarchyBlock {
   [category: string]: BEBICsHierarchyBlock;
 }

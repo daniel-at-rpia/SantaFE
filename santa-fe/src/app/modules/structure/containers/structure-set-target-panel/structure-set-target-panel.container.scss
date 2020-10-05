@@ -2,6 +2,8 @@
 @import "modules/structure/structure.scss";
 
 $structureSetTargetPanel_edit_column_size: 14rem;
+$structureSetTargetPanel_configurator_container_leftPadding: $spacing_large;
+$structureSetTargetPanel_configurator_container_width: $securityDefinitionConfigurator_width + $structureSetTargetPanel_configurator_container_leftPadding;
 .sat-structureSetTargetPanel {
   $blockName: &;
   flex: 1 1 auto;
@@ -59,21 +61,43 @@ $structureSetTargetPanel_edit_column_size: 14rem;
     }
   }
   &__main {
+    @include mix_fixed_div(relative, $z_index_base_item);
     flex: 1 1 auto;
     display: flex;
     overflow: hidden;
     &-preview {
-      @include mix_border_generator(0 $typical_border_width 0 0);
+      @include mix_alive('custom', margin-right $animation_duration_light);
       flex: 0 1 50%;
       display: flex;
       align-items: center;
       padding-right: $spacing_large;
+      margin-right: 0;
+      overflow: hidden;
       &>portfolio-breakdown {
         flex: 1 1 auto;
       }
     }
+    &-configurator {
+      @include mix_fixed_div(absolute, $z_index_base_item);
+      @include mix_border_generator(0 0 0 $typical_border_width);
+      @include mix_alive('light');
+      overflow: hidden;
+      height: 100%;
+      width: 0rem;
+      right: 50%;
+      padding-left: 0;
+      &-content { 
+        display: none;
+        height: 100%;
+        background-color: $color_gray_2;
+        security-definition-configurator {
+          height: 100%;
+          display: flex;
+        }
+      }
+    }
     &-edit {
-      flex: 0 1 50%;
+      flex: 0 0 50%;
       display: flex;
       flex-direction: column;
       padding-left: $spacing_large;
@@ -103,6 +127,13 @@ $structureSetTargetPanel_edit_column_size: 14rem;
           &:first-of-type {
             margin-right: $typical_border_width;
           }
+        }
+        &-createRow {
+          display: none;
+          align-self: flex-start;
+          background-color: $color_create;
+          margin-top: $spacing_small;
+          margin-right: auto;
         }
       }
       &-rowList {
@@ -149,6 +180,41 @@ $structureSetTargetPanel_edit_column_size: 14rem;
           display: flex;
         }
         &-ctas {
+          display: flex;
+        }
+      }
+    }
+  }
+  &--displayConfiguratorState {
+    #{$blockName} {
+      &__main {
+        &-preview {
+          margin-right: $structureSetTargetPanel_configurator_container_width;
+        }
+        &-configurator {
+          width: $structureSetTargetPanel_configurator_container_width;
+          padding-left: $structureSetTargetPanel_configurator_container_leftPadding;
+          &-content {
+            display: flex;
+          }
+        }
+        &-edit {
+          &-header-createRow {
+            @include material('none');
+            background-color: $color_active;
+          }
+        }
+      }
+    }
+  }
+  &--editingOverrideState {
+    #{$blockName} {
+      &__utilities {
+        display: none;
+      }
+      &__main {
+        min-height: 44rem;
+        &-edit-header-createRow {
           display: flex;
         }
       }
