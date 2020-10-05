@@ -26,7 +26,8 @@
     import {
       QUANT_COMPARER_PERCENTILE,
       SecurityMetricOptions,
-      BackendKeyDictionary,
+      FrontendKayToBackendKeyDictionary,
+      BackendKeyToDisplayLabelDictionary,
       TriCoreDriverConfig,
       DEFAULT_DRIVER_IDENTIFIER,
       AlertTypes,
@@ -41,7 +42,8 @@ export class UtilityService {
   // Any code about naming stuff goes into this service
   groupGroupMetricOptions = GroupMetricOptions;
   securityMetricOptions = SecurityMetricOptions;
-  keyDictionary = BackendKeyDictionary;
+  keyDictionary = FrontendKayToBackendKeyDictionary;
+  labelDicionary = BackendKeyToDisplayLabelDictionary;
   triCoreDriverConfig = TriCoreDriverConfig;
   definitionMap = SecurityDefinitionMap;
 
@@ -274,6 +276,23 @@ export class UtilityService {
       } else {
         return 'n/a';
       }
+    }
+
+    public convertBEKeyToLabel(backendKey: string): string{
+      if (!!this.labelDicionary[backendKey]) {
+        return this.labelDicionary[backendKey];
+      } else {
+        return backendKey;
+      }
+    }
+
+    public convertLabelToBEKey(label: string): string{
+      for (const eachKey in this.labelDicionary){
+        if (this.labelDicionary[eachKey] === label) {
+          return eachKey;
+        }
+      }
+      return null;
     }
 
     public convertBETenorToFE(backendTenor: string): string {
@@ -1027,7 +1046,8 @@ export class UtilityService {
       });
       let identifier = 'Custom';
       list.forEach((eachIdentifier) => {
-        identifier = `${identifier} - ${eachIdentifier}`;
+        const parsedIdentifier = this.convertBEKeyToLabel(eachIdentifier);
+        identifier = `${identifier} - ${parsedIdentifier}`;
       });
       return identifier;
     }
@@ -1037,7 +1057,8 @@ export class UtilityService {
       if (!!identifier && identifier.indexOf('Custom - ') >= 0) {
         const contentfulSection: string = identifier.slice(identifier.indexOf('Custom - ') + 9);
         const contentfulArray = contentfulSection.split(' - ');
-        contentfulArray.forEach((eachKey) => {
+        contentfulArray.forEach((eachLabel) => {
+          const eachKey = this.convertLabelToBEKey(eachLabel);
           if (eachKey) {
             result[eachKey] = [];
           };
