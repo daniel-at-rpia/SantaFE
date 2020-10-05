@@ -347,3 +347,7 @@ export interface BICsCategorizationBlock {
   bicsLevel3?: BEStructuringBreakdownBlock,
   bicsLevel4?: BEStructuringBreakdownBlock
 }
+
+export interface StructureBucketData {
+  [groupOption: string]: Array<string>;
+}

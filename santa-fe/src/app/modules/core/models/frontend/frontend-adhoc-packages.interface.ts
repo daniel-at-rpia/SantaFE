@@ -6,7 +6,8 @@ import {
   IFloatingFilterParams,
   SerializedNumberFilter
 } from 'ag-grid-community';
-
+import { PortfolioView } from 'Core/constants/structureConstants.constants';
+import { StructureBucketData } from 'Core/models/frontend/frontend-blocks.interface';
 import * as DTOs from 'FEModels/frontend-models.interface';
 import { BEPortfolioStructuringDTO } from 'BEModels/backend-models.interface';
 import {
@@ -119,4 +120,10 @@ export interface StructureSetTargetOverlayTransferPack {
 export interface StructureSetTargetPostEditUpdatePack {
   targetFund: BEPortfolioStructuringDTO;
   targetBreakdownBackendGroupOptionIdentifier: string;
+}
+
+export interface StructureSetViewData {
+  yyyyMMdd: number;
+  bucket: StructureBucketData;
+  view: PortfolioView;
 }
