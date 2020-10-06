@@ -72,7 +72,7 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
     align-items: center;
     &-moveVisualizer {
       display: flex;
-      flex: 1 1 auto;
+      flex: 0 1 90%;
       &>move-visualizer {
         flex: 1 1 auto;
       }
