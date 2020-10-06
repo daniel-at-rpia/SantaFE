@@ -43,7 +43,12 @@ export class BICsDataProcessingService {
       bicsLevel3: BicsLevel3,
       bicsLevel4: BicsLevel4
     }
-    this.bicsRawData.push(block);
+    const existingPortfolioIndex = this.bicsRawData.findIndex(portfolio => portfolio.portfolioID === block.portfolioID);
+    if (existingPortfolioIndex > -1) {
+      this.bicsRawData[existingPortfolioIndex] = block;
+    } else {
+      this.bicsRawData.push(block);
+    }
   }
 
    public getBICsBreakdownDefinitionList(rawData: BEStructuringBreakdownBlock): Array<string> {
