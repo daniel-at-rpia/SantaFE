@@ -103,6 +103,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.state.configurator.display = false;
         if (!!this.state.targetBreakdown) {
           this.state.targetBreakdown.state.isPreviewVariant = true;
+          this.state.targetBreakdown.state.isEditingView = false;
+          if (this.state.targetBreakdown.data.displayCategoryList.length > 0) {
+            this.state.targetBreakdown.data.displayCategoryList.forEach(row => {
+              this.utilityService.toggleSetView(row, this.state.targetBreakdown.state.isEditingView);
+            })
+          }
         }
         this.state.targetBreakdownIsOverride = !!pack.isCreateNewOverride || pack.targetBreakdown.state.isOverrideVariant;
         this.state.targetBreakdownRawData = this.retrieveRawBreakdownDataForTargetBreakdown();
