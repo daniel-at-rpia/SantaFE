@@ -14,7 +14,7 @@ import {
 } from 'ag-grid-community';
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { DTOService } from 'Core/services/DTOService';
-import { PortfolioMetricValues, PortfolioShortNames } from 'Core/constants/structureConstants.constants';
+import { PortfolioMetricValues, PortfolioShortNames, PortfolioView } from 'Core/constants/structureConstants.constants';
 import { BEStructuringBreakdownBlock } from 'Core/models/backend/backend-models.interface';
 
 export interface SecurityPortfolioBlock {
@@ -297,6 +297,7 @@ export interface PortfolioBreakdownCategoryBlock {
     targetPct: number;
   }
   bucket: StructureBucketData;
+  view: PortfolioView;
   children?: DTOs.PortfolioBreakdownDTO;
 }
 

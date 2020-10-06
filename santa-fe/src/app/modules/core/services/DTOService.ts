@@ -49,7 +49,7 @@
       AxeAlertScope,
       AxeAlertType
     } from 'Core/constants/tradeConstants.constant';
-    import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+    import { PortfolioShortNames, PortfolioMetricValues, PortfolioView } from 'Core/constants/structureConstants.constants';
   //
 
 @Injectable()
@@ -1895,6 +1895,7 @@ export class DTOService {
     rawData: BEModels.BEStructuringBreakdownBlock,
     definitionList: Array<string>,
     isDisplayCs01: boolean,
+    originalBEOverride: Array<BEModels.BEStructuringOverrideBlock> = [],
     isOverride = false
   ): DTOs.PortfolioBreakdownDTO {
     const isBicsBreakdown = rawData.groupOption.indexOf('BicsLevel') > -1;
@@ -1952,7 +1953,26 @@ export class DTOService {
         }
       }
     }
+ 
     definitionList.forEach((eachCategoryText) => {
+      let bucket: Blocks.StructureBucketData = {};
+      if (!!isOverride) {
+        const list = [];
+        originalBEOverride.forEach(override => {
+          const overrideCategory = this.utility.formCategoryKeyForOverride(override);
+          const modifiedOverrideObject = {
+            category: overrideCategory,
+            bucket: override.bucket
+          }
+          list.push(modifiedOverrideObject);
+        })
+        const matchedBEOverride = list.find(override => eachCategoryText === override.category);
+        bucket = !!matchedBEOverride ? matchedBEOverride.bucket : null;
+      } else {
+        bucket[rawData.groupOption] = [eachCategoryText];
+      }
+      const parsedBEView = !!rawData.breakdown[eachCategoryText]  && !!rawData.breakdown[eachCategoryText].view ? rawData.breakdown[eachCategoryText].view.toLowerCase() : null;
+      const view = PortfolioView[parsedBEView];
       const eachCs01CategoryBlock = rawData.breakdown[eachCategoryText] 
         ? this.formPortfolioBreakdownCategoryBlock(
           findCs01Min,
@@ -1963,7 +1983,9 @@ export class DTOService {
           true,
           rawData.portfolioId,
           rawData.groupOption,
-          isOverride
+          isOverride,
+          view,
+          bucket
         )
         : null;
       !!eachCs01CategoryBlock && object.data.rawCs01CategoryList.push(eachCs01CategoryBlock);
@@ -1977,7 +1999,9 @@ export class DTOService {
           false,
           rawData.portfolioId,
           rawData.groupOption,
-          isOverride
+          isOverride,
+          view,
+          bucket
         )
         : null;
       !!eachLeverageCategoryBlock && object.data.rawLeverageCategoryList.push(eachLeverageCategoryBlock);
@@ -1987,13 +2011,14 @@ export class DTOService {
 
   public formPortfolioOverrideBreakdown(
     rawData: BEModels.BEStructuringBreakdownBlock,
-    isDisplayCs01: boolean
+    isDisplayCs01: boolean,
+    originalBEOverride: Array<BEModels.BEStructuringOverrideBlock>,
   ): DTOs.PortfolioBreakdownDTO {
     const definitionList = [];
     for (let eachCategory in rawData.breakdown) {
       definitionList.push(eachCategory);
     }
-    const newBreakdown = this.formPortfolioBreakdown(false, rawData, definitionList, isDisplayCs01, true);
+    const newBreakdown = this.formPortfolioBreakdown(false, rawData, definitionList, isDisplayCs01, originalBEOverride, true);
     newBreakdown.state.isOverrideVariant = true;
     newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.OVERRIDE);
     newBreakdown.data.title = newBreakdown.data.backendGroupOptionIdentifier;
@@ -2009,7 +2034,9 @@ export class DTOService {
     isCs01: boolean,
     portfolioID: number,
     groupOption: string,
-    isOverride: boolean
+    isOverride: boolean,
+    view: PortfolioView,
+    bucket: Blocks.StructureBucketData
   ): DTOs.StructurePortfolioBreakdownRowDTO {
     if (!!rawCategoryData) {
       const parsedRawData = this.utility.deepCopy(rawCategoryData);
@@ -2045,14 +2072,6 @@ export class DTOService {
 
       const isBicsBreakdown = groupOption.indexOf('BicsLevel') > -1;
       
-      const isCustomBreakdown = groupOption.includes('Custom');
-
-      let categoryBucket: Blocks.StructureBucketData = {};
-
-      if (!isCustomBreakdown) {
-        categoryBucket[groupOption] = [categoryName];
-      }
-    
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
         category: `${categoryName}`,
         targetLevel: parsedRawData.targetLevel,
@@ -2074,7 +2093,8 @@ export class DTOService {
           targetLevel: rawTargetLevel,
           targetPct: rawTargetPct
         },
-        bucket: categoryBucket
+        view: view,
+        bucket: bucket
       };
       if (eachCategoryBlock.diffToTarget < 0) {
         eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `${eachCategoryBlock.diffToTarget}k` : `${eachCategoryBlock.diffToTarget}`;
@@ -2176,7 +2196,7 @@ export class DTOService {
       const overrideList: Array<BEModels.BEStructuringBreakdownBlock> = this.utility.convertRawOverrideToRawBreakdown(rawData.overrides);
       overrideList.forEach((eachRawBreakdown) => {
         const isDisplayCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
-        const newBreakdown = this.formPortfolioOverrideBreakdown(eachRawBreakdown, isDisplayCs01);
+        const newBreakdown = this.formPortfolioOverrideBreakdown(eachRawBreakdown, isDisplayCs01, rawData.overrides);
         object.data.children.unshift(newBreakdown);
       });
     }

@@ -299,7 +299,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               this.state.targetBreakdownRawData = rawBreakdownList[0];
             }
             const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
-            const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, isDisplayCs01);
+            const originalBEBucket = [serverReturn];
+            const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, isDisplayCs01, originalBEBucket);
             newBreakdown.state.isPreviewVariant = true;
             this.state.targetBreakdown = newBreakdown;
             const prevEditRowsForInheritance = this.utilityService.deepCopy(this.state.editRowList);

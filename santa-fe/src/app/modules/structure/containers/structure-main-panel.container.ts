@@ -2,8 +2,6 @@ import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { of, Subscription } from 'rxjs';
 import { catchError, first, tap} from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import * as moment from 'moment';
-
 import { DTOService } from 'Core/services/DTOService';
 import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
 import { selectMetricLevel, selectSetViewData } from 'Structure/selectors/structure.selectors';
