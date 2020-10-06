@@ -294,7 +294,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     let viewMessageDetails = 'view:'; 
     for (let values in bucket) {
       if (!!bucket[values]) {
-        viewMessageDetails = `${viewMessageDetails} ${bucket[values]}`;
+        viewMessageDetails = `${viewMessageDetails} ${bucket[values]}, with value ${payload.view}`;
       }
     }
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
