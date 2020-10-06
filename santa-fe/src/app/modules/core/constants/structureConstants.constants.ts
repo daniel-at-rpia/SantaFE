@@ -1,4 +1,6 @@
 import { PortfolioStructureDTO } from 'FEModels/frontend-models.interface';
+import { SecurityDefinitionBundleStub } from 'FEModels/frontend-stub-models.interface';
+import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
 
 export enum PortfolioView {
   overweight = 'Overweight',
@@ -36,3 +38,27 @@ export enum BICsLevels {
 }
 
 export const STRUCTURE_EDIT_MODAL_ID = 'Edit Fund Target';
+
+
+
+export const CustomeBreakdownConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> = [
+  {
+    label: 'Basic',
+    list: [
+      SecurityDefinitionMap.COUPON_TYPE,
+      SecurityDefinitionMap.CURRENCY,
+      SecurityDefinitionMap.RATING,
+      SecurityDefinitionMap.SECTOR,
+      SecurityDefinitionMap.TENOR,
+      SecurityDefinitionMap.STRATEGY,
+      SecurityDefinitionMap.INDUSTRY,
+      SecurityDefinitionMap.COUNTRY
+    ]
+  },{
+    label: 'Quality',
+    list: [
+      SecurityDefinitionMap.RATING_BUCKET,
+      SecurityDefinitionMap.SENIORITY
+    ]
+  }
+];

@@ -35,6 +35,8 @@ export const APIUrlMap = {
   updatePortfolioTargets: 'portfolioStructuring/update-portfolio-target',
   updatePortfolioBreakdown: 'portfolioStructuring/update-portfolio-breakdown',
   getBICsHierarchy: 'portfolioStructuring/get-bics-hierarchy',
+  getPortfolioOverride: 'portfolioStructuring/get-portfolio-override',
+  updatePortfolioOverride: 'portfolioStructuring/update-portfolio-override'
   getViews: 'portfolioStructuring/get-analyst-views',
   setView: 'portfolioStructuring/set-analyst-view'
 };
@@ -161,7 +163,7 @@ export const TriCoreDriverConfig: TriCoreDriverConfigStub = {
   }
 }
 
-export const BackendKeyDictionary = {
+export const FrontendKayToBackendKeyDictionary = {
   // definitions
   'SECURITY_TYPE': 'SecurityType',
   'RATING': 'RatingNoNotch',
@@ -189,6 +191,28 @@ export const BackendKeyDictionary = {
   'YIELD': 'yieldWorst',
   'SIZE': 'marketValue'
 };
+
+export const BackendKeyToDisplayLabelDictionary = {
+  'SecurityType': 'Security Type',
+  'RatingNoNotch': 'Rating',
+  'Ccy': 'Currency',
+  'Tenor': 'Tenor',
+  'IsOnTheRun': 'Is On The Run',
+  'RatingBucket': 'Rating Bucket',
+  'BailInStatus': 'Bail In Status',
+  'CouponType': 'Coupon Type',
+  'Industry': 'Industry',
+  'IsNewIssue': 'Is New Issue',
+  'Issuer': 'Issuer',
+  'MaturityType': 'Maturity Type',
+  'Sector': 'Sector',
+  'Seniority': 'Seniority',
+  'SubIndustry': 'Sub Industry',
+  'BackendTenor': 'Backend Tenor',
+  'Ticker': 'Ticker',
+  'Country': 'Country',
+  'QuotedToday': 'Quoted Today'
+}
 
 export const MIN_OBLIGOR_CURVE_VALUES = 2;
 

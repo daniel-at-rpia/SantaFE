@@ -77,7 +77,7 @@ export class MarketGroupPanel implements OnDestroy {
       isConfiguratorCollapsed: false,
       isGroupDataLoaded: false,
       configurator: {
-        dto: this.dtoService.createSecurityDefinitionConfigurator(false),
+        dto: this.dtoService.createSecurityDefinitionConfigurator(false, false, false),
         showSelectedGroupConfig: false,
         cachedOriginalConfig: null,
         shortcutList: [],
@@ -251,7 +251,7 @@ export class MarketGroupPanel implements OnDestroy {
   }
 
   public onClearConfig(){
-    this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(false);
+    this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(false, false, false);
   }
 
   public onClickExport(){
@@ -546,7 +546,7 @@ export class MarketGroupPanel implements OnDestroy {
     if (!this.state.configurator.cachedOriginalConfig) {
       this.state.configurator.cachedOriginalConfig = this.utilityService.deepCopy(this.state.configurator.dto);
     }
-    const newConfig = this.dtoService.createSecurityDefinitionConfigurator(false);
+    const newConfig = this.dtoService.createSecurityDefinitionConfigurator(false, false, false);
     selectedGroupList.forEach((eachGroup) => {
       this.updateConfiguratorPerGroup(eachGroup, newConfig);
     });

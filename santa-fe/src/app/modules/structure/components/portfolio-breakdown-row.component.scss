@@ -120,6 +120,7 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
           @include mix_text_overflow_multi_line();
           -webkit-box-align: end;
           height: auto;
+          border-width: 0;
           @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
           cursor: pointer;
           &:hover{

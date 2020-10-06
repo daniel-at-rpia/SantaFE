@@ -119,23 +119,28 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-public updatePopoverData(breakdownRow: StructurePortfolioBreakdownRowDTO)
- {
-  if (!!this.breakdownData.data.selectedCategory) {
-    if (breakdownRow.data.category !== this.breakdownData.data.selectedCategory) {
-      const previousRowCategory = this.breakdownData.data.selectedCategory;
-      this.breakdownData.data.selectedCategory = breakdownRow.data.category; 
-      const previousCs01Row = this.breakdownData.data.rawCs01CategoryList.find(row => row.data.category === previousRowCategory);
-      const previousLeverageRow = this.breakdownData.data.rawLeverageCategoryList.find(row => row.data.category === previousRowCategory);
-      if (!!previousCs01Row) {
-        previousCs01Row.state.isSelected = false;
+  public updatePopoverData(breakdownRow: StructurePortfolioBreakdownRowDTO) {
+    if (!!this.breakdownData.data.selectedCategory) {
+      if (breakdownRow.data.category !== this.breakdownData.data.selectedCategory) {
+        const previousRowCategory = this.breakdownData.data.selectedCategory;
+        this.breakdownData.data.selectedCategory = breakdownRow.data.category; 
+        const previousCs01Row = this.breakdownData.data.rawCs01CategoryList.find(row => row.data.category === previousRowCategory);
+        const previousLeverageRow = this.breakdownData.data.rawLeverageCategoryList.find(row => row.data.category === previousRowCategory);
+        if (!!previousCs01Row) {
+          previousCs01Row.state.isSelected = false;
+        }
+        if (!!previousLeverageRow) {
+          previousLeverageRow.state.isSelected = false;
+        }
       }
-      if (!!previousLeverageRow) {
-        previousLeverageRow.state.isSelected = false;
-      }
+    } else {
+      this.breakdownData.data.selectedCategory = breakdownRow.data.category;
     }
-  } else {
-    this.breakdownData.data.selectedCategory = breakdownRow.data.category;
+    const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.breakdownData.state.isDisplayingCs01);
+    breakdownRow.data.children = subBicsLevel;
+    this.breakdownData.data.popover = this.dtoService.formStructurePopoverObject(breakdownRow, this.breakdownData.state.isDisplayingCs01);
+    this.breakdownData.data.popover.data.mainRow.state.isSelected = true;
+    this.breakdownData.data.popover.state.isActive = true;
   }
   const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.breakdownData.state.isDisplayingCs01, this.breakdownData.state.isEditingView);
   breakdownRow.data.children = subBicsLevel;

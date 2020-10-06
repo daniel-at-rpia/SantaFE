@@ -233,6 +233,7 @@ export interface SecurityDefinitionConfiguratorDTO extends BasicDTOStructure {
     isLoadingLongOptionListFromServer: boolean;
     showFiltersFromDefinition: SecurityDefinitionDTO;
     noMainCTA: boolean;
+    securityAttrOnly: boolean;
   }
 }
 
@@ -507,6 +508,7 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
     rightEdge: number;
     rightGap: number;
     endPinLocation: number;
+    backgroundColor: string;
   }
   state: {
     isInversed: boolean;
@@ -697,6 +699,7 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     isTargetAlignmentRatingAvail: boolean;
     isPreviewVariant: boolean;
     isBICs: boolean;
+    isOverrideVariant: boolean;
     isEditingView: boolean;
   }
 }
@@ -731,11 +734,11 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     onSubmitMetricValues: (CS01: number, leverage: number) => void;
   }
   state: {
-    isEditing: boolean;
+    isEditAvailable: boolean;
     isStencil: boolean;
     isNumeric: boolean;
     isDataUnavailable: boolean;
-    isEditingFundTargets: boolean;
+    isEditingFund: boolean;
     hasErrors: {
       updatedCS01: boolean;
       updatedCreditLeverage: boolean;
