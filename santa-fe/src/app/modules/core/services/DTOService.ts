@@ -1920,7 +1920,7 @@ export class DTOService {
         isTargetAlignmentRatingAvail: !!isStencil,
         isPreviewVariant: false,
         isBICs: !!isBicsBreakdown,
-        isOverrideVariant: false
+        isOverrideVariant: false,
         isEditingView: false
       }
     };

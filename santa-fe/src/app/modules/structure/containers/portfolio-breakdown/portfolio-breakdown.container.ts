@@ -136,18 +136,12 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     } else {
       this.breakdownData.data.selectedCategory = breakdownRow.data.category;
     }
-    const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.breakdownData.state.isDisplayingCs01);
+    const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.breakdownData.state.isDisplayingCs01, this.breakdownData.state.isEditingView);
     breakdownRow.data.children = subBicsLevel;
     this.breakdownData.data.popover = this.dtoService.formStructurePopoverObject(breakdownRow, this.breakdownData.state.isDisplayingCs01);
     this.breakdownData.data.popover.data.mainRow.state.isSelected = true;
     this.breakdownData.data.popover.state.isActive = true;
   }
-  const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.breakdownData.state.isDisplayingCs01, this.breakdownData.state.isEditingView);
-  breakdownRow.data.children = subBicsLevel;
-  this.breakdownData.data.popover = this.dtoService.formStructurePopoverObject(breakdownRow, this.breakdownData.state.isDisplayingCs01);
-  this.breakdownData.data.popover.data.mainRow.state.isSelected = true;
-  this.breakdownData.data.popover.state.isActive = true;
- }
 
   public switchPopoverValues(block: PortfolioBreakdownCategoryBlock) {
     if (!block.children) return;
