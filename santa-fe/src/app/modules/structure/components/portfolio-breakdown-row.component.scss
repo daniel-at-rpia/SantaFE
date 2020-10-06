@@ -9,13 +9,14 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
   align-items: center;
   &__cta {
     @include mix_fixed_div(relative, $z_index_base_item);
-    display: flex;
     flex: 0 0 7.5rem;
+    display: flex;
     margin-right: $spacing_small;
     &-btn {
       @include mix_border_generator();
-      display: flex;
       flex: 1 1 auto;
+      display: flex;
+      min-height: $portfolioBreakdownRowBtnMinHeight;
       margin: 0 $spacing_small $spacing_small 0;
       padding: $spacing_xx_small;
       box-shadow: none;
@@ -67,12 +68,12 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
   }
   &__utility {
     @include mix_fixed_div(relative, $z_index_base_item_solid);
-    display: flex;
     flex: 1 1 auto;
+    display: flex;
     align-items: center;
     &-moveVisualizer {
-      display: flex;
       flex: 0 1 90%;
+      display: flex;
       &>move-visualizer {
         flex: 1 1 auto;
       }
@@ -107,7 +108,6 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
     #{$blockName} {
       &__cta {
         &-btn {
-          min-height: $portfolioBreakdownRowBtnMinHeight;
           word-break: break-word;
         }
       }
