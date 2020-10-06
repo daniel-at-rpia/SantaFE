@@ -26,8 +26,11 @@ export class PortfolioBreakdownRow {
   ) {}
 
   public onClickDiveIn(row: StructurePortfolioBreakdownRowDTO) {
-    if (!row.data.bicsLevel) return;
-    !!this.breakdownRowDiveIn && this.breakdownRowDiveIn.emit(row);
+    if (!row.data.bicsLevel || row.state.isStencil) {
+      return null;
+    } else {
+      !!this.breakdownRowDiveIn && this.breakdownRowDiveIn.emit(row);
+    }
   }
 
   public onClickSetView(view: PortfolioView) {

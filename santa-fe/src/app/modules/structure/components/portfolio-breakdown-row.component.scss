@@ -208,6 +208,11 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
   }
   &--stencilState {
     #{$blockName} {
+      &__cta {
+        &-btn {
+          cursor: not-allowed;
+        }
+      }
       &__cell {
         @include mix_stencil_animation;
         background-color: $color_stencil;
