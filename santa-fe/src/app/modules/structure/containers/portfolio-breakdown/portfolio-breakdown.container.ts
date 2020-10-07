@@ -175,12 +175,23 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       return null;
     } else {
       row.state.isEditingView = !!isEditing;
+      const oppositeMainList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawLeverageCategoryList : this.breakdownData.data.rawCs01CategoryList;
+      const matchedOppositeRow = oppositeMainList.find(category => category.data.category === row.data.category);
+      if (!!matchedOppositeRow) {
+        matchedOppositeRow.state.isEditingView = !!isEditing;
+      }
       if (row.data.children) {
         row.data.children.state.isEditingView = !!isEditing;
-        if(row.data.children.data.displayCategoryList.length > 0) {
-          row.data.children.data.displayCategoryList.forEach(category => {
-            category.state.isEditingView = isEditing;
-            this.toggleSetView(category, isEditing);
+        const selectedChildList = this.breakdownData.state.isDisplayingCs01 ? row.data.children.data.rawCs01CategoryList : row.data.children.data.rawLeverageCategoryList;
+        const oppositeChildList = selectedChildList === row.data.children.data.rawCs01CategoryList ?  row.data.children.data.rawLeverageCategoryList : row.data.children.data.rawCs01CategoryList;
+        if (selectedChildList.length > 0) {
+          selectedChildList.forEach(selectedRow => {
+            selectedRow.state.isEditingView = isEditing;
+            const matchedOppositeCategory = oppositeChildList.find(oppositeRow => oppositeRow.data.category === selectedRow.data.category);
+            if (!!matchedOppositeCategory) {
+              matchedOppositeCategory.state.isEditingView = isEditing
+            }
+            this.toggleSetView(selectedRow, isEditing);
           })
         }
       } else {
