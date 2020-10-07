@@ -106,7 +106,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           this.state.targetBreakdown.state.isEditingView = false;
           if (this.state.targetBreakdown.data.displayCategoryList.length > 0) {
             this.state.targetBreakdown.data.displayCategoryList.forEach(row => {
-              this.utilityService.toggleSetView(row, this.state.targetBreakdown.state.isEditingView);
+              row.state.isEditingView = false;
             })
           }
         }
