@@ -49,7 +49,7 @@
       AxeAlertScope,
       AxeAlertType
     } from 'Core/constants/tradeConstants.constant';
-    import { PortfolioShortNames, PortfolioMetricValues, PortfolioView } from 'Core/constants/structureConstants.constants';
+    import { PortfolioShortNames, PortfolioMetricValues, PortfolioView, PortfolioBreakdownGroupOptions } from 'Core/constants/structureConstants.constants';
   //
 
 @Injectable()
@@ -1955,22 +1955,11 @@ export class DTOService {
     }
  
     definitionList.forEach((eachCategoryText) => {
-      let bucket: Blocks.StructureBucketData = {};
-      if (!!isOverride) {
-        const list = [];
-        originalBEOverride.forEach(override => {
-          const overrideCategory = this.utility.formCategoryKeyForOverride(override);
-          const modifiedOverrideObject = {
-            category: overrideCategory,
-            bucket: override.bucket
-          }
-          list.push(modifiedOverrideObject);
-        })
-        const matchedBEOverride = list.find(override => eachCategoryText === override.category);
-        bucket = !!matchedBEOverride ? matchedBEOverride.bucket : null;
-      } else {
-        bucket[rawData.groupOption] = [eachCategoryText];
-      }
+      const parsedGroupOption = !!isOverride ? rawData.groupOption : PortfolioBreakdownGroupOptions[rawData.groupOption];
+      const bucket = this.utility.populateBEBucketObjectFromRowTitle(
+        this.utility.formBEBucketObjectFromBucketIdentifier(parsedGroupOption),
+        eachCategoryText
+      )
       const parsedBEView = !!rawData.breakdown[eachCategoryText]  && !!rawData.breakdown[eachCategoryText].view ? rawData.breakdown[eachCategoryText].view.toLowerCase() : null;
       const view = PortfolioView[parsedBEView];
       const eachCs01CategoryBlock = rawData.breakdown[eachCategoryText] 

@@ -9,10 +9,10 @@ export enum PortfolioView {
 }
 
 export enum PortfolioBreakdownGroupOptions {
-  currency = 'Currency',
-  tenor = 'Tenor',
-  rating = 'Rating',
-  bics = 'BICS'
+  Ccy = 'Currency',
+  Tenor = 'Tenor',
+  RatingNoNotch = 'Rating',
+  BICs = 'BICS'
 }
 
 export enum PortfolioShortNames {

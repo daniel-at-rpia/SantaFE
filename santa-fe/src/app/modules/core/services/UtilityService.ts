@@ -1140,24 +1140,5 @@ export class UtilityService {
       return breakdownList;
     }
 
-    public toggleSetView(row: DTOs.StructurePortfolioBreakdownRowDTO, isEditing: boolean) {
-      if (!row) {
-        return null;
-      } else {
-        row.state.isEditingView = !!isEditing;
-        if (row.data.children) {
-          row.data.children.state.isEditingView = !!isEditing;
-          if(row.data.children.data.displayCategoryList.length > 0) {
-            row.data.children.data.displayCategoryList.forEach(category => {
-              category.state.isEditingView = isEditing;
-              this.toggleSetView(category, isEditing);
-            })
-          }
-        } else {
-          return null;
-        }
-      }
-    }
-
   // structuring specific end
 }

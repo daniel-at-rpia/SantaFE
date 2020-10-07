@@ -165,7 +165,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     if (!breakdown.state.isPreviewVariant) {
       this.breakdownData.state.isEditingView = !this.breakdownData.state.isEditingView;
       breakdown.data.displayCategoryList.forEach(row => {
-        this.utilityService.toggleSetView(row, this.breakdownData.state.isEditingView);
+        this.toggleSetView(row, this.breakdownData.state.isEditingView);
     })
     }
   }

@@ -116,7 +116,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     setTimeout(() => {
       initialWaitForIcons();
     }, 200);
-    const loadData = this.fetchInitialFunds.bind(this);
+    const loadData = this.fetchFunds.bind(this);
     setTimeout(() => {
       loadData();
     }, 500);
@@ -206,68 +206,33 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     targetBar.data.displayedResults = '-';
   }
 
-  private fetchAllFunds(
-    endpoint: string,
-    payload: PayloadGetPortfolioStructures | PayloadSetView, 
-    isInitialFetch: boolean, 
-    systemAlertMessage: string = '') {
+  private fetchFunds() {
+    //If nothing is passed in, BE assumes current date
+    let payload: PayloadGetPortfolioStructures;
+    const endpoint = this.restfulCommService.apiMap.getPortfolioStructures;
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn: Array<BEPortfolioStructuringDTO>) => {
-        this.state.fetchResult.fundList = [];
-        serverReturn.forEach(eachFund => {
-          this.BICsDataProcessingService.getRawBICsData(eachFund);
-          const newFund = this.dtoService.formStructureFundObject(eachFund, false);
-          this.state.fetchResult.fundList.push(newFund);
-        })
-        this.state.fetchResult.fundList.length > 1 && this.sortFunds(this.state.fetchResult.fundList);
-        if (!isInitialFetch) {
-          const completeAlertMessage = `Successfully updated ${systemAlertMessage}`;
-          const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
-          this.store$.dispatch(new CoreSendNewAlerts([alert]));
-        }
+        this.processStructureData(serverReturn);
       }),
       catchError(err => {
         setTimeout(() => {
           this.state.fetchResult.fetchFundDataFailed = true;
           this.state.fetchResult.fetchFundDataFailedError = err.message;
           this.state.fetchResult.fundList.forEach(eachFund => {
-            if (!!isInitialFetch) {
-              eachFund.state.isDataUnavailable = this.state.fetchResult.fetchFundDataFailed;
-              this.setEmptyTargetBar(eachFund.data.creditLeverageTargetBar);
-              this.setEmptyTargetBar(eachFund.data.cs01TargetBar);
-            } else {
-              eachFund.state.isStencil = false;
-              eachFund.data.children.forEach(breakdown => {
-                breakdown.state.isStencil = false;
-                breakdown.data.displayCategoryList.forEach(category => {
-                  category.state.isStencil = false;
-                  category.data.moveVisualizer.state.isStencil = false;
-                })
-              })
-              const completeAlertMessage = `Unable to update ${systemAlertMessage}`;
-              const alert = this.dtoService.formSystemAlertObject('Structuring', 'ERROR', completeAlertMessage, null);
-              alert.state.isError = true;
-              this.store$.dispatch(new CoreSendNewAlerts([alert]));
-            }
+            eachFund.state.isDataUnavailable = this.state.fetchResult.fetchFundDataFailed;
+            this.setEmptyTargetBar(eachFund.data.creditLeverageTargetBar);
+            this.setEmptyTargetBar(eachFund.data.cs01TargetBar);
           })
         }, 500);
-        const formattedEndpoint = endpoint.split('/');
-        const errorMessage = formattedEndpoint[formattedEndpoint.length - 1].split('-').join(' ');
-        this.restfulCommService.logError(`${errorMessage} call failed to retrieve data`)
+        this.restfulCommService.logError('Get Portfolio Structures API called failed')
         console.error(`${endpoint} failed`, err);
         return of('error')
       })
     ).subscribe()
   }
-
-  private fetchInitialFunds() {
-    //If nothing is passed in, BE assumes current date
-    let payload: PayloadGetPortfolioStructures;
-    this.fetchAllFunds(this.restfulCommService.apiMap.getPortfolioStructures, payload, true);
-  }
-
+  
   private reloadFund(
     serverReturn: BEPortfolioStructuringDTO,
     systemAlertMessage: string
@@ -284,6 +249,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
 
   private updateViewData(data: StructureSetViewData) {
+    const currentFunds = this.utilityService.deepCopy(this.state.fetchResult.fundList);
     this.loadStencilFunds();
     const { yyyyMMdd, bucket, view } = data;
     const payload: PayloadSetView = {
@@ -291,13 +257,47 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       bucket: bucket, 
       view: view
     }
-    let viewMessageDetails = 'view:'; 
+    const endpoint = this.restfulCommService.apiMap.setView;
+    let messageDetails = ''; 
+    const displayViewValue = !!view ? view : 'removed';
     for (let values in bucket) {
       if (!!bucket[values]) {
-        viewMessageDetails = `${viewMessageDetails} ${bucket[values]}, with value ${payload.view}`;
+        messageDetails = messageDetails === '' ? `${bucket[values]}, with view value ${displayViewValue}` : `${messageDetails} ${bucket[values]}, with view value ${displayViewValue}`;
       }
     }
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
-    this.fetchAllFunds(this.restfulCommService.apiMap.setView, payload,false, viewMessageDetails);
+    this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
+      first(),
+      tap((serverReturn: Array<BEPortfolioStructuringDTO>) => {
+        this.processStructureData(serverReturn);
+        const completeAlertMessage = `Successfully updated ${messageDetails}`;
+        const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
+        this.store$.dispatch(new CoreSendNewAlerts([alert]));
+      }),
+      catchError(err => {
+        setTimeout(() => {
+          this.state.fetchResult.fetchFundDataFailed = true;
+          this.state.fetchResult.fetchFundDataFailedError = err.message;
+          this.state.fetchResult.fundList = currentFunds;
+          const completeAlertMessage = `Unable to update ${messageDetails}`;
+          const alert = this.dtoService.formSystemAlertObject('Structuring', 'ERROR', completeAlertMessage, null);
+          alert.state.isError = true;
+          this.store$.dispatch(new CoreSendNewAlerts([alert]));
+        }, 500)
+        this.restfulCommService.logError('Set Analyst View API call failed')
+        console.error(`${endpoint} failed`, err);
+        return of('error')
+      })
+    ).subscribe()
+  }
+
+  private processStructureData(serverReturn: Array<BEPortfolioStructuringDTO>) {
+    this.state.fetchResult.fundList = [];
+    serverReturn.forEach(eachFund => {
+      this.BICsDataProcessingService.getRawBICsData(eachFund);
+      const newFund = this.dtoService.formStructureFundObject(eachFund, false);
+      this.state.fetchResult.fundList.push(newFund);
+    })
+    this.state.fetchResult.fundList.length > 1 && this.sortFunds(this.state.fetchResult.fundList);
   }
 }

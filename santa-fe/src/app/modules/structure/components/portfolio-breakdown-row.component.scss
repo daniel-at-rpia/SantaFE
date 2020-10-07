@@ -2,6 +2,7 @@
 
 $portfolioBreakdownRowCategory_cell_width: 3.5rem;
 $portfolioBreakdownRowBtnMinHeight: 2.25rem;
+$portfolioBreakdownRowViewButtonSize: 1.2rem;
 .sat-portfolioBreakdownRow {
   $blockName: &;
   display: flex;
@@ -78,7 +79,7 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
         flex: 1 1 auto;
       }
     }
-    &-btnGroup {
+    &-ctas {
       @include mix_fixed_div(absolute, $z_index_dropdown);
       @include mix_alive('light');
       display: flex;
@@ -87,8 +88,8 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
       width: 100%;
       &-btn {
         @include mix_border_radius(3px);
-        width: $iconButton_size_x_small;
-        height: $iconButton_size_x_small;
+        width: $portfolioBreakdownRowViewButtonSize;
+        height: $portfolioBreakdownRowViewButtonSize;
         color: $font_color_inverse;
         padding: $spacing_small;
         margin-right: $spacing_small;
@@ -133,7 +134,7 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
   &--isEditingView {
     #{$blockName} {
       &__utility {
-        &-btnGroup {
+        &-ctas {
           transform: scale(1);
         }
       }
@@ -176,7 +177,7 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
   &--overweight {
     #{$blockName} {
       &__utility {
-        &-btnGroup {
+        &-ctas {
           &-btn {
             &--overweight {
               background-color: $color_active;
@@ -190,7 +191,7 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
   &--underweight {
     #{$blockName} {
       &__utility {
-        &-btnGroup {
+        &-ctas {
           &-btn {
             &--underweight {
               background-color: $color_active;
@@ -204,7 +205,7 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
   &--neutral {
     #{$blockName} {
       &__utility {
-        &-btnGroup {
+        &-ctas {
           &-btn {
             &--neutral {
               background-color: $color_active;

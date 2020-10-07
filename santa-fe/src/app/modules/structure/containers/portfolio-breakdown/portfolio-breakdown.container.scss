@@ -130,10 +130,15 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
       &-icon {
         &--up,
         &--down {
-          font-size: $font_size_x_small;
+          font-size: $font_size_small;
         }
         &--up {
-          margin-right: $spacing_xx_small;
+          margin-bottom: $spacing_x_small;
+          margin-right: -$spacing_minimum;
+        }
+        &--down {
+          margin-top: $spacing_x_small;
+          margin-left: -$spacing_minimum;
         }
       }
     }

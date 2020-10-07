@@ -59,7 +59,7 @@
   </section>
   <section class="sat-portfolioBreakdown__ctas">
     <button (click)="onClickEdit()" class="santaBtn--iconOnly sat-portfolioBreakdown__ctas-editBtn fal fa-pencil"></button>
-    <button (click)="onClickSetView(breakdownData)" class="santaBtn--iconOnly sat-portfolioBreakdown__ctas-viewBtn"><span class="sat-portfolioBreakdown__ctas-viewBtn-icon--up fal fa-arrow-up"></span><span class="sat-portfolioBreakdown__ctas-viewBtn-icon--down fal fa-arrow-down"></span></button>
+    <button (click)="onClickSetView(breakdownData)" class="santaBtn--iconOnly sat-portfolioBreakdown__ctas-viewBtn"><i class="sat-portfolioBreakdown__ctas-viewBtn-icon--up fal fa-arrow-up"></i><i class="sat-portfolioBreakdown__ctas-viewBtn-icon--down fal fa-arrow-down"></i></button>
   </section>
   <section class="sat-portfolioBreakdown__popover" *ngIf="breakdownData.data.popover">
     <structure-popover [popover]="breakdownData.data.popover">

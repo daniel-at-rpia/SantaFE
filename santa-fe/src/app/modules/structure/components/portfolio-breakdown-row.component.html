@@ -13,13 +13,13 @@
   }">
   <section class="sat-portfolioBreakdownRow__cta">
     <button (click)="onClickDiveIn(breakdownRow)" class="sat-portfolioBreakdownRow__cta-btn">
-      <span [ngClass]="{
+      <i [ngClass]="{
         'sat-portfolioBreakdownRow__cta-btn-view': true,
-        'fal': true,
+        'far': true,
         'fa-arrow-up': breakdownRow.data.view === constants.overweight,
         'fa-arrow-down': breakdownRow.data.view === constants.underweight,
         'fa-minus': breakdownRow.data.view === constants.neutral
-      }"></span>
+      }"></i>
       <span class="sat-portfolioBreakdownRow__cta-btn-text">{{ breakdownRow.data.category }}</span>
     </button>
   </section>
@@ -27,12 +27,12 @@
     <div class="sat-portfolioBreakdownRow__utility-moveVisualizer">
       <move-visualizer [visualizerData]="breakdownRow.data.moveVisualizer"></move-visualizer>
     </div>
-    <div class="sat-portfolioBreakdownRow__utility-btnGroup">
-      <button (click)="onClickSetView(constants.overweight)"class="sat-portfolioBreakdownRow__utility-btnGroup-btn santaBtn--iconOnly fal fa-arrow-up sat-portfolioBreakdownRow__utility-btnGroup-btn--overweight">
+    <div class="sat-portfolioBreakdownRow__utility-ctas">
+      <button (click)="onClickSetView(constants.overweight)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--iconOnly fal fa-arrow-up sat-portfolioBreakdownRow__utility-ctas-btn--overweight">
       </button>
-      <button (click)="onClickSetView(constants.underweight)"class="sat-portfolioBreakdownRow__utility-btnGroup-btn santaBtn--iconOnly fal fa-arrow-down sat-portfolioBreakdownRow__utility-btnGroup-btn--underweight">
+      <button (click)="onClickSetView(constants.underweight)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--iconOnly fal fa-arrow-down sat-portfolioBreakdownRow__utility-ctas-btn--underweight">
       </button>
-      <button (click)="onClickSetView(constants.neutral)"class="sat-portfolioBreakdownRow__utility-btnGroup-btn santaBtn--iconOnly fal fa-minus sat-portfolioBreakdownRow__utility-btnGroup-btn--neutral">
+      <button (click)="onClickSetView(constants.neutral)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--iconOnly fal fa-minus sat-portfolioBreakdownRow__utility-ctas-btn--neutral">
       </button>
     </div>
   </section>
