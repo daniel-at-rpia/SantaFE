@@ -45,14 +45,18 @@ export const CustomeBreakdownConfiguratorDefinitionLayout: Array<SecurityDefinit
   {
     label: 'Basic',
     list: [
-      SecurityDefinitionMap.COUPON_TYPE,
       SecurityDefinitionMap.CURRENCY,
       SecurityDefinitionMap.RATING,
-      SecurityDefinitionMap.SECTOR,
       SecurityDefinitionMap.TENOR,
-      SecurityDefinitionMap.STRATEGY,
-      SecurityDefinitionMap.INDUSTRY,
       SecurityDefinitionMap.COUNTRY
+    ]
+  },{
+    label: 'BICS',
+    list: [
+      SecurityDefinitionMap.BICS_LEVEL_1,
+      SecurityDefinitionMap.BICS_LEVEL_2,
+      SecurityDefinitionMap.BICS_LEVEL_3,
+      SecurityDefinitionMap.BICS_LEVEL_4
     ]
   },{
     label: 'Quality',

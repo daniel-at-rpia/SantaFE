@@ -37,6 +37,7 @@ import { StructureSetTargetPostEditUpdatePack } from 'FEModels/frontend-adhoc-pa
 import { StructureReloadBreakdownDataPostEditEvent } from 'Structure/actions/structure.actions';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import { CustomeBreakdownConfiguratorDefinitionLayout } from 'Core/constants/structureConstants.constants';
+import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 import * as moment from 'moment';
 
 @Component({
@@ -63,7 +64,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     private utilityService: UtilityService,
     private dtoService: DTOService,
     private restfulCommService: RestfulCommService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private bicsService: BICsDataProcessingService
   ){
     this.state = this.initializePageState();
   }
@@ -109,6 +111,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.state.activeMetric = pack.targetFund.data.cs01TargetBar.state.isInactiveMetric ? this.constants.metric.creditLeverage : this.constants.metric.cs01;
         this.loadEditRows();
         this.calculateAllocation();
+        this.loadBICSOptionsIntoConfigurator();
       }
     })
     this.modalService.bindModalSaveCallback(STRUCTURE_EDIT_MODAL_ID, this.submitTargetChanges.bind(this));
@@ -315,6 +318,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
     this.state.configurator.display = false;
     this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
+    this.loadBICSOptionsIntoConfigurator();
   }
 
   private loadEditRows() {
@@ -717,6 +721,26 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     } else {
       return false;
     }
+  }
+
+  private loadBICSOptionsIntoConfigurator() {
+    const level1 = this.bicsService.returnAllBICSBasedOnHierarchyDepth(1);
+    const level2 = this.bicsService.returnAllBICSBasedOnHierarchyDepth(2);
+    const level3 = this.bicsService.returnAllBICSBasedOnHierarchyDepth(3);
+    const level4 = this.bicsService.returnAllBICSBasedOnHierarchyDepth(4);
+    this.state.configurator.dto.data.definitionList.forEach((eachBundle) => {
+      eachBundle.data.list.forEach((eachDefinition) => {
+        if (eachDefinition.data.key === this.constants.definitionMap.BICS_LEVEL_1.key) {
+          eachDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(this.constants.definitionMap.BICS_LEVEL_1.key, level1);
+        } else if (eachDefinition.data.key === this.constants.definitionMap.BICS_LEVEL_2.key) {
+          eachDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(this.constants.definitionMap.BICS_LEVEL_2.key, level2);
+        } else if (eachDefinition.data.key === this.constants.definitionMap.BICS_LEVEL_3.key) {
+          eachDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(this.constants.definitionMap.BICS_LEVEL_3.key, level3);
+        } else if (eachDefinition.data.key === this.constants.definitionMap.BICS_LEVEL_4.key) {
+          eachDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(this.constants.definitionMap.BICS_LEVEL_4.key, level4);
+        }
+      });
+    });
   }
 
 }

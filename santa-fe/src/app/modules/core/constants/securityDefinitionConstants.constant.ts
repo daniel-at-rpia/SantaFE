@@ -345,7 +345,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
   SECTOR: {
     key: 'SECTOR',
     displayName: 'Sector',
-    icon: 'fal fa-chart-pie',
+    icon: 'fas fa-chart-pie',
     optionList: FilterOptionsSectorType,
     securityDTOAttr: 'sector'
   },
@@ -421,6 +421,30 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     key: 'OVERRIDE',
     displayName: 'Custom',
     icon: 'fas fa-star',
+    optionList: []
+  },
+  BICS_LEVEL_1: {
+    key: 'BICS_LEVEL_1',
+    displayName: 'BICS Lv.1',
+    icon: 'fal fa-industry-alt',
+    optionList: []
+  },
+  BICS_LEVEL_2: {
+    key: 'BICS_LEVEL_2',
+    displayName: 'BICS Lv.2',
+    icon: 'fal fa-industry-alt',
+    optionList: []
+  },
+  BICS_LEVEL_3: {
+    key: 'BICS_LEVEL_3',
+    displayName: 'BICS Lv.3',
+    icon: 'fal fa-industry-alt',
+    optionList: []
+  },
+  BICS_LEVEL_4: {
+    key: 'BICS_LEVEL_4',
+    displayName: 'BICS Lv.4',
+    icon: 'fal fa-industry-alt',
     optionList: []
   }
 };

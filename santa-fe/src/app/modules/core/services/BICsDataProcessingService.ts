@@ -19,6 +19,26 @@ export class BICsDataProcessingService {
     return parent;
   }
 
+  public returnAllBICSBasedOnHierarchyDepth(depth: number): Array<string> {
+    const allBICSList = [];
+    this.recursiveTraverseForPackagingAllBICSAtGivenDepth(
+      allBICSList,
+      this.formattedBICsHierarchyData.children,
+      depth,
+      1
+    );
+    allBICSList.sort((bicsA, bicsB) => {
+      if (bicsA > bicsB) {
+        return 1;
+      } else if (bicsB > bicsA) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+    return allBICSList;
+  }
+
   public getRawBICsData(rawData: BEPortfolioStructuringDTO) {
     const { BicsLevel1, BicsLevel2, BicsLevel3, BicsLevel4 } = rawData.breakdowns;
     const block: BICsCategorizationBlock = {
@@ -118,6 +138,31 @@ export class BICsDataProcessingService {
         }
       }
     })
+  }
+
+  private recursiveTraverseForPackagingAllBICSAtGivenDepth(
+    packageList: Array<string>,
+    formattedDataList: Array<BICsHierarchyBlock>,
+    targetDepth: number,
+    counter: number
+  ) {
+    if (targetDepth === counter) {
+      formattedDataList.forEach((eachBlock) => {
+        packageList.push(eachBlock.name);
+      });
+    } else {
+      formattedDataList.forEach((eachBlock) => {
+        if (eachBlock.children && eachBlock.children.length > 0) {
+          const newCounter = counter + 1;
+          this.recursiveTraverseForPackagingAllBICSAtGivenDepth(
+            packageList,
+            eachBlock.children,
+            targetDepth,
+            newCounter
+          );
+        }
+      });
+    }
   }
 
 }
