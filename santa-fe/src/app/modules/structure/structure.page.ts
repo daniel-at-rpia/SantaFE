@@ -21,7 +21,7 @@
     import { StructureState } from 'FEModels/frontend-page-states.interface';
     import { StructureStoreResetEvent } from 'Structure/actions/structure.actions';
     import { STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
-    import { BICsHierarchyAllDataBlock, BICsHierarchyBlock } from '../core/models/frontend/frontend-blocks.interface';
+    import { BICsHierarchyAllDataBlock, BICsHierarchyBlock } from 'FEModels/frontend-blocks.interface';
     import { BEBICsHierarchyBlock } from 'Core/models/backend/backend-models.interface';
     import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 

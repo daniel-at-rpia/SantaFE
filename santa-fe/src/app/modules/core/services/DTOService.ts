@@ -558,6 +558,28 @@ export class DTOService {
     return object;
   }
 
+  public loadBICSOptionsIntoConfigurator(
+    configuratorDTO: DTOs.SecurityDefinitionConfiguratorDTO,
+    sortedLevel1List: Array<string>,
+    sortedLevel2List: Array<string>,
+    sortedLevel3List: Array<string>,
+    sortedLevel4List: Array<string>
+  ) {
+    configuratorDTO.data.definitionList.forEach((eachBundle) => {
+      eachBundle.data.list.forEach((eachDefinition) => {
+        if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_1.key) {
+          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_1.key, sortedLevel1List);
+        } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_2.key) {
+          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_2.key, sortedLevel2List);
+        } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_3.key) {
+          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_3.key, sortedLevel3List);
+        } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_4.key) {
+          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_4.key, sortedLevel4List);
+        }
+      });
+    });
+  }
+
   public formAverageVisualizerObject(): DTOs.SecurityGroupAverageVisualizerDTO {
     const object: DTOs.SecurityGroupAverageVisualizerDTO = {
       data: {

@@ -8,6 +8,7 @@
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
+    import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
     import { TradeCenterPanelState } from 'FEModels/frontend-page-states.interface';
     import {
       SecurityDTO,
@@ -19,13 +20,18 @@
       SecurityTableDTO,
       AlertCountSummaryDTO
     } from 'FEModels/frontend-models.interface';
-    import { TableFetchResultBlock } from 'FEModels/frontend-blocks.interface';
+    import {
+      TableFetchResultBlock,
+      BICsHierarchyAllDataBlock,
+      BICsHierarchyBlock
+    } from 'FEModels/frontend-blocks.interface';
     import { PayloadGetTradeFullData } from 'BEModels/backend-payloads.interface';
     import {
       BEPortfolioDTO,
       BESecurityDTO,
       BEBestQuoteDTO,
-      BEFetchAllTradeDataReturn
+      BEFetchAllTradeDataReturn,
+      BEBICsHierarchyBlock
     } from 'BEModels/backend-models.interface';
     import { DefinitionConfiguratorEmitterParams, SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
     import {
@@ -162,7 +168,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     private dtoService: DTOService,
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
-    private processingService: LiveDataProcessingService
+    private processingService: LiveDataProcessingService,
+    private bicsDataProcessingService: BICsDataProcessingService
   ) {
     this.state = this.initializePageState();
   }
@@ -237,7 +244,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         } else {
           this.constants.ownershipShortcuts.splice(0, 1);
         }
-        this.populateSearchShortcuts();
+        this.fetchBICsHierarchy();
       }
     });
   }
@@ -379,6 +386,29 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
 
   public onSearchKeywordChange(newKeyword: string) {
     this.keywordChanged$.next(newKeyword);
+  }
+
+  private fetchBICsHierarchy() {
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getBICsHierarchy, {req: 'GET'}).pipe(
+      first(),
+      tap((serverReturn: BEBICsHierarchyBlock) => {
+        if (!!serverReturn) {
+          this.bicsDataProcessingService.formFormattedBICsHierarchy(serverReturn, {children: []}, 1);
+          this.dtoService.loadBICSOptionsIntoConfigurator(
+            this.state.configurator.dto,
+            this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(1),
+            this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(2),
+            this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(3),
+            this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(4)
+          )
+          this.populateSearchShortcuts();
+        }
+      }),
+      catchError(err => {
+        this.restfulCommService.logError('Cannot retrieve BICs hierarchy data');
+        return of('error');
+      })
+    ).subscribe()
   }
 
   private populateSearchShortcuts() {

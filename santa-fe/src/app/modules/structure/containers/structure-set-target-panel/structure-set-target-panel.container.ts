@@ -724,23 +724,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private loadBICSOptionsIntoConfigurator() {
-    const level1 = this.bicsService.returnAllBICSBasedOnHierarchyDepth(1);
-    const level2 = this.bicsService.returnAllBICSBasedOnHierarchyDepth(2);
-    const level3 = this.bicsService.returnAllBICSBasedOnHierarchyDepth(3);
-    const level4 = this.bicsService.returnAllBICSBasedOnHierarchyDepth(4);
-    this.state.configurator.dto.data.definitionList.forEach((eachBundle) => {
-      eachBundle.data.list.forEach((eachDefinition) => {
-        if (eachDefinition.data.key === this.constants.definitionMap.BICS_LEVEL_1.key) {
-          eachDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(this.constants.definitionMap.BICS_LEVEL_1.key, level1);
-        } else if (eachDefinition.data.key === this.constants.definitionMap.BICS_LEVEL_2.key) {
-          eachDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(this.constants.definitionMap.BICS_LEVEL_2.key, level2);
-        } else if (eachDefinition.data.key === this.constants.definitionMap.BICS_LEVEL_3.key) {
-          eachDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(this.constants.definitionMap.BICS_LEVEL_3.key, level3);
-        } else if (eachDefinition.data.key === this.constants.definitionMap.BICS_LEVEL_4.key) {
-          eachDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(this.constants.definitionMap.BICS_LEVEL_4.key, level4);
-        }
-      });
-    });
+    this.dtoService.loadBICSOptionsIntoConfigurator(
+      this.state.configurator.dto,
+      this.bicsService.returnAllBICSBasedOnHierarchyDepth(1),
+      this.bicsService.returnAllBICSBasedOnHierarchyDepth(2),
+      this.bicsService.returnAllBICSBasedOnHierarchyDepth(3),
+      this.bicsService.returnAllBICSBasedOnHierarchyDepth(4)
+    )
   }
 
 }
