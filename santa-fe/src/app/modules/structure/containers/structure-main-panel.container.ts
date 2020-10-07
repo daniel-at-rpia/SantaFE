@@ -211,7 +211,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       tap((serverReturn: Array<BEPortfolioStructuringDTO>) => {
         this.state.fetchResult.fundList = [];
         serverReturn.forEach(eachFund => {
-          this.BICsDataProcessingService.getRawBICsData(eachFund);
+          this.BICsDataProcessingService.setRawBICsData(eachFund);
           const newFund = this.dtoService.formStructureFundObject(eachFund, false);
           this.state.fetchResult.fundList.push(newFund);
         })
