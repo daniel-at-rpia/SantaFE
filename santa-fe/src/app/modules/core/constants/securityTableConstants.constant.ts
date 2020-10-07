@@ -584,11 +584,11 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       }
     }
   },{
-    key: 'sector',
+    key: 'bicsLevel1',
     content: {
-      label: 'Sector',
-      attrName: 'sector',
-      underlineAttrName: 'sector',
+      label: 'BICS Lv.1',
+      attrName: 'bicsLevel1',
+      underlineAttrName: 'bicsLevel1',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
@@ -596,6 +596,60 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
         default: {
           active: true,
           groupShow: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'bicsLevel2',
+    content: {
+      label: 'BICS Lv.2',
+      attrName: 'bicsLevel2',
+      underlineAttrName: 'bicsLevel2',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'bicsLevel3',
+    content: {
+      label: 'BICS Lv.3',
+      attrName: 'bicsLevel3',
+      underlineAttrName: 'bicsLevel3',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'bicsLevel4',
+    content: {
+      label: 'BICS Lv.4',
+      attrName: 'bicsLevel4',
+      underlineAttrName: 'bicsLevel4',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
         },
         tradeAlert: {
           active: false
@@ -615,42 +669,6 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
         default: {
           active: true,
           groupShow: true
-        },
-        tradeAlert: {
-          active: false
-        }
-      }
-    }
-  },{
-    key: 'industry',
-    content: {
-      label: 'Industry',
-      attrName: 'industry',
-      underlineAttrName: 'industry',
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isDataTypeText: true,
-      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
-      tableSpecifics: {
-        default: {
-          active: true
-        },
-        tradeAlert: {
-          active: false
-        }
-      }
-    }
-  },{
-    key: 'subIndustry',
-    content: {
-      label: 'SubIndustry',
-      attrName: 'subIndustry',
-      underlineAttrName: 'subIndustry',
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isDataTypeText: true,
-      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
-      tableSpecifics: {
-        default: {
-          active: true
         },
         tradeAlert: {
           active: false

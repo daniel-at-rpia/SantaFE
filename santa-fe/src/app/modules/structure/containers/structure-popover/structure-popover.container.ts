@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input,OnInit, Output, ViewEncapsulation} from '@angular/core';
 import { StructurePopoverDTO, StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend-models.interface';
-import { BICsDataProcessingService } from 'Structure/services/BICsDataProcessingService';
+import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 
 @Component({
   selector: 'structure-popover',

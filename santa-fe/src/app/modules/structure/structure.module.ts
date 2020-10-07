@@ -17,7 +17,6 @@ import { PortfolioBreakdown } from 'App/modules/structure/containers/portfolio-b
 import { StructureSetTargetPanel } from 'Structure/containers/structure-set-target-panel/structure-set-target-panel.container';
 
 import { PortfolioBreakdownRow } from 'App/modules/structure/components/portfolio-breakdown-row.component';
-import { BICsDataProcessingService } from 'Structure/services/BICsDataProcessingService';
 import { StructurePopover } from 'Structure/containers/structure-popover/structure-popover.container';
 
 @NgModule({
@@ -47,7 +46,6 @@ import { StructurePopover } from 'Structure/containers/structure-popover/structu
     FormModule
   ],
   providers: [
-    BICsDataProcessingService
   ]
 })
 export class StructureModule { }

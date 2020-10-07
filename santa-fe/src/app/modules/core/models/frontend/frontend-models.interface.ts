@@ -139,6 +139,10 @@ export interface SecurityDTO extends BasicDTOStructure {
       }
     }
     tradeHistory: Array<TradeDTO>;
+    bicsLevel1: string;
+    bicsLevel2: string;
+    bicsLevel3: string;
+    bicsLevel4: string;
   }
   api: {
     onClickCard: (card: SecurityDTO) => void;

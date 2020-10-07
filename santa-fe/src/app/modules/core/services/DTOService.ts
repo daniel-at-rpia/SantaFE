@@ -235,7 +235,11 @@ export class DTOService {
             sendEmail: false
           }
         },
-        tradeHistory: []
+        tradeHistory: [],
+        bicsLevel1: !isStencil ? rawData.bicsLevel1 : null,
+        bicsLevel2: !isStencil ? rawData.bicsLevel2 : null,
+        bicsLevel3: !isStencil ? rawData.bicsLevel3 : null,
+        bicsLevel4: !isStencil ? rawData.bicsLevel4 : null
       }
       if (!isStencil) {
         // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
@@ -552,6 +556,28 @@ export class DTOService {
       }
     };
     return object;
+  }
+
+  public loadBICSOptionsIntoConfigurator(
+    configuratorDTO: DTOs.SecurityDefinitionConfiguratorDTO,
+    sortedLevel1List: Array<string>,
+    sortedLevel2List: Array<string>,
+    sortedLevel3List: Array<string>,
+    sortedLevel4List: Array<string>
+  ) {
+    configuratorDTO.data.definitionList.forEach((eachBundle) => {
+      eachBundle.data.list.forEach((eachDefinition) => {
+        if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_1.key) {
+          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_1.key, sortedLevel1List);
+        } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_2.key) {
+          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_2.key, sortedLevel2List);
+        } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_3.key) {
+          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_3.key, sortedLevel3List);
+        } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_4.key) {
+          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_4.key, sortedLevel4List);
+        }
+      });
+    });
   }
 
   public formAverageVisualizerObject(): DTOs.SecurityGroupAverageVisualizerDTO {
@@ -2138,7 +2164,7 @@ export class DTOService {
     const isDisplayCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
     const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.BicsLevel1, BICsLevel1DefinitionList, isDisplayCs01);
     BICSBreakdown.data.title = 'BICS';
-    BICSBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.SECTOR);
+    BICSBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.BICS_LEVEL_1);
     object.data.children.push(BICSBreakdown);
     const currencyBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Ccy, FilterOptionsCurrency, isDisplayCs01);
     currencyBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
