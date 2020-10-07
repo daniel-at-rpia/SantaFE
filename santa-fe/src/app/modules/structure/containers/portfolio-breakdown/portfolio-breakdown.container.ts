@@ -90,22 +90,6 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  private removeRowStencils(row: StructurePortfolioBreakdownRowDTO) {
-    if (!row) {
-      return null;
-    } else {
-      if (!!row.data.children) {
-        row.data.children.data.displayCategoryList.forEach(row => {
-          row.state.isStencil = false;
-          row.data.moveVisualizer.state.isStencil = false;
-          if (row.data.children) {
-            this.removeRowStencils(row);
-          }
-        })
-      }
-    }
-  }
-
   public onClickEdit() {
     this.modalService.triggerModalOpen(this.constants.editModalId);
     !!this.clickedEdit && this.clickedEdit.emit(this.breakdownData);
@@ -152,7 +136,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     } else {
       this.breakdownData.data.selectedCategory = breakdownRow.data.category;
     }
-    const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.breakdownData.state.isDisplayingCs01);
+    const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.breakdownData.state.isDisplayingCs01, this.breakdownData.state.isEditingView);
     breakdownRow.data.children = subBicsLevel;
     this.breakdownData.data.popover = this.dtoService.formStructurePopoverObject(breakdownRow, this.breakdownData.state.isDisplayingCs01);
     this.breakdownData.data.popover.data.mainRow.state.isSelected = true;
@@ -176,4 +160,59 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       }
     })
   }
+
+  public onClickSetView(breakdown: PortfolioBreakdownDTO) {
+    if (!breakdown.state.isPreviewVariant) {
+      this.breakdownData.state.isEditingView = !this.breakdownData.state.isEditingView;
+      breakdown.data.displayCategoryList.forEach(row => {
+        this.toggleSetView(row, this.breakdownData.state.isEditingView);
+    })
+    }
+  }
+
+  private toggleSetView(row: StructurePortfolioBreakdownRowDTO, isEditing: boolean) {
+    if (!row) {
+      return null;
+    } else {
+      row.state.isEditingView = !!isEditing;
+      const oppositeMainList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawLeverageCategoryList : this.breakdownData.data.rawCs01CategoryList;
+      const matchedOppositeRow = oppositeMainList.find(category => category.data.category === row.data.category);
+      if (!!matchedOppositeRow) {
+        matchedOppositeRow.state.isEditingView = !!isEditing;
+      }
+      if (row.data.children) {
+        row.data.children.state.isEditingView = !!isEditing;
+        const selectedChildList = this.breakdownData.state.isDisplayingCs01 ? row.data.children.data.rawCs01CategoryList : row.data.children.data.rawLeverageCategoryList;
+        const oppositeChildList = selectedChildList === row.data.children.data.rawCs01CategoryList ?  row.data.children.data.rawLeverageCategoryList : row.data.children.data.rawCs01CategoryList;
+        if (selectedChildList.length > 0) {
+          selectedChildList.forEach(selectedRow => {
+            selectedRow.state.isEditingView = isEditing;
+            const matchedOppositeCategory = oppositeChildList.find(oppositeRow => oppositeRow.data.category === selectedRow.data.category);
+            if (!!matchedOppositeCategory) {
+              matchedOppositeCategory.state.isEditingView = isEditing
+            }
+            this.toggleSetView(selectedRow, isEditing);
+          })
+        }
+      } else {
+        return null;
+      }
+    }
+  }
+
+  private removeRowStencils(row: StructurePortfolioBreakdownRowDTO) {
+  if (!row) {
+    return null;
+  } else {
+    if (!!row.data.children) {
+      row.data.children.data.displayCategoryList.forEach(row => {
+        row.state.isStencil = false;
+        row.data.moveVisualizer.state.isStencil = false;
+        if (row.data.children) {
+          this.removeRowStencils(row);
+        }
+      })
+    }
+  }
+}
 }

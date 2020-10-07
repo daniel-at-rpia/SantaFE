@@ -105,6 +105,18 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.state.configurator.display = false;
         if (!!this.state.targetBreakdown) {
           this.state.targetBreakdown.state.isPreviewVariant = true;
+          this.state.targetBreakdown.state.isEditingView = false;
+          if (!!this.state.targetBreakdown.data.popover) {
+            this.state.targetBreakdown.data.popover.state.isActive = false;
+          }
+          const selectedCategory = this.state.targetBreakdown.data.displayCategoryList.find(category => category.state.isSelected);
+          if (!!selectedCategory) {
+            selectedCategory.state.isSelected = false;
+          }
+          if (this.state.targetBreakdown.data.displayCategoryList.length > 0) {
+            this.state.targetBreakdown.data.displayCategoryList.forEach(row => {
+              row.state.isEditingView = false;
+          })
         }
         this.state.targetBreakdownIsOverride = !!pack.isCreateNewOverride || pack.targetBreakdown.state.isOverrideVariant;
         this.state.targetBreakdownRawData = this.retrieveRawBreakdownDataForTargetBreakdown();
@@ -302,7 +314,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               this.state.targetBreakdownRawData = rawBreakdownList[0];
             }
             const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
-            const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, isDisplayCs01);
+            const originalBEBucket = [serverReturn];
+            const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, isDisplayCs01, originalBEBucket);
             newBreakdown.state.isPreviewVariant = true;
             this.state.targetBreakdown = newBreakdown;
             const prevEditRowsForInheritance = this.utilityService.deepCopy(this.state.editRowList);

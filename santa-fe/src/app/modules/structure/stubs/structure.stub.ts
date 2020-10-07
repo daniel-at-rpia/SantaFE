@@ -4,7 +4,6 @@ import {PortfolioShortNames} from 'Core/constants/structureConstants.constants';
 export const PortfolioStructuringSample: BEPortfolioStructuringDTO = 
   {
     "date":"2020-09-23T00:00:00-04:00",
-    "inDb":true,
     "portfolioId":5,
     "portfolioShortName":PortfolioShortNames.FIP,
     "portfolioNav":752202919.2976391,

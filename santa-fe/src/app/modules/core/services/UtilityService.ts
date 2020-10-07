@@ -1097,7 +1097,14 @@ export class UtilityService {
         const array = rowTitle.split(' - ');
         let index = 0;
         for (let eachBucketItem in bucket) {
-          bucket[eachBucketItem].push(array[index]);
+          if (array[index].includes(',')) {
+            const values = array[index].split(',');
+            values.forEach(value => {
+              bucket[eachBucketItem].push(value);
+            })
+          } else {
+            bucket[eachBucketItem].push(array[index]);
+          }
           index++;
         }
       }

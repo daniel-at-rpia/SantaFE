@@ -36,7 +36,9 @@ export const APIUrlMap = {
   updatePortfolioBreakdown: 'portfolioStructuring/update-portfolio-breakdown',
   getBICsHierarchy: 'portfolioStructuring/get-bics-hierarchy',
   getPortfolioOverride: 'portfolioStructuring/get-portfolio-override',
-  updatePortfolioOverride: 'portfolioStructuring/update-portfolio-override'
+  updatePortfolioOverride: 'portfolioStructuring/update-portfolio-override',
+  getViews: 'portfolioStructuring/get-analyst-views',
+  setView: 'portfolioStructuring/set-analyst-view'
 };
 
 export const FAILED_USER_INITIALS_FALLBACK = 'n/a';
