@@ -317,6 +317,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
   }
 
+  public onSelectForRemoval(targetRow: StructureSetTargetPanelEditRowBlock) {
+    if (targetRow) {
+      targetRow.
+    }
+  }
+
   private loadEditRows() {
     this.state.editRowList = [];
     if (!!this.state.targetBreakdown) {
