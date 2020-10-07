@@ -3,16 +3,16 @@ import { SecurityDefinitionBundleStub } from 'FEModels/frontend-stub-models.inte
 import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
 
 export enum PortfolioView {
-  positive = 'Positive',
-  negative = 'Negative', 
+  overweight = 'Overweight',
+  underweight = 'Underweight',
   neutral = 'Neutral'
 }
 
 export enum PortfolioBreakdownGroupOptions {
-  currency = 'Currency',
-  tenor = 'Tenor',
-  rating = 'Rating',
-  bics = 'BICS'
+  Ccy = 'Currency',
+  Tenor = 'Tenor',
+  RatingNoNotch = 'Rating',
+  BICs = 'BICS'
 }
 
 export enum PortfolioShortNames {
