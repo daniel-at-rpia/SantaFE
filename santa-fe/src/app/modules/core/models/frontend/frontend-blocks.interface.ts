@@ -291,6 +291,7 @@ export interface PortfolioBreakdownCategoryBlock {
   bicsLevel: number;
   portfolioID: number;
   children?: DTOs.PortfolioBreakdownDTO;
+  diveInLevel: number;
   raw: {
     currentLevel: number;
     currentPct: number;

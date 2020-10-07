@@ -17,7 +17,7 @@ export class StructurePopover implements OnInit {
   public ngOnInit() {};
 
   public getNextBicsLevel(breakdownRow: StructurePortfolioBreakdownRowDTO) {
-    if (breakdownRow.state.isBicsLevel1) {
+    if (breakdownRow.data.diveInLevel === 0) {
       this.closePopover();
     } else if (breakdownRow.data.children) {
       breakdownRow.state.isSelected = !breakdownRow.state.isSelected;

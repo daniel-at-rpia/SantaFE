@@ -5,13 +5,17 @@ import { PortfolioBreakdownDTO } from 'Core/models/frontend/frontend-models.inte
 import { DTOService } from 'Core/services/DTOService';
 import { BICsLevels } from 'Core/constants/structureConstants.constants';
 import { StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend-models.interface';
+import { UtilityService } from 'Core/services/UtilityService';
 @Injectable()
 
 export class BICsDataProcessingService {
   private bicsRawData: Array<BICsCategorizationBlock> = [];
   private formattedBICsHierarchyData: BICsHierarchyAllDataBlock;
   private subBicsLevelList: Array<string> = [];
-  constructor(private dtoService: DTOService) {}
+  constructor(
+    private dtoService: DTOService,
+    private utilityService: UtilityService
+  ) {}
 
   public formFormattedBICsHierarchy(data: BEBICsHierarchyBlock, parent: BICsHierarchyAllDataBlock | BICsHierarchyBlock, counter: number,) {
     this.iterateBICsData(data, parent, counter);
@@ -105,16 +109,9 @@ export class BICsDataProcessingService {
   })
   const definitionList = this.getBICsBreakdownDefinitionList(object);
   const breakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, object, definitionList, isDisplayCs01);
-  breakdown.data.rawCs01CategoryList.forEach(category => {
-    category.data.bicsLevel = breakdownRow.data.bicsLevel + 1;
-    category.data.moveVisualizer.state.isStencil = false;
-    category.state.isStencil = false;
-  })
-  breakdown.data.rawLeverageCategoryList.forEach(category => {
-    category.data.bicsLevel = breakdownRow.data.bicsLevel + 1;
-    category.data.moveVisualizer.state.isStencil = false;
-    category.state.isStencil = false;
-  })
+  breakdown.data.diveInLevel = breakdownRow.data.diveInLevel + 1;
+  this.utilityService.setBreakdownListProperties(breakdown.data.rawCs01CategoryList, breakdownRow);
+  this.utilityService.setBreakdownListProperties(breakdown.data.rawLeverageCategoryList, breakdownRow);
   breakdown.data.displayCategoryList = breakdown.state.isDisplayingCs01 ? breakdown.data.rawCs01CategoryList : breakdown.data.rawLeverageCategoryList;
   breakdown.data.title = breakdownRow.data.category;
   return breakdown;

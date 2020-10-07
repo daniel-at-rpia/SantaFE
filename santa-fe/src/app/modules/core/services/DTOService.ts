@@ -1196,7 +1196,8 @@ export class DTOService {
     min: number,
     isStencil: boolean,
     groupOption: string,
-    isOverride: boolean
+    isOverride: boolean,
+    diveInLevel: number
   ): DTOs.MoveVisualizerDTO {
     const parsedMin = min < 0 ? 0 : min;
     const parsedCurrentLevel = rawData.currentLevel < 0 ? 0 : rawData.currentLevel;
@@ -1236,7 +1237,7 @@ export class DTOService {
         isBasis: false,
         timeSeries: [],
         endPinText: '',
-        bicsLevelVisualizer: groupOption
+        diveInLevel: diveInLevel
       },
       style: {
         leftGap: 0,
@@ -1908,7 +1909,9 @@ export class DTOService {
         rawLeverageCategoryList: [],
         backendGroupOptionIdentifier: !isStencil ? rawData.groupOption : null,
         popover: null,
-        portfolioId: rawData.portfolioId
+        portfolioId: rawData.portfolioId,
+        selectedCategory: '',
+        diveInLevel: 0
       },
       style: {
         ratingFillWidth: null
@@ -1962,7 +1965,8 @@ export class DTOService {
           true,
           rawData.portfolioId,
           rawData.groupOption,
-          isOverride
+          isOverride,
+          object.data.diveInLevel
         )
         : null;
       !!eachCs01CategoryBlock && object.data.rawCs01CategoryList.push(eachCs01CategoryBlock);
@@ -1976,7 +1980,8 @@ export class DTOService {
           false,
           rawData.portfolioId,
           rawData.groupOption,
-          isOverride
+          isOverride,
+          object.data.diveInLevel
         )
         : null;
       !!eachLeverageCategoryBlock && object.data.rawLeverageCategoryList.push(eachLeverageCategoryBlock);
@@ -2008,7 +2013,8 @@ export class DTOService {
     isCs01: boolean,
     portfolioID: number,
     groupOption: string,
-    isOverride: boolean
+    isOverride: boolean,
+    diveInLevel: number
   ): DTOs.StructurePortfolioBreakdownRowDTO {
     if (!!rawCategoryData) {
       const parsedRawData = this.utility.deepCopy(rawCategoryData);
@@ -2037,14 +2043,14 @@ export class DTOService {
         minValue,
         !!isStencil,
         groupOption,
-        isOverride
+        isOverride,
+        diveInLevel
       );
       eachMoveVisualizer.data.endPinText = !!isCs01 ? `${eachMoveVisualizer.data.end}k` : `${eachMoveVisualizer.data.end}`;
       const diffToTarget = !!isCs01 ? Math.round(parsedRawData.targetLevel - parsedRawData.currentLevel) : this.utility.round(parsedRawData.targetLevel - parsedRawData.currentLevel, 2);
 
       const isBicsBreakdown = groupOption.indexOf('BicsLevel') > -1;
       
-    
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
         category: `${categoryName}`,
         targetLevel: parsedRawData.targetLevel,
@@ -2060,6 +2066,7 @@ export class DTOService {
         bicsLevel: !!isBicsBreakdown ? 1 : null,
         children: null,
         portfolioID: portfolioID,
+        diveInLevel: diveInLevel,
         raw: {
           currentLevel: rawCurrentLevel,
           currentPct: rawCurrentPct,
@@ -2076,7 +2083,6 @@ export class DTOService {
 
       const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock);
       eachCategoryBlockDTO.state.isBtnDiveIn = !!isBicsBreakdown;
-      eachCategoryBlockDTO.state.isBicsLevel1 = groupOption === 'BicsLevel1';
       return eachCategoryBlockDTO;
     } else {
       return null;
@@ -2122,8 +2128,7 @@ export class DTOService {
       state: {
         isSelected: false,
         isBtnDiveIn: false,
-        isStencil: true,
-        isBicsLevel1: false
+        isStencil: true
       }
     }
     return object;
