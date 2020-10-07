@@ -1133,32 +1133,5 @@ export class UtilityService {
       return breakdownList;
     }
 
-    public setBreakdownListProperties(breakdownList: Array<DTOs.StructurePortfolioBreakdownRowDTO>, parentRow: DTOs.StructurePortfolioBreakdownRowDTO) {
-      breakdownList.forEach(breakdown => {
-        breakdown.data.bicsLevel = parentRow.data.bicsLevel + 1;
-        breakdown.data.diveInLevel = parentRow.data.diveInLevel + 1;
-        breakdown.data.moveVisualizer.state.isStencil = false;
-        breakdown.state.isStencil = false;
-        breakdown.data.moveVisualizer.data.diveInLevel = breakdown.data.diveInLevel;
-        this.applyPopoverStencilMasks(breakdown.data.moveVisualizer);
-      })
-    }
-
-    private applyPopoverStencilMasks(visualizer: DTOs.MoveVisualizerDTO) {
-      switch(visualizer.data.diveInLevel) {
-        case 1:
-          visualizer.style.backgroundColor = "#f5f5f5";
-          break;
-        case 2: 
-        visualizer.style.backgroundColor = "#eee";
-          break;
-        case 3:
-        visualizer.style.backgroundColor = "#d5d5d5";
-          break;
-        default:
-        visualizer.style.backgroundColor = "#eee";
-      }
-    }
-
   // structuring specific end
 }
