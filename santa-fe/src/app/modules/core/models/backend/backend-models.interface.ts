@@ -635,7 +635,6 @@ export interface BEPortfolioStructuringDTO {
   indexShortName: string;
   indexNav: number;
   indexTotals: BEStructuringMetricTotalBlock;
-  inDb: boolean;
   breakdowns: {
     BicsLevel1: BEStructuringBreakdownBlock;
     BicsLevel2?: BEStructuringBreakdownBlock;
