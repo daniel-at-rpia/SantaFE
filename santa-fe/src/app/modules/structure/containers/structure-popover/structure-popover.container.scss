@@ -23,6 +23,37 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
     left: 50%;
     transform: translateX(-50%);
   }
+  &__categoryHeader {
+    display: flex;
+    justify-content: flex-end;
+    flex: 0 0 100%;
+    margin: $spacing_medium $scroll_bar_width $spacing_medium 0;
+    &-cell {
+      @include mix_fixed_div(relative, $z_index_base_item);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: $portfolioBreakdownRow_categoryList_cell_width;
+      &-icon {
+        color: $font_color_minor;
+        font-size: $font_size_large;
+      }
+      &-tooltip {
+        @include mix_fixed_div(absolute, $z_index_hovering_item);
+        @include mix_border_radius(3px);
+        display: none;
+        top: -100%;
+        color: $font_color_inverse;
+        line-height: $line_height_small;
+        width: 4.25rem;
+        background-color: $color_active;
+        text-align: center;
+      }
+      &:hover>&-tooltip {
+        display: block;
+      }
+    }
+  }
   &__mainCategory {
     flex: 0 0 100%;
     display: flex;
