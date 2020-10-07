@@ -10,13 +10,13 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
   @include mix_alive('light');
   background-color: $color_white;
   width: 29rem;
-  height: 36rem;
+  height: 38rem;
   top: 0;
   left: 0;
   transform: scale(0) translate(0, 0);
   padding: $spacing_medium $spacing_small;
   &__close-btn {
-    @include mix_fixed_div(absolute, $z_index_base_item_solid);
+    @include mix_fixed_div(absolute, $z_index_hovering_item);
     @include roundedButton($color_red_5, $font_color_inverse, $iconButton_size_large);
     font-size: $font_size_xx_large;
     bottom: -$iconButton_size_large/2; 
@@ -165,6 +165,6 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
     }
   }
   &--active {
-    transform: scale(1) translate(1rem, 3rem);
+    transform: scale(1) translate(1rem, 1rem);
   }
 }
