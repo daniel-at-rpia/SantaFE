@@ -427,25 +427,29 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     key: 'BICS_LEVEL_1',
     displayName: 'BICS Lv.1',
     icon: 'fal fa-industry-alt',
-    optionList: []
+    optionList: [],
+    securityDTOAttr: 'bicsLevel1'
   },
   BICS_LEVEL_2: {
     key: 'BICS_LEVEL_2',
     displayName: 'BICS Lv.2',
     icon: 'fal fa-industry-alt',
-    optionList: []
+    optionList: [],
+    securityDTOAttr: 'bicsLevel2'
   },
   BICS_LEVEL_3: {
     key: 'BICS_LEVEL_3',
     displayName: 'BICS Lv.3',
     icon: 'fal fa-industry-alt',
-    optionList: []
+    optionList: [],
+    securityDTOAttr: 'bicsLevel3'
   },
   BICS_LEVEL_4: {
     key: 'BICS_LEVEL_4',
     displayName: 'BICS Lv.4',
     icon: 'fal fa-industry-alt',
-    optionList: []
+    optionList: [],
+    securityDTOAttr: 'bicsLevel4'
   }
 };
 
@@ -457,11 +461,17 @@ export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> =
       SecurityDefinitionMap.COUPON_TYPE,
       SecurityDefinitionMap.CURRENCY,
       SecurityDefinitionMap.RATING,
-      SecurityDefinitionMap.SECTOR,
       SecurityDefinitionMap.TENOR,
       SecurityDefinitionMap.STRATEGY,
-      SecurityDefinitionMap.INDUSTRY,
       SecurityDefinitionMap.COUNTRY
+    ]
+  }, {
+    label: 'BICS',
+    list: [
+      SecurityDefinitionMap.BICS_LEVEL_1,
+      SecurityDefinitionMap.BICS_LEVEL_2,
+      SecurityDefinitionMap.BICS_LEVEL_3,
+      SecurityDefinitionMap.BICS_LEVEL_4
     ]
   },{
     label: 'Owner',

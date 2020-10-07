@@ -235,7 +235,11 @@ export class DTOService {
             sendEmail: false
           }
         },
-        tradeHistory: []
+        tradeHistory: [],
+        bicsLevel1: !isStencil ? rawData.bicsLevel1 : null,
+        bicsLevel2: !isStencil ? rawData.bicsLevel2 : null,
+        bicsLevel3: !isStencil ? rawData.bicsLevel3 : null,
+        bicsLevel4: !isStencil ? rawData.bicsLevel4 : null
       }
       if (!isStencil) {
         // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
