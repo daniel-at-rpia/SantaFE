@@ -39,7 +39,7 @@ export class PortfolioBreakdownRow {
     const viewData: StructureSetViewData = {
       yyyyMMdd: formattedDate,
       bucket: this.breakdownRow.data.bucket,
-      view: view
+      view: view !== this.breakdownRow.data.view ? view : null
     }
     this.store$.dispatch(new StructureSetView(viewData));
   }

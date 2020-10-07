@@ -99,7 +99,7 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
           background-color: $color_kill;
         }
         &--neutral {
-          background-color: $color_active;
+          color: $color_active;
         }
       }
     }
@@ -168,6 +168,48 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
           &-view {
             background-color: $color_white;
             color: $color_active;
+          }
+        }
+      }
+    }
+  }
+  &--overweight {
+    #{$blockName} {
+      &__utility {
+        &-btnGroup {
+          &-btn {
+            &--overweight {
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--underweight {
+    #{$blockName} {
+      &__utility {
+        &-btnGroup {
+          &-btn {
+            &--underweight {
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--neutral {
+    #{$blockName} {
+      &__utility {
+        &-btnGroup {
+          &-btn {
+            &--neutral {
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
           }
         }
       }
