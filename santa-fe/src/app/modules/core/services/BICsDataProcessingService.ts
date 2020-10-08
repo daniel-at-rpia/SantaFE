@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BICsHierarchyAllDataBlock, BICsHierarchyBlock, BICsCategorizationBlock } from 'App/modules/core/models/frontend/frontend-blocks.interface';
 import { BEBICsHierarchyBlock, BEPortfolioStructuringDTO, BEStructuringBreakdownBlock } from 'Core/models/backend/backend-models.interface';
-import { PortfolioBreakdownDTO } from 'Core/models/frontend/frontend-models.interface';
+import { PortfolioBreakdownDTO, MoveVisualizerDTO, StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend-models.interface';
 import { DTOService } from 'Core/services/DTOService';
 import { BICsLevels } from 'Core/constants/structureConstants.constants';
-import { StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend-models.interface';
 @Injectable()
 
 export class BICsDataProcessingService {
@@ -98,22 +97,41 @@ export class BICsDataProcessingService {
     })
     const definitionList = this.getBICsBreakdownDefinitionList(object);
     const breakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, object, definitionList, isDisplayCs01);
+    breakdown.data.diveInLevel = breakdownRow.data.diveInLevel + 1;
     breakdown.state.isEditingView = !!isEditingView;
-    breakdown.data.rawCs01CategoryList.forEach(category => {
-      category.data.bicsLevel = breakdownRow.data.bicsLevel + 1;
-      category.state.isEditingView = breakdown.state.isEditingView;
-      category.data.moveVisualizer.state.isStencil = false;
-      category.state.isStencil = false;
-    })
-    breakdown.data.rawLeverageCategoryList.forEach(category => {
-      category.data.bicsLevel = breakdownRow.data.bicsLevel + 1;
-      category.state.isEditingView = breakdown.state.isEditingView;
-      category.data.moveVisualizer.state.isStencil = false;
-      category.state.isStencil = false;
-    })
+    this.setBreakdownListProperties(breakdown.data.rawCs01CategoryList, breakdownRow, isEditingView);
+    this.setBreakdownListProperties(breakdown.data.rawLeverageCategoryList, breakdownRow, isEditingView);
     breakdown.data.displayCategoryList = breakdown.state.isDisplayingCs01 ? breakdown.data.rawCs01CategoryList : breakdown.data.rawLeverageCategoryList;
     breakdown.data.title = breakdownRow.data.category;
     return breakdown;
+  }
+
+  private setBreakdownListProperties(breakdownList: Array<StructurePortfolioBreakdownRowDTO>, parentRow: StructurePortfolioBreakdownRowDTO, isEditingView: boolean) {
+    breakdownList.forEach(breakdown => {
+      breakdown.data.bicsLevel = parentRow.data.bicsLevel + 1;
+      breakdown.data.diveInLevel = parentRow.data.diveInLevel + 1;
+      breakdown.data.moveVisualizer.state.isStencil = false;
+      breakdown.state.isEditingView = !!isEditingView;
+      breakdown.state.isStencil = false;
+      breakdown.data.moveVisualizer.data.diveInLevel = breakdown.data.diveInLevel;
+      this.applyPopoverStencilMasks(breakdown.data.moveVisualizer);
+    })
+  }
+
+  private applyPopoverStencilMasks(visualizer: MoveVisualizerDTO) {
+    switch(visualizer.data.diveInLevel) {
+      case 1:
+        visualizer.style.backgroundColor = "#f5f5f5";
+        break;
+      case 2:
+      visualizer.style.backgroundColor = "#eee";
+        break;
+      case 3:
+      visualizer.style.backgroundColor = "#d5d5d5";
+        break;
+      default:
+      visualizer.style.backgroundColor = "#eee";
+    }
   }
 
   private iterateBICsData(data: BEBICsHierarchyBlock, parent: BICsHierarchyAllDataBlock | BICsHierarchyBlock, counter: number) {

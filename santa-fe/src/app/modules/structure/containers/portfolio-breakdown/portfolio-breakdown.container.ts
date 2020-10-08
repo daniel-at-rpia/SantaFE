@@ -194,10 +194,10 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
         const oppositeChildList = selectedChildList === row.data.children.data.rawCs01CategoryList ?  row.data.children.data.rawLeverageCategoryList : row.data.children.data.rawCs01CategoryList;
         if (selectedChildList.length > 0) {
           selectedChildList.forEach(selectedRow => {
-            selectedRow.state.isEditingView = isEditing;
+            selectedRow.state.isEditingView = !!isEditing;
             const matchedOppositeCategory = oppositeChildList.find(oppositeRow => oppositeRow.data.category === selectedRow.data.category);
             if (!!matchedOppositeCategory) {
-              matchedOppositeCategory.state.isEditingView = isEditing
+              matchedOppositeCategory.state.isEditingView = !!isEditing
             }
             this.toggleSetView(selectedRow, isEditing);
           })
