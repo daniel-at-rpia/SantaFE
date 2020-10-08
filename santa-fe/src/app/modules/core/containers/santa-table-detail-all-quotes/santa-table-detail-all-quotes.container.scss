@@ -51,6 +51,12 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
     height: 100%;
     top: 0;
   }
+  &__trace {
+    @include mix_fixed_div(relative, $z_index_base_item_lift);
+    flex: 1 1 auto;
+    display: none;
+    overflow: hidden;
+  }
   &__main {
     @include mix_fixed_div(relative, $z_index_base_item_lift);
     @include mix_enable_scrollbar('horizontal');
@@ -156,6 +162,40 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
       }
     }
   }
+  &--viewAllQuotesState {
+    #{$santaTableDetailAllQuotesBlockName} {
+      &__viewSwitch {
+        &-quoteBtn {
+          @include material('none');
+          @extend .santaBtn--inverseLabelled;
+          background-color: $color_active;
+        }
+        &-historyBtn,
+        &-traceBtn {
+          @include material();
+          background-color: $color_white;
+          &>i {
+            color: $font_color_major;
+          }
+          &>span {
+            color: $font_color_major;
+          }
+        }
+      }
+      &__history,
+      &__trace {
+        display: none;
+      }
+      &__main {
+        display: flex;
+      }
+      &__ctas {
+        &-moreQuoteCta {
+          display: flex;
+        }
+      }
+    }
+  }
   &--viewHistoryState {
     #{$santaTableDetailAllQuotesBlockName} {
       &__viewSwitch {
@@ -164,7 +204,8 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
           @extend .santaBtn--inverseLabelled;
           background-color: $color_active;
         }
-        &-quoteBtn {
+        &-quoteBtn,
+        &-traceBtn {
           @include material();
           background-color: $color_white;
           &>i {
@@ -178,6 +219,41 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
       &__history {
         display: flex;
       }
+      &__main,
+      &__trace {
+        display: none;
+      }
+      &__ctas {
+        &-moreQuoteCta {
+          display: none;
+        }
+      }
+    }
+  }
+  &--viewTraceState {
+    #{$santaTableDetailAllQuotesBlockName} {
+      &__viewSwitch {
+        &-traceBtn {
+          @include material('none');
+          @extend .santaBtn--inverseLabelled;
+          background-color: $color_active;
+        }
+        &-quoteBtn,
+        &-historyBtn {
+          @include material();
+          background-color: $color_white;
+          &>i {
+            color: $font_color_major;
+          }
+          &>span {
+            color: $font_color_major;
+          }
+        }
+      }
+      &__trace {
+        display: flex;
+      }
+      &__history,
       &__main {
         display: none;
       }
