@@ -37,6 +37,7 @@ export const APIUrlMap = {
   getBICsHierarchy: 'portfolioStructuring/get-bics-hierarchy',
   getPortfolioOverride: 'portfolioStructuring/get-portfolio-override',
   updatePortfolioOverride: 'portfolioStructuring/update-portfolio-override',
+  deletePortfolioOverride: 'portfolioStructuring/delete-portfolio-override',
   getViews: 'portfolioStructuring/get-analyst-views',
   setView: 'portfolioStructuring/set-analyst-view'
 };

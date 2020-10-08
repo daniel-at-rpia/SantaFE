@@ -25,7 +25,11 @@ import {
   FilterOptionsTenor,
   SecurityDefinitionMap
 } from 'Core/constants/securityDefinitionConstants.constant';
-import { PayloadUpdateBreakdown, PayloadUpdateOverride } from 'BEModels/backend-payloads.interface';
+import {
+  PayloadUpdateBreakdown,
+  PayloadUpdateOverride,
+  PayloadDeleteOverride
+} from 'BEModels/backend-payloads.interface';
 import {
   BEStructuringBreakdownBlock,
   BEPortfolioStructuringDTO,
@@ -589,16 +593,55 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   private submitTargetChanges(): boolean {
     if (!this.state.targetBreakdownIsOverride) {
-      const payload: PayloadUpdateBreakdown = this.traverseEditRowsToFormUpdateBreakdownPayload();
-      if (!!payload) {
-        this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
+      return this.submitRegularBreakdownChanges();
+    } else {
+      return this.submitOverrideChanges();
+    }
+  }
+
+  private submitRegularBreakdownChanges(): boolean {
+    const payload: PayloadUpdateBreakdown = this.traverseEditRowsToFormUpdateBreakdownPayload();
+    if (!!payload) {
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
+        first(),
+        tap((serverReturn: BEPortfolioStructuringDTO) => {
+          const updatePack: StructureSetTargetPostEditUpdatePack = {
+            targetFund: serverReturn,
+            targetBreakdownBackendGroupOptionIdentifier: this.state.targetBreakdown.data.backendGroupOptionIdentifier
+          };
+          this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
+        }),
+        catchError(err => {
+          console.error('update breakdown failed');
+          this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'update breakdown failed', null)]));
+          return of('error');
+        })
+      ).subscribe();
+      return true;
+    } else {
+      this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target because no change is detected', null)]));
+      return false;
+    }
+  }
+
+  private submitOverrideChanges(): boolean {
+    const updatePayload: Array<PayloadUpdateOverride> = this.traverseEditRowsToFormUpdateOverridePayload();
+    const deletePayload: Array<PayloadDeleteOverride> = this.traverseRemovalListToFormDeleteOverridePayload();
+    const necessaryNumOfCalls = updatePayload.length + deletePayload.length;
+    if (necessaryNumOfCalls > 0) {
+      let callCount = 0;
+      updatePayload.forEach((eachPayload) => {
+        this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
           first(),
           tap((serverReturn: BEPortfolioStructuringDTO) => {
-            const updatePack: StructureSetTargetPostEditUpdatePack = {
-              targetFund: serverReturn,
-              targetBreakdownBackendGroupOptionIdentifier: this.state.targetBreakdown.data.backendGroupOptionIdentifier
-            };
-            this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
+            callCount++;
+            if (callCount === necessaryNumOfCalls) {
+              const updatePack: StructureSetTargetPostEditUpdatePack = {
+                targetFund: serverReturn,
+                targetBreakdownBackendGroupOptionIdentifier: this.state.targetBreakdown.data.backendGroupOptionIdentifier
+              };
+              this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
+            }
           }),
           catchError(err => {
             console.error('update breakdown failed');
@@ -606,41 +649,31 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             return of('error');
           })
         ).subscribe();
-        return true;
-      } else {
-        this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target because no change is detected', null)]));
-        return false;
-      }
+      });
+      deletePayload.forEach((eachPayload) => {
+        this.restfulCommService.callAPI(this.restfulCommService.apiMap.deletePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
+          first(),
+          tap((serverReturn: BEPortfolioStructuringDTO) => {
+            callCount++;
+            if (callCount === necessaryNumOfCalls) {
+              const updatePack: StructureSetTargetPostEditUpdatePack = {
+                targetFund: serverReturn,
+                targetBreakdownBackendGroupOptionIdentifier: this.state.targetBreakdown.data.backendGroupOptionIdentifier
+              };
+              this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
+            }
+          }),
+          catchError(err => {
+            console.error('delete breakdown failed');
+            this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'delete breakdown failed', null)]));
+            return of('error');
+          })
+        ).subscribe();
+      });
+      return true;
     } else {
-      const payload: Array<PayloadUpdateOverride> = this.traverseEditRowsToFormUpdateOverridePayload();
-      if (!!payload && payload.length > 0) {
-        let callCount = 0;
-        const callCompleteThreshold = payload.length;
-        payload.forEach((eachPayload) => {
-          this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
-            first(),
-            tap((serverReturn: BEPortfolioStructuringDTO) => {
-              callCount++;
-              if (callCount === callCompleteThreshold) {
-                const updatePack: StructureSetTargetPostEditUpdatePack = {
-                  targetFund: serverReturn,
-                  targetBreakdownBackendGroupOptionIdentifier: this.state.targetBreakdown.data.backendGroupOptionIdentifier
-                };
-                this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
-              }
-            }),
-            catchError(err => {
-              console.error('update breakdown failed');
-              this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'update breakdown failed', null)]));
-              return of('error');
-            })
-          ).subscribe();
-        });
-        return true;
-      } else {
-        this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target because no change is detected', null)]));
-        return false;
-      }
+      this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target because no change is detected', null)]));
+      return false;
     }
   }
 
@@ -709,6 +742,25 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         }
         eachPayload.portfolioOverride.breakdown = modifiedMetricBreakdowns;
       }
+      payload.push(eachPayload);
+    });
+    return payload;
+  }
+
+  private traverseRemovalListToFormDeleteOverridePayload(): Array<PayloadDeleteOverride> {
+    const payload: Array<PayloadDeleteOverride> = [];
+    this.state.removalList.forEach((eachRow) => {
+      const eachPayload: PayloadDeleteOverride = {
+        portfolioOverride: {
+          date: this.state.targetBreakdownRawData.date,
+          indexId: this.state.targetBreakdownRawData.indexId,
+          portfolioId: this.state.targetBreakdownRawData.portfolioId,
+          bucket: this.utilityService.populateBEBucketObjectFromRowTitle(
+            this.utilityService.formBEBucketObjectFromBucketIdentifier(this.state.targetBreakdown.data.title),
+            eachRow.rowTitle
+          )
+        }
+      };
       payload.push(eachPayload);
     });
     return payload;
