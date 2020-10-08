@@ -316,13 +316,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               this.state.targetBreakdownRawData = rawBreakdownList[0];
             }
             const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
-            const originalBEBucket = [serverReturn];
-            const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, isDisplayCs01, originalBEBucket);
+            const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, isDisplayCs01);
             newBreakdown.state.isPreviewVariant = true;
             this.state.targetBreakdown = newBreakdown;
+            this.earMarkNewRow(newCategoryKey);
             const prevEditRowsForInheritance = this.utilityService.deepCopy(this.state.editRowList);
             this.loadEditRows();
-            this.earMarkNewRow(newCategoryKey);
             this.inheritEditRowStates(prevEditRowsForInheritance);
           }),
           catchError(err => {
@@ -339,10 +338,17 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   public onSelectForRemoval(targetRow: StructureSetTargetPanelEditRowBlock) {
     if (targetRow) {
-      this.state.editRowList = this.state.editRowList.filter((eachRow) => {
+      const newList = this.utilityService.deepCopy(this.state.editRowList.filter((eachRow) => {
         return eachRow.rowTitle !== targetRow.rowTitle;
-      });
+      }));
+      this.state.targetBreakdownRawData.breakdown = this.utilityService.removePropertyFromObject(this.state.targetBreakdownRawData.breakdown, targetRow.rowTitle);
       !!targetRow.existInServer && this.state.removalList.push(targetRow);
+      const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
+      const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, isDisplayCs01);
+      newBreakdown.state.isPreviewVariant = true;
+      this.state.targetBreakdown = newBreakdown;
+      this.loadEditRows();
+      this.inheritEditRowStates(newList);
     }
   }
 
