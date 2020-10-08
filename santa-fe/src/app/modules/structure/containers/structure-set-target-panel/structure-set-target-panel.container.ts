@@ -118,13 +118,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               row.state.isEditingView = false;
             })
           }
-          this.state.targetBreakdownIsOverride = !!pack.isCreateNewOverride || pack.targetBreakdown.state.isOverrideVariant;
-          this.state.targetBreakdownRawData = this.retrieveRawBreakdownDataForTargetBreakdown();
-          this.state.activeMetric = pack.targetFund.data.cs01TargetBar.state.isInactiveMetric ? this.constants.metric.creditLeverage : this.constants.metric.cs01;
-          this.loadEditRows();
-          this.calculateAllocation();
-          this.loadBICSOptionsIntoConfigurator();
         }
+        this.state.targetBreakdownIsOverride = !!pack.isCreateNewOverride || pack.targetBreakdown.state.isOverrideVariant;
+        this.state.targetBreakdownRawData = this.retrieveRawBreakdownDataForTargetBreakdown();
+        this.state.activeMetric = pack.targetFund.data.cs01TargetBar.state.isInactiveMetric ? this.constants.metric.creditLeverage : this.constants.metric.cs01;
+        this.loadEditRows();
+        this.calculateAllocation();
+        this.loadBICSOptionsIntoConfigurator();
       }
     });
     this.modalService.bindModalSaveCallback(STRUCTURE_EDIT_MODAL_ID, this.submitTargetChanges.bind(this));
