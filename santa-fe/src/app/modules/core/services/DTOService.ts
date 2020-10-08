@@ -1984,11 +1984,15 @@ export class DTOService {
     }
  
     definitionList.forEach((eachCategoryText) => {
-      const parsedGroupOption = !!isOverride ? rawData.groupOption : PortfolioBreakdownGroupOptions[rawData.groupOption];
-      const bucket = this.utility.populateBEBucketObjectFromRowTitle(
-        this.utility.formBEBucketObjectFromBucketIdentifier(parsedGroupOption),
-        eachCategoryText
-      )
+      let bucket: Blocks.StructureBucketDataBlock = {};
+      if (!!isOverride) {
+        bucket = this.utility.populateBEBucketObjectFromRowTitle(
+          this.utility.formBEBucketObjectFromBucketIdentifier(rawData.groupOption),
+          eachCategoryText
+        )
+      } else {
+        bucket[rawData.groupOption] = [eachCategoryText];
+      }
       const parsedBEView = !!rawData.breakdown[eachCategoryText]  && !!rawData.breakdown[eachCategoryText].view ? rawData.breakdown[eachCategoryText].view.toLowerCase() : null;
       const view = PortfolioView[parsedBEView];
       const eachCs01CategoryBlock = rawData.breakdown[eachCategoryText] 
@@ -2057,7 +2061,7 @@ export class DTOService {
     isOverride: boolean,
     diveInLevel: number,
     view: PortfolioView,
-    bucket: Blocks.StructureBucketData
+    bucket: Blocks.StructureBucketDataBlock
   ): DTOs.StructurePortfolioBreakdownRowDTO {
     if (!!rawCategoryData) {
       const parsedRawData = this.utility.deepCopy(rawCategoryData);
