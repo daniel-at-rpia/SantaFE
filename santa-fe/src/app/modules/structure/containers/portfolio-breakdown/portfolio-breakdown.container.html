@@ -9,7 +9,8 @@
     'sat-portfolioBreakdown--badRating': breakdownData.state.isTargetAlignmentRatingAvail && breakdownData.style.ratingFillWidth < 60,
     'sat-portfolioBreakdown--editableState': breakdownData.state.isEditable && !breakdownData.state.isStencil && !breakdownData.state.isPreviewVariant,
     'sat-portfolioBreakdown--previewVariant': breakdownData.state.isPreviewVariant,
-    'sat-portfolioBreakdown--overrideVariant': breakdownData.state.isOverrideVariant
+    'sat-portfolioBreakdown--overrideVariant': breakdownData.state.isOverrideVariant,
+    'sat-portfolioBreakdown--editingView': breakdownData.state.isEditingView
   }">
   <section class="sat-portfolioBreakdown__title">
     <div class="sat-portfolioBreakdown__title-definition">
@@ -58,8 +59,9 @@
   </section>
   <section class="sat-portfolioBreakdown__ctas">
     <button (click)="onClickEdit()" class="santaBtn--iconOnly sat-portfolioBreakdown__ctas-editBtn fal fa-pencil"></button>
+    <button (click)="onClickSetView(breakdownData)" class="santaBtn--iconOnly sat-portfolioBreakdown__ctas-viewBtn"><i class="sat-portfolioBreakdown__ctas-viewBtn-icon--up fal fa-arrow-up"></i><i class="sat-portfolioBreakdown__ctas-viewBtn-icon--down fal fa-arrow-down"></i></button>
   </section>
-  <section class="sat-portfolioBreakdown__popover" *ngIf="breakdownData.data.popover">
+  <section class="sat-portfolioBreakdown__popover">
     <structure-popover [popover]="breakdownData.data.popover">
     </structure-popover>
   </section>

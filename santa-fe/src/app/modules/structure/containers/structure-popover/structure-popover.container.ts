@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input,OnInit, Output, ViewEncapsulation} from '@angular/core';
+import { PortfolioView } from 'App/modules/core/constants/structureConstants.constants';
 import { StructurePopoverDTO, StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend-models.interface';
-import { BICsDataProcessingService } from 'Structure/services/BICsDataProcessingService';
+import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 
 @Component({
   selector: 'structure-popover',
@@ -17,12 +18,12 @@ export class StructurePopover implements OnInit {
   public ngOnInit() {};
 
   public getNextBicsLevel(breakdownRow: StructurePortfolioBreakdownRowDTO) {
-    if (breakdownRow.state.isBicsLevel1) {
+    if (breakdownRow.data.diveInLevel === 0) {
       this.closePopover();
     } else if (breakdownRow.data.children) {
       breakdownRow.state.isSelected = !breakdownRow.state.isSelected;
     } else {
-      const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.popover.state.isDisplayCs01);
+      const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.popover.state.isDisplayCs01, breakdownRow.state.isEditingView);
       breakdownRow.data.children = subBicsLevel;
       breakdownRow.state.isSelected = true;
     }

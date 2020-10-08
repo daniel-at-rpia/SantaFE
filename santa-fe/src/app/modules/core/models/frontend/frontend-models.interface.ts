@@ -139,6 +139,10 @@ export interface SecurityDTO extends BasicDTOStructure {
       }
     }
     tradeHistory: Array<TradeDTO>;
+    bicsLevel1: string;
+    bicsLevel2: string;
+    bicsLevel3: string;
+    bicsLevel4: string;
   }
   api: {
     onClickCard: (card: SecurityDTO) => void;
@@ -499,7 +503,7 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
     isBasis: boolean;
     timeSeries: Array<any>;
     endPinText: string;
-    bicsLevelVisualizer?: string;
+    diveInLevel?: number;
   }
   style: {
     leftGap: number;
@@ -687,7 +691,8 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     backendGroupOptionIdentifier: string;
     popover: StructurePopoverDTO;
     portfolioId: number;
-    selectedCategory?: string;
+    selectedCategory: string;
+    diveInLevel: number;
   },
   style: {
     ratingFillWidth: number;
@@ -700,6 +705,7 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     isPreviewVariant: boolean;
     isBICs: boolean;
     isOverrideVariant: boolean;
+    isEditingView: boolean;
   }
 }
 
@@ -796,6 +802,6 @@ export interface StructurePortfolioBreakdownRowDTO extends BasicDTOStructure {
     isSelected: boolean;
     isBtnDiveIn: boolean;
     isStencil: boolean;
-    isBicsLevel1: boolean;
+    isEditingView: boolean;
   }
 }

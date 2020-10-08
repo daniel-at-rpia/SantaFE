@@ -119,6 +119,28 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
     width: 100%;
     &-editBtn {
       @include mix_border_radius(50%);
+      margin-right: $spacing_large;
+    }
+    &-viewBtn {
+      @include mix_border_radius(50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: row;
+      &-icon {
+        &--up,
+        &--down {
+          font-size: $font_size_small;
+        }
+        &--up {
+          margin-bottom: $spacing_x_small;
+          margin-right: -$spacing_minimum;
+        }
+        &--down {
+          margin-top: $spacing_x_small;
+          margin-left: -$spacing_minimum;
+        }
+      }
     }
   }
   &--goodRating {
@@ -183,11 +205,25 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
       }
     }
   }
+  &--editingView {
+    #{$blockName}{
+      &__ctas {
+        &-viewBtn {
+          background-color: $color_active;
+          box-shadow: none;
+          &-icon {
+            &--up,
+            &--down {
+              color: $font_color_inverse;
+            }
+          }
+        }
+      }
+    }
+  }
   &--previewVariant {
     flex: 1 1 auto;
     width: auto;
-    #{$blockName} {
-    }
   }
   &--stencilState {
     #{$blockName} {

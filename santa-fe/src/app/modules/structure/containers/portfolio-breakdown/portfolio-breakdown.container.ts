@@ -8,7 +8,7 @@ import { PortfolioMetricValues, STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/s
 import { ModalService } from 'Form/services/ModalService';
 import { UtilityService } from 'Core/services/UtilityService';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
-import { BICsDataProcessingService } from 'Structure/services/BICsDataProcessingService';
+import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 import { DTOService } from 'Core/services/DTOService';
 import { PortfolioBreakdownCategoryBlock } from 'Core/models/frontend/frontend-blocks.interface'; 
 @Component({
@@ -62,16 +62,24 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
 
   public loadData() {
     this.breakdownData.data.displayCategoryList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawCs01CategoryList : this.breakdownData.data.rawLeverageCategoryList;
+    let popoverCategory;
     if (this.dataIsReady) {
       this.calculateAlignmentRating();
      if (!!this.breakdownData.data.popover && !!this.breakdownData.data.popover.state.isActive) {
       const previousMetricData = this.utilityService.deepCopy(this.breakdownData.data.popover.data.mainRow.data.children);
-      const popoverCategory = this.breakdownData.data.popover.data.mainRow.data.category; 
+      popoverCategory = this.breakdownData.data.popover.data.mainRow.data.category; 
       const popoverRow = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawCs01CategoryList.find(row => row.data.category === popoverCategory) : this.breakdownData.data.rawLeverageCategoryList.find(row => row.data.category === popoverCategory);
       this.updatePopoverData(popoverRow);
       this.breakdownData.data.popover.data.mainRow.data.children = previousMetricData;
       this.switchPopoverValues(this.breakdownData.data.popover.data.mainRow.data);
      }
+     //handles a scenario where the user has the popover open in one metric, switches and closes the popover, then switches back, the category is still selected but there is no popover
+      const oppositeList =  this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawLeverageCategoryList : this.breakdownData.data.rawCs01CategoryList;
+      const matchedOppositeRow = oppositeList.find(row => row.data.category === popoverCategory);
+
+      if (!!matchedOppositeRow) {
+        matchedOppositeRow.state.isSelected = false;
+      }
       const flipStencil = this.removeStencil.bind(this);
       setTimeout(() => {
         flipStencil();
@@ -88,22 +96,6 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
         this.removeRowStencils(eachCategory);
       }
     });
-  }
-
-  private removeRowStencils(row: StructurePortfolioBreakdownRowDTO) {
-    if (!row) {
-      return null;
-    } else {
-      if (!!row.data.children) {
-        row.data.children.data.displayCategoryList.forEach(row => {
-          row.state.isStencil = false;
-          row.data.moveVisualizer.state.isStencil = false;
-          if (row.data.children) {
-            this.removeRowStencils(row);
-          }
-        })
-      }
-    }
   }
 
   public onClickEdit() {
@@ -152,7 +144,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     } else {
       this.breakdownData.data.selectedCategory = breakdownRow.data.category;
     }
-    const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.breakdownData.state.isDisplayingCs01);
+    const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.breakdownData.state.isDisplayingCs01, this.breakdownData.state.isEditingView);
     breakdownRow.data.children = subBicsLevel;
     this.breakdownData.data.popover = this.dtoService.formStructurePopoverObject(breakdownRow, this.breakdownData.state.isDisplayingCs01);
     this.breakdownData.data.popover.data.mainRow.state.isSelected = true;
@@ -176,4 +168,59 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       }
     })
   }
+
+  public onClickSetView(breakdown: PortfolioBreakdownDTO) {
+    if (!breakdown.state.isPreviewVariant) {
+      this.breakdownData.state.isEditingView = !this.breakdownData.state.isEditingView;
+      breakdown.data.displayCategoryList.forEach(row => {
+        this.toggleSetView(row, this.breakdownData.state.isEditingView);
+    })
+    }
+  }
+
+  private toggleSetView(row: StructurePortfolioBreakdownRowDTO, isEditing: boolean) {
+    if (!row) {
+      return null;
+    } else {
+      row.state.isEditingView = !!isEditing;
+      const oppositeMainList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawLeverageCategoryList : this.breakdownData.data.rawCs01CategoryList;
+      const matchedOppositeRow = oppositeMainList.find(category => category.data.category === row.data.category);
+      if (!!matchedOppositeRow) {
+        matchedOppositeRow.state.isEditingView = !!isEditing;
+      }
+      if (row.data.children) {
+        row.data.children.state.isEditingView = !!isEditing;
+        const selectedChildList = this.breakdownData.state.isDisplayingCs01 ? row.data.children.data.rawCs01CategoryList : row.data.children.data.rawLeverageCategoryList;
+        const oppositeChildList = selectedChildList === row.data.children.data.rawCs01CategoryList ?  row.data.children.data.rawLeverageCategoryList : row.data.children.data.rawCs01CategoryList;
+        if (selectedChildList.length > 0) {
+          selectedChildList.forEach(selectedRow => {
+            selectedRow.state.isEditingView = !!isEditing;
+            const matchedOppositeCategory = oppositeChildList.find(oppositeRow => oppositeRow.data.category === selectedRow.data.category);
+            if (!!matchedOppositeCategory) {
+              matchedOppositeCategory.state.isEditingView = !!isEditing
+            }
+            this.toggleSetView(selectedRow, isEditing);
+          })
+        }
+      } else {
+        return null;
+      }
+    }
+  }
+
+  private removeRowStencils(row: StructurePortfolioBreakdownRowDTO) {
+  if (!row) {
+    return null;
+  } else {
+    if (!!row.data.children) {
+      row.data.children.data.displayCategoryList.forEach(row => {
+        row.state.isStencil = false;
+        row.data.moveVisualizer.state.isStencil = false;
+        if (row.data.children) {
+          this.removeRowStencils(row);
+        }
+      })
+    }
+  }
+}
 }
