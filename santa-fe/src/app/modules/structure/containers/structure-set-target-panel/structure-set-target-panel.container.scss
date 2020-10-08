@@ -231,7 +231,7 @@ $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfig
     @include mix_fixed_div(relative, $z_index_base_item);
     flex: 0 0 auto;
     display: none;
-    margin: $spacing_small 0 $spacing_small $spacing_medium;
+    margin: $spacing_small $spacing_medium;
     &-btn {
       background-color: $color_kill;
       color: $font_color_inverse;
@@ -301,6 +301,9 @@ $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfig
     #{$blockName} {
       &__remove {
         display: flex;
+      }
+      &__lock {
+        display: none;
       }
     }
   }

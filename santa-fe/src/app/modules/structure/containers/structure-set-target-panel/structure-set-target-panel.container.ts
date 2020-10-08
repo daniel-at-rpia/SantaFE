@@ -89,7 +89,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       configurator: {
         dto: this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout),
         display: false
-      }
+      },
+      removalList: []
     };
     return state;
   }
@@ -303,8 +304,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           tap((serverReturn: BEStructuringOverrideBlock) => {
             const rawBreakdownList = this.utilityService.convertRawOverrideToRawBreakdown([serverReturn]);
             const newBreakdownBucketIdentifier = this.utilityService.formBucketIdentifierForOverride(serverReturn);
+            const newCategoryKey = this.utilityService.formCategoryKeyForOverride(serverReturn);
             if (!!this.state.targetBreakdown && this.state.targetBreakdown.data.backendGroupOptionIdentifier === newBreakdownBucketIdentifier) {
-              const newCategoryKey = this.utilityService.formCategoryKeyForOverride(serverReturn);
               const newDataBlock = rawBreakdownList[0].breakdown[newCategoryKey];
               this.state.targetBreakdownRawData.breakdown[newCategoryKey] = newDataBlock;
             } else {
@@ -321,6 +322,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             this.state.targetBreakdown = newBreakdown;
             const prevEditRowsForInheritance = this.utilityService.deepCopy(this.state.editRowList);
             this.loadEditRows();
+            this.earMarkNewRow(newCategoryKey);
             this.inheritEditRowStates(prevEditRowsForInheritance);
           }),
           catchError(err => {
@@ -337,7 +339,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   public onSelectForRemoval(targetRow: StructureSetTargetPanelEditRowBlock) {
     if (targetRow) {
-      targetRow.
+      this.state.editRowList = this.state.editRowList.filter((eachRow) => {
+        return eachRow.rowTitle !== targetRow.rowTitle;
+      });
+      !!targetRow.existInServer && this.state.removalList.push(targetRow);
     }
   }
 
@@ -396,7 +401,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               isPercent: true
             }
           },
-          isLocked: false
+          isLocked: false,
+          existInServer: true
         };
         this.state.editRowList.push(newRow);
       });
@@ -751,6 +757,15 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.bicsService.returnAllBICSBasedOnHierarchyDepth(3),
       this.bicsService.returnAllBICSBasedOnHierarchyDepth(4)
     )
+  }
+
+  private earMarkNewRow(targetTitle: string) {
+    const targetRow = this.state.editRowList.find((eachRow) => {
+      return eachRow.rowTitle === targetTitle;
+    });
+    if (!!targetRow) {
+      targetRow.existInServer = false;
+    }
   }
 
 }

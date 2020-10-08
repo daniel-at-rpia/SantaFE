@@ -103,7 +103,8 @@
             'sat-structureSetTargetEditRow--focusedCreditLeveragePercentState': eachCategory.targetCreditLeverage.percent.isFocused,
             'sat-structureSetTargetEditRow--lockedState': eachCategory.isLocked,
             'sat-structureSetTargetEditRow--evenState': categoryIndex%2 === 0,
-            'sat-structureSetTargetEditRow--overrideVariant': state.targetBreakdownIsOverride
+            'sat-structureSetTargetEditRow--overrideVariant': state.targetBreakdownIsOverride,
+            'sat-structureSetTargetEditRow--willBeRemovedState': eachCategory.willBeRemoved
           }">
           <section class="sat-structureSetTargetEditRow__remove">
             <button (click)="onSelectForRemoval(eachCategory)" class="sat-structureSetTargetEditRow__remove-btn santaBtn--iconOnly fal fa-times"></button>
