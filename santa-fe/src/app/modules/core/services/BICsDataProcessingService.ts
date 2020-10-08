@@ -39,7 +39,7 @@ export class BICsDataProcessingService {
     return allBICSList;
   }
 
-  public getRawBICsData(rawData: BEPortfolioStructuringDTO) {
+  public setRawBICsData(rawData: BEPortfolioStructuringDTO) {
     const { BicsLevel1, BicsLevel2, BicsLevel3, BicsLevel4 } = rawData.breakdowns;
     const block: BICsCategorizationBlock = {
       portfolioID: rawData.portfolioId,
