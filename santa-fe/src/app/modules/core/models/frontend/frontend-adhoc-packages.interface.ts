@@ -7,7 +7,7 @@ import {
   SerializedNumberFilter
 } from 'ag-grid-community';
 import { PortfolioView } from 'Core/constants/structureConstants.constants';
-import { StructureBucketData } from 'Core/models/frontend/frontend-blocks.interface';
+import { StructureBucketDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
 import * as DTOs from 'FEModels/frontend-models.interface';
 import { BEPortfolioStructuringDTO } from 'BEModels/backend-models.interface';
 import {
@@ -126,6 +126,6 @@ export interface StructureSetTargetPostEditUpdatePack {
 
 export interface StructureSetViewData {
   yyyyMMdd: number;
-  bucket: StructureBucketData;
+  bucket: StructureBucketDataBlock;
   view: PortfolioView;
 }

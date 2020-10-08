@@ -505,7 +505,7 @@ export interface MoveVisualizerDTO extends BasicDTOStructure {
     isBasis: boolean;
     timeSeries: Array<any>;
     endPinText: string;
-    bicsLevelVisualizer?: string;
+    diveInLevel?: number;
   }
   style: {
     leftGap: number;
@@ -693,7 +693,8 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     backendGroupOptionIdentifier: string;
     popover: StructurePopoverDTO;
     portfolioId: number;
-    selectedCategory?: string;
+    selectedCategory: string;
+    diveInLevel: number;
   },
   style: {
     ratingFillWidth: number;
@@ -803,7 +804,6 @@ export interface StructurePortfolioBreakdownRowDTO extends BasicDTOStructure {
     isSelected: boolean;
     isBtnDiveIn: boolean;
     isStencil: boolean;
-    isBicsLevel1: boolean;
     isEditingView: boolean;
   }
 }

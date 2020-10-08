@@ -1224,7 +1224,8 @@ export class DTOService {
     min: number,
     isStencil: boolean,
     groupOption: string,
-    isOverride: boolean
+    isOverride: boolean,
+    diveInLevel: number
   ): DTOs.MoveVisualizerDTO {
     const parsedMin = min < 0 ? 0 : min;
     const parsedCurrentLevel = rawData.currentLevel < 0 ? 0 : rawData.currentLevel;
@@ -1264,7 +1265,7 @@ export class DTOService {
         isBasis: false,
         timeSeries: [],
         endPinText: '',
-        bicsLevelVisualizer: groupOption
+        diveInLevel: diveInLevel
       },
       style: {
         leftGap: 0,
@@ -1937,7 +1938,9 @@ export class DTOService {
         rawLeverageCategoryList: [],
         backendGroupOptionIdentifier: !isStencil ? rawData.groupOption : null,
         popover: null,
-        portfolioId: rawData.portfolioId
+        portfolioId: rawData.portfolioId,
+        selectedCategory: '',
+        diveInLevel: 0
       },
       style: {
         ratingFillWidth: null
@@ -1983,11 +1986,15 @@ export class DTOService {
     }
  
     definitionList.forEach((eachCategoryText) => {
-      const parsedGroupOption = !!isOverride ? rawData.groupOption : PortfolioBreakdownGroupOptions[rawData.groupOption];
-      const bucket = this.utility.populateBEBucketObjectFromRowTitle(
-        this.utility.formBEBucketObjectFromBucketIdentifier(parsedGroupOption),
-        eachCategoryText
-      )
+      let bucket: Blocks.StructureBucketDataBlock = {};
+      if (!!isOverride) {
+        bucket = this.utility.populateBEBucketObjectFromRowTitle(
+          this.utility.formBEBucketObjectFromBucketIdentifier(rawData.groupOption),
+          eachCategoryText
+        )
+      } else {
+        bucket[rawData.groupOption] = [eachCategoryText];
+      }
       const parsedBEView = !!rawData.breakdown[eachCategoryText]  && !!rawData.breakdown[eachCategoryText].view ? rawData.breakdown[eachCategoryText].view.toLowerCase() : null;
       const view = PortfolioView[parsedBEView];
       const eachCs01CategoryBlock = rawData.breakdown[eachCategoryText] 
@@ -2001,6 +2008,7 @@ export class DTOService {
           rawData.portfolioId,
           rawData.groupOption,
           isOverride,
+          object.data.diveInLevel,
           view,
           bucket
         )
@@ -2017,6 +2025,7 @@ export class DTOService {
           rawData.portfolioId,
           rawData.groupOption,
           isOverride,
+          object.data.diveInLevel,
           view,
           bucket
         )
@@ -2052,8 +2061,9 @@ export class DTOService {
     portfolioID: number,
     groupOption: string,
     isOverride: boolean,
+    diveInLevel: number,
     view: PortfolioView,
-    bucket: Blocks.StructureBucketData
+    bucket: Blocks.StructureBucketDataBlock
   ): DTOs.StructurePortfolioBreakdownRowDTO {
     if (!!rawCategoryData) {
       const parsedRawData = this.utility.deepCopy(rawCategoryData);
@@ -2082,7 +2092,8 @@ export class DTOService {
         minValue,
         !!isStencil,
         groupOption,
-        isOverride
+        isOverride,
+        diveInLevel
       );
       eachMoveVisualizer.data.endPinText = !!isCs01 ? `${eachMoveVisualizer.data.end}k` : `${eachMoveVisualizer.data.end}`;
       const diffToTarget = !!isCs01 ? Math.round(parsedRawData.targetLevel - parsedRawData.currentLevel) : this.utility.round(parsedRawData.targetLevel - parsedRawData.currentLevel, 2);
@@ -2104,6 +2115,7 @@ export class DTOService {
         bicsLevel: !!isBicsBreakdown ? 1 : null,
         children: null,
         portfolioID: portfolioID,
+        diveInLevel: diveInLevel,
         raw: {
           currentLevel: rawCurrentLevel,
           currentPct: rawCurrentPct,
@@ -2122,7 +2134,6 @@ export class DTOService {
 
       const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock);
       eachCategoryBlockDTO.state.isBtnDiveIn = !!isBicsBreakdown;
-      eachCategoryBlockDTO.state.isBicsLevel1 = groupOption === 'BicsLevel1';
       return eachCategoryBlockDTO;
     } else {
       return null;
@@ -2169,7 +2180,6 @@ export class DTOService {
         isSelected: false,
         isBtnDiveIn: false,
         isStencil: true,
-        isBicsLevel1: false,
         isEditingView: false
       }
     }

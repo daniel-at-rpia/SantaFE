@@ -80,7 +80,7 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
     }
   }
   &__utility {
-    @include mix_fixed_div(relative, $z_index_base_item);
+    @include mix_fixed_div(relative, $z_index_tooltip);
     display: flex;
     flex-direction: column;
     &-btnGroup {
