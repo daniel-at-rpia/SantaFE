@@ -177,33 +177,6 @@ $moveVisualizer_line_stencilMaskAnimationDuration: $animation_duration_heavy;
       }
     }
   }
-  &--bicsLevel2Variant {
-    #{$blockName} {
-      &__bar {
-        &-stencilMask {
-          background-color: $color_gray_1
-        }
-      }
-    }
-  }
-  &--bicsLevel3Variant {
-    #{$blockName} {
-      &__bar {
-        &-stencilMask {
-          background-color: $color_gray_2
-        }
-      }
-    }
-  }
-  &--bicsLevel4Variant {
-    #{$blockName} {
-      &__bar {
-        &-stencilMask {
-          background-color: $color_gray_3
-        }
-      }
-    }
-  }
   &--noLeftEdge {
     #{$blockName} {
       &__bar {

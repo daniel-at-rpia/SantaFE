@@ -290,13 +290,14 @@ export interface PortfolioBreakdownCategoryBlock {
   moveVisualizer: DTOs.MoveVisualizerDTO;
   bicsLevel: number;
   portfolioID: number;
+  diveInLevel: number;
   raw: {
     currentLevel: number;
     currentPct: number;
     targetLevel: number;
     targetPct: number;
   }
-  bucket: StructureBucketData;
+  bucket: StructureBucketDataBlock;
   view: PortfolioView;
   children?: DTOs.PortfolioBreakdownDTO;
 }
@@ -350,6 +351,6 @@ export interface BICsCategorizationBlock {
   bicsLevel4?: BEStructuringBreakdownBlock
 }
 
-export interface StructureBucketData {
+export interface StructureBucketDataBlock {
   [groupOption: string]: Array<string>;
 }
