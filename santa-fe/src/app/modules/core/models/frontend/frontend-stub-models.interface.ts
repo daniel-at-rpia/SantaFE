@@ -54,6 +54,10 @@ export interface SecurityDefinitionMapStub {
   COUNTRY: SecurityDefinitionStub;
   QUOTED_TODAY: SecurityDefinitionStub;
   OVERRIDE: SecurityDefinitionStub;
+  BICS_LEVEL_1: SecurityDefinitionStub;
+  BICS_LEVEL_2: SecurityDefinitionStub;
+  BICS_LEVEL_3: SecurityDefinitionStub;
+  BICS_LEVEL_4: SecurityDefinitionStub;
 }
 
 export interface SecurityMetricOptionStub {

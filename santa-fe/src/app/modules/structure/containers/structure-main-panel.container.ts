@@ -2,12 +2,9 @@ import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { of, Subscription } from 'rxjs';
 import { catchError, first, tap} from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import * as moment from 'moment';
-
 import { DTOService } from 'Core/services/DTOService';
 import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
-import { selectMetricLevel } from 'Structure/selectors/structure.selectors';
-import { StructureMetricSelect } from 'Structure/actions/structure.actions';
+import { selectMetricLevel, selectSetViewData } from 'Structure/selectors/structure.selectors';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
 import { selectReloadBreakdownDataPostEdit } from 'Structure/selectors/structure.selectors';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
@@ -17,9 +14,13 @@ import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 import { PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/frontend-models.interface';
 import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
-import { PayloadUpdatePortfolioStructuresTargets, PayloadGetPortfolioStructures } from 'App/modules/core/models/backend/backend-payloads.interface';
-import { StructureSetTargetPostEditUpdatePack } from 'FEModels/frontend-adhoc-packages.interface';
-import { BICsDataProcessingService } from 'Structure/services/BICsDataProcessingService';
+import { 
+  PayloadUpdatePortfolioStructuresTargets,
+  PayloadGetPortfolioStructures,
+  PayloadSetView
+} from 'App/modules/core/models/backend/backend-payloads.interface';
+import { StructureSetTargetPostEditUpdatePack, StructureSetViewData } from 'FEModels/frontend-adhoc-packages.interface';
+import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 
 @Component({
     selector: 'structure-main-panel',
@@ -33,7 +34,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   subscriptions = {
     ownerInitialsSub: null,
     selectedMetricLevelSub: null,
-    reloadFundUponEditSub: null
+    reloadFundUponEditSub: null,
+    viewData: null
   };
   constants = {
     cs01: PortfolioMetricValues.cs01,
@@ -93,12 +95,16 @@ export class StructureMainPanel implements OnInit, OnDestroy {
             target.state.isStencil = true;
           })
         })
-
         setTimeout(() => {
           fund.state.isStencil = false;
         }, 500)
       })
     });
+    this.subscriptions.viewData = this.store$.pipe(select(selectSetViewData)).subscribe((value: StructureSetViewData) => {
+      if (!!value) {
+        this.updateViewData(value);
+      }
+    })
     this.subscriptions.reloadFundUponEditSub = this.store$.pipe(
       select(selectReloadBreakdownDataPostEdit)
     ).subscribe((updatePack: StructureSetTargetPostEditUpdatePack) => {
@@ -202,20 +208,14 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
 
   private fetchFunds() {
-    this.loadStencilFunds();
     //If nothing is passed in, BE assumes current date
     let payload: PayloadGetPortfolioStructures;
+    const endpoint = this.restfulCommService.apiMap.getPortfolioStructures;
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
-    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioStructures, { req: 'POST' }, payload, false, false).pipe(
+    this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn: Array<BEPortfolioStructuringDTO>) => {
-        this.state.fetchResult.fundList = [];
-        serverReturn.forEach(eachFund => {
-          this.BICsDataProcessingService.setRawBICsData(eachFund);
-          const newFund = this.dtoService.formStructureFundObject(eachFund, false);
-          this.state.fetchResult.fundList.push(newFund);
-        })
-        this.state.fetchResult.fundList.length > 1 && this.sortFunds(this.state.fetchResult.fundList);
+        this.processStructureData(serverReturn);
       }),
       catchError(err => {
         setTimeout(() => {
@@ -227,13 +227,13 @@ export class StructureMainPanel implements OnInit, OnDestroy {
             this.setEmptyTargetBar(eachFund.data.cs01TargetBar);
           })
         }, 500);
-        this.restfulCommService.logError('Get portfolio funds failed')
-        console.error(`${this.restfulCommService.apiMap.getPortfolioStructures} failed`, err);
+        this.restfulCommService.logError('Get Portfolio Structures API called failed')
+        console.error(`${endpoint} failed`, err);
         return of('error')
       })
     ).subscribe()
   }
-
+  
   private reloadFund(
     serverReturn: BEPortfolioStructuringDTO,
     systemAlertMessage: string
@@ -247,5 +247,60 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.state.fetchResult.fundList[selectedFundIndex] = updatedFund;
     const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${systemAlertMessage}`, null);
     this.store$.dispatch(new CoreSendNewAlerts([alert]));
+  }
+
+  private updateViewData(data: StructureSetViewData) {
+    const currentFunds = this.utilityService.deepCopy(this.state.fetchResult.fundList);
+    this.loadStencilFunds();
+    const { yyyyMMdd, bucket, view } = data;
+    const payload: PayloadSetView = {
+      yyyyMMdd: yyyyMMdd,
+      bucket: bucket, 
+      view: view
+    }
+    const endpoint = this.restfulCommService.apiMap.setView;
+    let totalBucketValues = '';
+    const displayViewValue = !!view ? view : 'removed';
+    for (let values in bucket) {
+      if (!!bucket[values]) {
+        totalBucketValues = totalBucketValues === '' ? `${bucket[values]}` : `${totalBucketValues} ${bucket[values]}`
+      }
+    }
+
+    const messageDetails = `${totalBucketValues}, with view value ${displayViewValue}`;
+    this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
+    this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
+      first(),
+      tap((serverReturn: Array<BEPortfolioStructuringDTO>) => {
+        this.processStructureData(serverReturn);
+        const completeAlertMessage = `Successfully updated ${messageDetails}`;
+        const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
+        this.store$.dispatch(new CoreSendNewAlerts([alert]));
+      }),
+      catchError(err => {
+        setTimeout(() => {
+          this.state.fetchResult.fetchFundDataFailed = true;
+          this.state.fetchResult.fetchFundDataFailedError = err.message;
+          this.state.fetchResult.fundList = currentFunds;
+          const completeAlertMessage = `Unable to update ${messageDetails}`;
+          const alert = this.dtoService.formSystemAlertObject('Structuring', 'ERROR', completeAlertMessage, null);
+          alert.state.isError = true;
+          this.store$.dispatch(new CoreSendNewAlerts([alert]));
+        }, 500)
+        this.restfulCommService.logError('Set Analyst View API call failed')
+        console.error(`${endpoint} failed`, err);
+        return of('error')
+      })
+    ).subscribe()
+  }
+
+  private processStructureData(serverReturn: Array<BEPortfolioStructuringDTO>) {
+    this.state.fetchResult.fundList = [];
+    serverReturn.forEach(eachFund => {
+      this.BICsDataProcessingService.getRawBICsData(eachFund);
+      const newFund = this.dtoService.formStructureFundObject(eachFund, false);
+      this.state.fetchResult.fundList.push(newFund);
+    })
+    this.state.fetchResult.fundList.length > 1 && this.sortFunds(this.state.fetchResult.fundList);
   }
 }

@@ -49,7 +49,7 @@
       AxeAlertScope,
       AxeAlertType
     } from 'Core/constants/tradeConstants.constant';
-    import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+    import { PortfolioShortNames, PortfolioMetricValues, PortfolioView, PortfolioBreakdownGroupOptions } from 'Core/constants/structureConstants.constants';
   //
 
 @Injectable()
@@ -235,7 +235,11 @@ export class DTOService {
             sendEmail: false
           }
         },
-        tradeHistory: []
+        tradeHistory: [],
+        bicsLevel1: !isStencil ? rawData.bicsLevel1 : null,
+        bicsLevel2: !isStencil ? rawData.bicsLevel2 : null,
+        bicsLevel3: !isStencil ? rawData.bicsLevel3 : null,
+        bicsLevel4: !isStencil ? rawData.bicsLevel4 : null
       }
       if (!isStencil) {
         // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
@@ -552,6 +556,28 @@ export class DTOService {
       }
     };
     return object;
+  }
+
+  public loadBICSOptionsIntoConfigurator(
+    configuratorDTO: DTOs.SecurityDefinitionConfiguratorDTO,
+    sortedLevel1List: Array<string>,
+    sortedLevel2List: Array<string>,
+    sortedLevel3List: Array<string>,
+    sortedLevel4List: Array<string>
+  ) {
+    configuratorDTO.data.definitionList.forEach((eachBundle) => {
+      eachBundle.data.list.forEach((eachDefinition) => {
+        if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_1.key) {
+          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_1.key, sortedLevel1List);
+        } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_2.key) {
+          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_2.key, sortedLevel2List);
+        } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_3.key) {
+          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_3.key, sortedLevel3List);
+        } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_4.key) {
+          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_4.key, sortedLevel4List);
+        }
+      });
+    });
   }
 
   public formAverageVisualizerObject(): DTOs.SecurityGroupAverageVisualizerDTO {
@@ -1896,6 +1922,7 @@ export class DTOService {
     rawData: BEModels.BEStructuringBreakdownBlock,
     definitionList: Array<string>,
     isDisplayCs01: boolean,
+    originalBEOverride: Array<BEModels.BEStructuringOverrideBlock> = [],
     isOverride = false
   ): DTOs.PortfolioBreakdownDTO {
     const isBicsBreakdown = rawData.groupOption.indexOf('BicsLevel') > -1;
@@ -1923,7 +1950,8 @@ export class DTOService {
         isTargetAlignmentRatingAvail: !!isStencil,
         isPreviewVariant: false,
         isBICs: !!isBicsBreakdown,
-        isOverrideVariant: false
+        isOverrideVariant: false,
+        isEditingView: false
       }
     };
     let findCs01Max = 0;
@@ -1954,7 +1982,15 @@ export class DTOService {
         }
       }
     }
+ 
     definitionList.forEach((eachCategoryText) => {
+      const parsedGroupOption = !!isOverride ? rawData.groupOption : PortfolioBreakdownGroupOptions[rawData.groupOption];
+      const bucket = this.utility.populateBEBucketObjectFromRowTitle(
+        this.utility.formBEBucketObjectFromBucketIdentifier(parsedGroupOption),
+        eachCategoryText
+      )
+      const parsedBEView = !!rawData.breakdown[eachCategoryText]  && !!rawData.breakdown[eachCategoryText].view ? rawData.breakdown[eachCategoryText].view.toLowerCase() : null;
+      const view = PortfolioView[parsedBEView];
       const eachCs01CategoryBlock = rawData.breakdown[eachCategoryText] 
         ? this.formPortfolioBreakdownCategoryBlock(
           findCs01Min,
@@ -1966,7 +2002,9 @@ export class DTOService {
           rawData.portfolioId,
           rawData.groupOption,
           isOverride,
-          object.data.diveInLevel
+          object.data.diveInLevel,
+          view,
+          bucket
         )
         : null;
       !!eachCs01CategoryBlock && object.data.rawCs01CategoryList.push(eachCs01CategoryBlock);
@@ -1981,7 +2019,9 @@ export class DTOService {
           rawData.portfolioId,
           rawData.groupOption,
           isOverride,
-          object.data.diveInLevel
+          object.data.diveInLevel,
+          view,
+          bucket
         )
         : null;
       !!eachLeverageCategoryBlock && object.data.rawLeverageCategoryList.push(eachLeverageCategoryBlock);
@@ -1991,13 +2031,14 @@ export class DTOService {
 
   public formPortfolioOverrideBreakdown(
     rawData: BEModels.BEStructuringBreakdownBlock,
-    isDisplayCs01: boolean
+    isDisplayCs01: boolean,
+    originalBEOverride: Array<BEModels.BEStructuringOverrideBlock>,
   ): DTOs.PortfolioBreakdownDTO {
     const definitionList = [];
     for (let eachCategory in rawData.breakdown) {
       definitionList.push(eachCategory);
     }
-    const newBreakdown = this.formPortfolioBreakdown(false, rawData, definitionList, isDisplayCs01, true);
+    const newBreakdown = this.formPortfolioBreakdown(false, rawData, definitionList, isDisplayCs01, originalBEOverride, true);
     newBreakdown.state.isOverrideVariant = true;
     newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.OVERRIDE);
     newBreakdown.data.title = newBreakdown.data.backendGroupOptionIdentifier;
@@ -2014,7 +2055,9 @@ export class DTOService {
     portfolioID: number,
     groupOption: string,
     isOverride: boolean,
-    diveInLevel: number
+    diveInLevel: number,
+    view: PortfolioView,
+    bucket: Blocks.StructureBucketData
   ): DTOs.StructurePortfolioBreakdownRowDTO {
     if (!!rawCategoryData) {
       const parsedRawData = this.utility.deepCopy(rawCategoryData);
@@ -2072,7 +2115,9 @@ export class DTOService {
           currentPct: rawCurrentPct,
           targetLevel: rawTargetLevel,
           targetPct: rawTargetPct
-        }
+        },
+        view: view,
+        bucket: bucket
       };
       if (eachCategoryBlock.diffToTarget < 0) {
         eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `${eachCategoryBlock.diffToTarget}k` : `${eachCategoryBlock.diffToTarget}`;
@@ -2128,7 +2173,8 @@ export class DTOService {
       state: {
         isSelected: false,
         isBtnDiveIn: false,
-        isStencil: true
+        isStencil: true,
+        isEditingView: false
       }
     }
     return object;
@@ -2143,7 +2189,7 @@ export class DTOService {
     const isDisplayCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
     const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.BicsLevel1, BICsLevel1DefinitionList, isDisplayCs01);
     BICSBreakdown.data.title = 'BICS';
-    BICSBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.SECTOR);
+    BICSBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.BICS_LEVEL_1);
     object.data.children.push(BICSBreakdown);
     const currencyBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Ccy, FilterOptionsCurrency, isDisplayCs01);
     currencyBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
@@ -2171,7 +2217,7 @@ export class DTOService {
       const overrideList: Array<BEModels.BEStructuringBreakdownBlock> = this.utility.convertRawOverrideToRawBreakdown(rawData.overrides);
       overrideList.forEach((eachRawBreakdown) => {
         const isDisplayCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
-        const newBreakdown = this.formPortfolioOverrideBreakdown(eachRawBreakdown, isDisplayCs01);
+        const newBreakdown = this.formPortfolioOverrideBreakdown(eachRawBreakdown, isDisplayCs01, rawData.overrides);
         object.data.children.unshift(newBreakdown);
       });
     }
