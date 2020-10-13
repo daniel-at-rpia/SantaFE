@@ -49,6 +49,7 @@
       AxeAlertScope,
       AxeAlertType
     } from 'Core/constants/tradeConstants.constant';
+    import { TraceTradeCounterParty, TradeSideValueEquivalent } from 'Core/constants/securityTableConstants.constant';
     import { PortfolioShortNames, PortfolioMetricValues, PortfolioView, PortfolioBreakdownGroupOptions } from 'Core/constants/structureConstants.constants';
   //
 
@@ -236,6 +237,7 @@ export class DTOService {
           }
         },
         tradeHistory: [],
+        traceTrades: [],
         bicsLevel1: !isStencil ? rawData.bicsLevel1 : null,
         bicsLevel2: !isStencil ? rawData.bicsLevel2 : null,
         bicsLevel3: !isStencil ? rawData.bicsLevel3 : null,
@@ -931,7 +933,8 @@ export class DTOService {
           }
         },
         alert: alert,
-        historicalTradeVisualizer: this.formHistoricalTradeObject(securityDTO)
+        historicalTradeVisualizer: this.formHistoricalTradeObject(securityDTO),
+        traceTradeVisualizer: null
       },
       style: {
         rowHeight: !!isSlimRowHeight ? AGGRID_ROW_HEIGHT_SLIM : AGGRID_ROW_HEIGHT
@@ -2179,6 +2182,53 @@ export class DTOService {
         isStencil: true,
         isEditingView: false
       }
+    }
+    return object;
+  }
+
+  public formTraceTradeBlockObject(rawData: BEModels.BETraceTradesBlock, targetSecurity: DTOs.SecurityDTO) {
+    const object: Blocks.TraceTradeBlock = {
+      eventTime: moment(rawData.eventTime).format(`YY MMM DD - HH:mm`),
+      counterParty: TraceTradeCounterParty[rawData.counterParty],
+      side: TradeSideValueEquivalent[rawData.side],
+      volumeEstimated: rawData.volumeEstimated,
+      volumeActual: rawData.volumeActual,
+      price: this.utility.parseTriCoreDriverNumber(rawData.price, TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
+      yield: this.utility.parseTriCoreDriverNumber(rawData.yield, TriCoreDriverConfig.Yield.label, targetSecurity, false) as number,
+      spread: this.utility.parseTriCoreDriverNumber(rawData.spread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
+      oasSpread: this.utility.parseTriCoreDriverNumber(rawData.oasSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
+      gSpread: this.utility.parseTriCoreDriverNumber(rawData.gSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
+      iSpread: this.utility.parseTriCoreDriverNumber(rawData.iSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
+      parSpread: this.utility.parseTriCoreDriverNumber(rawData.parSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string
+    }
+    return object;
+  }
+
+  public formTraceTradesVisualizerDTO(data: Array<Blocks.TraceTradeBlock>): DTOs.TraceTradesVisualizerDTO {
+    const object = {
+      data: {
+        pristineTradeList: data,
+        displayList: []
+      },
+      state: {},
+      graph: {
+        timeSeries: null,
+        pieChart: null
+      }
+    }
+    if (object.data.pristineTradeList.length > 0) {
+      object.data.displayList = object.data.pristineTradeList;
+    }
+    if (object.data.displayList.length > 0) {
+      object.data.displayList.sort((tradeA, tradeB) => {
+        if (tradeA.eventTime > tradeB.eventTime) {
+          return -1
+        } else if (tradeB.eventTime > tradeA.eventTime) {
+          return 1;
+        } else {
+          return 0;
+        }
+      })
     }
     return object;
   }

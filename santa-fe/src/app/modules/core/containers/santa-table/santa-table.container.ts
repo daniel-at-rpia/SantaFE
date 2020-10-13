@@ -15,8 +15,8 @@
       SecurityTableHeaderDTO,
       SecurityTableRowDTO
     } from 'FEModels/frontend-models.interface';
-    import { AgGridRow, AgGridRowNode } from 'FEModels/frontend-blocks.interface';
-    import { PayloadGetAllQuotes } from 'BEModels/backend-payloads.interface';
+    import { AgGridRow, AgGridRowNode, TableFetchResultBlock, TraceTradeBlock } from 'FEModels/frontend-blocks.interface';
+    import { PayloadGetAllQuotes, PayloadGetAllTraceTrades } from 'BEModels/backend-payloads.interface';
     import { AgGridRowParams, ClickedSortQuotesByMetricEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
     import { SecurityTableHeaderConfigStub } from 'FEModels/frontend-stub-models.interface';
     import { SantaTableSecurityCell } from 'Core/components/santa-table-security-cell/santa-table-security-cell.component';
@@ -24,7 +24,7 @@
     import { SantaTableAlertSideCell } from 'Core/components/santa-table-alert-side-cell/santa-table-alert-side-cell.component';
     import { SantaTableAlertStatusCell } from 'Core/components/santa-table-alert-status-cell/santa-table-alert-status-cell.component';
     import { SantaTableDetailAllQuotes } from 'Core/containers/santa-table-detail-all-quotes/santa-table-detail-all-quotes.container';
-    import { BEQuoteDTO } from 'BEModels/backend-models.interface';
+    import { BEQuoteDTO, BEGetAllTraceTradesBlock } from 'BEModels/backend-models.interface';
     import {
       AGGRID_DETAIL_ROW_DEFAULT_COUNT,
       AGGRID_DETAIL_ROW_HEIGHT_MINIMUM,
@@ -498,6 +498,9 @@ export class SantaTable implements OnInit, OnChanges {
           return of('error');
         })
       ).subscribe();
+      if (targetRow.data.security.data.currency === 'USD' && targetRow.data.security.data.securityType !== 'Cds') {
+        this.getAllTraceTrades(targetRow)
+      }
     }
   }
 
@@ -904,5 +907,30 @@ export class SantaTable implements OnInit, OnChanges {
     setTimeout(function(){
       window.location.reload(true);
     }, 3000);
+  }
+
+  private getAllTraceTrades(targetRow: SecurityTableRowDTO) {
+    const securityID = targetRow.data.security.data.securityID;
+    const payload: PayloadGetAllTraceTrades = {
+      "identifiers":  [securityID]
+    }
+    const endpoint = this.restfulCommService.apiMap.getAllTraceTrades;
+    this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
+      first(),
+      tap((serverReturn: BEGetAllTraceTradesBlock) => {
+        const rawDataKey = Object.keys(serverReturn)[0];
+        const rawDataTrades = serverReturn[rawDataKey];
+        if (rawDataTrades.length > 0) {
+          const traceTradeData: Array<TraceTradeBlock> = rawDataTrades.map(trade => this.dtoService.formTraceTradeBlockObject(trade, targetRow.data.security));
+          targetRow.data.security.data.traceTrades = traceTradeData;
+          targetRow.data.traceTradeVisualizer = this.dtoService.formTraceTradesVisualizerDTO(targetRow.data.security.data.traceTrades);
+        }
+      }),
+      catchError(err => {
+        this.restfulCommService.logError('Get Trace Trades API called failed')
+        console.error(`${endpoint} failed`, err);
+        return of('error')
+      })
+    ).subscribe()
   }
 }

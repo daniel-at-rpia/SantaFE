@@ -12,7 +12,8 @@ import {
   SecurityTableRowQuoteBlock,
   SecurityCostPortfolioBlock, 
   PortfolioMetricTotals,
-  PortfolioBreakdownCategoryBlock
+  PortfolioBreakdownCategoryBlock,
+  TraceTradeBlock
 } from 'FEModels/frontend-blocks.interface';
 import {AlertSubTypes, AlertTypes} from 'Core/constants/coreConstants.constant';
 import { SantaTableNumericFloatingFilterParams } from 'FEModels/frontend-adhoc-packages.interface';
@@ -21,6 +22,7 @@ import * as moment from 'moment';
 import * as am4Charts from '@amcharts/amcharts4/charts';
 import {Alert} from "Core/components/alert/alert.component";
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
+import { TraceTradeCounterParty } from 'Core/constants/securityTableConstants.constant';
 import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 import { BEPortfolioStructuringDTO } from 'Core/models/backend/backend-models.interface';
 
@@ -139,6 +141,7 @@ export interface SecurityDTO extends BasicDTOStructure {
       }
     }
     tradeHistory: Array<TradeDTO>;
+    traceTrades: Array<TraceTradeBlock>;
     bicsLevel1: string;
     bicsLevel2: string;
     bicsLevel3: string;
@@ -395,6 +398,7 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
     }
     alert: AlertDTO;
     historicalTradeVisualizer: HistoricalTradeVisualizerDTO;
+    traceTradeVisualizer: TraceTradesVisualizerDTO;
   },
   style: {
     rowHeight: number;
