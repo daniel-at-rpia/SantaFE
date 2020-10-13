@@ -1639,23 +1639,23 @@ export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
     headerKey: 'oasSpread',
     headerDisplayLabel: 'OAS Sprd',
     attrName: 'oasSpread',
-    size: 8
+    size: 5
   },{
     headerKey: 'gSpread',
     headerDisplayLabel: 'G Sprd',
     attrName: 'gSpread',
-    size: 8
+    size: 5
   },{
     headerKey: 'iSpread',
     headerDisplayLabel: 'I Sprd',
     attrName: 'iSpread',
-    size: 8
+    size: 5
   },
   {
     headerKey: 'parSpread',
     headerDisplayLabel: 'Par Sprd',
     attrName: 'parSpread',
-    size: 8
+    size: 5
   }
 ]
 
