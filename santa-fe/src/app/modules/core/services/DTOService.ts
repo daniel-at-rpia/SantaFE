@@ -943,7 +943,6 @@ export class DTOService {
         isCDSVariant: this.utility.isCDS(false, securityDTO),
         isCDSOffTheRun: false,
         viewHistoryState: false,
-        viewAllQuotesState: true,
         viewTraceState: false,
         quotesLoaded: false,
         isAgGridFullSizeVariant: false

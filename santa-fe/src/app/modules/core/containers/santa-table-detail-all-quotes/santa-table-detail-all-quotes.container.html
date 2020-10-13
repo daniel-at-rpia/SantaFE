@@ -5,7 +5,6 @@
     'santaTableDetailAllQuotes--showMoreQuoteCta': ((rowData.data.quotes.primaryQuotes.length > 0 && rowData.data.quotes.primaryPresentQuotes.length < rowData.data.quotes.primaryQuotes.length) || (rowData.data.quotes.secondaryQuotes.length > 0 && rowData.data.quotes.secondaryPresentQuotes.length < rowData.data.quotes.secondaryQuotes.length)) && !rowData.state.presentingAllQuotes,
     'santaTableDetailAllQuotes--securityIsCDSState': rowData.state.isCDSVariant,
     'santaTableDetailAllQuotes--securityIsOffTheRunCDSState': rowData.state.isCDSVariant && rowData.state.isCDSOffTheRun,
-    'santaTableDetailAllQuotes--viewAllQuotesState': rowData.state.viewAllQuotesState,
     'santaTableDetailAllQuotes--viewHistoryState': rowData.state.viewHistoryState,
     'santaTableDetailAllQuotes--viewTraceState': rowData.state.viewTraceState
   }">
@@ -20,7 +19,7 @@
         <span>Live Quotes</span>
       </button>
       <button (click)="onClickSwitchViewToTrace()" class="santaBtn--labelled santaTableDetailAllQuotes__viewSwitch-traceBtn">
-        <i class="fal fa-file-invoice-dollar"></i>
+        <i class="fal fa-analytics"></i>
         <span>Trace Trades</span>
       </button>
     </div>

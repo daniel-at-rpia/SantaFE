@@ -162,40 +162,6 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
       }
     }
   }
-  &--viewAllQuotesState {
-    #{$santaTableDetailAllQuotesBlockName} {
-      &__viewSwitch {
-        &-quoteBtn {
-          @include material('none');
-          @extend .santaBtn--inverseLabelled;
-          background-color: $color_active;
-        }
-        &-historyBtn,
-        &-traceBtn {
-          @include material();
-          background-color: $color_white;
-          &>i {
-            color: $font_color_major;
-          }
-          &>span {
-            color: $font_color_major;
-          }
-        }
-      }
-      &__history,
-      &__trace {
-        display: none;
-      }
-      &__main {
-        display: flex;
-      }
-      &__ctas {
-        &-moreQuoteCta {
-          display: flex;
-        }
-      }
-    }
-  }
   &--viewHistoryState {
     #{$santaTableDetailAllQuotesBlockName} {
       &__viewSwitch {
@@ -238,8 +204,7 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
           @extend .santaBtn--inverseLabelled;
           background-color: $color_active;
         }
-        &-quoteBtn,
-        &-historyBtn {
+        &-quoteBtn{
           @include material();
           background-color: $color_white;
           &>i {

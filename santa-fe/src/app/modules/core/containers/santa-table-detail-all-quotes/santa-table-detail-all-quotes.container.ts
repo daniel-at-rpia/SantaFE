@@ -157,7 +157,6 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
 
   public onClickSwitchViewToHistory() {
     this.rowData.state.viewHistoryState = true;
-    this.rowData.state.viewAllQuotesState = false;
     this.rowData.state.viewTraceState = false;
     this.restfulCommService.logEngagement(
       this.restfulCommService.engagementMap.santaTableAllQuotesDisplayTradeHistory,
@@ -169,7 +168,6 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
 
   public onClickSwitchViewToQuote() {
     this.rowData.state.viewHistoryState = false;
-    this.rowData.state.viewAllQuotesState = true;
     this.rowData.state.viewTraceState = false;
     this.restfulCommService.logEngagement(
       this.restfulCommService.engagementMap.santaTableAllQuotesDisplayQuotes,
@@ -181,7 +179,6 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
 
   public onClickSwitchViewToTrace() {
     this.rowData.state.viewHistoryState = false;
-    this.rowData.state.viewAllQuotesState = false;
     this.rowData.state.viewTraceState = true;
     this.restfulCommService.logEngagement(
       this.restfulCommService.engagementMap.santaTableAllQuotesDisplayTrace,
