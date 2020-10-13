@@ -802,11 +802,23 @@ export interface StructurePopoverDTO extends BasicDTOStructure {
 }
 
 export interface StructurePortfolioBreakdownRowDTO extends BasicDTOStructure {
-  data: PortfolioBreakdownCategoryBlock,
+  data: PortfolioBreakdownCategoryBlock;
   state: {
     isSelected: boolean;
     isBtnDiveIn: boolean;
     isStencil: boolean;
     isEditingView: boolean;
+  }
+}
+
+export interface TraceTradesVisualizerDTO extends BasicDTOStructure {
+  data: {
+    pristineTradeList: Array<TraceTradeBlock>;
+    displayList: Array<TraceTradeBlock>;
+  },
+  state: {},
+  graph: {
+    timeSeries: am4Charts.XYChart;
+    pieChart: am4Charts.PieChart;
   }
 }
