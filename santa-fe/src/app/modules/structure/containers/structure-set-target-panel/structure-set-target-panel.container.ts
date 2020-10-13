@@ -38,7 +38,7 @@ import {
 } from 'BEModels/backend-models.interface';
 import { PayloadGetPortfolioOverride } from 'BEModels/backend-payloads.interface';
 import { StructureSetTargetPostEditUpdatePack } from 'FEModels/frontend-adhoc-packages.interface';
-import { StructureReloadBreakdownDataPostEditEvent } from 'Structure/actions/structure.actions';
+import { StructureReloadBreakdownDataPostEditEvent, StructureUpdateMainPanelEvent } from 'Structure/actions/structure.actions';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import { CustomeBreakdownConfiguratorDefinitionLayout } from 'Core/constants/structureConstants.constants';
 import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
@@ -656,11 +656,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           tap((serverReturn: BEPortfolioStructuringDTO) => {
             callCount++;
             if (callCount === necessaryNumOfCalls) {
-              const updatePack: StructureSetTargetPostEditUpdatePack = {
-                targetFund: serverReturn,
-                targetBreakdownBackendGroupOptionIdentifier: this.state.targetBreakdown.data.backendGroupOptionIdentifier
-              };
-              this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
+              this.store$.dispatch(new StructureUpdateMainPanelEvent());
             }
           }),
           catchError(err => {
