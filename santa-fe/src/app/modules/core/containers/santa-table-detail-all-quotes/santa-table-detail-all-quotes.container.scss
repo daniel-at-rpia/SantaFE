@@ -33,6 +33,15 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
       @extend .santaBtn--inverseLabelled;
       background-color: $color_active;
     }
+    &-traceBtn {
+      display: flex;
+      background-color: $color_disabled;
+      cursor: not-allowed;
+      box-shadow: none;
+      &:hover {
+        box-shadow: none;
+      }
+    }
   }
   &__history {
     @include mix_fixed_div(relative, $z_index_base_item_lift);
@@ -170,8 +179,7 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
           @extend .santaBtn--inverseLabelled;
           background-color: $color_active;
         }
-        &-quoteBtn,
-        &-traceBtn {
+        &-quoteBtn {
           @include material();
           background-color: $color_white;
           &>i {
@@ -196,37 +204,67 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
       }
     }
   }
-  &--viewTraceState {
+  &--traceAvailableState {
     #{$blockName} {
       &__viewSwitch {
         &-traceBtn {
-          @include material('none');
-          @extend .santaBtn--inverseLabelled;
-          background-color: $color_active;
-        }
-        &-quoteBtn{
-          @include material();
-          background-color: $color_white;
-          &>i {
-            color: $font_color_major;
-          }
-          &>span {
-            color: $font_color_major;
-          }
-        }
-      }
-      &__trace {
-        display: flex;
-      }
-      &__history,
-      &__main {
-        display: none;
-      }
-      &__ctas {
-        &-moreQuoteCta {
-          display: none;
+          background-color: white;
+          cursor: pointer;
         }
       }
     }
+  &#{$blockName} {
+    &--viewTraceState {
+      #{$blockName} {
+        &__viewSwitch {
+          &-traceBtn {
+            @include material('none');
+            @extend .santaBtn--inverseLabelled;
+            background-color: $color_active;
+          }
+          &-quoteBtn{
+            @include material();
+            background-color: $color_white;
+            &>i {
+              color: $font_color_major;
+            }
+            &>span {
+              color: $font_color_major;
+            }
+          }
+        }
+        &__trace {
+          display: flex;
+        }
+        &__history,
+        &__main {
+          display: none;
+        }
+        &__ctas {
+          &-moreQuoteCta {
+            display: none;
+          }
+        }
+      }
+    }
+   }
+   &#{$blockName} {
+     &--viewHistoryState {
+       #{$blockName} {
+         &__viewSwitch {
+           &-traceBtn {
+            @include material();
+            background-color: $color_white;
+              &>i {
+                color: $font_color_major;
+              }
+              &>span {
+                color: $font_color_major;
+              }
+           }
+         }
+       }
+     }
+   }
   }
 }
