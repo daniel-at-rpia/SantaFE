@@ -149,3 +149,10 @@ export interface TradeHistoryHeaderConfigStub {
   size?: number;
   applyQuantColorCodes?: boolean;
 }
+
+export interface TradeTraceHeaderConfigStub {
+  headerKey: string;
+  headerDisplayLabel: string;
+  attrName: string;
+  size?: number;
+}

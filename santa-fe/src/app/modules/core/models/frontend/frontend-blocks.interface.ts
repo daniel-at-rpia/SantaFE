@@ -355,3 +355,18 @@ export interface BICsCategorizationBlock {
 export interface StructureBucketDataBlock {
   [groupOption: string]: Array<string>;
 }
+
+export interface TraceTradeBlock {
+  eventTime: string;
+  counterParty: TraceCounterParty;
+  side: string;
+  volumeEstimated: number;
+  volumeActual: number;
+  price: string;
+  yield: number;
+  spread: string;
+  oasSpread: string;
+  gSpread: string;
+  iSpread: string;
+  parSpread: string;
+}
