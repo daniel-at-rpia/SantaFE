@@ -5,6 +5,13 @@ import { SantaModalDTO } from "FEModels/frontend-models.interface";
 export class ModalService {
   private registeredModals: Array<SantaModalDTO> = [];
 
+  public modalIsRegistered(targetModalId): SantaModalDTO {
+    const exist = this.registeredModals.find((eachModal) => {
+      return eachModal.data.id === targetModalId;
+    });
+    return exist;
+  }
+
   public registerModal(targetModal: SantaModalDTO) {
     if (!!targetModal && !!targetModal.data.id) {
       const exist = this.registeredModals.find((eachModal) => {

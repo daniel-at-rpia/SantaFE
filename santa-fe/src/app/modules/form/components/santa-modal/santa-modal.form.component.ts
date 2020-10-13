@@ -19,16 +19,22 @@ export class SantaModal implements OnInit, OnDestroy {
     private elementRef: ElementRef,
     private dtoService: DTOService,
     private modalService: ModalService
-  ){
-    this.modalData = this.dtoService.formSantaModal(elementRef);
-    document.body.appendChild(this.modalData.data.modalElement);
-  }
+  ){}
 
   public ngOnInit() {
-    this.modalData.data.id = this.modalId;
-    this.modalData.api.openModal = this.openModal.bind(this);
-    this.modalData.api.closeModal = this.closeModal.bind(this);
-    this.modalService.registerModal(this.modalData);
+    const exist = this.modalService.modalIsRegistered(this.modalId);
+    if (!exist) {
+      this.modalData = this.dtoService.formSantaModal(this.elementRef);
+      this.modalData.data.id = this.modalId;
+      this.modalData.api.openModal = this.openModal.bind(this);
+      this.modalData.api.closeModal = this.closeModal.bind(this);
+      this.modalService.registerModal(this.modalData);
+    } else {
+      this.modalData = exist;
+      document.body.removeChild(this.modalData.data.modalElement);
+      this.modalData.data.modalElement = this.elementRef.nativeElement;
+    }
+    document.body.appendChild(this.modalData.data.modalElement);
   }
 
   public ngOnDestroy() {
