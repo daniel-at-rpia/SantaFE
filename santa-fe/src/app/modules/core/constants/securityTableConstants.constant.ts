@@ -2,7 +2,8 @@ import {
   SecurityTableHeaderConfigStub,
   SecurityTableQuoteHeaderConfigStub,
   TradeHistoryHeaderConfigStub,
-  SecurityTableSpecificAlertHeaderConfigsStub
+  SecurityTableSpecificAlertHeaderConfigsStub,
+  TradeTraceHeaderConfigStub
 } from 'FEModels/frontend-stub-models.interface';
 
 import {
@@ -1595,5 +1596,67 @@ export const TradeHistoryHeaderConfigList: Array<TradeHistoryHeaderConfigStub> =
     size: 9
   }
 ];
+
+export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
+  {
+    headerKey: 'eventTime',
+    headerDisplayLabel: 'Date & Time',
+    attrName: 'eventTime',
+    size: 8
+  },{
+    headerKey: 'counterParty',
+    headerDisplayLabel: 'Counter Party',
+    attrName: 'counterParty',
+    size: 10
+  },{
+    headerKey: 'side',
+    headerDisplayLabel: 'Side',
+    attrName: 'side'
+  },{
+    headerKey: 'volumeEstimated',
+    headerDisplayLabel: 'Volume (Estimated)',
+    attrName: 'volumeEstimated',
+    size: 10,
+  },{
+    headerKey: 'volumeActual',
+    headerDisplayLabel: 'Volume (Actual)',
+    attrName: 'volumeActual',
+    size: 8
+  },{
+    headerKey: 'price',
+    headerDisplayLabel: 'Px',
+    attrName: 'price',
+    size: 5
+  },{
+    headerKey: 'yield',
+    headerDisplayLabel: 'Yield',
+    attrName: 'yield'
+  },{
+    headerKey: 'spread',
+    headerDisplayLabel: 'Sprd',
+    attrName: 'spread'
+  },{
+    headerKey: 'oasSpread',
+    headerDisplayLabel: 'OAS Sprd',
+    attrName: 'oasSpread',
+    size: 8
+  },{
+    headerKey: 'gSpread',
+    headerDisplayLabel: 'G Sprd',
+    attrName: 'gSpread',
+    size: 8
+  },{
+    headerKey: 'iSpread',
+    headerDisplayLabel: 'I Sprd',
+    attrName: 'iSpread',
+    size: 8
+  },
+  {
+    headerKey: 'parSpread',
+    headerDisplayLabel: 'Par Sprd',
+    attrName: 'parSpread',
+    size: 8
+  }
+]
 
 export const AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD = 'fullWidth';
