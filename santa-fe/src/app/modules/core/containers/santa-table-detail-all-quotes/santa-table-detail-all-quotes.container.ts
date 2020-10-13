@@ -74,6 +74,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     this.parentNode && this.parentNode.setExpanded(false);
     this.parent.onRowClickedToCollapse(this.rowData, !this.parentNode, this.params);
     this.rowData.data.historicalTradeVisualizer.state.graphReceived = true;
+    this.rowData.state.viewTraceState = false;
   }
 
   public onClickSelectForAnalysis() {
@@ -178,14 +179,16 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   }
 
   public onClickSwitchViewToTrace() {
-    this.rowData.state.viewHistoryState = false;
-    this.rowData.state.viewTraceState = true;
-    this.restfulCommService.logEngagement(
-      this.restfulCommService.engagementMap.santaTableAllQuotesDisplayTrace,
-      this.rowData.data.security.data.securityID,
-      '',
-      'Trade Center Panel'
-    );
+    if (this.rowData.data.traceTradeVisualizer && this.rowData.data.traceTradeVisualizer.data.displayList.length > 0) {
+      this.rowData.state.viewHistoryState = false;
+      this.rowData.state.viewTraceState = true;
+      this.restfulCommService.logEngagement(
+        this.restfulCommService.engagementMap.santaTableAllQuotesDisplayTrace,
+        this.rowData.data.security.data.securityID,
+        '',
+        'Trade Center Panel'
+      );
+    }
   }
 
   public onClickGetAllTradeHistory(showAllTradeHistory: boolean) {
