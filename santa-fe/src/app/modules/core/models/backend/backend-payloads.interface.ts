@@ -130,6 +130,10 @@ export interface PayloadUpdateOverride {
   portfolioOverride: BEStructuringOverrideBlock;
 }
 
+export interface PayloadDeleteOverride {
+  portfolioOverride: BEStructuringOverrideBlock;
+}
+
 export interface PayloadGetPortfolioOverride {
   portfolioOverride: BEStructuringOverrideBlock;
 }

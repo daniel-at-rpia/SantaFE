@@ -319,6 +319,7 @@ export interface StructureSetTargetPanelEditRowBlock {
     percent: StructureSetTargetPanelEditRowItemBlock;
   };
   isLocked: boolean;
+  existInServer: boolean;
 }
 
 export interface StructureSetTargetPanelEditRowItemBlock {

@@ -308,4 +308,5 @@ export interface StructureSetTargetPanelState {
     dto: DTOs.SecurityDefinitionConfiguratorDTO;
     display: boolean;
   }
+  removalList: Array<StructureSetTargetPanelEditRowBlock>;
 }

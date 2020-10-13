@@ -11,6 +11,7 @@ export interface StructureState {
   selectedMetric: string;
   setTargetTransfer: StructureSetTargetOverlayTransferPack;
   reloadBreakdownDataPostEdit: StructureSetTargetPostEditUpdatePack;
+  updateTick: number;
   viewData: StructureSetViewData;
 }
 
@@ -18,6 +19,7 @@ const initialState: StructureState = {
   selectedMetric: PortfolioMetricValues.cs01,
   setTargetTransfer: null,
   reloadBreakdownDataPostEdit: null,
+  updateTick: 0,
   viewData: null
 }
 
@@ -48,6 +50,11 @@ export function structureReducer(
         ...state,
         viewData: action.viewData
       }
+    case StructureActions.UpdateMainPanel:
+      return {
+        ...state,
+        updateTick: state.updateTick + 1
+      };
     default:
       return state;
   }
