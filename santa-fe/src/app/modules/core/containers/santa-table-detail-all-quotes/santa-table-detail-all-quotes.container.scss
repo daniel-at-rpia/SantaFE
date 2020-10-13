@@ -13,7 +13,7 @@ $santaTableDetailAllQuotes_width: $securityQuote_main_size_1 * 2 + $securityQuot
 $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $securityQuote_main_size_2 * 2 + $securityQuote_main_size_3 + $spacing_small * 9 + $securityTableRow_expandCanvas_label_leftPadding + $securityTableRow_expandCanvas_label_rightPadding;
 
 .santaTableDetailAllQuotes {
-  $santaTableDetailAllQuotesBlockName: &;
+  $blockName: &;
   @include mix_fixed_div(relative, $z_index_base_item);
   // @include mix_gradient($color_detailTableBackground, $color_gray_4, 40%, 45deg);
   flex: 1 1 auto;
@@ -130,7 +130,7 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
     }
   }
   &--showMoreQuoteCta {
-    #{$santaTableDetailAllQuotesBlockName} {
+    #{$blockName} {
       &__ctas {
         &-moreQuoteCta {
           display: flex;
@@ -139,7 +139,7 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
     }
   }
   &--securityIsCDSState {
-    #{$santaTableDetailAllQuotesBlockName} {
+    #{$blockName} {
       &__main-content {
         &-label {
           width: $santaTableDetailAllQuotes_width_CDS;
@@ -151,7 +151,7 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
     }
   }
   &--securityIsOffTheRunCDSState {
-    #{$santaTableDetailAllQuotesBlockName} {
+    #{$blockName} {
       &__main-content {
         &-targetSecurity {
           display: flex;
@@ -163,7 +163,7 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
     }
   }
   &--viewHistoryState {
-    #{$santaTableDetailAllQuotesBlockName} {
+    #{$blockName} {
       &__viewSwitch {
         &-historyBtn {
           @include material('none');
@@ -197,7 +197,7 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
     }
   }
   &--viewTraceState {
-    #{$santaTableDetailAllQuotesBlockName} {
+    #{$blockName} {
       &__viewSwitch {
         &-traceBtn {
           @include material('none');
