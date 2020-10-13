@@ -227,6 +227,16 @@ $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfig
   @include mix_alive('custom', $animation_duration_light background-color);
   display: flex;
   background-color: $color_gray_2;
+  &__remove {
+    @include mix_fixed_div(relative, $z_index_base_item);
+    flex: 0 0 auto;
+    display: none;
+    margin: $spacing_small $spacing_medium;
+    &-btn {
+      background-color: $color_kill;
+      color: $font_color_inverse;
+    }
+  }
   &__lock {
     @include mix_fixed_div(relative, $z_index_base_item); // for some reason I need this position relative so the shadow won't be clipped by the next row's background color, weird
     flex: 0 0 auto;
@@ -286,6 +296,16 @@ $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfig
     flex: 0 0 $typical_border_width;
     background-color: $color_border_gray;
     margin: $spacing_small 0;
+  }
+  &--overrideVariant {
+    #{$blockName} {
+      &__remove {
+        display: flex;
+      }
+      &__lock {
+        display: none;
+      }
+    }
   }
   &--focusedCs01LevelState {
     #{$blockName} {

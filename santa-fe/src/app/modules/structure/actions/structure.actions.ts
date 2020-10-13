@@ -11,7 +11,8 @@ export enum StructureActions {
   SelectedMetricLevel = '[Structure] Metric Level Selected',
   SendSetTargetTransfer = '[Structure] Send Set Target Transfer',
   ReloadBreakdownDataPostEdit = '[Structure] Reload Breakdown Data',
-  SetView = '[Structure] View Set For Breakdown Category'
+  SetView = '[Structure] View Set For Breakdown Category',
+  UpdateMainPanel = '[Structure] Update Main Panel'
 }
 
 export class StructureStoreResetEvent implements Action {
@@ -41,6 +42,11 @@ export class StructureReloadBreakdownDataPostEditEvent implements Action {
   constructor(pack: StructureSetTargetPostEditUpdatePack) {
     this.pack = pack;
   }
+}
+
+export class StructureUpdateMainPanelEvent implements Action {
+  readonly type = StructureActions.UpdateMainPanel;
+  constructor(){}
 }
 
 export class StructureSetView implements Action {

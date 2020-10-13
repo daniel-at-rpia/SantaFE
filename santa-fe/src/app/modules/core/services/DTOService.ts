@@ -1923,7 +1923,6 @@ export class DTOService {
     rawData: BEModels.BEStructuringBreakdownBlock,
     definitionList: Array<string>,
     isDisplayCs01: boolean,
-    originalBEOverride: Array<BEModels.BEStructuringOverrideBlock> = [],
     isOverride = false
   ): DTOs.PortfolioBreakdownDTO {
     const isBicsBreakdown = rawData.groupOption.indexOf('BicsLevel') > -1;
@@ -2036,14 +2035,13 @@ export class DTOService {
 
   public formPortfolioOverrideBreakdown(
     rawData: BEModels.BEStructuringBreakdownBlock,
-    isDisplayCs01: boolean,
-    originalBEOverride: Array<BEModels.BEStructuringOverrideBlock>,
+    isDisplayCs01: boolean
   ): DTOs.PortfolioBreakdownDTO {
     const definitionList = [];
     for (let eachCategory in rawData.breakdown) {
       definitionList.push(eachCategory);
     }
-    const newBreakdown = this.formPortfolioBreakdown(false, rawData, definitionList, isDisplayCs01, originalBEOverride, true);
+    const newBreakdown = this.formPortfolioBreakdown(false, rawData, definitionList, isDisplayCs01, true);
     newBreakdown.state.isOverrideVariant = true;
     newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.OVERRIDE);
     newBreakdown.data.title = newBreakdown.data.backendGroupOptionIdentifier;
@@ -2222,7 +2220,7 @@ export class DTOService {
       const overrideList: Array<BEModels.BEStructuringBreakdownBlock> = this.utility.convertRawOverrideToRawBreakdown(rawData.overrides);
       overrideList.forEach((eachRawBreakdown) => {
         const isDisplayCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
-        const newBreakdown = this.formPortfolioOverrideBreakdown(eachRawBreakdown, isDisplayCs01, rawData.overrides);
+        const newBreakdown = this.formPortfolioOverrideBreakdown(eachRawBreakdown, isDisplayCs01);
         object.data.children.unshift(newBreakdown);
       });
     }
