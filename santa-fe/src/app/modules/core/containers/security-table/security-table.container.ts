@@ -38,6 +38,7 @@ export class SecurityTable implements OnInit, OnChanges {
   @Output() nativeLoadTableHeader = new EventEmitter();
   @Output() nativePerformSort = new EventEmitter<SecurityTableHeaderDTO>();
   @Output() nativePerformDefaultSort = new EventEmitter();
+  @Output() nativeTableGetAllTraceTrades = new EventEmitter<SecurityTableRowDTO>();
 
   constants = {
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE
@@ -156,6 +157,9 @@ export class SecurityTable implements OnInit, OnChanges {
       targetRow.data.security.state.isMultiLineVariant = targetRow.state.isExpanded;
       if (targetRow.state.isExpanded) {
         this.fetchSecurityQuotes(targetRow);
+        if (targetRow.data.security.data.currency === 'USD' && targetRow.data.security.data.securityType !== 'Cds') {
+          this.getAllTraceTrades(targetRow)
+        }
       }
     }
   }
@@ -196,6 +200,10 @@ export class SecurityTable implements OnInit, OnChanges {
 
   private fetchSecurityQuotes(targetRow: SecurityTableRowDTO){
     this.nativeTableFetchQuotes.emit(targetRow); 
+  }
+
+  private getAllTraceTrades(targetRow: SecurityTableRowDTO) {
+    this.nativeTableGetAllTraceTrades.emit(targetRow);
   }
 
   private applySkewToggleToRows(targetHeader: SecurityTableHeaderDTO, isAxe: boolean) {

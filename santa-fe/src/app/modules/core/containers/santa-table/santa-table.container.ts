@@ -255,6 +255,9 @@ export class SantaTable implements OnInit, OnChanges {
               if (targetRow.state.isExpanded) {
                 this.setAgGridRowHeight(targetRow, params, !!params.rowPinned, this.constants.agGridDetailRowHeightMinimum);
                 this.fetchSecurityQuotes(targetRow, params);
+                if (targetRow.data.security.data.currency === 'USD' && targetRow.data.security.data.securityType !== 'Cds') {
+                  this.getAllTraceTrades(targetRow);
+                }
               } else {
                 targetRow.state.presentingAllQuotes = false;
                 if (params.rowPinned) {
@@ -332,6 +335,10 @@ export class SantaTable implements OnInit, OnChanges {
 
   public onNativeTableFetchSecurityQuotes(targetRow: SecurityTableRowDTO){
     this.fetchSecurityQuotes(targetRow);
+  }
+
+  public onNativeGetAllTraceTrades(targetRow: SecurityTableRowDTO) {
+    this.getAllTraceTrades(targetRow);
   }
 
   public onNativeLoadTableHeader() {
@@ -498,9 +505,6 @@ export class SantaTable implements OnInit, OnChanges {
           return of('error');
         })
       ).subscribe();
-      if (targetRow.data.security.data.currency === 'USD' && targetRow.data.security.data.securityType !== 'Cds') {
-        this.getAllTraceTrades(targetRow)
-      }
     }
   }
 
@@ -640,6 +644,9 @@ export class SantaTable implements OnInit, OnChanges {
       if (eachAgGridRow.rowDTO.state.isExpanded) {
         try {
           this.fetchSecurityQuotes(eachAgGridRow.rowDTO);
+          if (eachAgGridRow.rowDTO.data.security.data.currency === 'USD' && eachAgGridRow.rowDTO.data.security.data.securityType !== 'Cds') {
+            this.getAllTraceTrades(eachAgGridRow.rowDTO)
+          }
         } catch {
           console.warn('read only issue at live updating all quotes in pinned rows', eachAgGridRow);
           // ignore, seems AgGrid causes some weird read only error
@@ -650,6 +657,9 @@ export class SantaTable implements OnInit, OnChanges {
       if (eachRow.state.isExpanded) {
         try {
           this.fetchSecurityQuotes(eachRow);
+          if (eachRow.data.security.data.currency === 'USD' && eachRow.data.security.data.securityType !== 'Cds') {
+            this.getAllTraceTrades(eachRow)
+          }
         } catch {
           console.warn('read only issue at live updating all quotes', eachRow);
           // ignore, seems AgGrid causes some weird read only error
