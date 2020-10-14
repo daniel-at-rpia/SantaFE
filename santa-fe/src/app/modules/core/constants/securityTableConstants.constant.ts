@@ -1611,7 +1611,8 @@ export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
   },{
     headerKey: 'side',
     headerDisplayLabel: 'Side',
-    attrName: 'side'
+    attrName: 'side',
+    applyQuantColorCodes: true
   },{
     headerKey: 'volumeEstimated',
     headerDisplayLabel: 'Volume (Estimated)',

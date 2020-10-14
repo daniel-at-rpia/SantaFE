@@ -61,14 +61,6 @@
           &-text {
             @include mix_text_overflow();
             color: $font_color_inverse;
-            &--positive {
-              padding: $spacing_xx_small $spacing_small;
-              background-color: $color_bid;
-            }
-            &--negative {
-              padding: $spacing_xx_small $spacing_small;
-              background-color: $color_ask;
-            }
           }
           &:first-of-type {
             border-left-width: 0;

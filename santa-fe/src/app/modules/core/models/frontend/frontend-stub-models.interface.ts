@@ -155,4 +155,5 @@ export interface TradeTraceHeaderConfigStub {
   headerDisplayLabel: string;
   attrName: string;
   size?: number;
+  applyQuantColorCodes?: boolean;
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnChanges, OnDestroy, ViewEncapsulation, Input } from '@angular/core';
 import { TraceTradesVisualizerDTO } from 'Core/models/frontend/frontend-models.interface';
-import { TradeTraceHeaderConfigList } from 'Core/constants/securityTableConstants.constant'
+import { TradeTraceHeaderConfigList, TradeSideValueEquivalent } from 'Core/constants/securityTableConstants.constant'
 
 @Component({
   selector: 'trace-trade-visualizer',
@@ -12,7 +12,11 @@ import { TradeTraceHeaderConfigList } from 'Core/constants/securityTableConstant
 export class TraceTradeVisualizer {
   @Input() traceTrades: TraceTradesVisualizerDTO;
   constants = {
-    headerConfigList: TradeTraceHeaderConfigList
+    headerConfigList: TradeTraceHeaderConfigList,
+    sideValueEquivalent: {
+      buy: TradeSideValueEquivalent.Bid,
+      sell: TradeSideValueEquivalent.Ask
+    }
   }
   constructor() {};
 }

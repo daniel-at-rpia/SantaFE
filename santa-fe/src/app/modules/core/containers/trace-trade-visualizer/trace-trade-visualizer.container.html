@@ -25,7 +25,11 @@
           [ngStyle]="{
             'width': eachHeader.size ? eachHeader.size + 'rem' : '4rem' 
           }">
-            <span class="sat-traceTradeVisualizer__table-content-rowList-item-cell-text">{{ eachTrade[eachHeader.attrName] }}</span>
+            <span [ngClass]="{
+              'sat-traceTradeVisualizer__table-content-rowList-item-cell-text': true,
+              'sat-traceTradeVisualizer__table-content-rowList-item-cell-text--positive': !!eachHeader.applyQuantColorCodes && eachTrade.side === constants.sideValueEquivalent.buy ,
+              'sat-traceTradeVisualizer__table-content-rowList-item-cell-text--negative': !!eachHeader.applyQuantColorCodes && eachTrade.side === constants.sideValueEquivalent.sell
+            }">{{ eachTrade[eachHeader.attrName] }}</span>
           </div>
         </li>
       </ul>
