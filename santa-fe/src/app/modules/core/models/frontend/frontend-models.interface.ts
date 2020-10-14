@@ -693,6 +693,7 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     portfolioId: number;
     selectedCategory: string;
     diveInLevel: number;
+    indexName: string;
   },
   style: {
     ratingFillWidth: number;
