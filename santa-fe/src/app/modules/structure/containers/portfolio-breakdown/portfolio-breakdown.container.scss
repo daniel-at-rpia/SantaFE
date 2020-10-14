@@ -173,16 +173,17 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
       }
     }
   }
-  &--ratingAvailableState {
-    #{$blockName} {
-      &__rating {
-        visibility: visible;
-        &-hoverText {
-          color: $font_color_inverse;
-        }
-      }
-    }
-  }
+  // temporarily disable it as the calculation needs to be decided
+  // &--ratingAvailableState {
+  //   #{$blockName} {
+  //     &__rating {
+  //       visibility: visible;
+  //       &-hoverText {
+  //         color: $font_color_inverse;
+  //       }
+  //     }
+  //   }
+  // }
   &--editableState {
     #{$blockName} {
       &__ctas {
