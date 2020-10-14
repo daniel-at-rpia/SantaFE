@@ -910,6 +910,7 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   private getAllTraceTrades(targetRow: SecurityTableRowDTO) {
+    const previousTraceTradesDisplayState = !!targetRow.data.traceTradeVisualizer ? targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades : null;
     const securityID = targetRow.data.security.data.securityID;
     const payload: PayloadGetAllTraceTrades = {
       "identifiers":  [securityID]
@@ -926,6 +927,7 @@ export class SantaTable implements OnInit, OnChanges {
             const traceTradeData: Array<TraceTradeBlock> = rawDataTrades.map(trade => this.dtoService.formTraceTradeBlockObject(trade, targetRow.data.security));
             targetRow.data.security.data.traceTrades = traceTradeData;
             targetRow.data.traceTradeVisualizer = this.dtoService.formTraceTradesVisualizerDTO(targetRow.data.security.data.traceTrades);
+            targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = !!previousTraceTradesDisplayState;
           }
         }
       }),
