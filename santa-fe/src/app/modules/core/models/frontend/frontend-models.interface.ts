@@ -793,7 +793,7 @@ export interface SantaModalDTO extends BasicDTOStructure {
 
 export interface StructurePopoverDTO extends BasicDTOStructure {
   data: {
-    mainRow: StructurePortfolioBreakdownRowDTO
+    mainRow: StructurePortfolioBreakdownRowDTO;
   }
   state: {
     isActive: boolean;
