@@ -63,6 +63,19 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
       font-size: $font_size_normal;
     }
   }
+  &__index {
+    @include mix_fixed_div(absolute, $z_index_base_item);
+    @include mix_calculate(bottom, 100%, $portfolioBreakdown_rating_thickness + $spacing_x_small, '-');
+    display: flex;
+    justify-content: flex-end;
+    width: $portfolioBreakdown_categoryList_cell_width + $spacing_small*2;
+    right: $spacing_x_small;
+    &-text {
+      @include mix_text_overflow_multi_line(2);
+      text-align: right;
+      color: $font_color_minor;
+    }
+  }
   &__categoryHeader {
     display: flex;
     justify-content: flex-end;
@@ -81,12 +94,16 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
         @include mix_fixed_div(absolute, $z_index_hovering_item);
         @include mix_border_radius(3px);
         display: none;
-        top: -100%;
+        bottom: 100%;
         color: $font_color_inverse;
         line-height: $line_height_small;
         width: 4.25rem;
         background-color: $color_active;
         text-align: center;
+        // &--index {
+          // width: 8rem;
+          // right: 0;
+        // }
       }
       &:hover>&-tooltip {
         display: block;
