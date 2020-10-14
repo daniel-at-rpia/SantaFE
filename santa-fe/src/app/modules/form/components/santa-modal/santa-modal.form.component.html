@@ -1,4 +1,5 @@
 <article
+  *ngIf="!!modalData"
   [ngClass]="{
     'santaModal': true,
     'santaModal--presentState': modalData.state.isPresenting
@@ -13,8 +14,8 @@
       <ng-content></ng-content>
     </div>
     <section class="santaModal__foreground-ctas">
-      <button (click)="closeModal()" class="santaBtn--iconOnly santaModal__foreground-ctas-btn santaModal__foreground-ctas-btn--cancel fal fa-times"></button>
-      <button (click)="saveModal()" class="santaBtn--iconOnly santaModal__foreground-ctas-btn santaModal__foreground-ctas-btn--confirm fal fa-check"></button>
+      <button (click)="closeModal()" class="santaModal__foreground-ctas-btn santaModal__foreground-ctas-btn--cancel fal fa-times"></button>
+      <button (click)="saveModal()" class="santaModal__foreground-ctas-btn santaModal__foreground-ctas-btn--confirm fal fa-check"></button>
     </section>
   </section>
 </article>

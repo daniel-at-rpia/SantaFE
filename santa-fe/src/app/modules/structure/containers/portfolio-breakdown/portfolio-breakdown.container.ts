@@ -65,18 +65,17 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     let popoverCategory;
     if (this.dataIsReady) {
       this.calculateAlignmentRating();
-     if (!!this.breakdownData.data.popover && !!this.breakdownData.data.popover.state.isActive) {
-      const previousMetricData = this.utilityService.deepCopy(this.breakdownData.data.popover.data.mainRow.data.children);
-      popoverCategory = this.breakdownData.data.popover.data.mainRow.data.category; 
-      const popoverRow = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawCs01CategoryList.find(row => row.data.category === popoverCategory) : this.breakdownData.data.rawLeverageCategoryList.find(row => row.data.category === popoverCategory);
-      this.updatePopoverData(popoverRow);
-      this.breakdownData.data.popover.data.mainRow.data.children = previousMetricData;
-      this.switchPopoverValues(this.breakdownData.data.popover.data.mainRow.data);
-     }
-     //handles a scenario where the user has the popover open in one metric, switches and closes the popover, then switches back, the category is still selected but there is no popover
+      if (!!this.breakdownData.data.popover && !!this.breakdownData.data.popover.state.isActive) {
+        const previousMetricData = this.utilityService.deepCopy(this.breakdownData.data.popover.data.mainRow.data.children);
+        popoverCategory = this.breakdownData.data.popover.data.mainRow.data.category; 
+        const popoverRow = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawCs01CategoryList.find(row => row.data.category === popoverCategory) : this.breakdownData.data.rawLeverageCategoryList.find(row => row.data.category === popoverCategory);
+        this.updatePopoverData(popoverRow);
+        this.breakdownData.data.popover.data.mainRow.data.children = previousMetricData;
+        this.switchPopoverValues(this.breakdownData.data.popover.data.mainRow.data);
+      }
+      //handles a scenario where the user has the popover open in one metric, switches and closes the popover, then switches back, the category is still selected but there is no popover
       const oppositeList =  this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawLeverageCategoryList : this.breakdownData.data.rawCs01CategoryList;
       const matchedOppositeRow = oppositeList.find(row => row.data.category === popoverCategory);
-
       if (!!matchedOppositeRow) {
         matchedOppositeRow.state.isSelected = false;
       }
@@ -174,7 +173,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       this.breakdownData.state.isEditingView = !this.breakdownData.state.isEditingView;
       breakdown.data.displayCategoryList.forEach(row => {
         this.toggleSetView(row, this.breakdownData.state.isEditingView);
-    })
+      })
     }
   }
 
@@ -209,18 +208,18 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
   }
 
   private removeRowStencils(row: StructurePortfolioBreakdownRowDTO) {
-  if (!row) {
-    return null;
-  } else {
-    if (!!row.data.children) {
-      row.data.children.data.displayCategoryList.forEach(row => {
-        row.state.isStencil = false;
-        row.data.moveVisualizer.state.isStencil = false;
-        if (row.data.children) {
-          this.removeRowStencils(row);
-        }
-      })
+    if (!row) {
+      return null;
+    } else {
+      if (!!row.data.children) {
+        row.data.children.data.displayCategoryList.forEach(row => {
+          row.state.isStencil = false;
+          row.data.moveVisualizer.state.isStencil = false;
+          if (row.data.children) {
+            this.removeRowStencils(row);
+          }
+        })
+      }
     }
   }
-}
 }

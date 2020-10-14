@@ -69,6 +69,7 @@ $modal_animation_duration: $animation_duration_normal;
       transform: scale(0.01);
       &-btn {
         @include mix_border_radius(50%);
+        @extend .santaBtn--iconOnly;  // need to use scss @extend instead of writing it in the html, because otherwise when the modal is re-instantiated, the styles of iconOnly will overwrite the local btn stylings, a weird behavior from view encapsulation I believe.
         display: flex;
         align-items: center;
         justify-content: center;
