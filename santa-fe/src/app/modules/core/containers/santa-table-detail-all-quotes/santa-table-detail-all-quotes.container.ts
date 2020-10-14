@@ -76,6 +76,10 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     this.rowData.data.historicalTradeVisualizer.state.graphReceived = true;
     this.rowData.state.viewTraceState = false;
     this.rowData.state.viewHistoryState = false;
+    if (!!this.rowData.data.traceTradeVisualizer && !!this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades) {
+      this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = false;
+      this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.traceTradeVisualizer.data.pristineTradeList.filter((row, i) => i < 9);
+    }
   }
 
   public onClickSelectForAnalysis() {

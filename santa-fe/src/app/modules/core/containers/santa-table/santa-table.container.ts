@@ -299,8 +299,19 @@ export class SantaTable implements OnInit, OnChanges {
     // try {
       if (isPinnedFullWidthCell) {
         this.setAgGridRowHeight(targetRow, params, isPinnedFullWidthCell, 0);
+        targetRow.state.isExpanded = false;
+        const pinnedTargetRowID = `${targetRow.data.security.data.securityID} - ${this.constants.agGridPinnedFullWidthRowKeyword}`;
+        const selectedPinnedRow = this.tableData.data.agGridPinnedTopRowData.find(row => row.id === pinnedTargetRowID);
+        if (!!selectedPinnedRow) {
+          selectedPinnedRow.rowDTO.state.viewHistoryState = false;
+          selectedPinnedRow.rowDTO.state.viewTraceState = false;
+          if (!!selectedPinnedRow.rowDTO.data.traceTradeVisualizer && !!selectedPinnedRow.rowDTO.data.traceTradeVisualizer.state.isDisplayAllTraceTrades) {
+            selectedPinnedRow.rowDTO.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = false;
+            selectedPinnedRow.rowDTO.data.traceTradeVisualizer.data.displayList =  selectedPinnedRow.rowDTO.data.traceTradeVisualizer.data.pristineTradeList.filter((row, i) => i < 9);
+          }
+        }
       }
-      targetRow.state.isExpanded = false;
+
     // } catch {
       // console.warn('read only issue', targetRow);
       // ignore, seems AgGrid causes some weird read only error
