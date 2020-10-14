@@ -2,10 +2,10 @@
 
 $structureUtilityPanel_width: 9rem;
 $structureUtilityPanel_tongue_expandWidth: $structureUtilityPanel_width*1.5;
-$structureUtilityPanel_side_width: 10rem;
+$structureUtilityPanel_side_width: 12rem;
 $structureUtilityPanel_width_expand: $structureUtilityPanel_tongue_expandWidth + $structureUtilityPanel_side_width*2 + $spacing_small*2;
 $structureUtilityPanel_tongue_topGutter: convert_px_to_rem(30px);
-$structureUtilityPanel_side_btn_size: convert_px_to_rem(45px);
+$structureUtilityPanel_side_btn_size: 2.25rem;
 .sat-structureUtilityPanel {
   $blockName: &;
   @include mix_fixed_div(absolute, $z_index_utilityTongue);
@@ -19,100 +19,49 @@ $structureUtilityPanel_side_btn_size: convert_px_to_rem(45px);
   transform: translate(0, -$structureUtilityPanel_tongue_topGutter);
   width: $structureUtilityPanel_width;
   cursor: pointer;
-  &:hover, 
-  &:focus {
-    transform: translate(0,0);
-  }
-  &__cs01,
-  &__leverage {
+  &__metricSelect {
     @include mix_fixed_div(absolute, $z_index_base_item);
     @include mix_alive('light');
     @include mix_calculate(height, 100%, $spacing_small*2, '-');
+    @include mix_border_generator(0 $typical_border_width 0 0, $color_white);
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin: $spacing_small 0; 
-    width: $structureUtilityPanel_side_width; 
-    flex: 1 1 auto;
-    transform: scale(0.01);
-    &-btn {
-      @include mix_fixed_div(absolute, $z_index_base_item);
-      @include roundedButton($size: $structureUtilityPanel_side_btn_size);
-      padding: 0;
-      &>i {
-        color: $color_black;
-        font-size: $font_size_large;
-      }
-    }
-    &-text {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      text-align: center;
-      &-targetStatus,
-      &-targetType {
-        font-size: $font_size_small; 
-        color: $font_color_inverse;
-      }
-      &-targetType {
-        flex-basis: 80%;
-        display: inline-block;
-      }
-      &-targetStatus {
-        @include mix_border_radius(3px);
-        @include mix_theme_background();
-        display: none;
-        padding: $spacing_xx_small $spacing_x_small;
-      }
-    }
-    &--selected {
-      #{$blockName} {
-        &__cs01,
-        &__leverage {
-          &-btn {
-            @include material('none');
-            background-color: $color_active;
-            pointer-events: none;
-            &>i{
-              color: $font_color_inverse;
-            }
-          }
-          &-text {
-            &-targetStatus {
-              display: inline-block;
-            }
-          }
-        }
-      }
-    }
-  }
-  &__cs01 {
-    @include mix_border_generator(0 $typical_border_width 0 0, $color_white);
-    right: 0;
-    &-btn {
-      right: -$spacing_medium;
-    }
-    &-text {
-      &-targetStatus {
-        margin-right: $spacing_small;
-      }
-      &-targetType {
-        margin: 0 $spacing_large $spacing_x_small $spacing_small;
-      }
-    }
-  }
-  &__leverage {
-    @include mix_border_generator(0 0 0 $typical_border_width, $color_white);
+    margin: $spacing_small 0;
+    padding-left: $spacing_small;
+    max-width: $structureUtilityPanel_side_width;
     left: 0;
-    &-btn {
-      left: -$spacing_medium;
-    }
-    &-text {
-      &-targetStatus {
-        margin-left: $spacing_small;
+    transform: scale(0.01);
+    &-metric {
+      flex: 1 1 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      &-title {
+        height: 2rem;
+        color: $font_color_inverse;
+        text-align: center;
+        margin-bottom: $spacing_medium;
       }
-      &-targetType {
-        margin: 0 $spacing_small $spacing_x_small $spacing_large;
+      &-selectedLabel {
+        @include mix_border_radius(3px);
+        @include mix_theme_background;
+        margin-top: -$spacing_x_small;
+        margin-bottom: $spacing_x_small;
+        padding: $spacing_xx_small $spacing_small;
+        visibility: hidden;
+        color: $font_color_inverse;
+        font-size: $font_size_x_small;
+      }
+      &-btn {
+        @include mix_fixed_div(absolute, $z_index_base_item);
+        @include mix_border_radius(50%);
+        bottom: -$structureUtilityPanel_side_btn_size + $spacing_small;
+        padding: 0;
+        width: $structureUtilityPanel_side_btn_size;
+        height: $structureUtilityPanel_side_btn_size;
+        &:hover {
+          transform: scale(1.25);
+        }
       }
     }
   }
@@ -137,6 +86,38 @@ $structureUtilityPanel_side_btn_size: convert_px_to_rem(45px);
       margin: $spacing_x_small 0;
     }
   }
+  &__updateNow {
+    @include mix_fixed_div(absolute, $z_index_base_item);
+    @include mix_alive('light');
+    @include mix_calculate(height, 100%, $spacing_small*2, '-');
+    @include mix_border_generator(0 0 0$typical_border_width, $color_white);
+    display: flex;
+    align-items: center;
+    margin: $spacing_small 0;
+    padding-left: $spacing_small;
+    max-width: $structureUtilityPanel_side_width;
+    right: 0;
+    transform: scale(0.01);
+    &-btn {
+      @include mix_fixed_div(absolute, $z_index_base_item);
+      @include mix_border_radius(50%);
+      right: -$structureUtilityPanel_side_btn_size/2;
+      padding: 0;
+      width: $structureUtilityPanel_side_btn_size;
+      height: $structureUtilityPanel_side_btn_size;
+      &:hover {
+        transform: scale(1.25);
+      }
+    }
+    &-label {
+      color: $font_color_inverse;
+      margin-right: $spacing_large;
+    }
+  }
+  &:hover, 
+  &:focus {
+    transform: translate(0,0);
+  }
   &--tongueExpanded {
     @include mix_calculate(left, 50%, $structureUtilityPanel_width_expand/2, '-');
     @include material('none');
@@ -144,8 +125,7 @@ $structureUtilityPanel_side_btn_size: convert_px_to_rem(45px);
     width: $structureUtilityPanel_width_expand;
     background-color: $color_active;
     #{$blockName} {
-      &__cs01,
-      &__leverage {
+      &__metricSelect, &__updateNow {
         transform: scale(1);
       }
       &__tongue {
