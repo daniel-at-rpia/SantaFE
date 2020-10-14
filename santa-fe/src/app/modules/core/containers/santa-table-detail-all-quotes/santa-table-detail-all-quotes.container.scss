@@ -137,6 +137,13 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
         color: $font_color_inverse;
       }
     }
+    &-moreTraceTradesCta {
+      @include mix_fixed_div(relative, $z_index_base_item_solid);
+      display: none;
+      flex-direction: row;
+      margin: 0 $spacing_medium;
+      background-color: $color_white;
+    }
   }
   &--showMoreQuoteCta {
     #{$blockName} {
@@ -235,6 +242,9 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
         }
         &__trace {
           display: flex;
+          & trace-trade-visualizer {
+            overflow-y: scroll;
+          }
         }
         &__history,
         &__main {
@@ -243,6 +253,20 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
         &__ctas {
           &-moreQuoteCta {
             display: none;
+          }
+        }
+      }
+      &#{$blockName} {
+        &--showMoreTraceTradesCta {
+          #{$blockName} {
+            &__ctas {
+              &-moreTraceTradesCta {
+                display: flex;
+              }
+              &-moreQuoteCta {
+                display: none;
+              }
+            }
           }
         }
       }

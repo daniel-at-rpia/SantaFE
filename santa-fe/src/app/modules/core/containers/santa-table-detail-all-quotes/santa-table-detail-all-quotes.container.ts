@@ -191,6 +191,11 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     }
   }
 
+  public onClickShowMoreTraceTrades() {
+    this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = true;
+    this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.traceTradeVisualizer.data.pristineTradeList;
+  }
+
   public onClickGetAllTradeHistory(showAllTradeHistory: boolean) {
     if (showAllTradeHistory) {
       this.fetchTradeAllHistory();

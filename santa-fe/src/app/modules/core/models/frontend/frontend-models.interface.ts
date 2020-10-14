@@ -816,7 +816,9 @@ export interface TraceTradesVisualizerDTO extends BasicDTOStructure {
     pristineTradeList: Array<TraceTradeBlock>;
     displayList: Array<TraceTradeBlock>;
   },
-  state: {},
+  state: {
+    isDisplayAllTraceTrades: boolean;
+  },
   graph: {
     timeSeries: am4Charts.XYChart;
     pieChart: am4Charts.PieChart;

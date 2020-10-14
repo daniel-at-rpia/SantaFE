@@ -2210,17 +2210,16 @@ export class DTOService {
         pristineTradeList: data,
         displayList: []
       },
-      state: {},
+      state: {
+        isDisplayAllTraceTrades: false
+      },
       graph: {
         timeSeries: null,
         pieChart: null
       }
     }
     if (object.data.pristineTradeList.length > 0) {
-      object.data.displayList = object.data.pristineTradeList;
-    }
-    if (object.data.displayList.length > 0) {
-      object.data.displayList.sort((tradeA, tradeB) => {
+      object.data.pristineTradeList.sort((tradeA, tradeB) => {
         if (tradeA.eventTime > tradeB.eventTime) {
           return -1
         } else if (tradeB.eventTime > tradeA.eventTime) {
@@ -2229,6 +2228,7 @@ export class DTOService {
           return 0;
         }
       })
+      object.data.displayList = object.data.pristineTradeList.length > 9 ? object.data.pristineTradeList.filter((row, i) => i < 9) : object.data.pristineTradeList;
     }
     return object;
   }
