@@ -918,12 +918,15 @@ export class SantaTable implements OnInit, OnChanges {
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn: BEGetAllTraceTradesBlock) => {
-        const rawDataKey = Object.keys(serverReturn)[0];
-        const rawDataTrades = serverReturn[rawDataKey];
-        if (rawDataTrades.length > 0) {
-          const traceTradeData: Array<TraceTradeBlock> = rawDataTrades.map(trade => this.dtoService.formTraceTradeBlockObject(trade, targetRow.data.security));
-          targetRow.data.security.data.traceTrades = traceTradeData;
-          targetRow.data.traceTradeVisualizer = this.dtoService.formTraceTradesVisualizerDTO(targetRow.data.security.data.traceTrades);
+        const isEmpty = this.utilityService.checkForEmptyObject(serverReturn);
+        if (!isEmpty) {
+          const rawDataKey = Object.keys(serverReturn)[0];
+          const rawDataTrades = serverReturn[rawDataKey];
+          if (rawDataTrades.length > 0) {
+            const traceTradeData: Array<TraceTradeBlock> = rawDataTrades.map(trade => this.dtoService.formTraceTradeBlockObject(trade, targetRow.data.security));
+            targetRow.data.security.data.traceTrades = traceTradeData;
+            targetRow.data.traceTradeVisualizer = this.dtoService.formTraceTradesVisualizerDTO(targetRow.data.security.data.traceTrades);
+          }
         }
       }),
       catchError(err => {
