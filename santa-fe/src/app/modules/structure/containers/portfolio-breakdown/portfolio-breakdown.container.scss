@@ -68,12 +68,15 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
     @include mix_calculate(bottom, 100%, $portfolioBreakdown_rating_thickness + $spacing_x_small, '-');
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     width: $portfolioBreakdown_categoryList_cell_width + $spacing_small*2;
-    right: $spacing_x_small;
+    height: 2rem;
+    right: $spacing_small;
     &-text {
       @include mix_text_overflow_multi_line(2);
       text-align: right;
       color: $font_color_minor;
+      line-height: $line_height_minimum;
     }
   }
   &__categoryHeader {
@@ -251,6 +254,13 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
           background-color: $color_stencil;
         }
         &-hoverText {
+          @include mix_stencil_animation;
+          background-color: $color_stencil;
+          color: $color_stencil;
+        }
+      }
+      &__index {
+        &-text {
           @include mix_stencil_animation;
           background-color: $color_stencil;
           color: $color_stencil;
