@@ -85,21 +85,7 @@
   &--inactiveState {
     #{$blockName} {
       &__indicator {
-        background-color: transparent;
-        &-bar {
-          &--current {
-            @include mix_gradient($color_gray_3, $color_gray_6, 0%, 90deg);
-          }
-        }
-      }
-    }
-  }
-  &--emptyState#{$blockName}--inactiveState {
-    #{$blockName} {
-      &__indicator {
-        &-values-text {
-          color: $font_color_minor;
-        }
+        opacity: 0.2;
       }
     }
   }
