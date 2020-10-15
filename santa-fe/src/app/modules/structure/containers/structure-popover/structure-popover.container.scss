@@ -15,13 +15,12 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
   left: 0;
   transform: scale(0) translate(0, 0);
   padding: $spacing_medium $spacing_small;
-  &__close-btn {
+  &__closeBtn {
     @include mix_fixed_div(absolute, $z_index_hovering_item);
-    @include roundedButton($color_red_5, $font_color_inverse, $iconButton_size_large);
-    font-size: $font_size_xx_large;
-    bottom: -$iconButton_size_large/2; 
-    left: 50%;
-    transform: translateX(-50%);
+    @include mix_calculate(left, 50%, $iconButton_size_large/2, '-');
+    bottom: -$iconButton_size_large/2;
+    background-color: $color_kill;
+    color: $font_color_inverse;
   }
   &__categoryHeader {
     display: flex;

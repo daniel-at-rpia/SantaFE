@@ -82,6 +82,36 @@
         color: $font_color_inverse;
       }
     }
+    &--circleLabelled {
+      @include mix_fixed_div(relative, $z_index_base_item);
+      @include mix_border_radius(50%);
+      width: $iconButton_size_large;
+      height: $iconButton_size_large;
+      padding: 0;
+      &>i {
+        @include mix_fixed_div(absolute, $z_index_base_item_solid);
+        @include mix_alive('light');
+        font-size: $font_size_large;
+      }
+      &>span {
+        @include mix_fixed_div(absolute, $z_index_base_item);
+        @include mix_alive('light');
+        font-size: $font_size_minimum;
+        opacity: 0;
+        bottom: $iconButton_size_large/3;
+        width: $iconButton_size_large - $spacing_x_small*2;
+      }
+      &:hover {
+        transform: scale(1.5);
+        &>i {
+          transform: translate(0, -40%);
+        }
+        &>span {
+          transform: translate(0, 70%);
+          opacity: 1;
+        }
+      }
+    }
   }
 
   .santaBtnGroup {

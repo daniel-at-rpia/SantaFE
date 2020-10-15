@@ -92,11 +92,7 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
       left: 50%;
       transform: translate(-50%, -50%);
       &-btn {
-        @include roundedButton($size: $iconButton_size_large);
         margin-right: $spacing_large;
-        &>i {
-          font-size: $font_size_large;
-        }
         &--edit {
           display: none;
           margin-right: 0;
@@ -105,7 +101,7 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
         &--save {
           display: none;
           &>i{
-            color: $color_white;
+            color: $font_color_inverse;
           }
         }
         &--cancel {

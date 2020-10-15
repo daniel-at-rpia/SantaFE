@@ -1,6 +1,6 @@
 <article [ngClass]="{
   'sat-fundStructuring': true,
-  'sat-fundStructuring--editAvailableState': fund.state.isEditAvailable,
+  'sat-fundStructuring--editAvailableState': true,
   'sat-fundStructuring--editingState': fund.state.isEditingFund,
   'sat-fundStructuring--invalidInput': fund.state.hasErrors.updatedCS01 || fund.state.hasErrors.updatedCreditLeverage,
   'sat-fundStructuring--errorState': fund.state.isDataUnavailable
@@ -54,15 +54,18 @@
   </section>
   <section class="sat-fundStructuring__utility">
     <div class="sat-fundStructuring__utility-btnGroup">
-      <button class="sat-fundStructuring__utility-btnGroup-btn santaBtn--iconOnly sat-fundStructuring__utility-btnGroup-btn--cancel" (click)="closeEditMenu()">
+      <button class="sat-fundStructuring__utility-btnGroup-btn santaBtn--circleLabelled sat-fundStructuring__utility-btnGroup-btn--cancel" (click)="closeEditMenu()">
         <i class="fal fa-times"></i>
+        <span>Cancel Edit</span>
       </button>
-      <button class="sat-fundStructuring__utility-btnGroup-btn santaBtn--iconOnly sat-fundStructuring__utility-btnGroup-btn--edit" (click)="showEditMenu()">
+      <button class="sat-fundStructuring__utility-btnGroup-btn santaBtn--circleLabelled sat-fundStructuring__utility-btnGroup-btn--edit" (click)="showEditMenu()">
         <i class="fal fa-pencil"></i>
+        <span>Edit Fund</span>
       </button>
-      <button class="sat-fundStructuring__utility-btnGroup-btn santaBtn--iconOnly sat-fundStructuring__utility-btnGroup-btn--save"
+      <button class="sat-fundStructuring__utility-btnGroup-btn santaBtn--circleLabelled sat-fundStructuring__utility-btnGroup-btn--save"
       (click)="onClickSaveNewMetrics(fund.data.target.target.cs01, fund.data.target.target.creditLeverage)">
         <i class="fal fa-cloud-upload-alt"></i>
+        <span>Save Edit</span>
       </button>
     </div>
     <hr class="sat-fundStructuring__utility-divider">
