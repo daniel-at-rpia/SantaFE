@@ -208,16 +208,13 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
     }
   }
   &--editingView {
-    #{$blockName}{
+    #{$blockName} {
       &__ctas {
         &-viewBtn {
+          @include material('none');
           background-color: $color_active;
-          box-shadow: none;
-          &-icon {
-            &--up,
-            &--down {
-              color: $font_color_inverse;
-            }
+          &>i, &>span {
+            color: $font_color_inverse;
           }
         }
       }

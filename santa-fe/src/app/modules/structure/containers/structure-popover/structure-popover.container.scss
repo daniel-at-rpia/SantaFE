@@ -20,7 +20,9 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
     @include mix_calculate(left, 50%, $iconButton_size_large/2, '-');
     bottom: -$iconButton_size_large/2;
     background-color: $color_kill;
-    color: $font_color_inverse;
+    &>i, &>span {
+      color: $font_color_inverse;
+    }
   }
   &__categoryHeader {
     display: flex;

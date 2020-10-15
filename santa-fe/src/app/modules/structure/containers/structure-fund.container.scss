@@ -100,7 +100,7 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
         &--cancel,
         &--save {
           display: none;
-          &>i{
+          &>i, &>span {
             color: $font_color_inverse;
           }
         }
