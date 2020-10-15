@@ -225,24 +225,6 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
         }
       }
     }
-   &#{$blockName} {
-     &--viewHistoryState {
-       #{$blockName} {
-         &__viewSwitch {
-           &-traceBtn {
-            @include material();
-            background-color: $color_white;
-              &>i {
-                color: $font_color_major;
-              }
-              &>span {
-                color: $font_color_major;
-              }
-           }
-         }
-       }
-     }
-   }
   }
   &--viewTraceState {
     #{$blockName} {
