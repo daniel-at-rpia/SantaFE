@@ -25,11 +25,13 @@ $portfolioBreakdownRowViewButtonSize: 1.2rem;
       flex-direction: row;
       cursor: not-allowed;
       &-text {
+        @include mix_text_overflow_multi_line(2);
         flex: 1 1 auto;
         text-align: right;
-        padding-left: 1.5rem;
+        margin-left: 1.5rem;
         overflow: hidden;
         text-overflow: ellipsis;
+        word-break: break-word;
       }
       &-view {
         @include mix_fixed_div(absolute, $z_index_base_item_solid);
@@ -41,7 +43,7 @@ $portfolioBreakdownRowViewButtonSize: 1.2rem;
         width: $iconButton_size_x_small;
         height: $iconButton_size_x_small;
         color: $font_color_inverse;
-        font-size: $font_size_x_small;
+        font-size: $font_size_small;
       }
     }
   }
@@ -105,22 +107,10 @@ $portfolioBreakdownRowViewButtonSize: 1.2rem;
       }
     }
   }
-  &--isBicsRow {
-    #{$blockName} {
-      &__cta {
-        &-btn {
-          word-break: break-word;
-        }
-      }
-    }
-  }
   &--isBicsDiveIn {
     #{$blockName} {
       &__cta {
         &-btn {
-          @include mix_text_overflow_multi_line();
-          -webkit-box-align: end;
-          height: auto;
           border-width: 0;
           @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
           cursor: pointer;

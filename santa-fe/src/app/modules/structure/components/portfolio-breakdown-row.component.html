@@ -1,7 +1,6 @@
 <article [ngClass]="{
   'sat-portfolioBreakdownRow': true,
   'sat-portfolioBreakdownRow--stencilState': breakdownRow.state.isStencil,
-  'sat-portfolioBreakdownRow--isBicsRow': breakdownRow.state.isBtnDiveIn,
   'sat-portfolioBreakdownRow--isBicsDiveIn': breakdownRow.state.isBtnDiveIn && breakdownRow.data.bicsLevel < 4,
   'sat-portfolioBreakdownRow--selected': breakdownRow.state.isSelected,
   'sat-portfolioBreakdownRow--noSignificantDiff': breakdownRow.data.diffToTarget === 0,
