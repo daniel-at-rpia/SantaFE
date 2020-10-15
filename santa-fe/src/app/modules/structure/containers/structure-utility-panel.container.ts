@@ -4,6 +4,7 @@ import { StructureMetricSelect } from 'Structure/actions/structure.actions';
 import { select, Store } from '@ngrx/store';
 import { selectMetricLevel } from 'Structure/selectors/structure.selectors';
 import { StructureUtilityPanelState } from 'Core/models/frontend/frontend-page-states.interface';
+import { StructureUpdateMainPanelEvent } from 'Structure/actions/structure.actions';
 @Component({
   selector: 'structure-utility-panel',
   templateUrl: './structure-utility-panel.container.html',
@@ -20,16 +21,8 @@ export class StructureUtilityPanel implements OnInit {
     cs01: PortfolioMetricValues.cs01,
     leverage: PortfolioMetricValues.creditLeverage
   }
-  constructor(private store$: Store<any>) {}
-  public ngOnInit() {
-    this.initializePageState();
-  }
 
-  public setMetricLevel(metricLevel: PortfolioMetricValues) {
-    const selectedMetric = metricLevel === this.constants.cs01 ? this.constants.cs01 : this.constants.leverage;
-    this.store$.dispatch(new StructureMetricSelect(selectedMetric));
-    this.state.isExpanded = false;
-  }
+  constructor(private store$: Store<any>) {}
 
   private initializePageState() {
     this.state = {
@@ -44,7 +37,22 @@ export class StructureUtilityPanel implements OnInit {
     });
   }
 
+  public ngOnInit() {
+    this.initializePageState();
+  }
+
+  public setMetricLevel(metricLevel: PortfolioMetricValues) {
+    const selectedMetric = metricLevel === this.constants.cs01 ? this.constants.cs01 : this.constants.leverage;
+    this.store$.dispatch(new StructureMetricSelect(selectedMetric));
+    this.state.isExpanded = false;
+  }
+
   public onToggleTongueExpand() {
     this.state.isExpanded = !this.state.isExpanded;
+  }
+
+  public onClickUpdateNow() {
+    this.store$.dispatch(new StructureUpdateMainPanelEvent());
+    this.state.isExpanded = false;
   }
 }
