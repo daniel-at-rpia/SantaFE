@@ -33,6 +33,19 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
       @extend .santaBtn--inverseLabelled;
       background-color: $color_active;
     }
+    &-traceBtn {
+      display: flex;
+      background-color: $color_disabled;
+      cursor: not-allowed;
+      box-shadow: none;
+      &>i,
+      &>span {
+        color: $color_gray_6;
+      }
+      &:hover {
+        box-shadow: none;
+      }
+    }
   }
   &__history {
     @include mix_fixed_div(relative, $z_index_base_item_lift);
@@ -128,6 +141,13 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
         color: $font_color_inverse;
       }
     }
+    &-moreTraceTradesCta {
+      @include mix_fixed_div(relative, $z_index_base_item_solid);
+      display: none;
+      flex-direction: row;
+      margin: 0 $spacing_medium;
+      background-color: $color_white;
+    }
   }
   &--showMoreQuoteCta {
     #{$blockName} {
@@ -170,8 +190,7 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
           @extend .santaBtn--inverseLabelled;
           background-color: $color_active;
         }
-        &-quoteBtn,
-        &-traceBtn {
+        &-quoteBtn {
           @include material();
           background-color: $color_white;
           &>i {
@@ -192,6 +211,17 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
       &__ctas {
         &-moreQuoteCta {
           display: none;
+        }
+      }
+    }
+  }
+  &--traceAvailableState {
+    #{$blockName} {
+      &__viewSwitch {
+        &-traceBtn {
+          @include material();
+          background-color: $color_white;
+          cursor: pointer;
         }
       }
     }
@@ -217,6 +247,9 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
       }
       &__trace {
         display: flex;
+        & trace-trade-visualizer {
+          overflow-y: scroll;
+        }
       }
       &__history,
       &__main {
@@ -225,6 +258,20 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
       &__ctas {
         &-moreQuoteCta {
           display: none;
+        }
+      }
+    }
+    &#{$blockName} {
+      &--showMoreTraceTradesCta {
+        #{$blockName} {
+          &__ctas {
+            &-moreTraceTradesCta {
+              display: flex;
+            }
+            &-moreQuoteCta {
+              display: none;
+            }
+          }
         }
       }
     }

@@ -1025,7 +1025,15 @@ export class UtilityService {
       parsedString = parsedString.replace(/\{/g, '<kbd>');
       parsedString = parsedString.replace(/\}/g, '</kbd>');
       return this.domSanitizer.bypassSecurityTrustHtml(parsedString);
-    } 
+    }
+    
+    public checkForEmptyObject(obj): boolean {
+      return _.isEmpty(obj);
+    }
+
+    public checkIfTraceIsAvailable(targetRow: DTOs.SecurityTableRowDTO): boolean {
+      return targetRow.data.security.data.currency === 'USD' && targetRow.data.security.data.securityType !== 'Cds'
+    }
 
     private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {
       if (delta < 0) {

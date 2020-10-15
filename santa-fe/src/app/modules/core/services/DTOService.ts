@@ -47,8 +47,10 @@
     } from 'Core/constants/securityTableConstants.constant';
     import {
       AxeAlertScope,
-      AxeAlertType
+      AxeAlertType,
+      TRACE_INITIAL_LIMIT
     } from 'Core/constants/tradeConstants.constant';
+    import { TraceTradeCounterParty, TradeSideValueEquivalent } from 'Core/constants/securityTableConstants.constant';
     import { PortfolioShortNames, PortfolioMetricValues, PortfolioView, PortfolioBreakdownGroupOptions } from 'Core/constants/structureConstants.constants';
   //
 
@@ -236,6 +238,7 @@ export class DTOService {
           }
         },
         tradeHistory: [],
+        traceTrades: [],
         bicsLevel1: !isStencil ? rawData.bicsLevel1 : null,
         bicsLevel2: !isStencil ? rawData.bicsLevel2 : null,
         bicsLevel3: !isStencil ? rawData.bicsLevel3 : null,
@@ -931,7 +934,8 @@ export class DTOService {
           }
         },
         alert: alert,
-        historicalTradeVisualizer: this.formHistoricalTradeObject(securityDTO)
+        historicalTradeVisualizer: this.formHistoricalTradeObject(securityDTO),
+        traceTradeVisualizer: null
       },
       style: {
         rowHeight: !!isSlimRowHeight ? AGGRID_ROW_HEIGHT_SLIM : AGGRID_ROW_HEIGHT
@@ -1938,7 +1942,8 @@ export class DTOService {
         popover: null,
         portfolioId: rawData.portfolioId,
         selectedCategory: '',
-        diveInLevel: 0
+        diveInLevel: 0,
+        indexName: ''
       },
       style: {
         ratingFillWidth: null
@@ -2183,6 +2188,53 @@ export class DTOService {
     return object;
   }
 
+  public formTraceTradeBlockObject(rawData: BEModels.BETraceTradesBlock, targetSecurity: DTOs.SecurityDTO) {
+    const object: Blocks.TraceTradeBlock = {
+      eventTime: moment(rawData.eventTime).format(`YY MMM DD - HH:mm`),
+      counterParty: TraceTradeCounterParty[rawData.counterParty],
+      side: TradeSideValueEquivalent[rawData.side],
+      volumeEstimated: rawData.volumeEstimated,
+      volumeActual: rawData.volumeActual,
+      price: this.utility.parseTriCoreDriverNumber(rawData.price, TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
+      yield: this.utility.parseTriCoreDriverNumber(rawData.yield, TriCoreDriverConfig.Yield.label, targetSecurity, false) as number,
+      spread: this.utility.parseTriCoreDriverNumber(rawData.spread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
+      oasSpread: this.utility.parseTriCoreDriverNumber(rawData.oasSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
+      gSpread: this.utility.parseTriCoreDriverNumber(rawData.gSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
+      iSpread: this.utility.parseTriCoreDriverNumber(rawData.iSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
+      parSpread: this.utility.parseTriCoreDriverNumber(rawData.parSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string
+    }
+    return object;
+  }
+
+  public formTraceTradesVisualizerDTO(data: Array<Blocks.TraceTradeBlock>): DTOs.TraceTradesVisualizerDTO {
+    const object = {
+      data: {
+        pristineTradeList: data,
+        displayList: []
+      },
+      state: {
+        isDisplayAllTraceTrades: false
+      },
+      graph: {
+        timeSeries: null,
+        pieChart: null
+      }
+    }
+    if (object.data.pristineTradeList.length > 0) {
+      object.data.pristineTradeList.sort((tradeA, tradeB) => {
+        if (tradeA.eventTime > tradeB.eventTime) {
+          return -1
+        } else if (tradeB.eventTime > tradeA.eventTime) {
+          return 1;
+        } else {
+          return 0;
+        }
+      })
+      object.data.displayList = object.data.pristineTradeList.length > TRACE_INITIAL_LIMIT ? object.data.pristineTradeList.filter((row, i) => i < TRACE_INITIAL_LIMIT) : object.data.pristineTradeList;
+    }
+    return object;
+  }
+
   private processBreakdownDataForStructureFund(
     object: DTOs.PortfolioStructureDTO,
     rawData: BEModels.BEPortfolioStructuringDTO,
@@ -2193,20 +2245,24 @@ export class DTOService {
     const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.BicsLevel1, BICsLevel1DefinitionList, isDisplayCs01);
     BICSBreakdown.data.title = 'BICS';
     BICSBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.BICS_LEVEL_1);
+    BICSBreakdown.data.indexName = rawData.indexShortName;
     object.data.children.push(BICSBreakdown);
     const currencyBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Ccy, FilterOptionsCurrency, isDisplayCs01);
     currencyBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
     currencyBreakdown.data.title = currencyBreakdown.data.definition.data.displayName;
+    currencyBreakdown.data.indexName = rawData.indexShortName;
     object.data.children.push(currencyBreakdown);
     currencyBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
     const tenorBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Tenor, FilterOptionsTenor, isDisplayCs01);
     tenorBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.TENOR);
     tenorBreakdown.data.title = tenorBreakdown.data.definition.data.displayName;
+    tenorBreakdown.data.indexName = rawData.indexShortName;
     object.data.children.push(tenorBreakdown);
     tenorBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
     const ratingBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.RatingNoNotch, FilterOptionsRating, isDisplayCs01);
     ratingBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.RATING);
     ratingBreakdown.data.title = ratingBreakdown.data.definition.data.displayName;
+    ratingBreakdown.data.indexName = rawData.indexShortName;
     object.data.children.push(ratingBreakdown);
     ratingBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
   }
@@ -2221,6 +2277,7 @@ export class DTOService {
       overrideList.forEach((eachRawBreakdown) => {
         const isDisplayCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
         const newBreakdown = this.formPortfolioOverrideBreakdown(eachRawBreakdown, isDisplayCs01);
+        newBreakdown.data.indexName = rawData.indexShortName;
         object.data.children.unshift(newBreakdown);
       });
     }

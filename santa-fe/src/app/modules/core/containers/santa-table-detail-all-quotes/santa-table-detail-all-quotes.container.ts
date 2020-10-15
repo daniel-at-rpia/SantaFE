@@ -31,6 +31,7 @@
     import * as BEModels from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
     import { GraphService } from 'Core/services/GraphService';
+    import { TRACE_INITIAL_LIMIT } from 'Core/constants/tradeConstants.constant';
 
   //
 
@@ -74,6 +75,12 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     this.parentNode && this.parentNode.setExpanded(false);
     this.parent.onRowClickedToCollapse(this.rowData, !this.parentNode, this.params);
     this.rowData.data.historicalTradeVisualizer.state.graphReceived = true;
+    this.rowData.state.viewTraceState = false;
+    this.rowData.state.viewHistoryState = false;
+    if (!!this.rowData.data.traceTradeVisualizer && !!this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades) {
+      this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = false;
+      this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.traceTradeVisualizer.data.pristineTradeList.filter((row, i) => i < TRACE_INITIAL_LIMIT);
+    }
   }
 
   public onClickSelectForAnalysis() {
@@ -178,14 +185,21 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   }
 
   public onClickSwitchViewToTrace() {
-    this.rowData.state.viewHistoryState = false;
-    this.rowData.state.viewTraceState = true;
-    this.restfulCommService.logEngagement(
-      this.restfulCommService.engagementMap.santaTableAllQuotesDisplayTrace,
-      this.rowData.data.security.data.securityID,
-      '',
-      'Trade Center Panel'
-    );
+    if (this.rowData.data.traceTradeVisualizer && this.rowData.data.traceTradeVisualizer.data.displayList.length > 0) {
+      this.rowData.state.viewHistoryState = false;
+      this.rowData.state.viewTraceState = true;
+      this.restfulCommService.logEngagement(
+        this.restfulCommService.engagementMap.santaTableAllQuotesDisplayTrace,
+        this.rowData.data.security.data.securityID,
+        '',
+        'Trade Center Panel'
+      );
+    }
+  }
+
+  public onClickShowMoreTraceTrades() {
+    this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = true;
+    this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.traceTradeVisualizer.data.pristineTradeList;
   }
 
   public onClickGetAllTradeHistory(showAllTradeHistory: boolean) {

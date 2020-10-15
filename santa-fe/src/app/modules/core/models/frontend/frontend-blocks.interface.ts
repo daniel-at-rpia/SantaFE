@@ -16,6 +16,7 @@ import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.const
 import { DTOService } from 'Core/services/DTOService';
 import { PortfolioMetricValues, PortfolioShortNames, PortfolioView } from 'Core/constants/structureConstants.constants';
 import { BEStructuringBreakdownBlock } from 'Core/models/backend/backend-models.interface';
+import { TraceTradeCounterParty } from 'Core/constants/securityTableConstants.constant';
 
 export interface SecurityPortfolioBlock {
   portfolioName: string;
@@ -354,4 +355,19 @@ export interface BICsCategorizationBlock {
 
 export interface StructureBucketDataBlock {
   [groupOption: string]: Array<string>;
+}
+
+export interface TraceTradeBlock {
+  eventTime: string;
+  counterParty: TraceTradeCounterParty;
+  side: string;
+  volumeEstimated: number;
+  volumeActual: number;
+  price: string;
+  yield: number;
+  spread: string;
+  oasSpread: string;
+  gSpread: string;
+  iSpread: string;
+  parSpread: string;
 }

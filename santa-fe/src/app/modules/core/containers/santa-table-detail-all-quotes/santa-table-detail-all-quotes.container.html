@@ -3,10 +3,12 @@
   [ngClass]="{
     'santaTableDetailAllQuotes': true,
     'santaTableDetailAllQuotes--showMoreQuoteCta': ((rowData.data.quotes.primaryQuotes.length > 0 && rowData.data.quotes.primaryPresentQuotes.length < rowData.data.quotes.primaryQuotes.length) || (rowData.data.quotes.secondaryQuotes.length > 0 && rowData.data.quotes.secondaryPresentQuotes.length < rowData.data.quotes.secondaryQuotes.length)) && !rowData.state.presentingAllQuotes,
+    'santaTableDetailAllQuotes--showMoreTraceTradesCta': rowData.state.viewTraceState && rowData.data.traceTradeVisualizer.data.pristineTradeList.length > 9 && !rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades,
     'santaTableDetailAllQuotes--securityIsCDSState': rowData.state.isCDSVariant,
     'santaTableDetailAllQuotes--securityIsOffTheRunCDSState': rowData.state.isCDSVariant && rowData.state.isCDSOffTheRun,
     'santaTableDetailAllQuotes--viewHistoryState': rowData.state.viewHistoryState,
-    'santaTableDetailAllQuotes--viewTraceState': rowData.state.viewTraceState
+    'santaTableDetailAllQuotes--viewTraceState': rowData.state.viewTraceState && !!rowData.data.traceTradeVisualizer,
+    'santaTableDetailAllQuotes--traceAvailableState': !!rowData.data.traceTradeVisualizer
   }">
   <section class="santaTableDetailAllQuotes__viewSwitch">
     <div class="santaBtnGroup">
@@ -19,7 +21,11 @@
         <span>Live Quotes</span>
       </button>
       <button (click)="onClickSwitchViewToTrace()" class="santaBtn--labelled santaTableDetailAllQuotes__viewSwitch-traceBtn">
-        <i class="fal fa-analytics"></i>
+        <i [ngClass]="{
+          'fal': !!rowData.data.traceTradeVisualizer,
+          'fas': !rowData.data.traceTradeVisualizer,
+          'fa-analytics': true
+        }"></i>
         <span>Trace Trades</span>
       </button>
     </div>
@@ -123,7 +129,9 @@
       </ul>
     </div>
   </section>
-  <section class="santaTableDetailAllQuotes__trace"></section>
+  <section class="santaTableDetailAllQuotes__trace">
+    <trace-trade-visualizer [traceTrades]="rowData.data.traceTradeVisualizer"></trace-trade-visualizer>
+  </section>
   <section class="santaTableDetailAllQuotes__ctas">
     <button (click)="onClickSelectForAnalysis()" class="santaTableDetailAllQuotes__ctas-selectBtn santaBtn--labelled">
       <i class="fal fa-chart-line"></i>
@@ -136,6 +144,10 @@
     <button (click)="onClickShowMoreQuotes()" class="santaTableDetailAllQuotes__ctas-moreQuoteCta santaBtn--labelled">
       <i class="fal fa-cloud-download"></i>
       <span>Show All Quotes ({{rowData.data.quotes.primaryQuotes.length - rowData.data.quotes.primaryPresentQuotes.length + rowData.data.quotes.secondaryQuotes.length - rowData.data.quotes.secondaryPresentQuotes.length}} More)</span>
+    </button>
+    <button *ngIf="rowData.data.traceTradeVisualizer && rowData.data.traceTradeVisualizer.data.pristineTradeList.length > 9" (click)="onClickShowMoreTraceTrades()" class="santaTableDetailAllQuotes__ctas-moreTraceTradesCta santaBtn--labelled">
+      <i class="fal fa-cloud-download"></i>
+      <span>Show All Trace Trades ({{rowData.data.traceTradeVisualizer.data.pristineTradeList.length - rowData.data.traceTradeVisualizer.data.displayList.length}} More)</span>
     </button>
   </section>
 </article>

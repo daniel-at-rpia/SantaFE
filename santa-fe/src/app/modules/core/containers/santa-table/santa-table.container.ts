@@ -15,8 +15,8 @@
       SecurityTableHeaderDTO,
       SecurityTableRowDTO
     } from 'FEModels/frontend-models.interface';
-    import { AgGridRow, AgGridRowNode } from 'FEModels/frontend-blocks.interface';
-    import { PayloadGetAllQuotes } from 'BEModels/backend-payloads.interface';
+    import { AgGridRow, AgGridRowNode, TableFetchResultBlock, TraceTradeBlock } from 'FEModels/frontend-blocks.interface';
+    import { PayloadGetAllQuotes, PayloadGetAllTraceTrades } from 'BEModels/backend-payloads.interface';
     import { AgGridRowParams, ClickedSortQuotesByMetricEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
     import { SecurityTableHeaderConfigStub } from 'FEModels/frontend-stub-models.interface';
     import { SantaTableSecurityCell } from 'Core/components/santa-table-security-cell/santa-table-security-cell.component';
@@ -24,7 +24,7 @@
     import { SantaTableAlertSideCell } from 'Core/components/santa-table-alert-side-cell/santa-table-alert-side-cell.component';
     import { SantaTableAlertStatusCell } from 'Core/components/santa-table-alert-status-cell/santa-table-alert-status-cell.component';
     import { SantaTableDetailAllQuotes } from 'Core/containers/santa-table-detail-all-quotes/santa-table-detail-all-quotes.container';
-    import { BEQuoteDTO } from 'BEModels/backend-models.interface';
+    import { BEQuoteDTO, BEGetAllTraceTradesBlock } from 'BEModels/backend-models.interface';
     import {
       AGGRID_DETAIL_ROW_DEFAULT_COUNT,
       AGGRID_DETAIL_ROW_HEIGHT_MINIMUM,
@@ -38,6 +38,7 @@
       SECURITY_TABLE_ICONS,
       AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD
     } from 'Core/constants/securityTableConstants.constant';
+    import { TRACE_INITIAL_LIMIT } from 'Core/constants/tradeConstants.constant';
     import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
     import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-filter/santa-table-numeric-filter.component';
     import { SantaTableFullWidthCellRenderer } from 'Core/components/santa-table-full-width-cell-renderer/santa-table-full-width-cell-renderer.component';
@@ -255,6 +256,10 @@ export class SantaTable implements OnInit, OnChanges {
               if (targetRow.state.isExpanded) {
                 this.setAgGridRowHeight(targetRow, params, !!params.rowPinned, this.constants.agGridDetailRowHeightMinimum);
                 this.fetchSecurityQuotes(targetRow, params);
+                const isTraceSecurity = this.utilityService.checkIfTraceIsAvailable(targetRow);
+                if (!!isTraceSecurity) {
+                  this.getAllTraceTrades(targetRow)
+                }
               } else {
                 targetRow.state.presentingAllQuotes = false;
                 if (params.rowPinned) {
@@ -296,8 +301,19 @@ export class SantaTable implements OnInit, OnChanges {
     // try {
       if (isPinnedFullWidthCell) {
         this.setAgGridRowHeight(targetRow, params, isPinnedFullWidthCell, 0);
+        targetRow.state.isExpanded = false;
+        const pinnedTargetRowID = `${targetRow.data.security.data.securityID} - ${this.constants.agGridPinnedFullWidthRowKeyword}`;
+        const selectedPinnedRow = this.tableData.data.agGridPinnedTopRowData.find(row => row.id === pinnedTargetRowID);
+        if (!!selectedPinnedRow) {
+          selectedPinnedRow.rowDTO.state.viewHistoryState = false;
+          selectedPinnedRow.rowDTO.state.viewTraceState = false;
+          if (!!selectedPinnedRow.rowDTO.data.traceTradeVisualizer && !!selectedPinnedRow.rowDTO.data.traceTradeVisualizer.state.isDisplayAllTraceTrades) {
+            selectedPinnedRow.rowDTO.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = false;
+            selectedPinnedRow.rowDTO.data.traceTradeVisualizer.data.displayList =  selectedPinnedRow.rowDTO.data.traceTradeVisualizer.data.pristineTradeList.filter((row, i) => i < TRACE_INITIAL_LIMIT);
+          }
+        }
       }
-      targetRow.state.isExpanded = false;
+
     // } catch {
       // console.warn('read only issue', targetRow);
       // ignore, seems AgGrid causes some weird read only error
@@ -332,6 +348,10 @@ export class SantaTable implements OnInit, OnChanges {
 
   public onNativeTableFetchSecurityQuotes(targetRow: SecurityTableRowDTO){
     this.fetchSecurityQuotes(targetRow);
+  }
+
+  public onNativeGetAllTraceTrades(targetRow: SecurityTableRowDTO) {
+    this.getAllTraceTrades(targetRow);
   }
 
   public onNativeLoadTableHeader() {
@@ -637,6 +657,10 @@ export class SantaTable implements OnInit, OnChanges {
       if (eachAgGridRow.rowDTO.state.isExpanded) {
         try {
           this.fetchSecurityQuotes(eachAgGridRow.rowDTO);
+          const isTraceSecurity = this.utilityService.checkIfTraceIsAvailable(eachAgGridRow.rowDTO);
+          if (!!isTraceSecurity) {
+            this.getAllTraceTrades(eachAgGridRow.rowDTO)
+          }
         } catch {
           console.warn('read only issue at live updating all quotes in pinned rows', eachAgGridRow);
           // ignore, seems AgGrid causes some weird read only error
@@ -647,6 +671,10 @@ export class SantaTable implements OnInit, OnChanges {
       if (eachRow.state.isExpanded) {
         try {
           this.fetchSecurityQuotes(eachRow);
+          const isTraceSecurity = this.utilityService.checkIfTraceIsAvailable(eachRow);
+          if (!!isTraceSecurity) {
+            this.getAllTraceTrades(eachRow)
+          }
         } catch {
           console.warn('read only issue at live updating all quotes', eachRow);
           // ignore, seems AgGrid causes some weird read only error
@@ -904,5 +932,38 @@ export class SantaTable implements OnInit, OnChanges {
     setTimeout(function(){
       window.location.reload(true);
     }, 3000);
+  }
+
+  private getAllTraceTrades(targetRow: SecurityTableRowDTO) {
+    const previousTraceTradesDisplayState = !!targetRow.data.traceTradeVisualizer ? targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades : null;
+    const securityID = targetRow.data.security.data.securityID;
+    const payload: PayloadGetAllTraceTrades = {
+      "identifiers":  [securityID]
+    }
+    const endpoint = this.restfulCommService.apiMap.getAllTraceTrades;
+    this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
+      first(),
+      tap((serverReturn: BEGetAllTraceTradesBlock) => {
+        const isEmpty = this.utilityService.checkForEmptyObject(serverReturn);
+        if (!isEmpty) {
+          const rawDataKey = Object.keys(serverReturn)[0];
+          const rawDataTrades = serverReturn[rawDataKey];
+          if (rawDataTrades.length > 0) {
+            const traceTradeData: Array<TraceTradeBlock> = rawDataTrades.map(trade => this.dtoService.formTraceTradeBlockObject(trade, targetRow.data.security));
+            targetRow.data.security.data.traceTrades = traceTradeData;
+            targetRow.data.traceTradeVisualizer = this.dtoService.formTraceTradesVisualizerDTO(targetRow.data.security.data.traceTrades);
+            targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = !!previousTraceTradesDisplayState;
+            if (!!previousTraceTradesDisplayState) {
+              targetRow.data.traceTradeVisualizer.data.displayList = targetRow.data.traceTradeVisualizer.data.pristineTradeList;
+            }
+          }
+        }
+      }),
+      catchError(err => {
+        this.restfulCommService.logError('Get Trace Trades API called failed')
+        console.error(`${endpoint} failed`, err);
+        return of('error')
+      })
+    ).subscribe()
   }
 }

@@ -12,7 +12,7 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO =
       "Cs01":124965.828569423
     },
     "indexId":25,
-    "indexShortName":"DEX Short Universe",
+    "indexShortName":"DEX BBB",
     "indexNav":821605479760.9755,
     "indexTotals":{
       "CreditLeverage":0.7179490792140522,

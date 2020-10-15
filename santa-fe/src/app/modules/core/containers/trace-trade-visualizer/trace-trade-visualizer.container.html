@@ -1,0 +1,38 @@
+<article *ngIf="!!traceTrades"
+  [ngClass]="{
+    'sat-traceTradeVisualizer': true
+  }">
+  <section class="sat-traceTradeVisualizer__table">
+    <div class="sat-traceTradeVisualizer__table-utility">
+      <span class="sat-traceTradeVisualizer__table-utility-label">Filter By Counter Party:</span>
+    </div>
+    <div class="sat-traceTradeVisualizer__table-header">
+      <ul class="sat-traceTradeVisualizer__table-header-list">
+        <li class="sat-traceTradeVisualizer__table-header-list-item" 
+          *ngFor="let eachHeader of constants.headerConfigList"
+          [ngStyle]="{
+            'width': eachHeader.size ? eachHeader.size + 'rem' : '4rem' 
+          }">
+          <span class="sat-traceTradeVisualizer__table-header-list-item-text">{{ eachHeader.headerDisplayLabel }}</span>
+        </li>
+      </ul>
+    </div>
+    <div class="sat-traceTradeVisualizer__table-content">
+      <ul class="sat-traceTradeVisualizer__table-content-rowList">
+        <li class="sat-traceTradeVisualizer__table-content-rowList-item"
+        *ngFor="let eachTrade of traceTrades.data.displayList">
+          <div class="sat-traceTradeVisualizer__table-content-rowList-item-cell" *ngFor="let eachHeader of constants.headerConfigList"
+          [ngStyle]="{
+            'width': eachHeader.size ? eachHeader.size + 'rem' : '4rem' 
+          }">
+            <span [ngClass]="{
+              'sat-traceTradeVisualizer__table-content-rowList-item-cell-text': true,
+              'sat-traceTradeVisualizer__table-content-rowList-item-cell-text--positive': !!eachHeader.applyQuantColorCodes && eachTrade.side === constants.sideValueEquivalent.buy ,
+              'sat-traceTradeVisualizer__table-content-rowList-item-cell-text--negative': !!eachHeader.applyQuantColorCodes && eachTrade.side === constants.sideValueEquivalent.sell
+            }">{{ eachTrade[eachHeader.attrName] }}</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+</article>

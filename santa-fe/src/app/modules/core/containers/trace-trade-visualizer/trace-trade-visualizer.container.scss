@@ -1,0 +1,117 @@
+@import "global.scss";
+
+@mixin mix_tradeVisualizer_cell_style() {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 $spacing_x_small;
+  overflow: hidden;
+}
+
+
+.sat-traceTradeVisualizer {
+  $blockName: &;
+  flex: 1 1 auto;
+  display: flex;
+  overflow: hidden;
+  margin-left: $spacing_medium;
+  &__table {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    &-utility {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      margin-bottom: $spacing_small;
+      &-label {
+        margin: 0 $spacing_medium;
+        font-size: $font_size_normal;
+        color: $font_color_inverse;
+      }
+      &-btn {
+        margin-right: $spacing_small;
+        &--selected {
+          @include material('none');
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+        &--disabled {
+          @include material('none');
+          @include mix_border_generator($typical_border_width, $color_disabled);
+          background-color: transparent;
+          color: $color_disabled;
+          cursor: not-allowed;
+        }
+      }
+    }
+    &-header {
+      flex: 0 0 auto;
+      display: flex;
+      margin-bottom: $spacing_small;
+      &-list {
+        flex: 1 1 auto;
+        display: flex;
+        &-item {
+          @include mix_border_generator(0 0 0 $typical_border_width);
+          @include mix_tradeVisualizer_cell_style;
+          display: flex;
+          border-color: transparent;
+          &-text {
+            @include mix_text_overflow();
+            color: $font_color_inverse;
+          }
+          &:first-of-type {
+            border-left-width: 0;
+          }
+        }
+      }
+    }
+    &-content {
+      @include mix_enable_scrollbar('vertical');
+      flex: 1 1 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      margin-bottom: $spacing_medium;
+      &-rowList {
+        flex: 1 1 100%;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: $spacing_medium;
+        &-item {
+          @include mix_border_radius(5px);
+          display: flex;
+          padding: $spacing_x_small 0 ;
+          &-cell {
+            @include mix_border_generator(0 0 0 $typical_border_width);
+            @include mix_tradeVisualizer_cell_style;
+            display: flex;
+            height: 1.75rem;
+            line-height: $line_height_default;
+            &-text {
+              @include mix_text_overflow_multi_line(2);
+              @include mix_border_radius(3px);
+              color: $font_color_inverse;
+              &--positive {
+                padding: $spacing_xx_small $spacing_small;
+                background-color: $color_bid;
+              }
+              &--negative {
+                padding: $spacing_xx_small $spacing_small;
+                background-color: $color_ask;
+              }
+            }
+            &:first-of-type {
+              border-left-width: 0;
+            }
+          }
+          &:hover {
+            background-color: $color_active;
+          }
+        }
+      }
+    }
+  }
+}
