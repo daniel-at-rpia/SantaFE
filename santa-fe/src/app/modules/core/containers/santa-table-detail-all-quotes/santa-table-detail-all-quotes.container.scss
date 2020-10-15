@@ -38,6 +38,10 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
       background-color: $color_disabled;
       cursor: not-allowed;
       box-shadow: none;
+      &>i,
+      &>span {
+        color: $color_gray_6;
+      }
       &:hover {
         box-shadow: none;
       }
@@ -215,63 +219,12 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
     #{$blockName} {
       &__viewSwitch {
         &-traceBtn {
-          background-color: white;
+          @include material();
+          background-color: $color_white;
           cursor: pointer;
         }
       }
     }
-  &#{$blockName} {
-    &--viewTraceState {
-      #{$blockName} {
-        &__viewSwitch {
-          &-traceBtn {
-            @include material('none');
-            @extend .santaBtn--inverseLabelled;
-            background-color: $color_active;
-          }
-          &-quoteBtn{
-            @include material();
-            background-color: $color_white;
-            &>i {
-              color: $font_color_major;
-            }
-            &>span {
-              color: $font_color_major;
-            }
-          }
-        }
-        &__trace {
-          display: flex;
-          & trace-trade-visualizer {
-            overflow-y: scroll;
-          }
-        }
-        &__history,
-        &__main {
-          display: none;
-        }
-        &__ctas {
-          &-moreQuoteCta {
-            display: none;
-          }
-        }
-      }
-      &#{$blockName} {
-        &--showMoreTraceTradesCta {
-          #{$blockName} {
-            &__ctas {
-              &-moreTraceTradesCta {
-                display: flex;
-              }
-              &-moreQuoteCta {
-                display: none;
-              }
-            }
-          }
-        }
-      }
-    }
-   }
    &#{$blockName} {
      &--viewHistoryState {
        #{$blockName} {
@@ -290,5 +243,55 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
        }
      }
    }
+  }
+  &--viewTraceState {
+    #{$blockName} {
+      &__viewSwitch {
+        &-traceBtn {
+          @include material('none');
+          @extend .santaBtn--inverseLabelled;
+          background-color: $color_active;
+        }
+        &-quoteBtn{
+          @include material();
+          background-color: $color_white;
+          &>i {
+            color: $font_color_major;
+          }
+          &>span {
+            color: $font_color_major;
+          }
+        }
+      }
+      &__trace {
+        display: flex;
+        & trace-trade-visualizer {
+          overflow-y: scroll;
+        }
+      }
+      &__history,
+      &__main {
+        display: none;
+      }
+      &__ctas {
+        &-moreQuoteCta {
+          display: none;
+        }
+      }
+    }
+    &#{$blockName} {
+      &--showMoreTraceTradesCta {
+        #{$blockName} {
+          &__ctas {
+            &-moreTraceTradesCta {
+              display: flex;
+            }
+            &-moreQuoteCta {
+              display: none;
+            }
+          }
+        }
+      }
+    }
   }
 }

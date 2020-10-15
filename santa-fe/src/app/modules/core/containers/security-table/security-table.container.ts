@@ -157,7 +157,8 @@ export class SecurityTable implements OnInit, OnChanges {
       targetRow.data.security.state.isMultiLineVariant = targetRow.state.isExpanded;
       if (targetRow.state.isExpanded) {
         this.fetchSecurityQuotes(targetRow);
-        if (targetRow.data.security.data.currency === 'USD' && targetRow.data.security.data.securityType !== 'Cds') {
+        const isTraceSecurity = this.utilityService.checkIfTraceIsAvailable(targetRow);
+        if (!!isTraceSecurity) {
           this.getAllTraceTrades(targetRow)
         }
       }

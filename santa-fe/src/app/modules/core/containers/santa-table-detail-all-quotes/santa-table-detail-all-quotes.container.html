@@ -7,8 +7,8 @@
     'santaTableDetailAllQuotes--securityIsCDSState': rowData.state.isCDSVariant,
     'santaTableDetailAllQuotes--securityIsOffTheRunCDSState': rowData.state.isCDSVariant && rowData.state.isCDSOffTheRun,
     'santaTableDetailAllQuotes--viewHistoryState': rowData.state.viewHistoryState,
-    'santaTableDetailAllQuotes--viewTraceState': rowData.state.viewTraceState,
-    'santaTableDetailAllQuotes--traceAvailableState': rowData.data.traceTradeVisualizer
+    'santaTableDetailAllQuotes--viewTraceState': rowData.state.viewTraceState && !!rowData.data.traceTradeVisualizer,
+    'santaTableDetailAllQuotes--traceAvailableState': !!rowData.data.traceTradeVisualizer
   }">
   <section class="santaTableDetailAllQuotes__viewSwitch">
     <div class="santaBtnGroup">
@@ -21,7 +21,11 @@
         <span>Live Quotes</span>
       </button>
       <button (click)="onClickSwitchViewToTrace()" class="santaBtn--labelled santaTableDetailAllQuotes__viewSwitch-traceBtn">
-        <i class="fal fa-analytics"></i>
+        <i [ngClass]="{
+          'fal': !!rowData.data.traceTradeVisualizer,
+          'fas': !rowData.data.traceTradeVisualizer,
+          'fa-analytics': true
+        }"></i>
         <span>Trace Trades</span>
       </button>
     </div>

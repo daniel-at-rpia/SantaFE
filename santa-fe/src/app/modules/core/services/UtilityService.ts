@@ -1031,6 +1031,10 @@ export class UtilityService {
       return _.isEmpty(obj);
     }
 
+    public checkIfTraceIsAvailable(targetRow: DTOs.SecurityTableRowDTO): boolean {
+      return targetRow.data.security.data.currency === 'USD' && targetRow.data.security.data.securityType !== 'Cds'
+    }
+
     private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {
       if (delta < 0) {
         return 100;

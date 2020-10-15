@@ -47,7 +47,8 @@
     } from 'Core/constants/securityTableConstants.constant';
     import {
       AxeAlertScope,
-      AxeAlertType
+      AxeAlertType,
+      TRACE_INITIAL_LIMIT
     } from 'Core/constants/tradeConstants.constant';
     import { TraceTradeCounterParty, TradeSideValueEquivalent } from 'Core/constants/securityTableConstants.constant';
     import { PortfolioShortNames, PortfolioMetricValues, PortfolioView, PortfolioBreakdownGroupOptions } from 'Core/constants/structureConstants.constants';
@@ -2229,7 +2230,7 @@ export class DTOService {
           return 0;
         }
       })
-      object.data.displayList = object.data.pristineTradeList.length > 9 ? object.data.pristineTradeList.filter((row, i) => i < 9) : object.data.pristineTradeList;
+      object.data.displayList = object.data.pristineTradeList.length > TRACE_INITIAL_LIMIT ? object.data.pristineTradeList.filter((row, i) => i < TRACE_INITIAL_LIMIT) : object.data.pristineTradeList;
     }
     return object;
   }

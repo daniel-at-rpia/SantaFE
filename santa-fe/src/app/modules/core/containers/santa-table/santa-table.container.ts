@@ -38,6 +38,7 @@
       SECURITY_TABLE_ICONS,
       AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD
     } from 'Core/constants/securityTableConstants.constant';
+    import { TRACE_INITIAL_LIMIT } from 'Core/constants/tradeConstants.constant';
     import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
     import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-filter/santa-table-numeric-filter.component';
     import { SantaTableFullWidthCellRenderer } from 'Core/components/santa-table-full-width-cell-renderer/santa-table-full-width-cell-renderer.component';
@@ -255,8 +256,9 @@ export class SantaTable implements OnInit, OnChanges {
               if (targetRow.state.isExpanded) {
                 this.setAgGridRowHeight(targetRow, params, !!params.rowPinned, this.constants.agGridDetailRowHeightMinimum);
                 this.fetchSecurityQuotes(targetRow, params);
-                if (targetRow.data.security.data.currency === 'USD' && targetRow.data.security.data.securityType !== 'Cds') {
-                  this.getAllTraceTrades(targetRow);
+                const isTraceSecurity = this.utilityService.checkIfTraceIsAvailable(targetRow);
+                if (!!isTraceSecurity) {
+                  this.getAllTraceTrades(targetRow)
                 }
               } else {
                 targetRow.state.presentingAllQuotes = false;
@@ -307,7 +309,7 @@ export class SantaTable implements OnInit, OnChanges {
           selectedPinnedRow.rowDTO.state.viewTraceState = false;
           if (!!selectedPinnedRow.rowDTO.data.traceTradeVisualizer && !!selectedPinnedRow.rowDTO.data.traceTradeVisualizer.state.isDisplayAllTraceTrades) {
             selectedPinnedRow.rowDTO.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = false;
-            selectedPinnedRow.rowDTO.data.traceTradeVisualizer.data.displayList =  selectedPinnedRow.rowDTO.data.traceTradeVisualizer.data.pristineTradeList.filter((row, i) => i < 9);
+            selectedPinnedRow.rowDTO.data.traceTradeVisualizer.data.displayList =  selectedPinnedRow.rowDTO.data.traceTradeVisualizer.data.pristineTradeList.filter((row, i) => i < TRACE_INITIAL_LIMIT);
           }
         }
       }
@@ -655,7 +657,8 @@ export class SantaTable implements OnInit, OnChanges {
       if (eachAgGridRow.rowDTO.state.isExpanded) {
         try {
           this.fetchSecurityQuotes(eachAgGridRow.rowDTO);
-          if (eachAgGridRow.rowDTO.data.security.data.currency === 'USD' && eachAgGridRow.rowDTO.data.security.data.securityType !== 'Cds') {
+          const isTraceSecurity = this.utilityService.checkIfTraceIsAvailable(eachAgGridRow.rowDTO);
+          if (!!isTraceSecurity) {
             this.getAllTraceTrades(eachAgGridRow.rowDTO)
           }
         } catch {
@@ -668,7 +671,8 @@ export class SantaTable implements OnInit, OnChanges {
       if (eachRow.state.isExpanded) {
         try {
           this.fetchSecurityQuotes(eachRow);
-          if (eachRow.data.security.data.currency === 'USD' && eachRow.data.security.data.securityType !== 'Cds') {
+          const isTraceSecurity = this.utilityService.checkIfTraceIsAvailable(eachRow);
+          if (!!isTraceSecurity) {
             this.getAllTraceTrades(eachRow)
           }
         } catch {

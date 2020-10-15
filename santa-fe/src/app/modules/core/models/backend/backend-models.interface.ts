@@ -659,7 +659,7 @@ export interface BEGetAllTraceTradesBlock {
 }
 
 export interface BETraceTradesBlock {
-  actionFlag: string;secu
+  actionFlag: string;
   counterParty: string;
   creationTime: string;
   discriminator: string;
