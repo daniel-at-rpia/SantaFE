@@ -27,11 +27,17 @@
       <move-visualizer [visualizerData]="breakdownRow.data.moveVisualizer"></move-visualizer>
     </div>
     <div class="sat-portfolioBreakdownRow__utility-ctas">
-      <button (click)="onClickSetView(constants.overweight)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--iconOnly fal fa-sun sat-portfolioBreakdownRow__utility-ctas-btn--overweight">
+      <button (click)="onClickSetView(constants.overweight)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--inverseLabelled santaBtn--small sat-portfolioBreakdownRow__utility-ctas-btn--overweight">
+        <i class="fal fa-sun"></i>
+        <span>over weight</span>
       </button>
-      <button (click)="onClickSetView(constants.underweight)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--iconOnly fal fa-thunderstorm sat-portfolioBreakdownRow__utility-ctas-btn--underweight">
+      <button (click)="onClickSetView(constants.underweight)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--inverseLabelled santaBtn--small sat-portfolioBreakdownRow__utility-ctas-btn--underweight">
+        <i class="fal fa-thunderstorm"></i>
+        <span>under weight</span>
       </button>
-      <button (click)="onClickSetView(constants.neutral)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--iconOnly fal fa-clouds sat-portfolioBreakdownRow__utility-ctas-btn--neutral">
+      <button (click)="onClickSetView(constants.neutral)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--small sat-portfolioBreakdownRow__utility-ctas-btn--neutral">
+        <i class="fal fa-clouds"></i>
+        <span>neutral</span>
       </button>
     </div>
   </section>

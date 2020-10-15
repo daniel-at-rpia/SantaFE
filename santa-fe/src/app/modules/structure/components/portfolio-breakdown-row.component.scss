@@ -2,7 +2,6 @@
 
 $portfolioBreakdownRowCategory_cell_width: 3.5rem;
 $portfolioBreakdownRowBtnMinHeight: 2.25rem;
-$portfolioBreakdownRowViewButtonSize: 1.2rem;
 .sat-portfolioBreakdownRow {
   $blockName: &;
   display: flex;
@@ -89,20 +88,12 @@ $portfolioBreakdownRowViewButtonSize: 1.2rem;
       justify-content: center;
       width: 100%;
       &-btn {
-        @include mix_border_radius(3px);
-        width: $portfolioBreakdownRowViewButtonSize;
-        height: $portfolioBreakdownRowViewButtonSize;
-        color: $font_color_inverse;
-        padding: $spacing_small;
         margin-right: $spacing_small;
         &--overweight {
           background-color: $color_positive;
         }
         &--underweight {
           background-color: $color_kill;
-        }
-        &--neutral {
-          color: $color_active;
         }
       }
     }
@@ -139,6 +130,17 @@ $portfolioBreakdownRowViewButtonSize: 1.2rem;
           }
         }
       }
+      &__utility {
+        &-ctas {
+          &-btn {
+            &--overweight {
+              @include material('none');
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
+          }
+        }
+      }
     }
   }
   &--underweight {
@@ -147,6 +149,17 @@ $portfolioBreakdownRowViewButtonSize: 1.2rem;
         &-btn {
           &-view {
             background-color: $color_kill;
+          }
+        }
+      }
+      &__utility {
+        &-ctas {
+          &-btn {
+            &--underweight {
+              @include material('none');
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
           }
         }
       }
@@ -162,42 +175,11 @@ $portfolioBreakdownRowViewButtonSize: 1.2rem;
           }
         }
       }
-    }
-  }
-  &--overweight {
-    #{$blockName} {
-      &__utility {
-        &-ctas {
-          &-btn {
-            &--overweight {
-              background-color: $color_active;
-              color: $font_color_inverse;
-            }
-          }
-        }
-      }
-    }
-  }
-  &--underweight {
-    #{$blockName} {
-      &__utility {
-        &-ctas {
-          &-btn {
-            &--underweight {
-              background-color: $color_active;
-              color: $font_color_inverse;
-            }
-          }
-        }
-      }
-    }
-  }
-  &--neutral {
-    #{$blockName} {
       &__utility {
         &-ctas {
           &-btn {
             &--neutral {
+              @include material('none');
               background-color: $color_active;
               color: $font_color_inverse;
             }

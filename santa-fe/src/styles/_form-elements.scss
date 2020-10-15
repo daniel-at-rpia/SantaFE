@@ -91,25 +91,39 @@
       &>i {
         @include mix_fixed_div(absolute, $z_index_base_item_solid);
         @include mix_alive('light');
-        font-size: $font_size_large;
+        font-size: $font_size_x_large;
       }
       &>span {
         @include mix_fixed_div(absolute, $z_index_base_item);
         @include mix_alive('light');
-        font-size: $font_size_minimum;
+        font-size: $font_size_xx_small;
         opacity: 0;
         bottom: $iconButton_size_large/3;
         width: $iconButton_size_large - $spacing_x_small*2;
       }
       &:hover {
+        @include mix_fixed_div(relative, $z_index_hovering_item_lift);
         transform: scale(1.5);
         &>i {
-          transform: translate(0, -40%);
+          transform: translate(0, -50%) scale(0.5);
         }
         &>span {
-          transform: translate(0, 70%);
+          transform: translate(0, 40%);
           opacity: 1;
         }
+      }
+    }
+    &--circleLabelled#{$btnBlockName}--small {
+      width: $iconButton_size_regular;
+      height: $iconButton_size_regular;
+      &>i {
+        font-size: $font_size_large;
+      }
+      &>span {
+        bottom: $iconButton_size_regular/3;
+        width: $iconButton_size_regular - $spacing_x_small*2;
+        line-height: $line_height_minimum;
+        font-size: $font_size_minimum;
       }
     }
   }
