@@ -90,7 +90,7 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     @include mix_fixed_div(absolute, $z_index_base_item);
     @include mix_alive('light');
     @include mix_calculate(height, 100%, $spacing_small*2, '-');
-    @include mix_border_generator(0 0 0$typical_border_width, $color_white);
+    @include mix_border_generator(0 0 0 $typical_border_width, $color_white);
     display: flex;
     align-items: center;
     margin: $spacing_small 0;
@@ -117,6 +117,46 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
   &:hover, 
   &:focus {
     transform: translate(0,0);
+  }
+  &--cs01Selected {
+    #{$blockName} {
+      &__metricSelect {
+        &-metric {
+          &--cs01 {
+            #{$blockName}__metricSelect-metric {
+              &-selectedLabel {
+                visibility: visible;
+              }
+              &-btn {
+                @include material('none');
+                background-color: $color_active;
+                color: $font_color_inverse;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--creditLeverageSelected {
+    #{$blockName} {
+      &__metricSelect {
+        &-metric {
+          &--creditLeverge {
+            #{$blockName}__metricSelect-metric {
+              &-selectedLabel {
+                visibility: visible;
+              }
+              &-btn {
+                @include material('none');
+                background-color: $color_active;
+                color: $font_color_inverse;
+              }
+            }
+          }
+        }
+      }
+    }
   }
   &--tongueExpanded {
     @include mix_calculate(left, 50%, $structureUtilityPanel_width_expand/2, '-');

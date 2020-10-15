@@ -99,7 +99,7 @@ $tradeUtilityPanel_side_btn_size: 2.25rem;
     @include mix_fixed_div(absolute, $z_index_base_item);
     @include mix_alive('light');
     @include mix_calculate(height, 100%, $spacing_small*2, '-');
-    @include mix_border_generator(0 0 0$typical_border_width, $color_white);
+    @include mix_border_generator(0 0 0 $typical_border_width, $color_white);
     display: flex;
     align-items: center;
     margin: $spacing_small 0;

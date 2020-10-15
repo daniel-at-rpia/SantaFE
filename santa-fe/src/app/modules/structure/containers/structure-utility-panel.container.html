@@ -1,17 +1,19 @@
 <article
   [ngClass]="{
     'sat-structureUtilityPanel': true,
-    'sat-structureUtilityPanel--tongueExpanded': state.isExpanded
+    'sat-structureUtilityPanel--tongueExpanded': state.isExpanded,
+    'sat-structureUtilityPanel--cs01Selected': state.selectedMetricValue === constants.cs01,
+    'sat-structureUtilityPanel--creditLeverageSelected': state.selectedMetricValue === constants.leverage
   }">
   <section class="sat-structureUtilityPanel__metricSelect">
-    <div class="sat-structureUtilityPanel__metricSelect-metric">
+    <div class="sat-structureUtilityPanel__metricSelect-metric sat-structureUtilityPanel__metricSelect-metric--creditLeverge">
       <span class="sat-structureUtilityPanel__metricSelect-metric-selectedLabel">Selected</span>
       <span class="sat-structureUtilityPanel__metricSelect-metric-title">Credit Leverage</span>
       <button class="sat-structureUtilityPanel__metricSelect-metric-btn" (click)="setMetricLevel(constants.leverage)">
         <i class="fal fa-check"></i>
       </button>
     </div>
-    <div class="sat-structureUtilityPanel__metricSelect-metric">
+    <div class="sat-structureUtilityPanel__metricSelect-metric sat-structureUtilityPanel__metricSelect-metric--cs01">
       <span class="sat-structureUtilityPanel__metricSelect-metric-selectedLabel">Selected</span>
       <span class="sat-structureUtilityPanel__metricSelect-metric-title">CS01</span>
       <button class="sat-structureUtilityPanel__metricSelect-metric-btn" (click)="setMetricLevel(constants.cs01)">
