@@ -1,0 +1,44 @@
+<article [ngClass]="{
+  'sat-portfolioBreakdownRow': true,
+  'sat-portfolioBreakdownRow--stencilState': breakdownRow.state.isStencil,
+  'sat-portfolioBreakdownRow--isBicsRow': breakdownRow.state.isBtnDiveIn,
+  'sat-portfolioBreakdownRow--isBicsDiveIn': breakdownRow.state.isBtnDiveIn && breakdownRow.data.bicsLevel < 4,
+  'sat-portfolioBreakdownRow--selected': breakdownRow.state.isSelected,
+  'sat-portfolioBreakdownRow--noSignificantDiff': breakdownRow.data.diffToTarget === 0,
+  'sat-portfolioBreakdownRow--isEditingView': breakdownRow.state.isEditingView,
+  'sat-portfolioBreakdownRow--negativeDiff': breakdownRow.data.diffToTarget < 0,
+  'sat-portfolioBreakdownRow--overweight': breakdownRow.data.view === constants.overweight,
+  'sat-portfolioBreakdownRow--underweight': breakdownRow.data.view === constants.underweight,
+  'sat-portfolioBreakdownRow--neutral': breakdownRow.data.view === constants.neutral
+  }">
+  <section class="sat-portfolioBreakdownRow__cta">
+    <button (click)="onClickDiveIn(breakdownRow)" class="sat-portfolioBreakdownRow__cta-btn">
+      <i [ngClass]="{
+        'sat-portfolioBreakdownRow__cta-btn-view': true,
+        'far': true,
+        'fa-arrow-up': breakdownRow.data.view === constants.overweight,
+        'fa-arrow-down': breakdownRow.data.view === constants.underweight,
+        'fa-minus': breakdownRow.data.view === constants.neutral
+      }"></i>
+      <span class="sat-portfolioBreakdownRow__cta-btn-text">{{ breakdownRow.data.category }}</span>
+    </button>
+  </section>
+  <section class="sat-portfolioBreakdownRow__utility">
+    <div class="sat-portfolioBreakdownRow__utility-moveVisualizer">
+      <move-visualizer [visualizerData]="breakdownRow.data.moveVisualizer"></move-visualizer>
+    </div>
+    <div class="sat-portfolioBreakdownRow__utility-ctas">
+      <button (click)="onClickSetView(constants.overweight)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--iconOnly fal fa-arrow-up sat-portfolioBreakdownRow__utility-ctas-btn--overweight">
+      </button>
+      <button (click)="onClickSetView(constants.underweight)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--iconOnly fal fa-arrow-down sat-portfolioBreakdownRow__utility-ctas-btn--underweight">
+      </button>
+      <button (click)="onClickSetView(constants.neutral)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--iconOnly fal fa-minus sat-portfolioBreakdownRow__utility-ctas-btn--neutral">
+      </button>
+    </div>
+  </section>
+    <div class="sat-portfolioBreakdownRow__cell sat-portfolioBreakdownRow__cell--target">{{breakdownRow.data.diffToTargetDisplay}}</div>
+    <hr class="sat-portfolioBreakdownRow__cellDivider">
+    <div class="sat-portfolioBreakdownRow__cell sat-portfolioBreakdownRow__cell--current">{{breakdownRow.data.currentPctDisplay}}</div>
+    <hr class="sat-portfolioBreakdownRow__cellDivider">
+    <div class="sat-portfolioBreakdownRow__cell sat-portfolioBreakdownRow__cell--index">{{breakdownRow.data.indexPctDisplay}}</div>
+</article>

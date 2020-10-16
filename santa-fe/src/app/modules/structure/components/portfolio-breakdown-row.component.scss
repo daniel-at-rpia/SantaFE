@@ -1,0 +1,266 @@
+@import "global.scss";
+
+$portfolioBreakdownRowCategory_cell_width: 3.5rem;
+$portfolioBreakdownRowBtnMinHeight: 2.25rem;
+$portfolioBreakdownRowViewButtonSize: 1.2rem;
+.sat-portfolioBreakdownRow {
+  $blockName: &;
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  &__cta {
+    @include mix_fixed_div(relative, $z_index_base_item);
+    flex: 0 0 7.5rem;
+    display: flex;
+    margin-right: $spacing_small;
+    &-btn {
+      @include mix_border_generator();
+      flex: 1 1 auto;
+      display: flex;
+      min-height: $portfolioBreakdownRowBtnMinHeight;
+      margin: 0 $spacing_small $spacing_small 0;
+      padding: $spacing_xx_small;
+      box-shadow: none;
+      text-align: right;
+      flex-direction: row;
+      cursor: not-allowed;
+      &-text {
+        flex: 1 1 auto;
+        text-align: right;
+        padding-left: 1.5rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      &-view {
+        @include mix_fixed_div(absolute, $z_index_base_item_solid);
+        @include mix_border_radius(3px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        left: $spacing_x_small;
+        width: $iconButton_size_x_small;
+        height: $iconButton_size_x_small;
+        color: $font_color_inverse;
+        font-size: $font_size_x_small;
+      }
+    }
+  }
+  &__cell {
+    @include mix_text_overflow;
+    flex: 0 0 ($portfolioBreakdownRowCategory_cell_width - $spacing_x_small*4/3 - $typical_border_width*2/3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: $font_size_normal;
+    color: $font_color_major;
+    &--target {
+      @include mix_border_radius(5px);
+      align-self: stretch;
+      background-color: $color_active;
+      color: $font_color_inverse;
+      margin: $spacing_x_small 0;
+    }
+  }
+  &__cellDivider {
+    @include mix_border_generator(0 $typical_border_width 0 0);
+    flex: 0 0 $spacing_x_small+$typical_border_width;
+    margin: $spacing_x_small $spacing_x_small $spacing_x_small 0;
+  }
+  &__utility {
+    @include mix_fixed_div(relative, $z_index_base_item_solid);
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    &-moveVisualizer {
+      flex: 0 1 90%;
+      display: flex;
+      &>move-visualizer {
+        flex: 1 1 auto;
+      }
+    }
+    &-ctas {
+      @include mix_fixed_div(absolute, $z_index_dropdown);
+      @include mix_alive('light');
+      display: flex;
+      transform: scale(0);
+      justify-content: center;
+      width: 100%;
+      &-btn {
+        @include mix_border_radius(3px);
+        width: $portfolioBreakdownRowViewButtonSize;
+        height: $portfolioBreakdownRowViewButtonSize;
+        color: $font_color_inverse;
+        padding: $spacing_small;
+        margin-right: $spacing_small;
+        &--overweight {
+          background-color: $color_positive;
+        }
+        &--underweight {
+          background-color: $color_kill;
+        }
+        &--neutral {
+          color: $color_active;
+        }
+      }
+    }
+  }
+  &--isBicsRow {
+    #{$blockName} {
+      &__cta {
+        &-btn {
+          word-break: break-word;
+        }
+      }
+    }
+  }
+  &--isBicsDiveIn {
+    #{$blockName} {
+      &__cta {
+        &-btn {
+          @include mix_text_overflow_multi_line();
+          -webkit-box-align: end;
+          height: auto;
+          border-width: 0;
+          @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
+          cursor: pointer;
+          &:hover{
+            @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
+          }
+        }
+      }
+    }
+  }
+  &--isEditingView {
+    #{$blockName} {
+      &__utility {
+        &-ctas {
+          transform: scale(1);
+        }
+      }
+    }
+  }
+  &--overweight {
+    #{$blockName} {
+      &__cta {
+        &-btn {
+          &-view {
+            background-color: $color_positive;
+          }
+        }
+      }
+    }
+  }
+  &--underweight {
+    #{$blockName} {
+      &__cta {
+        &-btn {
+          &-view {
+            background-color: $color_kill;
+          }
+        }
+      }
+    }
+  }
+  &--neutral {
+    #{$blockName} {
+      &__cta {
+        &-btn {
+          &-view {
+            background-color: $color_white;
+            color: $color_active;
+          }
+        }
+      }
+    }
+  }
+  &--overweight {
+    #{$blockName} {
+      &__utility {
+        &-ctas {
+          &-btn {
+            &--overweight {
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--underweight {
+    #{$blockName} {
+      &__utility {
+        &-ctas {
+          &-btn {
+            &--underweight {
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--neutral {
+    #{$blockName} {
+      &__utility {
+        &-ctas {
+          &-btn {
+            &--neutral {
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--selected {
+    #{$blockName} {
+      &__cta {
+        &-btn {
+          background-color: $color_active;
+          box-shadow: none;
+          color: $font_color_inverse;
+          &:hover {
+            box-shadow: none;
+          }
+        }
+      }
+    }
+  }
+  &--noSignificantDiff {
+    #{$blockName} {
+      &__cell {
+        &--target {
+          background-color: transparent;
+          color: $font_color_major;
+        }
+      }
+    }
+  }
+  &--negativeDiff {
+    #{$blockName} {
+      &__cell {
+        &--target {
+          background-color: $color_red_5;
+        }
+      }
+    }
+  }
+  &--stencilState {
+    #{$blockName} {
+      &__cta {
+        &-btn {
+          cursor: not-allowed;
+        }
+      }
+      &__cell {
+        @include mix_stencil_animation;
+        background-color: $color_stencil;
+        color: $color_stencil;
+      }
+    }
+  }
+}

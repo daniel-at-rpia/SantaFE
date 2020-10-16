@@ -9,7 +9,10 @@ import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { UtilityService } from 'Core/services/UtilityService';
 import { ModalService } from 'Form/services/ModalService';
 import { selectSetTargetTransferPack } from 'Structure/selectors/structure.selectors';
-import { StructureSetTargetOverlayTransferPack } from 'FEModels/frontend-adhoc-packages.interface';
+import {
+  StructureSetTargetOverlayTransferPack,
+  DefinitionConfiguratorEmitterParams
+} from 'FEModels/frontend-adhoc-packages.interface';
 import { StructureSetTargetPanelEditRowBlock, StructureSetTargetPanelEditRowItemBlock } from 'FEModels/frontend-blocks.interface';
 import {
   PortfolioBreakdownGroupOptions,
@@ -19,17 +22,23 @@ import {
 import {
   FilterOptionsCurrency,
   FilterOptionsRating,
-  FilterOptionsTenor
+  FilterOptionsTenor,
+  SecurityDefinitionMap
 } from 'Core/constants/securityDefinitionConstants.constant';
-import { PayloadUpdateBreakdown } from 'BEModels/backend-payloads.interface';
+import { PayloadUpdateBreakdown, PayloadUpdateOverride } from 'BEModels/backend-payloads.interface';
 import {
   BEStructuringBreakdownBlock,
   BEPortfolioStructuringDTO,
-  BEMetricBreakdowns
+  BEMetricBreakdowns,
+  BEStructuringOverrideBlock
 } from 'BEModels/backend-models.interface';
+import { PayloadGetPortfolioOverride } from 'BEModels/backend-payloads.interface';
 import { StructureSetTargetPostEditUpdatePack } from 'FEModels/frontend-adhoc-packages.interface';
 import { StructureReloadBreakdownDataPostEditEvent } from 'Structure/actions/structure.actions';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
+import { CustomeBreakdownConfiguratorDefinitionLayout } from 'Core/constants/structureConstants.constants';
+import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
+import * as moment from 'moment';
 
 @Component({
   selector: 'structure-set-target-panel',
@@ -45,15 +54,18 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   };
   constants = {
     metric: PortfolioMetricValues,
-    editModalId: STRUCTURE_EDIT_MODAL_ID
-  }
+    editModalId: STRUCTURE_EDIT_MODAL_ID,
+    configuratorLayout: CustomeBreakdownConfiguratorDefinitionLayout,
+    definitionMap: SecurityDefinitionMap
+  };
 
   constructor(
     private store$: Store<any>,
     private utilityService: UtilityService,
     private dtoService: DTOService,
     private restfulCommService: RestfulCommService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private bicsService: BICsDataProcessingService
   ){
     this.state = this.initializePageState();
   }
@@ -72,7 +84,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       displayPercentageUnallocatedCS01: 0,
       displayPercentageUnallocatedCreditLeverage: 0,
       displayRemainingUnallocatedCS01: '',
-      displayRemainingUnallocatedCreditLeverage: ''
+      displayRemainingUnallocatedCreditLeverage: '',
+      targetBreakdownIsOverride: false,
+      configurator: {
+        dto: this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout),
+        display: false
+      }
     };
     return state;
   }
@@ -85,13 +102,31 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       if (!!pack) {
         this.state.targetFund = this.utilityService.deepCopy(pack.targetFund);
         this.state.targetBreakdown = this.utilityService.deepCopy(pack.targetBreakdown);
-        this.state.targetBreakdown.state.isPreviewVariant = true;
+        this.state.configurator.display = false;
+        if (!!this.state.targetBreakdown) {
+          this.state.targetBreakdown.state.isPreviewVariant = true;
+          this.state.targetBreakdown.state.isEditingView = false;
+          if (!!this.state.targetBreakdown.data.popover) {
+            this.state.targetBreakdown.data.popover.state.isActive = false;
+          }
+          const selectedCategory = this.state.targetBreakdown.data.displayCategoryList.find(category => category.state.isSelected);
+          if (!!selectedCategory) {
+            selectedCategory.state.isSelected = false;
+          }
+          if (this.state.targetBreakdown.data.displayCategoryList.length > 0) {
+            this.state.targetBreakdown.data.displayCategoryList.forEach(row => {
+              row.state.isEditingView = false;
+            })
+          }
+        }
+        this.state.targetBreakdownIsOverride = !!pack.isCreateNewOverride || pack.targetBreakdown.state.isOverrideVariant;
         this.state.targetBreakdownRawData = this.retrieveRawBreakdownDataForTargetBreakdown();
         this.state.activeMetric = pack.targetFund.data.cs01TargetBar.state.isInactiveMetric ? this.constants.metric.creditLeverage : this.constants.metric.cs01;
         this.loadEditRows();
         this.calculateAllocation();
+        this.loadBICSOptionsIntoConfigurator();
       }
-    })
+    });
     this.modalService.bindModalSaveCallback(STRUCTURE_EDIT_MODAL_ID, this.submitTargetChanges.bind(this));
   }
 
@@ -231,17 +266,86 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
+  public onClickNewOverrideRow() {
+    this.state.configurator.display = !this.state.configurator.display;
+  }
+
+  public onApplyConfiguratorFilter(params: DefinitionConfiguratorEmitterParams) {
+    if (params.filterList.length === 0) {
+      const alert = this.dtoService.formSystemAlertObject('Apply Blocked', 'Empty Bucket', `Define the bucket with value before apply`, null);
+      this.store$.dispatch(new CoreSendNewAlerts([alert]));
+    } else {
+      const bucket = {}
+      let bucketToString = '';
+      params.filterList.forEach((eachItem) => {
+        const property = this.utilityService.convertFEKey(eachItem.key);
+        if (!!property) {
+          bucket[property] = eachItem.filterBy;
+          eachItem.filterBy.forEach((eachValue) => {
+            bucketToString = bucketToString === '' ? `${eachValue}` : `${bucketToString} - ${eachValue}`;
+          });
+        }
+      });
+      if (this.overrideCheckRowAlreadyExist(bucketToString)) {
+        const alert = this.dtoService.formSystemAlertObject('Apply Blocked', 'Already Exist', `${bucketToString} bucket already exist`, null);
+        this.store$.dispatch(new CoreSendNewAlerts([alert]));
+      } else {
+        const now = moment();
+        const payload: PayloadGetPortfolioOverride = {
+          portfolioOverride: {
+            date: now.format('YYYY-MM-DDT00:00:00-04:00'),
+            portfolioId: this.state.targetFund.data.portfolioId,
+            bucket: bucket
+          }
+        };
+        this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioOverride, {req: 'POST'}, payload).pipe(
+          first(),
+          tap((serverReturn: BEStructuringOverrideBlock) => {
+            const rawBreakdownList = this.utilityService.convertRawOverrideToRawBreakdown([serverReturn]);
+            const newBreakdownBucketIdentifier = this.utilityService.formBucketIdentifierForOverride(serverReturn);
+            if (!!this.state.targetBreakdown && this.state.targetBreakdown.data.backendGroupOptionIdentifier === newBreakdownBucketIdentifier) {
+              const newCategoryKey = this.utilityService.formCategoryKeyForOverride(serverReturn);
+              const newDataBlock = rawBreakdownList[0].breakdown[newCategoryKey];
+              this.state.targetBreakdownRawData.breakdown[newCategoryKey] = newDataBlock;
+            } else {
+              if (!!this.state.targetBreakdown) {
+                const alert = this.dtoService.formSystemAlertObject('Warning', 'Overwritten', `can not merge "${this.state.targetBreakdown.data.backendGroupOptionIdentifier}" with ${newBreakdownBucketIdentifier}, new breakdown has overwrote the previous one`, null);
+                this.store$.dispatch(new CoreSendNewAlerts([alert]));
+              }
+              this.state.targetBreakdownRawData = rawBreakdownList[0];
+            }
+            const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
+            const originalBEBucket = [serverReturn];
+            const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, isDisplayCs01, originalBEBucket);
+            newBreakdown.state.isPreviewVariant = true;
+            this.state.targetBreakdown = newBreakdown;
+            const prevEditRowsForInheritance = this.utilityService.deepCopy(this.state.editRowList);
+            this.loadEditRows();
+            this.inheritEditRowStates(prevEditRowsForInheritance);
+          }),
+          catchError(err => {
+            console.error(`${this.restfulCommService.apiMap.readAlert} failed`, err);
+            return of('error')
+          })
+        ).subscribe();
+      }
+    }
+    this.state.configurator.display = false;
+    this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
+    this.loadBICSOptionsIntoConfigurator();
+  }
+
   private loadEditRows() {
+    this.state.editRowList = [];
     if (!!this.state.targetBreakdown) {
-      this.state.editRowList = [];
       this.state.targetBreakdown.data.rawCs01CategoryList.forEach((eachCategory) => {
         const newRow: StructureSetTargetPanelEditRowBlock = {
-          targetBlockFromBreakdown: eachCategory,
-          rowTitle: eachCategory.category,
+          targetBlockFromBreakdown: eachCategory.data,
+          rowTitle: eachCategory.data.category,
           targetCs01: {
             level: {
-              savedDisplayValue: !!eachCategory.targetLevel ? `${eachCategory.targetLevel}` : null,
-              savedUnderlineValue: eachCategory.raw.targetLevel,
+              savedDisplayValue: !!eachCategory.data.targetLevel ? `${eachCategory.data.targetLevel}` : null,
+              savedUnderlineValue: eachCategory.data.raw.targetLevel,
               modifiedDisplayValue: null,
               modifiedUnderlineValue: null,
               isActive: false,
@@ -251,8 +355,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               isPercent: false
             },
             percent: {
-              savedDisplayValue: !!eachCategory.targetPct ? `${eachCategory.targetPct}` : null,
-              savedUnderlineValue: eachCategory.raw.targetPct,
+              savedDisplayValue: !!eachCategory.data.targetPct ? `${eachCategory.data.targetPct}` : null,
+              savedUnderlineValue: eachCategory.data.raw.targetPct,
               modifiedDisplayValue: null,
               modifiedUnderlineValue: null,
               isActive: false,
@@ -292,16 +396,28 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       });
       this.state.targetBreakdown.data.rawLeverageCategoryList.forEach((eachCategory) => {
         const targetRow = this.state.editRowList.find((eachRow) => {
-          return eachRow.rowTitle === eachCategory.category;
+          return eachRow.rowTitle === eachCategory.data.category;
         });
         if (!!targetRow) {
-          targetRow.targetCreditLeverage.level.savedDisplayValue = !!eachCategory.targetLevel ? `${eachCategory.targetLevel}` : null;
-          targetRow.targetCreditLeverage.level.savedUnderlineValue = eachCategory.raw.targetLevel;
-          targetRow.targetCreditLeverage.percent.savedDisplayValue = !!eachCategory.targetPct ? `${eachCategory.targetPct}` : null;
-          targetRow.targetCreditLeverage.percent.savedUnderlineValue = eachCategory.raw.targetPct;
+          targetRow.targetCreditLeverage.level.savedDisplayValue = !!eachCategory.data.targetLevel ? `${eachCategory.data.targetLevel}` : null;
+          targetRow.targetCreditLeverage.level.savedUnderlineValue = eachCategory.data.raw.targetLevel;
+          targetRow.targetCreditLeverage.percent.savedDisplayValue = !!eachCategory.data.targetPct ? `${eachCategory.data.targetPct}` : null;
+          targetRow.targetCreditLeverage.percent.savedUnderlineValue = eachCategory.data.raw.targetPct;
         };
       });
     }
+  }
+
+  private inheritEditRowStates(oldRows: Array<StructureSetTargetPanelEditRowBlock>) {
+    this.state.editRowList = this.state.editRowList.map((eachNewRow) => {
+      const matchedOldRow = oldRows.find((eachOldRow) => {
+        return eachOldRow.rowTitle === eachNewRow.rowTitle;
+      });
+      if (matchedOldRow) {
+        eachNewRow = matchedOldRow;
+      };
+      return eachNewRow;
+    });
   }
 
   private calculateAllocation() {
@@ -398,43 +514,47 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private refreshPreview() {
-    const breakdownTitle = this.state.targetBreakdown.data.title; 
-    const breakdown = this.state.targetFund.data.children.find(breakdown => breakdown.data.title === breakdownTitle);
-    const breakdownIndex = this.state.targetFund.data.children.indexOf(breakdown);
-    const breakdownDefinition = this.state.targetBreakdown.data.definition;
-    const definitionList = this.state.targetBreakdown.data.displayCategoryList.map((eachCategory) => {
-      return eachCategory.category;
-    });
-    const rawData = this.state.targetBreakdownRawData;
-    for (let category in rawData.breakdown) {
-      if (!!rawData.breakdown[category]) {
-        const matchedRowListItem = this.state.editRowList.find(rowList => rowList.rowTitle === category);
-        rawData.breakdown[category].metricBreakdowns.Cs01.targetLevel = matchedRowListItem.targetCs01.level.savedUnderlineValue;
-        rawData.breakdown[category].metricBreakdowns.Cs01.targetPct = matchedRowListItem.targetCs01.percent.savedUnderlineValue;
-        rawData.breakdown[category].metricBreakdowns.CreditLeverage.targetLevel = matchedRowListItem.targetCreditLeverage.level.savedUnderlineValue;
-        rawData.breakdown[category].metricBreakdowns.CreditLeverage.targetPct = matchedRowListItem.targetCreditLeverage.percent.savedUnderlineValue;
-      }
-    }
-    this.state.targetBreakdown.state.isStencil = true;
-    this.state.targetBreakdown.data.displayCategoryList.forEach(category => {
-      category.moveVisualizer.state.isStencil = true;
-    })
-    setTimeout(() => {
-      const updatedPortfolioBreakdown = this.dtoService.formPortfolioBreakdown(false, rawData, definitionList);
-      updatedPortfolioBreakdown.data.definition = breakdownDefinition;
-      updatedPortfolioBreakdown.data.title = breakdownTitle;
-      this.state.targetFund.data.children[breakdownIndex] = updatedPortfolioBreakdown; 
-      this.state.targetBreakdown = updatedPortfolioBreakdown;
-      this.state.targetBreakdown.state.isPreviewVariant = true;
-      this.state.editRowList.forEach(rowList => {
-        rowList.targetBlockFromBreakdown = this.state.activeMetric === PortfolioMetricValues.cs01 ? this.state.targetBreakdown.data.rawCs01CategoryList.find(breakdown => breakdown.category === rowList.rowTitle) : this.state.targetBreakdown.data.rawLeverageCategoryList.find(breakdown => breakdown.category === rowList.rowTitle);
+    if (!!this.state.targetBreakdown) {
+      const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
+      const breakdownTitle = this.state.targetBreakdown.data.title; 
+      const breakdown = this.state.targetFund.data.children.find(breakdown => breakdown.data.title === breakdownTitle);
+      const breakdownIndex = this.state.targetFund.data.children.indexOf(breakdown);
+      const breakdownDefinition = this.state.targetBreakdown.data.definition;
+      const definitionList = this.state.targetBreakdown.data.displayCategoryList.map((eachCategory) => {
+        return eachCategory.data.category;
       });
-      this.state.targetBreakdown.state.isDisplayingCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
-      this.state.targetBreakdown.state.isStencil = false;
+      const rawData = this.state.targetBreakdownRawData;
+      for (let category in rawData.breakdown) {
+        if (!!rawData.breakdown[category]) {
+          const matchedRowListItem = this.state.editRowList.find(rowList => rowList.rowTitle === category);
+          rawData.breakdown[category].metricBreakdowns.Cs01.targetLevel = matchedRowListItem.targetCs01.level.savedUnderlineValue;
+          rawData.breakdown[category].metricBreakdowns.Cs01.targetPct = matchedRowListItem.targetCs01.percent.savedUnderlineValue;
+          rawData.breakdown[category].metricBreakdowns.CreditLeverage.targetLevel = matchedRowListItem.targetCreditLeverage.level.savedUnderlineValue;
+          rawData.breakdown[category].metricBreakdowns.CreditLeverage.targetPct = matchedRowListItem.targetCreditLeverage.percent.savedUnderlineValue;
+        }
+      }
+      this.state.targetBreakdown.state.isStencil = true;
       this.state.targetBreakdown.data.displayCategoryList.forEach(category => {
-        category.moveVisualizer.state.isStencil = false;
+        category.data.moveVisualizer.state.isStencil = true;
       })
-   }, 300);
+      setTimeout(() => {
+        const updatedPortfolioBreakdown = this.dtoService.formPortfolioBreakdown(false, rawData, definitionList, isDisplayCs01);
+        updatedPortfolioBreakdown.data.definition = breakdownDefinition;
+        updatedPortfolioBreakdown.data.title = breakdownTitle;
+        this.state.targetFund.data.children[breakdownIndex] = updatedPortfolioBreakdown; 
+        this.state.targetBreakdown = updatedPortfolioBreakdown;
+        this.state.targetBreakdown.state.isPreviewVariant = true;
+        this.state.editRowList.forEach(rowList => {
+          const targetBlockFromBreakdown = this.state.activeMetric === PortfolioMetricValues.cs01 ? this.state.targetBreakdown.data.rawCs01CategoryList.find(breakdown => breakdown.data.category === rowList.rowTitle) : this.state.targetBreakdown.data.rawLeverageCategoryList.find(breakdown => breakdown.data.category === rowList.rowTitle);
+          rowList.targetBlockFromBreakdown = targetBlockFromBreakdown.data;
+        });
+        this.state.targetBreakdown.state.isDisplayingCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
+        this.state.targetBreakdown.state.isStencil = false;
+        this.state.targetBreakdown.data.displayCategoryList.forEach(category => {
+          category.data.moveVisualizer.state.isStencil = false;
+        })
+      }, 300);
+    }
   }
 
   private clearUnlockRowsBeforeDistribution(
@@ -450,30 +570,63 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private submitTargetChanges(): boolean {
-    const payload: PayloadUpdateBreakdown = this.traverseEditRowsToFormSubmitPayload();
-    if (!!payload) {
-      this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
-        first(),
-        tap((serverReturn: BEPortfolioStructuringDTO) => {
-          const updatePack: StructureSetTargetPostEditUpdatePack = {
-            targetFund: serverReturn,
-            targetBreakdownBackendGroupOptionIdentifier: this.state.targetBreakdown.data.backendGroupOptionIdentifier
-          };
-          this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
-        }),
-        catchError(err => {
-          console.error('update breakdown failed');
-          return of('error');
-        })
-      ).subscribe();
-      return true;
+    if (!this.state.targetBreakdownIsOverride) {
+      const payload: PayloadUpdateBreakdown = this.traverseEditRowsToFormUpdateBreakdownPayload();
+      if (!!payload) {
+        this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
+          first(),
+          tap((serverReturn: BEPortfolioStructuringDTO) => {
+            const updatePack: StructureSetTargetPostEditUpdatePack = {
+              targetFund: serverReturn,
+              targetBreakdownBackendGroupOptionIdentifier: this.state.targetBreakdown.data.backendGroupOptionIdentifier
+            };
+            this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
+          }),
+          catchError(err => {
+            console.error('update breakdown failed');
+            this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'update breakdown failed', null)]));
+            return of('error');
+          })
+        ).subscribe();
+        return true;
+      } else {
+        this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target because no change is detected', null)]));
+        return false;
+      }
     } else {
-      this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target because no change is detected', null)]));
-      return false;
+      const payload: Array<PayloadUpdateOverride> = this.traverseEditRowsToFormUpdateOverridePayload();
+      if (!!payload && payload.length > 0) {
+        let callCount = 0;
+        const callCompleteThreshold = payload.length;
+        payload.forEach((eachPayload) => {
+          this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
+            first(),
+            tap((serverReturn: BEPortfolioStructuringDTO) => {
+              callCount++;
+              if (callCount === callCompleteThreshold) {
+                const updatePack: StructureSetTargetPostEditUpdatePack = {
+                  targetFund: serverReturn,
+                  targetBreakdownBackendGroupOptionIdentifier: this.state.targetBreakdown.data.backendGroupOptionIdentifier
+                };
+                this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
+              }
+            }),
+            catchError(err => {
+              console.error('update breakdown failed');
+              this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'update breakdown failed', null)]));
+              return of('error');
+            })
+          ).subscribe();
+        });
+        return true;
+      } else {
+        this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target because no change is detected', null)]));
+        return false;
+      }
     }
   }
 
-  private traverseEditRowsToFormSubmitPayload(): PayloadUpdateBreakdown {
+  private traverseEditRowsToFormUpdateBreakdownPayload(): PayloadUpdateBreakdown {
     const payload: PayloadUpdateBreakdown = {
       portfolioBreakdown: {
         date: this.state.targetBreakdownRawData.date,
@@ -507,6 +660,42 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     return hasModification ? payload : null;
   }
 
+  private traverseEditRowsToFormUpdateOverridePayload(): Array<PayloadUpdateOverride> {
+    const payload: Array<PayloadUpdateOverride> = [];
+    this.state.editRowList.forEach((eachRow) => {
+      const eachPayload: PayloadUpdateOverride = {
+        portfolioOverride: {
+          date: this.state.targetBreakdownRawData.date,
+          indexId: this.state.targetBreakdownRawData.indexId,
+          portfolioId: this.state.targetBreakdownRawData.portfolioId,
+          bucket: this.utilityService.populateBEBucketObjectFromRowTitle(
+            this.utilityService.formBEBucketObjectFromBucketIdentifier(this.state.targetBreakdown.data.title),
+            eachRow.rowTitle
+          )
+        }
+      };
+      if(this.cs01ModifiedInEditRow(eachRow) || this.creditLeverageModifiedInEditRow(eachRow)) {
+        const modifiedMetricBreakdowns: BEMetricBreakdowns = {
+          view: null,
+          metricBreakdowns: {}
+        };
+        if (this.cs01ModifiedInEditRow(eachRow)) {
+          modifiedMetricBreakdowns.metricBreakdowns.Cs01 = {
+            targetLevel: eachRow.targetCs01.level.savedUnderlineValue
+          };
+        }
+        if (this.creditLeverageModifiedInEditRow(eachRow)) {
+          modifiedMetricBreakdowns.metricBreakdowns.CreditLeverage = {
+            targetLevel: eachRow.targetCreditLeverage.level.savedUnderlineValue
+          };
+        }
+        eachPayload.portfolioOverride.breakdown = modifiedMetricBreakdowns;
+      }
+      payload.push(eachPayload);
+    });
+    return payload;
+  }
+
   private cs01ModifiedInEditRow(targetRow: StructureSetTargetPanelEditRowBlock): boolean {
     return targetRow.targetCs01.level.isActive || targetRow.targetCs01.level.isImplied;
   }
@@ -517,7 +706,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   private retrieveRawBreakdownDataForTargetBreakdown(): BEStructuringBreakdownBlock {
     if (!!this.state.targetFund && !!this.state.targetBreakdown) {
-      const rawDataObject = this.state.targetFund.data.originalBEData.breakdowns;
+      let rawDataObject;
+      if (this.state.targetBreakdown.state.isOverrideVariant) {
+        rawDataObject = this.utilityService.convertRawOverrideToRawBreakdown(this.state.targetFund.data.originalBEData.overrides);
+      } else {
+        rawDataObject = this.state.targetFund.data.originalBEData.breakdowns;
+      }
       for (let eachBreakdownKey in rawDataObject) {
         const eachBreakdown: BEStructuringBreakdownBlock = rawDataObject[eachBreakdownKey];
         if (eachBreakdown.groupOption === this.state.targetBreakdown.data.backendGroupOptionIdentifier) {
@@ -527,6 +721,30 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     } else {
       return null;
     }
+  }
+
+  private overrideCheckRowAlreadyExist(bucketToString: string): boolean {
+    if (this.state.editRowList.length > 0) {
+      let exist = false;
+      this.state.editRowList.forEach((eachRow) => {
+        if (eachRow.rowTitle === bucketToString) {
+          exist = true;
+        }
+      });
+      return exist;
+    } else {
+      return false;
+    }
+  }
+
+  private loadBICSOptionsIntoConfigurator() {
+    this.dtoService.loadBICSOptionsIntoConfigurator(
+      this.state.configurator.dto,
+      this.bicsService.returnAllBICSBasedOnHierarchyDepth(1),
+      this.bicsService.returnAllBICSBasedOnHierarchyDepth(2),
+      this.bicsService.returnAllBICSBasedOnHierarchyDepth(3),
+      this.bicsService.returnAllBICSBasedOnHierarchyDepth(4)
+    )
   }
 
 }

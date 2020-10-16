@@ -33,7 +33,12 @@ export const APIUrlMap = {
   getAllTradeHistory: 'trade/get-all-trades-for-security',
   getPortfolioStructures: 'portfolioStructuring/get-portfolio-structures',
   updatePortfolioTargets: 'portfolioStructuring/update-portfolio-target',
-  updatePortfolioBreakdown: 'portfolioStructuring/update-portfolio-breakdown'
+  updatePortfolioBreakdown: 'portfolioStructuring/update-portfolio-breakdown',
+  getBICsHierarchy: 'portfolioStructuring/get-bics-hierarchy',
+  getPortfolioOverride: 'portfolioStructuring/get-portfolio-override',
+  updatePortfolioOverride: 'portfolioStructuring/update-portfolio-override',
+  getViews: 'portfolioStructuring/get-analyst-views',
+  setView: 'portfolioStructuring/set-analyst-view'
 };
 
 export const FAILED_USER_INITIALS_FALLBACK = 'n/a';
@@ -158,7 +163,7 @@ export const TriCoreDriverConfig: TriCoreDriverConfigStub = {
   }
 }
 
-export const BackendKeyDictionary = {
+export const FrontendKayToBackendKeyDictionary = {
   // definitions
   'SECURITY_TYPE': 'SecurityType',
   'RATING': 'RatingNoNotch',
@@ -179,6 +184,10 @@ export const BackendKeyDictionary = {
   'TICKER': 'Ticker',
   'COUNTRY': 'Country',
   'QUOTED_TODAY': 'QuotedToday',
+  'BICS_LEVEL_1': 'BicsLevel1',
+  'BICS_LEVEL_2': 'BicsLevel2',
+  'BICS_LEVEL_3': 'BicsLevel3',
+  'BICS_LEVEL_4': 'BicsLevel4',
 
   // metrics
   'SPREAD': 'oasSpread',
@@ -186,6 +195,32 @@ export const BackendKeyDictionary = {
   'YIELD': 'yieldWorst',
   'SIZE': 'marketValue'
 };
+
+export const BackendKeyToDisplayLabelDictionary = {
+  'SecurityType': 'Security Type',
+  'RatingNoNotch': 'Rating',
+  'Ccy': 'Currency',
+  'Tenor': 'Tenor',
+  'IsOnTheRun': 'Is On The Run',
+  'RatingBucket': 'Rating Bucket',
+  'BailInStatus': 'Bail In Status',
+  'CouponType': 'Coupon Type',
+  'Industry': 'Industry',
+  'IsNewIssue': 'Is New Issue',
+  'Issuer': 'Issuer',
+  'MaturityType': 'Maturity Type',
+  'Sector': 'Sector',
+  'Seniority': 'Seniority',
+  'SubIndustry': 'Sub Industry',
+  'BackendTenor': 'Backend Tenor',
+  'Ticker': 'Ticker',
+  'Country': 'Country',
+  'QuotedToday': 'Quoted Today',
+  'BicsLevel1': 'BICS Lv.1',
+  'BicsLevel2': 'BICS Lv.2',
+  'BicsLevel3': 'BICS Lv.3',
+  'BicsLevel4': 'BICS Lv.4'
+}
 
 export const MIN_OBLIGOR_CURVE_VALUES = 2;
 

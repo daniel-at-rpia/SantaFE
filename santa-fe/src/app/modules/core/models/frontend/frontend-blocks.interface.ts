@@ -14,7 +14,8 @@ import {
 } from 'ag-grid-community';
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { DTOService } from 'Core/services/DTOService';
-import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import { PortfolioMetricValues, PortfolioShortNames, PortfolioView } from 'Core/constants/structureConstants.constants';
+import { BEStructuringBreakdownBlock } from 'Core/models/backend/backend-models.interface';
 
 export interface SecurityPortfolioBlock {
   portfolioName: string;
@@ -287,12 +288,18 @@ export interface PortfolioBreakdownCategoryBlock {
   indexPct: number;
   indexPctDisplay: string;
   moveVisualizer: DTOs.MoveVisualizerDTO;
+  bicsLevel: number;
+  portfolioID: number;
+  diveInLevel: number;
   raw: {
     currentLevel: number;
     currentPct: number;
     targetLevel: number;
     targetPct: number;
   }
+  bucket: StructureBucketDataBlock;
+  view: PortfolioView;
+  children?: DTOs.PortfolioBreakdownDTO;
 }
 
 export interface GlobalNavLegendBlock {
@@ -324,4 +331,26 @@ export interface StructureSetTargetPanelEditRowItemBlock {
   isFocused: boolean;
   metric: PortfolioMetricValues;
   isPercent: boolean;
+}
+
+export interface BICsHierarchyBlock {
+  name: string;
+  bicsLevel: number;
+  children: Array<BICsHierarchyBlock>;
+}
+
+export interface BICsHierarchyAllDataBlock {
+  children: Array<BICsHierarchyBlock>;
+}
+
+export interface BICsCategorizationBlock {
+  portfolioID: number,
+  bicsLevel1: BEStructuringBreakdownBlock,
+  bicsLevel2?: BEStructuringBreakdownBlock,
+  bicsLevel3?: BEStructuringBreakdownBlock,
+  bicsLevel4?: BEStructuringBreakdownBlock
+}
+
+export interface StructureBucketDataBlock {
+  [groupOption: string]: Array<string>;
 }

@@ -233,6 +233,23 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'TW'
   ];
 
+  export const BICsLevel1DefinitionList = [
+    'Communications',
+    'Consumer Discretionary',
+    'Consumer Staples',
+    'Energy',
+    'Financials',
+    'Government',
+    'Health Care',
+    'Industrials',
+    'Materials',
+    'Not Classified',
+    'Real Estate',
+    'Technology',
+    'Utilities'
+  ];
+
+
   const FullStrategyList = [
     'Short Carry',
     'STOV',
@@ -328,7 +345,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
   SECTOR: {
     key: 'SECTOR',
     displayName: 'Sector',
-    icon: 'fal fa-chart-pie',
+    icon: 'fas fa-chart-pie',
     optionList: FilterOptionsSectorType,
     securityDTOAttr: 'sector'
   },
@@ -399,6 +416,40 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     displayName: 'Quoted Today',
     icon: 'far fa-calendar-day',
     optionList: FilterOptionsBoolean
+  },
+  OVERRIDE: {
+    key: 'OVERRIDE',
+    displayName: 'Custom',
+    icon: 'fas fa-star',
+    optionList: []
+  },
+  BICS_LEVEL_1: {
+    key: 'BICS_LEVEL_1',
+    displayName: 'BICS Lv.1',
+    icon: 'fal fa-industry-alt',
+    optionList: [],
+    securityDTOAttr: 'bicsLevel1'
+  },
+  BICS_LEVEL_2: {
+    key: 'BICS_LEVEL_2',
+    displayName: 'BICS Lv.2',
+    icon: 'fal fa-industry-alt',
+    optionList: [],
+    securityDTOAttr: 'bicsLevel2'
+  },
+  BICS_LEVEL_3: {
+    key: 'BICS_LEVEL_3',
+    displayName: 'BICS Lv.3',
+    icon: 'fal fa-industry-alt',
+    optionList: [],
+    securityDTOAttr: 'bicsLevel3'
+  },
+  BICS_LEVEL_4: {
+    key: 'BICS_LEVEL_4',
+    displayName: 'BICS Lv.4',
+    icon: 'fal fa-industry-alt',
+    optionList: [],
+    securityDTOAttr: 'bicsLevel4'
   }
 };
 
@@ -410,11 +461,17 @@ export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> =
       SecurityDefinitionMap.COUPON_TYPE,
       SecurityDefinitionMap.CURRENCY,
       SecurityDefinitionMap.RATING,
-      SecurityDefinitionMap.SECTOR,
       SecurityDefinitionMap.TENOR,
       SecurityDefinitionMap.STRATEGY,
-      SecurityDefinitionMap.INDUSTRY,
       SecurityDefinitionMap.COUNTRY
+    ]
+  }, {
+    label: 'BICS',
+    list: [
+      SecurityDefinitionMap.BICS_LEVEL_1,
+      SecurityDefinitionMap.BICS_LEVEL_2,
+      SecurityDefinitionMap.BICS_LEVEL_3,
+      SecurityDefinitionMap.BICS_LEVEL_4
     ]
   },{
     label: 'Owner',
