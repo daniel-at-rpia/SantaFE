@@ -951,7 +951,7 @@ export class SantaTable implements OnInit, OnChanges {
           if (rawDataTrades.length > 0) {
             const traceTradeData: Array<TraceTradeBlock> = rawDataTrades.map(trade => this.dtoService.formTraceTradeBlockObject(trade, targetRow.data.security));
             targetRow.data.security.data.traceTrades = traceTradeData;
-            targetRow.data.traceTradeVisualizer = this.dtoService.formTraceTradesVisualizerDTO(targetRow.data.security.data.traceTrades);
+            targetRow.data.traceTradeVisualizer = this.dtoService.formTraceTradesVisualizerDTO(targetRow.data.security);
             targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = !!previousTraceTradesDisplayState;
             if (!!previousTraceTradesDisplayState) {
               targetRow.data.traceTradeVisualizer.data.displayList = targetRow.data.traceTradeVisualizer.data.pristineTradeList;

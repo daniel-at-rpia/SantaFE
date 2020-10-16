@@ -1601,7 +1601,7 @@ export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
   {
     headerKey: 'eventTime',
     headerDisplayLabel: 'Date & Time',
-    attrName: 'eventTime',
+    attrName: 'parsedEventTime',
     size: 8
   },{
     headerKey: 'counterParty',

@@ -2190,7 +2190,8 @@ export class DTOService {
 
   public formTraceTradeBlockObject(rawData: BEModels.BETraceTradesBlock, targetSecurity: DTOs.SecurityDTO) {
     const object: Blocks.TraceTradeBlock = {
-      eventTime: moment(rawData.eventTime).format(`YY MMM DD - HH:mm`),
+      eventTime: rawData.eventTime,
+      parsedEventTime: moment(rawData.eventTime).format(`YY MMM DD - HH:mm`),
       counterParty: TraceTradeCounterParty[rawData.counterParty],
       side: TradeSideValueEquivalent[rawData.side],
       volumeEstimated: rawData.volumeEstimated,

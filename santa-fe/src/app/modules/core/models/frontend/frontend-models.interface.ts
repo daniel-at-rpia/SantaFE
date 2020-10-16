@@ -814,14 +814,15 @@ export interface StructurePortfolioBreakdownRowDTO extends BasicDTOStructure {
 
 export interface TraceTradesVisualizerDTO extends BasicDTOStructure {
   data: {
-    pristineTradeList: Array<TraceTradeBlock>;
     displayList: Array<TraceTradeBlock>;
+    scatterChartId: string;
   },
   state: {
     isDisplayAllTraceTrades: boolean;
+    graphReceived: boolean;
   },
   graph: {
-    timeSeries: am4Charts.XYChart;
+    scatterGraph: am4Charts.XYChart;
     pieChart: am4Charts.PieChart;
   }
 }
