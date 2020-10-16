@@ -75,7 +75,9 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     this.parentNode && this.parentNode.setExpanded(false);
     this.parent.onRowClickedToCollapse(this.rowData, !this.parentNode, this.params);
     this.rowData.data.historicalTradeVisualizer.state.graphReceived = false;
-    this.rowData.data.traceTradeVisualizer.state.graphReceived = false;
+    if (!!this.rowData.data.traceTradeVisualizer) {
+      this.rowData.data.traceTradeVisualizer.state.graphReceived = false;
+    }
     this.rowData.state.viewTraceState = false;
     this.rowData.state.viewHistoryState = false;
     if (!!this.rowData.data.traceTradeVisualizer && !!this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades) {
