@@ -309,7 +309,7 @@ export class SantaTable implements OnInit, OnChanges {
           selectedPinnedRow.rowDTO.state.viewTraceState = false;
           if (!!selectedPinnedRow.rowDTO.data.traceTradeVisualizer && !!selectedPinnedRow.rowDTO.data.traceTradeVisualizer.state.isDisplayAllTraceTrades) {
             selectedPinnedRow.rowDTO.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = false;
-            selectedPinnedRow.rowDTO.data.traceTradeVisualizer.data.displayList =  selectedPinnedRow.rowDTO.data.traceTradeVisualizer.data.pristineTradeList.filter((row, i) => i < TRACE_INITIAL_LIMIT);
+            selectedPinnedRow.rowDTO.data.traceTradeVisualizer.data.displayList =  selectedPinnedRow.rowDTO.data.security.data.traceTrades.filter((row, i) => i < TRACE_INITIAL_LIMIT);
           }
         }
       }
@@ -954,7 +954,7 @@ export class SantaTable implements OnInit, OnChanges {
             targetRow.data.traceTradeVisualizer = this.dtoService.formTraceTradesVisualizerDTO(targetRow.data.security);
             targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = !!previousTraceTradesDisplayState;
             if (!!previousTraceTradesDisplayState) {
-              targetRow.data.traceTradeVisualizer.data.displayList = targetRow.data.traceTradeVisualizer.data.pristineTradeList;
+              targetRow.data.traceTradeVisualizer.data.displayList = targetRow.data.security.data.traceTrades
             }
           }
         }

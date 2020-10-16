@@ -2207,22 +2207,24 @@ export class DTOService {
     return object;
   }
 
-  public formTraceTradesVisualizerDTO(data: Array<Blocks.TraceTradeBlock>): DTOs.TraceTradesVisualizerDTO {
+  public formTraceTradesVisualizerDTO(targetSecurity: DTOs.SecurityDTO): DTOs.TraceTradesVisualizerDTO {
     const object = {
       data: {
-        pristineTradeList: data,
-        displayList: []
+        displayList: [],
+        scatterChartId: `${targetSecurity.data.securityID}-scatterChart`
       },
       state: {
-        isDisplayAllTraceTrades: false
+        isDisplayAllTraceTrades: false,
+        graphReceived: false
       },
       graph: {
-        timeSeries: null,
+        scatterGraph: null,
         pieChart: null
       }
     }
-    if (object.data.pristineTradeList.length > 0) {
-      object.data.pristineTradeList.sort((tradeA, tradeB) => {
+
+    if (targetSecurity.data.traceTrades.length > 0) {
+      targetSecurity.data.traceTrades.sort((tradeA, tradeB) => {
         if (tradeA.eventTime > tradeB.eventTime) {
           return -1
         } else if (tradeB.eventTime > tradeA.eventTime) {
@@ -2231,7 +2233,8 @@ export class DTOService {
           return 0;
         }
       })
-      object.data.displayList = object.data.pristineTradeList.length > TRACE_INITIAL_LIMIT ? object.data.pristineTradeList.filter((row, i) => i < TRACE_INITIAL_LIMIT) : object.data.pristineTradeList;
+
+      object.data.displayList = targetSecurity.data.traceTrades.length > TRACE_INITIAL_LIMIT ? targetSecurity.data.traceTrades.filter((trade, i) => i < TRACE_INITIAL_LIMIT) : targetSecurity.data.traceTrades;
     }
     return object;
   }

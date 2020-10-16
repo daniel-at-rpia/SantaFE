@@ -79,7 +79,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     this.rowData.state.viewHistoryState = false;
     if (!!this.rowData.data.traceTradeVisualizer && !!this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades) {
       this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = false;
-      this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.traceTradeVisualizer.data.pristineTradeList.filter((row, i) => i < TRACE_INITIAL_LIMIT);
+      this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.security.data.traceTrades.filter((row, i) => i < TRACE_INITIAL_LIMIT);
     }
   }
 
@@ -199,7 +199,10 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
 
   public onClickShowMoreTraceTrades() {
     this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = true;
-    this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.traceTradeVisualizer.data.pristineTradeList;
+    //trigger ngOnChange to re-render charts
+    const copy = this.utilityService.deepCopy(this.rowData.data.traceTradeVisualizer)
+    this.rowData.data.traceTradeVisualizer = copy;
+    this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.security.data.traceTrades;
   }
 
   public onClickGetAllTradeHistory(showAllTradeHistory: boolean) {
