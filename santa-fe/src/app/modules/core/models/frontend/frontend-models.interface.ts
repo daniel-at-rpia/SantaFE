@@ -22,7 +22,6 @@ import * as moment from 'moment';
 import * as am4Charts from '@amcharts/amcharts4/charts';
 import {Alert} from "Core/components/alert/alert.component";
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
-import { TraceTradeCounterParty } from 'Core/constants/securityTableConstants.constant';
 import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 import { BEPortfolioStructuringDTO } from 'Core/models/backend/backend-models.interface';
 
@@ -816,6 +815,7 @@ export interface TraceTradesVisualizerDTO extends BasicDTOStructure {
   data: {
     displayList: Array<TraceTradeBlock>;
     scatterGraphId: string;
+    pieGraphId: string;
   },
   state: {
     isDisplayAllTraceTrades: boolean;
@@ -823,6 +823,6 @@ export interface TraceTradesVisualizerDTO extends BasicDTOStructure {
   },
   graph: {
     scatterGraph: am4Charts.XYChart;
-    pieChart: am4Charts.PieChart;
+    pieGraph: am4Charts.PieChart;
   }
 }

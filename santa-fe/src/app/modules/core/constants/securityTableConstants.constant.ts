@@ -1673,3 +1673,5 @@ export enum TradeSideValueEquivalent {
   Bid = 'Buy',
   Ask = 'Sell'
 }
+
+export const TraceTradeCounterPartyList: Array<TraceTradeCounterParty> = [TraceTradeCounterParty.D, TraceTradeCounterParty.C, TraceTradeCounterParty.A, TraceTradeCounterParty.T];

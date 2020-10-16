@@ -24,7 +24,7 @@ import {
 } from 'src/app/modules/core/models/frontend/frontend-adhoc-packages.interface';
 import { MIN_OBLIGOR_CURVE_VALUES } from 'src/app/modules/core/constants/coreConstants.constant'
 import { HistoricalTradeVisualizerDTO, TraceTradesVisualizerDTO } from 'FEModels/frontend-models.interface';
-import { TradeSideValueEquivalent } from 'Core/constants/securityTableConstants.constant';
+import { TraceTradeCounterPartyList, TradeSideValueEquivalent } from 'Core/constants/securityTableConstants.constant';
 
 
 @Injectable()
@@ -878,6 +878,40 @@ export class GraphService {
       bullet2.stroke = am4core.color('#eee')
       bullet2.tooltipText = "Buy: {valueY}";
       bullet2.circle.radius = 6;
+      return chart;
+    }
+
+    public generateTraceTradePieGraph(dto: TraceTradesVisualizerDTO): am4charts.PieChart {
+      const chart = am4core.create(dto.data.pieGraphId, am4charts.PieChart);
+      const counterPartyData = [];
+      TraceTradeCounterPartyList.forEach(counterParty => {
+        const counterPartyList = dto.data.displayList.filter(trade => trade.counterParty === counterParty);
+        if (counterPartyList.length > 0) {
+          let total = 0;
+          counterPartyList.forEach(trade => {
+            //estimated is preferred, but use actual if there is no estiamted value
+            const value = !!trade.volumeEstimated ? trade.volumeEstimated : trade.volumeActual;
+            total += value;
+          })
+          const object = {
+            counterParty: counterParty,
+            volume: total
+          }
+          counterPartyData.push(object);
+        }
+      })
+      chart.data = counterPartyData;
+      let pieSeries = chart.series.push(new am4charts.PieSeries());
+      pieSeries.dataFields.value = "volume";
+      pieSeries.dataFields.category = "counterParty";
+      pieSeries.slices.template.stroke = am4core.color("#fff");
+      pieSeries.slices.template.strokeWidth = 2;
+      pieSeries.slices.template.strokeOpacity = 1;
+
+      // This creates initial animation
+      pieSeries.hiddenState.properties.opacity = 1;
+      pieSeries.hiddenState.properties.endAngle = -90;
+      pieSeries.hiddenState.properties.startAngle = -90;
       return chart;
     }
   // TradeHistoryVisualizer Charts end

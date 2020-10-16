@@ -43,14 +43,15 @@
       BICsLevel1DefinitionList
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
-      QuoteHeaderConfigList
+      QuoteHeaderConfigList,
+      TraceTradeCounterParty,
+      TradeSideValueEquivalent
     } from 'Core/constants/securityTableConstants.constant';
     import {
       AxeAlertScope,
       AxeAlertType,
       TRACE_INITIAL_LIMIT
     } from 'Core/constants/tradeConstants.constant';
-    import { TraceTradeCounterParty, TradeSideValueEquivalent } from 'Core/constants/securityTableConstants.constant';
     import { PortfolioShortNames, PortfolioMetricValues, PortfolioView, PortfolioBreakdownGroupOptions } from 'Core/constants/structureConstants.constants';
   //
 
@@ -2211,7 +2212,8 @@ export class DTOService {
     const object = {
       data: {
         displayList: [],
-        scatterGraphId: `${targetSecurity.data.securityID}-scatterGraph`
+        scatterGraphId: `${targetSecurity.data.securityID}-scatterGraph`,
+        pieGraphId: `${targetSecurity.data.securityID}-pieGraphId`
       },
       state: {
         isDisplayAllTraceTrades: false,
@@ -2219,7 +2221,7 @@ export class DTOService {
       },
       graph: {
         scatterGraph: null,
-        pieChart: null
+        pieGraph: null
       }
     }
 

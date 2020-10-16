@@ -121,7 +121,8 @@
     overflow: hidden;
     max-width: 50rem;
     margin: 0 $spacing_small;
-    &-scatterGraph {
+    &-scatterGraph,
+    &-pieGraph {
       flex: 1 1 auto;
       display: flex;
       flex-direction: column;
@@ -136,7 +137,7 @@
       }
       &-graphContainer {
         @include mix_border_radius(10px);
-        flex: 0 0 50%;
+        flex: 1 1 auto;
         display: flex;
         background-color: $color_white;
         overflow: hidden;
@@ -152,7 +153,8 @@
   &--displayGraphsState {
     #{$blockName} {
       &__graphs {
-        &-scatterGraph {
+        &-scatterGraph,
+        &-pieGraph {
           &-graphContainer {
             &-content {
               transform: scale(1);
