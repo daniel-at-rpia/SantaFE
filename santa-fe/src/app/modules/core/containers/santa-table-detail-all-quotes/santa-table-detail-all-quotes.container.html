@@ -130,7 +130,10 @@
     </div>
   </section>
   <section class="santaTableDetailAllQuotes__trace">
-    <trace-trade-visualizer [traceTrades]="rowData.data.traceTradeVisualizer"></trace-trade-visualizer>
+    <trace-trade-visualizer
+      [traceTrades]="rowData.data.traceTradeVisualizer"
+      [showData]="rowData.state.viewTraceState">
+    </trace-trade-visualizer>
   </section>
   <section class="santaTableDetailAllQuotes__ctas">
     <button (click)="onClickSelectForAnalysis()" class="santaTableDetailAllQuotes__ctas-selectBtn santaBtn--labelled">

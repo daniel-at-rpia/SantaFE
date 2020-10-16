@@ -12,6 +12,7 @@ import { GraphService } from 'Core/services/GraphService';
 
 export class TraceTradeVisualizer implements OnChanges, OnDestroy{
   @Input() traceTrades: TraceTradesVisualizerDTO;
+  @Input() showData: boolean;
   constants = {
     headerConfigList: TradeTraceHeaderConfigList,
     sideValueEquivalent: {
@@ -26,6 +27,11 @@ export class TraceTradeVisualizer implements OnChanges, OnDestroy{
       try {
         if (this.traceTrades.graph.scatterGraph) {
           this.graphService.destoryGraph(this.traceTrades.graph.scatterGraph);
+          this.traceTrades.graph.scatterGraph = null;
+        }
+        if (this.traceTrades.graph.pieGraph) {
+          this.graphService.destoryGraph(this.traceTrades.graph.pieGraph);
+          this.traceTrades.graph.pieGraph = null;
         }
       } catch (err) {
         if (err && err.message === 'EventDispatched is disposed') {
@@ -40,9 +46,11 @@ export class TraceTradeVisualizer implements OnChanges, OnDestroy{
   public ngOnChanges() {
     const renderGraphs = () => {
       if (!!this.traceTrades) {
-        this.traceTrades.state.graphReceived = true;
-        this.traceTrades.graph.scatterGraph = this.graphService.generateTradeTraceScatterGraph(this.traceTrades);
-        this.traceTrades.graph.pieGraph = this.graphService.generateTraceTradePieGraph(this.traceTrades)
+        if (!!this.showData && !this.traceTrades.state.graphReceived) {
+          this.traceTrades.state.graphReceived = true;
+          this.traceTrades.graph.scatterGraph = this.graphService.generateTradeTraceScatterGraph(this.traceTrades);
+          this.traceTrades.graph.pieGraph = this.graphService.generateTraceTradePieGraph(this.traceTrades)
+        }
       }
     }
     setTimeout(renderGraphs.bind(this), 100);
