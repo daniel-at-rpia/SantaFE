@@ -248,6 +248,9 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
       &__trace {
         display: flex;
         & trace-trade-visualizer {
+          flex: 1 1 auto;
+          display: flex;
+          flex-direction: column;
           overflow-y: scroll;
         }
       }

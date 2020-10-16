@@ -2211,7 +2211,7 @@ export class DTOService {
     const object = {
       data: {
         displayList: [],
-        scatterChartId: `${targetSecurity.data.securityID}-scatterChart`
+        scatterGraphId: `${targetSecurity.data.securityID}-scatterGraph`
       },
       state: {
         isDisplayAllTraceTrades: false,

@@ -23,7 +23,8 @@ import {
   AmchartPieDataBlock
 } from 'src/app/modules/core/models/frontend/frontend-adhoc-packages.interface';
 import { MIN_OBLIGOR_CURVE_VALUES } from 'src/app/modules/core/constants/coreConstants.constant'
-import { HistoricalTradeVisualizerDTO } from 'FEModels/frontend-models.interface';
+import { HistoricalTradeVisualizerDTO, TraceTradesVisualizerDTO } from 'FEModels/frontend-models.interface';
+import { TradeSideValueEquivalent } from 'Core/constants/securityTableConstants.constant';
 
 
 @Injectable()
@@ -822,6 +823,61 @@ export class GraphService {
       pieSeries.slices.template.stroke = am4core.color("#fff");
       pieSeries.slices.template.strokeOpacity = 1;
       chart.hiddenState.properties.radius = am4core.percent(0);
+      return chart;
+    }
+
+    public generateTradeTraceScatterGraph(dto: TraceTradesVisualizerDTO): am4charts.XYChart {
+      const chart = am4core.create(dto.data.scatterGraphId, am4charts.XYChart);
+      const reverseList = [...dto.data.displayList].reverse();
+      const tradeData = reverseList.map(trade => {
+        const time = new Date(trade.eventTime);
+        const object = {
+          date: time.getTime(),
+          ...(trade.side === TradeSideValueEquivalent.Ask && {sellY: +trade.spread}),
+          ...(trade.side === TradeSideValueEquivalent.Bid && {buyY: +trade.spread})
+        }
+        return object;
+      });
+      chart.data = tradeData;
+      let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+      dateAxis.title.text = 'Time';
+      dateAxis.renderer.grid.template.location = 0;
+      const currentDate = new Date();
+      const formattedDate = moment(currentDate).format('YYYY-MM-DD');
+      const minStr = `${formattedDate}, 06:00:00`;
+      const maxStr = `${formattedDate}, 18:00:00`;
+      const minDate = new Date(minStr);
+      const maxDate = new Date(maxStr);
+      dateAxis.min = minDate.getTime();
+      dateAxis.max = maxDate.getTime();
+      dateAxis.baseInterval = {
+        "timeUnit": "second",
+        "count": 1
+      };
+      dateAxis.startLocation = 1;
+      dateAxis.endLocation = 1;
+      let yAxis = chart.yAxes.push(new am4charts.ValueAxis());
+      yAxis.title.text = 'Sprd';
+      let series1 = chart.series.push(new am4charts.LineSeries());
+      series1.dataFields.valueY = "sellY";
+      series1.dataFields.dateX = "date";
+      series1.strokeOpacity = 0;
+      series1.cursorTooltipEnabled = false;
+      let bullet1 = series1.bullets.push(new am4charts.CircleBullet());
+      bullet1.fill = am4core.color('#BC2B5D');
+      bullet1.stroke = am4core.color('#eee');
+      bullet1.tooltipText = "Sell: {valueY}";
+      bullet1.circle.radius = 6;
+      let series2 = chart.series.push(new am4charts.LineSeries());
+      series2.dataFields.valueY = "buyY";
+      series2.dataFields.dateX = "date";
+      series2.strokeOpacity = 0;
+      series2.cursorTooltipEnabled = false;
+      let bullet2 = series2.bullets.push(new am4charts.CircleBullet());
+      bullet2.fill = am4core.color('#26A77B')
+      bullet2.stroke = am4core.color('#eee')
+      bullet2.tooltipText = "Buy: {valueY}";
+      bullet2.circle.radius = 6;
       return chart;
     }
   // TradeHistoryVisualizer Charts end

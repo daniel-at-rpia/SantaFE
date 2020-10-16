@@ -1,6 +1,7 @@
 <article *ngIf="!!traceTrades"
   [ngClass]="{
-    'sat-traceTradeVisualizer': true
+    'sat-traceTradeVisualizer': true,
+    'sat-traceTradeVisualizer--displayGraphsState': traceTrades.state.graphReceived
   }">
   <section class="sat-traceTradeVisualizer__table">
     <div class="sat-traceTradeVisualizer__table-utility">
@@ -33,6 +34,14 @@
           </div>
         </li>
       </ul>
+    </div>
+  </section>
+  <section class="sat-traceTradeVisualizer__graphs">
+    <div class="sat-traceTradeVisualizer__graphs-scatterGraph">
+      <span class="sat-traceTradeVisualizer__graphs-scatterGraph-title">Buy vs Sell</span>
+      <div class="sat-traceTradeVisualizer__graphs-scatterGraph-graphContainer">
+        <div class="sat-traceTradeVisualizer__graphs-scatterGraph-graphContainer-content" id="{{ traceTrades.data.scatterGraphId }}"></div>
+      </div>
     </div>
   </section>
 </article>

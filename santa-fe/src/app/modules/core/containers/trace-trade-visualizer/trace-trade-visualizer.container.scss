@@ -114,4 +114,52 @@
       }
     }
   }
+  &__graphs {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-width: 50rem;
+    margin: 0 $spacing_small;
+    &-scatterGraph {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: $spacing_small;
+      overflow: hidden;
+      &-title {
+        flex: 0 0 auto;
+        text-align: center;
+        font-size: $font_size_normal;
+        color: $font_color_inverse;
+        margin-bottom: $spacing_small;
+      }
+      &-graphContainer {
+        @include mix_border_radius(10px);
+        flex: 0 0 50%;
+        display: flex;
+        background-color: $color_white;
+        overflow: hidden;
+        padding: $spacing_small;
+        &-content {
+          @include mix_alive('light');
+          flex: 1 1 auto;
+          transform: scale(0.001);
+        }
+      }
+    }
+  }
+  &--displayGraphsState {
+    #{$blockName} {
+      &__graphs {
+        &-scatterGraph {
+          &-graphContainer {
+            &-content {
+              transform: scale(1);
+            }
+          }
+        }
+      }
+    }
+  }
 }
