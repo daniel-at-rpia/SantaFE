@@ -149,6 +149,9 @@
         }
       }
     }
+    &-scatterGraph {
+      flex: 0 0 50%; //issues with Am Chart scaling
+    }
   }
   &--displayGraphsState {
     #{$blockName} {
