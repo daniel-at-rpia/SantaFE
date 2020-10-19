@@ -42,7 +42,7 @@ export class StructureUtilityPanel implements OnInit {
   }
 
   public setMetricLevel(metricLevel: PortfolioMetricValues) {
-    const selectedMetric = metricLevel === this.constants.cs01 ? this.constants.cs01 : this.constants.leverage;
+    const selectedMetric = metricLevel;
     this.store$.dispatch(new StructureMetricSelect(selectedMetric));
     this.state.isExpanded = false;
   }

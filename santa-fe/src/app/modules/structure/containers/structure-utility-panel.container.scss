@@ -1,9 +1,9 @@
 @import "global.scss";
 
 $structureUtilityPanel_width: 9rem;
-$structureUtilityPanel_tongue_expandWidth: $structureUtilityPanel_width*1.5;
+
 $structureUtilityPanel_side_width: 12rem;
-$structureUtilityPanel_width_expand: $structureUtilityPanel_tongue_expandWidth + $structureUtilityPanel_side_width*2 + $spacing_small*2;
+$structureUtilityPanel_width_expand: $structureUtilityPanel_width + $structureUtilityPanel_side_width*2 + $spacing_small*2;
 $structureUtilityPanel_tongue_topGutter: convert_px_to_rem(30px);
 $structureUtilityPanel_side_btn_size: 2.25rem;
 .sat-structureUtilityPanel {
@@ -28,7 +28,7 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     align-items: center;
     margin: $spacing_small 0;
     padding-left: $spacing_small;
-    max-width: $structureUtilityPanel_side_width;
+    width: $structureUtilityPanel_side_width;
     left: 0;
     transform: scale(0.01);
     &-metric {
@@ -45,8 +45,7 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       &-selectedLabel {
         @include mix_border_radius(3px);
         @include mix_theme_background;
-        margin-top: -$spacing_x_small;
-        margin-bottom: $spacing_x_small;
+        margin: -$spacing_x_small 0 $spacing_x_small 0;
         padding: $spacing_xx_small $spacing_small;
         visibility: hidden;
         color: $font_color_inverse;
@@ -95,7 +94,7 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     align-items: center;
     margin: $spacing_small 0;
     padding-left: $spacing_small;
-    max-width: $structureUtilityPanel_side_width;
+    width: $structureUtilityPanel_side_width;
     right: 0;
     transform: scale(0.01);
     &-btn {
@@ -111,7 +110,7 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     }
     &-label {
       color: $font_color_inverse;
-      margin-right: $spacing_large;
+      margin: $spacing_large $spacing_x_large;
     }
   }
   &:hover, 
