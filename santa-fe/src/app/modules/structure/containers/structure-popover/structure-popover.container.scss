@@ -23,6 +23,9 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
     &>i, &>span {
       color: $font_color_inverse;
     }
+    &:hover {
+      @include mix_fixed_div(absolute, $z_index_hovering_item);
+    }
   }
   &__categoryHeader {
     display: flex;
