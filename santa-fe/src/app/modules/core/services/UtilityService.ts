@@ -1097,12 +1097,12 @@ export class UtilityService {
       return categoryKey;
     }
 
-    public populateBEBucketObjectFromRowTitle(
+    public populateBEBucketObjectFromRowIdentifier(
       bucket: {[property: string]: Array<string>},
-      rowTitle: string
+      rowIdentifier: string
     ): {[property: string]: Array<string>} {
-      if (!!rowTitle) {
-        const array = rowTitle.split(' - ');
+      if (!!rowIdentifier) {
+        const array = rowIdentifier.split(' - ');
         let index = 0;
         for (let eachBucketItem in bucket) {
           if (array[index].includes(',')) {

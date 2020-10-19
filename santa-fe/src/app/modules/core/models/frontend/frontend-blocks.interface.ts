@@ -309,7 +309,8 @@ export interface GlobalNavLegendBlock {
 
 export interface StructureSetTargetPanelEditRowBlock {
   targetBlockFromBreakdown: PortfolioBreakdownCategoryBlock;
-  rowTitle: string;
+  rowIdentifier: string;
+  displayRowTitle: string;
   targetCs01: {
     level: StructureSetTargetPanelEditRowItemBlock;
     percent: StructureSetTargetPanelEditRowItemBlock;

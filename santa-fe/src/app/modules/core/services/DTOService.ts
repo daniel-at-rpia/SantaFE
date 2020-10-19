@@ -1986,7 +1986,7 @@ export class DTOService {
     definitionList.forEach((eachCategoryText) => {
       let bucket: Blocks.StructureBucketDataBlock = {};
       if (!!isOverride) {
-        bucket = this.utility.populateBEBucketObjectFromRowTitle(
+        bucket = this.utility.populateBEBucketObjectFromRowIdentifier(
           this.utility.formBEBucketObjectFromBucketIdentifier(rawData.groupOption),
           eachCategoryText
         )
