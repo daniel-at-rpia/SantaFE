@@ -729,6 +729,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           )
         }
       };
+      if (eachRow.displayRowTitle !== eachRow.rowIdentifier) {
+        eachPayload.portfolioOverride.title = eachRow.displayRowTitle;
+      }
       if(this.cs01ModifiedInEditRow(eachRow) || this.creditLeverageModifiedInEditRow(eachRow)) {
         const modifiedMetricBreakdowns: BEMetricBreakdowns = {
           view: null,

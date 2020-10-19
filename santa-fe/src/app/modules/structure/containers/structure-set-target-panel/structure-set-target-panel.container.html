@@ -125,7 +125,7 @@
             <santa-textarea
               class="sat-structureSetTargetEditRow__label-input"
               [inputValue]="eachCategory.rowIdentifier"
-              (keyup)="onEditRowRenamed($event, eachCategory)"
+              (onInputChange)="onEditRowRenamed($event, eachCategory)"
               >
             </santa-textarea>
           </section>
