@@ -101,3 +101,8 @@ html {
   input::-webkit-inner-spin-button {
     -webkit-appearance: none;
   }
+  textarea {
+    @include mix_border_radius(3px);
+    font-weight: 400;
+    font-family: "SantaOpenSans";
+  }

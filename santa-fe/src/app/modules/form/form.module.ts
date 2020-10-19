@@ -8,13 +8,15 @@ import { SantaLoadableButton } from './components/loadable-button/loadable-butto
 import { MetricSelectionDropdown } from './components/metric-selection-dropdown/metric-selection-dropdown.component';
 import { SantaModal } from './components/santa-modal/santa-modal.form.component';
 import { ModalService } from './services/ModalService';
+import { SantaTextarea } from './components/textarea/textarea.form.component';
 
 @NgModule({
   declarations: [
     SantaInput,
     SantaLoadableButton,
     MetricSelectionDropdown,
-    SantaModal
+    SantaModal,
+    SantaTextarea
   ],
   imports: [
     CommonModule,
@@ -24,7 +26,8 @@ import { ModalService } from './services/ModalService';
     SantaInput,
     SantaLoadableButton,
     MetricSelectionDropdown,
-    SantaModal
+    SantaModal,
+    SantaTextarea
   ],
   providers: [
     ModalService

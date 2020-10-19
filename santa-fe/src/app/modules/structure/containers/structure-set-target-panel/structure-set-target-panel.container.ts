@@ -356,6 +356,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
+  public onEditRowRenamed(
+    targetName: string,
+    targetRow: StructureSetTargetPanelEditRowBlock
+  ) {
+    targetRow.displayRowTitle = targetName;
+  }
+
   private loadEditRows() {
     this.state.editRowList = [];
     if (!!this.state.targetBreakdown) {
