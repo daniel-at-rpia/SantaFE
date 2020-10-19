@@ -40,7 +40,7 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
         height: 2rem;
         color: $font_color_inverse;
         text-align: center;
-        margin-bottom: $spacing_medium;
+        white-space: nowrap;
       }
       &-selectedLabel {
         @include mix_border_radius(3px);
