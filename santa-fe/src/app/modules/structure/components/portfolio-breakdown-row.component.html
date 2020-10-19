@@ -1,7 +1,6 @@
 <article [ngClass]="{
   'sat-portfolioBreakdownRow': true,
   'sat-portfolioBreakdownRow--stencilState': breakdownRow.state.isStencil,
-  'sat-portfolioBreakdownRow--isBicsRow': breakdownRow.state.isBtnDiveIn,
   'sat-portfolioBreakdownRow--isBicsDiveIn': breakdownRow.state.isBtnDiveIn && breakdownRow.data.bicsLevel < 4,
   'sat-portfolioBreakdownRow--selected': breakdownRow.state.isSelected,
   'sat-portfolioBreakdownRow--noSignificantDiff': breakdownRow.data.diffToTarget === 0,
@@ -15,7 +14,7 @@
     <button (click)="onClickDiveIn(breakdownRow)" class="sat-portfolioBreakdownRow__cta-btn">
       <i [ngClass]="{
         'sat-portfolioBreakdownRow__cta-btn-view': true,
-        'far': true,
+        'fal': true,
         'fa-arrow-up': breakdownRow.data.view === constants.overweight,
         'fa-arrow-down': breakdownRow.data.view === constants.underweight,
         'fa-minus': breakdownRow.data.view === constants.neutral
@@ -28,11 +27,17 @@
       <move-visualizer [visualizerData]="breakdownRow.data.moveVisualizer"></move-visualizer>
     </div>
     <div class="sat-portfolioBreakdownRow__utility-ctas">
-      <button (click)="onClickSetView(constants.overweight)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--iconOnly fal fa-arrow-up sat-portfolioBreakdownRow__utility-ctas-btn--overweight">
+      <button (click)="onClickSetView(constants.overweight)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--inverseLabelled santaBtn--small sat-portfolioBreakdownRow__utility-ctas-btn--overweight">
+        <i class="fal fa-arrow-up"></i>
+        <span>over weight</span>
       </button>
-      <button (click)="onClickSetView(constants.underweight)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--iconOnly fal fa-arrow-down sat-portfolioBreakdownRow__utility-ctas-btn--underweight">
+      <button (click)="onClickSetView(constants.underweight)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--inverseLabelled santaBtn--small sat-portfolioBreakdownRow__utility-ctas-btn--underweight">
+        <i class="fal fa-arrow-down"></i>
+        <span>under weight</span>
       </button>
-      <button (click)="onClickSetView(constants.neutral)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--iconOnly fal fa-minus sat-portfolioBreakdownRow__utility-ctas-btn--neutral">
+      <button (click)="onClickSetView(constants.neutral)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--small sat-portfolioBreakdownRow__utility-ctas-btn--neutral">
+        <i class="fal fa-minus"></i>
+        <span>neutral</span>
       </button>
     </div>
   </section>
