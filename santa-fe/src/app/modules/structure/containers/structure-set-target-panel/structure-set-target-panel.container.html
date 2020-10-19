@@ -124,7 +124,7 @@
             <span class="sat-structureSetTargetEditRow__label-text">{{eachCategory.displayRowTitle}}</span>
             <santa-textarea
               class="sat-structureSetTargetEditRow__label-input"
-              [inputValue]="eachCategory.rowIdentifier"
+              [inputValue]="eachCategory.displayRowTitle"
               (onInputChange)="onEditRowRenamed($event, eachCategory)"
               >
             </santa-textarea>

@@ -1055,7 +1055,7 @@ export class UtilityService {
       let identifier = '';
       list.forEach((eachIdentifier) => {
         const parsedIdentifier = this.convertBEKeyToLabel(eachIdentifier);
-        identifier = identifier === '' ? `${parsedIdentifier}` : `${identifier} - ${parsedIdentifier}`;
+        identifier = identifier === '' ? `${parsedIdentifier}` : `${identifier} ~ ${parsedIdentifier}`;
       });
       return identifier;
     }
@@ -1063,7 +1063,7 @@ export class UtilityService {
     public formBEBucketObjectFromBucketIdentifier(identifier: string): {[property: string]: Array<string>} {
       const result = {};
       if (!!identifier) {
-        const array = identifier.split(' - ');
+        const array = identifier.split(' ~ ');
         array.forEach((eachLabel) => {
           const eachKey = this.convertLabelToBEKey(eachLabel);
           if (eachKey) {
@@ -1092,7 +1092,7 @@ export class UtilityService {
       });
       let categoryKey = '';
       list.forEach((eachIdentifier) => {
-        categoryKey = categoryKey === '' ? `${rawData.bucket[eachIdentifier]}` : `${categoryKey} - ${rawData.bucket[eachIdentifier]}`;
+        categoryKey = categoryKey === '' ? `${rawData.bucket[eachIdentifier]}` : `${categoryKey} ~ ${rawData.bucket[eachIdentifier]}`;
       });
       return categoryKey;
     }
@@ -1102,25 +1102,18 @@ export class UtilityService {
       rowIdentifier: string
     ): {[property: string]: Array<string>} {
       if (!!rowIdentifier) {
-        const array = rowIdentifier.split(' - ');
-        let bucketSize = 0;
+        const array = rowIdentifier.split(' ~ ');
+        let index = 0;
         for (let eachBucketItem in bucket) {
-          bucketSize++;
-        }
-        // if the user has defined custom name for the override, then we won't be able to reverse-engineer the bucket
-        if (bucketSize === array.length) {
-          let index = 0;
-          for (let eachBucketItem in bucket) {
-            if (array[index].includes(',')) {
-              const values = array[index].split(',');
-              values.forEach(value => {
-                bucket[eachBucketItem].push(value);
-              })
-            } else {
-              bucket[eachBucketItem].push(array[index]);
-            }
-            index++;
+          if (array[index].includes(',')) {
+            const values = array[index].split(',');
+            values.forEach(value => {
+              bucket[eachBucketItem].push(value);
+            })
+          } else {
+            bucket[eachBucketItem].push(array[index]);
           }
+          index++;
         }
       }
       return bucket;
@@ -1138,7 +1131,7 @@ export class UtilityService {
           return eachBEDTO.groupOption === overrideBucketIdentifier;
         });
         if (!!matchExistBreakdown) {
-          const categoryKey = eachRawOverride.title && eachRawOverride.title.length > 0 ? eachRawOverride.title : this.formCategoryKeyForOverride(eachRawOverride);
+          const categoryKey = this.formCategoryKeyForOverride(eachRawOverride);
           if (eachRawOverride.title && eachRawOverride.title.length > 0) {
             displayLabelToCategoryPerBreakdownMap[overrideBucketIdentifier][categoryKey] = eachRawOverride.title;
           }

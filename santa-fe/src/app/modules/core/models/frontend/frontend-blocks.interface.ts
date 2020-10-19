@@ -312,6 +312,7 @@ export interface StructureSetTargetPanelEditRowBlock {
   targetBlockFromBreakdown: PortfolioBreakdownCategoryBlock;
   rowIdentifier: string;
   displayRowTitle: string;
+  modifiedDisplayRowTitle: string;
   targetCs01: {
     level: StructureSetTargetPanelEditRowItemBlock;
     percent: StructureSetTargetPanelEditRowItemBlock;

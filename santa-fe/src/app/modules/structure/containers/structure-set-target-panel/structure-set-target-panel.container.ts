@@ -306,7 +306,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioOverride, {req: 'POST'}, payload).pipe(
           first(),
           tap((serverReturn: BEStructuringOverrideBlock) => {
-            const rawBreakdownList = this.utilityService.convertRawOverrideToRawBreakdown([serverReturn]);
+            const rawBreakdownList = this.utilityService.convertRawOverrideToRawBreakdown([serverReturn]).list;
             const newBreakdownBucketIdentifier = this.utilityService.formBucketIdentifierForOverride(serverReturn);
             const newCategoryKey = this.utilityService.formCategoryKeyForOverride(serverReturn);
             if (!!this.state.targetBreakdown && this.state.targetBreakdown.data.backendGroupOptionIdentifier === newBreakdownBucketIdentifier) {
@@ -360,7 +360,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     targetName: string,
     targetRow: StructureSetTargetPanelEditRowBlock
   ) {
-    targetRow.displayRowTitle = targetName;
+    targetRow.modifiedDisplayRowTitle = targetName;
   }
 
   private loadEditRows() {
@@ -370,7 +370,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         const newRow: StructureSetTargetPanelEditRowBlock = {
           targetBlockFromBreakdown: eachCategory.data,
           rowIdentifier: eachCategory.data.category,
-          displayRowTitle: eachCategory.data.category,
+          displayRowTitle: eachCategory.data.displayCategory,
+          modifiedDisplayRowTitle: eachCategory.data.displayCategory,
           targetCs01: {
             level: {
               savedDisplayValue: !!eachCategory.data.targetLevel ? `${eachCategory.data.targetLevel}` : null,
@@ -729,8 +730,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           )
         }
       };
-      if (eachRow.displayRowTitle !== eachRow.rowIdentifier) {
-        eachPayload.portfolioOverride.title = eachRow.displayRowTitle;
+      if (eachRow.modifiedDisplayRowTitle !== eachRow.rowIdentifier) {
+        eachPayload.portfolioOverride.title = eachRow.modifiedDisplayRowTitle;
       }
       if(this.cs01ModifiedInEditRow(eachRow) || this.creditLeverageModifiedInEditRow(eachRow)) {
         const modifiedMetricBreakdowns: BEMetricBreakdowns = {
@@ -785,7 +786,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     if (!!this.state.targetFund && !!this.state.targetBreakdown) {
       let rawDataObject;
       if (this.state.targetBreakdown.state.isOverrideVariant) {
-        rawDataObject = this.utilityService.convertRawOverrideToRawBreakdown(this.state.targetFund.data.originalBEData.overrides);
+        rawDataObject = this.utilityService.convertRawOverrideToRawBreakdown(this.state.targetFund.data.originalBEData.overrides).list;
       } else {
         rawDataObject = this.state.targetFund.data.originalBEData.breakdowns;
       }
