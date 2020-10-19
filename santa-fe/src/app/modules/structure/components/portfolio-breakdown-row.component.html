@@ -15,9 +15,9 @@
       <i [ngClass]="{
         'sat-portfolioBreakdownRow__cta-btn-view': true,
         'fal': true,
-        'fa-sun': breakdownRow.data.view === constants.overweight,
-        'fa-thunderstorm': breakdownRow.data.view === constants.underweight,
-        'fa-clouds': breakdownRow.data.view === constants.neutral
+        'fa-arrow-up': breakdownRow.data.view === constants.overweight,
+        'fa-arrow-down': breakdownRow.data.view === constants.underweight,
+        'fa-minus': breakdownRow.data.view === constants.neutral
       }"></i>
       <span class="sat-portfolioBreakdownRow__cta-btn-text">{{ breakdownRow.data.category }}</span>
     </button>
@@ -28,15 +28,15 @@
     </div>
     <div class="sat-portfolioBreakdownRow__utility-ctas">
       <button (click)="onClickSetView(constants.overweight)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--inverseLabelled santaBtn--small sat-portfolioBreakdownRow__utility-ctas-btn--overweight">
-        <i class="fal fa-sun"></i>
+        <i class="fal fa-arrow-up"></i>
         <span>over weight</span>
       </button>
       <button (click)="onClickSetView(constants.underweight)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--inverseLabelled santaBtn--small sat-portfolioBreakdownRow__utility-ctas-btn--underweight">
-        <i class="fal fa-thunderstorm"></i>
+        <i class="fal fa-arrow-down"></i>
         <span>under weight</span>
       </button>
       <button (click)="onClickSetView(constants.neutral)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--small sat-portfolioBreakdownRow__utility-ctas-btn--neutral">
-        <i class="fal fa-clouds"></i>
+        <i class="fal fa-minus"></i>
         <span>neutral</span>
       </button>
     </div>

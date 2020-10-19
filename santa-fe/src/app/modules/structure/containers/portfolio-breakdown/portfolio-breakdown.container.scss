@@ -142,6 +142,17 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
       margin-right: $spacing_large;
     }
     &-viewBtn {
+      &-icon {
+        display: flex;
+        &-up {
+          font-size: $font_size_normal;
+          margin-bottom: $spacing_x_small;
+        }
+        &-down {
+          font-size: $font_size_normal;
+          margin-top: $spacing_x_small;
+        }
+      }
     }
   }
   &--goodRating {
