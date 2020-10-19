@@ -841,7 +841,6 @@ export class GraphService {
       chart.data = tradeData;
       let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
       dateAxis.title.text = 'Time';
-      dateAxis.renderer.grid.template.location = 0;
       const currentDate = new Date();
       const formattedDate = moment(currentDate).format('YYYY-MM-DD');
       const minStr = `${formattedDate}, 06:00:00`;
@@ -854,8 +853,6 @@ export class GraphService {
         "timeUnit": "second",
         "count": 1
       };
-      dateAxis.startLocation = 1;
-      dateAxis.endLocation = 1;
       let yAxis = chart.yAxes.push(new am4charts.ValueAxis());
       yAxis.title.text = 'Sprd';
       let series1 = chart.series.push(new am4charts.LineSeries());
