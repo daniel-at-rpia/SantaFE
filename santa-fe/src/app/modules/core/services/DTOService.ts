@@ -2210,16 +2210,19 @@ export class DTOService {
     return object;
   }
 
-  public formTraceTradesVisualizerDTO(targetSecurity: DTOs.SecurityDTO): DTOs.TraceTradesVisualizerDTO {
+  public formTraceTradesVisualizerDTO(targetRow: DTOs.SecurityTableRowDTO): DTOs.TraceTradesVisualizerDTO {
     const object = {
       data: {
         displayList: [],
-        scatterGraphId: `${targetSecurity.data.securityID}-scatterGraph`,
-        pieGraphId: `${targetSecurity.data.securityID}-pieGraphId`
+        scatterGraphId: `${targetRow.data.rowId}-scatterGraph`,
+        pieGraphId: `${targetRow.data.rowId}-pieGraphId`,
+        filterList: FilterTraceTradesOptions,
+        availableFiltersList: []
       },
       state: {
         isDisplayAllTraceTrades: false,
-        graphReceived: false
+        graphReceived: false,
+        selectedFiltersList: []
       },
       graph: {
         scatterGraph: null,
