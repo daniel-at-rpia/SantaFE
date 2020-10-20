@@ -251,6 +251,9 @@ $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfig
       font-size: $font_size_normal;
       color: $font_color_major;
     }
+    &-input {
+      display: none;
+    }
   }
   &__column {
     flex: 0 0 $structureSetTargetPanel_edit_column_size;
@@ -304,6 +307,14 @@ $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfig
       }
       &__lock {
         display: none;
+      }
+      &__label {
+        &-text {
+          display: none;
+        }
+        &-input {
+          display: flex;
+        }
       }
     }
   }

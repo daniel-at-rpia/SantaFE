@@ -612,6 +612,7 @@ export interface BEStructuringOverrideBlock {
     [property: string]: Array<string>;
   }
   breakdown?: BEMetricBreakdowns;
+  title?: string;
 }
 
 export interface BEStructuringMetricTotalBlock {

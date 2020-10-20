@@ -292,15 +292,6 @@
     @include mix_gradient($theme_color_1, $theme_color_2, 40%, 90deg);
   }
 
-  @mixin roundedButton($backgroundColor: $color_white, $color: $font_color_major, $size) {
-    @include mix_border_radius(50%);
-    background-color: $backgroundColor;
-    color: $color;
-    width: $size;
-    height: $size;
-    line-height: $size;
-  }
-
   @mixin bicsLevelCategoryText {
     writing-mode: vertical-rl;
     transform: rotate(-180deg);

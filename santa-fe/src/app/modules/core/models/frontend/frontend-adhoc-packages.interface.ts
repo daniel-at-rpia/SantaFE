@@ -9,7 +9,7 @@ import {
 import { PortfolioView } from 'Core/constants/structureConstants.constants';
 import { StructureBucketDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
 import * as DTOs from 'FEModels/frontend-models.interface';
-import { BEPortfolioStructuringDTO } from 'BEModels/backend-models.interface';
+import { BEPortfolioStructuringDTO, BEStructuringBreakdownBlock } from 'BEModels/backend-models.interface';
 import {
   QuoteMetricBlock,
   AgGridRow,
@@ -128,4 +128,9 @@ export interface StructureSetViewData {
   yyyyMMdd: number;
   bucket: StructureBucketDataBlock;
   view: PortfolioView;
+}
+
+export interface StructureOverrideToBreakdownConversionReturnPack {
+  list: Array<BEStructuringBreakdownBlock>;
+  displayLabelMap: object;
 }

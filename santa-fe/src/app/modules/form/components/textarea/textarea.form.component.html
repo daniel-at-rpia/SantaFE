@@ -1,0 +1,15 @@
+<article
+  [ngClass]="{
+    'santaTextarea': true
+  }">
+  <textarea
+    [ngClass]="{
+      'santaTextarea__element': true
+    }"
+    [(ngModel)]="inputValue"
+    (keyup)="onKey()"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+    (keyup.enter)="onPressedEnterKey()"
+  ></textarea>
+</article>
