@@ -2219,7 +2219,7 @@ export class DTOService {
         displayList: [],
         scatterGraphId: `${targetRow.data.rowId}-scatterGraph`,
         pieGraphId: `${targetRow.data.rowId}-pieGraphId`,
-        filterList: FilterTraceTradesOptions,
+        filterList: [],
         availableFiltersList: []
       },
       state: {
@@ -2233,8 +2233,8 @@ export class DTOService {
       }
     }
 
-    if (targetSecurity.data.traceTrades.length > 0) {
-      targetSecurity.data.traceTrades.sort((tradeA, tradeB) => {
+    if (targetRow.data.security.data.traceTrades.length > 0) {
+      targetRow.data.security.data.traceTrades.sort((tradeA, tradeB) => {
         if (tradeA.eventTime > tradeB.eventTime) {
           return -1
         } else if (tradeB.eventTime > tradeA.eventTime) {
@@ -2244,7 +2244,7 @@ export class DTOService {
         }
       })
 
-      object.data.displayList = targetSecurity.data.traceTrades.length > TRACE_INITIAL_LIMIT ? targetSecurity.data.traceTrades.filter((trade, i) => i < TRACE_INITIAL_LIMIT) : targetSecurity.data.traceTrades;
+      object.data.displayList = targetRow.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT ? targetRow.data.security.data.traceTrades.filter((trade, i) => i < TRACE_INITIAL_LIMIT) : targetRow.data.security.data.traceTrades;
     }
     return object;
   }
