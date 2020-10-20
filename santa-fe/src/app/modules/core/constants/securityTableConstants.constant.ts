@@ -1607,7 +1607,7 @@ export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
     headerKey: 'counterParty',
     headerDisplayLabel: 'Counter Party',
     attrName: 'counterParty',
-    size: 10
+    size: 7
   },{
     headerKey: 'side',
     headerDisplayLabel: 'Side',
@@ -1615,12 +1615,12 @@ export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
     applyQuantColorCodes: true
   },{
     headerKey: 'displayVolumeEstimated',
-    headerDisplayLabel: 'Volume (Estimated)',
+    headerDisplayLabel: 'Vol (Estimated)',
     attrName: 'displayVolumeEstimated',
-    size: 10,
+    size: 8,
   },{
     headerKey: 'displayVolumeReported',
-    headerDisplayLabel: 'Volume (Reported)',
+    headerDisplayLabel: 'Vol (Reported)',
     attrName: 'displayVolumeReported',
     size: 8
   },{
@@ -1645,18 +1645,16 @@ export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
     headerKey: 'gSpread',
     headerDisplayLabel: 'G Sprd',
     attrName: 'gSpread',
-    size: 5
   },{
     headerKey: 'iSpread',
     headerDisplayLabel: 'I Sprd',
     attrName: 'iSpread',
-    size: 5
   },
   {
     headerKey: 'parSpread',
     headerDisplayLabel: 'Par Sprd',
     attrName: 'parSpread',
-    size: 5
+    size: 4
   }
 ]
 

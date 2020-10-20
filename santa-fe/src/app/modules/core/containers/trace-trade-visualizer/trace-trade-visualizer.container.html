@@ -12,7 +12,7 @@
         <li class="sat-traceTradeVisualizer__table-header-list-item" 
           *ngFor="let eachHeader of constants.headerConfigList"
           [ngStyle]="{
-            'width': eachHeader.size ? eachHeader.size + 'rem' : '4rem' 
+            'width': eachHeader.size ? eachHeader.size + 'rem' : '3.5rem'
           }">
           <span class="sat-traceTradeVisualizer__table-header-list-item-text">{{ eachHeader.headerDisplayLabel }}</span>
         </li>
@@ -24,7 +24,7 @@
         *ngFor="let eachTrade of traceTrades.data.displayList">
           <div class="sat-traceTradeVisualizer__table-content-rowList-item-cell" *ngFor="let eachHeader of constants.headerConfigList"
           [ngStyle]="{
-            'width': eachHeader.size ? eachHeader.size + 'rem' : '4rem' 
+            'width': eachHeader.size ? eachHeader.size + 'rem' : '3.5rem'
           }">
             <span [ngClass]="{
               'sat-traceTradeVisualizer__table-content-rowList-item-cell-text': true,
