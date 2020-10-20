@@ -885,7 +885,7 @@ export class GraphService {
       let bullet1 = series1.bullets.push(new am4charts.CircleBullet());
       bullet1.fill = am4core.color('#BC2B5D');
       bullet1.stroke = am4core.color('#eee');
-      bullet1.tooltipText = "Sell {valueY} at {dateX.formatDate('HH:mm')}";
+      bullet1.tooltipText = "Sell {valueY} at {dateX.formatDate('HH:mm:ss')}";
       let series2 = chart.series.push(new am4charts.LineSeries());
       series2.dataFields.valueY = "buyY";
       series2.dataFields.dateX = "date";
@@ -894,7 +894,7 @@ export class GraphService {
       let bullet2 = series2.bullets.push(new am4charts.CircleBullet());
       bullet2.fill = am4core.color('#26A77B')
       bullet2.stroke = am4core.color('#eee')
-      bullet2.tooltipText = "Buy {valueY} at {dateX.formatDate('HH:mm')}";
+      bullet2.tooltipText = "Buy {valueY} at {dateX.formatDate('HH:mm:ss')}";
       return chart;
     }
 
