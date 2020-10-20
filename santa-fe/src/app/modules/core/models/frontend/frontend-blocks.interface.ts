@@ -363,7 +363,7 @@ export interface TraceTradeBlock {
   counterParty: TraceTradeCounterParty;
   side: string;
   volumeEstimated: number;
-  volumeActual: number;
+  volumeReported: number;
   price: string;
   yield: number;
   spread: string;

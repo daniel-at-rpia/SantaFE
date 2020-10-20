@@ -1619,9 +1619,9 @@ export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
     attrName: 'volumeEstimated',
     size: 10,
   },{
-    headerKey: 'volumeActual',
-    headerDisplayLabel: 'Volume (Actual)',
-    attrName: 'volumeActual',
+    headerKey: 'volumeReported',
+    headerDisplayLabel: 'Volume (Reported)',
+    attrName: 'volumeReported',
     size: 8
   },{
     headerKey: 'price',

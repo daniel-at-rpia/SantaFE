@@ -887,7 +887,7 @@ export class GraphService {
           let total = 0;
           counterPartyList.forEach(trade => {
             //estimated is preferred, but use actual if there is no estiamted value
-            const value = !!trade.volumeEstimated ? trade.volumeEstimated : trade.volumeActual;
+            const value = !!trade.volumeEstimated ? trade.volumeEstimated : trade.volumeReported;
             total += value;
           })
           const object = {

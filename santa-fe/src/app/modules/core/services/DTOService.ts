@@ -2196,7 +2196,7 @@ export class DTOService {
       counterParty: TraceTradeCounterParty[rawData.counterParty],
       side: TradeSideValueEquivalent[rawData.side],
       volumeEstimated: rawData.volumeEstimated,
-      volumeActual: rawData.volumeActual,
+      volumeReported: rawData.volumeActual,
       price: this.utility.parseTriCoreDriverNumber(rawData.price, TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
       yield: this.utility.parseTriCoreDriverNumber(rawData.yield, TriCoreDriverConfig.Yield.label, targetSecurity, false) as number,
       spread: this.utility.parseTriCoreDriverNumber(rawData.spread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
