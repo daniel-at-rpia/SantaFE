@@ -306,7 +306,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioOverride, {req: 'POST'}, payload).pipe(
           first(),
           tap((serverReturn: BEStructuringOverrideBlock) => {
-            const rawBreakdownList = this.utilityService.convertRawOverrideToRawBreakdown([serverReturn]);
+            const rawBreakdownList = this.utilityService.convertRawOverrideToRawBreakdown([serverReturn]).list;
             const newBreakdownBucketIdentifier = this.utilityService.formBucketIdentifierForOverride(serverReturn);
             const newCategoryKey = this.utilityService.formCategoryKeyForOverride(serverReturn);
             if (!!this.state.targetBreakdown && this.state.targetBreakdown.data.backendGroupOptionIdentifier === newBreakdownBucketIdentifier) {
@@ -343,9 +343,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   public onSelectForRemoval(targetRow: StructureSetTargetPanelEditRowBlock) {
     if (targetRow) {
       const newList = this.utilityService.deepCopy(this.state.editRowList.filter((eachRow) => {
-        return eachRow.rowTitle !== targetRow.rowTitle;
+        return eachRow.rowIdentifier !== targetRow.rowIdentifier;
       }));
-      this.state.targetBreakdownRawData.breakdown = this.utilityService.removePropertyFromObject(this.state.targetBreakdownRawData.breakdown, targetRow.rowTitle);
+      this.state.targetBreakdownRawData.breakdown = this.utilityService.removePropertyFromObject(this.state.targetBreakdownRawData.breakdown, targetRow.rowIdentifier);
       !!targetRow.existInServer && this.state.removalList.push(targetRow);
       const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
       const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, isDisplayCs01);
@@ -356,13 +356,22 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
+  public onEditRowRenamed(
+    targetName: string,
+    targetRow: StructureSetTargetPanelEditRowBlock
+  ) {
+    targetRow.modifiedDisplayRowTitle = targetName;
+  }
+
   private loadEditRows() {
     this.state.editRowList = [];
     if (!!this.state.targetBreakdown) {
       this.state.targetBreakdown.data.rawCs01CategoryList.forEach((eachCategory) => {
         const newRow: StructureSetTargetPanelEditRowBlock = {
           targetBlockFromBreakdown: eachCategory.data,
-          rowTitle: eachCategory.data.category,
+          rowIdentifier: eachCategory.data.category,
+          displayRowTitle: eachCategory.data.displayCategory,
+          modifiedDisplayRowTitle: eachCategory.data.displayCategory,
           targetCs01: {
             level: {
               savedDisplayValue: !!eachCategory.data.targetLevel ? `${eachCategory.data.targetLevel}` : null,
@@ -418,7 +427,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       });
       this.state.targetBreakdown.data.rawLeverageCategoryList.forEach((eachCategory) => {
         const targetRow = this.state.editRowList.find((eachRow) => {
-          return eachRow.rowTitle === eachCategory.data.category;
+          return eachRow.rowIdentifier === eachCategory.data.category;
         });
         if (!!targetRow) {
           targetRow.targetCreditLeverage.level.savedDisplayValue = !!eachCategory.data.targetLevel ? `${eachCategory.data.targetLevel}` : null;
@@ -433,7 +442,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   private inheritEditRowStates(oldRows: Array<StructureSetTargetPanelEditRowBlock>) {
     this.state.editRowList = this.state.editRowList.map((eachNewRow) => {
       const matchedOldRow = oldRows.find((eachOldRow) => {
-        return eachOldRow.rowTitle === eachNewRow.rowTitle;
+        return eachOldRow.rowIdentifier === eachNewRow.rowIdentifier;
       });
       if (matchedOldRow) {
         eachNewRow = matchedOldRow;
@@ -548,7 +557,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       const rawData = this.state.targetBreakdownRawData;
       for (let category in rawData.breakdown) {
         if (!!rawData.breakdown[category]) {
-          const matchedRowListItem = this.state.editRowList.find(rowList => rowList.rowTitle === category);
+          const matchedRowListItem = this.state.editRowList.find(rowList => rowList.rowIdentifier === category);
           rawData.breakdown[category].metricBreakdowns.Cs01.targetLevel = matchedRowListItem.targetCs01.level.savedUnderlineValue;
           rawData.breakdown[category].metricBreakdowns.Cs01.targetPct = matchedRowListItem.targetCs01.percent.savedUnderlineValue;
           rawData.breakdown[category].metricBreakdowns.CreditLeverage.targetLevel = matchedRowListItem.targetCreditLeverage.level.savedUnderlineValue;
@@ -567,7 +576,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.state.targetBreakdown = updatedPortfolioBreakdown;
         this.state.targetBreakdown.state.isPreviewVariant = true;
         this.state.editRowList.forEach(rowList => {
-          const targetBlockFromBreakdown = this.state.activeMetric === PortfolioMetricValues.cs01 ? this.state.targetBreakdown.data.rawCs01CategoryList.find(breakdown => breakdown.data.category === rowList.rowTitle) : this.state.targetBreakdown.data.rawLeverageCategoryList.find(breakdown => breakdown.data.category === rowList.rowTitle);
+          const targetBlockFromBreakdown = this.state.activeMetric === PortfolioMetricValues.cs01 ? this.state.targetBreakdown.data.rawCs01CategoryList.find(breakdown => breakdown.data.category === rowList.rowIdentifier) : this.state.targetBreakdown.data.rawLeverageCategoryList.find(breakdown => breakdown.data.category === rowList.rowIdentifier);
           rowList.targetBlockFromBreakdown = targetBlockFromBreakdown.data;
         });
         this.state.targetBreakdown.state.isDisplayingCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
@@ -701,7 +710,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             targetLevel: eachRow.targetCreditLeverage.level.savedUnderlineValue
           };
         }
-        payload.portfolioBreakdown.breakdown[eachRow.rowTitle] = modifiedMetricBreakdowns;
+        payload.portfolioBreakdown.breakdown[eachRow.rowIdentifier] = modifiedMetricBreakdowns;
       }
     });
     return hasModification ? payload : null;
@@ -715,12 +724,15 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           date: this.state.targetBreakdownRawData.date,
           indexId: this.state.targetBreakdownRawData.indexId,
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
-          bucket: this.utilityService.populateBEBucketObjectFromRowTitle(
+          bucket: this.utilityService.populateBEBucketObjectFromRowIdentifier(
             this.utilityService.formBEBucketObjectFromBucketIdentifier(this.state.targetBreakdown.data.title),
-            eachRow.rowTitle
+            eachRow.rowIdentifier
           )
         }
       };
+      if (eachRow.modifiedDisplayRowTitle !== eachRow.rowIdentifier) {
+        eachPayload.portfolioOverride.title = eachRow.modifiedDisplayRowTitle;
+      }
       if(this.cs01ModifiedInEditRow(eachRow) || this.creditLeverageModifiedInEditRow(eachRow)) {
         const modifiedMetricBreakdowns: BEMetricBreakdowns = {
           view: null,
@@ -751,9 +763,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           date: this.state.targetBreakdownRawData.date,
           indexId: this.state.targetBreakdownRawData.indexId,
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
-          bucket: this.utilityService.populateBEBucketObjectFromRowTitle(
+          bucket: this.utilityService.populateBEBucketObjectFromRowIdentifier(
             this.utilityService.formBEBucketObjectFromBucketIdentifier(this.state.targetBreakdown.data.title),
-            eachRow.rowTitle
+            eachRow.rowIdentifier
           )
         }
       };
@@ -774,7 +786,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     if (!!this.state.targetFund && !!this.state.targetBreakdown) {
       let rawDataObject;
       if (this.state.targetBreakdown.state.isOverrideVariant) {
-        rawDataObject = this.utilityService.convertRawOverrideToRawBreakdown(this.state.targetFund.data.originalBEData.overrides);
+        rawDataObject = this.utilityService.convertRawOverrideToRawBreakdown(this.state.targetFund.data.originalBEData.overrides).list;
       } else {
         rawDataObject = this.state.targetFund.data.originalBEData.breakdowns;
       }
@@ -793,7 +805,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     if (this.state.editRowList.length > 0) {
       let exist = false;
       this.state.editRowList.forEach((eachRow) => {
-        if (eachRow.rowTitle === bucketToString) {
+        if (eachRow.rowIdentifier === bucketToString) {
           exist = true;
         }
       });
@@ -815,7 +827,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   private earMarkNewRow(targetTitle: string) {
     const targetRow = this.state.editRowList.find((eachRow) => {
-      return eachRow.rowTitle === targetTitle;
+      return eachRow.rowIdentifier === targetTitle;
     });
     if (!!targetRow) {
       targetRow.existInServer = false;

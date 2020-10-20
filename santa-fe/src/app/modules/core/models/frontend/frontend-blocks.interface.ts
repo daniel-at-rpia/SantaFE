@@ -279,6 +279,7 @@ export interface PortfolioMetricTotals {
 
 export interface PortfolioBreakdownCategoryBlock {
   category: string;
+  displayCategory: string;
   targetLevel: number;
   targetPct: number;
   diffToTarget: number;
@@ -310,7 +311,9 @@ export interface GlobalNavLegendBlock {
 
 export interface StructureSetTargetPanelEditRowBlock {
   targetBlockFromBreakdown: PortfolioBreakdownCategoryBlock;
-  rowTitle: string;
+  rowIdentifier: string;
+  displayRowTitle: string;
+  modifiedDisplayRowTitle: string;
   targetCs01: {
     level: StructureSetTargetPanelEditRowItemBlock;
     percent: StructureSetTargetPanelEditRowItemBlock;

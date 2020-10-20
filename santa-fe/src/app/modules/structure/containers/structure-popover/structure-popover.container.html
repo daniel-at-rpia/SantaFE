@@ -3,7 +3,10 @@
   'sat-popover--active': !!popover && popover.state.isActive,
   'sat-popover--noDataAvailable': !!popover && popover.data.mainRow.data.children.data.displayCategoryList.length === 0
 }">
-  <button class="sat-popover__close-btn santaBtn--iconOnly fal fa-times" *ngIf="!!popover" (click)="closePopover()"></button>
+  <button *ngIf="!!popover" (click)="closePopover()" class="sat-popover__closeBtn santaBtn--circleLabelled">
+    <i class="fal fa-times"></i>
+    <span>Close</span>
+  </button>
   <section class="sat-popover__categoryHeader">
     <div class="sat-popover__categoryHeader-cell">
       <i class="sat-popover__categoryHeader-cell-icon fas fa-pennant"></i>

@@ -61,8 +61,17 @@
     </ul>
   </section>
   <section class="sat-portfolioBreakdown__ctas">
-    <button (click)="onClickEdit()" class="santaBtn--iconOnly sat-portfolioBreakdown__ctas-editBtn fal fa-pencil"></button>
-    <button (click)="onClickSetView(breakdownData)" class="santaBtn--iconOnly sat-portfolioBreakdown__ctas-viewBtn"><i class="sat-portfolioBreakdown__ctas-viewBtn-icon--up fal fa-arrow-up"></i><i class="sat-portfolioBreakdown__ctas-viewBtn-icon--down fal fa-arrow-down"></i></button>
+    <button (click)="onClickEdit()" class="santaBtn--circleLabelled sat-portfolioBreakdown__ctas-editBtn">
+      <i class="fal fa-pencil"></i>
+      <span>Set Target</span>
+    </button>
+    <button (click)="onClickSetView(breakdownData)" class="santaBtn--circleLabelled sat-portfolioBreakdown__ctas-viewBtn">
+      <i class="sat-portfolioBreakdown__ctas-viewBtn-icon">
+        <i class="sat-portfolioBreakdown__ctas-viewBtn-icon-up fal fa-arrow-up"></i>
+        <i class="sat-portfolioBreakdown__ctas-viewBtn-icon-down fal fa-arrow-down"></i>
+      </i>
+      <span>Set Outlook</span>
+    </button>
   </section>
   <section class="sat-portfolioBreakdown__popover">
     <structure-popover [popover]="breakdownData.data.popover">

@@ -117,6 +117,7 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
     flex: 0 0 auto;
     display: flex;
     flex-direction: column;
+    margin-bottom: $spacing_small; // this is to accomodate the ctas so the buttons don't block the content
     &-list {
       display: flex;
       flex-direction: column;
@@ -138,27 +139,18 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
     bottom: 0 - $iconButton_size_regular/2;
     width: 100%;
     &-editBtn {
-      @include mix_border_radius(50%);
       margin-right: $spacing_large;
     }
     &-viewBtn {
-      @include mix_border_radius(50%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: row;
       &-icon {
-        &--up,
-        &--down {
-          font-size: $font_size_small;
-        }
-        &--up {
+        display: flex;
+        &-up {
+          font-size: $font_size_normal;
           margin-bottom: $spacing_x_small;
-          margin-right: -$spacing_minimum;
         }
-        &--down {
+        &-down {
+          font-size: $font_size_normal;
           margin-top: $spacing_x_small;
-          margin-left: -$spacing_minimum;
         }
       }
     }
@@ -227,16 +219,13 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
     }
   }
   &--editingView {
-    #{$blockName}{
+    #{$blockName} {
       &__ctas {
         &-viewBtn {
+          @include material('none');
           background-color: $color_active;
-          box-shadow: none;
-          &-icon {
-            &--up,
-            &--down {
-              color: $font_color_inverse;
-            }
+          &>i, &>span {
+            color: $font_color_inverse;
           }
         }
       }
