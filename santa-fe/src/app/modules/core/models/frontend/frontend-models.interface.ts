@@ -706,6 +706,7 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     isPreviewVariant: boolean;
     isBICs: boolean;
     isOverrideVariant: boolean;
+    isEditingViewAvail: boolean;
     isEditingView: boolean;
   }
 }
