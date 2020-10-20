@@ -19,7 +19,7 @@
       SecurityGroupMetricPackBlock,
       SecurityCostPortfolioBlock
     } from 'FEModels/frontend-blocks.interface';
-    import { DefinitionConfiguratorEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
+    import { DefinitionConfiguratorEmitterParams, StructureOverrideToBreakdownConversionReturnPack } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       GroupMetricOptions
     } from 'Core/constants/marketConstants.constant';
@@ -1055,7 +1055,7 @@ export class UtilityService {
       let identifier = '';
       list.forEach((eachIdentifier) => {
         const parsedIdentifier = this.convertBEKeyToLabel(eachIdentifier);
-        identifier = identifier === '' ? `${parsedIdentifier}` : `${identifier} - ${parsedIdentifier}`;
+        identifier = identifier === '' ? `${parsedIdentifier}` : `${identifier} ~ ${parsedIdentifier}`;
       });
       return identifier;
     }
@@ -1063,7 +1063,7 @@ export class UtilityService {
     public formBEBucketObjectFromBucketIdentifier(identifier: string): {[property: string]: Array<string>} {
       const result = {};
       if (!!identifier) {
-        const array = identifier.split(' - ');
+        const array = identifier.split(' ~ ');
         array.forEach((eachLabel) => {
           const eachKey = this.convertLabelToBEKey(eachLabel);
           if (eachKey) {
@@ -1092,17 +1092,17 @@ export class UtilityService {
       });
       let categoryKey = '';
       list.forEach((eachIdentifier) => {
-        categoryKey = categoryKey === '' ? `${rawData.bucket[eachIdentifier]}` : `${categoryKey} - ${rawData.bucket[eachIdentifier]}`;
+        categoryKey = categoryKey === '' ? `${rawData.bucket[eachIdentifier]}` : `${categoryKey} ~ ${rawData.bucket[eachIdentifier]}`;
       });
       return categoryKey;
     }
 
-    public populateBEBucketObjectFromRowTitle(
+    public populateBEBucketObjectFromRowIdentifier(
       bucket: {[property: string]: Array<string>},
-      rowTitle: string
+      rowIdentifier: string
     ): {[property: string]: Array<string>} {
-      if (!!rowTitle) {
-        const array = rowTitle.split(' - ');
+      if (!!rowIdentifier) {
+        const array = rowIdentifier.split(' ~ ');
         let index = 0;
         for (let eachBucketItem in bucket) {
           if (array[index].includes(',')) {
@@ -1121,7 +1121,8 @@ export class UtilityService {
 
     public convertRawOverrideToRawBreakdown(
       overrideRawDataList: Array<BEStructuringOverrideBlock>
-    ): Array<BEStructuringBreakdownBlock> {
+    ): StructureOverrideToBreakdownConversionReturnPack {
+      const displayLabelToCategoryPerBreakdownMap = {};
       const breakdownList: Array<BEStructuringBreakdownBlock> = [];
       overrideRawDataList.forEach((eachRawOverride) => {
         eachRawOverride
@@ -1131,6 +1132,9 @@ export class UtilityService {
         });
         if (!!matchExistBreakdown) {
           const categoryKey = this.formCategoryKeyForOverride(eachRawOverride);
+          if (eachRawOverride.title && eachRawOverride.title.length > 0) {
+            displayLabelToCategoryPerBreakdownMap[overrideBucketIdentifier][categoryKey] = eachRawOverride.title;
+          }
           matchExistBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
         } else {
           const newConvertedBreakdown: BEStructuringBreakdownBlock = {
@@ -1141,11 +1145,36 @@ export class UtilityService {
             breakdown: {}
           };
           const categoryKey = this.formCategoryKeyForOverride(eachRawOverride);
+          if (eachRawOverride.title && eachRawOverride.title.length > 0) {
+            displayLabelToCategoryPerBreakdownMap[overrideBucketIdentifier] = {};
+            displayLabelToCategoryPerBreakdownMap[overrideBucketIdentifier][categoryKey] = eachRawOverride.title;
+          }
           newConvertedBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
           breakdownList.push(newConvertedBreakdown);
         }
       });
-      return breakdownList;
+      return {
+        list: breakdownList,
+        displayLabelMap: displayLabelToCategoryPerBreakdownMap
+      };
+    }
+
+    public updateDisplayLabelForOverrideConvertedBreakdown(
+      displayLabelMap: object,
+      targetBreakdown: DTOs.PortfolioBreakdownDTO
+    ) {
+      if (!!displayLabelMap && !!targetBreakdown) {
+        targetBreakdown.data.rawCs01CategoryList.forEach((eachRow) => {
+          if (!!displayLabelMap[eachRow.data.category]) {
+            eachRow.data.displayCategory = displayLabelMap[eachRow.data.category];
+          }
+        });
+        targetBreakdown.data.rawLeverageCategoryList.forEach((eachRow) => {
+          if (!!displayLabelMap[eachRow.data.category]) {
+            eachRow.data.displayCategory = displayLabelMap[eachRow.data.category];
+          }
+        });
+      }
     }
 
   // structuring specific end

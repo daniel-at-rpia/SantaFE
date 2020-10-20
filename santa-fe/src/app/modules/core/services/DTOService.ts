@@ -6,6 +6,7 @@
     import * as BEModels from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
     import * as Blocks from 'FEModels/frontend-blocks.interface';
+    import { StructureOverrideToBreakdownConversionReturnPack } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       SecurityDefinitionStub,
       SecurityDefinitionBundleStub,
@@ -1986,7 +1987,7 @@ export class DTOService {
     definitionList.forEach((eachCategoryText) => {
       let bucket: Blocks.StructureBucketDataBlock = {};
       if (!!isOverride) {
-        bucket = this.utility.populateBEBucketObjectFromRowTitle(
+        bucket = this.utility.populateBEBucketObjectFromRowIdentifier(
           this.utility.formBEBucketObjectFromBucketIdentifier(rawData.groupOption),
           eachCategoryText
         )
@@ -2099,6 +2100,7 @@ export class DTOService {
       
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
         category: `${categoryName}`,
+        displayCategory: `${categoryName}`,
         targetLevel: parsedRawData.targetLevel,
         targetPct: parsedRawData.targetPct,
         diffToTarget: parsedRawData.targetLevel != null ? diffToTarget : 0,
@@ -2221,11 +2223,16 @@ export class DTOService {
     selectedMetricValue: PortfolioMetricValues
   ){
     if(rawData.overrides) {
-      const overrideList: Array<BEModels.BEStructuringBreakdownBlock> = this.utility.convertRawOverrideToRawBreakdown(rawData.overrides);
+      const returnPack: StructureOverrideToBreakdownConversionReturnPack = this.utility.convertRawOverrideToRawBreakdown(rawData.overrides);
+      const overrideList: Array<BEModels.BEStructuringBreakdownBlock> = returnPack.list;
       overrideList.forEach((eachRawBreakdown) => {
         const isDisplayCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
         const newBreakdown = this.formPortfolioOverrideBreakdown(eachRawBreakdown, isDisplayCs01);
         newBreakdown.data.indexName = rawData.indexShortName;
+        this.utility.updateDisplayLabelForOverrideConvertedBreakdown(
+          returnPack.displayLabelMap[newBreakdown.data.backendGroupOptionIdentifier],
+          newBreakdown
+        );
         object.data.children.unshift(newBreakdown);
       });
     }

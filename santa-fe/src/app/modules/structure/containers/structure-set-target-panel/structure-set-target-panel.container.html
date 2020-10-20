@@ -121,7 +121,13 @@
             </button>
           </section>
           <section class="sat-structureSetTargetEditRow__label">
-            <span class="sat-structureSetTargetEditRow__label-text">{{eachCategory.rowTitle}}</span>
+            <span class="sat-structureSetTargetEditRow__label-text">{{eachCategory.displayRowTitle}}</span>
+            <santa-textarea
+              class="sat-structureSetTargetEditRow__label-input"
+              [inputValue]="eachCategory.displayRowTitle"
+              (onInputChange)="onEditRowRenamed($event, eachCategory)"
+              >
+            </santa-textarea>
           </section>
           <section class="sat-structureSetTargetEditRow__column">
             <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--creditLeverageLevel">
