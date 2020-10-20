@@ -1,5 +1,9 @@
 @import "global.scss";
 
+button {
+  @extend .santaBtn;
+}
+
 @mixin mix_tradeVisualizer_cell_style() {
   justify-content: center;
   align-items: center;
@@ -141,7 +145,7 @@
         display: flex;
         background-color: $color_white;
         overflow: hidden;
-        padding: $spacing_small;
+        padding: $spacing_x_small;
         &-content {
           @include mix_alive('light');
           flex: 1 1 auto;
@@ -150,7 +154,15 @@
       }
     }
     &-scatterGraph {
-      flex: 0 0 50%; //issues with Am Chart scaling
+      flex: 0 0 50%;
+    }
+    &-pieGraph {
+      display: flex;
+      justify-content: center;
+      width: 50%;
+      &-title {
+        margin: 0 auto $spacing_small;
+      }
     }
   }
   &--displayGraphsState {
