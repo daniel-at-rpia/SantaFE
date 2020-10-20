@@ -6,7 +6,7 @@ import { DTOService } from 'Core/services/DTOService';
 import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
 import { selectMetricLevel, selectSetViewData } from 'Structure/selectors/structure.selectors';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
-import { selectReloadBreakdownDataPostEdit } from 'Structure/selectors/structure.selectors';
+import { selectReloadBreakdownDataPostEdit, selectMainPanelUpdateTick } from 'Structure/selectors/structure.selectors';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { UtilityService } from 'Core/services/UtilityService';
 import { PortfolioMetricValues, PortfolioShortNames } from 'Core/constants/structureConstants.constants';
@@ -32,6 +32,7 @@ import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingServi
 export class StructureMainPanel implements OnInit, OnDestroy {
   state: StructureMainPanelState; 
   subscriptions = {
+    updateSub: null,
     ownerInitialsSub: null,
     selectedMetricLevelSub: null,
     reloadFundUponEditSub: null,
@@ -113,14 +114,13 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         this.reloadFund(updatePack.targetFund, systemAlertMessage);
       }
     });
-    const initialWaitForIcons = this.loadStencilFunds.bind(this);
-    setTimeout(() => {
-      initialWaitForIcons();
-    }, 200);
-    const loadData = this.fetchFunds.bind(this);
-    setTimeout(() => {
-      loadData();
-    }, 500);
+    this.subscriptions.updateSub = this.store$.pipe(
+      select(selectMainPanelUpdateTick)
+    ).subscribe((tick) => {
+      if (tick >= 0) {
+        this.fullUpdate();
+      }
+    });
   }
 
   public ngOnDestroy() {
@@ -178,6 +178,17 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         return of('error');
       })
     ).subscribe()
+  }
+
+  private fullUpdate() {
+    const initialWaitForIcons = this.loadStencilFunds.bind(this);
+    setTimeout(() => {
+      initialWaitForIcons();
+    }, 200);
+    const loadData = this.fetchFunds.bind(this);
+    setTimeout(() => {
+      loadData();
+    }, 500);
   }
 
   private loadStencilFunds() {

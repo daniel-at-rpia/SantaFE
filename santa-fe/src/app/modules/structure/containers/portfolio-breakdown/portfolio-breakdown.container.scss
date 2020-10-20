@@ -63,6 +63,22 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
       font-size: $font_size_normal;
     }
   }
+  &__index {
+    @include mix_fixed_div(absolute, $z_index_base_item);
+    @include mix_calculate(bottom, 100%, $portfolioBreakdown_rating_thickness + $spacing_x_small, '-');
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: $portfolioBreakdown_categoryList_cell_width + $spacing_small*2;
+    height: 2rem;
+    right: $spacing_small;
+    &-text {
+      @include mix_text_overflow_multi_line(2);
+      text-align: right;
+      color: $font_color_minor;
+      line-height: $line_height_minimum;
+    }
+  }
   &__categoryHeader {
     display: flex;
     justify-content: flex-end;
@@ -81,12 +97,16 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
         @include mix_fixed_div(absolute, $z_index_hovering_item);
         @include mix_border_radius(3px);
         display: none;
-        top: -100%;
+        bottom: 100%;
         color: $font_color_inverse;
         line-height: $line_height_small;
         width: 4.25rem;
         background-color: $color_active;
         text-align: center;
+        // &--index {
+          // width: 8rem;
+          // right: 0;
+        // }
       }
       &:hover>&-tooltip {
         display: block;
@@ -97,6 +117,7 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
     flex: 0 0 auto;
     display: flex;
     flex-direction: column;
+    margin-bottom: $spacing_small; // this is to accomodate the ctas so the buttons don't block the content
     &-list {
       display: flex;
       flex-direction: column;
@@ -118,27 +139,18 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
     bottom: 0 - $iconButton_size_regular/2;
     width: 100%;
     &-editBtn {
-      @include mix_border_radius(50%);
       margin-right: $spacing_large;
     }
     &-viewBtn {
-      @include mix_border_radius(50%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: row;
       &-icon {
-        &--up,
-        &--down {
-          font-size: $font_size_small;
-        }
-        &--up {
+        display: flex;
+        &-up {
+          font-size: $font_size_normal;
           margin-bottom: $spacing_x_small;
-          margin-right: -$spacing_minimum;
         }
-        &--down {
+        &-down {
+          font-size: $font_size_normal;
           margin-top: $spacing_x_small;
-          margin-left: -$spacing_minimum;
         }
       }
     }
@@ -173,16 +185,17 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
       }
     }
   }
-  &--ratingAvailableState {
-    #{$blockName} {
-      &__rating {
-        visibility: visible;
-        &-hoverText {
-          color: $font_color_inverse;
-        }
-      }
-    }
-  }
+  // temporarily disable it as the calculation needs to be decided
+  // &--ratingAvailableState {
+  //   #{$blockName} {
+  //     &__rating {
+  //       visibility: visible;
+  //       &-hoverText {
+  //         color: $font_color_inverse;
+  //       }
+  //     }
+  //   }
+  // }
   &--editableState {
     #{$blockName} {
       &__ctas {
@@ -206,16 +219,13 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
     }
   }
   &--editingView {
-    #{$blockName}{
+    #{$blockName} {
       &__ctas {
         &-viewBtn {
+          @include material('none');
           background-color: $color_active;
-          box-shadow: none;
-          &-icon {
-            &--up,
-            &--down {
-              color: $font_color_inverse;
-            }
+          &>i, &>span {
+            color: $font_color_inverse;
           }
         }
       }
@@ -233,6 +243,13 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
           background-color: $color_stencil;
         }
         &-hoverText {
+          @include mix_stencil_animation;
+          background-color: $color_stencil;
+          color: $color_stencil;
+        }
+      }
+      &__index {
+        &-text {
           @include mix_stencil_animation;
           background-color: $color_stencil;
           color: $color_stencil;

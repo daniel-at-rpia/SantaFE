@@ -18,3 +18,5 @@ export const selectReloadBreakdownDataPostEdit = createSelector(
 );
 
 export const selectSetViewData = createSelector(getStructureState, (state: StructureState) => state.viewData);
+
+export const selectMainPanelUpdateTick = createSelector(getStructureState, (state: StructureState) => state.updateTick);

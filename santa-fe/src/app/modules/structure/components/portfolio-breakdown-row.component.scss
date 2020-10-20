@@ -2,7 +2,6 @@
 
 $portfolioBreakdownRowCategory_cell_width: 3.5rem;
 $portfolioBreakdownRowBtnMinHeight: 2.25rem;
-$portfolioBreakdownRowViewButtonSize: 1.2rem;
 .sat-portfolioBreakdownRow {
   $blockName: &;
   display: flex;
@@ -10,7 +9,7 @@ $portfolioBreakdownRowViewButtonSize: 1.2rem;
   align-items: center;
   &__cta {
     @include mix_fixed_div(relative, $z_index_base_item);
-    flex: 0 0 7.5rem;
+    flex: 0 0 8rem;
     display: flex;
     margin-right: $spacing_small;
     &-btn {
@@ -25,11 +24,13 @@ $portfolioBreakdownRowViewButtonSize: 1.2rem;
       flex-direction: row;
       cursor: not-allowed;
       &-text {
+        @include mix_text_overflow_multi_line(2);
         flex: 1 1 auto;
         text-align: right;
-        padding-left: 1.5rem;
+        margin-left: 1.5rem;
         overflow: hidden;
         text-overflow: ellipsis;
+        word-break: break-word;
       }
       &-view {
         @include mix_fixed_div(absolute, $z_index_base_item_solid);
@@ -41,7 +42,7 @@ $portfolioBreakdownRowViewButtonSize: 1.2rem;
         width: $iconButton_size_x_small;
         height: $iconButton_size_x_small;
         color: $font_color_inverse;
-        font-size: $font_size_x_small;
+        font-size: $font_size_small;
       }
     }
   }
@@ -56,7 +57,7 @@ $portfolioBreakdownRowViewButtonSize: 1.2rem;
     color: $font_color_major;
     &--target {
       @include mix_border_radius(5px);
-      align-self: stretch;
+      padding: $spacing_x_small 0;
       background-color: $color_active;
       color: $font_color_inverse;
       margin: $spacing_x_small 0;
@@ -65,6 +66,7 @@ $portfolioBreakdownRowViewButtonSize: 1.2rem;
   &__cellDivider {
     @include mix_border_generator(0 $typical_border_width 0 0);
     flex: 0 0 $spacing_x_small+$typical_border_width;
+    align-self: stretch;
     margin: $spacing_x_small $spacing_x_small $spacing_x_small 0;
   }
   &__utility {
@@ -85,31 +87,13 @@ $portfolioBreakdownRowViewButtonSize: 1.2rem;
       display: flex;
       transform: scale(0);
       justify-content: center;
-      width: 100%;
       &-btn {
-        @include mix_border_radius(3px);
-        width: $portfolioBreakdownRowViewButtonSize;
-        height: $portfolioBreakdownRowViewButtonSize;
-        color: $font_color_inverse;
-        padding: $spacing_small;
         margin-right: $spacing_small;
         &--overweight {
           background-color: $color_positive;
         }
         &--underweight {
           background-color: $color_kill;
-        }
-        &--neutral {
-          color: $color_active;
-        }
-      }
-    }
-  }
-  &--isBicsRow {
-    #{$blockName} {
-      &__cta {
-        &-btn {
-          word-break: break-word;
         }
       }
     }
@@ -118,9 +102,6 @@ $portfolioBreakdownRowViewButtonSize: 1.2rem;
     #{$blockName} {
       &__cta {
         &-btn {
-          @include mix_text_overflow_multi_line();
-          -webkit-box-align: end;
-          height: auto;
           border-width: 0;
           @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
           cursor: pointer;
@@ -149,6 +130,17 @@ $portfolioBreakdownRowViewButtonSize: 1.2rem;
           }
         }
       }
+      &__utility {
+        &-ctas {
+          &-btn {
+            &--overweight {
+              @include material('none');
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
+          }
+        }
+      }
     }
   }
   &--underweight {
@@ -157,6 +149,17 @@ $portfolioBreakdownRowViewButtonSize: 1.2rem;
         &-btn {
           &-view {
             background-color: $color_kill;
+          }
+        }
+      }
+      &__utility {
+        &-ctas {
+          &-btn {
+            &--underweight {
+              @include material('none');
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
           }
         }
       }
@@ -172,42 +175,11 @@ $portfolioBreakdownRowViewButtonSize: 1.2rem;
           }
         }
       }
-    }
-  }
-  &--overweight {
-    #{$blockName} {
-      &__utility {
-        &-ctas {
-          &-btn {
-            &--overweight {
-              background-color: $color_active;
-              color: $font_color_inverse;
-            }
-          }
-        }
-      }
-    }
-  }
-  &--underweight {
-    #{$blockName} {
-      &__utility {
-        &-ctas {
-          &-btn {
-            &--underweight {
-              background-color: $color_active;
-              color: $font_color_inverse;
-            }
-          }
-        }
-      }
-    }
-  }
-  &--neutral {
-    #{$blockName} {
       &__utility {
         &-ctas {
           &-btn {
             &--neutral {
+              @include material('none');
               background-color: $color_active;
               color: $font_color_inverse;
             }
