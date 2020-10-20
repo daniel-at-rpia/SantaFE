@@ -364,6 +364,8 @@ export interface TraceTradeBlock {
   side: string;
   volumeEstimated: number;
   volumeReported: number;
+  displayVolumeEstimated: string;
+  displayVolumeReported: string;
   price: string;
   yield: number;
   spread: string;

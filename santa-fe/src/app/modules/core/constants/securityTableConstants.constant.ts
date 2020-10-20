@@ -1614,14 +1614,14 @@ export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
     attrName: 'side',
     applyQuantColorCodes: true
   },{
-    headerKey: 'volumeEstimated',
+    headerKey: 'displayVolumeEstimated',
     headerDisplayLabel: 'Volume (Estimated)',
-    attrName: 'volumeEstimated',
+    attrName: 'displayVolumeEstimated',
     size: 10,
   },{
-    headerKey: 'volumeReported',
+    headerKey: 'displayVolumeReported',
     headerDisplayLabel: 'Volume (Reported)',
-    attrName: 'volumeReported',
+    attrName: 'displayVolumeReported',
     size: 8
   },{
     headerKey: 'price',
