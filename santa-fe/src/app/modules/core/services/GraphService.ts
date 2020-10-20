@@ -839,6 +839,7 @@ export class GraphService {
         return object;
       });
       chart.data = tradeData;
+      chart.height = 145;
       let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
       dateAxis.title.text = 'Time';
       const currentDate = new Date();
@@ -855,6 +856,27 @@ export class GraphService {
       };
       let yAxis = chart.yAxes.push(new am4charts.ValueAxis());
       yAxis.title.text = 'Sprd';
+      const sortedSpreadData = chart.data.map(data => {
+        if (!!data.sellY || !!data.buyY) {
+          return !!data.sellY ? data.sellY : data.buyY
+        }
+      }).sort();
+      const yAxisMin = sortedSpreadData[0] - 5;
+      const yAxisMax = sortedSpreadData[sortedSpreadData.length - 1] + 5;
+      const yAxisMid = this.utility.round(((yAxisMax - yAxisMin)/2) + yAxisMin);
+      yAxis.min = yAxisMin;
+      yAxis.max = yAxisMax;
+      yAxis.strictMinMax = true;
+      yAxis.renderer.grid.template.disabled = true;
+      yAxis.renderer.labels.template.disabled = true;
+      function createGrid(value) {
+        var range = yAxis.axisRanges.create();
+        range.value = value;
+        range.label.text = "{value}";
+      }
+      createGrid(yAxisMin);
+      createGrid(yAxisMid);
+      createGrid(yAxisMax);
       let series1 = chart.series.push(new am4charts.LineSeries());
       series1.dataFields.valueY = "sellY";
       series1.dataFields.dateX = "date";
@@ -864,7 +886,6 @@ export class GraphService {
       bullet1.fill = am4core.color('#BC2B5D');
       bullet1.stroke = am4core.color('#eee');
       bullet1.tooltipText = "Sell: {valueY}";
-      bullet1.circle.radius = 6;
       let series2 = chart.series.push(new am4charts.LineSeries());
       series2.dataFields.valueY = "buyY";
       series2.dataFields.dateX = "date";
@@ -874,7 +895,6 @@ export class GraphService {
       bullet2.fill = am4core.color('#26A77B')
       bullet2.stroke = am4core.color('#eee')
       bullet2.tooltipText = "Buy: {valueY}";
-      bullet2.circle.radius = 6;
       return chart;
     }
 
