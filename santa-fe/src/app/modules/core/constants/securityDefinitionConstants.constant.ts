@@ -267,6 +267,8 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     "AE","AL","AM","AO","AR","AT","AU","AW","AZ","BB","BE","BG","BH","BJ","BM","BO","BR","BS","BY","BZ","CA","CD","CG","CH","CI","CL","CM","CN","CO","CR","CY","CZ","DE","DK","DO","EC","EE","EG","ES","ET","FI","FR","GA","GB","GE","GG","GH","GR","GT","HK","HN","HR","HU","ID","IE","IL","IM","IN","IQ","IS","IT","JE","JM","JO","JP","KE","KH","KR","KW","KY","KZ","LA","LB","LC","LK","LT","LU","LV","MA","MC","MD","ME","MK","MN","MO","MT","MU","MULT","MX","MY","MZ","NA","NG","NL","NO","NZ","OM","PA","PE","PG","PH","PK","PL","PR","PT","PY","QA","RO","RS","RU","RW","SA","SC","SE","SG","SI","SK","SN","SNAT","SR","SV","TG","TH","TJ","TN","TR","TT","TW","UA","US","UY","UZ","VE","VG","VN","ZA","ZM"
   ];
 
+export const editingViewAvailableUsers = [...FilterOptionsPortfolioResearchList, 'DM'];
+
 export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
   SECURITY_TYPE: {
     key: 'SECURITY_TYPE',
