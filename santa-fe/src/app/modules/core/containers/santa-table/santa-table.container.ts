@@ -302,7 +302,7 @@ export class SantaTable implements OnInit, OnChanges {
       if (isPinnedFullWidthCell) {
         this.setAgGridRowHeight(targetRow, params, isPinnedFullWidthCell, 0);
         targetRow.state.isExpanded = false;
-        const pinnedTargetRowID = `${targetRow.data.security.data.securityID}-pinned-fullWidth`;
+        const pinnedTargetRowID = `${targetRow.data.security.data.securityID}-${this.constants.agGridPinnedFullWidthRowKeyword}`;
         const selectedPinnedRow = this.tableData.data.agGridPinnedTopRowData.find(row => row.id === pinnedTargetRowID);
         if (!!selectedPinnedRow) {
           selectedPinnedRow.rowDTO.state.viewHistoryState = false;
