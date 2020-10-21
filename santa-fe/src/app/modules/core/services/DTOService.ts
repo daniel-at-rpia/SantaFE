@@ -2225,6 +2225,15 @@ export class DTOService {
     if(rawData.overrides) {
       const returnPack: StructureOverrideToBreakdownConversionReturnPack = this.utility.convertRawOverrideToRawBreakdown(rawData.overrides);
       const overrideList: Array<BEModels.BEStructuringBreakdownBlock> = returnPack.list;
+      overrideList.sort((overrideA, overrideB) =>{
+        if (overrideA.groupOption > overrideB.groupOption) {
+          return -1;
+        } else if (overrideB.groupOption > overrideA.groupOption) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
       overrideList.forEach((eachRawBreakdown) => {
         const isDisplayCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
         const newBreakdown = this.formPortfolioOverrideBreakdown(eachRawBreakdown, isDisplayCs01);
