@@ -287,6 +287,12 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         const completeAlertMessage = `Successfully updated ${messageDetails}`;
         const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
         this.store$.dispatch(new CoreSendNewAlerts([alert]));
+        this.restfulCommService.logEngagement(
+          this.restfulCommService.engagementMap.portfolioStructureSetView,
+          null,
+          `View value for ${totalBucketValues} updated as ${displayViewValue}. Set by ${this.state.ownerInitial}`,
+          'Portfolio Structure Breakdown'
+        )
       }),
       catchError(err => {
         setTimeout(() => {
