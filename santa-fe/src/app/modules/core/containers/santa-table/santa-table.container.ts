@@ -395,6 +395,10 @@ export class SantaTable implements OnInit, OnChanges {
           const fullWidthCell: AgGridRow = this.utilityService.deepCopy(copy);
           fullWidthCell.id = `${fullWidthCell.id}-${this.constants.agGridPinnedFullWidthRowKeyword}`;
           fullWidthCell.isFullWidth = true;
+          if (fullWidthCell.rowDTO.data.traceTradeVisualizer) {
+            fullWidthCell.rowDTO.data.traceTradeVisualizer.data.pieGraphId = `${fullWidthCell.id}-pieGraphId`;
+            fullWidthCell.rowDTO.data.traceTradeVisualizer.data.scatterGraphId = `${fullWidthCell.id}-scatterGraphId`
+          }
           fullWidthCell.rowDTO.style.rowHeight = 0;
           this.tableData.data.agGridPinnedTopRowData.push(fullWidthCell);
         }

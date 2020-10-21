@@ -2224,7 +2224,7 @@ export class DTOService {
     const object = {
       data: {
         displayList: [],
-        scatterGraphId: !isPinnedFullWidth ? `${targetRow.data.rowId}-scatterGraph` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-scatterGraph`,
+        scatterGraphId: !isPinnedFullWidth ? `${targetRow.data.rowId}-scatterGraphId` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-scatterGraphId`,
         pieGraphId: !isPinnedFullWidth ? `${targetRow.data.rowId}-pieGraphId` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-pieGraphId`,
         filterList: FilterTraceTradesOptions,
         availableFiltersList: []
