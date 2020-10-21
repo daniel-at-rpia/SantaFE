@@ -839,7 +839,7 @@ export class GraphService {
         return object;
       });
       chart.data = tradeData;
-      chart.height = 165;
+      chart.height = 160;
       let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
       dateAxis.title.text = 'Time';
       const currentDate = new Date();
@@ -925,7 +925,7 @@ export class GraphService {
       pieSeries.slices.template.strokeWidth = 2;
       pieSeries.slices.template.strokeOpacity = 1;
 
-      pieSeries.labels.template.maxWidth = 100;
+      pieSeries.labels.template.maxWidth = 75;
       pieSeries.labels.template.wrap = true;
 
       // This creates initial animation
