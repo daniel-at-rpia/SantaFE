@@ -3,11 +3,10 @@
     'sat-securityDefinitionConfigurator': true,
     'sat-securityDefinitionConfigurator--filterActiveState': configuratorData.state.showFiltersFromDefinition,
     'sat-securityDefinitionConfigurator--highlightedVariant': highlightedVariant,
-    'sat-securityDefinitionConfigurator--filterShowingLongDefinitionState': configuratorData.state.showFiltersFromDefinition?.data.urlForGetLongOptionListFromServer && configuratorData.state.showFiltersFromDefinition?.data.filterOptionList.length === 0,
-    'sat-securityDefinitionConfigurator--filterLoadingLongOptionListState': configuratorData.state.isLoadingLongOptionListFromServer,
     'sat-securityDefinitionConfigurator--groupByDisabledState': configuratorData.state.groupByDisabled,
     'sat-securityDefinitionConfigurator--canApplyFilterState': configuratorData.state.canApplyFilter,
-    'sat-securityDefinitionConfigurator--noMainCTAState': configuratorData.state.noMainCTA
+    'sat-securityDefinitionConfigurator--noMainCTAState': configuratorData.state.noMainCTA,
+    'sat-securityDefinitionConfigurator--filterShowingSelectedState': configuratorData.state.showFiltersFromDefinition?.data.filterOptionList.length > 5 && configuratorData.state.showFiltersFromDefinition?.data.highlightSelectedOptionList?.length > 0
   }">
   <section class="sat-securityDefinitionConfigurator__definitions">
     <ul class="sat-securityDefinitionConfigurator__definitions-list">
@@ -49,6 +48,22 @@
           [heroVariant]="true">
         </security-definition>
       </div>
+      <div class="sat-securityDefinitionConfigurator__filters-content-selectedListTitle">
+        <span class="sat-securityDefinitionConfigurator__filters-content-selectedListTitle-highlightedText">{{configuratorData.state.showFiltersFromDefinition?.data.highlightSelectedOptionList?.length}}</span>
+        <span class="sat-securityDefinitionConfigurator__filters-content-selectedListTitle-text">Selected</span>
+      </div>
+      <ul class="sat-securityDefinitionConfigurator__filters-content-optionList sat-securityDefinitionConfigurator__filters-content-optionList--selected">
+        <button
+          *ngFor="let eachOption of configuratorData.state.showFiltersFromDefinition?.data.highlightSelectedOptionList"
+          (click)="onClickFilterOption(eachOption)"
+          [ngClass]="{
+            'sat-securityDefinitionConfigurator__filters-content-optionList-item': true,
+            'sat-securityDefinitionConfigurator__filters-content-optionList-item--selected': eachOption.isSelected,
+            'sat-securityDefinitionConfigurator__filters-content-optionList-item--filteredOut': eachOption.isFilteredOut
+          }">
+          {{eachOption.displayLabel}}
+        </button>
+      </ul>
       <div class="sat-securityDefinitionConfigurator__filters-content-search">
         <santa-input
           [inputValue]="configuratorData.data.filterSearchInputValue"
@@ -56,14 +71,6 @@
           (onInputChange)="onSearchKeywordChange($event)">
         </santa-input>
       </div>
-      <santa-loadable-button
-        class="sat-securityDefinitionConfigurator__filters-content-loadLongOptionCta"
-        (onClickButton)="onClickLoadLongOptionListForDefinition(configuratorData.state.showFiltersFromDefinition)"
-        [isLoading]="configuratorData.state.isLoadingLongOptionListFromServer"
-        [columnLayout]="true"
-        [icon]="'fal fa-cloud-download'"
-        [text]="'Load Options'">
-      </santa-loadable-button>
       <ul class="sat-securityDefinitionConfigurator__filters-content-optionList">
         <button
           *ngFor="let eachOption of configuratorData.state.showFiltersFromDefinition?.data.filterOptionList"

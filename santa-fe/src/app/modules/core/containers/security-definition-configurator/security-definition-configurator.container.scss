@@ -89,7 +89,6 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       transform: translate(-125%, 0) scale(0.01, 1);
       &-closeBtn {
         @include mix_fixed_div(absolute, $z_index_hovering_item);
@@ -118,16 +117,29 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
         display: none;
         margin: 0 $spacing_medium;
       }
+      &-selectedListTitle {
+        display: none;
+        &-highlightedText {
+          @include mix_border_radius(3px);
+          background-color: $color_filter;
+          color: $font_color_inverse;
+          margin-right: $spacing_small;
+          padding: 0 $spacing_xx_small;
+        }
+        &-text {
+          color: $font_color_minor;
+        }
+      }
       &-optionList {
         @include mix_enable_scrollbar('vertical');
         display: flex;
         flex-wrap: wrap;
-        padding: $spacing_medium 0;
+        align-self: stretch;
         margin: 0 $spacing_small;
         &-item {
           flex: 0 1 100%;
           padding: $spacing_small $spacing_medium;
-          margin: $spacing_small $spacing_medium;
+          margin: $spacing_x_small $spacing_medium;
           font-size: $font_size_small;
           word-break: break-word;
           &--selected {
@@ -138,6 +150,13 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
           &--filteredOut {
             display: none;
           }
+        }
+        &--selected {
+          @include mix_border_generator(0 0 $typical_border_width 0);
+          flex: 0 0 auto;
+          display: none;
+          max-height: 11rem;
+          padding-bottom: $spacing_small;
         }
       }
     }
@@ -231,25 +250,15 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
       }
     }
   }
-  &--filterShowingLongDefinitionState {
+  &--filterShowingSelectedState {
     #{$securityDefinitionConfiguratorBlockName} {
       &__filters-content {
-        &-search {
-          display: none;
-        }
-        &-loadLongOptionCta {
+        &-selectedListTitle {
           display: flex;
         }
-        &-optionList {
-          display: none;
+        &-optionList--selected {
+          display: flex;
         }
-      }
-    }
-  }
-  &--filterLoadingLongOptionListState {
-    #{$securityDefinitionConfiguratorBlockName} {
-      &__definitions {
-
       }
     }
   }

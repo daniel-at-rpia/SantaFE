@@ -139,6 +139,9 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     if (this.configuratorData.state.groupByDisabled) {
       this.configuratorData.state.canApplyFilter = this.checkFilterCanApply();
     }
+    targetDefinition.data.highlightSelectedOptionList = targetDefinition.data.filterOptionList.filter((eachFilter) => {
+      return !!eachFilter.isSelected;
+    });
   }
 
   public onSearchKeywordChange(newKeyword) {
