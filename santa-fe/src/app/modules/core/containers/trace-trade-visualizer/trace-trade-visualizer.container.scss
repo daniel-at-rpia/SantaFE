@@ -1,5 +1,9 @@
 @import "global.scss";
 
+button {
+  @extend .santaBtn;
+}
+
 @mixin mix_tradeVisualizer_cell_style() {
   justify-content: center;
   align-items: center;
@@ -109,6 +113,67 @@
           }
           &:hover {
             background-color: $color_active;
+          }
+        }
+      }
+    }
+  }
+  &__graphs {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-width: 50rem;
+    margin: 0 $spacing_small;
+    &-scatterGraph,
+    &-pieGraph {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: $spacing_small;
+      overflow: hidden;
+      &-title {
+        flex: 0 0 auto;
+        text-align: center;
+        font-size: $font_size_normal;
+        color: $font_color_inverse;
+        margin-bottom: $spacing_small;
+      }
+      &-graphContainer {
+        @include mix_border_radius(10px);
+        flex: 1 1 auto;
+        display: flex;
+        background-color: $color_white;
+        overflow: hidden;
+        padding: $spacing_x_small;
+        &-content {
+          @include mix_alive('light');
+          flex: 1 1 auto;
+          transform: scale(0.001);
+        }
+      }
+    }
+    &-scatterGraph {
+      flex: 0 0 50%;
+    }
+    &-pieGraph {
+      display: flex;
+      justify-content: center;
+      width: 50%;
+      &-title {
+        margin: 0 auto $spacing_small;
+      }
+    }
+  }
+  &--displayGraphsState {
+    #{$blockName} {
+      &__graphs {
+        &-scatterGraph,
+        &-pieGraph {
+          &-graphContainer {
+            &-content {
+              transform: scale(1);
+            }
           }
         }
       }

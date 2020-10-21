@@ -1601,27 +1601,27 @@ export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
   {
     headerKey: 'eventTime',
     headerDisplayLabel: 'Date & Time',
-    attrName: 'eventTime',
+    attrName: 'parsedEventTime',
     size: 8
   },{
     headerKey: 'counterParty',
     headerDisplayLabel: 'Counter Party',
     attrName: 'counterParty',
-    size: 10
+    size: 7
   },{
     headerKey: 'side',
     headerDisplayLabel: 'Side',
     attrName: 'side',
     applyQuantColorCodes: true
   },{
-    headerKey: 'volumeEstimated',
-    headerDisplayLabel: 'Volume (Estimated)',
-    attrName: 'volumeEstimated',
-    size: 10,
+    headerKey: 'displayVolumeEstimated',
+    headerDisplayLabel: 'Vol (Estimated)',
+    attrName: 'displayVolumeEstimated',
+    size: 8,
   },{
-    headerKey: 'volumeActual',
-    headerDisplayLabel: 'Volume (Actual)',
-    attrName: 'volumeActual',
+    headerKey: 'displayVolumeReported',
+    headerDisplayLabel: 'Vol (Reported)',
+    attrName: 'displayVolumeReported',
     size: 8
   },{
     headerKey: 'price',
@@ -1645,18 +1645,16 @@ export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
     headerKey: 'gSpread',
     headerDisplayLabel: 'G Sprd',
     attrName: 'gSpread',
-    size: 5
   },{
     headerKey: 'iSpread',
     headerDisplayLabel: 'I Sprd',
     attrName: 'iSpread',
-    size: 5
   },
   {
     headerKey: 'parSpread',
     headerDisplayLabel: 'Par Sprd',
     attrName: 'parSpread',
-    size: 5
+    size: 4
   }
 ]
 
@@ -1673,3 +1671,5 @@ export enum TradeSideValueEquivalent {
   Bid = 'Buy',
   Ask = 'Sell'
 }
+
+export const TraceTradeCounterPartyList: Array<TraceTradeCounterParty> = [TraceTradeCounterParty.D, TraceTradeCounterParty.C, TraceTradeCounterParty.A, TraceTradeCounterParty.T];
