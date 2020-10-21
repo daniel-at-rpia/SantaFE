@@ -309,10 +309,9 @@ export class SantaTable implements OnInit, OnChanges {
           selectedPinnedRow.rowDTO.state.viewTraceState = false;
           if (!!selectedPinnedRow.rowDTO.data.traceTradeVisualizer) {
             selectedPinnedRow.rowDTO.data.traceTradeVisualizer.state.graphReceived = false;
-            if (!!selectedPinnedRow.rowDTO.data.traceTradeVisualizer.state.isDisplayAllTraceTrades) {
-              selectedPinnedRow.rowDTO.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = false;
-              selectedPinnedRow.rowDTO.data.traceTradeVisualizer.data.displayList =  selectedPinnedRow.rowDTO.data.security.data.traceTrades.filter((row, i) => i < TRACE_INITIAL_LIMIT);
-            }
+            selectedPinnedRow.rowDTO.data.traceTradeVisualizer.state.selectedFiltersList = [];
+            selectedPinnedRow.rowDTO.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = false;
+            selectedPinnedRow.rowDTO.data.traceTradeVisualizer.data.displayList = selectedPinnedRow.rowDTO.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT ? selectedPinnedRow.rowDTO.data.security.data.traceTrades.filter((row, i) => i < TRACE_INITIAL_LIMIT) : selectedPinnedRow.rowDTO.data.security.data.traceTrades;
           }
         }
       }

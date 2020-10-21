@@ -80,9 +80,10 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     }
     this.rowData.state.viewTraceState = false;
     this.rowData.state.viewHistoryState = false;
-    if (!!this.rowData.data.traceTradeVisualizer && !!this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades) {
+    if (!!this.rowData.data.traceTradeVisualizer) {
       this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = false;
-      this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.security.data.traceTrades.filter((row, i) => i < TRACE_INITIAL_LIMIT);
+      this.rowData.data.traceTradeVisualizer.state.selectedFiltersList = [];
+      this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT ? this.rowData.data.security.data.traceTrades.filter((row, i) => i < TRACE_INITIAL_LIMIT) : this.rowData.data.security.data.traceTrades;
     }
   }
 
