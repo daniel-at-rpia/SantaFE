@@ -44,14 +44,15 @@
       BICsLevel1DefinitionList
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
-      QuoteHeaderConfigList
+      QuoteHeaderConfigList,
+      TraceTradeCounterParty,
+      TradeSideValueEquivalent
     } from 'Core/constants/securityTableConstants.constant';
     import {
       AxeAlertScope,
       AxeAlertType,
       TRACE_INITIAL_LIMIT
     } from 'Core/constants/tradeConstants.constant';
-    import { TraceTradeCounterParty, TradeSideValueEquivalent } from 'Core/constants/securityTableConstants.constant';
     import { PortfolioShortNames, PortfolioMetricValues, PortfolioView, PortfolioBreakdownGroupOptions } from 'Core/constants/structureConstants.constants';
   //
 
@@ -2192,11 +2193,15 @@ export class DTOService {
 
   public formTraceTradeBlockObject(rawData: BEModels.BETraceTradesBlock, targetSecurity: DTOs.SecurityDTO) {
     const object: Blocks.TraceTradeBlock = {
-      eventTime: moment(rawData.eventTime).format(`YY MMM DD - HH:mm`),
+      traceTradeId: rawData.traceTradeID,
+      eventTime: rawData.eventTime,
+      parsedEventTime: moment(rawData.eventTime).format(`YY MMM DD - HH:mm`),
       counterParty: TraceTradeCounterParty[rawData.counterParty],
       side: TradeSideValueEquivalent[rawData.side],
       volumeEstimated: rawData.volumeEstimated,
-      volumeActual: rawData.volumeActual,
+      volumeReported: rawData.volumeActual,
+      displayVolumeEstimated: !!rawData.volumeEstimated ? this.utility.parseNumberToCommas(rawData.volumeEstimated) : null,
+      displayVolumeReported: !!rawData.volumeActual ? this.utility.parseNumberToCommas(rawData.volumeActual) : null,
       price: this.utility.parseTriCoreDriverNumber(rawData.price, TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
       yield: this.utility.parseTriCoreDriverNumber(rawData.yield, TriCoreDriverConfig.Yield.label, targetSecurity, false) as number,
       spread: this.utility.parseTriCoreDriverNumber(rawData.spread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
@@ -2208,22 +2213,28 @@ export class DTOService {
     return object;
   }
 
-  public formTraceTradesVisualizerDTO(data: Array<Blocks.TraceTradeBlock>): DTOs.TraceTradesVisualizerDTO {
+  public formTraceTradesVisualizerDTO(targetRow: DTOs.SecurityTableRowDTO): DTOs.TraceTradesVisualizerDTO {
     const object = {
       data: {
-        pristineTradeList: data,
-        displayList: []
+        displayList: [],
+        scatterGraphId: `${targetRow.data.rowId}-scatterGraph`,
+        pieGraphId: `${targetRow.data.rowId}-pieGraphId`,
+        filterList: [],
+        availableFiltersList: []
       },
       state: {
-        isDisplayAllTraceTrades: false
+        isDisplayAllTraceTrades: false,
+        graphReceived: false,
+        selectedFiltersList: []
       },
       graph: {
-        timeSeries: null,
-        pieChart: null
+        scatterGraph: null,
+        pieGraph: null
       }
     }
-    if (object.data.pristineTradeList.length > 0) {
-      object.data.pristineTradeList.sort((tradeA, tradeB) => {
+
+    if (targetRow.data.security.data.traceTrades.length > 0) {
+      targetRow.data.security.data.traceTrades.sort((tradeA, tradeB) => {
         if (tradeA.eventTime > tradeB.eventTime) {
           return -1
         } else if (tradeB.eventTime > tradeA.eventTime) {
@@ -2232,7 +2243,8 @@ export class DTOService {
           return 0;
         }
       })
-      object.data.displayList = object.data.pristineTradeList.length > TRACE_INITIAL_LIMIT ? object.data.pristineTradeList.filter((row, i) => i < TRACE_INITIAL_LIMIT) : object.data.pristineTradeList;
+
+      object.data.displayList = targetRow.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT ? targetRow.data.security.data.traceTrades.filter((trade, i) => i < TRACE_INITIAL_LIMIT) : targetRow.data.security.data.traceTrades;
     }
     return object;
   }

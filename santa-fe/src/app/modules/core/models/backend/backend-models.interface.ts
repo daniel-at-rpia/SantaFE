@@ -677,10 +677,11 @@ export interface BETraceTradesBlock {
   price: number;
   publishingTime: string;
   securityID: number;
+  sequenceNumber: number;
   settleDate: string;
   side: string;
   spread: number;
-  traceTableID: string;
+  traceTradeID: string;
   tradeTradeRefID: string;
   type: string;
   volumeActual: number;

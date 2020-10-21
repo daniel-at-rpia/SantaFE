@@ -1,6 +1,7 @@
 <article *ngIf="!!traceTrades"
   [ngClass]="{
-    'sat-traceTradeVisualizer': true
+    'sat-traceTradeVisualizer': true,
+    'sat-traceTradeVisualizer--displayGraphsState': traceTrades.state.graphReceived
   }">
   <section class="sat-traceTradeVisualizer__table">
     <div class="sat-traceTradeVisualizer__table-utility">
@@ -11,7 +12,7 @@
         <li class="sat-traceTradeVisualizer__table-header-list-item" 
           *ngFor="let eachHeader of constants.headerConfigList"
           [ngStyle]="{
-            'width': eachHeader.size ? eachHeader.size + 'rem' : '4rem' 
+            'width': eachHeader.size ? eachHeader.size + 'rem' : '3.5rem'
           }">
           <span class="sat-traceTradeVisualizer__table-header-list-item-text">{{ eachHeader.headerDisplayLabel }}</span>
         </li>
@@ -23,7 +24,7 @@
         *ngFor="let eachTrade of traceTrades.data.displayList">
           <div class="sat-traceTradeVisualizer__table-content-rowList-item-cell" *ngFor="let eachHeader of constants.headerConfigList"
           [ngStyle]="{
-            'width': eachHeader.size ? eachHeader.size + 'rem' : '4rem' 
+            'width': eachHeader.size ? eachHeader.size + 'rem' : '3.5rem'
           }">
             <span [ngClass]="{
               'sat-traceTradeVisualizer__table-content-rowList-item-cell-text': true,
@@ -33,6 +34,22 @@
           </div>
         </li>
       </ul>
+    </div>
+  </section>
+  <section class="sat-traceTradeVisualizer__graphs">
+    <div class="sat-traceTradeVisualizer__graphs-scatterGraph">
+      <span class="sat-traceTradeVisualizer__graphs-scatterGraph-title">Buy vs Sell</span>
+      <div class="sat-traceTradeVisualizer__graphs-scatterGraph-graphContainer">
+        <div class="sat-traceTradeVisualizer__graphs-scatterGraph-graphContainer-content" id="{{ traceTrades.data.scatterGraphId }}"></div>
+      </div>
+    </div>
+    <div class="sat-traceTradeVisualizer__graphs-pieGraph">
+      <span class="sat-traceTradeVisualizer__graphs-pieGraph-title">
+        Volume Per Counter Party
+      </span>
+      <div class="sat-traceTradeVisualizer__graphs-pieGraph-graphContainer">
+        <div class="sat-traceTradeVisualizer__graphs-pieGraph-graphContainer" id="{{ traceTrades.data.pieGraphId }}"></div>
+      </div>
     </div>
   </section>
 </article>
