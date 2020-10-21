@@ -5,6 +5,7 @@ import {
   SecurityMetricOptionStub,
   SearchShortcutStub
 } from 'FEModels/frontend-stub-models.interface';
+import { TraceTradeCounterParty, traceTradeFilterMillion, traceTradeFilterFiveMillion, TraceTradeCounterPartyList } from 'Core/constants/securityTableConstants.constant';
 
 import { APIUrlMap } from 'Core/constants/coreConstants.constant';
 
