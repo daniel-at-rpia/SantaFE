@@ -8,7 +8,7 @@
     import { UtilityService } from 'Core/services/UtilityService';
     import { SecurityDefinitionConfiguratorDTO,SecurityDefinitionDTO } from 'FEModels/frontend-models.interface';
     import { SecurityDefinitionFilterBlock } from 'FEModels/frontend-blocks.interface';
-    import { ConfiguratorDefinitionLayout } from 'Core/constants/securityDefinitionConstants.constant';
+    import { ConfiguratorDefinitionLayout, SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       DefinitionConfiguratorEmitterParams,
       DefinitionConfiguratorEmitterParamsItem
@@ -31,6 +31,9 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   lastExecutedConfiguration: SecurityDefinitionConfiguratorDTO;
   @Output() buryConfigurator = new EventEmitter();
   @Output() boostConfigurator = new EventEmitter();
+  constants = {
+    map: SecurityDefinitionMap
+  }
 
   constructor(
     private dtoService: DTOService,
@@ -57,6 +60,13 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         });
       }
       this.lastExecutedConfiguration = this.utilityService.deepCopy(this.configuratorData);
+      this.configuratorData.data.definitionList.forEach((eachBundle) => {
+        eachBundle.data.list.forEach((eachDefinition) => {
+          if (eachDefinition.data.key === this.constants.map.COUNTRY.key) {
+            this.fetchCountryCode(eachDefinition);
+          }
+        })
+      })
     }
   }
 
@@ -214,6 +224,19 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         return eachBundle.data.list.length > 0;
       });
     }
+  }
+
+  private fetchCountryCode(targetDefinition: SecurityDefinitionDTO) {
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getCountries, {req: 'GET'}).pipe(
+      first(),
+      tap((serverReturn: Array<string>) => {
+        targetDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(this.constants.map.COUNTRY.key, serverReturn);
+      }),
+      catchError(err => {
+        this.restfulCommService.logError('Cannot retrieve country data');
+        return of('error');
+      })
+    ).subscribe();
   }
 
 }
