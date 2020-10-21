@@ -537,3 +537,12 @@ export const RatingValueToLevelMapping = [
     values: ['NR']
   }
 ];
+
+export const FilterTraceTradesOptions = [
+  TraceTradeCounterParty.D,
+  TraceTradeCounterParty.C,
+  TraceTradeCounterParty.A,
+  TraceTradeCounterParty.T,
+  `≥ ${traceTradeFilterMillion}`,
+  `≥ ${traceTradeFilterFiveMillion}`
+]

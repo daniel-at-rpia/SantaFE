@@ -1672,4 +1672,10 @@ export enum TradeSideValueEquivalent {
   Ask = 'Sell'
 }
 
+export const traceTradeFilterMillion = '1M';
+
+export const traceTradeFilterFiveMillion = '5M';
+
+export const traceTradeFilterBaseAmount = 1000000;
+
 export const TraceTradeCounterPartyList: Array<TraceTradeCounterParty> = [TraceTradeCounterParty.D, TraceTradeCounterParty.C, TraceTradeCounterParty.A, TraceTradeCounterParty.T];
