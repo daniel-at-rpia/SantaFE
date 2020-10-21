@@ -11,6 +11,7 @@ import { ModalService } from 'Form/services/ModalService';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
 import { PortfolioBreakdownDTO, TargetBarDTO } from 'FEModels/frontend-models.interface';
 import { StructureSendSetTargetTransferEvent} from 'Structure/actions/structure.actions';
+import { StructuringTeamPMList } from 'Core/constants/securityDefinitionConstants.constant';
 
 @Component({
   selector: 'structure-fund',
@@ -25,7 +26,8 @@ export class StructureFund implements OnInit {
   constants = {
     cs01: PortfolioMetricValues.cs01,
     creditLeverage: PortfolioMetricValues.creditLeverage,
-    editModalId: STRUCTURE_EDIT_MODAL_ID
+    editModalId: STRUCTURE_EDIT_MODAL_ID,
+    structuringTeamPMList: StructuringTeamPMList
   }
   subscriptions = {
     ownerInitialsSub: null
@@ -42,7 +44,7 @@ export class StructureFund implements OnInit {
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
       select(selectUserInitials)
     ).subscribe((value) => {
-      this.fund.state.isEditAvailable = value === 'DM';
+      this.fund.state.isEditAvailable = this.constants.structuringTeamPMList.indexOf(value) >= 0;
     });
     this.fund.api.onSubmitMetricValues = this.saveEditDetails.bind(this);
   }

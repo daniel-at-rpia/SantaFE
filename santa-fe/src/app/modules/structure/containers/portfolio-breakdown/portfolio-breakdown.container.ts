@@ -11,6 +11,8 @@ import { selectUserInitials } from 'Core/selectors/core.selectors';
 import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 import { DTOService } from 'Core/services/DTOService';
 import { PortfolioBreakdownCategoryBlock } from 'Core/models/frontend/frontend-blocks.interface'; 
+import { StructuringTeamPMList } from 'Core/constants/securityDefinitionConstants.constant';
+
 @Component({
   selector: 'portfolio-breakdown',
   templateUrl: './portfolio-breakdown.container.html',
@@ -26,7 +28,8 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     ownerInitialsSub: null
   };
   constants = {
-    editModalId: STRUCTURE_EDIT_MODAL_ID
+    editModalId: STRUCTURE_EDIT_MODAL_ID,
+    structuringTeamPMList: StructuringTeamPMList
   }
 
   constructor(
@@ -41,7 +44,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
       select(selectUserInitials)
     ).subscribe((initials) => {
-      this.breakdownData.state.isEditable = initials === 'DM';
+      this.breakdownData.state.isEditable = this.constants.structuringTeamPMList.indexOf(initials) >= 0;
     });
   }
 
