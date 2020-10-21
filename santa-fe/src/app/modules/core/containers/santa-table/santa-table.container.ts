@@ -942,7 +942,18 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   private getAllTraceTrades(targetRow: SecurityTableRowDTO) {
-    const previousTraceTradesDisplayState = !!targetRow.data.traceTradeVisualizer ? targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades : null;
+    const previousTraceTradesDisplayAllState = !!targetRow.data.traceTradeVisualizer ? targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades : false;
+    const previousSelectedFilters = !!targetRow.data.traceTradeVisualizer && targetRow.data.traceTradeVisualizer.state.selectedFiltersList.length > 0 ? targetRow.data.traceTradeVisualizer.state.selectedFiltersList : [];
+    const previousDisplayListCopy = previousSelectedFilters.length > 0 ? this.utilityService.deepCopy(targetRow.data.traceTradeVisualizer.data.displayList) : [];
+    const setPreviousFilteredDisplayList = (row: SecurityTableRowDTO, traceData: Array<TraceTradeBlock>) => {
+      row.data.traceTradeVisualizer.state.selectedFiltersList = previousSelectedFilters;
+      const previousDisplayList = [];
+      previousDisplayListCopy.forEach(copy => {
+        const equivalentNewTrade = traceData.find(newTrade => newTrade.traceTradeId === copy.traceTradeId);
+        !!equivalentNewTrade && previousDisplayList.push(equivalentNewTrade);
+      })
+      row.data.traceTradeVisualizer.data.displayList = previousDisplayList;
+    }
     const securityID = targetRow.data.security.data.securityID;
     const payload: PayloadGetAllTraceTrades = {
       "identifiers":  [securityID]
@@ -959,9 +970,17 @@ export class SantaTable implements OnInit, OnChanges {
             const traceTradeData: Array<TraceTradeBlock> = rawDataTrades.map(trade => this.dtoService.formTraceTradeBlockObject(trade, targetRow.data.security));
             targetRow.data.security.data.traceTrades = traceTradeData;
             targetRow.data.traceTradeVisualizer = this.dtoService.formTraceTradesVisualizerDTO(targetRow);
-            targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = !!previousTraceTradesDisplayState;
-            if (!!previousTraceTradesDisplayState) {
-              targetRow.data.traceTradeVisualizer.data.displayList = targetRow.data.security.data.traceTrades
+            targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = !!previousTraceTradesDisplayAllState;
+            if (!!previousTraceTradesDisplayAllState) {
+              if (previousDisplayListCopy.length > 0) {
+                setPreviousFilteredDisplayList(targetRow, targetRow.data.security.data.traceTrades)
+              } else {
+                targetRow.data.traceTradeVisualizer.data.displayList = targetRow.data.security.data.traceTrades;
+              }
+            } else {
+              if(previousDisplayListCopy.length > 0) {
+                setPreviousFilteredDisplayList(targetRow, targetRow.data.traceTradeVisualizer.data.displayList);
+              }
             }
           }
         }
