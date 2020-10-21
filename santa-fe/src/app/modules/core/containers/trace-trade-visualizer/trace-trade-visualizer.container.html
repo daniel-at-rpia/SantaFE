@@ -5,7 +5,15 @@
   }">
   <section class="sat-traceTradeVisualizer__table">
     <div class="sat-traceTradeVisualizer__table-utility">
-      <span class="sat-traceTradeVisualizer__table-utility-label">Filter By Counter Party:</span>
+      <span class="sat-traceTradeVisualizer__table-utility-label">Show Trades By: </span>
+      <button *ngFor="let option of traceTrades.data.filterList" (click)="onToggleTraceFilters(option)"
+      [ngClass]="{
+        'sat-traceTradeVisualizer__table-utility-btn': true,
+        'sat-traceTradeVisualizer__table-utility-btn--disabled': traceTrades.data.availableFiltersList.indexOf(option) < 0,
+        'sat-traceTradeVisualizer__table-utility-btn--selected': traceTrades.state.selectedFiltersList.indexOf(option) >= 0
+        }">
+        {{ option }}
+      </button>
     </div>
     <div class="sat-traceTradeVisualizer__table-header">
       <ul class="sat-traceTradeVisualizer__table-header-list">

@@ -29,7 +29,11 @@
       SECURITY_TABLE_QUOTE_TYPE_RUN,
       SECURITY_TABLE_QUOTE_TYPE_AXE,
       AGGRID_ROW_HEIGHT,
-      AGGRID_ROW_HEIGHT_SLIM
+      AGGRID_ROW_HEIGHT_SLIM,
+      TraceTradeCounterPartyList,
+      traceTradeFilterMillion,
+      traceTradeFilterFiveMillion,
+      traceTradeFilterBaseAmount
     } from 'Core/constants/securityTableConstants.constant';
     import {
       GroupMetricOptions
@@ -41,7 +45,8 @@
       FilterOptionsCurrency,
       FilterOptionsRating,
       FilterOptionsTenor,
-      BICsLevel1DefinitionList
+      BICsLevel1DefinitionList,
+      FilterTraceTradesOptions
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       QuoteHeaderConfigList,
@@ -2219,7 +2224,7 @@ export class DTOService {
         displayList: [],
         scatterGraphId: `${targetRow.data.rowId}-scatterGraph`,
         pieGraphId: `${targetRow.data.rowId}-pieGraphId`,
-        filterList: [],
+        filterList: FilterTraceTradesOptions,
         availableFiltersList: []
       },
       state: {
@@ -2246,6 +2251,20 @@ export class DTOService {
 
       object.data.displayList = targetRow.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT ? targetRow.data.security.data.traceTrades.filter((trade, i) => i < TRACE_INITIAL_LIMIT) : targetRow.data.security.data.traceTrades;
     }
+    const traceFilterMillion = traceTradeFilterBaseAmount;
+    const traceFilterFiveMillion = traceTradeFilterBaseAmount * 5;
+    object.data.filterList.forEach(option => {
+      if (option.includes(traceTradeFilterMillion)) {
+        const tradeVolumeOverMillion = object.data.displayList.find((trade:Blocks.TraceTradeBlock) => !!trade.volumeEstimated ? trade.volumeEstimated >= traceFilterMillion : trade.volumeReported >= traceFilterMillion);
+        !!tradeVolumeOverMillion && object.data.availableFiltersList.push(option);
+      } else if (option.includes(traceTradeFilterFiveMillion)) {
+        const tradeVolumeOverFiveMillion = object.data.displayList.find((trade:Blocks.TraceTradeBlock) => !!trade.volumeEstimated ? trade.volumeEstimated >= traceFilterFiveMillion : trade.volumeReported >= traceFilterFiveMillion);
+        !!tradeVolumeOverFiveMillion && object.data.availableFiltersList.push(option);
+      } else {
+        const isCounterPartyAvailable = object.data.displayList.find(trade => trade.counterParty === option);
+        !!isCounterPartyAvailable && object.data.availableFiltersList.push(option);
+      }
+    })
     return object;
   }
 
