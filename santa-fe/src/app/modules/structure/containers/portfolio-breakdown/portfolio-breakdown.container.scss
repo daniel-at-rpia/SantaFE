@@ -138,10 +138,8 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
     left: 0;
     bottom: 0 - $iconButton_size_regular/2;
     width: 100%;
-    &-editBtn {
-      margin-right: $spacing_large;
-    }
     &-viewBtn {
+      display: none;
       &-icon {
         display: flex;
         &-up {
@@ -214,6 +212,18 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
         }
         &-text {
           color: $font_color_major;
+        }
+      }
+    }
+  }
+  &--isEditingViewAvailableState {
+    #{$blockName} {
+      &__ctas {
+        &-editBtn {
+          margin-right: $spacing_large;
+        }
+        &-viewBtn {
+          display: flex;
         }
       }
     }

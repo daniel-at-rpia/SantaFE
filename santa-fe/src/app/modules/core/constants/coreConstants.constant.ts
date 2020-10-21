@@ -251,7 +251,8 @@ export const EngagementActionList = {
   tradeAlertClickedTab: 'Trade Alert Click Tab',
   santaTableAllQuotesDisplayTradeHistory: 'Switch To Display Trade History',
   santaTableAllQuotesDisplayQuotes: 'Switch To Display Quotes',
-  santaTableAllQuotesDisplayTrace: 'Switch To Display Trace Data'
+  santaTableAllQuotesDisplayTrace: 'Switch To Display Trace Data',
+  portfolioStructureSetView: 'Portfolio Breakdown Category View Set'
 }
 
 export enum AlertTypes {

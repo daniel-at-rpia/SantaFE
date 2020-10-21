@@ -10,7 +10,8 @@ import { UtilityService } from 'Core/services/UtilityService';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
 import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 import { DTOService } from 'Core/services/DTOService';
-import { PortfolioBreakdownCategoryBlock } from 'Core/models/frontend/frontend-blocks.interface'; 
+import { PortfolioBreakdownCategoryBlock } from 'Core/models/frontend/frontend-blocks.interface';
+import { editingViewAvailableUsers } from 'Core/constants/securityDefinitionConstants.constant';
 @Component({
   selector: 'portfolio-breakdown',
   templateUrl: './portfolio-breakdown.container.html',
@@ -42,6 +43,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       select(selectUserInitials)
     ).subscribe((initials) => {
       this.breakdownData.state.isEditable = initials === 'DM';
+      this.breakdownData.state.isEditingViewAvail = editingViewAvailableUsers.includes(initials);
     });
   }
 
