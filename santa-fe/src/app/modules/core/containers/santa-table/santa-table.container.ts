@@ -258,7 +258,7 @@ export class SantaTable implements OnInit, OnChanges {
                 this.fetchSecurityQuotes(targetRow, params);
                 const isTraceSecurity = this.utilityService.checkIfTraceIsAvailable(targetRow);
                 if (!!isTraceSecurity) {
-                  this.getAllTraceTrades(targetRow)
+                  this.getAllTraceTrades(targetRow, !!params.rowPinned)
                 }
               } else {
                 targetRow.state.presentingAllQuotes = false;
@@ -395,10 +395,6 @@ export class SantaTable implements OnInit, OnChanges {
           const fullWidthCell: AgGridRow = this.utilityService.deepCopy(copy);
           fullWidthCell.id = `${fullWidthCell.id}-${this.constants.agGridPinnedFullWidthRowKeyword}`;
           fullWidthCell.isFullWidth = true;
-          if (!!fullWidthCell.rowDTO.data.traceTradeVisualizer) {
-            fullWidthCell.rowDTO.data.traceTradeVisualizer.data.pieGraphId = `${fullWidthCell.id}-pieGraphId`;
-            fullWidthCell.rowDTO.data.traceTradeVisualizer.data.scatterGraphId = `${fullWidthCell.id}-scatterGraphId`;
-          }
           fullWidthCell.rowDTO.style.rowHeight = 0;
           this.tableData.data.agGridPinnedTopRowData.push(fullWidthCell);
         }
@@ -666,7 +662,7 @@ export class SantaTable implements OnInit, OnChanges {
           this.fetchSecurityQuotes(eachAgGridRow.rowDTO);
           const isTraceSecurity = this.utilityService.checkIfTraceIsAvailable(eachAgGridRow.rowDTO);
           if (!!isTraceSecurity) {
-            this.getAllTraceTrades(eachAgGridRow.rowDTO);
+            this.getAllTraceTrades(eachAgGridRow.rowDTO, true);
           }
         } catch {
           console.warn('read only issue at live updating all quotes in pinned rows', eachAgGridRow);
@@ -941,7 +937,7 @@ export class SantaTable implements OnInit, OnChanges {
     }, 3000);
   }
 
-  private getAllTraceTrades(targetRow: SecurityTableRowDTO) {
+  private getAllTraceTrades(targetRow: SecurityTableRowDTO, isPinnedFullWidth: boolean = false) {
     const previousTraceTradesDisplayAllState = !!targetRow.data.traceTradeVisualizer ? targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades : false;
     const previousSelectedFilters = !!targetRow.data.traceTradeVisualizer && targetRow.data.traceTradeVisualizer.state.selectedFiltersList.length > 0 ? targetRow.data.traceTradeVisualizer.state.selectedFiltersList : [];
     const previousDisplayListCopy = previousSelectedFilters.length > 0 ? this.utilityService.deepCopy(targetRow.data.traceTradeVisualizer.data.displayList) : [];
@@ -969,7 +965,7 @@ export class SantaTable implements OnInit, OnChanges {
           if (rawDataTrades.length > 0) {
             const traceTradeData: Array<TraceTradeBlock> = rawDataTrades.map(trade => this.dtoService.formTraceTradeBlockObject(trade, targetRow.data.security));
             targetRow.data.security.data.traceTrades = traceTradeData;
-            targetRow.data.traceTradeVisualizer = this.dtoService.formTraceTradesVisualizerDTO(targetRow);
+            targetRow.data.traceTradeVisualizer = this.dtoService.formTraceTradesVisualizerDTO(targetRow, isPinnedFullWidth);
             targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = !!previousTraceTradesDisplayAllState;
             if (!!previousTraceTradesDisplayAllState) {
               if (previousDisplayListCopy.length > 0) {

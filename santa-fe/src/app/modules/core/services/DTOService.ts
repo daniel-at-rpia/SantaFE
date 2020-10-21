@@ -33,7 +33,8 @@
       TraceTradeCounterPartyList,
       traceTradeFilterMillion,
       traceTradeFilterFiveMillion,
-      traceTradeFilterBaseAmount
+      traceTradeFilterBaseAmount,
+      AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD
     } from 'Core/constants/securityTableConstants.constant';
     import {
       GroupMetricOptions
@@ -2219,12 +2220,12 @@ export class DTOService {
     return object;
   }
 
-  public formTraceTradesVisualizerDTO(targetRow: DTOs.SecurityTableRowDTO): DTOs.TraceTradesVisualizerDTO {
+  public formTraceTradesVisualizerDTO(targetRow: DTOs.SecurityTableRowDTO, isPinnedFullWidth: boolean = false): DTOs.TraceTradesVisualizerDTO {
     const object = {
       data: {
         displayList: [],
-        scatterGraphId: `${targetRow.data.rowId}-scatterGraph`,
-        pieGraphId: `${targetRow.data.rowId}-pieGraphId`,
+        scatterGraphId: !isPinnedFullWidth ? `${targetRow.data.rowId}-scatterGraph` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-scatterGraph`,
+        pieGraphId: !isPinnedFullWidth ? `${targetRow.data.rowId}-pieGraphId` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-pieGraphId`,
         filterList: FilterTraceTradesOptions,
         availableFiltersList: []
       },
