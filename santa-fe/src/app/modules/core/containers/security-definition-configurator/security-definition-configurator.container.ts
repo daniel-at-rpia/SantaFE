@@ -65,8 +65,11 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
           if (eachDefinition.data.key === this.constants.map.COUNTRY.key) {
             this.fetchCountryCode(eachDefinition);
           }
+          if (eachDefinition.data.key === this.constants.map.TICKER.key) {
+            this.fetchTicker(eachDefinition);
+          }
         })
-      })
+      });
     }
   }
 
@@ -231,6 +234,19 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       first(),
       tap((serverReturn: Array<string>) => {
         targetDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(this.constants.map.COUNTRY.key, serverReturn);
+      }),
+      catchError(err => {
+        this.restfulCommService.logError('Cannot retrieve country data');
+        return of('error');
+      })
+    ).subscribe();
+  }
+
+  private fetchTicker(targetDefinition: SecurityDefinitionDTO) {
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getTickers, {req: 'GET'}).pipe(
+      first(),
+      tap((serverReturn: Array<string>) => {
+        targetDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(this.constants.map.TICKER.key, serverReturn);
       }),
       catchError(err => {
         this.restfulCommService.logError('Cannot retrieve country data');

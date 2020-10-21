@@ -450,7 +450,14 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-industry-alt',
     optionList: [],
     securityDTOAttr: 'bicsLevel4'
-  }
+  },
+  TICKER: {
+    key: 'TICKER',
+    displayName: 'Ticker',
+    icon: 'fas fa-user-tie',
+    optionList: [],
+    securityDTOAttr: 'ticker'
+  },
 };
 
 export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> = [
