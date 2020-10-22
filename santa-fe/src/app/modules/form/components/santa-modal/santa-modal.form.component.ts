@@ -3,7 +3,9 @@ import { Component, ViewEncapsulation, ElementRef, Input, OnInit, OnDestroy, OnC
 import { DTOService } from 'Core/services/DTOService';
 import { SantaModalDTO } from 'FEModels/frontend-models.interface';
 import { ModalService } from 'Form/services/ModalService';
-
+import { Store, select } from '@ngrx/store';
+import { selectSetTargetTransferPack } from 'Structure/selectors/structure.selectors';
+import { StructureSetTargetOverlayTransferPack } from 'FEModels/frontend-adhoc-packages.interface';
 @Component({ 
   selector: 'santa-modal', 
   templateUrl: 'santa-modal.form.component.html', 
@@ -14,11 +16,15 @@ import { ModalService } from 'Form/services/ModalService';
 export class SantaModal implements OnInit, OnDestroy {
   @Input() modalId: string;
   public modalData: SantaModalDTO;
-
+  public modalTitle: string = 'Edit Data'
+  subscriptions = {
+    editStructurePortfolioSub: null
+  }
   constructor(
     private elementRef: ElementRef,
     private dtoService: DTOService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private store$: Store<any>
   ){}
 
   public ngOnInit() {
@@ -34,6 +40,13 @@ export class SantaModal implements OnInit, OnDestroy {
       document.body.removeChild(this.modalData.data.modalElement);
       this.modalData.data.modalElement = this.elementRef.nativeElement;
     }
+    this.subscriptions.editStructurePortfolioSub = this.store$.pipe(
+      select(selectSetTargetTransferPack)
+    ).subscribe((updatePack: StructureSetTargetOverlayTransferPack) => {
+      if (!!updatePack) {
+        this.modalTitle = `${updatePack.targetFund.data.portfolioShortName} - ${this.modalData.data.id}`
+      }
+    });
     document.body.appendChild(this.modalData.data.modalElement);
   }
 
