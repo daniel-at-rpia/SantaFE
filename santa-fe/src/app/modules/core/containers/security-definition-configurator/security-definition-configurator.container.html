@@ -71,7 +71,7 @@
           (onInputChange)="onSearchKeywordChange($event)">
         </santa-input>
       </div>
-      <ul class="sat-securityDefinitionConfigurator__filters-content-optionList">
+      <ul class="sat-securityDefinitionConfigurator__filters-content-optionList sat-securityDefinitionConfigurator__filters-content-optionList--regular">
         <button
           *ngFor="let eachOption of configuratorData.state.showFiltersFromDefinition?.data.filterOptionList"
           (click)="onClickFilterOption(eachOption)"
@@ -82,6 +82,19 @@
           }">
           {{eachOption.displayLabel}}
         </button>
+      </ul>
+      <ul class="sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList">
+        <div
+          *ngFor="let eachOption of configuratorData.state.showFiltersFromDefinition?.data.filterOptionList"
+          [ngClass]="{
+            'sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item': true,
+            'sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item--selected': eachOption.isSelected
+          }">
+          <button class="santaBtn--iconOnly sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item-diveIn fal fa-sign-in fa-rotate-90"></button>
+          <button (click)="onClickFilterOption(eachOption)" class="sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item-select">
+            {{eachOption.displayLabel}}
+          </button>
+        </div>
       </ul>
     </div>
   </section>

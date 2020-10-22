@@ -135,7 +135,7 @@ export class BICsDataProcessingService {
   }
 
   private iterateBICsData(data: BEBICsHierarchyBlock, parent: BICsHierarchyAllDataBlock | BICsHierarchyBlock, counter: number) {
-    if (!data) return;
+    if (!data || counter === 4) return;
     for (let category in data) {
       if (!!category) {
         const BICsData: BICsHierarchyBlock = {

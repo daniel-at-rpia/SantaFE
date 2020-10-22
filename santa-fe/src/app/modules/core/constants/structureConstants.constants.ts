@@ -43,24 +43,23 @@ export const STRUCTURE_EDIT_MODAL_ID = 'Edit Fund Target';
 
 export const CustomeBreakdownConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> = [
   {
-    label: 'Basic',
+    label: 'Common',
     list: [
       SecurityDefinitionMap.CURRENCY,
       SecurityDefinitionMap.RATING,
       SecurityDefinitionMap.TENOR,
-      SecurityDefinitionMap.COUNTRY,
-      SecurityDefinitionMap.TICKER
+      SecurityDefinitionMap.COUNTRY
     ]
   },{
     label: 'BICS',
     list: [
       SecurityDefinitionMap.BICS_CONSOLIDATED,
-      SecurityDefinitionMap.BICS_LEVEL_1,
-      SecurityDefinitionMap.BICS_LEVEL_2
+      SecurityDefinitionMap.BICS_LEVEL_1
     ]
   },{
-    label: 'Quality',
+    label: 'Bond',
     list: [
+      SecurityDefinitionMap.TICKER,
       SecurityDefinitionMap.RATING_BUCKET,
       SecurityDefinitionMap.SENIORITY
     ]

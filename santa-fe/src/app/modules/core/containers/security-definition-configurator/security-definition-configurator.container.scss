@@ -3,7 +3,7 @@
 
 $securityDefinitionConfigurator_ctas_height: 6rem;
 .sat-securityDefinitionConfigurator {
-  $securityDefinitionConfiguratorBlockName: &;
+  $blockName: &;
   @include mix_fixed_div(relative, $z_index_base_item);
   display: flex;
   flex-direction: column;
@@ -133,12 +133,10 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
       &-optionList {
         @include mix_enable_scrollbar('vertical');
         display: flex;
-        flex-wrap: wrap;
         align-self: stretch;
-        padding: $spacing_medium 0;
-        margin: 0 $spacing_small;
+        flex-direction: column;
+        padding: $spacing_medium $spacing_small;
         &-item {
-          flex: 0 1 100%;
           padding: $spacing_small $spacing_medium;
           margin: $spacing_x_small $spacing_medium;
           font-size: $font_size_small;
@@ -156,8 +154,35 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
           @include mix_border_generator(0 0 $typical_border_width 0);
           flex: 0 0 auto;
           display: none;
-          max-height: 11rem;
-          padding-bottom: $spacing_small;
+          max-height: 8rem;
+          padding: $spacing_medium 0 $spacing_small 0;
+          margin: 0 $spacing_medium;
+        }
+      }
+      &-consolidatedBICSList {
+        @include mix_enable_scrollbar('vertical');
+        display: none;
+        flex-direction: column;
+        padding: $spacing_medium $spacing_small;
+        &-item {
+          display: flex;
+          align-items: flex-start;
+          margin-bottom: $spacing_medium;
+          &-diveIn {
+            flex: 0 0 auto;
+            margin-right: $spacing_small;
+          }
+          &-select {
+            flex: 1 1 auto;
+          }
+          &--selected > &-select {
+            @include material('none');
+            background-color: $color_filter;
+            color: $font_color_inverse;
+          }
+          &--selected > &-diveIn {
+            display: none;
+          }
         }
       }
     }
@@ -221,7 +246,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
     }
   }
   &--filterActiveState {
-    #{$securityDefinitionConfiguratorBlockName} {
+    #{$blockName} {
       &__filters {
         @include mix_fixed_div(absolute, $z_index_hovering_item);
         &-content {
@@ -233,7 +258,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
     }
   }
   &--highlightedVariant {
-    #{$securityDefinitionConfiguratorBlockName} {
+    #{$blockName} {
       &__definitions {
         &-list-section-item-selectBtn--selected {
           background-color: $color_highlight;
@@ -252,7 +277,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
     }
   }
   &--filterShowingSelectedState {
-    #{$securityDefinitionConfiguratorBlockName} {
+    #{$blockName} {
       &__filters-content {
         &-selectedListTitle {
           display: flex;
@@ -263,8 +288,26 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
       }
     }
   }
+  &--filterShowingBICSConsolidatedState {
+    #{$blockName} {
+      &__filters-content {
+        &-title {
+          display: none;
+        }
+        &-selectedListTitle {
+          margin-top: $spacing_medium;
+        }
+        &-optionList--regular {
+          display: none;
+        }
+        &-consolidatedBICSList {
+          display: flex;
+        }
+      }
+    }
+  }
   &--noMainCTAState {
-    #{$securityDefinitionConfiguratorBlockName} {
+    #{$blockName} {
       &__filters {
         height: 100%;
       }
@@ -274,7 +317,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
     }
   }
   &--groupByDisabledState {
-    #{$securityDefinitionConfiguratorBlockName} {
+    #{$blockName} {
       &__definitions {
         &-list-section-item {
           &-selectBtn {
@@ -297,8 +340,8 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
       }
     }
   }
-  &--groupByDisabledState#{$securityDefinitionConfiguratorBlockName}--canApplyFilterState {
-    #{$securityDefinitionConfiguratorBlockName} {
+  &--groupByDisabledState#{$blockName}--canApplyFilterState {
+    #{$blockName} {
       &__ctas {
         &-content-filterApply-btn {
           transform: translate(0, 0);
