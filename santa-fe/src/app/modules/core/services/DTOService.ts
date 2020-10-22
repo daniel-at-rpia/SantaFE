@@ -41,10 +41,11 @@
       FilterOptionsCurrency,
       FilterOptionsRating,
       FilterOptionsTenor,
-      BICsLevel1DefinitionList
+      BICsLevel1DefinitionList,
+      FILTER_OPTION_LIST_EXTREME_LONG_THRESHOLD
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
-      QuoteHeaderConfigList
+      QuoteHeaderConfigList,
     } from 'Core/constants/securityTableConstants.constant';
     import {
       AxeAlertScope,
@@ -492,7 +493,9 @@ export class DTOService {
         displayName: rawData.displayName,
         key: rawData.key,
         urlForGetLongOptionListFromServer: rawData.urlForGetLongOptionListFromServer || null,
-        filterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
+        filterOptionList: rawData.optionList.length >= FILTER_OPTION_LIST_EXTREME_LONG_THRESHOLD ? [] : this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
+        highlightSelectedOptionList: [],
+        prinstineFilterOptionListForExtremeLong: rawData.optionList.length >= FILTER_OPTION_LIST_EXTREME_LONG_THRESHOLD ? this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList) : [],
         securityDTOAttr: rawData.securityDTOAttr
       },
       style: {
@@ -505,7 +508,8 @@ export class DTOService {
         // isUnactivated: true,
         groupByActive: false,
         filterActive: false,
-        isMiniPillVariant: false
+        isMiniPillVariant: false,
+        isExtremeLongVariant: rawData.optionList.length >= FILTER_OPTION_LIST_EXTREME_LONG_THRESHOLD
       }
     }
     return object;
@@ -549,9 +553,9 @@ export class DTOService {
         groupByDisabled: !!groupByDisabled,
         canApplyFilter: false,
         showFiltersFromDefinition: null,
-        showLongFilterOptions: false,
+        showFiltersFromDefinitionExtremeLongCount: 0,
+        showFiltersFromDefinitionExtremeLongCountPromptText: '',
         isLoading: false,
-        isLoadingLongOptionListFromServer: false,
         noMainCTA: !!noMainCTA,
         securityAttrOnly: securityAttrOnly
       }

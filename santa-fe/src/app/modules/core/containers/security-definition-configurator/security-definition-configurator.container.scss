@@ -130,6 +130,25 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
           color: $font_color_minor;
         }
       }
+      &-extremeLongPrompt {
+        @include mix_border_radius(5px);
+        display: none;
+        flex-direction: column;
+        padding: $spacing_x_small;
+        background-color: $color_gray_2;
+        margin: $spacing_medium;
+        &-icon {
+          align-self: center;
+          color: $font_color_minor;
+          font-size: $font_size_x_large;
+          margin-bottom: $spacing_medium;
+        }
+        &-text {
+          color: $font_color_minor;
+          text-align: center;
+          font-size: $font_size_normal;
+        }
+      }
       &-optionList {
         @include mix_enable_scrollbar('vertical');
         display: flex;
@@ -259,6 +278,13 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
         &-optionList--selected {
           display: flex;
         }
+      }
+    }
+  }
+  &--filterExtremeLongState {
+    #{$securityDefinitionConfiguratorBlockName} {
+      &__filters-content-extremeLongPrompt {
+        display: flex;
       }
     }
   }

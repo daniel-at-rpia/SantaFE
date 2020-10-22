@@ -8,7 +8,11 @@
     import { UtilityService } from 'Core/services/UtilityService';
     import { SecurityDefinitionConfiguratorDTO,SecurityDefinitionDTO } from 'FEModels/frontend-models.interface';
     import { SecurityDefinitionFilterBlock } from 'FEModels/frontend-blocks.interface';
-    import { ConfiguratorDefinitionLayout, SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
+    import {
+      ConfiguratorDefinitionLayout,
+      SecurityDefinitionMap,
+      FILTER_OPTION_LIST_EXTREME_LONG_THRESHOLD
+    } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       DefinitionConfiguratorEmitterParams,
       DefinitionConfiguratorEmitterParamsItem
@@ -32,7 +36,8 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   @Output() buryConfigurator = new EventEmitter();
   @Output() boostConfigurator = new EventEmitter();
   constants = {
-    map: SecurityDefinitionMap
+    map: SecurityDefinitionMap,
+    extremeLongThreshold: FILTER_OPTION_LIST_EXTREME_LONG_THRESHOLD
   }
 
   constructor(
@@ -73,22 +78,6 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     }
   }
 
-  public onClickLoadLongOptionListForDefinition(targetDefinition: SecurityDefinitionDTO) {
-    this.configuratorData.state.isLoadingLongOptionListFromServer = true;
-    this.restfulCommService.callAPI(targetDefinition.data.urlForGetLongOptionListFromServer, {req: 'GET'}).pipe(
-      first(),
-      delay(200),
-      tap((serverReturn: Array<string>) => {
-        targetDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, serverReturn);
-        this.configuratorData.state.isLoadingLongOptionListFromServer = false;
-      }),
-      catchError(err => {
-        console.log('error', err);
-        return of('error');
-      })
-    ).subscribe();
-  }
-
   public selectDefinitionForGrouping(targetDefinition: SecurityDefinitionDTO) {
     if (!targetDefinition.state.isLocked) {
       targetDefinition.state.groupByActive = !targetDefinition.state.groupByActive;
@@ -112,13 +101,11 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   public onClickDefinition(targetDefinition: SecurityDefinitionDTO) {
     if (!!targetDefinition && !targetDefinition.state.isUnactivated) {
       this.clearSearchFilter();
-      if (this.configuratorData.state.showFiltersFromDefinition && this.configuratorData.state.showFiltersFromDefinition.data.urlForGetLongOptionListFromServer) {
-        // have to flush out the long options for performance concerns
-        this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList = [];
-      }
       this.configuratorData.state.showFiltersFromDefinition = this.configuratorData.state.showFiltersFromDefinition === targetDefinition ? null : targetDefinition;
+      if (!!this.configuratorData.state.showFiltersFromDefinition && !!this.configuratorData.state.showFiltersFromDefinition.state.isExtremeLongVariant) {
+        this.updateExtremeLongCount(targetDefinition, this.configuratorData.state.showFiltersFromDefinition.data.prinstineFilterOptionListForExtremeLong.length);
+      }
       if (this.configuratorData.state.showFiltersFromDefinition) {
-        this.configuratorData.state.showLongFilterOptions = this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.length > 5 || !!this.configuratorData.state.showFiltersFromDefinition.data.urlForGetLongOptionListFromServer;  // any list with more than five options or need to be loaded from server is considered a long list, will need extra room on the UI
         this.boostConfigurator.emit();
       } else {
         this.buryConfigurator.emit();
@@ -139,26 +126,52 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     if (this.configuratorData.state.groupByDisabled) {
       this.configuratorData.state.canApplyFilter = this.checkFilterCanApply();
     }
-    targetDefinition.data.highlightSelectedOptionList = targetDefinition.data.filterOptionList.filter((eachFilter) => {
-      return !!eachFilter.isSelected;
-    });
+    if (targetDefinition.state.isExtremeLongVariant) {
+      if (targetOption.isSelected) {
+        targetDefinition.data.highlightSelectedOptionList.indexOf(targetOption) < 0 && targetDefinition.data.highlightSelectedOptionList.push(targetOption);
+      } else {
+        targetDefinition.data.highlightSelectedOptionList = targetDefinition.data.highlightSelectedOptionList.filter((eachFilter) => {
+          return eachFilter.key !== targetOption.key;
+        })
+      }
+    } else {
+      targetDefinition.data.highlightSelectedOptionList = targetDefinition.data.filterOptionList.filter((eachFilter) => {
+        return !!eachFilter.isSelected;
+      });
+    }
   }
 
   public onSearchKeywordChange(newKeyword) {
-    if (this.configuratorData.state.showFiltersFromDefinition) {
+    const targetDefinition = this.configuratorData.state.showFiltersFromDefinition;
+    if (!!targetDefinition) {
       this.configuratorData.data.filterSearchInputValue = newKeyword;
-      if (!!newKeyword && newKeyword.length >= 1) {
-        this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.forEach((eachOption) => {
-          if (this.applySearchFilter(eachOption, newKeyword)) {
-            eachOption.isFilteredOut = false;
-          } else {
-            eachOption.isFilteredOut = true;
+      if (targetDefinition.state.isExtremeLongVariant) {
+        if (!!newKeyword && newKeyword.length >= 1) {
+          const resultList = targetDefinition.data.prinstineFilterOptionListForExtremeLong.filter((eachOption) => {
+            return this.applySearchFilter(eachOption, newKeyword);
+          });
+          this.updateExtremeLongCount(targetDefinition, resultList.length);
+          if (this.configuratorData.state.showFiltersFromDefinitionExtremeLongCount < this.constants.extremeLongThreshold) {
+            targetDefinition.data.filterOptionList = this.utilityService.deepCopy(resultList);
           }
-        })
+        } else {
+          targetDefinition.data.filterOptionList = [];
+          this.updateExtremeLongCount(targetDefinition, this.configuratorData.state.showFiltersFromDefinition.data.prinstineFilterOptionListForExtremeLong.length);
+        }
       } else {
-        this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.forEach((eachOption) => {
-          eachOption.isFilteredOut = false;
-        })
+        if (!!newKeyword && newKeyword.length >= 1) {
+          this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.forEach((eachOption) => {
+            if (this.applySearchFilter(eachOption, newKeyword)) {
+              eachOption.isFilteredOut = false;
+            } else {
+              eachOption.isFilteredOut = true;
+            }
+          })
+        } else {
+          this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.forEach((eachOption) => {
+            eachOption.isFilteredOut = false;
+          })
+        }
       }
     }
   }
@@ -249,13 +262,19 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getTickers, {req: 'GET'}).pipe(
       first(),
       tap((serverReturn: Array<string>) => {
-        targetDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(this.constants.map.TICKER.key, serverReturn);
+        targetDefinition.data.prinstineFilterOptionListForExtremeLong = this.dtoService.generateSecurityDefinitionFilterOptionList(this.constants.map.TICKER.key, serverReturn);
+        targetDefinition.state.isExtremeLongVariant = true;
       }),
       catchError(err => {
         this.restfulCommService.logError('Cannot retrieve country data');
         return of('error');
       })
     ).subscribe();
+  }
+
+  private updateExtremeLongCount(targetDefinition: SecurityDefinitionDTO, count: number) {
+    this.configuratorData.state.showFiltersFromDefinitionExtremeLongCount = count;
+    this.configuratorData.state.showFiltersFromDefinitionExtremeLongCountPromptText = `There are <kbd>${count}</kbd> ${targetDefinition.data.name}s, use search to filter it down to less than 200 to see.`
   }
 
 }

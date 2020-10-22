@@ -548,3 +548,5 @@ export const RatingValueToLevelMapping = [
     values: ['NR']
   }
 ];
+
+export const FILTER_OPTION_LIST_EXTREME_LONG_THRESHOLD = 200;

@@ -202,7 +202,8 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     key: string;
     urlForGetLongOptionListFromServer: string;
     filterOptionList: Array<SecurityDefinitionFilterBlock>;
-    highlightSelectedOptionList?: Array<SecurityDefinitionFilterBlock>;
+    highlightSelectedOptionList: Array<SecurityDefinitionFilterBlock>;
+    prinstineFilterOptionListForExtremeLong: Array<SecurityDefinitionFilterBlock>;
     securityDTOAttr: string;
   }
   style: {
@@ -215,6 +216,7 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     groupByActive: boolean;
     filterActive: boolean;
     isMiniPillVariant: boolean;
+    isExtremeLongVariant: boolean;
   }
 }
 
@@ -233,10 +235,10 @@ export interface SecurityDefinitionConfiguratorDTO extends BasicDTOStructure {
   state: {
     groupByDisabled: boolean;
     canApplyFilter: boolean;
-    showLongFilterOptions: boolean;
     isLoading: boolean;
-    isLoadingLongOptionListFromServer: boolean;
     showFiltersFromDefinition: SecurityDefinitionDTO;
+    showFiltersFromDefinitionExtremeLongCount: number;
+    showFiltersFromDefinitionExtremeLongCountPromptText: string;
     noMainCTA: boolean;
     securityAttrOnly: boolean;
   }

@@ -6,7 +6,8 @@
     'sat-securityDefinitionConfigurator--groupByDisabledState': configuratorData.state.groupByDisabled,
     'sat-securityDefinitionConfigurator--canApplyFilterState': configuratorData.state.canApplyFilter,
     'sat-securityDefinitionConfigurator--noMainCTAState': configuratorData.state.noMainCTA,
-    'sat-securityDefinitionConfigurator--filterShowingSelectedState': configuratorData.state.showFiltersFromDefinition?.data.filterOptionList.length > 5 && configuratorData.state.showFiltersFromDefinition?.data.highlightSelectedOptionList?.length > 0
+    'sat-securityDefinitionConfigurator--filterShowingSelectedState': configuratorData.state.showFiltersFromDefinition?.data.filterOptionList.length > 5 && configuratorData.state.showFiltersFromDefinition?.data.highlightSelectedOptionList?.length > 0,
+    'sat-securityDefinitionConfigurator--filterExtremeLongState': configuratorData.state.showFiltersFromDefinition?.state.isExtremeLongVariant && configuratorData.state.showFiltersFromDefinitionExtremeLongCount > constants.extremeLongThreshold
   }">
   <section class="sat-securityDefinitionConfigurator__definitions">
     <ul class="sat-securityDefinitionConfigurator__definitions-list">
@@ -70,6 +71,10 @@
           [placeholder]="'search'"
           (onInputChange)="onSearchKeywordChange($event)">
         </santa-input>
+      </div>
+      <div class="sat-securityDefinitionConfigurator__filters-content-extremeLongPrompt">
+        <i class="sat-securityDefinitionConfigurator__filters-content-extremeLongPrompt-icon fal fa-info"></i>
+        <p class="sat-alert__detail-message-text" [innerHtml]="configuratorData.state.showFiltersFromDefinitionExtremeLongCountPromptText"></p>
       </div>
       <ul class="sat-securityDefinitionConfigurator__filters-content-optionList">
         <button
