@@ -135,6 +135,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
         display: flex;
         flex-wrap: wrap;
         align-self: stretch;
+        padding: $spacing_medium 0;
         margin: 0 $spacing_small;
         &-item {
           flex: 0 1 100%;

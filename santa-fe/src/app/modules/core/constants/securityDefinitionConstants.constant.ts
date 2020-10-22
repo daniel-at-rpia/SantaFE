@@ -427,6 +427,12 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fas fa-star',
     optionList: []
   },
+  BICS_CONSOLIDATED: {
+    key: 'BICS_CONSOLIDATED',
+    displayName: 'All BICS',
+    icon: 'fas fa-industry-alt',
+    optionList: []
+  },
   BICS_LEVEL_1: {
     key: 'BICS_LEVEL_1',
     displayName: 'BICS Lv.1',

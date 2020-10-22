@@ -54,10 +54,9 @@ export const CustomeBreakdownConfiguratorDefinitionLayout: Array<SecurityDefinit
   },{
     label: 'BICS',
     list: [
+      SecurityDefinitionMap.BICS_CONSOLIDATED,
       SecurityDefinitionMap.BICS_LEVEL_1,
-      SecurityDefinitionMap.BICS_LEVEL_2,
-      SecurityDefinitionMap.BICS_LEVEL_3,
-      SecurityDefinitionMap.BICS_LEVEL_4
+      SecurityDefinitionMap.BICS_LEVEL_2
     ]
   },{
     label: 'Quality',

@@ -73,22 +73,6 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     }
   }
 
-  public onClickLoadLongOptionListForDefinition(targetDefinition: SecurityDefinitionDTO) {
-    this.configuratorData.state.isLoadingLongOptionListFromServer = true;
-    this.restfulCommService.callAPI(targetDefinition.data.urlForGetLongOptionListFromServer, {req: 'GET'}).pipe(
-      first(),
-      delay(200),
-      tap((serverReturn: Array<string>) => {
-        targetDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, serverReturn);
-        this.configuratorData.state.isLoadingLongOptionListFromServer = false;
-      }),
-      catchError(err => {
-        console.log('error', err);
-        return of('error');
-      })
-    ).subscribe();
-  }
-
   public selectDefinitionForGrouping(targetDefinition: SecurityDefinitionDTO) {
     if (!targetDefinition.state.isLocked) {
       targetDefinition.state.groupByActive = !targetDefinition.state.groupByActive;
@@ -112,13 +96,11 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   public onClickDefinition(targetDefinition: SecurityDefinitionDTO) {
     if (!!targetDefinition && !targetDefinition.state.isUnactivated) {
       this.clearSearchFilter();
-      if (this.configuratorData.state.showFiltersFromDefinition && this.configuratorData.state.showFiltersFromDefinition.data.urlForGetLongOptionListFromServer) {
-        // have to flush out the long options for performance concerns
-        this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList = [];
-      }
       this.configuratorData.state.showFiltersFromDefinition = this.configuratorData.state.showFiltersFromDefinition === targetDefinition ? null : targetDefinition;
       if (this.configuratorData.state.showFiltersFromDefinition) {
-        this.configuratorData.state.showLongFilterOptions = this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.length > 5 || !!this.configuratorData.state.showFiltersFromDefinition.data.urlForGetLongOptionListFromServer;  // any list with more than five options or need to be loaded from server is considered a long list, will need extra room on the UI
+        if (this.configuratorData.state.showFiltersFromDefinition.state.isFilterLong) {
+          this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList = [];
+        }
         this.boostConfigurator.emit();
       } else {
         this.buryConfigurator.emit();

@@ -492,6 +492,7 @@ export class DTOService {
         displayName: rawData.displayName,
         key: rawData.key,
         urlForGetLongOptionListFromServer: rawData.urlForGetLongOptionListFromServer || null,
+        prinstineFilterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
         filterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
         securityDTOAttr: rawData.securityDTOAttr
       },
@@ -505,10 +506,21 @@ export class DTOService {
         // isUnactivated: true,
         groupByActive: false,
         filterActive: false,
-        isMiniPillVariant: false
+        isMiniPillVariant: false,
+        isFilterLong: rawData.optionList.length > 5
       }
     }
     return object;
+  }
+
+  public loadSecurityDefinitionOptions(
+    targetDefinition: DTOs.SecurityDefinitionDTO,
+    optionList: Array<string>
+  ): DTOs.SecurityDefinitionDTO {
+    targetDefinition.data.prinstineFilterOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList);
+    targetDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList);
+    targetDefinition.state.isFilterLong = optionList.length > 5;
+    return targetDefinition;
   }
 
   public formSecurityDefinitionBundleObject(
@@ -549,9 +561,7 @@ export class DTOService {
         groupByDisabled: !!groupByDisabled,
         canApplyFilter: false,
         showFiltersFromDefinition: null,
-        showLongFilterOptions: false,
         isLoading: false,
-        isLoadingLongOptionListFromServer: false,
         noMainCTA: !!noMainCTA,
         securityAttrOnly: securityAttrOnly
       }
@@ -568,14 +578,17 @@ export class DTOService {
   ) {
     configuratorDTO.data.definitionList.forEach((eachBundle) => {
       eachBundle.data.list.forEach((eachDefinition) => {
+        if (eachDefinition.data.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
+          this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel1List);
+        }
         if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_1.key) {
-          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_1.key, sortedLevel1List);
+          this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel1List);
         } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_2.key) {
-          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_2.key, sortedLevel2List);
+          this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel2List);
         } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_3.key) {
-          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_3.key, sortedLevel3List);
+          this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel3List);
         } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_4.key) {
-          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_4.key, sortedLevel4List);
+          this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel4List);
         }
       });
     });

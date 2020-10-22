@@ -6,7 +6,8 @@
     'sat-securityDefinitionConfigurator--groupByDisabledState': configuratorData.state.groupByDisabled,
     'sat-securityDefinitionConfigurator--canApplyFilterState': configuratorData.state.canApplyFilter,
     'sat-securityDefinitionConfigurator--noMainCTAState': configuratorData.state.noMainCTA,
-    'sat-securityDefinitionConfigurator--filterShowingSelectedState': configuratorData.state.showFiltersFromDefinition?.data.filterOptionList.length > 5 && configuratorData.state.showFiltersFromDefinition?.data.highlightSelectedOptionList?.length > 0
+    'sat-securityDefinitionConfigurator--filterShowingSelectedState': configuratorData.state.showFiltersFromDefinition?.state.isFilterLong,
+    'sat-securityDefinitionConfigurator--filterShowingBICSConsolidatedState': configuratorData.state.showFiltersFromDefinition?.data.key === constants.map.BICS_CONSOLIDATED.key
   }">
   <section class="sat-securityDefinitionConfigurator__definitions">
     <ul class="sat-securityDefinitionConfigurator__definitions-list">
@@ -31,7 +32,6 @@
             [definitionData]="eachDefinition"
             (onClick)="onClickDefinition($event)"
             [selected]="configuratorData.state.showFiltersFromDefinition === eachDefinition"
-            [interactionDisabled]="configuratorData.state.isLoadingLongOptionListFromServer"
             [groupByDisabled]="configuratorData.state.groupByDisabled"
             [isPartOfConfiguratorList]="true">
           </security-definition>
