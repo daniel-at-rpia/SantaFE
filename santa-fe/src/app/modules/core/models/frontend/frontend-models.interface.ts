@@ -217,6 +217,7 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     filterActive: boolean;
     isMiniPillVariant: boolean;
     isFilterLong: boolean;
+    currentFilterPathInConsolidatedBICS: Array<string>;
   }
 }
 

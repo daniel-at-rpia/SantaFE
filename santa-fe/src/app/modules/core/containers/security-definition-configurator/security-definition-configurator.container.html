@@ -90,7 +90,7 @@
             'sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item': true,
             'sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item--selected': eachOption.isSelected
           }">
-          <button class="santaBtn--iconOnly sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item-diveIn fal fa-sign-in fa-rotate-90"></button>
+          <button (click)="onClickConsolidatedBICSDiveIn(eachOption)" class="santaBtn--iconOnly sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item-diveIn fal fa-sign-in fa-rotate-90"></button>
           <button (click)="onClickFilterOption(eachOption)" class="sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item-select">
             {{eachOption.displayLabel}}
           </button>

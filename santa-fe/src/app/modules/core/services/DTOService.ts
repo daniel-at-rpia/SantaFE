@@ -507,7 +507,8 @@ export class DTOService {
         groupByActive: false,
         filterActive: false,
         isMiniPillVariant: false,
-        isFilterLong: rawData.optionList.length > 5
+        isFilterLong: rawData.optionList.length > 5,
+        currentFilterPathInConsolidatedBICS: []
       }
     }
     return object;

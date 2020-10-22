@@ -106,6 +106,16 @@ export class BICsDataProcessingService {
     return breakdown;
   }
 
+  public getShallowestLevel(category: string): number {
+    // traverse the bics and return the level of the earliest encounter of a given bics, useful to find the true level of a bics since now that same category would nest over and over
+    // not used in anywhere but might be useful
+    return this.getLevelRecursion(
+      category,
+      1,
+      this.formattedBICsHierarchyData.children
+    );
+  }
+
   private setBreakdownListProperties(breakdownList: Array<StructurePortfolioBreakdownRowDTO>, parentRow: StructurePortfolioBreakdownRowDTO, isEditingView: boolean) {
     breakdownList.forEach(breakdown => {
       breakdown.data.bicsLevel = parentRow.data.bicsLevel + 1;
@@ -135,7 +145,7 @@ export class BICsDataProcessingService {
   }
 
   private iterateBICsData(data: BEBICsHierarchyBlock, parent: BICsHierarchyAllDataBlock | BICsHierarchyBlock, counter: number) {
-    if (!data || counter === 4) return;
+    if (!data || counter > 4) return;
     for (let category in data) {
       if (!!category) {
         const BICsData: BICsHierarchyBlock = {
@@ -188,6 +198,37 @@ export class BICsDataProcessingService {
           );
         }
       });
+    }
+  }
+
+  private getLevelRecursion(
+    targetCategory: string,
+    currentLevel: number,
+    currentLevelBlockList: Array<BICsHierarchyBlock>
+  ): number {
+    if (!currentLevelBlockList || currentLevelBlockList.length === 0) {
+      return -1;
+    } else {
+      const existOnThisLevel = currentLevelBlockList.find((eachBlock) => {
+        return eachBlock.name === targetCategory;
+      });
+      if (!!existOnThisLevel) {
+        return currentLevel;
+      } else {
+        const resultInChild = currentLevelBlockList.map((eachBlock) => {
+          return this.getLevelRecursion(
+            targetCategory,
+            currentLevel+1,
+            eachBlock.children
+          );
+        });
+        const childExistLevel = Math.max(...resultInChild);
+        if ( childExistLevel > 0) {
+          return childExistLevel;
+        } else {
+          return -1;
+        }
+      }
     }
   }
 

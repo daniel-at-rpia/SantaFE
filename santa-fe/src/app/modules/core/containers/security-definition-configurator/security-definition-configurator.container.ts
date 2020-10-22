@@ -6,6 +6,7 @@
     import { DTOService } from 'Core/services/DTOService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { UtilityService } from 'Core/services/UtilityService';
+    import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
     import { SecurityDefinitionConfiguratorDTO,SecurityDefinitionDTO } from 'FEModels/frontend-models.interface';
     import { SecurityDefinitionFilterBlock } from 'FEModels/frontend-blocks.interface';
     import { ConfiguratorDefinitionLayout, SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
@@ -38,7 +39,8 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   constructor(
     private dtoService: DTOService,
     private restfulCommService: RestfulCommService,
-    private utilityService: UtilityService
+    private utilityService: UtilityService,
+    private bicsDataProcessingService: BICsDataProcessingService
   ) {
   }
 
@@ -156,6 +158,16 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     this.clickedApplyFilter.emit(params);
     this.lastExecutedConfiguration = this.utilityService.deepCopy(this.configuratorData);
     this.configuratorData.state.canApplyFilter = false;
+  }
+
+  public onClickConsolidatedBICSDiveIn(targetOption: SecurityDefinitionFilterBlock) {
+    const consolidatedBICSDefinition = this.configuratorData.state.showFiltersFromDefinition;
+    if (!!consolidatedBICSDefinition) {
+      consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.push(targetOption.shortKey);
+      const level = consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.length;
+      const newList = this.bicsDataProcessingService.getSubLevelList(targetOption.shortKey, level);
+      consolidatedBICSDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(consolidatedBICSDefinition.data.key, newList);
+    }
   }
 
   private applySearchFilter(targetOption: SecurityDefinitionFilterBlock, keyword: string): boolean {
