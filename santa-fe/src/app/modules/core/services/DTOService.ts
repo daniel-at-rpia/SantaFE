@@ -2251,16 +2251,18 @@ export class DTOService {
 
       object.data.displayList = targetRow.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT ? targetRow.data.security.data.traceTrades.filter((trade, i) => i < TRACE_INITIAL_LIMIT) : targetRow.data.security.data.traceTrades;
     }
+    const isTradeAvailableFromVolume = (list: Array<Blocks.TraceTradeBlock>, amount: number, filter: string) => {
+      const isTradeAvailable = list.find((trade: Blocks.TraceTradeBlock) => !!trade.volumeEstimated ? trade.volumeEstimated >= amount : trade.volumeReported >= amount);
+      !!isTradeAvailable && object.data.availableFiltersList.push(filter)
+    }
     object.data.filterList.forEach(option => {
-      if (option.includes(traceTradeNumericalFilters.filter250K.filterName)) {
-        const tradeVolumeOver250K = object.data.displayList.find((trade:Blocks.TraceTradeBlock) => !!trade.volumeEstimated ? trade.volumeEstimated >= traceTradeNumericalFilters.filter250K.amount : trade.volumeReported >= traceTradeNumericalFilters.filter250K.amount);
-        !!tradeVolumeOver250K && object.data.availableFiltersList.push(option);
-      } else if (option.includes(traceTradeNumericalFilters.filter1M.filterName )) {
-        const tradeVolumeOverMillion = object.data.displayList.find((trade:Blocks.TraceTradeBlock) => !!trade.volumeEstimated ? trade.volumeEstimated >= traceTradeNumericalFilters.filter1M.amount  : trade.volumeReported >= traceTradeNumericalFilters.filter1M.amount);
-        !!tradeVolumeOverMillion && object.data.availableFiltersList.push(option);
-      } else if (option.includes(traceTradeNumericalFilters.filter5M.filterName)) {
-        const tradeVolumeOverFiveMillion = object.data.displayList.find((trade:Blocks.TraceTradeBlock) => !!trade.volumeEstimated ? trade.volumeEstimated >= traceTradeNumericalFilters.filter5M.amount  : trade.volumeReported >= traceTradeNumericalFilters.filter1M.amount);
-        !!tradeVolumeOverFiveMillion && object.data.availableFiltersList.push(option);
+      const parsedOption = option.includes('≥') ? option.split('≥')[1].trim() : option;
+      if (parsedOption === traceTradeNumericalFilters.filter250K.filterName) {
+        isTradeAvailableFromVolume(object.data.displayList, traceTradeNumericalFilters.filter250K.amount, option)
+      } else if (parsedOption === traceTradeNumericalFilters.filter1M.filterName) {
+        isTradeAvailableFromVolume(object.data.displayList, traceTradeNumericalFilters.filter1M.amount, option)
+      } else if (parsedOption === traceTradeNumericalFilters.filter5M.filterName) {
+        isTradeAvailableFromVolume(object.data.displayList, traceTradeNumericalFilters.filter5M.amount, option)
       } else {
         const isCounterPartyAvailable = object.data.displayList.find(trade => trade.counterParty === option);
         !!isCounterPartyAvailable && object.data.availableFiltersList.push(option);
