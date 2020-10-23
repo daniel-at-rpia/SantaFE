@@ -67,13 +67,13 @@ export class StructureFund implements OnInit {
 
   public onChangeValue(amount: string, type: PortfolioMetricValues) {
     const value = !parseFloat(amount) ? 0 : parseFloat(amount);
-    if (type === PortfolioMetricValues.cs01) {
-      this.fund.data.target.target.cs01 = value * 1000;
-      this.fund.data.originalBEData.target.target.Cs01 = value * 1000;
-      return;
+    if (type === PortfolioMetricValues.creditDuration) {
+      this.fund.data.target.target.creditDuration = value;
+      this.fund.data.originalBEData.target.target.CreditDuration = value;
+    } else {
+      this.fund.data.target.target.creditLeverage = value;
+      this.fund.data.originalBEData.target.target.CreditLeverage = value;
     }
-    this.fund.data.target.target.creditLeverage = value;
-    this.fund.data.originalBEData.target.target.CreditLeverage = value;
   }
 
   public showEditMenu() {
@@ -85,8 +85,8 @@ export class StructureFund implements OnInit {
     this.resetErrors();
   }
 
-  public onClickSaveNewMetrics(targetCS01: number, targetLeverage: number) {
-    this.fund.api.onSubmitMetricValues(targetCS01, targetLeverage)
+  public onClickSaveNewMetrics(targetCreditDuration: number, targetLeverage: number) {
+    this.fund.api.onSubmitMetricValues(targetCreditDuration, targetLeverage)
   }
 
   private validateInput(value: number | string) {
@@ -95,19 +95,19 @@ export class StructureFund implements OnInit {
   }
 
   private resetErrors() {
-    this.fund.state.hasErrors.updatedCS01 = false;
+    this.fund.state.hasErrors.updatedCreditDuration = false;
     this.fund.state.hasErrors.updatedCreditLeverage = false;
     this.fund.state.hasErrors.errorMessage = '';
   }
 
-  private saveEditDetails(targetCS01: number, targetLeverage: number) {
+  private saveEditDetails(targetCreditDuration: number, targetLeverage: number) {
     this.resetErrors();
-    const isTargetCS01Invalid = this.validateInput(targetCS01);
+    const isTargetCreditDurationInvalid = this.validateInput(targetCreditDuration);
     const isTargetLeverageInvalid = this.validateInput(targetLeverage);
-    this.fund.data.cs01TargetBar.state.isEmpty = targetCS01 === 0;
+    this.fund.data.creditDurationTargetBar.state.isEmpty = targetCreditDuration === 0;
     this.fund.data.creditLeverageTargetBar.state.isEmpty = targetLeverage === 0;
-    if (isTargetCS01Invalid || isTargetLeverageInvalid ) {
-      const invalidTarget = isTargetCS01Invalid ? this.constants.cs01 : this.constants.creditLeverage;
+    if (isTargetCreditDurationInvalid || isTargetLeverageInvalid ) {
+      const invalidTarget = isTargetCreditDurationInvalid ? this.constants.creditDuration : this.constants.creditLeverage;
       const invalidInputErrorRef = `updated${invalidTarget.split(' ').join('')}`;
       this.fund.state.hasErrors[invalidInputErrorRef] = true;
       this.fund.state.hasErrors.errorMessage = `*Please enter a valid target level for ${invalidTarget}`;

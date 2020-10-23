@@ -6,13 +6,16 @@
   'sat-fundStructuring--errorState': fund.state.isDataUnavailable
   }">
   <header class="sat-fundStructuring__configuration">
+    <h2 class="sat-fundStructuring__configuration-title">{{ fund.data.portfolioShortName }}</h2>
     <div class="sat-fundStructuring__targetBar">
       <target-bar [targetBar]="fund.data.creditLeverageTargetBar">
       </target-bar>
     </div>
-    <h2 class="sat-fundStructuring__configuration-title">{{ fund.data.portfolioShortName }}</h2>
     <div class="sat-fundStructuring__targetBar">
       <target-bar [targetBar]="fund.data.cs01TargetBar"></target-bar>
+    </div>
+    <div class="sat-fundStructuring__targetBar">
+      <target-bar [targetBar]="fund.data.creditDurationTargetBar"></target-bar>
     </div>
   </header>
   <section class="sat-fundStructuring__editFund">
@@ -25,18 +28,17 @@
       <span>Add Override</span>
     </button>
     <div class="sat-fundStructuring__editFund-group">
-      <label for="CS01Target" class="sat-fundStructuring__editFund-group-label">Target CS01:</label>
+      <label for="creditDurationTarget" class="sat-fundStructuring__editFund-group-label">Target Credit Duration:</label>
       <santa-input
-        [inputValue]="fund.data.cs01TotalsInK.targetTotal"
+        [inputValue]="fund.data.target.target.creditDuration"
         [placeholder]="'0'"
         [isNumeric]="fund.state.isNumeric"
-        (onInputChange)="onChangeValue($event, constants.cs01)"
-        [hasError]="fund.state.hasErrors.updatedCS01"
+        (onInputChange)="onChangeValue($event, constants.creditDuration)"
+        [hasError]="fund.state.hasErrors.updatedCreditDuration"
         [ngClass]="{
           'sat-fundStructuring__editFund-group-input': true
         }">
       </santa-input>
-      <span class="sat-fundStructuring__editFund-group-unit">K</span>
     </div>
     <div class="sat-fundStructuring__editFund-group">
       <label for="leverageTarget" class="sat-fundStructuring__editFund-group-label">Target Credit Leverage:</label>
@@ -63,7 +65,7 @@
         <span>Edit Fund</span>
       </button>
       <button class="sat-fundStructuring__utility-btnGroup-btn santaBtn--circleLabelled sat-fundStructuring__utility-btnGroup-btn--save"
-      (click)="onClickSaveNewMetrics(fund.data.target.target.cs01, fund.data.target.target.creditLeverage)">
+      (click)="onClickSaveNewMetrics(fund.data.target.target.creditDuration, fund.data.target.target.creditLeverage)">
         <i class="fal fa-check"></i>
         <span>Save Edit</span>
       </button>

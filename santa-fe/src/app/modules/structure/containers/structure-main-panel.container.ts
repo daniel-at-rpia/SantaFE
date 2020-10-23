@@ -86,6 +86,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         //Switch active and inactive target bars
         fund.data.creditLeverageTargetBar.state.isInactiveMetric = this.state.selectedMetricValue === this.constants.cs01;
         fund.data.cs01TargetBar.state.isInactiveMetric = this.state.selectedMetricValue === this.constants.creditLeverage;
+        fund.data.creditDurationTargetBar.state.isInactiveMetric = this.state.selectedMetricValue === this.constants.creditLeverage;
         //Switch values to be displayed in breakdowns
         fund.data.children.forEach(breakdown => {
           breakdown.state.isDisplayingCs01 = this.state.selectedMetricValue === this.constants.cs01;
@@ -146,6 +147,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     fund.state.isStencil = true;
     fund.data.cs01TargetBar.state.isStencil = true;
     fund.data.creditLeverageTargetBar.state.isStencil = true;
+    fund.data.creditDurationTargetBar.state.isStencil = true;
     fund.data.children.forEach(breakdown => {
       breakdown.state.isStencil = true;
       breakdown.data.displayCategoryList.forEach(category => {
@@ -167,6 +169,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         fund.state.isStencil = false;
         fund.data.cs01TargetBar.state.isStencil = false;
         fund.data.creditLeverageTargetBar.state.isStencil = false;
+        fund.data.creditDurationTargetBar.state.isStencil = false;
         fund.data.children.forEach(breakdown => {
           breakdown.state.isStencil = false;
           breakdown.data.displayCategoryList.forEach(category => {
