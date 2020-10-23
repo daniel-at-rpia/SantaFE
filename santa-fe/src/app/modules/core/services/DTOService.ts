@@ -2123,7 +2123,8 @@ export class DTOService {
           targetPct: rawTargetPct
         },
         view: view,
-        bucket: bucket
+        bucket: bucket,
+        overrideVariant: !!isOverride
       };
       if (eachCategoryBlock.diffToTarget < 0) {
         eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `${eachCategoryBlock.diffToTarget}k` : `${eachCategoryBlock.diffToTarget}`;

@@ -301,6 +301,7 @@ export interface PortfolioBreakdownCategoryBlock {
   bucket: StructureBucketDataBlock;
   view: PortfolioView;
   children?: DTOs.PortfolioBreakdownDTO;
+  overrideVariant: boolean;
 }
 
 export interface GlobalNavLegendBlock {
