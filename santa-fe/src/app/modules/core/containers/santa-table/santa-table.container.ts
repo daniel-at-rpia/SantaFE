@@ -42,6 +42,7 @@
     import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
     import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-filter/santa-table-numeric-filter.component';
     import { SantaTableFullWidthCellRenderer } from 'Core/components/santa-table-full-width-cell-renderer/santa-table-full-width-cell-renderer.component';
+    import { GraphService } from 'Core/services/GraphService';
   //
 
 @Component({
@@ -124,7 +125,8 @@ export class SantaTable implements OnInit, OnChanges {
     private dtoService: DTOService,
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
-    private agGridMiddleLayerService: AgGridMiddleLayerService
+    private agGridMiddleLayerService: AgGridMiddleLayerService,
+    private graphService: GraphService
   ) { }
 
   public ngOnInit() {

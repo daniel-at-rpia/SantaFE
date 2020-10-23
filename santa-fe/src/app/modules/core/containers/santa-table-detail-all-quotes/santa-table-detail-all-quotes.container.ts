@@ -75,14 +75,20 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     this.parentNode && this.parentNode.setExpanded(false);
     this.parent.onRowClickedToCollapse(this.rowData, !this.parentNode, this.params);
     this.rowData.data.historicalTradeVisualizer.state.graphReceived = false;
-    if (!!this.rowData.data.traceTradeVisualizer) {
-      this.rowData.data.traceTradeVisualizer.state.graphReceived = false;
-    }
     this.rowData.state.viewTraceState = false;
     this.rowData.state.viewHistoryState = false;
     if (!!this.rowData.data.traceTradeVisualizer) {
+      if (!!this.rowData.data.traceTradeVisualizer.graph.pieGraph) {
+        this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.pieGraph);
+        this.rowData.data.traceTradeVisualizer.graph.pieGraph = null;
+      }
+      if (!!this.rowData.data.traceTradeVisualizer.graph.scatterGraph) {
+        this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.scatterGraph)
+        this.rowData.data.traceTradeVisualizer.graph.scatterGraph = null;
+      }
       this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = false;
       this.rowData.data.traceTradeVisualizer.state.selectedFiltersList = [];
+      this.rowData.data.traceTradeVisualizer.state.graphReceived = false;
       this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT ? this.rowData.data.security.data.traceTrades.filter((row, i) => i < TRACE_INITIAL_LIMIT) : this.rowData.data.security.data.traceTrades;
     }
   }
