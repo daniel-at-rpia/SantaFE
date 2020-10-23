@@ -1860,19 +1860,22 @@ export class DTOService {
           portfolioId: rawData.target.portfolioId,
           target: {
             cs01: rawData.target.target.Cs01 || 0,
-            creditLeverage: rawData.target.target.CreditLeverage || 0
+            creditLeverage: rawData.target.target.CreditLeverage || 0,
+            creditDuration: rawData.target.target.CreditDuration || 0
           }
         },
         currentTotals :{
           cs01: rawData.currentTotals.Cs01,
-          creditLeverage: rawData.currentTotals.CreditLeverage
+          creditLeverage: rawData.currentTotals.CreditLeverage,
+          creditDuration: rawData.currentTotals.CreditDuration
         },
         indexId: rawData.indexId,
         indexShortName: rawData.indexShortName,
         indexNav: rawData.indexNav,
         indexTotals: {
           cs01: rawData.indexTotals.Cs01,
-          creditLeverage: rawData.indexTotals.CreditLeverage
+          creditLeverage: rawData.indexTotals.CreditLeverage,
+          creditDuration: rawData.indexTotals.CreditDuration
         },
         children: [],
         cs01TotalsInK: {
@@ -1881,6 +1884,7 @@ export class DTOService {
         },
         cs01TargetBar: null,
         creditLeverageTargetBar: null,
+        creditDurationTargetBar: null,
         originalBEData: rawData
       },
       api: {
@@ -1895,6 +1899,7 @@ export class DTOService {
         hasErrors: {
           updatedCS01: false,
           updatedCreditLeverage: false,
+          updatedCreditDuration: false,
           errorMessage: ''
         }
       }

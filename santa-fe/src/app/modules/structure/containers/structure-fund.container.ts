@@ -25,6 +25,7 @@ export class StructureFund implements OnInit {
   constants = {
     cs01: PortfolioMetricValues.cs01,
     creditLeverage: PortfolioMetricValues.creditLeverage,
+    creditDuration: PortfolioMetricValues.creditDuration,
     editModalId: STRUCTURE_EDIT_MODAL_ID
   }
   subscriptions = {

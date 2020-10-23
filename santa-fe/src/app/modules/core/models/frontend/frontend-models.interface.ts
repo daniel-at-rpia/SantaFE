@@ -735,6 +735,7 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     }
     cs01TargetBar: TargetBarDTO;
     creditLeverageTargetBar: TargetBarDTO;
+    creditDurationTargetBar: TargetBarDTO;
     originalBEData: BEPortfolioStructuringDTO; // used when updating portfolios for portfolio structuring
   },
   api: {
@@ -749,6 +750,7 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     hasErrors: {
       updatedCS01: boolean;
       updatedCreditLeverage: boolean;
+      updatedCreditDuration: boolean;
       errorMessage: string;
     }
   }

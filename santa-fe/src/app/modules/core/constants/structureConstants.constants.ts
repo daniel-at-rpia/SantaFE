@@ -27,7 +27,8 @@ export enum PortfolioShortNames {
 
 export enum PortfolioMetricValues {
   cs01 = 'CS01',
-  creditLeverage = 'Credit Leverage'
+  creditLeverage = 'Credit Leverage',
+  creditDuration = 'Credit Duration'
 }
 
 export enum BICsLevels {
