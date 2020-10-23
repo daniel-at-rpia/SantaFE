@@ -222,6 +222,12 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
           @include material();
           background-color: $color_white;
           cursor: pointer;
+          &>i {
+            color: $font_color_major;
+          }
+          &>span {
+            color: $font_color_major;
+          }
         }
       }
     }
