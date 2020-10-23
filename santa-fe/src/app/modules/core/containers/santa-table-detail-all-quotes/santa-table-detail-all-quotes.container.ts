@@ -27,7 +27,7 @@
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
-    import { QuoteHeaderConfigList, TraceTradeCounterParty, traceTradeFilterMillion, traceTradeFilterFiveMillion, traceTradeFilterBaseAmount } from 'Core/constants/securityTableConstants.constant';
+    import { QuoteHeaderConfigList, TraceTradeCounterParty, traceTradeNumericalFilters} from 'Core/constants/securityTableConstants.constant';
     import * as BEModels from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
     import { GraphService } from 'Core/services/GraphService';
@@ -218,13 +218,20 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   }
 
   public filterTraceTradesByOptions(options: Array<string>) {
+    if (this.rowData.data.traceTradeVisualizer.graph.scatterGraph) {
+      this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.scatterGraph);
+      this.rowData.data.traceTradeVisualizer.graph.scatterGraph = null;
+    }
+    if (this.rowData.data.traceTradeVisualizer.graph.pieGraph) {
+      this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.pieGraph);
+      this.rowData.data.traceTradeVisualizer.graph.pieGraph = null;
+    }
     const copy = this.utilityService.deepCopy(this.rowData.data.traceTradeVisualizer);
     this.rowData.data.traceTradeVisualizer = copy;
     if (options.length > 0) {
       options.forEach((option,i) => {
-        //rewrite the option list for the purposes of processing the data, while maintaining the ≥ in the filters for 1M & 5M
-        if (option.includes(traceTradeFilterMillion) || option.includes(traceTradeFilterFiveMillion)) {
-          options[i] = option.includes(traceTradeFilterMillion) ? traceTradeFilterMillion : traceTradeFilterFiveMillion
+        if (option.includes('≥')) {
+          options[i] = option.split('≥')[1].trim();
         }
       })
       let processingTraceTradesList: Array<TraceTradeBlock> = [];
@@ -238,20 +245,25 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
         processingTraceTradesList = this.rowData.data.security.data.traceTrades;
       }
       let filterListWithCounterParty: Array<TraceTradeBlock> = [];
-      const optionsCounterPartyList = options.filter(options => !options.includes(traceTradeFilterMillion) && !options.includes(traceTradeFilterFiveMillion));
+      const filterWithNumber = /\d/;
+      const optionsCounterPartyList = options.filter(option => !filterWithNumber.test(option));
       if (optionsCounterPartyList.length > 0) {
         optionsCounterPartyList.forEach(counterParty => {
           const counterPartyFilterList = processingTraceTradesList.filter(trade => trade.counterParty === counterParty);
           filterListWithCounterParty = [...filterListWithCounterParty, ...counterPartyFilterList];
         })
       }
+      const filterTradesByAmount = (list: Array<TraceTradeBlock>, amount: number,): Array<TraceTradeBlock> => {
+        const newList = list.filter(trade => !!trade.volumeEstimated ? trade.volumeEstimated >= amount : trade.volumeReported >= amount);
+        return newList;
+      }
       const traceTradesFilterData = optionsCounterPartyList.length > 0 ? filterListWithCounterParty : processingTraceTradesList;
-      const traceFilterMillion = traceTradeFilterBaseAmount;
-      const traceFilterFiveMillion = traceTradeFilterBaseAmount * 5;
-      if (options.indexOf(traceTradeFilterMillion) > -1 || (options.indexOf(traceTradeFilterMillion) > -1 && options.indexOf(traceTradeFilterFiveMillion) > -1)) {
-        this.rowData.data.traceTradeVisualizer.data.displayList = traceTradesFilterData.filter(trade => !!trade.volumeEstimated ? trade.volumeEstimated >= traceFilterMillion : trade.volumeReported >= traceFilterMillion);
-      } else if (options.indexOf(traceTradeFilterFiveMillion) > -1) {
-        this.rowData.data.traceTradeVisualizer.data.displayList = traceTradesFilterData.filter(trade => !!trade.volumeEstimated ? trade.volumeEstimated >= traceFilterFiveMillion : trade.volumeReported >= traceFilterFiveMillion);
+      if (options.includes(traceTradeNumericalFilters.filter250K.filterName)) {
+        this.rowData.data.traceTradeVisualizer.data.displayList = filterTradesByAmount(traceTradesFilterData, traceTradeNumericalFilters.filter250K.amount)
+      } else if (options.includes(traceTradeNumericalFilters.filter1M.filterName)) {
+        this.rowData.data.traceTradeVisualizer.data.displayList = filterTradesByAmount(traceTradesFilterData, traceTradeNumericalFilters.filter1M.amount)
+      } else if (options.includes(traceTradeNumericalFilters.filter5M.filterName)) {
+        this.rowData.data.traceTradeVisualizer.data.displayList = filterTradesByAmount(traceTradesFilterData, traceTradeNumericalFilters.filter5M.amount)
       } else {
         this.rowData.data.traceTradeVisualizer.data.displayList = traceTradesFilterData;
       }

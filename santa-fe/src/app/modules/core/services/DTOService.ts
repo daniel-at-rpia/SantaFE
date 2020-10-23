@@ -31,9 +31,7 @@
       AGGRID_ROW_HEIGHT,
       AGGRID_ROW_HEIGHT_SLIM,
       TraceTradeCounterPartyList,
-      traceTradeFilterMillion,
-      traceTradeFilterFiveMillion,
-      traceTradeFilterBaseAmount,
+      traceTradeNumericalFilters,
       AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD
     } from 'Core/constants/securityTableConstants.constant';
     import {
@@ -2253,14 +2251,15 @@ export class DTOService {
 
       object.data.displayList = targetRow.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT ? targetRow.data.security.data.traceTrades.filter((trade, i) => i < TRACE_INITIAL_LIMIT) : targetRow.data.security.data.traceTrades;
     }
-    const traceFilterMillion = traceTradeFilterBaseAmount;
-    const traceFilterFiveMillion = traceTradeFilterBaseAmount * 5;
     object.data.filterList.forEach(option => {
-      if (option.includes(traceTradeFilterMillion)) {
-        const tradeVolumeOverMillion = object.data.displayList.find((trade:Blocks.TraceTradeBlock) => !!trade.volumeEstimated ? trade.volumeEstimated >= traceFilterMillion : trade.volumeReported >= traceFilterMillion);
+      if (option.includes(traceTradeNumericalFilters.filter250K.filterName)) {
+        const tradeVolumeOver250K = object.data.displayList.find((trade:Blocks.TraceTradeBlock) => !!trade.volumeEstimated ? trade.volumeEstimated >= traceTradeNumericalFilters.filter250K.amount : trade.volumeReported >= traceTradeNumericalFilters.filter250K.amount);
+        !!tradeVolumeOver250K && object.data.availableFiltersList.push(option);
+      } else if (option.includes(traceTradeNumericalFilters.filter1M.filterName )) {
+        const tradeVolumeOverMillion = object.data.displayList.find((trade:Blocks.TraceTradeBlock) => !!trade.volumeEstimated ? trade.volumeEstimated >= traceTradeNumericalFilters.filter1M.amount  : trade.volumeReported >= traceTradeNumericalFilters.filter1M.amount);
         !!tradeVolumeOverMillion && object.data.availableFiltersList.push(option);
-      } else if (option.includes(traceTradeFilterFiveMillion)) {
-        const tradeVolumeOverFiveMillion = object.data.displayList.find((trade:Blocks.TraceTradeBlock) => !!trade.volumeEstimated ? trade.volumeEstimated >= traceFilterFiveMillion : trade.volumeReported >= traceFilterFiveMillion);
+      } else if (option.includes(traceTradeNumericalFilters.filter5M.filterName)) {
+        const tradeVolumeOverFiveMillion = object.data.displayList.find((trade:Blocks.TraceTradeBlock) => !!trade.volumeEstimated ? trade.volumeEstimated >= traceTradeNumericalFilters.filter5M.amount  : trade.volumeReported >= traceTradeNumericalFilters.filter1M.amount);
         !!tradeVolumeOverFiveMillion && object.data.availableFiltersList.push(option);
       } else {
         const isCounterPartyAvailable = object.data.displayList.find(trade => trade.counterParty === option);

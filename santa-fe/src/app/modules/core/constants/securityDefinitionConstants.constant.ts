@@ -5,7 +5,7 @@ import {
   SecurityMetricOptionStub,
   SearchShortcutStub
 } from 'FEModels/frontend-stub-models.interface';
-import { TraceTradeCounterParty, traceTradeFilterMillion, traceTradeFilterFiveMillion, TraceTradeCounterPartyList } from 'Core/constants/securityTableConstants.constant';
+import { TraceTradeCounterParty, traceTradeNumericalFilters } from 'Core/constants/securityTableConstants.constant';
 
 import { APIUrlMap } from 'Core/constants/coreConstants.constant';
 
@@ -546,6 +546,7 @@ export const FilterTraceTradesOptions = [
   TraceTradeCounterParty.C,
   TraceTradeCounterParty.A,
   TraceTradeCounterParty.T,
-  `≥ ${traceTradeFilterMillion}`,
-  `≥ ${traceTradeFilterFiveMillion}`
+  `≥ ${traceTradeNumericalFilters.filter250K.filterName}`,
+  `≥ ${traceTradeNumericalFilters.filter1M.filterName}`,
+  `≥ ${traceTradeNumericalFilters.filter5M.filterName}`
 ]
