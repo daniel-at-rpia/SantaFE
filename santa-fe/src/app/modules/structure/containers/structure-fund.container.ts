@@ -11,6 +11,8 @@ import { ModalService } from 'Form/services/ModalService';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
 import { PortfolioBreakdownDTO, TargetBarDTO } from 'FEModels/frontend-models.interface';
 import { StructureSendSetTargetTransferEvent} from 'Structure/actions/structure.actions';
+import { UpdateTargetBlock, UpdateTargetPack } from 'Core/models/frontend/frontend-adhoc-packages.interface';
+import { BEPortfolioTargetMetricValues } from 'Core/constants/structureConstants.constants';
 
 @Component({
   selector: 'structure-fund',
@@ -21,11 +23,13 @@ import { StructureSendSetTargetTransferEvent} from 'Structure/actions/structure.
 
 export class StructureFund implements OnInit {
   @Input() fund: PortfolioStructureDTO;
-  @Output() updatedFundData = new EventEmitter<PortfolioStructureDTO>();
+  @Output() updatedFundData = new EventEmitter<UpdateTargetPack>();
   constants = {
     cs01: PortfolioMetricValues.cs01,
     creditLeverage: PortfolioMetricValues.creditLeverage,
     creditDuration: PortfolioMetricValues.creditDuration,
+    BECreditLeverage: BEPortfolioTargetMetricValues.CreditLeverage,
+    BECreditDuration: BEPortfolioTargetMetricValues.CreditDuration,
     editModalId: STRUCTURE_EDIT_MODAL_ID
   }
   subscriptions = {
@@ -68,11 +72,9 @@ export class StructureFund implements OnInit {
   public onChangeValue(amount: string, type: PortfolioMetricValues) {
     const value = !parseFloat(amount) ? 0 : parseFloat(amount);
     if (type === PortfolioMetricValues.creditDuration) {
-      this.fund.data.target.target.creditDuration = value;
-      this.fund.data.originalBEData.target.target.CreditDuration = value;
+      this.fund.state.modifiedFundTargets.creditDuration = value;
     } else {
-      this.fund.data.target.target.creditLeverage = value;
-      this.fund.data.originalBEData.target.target.CreditLeverage = value;
+      this.fund.state.modifiedFundTargets.creditLeverage  = value;
     }
   }
 
@@ -112,8 +114,26 @@ export class StructureFund implements OnInit {
       this.fund.state.hasErrors[invalidInputErrorRef] = true;
       this.fund.state.hasErrors.errorMessage = `*Please enter a valid target level for ${invalidTarget}`;
     } else {
-      this.fund.state.isEditingFund = false;
-      this.updatedFundData.emit(this.fund)
+      let updatedTargetData = [];
+      const checkTargetUpdates = (currentTarget: number, previousTarget: number, BEMetricType: BEPortfolioTargetMetricValues) => {
+        if (currentTarget !== previousTarget) {
+          const targetUpdateBlock: UpdateTargetBlock = {
+            metric: BEMetricType,
+            target: currentTarget
+          }
+          updatedTargetData.push(targetUpdateBlock);
+        }
+      }
+      checkTargetUpdates(targetCreditDuration, this.fund.data.target.target.creditDuration, this.constants.BECreditDuration);
+      checkTargetUpdates(targetLeverage, this.fund.data.target.target.creditLeverage, this.constants.BECreditLeverage);
+      if (updatedTargetData.length > 0) {
+        const updateData: UpdateTargetPack = {
+          fund: this.fund,
+          updateTargetBlocks: updatedTargetData
+        }
+        this.fund.state.isEditingFund = false;
+        this.updatedFundData.emit(updateData)
+      }
     }
   }
 }

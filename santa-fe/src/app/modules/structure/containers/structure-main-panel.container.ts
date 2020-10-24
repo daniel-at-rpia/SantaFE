@@ -9,7 +9,7 @@ import { selectUserInitials } from 'Core/selectors/core.selectors';
 import { selectReloadBreakdownDataPostEdit, selectMainPanelUpdateTick } from 'Structure/selectors/structure.selectors';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { UtilityService } from 'Core/services/UtilityService';
-import { PortfolioMetricValues, PortfolioShortNames } from 'Core/constants/structureConstants.constants';
+import { PortfolioMetricValues, PortfolioShortNames, BEPortfolioTargetMetricValues } from 'Core/constants/structureConstants.constants';
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 import { PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/frontend-models.interface';
 import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backend-models.interface';
@@ -19,7 +19,7 @@ import {
   PayloadGetPortfolioStructures,
   PayloadSetView
 } from 'App/modules/core/models/backend/backend-payloads.interface';
-import { StructureSetTargetPostEditUpdatePack, StructureSetViewData } from 'FEModels/frontend-adhoc-packages.interface';
+import { StructureSetTargetPostEditUpdatePack, StructureSetViewData, UpdateTargetPack, UpdateTargetBlock } from 'FEModels/frontend-adhoc-packages.interface';
 import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 
 @Component({
@@ -133,17 +133,18 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     }
   }
 
-  public getFundFromNewTargets(fund: PortfolioStructureDTO) {
+  public getFundFromNewTargets(updateData: UpdateTargetPack) {
+    const { fund, updateTargetBlocks } = updateData;
     const payload: PayloadUpdatePortfolioStructuresTargets = {
       portfolioTarget: {
-        date: fund.data.originalBEData.target.date,
         portfolioId: fund.data.originalBEData.target.portfolioId,
-        target: {
-          CreditLeverage: fund.data.target.target.creditLeverage,
-          Cs01: fund.data.target.target.cs01
-        }
+        target: {}
       }
     }
+    updateTargetBlocks.forEach((targetBlock: UpdateTargetBlock ) => {
+      const { metric, target } = targetBlock
+      payload.portfolioTarget.target[metric] = target;
+    });
     fund.state.isStencil = true;
     fund.data.cs01TargetBar.state.isStencil = true;
     fund.data.creditLeverageTargetBar.state.isStencil = true;
@@ -159,7 +160,18 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       first(),
       tap((serverReturn: BEPortfolioStructuringDTO) => {
         const updatedFund = this.dtoService.formStructureFundObject(serverReturn, false, this.state.selectedMetricValue);
-        const systemAlertMessage = `Successfully updated ${updatedFund.data.portfolioShortName}. Target CS01 level is ${updatedFund.data.cs01TargetBar.data.displayedTargetValue} and Credit Leverage level is ${updatedFund.data.creditLeverageTargetBar.data.displayedTargetValue}`;
+        let messageModifier: string = '';
+        updateTargetBlocks.forEach(targetBlock => {
+          const { metric, target } = targetBlock;
+          const parsedMetric = metric === BEPortfolioTargetMetricValues.CreditDuration ? PortfolioMetricValues.creditDuration : PortfolioMetricValues.creditLeverage;
+          if (parsedMetric === PortfolioMetricValues.creditDuration) {
+            const formattedCS01Target = this.utilityService.parseNumberToThousands(this.utilityService.round(serverReturn.target.target.Cs01), true, 0);
+            messageModifier += `New ${parsedMetric} target is ${target}. New CS01 target is ${formattedCS01Target}. `
+          } else {
+            messageModifier += `New ${parsedMetric} target is ${target}. `
+          }
+        })
+        const systemAlertMessage = `Successfully updated ${updatedFund.data.portfolioShortName}. ${messageModifier}`;
         this.reloadFund(serverReturn, systemAlertMessage);
       }),
       catchError(err => {

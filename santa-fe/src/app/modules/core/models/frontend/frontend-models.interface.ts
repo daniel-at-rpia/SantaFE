@@ -747,6 +747,10 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     isNumeric: boolean;
     isDataUnavailable: boolean;
     isEditingFund: boolean;
+    modifiedFundTargets: {
+      creditDuration: number;
+      creditLeverage: number;
+    }
     hasErrors: {
       updatedCS01: boolean;
       updatedCreditLeverage: boolean;

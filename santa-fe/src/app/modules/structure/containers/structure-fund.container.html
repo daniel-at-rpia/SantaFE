@@ -65,7 +65,7 @@
         <span>Edit Fund</span>
       </button>
       <button class="sat-fundStructuring__utility-btnGroup-btn santaBtn--circleLabelled sat-fundStructuring__utility-btnGroup-btn--save"
-      (click)="onClickSaveNewMetrics(fund.data.target.target.creditDuration, fund.data.target.target.creditLeverage)">
+      (click)="onClickSaveNewMetrics(fund.state.modifiedFundTargets.creditDuration, fund.state.modifiedFundTargets.creditLeverage)">
         <i class="fal fa-check"></i>
         <span>Save Edit</span>
       </button>
