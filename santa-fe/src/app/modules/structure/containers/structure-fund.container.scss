@@ -15,6 +15,7 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
     flex-wrap: wrap;
     justify-content: space-evenly;
     align-items: center;
+    margin-bottom: $spacing_medium;
     &-title {
       flex: 0 0 100%;
       margin: $spacing_small 0;
