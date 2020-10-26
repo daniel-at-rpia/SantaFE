@@ -137,8 +137,8 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
         flex-direction: column;
         padding: $spacing_medium $spacing_small;
         &-item {
-          padding: $spacing_small $spacing_medium;
-          margin: $spacing_x_small $spacing_medium;
+          padding: $spacing_small;
+          margin: $spacing_small $spacing_medium;
           font-size: $font_size_small;
           word-break: break-word;
           &--selected {
@@ -155,8 +155,11 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
           flex: 0 0 auto;
           display: none;
           max-height: 11rem;
-          padding: $spacing_medium 0 $spacing_small 0;
+          padding: $spacing_x_small;
           margin: 0 $spacing_medium;
+        }
+        &--selected > &-item {
+          margin: 0 0 $spacing_x_small 0;
         }
       }
       &-consolidatedBICSList {
@@ -166,21 +169,21 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
         padding: $spacing_medium $spacing_small;
         &-item {
           display: flex;
-          align-items: flex-start;
           margin-bottom: $spacing_medium;
           &-diveIn {
             flex: 0 0 auto;
-            margin-right: $spacing_small;
+            margin-right: $spacing_medium;
           }
           &-select {
             flex: 1 1 auto;
             word-break: break-word;
-            font-size: $font_size_x_small;
+            padding: $spacing_x_small;
           }
           &--selected > &-select {
             @include material('none');
             background-color: $color_filter;
             color: $font_color_inverse;
+            padding: $spacing_small;
           }
           &--selected > &-diveIn {
             display: none;
@@ -208,7 +211,6 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
               text-align: center;
               margin-right: $spacing_small;
               color: $font_color_inverse;
-              font-size: $font_size_x_small;
             }
             &-diveOutBtn {
               flex: 0 0 auto;
@@ -318,9 +320,6 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
           display: flex;
         }
         &-optionList {
-          &-item {
-            font-size: $font_size_x_small;
-          }
           &--selected {
             display: flex;
           }
