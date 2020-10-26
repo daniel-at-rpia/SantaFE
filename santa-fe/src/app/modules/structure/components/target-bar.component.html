@@ -5,8 +5,7 @@
   'sat-fundTargetBar--stencilState': targetBar.state.isStencil,
   'sat-fundTargetBar--emptyState': targetBar.state.isEmpty,
   'sat-fundTargetBar--errorState': targetBar.state.isDataUnavailable,
-  'sat-fundTargetBar--creditDuration': targetBar.data.targetMetric === constants.creditDuration,
-  'sat-fundTargetBar--cs01': targetBar.data.targetMetric === constants.cs01
+  'sat-fundTargetBar--additionalMetricTargetDataState': targetBar.data.additionalMetricTargetData
   }"
 >
     <p class="sat-fundTargetBar__type" *ngIf="targetBar.data.targetMetric !== constants.cs01">{{ targetBar.data.targetMetric }}</p>
@@ -21,6 +20,10 @@
       class="sat-fundTargetBar__indicator-values">
         <span class="sat-fundTargetBar__indicator-values-text">{{ targetBar.data.displayedResults }}</span>
       </div>
+    </section>
+    <section *ngIf="targetBar.data.additionalMetricTargetData" class="sat-fundTargetBar__additionalMetricTargetData">
+      <span class="sat-fundTargetBar__additionalMetricTargetData-type">{{ targetBar.data.additionalMetricTargetData.metric}}</span>
+      <span class="sat-fundTargetBar__additionalMetricTargetData-value">{{ targetBar.data.additionalMetricTargetData.current }} / {{ targetBar.data.additionalMetricTargetData.target }}</span>
     </section>
     <div class="sat-fundTargetBar__tooltip">Current / Target</div>
 </article>

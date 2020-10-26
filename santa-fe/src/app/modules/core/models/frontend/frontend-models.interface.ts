@@ -729,10 +729,6 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     indexNav: number;
     indexTotals: PortfolioMetricTotals;
     children: Array<PortfolioBreakdownDTO>;
-    cs01TotalsInK?: {
-      currentTotal: number;
-      targetTotal: number;
-    }
     cs01TargetBar: TargetBarDTO;
     creditLeverageTargetBar: TargetBarDTO;
     creditDurationTargetBar: TargetBarDTO;
@@ -769,6 +765,11 @@ export interface TargetBarDTO extends BasicDTOStructure {
     currentPercentage: string;
     exceededPercentage: string;
     displayedResults: string;
+    additionalMetricTargetData?: {
+      metric: PortfolioMetricValues;
+      current: string;
+      target: string;
+    }
   }
   state: {
     isInactiveMetric: boolean,

@@ -16,6 +16,7 @@
     height: $spacing_large;
     overflow: hidden;
     background-color: $color_active;
+    margin-bottom: $spacing_x_small;
     &-bar {
       @include mix_fixed_div(absolute, $z_index_base_item_solid);
       display: inline-block;
@@ -49,6 +50,19 @@
         color: $font_color_inverse;
       }
     }
+  }
+  &__additionalMetricTargetData {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    align-items: center;
+      &-type {
+        margin-bottom: $spacing_xx_small;
+      }
+      &-type,
+      &-value {
+        flex: 1 1 auto;
+      }
   }
   &__tooltip {
     @include mix_fixed_div(absolute, $z_index_hovering_item);
@@ -85,8 +99,17 @@
   }
   &--inactiveState {
     #{$blockName} {
+      &__type {
+        color: $color_disabled;
+      }
       &__indicator {
         opacity: 0.2;
+      }
+      &__additionalMetricTargetData {
+        &-type,
+        &-value {
+          color: $color_disabled;
+        }
       }
     }
   }
@@ -100,34 +123,12 @@
       }
     }
   }
-  &--creditDuration {
+  &--additionalMetricTargetDataState {
     #{$blockName} {
       &__type {
-        margin-top: 1.75rem;
+        margin-top: 2rem;
       }
     }
-  }
-  &--cs01 {
-   #{$blockName} {
-     &__indicator {
-       background-color: transparent;
-       border: none;
-       &-bar {
-         &--exceeded,
-         &--current {
-          display: none;
-         }
-       }
-       &-values {
-         top: 10%;
-         left: 50%;
-         transform: translate(-50%, -10%);
-         &-text {
-           color: $font_color_major;
-         }
-       }
-     }
-   }
   }
   &--stencilState {
     #{$blockName} {
@@ -136,6 +137,12 @@
           &-text {
             @include mix_stencil_animation();
           }
+        }
+      }
+      &__additionalMetricTargetData {
+        &-type,
+        &-value {
+          @include mix_stencil_animation();
         }
       }
     }
