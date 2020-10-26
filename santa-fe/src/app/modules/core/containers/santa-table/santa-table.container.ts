@@ -943,6 +943,16 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   private getAllTraceTrades(targetRow: SecurityTableRowDTO, isPinnedFullWidth: boolean = false) {
+    if (targetRow.data.traceTradeVisualizer) {
+      if (targetRow.data.traceTradeVisualizer.graph.pieGraph) {
+        this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.pieGraph)
+        targetRow.data.traceTradeVisualizer.graph.pieGraph = null;
+      }
+      if (targetRow.data.traceTradeVisualizer.graph.scatterGraph) {
+        this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.scatterGraph)
+        targetRow.data.traceTradeVisualizer.graph.scatterGraph = null;
+      }
+    }
     const previousTraceTradesDisplayAllState = !!targetRow.data.traceTradeVisualizer ? targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades : false;
     const previousSelectedFilters = !!targetRow.data.traceTradeVisualizer && targetRow.data.traceTradeVisualizer.state.selectedFiltersList.length > 0 ? targetRow.data.traceTradeVisualizer.state.selectedFiltersList : [];
     const previousDisplayListCopy = previousSelectedFilters.length > 0 ? this.utilityService.deepCopy(targetRow.data.traceTradeVisualizer.data.displayList) : [];
