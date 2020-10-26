@@ -270,6 +270,8 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'Basis'
   ];
 
+export const editingViewAvailableUsers = [...FilterOptionsPortfolioResearchList, 'DM'];
+
 export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
   SECURITY_TYPE: {
     key: 'SECURITY_TYPE',

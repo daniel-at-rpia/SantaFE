@@ -249,7 +249,8 @@ export const EngagementActionList = {
   tradeAlertAddSingleSecurity: 'Trade Alert Add Single Security',
   tradeAlertClickedTab: 'Trade Alert Click Tab',
   santaTableAllQuotesDisplayTradeHistory: 'Switch To Display Trade History',
-  santaTableAllQuotesDisplayQuotes: 'Switch To Display Quotes'
+  santaTableAllQuotesDisplayQuotes: 'Switch To Display Quotes',
+  portfolioStructureSetView: 'Portfolio Breakdown Category View Set'
 }
 
 export enum AlertTypes {

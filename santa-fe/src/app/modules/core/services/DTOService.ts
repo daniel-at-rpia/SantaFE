@@ -1966,6 +1966,7 @@ export class DTOService {
         isPreviewVariant: false,
         isBICs: !!isBicsBreakdown,
         isOverrideVariant: false,
+        isEditingViewAvail: false,
         isEditingView: false
       }
     };
