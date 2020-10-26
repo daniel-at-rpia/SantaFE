@@ -4,10 +4,12 @@
   'sat-fundTargetBar--inactiveState': targetBar.state.isInactiveMetric,
   'sat-fundTargetBar--stencilState': targetBar.state.isStencil,
   'sat-fundTargetBar--emptyState': targetBar.state.isEmpty,
-  'sat-fundTargetBar--errorState': targetBar.state.isDataUnavailable
+  'sat-fundTargetBar--errorState': targetBar.state.isDataUnavailable,
+  'sat-fundTargetBar--creditDuration': targetBar.data.targetMetric === constants.creditDuration,
+  'sat-fundTargetBar--cs01': targetBar.data.targetMetric === constants.cs01
   }"
 >
-    <p class="sat-fundTargetBar__type">{{ targetBar.data.targetMetric }}</p>
+    <p class="sat-fundTargetBar__type" *ngIf="targetBar.data.targetMetric !== constants.cs01">{{ targetBar.data.targetMetric }}</p>
     <section class="sat-fundTargetBar__indicator">
       <div
       [ngStyle]="{'width': targetBar.data.exceededPercentage}"
