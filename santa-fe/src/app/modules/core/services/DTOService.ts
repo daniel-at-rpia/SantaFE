@@ -2124,7 +2124,7 @@ export class DTOService {
         },
         view: view,
         bucket: bucket,
-        overrideVariant: !!isOverride
+        showFullCategory: !!isOverride
       };
       if (eachCategoryBlock.diffToTarget < 0) {
         eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `${eachCategoryBlock.diffToTarget}k` : `${eachCategoryBlock.diffToTarget}`;
