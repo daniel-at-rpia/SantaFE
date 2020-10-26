@@ -752,7 +752,6 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
       creditLeverage: number;
     }
     hasErrors: {
-      updatedCS01: boolean;
       updatedCreditLeverage: boolean;
       updatedCreditDuration: boolean;
       errorMessage: string;

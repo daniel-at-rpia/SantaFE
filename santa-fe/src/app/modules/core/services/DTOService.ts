@@ -1896,7 +1896,6 @@ export class DTOService {
         isDataUnavailable: false,
         isEditingFund: false,
         hasErrors: {
-          updatedCS01: false,
           updatedCreditLeverage: false,
           updatedCreditDuration: false,
           errorMessage: ''
