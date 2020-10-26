@@ -41,7 +41,8 @@
       FilterOptionsCurrency,
       FilterOptionsRating,
       FilterOptionsTenor,
-      BICsLevel1DefinitionList
+      BICsLevel1DefinitionList,
+      DEFINITION_LONG_THRESHOLD
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       QuoteHeaderConfigList
@@ -467,8 +468,9 @@ export class DTOService {
   }
 
   public generateSecurityDefinitionFilterOptionList(
-    name,
-    options
+    name: string,
+    options: Array<string>,
+    suffix: string = ''
   ): Array<Blocks.SecurityDefinitionFilterBlock> {
     return options.map((eachOption) => {
       const normalizedOption = this.utility.normalizeDefinitionFilterOption(eachOption);
@@ -477,7 +479,7 @@ export class DTOService {
         isFilteredOut: false,
         displayLabel: eachOption,
         shortKey: normalizedOption,
-        key: this.utility.formDefinitionFilterOptionKey(name, normalizedOption)
+        key: `${this.utility.formDefinitionFilterOptionKey(name, normalizedOption)}-${suffix}`
       }
       return newFilterDTO;
     })
@@ -520,7 +522,7 @@ export class DTOService {
   ): DTOs.SecurityDefinitionDTO {
     targetDefinition.data.prinstineFilterOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList);
     targetDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList);
-    targetDefinition.state.isFilterLong = optionList.length > 5;
+    targetDefinition.state.isFilterLong = optionList.length > DEFINITION_LONG_THRESHOLD;
     return targetDefinition;
   }
 

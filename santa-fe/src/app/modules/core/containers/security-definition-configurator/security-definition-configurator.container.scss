@@ -208,10 +208,8 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
               margin-right: $spacing_small;
               color: $font_color_inverse;
             }
-            &-cancelBtn {
+            &-diveOutBtn {
               flex: 0 0 auto;
-              color: $font_color_inverse;
-              background-color: $color_kill;
             }
           }
           &-separator {

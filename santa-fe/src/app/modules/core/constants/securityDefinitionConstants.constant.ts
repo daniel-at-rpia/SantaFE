@@ -556,3 +556,5 @@ export const RatingValueToLevelMapping = [
     values: ['NR']
   }
 ];
+
+export const DEFINITION_LONG_THRESHOLD = 5;

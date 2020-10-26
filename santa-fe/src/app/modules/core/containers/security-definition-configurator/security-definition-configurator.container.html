@@ -75,7 +75,7 @@
         <div *ngFor="let eachLevel of configuratorData.state.showFiltersFromDefinition?.state.currentFilterPathInConsolidatedBICS; let level = index;" class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn-entry">
           <div class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn-entry-content">
             <div class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn-entry-content-text">{{eachLevel}}</div>
-            <button (click)="onClickConsolidatedBICSDiveOut(eachLevel, level)" class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn-entry-content-cancelBtn santaBtn--iconOnly santaBtn--small fal fa-times"></button>
+            <button (click)="onClickConsolidatedBICSDiveOut(eachLevel, level)" class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn-entry-content-diveOutBtn santaBtn--iconOnly santaBtn--small fas fa-minus"></button>
           </div>
           <div class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn-entry-separator">
             <i class="far fa-arrow-down"></i>
@@ -101,7 +101,7 @@
             'sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item': true,
             'sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item--selected': eachOption.isSelected
           }">
-          <button (click)="onClickConsolidatedBICSDiveIn(eachOption)" class="santaBtn--iconOnly sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item-diveIn fal fa-sign-in fa-rotate-90"></button>
+          <button (click)="onClickConsolidatedBICSDiveIn(eachOption)" class="santaBtn--iconOnly sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item-diveIn far fa-plus"></button>
           <button (click)="onClickFilterOption(eachOption)" class="sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item-select">
             {{eachOption.displayLabel}}
           </button>

@@ -123,9 +123,16 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     if (this.configuratorData.state.groupByDisabled) {
       this.configuratorData.state.canApplyFilter = this.checkFilterCanApply();
     }
-    targetDefinition.data.highlightSelectedOptionList = targetDefinition.data.filterOptionList.filter((eachFilter) => {
-      return !!eachFilter.isSelected;
-    });
+    if (targetOption.isSelected) {
+      targetDefinition.data.highlightSelectedOptionList.push(targetOption);
+    } else {
+      targetDefinition.data.highlightSelectedOptionList = targetDefinition.data.highlightSelectedOptionList.filter((eachFilter) => {
+        return eachFilter.key !== targetOption.key;
+      });
+    }
+    // targetDefinition.data.highlightSelectedOptionList = targetDefinition.data.filterOptionList.filter((eachFilter) => {
+    //   return !!eachFilter.isSelected;
+    // });
   }
 
   public onSearchKeywordChange(newKeyword) {
@@ -166,7 +173,13 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.push(targetOption.shortKey);
       const level = consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.length;
       const newList = this.bicsDataProcessingService.getSubLevelList(targetOption.shortKey, level);
-      consolidatedBICSDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(consolidatedBICSDefinition.data.key, newList);
+      consolidatedBICSDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(consolidatedBICSDefinition.data.key, newList, `${level}`);
+      consolidatedBICSDefinition.data.filterOptionList.forEach((eachOption) => {
+        const existInSelected = consolidatedBICSDefinition.data.highlightSelectedOptionList.find((eachSelectedOption) => {
+          return eachOption.key === eachSelectedOption.key;
+        });
+        eachOption.isSelected = !!existInSelected;
+      });
     }
   }
 
@@ -178,7 +191,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       let newList = [];
       if (newLevel > 0) {
         newList = this.bicsDataProcessingService.getSubLevelList(
-          consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS[0],
+          consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS[consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.length-1],
           newLevel
         );
       } else {
@@ -186,8 +199,13 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
           newLevel+1
         );
       }
-
-      consolidatedBICSDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(consolidatedBICSDefinition.data.key, newList);
+      consolidatedBICSDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(consolidatedBICSDefinition.data.key, newList, `${newLevel}`);
+      consolidatedBICSDefinition.data.filterOptionList.forEach((eachOption) => {
+        const existInSelected = consolidatedBICSDefinition.data.highlightSelectedOptionList.find((eachSelectedOption) => {
+          return eachOption.key === eachSelectedOption.key;
+        });
+        eachOption.isSelected = !!existInSelected;
+      });
     }
   }
 
