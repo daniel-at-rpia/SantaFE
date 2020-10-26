@@ -5,6 +5,7 @@ $portfolioBreakdown_borderWidth: $typical_border_width*2; // can't use rem becau
 $portfolioBreakdown_rating_width: 12rem;
 $portfolioBreakdown_rating_thickness: 1.75rem;
 $portfolioBreakdown_categoryList_cell_width: 3.5rem;
+$portfolioBreakdown_rating_height: 1rem;
 
 .sat-portfolioBreakdown {
   $blockName: &;
@@ -44,7 +45,8 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
     justify-content: center;
     align-items: center;
     top: -$portfolioBreakdown_rating_thickness/2;
-    right: $spacing_medium;
+    left: 50%;
+    transform: translateX(-50%);
     width: $portfolioBreakdown_rating_width;
     height: $portfolioBreakdown_rating_thickness;
     overflow: hidden;
@@ -183,17 +185,16 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
       }
     }
   }
-  // temporarily disable it as the calculation needs to be decided
-  // &--ratingAvailableState {
-  //   #{$blockName} {
-  //     &__rating {
-  //       visibility: visible;
-  //       &-hoverText {
-  //         color: $font_color_inverse;
-  //       }
-  //     }
-  //   }
-  // }
+  &--ratingAvailableState {
+    #{$blockName} {
+      &__rating {
+        visibility: visible;
+        &-hoverText {
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
   &--editableState {
     #{$blockName} {
       &__ctas {

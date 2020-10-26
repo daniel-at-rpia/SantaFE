@@ -45,6 +45,9 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       this.breakdownData.state.isEditable = initials === 'DM';
       this.breakdownData.state.isEditingViewAvail = editingViewAvailableUsers.includes(initials);
     });
+    if (!!this.breakdownData && this.breakdownData.data.displayCategoryList.length > 1 && this.breakdownData.state.isOverrideVariant) {
+      this.sortOverrideRows();
+    }
   }
 
   public ngOnChanges() {
@@ -177,6 +180,18 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
         this.toggleSetView(row, this.breakdownData.state.isEditingView);
       })
     }
+  }
+
+  private sortOverrideRows() {
+    this.breakdownData.data.displayCategoryList.sort((rowA, rowB) => {
+      if (rowA.data.displayCategory < rowB.data.displayCategory) {
+        return -1
+      } else if (rowA.data.displayCategory > rowB.data.displayCategory) {
+        return 1;
+      } else {
+        return 0;
+      }
+    })
   }
 
   private toggleSetView(row: StructurePortfolioBreakdownRowDTO, isEditing: boolean) {
