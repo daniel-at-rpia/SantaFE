@@ -1672,19 +1672,15 @@ export enum TradeSideValueEquivalent {
   Ask = 'Sell'
 }
 
-export const traceTradeNumericalFilters = {
-  filter250K: {
-    filterName: '250K',
-    amount: 250000
-  },
-  filter1M: {
-    filterName: '1M',
-    amount: 1000000
-  },
-  filter5M: {
-    filterName: '5M',
-    amount: 5000000
-  }
+export enum traceTradeNumericalFilters {
+  filter250K = '≥ 250K',
+  filter1M = '≥ 1M',
+  filter5M = '≥ 5M'
+}
+
+export enum traceTradeFilterAmounts {
+  thousand = 1000,
+  million = 1000000
 }
 
 export const TraceTradeCounterPartyList: Array<TraceTradeCounterParty> = [TraceTradeCounterParty.D, TraceTradeCounterParty.C, TraceTradeCounterParty.A, TraceTradeCounterParty.T];

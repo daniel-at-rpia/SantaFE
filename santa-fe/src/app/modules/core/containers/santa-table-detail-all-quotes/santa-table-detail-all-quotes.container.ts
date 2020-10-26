@@ -27,7 +27,7 @@
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
-    import { QuoteHeaderConfigList, TraceTradeCounterParty, traceTradeNumericalFilters} from 'Core/constants/securityTableConstants.constant';
+    import { traceTradeFilterAmounts} from 'Core/constants/securityTableConstants.constant';
     import * as BEModels from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
     import { GraphService } from 'Core/services/GraphService';
@@ -234,42 +234,35 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     }
     const copy = this.utilityService.deepCopy(this.rowData.data.traceTradeVisualizer);
     this.rowData.data.traceTradeVisualizer = copy;
+    let numericalFiltersList: Array<number> = [];
+    const greaterThanSymbol = '≥';
     if (options.length > 0) {
-      options.forEach((option,i) => {
-        if (option.includes('≥')) {
-          options[i] = option.split('≥')[1].trim();
+      options.forEach((option) => {
+        if (option.includes(greaterThanSymbol)) {
+          const numericalAmount: number = this.utilityService.getTraceNumericFilterAmount(greaterThanSymbol, option);
+          numericalFiltersList = [...numericalFiltersList, numericalAmount];
         }
       })
       let processingTraceTradesList: Array<TraceTradeBlock> = [];
-      if (this.rowData.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT) {
-        if (this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades) {
-          processingTraceTradesList = this.rowData.data.security.data.traceTrades;
-        } else {
-          processingTraceTradesList = this.rowData.data.security.data.traceTrades.filter((trade, i) => i < TRACE_INITIAL_LIMIT);
-        }
+      if (this.rowData.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT && !this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades) {
+        processingTraceTradesList = this.rowData.data.security.data.traceTrades.filter((trade, i) => i < TRACE_INITIAL_LIMIT);
       } else {
         processingTraceTradesList = this.rowData.data.security.data.traceTrades;
       }
       let filterListWithCounterParty: Array<TraceTradeBlock> = [];
-      const filterWithNumber = /\d/;
-      const optionsCounterPartyList = options.filter(option => !filterWithNumber.test(option));
+      const checkNumericalFilter = /\d/;
+      const optionsCounterPartyList = options.filter(option => !checkNumericalFilter.test(option));
       if (optionsCounterPartyList.length > 0) {
         optionsCounterPartyList.forEach(counterParty => {
           const counterPartyFilterList = processingTraceTradesList.filter(trade => trade.counterParty === counterParty);
           filterListWithCounterParty = [...filterListWithCounterParty, ...counterPartyFilterList];
         })
       }
-      const filterTradesByAmount = (list: Array<TraceTradeBlock>, amount: number,): Array<TraceTradeBlock> => {
-        const newList = list.filter(trade => !!trade.volumeEstimated ? trade.volumeEstimated >= amount : trade.volumeReported >= amount);
-        return newList;
-      }
       const traceTradesFilterData = optionsCounterPartyList.length > 0 ? filterListWithCounterParty : processingTraceTradesList;
-      if (options.includes(traceTradeNumericalFilters.filter250K.filterName)) {
-        this.rowData.data.traceTradeVisualizer.data.displayList = filterTradesByAmount(traceTradesFilterData, traceTradeNumericalFilters.filter250K.amount)
-      } else if (options.includes(traceTradeNumericalFilters.filter1M.filterName)) {
-        this.rowData.data.traceTradeVisualizer.data.displayList = filterTradesByAmount(traceTradesFilterData, traceTradeNumericalFilters.filter1M.amount)
-      } else if (options.includes(traceTradeNumericalFilters.filter5M.filterName)) {
-        this.rowData.data.traceTradeVisualizer.data.displayList = filterTradesByAmount(traceTradesFilterData, traceTradeNumericalFilters.filter5M.amount)
+      if (numericalFiltersList.length > 0) {
+        numericalFiltersList.sort();
+        const filteredWithAmountsList = this.utilityService.getTraceTradesListBasedOnAmount(traceTradesFilterData, numericalFiltersList[numericalFiltersList.length - 1]);
+        this.rowData.data.traceTradeVisualizer.data.displayList = filteredWithAmountsList;
       } else {
         this.rowData.data.traceTradeVisualizer.data.displayList = traceTradesFilterData;
       }

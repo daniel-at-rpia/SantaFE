@@ -546,7 +546,7 @@ export const FilterTraceTradesOptions = [
   TraceTradeCounterParty.C,
   TraceTradeCounterParty.A,
   TraceTradeCounterParty.T,
-  `≥ ${traceTradeNumericalFilters.filter250K.filterName}`,
-  `≥ ${traceTradeNumericalFilters.filter1M.filterName}`,
-  `≥ ${traceTradeNumericalFilters.filter5M.filterName}`
+  traceTradeNumericalFilters.filter250K,
+  traceTradeNumericalFilters.filter1M,
+  traceTradeNumericalFilters.filter5M
 ]
