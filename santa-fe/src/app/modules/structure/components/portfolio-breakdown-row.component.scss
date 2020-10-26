@@ -221,6 +221,17 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
       }
     }
   }
+  &--showFullCategoryState {
+    #{$blockName} {
+      &__cta {
+        &-btn {
+          &-text {
+            display: flex;
+          }
+        }
+      }
+    }
+  }
   &--stencilState {
     #{$blockName} {
       &__cta {
