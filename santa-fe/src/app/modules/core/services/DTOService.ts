@@ -30,8 +30,6 @@
       SECURITY_TABLE_QUOTE_TYPE_AXE,
       AGGRID_ROW_HEIGHT,
       AGGRID_ROW_HEIGHT_SLIM,
-      TraceTradeCounterPartyList,
-      traceTradeNumericalFilters,
       AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD
     } from 'Core/constants/securityTableConstants.constant';
     import {
@@ -2252,18 +2250,14 @@ export class DTOService {
 
       object.data.displayList = targetRow.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT ? targetRow.data.security.data.traceTrades.filter((trade, i) => i < TRACE_INITIAL_LIMIT) : targetRow.data.security.data.traceTrades;
     }
-    const isTradeAvailableFromVolume = (list: Array<Blocks.TraceTradeBlock>, amount: number, filter: string) => {
-      const isTradeAvailable = list.find((trade: Blocks.TraceTradeBlock) => !!trade.volumeEstimated ? trade.volumeEstimated >= amount : trade.volumeReported >= amount);
-      !!isTradeAvailable && object.data.availableFiltersList.push(filter)
-    }
+    const greaterThanSymbol = '≥';
     object.data.filterList.forEach(option => {
-      const parsedOption = option.includes('≥') ? option.split('≥')[1].trim() : option;
-      if (parsedOption === traceTradeNumericalFilters.filter250K.filterName) {
-        isTradeAvailableFromVolume(object.data.displayList, traceTradeNumericalFilters.filter250K.amount, option)
-      } else if (parsedOption === traceTradeNumericalFilters.filter1M.filterName) {
-        isTradeAvailableFromVolume(object.data.displayList, traceTradeNumericalFilters.filter1M.amount, option)
-      } else if (parsedOption === traceTradeNumericalFilters.filter5M.filterName) {
-        isTradeAvailableFromVolume(object.data.displayList, traceTradeNumericalFilters.filter5M.amount, option)
+      const isNumericOption = option.includes(greaterThanSymbol);
+      if (!!isNumericOption) {
+        const parsedAmount: number = this.utility.getTraceNumericFilterAmount(greaterThanSymbol, option);
+        const isTradeAvailable = this.utility.getTraceTradesListBasedOnAmount(object.data.displayList, parsedAmount);
+        isTradeAvailable.length > 0 && object.data.
+        availableFiltersList.push(option);
       } else {
         const isCounterPartyAvailable = object.data.displayList.find(trade => trade.counterParty === option);
         !!isCounterPartyAvailable && object.data.availableFiltersList.push(option);
