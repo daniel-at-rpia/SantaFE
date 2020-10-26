@@ -1877,6 +1877,10 @@ export class DTOService {
           creditDuration: rawData.indexTotals.CreditDuration
         },
         children: [],
+        cs01TotalsInK: {
+          currentTotal: null,
+          targetTotal: null
+        },
         cs01TargetBar: null,
         creditLeverageTargetBar: null,
         creditDurationTargetBar: null,
@@ -1902,6 +1906,8 @@ export class DTOService {
         }
       }
     };
+    object.data.cs01TotalsInK.targetTotal = object.data.target.target.cs01 / 1000;
+    object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, object.state.isStencil, selectedMetricValue);
     object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil, selectedMetricValue);
     object.data.creditDurationTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditDuration, object.data.currentTotals.creditDuration, object.data.target.target.creditDuration, object.state.isStencil, selectedMetricValue);
     if (!!object.data.creditDurationTargetBar) {

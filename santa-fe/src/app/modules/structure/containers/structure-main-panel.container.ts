@@ -85,6 +85,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         fund.state.isStencil = true; 
         //Switch active and inactive target bars
         fund.data.creditLeverageTargetBar.state.isInactiveMetric = this.state.selectedMetricValue === this.constants.cs01;
+        fund.data.cs01TargetBar.state.isInactiveMetric = this.state.selectedMetricValue === this.constants.creditLeverage;
         fund.data.creditDurationTargetBar.state.isInactiveMetric = this.state.selectedMetricValue === this.constants.creditLeverage;
         //Switch values to be displayed in breakdowns
         fund.data.children.forEach(breakdown => {
@@ -145,6 +146,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       payload.portfolioTarget.target[metric] = target;
     });
     fund.state.isStencil = true;
+    fund.data.cs01TargetBar.state.isStencil = true;
     fund.data.creditLeverageTargetBar.state.isStencil = true;
     fund.data.creditDurationTargetBar.state.isStencil = true;
     fund.data.children.forEach(breakdown => {
@@ -177,6 +179,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         alert.state.isError = true;
         this.store$.dispatch(new CoreSendNewAlerts([alert]));
         fund.state.isStencil = false;
+        fund.data.cs01TargetBar.state.isStencil = false;
         fund.data.creditLeverageTargetBar.state.isStencil = false;
         fund.data.creditDurationTargetBar.state.isStencil = false;
         fund.data.children.forEach(breakdown => {
@@ -247,6 +250,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
           this.state.fetchResult.fundList.forEach(eachFund => {
             eachFund.state.isDataUnavailable = this.state.fetchResult.fetchFundDataFailed;
             this.setEmptyTargetBar(eachFund.data.creditLeverageTargetBar);
+            this.setEmptyTargetBar(eachFund.data.cs01TargetBar);
             this.setEmptyTargetBar(eachFund.data.creditDurationTargetBar);
           })
         }, 500);
@@ -262,6 +266,9 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     systemAlertMessage: string
   ) {
     const updatedFund = this.dtoService.formStructureFundObject(serverReturn, false, this.state.selectedMetricValue);
+    updatedFund.data.cs01TotalsInK.currentTotal = updatedFund.data.currentTotals.cs01 / 1000; //this is used in the set funds input fields, which are numbers - parseNumberToThousands() returns a string
+    updatedFund.data.cs01TargetBar.data.displayedCurrentValue = this.utilityService.parseNumberToThousands(updatedFund.data.currentTotals.cs01, true);
+    updatedFund.data.cs01TargetBar.data.displayedTargetValue = this.utilityService.parseNumberToThousands(updatedFund.data.target.target.cs01, true);
     const selectedFund = this.state.fetchResult.fundList.find(fund => fund.data.portfolioId === updatedFund.data.portfolioId);
     const selectedFundIndex = this.state.fetchResult.fundList.indexOf(selectedFund);
     this.state.fetchResult.fundList[selectedFundIndex] = updatedFund;
