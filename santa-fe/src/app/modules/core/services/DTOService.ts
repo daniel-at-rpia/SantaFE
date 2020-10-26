@@ -470,16 +470,17 @@ export class DTOService {
   public generateSecurityDefinitionFilterOptionList(
     name: string,
     options: Array<string>,
-    suffix: string = ''
+    bicsLevel?: number
   ): Array<Blocks.SecurityDefinitionFilterBlock> {
     return options.map((eachOption) => {
       const normalizedOption = this.utility.normalizeDefinitionFilterOption(eachOption);
       const newFilterDTO: Blocks.SecurityDefinitionFilterBlock = {
         isSelected: false,
         isFilteredOut: false,
-        displayLabel: eachOption,
+        displayLabel: !!bicsLevel ? `lv.${bicsLevel} - ${eachOption}` : eachOption,
+        bicsLevel: bicsLevel || null,
         shortKey: normalizedOption,
-        key: `${this.utility.formDefinitionFilterOptionKey(name, normalizedOption)}-${suffix}`
+        key: `${this.utility.formDefinitionFilterOptionKey(name, normalizedOption)}~${bicsLevel}`
       }
       return newFilterDTO;
     })
@@ -518,10 +519,11 @@ export class DTOService {
 
   public loadSecurityDefinitionOptions(
     targetDefinition: DTOs.SecurityDefinitionDTO,
-    optionList: Array<string>
+    optionList: Array<string>,
+    bicsLevel?: number
   ): DTOs.SecurityDefinitionDTO {
-    targetDefinition.data.prinstineFilterOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList);
-    targetDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList);
+    targetDefinition.data.prinstineFilterOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList, bicsLevel);
+    targetDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList, bicsLevel);
     targetDefinition.state.isFilterLong = optionList.length > DEFINITION_LONG_THRESHOLD;
     return targetDefinition;
   }
@@ -582,7 +584,7 @@ export class DTOService {
     configuratorDTO.data.definitionList.forEach((eachBundle) => {
       eachBundle.data.list.forEach((eachDefinition) => {
         if (eachDefinition.data.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
-          this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel1List);
+          this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel1List, 1);
         }
         if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_1.key) {
           this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel1List);

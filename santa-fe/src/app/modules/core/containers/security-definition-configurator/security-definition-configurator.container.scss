@@ -154,7 +154,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
           @include mix_border_generator(0 0 $typical_border_width 0);
           flex: 0 0 auto;
           display: none;
-          max-height: 8rem;
+          max-height: 11rem;
           padding: $spacing_medium 0 $spacing_small 0;
           margin: 0 $spacing_medium;
         }
@@ -174,7 +174,8 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
           }
           &-select {
             flex: 1 1 auto;
-            word-break: break-all;
+            word-break: break-word;
+            font-size: $font_size_x_small;
           }
           &--selected > &-select {
             @include material('none');
@@ -197,16 +198,17 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
         &-entry {
           display: flex;
           flex-direction: column;
-          margin: $spacing_small 0;
+          margin: $spacing_x_small 0;
           &-content {
             display: flex;
             align-items: center;
             &-text {
               flex: 1 1 auto;
-              word-break: break-all;
+              word-break: break-word;
               text-align: center;
               margin-right: $spacing_small;
               color: $font_color_inverse;
+              font-size: $font_size_x_small;
             }
             &-diveOutBtn {
               flex: 0 0 auto;
@@ -309,14 +311,19 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
       }
     }
   }
-  &--filterShowingSelectedState {
+  &--filterLongState {
     #{$blockName} {
       &__filters-content {
         &-selectedListTitle {
           display: flex;
         }
-        &-optionList--selected {
-          display: flex;
+        &-optionList {
+          &-item {
+            font-size: $font_size_x_small;
+          }
+          &--selected {
+            display: flex;
+          }
         }
       }
     }

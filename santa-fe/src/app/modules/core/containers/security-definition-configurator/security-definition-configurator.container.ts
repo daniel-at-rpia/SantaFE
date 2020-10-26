@@ -171,9 +171,9 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     const consolidatedBICSDefinition = this.configuratorData.state.showFiltersFromDefinition;
     if (!!consolidatedBICSDefinition) {
       consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.push(targetOption.shortKey);
-      const level = consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.length;
-      const newList = this.bicsDataProcessingService.getSubLevelList(targetOption.shortKey, level);
-      consolidatedBICSDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(consolidatedBICSDefinition.data.key, newList, `${level}`);
+      const level = consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.length+1;
+      const newList = this.bicsDataProcessingService.getSubLevelList(targetOption.shortKey, level-1);
+      consolidatedBICSDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(consolidatedBICSDefinition.data.key, newList, level);
       consolidatedBICSDefinition.data.filterOptionList.forEach((eachOption) => {
         const existInSelected = consolidatedBICSDefinition.data.highlightSelectedOptionList.find((eachSelectedOption) => {
           return eachOption.key === eachSelectedOption.key;
@@ -187,19 +187,19 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     const consolidatedBICSDefinition = this.configuratorData.state.showFiltersFromDefinition;
     if (!!consolidatedBICSDefinition) {
       consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS = consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.slice(0, level);
-      const newLevel = consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.length;
+      const newLevel = consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.length+1;
       let newList = [];
-      if (newLevel > 0) {
+      if (newLevel > 1) {
         newList = this.bicsDataProcessingService.getSubLevelList(
           consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS[consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.length-1],
-          newLevel
+          newLevel-1
         );
       } else {
         newList = this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(
-          newLevel+1
+          newLevel
         );
       }
-      consolidatedBICSDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(consolidatedBICSDefinition.data.key, newList, `${newLevel}`);
+      consolidatedBICSDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(consolidatedBICSDefinition.data.key, newList, newLevel);
       consolidatedBICSDefinition.data.filterOptionList.forEach((eachOption) => {
         const existInSelected = consolidatedBICSDefinition.data.highlightSelectedOptionList.find((eachSelectedOption) => {
           return eachOption.key === eachSelectedOption.key;
