@@ -123,13 +123,6 @@
       }
     }
   }
-  &--additionalMetricTargetDataState {
-    #{$blockName} {
-      &__type {
-        margin-top: 2rem;
-      }
-    }
-  }
   &--stencilState {
     #{$blockName} {
       &__indicator {
