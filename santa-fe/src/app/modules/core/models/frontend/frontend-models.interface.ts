@@ -203,7 +203,7 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     urlForGetLongOptionListFromServer: string;
     prinstineFilterOptionList: Array<SecurityDefinitionFilterBlock>;
     filterOptionList: Array<SecurityDefinitionFilterBlock>;
-    highlightSelectedOptionList?: Array<SecurityDefinitionFilterBlock>;
+    highlightSelectedOptionList: Array<SecurityDefinitionFilterBlock>;
     securityDTOAttr: string;
   }
   style: {

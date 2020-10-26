@@ -277,68 +277,69 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   public onApplyConfiguratorFilter(params: DefinitionConfiguratorEmitterParams) {
-    if (params.filterList.length === 0) {
-      const alert = this.dtoService.formSystemAlertObject('Apply Blocked', 'Empty Bucket', `Define the bucket with value before apply`, null);
-      this.store$.dispatch(new CoreSendNewAlerts([alert]));
-    } else {
-      const bucket = {}
-      let bucketToString = '';
-      params.filterList.forEach((eachItem) => {
-        const property = this.utilityService.convertFEKey(eachItem.key);
-        if (!!property) {
-          bucket[property] = eachItem.filterBy;
-          eachItem.filterBy.forEach((eachValue) => {
-            bucketToString = bucketToString === '' ? `${eachValue}` : `${bucketToString} - ${eachValue}`;
-          });
-        }
-      });
-      if (this.overrideCheckRowAlreadyExist(bucketToString)) {
-        const alert = this.dtoService.formSystemAlertObject('Apply Blocked', 'Already Exist', `${bucketToString} bucket already exist`, null);
-        this.store$.dispatch(new CoreSendNewAlerts([alert]));
-      } else {
-        const now = moment();
-        const payload: PayloadGetPortfolioOverride = {
-          portfolioOverride: {
-            date: now.format('YYYY-MM-DDT00:00:00-04:00'),
-            portfolioId: this.state.targetFund.data.portfolioId,
-            bucket: bucket
-          }
-        };
-        this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioOverride, {req: 'POST'}, payload).pipe(
-          first(),
-          tap((serverReturn: BEStructuringOverrideBlock) => {
-            const rawBreakdownList = this.utilityService.convertRawOverrideToRawBreakdown([serverReturn]).list;
-            const newBreakdownBucketIdentifier = this.utilityService.formBucketIdentifierForOverride(serverReturn);
-            const newCategoryKey = this.utilityService.formCategoryKeyForOverride(serverReturn);
-            if (!!this.state.targetBreakdown && this.state.targetBreakdown.data.backendGroupOptionIdentifier === newBreakdownBucketIdentifier) {
-              const newDataBlock = rawBreakdownList[0].breakdown[newCategoryKey];
-              this.state.targetBreakdownRawData.breakdown[newCategoryKey] = newDataBlock;
-            } else {
-              if (!!this.state.targetBreakdown) {
-                const alert = this.dtoService.formSystemAlertObject('Warning', 'Overwritten', `can not merge "${this.state.targetBreakdown.data.backendGroupOptionIdentifier}" with ${newBreakdownBucketIdentifier}, new breakdown has overwrote the previous one`, null);
-                this.store$.dispatch(new CoreSendNewAlerts([alert]));
-              }
-              this.state.targetBreakdownRawData = rawBreakdownList[0];
-            }
-            const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
-            const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, isDisplayCs01);
-            newBreakdown.state.isPreviewVariant = true;
-            this.state.targetBreakdown = newBreakdown;
-            this.earMarkNewRow(newCategoryKey);
-            const prevEditRowsForInheritance = this.utilityService.deepCopy(this.state.editRowList);
-            this.loadEditRows();
-            this.inheritEditRowStates(prevEditRowsForInheritance);
-          }),
-          catchError(err => {
-            console.error(`${this.restfulCommService.apiMap.readAlert} failed`, err);
-            return of('error')
-          })
-        ).subscribe();
-      }
-    }
-    this.state.configurator.display = false;
-    this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
-    this.loadBICSOptionsIntoConfigurator();
+    console.log('test, params is', params);
+    // if (params.filterList.length === 0) {
+    //   const alert = this.dtoService.formSystemAlertObject('Apply Blocked', 'Empty Bucket', `Define the bucket with value before apply`, null);
+    //   this.store$.dispatch(new CoreSendNewAlerts([alert]));
+    // } else {
+    //   const bucket = {}
+    //   let bucketToString = '';
+    //   params.filterList.forEach((eachItem) => {
+    //     const property = this.utilityService.convertFEKey(eachItem.key);
+    //     if (!!property) {
+    //       bucket[property] = eachItem.filterBy;
+    //       eachItem.filterBy.forEach((eachValue) => {
+    //         bucketToString = bucketToString === '' ? `${eachValue}` : `${bucketToString} - ${eachValue}`;
+    //       });
+    //     }
+    //   });
+    //   if (this.overrideCheckRowAlreadyExist(bucketToString)) {
+    //     const alert = this.dtoService.formSystemAlertObject('Apply Blocked', 'Already Exist', `${bucketToString} bucket already exist`, null);
+    //     this.store$.dispatch(new CoreSendNewAlerts([alert]));
+    //   } else {
+    //     const now = moment();
+    //     const payload: PayloadGetPortfolioOverride = {
+    //       portfolioOverride: {
+    //         date: now.format('YYYY-MM-DDT00:00:00-04:00'),
+    //         portfolioId: this.state.targetFund.data.portfolioId,
+    //         bucket: bucket
+    //       }
+    //     };
+    //     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioOverride, {req: 'POST'}, payload).pipe(
+    //       first(),
+    //       tap((serverReturn: BEStructuringOverrideBlock) => {
+    //         const rawBreakdownList = this.utilityService.convertRawOverrideToRawBreakdown([serverReturn]).list;
+    //         const newBreakdownBucketIdentifier = this.utilityService.formBucketIdentifierForOverride(serverReturn);
+    //         const newCategoryKey = this.utilityService.formCategoryKeyForOverride(serverReturn);
+    //         if (!!this.state.targetBreakdown && this.state.targetBreakdown.data.backendGroupOptionIdentifier === newBreakdownBucketIdentifier) {
+    //           const newDataBlock = rawBreakdownList[0].breakdown[newCategoryKey];
+    //           this.state.targetBreakdownRawData.breakdown[newCategoryKey] = newDataBlock;
+    //         } else {
+    //           if (!!this.state.targetBreakdown) {
+    //             const alert = this.dtoService.formSystemAlertObject('Warning', 'Overwritten', `can not merge "${this.state.targetBreakdown.data.backendGroupOptionIdentifier}" with ${newBreakdownBucketIdentifier}, new breakdown has overwrote the previous one`, null);
+    //             this.store$.dispatch(new CoreSendNewAlerts([alert]));
+    //           }
+    //           this.state.targetBreakdownRawData = rawBreakdownList[0];
+    //         }
+    //         const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
+    //         const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, isDisplayCs01);
+    //         newBreakdown.state.isPreviewVariant = true;
+    //         this.state.targetBreakdown = newBreakdown;
+    //         this.earMarkNewRow(newCategoryKey);
+    //         const prevEditRowsForInheritance = this.utilityService.deepCopy(this.state.editRowList);
+    //         this.loadEditRows();
+    //         this.inheritEditRowStates(prevEditRowsForInheritance);
+    //       }),
+    //       catchError(err => {
+    //         console.error(`${this.restfulCommService.apiMap.readAlert} failed`, err);
+    //         return of('error')
+    //       })
+    //     ).subscribe();
+    //   }
+    // }
+    // this.state.configurator.display = false;
+    // this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
+    // this.loadBICSOptionsIntoConfigurator();
   }
 
   public onSelectForRemoval(targetRow: StructureSetTargetPanelEditRowBlock) {

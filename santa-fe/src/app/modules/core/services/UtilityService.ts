@@ -427,9 +427,7 @@ export class UtilityService {
       };
       configuratorData.data.definitionList.forEach((eachBundle) => {
         eachBundle.data.list.forEach((eachDefinition) => {
-          const activeFilters = eachDefinition.data.filterOptionList.filter((eachOption) => {
-            return eachOption.isSelected;
-          });
+          const activeFilters = eachDefinition.data.highlightSelectedOptionList;
           activeFilters.length > 0 && params.filterList.push({
             key: eachDefinition.data.key,
             targetAttribute: eachDefinition.data.securityDTOAttr,

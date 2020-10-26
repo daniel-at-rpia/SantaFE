@@ -497,7 +497,8 @@ export class DTOService {
         urlForGetLongOptionListFromServer: rawData.urlForGetLongOptionListFromServer || null,
         prinstineFilterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
         filterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
-        securityDTOAttr: rawData.securityDTOAttr
+        securityDTOAttr: rawData.securityDTOAttr,
+        highlightSelectedOptionList: []
       },
       style: {
         icon: rawData.icon,
