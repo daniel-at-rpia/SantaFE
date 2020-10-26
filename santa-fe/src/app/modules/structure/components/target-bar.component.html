@@ -8,7 +8,7 @@
   'sat-fundTargetBar--additionalMetricTargetDataState': targetBar.data.additionalMetricTargetData
   }"
 >
-    <p class="sat-fundTargetBar__type" *ngIf="targetBar.data.targetMetric !== constants.cs01">{{ targetBar.data.targetMetric }}</p>
+    <p class="sat-fundTargetBar__type">{{ targetBar.data.targetMetric }}</p>
     <section class="sat-fundTargetBar__indicator">
       <div
       [ngStyle]="{'width': targetBar.data.exceededPercentage}"
