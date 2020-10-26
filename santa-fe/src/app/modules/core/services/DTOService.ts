@@ -1836,7 +1836,7 @@ export class DTOService {
     getDisplayedValues(object);
     if (!targetValue) {
       object.state.isEmpty = true;
-      object.data.displayedResults = targetMetric === PortfolioMetricValues.cs01 ? `${object.data.displayedCurrentValue} / -` : `${object.data.displayedCurrentValue} / -`;
+      object.data.displayedResults = `${object.data.displayedCurrentValue} / -`;
     }
     object.state.isInactiveMetric = object.data.targetMetric === PortfolioMetricValues.creditDuration ? activeMetricValue === PortfolioMetricValues.creditLeverage : object.data.targetMetric !== activeMetricValue;
     return object;
