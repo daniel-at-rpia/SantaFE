@@ -170,6 +170,27 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     }
   }
 
+  public onClickConsolidatedBICSDiveOut(targetLevelText: string, level: number) {
+    const consolidatedBICSDefinition = this.configuratorData.state.showFiltersFromDefinition;
+    if (!!consolidatedBICSDefinition) {
+      consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS = consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.slice(0, level);
+      const newLevel = consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.length;
+      let newList = [];
+      if (newLevel > 0) {
+        newList = this.bicsDataProcessingService.getSubLevelList(
+          consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS[0],
+          newLevel
+        );
+      } else {
+        newList = this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(
+          newLevel+1
+        );
+      }
+
+      consolidatedBICSDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(consolidatedBICSDefinition.data.key, newList);
+    }
+  }
+
   private applySearchFilter(targetOption: SecurityDefinitionFilterBlock, keyword: string): boolean {
     const normalizedTarget = targetOption.displayLabel.toLowerCase();
     const normalizedKeyword = keyword.toLowerCase();

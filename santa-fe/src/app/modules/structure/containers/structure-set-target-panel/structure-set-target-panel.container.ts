@@ -129,6 +129,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.state.activeMetric = pack.targetFund.data.cs01TargetBar.state.isInactiveMetric ? this.constants.metric.creditLeverage : this.constants.metric.cs01;
         this.loadEditRows();
         this.calculateAllocation();
+        this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
         this.loadBICSOptionsIntoConfigurator();
       }
     });
