@@ -74,6 +74,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     // the pinned rows won't have a parent
     this.parentNode && this.parentNode.setExpanded(false);
     this.parent.onRowClickedToCollapse(this.rowData, !this.parentNode, this.params);
+    this.rowData.state.isExpanded = false;
     this.rowData.data.historicalTradeVisualizer.state.graphReceived = false;
     this.rowData.state.viewTraceState = false;
     this.rowData.state.viewHistoryState = false;
