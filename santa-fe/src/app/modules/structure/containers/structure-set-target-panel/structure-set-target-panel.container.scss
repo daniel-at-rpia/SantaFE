@@ -394,11 +394,6 @@ $structureSetTargetPanel_highlight_border: 2px solid $color_active;
       }
     }
   }
-  &__divider {
-    flex: 0 0 $typical_border_width;
-    background-color: $color_border_gray;
-    margin: $spacing_small 0;
-  }
   &--overrideVariant {
     #{$blockName} {
       &__remove {
@@ -460,9 +455,6 @@ $structureSetTargetPanel_highlight_border: 2px solid $color_active;
         }
       }
     }
-  }
-  &--evenState {
-    background-color: $color_blue_gray_1;
   }
   &--lockedState {
     background-color: $color_green_1;
