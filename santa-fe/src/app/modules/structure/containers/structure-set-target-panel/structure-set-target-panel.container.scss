@@ -164,6 +164,47 @@ $structureSetTargetPanel_highlight_border: 2px solid $color_active;
   }
   &--cs01ActiveState {
     #{$blockName} {
+      &__main {
+        &-edit-rowList--singleRow {
+          .sat-structureSetTargetEditRow {
+            &__column {
+              &--cs01 {
+                @include mix_border_generator(2px, $static_color: $color_active);
+                @include mix_border_radius(3px);
+                background-color: $structureSetTargetPanel_highlight_color;
+              }
+            }
+          }
+        }
+        &-edit-rowList--multipleRows {
+          .sat-structureSetTargetEditRow {
+            &__column {
+              &--cs01 {
+                @include multiple_row__custom_borders();
+                background-color: $structureSetTargetPanel_highlight_color;
+              }
+            }
+            &:first-child {
+              .sat-structureSetTargetEditRow {
+                &__column {
+                  &--cs01 {
+                    @include multiple_row__custom_borders('first');
+                  }
+                }
+              }
+            }
+            &:last-child {
+              .sat-structureSetTargetEditRow {
+                &__column {
+                  &--cs01 {
+                    @include multiple_row__custom_borders('last');
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
       &__utilities-distribution-label {
         &--cs01 {
           display: flex;
@@ -176,6 +217,47 @@ $structureSetTargetPanel_highlight_border: 2px solid $color_active;
   }
   &--creditLeverageActiveState {
     #{$blockName} {
+      &__main {
+        &-edit-rowList--singleRow {
+          .sat-structureSetTargetEditRow {
+            &__column {
+              &--creditLeverage {
+                @include mix_border_generator(2px, $static_color: $color_active);
+                @include mix_border_radius(3px);
+                background-color: $structureSetTargetPanel_highlight_color;
+              }
+            }
+          }
+        }
+        &-edit-rowList--multipleRows {
+          .sat-structureSetTargetEditRow {
+            &__column {
+              &--creditLeverage {
+                @include multiple_row__custom_borders();
+                background-color: $structureSetTargetPanel_highlight_color;
+              }
+            }
+            &:first-child {
+              .sat-structureSetTargetEditRow {
+                &__column {
+                  &--creditLeverage {
+                    @include multiple_row__custom_borders('first');
+                  }
+                }
+              }
+            }
+            &:last-child {
+              .sat-structureSetTargetEditRow {
+                &__column {
+                  &--creditLeverage {
+                    @include multiple_row__custom_borders('last');
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
       &__utilities-distribution-label {
         &--cs01 {
           display: none;
@@ -248,7 +330,7 @@ $structureSetTargetPanel_highlight_border: 2px solid $color_active;
     @include mix_fixed_div(relative, $z_index_base_item);
     flex: 0 0 auto;
     display: none;
-    margin: $spacing_small $spacing_medium;
+    margin: $spacing_small;
     &-btn {
       background-color: $color_kill;
       color: $font_color_inverse;
