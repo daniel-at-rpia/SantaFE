@@ -1,9 +1,24 @@
 import { Injectable } from '@angular/core';
-import { BICsHierarchyAllDataBlock, BICsHierarchyBlock, BICsCategorizationBlock } from 'App/modules/core/models/frontend/frontend-blocks.interface';
-import { BEBICsHierarchyBlock, BEPortfolioStructuringDTO, BEStructuringBreakdownBlock } from 'Core/models/backend/backend-models.interface';
-import { PortfolioBreakdownDTO, MoveVisualizerDTO, StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend-models.interface';
+import {
+  BICsHierarchyAllDataBlock,
+  BICsHierarchyBlock,
+  BICsCategorizationBlock
+} from 'App/modules/core/models/frontend/frontend-blocks.interface';
+import {
+  BEBICsHierarchyBlock,
+  BEPortfolioStructuringDTO,
+  BEStructuringBreakdownBlock
+} from 'Core/models/backend/backend-models.interface';
+import {
+  PortfolioBreakdownDTO,
+  MoveVisualizerDTO,
+  StructurePortfolioBreakdownRowDTO
+} from 'Core/models/frontend/frontend-models.interface';
+import { DefinitionConfiguratorEmitterParams } from 'Core/models/frontend/frontend-adhoc-packages.interface';
 import { DTOService } from 'Core/services/DTOService';
 import { BICsLevels } from 'Core/constants/structureConstants.constants';
+import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
+
 @Injectable()
 
 export class BICsDataProcessingService {
@@ -114,6 +129,35 @@ export class BICsDataProcessingService {
       1,
       this.formattedBICsHierarchyData.children
     );
+  }
+
+  public convertConsolidatedBICSDefinitionConfiguratorParamToRegularParam(
+    params: DefinitionConfiguratorEmitterParams
+  ): DefinitionConfiguratorEmitterParams {
+    const targetIndex = params.filterList.findIndex((eachItem) => {
+      return eachItem.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key;
+    });
+    if (targetIndex >= 0) {
+      const consolidatedBICS = params.filterList[targetIndex];
+      params.filterList.splice(targetIndex, 1);
+      let deepestLevel = 1;
+      consolidatedBICS.filterByBlocks.forEach((eachBlock) =>{
+        if (eachBlock.bicsLevel > deepestLevel) {
+          deepestLevel = eachBlock.bicsLevel;
+        }
+      });
+      let convertedToLowestLevelStrings = [];
+      consolidatedBICS.filterByBlocks.forEach((eachBlock) => {
+        if (eachBlock.bicsLevel < deepestLevel) {
+          const eachResult:Array<string> = this.convertCategoryToChildren(eachBlock.shortKey, eachBlock.bicsLevel, deepestLevel);
+          convertedToLowestLevelStrings = convertedToLowestLevelStrings.concat(eachResult);
+        } else {
+          convertedToLowestLevelStrings.push(eachBlock.shortKey);
+        }
+      });
+      console.log('test, original = ', consolidatedBICS.filterBy, 'converted = ', convertedToLowestLevelStrings);
+    }
+    return params;
   }
 
   private setBreakdownListProperties(breakdownList: Array<StructurePortfolioBreakdownRowDTO>, parentRow: StructurePortfolioBreakdownRowDTO, isEditingView: boolean) {
@@ -231,6 +275,23 @@ export class BICsDataProcessingService {
         }
       }
     }
+  }
+
+  private convertCategoryToChildren(
+    category: string,
+    categoryLevel: number,
+    targetLevel: number
+  ): Array<string>{
+    let loopCategoryList = [category];
+    for (let i = categoryLevel; i < targetLevel; i++) {
+      let convertResult = [];
+      loopCategoryList.forEach((eachCategory) =>{
+        const children = this.getSubLevelList(eachCategory, i);
+        convertResult = convertResult.concat(children);
+      });
+      loopCategoryList = convertResult;
+    }
+    return loopCategoryList;
   }
 
 }

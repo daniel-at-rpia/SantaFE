@@ -13,7 +13,8 @@ import { BEPortfolioStructuringDTO, BEStructuringBreakdownBlock } from 'BEModels
 import {
   QuoteMetricBlock,
   AgGridRow,
-  AgGridRowNode
+  AgGridRowNode,
+  SecurityDefinitionFilterBlock
 } from 'FEModels/frontend-blocks.interface';
 
 export interface SecurityMapEntry {
@@ -35,6 +36,7 @@ export interface DefinitionConfiguratorEmitterParamsItem {
   key: string;
   targetAttribute: string;
   filterBy: Array<string>;
+  filterByBlocks: Array<SecurityDefinitionFilterBlock>;
 }
 
 export interface LiveDataDiffingResult {

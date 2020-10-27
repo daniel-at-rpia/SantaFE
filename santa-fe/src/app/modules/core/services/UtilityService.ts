@@ -433,7 +433,8 @@ export class UtilityService {
             targetAttribute: eachDefinition.data.securityDTOAttr,
             filterBy: activeFilters.map((eachFilter) => {
               return eachFilter.displayLabel;
-            })
+            }),
+            filterByBlocks: this.deepCopy(activeFilters)
           });
         });
       });
