@@ -92,7 +92,11 @@
           <target-bar [targetBar]="state.targetFund.data.cs01TargetBar"></target-bar>
         </div>
       </div>
-      <ul class="sat-structureSetTargetPanel__main-edit-rowList">
+      <ul [ngClass]="{
+          'sat-structureSetTargetPanel__main-edit-rowList': true,
+          'sat-structureSetTargetPanel__main-edit-rowList--singleRow': state.editRowList.length === 1,
+          'sat-structureSetTargetPanel__main-edit-rowList--multipleRows': state.editRowList.length > 1
+        }">
         <li
           *ngFor="let eachCategory of state.editRowList; let categoryIndex = index;"
           [ngClass]="{
@@ -102,7 +106,6 @@
             'sat-structureSetTargetEditRow--focusedCreditLeverageLevelState': eachCategory.targetCreditLeverage.level.isFocused,
             'sat-structureSetTargetEditRow--focusedCreditLeveragePercentState': eachCategory.targetCreditLeverage.percent.isFocused,
             'sat-structureSetTargetEditRow--lockedState': eachCategory.isLocked,
-            'sat-structureSetTargetEditRow--evenState': categoryIndex%2 === 0,
             'sat-structureSetTargetEditRow--overrideVariant': state.targetBreakdownIsOverride,
             'sat-structureSetTargetEditRow--willBeRemovedState': eachCategory.willBeRemoved
           }">
@@ -129,7 +132,7 @@
               >
             </santa-textarea>
           </section>
-          <section class="sat-structureSetTargetEditRow__column">
+          <section class="sat-structureSetTargetEditRow__column sat-structureSetTargetEditRow__column--creditLeverage">
             <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--creditLeverageLevel">
               <div class="sat-structureSetTargetEditRow__column-item-ctas">
                 <button *ngIf="eachCategory.targetCreditLeverage.level.isFocused" (click)="onClickSaveEdit(eachCategory, eachCategory.targetCreditLeverage.level)" class="santaBtn--small santaBtn--iconOnly sat-structureSetTargetEditRow__column-item-ctas-save fal fa-check"></button>
@@ -161,8 +164,7 @@
               <span class="sat-structureSetTargetEditRow__column-item-unitText">%</span>
             </div>
           </section>
-          <hr class="sat-structureSetTargetEditRow__divider">
-          <section class="sat-structureSetTargetEditRow__column">
+          <section class="sat-structureSetTargetEditRow__column sat-structureSetTargetEditRow__column--cs01">
             <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--cs01Level">
               <div class="sat-structureSetTargetEditRow__column-item-ctas">
                 <button *ngIf="eachCategory.targetCs01.level.isFocused" (click)="onClickSaveEdit(eachCategory, eachCategory.targetCs01.level)" class="santaBtn--small santaBtn--iconOnly sat-structureSetTargetEditRow__column-item-ctas-save fal fa-check"></button>
