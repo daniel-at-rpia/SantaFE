@@ -8,7 +8,8 @@
   'sat-portfolioBreakdownRow--negativeDiff': breakdownRow.data.diffToTarget < 0,
   'sat-portfolioBreakdownRow--overweight': breakdownRow.data.view === constants.overweight,
   'sat-portfolioBreakdownRow--underweight': breakdownRow.data.view === constants.underweight,
-  'sat-portfolioBreakdownRow--neutral': breakdownRow.data.view === constants.neutral
+  'sat-portfolioBreakdownRow--neutral': breakdownRow.data.view === constants.neutral,
+  'sat-portfolioBreakdownRow--showFullCategoryState': !!breakdownRow.data.showFullCategory
   }">
   <section class="sat-portfolioBreakdownRow__cta">
     <button (click)="onClickDiveIn(breakdownRow)" class="sat-portfolioBreakdownRow__cta-btn">

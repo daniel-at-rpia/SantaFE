@@ -135,16 +135,17 @@ export class BICsDataProcessingService {
   }
 
   private iterateBICsData(data: BEBICsHierarchyBlock, parent: BICsHierarchyAllDataBlock | BICsHierarchyBlock, counter: number) {
-    if (!data) return;
-    for (let category in data) {
-      if (!!category) {
-        const BICsData: BICsHierarchyBlock = {
-          name: category,
-          bicsLevel: counter,
-          children: []
+    if (counter < 5) {
+      for (let category in data) {
+        if (!!category) {
+          const BICsData: BICsHierarchyBlock = {
+            name: category,
+            bicsLevel: counter,
+            children: []
+          }
+          parent.children.push(BICsData);
+          this.iterateBICsData(data[category], BICsData, BICsData.bicsLevel + 1);
         }
-        parent.children.push(BICsData);
-        this.iterateBICsData(data[category], BICsData, BICsData.bicsLevel + 1);
       }
     }
   }
