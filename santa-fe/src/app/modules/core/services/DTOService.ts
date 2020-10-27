@@ -2196,11 +2196,12 @@ export class DTOService {
   }
 
   public formTraceTradeBlockObject(rawData: BEModels.BETraceTradesBlock, targetSecurity: DTOs.SecurityDTO) {
+    const counterParty = !!rawData.counterParty ? rawData.counterParty === TraceTradeCounterParty.ClientAffiliate ? TraceTradeCounterParty.ClientAffiliate : TraceTradeCounterParty[rawData.counterParty] : null;
     const object: Blocks.TraceTradeBlock = {
       traceTradeId: rawData.traceTradeID,
       eventTime: rawData.eventTime,
       parsedEventTime: moment(rawData.eventTime).format(`YY MMM DD - HH:mm`),
-      counterParty: TraceTradeCounterParty[rawData.counterParty],
+      counterParty: counterParty,
       side: TradeSideValueEquivalent[rawData.side],
       volumeEstimated: rawData.volumeEstimated,
       volumeReported: rawData.volumeActual,

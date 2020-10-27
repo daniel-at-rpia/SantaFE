@@ -1661,10 +1661,10 @@ export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
 export const AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD = 'fullWidth';
 
 export enum TraceTradeCounterParty {
-  D = 'Dealer',
-  C = 'Customer',
-  A = 'Affiliate',
-  T = 'ATS'
+  Dealer = 'Dealer',
+  Client = 'Client',
+  ClientAffiliate = 'Client Affiliate',
+  ATS = 'ATS'
 }
 
 export enum TradeSideValueEquivalent {
@@ -1683,4 +1683,4 @@ export enum traceTradeFilterAmounts {
   million = 1000000
 }
 
-export const TraceTradeCounterPartyList: Array<TraceTradeCounterParty> = [TraceTradeCounterParty.D, TraceTradeCounterParty.C, TraceTradeCounterParty.A, TraceTradeCounterParty.T];
+export const TraceTradeCounterPartyList: Array<TraceTradeCounterParty> = [TraceTradeCounterParty.Dealer, TraceTradeCounterParty.Client, TraceTradeCounterParty.ClientAffiliate, TraceTradeCounterParty.ATS];

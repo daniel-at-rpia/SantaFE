@@ -542,10 +542,10 @@ export const RatingValueToLevelMapping = [
 ];
 
 export const FilterTraceTradesOptions = [
-  TraceTradeCounterParty.D,
-  TraceTradeCounterParty.C,
-  TraceTradeCounterParty.A,
-  TraceTradeCounterParty.T,
+  TraceTradeCounterParty.Dealer,
+  TraceTradeCounterParty.Client,
+  TraceTradeCounterParty.ClientAffiliate,
+  TraceTradeCounterParty.ATS,
   traceTradeNumericalFilters.filter250K,
   traceTradeNumericalFilters.filter1M,
   traceTradeNumericalFilters.filter5M
