@@ -1761,7 +1761,7 @@ export class DTOService {
     return object;
   }
 
-  public formTargetBarObject(targetMetric: PortfolioMetricValues, currentValue: number, targetValue: number, isStencil: boolean) {
+  public formTargetBarObject(targetMetric: PortfolioMetricValues, currentValue: number, targetValue: number, isStencil: boolean, activeMetricValue: PortfolioMetricValues) {
     const object: DTOs.TargetBarDTO = {
       data: {
         targetMetric,
@@ -1826,20 +1826,19 @@ export class DTOService {
         targetBar.data.displayedCurrentValue = this.utility.parseNumberToThousands(targetBar.data.currentValue, true, 0);
         targetBar.data.displayedTargetValue = this.utility.parseNumberToThousands(targetBar.data.targetValue,true, 0);
         targetBar.data.displayedResults = getDisplayedResults(targetBar.data.displayedCurrentValue, targetBar.data.displayedTargetValue);
-        return;
+      } else {
+        targetBar.data.displayedCurrentValue = this.utility.round(targetBar.data.currentValue,2);
+        targetBar.data.displayedTargetValue = this.utility.round(targetBar.data.targetValue,2);
+        targetBar.data.displayedResults = getDisplayedResults(targetBar.data.displayedCurrentValue, targetBar.data.displayedTargetValue);
       }
-      targetBar.data.displayedCurrentValue = this.utility.round(targetBar.data.currentValue,2);
-      targetBar.data.displayedTargetValue = this.utility.round(targetBar.data.targetValue,2);
-      targetBar.data.displayedResults = getDisplayedResults(targetBar.data.displayedCurrentValue, targetBar.data.displayedTargetValue);
     }
     convertValuesForDisplay(object);
     getDisplayedValues(object);
     if (!targetValue) {
       object.state.isEmpty = true;
-      object.data.displayedResults = targetMetric === PortfolioMetricValues.cs01 ? `${object.data.displayedCurrentValue} / -` : `${object.data.displayedCurrentValue} / -`;
-      return object;
+      object.data.displayedResults = `${object.data.displayedCurrentValue} / -`;
     }
-    object.state.isEmpty = !object.data.targetValue;
+    object.state.isInactiveMetric = object.data.targetMetric === PortfolioMetricValues.creditDuration ? activeMetricValue === PortfolioMetricValues.creditLeverage : object.data.targetMetric !== activeMetricValue;
     return object;
   }
 
@@ -1860,27 +1859,27 @@ export class DTOService {
           portfolioId: rawData.target.portfolioId,
           target: {
             cs01: rawData.target.target.Cs01 || 0,
-            creditLeverage: rawData.target.target.CreditLeverage || 0
+            creditLeverage: rawData.target.target.CreditLeverage || 0,
+            creditDuration: rawData.target.target.CreditDuration || 0
           }
         },
         currentTotals :{
           cs01: rawData.currentTotals.Cs01,
-          creditLeverage: rawData.currentTotals.CreditLeverage
+          creditLeverage: rawData.currentTotals.CreditLeverage,
+          creditDuration: rawData.currentTotals.CreditDuration
         },
         indexId: rawData.indexId,
         indexShortName: rawData.indexShortName,
         indexNav: rawData.indexNav,
         indexTotals: {
           cs01: rawData.indexTotals.Cs01,
-          creditLeverage: rawData.indexTotals.CreditLeverage
+          creditLeverage: rawData.indexTotals.CreditLeverage,
+          creditDuration: rawData.indexTotals.CreditDuration
         },
         children: [],
-        cs01TotalsInK: {
-          currentTotal: null,
-          targetTotal: null
-        },
         cs01TargetBar: null,
         creditLeverageTargetBar: null,
+        creditDurationTargetBar: null,
         originalBEData: rawData
       },
       api: {
@@ -1893,17 +1892,28 @@ export class DTOService {
         isDataUnavailable: false,
         isEditingFund: false,
         hasErrors: {
-          updatedCS01: false,
           updatedCreditLeverage: false,
+          updatedCreditDuration: false,
           errorMessage: ''
+        },
+        modifiedFundTargets: {
+          creditLeverage: rawData.target.target.CreditLeverage || 0,
+          creditDuration: rawData.target.target.CreditDuration || 0
         }
       }
     };
-    object.data.cs01TotalsInK.targetTotal = object.data.target.target.cs01 / 1000;
-    object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, object.state.isStencil);
-    object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil);
-    object.data.cs01TargetBar.state.isInactiveMetric = selectedMetricValue !== object.data.cs01TargetBar.data.targetMetric;
-    object.data.creditLeverageTargetBar.state.isInactiveMetric = selectedMetricValue !== object.data.creditLeverageTargetBar.data.targetMetric;
+    object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, object.state.isStencil, selectedMetricValue);
+    object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil, selectedMetricValue);
+    object.data.creditDurationTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditDuration, object.data.currentTotals.creditDuration, object.data.target.target.creditDuration, object.state.isStencil, selectedMetricValue);
+    if (!!object.data.creditDurationTargetBar) {
+      const parsedCs01CurrentTotal = !!rawData.currentTotals.Cs01 ? this.utility.parseNumberToThousands(rawData.currentTotals.Cs01, true, 0) : '-';
+      const parsedCs01TargetTotal = !!rawData.target.target.Cs01 ? this.utility.parseNumberToThousands(rawData.target.target.Cs01, true, 0) : '-';
+      object.data.creditDurationTargetBar.data.additionalMetricTargetData = {
+        metric: PortfolioMetricValues.cs01,
+        current: parsedCs01CurrentTotal,
+        target: parsedCs01TargetTotal
+      }
+    }
     this.processBreakdownDataForStructureFund(
       object,
       rawData,

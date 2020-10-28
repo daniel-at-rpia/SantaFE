@@ -729,12 +729,9 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     indexNav: number;
     indexTotals: PortfolioMetricTotals;
     children: Array<PortfolioBreakdownDTO>;
-    cs01TotalsInK?: {
-      currentTotal: number;
-      targetTotal: number;
-    }
     cs01TargetBar: TargetBarDTO;
     creditLeverageTargetBar: TargetBarDTO;
+    creditDurationTargetBar: TargetBarDTO;
     originalBEData: BEPortfolioStructuringDTO; // used when updating portfolios for portfolio structuring
   },
   api: {
@@ -746,9 +743,13 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     isNumeric: boolean;
     isDataUnavailable: boolean;
     isEditingFund: boolean;
+    modifiedFundTargets: {
+      creditDuration: number;
+      creditLeverage: number;
+    }
     hasErrors: {
-      updatedCS01: boolean;
       updatedCreditLeverage: boolean;
+      updatedCreditDuration: boolean;
       errorMessage: string;
     }
   }
@@ -764,6 +765,11 @@ export interface TargetBarDTO extends BasicDTOStructure {
     currentPercentage: string;
     exceededPercentage: string;
     displayedResults: string;
+    additionalMetricTargetData?: {
+      metric: PortfolioMetricValues;
+      current: string;
+      target: string;
+    }
   }
   state: {
     isInactiveMetric: boolean,

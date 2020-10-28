@@ -11,6 +11,8 @@ import { ModalService } from 'Form/services/ModalService';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
 import { PortfolioBreakdownDTO, TargetBarDTO } from 'FEModels/frontend-models.interface';
 import { StructureSendSetTargetTransferEvent} from 'Structure/actions/structure.actions';
+import { UpdateTargetBlock, UpdateTargetPack } from 'Core/models/frontend/frontend-adhoc-packages.interface';
+import { BEPortfolioTargetMetricValues } from 'Core/constants/structureConstants.constants';
 
 @Component({
   selector: 'structure-fund',
@@ -21,10 +23,13 @@ import { StructureSendSetTargetTransferEvent} from 'Structure/actions/structure.
 
 export class StructureFund implements OnInit {
   @Input() fund: PortfolioStructureDTO;
-  @Output() updatedFundData = new EventEmitter<PortfolioStructureDTO>();
+  @Output() updatedFundData = new EventEmitter<UpdateTargetPack>();
   constants = {
     cs01: PortfolioMetricValues.cs01,
     creditLeverage: PortfolioMetricValues.creditLeverage,
+    creditDuration: PortfolioMetricValues.creditDuration,
+    BECreditLeverage: BEPortfolioTargetMetricValues.CreditLeverage,
+    BECreditDuration: BEPortfolioTargetMetricValues.CreditDuration,
     editModalId: STRUCTURE_EDIT_MODAL_ID
   }
   subscriptions = {
@@ -66,13 +71,11 @@ export class StructureFund implements OnInit {
 
   public onChangeValue(amount: string, type: PortfolioMetricValues) {
     const value = !parseFloat(amount) ? 0 : parseFloat(amount);
-    if (type === PortfolioMetricValues.cs01) {
-      this.fund.data.target.target.cs01 = value * 1000;
-      this.fund.data.originalBEData.target.target.Cs01 = value * 1000;
-      return;
+    if (type === PortfolioMetricValues.creditDuration) {
+      this.fund.state.modifiedFundTargets.creditDuration = value;
+    } else {
+      this.fund.state.modifiedFundTargets.creditLeverage  = value;
     }
-    this.fund.data.target.target.creditLeverage = value;
-    this.fund.data.originalBEData.target.target.CreditLeverage = value;
   }
 
   public showEditMenu() {
@@ -84,8 +87,8 @@ export class StructureFund implements OnInit {
     this.resetErrors();
   }
 
-  public onClickSaveNewMetrics(targetCS01: number, targetLeverage: number) {
-    this.fund.api.onSubmitMetricValues(targetCS01, targetLeverage)
+  public onClickSaveNewMetrics(targetCreditDuration: number, targetLeverage: number) {
+    this.fund.api.onSubmitMetricValues(targetCreditDuration, targetLeverage)
   }
 
   private validateInput(value: number | string) {
@@ -94,25 +97,43 @@ export class StructureFund implements OnInit {
   }
 
   private resetErrors() {
-    this.fund.state.hasErrors.updatedCS01 = false;
+    this.fund.state.hasErrors.updatedCreditDuration = false;
     this.fund.state.hasErrors.updatedCreditLeverage = false;
     this.fund.state.hasErrors.errorMessage = '';
   }
 
-  private saveEditDetails(targetCS01: number, targetLeverage: number) {
+  private saveEditDetails(targetCreditDuration: number, targetLeverage: number) {
     this.resetErrors();
-    const isTargetCS01Invalid = this.validateInput(targetCS01);
+    const isTargetCreditDurationInvalid = this.validateInput(targetCreditDuration);
     const isTargetLeverageInvalid = this.validateInput(targetLeverage);
-    this.fund.data.cs01TargetBar.state.isEmpty = targetCS01 === 0;
+    this.fund.data.creditDurationTargetBar.state.isEmpty = targetCreditDuration === 0;
     this.fund.data.creditLeverageTargetBar.state.isEmpty = targetLeverage === 0;
-    if (isTargetCS01Invalid || isTargetLeverageInvalid ) {
-      const invalidTarget = isTargetCS01Invalid ? this.constants.cs01 : this.constants.creditLeverage;
+    if (isTargetCreditDurationInvalid || isTargetLeverageInvalid ) {
+      const invalidTarget = isTargetCreditDurationInvalid ? this.constants.creditDuration : this.constants.creditLeverage;
       const invalidInputErrorRef = `updated${invalidTarget.split(' ').join('')}`;
       this.fund.state.hasErrors[invalidInputErrorRef] = true;
       this.fund.state.hasErrors.errorMessage = `*Please enter a valid target level for ${invalidTarget}`;
     } else {
-      this.fund.state.isEditingFund = false;
-      this.updatedFundData.emit(this.fund)
+      let updatedTargetData = [];
+      const checkTargetUpdates = (currentTarget: number, previousTarget: number, BEMetricType: BEPortfolioTargetMetricValues) => {
+        if (currentTarget !== previousTarget) {
+          const targetUpdateBlock: UpdateTargetBlock = {
+            metric: BEMetricType,
+            target: currentTarget
+          }
+          updatedTargetData.push(targetUpdateBlock);
+        }
+      }
+      checkTargetUpdates(targetCreditDuration, this.fund.data.target.target.creditDuration, this.constants.BECreditDuration);
+      checkTargetUpdates(targetLeverage, this.fund.data.target.target.creditLeverage, this.constants.BECreditLeverage);
+      if (updatedTargetData.length > 0) {
+        const updateData: UpdateTargetPack = {
+          fund: this.fund,
+          updateTargetBlocks: updatedTargetData
+        }
+        this.fund.state.isEditingFund = false;
+        this.updatedFundData.emit(updateData)
+      }
     }
   }
 }
