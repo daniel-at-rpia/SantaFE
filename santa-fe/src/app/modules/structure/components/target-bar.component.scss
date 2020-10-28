@@ -133,7 +133,6 @@
         }
       }
       &__additionalMetricTargetData {
-        &-type,
         &-value {
           @include mix_stencil_animation();
         }
