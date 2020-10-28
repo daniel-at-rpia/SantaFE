@@ -1685,4 +1685,8 @@ export enum traceTradeFilterAmounts {
   million = 1000000
 }
 
+export enum traceTradeNumericalFilterSymbols {
+  greaterThan = '≥'
+}
+
 export const TraceTradeCounterPartyList: Array<TraceTradeCounterParty> = [TraceTradeCounterParty.Dealer, TraceTradeCounterParty.Client, TraceTradeCounterParty.ClientAffiliate, TraceTradeCounterParty.ATS];

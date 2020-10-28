@@ -30,7 +30,8 @@
       SECURITY_TABLE_QUOTE_TYPE_AXE,
       AGGRID_ROW_HEIGHT,
       AGGRID_ROW_HEIGHT_SLIM,
-      AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD
+      AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD,
+      traceTradeNumericalFilterSymbols
     } from 'Core/constants/securityTableConstants.constant';
     import {
       GroupMetricOptions
@@ -2251,11 +2252,11 @@ export class DTOService {
 
       object.data.displayList = targetRow.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT ? targetRow.data.security.data.traceTrades.filter((trade, i) => i < TRACE_INITIAL_LIMIT) : targetRow.data.security.data.traceTrades;
     }
-    const greaterThanSymbol = '≥';
+    const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
     object.data.filterList.forEach(option => {
-      const isNumericOption = option.includes(greaterThanSymbol);
+      const isNumericOption = option.includes(numericFilter);
       if (!!isNumericOption) {
-        const parsedAmount: number = this.utility.getTraceNumericFilterAmount(greaterThanSymbol, option);
+        const parsedAmount: number = this.utility.getTraceNumericFilterAmount(numericFilter, option);
         const isTradeAvailable = this.utility.getTraceTradesListBasedOnAmount(object.data.displayList, parsedAmount);
         isTradeAvailable.length > 0 && object.data.
         availableFiltersList.push(option);

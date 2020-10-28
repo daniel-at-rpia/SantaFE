@@ -236,11 +236,11 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     const copy = this.utilityService.deepCopy(this.rowData.data.traceTradeVisualizer);
     this.rowData.data.traceTradeVisualizer = copy;
     let numericalFiltersList: Array<number> = [];
-    const greaterThanSymbol = '≥';
+    const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
     if (options.length > 0) {
       options.forEach((option) => {
-        if (option.includes(greaterThanSymbol)) {
-          const numericalAmount: number = this.utilityService.getTraceNumericFilterAmount(greaterThanSymbol, option);
+        if (option.includes(numericFilter)) {
+          const numericalAmount: number = this.utilityService.getTraceNumericFilterAmount(numericFilter, option);
           numericalFiltersList = [...numericalFiltersList, numericalAmount];
         }
       })
