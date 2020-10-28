@@ -99,7 +99,8 @@
           *ngFor="let eachOption of configuratorData.state.showFiltersFromDefinition?.data.filterOptionList"
           [ngClass]="{
             'sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item': true,
-            'sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item--selected': eachOption.isSelected
+            'sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item--selected': eachOption.isSelected,
+            'sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item--deepestLevel': eachOption.bicsLevel >= 4
           }">
           <button (click)="onClickConsolidatedBICSDiveIn(eachOption)" class="santaBtn--iconOnly sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item-diveIn far fa-plus"></button>
           <button (click)="onClickFilterOption(eachOption)" class="sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item-select">
