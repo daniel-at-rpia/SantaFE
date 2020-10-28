@@ -32,7 +32,7 @@
     import * as DTOs from 'FEModels/frontend-models.interface';
     import { GraphService } from 'Core/services/GraphService';
     import { TRACE_INITIAL_LIMIT } from 'Core/constants/tradeConstants.constant';
-
+    import { traceTradeNumericalFilterSymbols } from 'Core/constants/securityTableConstants.constant';
   //
 
 @Component({
@@ -215,7 +215,20 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     this.rowData.data.traceTradeVisualizer = copy;
     this.rowData.data.traceTradeVisualizer.state.graphReceived = false;
     this.rowData.data.traceTradeVisualizer.state.selectedFiltersList = [];
+    const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
     this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.security.data.traceTrades;
+    this.rowData.data.traceTradeVisualizer.data.filterList.forEach(option => {
+      const isNumericOption = option.includes(numericFilter);
+      if (!!isNumericOption) {
+        const parsedAmount: number = this.utilityService.getTraceNumericFilterAmount(numericFilter, option);
+        const isTradeAvailable = this.utilityService.getTraceTradesListBasedOnAmount(this.rowData.data.traceTradeVisualizer.data.displayList, parsedAmount);
+        isTradeAvailable.length > 0 && this.rowData.data.traceTradeVisualizer.data.
+        availableFiltersList.push(option);
+      } else {
+        const isCounterPartyAvailable = this.rowData.data.traceTradeVisualizer.data.displayList.find(trade => trade.counterParty === option);
+        !!isCounterPartyAvailable && this.rowData.data.traceTradeVisualizer.data.availableFiltersList.push(option);
+      }
+    })
   }
 
   public onClickGetAllTradeHistory(showAllTradeHistory: boolean) {
