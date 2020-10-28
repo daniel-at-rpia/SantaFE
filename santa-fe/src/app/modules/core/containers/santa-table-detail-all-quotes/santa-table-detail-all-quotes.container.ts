@@ -81,6 +81,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     if (!!this.rowData.data.traceTradeVisualizer) {
       this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = false;
       this.rowData.data.traceTradeVisualizer.state.selectedFiltersList = [];
+      this.rowData.data.traceTradeVisualizer.data.availableFiltersList = [];
       this.rowData.data.traceTradeVisualizer.state.graphReceived = false;
       this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT ? this.rowData.data.security.data.traceTrades.filter((row, i) => i < TRACE_INITIAL_LIMIT) : this.rowData.data.security.data.traceTrades;
     }
@@ -215,6 +216,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     this.rowData.data.traceTradeVisualizer = copy;
     this.rowData.data.traceTradeVisualizer.state.graphReceived = false;
     this.rowData.data.traceTradeVisualizer.state.selectedFiltersList = [];
+    this.rowData.data.traceTradeVisualizer.data.availableFiltersList = [];
     const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
     this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.security.data.traceTrades;
     this.rowData.data.traceTradeVisualizer.data.filterList.forEach(option => {
