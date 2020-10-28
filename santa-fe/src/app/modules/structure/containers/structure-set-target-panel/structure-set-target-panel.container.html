@@ -140,7 +140,7 @@
                 [inputValue]="eachCategory.targetCreditLeverage.level.savedDisplayValue"
                 [placeholder]="''"
                 [isNumeric]="true"
-                [isGrayedOut]="!eachCategory.targetCreditLeverage.level.isActive"
+                [isGrayedOut]="state.activeMetric !== constants.metric.creditLeverage"
                 [isDisabled]="state.activeMetric !== constants.metric.creditLeverage"
                 (onInputChange)="onValueChange($event, eachCategory.targetCreditLeverage.level)"
                 (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCreditLeverage.level)">
@@ -155,7 +155,7 @@
                 [inputValue]="eachCategory.targetCreditLeverage.percent.savedDisplayValue"
                 [placeholder]="''"
                 [isNumeric]="true"
-                [isGrayedOut]="!eachCategory.targetCreditLeverage.percent.isActive"
+                [isGrayedOut]="state.activeMetric !== constants.metric.creditLeverage"
                 [isDisabled]="state.activeMetric !== constants.metric.creditLeverage"
                 (onInputChange)="onValueChange($event, eachCategory.targetCreditLeverage.percent)"
                 (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCreditLeverage.percent)">
@@ -172,7 +172,7 @@
                 [inputValue]="eachCategory.targetCs01.level.savedDisplayValue"
                 [placeholder]="''"
                 [isNumeric]="true"
-                [isGrayedOut]="!eachCategory.targetCs01.level.isActive"
+                [isGrayedOut]="state.activeMetric !== constants.metric.cs01"
                 [isDisabled]="state.activeMetric !== constants.metric.cs01"
                 (onInputChange)="onValueChange($event, eachCategory.targetCs01.level)"
                 (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCs01.level)">
@@ -187,7 +187,7 @@
                 [inputValue]="eachCategory.targetCs01.percent.savedDisplayValue"
                 [placeholder]="''"
                 [isNumeric]="true"
-                [isGrayedOut]="!eachCategory.targetCs01.percent.isActive"
+                [isGrayedOut]="state.activeMetric !== constants.metric.cs01"
                 [isDisabled]="state.activeMetric !== constants.metric.cs01"
                 (onInputChange)="onValueChange($event, eachCategory.targetCs01.percent)"
                 (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCs01.percent)">
