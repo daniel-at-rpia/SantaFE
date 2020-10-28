@@ -13,6 +13,7 @@ import { PortfolioBreakdownDTO, TargetBarDTO } from 'FEModels/frontend-models.in
 import { StructureSendSetTargetTransferEvent} from 'Structure/actions/structure.actions';
 import { UpdateTargetBlock, UpdateTargetPack } from 'Core/models/frontend/frontend-adhoc-packages.interface';
 import { BEPortfolioTargetMetricValues } from 'Core/constants/structureConstants.constants';
+import { StructuringTeamPMList } from 'Core/constants/securityDefinitionConstants.constant';
 
 @Component({
   selector: 'structure-fund',
@@ -30,7 +31,8 @@ export class StructureFund implements OnInit {
     creditDuration: PortfolioMetricValues.creditDuration,
     BECreditLeverage: BEPortfolioTargetMetricValues.CreditLeverage,
     BECreditDuration: BEPortfolioTargetMetricValues.CreditDuration,
-    editModalId: STRUCTURE_EDIT_MODAL_ID
+    editModalId: STRUCTURE_EDIT_MODAL_ID,
+    structuringTeamPMList: StructuringTeamPMList
   }
   subscriptions = {
     ownerInitialsSub: null
@@ -47,7 +49,7 @@ export class StructureFund implements OnInit {
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
       select(selectUserInitials)
     ).subscribe((value) => {
-      this.fund.state.isEditAvailable = value === 'DM';
+      this.fund.state.isEditAvailable = this.constants.structuringTeamPMList.indexOf(value) >= 0;
     });
     this.fund.api.onSubmitMetricValues = this.saveEditDetails.bind(this);
   }

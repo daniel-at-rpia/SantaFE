@@ -13,7 +13,8 @@ import { BEPortfolioStructuringDTO, BEStructuringBreakdownBlock } from 'BEModels
 import {
   QuoteMetricBlock,
   AgGridRow,
-  AgGridRowNode
+  AgGridRowNode,
+  SecurityDefinitionFilterBlock
 } from 'FEModels/frontend-blocks.interface';
 import { BEPortfolioTargetMetricValues } from 'Core/constants/structureConstants.constants';
 
@@ -36,6 +37,7 @@ export interface DefinitionConfiguratorEmitterParamsItem {
   key: string;
   targetAttribute: string;
   filterBy: Array<string>;
+  filterByBlocks: Array<SecurityDefinitionFilterBlock>;
 }
 
 export interface LiveDataDiffingResult {
@@ -144,4 +146,9 @@ export interface UpdateTargetBlock {
 export interface UpdateTargetPack {
   fund: DTOs.PortfolioStructureDTO;
   updateTargetBlocks: Array<UpdateTargetBlock>;
+}
+
+export interface BICSServiceConsolidateReturnPack {
+  deepestLevel: number;
+  consolidatedStrings: Array<string>;
 }

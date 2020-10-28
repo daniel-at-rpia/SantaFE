@@ -41,7 +41,8 @@
       FilterOptionsCurrency,
       FilterOptionsRating,
       FilterOptionsTenor,
-      BICsLevel1DefinitionList
+      BICsLevel1DefinitionList,
+      DEFINITION_LONG_THRESHOLD
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       QuoteHeaderConfigList
@@ -467,17 +468,19 @@ export class DTOService {
   }
 
   public generateSecurityDefinitionFilterOptionList(
-    name,
-    options
+    name: string,
+    options: Array<string>,
+    bicsLevel?: number
   ): Array<Blocks.SecurityDefinitionFilterBlock> {
     return options.map((eachOption) => {
       const normalizedOption = this.utility.normalizeDefinitionFilterOption(eachOption);
       const newFilterDTO: Blocks.SecurityDefinitionFilterBlock = {
         isSelected: false,
         isFilteredOut: false,
-        displayLabel: eachOption,
+        displayLabel: !!bicsLevel ? `lv.${bicsLevel} - ${eachOption}` : eachOption,
+        bicsLevel: bicsLevel || null,
         shortKey: normalizedOption,
-        key: this.utility.formDefinitionFilterOptionKey(name, normalizedOption)
+        key: `${this.utility.formDefinitionFilterOptionKey(name, normalizedOption)}~${bicsLevel}`
       }
       return newFilterDTO;
     })
@@ -492,8 +495,10 @@ export class DTOService {
         displayName: rawData.displayName,
         key: rawData.key,
         urlForGetLongOptionListFromServer: rawData.urlForGetLongOptionListFromServer || null,
+        prinstineFilterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
         filterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
-        securityDTOAttr: rawData.securityDTOAttr
+        securityDTOAttr: rawData.securityDTOAttr,
+        highlightSelectedOptionList: []
       },
       style: {
         icon: rawData.icon,
@@ -505,10 +510,23 @@ export class DTOService {
         // isUnactivated: true,
         groupByActive: false,
         filterActive: false,
-        isMiniPillVariant: false
+        isMiniPillVariant: false,
+        isFilterLong: rawData.optionList.length > 5,
+        currentFilterPathInConsolidatedBICS: []
       }
     }
     return object;
+  }
+
+  public loadSecurityDefinitionOptions(
+    targetDefinition: DTOs.SecurityDefinitionDTO,
+    optionList: Array<string>,
+    bicsLevel?: number
+  ): DTOs.SecurityDefinitionDTO {
+    targetDefinition.data.prinstineFilterOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList, bicsLevel);
+    targetDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList, bicsLevel);
+    targetDefinition.state.isFilterLong = optionList.length > DEFINITION_LONG_THRESHOLD;
+    return targetDefinition;
   }
 
   public formSecurityDefinitionBundleObject(
@@ -549,9 +567,7 @@ export class DTOService {
         groupByDisabled: !!groupByDisabled,
         canApplyFilter: false,
         showFiltersFromDefinition: null,
-        showLongFilterOptions: false,
         isLoading: false,
-        isLoadingLongOptionListFromServer: false,
         noMainCTA: !!noMainCTA,
         securityAttrOnly: securityAttrOnly
       }
@@ -568,14 +584,17 @@ export class DTOService {
   ) {
     configuratorDTO.data.definitionList.forEach((eachBundle) => {
       eachBundle.data.list.forEach((eachDefinition) => {
+        if (eachDefinition.data.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
+          this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel1List, 1);
+        }
         if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_1.key) {
-          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_1.key, sortedLevel1List);
+          this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel1List);
         } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_2.key) {
-          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_2.key, sortedLevel2List);
+          this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel2List);
         } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_3.key) {
-          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_3.key, sortedLevel3List);
+          this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel3List);
         } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_4.key) {
-          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_4.key, sortedLevel4List);
+          this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel4List);
         }
       });
     });
