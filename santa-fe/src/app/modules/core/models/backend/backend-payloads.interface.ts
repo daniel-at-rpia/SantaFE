@@ -1,6 +1,6 @@
 import { AlertTypes, AlertSubTypes } from 'Core/constants/coreConstants.constant';
 import { AxeAlertType } from "Core/constants/tradeConstants.constant";
-import { PortfolioView} from 'Core/constants/structureConstants.constants'
+import { PortfolioView, BEPortfolioTargetMetricValues} from 'Core/constants/structureConstants.constants'
 import {
   BEPortfolioStructuringDTO,
   BEStructuringBreakdownBlock,
@@ -113,11 +113,10 @@ export interface PayloadGetPortfolioStructures {
 
 export interface PayloadUpdatePortfolioStructuresTargets {
   portfolioTarget: {
-    date: string,
+    date?: string,
     portfolioId: number,
     target: {
-      CreditLeverage: number,
-      Cs01: number
+      [metric in BEPortfolioTargetMetricValues]?: number;
     }
   }
 }

@@ -2,7 +2,7 @@
 
 $structureUtilityPanel_width: 9rem;
 
-$structureUtilityPanel_side_width: 12rem;
+$structureUtilityPanel_side_width: 14rem;
 $structureUtilityPanel_width_expand: $structureUtilityPanel_width + $structureUtilityPanel_side_width*2 + $spacing_small*2;
 $structureUtilityPanel_tongue_topGutter: 4rem;
 $structureUtilityPanel_side_btn_size: 2.25rem;
@@ -37,10 +37,9 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       flex-direction: column;
       align-items: center;
       &-title {
-        height: 2rem;
+        height: 2.4rem;
         color: $font_color_inverse;
         text-align: center;
-        white-space: nowrap;
       }
       &-selectedLabel {
         @include mix_border_radius(3px);
@@ -54,7 +53,7 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       &-btn {
         @include mix_fixed_div(absolute, $z_index_base_item);
         @include mix_border_radius(50%);
-        bottom: -$structureUtilityPanel_side_btn_size + $spacing_small;
+        bottom: -$structureUtilityPanel_side_btn_size + $spacing_x_small;
         padding: 0;
         width: $structureUtilityPanel_side_btn_size;
         height: $structureUtilityPanel_side_btn_size;
@@ -100,7 +99,6 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     display: flex;
     align-items: center;
     margin: $spacing_small 0;
-    padding-left: $spacing_small;
     width: $structureUtilityPanel_side_width;
     right: 0;
     transform: scale(0.01);
@@ -117,7 +115,7 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     }
     &-label {
       color: $font_color_inverse;
-      margin: $spacing_large $spacing_x_large;
+      margin: $spacing_large auto;
     }
   }
   &:hover, 
@@ -132,6 +130,7 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
             #{$blockName}__metricSelect-metric {
               &-selectedLabel {
                 visibility: visible;
+                font-size: $font_size_xx_small;
               }
               &-btn {
                 @include material('none');

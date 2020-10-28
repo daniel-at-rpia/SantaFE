@@ -3,11 +3,11 @@
     'sat-securityDefinitionConfigurator': true,
     'sat-securityDefinitionConfigurator--filterActiveState': configuratorData.state.showFiltersFromDefinition,
     'sat-securityDefinitionConfigurator--highlightedVariant': highlightedVariant,
-    'sat-securityDefinitionConfigurator--filterShowingLongDefinitionState': configuratorData.state.showFiltersFromDefinition?.data.urlForGetLongOptionListFromServer && configuratorData.state.showFiltersFromDefinition?.data.filterOptionList.length === 0,
-    'sat-securityDefinitionConfigurator--filterLoadingLongOptionListState': configuratorData.state.isLoadingLongOptionListFromServer,
     'sat-securityDefinitionConfigurator--groupByDisabledState': configuratorData.state.groupByDisabled,
     'sat-securityDefinitionConfigurator--canApplyFilterState': configuratorData.state.canApplyFilter,
-    'sat-securityDefinitionConfigurator--noMainCTAState': configuratorData.state.noMainCTA
+    'sat-securityDefinitionConfigurator--noMainCTAState': configuratorData.state.noMainCTA,
+    'sat-securityDefinitionConfigurator--filterLongState': configuratorData.state.showFiltersFromDefinition?.state.isFilterLong,
+    'sat-securityDefinitionConfigurator--filterShowingBICSConsolidatedState': configuratorData.state.showFiltersFromDefinition?.data.key === constants.map.BICS_CONSOLIDATED.key
   }">
   <section class="sat-securityDefinitionConfigurator__definitions">
     <ul class="sat-securityDefinitionConfigurator__definitions-list">
@@ -32,7 +32,6 @@
             [definitionData]="eachDefinition"
             (onClick)="onClickDefinition($event)"
             [selected]="configuratorData.state.showFiltersFromDefinition === eachDefinition"
-            [interactionDisabled]="configuratorData.state.isLoadingLongOptionListFromServer"
             [groupByDisabled]="configuratorData.state.groupByDisabled"
             [isPartOfConfiguratorList]="true">
           </security-definition>
@@ -49,6 +48,22 @@
           [heroVariant]="true">
         </security-definition>
       </div>
+      <div class="sat-securityDefinitionConfigurator__filters-content-selectedListTitle">
+        <span class="sat-securityDefinitionConfigurator__filters-content-selectedListTitle-highlightedText">{{configuratorData.state.showFiltersFromDefinition?.data.highlightSelectedOptionList?.length}}</span>
+        <span class="sat-securityDefinitionConfigurator__filters-content-selectedListTitle-text">Selected</span>
+      </div>
+      <ul class="sat-securityDefinitionConfigurator__filters-content-optionList sat-securityDefinitionConfigurator__filters-content-optionList--selected">
+        <button
+          *ngFor="let eachOption of configuratorData.state.showFiltersFromDefinition?.data.highlightSelectedOptionList"
+          (click)="onClickFilterOption(eachOption)"
+          [ngClass]="{
+            'sat-securityDefinitionConfigurator__filters-content-optionList-item': true,
+            'sat-securityDefinitionConfigurator__filters-content-optionList-item--selected': eachOption.isSelected,
+            'sat-securityDefinitionConfigurator__filters-content-optionList-item--filteredOut': eachOption.isFilteredOut
+          }">
+          {{eachOption.displayLabel}}
+        </button>
+      </ul>
       <div class="sat-securityDefinitionConfigurator__filters-content-search">
         <santa-input
           [inputValue]="configuratorData.data.filterSearchInputValue"
@@ -56,15 +71,18 @@
           (onInputChange)="onSearchKeywordChange($event)">
         </santa-input>
       </div>
-      <santa-loadable-button
-        class="sat-securityDefinitionConfigurator__filters-content-loadLongOptionCta"
-        (onClickButton)="onClickLoadLongOptionListForDefinition(configuratorData.state.showFiltersFromDefinition)"
-        [isLoading]="configuratorData.state.isLoadingLongOptionListFromServer"
-        [columnLayout]="true"
-        [icon]="'fal fa-cloud-download'"
-        [text]="'Load Options'">
-      </santa-loadable-button>
-      <ul class="sat-securityDefinitionConfigurator__filters-content-optionList">
+      <div class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn">
+        <div *ngFor="let eachLevel of configuratorData.state.showFiltersFromDefinition?.state.currentFilterPathInConsolidatedBICS; let level = index;" class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn-entry">
+          <div class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn-entry-content">
+            <div class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn-entry-content-text">{{eachLevel}}</div>
+            <button (click)="onClickConsolidatedBICSDiveOut(eachLevel, level)" class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn-entry-content-diveOutBtn santaBtn--iconOnly santaBtn--small fas fa-minus"></button>
+          </div>
+          <div class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn-entry-separator">
+            <i class="far fa-arrow-down"></i>
+          </div>
+        </div>
+      </div>
+      <ul class="sat-securityDefinitionConfigurator__filters-content-optionList sat-securityDefinitionConfigurator__filters-content-optionList--regular">
         <button
           *ngFor="let eachOption of configuratorData.state.showFiltersFromDefinition?.data.filterOptionList"
           (click)="onClickFilterOption(eachOption)"
@@ -75,6 +93,20 @@
           }">
           {{eachOption.displayLabel}}
         </button>
+      </ul>
+      <ul class="sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList">
+        <div
+          *ngFor="let eachOption of configuratorData.state.showFiltersFromDefinition?.data.filterOptionList"
+          [ngClass]="{
+            'sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item': true,
+            'sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item--selected': eachOption.isSelected,
+            'sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item--deepestLevel': eachOption.bicsLevel >= 4
+          }">
+          <button (click)="onClickConsolidatedBICSDiveIn(eachOption)" class="santaBtn--iconOnly sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item-diveIn far fa-plus"></button>
+          <button (click)="onClickFilterOption(eachOption)" class="sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item-select">
+            {{eachOption.displayLabel}}
+          </button>
+        </div>
       </ul>
     </div>
   </section>

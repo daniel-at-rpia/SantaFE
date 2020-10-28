@@ -203,7 +203,9 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     displayName: string;
     key: string;
     urlForGetLongOptionListFromServer: string;
+    prinstineFilterOptionList: Array<SecurityDefinitionFilterBlock>;
     filterOptionList: Array<SecurityDefinitionFilterBlock>;
+    highlightSelectedOptionList: Array<SecurityDefinitionFilterBlock>;
     securityDTOAttr: string;
   }
   style: {
@@ -216,6 +218,8 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     groupByActive: boolean;
     filterActive: boolean;
     isMiniPillVariant: boolean;
+    isFilterLong: boolean;
+    currentFilterPathInConsolidatedBICS: Array<string>;
   }
 }
 
@@ -234,9 +238,7 @@ export interface SecurityDefinitionConfiguratorDTO extends BasicDTOStructure {
   state: {
     groupByDisabled: boolean;
     canApplyFilter: boolean;
-    showLongFilterOptions: boolean;
     isLoading: boolean;
-    isLoadingLongOptionListFromServer: boolean;
     showFiltersFromDefinition: SecurityDefinitionDTO;
     noMainCTA: boolean;
     securityAttrOnly: boolean;
@@ -733,12 +735,9 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     indexNav: number;
     indexTotals: PortfolioMetricTotals;
     children: Array<PortfolioBreakdownDTO>;
-    cs01TotalsInK?: {
-      currentTotal: number;
-      targetTotal: number;
-    }
     cs01TargetBar: TargetBarDTO;
     creditLeverageTargetBar: TargetBarDTO;
+    creditDurationTargetBar: TargetBarDTO;
     originalBEData: BEPortfolioStructuringDTO; // used when updating portfolios for portfolio structuring
   },
   api: {
@@ -750,9 +749,13 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     isNumeric: boolean;
     isDataUnavailable: boolean;
     isEditingFund: boolean;
+    modifiedFundTargets: {
+      creditDuration: number;
+      creditLeverage: number;
+    }
     hasErrors: {
-      updatedCS01: boolean;
       updatedCreditLeverage: boolean;
+      updatedCreditDuration: boolean;
       errorMessage: string;
     }
   }
@@ -768,6 +771,11 @@ export interface TargetBarDTO extends BasicDTOStructure {
     currentPercentage: string;
     exceededPercentage: string;
     displayedResults: string;
+    additionalMetricTargetData?: {
+      metric: PortfolioMetricValues;
+      current: string;
+      target: string;
+    }
   }
   state: {
     isInactiveMetric: boolean,
