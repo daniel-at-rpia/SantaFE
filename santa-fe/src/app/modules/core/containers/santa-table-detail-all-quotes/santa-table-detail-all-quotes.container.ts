@@ -297,10 +297,10 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
       }
     } else {
       this.rowData.data.traceTradeVisualizer.state.graphReceived = false;
-      if (this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades) {
-        this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.security.data.traceTrades;
+      if (this.rowData.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT && !this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades) {
+        this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.security.data.traceTrades.filter((trade, i) => i < TRACE_INITIAL_LIMIT);
       } else {
-        this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT ? this.rowData.data.security.data.traceTrades.filter((trade, i) => i < TRACE_INITIAL_LIMIT) : this.rowData.data.security.data.traceTrades;
+        this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.security.data.traceTrades;
       }
     }
   }
