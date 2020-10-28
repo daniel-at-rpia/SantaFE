@@ -124,6 +124,15 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
       }
     ]
   },{
+    displayTitle: 'Aaron',
+    includedDefinitions: [
+      {
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
+        groupByActive: false,
+        selectedOptions: ['AY']
+      }
+    ]
+  },{
     displayTitle: 'Brian',
     includedDefinitions: [
       {

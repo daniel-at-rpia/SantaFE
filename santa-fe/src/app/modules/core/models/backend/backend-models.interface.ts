@@ -588,6 +588,7 @@ export interface BEMetricBreakdowns {
   metricBreakdowns: {
     CreditLeverage?: BEStructuringBreakdownSingleEntry;
     Cs01?: BEStructuringBreakdownSingleEntry;
+    CreditDuration?: BEStructuringBreakdownSingleEntry;
   },
   view: string;
 }
@@ -618,6 +619,7 @@ export interface BEStructuringOverrideBlock {
 export interface BEStructuringMetricTotalBlock {
   CreditLeverage: number;
   Cs01: number;
+  CreditDuration: number;
 }
 
 export interface BEPortfolioStructuringDTO {

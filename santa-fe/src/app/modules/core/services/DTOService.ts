@@ -44,7 +44,8 @@
       FilterOptionsRating,
       FilterOptionsTenor,
       BICsLevel1DefinitionList,
-      FilterTraceTradesOptions
+      FilterTraceTradesOptions,
+      DEFINITION_LONG_THRESHOLD
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       QuoteHeaderConfigList,
@@ -474,17 +475,19 @@ export class DTOService {
   }
 
   public generateSecurityDefinitionFilterOptionList(
-    name,
-    options
+    name: string,
+    options: Array<string>,
+    bicsLevel?: number
   ): Array<Blocks.SecurityDefinitionFilterBlock> {
     return options.map((eachOption) => {
       const normalizedOption = this.utility.normalizeDefinitionFilterOption(eachOption);
       const newFilterDTO: Blocks.SecurityDefinitionFilterBlock = {
         isSelected: false,
         isFilteredOut: false,
-        displayLabel: eachOption,
+        displayLabel: !!bicsLevel ? `lv.${bicsLevel} - ${eachOption}` : eachOption,
+        bicsLevel: bicsLevel || null,
         shortKey: normalizedOption,
-        key: this.utility.formDefinitionFilterOptionKey(name, normalizedOption)
+        key: `${this.utility.formDefinitionFilterOptionKey(name, normalizedOption)}~${bicsLevel}`
       }
       return newFilterDTO;
     })
@@ -499,8 +502,10 @@ export class DTOService {
         displayName: rawData.displayName,
         key: rawData.key,
         urlForGetLongOptionListFromServer: rawData.urlForGetLongOptionListFromServer || null,
+        prinstineFilterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
         filterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
-        securityDTOAttr: rawData.securityDTOAttr
+        securityDTOAttr: rawData.securityDTOAttr,
+        highlightSelectedOptionList: []
       },
       style: {
         icon: rawData.icon,
@@ -512,10 +517,23 @@ export class DTOService {
         // isUnactivated: true,
         groupByActive: false,
         filterActive: false,
-        isMiniPillVariant: false
+        isMiniPillVariant: false,
+        isFilterLong: rawData.optionList.length > 5,
+        currentFilterPathInConsolidatedBICS: []
       }
     }
     return object;
+  }
+
+  public loadSecurityDefinitionOptions(
+    targetDefinition: DTOs.SecurityDefinitionDTO,
+    optionList: Array<string>,
+    bicsLevel?: number
+  ): DTOs.SecurityDefinitionDTO {
+    targetDefinition.data.prinstineFilterOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList, bicsLevel);
+    targetDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList, bicsLevel);
+    targetDefinition.state.isFilterLong = optionList.length > DEFINITION_LONG_THRESHOLD;
+    return targetDefinition;
   }
 
   public formSecurityDefinitionBundleObject(
@@ -556,9 +574,7 @@ export class DTOService {
         groupByDisabled: !!groupByDisabled,
         canApplyFilter: false,
         showFiltersFromDefinition: null,
-        showLongFilterOptions: false,
         isLoading: false,
-        isLoadingLongOptionListFromServer: false,
         noMainCTA: !!noMainCTA,
         securityAttrOnly: securityAttrOnly
       }
@@ -575,14 +591,17 @@ export class DTOService {
   ) {
     configuratorDTO.data.definitionList.forEach((eachBundle) => {
       eachBundle.data.list.forEach((eachDefinition) => {
+        if (eachDefinition.data.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
+          this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel1List, 1);
+        }
         if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_1.key) {
-          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_1.key, sortedLevel1List);
+          this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel1List);
         } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_2.key) {
-          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_2.key, sortedLevel2List);
+          this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel2List);
         } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_3.key) {
-          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_3.key, sortedLevel3List);
+          this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel3List);
         } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_4.key) {
-          eachDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(SecurityDefinitionMap.BICS_LEVEL_4.key, sortedLevel4List);
+          this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel4List);
         }
       });
     });
@@ -1770,7 +1789,7 @@ export class DTOService {
     return object;
   }
 
-  public formTargetBarObject(targetMetric: PortfolioMetricValues, currentValue: number, targetValue: number, isStencil: boolean) {
+  public formTargetBarObject(targetMetric: PortfolioMetricValues, currentValue: number, targetValue: number, isStencil: boolean, activeMetricValue: PortfolioMetricValues) {
     const object: DTOs.TargetBarDTO = {
       data: {
         targetMetric,
@@ -1835,20 +1854,19 @@ export class DTOService {
         targetBar.data.displayedCurrentValue = this.utility.parseNumberToThousands(targetBar.data.currentValue, true, 0);
         targetBar.data.displayedTargetValue = this.utility.parseNumberToThousands(targetBar.data.targetValue,true, 0);
         targetBar.data.displayedResults = getDisplayedResults(targetBar.data.displayedCurrentValue, targetBar.data.displayedTargetValue);
-        return;
+      } else {
+        targetBar.data.displayedCurrentValue = this.utility.round(targetBar.data.currentValue,2);
+        targetBar.data.displayedTargetValue = this.utility.round(targetBar.data.targetValue,2);
+        targetBar.data.displayedResults = getDisplayedResults(targetBar.data.displayedCurrentValue, targetBar.data.displayedTargetValue);
       }
-      targetBar.data.displayedCurrentValue = this.utility.round(targetBar.data.currentValue,2);
-      targetBar.data.displayedTargetValue = this.utility.round(targetBar.data.targetValue,2);
-      targetBar.data.displayedResults = getDisplayedResults(targetBar.data.displayedCurrentValue, targetBar.data.displayedTargetValue);
     }
     convertValuesForDisplay(object);
     getDisplayedValues(object);
     if (!targetValue) {
       object.state.isEmpty = true;
-      object.data.displayedResults = targetMetric === PortfolioMetricValues.cs01 ? `${object.data.displayedCurrentValue} / -` : `${object.data.displayedCurrentValue} / -`;
-      return object;
+      object.data.displayedResults = `${object.data.displayedCurrentValue} / -`;
     }
-    object.state.isEmpty = !object.data.targetValue;
+    object.state.isInactiveMetric = object.data.targetMetric === PortfolioMetricValues.creditDuration ? activeMetricValue === PortfolioMetricValues.creditLeverage : object.data.targetMetric !== activeMetricValue;
     return object;
   }
 
@@ -1869,27 +1887,27 @@ export class DTOService {
           portfolioId: rawData.target.portfolioId,
           target: {
             cs01: rawData.target.target.Cs01 || 0,
-            creditLeverage: rawData.target.target.CreditLeverage || 0
+            creditLeverage: rawData.target.target.CreditLeverage || 0,
+            creditDuration: rawData.target.target.CreditDuration || 0
           }
         },
         currentTotals :{
           cs01: rawData.currentTotals.Cs01,
-          creditLeverage: rawData.currentTotals.CreditLeverage
+          creditLeverage: rawData.currentTotals.CreditLeverage,
+          creditDuration: rawData.currentTotals.CreditDuration
         },
         indexId: rawData.indexId,
         indexShortName: rawData.indexShortName,
         indexNav: rawData.indexNav,
         indexTotals: {
           cs01: rawData.indexTotals.Cs01,
-          creditLeverage: rawData.indexTotals.CreditLeverage
+          creditLeverage: rawData.indexTotals.CreditLeverage,
+          creditDuration: rawData.indexTotals.CreditDuration
         },
         children: [],
-        cs01TotalsInK: {
-          currentTotal: null,
-          targetTotal: null
-        },
         cs01TargetBar: null,
         creditLeverageTargetBar: null,
+        creditDurationTargetBar: null,
         originalBEData: rawData
       },
       api: {
@@ -1902,17 +1920,28 @@ export class DTOService {
         isDataUnavailable: false,
         isEditingFund: false,
         hasErrors: {
-          updatedCS01: false,
           updatedCreditLeverage: false,
+          updatedCreditDuration: false,
           errorMessage: ''
+        },
+        modifiedFundTargets: {
+          creditLeverage: rawData.target.target.CreditLeverage || 0,
+          creditDuration: rawData.target.target.CreditDuration || 0
         }
       }
     };
-    object.data.cs01TotalsInK.targetTotal = object.data.target.target.cs01 / 1000;
-    object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, object.state.isStencil);
-    object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil);
-    object.data.cs01TargetBar.state.isInactiveMetric = selectedMetricValue !== object.data.cs01TargetBar.data.targetMetric;
-    object.data.creditLeverageTargetBar.state.isInactiveMetric = selectedMetricValue !== object.data.creditLeverageTargetBar.data.targetMetric;
+    object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, object.state.isStencil, selectedMetricValue);
+    object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil, selectedMetricValue);
+    object.data.creditDurationTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditDuration, object.data.currentTotals.creditDuration, object.data.target.target.creditDuration, object.state.isStencil, selectedMetricValue);
+    if (!!object.data.creditDurationTargetBar) {
+      const parsedCs01CurrentTotal = !!rawData.currentTotals.Cs01 ? this.utility.parseNumberToThousands(rawData.currentTotals.Cs01, true, 0) : '-';
+      const parsedCs01TargetTotal = !!rawData.target.target.Cs01 ? this.utility.parseNumberToThousands(rawData.target.target.Cs01, true, 0) : '-';
+      object.data.creditDurationTargetBar.data.additionalMetricTargetData = {
+        metric: PortfolioMetricValues.cs01,
+        current: parsedCs01CurrentTotal,
+        target: parsedCs01TargetTotal
+      }
+    }
     this.processBreakdownDataForStructureFund(
       object,
       rawData,
