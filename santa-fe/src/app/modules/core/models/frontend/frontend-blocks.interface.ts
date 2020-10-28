@@ -275,6 +275,7 @@ export interface SelectAxeWatchlistRangeDriver extends AxeAlertBlock {
 export interface PortfolioMetricTotals {
   cs01: number;
   creditLeverage: number;
+  creditDuration: number;
 }
 
 export interface PortfolioBreakdownCategoryBlock {

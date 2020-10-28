@@ -6,7 +6,7 @@ import {
   IFloatingFilterParams,
   SerializedNumberFilter
 } from 'ag-grid-community';
-import { PortfolioView } from 'Core/constants/structureConstants.constants';
+import { PortfolioMetricValues, PortfolioView } from 'Core/constants/structureConstants.constants';
 import { StructureBucketDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
 import * as DTOs from 'FEModels/frontend-models.interface';
 import { BEPortfolioStructuringDTO, BEStructuringBreakdownBlock } from 'BEModels/backend-models.interface';
@@ -16,6 +16,7 @@ import {
   AgGridRowNode,
   SecurityDefinitionFilterBlock
 } from 'FEModels/frontend-blocks.interface';
+import { BEPortfolioTargetMetricValues } from 'Core/constants/structureConstants.constants';
 
 export interface SecurityMapEntry {
   keywords: Array<string>;
@@ -135,6 +136,16 @@ export interface StructureSetViewData {
 export interface StructureOverrideToBreakdownConversionReturnPack {
   list: Array<BEStructuringBreakdownBlock>;
   displayLabelMap: object;
+}
+
+export interface UpdateTargetBlock {
+  metric: BEPortfolioTargetMetricValues;
+  target: number;
+}
+
+export interface UpdateTargetPack {
+  fund: DTOs.PortfolioStructureDTO;
+  updateTargetBlocks: Array<UpdateTargetBlock>;
 }
 
 export interface BICSServiceConsolidateReturnPack {

@@ -22,7 +22,8 @@ export class StructureUtilityPanel implements OnInit {
   }
   constants = {
     cs01: PortfolioMetricValues.cs01,
-    leverage: PortfolioMetricValues.creditLeverage
+    leverage: PortfolioMetricValues.creditLeverage,
+    creditDuration: PortfolioMetricValues.creditDuration
   }
 
   constructor(private store$: Store<any>) {}
