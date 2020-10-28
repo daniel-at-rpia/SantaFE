@@ -134,7 +134,7 @@ $portfolioBreakdown_rating_height: 1rem;
     }
   }
   &__ctas {
-    @include mix_fixed_div(absolute, $z_index_hovering_item);
+    @include mix_fixed_div(absolute, $z_index_hovering_item_lift);
     display: none;
     justify-content: center;
     left: 0;
