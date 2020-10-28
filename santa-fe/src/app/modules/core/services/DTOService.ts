@@ -29,7 +29,9 @@
       SECURITY_TABLE_QUOTE_TYPE_RUN,
       SECURITY_TABLE_QUOTE_TYPE_AXE,
       AGGRID_ROW_HEIGHT,
-      AGGRID_ROW_HEIGHT_SLIM
+      AGGRID_ROW_HEIGHT_SLIM,
+      AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD,
+      traceTradeNumericalFilterSymbols
     } from 'Core/constants/securityTableConstants.constant';
     import {
       GroupMetricOptions
@@ -42,6 +44,7 @@
       FilterOptionsRating,
       FilterOptionsTenor,
       BICsLevel1DefinitionList,
+      FilterTraceTradesOptions,
       DEFINITION_LONG_THRESHOLD
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
@@ -2223,11 +2226,12 @@ export class DTOService {
   }
 
   public formTraceTradeBlockObject(rawData: BEModels.BETraceTradesBlock, targetSecurity: DTOs.SecurityDTO) {
+    const counterParty = !!rawData.counterParty ? rawData.counterParty === TraceTradeCounterParty.ClientAffiliate ? TraceTradeCounterParty.ClientAffiliate : TraceTradeCounterParty[rawData.counterParty] : null;
     const object: Blocks.TraceTradeBlock = {
       traceTradeId: rawData.traceTradeID,
       eventTime: rawData.eventTime,
       parsedEventTime: moment(rawData.eventTime).format(`YY MMM DD - HH:mm`),
-      counterParty: TraceTradeCounterParty[rawData.counterParty],
+      counterParty: counterParty,
       side: TradeSideValueEquivalent[rawData.side],
       volumeEstimated: rawData.volumeEstimated,
       volumeReported: rawData.volumeActual,
@@ -2244,13 +2248,13 @@ export class DTOService {
     return object;
   }
 
-  public formTraceTradesVisualizerDTO(targetRow: DTOs.SecurityTableRowDTO): DTOs.TraceTradesVisualizerDTO {
+  public formTraceTradesVisualizerDTO(targetRow: DTOs.SecurityTableRowDTO, isPinnedFullWidth: boolean = false): DTOs.TraceTradesVisualizerDTO {
     const object = {
       data: {
         displayList: [],
-        scatterGraphId: `${targetRow.data.rowId}-scatterGraph`,
-        pieGraphId: `${targetRow.data.rowId}-pieGraphId`,
-        filterList: [],
+        scatterGraphId: !isPinnedFullWidth ? `${targetRow.data.rowId}-scatterGraphId` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-scatterGraphId`,
+        pieGraphId: !isPinnedFullWidth ? `${targetRow.data.rowId}-pieGraphId` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-pieGraphId`,
+        filterList: FilterTraceTradesOptions,
         availableFiltersList: []
       },
       state: {
@@ -2277,6 +2281,19 @@ export class DTOService {
 
       object.data.displayList = targetRow.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT ? targetRow.data.security.data.traceTrades.filter((trade, i) => i < TRACE_INITIAL_LIMIT) : targetRow.data.security.data.traceTrades;
     }
+    const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
+    object.data.filterList.forEach(option => {
+      const isNumericOption = option.includes(numericFilter);
+      if (!!isNumericOption) {
+        const parsedAmount: number = this.utility.getTraceNumericFilterAmount(numericFilter, option);
+        const isTradeAvailable = this.utility.getTraceTradesListBasedOnAmount(object.data.displayList, parsedAmount);
+        isTradeAvailable.length > 0 && object.data.
+        availableFiltersList.push(option);
+      } else {
+        const isCounterPartyAvailable = object.data.displayList.find(trade => trade.counterParty === option);
+        !!isCounterPartyAvailable && object.data.availableFiltersList.push(option);
+      }
+    })
     return object;
   }
 

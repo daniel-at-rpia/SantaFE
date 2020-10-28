@@ -1,6 +1,6 @@
-import { Component, OnChanges, OnDestroy, ViewEncapsulation, Input } from '@angular/core';
+import { Component, OnChanges, OnDestroy, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
 import { TraceTradesVisualizerDTO } from 'Core/models/frontend/frontend-models.interface';
-import { TradeTraceHeaderConfigList, TradeSideValueEquivalent } from 'Core/constants/securityTableConstants.constant'
+import { TradeTraceHeaderConfigList, TradeSideValueEquivalent, TraceTradeCounterParty } from 'Core/constants/securityTableConstants.constant'
 import { GraphService } from 'Core/services/GraphService';
 
 @Component({
@@ -13,6 +13,7 @@ import { GraphService } from 'Core/services/GraphService';
 export class TraceTradeVisualizer implements OnChanges, OnDestroy{
   @Input() traceTrades: TraceTradesVisualizerDTO;
   @Input() showData: boolean;
+  @Output() filterOptionsList = new EventEmitter<string[]>();
   constants = {
     headerConfigList: TradeTraceHeaderConfigList,
     sideValueEquivalent: {
@@ -22,7 +23,7 @@ export class TraceTradeVisualizer implements OnChanges, OnDestroy{
   }
   constructor(private graphService: GraphService) {};
   public ngOnDestroy() {
-    if (!!this.traceTrades) {
+    if (!!this.traceTrades && !!this.traceTrades.graph.pieGraph && !!this.traceTrades.graph.scatterGraph) {
       this.traceTrades.state.graphReceived = false;
       try {
         if (this.traceTrades.graph.scatterGraph) {
@@ -46,7 +47,7 @@ export class TraceTradeVisualizer implements OnChanges, OnDestroy{
   public ngOnChanges() {
     const renderGraphs = () => {
       if (!!this.traceTrades) {
-        if (!!this.showData && !this.traceTrades.state.graphReceived) {
+        if (!!this.showData && !this.traceTrades.state.graphReceived && this.traceTrades.data.displayList.length > 0) {
           this.traceTrades.state.graphReceived = true;
           this.traceTrades.graph.scatterGraph = this.graphService.generateTradeTraceScatterGraph(this.traceTrades);
           this.traceTrades.graph.pieGraph = this.graphService.generateTraceTradePieGraph(this.traceTrades)
@@ -54,5 +55,16 @@ export class TraceTradeVisualizer implements OnChanges, OnDestroy{
       }
     }
     setTimeout(renderGraphs.bind(this), 100);
+  }
+
+  public onToggleTraceFilters(option: string) {
+    if (!!option && !!this.filterOptionsList) {
+      if (this.traceTrades.state.selectedFiltersList.includes(option)) {
+        this.traceTrades.state.selectedFiltersList = this.traceTrades.state.selectedFiltersList.filter(selected => selected !== option);
+      } else {
+        this.traceTrades.state.selectedFiltersList.push(option);
+      }
+      this.filterOptionsList.emit(this.traceTrades.state.selectedFiltersList);
+    }
   }
 }

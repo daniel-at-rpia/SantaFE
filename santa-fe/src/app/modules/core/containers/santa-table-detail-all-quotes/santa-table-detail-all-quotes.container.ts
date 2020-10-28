@@ -15,7 +15,7 @@
     import { of } from 'rxjs';
     import { ICellRendererAngularComp } from 'ag-grid-angular';
 
-    import { AgGridRowNode } from 'FEModels/frontend-blocks.interface';
+    import { AgGridRowNode, TraceTradeBlock } from 'FEModels/frontend-blocks.interface';
     import { SecurityTableRowDTO, SecurityQuoteDTO } from 'FEModels/frontend-models.interface';
     import { QuoteMetricBlock } from 'FEModels/frontend-blocks.interface';
     import {
@@ -27,12 +27,12 @@
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
-    import { QuoteHeaderConfigList } from 'Core/constants/securityTableConstants.constant';
+    import { traceTradeFilterAmounts} from 'Core/constants/securityTableConstants.constant';
     import * as BEModels from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
     import { GraphService } from 'Core/services/GraphService';
     import { TRACE_INITIAL_LIMIT } from 'Core/constants/tradeConstants.constant';
-
+    import { traceTradeNumericalFilterSymbols } from 'Core/constants/securityTableConstants.constant';
   //
 
 @Component({
@@ -74,15 +74,16 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     // the pinned rows won't have a parent
     this.parentNode && this.parentNode.setExpanded(false);
     this.parent.onRowClickedToCollapse(this.rowData, !this.parentNode, this.params);
+    this.rowData.state.isExpanded = false;
     this.rowData.data.historicalTradeVisualizer.state.graphReceived = false;
-    if (!!this.rowData.data.traceTradeVisualizer) {
-      this.rowData.data.traceTradeVisualizer.state.graphReceived = false;
-    }
     this.rowData.state.viewTraceState = false;
     this.rowData.state.viewHistoryState = false;
-    if (!!this.rowData.data.traceTradeVisualizer && !!this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades) {
+    if (!!this.rowData.data.traceTradeVisualizer) {
       this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = false;
-      this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.security.data.traceTrades.filter((row, i) => i < TRACE_INITIAL_LIMIT);
+      this.rowData.data.traceTradeVisualizer.state.selectedFiltersList = [];
+      this.rowData.data.traceTradeVisualizer.data.availableFiltersList = [];
+      this.rowData.data.traceTradeVisualizer.state.graphReceived = false;
+      this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT ? this.rowData.data.security.data.traceTrades.filter((row, i) => i < TRACE_INITIAL_LIMIT) : this.rowData.data.security.data.traceTrades;
     }
   }
 
@@ -203,15 +204,104 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   public onClickShowMoreTraceTrades() {
     this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = true;
     //trigger ngOnChange to re-render charts
+    if (this.rowData.data.traceTradeVisualizer.graph.pieGraph) {
+      this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.pieGraph);
+      this.rowData.data.traceTradeVisualizer.graph.pieGraph = null;
+    }
+    if (this.rowData.data.traceTradeVisualizer.graph.scatterGraph) {
+      this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.scatterGraph);
+      this.rowData.data.traceTradeVisualizer.graph.scatterGraph = null;
+    }
     const copy = this.utilityService.deepCopy(this.rowData.data.traceTradeVisualizer)
     this.rowData.data.traceTradeVisualizer = copy;
     this.rowData.data.traceTradeVisualizer.state.graphReceived = false;
+    this.rowData.data.traceTradeVisualizer.state.selectedFiltersList = [];
+    this.rowData.data.traceTradeVisualizer.data.availableFiltersList = [];
+    const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
     this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.security.data.traceTrades;
+    this.rowData.data.traceTradeVisualizer.data.filterList.forEach(option => {
+      const isNumericOption = option.includes(numericFilter);
+      if (!!isNumericOption) {
+        const parsedAmount: number = this.utilityService.getTraceNumericFilterAmount(numericFilter, option);
+        const isTradeAvailable = this.utilityService.getTraceTradesListBasedOnAmount(this.rowData.data.traceTradeVisualizer.data.displayList, parsedAmount);
+        isTradeAvailable.length > 0 && this.rowData.data.traceTradeVisualizer.data.
+        availableFiltersList.push(option);
+      } else {
+        const isCounterPartyAvailable = this.rowData.data.traceTradeVisualizer.data.displayList.find(trade => trade.counterParty === option);
+        !!isCounterPartyAvailable && this.rowData.data.traceTradeVisualizer.data.availableFiltersList.push(option);
+      }
+    })
   }
 
   public onClickGetAllTradeHistory(showAllTradeHistory: boolean) {
     if (showAllTradeHistory) {
       this.fetchTradeAllHistory();
+    }
+  }
+
+  public filterTraceTradesByOptions(options: Array<string>) {
+    if (this.rowData.data.traceTradeVisualizer.graph.scatterGraph) {
+      this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.scatterGraph);
+      this.rowData.data.traceTradeVisualizer.graph.scatterGraph = null;
+    }
+    if (this.rowData.data.traceTradeVisualizer.graph.pieGraph) {
+      this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.pieGraph);
+      this.rowData.data.traceTradeVisualizer.graph.pieGraph = null;
+    }
+    const copy = this.utilityService.deepCopy(this.rowData.data.traceTradeVisualizer);
+    this.rowData.data.traceTradeVisualizer = copy;
+    let numericalFiltersList: Array<number> = [];
+    const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
+    if (options.length > 0) {
+      options.forEach((option) => {
+        if (option.includes(numericFilter)) {
+          const numericalAmount: number = this.utilityService.getTraceNumericFilterAmount(numericFilter, option);
+          numericalFiltersList = [...numericalFiltersList, numericalAmount];
+        }
+      })
+      let processingTraceTradesList: Array<TraceTradeBlock> = [];
+      if (this.rowData.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT && !this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades) {
+        processingTraceTradesList = this.rowData.data.security.data.traceTrades.filter((trade, i) => i < TRACE_INITIAL_LIMIT);
+      } else {
+        processingTraceTradesList = this.rowData.data.security.data.traceTrades;
+      }
+      let filterListWithCounterParty: Array<TraceTradeBlock> = [];
+      const checkNumericalFilter = /\d/;
+      const optionsCounterPartyList = options.filter(option => !checkNumericalFilter.test(option));
+      if (optionsCounterPartyList.length > 0) {
+        optionsCounterPartyList.forEach(counterParty => {
+          const counterPartyFilterList = processingTraceTradesList.filter(trade => trade.counterParty === counterParty);
+          filterListWithCounterParty = [...filterListWithCounterParty, ...counterPartyFilterList];
+        })
+      }
+      const traceTradesFilterData = optionsCounterPartyList.length > 0 ? filterListWithCounterParty : processingTraceTradesList;
+      if (numericalFiltersList.length > 0) {
+        numericalFiltersList.sort();
+        const filteredWithAmountsList = this.utilityService.getTraceTradesListBasedOnAmount(traceTradesFilterData, numericalFiltersList[numericalFiltersList.length - 1]);
+        this.rowData.data.traceTradeVisualizer.data.displayList = filteredWithAmountsList;
+      } else {
+        this.rowData.data.traceTradeVisualizer.data.displayList = traceTradesFilterData;
+      }
+
+      if (this.rowData.data.traceTradeVisualizer.data.displayList.length > 0) {
+        this.rowData.data.traceTradeVisualizer.state.graphReceived = false;
+        this.rowData.data.traceTradeVisualizer.data.displayList.sort((tradeA, tradeB) => {
+          if (tradeA.eventTime > tradeB.eventTime) {
+            return -1
+          } else if (tradeB.eventTime > tradeA.eventTime) {
+            return 1;
+          } else {
+            return 0;
+          }
+        })
+      }
+    } else {
+      this.rowData.data.traceTradeVisualizer.state.graphReceived = false;
+      if (this.rowData.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT && !this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades) {
+        this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.security.data.traceTrades.filter((trade, i) => i < TRACE_INITIAL_LIMIT);
+      } else {
+        this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.security.data.traceTrades;
+      }
     }
   }
 

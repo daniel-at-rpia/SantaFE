@@ -17,7 +17,8 @@
     import {
       SecurityGroupMetricBlock,
       SecurityGroupMetricPackBlock,
-      SecurityCostPortfolioBlock
+      SecurityCostPortfolioBlock,
+      TraceTradeBlock
     } from 'FEModels/frontend-blocks.interface';
     import { DefinitionConfiguratorEmitterParams, StructureOverrideToBreakdownConversionReturnPack } from 'FEModels/frontend-adhoc-packages.interface';
     import {
@@ -35,6 +36,7 @@
     } from 'Core/constants/coreConstants.constant';
     import { CountdownPipe } from 'App/pipes/Countdown.pipe';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
+    import { traceTradeFilterAmounts } from '../constants/securityTableConstants.constant';
   // dependencies
 
 @Injectable()
@@ -1032,6 +1034,17 @@ export class UtilityService {
 
     public checkIfTraceIsAvailable(targetRow: DTOs.SecurityTableRowDTO): boolean {
       return targetRow.data.security.data.currency === 'USD' && targetRow.data.security.data.securityType !== 'Cds'
+    }
+
+    public getTraceNumericFilterAmount(filterSymbol: string, filter: string): number {
+      const parsedFilter = filter.split(filterSymbol)[1].trim();
+      const amount = parsedFilter.includes('K') ? +(parsedFilter.split('K')[0]) * traceTradeFilterAmounts.thousand : +(parsedFilter.split('M')[0]) * traceTradeFilterAmounts.million;
+      return amount;
+    }
+
+    public getTraceTradesListBasedOnAmount(list: Array<TraceTradeBlock>, amount: number): Array<TraceTradeBlock> {
+      const newList = list.filter(trade => !!trade.volumeEstimated ? trade.volumeEstimated >= amount : trade.volumeReported >= amount);
+      return newList;
     }
 
     private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {
