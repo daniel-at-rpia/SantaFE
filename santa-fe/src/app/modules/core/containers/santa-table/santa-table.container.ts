@@ -36,7 +36,8 @@
       AGGRID_ROW_HEIGHT_SLIM,
       SECURITY_TABLE_FINAL_STAGE,
       SECURITY_TABLE_ICONS,
-      AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD
+      AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD,
+      AGGRID_PINNED_FULL_WIDTH_PINNED_ROW_KEYWORD
     } from 'Core/constants/securityTableConstants.constant';
     import { TRACE_INITIAL_LIMIT } from 'Core/constants/tradeConstants.constant';
     import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
@@ -116,7 +117,8 @@ export class SantaTable implements OnInit, OnChanges {
     agGridDetailRowHeightMinimum: AGGRID_DETAIL_ROW_HEIGHT_MINIMUM,
     agGridDetailRowDefaultCount: AGGRID_DETAIL_ROW_DEFAULT_COUNT,
     agGridDetailRowHeightOffsetOffTheRunCDS: AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS,
-    agGridPinnedFullWidthRowKeyword: AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD
+    agGridPinnedFullWidthRowKeyword: AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD,
+    agGridPinnedRowKeyword: AGGRID_PINNED_FULL_WIDTH_PINNED_ROW_KEYWORD
   };
 
   icons = SECURITY_TABLE_ICONS;
@@ -387,22 +389,16 @@ export class SantaTable implements OnInit, OnChanges {
           // the deep copy is to make sure the pinned rows are retained as the state of the table changes. it also ensures when clicking on the pinned row's card, it doesn't trigger both the regular row and the pinned row
           const copy: AgGridRow = this.utilityService.deepCopy(targetRow);
           copy.rowDTO.state.isExpanded = false;  // always reset the isExpanded flag
-          if (!!copy.rowDTO.data.traceTradeVisualizer) {
-            copy.rowDTO.data.traceTradeVisualizer.state.graphReceived = false;
-            if (!!copy.rowDTO.data.traceTradeVisualizer.graph.pieGraph) {
-              this.graphService.destoryGraph(copy.rowDTO.data.traceTradeVisualizer.graph.pieGraph);
-              copy.rowDTO.data.traceTradeVisualizer.graph.pieGraph = null;
-            }
-            if (!!copy.rowDTO.data.traceTradeVisualizer.graph.scatterGraph) {
-              this.graphService.destoryGraph(copy.rowDTO.data.traceTradeVisualizer.graph.scatterGraph);
-              copy.rowDTO.data.traceTradeVisualizer.graph.scatterGraph = null;
-            }
+          if (copy.rowDTO.data.traceTradeVisualizer) {
+            copy.rowDTO.data.traceTradeVisualizer.data.pieGraphId = `${copy.id}-${this.constants.agGridPinnedRowKeyword}-pieGraphId`;
+            copy.rowDTO.data.traceTradeVisualizer.data.scatterGraphId = `${copy.id}-${this.constants.agGridPinnedRowKeyword}-scatterGraphId`;
           }
           this.tableData.data.agGridPinnedTopRowData.push(copy);
           const fullWidthCell: AgGridRow = this.utilityService.deepCopy(copy);
           fullWidthCell.id = `${fullWidthCell.id}-${this.constants.agGridPinnedFullWidthRowKeyword}`;
           fullWidthCell.isFullWidth = true;
           if (!!fullWidthCell.rowDTO.data.traceTradeVisualizer) {
+            fullWidthCell.rowDTO.data.traceTradeVisualizer.state.graphReceived = false;
             fullWidthCell.rowDTO.data.traceTradeVisualizer.data.pieGraphId = `${fullWidthCell.id}-pieGraphId`;
             fullWidthCell.rowDTO.data.traceTradeVisualizer.data.scatterGraphId = `${fullWidthCell.id}-scatterGraphId`
           }

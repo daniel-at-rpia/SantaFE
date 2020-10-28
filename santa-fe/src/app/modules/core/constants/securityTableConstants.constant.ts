@@ -1660,6 +1660,8 @@ export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
 
 export const AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD = 'fullWidth';
 
+export const AGGRID_PINNED_FULL_WIDTH_PINNED_ROW_KEYWORD = 'pinned';
+
 export enum TraceTradeCounterParty {
   Dealer = 'Dealer',
   Client = 'Client',
