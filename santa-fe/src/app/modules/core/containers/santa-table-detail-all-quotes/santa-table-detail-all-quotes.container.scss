@@ -239,6 +239,10 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
           @include material('none');
           @extend .santaBtn--inverseLabelled;
           background-color: $color_active;
+          &>i,
+          &>span {
+            color: $font_color_inverse;
+          }
         }
         &-quoteBtn{
           @include material();
