@@ -400,7 +400,7 @@ export class SantaTable implements OnInit, OnChanges {
           if (!!fullWidthCell.rowDTO.data.traceTradeVisualizer) {
             fullWidthCell.rowDTO.data.traceTradeVisualizer.state.graphReceived = false;
             fullWidthCell.rowDTO.data.traceTradeVisualizer.data.pieGraphId = `${fullWidthCell.id}-pieGraphId`;
-            fullWidthCell.rowDTO.data.traceTradeVisualizer.data.scatterGraphId = `${fullWidthCell.id}-scatterGraphId`
+            fullWidthCell.rowDTO.data.traceTradeVisualizer.data.scatterGraphId = `${fullWidthCell.id}-scatterGraphId`;
           }
           fullWidthCell.rowDTO.style.rowHeight = 0;
           this.tableData.data.agGridPinnedTopRowData.push(fullWidthCell);
