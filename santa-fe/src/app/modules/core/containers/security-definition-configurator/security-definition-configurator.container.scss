@@ -125,9 +125,11 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
           color: $font_color_inverse;
           margin-right: $spacing_small;
           padding: 0 $spacing_xx_small;
+          font-size: $font_size_normal;
         }
         &-text {
           color: $font_color_minor;
+          font-size: $font_size_normal;
         }
       }
       &-optionList {

@@ -130,9 +130,6 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         return eachFilter.key !== targetOption.key;
       });
     }
-    // targetDefinition.data.highlightSelectedOptionList = targetDefinition.data.filterOptionList.filter((eachFilter) => {
-    //   return !!eachFilter.isSelected;
-    // });
   }
 
   public onSearchKeywordChange(newKeyword) {
@@ -269,7 +266,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getCountries, {req: 'GET'}).pipe(
       first(),
       tap((serverReturn: Array<string>) => {
-        targetDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(this.constants.map.COUNTRY.key, serverReturn);
+        this.dtoService.loadSecurityDefinitionOptions(targetDefinition, serverReturn);
       }),
       catchError(err => {
         this.restfulCommService.logError('Cannot retrieve country data');
@@ -282,7 +279,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getTickers, {req: 'GET'}).pipe(
       first(),
       tap((serverReturn: Array<string>) => {
-        targetDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(this.constants.map.TICKER.key, serverReturn);
+        this.dtoService.loadSecurityDefinitionOptions(targetDefinition, serverReturn);
       }),
       catchError(err => {
         this.restfulCommService.logError('Cannot retrieve country data');

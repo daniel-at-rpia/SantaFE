@@ -277,7 +277,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   public onApplyConfiguratorFilter(params: DefinitionConfiguratorEmitterParams) {
-    console.log('test, params is', params);
     if (params.filterList.length === 0) {
       const alert = this.dtoService.formSystemAlertObject('Apply Blocked', 'Empty Bucket', `Define the bucket with value before apply`, null);
       this.store$.dispatch(new CoreSendNewAlerts([alert]));
