@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import {
   BICsHierarchyAllDataBlock,
   BICsHierarchyBlock,
-  BICsCategorizationBlock
+  BICsCategorizationBlock,
+  SecurityDefinitionFilterBlock
 } from 'App/modules/core/models/frontend/frontend-blocks.interface';
 import {
   BEBICsHierarchyBlock,
@@ -14,7 +15,10 @@ import {
   MoveVisualizerDTO,
   StructurePortfolioBreakdownRowDTO
 } from 'Core/models/frontend/frontend-models.interface';
-import { DefinitionConfiguratorEmitterParams } from 'Core/models/frontend/frontend-adhoc-packages.interface';
+import {
+  DefinitionConfiguratorEmitterParams,
+  BICSServiceConsolidateReturnPack
+} from 'Core/models/frontend/frontend-adhoc-packages.interface';
 import { DTOService } from 'Core/services/DTOService';
 import { BICsLevels } from 'Core/constants/structureConstants.constants';
 import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
@@ -131,33 +135,28 @@ export class BICsDataProcessingService {
     );
   }
 
-  public convertConsolidatedBICSDefinitionConfiguratorParamToRegularParam(
-    params: DefinitionConfiguratorEmitterParams
-  ): DefinitionConfiguratorEmitterParams {
-    const targetIndex = params.filterList.findIndex((eachItem) => {
-      return eachItem.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key;
+  public consolidateBICS(
+    definitionBlockList: Array<SecurityDefinitionFilterBlock>
+  ): BICSServiceConsolidateReturnPack {
+    let deepestLevel = 1;
+    definitionBlockList.forEach((eachBlock) =>{
+      if (eachBlock.bicsLevel > deepestLevel) {
+        deepestLevel = eachBlock.bicsLevel;
+      }
     });
-    if (targetIndex >= 0) {
-      const consolidatedBICS = params.filterList[targetIndex];
-      params.filterList.splice(targetIndex, 1);
-      let deepestLevel = 1;
-      consolidatedBICS.filterByBlocks.forEach((eachBlock) =>{
-        if (eachBlock.bicsLevel > deepestLevel) {
-          deepestLevel = eachBlock.bicsLevel;
-        }
-      });
-      let convertedToLowestLevelStrings = [];
-      consolidatedBICS.filterByBlocks.forEach((eachBlock) => {
-        if (eachBlock.bicsLevel < deepestLevel) {
-          const eachResult:Array<string> = this.convertCategoryToChildren(eachBlock.shortKey, eachBlock.bicsLevel, deepestLevel);
-          convertedToLowestLevelStrings = convertedToLowestLevelStrings.concat(eachResult);
-        } else {
-          convertedToLowestLevelStrings.push(eachBlock.shortKey);
-        }
-      });
-      console.log('test, original = ', consolidatedBICS.filterBy, 'converted = ', convertedToLowestLevelStrings);
-    }
-    return params;
+    let convertedToLowestLevelStrings = [];
+    definitionBlockList.forEach((eachBlock) => {
+      if (eachBlock.bicsLevel < deepestLevel) {
+        const eachResult:Array<string> = this.convertCategoryToChildren(eachBlock.shortKey, eachBlock.bicsLevel, deepestLevel);
+        convertedToLowestLevelStrings = convertedToLowestLevelStrings.concat(eachResult);
+      } else {
+        convertedToLowestLevelStrings.push(eachBlock.shortKey);
+      }
+    });
+    return {
+      deepestLevel: deepestLevel,
+      consolidatedStrings: convertedToLowestLevelStrings
+    };
   }
 
   private setBreakdownListProperties(breakdownList: Array<StructurePortfolioBreakdownRowDTO>, parentRow: StructurePortfolioBreakdownRowDTO, isEditingView: boolean) {

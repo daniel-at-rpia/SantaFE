@@ -136,3 +136,8 @@ export interface StructureOverrideToBreakdownConversionReturnPack {
   list: Array<BEStructuringBreakdownBlock>;
   displayLabelMap: object;
 }
+
+export interface BICSServiceConsolidateReturnPack {
+  deepestLevel: number;
+  consolidatedStrings: Array<string>;
+}

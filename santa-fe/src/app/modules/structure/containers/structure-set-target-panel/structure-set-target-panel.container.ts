@@ -282,8 +282,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       const alert = this.dtoService.formSystemAlertObject('Apply Blocked', 'Empty Bucket', `Define the bucket with value before apply`, null);
       this.store$.dispatch(new CoreSendNewAlerts([alert]));
     } else {
-      const convertedParams = this.bicsService.convertConsolidatedBICSDefinitionConfiguratorParamToRegularParam(params);
-      /*
+      const convertedParams = this.convertConsolidatedBICSDefinitionConfiguratorParamToRegularParam(params);
       const bucket = {}
       let bucketToString = '';
       params.filterList.forEach((eachItem) => {
@@ -338,7 +337,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           })
         ).subscribe();
       }
-      */
     }
     this.state.configurator.display = false;
     this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
@@ -837,6 +835,37 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     if (!!targetRow) {
       targetRow.existInServer = false;
     }
+  }
+
+  private convertConsolidatedBICSDefinitionConfiguratorParamToRegularParam(params: DefinitionConfiguratorEmitterParams): DefinitionConfiguratorEmitterParams {
+    const targetIndex = params.filterList.findIndex((eachItem) => {
+      return eachItem.key === this.constants.definitionMap.BICS_CONSOLIDATED.key;
+    });
+    if (targetIndex >= 0) {
+      const consolidatedBICS = params.filterList[targetIndex];
+      const result = this.bicsService.consolidateBICS(consolidatedBICS.filterByBlocks);
+      const convertedCategoryStringList: Array<string> = result.consolidatedStrings;
+      switch (result.deepestLevel) {
+        case 1:
+          consolidatedBICS.key = this.constants.definitionMap.BICS_LEVEL_1.key;
+          break;
+        case 2:
+          consolidatedBICS.key = this.constants.definitionMap.BICS_LEVEL_2.key;
+          break;
+        case 3:
+          consolidatedBICS.key = this.constants.definitionMap.BICS_LEVEL_3.key;
+          break;
+        case 4:
+          consolidatedBICS.key = this.constants.definitionMap.BICS_LEVEL_4.key;
+          break;
+        default:
+          params.filterList.splice(targetIndex, 1);
+          break;
+      };
+      consolidatedBICS.filterBy = convertedCategoryStringList;
+      consolidatedBICS.filterByBlocks = [];  // the blocks are no longer needed once consolidated, so can just set as null
+    }
+    return params;
   }
 
 }
