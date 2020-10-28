@@ -67,7 +67,7 @@
                 'fa-square': state.activeMetric !== constants.metric.creditLeverage
               }">
             </i>
-            <span>{{state.displayPercentageUnallocatedCreditLeverage}}% unallocated</span>
+            <span>{{state.displayCreditLeverageBtnText}}</span>
           </button>
           <target-bar [targetBar]="state.targetFund.data.creditLeverageTargetBar"></target-bar>
         </div>
@@ -86,7 +86,7 @@
                 'fa-square': state.activeMetric !== constants.metric.cs01
               }">
             </i>
-            <span>{{state.displayPercentageUnallocatedCS01}}% unallocated</span>
+            <span>{{state.displayCs01BtnText}}</span>
           </button>
           <target-bar [targetBar]="state.targetFund.data.cs01TargetBar"></target-bar>
         </div>

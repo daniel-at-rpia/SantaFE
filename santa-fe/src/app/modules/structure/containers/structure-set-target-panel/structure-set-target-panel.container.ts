@@ -85,6 +85,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       remainingUnallocatedCS01: 0,
       remainingUnallocatedCreditLeverage: 0,
       activeMetric: null,
+      displayCs01BtnText: null,
+      displayCreditLeverageBtnText: null,
       displayPercentageUnallocatedCS01: 0,
       displayPercentageUnallocatedCreditLeverage: 0,
       displayRemainingUnallocatedCS01: '',
@@ -195,6 +197,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.state.activeMetric = newMetric;
       this.state.targetFund.data.cs01TargetBar.state.isInactiveMetric = !this.state.targetFund.data.cs01TargetBar.state.isInactiveMetric;
       this.state.targetFund.data.creditLeverageTargetBar.state.isInactiveMetric = !this.state.targetFund.data.creditLeverageTargetBar.state.isInactiveMetric;
+      this.setBtnText();
       this.refreshPreview();
     }
   }
@@ -363,6 +366,27 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     targetRow.modifiedDisplayRowTitle = targetName;
   }
 
+  private setBtnText () {
+    const metricList = [this.constants.metric.cs01, this.constants.metric.creditLeverage];
+    const metricPercentageData = metricList.map(metric => (
+      {
+        btnText: metric === this.constants.metric.cs01 ? 'displayCs01BtnText' : 'displayCreditLeverageBtnText',
+        percentage: metric === this.constants.metric.cs01 ? this.state.displayPercentageUnallocatedCS01 : this.state.displayPercentageUnallocatedCreditLeverage,
+        metric: metric
+      }
+    ));
+    const isUnallocatedPercentageAvailable = metricPercentageData.find(data => data.percentage > 0);
+    if (!!isUnallocatedPercentageAvailable) {
+      metricPercentageData.forEach(data => {
+        this.state[data.btnText] = data.percentage > 0 ? `${data.percentage}% unallocated` : 'N/A';
+      });
+    } else {
+      metricPercentageData.forEach(data => {
+        this.state[data.btnText] = this.state.activeMetric === data.metric ? 'Selected' : 'Unselected';
+      });
+    }
+  }
+
   private loadEditRows() {
     this.state.editRowList = [];
     if (!!this.state.targetBreakdown) {
@@ -478,6 +502,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.state.displayPercentageUnallocatedCreditLeverage = 0;
       this.state.displayRemainingUnallocatedCreditLeverage = '0';
     }
+    this.setBtnText();
   }
 
   private setTarget(

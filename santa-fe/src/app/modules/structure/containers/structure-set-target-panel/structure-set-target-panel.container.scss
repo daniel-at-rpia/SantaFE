@@ -132,6 +132,8 @@ $structureSetTargetPanel_highlight_border: 2px solid $color_active;
             align-self: center;
             margin-top: $spacing_small;
             margin-bottom: $spacing_x_small;
+            min-width: 10rem;
+            justify-content: center;
             &>i {
               font-size: $font_size_large;
             }
