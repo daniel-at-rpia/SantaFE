@@ -1153,8 +1153,8 @@ export class UtilityService {
             breakdown: {}
           };
           const categoryKey = this.formCategoryKeyForOverride(eachRawOverride);
+          displayLabelToCategoryPerBreakdownMap[overrideBucketIdentifier] = {};
           if (eachRawOverride.title && eachRawOverride.title.length > 0) {
-            displayLabelToCategoryPerBreakdownMap[overrideBucketIdentifier] = {};
             displayLabelToCategoryPerBreakdownMap[overrideBucketIdentifier][categoryKey] = eachRawOverride.title;
           }
           newConvertedBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
