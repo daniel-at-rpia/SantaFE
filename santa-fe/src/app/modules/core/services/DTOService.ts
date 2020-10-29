@@ -2260,7 +2260,8 @@ export class DTOService {
       state: {
         isDisplayAllTraceTrades: false,
         graphReceived: false,
-        selectedFiltersList: []
+        selectedFiltersList: [],
+        showGraphs: false
       },
       graph: {
         scatterGraph: null,

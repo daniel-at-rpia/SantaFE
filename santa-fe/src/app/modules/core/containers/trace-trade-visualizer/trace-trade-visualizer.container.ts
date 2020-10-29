@@ -47,7 +47,7 @@ export class TraceTradeVisualizer implements OnChanges, OnDestroy{
   public ngOnChanges() {
     const renderGraphs = () => {
       if (!!this.traceTrades) {
-        if (!!this.showData && !this.traceTrades.state.graphReceived && this.traceTrades.data.displayList.length > 0) {
+        if (!!this.showData && !this.traceTrades.state.graphReceived && this.traceTrades.data.displayList.length > 0 && !!this.traceTrades.state.showGraphs) {
           this.traceTrades.state.graphReceived = true;
           this.traceTrades.graph.scatterGraph = this.graphService.generateTradeTraceScatterGraph(this.traceTrades);
           this.traceTrades.graph.pieGraph = this.graphService.generateTraceTradePieGraph(this.traceTrades)
