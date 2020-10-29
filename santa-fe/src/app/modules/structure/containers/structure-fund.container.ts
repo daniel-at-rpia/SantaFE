@@ -125,7 +125,16 @@ export class StructureFund implements OnInit {
             metric: BEMetricType,
             target: parsedTarget
           }
-          updatedTargetData.push(targetUpdateBlock);
+          if (BEMetricType === this.constants.BECreditDuration && !parsedTarget) {
+            // have to set Cs01 as well if credit duration is null
+            const cs01Target: UpdateTargetBlock = {
+              metric: this.constants.BECs01,
+              target: parsedTarget
+            }
+            updatedTargetData = [...updatedTargetData, targetUpdateBlock, cs01Target];
+          } else {
+            updatedTargetData.push(targetUpdateBlock);
+          }
         }
       }
       checkTargetUpdates(targetCreditDuration, this.fund.data.target.target.creditDuration, this.constants.BECreditDuration);
