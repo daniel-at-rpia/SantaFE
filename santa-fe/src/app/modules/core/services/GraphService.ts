@@ -23,7 +23,8 @@ import {
   AmchartPieDataBlock
 } from 'src/app/modules/core/models/frontend/frontend-adhoc-packages.interface';
 import { MIN_OBLIGOR_CURVE_VALUES } from 'src/app/modules/core/constants/coreConstants.constant'
-import { HistoricalTradeVisualizerDTO } from 'FEModels/frontend-models.interface';
+import { HistoricalTradeVisualizerDTO, TraceTradesVisualizerDTO } from 'FEModels/frontend-models.interface';
+import { TraceTradeCounterPartyList, TradeSideValueEquivalent } from 'Core/constants/securityTableConstants.constant';
 
 
 @Injectable()
@@ -822,6 +823,115 @@ export class GraphService {
       pieSeries.slices.template.stroke = am4core.color("#fff");
       pieSeries.slices.template.strokeOpacity = 1;
       chart.hiddenState.properties.radius = am4core.percent(0);
+      return chart;
+    }
+
+    public generateTradeTraceScatterGraph(dto: TraceTradesVisualizerDTO): am4charts.XYChart {
+      const chart = am4core.create(dto.data.scatterGraphId, am4charts.XYChart);
+      const reverseList = [...dto.data.displayList].reverse();
+      const tradeData = reverseList.map(trade => {
+        const time = new Date(trade.eventTime);
+        const object = {
+          date: time.getTime(),
+          ...(trade.side === TradeSideValueEquivalent.Ask && {sellY: +trade.spread}),
+          ...(trade.side === TradeSideValueEquivalent.Bid && {buyY: +trade.spread})
+        }
+        return object;
+      });
+      chart.data = tradeData;
+      chart.height = 160;
+      let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+      dateAxis.title.text = 'Time';
+      const currentDate = new Date();
+      const formattedDate = moment(currentDate).format('YYYY-MM-DD');
+      const minStr = `${formattedDate}, 06:00:00`;
+      const maxStr = `${formattedDate}, 18:00:00`;
+      const minDate = new Date(minStr);
+      const maxDate = new Date(maxStr);
+      dateAxis.min = minDate.getTime();
+      dateAxis.max = maxDate.getTime();
+      dateAxis.baseInterval = {
+        "timeUnit": "second",
+        "count": 1
+      };
+      let yAxis = chart.yAxes.push(new am4charts.ValueAxis());
+      yAxis.title.text = 'Sprd';
+      const sortedSpreadData = chart.data.map(data => {
+        if (!!data.sellY || !!data.buyY) {
+          return !!data.sellY ? data.sellY : data.buyY
+        }
+      }).sort();
+      const yAxisMin = sortedSpreadData[0] - 5;
+      const yAxisMax = sortedSpreadData[sortedSpreadData.length - 1] + 5;
+      const yAxisMid = this.utility.round(((yAxisMax - yAxisMin)/2) + yAxisMin);
+      yAxis.min = yAxisMin;
+      yAxis.max = yAxisMax;
+      yAxis.strictMinMax = true;
+      yAxis.renderer.grid.template.disabled = true;
+      yAxis.renderer.labels.template.disabled = true;
+      function createGrid(value) {
+        var range = yAxis.axisRanges.create();
+        range.value = value;
+        range.label.text = "{value}";
+      }
+      createGrid(yAxisMin);
+      createGrid(yAxisMid);
+      createGrid(yAxisMax);
+      let series1 = chart.series.push(new am4charts.LineSeries());
+      series1.dataFields.valueY = "sellY";
+      series1.dataFields.dateX = "date";
+      series1.strokeOpacity = 0;
+      series1.cursorTooltipEnabled = false;
+      let bullet1 = series1.bullets.push(new am4charts.CircleBullet());
+      bullet1.fill = am4core.color('#BC2B5D');
+      bullet1.stroke = am4core.color('#eee');
+      bullet1.tooltipText = "Sell {valueY} at {dateX.formatDate('HH:mm:ss')}";
+      let series2 = chart.series.push(new am4charts.LineSeries());
+      series2.dataFields.valueY = "buyY";
+      series2.dataFields.dateX = "date";
+      series2.strokeOpacity = 0;
+      series2.cursorTooltipEnabled = false;
+      let bullet2 = series2.bullets.push(new am4charts.CircleBullet());
+      bullet2.fill = am4core.color('#26A77B')
+      bullet2.stroke = am4core.color('#eee')
+      bullet2.tooltipText = "Buy {valueY} at {dateX.formatDate('HH:mm:ss')}";
+      return chart;
+    }
+
+    public generateTraceTradePieGraph(dto: TraceTradesVisualizerDTO): am4charts.PieChart {
+      const chart = am4core.create(dto.data.pieGraphId, am4charts.PieChart);
+      const counterPartyData = [];
+      TraceTradeCounterPartyList.forEach(counterParty => {
+        const counterPartyList = dto.data.displayList.filter(trade => trade.counterParty === counterParty);
+        if (counterPartyList.length > 0) {
+          let total = 0;
+          counterPartyList.forEach(trade => {
+            //estimated is preferred, but use actual if there is no estiamted value
+            const value = !!trade.volumeEstimated ? trade.volumeEstimated : trade.volumeReported;
+            total += value;
+          })
+          const object = {
+            counterParty: counterParty,
+            volume: total
+          }
+          counterPartyData.push(object);
+        }
+      })
+      chart.data = counterPartyData;
+      let pieSeries = chart.series.push(new am4charts.PieSeries());
+      pieSeries.dataFields.value = "volume";
+      pieSeries.dataFields.category = "counterParty";
+      pieSeries.slices.template.stroke = am4core.color("#fff");
+      pieSeries.slices.template.strokeWidth = 2;
+      pieSeries.slices.template.strokeOpacity = 1;
+
+      pieSeries.labels.template.maxWidth = 75;
+      pieSeries.labels.template.wrap = true;
+
+      // This creates initial animation
+      pieSeries.hiddenState.properties.opacity = 1;
+      pieSeries.hiddenState.properties.endAngle = -90;
+      pieSeries.hiddenState.properties.startAngle = -90;
       return chart;
     }
   // TradeHistoryVisualizer Charts end

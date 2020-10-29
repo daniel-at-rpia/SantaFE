@@ -13,7 +13,7 @@ $santaTableDetailAllQuotes_width: $securityQuote_main_size_1 * 2 + $securityQuot
 $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $securityQuote_main_size_2 * 2 + $securityQuote_main_size_3 + $spacing_small * 9 + $securityTableRow_expandCanvas_label_leftPadding + $securityTableRow_expandCanvas_label_rightPadding;
 
 .santaTableDetailAllQuotes {
-  $santaTableDetailAllQuotesBlockName: &;
+  $blockName: &;
   @include mix_fixed_div(relative, $z_index_base_item);
   // @include mix_gradient($color_detailTableBackground, $color_gray_4, 40%, 45deg);
   flex: 1 1 auto;
@@ -33,6 +33,19 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
       @extend .santaBtn--inverseLabelled;
       background-color: $color_active;
     }
+    &-traceBtn {
+      display: flex;
+      background-color: $color_disabled;
+      cursor: not-allowed;
+      box-shadow: none;
+      &>i,
+      &>span {
+        color: $color_gray_6;
+      }
+      &:hover {
+        box-shadow: none;
+      }
+    }
   }
   &__history {
     @include mix_fixed_div(relative, $z_index_base_item_lift);
@@ -50,6 +63,12 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
     width: 100%;
     height: 100%;
     top: 0;
+  }
+  &__trace {
+    @include mix_fixed_div(relative, $z_index_base_item_lift);
+    flex: 1 1 auto;
+    display: none;
+    overflow: hidden;
   }
   &__main {
     @include mix_fixed_div(relative, $z_index_base_item_lift);
@@ -122,9 +141,16 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
         color: $font_color_inverse;
       }
     }
+    &-moreTraceTradesCta {
+      @include mix_fixed_div(relative, $z_index_base_item_solid);
+      display: none;
+      flex-direction: row;
+      margin: 0 $spacing_medium;
+      background-color: $color_white;
+    }
   }
   &--showMoreQuoteCta {
-    #{$santaTableDetailAllQuotesBlockName} {
+    #{$blockName} {
       &__ctas {
         &-moreQuoteCta {
           display: flex;
@@ -133,7 +159,7 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
     }
   }
   &--securityIsCDSState {
-    #{$santaTableDetailAllQuotesBlockName} {
+    #{$blockName} {
       &__main-content {
         &-label {
           width: $santaTableDetailAllQuotes_width_CDS;
@@ -145,7 +171,7 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
     }
   }
   &--securityIsOffTheRunCDSState {
-    #{$santaTableDetailAllQuotesBlockName} {
+    #{$blockName} {
       &__main-content {
         &-targetSecurity {
           display: flex;
@@ -157,7 +183,7 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
     }
   }
   &--viewHistoryState {
-    #{$santaTableDetailAllQuotesBlockName} {
+    #{$blockName} {
       &__viewSwitch {
         &-historyBtn {
           @include material('none');
@@ -178,12 +204,87 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
       &__history {
         display: flex;
       }
+      &__main,
+      &__trace {
+        display: none;
+      }
+      &__ctas {
+        &-moreQuoteCta {
+          display: none;
+        }
+      }
+    }
+  }
+  &--traceAvailableState {
+    #{$blockName} {
+      &__viewSwitch {
+        &-traceBtn {
+          @include material();
+          background-color: $color_white;
+          cursor: pointer;
+          &>i {
+            color: $font_color_major;
+          }
+          &>span {
+            color: $font_color_major;
+          }
+        }
+      }
+    }
+  }
+  &--viewTraceState {
+    #{$blockName} {
+      &__viewSwitch {
+        &-traceBtn {
+          @include material('none');
+          @extend .santaBtn--inverseLabelled;
+          background-color: $color_active;
+          &>i,
+          &>span {
+            color: $font_color_inverse;
+          }
+        }
+        &-quoteBtn{
+          @include material();
+          background-color: $color_white;
+          &>i {
+            color: $font_color_major;
+          }
+          &>span {
+            color: $font_color_major;
+          }
+        }
+      }
+      &__trace {
+        display: flex;
+        & trace-trade-visualizer {
+          flex: 1 1 auto;
+          display: flex;
+          flex-direction: column;
+          overflow-y: scroll;
+        }
+      }
+      &__history,
       &__main {
         display: none;
       }
       &__ctas {
         &-moreQuoteCta {
           display: none;
+        }
+      }
+    }
+    &#{$blockName} {
+      &--showMoreTraceTradesCta {
+        #{$blockName} {
+          &__ctas {
+            &-moreTraceTradesCta {
+              display: flex;
+            }
+            &-moreQuoteCta {
+              display: none;
+            }
+          }
         }
       }
     }

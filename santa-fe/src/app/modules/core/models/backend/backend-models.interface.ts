@@ -656,3 +656,37 @@ export interface BEPortfolioStructuringDTO {
 export interface BEBICsHierarchyBlock {
   [category: string]: BEBICsHierarchyBlock;
 }
+
+export interface BEGetAllTraceTradesBlock {
+  [identifier: number]: Array<BETraceTradesBlock>;
+}
+
+export interface BETraceTradesBlock {
+  actionFlag: string;
+  counterParty: string;
+  creationTime: string;
+  discriminator: string;
+  eventDate: string;
+  eventTime: string;
+  gSpread: number;
+  globalIdentifier: string;
+  globalIdentifierType: string;
+  iSpread: number;
+  isAtsTrade: boolean;
+  lastModifiedTime: string;
+  oasSpread: number;
+  parSpread: number;
+  price: number;
+  publishingTime: string;
+  securityID: number;
+  sequenceNumber: number;
+  settleDate: string;
+  side: string;
+  spread: number;
+  traceTradeID: string;
+  tradeTradeRefID: string;
+  type: string;
+  volumeActual: number;
+  volumeEstimated: number;
+  yield: number;
+}

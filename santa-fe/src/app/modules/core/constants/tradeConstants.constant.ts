@@ -420,3 +420,5 @@ export enum AxeAlertType {
   normal = 'Axe',
   both = 'Both'
 }
+
+export const TRACE_INITIAL_LIMIT = 9;

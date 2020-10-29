@@ -15,8 +15,8 @@
       SecurityTableHeaderDTO,
       SecurityTableRowDTO
     } from 'FEModels/frontend-models.interface';
-    import { AgGridRow, AgGridRowNode } from 'FEModels/frontend-blocks.interface';
-    import { PayloadGetAllQuotes } from 'BEModels/backend-payloads.interface';
+    import { AgGridRow, AgGridRowNode, TableFetchResultBlock, TraceTradeBlock } from 'FEModels/frontend-blocks.interface';
+    import { PayloadGetAllQuotes, PayloadGetAllTraceTrades } from 'BEModels/backend-payloads.interface';
     import { AgGridRowParams, ClickedSortQuotesByMetricEmitterParams } from 'FEModels/frontend-adhoc-packages.interface';
     import { SecurityTableHeaderConfigStub } from 'FEModels/frontend-stub-models.interface';
     import { SantaTableSecurityCell } from 'Core/components/santa-table-security-cell/santa-table-security-cell.component';
@@ -24,7 +24,7 @@
     import { SantaTableAlertSideCell } from 'Core/components/santa-table-alert-side-cell/santa-table-alert-side-cell.component';
     import { SantaTableAlertStatusCell } from 'Core/components/santa-table-alert-status-cell/santa-table-alert-status-cell.component';
     import { SantaTableDetailAllQuotes } from 'Core/containers/santa-table-detail-all-quotes/santa-table-detail-all-quotes.container';
-    import { BEQuoteDTO } from 'BEModels/backend-models.interface';
+    import { BEQuoteDTO, BEGetAllTraceTradesBlock } from 'BEModels/backend-models.interface';
     import {
       AGGRID_DETAIL_ROW_DEFAULT_COUNT,
       AGGRID_DETAIL_ROW_HEIGHT_MINIMUM,
@@ -36,11 +36,14 @@
       AGGRID_ROW_HEIGHT_SLIM,
       SECURITY_TABLE_FINAL_STAGE,
       SECURITY_TABLE_ICONS,
-      AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD
+      AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD,
+      AGGRID_PINNED_FULL_WIDTH_PINNED_ROW_KEYWORD
     } from 'Core/constants/securityTableConstants.constant';
+    import { TRACE_INITIAL_LIMIT } from 'Core/constants/tradeConstants.constant';
     import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
     import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-filter/santa-table-numeric-filter.component';
     import { SantaTableFullWidthCellRenderer } from 'Core/components/santa-table-full-width-cell-renderer/santa-table-full-width-cell-renderer.component';
+    import { GraphService } from 'Core/services/GraphService';
   //
 
 @Component({
@@ -114,7 +117,8 @@ export class SantaTable implements OnInit, OnChanges {
     agGridDetailRowHeightMinimum: AGGRID_DETAIL_ROW_HEIGHT_MINIMUM,
     agGridDetailRowDefaultCount: AGGRID_DETAIL_ROW_DEFAULT_COUNT,
     agGridDetailRowHeightOffsetOffTheRunCDS: AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS,
-    agGridPinnedFullWidthRowKeyword: AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD
+    agGridPinnedFullWidthRowKeyword: AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD,
+    agGridPinnedRowKeyword: AGGRID_PINNED_FULL_WIDTH_PINNED_ROW_KEYWORD
   };
 
   icons = SECURITY_TABLE_ICONS;
@@ -123,7 +127,8 @@ export class SantaTable implements OnInit, OnChanges {
     private dtoService: DTOService,
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
-    private agGridMiddleLayerService: AgGridMiddleLayerService
+    private agGridMiddleLayerService: AgGridMiddleLayerService,
+    private graphService: GraphService
   ) { }
 
   public ngOnInit() {
@@ -242,7 +247,7 @@ export class SantaTable implements OnInit, OnChanges {
           }
           const targetRow = params.rowPinned
             ? this.tableData.data.agGridPinnedTopRowData.find((eachRow) => {
-              return eachRow.id === `${params.node.data.id} - ${this.constants.agGridPinnedFullWidthRowKeyword}`
+              return eachRow.id === `${params.node.data.id}-${this.constants.agGridPinnedFullWidthRowKeyword}`
             }).rowDTO 
             : params.node.data.rowDTO;
           if (!!targetRow) {
@@ -253,6 +258,10 @@ export class SantaTable implements OnInit, OnChanges {
             if (targetRow.data.security) {
               // targetRow.data.security.state.isMultiLineVariant = params.node.expanded;
               if (targetRow.state.isExpanded) {
+                const isTraceSecurity = this.utilityService.checkIfTraceIsAvailable(targetRow);
+                if (!!isTraceSecurity) {
+                  this.getAllTraceTrades(targetRow, !!params.rowPinned)
+                }
                 this.setAgGridRowHeight(targetRow, params, !!params.rowPinned, this.constants.agGridDetailRowHeightMinimum);
                 this.fetchSecurityQuotes(targetRow, params);
               } else {
@@ -295,9 +304,17 @@ export class SantaTable implements OnInit, OnChanges {
   ) {
     // try {
       if (isPinnedFullWidthCell) {
+        targetRow.state.isExpanded = false;
+        targetRow.state.viewHistoryState = false;
+        targetRow.state.viewTraceState = false;
+        if (!!targetRow.data.traceTradeVisualizer) {
+          targetRow.data.traceTradeVisualizer.state.selectedFiltersList = [];
+          targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = false;
+          targetRow.data.traceTradeVisualizer.data.displayList = targetRow.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT ? targetRow.data.security.data.traceTrades.filter((row, i) => i < TRACE_INITIAL_LIMIT) : targetRow.data.security.data.traceTrades;
+        }
         this.setAgGridRowHeight(targetRow, params, isPinnedFullWidthCell, 0);
       }
-      targetRow.state.isExpanded = false;
+
     // } catch {
       // console.warn('read only issue', targetRow);
       // ignore, seems AgGrid causes some weird read only error
@@ -334,6 +351,10 @@ export class SantaTable implements OnInit, OnChanges {
     this.fetchSecurityQuotes(targetRow);
   }
 
+  public onNativeGetAllTraceTrades(targetRow: SecurityTableRowDTO) {
+    this.getAllTraceTrades(targetRow);
+  }
+
   public onNativeLoadTableHeader() {
     this.loadTableHeaders(true);
   }
@@ -365,13 +386,22 @@ export class SantaTable implements OnInit, OnChanges {
           this.tableData.data.agGridPinnedTopRowData.splice(existIndexInPinnedList, 2);
         } else {
           // pin it
-          // the deep copy is to make sure the pinned rows are retained as the state of the table changes. it also ensures when clicking on the pinned row's card, it doesn't trigger both the regular row and the pinned row 
+          // the deep copy is to make sure the pinned rows are retained as the state of the table changes. it also ensures when clicking on the pinned row's card, it doesn't trigger both the regular row and the pinned row
           const copy: AgGridRow = this.utilityService.deepCopy(targetRow);
           copy.rowDTO.state.isExpanded = false;  // always reset the isExpanded flag
+          if (copy.rowDTO.data.traceTradeVisualizer) {
+            copy.rowDTO.data.traceTradeVisualizer.data.pieGraphId = `${copy.id}-${this.constants.agGridPinnedRowKeyword}-pieGraphId`;
+            copy.rowDTO.data.traceTradeVisualizer.data.scatterGraphId = `${copy.id}-${this.constants.agGridPinnedRowKeyword}-scatterGraphId`;
+          }
           this.tableData.data.agGridPinnedTopRowData.push(copy);
           const fullWidthCell: AgGridRow = this.utilityService.deepCopy(copy);
-          fullWidthCell.id = `${fullWidthCell.id} - ${this.constants.agGridPinnedFullWidthRowKeyword}`;
+          fullWidthCell.id = `${fullWidthCell.id}-${this.constants.agGridPinnedFullWidthRowKeyword}`;
           fullWidthCell.isFullWidth = true;
+          if (!!fullWidthCell.rowDTO.data.traceTradeVisualizer) {
+            fullWidthCell.rowDTO.data.traceTradeVisualizer.state.graphReceived = false;
+            fullWidthCell.rowDTO.data.traceTradeVisualizer.data.pieGraphId = `${fullWidthCell.id}-pieGraphId`;
+            fullWidthCell.rowDTO.data.traceTradeVisualizer.data.scatterGraphId = `${fullWidthCell.id}-scatterGraphId`;
+          }
           fullWidthCell.rowDTO.style.rowHeight = 0;
           this.tableData.data.agGridPinnedTopRowData.push(fullWidthCell);
         }
@@ -637,6 +667,10 @@ export class SantaTable implements OnInit, OnChanges {
       if (eachAgGridRow.rowDTO.state.isExpanded) {
         try {
           this.fetchSecurityQuotes(eachAgGridRow.rowDTO);
+          const isTraceSecurity = this.utilityService.checkIfTraceIsAvailable(eachAgGridRow.rowDTO);
+          if (!!isTraceSecurity) {
+            this.getAllTraceTrades(eachAgGridRow.rowDTO, true);
+          }
         } catch {
           console.warn('read only issue at live updating all quotes in pinned rows', eachAgGridRow);
           // ignore, seems AgGrid causes some weird read only error
@@ -647,6 +681,10 @@ export class SantaTable implements OnInit, OnChanges {
       if (eachRow.state.isExpanded) {
         try {
           this.fetchSecurityQuotes(eachRow);
+          const isTraceSecurity = this.utilityService.checkIfTraceIsAvailable(eachRow);
+          if (!!isTraceSecurity) {
+            this.getAllTraceTrades(eachRow)
+          }
         } catch {
           console.warn('read only issue at live updating all quotes', eachRow);
           // ignore, seems AgGrid causes some weird read only error
@@ -884,6 +922,17 @@ export class SantaTable implements OnInit, OnChanges {
         // the params is the regular row's params
         fullWidthNode = params.api.getPinnedTopRow(params.node.rowIndex+1) as any;  // skip AgGrid's unnecessary type checking
       }
+      if (targetRow.data.traceTradeVisualizer) {
+        if (targetRow.data.traceTradeVisualizer.graph.pieGraph) {
+          this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.pieGraph);
+          targetRow.data.traceTradeVisualizer.graph.pieGraph = null;
+        }
+        if (targetRow.data.traceTradeVisualizer.graph.scatterGraph) {
+          this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.scatterGraph);
+          targetRow.data.traceTradeVisualizer.graph.scatterGraph = null;
+        }
+        targetRow.data.traceTradeVisualizer.state.graphReceived = false;
+      }
       fullWidthNode.data.rowDTO = this.utilityService.deepCopy(targetRow);
       fullWidthNode.data.rowDTO.style.rowHeight = targetHeight;
       params.api.setPinnedTopRowData(this.tableData.data.agGridPinnedTopRowData);
@@ -904,5 +953,67 @@ export class SantaTable implements OnInit, OnChanges {
     setTimeout(function(){
       window.location.reload(true);
     }, 3000);
+  }
+
+  private getAllTraceTrades(targetRow: SecurityTableRowDTO, isPinnedFullWidth: boolean = false) {
+    if (!!targetRow.data.traceTradeVisualizer) {
+      if (!!targetRow.data.traceTradeVisualizer.graph.pieGraph) {
+        this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.pieGraph);
+        targetRow.data.traceTradeVisualizer.graph.pieGraph = null;
+      }
+      if (!!targetRow.data.traceTradeVisualizer.graph.scatterGraph) {
+        this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.scatterGraph);
+        targetRow.data.traceTradeVisualizer.graph.scatterGraph = null;
+      }
+    }
+    const previousTraceTradesDisplayAllState = !!targetRow.data.traceTradeVisualizer ? targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades : false;
+    const previousSelectedFilters = !!targetRow.data.traceTradeVisualizer && targetRow.data.traceTradeVisualizer.state.selectedFiltersList.length > 0 ? targetRow.data.traceTradeVisualizer.state.selectedFiltersList : [];
+    const previousDisplayListCopy = previousSelectedFilters.length > 0 ? this.utilityService.deepCopy(targetRow.data.traceTradeVisualizer.data.displayList) : [];
+    const setPreviousFilteredDisplayList = (row: SecurityTableRowDTO, traceData: Array<TraceTradeBlock>) => {
+      row.data.traceTradeVisualizer.state.selectedFiltersList = previousSelectedFilters;
+      const previousDisplayList = [];
+      previousDisplayListCopy.forEach(copy => {
+        const equivalentNewTrade = traceData.find(newTrade => newTrade.traceTradeId === copy.traceTradeId);
+        !!equivalentNewTrade && previousDisplayList.push(equivalentNewTrade);
+      })
+      row.data.traceTradeVisualizer.data.displayList = previousDisplayList;
+    }
+    const securityID = targetRow.data.security.data.securityID;
+    const payload: PayloadGetAllTraceTrades = {
+      "identifiers":  [securityID]
+    }
+    const endpoint = this.restfulCommService.apiMap.getAllTraceTrades;
+    this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
+      first(),
+      tap((serverReturn: BEGetAllTraceTradesBlock) => {
+        const isEmpty = this.utilityService.checkForEmptyObject(serverReturn);
+        if (!isEmpty) {
+          const rawDataKey = Object.keys(serverReturn)[0];
+          const rawDataTrades = serverReturn[rawDataKey];
+          if (rawDataTrades.length > 0) {
+            const traceTradeData: Array<TraceTradeBlock> = rawDataTrades.map(trade => this.dtoService.formTraceTradeBlockObject(trade, targetRow.data.security));
+            targetRow.data.security.data.traceTrades = traceTradeData;
+            targetRow.data.traceTradeVisualizer = this.dtoService.formTraceTradesVisualizerDTO(targetRow, isPinnedFullWidth);
+            targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = !!previousTraceTradesDisplayAllState;
+            if (!!previousTraceTradesDisplayAllState) {
+              if (previousDisplayListCopy.length > 0) {
+                setPreviousFilteredDisplayList(targetRow, targetRow.data.security.data.traceTrades)
+              } else {
+                targetRow.data.traceTradeVisualizer.data.displayList = targetRow.data.security.data.traceTrades;
+              }
+            } else {
+              if(previousDisplayListCopy.length > 0) {
+                setPreviousFilteredDisplayList(targetRow, targetRow.data.traceTradeVisualizer.data.displayList);
+              }
+            }
+          }
+        }
+      }),
+      catchError(err => {
+        this.restfulCommService.logError('Get Trace Trades API called failed')
+        console.error(`${endpoint} failed`, err);
+        return of('error')
+      })
+    ).subscribe()
   }
 }

@@ -144,3 +144,7 @@ export interface PayloadSetView {
   }
   view: PortfolioView
 }
+
+export interface PayloadGetAllTraceTrades {
+  identifiers: Array<string>;
+}
