@@ -477,7 +477,7 @@ export class DTOService {
       const newFilterDTO: Blocks.SecurityDefinitionFilterBlock = {
         isSelected: false,
         isFilteredOut: false,
-        displayLabel: !!bicsLevel ? `lv.${bicsLevel} - ${eachOption}` : eachOption,
+        displayLabel: !!bicsLevel ? `Lv.${bicsLevel} ${eachOption}` : eachOption,
         bicsLevel: bicsLevel || null,
         shortKey: normalizedOption,
         key: `${this.utility.formDefinitionFilterOptionKey(name, normalizedOption)}~${bicsLevel}`
