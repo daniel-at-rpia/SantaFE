@@ -145,3 +145,12 @@ export interface PayloadSetView {
   }
   view: PortfolioView
 }
+
+export interface PayloadClearPortfolioBreakdown {
+  portfolioBreakdown: {
+    date?: string;
+    portfolioId: number;
+    groupOption: string;
+  }
+  groupOptionValue?: string;
+}
