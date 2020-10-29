@@ -119,9 +119,10 @@ export class StructureFund implements OnInit {
       let updatedTargetData = [];
       const checkTargetUpdates = (currentTarget: number, previousTarget: number, BEMetricType: BEPortfolioTargetMetricValues) => {
         if (currentTarget !== previousTarget) {
+          const parsedTarget = currentTarget === 0 ? null : currentTarget;
           const targetUpdateBlock: UpdateTargetBlock = {
             metric: BEMetricType,
-            target: currentTarget
+            target: parsedTarget
           }
           updatedTargetData.push(targetUpdateBlock);
         }
