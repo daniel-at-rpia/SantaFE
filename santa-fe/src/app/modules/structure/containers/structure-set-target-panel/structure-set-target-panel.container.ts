@@ -748,7 +748,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           metricBreakdowns: {}
         };
         if (this.cs01ModifiedInEditRow(eachRow)) {
-          const parsedValue = eachRow.targetCs01.level.savedUnderlineValue === 0 ? eachRow.targetCs01.level.savedUnderlineValue : null;
+          const parsedValue = eachRow.targetCs01.level.savedUnderlineValue === 0 ? null : eachRow.targetCs01.level.savedUnderlineValue;
           modifiedMetricBreakdowns.metricBreakdowns.Cs01 = {
             targetLevel: parsedValue
           };
@@ -759,7 +759,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           }
         }
         if (this.creditLeverageModifiedInEditRow(eachRow)) {
-          const parsedValue = eachRow.targetCreditLeverage.level.savedUnderlineValue === 0 ? eachRow.targetCreditLeverage.level.savedUnderlineValue : null;
+          const parsedValue = eachRow.targetCreditLeverage.level.savedUnderlineValue === 0 ? null : eachRow.targetCreditLeverage.level.savedUnderlineValue;
           modifiedMetricBreakdowns.metricBreakdowns.CreditLeverage = {
             targetLevel: parsedValue
           };
