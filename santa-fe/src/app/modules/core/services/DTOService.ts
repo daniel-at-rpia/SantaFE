@@ -2230,7 +2230,7 @@ export class DTOService {
     const object: Blocks.TraceTradeBlock = {
       traceTradeId: rawData.traceTradeID,
       eventTime: rawData.eventTime,
-      parsedEventTime: moment(rawData.eventTime).format(`YY MMM DD - HH:mm`),
+      parsedEventTime: moment(rawData.eventTime).format(`HH:mm`),
       counterParty: counterParty,
       side: TradeSideValueEquivalent[rawData.side],
       volumeEstimated: rawData.volumeEstimated,
