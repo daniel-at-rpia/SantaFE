@@ -68,5 +68,6 @@ export const CustomeBreakdownConfiguratorDefinitionLayout: Array<SecurityDefinit
 
 export enum BEPortfolioTargetMetricValues {
   CreditLeverage = 'CreditLeverage',
-  CreditDuration = 'CreditDuration'
+  CreditDuration = 'CreditDuration',
+  Cs01 = 'Cs01'
 }

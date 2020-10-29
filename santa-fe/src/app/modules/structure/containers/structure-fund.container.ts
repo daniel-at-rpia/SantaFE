@@ -31,6 +31,7 @@ export class StructureFund implements OnInit {
     creditDuration: PortfolioMetricValues.creditDuration,
     BECreditLeverage: BEPortfolioTargetMetricValues.CreditLeverage,
     BECreditDuration: BEPortfolioTargetMetricValues.CreditDuration,
+    BECs01: BEPortfolioTargetMetricValues.Cs01,
     editModalId: STRUCTURE_EDIT_MODAL_ID,
     structuringTeamPMList: StructuringTeamPMList
   }
