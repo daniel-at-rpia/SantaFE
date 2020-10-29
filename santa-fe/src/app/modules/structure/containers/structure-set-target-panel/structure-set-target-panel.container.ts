@@ -36,7 +36,10 @@ import {
   BEMetricBreakdowns,
   BEStructuringOverrideBlock
 } from 'BEModels/backend-models.interface';
-import { PayloadGetPortfolioOverride } from 'BEModels/backend-payloads.interface';
+import {
+  PayloadGetPortfolioOverride,
+  PayloadClearPortfolioBreakdown
+} from 'BEModels/backend-payloads.interface';
 import { StructureSetTargetPostEditUpdatePack } from 'FEModels/frontend-adhoc-packages.interface';
 import { StructureReloadBreakdownDataPostEditEvent, StructureUpdateMainPanelEvent } from 'Structure/actions/structure.actions';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
@@ -166,7 +169,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   ) {
     targetItem.isFocused = false;
     targetItem.savedDisplayValue = targetItem.modifiedDisplayValue;
-    targetItem.savedUnderlineValue = targetItem.modifiedUnderlineValue;
+    targetItem.savedUnderlineValue = targetItem.modifiedUnderlineValue === 0 ? null : targetItem.modifiedUnderlineValue;
     let counterPartyItem = null;
     if (targetItem.metric === this.constants.metric.cs01) {
       if (!!targetItem.isPercent) {
@@ -399,7 +402,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           targetCs01: {
             level: {
               savedDisplayValue: !!eachCategory.data.targetLevel ? `${eachCategory.data.targetLevel}` : null,
-              savedUnderlineValue: eachCategory.data.raw.targetLevel,
+              savedUnderlineValue: !!eachCategory.data.raw.targetLevel ? eachCategory.data.raw.targetLevel : null,
               modifiedDisplayValue: null,
               modifiedUnderlineValue: null,
               isActive: false,
@@ -410,7 +413,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             },
             percent: {
               savedDisplayValue: !!eachCategory.data.targetPct ? `${eachCategory.data.targetPct}` : null,
-              savedUnderlineValue: eachCategory.data.raw.targetPct,
+              savedUnderlineValue: !!eachCategory.data.raw.targetPct ? eachCategory.data.raw.targetPct : null,
               modifiedDisplayValue: null,
               modifiedUnderlineValue: null,
               isActive: false,
@@ -455,9 +458,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         });
         if (!!targetRow) {
           targetRow.targetCreditLeverage.level.savedDisplayValue = !!eachCategory.data.targetLevel ? `${eachCategory.data.targetLevel}` : null;
-          targetRow.targetCreditLeverage.level.savedUnderlineValue = eachCategory.data.raw.targetLevel;
+          targetRow.targetCreditLeverage.level.savedUnderlineValue = !!eachCategory.data.raw.targetLevel ? eachCategory.data.raw.targetLevel : null;
           targetRow.targetCreditLeverage.percent.savedDisplayValue = !!eachCategory.data.targetPct ? `${eachCategory.data.targetPct}` : null;
-          targetRow.targetCreditLeverage.percent.savedUnderlineValue = eachCategory.data.raw.targetPct;
+          targetRow.targetCreditLeverage.percent.savedUnderlineValue = !!eachCategory.data.raw.targetPct ? eachCategory.data.raw.targetPct : null;
         };
       });
     }
@@ -510,7 +513,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     targetItem: StructureSetTargetPanelEditRowItemBlock
   ) {
     if (displayValue == '') {
-      displayValue = '0'
+      displayValue = '0';
     };
     targetItem.modifiedDisplayValue = displayValue;
     targetItem.isActive = true;
@@ -536,37 +539,49 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     let impliedValue = null;
     if (metric === this.constants.metric.cs01) {
       if (this.state.totalUnallocatedCS01 > 0) {
-        if (!!targetIsPercent) {
-          impliedValue = targetUnderlineValue * this.state.totalUnallocatedCS01;
-          counterPartyItem.modifiedUnderlineValue = impliedValue;
-          counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue/1000, 0);
+        if (!!targetUnderlineValue) {
+          if (!!targetIsPercent) {
+            impliedValue = targetUnderlineValue * this.state.totalUnallocatedCS01;
+            counterPartyItem.modifiedUnderlineValue = impliedValue;
+            counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue/1000, 0);
+          } else {
+            impliedValue = targetUnderlineValue / this.state.totalUnallocatedCS01;
+            counterPartyItem.modifiedUnderlineValue = impliedValue;
+            counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue*100, 1);
+          }
         } else {
-          impliedValue = targetUnderlineValue / this.state.totalUnallocatedCS01;
-          counterPartyItem.modifiedUnderlineValue = impliedValue;
-          counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue*100, 1);
+          impliedValue = null;
+          counterPartyItem.modifiedUnderlineValue = 0;
+          counterPartyItem.modifiedDisplayValue = '';
         }
       } else {
         counterPartyItem.modifiedUnderlineValue = 0;
-        counterPartyItem.modifiedDisplayValue = '0';
+        counterPartyItem.modifiedDisplayValue = '';
       }
     } else if (metric === this.constants.metric.creditLeverage) {
       if (this.state.totalUnallocatedCreditLeverage > 0) {
-        if (!!targetIsPercent) {
-          impliedValue = targetUnderlineValue * this.state.totalUnallocatedCreditLeverage;
-          counterPartyItem.modifiedUnderlineValue = impliedValue;
-          counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue, 2);
+        if (!!targetUnderlineValue) {
+          if (!!targetIsPercent) {
+            impliedValue = targetUnderlineValue * this.state.totalUnallocatedCreditLeverage;
+            counterPartyItem.modifiedUnderlineValue = impliedValue;
+            counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue, 2);
+          } else {
+            impliedValue = targetUnderlineValue / this.state.totalUnallocatedCreditLeverage;
+            counterPartyItem.modifiedUnderlineValue = impliedValue;
+            counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue*100, 1);
+          }
         } else {
-          impliedValue = targetUnderlineValue / this.state.totalUnallocatedCreditLeverage;
-          counterPartyItem.modifiedUnderlineValue = impliedValue;
-          counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue*100, 1);
+          impliedValue = null;
+          counterPartyItem.modifiedUnderlineValue = 0;
+          counterPartyItem.modifiedDisplayValue = '';
         }
       } else {
         counterPartyItem.modifiedUnderlineValue = 0;
-        counterPartyItem.modifiedDisplayValue = '0';
+        counterPartyItem.modifiedDisplayValue = '';
       }
     }
     counterPartyItem.savedDisplayValue = counterPartyItem.modifiedDisplayValue;
-    counterPartyItem.savedUnderlineValue = counterPartyItem.modifiedUnderlineValue;
+    counterPartyItem.savedUnderlineValue = counterPartyItem.modifiedUnderlineValue === 0 ? null : counterPartyItem.modifiedUnderlineValue;
   }
 
   private refreshPreview() {
@@ -727,12 +742,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         };
         if (this.cs01ModifiedInEditRow(eachRow)) {
           modifiedMetricBreakdowns.metricBreakdowns.Cs01 = {
-            targetLevel: eachRow.targetCs01.level.savedUnderlineValue
+            targetLevel: !eachRow.targetCs01.level.savedUnderlineValue ? null : eachRow.targetCs01.level.savedUnderlineValue
           };
         }
         if (this.creditLeverageModifiedInEditRow(eachRow)) {
           modifiedMetricBreakdowns.metricBreakdowns.CreditLeverage = {
-            targetLevel: eachRow.targetCreditLeverage.level.savedUnderlineValue
+            targetLevel: !eachRow.targetCreditLeverage.level.savedUnderlineValue ? null : eachRow.targetCreditLeverage.level.savedUnderlineValue
           };
         }
         payload.portfolioBreakdown.breakdown[eachRow.rowIdentifier] = modifiedMetricBreakdowns;
@@ -765,15 +780,16 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         };
         if (this.cs01ModifiedInEditRow(eachRow)) {
           modifiedMetricBreakdowns.metricBreakdowns.Cs01 = {
-            targetLevel: eachRow.targetCs01.level.savedUnderlineValue
+            targetLevel: !eachRow.targetCs01.level.savedUnderlineValue ? null : eachRow.targetCs01.level.savedUnderlineValue
           };
         }
         if (this.creditLeverageModifiedInEditRow(eachRow)) {
           modifiedMetricBreakdowns.metricBreakdowns.CreditLeverage = {
-            targetLevel: eachRow.targetCreditLeverage.level.savedUnderlineValue
+            targetLevel: !eachRow.targetCreditLeverage.level.savedUnderlineValue ? null : eachRow.targetCs01.level.savedUnderlineValue
           };
         }
         eachPayload.portfolioOverride.breakdown = modifiedMetricBreakdowns;
+        console.log(eachPayload, 'each payload')
       }
       payload.push(eachPayload);
     });
