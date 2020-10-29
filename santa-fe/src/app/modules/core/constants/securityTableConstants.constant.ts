@@ -1600,7 +1600,7 @@ export const TradeHistoryHeaderConfigList: Array<TradeHistoryHeaderConfigStub> =
 export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
   {
     headerKey: 'eventTime',
-    headerDisplayLabel: 'Date & Time',
+    headerDisplayLabel: 'Time',
     attrName: 'parsedEventTime',
     size: 8
   },{

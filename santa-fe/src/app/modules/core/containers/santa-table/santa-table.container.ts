@@ -969,6 +969,7 @@ export class SantaTable implements OnInit, OnChanges {
     const previousTraceTradesDisplayAllState = !!targetRow.data.traceTradeVisualizer ? targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades : false;
     const previousSelectedFilters = !!targetRow.data.traceTradeVisualizer && targetRow.data.traceTradeVisualizer.state.selectedFiltersList.length > 0 ? targetRow.data.traceTradeVisualizer.state.selectedFiltersList : [];
     const previousDisplayListCopy = previousSelectedFilters.length > 0 ? this.utilityService.deepCopy(targetRow.data.traceTradeVisualizer.data.displayList) : [];
+    const previousAvailableFiltersList = !!targetRow.data.traceTradeVisualizer && targetRow.data.traceTradeVisualizer.data.availableFiltersList.length > 0 ? targetRow.data.traceTradeVisualizer.data.availableFiltersList : [];
     const setPreviousFilteredDisplayList = (row: SecurityTableRowDTO, traceData: Array<TraceTradeBlock>) => {
       row.data.traceTradeVisualizer.state.selectedFiltersList = previousSelectedFilters;
       const previousDisplayList = [];
@@ -994,6 +995,10 @@ export class SantaTable implements OnInit, OnChanges {
             const traceTradeData: Array<TraceTradeBlock> = rawDataTrades.map(trade => this.dtoService.formTraceTradeBlockObject(trade, targetRow.data.security));
             targetRow.data.security.data.traceTrades = traceTradeData;
             targetRow.data.traceTradeVisualizer = this.dtoService.formTraceTradesVisualizerDTO(targetRow, isPinnedFullWidth);
+            targetRow.data.traceTradeVisualizer.state.showGraphs = targetRow.data.security.data.traceTrades.length > 2;
+            if (previousAvailableFiltersList.length > 0) {
+              targetRow.data.traceTradeVisualizer.data.availableFiltersList = previousAvailableFiltersList;
+            }
             targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = !!previousTraceTradesDisplayAllState;
             if (!!previousTraceTradesDisplayAllState) {
               if (previousDisplayListCopy.length > 0) {
