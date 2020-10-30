@@ -13,11 +13,16 @@ import {
   StructureSetTargetOverlayTransferPack,
   DefinitionConfiguratorEmitterParams
 } from 'FEModels/frontend-adhoc-packages.interface';
-import { StructureSetTargetPanelEditRowBlock, StructureSetTargetPanelEditRowItemBlock } from 'FEModels/frontend-blocks.interface';
+import { StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend-models.interface';
+import {
+  StructureSetTargetPanelEditRowBlock,
+  StructureSetTargetPanelEditRowItemBlock,
+} from 'FEModels/frontend-blocks.interface';
 import {
   PortfolioBreakdownGroupOptions,
   PortfolioMetricValues,
-  STRUCTURE_EDIT_MODAL_ID
+  STRUCTURE_EDIT_MODAL_ID,
+  PortfolioView
 } from 'Core/constants/structureConstants.constants';
 import {
   FilterOptionsCurrency,
@@ -184,6 +189,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       targetItem,
       counterPartyItem
     );
+    if (this.state.activeMetric === this.constants.metric.cs01) {
+      this.state.targetBreakdownRawData.breakdown[targetCategory.rowIdentifier].metricBreakdowns.Cs01.targetLevel = targetCategory.targetCs01.level.savedUnderlineValue;
+      this.state.targetBreakdownRawData.breakdown[targetCategory.rowIdentifier].metricBreakdowns.Cs01.targetPct = targetCategory.targetCs01.percent.savedUnderlineValue;
+    } else {
+      this.state.targetBreakdownRawData.breakdown[targetCategory.rowIdentifier].metricBreakdowns.CreditLeverage.targetLevel = targetCategory.targetCreditLeverage.level.savedUnderlineValue;
+      this.state.targetBreakdownRawData.breakdown[targetCategory.rowIdentifier].metricBreakdowns.CreditLeverage.targetPct = targetCategory.targetCreditLeverage.percent.savedUnderlineValue;
+    }
     if (!notOneOffEdit) {
       targetCategory.isLocked = true;
       this.calculateAllocation();
