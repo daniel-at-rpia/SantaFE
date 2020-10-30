@@ -79,6 +79,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       targetBreakdown: null,
       targetFund: null,
       targetBreakdownRawData: null,
+      targetBreakdownRawDataDisplayLabelMap: {},
       editRowList: [],
       totalUnallocatedCS01: 0,
       totalUnallocatedCreditLeverage: 0,
@@ -291,7 +292,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         if (!!property) {
           bucket[property] = eachItem.filterBy;
           eachItem.filterBy.forEach((eachValue) => {
-            bucketToString = bucketToString === '' ? `${eachValue}` : `${bucketToString} - ${eachValue}`;
+            bucketToString = bucketToString === '' ? `${eachValue}` : `${bucketToString} ~ ${eachValue}`;
           });
         }
       });
@@ -313,6 +314,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             serverReturn.title = this.state.configurator.newOverrideNameCache;
             const returnPack = this.utilityService.convertRawOverrideToRawBreakdown([serverReturn]);
             const rawBreakdownList = returnPack.list;
+            this.state.targetBreakdownRawDataDisplayLabelMap = this.utilityService.deepObjectMerge(returnPack.displayLabelMap, this.state.targetBreakdownRawDataDisplayLabelMap);
             const newBreakdownBucketIdentifier = this.utilityService.formBucketIdentifierForOverride(serverReturn);
             const newCategoryKey = this.utilityService.formCategoryKeyForOverride(serverReturn);
             if (!!this.state.targetBreakdown && this.state.targetBreakdown.data.backendGroupOptionIdentifier === newBreakdownBucketIdentifier) {
@@ -329,7 +331,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, isDisplayCs01);
             newBreakdown.state.isPreviewVariant = true;
             this.utilityService.updateDisplayLabelForOverrideConvertedBreakdown(
-              returnPack.displayLabelMap[newBreakdownBucketIdentifier],
+              this.state.targetBreakdownRawDataDisplayLabelMap[newBreakdownBucketIdentifier],
               newBreakdown
             );
             this.state.targetBreakdown = newBreakdown;
@@ -359,6 +361,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       !!targetRow.existInServer && this.state.removalList.push(targetRow);
       const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
       const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, isDisplayCs01);
+      this.utilityService.updateDisplayLabelForOverrideConvertedBreakdown(
+        this.state.targetBreakdownRawDataDisplayLabelMap[newBreakdown.data.backendGroupOptionIdentifier],
+        newBreakdown
+      );
       newBreakdown.state.isPreviewVariant = true;
       this.state.targetBreakdown = newBreakdown;
       this.loadEditRows();
@@ -734,10 +740,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           date: this.state.targetBreakdownRawData.date,
           indexId: this.state.targetBreakdownRawData.indexId,
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
-          bucket: this.utilityService.populateBEBucketObjectFromRowIdentifier(
-            this.utilityService.formBEBucketObjectFromBucketIdentifier(this.state.targetBreakdown.data.title),
-            eachRow.rowIdentifier
-          )
+          bucket: eachRow.targetBlockFromBreakdown.bucket
         }
       };
       if (eachRow.modifiedDisplayRowTitle !== eachRow.rowIdentifier) {
@@ -796,7 +799,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     if (!!this.state.targetFund && !!this.state.targetBreakdown) {
       let rawDataObject;
       if (this.state.targetBreakdown.state.isOverrideVariant) {
-        rawDataObject = this.utilityService.convertRawOverrideToRawBreakdown(this.state.targetFund.data.originalBEData.overrides).list;
+        const resultPack = this.utilityService.convertRawOverrideToRawBreakdown(this.state.targetFund.data.originalBEData.overrides);
+        rawDataObject = resultPack.list;
+        this.state.targetBreakdownRawDataDisplayLabelMap = resultPack.displayLabelMap;
       } else {
         rawDataObject = this.state.targetFund.data.originalBEData.breakdowns;
       }

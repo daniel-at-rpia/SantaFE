@@ -2076,6 +2076,7 @@ export class DTOService {
     newBreakdown.state.isOverrideVariant = true;
     newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.OVERRIDE);
     newBreakdown.data.title = newBreakdown.data.backendGroupOptionIdentifier;
+    newBreakdown.data.title = newBreakdown.data.title.replace('BICS Lv.4', 'BICS Override');
     return newBreakdown;
   }
 
