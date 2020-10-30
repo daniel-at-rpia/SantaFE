@@ -167,7 +167,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   public onClickConsolidatedBICSDiveIn(targetOption: SecurityDefinitionFilterBlock) {
     const consolidatedBICSDefinition = this.configuratorData.state.showFiltersFromDefinition;
     if (!!consolidatedBICSDefinition) {
-      consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.push(targetOption.shortKey);
+      consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.push(targetOption.displayLabel);
       const level = consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.length+1;
       const newList = this.bicsDataProcessingService.getSubLevelList(targetOption.shortKey, level-1);
       consolidatedBICSDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(consolidatedBICSDefinition.data.key, newList, level);
