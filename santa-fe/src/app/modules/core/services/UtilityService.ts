@@ -1176,5 +1176,38 @@ export class UtilityService {
       }
     }
 
+    public getCompareValuesForStructuringVisualizer(rawData: BEStructuringBreakdownBlock): Array<number> {
+      let findCs01Max = 0;
+      let findCs01Min = 0;
+      let findLeverageMax = 0;
+      let findLeverageMin = 0;
+      for (const eachCategory in rawData.breakdown) {
+        const eachCs01Entry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].metricBreakdowns.Cs01 : null;
+        if (!!eachCs01Entry) {
+          const highestVal = Math.max(eachCs01Entry.currentLevel, eachCs01Entry.targetLevel);
+          const lowestVal = Math.min(eachCs01Entry.currentLevel, eachCs01Entry.targetLevel);
+          if (highestVal > findCs01Max) {
+            findCs01Max = highestVal;
+          }
+          if (lowestVal < findCs01Min) {
+            findCs01Min = lowestVal;
+          }
+        }
+        const eachLeverageEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].metricBreakdowns.CreditLeverage : null;
+        if (!!eachLeverageEntry) {
+          const highestVal = Math.max(eachLeverageEntry.currentLevel, eachLeverageEntry.targetLevel);
+          const lowestVal = Math.min(eachLeverageEntry.currentLevel, eachLeverageEntry.targetLevel);
+          if (highestVal > findLeverageMax) {
+            findLeverageMax = highestVal;
+          }
+          if (lowestVal < findLeverageMin) {
+            findLeverageMin = lowestVal;
+          }
+        }
+      }
+
+      return [findCs01Min, findCs01Max, findLeverageMin, findLeverageMax];
+    }
+
   // structuring specific end
 }
