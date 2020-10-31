@@ -1209,5 +1209,29 @@ export class UtilityService {
       return [findCs01Min, findCs01Max, findLeverageMin, findLeverageMax];
     }
 
+    public calculateAlignmentRating(breakdownData: DTOs.PortfolioBreakdownDTO) {
+      const targetList = breakdownData.state.isDisplayingCs01 ? breakdownData.data.rawCs01CategoryList : breakdownData.data.rawLeverageCategoryList;
+      let totalLevel = 0;
+      targetList.forEach((eachCategory) => {
+        totalLevel = totalLevel + eachCategory.data.currentLevel;
+      });
+      const targetListWithTargets = targetList.filter((eachCategory) => {
+        return !!eachCategory.data.targetLevel;
+      });
+      if (targetListWithTargets.length > 0) {
+        let misalignmentAggregate = 0;
+        targetListWithTargets.forEach((eachCategory) => {
+          const misalignmentPercentage = eachCategory.data.diffToTarget / totalLevel * 100;
+          misalignmentAggregate = misalignmentAggregate + Math.abs(misalignmentPercentage);
+        });
+        misalignmentAggregate = misalignmentAggregate > 100 ? 100 : misalignmentAggregate;
+        breakdownData.style.ratingFillWidth = 100 - this.round(misalignmentAggregate, 0);
+        breakdownData.data.ratingHoverText = `${100 - this.round(misalignmentAggregate, 0)}`;
+        breakdownData.state.isTargetAlignmentRatingAvail = true;
+      } else {
+        breakdownData.state.isTargetAlignmentRatingAvail = false;
+      }
+    }
+
   // structuring specific end
 }

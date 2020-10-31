@@ -72,7 +72,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     this.breakdownData.data.displayCategoryList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawCs01CategoryList : this.breakdownData.data.rawLeverageCategoryList;
     let popoverCategory;
     if (this.dataIsReady) {
-      this.calculateAlignmentRating();
+      this.utilityService.calculateAlignmentRating(this.breakdownData);
       if (!!this.breakdownData.data.popover && !!this.breakdownData.data.popover.state.isActive) {
         const previousMetricData = this.utilityService.deepCopy(this.breakdownData.data.popover.data.mainRow.data.children);
         popoverCategory = this.breakdownData.data.popover.data.mainRow.data.category; 
@@ -108,30 +108,6 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
   public onClickEdit() {
     this.modalService.triggerModalOpen(this.constants.editModalId);
     !!this.clickedEdit && this.clickedEdit.emit(this.breakdownData);
-  }
-
-  public calculateAlignmentRating() {
-    const targetList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawCs01CategoryList : this.breakdownData.data.rawLeverageCategoryList;
-    let totalLevel = 0;
-    targetList.forEach((eachCategory) => {
-      totalLevel = totalLevel + eachCategory.data.currentLevel;
-    });
-    const targetListWithTargets = targetList.filter((eachCategory) => {
-      return !!eachCategory.data.targetLevel;
-    });
-    if (targetListWithTargets.length > 0) {
-      let misalignmentAggregate = 0;
-      targetListWithTargets.forEach((eachCategory) => {
-        const misalignmentPercentage = eachCategory.data.diffToTarget / totalLevel * 100;
-        misalignmentAggregate = misalignmentAggregate + Math.abs(misalignmentPercentage);
-      });
-      misalignmentAggregate = misalignmentAggregate > 100 ? 100 : misalignmentAggregate;
-      this.breakdownData.style.ratingFillWidth = 100 - this.utilityService.round(misalignmentAggregate, 0);
-      this.breakdownData.data.ratingHoverText = `${100 - this.utilityService.round(misalignmentAggregate, 0)}`;
-      this.breakdownData.state.isTargetAlignmentRatingAvail = true;
-    } else {
-      this.breakdownData.state.isTargetAlignmentRatingAvail = false;
-    }
   }
 
   public updatePopoverData(breakdownRow: StructurePortfolioBreakdownRowDTO) {
