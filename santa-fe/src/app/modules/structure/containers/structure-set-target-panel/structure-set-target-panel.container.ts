@@ -300,10 +300,17 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       const convertedParams = this.convertConsolidatedBICSDefinitionConfiguratorParamToRegularParam(params);
       const bucket = {}
       let bucketToString = '';
-      params.filterList.forEach((eachItem) => {
+      let hasBICSConsolidate = false;
+      convertedParams.filterList.forEach((eachItem) => {
         const property = this.utilityService.convertFEKey(eachItem.key);
         if (!!property) {
           bucket[property] = eachItem.filterBy;
+        }
+        // because bics consolidated are all converted to level 4 already
+        if (eachItem.key === this.constants.definitionMap.BICS_LEVEL_4.key) {
+          hasBICSConsolidate = true;
+          bucketToString = bucketToString === '' ? `${this.state.configurator.newOverrideNameCache}` : `${bucketToString} ~ ${this.state.configurator.newOverrideNameCache}`;
+        } else {
           eachItem.filterBy.forEach((eachValue) => {
             bucketToString = bucketToString === '' ? `${eachValue}` : `${bucketToString} ~ ${eachValue}`;
           });
@@ -324,7 +331,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioOverride, {req: 'POST'}, payload).pipe(
           first(),
           tap((serverReturn: BEStructuringOverrideBlock) => {
-            serverReturn.title = this.state.configurator.newOverrideNameCache;
+            if (hasBICSConsolidate) {
+              serverReturn.title = bucketToString;
+            }
             const returnPack = this.utilityService.convertRawOverrideToRawBreakdown([serverReturn]);
             const rawBreakdownList = returnPack.list;
             this.state.targetBreakdownRawDataDisplayLabelMap = this.utilityService.deepObjectMerge(returnPack.displayLabelMap, this.state.targetBreakdownRawDataDisplayLabelMap);
