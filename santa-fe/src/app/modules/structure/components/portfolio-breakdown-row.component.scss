@@ -18,7 +18,7 @@ $portfolioBreakdownRowIconSpacing: .1rem;
       flex: 1 1 auto;
       display: flex;
       min-height: $portfolioBreakdownRowBtnMinHeight;
-      margin: 0 $spacing_small $spacing_small 0;
+      margin: 0 $spacing_x_small $spacing_small 0;
       padding: $spacing_xx_small;
       box-shadow: none;
       text-align: right;
@@ -258,7 +258,7 @@ $portfolioBreakdownRowIconSpacing: .1rem;
       &__utility {
         &-ctas {
           &-btn {
-            &--positive {
+            &--deteriorating {
               @include material('none');
               background-color: $color_active;
               color: $font_color_inverse;
