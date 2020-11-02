@@ -6,8 +6,10 @@
   'sat-portfolioBreakdownRow--noSignificantDiff': breakdownRow.data.diffToTarget === 0,
   'sat-portfolioBreakdownRow--isEditingView': breakdownRow.state.isEditingView,
   'sat-portfolioBreakdownRow--negativeDiff': breakdownRow.data.diffToTarget < 0,
-  'sat-portfolioBreakdownRow--overweight': breakdownRow.data.view === constants.overweight,
-  'sat-portfolioBreakdownRow--underweight': breakdownRow.data.view === constants.underweight,
+  'sat-portfolioBreakdownRow--positive': breakdownRow.data.view === constants.positive,
+  'sat-portfolioBreakdownRow--improving': breakdownRow.data.view === constants.improving,
+  'sat-portfolioBreakdownRow--deteriorating': breakdownRow.data.view === constants.deteriorating,
+  'sat-portfolioBreakdownRow--negative': breakdownRow.data.view === constants.negative,
   'sat-portfolioBreakdownRow--neutral': breakdownRow.data.view === constants.neutral,
   'sat-portfolioBreakdownRow--showFullCategoryState': !!breakdownRow.data.showFullCategory
   }">
