@@ -2047,9 +2047,7 @@ export class DTOService {
 
   public formPortfolioOverrideBreakdown(
     rawData: BEModels.BEStructuringBreakdownBlock,
-    isDisplayCs01: boolean,
-    hasPreviousList: boolean = false,
-    previousList: Array<Blocks.StructureSetTargetPanelEditRowBlock> = []
+    isDisplayCs01: boolean
   ): DTOs.PortfolioBreakdownDTO {
     const definitionList = [];
     for (let eachCategory in rawData.breakdown) {
@@ -2059,18 +2057,6 @@ export class DTOService {
     newBreakdown.state.isOverrideVariant = true;
     newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.OVERRIDE);
     newBreakdown.data.title = newBreakdown.data.backendGroupOptionIdentifier;
-    if (!!hasPreviousList && previousList.length > 0) {
-      previousList.forEach(row => {
-        const cs01Equivalent = newBreakdown.data.rawCs01CategoryList.find(cs01Row => cs01Row.data.category === row.rowIdentifier);
-        const creditLeverageEquivalent = newBreakdown.data.rawLeverageCategoryList.find(creditLeverageRow => creditLeverageRow.data.category === row.rowIdentifier);
-        if (!!cs01Equivalent) {
-          cs01Equivalent.data.displayCategory = row.displayRowTitle;
-        }
-        if (!!creditLeverageEquivalent) {
-          creditLeverageEquivalent.data.displayCategory = row.displayRowTitle
-        }
-      })
-    }
     return newBreakdown;
   }
 

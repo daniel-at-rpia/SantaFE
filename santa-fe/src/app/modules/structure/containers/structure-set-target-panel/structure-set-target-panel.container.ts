@@ -363,11 +363,25 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.state.targetBreakdownRawData.breakdown = this.utilityService.removePropertyFromObject(this.state.targetBreakdownRawData.breakdown, targetRow.rowIdentifier);
       !!targetRow.existInServer && this.state.removalList.push(targetRow);
       const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
-      const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, isDisplayCs01, true, this.state.editRowList);
+      const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, isDisplayCs01);
       newBreakdown.state.isPreviewVariant = true;
       this.state.targetBreakdown = newBreakdown;
       this.loadEditRows();
       this.inheritEditRowStates(newList);
+      //Have preview retain custom titles
+      if (this.state.editRowList.length > 0) {
+        this.state.editRowList.forEach(row => {
+          const cs01Equivalent = newBreakdown.data.rawCs01CategoryList.find(cs01Row => cs01Row.data.category === row.rowIdentifier);
+          const creditLeverageEquivalent = newBreakdown.data.rawLeverageCategoryList.find(creditLeverageRow => creditLeverageRow.data.category === row.rowIdentifier);
+          if (!!cs01Equivalent) {
+            cs01Equivalent.data.displayCategory = row.displayRowTitle;
+          }
+          if (!!creditLeverageEquivalent) {
+            creditLeverageEquivalent.data.displayCategory = row.displayRowTitle
+          }
+        })
+      }
+      this.refreshPreview();
     }
   }
 
