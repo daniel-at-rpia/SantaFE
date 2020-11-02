@@ -31,6 +31,7 @@ export class StructureFund implements OnInit {
     creditDuration: PortfolioMetricValues.creditDuration,
     BECreditLeverage: BEPortfolioTargetMetricValues.CreditLeverage,
     BECreditDuration: BEPortfolioTargetMetricValues.CreditDuration,
+    BECs01: BEPortfolioTargetMetricValues.Cs01,
     editModalId: STRUCTURE_EDIT_MODAL_ID,
     structuringTeamPMList: StructuringTeamPMList
   }
@@ -119,11 +120,21 @@ export class StructureFund implements OnInit {
       let updatedTargetData = [];
       const checkTargetUpdates = (currentTarget: number, previousTarget: number, BEMetricType: BEPortfolioTargetMetricValues) => {
         if (currentTarget !== previousTarget) {
+          const parsedTarget = currentTarget === 0 ? null : currentTarget;
           const targetUpdateBlock: UpdateTargetBlock = {
             metric: BEMetricType,
-            target: currentTarget
+            target: parsedTarget
           }
-          updatedTargetData.push(targetUpdateBlock);
+          if (BEMetricType === this.constants.BECreditDuration && !parsedTarget) {
+            // have to set Cs01 as well if credit duration is null
+            const cs01Target: UpdateTargetBlock = {
+              metric: this.constants.BECs01,
+              target: parsedTarget
+            }
+            updatedTargetData = [...updatedTargetData, targetUpdateBlock, cs01Target];
+          } else {
+            updatedTargetData.push(targetUpdateBlock);
+          }
         }
       }
       checkTargetUpdates(targetCreditDuration, this.fund.data.target.target.creditDuration, this.constants.BECreditDuration);

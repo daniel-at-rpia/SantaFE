@@ -29,7 +29,9 @@
       SECURITY_TABLE_QUOTE_TYPE_RUN,
       SECURITY_TABLE_QUOTE_TYPE_AXE,
       AGGRID_ROW_HEIGHT,
-      AGGRID_ROW_HEIGHT_SLIM
+      AGGRID_ROW_HEIGHT_SLIM,
+      AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD,
+      traceTradeNumericalFilterSymbols
     } from 'Core/constants/securityTableConstants.constant';
     import {
       GroupMetricOptions
@@ -42,14 +44,18 @@
       FilterOptionsRating,
       FilterOptionsTenor,
       BICsLevel1DefinitionList,
+      FilterTraceTradesOptions,
       DEFINITION_LONG_THRESHOLD
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
-      QuoteHeaderConfigList
+      QuoteHeaderConfigList,
+      TraceTradeCounterParty,
+      TradeSideValueEquivalent
     } from 'Core/constants/securityTableConstants.constant';
     import {
       AxeAlertScope,
-      AxeAlertType
+      AxeAlertType,
+      TRACE_INITIAL_LIMIT
     } from 'Core/constants/tradeConstants.constant';
     import { PortfolioShortNames, PortfolioMetricValues, PortfolioView, PortfolioBreakdownGroupOptions } from 'Core/constants/structureConstants.constants';
   //
@@ -238,6 +244,7 @@ export class DTOService {
           }
         },
         tradeHistory: [],
+        traceTrades: [],
         bicsLevel1: !isStencil ? rawData.bicsLevel1 : null,
         bicsLevel2: !isStencil ? rawData.bicsLevel2 : null,
         bicsLevel3: !isStencil ? rawData.bicsLevel3 : null,
@@ -951,7 +958,8 @@ export class DTOService {
           }
         },
         alert: alert,
-        historicalTradeVisualizer: this.formHistoricalTradeObject(securityDTO)
+        historicalTradeVisualizer: this.formHistoricalTradeObject(securityDTO),
+        traceTradeVisualizer: null
       },
       style: {
         rowHeight: !!isSlimRowHeight ? AGGRID_ROW_HEIGHT_SLIM : AGGRID_ROW_HEIGHT
@@ -963,6 +971,7 @@ export class DTOService {
         isCDSVariant: this.utility.isCDS(false, securityDTO),
         isCDSOffTheRun: false,
         viewHistoryState: false,
+        viewTraceState: false,
         quotesLoaded: false,
         isAgGridFullSizeVariant: false
       }
@@ -2199,6 +2208,79 @@ export class DTOService {
         isEditingView: false
       }
     }
+    return object;
+  }
+
+  public formTraceTradeBlockObject(rawData: BEModels.BETraceTradesBlock, targetSecurity: DTOs.SecurityDTO) {
+    const counterParty = !!rawData.counterParty ? rawData.counterParty === TraceTradeCounterParty.ClientAffiliate ? TraceTradeCounterParty.ClientAffiliate : TraceTradeCounterParty[rawData.counterParty] : null;
+    const object: Blocks.TraceTradeBlock = {
+      traceTradeId: rawData.traceTradeID,
+      eventTime: rawData.eventTime,
+      parsedEventTime: moment(rawData.eventTime).format(`HH:mm`),
+      counterParty: counterParty,
+      side: TradeSideValueEquivalent[rawData.side],
+      volumeEstimated: rawData.volumeEstimated,
+      volumeReported: rawData.volumeActual,
+      displayVolumeEstimated: !!rawData.volumeEstimated ? this.utility.parseNumberToCommas(rawData.volumeEstimated) : null,
+      displayVolumeReported: !!rawData.volumeActual ? this.utility.parseNumberToCommas(rawData.volumeActual) : null,
+      price: this.utility.parseTriCoreDriverNumber(rawData.price, TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
+      yield: this.utility.parseTriCoreDriverNumber(rawData.yield, TriCoreDriverConfig.Yield.label, targetSecurity, false) as number,
+      spread: this.utility.parseTriCoreDriverNumber(rawData.spread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
+      oasSpread: this.utility.parseTriCoreDriverNumber(rawData.oasSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
+      gSpread: this.utility.parseTriCoreDriverNumber(rawData.gSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
+      iSpread: this.utility.parseTriCoreDriverNumber(rawData.iSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
+      parSpread: this.utility.parseTriCoreDriverNumber(rawData.parSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string
+    }
+    return object;
+  }
+
+  public formTraceTradesVisualizerDTO(targetRow: DTOs.SecurityTableRowDTO, isPinnedFullWidth: boolean = false): DTOs.TraceTradesVisualizerDTO {
+    const object = {
+      data: {
+        displayList: [],
+        scatterGraphId: !isPinnedFullWidth ? `${targetRow.data.rowId}-scatterGraphId` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-scatterGraphId`,
+        pieGraphId: !isPinnedFullWidth ? `${targetRow.data.rowId}-pieGraphId` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-pieGraphId`,
+        filterList: FilterTraceTradesOptions,
+        availableFiltersList: []
+      },
+      state: {
+        isDisplayAllTraceTrades: false,
+        graphReceived: false,
+        selectedFiltersList: [],
+        showGraphs: false
+      },
+      graph: {
+        scatterGraph: null,
+        pieGraph: null
+      }
+    }
+
+    if (targetRow.data.security.data.traceTrades.length > 0) {
+      targetRow.data.security.data.traceTrades.sort((tradeA, tradeB) => {
+        if (tradeA.eventTime > tradeB.eventTime) {
+          return -1
+        } else if (tradeB.eventTime > tradeA.eventTime) {
+          return 1;
+        } else {
+          return 0;
+        }
+      })
+
+      object.data.displayList = targetRow.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT ? targetRow.data.security.data.traceTrades.filter((trade, i) => i < TRACE_INITIAL_LIMIT) : targetRow.data.security.data.traceTrades;
+    }
+    const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
+    object.data.filterList.forEach(option => {
+      const isNumericOption = option.includes(numericFilter);
+      if (!!isNumericOption) {
+        const parsedAmount: number = this.utility.getTraceNumericFilterAmount(numericFilter, option);
+        const isTradeAvailable = this.utility.getTraceTradesListBasedOnAmount(object.data.displayList, parsedAmount);
+        isTradeAvailable.length > 0 && object.data.
+        availableFiltersList.push(option);
+      } else {
+        const isCounterPartyAvailable = object.data.displayList.find(trade => trade.counterParty === option);
+        !!isCounterPartyAvailable && object.data.availableFiltersList.push(option);
+      }
+    })
     return object;
   }
 

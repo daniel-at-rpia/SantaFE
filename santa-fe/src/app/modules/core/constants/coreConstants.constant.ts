@@ -39,7 +39,8 @@ export const APIUrlMap = {
   updatePortfolioOverride: 'portfolioStructuring/update-portfolio-override',
   deletePortfolioOverride: 'portfolioStructuring/delete-portfolio-override',
   getViews: 'portfolioStructuring/get-analyst-views',
-  setView: 'portfolioStructuring/set-analyst-view'
+  setView: 'portfolioStructuring/set-analyst-view',
+  getAllTraceTrades: 'TraceTrade/get-all-trace-trades'
 };
 
 export const FAILED_USER_INITIALS_FALLBACK = 'n/a';
@@ -250,6 +251,7 @@ export const EngagementActionList = {
   tradeAlertClickedTab: 'Trade Alert Click Tab',
   santaTableAllQuotesDisplayTradeHistory: 'Switch To Display Trade History',
   santaTableAllQuotesDisplayQuotes: 'Switch To Display Quotes',
+  santaTableAllQuotesDisplayTrace: 'Switch To Display Trace Data',
   portfolioStructureSetView: 'Portfolio Breakdown Category View Set'
 }
 
