@@ -1233,5 +1233,17 @@ export class UtilityService {
       }
     }
 
+    public sortOverrideRows(breakdownData: DTOs.PortfolioBreakdownDTO) {
+      breakdownData.data.displayCategoryList.sort((rowA, rowB) => {
+        if (rowA.data.displayCategory < rowB.data.displayCategory) {
+          return -1
+        } else if (rowA.data.displayCategory > rowB.data.displayCategory) {
+          return 1;
+        } else {
+          return 0;
+        }
+      })
+    }
+
   // structuring specific end
 }
