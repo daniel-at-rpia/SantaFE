@@ -38,17 +38,31 @@
       <move-visualizer [visualizerData]="breakdownRow.data.moveVisualizer"></move-visualizer>
     </div>
     <div class="sat-portfolioBreakdownRow__utility-ctas">
-      <button (click)="onClickSetView(constants.overweight)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--inverseLabelled santaBtn--small sat-portfolioBreakdownRow__utility-ctas-btn--overweight">
-        <i class="fal fa-arrow-up"></i>
-        <span>over weight</span>
+      <button (click)="onClickSetView(constants.positive)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--inverseLabelled santaBtn--x_small sat-portfolioBreakdownRow__utility-ctas-btn--positive">
+        <i class="sat-portfolioBreakdownRow__utility-ctas-btn-iconGroup">
+          <i class="fal fa-arrow-up sat-portfolioBreakdownRow__utility-ctas-btn-iconGroup-icon sat-portfolioBreakdownRow__utility-ctas-btn-iconGroup-icon--reg"></i>
+          <i class="fal fa-arrow-up sat-portfolioBreakdownRow__utility-ctas-btn-iconGroup-icon sat-portfolioBreakdownRow__utility-ctas-btn-iconGroup-icon--small"></i>
+        </i>
+        <span class="sat-portfolioBreakdownRow__utility-ctas-btn-text">positive</span>
       </button>
-      <button (click)="onClickSetView(constants.underweight)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--inverseLabelled santaBtn--small sat-portfolioBreakdownRow__utility-ctas-btn--underweight">
-        <i class="fal fa-arrow-down"></i>
-        <span>under weight</span>
+      <button (click)="onClickSetView(constants.improving)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--x_small santaBtn--inverseLabelled sat-portfolioBreakdownRow__utility-ctas-btn--improving">
+        <i class="fal fa-arrow-up sat-portfolioBreakdownRow__utility-ctas-btn-icon"></i>
+        <span class="sat-portfolioBreakdownRow__utility-ctas-btn-text">improving</span>
       </button>
-      <button (click)="onClickSetView(constants.neutral)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--small sat-portfolioBreakdownRow__utility-ctas-btn--neutral">
-        <i class="fal fa-minus"></i>
-        <span>neutral</span>
+      <button (click)="onClickSetView(constants.neutral)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--x_small sat-portfolioBreakdownRow__utility-ctas-btn--neutral">
+        <i class="fal fa-minus sat-portfolioBreakdownRow__utility-ctas-btn-icon"></i>
+        <span class="sat-portfolioBreakdownRow__utility-ctas-btn-text">neutral</span>
+      </button>
+      <button (click)="onClickSetView(constants.deteriorating)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--x_small sat-portfolioBreakdownRow__utility-ctas-btn--deteriorating">
+        <i class="fal fa-arrow-down sat-portfolioBreakdownRow__utility-ctas-btn-icon"></i>
+        <span class="sat-portfolioBreakdownRow__utility-ctas-btn-text">deteriorating</span>
+      </button>
+      <button (click)="onClickSetView(constants.negative)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--x_small sat-portfolioBreakdownRow__utility-ctas-btn--negative">
+        <i class="sat-portfolioBreakdownRow__utility-ctas-btn-iconGroup">
+          <i class="fal fa-arrow-down sat-portfolioBreakdownRow__utility-ctas-btn-iconGroup-icon sat-portfolioBreakdownRow__utility-ctas-btn-iconGroup-icon--small"></i>
+          <i class="fal fa-arrow-down sat-portfolioBreakdownRow__utility-ctas-btn-iconGroup-icon sat-portfolioBreakdownRow__utility-ctas-btn-iconGroup-icon--reg"></i>
+        </i>
+        <span class="sat-portfolioBreakdownRow__utility-ctas-btn-text">negative</span>
       </button>
     </div>
   </section>
