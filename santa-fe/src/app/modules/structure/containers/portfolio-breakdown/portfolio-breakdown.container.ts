@@ -48,14 +48,14 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       this.breakdownData.state.isEditable = this.constants.structuringTeamPMList.indexOf(initials) >= 0;
       this.breakdownData.state.isEditingViewAvail = editingViewAvailableUsers.includes(initials);
     });
-    if (!!this.breakdownData && this.breakdownData.data.displayCategoryList.length > 1 && this.breakdownData.state.isOverrideVariant) {
-      this.sortOverrideRows();
-    }
   }
 
   public ngOnChanges() {
     if (!!this.breakdownData) {
       this.loadData();
+      if (this.breakdownData.data.displayCategoryList.length > 1 && this.breakdownData.state.isOverrideVariant) {
+        this.sortOverrideRows();
+      }
     }
   }
 
