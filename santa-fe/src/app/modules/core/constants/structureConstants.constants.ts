@@ -3,9 +3,11 @@ import { SecurityDefinitionBundleStub } from 'FEModels/frontend-stub-models.inte
 import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
 
 export enum PortfolioView {
-  overweight = 'Overweight',
-  underweight = 'Underweight',
-  neutral = 'Neutral'
+  positive = 'Positive',
+  improving = 'Improving',
+  neutral = 'Neutral',
+  deteriorating = 'Deteriorating',
+  negative = 'Negative'
 }
 
 export enum PortfolioBreakdownGroupOptions {
