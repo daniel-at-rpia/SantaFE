@@ -92,6 +92,9 @@ export class StructureMainPanel implements OnInit, OnDestroy {
           breakdown.state.isDisplayingCs01 = this.state.selectedMetricValue === this.constants.cs01;
           breakdown.state.isStencil = true;
           const targetList  = breakdown.state.isDisplayingCs01 ? breakdown.data.rawCs01CategoryList : breakdown.data.rawLeverageCategoryList;
+          if (breakdown.data.displayCategoryList.length > 1 && breakdown.state.isOverrideVariant) {
+            this.utilityService.sortOverrideRows(breakdown);
+          }
           targetList.forEach(target => {
             target.data.moveVisualizer.state.isStencil = true;
             target.state.isStencil = true;
