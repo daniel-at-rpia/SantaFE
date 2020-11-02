@@ -5,6 +5,7 @@ import {
   SecurityMetricOptionStub,
   SearchShortcutStub
 } from 'FEModels/frontend-stub-models.interface';
+import { TraceTradeCounterParty, traceTradeNumericalFilters } from 'Core/constants/securityTableConstants.constant';
 
 import { APIUrlMap } from 'Core/constants/coreConstants.constant';
 
@@ -556,5 +557,15 @@ export const RatingValueToLevelMapping = [
     values: ['NR']
   }
 ];
+
+export const FilterTraceTradesOptions = [
+  TraceTradeCounterParty.Dealer,
+  TraceTradeCounterParty.Client,
+  TraceTradeCounterParty.ClientAffiliate,
+  TraceTradeCounterParty.ATS,
+  traceTradeNumericalFilters.filter250K,
+  traceTradeNumericalFilters.filter1M,
+  traceTradeNumericalFilters.filter5M
+]
 
 export const DEFINITION_LONG_THRESHOLD = 5;

@@ -39,6 +39,7 @@ import { SantaTableFullWidthCellRenderer } from 'Core/components/santa-table-ful
 import { GlobalNav } from 'Core/containers/global-nav/global-nav.container';
 import { AppRoutingModule } from 'App/app-routing.module';
 import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
+import { TraceTradeVisualizer } from 'Core/containers/trace-trade-visualizer/trace-trade-visualizer.container';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingServi
     HistoricalTradeVisualizer,
     SantaTableAlertStatusCell,
     SantaTableFullWidthCellRenderer,
-    GlobalNav
+    GlobalNav,
+    TraceTradeVisualizer
   ],
   imports: [
     CommonModule,

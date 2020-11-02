@@ -92,6 +92,9 @@ export class StructureMainPanel implements OnInit, OnDestroy {
           breakdown.state.isDisplayingCs01 = this.state.selectedMetricValue === this.constants.cs01;
           breakdown.state.isStencil = true;
           const targetList  = breakdown.state.isDisplayingCs01 ? breakdown.data.rawCs01CategoryList : breakdown.data.rawLeverageCategoryList;
+          if (breakdown.data.displayCategoryList.length > 1 && breakdown.state.isOverrideVariant) {
+            this.utilityService.sortOverrideRows(breakdown);
+          }
           targetList.forEach(target => {
             target.data.moveVisualizer.state.isStencil = true;
             target.state.isStencil = true;
@@ -163,12 +166,16 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         let messageModifier: string = '';
         updateTargetBlocks.forEach(targetBlock => {
           const { metric, target } = targetBlock;
-          const parsedMetric = metric === BEPortfolioTargetMetricValues.CreditDuration ? PortfolioMetricValues.creditDuration : PortfolioMetricValues.creditLeverage;
-          if (parsedMetric === PortfolioMetricValues.creditDuration) {
-            const formattedCS01Target = this.utilityService.parseNumberToThousands(this.utilityService.round(serverReturn.target.target.Cs01), true, 0);
-            messageModifier += `New ${parsedMetric} target is ${target}. New CS01 target is ${formattedCS01Target}. `
+          const parsedTarget = !!target ? target : 'removed';
+          if (metric === BEPortfolioTargetMetricValues.CreditDuration) {
+            const parsedCS01Target = !!serverReturn.target.target.Cs01 ? this.utilityService.parseNumberToThousands(this.utilityService.round(serverReturn.target.target.Cs01), true, 0) : 'removed';
+            messageModifier += `${PortfolioMetricValues.creditDuration} target is ${parsedTarget}. ${PortfolioMetricValues.cs01} target is ${parsedCS01Target}. `
           } else {
-            messageModifier += `New ${parsedMetric} target is ${target}. `
+            if (metric === BEPortfolioTargetMetricValues.Cs01) {
+              messageModifier += '';
+            } else {
+              messageModifier += `${PortfolioMetricValues.creditLeverage} target is ${parsedTarget}. `;
+            }
           }
         })
         const systemAlertMessage = `Successfully updated ${updatedFund.data.portfolioShortName}. ${messageModifier}`;
