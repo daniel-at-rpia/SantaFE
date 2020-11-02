@@ -15,13 +15,21 @@
   }">
   <section class="sat-portfolioBreakdownRow__cta">
     <button (click)="onClickDiveIn(breakdownRow)" class="sat-portfolioBreakdownRow__cta-btn">
-      <i [ngClass]="{
-        'sat-portfolioBreakdownRow__cta-btn-view': true,
-        'fal': true,
-        'fa-arrow-up': breakdownRow.data.view === constants.overweight,
-        'fa-arrow-down': breakdownRow.data.view === constants.underweight,
-        'fa-minus': breakdownRow.data.view === constants.neutral
-      }"></i>
+      <div class="sat-portfolioBreakdownRow__cta-btn-iconGroup">
+        <i [ngClass]="{
+          'sat-portfolioBreakdownRow__cta-btn-iconGroup-primaryIcon': true,
+          'fal': true,
+          'fa-arrow-up': breakdownRow.data.view === constants.positive || breakdownRow.data.view === constants.improving,
+          'fa-arrow-down': breakdownRow.data.view === constants.negative || breakdownRow.data.view === constants.deteriorating,
+          'fa-minus': breakdownRow.data.view === constants.neutral
+        }"></i>
+        <i [ngClass]="{
+          'sat-portfolioBreakdownRow__cta-btn-iconGroup-secondaryIcon': true,
+          'fal': true,
+          'fa-arrow-up': breakdownRow.data.view === constants.positive,
+          'fa-arrow-down': breakdownRow.data.view === constants.negative
+        }"></i>
+      </div>
       <span class="sat-portfolioBreakdownRow__cta-btn-text" title="{{breakdownRow.data.category}}">{{ breakdownRow.data.displayCategory }}</span>
     </button>
   </section>
