@@ -115,7 +115,9 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     ).subscribe((updatePack: StructureSetTargetPostEditUpdatePack) => {
       if (!!updatePack && !!updatePack.targetFund) {
         const systemAlertMessage = `Successfully Updated Target for ${updatePack.targetBreakdownBackendGroupOptionIdentifier}`;
-        this.reloadFund(updatePack.targetFund, systemAlertMessage);
+        const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${systemAlertMessage}`, null);
+        this.store$.dispatch(new CoreSendNewAlerts([alert]));
+        this.reloadFund(updatePack.targetFund);
       }
     });
     this.subscriptions.updateSub = this.store$.pipe(
@@ -137,69 +139,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
 
   public getFundFromNewTargets(updateData: UpdateTargetPack) {
-    const { fund, updateTargetBlocks } = updateData;
-    const payload: PayloadUpdatePortfolioStructuresTargets = {
-      portfolioTarget: {
-        portfolioId: fund.data.originalBEData.target.portfolioId,
-        target: {}
-      }
-    }
-    updateTargetBlocks.forEach((targetBlock: UpdateTargetBlock ) => {
-      const { metric, target } = targetBlock
-      payload.portfolioTarget.target[metric] = target;
-    });
-    fund.state.isStencil = true;
-    fund.data.cs01TargetBar.state.isStencil = true;
-    fund.data.creditLeverageTargetBar.state.isStencil = true;
-    fund.data.creditDurationTargetBar.state.isStencil = true;
-    fund.data.children.forEach(breakdown => {
-      breakdown.state.isStencil = true;
-      breakdown.data.displayCategoryList.forEach(category => {
-        category.data.moveVisualizer.state.isStencil = true;
-        category.state.isStencil = true;
-      })
-    })
-    this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioTargets, {req: 'POST'}, payload).pipe(
-      first(),
-      tap((serverReturn: BEPortfolioStructuringDTO) => {
-        const updatedFund = this.dtoService.formStructureFundObject(serverReturn, false, this.state.selectedMetricValue);
-        let messageModifier: string = '';
-        updateTargetBlocks.forEach(targetBlock => {
-          const { metric, target } = targetBlock;
-          const parsedTarget = !!target ? target : 'removed';
-          if (metric === BEPortfolioTargetMetricValues.CreditDuration) {
-            const parsedCS01Target = !!serverReturn.target.target.Cs01 ? this.utilityService.parseNumberToThousands(this.utilityService.round(serverReturn.target.target.Cs01), true, 0) : 'removed';
-            messageModifier += `${PortfolioMetricValues.creditDuration} target is ${parsedTarget}. ${PortfolioMetricValues.cs01} target is ${parsedCS01Target}. `
-          } else {
-            if (metric === BEPortfolioTargetMetricValues.Cs01) {
-              messageModifier += '';
-            } else {
-              messageModifier += `${PortfolioMetricValues.creditLeverage} target is ${parsedTarget}. `;
-            }
-          }
-        })
-        const systemAlertMessage = `Successfully updated ${updatedFund.data.portfolioShortName}. ${messageModifier}`;
-        this.reloadFund(serverReturn, systemAlertMessage);
-      }),
-      catchError(err => {
-        const alert = this.dtoService.formSystemAlertObject('Structuring', 'ERROR', `Unable to update ${fund.data.portfolioShortName} target levels`, null);
-        alert.state.isError = true;
-        this.store$.dispatch(new CoreSendNewAlerts([alert]));
-        fund.state.isStencil = false;
-        fund.data.cs01TargetBar.state.isStencil = false;
-        fund.data.creditLeverageTargetBar.state.isStencil = false;
-        fund.data.creditDurationTargetBar.state.isStencil = false;
-        fund.data.children.forEach(breakdown => {
-          breakdown.state.isStencil = false;
-          breakdown.data.displayCategoryList.forEach(category => {
-            category.data.moveVisualizer.state.isStencil = false;
-            category.state.isStencil = false;
-          })
-        })
-        this.restfulCommService.logError('Cannot retrieve fund with updated targets');
-        return of('error');
-      })
-    ).subscribe()
+    this.updateFundTarget(updateData, true);
   }
 
   private fullUpdate() {
@@ -269,8 +209,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
   
   private reloadFund(
-    serverReturn: BEPortfolioStructuringDTO,
-    systemAlertMessage: string
+    serverReturn: BEPortfolioStructuringDTO
   ) {
     const updatedFund = this.dtoService.formStructureFundObject(serverReturn, false, this.state.selectedMetricValue);
     updatedFund.data.cs01TargetBar.data.displayedCurrentValue = this.utilityService.parseNumberToThousands(updatedFund.data.currentTotals.cs01, true);
@@ -278,8 +217,6 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     const selectedFund = this.state.fetchResult.fundList.find(fund => fund.data.portfolioId === updatedFund.data.portfolioId);
     const selectedFundIndex = this.state.fetchResult.fundList.indexOf(selectedFund);
     this.state.fetchResult.fundList[selectedFundIndex] = updatedFund;
-    const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${systemAlertMessage}`, null);
-    this.store$.dispatch(new CoreSendNewAlerts([alert]));
   }
 
   private updateViewData(data: StructureSetViewData) {
@@ -341,5 +278,67 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       this.state.fetchResult.fundList.push(newFund);
     })
     this.state.fetchResult.fundList.length > 1 && this.sortFunds(this.state.fetchResult.fundList);
+  }
+
+  private updateFundTarget(
+    updateData: UpdateTargetPack,
+    reloadAfterUpdateCall: boolean
+  ) {
+    const { fund, updateTargetBlocks } = updateData;
+    const payload: PayloadUpdatePortfolioStructuresTargets = {
+      portfolioTarget: {
+        portfolioId: fund.data.originalBEData.target.portfolioId,
+        target: {}
+      }
+    }
+    updateTargetBlocks.forEach((targetBlock: UpdateTargetBlock ) => {
+      const { metric, target } = targetBlock
+      payload.portfolioTarget.target[metric] = target;
+    });
+    fund.state.isStencil = true;
+    fund.data.cs01TargetBar.state.isStencil = true;
+    fund.data.creditLeverageTargetBar.state.isStencil = true;
+    fund.data.creditDurationTargetBar.state.isStencil = true;
+    fund.data.children.forEach(breakdown => {
+      breakdown.state.isStencil = true;
+      breakdown.data.displayCategoryList.forEach(category => {
+        category.data.moveVisualizer.state.isStencil = true;
+        category.state.isStencil = true;
+      })
+    })
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioTargets, {req: 'POST'}, payload).pipe(
+      first(),
+      tap((serverReturn: BEPortfolioStructuringDTO) => {
+        if (!!serverReturn) {
+          // code...
+        } else {
+          this.restfulCommService.logError('Update Fund ServerReturn is invalid');
+        }
+        if (reloadAfterUpdateCall) {
+          this.reloadFund(serverReturn);
+        }
+        const systemAlertMessage = `Successfully updated ${serverReturn.portfolioShortName} target levels.`;
+        const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${systemAlertMessage}`, null);
+        this.store$.dispatch(new CoreSendNewAlerts([alert]));
+      }),
+      catchError(err => {
+        const alert = this.dtoService.formSystemAlertObject('Structuring', 'ERROR', `Unable to update ${fund.data.portfolioShortName} target levels`, null);
+        alert.state.isError = true;
+        this.store$.dispatch(new CoreSendNewAlerts([alert]));
+        fund.state.isStencil = false;
+        fund.data.cs01TargetBar.state.isStencil = false;
+        fund.data.creditLeverageTargetBar.state.isStencil = false;
+        fund.data.creditDurationTargetBar.state.isStencil = false;
+        fund.data.children.forEach(breakdown => {
+          breakdown.state.isStencil = false;
+          breakdown.data.displayCategoryList.forEach(category => {
+            category.data.moveVisualizer.state.isStencil = false;
+            category.state.isStencil = false;
+          })
+        })
+        this.restfulCommService.logError('Cannot retrieve fund with updated targets');
+        return of('error');
+      })
+    ).subscribe()
   }
 }
