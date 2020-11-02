@@ -17,9 +17,11 @@ export class PortfolioBreakdownRow {
   @Input() breakdownRow: StructurePortfolioBreakdownRowDTO;
   @Output() breakdownRowDiveIn = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
   constants = {
-    overweight: PortfolioView.overweight,
-    underweight: PortfolioView.underweight,
-    neutral: PortfolioView.neutral
+    positive: PortfolioView.positive,
+    improving: PortfolioView.improving,
+    neutral: PortfolioView.neutral,
+    deteriorating: PortfolioView.deteriorating,
+    negative: PortfolioView.negative
   }
   constructor(
     private store$: Store<any>
