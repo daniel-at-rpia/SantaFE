@@ -131,6 +131,7 @@ export interface StructureSetViewData {
   yyyyMMdd: number;
   bucket: StructureBucketDataBlock;
   view: PortfolioView;
+  displayCategory: string;
 }
 
 export interface StructureOverrideToBreakdownConversionReturnPack {
