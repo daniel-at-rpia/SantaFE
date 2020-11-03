@@ -12,6 +12,8 @@ import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingServi
 import { DTOService } from 'Core/services/DTOService';
 import { PortfolioBreakdownCategoryBlock } from 'Core/models/frontend/frontend-blocks.interface';
 import { editingViewAvailableUsers } from 'Core/constants/securityDefinitionConstants.constant';
+import { StructuringTeamPMList } from 'Core/constants/securityDefinitionConstants.constant';
+
 @Component({
   selector: 'portfolio-breakdown',
   templateUrl: './portfolio-breakdown.container.html',
@@ -27,7 +29,8 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     ownerInitialsSub: null
   };
   constants = {
-    editModalId: STRUCTURE_EDIT_MODAL_ID
+    editModalId: STRUCTURE_EDIT_MODAL_ID,
+    structuringTeamPMList: StructuringTeamPMList
   }
 
   constructor(
@@ -42,17 +45,17 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
       select(selectUserInitials)
     ).subscribe((initials) => {
-      this.breakdownData.state.isEditable = initials === 'DM';
+      this.breakdownData.state.isEditable = this.constants.structuringTeamPMList.indexOf(initials) >= 0;
       this.breakdownData.state.isEditingViewAvail = editingViewAvailableUsers.includes(initials);
     });
-    if (!!this.breakdownData && this.breakdownData.data.displayCategoryList.length > 1 && this.breakdownData.state.isOverrideVariant) {
-      this.sortOverrideRows();
-    }
   }
 
   public ngOnChanges() {
     if (!!this.breakdownData) {
       this.loadData();
+      if (this.breakdownData.data.displayCategoryList.length > 1 && this.breakdownData.state.isOverrideVariant) {
+        this.utilityService.sortOverrideRows(this.breakdownData);
+      }
     }
   }
 
@@ -69,7 +72,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     this.breakdownData.data.displayCategoryList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawCs01CategoryList : this.breakdownData.data.rawLeverageCategoryList;
     let popoverCategory;
     if (this.dataIsReady) {
-      this.calculateAlignmentRating();
+      this.utilityService.calculateAlignmentRating(this.breakdownData);
       if (!!this.breakdownData.data.popover && !!this.breakdownData.data.popover.state.isActive) {
         const previousMetricData = this.utilityService.deepCopy(this.breakdownData.data.popover.data.mainRow.data.children);
         popoverCategory = this.breakdownData.data.popover.data.mainRow.data.category; 
@@ -105,30 +108,6 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
   public onClickEdit() {
     this.modalService.triggerModalOpen(this.constants.editModalId);
     !!this.clickedEdit && this.clickedEdit.emit(this.breakdownData);
-  }
-
-  public calculateAlignmentRating() {
-    const targetList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawCs01CategoryList : this.breakdownData.data.rawLeverageCategoryList;
-    let totalLevel = 0;
-    targetList.forEach((eachCategory) => {
-      totalLevel = totalLevel + eachCategory.data.currentLevel;
-    });
-    const targetListWithTargets = targetList.filter((eachCategory) => {
-      return !!eachCategory.data.targetLevel;
-    });
-    if (targetListWithTargets.length > 0) {
-      let misalignmentAggregate = 0;
-      targetListWithTargets.forEach((eachCategory) => {
-        const misalignmentPercentage = eachCategory.data.diffToTarget / totalLevel * 100;
-        misalignmentAggregate = misalignmentAggregate + Math.abs(misalignmentPercentage);
-      });
-      misalignmentAggregate = misalignmentAggregate > 100 ? 100 : misalignmentAggregate;
-      this.breakdownData.style.ratingFillWidth = 100 - this.utilityService.round(misalignmentAggregate, 0);
-      this.breakdownData.data.ratingHoverText = `${100 - this.utilityService.round(misalignmentAggregate, 0)}`;
-      this.breakdownData.state.isTargetAlignmentRatingAvail = true;
-    } else {
-      this.breakdownData.state.isTargetAlignmentRatingAvail = false;
-    }
   }
 
   public updatePopoverData(breakdownRow: StructurePortfolioBreakdownRowDTO) {
@@ -180,18 +159,6 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
         this.toggleSetView(row, this.breakdownData.state.isEditingView);
       })
     }
-  }
-
-  private sortOverrideRows() {
-    this.breakdownData.data.displayCategoryList.sort((rowA, rowB) => {
-      if (rowA.data.displayCategory < rowB.data.displayCategory) {
-        return -1
-      } else if (rowA.data.displayCategory > rowB.data.displayCategory) {
-        return 1;
-      } else {
-        return 0;
-      }
-    })
   }
 
   private toggleSetView(row: StructurePortfolioBreakdownRowDTO, isEditing: boolean) {

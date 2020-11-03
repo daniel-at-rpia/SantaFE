@@ -17,7 +17,8 @@
     import {
       SecurityGroupMetricBlock,
       SecurityGroupMetricPackBlock,
-      SecurityCostPortfolioBlock
+      SecurityCostPortfolioBlock,
+      TraceTradeBlock
     } from 'FEModels/frontend-blocks.interface';
     import { DefinitionConfiguratorEmitterParams, StructureOverrideToBreakdownConversionReturnPack } from 'FEModels/frontend-adhoc-packages.interface';
     import {
@@ -35,6 +36,7 @@
     } from 'Core/constants/coreConstants.constant';
     import { CountdownPipe } from 'App/pipes/Countdown.pipe';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
+    import { traceTradeFilterAmounts } from '../constants/securityTableConstants.constant';
   // dependencies
 
 @Injectable()
@@ -427,15 +429,14 @@ export class UtilityService {
       };
       configuratorData.data.definitionList.forEach((eachBundle) => {
         eachBundle.data.list.forEach((eachDefinition) => {
-          const activeFilters = eachDefinition.data.filterOptionList.filter((eachOption) => {
-            return eachOption.isSelected;
-          });
+          const activeFilters = eachDefinition.data.highlightSelectedOptionList;
           activeFilters.length > 0 && params.filterList.push({
             key: eachDefinition.data.key,
             targetAttribute: eachDefinition.data.securityDTOAttr,
             filterBy: activeFilters.map((eachFilter) => {
               return eachFilter.displayLabel;
-            })
+            }),
+            filterByBlocks: this.deepCopy(activeFilters)
           });
         });
       });
@@ -1025,7 +1026,26 @@ export class UtilityService {
       parsedString = parsedString.replace(/\{/g, '<kbd>');
       parsedString = parsedString.replace(/\}/g, '</kbd>');
       return this.domSanitizer.bypassSecurityTrustHtml(parsedString);
-    } 
+    }
+    
+    public checkForEmptyObject(obj): boolean {
+      return _.isEmpty(obj);
+    }
+
+    public checkIfTraceIsAvailable(targetRow: DTOs.SecurityTableRowDTO): boolean {
+      return targetRow.data.security.data.currency === 'USD' && targetRow.data.security.data.securityType !== 'Cds'
+    }
+
+    public getTraceNumericFilterAmount(filterSymbol: string, filter: string): number {
+      const parsedFilter = filter.split(filterSymbol)[1].trim();
+      const amount = parsedFilter.includes('K') ? +(parsedFilter.split('K')[0]) * traceTradeFilterAmounts.thousand : +(parsedFilter.split('M')[0]) * traceTradeFilterAmounts.million;
+      return amount;
+    }
+
+    public getTraceTradesListBasedOnAmount(list: Array<TraceTradeBlock>, amount: number): Array<TraceTradeBlock> {
+      const newList = list.filter(trade => !!trade.volumeEstimated ? trade.volumeEstimated >= amount : trade.volumeReported >= amount);
+      return newList;
+    }
 
     private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {
       if (delta < 0) {
@@ -1175,6 +1195,75 @@ export class UtilityService {
           }
         });
       }
+    }
+
+    public getCompareValuesForStructuringVisualizer(rawData: BEStructuringBreakdownBlock): Array<number> {
+      let findCs01Max = 0;
+      let findCs01Min = 0;
+      let findLeverageMax = 0;
+      let findLeverageMin = 0;
+      for (const eachCategory in rawData.breakdown) {
+        const eachCs01Entry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].metricBreakdowns.Cs01 : null;
+        if (!!eachCs01Entry) {
+          const highestVal = Math.max(eachCs01Entry.currentLevel, eachCs01Entry.targetLevel);
+          const lowestVal = Math.min(eachCs01Entry.currentLevel, eachCs01Entry.targetLevel);
+          if (highestVal > findCs01Max) {
+            findCs01Max = highestVal;
+          }
+          if (lowestVal < findCs01Min) {
+            findCs01Min = lowestVal;
+          }
+        }
+        const eachLeverageEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].metricBreakdowns.CreditLeverage : null;
+        if (!!eachLeverageEntry) {
+          const highestVal = Math.max(eachLeverageEntry.currentLevel, eachLeverageEntry.targetLevel);
+          const lowestVal = Math.min(eachLeverageEntry.currentLevel, eachLeverageEntry.targetLevel);
+          if (highestVal > findLeverageMax) {
+            findLeverageMax = highestVal;
+          }
+          if (lowestVal < findLeverageMin) {
+            findLeverageMin = lowestVal;
+          }
+        }
+      }
+
+      return [findCs01Min, findCs01Max, findLeverageMin, findLeverageMax];
+    }
+
+    public calculateAlignmentRating(breakdownData: DTOs.PortfolioBreakdownDTO) {
+      const targetList = breakdownData.state.isDisplayingCs01 ? breakdownData.data.rawCs01CategoryList : breakdownData.data.rawLeverageCategoryList;
+      let totalLevel = 0;
+      targetList.forEach((eachCategory) => {
+        totalLevel = totalLevel + eachCategory.data.currentLevel;
+      });
+      const targetListWithTargets = targetList.filter((eachCategory) => {
+        return !!eachCategory.data.targetLevel;
+      });
+      if (targetListWithTargets.length > 0) {
+        let misalignmentAggregate = 0;
+        targetListWithTargets.forEach((eachCategory) => {
+          const misalignmentPercentage = eachCategory.data.diffToTarget / totalLevel * 100;
+          misalignmentAggregate = misalignmentAggregate + Math.abs(misalignmentPercentage);
+        });
+        misalignmentAggregate = misalignmentAggregate > 100 ? 100 : misalignmentAggregate;
+        breakdownData.style.ratingFillWidth = 100 - this.round(misalignmentAggregate, 0);
+        breakdownData.data.ratingHoverText = `${100 - this.round(misalignmentAggregate, 0)}`;
+        breakdownData.state.isTargetAlignmentRatingAvail = true;
+      } else {
+        breakdownData.state.isTargetAlignmentRatingAvail = false;
+      }
+    }
+
+    public sortOverrideRows(breakdownData: DTOs.PortfolioBreakdownDTO) {
+      breakdownData.data.displayCategoryList.sort((rowA, rowB) => {
+        if (rowA.data.displayCategory < rowB.data.displayCategory) {
+          return -1
+        } else if (rowA.data.displayCategory > rowB.data.displayCategory) {
+          return 1;
+        } else {
+          return 0;
+        }
+      })
     }
 
   // structuring specific end

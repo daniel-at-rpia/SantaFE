@@ -588,6 +588,7 @@ export interface BEMetricBreakdowns {
   metricBreakdowns: {
     CreditLeverage?: BEStructuringBreakdownSingleEntry;
     Cs01?: BEStructuringBreakdownSingleEntry;
+    CreditDuration?: BEStructuringBreakdownSingleEntry;
   },
   view: string;
 }
@@ -618,6 +619,7 @@ export interface BEStructuringOverrideBlock {
 export interface BEStructuringMetricTotalBlock {
   CreditLeverage: number;
   Cs01: number;
+  CreditDuration: number;
 }
 
 export interface BEPortfolioStructuringDTO {
@@ -653,4 +655,38 @@ export interface BEPortfolioStructuringDTO {
 
 export interface BEBICsHierarchyBlock {
   [category: string]: BEBICsHierarchyBlock;
+}
+
+export interface BEGetAllTraceTradesBlock {
+  [identifier: number]: Array<BETraceTradesBlock>;
+}
+
+export interface BETraceTradesBlock {
+  actionFlag: string;
+  counterParty: string;
+  creationTime: string;
+  discriminator: string;
+  eventDate: string;
+  eventTime: string;
+  gSpread: number;
+  globalIdentifier: string;
+  globalIdentifierType: string;
+  iSpread: number;
+  isAtsTrade: boolean;
+  lastModifiedTime: string;
+  oasSpread: number;
+  parSpread: number;
+  price: number;
+  publishingTime: string;
+  securityID: number;
+  sequenceNumber: number;
+  settleDate: string;
+  side: string;
+  spread: number;
+  traceTradeID: string;
+  tradeTradeRefID: string;
+  type: string;
+  volumeActual: number;
+  volumeEstimated: number;
+  yield: number;
 }
