@@ -24,13 +24,6 @@ $portfolioBreakdownRowIconSpacing: .1rem;
       text-align: right;
       flex-direction: row;
       cursor: not-allowed;
-      &-iconGroup {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: $font_color_inverse;
-        padding: $portfolioBreakdownRowIconSpacing;
-      }
       &-text {
         @include mix_text_overflow_multi_line(3);
         flex: 1 1 auto;
@@ -97,75 +90,49 @@ $portfolioBreakdownRowIconSpacing: .1rem;
       justify-content: center;
       &-btn {
         margin-right: $spacing_small;
+        &-icon {
+          color: $font_color_inverse;
+        }
         &-text {
           word-break: break-all;
-        }
-        &-text,
-        &-icon,
-        &-iconGroup-icon {
           color: $font_color_inverse;
         }
         &--positive {
-          background-color: $color_positive;
-          #{$blockName} {
-            &__utility {
-              &-ctas {
-                &-btn {
-                  &-iconGroup {
-                    display: flex;
-                    align-items: flex-end;
-                    &-icon {
-                      &--small {
-                        font-size: $font_size_x_small;
-                        margin-left: $portfolioBreakdownRowIconSpacing;
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
+          background-color: $color_green_6;
         }
         &--improving {
-          background-color: $color_green_3;
+          background-color: $color_lime_10;
+          #{$blockName} {
+            &__utility {
+              &-ctas {
+                &-btn {
+                  &-icon {
+                    transform: rotate(45deg);
+                  }
+                }
+              }
+            }
+          }
         }
         &--neutral {
-          #{$blockName} {
-            &__utility {
-              &-ctas {
-                &-btn {
-                  &-icon,
-                  &-text {
-                    color: $font_color_major;
-                  }
-                }
-              }
-            }
-          }
+          background-color: $color_yellow_6;
         }
         &--deteriorating {
-          background-color: $color_red_3;
-        }
-        &--negative {
-          background-color: $color_kill;
+          background-color: $color_orange_6;
           #{$blockName} {
             &__utility {
               &-ctas {
                 &-btn {
-                  &-iconGroup {
-                    display: flex;
-                    align-items: flex-end;
-                    &-icon {
-                      &--small {
-                        font-size: $font_size_x_small;
-                        margin-right: $portfolioBreakdownRowIconSpacing;
-                      }
-                    }
+                  &-icon {
+                    transform: rotate(45deg);
                   }
                 }
               }
             }
           }
+        }
+        &--negative {
+          background-color: $color_red_6;
         }
       }
     }
@@ -197,11 +164,8 @@ $portfolioBreakdownRowIconSpacing: .1rem;
     #{$blockName} {
       &__cta {
         &-btn {
-          &-iconGroup {
-            background-color: $color_positive;
-            &-secondaryIcon {
-              font-size: $font_size_xx_small;
-            }
+          &-view {
+            background-color: $color_green_6;
           }
         }
       }
@@ -222,10 +186,10 @@ $portfolioBreakdownRowIconSpacing: .1rem;
     #{$blockName} {
       &__cta {
         &-btn {
-          &-iconGroup {
-            background-color: $color_green_3;
-            &-secondaryIcon {
-              display: none;
+          &-view {
+            background-color: $color_lime_10;
+            &-icon {
+              transform: rotate(45deg);
             }
           }
         }
@@ -247,10 +211,10 @@ $portfolioBreakdownRowIconSpacing: .1rem;
     #{$blockName} {
       &__cta {
         &-btn {
-          &-iconGroup {
-            background-color: $color_red_3;
-            &-secondaryIcon {
-              display: none;
+          &-view {
+            background-color: $color_orange_6;
+            &-icon {
+              transform: rotate(45deg);
             }
           }
         }
@@ -272,11 +236,8 @@ $portfolioBreakdownRowIconSpacing: .1rem;
     #{$blockName} {
       &__cta {
         &-btn {
-          &-iconGroup {
-            background-color: $color_kill;
-            &-secondaryIcon {
-              font-size: $font_size_xx_small;
-            }
+          &-view {
+            background-color: $color_red_6;
           }
         }
       }
@@ -297,9 +258,8 @@ $portfolioBreakdownRowIconSpacing: .1rem;
     #{$blockName} {
       &__cta {
         &-btn {
-          &-iconGroup {
-            background-color: $color_white;
-            color: $color_active;
+          &-view {
+            background-color: $color_yellow_6;
           }
         }
       }
@@ -314,7 +274,9 @@ $portfolioBreakdownRowIconSpacing: .1rem;
                 &__utility {
                   &-ctas {
                     &-btn {
-                      &-icon,
+                      &-icon {
+                        color: $font_color_inverse;
+                      }
                       &-text {
                         color: $font_color_inverse
                       }
