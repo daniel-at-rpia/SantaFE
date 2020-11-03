@@ -16,6 +16,7 @@
   <section class="sat-portfolioBreakdownRow__cta">
     <button (click)="onClickDiveIn(breakdownRow)" class="sat-portfolioBreakdownRow__cta-btn">
       <div class="sat-portfolioBreakdownRow__cta-btn-view">
+        <span *ngIf="!!breakdownRow.data.view" class="sat-portfolioBreakdownRow__cta-btn-view-toolTip">{{ breakdownRow.data.view }}</span>
         <i [ngClass]="{
           'sat-portfolioBreakdownRow__cta-btn-view-icon': true,
           'fal': true,
