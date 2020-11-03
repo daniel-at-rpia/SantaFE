@@ -16,10 +16,9 @@ import {
 import { StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend-models.interface';
 import {
   StructureSetTargetPanelEditRowBlock,
-  StructureSetTargetPanelEditRowItemBlock,
+  StructureSetTargetPanelEditRowItemBlock
 } from 'FEModels/frontend-blocks.interface';
 import {
-  PortfolioBreakdownGroupOptions,
   PortfolioMetricValues,
   STRUCTURE_EDIT_MODAL_ID,
   PortfolioView
@@ -194,7 +193,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       targetItem,
       counterPartyItem
     );
-    if (this.state.activeMetric === this.constants.metric.cs01) {
+    if (targetItem.metric === this.constants.metric.cs01) {
       this.state.targetBreakdownRawData.breakdown[targetCategory.rowIdentifier].metricBreakdowns.Cs01.targetLevel = targetCategory.targetCs01.level.savedUnderlineValue;
       this.state.targetBreakdownRawData.breakdown[targetCategory.rowIdentifier].metricBreakdowns.Cs01.targetPct = targetCategory.targetCs01.percent.savedUnderlineValue;
     } else {
@@ -417,6 +416,29 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.state[data.btnText] = this.state.activeMetric === data.metric ? 'Selected' : 'Unselected';
       });
     }
+  }
+
+  public clearAllRowTargets() {
+    this.state.editRowList.forEach(row => {
+      this.resetRowTargets(row, this.constants.metric.cs01);
+      this.resetRowTargets(row, this.constants.metric.creditLeverage);
+    })
+    this.state.clearAllTargetSelected = true;
+    this.refreshPreview();
+  }
+
+  private resetRowTargets(row: StructureSetTargetPanelEditRowBlock, targetMetric: PortfolioMetricValues) {
+    const rowTargetMetric = targetMetric === this.constants.metric.cs01 ? 'targetCs01' : 'targetCreditLeverage';
+    row[rowTargetMetric].level.modifiedDisplayValue = '';
+    row[rowTargetMetric].level.modifiedUnderlineValue = 0;
+    row[rowTargetMetric].level.savedDisplayValue = '';
+    row[rowTargetMetric].level.savedUnderlineValue = null;
+    row[rowTargetMetric].percent.modifiedDisplayValue = '';
+    row[rowTargetMetric].percent.modifiedUnderlineValue = 0;
+    row[rowTargetMetric].percent.savedDisplayValue = '';
+    row[rowTargetMetric].percent.savedUnderlineValue = null;
+    this.onClickSaveEdit(row, row[rowTargetMetric].level, true);
+    this.onClickSaveEdit(row, row[rowTargetMetric].percent), true;
   }
 
   private loadEditRows() {
@@ -673,7 +695,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
-  private submitRegularBreakdownChanges(): boolean {
+  private submitUpdatedRegularTargetBreakdownChanges():boolean {
     const payload: PayloadUpdateBreakdown = this.traverseEditRowsToFormUpdateBreakdownPayload();
     if (!!payload) {
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
@@ -695,6 +717,43 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     } else {
       this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target because no change is detected', null)]));
       return false;
+    }
+  }
+
+  private submitRegularBreakdownChanges(): boolean {
+    //checks if resetting all targets
+    if (!!this.state.clearAllTargetSelected) {
+      const allTargetsReset = this.state.editRowList.every(row => !row.targetCreditLeverage.level.savedUnderlineValue && !row.targetCreditLeverage.percent.savedUnderlineValue && !row.targetCs01.level.savedUnderlineValue && !row.targetCs01.percent.savedUnderlineValue);
+      if (!!allTargetsReset) {
+        const payload: PayloadClearPortfolioBreakdown = {
+          portfolioBreakdown: {
+            portfolioId: this.state.targetFund.data.portfolioId,
+            groupOption: this.state.targetBreakdownRawData.groupOption
+          }
+        }
+        if (!!payload) {
+          this.restfulCommService.callAPI(this.restfulCommService.apiMap.clearPortfolioBreakdown, {req: 'POST'}, payload).pipe(
+            first(),
+            tap((serverReturn: BEPortfolioStructuringDTO) => {
+              const updatePack: StructureSetTargetPostEditUpdatePack = {
+                targetFund: serverReturn,
+                targetBreakdownBackendGroupOptionIdentifier: this.state.targetBreakdown.data.backendGroupOptionIdentifier
+              };
+              this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
+            }),
+            catchError(err => {
+              console.error('clear portfolio breakdown failed');
+              this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'clear portfolio breakdown failed', null)]));
+              return of('error');
+            })
+          ).subscribe();
+          return true;
+        }
+      } else {
+        return this.submitUpdatedRegularTargetBreakdownChanges();
+      }
+    } else {
+      return this.submitUpdatedRegularTargetBreakdownChanges();
     }
   }
 

@@ -32,6 +32,9 @@
   </section>
   <section class="sat-structureSetTargetPanel__main">
     <div class="sat-structureSetTargetPanel__main-preview">
+      <div class="sat-structureSetTargetPanel__main-preview-clearTargets">
+        <button (click)="clearAllRowTargets()" class="santaBtn--labelled sat-structureSetTargetPanel__main-preview-clearTargets-btn"><i class="fal fa-eraser"></i>Clear All Targets</button>
+      </div>
       <portfolio-breakdown
         *ngIf="state.targetBreakdown"
         [breakdownData]="state.targetBreakdown"

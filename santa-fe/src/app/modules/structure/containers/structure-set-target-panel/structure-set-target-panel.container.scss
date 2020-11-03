@@ -85,11 +85,18 @@ $structureSetTargetPanel_highlight_border: 2px solid $color_active;
     &-preview {
       @include mix_alive('custom', margin-right $animation_duration_light);
       flex: 0 1 50%;
+      flex-wrap: wrap;
       display: flex;
-      align-items: center;
       padding-right: $spacing_large;
       margin-right: 0;
       overflow: hidden;
+      &-clearTargets {
+        flex: 0 0 100%;
+        align-self: flex-start;
+        display: flex;
+        justify-content: flex-end;
+        margin-top: $spacing_small;
+      }
       &>portfolio-breakdown {
         flex: 1 1 auto;
       }

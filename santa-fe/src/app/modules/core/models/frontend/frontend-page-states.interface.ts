@@ -312,4 +312,5 @@ export interface StructureSetTargetPanelState {
     display: boolean;
   }
   removalList: Array<StructureSetTargetPanelEditRowBlock>;
+  clearAllTargetSelected?: boolean;
 }
