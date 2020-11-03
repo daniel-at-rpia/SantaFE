@@ -112,6 +112,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       select(selectSetTargetTransferPack)
     ).subscribe((pack: StructureSetTargetOverlayTransferPack) => {
       if (!!pack) {
+        this.state = this.initializePageState();
         this.state.targetFund = this.utilityService.deepCopy(pack.targetFund);
         this.state.targetBreakdown = this.utilityService.deepCopy(pack.targetBreakdown);
         this.state.configurator.display = false;
@@ -822,10 +823,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           date: this.state.targetBreakdownRawData.date,
           indexId: this.state.targetBreakdownRawData.indexId,
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
-          bucket: this.utilityService.populateBEBucketObjectFromRowIdentifier(
-            this.utilityService.formBEBucketObjectFromBucketIdentifier(this.state.targetBreakdown.data.title),
-            eachRow.rowIdentifier
-          )
+          bucket: eachRow.targetBlockFromBreakdown.bucket
         }
       };
       payload.push(eachPayload);
