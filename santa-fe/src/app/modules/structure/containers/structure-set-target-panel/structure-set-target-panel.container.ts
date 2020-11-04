@@ -764,7 +764,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             tap((serverReturn: BEPortfolioStructuringDTO) => {
               const updatePack: StructureSetTargetPostEditUpdatePack = {
                 targetFund: serverReturn,
-                targetBreakdownBackendGroupOptionIdentifier: this.state.targetBreakdown.data.backendGroupOptionIdentifier
+                targetBreakdownTitle: this.state.targetBreakdown.data.title
               };
               this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
             }),
