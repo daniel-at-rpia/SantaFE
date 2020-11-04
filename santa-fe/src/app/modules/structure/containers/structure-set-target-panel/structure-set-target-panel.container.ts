@@ -347,6 +347,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               if (!!this.state.targetBreakdown) {
                 const alert = this.dtoService.formSystemAlertObject('Warning', 'Overwritten', `can not merge "${this.state.targetBreakdown.data.backendGroupOptionIdentifier}" with ${newBreakdownBucketIdentifier}, new breakdown has overwrote the previous one`, null);
                 this.store$.dispatch(new CoreSendNewAlerts([alert]));
+                this.state.removalList = [];  // need to refresh the removalList so previous removal state won't be carried over
               }
               this.state.targetBreakdownRawData = rawBreakdownList[0];
             }
@@ -729,18 +730,20 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     necessaryDeleteNumOfCalls: number
   ) {
     let callCount = 0;
-    deletePayload.forEach((eachPayload) => {
+    deletePayload.forEach((eachPayload, index) => {
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.deletePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
         first(),
         tap((serverReturn: BEPortfolioStructuringDTO) => {
           callCount++;
           if (callCount === necessaryDeleteNumOfCalls) {
             this.store$.dispatch(new StructureUpdateMainPanelEvent());
+            const alert = this.dtoService.formSystemAlertObject('Structuring', 'Deleted', `Deleted Override Successfully`, null);
+            this.store$.dispatch(new CoreSendNewAlerts([alert]));
           }
         }),
         catchError(err => {
           console.error('delete breakdown failed');
-          this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'delete breakdown failed', null)]));
+          this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', `Delete Override Failed`, null)]));
           return of('error');
         })
       ).subscribe();
