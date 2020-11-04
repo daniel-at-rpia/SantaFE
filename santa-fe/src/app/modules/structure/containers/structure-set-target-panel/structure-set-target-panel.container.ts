@@ -435,14 +435,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     const rowTargetMetric = targetMetric === this.constants.metric.cs01 ? 'targetCs01' : 'targetCreditLeverage';
     row[rowTargetMetric].level.modifiedDisplayValue = '';
     row[rowTargetMetric].level.modifiedUnderlineValue = 0;
-    row[rowTargetMetric].level.savedDisplayValue = '';
-    row[rowTargetMetric].level.savedUnderlineValue = null;
-    row[rowTargetMetric].percent.modifiedDisplayValue = '';
-    row[rowTargetMetric].percent.modifiedUnderlineValue = 0;
-    row[rowTargetMetric].percent.savedDisplayValue = '';
-    row[rowTargetMetric].percent.savedUnderlineValue = null;
+    row[rowTargetMetric].level.isActive = true;
     this.onClickSaveEdit(row, row[rowTargetMetric].level, true);
-    this.onClickSaveEdit(row, row[rowTargetMetric].percent), true;
   }
 
   private loadEditRows() {
