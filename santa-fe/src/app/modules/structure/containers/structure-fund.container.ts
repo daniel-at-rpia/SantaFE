@@ -8,12 +8,17 @@ import { PortfolioMetricValues, STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/s
 import { DTOService } from 'Core/services/DTOService';
 import { UtilityService } from 'Core/services/UtilityService';
 import { ModalService } from 'Form/services/ModalService';
+import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
 import { PortfolioBreakdownDTO, TargetBarDTO } from 'FEModels/frontend-models.interface';
-import { StructureSendSetTargetTransferEvent} from 'Structure/actions/structure.actions';
-import { UpdateTargetBlock, UpdateTargetPack } from 'Core/models/frontend/frontend-adhoc-packages.interface';
+import { StructureSetTargetPostEditUpdatePack } from 'FEModels/frontend-adhoc-packages.interface';
+import { CoreSendNewAlerts } from 'Core/actions/core.actions';
+import { StructureSendSetTargetTransferEvent, StructureReloadBreakdownDataPostEditEvent } from 'Structure/actions/structure.actions';
+import { UpdateTargetBlock } from 'Core/models/frontend/frontend-adhoc-packages.interface';
 import { BEPortfolioTargetMetricValues } from 'Core/constants/structureConstants.constants';
 import { StructuringTeamPMList } from 'Core/constants/securityDefinitionConstants.constant';
+import { PayloadUpdatePortfolioStructuresTargets } from 'App/modules/core/models/backend/backend-payloads.interface';
+import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backend-models.interface';
 
 @Component({
   selector: 'structure-fund',
@@ -24,7 +29,6 @@ import { StructuringTeamPMList } from 'Core/constants/securityDefinitionConstant
 
 export class StructureFund implements OnInit {
   @Input() fund: PortfolioStructureDTO;
-  @Output() updatedFundData = new EventEmitter<UpdateTargetPack>();
   constants = {
     cs01: PortfolioMetricValues.cs01,
     creditLeverage: PortfolioMetricValues.creditLeverage,
@@ -43,7 +47,8 @@ export class StructureFund implements OnInit {
     private dtoService: DTOService,
     private utilityService: UtilityService,
     private store$: Store<any>,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private restfulCommService: RestfulCommService
   ){}
 
   public ngOnInit() {
@@ -140,13 +145,79 @@ export class StructureFund implements OnInit {
       checkTargetUpdates(targetCreditDuration, this.fund.data.target.target.creditDuration, this.constants.BECreditDuration);
       checkTargetUpdates(targetLeverage, this.fund.data.target.target.creditLeverage, this.constants.BECreditLeverage);
       if (updatedTargetData.length > 0) {
-        const updateData: UpdateTargetPack = {
-          fund: this.fund,
-          updateTargetBlocks: updatedTargetData
-        }
         this.fund.state.isEditingFund = false;
-        this.updatedFundData.emit(updateData)
+        this.updateFundDetermineAutoScaling(updatedTargetData);
       }
     }
+  }
+
+  private updateFundDetermineAutoScaling(updatedTargetDataList: Array<UpdateTargetBlock>) {
+    this.updateFundTarget(updatedTargetDataList, true);
+  }
+
+  private updateFundTarget(
+    updatedTargetDataList: Array<UpdateTargetBlock>,
+    reloadAfterUpdateCall: boolean
+  ) {
+    const targetFund = this.fund;
+    const payload: PayloadUpdatePortfolioStructuresTargets = {
+      portfolioTarget: {
+        portfolioId: targetFund.data.originalBEData.target.portfolioId,
+        target: {}
+      }
+    }
+    updatedTargetDataList.forEach((targetBlock: UpdateTargetBlock ) => {
+      const { metric, target } = targetBlock
+      payload.portfolioTarget.target[metric] = target;
+    });
+    targetFund.state.isStencil = true;
+    targetFund.data.cs01TargetBar.state.isStencil = true;
+    targetFund.data.creditLeverageTargetBar.state.isStencil = true;
+    targetFund.data.creditDurationTargetBar.state.isStencil = true;
+    targetFund.data.children.forEach(breakdown => {
+      breakdown.state.isStencil = true;
+      breakdown.data.displayCategoryList.forEach(category => {
+        category.data.moveVisualizer.state.isStencil = true;
+        category.state.isStencil = true;
+      })
+    })
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioTargets, {req: 'POST'}, payload).pipe(
+      first(),
+      tap((serverReturn: BEPortfolioStructuringDTO) => {
+        if (!!serverReturn) {
+          // code...
+        } else {
+          this.restfulCommService.logError('Update Fund ServerReturn is invalid');
+        }
+        if (reloadAfterUpdateCall) {
+          const updatePack: StructureSetTargetPostEditUpdatePack = {
+            targetFund: serverReturn,
+            targetBreakdownTitle: null
+          };
+          this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
+        }
+        const systemAlertMessage = `Successfully updated ${serverReturn.portfolioShortName} target levels.`;
+        const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${systemAlertMessage}`, null);
+        this.store$.dispatch(new CoreSendNewAlerts([alert]));
+      }),
+      catchError(err => {
+        const alert = this.dtoService.formSystemAlertObject('Structuring', 'ERROR', `Unable to update ${targetFund.data.portfolioShortName} target levels`, null);
+        alert.state.isError = true;
+        this.store$.dispatch(new CoreSendNewAlerts([alert]));
+        targetFund.state.isStencil = false;
+        targetFund.data.cs01TargetBar.state.isStencil = false;
+        targetFund.data.creditLeverageTargetBar.state.isStencil = false;
+        targetFund.data.creditDurationTargetBar.state.isStencil = false;
+        targetFund.data.children.forEach(breakdown => {
+          breakdown.state.isStencil = false;
+          breakdown.data.displayCategoryList.forEach(category => {
+            category.data.moveVisualizer.state.isStencil = false;
+            category.state.isStencil = false;
+          })
+        })
+        this.restfulCommService.logError('Cannot retrieve fund with updated targets');
+        return of('error');
+      })
+    ).subscribe()
   }
 }

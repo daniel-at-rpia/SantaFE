@@ -14,12 +14,11 @@ import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 import { PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/frontend-models.interface';
 import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
-import { 
-  PayloadUpdatePortfolioStructuresTargets,
+import {
   PayloadGetPortfolioStructures,
   PayloadSetView
 } from 'App/modules/core/models/backend/backend-payloads.interface';
-import { StructureSetTargetPostEditUpdatePack, StructureSetViewData, UpdateTargetPack, UpdateTargetBlock } from 'FEModels/frontend-adhoc-packages.interface';
+import { StructureSetTargetPostEditUpdatePack, StructureSetViewData } from 'FEModels/frontend-adhoc-packages.interface';
 import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 
 @Component({
@@ -114,9 +113,11 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       select(selectReloadBreakdownDataPostEdit)
     ).subscribe((updatePack: StructureSetTargetPostEditUpdatePack) => {
       if (!!updatePack && !!updatePack.targetFund) {
-        const systemAlertMessage = `Successfully Updated Target for ${updatePack.targetBreakdownTitle}`;
-        const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${systemAlertMessage}`, null);
-        this.store$.dispatch(new CoreSendNewAlerts([alert]));
+        if (updatePack.targetBreakdownTitle !== null) {
+          const systemAlertMessage = `Successfully Updated Target for ${updatePack.targetBreakdownTitle}`;
+          const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${systemAlertMessage}`, null);
+          this.store$.dispatch(new CoreSendNewAlerts([alert]));
+        }
         this.reloadFund(updatePack.targetFund);
       }
     });
@@ -136,10 +137,6 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         eachSub.unsubscribe();
       }
     }
-  }
-
-  public getFundFromNewTargets(updateData: UpdateTargetPack) {
-    this.updateFundTarget(updateData, true);
   }
 
   private fullUpdate() {
@@ -278,67 +275,5 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       this.state.fetchResult.fundList.push(newFund);
     })
     this.state.fetchResult.fundList.length > 1 && this.sortFunds(this.state.fetchResult.fundList);
-  }
-
-  private updateFundTarget(
-    updateData: UpdateTargetPack,
-    reloadAfterUpdateCall: boolean
-  ) {
-    const { fund, updateTargetBlocks } = updateData;
-    const payload: PayloadUpdatePortfolioStructuresTargets = {
-      portfolioTarget: {
-        portfolioId: fund.data.originalBEData.target.portfolioId,
-        target: {}
-      }
-    }
-    updateTargetBlocks.forEach((targetBlock: UpdateTargetBlock ) => {
-      const { metric, target } = targetBlock
-      payload.portfolioTarget.target[metric] = target;
-    });
-    fund.state.isStencil = true;
-    fund.data.cs01TargetBar.state.isStencil = true;
-    fund.data.creditLeverageTargetBar.state.isStencil = true;
-    fund.data.creditDurationTargetBar.state.isStencil = true;
-    fund.data.children.forEach(breakdown => {
-      breakdown.state.isStencil = true;
-      breakdown.data.displayCategoryList.forEach(category => {
-        category.data.moveVisualizer.state.isStencil = true;
-        category.state.isStencil = true;
-      })
-    })
-    this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioTargets, {req: 'POST'}, payload).pipe(
-      first(),
-      tap((serverReturn: BEPortfolioStructuringDTO) => {
-        if (!!serverReturn) {
-          // code...
-        } else {
-          this.restfulCommService.logError('Update Fund ServerReturn is invalid');
-        }
-        if (reloadAfterUpdateCall) {
-          this.reloadFund(serverReturn);
-        }
-        const systemAlertMessage = `Successfully updated ${serverReturn.portfolioShortName} target levels.`;
-        const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${systemAlertMessage}`, null);
-        this.store$.dispatch(new CoreSendNewAlerts([alert]));
-      }),
-      catchError(err => {
-        const alert = this.dtoService.formSystemAlertObject('Structuring', 'ERROR', `Unable to update ${fund.data.portfolioShortName} target levels`, null);
-        alert.state.isError = true;
-        this.store$.dispatch(new CoreSendNewAlerts([alert]));
-        fund.state.isStencil = false;
-        fund.data.cs01TargetBar.state.isStencil = false;
-        fund.data.creditLeverageTargetBar.state.isStencil = false;
-        fund.data.creditDurationTargetBar.state.isStencil = false;
-        fund.data.children.forEach(breakdown => {
-          breakdown.state.isStencil = false;
-          breakdown.data.displayCategoryList.forEach(category => {
-            category.data.moveVisualizer.state.isStencil = false;
-            category.state.isStencil = false;
-          })
-        })
-        this.restfulCommService.logError('Cannot retrieve fund with updated targets');
-        return of('error');
-      })
-    ).subscribe()
   }
 }

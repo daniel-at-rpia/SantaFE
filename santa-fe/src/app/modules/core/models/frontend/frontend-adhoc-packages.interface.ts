@@ -144,11 +144,6 @@ export interface UpdateTargetBlock {
   target: number;
 }
 
-export interface UpdateTargetPack {
-  fund: DTOs.PortfolioStructureDTO;
-  updateTargetBlocks: Array<UpdateTargetBlock>;
-}
-
 export interface BICSServiceConsolidateReturnPack {
   deepestLevel: number;
   consolidatedStrings: Array<string>;
