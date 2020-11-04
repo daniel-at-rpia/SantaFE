@@ -431,6 +431,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.resetRowTargets(row, this.constants.metric.creditLeverage);
     })
     this.state.clearAllTargetSelected = true;
+    this.setBtnText();
     this.refreshPreview();
   }
 
@@ -440,6 +441,16 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     row[rowTargetMetric].level.modifiedUnderlineValue = 0;
     row[rowTargetMetric].level.isActive = true;
     this.onClickSaveEdit(row, row[rowTargetMetric].level, true);
+    this.resetRemainingPercentageAllocated(targetMetric);
+  }
+
+  private resetRemainingPercentageAllocated(targetMetric: PortfolioMetricValues) {
+    if (targetMetric === this.constants.metric.cs01) {
+      this.state.displayPercentageUnallocatedCS01 = !!this.state.targetFund.data.target.target.cs01 ? 100 : null;
+    } else {
+      this.state.displayPercentageUnallocatedCreditLeverage = !!this.state.targetFund.data.target.target.creditLeverage ? 100 : null;
+    }
+
   }
 
   private loadEditRows() {
