@@ -96,11 +96,7 @@
             <target-bar [targetBar]="state.targetFund.data.cs01TargetBar"></target-bar>
           </div>
         </div>
-        <ul [ngClass]="{
-            'sat-structureSetTargetPanel__main-edit-content-rowList': true,
-            'sat-structureSetTargetPanel__main-edit-content-rowList--singleRow': state.editRowList.length === 1,
-            'sat-structureSetTargetPanel__main-edit-content-rowList--multipleRows': state.editRowList.length > 1
-          }">
+        <ul class="sat-structureSetTargetPanel__main-edit-content-rowList">
           <li
             *ngFor="let eachCategory of state.editRowList; let categoryIndex = index;"
             [ngClass]="{
