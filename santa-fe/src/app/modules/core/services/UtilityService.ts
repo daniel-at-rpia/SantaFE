@@ -63,6 +63,14 @@ export class UtilityService {
       }
     }
 
+    public deepObjectMerge(objectA: object, objectB: object): object {
+      if (!!objectA && !!objectB) {
+        return _.merge(objectA, objectB);
+      } else {
+        return null;
+      }
+    }
+
     public removePropertyFromObject(targetObject: any, targetProperty: string): any {
       if (!!targetObject && !!targetProperty) {
         return _.omit(targetObject, targetProperty);

@@ -138,12 +138,13 @@ export class BICsDataProcessingService {
   public consolidateBICS(
     definitionBlockList: Array<SecurityDefinitionFilterBlock>
   ): BICSServiceConsolidateReturnPack {
-    let deepestLevel = 1;
-    definitionBlockList.forEach((eachBlock) =>{
-      if (eachBlock.bicsLevel > deepestLevel) {
-        deepestLevel = eachBlock.bicsLevel;
-      }
-    });
+    let deepestLevel = 4;
+    // temporarily disable this, always set level to 4
+    // definitionBlockList.forEach((eachBlock) =>{
+    //   if (eachBlock.bicsLevel > deepestLevel) {
+    //     deepestLevel = eachBlock.bicsLevel;
+    //   }
+    // });
     let convertedToLowestLevelStrings = [];
     definitionBlockList.forEach((eachBlock) => {
       if (eachBlock.bicsLevel < deepestLevel) {

@@ -84,6 +84,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       targetBreakdown: null,
       targetFund: null,
       targetBreakdownRawData: null,
+      targetBreakdownRawDataDisplayLabelMap: {},
       editRowList: [],
       totalUnallocatedCS01: 0,
       totalUnallocatedCreditLeverage: 0,
@@ -97,7 +98,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       targetBreakdownIsOverride: false,
       configurator: {
         dto: this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout),
-        display: false
+        display: false,
+        newOverrideNameCache: null
       },
       removalList: []
     };
@@ -110,6 +112,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       select(selectSetTargetTransferPack)
     ).subscribe((pack: StructureSetTargetOverlayTransferPack) => {
       if (!!pack) {
+        this.state = this.initializePageState();
         this.state.targetFund = this.utilityService.deepCopy(pack.targetFund);
         this.state.targetBreakdown = this.utilityService.deepCopy(pack.targetBreakdown);
         this.state.configurator.display = false;
@@ -294,15 +297,23 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       const alert = this.dtoService.formSystemAlertObject('Apply Blocked', 'Empty Bucket', `Define the bucket with value before apply`, null);
       this.store$.dispatch(new CoreSendNewAlerts([alert]));
     } else {
+      this.state.configurator.newOverrideNameCache = null;
       const convertedParams = this.convertConsolidatedBICSDefinitionConfiguratorParamToRegularParam(params);
       const bucket = {}
       let bucketToString = '';
-      params.filterList.forEach((eachItem) => {
+      let hasBICSConsolidate = false;
+      convertedParams.filterList.forEach((eachItem) => {
         const property = this.utilityService.convertFEKey(eachItem.key);
         if (!!property) {
           bucket[property] = eachItem.filterBy;
+        }
+        // because bics consolidated are all converted to level 4 already
+        if (eachItem.key === this.constants.definitionMap.BICS_LEVEL_4.key) {
+          hasBICSConsolidate = true;
+          bucketToString = bucketToString === '' ? `${this.state.configurator.newOverrideNameCache}` : `${bucketToString} ~ ${this.state.configurator.newOverrideNameCache}`;
+        } else {
           eachItem.filterBy.forEach((eachValue) => {
-            bucketToString = bucketToString === '' ? `${eachValue}` : `${bucketToString} - ${eachValue}`;
+            bucketToString = bucketToString === '' ? `${eachValue}` : `${bucketToString} ~ ${eachValue}`;
           });
         }
       });
@@ -321,7 +332,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioOverride, {req: 'POST'}, payload).pipe(
           first(),
           tap((serverReturn: BEStructuringOverrideBlock) => {
-            const rawBreakdownList = this.utilityService.convertRawOverrideToRawBreakdown([serverReturn]).list;
+            if (hasBICSConsolidate) {
+              serverReturn.title = bucketToString;
+            }
+            const returnPack = this.utilityService.convertRawOverrideToRawBreakdown([serverReturn]);
+            const rawBreakdownList = returnPack.list;
+            this.state.targetBreakdownRawDataDisplayLabelMap = this.utilityService.deepObjectMerge(returnPack.displayLabelMap, this.state.targetBreakdownRawDataDisplayLabelMap);
             const newBreakdownBucketIdentifier = this.utilityService.formBucketIdentifierForOverride(serverReturn);
             const newCategoryKey = this.utilityService.formCategoryKeyForOverride(serverReturn);
             if (!!this.state.targetBreakdown && this.state.targetBreakdown.data.backendGroupOptionIdentifier === newBreakdownBucketIdentifier) {
@@ -337,6 +353,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
             const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, isDisplayCs01);
             newBreakdown.state.isPreviewVariant = true;
+            this.utilityService.updateDisplayLabelForOverrideConvertedBreakdown(
+              this.state.targetBreakdownRawDataDisplayLabelMap[newBreakdownBucketIdentifier],
+              newBreakdown
+            );
             this.state.targetBreakdown = newBreakdown;
             this.earMarkNewRow(newCategoryKey);
             const prevEditRowsForInheritance = this.utilityService.deepCopy(this.state.editRowList);
@@ -364,6 +384,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       !!targetRow.existInServer && this.state.removalList.push(targetRow);
       const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
       const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, isDisplayCs01);
+      this.utilityService.updateDisplayLabelForOverrideConvertedBreakdown(
+        this.state.targetBreakdownRawDataDisplayLabelMap[newBreakdown.data.backendGroupOptionIdentifier],
+        newBreakdown
+      );
       newBreakdown.state.isPreviewVariant = true;
       this.state.targetBreakdown = newBreakdown;
       this.loadEditRows();
@@ -641,7 +665,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         tap((serverReturn: BEPortfolioStructuringDTO) => {
           const updatePack: StructureSetTargetPostEditUpdatePack = {
             targetFund: serverReturn,
-            targetBreakdownBackendGroupOptionIdentifier: this.state.targetBreakdown.data.backendGroupOptionIdentifier
+            targetBreakdownTitle: this.state.targetBreakdown.data.title
           };
           this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
         }),
@@ -672,7 +696,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             if (callCount === necessaryNumOfCalls) {
               const updatePack: StructureSetTargetPostEditUpdatePack = {
                 targetFund: serverReturn,
-                targetBreakdownBackendGroupOptionIdentifier: this.state.targetBreakdown.data.backendGroupOptionIdentifier
+                targetBreakdownTitle: this.state.targetBreakdown.data.title
               };
               this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
             }
@@ -756,10 +780,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           date: this.state.targetBreakdownRawData.date,
           indexId: this.state.targetBreakdownRawData.indexId,
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
-          bucket: this.utilityService.populateBEBucketObjectFromRowIdentifier(
-            this.utilityService.formBEBucketObjectFromBucketIdentifier(this.state.targetBreakdown.data.title),
-            eachRow.rowIdentifier
-          )
+          bucket: eachRow.targetBlockFromBreakdown.bucket
         }
       };
       if (eachRow.modifiedDisplayRowTitle !== eachRow.rowIdentifier) {
@@ -802,10 +823,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           date: this.state.targetBreakdownRawData.date,
           indexId: this.state.targetBreakdownRawData.indexId,
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
-          bucket: this.utilityService.populateBEBucketObjectFromRowIdentifier(
-            this.utilityService.formBEBucketObjectFromBucketIdentifier(this.state.targetBreakdown.data.title),
-            eachRow.rowIdentifier
-          )
+          bucket: eachRow.targetBlockFromBreakdown.bucket
         }
       };
       payload.push(eachPayload);
@@ -825,7 +843,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     if (!!this.state.targetFund && !!this.state.targetBreakdown) {
       let rawDataObject;
       if (this.state.targetBreakdown.state.isOverrideVariant) {
-        rawDataObject = this.utilityService.convertRawOverrideToRawBreakdown(this.state.targetFund.data.originalBEData.overrides).list;
+        const resultPack = this.utilityService.convertRawOverrideToRawBreakdown(this.state.targetFund.data.originalBEData.overrides);
+        rawDataObject = resultPack.list;
+        this.state.targetBreakdownRawDataDisplayLabelMap = resultPack.displayLabelMap;
       } else {
         rawDataObject = this.state.targetFund.data.originalBEData.breakdowns;
       }
@@ -879,6 +899,11 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     });
     if (targetIndex >= 0) {
       const consolidatedBICS = params.filterList[targetIndex];
+      let displayName = '';
+      consolidatedBICS.filterByBlocks.forEach((eachBlock, index) => {
+        displayName = index === 0 ? `${eachBlock.displayLabel}` : `${displayName} + ${eachBlock.displayLabel}`;
+      });
+      this.state.configurator.newOverrideNameCache = displayName;
       const result = this.bicsService.consolidateBICS(consolidatedBICS.filterByBlocks);
       const convertedCategoryStringList: Array<string> = result.consolidatedStrings;
       switch (result.deepestLevel) {
