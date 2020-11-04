@@ -24,12 +24,9 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
       flex-direction: row;
       cursor: not-allowed;
       &-text {
-        @include mix_text_overflow_multi_line(3);
         flex: 1 1 auto;
         text-align: right;
         margin-left: 1.5rem;
-        overflow: hidden;
-        text-overflow: ellipsis;
         word-break: break-word;
       }
       &-view {
@@ -217,17 +214,6 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
       &__cell {
         &--target {
           background-color: $color_red_5;
-        }
-      }
-    }
-  }
-  &--showFullCategoryState {
-    #{$blockName} {
-      &__cta {
-        &-btn {
-          &-text {
-            display: flex;
-          }
         }
       }
     }
