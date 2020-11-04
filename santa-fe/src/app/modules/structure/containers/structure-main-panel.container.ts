@@ -114,7 +114,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       select(selectReloadBreakdownDataPostEdit)
     ).subscribe((updatePack: StructureSetTargetPostEditUpdatePack) => {
       if (!!updatePack && !!updatePack.targetFund) {
-        const systemAlertMessage = `Successfully Updated Target for ${updatePack.targetBreakdownBackendGroupOptionIdentifier}`;
+        const systemAlertMessage = `Successfully Updated Target for ${updatePack.targetBreakdownTitle}`;
         this.reloadFund(updatePack.targetFund, systemAlertMessage);
       }
     });

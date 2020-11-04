@@ -124,7 +124,7 @@ export interface StructureSetTargetOverlayTransferPack {
 
 export interface StructureSetTargetPostEditUpdatePack {
   targetFund: BEPortfolioStructuringDTO;
-  targetBreakdownBackendGroupOptionIdentifier: string;
+  targetBreakdownTitle: string;
 }
 
 export interface StructureSetViewData {

@@ -484,7 +484,7 @@ export class DTOService {
       const newFilterDTO: Blocks.SecurityDefinitionFilterBlock = {
         isSelected: false,
         isFilteredOut: false,
-        displayLabel: !!bicsLevel ? `lv.${bicsLevel} - ${eachOption}` : eachOption,
+        displayLabel: !!bicsLevel ? `Lv.${bicsLevel} ${eachOption}` : eachOption,
         bicsLevel: bicsLevel || null,
         shortKey: normalizedOption,
         key: `${this.utility.formDefinitionFilterOptionKey(name, normalizedOption)}~${bicsLevel}`
@@ -2057,6 +2057,7 @@ export class DTOService {
     newBreakdown.state.isOverrideVariant = true;
     newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.OVERRIDE);
     newBreakdown.data.title = newBreakdown.data.backendGroupOptionIdentifier;
+    newBreakdown.data.title = newBreakdown.data.title.replace('BICS Lv.4', 'BICS Override');
     return newBreakdown;
   }
 

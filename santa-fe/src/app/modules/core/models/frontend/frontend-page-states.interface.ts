@@ -294,6 +294,7 @@ export interface StructureSetTargetPanelState {
   targetFund: DTOs.PortfolioStructureDTO;
   targetBreakdown: DTOs.PortfolioBreakdownDTO;
   targetBreakdownRawData: BEStructuringBreakdownBlock;
+  targetBreakdownRawDataDisplayLabelMap: object;
   editRowList: Array<StructureSetTargetPanelEditRowBlock>;
   totalUnallocatedCS01: number;
   totalUnallocatedCreditLeverage: number;
@@ -310,6 +311,7 @@ export interface StructureSetTargetPanelState {
   configurator: {
     dto: DTOs.SecurityDefinitionConfiguratorDTO;
     display: boolean;
+    newOverrideNameCache: string;
   }
   removalList: Array<StructureSetTargetPanelEditRowBlock>;
   clearAllTargetSelected: boolean;
