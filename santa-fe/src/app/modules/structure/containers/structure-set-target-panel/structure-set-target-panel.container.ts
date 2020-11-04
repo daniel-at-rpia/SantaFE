@@ -403,18 +403,21 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   private setBtnText () {
     const metricList = [this.constants.metric.cs01, this.constants.metric.creditLeverage];
-    const metricPercentageData = metricList.map(metric => (
-      {
-        btnText: metric === this.constants.metric.cs01 ? 'displayCs01BtnText' : 'displayCreditLeverageBtnText',
-        percentage: metric === this.constants.metric.cs01 ? this.state.displayPercentageUnallocatedCS01 : this.state.displayPercentageUnallocatedCreditLeverage,
-        metric: metric
+    const metricPercentageData = metricList.map(metric => {
+        const isCs01 = metric === this.constants.metric.cs01;
+        const object = {
+          btnText: !!isCs01 ? 'displayCs01BtnText' : 'displayCreditLeverageBtnText',
+          formattedMetric: !!isCs01 ? 'cs01' : 'creditLeverage',
+          percentage: !!isCs01 ? this.state.displayPercentageUnallocatedCS01 : this.state.displayPercentageUnallocatedCreditLeverage,
+          metric: metric
+        }
+        return object;
       }
-    ));
-    const isUnallocatedPercentageAvailable = metricPercentageData.find(data => data.percentage > 0);
-    if (!!isUnallocatedPercentageAvailable) {
+    );
+    if (!!this.state.targetFund.data.target.target.cs01 || !!this.state.targetFund.data.target.target.creditLeverage) {
       metricPercentageData.forEach(data => {
-        this.state[data.btnText] = data.percentage > 0 ? `${data.percentage}% unallocated` : 'N/A';
-      });
+        this.state[data.btnText] = !!this.state.targetFund.data.target.target[data.formattedMetric] ? `${data.percentage}% unallocated` : 'N/A';
+      })
     } else {
       metricPercentageData.forEach(data => {
         this.state[data.btnText] = this.state.activeMetric === data.metric ? 'Selected' : 'Unselected';
