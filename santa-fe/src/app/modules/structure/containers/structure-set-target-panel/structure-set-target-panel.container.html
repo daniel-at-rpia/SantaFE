@@ -50,156 +50,159 @@
       </div>
     </div>
     <div class="sat-structureSetTargetPanel__main-edit">
-      <div *ngIf="state.targetFund" class="sat-structureSetTargetPanel__main-edit-header">
-        <button (click)="onClickNewOverrideRow()" class="sat-structureSetTargetPanel__main-edit-header-createRow santaBtn--labelled santaBtn--inverseLabelled">
-          <i class="fal fa-plus"></i>
-          <span>New Override Row</span>
-        </button>
-        <div class="sat-structureSetTargetPanel__main-edit-header-item">
-          <button
-            (click)="onClickChangeActiveMetric(constants.metric.creditLeverage)"
-            [ngClass]="{
-              'santaBtn--labelled': true,
-              'sat-structureSetTargetPanel__main-edit-header-item-btn': true,
-              'sat-structureSetTargetPanel__main-edit-header-item-btn--selected': state.activeMetric === constants.metric.creditLeverage
-            }">
-            <i
-              [ngClass]="{
-                'fal': true,
-                'fa-check-square': state.activeMetric === constants.metric.creditLeverage,
-                'fa-square': state.activeMetric !== constants.metric.creditLeverage
-              }">
-            </i>
-            <span>{{state.displayCreditLeverageBtnText}}</span>
+      <div class="sat-structureSetTargetPanel__main-edit-content">
+        <div class="sat-structureSetTargetPanel__main-edit-content-border"></div>
+        <div *ngIf="state.targetFund" class="sat-structureSetTargetPanel__main-edit-content-header">
+          <button (click)="onClickNewOverrideRow()" class="sat-structureSetTargetPanel__main-edit-content-header-createRow santaBtn--labelled santaBtn--inverseLabelled">
+            <i class="fal fa-plus"></i>
+            <span>New Override Row</span>
           </button>
-          <target-bar [targetBar]="state.targetFund.data.creditLeverageTargetBar"></target-bar>
-        </div>
-        <div class="sat-structureSetTargetPanel__main-edit-header-item">
-          <button
-            (click)="onClickChangeActiveMetric(constants.metric.cs01)"
-            [ngClass]="{
-              'santaBtn--labelled': true,
-              'sat-structureSetTargetPanel__main-edit-header-item-btn': true,
-              'sat-structureSetTargetPanel__main-edit-header-item-btn--selected': state.activeMetric === constants.metric.cs01
-            }">
-            <i
-              [ngClass]="{
-                'fal': true,
-                'fa-check-square': state.activeMetric === constants.metric.cs01,
-                'fa-square': state.activeMetric !== constants.metric.cs01
-              }">
-            </i>
-            <span>{{state.displayCs01BtnText}}</span>
-          </button>
-          <target-bar [targetBar]="state.targetFund.data.cs01TargetBar"></target-bar>
-        </div>
-      </div>
-      <ul [ngClass]="{
-          'sat-structureSetTargetPanel__main-edit-rowList': true,
-          'sat-structureSetTargetPanel__main-edit-rowList--singleRow': state.editRowList.length === 1,
-          'sat-structureSetTargetPanel__main-edit-rowList--multipleRows': state.editRowList.length > 1
-        }">
-        <li
-          *ngFor="let eachCategory of state.editRowList; let categoryIndex = index;"
-          [ngClass]="{
-            'sat-structureSetTargetEditRow': true,
-            'sat-structureSetTargetEditRow--focusedCs01LevelState': eachCategory.targetCs01.level.isFocused,
-            'sat-structureSetTargetEditRow--focusedCs01PercentState': eachCategory.targetCs01.percent.isFocused,
-            'sat-structureSetTargetEditRow--focusedCreditLeverageLevelState': eachCategory.targetCreditLeverage.level.isFocused,
-            'sat-structureSetTargetEditRow--focusedCreditLeveragePercentState': eachCategory.targetCreditLeverage.percent.isFocused,
-            'sat-structureSetTargetEditRow--lockedState': eachCategory.isLocked,
-            'sat-structureSetTargetEditRow--overrideVariant': state.targetBreakdownIsOverride,
-            'sat-structureSetTargetEditRow--willBeRemovedState': eachCategory.willBeRemoved
-          }">
-          <section class="sat-structureSetTargetEditRow__remove">
-            <button (click)="onSelectForRemoval(eachCategory)" class="sat-structureSetTargetEditRow__remove-btn santaBtn--iconOnly fal fa-times"></button>
-          </section>
-          <section class="sat-structureSetTargetEditRow__lock">
+          <div class="sat-structureSetTargetPanel__main-edit-content-header-item">
             <button
-              (click)="onToggleLock(eachCategory)"
+              (click)="onClickChangeActiveMetric(constants.metric.creditLeverage)"
               [ngClass]="{
-                'sat-structureSetTargetEditRow__lock-btn': true,
-                'santaBtn--iconOnly': true,
-                'fal fa-unlock-alt': !eachCategory.isLocked,
-                'fas fa-lock-alt': eachCategory.isLocked
+                'santaBtn--labelled': true,
+                'sat-structureSetTargetPanel__main-edit-content-header-item-btn': true,
+                'sat-structureSetTargetPanel__main-edit-content-header-item-btn--selected': state.activeMetric === constants.metric.creditLeverage
               }">
+              <i
+                [ngClass]="{
+                  'fal': true,
+                  'fa-check-square': state.activeMetric === constants.metric.creditLeverage,
+                  'fa-square': state.activeMetric !== constants.metric.creditLeverage
+                }">
+              </i>
+              <span>{{state.displayCreditLeverageBtnText}}</span>
             </button>
-          </section>
-          <section class="sat-structureSetTargetEditRow__label">
-            <span class="sat-structureSetTargetEditRow__label-text">{{eachCategory.displayRowTitle}}</span>
-            <santa-textarea
-              class="sat-structureSetTargetEditRow__label-input"
-              [inputValue]="eachCategory.displayRowTitle"
-              (onInputChange)="onEditRowRenamed($event, eachCategory)"
-              >
-            </santa-textarea>
-          </section>
-          <section class="sat-structureSetTargetEditRow__column sat-structureSetTargetEditRow__column--creditLeverage">
-            <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--creditLeverageLevel">
-              <div class="sat-structureSetTargetEditRow__column-item-ctas">
-                <button *ngIf="eachCategory.targetCreditLeverage.level.isFocused" (click)="onClickSaveEdit(eachCategory, eachCategory.targetCreditLeverage.level)" class="santaBtn--small santaBtn--iconOnly sat-structureSetTargetEditRow__column-item-ctas-save fal fa-check"></button>
+            <target-bar [targetBar]="state.targetFund.data.creditLeverageTargetBar"></target-bar>
+          </div>
+          <div class="sat-structureSetTargetPanel__main-edit-content-header-item">
+            <button
+              (click)="onClickChangeActiveMetric(constants.metric.cs01)"
+              [ngClass]="{
+                'santaBtn--labelled': true,
+                'sat-structureSetTargetPanel__main-edit-content-header-item-btn': true,
+                'sat-structureSetTargetPanel__main-edit-content-header-item-btn--selected': state.activeMetric === constants.metric.cs01
+              }">
+              <i
+                [ngClass]="{
+                  'fal': true,
+                  'fa-check-square': state.activeMetric === constants.metric.cs01,
+                  'fa-square': state.activeMetric !== constants.metric.cs01
+                }">
+              </i>
+              <span>{{state.displayCs01BtnText}}</span>
+            </button>
+            <target-bar [targetBar]="state.targetFund.data.cs01TargetBar"></target-bar>
+          </div>
+        </div>
+        <ul [ngClass]="{
+            'sat-structureSetTargetPanel__main-edit-content-rowList': true,
+            'sat-structureSetTargetPanel__main-edit-content-rowList--singleRow': state.editRowList.length === 1,
+            'sat-structureSetTargetPanel__main-edit-content-rowList--multipleRows': state.editRowList.length > 1
+          }">
+          <li
+            *ngFor="let eachCategory of state.editRowList; let categoryIndex = index;"
+            [ngClass]="{
+              'sat-structureSetTargetEditRow': true,
+              'sat-structureSetTargetEditRow--focusedCs01LevelState': eachCategory.targetCs01.level.isFocused,
+              'sat-structureSetTargetEditRow--focusedCs01PercentState': eachCategory.targetCs01.percent.isFocused,
+              'sat-structureSetTargetEditRow--focusedCreditLeverageLevelState': eachCategory.targetCreditLeverage.level.isFocused,
+              'sat-structureSetTargetEditRow--focusedCreditLeveragePercentState': eachCategory.targetCreditLeverage.percent.isFocused,
+              'sat-structureSetTargetEditRow--lockedState': eachCategory.isLocked,
+              'sat-structureSetTargetEditRow--overrideVariant': state.targetBreakdownIsOverride,
+              'sat-structureSetTargetEditRow--willBeRemovedState': eachCategory.willBeRemoved
+            }">
+            <section class="sat-structureSetTargetEditRow__remove">
+              <button (click)="onSelectForRemoval(eachCategory)" class="sat-structureSetTargetEditRow__remove-btn santaBtn--iconOnly fal fa-times"></button>
+            </section>
+            <section class="sat-structureSetTargetEditRow__lock">
+              <button
+                (click)="onToggleLock(eachCategory)"
+                [ngClass]="{
+                  'sat-structureSetTargetEditRow__lock-btn': true,
+                  'santaBtn--iconOnly': true,
+                  'fal fa-unlock-alt': !eachCategory.isLocked,
+                  'fas fa-lock-alt': eachCategory.isLocked
+                }">
+              </button>
+            </section>
+            <section class="sat-structureSetTargetEditRow__label">
+              <span class="sat-structureSetTargetEditRow__label-text">{{eachCategory.displayRowTitle}}</span>
+              <santa-textarea
+                class="sat-structureSetTargetEditRow__label-input"
+                [inputValue]="eachCategory.displayRowTitle"
+                (onInputChange)="onEditRowRenamed($event, eachCategory)"
+                >
+              </santa-textarea>
+            </section>
+            <section class="sat-structureSetTargetEditRow__column sat-structureSetTargetEditRow__column--creditLeverage">
+              <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--creditLeverageLevel">
+                <div class="sat-structureSetTargetEditRow__column-item-ctas">
+                  <button *ngIf="eachCategory.targetCreditLeverage.level.isFocused" (click)="onClickSaveEdit(eachCategory, eachCategory.targetCreditLeverage.level)" class="santaBtn--small santaBtn--iconOnly sat-structureSetTargetEditRow__column-item-ctas-save fal fa-check"></button>
+                </div>
+                <santa-input
+                  [inputValue]="eachCategory.targetCreditLeverage.level.savedDisplayValue"
+                  [placeholder]="''"
+                  [isNumeric]="true"
+                  [isGrayedOut]="state.activeMetric !== constants.metric.creditLeverage"
+                  [isDisabled]="state.activeMetric !== constants.metric.creditLeverage"
+                  (onInputChange)="onValueChange($event, eachCategory.targetCreditLeverage.level)"
+                  (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCreditLeverage.level)">
+                </santa-input>
+                <span class="sat-structureSetTargetEditRow__column-item-unitText"></span>
               </div>
-              <santa-input
-                [inputValue]="eachCategory.targetCreditLeverage.level.savedDisplayValue"
-                [placeholder]="''"
-                [isNumeric]="true"
-                [isGrayedOut]="state.activeMetric !== constants.metric.creditLeverage"
-                [isDisabled]="state.activeMetric !== constants.metric.creditLeverage"
-                (onInputChange)="onValueChange($event, eachCategory.targetCreditLeverage.level)"
-                (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCreditLeverage.level)">
-              </santa-input>
-              <span class="sat-structureSetTargetEditRow__column-item-unitText"></span>
-            </div>
-            <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--creditLeveragePercent">
-              <div class="sat-structureSetTargetEditRow__column-item-ctas">
-                <button *ngIf="eachCategory.targetCreditLeverage.percent.isFocused" (click)="onClickSaveEdit(eachCategory, eachCategory.targetCreditLeverage.percent)" class="santaBtn--small santaBtn--iconOnly sat-structureSetTargetEditRow__column-item-ctas-save fal fa-check"></button>
+              <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--creditLeveragePercent">
+                <div class="sat-structureSetTargetEditRow__column-item-ctas">
+                  <button *ngIf="eachCategory.targetCreditLeverage.percent.isFocused" (click)="onClickSaveEdit(eachCategory, eachCategory.targetCreditLeverage.percent)" class="santaBtn--small santaBtn--iconOnly sat-structureSetTargetEditRow__column-item-ctas-save fal fa-check"></button>
+                </div>
+                <santa-input
+                  [inputValue]="eachCategory.targetCreditLeverage.percent.savedDisplayValue"
+                  [placeholder]="''"
+                  [isNumeric]="true"
+                  [isGrayedOut]="state.activeMetric !== constants.metric.creditLeverage"
+                  [isDisabled]="state.activeMetric !== constants.metric.creditLeverage"
+                  (onInputChange)="onValueChange($event, eachCategory.targetCreditLeverage.percent)"
+                  (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCreditLeverage.percent)">
+                </santa-input>
+                <span class="sat-structureSetTargetEditRow__column-item-unitText">%</span>
               </div>
-              <santa-input
-                [inputValue]="eachCategory.targetCreditLeverage.percent.savedDisplayValue"
-                [placeholder]="''"
-                [isNumeric]="true"
-                [isGrayedOut]="state.activeMetric !== constants.metric.creditLeverage"
-                [isDisabled]="state.activeMetric !== constants.metric.creditLeverage"
-                (onInputChange)="onValueChange($event, eachCategory.targetCreditLeverage.percent)"
-                (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCreditLeverage.percent)">
-              </santa-input>
-              <span class="sat-structureSetTargetEditRow__column-item-unitText">%</span>
-            </div>
-          </section>
-          <section class="sat-structureSetTargetEditRow__column sat-structureSetTargetEditRow__column--cs01">
-            <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--cs01Level">
-              <div class="sat-structureSetTargetEditRow__column-item-ctas">
-                <button *ngIf="eachCategory.targetCs01.level.isFocused" (click)="onClickSaveEdit(eachCategory, eachCategory.targetCs01.level)" class="santaBtn--small santaBtn--iconOnly sat-structureSetTargetEditRow__column-item-ctas-save fal fa-check"></button>
+            </section>
+            <section class="sat-structureSetTargetEditRow__column sat-structureSetTargetEditRow__column--cs01">
+              <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--cs01Level">
+                <div class="sat-structureSetTargetEditRow__column-item-ctas">
+                  <button *ngIf="eachCategory.targetCs01.level.isFocused" (click)="onClickSaveEdit(eachCategory, eachCategory.targetCs01.level)" class="santaBtn--small santaBtn--iconOnly sat-structureSetTargetEditRow__column-item-ctas-save fal fa-check"></button>
+                </div>
+                <santa-input
+                  [inputValue]="eachCategory.targetCs01.level.savedDisplayValue"
+                  [placeholder]="''"
+                  [isNumeric]="true"
+                  [isGrayedOut]="state.activeMetric !== constants.metric.cs01"
+                  [isDisabled]="state.activeMetric !== constants.metric.cs01"
+                  (onInputChange)="onValueChange($event, eachCategory.targetCs01.level)"
+                  (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCs01.level)">
+                </santa-input>
+                <span class="sat-structureSetTargetEditRow__column-item-unitText">K</span>
               </div>
-              <santa-input
-                [inputValue]="eachCategory.targetCs01.level.savedDisplayValue"
-                [placeholder]="''"
-                [isNumeric]="true"
-                [isGrayedOut]="state.activeMetric !== constants.metric.cs01"
-                [isDisabled]="state.activeMetric !== constants.metric.cs01"
-                (onInputChange)="onValueChange($event, eachCategory.targetCs01.level)"
-                (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCs01.level)">
-              </santa-input>
-              <span class="sat-structureSetTargetEditRow__column-item-unitText">K</span>
-            </div>
-            <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--cs01Percent">
-              <div class="sat-structureSetTargetEditRow__column-item-ctas">
-                <button *ngIf="eachCategory.targetCs01.percent.isFocused" (click)="onClickSaveEdit(eachCategory, eachCategory.targetCs01.percent)" class="santaBtn--small santaBtn--iconOnly sat-structureSetTargetEditRow__column-item-ctas-save fal fa-check"></button>
+              <div class="sat-structureSetTargetEditRow__column-item sat-structureSetTargetEditRow__column-item--cs01Percent">
+                <div class="sat-structureSetTargetEditRow__column-item-ctas">
+                  <button *ngIf="eachCategory.targetCs01.percent.isFocused" (click)="onClickSaveEdit(eachCategory, eachCategory.targetCs01.percent)" class="santaBtn--small santaBtn--iconOnly sat-structureSetTargetEditRow__column-item-ctas-save fal fa-check"></button>
+                </div>
+                <santa-input
+                  [inputValue]="eachCategory.targetCs01.percent.savedDisplayValue"
+                  [placeholder]="''"
+                  [isNumeric]="true"
+                  [isGrayedOut]="state.activeMetric !== constants.metric.cs01"
+                  [isDisabled]="state.activeMetric !== constants.metric.cs01"
+                  (onInputChange)="onValueChange($event, eachCategory.targetCs01.percent)"
+                  (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCs01.percent)">
+                </santa-input>
+                <span class="sat-structureSetTargetEditRow__column-item-unitText">%</span>
               </div>
-              <santa-input
-                [inputValue]="eachCategory.targetCs01.percent.savedDisplayValue"
-                [placeholder]="''"
-                [isNumeric]="true"
-                [isGrayedOut]="state.activeMetric !== constants.metric.cs01"
-                [isDisabled]="state.activeMetric !== constants.metric.cs01"
-                (onInputChange)="onValueChange($event, eachCategory.targetCs01.percent)"
-                (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCs01.percent)">
-              </santa-input>
-              <span class="sat-structureSetTargetEditRow__column-item-unitText">%</span>
-            </div>
-          </section>
-        </li>
-      </ul>
+            </section>
+          </li>
+        </ul>
+      </div>
     </div>
   </section>
 </article>
