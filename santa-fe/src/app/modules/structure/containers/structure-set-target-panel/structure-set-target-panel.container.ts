@@ -324,7 +324,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         const now = moment();
         const payload: PayloadGetPortfolioOverride = {
           portfolioOverride: {
-            date: now.format('YYYY-MM-DDT00:00:00-04:00'),
+            date: now.format('YYYY-MM-DD'),
             portfolioId: this.state.targetFund.data.portfolioId,
             bucket: bucket
           }
@@ -732,9 +732,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private traverseEditRowsToFormUpdateBreakdownPayload(): PayloadUpdateBreakdown {
+    const now = moment();
     const payload: PayloadUpdateBreakdown = {
       portfolioBreakdown: {
-        date: this.state.targetBreakdownRawData.date,
+        date: now.format('YYYY-MM-DD'),
         groupOption: this.state.targetBreakdownRawData.groupOption,
         indexId: this.state.targetBreakdownRawData.indexId,
         portfolioId: this.state.targetBreakdownRawData.portfolioId,
@@ -773,11 +774,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private traverseEditRowsToFormUpdateOverridePayload(): Array<PayloadUpdateOverride> {
+    const now = moment();
     const payload: Array<PayloadUpdateOverride> = [];
     this.state.editRowList.forEach((eachRow) => {
       const eachPayload: PayloadUpdateOverride = {
         portfolioOverride: {
-          date: this.state.targetBreakdownRawData.date,
+          date: now.format('YYYY-MM-DD'),
           indexId: this.state.targetBreakdownRawData.indexId,
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
           bucket: eachRow.targetBlockFromBreakdown.bucket
@@ -817,10 +819,11 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   private traverseRemovalListToFormDeleteOverridePayload(): Array<PayloadDeleteOverride> {
     const payload: Array<PayloadDeleteOverride> = [];
+    const now = moment();
     this.state.removalList.forEach((eachRow) => {
       const eachPayload: PayloadDeleteOverride = {
         portfolioOverride: {
-          date: this.state.targetBreakdownRawData.date,
+          date: now.format('YYYY-MM-DD'),
           indexId: this.state.targetBreakdownRawData.indexId,
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
           bucket: eachRow.targetBlockFromBreakdown.bucket
