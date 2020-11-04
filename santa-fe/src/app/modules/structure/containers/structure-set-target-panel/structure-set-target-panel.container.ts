@@ -545,14 +545,14 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.state.remainingUnallocatedCreditLeverage = this.state.remainingUnallocatedCreditLeverage - eachRow.targetCreditLeverage.level.savedUnderlineValue;
       }
     });
-    if (!!this.state.remainingUnallocatedCS01) {
+    if (this.state.remainingUnallocatedCS01 > 0) {
       this.state.displayPercentageUnallocatedCS01 = this.utilityService.round(this.state.remainingUnallocatedCS01/this.state.totalUnallocatedCS01 * 100, 0);
       this.state.displayRemainingUnallocatedCS01 = `${this.utilityService.round(this.state.remainingUnallocatedCS01/1000, 1)} k`;
     } else {
       this.state.displayPercentageUnallocatedCS01 = 0;
       this.state.displayRemainingUnallocatedCS01 = '0 k';
     }
-    if (!!this.state.remainingUnallocatedCreditLeverage) {
+    if (this.state.remainingUnallocatedCreditLeverage > 0) {
       this.state.displayPercentageUnallocatedCreditLeverage = this.utilityService.round(this.state.remainingUnallocatedCreditLeverage/this.state.totalUnallocatedCreditLeverage * 100, 0);
       this.state.displayRemainingUnallocatedCreditLeverage = this.utilityService.round(this.state.remainingUnallocatedCreditLeverage, 2);
     } else {
