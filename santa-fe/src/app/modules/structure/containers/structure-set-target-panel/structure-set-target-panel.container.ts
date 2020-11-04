@@ -103,7 +103,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         dto: this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout),
         display: false
       },
-      removalList: []
+      removalList: [],
+      clearAllTargetSelected: false
     };
     return state;
   }
@@ -140,6 +141,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.calculateAllocation();
         this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
         this.loadBICSOptionsIntoConfigurator();
+        if (!!this.state.clearAllTargetSelected) {
+          this.state.clearAllTargetSelected = false;
+        }
       }
     });
     this.modalService.bindModalSaveCallback(STRUCTURE_EDIT_MODAL_ID, this.submitTargetChanges.bind(this));
