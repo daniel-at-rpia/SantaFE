@@ -685,50 +685,66 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   private submitOverrideChanges(): boolean {
     const updatePayload: Array<PayloadUpdateOverride> = this.traverseEditRowsToFormUpdateOverridePayload();
     const deletePayload: Array<PayloadDeleteOverride> = this.traverseRemovalListToFormDeleteOverridePayload();
-    const necessaryNumOfCalls = updatePayload.length + deletePayload.length;
-    if (necessaryNumOfCalls > 0) {
-      let callCount = 0;
-      updatePayload.forEach((eachPayload) => {
-        this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
-          first(),
-          tap((serverReturn: BEPortfolioStructuringDTO) => {
-            callCount++;
-            if (callCount === necessaryNumOfCalls) {
-              const updatePack: StructureSetTargetPostEditUpdatePack = {
-                targetFund: serverReturn,
-                targetBreakdownTitle: this.state.targetBreakdown.data.title
-              };
-              this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
-            }
-          }),
-          catchError(err => {
-            console.error('update breakdown failed');
-            this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'update breakdown failed', null)]));
-            return of('error');
-          })
-        ).subscribe();
-      });
-      deletePayload.forEach((eachPayload) => {
-        this.restfulCommService.callAPI(this.restfulCommService.apiMap.deletePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
-          first(),
-          tap((serverReturn: BEPortfolioStructuringDTO) => {
-            callCount++;
-            if (callCount === necessaryNumOfCalls) {
-              this.store$.dispatch(new StructureUpdateMainPanelEvent());
-            }
-          }),
-          catchError(err => {
-            console.error('delete breakdown failed');
-            this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'delete breakdown failed', null)]));
-            return of('error');
-          })
-        ).subscribe();
-      });
+    const necessaryUpdateNumOfCalls = updatePayload.length;
+    const necessaryDeleteNumOfCalls = deletePayload.length;
+    if (necessaryUpdateNumOfCalls + necessaryDeleteNumOfCalls > 0) {
+      if (updatePayload.length > 0) {
+        let callCount = 0;
+        updatePayload.forEach((eachPayload) => {
+          this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
+            first(),
+            tap((serverReturn: BEPortfolioStructuringDTO) => {
+              callCount++;
+              if (callCount === necessaryUpdateNumOfCalls) {
+                if (necessaryDeleteNumOfCalls > 0) {
+                  this.submitOverrideChangesForDelete(deletePayload, necessaryDeleteNumOfCalls);
+                } else {
+                  const updatePack: StructureSetTargetPostEditUpdatePack = {
+                    targetFund: serverReturn,
+                    targetBreakdownTitle: this.state.targetBreakdown.data.title
+                  };
+                  this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
+                }
+              }
+            }),
+            catchError(err => {
+              console.error('update breakdown failed');
+              this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'update breakdown failed', null)]));
+              return of('error');
+            })
+          ).subscribe();
+        });
+      } else {
+        this.submitOverrideChangesForDelete(deletePayload, necessaryDeleteNumOfCalls);
+      }
       return true;
     } else {
       this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target because no change is detected', null)]));
       return false;
     }
+  }
+
+  private submitOverrideChangesForDelete(
+    deletePayload: Array<PayloadDeleteOverride>,
+    necessaryDeleteNumOfCalls: number
+  ) {
+    let callCount = 0;
+    deletePayload.forEach((eachPayload) => {
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.deletePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
+        first(),
+        tap((serverReturn: BEPortfolioStructuringDTO) => {
+          callCount++;
+          if (callCount === necessaryDeleteNumOfCalls) {
+            this.store$.dispatch(new StructureUpdateMainPanelEvent());
+          }
+        }),
+        catchError(err => {
+          console.error('delete breakdown failed');
+          this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'delete breakdown failed', null)]));
+          return of('error');
+        })
+      ).subscribe();
+    });
   }
 
   private traverseEditRowsToFormUpdateBreakdownPayload(): PayloadUpdateBreakdown {
