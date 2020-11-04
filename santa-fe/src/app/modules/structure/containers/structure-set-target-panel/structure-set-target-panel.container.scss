@@ -465,6 +465,9 @@ $structureSetTargetPanel_highlight_border: 2px solid $color_active;
       }
     }
   }
+  &--evenState {
+    background-color: $color_blue_gray_1;
+  }
   &--lockedState {
     background-color: $color_green_1;
     #{$blockName} {
