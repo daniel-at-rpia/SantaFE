@@ -6,19 +6,25 @@
   'sat-portfolioBreakdownRow--noSignificantDiff': breakdownRow.data.diffToTarget === 0,
   'sat-portfolioBreakdownRow--isEditingView': breakdownRow.state.isEditingView,
   'sat-portfolioBreakdownRow--negativeDiff': breakdownRow.data.diffToTarget < 0,
-  'sat-portfolioBreakdownRow--overweight': breakdownRow.data.view === constants.overweight,
-  'sat-portfolioBreakdownRow--underweight': breakdownRow.data.view === constants.underweight,
-  'sat-portfolioBreakdownRow--neutral': breakdownRow.data.view === constants.neutral
+  'sat-portfolioBreakdownRow--positive': breakdownRow.data.view === constants.positive,
+  'sat-portfolioBreakdownRow--improving': breakdownRow.data.view === constants.improving,
+  'sat-portfolioBreakdownRow--deteriorating': breakdownRow.data.view === constants.deteriorating,
+  'sat-portfolioBreakdownRow--negative': breakdownRow.data.view === constants.negative,
+  'sat-portfolioBreakdownRow--neutral': breakdownRow.data.view === constants.neutral,
+  'sat-portfolioBreakdownRow--showFullCategoryState': !!breakdownRow.data.showFullCategory
   }">
   <section class="sat-portfolioBreakdownRow__cta">
     <button (click)="onClickDiveIn(breakdownRow)" class="sat-portfolioBreakdownRow__cta-btn">
-      <i [ngClass]="{
-        'sat-portfolioBreakdownRow__cta-btn-view': true,
-        'fal': true,
-        'fa-arrow-up': breakdownRow.data.view === constants.overweight,
-        'fa-arrow-down': breakdownRow.data.view === constants.underweight,
-        'fa-minus': breakdownRow.data.view === constants.neutral
-      }"></i>
+      <div class="sat-portfolioBreakdownRow__cta-btn-view">
+        <span *ngIf="!!breakdownRow.data.view" class="sat-portfolioBreakdownRow__cta-btn-view-toolTip">{{ breakdownRow.data.view }}</span>
+        <i [ngClass]="{
+          'sat-portfolioBreakdownRow__cta-btn-view-icon': true,
+          'fal': true,
+          'fa-arrow-up': breakdownRow.data.view === constants.positive || breakdownRow.data.view === constants.improving,
+          'fa-arrow-down': breakdownRow.data.view === constants.negative || breakdownRow.data.view === constants.deteriorating,
+          'fa-arrows-alt-h': breakdownRow.data.view === constants.neutral
+        }"></i>
+      </div>
       <span class="sat-portfolioBreakdownRow__cta-btn-text" title="{{breakdownRow.data.category}}">{{ breakdownRow.data.displayCategory }}</span>
     </button>
   </section>
@@ -27,17 +33,25 @@
       <move-visualizer [visualizerData]="breakdownRow.data.moveVisualizer"></move-visualizer>
     </div>
     <div class="sat-portfolioBreakdownRow__utility-ctas">
-      <button (click)="onClickSetView(constants.overweight)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--inverseLabelled santaBtn--small sat-portfolioBreakdownRow__utility-ctas-btn--overweight">
-        <i class="fal fa-arrow-up"></i>
-        <span>over weight</span>
+      <button (click)="onClickSetView(constants.positive)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--inverseLabelled santaBtn--small sat-portfolioBreakdownRow__utility-ctas-btn--positive">
+        <i class="fal fa-arrow-up sat-portfolioBreakdownRow__utility-ctas-btn-icon"></i>
+        <span class="sat-portfolioBreakdownRow__utility-ctas-btn-text">positive</span>
       </button>
-      <button (click)="onClickSetView(constants.underweight)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--inverseLabelled santaBtn--small sat-portfolioBreakdownRow__utility-ctas-btn--underweight">
-        <i class="fal fa-arrow-down"></i>
-        <span>under weight</span>
+      <button (click)="onClickSetView(constants.improving)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--small santaBtn--inverseLabelled sat-portfolioBreakdownRow__utility-ctas-btn--improving">
+        <i class="fal fa-arrow-up sat-portfolioBreakdownRow__utility-ctas-btn-icon"></i>
+        <span class="sat-portfolioBreakdownRow__utility-ctas-btn-text">improving</span>
       </button>
       <button (click)="onClickSetView(constants.neutral)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--small sat-portfolioBreakdownRow__utility-ctas-btn--neutral">
-        <i class="fal fa-minus"></i>
-        <span>neutral</span>
+        <i class="fal fa-arrows-alt-h sat-portfolioBreakdownRow__utility-ctas-btn-icon"></i>
+        <span class="sat-portfolioBreakdownRow__utility-ctas-btn-text">neutral</span>
+      </button>
+      <button (click)="onClickSetView(constants.deteriorating)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--small sat-portfolioBreakdownRow__utility-ctas-btn--deteriorating">
+        <i class="fal fa-arrow-down sat-portfolioBreakdownRow__utility-ctas-btn-icon"></i>
+        <span class="sat-portfolioBreakdownRow__utility-ctas-btn-text">deteriorating</span>
+      </button>
+      <button (click)="onClickSetView(constants.negative)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--small sat-portfolioBreakdownRow__utility-ctas-btn--negative">
+        <i class="fal fa-arrow-down sat-portfolioBreakdownRow__utility-ctas-btn-icon"></i>
+        <span class="sat-portfolioBreakdownRow__utility-ctas-btn-text">negative</span>
       </button>
     </div>
   </section>
