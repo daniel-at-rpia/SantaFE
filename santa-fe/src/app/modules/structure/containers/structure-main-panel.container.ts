@@ -114,7 +114,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       select(selectReloadBreakdownDataPostEdit)
     ).subscribe((updatePack: StructureSetTargetPostEditUpdatePack) => {
       if (!!updatePack && !!updatePack.targetFund) {
-        const systemAlertMessage = `Successfully Updated Target for ${updatePack.targetBreakdownBackendGroupOptionIdentifier}`;
+        const systemAlertMessage = `Successfully Updated Target for ${updatePack.targetBreakdownTitle}`;
         const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${systemAlertMessage}`, null);
         this.store$.dispatch(new CoreSendNewAlerts([alert]));
         this.reloadFund(updatePack.targetFund);
@@ -222,7 +222,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   private updateViewData(data: StructureSetViewData) {
     const currentFunds = this.utilityService.deepCopy(this.state.fetchResult.fundList);
     this.loadStencilFunds();
-    const { yyyyMMdd, bucket, view } = data;
+    const { yyyyMMdd, bucket, view, displayCategory } = data;
     const payload: PayloadSetView = {
       yyyyMMdd: yyyyMMdd,
       bucket: bucket, 
@@ -237,7 +237,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       }
     }
 
-    const messageDetails = `${totalBucketValues}, with view value ${displayViewValue}`;
+    const messageDetails = `${displayCategory}, with view value ${displayViewValue}`;
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
@@ -249,7 +249,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         this.restfulCommService.logEngagement(
           this.restfulCommService.engagementMap.portfolioStructureSetView,
           null,
-          `View value for ${totalBucketValues} updated as ${displayViewValue}. Set by ${this.state.ownerInitial}`,
+          `View value for ${displayCategory} updated as ${displayViewValue}. Set by ${this.state.ownerInitial}`,
           'Portfolio Structure Breakdown'
         )
       }),

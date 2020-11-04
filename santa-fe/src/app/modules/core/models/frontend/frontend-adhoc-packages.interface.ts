@@ -124,13 +124,14 @@ export interface StructureSetTargetOverlayTransferPack {
 
 export interface StructureSetTargetPostEditUpdatePack {
   targetFund: BEPortfolioStructuringDTO;
-  targetBreakdownBackendGroupOptionIdentifier: string;
+  targetBreakdownTitle: string;
 }
 
 export interface StructureSetViewData {
   yyyyMMdd: number;
   bucket: StructureBucketDataBlock;
   view: PortfolioView;
+  displayCategory: string;
 }
 
 export interface StructureOverrideToBreakdownConversionReturnPack {
