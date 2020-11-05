@@ -147,6 +147,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         if (!!this.state.clearAllTargetSelected) {
           this.state.clearAllTargetSelected = false;
         }
+        const modalTitle = this.state.targetBreakdown.state.isOverrideVariant ? `${this.state.targetFund.data.portfolioShortName} - Edit Override Targets` : `${this.state.targetFund.data.portfolioShortName} - Edit Breakdown Targets`;
+        this.modalService.setModalTitle(STRUCTURE_EDIT_MODAL_ID, modalTitle);
       }
     });
     this.modalService.bindModalSaveCallback(STRUCTURE_EDIT_MODAL_ID, this.submitTargetChanges.bind(this));
@@ -618,6 +620,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     let impliedValue = null;
     if (metric === this.constants.metric.cs01) {
       if (this.state.totalUnallocatedCS01 > 0) {
+        // checks if there is an actual target saved, and if not, it would have been set to null
         if (!!targetUnderlineValue) {
           if (!!targetIsPercent) {
             impliedValue = targetUnderlineValue * this.state.totalUnallocatedCS01;
@@ -723,7 +726,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
-  private submitUpdatedRegularTargetBreakdownChanges():boolean {
+  private submitRegularBreakdownChangesUpdate():boolean {
     const payload: PayloadUpdateBreakdown = this.traverseEditRowsToFormUpdateBreakdownPayload();
     if (!!payload) {
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
@@ -778,10 +781,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           return true;
         }
       } else {
-        return this.submitUpdatedRegularTargetBreakdownChanges();
+        return this.submitRegularBreakdownChangesUpdate();
       }
     } else {
-      return this.submitUpdatedRegularTargetBreakdownChanges();
+      return this.submitRegularBreakdownChangesUpdate();
     }
   }
 
@@ -932,7 +935,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           };
         }
         eachPayload.portfolioOverride.breakdown = modifiedMetricBreakdowns;
-        console.log(eachPayload, 'each payload')
       }
       payload.push(eachPayload);
     });

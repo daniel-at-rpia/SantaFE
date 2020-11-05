@@ -2157,7 +2157,8 @@ export class DTOService {
     const object: DTOs.SantaModalDTO = {
       data: {
         id: null,
-        modalElement: elementRef.nativeElement
+        modalElement: elementRef.nativeElement,
+        title: 'Edit'
       },
       state: {
         isPresenting: false

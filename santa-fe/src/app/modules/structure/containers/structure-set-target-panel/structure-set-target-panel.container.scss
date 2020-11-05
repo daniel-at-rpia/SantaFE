@@ -7,20 +7,6 @@ $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfig
 $structureSetTargetPanel_highlight_color: $color_blue_gray_1;
 $structureSetTargetPanel_highlight_border: 2px solid $color_active;
 
-@mixin multiple_row__custom_borders($element: 'regular') {
-  @if $element == 'regular' {
-    border-right: $structureSetTargetPanel_highlight_border;
-    border-left: $structureSetTargetPanel_highlight_border;
-  }@else if $element == 'first' {
-    border-top-right-radius: 3px;
-    border-top-left-radius: 3px;
-    border-top: $structureSetTargetPanel_highlight_border;
-  }@else if $element == 'last' {
-    border-bottom-right-radius: 3px;
-    border-bottom-left-radius: 3px;
-    border-bottom: $structureSetTargetPanel_highlight_border;
-  }
-}
 .sat-structureSetTargetPanel {
   $blockName: &;
   flex: 1 1 auto;
