@@ -875,20 +875,18 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           metricBreakdowns: {}
         };
         if (this.cs01ModifiedInEditRow(eachRow)) {
-          const parsedValue = eachRow.targetCs01.level.savedUnderlineValue === 0 ? null : eachRow.targetCs01.level.savedUnderlineValue;
           modifiedMetricBreakdowns.metricBreakdowns.Cs01 = {
-            targetLevel: parsedValue
+            targetLevel: eachRow.targetCs01.level.savedUnderlineValue
           };
-          if (!parsedValue) {
+          if (!eachRow.targetCs01.level.savedUnderlineValue) {
             modifiedMetricBreakdowns.metricBreakdowns.CreditDuration = {
-              targetLevel: parsedValue
+              targetLevel: eachRow.targetCs01.level.savedUnderlineValue
             };
           }
         }
         if (this.creditLeverageModifiedInEditRow(eachRow)) {
-          const parsedValue = eachRow.targetCreditLeverage.level.savedUnderlineValue === 0 ? null : eachRow.targetCreditLeverage.level.savedUnderlineValue;
           modifiedMetricBreakdowns.metricBreakdowns.CreditLeverage = {
-            targetLevel: parsedValue
+            targetLevel: eachRow.targetCreditLeverage.level.savedUnderlineValue
           };
         }
         payload.portfolioBreakdown.breakdown[eachRow.rowIdentifier] = modifiedMetricBreakdowns;
@@ -918,20 +916,18 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           metricBreakdowns: {}
         };
         if (this.cs01ModifiedInEditRow(eachRow)) {
-          const parsedValue = eachRow.targetCs01.level.savedUnderlineValue === 0 ? null : eachRow.targetCs01.level.savedUnderlineValue;
           modifiedMetricBreakdowns.metricBreakdowns.Cs01 = {
-            targetLevel: parsedValue
+            targetLevel: eachRow.targetCs01.level.savedUnderlineValue
           };
-          if (!parsedValue) {
+          if (!eachRow.targetCs01.level.savedUnderlineValue) {
             modifiedMetricBreakdowns.metricBreakdowns.CreditDuration = {
-              targetLevel: parsedValue
+              targetLevel: eachRow.targetCs01.level.savedUnderlineValue
             };
           }
         }
         if (this.creditLeverageModifiedInEditRow(eachRow)) {
-          const parsedValue = eachRow.targetCreditLeverage.level.savedUnderlineValue === 0 ? null : eachRow.targetCreditLeverage.level.savedUnderlineValue;
           modifiedMetricBreakdowns.metricBreakdowns.CreditLeverage = {
-            targetLevel: parsedValue
+            targetLevel: eachRow.targetCreditLeverage.level.savedUnderlineValue
           };
         }
         eachPayload.portfolioOverride.breakdown = modifiedMetricBreakdowns;
