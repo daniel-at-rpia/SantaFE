@@ -1,7 +1,7 @@
 @import "global.scss";
 @import "modules/structure/structure.scss";
 
-$fundStructuring_setTarget_height: 10rem;
+$fundStructuring_setTarget_height: 13rem;
 $funtStructuring_setTarget_backgroundIcon_size: $font_size_hero;
 $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_height - $funtStructuring_setTarget_backgroundIcon_size)/2;
 .sat-fundStructuring {
@@ -46,16 +46,12 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
       align-items: center;
       justify-content: flex-end;
       margin-bottom: $spacing_x_small;
-      padding-right: $fundStructuring_setTarget_backgroundIcon_gutter;
-      &-label,
-      &-input {
-        margin-right: $spacing_x_small;
+      padding-right: $spacing_medium;
+      &-label {
+        margin-right: $spacing_small;
       }
       &-input {
         width: 5rem;
-      }
-      &:last-child {
-        padding-right: $fundStructuring_setTarget_backgroundIcon_gutter + .5rem;
       }
     }
     &-message {
@@ -79,6 +75,12 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
       color: $color_gray_6;
       opacity: 0;
       transform: translate(0, -50%);
+    }
+    &-autoScalingToggle {
+      @include material('none');
+      background-color: $color_disabled;
+      margin-right: $spacing_medium;
+      cursor: not-allowed;
     }
   }
   &__utility {
@@ -154,6 +156,21 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
       }
     }
   }
+  &--autoScalingAvailableState {
+    #{$blockName} {
+      &__editFund-autoScalingToggle {
+        @include material();
+        background-color: $color_white;
+        cursor: pointer;
+        i {
+          color: $font_color_major;
+        }
+        span {
+          color: $font_color_major;
+        }
+      }
+    }
+  }
   &--editingState {
     #{$blockName} {
       &__editFund {
@@ -178,6 +195,20 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
               display: flex;
             }
           }
+        }
+      }
+    }
+  }
+  &--autoScalingSelectedState {
+    #{$blockName} {
+      &__editFund-autoScalingToggle {
+        @include material('none');
+        background-color: $color_active;
+        i {
+          color: $font_color_inverse;
+        }
+        span {
+          color: $font_color_inverse;
         }
       }
     }

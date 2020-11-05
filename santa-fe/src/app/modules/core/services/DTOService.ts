@@ -1927,7 +1927,11 @@ export class DTOService {
         modifiedFundTargets: {
           creditLeverage: rawData.target.target.CreditLeverage || 0,
           creditDuration: rawData.target.target.CreditDuration || 0
-        }
+        },
+        autoScalingAvailable: !isStencil 
+          ? !!rawData.target.target.CreditLeverage || !!rawData.target.target.CreditDuration
+          : false,
+        autoScalingActive: false
       }
     };
     object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, object.state.isStencil, selectedMetricValue);

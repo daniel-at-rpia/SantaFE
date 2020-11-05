@@ -92,11 +92,17 @@ export class StructureFund implements OnInit {
 
   public closeEditMenu() {
     this.fund.state.isEditingFund = false;
-    this.resetErrors();
+    this.resetEditForm();
   }
 
   public onClickSaveNewMetrics(targetCreditDuration: number, targetLeverage: number) {
     this.fund.api.onSubmitMetricValues(targetCreditDuration, targetLeverage)
+  }
+
+  public onToggleEditTargetAutoScaling() {
+    if (this.fund.state.autoScalingAvailable) {
+      this.fund.state.autoScalingActive = !this.fund.state.autoScalingActive;
+    }
   }
 
   private validateInput(value: number | string) {
@@ -104,14 +110,15 @@ export class StructureFund implements OnInit {
      return result;
   }
 
-  private resetErrors() {
+  private resetEditForm() {
     this.fund.state.hasErrors.updatedCreditDuration = false;
     this.fund.state.hasErrors.updatedCreditLeverage = false;
     this.fund.state.hasErrors.errorMessage = '';
+    this.fund.state.autoScalingActive = false;
   }
 
   private saveEditDetails(targetCreditDuration: number, targetLeverage: number) {
-    this.resetErrors();
+    this.resetEditForm();
     const isTargetCreditDurationInvalid = this.validateInput(targetCreditDuration);
     const isTargetLeverageInvalid = this.validateInput(targetLeverage);
     this.fund.data.creditDurationTargetBar.state.isEmpty = targetCreditDuration === 0;

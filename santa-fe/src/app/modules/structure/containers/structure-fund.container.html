@@ -3,7 +3,9 @@
   'sat-fundStructuring--editAvailableState': fund.state.isEditAvailable,
   'sat-fundStructuring--editingState': fund.state.isEditingFund,
   'sat-fundStructuring--invalidInput': fund.state.hasErrors.updatedCreditDuration || fund.state.hasErrors.updatedCreditLeverage,
-  'sat-fundStructuring--errorState': fund.state.isDataUnavailable
+  'sat-fundStructuring--errorState': fund.state.isDataUnavailable,
+  'sat-fundStructuring--autoScalingAvailableState': fund.state.autoScalingAvailable,
+  'sat-fundStructuring--autoScalingSelectedState': fund.state.autoScalingActive
   }">
   <header class="sat-fundStructuring__configuration">
     <div class="sat-fundStructuring__targetBar">
@@ -50,6 +52,16 @@
         }">
       </santa-input>
     </div>
+    <button (click)="onToggleEditTargetAutoScaling()" class="santaBtn--labelled santaBtn--inverseLabelled sat-fundStructuring__editFund-autoScalingToggle">
+      <i
+        [ngClass]="{
+          'fal': true,
+          'fa-square': !fund.state.autoScalingActive,
+          'fa-check-square': fund.state.autoScalingActive
+        }">
+      </i>
+      <span>Auto-Adjust Breakdown Targets</span>
+    </button>
   </section>
   <section class="sat-fundStructuring__utility">
     <div class="sat-fundStructuring__utility-btnGroup">
