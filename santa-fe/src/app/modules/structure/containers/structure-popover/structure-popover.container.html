@@ -1,7 +1,7 @@
 <article [ngClass]="{
   'sat-popover': true,
   'sat-popover--active': !!popover && popover.state.isActive,
-  'sat-popover--noDataAvailable': !!popover && popover.data.mainRow.data.children.data.displayCategoryList.length === 0
+  'sat-popover--noDataAvailable': !!popover && !!popover.data.mainRow.data.children && popover.data.mainRow.data.children.data.displayCategoryList.length === 0
 }">
   <button *ngIf="!!popover" (click)="closePopover()" class="sat-popover__closeBtn santaBtn--circleLabelled">
     <i class="fal fa-times"></i>
@@ -37,7 +37,7 @@
       <div class="sat-popover__levels-firstDiveIn-category">
         <span class="sat-popover__levels-firstDiveIn-category-text"> Level {{ popover.data.mainRow.data.bicsLevel + 1 }} - {{ popover.data.mainRow.data.category }}</span>
       </div>
-      <ul class="sat-popover__levels-firstDiveIn-list">
+      <ul class="sat-popover__levels-firstDiveIn-list" *ngIf="!!popover.data.mainRow.data.children">
         <li
           *ngFor="let secondLevel of popover.data.mainRow.data.children.data.displayCategoryList" 
           class="sat-popover__levels-firstDiveIn-list-item">

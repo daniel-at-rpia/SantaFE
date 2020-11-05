@@ -148,3 +148,12 @@ export interface PayloadSetView {
 export interface PayloadGetAllTraceTrades {
   identifiers: Array<string>;
 }
+
+export interface PayloadClearPortfolioBreakdown {
+  portfolioBreakdown: {
+    date?: string;
+    portfolioId: number;
+    groupOption: string;
+  }
+  groupOptionValue?: string;
+}

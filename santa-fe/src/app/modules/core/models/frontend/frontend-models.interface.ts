@@ -792,6 +792,7 @@ export interface SantaModalDTO extends BasicDTOStructure {
   data: {
     id: string;
     modalElement: Node;
+    title: string;
   },
   state: {
     isPresenting: boolean;

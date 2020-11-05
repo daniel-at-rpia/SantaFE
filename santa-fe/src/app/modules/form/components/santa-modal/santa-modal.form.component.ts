@@ -3,7 +3,7 @@ import { Component, ViewEncapsulation, ElementRef, Input, OnInit, OnDestroy, OnC
 import { DTOService } from 'Core/services/DTOService';
 import { SantaModalDTO } from 'FEModels/frontend-models.interface';
 import { ModalService } from 'Form/services/ModalService';
-
+import { Store, select } from '@ngrx/store';
 @Component({ 
   selector: 'santa-modal', 
   templateUrl: 'santa-modal.form.component.html', 
@@ -14,11 +14,14 @@ import { ModalService } from 'Form/services/ModalService';
 export class SantaModal implements OnInit, OnDestroy {
   @Input() modalId: string;
   public modalData: SantaModalDTO;
-
+  subscriptions = {
+    editStructurePortfolioSub: null
+  }
   constructor(
     private elementRef: ElementRef,
     private dtoService: DTOService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private store$: Store<any>
   ){}
 
   public ngOnInit() {
