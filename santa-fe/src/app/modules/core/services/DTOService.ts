@@ -424,7 +424,13 @@ export class DTOService {
       alertQuoteDealer: targetAlert.data.dealer,
       alertTradeTrader: targetAlert.data.trader,
       alertStatus: targetAlert.data.status,
-      shortcutConfig: dto.data.alert.shortcutConfig
+      shortcutConfig: dto.data.alert.shortcutConfig,
+      alertTraceCounterParty: targetAlert.data.traceCounterParty,
+      alertTracePrice: targetAlert.data.tracePrice,
+      alertTraceSide: targetAlert.data.traceSide,
+      alertTraceSpread: targetAlert.data.traceSpread,
+      alertTraceVolumeReported: targetAlert.data.traceVolumeReported,
+      alertTraceVolumeEstimated: targetAlert.data.traceVolumeEstimated
     };
   }
 
@@ -1396,7 +1402,13 @@ export class DTOService {
         trader: null,
         dealer: null,
         status: null,
-        isMarketListTraded: false
+        isMarketListTraded: false,
+        traceCounterParty: null,
+        traceSide: null,
+        traceVolumeEstimated: null,
+        traceVolumeReported: null,
+        tracePrice: null,
+        traceSpread: null
       },
       api: {
         onMouseEnterAlert: null,
@@ -1430,7 +1442,7 @@ export class DTOService {
     rawData: BEModels.BEAlertDTO
   ): DTOs.AlertDTO {
     const parsedTitleList = rawData.keyWord.split('|');
-    const momentTime = moment(rawData.timeStamp);
+    const momentTime = !!rawData.trade ? moment(rawData.trade.eventTime): moment(rawData.timeStamp);
     const object: DTOs.AlertDTO = {
       data: {
         id: rawData.alertId,
@@ -1470,6 +1482,16 @@ export class DTOService {
         isMarketListVariant: !!rawData.isMarketListAlert || !!rawData.marketListAlert,  // TODO: remove first part as soon as BE is promoted
         isExpired: false
       }
+    }
+    // checks if its a trace alert
+    if (!!rawData.trade) {
+      const { counterParty, side, volumeEstimated, volumeActual, price, spread } = rawData.trade;
+      object.data.traceCounterParty = counterParty;
+      object.data.traceSide = side;
+      object.data.traceVolumeEstimated = volumeEstimated;
+      object.data.traceVolumeReported = volumeActual;
+      object.data.tracePrice = price;
+      object.data.traceSpread = spread;
     }
     this.appendAlertDetailInfo(object, rawData);
     this.appendAlertStatus(object);
