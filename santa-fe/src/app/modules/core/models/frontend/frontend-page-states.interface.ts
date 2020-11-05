@@ -300,6 +300,8 @@ export interface StructureSetTargetPanelState {
   totalUnallocatedCreditLeverage: number;
   remainingUnallocatedCS01: number;
   remainingUnallocatedCreditLeverage: number;
+  displayCs01BtnText: string;
+  displayCreditLeverageBtnText: string;
   displayRemainingUnallocatedCS01: string;
   displayRemainingUnallocatedCreditLeverage: string;
   displayPercentageUnallocatedCS01: number;
@@ -312,4 +314,5 @@ export interface StructureSetTargetPanelState {
     newOverrideNameCache: string;
   }
   removalList: Array<StructureSetTargetPanelEditRowBlock>;
+  clearAllTargetSelected: boolean;
 }

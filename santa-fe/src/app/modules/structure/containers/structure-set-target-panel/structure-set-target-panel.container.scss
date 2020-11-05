@@ -4,6 +4,9 @@
 $structureSetTargetPanel_edit_column_size: 14rem;
 $structureSetTargetPanel_configurator_container_leftPadding: $spacing_large;
 $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfigurator_width + $structureSetTargetPanel_configurator_container_leftPadding;
+$structureSetTargetPanel_highlight_color: $color_blue_gray_1;
+$structureSetTargetPanel_highlight_border: 2px solid $color_active;
+
 .sat-structureSetTargetPanel {
   $blockName: &;
   flex: 1 1 auto;
@@ -68,11 +71,18 @@ $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfig
     &-preview {
       @include mix_alive('custom', margin-right $animation_duration_light);
       flex: 0 1 50%;
+      flex-wrap: wrap;
       display: flex;
-      align-items: center;
       padding-right: $spacing_large;
       margin-right: 0;
       overflow: hidden;
+      &-clearTargets {
+        flex: 0 0 100%;
+        align-self: flex-start;
+        display: flex;
+        justify-content: flex-end;
+        margin-top: $spacing_small;
+      }
       &>portfolio-breakdown {
         flex: 1 1 auto;
       }
@@ -101,52 +111,77 @@ $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfig
       display: flex;
       flex-direction: column;
       padding-left: $spacing_large;
-      &-header {
-        flex: 0 0 auto;
-        display: flex;
-        justify-content: flex-end;
-        margin-right: $scroll_bar_width;
-        &-item {
-          flex: 0 0 $structureSetTargetPanel_edit_column_size;
-          display: flex;
-          flex-direction: column;
-          padding: 0 $spacing_medium;
-          &-btn {
-            align-self: center;
-            margin-top: $spacing_small;
-            margin-bottom: $spacing_x_small;
-            &>i {
-              font-size: $font_size_large;
-            }
-            &--selected {
-              @include material('none');
-              @extend .santaBtn--inverseLabelled;
-              background-color: $color_active;
-            }
-          }
-          &:first-of-type {
-            margin-right: $typical_border_width;
-          }
-        }
-        &-createRow {
-          display: none;
-          align-self: flex-start;
-          background-color: $color_create;
-          margin-top: $spacing_small;
-          margin-right: auto;
-        }
-      }
-      &-rowList {
-        @include mix_enable_scrollbar('vertical');
+      &-content {
+        @include mix_fixed_div(relative, $z_index_base_item);
         display: flex;
         flex-direction: column;
-        padding-bottom: $spacing_x_large;
-        margin-top: $spacing_small;
+        overflow: hidden;
+        &-border {
+          @include mix_fixed_div(absolute, $z_index_base_item_solid);
+          @include mix_border_generator(2px, $color_active);
+          @include mix_border_radius(5px);
+          @include mix_alive('light');
+          width: $structureSetTargetPanel_edit_column_size + $spacing_small;
+          height: 100%;
+        }
+        &-header {
+          flex: 0 0 auto;
+          display: flex;
+          justify-content: flex-end;
+          margin-right: $scroll_bar_width;
+          &-item {
+            flex: 0 0 $structureSetTargetPanel_edit_column_size;
+            display: flex;
+            flex-direction: column;
+            padding: 0 $spacing_medium;
+            &-btn {
+              align-self: center;
+              margin-top: $spacing_small;
+              margin-bottom: $spacing_x_small;
+              min-width: 10rem;
+              justify-content: center;
+              &>i {
+                font-size: $font_size_large;
+              }
+              &--selected {
+                @include material('none');
+                @extend .santaBtn--inverseLabelled;
+                background-color: $color_active;
+              }
+            }
+            &:first-of-type {
+              margin-right: $typical_border_width;
+            }
+          }
+          &-createRow {
+            display: none;
+            align-self: flex-start;
+            background-color: $color_create;
+            margin-top: $spacing_small;
+            margin-right: auto;
+          }
+        }
+        &-rowList {
+          @include mix_enable_scrollbar('vertical');
+          display: flex;
+          flex-direction: column;
+          padding-bottom: $spacing_x_large;
+          margin-top: $spacing_small;
+        }
       }
     }
   }
   &--cs01ActiveState {
     #{$blockName} {
+      &__main {
+        &-edit {
+          &-content {
+            &-border {
+              right: 0;
+            }
+          }
+        }
+      }
       &__utilities-distribution-label {
         &--cs01 {
           display: flex;
@@ -159,6 +194,15 @@ $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfig
   }
   &--creditLeverageActiveState {
     #{$blockName} {
+      &__main {
+        &-edit {
+          &-content {
+            &-border {
+              right: $structureSetTargetPanel_edit_column_size + $spacing_small;
+            }
+          }
+        }
+      }
       &__utilities-distribution-label {
         &--cs01 {
           display: none;
@@ -199,9 +243,11 @@ $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfig
           }
         }
         &-edit {
-          &-header-createRow {
-            @include material('none');
-            background-color: $color_active;
+          &-content {
+            &-header-createRow {
+              @include material('none');
+              background-color: $color_active;
+            }
           }
         }
       }
@@ -214,7 +260,7 @@ $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfig
       }
       &__main {
         min-height: 44rem;
-        &-edit-header-createRow {
+        &-edit-content-header-createRow {
           display: flex;
         }
       }
@@ -231,7 +277,7 @@ $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfig
     @include mix_fixed_div(relative, $z_index_base_item);
     flex: 0 0 auto;
     display: none;
-    margin: $spacing_small $spacing_medium;
+    margin: $spacing_small;
     &-btn {
       background-color: $color_kill;
       color: $font_color_inverse;
@@ -292,13 +338,9 @@ $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfig
       }
       santa-input {
         flex: 1 1 auto;
+        z-index: $z_index_base_item_lift;
       }
     }
-  }
-  &__divider {
-    flex: 0 0 $typical_border_width;
-    background-color: $color_border_gray;
-    margin: $spacing_small 0;
   }
   &--overrideVariant {
     #{$blockName} {

@@ -52,4 +52,13 @@ export class ModalService {
       exist.api.saveModal = callback;
     }
   }
+
+  public setModalTitle(targetModalId: string, title: string) {
+    const exist = this.registeredModals.find((eachModal) => {
+      return eachModal.data.id === targetModalId;
+    });
+    if (!!exist) {
+      exist.data.title = title;
+    }
+  }
 }

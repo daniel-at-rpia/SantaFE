@@ -2134,8 +2134,7 @@ export class DTOService {
           targetPct: rawTargetPct
         },
         view: view,
-        bucket: bucket,
-        showFullCategory: !!isOverride
+        bucket: bucket
       };
       if (eachCategoryBlock.diffToTarget < 0) {
         eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `${eachCategoryBlock.diffToTarget}k` : `${eachCategoryBlock.diffToTarget}`;
@@ -2158,7 +2157,8 @@ export class DTOService {
     const object: DTOs.SantaModalDTO = {
       data: {
         id: null,
-        modalElement: elementRef.nativeElement
+        modalElement: elementRef.nativeElement,
+        title: 'Edit'
       },
       state: {
         isPresenting: false
