@@ -78,6 +78,18 @@
           <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Trade Alerts</span>
         </div>
       </div>
+      <div
+      [ngClass]="{
+        'sat-tradeAlertPanel__overview-tabList-tab': true,
+        'sat-tradeAlertPanel__overview-tabList-tab--marketList': true,
+        'sat-tradeAlertPanel__overview-tabList-tab--empty': state.alert.marketListAxeAlertCount === 0
+      }">
+      <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.traceAlert)">
+        <i class="sat-tradeAlertPanel__overview-tabList-tab-cta-icon fal fa-analytics"></i>
+        <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-countText">{{state.alert.traceAlertCount}}</span>
+        <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Trace Alerts</span>
+      </div>
+    </div>
     </div>
     <div class="sat-tradeAlertPanel__overview-keywordSearch">
       <i class="sat-tradeAlertPanel__overview-keywordSearch-activeIcon fal fa-search"></i>
