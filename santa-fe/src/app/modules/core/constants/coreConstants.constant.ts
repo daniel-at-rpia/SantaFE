@@ -259,6 +259,7 @@ export enum AlertTypes {
   axeAlert = 'Axe',
   markAlert = 'Mark',
   tradeAlert = 'Trade',
+  traceAlert = 'TraceTrade',
   system = 'System'
 }
 

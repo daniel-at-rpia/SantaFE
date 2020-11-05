@@ -286,7 +286,130 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
         }
       }
     }
-  },{
+  },
+  {
+    key: 'alertTraceCounterParty',
+    content: {
+      label: 'Counter Party',
+      attrName: 'alertTraceCounterParty',
+      underlineAttrName: 'alertTraceCounterParty',
+      blockAttrName: 'alert',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true
+        }
+      }
+    }
+  },
+  {
+    key: 'alertTraceSide',
+    content: {
+      label: 'Side',
+      attrName: 'alertTraceSide',
+      underlineAttrName: 'alertTraceSide',
+      blockAttrName: 'alert',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true
+        }
+      }
+    }
+  },
+  {
+    key: 'alertTraceVolumeEstimated',
+    content: {
+      label: 'Vol (Estimated)',
+      attrName: 'alertTraceVolumeEstimated',
+      underlineAttrName: 'alertTraceVolumeEstimated',
+      blockAttrName: 'alert',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true
+        }
+      }
+    }
+  },
+  {
+    key: 'alertTraceVolumeReported',
+    content: {
+      label: 'Vol (Reported)',
+      attrName: 'alertTraceVolumeReported',
+      underlineAttrName: 'alertTraceVolumeReported',
+      blockAttrName: 'alert',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true
+        }
+      }
+    }
+  },
+  {
+    key: 'alertTracePrice',
+    content: {
+      label: 'Px',
+      attrName: 'alertTracePrice',
+      underlineAttrName: 'alertTracePrice',
+      blockAttrName: 'alert',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true
+        }
+      }
+    }
+  },
+  {
+    key: 'alertTraceSpread',
+    content: {
+      label: 'Sprd',
+      attrName: 'alertTraceSpread',
+      underlineAttrName: 'alertTraceSpread',
+      blockAttrName: 'alert',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true
+        }
+      }
+    }
+  },
+  {
     key: 'bestQuote',
     content: {
       label: 'Best Quote (Bid vs Ask)',
@@ -1479,18 +1602,28 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   }
 ];
 
+const POSITION_ALERT_HEADERS = ['hfPosition', 'nlfPosition', 'dofPosition', 'sofPosition', 'stipPosition', 'fipPosition', 'cipPosition', 'agbPosition', 'bbbPosition'];
+
+const TRACE_ALERT_HEADERS = ['alertTraceCounterParty', 'alertTraceSide', 'alertTraceVolumeEstimated', 'alertTraceVolumeReported', 'alertTracePrice', 'alertTraceSpread'];
+
+const TRACE_ALERT_EXCLUDED_HEADERS = SecurityTableHeaderConfigs.filter(header => header.key.indexOf('Trace') === -1 && !!header.content.tableSpecifics.tradeAlert && !!header.content.tableSpecifics.tradeAlert.active).map(newHeader => newHeader.key);
+
 export const SecurityTableAlertHeaderConfigs: SecurityTableSpecificAlertHeaderConfigsStub = {
   axe: {
     include: ['cs01CadFirm'],
-    exclude: ['alertTradeTrader', 'hfPosition', 'nlfPosition', 'dofPosition', 'sofPosition', 'stipPosition', 'fipPosition', 'cipPosition', 'agbPosition', 'bbbPosition']
+    exclude: ['alertTradeTrader', ...POSITION_ALERT_HEADERS, ...TRACE_ALERT_HEADERS]
   },
   mark: {
     include: ['cs01CadFirm'],
-    exclude: ['alertTradeTrader', 'hfPosition', 'nlfPosition', 'dofPosition', 'sofPosition', 'stipPosition', 'fipPosition', 'cipPosition', 'agbPosition', 'bbbPosition']
+    exclude: ['alertTradeTrader', ...POSITION_ALERT_HEADERS, ...TRACE_ALERT_HEADERS]
   },
   trade: {
     include: ['cs01CadFirm'],
-    exclude: ['alertType', 'alertStatus', 'hfPosition', 'nlfPosition']
+    exclude: ['alertType', 'alertStatus', 'hfPosition', 'nlfPosition', ...TRACE_ALERT_HEADERS]
+  },
+  trace: {
+    include: ['alertTime', 'alertType','alertMessage', ...TRACE_ALERT_HEADERS],
+    exclude: TRACE_ALERT_EXCLUDED_HEADERS
   },
   all: {
     include: ['cs01CadFirm'],
