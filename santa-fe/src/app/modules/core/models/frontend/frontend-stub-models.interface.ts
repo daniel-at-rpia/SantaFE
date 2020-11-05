@@ -109,6 +109,7 @@ export interface SecurityTableSpecificAlertHeaderConfigsStub {
   axe: SecurityTableSpecificAlertHeaderStub;
   mark: SecurityTableSpecificAlertHeaderStub;
   trade: SecurityTableSpecificAlertHeaderStub;
+  trace: SecurityTableSpecificAlertHeaderStub;
   all: SecurityTableSpecificAlertHeaderStub;
 }
 

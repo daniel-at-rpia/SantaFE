@@ -267,6 +267,7 @@ export interface TradeAlertPanelState {
     markAlertCount: number;
     unreadMarkAlertCount: number;
     tradeAlertCount: number;
+    traceAlertCount: number;
     unreadTradeAlertCount: number;
     scopedAlertType: AlertTypes;
     scopedForMarketListOnly: boolean;

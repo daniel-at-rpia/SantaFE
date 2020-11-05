@@ -439,10 +439,11 @@ export interface BEAlertDTO {
   securityIdentifierToQuoteId?: {
     [property: string]: string;
   };
-  trades?: Array<BETradeBlock>;
+  trades?: Array<BETradeBlock>; // for trade alerts
   quote?: BEAlertRegularQuoteBlock|BEAlertMarketListQuoteBlock|BEAlertCDSQuoteBlock;
   marketListAlert?: BEAlertMarketListBlock;
   sendEmail: boolean;
+  trade?: BETraceTradesBlock; // for trace alerts
 }
 
 export interface BETradeBlock {
@@ -664,7 +665,7 @@ export interface BEGetAllTraceTradesBlock {
 
 export interface BETraceTradesBlock {
   actionFlag: string;
-  counterParty: string;
+  counterParty: TraceTradeCounterParty;
   creationTime: string;
   discriminator: string;
   eventDate: string;
