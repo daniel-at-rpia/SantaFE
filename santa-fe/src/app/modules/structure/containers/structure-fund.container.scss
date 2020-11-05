@@ -203,6 +203,7 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
     #{$blockName} {
       &__editFund-autoScalingToggle {
         @include material('none');
+        @include mix_border_generator($typical_border_width, $color_white);
         background-color: $color_active;
         i {
           color: $font_color_inverse;

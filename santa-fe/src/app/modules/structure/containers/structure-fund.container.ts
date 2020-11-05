@@ -118,7 +118,6 @@ export class StructureFund implements OnInit {
   }
 
   private saveEditDetails(targetCreditDuration: number, targetLeverage: number) {
-    this.resetEditForm();
     const isTargetCreditDurationInvalid = this.validateInput(targetCreditDuration);
     const isTargetLeverageInvalid = this.validateInput(targetLeverage);
     this.fund.data.creditDurationTargetBar.state.isEmpty = targetCreditDuration === 0;
@@ -156,10 +155,41 @@ export class StructureFund implements OnInit {
         this.updateFundDetermineAutoScaling(updatedTargetData);
       }
     }
+    // reset at last so the logic for save can still access the states
+    this.resetEditForm();
   }
 
   private updateFundDetermineAutoScaling(updatedTargetDataList: Array<UpdateTargetBlock>) {
-    this.updateFundTarget(updatedTargetDataList, true);
+    if (this.fund.state.autoScalingActive) {
+      let cs01ScalingRate = null;
+      let creditLeverageScalingRate = null;
+      const isCreditDurationUpdated = updatedTargetDataList.find((eachUpdate) => {
+        return eachUpdate.metric === this.constants.BECreditDuration;
+      });
+      const isCreditLeverageUpdated = updatedTargetDataList.find((eachUpdate) => {
+        return eachUpdate.metric === this.constants.BECreditLeverage;
+      });
+      if (isCreditDurationUpdated) {
+        const oldCreditDuration = this.fund.data.target.target.creditDuration;
+        if (!!oldCreditDuration) {
+          cs01ScalingRate = isCreditDurationUpdated.target / oldCreditDuration;
+        }
+      }
+      if (isCreditLeverageUpdated) {
+        const oldCreditLeverage = this.fund.data.target.target.creditLeverage;
+        if (!!oldCreditLeverage) {
+          creditLeverageScalingRate = isCreditLeverageUpdated.target / oldCreditLeverage;
+        }
+      }
+      // this.updateFundTarget(updatedTargetDataList, false);
+      this.fund.data.children.forEach((eachBreakdown) => {
+        if (!eachBreakdown.state.isOverrideVariant) {
+          this.distributeTargetBreakdown(eachBreakdown, cs01ScalingRate, creditLeverageScalingRate);
+        }
+      });
+    } else {
+      // this.updateFundTarget(updatedTargetDataList, true);
+    }
   }
 
   private updateFundTarget(
@@ -226,5 +256,13 @@ export class StructureFund implements OnInit {
         return of('error');
       })
     ).subscribe()
+  }
+
+  private distributeTargetBreakdown(
+    targetBreakdown: PortfolioBreakdownDTO,
+    cs01ScalingRate: number,
+    creditLeverageScalingRate: number
+  ) {
+    console.log('test, scale breakdown', targetBreakdown, cs01ScalingRate, creditLeverageScalingRate);
   }
 }
