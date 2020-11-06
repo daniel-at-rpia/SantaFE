@@ -81,8 +81,8 @@
       <div
       [ngClass]="{
         'sat-tradeAlertPanel__overview-tabList-tab': true,
-        'sat-tradeAlertPanel__overview-tabList-tab--marketList': true,
-        'sat-tradeAlertPanel__overview-tabList-tab--empty': state.alert.marketListAxeAlertCount === 0
+        'sat-tradeAlertPanel__overview-tabList-tab--trace': true,
+        'sat-tradeAlertPanel__overview-tabList-tab--empty': state.alert.traceAlertCount === 0
       }">
       <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.traceAlert)">
         <i class="sat-tradeAlertPanel__overview-tabList-tab-cta-icon fal fa-analytics"></i>
