@@ -339,6 +339,20 @@ $alert_type_size: $iconButton_size_regular;
       }
     }
   }
+  &--typeTraceVariant {
+    #{$alertBlockName} {
+      &__thumbnail {
+        &-type-circle-inner {
+          &--trace {
+            display: flex;
+          }
+          &--system {
+            display: none;
+          }
+        }
+      }
+    }
+  }
   &--bidSidedVariant {
     #{$alertBlockName} {
       &__thumbnail {

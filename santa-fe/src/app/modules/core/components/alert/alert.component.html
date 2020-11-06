@@ -4,6 +4,7 @@
     'sat-alert--typeMarkVariant': alertData.data.type === alertTypes.markAlert,
     'sat-alert--typeAxeVariant': alertData.data.type === alertTypes.axeAlert,
     'sat-alert--typeTradeVariant': alertData.data.type === alertTypes.tradeAlert,
+    'sat-alert--typeTraceVariant': alertData.data.type === alertTypes.traceAlert,
     'sat-alert--askSidedVariant': alertData.data.subType === alertSubTypes.ask || alertData.data.subType === alertSubTypes.sell,
     'sat-alert--bidSidedVariant': alertData.data.subType === alertSubTypes.bid || alertData.data.subType === alertSubTypes.buy,
     'sat-alert--slideOutState': alertData.state.isSlidedOut || !alertData.state.isCountdownFinished,
@@ -25,6 +26,9 @@
         </div>
         <div class="sat-alert__thumbnail-type-circle-inner sat-alert__thumbnail-type-circle-inner--trade">
           <i class="sat-alert__thumbnail-type-circle-inner-icon fal fa-handshake"></i>
+        </div>
+        <div class="sat-alert__thumbnail-type-circle-inner sat-alert__thumbnail-type-circle-inner--trace">
+          <i class="sat-alert__thumbnail-type-circle-inner-icon fal fa-analytics"></i>
         </div>
         <div class="sat-alert__thumbnail-type-circle-inner sat-alert__thumbnail-type-circle-inner--system">
           <i class="sat-alert__thumbnail-type-circle-inner-icon fas fa-info"></i>
