@@ -67,6 +67,9 @@ $alert_type_size: $iconButton_size_regular;
           &--trade {
             background-color: $tradeTradeAlertColor;
           }
+          &--trace {
+            background-color: $tradeTraceAlertColor;
+          }
           &--system {
             background-color: $alert_default_color;
             display: flex;
