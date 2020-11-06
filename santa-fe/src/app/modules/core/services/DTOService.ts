@@ -1487,7 +1487,7 @@ export class DTOService {
     if (!!rawData.trade) {
       const { counterParty, side, volumeEstimated, volumeActual, price, spread } = rawData.trade;
       object.data.traceCounterParty = counterParty;
-      object.data.traceSide = side;
+      object.data.traceSide = TradeSideValueEquivalent[side];
       object.data.traceVolumeEstimated = volumeEstimated;
       object.data.traceVolumeReported = volumeActual;
       object.data.tracePrice = price;
