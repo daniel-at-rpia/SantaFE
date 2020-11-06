@@ -366,11 +366,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
               if (eachRawAlert.isCancelled) {
                 // cancellation of alerts carries diff meaning depending on the alert type:
                 // axe & mark & inquiry: it could be the trader entered it by mistake, but it could also be the trader changed his mind so he/she cancels the previous legitmate entry. So when such an cancelled alert comes in
-                // trade: since it is past tense, so it could only be cancelled because of entered by mistake
-                if (newAlert.data.type === this.constants.alertTypes.markAlert || newAlert.data.type === this.constants.alertTypes.axeAlert || newAlert.data.type === this.constants.alertTypes.traceAlert) {
+                // trade and trace: since it is past tense, so it could only be cancelled because of entered by mistake
+                if (newAlert.data.type === this.constants.alertTypes.markAlert || newAlert.data.type === this.constants.alertTypes.axeAlert) {
                   !newAlert.state.isRead && alertTableList.push(newAlert);
                   updateList.push(newAlert);
-                } else if (newAlert.data.type === this.constants.alertTypes.tradeAlert) {
+                } else if (newAlert.data.type === this.constants.alertTypes.tradeAlert || newAlert.data.type === this.constants.alertTypes.traceAlert) {
                   alertTableRemovalList.push(newAlert);
                 }
               } else {
@@ -506,7 +506,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     ) {
       if (this.state.fetchResult.alertTable.fetchComplete) {
         const tabName = isMarketListOnly ? 'Inquiry' : targetType;
-        if (targetType === this.constants.alertTypes.axeAlert && this.state.alert.nonMarketListAxeAlertCount > 0 || targetType === this.constants.alertTypes.axeAlert && this.state.alert.marketListAxeAlertCount > 0 || targetType === this.constants.alertTypes.traceAlert && this.state.alert.nonMarketListAxeAlertCount > 0 || targetType === this.constants.alertTypes.traceAlert && this.state.alert.marketListAxeAlertCount > 0) {
+        if (targetType === this.constants.alertTypes.axeAlert && this.state.alert.nonMarketListAxeAlertCount > 0 || targetType === this.constants.alertTypes.axeAlert && this.state.alert.marketListAxeAlertCount > 0) {
           if (this.state.alert.scopedAlertType !== targetType || this.state.alert.scopedForMarketListOnly !== !!isMarketListOnly) {
             this.state.displayAlertTable = true;
             this.state.alert.scopedAlertType = targetType;
@@ -519,7 +519,14 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           }
         } else {
           this.state.alert.scopedForMarketListOnly = false;
-          const alertTypeCount = (targetType === 'Mark') ? this.state.alert.markAlertCount : this.state.alert.tradeAlertCount; 
+          let alertTypeCount;
+          if (targetType === this.constants.alertTypes.markAlert) {
+            alertTypeCount = this.state.alert.markAlertCount;
+          } else if (targetType === this.constants.alertTypes.traceAlert) {
+            alertTypeCount = this.state.alert.traceAlertCount;
+          } else {
+            alertTypeCount = this.state.alert.tradeAlertCount;
+          }
           if (this.state.alert.scopedAlertType !== targetType && alertTypeCount > 0) {
             this.state.displayAlertTable = true;
             this.state.alert.scopedAlertType = targetType;
