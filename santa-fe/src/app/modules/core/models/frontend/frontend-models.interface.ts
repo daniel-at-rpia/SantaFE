@@ -12,7 +12,8 @@ import {
   SecurityTableRowQuoteBlock,
   SecurityCostPortfolioBlock, 
   PortfolioMetricTotals,
-  PortfolioBreakdownCategoryBlock
+  PortfolioBreakdownCategoryBlock,
+  TraceTradeBlock
 } from 'FEModels/frontend-blocks.interface';
 import {AlertSubTypes, AlertTypes} from 'Core/constants/coreConstants.constant';
 import { SantaTableNumericFloatingFilterParams } from 'FEModels/frontend-adhoc-packages.interface';
@@ -23,6 +24,7 @@ import {Alert} from "Core/components/alert/alert.component";
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 import { BEPortfolioStructuringDTO } from 'Core/models/backend/backend-models.interface';
+import { TraceTradeCounterParty } from 'Core/constants/securityTableConstants.constant';
 
 interface BasicDTOStructure {
   [property: string]: object;
@@ -139,6 +141,7 @@ export interface SecurityDTO extends BasicDTOStructure {
       }
     }
     tradeHistory: Array<TradeDTO>;
+    traceTrades: Array<TraceTradeBlock>;
     bicsLevel1: string;
     bicsLevel2: string;
     bicsLevel3: string;
@@ -201,7 +204,9 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     displayName: string;
     key: string;
     urlForGetLongOptionListFromServer: string;
+    prinstineFilterOptionList: Array<SecurityDefinitionFilterBlock>;
     filterOptionList: Array<SecurityDefinitionFilterBlock>;
+    highlightSelectedOptionList: Array<SecurityDefinitionFilterBlock>;
     securityDTOAttr: string;
   }
   style: {
@@ -214,6 +219,8 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     groupByActive: boolean;
     filterActive: boolean;
     isMiniPillVariant: boolean;
+    isFilterLong: boolean;
+    currentFilterPathInConsolidatedBICS: Array<string>;
   }
 }
 
@@ -232,9 +239,7 @@ export interface SecurityDefinitionConfiguratorDTO extends BasicDTOStructure {
   state: {
     groupByDisabled: boolean;
     canApplyFilter: boolean;
-    showLongFilterOptions: boolean;
     isLoading: boolean;
-    isLoadingLongOptionListFromServer: boolean;
     showFiltersFromDefinition: SecurityDefinitionDTO;
     noMainCTA: boolean;
     securityAttrOnly: boolean;
@@ -395,6 +400,7 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
     }
     alert: AlertDTO;
     historicalTradeVisualizer: HistoricalTradeVisualizerDTO;
+    traceTradeVisualizer: TraceTradesVisualizerDTO;
   },
   style: {
     rowHeight: number;
@@ -406,6 +412,7 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
     isCDSVariant: boolean;
     isCDSOffTheRun: boolean;
     viewHistoryState: boolean;
+    viewTraceState: boolean;
     quotesLoaded: boolean;
     isAgGridFullSizeVariant: boolean;
   }
@@ -706,6 +713,7 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     isPreviewVariant: boolean;
     isBICs: boolean;
     isOverrideVariant: boolean;
+    isEditingViewAvail: boolean;
     isEditingView: boolean;
   }
 }
@@ -728,12 +736,9 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     indexNav: number;
     indexTotals: PortfolioMetricTotals;
     children: Array<PortfolioBreakdownDTO>;
-    cs01TotalsInK?: {
-      currentTotal: number;
-      targetTotal: number;
-    }
     cs01TargetBar: TargetBarDTO;
     creditLeverageTargetBar: TargetBarDTO;
+    creditDurationTargetBar: TargetBarDTO;
     originalBEData: BEPortfolioStructuringDTO; // used when updating portfolios for portfolio structuring
   },
   api: {
@@ -745,9 +750,13 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     isNumeric: boolean;
     isDataUnavailable: boolean;
     isEditingFund: boolean;
+    modifiedFundTargets: {
+      creditDuration: number;
+      creditLeverage: number;
+    }
     hasErrors: {
-      updatedCS01: boolean;
       updatedCreditLeverage: boolean;
+      updatedCreditDuration: boolean;
       errorMessage: string;
     }
   }
@@ -763,6 +772,11 @@ export interface TargetBarDTO extends BasicDTOStructure {
     currentPercentage: string;
     exceededPercentage: string;
     displayedResults: string;
+    additionalMetricTargetData?: {
+      metric: PortfolioMetricValues;
+      current: string;
+      target: string;
+    }
   }
   state: {
     isInactiveMetric: boolean,
@@ -776,6 +790,7 @@ export interface SantaModalDTO extends BasicDTOStructure {
   data: {
     id: string;
     modalElement: Node;
+    title: string;
   },
   state: {
     isPresenting: boolean;
@@ -789,7 +804,7 @@ export interface SantaModalDTO extends BasicDTOStructure {
 
 export interface StructurePopoverDTO extends BasicDTOStructure {
   data: {
-    mainRow: StructurePortfolioBreakdownRowDTO
+    mainRow: StructurePortfolioBreakdownRowDTO;
   }
   state: {
     isActive: boolean;
@@ -798,11 +813,31 @@ export interface StructurePopoverDTO extends BasicDTOStructure {
 }
 
 export interface StructurePortfolioBreakdownRowDTO extends BasicDTOStructure {
-  data: PortfolioBreakdownCategoryBlock,
+  data: PortfolioBreakdownCategoryBlock;
   state: {
     isSelected: boolean;
     isBtnDiveIn: boolean;
     isStencil: boolean;
     isEditingView: boolean;
+  }
+}
+
+export interface TraceTradesVisualizerDTO extends BasicDTOStructure {
+  data: {
+    displayList: Array<TraceTradeBlock>;
+    scatterGraphId: string;
+    pieGraphId: string;
+    filterList: Array<string>;
+    availableFiltersList: Array<string>;
+  },
+  state: {
+    isDisplayAllTraceTrades: boolean;
+    graphReceived: boolean;
+    selectedFiltersList: Array<string>;
+    showGraphs: boolean;
+  },
+  graph: {
+    scatterGraph: am4Charts.XYChart;
+    pieGraph: am4Charts.PieChart;
   }
 }

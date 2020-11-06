@@ -16,6 +16,7 @@ import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.const
 import { DTOService } from 'Core/services/DTOService';
 import { PortfolioMetricValues, PortfolioShortNames, PortfolioView } from 'Core/constants/structureConstants.constants';
 import { BEStructuringBreakdownBlock } from 'Core/models/backend/backend-models.interface';
+import { TraceTradeCounterParty } from 'Core/constants/securityTableConstants.constant';
 
 export interface SecurityPortfolioBlock {
   portfolioName: string;
@@ -109,6 +110,7 @@ export interface SecurityDefinitionFilterBlock {
   isSelected: boolean;  // means it is selected for filtering
   isFilteredOut: boolean;  // means it is hidden/disabled in the UI, sry about this naming failure, it's just not worth it to mass-rename it in the code
   displayLabel: string;
+  bicsLevel?: number;  // only exist for consolidated bics options
   shortKey: string;
   key: string;
 }
@@ -274,6 +276,7 @@ export interface SelectAxeWatchlistRangeDriver extends AxeAlertBlock {
 export interface PortfolioMetricTotals {
   cs01: number;
   creditLeverage: number;
+  creditDuration: number;
 }
 
 export interface PortfolioBreakdownCategoryBlock {
@@ -357,4 +360,23 @@ export interface BICsCategorizationBlock {
 
 export interface StructureBucketDataBlock {
   [groupOption: string]: Array<string>;
+}
+
+export interface TraceTradeBlock {
+  traceTradeId: string;
+  eventTime: string;
+  parsedEventTime: string;
+  counterParty: TraceTradeCounterParty;
+  side: string;
+  volumeEstimated: number;
+  volumeReported: number;
+  displayVolumeEstimated: string;
+  displayVolumeReported: string;
+  price: string;
+  yield: number;
+  spread: string;
+  oasSpread: string;
+  gSpread: string;
+  iSpread: string;
+  parSpread: string;
 }

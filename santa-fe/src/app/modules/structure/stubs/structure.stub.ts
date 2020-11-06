@@ -9,14 +9,16 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO =
     "portfolioNav":752202919.2976391,
     "currentTotals":{
       "CreditLeverage":0.7567398373447978,
-      "Cs01":124965.828569423
+      "Cs01":124965.828569423,
+      "CreditDuration":1.8940384
     },
     "indexId":25,
     "indexShortName":"DEX BBB",
     "indexNav":821605479760.9755,
     "indexTotals":{
       "CreditLeverage":0.7179490792140522,
-      "Cs01":169992574.48114464
+      "Cs01":169992574.48114464,
+      "CreditDuration":1.39403848
     },
     "target":{
       "portfolioTargetId":"d6a4963d-e9ea-4014-ab74-46aee700b9e8",
@@ -24,7 +26,8 @@ export const PortfolioStructuringSample: BEPortfolioStructuringDTO =
       "portfolioId":5,
       "target":{
         "Cs01":150000.0,
-        "CreditLeverage":0.85
+        "CreditLeverage":0.85,
+        "CreditDuration":2.94390384
       }
     },
     "breakdowns":{

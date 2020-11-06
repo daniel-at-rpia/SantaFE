@@ -5,6 +5,7 @@ $portfolioBreakdown_borderWidth: $typical_border_width*2; // can't use rem becau
 $portfolioBreakdown_rating_width: 12rem;
 $portfolioBreakdown_rating_thickness: 1.75rem;
 $portfolioBreakdown_categoryList_cell_width: 3.5rem;
+$portfolioBreakdown_rating_height: 1rem;
 
 .sat-portfolioBreakdown {
   $blockName: &;
@@ -44,7 +45,8 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
     justify-content: center;
     align-items: center;
     top: -$portfolioBreakdown_rating_thickness/2;
-    right: $spacing_medium;
+    left: 50%;
+    transform: translateX(-50%);
     width: $portfolioBreakdown_rating_width;
     height: $portfolioBreakdown_rating_thickness;
     overflow: hidden;
@@ -69,7 +71,7 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    width: $portfolioBreakdown_categoryList_cell_width + $spacing_small*2;
+    width: 6rem;
     height: 2rem;
     right: $spacing_small;
     &-text {
@@ -132,16 +134,14 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
     }
   }
   &__ctas {
-    @include mix_fixed_div(absolute, $z_index_hovering_item);
+    @include mix_fixed_div(absolute, $z_index_hovering_item_lift);
     display: none;
     justify-content: center;
     left: 0;
     bottom: 0 - $iconButton_size_regular/2;
     width: 100%;
-    &-editBtn {
-      margin-right: $spacing_large;
-    }
     &-viewBtn {
+      display: none;
       &-icon {
         display: flex;
         &-up {
@@ -185,17 +185,16 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
       }
     }
   }
-  // temporarily disable it as the calculation needs to be decided
-  // &--ratingAvailableState {
-  //   #{$blockName} {
-  //     &__rating {
-  //       visibility: visible;
-  //       &-hoverText {
-  //         color: $font_color_inverse;
-  //       }
-  //     }
-  //   }
-  // }
+  &--ratingAvailableState {
+    #{$blockName} {
+      &__rating {
+        visibility: visible;
+        &-hoverText {
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
   &--editableState {
     #{$blockName} {
       &__ctas {
@@ -214,6 +213,18 @@ $portfolioBreakdown_categoryList_cell_width: 3.5rem;
         }
         &-text {
           color: $font_color_major;
+        }
+      }
+    }
+  }
+  &--isEditingViewAvailableState {
+    #{$blockName} {
+      &__ctas {
+        &-editBtn {
+          margin-right: $spacing_large;
+        }
+        &-viewBtn {
+          display: flex;
         }
       }
     }

@@ -7,6 +7,7 @@
     font-size: $font_size_small;
     margin: 0 0 $spacing_x_small 0;
     text-align: center;
+    color: $font_color_major;
   }
   &__indicator {
     @include mix_border_generator($static_color: $color_active);
@@ -15,6 +16,7 @@
     height: $spacing_large;
     overflow: hidden;
     background-color: $color_active;
+    margin-bottom: $spacing_x_small;
     &-bar {
       @include mix_fixed_div(absolute, $z_index_base_item_solid);
       display: inline-block;
@@ -48,6 +50,19 @@
         color: $font_color_inverse;
       }
     }
+  }
+  &__additionalMetricTargetData {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    align-items: center;
+      &-type {
+        margin-bottom: $spacing_xx_small;
+      }
+      &-type,
+      &-value {
+        flex: 1 1 auto;
+      }
   }
   &__tooltip {
     @include mix_fixed_div(absolute, $z_index_hovering_item);
@@ -84,8 +99,17 @@
   }
   &--inactiveState {
     #{$blockName} {
+      &__type {
+        color: $color_disabled;
+      }
       &__indicator {
         opacity: 0.2;
+      }
+      &__additionalMetricTargetData {
+        &-type,
+        &-value {
+          color: $color_disabled;
+        }
       }
     }
   }
@@ -106,6 +130,11 @@
           &-text {
             @include mix_stencil_animation();
           }
+        }
+      }
+      &__additionalMetricTargetData {
+        &-value {
+          @include mix_stencil_animation();
         }
       }
     }

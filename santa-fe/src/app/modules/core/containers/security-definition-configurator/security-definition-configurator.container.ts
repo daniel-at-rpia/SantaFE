@@ -6,9 +6,10 @@
     import { DTOService } from 'Core/services/DTOService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { UtilityService } from 'Core/services/UtilityService';
+    import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
     import { SecurityDefinitionConfiguratorDTO,SecurityDefinitionDTO } from 'FEModels/frontend-models.interface';
     import { SecurityDefinitionFilterBlock } from 'FEModels/frontend-blocks.interface';
-    import { ConfiguratorDefinitionLayout } from 'Core/constants/securityDefinitionConstants.constant';
+    import { ConfiguratorDefinitionLayout, SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       DefinitionConfiguratorEmitterParams,
       DefinitionConfiguratorEmitterParamsItem
@@ -31,11 +32,15 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   lastExecutedConfiguration: SecurityDefinitionConfiguratorDTO;
   @Output() buryConfigurator = new EventEmitter();
   @Output() boostConfigurator = new EventEmitter();
+  constants = {
+    map: SecurityDefinitionMap
+  }
 
   constructor(
     private dtoService: DTOService,
     private restfulCommService: RestfulCommService,
-    private utilityService: UtilityService
+    private utilityService: UtilityService,
+    private bicsDataProcessingService: BICsDataProcessingService
   ) {
   }
 
@@ -57,23 +62,17 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         });
       }
       this.lastExecutedConfiguration = this.utilityService.deepCopy(this.configuratorData);
+      this.configuratorData.data.definitionList.forEach((eachBundle) => {
+        eachBundle.data.list.forEach((eachDefinition) => {
+          if (eachDefinition.data.key === this.constants.map.COUNTRY.key) {
+            this.fetchCountryCode(eachDefinition);
+          }
+          if (eachDefinition.data.key === this.constants.map.TICKER.key) {
+            this.fetchTicker(eachDefinition);
+          }
+        })
+      });
     }
-  }
-
-  public onClickLoadLongOptionListForDefinition(targetDefinition: SecurityDefinitionDTO) {
-    this.configuratorData.state.isLoadingLongOptionListFromServer = true;
-    this.restfulCommService.callAPI(targetDefinition.data.urlForGetLongOptionListFromServer, {req: 'GET'}).pipe(
-      first(),
-      delay(200),
-      tap((serverReturn: Array<string>) => {
-        targetDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, serverReturn);
-        this.configuratorData.state.isLoadingLongOptionListFromServer = false;
-      }),
-      catchError(err => {
-        console.log('error', err);
-        return of('error');
-      })
-    ).subscribe();
   }
 
   public selectDefinitionForGrouping(targetDefinition: SecurityDefinitionDTO) {
@@ -99,13 +98,11 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   public onClickDefinition(targetDefinition: SecurityDefinitionDTO) {
     if (!!targetDefinition && !targetDefinition.state.isUnactivated) {
       this.clearSearchFilter();
-      if (this.configuratorData.state.showFiltersFromDefinition && this.configuratorData.state.showFiltersFromDefinition.data.urlForGetLongOptionListFromServer) {
-        // have to flush out the long options for performance concerns
-        this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList = [];
-      }
       this.configuratorData.state.showFiltersFromDefinition = this.configuratorData.state.showFiltersFromDefinition === targetDefinition ? null : targetDefinition;
       if (this.configuratorData.state.showFiltersFromDefinition) {
-        this.configuratorData.state.showLongFilterOptions = this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.length > 5 || !!this.configuratorData.state.showFiltersFromDefinition.data.urlForGetLongOptionListFromServer;  // any list with more than five options or need to be loaded from server is considered a long list, will need extra room on the UI
+        if (this.configuratorData.state.showFiltersFromDefinition.state.isFilterLong) {
+          this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList = [];
+        }
         this.boostConfigurator.emit();
       } else {
         this.buryConfigurator.emit();
@@ -125,6 +122,13 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     targetDefinition.state.filterActive = filterActive;
     if (this.configuratorData.state.groupByDisabled) {
       this.configuratorData.state.canApplyFilter = this.checkFilterCanApply();
+    }
+    if (targetOption.isSelected) {
+      targetDefinition.data.highlightSelectedOptionList.push(targetOption);
+    } else {
+      targetDefinition.data.highlightSelectedOptionList = targetDefinition.data.highlightSelectedOptionList.filter((eachFilter) => {
+        return eachFilter.key !== targetOption.key;
+      });
     }
   }
 
@@ -158,6 +162,48 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     this.clickedApplyFilter.emit(params);
     this.lastExecutedConfiguration = this.utilityService.deepCopy(this.configuratorData);
     this.configuratorData.state.canApplyFilter = false;
+  }
+
+  public onClickConsolidatedBICSDiveIn(targetOption: SecurityDefinitionFilterBlock) {
+    const consolidatedBICSDefinition = this.configuratorData.state.showFiltersFromDefinition;
+    if (!!consolidatedBICSDefinition) {
+      consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.push(targetOption.displayLabel);
+      const level = consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.length+1;
+      const newList = this.bicsDataProcessingService.getSubLevelList(targetOption.shortKey, level-1);
+      consolidatedBICSDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(consolidatedBICSDefinition.data.key, newList, level);
+      consolidatedBICSDefinition.data.filterOptionList.forEach((eachOption) => {
+        const existInSelected = consolidatedBICSDefinition.data.highlightSelectedOptionList.find((eachSelectedOption) => {
+          return eachOption.key === eachSelectedOption.key;
+        });
+        eachOption.isSelected = !!existInSelected;
+      });
+    }
+  }
+
+  public onClickConsolidatedBICSDiveOut(targetLevelText: string, level: number) {
+    const consolidatedBICSDefinition = this.configuratorData.state.showFiltersFromDefinition;
+    if (!!consolidatedBICSDefinition) {
+      consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS = consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.slice(0, level);
+      const newLevel = consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.length+1;
+      let newList = [];
+      if (newLevel > 1) {
+        newList = this.bicsDataProcessingService.getSubLevelList(
+          consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS[consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.length-1],
+          newLevel-1
+        );
+      } else {
+        newList = this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(
+          newLevel
+        );
+      }
+      consolidatedBICSDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(consolidatedBICSDefinition.data.key, newList, newLevel);
+      consolidatedBICSDefinition.data.filterOptionList.forEach((eachOption) => {
+        const existInSelected = consolidatedBICSDefinition.data.highlightSelectedOptionList.find((eachSelectedOption) => {
+          return eachOption.key === eachSelectedOption.key;
+        });
+        eachOption.isSelected = !!existInSelected;
+      });
+    }
   }
 
   private applySearchFilter(targetOption: SecurityDefinitionFilterBlock, keyword: string): boolean {
@@ -214,6 +260,32 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         return eachBundle.data.list.length > 0;
       });
     }
+  }
+
+  private fetchCountryCode(targetDefinition: SecurityDefinitionDTO) {
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getCountries, {req: 'GET'}).pipe(
+      first(),
+      tap((serverReturn: Array<string>) => {
+        this.dtoService.loadSecurityDefinitionOptions(targetDefinition, serverReturn);
+      }),
+      catchError(err => {
+        this.restfulCommService.logError('Cannot retrieve country data');
+        return of('error');
+      })
+    ).subscribe();
+  }
+
+  private fetchTicker(targetDefinition: SecurityDefinitionDTO) {
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getTickers, {req: 'GET'}).pipe(
+      first(),
+      tap((serverReturn: Array<string>) => {
+        this.dtoService.loadSecurityDefinitionOptions(targetDefinition, serverReturn);
+      }),
+      catchError(err => {
+        this.restfulCommService.logError('Cannot retrieve country data');
+        return of('error');
+      })
+    ).subscribe();
   }
 
 }

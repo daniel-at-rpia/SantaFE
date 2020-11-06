@@ -2,7 +2,8 @@ import {
   SecurityTableHeaderConfigStub,
   SecurityTableQuoteHeaderConfigStub,
   TradeHistoryHeaderConfigStub,
-  SecurityTableSpecificAlertHeaderConfigsStub
+  SecurityTableSpecificAlertHeaderConfigsStub,
+  TradeTraceHeaderConfigStub
 } from 'FEModels/frontend-stub-models.interface';
 
 import {
@@ -1596,4 +1597,96 @@ export const TradeHistoryHeaderConfigList: Array<TradeHistoryHeaderConfigStub> =
   }
 ];
 
+export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
+  {
+    headerKey: 'eventTime',
+    headerDisplayLabel: 'Time',
+    attrName: 'parsedEventTime',
+    size: 8
+  },{
+    headerKey: 'counterParty',
+    headerDisplayLabel: 'Counter Party',
+    attrName: 'counterParty',
+    size: 7
+  },{
+    headerKey: 'side',
+    headerDisplayLabel: 'Side',
+    attrName: 'side',
+    applyQuantColorCodes: true
+  },{
+    headerKey: 'displayVolumeEstimated',
+    headerDisplayLabel: 'Vol (Estimated)',
+    attrName: 'displayVolumeEstimated',
+    size: 8,
+  },{
+    headerKey: 'displayVolumeReported',
+    headerDisplayLabel: 'Vol (Reported)',
+    attrName: 'displayVolumeReported',
+    size: 8
+  },{
+    headerKey: 'price',
+    headerDisplayLabel: 'Px',
+    attrName: 'price',
+    size: 5
+  },{
+    headerKey: 'yield',
+    headerDisplayLabel: 'Yield',
+    attrName: 'yield'
+  },{
+    headerKey: 'spread',
+    headerDisplayLabel: 'Sprd',
+    attrName: 'spread'
+  },{
+    headerKey: 'oasSpread',
+    headerDisplayLabel: 'OAS Sprd',
+    attrName: 'oasSpread',
+    size: 5
+  },{
+    headerKey: 'gSpread',
+    headerDisplayLabel: 'G Sprd',
+    attrName: 'gSpread',
+  },{
+    headerKey: 'iSpread',
+    headerDisplayLabel: 'I Sprd',
+    attrName: 'iSpread',
+  },
+  {
+    headerKey: 'parSpread',
+    headerDisplayLabel: 'Par Sprd',
+    attrName: 'parSpread',
+    size: 4
+  }
+]
+
 export const AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD = 'fullWidth';
+
+export const AGGRID_PINNED_FULL_WIDTH_PINNED_ROW_KEYWORD = 'pinned';
+
+export enum TraceTradeCounterParty {
+  Dealer = 'Dealer',
+  Client = 'Client',
+  ClientAffiliate = 'Client Affiliate',
+  ATS = 'ATS'
+}
+
+export enum TradeSideValueEquivalent {
+  Bid = 'Buy',
+  Ask = 'Sell'
+}
+
+export enum traceTradeNumericalFilters {
+  filter250K = '≥ 250K',
+  filter1M = '≥ 1M',
+  filter5M = '≥ 5M'
+}
+
+export enum traceTradeFilterAmounts {
+  thousand = 1000,
+  million = 1000000
+}
+
+export enum traceTradeNumericalFilterSymbols {
+  greaterThan = '≥'
+}
+
+export const TraceTradeCounterPartyList: Array<TraceTradeCounterParty> = [TraceTradeCounterParty.Dealer, TraceTradeCounterParty.Client, TraceTradeCounterParty.ClientAffiliate, TraceTradeCounterParty.ATS];

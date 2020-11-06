@@ -3,7 +3,7 @@
 
 $securityDefinitionConfigurator_ctas_height: 6rem;
 .sat-securityDefinitionConfigurator {
-  $securityDefinitionConfiguratorBlockName: &;
+  $blockName: &;
   @include mix_fixed_div(relative, $z_index_base_item);
   display: flex;
   flex-direction: column;
@@ -28,7 +28,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
           display: flex;
           &-text {
             @include mix_fixed_div(relative, $z_index_base_item_lift);
-            color: $font_color_major;
+            color: $font_color_minor;
             background-color: $color_gray_2;
             padding: $spacing_x_small;
             font-size: $font_size_x_large;
@@ -89,7 +89,6 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       transform: translate(-125%, 0) scale(0.01, 1);
       &-closeBtn {
         @include mix_fixed_div(absolute, $z_index_hovering_item);
@@ -118,15 +117,29 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
         display: none;
         margin: 0 $spacing_medium;
       }
+      &-selectedListTitle {
+        display: none;
+        &-highlightedText {
+          @include mix_border_radius(3px);
+          background-color: $color_filter;
+          color: $font_color_inverse;
+          margin-right: $spacing_small;
+          padding: 0 $spacing_xx_small;
+          font-size: $font_size_normal;
+        }
+        &-text {
+          color: $font_color_minor;
+          font-size: $font_size_normal;
+        }
+      }
       &-optionList {
         @include mix_enable_scrollbar('vertical');
         display: flex;
-        flex-wrap: wrap;
-        padding: $spacing_medium 0;
-        margin: 0 $spacing_small;
+        align-self: stretch;
+        flex-direction: column;
+        padding: $spacing_medium $spacing_small;
         &-item {
-          flex: 0 1 100%;
-          padding: $spacing_small $spacing_medium;
+          padding: $spacing_small;
           margin: $spacing_small $spacing_medium;
           font-size: $font_size_small;
           word-break: break-word;
@@ -137,6 +150,82 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
           }
           &--filteredOut {
             display: none;
+          }
+        }
+        &--selected {
+          @include mix_border_generator(0 0 $typical_border_width 0);
+          flex: 0 0 auto;
+          display: none;
+          max-height: 11rem;
+          padding: $spacing_x_small;
+          margin: 0 $spacing_medium;
+        }
+        &--selected > &-item {
+          margin: 0 0 $spacing_x_small 0;
+        }
+      }
+      &-consolidatedBICSList {
+        @include mix_enable_scrollbar('vertical');
+        display: none;
+        flex-direction: column;
+        padding: $spacing_medium $spacing_small;
+        &-item {
+          display: flex;
+          margin-bottom: $spacing_medium;
+          &-diveIn {
+            flex: 0 0 auto;
+            margin-right: $spacing_medium;
+          }
+          &-select {
+            flex: 1 1 auto;
+            word-break: break-word;
+            padding: $spacing_x_small;
+            align-items: flex-start;
+            text-align: left;
+          }
+          &--selected > &-select {
+            @include material('none');
+            background-color: $color_filter;
+            color: $font_color_inverse;
+            padding: $spacing_small;
+          }
+          &--selected > &-diveIn {
+            display: none;
+          }
+          &--deepestLevel > &-diveIn {
+            display: none;
+          }
+        }
+      }
+      &-bicsDiveIn {
+        @include mix_border_radius(5px);
+        display: none;
+        align-self: stretch;
+        flex-direction: column;
+        padding: 0 $spacing_small;
+        margin: $spacing_small $spacing_small 0 $spacing_small;
+        background-color: $color_active;
+        &-entry {
+          display: flex;
+          flex-direction: column;
+          margin: $spacing_x_small 0;
+          &-content {
+            display: flex;
+            align-items: center;
+            &-text {
+              flex: 1 1 auto;
+              word-break: break-word;
+              text-align: center;
+              margin-right: $spacing_small;
+              color: $font_color_inverse;
+            }
+            &-diveOutBtn {
+              flex: 0 0 auto;
+            }
+          }
+          &-separator {
+            text-align: center;
+            color: $font_color_inverse;
           }
         }
       }
@@ -201,7 +290,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
     }
   }
   &--filterActiveState {
-    #{$securityDefinitionConfiguratorBlockName} {
+    #{$blockName} {
       &__filters {
         @include mix_fixed_div(absolute, $z_index_hovering_item);
         &-content {
@@ -213,7 +302,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
     }
   }
   &--highlightedVariant {
-    #{$securityDefinitionConfiguratorBlockName} {
+    #{$blockName} {
       &__definitions {
         &-list-section-item-selectBtn--selected {
           background-color: $color_highlight;
@@ -231,30 +320,46 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
       }
     }
   }
-  &--filterShowingLongDefinitionState {
-    #{$securityDefinitionConfiguratorBlockName} {
+  &--filterLongState {
+    #{$blockName} {
       &__filters-content {
-        &-search {
-          display: none;
-        }
-        &-loadLongOptionCta {
+        &-selectedListTitle {
           display: flex;
         }
         &-optionList {
-          display: none;
+          &--selected {
+            display: flex;
+          }
         }
       }
     }
   }
-  &--filterLoadingLongOptionListState {
-    #{$securityDefinitionConfiguratorBlockName} {
-      &__definitions {
-
+  &--filterShowingBICSConsolidatedState {
+    #{$blockName} {
+      &__filters-content {
+        &-title {
+          display: none;
+        }
+        &-selectedListTitle {
+          margin-top: $spacing_medium;
+        }
+        &-optionList--regular {
+          display: none;
+        }
+        &-search {
+          display: none;
+        }
+        &-consolidatedBICSList {
+          display: flex;
+        }
+        &-bicsDiveIn {
+          display: flex;
+        }
       }
     }
   }
   &--noMainCTAState {
-    #{$securityDefinitionConfiguratorBlockName} {
+    #{$blockName} {
       &__filters {
         height: 100%;
       }
@@ -264,7 +369,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
     }
   }
   &--groupByDisabledState {
-    #{$securityDefinitionConfiguratorBlockName} {
+    #{$blockName} {
       &__definitions {
         &-list-section-item {
           &-selectBtn {
@@ -287,8 +392,8 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
       }
     }
   }
-  &--groupByDisabledState#{$securityDefinitionConfiguratorBlockName}--canApplyFilterState {
-    #{$securityDefinitionConfiguratorBlockName} {
+  &--groupByDisabledState#{$blockName}--canApplyFilterState {
+    #{$blockName} {
       &__ctas {
         &-content-filterApply-btn {
           transform: translate(0, 0);

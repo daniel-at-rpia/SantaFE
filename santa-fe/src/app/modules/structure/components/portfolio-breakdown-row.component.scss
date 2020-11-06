@@ -2,6 +2,7 @@
 
 $portfolioBreakdownRowCategory_cell_width: 3.5rem;
 $portfolioBreakdownRowBtnMinHeight: 2.25rem;
+$portfolioBreakdownRowIconSpacing: .1rem;
 .sat-portfolioBreakdownRow {
   $blockName: &;
   display: flex;
@@ -9,40 +10,61 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
   align-items: center;
   &__cta {
     @include mix_fixed_div(relative, $z_index_base_item);
-    flex: 0 0 8rem;
+    flex: 0 0 8.5rem;
     display: flex;
-    margin-right: $spacing_small;
+    margin-right: .5rem;
     &-btn {
       @include mix_border_generator();
       flex: 1 1 auto;
       display: flex;
       min-height: $portfolioBreakdownRowBtnMinHeight;
-      margin: 0 $spacing_small $spacing_small 0;
+      margin: 0 $spacing_x_small $spacing_small 0;
       padding: $spacing_xx_small;
       box-shadow: none;
       text-align: right;
       flex-direction: row;
       cursor: not-allowed;
       &-text {
-        @include mix_text_overflow_multi_line(2);
         flex: 1 1 auto;
         text-align: right;
-        margin-left: 1.5rem;
-        overflow: hidden;
-        text-overflow: ellipsis;
         word-break: break-word;
       }
       &-view {
-        @include mix_fixed_div(absolute, $z_index_base_item_solid);
         @include mix_border_radius(3px);
+        flex: 0 0 auto;
         display: flex;
         align-items: center;
         justify-content: center;
-        left: $spacing_x_small;
+        position: relative;
         width: $iconButton_size_x_small;
         height: $iconButton_size_x_small;
         color: $font_color_inverse;
         font-size: $font_size_small;
+        &-icon {
+          flex: 0 0 auto;
+        }
+        &-toolTip {
+          display: none;
+          position: absolute;
+          top: -$iconButton_size_x_small;
+          background-color: $color_active;
+          color: $font_color_inverse;
+          padding: $portfolioBreakdownRowIconSpacing;
+          font-size: $font_size_small;
+        }
+        &:hover {
+          #{$blockName} {
+            &__cta {
+              &-btn {
+                &-view {
+                  &-toolTip {
+                    display: flex;
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -89,11 +111,49 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
       justify-content: center;
       &-btn {
         margin-right: $spacing_small;
-        &--overweight {
-          background-color: $color_positive;
+        &-icon {
+          color: $font_color_inverse;
         }
-        &--underweight {
-          background-color: $color_kill;
+        &-text {
+          word-break: break-all;
+          color: $font_color_inverse;
+        }
+        &--positive {
+          background-color: $color_green_6;
+        }
+        &--improving {
+          background-color: $color_lime_10;
+          #{$blockName} {
+            &__utility {
+              &-ctas {
+                &-btn {
+                  &-icon {
+                    transform: rotate(45deg);
+                  }
+                }
+              }
+            }
+          }
+        }
+        &--neutral {
+          background-color: $color_yellow_6;
+        }
+        &--deteriorating {
+          background-color: $color_orange_6;
+          #{$blockName} {
+            &__utility {
+              &-ctas {
+                &-btn {
+                  &-icon {
+                    transform: rotate(45deg);
+                  }
+                }
+              }
+            }
+          }
+        }
+        &--negative {
+          background-color: $color_red_6;
         }
       }
     }
@@ -121,19 +181,19 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
       }
     }
   }
-  &--overweight {
+  &--positive {
     #{$blockName} {
       &__cta {
         &-btn {
           &-view {
-            background-color: $color_positive;
+            background-color: $color_green_6;
           }
         }
       }
       &__utility {
         &-ctas {
           &-btn {
-            &--overweight {
+            &--positive {
               @include material('none');
               background-color: $color_active;
               color: $font_color_inverse;
@@ -143,19 +203,69 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
       }
     }
   }
-  &--underweight {
+  &--improving {
     #{$blockName} {
       &__cta {
         &-btn {
           &-view {
-            background-color: $color_kill;
+            background-color: $color_lime_10;
+            &-icon {
+              transform: rotate(45deg);
+            }
           }
         }
       }
       &__utility {
         &-ctas {
           &-btn {
-            &--underweight {
+            &--improving {
+              @include material('none');
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--deteriorating {
+    #{$blockName} {
+      &__cta {
+        &-btn {
+          &-view {
+            background-color: $color_orange_6;
+            &-icon {
+              transform: rotate(45deg);
+            }
+          }
+        }
+      }
+      &__utility {
+        &-ctas {
+          &-btn {
+            &--deteriorating {
+              @include material('none');
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--negative {
+    #{$blockName} {
+      &__cta {
+        &-btn {
+          &-view {
+            background-color: $color_red_6;
+          }
+        }
+      }
+      &__utility {
+        &-ctas {
+          &-btn {
+            &--negative {
               @include material('none');
               background-color: $color_active;
               color: $font_color_inverse;
@@ -170,8 +280,7 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
       &__cta {
         &-btn {
           &-view {
-            background-color: $color_white;
-            color: $color_active;
+            background-color: $color_yellow_6;
           }
         }
       }
@@ -182,6 +291,20 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
               @include material('none');
               background-color: $color_active;
               color: $font_color_inverse;
+              #{$blockName} {
+                &__utility {
+                  &-ctas {
+                    &-btn {
+                      &-icon {
+                        color: $font_color_inverse;
+                      }
+                      &-text {
+                        color: $font_color_inverse
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }
