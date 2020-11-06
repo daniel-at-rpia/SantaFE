@@ -1622,7 +1622,7 @@ export const SecurityTableAlertHeaderConfigs: SecurityTableSpecificAlertHeaderCo
     exclude: ['alertType', 'alertStatus', 'hfPosition', 'nlfPosition', ...TRACE_ALERT_HEADERS]
   },
   trace: {
-    include: ['alertTime', 'alertType','alertMessage', ...TRACE_ALERT_HEADERS],
+    include: ['alertTime', 'alertMessage', ...TRACE_ALERT_HEADERS],
     exclude: TRACE_ALERT_EXCLUDED_HEADERS
   },
   all: {
