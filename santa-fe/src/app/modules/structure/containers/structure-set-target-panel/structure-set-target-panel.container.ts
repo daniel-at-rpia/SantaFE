@@ -16,10 +16,9 @@ import {
 import { StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend-models.interface';
 import {
   StructureSetTargetPanelEditRowBlock,
-  StructureSetTargetPanelEditRowItemBlock,
+  StructureSetTargetPanelEditRowItemBlock
 } from 'FEModels/frontend-blocks.interface';
 import {
-  PortfolioBreakdownGroupOptions,
   PortfolioMetricValues,
   STRUCTURE_EDIT_MODAL_ID,
   PortfolioView
@@ -41,7 +40,10 @@ import {
   BEMetricBreakdowns,
   BEStructuringOverrideBlock
 } from 'BEModels/backend-models.interface';
-import { PayloadGetPortfolioOverride } from 'BEModels/backend-payloads.interface';
+import {
+  PayloadGetPortfolioOverride,
+  PayloadClearPortfolioBreakdown
+} from 'BEModels/backend-payloads.interface';
 import { StructureSetTargetPostEditUpdatePack } from 'FEModels/frontend-adhoc-packages.interface';
 import { StructureReloadBreakdownDataPostEditEvent, StructureUpdateMainPanelEvent } from 'Structure/actions/structure.actions';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
@@ -91,6 +93,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       remainingUnallocatedCS01: 0,
       remainingUnallocatedCreditLeverage: 0,
       activeMetric: null,
+      displayCs01BtnText: null,
+      displayCreditLeverageBtnText: null,
       displayPercentageUnallocatedCS01: 0,
       displayPercentageUnallocatedCreditLeverage: 0,
       displayRemainingUnallocatedCS01: '',
@@ -101,7 +105,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         display: false,
         newOverrideNameCache: null
       },
-      removalList: []
+      removalList: [],
+      clearAllTargetSelected: false
     };
     return state;
   }
@@ -139,6 +144,11 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.calculateAllocation();
         this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
         this.loadBICSOptionsIntoConfigurator();
+        if (!!this.state.clearAllTargetSelected) {
+          this.state.clearAllTargetSelected = false;
+        }
+        const modalTitle = this.state.targetBreakdown.state.isOverrideVariant ? `${this.state.targetFund.data.portfolioShortName} - Edit Override Targets` : `${this.state.targetFund.data.portfolioShortName} - Edit Breakdown Targets`;
+        this.modalService.setModalTitle(STRUCTURE_EDIT_MODAL_ID, modalTitle);
       }
     });
     this.modalService.bindModalSaveCallback(STRUCTURE_EDIT_MODAL_ID, this.submitTargetChanges.bind(this));
@@ -173,7 +183,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   ) {
     targetItem.isFocused = false;
     targetItem.savedDisplayValue = targetItem.modifiedDisplayValue;
-    targetItem.savedUnderlineValue = targetItem.modifiedUnderlineValue;
+    targetItem.savedUnderlineValue = targetItem.modifiedUnderlineValue === 0 ? null : targetItem.modifiedUnderlineValue;
     let counterPartyItem = null;
     if (targetItem.metric === this.constants.metric.cs01) {
       if (!!targetItem.isPercent) {
@@ -192,7 +202,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       targetItem,
       counterPartyItem
     );
-    if (this.state.activeMetric === this.constants.metric.cs01) {
+    if (targetItem.metric === this.constants.metric.cs01) {
       this.state.targetBreakdownRawData.breakdown[targetCategory.rowIdentifier].metricBreakdowns.Cs01.targetLevel = targetCategory.targetCs01.level.savedUnderlineValue;
       this.state.targetBreakdownRawData.breakdown[targetCategory.rowIdentifier].metricBreakdowns.Cs01.targetPct = targetCategory.targetCs01.percent.savedUnderlineValue;
     } else {
@@ -212,6 +222,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.state.targetFund.data.cs01TargetBar.state.isInactiveMetric = !this.state.targetFund.data.cs01TargetBar.state.isInactiveMetric;
       this.state.targetFund.data.creditLeverageTargetBar.state.isInactiveMetric = !this.state.targetFund.data.creditLeverageTargetBar.state.isInactiveMetric;
       this.state.targetBreakdown.state.isDisplayingCs01 = this.state.activeMetric === this.constants.metric.cs01;
+      this.setBtnText();
       this.refreshPreview();
     }
   }
@@ -347,6 +358,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               if (!!this.state.targetBreakdown) {
                 const alert = this.dtoService.formSystemAlertObject('Warning', 'Overwritten', `can not merge "${this.state.targetBreakdown.data.backendGroupOptionIdentifier}" with ${newBreakdownBucketIdentifier}, new breakdown has overwrote the previous one`, null);
                 this.store$.dispatch(new CoreSendNewAlerts([alert]));
+                this.state.removalList = [];  // need to refresh the removalList so previous removal state won't be carried over
               }
               this.state.targetBreakdownRawData = rawBreakdownList[0];
             }
@@ -416,6 +428,49 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     targetRow.modifiedDisplayRowTitle = targetName;
   }
 
+  private setBtnText () {
+    const metricList = [this.constants.metric.cs01, this.constants.metric.creditLeverage];
+    const metricPercentageData = metricList.map(metric => {
+        const isCs01 = metric === this.constants.metric.cs01;
+        const object = {
+          btnText: !!isCs01 ? 'displayCs01BtnText' : 'displayCreditLeverageBtnText',
+          formattedMetric: !!isCs01 ? 'cs01' : 'creditLeverage',
+          percentage: !!isCs01 ? this.state.displayPercentageUnallocatedCS01 : this.state.displayPercentageUnallocatedCreditLeverage,
+          metric: metric
+        }
+        return object;
+      }
+    );
+    if (!!this.state.targetFund.data.target.target.cs01 || !!this.state.targetFund.data.target.target.creditLeverage) {
+      metricPercentageData.forEach(data => {
+        this.state[data.btnText] = !!this.state.targetFund.data.target.target[data.formattedMetric] ? `${data.percentage}% unallocated` : 'N/A';
+      })
+    } else {
+      metricPercentageData.forEach(data => {
+        this.state[data.btnText] = this.state.activeMetric === data.metric ? 'Selected' : 'Unselected';
+      });
+    }
+  }
+
+  public clearAllRowTargets() {
+    this.state.editRowList.forEach(row => {
+      this.resetRowTargets(row, this.constants.metric.cs01);
+      this.resetRowTargets(row, this.constants.metric.creditLeverage);
+    })
+    this.state.clearAllTargetSelected = true;
+    this.calculateAllocation();
+    this.setBtnText();
+    this.refreshPreview();
+  }
+
+  private resetRowTargets(row: StructureSetTargetPanelEditRowBlock, targetMetric: PortfolioMetricValues) {
+    const rowTargetMetric = targetMetric === this.constants.metric.cs01 ? 'targetCs01' : 'targetCreditLeverage';
+    row[rowTargetMetric].level.modifiedDisplayValue = '';
+    row[rowTargetMetric].level.modifiedUnderlineValue = 0;
+    row[rowTargetMetric].level.isActive = true;
+    this.onClickSaveEdit(row, row[rowTargetMetric].level, true);
+  }
+
   private loadEditRows() {
     this.state.editRowList = [];
     if (!!this.state.targetBreakdown) {
@@ -428,7 +483,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           targetCs01: {
             level: {
               savedDisplayValue: !!eachCategory.data.targetLevel ? `${eachCategory.data.targetLevel}` : null,
-              savedUnderlineValue: eachCategory.data.raw.targetLevel,
+              savedUnderlineValue: !!eachCategory.data.raw.targetLevel ? eachCategory.data.raw.targetLevel : null,
               modifiedDisplayValue: null,
               modifiedUnderlineValue: null,
               isActive: false,
@@ -439,7 +494,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             },
             percent: {
               savedDisplayValue: !!eachCategory.data.targetPct ? `${eachCategory.data.targetPct}` : null,
-              savedUnderlineValue: eachCategory.data.raw.targetPct,
+              savedUnderlineValue: !!eachCategory.data.raw.targetPct ? eachCategory.data.raw.targetPct : null,
               modifiedDisplayValue: null,
               modifiedUnderlineValue: null,
               isActive: false,
@@ -484,9 +539,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         });
         if (!!targetRow) {
           targetRow.targetCreditLeverage.level.savedDisplayValue = !!eachCategory.data.targetLevel ? `${eachCategory.data.targetLevel}` : null;
-          targetRow.targetCreditLeverage.level.savedUnderlineValue = eachCategory.data.raw.targetLevel;
+          targetRow.targetCreditLeverage.level.savedUnderlineValue = !!eachCategory.data.raw.targetLevel ? eachCategory.data.raw.targetLevel : null;
           targetRow.targetCreditLeverage.percent.savedDisplayValue = !!eachCategory.data.targetPct ? `${eachCategory.data.targetPct}` : null;
-          targetRow.targetCreditLeverage.percent.savedUnderlineValue = eachCategory.data.raw.targetPct;
+          targetRow.targetCreditLeverage.percent.savedUnderlineValue = !!eachCategory.data.raw.targetPct ? eachCategory.data.raw.targetPct : null;
         };
       });
     }
@@ -517,20 +572,21 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.state.remainingUnallocatedCreditLeverage = this.state.remainingUnallocatedCreditLeverage - eachRow.targetCreditLeverage.level.savedUnderlineValue;
       }
     });
-    if (!!this.state.remainingUnallocatedCS01) {
+    if (this.state.remainingUnallocatedCS01 > 0) {
       this.state.displayPercentageUnallocatedCS01 = this.utilityService.round(this.state.remainingUnallocatedCS01/this.state.totalUnallocatedCS01 * 100, 0);
       this.state.displayRemainingUnallocatedCS01 = `${this.utilityService.round(this.state.remainingUnallocatedCS01/1000, 1)} k`;
     } else {
       this.state.displayPercentageUnallocatedCS01 = 0;
       this.state.displayRemainingUnallocatedCS01 = '0 k';
     }
-    if (!!this.state.remainingUnallocatedCreditLeverage) {
+    if (this.state.remainingUnallocatedCreditLeverage > 0) {
       this.state.displayPercentageUnallocatedCreditLeverage = this.utilityService.round(this.state.remainingUnallocatedCreditLeverage/this.state.totalUnallocatedCreditLeverage * 100, 0);
       this.state.displayRemainingUnallocatedCreditLeverage = this.utilityService.round(this.state.remainingUnallocatedCreditLeverage, 2);
     } else {
       this.state.displayPercentageUnallocatedCreditLeverage = 0;
       this.state.displayRemainingUnallocatedCreditLeverage = '0';
     }
+    this.setBtnText();
   }
 
   private setTarget(
@@ -538,7 +594,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     targetItem: StructureSetTargetPanelEditRowItemBlock
   ) {
     if (displayValue == '') {
-      displayValue = '0'
+      displayValue = '0';
     };
     targetItem.modifiedDisplayValue = displayValue;
     targetItem.isActive = true;
@@ -564,37 +620,50 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     let impliedValue = null;
     if (metric === this.constants.metric.cs01) {
       if (this.state.totalUnallocatedCS01 > 0) {
-        if (!!targetIsPercent) {
-          impliedValue = targetUnderlineValue * this.state.totalUnallocatedCS01;
-          counterPartyItem.modifiedUnderlineValue = impliedValue;
-          counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue/1000, 0);
+        // checks if there is an actual target saved, and if not, it would have been set to null
+        if (!!targetUnderlineValue) {
+          if (!!targetIsPercent) {
+            impliedValue = targetUnderlineValue * this.state.totalUnallocatedCS01;
+            counterPartyItem.modifiedUnderlineValue = impliedValue;
+            counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue/1000, 0);
+          } else {
+            impliedValue = targetUnderlineValue / this.state.totalUnallocatedCS01;
+            counterPartyItem.modifiedUnderlineValue = impliedValue;
+            counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue*100, 1);
+          }
         } else {
-          impliedValue = targetUnderlineValue / this.state.totalUnallocatedCS01;
-          counterPartyItem.modifiedUnderlineValue = impliedValue;
-          counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue*100, 1);
+          impliedValue = null;
+          counterPartyItem.modifiedUnderlineValue = 0;
+          counterPartyItem.modifiedDisplayValue = '';
         }
       } else {
         counterPartyItem.modifiedUnderlineValue = 0;
-        counterPartyItem.modifiedDisplayValue = '0';
+        counterPartyItem.modifiedDisplayValue = '';
       }
     } else if (metric === this.constants.metric.creditLeverage) {
       if (this.state.totalUnallocatedCreditLeverage > 0) {
-        if (!!targetIsPercent) {
-          impliedValue = targetUnderlineValue * this.state.totalUnallocatedCreditLeverage;
-          counterPartyItem.modifiedUnderlineValue = impliedValue;
-          counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue, 2);
+        if (!!targetUnderlineValue) {
+          if (!!targetIsPercent) {
+            impliedValue = targetUnderlineValue * this.state.totalUnallocatedCreditLeverage;
+            counterPartyItem.modifiedUnderlineValue = impliedValue;
+            counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue, 2);
+          } else {
+            impliedValue = targetUnderlineValue / this.state.totalUnallocatedCreditLeverage;
+            counterPartyItem.modifiedUnderlineValue = impliedValue;
+            counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue*100, 1);
+          }
         } else {
-          impliedValue = targetUnderlineValue / this.state.totalUnallocatedCreditLeverage;
-          counterPartyItem.modifiedUnderlineValue = impliedValue;
-          counterPartyItem.modifiedDisplayValue = this.utilityService.round(impliedValue*100, 1);
+          impliedValue = null;
+          counterPartyItem.modifiedUnderlineValue = 0;
+          counterPartyItem.modifiedDisplayValue = '';
         }
       } else {
         counterPartyItem.modifiedUnderlineValue = 0;
-        counterPartyItem.modifiedDisplayValue = '0';
+        counterPartyItem.modifiedDisplayValue = '';
       }
     }
     counterPartyItem.savedDisplayValue = counterPartyItem.modifiedDisplayValue;
-    counterPartyItem.savedUnderlineValue = counterPartyItem.modifiedUnderlineValue;
+    counterPartyItem.savedUnderlineValue = counterPartyItem.modifiedUnderlineValue === 0 ? null : counterPartyItem.modifiedUnderlineValue;
   }
 
   private updateTargetBreakdownLists(list: Array<StructurePortfolioBreakdownRowDTO>, minValue: number, maxValue: number, isCs01: boolean) {
@@ -657,7 +726,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
-  private submitRegularBreakdownChanges(): boolean {
+  private submitRegularBreakdownChangesUpdate():boolean {
     const payload: PayloadUpdateBreakdown = this.traverseEditRowsToFormUpdateBreakdownPayload();
     if (!!payload) {
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
@@ -682,53 +751,108 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
-  private submitOverrideChanges(): boolean {
-    const updatePayload: Array<PayloadUpdateOverride> = this.traverseEditRowsToFormUpdateOverridePayload();
-    const deletePayload: Array<PayloadDeleteOverride> = this.traverseRemovalListToFormDeleteOverridePayload();
-    const necessaryNumOfCalls = updatePayload.length + deletePayload.length;
-    if (necessaryNumOfCalls > 0) {
-      let callCount = 0;
-      updatePayload.forEach((eachPayload) => {
-        this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
-          first(),
-          tap((serverReturn: BEPortfolioStructuringDTO) => {
-            callCount++;
-            if (callCount === necessaryNumOfCalls) {
+  private submitRegularBreakdownChanges(): boolean {
+    //checks if resetting all targets
+    if (!!this.state.clearAllTargetSelected) {
+      const allTargetsReset = this.state.editRowList.every(row => !row.targetCreditLeverage.level.savedUnderlineValue && !row.targetCreditLeverage.percent.savedUnderlineValue && !row.targetCs01.level.savedUnderlineValue && !row.targetCs01.percent.savedUnderlineValue);
+      if (!!allTargetsReset) {
+        const payload: PayloadClearPortfolioBreakdown = {
+          portfolioBreakdown: {
+            portfolioId: this.state.targetFund.data.portfolioId,
+            groupOption: this.state.targetBreakdownRawData.groupOption
+          }
+        }
+        if (!!payload) {
+          this.restfulCommService.callAPI(this.restfulCommService.apiMap.clearPortfolioBreakdown, {req: 'POST'}, payload).pipe(
+            first(),
+            tap((serverReturn: BEPortfolioStructuringDTO) => {
               const updatePack: StructureSetTargetPostEditUpdatePack = {
                 targetFund: serverReturn,
                 targetBreakdownTitle: this.state.targetBreakdown.data.title
               };
               this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
-            }
-          }),
-          catchError(err => {
-            console.error('update breakdown failed');
-            this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'update breakdown failed', null)]));
-            return of('error');
-          })
-        ).subscribe();
-      });
-      deletePayload.forEach((eachPayload) => {
-        this.restfulCommService.callAPI(this.restfulCommService.apiMap.deletePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
-          first(),
-          tap((serverReturn: BEPortfolioStructuringDTO) => {
-            callCount++;
-            if (callCount === necessaryNumOfCalls) {
-              this.store$.dispatch(new StructureUpdateMainPanelEvent());
-            }
-          }),
-          catchError(err => {
-            console.error('delete breakdown failed');
-            this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'delete breakdown failed', null)]));
-            return of('error');
-          })
-        ).subscribe();
-      });
+            }),
+            catchError(err => {
+              console.error('clear portfolio breakdown failed');
+              this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'clear portfolio breakdown failed', null)]));
+              return of('error');
+            })
+          ).subscribe();
+          return true;
+        }
+      } else {
+        return this.submitRegularBreakdownChangesUpdate();
+      }
+    } else {
+      return this.submitRegularBreakdownChangesUpdate();
+    }
+  }
+
+  private submitOverrideChanges(): boolean {
+    const updatePayload: Array<PayloadUpdateOverride> = this.traverseEditRowsToFormUpdateOverridePayload();
+    const deletePayload: Array<PayloadDeleteOverride> = this.traverseRemovalListToFormDeleteOverridePayload();
+    const necessaryUpdateNumOfCalls = updatePayload.length;
+    const necessaryDeleteNumOfCalls = deletePayload.length;
+    if (necessaryUpdateNumOfCalls + necessaryDeleteNumOfCalls > 0) {
+      if (updatePayload.length > 0) {
+        let callCount = 0;
+        updatePayload.forEach((eachPayload) => {
+          this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
+            first(),
+            tap((serverReturn: BEPortfolioStructuringDTO) => {
+              callCount++;
+              if (callCount === necessaryUpdateNumOfCalls) {
+                if (necessaryDeleteNumOfCalls > 0) {
+                  this.submitOverrideChangesForDelete(deletePayload, necessaryDeleteNumOfCalls);
+                } else {
+                  const updatePack: StructureSetTargetPostEditUpdatePack = {
+                    targetFund: serverReturn,
+                    targetBreakdownTitle: this.state.targetBreakdown.data.title
+                  };
+                  this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
+                }
+              }
+            }),
+            catchError(err => {
+              console.error('update breakdown failed');
+              this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'update breakdown failed', null)]));
+              return of('error');
+            })
+          ).subscribe();
+        });
+      } else {
+        this.submitOverrideChangesForDelete(deletePayload, necessaryDeleteNumOfCalls);
+      }
       return true;
     } else {
       this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target because no change is detected', null)]));
       return false;
     }
+  }
+
+  private submitOverrideChangesForDelete(
+    deletePayload: Array<PayloadDeleteOverride>,
+    necessaryDeleteNumOfCalls: number
+  ) {
+    let callCount = 0;
+    deletePayload.forEach((eachPayload, index) => {
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.deletePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
+        first(),
+        tap((serverReturn: BEPortfolioStructuringDTO) => {
+          callCount++;
+          if (callCount === necessaryDeleteNumOfCalls) {
+            this.store$.dispatch(new StructureUpdateMainPanelEvent());
+            const alert = this.dtoService.formSystemAlertObject('Structuring', 'Deleted', `Deleted Override Successfully`, null);
+            this.store$.dispatch(new CoreSendNewAlerts([alert]));
+          }
+        }),
+        catchError(err => {
+          console.error('delete breakdown failed');
+          this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', `Delete Override Failed`, null)]));
+          return of('error');
+        })
+      ).subscribe();
+    });
   }
 
   private traverseEditRowsToFormUpdateBreakdownPayload(): PayloadUpdateBreakdown {
@@ -751,20 +875,18 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           metricBreakdowns: {}
         };
         if (this.cs01ModifiedInEditRow(eachRow)) {
-          const parsedValue = eachRow.targetCs01.level.savedUnderlineValue === 0 ? null : eachRow.targetCs01.level.savedUnderlineValue;
           modifiedMetricBreakdowns.metricBreakdowns.Cs01 = {
-            targetLevel: parsedValue
+            targetLevel: eachRow.targetCs01.level.savedUnderlineValue
           };
-          if (!parsedValue) {
+          if (!eachRow.targetCs01.level.savedUnderlineValue) {
             modifiedMetricBreakdowns.metricBreakdowns.CreditDuration = {
-              targetLevel: parsedValue
+              targetLevel: eachRow.targetCs01.level.savedUnderlineValue
             };
           }
         }
         if (this.creditLeverageModifiedInEditRow(eachRow)) {
-          const parsedValue = eachRow.targetCreditLeverage.level.savedUnderlineValue === 0 ? null : eachRow.targetCreditLeverage.level.savedUnderlineValue;
           modifiedMetricBreakdowns.metricBreakdowns.CreditLeverage = {
-            targetLevel: parsedValue
+            targetLevel: eachRow.targetCreditLeverage.level.savedUnderlineValue
           };
         }
         payload.portfolioBreakdown.breakdown[eachRow.rowIdentifier] = modifiedMetricBreakdowns;
@@ -794,20 +916,18 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           metricBreakdowns: {}
         };
         if (this.cs01ModifiedInEditRow(eachRow)) {
-          const parsedValue = eachRow.targetCs01.level.savedUnderlineValue === 0 ? null : eachRow.targetCs01.level.savedUnderlineValue;
           modifiedMetricBreakdowns.metricBreakdowns.Cs01 = {
-            targetLevel: parsedValue
+            targetLevel: eachRow.targetCs01.level.savedUnderlineValue
           };
-          if (!parsedValue) {
+          if (!eachRow.targetCs01.level.savedUnderlineValue) {
             modifiedMetricBreakdowns.metricBreakdowns.CreditDuration = {
-              targetLevel: parsedValue
+              targetLevel: eachRow.targetCs01.level.savedUnderlineValue
             };
           }
         }
         if (this.creditLeverageModifiedInEditRow(eachRow)) {
-          const parsedValue = eachRow.targetCreditLeverage.level.savedUnderlineValue === 0 ? null : eachRow.targetCreditLeverage.level.savedUnderlineValue;
           modifiedMetricBreakdowns.metricBreakdowns.CreditLeverage = {
-            targetLevel: parsedValue
+            targetLevel: eachRow.targetCreditLeverage.level.savedUnderlineValue
           };
         }
         eachPayload.portfolioOverride.breakdown = modifiedMetricBreakdowns;
