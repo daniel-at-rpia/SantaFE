@@ -145,7 +145,7 @@ $portfolioBreakdownRowIconSpacing: .1rem;
               &-ctas {
                 &-btn {
                   &-icon {
-                    transform: rotate(45deg);
+                    transform: rotate(-45deg);
                   }
                 }
               }
@@ -235,7 +235,7 @@ $portfolioBreakdownRowIconSpacing: .1rem;
           &-view {
             background-color: $color_orange_6;
             &-icon {
-              transform: rotate(45deg);
+              transform: rotate(-45deg);
             }
           }
         }
