@@ -516,6 +516,8 @@ export class UtilityService {
           return AlertTypes.markAlert;
         case AlertTypes.tradeAlert:
           return AlertTypes.tradeAlert;
+        case AlertTypes.traceAlert:
+          return AlertTypes.traceAlert;
         default:
           return AlertTypes.system;
       }
