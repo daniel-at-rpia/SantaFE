@@ -590,7 +590,7 @@ export interface BEMetricBreakdowns {
     Cs01?: BEStructuringBreakdownSingleEntry;
     CreditDuration?: BEStructuringBreakdownSingleEntry;
   },
-  view: string;
+  view?: string;
 }
 
 export interface BEStructuringBreakdownBlock {

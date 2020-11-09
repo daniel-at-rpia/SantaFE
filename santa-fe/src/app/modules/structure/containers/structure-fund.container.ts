@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsul
 import { of, Subscription } from 'rxjs';
 import { catchError, first, tap} from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
+import * as moment from 'moment';
 
 import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.interface';
 import { PortfolioMetricValues, STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
@@ -11,14 +12,16 @@ import { ModalService } from 'Form/services/ModalService';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
 import { PortfolioBreakdownDTO, TargetBarDTO } from 'FEModels/frontend-models.interface';
-import { StructureSetTargetPostEditUpdatePack } from 'FEModels/frontend-adhoc-packages.interface';
+import { StructureSetTargetPostEditUpdatePack, UpdateTargetBlock } from 'FEModels/frontend-adhoc-packages.interface';
+import {
+  PayloadUpdatePortfolioStructuresTargets,
+  PayloadUpdateBreakdown
+} from 'BEModels/backend-payloads.interface';
+import { BEPortfolioStructuringDTO, BEMetricBreakdowns } from 'BEModels/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import { StructureSendSetTargetTransferEvent, StructureReloadBreakdownDataPostEditEvent } from 'Structure/actions/structure.actions';
-import { UpdateTargetBlock } from 'Core/models/frontend/frontend-adhoc-packages.interface';
 import { BEPortfolioTargetMetricValues } from 'Core/constants/structureConstants.constants';
 import { StructuringTeamPMList } from 'Core/constants/securityDefinitionConstants.constant';
-import { PayloadUpdatePortfolioStructuresTargets } from 'App/modules/core/models/backend/backend-payloads.interface';
-import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backend-models.interface';
 
 @Component({
   selector: 'structure-fund',
@@ -181,14 +184,22 @@ export class StructureFund implements OnInit {
           creditLeverageScalingRate = isCreditLeverageUpdated.target / oldCreditLeverage;
         }
       }
-      // this.updateFundTarget(updatedTargetDataList, false);
+      this.updateFundTarget(updatedTargetDataList, false);
+      let numOfUpdateCallsNeeded = 0;
+      let numOfUpdateCallsCompleted = 0;
       this.fund.data.children.forEach((eachBreakdown) => {
         if (!eachBreakdown.state.isOverrideVariant) {
-          this.distributeTargetBreakdown(eachBreakdown, cs01ScalingRate, creditLeverageScalingRate);
+          this.distributeTargetBreakdown(
+            eachBreakdown,
+            cs01ScalingRate,
+            creditLeverageScalingRate,
+            numOfUpdateCallsNeeded,
+            numOfUpdateCallsCompleted
+          );
         }
       });
     } else {
-      // this.updateFundTarget(updatedTargetDataList, true);
+      this.updateFundTarget(updatedTargetDataList, true);
     }
   }
 
@@ -261,8 +272,71 @@ export class StructureFund implements OnInit {
   private distributeTargetBreakdown(
     targetBreakdown: PortfolioBreakdownDTO,
     cs01ScalingRate: number,
-    creditLeverageScalingRate: number
+    creditLeverageScalingRate: number,
+    numOfUpdateCallsNeeded: number,
+    numOfUpdateCallsCompleted: number
   ) {
-    console.log('test, scale breakdown', targetBreakdown, cs01ScalingRate, creditLeverageScalingRate);
+    const payload: PayloadUpdateBreakdown = {
+      portfolioBreakdown: {
+        date: moment().format('YYYY-MM-DD'),
+        groupOption: targetBreakdown.data.backendGroupOptionIdentifier,
+        portfolioId: this.fund.data.portfolioId,
+        indexId: this.fund.data.indexId,
+        breakdown: {}
+      }
+    };
+    for (let i = 0; i < targetBreakdown.data.rawCs01CategoryList.length; i++) {
+      if (!!cs01ScalingRate || !!creditLeverageScalingRate) {
+        // the rate will be null if scaling is not suppose to apply to this metric
+        let addToPayload = false;
+        const categoryIdentifier = targetBreakdown.data.rawCs01CategoryList[i].data.category;
+        const currentTargetCs01 = targetBreakdown.data.rawCs01CategoryList[i].data.raw.targetLevel;
+        const currentTargetCreditLeverage = targetBreakdown.data.rawLeverageCategoryList[i].data.raw.targetLevel;
+        const eachTargetPayload: BEMetricBreakdowns = {
+          metricBreakdowns: {}
+        };
+        if (!!cs01ScalingRate && !!currentTargetCs01) {
+          // only apply scaling to cs01 if this category has a cs01 target
+          eachTargetPayload.metricBreakdowns.Cs01 = {
+            targetLevel: currentTargetCs01 * cs01ScalingRate
+          };
+          addToPayload = true;
+        }
+        if (!!creditLeverageScalingRate && !!currentTargetCreditLeverage) {
+          // only apply scaling to credit leverage if this category has a credit leverage target
+          eachTargetPayload.metricBreakdowns.CreditLeverage = {
+            targetLevel: targetBreakdown.data.rawLeverageCategoryList[i].data.raw.targetLevel * creditLeverageScalingRate
+          };
+          addToPayload = true;
+        }
+        if (!!addToPayload) {
+          payload.portfolioBreakdown.breakdown[categoryIdentifier] = eachTargetPayload;
+        }
+      }
+    }
+    if (!this.utilityService.isObjectEmpty(payload.portfolioBreakdown.breakdown)) {
+      numOfUpdateCallsNeeded++;
+      console.log('test, going to update this breakdown', payload);
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
+        first(),
+        tap((serverReturn: BEPortfolioStructuringDTO) => {
+          numOfUpdateCallsCompleted++;
+          if (numOfUpdateCallsCompleted === numOfUpdateCallsNeeded) {
+            const updatePack: StructureSetTargetPostEditUpdatePack = {
+              targetFund: serverReturn,
+              targetBreakdownTitle: targetBreakdown.data.title
+            };
+            this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
+          } else {
+            this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Structuring', 'Updated', `Successfully Updated Target for ${targetBreakdown.data.title}`, null)]));
+          }
+        }),
+        catchError(err => {
+          console.error('update breakdown failed');
+          this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'update breakdown failed', null)]));
+          return of('error');
+        })
+      ).subscribe();
+    }
   }
 }

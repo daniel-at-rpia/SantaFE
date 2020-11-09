@@ -63,6 +63,10 @@ export class UtilityService {
       }
     }
 
+    public isObjectEmpty(object: object): boolean {
+      return _.isEmpty(object);
+    }
+
     public deepObjectMerge(objectA: object, objectB: object): object {
       if (!!objectA && !!objectB) {
         return _.merge(objectA, objectB);
