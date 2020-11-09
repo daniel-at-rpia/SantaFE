@@ -2107,7 +2107,11 @@ export class DTOService {
       const rawCurrentPct = parsedRawData.currentPct;
       const rawTargetLevel = parsedRawData.targetLevel;
       const rawTargetPct = parsedRawData.targetPct;
-      parsedRawData.currentLevel = !!isCs01 ? this.utility.round(parsedRawData.currentLevel/1000, 0) : this.utility.round(parsedRawData.currentLevel, 2);
+      if (!!isCs01) {
+        parsedRawData.currentLevel = rawCurrentLevel >= 1000 ? this.utility.round(parsedRawData.currentLevel/1000, 0) : 0;
+      } else {
+        parsedRawData.currentLevel = this.utility.round(parsedRawData.currentLevel, 2);
+      }
       if (parsedRawData.targetLevel != null) {
         parsedRawData.targetLevel = !!isCs01 ? this.utility.round(parsedRawData.targetLevel/1000, 0) : this.utility.round(parsedRawData.targetLevel, 2);
       }
