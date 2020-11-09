@@ -202,7 +202,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           unreadMarkAlertCount: 0,
           tradeAlertCount: 0,
           traceAlertCount: 0,
-          unreadTradeAlertCount: 0,
           scopedForMarketListOnly: false,
           scopedAlertType: null,
           recentUpdatedAlertList: []
