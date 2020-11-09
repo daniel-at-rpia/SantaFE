@@ -49,7 +49,7 @@ $portfolioBreakdownRowIconSpacing: .1rem;
           top: -$iconButton_size_x_small;
           background-color: $color_active;
           color: $font_color_inverse;
-          padding: $portfolioBreakdownRowIconSpacing;
+          padding: $spacing_xx_small;
           font-size: $font_size_small;
         }
         &:hover {
