@@ -6,7 +6,7 @@ import { DTOService } from 'Core/services/DTOService';
 import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
 import { selectMetricLevel, selectSetViewData } from 'Structure/selectors/structure.selectors';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
-import { selectReloadBreakdownDataPostEdit, selectMainPanelUpdateTick } from 'Structure/selectors/structure.selectors';
+import { selectReloadFundDataPostEdit, selectMainPanelUpdateTick } from 'Structure/selectors/structure.selectors';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { UtilityService } from 'Core/services/UtilityService';
 import { PortfolioMetricValues, PortfolioShortNames, BEPortfolioTargetMetricValues } from 'Core/constants/structureConstants.constants';
@@ -18,7 +18,7 @@ import {
   PayloadGetPortfolioStructures,
   PayloadSetView
 } from 'App/modules/core/models/backend/backend-payloads.interface';
-import { StructureSetTargetPostEditUpdatePack, StructureSetViewData } from 'FEModels/frontend-adhoc-packages.interface';
+import { StructureSetViewData } from 'FEModels/frontend-adhoc-packages.interface';
 import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 
 @Component({
@@ -110,15 +110,10 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       }
     })
     this.subscriptions.reloadFundUponEditSub = this.store$.pipe(
-      select(selectReloadBreakdownDataPostEdit)
-    ).subscribe((updatePack: StructureSetTargetPostEditUpdatePack) => {
-      if (!!updatePack && !!updatePack.targetFund) {
-        if (updatePack.targetBreakdownTitle !== null) {
-          const systemAlertMessage = `Successfully Updated Target for ${updatePack.targetBreakdownTitle}`;
-          const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${systemAlertMessage}`, null);
-          this.store$.dispatch(new CoreSendNewAlerts([alert]));
-        }
-        this.reloadFund(updatePack.targetFund);
+      select(selectReloadFundDataPostEdit)
+    ).subscribe((targetFund: BEPortfolioStructuringDTO) => {
+      if (!!targetFund) {
+        this.reloadFund(targetFund);
       }
     });
     this.subscriptions.updateSub = this.store$.pipe(

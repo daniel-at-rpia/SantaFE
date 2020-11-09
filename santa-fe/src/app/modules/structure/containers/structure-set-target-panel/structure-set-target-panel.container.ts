@@ -44,8 +44,7 @@ import {
   PayloadGetPortfolioOverride,
   PayloadClearPortfolioBreakdown
 } from 'BEModels/backend-payloads.interface';
-import { StructureSetTargetPostEditUpdatePack } from 'FEModels/frontend-adhoc-packages.interface';
-import { StructureReloadBreakdownDataPostEditEvent, StructureUpdateMainPanelEvent } from 'Structure/actions/structure.actions';
+import { StructureReloadFundDataPostEditEvent, StructureUpdateMainPanelEvent } from 'Structure/actions/structure.actions';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import { CustomeBreakdownConfiguratorDefinitionLayout } from 'Core/constants/structureConstants.constants';
 import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
@@ -732,11 +731,17 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
         first(),
         tap((serverReturn: BEPortfolioStructuringDTO) => {
-          const updatePack: StructureSetTargetPostEditUpdatePack = {
-            targetFund: serverReturn,
-            targetBreakdownTitle: this.state.targetBreakdown.data.title
-          };
-          this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
+          this.store$.dispatch(
+            new CoreSendNewAlerts([
+              this.dtoService.formSystemAlertObject(
+                'Structuring',
+                'Updated',
+                `Successfully Updated Target for ${this.state.targetBreakdown.data.title}`,
+                null
+              )]
+            )
+          );
+          this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
         }),
         catchError(err => {
           console.error('update breakdown failed');
@@ -766,11 +771,17 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           this.restfulCommService.callAPI(this.restfulCommService.apiMap.clearPortfolioBreakdown, {req: 'POST'}, payload).pipe(
             first(),
             tap((serverReturn: BEPortfolioStructuringDTO) => {
-              const updatePack: StructureSetTargetPostEditUpdatePack = {
-                targetFund: serverReturn,
-                targetBreakdownTitle: this.state.targetBreakdown.data.title
-              };
-              this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
+              this.store$.dispatch(
+                new CoreSendNewAlerts([
+                  this.dtoService.formSystemAlertObject(
+                    'Structuring',
+                    'Updated',
+                    `Successfully Updated Target for ${this.state.targetBreakdown.data.title}`,
+                    null
+                  )]
+                )
+              );
+              this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
             }),
             catchError(err => {
               console.error('clear portfolio breakdown failed');
@@ -805,11 +816,17 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
                 if (necessaryDeleteNumOfCalls > 0) {
                   this.submitOverrideChangesForDelete(deletePayload, necessaryDeleteNumOfCalls);
                 } else {
-                  const updatePack: StructureSetTargetPostEditUpdatePack = {
-                    targetFund: serverReturn,
-                    targetBreakdownTitle: this.state.targetBreakdown.data.title
-                  };
-                  this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
+                  this.store$.dispatch(
+                    new CoreSendNewAlerts([
+                      this.dtoService.formSystemAlertObject(
+                        'Structuring',
+                        'Updated',
+                        `Successfully Updated Target for ${this.state.targetBreakdown.data.title}`,
+                        null
+                      )]
+                    )
+                  );
+                  this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
                 }
               }
             }),

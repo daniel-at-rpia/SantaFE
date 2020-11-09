@@ -12,14 +12,14 @@ import { ModalService } from 'Form/services/ModalService';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
 import { PortfolioBreakdownDTO, TargetBarDTO } from 'FEModels/frontend-models.interface';
-import { StructureSetTargetPostEditUpdatePack, UpdateTargetBlock } from 'FEModels/frontend-adhoc-packages.interface';
+import { UpdateTargetBlock } from 'FEModels/frontend-adhoc-packages.interface';
 import {
   PayloadUpdatePortfolioStructuresTargets,
   PayloadUpdateBreakdown
 } from 'BEModels/backend-payloads.interface';
 import { BEPortfolioStructuringDTO, BEMetricBreakdowns } from 'BEModels/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
-import { StructureSendSetTargetTransferEvent, StructureReloadBreakdownDataPostEditEvent } from 'Structure/actions/structure.actions';
+import { StructureSendSetTargetTransferEvent, StructureReloadFundDataPostEditEvent } from 'Structure/actions/structure.actions';
 import { BEPortfolioTargetMetricValues } from 'Core/constants/structureConstants.constants';
 import { StructuringTeamPMList } from 'Core/constants/securityDefinitionConstants.constant';
 
@@ -238,11 +238,7 @@ export class StructureFund implements OnInit {
           this.restfulCommService.logError('Update Fund ServerReturn is invalid');
         }
         if (reloadAfterUpdateCall) {
-          const updatePack: StructureSetTargetPostEditUpdatePack = {
-            targetFund: serverReturn,
-            targetBreakdownTitle: null
-          };
-          this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
+          this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
         }
         const systemAlertMessage = `Successfully updated ${serverReturn.portfolioShortName} target levels.`;
         const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${systemAlertMessage}`, null);
@@ -316,19 +312,22 @@ export class StructureFund implements OnInit {
     }
     if (!this.utilityService.isObjectEmpty(payload.portfolioBreakdown.breakdown)) {
       numOfUpdateCallsNeeded++;
-      console.log('test, going to update this breakdown', payload);
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
         first(),
         tap((serverReturn: BEPortfolioStructuringDTO) => {
           numOfUpdateCallsCompleted++;
+          this.store$.dispatch(
+            new CoreSendNewAlerts([
+              this.dtoService.formSystemAlertObject(
+                'Structuring',
+                'Auto-Scaled',
+                `Successfully Auto-Scaled Target for ${targetBreakdown.data.title}`,
+                null
+              )]
+            )
+          );
           if (numOfUpdateCallsCompleted === numOfUpdateCallsNeeded) {
-            const updatePack: StructureSetTargetPostEditUpdatePack = {
-              targetFund: serverReturn,
-              targetBreakdownTitle: targetBreakdown.data.title
-            };
-            this.store$.dispatch(new StructureReloadBreakdownDataPostEditEvent(updatePack));
-          } else {
-            this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Structuring', 'Updated', `Successfully Updated Target for ${targetBreakdown.data.title}`, null)]));
+            this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
           }
         }),
         catchError(err => {

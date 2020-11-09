@@ -122,11 +122,6 @@ export interface StructureSetTargetOverlayTransferPack {
   isCreateNewOverride: boolean;
 }
 
-export interface StructureSetTargetPostEditUpdatePack {
-  targetFund: BEPortfolioStructuringDTO;
-  targetBreakdownTitle: string;
-}
-
 export interface StructureSetViewData {
   yyyyMMdd: number;
   bucket: StructureBucketDataBlock;
