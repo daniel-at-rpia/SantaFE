@@ -129,7 +129,7 @@ export class AgGridMiddleLayerService {
           return eachGroup.headerName === eachHeader.data.groupBelongs;
         });
         if(!!targetGroup) {
-          // open means only show it only when the group is opened, close means show it only when the group is closed
+          // open means only show it only when the group is opened, close means show it only when the group is closed, and all means show it regardless
           newAgColumn.columnGroupShow = eachHeader.data.groupShow ? 'all' : 'open';
           targetGroup.children.push(newAgColumn);
           const alreadyInList = list.findIndex((eachDefinition) => {

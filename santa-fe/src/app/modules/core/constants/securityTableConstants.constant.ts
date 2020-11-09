@@ -303,7 +303,9 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
           disabled: true
         },
         tradeAlert: {
-          active: true
+          active: true,
+          disabled: false,
+          groupShow: true
         }
       }
     }
@@ -324,7 +326,9 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
           disabled: true
         },
         tradeAlert: {
-          active: true
+          active: true,
+          disabled: false,
+          groupShow: true
         }
       }
     }
@@ -344,7 +348,9 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
           disabled: true
         },
         tradeAlert: {
-          active: true
+          active: true,
+          disabled: false,
+          groupShow: true
         }
       }
     }
@@ -364,7 +370,9 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
           disabled: true
         },
         tradeAlert: {
-          active: true
+          active: true,
+          disabled: false,
+          groupShow: true
         }
       }
     }
@@ -384,7 +392,9 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
           disabled: true
         },
         tradeAlert: {
-          active: true
+          active: true,
+          disabled: false,
+          groupShow: true
         }
       }
     }
@@ -404,7 +414,9 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
           disabled: true
         },
         tradeAlert: {
-          active: true
+          active: true,
+          disabled: false,
+          groupShow: true
         }
       }
     }
