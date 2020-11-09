@@ -426,11 +426,11 @@ export class DTOService {
       alertStatus: targetAlert.data.status,
       shortcutConfig: dto.data.alert.shortcutConfig,
       alertTraceCounterParty: targetAlert.data.traceCounterParty,
-      alertTracePrice: targetAlert.data.tracePrice,
+      alertTraceDisplayPrice: targetAlert.data.traceDisplayPrice,
       alertTraceSide: targetAlert.data.traceSide,
-      alertTraceSpread: targetAlert.data.traceSpread,
-      alertTraceVolumeReported: targetAlert.data.traceVolumeReported,
-      alertTraceVolumeEstimated: targetAlert.data.traceVolumeEstimated
+      alertTraceDisplaySpread: targetAlert.data.traceDisplaySpread,
+      alertTraceDisplayVolumeReported: targetAlert.data.traceDisplayVolumeReported,
+      alertTraceDisplayVolumeEstimated: targetAlert.data.traceDisplayVolumeEstimated
     };
   }
 
@@ -1554,6 +1554,10 @@ export class DTOService {
         alertDTO.data.traceVolumeReported = volumeActual;
         alertDTO.data.tracePrice = price;
         alertDTO.data.traceSpread = spread;
+        alertDTO.data.traceDisplayVolumeEstimated = !!alertDTO.data.traceVolumeEstimated ? this.utility.parseNumberToCommas(alertDTO.data.traceVolumeEstimated) : null;
+        alertDTO.data.traceDisplayVolumeReported = !!alertDTO.data.traceVolumeReported  ? this.utility.parseNumberToCommas(alertDTO.data.traceVolumeReported ) : null;
+        alertDTO.data.traceDisplayPrice = this.utility.parseTriCoreDriverNumber(alertDTO.data.tracePrice, TriCoreDriverConfig.Price.label, alertDTO.data.security, true) as string;
+        alertDTO.data.traceDisplaySpread = this.utility.parseTriCoreDriverNumber(alertDTO.data.traceSpread, TriCoreDriverConfig.Spread.label, alertDTO.data.security, true) as string;
       }
     }
     if (alertDTO.state.isMarketListVariant) {

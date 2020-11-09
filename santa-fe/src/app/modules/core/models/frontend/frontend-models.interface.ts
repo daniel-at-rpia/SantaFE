@@ -141,10 +141,10 @@ export interface SecurityDTO extends BasicDTOStructure {
       },
       alertTraceCounterParty?: TraceTradeCounterParty;
       alertTraceSide?: string;
-      alertTraceVolumeEstimated?: number;
-      alertTraceVolumeReported?: number;
-      alertTracePrice?: number;
-      alertTraceSpread?: number;
+      alertTraceDisplayVolumeEstimated?: string;
+      alertTraceDisplayVolumeReported?: string;
+      alertTraceDisplayPrice?: string;
+      alertTraceDisplaySpread?: string;
     }
     tradeHistory: Array<TradeDTO>;
     traceTrades: Array<TraceTradeBlock>;
@@ -583,6 +583,10 @@ export interface AlertDTO extends BasicDTOStructure {
     traceVolumeReported?: number;
     tracePrice?: number;
     traceSpread?: number;
+    traceDisplayVolumeEstimated?: string;
+    traceDisplayVolumeReported?: string;
+    traceDisplayPrice?: string;
+    traceDisplaySpread?: string;
   },
   state: {
     isRead: boolean;

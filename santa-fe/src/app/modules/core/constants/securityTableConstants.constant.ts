@@ -334,11 +334,11 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
     }
   },
   {
-    key: 'alertTraceVolumeEstimated',
+    key: 'alertTraceDisplayVolumeEstimated',
     content: {
       label: 'Vol (Estimated)',
-      attrName: 'alertTraceVolumeEstimated',
-      underlineAttrName: 'alertTraceVolumeEstimated',
+      attrName: 'alertTraceDisplayVolumeEstimated',
+      underlineAttrName: 'alertTraceDisplayVolumeEstimated',
       blockAttrName: 'alert',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.alert,
@@ -356,11 +356,11 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
     }
   },
   {
-    key: 'alertTraceVolumeReported',
+    key: 'alertTraceDisplayVolumeReported',
     content: {
       label: 'Vol (Reported)',
-      attrName: 'alertTraceVolumeReported',
-      underlineAttrName: 'alertTraceVolumeReported',
+      attrName: 'alertTraceDisplayVolumeReported',
+      underlineAttrName: 'alertTraceDisplayVolumeReported',
       blockAttrName: 'alert',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.alert,
@@ -378,11 +378,11 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
     }
   },
   {
-    key: 'alertTracePrice',
+    key: 'alertTraceDisplayPrice',
     content: {
       label: 'Px',
-      attrName: 'alertTracePrice',
-      underlineAttrName: 'alertTracePrice',
+      attrName: 'alertTraceDisplayPrice',
+      underlineAttrName: 'alertTraceDisplayPrice',
       blockAttrName: 'alert',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.alert,
@@ -400,11 +400,11 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
     }
   },
   {
-    key: 'alertTraceSpread',
+    key: 'alertTraceDisplaySpread',
     content: {
       label: 'Sprd',
-      attrName: 'alertTraceSpread',
-      underlineAttrName: 'alertTraceSpread',
+      attrName: 'alertTraceDisplaySpread',
+      underlineAttrName: 'alertTraceDisplaySpread',
       blockAttrName: 'alert',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.alert,
@@ -1616,7 +1616,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
 
 const POSITION_ALERT_HEADERS = ['hfPosition', 'nlfPosition', 'dofPosition', 'sofPosition', 'stipPosition', 'fipPosition', 'cipPosition', 'agbPosition', 'bbbPosition'];
 
-const TRACE_ALERT_HEADERS = ['alertTraceCounterParty', 'alertTraceSide', 'alertTraceVolumeEstimated', 'alertTraceVolumeReported', 'alertTracePrice', 'alertTraceSpread'];
+const TRACE_ALERT_HEADERS = ['alertTraceCounterParty', 'alertTraceSide', 'alertTraceDisplayVolumeEstimated', 'alertTraceDisplayVolumeReported', 'alertTraceDisplayPrice', 'alertTraceDisplaySpread'];
 
 const TRACE_ALERT_EXCLUDED_HEADERS = SecurityTableHeaderConfigs.filter(header => header.key.indexOf('Trace') === -1 && !!header.content.tableSpecifics.tradeAlert && !!header.content.tableSpecifics.tradeAlert.active).map(newHeader => newHeader.key);
 
