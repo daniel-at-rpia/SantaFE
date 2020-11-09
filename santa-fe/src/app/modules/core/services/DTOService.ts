@@ -1483,16 +1483,6 @@ export class DTOService {
         isExpired: false
       }
     }
-    // checks if its a trace alert
-    if (!!rawData.trade) {
-      const { counterParty, side, volumeEstimated, volumeActual, price, spread } = rawData.trade;
-      object.data.traceCounterParty = counterParty;
-      object.data.traceSide = TradeSideValueEquivalent[side];
-      object.data.traceVolumeEstimated = volumeEstimated;
-      object.data.traceVolumeReported = volumeActual;
-      object.data.tracePrice = price;
-      object.data.traceSpread = spread;
-    }
     this.appendAlertDetailInfo(object, rawData);
     this.appendAlertStatus(object);
     return object;
@@ -1555,6 +1545,15 @@ export class DTOService {
               break;
           }
         }
+      }
+      if (!!rawData.trade && rawData.type === AlertTypes.traceAlert) {
+        const { counterParty, side, volumeEstimated, volumeActual, price, spread } = rawData.trade;
+        alertDTO.data.traceCounterParty = counterParty;
+        alertDTO.data.traceSide = TradeSideValueEquivalent[side];
+        alertDTO.data.traceVolumeEstimated = volumeEstimated;
+        alertDTO.data.traceVolumeReported = volumeActual;
+        alertDTO.data.tracePrice = price;
+        alertDTO.data.traceSpread = spread;
       }
     }
     if (alertDTO.state.isMarketListVariant) {
