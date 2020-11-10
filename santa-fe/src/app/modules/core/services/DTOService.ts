@@ -1551,9 +1551,9 @@ export class DTOService {
         }
       }
       if (!!rawData.trade && rawData.type === AlertTypes.traceAlert) {
-        const { counterParty, side, volumeEstimated, volumeActual, price, spread } = rawData.trade;
+        const { counterParty, side, volumeEstimated, volumeReported, price, spread } = rawData.trade;
         const parsedVolumeEstimated = !!volumeEstimated ? +(this.utility.parseNumberToThousands(volumeEstimated, false)) : null;
-        const parsedVolumeReported = !!volumeActual ? +(this.utility.parseNumberToThousands(volumeActual, false)) : null;
+        const parsedVolumeReported = !!volumeReported ? +(this.utility.parseNumberToThousands(volumeReported, false)) : null;
         alertDTO.data.traceCounterParty = counterParty;
         alertDTO.data.traceSide = TradeSideValueEquivalent[side];
         alertDTO.data.traceVolumeEstimated = parsedVolumeEstimated;
@@ -2243,9 +2243,9 @@ export class DTOService {
       counterParty: counterParty,
       side: TradeSideValueEquivalent[rawData.side],
       volumeEstimated: rawData.volumeEstimated,
-      volumeReported: rawData.volumeActual,
+      volumeReported: rawData.volumeReported,
       displayVolumeEstimated: !!rawData.volumeEstimated ? this.utility.parseNumberToCommas(rawData.volumeEstimated) : null,
-      displayVolumeReported: !!rawData.volumeActual ? this.utility.parseNumberToCommas(rawData.volumeActual) : null,
+      displayVolumeReported: !!rawData.volumeReported ? this.utility.parseNumberToCommas(rawData.volumeReported) : null,
       price: this.utility.parseTriCoreDriverNumber(rawData.price, TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
       yield: this.utility.parseTriCoreDriverNumber(rawData.yield, TriCoreDriverConfig.Yield.label, targetSecurity, false) as number,
       spread: this.utility.parseTriCoreDriverNumber(rawData.spread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
