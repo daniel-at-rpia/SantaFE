@@ -336,7 +336,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   {
     key: 'alertTraceVolumeEstimated',
     content: {
-      label: 'Vol Estimated (MM)',
+      label: 'Vol Estimated (K)',
       attrName: 'alertTraceVolumeEstimated',
       underlineAttrName: 'alertTraceVolumeEstimated',
       blockAttrName: 'alert',
@@ -358,7 +358,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   {
     key: 'alertTraceVolumeReported',
     content: {
-      label: 'Vol Reported (MM)',
+      label: 'Vol Reported (K)',
       attrName: 'alertTraceVolumeReported',
       underlineAttrName: 'alertTraceVolumeReported',
       blockAttrName: 'alert',
