@@ -688,7 +688,7 @@ export interface BETraceTradesBlock {
   traceTradeID: string;
   tradeTradeRefID: string;
   type: string;
-  volumeActual: number;
+  volumeReported: number;
   volumeEstimated: number;
   yield: number;
 }
