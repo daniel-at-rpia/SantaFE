@@ -1552,10 +1552,12 @@ export class DTOService {
       }
       if (!!rawData.trade && rawData.type === AlertTypes.traceAlert) {
         const { counterParty, side, volumeEstimated, volumeActual, price, spread } = rawData.trade;
+        const parsedVolumeEstimated = !!volumeEstimated ? +(this.utility.parseNumberToThousands(volumeEstimated, false)) : null;
+        const parsedVolumeReported = !!volumeActual ? +(this.utility.parseNumberToThousands(volumeActual, false)) : null;
         alertDTO.data.traceCounterParty = counterParty;
         alertDTO.data.traceSide = TradeSideValueEquivalent[side];
-        alertDTO.data.traceVolumeEstimated = volumeEstimated;
-        alertDTO.data.traceVolumeReported = volumeActual;
+        alertDTO.data.traceVolumeEstimated = parsedVolumeEstimated;
+        alertDTO.data.traceVolumeReported = parsedVolumeReported;
         alertDTO.data.tracePrice = price;
         alertDTO.data.traceSpread = spread;
         alertDTO.data.traceDisplayVolumeEstimated = !!alertDTO.data.traceVolumeEstimated ? this.utility.parseNumberToCommas(alertDTO.data.traceVolumeEstimated) : null;
