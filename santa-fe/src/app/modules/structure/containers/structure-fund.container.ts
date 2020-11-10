@@ -11,11 +11,16 @@ import { UtilityService } from 'Core/services/UtilityService';
 import { ModalService } from 'Form/services/ModalService';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
-import { PortfolioBreakdownDTO, TargetBarDTO } from 'FEModels/frontend-models.interface';
+import {
+  PortfolioBreakdownDTO,
+  TargetBarDTO,
+  StructurePortfolioBreakdownRowDTO
+} from 'FEModels/frontend-models.interface';
 import { UpdateTargetBlock } from 'FEModels/frontend-adhoc-packages.interface';
 import {
   PayloadUpdatePortfolioStructuresTargets,
-  PayloadUpdateBreakdown
+  PayloadUpdateBreakdown,
+  PayloadUpdateOverride
 } from 'BEModels/backend-payloads.interface';
 import { BEPortfolioStructuringDTO, BEMetricBreakdowns } from 'BEModels/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
@@ -189,7 +194,15 @@ export class StructureFund implements OnInit {
       let numOfUpdateCallsCompleted = 0;
       this.fund.data.children.forEach((eachBreakdown) => {
         if (!eachBreakdown.state.isOverrideVariant) {
-          this.distributeTargetBreakdown(
+          this.autoScaleTargetBreakdown(
+            eachBreakdown,
+            cs01ScalingRate,
+            creditLeverageScalingRate,
+            numOfUpdateCallsNeeded,
+            numOfUpdateCallsCompleted
+          );
+        } else {
+          this.autoScaleTargetOverride(
             eachBreakdown,
             cs01ScalingRate,
             creditLeverageScalingRate,
@@ -265,77 +278,152 @@ export class StructureFund implements OnInit {
     ).subscribe()
   }
 
-  private distributeTargetBreakdown(
+  private autoScaleTargetBreakdown(
     targetBreakdown: PortfolioBreakdownDTO,
     cs01ScalingRate: number,
     creditLeverageScalingRate: number,
     numOfUpdateCallsNeeded: number,
     numOfUpdateCallsCompleted: number
   ) {
-    const payload: PayloadUpdateBreakdown = {
-      portfolioBreakdown: {
-        date: moment().format('YYYY-MM-DD'),
-        groupOption: targetBreakdown.data.backendGroupOptionIdentifier,
-        portfolioId: this.fund.data.portfolioId,
-        indexId: this.fund.data.indexId,
-        breakdown: {}
+    if (!!cs01ScalingRate || !!creditLeverageScalingRate) {
+      // the rate will be null if scaling is not suppose to apply to this metric
+      const payload: PayloadUpdateBreakdown = {
+        portfolioBreakdown: {
+          date: moment().format('YYYY-MM-DD'),
+          groupOption: targetBreakdown.data.backendGroupOptionIdentifier,
+          portfolioId: this.fund.data.portfolioId,
+          indexId: this.fund.data.indexId,
+          breakdown: {}
+        }
+      };
+      for (let i = 0; i < targetBreakdown.data.rawCs01CategoryList.length; i++) {
+        // using rawCs01CategoryList for the traversal, it doesn't matter which one to use since the assumption is the cs01 list and creditLeverage list will have the same length
+        const eachPayloadMetricBreakdown = this.autoScaleBreakdownRow(
+          targetBreakdown.data.rawCs01CategoryList[i],
+          targetBreakdown.data.rawLeverageCategoryList[i],
+          cs01ScalingRate,
+          creditLeverageScalingRate,
+        );
+        if (!!eachPayloadMetricBreakdown) {
+          const categoryIdentifier = targetBreakdown.data.rawCs01CategoryList[i].data.category;
+          payload.portfolioBreakdown.breakdown[categoryIdentifier] = eachPayloadMetricBreakdown;
+        }
       }
-    };
-    for (let i = 0; i < targetBreakdown.data.rawCs01CategoryList.length; i++) {
-      if (!!cs01ScalingRate || !!creditLeverageScalingRate) {
-        // the rate will be null if scaling is not suppose to apply to this metric
-        let addToPayload = false;
-        const categoryIdentifier = targetBreakdown.data.rawCs01CategoryList[i].data.category;
-        const currentTargetCs01 = targetBreakdown.data.rawCs01CategoryList[i].data.raw.targetLevel;
-        const currentTargetCreditLeverage = targetBreakdown.data.rawLeverageCategoryList[i].data.raw.targetLevel;
-        const eachTargetPayload: BEMetricBreakdowns = {
-          metricBreakdowns: {}
-        };
-        if (!!cs01ScalingRate && !!currentTargetCs01) {
-          // only apply scaling to cs01 if this category has a cs01 target
-          eachTargetPayload.metricBreakdowns.Cs01 = {
-            targetLevel: currentTargetCs01 * cs01ScalingRate
-          };
-          addToPayload = true;
-        }
-        if (!!creditLeverageScalingRate && !!currentTargetCreditLeverage) {
-          // only apply scaling to credit leverage if this category has a credit leverage target
-          eachTargetPayload.metricBreakdowns.CreditLeverage = {
-            targetLevel: targetBreakdown.data.rawLeverageCategoryList[i].data.raw.targetLevel * creditLeverageScalingRate
-          };
-          addToPayload = true;
-        }
-        if (!!addToPayload) {
-          payload.portfolioBreakdown.breakdown[categoryIdentifier] = eachTargetPayload;
-        }
+      if (!this.utilityService.isObjectEmpty(payload.portfolioBreakdown.breakdown)) {
+        numOfUpdateCallsNeeded++;
+        this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
+          first(),
+          tap((serverReturn: BEPortfolioStructuringDTO) => {
+            numOfUpdateCallsCompleted++;
+            this.store$.dispatch(
+              new CoreSendNewAlerts([
+                this.dtoService.formSystemAlertObject(
+                  'Structuring',
+                  'Auto-Scaled',
+                  `Successfully Auto-Scaled Target for ${targetBreakdown.data.title}`,
+                  null
+                )]
+              )
+            );
+            if (numOfUpdateCallsCompleted === numOfUpdateCallsNeeded) {
+              this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
+            }
+          }),
+          catchError(err => {
+            console.error('auto-scale breakdown failed');
+            this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Auto-Scale', 'auto-scale breakdown failed', null)]));
+            return of('error');
+          })
+        ).subscribe();
       }
     }
-    if (!this.utilityService.isObjectEmpty(payload.portfolioBreakdown.breakdown)) {
-      numOfUpdateCallsNeeded++;
-      this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
-        first(),
-        tap((serverReturn: BEPortfolioStructuringDTO) => {
-          numOfUpdateCallsCompleted++;
-          this.store$.dispatch(
-            new CoreSendNewAlerts([
-              this.dtoService.formSystemAlertObject(
-                'Structuring',
-                'Auto-Scaled',
-                `Successfully Auto-Scaled Target for ${targetBreakdown.data.title}`,
-                null
-              )]
-            )
-          );
-          if (numOfUpdateCallsCompleted === numOfUpdateCallsNeeded) {
-            this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
+  }
+
+  private autoScaleTargetOverride(
+    targetBreakdown: PortfolioBreakdownDTO,
+    cs01ScalingRate: number,
+    creditLeverageScalingRate: number,
+    numOfUpdateCallsNeeded: number,
+    numOfUpdateCallsCompleted: number
+  ) {
+    if (!!cs01ScalingRate || !!creditLeverageScalingRate) {
+      // the rate will be null if scaling is not suppose to apply to this metric
+      for (let i = 0; i < targetBreakdown.data.rawCs01CategoryList.length; i++) {
+        // using rawCs01CategoryList for the traversal, it doesn't matter which one to use since the assumption is the cs01 list and creditLeverage list will have the same length
+        const eachRow = targetBreakdown.data.rawCs01CategoryList[i];
+        const eachPayload:PayloadUpdateOverride = {
+          portfolioOverride: {
+            date: moment().format('YYYY-MM-DD'),
+            portfolioId: this.fund.data.portfolioId,
+            indexId: this.fund.data.indexId,
+            bucket: eachRow.data.bucket
           }
-        }),
-        catchError(err => {
-          console.error('update breakdown failed');
-          this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'update breakdown failed', null)]));
-          return of('error');
-        })
-      ).subscribe();
+        };
+        const eachPayloadMetricBreakdown = this.autoScaleBreakdownRow(
+          targetBreakdown.data.rawCs01CategoryList[i],
+          targetBreakdown.data.rawLeverageCategoryList[i],
+          cs01ScalingRate,
+          creditLeverageScalingRate
+        );
+        if (!!eachPayloadMetricBreakdown) {
+          numOfUpdateCallsNeeded++;
+          eachPayload.portfolioOverride.breakdown = eachPayloadMetricBreakdown;
+          this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
+            first(),
+            tap((serverReturn: BEPortfolioStructuringDTO) => {
+              numOfUpdateCallsCompleted++;
+              this.store$.dispatch(
+                new CoreSendNewAlerts([
+                  this.dtoService.formSystemAlertObject(
+                    'Structuring',
+                    'Auto-Scaled',
+                    `Successfully Auto-Scaled Target for ${targetBreakdown.data.title} - ${eachRow.data.displayCategory}`,
+                    null
+                  )]
+                )
+              );
+              if (numOfUpdateCallsNeeded === numOfUpdateCallsCompleted) {
+                this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
+              }
+            }),
+            catchError(err => {
+            console.error('auto-scale breakdown failed');
+            this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Auto-Scale', 'auto-scale override failed', null)]));
+              return of('error');
+            })
+          ).subscribe();
+        }
+      }
     }
+  }
+
+  // return true if the row can be scaled (currently has target on the corresponding metric)
+  private autoScaleBreakdownRow(
+    targetCS01Row: StructurePortfolioBreakdownRowDTO,
+    targetCreditLeverageRow: StructurePortfolioBreakdownRowDTO,
+    cs01ScalingRate: number,
+    creditLeverageScalingRate: number
+  ): BEMetricBreakdowns {
+    let addToPayload = false;
+    const currentTargetCs01 = targetCS01Row.data.raw.targetLevel;
+    const currentTargetCreditLeverage = targetCreditLeverageRow.data.raw.targetLevel;
+    const eachTargetPayload: BEMetricBreakdowns = {
+      metricBreakdowns: {}
+    };
+    if (!!cs01ScalingRate && !!currentTargetCs01) {
+      // only apply scaling to cs01 if this category has a cs01 target
+      eachTargetPayload.metricBreakdowns.Cs01 = {
+        targetLevel: currentTargetCs01 * cs01ScalingRate
+      };
+      addToPayload = true;
+    }
+    if (!!creditLeverageScalingRate && !!currentTargetCreditLeverage) {
+      // only apply scaling to credit leverage if this category has a credit leverage target
+      eachTargetPayload.metricBreakdowns.CreditLeverage = {
+        targetLevel: currentTargetCreditLeverage * creditLeverageScalingRate
+      };
+      addToPayload = true;
+    }
+    return addToPayload ? eachTargetPayload : null;
   }
 }
