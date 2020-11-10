@@ -201,7 +201,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           markAlertCount: 0,
           unreadMarkAlertCount: 0,
           tradeAlertCount: 0,
-          unreadTradeAlertCount: 0,
+          traceAlertCount: 0,
           scopedForMarketListOnly: false,
           scopedAlertType: null,
           recentUpdatedAlertList: []
@@ -365,15 +365,15 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
               if (eachRawAlert.isCancelled) {
                 // cancellation of alerts carries diff meaning depending on the alert type:
                 // axe & mark & inquiry: it could be the trader entered it by mistake, but it could also be the trader changed his mind so he/she cancels the previous legitmate entry. So when such an cancelled alert comes in
-                // trade: since it is past tense, so it could only be cancelled because of entered by mistake
+                // trade and trace: since it is past tense, so it could only be cancelled because of entered by mistake
                 if (newAlert.data.type === this.constants.alertTypes.markAlert || newAlert.data.type === this.constants.alertTypes.axeAlert) {
                   !newAlert.state.isRead && alertTableList.push(newAlert);
                   updateList.push(newAlert);
-                } else if (newAlert.data.type === this.constants.alertTypes.tradeAlert) {
+                } else if (newAlert.data.type === this.constants.alertTypes.tradeAlert || newAlert.data.type === this.constants.alertTypes.traceAlert) {
                   alertTableRemovalList.push(newAlert);
                 }
               } else {
-                if (!newAlert.state.isRead && newAlert.data.isUrgent && !newAlert.state.isRead) {
+                if (!newAlert.state.isRead && newAlert.data.isUrgent) {
                   updateList.push(newAlert);
                 }
                 if (newAlert.data.security && newAlert.data.security.data.securityID) {
@@ -487,7 +487,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
     private getAlertHeaders(alertType: string) {
       const securityTableHeaderConfigsCopy = this.utilityService.deepCopy(SecurityTableHeaderConfigs);
-      const formattedAlert = alertType.toLowerCase();
+      const formattedAlert = alertType !== this.constants.alertTypes.traceAlert ? alertType.toLowerCase() : alertType.toLowerCase().split('trade')[0];
       const headerAlertConfig = SecurityTableAlertHeaderConfigs[formattedAlert];
       securityTableHeaderConfigsCopy.forEach(metric => {
           if (headerAlertConfig.include.indexOf(metric.key) > -1) {
@@ -518,7 +518,14 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           }
         } else {
           this.state.alert.scopedForMarketListOnly = false;
-          const alertTypeCount = (targetType === 'Mark') ? this.state.alert.markAlertCount : this.state.alert.tradeAlertCount; 
+          let alertTypeCount;
+          if (targetType === this.constants.alertTypes.markAlert) {
+            alertTypeCount = this.state.alert.markAlertCount;
+          } else if (targetType === this.constants.alertTypes.traceAlert) {
+            alertTypeCount = this.state.alert.traceAlertCount;
+          } else {
+            alertTypeCount = this.state.alert.tradeAlertCount;
+          }
           if (this.state.alert.scopedAlertType !== targetType && alertTypeCount > 0) {
             this.state.displayAlertTable = true;
             this.state.alert.scopedAlertType = targetType;
@@ -1052,6 +1059,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.state.alert.marketListAxeAlertCount = 0;
       this.state.alert.markAlertCount = 0;
       this.state.alert.tradeAlertCount = 0;
+      this.state.alert.traceAlertCount = 0;
       this.alertCountIncrement(newAlertList);
       newAlertList.forEach((eachAlert) => {
         this.state.alert.alertTableAlertList[eachAlert.data.id] = eachAlert;
@@ -1208,6 +1216,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             case this.constants.alertTypes.tradeAlert:
               this.state.alert.tradeAlertCount++;
               break;
+            case this.constants.alertTypes.traceAlert:
+              this.state.alert.traceAlertCount++;
+              break;
             default:
               break;
           }
@@ -1231,6 +1242,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
               break;
             case this.constants.alertTypes.tradeAlert:
               this.state.alert.tradeAlertCount--;
+              break;
+            case this.constants.alertTypes.traceAlert:
+              this.state.alert.traceAlertCount--;
               break;
             default:
               break;

@@ -2,7 +2,6 @@
 
 $portfolioBreakdownRowCategory_cell_width: 3.5rem;
 $portfolioBreakdownRowBtnMinHeight: 2.25rem;
-$portfolioBreakdownRowIconSpacing: .1rem;
 .sat-portfolioBreakdownRow {
   $blockName: &;
   display: flex;
@@ -49,7 +48,7 @@ $portfolioBreakdownRowIconSpacing: .1rem;
           top: -$iconButton_size_x_small;
           background-color: $color_active;
           color: $font_color_inverse;
-          padding: $portfolioBreakdownRowIconSpacing;
+          padding: $spacing_xx_small;
           font-size: $font_size_small;
         }
         &:hover {
@@ -145,7 +144,7 @@ $portfolioBreakdownRowIconSpacing: .1rem;
               &-ctas {
                 &-btn {
                   &-icon {
-                    transform: rotate(45deg);
+                    transform: rotate(-45deg);
                   }
                 }
               }
@@ -235,7 +234,7 @@ $portfolioBreakdownRowIconSpacing: .1rem;
           &-view {
             background-color: $color_orange_6;
             &-icon {
-              transform: rotate(45deg);
+              transform: rotate(-45deg);
             }
           }
         }
