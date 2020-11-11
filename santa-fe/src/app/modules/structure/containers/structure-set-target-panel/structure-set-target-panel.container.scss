@@ -110,12 +110,12 @@ $structureSetTargetPanel_highlight_border: 2px solid $color_active;
       flex: 0 0 50%;
       display: flex;
       flex-direction: column;
-      padding-left: $spacing_large;
       &-content {
         @include mix_fixed_div(relative, $z_index_base_item);
         display: flex;
         flex-direction: column;
         overflow: hidden;
+        padding-left: $spacing_large;
         &-border {
           @include mix_fixed_div(absolute, $z_index_base_item_solid);
           @include mix_border_generator(2px, $color_active);
