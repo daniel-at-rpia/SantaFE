@@ -2368,6 +2368,7 @@ export class DTOService {
           returnPack.displayLabelMap[newBreakdown.data.backendGroupOptionIdentifier],
           newBreakdown
         );
+        this.utility.sortOverrideRows(newBreakdown);
         object.data.children.unshift(newBreakdown);
       });
     }
