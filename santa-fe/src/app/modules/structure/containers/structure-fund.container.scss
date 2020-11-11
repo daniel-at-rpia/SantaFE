@@ -6,13 +6,13 @@ $funtStructuring_setTarget_backgroundIcon_size: $font_size_hero;
 $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_height - $funtStructuring_setTarget_backgroundIcon_size)/2;
 .sat-fundStructuring {
   $blockName: &;
+  @include mix_border_radius(10px);
   @include mix_alive('light');
   display: flex;
   flex-direction: column;
   overflow: hidden;
   &__configuration {
     @include mix_fixed_div(relative, $z_index_base_item_solid);
-    @include mix_border_radius(10px, 'top');
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
@@ -29,7 +29,7 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
   }
   &__editFund {
     @include mix_fixed_div(relative, $z_index_base_item);
-    @include mix_alive('custom', transform $animation_duration_light);
+    @include mix_alive('custom', transform $animation_duration_light, border-radius $animation_duration_light);
     flex: 0 0 auto;
     display: flex;
     flex-direction: column;
@@ -78,7 +78,7 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
       font-size: $funtStructuring_setTarget_backgroundIcon_size;
       color: $color_gray_6;
       opacity: 0;
-      transform: translate(0, -50%);
+      transform: translate(0, -100%);
     }
     &-autoScalingToggle {
       @include material();
@@ -171,6 +171,7 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
   &--editingState {
     #{$blockName} {
       &__editFund {
+        @include mix_border_radius(0);
         background-color: $color_active;
         color: $font_color_inverse;
         height: $fundStructuring_setTarget_height;
