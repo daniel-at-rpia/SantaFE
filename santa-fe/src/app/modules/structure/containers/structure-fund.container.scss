@@ -77,10 +77,11 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
       transform: translate(0, -50%);
     }
     &-autoScalingToggle {
-      @include material('none');
-      background-color: $color_disabled;
+      @include material();
+      display: none;
+      background-color: $color_white;
+      cursor: pointer;
       margin-right: $spacing_medium;
-      cursor: not-allowed;
     }
   }
   &__utility {
@@ -159,15 +160,7 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
   &--autoScalingAvailableState {
     #{$blockName} {
       &__editFund-autoScalingToggle {
-        @include material();
-        background-color: $color_white;
-        cursor: pointer;
-        i {
-          color: $font_color_major;
-        }
-        span {
-          color: $font_color_major;
-        }
+        display: flex;
       }
     }
   }
