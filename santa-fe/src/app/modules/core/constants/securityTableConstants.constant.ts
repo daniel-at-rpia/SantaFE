@@ -52,7 +52,8 @@ export const SecurityTableHeaderConfigGroups = {
   cs01: 'CS01 (k)',
   delta: 'Deltas',
   securityInfo: 'Security Info',
-  ownership: 'Ownership'
+  ownership: 'Ownership',
+  lastTrace: 'Trace Last Print (IG > 1MM / HY > 500k)'
 };
 
 export const SECURITY_TABLE_ICONS = {
@@ -1326,6 +1327,98 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
         },
         tradeAlert: {
           active: true
+        }
+      }
+    }
+  },{
+    key: 'lastTraceSpread',
+    content: {
+      label: 'Spread',
+      attrName: 'lastTraceSpread',
+      underlineAttrName: 'lastTraceSpread',
+      blockAttrName: 'lastTrace',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDriverDependent: false,
+      groupBelongs: SecurityTableHeaderConfigGroups.lastTrace,
+      tableSpecifics: {
+        default: {
+          active: true,
+          disabled: false,
+          groupShow: true
+        },
+        tradeAlert: {
+          active: false,
+          disabled: true,
+          groupShow: false
+        }
+      }
+    }
+  },{
+    key: 'lastTracePrice',
+    content: {
+      label: 'Price',
+      attrName: 'lastTracePrice',
+      underlineAttrName: 'lastTracePrice',
+      blockAttrName: 'lastTrace',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDriverDependent: false,
+      groupBelongs: SecurityTableHeaderConfigGroups.lastTrace,
+      tableSpecifics: {
+        default: {
+          active: true,
+          disabled: false,
+          groupShow: true
+        },
+        tradeAlert: {
+          active: false,
+          disabled: true,
+          groupShow: false
+        }
+      }
+    }
+  },{
+    key: 'lastTraceVolumeEstimated',
+    content: {
+      label: 'Vol (Estimated)',
+      attrName: 'lastTraceVolumeEstimated',
+      underlineAttrName: 'lastTraceVolumeEstimated',
+      blockAttrName: 'lastTrace',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDriverDependent: false,
+      groupBelongs: SecurityTableHeaderConfigGroups.lastTrace,
+      tableSpecifics: {
+        default: {
+          active: true,
+          disabled: false,
+          groupShow: true
+        },
+        tradeAlert: {
+          active: false,
+          disabled: true,
+          groupShow: false
+        }
+      }
+    }
+  },{
+    key: 'lastTraceVolumeReported',
+    content: {
+      label: 'Vol (Reported)',
+      attrName: 'lastTraceVolumeReported',
+      underlineAttrName: 'lastTraceVolumeReported',
+      blockAttrName: 'lastTrace',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDriverDependent: false,
+      groupBelongs: SecurityTableHeaderConfigGroups.lastTrace,
+      tableSpecifics: {
+        default: {
+          active: true,
+          disabled: false,
+          groupShow: true
+        },
+        tradeAlert: {
+          active: false,
+          disabled: true,
+          groupShow: false
         }
       }
     }
