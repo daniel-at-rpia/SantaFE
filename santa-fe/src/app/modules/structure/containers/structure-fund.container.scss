@@ -11,11 +11,14 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
   flex-direction: column;
   overflow: hidden;
   &__configuration {
+    @include mix_fixed_div(relative, $z_index_base_item_solid);
+    @include mix_border_radius(10px, 'top');
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
     align-items: flex-start;
     padding: $spacing_x_small 0;
+    background-color: $color_gray_2;
     &-title {
       flex: 0 0 auto;
       text-align: center;
@@ -26,13 +29,14 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
   }
   &__editFund {
     @include mix_fixed_div(relative, $z_index_base_item);
-    @include mix_alive('light');
+    @include mix_alive('custom', transform $animation_duration_light);
     flex: 0 0 auto;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     height: 0;
     overflow: hidden;
+    transform: translate(0, -$fundStructuring_setTarget_height);
     &-overrideCta {
       flex: 0 0 auto;
       display: flex;
@@ -172,6 +176,7 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
         height: $fundStructuring_setTarget_height;
         padding-bottom: $spacing_medium;
         margin-bottom: 0;
+        transform: translate(0, 0);
         &-backgroundIcon {
           opacity: 1;
           transform: translate(0, 0);
