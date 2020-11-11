@@ -189,7 +189,6 @@ export class StructureFund implements OnInit {
           creditLeverageScalingRate = isCreditLeverageUpdated.target / oldCreditLeverage;
         }
       }
-      this.updateFundTarget(updatedTargetDataList, false);
       let numOfUpdateCallsNeeded = 0;
       let numOfUpdateCallsCompleted = 0;
       this.fund.data.children.forEach((eachBreakdown) => {
@@ -211,6 +210,7 @@ export class StructureFund implements OnInit {
           );
         }
       });
+      this.updateFundTarget(updatedTargetDataList, numOfUpdateCallsNeeded === 0);
     } else {
       this.updateFundTarget(updatedTargetDataList, true);
     }
