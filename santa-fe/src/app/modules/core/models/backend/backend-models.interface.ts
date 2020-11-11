@@ -1,6 +1,7 @@
 import { AlertTypes } from 'Core/constants/coreConstants.constant';
 import {AxeAlertType} from "Core/constants/tradeConstants.constant";
 import { PortfolioShortNames } from 'Core/constants/structureConstants.constants';
+import { TraceTradeCounterParty } from '../../constants/securityTableConstants.constant';
 export interface BEFetchAllTradeDataReturn {
   numberOfSecurities: number;
   securityDtos: BEFullSecurityCollection;
@@ -438,10 +439,11 @@ export interface BEAlertDTO {
   securityIdentifierToQuoteId?: {
     [property: string]: string;
   };
-  trades?: Array<BETradeBlock>;
+  trades?: Array<BETradeBlock>; // for trade alerts
   quote?: BEAlertRegularQuoteBlock|BEAlertMarketListQuoteBlock|BEAlertCDSQuoteBlock;
   marketListAlert?: BEAlertMarketListBlock;
   sendEmail: boolean;
+  trade?: BETraceTradesBlock; // for trace alerts
 }
 
 export interface BETradeBlock {
@@ -663,7 +665,7 @@ export interface BEGetAllTraceTradesBlock {
 
 export interface BETraceTradesBlock {
   actionFlag: string;
-  counterParty: string;
+  counterParty: TraceTradeCounterParty;
   creationTime: string;
   discriminator: string;
   eventDate: string;
@@ -686,7 +688,7 @@ export interface BETraceTradesBlock {
   traceTradeID: string;
   tradeTradeRefID: string;
   type: string;
-  volumeActual: number;
+  volumeReported: number;
   volumeEstimated: number;
   yield: number;
 }

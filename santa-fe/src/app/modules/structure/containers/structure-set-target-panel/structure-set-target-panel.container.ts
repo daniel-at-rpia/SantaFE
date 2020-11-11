@@ -146,7 +146,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         if (!!this.state.clearAllTargetSelected) {
           this.state.clearAllTargetSelected = false;
         }
-        const modalTitle = this.state.targetBreakdown.state.isOverrideVariant ? `${this.state.targetFund.data.portfolioShortName} - Edit Override Targets` : `${this.state.targetFund.data.portfolioShortName} - Edit Breakdown Targets`;
+        const modalTitle = !!this.state.targetBreakdownIsOverride ? `${this.state.targetFund.data.portfolioShortName} - Edit Override Targets` : `${this.state.targetFund.data.portfolioShortName} - Edit Breakdown Targets`;
         this.modalService.setModalTitle(STRUCTURE_EDIT_MODAL_ID, modalTitle);
       }
     });

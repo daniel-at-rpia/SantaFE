@@ -343,6 +343,16 @@ $tradeAlertPanel_overview_tabIndicate_width: 7rem;
                 }
               }
             }
+            &--trace {
+              #{$tradeAlertPanelBlockName} {
+                &__overview-tabList-tab-cta {
+                  background-color: $tradeTraceAlertColor;
+                  &-icon, &-regText {
+                    color: $font_color_inverse;
+                  }
+                }
+              }
+            }
             &--empty {
               #{$tradeAlertPanelBlockName} {
                 &__overview-tabList-tab-cta {
@@ -478,6 +488,32 @@ $tradeAlertPanel_overview_tabIndicate_width: 7rem;
           }
         }
         &-tabList-tab--trade {
+          #{$tradeAlertPanelBlockName} {
+            &__overview-tabList-tab-cta {
+              @include material('none');
+              background-color: $color_active;
+              &-countText {
+                background-color: $color_white;
+                color: $color_active;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--scopeTraceAlertsState {
+    border-color: $tradeTraceAlertColor;
+    background-color: $tradeTraceAlertBackgroundColor;
+    #{$tradeAlertPanelBlockName} {
+      &__overview {
+        &-tabIndicate {
+          transform: translate(2rem, 0);
+          &-icon {
+            color: $tradeTraceAlertColor;
+          }
+        }
+        &-tabList-tab--trace {
           #{$tradeAlertPanelBlockName} {
             &__overview-tabList-tab-cta {
               @include material('none');

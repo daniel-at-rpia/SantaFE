@@ -424,7 +424,17 @@ export class DTOService {
       alertQuoteDealer: targetAlert.data.dealer,
       alertTradeTrader: targetAlert.data.trader,
       alertStatus: targetAlert.data.status,
-      shortcutConfig: dto.data.alert.shortcutConfig
+      shortcutConfig: dto.data.alert.shortcutConfig,
+      alertTraceCounterParty: targetAlert.data.traceCounterParty,
+      alertTraceVolumeEstimated: targetAlert.data.traceVolumeEstimated,
+      alertTraceVolumeReported: targetAlert.data.traceVolumeReported,
+      alertTracePrice: targetAlert.data.tracePrice,
+      alertTraceSpread: targetAlert.data.traceSpread,
+      alertTraceDisplayPrice: targetAlert.data.traceDisplayPrice,
+      alertTraceSide: targetAlert.data.traceSide,
+      alertTraceDisplaySpread: targetAlert.data.traceDisplaySpread,
+      alertTraceDisplayVolumeReported: targetAlert.data.traceDisplayVolumeReported,
+      alertTraceDisplayVolumeEstimated: targetAlert.data.traceDisplayVolumeEstimated
     };
   }
 
@@ -1396,7 +1406,13 @@ export class DTOService {
         trader: null,
         dealer: null,
         status: null,
-        isMarketListTraded: false
+        isMarketListTraded: false,
+        traceCounterParty: null,
+        traceSide: null,
+        traceVolumeEstimated: null,
+        traceVolumeReported: null,
+        tracePrice: null,
+        traceSpread: null
       },
       api: {
         onMouseEnterAlert: null,
@@ -1430,7 +1446,7 @@ export class DTOService {
     rawData: BEModels.BEAlertDTO
   ): DTOs.AlertDTO {
     const parsedTitleList = rawData.keyWord.split('|');
-    const momentTime = moment(rawData.timeStamp);
+    const momentTime = !!rawData.trade ? moment(rawData.trade.eventTime): moment(rawData.timeStamp);
     const object: DTOs.AlertDTO = {
       data: {
         id: rawData.alertId,
@@ -1534,6 +1550,21 @@ export class DTOService {
           }
         }
       }
+      if (!!rawData.trade && rawData.type === AlertTypes.traceAlert) {
+        const { counterParty, side, volumeEstimated, volumeReported, price, spread } = rawData.trade;
+        const parsedVolumeEstimated = !!volumeEstimated ? +(this.utility.parseNumberToThousands(volumeEstimated, false)) : null;
+        const parsedVolumeReported = !!volumeReported ? +(this.utility.parseNumberToThousands(volumeReported, false)) : null;
+        alertDTO.data.traceCounterParty = counterParty;
+        alertDTO.data.traceSide = TradeSideValueEquivalent[side];
+        alertDTO.data.traceVolumeEstimated = parsedVolumeEstimated;
+        alertDTO.data.traceVolumeReported = parsedVolumeReported;
+        alertDTO.data.tracePrice = price;
+        alertDTO.data.traceSpread = spread;
+        alertDTO.data.traceDisplayVolumeEstimated = !!alertDTO.data.traceVolumeEstimated ? this.utility.parseNumberToCommas(alertDTO.data.traceVolumeEstimated) : null;
+        alertDTO.data.traceDisplayVolumeReported = !!alertDTO.data.traceVolumeReported  ? this.utility.parseNumberToCommas(alertDTO.data.traceVolumeReported ) : null;
+        alertDTO.data.traceDisplayPrice = this.utility.parseTriCoreDriverNumber(alertDTO.data.tracePrice, TriCoreDriverConfig.Price.label, alertDTO.data.security, true) as string;
+        alertDTO.data.traceDisplaySpread = this.utility.parseTriCoreDriverNumber(alertDTO.data.traceSpread, TriCoreDriverConfig.Spread.label, alertDTO.data.security, true) as string;
+      }
     }
     if (alertDTO.state.isMarketListVariant) {
       const quoteBlock = rawData.quote as BEModels.BEAlertMarketListQuoteBlock;
@@ -1590,7 +1621,8 @@ export class DTOService {
       state: {
         isAxe: type === AlertTypes.axeAlert,
         isMark: type === AlertTypes.markAlert,
-        isTrade: type === AlertTypes.tradeAlert
+        isTrade: type === AlertTypes.tradeAlert,
+        isTrace: type === AlertTypes.traceAlert
       }
     }
     return object;
@@ -2085,7 +2117,11 @@ export class DTOService {
       const rawCurrentPct = parsedRawData.currentPct;
       const rawTargetLevel = parsedRawData.targetLevel;
       const rawTargetPct = parsedRawData.targetPct;
-      parsedRawData.currentLevel = !!isCs01 ? this.utility.round(parsedRawData.currentLevel/1000, 0) : this.utility.round(parsedRawData.currentLevel, 2);
+      if (!!isCs01) {
+        parsedRawData.currentLevel = rawCurrentLevel >= 1000 ? this.utility.round(parsedRawData.currentLevel/1000, 0) : 0;
+      } else {
+        parsedRawData.currentLevel = this.utility.round(parsedRawData.currentLevel, 2);
+      }
       if (parsedRawData.targetLevel != null) {
         parsedRawData.targetLevel = !!isCs01 ? this.utility.round(parsedRawData.targetLevel/1000, 0) : this.utility.round(parsedRawData.targetLevel, 2);
       }
@@ -2211,9 +2247,9 @@ export class DTOService {
       counterParty: counterParty,
       side: TradeSideValueEquivalent[rawData.side],
       volumeEstimated: rawData.volumeEstimated,
-      volumeReported: rawData.volumeActual,
+      volumeReported: rawData.volumeReported,
       displayVolumeEstimated: !!rawData.volumeEstimated ? this.utility.parseNumberToCommas(rawData.volumeEstimated) : null,
-      displayVolumeReported: !!rawData.volumeActual ? this.utility.parseNumberToCommas(rawData.volumeActual) : null,
+      displayVolumeReported: !!rawData.volumeReported ? this.utility.parseNumberToCommas(rawData.volumeReported) : null,
       price: this.utility.parseTriCoreDriverNumber(rawData.price, TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
       yield: this.utility.parseTriCoreDriverNumber(rawData.yield, TriCoreDriverConfig.Yield.label, targetSecurity, false) as number,
       spread: this.utility.parseTriCoreDriverNumber(rawData.spread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
