@@ -72,10 +72,10 @@
         </santa-input>
       </div>
       <div class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn">
-        <div *ngFor="let eachLevel of configuratorData.state.showFiltersFromDefinition?.state.currentFilterPathInConsolidatedBICS; let eachIndex = index;" class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn-entry">
+        <div *ngFor="let eachLevel of configuratorData.state.showFiltersFromDefinition?.state.currentFilterPathInConsolidatedBICS; let level = index;" class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn-entry">
           <div class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn-entry-content">
-            <div class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn-entry-content-text">Lv.{{eachIndex+1}} {{eachLevel}}</div>
-            <button (click)="onClickConsolidatedBICSDiveOut(eachLevel, eachIndex)" class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn-entry-content-diveOutBtn santaBtn--iconOnly santaBtn--small fas fa-minus"></button>
+            <div class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn-entry-content-text">{{eachLevel}}</div>
+            <button (click)="onClickConsolidatedBICSDiveOut(eachLevel, level)" class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn-entry-content-diveOutBtn santaBtn--iconOnly santaBtn--small fas fa-minus"></button>
           </div>
           <div class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn-entry-separator">
             <i class="far fa-arrow-down"></i>

@@ -167,7 +167,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   public onClickConsolidatedBICSDiveIn(targetOption: SecurityDefinitionFilterBlock) {
     const consolidatedBICSDefinition = this.configuratorData.state.showFiltersFromDefinition;
     if (!!consolidatedBICSDefinition) {
-      consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.push(targetOption.shortKey);
+      consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.push(targetOption.displayLabel);
       const level = consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.length+1;
       const newList = this.bicsDataProcessingService.getSubLevelList(targetOption.shortKey, level-1);
       consolidatedBICSDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(consolidatedBICSDefinition.data.key, newList, level);
@@ -180,10 +180,10 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     }
   }
 
-  public onClickConsolidatedBICSDiveOut(targetLevelText: string, index: number) {
+  public onClickConsolidatedBICSDiveOut(targetLevelText: string, level: number) {
     const consolidatedBICSDefinition = this.configuratorData.state.showFiltersFromDefinition;
     if (!!consolidatedBICSDefinition) {
-      consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS = consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.slice(0, index);
+      consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS = consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.slice(0, level);
       const newLevel = consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.length+1;
       let newList = [];
       if (newLevel > 1) {
