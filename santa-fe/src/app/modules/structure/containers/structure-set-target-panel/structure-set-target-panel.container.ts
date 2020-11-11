@@ -370,9 +370,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               newBreakdown
             );
             this.state.targetBreakdown = newBreakdown;
-            this.earMarkNewRow(newCategoryKey);
             const prevEditRowsForInheritance = this.utilityService.deepCopy(this.state.editRowList);
             this.loadEditRows();
+            this.earMarkNewRow(newCategoryKey);
             this.inheritEditRowStates(prevEditRowsForInheritance);
           }),
           catchError(err => {
