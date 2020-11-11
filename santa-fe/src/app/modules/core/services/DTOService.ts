@@ -248,7 +248,13 @@ export class DTOService {
         bicsLevel1: !isStencil ? rawData.bicsLevel1 : null,
         bicsLevel2: !isStencil ? rawData.bicsLevel2 : null,
         bicsLevel3: !isStencil ? rawData.bicsLevel3 : null,
-        bicsLevel4: !isStencil ? rawData.bicsLevel4 : null
+        bicsLevel4: !isStencil ? rawData.bicsLevel4 : null,
+        lastTrace: {
+          lastTracePrice: null,
+          lastTraceSpread: null,
+          lastTraceVolumeReported: null,
+          lastTraceVolumeEstimated: null
+        }
       }
       if (!isStencil) {
         // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
@@ -402,6 +408,13 @@ export class DTOService {
     block.positionNLFInMM = this.utility.parsePositionToMM(block.positionNLF, false, true);
     dto.data.cs01CadFirmInK = this.utility.parseNumberToThousands(dto.data.cs01CadFirm, false);
     dto.data.cs01LocalFirmInK = this.utility.parseNumberToThousands(dto.data.cs01LocalFirm, false);
+  }
+
+  public appendLastTraceInfoToSecurityDTO(dto: DTOs.SecurityDTO, rawData: BEModels.BEFullSecurityDTO) {
+    dto.data.lastTrace.lastTracePrice = rawData.lastTracePrice;
+    dto.data.lastTrace.lastTraceSpread = rawData.lastTraceSpread;
+    dto.data.lastTrace.lastTraceVolumeEstimated = rawData.lastTraceVolumeEstimated;
+    dto.data.lastTrace.lastTraceVolumeReported = rawData.lastTraceVolumeReported;
   }
 
   public appendAlertInfoToSecurityDTO(

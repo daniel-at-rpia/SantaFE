@@ -32,6 +32,10 @@ export interface BEFullSecurityDTO {
   security: BESecurityDTO;
   bestQuotes: BEBestQuoteDTO;
   positions: Array<BEPortfolioDTO>;
+  lastTraceSpread: number;
+  lastTracePrice: number;
+  lastTraceVolumeEstimated: number;
+  lastTraceVolumeReported: number;
 }
 
 export interface BEPortfolioDTO {

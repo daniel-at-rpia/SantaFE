@@ -156,6 +156,12 @@ export interface SecurityDTO extends BasicDTOStructure {
     bicsLevel2: string;
     bicsLevel3: string;
     bicsLevel4: string;
+    lastTrace: {
+      lastTraceSpread: number;
+      lastTracePrice: number;
+      lastTraceVolumeEstimated: number;
+      lastTraceVolumeReported: number;
+    }
   }
   api: {
     onClickCard: (card: SecurityDTO) => void;
