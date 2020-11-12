@@ -10,7 +10,8 @@ import * as DTOs from 'FEModels/frontend-models.interface';
 import * as am4charts from "@amcharts/amcharts4/charts";
 import {
   GridApi,
-  ColumnApi
+  ColumnApi,
+  ValueFormatterParams
 } from 'ag-grid-community';
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { DTOService } from 'Core/services/DTOService';
@@ -166,6 +167,7 @@ export interface AgGridColumnDefinition {
   }
   children?: Array<AgGridColumnDefinition>;
   columnGroupShow?: string;
+  valueFormatter?: (params: ValueFormatterParams) => string;
 }
 
 export interface AgGridRowNode {

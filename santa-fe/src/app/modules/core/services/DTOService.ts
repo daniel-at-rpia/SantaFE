@@ -50,7 +50,8 @@
     import {
       QuoteHeaderConfigList,
       TraceTradeCounterParty,
-      TradeSideValueEquivalent
+      TradeSideValueEquivalent,
+      TRACE_TRACE_VOLUME_REPORTED_THRESHOLD
     } from 'Core/constants/securityTableConstants.constant';
     import {
       AxeAlertScope,
@@ -1552,12 +1553,10 @@ export class DTOService {
       }
       if (!!rawData.trade && rawData.type === AlertTypes.traceAlert) {
         const { counterParty, side, volumeEstimated, volumeReported, price, spread } = rawData.trade;
-        const parsedVolumeEstimated = !!volumeEstimated ? +(this.utility.parseNumberToThousands(volumeEstimated, false)) : null;
-        const parsedVolumeReported = !!volumeReported ? +(this.utility.parseNumberToThousands(volumeReported, false)) : null;
         alertDTO.data.traceCounterParty = counterParty;
         alertDTO.data.traceSide = TradeSideValueEquivalent[side];
-        alertDTO.data.traceVolumeEstimated = parsedVolumeEstimated;
-        alertDTO.data.traceVolumeReported = parsedVolumeReported;
+        alertDTO.data.traceVolumeEstimated = volumeEstimated;
+        alertDTO.data.traceVolumeReported = volumeReported;
         alertDTO.data.tracePrice = price;
         alertDTO.data.traceSpread = spread;
         alertDTO.data.traceDisplayVolumeEstimated = !!alertDTO.data.traceVolumeEstimated ? this.utility.parseNumberToCommas(alertDTO.data.traceVolumeEstimated) : null;
@@ -2245,7 +2244,7 @@ export class DTOService {
       volumeEstimated: rawData.volumeEstimated,
       volumeReported: rawData.volumeReported,
       displayVolumeEstimated: !!rawData.volumeEstimated ? this.utility.parseNumberToCommas(rawData.volumeEstimated) : null,
-      displayVolumeReported: !!rawData.volumeReported ? this.utility.parseNumberToCommas(rawData.volumeReported) : null,
+      displayVolumeReported: !!rawData.volumeReported ? !!rawData.volumeEstimated ? `${traceTradeNumericalFilterSymbols.greaterThan} ${TRACE_TRACE_VOLUME_REPORTED_THRESHOLD}` : this.utility.parseNumberToCommas(rawData.volumeReported) : null,
       price: this.utility.parseTriCoreDriverNumber(rawData.price, TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
       yield: this.utility.parseTriCoreDriverNumber(rawData.yield, TriCoreDriverConfig.Yield.label, targetSecurity, false) as number,
       spread: this.utility.parseTriCoreDriverNumber(rawData.spread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,

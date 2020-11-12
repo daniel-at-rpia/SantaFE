@@ -3,7 +3,8 @@
     import {
       GridApi,
       ColumnApi,
-      Column
+      Column,
+      ValueFormatterParams
     } from 'ag-grid-community';
 
     import { UtilityService } from './UtilityService';
@@ -45,6 +46,10 @@
       TriCoreDriverConfig,
       DEFAULT_DRIVER_IDENTIFIER
     } from 'Core/constants/coreConstants.constant';
+    import {
+      TRACE_TRACE_VOLUME_REPORTED_THRESHOLD,
+      traceTradeNumericalFilterSymbols,
+    } from 'Core/constants/securityTableConstants.constant'
   //
 
 @Injectable()
@@ -119,6 +124,21 @@ export class AgGridMiddleLayerService {
         enableRowGroup: false,
         hide: !isActiveByDefault
       };
+      if (eachHeader.data.key === 'alertTraceVolumeEstimated' || eachHeader.data.key === 'alertTraceVolumeReported') {
+        if (eachHeader.data.key === 'alertTraceVolumeEstimated') {
+          newAgColumn.valueFormatter = (params: ValueFormatterParams) => (!!params.value ? this.utilityService.parseNumberToCommas(params.value) : null);
+        }
+        if (eachHeader.data.key === 'alertTraceVolumeReported') {
+          newAgColumn.valueFormatter = (params: ValueFormatterParams) => {
+            if (!!params.data && !!params.data.alertTraceVolumeEstimated) {
+              return `${traceTradeNumericalFilterSymbols.greaterThan} ${TRACE_TRACE_VOLUME_REPORTED_THRESHOLD}`;
+            } else {
+              const displayValue = !!params.value ? this.utilityService.parseNumberToCommas(params.value) : null;
+              return displayValue;
+            }
+          }
+        }
+      }
       if (eachHeader.data.key === 'alertTime') {
         newAgColumn['sort'] = 'asc';
       }

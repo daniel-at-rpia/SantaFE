@@ -336,7 +336,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   {
     key: 'alertTraceVolumeEstimated',
     content: {
-      label: 'Vol Estimated (K)',
+      label: 'Vol (Estimated)',
       attrName: 'alertTraceVolumeEstimated',
       underlineAttrName: 'alertTraceVolumeEstimated',
       blockAttrName: 'alert',
@@ -358,7 +358,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   {
     key: 'alertTraceVolumeReported',
     content: {
-      label: 'Vol Reported (K)',
+      label: 'Vol (Reported)',
       attrName: 'alertTraceVolumeReported',
       underlineAttrName: 'alertTraceVolumeReported',
       blockAttrName: 'alert',
@@ -1807,6 +1807,8 @@ export const AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD = 'fullWidth';
 
 export const AGGRID_PINNED_FULL_WIDTH_PINNED_ROW_KEYWORD = 'pinned';
 
+export const TRACE_TRACE_VOLUME_REPORTED_THRESHOLD = '1MM';
+
 export enum TraceTradeCounterParty {
   Dealer = 'Dealer',
   Client = 'Client',
@@ -1831,7 +1833,8 @@ export enum traceTradeFilterAmounts {
 }
 
 export enum traceTradeNumericalFilterSymbols {
-  greaterThan = '≥'
+  greaterThan = '≥',
+  lessThan = '≤'
 }
 
 export const TraceTradeCounterPartyList: Array<TraceTradeCounterParty> = [TraceTradeCounterParty.Dealer, TraceTradeCounterParty.Client, TraceTradeCounterParty.ClientAffiliate, TraceTradeCounterParty.ATS];
