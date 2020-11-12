@@ -1,5 +1,6 @@
   // dependencies
     import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
+    import { ActivatedRoute } from '@angular/router';
     import {
       Observable,
       Subscription,
@@ -36,6 +37,7 @@
 export class TradePage implements OnInit, OnDestroy {
   state: TradeState;
   subscriptions = {
+    routeChange: null,
     receiveSelectedSecuritySub: null,
     displayAlertThumbnailSub: null,
     ownerInitialsSub: null
@@ -55,7 +57,8 @@ export class TradePage implements OnInit, OnDestroy {
     private store$: Store<any>,
     private dtoService: DTOService,
     private utilityService: UtilityService,
-    private restfulCommService: RestfulCommService
+    private restfulCommService: RestfulCommService,
+    private route: ActivatedRoute
   ) {
     this.initializePageState();
   }
@@ -63,6 +66,12 @@ export class TradePage implements OnInit, OnDestroy {
   public ngOnInit() {
     this.initializePageState();
     this.store$.dispatch(new TradeStoreResetEvent());
+    this.subscriptions.routeChange = this.route.paramMap.pipe(
+      tap(params => {
+        console.log('test, route in Trade', params.get('stateId'));
+      })
+    ).subscribe();
+
     this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
       select(selectSelectedSecurityForAnalysis)
     ).subscribe((targetSecurity) => {
