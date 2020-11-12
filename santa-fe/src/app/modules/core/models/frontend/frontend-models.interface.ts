@@ -434,6 +434,7 @@ export interface SecurityTableCellDTO extends BasicDTOStructure {
     bestQuoteComparerDTO: BestQuoteComparerDTO;
     alertSideDTO: SantaTableAlertSideCellDTO;
     alertStatusDTO: SantaTableAlertStatusCellDTO;
+    alertTraceSideDTO: SantaTableAlertSideCellDTO;
   },
   state: {
     isBestQuoteVariant: boolean;

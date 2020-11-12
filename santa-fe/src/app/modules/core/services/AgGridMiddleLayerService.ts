@@ -185,6 +185,9 @@ export class AgGridMiddleLayerService {
     const alertStatusCellIndex = targetHeaders.findIndex((eachHeader) => {
       return eachHeader.data.key === 'alertStatus';
     }) - 1;
+    const alertTraceSideIndex = targetHeaders.findIndex(eachHeader => {
+      return eachHeader.data.key === 'alertTraceSide';
+    }) - 1;
     const list = [];
     targetRows.forEach((eachRow, index) => {
       if (index === 0) {
@@ -198,7 +201,8 @@ export class AgGridMiddleLayerService {
         bestQuoteCellIndex,
         bestAxeQuoteCellIndex,
         alertSideCellIndex,
-        alertStatusCellIndex
+        alertStatusCellIndex,
+        alertTraceSideIndex
       );
       !!newAgRow.id && list.push(newAgRow);
     });
@@ -225,6 +229,9 @@ export class AgGridMiddleLayerService {
     const alertStatusCellIndex = table.data.allHeaders.findIndex((eachHeader) => {
       return eachHeader.data.key === 'alertStatus';
     }) - 1;
+    const alertTraceSideIndex = table.data.allHeaders.findIndex((eachHeader) => {
+      return eachHeader.data.key === 'alertTraceSide';
+    }) - 1;
     targetRows.forEach((eachRow) => {
       const id = eachRow.data.rowId;
       const newAgRow = this.formAgGridRow(
@@ -233,7 +240,8 @@ export class AgGridMiddleLayerService {
         bestQuoteCellIndex,
         bestAxeQuoteCellIndex,
         alertSideCellIndex,
-        alertStatusCellIndex
+        alertStatusCellIndex,
+        alertTraceSideIndex
       );
       const existIndexInPinned = table.data.agGridPinnedTopRowData.findIndex((eachAgGridRow) => {
         return eachAgGridRow.id === id;
@@ -270,7 +278,7 @@ export class AgGridMiddleLayerService {
       newAgColumn.comparator = this.agCompareSecurities.bind(this);
     } else if (targetHeader.state.isBestQuoteVariant) {
       newAgColumn.comparator = this.agCompareBestQuoteComparer.bind(this);
-    } else if (targetHeader.data.key === 'alertSide') {
+    } else if (targetHeader.data.key === 'alertSide' || targetHeader.data.key === 'alertTraceSide') {
       newAgColumn.comparator = this.agCompareAlertSide.bind(this);
     } else if (targetHeader.data.key === 'alertStatus') {
       newAgColumn.comparator = this.agCompareAlertStatus.bind(this);
@@ -290,7 +298,7 @@ export class AgGridMiddleLayerService {
         newAgColumn.width = AGGRID_SECURITY_CARD_COLUMN_WIDTH;
       } else if (!!targetHeader.state.isBestQuoteVariant) {
         newAgColumn.width = AGGRID_QUOTE_COLUMN_WIDTH;
-      } else if (targetHeader.data.key === 'alertSide') {
+      } else if (targetHeader.data.key === 'alertSide' ||targetHeader.data.key === 'alertTraceSide') {
         newAgColumn.width = AGGRID_ALERT_SIDE_COLUMN_WIDTH;
       }
     } else if (!targetHeader.data.isDataTypeText) {
@@ -332,7 +340,8 @@ export class AgGridMiddleLayerService {
     bestQuoteCellIndex: number,
     bestAxeQuoteCellIndex: number,
     alertSideCellIndex: number,
-    alertStatusCellIndex: number
+    alertStatusCellIndex: number,
+    alertTraceSideIndex: number
   ): AgGridRow {
     const eachSecurity = targetRow.data.security;
     const newAgRow: AgGridRow = {
@@ -353,6 +362,10 @@ export class AgGridMiddleLayerService {
       alertStatus:
         alertStatusCellIndex > -1
           ? targetRow.data.cells[alertStatusCellIndex].data.alertStatusDTO
+          : null,
+      alertTraceSide:
+        alertTraceSideIndex > -1
+          ? targetRow.data.cells[alertTraceSideIndex].data.alertTraceSideDTO
           : null,
       rowDTO: targetRow,
       isFullWidth: targetRow.state.isAgGridFullSizeVariant

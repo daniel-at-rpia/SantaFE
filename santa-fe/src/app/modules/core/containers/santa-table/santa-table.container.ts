@@ -137,6 +137,7 @@ export class SantaTable implements OnInit, OnChanges {
       bestQuote: SantaTableQuoteCell,
       bestAxeQuote: SantaTableQuoteCell,
       alertSide: SantaTableAlertSideCell,
+      alertTraceSide: SantaTableAlertSideCell,
       detailAllQuotes: SantaTableDetailAllQuotes,
       numericFloatingFilter: SantaTableNumericFloatingFilter,
       numericFilter: SantaTableNumericFilter,

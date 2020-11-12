@@ -200,6 +200,7 @@ export interface AgGridRow {
   bestAxeQuote: DTOs.BestQuoteComparerDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Best Axe Quote column
   alertSide: DTOs.SantaTableAlertSideCellDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Alert Side column
   alertStatus: DTOs.SantaTableAlertStatusCellDTO;  // this needs to be identical to SecurityTableHeaderConfigs' key for Alert Status column
+  alertTraceSide: DTOs.SantaTableAlertSideCellDTO; // this needs to be identical to SecurityTableHeaderConfigs' key for Alert Trace Side column;
   rowDTO: DTOs.SecurityTableRowDTO;
   isFullWidth: boolean;
 }

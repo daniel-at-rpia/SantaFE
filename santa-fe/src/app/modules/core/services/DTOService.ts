@@ -1002,7 +1002,8 @@ export class DTOService {
         textData: !!isStencil ? 'PLACE' : textData,
         bestQuoteComparerDTO: bestQuoteComparerDTO,
         alertSideDTO: null,
-        alertStatusDTO: null
+        alertStatusDTO: null,
+        alertTraceSideDTO: null,
       },
       state: {
         isBestQuoteVariant: targetHeader.state.isBestQuoteVariant,
@@ -1044,6 +1045,19 @@ export class DTOService {
           object.data.alertSideDTO.data.side = 'Buy';
           object.data.alertSideDTO.state.bidSided = true;
         }
+      }
+      if (targetHeader.data.key === 'alertTraceSide') {
+        const side = alertDTO.data.traceSide;
+        object.data.alertTraceSideDTO = {
+          data: {
+            side: side
+          },
+          state: {
+            isStencil: false,
+            askSided: side === AlertSubTypes.sell,
+            bidSided: side === AlertSubTypes.buy
+          }
+        };
       }
       if (targetHeader.data.key === 'alertStatus') {
         object.data.alertStatusDTO = this.formSecurityTableAlertStatusCellObject(alertDTO);

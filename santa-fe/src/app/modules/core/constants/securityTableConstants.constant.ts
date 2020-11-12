@@ -320,6 +320,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.alert,
+      isCustomComponent: true,
       tableSpecifics: {
         default: {
           active: false,
