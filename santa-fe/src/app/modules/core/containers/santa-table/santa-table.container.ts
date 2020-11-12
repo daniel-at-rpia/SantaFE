@@ -137,7 +137,6 @@ export class SantaTable implements OnInit, OnChanges {
       bestQuote: SantaTableQuoteCell,
       bestAxeQuote: SantaTableQuoteCell,
       alertSide: SantaTableAlertSideCell,
-      alertTraceSide: SantaTableAlertSideCell,
       detailAllQuotes: SantaTableDetailAllQuotes,
       numericFloatingFilter: SantaTableNumericFloatingFilter,
       numericFilter: SantaTableNumericFilter,
@@ -427,15 +426,6 @@ export class SantaTable implements OnInit, OnChanges {
     this.agGridMiddleLayerService.selectedDriverType = this.activeTriCoreDriver;
     this.tableData.data.headers = [];
     this.tableData.data.allHeaders = [];
-    if (this.tableName === 'tradeAlert') {
-      const alertMessage = this.securityTableHeaderConfigs.find((header: SecurityTableHeaderConfigStub) => header.key === 'alertMessage');
-      const alertTraceVolumeReportedIndex = this.securityTableHeaderConfigs.findIndex((header: SecurityTableHeaderConfigStub) => header.key === 'alertTraceVolumeReported');
-      const headerListWithoutAlertMessage = this.securityTableHeaderConfigs.filter((header: SecurityTableHeaderConfigStub) => header.key !== 'alertMessage'); 
-      const traceListfirstHalf = headerListWithoutAlertMessage.slice(0, alertTraceVolumeReportedIndex + 1);
-      const traceListSecondHalf = headerListWithoutAlertMessage.slice(alertTraceVolumeReportedIndex + 1);
-      const traceHeaderListFull = [...traceListfirstHalf, alertMessage, ...traceListSecondHalf];
-      this.securityTableHeaderConfigs = traceHeaderListFull;
-    }
     this.securityTableHeaderConfigs.forEach((eachStub) => {
       const targetSpecifics = eachStub.content.tableSpecifics[this.tableName] || eachStub.content.tableSpecifics.default;
       if (eachStub.content.isForSecurityCard || targetSpecifics.active) {

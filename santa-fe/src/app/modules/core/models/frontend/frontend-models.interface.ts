@@ -140,7 +140,6 @@ export interface SecurityDTO extends BasicDTOStructure {
         sendEmail: boolean;
       },
       alertTraceCounterParty?: TraceTradeCounterParty;
-      alertTraceSide?: string;
       alertTraceVolumeEstimated?: number;
       alertTraceVolumeReported?: number;
       alertTracePrice?: number;
@@ -434,7 +433,6 @@ export interface SecurityTableCellDTO extends BasicDTOStructure {
     bestQuoteComparerDTO: BestQuoteComparerDTO;
     alertSideDTO: SantaTableAlertSideCellDTO;
     alertStatusDTO: SantaTableAlertStatusCellDTO;
-    alertTraceSideDTO: SantaTableAlertSideCellDTO;
   },
   state: {
     isBestQuoteVariant: boolean;

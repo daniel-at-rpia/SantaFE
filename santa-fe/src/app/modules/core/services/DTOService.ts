@@ -23,7 +23,8 @@
       DEFAULT_DRIVER_IDENTIFIER,
       AlertTypes,
       AlertSubTypes,
-      ALERT_STATUS_SORTINGVALUE_UNIT
+      ALERT_STATUS_SORTINGVALUE_UNIT,
+      TRACE_ALERT_REPORTED_THRESHOLD
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
@@ -50,8 +51,7 @@
     import {
       QuoteHeaderConfigList,
       TraceTradeCounterParty,
-      TradeSideValueEquivalent,
-      TRACE_TRACE_VOLUME_REPORTED_THRESHOLD
+      TradeSideValueEquivalent
     } from 'Core/constants/securityTableConstants.constant';
     import {
       AxeAlertScope,
@@ -432,7 +432,6 @@ export class DTOService {
       alertTracePrice: targetAlert.data.tracePrice,
       alertTraceSpread: targetAlert.data.traceSpread,
       alertTraceDisplayPrice: targetAlert.data.traceDisplayPrice,
-      alertTraceSide: targetAlert.data.traceSide,
       alertTraceDisplaySpread: targetAlert.data.traceDisplaySpread,
       alertTraceDisplayVolumeReported: targetAlert.data.traceDisplayVolumeReported,
       alertTraceDisplayVolumeEstimated: targetAlert.data.traceDisplayVolumeEstimated
@@ -1002,8 +1001,7 @@ export class DTOService {
         textData: !!isStencil ? 'PLACE' : textData,
         bestQuoteComparerDTO: bestQuoteComparerDTO,
         alertSideDTO: null,
-        alertStatusDTO: null,
-        alertTraceSideDTO: null,
+        alertStatusDTO: null
       },
       state: {
         isBestQuoteVariant: targetHeader.state.isBestQuoteVariant,
@@ -1045,19 +1043,6 @@ export class DTOService {
           object.data.alertSideDTO.data.side = 'Buy';
           object.data.alertSideDTO.state.bidSided = true;
         }
-      }
-      if (targetHeader.data.key === 'alertTraceSide') {
-        const side = alertDTO.data.traceSide;
-        object.data.alertTraceSideDTO = {
-          data: {
-            side: side
-          },
-          state: {
-            isStencil: false,
-            askSided: side === AlertSubTypes.sell,
-            bidSided: side === AlertSubTypes.buy
-          }
-        };
       }
       if (targetHeader.data.key === 'alertStatus') {
         object.data.alertStatusDTO = this.formSecurityTableAlertStatusCellObject(alertDTO);
@@ -1566,9 +1551,8 @@ export class DTOService {
         }
       }
       if (!!rawData.trade && rawData.type === AlertTypes.traceAlert) {
-        const { counterParty, side, volumeEstimated, volumeReported, price, spread } = rawData.trade;
+        const { counterParty, volumeEstimated, volumeReported, price, spread } = rawData.trade;
         alertDTO.data.traceCounterParty = counterParty;
-        alertDTO.data.traceSide = TradeSideValueEquivalent[side];
         alertDTO.data.traceVolumeEstimated = volumeEstimated;
         alertDTO.data.traceVolumeReported = volumeReported;
         alertDTO.data.tracePrice = price;
@@ -2258,7 +2242,7 @@ export class DTOService {
       volumeEstimated: rawData.volumeEstimated,
       volumeReported: rawData.volumeReported,
       displayVolumeEstimated: !!rawData.volumeEstimated ? this.utility.parseNumberToCommas(rawData.volumeEstimated) : null,
-      displayVolumeReported: !!rawData.volumeReported ? !!rawData.volumeEstimated ? `${traceTradeNumericalFilterSymbols.greaterThan} ${TRACE_TRACE_VOLUME_REPORTED_THRESHOLD}` : this.utility.parseNumberToCommas(rawData.volumeReported) : null,
+      displayVolumeReported: null,
       price: this.utility.parseTriCoreDriverNumber(rawData.price, TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
       yield: this.utility.parseTriCoreDriverNumber(rawData.yield, TriCoreDriverConfig.Yield.label, targetSecurity, false) as number,
       spread: this.utility.parseTriCoreDriverNumber(rawData.spread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
@@ -2266,6 +2250,18 @@ export class DTOService {
       gSpread: this.utility.parseTriCoreDriverNumber(rawData.gSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
       iSpread: this.utility.parseTriCoreDriverNumber(rawData.iSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
       parSpread: this.utility.parseTriCoreDriverNumber(rawData.parSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string
+    }
+    //Set specific display value for volume reported based on the availability of volume estimated
+    if (!!object.volumeReported) {
+      if (!!object.volumeEstimated) {
+        const reportedInteger = object.volumeReported /TRACE_ALERT_REPORTED_THRESHOLD;
+        const roundedReportedVolume = Math.floor(reportedInteger);
+        object.displayVolumeReported = `${traceTradeNumericalFilterSymbols.greaterThan} ${roundedReportedVolume}MM`;
+      } else {
+        object.displayVolumeReported = this.utility.parseNumberToCommas(rawData.volumeReported);
+      }
+    } else {
+      object.displayVolumeReported = null;
     }
     return object;
   }

@@ -265,51 +265,6 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       }
     }
   },{
-    key: 'alertMessage',
-    content: {
-      label: 'Alert Message',
-      attrName: 'alertMessage',
-      underlineAttrName: 'alertMessage',
-      blockAttrName: 'alert',
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isDataTypeText: true,
-      groupBelongs: SecurityTableHeaderConfigGroups.alert,
-      tableSpecifics: {
-        default: {
-          active: false,
-          disabled: true
-        },
-        tradeAlert: {
-          active: true,
-          disabled: false,
-          groupShow: false
-        }
-      }
-    }
-  },{
-    key: 'alertTraceSide',
-    content: {
-      label: 'Side',
-      attrName: 'alertTraceSide',
-      underlineAttrName: 'alertTraceSide',
-      blockAttrName: 'alert',
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isDataTypeText: true,
-      groupBelongs: SecurityTableHeaderConfigGroups.alert,
-      isCustomComponent: true,
-      tableSpecifics: {
-        default: {
-          active: false,
-          disabled: true
-        },
-        tradeAlert: {
-          active: true,
-          disabled: false,
-          groupShow: true
-        }
-      }
-    }
-  },{
     key: 'alertTraceCounterParty',
     content: {
       label: 'Counter Party',
@@ -412,6 +367,28 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
           active: true,
           disabled: false,
           groupShow: true
+        }
+      }
+    }
+  },{
+    key: 'alertMessage',
+    content: {
+      label: 'Alert Message',
+      attrName: 'alertMessage',
+      underlineAttrName: 'alertMessage',
+      blockAttrName: 'alert',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true,
+          disabled: false,
+          groupShow: false
         }
       }
     }
@@ -1610,7 +1587,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
 
 const POSITION_ALERT_HEADERS = ['hfPosition', 'nlfPosition', 'dofPosition', 'sofPosition', 'stipPosition', 'fipPosition', 'cipPosition', 'agbPosition', 'bbbPosition'];
 
-const TRACE_ALERT_HEADERS = ['alertTraceCounterParty', 'alertTraceSide', 'alertTraceVolumeEstimated', 'alertTraceVolumeReported', 'alertTracePrice', 'alertTraceSpread'];
+const TRACE_ALERT_HEADERS = ['alertTraceCounterParty', 'alertTraceVolumeEstimated', 'alertTraceVolumeReported', 'alertTracePrice', 'alertTraceSpread'];
 
 const TRACE_ALERT_EXCLUDED_HEADERS = SecurityTableHeaderConfigs.filter(header => header.key.indexOf('Trace') === -1 && !!header.content.tableSpecifics.tradeAlert && !!header.content.tableSpecifics.tradeAlert.active).map(newHeader => newHeader.key);
 
@@ -1628,7 +1605,7 @@ export const SecurityTableAlertHeaderConfigs: SecurityTableSpecificAlertHeaderCo
     exclude: ['alertType', 'alertStatus', 'hfPosition', 'nlfPosition', ...TRACE_ALERT_HEADERS]
   },
   trace: {
-    include: ['alertTime', 'alertMessage', ...TRACE_ALERT_HEADERS],
+    include: ['alertTime', 'alertMessage', 'alertSide',...TRACE_ALERT_HEADERS],
     exclude: TRACE_ALERT_EXCLUDED_HEADERS
   },
   all: {
@@ -1800,8 +1777,6 @@ export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
 export const AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD = 'fullWidth';
 
 export const AGGRID_PINNED_FULL_WIDTH_PINNED_ROW_KEYWORD = 'pinned';
-
-export const TRACE_TRACE_VOLUME_REPORTED_THRESHOLD = '1MM';
 
 export enum TraceTradeCounterParty {
   Dealer = 'Dealer',
