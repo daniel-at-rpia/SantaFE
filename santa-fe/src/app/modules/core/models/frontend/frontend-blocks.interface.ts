@@ -366,6 +366,8 @@ export interface TraceTradeBlock {
   traceTradeId: string;
   tradeTime: string;
   displayTradeTime: string;
+  reportingTime: string;
+  displayReportingTime: string;
   counterParty: TraceTradeCounterParty;
   side: string;
   volumeEstimated: number;

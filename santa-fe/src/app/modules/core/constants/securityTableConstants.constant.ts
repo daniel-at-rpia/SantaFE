@@ -1749,6 +1749,11 @@ export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
     attrName: 'displayTradeTime',
     size: 6
   },{
+    headerKey: 'displayReportingTime',
+    headerDisplayLabel: 'Reporting Time',
+    attrName: 'displayReportingTime',
+    size: 8
+  },{
     headerKey: 'counterParty',
     headerDisplayLabel: 'Counter Party',
     attrName: 'counterParty',

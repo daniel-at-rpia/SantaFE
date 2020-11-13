@@ -2244,6 +2244,8 @@ export class DTOService {
       traceTradeId: rawData.traceTradeID,
       tradeTime: rawData.eventTime,
       displayTradeTime: moment(rawData.eventTime).format(`HH:mm`),
+      reportingTime: rawData.publishingTime,
+      displayReportingTime: moment(rawData.publishingTime).format(`ddd MMM DD - HH:mm`),
       counterParty: counterParty,
       side: TradeSideValueEquivalent[rawData.side],
       volumeEstimated: rawData.volumeEstimated,
