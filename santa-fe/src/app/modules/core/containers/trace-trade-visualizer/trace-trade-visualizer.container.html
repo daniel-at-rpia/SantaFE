@@ -46,7 +46,7 @@
   </section>
   <section class="sat-traceTradeVisualizer__graphs">
     <div class="sat-traceTradeVisualizer__graphs-scatterGraph">
-      <span class="sat-traceTradeVisualizer__graphs-scatterGraph-title">Buy vs Sell</span>
+      <span class="sat-traceTradeVisualizer__graphs-scatterGraph-title">Buy vs Sell Over Time</span>
       <div class="sat-traceTradeVisualizer__graphs-scatterGraph-graphContainer">
         <div class="sat-traceTradeVisualizer__graphs-scatterGraph-graphContainer-content" id="{{ traceTrades.data.scatterGraphId }}"></div>
       </div>
@@ -58,6 +58,14 @@
         </span>
         <div class="sat-traceTradeVisualizer__graphs-pieGraphs-left-graphContainer">
           <div class="sat-traceTradeVisualizer__graphs-pieGraphs-left-graphContainer-content" id="{{ traceTrades.data.pieGraphLeftId }}"></div>
+        </div>
+      </div>
+      <div class="sat-traceTradeVisualizer__graphs-pieGraphs-right">
+        <span class="sat-traceTradeVisualizer__graphs-pieGraphs-right-title">
+          Buy Volume vs Sell Volume
+        </span>
+        <div class="sat-traceTradeVisualizer__graphs-pieGraphs-right-graphContainer">
+          <div class="sat-traceTradeVisualizer__graphs-pieGraphs-right-graphContainer-content" id="{{ traceTrades.data.pieGraphRightId }}"></div>
         </div>
       </div>
     </div>
