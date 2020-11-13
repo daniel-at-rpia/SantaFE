@@ -394,7 +394,7 @@ export class SantaTable implements OnInit, OnChanges {
           const copy: AgGridRow = this.utilityService.deepCopy(targetRow);
           copy.rowDTO.state.isExpanded = false;  // always reset the isExpanded flag
           if (copy.rowDTO.data.traceTradeVisualizer) {
-            copy.rowDTO.data.traceTradeVisualizer.data.pieGraphId = `${copy.id}-${this.constants.agGridPinnedRowKeyword}-${this.constants.tracePieGraphLeftId}`;
+            copy.rowDTO.data.traceTradeVisualizer.data.pieGraphLeftId = `${copy.id}-${this.constants.agGridPinnedRowKeyword}-${this.constants.tracePieGraphLeftId}`;
             copy.rowDTO.data.traceTradeVisualizer.data.scatterGraphId = `${copy.id}-${this.constants.agGridPinnedRowKeyword}-${this.constants.traceScatterGraphId}`;
           }
           this.tableData.data.agGridPinnedTopRowData.push(copy);
@@ -403,7 +403,7 @@ export class SantaTable implements OnInit, OnChanges {
           fullWidthCell.isFullWidth = true;
           if (!!fullWidthCell.rowDTO.data.traceTradeVisualizer) {
             fullWidthCell.rowDTO.data.traceTradeVisualizer.state.graphReceived = false;
-            fullWidthCell.rowDTO.data.traceTradeVisualizer.data.pieGraphId = `${fullWidthCell.id}-${this.constants.tracePieGraphLeftId}`;
+            fullWidthCell.rowDTO.data.traceTradeVisualizer.data.pieGraphLeftId = `${fullWidthCell.id}-${this.constants.tracePieGraphLeftId}`;
             fullWidthCell.rowDTO.data.traceTradeVisualizer.data.scatterGraphId = `${fullWidthCell.id}-${this.constants.traceScatterGraphId}`;
           }
           fullWidthCell.rowDTO.style.rowHeight = 0;

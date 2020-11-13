@@ -849,7 +849,7 @@ export interface TraceTradesVisualizerDTO extends BasicDTOStructure {
   data: {
     displayList: Array<TraceTradeBlock>;
     scatterGraphId: string;
-    pieGraphId: string;
+    pieGraphLeftId: string;
     filterList: Array<string>;
     availableFiltersList: Array<string>;
   },
