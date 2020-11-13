@@ -153,13 +153,17 @@ button {
       }
     }
     &-pieGraphs {
-      flex: 1 1 auto;
+      flex: 0 0 50%;
       display: flex;
       justify-content: center;
       flex-direction: column;
       margin-bottom: $spacing_small;
       overflow: hidden;
-      &-left {
+      &-left,
+      &-right {
+        display: flex;
+        flex-direction: column;
+        flex: 1 0 auto;
         &-title {
           flex: 0 0 auto;
           text-align: center;
