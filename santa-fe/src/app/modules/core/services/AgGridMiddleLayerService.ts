@@ -130,16 +130,11 @@ export class AgGridMiddleLayerService {
           newAgColumn.valueFormatter = (params: ValueFormatterParams) => (!!params.value ? this.utilityService.parseNumberToCommas(params.value) : null);
         }
         if (eachHeader.data.key === 'alertTraceVolumeReported' || eachHeader.data.key === 'lastTraceVolumeReported') {
-          const formatReportedValues = (amount: number): string => {
-            const reportedInteger = amount / TRACE_ALERT_REPORTED_THRESHOLD;
-            const roundedVolumeReported = Math.floor(reportedInteger);
-            return `${traceTradeNumericalFilterSymbols.greaterThan} ${roundedVolumeReported}MM`;
-          }
           newAgColumn.valueFormatter = (params: ValueFormatterParams) => {
             if (!!params.data && !!params.data.alertTraceVolumeEstimated && params.context.componentParent.tableName === 'tradeAlert') {
-              return formatReportedValues(params.value);
+              return this.utilityService.formatTraceReportedValues(params.value);
             } else if (!!params.data && !!params.data.lastTraceVolumeEstimated && params.context.componentParent.tableName === 'tradeMain') {
-              return formatReportedValues(params.value);
+              return this.utilityService.formatTraceReportedValues(params.value);
             } else {
               const displayValue = !!params.value ? this.utilityService.parseNumberToCommas(params.value) : null;
               return displayValue;

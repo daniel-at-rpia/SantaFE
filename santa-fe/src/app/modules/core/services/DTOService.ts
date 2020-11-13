@@ -2269,9 +2269,7 @@ export class DTOService {
     //Set specific display value for volume reported based on the availability of volume estimated
     if (!!object.volumeReported) {
       if (!!object.volumeEstimated) {
-        const reportedInteger = object.volumeReported /TRACE_ALERT_REPORTED_THRESHOLD;
-        const roundedReportedVolume = Math.floor(reportedInteger);
-        object.displayVolumeReported = `${traceTradeNumericalFilterSymbols.greaterThan} ${roundedReportedVolume}MM`;
+        object.displayVolumeReported = this.utility.formatTraceReportedValues(object.volumeReported);
       } else {
         object.displayVolumeReported = this.utility.parseNumberToCommas(rawData.volumeReported);
       }
