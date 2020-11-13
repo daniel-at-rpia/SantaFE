@@ -23,7 +23,8 @@
       DEFAULT_DRIVER_IDENTIFIER,
       AlertTypes,
       AlertSubTypes,
-      ALERT_STATUS_SORTINGVALUE_UNIT
+      ALERT_STATUS_SORTINGVALUE_UNIT,
+      TRACE_ALERT_REPORTED_THRESHOLD
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
@@ -1565,12 +1566,10 @@ export class DTOService {
       }
       if (!!rawData.trade && rawData.type === AlertTypes.traceAlert) {
         const { counterParty, side, volumeEstimated, volumeReported, price, spread } = rawData.trade;
-        const parsedVolumeEstimated = !!volumeEstimated ? +(this.utility.parseNumberToThousands(volumeEstimated, false)) : null;
-        const parsedVolumeReported = !!volumeReported ? +(this.utility.parseNumberToThousands(volumeReported, false)) : null;
         alertDTO.data.traceCounterParty = counterParty;
         alertDTO.data.traceSide = TradeSideValueEquivalent[side];
-        alertDTO.data.traceVolumeEstimated = parsedVolumeEstimated;
-        alertDTO.data.traceVolumeReported = parsedVolumeReported;
+        alertDTO.data.traceVolumeEstimated = volumeEstimated;
+        alertDTO.data.traceVolumeReported = volumeReported;
         alertDTO.data.tracePrice = price;
         alertDTO.data.traceSpread = spread;
         alertDTO.data.traceDisplayVolumeEstimated = !!alertDTO.data.traceVolumeEstimated ? this.utility.parseNumberToCommas(alertDTO.data.traceVolumeEstimated) : null;
@@ -2258,7 +2257,7 @@ export class DTOService {
       volumeEstimated: rawData.volumeEstimated,
       volumeReported: rawData.volumeReported,
       displayVolumeEstimated: !!rawData.volumeEstimated ? this.utility.parseNumberToCommas(rawData.volumeEstimated) : null,
-      displayVolumeReported: !!rawData.volumeReported ? this.utility.parseNumberToCommas(rawData.volumeReported) : null,
+      displayVolumeReported: null,
       price: this.utility.parseTriCoreDriverNumber(rawData.price, TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
       yield: this.utility.parseTriCoreDriverNumber(rawData.yield, TriCoreDriverConfig.Yield.label, targetSecurity, false) as number,
       spread: this.utility.parseTriCoreDriverNumber(rawData.spread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
@@ -2266,6 +2265,18 @@ export class DTOService {
       gSpread: this.utility.parseTriCoreDriverNumber(rawData.gSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
       iSpread: this.utility.parseTriCoreDriverNumber(rawData.iSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
       parSpread: this.utility.parseTriCoreDriverNumber(rawData.parSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string
+    }
+    //Set specific display value for volume reported based on the availability of volume estimated
+    if (!!object.volumeReported) {
+      if (!!object.volumeEstimated) {
+        const reportedInteger = object.volumeReported /TRACE_ALERT_REPORTED_THRESHOLD;
+        const roundedReportedVolume = Math.floor(reportedInteger);
+        object.displayVolumeReported = `${traceTradeNumericalFilterSymbols.greaterThan} ${roundedReportedVolume}MM`;
+      } else {
+        object.displayVolumeReported = this.utility.parseNumberToCommas(rawData.volumeReported);
+      }
+    } else {
+      object.displayVolumeReported = null;
     }
     return object;
   }
