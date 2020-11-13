@@ -37,7 +37,8 @@
       SECURITY_TABLE_FINAL_STAGE,
       SECURITY_TABLE_ICONS,
       AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD,
-      AGGRID_PINNED_FULL_WIDTH_PINNED_ROW_KEYWORD
+      AGGRID_PINNED_FULL_WIDTH_PINNED_ROW_KEYWORD,
+      TRACE_SCATTER_GRAPH_ID
     } from 'Core/constants/securityTableConstants.constant';
     import { TRACE_INITIAL_LIMIT } from 'Core/constants/tradeConstants.constant';
     import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
@@ -118,7 +119,8 @@ export class SantaTable implements OnInit, OnChanges {
     agGridDetailRowDefaultCount: AGGRID_DETAIL_ROW_DEFAULT_COUNT,
     agGridDetailRowHeightOffsetOffTheRunCDS: AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS,
     agGridPinnedFullWidthRowKeyword: AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD,
-    agGridPinnedRowKeyword: AGGRID_PINNED_FULL_WIDTH_PINNED_ROW_KEYWORD
+    agGridPinnedRowKeyword: AGGRID_PINNED_FULL_WIDTH_PINNED_ROW_KEYWORD,
+    traceScatterGraphId: TRACE_SCATTER_GRAPH_ID
   };
 
   icons = SECURITY_TABLE_ICONS;
@@ -391,7 +393,7 @@ export class SantaTable implements OnInit, OnChanges {
           copy.rowDTO.state.isExpanded = false;  // always reset the isExpanded flag
           if (copy.rowDTO.data.traceTradeVisualizer) {
             copy.rowDTO.data.traceTradeVisualizer.data.pieGraphId = `${copy.id}-${this.constants.agGridPinnedRowKeyword}-pieGraphId`;
-            copy.rowDTO.data.traceTradeVisualizer.data.scatterGraphId = `${copy.id}-${this.constants.agGridPinnedRowKeyword}-scatterGraphId`;
+            copy.rowDTO.data.traceTradeVisualizer.data.scatterGraphId = `${copy.id}-${this.constants.agGridPinnedRowKeyword}-${this.constants.traceScatterGraphId}`;
           }
           this.tableData.data.agGridPinnedTopRowData.push(copy);
           const fullWidthCell: AgGridRow = this.utilityService.deepCopy(copy);
@@ -400,7 +402,7 @@ export class SantaTable implements OnInit, OnChanges {
           if (!!fullWidthCell.rowDTO.data.traceTradeVisualizer) {
             fullWidthCell.rowDTO.data.traceTradeVisualizer.state.graphReceived = false;
             fullWidthCell.rowDTO.data.traceTradeVisualizer.data.pieGraphId = `${fullWidthCell.id}-pieGraphId`;
-            fullWidthCell.rowDTO.data.traceTradeVisualizer.data.scatterGraphId = `${fullWidthCell.id}-scatterGraphId`;
+            fullWidthCell.rowDTO.data.traceTradeVisualizer.data.scatterGraphId = `${fullWidthCell.id}-${this.constants.traceScatterGraphId}`;
           }
           fullWidthCell.rowDTO.style.rowHeight = 0;
           this.tableData.data.agGridPinnedTopRowData.push(fullWidthCell);
