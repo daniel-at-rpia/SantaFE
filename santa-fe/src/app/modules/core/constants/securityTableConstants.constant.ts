@@ -1816,6 +1816,8 @@ export const TRACE_SCATTER_GRAPH_ID = 'traceScatterGraphID';
 
 export const TRACE_PIE_GRAPH_LEFT_ID = 'tracePieGraphLeftID';
 
+export const TRACE_PIE_GRAPH_RIGHT_ID = 'tracePieGraphRightID';
+
 export enum TraceTradeCounterParty {
   Dealer = 'Dealer',
   Client = 'Client',

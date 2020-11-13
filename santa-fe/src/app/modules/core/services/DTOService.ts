@@ -33,7 +33,8 @@
       AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD,
       traceTradeNumericalFilterSymbols,
       TRACE_SCATTER_GRAPH_ID,
-      TRACE_PIE_GRAPH_LEFT_ID
+      TRACE_PIE_GRAPH_LEFT_ID,
+      TRACE_PIE_GRAPH_RIGHT_ID
     } from 'Core/constants/securityTableConstants.constant';
     import {
       GroupMetricOptions
@@ -2271,6 +2272,7 @@ export class DTOService {
         displayList: [],
         scatterGraphId: !isPinnedFullWidth ? `${targetRow.data.rowId}-${TRACE_SCATTER_GRAPH_ID}` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-${TRACE_SCATTER_GRAPH_ID}`,
         pieGraphLeftId: !isPinnedFullWidth ? `${targetRow.data.rowId}-${TRACE_PIE_GRAPH_LEFT_ID}` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-${TRACE_PIE_GRAPH_LEFT_ID}`,
+        pieGraphRightId: !isPinnedFullWidth ? `${targetRow.data.rowId}-${TRACE_PIE_GRAPH_RIGHT_ID}` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-${TRACE_PIE_GRAPH_RIGHT_ID}`,
         filterList: FilterTraceTradesOptions,
         availableFiltersList: []
       },
@@ -2282,7 +2284,8 @@ export class DTOService {
       },
       graph: {
         scatterGraph: null,
-        pieGraphLeft: null
+        pieGraphLeft: null,
+        pieGraphRight: null
       }
     }
 
