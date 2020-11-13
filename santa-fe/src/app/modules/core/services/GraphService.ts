@@ -898,7 +898,7 @@ export class GraphService {
       return chart;
     }
 
-    public generateTraceTradePieGraph(dto: TraceTradesVisualizerDTO): am4charts.PieChart {
+    public generateTraceTradeCounterPartyGraph(dto: TraceTradesVisualizerDTO): am4charts.PieChart {
       const chart = am4core.create(dto.data.pieGraphLeftId, am4charts.PieChart);
       const counterPartyData = [];
       TraceTradeCounterPartyList.forEach(counterParty => {
