@@ -1814,6 +1814,8 @@ export const AGGRID_PINNED_FULL_WIDTH_PINNED_ROW_KEYWORD = 'pinned';
 
 export const TRACE_SCATTER_GRAPH_ID = 'traceScatterGraphID';
 
+export const TRACE_PIE_GRAPH_LEFT_ID = 'tracePieGraphLeftID';
+
 export enum TraceTradeCounterParty {
   Dealer = 'Dealer',
   Client = 'Client',

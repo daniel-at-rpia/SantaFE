@@ -38,7 +38,8 @@
       SECURITY_TABLE_ICONS,
       AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD,
       AGGRID_PINNED_FULL_WIDTH_PINNED_ROW_KEYWORD,
-      TRACE_SCATTER_GRAPH_ID
+      TRACE_SCATTER_GRAPH_ID,
+      TRACE_PIE_GRAPH_LEFT_ID
     } from 'Core/constants/securityTableConstants.constant';
     import { TRACE_INITIAL_LIMIT } from 'Core/constants/tradeConstants.constant';
     import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
@@ -120,7 +121,8 @@ export class SantaTable implements OnInit, OnChanges {
     agGridDetailRowHeightOffsetOffTheRunCDS: AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS,
     agGridPinnedFullWidthRowKeyword: AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD,
     agGridPinnedRowKeyword: AGGRID_PINNED_FULL_WIDTH_PINNED_ROW_KEYWORD,
-    traceScatterGraphId: TRACE_SCATTER_GRAPH_ID
+    traceScatterGraphId: TRACE_SCATTER_GRAPH_ID,
+    tracePieGraphLeftId: TRACE_PIE_GRAPH_LEFT_ID
   };
 
   icons = SECURITY_TABLE_ICONS;
@@ -392,7 +394,7 @@ export class SantaTable implements OnInit, OnChanges {
           const copy: AgGridRow = this.utilityService.deepCopy(targetRow);
           copy.rowDTO.state.isExpanded = false;  // always reset the isExpanded flag
           if (copy.rowDTO.data.traceTradeVisualizer) {
-            copy.rowDTO.data.traceTradeVisualizer.data.pieGraphId = `${copy.id}-${this.constants.agGridPinnedRowKeyword}-pieGraphId`;
+            copy.rowDTO.data.traceTradeVisualizer.data.pieGraphId = `${copy.id}-${this.constants.agGridPinnedRowKeyword}-${this.constants.tracePieGraphLeftId}`;
             copy.rowDTO.data.traceTradeVisualizer.data.scatterGraphId = `${copy.id}-${this.constants.agGridPinnedRowKeyword}-${this.constants.traceScatterGraphId}`;
           }
           this.tableData.data.agGridPinnedTopRowData.push(copy);
@@ -401,7 +403,7 @@ export class SantaTable implements OnInit, OnChanges {
           fullWidthCell.isFullWidth = true;
           if (!!fullWidthCell.rowDTO.data.traceTradeVisualizer) {
             fullWidthCell.rowDTO.data.traceTradeVisualizer.state.graphReceived = false;
-            fullWidthCell.rowDTO.data.traceTradeVisualizer.data.pieGraphId = `${fullWidthCell.id}-pieGraphId`;
+            fullWidthCell.rowDTO.data.traceTradeVisualizer.data.pieGraphId = `${fullWidthCell.id}-${this.constants.tracePieGraphLeftId}`;
             fullWidthCell.rowDTO.data.traceTradeVisualizer.data.scatterGraphId = `${fullWidthCell.id}-${this.constants.traceScatterGraphId}`;
           }
           fullWidthCell.rowDTO.style.rowHeight = 0;
