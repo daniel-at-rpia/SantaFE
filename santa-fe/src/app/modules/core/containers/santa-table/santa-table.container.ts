@@ -935,6 +935,10 @@ export class SantaTable implements OnInit, OnChanges {
           this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.pieGraphLeft);
           targetRow.data.traceTradeVisualizer.graph.pieGraphLeft = null;
         }
+        if (targetRow.data.traceTradeVisualizer.graph.pieGraphRight) {
+          this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.pieGraphRight);
+          targetRow.data.traceTradeVisualizer.graph.pieGraphRight = null;
+        }
         if (targetRow.data.traceTradeVisualizer.graph.scatterGraph) {
           this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.scatterGraph);
           targetRow.data.traceTradeVisualizer.graph.scatterGraph = null;
@@ -968,6 +972,10 @@ export class SantaTable implements OnInit, OnChanges {
       if (!!targetRow.data.traceTradeVisualizer.graph.pieGraphLeft) {
         this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.pieGraphLeft);
         targetRow.data.traceTradeVisualizer.graph.pieGraphLeft = null;
+      }
+      if (!!targetRow.data.traceTradeVisualizer.graph.pieGraphRight) {
+        this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.pieGraphRight);
+        targetRow.data.traceTradeVisualizer.graph.pieGraphRight = null;
       }
       if (!!targetRow.data.traceTradeVisualizer.graph.scatterGraph) {
         this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.scatterGraph);

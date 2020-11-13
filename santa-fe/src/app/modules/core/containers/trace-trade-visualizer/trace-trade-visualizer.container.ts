@@ -38,6 +38,10 @@ export class TraceTradeVisualizer implements OnChanges, OnDestroy{
           this.graphService.destoryGraph(this.traceTrades.graph.pieGraphLeft);
           this.traceTrades.graph.pieGraphLeft = null;
         }
+        if (this.traceTrades.graph.pieGraphRight) {
+          this.graphService.destoryGraph(this.traceTrades.graph.pieGraphRight);
+          this.traceTrades.graph.pieGraphRight = null;
+        }
       } catch (err) {
         if (err && err.message === 'EventDispatched is disposed') {
           console.log('dispose misbehavior captured');

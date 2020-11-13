@@ -208,6 +208,10 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
       this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.pieGraphLeft);
       this.rowData.data.traceTradeVisualizer.graph.pieGraphLeft = null;
     }
+    if (this.rowData.data.traceTradeVisualizer.graph.pieGraphRight) {
+      this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.pieGraphRight);
+      this.rowData.data.traceTradeVisualizer.graph.pieGraphRight = null;
+    }
     if (this.rowData.data.traceTradeVisualizer.graph.scatterGraph) {
       this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.scatterGraph);
       this.rowData.data.traceTradeVisualizer.graph.scatterGraph = null;
@@ -243,6 +247,10 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     if (this.rowData.data.traceTradeVisualizer.graph.scatterGraph) {
       this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.scatterGraph);
       this.rowData.data.traceTradeVisualizer.graph.scatterGraph = null;
+    }
+    if (this.rowData.data.traceTradeVisualizer.graph.pieGraphRight) {
+      this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.pieGraphRight);
+      this.rowData.data.traceTradeVisualizer.graph.pieGraphRight = null;
     }
     if (this.rowData.data.traceTradeVisualizer.graph.pieGraphLeft) {
       this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.pieGraphLeft);
