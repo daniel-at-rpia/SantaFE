@@ -1,21 +1,24 @@
 @import "global.scss";
 @import "modules/structure/structure.scss";
 
-$fundStructuring_setTarget_height: 10rem;
+$fundStructuring_setTarget_height: 13rem;
 $funtStructuring_setTarget_backgroundIcon_size: $font_size_hero;
 $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_height - $funtStructuring_setTarget_backgroundIcon_size)/2;
 .sat-fundStructuring {
   $blockName: &;
+  @include mix_border_radius(10px);
   @include mix_alive('light');
   display: flex;
   flex-direction: column;
   overflow: hidden;
   &__configuration {
+    @include mix_fixed_div(relative, $z_index_base_item_solid);
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
     align-items: flex-start;
     padding: $spacing_x_small 0;
+    background-color: $color_gray_2;
     &-title {
       flex: 0 0 auto;
       text-align: center;
@@ -26,13 +29,14 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
   }
   &__editFund {
     @include mix_fixed_div(relative, $z_index_base_item);
-    @include mix_alive('light');
+    @include mix_alive('custom', transform $animation_duration_light, border-radius $animation_duration_light);
     flex: 0 0 auto;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     height: 0;
     overflow: hidden;
+    transform: translate(0, -$fundStructuring_setTarget_height);
     &-overrideCta {
       flex: 0 0 auto;
       display: flex;
@@ -46,16 +50,12 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
       align-items: center;
       justify-content: flex-end;
       margin-bottom: $spacing_x_small;
-      padding-right: $fundStructuring_setTarget_backgroundIcon_gutter;
-      &-label,
-      &-input {
-        margin-right: $spacing_x_small;
+      padding-right: $spacing_medium;
+      &-label {
+        margin-right: $spacing_small;
       }
       &-input {
         width: 5rem;
-      }
-      &:last-child {
-        padding-right: $fundStructuring_setTarget_backgroundIcon_gutter + .5rem;
       }
     }
     &-message {
@@ -78,7 +78,14 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
       font-size: $funtStructuring_setTarget_backgroundIcon_size;
       color: $color_gray_6;
       opacity: 0;
-      transform: translate(0, -50%);
+      transform: translate(0, -100%);
+    }
+    &-autoScalingToggle {
+      @include material();
+      display: none;
+      background-color: $color_white;
+      cursor: pointer;
+      margin-right: $spacing_medium;
     }
   }
   &__utility {
@@ -154,14 +161,23 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
       }
     }
   }
+  &--autoScalingAvailableState {
+    #{$blockName} {
+      &__editFund-autoScalingToggle {
+        display: flex;
+      }
+    }
+  }
   &--editingState {
     #{$blockName} {
       &__editFund {
+        @include mix_border_radius(0);
         background-color: $color_active;
         color: $font_color_inverse;
         height: $fundStructuring_setTarget_height;
         padding-bottom: $spacing_medium;
         margin-bottom: 0;
+        transform: translate(0, 0);
         &-backgroundIcon {
           opacity: 1;
           transform: translate(0, 0);
@@ -178,6 +194,21 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
               display: flex;
             }
           }
+        }
+      }
+    }
+  }
+  &--autoScalingSelectedState {
+    #{$blockName} {
+      &__editFund-autoScalingToggle {
+        @include material('none');
+        @include mix_border_generator($typical_border_width, $color_white);
+        background-color: $color_active;
+        i {
+          color: $font_color_inverse;
+        }
+        span {
+          color: $font_color_inverse;
         }
       }
     }
