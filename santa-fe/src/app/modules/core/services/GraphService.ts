@@ -830,7 +830,7 @@ export class GraphService {
       const chart = am4core.create(dto.data.scatterGraphId, am4charts.XYChart);
       const reverseList = [...dto.data.displayList].reverse();
       const tradeData = reverseList.map(trade => {
-        const time = new Date(trade.eventTime);
+        const time = new Date(trade.tradeTime);
         const object = {
           date: time.getTime(),
           ...(trade.side === TradeSideValueEquivalent.Ask && {sellY: +trade.spread}),

@@ -364,8 +364,8 @@ export interface StructureBucketDataBlock {
 
 export interface TraceTradeBlock {
   traceTradeId: string;
-  eventTime: string;
-  parsedEventTime: string;
+  tradeTime: string;
+  displayTradeTime: string;
   counterParty: TraceTradeCounterParty;
   side: string;
   volumeEstimated: number;

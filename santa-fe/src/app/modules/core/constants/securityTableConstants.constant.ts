@@ -1744,10 +1744,10 @@ export const TradeHistoryHeaderConfigList: Array<TradeHistoryHeaderConfigStub> =
 
 export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
   {
-    headerKey: 'eventTime',
-    headerDisplayLabel: 'Time',
-    attrName: 'parsedEventTime',
-    size: 8
+    headerKey: 'displayTradeTime',
+    headerDisplayLabel: 'Trade Time',
+    attrName: 'displayTradeTime',
+    size: 6
   },{
     headerKey: 'counterParty',
     headerDisplayLabel: 'Counter Party',

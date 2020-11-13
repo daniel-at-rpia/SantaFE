@@ -2242,8 +2242,8 @@ export class DTOService {
     const counterParty = !!rawData.counterParty ? rawData.counterParty === TraceTradeCounterParty.ClientAffiliate ? TraceTradeCounterParty.ClientAffiliate : TraceTradeCounterParty[rawData.counterParty] : null;
     const object: Blocks.TraceTradeBlock = {
       traceTradeId: rawData.traceTradeID,
-      eventTime: rawData.eventTime,
-      parsedEventTime: moment(rawData.eventTime).format(`HH:mm`),
+      tradeTime: rawData.eventTime,
+      displayTradeTime: moment(rawData.eventTime).format(`HH:mm`),
       counterParty: counterParty,
       side: TradeSideValueEquivalent[rawData.side],
       volumeEstimated: rawData.volumeEstimated,
@@ -2284,9 +2284,9 @@ export class DTOService {
 
     if (targetRow.data.security.data.traceTrades.length > 0) {
       targetRow.data.security.data.traceTrades.sort((tradeA, tradeB) => {
-        if (tradeA.eventTime > tradeB.eventTime) {
+        if (tradeA.tradeTime > tradeB.tradeTime) {
           return -1
-        } else if (tradeB.eventTime > tradeA.eventTime) {
+        } else if (tradeB.tradeTime > tradeA.tradeTime) {
           return 1;
         } else {
           return 0;

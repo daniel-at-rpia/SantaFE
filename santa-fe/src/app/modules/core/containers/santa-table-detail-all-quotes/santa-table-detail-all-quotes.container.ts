@@ -286,9 +286,9 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
       if (this.rowData.data.traceTradeVisualizer.data.displayList.length > 0) {
         this.rowData.data.traceTradeVisualizer.state.graphReceived = false;
         this.rowData.data.traceTradeVisualizer.data.displayList.sort((tradeA, tradeB) => {
-          if (tradeA.eventTime > tradeB.eventTime) {
+          if (tradeA.tradeTime > tradeB.tradeTime) {
             return -1
-          } else if (tradeB.eventTime > tradeA.eventTime) {
+          } else if (tradeB.tradeTime > tradeA.tradeTime) {
             return 1;
           } else {
             return 0;
