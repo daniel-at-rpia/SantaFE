@@ -122,11 +122,6 @@ export interface StructureSetTargetOverlayTransferPack {
   isCreateNewOverride: boolean;
 }
 
-export interface StructureSetTargetPostEditUpdatePack {
-  targetFund: BEPortfolioStructuringDTO;
-  targetBreakdownTitle: string;
-}
-
 export interface StructureSetViewData {
   yyyyMMdd: number;
   bucket: StructureBucketDataBlock;
@@ -142,11 +137,6 @@ export interface StructureOverrideToBreakdownConversionReturnPack {
 export interface UpdateTargetBlock {
   metric: BEPortfolioTargetMetricValues;
   target: number;
-}
-
-export interface UpdateTargetPack {
-  fund: DTOs.PortfolioStructureDTO;
-  updateTargetBlocks: Array<UpdateTargetBlock>;
 }
 
 export interface BICSServiceConsolidateReturnPack {
