@@ -55,6 +55,7 @@ export class TraceTradeVisualizer implements OnChanges, OnDestroy{
           this.traceTrades.state.graphReceived = true;
           this.traceTrades.graph.scatterGraph = this.graphService.generateTradeTraceScatterGraph(this.traceTrades);
           this.traceTrades.graph.pieGraphLeft = this.graphService.generateTraceTradePieGraph(this.traceTrades, this.traceTrades.data.pieGraphLeftId, TraceTradeCounterPartyList, traceTradePieGraphKeys.counterParty);
+          this.traceTrades.graph.pieGraphRight = this.graphService.generateTraceTradePieGraph(this.traceTrades, this.traceTrades.data.pieGraphRightId, [this.constants.sideValueEquivalent.buy, this.constants.sideValueEquivalent.sell], traceTradePieGraphKeys.side);
         }
       }
     }

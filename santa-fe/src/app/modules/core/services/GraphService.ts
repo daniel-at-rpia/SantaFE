@@ -918,7 +918,8 @@ export class GraphService {
           })
           const object = {
             [targetKey]: category,
-            volume: total
+            volume: total,
+            ...(targetKey === traceTradePieGraphKeys.side && {color: category === TradeSideValueEquivalent.Bid ? am4core.color("#26A77B") : am4core.color('#BC2B5D')})
           }
           chartData.push(object);
         }
@@ -933,6 +934,7 @@ export class GraphService {
 
       pieSeries.labels.template.maxWidth = 75;
       pieSeries.labels.template.wrap = true;
+      pieSeries.slices.template.propertyFields.fill = "color";
 
       // This creates initial animation
       pieSeries.hiddenState.properties.opacity = 1;
