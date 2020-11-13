@@ -52,20 +52,22 @@
       </div>
     </div>
     <div class="sat-traceTradeVisualizer__graphs-pieGraphs">
-      <div class="sat-traceTradeVisualizer__graphs-pieGraphs-left">
-        <span class="sat-traceTradeVisualizer__graphs-pieGraphs-left-title">
-          Volume Per Counter Party
-        </span>
-        <div class="sat-traceTradeVisualizer__graphs-pieGraphs-left-graphContainer">
-          <div class="sat-traceTradeVisualizer__graphs-pieGraphs-left-graphContainer-content" id="{{ traceTrades.data.pieGraphLeftId }}"></div>
+      <div class="sat-traceTradeVisualizer__graphs-pieGraphs-graphContainer">
+        <div class="sat-traceTradeVisualizer__graphs-pieGraphs-graphContainer-left">
+          <span class="sat-traceTradeVisualizer__graphs-pieGraphs-graphContainer-left-title">
+            Volume Per Counter Party
+          </span>
+          <div class="sat-traceTradeVisualizer__graphs-pieGraphs-graphContainer-left-content">
+            <div class="sat-traceTradeVisualizer__graphs-pieGraphs-graphContainer-left-content-graph" id="{{ traceTrades.data.pieGraphLeftId }}"></div>
+          </div>
         </div>
-      </div>
-      <div class="sat-traceTradeVisualizer__graphs-pieGraphs-right">
-        <span class="sat-traceTradeVisualizer__graphs-pieGraphs-right-title">
-          Buy Volume vs Sell Volume
-        </span>
-        <div class="sat-traceTradeVisualizer__graphs-pieGraphs-right-graphContainer">
-          <div class="sat-traceTradeVisualizer__graphs-pieGraphs-right-graphContainer-content" id="{{ traceTrades.data.pieGraphRightId }}"></div>
+        <div class="sat-traceTradeVisualizer__graphs-pieGraphs-graphContainer-right">
+          <span class="sat-traceTradeVisualizer__graphs-pieGraphs-graphContainer-right-title">
+            Buy Volume vs Sell Volume
+          </span>
+          <div class="sat-traceTradeVisualizer__graphs-pieGraphs-graphContainer-right-content">
+            <div class="sat-traceTradeVisualizer__graphs-pieGraphs-graphContainer-right-content-graph" id="{{ traceTrades.data.pieGraphRightId }}"></div>
+          </div>
         </div>
       </div>
     </div>
