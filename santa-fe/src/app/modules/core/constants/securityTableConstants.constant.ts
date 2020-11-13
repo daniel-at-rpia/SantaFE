@@ -1845,4 +1845,9 @@ export enum traceTradeNumericalFilterSymbols {
   greaterThan = '≥'
 }
 
+export enum traceTradePieGraphKeys {
+  counterParty = 'counterParty',
+  side = 'side'
+}
+
 export const TraceTradeCounterPartyList: Array<TraceTradeCounterParty> = [TraceTradeCounterParty.Dealer, TraceTradeCounterParty.Client, TraceTradeCounterParty.ClientAffiliate, TraceTradeCounterParty.ATS];

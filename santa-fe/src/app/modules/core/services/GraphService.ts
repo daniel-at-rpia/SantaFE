@@ -23,8 +23,14 @@ import {
   AmchartPieDataBlock
 } from 'src/app/modules/core/models/frontend/frontend-adhoc-packages.interface';
 import { MIN_OBLIGOR_CURVE_VALUES } from 'src/app/modules/core/constants/coreConstants.constant'
-import { HistoricalTradeVisualizerDTO, TraceTradesVisualizerDTO } from 'FEModels/frontend-models.interface';
-import { TraceTradeCounterPartyList, TradeSideValueEquivalent } from 'Core/constants/securityTableConstants.constant';
+import {
+  HistoricalTradeVisualizerDTO,
+  TraceTradesVisualizerDTO
+} from 'FEModels/frontend-models.interface';
+import {
+  TradeSideValueEquivalent,
+  traceTradePieGraphKeys
+} from 'Core/constants/securityTableConstants.constant';
 
 
 @Injectable()
@@ -898,29 +904,29 @@ export class GraphService {
       return chart;
     }
 
-    public generateTraceTradeCounterPartyGraph(dto: TraceTradesVisualizerDTO): am4charts.PieChart {
-      const chart = am4core.create(dto.data.pieGraphLeftId, am4charts.PieChart);
-      const counterPartyData = [];
-      TraceTradeCounterPartyList.forEach(counterParty => {
-        const counterPartyList = dto.data.displayList.filter(trade => trade.counterParty === counterParty);
-        if (counterPartyList.length > 0) {
+    public generateTraceTradePieGraph(dto: TraceTradesVisualizerDTO, graphID: string, categories: Array<string>, targetKey: traceTradePieGraphKeys): am4charts.PieChart {
+      const chart = am4core.create(graphID, am4charts.PieChart);
+      const chartData = [];
+      categories.forEach(category => {
+        const categoryList = dto.data.displayList.filter(trade => trade[targetKey] === category);
+        if (categoryList.length > 0) {
           let total = 0;
-          counterPartyList.forEach(trade => {
+          categoryList.forEach(trade => {
             //estimated is preferred, but use actual if there is no estiamted value
             const value = !!trade.volumeEstimated ? trade.volumeEstimated : trade.volumeReported;
             total += value;
           })
           const object = {
-            counterParty: counterParty,
+            [targetKey]: category,
             volume: total
           }
-          counterPartyData.push(object);
+          chartData.push(object);
         }
       })
-      chart.data = counterPartyData;
+      chart.data = chartData;
       let pieSeries = chart.series.push(new am4charts.PieSeries());
       pieSeries.dataFields.value = "volume";
-      pieSeries.dataFields.category = "counterParty";
+      pieSeries.dataFields.category = targetKey;
       pieSeries.slices.template.stroke = am4core.color("#fff");
       pieSeries.slices.template.strokeWidth = 2;
       pieSeries.slices.template.strokeOpacity = 1;

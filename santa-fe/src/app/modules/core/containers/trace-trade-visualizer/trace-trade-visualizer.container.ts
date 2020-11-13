@@ -1,6 +1,10 @@
 import { Component, OnChanges, OnDestroy, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
 import { TraceTradesVisualizerDTO } from 'Core/models/frontend/frontend-models.interface';
-import { TradeTraceHeaderConfigList, TradeSideValueEquivalent, TraceTradeCounterParty } from 'Core/constants/securityTableConstants.constant'
+import {
+  TradeTraceHeaderConfigList,TradeSideValueEquivalent,
+  traceTradePieGraphKeys,
+  TraceTradeCounterPartyList
+} from 'Core/constants/securityTableConstants.constant'
 import { GraphService } from 'Core/services/GraphService';
 
 @Component({
@@ -50,7 +54,7 @@ export class TraceTradeVisualizer implements OnChanges, OnDestroy{
         if (!!this.showData && !this.traceTrades.state.graphReceived && this.traceTrades.data.displayList.length > 0 && !!this.traceTrades.state.showGraphs) {
           this.traceTrades.state.graphReceived = true;
           this.traceTrades.graph.scatterGraph = this.graphService.generateTradeTraceScatterGraph(this.traceTrades);
-          this.traceTrades.graph.pieGraphLeft = this.graphService.generateTraceTradeCounterPartyGraph(this.traceTrades)
+          this.traceTrades.graph.pieGraphLeft = this.graphService.generateTraceTradePieGraph(this.traceTrades, this.traceTrades.data.pieGraphLeftId, TraceTradeCounterPartyList, traceTradePieGraphKeys.counterParty);
         }
       }
     }
