@@ -912,7 +912,7 @@ export class GraphService {
         if (categoryList.length > 0) {
           let total = 0;
           categoryList.forEach(trade => {
-            //estimated is preferred, but use actual if there is no estiamted value
+            //estimated is preferred, but use reported if there is no estimated value
             const value = !!trade.volumeEstimated ? trade.volumeEstimated : trade.volumeReported;
             total += value;
           })
